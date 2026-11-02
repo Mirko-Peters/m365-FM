@@ -1,0 +1,168 @@
+{
+  "episode_id": "67887106",
+  "slug": "how-t-sql-saves-you-from-begging-it",
+  "title": "How T‑SQL Saves You From Begging IT: Safe SELECT Queries, SQL vs T‑SQL & Beating Blank Query Window Panic",
+  "lang": "en",
+  "duration_s": 1180,
+  "transcript_source": "data/en_transcripts/3f77fda470c7.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "transact-sql",
+      "name": "Transact-SQL (T-SQL)",
+      "type": "product",
+      "score": 95,
+      "mentions": 13,
+      "first_mention_s": 224,
+      "quote": "They spiced it with extras and called it tear squal same foundation, but with quirks, enhancements.",
+      "url": "https://www.m365.fm/entity/transact-sql/"
+    },
+    {
+      "slug": "sql",
+      "name": "SQL",
+      "type": "concept",
+      "score": 90,
+      "mentions": 21,
+      "first_mention_s": 1,
+      "quote": "Everyone treats cequl like it's some kind of wizard spell.",
+      "url": "https://www.m365.fm/entity/sql/"
+    },
+    {
+      "slug": "sql-join",
+      "name": "SQL JOIN",
+      "type": "concept",
+      "score": 80,
+      "mentions": 24,
+      "first_mention_s": 664,
+      "quote": "when your data lives in different tables, Joins are how you stitch",
+      "url": "https://www.m365.fm/entity/sql-join/"
+    },
+    {
+      "slug": "sql-server",
+      "name": "Microsoft SQL Server",
+      "type": "product",
+      "score": 70,
+      "mentions": 4,
+      "first_mention_s": 242,
+      "quote": "paste in a script from some block and cycle server rejects it",
+      "url": "https://www.m365.fm/entity/sql-server/"
+    },
+    {
+      "slug": "sql-server-management-studio",
+      "name": "SQL Server Management Studio (SSMS)",
+      "type": "product",
+      "score": 55,
+      "mentions": 1,
+      "first_mention_s": 36,
+      "quote": "You open Circle Server Management Studio faced with that gray canvas",
+      "url": "https://www.m365.fm/entity/sql-server-management-studio/"
+    },
+    {
+      "slug": "excel",
+      "name": "Microsoft Excel",
+      "type": "product",
+      "score": 40,
+      "mentions": 3,
+      "first_mention_s": 23,
+      "quote": "If you can wrangle pivot tables in Excel, you're already halfway to pulling your first query.",
+      "url": "https://www.m365.fm/entity/excel/"
+    },
+    {
+      "slug": "microsoft",
+      "name": "Microsoft",
+      "type": "org",
+      "score": 30,
+      "mentions": 14,
+      "first_mention_s": 74,
+      "quote": "verify this with Microsoft's own documentation for your safety",
+      "url": "https://www.m365.fm/entity/microsoft/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "sql-join",
+      "name": "SQL JOIN",
+      "type": "concept",
+      "mentions": 24,
+      "first_mention_s": 664,
+      "quote": "when your data lives in different tables, Joins are how you stitch",
+      "status": "review"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "And that's what most people never get told. SQL was designed to be approachable. It wasn't supposed to sound like obscure math.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 104,
+      "entities": [
+        "sql"
+      ],
+      "why": "Reframes SQL as an approachable everyday tool instead of an expert-only discipline."
+    },
+    {
+      "text": "Bottom line, don't panic about extras. They're not roadblocks. They're optional power tools. You don't need them to pull quick answers. But when you start building repeatable processes, dashboards or anything automated, they'll earn their keep.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 442,
+      "entities": [
+        "transact-sql"
+      ],
+      "why": "Clear guidance on when the T-SQL extensions actually matter for business users."
+    },
+    {
+      "text": "A left join is more forgiving. It keeps every record in the left table. Even if the right table doesn't have a match.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 760,
+      "entities": [
+        "sql-join"
+      ],
+      "why": "A concise plain-English definition of the left join that beginners can remember."
+    },
+    {
+      "text": "These mistakes sting because they scale. You try them in dev with one hundred rows, no harm, You aim them at production with one hundred million disaster.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 1052,
+      "entities": [
+        "sql"
+      ],
+      "why": "Explains why harmless-looking query habits become production incidents at scale."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "The blank query window panic"
+    },
+    {
+      "start_s": 211,
+      "title": "T-SQL vs SQL: Microsoft's dialect"
+    },
+    {
+      "start_s": 457,
+      "title": "The SELECT survival guide"
+    },
+    {
+      "start_s": 660,
+      "title": "Joins and the relationship drama"
+    },
+    {
+      "start_s": 885,
+      "title": "Mistakes that make DBAs cry"
+    },
+    {
+      "start_s": 1125,
+      "title": "Three rules and your homework"
+    }
+  ],
+  "takeaways": [
+    "SELECT is read-only in normal use, so writing your first query to answer a business question is a safe way to learn instead of waiting in a ticket queue.",
+    "T-SQL is Microsoft's dialect of standard SQL: the basics like SELECT, FROM, WHERE and ORDER BY stay the same, while extras such as TOP, TRY/CATCH and GO matter once you automate.",
+    "Choose inner or left joins deliberately and avoid SELECT *, missing WHERE clauses and sorting huge unindexed tables, because those habits are what overload production databases."
+  ],
+  "hook": "If a blank query window in SQL Server Management Studio makes you open a ticket instead of getting the answer yourself, this episode is for you. Business users and analysts learn how safe, read-only SELECT queries, the difference between SQL and T-SQL, and careful joins let them pull their own numbers without breaking production.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-02T23:41:54Z"
+}
