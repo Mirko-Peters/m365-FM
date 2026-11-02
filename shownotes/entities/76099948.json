@@ -1,0 +1,168 @@
+{
+ "episode_id": "76099948",
+ "slug": "dataverse-deep-dive-how-to-design-scalable-data-models-for-fast-power-platform-and-model-driven",
+ "title": "Dataverse-Performance: skalierbare Datenmodelle mit schlankem Schema, klugen Beziehungen und Indizes",
+ "lang": "de",
+ "duration_s": 947,
+ "transcript_source": "transcripts/de/HYaAvq6sSk8.vtt",
+ "time_basis": "vtt",
+ "entities": [
+  {
+   "slug": "dataverse",
+   "name": "Dataverse",
+   "type": "product",
+   "score": 95,
+   "mentions": 21,
+   "first_mention_s": 65,
+   "quote": "Die Realität ist, dass skalierbare Leistung nicht dadurch entsteht, dass man Dataverse einfach mehr Ressourcen zuweist.",
+   "url": "https://www.m365.fm/de/entity/dataverse/"
+  },
+  {
+   "slug": "model-driven-app",
+   "name": "Model-driven app",
+   "type": "concept",
+   "score": 40,
+   "mentions": 1,
+   "first_mention_s": 309,
+   "quote": "kann ein einziger überlasteter Verknüpfungspunkt eine gesamte modellgesteuerte App in die Knie zwingen.",
+   "url": "https://www.m365.fm/de/entity/model-driven-app/"
+  },
+  {
+   "slug": "power-automate",
+   "name": "Power Automate",
+   "type": "product",
+   "score": 40,
+   "mentions": 2,
+   "first_mention_s": 121,
+   "quote": "langsame Formulare, verzögerte Lookups und Power-Automate-Flows mit Timeouts",
+   "url": "https://www.m365.fm/de/entity/power-automate/"
+  },
+  {
+   "slug": "power-platform",
+   "name": "Power Platform",
+   "type": "platform",
+   "score": 35,
+   "mentions": 1,
+   "first_mention_s": 77,
+   "quote": "und warum viele Power-Plattform-Ersteller sich von Anfang an unwissentlich in eine schlechte Performance manövrieren.",
+   "url": "https://www.m365.fm/de/entity/power-platform/"
+  },
+  {
+   "slug": "power-platform-admin-center",
+   "name": "Power Platform admin center",
+   "type": "product",
+   "score": 35,
+   "mentions": 1,
+   "first_mention_s": 914,
+   "quote": "Leistungseinblicke im Power-Plattform-Admin-Center helfen Ihnen, langsame Abfragen zu finden,",
+   "url": "https://www.m365.fm/de/entity/power-platform-admin-center/"
+  }
+ ],
+ "new_entities": [
+  {
+   "slug": "dataverse-table-relationships",
+   "name": "Dataverse table relationships",
+   "type": "concept",
+   "mentions": 21,
+   "first_mention_s": 65,
+   "quote": "Das Beziehungsdesign kann unbemerkt Performance-Probleme verursachen,",
+   "status": "review"
+  },
+  {
+   "slug": "dataverse-indexing",
+   "name": "Dataverse indexing",
+   "type": "concept",
+   "mentions": 25,
+   "first_mention_s": 532,
+   "quote": "Indizierung ist gleichbedeutend mit einer präzisen Karte und dem direkten Weg zum richtigen Regal.",
+   "status": "review"
+  },
+  {
+   "slug": "database-normalization",
+   "name": "Database normalization",
+   "type": "concept",
+   "mentions": 5,
+   "first_mention_s": 206,
+   "quote": "In der Praxis kann eine Übernormalisierung die Dataverse-Leistung beeinträchtigen,",
+   "status": "review"
+  }
+ ],
+ "quotes": [
+  {
+   "text": "Die überraschende Wahrheit ist, es ist nicht die reine Größe, die Ihre App ausbremst, sondern die Art und Weise, wie die Tabelle von Grund auf entworfen wurde.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 99,
+   "entities": [],
+   "why": "Zentrale These der Folge: Schema-Design statt Datenmenge."
+  },
+  {
+   "text": "Jeder zusätzliche Join in einer Abfrage zwingt die Dataverse-Engine dazu, mehr Arbeit zu leisten, mehr Daten zu übersetzen und mehr Informationen im Arbeitsspeicher zu halten, während Bedingungen ausgewertet werden.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 418,
+   "entities": [
+    "dataverse"
+   ],
+   "why": "Erklärt technisch, warum komplexe Joins bremsen."
+  },
+  {
+   "text": "Das andere Extrem, eine Überindizierung, kann genauso schlimm sein. Jedes Mal, wenn Sie einen Datensatz einfügen, aktualisieren oder löschen, muss Dataverse alle relevanten Indizes pflegen.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 616,
+   "entities": [
+    "dataverse",
+    "dataverse-indexing"
+   ],
+   "why": "Warnt vor Überindizierung – ausgewogene Indexstrategie."
+  },
+  {
+   "text": "Frühzeitige architektonische Planung ist der günstigste Leistungsschub, den Sie jemals implementieren werden. Es geht nicht darum, vorsorglich zusätzliche Ebenen hinzuzufügen, sondern darüber nachzudenken, wie sich Ihre Tabellen, Beziehungen und Indizes verhalten, wenn die App unter voller Produktionslast steht.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 785,
+   "entities": [
+    "dataverse-table-relationships",
+    "dataverse-indexing"
+   ],
+   "why": "Kernbotschaft: Performance proaktiv in die Architektur einplanen."
+  }
+ ],
+ "chapters": [
+  {
+   "start_s": 65,
+   "title": "Einstieg: Schema-Design und Reaktionszeit"
+  },
+  {
+   "start_s": 85,
+   "title": "Versteckte Performance-Fallen in Tabellen"
+  },
+  {
+   "start_s": 295,
+   "title": "Wenn Beziehungen zu Hindernissen werden"
+  },
+  {
+   "start_s": 537,
+   "title": "Indizierung: der stille Leistungsbeschleuniger"
+  },
+  {
+   "start_s": 761,
+   "title": "Von reaktiven Korrekturen zu proaktiver Architektur"
+  },
+  {
+   "start_s": 902,
+   "title": "Werkzeuge: Lösungschecker und Power Platform Admin Center"
+  }
+ ],
+ "takeaways": [
+  "Langsame Dataverse-Apps liegen meist am Schema, nicht an der Datenmenge: Selten genutzte Felder und Übernormalisierung erzeugen unnötige Joins und Ballast.",
+  "Beziehungsdesign hat Ausführungskosten – M:N-Beziehungen und kaskadierende Lookups können sich bei realer Last stark summieren, einfache Lookups oder Auswahlfelder sind oft schneller.",
+  "Indizes gezielt für häufig gefilterte, sortierte und verknüpfte Spalten planen, Überindizierung vermeiden und Performance von Anfang an als Designanforderung behandeln."
+ ],
+ "hook": "Warum fühlt sich eine Dataverse-Tabelle mit wenigen tausend Zeilen langsamer an als eine mit einer Million? Mirko Peters zeigt, wie schlanke Schemas, durchdachte Beziehungen und eine kluge Indizierungsstrategie Model-driven Apps und Power-Automate-Flows schnell halten – bevor Performance-Probleme in Produktion auftauchen.",
+ "youtube_video_id": "HYaAvq6sSk8",
+ "source_video_id": "HYaAvq6sSk8",
+ "show_id": 7393187,
+ "generated_at": "2026-11-02T23:07:11Z"
+}

@@ -1,0 +1,177 @@
+{
+ "episode_id": "76070167",
+ "slug": "what-is-an-api-gateway-and-do-you-actually-need-one",
+ "title": "API-Gateway einfach erklärt: Routing, Sicherheit und Ratenbegrenzung für Microservices – brauchen Sie eines?",
+ "lang": "de",
+ "duration_s": 739,
+ "transcript_source": "transcripts/de/C6ueYq-dQz0.vtt",
+ "time_basis": "vtt",
+ "entities": [
+  {
+   "slug": "azure-api-management",
+   "name": "Azure API Management",
+   "type": "product",
+   "score": 60,
+   "mentions": 1,
+   "first_mention_s": 199,
+   "quote": "In der Azure-Welt ist Azure API Management die vollständige Plattform.",
+   "url": "https://www.m365.fm/de/entity/azure-api-management/"
+  },
+  {
+   "slug": "azure",
+   "name": "Microsoft Azure",
+   "type": "platform",
+   "score": 30,
+   "mentions": 2,
+   "first_mention_s": 199,
+   "quote": "In der Azure-Welt ist Azure API Management die vollständige Plattform.",
+   "url": "https://www.m365.fm/de/entity/azure/"
+  }
+ ],
+ "new_entities": [
+  {
+   "slug": "api-gateway",
+   "name": "API gateway",
+   "type": "concept",
+   "mentions": 62,
+   "first_mention_s": 71,
+   "quote": "Es ist ein zentraler Einstiegspunkt, der zwischen Ihren Clients und Ihren Backenddiensten liegt.",
+   "status": "review"
+  },
+  {
+   "slug": "rate-limiting",
+   "name": "Rate limiting",
+   "type": "concept",
+   "mentions": 5,
+   "first_mention_s": 125,
+   "quote": "Selbst ein einfaches Limit schützt Ihr Backend vor Überlastung.",
+   "status": "review"
+  },
+  {
+   "slug": "throttling",
+   "name": "Throttling",
+   "type": "concept",
+   "mentions": 2,
+   "first_mention_s": 452,
+   "quote": "Ratenbegrenzung und Drosselung sind Standardfunktion.",
+   "status": "review"
+  },
+  {
+   "slug": "json",
+   "name": "JSON",
+   "type": "concept",
+   "mentions": 4,
+   "first_mention_s": 530,
+   "quote": "Vielleicht sendet der Client JSON, aber ihr Backend versteht nur XML.",
+   "status": "review"
+  },
+  {
+   "slug": "microservices",
+   "name": "Microservices",
+   "type": "concept",
+   "mentions": 1,
+   "first_mention_s": 191,
+   "quote": "Aber das API-Gateway ist bei Microservices unverzichtbar geworden.",
+   "status": "review"
+  }
+ ],
+ "quotes": [
+  {
+   "text": "Ein API-Gateway macht das Gleiche für Ihre Software. Es ist ein zentraler Einstiegspunkt, der zwischen Ihren Clients und Ihren Backenddiensten liegt. Jede Anfrage läuft zuerst durch das Gateway.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 174,
+   "entities": [
+    "api-gateway"
+   ],
+   "why": "Prägnante Definition des API-Gateways"
+  },
+  {
+   "text": "Ohne Gateway muss jeder Dienst seine eigene Authentifizierung verwalten. Das bedeutet doppelte Arbeit und ist fehleranfällig. Ein Dienst prüft Tokens korrekt, ein anderer lässt einen Schritt aus und ein dritter nutzt eine völlig andere Methode.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 336,
+   "entities": [
+    "api-gateway"
+   ],
+   "why": "Warum zentrale Authentifizierung Sicherheit konsistent macht"
+  },
+  {
+   "text": "Das Gateway kann begrenzen, wie viele Anfragen jeder Client stellen darf. Ratenbegrenzung und Drosselung sind Standardfunktion. Sie legen die Regeln am Gateway fest und es setzt sie durch. Ihre Backend-Dienste bekommen die Lastspitze nie zu spüren.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 448,
+   "entities": [
+    "api-gateway",
+    "rate-limiting",
+    "throttling"
+   ],
+   "why": "Schutz der Backends vor Lastspitzen"
+  },
+  {
+   "text": "Die mobile App sendet JSON. Das Gateway konvertiert es in XML. Das System erhält, was es erwartet. Die mobile App erhält eine Antwort zurück, die bereits in JSON vorliegt. Niemand muss da etwas umschreiben.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 571,
+   "entities": [
+    "api-gateway",
+    "json"
+   ],
+   "why": "Anschauliches Beispiel für Datentransformation"
+  },
+  {
+   "text": "Das ist die wichtige Erkenntnis. Das Gateway ist nicht nur ein Router. Es ist eine Kontrollzentrale für Ihre gesamte API-Plattform. Jede Anfrage, jede Antwort, jeder Fehler, alles fließt durch eine Stelle.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 675,
+   "entities": [
+    "api-gateway"
+   ],
+   "why": "Kernbotschaft der Folge"
+  }
+ ],
+ "chapters": [
+  {
+   "start_s": 0,
+   "title": "Einführung: Wenn aus einer App viele Services werden"
+  },
+  {
+   "start_s": 87,
+   "title": "Das Problem: Zu viele Türen"
+  },
+  {
+   "start_s": 152,
+   "title": "Was ist ein API-Gateway?"
+  },
+  {
+   "start_s": 222,
+   "title": "Teil 1: Traffic-Routing"
+  },
+  {
+   "start_s": 329,
+   "title": "Teil 2: Sicherheit am Haupteingang"
+  },
+  {
+   "start_s": 424,
+   "title": "Teil 3: Ratenbegrenzung, Drosselung und Load-Balancing"
+  },
+  {
+   "start_s": 524,
+   "title": "Teil 4: Datentransformation"
+  },
+  {
+   "start_s": 618,
+   "title": "Wie alles zusammenhängt und konkrete Handlungsempfehlungen"
+  }
+ ],
+ "takeaways": [
+  "Ein API-Gateway ist der zentrale Einstiegspunkt zwischen Clients und Backend-Diensten: Clients kennen nur noch eine URL, das Gateway übernimmt Routing, Sicherheit, Ratenbegrenzung und Datentransformation.",
+  "Authentifizierung und Ratenbegrenzung gehören zentral ans Gateway – so wird Sicherheit konsistent, kompromittierte API-Schlüssel lassen sich an einer Stelle sperren und Backends sind vor Lastspitzen geschützt.",
+  "Bei ein oder zwei Diensten ist ein Gateway meist noch nicht nötig; ab drei Diensten oder bei APIs für externe Clients zahlt es sich schnell aus – in der Azure-Welt etwa mit Azure API Management."
+ ],
+ "hook": "Erst eine App, dann ein Service, dann noch einer – und plötzlich wird die Verkehrsleitung dazwischen zum Albtraum. Diese Folge erklärt, was ein API-Gateway für Routing, Sicherheit, Ratenbegrenzung und Transformation leistet und ab wann Sie wirklich eines brauchen.",
+ "youtube_video_id": "C6ueYq-dQz0",
+ "source_video_id": "C6ueYq-dQz0",
+ "show_id": 7393187,
+ "generated_at": "2026-11-02T23:04:36Z"
+}

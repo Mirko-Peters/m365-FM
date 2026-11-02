@@ -1,0 +1,199 @@
+{
+ "episode_id": "76102942",
+ "slug": "sharepoint-online-permission-auditing-at-scale",
+ "title": "SharePoint-Berechtigungen im großen Maßstab prüfen: Audits mit PnP PowerShell, Microsoft Graph und Azure Automation",
+ "lang": "de",
+ "duration_s": 959,
+ "transcript_source": "transcripts/de/ErwHNxsj1Nc.vtt",
+ "time_basis": "vtt",
+ "entities": [
+  {
+   "slug": "sharepoint",
+   "name": "SharePoint",
+   "type": "product",
+   "score": 90,
+   "mentions": 10,
+   "first_mention_s": 65,
+   "quote": "Ihre SharePoint-Berechtigungen sind wahrscheinlich ein einziges Durcheinander.",
+   "url": "https://www.m365.fm/de/entity/sharepoint/"
+  },
+  {
+   "slug": "pnp-powershell",
+   "name": "PnP PowerShell",
+   "type": "product",
+   "score": 85,
+   "mentions": 10,
+   "first_mention_s": 292,
+   "quote": "PNP PowerShell ist im Grunde deine Brücke zwischen SharePoint Online und deiner Automatisierungsumgebung.",
+   "url": "https://www.m365.fm/de/entity/pnp-powershell/"
+  },
+  {
+   "slug": "graph",
+   "name": "Microsoft Graph",
+   "type": "product",
+   "score": 85,
+   "mentions": 10,
+   "first_mention_s": 380,
+   "quote": "Graph liegt viel in Microsoft 365 Diensten zugrunde. Bei Berechtigungen fungiert es als Rückgrat,",
+   "url": "https://www.m365.fm/de/entity/graph/"
+  },
+  {
+   "slug": "azure-automation",
+   "name": "Azure Automation",
+   "type": "product",
+   "score": 80,
+   "mentions": 6,
+   "first_mention_s": 768,
+   "quote": "Azure Automation kann sowohl Standardausgabe als auch Fehlerstreams in Auftragsprotokollen erfassen,",
+   "url": "https://www.m365.fm/de/entity/azure-automation/"
+  },
+  {
+   "slug": "entra-id",
+   "name": "Microsoft Entra ID",
+   "type": "product",
+   "score": 55,
+   "mentions": 4,
+   "first_mention_s": 183,
+   "quote": "die sich in Azure AD-Gruppen befinden können, welche wiederum eigene verschachtelte Gruppen enthalten.",
+   "url": "https://www.m365.fm/de/entity/entra-id/"
+  },
+  {
+   "slug": "compliance",
+   "name": "Compliance",
+   "type": "concept",
+   "score": 50,
+   "mentions": 3,
+   "first_mention_s": 192,
+   "quote": "Compliance-Teams erwarten nach wie vor saubere Audit-Protokolle und Nachweise über regelmäßige Überprüfungen.",
+   "url": "https://www.m365.fm/de/entity/compliance/"
+  },
+  {
+   "slug": "azure-key-vault",
+   "name": "Azure Key Vault",
+   "type": "product",
+   "score": 45,
+   "mentions": 4,
+   "first_mention_s": 396,
+   "quote": "Key Vault hält die sensiblen Daten verschlüsselt",
+   "url": "https://www.m365.fm/de/entity/azure-key-vault/"
+  }
+ ],
+ "new_entities": [
+  {
+   "slug": "permission-inheritance",
+   "name": "Permission inheritance (SharePoint)",
+   "type": "concept",
+   "mentions": 7,
+   "first_mention_s": 172,
+   "quote": "wenn die Vererbung unsichtbar bleibt, weil Sie nur die direkten Berechtigungen betrachten.",
+   "status": "review"
+  },
+  {
+   "slug": "guest-access",
+   "name": "Guest access",
+   "type": "concept",
+   "mentions": 5,
+   "first_mention_s": 227,
+   "quote": "Gastkonten, die eigentlich hätten ablaufen sollen, es aber nicht taten.",
+   "status": "review"
+  },
+  {
+   "slug": "throttling",
+   "name": "Throttling",
+   "type": "concept",
+   "mentions": 4,
+   "first_mention_s": 355,
+   "quote": "Paginierung und Drosselung sind hier eine weitere Realität.",
+   "status": "review"
+  },
+  {
+   "slug": "hybrid-runbook-worker",
+   "name": "Hybrid Runbook Worker",
+   "type": "product",
+   "mentions": 1,
+   "first_mention_s": 886,
+   "quote": "ermöglichen Hybrid Runbook Worker die Ausführung dieser Skripte vor Ort oder auf einer dedizierten VM,",
+   "status": "review"
+  }
+ ],
+ "quotes": [
+  {
+   "text": "Sie erkennen, dass das Modell der jährlichen Momentaufnahme nicht deshalb fehlerhaft ist, weil Menschen faul sind. Es ist fehlerhaft, weil sich das System, das es erfassen will, ständig verändert. Berechtigungen sind lebendige Daten.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 258,
+   "entities": [],
+   "why": "Begründet, warum manuelle Jahresprüfungen scheitern."
+  },
+  {
+   "text": "Eine Falle in die Administratoren tappen ist das ausschließlich Sammeln direkter Berechtigung. Das erzeugt einen sauber aussehenden Datensatz, der jedoch gefährlich unvollständig ist.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 669,
+   "entities": [],
+   "why": "Typischer Fehler: vererbte und gruppenbasierte Zugriffe übersehen."
+  },
+  {
+   "text": "Das Endziel sind keine separaten Tabellen für jeden Typ, sondern ein flacher, normalisierter Datensatz, in dem jede Zeile die Ressource, den aufgelösten Benutzer und die effektive Zugriffsebene zeigt, unabhängig davon, wie sie gewährt wurde,",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 688,
+   "entities": [],
+   "why": "Beschreibt das Zielformat eines brauchbaren Berechtigungsberichts."
+  },
+  {
+   "text": "Key Vault hält die sensiblen Daten verschlüsselt und rollenbasierte Zugriffskontrollen stellen sicher, dass nur Ihr Automatisierungskonto Sie abrufen kann.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 845,
+   "entities": [
+    "azure-key-vault"
+   ],
+   "why": "Sichere Ablage von Zertifikaten für unbeaufsichtigte Runbooks."
+  },
+  {
+   "text": "Diese Historie zu bewahren bedeutet, dass Sie nachweisen können, dass die Prüfung zu einem bestimmten Zeitpunkt lief und genau sehen können, was passiert ist, wenn sie nicht abgeschlossen wurde.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 908,
+   "entities": [],
+   "why": "Protokollierung als Nachweis für Audits."
+  }
+ ],
+ "chapters": [
+  {
+   "start_s": 65,
+   "title": "Einstieg: Wer hat worauf Zugriff?"
+  },
+  {
+   "start_s": 95,
+   "title": "Warum traditionelle Berechtigungsprüfungen im Unternehmensmaßstab scheitern"
+  },
+  {
+   "start_s": 292,
+   "title": "Die Grundlage mit PnP PowerShell schaffen"
+  },
+  {
+   "start_s": 519,
+   "title": "Berechtigungsdaten mit der Microsoft Graph API auslesen"
+  },
+  {
+   "start_s": 767,
+   "title": "Die Prüfung mit Azure Automation automatisieren"
+  },
+  {
+   "start_s": 946,
+   "title": "Änderungserkennung und Benachrichtigungen"
+  }
+ ],
+ "takeaways": [
+  "Jährliche manuelle Berechtigungsprüfungen veralten sofort – Berechtigungen sind lebendige Daten und müssen automatisiert und regelmäßig erfasst werden.",
+  "PnP PowerShell mit App-only-Authentifizierung per Zertifikat erschließt alle Websites, die Microsoft Graph API liefert die Berechtigungen bis auf Datei-Ebene inklusive Vererbung und Gruppenauflösung.",
+  "Azure Automation mit Zertifikaten in Azure Key Vault, Protokollierung und Zeitplänen liefert täglich aktuelle Berichte – ein Vergleich mit dem Vortag macht neue Gastzugriffe sichtbar."
+ ],
+ "hook": "Kaum eine Organisation hat einen Bericht, der zeigt, wer in SharePoint worauf Zugriff hat. Mirko Peters zeigt, wie Sie mit PnP PowerShell, der Microsoft Graph API und Azure Automation jede Website, Bibliothek und jeden Benutzer automatisch prüfen – inklusive vererbter und verschachtelter Gruppenzugriffe.",
+ "youtube_video_id": "ErwHNxsj1Nc",
+ "source_video_id": "ErwHNxsj1Nc",
+ "show_id": 7393187,
+ "generated_at": "2026-11-02T23:07:11Z"
+}

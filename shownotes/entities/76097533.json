@@ -1,0 +1,205 @@
+{
+ "episode_id": "76097533",
+ "slug": "how-to-handle-millions-of-events-per-second-with-azure-event-hubs",
+ "title": "Azure Event Hubs einfach erklärt: Echtzeit-Datenstreaming mit Partitionen, Consumergruppen und Kafka",
+ "lang": "de",
+ "duration_s": 998,
+ "transcript_source": "transcripts/de/HD-ADEbEieQ.vtt",
+ "time_basis": "vtt",
+ "entities": [
+  {
+   "slug": "azure-event-hubs",
+   "name": "Azure Event Hubs",
+   "type": "product",
+   "score": 95,
+   "mentions": 34,
+   "first_mention_s": 153,
+   "quote": "Event Hubs ist keine Warteschlange und keine Datenbank. Es ist ein Datenstrom und der Unterschied ist wichtig.",
+   "url": "https://www.m365.fm/de/entity/azure-event-hubs/"
+  },
+  {
+   "slug": "azure-service-bus",
+   "name": "Azure Service Bus",
+   "type": "product",
+   "score": 65,
+   "mentions": 9,
+   "first_mention_s": 695,
+   "quote": "Service-Bus ist der Postdienst. Er ist zuverlässig geordnet und garantiert die Zustellung.",
+   "url": "https://www.m365.fm/de/entity/azure-service-bus/"
+  },
+  {
+   "slug": "azure-functions",
+   "name": "Azure Functions",
+   "type": "product",
+   "score": 45,
+   "mentions": 5,
+   "first_mention_s": 722,
+   "quote": "Das Schöne an Funktionen ist, dass sie automatisch mit ihrer Partitionsanzahl skaliert werden.",
+   "url": "https://www.m365.fm/de/entity/azure-functions/"
+  },
+  {
+   "slug": "cosmos-db",
+   "name": "Azure Cosmos DB",
+   "type": "product",
+   "score": 30,
+   "mentions": 1,
+   "first_mention_s": 955,
+   "quote": "und schreibt diese dann zur schnellen Abfrage in Cosmos DB.",
+   "url": "https://www.m365.fm/de/entity/cosmos-db/"
+  }
+ ],
+ "new_entities": [
+  {
+   "slug": "event-hubs-partitions",
+   "name": "Partitions (Azure Event Hubs)",
+   "type": "concept",
+   "mentions": 15,
+   "first_mention_s": 248,
+   "quote": "Mehr Partitionen bedeuten mehr parallele Verarbeitung.",
+   "status": "review"
+  },
+  {
+   "slug": "event-hubs-consumer-groups",
+   "name": "Consumer groups (Azure Event Hubs)",
+   "type": "concept",
+   "mentions": 9,
+   "first_mention_s": 248,
+   "quote": "Eine Consumergruppe ist einfach eine separate Downstream-Anwendung, die denselben Stream liest.",
+   "status": "review"
+  },
+  {
+   "slug": "azure-event-grid",
+   "name": "Azure Event Grid",
+   "type": "product",
+   "mentions": 7,
+   "first_mention_s": 695,
+   "quote": "Event-Grid ist der Rauchmelder. Es ist schlank und reaktionsschnell.",
+   "status": "review"
+  },
+  {
+   "slug": "apache-kafka",
+   "name": "Apache Kafka",
+   "type": "product",
+   "mentions": 5,
+   "first_mention_s": 205,
+   "quote": "Folgendes überrascht viele, Event Hubs ist Kafka-kompatibel.",
+   "status": "review"
+  },
+  {
+   "slug": "azure-stream-analytics",
+   "name": "Azure Stream Analytics",
+   "type": "product",
+   "mentions": 1,
+   "first_mention_s": 553,
+   "quote": "Anschließend verbinden Sie Azure Stream Analytics mit dem Hub,",
+   "status": "review"
+  },
+  {
+   "slug": "azure-blob-storage",
+   "name": "Azure Blob Storage",
+   "type": "product",
+   "mentions": 3,
+   "first_mention_s": 479,
+   "quote": "Der Consumer speichert diesen Offset an einem dauerhaften Ort, in der Regel im Azure Blob-Speicher.",
+   "status": "review"
+  },
+  {
+   "slug": "azure-data-lake-storage",
+   "name": "Azure Data Lake Storage",
+   "type": "product",
+   "mentions": 3,
+   "first_mention_s": 320,
+   "quote": "und schreibt alle Protokolle zur langfristigen Speicherung und Analyse in Azure Data Lake.",
+   "status": "review"
+  }
+ ],
+ "quotes": [
+  {
+   "text": "Sie können zwischen 2 und 32 Partitionen pro Event Hub haben und legen diese Zahl fest, wenn Sie den Hub erstellen. Sie kann später nicht mehr geändert werden. Daher müssen Sie sich im Voraus Gedanken über Ihren Durchsatzbedarf machen.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 273,
+   "entities": [
+    "event-hubs-partitions",
+    "azure-event-hubs"
+   ],
+   "why": "Konkrete Designregel: Partitionsanzahl früh am Durchsatz planen."
+  },
+  {
+   "text": "Die wichtigste Erkenntnis ist, dass Event-Hubs Produzenten und Konsumenten vollständig entkoppelt. Produzenten wissen nicht, wer ihre Daten liest. Consumer wissen nicht, wer die Daten sendet.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 500,
+   "entities": [
+    "azure-event-hubs"
+   ],
+   "why": "Kernprinzip der Entkopplung von Producern und Consumern."
+  },
+  {
+   "text": "Hohes Volumen, mehrere Verbraucher und die Notwendigkeit von Echtzeit-Informationen. Event-Hubs ist nicht die Lösung für jedes Problem, aber in dieser Kombination ist es das richtige Tool für die Aufgabe.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 681,
+   "entities": [
+    "azure-event-hubs"
+   ],
+   "why": "Klare Faustregel, wann Event Hubs passt."
+  },
+  {
+   "text": "Diese Dienste arbeiten zusammen. EventHubs erfassen den Rohdatenstrom. EventGrid reagiert auf Ereignisse in diesem Strom und löst nachgelagerte Aktionen aus. Servicebus verarbeitet die zuverlässige Nachrichtenübermittlung für Geschäftsworkflows.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 814,
+   "entities": [
+    "azure-event-hubs",
+    "azure-event-grid",
+    "azure-service-bus"
+   ],
+   "why": "Fasst das Zusammenspiel der drei Azure-Messaging-Dienste zusammen."
+  }
+ ],
+ "chapters": [
+  {
+   "start_s": 65,
+   "title": "Das Problem: Batchjobs vs. Echtzeitdaten"
+  },
+  {
+   "start_s": 156,
+   "title": "Was ist Azure Event Hubs?"
+  },
+  {
+   "start_s": 245,
+   "title": "Bausteine: Partitionen, Consumergruppen, Durchsatzeinheiten"
+  },
+  {
+   "start_s": 394,
+   "title": "Das Producer- und Consumer-Modell"
+  },
+  {
+   "start_s": 521,
+   "title": "Reale Anwendungsfälle: IoT, Logging, Clickstream, Betrugserkennung"
+  },
+  {
+   "start_s": 691,
+   "title": "Event Hubs vs. Event Grid und Service Bus"
+  },
+  {
+   "start_s": 831,
+   "title": "Preise und Tarife"
+  },
+  {
+   "start_s": 934,
+   "title": "Erste Schritte: eine einfache Architektur"
+  }
+ ],
+ "takeaways": [
+  "Azure Event Hubs ist weder Warteschlange noch Datenbank, sondern ein Datenstrom, den mehrere Consumergruppen unabhängig und im eigenen Tempo lesen können.",
+  "Partitionen und Durchsatzeinheiten bestimmen Parallelität und Kapazität – die Partitionsanzahl muss beim Anlegen des Hubs anhand des erwarteten Durchsatzes geplant werden.",
+  "Event Grid reagiert auf diskrete Ereignisse, Service Bus liefert geschäftskritische Nachrichten zuverlässig, Event Hubs streamt große Datenmengen – kombiniert ergänzen sich die drei Dienste."
+ ],
+ "hook": "Tausende Sensoren, Millionen Ereignisse pro Sekunde – und ein nächtlicher Batchjob, der immer einen Tag zu spät kommt. Mirko Peters erklärt, wie Azure Event Hubs mit Partitionen, Consumergruppen und Kafka-Kompatibilität Echtzeit-Datenströme puffert und verteilt und wann Event Grid oder Service Bus die bessere Wahl sind.",
+ "youtube_video_id": "HD-ADEbEieQ",
+ "source_video_id": "HD-ADEbEieQ",
+ "show_id": 7393187,
+ "generated_at": "2026-11-02T23:07:11Z"
+}

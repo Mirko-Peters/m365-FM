@@ -1,0 +1,235 @@
+{
+ "episode_id": "76069971",
+ "slug": "microsoft-entra-domain-services-simply-explained",
+ "title": "Microsoft Entra Domain Services einfach erklärt: Legacy-Apps in Azure ohne eigene Domain-Controller",
+ "lang": "de",
+ "duration_s": 1039,
+ "transcript_source": "transcripts/de/0CI-mzhWEWE.vtt",
+ "time_basis": "vtt",
+ "entities": [
+  {
+   "slug": "mirko-peters",
+   "name": "Mirko Peters",
+   "type": "person",
+   "score": 40,
+   "mentions": 1,
+   "first_mention_s": 69,
+   "quote": "Bin Mirko Peters.",
+   "url": "https://www.m365.fm/de/entity/mirko-peters/"
+  },
+  {
+   "slug": "entra-domain-services",
+   "name": "Microsoft Entra Domain Services",
+   "type": "product",
+   "score": 100,
+   "mentions": 35,
+   "first_mention_s": 95,
+   "quote": "Microsoft Entra Domain Services ist eine verwaltete Windows-Domain, die in Ihrem Azure-Netzwerk läuft.",
+   "url": "https://www.m365.fm/de/entity/entra-domain-services/"
+  },
+  {
+   "slug": "entra-id",
+   "name": "Microsoft Entra ID",
+   "type": "product",
+   "score": 90,
+   "mentions": 38,
+   "first_mention_s": 84,
+   "quote": "Entra ID bleibt ein Cloud-Identitätsdienst.",
+   "url": "https://www.m365.fm/de/entity/entra-id/"
+  },
+  {
+   "slug": "active-directory",
+   "name": "Active Directory",
+   "type": "product",
+   "score": 90,
+   "mentions": 30,
+   "first_mention_s": 84,
+   "quote": "Die meisten Leute nehmen an, dass EntraID jede Aufgabe von Active Directory ersetzt. Das tut es nicht.",
+   "url": "https://www.m365.fm/de/entity/active-directory/"
+  },
+  {
+   "slug": "azure",
+   "name": "Microsoft Azure",
+   "type": "platform",
+   "score": 70,
+   "mentions": 34,
+   "first_mention_s": 71,
+   "quote": "Eine App lebt in Azure, spricht aber immer noch die alte Active Directory-Sprache.",
+   "url": "https://www.m365.fm/de/entity/azure/"
+  },
+  {
+   "slug": "mfa",
+   "name": "Multifactor authentication (MFA)",
+   "type": "concept",
+   "score": 45,
+   "mentions": 3,
+   "first_mention_s": 128,
+   "quote": "EntraID kann auch eine zweite Anmeldeprüfung per Multifaktor-Authentifizierung verlangen.",
+   "url": "https://www.m365.fm/de/entity/mfa/"
+  },
+  {
+   "slug": "microsoft-365",
+   "name": "Microsoft 365",
+   "type": "platform",
+   "score": 40,
+   "mentions": 6,
+   "first_mention_s": 115,
+   "quote": "Jeder meldet sich über Entra ID bei Microsoft 365 an",
+   "url": "https://www.m365.fm/de/entity/microsoft-365/"
+  }
+ ],
+ "new_entities": [
+  {
+   "slug": "domain-controller",
+   "name": "Domain controller",
+   "type": "concept",
+   "mentions": 19,
+   "first_mention_s": 217,
+   "quote": "Microsoft kümmert sich um die Domain-Controller und Sie geben einen Teil der Kontrolle auf",
+   "status": "review"
+  },
+  {
+   "slug": "ldap",
+   "name": "Lightweight Directory Access Protocol (LDAP)",
+   "type": "concept",
+   "mentions": 6,
+   "first_mention_s": 79,
+   "quote": "Domain Services sind nicht geeignet, wenn die App LDAP-Schreibzugriff benötigt.",
+   "status": "review"
+  },
+  {
+   "slug": "azure-virtual-machines",
+   "name": "Azure Virtual Machines",
+   "type": "product",
+   "mentions": 10,
+   "first_mention_s": 71,
+   "quote": "Ihre Aufgabe ist es, die richtigen Azure VMs und Apps mit der verwalteten Domäne zu verbinden.",
+   "status": "review"
+  },
+  {
+   "slug": "azure-virtual-network",
+   "name": "Azure Virtual Network",
+   "type": "product",
+   "mentions": 7,
+   "first_mention_s": 261,
+   "quote": "Es läuft innerhalb eines virtuellen Azure-Netzwerks oft als VNet bezeichnet.",
+   "status": "review"
+  },
+  {
+   "slug": "group-policy",
+   "name": "Group Policy",
+   "type": "product",
+   "mentions": 5,
+   "first_mention_s": 79,
+   "quote": "Sie stützt sich möglicherweise auf Gruppenrichtlinien, die Sammlung von Unternehmensregeln",
+   "status": "review"
+  },
+  {
+   "slug": "ntlm",
+   "name": "NTLM",
+   "type": "concept",
+   "mentions": 2,
+   "first_mention_s": 329,
+   "quote": "Da mit Kerberos und NTLM funktionieren, benötigt Domainservices eine geschützte Form der Passwortdaten",
+   "status": "review"
+  }
+ ],
+ "quotes": [
+  {
+   "text": "Die meisten Leute nehmen an, dass EntraID jede Aufgabe von Active Directory ersetzt. Das tut es nicht. Moderne Cloud-Apps können Sie über EntraID anmelden, aber ältere Windows-Apps erwarten dieselbe Domäne wie damals im Serverraum.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 84,
+   "entities": [
+    "entra-id",
+    "active-directory"
+   ],
+   "why": "Kernirrtum: Entra ID ersetzt Active Directory nicht vollständig"
+  },
+  {
+   "text": "Microsoft Entra Domain Services ist eine verwaltete Windows-Domain, die in Ihrem Azure-Netzwerk läuft. Das ist die einfache Definition. Die Domain-Controller laufen im Hintergrund vollständig verwaltet von Microsoft",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 261,
+   "entities": [
+    "entra-domain-services",
+    "azure",
+    "domain-controller"
+   ],
+   "why": "Klare Definition des Dienstes"
+  },
+  {
+   "text": "Die Richtung spielt hier eine Rolle. Identitätsdetails fließen in Entra-Domainservices hinein. Sie fließen nicht wieder zurück. Wenn ein Benutzer also aus Entra-ID stammt, verwalten Sie diesen Benutzer auch in Entra-ID.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 379,
+   "entities": [
+    "entra-domain-services",
+    "entra-id"
+   ],
+   "why": "Einweg-Synchronisierung als wichtigstes Verwaltungsdetail"
+  },
+  {
+   "text": "Für eine Cloud-Benutzer bedeutet dies oft, dass Sie Ihr Passwort ändern müssen, nachdem Domainservices aktiviert wurde. Diese Passwortänderung erzeugt die für die verwaltete Domäne erforderliche geschützte Form.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 426,
+   "entities": [
+    "entra-domain-services"
+   ],
+   "why": "Typischer Stolperstein bei der Einrichtung"
+  },
+  {
+   "text": "Domain Services sind nicht geeignet, wenn die App LDAP-Schreibzugriff benötigt. Dieselbe Warnung gilt, wenn eine App das Active Directory-Schema ändern muss, also die Felder.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 818,
+   "entities": [
+    "entra-domain-services",
+    "ldap",
+    "active-directory"
+   ],
+   "why": "Harte Grenzen des verwalteten Dienstes"
+  }
+ ],
+ "chapters": [
+  {
+   "start_s": 0,
+   "title": "Einführung: Legacy-Apps in Azure brauchen noch eine Windows-Domäne"
+  },
+  {
+   "start_s": 108,
+   "title": "Warum Entra ID allein nicht jede Legacy-App ausführen kann"
+  },
+  {
+   "start_s": 258,
+   "title": "Was Microsoft Entra Domain Services eigentlich ist"
+  },
+  {
+   "start_s": 489,
+   "title": "Entra ID, Active Directory und Domain Services: unterschiedliche Aufgaben"
+  },
+  {
+   "start_s": 700,
+   "title": "Wann Domain Services passt und wann nicht"
+  },
+  {
+   "start_s": 888,
+   "title": "Die Kompromisse bei verwalteten Diensten"
+  },
+  {
+   "start_s": 996,
+   "title": "Eine einfache Azure-Migrationsgeschichte"
+  }
+ ],
+ "takeaways": [
+  "Microsoft Entra Domain Services ist eine von Microsoft verwaltete Windows-Domäne im Azure-Netzwerk, die Legacy-Apps LDAP, Kerberos, NTLM, DNS und Gruppenrichtlinien bietet – ohne eigene Domain-Controller.",
+  "Identitäten fließen nur in eine Richtung: von Entra ID (bzw. dem lokalen Active Directory) in die verwaltete Domäne; Benutzer und Gruppen werden deshalb immer im Quellverzeichnis gepflegt.",
+  "Neue Cloud-Apps sollten sich direkt über Entra ID anmelden; benötigt eine App LDAP-Schreibzugriff, Schemaänderungen oder volle Domain-Admin-Rechte, ist ein selbst betriebenes Active Directory die richtige Wahl."
+ ],
+ "hook": "Ihre alte Finanz-App läuft jetzt in Azure – und verlangt trotzdem nach einer Windows-Domäne. In dieser Folge erklärt Mirko Peters, wo Entra ID, Active Directory und Microsoft Entra Domain Services hingehören und warum Identitätsdaten nur in eine Richtung fließen.",
+ "youtube_video_id": "0CI-mzhWEWE",
+ "source_video_id": "0CI-mzhWEWE",
+ "show_id": 7393187,
+ "generated_at": "2026-11-02T23:04:05Z"
+}
