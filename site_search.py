@@ -3,7 +3,7 @@
 1) Suchindex: nach dem Schreiben der Sitemaps liest build_index() jede indexierbare Seite (alle Sprachen, Quelle: die
    Sitemap-Liste des Seitenbaus) aus docs/ bzw. r2out/ und schreibt search/manifest.json + search/part-<n>.json nach
    r2out/ (Site-Worker liefert sie aus dem R2-Bucket). Format = Vertrag mit dem Worker (Issue #128, /api/search):
-   {"id","url","lang","type","title","summary","keywords","entities","date","image"}.
+   {"id","url","lang","type","title","summary","keywords","entities","date","image","group"} (group = x-default des hreflang-Clusters, leer wenn keiner; Manifest mit "build" als ISO-Zeitstempel).
 2) Suchseite /search/ und /<lang>/search/ (noindex): Formular, Treffer, Facetten (Typ, Sprache, Thema, Jahr);
    die Abfrage macht assets/search.js gegen die Community-API (tippfehlertolerant, alle Sprachen)."""
 import html as _h, json, re
@@ -88,9 +88,10 @@ def extract(url, html, lang_default, typ, allow_noindex=False):
     ents = [e for e, _ in Counter(x for x in _RX["ent"].findall(html) if x != own).most_common(10)]
     kw = ", ".join(dict.fromkeys(_txt(str(k), 120) for k in kw if k))
     img = g("ogi")
+    _xd = re.search(r'<link rel="alternate" hreflang="x-default" href="([^"]+)"', html[:20000])   # Cluster der Sprachfassungen (auch Dub-Folgen mit eigenen Slugs)
     return {"id": f"{g('lang') or lang_default}:{path}", "url": url, "lang": g("lang") or lang_default, "type": _type(path, typ, types),
             "title": title, "summary": _txt(g("desc"), 300), "keywords": kw[:500], "entities": ents,
-            "date": date, "image": img if img.startswith("https://img.m365.fm/") else ""}
+            "date": date, "image": img if img.startswith("https://img.m365.fm/") else "", "group": _xd.group(1) if _xd else ""}
 
 
 def build_index(sitemap, roots, write_r2, base, langs):
@@ -126,7 +127,7 @@ def build_index(sitemap, roots, write_r2, base, langs):
     for n, p in enumerate(parts, 1):
         write_r2(f"search/part-{n}.json", json.dumps({"part": n, "docs": p}, ensure_ascii=False, separators=(",", ":")))
     import datetime as _dt
-    write_r2("search/manifest.json", json.dumps({"generated": _dt.date.today().isoformat(), "parts": len(parts), "count": len(docs),
+    write_r2("search/manifest.json", json.dumps({"generated": _dt.date.today().isoformat(), "build": _dt.datetime.now(_dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"), "parts": len(parts), "count": len(docs),
                                                  "types": dict(Counter(d["type"] for d in docs)), "langs": dict(Counter(d["lang"] for d in docs))}, ensure_ascii=False))
     return docs
 
