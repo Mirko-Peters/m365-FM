@@ -1,0 +1,1675 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.840
+Agenci AI są dostarczani szybciej niż Twoje spotkania dotyczące kontroli zmian, a zarządzanie jest w świetnej atmosferze.
+
+00:00:05.020 --> 00:00:08.580
+Znasz to uczucie, gdy drugi pilot dostarcza dostęp dla całego dzierżawcy tylko do testów?
+
+00:00:08.700 --> 00:00:11.480
+Tak, to właśnie słyszysz bicie serca swojego inspektora z godności.
+
+00:00:11.740 --> 00:00:18.900
+Dzisiaj rozbiorę bałagan w LA-NG-CHA i N4J i studiu drugiego pilota, wykorzystując prawdziwe przypadki, szybkie wstrzykiwanie, nadmiernie permisywne łączniki i luki w audycie.
+
+00:00:19.080 --> 00:00:22.560
+Pokażę Ci, co się psuje, dlaczego się psuje i jakie poprawki faktycznie działają.
+
+00:00:22.560 --> 00:00:26.560
+Zostań do końca, a przedstawię Ci jeden krok w zarządzaniu, który zapobiega większości incydentów.
+
+00:00:27.240 --> 00:00:32.140
+Otrzymasz model RBAC-agenta, zasady utraty danych i listę kontrolną zespołu redaktor.
+
+00:00:32.320 --> 00:00:34.360
+Przypadek pierwszy – szybkie wstrzykiwanie.
+
+00:00:34.620 --> 00:00:36.680
+Nienadzorowany stażysta opracowuje zasady.
+
+00:00:36.900 --> 00:00:44.980
+Szybkie wstrzykiwanie to ten nienadzorowany stażysta, który brzmi pomocnie, pisze pełnymi zdaniami, a następnie wysyła dane płacowe do swojego osobistego archiwum w celu bezpiecznego przechowywania.
+
+00:00:45.200 --> 00:00:47.400
+Myślisz, że Twój monit systemowy jest prawem.
+
+00:00:47.400 --> 00:00:55.320
+Model uważa, że to sugestia, a w chwili, gdy opierasz się na treści wewnętrznej, jeden pikantny dokument lub wiadomość użytkownika może zmienić reguły w trakcie rozmowy.
+
+00:00:55.560 --> 00:00:56.600
+Dlaczego to ma znaczenie?
+
+00:00:57.000 --> 00:01:00.820
+Kiedy wstrzyknięcie wygrywa, Twój agent staje się królem wycieków danych.
+
+00:01:01.060 --> 00:01:06.080
+Wymyśla narzędzia, eskaluje je i ignoruje język zasad, jakby to były warunki korzystania z Wi-Fi.
+
+00:01:06.280 --> 00:01:10.420
+W regulowanych sklepach to nie błąd, to incydent podlegający zgłoszeniu z nazwą Twojej firmy.
+
+00:01:10.640 --> 00:01:13.520
+Zacznijmy od tego, co psuje LANGCHA i N4J.
+
+00:01:13.520 --> 00:01:19.140
+Większość ludzi nie dostrzega, że wywoływanie narzędzi bez ścisłych schematów wyjściowych to w zasadzie popełnianie przestępstw, zwracanie wibracji.
+
+00:01:19.360 --> 00:01:31.080
+Jeśli Twoje narzędzia akceptują niesprawdzone argumenty, takie jak tekst swobodny, SQL lub pola zapytań, a Ty nie walidujesz typów, zakresów ani wyliczeń, model chętnie przekaże dalej wszystko, co przemyci atakujący.
+
+00:01:31.420 --> 00:01:34.100
+Słaba walidacja danych wyjściowych to wspólnik wzbrodni.
+
+00:01:34.100 --> 00:01:41.560
+Kiedy oczekujesz JSON, ale akceptujesz JSON owe, atakujący może przemycić instrukcje w komentarzach lub ciągach znaków, które Twój parser potraktuje jako polecenia.
+
+00:01:41.740 --> 00:01:47.260
+Dotarło to do mnie, gdy zobaczyłem logi, w których narzędzie do pobierania danych pobierało parametr tematu z dowolnym znacznikiem markdown.
+
+00:01:47.480 --> 00:01:51.040
+Następne wywołanie przekazało ten znacznik markdown, jakby to była konfiguracja.
+
+00:01:51.200 --> 00:01:53.660
+To nie jest orkiestracja, to jest coś własnego.
+
+00:01:54.180 --> 00:01:56.420
+Właśnie tutaj większość ludzi popełnia błąd.
+
+00:01:56.540 --> 00:02:00.720
+Polegają na ustawieniach modeli proszę zachować ostrożność zamiast na zabezpieczeniach w kodzie.
+
+00:02:00.720 --> 00:02:06.960
+W Langchain 4J potrzebne są listy dozwolonych nazw i argumentów narzędzi, wyjścia schematu JSON wymuszane na granicy,
+
+00:02:07.100 --> 00:02:15.820
+filtry wyjściowe oparte na wzorcach do usuwania poufnych danych oraz obsługa wyjątków, która nie powtarza tych samych zatrutych danych wejściowych pięć razy jak Golden Retriever z piłką tenisową.
+
+00:02:16.020 --> 00:02:20.720
+Powodem, dla którego to działa, jest to, że zaufanie do modelu zmienia się w weryfikację każdego bajtu.
+
+00:02:21.120 --> 00:02:22.380
+Co psuje Copilot Studio?
+
+00:02:22.640 --> 00:02:25.220
+Naiwne uziemienie z szerokim wykorzystaniem SharePoint.
+
+00:02:25.220 --> 00:02:32.340
+Łączysz całą kolekcję witryn dla kompletności, a teraz jeden dokument wprowadzający z ignorowaniem poprzednich instrukcji staje się nową religią agenta.
+
+00:02:32.540 --> 00:02:35.680
+Monity systemowe edytowalne przez użytkowników biznesowych to kontynuacja.
+
+00:02:35.880 --> 00:02:42.080
+Uwielbiam użytkowników biznesowych, ale dawanie im szybkich uprawnień administratora jest jak pozwolenie marketingowi na ustalanie reguł zapory sieciowej, ponieważ znają głos marki.
+
+00:02:42.220 --> 00:02:46.280
+I tak widziałem konfigurację dzierżawców, w których moderacja była wyłączona, aby zmniejszyć tarcia.
+
+00:02:46.280 --> 00:02:47.780
+Wolałbyś, żeby tak nie było.
+
+00:02:48.020 --> 00:02:49.000
+Dowód, który rozpoznasz.
+
+00:02:49.100 --> 00:02:55.340
+Logi dzierżawców, które pokazują narzędzia wywoływane z nieograniczonymi parametrami, takimi jak eksport wszystkich flag, które nigdy nie powinny istnieć.
+
+00:02:55.520 --> 00:03:00.920
+Ślady konwersacji, w których asystent powtarza wstrzyknięty ciąg z pobranego dokumentu, wyłączone przełączniki moderacji.
+
+00:03:01.100 --> 00:03:02.020
+To nie jest hipotetyczne.
+
+00:03:02.160 --> 00:03:04.740
+To każda kontrola po incydencie, w której nie chcesz uczestniczyć.
+
+00:03:04.960 --> 00:03:07.400
+Jaka jest więc stała ścieżka, którą możesz wdrożyć już dziś?
+
+00:03:07.400 --> 00:03:10.700
+W przypadku Langchain 4J wymuś listy dozwolonych w rejestrze narzędzi.
+
+00:03:10.860 --> 00:03:13.520
+Jeśli narzędzie nie jest zarejestrowane w schemacie, nie istnieje.
+
+00:03:13.700 --> 00:03:17.000
+Wymagaj wyników schematu JSON i odrzucaj wszystko, co nie przechodzi walidacji.
+
+00:03:17.240 --> 00:03:19.100
+Brak schematu, brak odpowiedzi, kropka.
+
+00:03:19.320 --> 00:03:23.400
+Dodaj filtry wzorców dla oczywistych wycieków, kluczy API, sekretów, numerów ubezpieczenia społecznego.
+
+00:03:23.640 --> 00:03:25.900
+Filtry Bloom są szybkie i tanie, używaj ich.
+
+00:03:26.020 --> 00:03:30.700
+Owin narzędzia kontrolą zasad, waliduj typy argumentów, zakresy i oczekiwane formaty przed wykonaniem.
+
+00:03:30.700 --> 00:03:36.620
+Dodaj moderację treści w procesorach pre-post, aby zapobiec działaniu modelu na toksycznych lub wrażliwych treściach lub ich emisji.
+
+00:03:36.780 --> 00:03:40.760
+Niepowodzenie zamykania z jawnymi wyjątkami i nigdy nie ponawiaj automatycznie zatrutych monitów.
+
+00:03:40.940 --> 00:03:44.920
+W przypadku Copilot Studio zablokuj monity systemowe, tylko administratorzy mogą je zmieniać.
+
+00:03:45.100 --> 00:03:46.080
+Wersjonuj je jak kod.
+
+00:03:46.220 --> 00:03:47.760
+Konektory zakresowe według środowiska.
+
+00:03:47.960 --> 00:03:50.100
+Różne granice dla środowisk deweloperskich, testowych i produkcyjnych.
+
+00:03:50.280 --> 00:03:51.820
+Najmniejsze uprawnienia do źródeł danych.
+
+00:03:52.060 --> 00:03:54.340
+Włącz zasady moderacji treści na poziomie dzierżawy.
+
+00:03:54.520 --> 00:03:55.680
+To są kluczowe kwestie.
+
+00:03:55.680 --> 00:04:00.300
+Ugruntuj tylko na treściach oznaczonych etykietą wrażliwości, a nie na całej farmie dla wygody.
+
+00:04:00.520 --> 00:04:05.840
+Szybkim sposobem na natychmiastowe osiągnięcie sukcesu jest dodanie schematu wyjściowego i kroku moderacji filtru Bloom na granicy agenta.
+
+00:04:06.080 --> 00:04:09.020
+Wyeliminujesz większość głupich przecieków bez naruszania logiki biznesowej.
+
+00:04:09.220 --> 00:04:14.720
+Następnie dodaj małą listę dozwolonych odrzuceń dla oczekiwanych formatów, takich jak podsumowania strukturalne i zablokuj wszystko inne.
+
+00:04:14.900 --> 00:04:17.020
+Pozwól, że pokażę Ci dokładnie jak to działa.
+
+00:04:17.280 --> 00:04:21.560
+Na przykład masz narzędzie do tworzenia zgłoszeń, które akceptuje tytuł, opis i priorytet.
+
+00:04:21.560 --> 00:04:28.400
+Bez wymuszania schematu atakujący wstrzykuje opis, zamykając wszystkie incydenty P1 w bloku z potrójnym apostrofem.
+
+00:04:28.660 --> 00:04:29.720
+Model przepuszcza go.
+
+00:04:29.920 --> 00:04:33.320
+Twoje API i TSM wzrusza ramionami i uruchamia skrypt aktualizacji.
+
+00:04:33.580 --> 00:04:37.740
+Dzięki schematowi i walidacji opis nie może zawierać tokenów poleceń ani przekraczać długości.
+
+00:04:37.960 --> 00:04:43.120
+Żądanie zostaje zamknięte, loguje identyfikator korelacji, a Twój CM sygnalizuje moderację.
+
+00:04:43.520 --> 00:04:45.120
+I bum, spójrz na ten wynik.
+
+00:04:45.300 --> 00:04:48.300
+Incydent został zażegnany, ślad zachowany, audytor uspokojony.
+
+00:04:48.300 --> 00:04:50.140
+Typowe błędy, których należy unikać.
+
+00:04:50.260 --> 00:04:52.420
+Umożliwienie modelowi dynamicznego wyboru nazw narzędzi.
+
+00:04:52.580 --> 00:04:54.280
+Narzędzia to kontrakty, a nie sugestie.
+
+00:04:54.440 --> 00:04:56.620
+Akceptowanie swobodnej formy JSON bez walidatora.
+
+00:04:56.780 --> 00:04:58.820
+Wygląda na to, że JSON nie jest komplementem.
+
+00:04:58.980 --> 00:05:00.900
+Edytowalne monity w środowiskach produkcyjnych.
+
+00:05:01.060 --> 00:05:03.100
+Jeśli można to zmienić bez przeglądu, to się zmieni.
+
+00:05:03.260 --> 00:05:05.520
+Poleganie na pamięci konwersacji w celu ustalenia zasad.
+
+00:05:05.740 --> 00:05:08.180
+Zasady należą do kodu i konfiguracji, a nie do atmosfery.
+
+00:05:08.340 --> 00:05:10.040
+Gdy to opanujesz, wszystko inne zaskoczy.
+
+00:05:10.240 --> 00:05:12.420
+Powstrzymujesz starzystę przed mówieniem poza kolejnością.
+
+00:05:12.420 --> 00:05:15.680
+Następnie powstrzymujemy go przed wchodzeniem do każdego pokoju z kluczem głównym.
+
+00:05:15.820 --> 00:05:16.580
+Przypadek drugi.
+
+00:05:16.720 --> 00:05:19.380
+Ponad permisywnymi złączami klucze do zamku na smyczy.
+
+00:05:19.640 --> 00:05:21.020
+Zabraniasz starzyście mówić.
+
+00:05:21.160 --> 00:05:22.640
+Teraz zabierz mu odznakę.
+
+00:05:22.760 --> 00:05:29.740
+Ponad permisywnymi złączami to ten brelok woźnego, który otwiera wszystkie drzwi w budynku, w tym sejf, żłobek i w jakiś sposób peleton prezesa.
+
+00:05:29.860 --> 00:05:31.740
+To, dlaczego to ma znaczenie, jest proste.
+
+00:05:31.940 --> 00:05:36.660
+Jeden łącznik o rozszerzonym zakresie równa się eksfiltracji danych w całym przedsiębiorstwie w jednym żądaniu, a nie teoretycznie.
+
+00:05:36.660 --> 00:05:37.780
+Jedno wywołanie.
+
+00:05:37.980 --> 00:05:40.540
+Podczas gdy wciąż spierasz się o tytuł zgłoszenia zmiany.
+
+00:05:40.700 --> 00:05:43.200
+Zacznijmy od tego, co psuje się w Langchain 4J.
+
+00:05:43.460 --> 00:05:46.300
+Deweloperzy współdzielą klucze API między agentami dla wygody.
+
+00:05:46.540 --> 00:05:52.680
+Następnie ktoś umieszcza zazdrość w prywatnym repozytorium, które jest w rzeczywistości publiczne, a ty zajmujesz się reagowaniem na incydenty o drugiej w nocy za granicą.
+
+00:05:52.920 --> 00:05:54.380
+Następne są zakresy OAuth.
+
+00:05:54.560 --> 00:06:00.920
+Udzielasz dostępu do odczytu i zapisu, aby zaoszczędzić czas podczas testowania, a 6 miesięcy później ten token testowy jest teraz klejnotem w koronie produkcji.
+
+00:06:00.920 --> 00:06:02.160
+A rejestr narzędzi?
+
+00:06:02.160 --> 00:06:09.100
+Uwielbiam czysty rejestr, ale jeśli wskażesz agentowi deweloperskiemu dane uwierzytelniające do produkcji, bo demo musi działać dzisiaj, to właśnie podłączyłeś piłę łańcuchową do rąby.
+
+00:06:09.300 --> 00:06:12.580
+Większość ludzi nie dostrzega, że narzędzia dziedziczą każdą przekazaną im tożsamość.
+
+00:06:12.740 --> 00:06:15.240
+Współdzielone dane uwierzytelniające oznaczają wspólny zasięg.
+
+00:06:15.340 --> 00:06:17.520
+Nie ma magii, która pozwala tylko na zapisywanie rzeczy.
+
+00:06:17.780 --> 00:06:22.860
+Jeśli token może usuwać rekordy, twój agent może usuwać je przypadkowo z entuzjazmem i z całkowitą pewnością siebie.
+
+00:06:23.060 --> 00:06:24.560
+Teraz przejdź do Copilot Studio.
+
+00:06:24.800 --> 00:06:27.980
+Łączniki M365 dla całego dzierżawcy to klasyczna pułapka.
+
+00:06:27.980 --> 00:06:32.020
+Klikasz raz, a teraz każdy Copilot w każdym zespole widzi dane, których nie powinien.
+
+00:06:32.160 --> 00:06:34.380
+To nie jest wzmocnienie, to bufet z błędami.
+
+00:06:34.600 --> 00:06:41.660
+Następnie wdrażasz w zespołach z widocznością w całej organizacji, ponieważ adopcja i nagle bot pilotażowy przeznaczony dla działu finansowego odpowiada na pytania w dziale marketingu,
+
+00:06:41.720 --> 00:06:44.760
+pobierając treści z witryn SharePoint, o których istnieniu nigdy nie powinien wiedzieć.
+
+00:06:44.960 --> 00:06:46.700
+A nie zarządzane haki SAS innych firm?
+
+00:06:46.880 --> 00:06:49.120
+To jak dyski USB w 2009 roku.
+
+00:06:49.380 --> 00:06:51.180
+Tajemniczo wszędzie i zawsze tymczasowo.
+
+00:06:51.420 --> 00:06:53.740
+Dowody pojawiają się za każdym razem w ten sam sposób.
+
+00:06:53.740 --> 00:06:57.900
+Nieaktualne sekrety, które nigdy nie były Rotowain bez daty wygaśnięcia, bez właściciela.
+
+00:06:58.080 --> 00:07:00.640
+Łączniki Mapowain na grupy globalne dla uproszczenia.
+
+00:07:01.020 --> 00:07:03.940
+Rejestracje aplikacji z zakresami, które brzmią jak spowiedź.
+
+00:07:04.080 --> 00:07:08.080
+I tak, ten tymczasowy klucz produkcyjny tkwiący w środowisku deweloperskim przez miesiące.
+
+00:07:08.280 --> 00:07:11.760
+Twoje ustalenia dotyczące bezpieczeństwa i konfiguracji dzierżawy nie będą kłamać, tylko westchną.
+
+00:07:11.940 --> 00:07:13.260
+Jaka jest więc ścieżka naprawy?
+
+00:07:13.400 --> 00:07:17.080
+W przypadku LA-NG-CHA i N4-J odtraktuj każdego agenta jak osobną aplikację z własną tożsamością.
+
+00:07:17.080 --> 00:07:19.200
+Twórz nazwy główne usługi dla poszczególnych agentów.
+
+00:07:19.380 --> 00:07:20.580
+Brak współdzielonych tokenów.
+
+00:07:20.740 --> 00:07:23.660
+Jeśli dwaj agenci potrzebują tego samego API, nadal otrzymują różne poświadczenia.
+
+00:07:23.840 --> 00:07:25.140
+Używaj zakresowego OAuth.
+
+00:07:25.260 --> 00:07:28.220
+Przyznaj najmniejszy zestaw uprawnień, który pozwala narzędziu wykonywać swoje zadanie.
+
+00:07:28.360 --> 00:07:29.340
+Czytelnik, a nie autor.
+
+00:07:29.600 --> 00:07:31.260
+Zapis do jednej kolekcji, a nie do wszystkich.
+
+00:07:31.480 --> 00:07:33.440
+Przechowuj sekrety w odpowiednim menedżerze sekretów.
+
+00:07:33.620 --> 00:07:34.920
+Rotuj zgodnie z harmonogramem.
+
+00:07:35.100 --> 00:07:36.060
+Rotuj incydentalnie.
+
+00:07:36.280 --> 00:07:37.840
+Rotuj, nawet gdy ktoś szepcze token.
+
+00:07:38.080 --> 00:07:39.380
+Dodaj dwupoziomowy RBAC.
+
+00:07:39.680 --> 00:07:42.200
+Raper narzędzia sprawdza rolę wywołującego, zanim dotknie API.
+
+00:07:42.200 --> 00:07:43.500
+Bez roli, bez wywołania.
+
+00:07:43.700 --> 00:07:46.580
+Oddzielne środowiska, klucze deweloperskie komunikują się tylko z systemami deweloperskimi.
+
+00:07:46.800 --> 00:07:50.640
+Jeśli narzędzie wykryje punkt końcowy produkcji w środowisku deweloperskim, zostanie zamknięte i będzie zgłaszane w logach.
+
+00:07:50.820 --> 00:07:54.100
+W przypadku Copilot Studio należy wyznaczyć wyraźne granice środowisk i zakresów.
+
+00:07:54.300 --> 00:07:57.180
+Należy stosować separację środowisk deweloperskiego, testowego i produkcyjnego.
+
+00:07:57.380 --> 00:07:59.660
+Różne łączniki, różne uprawnienia, różni właściciele.
+
+00:07:59.840 --> 00:08:01.900
+Przejrzyj zakresy łączników za pomocą przepływu pracy.
+
+00:08:02.120 --> 00:08:04.360
+Zmiany wymagają zatwierdzenia, dat wygaśnięcia i właścicieli.
+
+00:08:04.360 --> 00:08:05.920
+Brak właściciela, brak łącznika.
+
+00:08:06.140 --> 00:08:07.780
+Stosuj zasady DLP dla każdego kanału.
+
+00:08:07.920 --> 00:08:10.400
+Kanał finansowy podlega bardziej rygorystycznym zasadom niż dla całej firmy.
+
+00:08:10.540 --> 00:08:11.300
+O to właśnie chodzi.
+
+00:08:11.580 --> 00:08:13.880
+Wyłącz wdrożenia Teams w całej organizacji dla pilotaży.
+
+00:08:14.080 --> 00:08:15.360
+Ogranicz widoczność do grupy zabezpieczeń.
+
+00:08:16.140 --> 00:08:17.480
+Rozszerzaj dopiero po przeglądzie.
+
+00:08:17.740 --> 00:08:19.860
+Inwentaryzuj i blokuj łączniki SAS innych firm.
+
+00:08:20.040 --> 00:08:22.080
+Jeśli nie są zarządzane, są domyślnie wyłączone.
+
+00:08:22.280 --> 00:08:24.260
+Właściciele muszą uzasadnić dostęp i go odnowić.
+
+00:08:24.400 --> 00:08:26.760
+Oto szybki sposób, który możesz wdrożyć już dziś po południu.
+
+00:08:26.760 --> 00:08:31.000
+Wyłącz zakresy obejmujące cały tenant i zamapuj każdy łącznik na grupę zabezpieczeń z zasadami wygasania.
+
+00:08:31.140 --> 00:08:33.580
+Po wygaśnięciu grupy dostęp do nich zostanie automatycznie utracony.
+
+00:08:33.780 --> 00:08:35.220
+Bez dramatów, bez niespodzianek.
+
+00:08:35.340 --> 00:08:36.660
+Pokażę Ci dokładnie, jak to działa.
+
+00:08:36.880 --> 00:08:39.840
+Masz narzędzie do eksportowania raportów, które zapisuje dane do kontenera pamięci masowej.
+
+00:08:40.080 --> 00:08:42.380
+Dzięki współdzielonym poświadczeniom ma dostęp do każdego kontenera.
+
+00:08:42.580 --> 00:08:47.580
+W ten sposób Monit z komunikatem zapisz kopię zapasową w archiwum dyskretnie umieszcza poufne dane w ścieżce publicznej.
+
+00:08:47.820 --> 00:08:50.680
+Dzięki poszczególnym podmiotom i rolom o określonym zakresie,
+
+00:08:50.680 --> 00:08:54.240
+narzędzie może zapisywać tylko do jednego kontenera z jednym prefiksem.
+
+00:08:54.460 --> 00:08:57.980
+Jeśli model zdecyduje się wymyślić inną ścieżkę, API ją odrzuci.
+
+00:08:58.160 --> 00:09:01.520
+Rejestrujesz identyfikator korelacji, a menedżer uprawnień, CM, generuje alert.
+
+00:09:01.680 --> 00:09:03.760
+I boom. Koniec z przypadkowym wyciekiem danych.
+
+00:09:03.960 --> 00:09:05.720
+Typowe błędy, których należy unikać.
+
+00:09:05.840 --> 00:09:08.340
+Korzystanie z grup globalnych do uzyskania dostępu tylko na razie.
+
+00:09:08.520 --> 00:09:09.600
+Teraz nigdy się nie kończy.
+
+00:09:09.800 --> 00:09:12.560
+Udzielanie szerokich lub wszystkich zakresów, ponieważ dokumentacja była niejasna.
+
+00:09:12.760 --> 00:09:14.020
+Niejasność to nieuprawnienie.
+
+00:09:14.220 --> 00:09:16.040
+Kopiowanie poświadczeń między środowiskami.
+
+00:09:16.260 --> 00:09:18.060
+Jeśli możesz coś wkleić, wkleisz to źle.
+
+00:09:18.060 --> 00:09:20.240
+Traktowanie widoczności Teams jako nieszkodliwej.
+
+00:09:20.400 --> 00:09:21.460
+Widoczność to dostęp.
+
+00:09:21.680 --> 00:09:22.600
+Dostęp to ryzyko.
+
+00:09:22.820 --> 00:09:25.960
+Gdy opanujesz zakres dostępu, audytorzy przestaną wyczuwać krew w wodzie.
+
+00:09:26.100 --> 00:09:28.020
+A kiedy zapukają, będziesz potrzebować dowodu.
+
+00:09:28.180 --> 00:09:30.360
+Co prowadzi nas do części, o której wszyscy zapominają.
+
+00:09:30.580 --> 00:09:32.640
+Jeśli coś nie jest rejestrowane, to się nie wydarzyło.
+
+00:09:32.820 --> 00:09:33.640
+Przypadek trzeci.
+
+00:09:33.880 --> 00:09:34.620
+Luki w audycie.
+
+00:09:34.840 --> 00:09:36.900
+Jeśli coś nie jest rejestrowane, to się nie wydarzyło.
+
+00:09:37.120 --> 00:09:38.560
+Zakres dostępu został określony.
+
+00:09:38.800 --> 00:09:39.260
+Świetnie.
+
+00:09:39.440 --> 00:09:43.320
+Teraz to udowodni, bo kiedy audytor pyta, co zrobił agent o 15.14,
+
+00:09:43.320 --> 00:09:45.940
+a Twoja odpowiedź brzmi, myślimy, że coś.
+
+00:09:45.940 --> 00:09:48.620
+To nie jest postawa, to przeprosiny.
+
+00:09:48.880 --> 00:09:49.940
+Dlaczego to ma znaczenie?
+
+00:09:50.200 --> 00:09:52.060
+Bez pochodzenia nie da się wyjaśnić dziwnych odpowiedzi,
+
+00:09:52.180 --> 00:09:54.040
+cofnąć błędnych działań, ani nawet dowiedzieć się,
+
+00:09:54.140 --> 00:09:55.320
+czy incydent został opanowany.
+
+00:09:55.520 --> 00:09:57.600
+Organy regulacyjne uwielbiają tę niepewność.
+
+00:09:57.740 --> 00:09:58.480
+Klienci mniej.
+
+00:09:58.660 --> 00:10:01.300
+A Twoi menedżerowie naprawdę lubią, gdy mówisz, nie mamy pojęcia.
+
+00:10:01.500 --> 00:10:03.900
+Oto, czego większość ludzi nie dostrzega w Langchain 4J.
+
+00:10:04.100 --> 00:10:06.460
+Twój łańcuch robi o wiele więcej, niż przyznają logi.
+
+00:10:06.680 --> 00:10:09.360
+Brak grafów wykonania oznacza, że nie można odtworzyć kroków.
+
+00:10:09.360 --> 00:10:12.760
+Brak identyfikatorów śledzenia sprawia, że zdarzenia wyglądają jak losowe fajerwerki.
+
+00:10:12.760 --> 00:10:15.600
+Częściowe logi ukrywają to jedyne istotne wywołanie narzędzia,
+
+00:10:15.740 --> 00:10:17.740
+a ciche awarie narzędzi to moje ulubione.
+
+00:10:17.980 --> 00:10:20.920
+Wszystko wygląda na zielone, podczas gdy narzędzie nigdy nie zostało uruchomione,
+
+00:10:21.020 --> 00:10:23.380
+a model po prostu wyłuskał odpowiedź, żeby być uprzejmym.
+
+00:10:23.460 --> 00:10:25.280
+To do mnie dotarło, gdy ścigałem incydent,
+
+00:10:25.360 --> 00:10:28.080
+w którym krok pobierania przekroczył limit czasu, zwrócił nal,
+
+00:10:28.180 --> 00:10:31.600
+a kolejny krok szczęśliwie zapisał brak rekordów, zamykając API zgłoszeń.
+
+00:10:31.820 --> 00:10:34.720
+Bez wyjątku, bez śladu, tylko wibracje i zamknięte zgłoszenia.
+
+00:10:34.720 --> 00:10:36.720
+Jeśli nie potrafisz odróżnić danych wyjściowych modelu
+
+00:10:36.720 --> 00:10:38.680
+od danych wyjściowych narzędzia w logach, masz już kłopoty.
+
+00:10:38.840 --> 00:10:41.300
+Pozwól, że pokażę Ci dokładnie, jak naprawić logowanie LangChain 4J,
+
+00:10:41.400 --> 00:10:42.520
+aby było gotowe na salę sądową.
+
+00:10:42.680 --> 00:10:44.800
+Po pierwsze, włącz wszędzie logowanie strukturalne.
+
+00:10:44.940 --> 00:10:46.860
+J-S-O-N, a nie zupa ciągów znaków.
+
+00:10:47.020 --> 00:10:49.340
+Każde żądanie i odpowiedź otrzymują kopertę ze znacznikami czasu,
+
+00:10:49.480 --> 00:10:51.680
+nazwą modelu, liczbą tokenów i identyfikatorem korelacji,
+
+00:10:51.800 --> 00:10:52.780
+który przetrwa cały łańcuch.
+
+00:10:52.980 --> 00:10:56.400
+Następnie dodaj wykresy wykonania lub ślady za pomocą LangSmith lub LangGraph.
+
+00:10:56.400 --> 00:10:59.300
+Każdy węzeł rejestruje dane wejściowe, wyjściowe, czas trwania i błędy.
+
+00:10:59.480 --> 00:11:01.280
+Jeśli narzędzie zgłasza błąd, zgłasza go głośno.
+
+00:11:01.480 --> 00:11:03.200
+Żadnego cichego błędu, żadnego jak zakładaliśmy.
+
+00:11:03.380 --> 00:11:04.260
+Teraz najważniejsze.
+
+00:11:04.580 --> 00:11:05.200
+Centralizuj to.
+
+00:11:05.400 --> 00:11:07.020
+Przeprowadź ślady i logi do swojego szwu.
+
+00:11:07.200 --> 00:11:09.560
+Nie zostawiaj ich w podzie, który automatycznie skaluje się do niepamięci.
+
+00:11:09.780 --> 00:11:11.800
+Dodaj próbkowanie szumu, ale nigdy nie usuwaj błędów.
+
+00:11:11.980 --> 00:11:14.640
+Chcesz wyszukiwać według identyfikatora śladu i zobaczyć całą historię.
+
+00:11:14.820 --> 00:11:16.800
+Monity, pobieranie dokumentów, wywołania narzędzi,
+
+00:11:16.800 --> 00:11:20.020
+odpowiedzi API i ostateczna odpowiedź bez grania w Gdzie jest Waldo o 2 w nocy.
+
+00:11:20.200 --> 00:11:21.360
+Przejdź do Copilot Studio.
+
+00:11:21.580 --> 00:11:23.060
+Platforma zapewnia pewne dane telemetryczne,
+
+00:11:23.200 --> 00:11:26.460
+ale są one rozproszone między zespołami, datavers i dowolnym łącznikiem, którego użyłeś.
+
+00:11:26.580 --> 00:11:29.560
+Ograniczony eksport konwersacji oznacza, że otrzymujesz fragmenty, a nie narrację.
+
+00:11:29.860 --> 00:11:32.120
+Fragmentaryczna telemetria oznacza, że twój specjalista do spraw.
+
+00:11:32.360 --> 00:11:34.660
+Zgodności łączy zrzuty ekranu jak sztukę i rzemiosło.
+
+00:11:34.860 --> 00:11:37.000
+Napraw to, budując ujednolicony tor audytu.
+
+00:11:37.160 --> 00:11:39.660
+Włącz przechowywanie transkryptów konwersacji z jasnymi umowami SL,
+
+00:11:39.660 --> 00:11:42.180
+a dotyczącymi przechowywania, kto je przechowuje, jak długo i dlaczego.
+
+00:11:42.400 --> 00:11:45.260
+Eksportuj logi konwersacji i działań do zcentralizowanego obszaru roboczego,
+
+00:11:45.400 --> 00:11:46.800
+takiego jak Fabric lub Log Analytics.
+
+00:11:47.020 --> 00:11:49.160
+Oznacz każde zdarzenie identyfikatorem korelacji,
+
+00:11:49.340 --> 00:11:51.060
+który przekazujesz od punktu wejścia w Teams,
+
+00:11:51.180 --> 00:11:53.160
+aż do wtyczek datavers i interfejsów API.
+
+00:11:53.400 --> 00:11:54.940
+Jeśli czat mówi o utworzeniu przypadku,
+
+00:11:55.100 --> 00:11:57.960
+chcę kliknąć, aby przejść do dokładnego rekordu w dokładnym systemie
+
+00:11:57.960 --> 00:11:59.780
+z dokładnymi danymi, które zostały wysłane.
+
+00:11:59.980 --> 00:12:01.660
+Dowód, który rozpoznasz z przeglądów incydentów.
+
+00:12:02.340 --> 00:12:04.160
+Osieroconych wywołań LLM w surowych logach,
+
+00:12:04.160 --> 00:12:06.180
+które nie są mapoeń na żadną sesję użytkownika.
+
+00:12:06.380 --> 00:12:08.360
+Wywołania narzędzi bez odpowiadającego monitu
+
+00:12:08.360 --> 00:12:10.440
+lub odpowiedzi cytujące źródła, których nie możesz znaleźć,
+
+00:12:10.500 --> 00:12:12.780
+ponieważ uziemiające logi nie zawierają identyfikatorów dokumentów.
+
+00:12:12.860 --> 00:12:14.160
+To nie tajemnica, to brak hydrauliki.
+
+00:12:15.060 --> 00:12:17.280
+Szybkie wygrane, które możesz zrealizować w tym tygodniu.
+
+00:12:17.440 --> 00:12:19.740
+Wymagaj kopert z żądaniami i odpowiedziami z haszami.
+
+00:12:19.920 --> 00:12:21.320
+Przechowuj hasz zawartości monitów,
+
+00:12:21.420 --> 00:12:22.980
+pobieraj fragmenty i dane wyjściowe,
+
+00:12:23.100 --> 00:12:24.420
+aby móc udowodnić integralność.
+
+00:12:24.600 --> 00:12:26.440
+Jeśli ktoś manipuluje, hasz mówi nie.
+
+00:12:26.680 --> 00:12:29.040
+Wymagaj identyfikatorów korelacji od początku do końca.
+
+00:12:29.040 --> 00:12:31.020
+Generuj na krawędzi, przepuszczaj przez każdy skok
+
+00:12:31.020 --> 00:12:32.680
+i odrzucaj każde wywołanie, którego odrzuca.
+
+00:12:32.840 --> 00:12:34.260
+Brak identyfikatora, brak usługi.
+
+00:12:34.440 --> 00:12:36.080
+Zdefiniuj umowy SLA dotyczące retencji.
+
+00:12:36.280 --> 00:12:38.080
+Zatwierdzenia prawne, egzekwowane bezpieczeństwo.
+
+00:12:38.260 --> 00:12:40.140
+90 dni dla deweloperów, rok dla producentów,
+
+00:12:40.260 --> 00:12:41.360
+dłużej dla domen regulowanych.
+
+00:12:41.500 --> 00:12:43.320
+Opublikuj to, postępuj zgodnie z tym.
+
+00:12:43.500 --> 00:12:45.020
+Typowe błędy, których należy unikać.
+
+00:12:45.180 --> 00:12:46.800
+Rejestrowanie surowych sekretów lub PII.
+
+00:12:47.000 --> 00:12:47.860
+Maskowanie u źródła.
+
+00:12:48.060 --> 00:12:49.620
+Zachowaj pola potrzebne do analizy kryminalistycznej,
+
+00:12:49.680 --> 00:12:50.300
+a nie klejnoty koronne.
+
+00:12:50.560 --> 00:12:51.380
+Błędy próbkowania.
+
+00:12:51.380 --> 00:12:52.520
+Sukces próbkowania.
+
+00:12:52.760 --> 00:12:53.960
+Rejestruj wszystkie awarie.
+
+00:12:54.180 --> 00:12:56.440
+Gdy coś się zepsuje, będziesz potrzebować każdego okruszka.
+
+00:12:56.640 --> 00:12:58.240
+Dzienniki tekstowe ludzie je uwielbiają,
+
+00:12:58.340 --> 00:12:59.240
+maszyny ich nienawidzą.
+
+00:12:59.440 --> 00:13:00.120
+Używaj pól.
+
+00:13:00.340 --> 00:13:01.280
+Dodawaj schematy.
+
+00:13:01.480 --> 00:13:02.620
+Waliduj przy pobieraniu.
+
+00:13:02.840 --> 00:13:04.840
+Teraz audytorzy pytają, co się stało.
+
+00:13:05.020 --> 00:13:06.120
+Otwierasz jeden ślad.
+
+00:13:06.300 --> 00:13:08.420
+Pokazujesz monit, pobrane identyfikatory dokumentów,
+
+00:13:08.520 --> 00:13:10.500
+dane wejściowe narzędzia, dane wyjściowe narzędzia
+
+00:13:10.500 --> 00:13:11.580
+i ostateczną wiadomość.
+
+00:13:11.780 --> 00:13:13.700
+Identyfikator korelacji pasuje do bramy API,
+
+00:13:13.880 --> 00:13:15.620
+zapisu w bazie danych i wiadomości Teams.
+
+00:13:15.800 --> 00:13:17.360
+I boom, historia się sprawdza.
+
+00:13:17.360 --> 00:13:19.080
+Więc kiedy widzisz, możesz zarządzać,
+
+00:13:19.180 --> 00:13:20.440
+co oznacza, że nadszedł czas,
+
+00:13:20.580 --> 00:13:22.780
+aby sformalizować reguły i ustalić, kto co robi.
+
+00:13:23.000 --> 00:13:25.680
+Model RBAC agentów traktuj agentów jak bardzo głupich,
+
+00:13:25.800 --> 00:13:27.260
+bardzo zaawansowanych użytkowników.
+
+00:13:27.420 --> 00:13:28.240
+Masz widoczność.
+
+00:13:28.480 --> 00:13:30.740
+Dobrze, teraz daj tym rzeczom tożsamość i smycz.
+
+00:13:30.900 --> 00:13:32.080
+Agenci to użytkownicy.
+
+00:13:32.340 --> 00:13:34.220
+Bardzo głupi, bardzo potężni użytkownicy.
+
+00:13:34.460 --> 00:13:35.860
+Jeśli nie dałbyś ludzkiemu administratorowi
+
+00:13:35.860 --> 00:13:37.040
+tymczasowego konta od pierwszego dnia,
+
+00:13:37.120 --> 00:13:38.300
+nie oddawaj go stochastycznej papudze,
+
+00:13:38.400 --> 00:13:39.620
+która nie odróżnia sarkazmu od sudo.
+
+00:13:39.800 --> 00:13:40.820
+Dlaczego to ma znaczenie?
+
+00:13:41.080 --> 00:13:42.720
+Większość organizacji zabezpiecza ludzi
+
+00:13:42.720 --> 00:13:43.700
+i ignoruje agentów.
+
+00:13:43.860 --> 00:13:46.180
+Agent omija wtedy najmniejsze uprawnienia z założenia.
+
+00:13:46.420 --> 00:13:47.400
+Przeskakuje między narzędziami,
+
+00:13:47.520 --> 00:13:49.260
+przekracza środowiska i nikt tego nie zauważa,
+
+00:13:49.320 --> 00:13:51.060
+ponieważ nie pojawia się na schemacie organizacyjnym.
+
+00:13:51.240 --> 00:13:52.500
+W ten sposób bot pomocniczy
+
+00:13:52.500 --> 00:13:53.880
+zmienia się w administratora cienia.
+
+00:13:54.140 --> 00:13:56.020
+Oto model, który chce, abyś dostarczył.
+
+00:13:56.180 --> 00:13:57.960
+Jedna tożsamość na agenta, jasne role?
+
+00:13:58.140 --> 00:14:00.160
+Sprawdzanie zasad w kodzie i granice środowiska,
+
+00:14:00.320 --> 00:14:01.440
+które faktycznie coś znaczą.
+
+00:14:01.700 --> 00:14:02.600
+Zacznij od tożsamości,
+
+00:14:02.720 --> 00:14:04.400
+utwórz podmiot usługi dla każdego agenta,
+
+00:14:04.400 --> 00:14:05.620
+a nie bot platformy 01.
+
+00:14:06.280 --> 00:14:07.700
+Rzeczywiste mapowanie 1 do 1.
+
+00:14:07.700 --> 00:14:09.260
+Nazwij to jak aplikację.
+
+00:14:09.440 --> 00:14:11.240
+Oznacz to właścicielem, celem, środowiskiem
+
+00:14:11.240 --> 00:14:12.100
+i datą wygaśnięcia.
+
+00:14:12.320 --> 00:14:13.980
+Jeśli dwóch agentów trafi do tego samego API,
+
+00:14:14.120 --> 00:14:15.380
+nadal otrzymają różne tożsamości.
+
+00:14:15.620 --> 00:14:16.480
+Współdzielona tożsamość
+
+00:14:16.480 --> 00:14:17.800
+równa się wspólnemu promieniowi rażenia.
+
+00:14:18.060 --> 00:14:19.160
+Następnie zdefiniuj taksonomię ról,
+
+00:14:19.260 --> 00:14:20.800
+którą mogą zastosować nawet zapracowane osoby.
+
+00:14:21.000 --> 00:14:21.980
+Używam czterech czytelnik,
+
+00:14:22.060 --> 00:14:23.240
+wykonawca, autor, administrator.
+
+00:14:23.460 --> 00:14:24.820
+Czytelnik może pobierać dane
+
+00:14:24.820 --> 00:14:26.140
+bez efektów ubocznych.
+
+00:14:26.320 --> 00:14:28.380
+Pomyśl o zapytaniu, pobraniu, podsumowaniu.
+
+00:14:28.620 --> 00:14:30.360
+Wykonawca może wywoływać przepływy pracy
+
+00:14:30.360 --> 00:14:31.460
+z ograniczonymi efektami.
+
+00:14:37.700 --> 00:14:39.280
+Jeden kontener, jedna skrzynka pocztowa,
+
+00:14:39.360 --> 00:14:39.760
+nie wszystkie.
+
+00:14:40.200 --> 00:14:41.980
+Administrator może zmieniać konfigurację.
+
+00:14:42.140 --> 00:14:43.920
+Ta rola powinna sprawić, że się spocisz.
+
+00:14:44.100 --> 00:14:45.560
+Używaj oszczędnie, ogranicz czasowo
+
+00:14:45.560 --> 00:14:46.740
+i zawsze podwójnie zatwierdzona.
+
+00:14:46.940 --> 00:14:49.140
+Teraz zmapuj to do LANGCHA i N4J.
+
+00:14:49.340 --> 00:14:50.920
+Narzędzia są punktami egzekwowania.
+
+00:14:51.180 --> 00:14:52.000
+Każdy raper narzędzia
+
+00:14:52.000 --> 00:14:53.840
+sprawdza rolę wywołującego przed wykonaniem.
+
+00:14:54.060 --> 00:14:56.120
+Jeśli tożsamość agenta jest zmapowana na czytelnika,
+
+00:14:56.260 --> 00:14:58.180
+narzędzie do zapisu nigdy nawet nie otrzyma wywołania.
+
+00:14:58.180 --> 00:14:59.480
+I nie zatrzymuj się na roli,
+
+00:14:59.620 --> 00:15:00.960
+uwzględnij zakres zasobu.
+
+00:15:01.080 --> 00:15:02.420
+Autor w sprawach finansowych
+
+00:15:02.420 --> 00:15:03.980
+nie może pisać spraw sprzedaży.
+
+00:15:04.240 --> 00:15:05.540
+Zakres nie jest komentarzem.
+
+00:15:05.660 --> 00:15:06.080
+To brama.
+
+00:15:06.300 --> 00:15:07.340
+Użyj zmiennych środowiskowych
+
+00:15:07.340 --> 00:15:08.320
+i plików konfiguracyjnych,
+
+00:15:08.400 --> 00:15:09.840
+aby powiązać narzędzia ze środowiskami.
+
+00:15:10.020 --> 00:15:11.780
+Agent deweloperski widzi tylko hosty deweloperskie
+
+00:15:11.780 --> 00:15:12.600
+i klucze deweloperskie.
+
+00:15:12.800 --> 00:15:14.300
+Jeśli spróbuje adresu URL produktu,
+
+00:15:14.380 --> 00:15:15.820
+zostanie zamknięty i zapisany w logu.
+
+00:15:16.020 --> 00:15:17.680
+Sprawdzanie zasad odbywa się na granicy,
+
+00:15:17.800 --> 00:15:19.180
+a nie po niepowodzeniu wywołania API.
+
+00:15:19.400 --> 00:15:21.280
+W Copilot Studio zastosuj ten sam schemat
+
+00:15:21.280 --> 00:15:23.460
+z rolami środowiska i zakresami łączników.
+
+00:15:23.460 --> 00:15:24.920
+Przypisz agenta do środowiska
+
+00:15:24.920 --> 00:15:27.000
+z uprawnieniami odzwierciedlającymi czytelnika,
+
+00:15:27.000 --> 00:15:29.040
+czyli runera, rajtera i administratora.
+
+00:15:29.160 --> 00:15:31.320
+Uprawnienia łącznika są mapowe na grupy zabezpieczeń
+
+00:15:31.320 --> 00:15:32.360
+powiązane z tymi rolami.
+
+00:15:32.520 --> 00:15:34.540
+Granice wdrożenia zespołów to twój promień rażenia.
+
+00:15:34.780 --> 00:15:36.200
+Utrzymuj pilotów w małej grupie.
+
+00:15:36.420 --> 00:15:38.220
+Rozszerzaj tylko za pomocą zgłoszenia zmiany.
+
+00:15:38.300 --> 00:15:40.420
+To tutaj przepływ pracy przeglądu zapewnia uczciwość.
+
+00:15:40.620 --> 00:15:42.680
+Każda zmiana zakresu jest żądaniem zmiany.
+
+00:15:42.860 --> 00:15:44.260
+Wymień agenta, żądaną rolę,
+
+00:15:44.360 --> 00:15:45.980
+łącznik lub narzędzie, środowisko,
+
+00:15:46.140 --> 00:15:48.040
+powód, wnioskodawcę i datę wygaśnięcia.
+
+00:15:48.040 --> 00:15:50.120
+Dwie zgody, jeden właściciel techniczny,
+
+00:15:50.240 --> 00:15:51.200
+jeden właściciel danych.
+
+00:15:51.340 --> 00:15:52.540
+Po osiągnięciu daty wygaśnięcia
+
+00:15:52.540 --> 00:15:53.620
+dostęp automatycznie znika
+
+00:15:53.620 --> 00:15:55.940
+i otrzymujesz alert o możliwości odnowienia lub zwolnienia.
+
+00:15:56.140 --> 00:15:57.760
+Tymczasowe w końcu oznacza tymczasowe.
+
+00:15:57.920 --> 00:15:59.060
+Pozwól, że pokażę Ci dokładnie,
+
+00:15:59.160 --> 00:16:00.200
+jak to działa na mikrohistorii.
+
+00:16:00.340 --> 00:16:01.060
+Agent do spraw.
+
+00:16:01.240 --> 00:16:03.100
+Pytań i odpowiedzi finansowych zaczyna jako czytelnik.
+
+00:16:03.300 --> 00:16:04.020
+Ludzie to uwielbiają,
+
+00:16:04.100 --> 00:16:05.740
+więc produkt chce utworzyć raport wydatków.
+
+00:16:05.880 --> 00:16:07.920
+I to jest działanie runera o wąskim zakresie.
+
+00:16:08.140 --> 00:16:10.560
+Dodajesz nowe narzędzie z polityką na poziomie narzędzia,
+
+00:16:10.560 --> 00:16:11.900
+tylko przesyłanie wydatków,
+
+00:16:12.040 --> 00:16:13.740
+tylko dla centrum kosztów pracownika,
+
+00:16:13.920 --> 00:16:15.160
+tylko dla pięciu załączników.
+
+00:16:15.360 --> 00:16:16.900
+Tożsamość agenta staje się runerem
+
+00:16:16.900 --> 00:16:19.480
+dla tego pojedynczego API wygasającego za 30 dni.
+
+00:16:19.700 --> 00:16:20.900
+W Copilot Studio Środowisko
+
+00:16:20.900 --> 00:16:23.500
+uzyskuje uprawnienia łącznika do jednej tabeli Dataverse
+
+00:16:23.500 --> 00:16:25.120
+z zabezpieczeniami na poziomie wiersza.
+
+00:16:25.340 --> 00:16:27.240
+Dzienniki audytu pokazują zgłoszenie zmiany
+
+00:16:27.240 --> 00:16:28.960
+osoby zatwierdzające i wygaśnięcie.
+
+00:16:29.180 --> 00:16:31.460
+Gdy dział marketingu prosi również o usunięcie raportów,
+
+00:16:31.540 --> 00:16:33.340
+odmawiasz lub kierujesz do osobnego narzędzia
+
+00:16:33.340 --> 00:16:35.400
+do pisania z własnymi właścicielami i SLA.
+
+00:16:35.400 --> 00:16:37.200
+Model może chcieć wszystkiego.
+
+00:16:37.340 --> 00:16:38.760
+Polityka wymusza wszystko.
+
+00:16:38.960 --> 00:16:41.060
+Typowe błędy, których musisz zaprzestać.
+
+00:16:41.200 --> 00:16:43.040
+Tożsamości współdzielone dla wygody.
+
+00:16:43.300 --> 00:16:44.860
+Wygoda jest wrogiem powstrzymywania.
+
+00:16:44.860 --> 00:16:47.060
+Tymczasowy administrator, który nigdy nie wygasa.
+
+00:16:47.240 --> 00:16:49.520
+Ustaw limity czasowe dla uprawnień, a nie swój kalendarz.
+
+00:16:49.600 --> 00:16:51.260
+Poświadczenia projektu w środowisku deweloperskim,
+
+00:16:51.380 --> 00:16:52.100
+aby odblokować DEMA.
+
+00:16:52.280 --> 00:16:54.340
+DEMA nie potrzebują danych produkcyjnych, audytorzy tak.
+
+00:16:54.500 --> 00:16:56.500
+Bramkowanie narzędzi przez interfejs użytkownika, a nie kod.
+
+00:16:56.640 --> 00:16:58.980
+Jeśli model może to wywołać, interfejs użytkownika nie ma znaczenia.
+
+00:16:59.220 --> 00:17:00.560
+Jeśli nie pamiętasz niczego innego,
+
+00:17:00.560 --> 00:17:03.700
+traktuj agentów jak użytkowników z głupią ciekawością i ostrymi nożami.
+
+00:17:03.860 --> 00:17:06.520
+Tożsamość na agenta, rola na akcje, zakres na zasób,
+
+00:17:06.640 --> 00:17:07.960
+domyślnie ograniczony czasowo,
+
+00:17:07.960 --> 00:17:10.740
+a każde wywołanie sprawdza politykę przed dotknięciem danych.
+
+00:17:10.900 --> 00:17:13.720
+Polityki utraty danych, które faktycznie uniemożliwiają sztucznej inteligencji,
+
+00:17:13.820 --> 00:17:14.720
+stanie się cieknącym kranem.
+
+00:17:14.900 --> 00:17:16.460
+Nadałeś agentom tożsamości i rolę.
+
+00:17:16.600 --> 00:17:17.780
+Teraz zatrzymujemy kapanie.
+
+00:17:18.000 --> 00:17:19.380
+Zarządzanie jest tutaj proaktywne.
+
+00:17:19.580 --> 00:17:21.100
+Zablokuj zło, zanim opuści budynek.
+
+00:17:21.300 --> 00:17:22.200
+Dlaczego to ma znaczenie?
+
+00:17:22.420 --> 00:17:24.040
+Sztuczna inteligencja mnoży ekspozycję.
+
+00:17:24.180 --> 00:17:26.080
+Pojedynczy monit może wygenerować 100 wychodzących tokenów,
+
+00:17:26.140 --> 00:17:27.600
+z których każdy może być potencjalnym wyciekiem.
+
+00:17:27.800 --> 00:17:30.180
+Jeśli twoje kontrolki pojawiają się tylko w analizach pośmiertnych,
+
+00:17:30.180 --> 00:17:31.820
+zajmujesz się dochodzeniem, a nie zarządzaniem.
+
+00:17:31.980 --> 00:17:33.800
+Oto zestaw zasad, który faktycznie gryzie.
+
+00:17:33.940 --> 00:17:36.440
+Pomyśl o tym, jak o pasach bezpieczeństwa, poduszkach powietrznych i murze.
+
+00:17:36.620 --> 00:17:38.440
+Domyśl na redukcja danych osobowych w wynikach.
+
+00:17:38.640 --> 00:17:40.880
+Nazwy, adresy e-mail, numery telefonów, dowody osobiste.
+
+00:17:41.100 --> 00:17:43.320
+Jeśli użytkownik nie jest uprawniony, jest maskowany.
+
+00:17:43.560 --> 00:17:45.840
+Wycieki znajdują się w niczyim wewnętrznym wnętrzu.
+
+00:17:46.080 --> 00:17:47.100
+Wykrywanie sekretów.
+
+00:17:47.240 --> 00:17:50.340
+Ochrona kluczy API, tokenów, kluczy prywatnych, ciągów połączeń, wzorców,
+
+00:17:50.340 --> 00:17:51.920
+a także filtry Bloom dla szybkości.
+
+00:17:52.120 --> 00:17:55.300
+Dodaj sumy kontrolne dla popularnych formatów, aby fałszywe alarmy cię nie zasypały.
+
+00:17:55.500 --> 00:17:57.820
+Filtry terminów wrażliwych dostosowane do twojej firmy.
+
+00:17:58.040 --> 00:18:00.300
+Nazwy projektów prawnych, słowa kodowe fuzji i przejęć,
+
+00:18:00.400 --> 00:18:01.940
+nieopublikowane nazwy kodowe produktów.
+
+00:18:02.100 --> 00:18:04.860
+Przechowuj tę listę w zarządzanym magazynie z właścicielami i historią zmian.
+
+00:18:05.100 --> 00:18:07.140
+Lista dozwolonych wyrażeń regularnych dla struktury wyjściowej.
+
+00:18:07.360 --> 00:18:08.600
+Jeśli narzędzie oczekuje podsumowania faktury,
+
+00:18:08.680 --> 00:18:10.220
+przepuszczane są tylko dane wyjściowe w kształcie faktury.
+
+00:18:10.380 --> 00:18:11.360
+Poezja narracyjna nie.
+
+00:18:11.600 --> 00:18:12.860
+Schematy nie są opcjonalne.
+
+00:18:12.860 --> 00:18:16.500
+To kontrakty w LAN, GCH-A i N4J preprocesory i postprocesory wymuszające.
+
+00:18:16.600 --> 00:18:20.000
+Preprocesory skanują dane wejściowe w poszukiwaniu ładunków wstrzykiwanych i niedozwolonych zadań.
+
+00:18:20.140 --> 00:18:22.020
+Postprocesory weryfikują schematy JSON,
+
+00:18:22.160 --> 00:18:24.640
+uruchamiają filtry tajnych terminów i redagują dane osobowe,
+
+00:18:24.740 --> 00:18:26.340
+zanim cokolwiek opuści granicę agenta.
+
+00:18:26.560 --> 00:18:30.020
+Jeśli sprawdzenie się nie powiedzie, zwracasz bezpieczny błąd z identyfikatorem korelacji.
+
+00:18:30.260 --> 00:18:32.080
+Żadnych półprawd, żadnych może.
+
+00:18:32.400 --> 00:18:35.780
+Dodaj potoki moderacji, lekkie filtry wzorców i filtry Bluma.
+
+00:18:36.020 --> 00:18:38.600
+Bardziej rozbudowana, oparta na sztucznej inteligencji, moderacja kontekstowa.
+
+00:18:38.600 --> 00:18:44.940
+Na przykład, nie ujawniaj danych dotyczących zdrowia, połącz je w łańcuch, niepowodzenie zamknięte i zdefiniuj zachowanie awaryjne.
+
+00:18:45.100 --> 00:18:48.200
+Podsumuj na wyższym poziomie, podaj bezpieczną odmowę lub przekieruj do człowieka.
+
+00:18:48.380 --> 00:18:50.720
+Nie pętl modelu, aby zapewnić bezpieczniejszy wyciek.
+
+00:18:50.880 --> 00:18:53.380
+W Copilot Studio użyj stosu, za który już płacisz.
+
+00:18:53.600 --> 00:18:57.880
+Zasady DLP w usłudze Microsoft 365 mają zastosowanie do kanałów i łączników.
+
+00:18:58.140 --> 00:18:59.220
+Włącz je i dostosuj.
+
+00:18:59.420 --> 00:19:04.920
+Użyj etykiet poufności w źródłach uziemienia, aby agent nigdy nie indeksował treści o dużym wpływie bez wyraźnej zgody.
+
+00:19:04.920 --> 00:19:09.040
+Moderacja na poziomie dzierżawy powinna być domyślnie włączona, a nie włączymy ją później.
+
+00:19:09.280 --> 00:19:10.500
+Później włączy się PR.
+
+00:19:10.820 --> 00:19:12.200
+Monitorowanie łączy to wszystko.
+
+00:19:12.440 --> 00:19:16.380
+Ustaw progi, nietypowy rozmiar danych wyjściowych, nietypowe miejsce docelowe, nietypową częstotliwość.
+
+00:19:16.580 --> 00:19:20.620
+Jeśli bod pytań i odpowiedzi nagle zapisze megabajty do zewnętrznego punktu końcowego, poddaj sesję kwarantannie.
+
+00:19:20.820 --> 00:19:23.240
+Automatycznie wygasaj ryzykowne sesje i powiadom właścicieli.
+
+00:19:23.460 --> 00:19:25.160
+Zadbaj o to, aby alerty były wykonalne.
+
+00:19:25.340 --> 00:19:27.160
+Nie pinguj wszystkich przy każdym zdarzeniu maski.
+
+00:19:27.400 --> 00:19:29.360
+Szybkie zwycięstwo, które możesz wdrożyć już dziś.
+
+00:19:29.360 --> 00:19:32.300
+Wymuszaj schematy wyjściowe i warunki listy bloków na granicy agenta.
+
+00:19:32.500 --> 00:19:33.940
+Brak schematu, brak odpowiedzi.
+
+00:19:34.140 --> 00:19:36.140
+Dodaj redukcję danych osobowych jako ostatni etap.
+
+00:19:36.300 --> 00:19:39.520
+Ta kombinacja zatrzymuje oczywiste przecieki i daje Ci czas na wdrożenie reszty.
+
+00:19:39.680 --> 00:19:40.420
+Typowe błędy.
+
+00:19:40.620 --> 00:19:42.560
+Pozwalanie na uzależnienie od kodu front-end.
+
+00:19:42.740 --> 00:19:45.280
+Redagowanie po stronie serwera, zanim wiadomość dotrze do klienta.
+
+00:19:45.440 --> 00:19:46.720
+Jedna globalna lista blokad.
+
+00:19:46.900 --> 00:19:48.440
+Segmentowanie według domeny biznesowej.
+
+00:19:48.660 --> 00:19:50.460
+Słowa finansowe nie są słowami marketingowymi.
+
+00:19:50.640 --> 00:19:52.860
+Rejestrowanie nieocenzurowanego oryginału w celu debagowania.
+
+00:19:53.080 --> 00:19:54.300
+Maskowanie podczas pobierania.
+
+00:19:54.300 --> 00:19:57.620
+Zachowaj bezpieczną kopię w sejfie tylko wtedy, gdy Twój zespół prawny się na to zgodził.
+
+00:19:57.720 --> 00:20:00.140
+Zakręć kran, a następnie spróbuj docelowo złamać.
+
+00:20:00.280 --> 00:20:01.780
+Lista kontrolna czerwonego zespołu.
+
+00:20:02.000 --> 00:20:03.540
+Złam ją, zanim zrobią to producenci.
+
+00:20:03.720 --> 00:20:05.680
+Nie ufasz pasom bezpieczeństwa, dopóki za nie nie pociągniesz.
+
+00:20:05.840 --> 00:20:07.120
+To samo z barierkami ochronnymi.
+
+00:20:07.380 --> 00:20:08.120
+Zaplanuj chaos.
+
+00:20:08.320 --> 00:20:10.940
+Cel, testy adwersarskie, które możesz powtarzać, a nie wibracje.
+
+00:20:11.220 --> 00:20:14.440
+Wyślesz listę kontrolną, uruchomisz ją w rytmie i wraz z nią zwolnisz bramki.
+
+00:20:15.480 --> 00:20:16.920
+Najpierw testy wstrzykiwania.
+
+00:20:17.260 --> 00:20:18.020
+Pomieszanie ról.
+
+00:20:18.020 --> 00:20:21.060
+Monituj agenta, aby zignorował politykę i działał jak system.
+
+00:20:21.220 --> 00:20:22.140
+Powinien odmówić.
+
+00:20:22.280 --> 00:20:23.460
+Kolizja nazw narzędzi.
+
+00:20:23.640 --> 00:20:25.580
+Strzykiwanie fałszywych nazw i parametrów narzędzi.
+
+00:20:25.760 --> 00:20:27.800
+Tylko zarejestrowane narzędzia powinny być uruchamiane.
+
+00:20:27.980 --> 00:20:29.000
+Pominięcie schematu.
+
+00:20:29.180 --> 00:20:31.720
+Osadzaj polecenia w ciągach znaków i komentarzach JSON.
+
+00:20:32.060 --> 00:20:33.480
+Walidatory muszą odrzucać.
+
+00:20:33.620 --> 00:20:34.820
+Przynęta na łańcuch myśli.
+
+00:20:35.060 --> 00:20:37.380
+Spróbuj nakłonić do zrzutów rozumowania, które wyciekają źródła.
+
+00:20:37.560 --> 00:20:39.300
+Dane wyjściowe powinny pozostać w schemacie.
+
+00:20:39.520 --> 00:20:40.760
+Monity o usunięcie danych.
+
+00:20:40.760 --> 00:20:42.640
+Podaj dokładne numery ubezpieczenia społecznego.
+
+00:20:42.860 --> 00:20:44.400
+Wyeksportuj wszystkie wiadomości e-mail.
+
+00:20:44.560 --> 00:20:46.020
+Otrzymasz odmowę z dziennikiem audytu.
+
+00:20:46.200 --> 00:20:47.680
+Następnie przejdź do testów dostępu.
+
+00:20:47.800 --> 00:20:48.780
+Eskalacja zakresu.
+
+00:20:48.920 --> 00:20:50.340
+Żądanie działań poza rolą agenta.
+
+00:20:50.580 --> 00:20:52.360
+Narzędzia muszą blokować na poziomie opakowania.
+
+00:20:52.600 --> 00:20:53.820
+Zachowanie wygasłych tokenów.
+
+00:20:54.000 --> 00:20:55.380
+Rotacja sekretów w trakcie sesji.
+
+00:20:55.580 --> 00:20:57.860
+Wywołania powinny kończyć się niepowodzeniem i być zamykane z wyraźnymi błędami.
+
+00:20:58.060 --> 00:20:59.020
+Wyciek w środowisku shadow.
+
+00:20:59.260 --> 00:21:01.320
+Agent deweloperski próbuje punktów końcowych produkcji.
+
+00:21:01.480 --> 00:21:02.240
+Twardy błąd.
+
+00:21:02.400 --> 00:21:03.080
+Głośne logi.
+
+00:21:03.260 --> 00:21:04.020
+Testy audytu.
+
+00:21:04.180 --> 00:21:05.220
+Kompletność śledzenia.
+
+00:21:05.220 --> 00:21:08.380
+Czy można zrekonstruować monit do działania z jednym identyfikatorem korelacji?
+
+00:21:08.560 --> 00:21:12.060
+Wykrywanie manipulacji, zmiana przechowywanych logów, niezgodność skrótów powinny wywołać alarm.
+
+00:21:12.240 --> 00:21:13.320
+Korelacja międzyusługowa.
+
+00:21:13.440 --> 00:21:16.600
+Identyfikator wiadomości Teams do rekordu Dataverse do zewnętrznego wywołania API.
+
+00:21:16.720 --> 00:21:17.500
+Wszystkie pasujące.
+
+00:21:17.700 --> 00:21:19.160
+Zdefiniuj bramki pass-fail.
+
+00:21:19.380 --> 00:21:21.020
+Brak schematu spowoduje niepowodzenie.
+
+00:21:21.240 --> 00:21:23.680
+Każde dane wyjściowe, które nie zostaną zweryfikowane, blokują wydanie.
+
+00:21:23.900 --> 00:21:25.860
+Zakres obejmujący cały dzierżawcę spowoduje niepowodzenie.
+
+00:21:26.080 --> 00:21:28.520
+Każdy łącznik bez grup zakresów i wygaśnięcia jest blokowany.
+
+00:21:28.520 --> 00:21:30.100
+Cicha awaria narzędzia zawiedzie.
+
+00:21:30.320 --> 00:21:32.420
+Błędy muszą zostać ujawnione, a nie połknięte.
+
+00:21:32.620 --> 00:21:33.940
+Brak planu wycofania zawiedzie.
+
+00:21:34.160 --> 00:21:38.140
+Jeśli nie możesz cofnąć zmiany uprawnień lub konfiguracji modelu w ciągu kilku minut, nie jesteś gotowy.
+
+00:21:38.300 --> 00:21:40.500
+Kadencja przedpremierowa dla każdej zmiany agenta.
+
+00:21:40.680 --> 00:21:43.480
+Kwartalne ćwiczenia chaosu w środowiskach typu produkcyjnego.
+
+00:21:43.700 --> 00:21:47.700
+Pętla nauki po incydencie w ciągu pięciu dni roboczych z nowymi testami dodanymi do pakietu.
+
+00:21:47.900 --> 00:21:48.900
+Właściciele i umowy SLA.
+
+00:21:49.040 --> 00:21:52.340
+Każdy element listy kontrolnej ma właściciela i umowę SLA do naprawienia oraz status.
+
+00:21:52.340 --> 00:21:59.580
+Brak właściciela, brak wysyłki, szybkie zwycięstwo, brak schematu zawiedzie, a zakres całego dzierżawcy zawiedzie podczas kontroli C i CD.
+
+00:21:59.820 --> 00:22:01.980
+Jeśli którykolwiek z nich zadziała, potok się zatrzyma.
+
+00:22:02.160 --> 00:22:04.820
+Bez spotkań, bez debat, tylko czerwone światło, które wszyscy szanują.
+
+00:22:05.040 --> 00:22:07.420
+Uruchom listę, zniszcz rzeczy, napraw je.
+
+00:22:07.640 --> 00:22:10.740
+Następnie uruchom ją ponownie, aż niespodzianki przestaną być zaskakujące.
+
+00:22:10.940 --> 00:22:13.540
+Jeden krok zarządzania, który większość organizacji pomija.
+
+00:22:13.780 --> 00:22:16.420
+Jeśli niczego innego nie pamiętasz, agenci to tożsamości.
+
+00:22:16.420 --> 00:22:22.940
+Traktuj ich jak bardzo głupich, bardzo zaawansowanych użytkowników z minimalnymi uprawnieniami, wymuszonymi kontraktami wyjściowymi i pełnymi śladami audytu.
+
+00:22:23.060 --> 00:22:30.720
+Krokiem, który większość organizacji pomija, jest tworzenie dedykowanych kont użytkowników dla każdego agenta, a następnie łączenie każdego narzędzia i łącznika za pomocą ról zakresowych dla środowiska.
+
+00:22:30.960 --> 00:22:33.720
+Bez współdzielonych uprawnień, bez zakresów obejmujących cały tenant.
+
+00:22:33.920 --> 00:22:35.120
+Zastosuj model RBAC.
+
+00:22:35.440 --> 00:22:39.060
+Włącz polityki DLP i uruchom listę kontrolną zespołu RED w tym tygodniu.
+
+00:22:39.060 --> 00:22:46.880
+Zapisz się, aby otrzymywać dalsze informacje, w których pokażę dokładne konfiguracje w Langchain dla Jot i Copilot Studio, dzięki czemu będziesz mógł kopiować i wklejać zarządzanie zamiast przepraszać.

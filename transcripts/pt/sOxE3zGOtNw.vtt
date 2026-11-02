@@ -1,0 +1,1240 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.480
+O tópico de hoje é um assunto do qual quase todo mundo já ouviu falar, mas poucos conseguem explicar, claro.
+
+00:00:03.860 --> 00:00:04.220
+MCP.
+
+00:00:04.560 --> 00:00:08.240
+Você provavelmente viu o termo HTTP para agentes de IA, mas o que isso realmente significa?
+
+00:00:08.920 --> 00:00:12.560
+Ao final deste episódio, você entenderá o que é MCP ou o que o servidor MCP do Azure faz,
+
+00:00:12.620 --> 00:00:15.100
+porque ele é crucial na conexão de ferramentas de IA aos seus dados.
+
+00:00:15.640 --> 00:00:18.940
+Vamos dividi-lo nos principais blocos de construção, começando com o panorama geral,
+
+00:00:19.100 --> 00:00:20.900
+depois o protocolo em si e a implementação da Microsoft,
+
+00:00:21.420 --> 00:00:23.260
+e por fim um exemplo real que você pode realmente usar.
+
+00:00:24.220 --> 00:00:25.820
+Panorama geral. Isso é importante agora.
+
+00:00:26.420 --> 00:00:27.580
+Então aqui está a sua em que estamos agora.
+
+00:00:27.900 --> 00:00:29.540
+Todos estão criando agentes de IA.
+
+00:00:30.000 --> 00:00:33.520
+Não apenas empresas de tecnologia, mas bancos, hospitais, fabricantes e até mesmo pequenas empresas.
+
+00:00:34.120 --> 00:00:36.560
+Todos estão tentando criar assistentes de IA que realmente possam fazer coisas.
+
+00:00:36.960 --> 00:00:38.840
+Não apenas responder perguntas, mas realizações reais.
+
+00:00:39.260 --> 00:00:42.720
+Atualizar um registro, verificar um inventário, implantar código ou consertar um servidor quebrado.
+
+00:00:43.340 --> 00:00:44.440
+E é aqui que o problema aparece.
+
+00:00:44.940 --> 00:00:47.480
+Esses agentes precisam se conectar a ferramentas e dados reais.
+
+00:00:48.200 --> 00:00:51.400
+Bancos de dados, contas de armazenamento, sistemas de tickets, CRMs.
+
+00:00:52.080 --> 00:00:54.020
+A maioria das pessoas faz isso da maneira mais difícil hoje em dia.
+
+00:00:54.240 --> 00:00:58.120
+Elas escrevem códigos de integração personalizados para cada ferramenta, API e fonte de dados.
+
+00:00:58.120 --> 00:01:02.080
+Um conector para o banco de dados, outro para arquivos e um terceiro para o sistema de monitoramento.
+
+00:01:02.440 --> 00:01:07.880
+Cada um precisa de sua própria autenticação, seu próprio tratamento de erros e sua própria maneira de formatar solicitações e respostas.
+
+00:01:08.420 --> 00:01:10.620
+Essa abordagem é frágil, demorada e não é escalável.
+
+00:01:11.200 --> 00:01:15.240
+Cada assistente de IA que você cria exige sua própria pilha de código para se conectar aos serviços necessários.
+
+00:01:15.920 --> 00:01:18.900
+Mude de uma plataforma de IA para outra e você reconstruirá tudo do zero.
+
+00:01:18.900 --> 00:01:21.820
+A maioria das demonstrações de IA que você vê funcionam muito bem isoladamente.
+
+00:01:22.360 --> 00:01:24.940
+Elas respondem perguntas, geram texto e parecem impressionantes.
+
+00:01:25.380 --> 00:01:27.720
+Mas ao tocar em um sistema real, elas simplesmente se desintegram.
+
+00:01:28.120 --> 00:01:29.080
+É aí que mora a complexidade.
+
+00:01:29.520 --> 00:01:30.300
+O MCP muda isso.
+
+00:01:30.760 --> 00:01:33.220
+Ele oferece a IA uma maneira padrão de alcançar e obter o que precisa.
+
+00:01:33.760 --> 00:01:35.860
+Um protocolo, um modo de falar com ferramentas.
+
+00:01:36.560 --> 00:01:39.500
+Qualquer assistente de IA que fale MCP pode usar qualquer servidor MCP.
+
+00:01:40.220 --> 00:01:43.920
+É como a diferença entre ter um controle remoto separado para cada dispositivo em sua casa
+
+00:01:43.920 --> 00:01:46.200
+e um controle remoto universal que funciona com tudo.
+
+00:01:46.200 --> 00:01:48.700
+Então vamos começar com a definição mais simples.
+
+00:01:49.420 --> 00:01:50.020
+O que é MCP?
+
+00:01:50.120 --> 00:01:51.000
+É um protocolo explicado.
+
+00:01:51.400 --> 00:01:52.140
+O que é MCP exatamente?
+
+00:01:52.640 --> 00:01:53.840
+Deixe-me explicar em português simples.
+
+00:01:54.200 --> 00:01:56.160
+MCP significa Model Context Protocol
+
+00:01:56.160 --> 00:01:58.300
+e é um padrão aberto que informa aos agentes de IA
+
+00:01:58.300 --> 00:02:01.060
+como se comunicar com ferramentas externas, APIs e fontes de dados.
+
+00:02:01.940 --> 00:02:03.300
+Pense nisso com uma linguagem comum para IA.
+
+00:02:03.660 --> 00:02:06.540
+Antes do MCP, cada assistente de IA tinha que aprender uma linguagem diferente
+
+00:02:06.540 --> 00:02:07.880
+para cada ferramenta que quisesse usar.
+
+00:02:09.240 --> 00:02:11.340
+O MCP diz, vamos todos concordar com uma linguagem
+
+00:02:11.340 --> 00:02:13.380
+e então cada ferramenta só precisa falar essa linguagem.
+
+00:02:14.300 --> 00:02:14.700
+Internamente.
+
+00:02:14.700 --> 00:02:16.740
+Ele é baseado em JSON-RPC 2.0
+
+00:02:16.740 --> 00:02:19.560
+um formato de mensagem simples para enviar solicitações e obter respostas.
+
+00:02:20.080 --> 00:02:21.640
+Nada sofisticado e já existe há anos.
+
+00:02:22.400 --> 00:02:23.900
+O que o MCP adiciona é estrutura.
+
+00:02:24.340 --> 00:02:27.940
+Ele define três elementos principais que um agente de IA pode usar em qualquer servidor MCP.
+
+00:02:28.120 --> 00:02:29.260
+Ferramentas, recursos e prompts.
+
+00:02:30.340 --> 00:02:32.000
+Ferramentas são ações que a IA pode executar
+
+00:02:32.000 --> 00:02:33.600
+como criar um registro e executar uma consulta.
+
+00:02:34.140 --> 00:02:36.100
+Recursos são pedaços de dados que a IA pode ler
+
+00:02:36.100 --> 00:02:37.920
+como um perfil de cliente ou um arquivo de log.
+
+00:02:38.560 --> 00:02:42.120
+E os prompts são modelos que orientam como a IA deve se comportar em determinadas situações.
+
+00:02:42.700 --> 00:02:43.740
+Desta é a maneira mais simples de pensar.
+
+00:02:43.740 --> 00:02:46.060
+Imagine que você tem um controle remoto universal.
+
+00:02:46.600 --> 00:02:49.480
+Esse controle fala com sua TV, seus termos de som, seu aparelho de streaming e suas luzes.
+
+00:02:49.800 --> 00:02:50.980
+Controle remoto e muitos dispositivos.
+
+00:02:51.400 --> 00:02:53.080
+MCP é esse controle remoto para agentes de IA.
+
+00:02:53.420 --> 00:02:54.560
+Um protocolo e muitas ferramentas.
+
+00:02:54.920 --> 00:02:57.840
+Você cria um servidor MCP que expõe suas ferramentas e dados
+
+00:02:57.840 --> 00:03:00.300
+e qualquer agente de IA compatível com o MCP pode usá-lo.
+
+00:03:00.880 --> 00:03:04.800
+GitHub, Copilot, Cloud, ChatGPT, agentes personalizados, todos falam o mesmo protocolo.
+
+00:03:05.320 --> 00:03:06.840
+E isso não é uma coisa proprietária da Microsoft.
+
+00:03:07.560 --> 00:03:10.320
+O MCP foi criado originalmente pela Anthrop, que é a empresa por trás do Cloud,
+
+00:03:10.320 --> 00:03:13.500
+mas foi adotado pela OpenAI, Google, Microsoft e muitos outros.
+
+00:03:14.000 --> 00:03:17.100
+Está se tornando a maneira padrão para agentes de IA se conectarem ao mundo exterior.
+
+00:03:17.880 --> 00:03:20.580
+Não é uma dependência de fornecedor, mas um padrão aberto que todos podem usar.
+
+00:03:21.380 --> 00:03:22.500
+O problema é que o MCP resolve.
+
+00:03:23.080 --> 00:03:24.380
+Esta é a maneira antiga de fazer as coisas.
+
+00:03:24.680 --> 00:03:27.400
+Antes do MCP, cada integração de IA é um projeto personalizado.
+
+00:03:27.400 --> 00:03:30.840
+Digamos que queira que seu assistente de IA verifique os níveis de estoque do banco de dados.
+
+00:03:31.240 --> 00:03:31.560
+Ótimo.
+
+00:03:31.960 --> 00:03:32.920
+Agora você precisa escrever o código.
+
+00:03:33.400 --> 00:03:34.440
+Você precisa descobrir a autenticação.
+
+00:03:34.980 --> 00:03:36.840
+Como a IA aprova que tem permissão para ler esses dados.
+
+00:03:37.500 --> 00:03:38.360
+Você precisa lidar com erros.
+
+00:03:39.060 --> 00:03:40.260
+O que ocorre quando o banco de dados cai?
+
+00:03:40.700 --> 00:03:41.860
+Você precisa formatar a resposta.
+
+00:03:42.240 --> 00:03:45.260
+Como a saída do banco de dados é transformada em algo que a IA pode entender?
+
+00:03:46.120 --> 00:03:48.300
+Semanas de desenvolvimento, uma conexão com o banco de dados.
+
+00:03:48.720 --> 00:03:49.540
+Esse é o custo da integração.
+
+00:03:50.180 --> 00:03:52.580
+Um assistente de IA, um banco de dados, semanas de serviço.
+
+00:03:53.060 --> 00:03:55.300
+Agora multiplique isso por cada ferramenta que sua IA precisa tocar.
+
+00:03:55.300 --> 00:03:58.720
+O CRM, o sistema de tickets, o armazenamento de arquivos, o registro de monitoramento.
+
+00:03:59.320 --> 00:04:02.200
+Cada um requer seu próprio código personalizado, seu próprio padrão de autenticação,
+
+00:04:02.340 --> 00:04:03.320
+seu próprio tratamento de erros.
+
+00:04:03.520 --> 00:04:05.320
+E nenhum desses códigos funciona com nenhuma outra ferramenta.
+
+00:04:05.800 --> 00:04:08.820
+Você está construindo a mesma coisa repetidamente, apenas um pouco diferente a cada um.
+
+00:04:09.300 --> 00:04:10.260
+E aqui está o problema de segurança.
+
+00:04:10.700 --> 00:04:12.780
+Cada integração personalizada tem sua própria autenticação.
+
+00:04:13.160 --> 00:04:14.260
+Algumas usam chaves de API.
+
+00:04:14.440 --> 00:04:15.320
+Outras usam o AOS.
+
+00:04:15.400 --> 00:04:16.300
+Algumas os certificados.
+
+00:04:16.380 --> 00:04:17.520
+Algumas a autenticação básica.
+
+00:04:18.060 --> 00:04:20.400
+Você acaba com uma dúzia de maneiras diferentes para seus dados de IA
+
+00:04:20.400 --> 00:04:22.300
+e nenhuma maneira consistente de controlar nada disso.
+
+00:04:22.960 --> 00:04:23.460
+Nem tem acesso.
+
+00:04:23.880 --> 00:04:24.500
+O que eles podem fazer?
+
+00:04:24.500 --> 00:04:25.620
+Onde estão os registros?
+
+00:04:25.920 --> 00:04:29.520
+A maioria das organizações não consegue responder a essas perguntas sobre suas integrações de IA
+
+00:04:29.520 --> 00:04:31.920
+porque elas foram criadas por equipes diferentes em momentos diferentes,
+
+00:04:32.020 --> 00:04:34.120
+com padrões diferentes, com padrões diferentes.
+
+00:04:34.500 --> 00:04:35.600
+O problema de fragmentação é real.
+
+00:04:36.100 --> 00:04:38.140
+Digamos que você crie seu assistente de IA no OpenAI.
+
+00:04:38.740 --> 00:04:41.480
+Você escreve todas as suas integrações para o formato chamado de função do OpenAI.
+
+00:04:41.980 --> 00:04:45.940
+Então, seis meses depois, sua empresa decide mudar para o Cloud ou você quer usar os dois.
+
+00:04:46.400 --> 00:04:47.700
+Agora você reconstrói cada integração.
+
+00:04:48.040 --> 00:04:49.760
+Mesmas ferramentas, mesmos dados, formatos diferentes.
+
+00:04:50.140 --> 00:04:51.300
+Isso não é progresso, é trabalho duro.
+
+00:04:51.680 --> 00:04:52.940
+O custo real aumenta rapidamente.
+
+00:04:52.940 --> 00:04:55.820
+A maioria das grandes organizações já executa dezenas de agentes de IA.
+
+00:04:56.380 --> 00:04:59.120
+De acordo com a IDC, a empresa média executa 47 deles.
+
+00:04:59.680 --> 00:05:01.620
+Cada um tem seu próprio conjunto de conectores personalizados.
+
+00:05:02.120 --> 00:05:03.480
+E aqui está uma estatística que pode surpreender.
+
+00:05:03.960 --> 00:05:07.440
+68% dos CIOs não sabem nem informar o gasto total com IA.
+
+00:05:08.140 --> 00:05:12.280
+Eles não sabem quanto estão gastando nessas integrações porque está espalhado por equipes, projetos e orçamentos.
+
+00:05:12.280 --> 00:05:14.340
+O MCP inverte todo esse modelo.
+
+00:05:14.720 --> 00:05:18.500
+Em vez de escrever código personalizado para cada ferramenta de IA, cria um servidor MCP.
+
+00:05:19.020 --> 00:05:21.960
+Esse servidor expõe suas ferramentas e dados por meio de uma interface padrão.
+
+00:05:22.500 --> 00:05:24.320
+Qualquer agente compatível com o MCP pode usá-lo.
+
+00:05:24.720 --> 00:05:27.980
+Cloud, Cloud, chat, ABT, agentes personalizados, suas próprias ferramentas internas.
+
+00:05:28.560 --> 00:05:29.620
+Escreva uma vez, use em qualquer lugar.
+
+00:05:30.100 --> 00:05:30.720
+Essa é a mudança.
+
+00:05:31.080 --> 00:05:32.120
+O que é o servidor MCP do uso?
+
+00:05:32.120 --> 00:05:34.380
+Então, cobrimos o problema que o MCP resolve.
+
+00:05:34.680 --> 00:05:36.480
+Agora, vamos falar sobre a resposta da Microsoft para ele.
+
+00:05:36.920 --> 00:05:37.820
+É a versão MCP do Azure?
+
+00:05:37.900 --> 00:05:39.720
+É a versão oficial da Microsoft para o MCP.
+
+00:05:40.240 --> 00:05:45.080
+Pense nele como uma ponte que permite que agentes de IA acessem seus recursos do Azure e com segurança e gerenciem.
+
+00:05:45.700 --> 00:05:48.960
+E quero deixar claro que essa coisa realmente é um produto separado do CECOM.
+
+00:05:49.500 --> 00:05:50.560
+Não há um novo serviço do Azure.
+
+00:05:50.900 --> 00:05:55.200
+É uma ferramenta, um servidor de código aberto que fica entre seu assistente de IA e seu ambiente do Azure.
+
+00:05:55.620 --> 00:05:57.260
+Ele funciona com o modo de agente GitHub, com o bairro.
+
+00:05:57.720 --> 00:05:58.600
+Funciona com o seu ambiente de kernel.
+
+00:05:58.980 --> 00:05:59.860
+Funciona com o Cloud Descan.
+
+00:05:59.860 --> 00:06:02.760
+E funciona com qualquer agente MCP personalizado que você mesmo criar.
+
+00:06:03.420 --> 00:06:05.400
+Qualquer cliente que fale em MCP pode se conectar a ele.
+
+00:06:05.980 --> 00:06:09.860
+Depois de conectado, esse agente obtém acesso aos seus recursos do Azure por meio de linguagem natural simples.
+
+00:06:10.140 --> 00:06:11.620
+Não é preciso saber a chamada exata da API.
+
+00:06:12.360 --> 00:06:13.460
+Não é preciso lembrar do mestre SDK.
+
+00:06:14.140 --> 00:06:14.720
+Basta perguntar.
+
+00:06:15.000 --> 00:06:15.860
+Aqui está a ideia central.
+
+00:06:16.360 --> 00:06:17.600
+O Azure tem dezenas de serviços.
+
+00:06:17.900 --> 00:06:20.280
+Armazenamento, banco de dados, monitoramento, configuração, containers.
+
+00:06:20.800 --> 00:06:24.420
+Cada um vem com seu próprio SDK, sua própria API, seu próprio padrão de autenticação.
+
+00:06:25.160 --> 00:06:27.980
+O servidor MCP do Azure reúne todos eles em uma interface unificada.
+
+00:06:27.980 --> 00:06:29.880
+Um servidor, um protocolo, todas as ferramentas.
+
+00:06:30.300 --> 00:06:31.260
+Por que a Microsoft criou isso?
+
+00:06:31.580 --> 00:06:34.080
+Porque o problema de fragmentação é especialmente ruim no Azure.
+
+00:06:34.560 --> 00:06:38.080
+Imagine que você está criando um agente de IA que precisa verificar os logs do Azure Monitor.
+
+00:06:38.180 --> 00:06:41.000
+Atualizar uma configuração de aplicativo e implantar uma nova versão do container.
+
+00:06:41.560 --> 00:06:42.920
+São três SDKs diferentes.
+
+00:06:43.080 --> 00:06:44.440
+Três fluxos de autenticação diferentes.
+
+00:06:44.620 --> 00:06:46.260
+Três maneiras diferentes de lidar com erros.
+
+00:06:46.260 --> 00:06:50.440
+Servidor MCP do Azure reúne tudo isso em uma sessão, uma autenticação, uma autenticação,
+
+00:06:50.580 --> 00:06:51.880
+uma maneira consistente de trabalhar.
+
+00:06:52.880 --> 00:06:54.040
+Agora aqui está a parte importante.
+
+00:06:54.480 --> 00:06:55.640
+Isso não é apenas para desenvolvedores.
+
+00:06:56.060 --> 00:07:01.060
+Sim, os desenvolvedores usarão, mas o verdadeiro poder é que ele permite o controle de linguagem natural dos recursos do Azure.
+
+00:07:01.900 --> 00:07:05.720
+Alguém que não conheça o PowerShell ou a CLI do Azure pode perguntar ao assistente de IA.
+
+00:07:05.980 --> 00:07:09.060
+Mostre-me a última hora de erros do serviço de pagamento e obter uma resposta.
+
+00:07:09.840 --> 00:07:11.320
+O servidor MCP lida com a tradução.
+
+00:07:11.320 --> 00:07:14.800
+Ele transforma a solicitação de linguagem natural na chamada de API apropriada,
+
+00:07:14.980 --> 00:07:16.580
+executa no Azure Monitor e retorna o resultado.
+
+00:07:16.940 --> 00:07:17.580
+E retorna o resultado.
+
+00:07:18.160 --> 00:07:21.560
+A partir de hoje, o servidor MCP do Azure é integrado ao Visual Studio 2026,
+
+00:07:21.680 --> 00:07:22.820
+é de código aberto no GitHub.
+
+00:07:23.520 --> 00:07:26.020
+É mantido ativamente pela equipe do SDK do Azure e da Microsoft.
+
+00:07:26.680 --> 00:07:29.320
+E está em versão prévia pública, o que significa que já pode usá-lo,
+
+00:07:29.400 --> 00:07:31.080
+com novos recursos sendo incluídos sempre.
+
+00:07:32.060 --> 00:07:33.300
+Serviços e pais que você pode acessar.
+
+00:07:33.740 --> 00:07:35.920
+Então, o que você pode realmente fazer com o servidor MCP do Azure?
+
+00:07:36.360 --> 00:07:38.220
+Vejamos os serviços específicos que ele pode alcançar.
+
+00:07:38.720 --> 00:07:40.760
+A lista está crescendo, mas aqui está o que é compatível agora.
+
+00:07:41.380 --> 00:07:42.060
+Armazenamento do Azure.
+
+00:07:42.440 --> 00:07:45.000
+É possível listar contas de armazenamento, gerenciar contêineres de blog,
+
+00:07:45.080 --> 00:07:46.800
+consultar tabelas, tudo via linguagem natural.
+
+00:07:47.340 --> 00:07:50.100
+Em vez de escrever um script para verificar seu armazenamento, basta perguntar.
+
+00:07:50.720 --> 00:07:52.260
+Mostre-me os contêineres na minha conta de produção.
+
+00:07:53.300 --> 00:07:57.040
+Servidor MCP lida com a chamada de API, formata a resposta e fornece a resposta.
+
+00:07:57.640 --> 00:07:59.080
+O Azure Cosmos DB é enorme.
+
+00:07:59.720 --> 00:08:03.760
+Você pode consultar bancos de dados, gerenciar contêineres e executar consultas SQL em seus dados sem SQL.
+
+00:08:04.380 --> 00:08:07.740
+Se você estiver criando um agente IA que precisa consultar registro de clientes ou histórico de pedidos,
+
+00:08:07.740 --> 00:08:09.080
+é assim que ele obtém esses dados.
+
+00:08:09.480 --> 00:08:13.200
+Sem conector personalizado, sem código SDK, apenas uma chamada de ferramenta por meio do MCP.
+
+00:08:13.460 --> 00:08:14.220
+Azure Monitor.
+
+00:08:14.680 --> 00:08:16.060
+É aqui que o verdadeiro poder aparece.
+
+00:08:16.520 --> 00:08:21.300
+Você pode consultar logs usando KQL, a linguagem de consulta custo sem escrever um único comando KQL.
+
+00:08:21.800 --> 00:08:22.880
+Liste espaço de trabalho.
+
+00:08:23.060 --> 00:08:24.240
+Verifique as tabelas disponíveis.
+
+00:08:24.360 --> 00:08:29.140
+Pergunte, mostre-me as últimas 24 horas de erros e o servidor MCP traduz isso na consulta correta,
+
+00:08:29.340 --> 00:08:32.580
+executa no Log Analytics e retorna os resultados e retorna os resultados.
+
+00:08:32.580 --> 00:08:36.520
+Para qualquer pessoa que já tenha lutado com a sintaxe KQL, isso por si só já vale o preço da admissão.
+
+00:08:37.260 --> 00:08:41.540
+No ASRAP Configuration, você pode gerenciar pares de chave-valor, manipular ativações e bloquear definições.
+
+00:08:42.240 --> 00:08:45.220
+Se seu aplicativo ler a configuração da configuração de aplicativo do Azure,
+
+00:08:45.560 --> 00:08:49.460
+seu agente de IA poderá verificar esses valores, atualizá-los e verificar as alterações,
+
+00:08:49.620 --> 00:08:52.060
+tudo por meio de conversações, tudo por meio de conversação.
+
+00:08:52.220 --> 00:08:53.220
+E não são apenas serviços.
+
+00:08:53.320 --> 00:08:56.960
+A CLI do Azure e a CLI do desenvolvedor do Azure AZD também são expostas como ferramentas.
+
+00:08:57.560 --> 00:09:00.500
+Isso significa que seu agente de IA pode rodar comandos da CLI do Azure.
+
+00:09:00.500 --> 00:09:04.420
+Ele pode provisionar recursos, implantar aplicativos, gerenciar infraestrutura,
+
+00:09:04.700 --> 00:09:06.400
+os mesmos comandos que você digita em um terminal,
+
+00:09:06.640 --> 00:09:08.760
+mas acionados por linguagem natural ou por meio de um assistente de IA.
+
+00:09:09.320 --> 00:09:14.040
+O que isso significa na prática é que um MCP pode substituir dezenas de SDKs e chamadas de API.
+
+00:09:15.140 --> 00:09:18.880
+Você não precisa instalar o SDK do Azure Storage, o SDK do Cosmos DB, o SDK do Monitor
+
+00:09:18.880 --> 00:09:20.820
+e aprender três padrões de autenticação diferentes.
+
+00:09:21.500 --> 00:09:23.760
+Você instala um servidor MCP, autentica uma vez-se,
+
+00:09:24.020 --> 00:09:26.440
+e todos esses recursos estão disponíveis por meio de uma única interface.
+
+00:09:26.880 --> 00:09:28.600
+Pense em um cenário típico de solução de problemas.
+
+00:09:28.600 --> 00:09:30.440
+Seu aplicativo está gerando erros.
+
+00:09:31.020 --> 00:09:32.920
+Precisa verificar os logs, analisar a configuração,
+
+00:09:33.180 --> 00:09:34.860
+verificar se a conta de armazenamento está acessível
+
+00:09:34.860 --> 00:09:36.300
+e verificar a conexão do banco de dados.
+
+00:09:36.860 --> 00:09:38.800
+Antes do MCP, eram quatro ferramentas diferentes,
+
+00:09:38.920 --> 00:09:41.000
+quatro logins diferentes, quatro maneiras diferentes de obter informações.
+
+00:09:41.760 --> 00:09:43.860
+Com o servidor MCP do Azure, é uma conversa.
+
+00:09:44.560 --> 00:09:46.320
+Mostre meus erros, confira minha configuração,
+
+00:09:46.440 --> 00:09:48.420
+verifique meu armazenamento e teste minha conexão ao banco.
+
+00:09:48.960 --> 00:09:50.020
+O servidor lida com tudo isso.
+
+00:09:50.640 --> 00:09:51.480
+Como isso realmente funciona?
+
+00:09:51.900 --> 00:09:52.740
+Dá uma olhada nos bastidores.
+
+00:09:52.740 --> 00:09:54.820
+Como isso realmente funciona nos bastidores?
+
+00:09:55.280 --> 00:09:58.180
+A autenticação usa o EntraID, que é seu Azure Active Directory,
+
+00:09:58.280 --> 00:09:59.960
+por meio da biblioteca de identidade do Azure.
+
+00:10:00.660 --> 00:10:02.600
+Quando o seu agente de IA faz uma solicitação,
+
+00:10:02.700 --> 00:10:04.460
+ele se autentica usando sua identidade do Azure.
+
+00:10:05.000 --> 00:10:07.320
+São as mesmas credenciais usadas para acessar o portal do Azure,
+
+00:10:07.460 --> 00:10:09.440
+sem chave de API ou contas de serviço compartilhadas,
+
+00:10:09.520 --> 00:10:10.180
+apenas sua identidade.
+
+00:10:10.860 --> 00:10:11.820
+Pense nisso com uma recepção.
+
+00:10:12.460 --> 00:10:14.220
+O servidor verifica sua ID antes de permitir sua entrada.
+
+00:10:14.780 --> 00:10:16.660
+Agora, autorização a respeito ao RBAC do Azure,
+
+00:10:16.880 --> 00:10:18.220
+controle de acesso baseado em função.
+
+00:10:18.220 --> 00:10:20.880
+O servidor MCP não concede nenhuma permissão nova.
+
+00:10:21.760 --> 00:10:23.880
+Ele só permite o que sua conta já tem permissão para fazer.
+
+00:10:24.560 --> 00:10:26.640
+Se você puder ler contas de armazenamento no portal,
+
+00:10:26.880 --> 00:10:28.120
+o servidor MCP poderá lê-las.
+
+00:10:28.660 --> 00:10:31.000
+Se não consegue excluir banco de dados, o servidor MCP também não.
+
+00:10:31.380 --> 00:10:33.240
+Ele herda o modelo de segurança existente do Azure.
+
+00:10:33.600 --> 00:10:34.720
+Ele não adiciona nova superfície.
+
+00:10:35.080 --> 00:10:37.400
+Portanto, se você já confia no Azure para executar seus aplicativos,
+
+00:10:37.480 --> 00:10:39.060
+você já confia no modelo de segurança aqui.
+
+00:10:39.640 --> 00:10:40.820
+Para transporte, há duas opções.
+
+00:10:41.540 --> 00:10:43.720
+HTTP transmitível para conexões remotas,
+
+00:10:43.800 --> 00:10:45.880
+quando seu assistente de IA está sendo executado na nuvem
+
+00:10:45.880 --> 00:10:46.940
+ou em uma máquina diferente.
+
+00:10:46.940 --> 00:10:48.660
+e STDO para desenvolvimento local,
+
+00:10:48.760 --> 00:10:50.540
+quando você está executando tudo em sua própria máquina.
+
+00:10:51.120 --> 00:10:54.440
+A opção HTTP transmitível é recomendada pela Microsoft para produção,
+
+00:10:54.740 --> 00:10:57.100
+porque funciona bem com balanceadores de carga e proxies.
+
+00:10:57.860 --> 00:10:59.700
+Pense nisso com uma chamada telefônica para remoto
+
+00:10:59.700 --> 00:11:00.900
+e uma conversa direta para local.
+
+00:11:01.420 --> 00:11:02.320
+As sessões são importantes aqui.
+
+00:11:02.680 --> 00:11:04.940
+O servidor MCP mantém o estado durante uma conversa.
+
+00:11:05.660 --> 00:11:07.120
+Portanto, quando seu agente faz uma pergunta,
+
+00:11:07.200 --> 00:11:09.460
+obteve uma resposta e em seguida faz uma pergunta de acompanhamento,
+
+00:11:09.540 --> 00:11:11.000
+o servidor lembra o que aconteceu antes.
+
+00:11:11.640 --> 00:11:13.080
+As ferramentas podem se basear em etapas anteriores.
+
+00:11:13.080 --> 00:11:16.080
+Você pode consultar logs e identificar um problema,
+
+00:11:16.200 --> 00:11:16.960
+criar uma correção,
+
+00:11:17.380 --> 00:11:17.880
+implantá-la,
+
+00:11:18.040 --> 00:11:19.760
+tudo em uma sessão sem perder o contexto.
+
+00:11:20.500 --> 00:11:21.920
+Mas como ter um bate-papo durante um café,
+
+00:11:21.980 --> 00:11:23.020
+onde você continua de onde parou.
+
+00:11:23.500 --> 00:11:25.500
+O servidor usa SDKs do Azure internamente,
+
+00:11:25.580 --> 00:11:27.720
+o que significa que ele herda toda a lógica de repetição integrada
+
+00:11:27.720 --> 00:11:29.500
+e tratamento de erros que esses SDKs fornecem.
+
+00:11:30.100 --> 00:11:32.160
+Se uma solicitação falhar por um problema de rede temporária,
+
+00:11:32.220 --> 00:11:33.440
+ela será repetida automaticamente.
+
+00:11:34.180 --> 00:11:35.560
+Se um serviço não estiver disponível,
+
+00:11:35.740 --> 00:11:36.860
+ele lida com o erro normalmente.
+
+00:11:37.480 --> 00:11:38.600
+Você não precisa escrever nada disso.
+
+00:11:39.200 --> 00:11:39.940
+Já está incorporado.
+
+00:11:39.940 --> 00:11:42.620
+Agora, o modelo de segurança usa algo chamado em nome da autenticação,
+
+00:11:42.840 --> 00:11:43.420
+ou OBO.
+
+00:11:44.140 --> 00:11:44.720
+Isso é importante.
+
+00:11:45.600 --> 00:11:47.200
+Quando o seu agente e A chama uma ferramenta,
+
+00:11:47.280 --> 00:11:50.060
+o servidor MCP passa a sua identidade para o serviço downstream.
+
+00:11:51.020 --> 00:11:52.680
+Conta de armazenamento vê a sua identidade,
+
+00:11:52.780 --> 00:11:53.720
+não a identidade do servidor.
+
+00:11:54.300 --> 00:11:55.660
+O banco de dados vê a sua identidade,
+
+00:11:55.820 --> 00:11:57.340
+não uma conta de serviço compartilhada.
+
+00:11:57.860 --> 00:11:59.680
+Isso significa que cada ação é atribuível a você.
+
+00:12:00.140 --> 00:12:01.680
+Cada registro de auditoria mostra quem fez o que.
+
+00:12:02.060 --> 00:12:04.220
+Nenhuma conta de serviço anônima fazendo coisas que ninguém pode aceitar.
+
+00:12:04.460 --> 00:12:05.760
+O servidor diz estou aqui em nome do Miro.
+
+00:12:06.340 --> 00:12:08.180
+E o serviço vê você, não o servidor.
+
+00:12:08.180 --> 00:12:10.440
+Para empresas que precisam de ainda mais controle,
+
+00:12:10.540 --> 00:12:13.540
+você pode frontear servidores MCP com gerenciamento de API do Azure.
+
+00:12:14.080 --> 00:12:17.080
+Isso oferece políticas de governança, limite de taxa, trilhas de auditoria
+
+00:12:17.080 --> 00:12:19.260
+e checagem de segurança na camada de protocolo.
+
+00:12:19.540 --> 00:12:21.540
+Você pode controlar quais ferramentas estão disponíveis.
+
+00:12:21.620 --> 00:12:22.580
+Quem as usa é a frequência.
+
+00:12:23.140 --> 00:12:25.760
+É o mesmo gerenciamento de API que você já usa para as suas APIs REST,
+
+00:12:25.820 --> 00:12:27.280
+agora aplicadas as ferramentas MCP.
+
+00:12:27.880 --> 00:12:28.780
+Aqui está a principal lição.
+
+00:12:29.320 --> 00:12:31.980
+O servidor MCP do Azure não inventa novos mecanismos de segurança.
+
+00:12:32.480 --> 00:12:33.660
+Ele usa os que o Azure já tem.
+
+00:12:33.660 --> 00:12:38.020
+Entre ID para autenticação, RBAC para autorização, SDKs para confiabilidade,
+
+00:12:38.140 --> 00:12:39.580
+API Management para governança.
+
+00:12:40.400 --> 00:12:42.620
+Se você já confia no Azure para executar seus aplicativos,
+
+00:12:42.720 --> 00:12:45.120
+você já confia no modelo de segurança que o servidor MCP usa.
+
+00:12:45.960 --> 00:12:46.980
+Exemplo do mundo real em ação.
+
+00:12:47.460 --> 00:12:49.400
+Vamos tornar isso real com um exemplo que você realmente contraria.
+
+00:12:49.840 --> 00:12:52.020
+Imagine que você executa um aplicativo de container no Azure.
+
+00:12:52.380 --> 00:12:55.480
+Você acessa a URL, recebe um erro 404, o aplicativo não inicia.
+
+00:12:55.820 --> 00:12:58.320
+O portal do Azure mostra um erro de ativação, mas nenhum registro.
+
+00:12:58.720 --> 00:13:00.100
+Nada útil. Você está travado.
+
+00:13:00.620 --> 00:13:02.120
+A maneira antiga de lidar com isso é difícil.
+
+00:13:02.120 --> 00:13:03.120
+Você abre o portal.
+
+00:13:03.580 --> 00:13:05.220
+Você vai escolher as configurações do aplicativo de container.
+
+00:13:05.540 --> 00:13:06.460
+Você verifica o seu implantação.
+
+00:13:06.920 --> 00:13:09.360
+Você escreve o comando CLI para extrair informações de diagnóstico.
+
+00:13:09.900 --> 00:13:11.900
+Você compara arquivos de configuração entre ambientes.
+
+00:13:12.580 --> 00:13:14.600
+Você rastreia manualmente a sequência de inicialização,
+
+00:13:14.740 --> 00:13:15.800
+tentando descobrir o que está quebrado.
+
+00:13:16.380 --> 00:13:17.020
+Isso leva horas.
+
+00:13:17.680 --> 00:13:19.180
+E pressupõe que você já sabe o que procurar.
+
+00:13:19.720 --> 00:13:22.320
+Com o servidor MCP do Azure, a experiência é completamente diferente.
+
+00:13:22.920 --> 00:13:25.060
+Você copia a mensagem de erro, cola no Copilot,
+
+00:13:25.180 --> 00:13:28.000
+habilita as ferramentas do Azure MCP e deixa a gente fazer o diagnóstico.
+
+00:13:28.000 --> 00:13:31.900
+O agente lê os arquivos do seu projeto, analisa as configurações do seu aplicativo,
+
+00:13:32.000 --> 00:13:34.680
+verifica a configuração do aplicativo de container e identifica o problema.
+
+00:13:35.260 --> 00:13:38.320
+A string de conexão da configuração do seu app Azure é um valor reservado.
+
+00:13:38.720 --> 00:13:39.800
+Ela nunca foi configurada para o plus.
+
+00:13:40.220 --> 00:13:43.220
+Ao tentar iniciar o aplicativo de container, não conecta a configuração,
+
+00:13:43.500 --> 00:13:45.220
+gera uma exceção e falha na inicialização.
+
+00:13:45.860 --> 00:13:48.080
+O agente não apenas encontra o problema, ele propõe uma correção.
+
+00:13:48.460 --> 00:13:50.320
+Crie um repositório de configuração de aplicativo real,
+
+00:13:50.460 --> 00:13:52.340
+defina as variáveis de ambiente no aplicativo de container,
+
+00:13:52.580 --> 00:13:55.000
+atualize o código para ler variáveis de ambiente em vez de espaços reservados codificados,
+
+00:13:55.000 --> 00:13:58.620
+reimplante e, em vez de espaços codificados, reimplante e lhe orienta em cada etapa,
+
+00:13:58.720 --> 00:14:00.180
+pedindo permissão antes de fazer alterações.
+
+00:14:00.620 --> 00:14:01.820
+Bom, é aqui que fica impressionante.
+
+00:14:02.380 --> 00:14:05.040
+O agente orquestra várias operações do Azure em sequência.
+
+00:14:05.700 --> 00:14:09.240
+Ele consulta o Azure Resource Graph para encontrar os aplicativos de container do seu projeto.
+
+00:14:09.760 --> 00:14:11.060
+Ele identifica o grupo de recursos,
+
+00:14:11.560 --> 00:14:14.020
+ele cria o repositório de configuração de aplicativo nesse mesmo grupo.
+
+00:14:14.480 --> 00:14:17.280
+Ele atualiza o aplicativo de container com a nova variável de ambiente.
+
+00:14:17.760 --> 00:14:19.380
+Ele faz alterações de código no seu projeto.
+
+00:14:19.700 --> 00:14:20.440
+Ele inicia a implantação.
+
+00:14:21.060 --> 00:14:22.720
+E então verifica se o endpoint está funcionando.
+
+00:14:23.040 --> 00:14:23.860
+Tudo isso leva minutos.
+
+00:14:23.860 --> 00:14:25.740
+O agente lidou com cada operação.
+
+00:14:26.160 --> 00:14:29.160
+Do Azure lendo recursos, criando novos, atualizando configurações,
+
+00:14:29.260 --> 00:14:31.020
+disparando implantações, verificando resultados.
+
+00:14:31.540 --> 00:14:33.060
+Você não escreveu um único comando CLI.
+
+00:14:33.440 --> 00:14:34.320
+Você não navegou pelo portal.
+
+00:14:34.760 --> 00:14:36.540
+Você apenas escreveu o problema e aprovou as etapas.
+
+00:14:37.200 --> 00:14:39.560
+O que isso significa para você é que a solução de problemas complexos
+
+00:14:39.560 --> 00:14:41.380
+se torna uma conversa em vez de um processo manual.
+
+00:14:42.420 --> 00:14:44.860
+Não precisa ser um especialista em Azure para diagnosticar e corrigir problemas.
+
+00:14:45.320 --> 00:14:48.060
+O agente traz a experiência e você traz o contexto e a aprovação.
+
+00:14:48.560 --> 00:14:50.320
+Você mesmo pode tentar isso usando o aplicativo de teste.
+
+00:14:50.540 --> 00:14:51.840
+Você não precisa de permissões especiais.
+
+00:14:51.840 --> 00:14:52.960
+Você não precisa ser um desenvolvedor.
+
+00:14:52.960 --> 00:14:56.440
+Você só precisa de uma assinatura do Azure e um assistente de A compatível com o MCP.
+
+00:14:57.380 --> 00:14:59.180
+Como tudo se conecta, o panorama geral.
+
+00:14:59.860 --> 00:15:00.740
+Agora você entende as partes.
+
+00:15:01.220 --> 00:15:02.440
+O MCP é o protocolo padrão.
+
+00:15:02.880 --> 00:15:05.040
+E o servidor MCP do Azure é a implementação da Microsoft.
+
+00:15:05.680 --> 00:15:07.660
+E os serviços do Azure são as ferramentas a que eles se conectam.
+
+00:15:08.100 --> 00:15:09.600
+Mas o valor real não é uma única peça.
+
+00:15:10.060 --> 00:15:12.180
+É que todos eles trabalham juntos por meio de um protocolo.
+
+00:15:12.400 --> 00:15:13.320
+Como isso se parece na prática?
+
+00:15:13.720 --> 00:15:16.500
+Imagine um único agente que pode consultar logs do monitor do Azure,
+
+00:15:16.660 --> 00:15:20.000
+verificar configurações de aplicativos, criar novos recursos e implantar código atualizado.
+
+00:15:20.000 --> 00:15:20.840
+Tudo em uma sessão.
+
+00:15:21.740 --> 00:15:23.020
+Não são quatro integrações separadas.
+
+00:15:23.680 --> 00:15:27.420
+É um servidor MCP fazendo quatro coisas em sequência com o contexto realizado em cada etapa.
+
+00:15:28.360 --> 00:15:30.480
+A saída de uma ferramenta se torna a entrada para a próxima.
+
+00:15:31.120 --> 00:15:32.780
+O estado da sessão mantém tudo conectado.
+
+00:15:33.340 --> 00:15:36.140
+Isso cria efeitos de interação que você não obtém com ferramentas isoladas.
+
+00:15:36.480 --> 00:15:40.320
+O agente lê logs, detecta um problema de configuração, cria uma correção e implanta
+
+00:15:40.320 --> 00:15:43.040
+sem que você precise copiar manualmente as informações entre as etapas.
+
+00:15:43.880 --> 00:15:45.060
+O efeito de rede também entra em ação.
+
+00:15:45.060 --> 00:15:49.640
+À medida que mais servidores MCP são criados, cada assistente de IA obtém acesso a mais recursos.
+
+00:15:50.380 --> 00:15:54.280
+A Microsoft já tem servidores MCP para Azure DevOps, PlayWrite e processamento de documentos.
+
+00:15:54.720 --> 00:15:55.560
+Terceiros estão criando.
+
+00:15:56.080 --> 00:15:59.320
+Cada novo servidor adiciona ferramentas que qualquer agente compatível com o MCP pode usar.
+
+00:15:59.840 --> 00:16:02.380
+O ecossistema se torna mais valioso a cada servidor adicionado.
+
+00:16:02.900 --> 00:16:04.000
+Agora vamos ver para onde está indo.
+
+00:16:04.540 --> 00:16:07.800
+O servidor MCP do Azure já está integrado ao Visual Studio 2026.
+
+00:16:08.300 --> 00:16:10.680
+O servidor MCP do Azure DevOps está disponível ao público.
+
+00:16:11.520 --> 00:16:13.740
+O Azure API Management agora oferece suporte ao MCP,
+
+00:16:13.740 --> 00:16:17.640
+permitindo que empresas controlem e protejam suas ferramentas da mesma forma que fazem com APIs.
+
+00:16:18.300 --> 00:16:21.520
+A Microsoft anunciou na BIO 2026 o Agent Orchestrator,
+
+00:16:22.060 --> 00:16:24.320
+um serviço gerenciado que lida com o balanceamento de carga,
+
+00:16:24.400 --> 00:16:26.840
+integridade e atribuição de custos entre milhares de agentes.
+
+00:16:27.800 --> 00:16:31.160
+Os primeiros usuários reduziram em 30% a 45% o custo de computação por agente
+
+00:16:31.160 --> 00:16:32.680
+via roteamento inteligente de modelos.
+
+00:16:33.320 --> 00:16:34.160
+O panorama geral é claro.
+
+00:16:34.720 --> 00:16:37.300
+O MCP está se tornando a camada de integração universal para a IA.
+
+00:16:37.300 --> 00:16:40.500
+O servidor MCP do Azure é a rampa de acesso aos usuários.
+
+00:16:40.500 --> 00:16:44.820
+As organizações que adotarem o MCP agora poderão se conectar a qualquer plataforma de IA
+
+00:16:44.820 --> 00:16:46.320
+sem reconstruir suas integrações.
+
+00:16:47.300 --> 00:16:49.320
+Suas ferramentas, seus dados, seu modelo de segurança,
+
+00:16:49.460 --> 00:16:52.120
+tudo acessível por um protocolo de qualquer assistente de IA que utilize.
+
+00:16:53.680 --> 00:16:54.960
+Esse é o conhecimento essencial de hoje.
+
+00:16:55.680 --> 00:16:58.740
+O MCP dá aos agentes de IA um padrão para interagir com ferramentas.
+
+00:16:58.880 --> 00:17:01.720
+E o servidor MCP do Azure garante acesso ao seu ambiente Azure.
+
+00:17:02.440 --> 00:17:05.000
+Você desenvolve com IA no Azure e começa a explorar o MCP hoje.
+
+00:17:05.000 --> 00:17:09.260
+Inscreva-se na sua plataforma de podcast favorita e compartilhe isso com alguém que esteja começando sua jornada.
+
+00:17:09.620 --> 00:17:10.640
+Deixe um comentário se algo fez sentido.
+
+00:17:11.100 --> 00:17:11.700
+Eu leio todos.
+
+00:17:12.460 --> 00:17:15.480
+Eu sou Mirko Peters e este foi mais um episódio do Microsoft Knowledge Nuggets.

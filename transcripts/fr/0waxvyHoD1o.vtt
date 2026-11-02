@@ -1,0 +1,2734 @@
+WEBVTT
+
+00:00:00.080 --> 00:00:03.540
+Votre flux DIA n'a pas échoué à cause de l'IA, il a échoué parce qu'elle vous a fait confiance.
+
+00:00:03.760 --> 00:00:05.360
+C'est la partie que personne ne veut entendre.
+
+00:00:05.480 --> 00:00:08.020
+Vous avez créé une automatisation, vous l'avez dite intelligente,
+
+00:00:08.260 --> 00:00:11.220
+puis lui avez fourni des données bâclées d'un formulaire rempli un vendredi après-midi.
+
+00:00:11.400 --> 00:00:13.940
+Vous avez cru que l'automatisation garantissait la fiabilité,
+
+00:00:14.300 --> 00:00:18.600
+alors qu'elle ne fait qu'amplifier vos erreurs, plus vite et avec plus d'aplomb qu'un stagiaire ne pourrait jamais le faire.
+
+00:00:18.780 --> 00:00:20.560
+Laissez-moi traduire cela en langage commercial.
+
+00:00:20.960 --> 00:00:24.340
+Votre flux Copilot Studio ne s'est pas effondré parce que Microsoft a fait une erreur.
+
+00:00:24.340 --> 00:00:27.780
+Il s'est effondré parce que de mauvaises données d'entrée ont été traitées comme des vérités d'évangile.
+
+00:00:27.940 --> 00:00:30.020
+Un champ manquant ici, un email mal orthographié là,
+
+00:00:30.240 --> 00:00:32.860
+et tout à coup, votre dataverse semble avoir été compilé par des bambins.
+
+00:00:33.040 --> 00:00:34.200
+L'IA ne s'est pas mal comportée.
+
+00:00:34.340 --> 00:00:36.680
+Elle a fait exactement ce que vous lui avez dit de faire, exactement de travers.
+
+00:00:36.880 --> 00:00:38.020
+Alors, qu'est-ce qui manque ?
+
+00:00:38.020 --> 00:00:38.760
+La gouvernance.
+
+00:00:38.940 --> 00:00:39.980
+Une véritable validation.
+
+00:00:40.320 --> 00:00:42.840
+Le moment où un humain arrête l'automatisation suffisamment longtemps
+
+00:00:42.840 --> 00:00:45.420
+pour confirmer la réalité avant que les robots ne se précipitent.
+
+00:00:45.580 --> 00:00:48.380
+C'est là qu'intervient la demande d'information ou l'action RFI.
+
+00:00:48.660 --> 00:00:50.300
+Considérez-la comme le pare-feu humain,
+
+00:00:50.300 --> 00:00:53.100
+et elle ne laisse pas les données inutiles faire exploser votre automatisation.
+
+00:00:53.300 --> 00:00:55.820
+Il les met en quarantaine, impose une révision humaine,
+
+00:00:56.120 --> 00:00:57.440
+puis laisse le flux se poursuivre.
+
+00:00:57.560 --> 00:01:00.160
+A la fin de cet article, vous saurez pourquoi les incohérences de données,
+
+00:01:00.440 --> 00:01:03.000
+les boucles nulles et les actions absurdes de l'IA continuent de se produire,
+
+00:01:03.320 --> 00:01:05.780
+et comment un petit mécanisme de conformité élimine ces trois éléments.
+
+00:01:06.020 --> 00:01:08.860
+Spoiler, le problème n'est pas que vos flux sont trop automatisés,
+
+00:01:09.220 --> 00:01:10.740
+c'est qu'ils ne sont pas suffisamment gouvernés.
+
+00:01:10.900 --> 00:01:13.080
+Le secret honteux de l'automatisation par l'IA.
+
+00:01:13.080 --> 00:01:14.420
+L'IA aime la précision.
+
+00:01:14.640 --> 00:01:16.060
+Les utilisateurs aiment le chaos.
+
+00:01:16.300 --> 00:01:19.360
+C'est le grand angle mort de la gouvernance de l'automatisation d'entreprises.
+
+00:01:19.360 --> 00:01:22.720
+Tous les passionnés de Copilot Studio pensent que leurs flux sont à toute épreuve
+
+00:01:22.720 --> 00:01:23.820
+parce que l'IA s'en charge.
+
+00:01:24.020 --> 00:01:26.620
+Eh bien, la vérité, c'est que l'IA gère tout ce que vous lui fournissez,
+
+00:01:26.820 --> 00:01:27.900
+bon ou mauvais, sans jugement.
+
+00:01:28.080 --> 00:01:29.820
+Elle est obéissante, pas intelligente.
+
+00:01:29.960 --> 00:01:30.500
+Elle ne demande pas.
+
+00:01:30.820 --> 00:01:33.640
+Sommes-nous sûrs que ce visiteur a une habilitation de sécurité pour le laboratoire ?
+
+00:01:33.640 --> 00:01:35.040
+Elle se contente de réserver la réunion,
+
+00:01:35.300 --> 00:01:38.220
+de mettre à jour le dossier et de prier pour que l'équipe juridique ne le découvre jamais.
+
+00:01:38.500 --> 00:01:41.040
+Imaginez un flux conçu pour gérer les demandes d'accès aux installations.
+
+00:01:41.360 --> 00:01:43.800
+Il prend les réponses des employés ou des visiteurs externes
+
+00:01:43.800 --> 00:01:45.320
+et les ajoute à une table dataverse.
+
+00:01:45.520 --> 00:01:46.900
+Dans votre tête, c'est propre.
+
+00:01:46.900 --> 00:01:50.160
+En réalité, quelqu'un laisse le champ objet de la visite vide ou saisit réunion.
+
+00:01:50.360 --> 00:01:52.260
+Ce n'est pas un objet, c'est un haussement d'épaule.
+
+00:01:52.380 --> 00:01:55.480
+Mais votre automatisation le lit comme valide et le transmet joyeusement à la sécurité.
+
+00:01:56.020 --> 00:01:58.420
+Félicitations, vous avez maintenant autorisé une personne inconnue
+
+00:01:58.420 --> 00:02:00.520
+à entrer dans un bâtiment à accès restreint pour une réunion.
+
+00:02:00.760 --> 00:02:02.280
+Lorsque l'équipe d'audit examinera cela,
+
+00:02:02.640 --> 00:02:05.820
+elle qualifiera votre flux de risque de conformité et non de merveille technique.
+
+00:02:06.140 --> 00:02:08.320
+C'est ainsi que la plupart des workflows IA échouent.
+
+00:02:08.460 --> 00:02:09.620
+Non pas à cause d'erreurs logiques,
+
+00:02:09.840 --> 00:02:11.620
+mais à cause d'une confiance aveugle dans l'apport humain.
+
+00:02:11.780 --> 00:02:14.120
+L'automatisation suppose une structure là où il n'y en a pas.
+
+00:02:14.120 --> 00:02:16.000
+Elle consomme des déclarations au lieu de fait.
+
+00:02:16.140 --> 00:02:18.940
+Elle ne vérifie pas la validité parce que vous ne lui avez jamais demandé de le faire.
+
+00:02:19.060 --> 00:02:21.500
+Et lorsque ces données erronées se propagent en aval dans Dataverse,
+
+00:02:21.800 --> 00:02:23.920
+les tableaux de bord Power BI ou même votre système RH,
+
+00:02:24.200 --> 00:02:25.660
+elles infectent tous les enregistrements suivants.
+
+00:02:25.800 --> 00:02:28.940
+Ce qui était au départ une commodité se transforme en corruption systémique.
+
+00:02:29.100 --> 00:02:32.020
+Les équipes de gouvernance appellent cela le manque de fiabilité des données.
+
+00:02:32.280 --> 00:02:35.280
+Chaque décision automatisée doit remonter à une entrée vérifiée.
+
+00:02:35.500 --> 00:02:39.180
+Sans ce point de contrôle, vous n'automatisez pas, vous accélérez les erreurs.
+
+00:02:39.320 --> 00:02:42.840
+L'ironie est que la plupart des gens conçoivent des flux pour éliminer les frictions humaines
+
+00:02:42.840 --> 00:02:45.780
+alors qu'il serait plus judicieux de les rajouter stratégiquement au bon endroit.
+
+00:02:46.020 --> 00:02:48.960
+Microsoft a donc finalement décidé de rendre vos flux moins crédules.
+
+00:02:49.200 --> 00:02:52.640
+L'action de demande d'informations est leur façon d'injecter un contrôle de cohérence
+
+00:02:52.640 --> 00:02:54.180
+dans un système par ailleurs naïf.
+
+00:02:54.340 --> 00:02:56.260
+Elle interrompt l'exécution en cours de route et dit
+
+00:02:56.260 --> 00:02:59.560
+« Attendez, un humain doit confirmer cela avant de continuer. »
+
+00:02:59.560 --> 00:03:01.420
+Ce moment d'attente n'est pas une inefficacité,
+
+00:03:01.780 --> 00:03:03.360
+c'est la discipline de gouvernance en action.
+
+00:03:03.540 --> 00:03:04.520
+Quand on y pense de cette façon,
+
+00:03:04.800 --> 00:03:06.680
+l'automatisation sans validation n'est pas un progrès,
+
+00:03:06.680 --> 00:03:09.480
+c'est une violation de politique avec une interface utilisateur brillante.
+
+00:03:09.480 --> 00:03:12.020
+Chaque champ non vérifié, chaque liste déroulante vide,
+
+00:03:12.400 --> 00:03:14.000
+chaque zone de texte considérée comme vraie
+
+00:03:14.000 --> 00:03:15.780
+est une violation potentielle de la conformité.
+
+00:03:15.960 --> 00:03:19.740
+La fonctionnalité RFI existe précisément pour remettre de l'ordre dans le chaos,
+
+00:03:20.080 --> 00:03:21.380
+un formulaire outlook à la fois.
+
+00:03:21.860 --> 00:03:24.620
+Et une fois que vous aurez vu un mauvais flux corrompre votre lac de données,
+
+00:03:25.000 --> 00:03:26.000
+vous apprécierez ce moment,
+
+00:03:26.340 --> 00:03:28.720
+car l'alternative n'est pas une automatisation plus rapide,
+
+00:03:29.020 --> 00:03:30.160
+c'est un désastre plus rapide.
+
+00:03:30.720 --> 00:03:32.820
+Entrez dans RFI, l'humain dans la boucle.
+
+00:03:32.820 --> 00:03:35.600
+L'action de demande d'informations, ou RFI,
+
+00:03:35.920 --> 00:03:38.260
+est le moment où votre automatisation apprend l'humilité.
+
+00:03:38.260 --> 00:03:41.360
+C'est l'équivalent dans Copilot Studio de lever la main numérique et de dire
+
+00:03:41.360 --> 00:03:44.020
+« Attendez, j'ai besoin d'un humain avant de tout gâcher ».
+
+00:03:44.020 --> 00:03:45.740
+Et oui, c'est exactement ce qu'elle fait.
+
+00:03:45.920 --> 00:03:48.760
+Ce n'est pas seulement un remplisseur de formulaires ou une invite glorifiée.
+
+00:03:48.940 --> 00:03:50.580
+C'est un point de contrôle de conformité
+
+00:03:50.580 --> 00:03:53.900
+qui fait la distinction entre des données validées et propres et le chaos absolu.
+
+00:03:54.060 --> 00:03:55.040
+Voici ce que c'est vraiment.
+
+00:03:55.240 --> 00:03:57.180
+L'action RFI se trouve dans votre flux d'agents
+
+00:03:57.180 --> 00:03:59.100
+et interrompt sa progression jusqu'à ce que quelqu'un,
+
+00:03:59.400 --> 00:04:00.160
+une personne réelle,
+
+00:04:00.340 --> 00:04:02.100
+réponde à un message Outlook exploitable.
+
+00:04:02.340 --> 00:04:04.340
+Ce message n'est pas une notification passive.
+
+00:04:04.560 --> 00:04:07.100
+Il s'agit d'un mini-formulaire intégré directement dans Outlook,
+
+00:04:07.100 --> 00:04:09.900
+conçu avec des champs obligatoires que le destinataire doit remplir
+
+00:04:09.900 --> 00:04:11.060
+avant que le flux ne se poursuive.
+
+00:04:11.180 --> 00:04:12.500
+Pendant qu'il réfléchit à ses réponses,
+
+00:04:12.760 --> 00:04:13.900
+votre automatisation reste là,
+
+00:04:14.180 --> 00:04:15.100
+suspendue au milieu du flux,
+
+00:04:15.380 --> 00:04:17.140
+comme un majordome bien formé attendant des instructions.
+
+00:04:17.380 --> 00:04:18.740
+Ce n'est que lorsque les champs sont remplis,
+
+00:04:18.980 --> 00:04:20.340
+que toutes les valeurs requises sont fournies
+
+00:04:20.340 --> 00:04:22.200
+et que toutes les cases sont cochées que le flux continue.
+
+00:04:22.460 --> 00:04:25.040
+Considérez cela comme un accès conditionnel pour les flux de travail.
+
+00:04:25.300 --> 00:04:26.940
+Vous ne laisseriez pas une machine non vérifiée
+
+00:04:26.940 --> 00:04:28.460
+se connecter à votre réseau d'entreprise,
+
+00:04:28.780 --> 00:04:30.280
+alors pourquoi laisser des données non vérifiées
+
+00:04:30.280 --> 00:04:31.700
+entrer dans votre table Dataverse ?
+
+00:04:31.700 --> 00:04:33.740
+RFI impose exactement ce type d'arrêt.
+
+00:04:33.740 --> 00:04:37.120
+L'exécution s'interrompt jusqu'à ce que la réalité soit conforme à la politique.
+
+00:04:37.280 --> 00:04:38.280
+Et voici l'astuce.
+
+00:04:38.620 --> 00:04:39.300
+C'est synchrone.
+
+00:04:39.920 --> 00:04:41.920
+Cela signifie que le flux attend la vérité.
+
+00:04:42.080 --> 00:04:43.720
+Il ne devine pas, il ne déduit pas,
+
+00:04:44.080 --> 00:04:46.080
+il attend simplement qu'on lui dise définitivement.
+
+00:04:46.560 --> 00:04:48.120
+Ces données sont prêtes à être utilisées.
+
+00:04:48.320 --> 00:04:51.620
+Maintenant, il est en temps de supposer que vos invites dits agèrent déjà cela.
+
+00:04:51.820 --> 00:04:53.880
+Après tout, les invites semblent intelligentes.
+
+00:04:54.040 --> 00:04:54.940
+Elles valident les détails,
+
+00:04:55.300 --> 00:04:57.400
+résument le contenu et détectent même les champs manquants.
+
+00:04:57.540 --> 00:04:59.000
+Mais les invites ne font que interpréter.
+
+00:04:59.160 --> 00:05:00.800
+Elles pensent que les informations ont du sens.
+
+00:05:00.800 --> 00:05:01.880
+Elles manquent d'autorité.
+
+00:05:02.120 --> 00:05:03.240
+Les RFI confirment.
+
+00:05:03.380 --> 00:05:06.100
+Elles transforment ce qui semble correct en officiellement vérifié.
+
+00:05:06.240 --> 00:05:08.260
+Les invites indiquent une compréhension approximative.
+
+00:05:08.560 --> 00:05:09.940
+Les RFI imposent la conformité.
+
+00:05:10.160 --> 00:05:11.000
+Lorsqu'elles sont combinées,
+
+00:05:11.320 --> 00:05:12.300
+l'une vérifie la logique,
+
+00:05:12.560 --> 00:05:13.600
+l'autre la responsabilité.
+
+00:05:13.820 --> 00:05:14.740
+Voici un cas concret.
+
+00:05:14.920 --> 00:05:17.320
+Un flux d'installation traitant les demandes d'accès des visiteurs
+
+00:05:17.320 --> 00:05:20.140
+a utilisé une invite d'IA pour valider les entrées de Microsoft Form.
+
+00:05:20.320 --> 00:05:22.120
+Si le visiteur prévoyait d'accéder à un laboratoire,
+
+00:05:22.420 --> 00:05:23.780
+l'IA vérifiait les informations de sécurité,
+
+00:05:24.040 --> 00:05:24.660
+le type de travail,
+
+00:05:24.880 --> 00:05:26.120
+l'habilitation et l'équipement de protection.
+
+00:05:26.360 --> 00:05:27.900
+Lorsque l'utilisateur ignorait cette section,
+
+00:05:27.900 --> 00:05:29.500
+l'invite l'a signalé comme incomplète.
+
+00:05:29.700 --> 00:05:31.000
+Saisissez la demande d'informations.
+
+00:05:31.200 --> 00:05:34.040
+Le flux générait automatiquement un message à l'intention de l'expéditeur.
+
+00:05:34.480 --> 00:05:36.760
+Veuillez fournir les détails de sécurité avant d'approuver l'accès.
+
+00:05:36.920 --> 00:05:39.220
+Le destinataire ouvrait le message exploitable dans Outlook,
+
+00:05:39.520 --> 00:05:41.640
+saisissez les informations requises et appuyez sur Envoyer.
+
+00:05:41.800 --> 00:05:43.560
+Ce n'est qu'à ce moment-là que le flux de l'agent se poursuivait,
+
+00:05:43.820 --> 00:05:45.120
+mettant à jour l'enregistrement Dataverse,
+
+00:05:45.400 --> 00:05:46.460
+marquant le laisser-passer comme valide
+
+00:05:46.460 --> 00:05:47.940
+et gardant vos auditeurs parfaitement silencieux.
+
+00:05:48.040 --> 00:05:50.080
+Et oui, plusieurs utilisateurs peuvent être affectés,
+
+00:05:50.340 --> 00:05:51.460
+le premier intervenant l'emporte.
+
+00:05:51.640 --> 00:05:53.740
+Les tentatives suivantes sont verrouillées comme redondantes,
+
+00:05:53.740 --> 00:05:56.120
+ce qui garantit une fiabilité basée sur l'orodatage
+
+00:05:56.120 --> 00:05:57.740
+et évite les modifications contradictoires.
+
+00:05:57.940 --> 00:05:59.700
+Chaque soumission de demande d'informations
+
+00:05:59.700 --> 00:06:01.220
+laisse une trace parfaitement nette.
+
+00:06:01.320 --> 00:06:03.540
+Qui a répondu ? Quand ? Ce qui a été saisi.
+
+00:06:03.760 --> 00:06:06.640
+C'est de l'or pour les équipes de gouvernance obsédées par la traçabilité.
+
+00:06:06.860 --> 00:06:08.760
+Les RFI ne corrigent pas seulement les données erronées,
+
+00:06:09.020 --> 00:06:10.300
+elles réparent aussi les responsabilités.
+
+00:06:10.480 --> 00:06:12.200
+Elles font en sorte que nul ne puisse hausser les épaules.
+
+00:06:12.540 --> 00:06:13.380
+Oh, c'est le système.
+
+00:06:13.540 --> 00:06:15.320
+Car si les données passaient par une porte RFI,
+
+00:06:15.520 --> 00:06:16.500
+quelqu'un, quelque part,
+
+00:06:16.860 --> 00:06:18.420
+devait cliquer sur Envoyer en indiquant son nom.
+
+00:06:18.580 --> 00:06:21.120
+C'est une responsabilité numérique au niveau du formulaire.
+
+00:06:21.120 --> 00:06:24.260
+C'est ainsi que vous réintroduisez la responsabilité dans l'automatisation,
+
+00:06:24.640 --> 00:06:26.580
+délibérément, de manière audible et fière.
+
+00:06:26.760 --> 00:06:28.160
+La RFI ne vous ralentit pas,
+
+00:06:28.460 --> 00:06:30.940
+elle empêche votre flux de se heurter à un mur de conformité.
+
+00:06:31.120 --> 00:06:32.560
+Et maintenant que vous savez ce qu'elle fait,
+
+00:06:32.820 --> 00:06:34.660
+parlons de la raison pour laquelle cette petite pause
+
+00:06:34.660 --> 00:06:36.200
+est l'acte de gouvernance le plus important
+
+00:06:36.200 --> 00:06:37.960
+que vous ajouterez jamais à une automatisation.
+
+00:06:38.120 --> 00:06:40.700
+Pourquoi la gouvernance commence par la validation humaine ?
+
+00:06:40.700 --> 00:06:43.580
+L'automatisation n'a jamais été censée éliminer les humains de la boucle,
+
+00:06:43.900 --> 00:06:45.720
+elle était censée éliminer leur paresse de la boucle.
+
+00:06:45.860 --> 00:06:47.840
+Pourtant, dans la course à l'automatisation,
+
+00:06:48.260 --> 00:06:50.580
+nous avons décidé que la validation était facultative.
+
+00:06:50.580 --> 00:06:51.480
+Ce n'est pas le cas.
+
+00:06:51.640 --> 00:06:54.740
+Toute automatisation digne de confiance comprend un point de confirmation humaine,
+
+00:06:55.060 --> 00:06:57.900
+le moment où quelqu'un lève le doigt et dit « oui, c'est exact ».
+
+00:06:57.900 --> 00:06:59.900
+Sinon, vous ne construisez pas un processus métier,
+
+00:07:00.160 --> 00:07:02.400
+vous construisez un moulin à rumeurs avec l'efficacité de la machine.
+
+00:07:02.580 --> 00:07:04.860
+Les responsables de la gouvernance comprennent cela instinctivement,
+
+00:07:05.020 --> 00:07:07.820
+car chaque cadre de conformité, ISO, SOC, RGPD,
+
+00:07:08.200 --> 00:07:09.300
+choisissez votre acronyme préféré,
+
+00:07:09.580 --> 00:07:10.920
+tourne autour de points de décision traçables.
+
+00:07:11.060 --> 00:07:12.000
+Qui a approuvé quoi ?
+
+00:07:12.000 --> 00:07:13.240
+Quand cela a-t-il été fait ?
+
+00:07:13.240 --> 00:07:14.700
+Dans quelles conditions de données ?
+
+00:07:14.700 --> 00:07:16.540
+Ce ne sont pas des questions bureaucratiques,
+
+00:07:16.860 --> 00:07:19.160
+c'est l'échafaudage d'une automatisation défendable.
+
+00:07:19.160 --> 00:07:22.880
+Une action RFI insère ses moments de réponse directement dans votre flux.
+
+00:07:23.100 --> 00:07:25.960
+Sans cela, votre rapport d'audit se lit comme un roman policier,
+
+00:07:26.240 --> 00:07:26.940
+rempli d'événements,
+
+00:07:27.300 --> 00:07:29.220
+mais sans aucune idée de qui les a réellement causés.
+
+00:07:29.400 --> 00:07:30.400
+Pour voir la différence,
+
+00:07:30.820 --> 00:07:34.460
+considérez une RFI comme une feuille de signature numérique intégrée à Outlook.
+
+00:07:34.660 --> 00:07:37.180
+Le flux s'arrête jusqu'à ce que la signature humaine arrive,
+
+00:07:37.520 --> 00:07:39.940
+électroniquement, automatiquement et consignée.
+
+00:07:40.140 --> 00:07:42.020
+Lorsque l'utilisateur appuie sur « envoyer »,
+
+00:07:42.020 --> 00:07:45.660
+sa réponse, son identifiant de messagerie et son horodatage sont enregistrés.
+
+00:07:45.660 --> 00:07:48.700
+Cela signifie que chaque étape d'automatisation consécutive,
+
+00:07:48.960 --> 00:07:52.020
+de l'approbation de l'accès des visiteurs à la publication des transactions,
+
+00:07:52.460 --> 00:07:53.860
+renvoie à une action humaine validée.
+
+00:07:54.100 --> 00:07:55.680
+Vous pouvez retracer la lignée des données
+
+00:07:55.680 --> 00:07:58.340
+jusqu'à la personne suffisamment têtue pour laisser un champ vide.
+
+00:07:58.560 --> 00:07:59.700
+Dans un audit de conformité,
+
+00:08:00.020 --> 00:08:00.940
+ce n'est pas seulement utile,
+
+00:08:01.200 --> 00:08:02.160
+c'est une question de survie.
+
+00:08:02.300 --> 00:08:03.700
+Parlons maintenant de la fiabilité.
+
+00:08:03.880 --> 00:08:06.100
+L'automatisation souffre de ce que les ingénieurs appellent
+
+00:08:06.100 --> 00:08:07.180
+les défaillances silencieuses,
+
+00:08:07.460 --> 00:08:08.860
+des choses qui se cassent de manière invisible.
+
+00:08:09.080 --> 00:08:10.020
+Une valeur disparaît,
+
+00:08:10.340 --> 00:08:12.300
+une condition échoue et personne ne le remarque
+
+00:08:12.300 --> 00:08:14.120
+jusqu'à ce que le résultat paraisse absurde.
+
+00:08:14.300 --> 00:08:15.700
+Les RFI tuent le silence.
+
+00:08:15.920 --> 00:08:17.800
+Elles introduisent un point de contrôle sonore.
+
+00:08:17.940 --> 00:08:19.540
+Un champ manquant ne passe pas inaperçu,
+
+00:08:19.800 --> 00:08:20.300
+il arrête le processus.
+
+00:08:20.980 --> 00:08:22.060
+Pas de formulaires ignorés,
+
+00:08:22.300 --> 00:08:23.200
+pas de saisie générique.
+
+00:08:23.420 --> 00:08:24.800
+L'humain reçoit un message exploitable
+
+00:08:24.800 --> 00:08:26.860
+exigeant son attention avant que la machine ne continue.
+
+00:08:27.040 --> 00:08:28.340
+Les professionnels de la gouvernance
+
+00:08:28.340 --> 00:08:29.800
+appellent cela le contrôle préventif.
+
+00:08:29.940 --> 00:08:32.080
+Les utilisateurs moyens appellent cela du babysitting ennuyeux,
+
+00:08:32.300 --> 00:08:33.760
+mais ce sont généralement ces mêmes utilisateurs
+
+00:08:33.760 --> 00:08:34.840
+qui écrivent des emails d'excuses
+
+00:08:34.840 --> 00:08:35.900
+aux services de conformité plus tard.
+
+00:08:36.060 --> 00:08:36.900
+Voici le charme.
+
+00:08:37.020 --> 00:08:38.500
+En intégrant la validation humaine,
+
+00:08:38.820 --> 00:08:39.960
+vous transformez la fiabilité
+
+00:08:39.960 --> 00:08:41.340
+d'une conjecture en mathématiques.
+
+00:08:42.300 --> 00:08:43.700
+Je ne comprends combien de flux ont été terminés
+
+00:08:43.700 --> 00:08:44.680
+avec des données vérifiées,
+
+00:08:44.940 --> 00:08:46.320
+car les actions RFI vous le disent.
+
+00:08:46.520 --> 00:08:48.800
+Chacun devient un nœud de responsabilité mesurable.
+
+00:08:49.020 --> 00:08:50.100
+L'organisation passe de
+
+00:08:50.100 --> 00:08:51.800
+« Je pense que nos flux sont stables »
+
+00:08:51.800 --> 00:08:53.380
+à « Nous pouvons prouver qu'ils le sont ».
+
+00:08:53.380 --> 00:08:55.080
+C'est la maturité de la gouvernance définie
+
+00:08:55.080 --> 00:08:56.180
+non pas par la bureaucratie,
+
+00:08:56.400 --> 00:08:57.220
+mais par la télémétrie.
+
+00:08:57.580 --> 00:08:58.520
+Sarcasme mis à part,
+
+00:08:58.840 --> 00:09:01.100
+ce principe de confirmation humaine n'est pas démodé,
+
+00:09:01.380 --> 00:09:02.260
+il est intemporel.
+
+00:09:02.720 --> 00:09:03.720
+Pensez à la fabrication.
+
+00:09:04.080 --> 00:09:04.960
+Les machines assemblent,
+
+00:09:05.140 --> 00:09:06.160
+les inspecteurs vérifient.
+
+00:09:06.320 --> 00:09:07.200
+Pensez à la finance.
+
+00:09:07.420 --> 00:09:08.520
+Les algorithmes calculent,
+
+00:09:08.720 --> 00:09:09.520
+les comptables signent.
+
+00:09:09.520 --> 00:09:11.020
+L'automatisation sans supervision
+
+00:09:11.020 --> 00:09:12.100
+est une équation inachevée.
+
+00:09:12.220 --> 00:09:13.760
+L'action RFI donne à Copilot Studio
+
+00:09:13.760 --> 00:09:14.520
+la moitié manquante,
+
+00:09:14.760 --> 00:09:15.760
+une somme de contrôle vérifiée
+
+00:09:15.760 --> 00:09:16.440
+par l'utilisateur.
+
+00:09:16.580 --> 00:09:17.600
+Elle apporte de la discipline
+
+00:09:17.600 --> 00:09:19.020
+là où il n'y avait que de la commodité.
+
+00:09:19.200 --> 00:09:19.480
+Et oui,
+
+00:09:19.780 --> 00:09:20.900
+elle vous ralentit légèrement.
+
+00:09:21.080 --> 00:09:22.340
+Ce délai est une fonctionnalité,
+
+00:09:22.640 --> 00:09:23.180
+pas un défaut.
+
+00:09:23.340 --> 00:09:24.260
+La vitesse sans validation,
+
+00:09:24.660 --> 00:09:25.220
+c'est comme conduire
+
+00:09:25.220 --> 00:09:26.320
+une voiture de sport sans frein,
+
+00:09:26.640 --> 00:09:27.640
+exaltant jusqu'à ce que vous voyez
+
+00:09:27.640 --> 00:09:28.480
+le mur de conformité.
+
+00:09:28.660 --> 00:09:29.460
+Les humains dans la boucle
+
+00:09:29.460 --> 00:09:31.020
+agissent comme votre système de freinage,
+
+00:09:31.320 --> 00:09:32.360
+dissipant le chaos cinétique
+
+00:09:32.360 --> 00:09:33.220
+en données structurées.
+
+00:09:33.420 --> 00:09:34.340
+Lorsque la pause prend fin,
+
+00:09:34.600 --> 00:09:36.000
+l'automatisation accélère à nouveau.
+
+00:09:36.000 --> 00:09:36.660
+Mais maintenant,
+
+00:09:36.960 --> 00:09:37.600
+ça prend une tournure
+
+00:09:37.600 --> 00:09:38.820
+que vous pouvez défendre au tribunal.
+
+00:09:39.020 --> 00:09:40.200
+Le parallèle avec la supervision
+
+00:09:40.200 --> 00:09:41.480
+de la qualité des données est clair.
+
+00:09:41.680 --> 00:09:42.720
+Dans la gouvernance d'entreprise,
+
+00:09:43.020 --> 00:09:44.140
+la validation ne consiste pas
+
+00:09:44.140 --> 00:09:45.360
+à se méfier des créateurs de données,
+
+00:09:45.640 --> 00:09:46.540
+mais à protéger les systèmes
+
+00:09:46.540 --> 00:09:47.160
+qui en dépendent.
+
+00:09:47.320 --> 00:09:47.980
+Dès que les réponses
+
+00:09:47.980 --> 00:09:48.960
+aux demandes d'informations
+
+00:09:48.960 --> 00:09:49.940
+entrent dans Dataverse,
+
+00:09:50.300 --> 00:09:51.500
+elles deviennent des faits vérifiables
+
+00:09:51.500 --> 00:09:52.700
+plutôt que des champs de texte
+
+00:09:52.700 --> 00:09:53.400
+non vérifiables.
+
+00:09:53.780 --> 00:09:55.060
+Ce passage du subjectif
+
+00:09:55.060 --> 00:09:55.760
+à l'objectif
+
+00:09:55.760 --> 00:09:56.540
+est ce qui fait passer
+
+00:09:56.540 --> 00:09:57.520
+un flux automatisé
+
+00:09:57.520 --> 00:09:59.020
+de pratiques après pour l'audit.
+
+00:09:59.280 --> 00:10:00.680
+La partie vraiment intelligente,
+
+00:10:00.880 --> 00:10:02.080
+associez les demandes d'informations
+
+00:10:02.080 --> 00:10:03.300
+à la validation générative
+
+00:10:03.300 --> 00:10:03.680
+par l'IA
+
+00:10:03.680 --> 00:10:05.060
+et vous obtenez une double assurance.
+
+00:10:05.300 --> 00:10:06.400
+L'IA inspecte la logique,
+
+00:10:06.660 --> 00:10:07.780
+l'humain confirme la réalité.
+
+00:10:08.040 --> 00:10:08.580
+Deux lentilles,
+
+00:10:08.840 --> 00:10:09.400
+une vérité.
+
+00:10:09.560 --> 00:10:10.740
+C'est la gouvernance en stéréo
+
+00:10:10.740 --> 00:10:11.600
+et elle commence au moment
+
+00:10:11.600 --> 00:10:12.160
+où vous décidez
+
+00:10:12.160 --> 00:10:13.020
+que l'automatisation
+
+00:10:13.020 --> 00:10:13.900
+sans responsabilité
+
+00:10:13.900 --> 00:10:14.760
+n'est pas intelligente,
+
+00:10:15.020 --> 00:10:15.720
+elle est imprudente.
+
+00:10:15.940 --> 00:10:16.600
+Section 4,
+
+00:10:16.900 --> 00:10:17.900
+la boucle de gouvernance
+
+00:10:17.900 --> 00:10:18.720
+IA plus RFI.
+
+00:10:18.920 --> 00:10:19.880
+La validation par l'IA
+
+00:10:19.880 --> 00:10:20.660
+est intelligente.
+
+00:10:20.840 --> 00:10:21.920
+Vous lui fournissez du texte,
+
+00:10:22.100 --> 00:10:22.800
+elle crache un jugement.
+
+00:10:23.020 --> 00:10:24.840
+Vrai, faux, valide, incomplet,
+
+00:10:25.160 --> 00:10:25.660
+c'est l'équivalent
+
+00:10:25.660 --> 00:10:26.120
+pour la machine
+
+00:10:26.120 --> 00:10:26.960
+de lever les sourcils.
+
+00:10:27.060 --> 00:10:27.680
+Mais le jugement
+
+00:10:27.680 --> 00:10:28.460
+sans autorité
+
+00:10:28.460 --> 00:10:29.520
+reste une conjecture.
+
+00:10:29.660 --> 00:10:30.740
+Et dans l'automatisation,
+
+00:10:30.740 --> 00:10:32.100
+la conjecture est l'ennemi.
+
+00:10:32.300 --> 00:10:32.700
+C'est pourquoi
+
+00:10:32.700 --> 00:10:33.860
+l'association des invites
+
+00:10:33.860 --> 00:10:35.180
+de l'IA à l'action RFI
+
+00:10:35.180 --> 00:10:36.000
+crée ce que j'appelle
+
+00:10:36.000 --> 00:10:37.200
+la boucle de gouvernance.
+
+00:10:37.380 --> 00:10:38.220
+Un circuit fermé
+
+00:10:38.220 --> 00:10:39.740
+entre le raisonnement artificiel
+
+00:10:39.740 --> 00:10:40.980
+et la confirmation humaine.
+
+00:10:41.180 --> 00:10:41.900
+L'IA propose,
+
+00:10:42.160 --> 00:10:42.940
+l'humain confirme.
+
+00:10:43.140 --> 00:10:43.500
+Ensemble,
+
+00:10:43.780 --> 00:10:44.560
+il crée une fiabilité
+
+00:10:44.560 --> 00:10:45.580
+que vous pouvez réellement prouver.
+
+00:10:45.800 --> 00:10:46.940
+Voici comment cela se passe.
+
+00:10:47.120 --> 00:10:48.280
+Un flux d'agents Copilot Studio
+
+00:10:48.280 --> 00:10:49.400
+reçoit une soumission provenant,
+
+00:10:49.560 --> 00:10:50.000
+par exemple,
+
+00:10:50.220 --> 00:10:51.160
+d'un formulaire Microsoft
+
+00:10:51.160 --> 00:10:52.260
+demandant l'accès d'un visiteur.
+
+00:10:52.420 --> 00:10:53.580
+Les détails semblent anodins.
+
+00:10:53.800 --> 00:10:54.840
+James se rend au siège
+
+00:10:54.840 --> 00:10:55.960
+pour une réunion de projet.
+
+00:10:56.180 --> 00:10:56.880
+L'invite de l'IA
+
+00:10:56.880 --> 00:10:58.000
+l'évalue via la logique
+
+00:10:58.000 --> 00:10:59.580
+de validation que vous avez créée.
+
+00:10:59.760 --> 00:11:00.840
+Inclut-il le type de réunion,
+
+00:11:01.100 --> 00:11:01.480
+la durée,
+
+00:11:01.760 --> 00:11:02.960
+les informations d'identification
+
+00:11:02.960 --> 00:11:03.760
+de sécurité ?
+
+00:11:03.760 --> 00:11:04.540
+La réponse du modèle
+
+00:11:04.540 --> 00:11:05.720
+indique les détails JSON,
+
+00:11:06.100 --> 00:11:07.060
+la validité de la valeur
+
+00:11:07.060 --> 00:11:07.620
+vraie ou faux,
+
+00:11:07.940 --> 00:11:08.700
+et la raison pour laquelle
+
+00:11:08.700 --> 00:11:09.740
+la durée prévue est manquante
+
+00:11:09.740 --> 00:11:10.640
+ou contient des informations
+
+00:11:10.640 --> 00:11:11.300
+obligatoires.
+
+00:11:11.440 --> 00:11:12.480
+Il s'agit du premier point
+
+00:11:12.480 --> 00:11:13.040
+de contrôle.
+
+00:11:13.240 --> 00:11:14.180
+Le verdict de l'invite
+
+00:11:14.180 --> 00:11:14.960
+n'est pas un ordre,
+
+00:11:15.220 --> 00:11:15.820
+c'est une preuve.
+
+00:11:16.020 --> 00:11:16.960
+La demande d'information
+
+00:11:16.960 --> 00:11:17.700
+reprend maintenant
+
+00:11:17.700 --> 00:11:18.580
+là où l'IA s'arrête.
+
+00:11:18.780 --> 00:11:19.720
+Si la sortie de l'invite
+
+00:11:19.720 --> 00:11:20.420
+renvoie false,
+
+00:11:20.760 --> 00:11:21.700
+le flux passe à une action
+
+00:11:21.700 --> 00:11:22.640
+de demande d'information.
+
+00:11:22.640 --> 00:11:24.320
+L'automatisation s'interrompt.
+
+00:11:24.420 --> 00:11:25.060
+Elle crée un message
+
+00:11:25.060 --> 00:11:25.980
+exploitable Outlook
+
+00:11:25.980 --> 00:11:27.240
+intitulé quelque chose comme
+
+00:11:27.240 --> 00:11:28.380
+« Besoin de plus de détails
+
+00:11:28.380 --> 00:11:29.200
+pour la demande d'accès
+
+00:11:29.200 --> 00:11:30.040
+au siège social ».
+
+00:11:30.040 --> 00:11:30.800
+Dans ce message,
+
+00:11:31.100 --> 00:11:31.840
+figurent précisément
+
+00:11:31.840 --> 00:11:32.500
+les champs manquants
+
+00:11:32.500 --> 00:11:33.460
+identifiés par l'IA,
+
+00:11:33.840 --> 00:11:34.880
+une description détaillée,
+
+00:11:35.220 --> 00:11:35.860
+la durée prévue
+
+00:11:35.860 --> 00:11:36.580
+et toute autre donnée
+
+00:11:36.580 --> 00:11:37.580
+de conformité requise.
+
+00:11:37.760 --> 00:11:38.640
+Le système l'attribue
+
+00:11:38.640 --> 00:11:39.540
+au demandeur d'origine
+
+00:11:39.540 --> 00:11:40.800
+en utilisant son identité
+
+00:11:40.800 --> 00:11:41.580
+d'annuaire à partir
+
+00:11:41.580 --> 00:11:42.280
+du formulaire.
+
+00:11:42.420 --> 00:11:43.080
+Le message arrive
+
+00:11:43.080 --> 00:11:44.040
+dans sa boîte de réception
+
+00:11:44.040 --> 00:11:44.900
+et, tout à coup,
+
+00:11:45.240 --> 00:11:45.920
+le flux qui semblait
+
+00:11:45.920 --> 00:11:46.820
+entièrement automatisé
+
+00:11:46.820 --> 00:11:47.420
+indique poliment
+
+00:11:47.420 --> 00:11:49.000
+« Vous avez oublié quelque chose.
+
+00:11:49.000 --> 00:11:49.880
+Corrigez-le ».
+
+00:11:49.880 --> 00:11:50.880
+Lorsqu'ils répondent,
+
+00:11:51.100 --> 00:11:52.160
+ces données ne se contentent pas
+
+00:11:52.160 --> 00:11:53.360
+de corriger l'enregistrement.
+
+00:11:54.040 --> 00:11:54.840
+Elles authentifient
+
+00:11:54.840 --> 00:11:55.440
+la correction.
+
+00:11:55.880 --> 00:11:56.720
+La RFI capture
+
+00:11:56.720 --> 00:11:57.420
+l'orodatage,
+
+00:11:57.680 --> 00:11:58.940
+l'identité de l'utilisateur
+
+00:11:58.940 --> 00:11:59.760
+et le nouveau contenu,
+
+00:12:00.080 --> 00:12:00.860
+puis stocke ses détails
+
+00:12:00.860 --> 00:12:01.680
+sous forme de sorties
+
+00:12:01.680 --> 00:12:02.180
+structurées,
+
+00:12:02.460 --> 00:12:02.900
+indexées,
+
+00:12:03.180 --> 00:12:04.040
+consignées et immuables.
+
+00:12:04.200 --> 00:12:05.280
+Le flux de l'agent reprend,
+
+00:12:05.580 --> 00:12:06.240
+met à jour la ligne
+
+00:12:06.240 --> 00:12:06.920
+du dataverse
+
+00:12:06.920 --> 00:12:07.920
+et convertit le statut
+
+00:12:07.920 --> 00:12:09.400
+de « Besoin d'information »
+
+00:12:09.400 --> 00:12:10.140
+à « Valide ».
+
+00:12:10.140 --> 00:12:10.720
+À ce moment-là,
+
+00:12:10.960 --> 00:12:11.580
+vous avez non seulement
+
+00:12:11.580 --> 00:12:12.660
+terminé le flux de travail,
+
+00:12:12.960 --> 00:12:13.640
+mais vous avez également
+
+00:12:13.640 --> 00:12:14.440
+créé un artefact
+
+00:12:14.440 --> 00:12:15.440
+de gouvernance vérifiable.
+
+00:12:15.680 --> 00:12:16.380
+Chaque résultat
+
+00:12:16.380 --> 00:12:17.100
+est documenté.
+
+00:12:17.260 --> 00:12:18.420
+L'évaluation initiale
+
+00:12:18.420 --> 00:12:18.780
+de l'IA,
+
+00:12:19.160 --> 00:12:20.100
+la correction humaine
+
+00:12:20.100 --> 00:12:21.240
+et l'état final validé.
+
+00:12:21.520 --> 00:12:22.120
+Comparer cela
+
+00:12:22.120 --> 00:12:23.520
+à un scénario sans RFI.
+
+00:12:23.720 --> 00:12:24.600
+L'IA signalerait toujours
+
+00:12:24.600 --> 00:12:25.360
+les détails manquants,
+
+00:12:25.600 --> 00:12:26.820
+mais que se passerait-il ensuite ?
+
+00:12:26.820 --> 00:12:27.480
+Elle pourrait publier
+
+00:12:27.480 --> 00:12:27.980
+une erreur,
+
+00:12:28.260 --> 00:12:29.200
+envoyer un email vague
+
+00:12:29.200 --> 00:12:30.060
+ou simplement répéter
+
+00:12:30.060 --> 00:12:31.080
+la même question sans fin
+
+00:12:31.080 --> 00:12:31.840
+jusqu'à ce que quelqu'un
+
+00:12:31.840 --> 00:12:32.600
+la corrige manuellement.
+
+00:12:32.860 --> 00:12:34.280
+C'est le fameux échec silencieux.
+
+00:12:34.440 --> 00:12:35.940
+Le flux s'est techniquement exécuté,
+
+00:12:36.220 --> 00:12:36.920
+mais ce qui la produit
+
+00:12:36.920 --> 00:12:37.520
+n'est pas fiable.
+
+00:12:37.740 --> 00:12:38.860
+En intégrant la RFI,
+
+00:12:39.200 --> 00:12:40.160
+vous éliminez complètement
+
+00:12:40.160 --> 00:12:40.780
+le silence.
+
+00:12:41.000 --> 00:12:41.840
+Le flux doit attendre
+
+00:12:41.840 --> 00:12:42.920
+visiblement que les données
+
+00:12:42.920 --> 00:12:43.700
+validées arrivent.
+
+00:12:43.880 --> 00:12:44.540
+Ce n'est pas fiable,
+
+00:12:44.840 --> 00:12:46.020
+c'est infaillible par conception.
+
+00:12:46.340 --> 00:12:47.000
+Considérez-la comme
+
+00:12:47.000 --> 00:12:47.980
+une sécurité physique.
+
+00:12:48.200 --> 00:12:48.760
+L'invite d'IA
+
+00:12:48.760 --> 00:12:49.860
+est la caméra de surveillance.
+
+00:12:50.260 --> 00:12:51.420
+Elle observe et analyse.
+
+00:12:51.640 --> 00:12:53.180
+La RFI est la porte verrouillée.
+
+00:12:53.360 --> 00:12:54.160
+Elle refuse l'entrée
+
+00:12:54.160 --> 00:12:54.960
+tant que vous n'avez pas
+
+00:12:54.960 --> 00:12:56.520
+flashé des identifiants vérifiés.
+
+00:12:56.700 --> 00:12:57.640
+Vous avez besoin des deux.
+
+00:12:57.840 --> 00:12:58.720
+Les caméras dissuadent
+
+00:12:58.720 --> 00:12:59.660
+le mauvais comportement,
+
+00:12:59.980 --> 00:13:00.800
+les verroules évitent.
+
+00:13:00.940 --> 00:13:02.160
+Dans le monde de la gouvernance,
+
+00:13:02.480 --> 00:13:03.280
+les invites détectent
+
+00:13:03.280 --> 00:13:04.060
+les incohérences.
+
+00:13:04.300 --> 00:13:05.360
+Les RFI les empêchent
+
+00:13:05.360 --> 00:13:06.080
+de se propager.
+
+00:13:06.300 --> 00:13:06.660
+Ensemble,
+
+00:13:06.900 --> 00:13:07.420
+elles transforment
+
+00:13:07.420 --> 00:13:08.680
+une automatisation désordonnée
+
+00:13:08.680 --> 00:13:09.500
+et sujettent aux erreurs
+
+00:13:09.500 --> 00:13:10.860
+en un processus d'authentification
+
+00:13:10.860 --> 00:13:11.480
+à deux facteurs
+
+00:13:11.480 --> 00:13:12.320
+pour la qualité des données.
+
+00:13:12.540 --> 00:13:13.460
+Chaque sortie RFI
+
+00:13:13.460 --> 00:13:14.300
+est un enregistrement
+
+00:13:14.300 --> 00:13:15.180
+d'audits miniatures.
+
+00:13:15.380 --> 00:13:16.180
+L'objet JSON
+
+00:13:16.180 --> 00:13:16.900
+inclut non seulement
+
+00:13:16.900 --> 00:13:17.740
+les valeurs soumises,
+
+00:13:18.040 --> 00:13:18.440
+mais également
+
+00:13:18.440 --> 00:13:19.200
+qui les a fournies,
+
+00:13:19.480 --> 00:13:20.560
+quand et dans quel contexte.
+
+00:13:20.660 --> 00:13:21.340
+Les responsables
+
+00:13:21.340 --> 00:13:22.740
+de la conformité adorent cela,
+
+00:13:23.100 --> 00:13:23.920
+car cela convertit
+
+00:13:23.920 --> 00:13:24.840
+la logique de validation
+
+00:13:24.840 --> 00:13:26.120
+abstraite en preuve tangible.
+
+00:13:26.400 --> 00:13:27.620
+Vous pouvez désormais démontrer
+
+00:13:27.620 --> 00:13:28.320
+que les décisions
+
+00:13:28.320 --> 00:13:28.940
+de votre IA
+
+00:13:28.940 --> 00:13:30.120
+n'ont jamais été autonomes.
+
+00:13:30.280 --> 00:13:31.280
+Elles ont été corroborées
+
+00:13:31.280 --> 00:13:32.420
+par un humain en temps réel.
+
+00:13:32.620 --> 00:13:33.200
+C'est la différence
+
+00:13:33.200 --> 00:13:34.560
+entre une démonstration intelligente
+
+00:13:34.560 --> 00:13:35.640
+et un système de contrôle prêt
+
+00:13:35.640 --> 00:13:36.300
+pour l'entreprise.
+
+00:13:36.520 --> 00:13:37.180
+Les meilleures pratiques
+
+00:13:39.500 --> 00:13:40.540
+sont sur cette double validation.
+
+00:13:40.880 --> 00:13:41.900
+Raisonnement automatisé
+
+00:13:41.900 --> 00:13:42.980
+et confirmation humaine.
+
+00:13:43.200 --> 00:13:44.560
+Cela garantit la répétabilité.
+
+00:13:44.780 --> 00:13:45.280
+Vous pouvez R.E.
+
+00:13:45.360 --> 00:13:46.040
+accent aigu exécuter
+
+00:13:46.040 --> 00:13:46.920
+le même processus demain
+
+00:13:46.920 --> 00:13:48.240
+et obtenir des résultats vérifiables.
+
+00:13:48.460 --> 00:13:49.900
+Cela garantit la défendabilité.
+
+00:13:50.120 --> 00:13:51.140
+Si les régulateurs demandent
+
+00:13:51.140 --> 00:13:52.440
+comment une décision a été prise,
+
+00:13:52.760 --> 00:13:53.840
+vous avez une preuve littérale.
+
+00:13:53.980 --> 00:13:55.500
+Et cela garantit la fiabilité.
+
+00:13:55.720 --> 00:13:56.760
+Chaque exécution du flux
+
+00:13:56.760 --> 00:13:58.020
+génère des résultats cohérents
+
+00:13:58.020 --> 00:13:59.120
+avec une confiance mesurée
+
+00:13:59.120 --> 00:14:00.740
+et non des hypothèses optimistes.
+
+00:14:00.880 --> 00:14:01.800
+Oui, cette approche
+
+00:14:01.800 --> 00:14:02.500
+introduit un délai,
+
+00:14:02.820 --> 00:14:04.440
+généralement de 10 à 15 secondes d'attente
+
+00:14:04.440 --> 00:14:05.380
+pendant qu'un utilisateur
+
+00:14:05.380 --> 00:14:06.580
+remplit sa demande d'informations.
+
+00:14:06.780 --> 00:14:07.540
+Mais cette brève pause
+
+00:14:07.540 --> 00:14:08.220
+évite des heures,
+
+00:14:08.500 --> 00:14:09.560
+voire des jours de nettoyage
+
+00:14:09.560 --> 00:14:10.180
+post-incident
+
+00:14:10.180 --> 00:14:11.160
+lorsque de mauvaises données
+
+00:14:11.160 --> 00:14:12.240
+se propagent sans contrôle.
+
+00:14:12.480 --> 00:14:13.140
+Les gens se plaignent
+
+00:14:13.140 --> 00:14:14.200
+que la demande d'informations
+
+00:14:14.200 --> 00:14:15.500
+ralentit leurs automatisations.
+
+00:14:15.800 --> 00:14:16.480
+C'est comme se plaindre
+
+00:14:16.480 --> 00:14:17.400
+que les freins ralentissent
+
+00:14:17.400 --> 00:14:18.000
+votre voiture.
+
+00:14:18.200 --> 00:14:19.240
+Ils le font intentionnellement
+
+00:14:19.240 --> 00:14:20.080
+pour que vous puissiez
+
+00:14:20.080 --> 00:14:21.160
+continuer à conduire demain.
+
+00:14:21.380 --> 00:14:21.940
+En fin de compte,
+
+00:14:22.260 --> 00:14:23.240
+la boucle RFI de l'IA
+
+00:14:23.240 --> 00:14:24.020
+ne fait pas que réparer
+
+00:14:24.020 --> 00:14:24.700
+les flux de travail,
+
+00:14:25.000 --> 00:14:26.120
+elle refonde la responsabilité.
+
+00:14:26.280 --> 00:14:27.580
+Elle apprend à votre automatisation
+
+00:14:27.580 --> 00:14:28.420
+à être sceptique.
+
+00:14:28.600 --> 00:14:29.640
+L'IA détecte les anomalies,
+
+00:14:29.900 --> 00:14:30.680
+la demande d'informations
+
+00:14:30.680 --> 00:14:31.460
+vérifie les corrections
+
+00:14:31.460 --> 00:14:32.180
+et, ensemble,
+
+00:14:32.500 --> 00:14:33.060
+elle traite les données
+
+00:14:33.060 --> 00:14:34.140
+non pas comme du texte jetable,
+
+00:14:34.380 --> 00:14:35.340
+mais comme un inventaire contrôlé.
+
+00:14:35.500 --> 00:14:36.600
+Chaque élément est vérifié,
+
+00:14:36.820 --> 00:14:37.960
+enregistré et récupérable.
+
+00:14:38.120 --> 00:14:38.880
+La gouvernance cesse
+
+00:14:38.880 --> 00:14:39.660
+d'être une réflexion
+
+00:14:39.660 --> 00:14:40.640
+après coup bureaucratique.
+
+00:14:40.820 --> 00:14:42.020
+Elle devient une fonctionnalité
+
+00:14:42.020 --> 00:14:42.660
+d'ingénierie.
+
+00:14:42.800 --> 00:14:43.540
+Et dans cette boucle,
+
+00:14:43.860 --> 00:14:44.980
+lente, délibérée
+
+00:14:44.980 --> 00:14:45.780
+et responsable,
+
+00:14:46.120 --> 00:14:46.780
+c'est là que commence
+
+00:14:46.780 --> 00:14:47.880
+la véritable fiabilité
+
+00:14:47.880 --> 00:14:48.600
+de l'entreprise.
+
+00:14:48.900 --> 00:14:49.620
+Les pièges courants
+
+00:14:49.620 --> 00:14:51.080
+lorsque vous ignorez les RFI.
+
+00:14:51.260 --> 00:14:52.240
+Parlons de ce qui se passe
+
+00:14:52.240 --> 00:14:52.920
+lorsque vous faites
+
+00:14:52.920 --> 00:14:54.440
+comme si les RFI n'existaient pas.
+
+00:14:54.640 --> 00:14:54.960
+Spoiler,
+
+00:14:55.320 --> 00:14:56.260
+ce n'est pas joli à voir.
+
+00:14:56.460 --> 00:14:57.240
+Les flux non RFI
+
+00:14:57.240 --> 00:14:58.120
+sont comme des adolescents
+
+00:14:58.120 --> 00:14:59.080
+avec des clés de voiture,
+
+00:14:59.380 --> 00:15:00.280
+techniquement fonctionnels,
+
+00:15:00.560 --> 00:15:01.820
+catastrophiquement non supervisés.
+
+00:15:01.960 --> 00:15:02.520
+Ils acceptent
+
+00:15:02.520 --> 00:15:02.980
+toutes les données
+
+00:15:02.980 --> 00:15:03.840
+que vous leur fournissez,
+
+00:15:04.060 --> 00:15:04.560
+puis se dirigent
+
+00:15:04.560 --> 00:15:05.200
+vers la catastrophe
+
+00:15:05.200 --> 00:15:05.920
+en toute confiance.
+
+00:15:06.120 --> 00:15:06.920
+Commencez par le mode
+
+00:15:06.920 --> 00:15:07.480
+de défaillance
+
+00:15:07.480 --> 00:15:08.300
+le plus prévisible,
+
+00:15:08.640 --> 00:15:09.360
+les entrées nulles.
+
+00:15:09.520 --> 00:15:10.360
+Votre flux rencontre
+
+00:15:10.360 --> 00:15:10.920
+un champ vide,
+
+00:15:11.260 --> 00:15:12.500
+disons le nombre de visiteurs
+
+00:15:12.500 --> 00:15:13.740
+pour une visite d'installation,
+
+00:15:14.120 --> 00:15:14.820
+et essaie joyeusement
+
+00:15:14.820 --> 00:15:15.560
+de le transmettre.
+
+00:15:15.840 --> 00:15:16.540
+Cette valeur nulle
+
+00:15:16.540 --> 00:15:17.520
+se propage en aval,
+
+00:15:17.840 --> 00:15:18.700
+brisant les conditions,
+
+00:15:19.180 --> 00:15:20.280
+sautant les branches parallèles
+
+00:15:20.280 --> 00:15:20.880
+et perturbant
+
+00:15:20.880 --> 00:15:21.980
+chaque action dépendante.
+
+00:15:22.140 --> 00:15:22.800
+Vous vous retrouvez
+
+00:15:22.800 --> 00:15:23.320
+avec des flux
+
+00:15:23.320 --> 00:15:23.960
+qui réussissent
+
+00:15:23.960 --> 00:15:25.020
+selon Power Automate
+
+00:15:25.020 --> 00:15:25.660
+mais qui fournissent
+
+00:15:25.660 --> 00:15:26.240
+des résultats
+
+00:15:26.240 --> 00:15:26.920
+qui ne passeraient pas
+
+00:15:26.920 --> 00:15:28.000
+un test logique de base.
+
+00:15:28.220 --> 00:15:28.960
+Vous obtenez ensuite
+
+00:15:28.960 --> 00:15:30.000
+les glorieux enregistrements
+
+00:15:30.000 --> 00:15:31.040
+fantômes dans Dataverse,
+
+00:15:31.340 --> 00:15:31.760
+des lignes vides
+
+00:15:31.760 --> 00:15:32.680
+avec des orodatages
+
+00:15:32.680 --> 00:15:33.500
+mais aucune donnée réelle
+
+00:15:33.500 --> 00:15:34.260
+encombrant vos tables
+
+00:15:34.260 --> 00:15:34.820
+comme des moutons
+
+00:15:34.820 --> 00:15:35.600
+de poussière numérique.
+
+00:15:35.840 --> 00:15:36.360
+Viennent ensuite
+
+00:15:36.360 --> 00:15:37.820
+les approbations inexactes.
+
+00:15:37.920 --> 00:15:38.860
+Sans validation RFI,
+
+00:15:39.160 --> 00:15:40.240
+votre automatisation suppose
+
+00:15:40.240 --> 00:15:40.760
+que la personne
+
+00:15:40.760 --> 00:15:41.720
+qui a rempli le formulaire
+
+00:15:41.720 --> 00:15:42.580
+a compris toutes les règles.
+
+00:15:42.760 --> 00:15:43.420
+Ce n'est pas le cas.
+
+00:15:43.580 --> 00:15:44.140
+Vous obtenez donc
+
+00:15:44.140 --> 00:15:44.860
+un accès visiteur
+
+00:15:44.860 --> 00:15:45.980
+sans habilitation de sécurité,
+
+00:15:46.300 --> 00:15:47.220
+des approbations de dépenses
+
+00:15:47.220 --> 00:15:47.840
+sans centre de coût
+
+00:15:47.840 --> 00:15:48.560
+ou de nouvelles recrues
+
+00:15:48.560 --> 00:15:49.780
+ajoutées sans identifiant vérifier.
+
+00:15:49.980 --> 00:15:50.500
+Les bons jours,
+
+00:15:50.760 --> 00:15:51.920
+cela crée du travail à refaire.
+
+00:15:51.920 --> 00:15:52.660
+Les mauvais jours,
+
+00:15:52.940 --> 00:15:54.060
+cela crée une responsabilité.
+
+00:15:54.200 --> 00:15:54.660
+N'oubliez pas
+
+00:15:54.660 --> 00:15:55.800
+qu'une approbation automatisée
+
+00:15:55.800 --> 00:15:56.660
+saisie dans Dataverse
+
+00:15:56.660 --> 00:15:57.620
+fait partie de votre piste
+
+00:15:57.620 --> 00:15:58.240
+de conformité.
+
+00:15:58.440 --> 00:15:59.100
+Une fois verrouillée,
+
+00:15:59.400 --> 00:16:00.240
+les auditeurs se fichent
+
+00:16:00.240 --> 00:16:00.840
+que ce soit le flux
+
+00:16:00.840 --> 00:16:01.260
+qui les fait.
+
+00:16:01.420 --> 00:16:02.120
+Ils appelleront cela
+
+00:16:02.120 --> 00:16:03.160
+une défaillance du contrôle
+
+00:16:03.160 --> 00:16:04.060
+et ils auront raison.
+
+00:16:04.240 --> 00:16:04.500
+Et oui,
+
+00:16:04.800 --> 00:16:05.520
+les données Dataverse
+
+00:16:05.520 --> 00:16:06.300
+corrompues découlent
+
+00:16:06.300 --> 00:16:07.200
+naturellement de ce chaos.
+
+00:16:07.440 --> 00:16:08.420
+Chaque fois que des informations
+
+00:16:08.420 --> 00:16:09.480
+incomplètes s'infiltrent,
+
+00:16:09.760 --> 00:16:10.700
+les relations entre les tables
+
+00:16:10.700 --> 00:16:11.320
+se fracturent.
+
+00:16:11.440 --> 00:16:12.160
+Les recherches échouent,
+
+00:16:12.360 --> 00:16:13.180
+les requêtes dépendantes
+
+00:16:13.180 --> 00:16:14.080
+renvoient des absurdités
+
+00:16:14.080 --> 00:16:14.760
+et les tableaux de bord
+
+00:16:14.760 --> 00:16:15.400
+affichent soudainement
+
+00:16:15.400 --> 00:16:15.820
+des totaux
+
+00:16:15.820 --> 00:16:16.420
+qui font s'étouffer
+
+00:16:16.420 --> 00:16:17.160
+le service financier
+
+00:16:17.160 --> 00:16:17.680
+avec son café.
+
+00:16:17.900 --> 00:16:19.040
+Sans point de contrôle RFI,
+
+00:16:19.380 --> 00:16:20.100
+aucune de ces lacunes
+
+00:16:20.100 --> 00:16:20.580
+n'est détectée
+
+00:16:20.580 --> 00:16:21.420
+au moment de la création.
+
+00:16:21.620 --> 00:16:22.440
+Elle s'accumule simplement
+
+00:16:22.440 --> 00:16:23.560
+jusqu'à ce que la saison des rapports
+
+00:16:23.560 --> 00:16:24.620
+se transforme en un exercice
+
+00:16:24.620 --> 00:16:25.820
+d'attribution des responsabilités.
+
+00:16:25.980 --> 00:16:26.780
+Puis il y a la boucle
+
+00:16:26.780 --> 00:16:28.300
+sans fin de clarification de l'IA,
+
+00:16:28.660 --> 00:16:30.000
+l'appel à l'aide de l'automatisation.
+
+00:16:30.280 --> 00:16:30.840
+Votre invite dit
+
+00:16:30.840 --> 00:16:32.240
+à identifier les détails manquants,
+
+00:16:32.600 --> 00:16:33.400
+envoie une autre invite,
+
+00:16:33.720 --> 00:16:34.920
+obtient une autre réponse vague,
+
+00:16:35.220 --> 00:16:36.540
+recommence et finit par expirer.
+
+00:16:36.700 --> 00:16:37.860
+C'est comme avoir une conversation
+
+00:16:37.860 --> 00:16:38.700
+avec un chatbot
+
+00:16:38.700 --> 00:16:39.660
+qui a oublié le sujet
+
+00:16:39.660 --> 00:16:40.880
+mais refuse d'arrêter de taper.
+
+00:16:41.060 --> 00:16:41.660
+Tout cela parce que
+
+00:16:41.660 --> 00:16:42.500
+vous n'avez pas donné au flux
+
+00:16:42.500 --> 00:16:43.440
+un moyen de faire une pause
+
+00:16:43.440 --> 00:16:44.300
+et d'attendre des corrections
+
+00:16:44.300 --> 00:16:45.620
+définitives vérifiées par l'homme.
+
+00:16:45.820 --> 00:16:46.840
+C'est ce que fait la RFI.
+
+00:16:47.000 --> 00:16:47.700
+Elle brise ce cycle
+
+00:16:47.700 --> 00:16:48.960
+en prenant l'exécution en otage
+
+00:16:48.960 --> 00:16:50.120
+jusqu'à ce que la vérité arrive.
+
+00:16:50.320 --> 00:16:51.200
+Les problèmes commerciaux
+
+00:16:51.200 --> 00:16:52.440
+liés au fait d'ignorer la RFI
+
+00:16:52.440 --> 00:16:53.600
+se répercutent tous en aval.
+
+00:16:53.780 --> 00:16:55.340
+L'exposition réglementaire augmente
+
+00:16:55.340 --> 00:16:56.340
+car vous ne pouvez pas prouver
+
+00:16:56.340 --> 00:16:57.120
+qui a approuvé quoi.
+
+00:16:57.300 --> 00:16:58.040
+Les pistes d'audit
+
+00:16:58.040 --> 00:16:58.820
+deviennent peu fiables
+
+00:16:58.820 --> 00:16:59.900
+car votre chaîne de preuves
+
+00:16:59.900 --> 00:17:01.380
+commence avec des données incomplètes.
+
+00:17:01.520 --> 00:17:02.660
+Si vous pensez que les auditeurs
+
+00:17:02.660 --> 00:17:04.180
+aiment la reconstruction interprétative
+
+00:17:04.180 --> 00:17:04.980
+des valeurs manquantes,
+
+00:17:05.300 --> 00:17:05.940
+vous n'en avez clairement
+
+00:17:05.940 --> 00:17:06.680
+jamais rencontrées.
+
+00:17:06.800 --> 00:17:07.720
+Et quantifions le coût.
+
+00:17:07.920 --> 00:17:09.180
+Chaque fois qu'une automatisation
+
+00:17:09.180 --> 00:17:10.120
+échoue silencieusement
+
+00:17:10.120 --> 00:17:11.320
+en raison d'une mauvaise saisie,
+
+00:17:11.720 --> 00:17:12.580
+quelqu'un doit identifier
+
+00:17:12.580 --> 00:17:13.560
+manuellement le problème,
+
+00:17:13.940 --> 00:17:14.640
+corriger les données,
+
+00:17:15.060 --> 00:17:15.720
+relancer le flux
+
+00:17:15.720 --> 00:17:16.820
+et vérifier tous ces systèmes
+
+00:17:16.820 --> 00:17:17.260
+en aval.
+
+00:17:17.520 --> 00:17:18.660
+Multipliez cela par des centaines
+
+00:17:18.660 --> 00:17:19.540
+de déclencheurs par mois
+
+00:17:19.540 --> 00:17:20.540
+et vous obtenez soudainement
+
+00:17:20.540 --> 00:17:21.600
+une baby-sitter à plein temps
+
+00:17:21.600 --> 00:17:22.520
+pour votre flux de travail
+
+00:17:22.520 --> 00:17:23.320
+sans code efficace.
+
+00:17:23.520 --> 00:17:24.880
+Les RFI coûtent des secondes,
+
+00:17:25.100 --> 00:17:26.060
+le nettoyage des jours.
+
+00:17:26.220 --> 00:17:27.900
+Pourtant, les gens résistent toujours.
+
+00:17:28.080 --> 00:17:29.160
+Ils affirment que les RFI
+
+00:17:29.160 --> 00:17:29.940
+freinent l'innovation,
+
+00:17:30.340 --> 00:17:31.000
+ajoutent des frictions
+
+00:17:31.000 --> 00:17:31.780
+ou forcent les humains
+
+00:17:31.780 --> 00:17:32.440
+à intervenir.
+
+00:17:32.440 --> 00:17:33.580
+C'est exact, oui,
+
+00:17:33.820 --> 00:17:34.500
+et c'est glorieux.
+
+00:17:34.660 --> 00:17:35.500
+Ignorer les RFI,
+
+00:17:35.780 --> 00:17:36.740
+c'est comme enlever sa ceinture
+
+00:17:36.740 --> 00:17:37.280
+de sécurité
+
+00:17:37.280 --> 00:17:38.520
+pour plus de liberté de mouvement.
+
+00:17:38.760 --> 00:17:39.520
+C'est de l'optimisme
+
+00:17:39.520 --> 00:17:40.640
+déguisé en négligence.
+
+00:17:40.840 --> 00:17:42.100
+La gouvernance existe précisément
+
+00:17:42.100 --> 00:17:42.680
+parce que les gens
+
+00:17:42.680 --> 00:17:43.300
+oublient les détails,
+
+00:17:43.600 --> 00:17:44.380
+précipitent les réponses
+
+00:17:44.380 --> 00:17:45.180
+et supposent que les machines
+
+00:17:45.180 --> 00:17:45.960
+les répareront plus tard.
+
+00:17:46.100 --> 00:17:47.000
+Les machines ne réparent pas,
+
+00:17:47.240 --> 00:17:47.740
+ce sont les humains
+
+00:17:47.740 --> 00:17:48.800
+qui le font, douloureusement,
+
+00:17:49.140 --> 00:17:50.320
+après que le système tombe en panne.
+
+00:17:50.440 --> 00:17:51.400
+Donc, si vous êtes tenté
+
+00:17:51.400 --> 00:17:52.500
+de sauter les demandes d'informations,
+
+00:17:52.860 --> 00:17:53.440
+imaginez-vous en train
+
+00:17:53.440 --> 00:17:54.140
+de rédiger le rapport
+
+00:17:54.140 --> 00:17:55.460
+de conformité du trimestre suivant
+
+00:17:55.460 --> 00:17:56.280
+avec des crayons de couleur
+
+00:17:56.280 --> 00:17:57.300
+parce que votre lignée de données
+
+00:17:57.300 --> 00:17:58.340
+s'est effondrée en conjecture.
+
+00:17:58.700 --> 00:18:00.040
+Dramatique, juste légèrement.
+
+00:18:00.240 --> 00:18:01.120
+Sans les demandes d'informations,
+
+00:18:01.440 --> 00:18:02.880
+votre automatisation n'est pas conforme,
+
+00:18:02.960 --> 00:18:03.880
+c'est de la rédaction créative
+
+00:18:03.880 --> 00:18:04.680
+avec des orodatages.
+
+00:18:04.880 --> 00:18:05.940
+Chaque champ omis est un mensonge
+
+00:18:05.940 --> 00:18:06.940
+que votre système se raconte
+
+00:18:06.940 --> 00:18:07.340
+à lui-même
+
+00:18:07.340 --> 00:18:08.900
+et chaque enregistrement non vérifié
+
+00:18:08.900 --> 00:18:09.940
+est une violation de la politique
+
+00:18:09.940 --> 00:18:10.880
+en attente de découverte.
+
+00:18:11.000 --> 00:18:11.740
+Le gain de l'inclusion
+
+00:18:11.740 --> 00:18:12.720
+des demandes d'informations
+
+00:18:12.720 --> 00:18:14.240
+n'est pas un triomphe administratif,
+
+00:18:14.480 --> 00:18:15.700
+c'est un bon sens opérationnel.
+
+00:18:15.860 --> 00:18:17.000
+Une fois que vous aurez constaté
+
+00:18:17.000 --> 00:18:18.260
+à quel point vos flux sont propres,
+
+00:18:18.500 --> 00:18:19.400
+cohérents et vérifiables,
+
+00:18:19.700 --> 00:18:20.260
+vous vous demanderez
+
+00:18:20.260 --> 00:18:21.540
+comment vous avez pu tolérer le chaos.
+
+00:18:21.720 --> 00:18:23.180
+RFI transforme l'automatisation
+
+00:18:23.180 --> 00:18:24.220
+d'un exercice de confiance
+
+00:18:24.220 --> 00:18:25.260
+en un système de contrôle.
+
+00:18:25.480 --> 00:18:26.920
+Donc, si vos flux continuent d'échouer,
+
+00:18:27.160 --> 00:18:28.160
+le problème ne vient peut-être pas
+
+00:18:28.160 --> 00:18:28.580
+de Copilot,
+
+00:18:28.940 --> 00:18:29.780
+mais du fait que vous avez laissé
+
+00:18:29.780 --> 00:18:30.820
+votre logiciel faire confiance
+
+00:18:30.820 --> 00:18:31.660
+aux humains sans surveillance.
+
+00:18:31.880 --> 00:18:33.120
+La mise à niveau de la gouvernance
+
+00:18:33.120 --> 00:18:34.340
+dont vous ne saviez pas avoir besoin.
+
+00:18:34.580 --> 00:18:35.220
+Voici le truc,
+
+00:18:35.440 --> 00:18:36.400
+la plupart des gens finissent
+
+00:18:36.400 --> 00:18:37.600
+par réaliser que la fiabilité
+
+00:18:37.600 --> 00:18:38.240
+ne se résume pas
+
+00:18:38.240 --> 00:18:39.380
+à une IA plus intelligente,
+
+00:18:39.640 --> 00:18:40.780
+mais à une gouvernance plus stricte.
+
+00:18:40.940 --> 00:18:42.100
+La demande d'informations.
+
+00:18:42.320 --> 00:18:44.200
+L'action n'est pas une finition facultative,
+
+00:18:44.540 --> 00:18:45.780
+c'est l'intégrité structurelle.
+
+00:18:45.980 --> 00:18:46.620
+C'est la différence
+
+00:18:46.620 --> 00:18:47.780
+entre notre automatisation
+
+00:18:50.260 --> 00:18:51.360
+Lorsque vous intégrez RFI
+
+00:18:51.360 --> 00:18:52.560
+à vos flux Copilot Studio,
+
+00:18:52.940 --> 00:18:53.640
+vous créez une boucle
+
+00:18:53.640 --> 00:18:54.840
+de responsabilité fermée.
+
+00:18:55.020 --> 00:18:56.200
+Chaque décision est vérifiée,
+
+00:18:56.520 --> 00:18:57.320
+chaque écart résolu,
+
+00:18:57.640 --> 00:18:58.880
+chaque enregistrement défendable.
+
+00:18:59.100 --> 00:18:59.960
+C'est là toute la magie.
+
+00:19:00.140 --> 00:19:01.100
+RFI ne se contente pas
+
+00:19:01.100 --> 00:19:02.440
+d'appliquer des règles de conformité,
+
+00:19:02.780 --> 00:19:04.140
+il convertit une gouvernance abstraite
+
+00:19:04.140 --> 00:19:04.960
+en comportement de flux
+
+00:19:04.960 --> 00:19:05.680
+de travail tangible.
+
+00:19:05.940 --> 00:19:06.960
+Votre IA ne se contente pas
+
+00:19:06.960 --> 00:19:08.100
+de faire confiance au texte,
+
+00:19:08.260 --> 00:19:09.060
+elle le contre-examine.
+
+00:19:09.340 --> 00:19:10.420
+Votre flux ne se contente pas
+
+00:19:10.420 --> 00:19:11.300
+d'enregistrer des données,
+
+00:19:11.620 --> 00:19:12.800
+il exige une assurance qualité.
+
+00:19:13.080 --> 00:19:14.160
+C'est une gouvernance déguisée
+
+00:19:14.160 --> 00:19:15.000
+en fonctionnalité,
+
+00:19:15.300 --> 00:19:16.440
+et c'est pourquoi elle révolutionne
+
+00:19:16.440 --> 00:19:17.540
+discrètement la fiabilité.
+
+00:19:17.740 --> 00:19:18.760
+Considérez la gouvernance
+
+00:19:18.760 --> 00:19:19.160
+des données,
+
+00:19:19.500 --> 00:19:20.840
+la conformité et la fiabilité
+
+00:19:20.840 --> 00:19:21.600
+comme les trois angles
+
+00:19:21.600 --> 00:19:22.360
+d'un même triangle.
+
+00:19:22.620 --> 00:19:23.240
+Sans RFI,
+
+00:19:23.580 --> 00:19:24.560
+cette structure s'effondre
+
+00:19:24.560 --> 00:19:25.800
+en raccourci et en excuse.
+
+00:19:26.060 --> 00:19:26.820
+Avec RFI,
+
+00:19:27.200 --> 00:19:28.500
+chaque partie soutient les autres.
+
+00:19:28.660 --> 00:19:29.440
+La qualité des données
+
+00:19:29.440 --> 00:19:30.520
+garantit la conformité,
+
+00:19:30.860 --> 00:19:31.880
+la conformité renforce
+
+00:19:31.880 --> 00:19:32.660
+la traçabilité
+
+00:19:32.660 --> 00:19:33.460
+et la traçabilité
+
+00:19:33.460 --> 00:19:34.500
+renforce la fiabilité.
+
+00:19:34.680 --> 00:19:35.380
+Vous arrêtez de lutter
+
+00:19:35.380 --> 00:19:36.180
+contre les incendies
+
+00:19:36.180 --> 00:19:37.020
+et commencez à auditer
+
+00:19:37.020 --> 00:19:37.720
+en toute confiance.
+
+00:19:37.900 --> 00:19:38.180
+Et oui,
+
+00:19:38.440 --> 00:19:39.600
+vos auditeurs souriront vraiment.
+
+00:19:39.720 --> 00:19:40.700
+Un résultat inquiétant
+
+00:19:40.700 --> 00:19:41.320
+mais mesurable.
+
+00:19:41.600 --> 00:19:42.940
+Voici donc ce que vous en retirez.
+
+00:19:43.080 --> 00:19:43.700
+Arrêtez de traiter
+
+00:19:43.700 --> 00:19:44.300
+la gouvernance
+
+00:19:44.300 --> 00:19:45.200
+comme de la paperasserie.
+
+00:19:45.380 --> 00:19:46.140
+C'est une armure.
+
+00:19:46.340 --> 00:19:47.400
+RFI est le revêtement
+
+00:19:47.400 --> 00:19:48.780
+qui empêche vos automatisations
+
+00:19:48.780 --> 00:19:49.360
+de s'empaler
+
+00:19:49.360 --> 00:19:50.280
+sur de mauvaises données.
+
+00:19:50.500 --> 00:19:51.280
+Si vos flux de travail
+
+00:19:51.280 --> 00:19:52.340
+ne l'ont pas encore adopté,
+
+00:19:52.640 --> 00:19:53.220
+vous ne gérez pas,
+
+00:19:53.500 --> 00:19:54.420
+vous survivez à la chance.
+
+00:19:54.580 --> 00:19:55.160
+Et comme la chance
+
+00:19:55.160 --> 00:19:56.000
+finit par s'épuiser,
+
+00:19:56.380 --> 00:19:57.500
+renforcez vos flux dès maintenant.
+
+00:19:57.720 --> 00:19:58.480
+Ajoutez des RFI
+
+00:19:58.480 --> 00:19:59.240
+à chaque processus
+
+00:19:59.240 --> 00:19:59.960
+où des données manquantes
+
+00:19:59.960 --> 00:20:00.380
+ou douteuses
+
+00:20:00.380 --> 00:20:01.260
+pourraient causer des problèmes.
+
+00:20:01.480 --> 00:20:02.300
+Apprenez à votre IA
+
+00:20:02.300 --> 00:20:02.840
+à vérifier
+
+00:20:02.840 --> 00:20:03.780
+et non à supposer.
+
+00:20:03.960 --> 00:20:05.260
+Traitez chaque réponse à RFI
+
+00:20:05.260 --> 00:20:06.220
+comme ce qu'elle est réellement,
+
+00:20:06.520 --> 00:20:07.900
+une signature de responsabilité
+
+00:20:07.900 --> 00:20:08.640
+intégrée au code.
+
+00:20:08.860 --> 00:20:09.640
+Si cette explication
+
+00:20:09.640 --> 00:20:10.680
+vous a sauvé d'un cauchemar
+
+00:20:10.680 --> 00:20:11.840
+en matière de qualité des données,
+
+00:20:12.200 --> 00:20:12.980
+rendez-lui l'appareil.
+
+00:20:13.200 --> 00:20:13.700
+Abonnez-vous.
+
+00:20:13.900 --> 00:20:14.540
+Appuyez sur suivre,
+
+00:20:14.840 --> 00:20:15.640
+activez les notifications
+
+00:20:15.640 --> 00:20:16.500
+et continuez à créer
+
+00:20:16.500 --> 00:20:17.420
+des flux Copilot Studio
+
+00:20:17.420 --> 00:20:18.120
+qui ne se contentent pas
+
+00:20:18.120 --> 00:20:18.580
+de fonctionner,
+
+00:20:18.820 --> 00:20:19.540
+ils résistent aux audits.
+
+00:20:19.660 --> 00:20:20.880
+L'efficacité sans fiabilité
+
+00:20:20.880 --> 00:20:21.720
+est synonyme de chaos.
+
+00:20:21.900 --> 00:20:22.700
+RFI rend les choses
+
+00:20:22.700 --> 00:20:23.340
+plus civilisées.

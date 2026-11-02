@@ -1,0 +1,835 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.420
+Topik hari ini adalah topik yang hampir semua orang pernah mendengarnya, tetapi hampir tidak ada yang bisa menjelaskannya dengan meskipun saya.
+
+00:00:04.540 --> 00:00:06.420
+RIG, Retrieval Augmented Generation.
+
+00:00:06.920 --> 00:00:11.840
+Anda telah melihat akronim ini, di mana-mana pengumuman Microsoft ramah konferensi AI postingan blog, tetapi apa sebenarnya artinya?
+
+00:00:12.400 --> 00:00:13.700
+Dan lebih penting, mengapa Anda harus peduli?
+
+00:00:13.960 --> 00:00:14.500
+Begini masalahnya.
+
+00:00:15.040 --> 00:00:17.160
+Model bahasa besar seperti GPT-4O sangat hebat.
+
+00:00:17.880 --> 00:00:20.600
+Model ini dapat menulis esai, meringkas dokumen, bahkan menghasilkan kode.
+
+00:00:20.920 --> 00:00:22.440
+Tetapi keduanya memiliki dua masalah besar.
+
+00:00:22.980 --> 00:00:24.100
+Pertama, pengetahuan buku dalam waktu.
+
+00:00:24.600 --> 00:00:27.560
+Tanyakan kepada CCBT tentang sesuatu yang terjadi kemarin dan model tersebut tidak akan.
+
+00:00:27.560 --> 00:00:32.680
+Kedua, model ini tidak pernah melihat data internal perusahaan Anda, kebijakan Anda, detail produk, email pelanggan.
+
+00:00:33.400 --> 00:00:36.020
+Jadi ketika Anda mengajukan pertanyaan kepada LLM tentang bisnis Anda mendebak.
+
+00:00:36.440 --> 00:00:40.960
+Jadi disitulah Retrieval Augmented Generation berperan, RIG bukanlah model baru, bukan GPT yang lebih besar atau lebih.
+
+00:00:41.280 --> 00:00:42.760
+Ini adalah perkata yang sama sekali berbeda.
+
+00:00:43.160 --> 00:00:49.040
+Alih-alih meminta LLM untuk mengambil jawaban dari memori pelatihannya, RIG pertama-tama mencari informasi yang tepat dari data Anda sendiri
+
+00:00:49.040 --> 00:00:51.560
+dan menyerahkan informasi tersebut ke model di samping pertanyaan.
+
+00:00:52.220 --> 00:00:57.380
+Model kemudian menggunakan konteks tersebut untuk memberi Anda jawaban yang dihasarkan pada konten nyata dan terkini, bukan tebakan.
+
+00:00:57.720 --> 00:01:00.900
+Tanpa RAG, AI Anda bekerja dari memori yang sudah ada selama berbulan-bulan atau bertahunan.
+
+00:01:01.180 --> 00:01:03.320
+Dengan RAG, AI bekerja dari dokumen Anda yang saat ini.
+
+00:01:03.880 --> 00:01:09.420
+Itulah perbedaan antara AI yang terdengar percaya diri, tetapi mungkin salah, dan AI yang menunjukkan dengan tepat dari mana ia mendapatkan jawaban.
+
+00:01:09.720 --> 00:01:10.520
+Ini yang akan kita bahas hari.
+
+00:01:11.060 --> 00:01:13.500
+Pertama, kita akan melihat dua masalah yang membuat RAG diperlukan.
+
+00:01:13.820 --> 00:01:17.620
+Kemudian, kita akan menguraikan apa sebenarnya RAG itu, yaitu pengambilan, penambahan, dan pembuat.
+
+00:01:18.240 --> 00:01:23.140
+Selanjutnya, kita akan membahas layanan Azure utama, Azure AI Search, Azure Open AI, dan Azure AI Foundry.
+
+00:01:23.580 --> 00:01:26.660
+Dan kita akan menyelesaikannya dengan contoh nyata sehingga Anda dapat melihat bagaimana bagian banyak lain.
+
+00:01:26.980 --> 00:01:28.200
+Mari kita mulai dengan masalahnya sendiri.
+
+00:01:28.720 --> 00:01:30.500
+Setelah Anda melihatnya, solusinya menjadi jelas.
+
+00:01:31.440 --> 00:01:32.540
+Kedua masalah yang dimiliki LRM.
+
+00:01:33.100 --> 00:01:34.280
+Apa yang salah dengan model bahasa yang besar?
+
+00:01:34.900 --> 00:01:35.500
+Sebenarnya ada dua hal.
+
+00:01:36.500 --> 00:01:37.640
+Pertama, pengetahuan mereka dibuku.
+
+00:01:38.020 --> 00:01:38.520
+Mbak pikirkan.
+
+00:01:38.520 --> 00:01:43.640
+Ketika GPT-4O diwati, model tersebut belajar dicuplikan internet yang kini sudah berbulan-bulan atau bertahun-tahun.
+
+00:01:43.800 --> 00:01:46.860
+Jadi, model tersebut tidak mengetahui tentang produk baru peraturan tergini atau berita kemarin.
+
+00:01:47.160 --> 00:01:49.960
+Tanyakan tentang perubahan kebijakan dari minggu lalu dan model tersebut tidak akan tak.
+
+00:01:50.600 --> 00:01:52.300
+Informasi itu tidak ada dalam data pelatihannya.
+
+00:01:53.920 --> 00:01:58.600
+Kedua, LLM tidak pernah melihat data pribadi Anda, dokumen internal, email pelanggan, basis data milik Anda.
+
+00:01:59.820 --> 00:02:01.720
+Model tersebut tidak memiliki akses apapun ke semua itu.
+
+00:02:01.880 --> 00:02:06.040
+Jadi, keseorang karyawan bertanya tentang proses bisnis spesifik Anda, model tersebut tidak dapat menjawab.
+
+00:02:06.180 --> 00:02:07.120
+Model tersebut tidak mengetahui.
+
+00:02:07.120 --> 00:02:09.280
+Beberapa orang berpikir bahwa fine tuning menyelesaikan masat.
+
+00:02:09.620 --> 00:02:12.100
+Anda mengambil model dasar dan melatihnya sedikit lebih banyak pada data-data.
+
+00:02:12.300 --> 00:02:13.720
+Namun fine tuning memiliki masalahnya sendiri.
+
+00:02:13.960 --> 00:02:14.320
+Itu mahal.
+
+00:02:14.780 --> 00:02:16.660
+Anda membayar waktu GPU dan upaya rekayasa.
+
+00:02:17.200 --> 00:02:18.300
+Itu tidak memperbaiki kebasisan.
+
+00:02:19.000 --> 00:02:21.760
+Setelah Anda melakukan fine tuning, model tersebut masih dibuka pada titik waktu itu.
+
+00:02:22.500 --> 00:02:26.060
+Dan model ini tidak dapat menangani data yang sering berubah seperti tingkat inventaris atau harga.
+
+00:02:26.500 --> 00:02:28.860
+Penyempurnaan seperti mengacari seseorang buku teks dengan menghafal.
+
+00:02:29.460 --> 00:02:31.620
+Berguna tetapi mereka tetap tidak dapat mencari koran hari ini.
+
+00:02:32.280 --> 00:02:33.120
+Polusi sebenarnya lebih sederhana.
+
+00:02:33.120 --> 00:02:39.100
+Berikan model akses ke pengetahuan Anda saat dibutuhkan untuk menjawab alih-alih mencoba menjejalkan semuanya ke dalam memorinya.
+
+00:02:39.760 --> 00:02:40.680
+Jangan membuatnya menghafal semua.
+
+00:02:41.080 --> 00:02:43.580
+Biarkan model mencari berbagai hal secara real time dari data alkuan.
+
+00:02:43.820 --> 00:02:44.420
+Tulang dilakukan RR.
+
+00:02:44.720 --> 00:02:46.140
+Ide sederhana tetapi membahas segalanya.
+
+00:02:46.880 --> 00:02:47.580
+Polusi sebenarnya RRG itu.
+
+00:02:47.580 --> 00:02:49.560
+Jadi berikut RRG dalam satu kali ini.
+
+00:02:49.960 --> 00:02:52.660
+Alih-alih meminta model untuk mengambil jawaban dari data pelatihannya.
+
+00:02:53.020 --> 00:02:54.940
+Pertama-tama kita mencari informasi yang relevan.
+
+00:02:55.620 --> 00:02:57.540
+Lalu memasukkannya ke model di samping pertanyaan.
+
+00:02:58.400 --> 00:02:58.980
+Setelah ide-indinya.
+
+00:02:59.540 --> 00:03:00.360
+Tiga langkah sederhana.
+
+00:03:00.760 --> 00:03:02.520
+Mengambil, menambah, dan menghasilkan.
+
+00:03:03.080 --> 00:03:04.220
+Ijinkan saya memberi Anda sebuah analogi.
+
+00:03:04.560 --> 00:03:05.340
+Bayangkan seorang pustakawan.
+
+00:03:05.920 --> 00:03:07.860
+Anda masuk ke perpustakaan Anda mengajukan pertanyaan.
+
+00:03:07.860 --> 00:03:10.540
+Anda tidak akan mengira pustakawan itu telah menghafal setiap buku.
+
+00:03:10.860 --> 00:03:11.300
+Tuk konyol.
+
+00:03:11.820 --> 00:03:14.160
+Sebaliknya, Anda meminta mereka untuk menemukan buku yang tepat.
+
+00:03:14.160 --> 00:03:15.880
+Membukannya di halaman yang tepat dan membacakan jawaban.
+
+00:03:15.960 --> 00:03:17.180
+Pustakawan tidak menghafal apapun.
+
+00:03:17.920 --> 00:03:19.340
+Mereka mengambil terlebih dahulu lalu membaca.
+
+00:03:19.920 --> 00:03:20.980
+Dan itulah yang dilakukan RRG.
+
+00:03:21.380 --> 00:03:22.700
+Pengambilan pertama, pembuatan kedua.
+
+00:03:23.260 --> 00:03:24.740
+Jadi beginilah cara kerjanya dalam praktek.
+
+00:03:25.320 --> 00:03:26.240
+Kemudian mengajukan pertanyaan.
+
+00:03:26.660 --> 00:03:28.180
+Sistem kemudian mencari bahasi pengetahuan.
+
+00:03:28.480 --> 00:03:30.480
+Dokumen Anda, data Anda, informasi pribadi Anda.
+
+00:03:30.960 --> 00:03:33.480
+Apapun yang ditemukannya, dimasukkan ke dalam model bahasa besar
+
+00:03:33.480 --> 00:03:36.060
+dan model tersebut menghasilkan jawaban berdasarkan konteks tersebut.
+
+00:03:36.160 --> 00:03:37.080
+Dan inilah bagian yang penting.
+
+00:03:37.500 --> 00:03:38.680
+LM tidak pernah melihat data mentah Anda.
+
+00:03:39.080 --> 00:03:40.880
+Ia hanya melihat apa yang diberikan sistem pengambilan.
+
+00:03:40.880 --> 00:03:41.780
+Bukan kekurang.
+
+00:03:42.120 --> 00:03:43.240
+Jadi ini adalah fitur keamanan.
+
+00:03:43.620 --> 00:03:45.880
+Dokumen sensitif Anda tetap berada di penyimpanan Anda sendiri.
+
+00:03:46.160 --> 00:03:48.340
+Pada waktu query model hanya mendapatkan cupikan relevan
+
+00:03:48.340 --> 00:03:50.060
+yang dibutuhkan untuk menjawab pertanyaan spesifik itu.
+
+00:03:50.440 --> 00:03:51.680
+Tidak ada pelatihan pada data Anda,
+
+00:03:51.780 --> 00:03:53.020
+tidak ada hafalan, tidak ada kebocoran.
+
+00:03:53.440 --> 00:03:54.560
+Data Anda tetap berada di tempatnya.
+
+00:03:54.960 --> 00:03:57.020
+Jadi muncahkan kedua masalah yang telah kita bicarakan sebelum.
+
+00:03:57.500 --> 00:03:57.860
+Data basic.
+
+00:03:58.340 --> 00:03:58.860
+Bukan masalah.
+
+00:03:59.360 --> 00:04:00.480
+Basis pengetahuan Anda tetap terkini.
+
+00:04:00.980 --> 00:04:01.400
+Data pribadi.
+
+00:04:01.920 --> 00:04:03.640
+Model hanya melihat apa yang Anda pilih untuk diambil.
+
+00:04:03.980 --> 00:04:06.060
+Ini seperti memberi pustakawan akses ke lemari arsip Anda
+
+00:04:06.060 --> 00:04:07.940
+tetapi hanya membiarkan mereka mengambil satu folder
+
+00:04:07.940 --> 00:04:09.240
+yang Anda butuhkan saat Anda butuhkannya.
+
+00:04:10.540 --> 00:04:11.780
+Penyematan vektor dan pencarian semantik.
+
+00:04:12.360 --> 00:04:14.120
+Sekarang Anda mungkin bertanya-tanya bagaimana pencarian bekerja.
+
+00:04:14.420 --> 00:04:16.120
+Bukan tentang mencocokkan kata kunci
+
+00:04:16.120 --> 00:04:17.940
+atau menjalankan kontropece F di seluruh dokumen Anda.
+
+00:04:18.200 --> 00:04:19.120
+Ini sesuatu yang jauh lebih penting.
+
+00:04:19.540 --> 00:04:22.060
+Ini disebut pencarian semantik dan berjalan pada penyematan vektor.
+
+00:04:22.580 --> 00:04:23.880
+Ijinkan saya menjelaskan apa itu penyematan.
+
+00:04:24.180 --> 00:04:26.040
+Penyematan vektor adalah daftar panjang angka
+
+00:04:26.040 --> 00:04:28.440
+yang menangkap makna sepotong teks seperti koordinat pada peta.
+
+00:04:28.840 --> 00:04:31.780
+Setiap dokumen mendapatkan koordinatnya sendiri pada peta makna itu.
+
+00:04:32.340 --> 00:04:33.560
+Saat Anda mengajukan pertanyaan,
+
+00:04:33.560 --> 00:04:35.640
+sistem mengubah pertanyaan Anda menjadi koordinat juga
+
+00:04:35.640 --> 00:04:37.300
+lalu menemukan dokumen yang paling mendekati.
+
+00:04:37.620 --> 00:04:38.520
+Kunci ini adalah semantik.
+
+00:04:39.480 --> 00:04:40.980
+Ini bukan tentang menemukan kata-kata yang tepat,
+
+00:04:41.080 --> 00:04:42.000
+ini tanggung memahami konsep.
+
+00:04:42.580 --> 00:04:43.760
+Jika Anda mencari hotel murah,
+
+00:04:43.980 --> 00:04:46.380
+sistem dapat menemukan dokumen tentang akomodasi yang terjangkau
+
+00:04:46.380 --> 00:04:48.500
+meskipun kata-kata yang tepat itu tidak pernah muncul.
+
+00:04:49.100 --> 00:04:49.400
+Mengapa?
+
+00:04:49.880 --> 00:04:50.740
+Karena artinya dekat.
+
+00:04:51.560 --> 00:04:53.220
+Embedding untuk anggaran dan harga terjangkau
+
+00:04:53.220 --> 00:04:54.560
+terletak bersebelahan di peta tersebut.
+
+00:04:55.660 --> 00:04:58.300
+Model kecil khusus seperti embedding teks Azure 3 besar
+
+00:04:58.300 --> 00:04:59.280
+membuat embedding ini.
+
+00:04:59.820 --> 00:05:00.980
+Ini bukan model bahasa raksasa,
+
+00:05:00.980 --> 00:05:03.440
+jadi ini adalah alat terfokus yang melakukan suatu pekerjaan.
+
+00:05:04.200 --> 00:05:05.760
+Mengubah teks menjadi angka koordinat tersebut.
+
+00:05:06.320 --> 00:05:07.400
+Nilai yang membuat raki begitu hebat.
+
+00:05:07.880 --> 00:05:10.560
+Dokumen Anda diubah menjadi embedding sekali selama pengindeksan.
+
+00:05:11.100 --> 00:05:12.440
+Kemudian ketika query masuk,
+
+00:05:12.600 --> 00:05:14.560
+sistem menemukan konten yang paling relevan dalam hitungan.
+
+00:05:14.800 --> 00:05:16.480
+Melih detik meskipun kata-kata persis pengguna
+
+00:05:16.480 --> 00:05:17.920
+tidak pernah muncul dimanapun dalam dokumen.
+
+00:05:18.660 --> 00:05:20.960
+Sistem memahami maksud bukan hanya kata kunci yang Anda ketik.
+
+00:05:22.280 --> 00:05:23.820
+Azure AI Search, mesin pengambilan.
+
+00:05:24.480 --> 00:05:25.720
+Jadi sekarang Anda memahami konsepnya.
+
+00:05:26.220 --> 00:05:27.300
+Ambil dulu, lalu buat.
+
+00:05:27.800 --> 00:05:29.480
+Namun di mana semua pengambilan itu sebenarnya terjadi.
+
+00:05:29.620 --> 00:05:31.280
+Disitulah Azure AI Search berperan.
+
+00:05:31.280 --> 00:05:35.600
+Azure AI Search adalah layanan yang menyimpan, mengindeks, dan mengambil konten Anda.
+
+00:05:36.400 --> 00:05:38.980
+Anggap saja ini sebagai sistem pengarsipan untuk aplikasi RG Anda.
+
+00:05:39.560 --> 00:05:41.660
+Sistem ini menangani dua tugas utama dan mari kita bahas.
+
+00:05:42.200 --> 00:05:42.960
+Pertama, pengindeksan.
+
+00:05:43.260 --> 00:05:44.660
+Itulah cara menyiapkan data Anda untuk dicari.
+
+00:05:45.100 --> 00:05:45.840
+Kedua, pencarian.
+
+00:05:46.220 --> 00:05:49.120
+Itu sebenarnya menemukan konten yang tepat saat seseorang mengajukan pertanyaan.
+
+00:05:49.540 --> 00:05:51.080
+Mari kita bahas proses pengindeksan terlebih dahulu.
+
+00:05:51.560 --> 00:05:54.500
+Anda mulai dengan mengarahkan Azure AI Search ke sumber data Anda.
+
+00:05:54.500 --> 00:06:00.460
+Yang bisa berupa wadah penyimpanan blog yang penuh dengan PDF, basis data SQL dengan catatan pelanggan, atau sejumlah sumber lainnya.
+
+00:06:01.600 --> 00:06:05.200
+Layanan membaca dokumen-dokumen tersebut memecahnya menjadi bagian-bagian yang lebih kecil.
+
+00:06:05.480 --> 00:06:11.580
+Yang disebut potongan membuat penyematan vektor untuk setiap potongan menggunakan model penyematan yang telah kita bahas sebelumnya dan menyimpan semuanya dalam indeks pencarian.
+
+00:06:11.580 --> 00:06:14.760
+Anggap indeks sebagai katalog raksasa yang sangat terorganisir.
+
+00:06:15.500 --> 00:06:20.320
+Setiap konten mendapatkan ID unik, potongan teks, dan serangkaian koordinat pada peta makna tersebut.
+
+00:06:20.860 --> 00:06:21.720
+Sekarang proses pencarian.
+
+00:06:22.220 --> 00:06:26.760
+Saat pengguna mengajukan pertanyaan, AI Search mengubah pertanyaan itu menjadi vektor menggunakan model penyematan yang sama,
+
+00:06:26.960 --> 00:06:32.280
+lalu memindai indeks untuk menemukan potongan yang koordinatnya paling dekat dengan koordinatnya paling dekat dengan koordinat pertanyaan.
+
+00:06:32.280 --> 00:06:33.840
+Yang mengelihkan kecocokan teratas.
+
+00:06:33.980 --> 00:06:37.500
+Biasanya 5 hingga 10 yang paling relevan dan melakukan semua ini dalam milik titik.
+
+00:06:38.080 --> 00:06:39.380
+Anda mendapatkan beberapa usia yang kuat di sini.
+
+00:06:39.380 --> 00:06:44.760
+Pencarian vektor murni menemukan konten berdasarkan makna sehingga konsep yang serupa muncul meskipun kata-kata yang tepat tidak cocok.
+
+00:06:45.000 --> 00:06:48.600
+Pencarian kata kunci berfungsi seperti mesin pencari tradisional menemukan kecocokan kata yang tepat.
+
+00:06:49.240 --> 00:06:53.220
+Atau Anda dapat menggunakan pencarian hibrida yang menggabungkan kedua pendekatan dan itu biasanya merupakan pilihan terbaik.
+
+00:06:53.560 --> 00:06:59.620
+Ada juga yang disebut pemeringkatan ulang semantik yang mengambil hasil awal tersebut dan memberikan sumber daya berdasarkan seberapa baik hasil tersebut menjawab pertanyaan.
+
+00:06:59.760 --> 00:07:03.160
+Ini seperti rentasan kedua yang menangkap hal-hal yang mungkin terlewatkan oleh indeks pengetahuan.
+
+00:07:03.160 --> 00:07:06.280
+Satu hal yang perlu Anda ketahui, Azure AI Search bisa jadi mahal.
+
+00:07:07.060 --> 00:07:09.860
+Tingkat dasar dimulai sekitar 75 per bulan dan naik dari sana.
+
+00:07:10.420 --> 00:07:14.960
+Jika Anda hanya bereksperimen, gunakan tingkat gratis atau pastikan Anda menghapus sumber daya Anda setelah selesai.
+
+00:07:15.440 --> 00:07:17.660
+Namun untuk penggunaan produksi, biayanya biasanya terbayar.
+
+00:07:18.440 --> 00:07:20.200
+Anda membeli kecepatan dan keandaran skala besar.
+
+00:07:21.660 --> 00:07:24.780
+Azure Open AI plus AI Foundry Pembuatan Orkestrasi
+
+00:07:24.780 --> 00:07:31.480
+Jadi sekarang data Anda diindeks dan siap untuk diambil tetapi LLM masih perlu memahami pertanyaan Anda dan menghasilkan jawaban yang solid.
+
+00:07:31.480 --> 00:07:34.260
+Di sinilah Azure Open AI dan Azure AI Foundry hadir.
+
+00:07:34.960 --> 00:07:40.560
+Azure Open AI menyediakan model bahasa aktual, GPT-4O, GPT-4.1 atau model apapun yang Anda pilih.
+
+00:07:41.040 --> 00:07:42.080
+Ini adalah mesin pembuatnya.
+
+00:07:42.600 --> 00:07:48.100
+Ia menerima perintah yang menyertakan pertanyaan asli dari pengguna dan konteks yang diambil oleh pencarian Azure AI.
+
+00:07:48.680 --> 00:07:52.120
+Model membaca konteks tersebut dan menghasilkan jawaban berdasarkan apa yang ditemukan.
+
+00:07:52.620 --> 00:07:55.200
+Sekarang Anda tidak bisa begitu saja memasukkan semuanya dan berharap yang terbaik.
+
+00:07:55.580 --> 00:07:59.680
+Anda memerlukan perintah sistem, serangka instruksi yang Anda berikan kepada model di awal tentang cara berbedala.
+
+00:07:59.680 --> 00:08:05.320
+Anda memberitahu model untuk hanya menggunakan konteks yang disediakan, mengutip sumbernya, dan yang terpenting mengatakan, saya tidak tahu.
+
+00:08:05.840 --> 00:08:08.500
+Jika informasi yang relevan tidak ada dalam dokumen yang diambil.
+
+00:08:09.040 --> 00:08:10.040
+Itulah yang model tetap jujur.
+
+00:08:10.580 --> 00:08:15.200
+Tanpa perintah sistem yang baik, model mungkin akan kembali ke data pelatihannya atau lebih buruk lagi, mengarang sesuatu.
+
+00:08:15.600 --> 00:08:17.320
+Jadi bagaimana Anda benar-benar menghubungkan semua bagian ini?
+
+00:08:17.800 --> 00:08:19.140
+Di sinilah Azure AI Foundry hadir.
+
+00:08:19.820 --> 00:08:24.060
+Ini adalah portal tempat Anda membuat proyek menyebarkan model, menghubungkan sumber data, dan mengunci agen.
+
+00:08:24.060 --> 00:08:26.960
+Anggap saja ini sebagai pusat kendali untuk seluruh pengaturan rakan.
+
+00:08:27.260 --> 00:08:33.260
+Di dalam Foundry, Anda dapat menambahkan indeks pencarian Azure AI sebagai sumber pengetahuan untuk agen Anda tanpa menulis kode khusus untuk pengaturan dasar.
+
+00:08:33.580 --> 00:08:37.680
+Anda cukup membuat koneksi, memilih indeks, dan agen dapat mulai menanyakannya secara otomatis.
+
+00:08:38.160 --> 00:08:39.440
+Portal menangani orkestrasi.
+
+00:08:40.320 --> 00:08:47.400
+Saat pengguna mengajukan pertanyaan, agen tahu untuk memanggil pencarian AI, mendapatkan potongan yang relevan, dan meneruskannya ke LLM bersama dengan pertanyaan awal.
+
+00:08:47.900 --> 00:08:48.720
+Berikut contoh konkretnya.
+
+00:08:48.720 --> 00:08:53.320
+Dalam satu tutorial yang saya temukan, seseorang membuat agen rekomendasi film menggunakan kumpulan data Netflix.
+
+00:08:53.920 --> 00:09:00.900
+Mereka mengunggah file CSV dengan judul film, deskripsi, dan informasi pemeran ke penyimpanan blob Azure, lalu menggunakan pencarian Azure AI untuk mengindeks data tersebut.
+
+00:09:01.500 --> 00:09:06.240
+Di Azure AI Foundry, mereka membuat agen dengan GP Team 4O dan menghubungkan indeks pencarian AI.
+
+00:09:07.120 --> 00:09:09.800
+Saat pengguna bertanya, saya suka film thriller, beri saya beberapa rekomendasi.
+
+00:09:10.160 --> 00:09:14.420
+Agen menusuri indeks menemukan film thriller dari kumpulan data spesifik tersebut dan memberikan rekomendasi.
+
+00:09:14.540 --> 00:09:18.160
+Dan inilah kuncinya, ia hanya merekomendasikan film yang benar-benar ada dalam kumpulan data tersebut.
+
+00:09:18.160 --> 00:09:23.100
+Ia tidak menciptakan apapun, tidak menarik di data pelatihannya, dan bekerja secara eksklusif dari konten yang mereka sediakan.
+
+00:09:23.480 --> 00:09:24.160
+Itulah kekuatan RAC.
+
+00:09:24.800 --> 00:09:26.200
+RAC Klasik vs RAC Agen
+
+00:09:26.200 --> 00:09:27.840
+Sekarang mari kita bahas tentang peraturannya.
+
+00:09:28.320 --> 00:09:30.480
+Ada dua pola utama, RAC Klasik dan RAC Agen.
+
+00:09:30.940 --> 00:09:32.580
+Yang mana yang Anda pilih bergantung pada apa yang Anda buat.
+
+00:09:33.000 --> 00:09:34.320
+RAC Klasik adalah pendekatan langsung.
+
+00:09:34.940 --> 00:09:37.880
+Satu query masuk, satu pencarian berjalan, dan jawaban keluar.
+
+00:09:38.320 --> 00:09:39.220
+Sederhana, cepat di prediksi.
+
+00:09:39.580 --> 00:09:43.720
+Bayangkan seperti berjalan ke meja resepsionis di gedung perkantoran dan meminta satu berkas tertentu.
+
+00:09:44.280 --> 00:09:46.080
+Resepsionis mengambilnya, menyerahkannya kepada Anda.
+
+00:09:46.080 --> 00:09:49.580
+RAC Klasik sangat cocok untuk tanya jawab faktual pada satu topik seperti
+
+00:09:49.580 --> 00:09:52.320
+Apa kebijakan perusahaan tentang kerja jarak jauh?
+
+00:09:52.380 --> 00:09:54.660
+Atau tunjukkan langkah pemencahan masalah untuk kode kesalahan ini?
+
+00:09:55.360 --> 00:09:59.820
+RAC Klasik dapat diandalkan, murah, dan mudah diperbaiki saat terjadi kesalahan karena alurnya ribu.
+
+00:10:00.220 --> 00:10:00.980
+RAC Agentik berbeda.
+
+00:10:01.720 --> 00:10:03.640
+Agen AI memutuskan cara mengambil informasi.
+
+00:10:04.300 --> 00:10:07.060
+Ia dapat mengajukan beberapa supertanyaan, mencari indeks yang berbeda,
+
+00:10:07.460 --> 00:10:10.260
+mengulangi hasil, dan mensintesis di berbagai sumber sebelum menjawab.
+
+00:10:10.260 --> 00:10:14.860
+Ini seperti memiliki manajer gedung yang berkoordinasi dengan berbagai departemen untuk mengumpulkan semua bagian.
+
+00:10:15.180 --> 00:10:16.400
+Mereka tidak hanya mengambil satu berkas.
+
+00:10:16.640 --> 00:10:21.140
+Mereka berbicara dengan SDM, memberikan catatan, melakukan referensi silang kebijakan, lalu kembali dengan jawaban lengkap.
+
+00:10:21.480 --> 00:10:26.920
+Microsoft menjalankan pengujian mereka sendiri dan menemukan bahwa RAC Agentik memberikan peningkatan sekitar 40% dalam relevan sejawaban untuk pertanyaan komplek.
+
+00:10:27.100 --> 00:10:30.660
+Itu signifikan, tetapi menggunakan token 3 hingga 10 kali lebih banyak dan menambah latensi.
+
+00:10:31.160 --> 00:10:33.220
+Untuk pertanyaan sederhana, pekerjaan tambahan itu terbuang sia-sia.
+
+00:10:33.220 --> 00:10:34.860
+RAC Klasik menanganinya dengan baik.
+
+00:10:34.860 --> 00:10:36.420
+Jadi kapan Anda menggunakan masing-masing?
+
+00:10:36.580 --> 00:10:39.800
+Klasik untuk query rutin bervolume tinggi yang mengutamakan kecepatan dan biaya.
+
+00:10:40.440 --> 00:10:45.160
+Agentik untuk pertanyaan, multilangkah, ambigu, atau lintas domain yang akurasinya sepanjang dengan komputasi tambahan.
+
+00:10:45.680 --> 00:10:47.160
+Bagian koneksi, contoh menyeluruh.
+
+00:10:48.000 --> 00:10:50.500
+Mari kita lihat bagaimana semua bagian ini saling terkait dengan contoh nyata.
+
+00:10:51.060 --> 00:10:55.200
+Bayangkan Anda sedang membangun agen dukungan pelanggan untuk agen perjalanan bernama Marigold Travels.
+
+00:10:55.320 --> 00:11:00.120
+Anda memiliki biosur perjalanan, ulasan hotel, dan dokumen kebijakan yang tersebar di seluruh organisasi Anda.
+
+00:11:00.120 --> 00:11:05.940
+Anda ingin pelanggan mengajukan pertanyaan dan mendapatkan jawaban akurat berdasarkan konten Anda yang sebenarnya, bukan tembakan umum.
+
+00:11:06.460 --> 00:11:09.380
+Langkah pertama, simpan semua konten tersebut di penyimpanan blob Azure.
+
+00:11:10.080 --> 00:11:14.200
+Brosur di satu folder, ulasan di folder lain, kebijakan di folder ketiga, hanya file dalam kontainer.
+
+00:11:14.940 --> 00:11:19.600
+Langkah kedua, gunakan pencarian Azure AI untuk mengindeks data tersebut dengan menjalankan panduan impor data,
+
+00:11:19.820 --> 00:11:22.160
+mengarahkannya ke penyimpanan blob Anda, dan membiarkannya bekerja.
+
+00:11:22.360 --> 00:11:28.000
+Layanan membaca setiap dokumen, membaginya menjadi beberapa bagian, membuat penyematan vektor, dan membangun indeks yang dapat dicari.
+
+00:11:28.440 --> 00:11:29.860
+Seluruh proses memakan waktu beberapa menit.
+
+00:11:30.360 --> 00:11:32.880
+Langkah ketiga, masuk ke Azure AI Foundry untuk membuat agen.
+
+00:11:33.560 --> 00:11:35.120
+Terapkan JPP 4O sebagai model Anda.
+
+00:11:35.480 --> 00:11:38.900
+Tulis perintah sistem yang memberitahunya, untuk hanya menggunakan konteks yang disediakan,
+
+00:11:39.100 --> 00:11:42.780
+dan mengutip sumbernya, lalu hubungkan indeks pencarian Azure AI Anda sebagai sumber pengetahuan.
+
+00:11:43.320 --> 00:11:44.240
+Berapa klik dan selesai.
+
+00:11:44.640 --> 00:11:45.640
+Sekarang seorang pelanggan bertanya,
+
+00:11:45.820 --> 00:11:48.320
+Apa hotel dengan ulasan terbaik di Dubai dengan harga di bawah 300?
+
+00:11:48.420 --> 00:11:51.520
+Agen tersebut mengambil pertanyaan itu dan mengirimkannya ke pencarian Azure AI.
+
+00:11:51.900 --> 00:11:56.300
+Pencarian Azure AI mengubahnya menjadi vektor, dan menemukan potongan paling relevan dari ulasan dan brosuran.
+
+00:11:56.780 --> 00:11:59.780
+Potongan tersebut diteruskan ke JPP 4O bersama dengan pertanyaan asli.
+
+00:12:00.540 --> 00:12:05.540
+Model membacanya mengidentifikasi kecocokan teratas dan menghasilkan respons dengan kutipan yang mengarah kembali ke dokumen sumberan.
+
+00:12:05.880 --> 00:12:08.320
+Begini masalahnya, LLM tidak pernah mengingat data itu.
+
+00:12:08.780 --> 00:12:10.260
+LLM tidak pernah melatih ulasan hotel Anda.
+
+00:12:10.660 --> 00:12:12.660
+LLM bekerja dari konten spesifik Anda setiap saat.
+
+00:12:13.160 --> 00:12:15.680
+Tambahkan ulasan baru besok dan jawabannya diperbarui secara otomatik.
+
+00:12:15.980 --> 00:12:18.040
+Hapus brosur yang kedalui warsa dan brosur tersebut tidak akan muncul.
+
+00:12:18.160 --> 00:12:19.500
+Model tidak perlu pelatihan ulang.
+
+00:12:19.780 --> 00:12:21.260
+Model hanya membutuhkan lapisan pengambilan untuk Anda.
+
+00:12:21.660 --> 00:12:23.460
+Jadi bagaimana Anda benar-benar mulai membangunan RGD?
+
+00:12:23.860 --> 00:12:25.340
+Mari kita urekan menjadi tiga langkah.
+
+00:12:25.340 --> 00:12:27.580
+Hal pertama yang harus dilakukan adalah mengetahui data Anda.
+
+00:12:28.100 --> 00:12:33.300
+Sebelum Anda memilih layanan, cari tahu di mana konten Anda berada, bagaimana konten tersebut diatur, dan siapa yang harus memiliki akses.
+
+00:12:33.660 --> 00:12:35.540
+Hidup atau matinya RGD bergantung pada kualitas data Anda.
+
+00:12:35.940 --> 00:12:37.100
+Selanjutnya, buatlah seterusnya nunggu.
+
+00:12:37.500 --> 00:12:38.700
+Jangan terlalu memperumit pengaturan.
+
+00:12:39.000 --> 00:12:42.780
+Gunakan panduan impor data di pencarian Azure AI untuk mengindeks hanya satu set dokumen.
+
+00:12:43.280 --> 00:12:44.060
+Uji dengan kueh di dasar.
+
+00:12:44.060 --> 00:12:47.520
+Pastikan pengambilan data Anda berfungsi dengan sempurna sebelum menambahkan LLM.
+
+00:12:48.380 --> 00:12:51.660
+Sebagian besar kegagalan RGD bukan nonsal model, melainkan nonsal pengambilan data.
+
+00:12:52.080 --> 00:12:53.340
+Langkah terakhir, tambahkan LLM.
+
+00:12:53.980 --> 00:12:56.860
+Setelah pencarian Anda memberikan hasil yang tepat, Anda perlu menambahkan generasi.
+
+00:12:57.380 --> 00:13:00.020
+Saat itulah Anda menghubungkan Azure Open AI dan menulis perintah sistem.
+
+00:13:00.600 --> 00:13:02.440
+Begini, RGD, bukanlah sesuatu yang Anda beli.
+
+00:13:02.760 --> 00:13:03.600
+Ini adalah pola yang Anda buat.
+
+00:13:04.400 --> 00:13:08.480
+Azure memberi Anda bagian-bagian penyimpanan pencarian model dan perangkat untuk menghubungkannya.
+
+00:13:09.400 --> 00:13:11.300
+Anda hanya perlu menyatukan semuanya dengan cara yang benar.
+
+00:13:11.300 --> 00:13:15.740
+Jika ini membantu Anda melihat gambaran besarnya, klik perlangganan untuk perincian lebih lanjut dalam mahasiswa.
+
+00:13:16.040 --> 00:13:17.760
+Berikan komentar dengan kasus penggunaan RGD.
+
+00:13:18.080 --> 00:13:19.020
+Saya ingin tahu apa yang Anda buat.

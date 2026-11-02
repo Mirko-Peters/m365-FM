@@ -1,0 +1,1495 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:01.660
+Es begann mit einer Warnung, dann Stille.
+
+00:00:02.400 --> 00:00:04.820
+Die GPU-Rechnung stieg, als hätte der Beschleuniger nie geschlafen,
+
+00:00:05.000 --> 00:00:07.100
+doch die Ausgaben krochen dahin, als ob das Licht ausginge.
+
+00:00:07.600 --> 00:00:09.220
+Die Dashboards waren grün, die Kunden nicht.
+
+00:00:10.460 --> 00:00:11.400
+Die Anomalie passte nicht.
+
+00:00:11.980 --> 00:00:14.660
+Nahezu keine GPU-Auslastung, während die Latenz anstieg.
+
+00:00:15.220 --> 00:00:18.120
+Keine ausgelösten Warnungen, keine roten Linien, einfach nur Zeit verdunstet.
+
+00:00:18.780 --> 00:00:21.840
+Die Beweise deuten auf eine einzelne Pathologie hin, die sich als normal tarnt.
+
+00:00:22.180 --> 00:00:22.740
+Hier ist das Versprechen.
+
+00:00:23.380 --> 00:00:26.400
+Wir werden die Artefakte verfolgen, den Schuldigen benennen und die Pathologie beheben.
+
+00:00:26.400 --> 00:00:32.180
+Wir untersuchen drei Fehler-Modi, CPU-Fallback, Versionskonflikt zwischen CUDA und ONN-Extensor RT
+
+00:00:32.180 --> 00:00:36.500
+sowie Container-Fehl-Konfigurationen und wir belegen dies mit Latenz, Durchsatz und GPU-Auslastung
+
+00:00:36.500 --> 00:00:37.720
+vor und nach der Operation.
+
+00:00:39.080 --> 00:00:41.100
+Fallaufbau, Umgebung und Opferprofil
+
+00:00:41.100 --> 00:00:45.900
+Jede Konfiguration erzählt eine Geschichte und diese beginnt mit einem normalen Mieter unter Druck.
+
+00:00:46.880 --> 00:00:50.060
+Die Arbeitslast besteht aus Text-zu-Bild-Diffusionen, stabilen Diffusionsvarianten,
+
+00:00:50.180 --> 00:00:55.140
+die mit 512x512 ausgeführt werden und auf 1024 skaliert werden, der Datenverkehr stoßweise.
+
+00:00:55.140 --> 00:00:58.200
+Die Parallelitäts-Push liegen zwischen 8 und 32 Anforderungen.
+
+00:00:58.400 --> 00:00:59.980
+Die Batch-Größen schwanken zwischen 1 und 8.
+
+00:01:00.260 --> 00:01:02.020
+Die Service-Level sind hinsichtlich der Tailor-Tens streng.
+
+00:01:02.640 --> 00:01:05.260
+P95-Verstöße führen direkt zu Gutschriften und Strafen.
+
+00:01:05.820 --> 00:01:08.240
+Die Modelle sind nicht exotisch, aber ihre Auswahl ist wichtig.
+
+00:01:08.720 --> 00:01:11.100
+ONN-X exportierte stabile Diffusions-Pipelines,
+
+00:01:11.240 --> 00:01:15.180
+Cross-Attention-Optimierungen wie X-Formas oder skalierte Dot-Product-Attention- und Scheduler-Auswahlen,
+
+00:01:15.240 --> 00:01:16.660
+die Schritte gegen Qualität eintauschen.
+
+00:01:17.460 --> 00:01:20.420
+Das Ökosystem soll beschleunigt werden, wenn die Infrastruktur ehrlich ist.
+
+00:01:21.060 --> 00:01:22.620
+Die Hardware sieht auf dem Papier seriös aus.
+
+00:01:22.620 --> 00:01:27.120
+NVIDIA-RTX und A-Serienkarten in der Cloud, 16 bis 32 GB Fill-Warm.
+
+00:01:27.720 --> 00:01:30.160
+PCI-E sitzt wie eine Mautstelle zwischen Host und Gerät.
+
+00:01:30.680 --> 00:01:34.420
+Schnell genug werden konfiguriert strafend, wenn die O-Bindungen auf auslagerbare Übertragungen zurückgreifen.
+
+00:01:34.660 --> 00:01:36.160
+In dieser Umgebung geschieht nichts zufällig.
+
+00:01:36.600 --> 00:01:38.200
+Die Toolchain stapelt sich in vertrauten Schichten.
+
+00:01:38.660 --> 00:01:42.620
+PyTorch wird im Export verwendet, dann übernimmt die ONNX-Laufzeit oder Tensor-AT die Inferenz.
+
+00:01:42.960 --> 00:01:43.980
+CUDA-Treiber sitzen unter allen.
+
+00:01:44.680 --> 00:01:47.280
+Achtung, Kerner versprechen Geschwindigkeit, wenn die Version übereinstimmen.
+
+00:01:48.200 --> 00:01:50.000
+Die Bereitstellung erfolgt strikt containerisiert.
+
+00:01:50.240 --> 00:01:53.260
+Unveränderliche Images, CI-gesteuerte Rollouts, Blue-Green-Nachrichtlinie.
+
+00:01:54.160 --> 00:01:55.480
+Diese Einschränkung sollte Sicherheit schaffen.
+
+00:01:56.060 --> 00:01:57.600
+Außerdem können Fehler in Amber eingefroren werden.
+
+00:01:57.940 --> 00:01:59.420
+Die geschäftlichen Einsätze sind nicht abstrakt.
+
+00:01:59.840 --> 00:02:01.280
+Die Kosten pro Anfrage bestimmen die Marge.
+
+00:02:01.760 --> 00:02:04.840
+EPU-Reservierungen werden stundenweise abgerechnet, unabhängig davon, ob die Kerne laufen oder nicht.
+
+00:02:04.840 --> 00:02:08.300
+Wenn die Latenz von Sekunden auf eine halbe Minute ansteigt, bricht der Durchsatz ein.
+
+00:02:08.800 --> 00:02:11.180
+Eine Fehlkonfiguration verwandelt ein Beschleuniger in ein Heizgerät.
+
+00:02:11.560 --> 00:02:14.060
+Teuer leise und damit beschäftigt, nichts zu tun, was der Warteschlange hilft.
+
+00:02:14.820 --> 00:02:16.740
+Bei näherer Betrachtung wird das Opferprofil enger.
+
+00:02:17.740 --> 00:02:21.980
+Parallelität bei 16, Badges bei 2, um unter den VRM-Obergrenzen von 512 zu bleiben.
+
+00:02:22.460 --> 00:02:24.200
+Und die Qualität wird auf 2025 erhöht.
+
+00:02:24.820 --> 00:02:26.660
+Der Mieter erwartet einen gleichbleibenden P190.
+
+00:02:27.240 --> 00:02:33.620
+Stattdessen zeigen die Traces unregelmäßige Latenzen, große Deltas zwischen P50 und P95 und GPU-Tastverhältnisse,
+
+00:02:33.620 --> 00:02:36.260
+die ohne ersichtlichen Grund zwischen 5% und 40% schwanken.
+
+00:02:37.080 --> 00:02:38.620
+CPU-Diagramme erzählen eine andere Wahrheit.
+
+00:02:38.940 --> 00:02:41.200
+Kerne werden ausgelastet, obwohl keine Vorverarbeitung dies recht wird.
+
+00:02:41.840 --> 00:02:43.380
+Die Hinweise legen drei Möglichkeiten nahe.
+
+00:02:43.680 --> 00:02:44.580
+Erstens CPU-Fallback.
+
+00:02:45.100 --> 00:02:48.000
+Wenn der CUDA oder Tensor-RT-Ausführungsprovider nicht geladen werden kann,
+
+00:02:48.560 --> 00:02:50.420
+wählt die Engine stillschweigend den CPU-Diagramm aus.
+
+00:02:50.760 --> 00:02:52.900
+Das Modell funktioniert, aber die Latenz ist 10 bis 30 Mal höher.
+
+00:02:53.220 --> 00:02:54.120
+Zweitens Versionskonflikt.
+
+00:02:54.700 --> 00:02:56.900
+ONX-Laufzeit wurde mit einem CUDA kompiliert.
+
+00:02:57.180 --> 00:02:58.400
+Knoten führen ein anderes aus.
+
+00:02:58.500 --> 00:03:01.680
+Tensor-RT-Engines wurden ungültig gemacht und mit generischen Kernen neu erstellt.
+
+00:03:01.680 --> 00:03:04.880
+Die Auslastung ist vorhanden, aber die schnellen Pfade sind weg.
+
+00:03:05.780 --> 00:03:10.300
+Drittens Fehlkonfiguration von Containern, aufgeblähte Images, fehlende GPU-Geräte-Mounts,
+
+00:03:10.360 --> 00:03:13.560
+falsche Einstellungen des NVIDIA-Container-Toolkits und Speicher-Arena mit Zuweisungen,
+
+00:03:13.660 --> 00:03:15.220
+die die Tail-Latenz unter Last verstärken.
+
+00:03:16.060 --> 00:03:17.560
+Letztendlich ist dies kein Geheimnis der Modelle.
+
+00:03:17.980 --> 00:03:19.540
+Es geht um die Wahrhaftigkeit der Infrastruktur.
+
+00:03:20.320 --> 00:03:22.820
+Wir verfolgen die Artefakte, die Reihenfolge der Anbieter,
+
+00:03:23.020 --> 00:03:25.240
+die Funktionsprotokolle und die Gerätebereitstellungen
+
+00:03:25.240 --> 00:03:27.220
+und korrelieren sie mit drei unerschütterlichen Messgrößen,
+
+00:03:27.680 --> 00:03:29.180
+Latenz, Durchsatz und GPU-Auslastung.
+
+00:03:30.440 --> 00:03:32.480
+Beweisdatei A, CPU, Fallback.
+
+00:03:33.740 --> 00:03:35.140
+Der Stille, Saboteur.
+
+00:03:35.940 --> 00:03:37.980
+Begann mit einer Anfrage, die nur Sekunden hätte dauern sollen,
+
+00:03:38.040 --> 00:03:38.660
+was aber nicht der Fall hat.
+
+00:03:38.940 --> 00:03:40.780
+Die GPU-Anzeige war ruhig, zu ruhig.
+
+00:03:41.560 --> 00:03:43.600
+Der CPU-Graph stieg unterdessen wie ein Feueralarm an.
+
+00:03:43.980 --> 00:03:45.960
+Bei näherer Betrachtung hatte die Engine eine Wahl getroffen.
+
+00:03:46.400 --> 00:03:48.400
+Sie führte einen Auftrag mit GPU-Preis auf der CPU aus.
+
+00:03:48.700 --> 00:03:49.640
+Es wurden keine Warnungen ausgelöst.
+
+00:03:49.640 --> 00:03:51.220
+Die Ausgabe wurde schließlich zurückgegeben.
+
+00:03:51.520 --> 00:03:52.600
+Dies ist der stille Saboteur.
+
+00:03:53.040 --> 00:03:53.840
+Der CPU, Fallback.
+
+00:03:54.240 --> 00:03:55.220
+Warum das wichtig, ist es einfach.
+
+00:03:55.580 --> 00:03:57.740
+Stabile Diffusion auf einer CPU ist eine Zeitsynchronisierung.
+
+00:03:58.200 --> 00:04:00.160
+Das Modell funktioniert, aber die Latenz vervielfacht sich,
+
+00:04:00.340 --> 00:04:02.500
+wird 10 bis 30 Mal langsamer und der Durchsatz bricht ein.
+
+00:04:03.160 --> 00:04:05.540
+In einer Umgebung, die Millisekunden verkauft, ist diese Lücke fatal.
+
+00:04:06.120 --> 00:04:07.700
+Die Rechnung zählt weiterhin die GPU-Zeit,
+
+00:04:07.780 --> 00:04:08.900
+aber das Gerät erledigt die Arbeit nicht.
+
+00:04:09.320 --> 00:04:10.480
+Die Zeitleiste enthüllte das Muster.
+
+00:04:10.820 --> 00:04:12.780
+Container, die lokal mit Cuda ausgeführt wurden, flogen davon.
+
+00:04:13.480 --> 00:04:16.120
+Auf einem Clusterknoten mit einem etwas anderen Treiberstapel bereitgestellt,
+
+00:04:16.120 --> 00:04:17.320
+wurden dieselben Container gestartet,
+
+00:04:17.320 --> 00:04:19.400
+Integritätstest durchgeführt und dann herabgestuft.
+
+00:04:20.080 --> 00:04:22.180
+Der Integritätsendpunkt hat nur geprüft, ob der Server aktiv ist.
+
+00:04:22.540 --> 00:04:24.620
+Er hat also nie geprüft, ob die GPU tatsächlich ausgeführt wird.
+
+00:04:25.640 --> 00:04:27.100
+In dieser Umgebung geschieht nichts zufällig.
+
+00:04:27.860 --> 00:04:28.740
+Stille ist ein Artefakt.
+
+00:04:29.180 --> 00:04:31.660
+Das zentrale Artefakt ist die Reihenfolge der Ausführungsprovider
+
+00:04:31.660 --> 00:04:32.820
+in der ONNX-Laufzeit.
+
+00:04:33.680 --> 00:04:34.820
+Die Engine akzeptiert eine Liste,
+
+00:04:34.960 --> 00:04:37.100
+versucht es mit TensorRT, dann mit Cuda und dann mit der CPU.
+
+00:04:37.840 --> 00:04:39.460
+Wenn Cuda nicht initialisiert werden kann,
+
+00:04:39.540 --> 00:04:42.200
+falscher Treiber, fehlende Bibliotheken oder ein nicht gemountetes Gerät,
+
+00:04:42.200 --> 00:04:44.440
+bindet ORT stillschweigend den CPUs-Führungsprovider.
+
+00:04:44.980 --> 00:04:46.480
+Keine Ausnahme, kein Absturz,
+
+00:04:46.480 --> 00:04:48.460
+ist nur eine Zeile in den Protokollen, oft unterhalb des Fallses.
+
+00:04:48.680 --> 00:04:50.200
+Guter Ausführungsprovider nicht verfügbar,
+
+00:04:50.420 --> 00:04:51.520
+wird auf CPU zurückgegriffen.
+
+00:04:52.020 --> 00:04:53.920
+Diese Zeile ist das Geständnis, das die meisten Teams nie lesen.
+
+00:04:54.240 --> 00:04:54.920
+Ist der seltsame Teil.
+
+00:04:55.900 --> 00:04:57.980
+Auslastungsdiagramme sehen auf den ersten Blick täuschend normal aus.
+
+00:04:58.500 --> 00:04:59.460
+Anforderungen werden auch abgeschlossen.
+
+00:05:00.020 --> 00:05:01.720
+Eine Serviceübersicht wird grün angezeigt,
+
+00:05:01.840 --> 00:05:04.220
+aber der GPU-Arbeitszyklus bewegt sich bei 5%,
+
+00:05:04.220 --> 00:05:05.960
+während die CPU-Benutzerzeit hoch und gleich bleibt.
+
+00:05:06.540 --> 00:05:09.320
+Die P50-Latenz war 480 und die P590-Latenz löst sich um.
+
+00:05:09.760 --> 00:05:11.040
+Spitzmäßiger Datenverkehr verschlimmert all.
+
+00:05:11.340 --> 00:05:12.140
+Bilden sich Warteschlangen,
+
+00:05:12.220 --> 00:05:14.080
+die automatische Skalierung fügt weitere Replikate hinzu,
+
+00:05:14.080 --> 00:05:16.500
+Stellen Sie es sich wie ein Staffelteam vor,
+
+00:05:16.560 --> 00:05:17.720
+bei dem der Sprinter nie auftaucht,
+
+00:05:17.800 --> 00:05:19.100
+also läuft der Bibliotheker die Etappe.
+
+00:05:19.480 --> 00:05:21.180
+Der Staffelstart bewegt sich aber nicht im Renntempo.
+
+00:05:21.580 --> 00:05:22.280
+Mit anderen Worten,
+
+00:05:22.340 --> 00:05:25.300
+Ihr System liefert Korrektheit auf Kosten des gesamten SLO-Budges.
+
+00:05:25.960 --> 00:05:27.140
+Artefakte häufen sich schnell an,
+
+00:05:27.180 --> 00:05:28.300
+wenn Sie die Bootsequenz verfolgen.
+
+00:05:29.040 --> 00:05:30.080
+Die Lastprotokolle des Anbieters
+
+00:05:30.080 --> 00:05:31.380
+zeigen zu der Initialisierungsversuche
+
+00:05:31.380 --> 00:05:32.460
+mit Überprüfung der Treiberversion.
+
+00:05:33.260 --> 00:05:35.480
+Wenn der Container mit CUDA 12.2 erstellt wurde,
+
+00:05:35.680 --> 00:05:37.360
+der Knoten aber nur über 12 verfügt,
+
+00:05:37.660 --> 00:05:39.020
+schlägt die Initialisierung fehl.
+
+00:05:39.920 --> 00:05:42.060
+Wenn das NVIDIA-Container-Toolkit nicht konfiguriert ist,
+
+00:05:42.060 --> 00:05:44.260
+wird die Gerätebereitstellung nie im Container angezeigt.
+
+00:05:44.780 --> 00:05:46.080
+Kein DevSash, NVIDIA, kein LibCooler.
+
+00:05:46.740 --> 00:05:49.380
+Wenn die Portspezifikation also nicht explizit GPUs anfordert,
+
+00:05:49.800 --> 00:05:51.060
+weist der Scheduler das Gerät nie zu.
+
+00:05:52.920 --> 00:05:54.920
+Jeder dieser Fälle löst der stille Downgrade aus.
+
+00:05:55.500 --> 00:05:56.560
+Die Reproduktion ist unkompliziert.
+
+00:05:57.000 --> 00:05:58.500
+Auf einem falsch konfigurierten Knoten
+
+00:05:58.500 --> 00:06:00.280
+gibt eine einfache Inferenz die Anbieter
+
+00:06:00.280 --> 00:06:01.980
+CPU-Ausführungsanbieter aus,
+
+00:06:02.360 --> 00:06:04.060
+wo Sie Tensor-RT-Ausführungsanbieter
+
+00:06:04.060 --> 00:06:06.440
+Zudar-Ausführungsanbieter erwarten.
+
+00:06:07.600 --> 00:06:09.820
+Drücken Sie eine einzelne 5,12-Eingabe-Aufforderung,
+
+00:06:09.820 --> 00:06:10.680
+und die GPU bleibt im Leeren.
+
+00:06:11.000 --> 00:06:12.040
+Die CPU-Threads steigen an,
+
+00:06:12.060 --> 00:06:13.720
+das Bild wird in 20 bis 40 Sekunden anstelle
+
+00:06:13.720 --> 00:06:14.720
+von 2 bis 6 zurückgegeben.
+
+00:06:15.080 --> 00:06:16.160
+Wiederholen Sie dies auf einem Knoten
+
+00:06:16.160 --> 00:06:17.280
+mit den richtigen Treibern und Bereitstellen.
+
+00:06:17.640 --> 00:06:18.880
+Dieselbe Eingabe-Aufforderung
+
+00:06:18.880 --> 00:06:20.440
+wird in einem Bruchteil der Zeit abgeschlossen
+
+00:06:20.440 --> 00:06:22.660
+und der GPU-Arbeitszyklus springt in ein anhaltendes Band.
+
+00:06:22.860 --> 00:06:23.940
+Die Hinweise deuten darauf hin,
+
+00:06:23.960 --> 00:06:25.380
+dass die aktuellen Leitplanken theatralisch sind.
+
+00:06:26.240 --> 00:06:27.480
+Integritätstests geben 200 zurück,
+
+00:06:27.580 --> 00:06:28.400
+da der Server antwortet.
+
+00:06:28.780 --> 00:06:29.800
+Es gibt keine Startbestätigung,
+
+00:06:29.860 --> 00:06:30.800
+dass der GPU-Pfad aktiv ist.
+
+00:06:31.300 --> 00:06:32.200
+Leistungstests sind nicht vorhanden,
+
+00:06:32.260 --> 00:06:33.360
+daher geht die Orchestrierung davon aus,
+
+00:06:33.420 --> 00:06:34.320
+dass die Replikate Fehler fräsen.
+
+00:06:34.320 --> 00:06:35.860
+Das System kann den Unterschied
+
+00:06:35.860 --> 00:06:37.560
+zwischen Beschleunigung und Emulation nicht erkennen.
+
+00:06:38.360 --> 00:06:39.620
+Die Gegenmaßnahme ist absichtlich blum.
+
+00:06:40.240 --> 00:06:40.980
+Schwerwiegender Fehler,
+
+00:06:41.100 --> 00:06:42.660
+wenn der GPU-Ausführungsanbieter fehlt
+
+00:06:42.660 --> 00:06:43.620
+oder beeinträchtigt ist.
+
+00:06:44.500 --> 00:06:46.240
+Dat mit der CPU in der Produktion verweigern.
+
+00:06:46.980 --> 00:06:48.780
+Beim Prozessstart Anbieter aufzählen,
+
+00:06:48.920 --> 00:06:51.140
+bestätigen, dass Tensor RT oder CUDA geladen wurde
+
+00:06:51.140 --> 00:06:53.600
+und dass die Geräteanzahl den Erwartungen entspricht.
+
+00:06:54.320 --> 00:06:55.320
+Den Capability-Set QDNN
+
+00:06:55.860 --> 00:06:57.820
+verfügbare Tensorkerne Arbeitsspeicherlimits
+
+00:06:57.820 --> 00:06:58.400
+protokollieren
+
+00:06:58.400 --> 00:06:59.440
+und bei fehlenden Daten
+
+00:06:59.440 --> 00:07:00.540
+mit einem Wertung gleich 0 beenden.
+
+00:07:00.540 --> 00:07:03.180
+Verfügbarkeit gegen Integrität eintauschen
+
+00:07:03.180 --> 00:07:04.360
+und Orchestratoren die Neuplanung
+
+00:07:04.360 --> 00:07:05.760
+auf einem fehlerfreien Knoten ermöglichen.
+
+00:07:05.840 --> 00:07:06.660
+Um dies sicherzustellen,
+
+00:07:06.720 --> 00:07:08.120
+die Überprüfung der ELA-Bindung erzwingen.
+
+00:07:08.720 --> 00:07:10.600
+Ein- und Ausgaben an den Gerätearbeitsspeicher binden
+
+00:07:10.600 --> 00:07:12.400
+und beim Start eine triviale Inferenz validieren.
+
+00:07:13.200 --> 00:07:13.800
+Ein Warmlauf,
+
+00:07:13.900 --> 00:07:15.560
+der den Fuse-Detention-Kernel trainiert.
+
+00:07:16.160 --> 00:07:17.760
+Wenn das Timing ein Latenzgate überschreitet,
+
+00:07:17.940 --> 00:07:19.120
+von einem verschlechterten Pfad ausgehen
+
+00:07:19.120 --> 00:07:19.980
+und den Pottfehl schlagen lassen.
+
+00:07:20.760 --> 00:07:22.920
+Ein Canary-Prompt mit deterministischen Seeds hinzufügen.
+
+00:07:23.560 --> 00:07:25.100
+Latenz mit dem Basisfenster vergleichen.
+
+00:07:26.040 --> 00:07:27.620
+Wenn die Abweichung ihre Toleranz überschreitet,
+
+00:07:27.620 --> 00:07:29.220
+wird Seitenproduktion durchführen und Rollout stoppen.
+
+00:07:29.480 --> 00:07:30.380
+Das mag hart erscheinen,
+
+00:07:30.700 --> 00:07:31.720
+aber die Alternative schlimmer.
+
+00:07:32.280 --> 00:07:33.300
+Ein Cluster, der funktioniert
+
+00:07:33.300 --> 00:07:35.180
+und dabei Zeit und Budget verschwendet.
+
+00:07:35.640 --> 00:07:37.860
+Die Reihenfolge der Anbieter sperren CPU-Vollberg ablehnen
+
+00:07:37.860 --> 00:07:39.640
+und das System seine Schnelligkeit unter Beweis stellen lassen,
+
+00:07:39.720 --> 00:07:40.560
+bevor es als aktiv betrachtet.
+
+00:07:40.840 --> 00:07:42.900
+Nur dann bedeutet grün, beschleunigt.
+
+00:07:44.300 --> 00:07:45.980
+Beweisdatei B, Versionskonflikt,
+
+00:07:46.320 --> 00:07:48.640
+CUDA ONX Tensor RT in Kompatibilität.
+
+00:07:49.220 --> 00:07:50.480
+Wenn die GPU nicht verwendet wurde,
+
+00:07:50.620 --> 00:07:51.660
+stellt sich als nächstes die Frage,
+
+00:07:51.760 --> 00:07:52.600
+ob sie auch bei Vorhandensein
+
+00:07:52.600 --> 00:07:53.720
+mit voller Geschwindigkeit arbeiten konnte.
+
+00:07:54.180 --> 00:07:56.020
+Die Beweise deuten auf einen subtileren Fehler hin.
+
+00:07:56.020 --> 00:07:57.720
+Die Versionen stimmen ausreichend überein,
+
+00:07:57.800 --> 00:07:58.500
+um ausgeführt zu werden,
+
+00:07:58.580 --> 00:07:59.880
+aber nicht genug, um den schnellen Fahrt freizuscheln.
+
+00:08:00.220 --> 00:08:01.540
+Das System sieht beschleunigt aus,
+
+00:08:01.620 --> 00:08:02.520
+bis man auf die Uhren schaut.
+
+00:08:03.300 --> 00:08:04.460
+Warum das wichtig ist, ist einfach.
+
+00:08:05.300 --> 00:08:07.120
+Diffusionspipelines leben oder sterben von der Aufmerksamkeit.
+
+00:08:07.560 --> 00:08:09.280
+Wenn die ONX-Laufzeit und Tensor RT
+
+00:08:09.280 --> 00:08:11.480
+die erwarteten Kerne nicht laden oder fusionieren können,
+
+00:08:11.560 --> 00:08:13.700
+weil die CUDA, CODNN oder Tensor RT-Versionen
+
+00:08:13.700 --> 00:08:14.340
+nicht übereinstimmen,
+
+00:08:14.760 --> 00:08:16.880
+leiten sie stillschweigend an generische Implementierungen weiter.
+
+00:08:17.580 --> 00:08:18.320
+Das Modell funktioniert.
+
+00:08:19.160 --> 00:08:21.700
+Die Auslastung liegt bei 30 bis 50 Prozent,
+
+00:08:22.080 --> 00:08:23.620
+die Latenz übersteigt das Budget.
+
+00:08:23.620 --> 00:08:26.240
+Der Bild sieht gleich aus, die Arbeit ist langsamer.
+
+00:08:26.880 --> 00:08:28.720
+Bei näherer Betrachtung sind die Artefakte präzise.
+
+00:08:29.660 --> 00:08:31.840
+Die Ladeprotokolle des Anbieters erklären den Erfolg mit einem TEN.
+
+00:08:32.480 --> 00:08:33.940
+Auf Standardkernel zurückgreifen
+
+00:08:33.940 --> 00:08:35.600
+oder X-Former deaktivieren.
+
+00:08:36.220 --> 00:08:36.720
+Sie werden sehen,
+
+00:08:36.820 --> 00:08:38.720
+dass die Deserialisierung des Tensor RT-Plans
+
+00:08:38.720 --> 00:08:40.880
+mit einem inkompatiblen Engine-Neuaufbau fehlschlägt,
+
+00:08:40.980 --> 00:08:42.260
+der eine On-Note-Kompilierung auslöst.
+
+00:08:42.700 --> 00:08:44.620
+Engines, die auf einer Nebenversion von Tensor RT erstellt wurden,
+
+00:08:44.700 --> 00:08:45.800
+lassen sich aufeinander nicht deserialisieren.
+
+00:08:46.360 --> 00:08:47.520
+Der Neuaufbau ist abgeschlossen,
+
+00:08:47.520 --> 00:08:49.320
+aber der resultierende Plan lässt möglicherweise
+
+00:08:49.320 --> 00:08:51.280
+Fused Detention oder FP16-Optimierung aus.
+
+00:08:51.280 --> 00:08:52.580
+Das Rennen ist beendet.
+
+00:08:53.100 --> 00:08:55.340
+Ohne Spitzen bleiben die Tensor-Kern-Tastverhältnisse stumm.
+
+00:08:56.040 --> 00:08:57.160
+Hier ist der nicht-intuitive Teil.
+
+00:08:57.860 --> 00:08:59.780
+Die Teams interpretieren, dass es optimal läuft.
+
+00:09:00.740 --> 00:09:02.180
+In dieser Umgebung geschieht nichts zufällig.
+
+00:09:03.100 --> 00:09:05.600
+Wenn die Scale.Product-Aufmerksamkeit nicht aktiv ist,
+
+00:09:05.640 --> 00:09:06.820
+wenn X-Formers deaktiviert ist,
+
+00:09:06.880 --> 00:09:08.920
+wenn CoDNN einen begrenzten Arbeitsbereich meldet,
+
+00:09:09.000 --> 00:09:10.000
+bricht die Leistung höflich ein.
+
+00:09:10.840 --> 00:09:11.740
+Die einfache Version ist,
+
+00:09:11.740 --> 00:09:13.800
+dass nicht übereinstimmende Binärdateien kernel erzwingen,
+
+00:09:13.860 --> 00:09:15.920
+die mehr Speicherbewegungen und weniger mathematische Dichte verwenden.
+
+00:09:16.300 --> 00:09:17.540
+PCI wird in Traces sichtbar.
+
+00:09:18.240 --> 00:09:20.240
+Die Tailor-Tenzen verschieben sich mit zunehmender Parallelität.
+
+00:09:20.240 --> 00:09:22.160
+Stellen Sie sich den Stack als ein Sperrsatz um.
+
+00:09:22.560 --> 00:09:28.100
+Treiber, CoDNN, ONNX, Laufzeit-Build-Flex und Tensor-RT.
+
+00:09:28.620 --> 00:09:30.420
+Ein Zahn ist nicht an seinem Platz, der Schlüssel dreht sich halt.
+
+00:09:31.160 --> 00:09:33.720
+OAT bewirbt ein Capability-Graph pro Ausführungsprovider.
+
+00:09:34.500 --> 00:09:36.800
+Wenn das kompilierte OAT CoDNN 12.2 erwartet,
+
+00:09:36.960 --> 00:09:39.140
+der Knotentreiber jedoch 12.1 bereitstellt.
+
+00:09:39.720 --> 00:09:42.280
+CoDNN wird mit eingeschränkten Funktionen oder gar nicht geladen.
+
+00:09:42.840 --> 00:09:44.700
+Wenn Tensor-RT 8.6 auf dem Knoten ist,
+
+00:09:44.760 --> 00:09:46.520
+die Pläne aber mit 8.4 generiert wurden,
+
+00:09:46.740 --> 00:09:47.940
+schlägt die Deserialisierung fehl
+
+00:09:47.940 --> 00:09:49.660
+und wird mit konservativen Taktiken neu generiert.
+
+00:09:50.260 --> 00:09:52.840
+Das System bevorzugt stillschweigend Korrektheit gegenüber Geschwindigkeiten.
+
+00:09:53.380 --> 00:09:55.060
+Benchmarks belegen den Verlust in der Praxis.
+
+00:09:55.640 --> 00:09:57.240
+Wenn X-Formers oder SDP aktiv sind,
+
+00:09:57.320 --> 00:09:59.280
+verkürzt die Diffusion-Attention die Echtzeit messbar.
+
+00:09:59.280 --> 00:10:03.980
+Untersuchungen zeigen durchweg eine um das 2- bis 5-fache beschleunigte Ausführung des Attention-Pfads
+
+00:10:03.980 --> 00:10:05.400
+abhängig von der Auflösung der Batch-Größe.
+
+00:10:05.960 --> 00:10:08.460
+Deaktivieren Sie diese durch Versionstrip, verlieren Sie diese Multiplikatoren.
+
+00:10:09.180 --> 00:10:11.920
+Token-Merging, Tomb-Stacks mit diesen Gewinnen.
+
+00:10:12.980 --> 00:10:17.020
+Ohne die fusionierten Kerne wird der Vorteil durch die Speicherbahnbreite und nicht optimierte Layouts gedrosselt.
+
+00:10:17.520 --> 00:10:21.260
+Die Lücke vergrößert sich unter 1024 mal 1024 und höherer Parallelität.
+
+00:10:21.820 --> 00:10:24.360
+Um die Artefakte nachzuverfolgen, beginnen Sie mit der Funktionsennummeration.
+
+00:10:24.360 --> 00:10:27.960
+Geben Sie beim Start die genaue Anbieterliste und die gemeldeten Features aus.
+
+00:10:28.920 --> 00:10:33.320
+Tensor-RT-Version, FP16 und ENT8-Verfügbarkeit, maximaler Arbeitsbereich,
+
+00:10:33.760 --> 00:10:37.080
+CO-DNN-Faltungsheuristiken, NCCL-Präsenz für Multi-GPU.
+
+00:10:38.000 --> 00:10:41.000
+Geben Sie für die ONNX-Laufzeit die IP-Prioritäten aus.
+
+00:10:41.640 --> 00:10:43.300
+Tensor-RT, CUDA, dann CPU.
+
+00:10:44.020 --> 00:10:46.420
+Beprüfen Sie, welche tatsächlich an Ihre Grafknoten gebunden ist.
+
+00:10:46.820 --> 00:10:51.660
+Protokollieren Sie, ob Attention-Knoten Tensor-RT mit fusionierten Kerneln oder generischen CUDA-Kerneln zugewiesen sind.
+
+00:10:52.360 --> 00:10:53.820
+Fragen Sie als nächstes die Umgebung ab.
+
+00:10:54.360 --> 00:10:55.080
+Fragen Sie den Treiber ab.
+
+00:10:55.400 --> 00:10:58.240
+NVIDIA SME zeigt das Kernel-Modul und die CUDA-Kompatibilität an.
+
+00:10:58.640 --> 00:11:00.160
+Lesen Sie die Bibliotheksversion im Container.
+
+00:11:00.440 --> 00:11:03.240
+LibCuda, LibCublas, LibCudon, Lib5a.
+
+00:11:03.920 --> 00:11:08.040
+Wenn das Image-CUDA 12.3-Bibliotheken enthält, der Host-Treiber jedoch bis zu 12.2 unterstützt.
+
+00:11:08.240 --> 00:11:11.120
+Mit der Laufzeit-Kompatibilitätsmodus möglicherweise mit Einschränkungen geladen.
+
+00:11:11.520 --> 00:11:15.400
+Wenn das Image-Tensor RT 8.6-Header erwartet, das Note-Plug-In jedoch 8.4 liefert,
+
+00:11:15.560 --> 00:11:18.420
+werden API-Aufrufe bestimmte Optimierungen verschlechtern oder zunichte machen.
+
+00:11:18.420 --> 00:11:20.600
+Die Behebung ist eine Bildmatrix, kein Wunsch.
+
+00:11:20.600 --> 00:11:23.220
+Fixieren Sie exakte Versionen in einer einzigen Quelle der Wache.
+
+00:11:24.320 --> 00:11:29.960
+Basis-Image mit Treiberkompatibilität, CUDA-Minor, CODNN, ORT-BildHash und Tensor-RT-Version.
+
+00:11:30.620 --> 00:11:33.540
+Backen Sie Inferenz-Images anhand dieser Matrix und lehnen Sie Knoten ab,
+
+00:11:33.580 --> 00:11:35.740
+die nicht über Knotenbezeichnungen und Zulassungsprüfungen übereinstimmen.
+
+00:11:36.040 --> 00:11:39.740
+Erstellen Sie Tensor-RT-Engines für jede Modellvariante und Auflösung in der genauen Tensor-RT-Version,
+
+00:11:39.780 --> 00:11:41.680
+die Sie bereitstellen, die Sie bereitstellen, vorab und cachen Sie.
+
+00:11:41.680 --> 00:11:44.140
+Behandeln Sie Plan-Dateien als Artefakte, die an die Matrix geboten.
+
+00:11:44.660 --> 00:11:47.080
+Verlassen Sie sich in der Produktion niemals auf das Stellen von Engines aus dem Knoten.
+
+00:11:47.280 --> 00:11:49.180
+Dies maskiert Drift und bläht Kaltstarts auf.
+
+00:11:50.940 --> 00:11:53.940
+Fügen Sie CI-Smoke-Tests hinzu, die die Kernefunktionen bestätigen, um dies zu gewährleisten.
+
+00:11:54.280 --> 00:11:57.280
+Führen Sie den Container in einem isolierten Runner mit dem Zieltreiber aus
+
+00:11:57.280 --> 00:12:00.220
+und überprüfen Sie, ob Tensor-RT-FP16-Kerne verwendet,
+
+00:12:00.320 --> 00:12:04.420
+Attention-Nodes fusioniert, IO-Bindung aktiv und DX-Formers oder SDP bestätigt wurden.
+
+00:12:04.420 --> 00:12:08.520
+Führen Sie einen deterministischen Promptsatz aus und schlagen Sie dem Bild fehl,
+
+00:12:08.600 --> 00:12:12.540
+wenn die Latenz das Basisfenster überschreitet oder wenn Protokolle Falling-Back-Sprache enthalten.
+
+00:12:13.320 --> 00:12:16.060
+Speichern Sie den Capability-Snapshot zusammen mit dem Image-Digest,
+
+00:12:16.300 --> 00:12:19.220
+damit Rollbacks sowohl Code- als auch Leistungsmerkmale wiederherstellen.
+
+00:12:20.080 --> 00:12:22.440
+Letztendlich besagen die Beweise, dass Versionsabweichungen kein Fehler sind.
+
+00:12:22.860 --> 00:12:24.060
+Es ist eine Geschwindigkeit, die man bezahlt.
+
+00:12:24.240 --> 00:12:24.820
+Das System wird laufen.
+
+00:12:25.140 --> 00:12:26.160
+Die Uhren werden es bezeugen.
+
+00:12:27.280 --> 00:12:28.920
+Beweisdatei C, Container.
+
+00:12:30.280 --> 00:12:32.220
+Effizienzverlust durch Fehlkonfiguration per Design.
+
+00:12:32.220 --> 00:12:36.980
+Selbst wenn die Versionen übereinstimmen, kann der Container die Effizienz von innen heraus sabotieren.
+
+00:12:38.040 --> 00:12:40.720
+Die Beweise deuten auf ein langsames Ausbluten, aufgeblähtes Image,
+
+00:12:40.820 --> 00:12:44.120
+fehlende GPU-Verbindungen und ein Allokator-Verhalten hin, das die Latenz und der Last verzerrt.
+
+00:12:44.340 --> 00:12:44.920
+Nichts stürzt ab.
+
+00:12:45.400 --> 00:12:46.200
+Alles verschlechtert sich.
+
+00:12:47.980 --> 00:12:49.040
+Warum das Wichtiges ist einfach.
+
+00:12:49.280 --> 00:12:50.920
+Container bilden den Rahmen für die Laufzeit-Realität.
+
+00:12:51.760 --> 00:12:54.220
+Wenn das Image überdimensioniert ist und kalt startsverzögert werden,
+
+00:12:54.300 --> 00:12:55.720
+kommen Replikate zu spät zum Vorfall.
+
+00:12:56.320 --> 00:12:59.820
+Wenn GPU-Geräte nicht gemontet sind oder der Laufzeit die richtigen Flex fehlen,
+
+00:13:00.160 --> 00:13:01.420
+verhalten sich Ausführungsanbieter schlecht.
+
+00:13:02.220 --> 00:13:04.740
+Wenn Arbeitsspeicher einer Zuweisung über RAM-Fluktuation horten,
+
+00:13:04.800 --> 00:13:05.980
+löst dies Paging- und T-Spitzen aus.
+
+00:13:06.640 --> 00:13:07.400
+Das Modell sieht gut aus.
+
+00:13:08.060 --> 00:13:10.300
+Der Container wickelt jede Anfrage still und leise ab.
+
+00:13:10.920 --> 00:13:13.240
+Bei näherer Betrachtung sammeln sich zur Bildzeit Artefakte an.
+
+00:13:14.120 --> 00:13:17.460
+Images überschreiten 2 GB, die mit Compilern, Headern und Testassets geladen werden,
+
+00:13:17.540 --> 00:13:18.920
+da kein mehrstufiger Bild vorhanden ist.
+
+00:13:19.140 --> 00:13:23.940
+Ein fehlendes Docker-Regnore lädt Notebooks, Caches und experimentelle Gewichtungen in Produktionsebenen ein.
+
+00:13:24.500 --> 00:13:26.600
+Jede Bereitstellung zieht Gigabytes über die Leitung.
+
+00:13:27.620 --> 00:13:31.560
+Kalieren Sie dies über Knotenpuls hinweg und ein Kaltstart wird zur Richtlinie, nicht zum Ausreißer.
+
+00:13:31.560 --> 00:13:33.040
+Beweise sind nicht mysteriös.
+
+00:13:33.420 --> 00:13:35.140
+Die Docker-Historie erzählt die Geschichte in Ebenen.
+
+00:13:35.440 --> 00:13:37.180
+Die Laufzeit enthüllt die zweite Stufe der Erosion.
+
+00:13:37.840 --> 00:13:43.180
+Ohne explizite GPU-Flags, keine GPUs in Docker oder fehlende Geräte-Plugin-Konfigurationen in Kubernetes,
+
+00:13:43.800 --> 00:13:46.560
+sieht der Prozess keine Hashtef-NVIDIA-Geräte.
+
+00:13:48.040 --> 00:13:50.680
+Fehlkonfigurationen des NVIDIA-Container-Toolkits verbergen LibCuda.
+
+00:13:51.780 --> 00:13:54.340
+Sodass der Ausführungsanbieter mit Einschränkungen oder gar nicht geladen wird.
+
+00:13:54.560 --> 00:13:54.760
+Wird
+
+00:13:54.760 --> 00:14:00.080
+MEG werden nicht erzwungen, sodass Workloads um Speicherbereiche kämpfen und die Scheduler das nicht verstehen.
+
+00:14:00.640 --> 00:14:02.360
+Protokolle bleiben höflich, die Leistung lässt nach.
+
+00:14:02.780 --> 00:14:03.900
+Das Speicherverhalten ist die dritte Stufe.
+
+00:14:04.500 --> 00:14:07.900
+Standardmäßig speichert die Kuda-Speicher-Arena von ONX-Runtimes zu Ordnung aggressiv im Cache.
+
+00:14:08.560 --> 00:14:13.340
+Bei Parallelität sieht das nach Stabilität aus, bis die Arena überfüllt ist und neue Anforderungen aushungert.
+
+00:14:13.340 --> 00:14:20.060
+Fixierte Arbeitsspeicher ist nicht festgelegt, sodass Übertragungen zwischen Host und Gerät über auslagerbare Puffer erfolgen, was PCI zu einem Engpass macht.
+
+00:14:20.300 --> 00:14:25.940
+E-Slash-A ist nicht an das Gerät gebunden, sodass Tensoren zwischen CPU und GPU hin- und herspringen und unsichtbare Latenzbelastung verursachen.
+
+00:14:26.200 --> 00:14:28.280
+Das Tail-Verhalten verschlechtert sich zuerst, dann folgt der Media.
+
+00:14:28.900 --> 00:14:30.420
+So sieht das Symptombild in der Praxis aus.
+
+00:14:31.260 --> 00:14:33.980
+Der effektive Durchsatz bleibt trotz moderater GPU-Auslastung zurück.
+
+00:14:34.340 --> 00:14:39.560
+Die Latenz bei geringer Last ist akzeptabel, aber P95 schwankt bei Parallelität und erreicht dann unvorhersehbare Spitzen.
+
+00:14:39.560 --> 00:14:43.740
+Gelegentliche OOM-Kills führen zu der zurückgesetzten Replikaten bei Spitzenverkehr, was zu Herdenverhalten führt.
+
+00:14:43.940 --> 00:14:47.760
+Neu-Starts werden kaskadenartig ausgeführt, die automatische Skalierung wird überlastet und überlastet und überlastet und überlastet und Wartschlangen werden neu aufgebaut.
+
+00:14:47.880 --> 00:14:52.200
+Die Betreiber jagen der falschen Ursache nach, da sie glauben, dass das Modell schwerfällig ist, während die Container nicht in den Zusammenbruch verursachen.
+
+00:14:52.340 --> 00:14:54.200
+Stellen Sie sich Containerhygiene als Beweismittelhandhaben.
+
+00:14:54.440 --> 00:14:55.880
+Mehrstufige Builds entfernen Fingerabdrücken.
+
+00:14:56.400 --> 00:14:58.640
+Compiler und Entwicklungstools gelangen nie in die Laufzeitumgebung.
+
+00:14:59.260 --> 00:15:02.480
+Ein Distroless- oder Slim-Basis-Image verengt die Oberfläche und verkürzt die Pulszeiten.
+
+00:15:02.480 --> 00:15:05.600
+Docker-Slim- oder Dive-Audits bestätigen, was den Bild überlebt hat.
+
+00:15:06.240 --> 00:15:08.360
+Ein Docker-Regnore verhindert versehentliches Bulk-Building.
+
+00:15:09.120 --> 00:15:10.520
+Das Ergebnis ist forensische Sauberkeit.
+
+00:15:11.100 --> 00:15:12.800
+Es wird nur das ausgeführt, was ausgeführt werden soll.
+
+00:15:13.240 --> 00:15:15.100
+GPU-Plugins benötigen explizite Anweisungen.
+
+00:15:15.580 --> 00:15:18.380
+Deklarieren Sie in Docker alle GPUs oder den exakten Mix-Slice.
+
+00:15:19.320 --> 00:15:24.800
+Fordern Sie in kubernetes-NVIDIA.com, MinCPU-Ressourcen an und stellen Sie sicher, dass das Geräte-Plugin mit Ihrem Treiber-Branch beeinstimmt.
+
+00:15:25.480 --> 00:15:28.260
+Bestätigen Sie beim Start das Vorhandensein des Geräts und die Treiber-Kompatibilität.
+
+00:15:28.260 --> 00:15:31.840
+NVIDIA-SME und LD-Config dienen nicht der Dekoration, sondern sind Zulassungsprüfung.
+
+00:15:32.100 --> 00:15:35.140
+Wenn etwas fehlt oder nicht übereinstimmt, protokollieren Sie es als Verstoß und beenden Sie das Programm.
+
+00:15:35.440 --> 00:15:37.620
+Optimieren Sie dann ONX-Runtime und Tensor-AT gezielt.
+
+00:15:38.220 --> 00:15:41.320
+Sperren Sie die Reihenfolge der Ausführungsanbieter nur in der Produktion auf GPU-Pfade.
+
+00:15:41.980 --> 00:15:46.380
+Erwägen Sie, den CUDA-Speicherbereich zu deaktivieren oder neu zu optimieren, wenn er über Ihren Arbeitssatz hinaus belegt.
+
+00:15:47.000 --> 00:15:50.080
+Begrenzen Sie das Wachstum oder legen Sie die Vorabzuweisung auf vorhersehbare Grenzen.
+
+00:15:51.020 --> 00:15:54.060
+Aktivieren Sie FP16-Standardmäßig, wenn die Genauigkeitsleitlinien dies zulassen.
+
+00:15:54.500 --> 00:15:56.420
+Gehten Sie INT8 hinter einem Genauigkeitstest.
+
+00:15:57.020 --> 00:16:00.660
+Binden Sie I.O. an den Gerätespeicher, damit Eingaben dort eintreffen, wo die Berechnung stattfindet,
+
+00:16:00.720 --> 00:16:03.380
+und wählen Sie Streams bewusst aus, um Head-of-Line-Blockierungen zu verhindern.
+
+00:16:04.220 --> 00:16:06.260
+Halten Sie sich an zwei Gates, Integrität und Leistung.
+
+00:16:07.000 --> 00:16:09.860
+Integrität ist nicht nur ein Wert von 200, sondern ein verifizierter Funktionsnapsch.
+
+00:16:10.260 --> 00:16:14.380
+Anbieter geladen, fusionierte Kerne vorhanden, Tensor-Kerne bestätigt, I.O. gebunden.
+
+00:16:15.760 --> 00:16:20.580
+Leistung ist ein Basis-Prompt-Set, das beim Start mit einem Latenzfenster und ihrer Auslastungsgrenze warmläuft.
+
+00:16:21.140 --> 00:16:23.820
+Wenn der Container nicht beides erreichen kann, wird er nicht zum Dienst zugelassen.
+
+00:16:23.820 --> 00:16:28.100
+Hängen Sie Pool-Size-Budgets an CI an, damit Images, die die Schwellenwerte überschreiten, nicht bestehen.
+
+00:16:28.620 --> 00:16:32.860
+Bewahrten Sie einen Diff des Image-Inhalts ProDigest auf, damit Rollbacks-Code und Hygiene wiederherstellen können.
+
+00:16:33.600 --> 00:16:37.760
+Die Beweise deuten darauf hin, dass Container nicht nur Software bereitstellen, sondern auch das Verhalten unter Stress kodieren.
+
+00:16:37.760 --> 00:16:42.760
+Wenn Sie laut, schwerfällig oder vage in Bezug auf die GPU sind, machen Sie die Beschleunigung zur Zeremonie.
+
+00:16:43.200 --> 00:16:46.580
+Wenn Sie schlank, explizit und durchsetzungsfähig sind, bewahren Sie den schnellen Pfad, für den Sie bezahlt haben.
+
+00:16:46.920 --> 00:16:48.360
+In dieser Umgebung geschieht nichts zufällig.
+
+00:16:48.800 --> 00:16:51.700
+Der Container unterstützt die GPU entweder bei Ihrer Arbeit oder steht Ihr im Weg.
+
+00:16:52.440 --> 00:16:54.060
+Fodern Sie Klabor, überzeugende Kennzahlen.
+
+00:16:54.500 --> 00:16:56.220
+Latenz, Durchsatz, Auslastung.
+
+00:16:56.220 --> 00:16:57.780
+Beweise schlagen Meinungen.
+
+00:16:57.920 --> 00:17:00.760
+Also korrigieren wir den Promptsatz, sperren die Seeds und führen einen Warmlauf durch.
+
+00:17:01.220 --> 00:17:02.720
+Dieselben Scheduler, dieselben Schritte.
+
+00:17:02.960 --> 00:17:09.620
+2025 für 512 erweitert auf 50 für 1024 mal 1024, um die Belastung aufzudecken, um die Belastung aufzudecken.
+
+00:17:10.160 --> 00:17:12.820
+Die Parallelität wird bei 16 gehalten mit einem Anstieg auf 32.
+
+00:17:12.820 --> 00:17:16.100
+Die Batchgröße beginnt bei 1 und steigt vorsichtig an, bis die Vorhungen und Grenzen sprechen.
+
+00:17:16.900 --> 00:17:19.280
+Keine Extrapolation, keine Ausreden, nur Taktraten und Zähler.
+
+00:17:19.800 --> 00:17:20.980
+Die Latenz sagt zuerst aus.
+
+00:17:20.980 --> 00:17:28.340
+Im verschlechterten Zustand dehnt sich der CPU-Fallback oder generische Aufmerksamkeitspart P50 bei 512 mal 512 mal 512 auf zweistellige Werte auf.
+
+00:17:28.620 --> 00:17:30.060
+P95 erzählt die wahre Geschichte.
+
+00:17:30.700 --> 00:17:35.160
+Er wandert unvorhersehbar auf 20,40 Sekunden, weil Warteschlangen kleine Ineffizienzen verstärken.
+
+00:17:36.060 --> 00:17:40.560
+Bei 1024 mal 1024 mit 50 Schritten wird P95 bei der Ankunft zu einem Verstoß.
+
+00:17:41.160 --> 00:17:49.700
+Nach der Behebung, GPU-EP gesperrt, Fused Attention aktiv, A.O. an Gerät gebunden, kehrt P50 zu den niedrigen einstelligen Werten zurück und P95 komprimiert innerhalb des Budgets.
+
+00:17:50.980 --> 00:17:52.920
+Der Bereich schrumpft, das System wird vorhersehbar.
+
+00:17:53.460 --> 00:17:54.380
+Der Durchsatz bestätigt sich.
+
+00:17:54.840 --> 00:17:57.720
+Bei Parallelität 16 führt der verschlechterte Pfad zu einem Rinnensaal.
+
+00:17:58.440 --> 00:18:02.220
+Bilder pro Minute steigen mit Replikaten kaum an, da sich jede Instanz selbst blockiert.
+
+00:18:02.660 --> 00:18:05.220
+Die Skalierung auf 32 vervielfacht die Konflikte, nicht die Ausgabe.
+
+00:18:05.620 --> 00:18:07.140
+Nach der Behebung begratigt sich die Beziehung.
+
+00:18:07.480 --> 00:18:12.400
+Bilder pro Minute steigen nahezu linear an, bis der Tensor-Kerntastgrad gesättigt ist oder VRM den Stapel begrenzt.
+
+00:18:13.160 --> 00:18:14.840
+Der Steigungsunterschied ist die Überzeugung.
+
+00:18:15.240 --> 00:18:17.580
+Die Arbeit überquert die Ziellinie tatsächlich schneller, nicht nur lauter.
+
+00:18:18.080 --> 00:18:19.200
+Die Auslastung schließt den Fall ab.
+
+00:18:19.940 --> 00:18:24.000
+Zuvor lag der GPU-Tastgrad im Leerlauf zwischen Prozent und 50 Prozent mit langen, flachen Tälern.
+
+00:18:25.400 --> 00:18:28.420
+PCE-Zähler zeigen rattern von auslagerbaren Übertragungen.
+
+00:18:30.080 --> 00:18:35.360
+Danach stabilisiert sich der Tastgrad in einem hohen, konsistenten Band mit sichtbarer Tensor-Kerneinbindung.
+
+00:18:36.260 --> 00:18:38.640
+Die CPU kehrt zur Orchestrierung und leichten Vorverarbeitung zurück.
+
+00:18:39.240 --> 00:18:43.920
+PCE-Spitzen werden komprimiert, da fixierter Speicher und IO-Bindung den unnötigen Datenverkehr eliminiert haben.
+
+00:18:43.920 --> 00:18:46.800
+Nichts anderes erklärt diese Verschiebung als die tatsächliche Beschleunigung.
+
+00:18:47.100 --> 00:18:48.080
+Wir fügen eine Stresskurve hinzu.
+
+00:18:48.440 --> 00:18:53.800
+Unter 512 x 512 Schritten 2025 hält der feste Pfad die Parallelität 16 ohne Spitzenentäl aufrecht.
+
+00:18:54.020 --> 00:18:56.540
+Bei einer Erhöhung auf 32 verschlechtert sich das System mit dem Ganzen.
+
+00:18:56.900 --> 00:18:59.260
+P95 wird vorhersehbar und nicht chaotisch erweitert.
+
+00:19:00.260 --> 00:19:03.740
+100.024 x 1024 bei 50 Schritten wird der Unterschied vergrößert.
+
+00:19:03.740 --> 00:19:06.660
+Der verschlechterte Pfad knickt in Timeouts ein.
+
+00:19:07.080 --> 00:19:12.580
+Der gehärtete Pfad hält brauchbare P50 und akzeptable P95 mit Batch 1.2 bis zu den V-Ram-Grenzen 1 aufrecht.
+
+00:19:13.140 --> 00:19:14.480
+Hier sind Aränen und Streams wichtig.
+
+00:19:15.100 --> 00:19:16.920
+Nach dem Tuning geht die Head-of-Line-Blockierung zurück.
+
+00:19:17.700 --> 00:19:19.400
+Der Kostenaspekt ist einfache Arithmetik.
+
+00:19:19.520 --> 00:19:25.140
+Anforderungen pro GPU-Stunde steigen um das 2- bis 5-fache, wenn die Fusionsaufmerksamkeit von FP16 und die ECDA-Bindung verifiziert werden.
+
+00:19:26.000 --> 00:19:28.400
+Die effektiven Kosten pro 1000 Images sinken entsprechend.
+
+00:19:28.980 --> 00:19:32.740
+Drafen für Kaltstarts werden reduziert, da die Images schlank und die Engines vorgefertigt sind.
+
+00:19:32.740 --> 00:19:35.520
+Knoten zahlen bei der ersten Berührung keine Kompilierungssteuer mehr.
+
+00:19:35.740 --> 00:19:36.860
+Das Ledger stimmt mit den Protokollen.
+
+00:19:37.300 --> 00:19:38.800
+Die Verifizierung verhindert glückliche Versuche.
+
+00:19:39.180 --> 00:19:42.140
+Wiederholen Sie den Vorgang auf einem zweiten Knotenpool mit einer anderen Nebentreiberwässer.
+
+00:19:42.520 --> 00:19:46.000
+Das gehärtete Image weigert sich standardmäßig, auf einem nicht übereinstimmenden Knoten zu starten.
+
+00:19:46.900 --> 00:19:48.820
+Die Ergebnisse sind also vergleichbar und nicht verwechselt.
+
+00:19:49.260 --> 00:19:50.880
+Überprüfen Sie die Capability-Snapshots gegeneinander.
+
+00:19:51.320 --> 00:19:54.800
+Gleiche Anbieterreihenfolge, gleiches Tensor-RT, gleiche Kernel-Assektionen.
+
+00:19:55.240 --> 00:19:57.600
+Führen Sie den Promptsatz erneut aus und erfassen Sie die Verteilung einer.
+
+00:19:57.600 --> 00:20:00.000
+Wenn sich die Histogramme überschneiden, steigt das Vertrauen.
+
+00:20:00.000 --> 00:20:02.620
+Wenn dies nicht der Fall ist, erklärt der Capability-Tiff warum.
+
+00:20:03.300 --> 00:20:05.240
+Am Ende streiten sich die Zahlen nicht, sie überzeugen.
+
+00:20:05.720 --> 00:20:08.600
+Die Latenz wird komprimiert, der Durchsatz skaliert, die Auslastung stabilisiert sich.
+
+00:20:08.960 --> 00:20:10.300
+Die Pathologie ist nicht hypothetisch.
+
+00:20:10.920 --> 00:20:13.740
+Es ist messbar und hinterlässt Fingerabdrücke auf jedem Graphen.
+
+00:20:15.360 --> 00:20:16.340
+Das Abhilfeprotokoll.
+
+00:20:16.860 --> 00:20:18.240
+Eine wiederholbare Checkliste zur Härte.
+
+00:20:18.500 --> 00:20:20.100
+Die Zulassungskontrolle steht an erster Stelle.
+
+00:20:20.580 --> 00:20:23.780
+Dat verweigern, wenn Tensor-RT oder Kula-Ausführungsanbieter nicht vorhanden sind.
+
+00:20:23.780 --> 00:20:30.820
+Anbieter aufzählen, Geräteanzahl überprüfen, Snapshots der Druckfunktionalität, CU-DNN FP16, INT8-Arbeitsbereich drucken.
+
+00:20:31.560 --> 00:20:33.140
+Wenn etwas fehlt, mit einem Wert ungleich Null werden.
+
+00:20:33.540 --> 00:20:34.740
+Verfügbarkeit folgt Integrität.
+
+00:20:35.640 --> 00:20:36.800
+Versionspinning ist das Rückgrat.
+
+00:20:37.340 --> 00:20:42.280
+Einen einzelnen Matrix-Treiber-Branch pflegen, Cuda-Minor zu CU-DNN ONX Laufzeit-Bild-Hash-Tensor-RT.
+
+00:20:42.280 --> 00:20:44.800
+Inferenz-Images anhand dieser Matrix erstellen.
+
+00:20:45.380 --> 00:20:46.540
+Knoten entsprechend kennzeichnen.
+
+00:20:47.280 --> 00:20:48.280
+Zulassung bei Gleichheitssperren.
+
+00:20:49.100 --> 00:20:51.560
+Vorgefertigte Tensor-RT-Engines pro Modell und Auflösung.
+
+00:20:51.900 --> 00:20:53.960
+Pläne sind Artefakte, keine Laufzeitschätzung.
+
+00:20:54.660 --> 00:20:55.880
+Container-Hygiene bewahrt die Wahrheit.
+
+00:20:56.540 --> 00:20:57.440
+Mehrstufige Builds verwenden.
+
+00:20:57.940 --> 00:20:59.620
+Die Laufzeit-Distribution beibehalten oder schlankert.
+
+00:21:00.060 --> 00:21:01.480
+Ein striktes Docker-Regno einbeziehen.
+
+00:21:01.980 --> 00:21:03.940
+Mit Docker-Verlauf und einem Verschlankungsordid überprüfen.
+
+00:21:04.440 --> 00:21:05.800
+Budgets für Poolgrößen in CI festlegen.
+
+00:21:06.280 --> 00:21:07.780
+Aufgeblähte Images fehlschlagen lassen.
+
+00:21:07.880 --> 00:21:09.940
+Images signieren und Inhalte pro Digest vergleichen.
+
+00:21:09.940 --> 00:21:11.760
+Zuerst die GPU konfigurieren.
+
+00:21:11.840 --> 00:21:13.640
+EP-Reihenfolge für Tensor-RT-Cudor-Sperren.
+
+00:21:13.720 --> 00:21:15.380
+CPU-Anbieter in der Produktion deaktivieren.
+
+00:21:16.360 --> 00:21:19.440
+Nvidia-Präsenz für Entwickler und Nvidia-Container-Toolkit-Version bestätigen.
+
+00:21:20.480 --> 00:21:23.900
+Explizit auf nvidia.com anfordern oder Lizenzen mischen und beim Start überprüfen.
+
+00:21:24.400 --> 00:21:25.120
+Laufzeit optimieren.
+
+00:21:25.820 --> 00:21:27.280
+FP16 standardmäßig aktivieren.
+
+00:21:28.280 --> 00:21:29.720
+Intel 8 mit Genauigkeitsprüfung steuern.
+
+00:21:30.860 --> 00:21:32.400
+I.O. direkt an den Gerätespeicher binden.
+
+00:21:32.540 --> 00:21:33.740
+Angehefteten Speicher aktivieren.
+
+00:21:33.840 --> 00:21:36.500
+Streams auswählen, um Head-Offline-Blockierungen zu vermeiden.
+
+00:21:36.500 --> 00:21:41.480
+OAT-Cuda-Arena neu optimieren oder deaktivieren, wenn sie über den Arbeitssatz hinaus anhält.
+
+00:21:41.880 --> 00:21:47.120
+Leistungs-SLOs als Code festlegen, selbst das beim Start mit deterministischen Eingabeaufforderungen Latenzfenster und Ausdrucksgrenze durchführt.
+
+00:21:47.520 --> 00:21:48.820
+Bei sinkenden Rückständen fehlschlagen lassen.
+
+00:21:49.500 --> 00:21:55.520
+Beobachtbarkeit, GPU-Metriken pro Anforderung, Warnungen bei beeinträchtigten Pfaden, Canary-Eingabeaufforderungen und Diffable-Baselines hinzufügen.
+
+00:21:56.520 --> 00:21:59.660
+Blue-Green mit Leistungsgrenzen und automatischem Rollback bei Verstößen einführen.
+
+00:21:59.660 --> 00:22:03.960
+Mit der Durchsetzung des Protokolls ist die Beschleunigung nachweisbar und nicht nur angenommen.
+
+00:22:05.300 --> 00:22:06.100
+Die Lektion ist klinisch.
+
+00:22:06.660 --> 00:22:09.780
+Diller-CPU-Fallback-Versionsdrift und aufgeblähte Container sind keine Fehler.
+
+00:22:10.380 --> 00:22:12.200
+Es handelt sich um vorhersehbare Fehlermuster, die Sie blöcken.
+
+00:22:12.720 --> 00:22:18.100
+Führen Sie das Protokoll aus, messen Sie die GPU-Auslastung, lehnen Sie fehlerhafte Pfade ab, fixieren Sie Versionen, behandeln Sie Engines als Artefakte.
+
+00:22:18.100 --> 00:22:26.460
+Wenn Sie tiefer in das Verhalten von ONNX-Laufzeit und Tensor-AT-Speicher eintauchen und wissen möchten, wann Arenen deaktiviert werden sollten, sehen Sie sich den nächsten Fall in dieser Reihe an und abonnieren Sie die Labor-Notizen.

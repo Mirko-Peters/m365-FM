@@ -1,0 +1,222 @@
+{
+  "episode_id": "68435304",
+  "slug": "power-bi-query-folding-order-of-operations",
+  "title": "Power BI query folding: fix the hidden order of operations slowing your reports",
+  "lang": "en",
+  "duration_s": 1309,
+  "transcript_source": "data/en_transcripts/97bb787412c7.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "query-folding",
+      "name": "Query folding",
+      "type": "concept",
+      "score": 95,
+      "mentions": 53,
+      "first_mention_s": 106,
+      "quote": "sometimes skipping entire layers if it can fold logic back into the source system.",
+      "url": "https://www.m365.fm/entity/query-folding/"
+    },
+    {
+      "slug": "power-query",
+      "name": "Power Query",
+      "type": "product",
+      "score": 92,
+      "mentions": 26,
+      "first_mention_s": 32,
+      "quote": "power query doesn't actually execute those steps in the visual order you see.",
+      "url": "https://www.m365.fm/entity/power-query/"
+    },
+    {
+      "slug": "power-bi",
+      "name": "Power BI",
+      "type": "product",
+      "score": 80,
+      "mentions": 21,
+      "first_mention_s": 1,
+      "quote": "You think powerbi runs your query exactly as you wrote it.",
+      "url": "https://www.m365.fm/entity/power-bi/"
+    },
+    {
+      "slug": "power-query-m",
+      "name": "Power Query M formula language",
+      "type": "concept",
+      "score": 70,
+      "mentions": 11,
+      "first_mention_s": 102,
+      "quote": "The m engine runs its optimized plan, sometimes skipping entire layers if it can fold logic back into the source system.",
+      "url": "https://www.m365.fm/entity/power-query-m/"
+    },
+    {
+      "slug": "sql-server",
+      "name": "Microsoft SQL Server",
+      "type": "product",
+      "score": 55,
+      "mentions": 9,
+      "first_mention_s": 256,
+      "quote": "to the source system SEQL server, a fabric lakehouse, an excel file wherever the data lives",
+      "url": "https://www.m365.fm/entity/sql-server/"
+    },
+    {
+      "slug": "query-diagnostics",
+      "name": "Query diagnostics (Power Query)",
+      "type": "product",
+      "score": 50,
+      "mentions": 5,
+      "first_mention_s": 393,
+      "quote": "At that point, diagnostics will show earlier steps executed at the source",
+      "url": "https://www.m365.fm/entity/query-diagnostics/"
+    },
+    {
+      "slug": "power-bi-performance-analyzer",
+      "name": "Performance analyzer (Power BI)",
+      "type": "product",
+      "score": 40,
+      "mentions": 2,
+      "first_mention_s": 531,
+      "quote": "your query becomes a therapy case for the performance analyzer.",
+      "url": "https://www.m365.fm/entity/power-bi-performance-analyzer/"
+    },
+    {
+      "slug": "fabric",
+      "name": "Microsoft Fabric",
+      "type": "platform",
+      "score": 35,
+      "mentions": 5,
+      "first_mention_s": 257,
+      "quote": "to the source system SEQL server, a fabric lakehouse, an excel file wherever the data lives",
+      "url": "https://www.m365.fm/entity/fabric/"
+    },
+    {
+      "slug": "fabric-lakehouse",
+      "name": "Fabric lakehouse",
+      "type": "product",
+      "score": 25,
+      "mentions": 2,
+      "first_mention_s": 258,
+      "quote": "to the source system SEQL server, a fabric lakehouse, an excel file wherever the data lives",
+      "url": "https://www.m365.fm/entity/fabric-lakehouse/"
+    },
+    {
+      "slug": "etl",
+      "name": "Extract, transform, load (ETL)",
+      "type": "concept",
+      "score": 25,
+      "mentions": 2,
+      "first_mention_s": 438,
+      "quote": "forced it to perform database scale transformations in a lightweight ETL layer.",
+      "url": "https://www.m365.fm/entity/etl/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "power-query-m",
+      "name": "Power Query M formula language",
+      "type": "concept",
+      "mentions": 11,
+      "first_mention_s": 102,
+      "quote": "The m engine runs its optimized plan, sometimes skipping entire layers if it can fold logic back into the source system.",
+      "status": "review"
+    },
+    {
+      "slug": "query-diagnostics",
+      "name": "Query diagnostics (Power Query)",
+      "type": "product",
+      "mentions": 5,
+      "first_mention_s": 393,
+      "quote": "At that point, diagnostics will show earlier steps executed at the source",
+      "status": "review"
+    },
+    {
+      "slug": "power-bi-performance-analyzer",
+      "name": "Performance analyzer (Power BI)",
+      "type": "product",
+      "mentions": 2,
+      "first_mention_s": 531,
+      "quote": "your query becomes a therapy case for the performance analyzer.",
+      "status": "review"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "Power query is that auditor. It builds a dependency tree, not a checklist. Each step isn't executed immediately, it's defined.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 83,
+      "entities": [
+        "power-query"
+      ],
+      "why": "Explains why Applied Steps are a logical description rather than an execution order."
+    },
+    {
+      "text": "Most real world, why is my query slow? Complaints are just folding issues disguised as mystery bugs.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 425,
+      "entities": [
+        "query-folding",
+        "power-bi"
+      ],
+      "why": "Pinpoints broken query folding as the usual cause of slow refreshes."
+    },
+    {
+      "text": "Folding is binary. The moment a command cannot be pushed to the source, every downstream step executes locally.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 641,
+      "entities": [
+        "query-folding"
+      ],
+      "why": "States the key rule of how one non-foldable step affects all later steps."
+    },
+    {
+      "text": "test folding integrity like you test backups frequently and skeptically. Create a diagnostic query mirroring your transformation chain and verify which steps still fold.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 1186,
+      "entities": [
+        "query-folding",
+        "query-diagnostics"
+      ],
+      "why": "Gives a practical, repeatable check for keeping queries foldable."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "Power BI does not run your steps in order"
+    },
+    {
+      "start_s": 49,
+      "title": "Logical versus physical execution"
+    },
+    {
+      "start_s": 243,
+      "title": "Query folding, the hidden optimizer"
+    },
+    {
+      "start_s": 565,
+      "title": "When folding fails"
+    },
+    {
+      "start_s": 825,
+      "title": "Source, transformation and load stages"
+    },
+    {
+      "start_s": 1079,
+      "title": "How to fix the broken order"
+    },
+    {
+      "start_s": 1277,
+      "title": "The real order of Power BI"
+    }
+  ],
+  "takeaways": [
+    "Applied Steps in Power Query describe a logical order, while the engine builds a dependency tree and executes an optimized physical plan that can defer, reorder or skip steps.",
+    "Query folding pushes transformations back to the source; one non-foldable step such as a custom function or index column makes every downstream step run locally and can turn seconds into minutes.",
+    "Keep queries foldable by checking View Native Query and query diagnostics, separate source, staging and load queries, avoid uncontrolled query references, and move heavy logic into SQL views or Fabric."
+  ],
+  "hook": "Power BI refreshes that crawl are rarely a DAX problem; they come from misunderstanding how Power Query orders and executes your steps. This episode is for Power BI developers and analysts who want to understand logical versus physical execution, keep query folding intact, and structure queries so refresh times become predictable.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-02T21:36:58Z"
+}

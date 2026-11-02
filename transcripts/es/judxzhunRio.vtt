@@ -1,0 +1,841 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.560
+De nuevo, aquí está la verdad. La capacitación no es una reunión, es un sistema. Si no implementas
+
+00:00:04.560 --> 00:00:08.400
+un centro de aprendizaje dinámico y controlado, estás financiando un cosplay de mesa de ayuda.
+
+00:00:08.580 --> 00:00:12.460
+En los próximos minutos, te mostraré el modelo que reduce tickets, elimina documentos en la sombra
+
+00:00:12.460 --> 00:00:15.880
+y centraliza la gobernanza. Obtendrás la arquitectura, un plan de despliegue y los
+
+00:00:15.880 --> 00:00:19.660
+KPI que demuestran que funciona. Nada de demostraciones en vivo, operaciones reales.
+
+00:00:19.820 --> 00:00:23.600
+¿Por qué falla tu capacitación para Copilot? Bien, básicamente, estás ejecutando un programa
+
+00:00:23.600 --> 00:00:27.860
+de capacitación estático contra un objetivo móvil. Copilot cambia semanalmente. Tus diapositivas no.
+
+00:00:27.860 --> 00:00:32.320
+Los usuarios olvidan, Copilot no. Esa discrepancia es la causa raíz. Capacitas para un producto,
+
+00:00:32.500 --> 00:00:36.640
+pero tienes un motor de comportamiento. Y sí, eso importa. Esto es lo que la mayoría pasa por alto.
+
+00:00:36.820 --> 00:00:40.080
+Los planes de adopción tradicionales asumen una ruta de habilidades lineal, principiante,
+
+00:00:40.340 --> 00:00:44.280
+intermedio, avanzado. Copilot no es lineal, es conversacional, depende del contexto y es
+
+00:00:44.280 --> 00:00:47.740
+sumamente sensible a los límites de datos y a la calidad de los prompts. Si enseñas una vez,
+
+00:00:47.940 --> 00:00:52.000
+no has enseñado a nadie. Si enseñas durante el flujo de trabajo, cubres el 80% de la confusión
+
+00:00:52.000 --> 00:00:55.500
+diaria antes de que se convierta en un ticket. La falacia del usuario promedio lo empeora.
+
+00:00:55.500 --> 00:00:59.500
+Cuando optimizas para el menos preparado, creas un caos de mínimo común denominador.
+
+00:00:59.660 --> 00:01:04.140
+Diluyes los prompts, ocultas matices y eliminas la gobernanza hasta que resulta inofensivo e inútil.
+
+00:01:04.280 --> 00:01:08.360
+¿El resultado? Dos grupos. Usuarios avanzados que te ignoran y crean sus propias prácticas en
+
+00:01:08.360 --> 00:01:12.280
+la sombra, y usuarios confundidos que escalan quejas ruidosamente. Nombremos los tickets que
+
+00:01:12.280 --> 00:01:16.260
+sigues viendo. Número 1. ¿Por dónde empiezo? Eso es un fallo de descubrimiento.
+
+00:01:16.440 --> 00:01:20.980
+Número 2. ¿Cuál Copilot? Outlook, Word, Teams, Graph Grounded, Studio Build.
+
+00:01:21.140 --> 00:01:24.800
+Los usuarios piensan que Copilot es una sola cosa. Son múltiples superficies y agentes con
+
+00:01:24.800 --> 00:01:28.360
+diferentes capacidades y riesgos. Número 3. ¿Es esto seguro? Traducción.
+
+00:01:28.680 --> 00:01:32.420
+Nunca mostraste los límites de datos, políticas de transcripción o conectores aprobados donde el
+
+00:01:32.420 --> 00:01:36.380
+usuario realmente trabaja. Número 4. ¿Por qué respondió eso? Es un problema de patrones de
+
+00:01:36.380 --> 00:01:40.340
+prompts y contexto de recuperación, no que Copilot esté equivocado. Entra en juego la economía de
+
+00:01:40.340 --> 00:01:44.980
+capacitación en la sombra. Presentaciones en Teams, PDF en chats, páginas wiki con títulos heroicos como
+
+00:01:44.980 --> 00:01:50.460
+Guía definitiva Copilot V7 Final Final. Sin control de versiones, sin propiedad, sin política de retiro.
+
+00:01:50.460 --> 00:01:55.220
+En el momento en que publicas tu guía oficial, 5 copias no oficiales aparecen como gremlins después
+
+00:01:55.220 --> 00:01:59.040
+de medianoche. Ahora las búsquedas arrojan contradicciones y tu única fuente de verdad
+
+00:01:59.040 --> 00:02:03.800
+es un cuento popular. Causa de confusión, más tickets, resultados inconsistentes, riesgos de
+
+00:02:03.800 --> 00:02:08.120
+datos y, mi favorito, ejecutivos cuestionando el gasto en licencias porque no ven el retorno de
+
+00:02:08.120 --> 00:02:12.140
+inversión. Estás desperdiciando tiempo enseñando conceptos básicos de prompts repetidamente mientras
+
+00:02:12.140 --> 00:02:16.960
+agentes rebeldes se multiplican en entornos sin gestión. Eso no es adopción, es entropía. Lo extraño es
+
+00:02:16.960 --> 00:02:21.060
+que intentas arreglar esto con seminarios web trimestrales. Los usuarios no necesitan charlas
+
+00:02:21.060 --> 00:02:26.060
+programadas, necesitan respuestas donde surge la pregunta. En Word, en Teams, junto al cuadro de
+
+00:02:26.060 --> 00:02:31.200
+redacción. Si la guía no reside dentro de las herramientas o a un solo clic, bien podría estar
+
+00:02:31.200 --> 00:02:35.160
+en un museo. Todo cobró sentido cuando comprendí que la adopción de Copilot es un problema de
+
+00:02:35.160 --> 00:02:39.040
+arquitectura de información disfrazado de capacitación. Estás trapeando el piso respondiendo
+
+00:02:39.040 --> 00:02:43.140
+tickets mientras la válvula de arriba sigue goteando. Repara la válvula, construye un centro gobernado
+
+00:02:43.140 --> 00:02:47.040
+y actualizado que sea consciente del inquilino, versionado y fácil de encontrar. Luego, dirige
+
+00:02:47.040 --> 00:02:51.000
+a todos hacia él sin descanso. En otras palabras, deja de imponer el conocimiento. Haz que sea
+
+00:02:51.000 --> 00:02:55.360
+accesible, útil y demostrablemente actual. Eso significa páginas canónicas con sellos de frescura,
+
+00:02:55.660 --> 00:02:59.240
+prompts aprobados que expliquen por qué funcionan y árboles de decisión que dirijan a la aplicación
+
+00:02:59.240 --> 00:03:03.400
+Copilot correcta. En menos de tres clics, significa mostrar la política de transcripción y privacidad
+
+00:03:03.400 --> 00:03:07.160
+antes de que alguien vuelque contenido sensible en el chat y culpe a la herramienta. La versión simple
+
+00:03:07.160 --> 00:03:11.720
+es esta. Si tu capacitación no es un sistema con propiedad, ciclo de vida y telemetría, se degradará
+
+00:03:11.720 --> 00:03:15.420
+hasta convertirse en folclore. Y el folclore se escala maravillosamente en tickets de soporte.
+
+00:03:15.640 --> 00:03:19.420
+Vamos a reemplazar el folclore con un centro de aprendizaje de Copilot gobernado que responda
+
+00:03:19.420 --> 00:03:23.820
+preguntas antes de que existan, desvíe intenciones y elimine el oxígeno que necesita la capacitación
+
+00:03:23.820 --> 00:03:28.060
+en la sombra para sobrevivir. Ahora, construyamos aquello con lo que deberías haber empezado. Lo que
+
+00:03:28.060 --> 00:03:32.720
+realmente es el centro de aprendizaje de Copilot, arquitectura. Bien, básicamente esto no es un sitio
+
+00:03:32.720 --> 00:03:37.040
+de SharePoint con algunos enlaces. Es un centro gobernado y consciente del inquilino que centraliza el
+
+00:03:37.040 --> 00:03:41.380
+conocimiento, los artefactos y los patrones de uso seguro de Copilot, haciéndolos inevitables.
+
+00:03:41.380 --> 00:03:45.060
+Es la columna vertebral de la adopción de Copilot, no una decoración de contenido, sino
+
+00:03:45.060 --> 00:03:48.780
+estructura. Piénsalo como un aeropuerto, no como un tablón de anuncios. Puertas de embarque,
+
+00:03:48.960 --> 00:03:52.600
+seguridad, señalización y control de tráfico aéreo. La gente se mueve porque el sistema
+
+00:03:52.600 --> 00:03:57.360
+los guía. Entra al centro. Un hub de SharePoint moderno para la terminal, elementos web SPFX para
+
+00:03:57.360 --> 00:04:01.200
+las puertas, búsqueda moderna PNP para la señalización y una capa de gobernanza para la
+
+00:04:01.200 --> 00:04:06.360
+seguridad. No lo visitas, operas a través de él. Primero la base. SharePoint moderno te brinda un lienzo
+
+00:04:06.360 --> 00:04:10.700
+rápido y receptivo con integración nativa en Teams. Usamos un sitio central, por lo que cada sitio
+
+00:04:10.700 --> 00:04:14.420
+secundario hereda la navegación, el tema y la gobernanza. Ese centro alberga tres áreas
+
+00:04:14.420 --> 00:04:18.700
+principales. Aprender, hacer y gobernar. Aprender es conocimiento curado. Hacer es el
+
+00:04:18.700 --> 00:04:22.120
+directorio de prompts y agentes. Gobernar es la política al frente, donde los usuarios
+
+00:04:22.120 --> 00:04:25.940
+realmente la ven, no enterrada en arqueología de cumplimiento. Ahora, los componentes.
+
+00:04:26.100 --> 00:04:30.000
+Los elementos web SPFX hacen el trabajo pesado. Tarjetas de directorio para agentes de Copilot
+
+00:04:30.000 --> 00:04:33.500
+Studio, galerías de prompts basadas en roles y banners de contexto que muestran el alcance del
+
+00:04:33.500 --> 00:04:37.660
+entorno. ¿Por qué SPFX? Porque reconoce al inquilino, es rápida y se implementa en SharePoint,
+
+00:04:37.660 --> 00:04:41.180
+pestañas de Teams y Viva Connections sin eFrames. ¿Quieres un paquete de código que
+
+00:04:41.180 --> 00:04:45.980
+aparezca en todas partes? Eso se llama eficiencia, algo que el usuario promedio rara vez agradece,
+
+00:04:46.240 --> 00:04:49.460
+pero el liderazgo sí. El descubrimiento es donde los proyectos viven o mueren.
+
+00:04:49.760 --> 00:04:53.160
+Implementamos la búsqueda moderna de PNP como el motor de capacidad de hallazgo.
+
+00:04:53.300 --> 00:04:58.200
+La taxonomía importa. Taxonomía para la interfaz, Word, Outlook, Teams, Graph. Función,
+
+00:04:58.480 --> 00:05:04.160
+resumir, generar, analizar. Role, ventas, finanzas, R, HH, y riesgo. Interno,
+
+00:05:04.160 --> 00:05:08.360
+externo, regulado. Los ámbitos son todo mi equipo y la organización. Así, un vendedor ve primero
+
+00:05:08.360 --> 00:05:11.840
+las instrucciones aprobadas para su rol, no una presentación aleatoria de 2023. Las plantillas
+
+00:05:11.840 --> 00:05:15.000
+de resultados muestran tarjetas con insignias de frescura, propietario y última auditoría,
+
+00:05:15.220 --> 00:05:18.500
+para que la confianza sea visible. Las fuentes de contenido no son una bolsa misteriosa.
+
+00:05:18.700 --> 00:05:22.340
+Agregamos los feeds de Microsoft Learn y Viva Learning con etiquetas de procedencia claras,
+
+00:05:22.640 --> 00:05:26.860
+oficial, comunidad o interno. Las rutas de la comunidad están permitidas, pero no son autoritativas.
+
+00:05:27.060 --> 00:05:30.540
+Los PO internos y guías de rol tienen reglas de ciclo de vida, borrador, revisión,
+
+00:05:30.800 --> 00:05:34.700
+publicación, retiro, cadencia de actualización mensual con registros de auditoría. Si no tiene
+
+00:05:34.700 --> 00:05:39.000
+un propietario y una fecha de vencimiento, no se publica. De nada. El directorio de archivos de
+
+00:05:39.000 --> 00:05:42.700
+guía es tu única fuente de verdad para los activos de Copilot y los agentes de estudio.
+
+00:05:42.920 --> 00:05:47.820
+Cada entrada es un objeto con campos, propietario, entorno, políticas de datos, conectores,
+
+00:05:48.180 --> 00:05:52.920
+propósito, definición de éxito y límites. Incluye notas de uso y enlaces de telemetría,
+
+00:05:53.380 --> 00:05:58.080
+añade un botón de prueba para entornos seguros y un flujo de acceso real, no deseos.
+
+00:05:58.080 --> 00:06:01.980
+La gobernanza no es un pie de página, es la puerta principal. Muestra la retención de
+
+00:06:01.980 --> 00:06:05.400
+transcripciones, políticas de privacidad y límites de datos en cada página relevante
+
+00:06:05.400 --> 00:06:08.200
+mediante un componente de encabezado. Los conectores aprobados se enumeran con
+
+00:06:08.200 --> 00:06:11.760
+información sobre herramientas, permitidos, condicionales o bloqueados. Muestra ejemplos
+
+00:06:11.760 --> 00:06:16.000
+de solicitudes no permitidas en texto rojo. Nadie lee la política. Todo el mundo recuerda
+
+00:06:16.000 --> 00:06:20.540
+un ejemplo vívido de lo que no se debe hacer. La verdad, el miedo aplicado con precisión es un
+
+00:06:20.540 --> 00:06:25.380
+control maravilloso. El, justo a tiempo, importa. Usa Viva Connections para fijar el centro
+
+00:06:25.380 --> 00:06:29.200
+en Teams. Añade enlaces profundos junto a los cuadros de redacción. Ayúdame a escribir de
+
+00:06:29.200 --> 00:06:32.520
+forma segura, que abre patrones de instrucciones específicos del rol con botones de copiar y
+
+00:06:32.520 --> 00:06:35.780
+ejecutar. Las páginas de contexto se integran directamente en los canales de Teams. Si un
+
+00:06:35.780 --> 00:06:39.580
+usuario tiene que abandonar su flujo para aprender, no lo hará. Luego enviará un ticket. Luego tú te
+
+00:06:39.580 --> 00:06:43.900
+quejarás. Podemos evitar las tres cosas. Lo, siempre verde, no es negociable. Establece un ciclo
+
+00:06:43.900 --> 00:06:47.580
+de vida del contenido. Oleadas de actualización mensual, insignias de versión y reglas de retiro
+
+00:06:47.580 --> 00:06:52.000
+automático. SPFX muestra el estado de frescura en línea. Revisado hace 12 días frente a
+
+00:06:52.000 --> 00:06:56.580
+caducado hace 94 días. Los propietarios reciben recordatorios. Las páginas obsoletas pierden
+
+00:06:56.580 --> 00:06:59.680
+relevancia en la búsqueda. La capacitación en la sombra muere cuando las páginas canónicas
+
+00:06:59.680 --> 00:07:03.160
+superan a todo lo demás y los enlaces obsoletos redirigen a la página principal. La propiedad
+
+00:07:03.160 --> 00:07:06.140
+es explícita. Cada página tiene un propietario asignado, un suplente y un acuerdo de nivel
+
+00:07:06.140 --> 00:07:09.940
+de servicio, SLA. Los cambios se registran. Los usuarios pueden ver qué cambió sin necesidad
+
+00:07:09.940 --> 00:07:13.600
+de una búsqueda del tesoro. Esa transparencia genera confianza, lo que a su vez permite la desvío
+
+00:07:13.600 --> 00:07:18.160
+de consultas. En otras palabras, centraliza antes de evangelizar. No puedes gobernar lo que no
+
+00:07:18.160 --> 00:07:22.440
+ves, ni escalar lo que no puedes encontrar. Construye el aeropuerto y luego los aviones.
+
+00:07:22.840 --> 00:07:26.860
+Tus usuarios aterrizarán donde se supone que deben hacerlo. ¿Cómo soluciona los tickets y
+
+00:07:26.860 --> 00:07:30.700
+la mecánica de la capacitación en la sombra? Bien, básicamente dejamos de responder preguntas
+
+00:07:30.700 --> 00:07:34.180
+aleatorias y comenzamos a desviar intenciones. El volumen de tickets cae cuando los usuarios
+
+00:07:34.180 --> 00:07:37.240
+pueden relacionar lo que quieren con dónde hacer clic, sin tener que abrir Outlook para
+
+00:07:37.240 --> 00:07:41.760
+pedir ayuda. Lo hacemos con tres palancas. Mapeo de intenciones, respuestas canónicas y frescura
+
+00:07:41.760 --> 00:07:45.680
+visible. Primero el mapeo de intenciones. Vincula tus preguntas frecuentes a consultas reales,
+
+00:07:45.680 --> 00:07:49.240
+no a lo que crees que preguntan los usuarios. Pasa los registros de búsqueda y los tickets
+
+00:07:49.240 --> 00:07:53.460
+a cuatro raíces. Comienza con qué Copilot es seguro y por qué esa respuesta. Cada raíz
+
+00:07:53.460 --> 00:07:57.520
+tiene una página de destino con dos activos, un árbol de decisión y un ejemplo de prompt.
+
+00:07:57.680 --> 00:08:01.460
+El árbol de decisión elige el camino en menos de tres clics. El ejemplo de prompt muestra
+
+00:08:01.460 --> 00:08:05.480
+cómo es un buen resultado y el patrón incorrecto al lado. Los usuarios no necesitan teoría,
+
+00:08:05.700 --> 00:08:09.400
+necesitan contraste. Qué Copilot se convierte en una elección guiada. Superficie,
+
+00:08:09.640 --> 00:08:14.520
+rol, sensibilidad de datos. Tres interruptores. La página se actualiza en vivo. Usa Teams para
+
+00:08:14.520 --> 00:08:18.760
+notas de reuniones, Outlook para triaje, Word para formatos largos y usa el agente de estudio
+
+00:08:18.760 --> 00:08:23.140
+cuando necesites contexto de línea de negocio con conectores aprobados. Y sí, aclara cuando
+
+00:08:23.140 --> 00:08:27.460
+no usar nada. Porque no hacer nada a veces es la acción más segura. La guía justo a tiempo
+
+00:08:27.460 --> 00:08:31.700
+elimina el comportamiento de dónde está esa presentación. Integra páginas de contexto en
+
+00:08:31.700 --> 00:08:36.240
+Teams. Añade un enlace de ayúdame a escribir cerca de las superficies de redacción que abra
+
+00:08:36.240 --> 00:08:40.760
+un prompt basado en roles con copiar y ejecutar. No solo el prompt, también la nota de por qué
+
+00:08:40.760 --> 00:08:45.440
+funciona. Establece intención, alcance y restricciones. Nombra las fuentes de datos.
+
+00:08:45.720 --> 00:08:48.940
+Evita las instrucciones que condicionan la respuesta. Debajo del recuadro rojo,
+
+00:08:49.200 --> 00:08:53.180
+no hagas esto con un ejemplo tentador pero inseguro. De nada. La biblioteca de prompts
+
+00:08:53.180 --> 00:08:56.580
+tiene un criterio definido. Cada prompt aprobado tiene cuatro campos. Propósito,
+
+00:08:56.840 --> 00:09:00.320
+anatomía, variaciones y modos de falla. El propósito es la tarea en una sola línea.
+
+00:09:00.520 --> 00:09:03.520
+La anatomía etiqueta cada cláusula para que los usuarios puedan remezclarla sin romperla.
+
+00:09:03.640 --> 00:09:06.840
+Las variaciones muestran ajustes de tono o de rol. Los modos de falla explican por qué
+
+00:09:06.840 --> 00:09:10.620
+el resultado fue extraño. Verbos ambiguos, contexto faltante, trampas de alucinación,
+
+00:09:10.860 --> 00:09:14.320
+además de la solución rápida. Los botones de copiar y ejecutar respetan los límites de rol
+
+00:09:14.320 --> 00:09:19.080
+y datos. Si no tienes acceso, verás la ruta para solicitar acceso, no una sorpresa de error 403.
+
+00:09:19.280 --> 00:09:22.300
+La capacitación en la sombra muere cuando las respuestas canónicas superan a todo lo demás
+
+00:09:22.300 --> 00:09:26.180
+y el contenido obsoleto se autodestruye. Hacemos ambas cosas. Las páginas canónicas obtienen
+
+00:09:26.180 --> 00:09:29.940
+prioridad a nivel de centro y aumento de búsqueda. Los enlaces heredados se redirigen a la página
+
+00:09:29.940 --> 00:09:34.340
+canónica correspondiente con un banner. Este recurso fue archivado. Aquí está la guía actual.
+
+00:09:34.340 --> 00:09:38.840
+Las wikis de los sitios no se eliminan, caducan. Las reglas de vencimiento automático marcan y
+
+00:09:38.840 --> 00:09:42.900
+degradan cualquier cosa sin un propietario actual o revisión. Puedes conservar tu blog de pasatiempos.
+
+00:09:43.140 --> 00:09:46.960
+Simplemente no engañará a la gente a gran escala. La claridad de propiedad evita las dudas sobre
+
+00:09:46.960 --> 00:09:51.360
+quién mantiene este escenario. Cada página muestra propietario, respaldo, SLA y frescura.
+
+00:09:51.520 --> 00:09:57.740
+La insignia es directa. Verde, revisado hace 30 días. Ámbar, 31 a 90 días. Rojo, obsoleto hace 90 días.
+
+00:09:57.920 --> 00:10:00.720
+Los tickets generados desde una página roja se dirigen al propietario con un recordatorio para
+
+00:10:00.720 --> 00:10:03.520
+actualizar. Los usuarios ven la misma insignia, así que confían en el verde,
+
+00:10:03.520 --> 00:10:07.400
+cuestionan el ámbar y evitan el rojo. Esa transparencia desvía los correos electrónicos
+
+00:10:07.400 --> 00:10:11.680
+antes de que existan. El andamiaje de seguridad no es un PDF, está en todas partes. Los límites de
+
+00:10:11.680 --> 00:10:14.700
+datos se encuentran en la parte superior de las páginas de decisiones. La lista de conectores
+
+00:10:14.700 --> 00:10:18.440
+aprobados permite estados condicionales y bloqueados con códigos de motivo. La política de retención de
+
+00:10:18.440 --> 00:10:22.380
+transcripciones aparece antes del primer chat, no después de una brecha. Los ejemplos de líneas rojas
+
+00:10:22.380 --> 00:10:27.020
+muestran las solicitudes prohibidas. La gente recuerda mejor no subir datos de pacientes, punto,
+
+00:10:27.020 --> 00:10:32.380
+que el párrafo 7a de tu política. Usa la corteza frontal, no el teatro del cumplimiento. Los impulsos de
+
+00:10:32.380 --> 00:10:37.120
+adopción mantienen el ciclo vivo. Cada página termina con fue útil esto. Una microencuesta de
+
+00:10:37.120 --> 00:10:41.820
+dos clics con un texto opcional de qué faltaba. Preguntar a un experto escala a una cola gobernada
+
+00:10:41.820 --> 00:10:45.840
+con categorías asignadas a propietarios. La clasificación semanal revisa los aciertos y
+
+00:10:45.840 --> 00:10:50.520
+errores. La actualización mensual envía correcciones. Publica el registro de cambios. Los usuarios ven que
+
+00:10:50.520 --> 00:10:54.380
+escuchas y dejan de escribir sus propias guías para compensar. La verdad es que no reduces los
+
+00:10:54.380 --> 00:10:58.440
+tickets diciéndole a la gente que deje de abrirlos. Reduces los tickets ganándole al ticket con la
+
+00:10:58.440 --> 00:11:03.360
+respuesta, haciéndola obvia, actual y segura, y haciendo que toda copia no oficial sea peor que
+
+00:11:03.360 --> 00:11:08.000
+la original a propósito. Contaré el caso de estudio, resultados antes y después, y victorias
+
+00:11:08.000 --> 00:11:13.480
+de gobernanza. Primero la línea base. Una empresa, miles de licencias de Copilot, parecían ocupados y
+
+00:11:13.480 --> 00:11:18.120
+no aprendían nada. La cola de tickets estaba dominada por cuatro temas. Empezar, ¿qué Copilot?
+
+00:11:18.400 --> 00:11:22.460
+Es seguro, ¿por qué esa respuesta? Guías dispersas por todas partes. Wikis de Teams,
+
+00:11:22.460 --> 00:11:28.480
+presentaciones, archivos PDF con nombres heroicos, propietarios, desconocidos, fechas de revisión,
+
+00:11:28.700 --> 00:11:33.640
+ficticias. Los usuarios buscaron, encontraron contradicciones y escalaron. Agentes en la sombra
+
+00:11:33.640 --> 00:11:38.020
+aparecieron en entornos aleatorios con conectores misteriosos. La pregunta de liderazgo era predecible.
+
+00:11:38.360 --> 00:11:42.340
+¿Dónde está el ROI? La intervención no fue una charla motivacional. Desplegamos el centro de
+
+00:11:42.340 --> 00:11:46.580
+Copilot Learning Center para aprender, hacer y gobernar, anclado en Teams. Lanzamos una sección de
+
+00:11:46.580 --> 00:11:50.680
+preguntas frecuentes con intención, una biblioteca de prompts por roles con opción de copiar y ejecutar,
+
+00:11:50.680 --> 00:11:54.100
+y un directorio de agentes con campos de propietario, entorno y política de datos.
+
+00:11:54.260 --> 00:11:58.820
+PNP Modern Search impulsó las páginas canónicas. Los enlaces heredados redirigieron a los usuarios
+
+00:11:58.820 --> 00:12:02.760
+con banners de guía archivada frente a actual. Cada página mostraba el propietario, el respaldo,
+
+00:12:03.020 --> 00:12:07.160
+el SLA y un distintivo de actualización. La gobernanza pasó de PDFs a encabezados de página,
+
+00:12:07.480 --> 00:12:10.420
+retención de transcripciones, conectores aprobados y ejemplos de límites.
+
+00:12:10.740 --> 00:12:14.680
+Resultados. La tendencia es lo que cuenta. La reducción de tickets aumentó semana tras semana
+
+00:12:14.680 --> 00:12:18.760
+porque las respuestas estaban donde surgían las preguntas. El éxito en las búsquedas aumentó a medida que
+
+00:12:18.760 --> 00:12:22.480
+los usuarios llegaban a árboles de decisión que definían qué Copilot usar en menos de tres clics.
+
+00:12:22.640 --> 00:12:25.940
+Los artefactos duplicados disminuyeron. Las wikis de sitios impropietarios caducaron
+
+00:12:25.940 --> 00:12:29.700
+automáticamente y desaparecieron de los resultados. La biblioteca de prompts se convirtió en el centro
+
+00:12:29.700 --> 00:12:33.960
+gravitacional. Alta reutilización en las páginas de inicio por roles. Menos quejas por alucinaciones,
+
+00:12:34.240 --> 00:12:38.120
+ya que los modos de falla eran explícitos y tenían soluciones. El compromiso no era vanidad,
+
+00:12:38.380 --> 00:12:41.600
+era direccional. Los visitantes únicos se concentraron en empezar aquí,
+
+00:12:41.880 --> 00:12:46.160
+qué Copilot, y tres guías por roles. El tiempo en páginas se estabilizó en duraciones de lectura y acción,
+
+00:12:46.160 --> 00:12:50.620
+no de desplazamiento infinito. Las microencuestas produjeron dos tipos de comentarios, variantes
+
+00:12:50.620 --> 00:12:54.620
+faltantes y ejemplos de límites más claros. Lanzamos ambos en la actualización mensual.
+
+00:12:54.780 --> 00:12:58.340
+El registro de cambios demostró el progreso. Los usuarios aprendieron a volver porque el
+
+00:12:58.340 --> 00:13:02.560
+contenido realmente evolucionaba. Las victorias de gobernanza fueron medibles. Los agentes no
+
+00:13:02.560 --> 00:13:06.800
+autorizados disminuyeron al notar los creadores que existía un directorio oficial con ruta de acceso
+
+00:13:06.800 --> 00:13:10.760
+y visibilidad. El enrutamiento de entornos se respetó. Los agentes de alto riesgo se trasladaron a
+
+00:13:10.760 --> 00:13:14.340
+entornos gestionados con la Política de Prevención de Pérdida de Datos, DLP, correcta. La guía de
+
+00:13:14.340 --> 00:13:17.960
+transcripciones dejó de ser un mito y se convirtió en una realidad previa al chat. Ocurrieron menos
+
+00:13:17.960 --> 00:13:21.820
+eventos de, no debimos pegar eso, porque la página advertía educadamente antes de hacerlo.
+
+00:13:22.000 --> 00:13:26.300
+El cambio cultural es la victoria silenciosa. El reflejo cambió de, preguntar a la IA, a,
+
+00:13:26.500 --> 00:13:31.040
+consultar el centro. Incluso los usuarios avanzados participaron enviando variantes de prompts mediante
+
+00:13:31.040 --> 00:13:35.380
+el flujo de contribución, en lugar de publicar folclore en canales privados. La claridad en la
+
+00:13:35.380 --> 00:13:40.180
+propiedad acabó con la duda de, ¿quién mantiene este sitio? Las insignias verdes generaron confianza.
+
+00:13:40.180 --> 00:13:44.340
+Las insignias ámbar activaron avisos útiles. Las insignias rojas eran raras y vergonzosas,
+
+00:13:44.480 --> 00:13:48.280
+exactamente el objetivo. Lecciones aprendidas porque repetirán estos errores a menos que
+
+00:13:48.280 --> 00:13:53.440
+los detengan. Prioricen la capacidad de búsqueda. La taxonomía y los alcances determinan la relevancia.
+
+00:13:53.640 --> 00:13:58.440
+Las suposiciones aumentan los tickets. Declaran lo que está obsoleto con redirecciones implacables.
+
+00:13:58.700 --> 00:14:03.660
+No negocien con los enlaces rotos. Publiquen rutas de inicio basadas en roles. La guía genérica
+
+00:14:03.660 --> 00:14:08.520
+invita a errores genéricos. Instrumenten todo. Términos de búsqueda, clics, tasa de rebote.
+
+00:14:08.520 --> 00:14:12.880
+El ciclo les indica qué corregir el próximo mes. Ahora, la recompensa prometida. El interruptor
+
+00:14:12.880 --> 00:14:15.940
+de gobernanza que colapsa la capacitación en la sombra. Establecimos una política de
+
+00:14:15.940 --> 00:14:19.560
+descubrimiento centralizada. Fijar la aplicación en Teams y el centro de SharePoint como punto de
+
+00:14:19.560 --> 00:14:23.040
+entrada autorizado. Todo el contenido relacionado con Copilot reside bajo esa arquitectura de
+
+00:14:23.040 --> 00:14:26.980
+información. Sin excepciones de wikis laterales. Los enlaces heredados resuelven hacia la fuente
+
+00:14:26.980 --> 00:14:30.900
+oficial. Las páginas fuera del centro muestran avisos y las reglas de archivo automático eliminan
+
+00:14:30.900 --> 00:14:35.380
+el resto. No persigas el folclore, quítale el oxígeno. El interruptor de gobernanza que colapsa
+
+00:14:35.380 --> 00:14:38.820
+el entrenamiento en la sombra. Aquí está el interruptor. Exige un único servicio de
+
+00:14:38.820 --> 00:14:42.600
+descubrimiento, no una sugerencia, sino una política. Fija el centro de aprendizaje como
+
+00:14:42.600 --> 00:14:46.180
+una aplicación de Teams para todos y establece el Hub de SharePoint como el punto de entrada
+
+00:14:46.180 --> 00:14:50.900
+oficial. Cada camino comienza allí. El costo cognitivo de ¿dónde busco? cae a cero y la
+
+00:14:50.900 --> 00:14:54.860
+relevancia de tus búsquedas deja de competir con 12 wikis rivales con nombres heroicos.
+
+00:14:55.140 --> 00:15:00.020
+Siguiente, política. Todo el contenido relacionado con Copilot, guías, prompts, documentos de agentes
+
+00:15:00.020 --> 00:15:03.780
+y FAQs, debe vivir bajo la arquitectura de información del Hub. Sin excepciones de wikis
+
+00:15:03.780 --> 00:15:08.120
+paralelas, sin presentaciones temporales en equipos aleatorios, sin PDFs en canales privados.
+
+00:15:08.340 --> 00:15:13.000
+Si no está en el Hub, no es oficial. Esa línea binaria es cómo eliminas el folclore sin destruir
+
+00:15:13.000 --> 00:15:15.700
+la cultura. La aplicación de normas es aburrida y hermosa.
+
+00:15:15.820 --> 00:15:21.180
+Primero, gobernanza de enlaces. Las redirecciones desde URLs antiguas llevan a la página canónica
+
+00:15:21.180 --> 00:15:25.540
+automáticamente. Los usuarios siguen un enlace obsoleto y llegan a la respuesta correcta con
+
+00:15:25.540 --> 00:15:30.280
+un aviso explicando el cambio. Segundo, avisos en contenido fuera del Hub. Esta página no es
+
+00:15:30.280 --> 00:15:34.660
+oficial. Consulta la guía actualizada. Tercero, reglas de autoarchivo. El contenido
+
+00:15:34.660 --> 00:15:38.900
+sin propietario o fecha de revisión es marcado, degradado en búsquedas y enviado a archivo.
+
+00:15:39.120 --> 00:15:43.560
+No borras la historia, la retiras de la ruta de decisión. Los roles y respaldos mantienen
+
+00:15:43.560 --> 00:15:48.920
+la integridad del sistema. Asigna propietarios para cada área. Aprender, ejecutar, gobernar,
+
+00:15:49.160 --> 00:15:53.100
+además de cada guía de rol y cada entrada de agente. Los propietarios tienen respaldos.
+
+00:15:53.100 --> 00:15:57.320
+Las revisiones trimestrales no son negociables. Ocurren según el calendario, no por instinto.
+
+00:15:57.460 --> 00:16:00.740
+La telemetría impulsa la depuración. Las páginas con pocos clics se corrigen,
+
+00:16:00.920 --> 00:16:05.040
+se fusionan o se retiran. Las búsquedas con alta fricción disparan la creación de contenido. Y sí,
+
+00:16:05.300 --> 00:16:09.880
+los propietarios pierden privilegios y ignoran su SLA. La rendición de cuentas no es maldad,
+
+00:16:10.060 --> 00:16:15.040
+es mantenimiento. La alineación con DLP no es una nota al pie, es el prólogo. Muestra las políticas
+
+00:16:15.040 --> 00:16:19.060
+de datos en la parte superior de páginas relevantes en lenguaje claro con ejemplos. No se pueden
+
+00:16:19.060 --> 00:16:22.740
+resumir correos internos. No se puede pegar información personal, PII, de clientes.
+
+00:16:22.740 --> 00:16:25.760
+Uso de intercambio externo condicional mediante conectores aprobados. Incluye
+
+00:16:25.760 --> 00:16:28.840
+ejemplos de límites prohibidos que activen alarmas a propósito explicando el por qué.
+
+00:16:29.000 --> 00:16:33.080
+El usuario promedio no memoriza códigos de políticas. Recuerdan límites simples y claros
+
+00:16:33.080 --> 00:16:37.280
+entregados en el momento de la intención. Los KPIs te dicen si el interruptor funcionó.
+
+00:16:37.460 --> 00:16:42.000
+Observa cómo la mezcla de tickets pasa de lo básico a lo avanzado. Sigue el tiempo de respuesta a
+
+00:16:42.000 --> 00:16:46.720
+través de la navegación del hub. El objetivo es tres clics o menos para el 70% de las preguntas sobre
+
+00:16:46.720 --> 00:16:51.060
+Copilot. Monitorea la tendencia a la baja del contenido obsoleto. Las insignias de frescura deben
+
+00:16:51.060 --> 00:16:55.200
+volverse verdes para el segundo mes. La tasa de éxito de búsqueda debe subir a medida que lo hace
+
+00:16:55.200 --> 00:16:59.460
+Copilot. Los árboles de decisión eliminan la confusión. La decadencia de documentos no oficiales
+
+00:16:59.460 --> 00:17:03.080
+se vuelve una línea en su panel, no un rumor en un canal. La parte contraintuitiva es que la
+
+00:17:03.080 --> 00:17:06.900
+centralización aumenta la contribución. Cuando la gente sabe dónde reside el oficial, envían
+
+00:17:06.900 --> 00:17:11.020
+mejoras en lugar de publicar normas paralelas. Su flujo de contribución hace que eso sea sencillo.
+
+00:17:11.140 --> 00:17:15.680
+Proponga un cambio, adjunte evidencia, envíe al propietario, publique con un registro de cambios.
+
+00:17:15.680 --> 00:17:20.040
+Dé crédito a los colaboradores de forma visible. La prueba social impulsa la gobernanza mucho mejor
+
+00:17:20.040 --> 00:17:24.660
+que un memorando estricto. Y sí, hay un empujón cultural. Configure su guía de ayuda predeterminada
+
+00:17:24.660 --> 00:17:28.820
+en Teams para abrir el centro. Incluya el centro en la incorporación, la capacitación de desempeño y
+
+00:17:28.820 --> 00:17:32.600
+las revisiones comerciales trimestrales. Cuando los líderes pregunten, ¿qué hay de nuevo con
+
+00:17:32.600 --> 00:17:36.960
+Copilot? Reciben el enlace al registro de cambios, público, fechado y despiadadamente breve. El mensaje
+
+00:17:36.960 --> 00:17:41.280
+es claro. Las respuestas viven aquí, evolucionan aquí y en ningún otro lugar. Active el interruptor y
+
+00:17:41.280 --> 00:17:45.620
+elimine la capacitación paralela a propósito. Manual de KPI, demostrando que funcionó. Bien,
+
+00:17:45.860 --> 00:17:50.160
+básicamente, necesita números que terminen las discusiones. Comience con las métricas North
+
+00:17:50.160 --> 00:17:53.860
+Star, tasa de deflexión de tickets, visitantes únicos al centro, reutilización de la biblioteca
+
+00:17:53.860 --> 00:17:57.640
+de prompts y decadencia de documentos no oficiales. Si eso se mueve en la dirección correcta, todo lo
+
+00:17:57.640 --> 00:18:01.500
+demás es comentario. Los indicadores adelantados demuestran la dirección temprano. Rastre la tasa
+
+00:18:01.500 --> 00:18:05.700
+de éxito de búsqueda, clics en Copilot y el tiempo en la página para las guías de rol. Si los usuarios
+
+00:18:05.700 --> 00:18:10.220
+resuelven en tres clics o menos el 70% de las veces, está dirigiendo correctamente. Si se van,
+
+00:18:10.220 --> 00:18:15.120
+su taxonomía está mal. Arréglela, no a ellos. Los indicadores rezagados confirman el cambio de
+
+00:18:15.120 --> 00:18:19.680
+comportamiento. Cuente menos activos paralelos, menos agentes duplicados y una mayor satisfacción
+
+00:18:19.680 --> 00:18:23.840
+de ¿fue útil? Vincule esos a la telemetría. ¿Están desapareciendo las insignias rojas y
+
+00:18:23.840 --> 00:18:28.180
+manteniéndose las verdes? Bien, la estrategia Evergreen está funcionando. Objetivos, porque las
+
+00:18:28.180 --> 00:18:33.560
+promesas vagas son para aficionados. Alcance un 30-40% de deflexión en 60-90 días. Convierta el 70% de las
+
+00:18:33.560 --> 00:18:37.620
+preguntas sobre Copilot en tres clics. Reduzca la tasa de contenido obsoleto por debajo del 10% para el
+
+00:18:37.620 --> 00:18:41.080
+segundo mes. Impulse la reutilización de prompts en las cinco guías de rol principales semanalmente.
+
+00:18:41.220 --> 00:18:45.360
+La instrumentación es ligera y despiadada. Análisis de uso de SharePoint, registros de
+
+00:18:45.360 --> 00:18:49.940
+búsqueda y un panel de Power BI. Triage semanal, actualización mensual, auditoría de gobernanza
+
+00:18:49.940 --> 00:18:53.920
+trimestral. Publique el cuadro de mando. Los ejecutivos quieren retorno de inversión de licencias.
+
+00:18:54.160 --> 00:18:58.740
+Muestre menos tickets, respuestas más rápidas, uso más seguro. Presupuesto asegurado. La verdad,
+
+00:18:59.120 --> 00:19:04.740
+si no está en el panel, no sucedió. Mida, arregle, publique, repita. Conclusión clave. La capacitación
+
+00:19:04.740 --> 00:19:08.340
+es un sistema gobernado y constante que responde preguntas antes de que existan tickets y detiene
+
+00:19:08.340 --> 00:19:12.220
+la capacitación paralela y necesaria. Si esto aclaró el camino, despliegue el centro de aprendizaje,
+
+00:19:12.520 --> 00:19:16.340
+bloquee el interruptor de descubrimiento y ejecute el manual de KPI. Luego lleve los números al
+
+00:19:16.340 --> 00:19:20.160
+liderazgo y obtenga su presupuesto. Suscríbete a la serie sobre gobernanza de copilotos. A
+
+00:19:20.160 --> 00:19:23.060
+continuación, seguridad de agentes, enrutamiento de entornos y telemetría.

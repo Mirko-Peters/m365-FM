@@ -1,0 +1,1450 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.680
+Il tuo copilota non è stupido. Hai fatto morire di fa. Nessuno schema, nessuna regola, nessuna
+
+00:00:04.680 --> 00:00:10.020
+barriera di protezione. Poi ti lamenti delle allucinazioni. La maggior parte dei fallimenti
+
+00:00:10.020 --> 00:00:14.880
+di Power Platform AI non sono dovuti al Q&A. Sono contesti che hai creato. Ecco cosa otterrai
+
+00:00:14.880 --> 00:00:19.440
+oggi. Un modello di progettazione del contesto ripetibile per Copilot Studio e Power Automate
+
+00:00:19.440 --> 00:00:23.360
+che elimina le allucinazioni, corregge la deriva tra tenant e riduce drasticamente l'attenza
+
+00:00:23.360 --> 00:00:27.680
+e costi. Creeremo il modello di messaggio di sistema, una checklist di messa a terra
+
+00:00:27.680 --> 00:00:31.600
+dello schema e un modello di pipeline di recupero. C'è un livello che tutti dimenticano, il
+
+00:00:31.600 --> 00:00:35.840
+livello dei criteri che impedisce la deriva della governance. Lo collegheremo e lo dimostreremo
+
+00:00:35.840 --> 00:00:40.300
+con metriche prima e dopo. Ora iniziamo. Problema perché il tuo copilota fallisce
+
+00:00:40.300 --> 00:00:45.000
+debito di contesto. Definiamo il problema in modo preciso debito di contesto. È l'accumulo
+
+00:00:45.000 --> 00:00:49.920
+di contesto mancante o approssimativo che costringe un modello linguistico a indovinare. Salti
+
+00:00:49.920 --> 00:00:54.120
+le regole di sistema, non ti basi su dataverse, lasci gli strumenti indefiniti e ignori i criteri.
+
+00:00:54.120 --> 00:00:59.840
+Poi rimani scioccato quando gli output traballano tra i tenant. Affascinante. Il debito di contesto
+
+00:00:59.840 --> 00:01:03.420
+si presenta come quattro fallimenti. Primo, regole di sistema mancanti, nessuna identità,
+
+00:01:03.540 --> 00:01:07.200
+nessun ambito, nessuna politica di rifiuto. Il modello è ottimizzato per essere utile
+
+00:01:07.200 --> 00:01:12.280
+e prolisso, non conforme e preciso. Secondo, dati non fondati. Fai un cenno alla tabella
+
+00:01:12.280 --> 00:01:16.560
+dei prestiti senza fornire nomi di entità, definizione di campo, relazioni o record di esempio.
+
+00:01:17.240 --> 00:01:22.160
+Terzo, strumenti non definiti. Gli chiedi di aggiornare lo stato, ma non esponi un percorso
+
+00:01:22.160 --> 00:01:26.400
+di azione regolato in Power Automate. Quarto, policy assenti. Te affidi alle vibrazioni
+
+00:01:26.400 --> 00:01:30.580
+invece che a DLP, etichette di sensibilità e accesso condizionale? Quel contesto garantisce
+
+00:01:30.580 --> 00:01:34.680
+la deriva. Le prove sono ovunque. Gli alti tassi di fallimento e abbandonano l'intelligenza
+
+00:01:34.680 --> 00:01:38.260
+artificiale aziendale tracciano l'esecuzione e il contesto, non i limiti del modello. I team
+
+00:01:38.260 --> 00:01:42.160
+segnalano allucinazioni, incongruenze specifiche dell'ambiente e token burn a causa del recupero
+
+00:01:42.160 --> 00:01:45.420
+eccessivo di intere tabelle solo per sicurezza. Non hai bisogno di un modello più grande,
+
+00:01:45.500 --> 00:01:48.060
+hai bisogno di una spina dorsale. Ecco il modello mentale che risolve il problema.
+
+00:01:48.060 --> 00:01:52.780
+Quattro livelli di contesto, sistema, recupero, strumenti, policy. Pensalo come il registro
+
+00:01:52.780 --> 00:01:56.580
+di Windows per il tuo agente. Non è solo un database, è la spina dorsale. Il sistema
+
+00:01:56.580 --> 00:02:00.580
+dichiara chi è l'agente e cosa rifiuta. Il recupero fornisce fatti e schemi in modo
+
+00:02:00.580 --> 00:02:04.560
+che smetta di inventare campi. Gli strumenti espongono le azioni esatte che puoi eseguire
+
+00:02:04.560 --> 00:02:09.040
+con privilegi minimi. I criteri impongono dei limiti indipendentemente da prompt e intelligenti.
+
+00:02:09.400 --> 00:02:13.240
+Rimuovi qualsiasi livello e gli output traballano. Aggiungi ne quattro e si bloccano. Ciò che la maggior
+
+00:02:13.240 --> 00:02:16.400
+parte degli sviluppatori trascura è che gli ambienti sono i limiti di sicurezza in Power Platform.
+
+00:02:16.400 --> 00:02:20.620
+Se i tuoi criteri dell'EP bloccano la combinazione di connettori business non business in produzione
+
+00:02:20.620 --> 00:02:24.600
+ma non in sviluppo è creato di universi diversi. Gli occhi e le mani del tuo agente cambiano
+
+00:02:24.600 --> 00:02:29.060
+in base all'ambiente. Quindi sì, i risultati variano tra tenant e ambienti perché cambi
+
+00:02:29.060 --> 00:02:32.340
+il mondo sotto i suoi piedi. Lascia che ti spieghi il tipico ciclo di errore.
+
+00:02:32.800 --> 00:02:36.220
+Crei un agente e copai lo studio? Gli dai un obiettivo vago, assistenza con le domande
+
+00:02:36.220 --> 00:02:42.120
+di prestito. Colleghi una raccolta documenti di PDF senza estrarre la struttura. Non indicizi entità,
+
+00:02:42.120 --> 00:02:46.240
+relazioni o etichette di riservatezza di Dataverse. Salti il catalogo degli strumenti e dai
+
+00:02:46.240 --> 00:02:50.340
+per scontato che copai lo te lo capirà. Poi fai una domanda. Risponde con una policy
+
+00:02:50.340 --> 00:02:53.720
+generica e inventa un campo denominato fase prestito che non esiste nel tuo schema.
+
+00:02:54.680 --> 00:02:57.460
+Congratulazioni, hai pagato dei token per leggere il contenuto sbagliato e hai ottenuto
+
+00:02:57.460 --> 00:03:01.200
+delle sciocchezze. Confrontalo con un approccio fondato. Stessa domanda, ma il tuo livello
+
+00:03:01.200 --> 00:03:04.960
+di recupero include un indice di schema, una richiesta di prestito per entità, uno stato
+
+00:03:04.960 --> 00:03:09.400
+del campo, valori di elenco di selezione, relazioni con richiedente e documento, oltre a record
+
+00:03:09.400 --> 00:03:13.220
+di esempio. La gente fa riferimento esplicitamente allo stato della richiesta di prestito
+
+00:03:13.220 --> 00:03:17.240
+e cita i valori consentiti. Nessuna ipotesi. La differenza non è nel modello, ma nel contesto.
+
+00:03:17.720 --> 00:03:21.360
+La latenza e il costo sono sintomi dello stesso debito. Il recupero eccessivo di intere tabelle
+
+00:03:21.360 --> 00:03:25.400
+perché non hai filtro a livello di campo fa esplodere token e tempo. Un recupero vago
+
+00:03:25.400 --> 00:03:29.000
+costringe il modello a esaminare blocchi rilevanti. Un filtro di intenti non definito
+
+00:03:29.000 --> 00:03:32.360
+non può essere aprito. Paghi tutto, non impari nulla e continui ad avere allucinazione.
+
+00:03:32.740 --> 00:03:36.840
+Brutale. La deriva della governance è un kille silenzioso. Senza un livello di policy,
+
+00:03:37.040 --> 00:03:41.320
+di LP, ticket e di riservatezza, accesso condizionale e comportamento del tuo agente diverge gradualmente.
+
+00:03:41.320 --> 00:03:45.140
+Un connettore viene riclassificato, un account ospite si insinua in un flusso, i registri
+
+00:03:45.140 --> 00:03:48.180
+sono disattivati, quindi la gente riassume felicemente le note riservate in un connettore
+
+00:03:48.180 --> 00:03:52.740
+nazionale. Non te ne accorgi fino a una settimana di audio. Eccellente. Ecco la soluzione e la
+
+00:03:52.740 --> 00:03:56.920
+realizzeremo passo dopo passo in questa serie. Livello di sistema. Un messaggio di sistema
+
+00:03:56.920 --> 00:04:00.380
+conciso con versione che codifica identità, ambito, rifiuto, consapevolezza dello schema,
+
+00:04:00.660 --> 00:04:04.900
+regole di utilizzo, degli strumenti e limiti di registrazione. Creato per ambiente con token
+
+00:04:04.900 --> 00:04:09.700
+per unità aziendale, mappatura da riservatezza. Livello di recupero. Una pipeline che si basa
+
+00:04:09.700 --> 00:04:13.880
+prima su Dataverse con un indice di documenti come origine secondaria utilizzando suddivisione
+
+00:04:13.880 --> 00:04:17.900
+in blocchi consapevole dell'entità, ricerca ibrida, riduzione di sicurezza e filtri a
+
+00:04:17.900 --> 00:04:22.720
+livello di campo. Livello di strumenti. Un catalogo curato di azioni Power Automate
+
+00:04:22.720 --> 00:04:26.120
+con privilegi minimi, con modelli di prompt che definiscono schemi di input, logica di
+
+00:04:26.120 --> 00:04:30.820
+rifiuto e flag di riservatezza. Livello di policy. Gruppi di LP applicati, accesso
+
+00:04:30.820 --> 00:04:34.120
+condizionale, mascheramento in tempo reale tramite etichette e un kill switch di
+
+00:04:34.120 --> 00:04:38.860
+amministrazione. Se non ricordi nient'altro ricorda questo. I modelli prevedono il test. Tu progetti
+
+00:04:38.860 --> 00:04:42.940
+verità, potere, confini. Tuo lavoro è il contesto. Il modello è il motore di rendering.
+
+00:04:43.500 --> 00:04:46.960
+Smettila di dare la colpa al rendere per il tuo progetto mancato. Livello 1. Contesto di
+
+00:04:46.960 --> 00:04:51.160
+sistema che non devia. Schema più. Checklist. Ora smettiamo di indovinare e installiamo
+
+00:04:51.160 --> 00:04:55.600
+l'identità. Senza regole esplicite di rifiuto e ambito di identità, i grandi modelli linguistici
+
+00:04:55.600 --> 00:04:58.860
+per impostazione predefinita sono affascinanti Labrador, che vanno a prendere tutto, accontentano
+
+00:04:58.860 --> 00:05:03.720
+tutti e calpestano la conformità. Hai bisogno di un buttafuori, non di un goal dirty. La verità è che se il messaggio
+
+00:05:03.720 --> 00:05:08.060
+del tuo sistema è vago, i tuoi output saranno vaghi. Se il messaggio del tuo sistema è incoerente
+
+00:05:08.060 --> 00:05:12.380
+per l'ambiente, i tuoi output deviranno per l'ambiente. Quindi creiamo prima la spena d'orsena.
+
+00:05:12.760 --> 00:05:17.780
+Ecco lo schema che uso. È breve, con versione spietato. Ruolo. Sei il copilota delle operazioni
+
+00:05:17.780 --> 00:05:23.060
+di prestito per l'unità aziendale nell'ambiente. Nome ambiente. Rispondi solo alle domande di
+
+00:05:23.060 --> 00:05:27.880
+prestito e ai processi correlati. Ambito. Attieniti all'entità da diverse e ai documenti
+
+00:05:27.880 --> 00:05:32.460
+etichettati in questo ambiente. Se la risposta richiede sistemi esterni o contenuti non etichettati,
+
+00:05:32.560 --> 00:05:37.860
+rifiuti a procurare un passaggio successivo sicuro. Tono conciso, fattuale, campi del sito esattamente
+
+00:05:37.860 --> 00:05:43.740
+come schema. Entity.affield. Criterio di rifiuto. Se viene richiesto un elenco di etichette
+
+00:05:43.740 --> 00:05:47.380
+di contenuto sensibile etichettato in un contesto non aziendale, rifiuta con motivo. Blocker
+
+00:05:47.380 --> 00:05:51.980
+di epilogo del rifiuto. Consape lo schema. Preferisci l'indice dello schema da diverse?
+
+00:05:52.440 --> 00:05:56.420
+Non inventare mai can. Associati sinonimi a nomi canonici utilizzando il glossario fornito.
+
+00:05:59.710 --> 00:06:03.910
+Regole di utilizzo del strumento. Puoi chiamare azioni Power Automate approvate solo quando
+
+00:06:03.910 --> 00:06:08.670
+un intento è classificato come azionabile con affidabilità già all'otto. Altrimenti rispondi
+
+00:06:08.670 --> 00:06:14.290
+con analisi. Limiti di registrazione. Non ripetere P. Riepiloga i valori come mascherati
+
+00:06:14.290 --> 00:06:18.830
+quando la sensibilità è elevata. Tale schema viene inserito nelle istruzioni personalizzate
+
+00:06:18.830 --> 00:06:22.690
+di Copilot. E si ottiene il nome dell'ambiente parametrizzato, l'unità aziendale, l'elenco
+
+00:06:22.690 --> 00:06:27.290
+dell'etichetta M. Collegali alle variabili di ambiente, in modo che dev, what e prod condividano
+
+00:06:27.290 --> 00:06:32.250
+la stessa logica con associazioni diverse. Versione itsmsg1.3. Contrassegna la versione in ogni
+
+00:06:32.250 --> 00:06:35.950
+piedi pagina di risposta durante il test e il criterio 1.3 in modo che la deriva sia immediatamente
+
+00:06:35.950 --> 00:06:39.390
+visibile, in modo che... Ora, lista di controllo perché altrimenti dimenticherai qualcosa.
+
+00:06:40.670 --> 00:06:45.930
+Obiettivi. Cosa può ottenere la gente in una frase? Pubblico. Chi serve? Responsabili
+
+00:06:45.930 --> 00:06:50.590
+dei prestiti, non interaziendi. Definizioni. Nomi di entità e campi canonici più sinonimi.
+
+00:06:51.210 --> 00:06:56.550
+Contenuto consentito. Classi di dati e origini consentite. Azioni non consentite. Tutto ciò
+
+00:06:56.550 --> 00:07:01.110
+che è cross-tenant non etichettato esterno ai connettori aziendali. Percorsi di escalation.
+
+00:07:01.110 --> 00:07:05.610
+Quando passare a un essere umano. Criteri e modello di messaggio. Rubrica di valutazione.
+
+00:07:05.950 --> 00:07:09.750
+Come valutiamo gli output. Accuratezza del campo. Correttezza del rifiuto. Eccitazione
+
+00:07:09.750 --> 00:07:14.330
+dello schema. Scrivilo in un linguaggio semplice e poi compri. L'errore più comune è seppellire
+
+00:07:14.330 --> 00:07:18.250
+i vincoli sotto un romanzo di testo di policy. Il modello scorrerà come un stagista medio.
+
+00:07:18.770 --> 00:07:24.250
+Sì chirurgico. Un altro è classico. Inserire i vincoli nel prompt utente. No, i vincoli appartengono
+
+00:07:24.250 --> 00:07:27.630
+ai messaggi di sistema e a rappare di strumenti. Non ovunque l'utente digiti.
+
+00:07:27.630 --> 00:07:31.570
+E versione per ambiente? Dev può essere permissivo. Prod non può.
+
+00:07:32.590 --> 00:07:35.670
+Copiare un singolo file di sistema tra i tenant senza token è il modo in cui si creano
+
+00:07:35.670 --> 00:07:38.670
+universi paralleli. Una soluzione rapida che può tenere a gestire.
+
+00:07:38.990 --> 00:07:41.850
+Crea un modello per il messaggio con variabili associati all'importazione della soluzione.
+
+00:07:42.170 --> 00:07:44.090
+Questo da solo elimina un mucchio di incongruenze.
+
+00:07:44.570 --> 00:07:47.270
+Aggiunge una sezione di glossario che mappa i sinonimi comuni ai campi canonici.
+
+00:07:47.390 --> 00:07:49.610
+Fase, passaggio, fase, stato della richiesta di prestito.
+
+00:07:49.850 --> 00:07:52.390
+Stato della richiesta di prestito. Vedrai che i campi allucinati scompaiono.
+
+00:07:52.390 --> 00:07:57.330
+L'implementazione in Copilot Studio è semplice. Apri le istruzioni personalizzate, incolla il modello,
+
+00:07:57.530 --> 00:08:00.410
+inserisci le variabili per il nome dell'ambiente, l'unità aziendale, l'elenco delle etichette
+
+00:08:00.410 --> 00:08:02.470
+delle immagini e attiva varia disattiva le immagini e immagini.
+
+00:08:03.630 --> 00:08:07.330
+Crea una nota sul set di istruzioni per la canonizzazione dello schema a cui l'agente
+
+00:08:07.330 --> 00:08:10.570
+fa riferimento prima di rispondere. Quindi aggiungi un paragrafo del modello di rifiuto.
+
+00:08:11.210 --> 00:08:13.610
+Non posso condividere il redatto a causa dell'etichetta dei criteri.
+
+00:08:14.170 --> 00:08:15.090
+Ecco un'alternativa è sicura.
+
+00:08:16.150 --> 00:08:17.990
+La coerenza non è magia, sono modelli.
+
+00:08:17.990 --> 00:08:22.930
+Guarderei il finale, limiti di registrazione. Indica che l'agente non ripete mai valori
+
+00:08:22.930 --> 00:08:25.770
+sensibili non elaborati. Quando deve farvi riferimento, utilizza
+
+00:08:25.770 --> 00:08:29.570
+segnaposto e offre un'azione strumento che gestisce i segreti tramite azioni di credenziali
+
+00:08:29.570 --> 00:08:33.570
+nei flussi. Se non ricordate nient'altro, ricordate questo. Identità, ambito, rifiuto,
+
+00:08:33.690 --> 00:08:36.950
+schema, strumenti, registrazione, sei righe, zero trammi.
+
+00:08:38.070 --> 00:08:40.990
+Livello 2, recupero che si collega a Dataverse sul modello di pipeline.
+
+00:08:41.930 --> 00:08:44.970
+Identità impostata. Ora gli forniamo fatti che non può allucinare.
+
+00:08:44.970 --> 00:08:48.550
+Il recupero è dove la maggior parte di voi accende la pompa antincendio e lo chiama
+
+00:08:48.550 --> 00:08:49.930
+messa a terra. Sbagliato.
+
+00:08:50.590 --> 00:08:53.790
+Il recupero è selettivo e consapevole dell'entità e sia prima di tutto attraverso perché è
+
+00:08:53.790 --> 00:08:54.910
+lì che risiede la vostra verità.
+
+00:08:56.630 --> 00:09:00.290
+Perché è importante? Le allucinazioni sbociano quando il modello deve dedurre la struttura.
+
+00:09:00.990 --> 00:09:03.850
+Se non riesce a vedere le definizioni canoniche identità e campi, le inventano.
+
+00:09:04.590 --> 00:09:08.290
+Latenza e costi aumentano quando si estraggono intere tabelle e blob PDF perché non si è
+
+00:09:08.290 --> 00:09:12.310
+filtrato in base all'intento. Il risultato? Rumore costoso. La soluzione è una
+
+00:09:12.310 --> 00:09:14.670
+pipeline che privilegia lo schema e taglia in base alla sicurezza.
+
+00:09:14.970 --> 00:09:16.770
+Ecco il modello. Due indici in cervello.
+
+00:09:17.490 --> 00:09:21.150
+Innanzitutto un indice di schema per entità, campi, relazioni, sette di opzioni, regole
+
+00:09:21.150 --> 00:09:23.470
+aziendali data verso più un piccolo glossario di sinonimi.
+
+00:09:24.190 --> 00:09:27.730
+In secondo luogo un indice dei documenti per policy, SOP e documenti di riferimento
+
+00:09:27.730 --> 00:09:29.090
+solo dopo che sono stati strutturati.
+
+00:09:29.390 --> 00:09:32.550
+Ricerca ibrida su entrambi con limitazioni di sicurezza per ambienti e utente.
+
+00:09:32.930 --> 00:09:34.870
+Il modello non vede mai ciò che l'utente non è autorizzato a vedere.
+
+00:09:35.270 --> 00:09:36.550
+Questo non è un suggerimento, è il limite.
+
+00:09:36.550 --> 00:09:38.470
+Lasciatemi analizzare l'indice dello schema.
+
+00:09:39.130 --> 00:09:43.550
+Acquisizione per ogni entità, nome, descrizione, elenco di campi con tipi di dati, valori di
+
+00:09:43.550 --> 00:09:47.610
+sette di opzioni, relazioni, uno a molti e molti a uno, regole aziendali che influenzano
+
+00:09:47.610 --> 00:09:48.410
+gli stati validi.
+
+00:09:49.230 --> 00:09:53.230
+Includere due record di esempio per entità, redatti e una query di esempio che mappa il
+
+00:09:53.230 --> 00:09:54.770
+linguaggio naturale e i campi canonici.
+
+00:09:55.530 --> 00:09:58.710
+Aggiungere una mappa di sinonimi, fase, passaggio, fase, stato della domanda di prestito.
+
+00:09:59.250 --> 00:10:02.850
+Il modello si ancorrerà in nomi canonici perché gli è stata consegnata la mappa, dall'indice
+
+00:10:02.850 --> 00:10:03.410
+dei documenti.
+
+00:10:03.730 --> 00:10:05.910
+I pdf non sono testi sacri, sono contenitori.
+
+00:10:06.150 --> 00:10:07.590
+Estrai la struttura prima dell'indicizzazione.
+
+00:10:07.990 --> 00:10:11.030
+Le intestazioni diventano sezioni, le tabelle diventano coppie, chiave valore.
+
+00:10:11.070 --> 00:10:14.670
+Le policy vengono contrassegnate con classificazioni Microsoft View ed etichette MIP in modo che
+
+00:10:14.670 --> 00:10:16.210
+l'assessibilità sia leggibile dalla macchina.
+
+00:10:16.670 --> 00:10:20.430
+Se un file non può essere analizzato in sezioni e campi non appartiene all'indice, non stai
+
+00:10:20.430 --> 00:10:21.190
+creando uno scrapbook?
+
+00:10:21.670 --> 00:10:23.110
+La limitazione di sicurezza non negoziabile.
+
+00:10:23.110 --> 00:10:26.750
+Il livello di query dell'indice deve filtrare in base all'identità dell'utente all'ambiente
+
+00:10:26.750 --> 00:10:27.650
+e alla politica DLP.
+
+00:10:28.110 --> 00:10:31.770
+Se dev consente determinati connettori e prod no, il livello di recupero riflette ciò.
+
+00:10:32.070 --> 00:10:34.010
+Stesso utente, ambiente diverso, recupero diverso.
+
+00:10:34.310 --> 00:10:35.410
+Questo non è un ritocco on design.
+
+00:10:35.810 --> 00:10:37.310
+La suddivisione in blocchi interrompe il subitesimo.
+
+00:10:37.670 --> 00:10:38.990
+Suddividi in blocchi in base alla logica dente.
+
+00:10:38.990 --> 00:10:41.650
+Per schema raggruppa in base alla granularità di entità e relazione.
+
+00:10:41.950 --> 00:10:44.790
+Tensa 500-800 token per blocco con elenchi di campi intatti.
+
+00:10:45.190 --> 00:10:49.130
+Per documenti suddividi in blocchi in sezioni con intestazioni preservate e includi metadati
+
+00:10:49.130 --> 00:10:52.370
+di navigazione, titolo, sezione, sottosezione.
+
+00:10:53.110 --> 00:10:55.250
+L'obiettivo è restituire un significato in un coriangolo.
+
+00:10:55.830 --> 00:10:57.310
+Tattiche di prestazione che sentirai davvero.
+
+00:10:57.770 --> 00:10:58.710
+Filtraggio a livello di campo.
+
+00:10:59.170 --> 00:11:02.290
+Quando l'intento include lo stato, non estrare l'intera definizione dell'entità.
+
+00:11:02.930 --> 00:11:04.990
+Estrae il blocco di campo e la regola aziendale pertinente.
+
+00:11:05.510 --> 00:11:07.890
+I primi K, in base alla classificazione dell'intento, indirizzano a QE.
+
+00:11:08.310 --> 00:11:10.290
+Le quelle di schema ottengono K piccole, due, tre.
+
+00:11:10.870 --> 00:11:12.470
+Le ricerche di documenti potrebbero richiedere i quattro.
+
+00:11:13.270 --> 00:11:16.810
+Memorizza nella cache le facco ad alta frequenza gli snippet di schema con un TTL breve
+
+00:11:16.810 --> 00:11:18.710
+in modo da non pagare per le stesse ricerche tutto il giorno.
+
+00:11:18.710 --> 00:11:23.070
+Applica limiti a connettori e token in modo che un singolo prompt vago non possa attivare
+
+00:11:23.070 --> 00:11:23.790
+uno sweep di tabelle.
+
+00:11:24.350 --> 00:11:24.690
+Di niente.
+
+00:11:25.250 --> 00:11:26.690
+Come collegare questo in Copilot Studio?
+
+00:11:27.450 --> 00:11:29.350
+Imposta Dataverse come fonte di conoscenza primaria.
+
+00:11:29.890 --> 00:11:33.870
+Crea una fonte di dati che emette schede di schema, entità, campi, relazioni, set di
+
+00:11:33.870 --> 00:11:38.190
+opzioni, regole, esempi, allegra classificazioni di competenza ed etichette MIP come proprietà.
+
+00:11:39.170 --> 00:11:42.330
+Aggiungi l'indice del tuo documento come fonte secondaria con contenuto di sezione.
+
+00:11:42.470 --> 00:11:45.670
+Configura recupero ibrido con riclassificazione che preferisce le corrispondenze di schema
+
+00:11:45.670 --> 00:11:46.450
+rispetto a testa nota.
+
+00:11:46.670 --> 00:11:48.150
+Se esiste un riscontro di schema, potenziala.
+
+00:11:48.530 --> 00:11:50.050
+Se non esiste, ripiega sui documenti.
+
+00:11:50.290 --> 00:11:53.370
+Se non esiste nessuno dei due, rifiuta o poni una domanda di chiarimento.
+
+00:11:54.350 --> 00:11:55.590
+Sì, rifiuta meglio della finzione.
+
+00:11:56.030 --> 00:11:58.730
+Elenco di controllo per la messa a terra dello schema che stamperai e attaccherai il tumo.
+
+00:11:59.530 --> 00:12:03.210
+Nomi delle entità esattamente come in Dataverse, descrizioni dei campi in linguaggio semplice,
+
+00:12:03.210 --> 00:12:07.830
+relazioni elencate con cardinalità, valori e significati dei set di opzioni, record di
+
+00:12:07.830 --> 00:12:11.890
+esempio con valori mascherati, regole aziendali, note sulla gestione dei valori nulli, sinonimi
+
+00:12:11.890 --> 00:12:14.030
+di nomi canonici e avvertenze sulla qualità dei dati.
+
+00:12:14.950 --> 00:12:17.050
+Se manca uno di questi, la messa a terra è incompleta.
+
+00:12:17.570 --> 00:12:18.150
+Errori comuni.
+
+00:12:18.390 --> 00:12:20.830
+Indicizzazione dei PDF senza estrazione della struttura, non farlo.
+
+00:12:21.190 --> 00:12:22.770
+Ignorare etichette di riservatezza, pericoloso.
+
+00:12:23.250 --> 00:12:26.750
+Mescolare connettori aziendali e non aziendali nella stessa chiamata di recupero, bloccati
+
+00:12:26.750 --> 00:12:28.970
+da DLP in produzione, quindi ti comporti in modo sorpreso.
+
+00:12:29.290 --> 00:12:32.730
+Un altro, restituendo 10 blocchi vicini perché non hai mai deduplicato le intestazioni.
+
+00:12:33.210 --> 00:12:34.070
+Pulisci il tuo feed.
+
+00:12:34.630 --> 00:12:35.570
+Ciò non è rapido dimostrazione.
+
+00:12:35.950 --> 00:12:38.210
+Pronto, possiamo spostare questo prestito alla revisione finale.
+
+00:12:38.950 --> 00:12:40.970
+Dati totali CDA in basso e dati di origine in alto.
+
+00:12:41.650 --> 00:12:45.030
+Una pipeline errata recupera 3 PDF di policy generiche e nessuno schema.
+
+00:12:45.550 --> 00:12:46.790
+Il modello inventa la fase del prestito.
+
+00:12:47.690 --> 00:12:50.970
+Pipeline corretta, classificatore di intenti indirizza allo schema, restituisce la domanda
+
+00:12:50.970 --> 00:12:51.430
+di prestito.
+
+00:12:52.130 --> 00:12:56.730
+Stato, transizioni consentite tramite regole aziendali e il nome dell'azione di Power Automate
+
+00:12:56.730 --> 00:12:57.810
+che modifica lo stato.
+
+00:12:58.610 --> 00:13:02.930
+I siti di risposta visualizzano i valori consentiti e propongono azione e la rifiutano se la sensibilità
+
+00:13:02.930 --> 00:13:03.370
+la blocca.
+
+00:13:03.930 --> 00:13:04.550
+Questa è la messa a te.
+
+00:13:05.330 --> 00:13:06.570
+Un ultimo dettaglio è la latenza.
+
+00:13:07.290 --> 00:13:09.530
+Misura il tempo di recupero separatamente dalla generazione.
+
+00:13:10.150 --> 00:13:13.630
+Se il recupero supera regolarmente i 300.000 e 60, i filtri sono sbagliati o l'indice è
+
+00:13:13.630 --> 00:13:13.970
+gonfio.
+
+00:13:14.770 --> 00:13:15.450
+Ottimizza prima lì.
+
+00:13:15.810 --> 00:13:17.470
+I modelli sono veloci, la tua indecisione no.
+
+00:13:17.930 --> 00:13:19.490
+Se non ricordi nient'altro, ricorda questo.
+
+00:13:20.070 --> 00:13:21.810
+Il recupero non è una ricerca, è una selezione.
+
+00:13:22.310 --> 00:13:23.390
+Data versa è la spina dorsale.
+
+00:13:24.110 --> 00:13:24.930
+I documenti sono muscoli.
+
+00:13:24.930 --> 00:13:28.850
+Collegali entrambi, riducili per sicurezza e il tuo agente smetterà di indovinare.
+
+00:13:30.330 --> 00:13:33.090
+Velo tre strumenti e policy che applicano la governance U.
+
+00:13:33.770 --> 00:13:34.990
+Power Automate più DLP.
+
+00:13:35.850 --> 00:13:36.450
+Sa cosa è vero.
+
+00:13:36.910 --> 00:13:38.370
+Ora insegnagli cosa può fare in sicurezza.
+
+00:13:38.890 --> 00:13:40.610
+Un agente che non sa agire è un chatbot.
+
+00:13:41.170 --> 00:13:44.090
+Un agente che agisce senza protezione in a violazione in attesa di titoli.
+
+00:13:44.710 --> 00:13:46.070
+Vuoi competenza con le cinture di sicurezza.
+
+00:13:46.430 --> 00:13:48.670
+Inserisci i Power Automate DLP a accesso condizionale.
+
+00:13:48.670 --> 00:13:51.290
+I muscoli, le recinzioni e il buttafuori alla porta.
+
+00:13:51.950 --> 00:13:52.490
+Ecco il principio.
+
+00:13:53.110 --> 00:13:55.370
+Le azioni sono esplicite, autorizzate e reversibili.
+
+00:13:56.090 --> 00:13:57.110
+Non diamo libertà al modello.
+
+00:13:57.830 --> 00:13:58.770
+Gli diamo un catalogo di verbi.
+
+00:13:59.130 --> 00:14:01.210
+Ogni verbo ha un flusso con uno schema di input ristretto,
+
+00:14:01.290 --> 00:14:04.070
+riferimenti di connessione con privilegi minimi e logica di rifiuto integrata.
+
+00:14:04.490 --> 00:14:05.490
+Modello non improvvisa mai dirì.
+
+00:14:05.830 --> 00:14:06.610
+Richiede un verbo.
+
+00:14:07.150 --> 00:14:08.190
+Inizia con un catalogo di strumenti.
+
+00:14:08.550 --> 00:14:09.670
+Le voci del catalogo hanno questo aspetto.
+
+00:14:10.110 --> 00:14:13.350
+Nome visualizzato, scopo, schema di input, precondizioni, flag di sensibilità,
+
+00:14:13.430 --> 00:14:15.410
+riferimento di connessione e contratto di restituzione.
+
+00:14:15.410 --> 00:14:17.090
+Esempio, oggiorno lo stato del prestito.
+
+00:14:17.750 --> 00:14:19.170
+Scopo e richiesta di prestito di transizione.
+
+00:14:19.970 --> 00:14:23.310
+Stato, input, stringa di prestito, enumerazione stato di destinazione.
+
+00:14:24.710 --> 00:14:25.150
+Precondizioni.
+
+00:14:25.650 --> 00:14:28.090
+Lo stato di destinazione deve essere una transizione valida per sette regole.
+
+00:14:28.970 --> 00:14:31.890
+I flag di sensibilità richiedono un connettore aziendale etichettato come interno.
+
+00:14:32.550 --> 00:14:34.410
+Riferimento di connessione prestiti svcmin.
+
+00:14:35.290 --> 00:14:36.670
+Stai insegnando a un bambino a usare le forbici,
+
+00:14:36.750 --> 00:14:38.650
+dandogli le forbici di sicurezza nella monotosega.
+
+00:14:39.350 --> 00:14:40.530
+Privilegio minimo, non è facoltativo.
+
+00:14:40.530 --> 00:14:44.810
+Crea account di servizio dedicati con autorizzazioni dataverse minime per eseguire solo quell'azione.
+
+00:14:44.810 --> 00:14:47.830
+Nessun diritto di tabella esteso, nessun intervento di potere a livello di gruppo.
+
+00:14:48.050 --> 00:14:50.830
+Archivia le credenziali nei riferimenti di connessione vincolati per ambiente.
+
+00:14:51.150 --> 00:14:55.130
+Quindi, lo sviluppato è l'utilizzo a dati falsi, la produzione tocca la realtà e nessuno dei due troppe lammellate.
+
+00:14:55.450 --> 00:14:58.010
+Utilizzi la sicurezza personalizzata, esaminala come se lo pensassi davvero.
+
+00:14:58.570 --> 00:15:00.450
+Ora, crea un modello di flusso con tre livelli standard.
+
+00:15:00.990 --> 00:15:02.370
+Livello 1, convalida dell'input.
+
+00:15:02.930 --> 00:15:08.090
+Convalida ai tipi, mappa è sinonime ai campi canonici e rifiuta parametri ambigui o mancanti con un rifiuto strutturato.
+
+00:15:08.570 --> 00:15:09.810
+Livello 2, controlli delle po.
+
+00:15:09.810 --> 00:15:16.810
+Valuta le etichette MIP, l'appartenenza al gruppo di LP e tutti i segnali di accesso condizionale che esponi tramite intestazioni o contesto di attivazione.
+
+00:15:17.810 --> 00:15:19.230
+Livello 3, esecuzione e mascheramento.
+
+00:15:19.710 --> 00:15:24.350
+Esegui il diritto minimo, maschere valori sensibili nei registri e restituisci un risultato compatto compatto con un identico relazione.
+
+00:15:24.890 --> 00:15:27.350
+I modelli di prompt si trovano di fronte a questi flussi come wrapper.
+
+00:15:27.350 --> 00:15:31.930
+Definiscono come l'agente richiede lo strumento quando l'intento cambia stato e confidenza.
+
+00:15:33.150 --> 00:15:36.090
+8, che ha maggiorno stato prestito con il di prestito, stato target.
+
+00:15:37.350 --> 00:15:41.450
+Se lo stato è in conflitto con regole aziendali o blocchi di sensibilità, rifiuta e cita la polisi specifica.
+
+00:15:42.190 --> 00:15:43.390
+È qui che la maggior parte di voi fallisce.
+
+00:15:43.390 --> 00:15:47.990
+Passate testo in formato libero nei flussi come se fosse il 2019, schema forte in entrata e risultati forti in uscita.
+
+00:15:48.230 --> 00:15:49.650
+Contrassegna le variabili come sensibili.
+
+00:15:49.990 --> 00:15:54.170
+Input come SSN, redito o qualsiasi campo ad alta sensibilità, risiedono in variabili protette.
+
+00:15:54.450 --> 00:15:55.510
+Vengono mai visualizzate in esecuzione.
+
+00:15:55.510 --> 00:15:59.050
+Utilizza azioni di credenziali per qualsiasi cosa relativa all'autenticazione.
+
+00:15:59.430 --> 00:16:04.110
+Se un flusso deve recuperare un token, le credenziali vengono estratte in fase di esecuzione da un archivio protetto,
+
+00:16:04.230 --> 00:16:08.530
+non incollate in un prompt, non inserite in variabili di ambiente denominate peldon't read, se le persone lo fanno.
+
+00:16:08.830 --> 00:16:09.650
+Non comportare da persona.
+
+00:16:09.650 --> 00:16:11.590
+L'accesso condizionale è l'adulto nella stagna.
+
+00:16:11.890 --> 00:16:12.590
+Applica MFA.
+
+00:16:13.010 --> 00:16:15.630
+Limita l'esecuzione a dispositivi conformi o posizioni attendibili.
+
+00:16:16.210 --> 00:16:18.610
+Se la tua polisi stabilisce che gli ospiti non possono avviare azioni,
+
+00:16:18.970 --> 00:16:22.350
+il rapper dello strumento dovrebbe leggere l'identità del chiamante e rifiutare con un chiaro rifiuto.
+
+00:16:22.350 --> 00:16:25.130
+L'azione richiede un dispositivo conforme per polisi.
+
+00:16:26.010 --> 00:16:27.890
+L'agente rimane educato, la polisi rimane ferma.
+
+00:16:28.410 --> 00:16:29.130
+DLP la membrana.
+
+00:16:29.510 --> 00:16:31.630
+Classifica i connettori in aziendali, non aziendali e bloccati.
+
+00:16:32.030 --> 00:16:34.370
+Flussi in questo catalogo di strumenti utilizzano connettori sull'azienda.
+
+00:16:34.370 --> 00:16:36.930
+Stai cercando di installare l'output verso una destinazione in un'azienda.
+
+00:16:37.510 --> 00:16:39.470
+Bloccato a livello di tenant e non solo nel tuo flusso.
+
+00:16:39.770 --> 00:16:42.070
+Il punto è rendere fisicamente impossibile il percorso sbagliato.
+
+00:16:42.790 --> 00:16:45.370
+Non dipendi dalla moderazione dello sviluppatore, dipendi dalla fisica.
+
+00:16:45.690 --> 00:16:47.590
+La segmentazione dell'ambiente mantiene la tua sentimentale.
+
+00:16:47.590 --> 00:16:53.850
+DATI diversi, riferimenti di connessioni diversi, nomi di strumenti, stessi schemi.
+
+00:16:54.470 --> 00:16:57.130
+Ciò significa che prom detto gente non cambia, non cambia, non cambia, non cambia solo i binding.
+
+00:16:57.750 --> 00:17:02.270
+Esegui test in UATI con etichette realistiche e impostazioni DLP in modo che non ci siano sorprese in PROD.
+
+00:17:02.990 --> 00:17:05.630
+Se dev ha un DLP l'assista è PROD rigoroso, testa entrambi.
+
+00:17:06.130 --> 00:17:07.730
+La varianza è intenzionale, non accidentale.
+
+00:17:08.070 --> 00:17:09.610
+Livello di polisi cablato in fase di esecuzione.
+
+00:17:09.950 --> 00:17:12.990
+Incorpora regole di rifiuto che potrebbero essere etichette nel contenuto recuperato.
+
+00:17:12.990 --> 00:17:18.130
+Se il recupero restituisce un record con informazioni riservate, l'azione richiesta lo esporrebbe a un sistema esterno
+
+00:17:18.130 --> 00:17:21.730
+e il wrapper dello strumento rifiuta con una motivazione codificata in base alla policy e registra l'incidente.
+
+00:17:22.130 --> 00:17:25.510
+Il mascheramento in tempo reale sostituisce i valori consegni a posto nel testo visibile del modello.
+
+00:17:25.810 --> 00:17:28.870
+Il modello non vede mai segreti non elaborati, quindi un può divulgarli accidentalmente.
+
+00:17:29.350 --> 00:17:30.190
+Non hai sfiducia a igiene.
+
+00:17:30.770 --> 00:17:33.630
+La registrazione e gli audit sono parte integrante della progettazione, non ripensamento.
+
+00:17:33.850 --> 00:17:35.250
+Attiva i registri di audit per ogni flusso.
+
+00:17:35.250 --> 00:17:38.530
+Registra che è richiesto l'azione, quali parametri sono stati passati e mascherati,
+
+00:17:38.610 --> 00:17:40.810
+quali controlli dei criteri sono stati eseguiti e il risultato.
+
+00:17:40.870 --> 00:17:44.610
+Le revisioni trimestrali individuano asset orfani, flussi condivisi in eccesso e intrusioni di cone.
+
+00:17:44.990 --> 00:17:47.130
+Annulla il provvigio di qualsiasi cosa di proprietà di un ex dipendente.
+
+00:17:47.770 --> 00:17:51.410
+Ignora questo e alla fine scoprirai un flusso fantasma che scrive in produzione alle due di notte.
+
+00:17:52.150 --> 00:17:52.590
+Delizioso.
+
+00:17:52.890 --> 00:17:53.490
+Errori comuni.
+
+00:17:54.050 --> 00:17:55.590
+Passaggio di segreti nei prompt utente.
+
+00:17:55.870 --> 00:17:56.550
+Rimpianto immediato.
+
+00:17:57.030 --> 00:17:59.930
+Registrazione di informazioni personali identificabili nei messaggi di successo e anche rimpianto.
+
+00:18:00.150 --> 00:18:02.250
+Creazione di flussi senza prompt e schemi di controllo delle versioni.
+
+00:18:05.250 --> 00:18:06.770
+Ambienti non gestiti senza DLP.
+
+00:18:07.550 --> 00:18:09.670
+Congratulazioni, la tua prova di concetto è una responsabilità.
+
+00:18:10.590 --> 00:18:14.690
+E mi è preferito mescolare i connettori aziendali e non aziendali perché dovremmo solo inviare un'email a qualcuno.
+
+00:18:15.130 --> 00:18:16.710
+No, usa l'email aziendale o non inviare email.
+
+00:18:17.110 --> 00:18:17.790
+Parliamo di kill switch.
+
+00:18:18.230 --> 00:18:20.930
+Hai bisogno di un interruttore di emergenza nell'interfaccia di amministrazione
+
+00:18:20.930 --> 00:18:24.310
+o tramite automazione che disabiliti la gente, disabiliti la soluzione dello strumento entrare.
+
+00:18:24.610 --> 00:18:28.830
+Quando si verifica una violazione delle polisi, non si discute, ci si ferma, si indaga, si riprende solo.
+
+00:18:29.310 --> 00:18:30.450
+Con un registro delle modifiche.
+
+00:18:31.010 --> 00:18:31.910
+Velocità e sicurezza.
+
+00:18:32.270 --> 00:18:34.810
+Una volta eseguito il collegamento accade qualcosa di prevedibile.
+
+00:18:35.250 --> 00:18:38.190
+L'utente smette di promettere troppe e propone azioni che può effettivamente intraprendere.
+
+00:18:38.930 --> 00:18:41.590
+Quando le polisi negano, il rifiuto è specifico e registrato.
+
+00:18:42.130 --> 00:18:43.490
+Gli utenti si fidano perché è coerente.
+
+00:18:44.090 --> 00:18:49.070
+E sì, il team di Odit smette di aggirarsi come un falco perché finalmente gli ha fornito dati di telemetria degni di essere letto.
+
+00:18:49.210 --> 00:18:49.850
+Build end-to-end.
+
+00:18:50.390 --> 00:18:52.310
+Copilot Studio più Power Automate.
+
+00:18:52.970 --> 00:18:53.810
+Metriche prime e dopo.
+
+00:18:54.710 --> 00:18:56.650
+Uniamo la spina dorsale con una build concreta.
+
+00:18:57.270 --> 00:18:58.350
+Un copilato di supporto e prestito.
+
+00:18:59.390 --> 00:19:02.110
+Copilot Studio gestisce l'orchestrazione data verso la verità.
+
+00:19:02.430 --> 00:19:03.430
+Power Automate e il mani.
+
+00:19:03.430 --> 00:19:05.270
+Stessa architettura in dev.
+
+00:19:05.390 --> 00:19:07.410
+Watt, Prod, Binding diversi, stessa logica.
+
+00:19:07.750 --> 00:19:08.210
+Passaggio 1.
+
+00:19:08.290 --> 00:19:09.130
+Applica modello di sistema.
+
+00:19:09.470 --> 00:19:12.730
+In Copilot Studio crea istruzioni personalizzate utilizzando il nostro modello di versione.
+
+00:19:13.390 --> 00:19:14.270
+Nome ambiente di binding.
+
+00:19:15.350 --> 00:19:16.070
+Unità aziendale.
+
+00:19:16.190 --> 00:19:16.430
+UAT.
+
+00:19:16.890 --> 00:19:17.770
+Prestito al dettaglio.
+
+00:19:18.030 --> 00:19:18.390
+Etichetta.
+
+00:19:18.530 --> 00:19:18.770
+MIP.
+
+00:19:18.890 --> 00:19:19.210
+Elenco.
+
+00:19:19.910 --> 00:19:21.190
+Riservato altamente riservato.
+
+00:19:22.390 --> 00:19:25.070
+Nella fase del glossario fase fase stato della domanda di prestito attivas.
+
+00:19:25.410 --> 00:19:25.670
+Sempre.
+
+00:19:25.810 --> 00:19:26.170
+Includi.
+
+00:19:26.370 --> 00:19:26.530
+Tien.
+
+00:19:26.530 --> 00:19:30.870
+Criterio di temperatura UV 1.3 nel piedi pagina di test in modo che la deriva sia visibile.
+
+00:19:31.550 --> 00:19:32.070
+Passaggio 2.
+
+00:19:32.170 --> 00:19:33.150
+Creare l'indice dello schema.
+
+00:19:33.310 --> 00:19:34.810
+Generare schede schema per entità.
+
+00:19:35.030 --> 00:19:35.870
+Domanda di prestito.
+
+00:19:35.950 --> 00:19:36.950
+Documento del richiedente.
+
+00:19:37.050 --> 00:19:37.790
+Includere campi.
+
+00:19:38.030 --> 00:19:38.730
+Set di opzioni.
+
+00:19:39.010 --> 00:19:39.450
+Relazioni.
+
+00:19:39.710 --> 00:19:42.010
+E contrassegnare due record campione per entità.
+
+00:19:43.170 --> 00:19:44.010
+Aggiungere le regole aziendale.
+
+00:19:44.770 --> 00:19:46.290
+Transizioni di stato consentite.
+
+00:19:46.490 --> 00:19:46.950
+Inviate.
+
+00:19:47.030 --> 00:19:47.710
+Revisione iniziale.
+
+00:19:47.790 --> 00:19:48.410
+Revisione finale.
+
+00:19:48.710 --> 00:19:49.150
+Approvate.
+
+00:19:49.210 --> 00:19:49.650
+Rifiutate.
+
+00:19:49.730 --> 00:19:50.330
+Nessuna diretta.
+
+00:19:50.390 --> 00:19:50.690
+Inviate.
+
+00:19:50.750 --> 00:19:51.150
+Approvate.
+
+00:19:51.250 --> 00:19:51.670
+Pubblicate.
+
+00:19:51.770 --> 00:19:53.090
+Come fonte di conoscenza primaria.
+
+00:19:53.430 --> 00:19:54.450
+Nell'indice del documento.
+
+00:19:54.530 --> 00:19:55.190
+Procedure operative.
+
+00:19:55.310 --> 00:19:55.510
+Standard.
+
+00:19:55.630 --> 00:19:55.990
+Secondare.
+
+00:19:56.090 --> 00:19:57.770
+Sezione di criteri di prestito per visualizzazione.
+
+00:19:57.870 --> 00:19:58.990
+Classificazioni conservate.
+
+00:19:59.930 --> 00:20:00.470
+Passaggio 3.
+
+00:20:00.630 --> 00:20:01.610
+Configurare il recupero.
+
+00:20:01.770 --> 00:20:02.850
+Abilitare la ricerca ibrida.
+
+00:20:02.990 --> 00:20:05.550
+Con riclassificazione che aumenta le corrispondenze di schema.
+
+00:20:05.650 --> 00:20:07.170
+Classificare la ricerca intensa nello schema.
+
+00:20:07.290 --> 00:20:08.030
+Ricerca di criteri.
+
+00:20:08.130 --> 00:20:08.490
+Eseguibile.
+
+00:20:08.610 --> 00:20:10.490
+Top K2 per schema 4 per documenti.
+
+00:20:10.490 --> 00:20:14.550
+Filtre a livello di campo per intento, termine, stato, reddito, KYC.
+
+00:20:15.310 --> 00:20:20.510
+Attivare le deduzioni di sicurezza per utente e ambiente con tanti frammenti di schema ad alta frequenza con un TTL di 10 minuti.
+
+00:20:21.010 --> 00:20:21.630
+Passaggio 4.
+
+00:20:21.730 --> 00:20:23.290
+Collegare il catalogo di strumenti.
+
+00:20:23.370 --> 00:20:25.010
+Importare una soluzione gestita con tre flussi.
+
+00:20:25.090 --> 00:20:26.110
+Ottenere l'epilogo del prestito.
+
+00:20:26.190 --> 00:20:27.150
+Aggiornare lo stato del prestito.
+
+00:20:27.230 --> 00:20:27.710
+Richiede un documento.
+
+00:20:28.190 --> 00:20:33.910
+Ogni flusso apre condizioni di schema di input, flag di sensibilità, privilegi minimi, riferimenti di connessione associati a UAT.
+
+00:20:34.430 --> 00:20:36.690
+Input contrassegnati come sensibili o va appropriato.
+
+00:20:36.690 --> 00:20:38.870
+Registri abilitati con mascheramento di correlazione.
+
+00:20:39.350 --> 00:20:40.030
+Passaggio 5.
+
+00:20:40.030 --> 00:20:40.990
+Aggiungere rapper di pro.
+
+00:20:41.530 --> 00:20:43.990
+In Copilot Studio crea modelli di invocazione degli strumenti.
+
+00:20:44.870 --> 00:20:49.650
+Quando l'intento cambia stato e la fiducia 8 chiama l'aggiornamento dello stato del prestito con lì del prestito stato di destinazione.
+
+00:20:50.590 --> 00:20:54.790
+Se lo stato di destinazione viola le regole aziendali, rifiuta con il codice rubrica BR transizione di stato.
+
+00:20:55.350 --> 00:20:58.450
+Un riepilogo dei rifiuti con non posso eseguirlo a causa del codice etichetta della policy.
+
+00:20:59.030 --> 00:20:59.830
+Ecco un passaggio successivo.
+
+00:21:00.730 --> 00:21:01.710
+Ciclo di convalida.
+
+00:21:01.710 --> 00:21:05.710
+Crea una suite di test di 25 prompt, esempi ambigui di avversari e normali.
+
+00:21:06.530 --> 00:21:09.270
+Sposta l'A4831 in possiamo passare direttamente ad approvato.
+
+00:21:09.270 --> 00:21:11.950
+Invia tramite email il codice SSN del richiedente da sovrò.
+
+00:21:12.350 --> 00:21:13.550
+Esegui su dev o apte pro.
+
+00:21:14.070 --> 00:21:20.390
+Verifica che gli output, i campi canonici del sito e le azioni vengano proposti solo quando consentito e che i rifiuti della policy siano specifici e registrati.
+
+00:21:20.650 --> 00:21:24.930
+Confronta gli ID di correlazione ai registri di flusso con le trascrizioni di Copilot per confermare la traccia BD.
+
+00:21:24.930 --> 00:21:30.670
+Prima delle metriche dalla build non fondata, il 37% delle risposte faceva riferimento a campi inesistenti.
+
+00:21:31.430 --> 00:21:34.190
+La deriva tra tenant ha prodotto tre nomi di stato diversi.
+
+00:21:35.050 --> 00:21:38.070
+Latenza mediana è di 4,2 secondi a causa delle scansioni delle tabelle.
+
+00:21:38.070 --> 00:21:42.170
+Il consumo di token per Q&A è stato in media di 9.800 token.
+
+00:21:43.710 --> 00:21:49.770
+Due mancati insuccessi di policy in cui le note sensibili sono state ripilogate verso una destinazione non zendale, bloccata solo dal tenant DLP.
+
+00:21:50.990 --> 00:21:55.590
+Dopo metriche con campi inventati e progettati in base al contesto in tutta la suite richiesta di prestito canonica.
+
+00:21:55.590 --> 00:21:58.930
+Stato citato nel 100% delle risposte sullo stato.
+
+00:21:59.270 --> 00:22:02.310
+Latenza ridotta a 1,6 secondi in media con recupero a livello di campo.
+
+00:22:02.710 --> 00:22:05.290
+Utilizzo di token per Q&A in media di 3.100.
+
+00:22:05.830 --> 00:22:07.410
+Tentativi di violazione delle policy 4.
+
+00:22:07.890 --> 00:22:10.270
+Tutti rifiutati con motivazione esplicita e registrati con me.
+
+00:22:11.230 --> 00:22:15.710
+Stessi prompt tra Dev, Weat, Boss, Prod hanno prodotto riferimenti di campo identici.
+
+00:22:17.070 --> 00:22:19.550
+Differenze solo nelle azioni consentite come previsto.
+
+00:22:20.090 --> 00:22:20.830
+Una breve microstoria.
+
+00:22:20.830 --> 00:22:23.750
+Un tester ha chiesto FastTrack L5-1 per approvazione.
+
+00:22:23.750 --> 00:22:27.350
+In precedenza l'agente ha detto Fatto e ha immaginato una transizione.
+
+00:22:28.550 --> 00:22:29.510
+La risposta del copiloto.
+
+00:22:30.070 --> 00:22:30.510
+Rifiutato.
+
+00:22:30.850 --> 00:22:33.330
+La transizione di stato BR inviata, approvata, non è valida.
+
+00:22:34.210 --> 00:22:36.270
+Transizioni valide, inviate revisione iniziale.
+
+00:22:37.110 --> 00:22:39.750
+Quindi offre aggiornamento allo stato del prestito per la revisione iniziale.
+
+00:22:40.270 --> 00:22:42.130
+Un clic percorso conforme pronto per l'audito.
+
+00:22:42.810 --> 00:22:43.850
+Trasferisci le risorse.
+
+00:22:44.270 --> 00:22:46.770
+Impacchetta il file del modello di messaggio di sistema con i token.
+
+00:22:46.770 --> 00:22:50.390
+La checklist di messa a terra dello schema, il modello JSON della pipeline di recupero,
+
+00:22:50.490 --> 00:22:53.050
+i tre modelli di prompt di flusso e un file di mappatura dell'ambiente
+
+00:22:53.050 --> 00:22:54.850
+per i riferimenti di connessione e le etichette.
+
+00:22:55.170 --> 00:22:55.930
+Controlla la versione di tool.
+
+00:22:56.230 --> 00:22:57.310
+Archivia nel controllo di ciò da ciò.
+
+00:22:57.570 --> 00:22:59.430
+All'importazione i variabili vengono associate per ambiente.
+
+00:22:59.870 --> 00:23:01.070
+Nessuna modifica manuale in produzione.
+
+00:23:01.330 --> 00:23:01.790
+Siete adulti.
+
+00:23:03.090 --> 00:23:05.990
+Distribuisci in Watt, esegui la suite, acquisisci la tabella prima o dopo
+
+00:23:05.990 --> 00:23:07.070
+e presenta due screenshot.
+
+00:23:07.770 --> 00:23:10.250
+Una risposta fondata che cita lo stato della domanda di prestito.
+
+00:23:10.330 --> 00:23:13.230
+Una voce da registro di controllo con input mascherati ogni di di correlazione.
+
+00:23:13.650 --> 00:23:15.790
+Questa è la tua prova esecutiva senza perdita di nulla.
+
+00:23:16.630 --> 00:23:19.030
+Ora hai un'identità di spine che non si sposta, un recupero,
+
+00:23:19.270 --> 00:23:22.550
+che non crea allucinazioni, strumenti che agiscono con privilegi minimi e policy,
+
+00:23:22.550 --> 00:23:24.070
+che rifiutano con ricevute.
+
+00:23:24.570 --> 00:23:26.290
+È ripetibile, verificabile e veloce.
+
+00:23:26.750 --> 00:23:29.130
+È scioccante ciò che accade quando fornisci verità e limiti al modello.
+
+00:23:30.150 --> 00:23:30.750
+Punto chiave.
+
+00:23:31.010 --> 00:23:33.990
+Progettazione del contesto, recupero del sistema, strumenti e policy
+
+00:23:33.990 --> 00:23:35.970
+trasformano Copilot da un indovino prolisso
+
+00:23:35.970 --> 00:23:37.970
+a un compagno di squadra governato che individua i campi,
+
+00:23:38.050 --> 00:23:39.550
+agisce in modo sicuro e rifiuta con precisione.
+
+00:23:40.750 --> 00:23:41.430
+Ma è una cosa efficiente.
+
+00:23:41.670 --> 00:23:43.670
+Clona i modelli, associa le variabili di ambiente,
+
+00:23:43.810 --> 00:23:45.290
+indicizza i tuoi dati rispetto allo schema,
+
+00:23:45.630 --> 00:23:48.630
+applica DLP ed esegui la suite di valutazione su Dev, Watt e Prod.
+
+00:23:48.970 --> 00:23:51.410
+Quindi promuovi a WIAT con tag di versioni, kill switch e abilità.
+
+00:23:51.410 --> 00:23:53.870
+Se questo ti ha fatto risparmiare tempo, ripaga il debit.
+
+00:23:54.370 --> 00:23:57.210
+Iscriviti e segui la procedura dettagliata sulla valutazione avanzata
+
+00:23:57.210 --> 00:23:58.610
+e sull'orchestrazione multiagente.
+
+00:23:59.110 --> 00:23:59.490
+Procedi.
