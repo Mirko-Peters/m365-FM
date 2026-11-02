@@ -479,9 +479,9 @@ def build(g):
             if r and r.get("audio"): lald["associatedMedia"] = {"@type": "AudioObject", "contentUrl": r["audio"]}
             # Sprachfassung (uebersetzter Titel und Teaser, bei 150 Folgen je Sprache auch Show Notes): indexierbar, in Sitemap und hreflang; liegt im R2-Bucket statt in GitHub Pages
             _lalts = None if l in oa else alts   # T3: Sprache mit Dub-Fassung: diese Kopie bleibt ohne hreflang (ein Vertreter je Sprache im Cluster)
-            _lh = g["page"](l, f"{lt} – {NAME}", ls[:300], lu, f'{g["header"](l, "")}<main class="wrap">{lbody}</main>{g["footer"](l)}', _lalts, [lald], xdefault=ep_url(e), og_type="article", og_of=ep_url(e), switch=alts)
-            if l in oa:   # T42: die Kopie verweist kanonisch auf die Dub-Folge dieser Sprache (die im Cluster steht), nicht in die Sitemap
-                _lh = _lh.replace(f'<link rel="canonical" href="{lu}">', f'<link rel="canonical" href="{oa[l][0]}">', 1)
+            _lcan = oa[l][0] if l in oa else lu   # T42: Kopie in einer Sprache mit Dub-Folge -> kanonisch (auch og:url, Teilen, JSON-LD) die Dub-Folge, nicht in die Sitemap
+            if l in oa: lald["url"] = _lcan
+            _lh = g["page"](l, f"{lt} – {NAME}", ls[:300], _lcan, f'{g["header"](l, "")}<main class="wrap">{lbody}</main>{g["footer"](l)}', _lalts, [lald], xdefault=ep_url(e), og_type="article", og_of=ep_url(e), switch=alts, self_url=lu)
             (g.get("write_r2") or write)(f"{l}/show/episodes/{e['slug']}/index.html", _lh)
             if l not in oa: sitemap.append((lu, day(e.get("update_time")) or TODAY, _lalts))
 
@@ -501,7 +501,8 @@ def build(g):
         npg = (len(les) + PER - 1) // PER
         for p in range(npg):
             part = les[p * PER:(p + 1) * PER]
-            lis = "".join(f'<li style="margin:.9em 0"><a href="{loc_url(l, "episodes/" + e["slug"] + "/")}"><strong>{esc(TRL[l][e["slug"]][0])}</strong></a><br><span class="mut">{day(e["create_time"])}</span><br>{esc((TRL[l][e["slug"]][1] or "")[:200])}</li>' for e in part)
+            _oa_l = lambda e: ((g.get("orig_alts") or {}).get(e["slug"]) or {}).get(l)   # T42: gibt es die Folge als Dub in dieser Sprache, verlinkt die Liste die Dub-Folge
+            lis = "".join(f'<li style="margin:.9em 0"><a href="{(_oa_l(e) or (None,))[0] or loc_url(l, "episodes/" + e["slug"] + "/")}"><strong>{esc(TRL[l][e["slug"]][0])}</strong></a><br><span class="mut">{day(e["create_time"])}</span><br>{esc((TRL[l][e["slug"]][1] or "")[:200])}</li>' for e in part)
             pg = "".join(f'<a href="{loc_url(l, "episodes/" + ("" if q == 0 else f"page/{q + 1}/"))}"{" style=font-weight:700" if q == p else ""}>{q + 1}</a> ' for q in range(npg))
             lrel = "episodes/" if p == 0 else f"episodes/page/{p + 1}/"
             lu = loc_url(l, lrel)

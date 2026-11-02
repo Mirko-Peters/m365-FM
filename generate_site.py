@@ -194,29 +194,44 @@ def load():
 
 
 def finish_hreflang(roots):
-    """T42: Seiten ohne eigene Alternates (Community, Blog-Listen, Lernpfade, Listen ...), die es unter gleichem Pfad in mehreren
-    Sprachen gibt, bekommen hreflang (gegenseitig, mit x-default) und einen Sprachumschalter auf diese Fassungen. Nur indexierbare,
-    selbstkanonische Seiten (page() traegt nur solche ein). Gibt die Zahl der verknuepften Seiten zurueck."""
-    groups = {}
-    for lang, u in AUTO_HL:
+    """T42: Abschluss des Baus. (1) Seiten ohne eigene Alternates, die es unter gleichem Pfad in mehreren Sprachen gibt, bekommen
+    hreflang (gegenseitig; x-default nur, wenn es eine englische Fassung gibt) - nur indexierbare, selbstkanonische Seiten, keine
+    Folgeseiten /page/N/. (2) Der Sprachumschalter jeder Seite zeigt auf die vorhandene Fassung derselben Seite in der anderen
+    Sprache (auch noindex-Fassungen; eigene Alternates/switch= gehen vor), sonst bleibt die Startseite der Sprache.
+    Gibt (Seiten mit hreflang, Seiten mit neuem Umschalter) zurueck."""
+    def base_of(u):
         rel = u[len(BASE):]
-        base = rel[3:] if re.match(r"^/[a-z]{2}/", rel) and rel[1:3] in LANGS else rel
-        groups.setdefault(base, {})[lang if lang in LANGS else "en"] = u
-    n = 0
-    for base, alts in groups.items():
-        for lang, u in alts.items():
-            rel = u[len(BASE) + 1:] + "index.html"
-            f = next((r / rel for r in roots if (r / rel).is_file()), None)
-            if not f: continue
-            h = f.read_text("utf-8")
-            if "<!--hl-auto-->" not in h: continue
+        return rel[3:] if re.match(r"^/[a-z]{2}/", rel) and rel[1:3] in LANGS else rel
+    page1 = lambda b: re.sub(r"page/\d+/$", "", b)
+    members, indexable = {}, {}
+    for lang, u, noidx, auto, alts, sw in SW_REG:
+        lg = lang if lang in LANGS else "en"
+        members.setdefault(base_of(u), {}).setdefault(lg, u)
+        if auto: indexable.setdefault(base_of(u), {})[lg] = u
+    n_hl = n_sw = 0
+    for lang, u, noidx, auto, alts, sw in SW_REG:
+        b = base_of(u)
+        grp = members.get(page1(b), {}) if page1(b) != b else members.get(b, {})   # Folgeseite N: Umschalter auf Seite 1 der anderen Sprachen
+        target = {**grp, **(alts or {}), **(sw or {}), (lang if lang in LANGS else "en"): u}   # die eigene Sprache zeigt immer auf diese Seite
+        need_sw = any(l not in (alts or {}) and l not in (sw or {}) for l in grp if grp[l] != u)
+        if not auto and not need_sw: continue
+        rel = u[len(BASE) + 1:] + "index.html"
+        f = next((r / rel for r in roots if (r / rel).is_file()), None)
+        if not f: continue
+        h = f.read_text("utf-8"); h0 = h
+        if auto and "<!--hl-auto-->" in h:
+            hl = indexable.get(b, {}) if page1(b) == b else {}
             link = ""
-            if len(alts) > 1 and f'<link rel="canonical" href="{u}">' in h:   # nachtraeglich umgebogene Kanonische (z. B. pub(canon=...)) bleiben ohne hreflang
-                link = "".join(f'<link rel="alternate" hreflang="{LANGS[l][1] if l in LANGS else l}" href="{v}">\n' for l, v in sorted(alts.items(), key=lambda x: (x[0] != "en", x[0])))
-                link += f'<link rel="alternate" hreflang="x-default" href="{alts.get("en") or BASE + "/"}">\n'
-                h = switch_from(h, alts); n += 1
-            f.write_text(h.replace("<!--hl-auto-->", link, 1), "utf-8")
-    return n
+            if len(hl) > 1 and f'<link rel="canonical" href="{u}">' in h:   # nachtraeglich umgebogene Kanonische bleiben ohne hreflang
+                link = "".join(f'<link rel="alternate" hreflang="{LANGS[l][1] if l in LANGS else l}" href="{v}">\n' for l, v in sorted(hl.items(), key=lambda x: (x[0] != "en", x[0])))
+                if "en" in hl: link += f'<link rel="alternate" hreflang="x-default" href="{hl["en"]}">\n'
+                n_hl += 1
+            h = h.replace("<!--hl-auto-->", link, 1)
+        if need_sw: h = switch_from(h, target)
+        if h != h0:
+            f.write_text(h, "utf-8")
+            if need_sw: n_sw += 1
+    return n_hl, n_sw
 
 
 def lang_switch(cur, alt_urls, home_langs):
@@ -428,7 +443,7 @@ def single_main(html_):
 FXCSS = re.sub(r"/\*.*?\*/|\s*([{};:,])\s*", lambda m: m.group(1) or "", (ROOT / "assets" / "fx.css").read_text(encoding="utf-8"), flags=re.S).strip()   # kleines CSS inline statt eigener Anfrage (Ladezeit)
 
 
-AUTO_HL = []   # T42: Seiten ohne eigene Alternates; finish_hreflang() verknuepft am Ende alle, die es unter gleichem Pfad in mehreren Sprachen gibt
+SW_REG = []   # T42: (lang, url, noindex, auto, alternates, switch) je Seite; finish_hreflang() verknuepft am Ende Sprachfassungen unter gleichem Pfad
 
 
 def switch_from(body, alts):
@@ -438,7 +453,7 @@ def switch_from(body, alts):
     return re.sub(r'<details class="lsw">.*?</details>', lambda b: re.sub(r'<a href="([^"]*)" hreflang="([^"]+)"', lambda a: f'<a href="{m.get(a.group(2), a.group(1))}" hreflang="{a.group(2)}"', b.group(0)), body, count=1, flags=re.S)
 
 
-def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefault=None, og_type="article", extra_head="", noindex=False, side="", og_of=None, switch=None):
+def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefault=None, og_type="article", extra_head="", noindex=False, side="", og_of=None, switch=None, self_url=None):
     if lang in COMM_LANGS[2:] and any(k in canonical for k in ("/community/", "/entity/", "/glossary/")):
         extra_head += f'<script defer src="{BASE}/assets/ui-{lang}.js"></script>'
     hl = LANGS[lang][1] if lang in LANGS else "en"
@@ -448,9 +463,12 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
     if alternates:
         for l, u in alternates.items():
             alt += f'<link rel="alternate" hreflang="{LANGS[l][1] if l in LANGS else l}" href="{u}">\n'
-        alt += f'<link rel="alternate" hreflang="x-default" href="{xdefault or alternates.get("en") or BASE + "/"}">\n'   # x-default = englische Fassung des Clusters, sonst Startseite
-    elif not noindex and canonical.startswith(BASE + "/") and not canonical.endswith(".html"):
-        alt = "<!--hl-auto-->"; AUTO_HL.append((lang, canonical))   # T42: Sprachfassungen unter gleichem Pfad werden am Ende eingetragen
+        if xdefault or alternates.get("en"): alt += f'<link rel="alternate" hreflang="x-default" href="{xdefault or alternates["en"]}">\n'   # x-default = englische Fassung des Clusters (T42: sonst keins statt der Startseite)
+    _self = self_url or canonical
+    _auto = not alternates and not noindex and _self == canonical
+    if _self.startswith(BASE + "/") and not _self.endswith(".html"):
+        SW_REG.append((lang, _self, noindex, _auto, alternates, switch))   # T42: fuer Umschalter (alle Seiten) und hreflang (nur _auto) am Ende des Baus
+        if _auto: alt = "<!--hl-auto-->"
     body = switch_from(body, switch or alternates)   # T42
     ld = "".join(f'<script type="application/ld+json">{json.dumps(j, ensure_ascii=False)}</script>\n' for j in complete_ld(jsonld))
     desc = meta_desc(desc)   # T7: Beschreibung einheitlich begrenzt
@@ -1144,7 +1162,7 @@ def build():
         btns += f'<a class="btn" href="{yt}" rel="noopener">▶ {esc(ui[1])}</a>'
         if tr: btns += f'<a class="btn" href="{tr}">📄 {esc(ui[2])}</a>'
         rel = "".join(f'<a class="row" href="{url_of(x)}" title="{esc(x["e"]["title"])}"><h3>{esc(anchor_title(x["e"]["title"]))}</h3></a>' for x in more)
-        body = f"""{header(l, lang_switch(l, alts, [x for x in LANGS if x in alts]))}
+        body = f"""{header(l, lang_switch(l, alts, active))}
 <main class="wrap"><article>
 <nav class="crumbs" aria-label="breadcrumb"><a href="{BASE}/{l}/">{esc(ui[7])}</a> / {esc(LANGS[l][0])} / {it["date"]}</nav>
 <div class="kicker">M365.FM · {esc(LANGS[l][0])}</div>{('<p class="mut"><a href="' + BASE + '/show/episodes/' + ORIG[vid] + '/" hreflang="en">' + ("Original (English)" if l != "de" else "Original (Englisch)") + '</a></p>') if vid in ORIG else ""}
@@ -1262,10 +1280,10 @@ def build():
         if lg not in _AST and lg != "en":
             continue
         u = ast_url(lg)
-        alts_ast = {x: ast_url(x) for x in active if x in _AST}
+        alts_ast = {"en": ast_url("en"), **{x: ast_url(x) for x in active if x in _AST}}   # T42: Englisch gehoert in den Cluster (Umschalter, Sitemap)
         write(("accessibility" if lg == "en" else f"{lg}/accessibility") + "/index.html", page(lg, ast_label(lg) + " – M365.FM", (_AST.get(lg) or _AST["en"]).get("meta", ""), u,
-              f'{header(lg, "")}<main class="wrap" style="max-width:46em">{ast_body(lg)}</main>{footer(lg)}', alts_ast or None, [], xdefault=ast_url("en"), og_type="website", extra_head=f'<link rel="alternate" hreflang="en" href="{ast_url("en")}">\n'))
-        sitemap.append((u, TODAY, alts_ast or None))
+              f'{header(lg, "")}<main class="wrap" style="max-width:46em">{ast_body(lg)}</main>{footer(lg)}', alts_ast if len(alts_ast) > 1 else None, [], xdefault=ast_url("en"), og_type="website"))
+        sitemap.append((u, TODAY, alts_ast if len(alts_ast) > 1 else None))
 
     # Community-Seite je Sprache (noindex) + Service Worker fuer Web-Push
     for l in list(active) + ["en"]:
@@ -1488,13 +1506,14 @@ def build():
               {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
                   {"@type": "ListItem", "position": 1, "name": "M365.FM", "item": f"{BASE}/"}, {"@type": "ListItem", "position": 2, "name": LANGS[l][0], "item": f"{BASE}/{l}/"},
                   {"@type": "ListItem", "position": 3, "name": label, "item": u}]}]
-        alts = {x: f"{BASE}/{x}/top/" for x in active if top_for(x, 1) and not is_prov(x)}   # T42: vorlaeufige (noindex) Fassungen nicht im Cluster
-        body = f"""{header(l, lang_switch(l, alts, active))}
+        sw_top = {x: f"{BASE}/{x}/top/" for x in active if top_for(x, 1)}
+        alts = {x: v for x, v in sw_top.items() if not is_prov(x)}   # T42: vorlaeufige (noindex) Fassungen nicht im Cluster
+        body = f"""{header(l, lang_switch(l, sw_top, active))}
 <main class="wrap"><nav class="crumbs" aria-label="breadcrumb"><a href="{BASE}/{l}/">{esc(ui[7])}</a> / {esc(LANGS[l][0])}</nav>
 <div class="kicker">★ {esc(LANGS[l][0])} · {esc(wk)}</div><h1>{esc(label)}</h1>
 <h2>{esc(ui[3])}</h2><div class="list">{rows}</div>
 <p style="margin-top:1.6em"><a class="btn" href="{BASE}/{l}/">{esc(ui[3])} →</a></p></main>{footer(l)}"""
-        write(f"{l}/top/index.html", page(l, f"{label} – M365.FM {LANGS[l][0]}", short(" · ".join(strip_tags(x["e"]["title"]).split(":")[0] for x in t[:3]), 155), u, body, alts, ld, og_type="website", noindex=prov, side=side_for(l, label, body)))
+        write(f"{l}/top/index.html", page(l, f"{label} – M365.FM {LANGS[l][0]}", short(" · ".join(strip_tags(x["e"]["title"]).split(":")[0] for x in t[:3]), 155), u, body, None if prov else alts, ld, og_type="website", noindex=prov, side=side_for(l, label, body), switch=sw_top))
         if not prov:
             sitemap.append((u, wk, alts))
         topfeed[l] = [{"rank": n + 1, "title": strip_tags(x["e"]["title"]), "url": url_of(x), "episode": x["eid"]} for n, x in enumerate(t)]
@@ -1507,7 +1526,7 @@ def build():
     # Sitemap-Index je Sprache und Typ (T1): sitemap-<sprache>-<typ>.xml mit echtem lastmod und x-default; Hubs (lastmod = Baudatum)
     # bekommen das juengste Datum ihrer Gruppe, der Index das juengste Datum je Datei. Grenzen je Datei: 45.000 URLs.
     import site_sitemaps as SMAP
-    print("hreflang: Sprachfassungen verknuepft (gleicher Pfad):", finish_hreflang([OUT, R2OUT]))   # T42
+    print_hl = finish_hreflang([OUT, R2OUT]); print("hreflang (gleicher Pfad) / Sprachumschalter auf Seitenebene:", *print_hl)   # T42
     files = SMAP.write_all(sitemap, write, BASE, LANGS, TODAY)
     print(f"Sitemaps: {len(files)} Dateien, {len(sitemap)} URLs")
     _showix = PP.episode_index(BASE)

@@ -490,7 +490,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             _has_de = bool(e["desc"].get("de")) and e["desc"].get("de") != e["desc"].get("en") or bool((e.get("long") or {}).get("de")) or bool(GENTEXT.get(e["id"], {}).get("de"))
             _thin = False
             if e["type"] == "person" and e["id"] != AUTHOR_EID:   # Personen: nur mit echter Beschreibung (nicht der Speaker-Schablone) oder mehreren Auftritten in den Index
-                _app = len(eps) + len((SPEAKERS.get(e["id"]) or {}).get("sessions") or [])
+                _app = max(len(ep_find(e, "en")), len(ep_find(e, "de"))) + len((SPEAKERS.get(e["id"]) or {}).get("sessions") or [])   # T42: gleiche Entscheidung fuer en und de (sonst verweist en per hreflang auf ein noindex-de)
                 _real = (len(e["desc"].get("en") or "") > 80 and not e.get("speaker")) or bool((e.get("long") or {}).get("en"))
                 _thin = not _real and _app < 2 and not SQ.BY_PERSON.get(e["id"])   # eigene Zitate sind echter Inhalt
             _alts = {"en": eurl(BASE, "en", e["id"]), "de": eurl(BASE, "de", e["id"])} if _has_de and not _thin else None
