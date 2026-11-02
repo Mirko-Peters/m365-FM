@@ -29,11 +29,17 @@ jobs:
           if [ -e shownotes/PAUSED ]; then echo "shownotes/PAUSED vorhanden - Lauf uebersprungen"; exit 0; fi
           DRY=""; if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.dry_run }}" = "true" ]; then DRY="--dry-run"; fi
           python tools/set_spreaker_links.py --limit "${{ inputs.limit || '300' }}" --ids "${{ inputs.ids }}" $DRY
+      - name: Feed-Pruefung (steht der Link im oeffentlichen RSS?)
+        if: always()
+        continue-on-error: true
+        run: |
+          sleep 60   # Spreaker erneuert den Feed mit kurzer Verzoegerung
+          python tools/check_spreaker_links_feed.py
       - name: Protokoll sichern
         if: always()
         run: |
           git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
-          for f in data/spreaker_links.tsv data/spreaker_auth.enc; do [ -e "$f" ] && git add -A "$f"; done
+          for f in data/spreaker_links.tsv data/spreaker_auth.enc reports/spreaker-links-feed.md reports/spreaker-links-feed.json; do [ -e "$f" ] && git add -A "$f"; done
           if git diff --cached --quiet; then echo "nichts zu sichern"; exit 0; fi
           git commit -q -m "Spreaker-Website-Feld: Protokoll $(date -u +%Y-%m-%dT%H:%MZ) [skip ci]"
           for i in 1 2 3 4 5; do
