@@ -2,6 +2,7 @@
 import { execFileSync, spawnSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { webcrypto as crypto } from "node:crypto";
+import { d1BackupExportArgs, d1BackupTables } from "./src/d1_backup.js";
 
 const run = (args, input) => { const r = spawnSync("npx", ["wrangler", ...args], { input, encoding: "utf8" }); return r; };
 const fail = (m) => { console.error("::error::" + String(m).replace(/\r?\n/g, " | ").slice(0, 900)); process.exit(1); };
@@ -38,7 +39,15 @@ console.log("D1:", db.name);
 
 // 2) Schema anwenden (idempotent)
 // Sicherung vor jeder Schemaaenderung (Artefakt im Workflow), dann versionierte Migrationen (migrations/, Tabelle d1_migrations merkt sich den Stand)
-const bak = run(["d1", "export", "m365-dub", "--remote", "--output=backup-d1.sql"]);
+const schema = run(["d1", "execute", "m365-dub", "--remote", "--json", "--command", "SELECT name FROM sqlite_schema WHERE type='table' ORDER BY name"]);
+if (schema.status !== 0) fail("D1-Tabellen fuer Sicherung: " + (schema.stderr || schema.stdout));
+let tables = [];
+try {
+  const result = JSON.parse(schema.stdout);
+  tables = d1BackupTables(Array.isArray(result) ? result.flatMap((x) => x.results || []) : result.results || []);
+} catch { fail("D1-Tabellenliste nicht lesbar"); }
+// FTS5-Virtual- und Schattentabellen kann wrangler d1 export nicht sichern.
+const bak = run(d1BackupExportArgs(tables));
 console.log("D1-Sicherung:", bak.status === 0 ? "backup-d1.sql" : "FEHLER " + (bak.stderr || bak.stdout).slice(0, 300));
 if (bak.status !== 0) fail("Ohne Sicherung keine Migration");
 const sch = run(["d1", "migrations", "apply", "m365-dub", "--remote"]);
