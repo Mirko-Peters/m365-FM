@@ -1,0 +1,1825 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:08.340
+Kopilot Anda tidak pintar, itu hanyalah fitur pelengkapan otomatis yang rapi dan anak magang yang terlalu banyak kafein dengan lencana Microsoft yang terdengar percaya diri padahal sebenarnya tersesat.
+
+00:00:08.480 --> 00:00:14.220
+Admin rata-rata menginstallnya, mengajukan satu pertanyaan ambisius seperti meringkas penjualan kuartal lalu di berbagai wilayah,
+
+00:00:14.480 --> 00:00:18.860
+lalu terkejut saat ia menjawab dengan apapun yang kebetulan muat di jendela konteksnya yang terbatas.
+
+00:00:19.020 --> 00:00:22.500
+Itu bukan wawasan, itu tebakan statistik yang disampaikan dengan nada ramah.
+
+00:00:22.660 --> 00:00:27.580
+Kebanyakan yang disebut AI Kopilot berjalan dengan sesuatu yang disebut Retrival Augmented Generation atau RAG sebagai singkatannya.
+
+00:00:27.580 --> 00:00:32.700
+Secara teori, ini brilian. Anda mengajukan pertanyaan, ia mencari di basis pengetahuan, mengambil potongan yang relevan,
+
+00:00:32.880 --> 00:00:35.260
+dan menempelkannya ke perintah Anda agar model bahasa terlihat informatif.
+
+00:00:35.420 --> 00:00:38.940
+Dalam praktiknya, itu seperti meminta seorang pustakawan untuk memberikan seluruh pengetahuan manusia.
+
+00:00:39.160 --> 00:00:42.920
+Dia berlari menyusuri satu lorong, mengambil tiga buku secara acak, dan meneriakan jawabannya sambil berlari kembali.
+
+00:00:43.140 --> 00:00:45.500
+Satu query, satu pengambilan, satu peluang untuk salah.
+
+00:00:45.760 --> 00:00:48.720
+Sekarang, bandingkan itu dengan cara kerja keputusan perusahaan yang sebenarnya.
+
+00:00:48.960 --> 00:00:51.600
+Apakah Anda pernah hanya membutuhkan satu potong data? Tidak.
+
+00:00:51.600 --> 00:00:59.600
+Anda butuh spreadsheet dari keuangan, laporan riset dari sarepoin, gudang metrik di Microsoft Fabric, dan biasanya data pasar eksternal yang bahkan tidak ada di tenansi Anda.
+
+00:00:59.800 --> 00:01:03.440
+RAG klasik akan gagal saat kebenaran Anda tersebar di lebih dari satu tempat.
+
+00:01:03.600 --> 00:01:11.660
+Ia tidak bisa merencanakan pencarian ganda, tidak bisa menvalidasi kontradiksi, dan tentu saja tidak bisa mengerti bahwa kinerja kuartalan memiliki arti berbeda bagi pemasaran dan manufaktur.
+
+00:01:11.860 --> 00:01:14.340
+Namun, orang terus menyebut sistem ini cerdas.
+
+00:01:14.580 --> 00:01:14.940
+Salah.
+
+00:01:14.940 --> 00:01:20.920
+Mereka hanyalah turis konteks, mereka mengunjungi aset data Anda, berfoto selfie dengan PDF, dan berpura-pura tahu seluk beluk kota itu.
+
+00:01:21.160 --> 00:01:25.920
+Sementara itu, admin rata-rata dengan jujur percaya kopilot memiliki akses mahatau ke setiap folder sarepoin.
+
+00:01:26.100 --> 00:01:30.660
+Tidak, kecuali Anda membangun konektor dan pemberi alasan yang eksplisit, ia beroperasi dengan mata tertutup.
+
+00:01:30.800 --> 00:01:32.940
+Ini tidak hanya tidak efisien, tapi berbahaya.
+
+00:01:33.160 --> 00:01:36.460
+Tanpa pengambilan berbasis agen, perusahaan akan tenggelam dalam fragmentasi konteks.
+
+00:01:36.620 --> 00:01:38.620
+Keputusan dibuat berdasarkan data parsial.
+
+00:01:38.620 --> 00:01:40.480
+Risiko kepatuhan tidak disadari.
+
+00:01:40.480 --> 00:01:44.800
+Tim mengejar wawasan halusinasi yang dihasilkan oleh model yang tidak pernah mau memeriksa dirinya sendiri.
+
+00:01:45.160 --> 00:01:47.040
+Ironisnya, perbaikannya sudah ada.
+
+00:01:47.300 --> 00:01:48.820
+Masukkan RAG berbasis agen.
+
+00:01:49.020 --> 00:01:51.640
+Ia tidak sekadar mengambil informasi, ia memikirkannya secara mendalam.
+
+00:01:51.840 --> 00:01:54.920
+Ia merencanakan, memeriksa silang, dan menalar layaknya tim riset digital.
+
+00:01:55.160 --> 00:02:00.820
+Di akhir episode ini, Anda akan tahu persis cara membuat kopilot Anda berhenti bertindak seperti burung beo dan mulai berperilaku seperti ilmuwan.
+
+00:02:01.020 --> 00:02:05.440
+Dan ya, ada empat langkah, kita akan memperbaiki kopilot Anda yang bodoh dalam empat langkah tepat.
+
+00:02:05.600 --> 00:02:07.960
+Mitos RAG, mengapa kecerdasan linear gagal?
+
+00:02:07.960 --> 00:02:09.800
+Baiklah, mari kita bedah mitosnya.
+
+00:02:09.800 --> 00:02:14.200
+Retrieval Augmented Generation terdengar canggih, namun secara mendasar, ini sangat lineal.
+
+00:02:14.380 --> 00:02:17.500
+Langkah 1, ambil beberapa potongan teks berdasarkan kesamaan faktor.
+
+00:02:17.680 --> 00:02:20.220
+Langkah 2, masukkan potongan tersebut ke dalam perintah.
+
+00:02:20.400 --> 00:02:23.080
+Langkah 3, hasilkan jawaban lalu nyatakan kemenangan.
+
+00:02:23.360 --> 00:02:28.860
+Hanya itu, tanpa memori pencarian sebelumnya, tanpa penalaran kontradiksi, tanpa pengenalan konteks pengguna.
+
+00:02:29.080 --> 00:02:33.600
+Ini adalah garis lurus dari query kejawaban, semacam SQL join yang diperbagus dalam bahasa Inggris.
+
+00:02:33.800 --> 00:02:35.900
+Masalah dimulai saat realita menjadi rumit.
+
+00:02:35.900 --> 00:02:39.460
+Misalnya Anda bertanya, bandingkan reliability perangkat kita dengan pesaing.
+
+00:02:39.720 --> 00:02:45.220
+Sistem RAG standar mengakses satu indeks, mengambil dokumen yang menyebut reliability, lalu memberikan ringkasan.
+
+00:02:45.420 --> 00:02:47.440
+Apakah ia memeriksa log manufaktur di fabrik?
+
+00:02:47.560 --> 00:02:50.060
+Apakah ia membaca laporan pengujian baru yang tersembunyi di Sarepoin?
+
+00:02:50.220 --> 00:02:52.220
+Apakah ia menvalidasi data eksternal dari web?
+
+00:02:52.320 --> 00:02:53.180
+Tentu saja tidak.
+
+00:02:53.480 --> 00:02:55.120
+Ia bahkan tidak tahu sumber-sumber itu ada.
+
+00:02:55.340 --> 00:02:56.860
+Ia hanya menutupi ketidakpastian dengan kevasihan.
+
+00:02:56.860 --> 00:03:00.260
+Bayangkan ini seperti analogi perpustakaan yang tragis.
+
+00:03:00.400 --> 00:03:03.440
+Anda masuk dan bertanya kepada satu pustakawan tentang ekonomi global.
+
+00:03:03.700 --> 00:03:10.000
+Dia berlari kerak berlabel ekonomi, memberi Anda buku acak tentang kurs mata uang tahun 2012, dan menyatakan masalah selesai.
+
+00:03:10.220 --> 00:03:12.600
+Layanan pelanggan yang baik, namun penelitian yang buruk.
+
+00:03:12.740 --> 00:03:18.400
+Kecerdasan sejati akan merekrut banyak pustakawan, satu untuk keuangan, sejarah, kebijakan, lalu menyintai sistemuan mereka.
+
+00:03:18.400 --> 00:03:20.920
+Itulah perbedaan antara pengambilan data dan penalaran.
+
+00:03:21.080 --> 00:03:23.140
+Di perusahaan, kegagalan ini berlipat ganda.
+
+00:03:23.380 --> 00:03:26.020
+Satu pertanyaan eksekutif sering menyentuh lusinan sistem.
+
+00:03:26.260 --> 00:03:30.680
+Dokumen Sarepoin, set data Power BI, tabel Azure SQL, utas email.
+
+00:03:30.920 --> 00:03:34.220
+RAG klasik meratakan semua kompleksitas itu dalam satu langkah.
+
+00:03:34.440 --> 00:03:40.380
+Hasilnya, output tidak konsisten, ringkasan dangkal, dan data halusinasi yang diucapkan dengan penuh percaya diri.
+
+00:03:40.540 --> 00:03:46.800
+Kepatuhan regulasi, lupakan saja, saat model menarik teks dari apapun yang cocok secara vektor, Anda kehilangan asal-usulnya.
+
+00:03:46.800 --> 00:03:48.900
+Coba jelaskan itu kepada komite audit Anda.
+
+00:03:49.100 --> 00:03:51.960
+Namun, pemasaran seputar kopilot membuatnya terdengar maha kuasa.
+
+00:03:52.160 --> 00:03:54.940
+Brosur membisikkan, tanya apa saja, kopilot tahu bisnis Anda.
+
+00:03:55.120 --> 00:03:56.420
+Tidak, itu tidak benar.
+
+00:03:56.620 --> 00:03:58.440
+Ia melakukan pengambilan teks dengan amnesia.
+
+00:03:58.660 --> 00:04:01.000
+Ia tidak bisa merencanakan, merenung, atau memverifikasi.
+
+00:04:01.180 --> 00:04:05.620
+Ia tidak tahu situs Sarepoin mana yang berisi dokumen yang tepat atau apakah gudang fabrik tersinkronisasi.
+
+00:04:05.820 --> 00:04:10.160
+Namun karena bahasanya halus, eksekutif berasungsi ada pemahaman padahal hanya korelasi.
+
+00:04:10.400 --> 00:04:13.120
+Ilusi kecerdasan inilah yang dibeli oleh perusahaan.
+
+00:04:13.120 --> 00:04:16.540
+Selimut nyaman dan mahal yang ditenun dari distribusi probabilitas.
+
+00:04:16.540 --> 00:04:19.360
+Mereka merayakan saat kopilot menyusun email dengan benar,
+
+00:04:19.580 --> 00:04:22.120
+tanpa sadar bahwa ia salah memahami data sumber sepenuhnya.
+
+00:04:22.340 --> 00:04:28.420
+Mereka membanggakan wawasan berbasis AI tanpa menyadari bahwa wawasan itu dirakit dari konteks yang tidak cocok dan cuplikan parsial.
+
+00:04:28.660 --> 00:04:30.320
+Inilah konsekuensi ekonominya.
+
+00:04:30.600 --> 00:04:34.720
+Setiap laporan yang diringkas keliru, setiap KPI halusinasi berujung pada keputusan yang buruk.
+
+00:04:34.880 --> 00:04:36.740
+Proyek berubah arah berdasarkan fiksi.
+
+00:04:36.940 --> 00:04:38.740
+Tim kepatuhan mengejar bayang-bayang,
+
+00:04:38.740 --> 00:04:42.400
+dan saat realita muncul, saat wawasan palsu gagal diproduksi,
+
+00:04:42.660 --> 00:04:47.260
+kesalahan ditimpakan pada batasan AI, bukan pada arsitektur malas yang memang memicu kegagalan.
+
+00:04:47.560 --> 00:04:50.840
+Kenyataannya, kecerdasan linear gagal karena perusahaan tidaklah linear.
+
+00:04:51.120 --> 00:04:54.240
+Data itu terdistribusi, kontekstual, dan seringkali kontradiktif.
+
+00:04:54.360 --> 00:04:57.060
+Alur kerja satu query yang kaku tidak bisa beradaptasi dengan lingkungan tersebut,
+
+00:04:57.320 --> 00:04:59.040
+sama seperti satu neuron yang tidak bisa berpikir.
+
+00:04:59.200 --> 00:05:02.600
+Yang Anda butuhkan bukanlah perintah yang lebih baik, Anda butuh sistem yang bisa merencanakan.
+
+00:05:02.600 --> 00:05:07.140
+Sistem yang bisa memutuskan layanan mana yang digunakan, urutannya, dan cara memverifikasi hasilnya.
+
+00:05:07.140 --> 00:05:11.540
+Jadi, bagaimana kita mengajar copilot untuk beroperasi seperti tim riset, bukan seperti burung Beo?
+
+00:05:11.760 --> 00:05:13.740
+Disinilah agentik RAG berperan,
+
+00:05:13.980 --> 00:05:16.800
+lompatan evolusi dari pencarian reaktif ke penalaran proaktif.
+
+00:05:16.960 --> 00:05:20.740
+Ini menambahkan lapisan perencanaan, pengambil data khusus, dan siklus verifikasi.
+
+00:05:21.040 --> 00:05:24.640
+Dengan kata lain, ia berhenti berpura-pura pintar dan akhirnya belajar untuk berpikir.
+
+00:05:24.800 --> 00:05:27.680
+Inilah agentik RAG, dari sekadar pencarian menjadi penalaran.
+
+00:05:27.880 --> 00:05:30.320
+Disinilah kita beralih dari sekadar trik menjadi kecerdasan nyata.
+
+00:05:30.320 --> 00:05:32.260
+Agentik RAG bukanlah sekadar istilah tren,
+
+00:05:32.460 --> 00:05:35.480
+ini adalah kemampuan yang hilang dari copilot Anda sejak awal, fungsi eksekutif.
+
+00:05:35.480 --> 00:05:38.660
+Anggap saja ini sebagai RAG yang telah memiliki korteks prefrontal.
+
+00:05:38.840 --> 00:05:41.560
+Alih-alih menjalankan satu query dan berharap hasil terbaik,
+
+00:05:41.860 --> 00:05:43.560
+ia memecah masalah menjadi bagian-bagian,
+
+00:05:43.860 --> 00:05:45.540
+menugaskan tugas ke agen spesialis,
+
+00:05:45.820 --> 00:05:48.480
+memeriksa pekerjaan mereka, lalu menyintesis hasilnya.
+
+00:05:48.720 --> 00:05:52.060
+Singkatnya, ia mengubah model bahasa dari burung Beo menjadi perencana.
+
+00:05:52.280 --> 00:05:55.800
+Secara mekanis, agentik RAG beroperasi melalui orkestrasi multiagen
+
+00:05:55.800 --> 00:05:57.800
+yang dibangun di atas Azure Eye Agent Service.
+
+00:05:58.040 --> 00:05:59.800
+Bayangkan tiga peran yang sedang bekerja.
+
+00:05:59.800 --> 00:06:02.700
+Pertama, perencana semacam manajer proyek digital.
+
+00:06:02.900 --> 00:06:06.840
+Perencana membaca query Anda dan memutuskan alat atau sumber data mana yang relevan.
+
+00:06:07.040 --> 00:06:09.600
+Kemudian, agen pengambil data, pakar domain yang dilatih
+
+00:06:09.600 --> 00:06:11.960
+untuk mengakses data terstruktur atau tidak terstruktur.
+
+00:06:12.180 --> 00:06:15.840
+Terakhir, agen verifikator atau penalar yang berfungsi sebagai pemimpin redaksi,
+
+00:06:16.160 --> 00:06:19.320
+memeriksa konsistensi, menvalidasi kutipan, dan menyusun respons akhir.
+
+00:06:19.520 --> 00:06:22.860
+Bersama-sama, mereka menjalankan apa yang kita sebut siklus penalaran adaptif.
+
+00:06:22.980 --> 00:06:26.280
+Query, ambil, validasi, perbaiki, dan tindak lanjuti.
+
+00:06:26.280 --> 00:06:29.560
+Kata kuncinya adalah adaptif, tidak seperti RAG standar.
+
+00:06:29.800 --> 00:06:31.460
+Siklus ini tidak berhenti pada keluaran pertama.
+
+00:06:31.680 --> 00:06:33.760
+Ia melakukan pengalihan rute saat muncul kontradiksi.
+
+00:06:34.000 --> 00:06:36.320
+Bandingkan tarian yang terorkestrasi ini dengan ruang redaksi berita.
+
+00:06:36.440 --> 00:06:38.920
+Perencana adalah editor pengelola yang menentukan tugas liputan.
+
+00:06:39.080 --> 00:06:41.100
+Anda memeriksa sarepoin untuk laporan internal.
+
+00:06:41.340 --> 00:06:43.140
+Anda menarik metrik sensor dari fabrik.
+
+00:06:43.300 --> 00:06:45.280
+Anda memindai web untuk mencari data kompetitor.
+
+00:06:45.540 --> 00:06:47.780
+Setiap agen pengambil data mendapatkan bagiannya masing-masing.
+
+00:06:48.040 --> 00:06:49.720
+Verifikator memeriksa fakta draft gabungan,
+
+00:06:49.920 --> 00:06:51.880
+menjalankan ulang query jika ada kutipan yang bertentangan,
+
+00:06:52.140 --> 00:06:53.500
+baru kemudian menerbitkan ringkasannya.
+
+00:06:53.500 --> 00:06:56.280
+Hasilnya bukanlah tumpukan teks yang sekadar terdengar masuk akal.
+
+00:06:56.460 --> 00:06:58.700
+Ini adalah wawasan yang koheren dan didukung oleh bukti.
+
+00:06:58.860 --> 00:07:00.640
+Lompatannya di sini bukanlah model yang lebih besar,
+
+00:07:00.880 --> 00:07:01.920
+melainkan penalaran terstruktur.
+
+00:07:02.180 --> 00:07:04.140
+Mari kita telusuri lebih dalam ke dalam otak perencana.
+
+00:07:04.300 --> 00:07:07.140
+Ia menerjemahkan pertanyaan bahasa Inggris Anda yang sederhana menjadi peta tugas.
+
+00:07:07.280 --> 00:07:09.460
+Pengambil data mana yang digunakan, urutan menjalankannya,
+
+00:07:09.700 --> 00:07:11.380
+dan bagaimana temuan mereka harus digabungkan.
+
+00:07:11.600 --> 00:07:14.720
+Disinilah Azure Eye Agent Service menunjukkan eksistensinya.
+
+00:07:14.980 --> 00:07:16.980
+Layanan ini menyediakan lapisan orkestrasi
+
+00:07:16.980 --> 00:07:19.100
+yang memungkinkan agen-agen ini berkomunikasi.
+
+00:07:19.100 --> 00:07:24.100
+Layanan mikro yang berkomunikasi melalui api yang diatur oleh autentikasi Microsoft Entra
+
+00:07:24.100 --> 00:07:25.300
+bukan tebak-tebakan.
+
+00:07:25.580 --> 00:07:26.980
+Sekarang, tentang keamanan,
+
+00:07:27.280 --> 00:07:29.580
+karena petugas kepatuhan rata-rata mungkin sudah panik.
+
+00:07:29.740 --> 00:07:31.920
+Agentik RAG tidak mengambil jalan pintas.
+
+00:07:32.140 --> 00:07:34.240
+Ini dibangun dengan autentikasi atas nama pengguna,
+
+00:07:34.520 --> 00:07:36.640
+artinya identitas Anda ikut serta dalam permintaan.
+
+00:07:36.880 --> 00:07:38.060
+Sistem tidak meniru Anda.
+
+00:07:38.360 --> 00:07:40.060
+Sistem menggunakan token terverifikasi Anda
+
+00:07:40.060 --> 00:07:42.140
+untuk hanya mengambil apa yang Anda izinkan untuk dilihat.
+
+00:07:42.300 --> 00:07:43.720
+Keamanan tingkat baris, RLS,
+
+00:07:43.940 --> 00:07:46.400
+dan keamanan tingkat kolom, CLS, sudah terintegrasi.
+
+00:07:46.400 --> 00:07:49.880
+AI tidak akan secara tidak sengaja mengungkapkan perakiraan CFO kepada seorang peserta magang.
+
+00:07:50.100 --> 00:07:53.000
+Setiap panggilan pengambilan data dicatat, dapat diaudit, dan dapat dibatalkan.
+
+00:07:53.180 --> 00:07:56.080
+Ini penting karena RAG statis tidak memiliki konsep konteks pengguna.
+
+00:07:56.280 --> 00:07:58.780
+RAG statis mengambil apapun yang diizinkan lapisan pencariannya,
+
+00:07:59.040 --> 00:08:00.940
+seringkali melewati kerangka izin perusahaan sepenuhnya.
+
+00:08:01.140 --> 00:08:03.400
+Agentik RAG memulihkan kedisiplinan tersebut.
+
+00:08:03.580 --> 00:08:05.900
+Saat pengambil data fabrik meminta tabel Lakehouse,
+
+00:08:06.100 --> 00:08:08.900
+ia menerapkan aturan RLS yang sama dengan dashboard BI Anda.
+
+00:08:09.180 --> 00:08:11.620
+Saat agen Sarepoin mencari di pustaka dokumen,
+
+00:08:11.980 --> 00:08:15.080
+ia menghormati izin tingkat situs dan label Microsoft Purview.
+
+00:08:15.080 --> 00:08:18.080
+Jadi, kebijakan yang sama yang melindungi pengguna manusia Anda,
+
+00:08:18.220 --> 00:08:19.440
+kini melindungi pengguna AI Anda.
+
+00:08:19.620 --> 00:08:21.940
+Mari kita bawa kembali ini ke realitas alur kerja.
+
+00:08:22.120 --> 00:08:23.500
+Misalkan pertanyaannya adalah,
+
+00:08:23.780 --> 00:08:27.020
+pada rentang glukosa mana produk A berkinerja lebih buruk dibandingkan produk B,
+
+00:08:27.240 --> 00:08:28.280
+dan apa dampak klinisnya?
+
+00:08:28.500 --> 00:08:32.280
+RAG standar akan membuang cuplikan apapun yang menyebutkan produk A dan glukosa.
+
+00:08:32.520 --> 00:08:35.320
+Agentik RAG yang didukung oleh Azure Eye Agent Service,
+
+00:08:35.640 --> 00:08:38.580
+akan meminta perencananya untuk mengidentifikasi tiga lini pengambilan data,
+
+00:08:38.780 --> 00:08:41.300
+fabrik untuk data sensor, Sarepoin untuk catatan klinis,
+
+00:08:41.520 --> 00:08:42.980
+dan Bing untuk publikasi eksternal.
+
+00:08:42.980 --> 00:08:45.780
+Setiap agen pengambil data menghadirkan bukti yang relevan.
+
+00:08:45.980 --> 00:08:48.180
+Verifikator membandingkan seluruh kumpulan data,
+
+00:08:48.540 --> 00:08:49.300
+menandai perbedaan,
+
+00:08:49.640 --> 00:08:52.920
+mungkin bahkan memperbaiki query fabrik asli jika muncul data pencilan.
+
+00:08:53.120 --> 00:08:54.180
+Hanya setelah validasi,
+
+00:08:54.400 --> 00:08:56.760
+ia mensintesis wawasan akhir dengan kutipan yang utuh.
+
+00:08:56.980 --> 00:08:58.880
+Itulah penalaran iteratif yang sedang berjalan.
+
+00:08:59.120 --> 00:09:01.220
+RAG reaktif berhenti setelah langkah pertama.
+
+00:09:01.460 --> 00:09:04.160
+Agentik RAG belajar dan menyesuaikan diri di tengah percakapan.
+
+00:09:04.420 --> 00:09:06.960
+Ia dapat memecah pertanyaan tindak lanjut secara otomatis.
+
+00:09:06.960 --> 00:09:10.240
+Tanyakan, bisakah kita meningkatkan akurasi menggunakan studi terbaru,
+
+00:09:10.420 --> 00:09:13.880
+dan agen yang sama beralih untuk mengambil materi baru tanpa kehilangan konteks.
+
+00:09:14.060 --> 00:09:17.220
+Ini adalah pemahaman berkelanjutan, bukan kehilangan memori episodi.
+
+00:09:17.420 --> 00:09:19.020
+Bonus kepatuhannya sangat besar.
+
+00:09:19.340 --> 00:09:21.260
+Setiap tindakan agen dapat dilacak dalam log audit,
+
+00:09:21.520 --> 00:09:24.100
+setiap token diautentikasi, setiap dokumen yang disentuh dicatat.
+
+00:09:24.220 --> 00:09:27.280
+Anda mendapatkan ilusi kemahatahuan dengan administrasi kehati-hatian.
+
+00:09:27.540 --> 00:09:29.080
+Sesuatu yang sangat disukai auditor.
+
+00:09:29.420 --> 00:09:31.560
+Jadi, pergeseran filosofisnya adalah sebagai berikut.
+
+00:09:31.680 --> 00:09:33.720
+Pengambilan data saja hanya menyediakan informasi.
+
+00:09:33.720 --> 00:09:36.140
+Agensi mengubah informasi tersebut menjadi proses.
+
+00:09:36.360 --> 00:09:39.140
+Dengan memperkenalkan perencanaan, spesialisasi, dan verifikasi,
+
+00:09:39.400 --> 00:09:41.180
+Azure Agent Service mengubah kumpulan data acak
+
+00:09:41.180 --> 00:09:43.100
+menjadi rantai penalaran yang dapat dipertanggungjawabkan.
+
+00:09:43.300 --> 00:09:46.400
+Dalam dunia perusahaan, itulah perbedaan antara asisten yang Anda percayai
+
+00:09:46.400 --> 00:09:48.120
+dan asisten yang diam-diam Anda nonaktifkan.
+
+00:09:48.360 --> 00:09:50.700
+Sekarang setelah kopilot kita memiliki otak yang berfungsi,
+
+00:09:50.980 --> 00:09:52.240
+saatnya memberinya ingatan yang tepat.
+
+00:09:52.420 --> 00:09:55.100
+Dengan kata lain, mari kita beri tempat yang substansial untuk dicari,
+
+00:09:55.400 --> 00:09:57.200
+dimulai dari kekacauan tidak terstruktur di Sarepoin.
+
+00:09:57.600 --> 00:10:00.240
+Mengintegrasikan Sarepoin mengubah kekacauan menjadi pengetahuan.
+
+00:10:00.240 --> 00:10:03.060
+Sarepoin adalah tempat persembunyian pengetahuan perusahaan.
+
+00:10:03.220 --> 00:10:06.400
+Setiap perusahaan memilikinya, situs penggalian arkeologis yang berisi powerpoint,
+
+00:10:06.640 --> 00:10:10.160
+catatan rapat, spesifikasi usang, dan dokumen bernama Final V12 Benar-Benar Final.
+
+00:10:10.400 --> 00:10:12.320
+Dan bagi manusia, itu adalah kekacauan.
+
+00:10:12.560 --> 00:10:15.360
+Bagi sistem RAG yang naif, itu adalah kekacauan yang tidak bisa dibaca.
+
+00:10:15.540 --> 00:10:17.940
+Pencarian kata kunci dengan patuh menampilkan seribu hasil,
+
+00:10:18.220 --> 00:10:21.720
+sebagian besar tidak relevan, dan pengguna biasa terus menggulir hingga semangat mereka membaik.
+
+00:10:21.840 --> 00:10:24.200
+Kemudian mereka meminta bantuan kopilot dan kopilot
+
+00:10:24.200 --> 00:10:25.820
+dengan sigap meringkas dekade yang salah.
+
+00:10:25.820 --> 00:10:29.720
+Agentik RAG memperlakukan Sarepoin secara berbeda, bukan sebagai perpustakaan,
+
+00:10:29.920 --> 00:10:31.360
+melainkan sebagai substrat pengetahuan.
+
+00:10:31.580 --> 00:10:35.320
+Ia tahu bahwa terkubur di dalam folder-folder itu terdapat wawasan kualitatif
+
+00:10:35.320 --> 00:10:37.900
+yang tidak akan pernah ditangkap oleh tabel terstruktur fabrik
+
+00:10:37.900 --> 00:10:40.200
+seperti konteks, keputusan, dan rasional.
+
+00:10:40.480 --> 00:10:42.960
+Jadi, alih-alih menjalankan sapuan kata kunci tunggal,
+
+00:10:43.220 --> 00:10:46.360
+agen pencari Sarepoin menggunakan penyematan semantik dan pencarian vektor
+
+00:10:46.360 --> 00:10:48.400
+untuk memetakan makna, bukan sekadar teks.
+
+00:10:48.580 --> 00:10:50.780
+Tanyakan tentang keandalan produk di lingkungan lembab,
+
+00:10:51.020 --> 00:10:53.540
+dan ia tidak terpaku pada kata-kata tersebut secara harfiah.
+
+00:10:53.540 --> 00:10:56.140
+Ia mengenali dokumen yang membahas mode kegagalan,
+
+00:10:56.440 --> 00:10:59.080
+ketahanan terhadap kondensasi, dan performa perkat.
+
+00:10:59.200 --> 00:11:00.660
+Ia mengenali maksudnya,
+
+00:11:00.880 --> 00:11:04.300
+disinilah kesadaran akan izin menjadi fitur penentu keberhasilan.
+
+00:11:04.580 --> 00:11:08.080
+Setiap situs Sarepoin memiliki jaringan izin, tim, subsitus,
+
+00:11:08.340 --> 00:11:09.740
+dan folder rahasia yang rumit.
+
+00:11:09.840 --> 00:11:11.680
+Crawler yang bodoh akan mengabaikan hal itu
+
+00:11:11.680 --> 00:11:15.040
+dan secara tidak sengaja menampilkan keluhan SDM dalam laporan pemasaran.
+
+00:11:15.280 --> 00:11:18.120
+Namun, model agentik melakukan autentikasi atas nama Anda,
+
+00:11:18.440 --> 00:11:20.080
+mewarisi konteks keamanan Anda yang tepat.
+
+00:11:20.220 --> 00:11:22.400
+Ia hanya bisa membaca apa yang diizinkan untuk Anda lihat.
+
+00:11:22.400 --> 00:11:24.940
+Outputnya dipangkas secara otomatis berdasarkan kebijakan.
+
+00:11:25.100 --> 00:11:28.060
+Pemangkasan keamanan berkat label Microsoft Entra dan Purview.
+
+00:11:28.320 --> 00:11:31.040
+Jadi kecerdasan AI tidak akan pernah melampaui otorisasinya.
+
+00:11:31.320 --> 00:11:33.140
+Mari kita jalankan skenario praktis.
+
+00:11:33.360 --> 00:11:37.860
+Seorang manajer R dan D mengetik ringkas perbedaan kinerja produk A di iklim pesisir.
+
+00:11:38.020 --> 00:11:40.180
+Perencana membaginya menjadi subtugas.
+
+00:11:40.360 --> 00:11:43.140
+Pencari fabrik bersiap menganalisis data sensor numerik,
+
+00:11:43.240 --> 00:11:45.920
+sementara agen Sarepoin menyelami makalah penelitian internal,
+
+00:11:46.220 --> 00:11:49.920
+log pemeliharaan, dan catatan teknik yang diberi label istilah terkait kelembapan.
+
+00:11:49.920 --> 00:11:52.800
+Ia menemukan laporan uji lapangan tahun 2023,
+
+00:11:53.460 --> 00:11:55.300
+utas diskusi tentang korosi material,
+
+00:11:55.660 --> 00:11:57.880
+dan dokumen ringkasan temuan dari tim kandalan.
+
+00:11:58.200 --> 00:12:01.180
+Setiap dokumen diberi skor vektor untuk relevansi semantik,
+
+00:12:01.420 --> 00:12:03.680
+diambil, dan diteruskan ke agen verifikator.
+
+00:12:03.880 --> 00:12:08.040
+Verifikator tersebut memeriksa silang hasil kualitatif tersebut dengan angka-angka fabrik.
+
+00:12:08.220 --> 00:12:09.320
+Jika muncul kontradiksi,
+
+00:12:09.660 --> 00:12:11.660
+katakanlah dokumen lama mengklaim korosi minimal,
+
+00:12:11.980 --> 00:12:14.980
+ia menandai ketidak konsistenan tersebut dan meminta data yang lebih baru.
+
+00:12:14.980 --> 00:12:22.000
+Jawaban sintesis akhir memberitahu manajer R dan D secara tepat rakitan mana yang mengalami penurunan kualitas dalam kelembapan tinggi dan mengutip sumber yang tervalidasi.
+
+00:12:22.220 --> 00:12:25.020
+Apa yang dulunya membutuhkan waktu beberapa jam untuk digali secara manual,
+
+00:12:25.220 --> 00:12:27.440
+kini diringkas menjadi satu siklus penalaran yang berkelanjutan.
+
+00:12:27.680 --> 00:12:32.040
+Sarepoin beralih dari repository pasif menjadi partisipan aktif kecerdasan perusahaan,
+
+00:12:32.280 --> 00:12:34.880
+pada dasarnya menjadi memori saraf keputusan korporat.
+
+00:12:35.060 --> 00:12:37.380
+Lapisan RAG agentik tidak hanya membaca dokumen,
+
+00:12:37.700 --> 00:12:38.820
+tetapi mempelajari hubungan,
+
+00:12:39.080 --> 00:12:39.700
+silsilah proyek,
+
+00:12:39.920 --> 00:12:40.640
+tren kepenulisan,
+
+00:12:40.860 --> 00:12:41.800
+klaster kontekstual,
+
+00:12:42.040 --> 00:12:44.120
+dan mampu merangkainya menjadi argumen yang koheren.
+
+00:12:44.120 --> 00:12:48.100
+Kini, petugas kepatuhan mungkin masih merasa gelisah saat mendengar istilah pengambilan otonom.
+
+00:12:48.240 --> 00:12:49.000
+Tenang saja,
+
+00:12:49.360 --> 00:12:51.160
+setiap query dan akses dokumen dicatat,
+
+00:12:51.340 --> 00:12:52.340
+jejak audit tetap utuh,
+
+00:12:52.600 --> 00:12:57.080
+kerangka kerja regulasi seperti ISO 27001 dan GDPR bergantung pada akuntabilitas,
+
+00:12:57.320 --> 00:12:59.340
+dan sistem ini menyediakannya secara otomatis.
+
+00:12:59.540 --> 00:13:04.900
+Agen tersebut bahkan dapat menyertakan metadata yang mencantumkan jalur dokumen dan stempel waktu akses pada setiap frasa yang dihasilkan.
+
+00:13:05.060 --> 00:13:08.600
+Itu berarti setiap climb yang dibuat AI dapat dilacak kembali ke versi file tertentu,
+
+00:13:08.920 --> 00:13:10.520
+sebuah sistem nir penyangkalan bagi robot.
+
+00:13:10.520 --> 00:13:16.200
+Singkatnya, mengintegrasikan sarepoin di bawah RAG agentik mengubah kekacauan konten menjadi koreografi pengetahuan.
+
+00:13:16.440 --> 00:13:19.320
+Masa lalu Anda yang tidak terstruktur menjadi dapat dicari berdasarkan makna,
+
+00:13:19.520 --> 00:13:22.220
+dijaga oleh kebijakan, dan divalidasi melalui referensi silam.
+
+00:13:22.420 --> 00:13:26.080
+Sarepoin berhenti menjadi gudang digital dan berubah menjadi infrastruktur kognitif.
+
+00:13:26.200 --> 00:13:28.700
+Namun, konteks kualitatif hanyalah separuh dari otak.
+
+00:13:28.880 --> 00:13:32.380
+Separuh lainnya, kebenaran numerik yang terstruktur berada di dalam Microsoft Fabric,
+
+00:13:32.580 --> 00:13:33.920
+dan itulah tujuan kita selanjutnya.
+
+00:13:34.120 --> 00:13:36.240
+Microsoft Fabric, mitra terstrukturnya.
+
+00:13:36.240 --> 00:13:39.920
+Selamat datang di belahan lain otak perusahaan Anda, sisi yang terstruktur.
+
+00:13:40.180 --> 00:13:42.360
+Jika sarepoin menyimpan pengetahuan kolektif Anda,
+
+00:13:42.720 --> 00:13:45.000
+Microsoft Fabric menyimpan kebenaran empiris Anda.
+
+00:13:45.180 --> 00:13:47.980
+Ini adalah tulang punggung analitik terpadu di mana angka, model,
+
+00:13:48.200 --> 00:13:51.060
+dan aliran peristiwa menyatu menjadi sesuatu yang mendekati koherensi.
+
+00:13:51.200 --> 00:13:53.620
+Kebanyakan organisasi menganggapnya sebagai gudang data.
+
+00:13:53.860 --> 00:13:56.580
+Di bawah agentik RAG, ia menjadi substrat penalaran.
+
+00:13:56.820 --> 00:13:58.820
+Inilah peran yang dimainkan Fabric presisi.
+
+00:13:59.040 --> 00:14:00.320
+Ia tidak berbicara dalam anekdot,
+
+00:14:00.500 --> 00:14:02.860
+ia berbicara dalam telemetri, transaksi, dan deret waktu.
+
+00:14:02.860 --> 00:14:06.040
+Di dalam Fabric terdapat lake house, warehouse, dan model semantik,
+
+00:14:06.280 --> 00:14:08.160
+masing-masing merupakan dialek struktur yang berbeda.
+
+00:14:08.320 --> 00:14:11.340
+Agen data Fabric yang dibangun di atas layanan agen Azure AI
+
+00:14:11.340 --> 00:14:13.600
+menerjemahkan bahasa alami menjadi kweri terstruktur
+
+00:14:13.600 --> 00:14:15.600
+yang melintasi lapisan tersebut dengan aman.
+
+00:14:15.880 --> 00:14:19.260
+Mintalah untuk menunjukkan varian hasil kuartalan produk A berdasarkan wilayah,
+
+00:14:19.480 --> 00:14:22.220
+dan ia akan diam-diam menyusun kweri mirip SQL yang dioptimalkan,
+
+00:14:22.460 --> 00:14:24.020
+menargetkan tabel dan partisi yang tepat.
+
+00:14:24.140 --> 00:14:26.720
+Dijalankan terhadap konteks Anda yang telah terautentikasi.
+
+00:14:26.900 --> 00:14:30.040
+Tanpa prom, tanpa alat BI, hanya kecerdasan langsung yang terkelola.
+
+00:14:30.040 --> 00:14:33.120
+Kini, akses mentah ke angka tidak ada artinya tanpa perlindungan,
+
+00:14:33.360 --> 00:14:36.200
+jadi keamanan di Fabric bukanlah pilihan, melainkan arsitektur.
+
+00:14:36.400 --> 00:14:39.720
+Setiap interaksi dienkripsi dan diautentikasi melalui Microsoft Entra ID,
+
+00:14:40.060 --> 00:14:43.360
+memastikan bahwa agen beroperasi di bawah token pengguna Anda yang terverifikasi.
+
+00:14:43.620 --> 00:14:47.220
+Ingat kekacauan pintasan prinsipal layanan yang mengabaikan keamanan tingkat baris?
+
+00:14:47.420 --> 00:14:48.820
+Hal-hal tersebut dilarang di sini.
+
+00:14:49.100 --> 00:14:52.420
+Alur asteris on behalf of asteris membawa identitas Anda dari ujung ke ujung,
+
+00:14:52.640 --> 00:14:55.300
+menerapkan RLS dan keamanan tingkat kolom secara otomatis.
+
+00:14:55.300 --> 00:14:59.160
+Jika bagian keuangan menandai kolom sebagai rahasia, AI tidak akan pernah melihatnya,
+
+00:14:59.420 --> 00:15:01.700
+dan setiap eksekusi meninggalkan jejak di log audit Fabric,
+
+00:15:01.880 --> 00:15:04.240
+memuaskan auditor yang menganggap log sebagai bacaan wajib.
+
+00:15:04.340 --> 00:15:06.440
+Di atasnya terdapat tata kelola purview.
+
+00:15:06.760 --> 00:15:11.480
+Label sensitivitas menyertai data tersebut, rahasia, internal saja, terbatas ekspor.
+
+00:15:11.680 --> 00:15:14.600
+Saat agen data Fabric menyusun query menggunakan kolom tersebut,
+
+00:15:14.840 --> 00:15:16.200
+kebijakan langsung mencegatnya.
+
+00:15:16.440 --> 00:15:19.540
+Upaya pelanggaran memicu penegakan DLP sebelum satu byte pun keluar.
+
+00:15:19.740 --> 00:15:22.440
+Ini pada dasarnya adalah perlindungan tingkat perusahaan untuk AI.
+
+00:15:22.440 --> 00:15:25.040
+Model dapat bereksplorasi namun tidak membahayakan dirinya sendiri.
+
+00:15:25.240 --> 00:15:27.820
+Jadi, apa yang terjadi saat kita menggabungkan disiplin terstruktur ini
+
+00:15:27.820 --> 00:15:29.260
+dengan intuisi Sarepoin yang tidak teratur?
+
+00:15:29.460 --> 00:15:31.820
+Layanan agen AI Azure yang mengordinasikannya.
+
+00:15:32.100 --> 00:15:33.520
+Bayangkan sebuah ruang sidang.
+
+00:15:33.780 --> 00:15:37.800
+Agen Fabric menyediakan bukti nyata, grafik, jumlah, rata-rata sensor,
+
+00:15:38.140 --> 00:15:40.560
+sementara agen Sarepoin memberikan kesaksian-saksi.
+
+00:15:40.800 --> 00:15:42.640
+Agen Verifikator menguji silang keduanya,
+
+00:15:43.000 --> 00:15:45.840
+memastikan angka dan narasi selaras sebelum menyajikan putusan
+
+00:15:45.840 --> 00:15:47.800
+sebagai jawaban terpadu yang kayak kutipan.
+
+00:15:48.000 --> 00:15:49.520
+Mari kita gunakan sebuah contoh.
+
+00:15:49.520 --> 00:15:51.180
+Seorang pimpinan operasional bertanya,
+
+00:15:51.520 --> 00:15:53.560
+apakah kita kehilangan efisiensi karena cacat kemasan?
+
+00:15:53.740 --> 00:15:56.640
+Perencana mengirim agen Fabric untuk mengambil tingkat hasil produksi
+
+00:15:56.640 --> 00:15:58.040
+per lini produksi dari gudang.
+
+00:15:58.280 --> 00:16:00.260
+Secara bersamaan, ia mengirim agen Sarepoin
+
+00:16:00.260 --> 00:16:02.840
+untuk menelusuri log pemeliharaan dan korespondensi pemasok.
+
+00:16:03.000 --> 00:16:05.800
+Agen Fabric mengembalikan kumpulan data yang menunjukkan penurunan kecil
+
+00:16:05.800 --> 00:16:07.460
+yang berkorelasi dengan lonjakan kelembapan.
+
+00:16:07.760 --> 00:16:10.180
+Agen Sarepoin memunculkan utas email yang menyebutkan
+
+00:16:10.180 --> 00:16:12.400
+bahan kemasan yang melengkung selama periode yang sama.
+
+00:16:12.400 --> 00:16:14.040
+Verifikator menguatkan keduanya,
+
+00:16:14.260 --> 00:16:15.740
+melabeli korelasi tersebut kredibel,
+
+00:16:16.020 --> 00:16:17.620
+dan sistem menyusun temuan ringkas lengkap
+
+00:16:17.620 --> 00:16:19.840
+dengan grafik kuantitatif dan dokumen referensi.
+
+00:16:20.080 --> 00:16:23.240
+Diagnostik Six Sigma Instant tanpa perlu analis yang kurang tidur.
+
+00:16:23.460 --> 00:16:26.420
+Di balik layar, layanan agen AI Azure menangani konkurensi,
+
+00:16:26.620 --> 00:16:28.980
+melakukan pengambilan batch melalui apa yang secara efektif
+
+00:16:28.980 --> 00:16:30.200
+merupakan mesh layanan mikro.
+
+00:16:30.440 --> 00:16:32.460
+Setiap agen menerbitkan skema yang mendeskripsikan
+
+00:16:32.460 --> 00:16:33.580
+apa yang dapat diaksesnya,
+
+00:16:33.580 --> 00:16:35.420
+skema Fabric, metadata Sarepoin,
+
+00:16:35.640 --> 00:16:37.020
+atau konteks web terbuka Bing.
+
+00:16:37.200 --> 00:16:39.000
+Perencana memanfaatkan registri tersebut
+
+00:16:39.000 --> 00:16:40.140
+seperti direktori API.
+
+00:16:40.420 --> 00:16:42.140
+Hasilnya adalah kecerdasan modular,
+
+00:16:42.440 --> 00:16:44.740
+tukar, atau perluas agen saat domain data baru
+
+00:16:44.740 --> 00:16:46.700
+muncul tanpa menulis ulang seluruh copilot.
+
+00:16:46.920 --> 00:16:47.740
+Dari sisi performa,
+
+00:16:47.880 --> 00:16:49.500
+inovasinya bukanlah modal yang lebih besar,
+
+00:16:49.760 --> 00:16:51.560
+melainkan urutan pengambilan yang lebih cerdas.
+
+00:16:51.720 --> 00:16:53.460
+Perencana dapat menanyakan Fabric terlebih dahulu
+
+00:16:53.460 --> 00:16:54.720
+untuk menentukan batasan numerik,
+
+00:16:54.840 --> 00:16:56.980
+lalu menggunakannya untuk mempersempit eksplorasi Sarepoin.
+
+00:16:57.160 --> 00:16:59.520
+Hal itu mengurangi kebisingan dan mempercepat konvergensi.
+
+00:16:59.520 --> 00:17:02.080
+Anggaplah itu sebagai pemangkasan data melalui penelaran.
+
+00:17:02.300 --> 00:17:03.840
+Alih-alih tenggelam dalam 10.000 dokumen,
+
+00:17:03.840 --> 00:17:05.940
+sistem mengetahui 10 dokumen mana yang penting
+
+00:17:05.940 --> 00:17:07.800
+karena angka-angka tersebut sudah membingkai pertanyaannya.
+
+00:17:08.000 --> 00:17:09.600
+Petugas kepatuhan menyukai pengaturan ini
+
+00:17:09.600 --> 00:17:11.920
+karena tata kelola berskala seiring dengan kecerdasan.
+
+00:17:12.160 --> 00:17:13.400
+Setiap panggilan agen dicatat,
+
+00:17:13.580 --> 00:17:15.040
+setiap transformasi dapat dilacak.
+
+00:17:15.220 --> 00:17:16.280
+Saat CFO bertanya,
+
+00:17:16.600 --> 00:17:17.640
+dari mana asal angka ini,
+
+00:17:17.860 --> 00:17:19.740
+Anda dapat menunjuk langsung ke tabel Fabric,
+
+00:17:19.900 --> 00:17:20.500
+stempel waktu,
+
+00:17:20.760 --> 00:17:22.240
+dan token pengguna yang mengeksekusi.
+
+00:17:22.460 --> 00:17:25.020
+Transparansi tersebut mengubah rasa takut menjadi kepercayaan,
+
+00:17:25.020 --> 00:17:26.940
+mata uang penting dalam industri yang diatur
+
+00:17:26.940 --> 00:17:28.480
+seperti keuangan atau kesehatan.
+
+00:17:28.680 --> 00:17:30.580
+Gabungkan properti ini dan Anda telah membangun
+
+00:17:30.580 --> 00:17:31.440
+simfoni analitis,
+
+00:17:31.640 --> 00:17:32.880
+presisi terstruktur dari Fabric
+
+00:17:32.880 --> 00:17:35.240
+yang diselaraskan dengan pemahaman kontekstual dari Sarepoin.
+
+00:17:35.440 --> 00:17:37.200
+Perusahaan beralih dari mencari dan berharap
+
+00:17:37.200 --> 00:17:37.880
+menjadi mengambil,
+
+00:17:38.060 --> 00:17:38.680
+memverifikasi,
+
+00:17:38.860 --> 00:17:39.340
+memutuskan.
+
+00:17:39.560 --> 00:17:39.900
+Dan ya,
+
+00:17:40.100 --> 00:17:41.100
+kecepatannya mencengangkan.
+
+00:17:41.340 --> 00:17:41.640
+Sekarang,
+
+00:17:41.780 --> 00:17:42.980
+gabungkan pemanggilan multitingkat ini
+
+00:17:42.980 --> 00:17:44.660
+dengan penalaran dan Anda mendapatkan kecepatan.
+
+00:17:44.780 --> 00:17:46.000
+Kecepatan yang mengerikan,
+
+00:17:46.340 --> 00:17:48.160
+siklus riset kekeputusan yang dulunya
+
+00:17:48.160 --> 00:17:50.080
+memerlukan banyak analis kini menyusut
+
+00:17:50.080 --> 00:17:51.080
+menjadi hitungan jam
+
+00:17:51.080 --> 00:17:53.400
+yang membawa kita langsung ke gerakan terakhir.
+
+00:17:53.620 --> 00:17:54.040
+Dampak,
+
+00:17:54.260 --> 00:17:55.940
+dampak perusahaan dari hitungan bulan
+
+00:17:55.940 --> 00:17:56.820
+menjadi hitungan menit.
+
+00:17:56.820 --> 00:17:58.440
+Mari bicara soal konsekuensi,
+
+00:17:58.620 --> 00:17:59.220
+jenis yang baik.
+
+00:17:59.440 --> 00:18:00.980
+Saat Anda beralih dari RAG pasif
+
+00:18:00.980 --> 00:18:02.860
+ke RAG agentik di Fabric dan Sarepoin,
+
+00:18:03.080 --> 00:18:04.500
+lini masa perusahaan rata-rata berubah.
+
+00:18:04.680 --> 00:18:05.660
+Apa yang butuh berbulan-bulan
+
+00:18:05.660 --> 00:18:07.060
+untuk dilaporkan berubah menjadi menit
+
+00:18:07.060 --> 00:18:08.360
+untuk sintesis terverifikasi.
+
+00:18:08.560 --> 00:18:09.900
+AI tidak lagi menunggu manusia
+
+00:18:09.900 --> 00:18:11.880
+menerjemahkan pertanyaan menjadi query data.
+
+00:18:12.100 --> 00:18:13.280
+Ia melakukan penerjemahan,
+
+00:18:13.480 --> 00:18:13.980
+validasi,
+
+00:18:14.180 --> 00:18:15.960
+dan peringkasan tersebut secara otomatis.
+
+00:18:16.320 --> 00:18:17.420
+Pertimbangkan R dan D.
+
+00:18:17.420 --> 00:18:18.980
+Tim dulu terbiasa mengumpulkan
+
+00:18:18.980 --> 00:18:19.940
+komite lintas fungsi
+
+00:18:19.940 --> 00:18:20.980
+untuk menyelaraskan data.
+
+00:18:21.160 --> 00:18:22.640
+Insinyur mengekspor metrik uji,
+
+00:18:22.640 --> 00:18:23.880
+analis membersihkannya,
+
+00:18:24.200 --> 00:18:25.340
+kepatuhan memeriksa izin,
+
+00:18:25.620 --> 00:18:27.260
+dan seseorang pasti menamai ulang file
+
+00:18:27.260 --> 00:18:28.180
+sebagai final-final.
+
+00:18:28.420 --> 00:18:30.580
+RAG agentik menghancurkan siklus itu.
+
+00:18:30.780 --> 00:18:32.180
+Perencana mengorkestrasi agen
+
+00:18:32.180 --> 00:18:33.680
+yang mengambil tabel kinerja Fabric
+
+00:18:33.680 --> 00:18:35.620
+dan catatan desain Sarepoin secara bersamaan,
+
+00:18:35.900 --> 00:18:36.480
+menggabungkannya,
+
+00:18:36.740 --> 00:18:38.560
+dan menyusun ringkasan tervalidasi lengkap
+
+00:18:38.560 --> 00:18:40.140
+dengan citasi dan label keamanan.
+
+00:18:40.340 --> 00:18:42.660
+Latensi pengambilan keputusan hampir nol.
+
+00:18:42.860 --> 00:18:45.060
+Kepatuhan dan audit mengalami guncangan serupa.
+
+00:18:45.300 --> 00:18:47.260
+Audit tradisional berarti mengirim paket bukti
+
+00:18:47.260 --> 00:18:48.640
+melalui email selama berminggu-minggu.
+
+00:18:48.820 --> 00:18:49.060
+Kini,
+
+00:18:49.260 --> 00:18:50.540
+AI yang sama yang menulis laporan
+
+00:18:50.540 --> 00:18:52.900
+dapat membuat ulang jejak penalarannya sesuai permintaan.
+
+00:18:53.100 --> 00:18:54.160
+Setiap panggilan pengambilan,
+
+00:18:54.400 --> 00:18:54.840
+string query,
+
+00:18:55.120 --> 00:18:55.580
+jalur file,
+
+00:18:55.780 --> 00:18:56.840
+dan stempel waktu dicatat.
+
+00:18:56.940 --> 00:18:58.560
+Auditor dapat memutar ulang langkah tepat
+
+00:18:58.560 --> 00:18:59.580
+yang mengarah pada kesimpulan,
+
+00:18:59.880 --> 00:19:01.240
+mengubah uji tuntas dari perburuan
+
+00:19:01.240 --> 00:19:02.760
+harta karun menjadi sekadar centang.
+
+00:19:02.960 --> 00:19:04.740
+Apa yang dulunya merupakan paparan risiko
+
+00:19:04.740 --> 00:19:05.960
+menjadi permata tata kelola.
+
+00:19:06.200 --> 00:19:08.380
+Manufaktur mendapatkan keunggulan prediktif.
+
+00:19:08.520 --> 00:19:09.840
+Aliran kuantitatif Fabric
+
+00:19:09.840 --> 00:19:11.140
+mengungkap penyimpangan proses.
+
+00:19:11.380 --> 00:19:12.840
+Catatan kualitatif Sarepoin
+
+00:19:12.840 --> 00:19:14.040
+menjelaskan penyebabnya.
+
+00:19:14.240 --> 00:19:15.580
+Loop agentik mengorelasikannya
+
+00:19:15.580 --> 00:19:16.700
+sebelum peringatan meningkat,
+
+00:19:16.700 --> 00:19:18.920
+secara efektif melakukan perbaikan berkelanjutan
+
+00:19:18.920 --> 00:19:20.140
+tanpa konsultan Six Sigma.
+
+00:19:20.420 --> 00:19:22.140
+Bayangkan mengganti ruangan berisi staff magang
+
+00:19:22.140 --> 00:19:23.700
+yang kelelahan dengan panel konsultan ahli
+
+00:19:23.700 --> 00:19:24.480
+yang tidak pernah tidur,
+
+00:19:24.700 --> 00:19:25.700
+tidak pernah melupakan konteks,
+
+00:19:25.900 --> 00:19:27.060
+dan tidak pernah melebihi anggaran.
+
+00:19:27.240 --> 00:19:28.800
+Itu adalah ekwivalen operasional
+
+00:19:28.800 --> 00:19:29.900
+dari kecerdasan majemuk.
+
+00:19:30.060 --> 00:19:30.540
+Tentu saja,
+
+00:19:30.760 --> 00:19:31.820
+otomatisasi hanya penting
+
+00:19:31.820 --> 00:19:33.100
+jika dapat dipertanggungjawabkan.
+
+00:19:33.280 --> 00:19:34.780
+RAG agentik mempertahankan
+
+00:19:34.780 --> 00:19:36.260
+setiap lapisan pewarisan perusahaan,
+
+00:19:36.460 --> 00:19:37.640
+izin, label sensitivitas,
+
+00:19:37.820 --> 00:19:38.360
+dan log audit,
+
+00:19:38.620 --> 00:19:40.180
+sehingga CIO dapat meningkatkan kecerdasan
+
+00:19:40.180 --> 00:19:41.220
+tanpa meningkatkan risiko.
+
+00:19:41.460 --> 00:19:42.760
+Setiap wawasan dapat dilacak
+
+00:19:42.760 --> 00:19:43.760
+ke kredensial pengguna
+
+00:19:43.760 --> 00:19:45.740
+dan repository terkelola yang menghasilkannya.
+
+00:19:46.000 --> 00:19:46.960
+Sistem ini beroperasi
+
+00:19:46.960 --> 00:19:48.800
+seperti buku besar keuangan untuk pemikiran,
+
+00:19:49.060 --> 00:19:49.580
+transparan,
+
+00:19:49.740 --> 00:19:50.300
+dapat dibalik,
+
+00:19:50.420 --> 00:19:51.160
+dan tahan gangguan.
+
+00:19:51.360 --> 00:19:52.920
+Lalu bagaimana dengan sisi manusianya?
+
+00:19:53.160 --> 00:19:54.080
+Mengurangi kebosanan,
+
+00:19:54.360 --> 00:19:55.300
+para profesional berhenti
+
+00:19:55.300 --> 00:19:56.480
+menyalin tempel dari ekspor
+
+00:19:56.480 --> 00:19:57.620
+dan mulai menafsirkan kebenaran
+
+00:19:57.620 --> 00:19:58.560
+yang telah disintesis.
+
+00:19:58.760 --> 00:19:59.940
+Rapat menjadi lebih singkat
+
+00:19:59.940 --> 00:20:00.740
+karena AI datang
+
+00:20:00.740 --> 00:20:02.160
+dengan bukti yang sudah tervalidasi.
+
+00:20:02.420 --> 00:20:03.120
+Proyek dipercepat
+
+00:20:03.120 --> 00:20:04.200
+karena data dan narasi
+
+00:20:04.200 --> 00:20:05.240
+bertemu secara instan.
+
+00:20:05.420 --> 00:20:06.780
+Ini adalah bagian yang paling banyak
+
+00:20:06.780 --> 00:20:08.040
+dilewatkan oleh para eksekutif.
+
+00:20:08.180 --> 00:20:09.540
+Bergerak cepat bukanlah kecerobohan
+
+00:20:09.540 --> 00:20:10.860
+jika penalarannya didokumentasikan.
+
+00:20:11.100 --> 00:20:12.040
+Kecerobohan yang sebenarnya
+
+00:20:12.040 --> 00:20:13.500
+adalah tetap membangun kopilot bodoh,
+
+00:20:13.740 --> 00:20:14.980
+bio sekali pakai yang buta konteks
+
+00:20:14.980 --> 00:20:16.460
+dan menyamar sebagai penyusun strategi.
+
+00:20:16.660 --> 00:20:17.740
+Mereka seharusnya berada
+
+00:20:17.740 --> 00:20:19.160
+di museum keingintahuan AI awal
+
+00:20:19.160 --> 00:20:19.880
+di sebelah klipi.
+
+00:20:20.120 --> 00:20:21.280
+Jadi, jika perusahaan Anda
+
+00:20:21.280 --> 00:20:22.220
+masih membanggakan kopilot
+
+00:20:22.220 --> 00:20:23.160
+yang hanya bisa mengambil data,
+
+00:20:23.440 --> 00:20:24.580
+selamat, Anda mendanai fitur
+
+00:20:24.580 --> 00:20:25.700
+pelengkapan otomatis yang mewah.
+
+00:20:25.860 --> 00:20:26.480
+Para pemain serius
+
+00:20:26.480 --> 00:20:27.300
+sudah menggunakan agen
+
+00:20:27.300 --> 00:20:28.100
+yang mampu merencanakan,
+
+00:20:28.280 --> 00:20:29.520
+memverifikasi, dan bertindak.
+
+00:20:29.640 --> 00:20:30.920
+Penyusutan durasi dari hitungan bulan
+
+00:20:30.920 --> 00:20:31.380
+menjadi menit
+
+00:20:31.380 --> 00:20:32.420
+hanyalah manfaat permukaan.
+
+00:20:32.600 --> 00:20:33.480
+Manfaat yang lebih dalam
+
+00:20:39.540 --> 00:20:40.460
+terus membangun kopilot
+
+00:20:40.460 --> 00:20:41.060
+yang bodoh,
+
+00:20:41.260 --> 00:20:42.100
+bukan hanya tidak efisien,
+
+00:20:42.320 --> 00:20:43.100
+tetapi juga sembrono.
+
+00:20:43.340 --> 00:20:44.260
+Masa depan AI perusahaan
+
+00:20:44.260 --> 00:20:45.140
+bukanlah prompt asteris
+
+00:20:45.140 --> 00:20:45.620
+yang lebih besar,
+
+00:20:45.820 --> 00:20:46.840
+melainkan feedback loop asteris
+
+00:20:46.840 --> 00:20:47.760
+yang lebih kecil dengan memori
+
+00:20:47.760 --> 00:20:48.780
+dan tata kelola yang lebih baik.
+
+00:20:48.940 --> 00:20:50.640
+Agentik RAG memberikan keduanya.
+
+00:20:50.900 --> 00:20:51.840
+Kecerdasan akhirnya
+
+00:20:51.840 --> 00:20:52.920
+berperilaku seperti sistem,
+
+00:20:53.200 --> 00:20:54.220
+bukan sekadar atraksi.
+
+00:20:54.460 --> 00:20:55.240
+Berhenti membangun,
+
+00:20:55.400 --> 00:20:56.100
+mulailah berpikir.
+
+00:20:56.280 --> 00:20:58.040
+RAG tanpa agensi sudah usang.
+
+00:20:58.260 --> 00:20:59.660
+Itu adalah arsitektur masa lalu
+
+00:20:59.660 --> 00:21:00.600
+yang berpura-pura menangani
+
+00:21:00.600 --> 00:21:01.420
+masalah masa depan.
+
+00:21:01.600 --> 00:21:03.140
+Perusahaan modern tidak butuh chatbot,
+
+00:21:03.380 --> 00:21:04.860
+mereka butuh infrastruktur kognitif,
+
+00:21:04.860 --> 00:21:06.140
+sistem yang bisa merencanakan,
+
+00:21:06.320 --> 00:21:06.920
+memverifikasi,
+
+00:21:07.160 --> 00:21:08.620
+dan bertindak di bawah identitas Anda,
+
+00:21:08.800 --> 00:21:09.540
+bukan di sampingnya.
+
+00:21:09.740 --> 00:21:10.940
+Itulah Agentik RAG,
+
+00:21:11.160 --> 00:21:12.460
+ekosistem penalaran deliberatif
+
+00:21:12.460 --> 00:21:13.240
+yang dibangun di atas
+
+00:21:13.240 --> 00:21:14.460
+Azure AI Agent Service
+
+00:21:14.460 --> 00:21:15.880
+yang berkomunikasi secara aman
+
+00:21:15.880 --> 00:21:17.380
+dengan Sarepoint dan Microsoft Fabric
+
+00:21:17.380 --> 00:21:18.120
+layaknya tim ahli
+
+00:21:18.120 --> 00:21:19.820
+yang berbagi satu otak terautentikasi.
+
+00:21:20.080 --> 00:21:20.800
+Jika kopilot Anda
+
+00:21:20.800 --> 00:21:21.920
+masih tidak bisa menjadwalkan
+
+00:21:21.920 --> 00:21:22.820
+pengambilan datanya sendiri,
+
+00:21:23.120 --> 00:21:24.040
+menvalidasi referensi,
+
+00:21:24.240 --> 00:21:25.440
+atau menjelaskan alur penalarannya,
+
+00:21:25.700 --> 00:21:26.820
+berhentilah menyebutnya cerdas,
+
+00:21:27.020 --> 00:21:27.720
+itu hanya hiasan.
+
+00:21:27.880 --> 00:21:29.260
+Kecerdasan menyeratkan niat,
+
+00:21:29.440 --> 00:21:30.080
+verifikasi,
+
+00:21:30.300 --> 00:21:31.220
+dan konsekuensi.
+
+00:21:31.220 --> 00:21:33.120
+AI hiasan melakukan monolog,
+
+00:21:33.320 --> 00:21:34.920
+AI agen melakukan eksperimen.
+
+00:21:35.180 --> 00:21:37.260
+Perbedaannya terletak pada akuntabilitas,
+
+00:21:37.500 --> 00:21:38.760
+yang satu menciptakan keluaran,
+
+00:21:38.980 --> 00:21:40.140
+yang lain menciptakan pemahaman.
+
+00:21:40.340 --> 00:21:41.580
+Pergeseran arsitektur ini
+
+00:21:41.580 --> 00:21:42.900
+bukan lagi sebuah pilihan.
+
+00:21:43.180 --> 00:21:44.020
+Saat keputusan Anda
+
+00:21:44.020 --> 00:21:45.200
+mencakup data terstruktur
+
+00:21:45.200 --> 00:21:46.100
+dan tidak terstruktur,
+
+00:21:46.380 --> 00:21:47.660
+RAG statis akan runtuh.
+
+00:21:47.860 --> 00:21:49.200
+Petugas kepatuhan sudah mengetahuinya,
+
+00:21:49.500 --> 00:21:50.320
+analis sudah merasakannya,
+
+00:21:50.600 --> 00:21:51.480
+dan pimpinan akan segera
+
+00:21:51.480 --> 00:21:52.320
+menuntut bukti penalaran,
+
+00:21:52.540 --> 00:21:54.000
+bukan sekadar nada bicara yang meyakinkan.
+
+00:21:54.160 --> 00:21:55.480
+Tumpukan teknologi Microsoft
+
+00:21:55.480 --> 00:21:57.020
+akhirnya menyediakan kerangka kerjanya.
+
+00:21:57.240 --> 00:21:58.260
+Azure AI Agent Service
+
+00:21:58.260 --> 00:21:59.120
+untuk orkestrasi,
+
+00:21:59.120 --> 00:22:01.120
+agen data fabrik untuk kebenaran kuantitatif,
+
+00:22:01.320 --> 00:22:02.600
+pengambilan sarepoin untuk konteks,
+
+00:22:02.800 --> 00:22:03.660
+dan tata kelola purview
+
+00:22:03.660 --> 00:22:05.040
+yang menyegel seluruh sistem sarafnya.
+
+00:22:05.260 --> 00:22:06.800
+Jadi, inilah tantangan bagi Anda.
+
+00:22:07.040 --> 00:22:07.820
+Berhentilah menggunakan
+
+00:22:07.820 --> 00:22:08.600
+kuda pertunjukan,
+
+00:22:08.780 --> 00:22:09.260
+fitur pamer.
+
+00:22:09.500 --> 00:22:10.300
+Bangun agen yang berdebat
+
+00:22:10.300 --> 00:22:11.060
+dengan diri mereka sendiri
+
+00:22:11.060 --> 00:22:12.380
+sampai mereka sepakat akan kebenaran.
+
+00:22:12.820 --> 00:22:14.500
+Bereksperimenlah dengan perencanaan multi-agen.
+
+00:22:14.720 --> 00:22:16.300
+Uji coba atas nama otentikasi.
+
+00:22:16.540 --> 00:22:17.700
+Hubungkan fabrik dan sarepoin
+
+00:22:17.700 --> 00:22:18.320
+sampai AI Anda
+
+00:22:18.320 --> 00:22:19.800
+benar-benar bisa mempertahankan jawabannya.
+
+00:22:19.960 --> 00:22:21.260
+Karena kecerdasan tanpa tindakan
+
+00:22:21.260 --> 00:22:22.540
+bukanlah kecerdasan sama sekali.
+
+00:22:22.800 --> 00:22:23.600
+Jika penjelasan ini
+
+00:22:23.600 --> 00:22:25.040
+lebih mencerahkan daripada vendor Anda,
+
+00:22:25.300 --> 00:22:26.060
+silakan berlangganan.
+
+00:22:26.220 --> 00:22:27.440
+Pembahasan mendalam berikutnya
+
+00:22:27.440 --> 00:22:28.880
+akan membedah desain multi-agen
+
+00:22:28.880 --> 00:22:30.920
+di dalam Microsoft 365 AI.
+
+00:22:31.140 --> 00:22:32.220
+Cara membuat kopilot Anda
+
+00:22:32.220 --> 00:22:33.300
+tidak hanya penuh perhatian,
+
+00:22:33.580 --> 00:22:34.480
+tetapi juga tanggap
+
+00:22:34.480 --> 00:22:35.620
+dalam batasan kebijakan.
+
+00:22:35.900 --> 00:22:37.160
+Efisiensi bukanlah sihir,
+
+00:22:37.340 --> 00:22:38.420
+itu adalah arsitektur.
+
+00:22:38.580 --> 00:22:39.720
+Kunci jalur peningkatan Anda,
+
+00:22:39.940 --> 00:22:40.380
+berlangganan,
+
+00:22:40.500 --> 00:22:41.360
+aktifkan notifikasi,
+
+00:22:41.500 --> 00:22:42.380
+dan biarkan wawasan baru
+
+00:22:42.380 --> 00:22:43.540
+diterapkan secara otomatis.
+
+00:22:43.760 --> 00:22:44.320
+Lanjutkan.

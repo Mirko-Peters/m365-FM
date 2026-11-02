@@ -1,0 +1,1300 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.820
+Unser heutiges Thema hat fast jeder schon einmal gehört, aber kaum jemand kann es einfach erklären.
+
+00:00:04.460 --> 00:00:06.280
+At AG, Retrieval Augmented Generation.
+
+00:00:06.860 --> 00:00:07.940
+Sie haben das Akronym überall gesehen.
+
+00:00:08.080 --> 00:00:11.800
+Microsoft-Ankündigungen, KI-Konferenzen, Blog-Beiträge, aber was bedeutet es eigentlich?
+
+00:00:12.340 --> 00:00:13.740
+Und noch wichtiger, warum sollte es Sie interessieren?
+
+00:00:14.000 --> 00:00:14.460
+Es ist so.
+
+00:00:14.940 --> 00:00:17.200
+Große Sprachmodelle wie GPT-4O sind leistungsfähig.
+
+00:00:17.940 --> 00:00:21.580
+Sie können Essays schreiben, Dokumente zusammenfassen und sogar Code generieren, aber Sie haben zwei große Probleme.
+
+00:00:21.900 --> 00:00:22.120
+Ah.
+
+00:00:22.860 --> 00:00:24.300
+Erstens ist Ihr Wissen zeitlich eingefroren.
+
+00:00:24.680 --> 00:00:27.200
+Fragen Sie ChatGPT nach etwas, das gestern passiert ist und es hat keine Ahnung.
+
+00:00:27.200 --> 00:00:30.460
+Fragen. Zweitens haben diese Modelle nie die internen Daten Ihres Unternehmens gesehen.
+
+00:00:30.780 --> 00:00:32.680
+Ihre Richtlinien, Produktdetails, Kunden-E-Mails.
+
+00:00:33.440 --> 00:00:35.940
+Wenn Sie also ein LLM etwas über Ihr Unternehmen fragen, rät es nur.
+
+00:00:36.400 --> 00:00:38.400
+Genau hier kommt Retrieval Augmented Generation ins Spiel.
+
+00:00:38.840 --> 00:00:41.100
+Ja, AG ist kein neues Modell, kein größer oder besseres GPT.
+
+00:00:41.400 --> 00:00:42.580
+Es ist ein grundlegender anderer Ansatz.
+
+00:00:43.300 --> 00:00:46.300
+Anstatt das LLM zu bitten, Antworten aus seinem Trainingsgedächtnis zu ziehen,
+
+00:00:46.460 --> 00:00:50.940
+sucht er AG zuerst die richtigen Informationen aus ihren Daten und gibt sie zusammen mit der Frage an das Modell weiter.
+
+00:00:51.960 --> 00:00:54.780
+Das Modell nutzt diesen Kontext dann, um Ihnen Antworten zu geben,
+
+00:00:54.780 --> 00:00:57.340
+die auf echten, aktuellen Inhalten basieren, ohne zu raten.
+
+00:00:57.780 --> 00:01:00.800
+Ohne RAG arbeitet Ihre KI mit einem Gedächtnis, das Monate oder Jahre alt ist.
+
+00:01:01.020 --> 00:01:03.460
+Mit RAG arbeitet sie mit ihren tatsächlichen Dokumenten von heute.
+
+00:01:03.960 --> 00:01:06.840
+Das ist der Unterschied zwischen einer KI, die überzeugt klingt, aber falsch liegen könnte
+
+00:01:06.840 --> 00:01:09.100
+und einer, die Ihnen genau zeigt, woher sie die Antwort hat.
+
+00:01:09.620 --> 00:01:10.540
+Das werden wir heute behandeln.
+
+00:01:11.080 --> 00:01:13.320
+Zuerst betrachten wir die zwei Probleme, die RAG notwendig machen.
+
+00:01:13.820 --> 00:01:17.740
+Dann schlüsseln wir auf, was RAG eigentlich ist, das Retrieval, die Augmentierung, die Generierung, die Generierung.
+
+00:01:18.140 --> 00:01:20.140
+Als nächstes gehen wir die wichtigsten Azure-Dienste durch.
+
+00:01:20.300 --> 00:01:23.140
+Azure AI Search, Azure Open AI und Azure AI Foundry.
+
+00:01:23.140 --> 00:01:26.540
+Zum Abschluss zeigen wir ein echtes Beispiel, damit Sie sehen, wie die Teile zusammenpassen.
+
+00:01:27.000 --> 00:01:28.100
+Beginnen wir mit dem Problem selbst.
+
+00:01:28.620 --> 00:01:30.460
+Wenn man das erst einmal sieht, wird die Lösung offensichtlich.
+
+00:01:31.360 --> 00:01:32.560
+Die zwei Probleme, die LAMs haben.
+
+00:01:33.060 --> 00:01:34.340
+Was ist also das Problem mit großen Sparmen?
+
+00:01:34.900 --> 00:01:35.460
+Einigstwürdigen.
+
+00:01:36.500 --> 00:01:37.580
+Erstens, Ihr Wissen ist eingefroren.
+
+00:01:38.060 --> 00:01:38.680
+Denken Sie darüber nach.
+
+00:01:38.920 --> 00:01:41.740
+Als GPT4O trainiert wurde, lernte es von einem Internet-Snapshot,
+
+00:01:41.840 --> 00:01:43.320
+der inzwischen Monate oder Jahre alt ist.
+
+00:01:43.700 --> 00:01:46.600
+Daher kennt es keine neuen Produkte, aktuellen Vorschriften oder die Nachrichten von gestern.
+
+00:01:46.920 --> 00:01:49.940
+Fragen Sie es nach einer richtigen Änderung von letzter Woche, es kann das unmöglich wissen.
+
+00:01:50.540 --> 00:01:52.480
+Diese Informationen sind schlichtweg nicht in Trainingsdaten enthalten.
+
+00:01:52.480 --> 00:01:57.060
+Zweitens, haben LLMs nie ihre privaten Daten, ihre internen Dokumente,
+
+00:01:57.280 --> 00:01:59.280
+Kunden-E-Mails oder proprietären Datenbanken gesehen?
+
+00:01:59.840 --> 00:02:01.580
+Das Modell hat keinerlei Zugriff darauf.
+
+00:02:02.160 --> 00:02:04.820
+Wenn ein Mitarbeiter also nach ihren spezifischen Geschäftsprozessen fragt,
+
+00:02:04.860 --> 00:02:05.940
+kann das Modell nicht antworten.
+
+00:02:06.320 --> 00:02:07.120
+Es weiß nicht, was Sie wissen.
+
+00:02:07.560 --> 00:02:09.060
+Manche Leute glauben, Feintuning würde dies lösen.
+
+00:02:09.420 --> 00:02:11.820
+Man nimmt das Basismodell und trainiert es etwas weiter mit den eigenen Daten.
+
+00:02:12.160 --> 00:02:13.420
+Aber Feintuning hat seine eigenen Probleme.
+
+00:02:13.860 --> 00:02:14.320
+Es ist teuer.
+
+00:02:14.720 --> 00:02:16.880
+Sie bezahlen für GPU-Zeit und den technischen Aufwand.
+
+00:02:17.320 --> 00:02:18.380
+Es löst das Problem für ein Zettere.
+
+00:02:18.380 --> 00:02:21.760
+Sobald das Feintuning abgeschlossen ist, bleibt das Modell auf diesem Teilstand eingefahren.
+
+00:02:22.500 --> 00:02:25.880
+Und es kann nicht mit Daten umgehen, die sich häufig ändern, wie Lagerbestände oder Preise.
+
+00:02:26.520 --> 00:02:28.860
+Feintuning ist, als würde man jemandem ein Lehrbuch auswendig lernen lassen.
+
+00:02:29.420 --> 00:02:31.700
+Nützlich, aber die Person kann trotzdem nicht in der heutigen Zeitung nachschlagen.
+
+00:02:32.180 --> 00:02:33.100
+Die echte Lösung ist einfacher.
+
+00:02:33.920 --> 00:02:37.440
+Geben Sie dem Modell Zugriff auf Ihr Wissen, genau in dem Moment, in dem es antworten muss,
+
+00:02:37.500 --> 00:02:39.200
+anstatt alles in dessen Gedächtnis zu stopfen.
+
+00:02:39.600 --> 00:02:40.760
+Lassen Sie es nicht alles auswendig lernen.
+
+00:02:40.760 --> 00:02:43.520
+Lassen Sie es in Echtzeit in Ihren tatsächlichen Daten nachschlagen.
+
+00:02:43.740 --> 00:02:44.400
+Genau das mal RAG.
+
+00:02:44.780 --> 00:02:46.200
+Eine einfache Idee, die doch alles verändert.
+
+00:02:46.860 --> 00:02:47.560
+Was RAG eigentlich?
+
+00:02:48.200 --> 00:02:49.700
+Also hier ist RAG in einem Satz zusammengefasst.
+
+00:02:50.020 --> 00:02:52.800
+Anstatt das Modell zu bitten, eine Antwort aus seinen Trainingsdaten zu ziehen,
+
+00:02:53.140 --> 00:02:57.160
+finden wir zuerst die relevanten Informationen und geben diese zusammen mit der Frage an das Modell weiter.
+
+00:02:58.320 --> 00:02:59.100
+Das ist der Kern der Idee.
+
+00:02:59.560 --> 00:03:00.340
+Drei einfache Schritte.
+
+00:03:00.720 --> 00:03:02.400
+Abrufen, anreichern und generieren.
+
+00:03:03.000 --> 00:03:04.200
+Lassen Sie mich ein Beispiel zur Veranschaulichung.
+
+00:03:04.540 --> 00:03:05.360
+Denken Sie an einen Bibliotheker.
+
+00:03:05.640 --> 00:03:07.540
+Sie gehen in eine Bibliothek und stellen eine Frage.
+
+00:03:07.920 --> 00:03:10.440
+Sie würden nicht erwarten, dass der Bibliotheker jedes Buch auswendig gelernt hat.
+
+00:03:10.760 --> 00:03:11.480
+Das wäre lächerlich.
+
+00:03:11.960 --> 00:03:15.740
+Stattdessen bitten Sie ihn, das richtige Buch zu finden, die richtige Seite aufzuschlagen und Ihnen die Antwort vorzulesen.
+
+00:03:15.960 --> 00:03:17.340
+Der Bibliotheker muss sich nichts einprägen.
+
+00:03:17.920 --> 00:03:19.240
+Er ruft zuerst ab und liest dann vor.
+
+00:03:19.920 --> 00:03:20.920
+Und genau das tut RAG.
+
+00:03:21.380 --> 00:03:22.760
+Zuerst das Abrufen, dann das Generieren.
+
+00:03:23.280 --> 00:03:24.600
+So funktioniert es also in der Praxis.
+
+00:03:25.160 --> 00:03:26.120
+Ein Benutzer stellt eine Frage.
+
+00:03:26.600 --> 00:03:30.500
+Das System durchsucht daraufhin eine Wissensdatenbank, ihre Dokumente, ihre Daten, ihre privaten Informationen.
+
+00:03:30.960 --> 00:03:33.480
+Was auch immer gefunden wird, wird in das große Sprachmodell eingespeist
+
+00:03:33.480 --> 00:03:35.600
+und das Modell generiert basierend auf diesem Kontext eine Antwort.
+
+00:03:36.000 --> 00:03:36.960
+Und hier ist der entscheidende Teil.
+
+00:03:37.380 --> 00:03:38.740
+Das LM sieht niemals ihre Rohdaten.
+
+00:03:38.740 --> 00:03:40.920
+Es sieht nur das, was Ihnen das Abrufsystem zur Verfügung stellt.
+
+00:03:41.200 --> 00:03:41.800
+Das ist kein Nachteil.
+
+00:03:42.100 --> 00:03:43.460
+Im Gegenteil, es ist ein Sicherheitsmerkmal.
+
+00:03:43.720 --> 00:03:45.840
+Ihre sensiblen Dokumente verbleiben in Ihrem eigenen Speichel.
+
+00:03:46.240 --> 00:03:50.100
+Zum Zeitpunkt der Abfrage erhält das Modell nur die relevanten Schnipsel, die es zur Beantwortung benötigt.
+
+00:03:50.660 --> 00:03:52.880
+Kein Training mit Ihren Daten, kein Auswendiglernen, keine Lacks.
+
+00:03:53.380 --> 00:03:54.580
+Ihre Daten bleiben dort, wo Sie hingehören.
+
+00:03:55.000 --> 00:03:57.060
+RAG löst also beide Probleme, die wir vorhin besprochen haben.
+
+00:03:57.520 --> 00:03:58.080
+Veraltete Daten.
+
+00:03:58.360 --> 00:03:58.920
+Kein Problem mehr.
+
+00:03:59.280 --> 00:04:00.480
+Ihre Wissensbasis bleibt aktuell.
+
+00:04:00.960 --> 00:04:01.480
+Private Daten.
+
+00:04:01.480 --> 00:04:03.540
+Das Modell sieht nur das, was Sie abrufen möchten.
+
+00:04:03.700 --> 00:04:06.540
+Es ist, als würden Sie einem Bibliotheker Zugriff auf Ihren Aktenschrank geben,
+
+00:04:06.620 --> 00:04:09.340
+ihn aber nur genau den einen Ordner herausnehmen lassen, den Sie gerade brauchen.
+
+00:04:10.840 --> 00:04:11.960
+Vektoreinbettungen und semantische Suche.
+
+00:04:12.300 --> 00:04:14.160
+Vielleicht fragen Sie sich jetzt, wie diese Suche eigentlich funktioniert.
+
+00:04:14.540 --> 00:04:18.140
+Es geht nicht darum, Schlüsselwörter abzugleichen und eine Stärk-plus-F-Suche über Ihre Dokumente laufen zu lassen.
+
+00:04:18.280 --> 00:04:19.120
+Es wird das viel intelligenter.
+
+00:04:19.540 --> 00:04:21.540
+Es nennt sich semantische Suche und basiert auf Vektoreinbettungen.
+
+00:04:22.540 --> 00:04:23.720
+Lassen Sie mich erklären, was eine Einbettung ist.
+
+00:04:24.140 --> 00:04:28.580
+Eine Vektoreinbettung ist eine lange Liste von Zahlen, die die Bedeutung eines Textes wie Koordinaten auf einer Landkarte erfassen.
+
+00:04:28.880 --> 00:04:31.780
+Jedes Dokument erhält seine eigene Koordinate auf dieser Bedeutungskarte.
+
+00:04:32.260 --> 00:04:37.140
+Wenn Sie eine Frage stellen, wandelt das System diese ebenfalls in Koordinaten um und findet dann die Dokumente, die am nächsten liegen.
+
+00:04:37.480 --> 00:04:38.660
+Der Schlüssel liegt hier im Wort semantisch.
+
+00:04:39.440 --> 00:04:42.000
+Es geht nicht darum, exakte Wörter zu finden, sondern Konzepte zu verstehen.
+
+00:04:42.540 --> 00:04:46.400
+Wenn Sie nach Budgethotels suchen, kann das System Dokumente über erschwingliche Unterkünfte finden,
+
+00:04:46.400 --> 00:04:48.380
+selbst wenn diese exakten Wörter nie vorkommen.
+
+00:04:49.020 --> 00:04:49.280
+Warum?
+
+00:04:49.800 --> 00:04:50.920
+Weil die Bedeutung nah beieinander liegen.
+
+00:04:50.920 --> 00:04:54.800
+Die Einbettungen für Budget und Erschwinglich liegen auf dieser Karte direkt nebeneinander.
+
+00:04:55.540 --> 00:04:59.200
+Ein spezielles kleines Modell wie Azure's Text Embedding 3 Large erstellt diese Einbettungen.
+
+00:04:59.780 --> 00:05:03.420
+Es ist kein riesiges Sprachmodell, sondern ein fokussiertes Werkzeug für eine einzige Aufgabe.
+
+00:05:04.220 --> 00:05:05.840
+Text in diese Koordinatenzahlen umwandeln.
+
+00:05:06.280 --> 00:05:07.480
+Das macht RAG so leistungsfähig.
+
+00:05:07.860 --> 00:05:10.700
+Ihre Dokumente werden während der Indizierung einmalig in Einbettungen umgewandelt.
+
+00:05:10.820 --> 00:05:14.820
+Wenn dann eine Anfrage eingeht, findet das System in Millisekunden die relevantesten Inhalte,
+
+00:05:14.920 --> 00:05:17.780
+selbst wenn die exakten Worte des Benutzers nirgendwo in den Dokumenten stehen.
+
+00:05:17.780 --> 00:05:20.860
+Es versteht die Absicht nicht nur die getippten Schlüsselwörter.
+
+00:05:22.200 --> 00:05:23.820
+Azure AI Search, die Suchmaschine.
+
+00:05:24.480 --> 00:05:25.620
+Sie verstehen nun also das Konzept.
+
+00:05:26.140 --> 00:05:27.240
+Erst abrufen, dann generieren.
+
+00:05:27.720 --> 00:05:29.400
+Aber wo findet dieser ganze Abruf eigentlich statt?
+
+00:05:29.780 --> 00:05:31.260
+Hier kommt Azure AI Search ins Spiel.
+
+00:05:32.080 --> 00:05:35.660
+Azure AI Search ist der Dienst, der Ihre Inhalte speichert, indiziert und abruft.
+
+00:05:36.460 --> 00:05:38.960
+Betrachten Sie es als das Ablagesystem für Ihre AG-Anwendung.
+
+00:05:39.520 --> 00:05:41.640
+Es übernimmt zwei Hauptaufgaben, die winnen und durchgehen.
+
+00:05:41.640 --> 00:05:42.840
+Erstens Indizierung.
+
+00:05:43.180 --> 00:05:44.840
+Das bedeutet, Ihre Daten für die Suche vorzubereiten.
+
+00:05:45.120 --> 00:05:46.140
+Zweitens Suchen.
+
+00:05:46.320 --> 00:05:48.960
+Das ist das tatsächliche Finden der richtigen Inhalte, wenn jemand eine Frage stellt.
+
+00:05:49.540 --> 00:05:51.140
+Gehen wir zuerst den Indizierungsprozess durch.
+
+00:05:51.600 --> 00:05:54.580
+Sie beginnen damit, Azure AI Search auf Ihre Datenquelle zu verweisen.
+
+00:05:54.960 --> 00:05:57.140
+Sei es ein Blob Storage Container voller PDFs,
+
+00:05:57.460 --> 00:06:00.280
+eine SQL-Datenbank mit Kundendatensätzen oder viele andere Quellen.
+
+00:06:01.220 --> 00:06:04.540
+Der Dienst liest diese Dokumente, zerlegt sie in kleinere Stücke, sogenannte Chunks,
+
+00:06:04.880 --> 00:06:08.140
+erstellt für jeden Chunk Vektor Einbettungen mit dem zuvor erwähnten Einbettungsmodell
+
+00:06:08.140 --> 00:06:11.920
+und speichert alles in einem Suchindex und speichert alles in einem Suchindex.
+
+00:06:12.060 --> 00:06:15.000
+Stellen Sie sich den Index wie einen riesigen, bestens organisierten Katalog vor.
+
+00:06:15.480 --> 00:06:17.960
+Jeder Inhalt erhält eine eindeutige ID, einen Textabschnitt
+
+00:06:17.960 --> 00:06:20.240
+und eine Reihe von Koordinaten auf dieser Bedeutungskarte.
+
+00:06:20.860 --> 00:06:21.540
+Nun zum Suchprozess.
+
+00:06:22.420 --> 00:06:23.620
+Wenn ein Nutzer eine Frage stellt,
+
+00:06:23.740 --> 00:06:26.320
+wandelt AI Search diese mittels desselben Embedding-Modells
+
+00:06:26.320 --> 00:06:29.060
+in einen Vektor um und scannt dann den Index nach Abschnitten,
+
+00:06:29.220 --> 00:06:31.300
+deren Koordinaten denen der Frage am nächsten liegen.
+
+00:06:32.560 --> 00:06:34.020
+Es liefert die besten Treffer zurück,
+
+00:06:34.020 --> 00:06:37.440
+meist die fünf bis zehn relevantesten und das alles in Millisekunden.
+
+00:06:38.140 --> 00:06:39.340
+Hier haben Sie einige starke Optionen.
+
+00:06:39.740 --> 00:06:41.760
+Die reine Vektorsuche findet Inhalte nach Bedeutung,
+
+00:06:41.840 --> 00:06:42.980
+sodass ähnliche Konzepte erscheinen,
+
+00:06:43.040 --> 00:06:44.520
+auch wenn die exakten Wörter nicht übereinstimmen.
+
+00:06:44.980 --> 00:06:47.080
+Die Stichwortsuche funktioniert wie eine traditionelle Suchmaschine
+
+00:06:47.080 --> 00:06:48.360
+und findet exakte Worte übereinstimmungen.
+
+00:06:49.260 --> 00:06:51.800
+Oder Sie nutzen die hybride Suche, die beide Ansätze kombiniert.
+
+00:06:51.960 --> 00:06:53.020
+Das ist meist die beste Wahl.
+
+00:06:53.740 --> 00:06:55.460
+Es gibt auch das sogenannte semantische Reranking,
+
+00:06:55.620 --> 00:06:57.440
+das die ersten Ergebnisse nimmt und Sie danach sortiert,
+
+00:06:57.520 --> 00:06:59.220
+wie gut Sie die Frage tatsächlich beantworten.
+
+00:07:00.200 --> 00:07:01.660
+Es ist wie ein zweiter Durchgang der Dinge auffängt,
+
+00:07:01.660 --> 00:07:02.960
+die der erste möglicherweise übersehen hat.
+
+00:07:03.620 --> 00:07:04.620
+Eine Sache sollten Sie wissen.
+
+00:07:04.760 --> 00:07:06.240
+Azure AI Search kann teuer werden.
+
+00:07:06.240 --> 00:07:09.180
+Der Basistarif beginnt bei etwa 75 Dollar pro Monat
+
+00:07:09.180 --> 00:07:09.920
+und steigt von dort an.
+
+00:07:10.360 --> 00:07:12.520
+Wenn Sie nur experimentieren, nutzen Sie den kostenlosen Tarif
+
+00:07:12.520 --> 00:07:14.320
+oder stellen Sie sicher, dass Sie Ihre Ressourcen löschen,
+
+00:07:14.380 --> 00:07:14.920
+wenn Sie fertig sind.
+
+00:07:15.500 --> 00:07:17.760
+Für den produktiven Einsatz zahlen sich die Kosten jedoch meist aus.
+
+00:07:18.360 --> 00:07:20.440
+Sie kaufen Geschwindigkeit und Zuverlässigkeit in großem Maßstab.
+
+00:07:21.820 --> 00:07:24.960
+Azure Open AI plus AI Foundry, Generierung und Orchestrierung.
+
+00:07:25.620 --> 00:07:28.040
+Ihre Daten sind nun also indiziert und bereit für den Abruf,
+
+00:07:28.040 --> 00:07:30.080
+aber das LLM muss Ihre Frage noch verstehen
+
+00:07:30.080 --> 00:07:31.580
+und eine fundierte Antwort generieren.
+
+00:07:31.940 --> 00:07:34.300
+Hier kommen Azure Open AI und Azure AI Foundry ins Spiel.
+
+00:07:34.300 --> 00:07:37.320
+Azure Open AI stellt das eigentliche Sprachmodell bereit,
+
+00:07:37.520 --> 00:07:40.440
+sei es GPT-4O, GPT-4.1 oder ein Modell Ihrer Wahl.
+
+00:07:41.040 --> 00:07:42.100
+Dies ist die Generierungsengine.
+
+00:07:42.620 --> 00:07:45.280
+Sie erhält einen Prompt, der sowohl die ursprüngliche Frage des Nutzers
+
+00:07:45.280 --> 00:07:48.140
+als auch den von Azure AI Search abgerufenen Kontext enthält.
+
+00:07:48.680 --> 00:07:50.200
+Das Modell liest diesen Kontext durch
+
+00:07:50.200 --> 00:07:51.980
+und erstellt auf dieser Basis eine Antwort.
+
+00:07:52.720 --> 00:07:54.220
+Nun können Sie nicht einfach alles hineinwerfen
+
+00:07:54.220 --> 00:07:54.980
+und auf das Beste hoffen.
+
+00:07:55.380 --> 00:07:56.940
+Sie benötigen einen Systemprompt,
+
+00:07:57.000 --> 00:07:58.060
+eine Reihe von Anweisungen,
+
+00:07:58.140 --> 00:07:59.800
+die Sie dem Modell vorab geben, wie es sich verhalten soll.
+
+00:08:00.160 --> 00:08:02.620
+Sie weisen es an, nur den bereitgestellten Kontext zu verwenden,
+
+00:08:02.620 --> 00:08:04.240
+seine Quellen zu zitieren und vor allem zu sagen,
+
+00:08:04.340 --> 00:08:05.560
+ich weiß es nicht, ich weiß es nicht,
+
+00:08:05.780 --> 00:08:08.600
+falls die relevante Information nicht in den abgerufenen Dokumenten enthalten ist.
+
+00:08:08.980 --> 00:08:09.920
+Das hält das Modell ehrlich?
+
+00:08:10.600 --> 00:08:12.380
+Ohne einen guten Systempompt könnte das Modell
+
+00:08:12.380 --> 00:08:13.760
+auf seine Trainingsdaten zurückgreifen
+
+00:08:13.760 --> 00:08:15.140
+oder, noch schlimmer, etwas erfinden.
+
+00:08:15.580 --> 00:08:17.300
+Wie verknüpft man also all diese Teile miteinander?
+
+00:08:17.820 --> 00:08:19.320
+Genau hier kommt Azure AI Foundry ins Spiel.
+
+00:08:19.840 --> 00:08:21.560
+Es ist das Portal, in dem Sie ein Projekt erstellen,
+
+00:08:21.660 --> 00:08:24.160
+Ihre Modelle bereitstellen, Datenquellen verbinden, testen, testen.
+
+00:08:24.580 --> 00:08:27.060
+Betrachten Sie es als Kontrollzentrum für Ihre gesamte RAG-Einrichtung.
+
+00:08:27.360 --> 00:08:29.440
+In Foundry können Sie Ihren Azure AI Search Index
+
+00:08:29.440 --> 00:08:31.120
+als Wissensquelle zu Ihrem Agenten hinzufügen,
+
+00:08:31.220 --> 00:08:32.980
+ohne eigenen Code für die Grundeinrichtung schreiben zu müssen.
+
+00:08:33.520 --> 00:08:34.660
+Sie erstellen einfach eine Verbindung,
+
+00:08:34.900 --> 00:08:35.740
+wählen Ihren Index aus
+
+00:08:35.740 --> 00:08:37.540
+und der Agent kann diesen automatisch abfragen.
+
+00:08:38.100 --> 00:08:39.620
+Das Portal übernimmt die Orchestrierung.
+
+00:08:40.200 --> 00:08:41.520
+Wenn ein Benutzer eine Frage stellt,
+
+00:08:41.620 --> 00:08:43.540
+weiß der Agent, dass er AI Search aufrufen,
+
+00:08:43.600 --> 00:08:44.720
+die relevanten Abschnitte abrufen
+
+00:08:44.720 --> 00:08:46.320
+und diese zusammen mit der ursprünglichen Frage
+
+00:08:46.320 --> 00:08:47.520
+an das LLM weitergeben muss.
+
+00:08:47.880 --> 00:08:48.680
+Es ist ein konkretes Beispiel.
+
+00:08:49.220 --> 00:08:50.600
+In einem Tutorial, auf das ich gestoßen bin,
+
+00:08:50.720 --> 00:08:51.440
+hat jemand einen Filmempfehlungsagenten
+
+00:08:51.960 --> 00:08:53.240
+mit einem Netflix-Datensatz erstellt.
+
+00:08:53.440 --> 00:08:55.740
+Sie luden eine CSV-Datei mit Filmtiteln,
+
+00:08:55.840 --> 00:08:57.320
+Beschreibungen und Besetzungsinformationen
+
+00:08:57.320 --> 00:08:58.260
+in Azure Blob Storage hoch
+
+00:08:58.260 --> 00:08:59.880
+und nutzten dann Azure AI Search,
+
+00:08:59.960 --> 00:09:00.880
+um diese Daten zu indizieren.
+
+00:09:01.520 --> 00:09:04.500
+In Azure AI Foundry erstellten Sie einen Agenten mit GPT-4O
+
+00:09:04.500 --> 00:09:06.280
+und verbanden ihn mit dem AI Search Index.
+
+00:09:07.120 --> 00:09:08.000
+Als ein Benutzer fragte,
+
+00:09:08.060 --> 00:09:09.480
+ich mag Thriller, gib mir ein paar Empfehlungen,
+
+00:09:10.140 --> 00:09:11.420
+durchsuchte der Agent den Index,
+
+00:09:11.500 --> 00:09:13.160
+fand Thriller aus diesem spezifischen Datensatz
+
+00:09:13.160 --> 00:09:14.300
+und gab Empfehlungen zurück.
+
+00:09:15.000 --> 00:09:15.940
+Und hier ist der entscheidende Punkt,
+
+00:09:16.020 --> 00:09:16.720
+er empfahl nur Filme,
+
+00:09:16.780 --> 00:09:18.040
+die tatsächlich in diesem Datensatz anhalten.
+
+00:09:18.340 --> 00:09:19.000
+Er hat nichts erfunden,
+
+00:09:19.120 --> 00:09:20.940
+nicht auf seine Trainingsdaten zurückgegriffen
+
+00:09:20.940 --> 00:09:21.720
+und arbeitete ausschließlich
+
+00:09:21.720 --> 00:09:22.920
+mit den bereitgestellten Inhalten.
+
+00:09:23.400 --> 00:09:24.280
+Es ist Stärke von ARG.
+
+00:09:24.740 --> 00:09:26.200
+Klassisches versus Agent-basiertes ARG.
+
+00:09:26.200 --> 00:09:27.880
+Sprechen wir nun über die Einrichtung.
+
+00:09:28.240 --> 00:09:29.080
+Es gibt zwei Hauptmuster,
+
+00:09:29.180 --> 00:09:30.840
+klassisches RAG und agenten-basiertes ARG.
+
+00:09:30.960 --> 00:09:31.620
+Welches Sie wählen,
+
+00:09:31.680 --> 00:09:32.660
+hängt davon ab, was Sie aufbauen.
+
+00:09:33.060 --> 00:09:34.640
+Klassisches RAG ist der direkte Ansatz.
+
+00:09:34.940 --> 00:09:35.920
+Eine Anfrage geht ein,
+
+00:09:36.080 --> 00:09:37.040
+eine Suche wird ausgeführt
+
+00:09:37.040 --> 00:09:38.040
+und eine Antwort kommt heraus.
+
+00:09:38.280 --> 00:09:39.300
+Einfach schnell vorhersehbar.
+
+00:09:39.740 --> 00:09:40.520
+Stellen Sie es sich so vor,
+
+00:09:40.580 --> 00:09:41.500
+als würden Sie an die Rezeption
+
+00:09:41.500 --> 00:09:42.400
+eines Bürogebäudes gehen
+
+00:09:42.400 --> 00:09:43.600
+und nach einer bestimmten Datei fragen.
+
+00:09:44.180 --> 00:09:45.260
+Der Empfangsmitarbeiter nimmt Sie,
+
+00:09:45.340 --> 00:09:45.920
+gibt sie ihn fertig.
+
+00:09:46.700 --> 00:09:48.360
+Klassisches RAG eignet sich hervorragend
+
+00:09:48.360 --> 00:09:49.520
+für sachliche Fragen und Antworten
+
+00:09:49.520 --> 00:09:50.440
+zu einem einzigen Thema wie
+
+00:09:50.440 --> 00:09:51.980
+Was ist die Unternehmensrichtlinie für Remote-Arbeit?
+
+00:09:51.980 --> 00:09:53.200
+Oder zeige mir die Schritte
+
+00:09:53.200 --> 00:09:54.640
+zur Fehlerbehebung für diesen Fehlercode.
+
+00:09:55.340 --> 00:09:56.780
+Es ist zuverlässig, kostengünstig
+
+00:09:56.780 --> 00:09:57.720
+und einfach zu korrigieren,
+
+00:09:57.780 --> 00:09:58.400
+wenn etwas schief geht,
+
+00:09:58.480 --> 00:09:59.300
+da der Ablauflinie ist.
+
+00:10:00.320 --> 00:10:01.140
+Agentenbasiertes ARG sein.
+
+00:10:01.540 --> 00:10:02.620
+Der KI-Agent entscheidet selbst,
+
+00:10:02.680 --> 00:10:03.720
+wie Informationen abgerufen werden.
+
+00:10:04.180 --> 00:10:05.360
+Er kann mehrere Unterfragen stellen,
+
+00:10:05.460 --> 00:10:06.580
+verschiedene Indizes durchsuchen,
+
+00:10:06.700 --> 00:10:07.500
+Ergebnisse iterieren
+
+00:10:07.500 --> 00:10:09.060
+und Informationen über verschiedene Quellen
+
+00:10:09.060 --> 00:10:09.760
+hinweg zusammenfüllen,
+
+00:10:09.840 --> 00:10:10.440
+bevor er antwortet.
+
+00:10:10.860 --> 00:10:12.200
+Es ist, als hätte man einen Gebäudemanager,
+
+00:10:12.260 --> 00:10:13.180
+der sich mit verschiedenen Abteilungen
+
+00:10:13.180 --> 00:10:13.560
+koordiniert,
+
+00:10:13.600 --> 00:10:14.760
+um alle Puzzleteile zusammenzutragen.
+
+00:10:15.120 --> 00:10:16.280
+Er greift nicht einfach nur in die Datei.
+
+00:10:16.660 --> 00:10:17.920
+Er spricht mit der Personalabteilung,
+
+00:10:17.980 --> 00:10:18.460
+Prüfunterlagen,
+
+00:10:18.460 --> 00:10:19.240
+vergleicht Richtlinien
+
+00:10:19.240 --> 00:10:20.960
+und kommt dann mit einer vollständigen Antwort zurück.
+
+00:10:21.540 --> 00:10:22.900
+Microsoft hat eigene Tests durchgeführt
+
+00:10:22.900 --> 00:10:23.380
+und festgestellt,
+
+00:10:23.460 --> 00:10:24.460
+dass agentenbasiertes ARG
+
+00:10:24.460 --> 00:10:25.320
+die Relevanz der Antworten
+
+00:10:25.320 --> 00:10:25.940
+bei komplexen Fragen
+
+00:10:25.940 --> 00:10:26.760
+um etwa 14 verbessert.
+
+00:10:27.060 --> 00:10:27.820
+Das ist beachtlich,
+
+00:10:27.900 --> 00:10:29.440
+verbraucht aber drei bis zehnmal mehr Token
+
+00:10:29.440 --> 00:10:30.400
+und erhöht die Latenz.
+
+00:10:31.080 --> 00:10:31.780
+Bei einfachen Fragen
+
+00:10:31.780 --> 00:10:33.160
+ist dieser zusätzliche Aufwand verschwendet.
+
+00:10:33.480 --> 00:10:35.040
+Klassisches ARG bewältigt diese problemlos.
+
+00:10:35.440 --> 00:10:36.260
+Wann verwende man also was?
+
+00:10:36.660 --> 00:10:37.800
+Klassisch für Routineanfragen
+
+00:10:37.800 --> 00:10:38.400
+mit hohem Volumen,
+
+00:10:38.460 --> 00:10:39.480
+bei denen Geschwindigkeit und Kosten
+
+00:10:39.480 --> 00:10:40.140
+am wichtigsten sind.
+
+00:10:40.600 --> 00:10:41.660
+Agentenbasiert für mehrstufige,
+
+00:10:41.780 --> 00:10:43.380
+mehrdeutige oder bereichsübergreifende Fragen,
+
+00:10:43.440 --> 00:10:44.060
+bei denen Genauigkeit
+
+00:10:44.060 --> 00:10:45.320
+den zusätzlichen Rechenaufwand wert ist.
+
+00:10:45.880 --> 00:10:47.120
+Verbindungsabschnitt durchgehendes Beispiel.
+
+00:10:48.040 --> 00:10:48.500
+Schauen wir uns an,
+
+00:10:48.540 --> 00:10:49.180
+wie all diese Teile
+
+00:10:49.180 --> 00:10:50.460
+mit einem echten Beispiel zusammenpassen.
+
+00:10:51.060 --> 00:10:51.640
+Stellen Sie sich vor,
+
+00:10:51.720 --> 00:10:53.360
+Sie entwickeln einen Kundensupport-Agenten
+
+00:10:53.360 --> 00:10:54.060
+für ein Reisebüro
+
+00:10:54.060 --> 00:10:55.120
+namens Marigold Travels.
+
+00:10:55.600 --> 00:10:56.540
+Sie haben Reisebroschüren,
+
+00:10:56.760 --> 00:10:57.420
+Hotelbewertungen
+
+00:10:57.420 --> 00:10:58.400
+und Richtlinien Dokumente,
+
+00:10:58.480 --> 00:10:59.700
+die in Ihrem Unternehmen verstreut sind,
+
+00:10:59.840 --> 00:11:00.580
+die in Ihrem verstreut sind.
+
+00:11:00.880 --> 00:11:01.280
+Sie möchten,
+
+00:11:01.440 --> 00:11:02.280
+dass Kunden Fragen stellen
+
+00:11:02.280 --> 00:11:03.320
+und genaue Antworten erhalten,
+
+00:11:03.420 --> 00:11:04.880
+die auf Ihren tatsächlichen Inhalten basieren,
+
+00:11:05.080 --> 00:11:06.020
+nicht auf allgemeinen Vermutungen.
+
+00:11:06.540 --> 00:11:07.020
+Schritt 1.
+
+00:11:07.440 --> 00:11:08.520
+Speichern Sie all diese Inhalte
+
+00:11:08.520 --> 00:11:09.360
+im Azure Blog Storage.
+
+00:11:10.100 --> 00:11:11.040
+Broschüren in einem Ordner,
+
+00:11:11.040 --> 00:11:11.880
+Bewertungen in einem anderen,
+
+00:11:12.000 --> 00:11:12.640
+Richtlinien in einem dritten
+
+00:11:12.640 --> 00:11:13.940
+Einfachdateien in einem Container.
+
+00:11:14.940 --> 00:11:15.420
+Schritt 2.
+
+00:11:15.600 --> 00:11:16.940
+Verwenden Sie die Azure KI-Suche,
+
+00:11:17.120 --> 00:11:18.220
+um diese Daten zu indexieren,
+
+00:11:18.300 --> 00:11:20.080
+indem Sie den Datenimport-Assistenten ausführen,
+
+00:11:20.180 --> 00:11:21.440
+ihn auf Ihren Blog Storage verweisen
+
+00:11:21.440 --> 00:11:22.200
+und ihn arbeiten lassen.
+
+00:11:22.620 --> 00:11:23.900
+Der Dienst liest jedes Dokument,
+
+00:11:24.240 --> 00:11:25.060
+unterteilt es in Stücke,
+
+00:11:25.260 --> 00:11:26.180
+erstellt Vector-Embeddings
+
+00:11:26.180 --> 00:11:27.880
+und baut einen durchsuchbaren Index auf.
+
+00:11:28.380 --> 00:11:29.840
+Der gesamte Vorgang dauert nur wenige Minuten.
+
+00:11:30.280 --> 00:11:30.720
+Schritt 3.
+
+00:11:30.900 --> 00:11:32.160
+Gehen Sie in Azure AI Foundry
+
+00:11:32.160 --> 00:11:33.160
+und erstellen Sie einen Agenten.
+
+00:11:33.600 --> 00:11:35.540
+Stellen Sie GPT-4O als Ihr Modell bereit,
+
+00:11:35.640 --> 00:11:36.740
+schreiben Sie einen System-Prompt,
+
+00:11:36.820 --> 00:11:37.420
+der es anweist,
+
+00:11:37.460 --> 00:11:39.140
+nur den bereitgestellten Kontext zu verwenden
+
+00:11:39.140 --> 00:11:40.320
+und seine Quellen zu zitieren
+
+00:11:40.320 --> 00:11:42.120
+und verbinden Sie dann Ihren Azure KI-Suchindex
+
+00:11:42.120 --> 00:11:42.800
+als Wissensquelle.
+
+00:11:43.260 --> 00:11:44.080
+Ein paar Klicks und fertig.
+
+00:11:44.680 --> 00:11:45.440
+Nun fragt ein Kunde,
+
+00:11:45.660 --> 00:11:47.060
+was ist das am besten bewertete Hotel
+
+00:11:47.060 --> 00:11:48.220
+in Dubai unter 300 Dollar?
+
+00:11:48.840 --> 00:11:49.840
+Der Agent nimmt diese Frage
+
+00:11:49.840 --> 00:11:51.360
+und sendet sie an die Azure KI-Suche.
+
+00:11:51.880 --> 00:11:53.120
+Die Azure KI-Suche wandelt Sie
+
+00:11:53.120 --> 00:11:53.740
+in einen Vektor um
+
+00:11:53.740 --> 00:11:54.980
+und findet die relevantesten Abschnitte
+
+00:11:54.980 --> 00:11:56.240
+aus Ihren Bewertungen und Broschüren.
+
+00:11:56.820 --> 00:11:57.780
+Diese Abschnitte werden zusammen
+
+00:11:57.780 --> 00:11:58.720
+mit der ursprünglichen Frage
+
+00:11:58.720 --> 00:11:59.860
+an GPT-4O weitergeleitet.
+
+00:12:00.460 --> 00:12:01.380
+Das Modell liest Sie durch,
+
+00:12:01.500 --> 00:12:02.700
+identifiziert das beste Ergebnis
+
+00:12:02.700 --> 00:12:04.060
+und generiert eine Antwort mit Zitaten,
+
+00:12:04.140 --> 00:12:05.260
+die auf Ihre Quelldokumente verweisen.
+
+00:12:05.760 --> 00:12:06.600
+Das Wichtige dabei ist,
+
+00:12:06.600 --> 00:12:08.460
+das LLM hat diese Daten nie auswendig gelernt.
+
+00:12:08.840 --> 00:12:10.300
+Es wurde nie mit Ihren Hotelbewertungen trainiert.
+
+00:12:10.660 --> 00:12:11.380
+Es arbeitet jedes Mal
+
+00:12:11.380 --> 00:12:12.560
+mit Ihren spezifischen Inhalten.
+
+00:12:13.000 --> 00:12:14.280
+Fügen Sie morgen neue Bewertungen hinzu,
+
+00:12:14.380 --> 00:12:15.680
+werden die Antworten automatisch aktualisiert.
+
+00:12:15.940 --> 00:12:17.340
+Entfernen Sie eine veraltete Broschüre,
+
+00:12:17.420 --> 00:12:18.040
+taucht Sie nicht mehr auf.
+
+00:12:18.360 --> 00:12:19.560
+Das Modell muss nicht neu trainiert werden.
+
+00:12:19.880 --> 00:12:21.180
+Es benötigt nur die richtige Abrufebene.
+
+00:12:21.740 --> 00:12:22.640
+Wie fangen Sie also eigentlich an,
+
+00:12:22.680 --> 00:12:23.640
+RAG auf Azure zu bauen?
+
+00:12:24.140 --> 00:12:25.360
+Lassen Sie uns das in drei Schritten unterteilen.
+
+00:12:26.100 --> 00:12:27.200
+Zuallererst kennen Sie Ihre Daten.
+
+00:12:28.260 --> 00:12:29.480
+Bevor Sie sich für einen Dienst entscheiden,
+
+00:12:29.720 --> 00:12:30.860
+klären Sie, wo Ihre Inhalte liegen,
+
+00:12:30.940 --> 00:12:31.720
+wie Sie organisiert sind
+
+00:12:31.720 --> 00:12:33.000
+und wer Zugriff darauf haben sollte.
+
+00:12:33.840 --> 00:12:34.720
+RAG steht und fällt
+
+00:12:34.720 --> 00:12:35.680
+mit der Qualität Ihrer Daten.
+
+00:12:36.120 --> 00:12:36.860
+Als nächstes ist es einfach.
+
+00:12:37.300 --> 00:12:38.700
+Komplizieren Sie das Setup nicht unnötig.
+
+00:12:39.000 --> 00:12:40.500
+Nutzen Sie den Datenimportassistenten
+
+00:12:40.500 --> 00:12:41.420
+in Azure AI Search,
+
+00:12:41.480 --> 00:12:42.820
+um nur Einsatzdokumente zu indizieren.
+
+00:12:43.140 --> 00:12:44.220
+Testen Sie mit grundlegenden Abwarten.
+
+00:12:44.620 --> 00:12:45.100
+Stellen Sie sicher,
+
+00:12:45.180 --> 00:12:46.300
+dass Ihre Suche perfekt funktioniert,
+
+00:12:46.400 --> 00:12:47.360
+bevor Sie das LLM hinzufügen.
+
+00:12:48.340 --> 00:12:49.300
+Die meisten RAG-Fehler
+
+00:12:49.300 --> 00:12:49.720
+sind keine Modellprobleme.
+
+00:12:50.680 --> 00:12:51.540
+Es sind Suchprobleme.
+
+00:12:52.040 --> 00:12:52.440
+Letzter Schritt,
+
+00:12:52.520 --> 00:12:53.340
+fügen Sie das LLM hinzu.
+
+00:12:53.940 --> 00:12:54.560
+Sobald Ihre Suche
+
+00:12:54.560 --> 00:12:55.680
+die richtigen Ergebnisse liefert,
+
+00:12:55.760 --> 00:12:56.780
+fügen Sie die Generierung hinzu.
+
+00:12:57.300 --> 00:12:58.580
+Dann verbinden Sie Azure Open AI
+
+00:12:58.580 --> 00:12:59.880
+und schreiben Ihren System-Prompt.
+
+00:13:00.460 --> 00:13:01.000
+Die Sache ist die,
+
+00:13:01.060 --> 00:13:01.640
+RAG ist nichts,
+
+00:13:01.640 --> 00:13:02.300
+das man einfach kauft.
+
+00:13:02.760 --> 00:13:03.200
+Es ist ein Muster,
+
+00:13:03.280 --> 00:13:03.680
+das man aufbaut.
+
+00:13:04.460 --> 00:13:05.600
+Azure liefert Ihnen die Bausteine.
+
+00:13:05.960 --> 00:13:06.980
+Speicher, Suche, Modelle
+
+00:13:06.980 --> 00:13:07.560
+und den Kleber,
+
+00:13:07.640 --> 00:13:08.400
+um alles zu verbinden.
+
+00:13:09.620 --> 00:13:10.200
+Sie müssen nur alles
+
+00:13:10.200 --> 00:13:11.300
+auf die richtige Weise zusammenfügen.
+
+00:13:11.980 --> 00:13:13.320
+Wenn Ihnen dieser Überblick geholfen hat,
+
+00:13:13.480 --> 00:13:14.200
+abonnieren Sie den Kanal
+
+00:13:14.200 --> 00:13:15.440
+für weitere einfache Erklärungen.
+
+00:13:16.060 --> 00:13:17.220
+Schreiben Sie Ihren RAG-Anleitungsfall
+
+00:13:17.220 --> 00:13:17.680
+in den Kommentar.
+
+00:13:18.040 --> 00:13:18.540
+Ich würde gerne wissen,
+
+00:13:18.600 --> 00:13:19.140
+woran Sie gerade arbeiten.

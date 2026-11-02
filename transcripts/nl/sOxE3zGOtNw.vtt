@@ -1,0 +1,931 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.720
+Het onderwerp van vandaag is iets waar bijna iedereen van gehoord heeft, maar weinig duidelijk kunnen uitleggen.
+
+00:00:04.080 --> 00:00:08.880
+MCP. Je hebt het waarschijnlijk wel eens HTTP voor AI-agenten horen noemen, maar wat betekent dat eigenlijk?
+
+00:00:09.040 --> 00:00:15.480
+Aan het einde van deze aflevering begrijp je wat MCP is, wat de Azure MCP-server doet en waarom het belangrijk is voor hoe AI-tools verbinding maken met jouw data.
+
+00:00:15.660 --> 00:00:23.540
+We splitsen het op in de belangrijkste bouwstenen, beginnend bij het grote geheel, dan het protocol zelf, vervolgens de implementatie van Microsoft en tot slot een concreet voorbeeld dat je echt kunt gebruiken.
+
+00:00:23.700 --> 00:00:28.280
+Het grote geheel. Waarom dit nu belangrijk is. Dus, dit is de situatie waarin we ons nu bevinden.
+
+00:00:28.280 --> 00:00:33.700
+Iedereen bouwt AI-agenten. Niet alleen techbedrijven, maar ook banken, ziekenhuizen, fabrikanten en zelfs kleine bedrijven.
+
+00:00:33.840 --> 00:00:36.840
+Ze proberen allemaal AI-assistenten te bouwen die ook daadwerkelijk taken kunnen uitvoeren.
+
+00:00:37.040 --> 00:00:39.180
+Niet alleen vragen beantwoorden, maar echte acties ondernemen.
+
+00:00:39.360 --> 00:00:43.180
+Een record bijwerken, voorraad controleren, code implementeren of een defecte server repareren.
+
+00:00:43.340 --> 00:00:47.900
+En hier komt het probleem naar voren. Deze agenten moeten verbinding maken met echte tools en echte data.
+
+00:00:48.280 --> 00:00:51.780
+Databases, opslagaccounts, ticketsystemen, CRM-platforms.
+
+00:00:51.900 --> 00:00:54.440
+De manier waarop de meeste mensen dit vandaag doen, is de moeilijke weg.
+
+00:00:54.440 --> 00:00:58.440
+Ze schrijven een aangepaste integratiecode voor elke tool, elke API en elke databron.
+
+00:00:58.600 --> 00:01:02.460
+Eén connector voor de database, een andere voor bestandsopslag, een derde voor het monitoringsysteem.
+
+00:01:02.580 --> 00:01:08.160
+Elke connector heeft zijn eigen authenticatie nodig, zijn eigen foutafhandeling en zijn eigen manier om verzoeken en reacties te formateren.
+
+00:01:08.340 --> 00:01:10.860
+Deze aanpak is fragiel, tijdrovend en niet schaalbaar.
+
+00:01:11.040 --> 00:01:15.600
+Elke AI-assistent die je bouwt, heeft zijn eigen stapel, lijncode, nodig om met de benodigde services te communiceren.
+
+00:01:15.820 --> 00:01:19.360
+Stap je over van het ene naar het andere AI-platform, dan moet je alles vanaf nul opbouwen.
+
+00:01:19.360 --> 00:01:22.180
+De meeste AI-demo's die je ziet, werken prima in isolatie.
+
+00:01:22.360 --> 00:01:27.660
+Ze beantwoorden vragen, genereren tekst en zien er indrukwekkend uit, maar zodra ze een echt systeem moeten aanraken, vallen ze uit elkaar.
+
+00:01:27.880 --> 00:01:29.260
+Dat is waar de complexiteit zit.
+
+00:01:29.560 --> 00:01:30.620
+MCP verandert dit.
+
+00:01:30.800 --> 00:01:33.740
+Het geeft AI een standaard manier om contact te maken en te pakken wat nodig is.
+
+00:01:33.900 --> 00:01:36.340
+Eén protocol, één manier om met tools te communiceren.
+
+00:01:36.520 --> 00:01:40.180
+Elke AI-assistent die MCP spreekt, kan elke MCP-server gebruiken.
+
+00:01:40.360 --> 00:01:46.640
+Het is als het verschil tussen een aparte afstandsbediening voor elk apparaat in je huis hebben, versus één universele afstandsbediening die met alles werkt.
+
+00:01:46.640 --> 00:01:48.940
+Laten we dus beginnen met de eenvoudigste definitie.
+
+00:01:48.940 --> 00:01:51.300
+Wat is MCP, het protocol uitgelegd?
+
+00:01:51.400 --> 00:01:52.540
+Wat is MCP precies?
+
+00:01:52.720 --> 00:01:54.460
+Ik zal het in begrijpelijke taal uitleggen.
+
+00:01:54.620 --> 00:02:01.540
+MCP staat voor model context protocol en het is een open standaard die AI-agenten vertelt hoe ze moeten praten met externe tools, APIs en databronnen.
+
+00:02:01.720 --> 00:02:03.620
+Zie het als een gemeenschappelijke taal voor AI.
+
+00:02:03.880 --> 00:02:08.620
+Voor MCP moest elke AI-assistent een andere taal leren voor elk hulpmiddel dat het wilde gebruiken.
+
+00:02:08.860 --> 00:02:13.680
+MCP zegt laten we afspreken één taal te gebruiken, zodat elk hulpmiddel alleen die taal hoeft te spreken.
+
+00:02:13.680 --> 00:02:19.960
+Onder de motorkap is het gebaseerd op JSON-RPC 2.0, een eenvoudig berichtformaat voor het verzenden van verzoeken en ontvangen van antwoorden.
+
+00:02:20.160 --> 00:02:21.900
+Niets bijzonders en het bestaat al jaren.
+
+00:02:22.140 --> 00:02:24.320
+Wat MCP daaraan toevoegt, is structuur.
+
+00:02:24.500 --> 00:02:29.780
+Het definieert drie belangrijke zaken die een AI-agent kan doen met elke MCP-server, tools, resources en prompts.
+
+00:02:30.000 --> 00:02:33.940
+Tools zijn acties die de AI kan uitvoeren, zoals een record aanmaken of een query draaien.
+
+00:02:34.160 --> 00:02:38.160
+Resources zijn gegevens die de AI kan lezen, zoals een klantprofiel of een logbestand.
+
+00:02:38.340 --> 00:02:42.000
+En prompts zijn schablonen die sturen hoe de AI zich in bepaalde situaties moet gedragen.
+
+00:02:42.000 --> 00:02:44.220
+Dit is de eenvoudigste manier om erover na te denken.
+
+00:02:44.440 --> 00:02:46.400
+Stel je voor dat je een universele afstandsbediening hebt.
+
+00:02:46.560 --> 00:02:49.600
+Die afstandsbediening kan praten met je tv, je geluidssysteem, je streamingbox, je verlichting.
+
+00:02:49.740 --> 00:02:51.240
+Eén afstandsbediening, vele apparaten.
+
+00:02:51.440 --> 00:02:53.500
+MCP is die afstandsbediening voor AI-agents.
+
+00:02:53.680 --> 00:02:55.060
+Eén protocol, vele tools.
+
+00:02:55.300 --> 00:03:00.420
+Je bouwt één MCP-server die je tools en data ontsluit en elke MCP-compatibele AI-agent kan deze gebruiken.
+
+00:03:00.600 --> 00:03:03.620
+GitHub, Copilot, Kloot, ChatGPT, aangepaste agents.
+
+00:03:03.740 --> 00:03:05.160
+Ze spreken allemaal hetzelfde protocol.
+
+00:03:05.380 --> 00:03:07.280
+En dit is geen eigen product van Microsoft.
+
+00:03:07.280 --> 00:03:13.860
+MCP werd oorspronkelijk gemaakt door Anthropik, het bedrijf achter Kloot, maar het is overgenomen door OpenAI, Google, Microsoft en vele anderen.
+
+00:03:14.040 --> 00:03:17.640
+Het wordt de standaard manier voor AI-agents om verbinding te maken met de buitenwereld.
+
+00:03:17.840 --> 00:03:20.940
+Geen vendor-lock-in, maar een open standaard die iedereen kan gebruiken.
+
+00:03:21.120 --> 00:03:22.880
+Het probleem dat MCP oplost.
+
+00:03:23.120 --> 00:03:24.480
+Dit is de oude manier van werken.
+
+00:03:24.720 --> 00:03:27.540
+Voor MCP was elke AI-integratie een maatwerkproject.
+
+00:03:27.800 --> 00:03:31.020
+Stel dat je wilt dat je AI-assistentenvoorraadniveaus in je database controleert.
+
+00:03:31.460 --> 00:03:31.780
+Geweldig!
+
+00:03:31.940 --> 00:03:33.200
+Nu moet je code gaan schrijven.
+
+00:03:33.360 --> 00:03:34.960
+Je moet de authenticatie uitzoeken.
+
+00:03:35.100 --> 00:03:37.140
+Hoe bewijst de AI dat hij die gegevens mag lezen?
+
+00:03:37.320 --> 00:03:38.820
+Je moet foutafhandeling regelen.
+
+00:03:39.040 --> 00:03:40.680
+Wat gebeurt er als de database plat ligt?
+
+00:03:40.860 --> 00:03:42.300
+Je moet het antwoord formatteren.
+
+00:03:42.440 --> 00:03:45.620
+Hoe wordt de output van de database omgezet in iets dat de AI kan begrijpen?
+
+00:03:45.840 --> 00:03:48.340
+Weken na een ontwikkeling voor één verbinding met één database.
+
+00:03:48.660 --> 00:03:50.000
+Dat is de integratie-taks.
+
+00:03:50.200 --> 00:03:52.780
+Eén AI-assistent, één database, weken werk.
+
+00:03:53.280 --> 00:03:55.620
+Vermenigvuldig dat nu met elke tool die je AI moet kunnen gebruiken.
+
+00:03:55.780 --> 00:03:59.400
+Het CRM, het ticketsysteem, de bestandsopslag, de monitoringslogs.
+
+00:03:59.400 --> 00:04:03.780
+Elk vereist eigen aangepaste code, eigen authenticatiepatronen, eigen foutafhandeling
+
+00:04:03.780 --> 00:04:05.800
+en niets van die code werkt met een andere tool.
+
+00:04:05.980 --> 00:04:08.600
+Je bouwt steeds weer hetzelfde, telkens net iets anders.
+
+00:04:08.820 --> 00:04:10.420
+En dit is het beveiligingsprobleem.
+
+00:04:10.600 --> 00:04:13.260
+Elke aangepaste integratie heeft zijn eigen authenticatie.
+
+00:04:13.500 --> 00:04:17.900
+Sommigen gebruiken API-sleutels, andere OAuth, certificaten of basisauthenticatie.
+
+00:04:18.060 --> 00:04:22.720
+Je eindigt met 12 verschillende manieren voor je AI-data en geen consistente manier om dit te beheren.
+
+00:04:22.880 --> 00:04:23.720
+Wie heeft er toegang?
+
+00:04:23.920 --> 00:04:24.720
+Wat kunnen zij doen?
+
+00:04:24.940 --> 00:04:25.960
+Waar zijn de logbestanden?
+
+00:04:25.960 --> 00:04:29.760
+De meeste organisaties kunnen die vragen voor hun AI-integraties niet beantwoorden
+
+00:04:29.760 --> 00:04:33.980
+omdat de integraties door verschillende teams op verschillende momenten en met verschillende standaarden zijn gebouwd.
+
+00:04:34.120 --> 00:04:35.940
+Het fragmentatieprobleem is echt.
+
+00:04:36.220 --> 00:04:38.600
+Stel dat je je AI-assistent op OpenAI bouwt.
+
+00:04:38.720 --> 00:04:41.820
+Je schrijft al je integraties voor het functie-aanroepformaat van OpenAI.
+
+00:04:42.040 --> 00:04:45.940
+Dan besluit je bedrijf zes maanden later om over te stappen op kloot of je wilt ze beide gebruiken.
+
+00:04:46.120 --> 00:04:47.740
+Nu moet je elke integratie opnieuw bouwen.
+
+00:04:47.940 --> 00:04:49.900
+Dezelfde tools, dezelfde data, ander formaat.
+
+00:04:50.040 --> 00:04:51.720
+Dat is geen vooruitgang, dat is zinloos werk.
+
+00:04:51.860 --> 00:04:53.400
+De werkelijke kosten lopen snel op.
+
+00:04:53.400 --> 00:04:56.320
+De meeste grote organisaties gebruiken al tientallen AI-agents.
+
+00:04:56.500 --> 00:04:59.140
+Volgens IDC gebruikt de gemiddelde onderneming er 47.
+
+00:04:59.440 --> 00:05:01.880
+Elke agent heeft zijn eigen stapel aangepaste connectoren.
+
+00:05:02.080 --> 00:05:04.080
+En hier is een statistiek die je misschien zal verbazen.
+
+00:05:04.200 --> 00:05:08.100
+68% van de CEO's kan de totale AI-agent-uitgaven niet eens rapporteren.
+
+00:05:08.280 --> 00:05:12.820
+Ze weten niet wat ze uitgeven aan deze integraties omdat het verspreid is over teams, projecten en budgetten.
+
+00:05:12.980 --> 00:05:14.680
+MCP gooit dit hele model om.
+
+00:05:14.820 --> 00:05:18.780
+In plaats van aangepaste code te schrijven voor elk AI-tool, bouw je één MCP-server.
+
+00:05:18.960 --> 00:05:21.840
+Die server stelt je tools en data beschikbaar via een standaard interface.
+
+00:05:21.840 --> 00:05:24.580
+Vervolgens kan elke MCP-compatibele agent deze gebruiken.
+
+00:05:24.700 --> 00:05:28.040
+Copilot, Cloud, ChatGPT, aangepaste agents, je eigen interne tools.
+
+00:05:28.220 --> 00:05:29.860
+Eén keer schrijven, overal gebruiken.
+
+00:05:30.060 --> 00:05:30.940
+Dat is de verschuiving.
+
+00:05:31.180 --> 00:05:32.540
+Wat is de Azure MCP-server?
+
+00:05:32.720 --> 00:05:34.720
+We hebben dus het probleem besproken dat MCP oplost.
+
+00:05:34.920 --> 00:05:37.040
+Laten we nu praten over het antwoord van Microsoft hierop.
+
+00:05:37.140 --> 00:05:40.440
+De Azure MCP-server is de officiële visie van Microsoft op MCP.
+
+00:05:40.660 --> 00:05:45.260
+Zie het als een brug waarmee AI-agents veilig toegang krijgen tot je Azure resources en deze kunnen beheren.
+
+00:05:45.260 --> 00:05:47.560
+En ik wil duidelijk zijn over wat dit ding werkelijk is.
+
+00:05:47.700 --> 00:05:49.360
+Het is geen apart product dat je koopt.
+
+00:05:49.520 --> 00:05:51.000
+Het is geen nieuwe Azure service.
+
+00:05:51.220 --> 00:05:55.180
+Het is een tool, een open source server die precies tussen je AI-assistent en je Azure-omgeving staat.
+
+00:05:55.340 --> 00:05:57.380
+Het werkt met de GitHub Copilot agent modus.
+
+00:05:57.540 --> 00:05:58.860
+Het werkt met Cementen Kernel.
+
+00:05:59.040 --> 00:06:00.160
+Het werkt met Cloud Desktop.
+
+00:06:00.460 --> 00:06:03.260
+En het werkt met elke aangepaste MCP-agent die je zelf bouwt.
+
+00:06:03.360 --> 00:06:06.000
+Elke client die MCP spreekt, kan er verbinding mee maken.
+
+00:06:06.200 --> 00:06:09.700
+Eenmaal verbonden krijgt die agent toegang tot je Azure resources via natuurlijke taal.
+
+00:06:09.840 --> 00:06:11.940
+Je hoeft de exacte API-aanroep niet te kennen.
+
+00:06:11.940 --> 00:06:14.020
+Je hoeft de SDK-methode niet te onthouden.
+
+00:06:14.180 --> 00:06:15.040
+Je vraagt het gewoon.
+
+00:06:15.280 --> 00:06:16.220
+Dit is het kernidee.
+
+00:06:16.360 --> 00:06:20.660
+Azure heeft tientallen services, opslag, databases, monitoring, configuratie, containers.
+
+00:06:20.880 --> 00:06:24.840
+Elk heeft zijn eigen SDK, zijn eigen API, zijn eigen verificatiepatroon.
+
+00:06:24.980 --> 00:06:29.920
+De Azure MCP-server verpakt ze allemaal in één uniforme interface, één server, één protocol, alle tools.
+
+00:06:30.180 --> 00:06:31.680
+Waarom heeft Microsoft dit gebouwd?
+
+00:06:31.820 --> 00:06:34.620
+Omdat het fragmentatieprobleem in Azure bijzonder groot is.
+
+00:06:34.820 --> 00:06:37.780
+Stel je voor dat je een AI-agent bouwt die Azure Monitor Lux moet controleren.
+
+00:06:37.880 --> 00:06:41.300
+Een app-configuratie-instelling moet bijwerken en een nieuwe containerversie moet implementeren.
+
+00:06:41.300 --> 00:06:46.820
+Dat zijn drie verschillende SDK's, drie verschillende verificatiestromen, drie verschillende manieren om fouten af te handelen.
+
+00:06:46.980 --> 00:06:52.460
+De Azure MCP-server brengt dat terug naar één sessie, één verificatie, één consistente manier van werken.
+
+00:06:52.680 --> 00:06:54.320
+Nu, dit is het belangrijke gedeelte.
+
+00:06:54.560 --> 00:06:56.040
+Dit is niet alleen voor ontwikkelaars.
+
+00:06:56.260 --> 00:07:01.680
+Ja, ontwikkelaars zullen het gebruiken, maar de echte kracht is dat het natuurlijke taalbesturing van Azure resources mogelijk maakt.
+
+00:07:01.860 --> 00:07:08.320
+Iemand die PowerShell of de Azure CLI niet kent, kan aan zijn AI-assistent vragen, laat me het laatste uur aan fouten voor de betalingsservice zien.
+
+00:07:08.320 --> 00:07:11.960
+En een antwoord krijgen, de MCP-server handelt de vertaling af.
+
+00:07:12.080 --> 00:07:17.700
+Het zet het verzoek in natuurlijke taal om in de juiste API-aanroep, voert deze uit tegen Azure Monitor en retourneert het resultaat.
+
+00:07:17.880 --> 00:07:21.820
+Sinds vandaag is de Azure MCP-server ingebouwd in Visual Studio 2026.
+
+00:07:22.100 --> 00:07:23.440
+Het is open source op GitHub.
+
+00:07:23.680 --> 00:07:26.700
+Het wordt actief onderhouden door Microsoft's Azure SDK-team.
+
+00:07:26.820 --> 00:07:31.620
+En het is in publieke preview, wat betekent dat je het nu kunt gebruiken met regelmatig nieuwe toegevoegde mogelijkheden.
+
+00:07:31.960 --> 00:07:33.400
+Kernservices die je kunt benaderen.
+
+00:07:33.400 --> 00:07:38.700
+Dus, wat kun je eigenlijk doen met de Azure MCP-server? Laten we kijken naar de specifieke services die het kan bereiken.
+
+00:07:38.860 --> 00:07:41.200
+De lijst groeit, maar dit wordt op dit moment ondersteund.
+
+00:07:41.360 --> 00:07:47.180
+Azure Storage. Je kunt opslagaccounts weergeven, blobcontainers beheren, tabellen bevragen, allemaal via natuurlijke taal.
+
+00:07:47.300 --> 00:07:50.420
+In plaats van een script te schrijven om je opslag te controleren, vraag je het gewoon.
+
+00:07:50.620 --> 00:07:52.980
+Laat me de containers in mijn productieopslagaccount zien.
+
+00:07:53.160 --> 00:07:57.360
+De MCP-server handelt de API-aanroep af, formateert het antwoord en geeft je het antwoord.
+
+00:07:57.520 --> 00:07:59.540
+Azure Cosmos DB. Deze is enorm.
+
+00:07:59.540 --> 00:08:04.260
+Je kunt databases bevragen, containers beheren en SQL-queries uitvoeren op je NOSQL-gegevens.
+
+00:08:04.480 --> 00:08:09.240
+Als je een AI-agent bouwt die klant records of ordergeschiedenissen moet opzoeken, is dit hoe deze aan die gegevens komt.
+
+00:08:09.460 --> 00:08:13.500
+Geen aangepaste connector, geen SDK-code, gewoon een tool-aanroep via MCP.
+
+00:08:13.660 --> 00:08:16.280
+Azure Monitor. Dit is waar de echte kracht naar voren komt.
+
+00:08:16.500 --> 00:08:21.740
+Je kunt LAX bevragen met KQL, Kusto Query Language, zonder zelf één KQL-commando te schrijven.
+
+00:08:21.740 --> 00:08:32.480
+Lijst werkruimte op, controleer beschikbare tabellen, vraag om de fouten van de afgelopen 24 uur en de MCP-server vertaalt dit naar de juiste query, voert deze uit in Log Analytics en geeft de resultaten terug.
+
+00:08:32.660 --> 00:08:36.780
+Voor iedereen die ooit heeft geworsteld met KQL-syntaxis, is dit alleen al de moeite waard.
+
+00:08:36.940 --> 00:08:42.500
+In Azure App Configuration kun je sleutelwaardeparen beheren, configuraties inschakelen en instellingen vergrendelen of ontgrendelen.
+
+00:08:42.500 --> 00:08:51.660
+Als je applicatieconfiguraties leest uit Azure App Configuration, kan je AI-agent die waarde controleren, bijwerken en wijzigingen verifiëren, allemaal via een gesprek.
+
+00:08:51.780 --> 00:08:57.160
+En het zijn niet alleen services, ook de Azure CLI en Azure Developer CLI AZD zijn beschikbaar als tools.
+
+00:08:57.420 --> 00:09:01.000
+Dat betekent dat je AI-agent direct elk Azure CLI-commando kan uitvoeren.
+
+00:09:01.180 --> 00:09:09.200
+Het kan resources inrichten, applicaties implementeren, infrastructuur beheren, dezelfde commando's die je in een terminal typt, maar dan geactiveerd via natuurlijke taal door een AI-assistent.
+
+00:09:09.200 --> 00:09:14.620
+Dit betekent in de praktijk dat één MCP tientallen SDK's en API aanroepen kan vervangen.
+
+00:09:14.780 --> 00:09:21.240
+Je hoeft niet de Azure Storage SDK, de Cosmos DB SDK en de Monitor SDK te installeren en drie verschillende authenticatiepatronen te leren.
+
+00:09:21.420 --> 00:09:26.620
+Je installeert één MCP-server, authenticeert één keer en al die mogelijkheden zijn beschikbaar via één interface.
+
+00:09:26.880 --> 00:09:29.000
+Denk aan een typisch scenario voor probleemoplossing.
+
+00:09:29.260 --> 00:09:30.940
+Je applicatie geeft foutmeldingen.
+
+00:09:31.080 --> 00:09:36.560
+Je moet de logboeken controleren, naar de configuratie kijken, verifiëren of het storage-account toegankelijk is en de database-verbinding testen.
+
+00:09:36.560 --> 00:09:41.580
+Voor MCP waren dat vier verschillende tools, vier verschillende logins en vier verschillende manieren om informatie te verkrijgen.
+
+00:09:41.740 --> 00:09:44.160
+Met de Azure MCP-server is het één gesprek.
+
+00:09:44.320 --> 00:09:48.540
+Laat me de fouten zien, controleer mijn configuratie, verifieer mijn opslag en test mijn database-verbinding.
+
+00:09:48.740 --> 00:09:50.360
+De server handelt dit allemaal af.
+
+00:09:50.500 --> 00:09:51.720
+Hoe het daadwerkelijk werkt?
+
+00:09:51.940 --> 00:09:53.340
+Laten we onder de motorkap kijken.
+
+00:09:53.560 --> 00:09:55.180
+Hoe werkt dit eigenlijk achter de schermen?
+
+00:09:55.540 --> 00:10:00.520
+Authenticatie maakt gebruik van Entra ID, dat is je Azure Active Directory, via de Azure Identity Library.
+
+00:10:00.800 --> 00:10:04.580
+Wanneer je AI-agent een verzoek doet, authenticeert deze zich met je Azure-identiteit.
+
+00:10:04.580 --> 00:10:10.500
+Dezelfde inloggegevens die je gebruikt voor het Azure-portaal, geen apart API-sleutels, geen gedeelde service-accounts, alleen jouw identiteit.
+
+00:10:10.720 --> 00:10:11.980
+Zie het als een receptiebalie.
+
+00:10:12.140 --> 00:10:14.740
+De server controleert je legitimatiebewijs voordat je naar binnen mag.
+
+00:10:14.920 --> 00:10:19.000
+De autorisatie respecteert Azure RBAC, oftewel op rollen gebaseerd toegangsbeheer.
+
+00:10:19.140 --> 00:10:21.560
+De MCP-server verleent geen nieuwe rechten.
+
+00:10:21.800 --> 00:10:23.860
+Het staat alleen toe wat jouw account al mag doen.
+
+00:10:24.100 --> 00:10:28.020
+Als je in het portaal storage-accounts kunt lezen, kan de MCP-server ze ook lezen.
+
+00:10:28.020 --> 00:10:31.240
+Als jij geen databases kunt verwijderen, kan de MCP-server dat ook niet.
+
+00:10:31.360 --> 00:10:33.480
+Het erft het bestaande beveiligingsmodel van Azure.
+
+00:10:33.480 --> 00:10:35.360
+Het voegt geen nieuwe aanvalsoppervlakken toe.
+
+00:10:35.520 --> 00:10:39.600
+Dus, als je Azure al vertrouwt voor het draaien van je applicaties, vertrouw je dit beveiligingsmodel ook.
+
+00:10:39.720 --> 00:10:41.380
+Voor transport zijn er twee opties.
+
+00:10:41.840 --> 00:10:47.060
+Straat-aamable HTTP voor externe verbindingen, wanneer je AI-assistent in de cloud of op een andere machine draait.
+
+00:10:47.240 --> 00:10:50.900
+En STDIO voor lokale ontwikkeling, wanneer je alles op je eigen machine draait.
+
+00:10:51.080 --> 00:10:57.320
+De straat-aamable HTTP optie is wat Microsoft aanbeveelt voor productie, omdat het goed werkt met loadbalancers en proxies.
+
+00:10:57.560 --> 00:11:01.120
+Zie het als een telefoongesprek voor op afstand en een direct gesprek voor lokaal.
+
+00:11:01.120 --> 00:11:05.600
+Sessies zijn hierbij belangrijk. De MCP-server behoudt een status tijdens een gesprek.
+
+00:11:05.760 --> 00:11:11.380
+Dus, wanneer je agent een vraag stelt, een antwoord krijgt en vervolgens een vervolgvraag stelt, onthoudt de server wat er eerder is gebeurd.
+
+00:11:11.540 --> 00:11:13.420
+Tools kunnen voortbouwen op eerdere stappen.
+
+00:11:13.580 --> 00:11:20.240
+Je kunt laks opvragen, een probleem identificeren, een oplossing maken en deze implementeren, allemaal binnen één sessie, zonder context te verliezen.
+
+00:11:20.420 --> 00:11:23.380
+Het is als een praatje bij de koffie waarbij je verder gaat waar je gebleven was.
+
+00:11:23.380 --> 00:11:29.860
+De server gebruikt Azure SDK's onder de motorkap, wat betekent dat hij alle ingebouwde retry-logica en foutafhandeling erft die de SDK's bieden.
+
+00:11:29.980 --> 00:11:33.980
+Als een verzoek mislukt vanwege een tijdelijk netwerkprobleem, probeert hij het automatisch opnieuw.
+
+00:11:34.140 --> 00:11:37.040
+Als een service niet beschikbaar is, handelt hij de fout netjes af.
+
+00:11:37.180 --> 00:11:40.160
+Je hoeft dat allemaal niet zelf te schrijven. Het zit er al in gebakken.
+
+00:11:40.360 --> 00:11:44.260
+Nu, het beveiligingsmodel gebruikt iets dat on behalf of authentication heet, of obo.
+
+00:11:44.420 --> 00:11:45.240
+Dit is belangrijk.
+
+00:11:45.240 --> 00:11:50.700
+Wanneer je AI-agent een tool aanroept, geeft de MCP-server jouw identiteit door aan de downstream service.
+
+00:11:50.880 --> 00:11:53.980
+Het storage-account ziet jouw identiteit, niet die van de server.
+
+00:11:54.220 --> 00:11:57.260
+De database ziet jouw identiteit, niet een gedeeld service-account.
+
+00:11:57.520 --> 00:11:59.880
+Dit betekent dat elke actie naar jou herleidbaar is.
+
+00:12:00.060 --> 00:12:01.820
+Elk ad-it-logboek laat zien wie wat heeft gedaan.
+
+00:12:02.060 --> 00:12:04.480
+Geen anonieme service-accounts die dingen doen die niemand kan traceren.
+
+00:12:04.660 --> 00:12:06.480
+De server zegt, ik ben hier namens Miro.
+
+00:12:06.700 --> 00:12:08.600
+En de service ziet jou, niet de server.
+
+00:12:08.600 --> 00:12:13.940
+Voor bedrijven die nog meer controle nodig hebben, kun je MCP-servers voor Azure API Management plaatsen.
+
+00:12:13.940 --> 00:12:19.300
+Dit geeft je governance-beleid, rate-limiting, audit-trails en content-safety-controles op de protocolaag.
+
+00:12:19.380 --> 00:12:22.840
+Je kunt bepalen welke tools beschikbaar zijn, wie ze kan gebruiken en hoe vaak.
+
+00:12:23.000 --> 00:12:27.400
+Het is hetzelfde API Management dat je al gebruikt voor je rest APIs, nu toegepast op MCP-tools.
+
+00:12:27.640 --> 00:12:29.080
+Dit is de belangrijkste conclusie.
+
+00:12:29.260 --> 00:12:32.280
+De Azure MCP-server bedenkt geen nieuwe beveiligingsmechanismen.
+
+00:12:32.420 --> 00:12:34.280
+Hij gebruikt de mechanisme die Azure al heeft.
+
+00:12:34.280 --> 00:12:40.120
+Entra ID voor authenticatie, RBAC voor autorisatie, SDKs voor betrouwbaarheid, API Management voor governance.
+
+00:12:40.120 --> 00:12:45.500
+Als je Azure al vertrouwt voor het draaien van je applicaties, vertrouw je ook het beveiligingsmodel dat de MCP-server gebruikt.
+
+00:12:45.660 --> 00:12:47.040
+Een praktijkvoorbeeld in actie.
+
+00:12:47.260 --> 00:12:49.840
+Laten we dit concreet maken met een voorbeeld dat je echt kunt tegenkomen.
+
+00:12:50.080 --> 00:12:52.140
+Stel je voor dat je een container-app op Azure draait.
+
+00:12:52.280 --> 00:12:54.560
+Je gaat naar de URL en krijgt een 404-fout.
+
+00:12:54.760 --> 00:12:55.780
+De app wil niet starten.
+
+00:12:55.960 --> 00:12:58.400
+De Azure-portal toont een activatie-fout, maar geen logs.
+
+00:12:58.640 --> 00:12:59.440
+Niets nuttigs te zien.
+
+00:12:59.640 --> 00:13:00.340
+Je loopt vast.
+
+00:13:00.520 --> 00:13:02.340
+De oude manier om dit op te lossen is pijnlijk.
+
+00:13:02.520 --> 00:13:03.380
+Je opent de portal.
+
+00:13:03.620 --> 00:13:05.340
+Je spit door de instellingen van de container-app.
+
+00:13:05.520 --> 00:13:06.940
+Je controleert de deployment-lags.
+
+00:13:06.940 --> 00:13:09.980
+Je schrijft CLI-commando's om diagnostische informatie op te halen.
+
+00:13:10.100 --> 00:13:12.540
+Je vergelijkt configuratiebestanden tussen omgevingen.
+
+00:13:12.660 --> 00:13:16.220
+Je traceert handmatig de opstartvolgorde om te achterhalen wat er kapot is.
+
+00:13:16.420 --> 00:13:17.160
+Dit kost uren.
+
+00:13:17.340 --> 00:13:19.540
+En het gaat ervan uit dat je al weet waar je moet zoeken.
+
+00:13:19.760 --> 00:13:22.660
+Met de Azure MCP-server is de ervaring totaal anders.
+
+00:13:22.840 --> 00:13:28.120
+Je kopieert de foutmelding, plakt deze in Copilot, schakelt de Azure MCP-tools in en laat de agenten diagnose stellen.
+
+00:13:28.320 --> 00:13:29.000
+Dat is alles.
+
+00:13:29.220 --> 00:13:34.900
+De agent leest je projectbestanden, bekijkt je app-instellingen, controleert de configuratie van de container-app en identificeert het probleem.
+
+00:13:34.900 --> 00:13:38.280
+Je Azure App Configuratie Connection String bevat een placeholder-waarde.
+
+00:13:38.520 --> 00:13:40.400
+Deze was nooit geconfigureerd voor productie.
+
+00:13:40.600 --> 00:13:45.620
+Wanneer de container-app probeert te starten, kan deze geen verbinding maken met de app-configuratie, geeft een foutmelding en start niet.
+
+00:13:45.780 --> 00:13:48.680
+De agent vindt niet alleen het probleem, hij stelt ook een oplossing voor.
+
+00:13:48.900 --> 00:13:50.600
+Maak een echte app-configuratie-store aan.
+
+00:13:50.740 --> 00:13:52.840
+Stel de omgevingsvariabelen in de container-app in.
+
+00:13:52.960 --> 00:13:56.720
+Update de code om uit omgevingsvariabelen te lezen in plaats van hardcoded placeholders.
+
+00:13:57.240 --> 00:14:00.540
+Herimplementeer en hij leidt je door elke stap waarbij hij om toestemming vraagt voor wijzigingen.
+
+00:14:00.740 --> 00:14:02.120
+Dit is waar het indrukwekkend wordt.
+
+00:14:02.120 --> 00:14:05.260
+De agent orkestreert meerdere Azure-bewerkingen achter elkaar.
+
+00:14:05.440 --> 00:14:09.540
+Hij bevraagt de Azure Resource Graph om de container-apps gerelateerd aan je project te vinden.
+
+00:14:09.720 --> 00:14:11.500
+Hij identificeert de resource-groep.
+
+00:14:11.660 --> 00:14:14.300
+Hij maakt de app-configuratie-store aan in diezelfde groep.
+
+00:14:14.440 --> 00:14:17.240
+Hij update de container-app met de nieuwe omgevingsvariabelen.
+
+00:14:17.420 --> 00:14:19.480
+Hij voert de codewijzigingen in je project uit.
+
+00:14:19.660 --> 00:14:20.580
+Hij start de deployment.
+
+00:14:20.940 --> 00:14:22.840
+En dan verifieert hij of het eindpunt werkt.
+
+00:14:23.000 --> 00:14:24.580
+Het hele proces duurt slechts minuten.
+
+00:14:24.580 --> 00:14:30.960
+De agent handelde elke Azure-bewerking af, resources lezen, nieuwe aanmaken, configuraties bijwerken, deployments triggeren, resultaten verifiëren.
+
+00:14:31.100 --> 00:14:33.120
+Je hebt geen enkel CLI-commando hoeven schrijven.
+
+00:14:33.280 --> 00:14:34.860
+Je hoeft er niet door de portal te navigeren.
+
+00:14:35.020 --> 00:14:37.240
+Je hebt alleen het probleem beschreven en de stappen goedgekeurd.
+
+00:14:37.460 --> 00:14:41.600
+Dit betekent voor jou dat complexe probleemoplossing een gesprek wordt in plaats van een handmatig proces.
+
+00:14:41.920 --> 00:14:45.120
+Je hoeft geen Azure-expert te zijn om problemen te diagnostiseren en op te lossen.
+
+00:14:45.280 --> 00:14:48.160
+De agent brengt de expertise, jij brengt de context en de goedkeuring.
+
+00:14:48.340 --> 00:14:50.320
+En je kunt dit zelf uitproberen met een test-app.
+
+00:14:50.440 --> 00:14:51.900
+Je hebt geen speciale rechten nodig.
+
+00:14:51.900 --> 00:14:53.420
+Je hoeft geen ontwikkelaar te zijn.
+
+00:14:53.600 --> 00:14:57.140
+Je hebt alleen een Azure-abonnement en een MCP-compatibele AI-assistent nodig.
+
+00:14:57.300 --> 00:14:59.580
+Hoe alles met elkaar verbonden is, het grote geheel.
+
+00:14:59.760 --> 00:15:01.000
+Nu begrijp je de onderdelen.
+
+00:15:01.300 --> 00:15:02.840
+MCP is het standaardprotocol.
+
+00:15:03.040 --> 00:15:07.620
+De Azure MCP-server is Microsoft's implementatie en Azure-services zijn de tools waarmee deze verbinding maakt.
+
+00:15:07.780 --> 00:15:09.800
+Maar de echte waarde zit niet in één enkel onderdeel.
+
+00:15:09.940 --> 00:15:12.360
+Het zit in het feit dat ze allemaal samenwerken via één protocol.
+
+00:15:12.600 --> 00:15:13.840
+Hoe ziet dat er in de praktijk uit?
+
+00:15:14.040 --> 00:15:18.100
+Stel je een enkele agent voor die Azure Monitor Laks kan opvragen, app-configuratie-instellingen kan controleren,
+
+00:15:18.240 --> 00:15:21.200
+nieuwe bronnen kan aanmaken en bijgewerkte code kan implementeren, allemaal in één sessie.
+
+00:15:21.200 --> 00:15:23.380
+Dat zijn geen vier afzonderlijke integraties.
+
+00:15:23.580 --> 00:15:28.260
+Dat is één MCP-server die vier dingen achter elkaar doet, waarbij de context bij elke stap behouden blijft.
+
+00:15:28.400 --> 00:15:30.820
+De output van de ene tool wordt de input voor de volgende.
+
+00:15:31.020 --> 00:15:33.220
+De sessiestatus houdt alles met elkaar verbonden.
+
+00:15:33.480 --> 00:15:36.540
+Dit creëert interactie-effecten die je niet krijgt met geïsoleerde tools.
+
+00:15:36.780 --> 00:15:43.480
+De agent leest Laks, ziet een configuratie-probleem, bouwt een oplossing en implementeert deze zonder dat je handmatig informatie tussen stappen hoeft te kopiëren.
+
+00:15:43.640 --> 00:15:45.380
+Het netwerkeffect speelt ook een rol.
+
+00:15:45.620 --> 00:15:50.100
+Naarmate er meer MCP-servers worden gebouwd, krijgt elke AI-assistent toegang tot meer mogelijkheden.
+
+00:15:50.100 --> 00:15:54.320
+Microsoft heeft al MCP-servers voor Azure DevOps, Playwright en documentverwerking.
+
+00:15:54.480 --> 00:15:55.940
+Derde partijen bouwen ze ook.
+
+00:15:56.100 --> 00:15:59.620
+Elke nieuwe server voegt tools toe die elke MCP-compatibele agent kan gebruiken.
+
+00:15:59.800 --> 00:16:02.540
+Het ecosysteem wordt waardevoller met elke toegevoegde server.
+
+00:16:02.800 --> 00:16:04.340
+Laten we nu kijken waar dit naartoe gaat.
+
+00:16:04.540 --> 00:16:08.200
+De Azure MCP-server is al ingebouwd in Visual Studio 2026.
+
+00:16:08.520 --> 00:16:11.420
+De Azure DevOps MCP-server is algemeen beschikbaar.
+
+00:16:11.600 --> 00:16:18.100
+Azure API Management ondersteunt nu MCP, zodat ondernemingen hun MCP-tools kunnen beheren en beveiligen op dezelfde manier als hun APIs.
+
+00:16:18.100 --> 00:16:27.320
+En Microsoft kondigt de agent-orchestrator aan op beeld 2026, een beheerdedienst die taakverdeling, gezondheidscontrole en kostentoerekening over duizenden agents afhandelt.
+
+00:16:27.540 --> 00:16:32.960
+Vroege gebruikers zagen een reductie van 30 tot 45 procent in rekenkosten per agent door intelligente modelroutering.
+
+00:16:33.140 --> 00:16:34.600
+Het grote geheel is duidelijk.
+
+00:16:34.800 --> 00:16:37.660
+MCP wordt de universele integratielaag voor AI.
+
+00:16:37.880 --> 00:16:41.040
+En de Azure MCP-server is de oprit voor Azure-gebruikers.
+
+00:16:41.040 --> 00:16:47.040
+Organisaties die nu MCP adopteren, kunnen op elk AI-platform inpluggen zonder hun integraties opnieuw op te bouwen.
+
+00:16:47.260 --> 00:16:53.580
+Jouw tools, jouw data, jouw beveiligingsmodel, allemaal toegankelijk via één protocol vanaf elk AI-assistent die het spreekt.
+
+00:16:53.800 --> 00:16:55.120
+Dat is de kennis voor vandaag.
+
+00:16:55.380 --> 00:17:01.980
+MCP geeft AI-agents een standaard manier om met tools te praten, en de Azure MCP-server geeft ze toegang tot je hele Azure-omgeving.
+
+00:17:02.180 --> 00:17:05.460
+Als je met AI op Azure bouwt, begin dan vandaag nog met het verkennen van MCP.
+
+00:17:05.460 --> 00:17:09.120
+Abonneer je op je favoriete podcast-platform en deel dit met iemand die aan zijn reis begint.
+
+00:17:09.320 --> 00:17:11.200
+Laat een reactie achter als het kwartje is gevallen.
+
+00:17:11.380 --> 00:17:12.080
+Ik lees ze allemaal.
+
+00:17:12.400 --> 00:17:15.840
+Ik ben Mirko Peters en dit was weer een aflevering van Microsoft Knowledge Nuggets.

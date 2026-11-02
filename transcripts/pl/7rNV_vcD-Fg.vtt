@@ -1,0 +1,1819 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.320
+Zaczęło się od ostrzeżenia, potem zapadła cisza.
+
+00:00:02.520 --> 00:00:07.520
+Rachunek za GPU rusł, jakby akcelerator nigdy nie spał, a mimo to wyniki spływały tak wolno, jakby zgasły światła.
+
+00:00:07.720 --> 00:00:09.780
+Dashboardy świeciły na zielono, klienci nie.
+
+00:00:09.960 --> 00:00:11.700
+Ta anomalia do niczego nie pasowała.
+
+00:00:11.920 --> 00:00:15.000
+Bliskie zeru wykorzystanie GPU przy gwałtownym wzroście opóźnień.
+
+00:00:15.160 --> 00:00:18.640
+Żadnych alertów, żadnych czerwonych linii, po prostu czas przeciekający przez palce.
+
+00:00:18.880 --> 00:00:22.100
+Dowody wskazują na jedną patologię, która podszywa się pod normalność.
+
+00:00:22.280 --> 00:00:23.140
+Oto obietnica.
+
+00:00:23.580 --> 00:00:26.920
+Przeanalizujemy artefakty, nazwiemy winowajce i naprawimy usterkę.
+
+00:00:26.920 --> 00:00:33.600
+Zbadamy trzy tryby awarii, przełączenie na CPU, niezgodność wersji między cuda i ONNX Tensorszt oraz błędną konfigurację kontenera,
+
+00:00:33.720 --> 00:00:38.620
+a następnie udowodnimy to, porównując opóźnienia, przepustowość i wykorzystanie GPU przed i po naprawie.
+
+00:00:38.800 --> 00:00:41.500
+Konfiguracja przypadku, środowisko i profil ofiary.
+
+00:00:41.700 --> 00:00:46.400
+Każda konfiguracja opowiada pewną historię, a ta zaczyna się od zwykłego użytkownika pod presją.
+
+00:00:46.580 --> 00:00:53.760
+Obciążenie to dyfuzja tekstu na obraz, warianty stable diffusion działające w 512 na 512 i skalujące się do 1024 na 1024.
+
+00:00:53.760 --> 00:00:57.980
+Ruch jest skokowy. Współbieżność waha się między 8 a 32 żądaniami.
+
+00:00:58.200 --> 00:01:00.000
+Rozmiary partii wahają się od 1 do 8.
+
+00:01:00.240 --> 00:01:02.580
+Poziomy usług są rygorystyczne w kwestii opóźnień końcowych.
+
+00:01:02.780 --> 00:01:05.760
+Naruszenia P95 przekładają się bezpośrednio na zwroty kosztów i kary.
+
+00:01:05.980 --> 00:01:08.760
+Modele nie są egzotyczne, ale wybory z nimi związane mają znaczenie.
+
+00:01:08.960 --> 00:01:12.540
+Potoki stable diffusion eksportowane do ONNX, optymalizacje cross-attention,
+
+00:01:12.680 --> 00:01:17.360
+takie jak sformers lub scalet dot product attention oraz wybory harmonogramu, które zamieniają kroki na jakość.
+
+00:01:17.480 --> 00:01:20.700
+Ekosystem ma przyspieszać, gdy infrastruktura działa poprawnie.
+
+00:01:20.700 --> 00:01:22.800
+Sprzęt na papierze wygląda przyzwoicie.
+
+00:01:23.000 --> 00:01:26.700
+Karty Nvidia RTX i serii A w chmurze 16 do 32 GB VRAM.
+
+00:01:27.440 --> 00:01:30.620
+Magistrala PCIe znajduje się między hostem a urządzeniem niczym punkt poboru opłat.
+
+00:01:30.780 --> 00:01:34.560
+Wystarczająco szybka, gdy jest skonfigurowana i zabójcza, gdy powiązania i owracają do transferów stronicowalnych.
+
+00:01:34.720 --> 00:01:36.480
+W tym środowisku nic nie jest przypadkowe.
+
+00:01:36.680 --> 00:01:38.560
+Łańcuch narzędzi układa się w znane warstwy.
+
+00:01:38.720 --> 00:01:42.600
+Pythorch służy do eksportu, a potem ONNX Runtime lub Tensorst przejmuje wnioskowanie.
+
+00:01:42.880 --> 00:01:44.760
+Sterowniki cuda znajdują się pod wszystkim.
+
+00:01:44.760 --> 00:01:48.080
+Jądra Attention obiecują szybkość, jeśli wersje są zgodne.
+
+00:01:48.220 --> 00:01:52.360
+Wdrożenie jest ściśle konteneryzowane, obrazy niezmienne, wdrożenia sterowane ci.
+
+00:01:52.520 --> 00:01:53.380
+Polityka Blue Green.
+
+00:01:53.540 --> 00:01:55.800
+To ograniczenie powinno zapewniać bezpieczeństwo.
+
+00:01:56.040 --> 00:01:57.800
+Może jednak również zakonserwować błędy.
+
+00:01:58.040 --> 00:01:59.860
+Stawki biznesowe nie są abstrakcyjne.
+
+00:02:00.040 --> 00:02:01.580
+Koszt żądania definiuje marżę.
+
+00:02:01.760 --> 00:02:05.140
+Rezerwacje GPU wyceniane godzinowo, niezależnie od tego, czy jądra działają, czy nie.
+
+00:02:05.360 --> 00:02:08.720
+Gdy opóźnienie wydłuża się z sekund do pół minuty, przepustowość załamuje się.
+
+00:02:08.720 --> 00:02:11.500
+Jedna błędna konfiguracja zmienia akcelerator w grzejnik.
+
+00:02:11.500 --> 00:02:14.480
+Drogi, cichy i zajęty robieniem czegoś, co nie pomaga kolejce.
+
+00:02:14.660 --> 00:02:17.300
+Przy bliższym przyjrzeniu się profil ofiary zawęża się.
+
+00:02:17.500 --> 00:02:24.600
+Współbieżność 16, partie po dwie, aby pozostać poniżej limitów VRAM przy 512, przechodząc do 1024 roku dla jakości.
+
+00:02:24.780 --> 00:02:26.920
+Użytkownik oczekuje spójnego P95.
+
+00:02:27.340 --> 00:02:36.540
+Zamiast tego ślady pokazują nieregularne opóźnienia, szerokie delty między P50 a P95 oraz cykle pracy GPU oscylujące od 5% do 40% bez wyraźnego powodu.
+
+00:02:36.780 --> 00:02:38.440
+Wykresy CPU mówią co innego.
+
+00:02:38.440 --> 00:02:41.580
+Rdzenie obciążone, choć brak przetwarzania wstępnego, by to uzasadnić.
+
+00:02:41.700 --> 00:02:43.480
+Dowody wskazują na trzy możliwe przyczyny.
+
+00:02:43.620 --> 00:02:45.520
+Po pierwsze, awaryjne przełączenie na CPU.
+
+00:02:45.780 --> 00:02:50.120
+Gdy dostawca wykonań cuda lub tensorszt nie może się załadować, silnik po cichu wybiera wykres CPU.
+
+00:02:50.420 --> 00:02:53.160
+Model działa, ale z od 10 do 30-krotnie większym opóźnieniem.
+
+00:02:53.320 --> 00:02:54.880
+Po drugie, niezgodność wersji.
+
+00:02:54.880 --> 00:03:02.320
+ONNX Runtime skompilowany pod jedno cuda, węzły używające innego, silniki tensorszt unieważnione i przebudowane z ogólnymi jądrami.
+
+00:03:02.500 --> 00:03:05.340
+Wykorzystanie jest widoczne, ale szybkie ścieżki zniknęły.
+
+00:03:05.480 --> 00:03:15.520
+Po trzecie, błędna konfiguracja kontenera, przeładowane obrazy, brak zamontowanych urządzeń GPU, złe ustawienia NVID, a container toolkit oraz obszary pamięci przetrzymujące, alokacje, co zwiększa opóźnienia końcowe pod obciążeniem.
+
+00:03:15.520 --> 00:03:20.360
+Ostatecznie nie jest to zagadka dotycząca modeli, to sprawa dotycząca uczciwości infrastruktury.
+
+00:03:20.520 --> 00:03:29.620
+Prześledzimy artefakty, kolejność dostawców, logi możliwości, punkty montowania urządzeń i powiążemy je z trzema niezmiennymi metrykami, opóźnieniem, przepustowością i wykorzystaniem GPU.
+
+00:03:30.740 --> 00:03:34.900
+Plik dowodowy, a awaryjne przełączenie na CPU, cichy sabotażysta.
+
+00:03:35.320 --> 00:03:38.700
+Zaczęło się od zapytania, które powinno zająć sekundy, a nie zajęło.
+
+00:03:38.900 --> 00:03:41.060
+Wskaźnik GPU był cichy, zbyt cichy.
+
+00:03:41.060 --> 00:03:43.860
+Wykres CPU tymczasem wzrósł jak alarm przeciwpożarowy.
+
+00:03:43.860 --> 00:03:46.240
+Po bliższym przyjrzeniu się, silnik dokonał wyboru.
+
+00:03:46.380 --> 00:03:48.560
+Uruchomił zadanie przeznaczone dla GPU na procesorze.
+
+00:03:48.740 --> 00:03:49.980
+Żaden alert się nie włączył.
+
+00:03:50.160 --> 00:03:51.260
+Wynik w końcu się pojawił.
+
+00:03:51.440 --> 00:03:53.860
+Oto cichy sabotażysta, awaryjne przełączenie na CPU.
+
+00:03:54.160 --> 00:03:54.880
+Dlaczego to ważne?
+
+00:03:55.100 --> 00:03:55.680
+To proste.
+
+00:03:55.920 --> 00:03:58.060
+Stable diffusion na procesorze to strata czasu.
+
+00:03:58.340 --> 00:04:02.880
+Model działa, ale opóźnienie rośnie wielokrotnie od 10 do 30 razy wolniej, a przepustowość drastycznie spada.
+
+00:04:03.060 --> 00:04:06.120
+W środowisku, gdzie sprzedaje się milisekundy, ta różnica jest krytyczna.
+
+00:04:06.320 --> 00:04:09.060
+Rachunek nalicza czas GPU, ale urządzenie nie wykonuje pracy.
+
+00:04:09.060 --> 00:04:10.740
+Oś czasu ujawniła wzorzec.
+
+00:04:10.740 --> 00:04:13.300
+Kontenery, które lokalnie działały z cuda, śmigały.
+
+00:04:13.460 --> 00:04:19.720
+Po wdrożeniu do węzła klastra z nieco innym stosem sterowników, te same kontenery uruchamiały się, odpowiadały na sondy zdrowia, a potem zwalniały.
+
+00:04:19.880 --> 00:04:25.420
+Punkt końcowy zdrowia sprawdzał tylko, czy serwer działa, więc nigdy nie sprawdzał, czy GPU faktycznie wykonuje pracę.
+
+00:04:25.560 --> 00:04:27.700
+W tym środowisku nic nie jest przypadkowe.
+
+00:04:27.880 --> 00:04:29.040
+Cisza to artefakt.
+
+00:04:29.280 --> 00:04:33.380
+Głównym artefaktem jest kolejność dostawców wykonań w ONN X Runtime.
+
+00:04:33.380 --> 00:04:37.380
+Silnik akceptuje listę, spróbuj ten sorszt, potem cuda, potem CPU.
+
+00:04:37.760 --> 00:04:44.540
+Jeśli cuda nie zainicjuje się zły sterownik, brak bibliotek, niezamontowane urządzenie ORT po cichu przypisze dostawcę wykonań CPU.
+
+00:04:44.880 --> 00:04:48.500
+Brak wyjątku, brak awarii, tylko linijka w logach często ukryta na dole.
+
+00:04:48.700 --> 00:04:51.340
+Dostawca wykonań cuda niedostępny przełączam na CPU.
+
+00:04:51.540 --> 00:04:54.060
+Ta linijka to wyznanie, którego większość zespołów nigdy nie czyta.
+
+00:04:54.060 --> 00:04:55.420
+A teraz najdziwniejsza część.
+
+00:04:55.640 --> 00:04:58.480
+Wykresy wykorzystania wyglądają na pierwszy rzut oka zwodniczo normalnie.
+
+00:04:58.680 --> 00:04:59.920
+Zapytania nadal się kończą.
+
+00:05:00.140 --> 00:05:03.540
+Mapa usług świeci się na zielono, ale cykl pracy GPU utrzymuje się na poziomie 5%,
+
+00:05:03.540 --> 00:05:06.080
+podczas gdy zużycie procesora przez użytkownika jest wysokie i stałe.
+
+00:05:06.220 --> 00:05:09.500
+Opóźnienie P50 rośnie czterokrotnie, a P95 wymyka się spod kontroli.
+
+00:05:09.660 --> 00:05:11.440
+Nagłe skoki ruchu tylko pogarszają sprawę.
+
+00:05:11.560 --> 00:05:15.140
+Kolejki rosną, a autoskalowanie dodaje kolejne repliki, z których każda dziedziczy tę samą wadę.
+
+00:05:15.320 --> 00:05:19.280
+Wyobraź sobie sztafetę, w której sprinter się nie zjawia, więc jego odcinek biegnie bibliotekarz.
+
+00:05:24.060 --> 00:05:28.900
+Podczas śledzenia sekwencji uruchamiania szybko pojawiają się dowody problemów.
+
+00:05:29.040 --> 00:05:33.160
+Dzienniki ładowania dostawców pokazują próby inicjalizacji cuda wraz z weryfikacją wersji sterownika.
+
+00:05:33.400 --> 00:05:39.300
+Jeśli kontener zbudowano w oparciu o cuda 12.2, a węzeł ma tylko 12.0, inicjalizacja kończy się niepowodzeniem.
+
+00:05:39.500 --> 00:05:42.640
+Jeśli zestaw narzędzi NVID i a-container toolkit nie jest skonfigurowany,
+
+00:05:42.700 --> 00:05:44.700
+montowanie urządzenia nigdy nie pojawi się w kontenerze.
+
+00:05:44.900 --> 00:05:46.820
+Brak dev Nvidia oznacza brak libcuda.
+
+00:05:47.080 --> 00:05:52.120
+Jeśli więc specyfikacja podanie rząda GPU wprost, harmonogram nigdy nie przypisze urządzenia.
+
+00:05:52.120 --> 00:05:55.320
+Każda z tych przyczyn wywołuje cichą degradację wydajności.
+
+00:05:55.520 --> 00:05:57.120
+Odtworzenie błędu jest proste.
+
+00:05:58.720 --> 00:06:05.240
+Na źle skonfigurowanym węźle prosta inferencja wskazuje dostawcę CPU zamiast oczekiwanego tensorszt lub cuda.
+
+00:06:07.260 --> 00:06:10.560
+Wysłanie pojedynczego promptu pozostawia GPU w stanie bezczynności.
+
+00:06:10.840 --> 00:06:15.220
+Wątki CPU gwałtownie rosną, a obraz wraca po od 20 do 40 sekundach zamiast po 2 do 6.
+
+00:06:15.440 --> 00:06:18.100
+Powtórz to na węźle z właściwymi sterownikami i montowaniami.
+
+00:06:18.100 --> 00:06:22.420
+Ten sam prompt kończy się w ułamku czasu, a cykl pracy GPU wchodzi w stabilny zakres.
+
+00:06:22.600 --> 00:06:25.600
+Dowody sugerują, że obecne zabezpieczenia są tylko fasadowe.
+
+00:06:25.820 --> 00:06:28.380
+Sondy zdrowia zwracają 200, ponieważ serwer odpowiada.
+
+00:06:28.600 --> 00:06:31.320
+Brak jest asercji przy starcie, która potwierdzałaby, że ścieżka GPU działa.
+
+00:06:31.560 --> 00:06:34.880
+Sondy wydajności nie istnieją, więc orkiestracja uznaje repliki za sprawne.
+
+00:06:35.120 --> 00:06:37.720
+System nie potrafi odróżnić akceleracji od emulacji.
+
+00:06:37.980 --> 00:06:39.960
+Środek zaradczy jest z założenia radykalny.
+
+00:06:40.160 --> 00:06:44.120
+Całkowita awaria, jeśli dostawca wykonawczy GPU jest nieobecny lub działa nieprawidłowo.
+
+00:06:44.300 --> 00:06:47.160
+Odmowa uruchomienia z użyciem CPU w środowisku produkcyjnym.
+
+00:06:47.160 --> 00:06:53.980
+Przy uruchomieniu procesu wylicz dostawców, sprawdź, czy załadowano tensorszt lub cuda i czy liczba urządzeń jest zgodna z oczekiwaniami.
+
+00:06:54.240 --> 00:07:00.960
+Zaloguj zestaw możliwości QDNN, dostępne rdzenie tensorą, limity pamięci i zakończ z kodem błędu, jeśli czegokolwiek brakuje.
+
+00:07:01.120 --> 00:07:05.660
+Poświęć dostępność na rzecz integralności i pozwól orkiestratorom przenieść zadania na zdrowy węzeł.
+
+00:07:05.820 --> 00:07:08.420
+Aby to zapewnić, wprowadź weryfikację wiązania we W.
+
+00:07:08.600 --> 00:07:12.760
+Przypisz wejścia i wyjścia do pamięci urządzenia i zweryfikuj prostą inferencję przy starcie.
+
+00:07:12.980 --> 00:07:15.940
+Jeden rozgrzewkowy przebieg, który uruchamia jądro Fused Attention.
+
+00:07:15.940 --> 00:07:20.300
+Jeśli czas przekroczy limit opóźnienia, uznaj ścieżkę za zdegradowaną i zrestartuj poda.
+
+00:07:20.440 --> 00:07:23.540
+Dodaj zestaw promptów kontrolnych z deterministycznymi ziarnami losowości.
+
+00:07:23.740 --> 00:07:25.560
+Porównaj opóźnienia z oknem bazowym.
+
+00:07:25.820 --> 00:07:29.200
+Jeśli odchylenie przekracza tolerancję, wyślij alert i zatrzymaj wdrażanie.
+
+00:07:29.440 --> 00:07:32.340
+Może się to wydawać surowe, ale alternatywa jest znacznie gorsza.
+
+00:07:32.500 --> 00:07:35.400
+Klaster, który działa jednocześnie marnując czas i budżet.
+
+00:07:35.600 --> 00:07:41.000
+Zablokuj kolejność dostawców, odrzuć użycie procesora, fallback i wymuś, by system udowodnił szybkość, zanim uznamy go za sprawny.
+
+00:07:41.000 --> 00:07:43.560
+Dopiero wtedy zielony kolor oznacza akcelerację.
+
+00:07:44.040 --> 00:07:48.760
+Dowód B. Niedopasowanie wersji, niekompatybilność, cuda ONNX i TensorSzt.
+
+00:07:48.860 --> 00:07:53.920
+Jeśli GPU nie zostało użyte, kolejne pytanie brzmi, czy mogłoby działać z pełną prędkością, nawet jeśli jest obecne?
+
+00:07:54.100 --> 00:07:56.220
+Dowody wskazują na bardziej subtelną awarię.
+
+00:07:56.420 --> 00:08:00.020
+Wersje są na tyle zgodne, by uruchomić system, ale nie na tyle, by odblokować szybką ścieżkę.
+
+00:08:00.240 --> 00:08:02.900
+System wygląda na przyspieszony, dopóki nie spojrzysz na zegary.
+
+00:08:03.080 --> 00:08:04.940
+Powód, dla którego to ważne, jest oczywisty.
+
+00:08:04.940 --> 00:08:07.740
+Potoki dyfuzyjne zależą od wydajności mechanizmu Attention.
+
+00:08:08.060 --> 00:08:12.940
+Gdy ONNX Runtime i TensorSzt nie mogą załadować oczekiwanych połączonych jąder Fused Kernels,
+
+00:08:13.120 --> 00:08:17.520
+przez różnice w wersjach cuda, cudne lub TensorSzt, cicho przełączają się na implementacje ogólne.
+
+00:08:17.860 --> 00:08:18.520
+Model działa.
+
+00:08:19.040 --> 00:08:24.000
+Wykorzystanie oscyluje wokół od 30 do 50%, a opóźnienia przekraczają budżet.
+
+00:08:24.160 --> 00:08:26.660
+Kompilacja wygląda tak samo, praca jest wolniejsza.
+
+00:08:26.840 --> 00:08:29.560
+Przy bliższym przyjrzeniu się, artefakty są precyzyjne.
+
+00:08:29.780 --> 00:08:32.800
+Logi ładowania dostawców ogłaszają sukces z pewnym, ale...
+
+00:08:32.800 --> 00:08:35.700
+Powrót do domyślnych jąder lub wyłączone z Formers.
+
+00:08:36.020 --> 00:08:42.200
+Zobaczysz, że deserializacja planu TensorSzt zawodzi, wymuszając przebudowę silnika, co inicjuje kompilację na węźle.
+
+00:08:42.420 --> 00:08:46.160
+Silniki zbudowane na jednej wersji MinorTensorSzt nie zdeserializują się na innej.
+
+00:08:46.340 --> 00:08:51.240
+Przebudowa kończy się sukcesem, ale wynikowy plan może pomijać Fused Attention lub optymalizację FP16.
+
+00:08:51.620 --> 00:08:52.700
+Wyścig dobiega końca.
+
+00:08:52.920 --> 00:08:55.860
+Bez skoków wydajności, cykle pracy rdzeni Tensor pozostają stłumione.
+
+00:08:55.860 --> 00:08:57.620
+Oto część sprzeczna z intuicją.
+
+00:08:57.860 --> 00:09:00.720
+Zespoły interpretują fakt, że system działa jako optymalny.
+
+00:09:00.720 --> 00:09:02.900
+W tym środowisku nic nie jest przypadkowe.
+
+00:09:03.100 --> 00:09:10.340
+Jeśli Scaled Dot Product Attention nie jest aktywne, jeśli Sformers jest wyłączone, jeśli Cudny zgłasza ograniczony obszar roboczy, wydajność uprzejmie się załamuje.
+
+00:09:10.580 --> 00:09:15.800
+Mówiąc prościej, niedopasowane pliki binarne wymuszają użycie jąder, które częściej przenoszą dane w pamięci kosztem gęstości obliczeń.
+
+00:09:15.980 --> 00:09:17.740
+Pcie staje się widoczne w śladach Traces.
+
+00:09:17.980 --> 00:09:20.700
+Opóźnienia końcowe, Tail Latencies, rosną wraz ze wzrostem współbieżności.
+
+00:09:20.860 --> 00:09:23.040
+Potraktuj stos oprogramowania jak zestaw zamków.
+
+00:09:23.220 --> 00:09:28.080
+Sterownik, zestaw narzędzi Cuda, Cudne, flagi kompilacji, ONNX Runtime i TensorSzt.
+
+00:09:28.080 --> 00:09:31.140
+Jeden ząbek nie na swoim miejscu i klucz obraca się tylko do połowy.
+
+00:09:31.340 --> 00:09:34.400
+Ord ogłasza graf możliwości dla każdego dostawcy wykonawczego.
+
+00:09:34.640 --> 00:09:42.460
+Jeśli skompilowany Ord oczekuje Cuda 12.2, a sterownik węzła udostępnia 12.1, Cuda ładuje się z ograniczonymi funkcjami lub wcale.
+
+00:09:42.760 --> 00:09:50.220
+Jeśli na węźle jest TensorSzt 8.6, a plany wygenerowano w 8.4, deserializacja zawodzi i generuje je ponownie z użyciem konserwatywnych taktyk.
+
+00:09:50.420 --> 00:09:52.960
+System po cichu przedkłada poprawność nad szybkość.
+
+00:09:52.960 --> 00:09:59.860
+Benchmarki dowodzą strat w praktycznym ujęciu. Z aktywnym sformers lub SDP mechanizm Attention w dyfuzji mierzalnie skraca czas rzeczywisty.
+
+00:10:00.100 --> 00:10:05.900
+Badania konsekwentnie pokazują przyspieszenie od 2x do 5x w ścieżce Attention w zależności od rozdzielczości i rozmiarów sadu.
+
+00:10:06.080 --> 00:10:08.980
+Wyłączając je przez rozbieżność wersji tracisz te mnożniki.
+
+00:10:09.260 --> 00:10:12.140
+Token Merging Tome sumuje się z tymi zyskami.
+
+00:10:12.460 --> 00:10:17.140
+Bez połączonych jąder korzyść jest ograniczona przepustowością pamięci i niezoptymalizowanymi układami.
+
+00:10:17.140 --> 00:10:21.820
+Różnica potęguje się przy rozdzielczości 1024 na 1024 i wyższej współbieżności.
+
+00:10:22.000 --> 00:10:24.140
+Aby śledzić artefakty, zacznij od wyliczenia możliwości.
+
+00:10:24.940 --> 00:10:28.620
+Przy starcie wypisz dokładną listę dostawców i zgłaszane przez nich funkcje.
+
+00:10:28.860 --> 00:10:37.840
+Wersja TensorSt, dostępność FP16 i INT8, maksymalna przestrzeń robocza, heurystyka, splotu cudne, obecność NCCL dla wielu GPU.
+
+00:10:38.200 --> 00:10:41.440
+Dla środowiska wykonawczego ONNX zrzuć priorytety app.
+
+00:10:41.560 --> 00:10:43.540
+TensorSt, cuda, a następnie CPU.
+
+00:10:43.540 --> 00:10:46.800
+Zweryfikuj, co faktycznie łączy się z węzłami Twojego grafu.
+
+00:10:47.040 --> 00:10:52.120
+Zaloguj, czy węzły uwagi są przypisane do TensorSt ze scalonymi jądrami, czy do ogólnych jąder cuda.
+
+00:10:52.380 --> 00:10:53.940
+Następnie sprawdź środowisko.
+
+00:10:54.180 --> 00:10:58.600
+Odpytaj sterownik NVID i ASM i pokazuje moduł jądra i kompatybilność z cuda.
+
+00:10:58.800 --> 00:11:00.700
+Odczytaj wersję bibliotek w kontenerze.
+
+00:11:00.880 --> 00:11:03.460
+Libcuda, libcublas, libcan, libnywinfer.
+
+00:11:03.640 --> 00:11:07.940
+Jeśli obraz zawiera biblioteki cuda 12.3, a sterownik hosta obsługuje do 12.2,
+
+00:11:07.940 --> 00:11:11.400
+tryb kompatybilności środowiska uruchomieniowego może wczytać się z ograniczeniami.
+
+00:11:11.400 --> 00:11:15.640
+Jeśli obraz oczekuje na główku w TensorSt 8.6, a wtyczka węzła dostarcza 8.4,
+
+00:11:15.760 --> 00:11:18.660
+wywołania API ulegną degradacji lub anulują niektóre optymalizacje.
+
+00:11:18.880 --> 00:11:21.160
+Rozwiązaniem jest macierz budowania, a nie życzenia.
+
+00:11:21.420 --> 00:11:23.760
+Zablokuj dokładne wersje w jednym źródle prawdy.
+
+00:11:23.960 --> 00:11:27.940
+Obraz bazowy z kompatybilnością sterowników, wersją podrzędną cuda, cudne,
+
+00:11:28.060 --> 00:11:30.300
+haszem kompilacji ORD i wersją TensorSt.
+
+00:11:30.480 --> 00:11:33.260
+Przygotuj obrazy inferencji zgodnie z tą macierzą i odrzucaj węzły,
+
+00:11:33.260 --> 00:11:35.940
+które nie pasują poprzez etykiety węzłów i kontrolę przyjęcia.
+
+00:11:35.940 --> 00:11:41.560
+Wstępnie buduj i buforuj silniki TensorSt dla każdego wariantu modelu i rozdzielczości na dokładnie tej wersji TensorSt, którą wdrażasz.
+
+00:11:41.700 --> 00:11:44.280
+Traktuj pliki planu jako artefakty powiązane z macierzą.
+
+00:11:44.520 --> 00:11:47.420
+Nigdy nie polegaj na budowaniu silnika na węźle w środowisku produkcyjnym.
+
+00:11:47.620 --> 00:11:49.980
+Maskuje to dry w wersji i wydłuża zimne starty.
+
+00:11:50.180 --> 00:11:53.940
+Aby to utrzymać, dodaj testy dymne Ci, które potwierdzają możliwości jądra.
+
+00:11:54.120 --> 00:11:57.660
+Uruchom kontener w izolowanym środowisku z docelowym sterownikiem i zweryfikuj,
+
+00:11:57.740 --> 00:12:00.020
+czy TensorSt wczytuje używane jądra FP16,
+
+00:12:00.280 --> 00:12:01.640
+czy węzły uwagi są scalone,
+
+00:12:01.640 --> 00:12:05.280
+czy wiązanie IO jest aktywne i czy Sformers lub SDP są rozpoznawane.
+
+00:12:05.440 --> 00:12:08.040
+Uruchom deterministyczny zestaw promptów i przerwi budowanie,
+
+00:12:08.220 --> 00:12:09.880
+jeśli opóźnienie przekracza bazowe okno
+
+00:12:09.880 --> 00:12:12.880
+lub jeśli logi zawierają komunikaty o przełączaniu na inne tryby.
+
+00:12:13.080 --> 00:12:15.760
+Przechowuj migawkę możliwości wraz z sumą kontrolną obrazu,
+
+00:12:15.880 --> 00:12:19.360
+aby wycofanie zmian przywracało zarówno kod, jak i charakterystykę wydajności.
+
+00:12:19.600 --> 00:12:22.460
+Ostatecznie dowody wskazują, że dry w wersji to nie błąd, jak widać.
+
+00:12:22.640 --> 00:12:24.160
+To szybkość, za którą płacisz.
+
+00:12:24.400 --> 00:12:25.480
+System będzie działać.
+
+00:12:25.680 --> 00:12:27.060
+Zegary złożą świadectwo.
+
+00:12:27.440 --> 00:12:28.900
+Dowód plik C – kontener.
+
+00:12:28.900 --> 00:12:32.820
+Erozja wydajności przez błędną konfigurację w projekcie.
+
+00:12:33.060 --> 00:12:37.160
+Nawet gdy wersje są zgodne, kontener może od wewnątrz sabotować wydajność.
+
+00:12:37.440 --> 00:12:39.600
+Dowody wskazują na powolny wyciek, rozrost obrazu,
+
+00:12:39.720 --> 00:12:42.240
+brakującą infrastrukturę GPU i zachowanie alokatora,
+
+00:12:42.340 --> 00:12:44.140
+które zniekształca opóźnienia pod obciążeniem.
+
+00:12:44.360 --> 00:12:45.280
+Nic się nie zawiesza.
+
+00:12:45.500 --> 00:12:46.860
+Wszystko ulega degradacji.
+
+00:12:47.440 --> 00:12:49.080
+Dlaczego to ważne jest proste?
+
+00:12:49.220 --> 00:12:51.520
+Kontenery kształtują rzeczywistość wykonawczą.
+
+00:12:51.520 --> 00:12:54.240
+Jeśli obraz jest ociężały, a zimne starty się wleką,
+
+00:12:54.360 --> 00:12:56.300
+repliki przybywają spóźnione do incydentu.
+
+00:12:56.300 --> 00:12:59.340
+Jeśli urządzenia GPU nie są zamontowane lub środowisko uruchomieniowe
+
+00:12:59.340 --> 00:13:02.000
+nie ma odpowiednich flag, dostawcy wykonawczy działają nieprawidłowo.
+
+00:13:02.200 --> 00:13:03.960
+Jeśli obszary pamięci gromadzą alokację,
+
+00:13:04.080 --> 00:13:06.620
+rotacja RAM wywołuje stronicowanie i skoki opóźnień.
+
+00:13:06.820 --> 00:13:07.860
+Model wygląda dobrze.
+
+00:13:08.080 --> 00:13:10.280
+Kontener po cichu obciąża każde żądanie.
+
+00:13:10.520 --> 00:13:11.840
+Przy bliższym przyjrzeniu się,
+
+00:13:11.940 --> 00:13:13.740
+artefakty gromadzą się podczas budowania.
+
+00:13:14.000 --> 00:13:15.540
+Obrazy przekraczają 2 GB,
+
+00:13:15.760 --> 00:13:18.000
+wypchane kompilatorami, nagłówkami i testami,
+
+00:13:18.000 --> 00:13:19.540
+bo brak budowania wieloetapowego.
+
+00:13:19.780 --> 00:13:21.500
+Brak Docker Ignore wpuszcza notatniki,
+
+00:13:21.680 --> 00:13:24.440
+cache i eksperymentalne wagi do warstw produkcyjnych.
+
+00:13:24.440 --> 00:13:27.100
+Każde wdrożenie przesyła gigabajty przez sieć.
+
+00:13:27.480 --> 00:13:29.020
+Przeskaluj to na pulę węzłów,
+
+00:13:29.120 --> 00:13:31.460
+a zimny start stanie się normą, niewyjątkiem.
+
+00:13:31.740 --> 00:13:33.040
+Dowody nie są tajemnicze.
+
+00:13:33.280 --> 00:13:35.440
+Historia Dockera opowiada historię w warstwach.
+
+00:13:35.660 --> 00:13:38.360
+Środowisko uruchomieniowe ujawnia drugi poziom erozji.
+
+00:13:38.700 --> 00:13:40.040
+Bez jawnych flag GPU,
+
+00:13:40.220 --> 00:13:42.400
+braku GPU w Dockerze lub konfiguracji
+
+00:13:42.400 --> 00:13:43.960
+wtyczek urządzeń w Kubernetes,
+
+00:13:44.320 --> 00:13:46.120
+proces nie widzi urządzeń NVIDIA.
+
+00:13:46.120 --> 00:13:50.380
+Błędna konfiguracja zestawu narzędzi kontenera NVIDIA
+
+00:13:50.380 --> 00:13:51.260
+ukrywa LiMQDA,
+
+00:13:51.620 --> 00:13:54.820
+więc dostawca wykonawczy ładuje się z ograniczeniami lub wcale.
+
+00:13:55.120 --> 00:13:56.020
+MIG nie są wymuszane,
+
+00:13:56.120 --> 00:13:58.000
+więc obciążenia walczą o plasterki pamięci,
+
+00:13:58.120 --> 00:14:00.240
+generując straty, których planiści nie rozumieją.
+
+00:14:00.480 --> 00:14:02.620
+Logi pozostają grzeczne, a wydajność wycieka.
+
+00:14:02.860 --> 00:14:04.460
+Zachowanie pamięci to trzeci poziom.
+
+00:14:04.680 --> 00:14:07.020
+Domyślnie obszar pamięci cuda w ONNX Runtime
+
+00:14:07.020 --> 00:14:08.460
+agresywnie cachuje alokację.
+
+00:14:08.660 --> 00:14:10.680
+Przy współbieżności wygląda to na stabilność,
+
+00:14:10.820 --> 00:14:12.580
+dopóki obszar nie zarezerwuje zbyt wiele
+
+00:14:12.580 --> 00:14:13.940
+i nie zagłodzi nowych żądań.
+
+00:14:14.060 --> 00:14:15.560
+Pamięć przypięta nie jest ustawiona,
+
+00:14:15.680 --> 00:14:16.940
+więc transfery host urządzenie
+
+00:14:16.940 --> 00:14:18.460
+idą przez bufory stronicowalne,
+
+00:14:18.560 --> 00:14:20.040
+zmieniając pcie w wąskie gardło.
+
+00:14:20.260 --> 00:14:22.280
+Wejście-wyjście nie jest przypisane do urządzenia,
+
+00:14:22.400 --> 00:14:24.300
+więc tensory skaczą między CPU a GPU,
+
+00:14:24.500 --> 00:14:25.800
+tworząc ukryte koszty opóźnień.
+
+00:14:25.980 --> 00:14:27.640
+Zachowanie ogonowe pogarsza się najpierw,
+
+00:14:27.760 --> 00:14:28.840
+potem podąża za nim mediana.
+
+00:14:29.060 --> 00:14:30.960
+Oto jak objawy wyglądają w praktyce.
+
+00:14:31.180 --> 00:14:32.560
+Efektywna przepustowość kuleje
+
+00:14:32.560 --> 00:14:34.120
+mimo umiarkowanego użycia GPU.
+
+00:14:34.360 --> 00:14:36.440
+Opóźnienie przy lekkim obciążeniu jest akceptowalne,
+
+00:14:36.440 --> 00:14:38.640
+ale P95 chwieje się przy współbieżności,
+
+00:14:42.580 --> 00:14:43.940
+tworząc efekt stada.
+
+00:14:44.160 --> 00:14:46.140
+Restartujący się kaskadowo autoskalowanie drga,
+
+00:14:46.280 --> 00:14:47.400
+a kolejki rosną od nowa.
+
+00:14:47.540 --> 00:14:48.860
+Operatorzy szukają błędnej przyczyny,
+
+00:14:48.940 --> 00:14:50.120
+wierząc, że model jest ciężki,
+
+00:14:50.220 --> 00:14:51.960
+podczas gdy polityki kontenera powodują upadek.
+
+00:14:52.020 --> 00:14:53.160
+Pomyśl o higienie kontenerów,
+
+00:14:53.220 --> 00:14:54.220
+jak o zabezpieczaniu dowodów.
+
+00:14:54.400 --> 00:14:56.220
+Budowanie wieloetapowe usuwa odciski palców.
+
+00:14:56.400 --> 00:14:57.660
+Kompilatory i narzędzia deweloperskie
+
+00:14:57.660 --> 00:14:59.260
+nigdy nie wchodzą do środowiska uruchomieniowego.
+
+00:14:59.440 --> 00:15:00.780
+Obraz bazowy Distroles lub Slim
+
+00:15:00.780 --> 00:15:01.840
+zwęża powierzchnię ataku
+
+00:15:01.840 --> 00:15:02.820
+i skraca czas pobierania.
+
+00:15:03.020 --> 00:15:04.300
+Audyty Docker Slim lub DAEW
+
+00:15:04.300 --> 00:15:05.880
+potwierdzają, co przetrwało budowanie.
+
+00:15:05.880 --> 00:15:07.200
+Plik Docker Ignore zapobiega
+
+00:15:07.200 --> 00:15:08.980
+przypadkowemu gromadzeniu zbędnych plików.
+
+00:15:09.120 --> 00:15:11.080
+Efektem jest czystość kryminalistyczna.
+
+00:15:11.260 --> 00:15:13.060
+Uruchamia się tylko to, co powinno.
+
+00:15:13.200 --> 00:15:15.540
+Instalacja GPU wymaga jawnych deklaracji.
+
+00:15:15.780 --> 00:15:17.560
+W Dockerze zadeklaruj wszystkie GPU
+
+00:15:17.560 --> 00:15:19.080
+lub dokładny plasterek MIG.
+
+00:15:19.200 --> 00:15:21.620
+W Kubernetes żądaj zasobów GPU NVIDIA
+
+00:15:21.620 --> 00:15:23.400
+i upewnij się, że wtyczka urządzenia
+
+00:15:23.400 --> 00:15:24.920
+pasuje do gałęzi sterownika.
+
+00:15:25.140 --> 00:15:26.880
+Przy starcie potwierdź obecność urządzenia
+
+00:15:26.880 --> 00:15:28.260
+i kompatybilność sterownika.
+
+00:15:28.440 --> 00:15:30.240
+Konfiguracje NVID i ASME i LD
+
+00:15:30.240 --> 00:15:31.940
+nie są dla ozdoby, to kontrole dostępu.
+
+00:15:32.100 --> 00:15:33.820
+Jeśli czegoś brakuje lub jest niedopasowane,
+
+00:15:33.820 --> 00:15:35.320
+zaloguj to jako naruszenie i wyjdź.
+
+00:15:35.440 --> 00:15:38.160
+Następnie dostrój ONNX Runtime i Tensor z rozmysłem.
+
+00:15:38.380 --> 00:15:40.140
+Zablokuj kolejność dostawcy wykonawczego
+
+00:15:40.140 --> 00:15:41.740
+tylko do ścieżek GPU na produkcji.
+
+00:15:41.960 --> 00:15:43.700
+Rozważ wyłączenie lub ponowną konfigurację
+
+00:15:43.700 --> 00:15:45.720
+obszaru pamięci cuda, gdy gromadzi on zasoby
+
+00:15:45.720 --> 00:15:47.000
+poza Twoim zestawem roboczym.
+
+00:15:47.220 --> 00:15:49.200
+Ogranicz wzrost lub ustaw przealokację
+
+00:15:49.200 --> 00:15:50.380
+na przewidywalne limity.
+
+00:15:50.640 --> 00:15:54.220
+Włącz FP16 domyślnie, gdy pozwalają na to bariery dokładności.
+
+00:15:54.500 --> 00:15:56.840
+Zabezpiecz i NT8 testem dokładności.
+
+00:15:57.060 --> 00:15:58.500
+Powiąż i OS pamięcią urządzenia,
+
+00:15:58.620 --> 00:15:59.660
+aby wejścia trafiały tam,
+
+00:15:59.660 --> 00:16:00.960
+gdzie odbywają się obliczenia
+
+00:16:00.960 --> 00:16:02.420
+i wybieraj strumienie świadomie,
+
+00:16:02.540 --> 00:16:03.900
+by zapobiec blokowaniu kolejki.
+
+00:16:04.120 --> 00:16:05.560
+Wymuś to za pomocą dwóch bramek,
+
+00:16:05.680 --> 00:16:06.580
+stanu i wydajności.
+
+00:16:06.880 --> 00:16:08.220
+Stan to nie tylko kod 200,
+
+00:16:08.420 --> 00:16:10.220
+to zweryfikowany migawka możliwości.
+
+00:16:10.480 --> 00:16:11.480
+Dostawcy załadowani,
+
+00:16:11.600 --> 00:16:12.860
+połączone jądra obecne,
+
+00:16:12.980 --> 00:16:15.180
+wdzenie tensorą rozpoznane i opowiązane.
+
+00:16:15.420 --> 00:16:17.100
+Wydajność to bazowy zestaw poleceń,
+
+00:16:17.220 --> 00:16:18.500
+który uruchamia się na rozgrzewkę
+
+00:16:18.500 --> 00:16:19.360
+z oknem opóźnienia
+
+00:16:19.360 --> 00:16:20.900
+i minimalnym progiem utylizacji.
+
+00:16:21.120 --> 00:16:22.580
+Jeśli kontener nie osiąga obu,
+
+00:16:22.660 --> 00:16:24.160
+nie zostaje dopuszczony do obsługi.
+
+00:16:24.400 --> 00:16:26.120
+Dołącz budżety rozmiaru pobierania do Ci,
+
+00:16:26.120 --> 00:16:27.620
+aby obrazy przekraczające progi
+
+00:16:27.620 --> 00:16:28.480
+i przerywały budowanie.
+
+00:16:28.700 --> 00:16:30.420
+Przechowuj różnice zawartości obrazów
+
+00:16:30.420 --> 00:16:31.300
+dla każdego skrótu,
+
+00:16:31.400 --> 00:16:33.280
+aby wycofania przywracały kod i porządek.
+
+00:16:33.440 --> 00:16:34.200
+Dowody wskazują,
+
+00:16:34.400 --> 00:16:36.440
+że kontenery nie tylko wdrażają oprogramowanie,
+
+00:16:36.600 --> 00:16:38.240
+one kodują zachowanie pod obciążeniem.
+
+00:16:38.480 --> 00:16:39.300
+Gdy są hałaśliwe,
+
+00:16:39.440 --> 00:16:41.060
+ciężkie lub niejasne w kwestii GPU,
+
+00:16:41.260 --> 00:16:42.760
+zmieniają akcelerację w ceremonie.
+
+00:16:43.000 --> 00:16:44.620
+Gdy są lekkie, konkretne i asertywne,
+
+00:16:44.720 --> 00:16:45.760
+zachowują szybką ścieżkę,
+
+00:16:45.900 --> 00:16:46.800
+za którą zapłaciłeś.
+
+00:16:46.940 --> 00:16:48.820
+W tym środowisku nic nie jest przypadkowe.
+
+00:16:49.000 --> 00:16:50.780
+Kontener albo pomaga GPU w pracy,
+
+00:16:50.900 --> 00:16:51.760
+albo wchodzi w drogę.
+
+00:16:52.100 --> 00:16:53.180
+Laboratorium kryminalistyczne,
+
+00:16:53.180 --> 00:16:54.580
+metryki, które wydają wyrok.
+
+00:16:54.740 --> 00:16:56.720
+Opóźnienie, przepustowość, utylizacja.
+
+00:16:56.940 --> 00:16:58.140
+Dowody są lepsze od opinii,
+
+00:16:58.200 --> 00:16:59.400
+więc ustalamy zestaw poleceń,
+
+00:16:59.480 --> 00:17:00.140
+blokujemy ziarna
+
+00:17:00.140 --> 00:17:01.280
+i uruchamiamy na rozgrzewkę.
+
+00:17:01.400 --> 00:17:02.280
+Te same harmonogramy,
+
+00:17:02.340 --> 00:17:02.900
+te same kroki,
+
+00:17:03.000 --> 00:17:05.060
+od 20 do 25 dla 512,
+
+00:17:05.320 --> 00:17:08.260
+rozszerzone do 50 dla 1024 na 1024,
+
+00:17:08.540 --> 00:17:09.580
+aby ujawnić obciążenie.
+
+00:17:09.920 --> 00:17:11.420
+Współbieżność utrzymywana na 16,
+
+00:17:11.620 --> 00:17:12.540
+z próbą do 32.
+
+00:17:12.860 --> 00:17:14.120
+Rozmiar partii zaczyna się od 1,
+
+00:17:14.260 --> 00:17:14.940
+rosnąc ostrożnie,
+
+00:17:15.000 --> 00:17:16.760
+aż granice VRAM dadzą o sobie znać.
+
+00:17:16.920 --> 00:17:17.820
+Żadnych ekstrapolacji,
+
+00:17:18.000 --> 00:17:18.640
+żadnych wymówek,
+
+00:17:18.700 --> 00:17:19.720
+tylko zegary i liczniki.
+
+00:17:19.720 --> 00:17:21.480
+Opóźnienie zeznaje jako pierwsze.
+
+00:17:21.740 --> 00:17:22.580
+W stanie zdegradowanym
+
+00:17:22.580 --> 00:17:23.440
+przy awaryjnym CPU
+
+00:17:23.440 --> 00:17:24.660
+lub ogólnej ścieżce uwagi,
+
+00:17:24.740 --> 00:17:26.880
+P50 przy 512 na 512
+
+00:17:26.880 --> 00:17:28.420
+rozciąga się do wartości dwucyfrowych.
+
+00:17:28.560 --> 00:17:30.560
+P95 mówi całą prawdę.
+
+00:17:30.740 --> 00:17:31.760
+Waha się nieprzewidywalnie
+
+00:17:31.760 --> 00:17:33.280
+od 20 do 40 sekund,
+
+00:17:33.340 --> 00:17:34.560
+ponieważ kolejki potęgują
+
+00:17:34.560 --> 00:17:35.660
+małe nieefektywności.
+
+00:17:35.840 --> 00:17:38.800
+Przy 1024 na 1024 i 50 krokach
+
+00:17:38.800 --> 00:17:40.460
+P95 staje się naruszeniem
+
+00:17:40.460 --> 00:17:41.100
+już na starcie.
+
+00:17:41.260 --> 00:17:42.880
+Po naprawie zablokowanym EPU
+
+00:17:42.880 --> 00:17:44.420
+aktywną połączoną uwagą
+
+00:17:44.420 --> 00:17:46.400
+i opowiązanym z urządzeniem P50
+
+00:17:46.400 --> 00:17:48.440
+wraca do niskich wartości jednocyfrowych,
+
+00:17:48.440 --> 00:17:50.500
+a P95 mieści się w budżecie.
+
+00:17:50.720 --> 00:17:51.540
+Zakres się kurczy,
+
+00:17:51.720 --> 00:17:53.200
+system staje się przewidywalny.
+
+00:17:53.500 --> 00:17:54.660
+Przepustowość potwierdza.
+
+00:17:54.860 --> 00:17:56.020
+Przy współbieżności 16
+
+00:17:56.020 --> 00:17:57.060
+zdegradowana ścieżka
+
+00:17:57.060 --> 00:17:58.420
+daje tylko namiastkę wydajności.
+
+00:17:58.640 --> 00:17:59.400
+Obrazy na minutę
+
+00:17:59.400 --> 00:18:00.680
+ledwo rosną wraz z replikami,
+
+00:18:00.780 --> 00:18:01.820
+ponieważ każda instancja
+
+00:18:01.820 --> 00:18:02.540
+sama się blokuje.
+
+00:18:02.800 --> 00:18:03.900
+Skalowanie do 32
+
+00:18:03.900 --> 00:18:04.960
+z wielokrotnia spory,
+
+00:18:05.080 --> 00:18:05.560
+a nie wynik.
+
+00:18:05.700 --> 00:18:07.240
+Po naprawie relacja się prostuje.
+
+00:18:07.500 --> 00:18:08.280
+Obrazy na minutę
+
+00:18:08.280 --> 00:18:09.220
+rosną niemal liniowo,
+
+00:18:09.340 --> 00:18:10.220
+aż cykl pracy rdzeni
+
+00:18:10.220 --> 00:18:11.280
+tensorowych się nasyci
+
+00:18:11.280 --> 00:18:13.020
+lub VRAM ograniczy partię.
+
+00:18:13.260 --> 00:18:14.280
+Różnica w nachyleniu
+
+00:18:14.280 --> 00:18:15.040
+to dowód winy.
+
+00:18:15.040 --> 00:18:16.200
+Praca faktycznie dociera
+
+00:18:16.200 --> 00:18:17.060
+do mety szybciej,
+
+00:18:17.120 --> 00:18:18.000
+a nie tylko głośniej.
+
+00:18:18.220 --> 00:18:19.680
+Utylizacja zamyka sprawę.
+
+00:18:19.860 --> 00:18:21.160
+Wcześniej cykl pracy GPU
+
+00:18:21.160 --> 00:18:22.360
+oscylował między zerem
+
+00:18:22.360 --> 00:18:23.900
+a 50% z długimi,
+
+00:18:24.080 --> 00:18:24.900
+płaskimi dolinami.
+
+00:18:25.180 --> 00:18:25.900
+Liczniki PC
+
+00:18:25.900 --> 00:18:26.800
+wykazywały szum
+
+00:18:26.800 --> 00:18:28.120
+związany z transferami
+
+00:18:28.120 --> 00:18:29.060
+stronicowalnymi.
+
+00:18:29.860 --> 00:18:31.000
+Po zmianach cykl pracy
+
+00:18:31.000 --> 00:18:31.820
+stabilizuje się
+
+00:18:31.820 --> 00:18:32.480
+na wysokim,
+
+00:18:32.660 --> 00:18:33.340
+stałym poziomie
+
+00:18:33.340 --> 00:18:34.720
+z widocznym zaangażowaniem
+
+00:18:34.720 --> 00:18:35.720
+rdzeni tensorowych.
+
+00:18:35.940 --> 00:18:37.560
+CPU powraca do orkiestracji
+
+00:18:37.560 --> 00:18:39.160
+i lekkiego wstępnego przetwarzania.
+
+00:18:39.360 --> 00:18:39.760
+Piki PC
+
+00:18:39.760 --> 00:18:40.460
+wygładzają się,
+
+00:18:40.560 --> 00:18:41.740
+ponieważ przypięta pamięć
+
+00:18:41.740 --> 00:18:42.300
+i wiązanie
+
+00:18:42.300 --> 00:18:43.240
+i owy eliminowały
+
+00:18:43.240 --> 00:18:43.900
+zbędny ruch.
+
+00:18:43.900 --> 00:18:45.020
+Nic innego nie tłumaczy
+
+00:18:45.020 --> 00:18:45.500
+tej zmiany
+
+00:18:45.500 --> 00:18:46.780
+poza rzeczywistym przyspieszeniem.
+
+00:18:46.940 --> 00:18:47.640
+Dodajemy stres
+
+00:18:47.640 --> 00:18:48.620
+test weryfikacyjny.
+
+00:18:48.780 --> 00:18:50.420
+Dla 512 na 512 kroków
+
+00:18:50.420 --> 00:18:51.000
+2025
+
+00:18:51.000 --> 00:18:52.020
+poprawiona ścieżka
+
+00:18:52.020 --> 00:18:52.840
+utrzymuje współbieżność
+
+00:18:52.840 --> 00:18:54.020
+16 bez skoków na końcu.
+
+00:18:54.180 --> 00:18:55.220
+Przy 32 system
+
+00:18:55.220 --> 00:18:55.820
+degraduje się
+
+00:18:55.820 --> 00:18:56.800
+w sposób kontrolowany.
+
+00:18:56.980 --> 00:18:58.920
+P95 rośnie przewidywalnie,
+
+00:18:59.080 --> 00:18:59.720
+a nie chaotycznie.
+
+00:18:59.980 --> 00:19:01.880
+Dla 1024 na 1024
+
+00:19:01.880 --> 00:19:03.000
+przy 50 krokach
+
+00:19:03.000 --> 00:19:04.220
+różnica jest wyolbrzymiona.
+
+00:19:04.440 --> 00:19:05.300
+Zdegradowana ścieżka
+
+00:19:05.300 --> 00:19:05.800
+załamuje się
+
+00:19:05.800 --> 00:19:06.980
+pod wpływem przekroczeń czasu.
+
+00:19:07.220 --> 00:19:07.940
+Wzmocniona ścieżka
+
+00:19:07.940 --> 00:19:09.140
+utrzymuje użyteczne P50
+
+00:19:09.140 --> 00:19:10.480
+i akceptowalne P95
+
+00:19:10.480 --> 00:19:11.700
+przy partii od 1 do 2
+
+00:19:13.900 --> 00:19:14.860
+areny i strumienie.
+
+00:19:15.040 --> 00:19:15.800
+Po optymalizacji
+
+00:19:15.800 --> 00:19:16.540
+blokowanie typu
+
+00:19:16.540 --> 00:19:17.680
+Head of Line ustępuje.
+
+00:19:17.860 --> 00:19:18.560
+Kwestia kosztów
+
+00:19:18.560 --> 00:19:19.560
+to prosta arytmetyka.
+
+00:19:19.700 --> 00:19:20.240
+Liczba zapytań
+
+00:19:20.240 --> 00:19:21.280
+na godzinę pracy GPU
+
+00:19:21.280 --> 00:19:22.620
+rośnie od 2 do 5 razy
+
+00:19:22.620 --> 00:19:23.260
+po weryfikacji
+
+00:19:23.260 --> 00:19:24.740
+Fused Attention FP16
+
+00:19:24.740 --> 00:19:25.700
+i wiązania IO.
+
+00:19:25.920 --> 00:19:26.740
+Efektywny koszt
+
+00:19:26.740 --> 00:19:27.640
+za 1000 obrazów
+
+00:19:27.640 --> 00:19:28.520
+odpowiednio spada.
+
+00:19:28.700 --> 00:19:29.920
+Kary za zimny start maleją,
+
+00:19:30.000 --> 00:19:31.160
+ponieważ obrazy są lekkie,
+
+00:19:31.260 --> 00:19:32.760
+a silniki są wstępnie zbudowane.
+
+00:19:33.020 --> 00:19:34.220
+Węzły nie płacą już podatku
+
+00:19:34.220 --> 00:19:34.780
+od kompilacji
+
+00:19:34.780 --> 00:19:35.600
+przy pierwszym użyciu.
+
+00:19:35.840 --> 00:19:37.120
+Rejestr zgadza się z logami.
+
+00:19:37.360 --> 00:19:38.340
+Weryfikacja zapobiega
+
+00:19:38.340 --> 00:19:39.420
+przypadkowym sukcesom.
+
+00:19:39.420 --> 00:19:41.000
+Powtórz na drugiej puli węzłów
+
+00:19:41.000 --> 00:19:42.360
+z inną wersją sterownika.
+
+00:19:42.620 --> 00:19:44.060
+Wzmocniony obraz z założenia
+
+00:19:44.060 --> 00:19:45.040
+odmawia uruchomienia
+
+00:19:45.040 --> 00:19:46.340
+na niedopasowanym węźle.
+
+00:19:46.560 --> 00:19:48.300
+Dzięki temu wyniki są porównywalne,
+
+00:19:48.420 --> 00:19:49.220
+a nie zafałszowane.
+
+00:19:49.520 --> 00:19:51.020
+Sprawdź migawki możliwości.
+
+00:19:51.240 --> 00:19:52.660
+Ta sama kolejność dostawców,
+
+00:19:52.800 --> 00:19:53.520
+ten sam tensor,
+
+00:19:53.680 --> 00:19:54.980
+te same asercje Kerneli.
+
+00:19:55.180 --> 00:19:56.700
+Uruchom ponownie zestaw promptów
+
+00:19:56.700 --> 00:19:57.780
+i odzyskaj rozkłady.
+
+00:19:58.020 --> 00:19:59.340
+Gdy histogramy się pokrywają,
+
+00:19:59.460 --> 00:20:00.380
+pewność wzrasta.
+
+00:20:00.580 --> 00:20:02.000
+Gdy nie, różnica w możliwościach
+
+00:20:02.000 --> 00:20:02.800
+wyjaśnia dlaczego.
+
+00:20:03.080 --> 00:20:04.500
+Ostatecznie liczby nie dyskutują,
+
+00:20:04.640 --> 00:20:05.640
+one wydają werdykt.
+
+00:20:05.800 --> 00:20:06.620
+Opóźnienia maleją,
+
+00:20:09.420 --> 00:20:10.880
+metodologia nie jest hipotetyczna.
+
+00:20:11.120 --> 00:20:12.460
+Jest mierzalna i po fakcie
+
+00:20:12.460 --> 00:20:13.920
+pozostawia odciski palców
+
+00:20:13.920 --> 00:20:14.960
+na każdym wykresie.
+
+00:20:15.200 --> 00:20:16.120
+Protokół naprawczy,
+
+00:20:16.280 --> 00:20:18.280
+powtarzalna lista kontrolna wzmocnienia.
+
+00:20:18.520 --> 00:20:20.480
+Kontrola wstępu jest najważniejsza.
+
+00:20:20.680 --> 00:20:21.600
+Odmów uruchomienia,
+
+00:20:21.780 --> 00:20:23.420
+jeśli dostawcy tensorszt lub cuda
+
+00:20:23.420 --> 00:20:24.300
+nie są obecni.
+
+00:20:24.520 --> 00:20:25.260
+Wylicz dostawców,
+
+00:20:25.400 --> 00:20:26.560
+zweryfikuj liczbę urządzeń,
+
+00:20:26.680 --> 00:20:28.040
+wydrukuj migawki możliwości,
+
+00:20:28.180 --> 00:20:29.140
+obszar roboczy cudne,
+
+00:20:29.240 --> 00:20:30.900
+FP16 i NT8.
+
+00:20:31.160 --> 00:20:32.320
+Jeśli czegokolwiek brakuje,
+
+00:20:32.480 --> 00:20:33.460
+zakończ z kodem błędu.
+
+00:20:33.660 --> 00:20:35.400
+Dostępność wynika z integralności.
+
+00:20:35.620 --> 00:20:37.260
+Przypinanie wersji to kręgosłup.
+
+00:20:37.260 --> 00:20:38.320
+Utrzymuj jedną macierz,
+
+00:20:38.440 --> 00:20:39.200
+gałąź sterownika,
+
+00:20:39.340 --> 00:20:40.280
+cuda minor do cudne,
+
+00:20:40.400 --> 00:20:41.080
+hash kompilacji
+
+00:20:41.080 --> 00:20:42.100
+o NNX Runtime,
+
+00:20:42.200 --> 00:20:42.640
+tensorszt.
+
+00:20:42.800 --> 00:20:43.960
+Buduj obrazy wnioskowania
+
+00:20:43.960 --> 00:20:45.020
+zgodnie z tą macierzą.
+
+00:20:45.240 --> 00:20:46.720
+Oznacz węzły, aby pasowały.
+
+00:20:46.920 --> 00:20:48.440
+Uzależnij dostęp od zgodności.
+
+00:20:48.740 --> 00:20:49.780
+Wstępnie zbudowane silniki
+
+00:20:49.780 --> 00:20:50.980
+tensorszt dla każdego modelu
+
+00:20:50.980 --> 00:20:51.660
+i rozdzielczości.
+
+00:20:51.860 --> 00:20:52.760
+Plany to artefakty,
+
+00:20:52.880 --> 00:20:54.220
+niezgadywanie w czasie wykonywania.
+
+00:20:54.440 --> 00:20:56.100
+Higiena kontenerów zachowuje prawdę.
+
+00:20:56.300 --> 00:20:57.620
+Stosuj wieloetapowe budowanie.
+
+00:20:57.880 --> 00:20:59.080
+Utrzymuj środowisko uruchomieniowe
+
+00:20:59.080 --> 00:21:00.020
+jako distroles lub slim.
+
+00:21:00.020 --> 00:21:01.960
+Uwzględnij restrykcyjny plik Docker Ignore.
+
+00:21:02.140 --> 00:21:03.320
+Zweryfikuj za pomocą historii
+
+00:21:03.320 --> 00:21:04.520
+Dockera i audytu odchudzania.
+
+00:21:04.680 --> 00:21:06.360
+Ustaw budżety wielkości puli w CII.
+
+00:21:06.500 --> 00:21:07.760
+Odrzucaj napuchnięte obrazy,
+
+00:21:07.880 --> 00:21:09.480
+podpisuj je i porównuj zawartość
+
+00:21:09.480 --> 00:21:10.260
+według skrótów.
+
+00:21:10.420 --> 00:21:11.580
+Skonfiguruj najpierw GPU.
+
+00:21:11.780 --> 00:21:12.760
+Zablokuj kolejność app
+
+00:21:12.760 --> 00:21:13.520
+na tensorszt cuda.
+
+00:21:13.680 --> 00:21:14.660
+Wyłącz dostawcę CPU
+
+00:21:14.660 --> 00:21:15.820
+w środowisku produkcyjnym.
+
+00:21:16.020 --> 00:21:16.860
+Zweryfikuj obecność
+
+00:21:16.860 --> 00:21:17.740
+DevNV i DIA
+
+00:21:17.740 --> 00:21:18.960
+oraz wersję zestawu narzędzi
+
+00:21:18.960 --> 00:21:20.060
+kontenera NV i DIA.
+
+00:21:20.320 --> 00:21:22.060
+Żądaj GPU NVIDIA.com jawnie
+
+00:21:22.060 --> 00:21:22.920
+lub łącz licencję
+
+00:21:22.920 --> 00:21:24.080
+i weryfikuj je przy starcie.
+
+00:21:30.020 --> 00:21:31.880
+Powiąż i o bezpośrednio
+
+00:21:31.880 --> 00:21:33.040
+z pamięcią urządzenia
+
+00:21:33.040 --> 00:21:34.440
+włącz pamięć przypiętą.
+
+00:21:34.600 --> 00:21:35.400
+Wybierz strumienie,
+
+00:21:35.560 --> 00:21:37.200
+by uniknąć blokowania kolejki.
+
+00:21:37.440 --> 00:21:38.600
+Dostrój ponownie lub wyłącz
+
+00:21:38.600 --> 00:21:39.540
+arenę Ord Cuda,
+
+00:21:39.720 --> 00:21:40.420
+gdy zatrzymuje się
+
+00:21:40.420 --> 00:21:41.520
+poza zestawem roboczym.
+
+00:21:41.740 --> 00:21:43.340
+Ustaw SL o wydajności jako kod.
+
+00:21:43.460 --> 00:21:44.140
+Test autostartu
+
+00:21:44.140 --> 00:21:44.880
+z oknem opóźnień
+
+00:21:44.880 --> 00:21:46.100
+deterministycznych podpowiedzi
+
+00:21:46.100 --> 00:21:47.080
+i progiem wykorzystania.
+
+00:21:47.260 --> 00:21:48.000
+Przerywaj działanie
+
+00:21:48.000 --> 00:21:49.600
+przy narastających zaległościach.
+
+00:21:49.780 --> 00:21:50.740
+Dodaj obserwowalność
+
+00:21:50.740 --> 00:21:52.080
+metryki GPU dla żądania,
+
+00:21:52.260 --> 00:21:53.700
+alerty o obniżonej wydajności,
+
+00:21:53.880 --> 00:21:54.680
+podpowiedzi Canary
+
+00:21:54.680 --> 00:21:56.120
+i porównywalne linie bazowe.
+
+00:21:56.120 --> 00:21:57.160
+Wdruż Blue, Green
+
+00:21:57.160 --> 00:21:58.320
+z bramkami wydajności
+
+00:21:58.320 --> 00:21:59.720
+i automatycznym wycofaniem
+
+00:21:59.720 --> 00:22:00.380
+przy naruszeniu.
+
+00:22:00.660 --> 00:22:02.060
+Dzięki egzekwowaniu protokołu
+
+00:22:02.060 --> 00:22:03.600
+akceleracja jest dowodliwa,
+
+00:22:03.740 --> 00:22:04.480
+a nie zakładana.
+
+00:22:05.020 --> 00:22:06.240
+Lekcja jest kliniczna.
+
+00:22:06.440 --> 00:22:07.520
+Cichy fallback na CPU,
+
+00:22:07.740 --> 00:22:08.300
+dry w wersji
+
+00:22:08.300 --> 00:22:09.380
+i rozrost kontenerów
+
+00:22:09.380 --> 00:22:10.040
+to nie błędy.
+
+00:22:10.220 --> 00:22:11.680
+To przewidywalne wzorce awarii,
+
+00:22:11.760 --> 00:22:12.780
+które możesz zablokować.
+
+00:22:13.020 --> 00:22:13.680
+Stosuj protokół,
+
+00:22:13.780 --> 00:22:14.780
+mierz wykorzystanie GPU,
+
+00:22:14.940 --> 00:22:16.160
+odrzucaj zdegradowane ścieżki,
+
+00:22:16.300 --> 00:22:16.960
+przypinaj wersję,
+
+00:22:17.080 --> 00:22:18.480
+traktuj silniki jak artefakty.
+
+00:22:18.660 --> 00:22:19.840
+Jeśli chcesz głębiej poznać
+
+00:22:19.840 --> 00:22:21.580
+środowisko uruchomieniowe ONNX,
+
+00:22:21.580 --> 00:22:23.000
+zachowanie pamięci tensorszt
+
+00:22:23.000 --> 00:22:24.080
+i kiedy wyłączać Areny,
+
+00:22:24.180 --> 00:22:25.280
+obejrzyj kolejny odcinek
+
+00:22:25.280 --> 00:22:27.040
+i zasubskrybuj notatki laboratoryjne.

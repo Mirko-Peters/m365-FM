@@ -1,0 +1,1351 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:07.300
+Je co-piloot is niet dom, je hebt hem uitgehongerd, geen schema, geen regels, geen vangrails en dan klagen over hallucinaties.
+
+00:00:07.500 --> 00:00:11.920
+De waarheid? De meeste AI-fouten in het Power Platform liggen niet aan de intelligentie van het model.
+
+00:00:12.180 --> 00:00:14.160
+Ze liggen aan de context die jij hebt gecreëerd.
+
+00:00:14.400 --> 00:00:15.700
+Dit is wat je vandaag krijgt.
+
+00:00:15.880 --> 00:00:24.500
+Een herhaalbaar context-engineering-patroon voor Copilot Studio en Power Automate dat hallucinaties doodafwijkingen tussen tenants herstelt en latentie en kosten verlaagt.
+
+00:00:24.500 --> 00:00:29.500
+We bouwen het systeembericht-patroon, een checklist voor schema-grounding en een schabloon voor de retrieval-pipeline.
+
+00:00:30.000 --> 00:00:34.380
+Er is één laag die iedereen vergeet, de beleidslaag die governance-afwijkingen voorkomt.
+
+00:00:34.500 --> 00:00:37.300
+We koppelen deze en bewijzen het met statistieken van voor en na.
+
+00:00:37.480 --> 00:00:41.440
+We gaan van start, het probleem waarom je copilot faalt, context-schuld.
+
+00:00:41.680 --> 00:00:44.280
+Laten we het probleem precies definiëren, context-schuld.
+
+00:00:44.500 --> 00:00:49.120
+Het is de opeenstappeling van ontbrekende of slordige context die een taalmodel dwingt om te gaan gokken.
+
+00:00:49.120 --> 00:00:55.000
+Je slaat systeemregels over, je koppelt niet aan dataversen, je laat tools ongedefineerd en je negeert beleidsregels.
+
+00:00:55.200 --> 00:00:57.700
+Dan ben je verbaasd als de uitvoer verschilt per tenant.
+
+00:00:57.700 --> 00:01:00.940
+Fascinerend. Context-schuld uit zich in vier fouten.
+
+00:01:01.100 --> 00:01:05.420
+Ten eerste, ontbrekende systeemregels, geen identiteit, geen rijkwijte, geen weigeringsbeleid.
+
+00:01:05.540 --> 00:01:09.540
+Het model optimaliseert voor behulpzaamheid en breedspraakigheid, niet voor naleving en precisie.
+
+00:01:09.680 --> 00:01:11.300
+Ten tweede, niet gegronde data.
+
+00:01:11.560 --> 00:01:16.780
+Je wijst naar de leningentabel zonder entiteitsnamen, velddefinities, relaties of voorbeeldrecords te geven.
+
+00:01:16.780 --> 00:01:19.040
+Ten derde, ongeveer definieerde tools.
+
+00:01:19.300 --> 00:01:23.540
+Je vraagt om de status bij te werken, maar biedt geen beheerd actiepad aan in Power Automate.
+
+00:01:23.540 --> 00:01:29.500
+Ten vierde, afwezig beleid. Je vertrouwt op je gevoel in plaats van op DLP, vertrouwelijkheidslabels en voorwaardelijke toegang.
+
+00:01:29.700 --> 00:01:32.680
+Die context garandeert afwijkingen. Het bewijs is overal.
+
+00:01:32.900 --> 00:01:37.980
+Hoge uitval en verlatingspercentages bij bedrijfs-AI zijn terug te leiden naar uitvoering en context, niet naar modelbeperkingen.
+
+00:01:38.100 --> 00:01:43.780
+Teams rapporteren hallucinaties, inconsistenties per omgeving en tokenverbruik door hele tabellen op te halen voor de zekerheid.
+
+00:01:43.940 --> 00:01:46.500
+Je hebt geen groter model nodig. Je hebt een ruggengraad nodig.
+
+00:01:46.740 --> 00:01:48.420
+Dit is het mentale model dat het oplost.
+
+00:01:48.420 --> 00:01:51.760
+Vier contextlagen, systeem, retrieval, tools en beleid.
+
+00:01:51.960 --> 00:01:56.300
+Zie het als het Windows-register voor je agent. Het is niet zomaar een database, het is de ruggengraad.
+
+00:01:56.500 --> 00:01:58.720
+Systeem verklaart wie de agent is en wat hij weigert.
+
+00:01:59.020 --> 00:02:02.040
+Retrieval levert feiten en schema's zodat hij stopt met het verzinnen van velden.
+
+00:02:02.240 --> 00:02:06.340
+Tools stellen de exacte acties bloot die hij mag uitvoeren op basis van het principe van de minste rechten.
+
+00:02:06.560 --> 00:02:08.840
+Beleid dwingt grenzen af, ongeacht slimme prompts.
+
+00:02:09.100 --> 00:02:11.000
+Verwijder één laag en de uitvoer gaat wankelen.
+
+00:02:11.220 --> 00:02:12.980
+Voeg alle vier toe en ze staan als een huis.
+
+00:02:12.980 --> 00:02:16.680
+Wat de meeste ontwikkelaars missen, omgevingen zijn de beveiligingsgrens in het Power Platform.
+
+00:02:16.680 --> 00:02:20.560
+Als je DLP-beleid het mengen van zakelijke en niet-zakelijke connectoren in productie blokkeert,
+
+00:02:20.600 --> 00:02:23.100
+maar niet in de ontwikkelomgeving, heb je twee verschillende universums gebouwd.
+
+00:02:23.240 --> 00:02:25.760
+De ogen en handen van je agent veranderen per omgeving.
+
+00:02:25.980 --> 00:02:30.620
+Dus ja, resultaten wijken af tussen tenants en omgevingen, omdat je de wereld onder hun voeten verandert.
+
+00:02:30.820 --> 00:02:32.560
+Laat me de typische faalloop uitleggen.
+
+00:02:32.720 --> 00:02:34.440
+Je bouwt een co-pilot studio-agent.
+
+00:02:34.600 --> 00:02:37.020
+Je geeft hem een vaag doel, helpen bij leningaanvragen.
+
+00:02:37.220 --> 00:02:40.780
+Je koppelt een documentbibliotheek met pdf's zonder de structuur te extraheren.
+
+00:02:40.780 --> 00:02:44.460
+Je indexeert geen dataverse entiteiten, relaties of vertrouwelijkheidslabels.
+
+00:02:44.460 --> 00:02:48.080
+Je slaat de tool catalogus over en gaat ervan uit dat co-pilot het zelf wel uitzoekt.
+
+00:02:48.300 --> 00:02:49.340
+Dan stel je een vraag.
+
+00:02:49.520 --> 00:02:54.220
+Hij antwoordt met algemene beleidspraat en verzint een veld genaamd leningsfase, dat niet in je schema bestaat.
+
+00:02:54.640 --> 00:02:58.160
+Gefeliciteerd, je hebt betaald voor tokens om de verkeerde inhoud te lezen en kreeg onzin terug.
+
+00:02:58.360 --> 00:03:00.260
+Vergelijk dat eens met een gefundeerde aanpak.
+
+00:03:00.460 --> 00:03:05.600
+Dezelfde vraag, maar je ophallaag bevat een schema-index, entiteit leningaanvraag, veldstatus,
+
+00:03:05.880 --> 00:03:09.960
+keuzelijstwaarde, relaties met aanvragen en document, plus voorbeeld records.
+
+00:03:09.960 --> 00:03:14.420
+De agent verwijst expliciet naar de status van de leningaanvraag en noemt toegestane waarden.
+
+00:03:14.640 --> 00:03:15.280
+Geen gegok.
+
+00:03:15.440 --> 00:03:17.420
+Het verschil is niet het model, maar de context.
+
+00:03:17.680 --> 00:03:19.980
+Latentie en kosten zijn symptomen van dezelfde schuld.
+
+00:03:20.180 --> 00:03:24.180
+Het ophalen van hele tabellen omdat je geen filters op veldniveau hebt doet tokens en tijd exploderen.
+
+00:03:24.400 --> 00:03:27.640
+Vage ophaalacties dwingen het model om door irrelevante brokken informatie te waden.
+
+00:03:27.900 --> 00:03:29.780
+Onduidelijke top-K en geen intentiefiltering.
+
+00:03:30.000 --> 00:03:32.780
+Je betaalt voor alles, leert niets en krijgt alsnog hallucinaties.
+
+00:03:33.080 --> 00:03:35.640
+Brutaal, governance-afwijking is de stille doder.
+
+00:03:35.880 --> 00:03:41.720
+Zonder beleidslaag, DLP, vertrouwelijkheidslabels en voorwaardelijke toegang wijkt het gedrag van je agent geleidelijk af.
+
+00:03:41.840 --> 00:03:48.920
+Een connector wordt geherklassificeerd, een gastaccount sluipt een flow binnen, lags staan uit en de agent vat vrolijk gevoelige notices samen voor een nietzakelijke connector.
+
+00:03:49.180 --> 00:03:50.780
+Dat merk je pas tijdens de Added Week.
+
+00:03:50.780 --> 00:03:54.860
+Uitstekend. Dit is de oplossing en we gaan die stap voor stap bouwen in deze serie.
+
+00:03:55.280 --> 00:04:03.300
+Systeemlaag. Een beknopt versie beheert systeembericht dat identiteit, rijkwijte, weigeringslogica, schemabewustzijn, regels voor tolgebruik en logrenzen bevat.
+
+00:04:03.500 --> 00:04:07.620
+Opgesteld per omgeving met tokens voor bedrijfsonderdeel en vertrouwelijkheidstoewijzing.
+
+00:04:07.800 --> 00:04:18.880
+Ophalaag. Een pijplijn die eerst baseert op dataverse met een documentindex als secundaire bron, gebruikmakend van entiteitsbewuste chunking, hybride zoeken, beveiligingsafbakening en filters op veldniveau.
+
+00:04:18.880 --> 00:04:28.120
+Ophalaag. Een beheerde katalogus van Power Automate acties met het principe van minimale privileges en prompt schablonen die invoerschema's, weigeringslogica en vertrouwelijkheidsvlaggen definiëren.
+
+00:04:28.480 --> 00:04:34.740
+Beleidslaag. Afgedwongen DLP-groepen, voorwaardelijke toegang, real-time maskering via labels en een noodstop voor beheerders.
+
+00:04:34.900 --> 00:04:36.740
+Als je niets anders onthoudt, onthoud dan dit.
+
+00:04:36.920 --> 00:04:40.400
+Modellen voorspellen tekst. Jij ontwerpt de waarheid, de kracht en de grenzen.
+
+00:04:40.600 --> 00:04:43.320
+Jouw taak is de context. Het model is de rendering engine.
+
+00:04:43.600 --> 00:04:46.140
+Stop met het de schuld geven aan de renderer voor jouw ontbrekende blauwdruk.
+
+00:04:46.140 --> 00:04:49.580
+Laag 1. Systeemcontext die niet afwijkt. Patroon plus checklist.
+
+00:04:49.860 --> 00:04:52.160
+Nu stoppen we met gokken en installeren we identiteit.
+
+00:04:52.400 --> 00:04:57.480
+Zonder expliciete identiteitskaders en weigeringsregels gedragen grote taalmodellen zich als charmante labradors.
+
+00:04:57.660 --> 00:05:00.200
+Ze halen alles, plezieren iedereen en negeren de compliance.
+
+00:05:00.440 --> 00:05:02.720
+Je hebt een uitsmijter nodig, geen golden retriever.
+
+00:05:02.900 --> 00:05:06.520
+De waarheid is, als je systeembericht vaag is, zullen je outputresultaten ook vaag zijn.
+
+00:05:06.700 --> 00:05:10.840
+Als je systeembericht per omgeving inconsistent is, zullen je resultaten per omgeving afwijken.
+
+00:05:10.840 --> 00:05:12.500
+Daarom schrijven we eerst de kern.
+
+00:05:12.720 --> 00:05:14.100
+Dit is het patroon dat ik gebruik.
+
+00:05:14.220 --> 00:05:16.360
+Het is kort, versiebeheerd en medogenloos.
+
+00:05:16.560 --> 00:05:20.840
+Rol. Je bent de co-piloot voor leningoperaties voor bedrijfseenheid in omgeving omgevingsnaam.
+
+00:05:21.520 --> 00:05:25.120
+Je beantwoordt alleen vragen over leningaanvragen en gerelateerde processen.
+
+00:05:25.240 --> 00:05:29.520
+Kader. Houd je aan dataverse entiteiten en gelabelde documenten in deze omgeving.
+
+00:05:29.720 --> 00:05:35.200
+Als het antwoord externe systemen of ongelabelde inhoud vereist, weiger dan en stel een veilige volgende stap voor.
+
+00:05:35.380 --> 00:05:38.800
+Toon. Beknopt. Feitelijk. Citeer velden exact volgens schema.
+
+00:05:38.800 --> 00:05:41.760
+Entiteit. Veld. Weigeringsbeleid.
+
+00:05:41.900 --> 00:05:48.840
+Als gevoelige inhoud met label-label-lijst wordt opgevraagd in een nietzakelijke context, weiger dan met opgave van reden en leg de weigeringssamenvatting vast.
+
+00:05:49.060 --> 00:05:52.540
+Schema bewustzijn. Geef de voorkeur aan de dataverse schema-index.
+
+00:05:52.740 --> 00:05:57.540
+Verzin nooit velden. Koppel synoniemen aan kanonieke namen met behulp van de bijgeleverde woordenlijst.
+
+00:05:59.540 --> 00:06:00.860
+Regels voor tolgebruik.
+
+00:06:00.860 --> 00:06:07.800
+Je mag alleen goedgekeurde power automate acties aanroepen wanneer een intentie wordt geclassificeerd als actiegericht met betrouwbaarheid 0,8.
+
+00:06:07.800 --> 00:06:09.640
+Reageer anders met een analyse.
+
+00:06:10.260 --> 00:06:11.160
+Logging grenzen.
+
+00:06:11.540 --> 00:06:12.540
+Echo geen PII.
+
+00:06:12.860 --> 00:06:15.960
+Vat waarde samen als gemaskeerd wanneer de gevoeligheid hoog is.
+
+00:06:16.200 --> 00:06:19.240
+Dat patroon komt in de aangepaste instructies van Copilot Studio.
+
+00:06:19.520 --> 00:06:23.820
+En ja, het wordt geparametriceerd omgevingsnaam, bedrijfseenheid, MIP-label-lijst.
+
+00:06:23.820 --> 00:06:28.720
+Koppel deze aan omgevingsvariabelen zodat dev, u, at en prod dezelfde logica delen met andere bindingen.
+
+00:06:28.820 --> 00:06:31.380
+Voorzie het van een versie, systeembericht v1.3.
+
+00:06:31.580 --> 00:06:37.240
+Stempel de versie in elke reactievoet tijdens testen en beleid v1.3, zodat afwijkingen direct zichtbaar zijn.
+
+00:06:37.240 --> 00:06:39.740
+Nu de checklist, want anders vergeet je iets.
+
+00:06:39.740 --> 00:06:43.600
+Doelstellingen, wat de agent in één zin mag bereiken.
+
+00:06:43.960 --> 00:06:45.120
+Doelgroep, wie het dient.
+
+00:06:45.780 --> 00:06:47.400
+Leningadviseurs, niet het hele bedrijf.
+
+00:06:47.800 --> 00:06:51.040
+Definities, kanonieke entiteit en veldnamen plus synonieme.
+
+00:06:51.340 --> 00:06:54.540
+Toegestane inhoud, toegestane gegevensklassen en bronnen.
+
+00:06:54.760 --> 00:06:55.980
+Niet toegestane acties.
+
+00:06:56.200 --> 00:06:59.860
+Alles wat cross-tenant, ongelabeld of buiten zakelijke connectoren valt.
+
+00:06:59.860 --> 00:07:02.740
+Escalatiepad, wanneer over te dragen aan een mens.
+
+00:07:03.060 --> 00:07:04.500
+Criteria en berichtschabloon.
+
+00:07:05.360 --> 00:07:07.280
+Evaluatierubriek, hoe we resultaten beoordelen.
+
+00:07:07.860 --> 00:07:10.500
+Veldnauwkeurigheid, correctheid van weigeringen en citatie van het schema.
+
+00:07:10.780 --> 00:07:12.900
+Schrijf dit in begrijpelijke taal en comprimeer het daarna.
+
+00:07:13.060 --> 00:07:16.260
+De meest gemaakte fout is het begraven van beperkingen onder een roman aan beleidstekst.
+
+00:07:16.380 --> 00:07:18.480
+Het model zal erdoorheen scannen als een gemiddelde stagiair.
+
+00:07:18.620 --> 00:07:19.700
+Hou het chirurgisch precies.
+
+00:07:19.940 --> 00:07:20.920
+Nog een klassieke fout.
+
+00:07:21.200 --> 00:07:22.840
+Beperkingen in de gebruikersprompt proppen.
+
+00:07:23.060 --> 00:07:26.260
+Nee, beperkingen horen thuis in het systeembericht en de toolwrappers.
+
+00:07:26.500 --> 00:07:28.100
+Niet waar de gebruiker toevallig typt.
+
+00:07:28.320 --> 00:07:29.560
+En versie per omgeving.
+
+00:07:29.800 --> 00:07:30.960
+Def kan permissief zijn.
+
+00:07:31.160 --> 00:07:32.060
+Pro-out mag dat niet.
+
+00:07:32.280 --> 00:07:36.860
+Het kopiëren van één systeem bestand tussen tenants zonder tokens creëert parallele universa.
+
+00:07:37.040 --> 00:07:38.680
+Een snelle winst die je vandaag kunt boeken.
+
+00:07:38.940 --> 00:07:42.240
+Maak sjablonen van berichten met variabelen en koppel deze bij het importeren van de oplossing.
+
+00:07:42.480 --> 00:07:44.560
+Dat alleen al neemt een hoop inconsistentie weg.
+
+00:07:44.760 --> 00:07:47.760
+Voeg een woordenlijst toe die veel voorkomende synoniemen koppelt aan kanonieke velden,
+
+00:07:47.760 --> 00:07:50.640
+zoals stadium, stap, fase, status van leningaanvraag.
+
+00:07:50.720 --> 00:07:52.740
+Je zult zien dat gehallucineerde velden verdwijnen.
+
+00:07:53.180 --> 00:07:55.360
+Implementatie in Copilot Studio is eenvoudig.
+
+00:07:55.500 --> 00:07:59.540
+Open aangepaste instructies, plak het patroon, voeg variabelen in voor omgevingsnaam,
+
+00:07:59.680 --> 00:08:03.280
+bedrijfseenheid en afbeeldingslevenlijst, een schakel, altijd opnemen, in.
+
+00:08:03.620 --> 00:08:08.800
+Maak een notitie met instructies voor schema-canonisatie waar de agent naar verwijst voordat hij antwoordt.
+
+00:08:08.900 --> 00:08:10.940
+Voeg vervolgens een weigeringssjabloon toe.
+
+00:08:11.120 --> 00:08:13.800
+Ik kan redactie niet delen vanwege beleidslabels.
+
+00:08:13.800 --> 00:08:15.580
+Hier is een veilig alternatief.
+
+00:08:16.300 --> 00:08:18.760
+Consistentie is geen magie, het zijn sjablonen.
+
+00:08:18.760 --> 00:08:21.040
+Laatste vangrail, logboekgrenzen.
+
+00:08:21.260 --> 00:08:24.100
+Zorg dat de agent nooit onbewerkte gevoelige waarden herhaalt.
+
+00:08:24.300 --> 00:08:30.220
+Wanneer hij ernaar moet verwijzen, gebruikt hij tijdelijke aanduidingen en biedt hij een toolactie die geheimen verwerkt via referentieacties in flows.
+
+00:08:30.420 --> 00:08:31.980
+Als je niets anders onthoudt, onthoud dan dit.
+
+00:08:31.980 --> 00:08:35.800
+Identiteit, rijkwijten, weigering, schema, tools, logboekregistratie.
+
+00:08:36.000 --> 00:08:37.320
+Zes regels, geen drama.
+
+00:08:37.620 --> 00:08:38.520
+Laag 2, ophalen.
+
+00:08:38.660 --> 00:08:41.600
+Retrieval, dat gebaseerd is op dataverse via een pijplijnsjabloon.
+
+00:08:41.860 --> 00:08:43.060
+Identiteit is ingesteld.
+
+00:08:43.320 --> 00:08:45.680
+Nu geven we de agent feiten die hij niet kan hallucineren.
+
+00:08:45.880 --> 00:08:49.300
+Retrieval is waar de meesten van jullie de brandslang opendraaien en het grounding noemen.
+
+00:08:49.740 --> 00:08:50.180
+Onjuist.
+
+00:08:50.420 --> 00:08:56.100
+Retrieval is selectief, entiteitsbewust en ja, dataverse heeft de prioriteit omdat daar je bron van waarheid ligt.
+
+00:08:56.380 --> 00:08:57.380
+Waarom dit ertoe doet?
+
+00:08:57.820 --> 00:09:00.720
+Hallucinaties ontstaan wanneer het model zelf de structuur moet afleiden.
+
+00:09:00.940 --> 00:09:04.400
+Als het geen kanonieke entiteit en velddefinities kan zien, verzint het ze.
+
+00:09:04.600 --> 00:09:09.600
+Latentie en kosten stijgen wanneer je hele tabellen en pdf-blobs verwerkt omdat je niet op intentie hebt gefilterd.
+
+00:09:09.720 --> 00:09:11.340
+Het resultaat, dure ruis.
+
+00:09:11.540 --> 00:09:14.860
+De oplossing is een pijplijn die schema's bevoorrecht en bijsnijdt op basis van beveiliging.
+
+00:09:15.020 --> 00:09:15.900
+Hier is het schabloon.
+
+00:09:16.060 --> 00:09:17.440
+Twee indexen, één brein.
+
+00:09:17.440 --> 00:09:24.100
+Ten eerste een schema-index voor dataverse entiteiten, velden, relaties, optiezets, bedrijfsregels, plus een korte woordenlijst met synoniemen.
+
+00:09:24.220 --> 00:09:29.100
+Ten tweede een document-index voor beleid, SOPs en referentiedocumenten, alleen nadat deze gestructureerd zijn.
+
+00:09:29.280 --> 00:09:32.620
+Hybride zoeken over beide met beveiligingsfiltering per omgeving en gebruiker.
+
+00:09:32.780 --> 00:09:34.900
+Het model ziet nooit wat de gebruiker niet mag zien.
+
+00:09:35.160 --> 00:09:37.000
+Dat is geen suggestie, dat is de grens.
+
+00:09:37.160 --> 00:09:39.080
+Ik zal de schema-index voor je uiteenzetten.
+
+00:09:39.320 --> 00:09:45.240
+Leg voor elke entiteit het volgende vast, naam, beschrijving, veldlijst met datatypen, optiezetwaarden, relaties,
+
+00:09:45.240 --> 00:09:48.760
+één op veel, veel op één en bedrijfsregels die de geldige statussen beïnvloeden.
+
+00:09:48.960 --> 00:09:54.900
+Voeg twee voorbeeld-records per entiteit toe, geanonimiseerd, en één voorbeeld-query die natuurlijke taal koppelt aan canonieke velden.
+
+00:09:55.140 --> 00:09:58.900
+Voeg een synonieme kaart toe, stadium, stap, fase, status van leningaanvraag.
+
+00:09:59.020 --> 00:10:02.100
+Het model zal zich verankeren aan canonieke namen omdat jij de kaart hebt aangereikt.
+
+00:10:02.300 --> 00:10:03.460
+Nu, de document-index.
+
+00:10:03.640 --> 00:10:05.080
+PDF zijn geen heilige teksten.
+
+00:10:05.280 --> 00:10:06.080
+Het zijn containers.
+
+00:10:06.420 --> 00:10:08.160
+Extraheer de structuur voor het indexeren.
+
+00:10:08.340 --> 00:10:09.180
+Koppen worden secties.
+
+00:10:09.380 --> 00:10:10.240
+Tabellen worden sleutelwaardeparen.
+
+00:10:11.220 --> 00:10:16.360
+Beleidsregels worden gelabeld met Microsoft Purview-klassificaties en MIP-labels, zodat vertrouwelijkheid machineleesbaar is.
+
+00:10:16.480 --> 00:10:19.900
+Als een bestand niet kan worden geparseerd in secties en velden, hoort het niet in de index thuis.
+
+00:10:20.080 --> 00:10:21.480
+Je bent geen plakboek aan het maken.
+
+00:10:22.280 --> 00:10:23.700
+Beveiligingsfiltering is niet onderhandelbaar.
+
+00:10:23.880 --> 00:10:27.920
+De index-query-laag moet filteren op gebruikersidentiteit, omgeving en DLP-beleid.
+
+00:10:28.080 --> 00:10:31.580
+Als dev bepaalde connectoren toestaat en prod niet, dan weer spiegelt de ophalaag dat.
+
+00:10:31.800 --> 00:10:34.060
+Zelfde gebruiker, andere omgeving, andere resultaten.
+
+00:10:34.280 --> 00:10:35.660
+Dat is geen opsmuk, dat is ontwerp.
+
+00:10:35.760 --> 00:10:37.580
+Chunking stopt met snijden op basis van paginatelling.
+
+00:10:37.580 --> 00:10:41.940
+Chunk op basis van entiteitslogica. Groep weer voor schema's op entiteits- en relatiegranulariteit.
+
+00:10:42.160 --> 00:10:45.500
+Denk aan 500 tot 800 tokens per chunk met veldlijsten intact.
+
+00:10:45.680 --> 00:10:50.380
+Chunk documenten per sectie met behoud van koppen en voeg broodkruim om metadata toe.
+
+00:10:50.840 --> 00:10:52.620
+Titel, sectie, subsectie.
+
+00:10:52.800 --> 00:10:55.480
+Het punt is om betekenis terug te geven, geen confetti.
+
+00:10:56.100 --> 00:10:57.580
+Prestatietactieken die je echt zult merken.
+
+00:10:57.800 --> 00:10:58.980
+Filtering op veldniveau.
+
+00:10:59.220 --> 00:11:02.800
+Wanneer de intentiestatus bevat, haal dan niet de volledige entiteitsdefinitie op.
+
+00:11:02.940 --> 00:11:05.180
+Haal het veldblok en de relevante bedrijfsregel op.
+
+00:11:05.180 --> 00:11:08.000
+Top K op basis van intentieclassificatie stuurt de query.
+
+00:11:08.260 --> 00:11:10.560
+Schema queries krijgen een kleine K, 2 of 3.
+
+00:11:11.320 --> 00:11:13.160
+Documentzoekopdrachten hebben er misschien 4 of 6 nodig.
+
+00:11:13.360 --> 00:11:16.880
+Cash veel voorkomende FAQ's en schema snippets in het geheugen met een korte TTL,
+
+00:11:17.080 --> 00:11:19.200
+zodat je niet de hele dag voor dezelfde zoekopdrachten betaalt.
+
+00:11:19.360 --> 00:11:24.000
+Handhaaf connector en tokenlimieten, zodat een vage prompt geen volledige tabelscan activeert.
+
+00:11:24.220 --> 00:11:24.920
+Graag gedaan.
+
+00:11:25.140 --> 00:11:26.960
+Hoe je dit aansluit in Copilot Studio.
+
+00:11:27.400 --> 00:11:29.180
+Stel dataverse in als de primaire kennisbron.
+
+00:11:29.180 --> 00:11:29.720
+Kennisbron.
+
+00:11:29.920 --> 00:11:35.840
+Bouw een gegevensbron die schemakaarten, entiteiten, velden, relaties, optiesets, regels en voorbeelden afgeeft,
+
+00:11:36.000 --> 00:11:38.920
+en voeg Purview-classificaties en MIP-labels toe als eigenschappen.
+
+00:11:39.080 --> 00:11:41.720
+Voeg je documentindex toe als secundaire bron met sexy inhoud.
+
+00:11:41.980 --> 00:11:46.100
+Configureer hybride ophalen met herrangschikking die schema-overeenkomsten verkiest boven verhalende tekst.
+
+00:11:46.220 --> 00:11:48.420
+Als er een schema-overeenkomst is, geef die voorrang.
+
+00:11:48.600 --> 00:11:50.440
+Als er geen is, val terug op documenten.
+
+00:11:50.600 --> 00:11:53.820
+Als er geen van beide is, weiger dan of stel een verhelderende vraag.
+
+00:11:53.820 --> 00:11:55.900
+Ja, weigeren is beter dan fictie.
+
+00:11:56.060 --> 00:11:59.380
+Checklist voor schema-grounding die je zult printen en op je monitor zult plakken.
+
+00:11:59.840 --> 00:12:03.400
+Entiteitsnamen precies zoals in dataverse, veldbeschrijvingen in begrijpelijke taal,
+
+00:12:03.600 --> 00:12:06.800
+relaties vermeld met kardinaliteit, optiezetwaarden en betekenissen,
+
+00:12:07.040 --> 00:12:09.780
+voorbeeld records met schema's keerde waarden, bedrijfsregels,
+
+00:12:10.040 --> 00:12:14.480
+notices over NAL-afhandeling, synonieme voor kanonieke namen en opmerkingen over gegevenskwaliteit.
+
+00:12:14.660 --> 00:12:17.180
+Als een van deze ontbreekt, is je grounding onvolledig.
+
+00:12:17.520 --> 00:12:21.060
+Veelvoorkomende valkuilen, pdf's indexeren zonder structuur te extraheren, niet doen.
+
+00:12:21.740 --> 00:12:23.260
+Vertrouwelijkheidslabels negeren, gevaarlijk.
+
+00:12:23.260 --> 00:12:26.180
+Zakelijke en niet-zakelijke connectors mengen in dezelfde ophaalaanhoep,
+
+00:12:26.320 --> 00:12:29.040
+geblokkeerd door DLP in PROT, en dan verbaasd reageren.
+
+00:12:29.180 --> 00:12:33.180
+Nog een 10 vrijwel identieke tekstblokken retourneren omdat je de headers nooit hebt ondubbeld.
+
+00:12:33.340 --> 00:12:35.960
+Schoon je feed op. Laten we een snelle mentale demo doen.
+
+00:12:36.140 --> 00:12:38.920
+Prompt. Kunnen we deze lening naar de definitieve beoordeling verplaatsen?
+
+00:12:39.060 --> 00:12:41.460
+Totale CDA-down data en app-brondata.
+
+00:12:41.740 --> 00:12:45.340
+Slechte pijplijn haalt drie algemene beleids-pdf's op zonder schema.
+
+00:12:45.640 --> 00:12:47.180
+Model verzint een leningfase.
+
+00:12:47.440 --> 00:12:50.500
+Goede pijplijn. Intentieclassificatie stuurt door naar schema.
+
+00:12:50.820 --> 00:12:52.100
+Retourneert leningaanvraag.
+
+00:12:52.100 --> 00:12:58.200
+Status. Toegestane overgangen via bedrijfsregels en de Power Automate actienaam die de status wijzigt.
+
+00:12:58.380 --> 00:13:03.840
+Het antwoord citeert toegestane statuswaarden en stelt de actie voor of weigert deze als gevoeligheid het blokkeert.
+
+00:13:04.080 --> 00:13:04.840
+Dat is grounding.
+
+00:13:05.300 --> 00:13:06.140
+Nog één detail.
+
+00:13:06.380 --> 00:13:06.900
+Latentie.
+
+00:13:07.140 --> 00:13:09.400
+Meet de ophaaltijd apart van de generatietijd.
+
+00:13:09.400 --> 00:13:14.220
+Als het ophalen routinematig langer dan 300 milliseconden duurt, zijn je filters fout of is je index opgeblazen.
+
+00:13:14.620 --> 00:13:15.640
+Optimaliseer daar eerst.
+
+00:13:15.860 --> 00:13:17.920
+Modellen zijn snel, jouw besluiteloosheid niet.
+
+00:13:18.080 --> 00:13:19.980
+Als je niets anders onthoudt, onthoud dan dit.
+
+00:13:20.140 --> 00:13:22.140
+Ophalen is geen zoeken, het is curatie.
+
+00:13:22.580 --> 00:13:23.980
+Dataverse is de ruggengraat.
+
+00:13:24.360 --> 00:13:25.500
+Documenten zijn de spieren.
+
+00:13:25.760 --> 00:13:26.440
+Verbind beide.
+
+00:13:26.700 --> 00:13:27.740
+Trim op beveiliging.
+
+00:13:28.000 --> 00:13:29.280
+En je agent stopt met gokken.
+
+00:13:29.280 --> 00:13:30.980
+Laag 3.
+
+00:13:31.200 --> 00:13:33.240
+Tools en beleid die governance afdwingen.
+
+00:13:33.640 --> 00:13:35.320
+Power Automate plus DLP.
+
+00:13:35.720 --> 00:13:36.660
+Het weet wat waar is.
+
+00:13:36.980 --> 00:13:38.460
+Leer het nu wat het veilig kan doen.
+
+00:13:38.660 --> 00:13:40.640
+Een agent die niet kan handelen is een chatbot.
+
+00:13:40.840 --> 00:13:44.180
+Een agent die handelt zonder vangrails is een datalek dat op de voorpagina wacht.
+
+00:13:44.380 --> 00:13:46.240
+Je wilt competentie met een veiligheidsgordel.
+
+00:13:46.440 --> 00:13:49.140
+Maak kennis met Power Automate DLP en voorwaardelijke toegang.
+
+00:13:49.140 --> 00:13:51.660
+De spieren, de hekken en de uitsmijter bij de deur.
+
+00:13:51.860 --> 00:13:52.680
+Dit is het principe.
+
+00:13:52.920 --> 00:13:55.560
+Acties zijn expliciet, geautoriseerd en omkeerbaar.
+
+00:13:55.760 --> 00:13:57.360
+We geven het model geen vrijheid.
+
+00:13:57.540 --> 00:13:59.240
+We geven het een katalogus met werkwoorden.
+
+00:13:59.420 --> 00:14:01.040
+Elk werkwoord is een flow met een nauw inputschema.
+
+00:14:01.260 --> 00:14:03.920
+Minimale privilege connectiereferenties en ingebouwde weigeringslogica.
+
+00:14:04.080 --> 00:14:05.620
+Het model improviseert nooit rechten.
+
+00:14:05.840 --> 00:14:07.040
+Het vraagt een werkwoord aan.
+
+00:14:07.260 --> 00:14:08.560
+Begin met een tool katalogus.
+
+00:14:08.800 --> 00:14:10.240
+Katalogus items zien er zo uit.
+
+00:14:10.640 --> 00:14:15.680
+Weergavenaam, doel, inputschema, randvoorwaarden, gevoeligheidsvlaggen, connectiereferentie en retourcontract.
+
+00:14:15.780 --> 00:14:17.520
+Voorbeeld, update lening status.
+
+00:14:17.920 --> 00:14:19.740
+Doel, leningaanvraag overzetten.
+
+00:14:20.100 --> 00:14:23.800
+Status, input, lening ID string, doel status enum.
+
+00:14:24.520 --> 00:14:28.400
+Randvoorwaarden, doel status moet een geldige overgang zijn volgens de regelzet.
+
+00:14:28.400 --> 00:14:32.240
+Gevoeligheidsvlaggen, vereist zakelijke connector gelabeld als intern.
+
+00:14:33.040 --> 00:14:34.820
+Connectiereferentie, SVC, lening en min.
+
+00:14:35.000 --> 00:14:38.880
+Je leert een peuter een schaar gebruiken door een veiligheidsschaar te geven, geen kettingzaag.
+
+00:14:39.040 --> 00:14:40.880
+Minimale privileges zijn niet optioneel.
+
+00:14:41.120 --> 00:14:45.040
+Maak speciale service accounts met minimale dataverse rechten om precies die actie uit te voeren.
+
+00:14:45.260 --> 00:14:47.960
+Geen brede tabelrechten, geen machtsmisbruik op eigenaarsniveau.
+
+00:14:48.140 --> 00:14:51.120
+Sla inloggegevens op in connectiereferenties gebonden per omgeving.
+
+00:14:51.120 --> 00:14:55.080
+Dus, dev gebruikt nepdata, prod raakt de realiteit aan en beide lekken niet naar elkaar.
+
+00:14:55.240 --> 00:14:58.500
+Als je aangepaste beveiliging gebruikt, beoordeel deze dan alsof je het meent.
+
+00:14:58.720 --> 00:15:00.880
+Bouw nu een flow-schabloon met drie standaardlagen.
+
+00:15:01.140 --> 00:15:02.640
+Laag 1, invoervalidatie.
+
+00:15:02.880 --> 00:15:08.420
+Valideer type, koppel synoniemen aan kanonieke velden en wijs dubbelzinnige of ontbrekende parameters af met een gestructureerde weigering.
+
+00:15:08.720 --> 00:15:10.340
+Laag 2, beleidscontroles.
+
+00:15:10.340 --> 00:15:17.480
+Evalueer MIP-labels, DLP-groepslidmaatschap en alle signalen voor voorwaardelijke toegang die je via headers of de activeringscontext blootstelt.
+
+00:15:17.700 --> 00:15:19.480
+Laag 3, uitvoering en meskering.
+
+00:15:19.760 --> 00:15:24.720
+Voer het minimale recht uit, maskeer gevoelige waarden in logboeken en geef een compact resultaat terug met een correlatie-ID.
+
+00:15:25.000 --> 00:15:27.480
+Prompt schablonen staan voor deze flows als wrappers.
+
+00:15:27.720 --> 00:15:32.580
+Ze bepalen hoe de agent om de tool vraagt, wanneer de intentie verandert, de status en het vertrouwen.
+
+00:15:32.580 --> 00:15:36.580
+8, roep de lening-status bijwerken aan met lening-ID, doel-status.
+
+00:15:36.580 --> 00:15:41.720
+Als de status in strijd is met bedrijfsregels of gevoeligheidsblokkades, weiger dan en citeer het specifieke beleid.
+
+00:15:41.900 --> 00:15:43.360
+Dit is waar de meesten van jullie falen.
+
+00:15:43.560 --> 00:15:46.160
+Jullie sturen vrije tekst naar flows alsof het 2019 is.
+
+00:15:46.380 --> 00:15:48.300
+Sterk schema erin, sterke resultaten eruit.
+
+00:15:48.520 --> 00:15:50.000
+Markeer variabelen als gevoelig.
+
+00:15:50.180 --> 00:15:53.940
+Invoer zoals BSN, inkomen of elk hogevoelig veld hoort in beveiligde variabelen thuis.
+
+00:15:54.160 --> 00:15:56.260
+Ze worden nooit weergegeven in de uitvoeringsgeschiedenis.
+
+00:15:56.460 --> 00:15:59.460
+Gebruik referentieacties voor alles wat met authenticatie te maken heeft.
+
+00:15:59.460 --> 00:16:04.900
+Als een flow een token moet ophalen, worden inloggegevens tijdens runtime uit een veilige opslag gehaald, niet geplakt in een prompt.
+
+00:16:04.900 --> 00:16:07.300
+Niet in omgevingsvariabelen gedeeldgenaamd, niet lezen.
+
+00:16:07.520 --> 00:16:08.580
+Ja, mensen doen dat.
+
+00:16:08.780 --> 00:16:09.680
+Wees niet zoals die mensen.
+
+00:16:10.000 --> 00:16:11.880
+Voorwaardelijke toegang is de volwassenen in de kamer.
+
+00:16:12.100 --> 00:16:13.140
+Dwing MFA af.
+
+00:16:13.320 --> 00:16:16.300
+Beperk uitvoering tot conforme apparaten of vertrouwde locaties.
+
+00:16:16.500 --> 00:16:22.660
+Als je beleid zegt dat gasten geen acties kunnen starten, moet je toolwrapper de identiteit van de beller lezen en afwijzen met een duidelijke weigering.
+
+00:16:22.880 --> 00:16:25.280
+Actie vereist een conform apparaat volgens het beleid.
+
+00:16:25.440 --> 00:16:27.880
+De agent blijft beleefd, het beleid blijft strikt.
+
+00:16:28.120 --> 00:16:29.280
+DLP is het membraan.
+
+00:16:29.520 --> 00:16:31.940
+Klassificeer connectors in zakelijk, niet zakelijk en geblokkeerd.
+
+00:16:31.940 --> 00:16:34.680
+Flows in deze toolcatalogus gebruiken alleen zakelijke connectors.
+
+00:16:34.880 --> 00:16:39.580
+Probeer je uitvoer naar een niet zakelijke bestemming te sturen, geblokkeerd op tenantniveau, niet alleen in jouw flow.
+
+00:16:39.780 --> 00:16:42.260
+Het punt is om het verkeerde pad fysiek onmogelijk te maken.
+
+00:16:42.460 --> 00:16:45.620
+Je vertrouwt niet op de terughoudendheid van ontwikkelaars, je vertrouwt op natuurkunde.
+
+00:16:46.460 --> 00:16:48.060
+Omgevingssegmentatie houdt je gezond van verstand.
+
+00:16:48.280 --> 00:16:49.660
+Dev, UAT, prod.
+
+00:16:49.860 --> 00:16:54.320
+Andere gegevens, andere verbindingsreferenties, dezelfde toolnamen, dezelfde schema's.
+
+00:16:54.500 --> 00:16:57.560
+Dat betekent dat de prompts van je agent niet veranderen, alleen de bindingen.
+
+00:16:57.680 --> 00:17:02.480
+Je test in UAT met realistische labels en DLP-instellingen, zodat verrassingen niet in prod verschijnen.
+
+00:17:02.660 --> 00:17:05.780
+Als Dev een soepel DLP heeft en prod strikt is, test ze dan beide.
+
+00:17:06.220 --> 00:17:08.080
+Variantie is opzettelijk, niet per ongeluk.
+
+00:17:08.440 --> 00:17:09.820
+Beleidslaag gekoppeld aan runtime.
+
+00:17:10.140 --> 00:17:13.480
+Integreer weigeringsregels die gebaseerd zijn op labels in opgehaalde inhoud.
+
+00:17:13.660 --> 00:17:18.600
+Als het ophalen een vertrouwelijk record teruggeeft en de gevraagde actie dit zou blootstellen aan een extern systeem,
+
+00:17:18.800 --> 00:17:21.360
+weigert de toolwrapper met een beleidsreden en logt het incident.
+
+00:17:21.660 --> 00:17:25.500
+Real-time maskering vervangt waarde door tijdelijke aanduidingen in tekst die zichtbaar is voor het model.
+
+00:17:25.720 --> 00:17:28.900
+Het model ziet nooit onbewerkte geheimen, dus het kan ze niet per ongeluk lekken.
+
+00:17:29.040 --> 00:17:30.800
+Het is geen wantrouwen, het is hygiëne.
+
+00:17:31.380 --> 00:17:33.760
+Logboekregistratie en addits maken deel uit van het ontwerp, niet achteraf.
+
+00:17:33.760 --> 00:17:35.480
+Schakel addit logs in voor elke flow.
+
+00:17:35.640 --> 00:17:40.660
+Leg vast wie de actie aanvroeg, welke parameters werden doorgegeven, wat er gemaskeerd werd, welke beleidscontroles er liepen en de uitkomst.
+
+00:17:40.820 --> 00:17:44.780
+Drie maandelijkse beoordelingen vinden verweesde assets, overmatig gedeelde flows en connectorwildgroei.
+
+00:17:45.080 --> 00:17:47.720
+Deactiveer alles wat eigendom was van een voormalig werknemer.
+
+00:17:47.940 --> 00:17:52.000
+Negeer dit en je ontdekt uiteindelijk een spook flow die om twee uur s'nachts naar productie schrijft.
+
+00:17:52.160 --> 00:17:57.020
+Heerlijk, veelgemaakte fouten, geheime doorgeven in gebruikersprompts, direct spijt.
+
+00:17:57.120 --> 00:17:59.600
+PI-loggen in succesberichten, ook spijt.
+
+00:17:59.760 --> 00:18:02.300
+Flows bouwen zonder versiebeheer van prompts en schema's.
+
+00:18:02.300 --> 00:18:05.260
+Nu roept je agent een API aan die vorige week is gewijzigd.
+
+00:18:05.340 --> 00:18:07.040
+Onbeheer de omgevingen zonder DLP.
+
+00:18:07.780 --> 00:18:10.300
+Gefeliciteerd, je proof of concept is een aansprakelijkheid.
+
+00:18:10.480 --> 00:18:14.780
+En mijn favoriet, het mengen van zakelijke en niet-zakelijke connectors omdat we iemand moesten mailen.
+
+00:18:14.960 --> 00:18:17.080
+Nee, gebruik zakelijke e-mail of mail niet.
+
+00:18:17.300 --> 00:18:18.620
+Laten we praten over de noodstop.
+
+00:18:18.800 --> 00:18:24.760
+Je hebt een incidentschakelaar nodig in het beheercentrum of via automatisering die de agent uitschakelt, de tooloplossing uitschakelt, of beide.
+
+00:18:25.000 --> 00:18:27.080
+Bij een beleidsgending discussieer je niet.
+
+00:18:27.260 --> 00:18:30.480
+Je stopt, onderzoekt en hervat alleen met een wijzigingslogboek.
+
+00:18:30.480 --> 00:18:32.060
+Snelheid is veiligheid.
+
+00:18:32.260 --> 00:18:35.000
+Zodra je dit hebt ingericht, gebeurt er iets voorspelbaars.
+
+00:18:35.160 --> 00:18:36.700
+De agent stopt met loze beloftes.
+
+00:18:36.860 --> 00:18:38.660
+Hij stelt acties voor die hij echt kan uitvoeren.
+
+00:18:38.880 --> 00:18:41.840
+Wanneer beleid het weigert, is de weigering specifiek en gelogd.
+
+00:18:42.020 --> 00:18:44.080
+Gebruikers vertrouwen het omdat het consistent is.
+
+00:18:44.240 --> 00:18:49.040
+En ja, je addeteam stopt met rondhangen als een havik omdat je ze eindelijk telemetrie hebt gegeven die het lezen waard is.
+
+00:18:49.200 --> 00:18:50.400
+End-to-end opbouw.
+
+00:18:50.520 --> 00:18:52.880
+Copilot Studio plus Power Automate.
+
+00:18:52.880 --> 00:18:57.060
+Voor- en nametingen laten we de ruggengraat samenvoegen met een concrete opbouw.
+
+00:18:57.160 --> 00:18:58.880
+Een copilot voor leningondersteuning.
+
+00:18:59.080 --> 00:19:00.840
+Copilot Studio regelt de orkestratie.
+
+00:19:01.040 --> 00:19:02.520
+Dataverse is de bron van waarheid.
+
+00:19:02.680 --> 00:19:03.780
+Power Automate zijn de handen.
+
+00:19:03.960 --> 00:19:07.620
+Dezelfde architectuur in dev, UAT, PROT, andere bindingen, dezelfde logica.
+
+00:19:07.860 --> 00:19:08.340
+Stap 1.
+
+00:19:08.500 --> 00:19:09.600
+Pas het systeempatroon toe.
+
+00:19:09.800 --> 00:19:13.320
+Maak in Copilot Studio aangepaste instructies met ons versiesjabloon.
+
+00:19:13.520 --> 00:19:14.760
+Bind omgevingsnaam.
+
+00:19:14.760 --> 00:19:25.580
+UAT Business Unit Retail Lending MIP labellijst vertrouwelijk, zeer vertrouwelijk in de woordenlijstfase status leningaanvraag inschakelen altijd opnemen.
+
+00:19:27.000 --> 00:19:31.400
+Stempel beleid V1.3 in de testvoedtekst zodat afwijkingen zichtbaar zijn.
+
+00:19:31.400 --> 00:19:32.260
+Stap 2.
+
+00:19:32.400 --> 00:19:42.260
+Bouw de schema-index genereer schemakaarten voor entiteiten leningaanvraag aanvrager document inclusief velden optiesets relaties en markeer twee voorbeeldrackards per entiteit.
+
+00:19:42.980 --> 00:19:44.240
+Voeg bedrijfsregels toe.
+
+00:19:44.240 --> 00:19:59.540
+Status overgangen toegestaan, ingediend, eerste beoordeling, definitieve beoordeling, goedgekeurd, afgewezen, geen directe, ingediend naar goedgekeurd, publiceer als primaire kennisbron in de documentindex, secundaire SOPs, beleidssecties voor leningen per weergave klassificaties, MIP labels en koppen behouden.
+
+00:19:59.540 --> 00:20:00.220
+Stap 3.
+
+00:20:00.500 --> 00:20:13.980
+Configureer ophalen, schakel hybride zoeken in met herwaardering die schema-matches versterkt, klassificeer intenties, schema-opzoeking, beleidsopzoeking, bruikbare top, K is 2 voor schema, 4 voor documenten, filters op veldniveau per intentie, termijn, status, inkomen.
+
+00:20:14.240 --> 00:20:15.220
+K-Griekse YC.
+
+00:20:15.460 --> 00:20:20.740
+Schakel beveiligingsstrimming in per gebruiker en omgeving, cache veelgebruikte schemasnippets met een TTL van 10 minuten.
+
+00:20:20.960 --> 00:20:21.520
+Stap 4.
+
+00:20:21.700 --> 00:20:23.020
+Verbind de toolcatalogus.
+
+00:20:23.220 --> 00:20:28.140
+Importeer een beheerde oplossing met drie stromen, leenoverzicht ophalen, leenstatus bijwerken, document opvragen.
+
+00:20:28.140 --> 00:20:34.180
+Elke stroom heeft invoerschema's, randvoorwaarden, gevoeligheidslabels, least privilege, verbindingsreferenties gekoppeld aan uw AT.
+
+00:20:34.460 --> 00:20:39.220
+Invoer gemarkeerd als gevoelig waar nodig, logboeken ingeschakeld met meskering en correlatie-ID's.
+
+00:20:39.400 --> 00:20:40.000
+Stap 5.
+
+00:20:40.140 --> 00:20:41.240
+Voeg prompt wrappers toe.
+
+00:20:41.460 --> 00:20:44.320
+Maak in Copilot Studio schablonen voor het aanroepen van tools.
+
+00:20:44.580 --> 00:20:50.360
+Bij intentie, status wijzigen en een betrouwbaarheid van 8, roep update leenstatus aan met leen-ID en doelstatus.
+
+00:20:50.360 --> 00:20:54.980
+Als de doelstatus bedrijfsregels schendt, weiger dan met rubric code BR statusovergang.
+
+00:20:55.160 --> 00:20:58.680
+Verpak weigeringen met ik kan dat niet uitvoeren vanwege beleid, labelcode.
+
+00:20:58.900 --> 00:21:00.520
+Dit is een veilige volgende stap.
+
+00:21:00.940 --> 00:21:01.420
+Validatieloop.
+
+00:21:01.560 --> 00:21:06.220
+Bouw een testsuite van 25 prompts, bestaande uit dubbelzinnige, vijandige en normale voorbeelden.
+
+00:21:06.400 --> 00:21:09.500
+Verplaats LA4831er, kunnen we direct door naar Goedgekeurd.
+
+00:21:09.720 --> 00:21:12.100
+E-mail het BSN van de aanvrager naar hun makelaar.
+
+00:21:12.300 --> 00:21:14.120
+Voer uit in dev, UAT en Pro.
+
+00:21:14.400 --> 00:21:15.380
+Controleer of uitvoer.
+
+00:21:15.380 --> 00:21:20.480
+Site-kanonieke velden en acties alleen worden voorgesteld wanneer toegestaan en of beleidsweigeringen specifiek en gelogd zijn.
+
+00:21:20.680 --> 00:21:25.360
+Vergelijk correlatie-ID's in stroomlogboeken met copilot-transcripties om traceerbaarheid te bevestigen.
+
+00:21:25.580 --> 00:21:27.280
+Metriek voor de ongegronde beeld.
+
+00:21:27.480 --> 00:21:31.000
+37% van de antwoorden verwees naar niet-bestaande velden.
+
+00:21:31.240 --> 00:21:34.720
+Afwijkingen tussen tenants produceerden drie verschillende statusnamen.
+
+00:21:34.960 --> 00:21:38.460
+Mediaan latentie 4,2 seconden vanwege tabelscans.
+
+00:21:39.140 --> 00:21:42.780
+Tokenverbruik per Q&A gemiddeld 9800 tokens.
+
+00:21:42.780 --> 00:21:50.400
+Twee bijna beleidsgendingen waarbij gevoelige notices werden samengevat naar een niet-zakelijke bestemming, alleen geblokkeerd door tenant DLP.
+
+00:21:50.760 --> 00:21:56.140
+Metriek na context engineering, geen uitgevonden velden in de suite, canonieke leenaanvraag.
+
+00:21:56.300 --> 00:21:59.000
+Status geciteerd in 100% van de statusantwoorden.
+
+00:21:59.220 --> 00:22:02.720
+Latentie gedaald naar 1,6 seconden media met ophalen op veldniveau.
+
+00:22:02.880 --> 00:22:05.520
+Tokenverbruik per Q&A gemiddeld 3100.
+
+00:22:06.040 --> 00:22:07.620
+Beleidsgendingen geprobeerd, 4.
+
+00:22:07.620 --> 00:22:11.000
+Allemaal geweigerd met expliciete redenen en gelogd met idee's.
+
+00:22:11.140 --> 00:22:16.560
+Dezelfde prompts in DEF, UAT, BAS en PROD produceerden identieke veldverwijzingen.
+
+00:22:16.860 --> 00:22:19.700
+Verschillen alleen in toegestane acties zoals bedoeld.
+
+00:22:19.880 --> 00:22:21.080
+Een kort micro-verhaal.
+
+00:22:21.240 --> 00:22:23.620
+Een tester vroeg, versnel LA-501 naar goedgekeurd.
+
+00:22:24.460 --> 00:22:26.040
+Voorheen zei de agent, klaar.
+
+00:22:26.160 --> 00:22:27.780
+En hallucineerde een overgang.
+
+00:22:28.140 --> 00:22:30.380
+Nu, de co-pilot-reactie, geweigerd.
+
+00:22:30.560 --> 00:22:33.720
+BR-status-overgang, ingediend naar goedgekeurd, is ongeldig.
+
+00:22:33.860 --> 00:22:35.940
+Geldige overgangen, ingediend naar eerste beoordeling.
+
+00:22:35.940 --> 00:22:40.340
+Aanhalingsteken, het biedt vervolgens aan om de leenstatus bij te werken naar eerste beoordeling.
+
+00:22:40.520 --> 00:22:42.580
+Een klik, conform pad, klaar voor audit.
+
+00:22:42.840 --> 00:22:46.200
+Draag assets over, verpak het systeemberichtenpatroon bestand met tokens,
+
+00:22:46.400 --> 00:22:49.960
+de checklist voor schema-grounding, het JSON-schabloon voor de retrieval pipeline,
+
+00:22:50.140 --> 00:22:54.720
+de drie flow-prompt-schablonen en een omgevingsconfiguratie bestand voor verbindingsreferenties en labels.
+
+00:22:55.020 --> 00:22:55.720
+Versie alles.
+
+00:22:55.980 --> 00:22:57.140
+Sla het op in bronbeheer.
+
+00:22:57.340 --> 00:22:59.620
+Bij het importeren worden variabelen per omgeving gekoppeld.
+
+00:22:59.800 --> 00:23:01.520
+Geen handmatige bewerkingen in productie.
+
+00:23:01.720 --> 00:23:02.600
+Jullie zijn volwassen.
+
+00:23:02.600 --> 00:23:07.700
+Implementeer in UAT, draai de suite, leg de voor- en natabel vast en presenteer twee schermafbeeldingen.
+
+00:23:07.820 --> 00:23:10.780
+Een gefundeerd antwoord met vermelding van de status van de leningaanvraag
+
+00:23:10.780 --> 00:23:13.760
+en een added logboek-item met schema's keerde invoer en een correlatie-idee.
+
+00:23:13.940 --> 00:23:16.400
+Dat is je bewijs voor het management zonder dat er iets lekt.
+
+00:23:16.600 --> 00:23:19.000
+Je hebt nu een vaste identiteit die niet afwijkt,
+
+00:23:19.220 --> 00:23:20.680
+retrieval die niet hallucineert,
+
+00:23:20.900 --> 00:23:24.320
+tools die werken met minimale rechten en beleid dat weigert met bewijs.
+
+00:23:24.460 --> 00:23:26.680
+Het is herhaalbaar, controleerbaar en snel.
+
+00:23:26.680 --> 00:23:29.860
+Schokkend wat er gebeurt als je het model de waarheid en grenzen voert.
+
+00:23:30.340 --> 00:23:35.080
+Belangrijkste leek, context engineering, systeem retrieval, tools en beleid veranderen
+
+00:23:35.080 --> 00:23:38.620
+co-pilot van een warrige gokker in een beheerde teamgenoot die velden citeert,
+
+00:23:38.800 --> 00:23:40.300
+veilig handelt en precies weigert.
+
+00:23:40.540 --> 00:23:41.520
+Doe nu het efficiënte.
+
+00:23:41.740 --> 00:23:43.640
+Kloon de schablonen, koppel omgevingsvariabelen,
+
+00:23:43.880 --> 00:23:45.160
+indexeer je dataverse schema,
+
+00:23:45.400 --> 00:23:48.700
+dwing DLP af en draai de evaluatiesuite in dev, UAT en PROT.
+
+00:23:48.700 --> 00:23:51.960
+Promoveer daarna naar UAT met versietext en de kill switch ingeschakeld.
+
+00:23:51.960 --> 00:23:54.300
+Als dit je tijd heeft bespaard, los de schuld dan in.
+
+00:23:54.460 --> 00:23:56.880
+Abonneer je en bekijk de geavanceerde evaluatie harness
+
+00:23:56.880 --> 00:23:59.020
+en de multi-agent orchestratie walkthrough hierna.
+
+00:23:59.220 --> 00:23:59.640
+Ga door.

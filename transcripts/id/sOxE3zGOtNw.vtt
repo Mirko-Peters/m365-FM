@@ -1,0 +1,1363 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.140
+Topik hari ini adalah topik yang hampir semua orang pernah dengar tetapi hanya sedikit yang dapat menjelaskannya, MCP.
+
+00:00:04.560 --> 00:00:08.240
+Anda mungkin pernah melihatnya disebut HTTP untuk agen AI, tetapi apa sebenarnya artinya?
+
+00:00:08.800 --> 00:00:12.540
+Di akhir episode ini, Anda akan memahami apa itu MCP, apa fungsi server Azure MCP,
+
+00:00:12.780 --> 00:00:15.300
+dan mengapa hal itu penting untuk cara alat AI terhubung ke data Anda.
+
+00:00:15.680 --> 00:00:17.680
+Kami akan menguraikannya menjadi blok-blok penyusun utama,
+
+00:00:17.820 --> 00:00:21.160
+dimulai dengan gambaran besar, lalu protokol itu sendiri, lalu implementasi Microsoft, dan terakhir,
+
+00:00:21.520 --> 00:00:23.060
+contoh nyata yang benar-benar dapat Anda gunakan.
+
+00:00:24.320 --> 00:00:25.780
+Kamu berdua, mengapa penting sekarang?
+
+00:00:26.380 --> 00:00:27.560
+Inilah situasi yang kita harapis hati.
+
+00:00:27.900 --> 00:00:29.640
+Semua orang sedang membangun agen AI.
+
+00:00:30.000 --> 00:00:33.440
+Bukan hanya perusahaan teknologi, tetapi juga bank, rumah sakit, produsen, bahkan bisnis kecil.
+
+00:00:33.900 --> 00:00:36.640
+Mereka semua mencoba membangun asisten AI yang benar-benar dapat melakukan banyak.
+
+00:00:36.940 --> 00:00:38.880
+Tidak hanya menjawab pertanyaan, tetapi mengambil tindakannya.
+
+00:00:39.180 --> 00:00:42.940
+Memperbarui catatan, memiksa inventaris, menerapkan kode, atau memperbaiki server yang rusak.
+
+00:00:43.300 --> 00:00:44.420
+Dan disinilah masalahnya muncul.
+
+00:00:44.920 --> 00:00:47.220
+Agen-agen ini perlu terhubung ke alat dan data nyata.
+
+00:00:48.100 --> 00:00:51.760
+Basis data, akun penyimpanan, sistem tiket, platform CRM.
+
+00:00:52.180 --> 00:00:54.040
+Cara kebanyakan orang melakukannya saat ini adalah dengan soal itu.
+
+00:00:54.160 --> 00:00:58.000
+Mereka menulis kode integrasi khusus untuk setiap alat, setiap API, setiap sumber data.
+
+00:00:58.000 --> 00:01:02.140
+Satu konektor untuk basis data, satu lagi untuk penyimpanan berkas, dan yang ketiga untuk sistem memat.
+
+00:01:02.400 --> 00:01:05.460
+Masih memerlukan autentikasinya sendiri, penanganan kesalahannya sendiri,
+
+00:01:05.640 --> 00:01:07.600
+cara memformat permintaan dan responsnya sendiri.
+
+00:01:08.240 --> 00:01:10.620
+Pendekatan indera pemakan waktu dan tidak dapat ditingkatkan sekarang.
+
+00:01:11.160 --> 00:01:13.800
+Setiap asisten AI yang Anda buat memerlukan tumpukan kode perkatnya sendiri
+
+00:01:13.800 --> 00:01:15.440
+untuk berkomunikasi dengan layanan yang dibutuhkan.
+
+00:01:15.700 --> 00:01:19.200
+Beralihlah dari satu platform AI ke platform AI lainnya, dan Anda membangun kembali semuanya dari awal.
+
+00:01:19.520 --> 00:01:22.080
+Sebagian besar demo AI yang Anda lihat berfungsi dengan baik secara terpisah.
+
+00:01:22.080 --> 00:01:25.040
+Mereka menjawab pertanyaan, menghasilkan teks, tampak mengesankan.
+
+00:01:25.040 --> 00:01:27.660
+Tetapi saat mereka perlu menyentuh sistem nyata, mereka hancur.
+
+00:01:28.060 --> 00:01:29.140
+Disitulah letak kompleksitasnya.
+
+00:01:29.540 --> 00:01:30.260
+MCP mengubah ini.
+
+00:01:30.680 --> 00:01:33.240
+MCP memberi AI cara standar untuk menjangkau dan mengambil apa yang dibutuh.
+
+00:01:33.780 --> 00:01:36.060
+Satu protokol, satu cara berkomunikasi dengan alat.
+
+00:01:36.540 --> 00:01:39.500
+Asisten AI manapun yang berbicara MCP dapat menggunakan server MCP manapun.
+
+00:01:40.000 --> 00:01:43.920
+Ini seperti perbedaan antara memiliki kendali jarak jauh terpisah untuk setiap perangkat di rumah Anda
+
+00:01:43.920 --> 00:01:46.540
+versus satu kendali jarak jauh universal yang berfungsi dengan semuanya.
+
+00:01:47.100 --> 00:01:48.780
+Baiklah, mari kita mulai dengan definisi yang paling sederhana.
+
+00:01:49.000 --> 00:01:51.000
+Apa itu MCP? Penjelasan protokolnya.
+
+00:01:51.420 --> 00:01:52.120
+Apa sebenarnya MCP?
+
+00:01:52.580 --> 00:01:53.820
+Mari saya jelaskan dengan bahasa sederhana.
+
+00:01:55.040 --> 00:01:56.160
+Ini adalah dari modal konteks protokol,
+
+00:01:56.540 --> 00:02:00.180
+dan ini adalah standar terbuka yang beritahu agen AI cara berkomunikasi dengan alat eksternal,
+
+00:02:00.340 --> 00:02:01.300
+APA, dan sumber data.
+
+00:02:01.760 --> 00:02:03.280
+Anggap saja ini sebagai bahasa umum untuk AI.
+
+00:02:03.660 --> 00:02:08.120
+Sebelum MCP, setiap asisten AI harus mempelajari bahasa yang berbeda untuk setiap alat yang ingin digunakan.
+
+00:02:09.180 --> 00:02:13.380
+MCP berkata, mari kita sepakati satu bahasa dan setiap alat hanya perlu berbicara dalam satu bahasa itu.
+
+00:02:13.940 --> 00:02:17.040
+Di balik layar, ini didasarkan pada JSON RPC 2.0,
+
+00:02:17.140 --> 00:02:19.660
+format pesan sederhana untuk mengirim permintaan dan mendapatkan respon.
+
+00:02:20.000 --> 00:02:21.600
+Tidak ada yang mewah dan sudah ada selama bertahun-tahun.
+
+00:02:22.220 --> 00:02:23.820
+Yang ditambahkan MCP diatasnya adalah Stub.
+
+00:02:23.820 --> 00:02:27.720
+Ini mendefinisikan tiga hal utama yang dapat dilakukan agen AI dengan server MCP,
+
+00:02:28.140 --> 00:02:29.300
+alat sumber daya dan perintah apapun.
+
+00:02:30.220 --> 00:02:33.340
+Alat adalah tindakan yang dapat diambil AI seperti membuat catatan atau menjalankan query.
+
+00:02:34.180 --> 00:02:37.980
+Sumber daya adalah potongan data yang dapat dibaca AI seperti profil pelanggan atau file log.
+
+00:02:38.500 --> 00:02:42.460
+Dan perintah adalah tempat yang memandu bagaimana AI harus berperilaku dalam situasi tertentu.
+
+00:02:42.600 --> 00:02:43.880
+Berikut cara penelitian untuk memikirkan.
+
+00:02:44.280 --> 00:02:46.060
+Bayangkan Anda memiliki kendali jarak jauh universal.
+
+00:02:46.600 --> 00:02:49.300
+Kendali jarak jauh itu dapat berkomunikasi dengan TV, sistem suara, kotak streaming.
+
+00:02:49.760 --> 00:02:51.060
+Satu kendali jarak jauh banyak perangkat.
+
+00:02:51.060 --> 00:02:53.040
+MCP adalah kendali jarak jauh untuk agen AI.
+
+00:02:53.040 --> 00:02:54.440
+Oke, satu protokol banyak alat.
+
+00:02:54.900 --> 00:03:00.260
+Anda membangun satu server MCP yang mengekspos alat dan data Anda dan agen AI yang kompatibel dengan MCP dapat menggunakannya.
+
+00:03:00.840 --> 00:03:04.640
+GitHub, Copilot, Cloud, Jet, GPT, agen khusus semuanya menggunakan protokol yang sama.
+
+00:03:05.320 --> 00:03:06.760
+Dan ini bukanlah hal milik Microsoft.
+
+00:03:07.620 --> 00:03:10.000
+MCP awalnya dibuat oleh antropik perusahaan dibalik cloud,
+
+00:03:10.120 --> 00:03:13.360
+tetapi telah diadopsi oleh OpenAI, Google, Microsoft, dan banyak lainnya.
+
+00:03:14.000 --> 00:03:16.980
+Ini menjadi cara standar bagi agen AI untuk terhubung ke dunia luar.
+
+00:03:16.980 --> 00:03:20.680
+Bukan vendor lock-in, tetapi standar terbuka yang dapat digunakan semua orang.
+
+00:03:21.400 --> 00:03:22.460
+Masalah ini pecahkan MCP.
+
+00:03:23.020 --> 00:03:24.300
+Berikut cara lama dalam melakukan surat.
+
+00:03:24.660 --> 00:03:27.360
+Sebelum MCP, setiap integrasi AI adalah proyek khusus.
+
+00:03:27.840 --> 00:03:30.700
+Katakanlah Anda ingin asisten AI Anda meriksa tingkat inventaris di basis data Anda.
+
+00:03:31.260 --> 00:03:31.560
+Bagus.
+
+00:03:31.920 --> 00:03:32.740
+Sekarang Anda perlu skode.
+
+00:03:33.280 --> 00:03:34.380
+Anda perlu mencari tahu autentikasi.
+
+00:03:34.380 --> 00:03:37.000
+Bagaimana AI membuktikan bahwa ia diizinkan membaca data tertentu.
+
+00:03:37.440 --> 00:03:38.400
+Anda perlu menangani kesalahan.
+
+00:03:39.060 --> 00:03:40.260
+Apa yang terjadi saat basis data mati?
+
+00:03:40.740 --> 00:03:41.740
+Anda perlu memformat respons.
+
+00:03:42.140 --> 00:03:45.300
+Bagaimana keluaran basis data diubah menjadi sesuatu yang dapat dipahami AI?
+
+00:03:46.040 --> 00:03:48.220
+Pengembangan per minggu-minggu untuk satu koneksi ke satu basis data.
+
+00:03:48.660 --> 00:03:49.440
+Telah pajak integrasi.
+
+00:03:50.180 --> 00:03:52.520
+Satu asisten AI, satu basis data, per minggu-minggu kerja.
+
+00:03:53.040 --> 00:03:55.500
+Sekarang kalikan itu dengan setiap alat yang perlu disentuh AI-nya.
+
+00:03:55.840 --> 00:03:58.520
+CRM, sistem tiket, penyimpanan file, log pembantauan.
+
+00:03:59.100 --> 00:04:03.280
+Masing-masing memerlukan kode kustomnya sendiri, pola autentikasinya sendiri, penanganan kesalahannya sendiri,
+
+00:04:03.280 --> 00:04:05.300
+dan tidak ada kode yang berfungsi dengan alat lain.
+
+00:04:05.740 --> 00:04:08.660
+Anda membangun hal yang sama berulang-ulang hanya sedikit berbeda setiap kali.
+
+00:04:09.300 --> 00:04:10.280
+Dan inilah masalah keamanan.
+
+00:04:10.700 --> 00:04:12.780
+Setiap integrasi kustom memiliki autentikasinya sendiri.
+
+00:04:13.160 --> 00:04:17.720
+Beberapa menggunakan kunci API, beberapa menggunakan OAuth, beberapa menggunakan sertifikat, beberapa menggunakan autentikasi dasar.
+
+00:04:18.040 --> 00:04:22.580
+Anda berakhir dengan selusin cara berbeda untuk data AI Anda dan tidak ada cara yang konsisten untuk mengaturnya.
+
+00:04:22.900 --> 00:04:23.500
+Apa yang memiliki akses?
+
+00:04:23.860 --> 00:04:24.580
+Apa yang dapat mereka lakukan?
+
+00:04:24.920 --> 00:04:25.460
+Di mana log-nya?
+
+00:04:25.860 --> 00:04:29.400
+Sebagian besar organisasi tidak dapat menjawab pertanyaan tersebut untuk integrasi AI mereka
+
+00:04:29.400 --> 00:04:31.680
+karena integrasi tersebut dibangun oleh tim yang berbeda.
+
+00:04:31.680 --> 00:04:33.920
+Pada waktu yang berbeda dengan standar yang berbeda.
+
+00:04:34.620 --> 00:04:35.640
+Masalah fragmentasi itu nyat.
+
+00:04:36.000 --> 00:04:38.100
+Katakanlah Anda membangun asisten AI Anda di OpenAI.
+
+00:04:38.660 --> 00:04:41.560
+Anda menulis semua integrasi Anda untuk format pembanggilan fungsi OpenAI.
+
+00:04:41.980 --> 00:04:45.940
+Kemudian 6 bulan kemudian, perusahaan Anda memutuskan untuk beralih ke cloud atau Anda ingin menggunakan keduanya.
+
+00:04:46.420 --> 00:04:47.700
+Sekarang Anda membangun kembali setiap integrasi.
+
+00:04:48.040 --> 00:04:49.780
+Alat yang sama, data yang sama, format yang berbeda.
+
+00:04:50.100 --> 00:04:51.320
+Itu bukan kemajuan untuk pekerjaan chip.
+
+00:04:51.800 --> 00:04:52.940
+BIS Bandar bertambah dengan cepat.
+
+00:04:53.260 --> 00:04:55.720
+Sebagian besar organisasi besar sudah menjalankan lusinan agen AI.
+
+00:04:56.440 --> 00:04:59.280
+Menurut IDC, rata-rata perusahaan menjalankan 47 agen.
+
+00:04:59.280 --> 00:05:01.380
+Masih memaliki tumpukan konektor khusus sendiri.
+
+00:05:02.040 --> 00:05:03.520
+Dan berikut statistik yang mungkin menunjukkan Anda.
+
+00:05:03.800 --> 00:05:07.440
+68% CEO bahkan tidak dapat melaporkan total pengeluaran agen AI.
+
+00:05:07.980 --> 00:05:12.740
+Mereka tidak tahu berapa yang mereka belanjakan untuk integrasi ini karena tersebar di seluruh tim, proyek, dan anggaran.
+
+00:05:13.100 --> 00:05:14.380
+MCP membalikkan seluruh model ini.
+
+00:05:14.800 --> 00:05:18.580
+Alih-alih menulis kode khusus untuk setiap alat AI, Anda membangun satu server MCP.
+
+00:05:19.080 --> 00:05:21.940
+Server tersebut mengekspos peralatan dan data Anda melalui antarmukas tanda.
+
+00:05:22.280 --> 00:05:24.100
+Gen yang kompatibel dengan MCP dapat menggunakannya.
+
+00:05:24.700 --> 00:05:27.780
+Copilot Cloud C-CBT agen khusus peralatan internal Anda sendiri.
+
+00:05:27.780 --> 00:05:29.680
+Jadi, tulis sekali gunakan dimana saja.
+
+00:05:30.040 --> 00:05:30.580
+Telah perubahannya.
+
+00:05:31.040 --> 00:05:32.000
+Apa itu server Azure MCP?
+
+00:05:32.460 --> 00:05:34.440
+Jadi, kita telah membahas masalah yang dipecahkan MCP.
+
+00:05:34.740 --> 00:05:36.340
+Sekarang mari kita bahas jawaban Microsoft untuk ini.
+
+00:05:37.020 --> 00:05:39.880
+Server Azure MCP adalah versi resmi Microsoft dari MCP.
+
+00:05:40.280 --> 00:05:45.120
+Anggap saja sebagai jembatan yang memungkinkan agen AI mengakses sumber daya Azure Anda dengan aman dan mengolahnya.
+
+00:05:45.640 --> 00:05:47.460
+Dan saya ingin menjelaskan tentang apa sebenarnya benda ini.
+
+00:05:47.900 --> 00:05:48.960
+Ini bukan produk terpisah yang memberi.
+
+00:05:49.440 --> 00:05:50.380
+Ini bukan lain Azure baru.
+
+00:05:50.380 --> 00:05:55.320
+Ini adalah alat server sumber terbuka yang berada tepat di antara asisten AI dan lingkungan Azure Anda.
+
+00:05:55.560 --> 00:05:57.200
+Ini berfungsi dengan moda agen GitHub Copilot.
+
+00:05:57.600 --> 00:05:58.560
+Ini berfungsi dengan sematic kernel.
+
+00:05:58.840 --> 00:05:59.900
+Ini berfungsi dengan port desktop.
+
+00:06:00.260 --> 00:06:02.820
+Dan ini berfungsi dengan agen MCP khusus apapun yang Anda buat sendiri.
+
+00:06:03.380 --> 00:06:05.340
+Klien manapun yang menggunakan MCP dapat terhubung dengan ini.
+
+00:06:06.020 --> 00:06:09.760
+Setelah terhubung, agen tersebut mendapatkan akses ke sumber daya Azure Anda melalui bahasa alami yang sederhan.
+
+00:06:10.060 --> 00:06:11.680
+Anda tidak perlu mengetahui panggilan apa yang tepat.
+
+00:06:12.180 --> 00:06:13.560
+Anda tidak perlu mengingat metode SDK.
+
+00:06:14.060 --> 00:06:14.760
+Anda hanya perlu bertanya.
+
+00:06:14.760 --> 00:06:20.540
+Inilah intinya, Azure memiliki lusinan, layanan penyimpanan basis data pementauan konfigurasi kontainer.
+
+00:06:20.800 --> 00:06:24.380
+Masing-masing dilengkapi dengan SDK, API, pola autentikasinya sendiri.
+
+00:06:25.140 --> 00:06:29.980
+Server Azure MCP menggabungkan semuanya menjadi satu antarmuka terpadu, satu server, satu protokol, semua alat.
+
+00:06:30.360 --> 00:06:31.200
+Mengapa Microsoft membangun?
+
+00:06:31.560 --> 00:06:33.840
+Karena masalah fragmentasi sangat buruk di Azure.
+
+00:06:34.500 --> 00:06:37.760
+Bayangkan Anda sedang membangun agen AI yang perlu meriksa log Azure Monitor,
+
+00:06:37.920 --> 00:06:41.180
+memperbarui pengaturan konfigurasi aplikasi, dan menyebarkan versi kontainer baru.
+
+00:06:41.180 --> 00:06:46.320
+Itu berarti ada tiga SDK berbeda, tiga alur autentikasi berbeda, tiga cara berbeda untuk menangani kesalahan.
+
+00:06:47.100 --> 00:06:51.920
+Server Azure MCP menggabungkannya menjadi satu sesi, satu autentikasi, satu cara kerja yang konsisten.
+
+00:06:52.980 --> 00:06:54.000
+Nah, inilah bagian pentingnya.
+
+00:06:54.460 --> 00:06:55.360
+Ini bukan hanya untuk pengembang.
+
+00:06:55.980 --> 00:07:00.960
+Ya, pengembang akan menggunakannya, tetapi kekuatan sebenarnya adalah memungkinkan kontrol bahasa alami sumber daya Azure.
+
+00:07:01.820 --> 00:07:05.360
+Seseorang yang tidak mengenal PowerShell atau Azure CLI dapat bertanya kepada asisten AI mereka,
+
+00:07:05.560 --> 00:07:09.380
+tunjukkan kesalahan terakhir selama satu jam untuk layanan pembayaran, dan dapatkan jawaban.
+
+00:07:09.380 --> 00:07:11.400
+Server MCP menangani penerjemahan.
+
+00:07:11.940 --> 00:07:14.500
+Ia mengubah permintaan bahasa alami menjadi panggilan API yang sesuai,
+
+00:07:14.640 --> 00:07:17.220
+menjalankannya terhadap Azure Monitor, dan mengembalikan hasilnya.
+
+00:07:18.080 --> 00:07:21.540
+Hingga saat ini, server Azure MCP sudah terpasang di Visual Studio 2026.
+
+00:07:21.660 --> 00:07:23.060
+Server ini bersifat sumber terbuka di GitHub.
+
+00:07:23.560 --> 00:07:26.020
+Server ini pelihara secara aktif oleh tim Azure SDK Microsoft.
+
+00:07:26.600 --> 00:07:29.240
+Dan masih dalam perhatian jauh publik, artinya Anda dapat menggunakannya sekarang,
+
+00:07:29.480 --> 00:07:31.400
+dengan lebih banyak kemampuan yang ditambahkan secara berkat.
+
+00:07:32.000 --> 00:07:33.160
+Layanan inti yang dapat Anda akses.
+
+00:07:33.380 --> 00:07:35.980
+Jadi apa yang sebenarnya dapat Anda lakukan dengan server Azure MCP?
+
+00:07:36.400 --> 00:07:37.860
+Mari kita lihat layan spesifik yang dapat dijangkau.
+
+00:07:37.860 --> 00:07:40.940
+Daftarnya terus bertambah, tetapi berikut yang didukung saat ini.
+
+00:07:41.340 --> 00:07:41.840
+Azure Storage.
+
+00:07:42.380 --> 00:07:45.640
+Anda dapat mencantumkan akun penyimpanan, mengelola kontainer blob, tabel query,
+
+00:07:45.880 --> 00:07:46.960
+semuanya melalui bahasa alami.
+
+00:07:47.400 --> 00:07:50.020
+Daripada menulis skrip untuk memeriksa penyimpanan Anda, Anda cukup bertanya.
+
+00:07:50.600 --> 00:07:52.400
+Tunjukkan kontainer di akun penyimpanan produksi saya.
+
+00:07:53.280 --> 00:07:57.080
+Server MCP menangani panggilan API memformat respons dan memberi Anda jawabannya.
+
+00:07:57.540 --> 00:07:59.200
+Azure Cosmos DB, yang ini sangat besar.
+
+00:07:59.720 --> 00:08:01.880
+Anda dapat membuat query basis data, mengelola kontainer,
+
+00:08:01.960 --> 00:08:03.860
+dan menjalankan query scale Anda, tanpa scale-an.
+
+00:08:03.860 --> 00:08:07.740
+Jika Anda membangun agen AI yang perlu mencari catatan pelanggan atau rewrite pesanan,
+
+00:08:08.060 --> 00:08:09.240
+beginilah cara mendapatkan data resmi.
+
+00:08:09.580 --> 00:08:12.880
+Tidak ada konektor khusus, tidak ada kode SDK, hanya panggilan alat melalui MCP.
+
+00:08:13.400 --> 00:08:13.960
+Azure Monitor.
+
+00:08:14.280 --> 00:08:15.840
+Di sinilah kekuatan sebenarnya muncul.
+
+00:08:16.540 --> 00:08:18.500
+Anda dapat membuat query log menggunakan KQL,
+
+00:08:18.640 --> 00:08:21.120
+Kusto Query Language, tanpa melulis sendiri satu pun perintah KQL.
+
+00:08:21.780 --> 00:08:22.780
+Word daftar ruang kerja,
+
+00:08:23.020 --> 00:08:23.980
+periksa tabel yang tersedia,
+
+00:08:24.440 --> 00:08:24.840
+tanyakan,
+
+00:08:25.000 --> 00:08:26.660
+tunjukkan kesalahan 24 jam terakhir,
+
+00:08:26.660 --> 00:08:29.220
+dan server MCP menerjemahkannya ke dalam query yang tepat,
+
+00:08:29.320 --> 00:08:30.820
+menjalankannya terhadap log analytics,
+
+00:08:30.820 --> 00:08:32.100
+dan mengembalikan hasilnya.
+
+00:08:32.860 --> 00:08:34.940
+Bagi siapapun yang pernah kesulitan dengan sintaks KQL,
+
+00:08:35.080 --> 00:08:36.320
+ini saja sepadan dengan harganya.
+
+00:08:37.000 --> 00:08:38.140
+Konfigurasi aplikasi Azure,
+
+00:08:38.260 --> 00:08:39.580
+Anda dapat mengelola pasangan nilai kunci,
+
+00:08:39.680 --> 00:08:40.920
+menangani konfigurasi yang diaktifkan,
+
+00:08:41.000 --> 00:08:42.080
+mengunci, dan membuka kunci pengatur.
+
+00:08:42.280 --> 00:08:45.680
+Jika aplikasi Anda membaca konfigurasi dari konfigurasi aplikasi Azure,
+
+00:08:45.940 --> 00:08:47.860
+agen AI Anda dapat memperiksa nilai-nilai tersebut,
+
+00:08:47.980 --> 00:08:48.560
+memperbaruinya,
+
+00:08:48.700 --> 00:08:50.960
+dan meverifikasi perubahan semuanya melalui percakapan,
+
+00:08:51.180 --> 00:08:52.020
+semuanya melalui percakap.
+
+00:08:52.020 --> 00:08:53.180
+Dan bukan hanya layanan,
+
+00:08:53.320 --> 00:08:57.020
+Azure CLI dan Azure Developer CLI AZD juga diekspos sebagai alat.
+
+00:08:57.020 --> 00:09:00.280
+Itu berarti agen AI Anda dapat menjalankan perintah Azure secara langsung.
+
+00:09:00.980 --> 00:09:02.140
+Ia dapat menyediakan sumber daya,
+
+00:09:02.240 --> 00:09:03.000
+menyebarkan aplikasi,
+
+00:09:03.100 --> 00:09:04.040
+mengelola infrastruktur,
+
+00:09:04.480 --> 00:09:06.060
+perintah yang sama yang Anda ketik di terminal,
+
+00:09:06.340 --> 00:09:08.420
+tetapi dipicu oleh bahasa alami melalui asisten AI.
+
+00:09:09.320 --> 00:09:13.960
+Artinya dalam prakteknya adalah bahwa satu MCP dapat menggantikan lusinan SDK dan panggilan API.
+
+00:09:14.960 --> 00:09:17.100
+Anda tidak perlu menginstall Azure Storage SDK,
+
+00:09:17.100 --> 00:09:18.100
+Cosmos DB SDK,
+
+00:09:18.300 --> 00:09:18.940
+monitor SDK,
+
+00:09:19.120 --> 00:09:21.060
+dan mempelajari tiga pola autentikasi yang berbeda.
+
+00:09:21.480 --> 00:09:22.900
+Anda menginstall satu server MCP,
+
+00:09:23.080 --> 00:09:23.800
+mengautentikasi sekali,
+
+00:09:24.140 --> 00:09:26.400
+dan semua kemampuan tersebut tersedia melalui satu antarmuka.
+
+00:09:26.400 --> 00:09:28.640
+Pikirkan tentang skenario pemecahan masalah yang umum.
+
+00:09:29.280 --> 00:09:30.460
+Aplikasi Anda memunculkan kesalahan.
+
+00:09:30.960 --> 00:09:32.020
+Anda perlu memeriksa log,
+
+00:09:32.120 --> 00:09:32.960
+melihat konfigurasi,
+
+00:09:33.260 --> 00:09:35.200
+memverifikasi akun penyimpanan dapat diakses,
+
+00:09:35.280 --> 00:09:36.400
+dan memeriksa koneksi basis data.
+
+00:09:36.800 --> 00:09:37.460
+Sebelum MCP,
+
+00:09:37.640 --> 00:09:38.680
+ada empat alat yang berbeda,
+
+00:09:38.760 --> 00:09:39.500
+empat login yang berbeda,
+
+00:09:39.560 --> 00:09:41.040
+empat cara berbeda untuk mendapatkan informasi.
+
+00:09:41.680 --> 00:09:43.800
+Dengan server Azure MCP itu adalah satu percakapan.
+
+00:09:44.480 --> 00:09:45.280
+Tunjukkan kesalahannya,
+
+00:09:45.280 --> 00:09:46.320
+periksa konfigurasi saya,
+
+00:09:46.420 --> 00:09:47.340
+verifikasi penyimpanan saya,
+
+00:09:47.440 --> 00:09:48.460
+dan uji koneksi basis data saya.
+
+00:09:48.900 --> 00:09:49.920
+Server menangani semuanya.
+
+00:09:50.660 --> 00:09:51.440
+Cara kerjanya sebenarnya.
+
+00:09:52.000 --> 00:09:52.640
+Mari kita lebih dalam.
+
+00:09:52.640 --> 00:09:54.700
+Bagaimana cara kerjanya di balik layan?
+
+00:09:55.340 --> 00:09:56.700
+Autentikasi menggunakan Entra ID,
+
+00:09:56.960 --> 00:09:58.400
+yaitu Azure Active Directory Anda,
+
+00:09:58.640 --> 00:10:00.000
+melalui Azure Identity Library.
+
+00:10:00.740 --> 00:10:02.360
+Saat agen AI Anda membuat permintaan,
+
+00:10:02.440 --> 00:10:04.460
+ia mengautentikasi menggunakan identitas Azure Anda.
+
+00:10:05.080 --> 00:10:06.500
+Kredensial yang sama yang Anda gunakan
+
+00:10:06.500 --> 00:10:07.460
+untuk masuk ke portal Azure,
+
+00:10:07.580 --> 00:10:08.560
+tidak ada kunci api terpisah,
+
+00:10:08.640 --> 00:10:09.600
+tidak ada akun layan bersama,
+
+00:10:09.720 --> 00:10:10.320
+hanya identitas Anda.
+
+00:10:10.660 --> 00:10:11.880
+Anggap saja seperti meja resepsi,
+
+00:10:12.100 --> 00:10:14.180
+server memeriksa ID Anda sebelum mengizinkan Anda masuk.
+
+00:10:14.700 --> 00:10:16.560
+Sekarang otorisasi menghormati Azure RBAC,
+
+00:10:17.000 --> 00:10:18.200
+kontrol akses berbasis peran.
+
+00:10:19.060 --> 00:10:20.960
+Server MCP tidak memberikan izin baru apapun.
+
+00:10:20.960 --> 00:10:23.940
+Server hanya mengizinkan apa yang sudah diizinkan oleh akun Anda.
+
+00:10:24.460 --> 00:10:26.420
+Jika Anda dapat membaca akun penyimpanan di portal,
+
+00:10:26.600 --> 00:10:27.940
+server MCP dapat membacanya.
+
+00:10:28.480 --> 00:10:29.620
+Jika Anda dapat menghapus basis data,
+
+00:10:29.720 --> 00:10:31.100
+server MCP juga tidak dapat melakukannya.
+
+00:10:31.500 --> 00:10:33.400
+Server MCP mewarisi model keamanan Azure yang sudah.
+
+00:10:33.640 --> 00:10:34.700
+Server MCP tidak menambahkan serangan.
+
+00:10:35.060 --> 00:10:37.720
+Jadi, jika Anda sudah mercayai Azure untuk menjalankan aplikasi Anda,
+
+00:10:37.800 --> 00:10:39.120
+Anda sudah mercayai model keamanan di sini.
+
+00:10:39.580 --> 00:10:40.860
+Untuk transportasi, ada dua opsi.
+
+00:10:41.400 --> 00:10:43.780
+HTTP yang dapat dialirkan untuk koneksi jarak jauh,
+
+00:10:43.780 --> 00:10:46.620
+saat asisten AI Anda berjalan di cloud atau di komputer lain,
+
+00:10:46.840 --> 00:10:48.540
+dan SDDO untuk pengembangan lokal
+
+00:10:48.540 --> 00:10:50.660
+saat Anda menjalankan semuanya di komputer Anda sendiri.
+
+00:10:51.200 --> 00:10:52.860
+Opsi HTTP yang dapat dialirkan adalah
+
+00:10:52.860 --> 00:10:54.780
+yang direkomendasikan Microsoft untuk produksi
+
+00:10:54.780 --> 00:10:57.000
+karena berfungsi baik dengan penyeimbang beban dan proksi.
+
+00:10:57.780 --> 00:10:59.800
+Anggap saja seperti panggilan telepon untuk jarak jauh
+
+00:10:59.800 --> 00:11:00.900
+dan percakapan langsung untuk log.
+
+00:11:01.420 --> 00:11:02.060
+Asi penting di sini.
+
+00:11:02.760 --> 00:11:04.960
+Server MCP mempertahankan status selama percakapan.
+
+00:11:05.600 --> 00:11:07.300
+Jadi, saat agen Anda mengajukan pertanyaan,
+
+00:11:07.340 --> 00:11:09.260
+mendapat jawaban, lalu mengajukan pertanyaan lanjutan,
+
+00:11:09.440 --> 00:11:11.080
+server mengingat apa yang terjadi sebelumnya.
+
+00:11:11.700 --> 00:11:12.780
+Alat dapat dibuat berdasarkan mengenai.
+
+00:11:12.960 --> 00:11:14.460
+Anda dapat meminta log,
+
+00:11:14.820 --> 00:11:15.740
+mengidentifikasi masalah,
+
+00:11:16.040 --> 00:11:16.640
+membuat perbaikan,
+
+00:11:17.000 --> 00:11:18.780
+dan menyebarkannya semuanya dalam satu sesi
+
+00:11:18.780 --> 00:11:20.000
+tanpa kehilangan konteks.
+
+00:11:20.000 --> 00:11:21.920
+Ini seperti mengobrol sambil minum kopi
+
+00:11:21.920 --> 00:11:23.080
+dan melanjutkan dari tempat amat tinggal.
+
+00:11:23.500 --> 00:11:25.440
+Server menggunakan Azure SDK di balik layar
+
+00:11:25.440 --> 00:11:26.900
+yang berarti ia mewarisi semua logika
+
+00:11:26.900 --> 00:11:28.520
+coba lagi bawaan dan penanganan kesalahan
+
+00:11:28.520 --> 00:11:29.600
+yang disediakan SDK tersebut.
+
+00:11:30.020 --> 00:11:32.020
+Jika permintaan gagal karena masalah jaringan sementara,
+
+00:11:32.120 --> 00:11:33.680
+permintaan akan dicoba lagi secara otomatis.
+
+00:11:34.140 --> 00:11:35.200
+Jika layanan tidak tersedia,
+
+00:11:35.440 --> 00:11:37.000
+layanan tersebut akan menangani kesalahan dengan baik.
+
+00:11:37.300 --> 00:11:38.420
+Anda tidak perlu menulisnya sendiri.
+
+00:11:39.080 --> 00:11:40.000
+Layanan tersebut sudah ada di dalam.
+
+00:11:40.340 --> 00:11:42.080
+Sekarang, model keamanan menggunakan sesuatu
+
+00:11:42.080 --> 00:11:43.420
+yang disebut atas nama autentikasi,
+
+00:11:43.560 --> 00:11:44.560
+atau OBO, yang penting.
+
+00:11:44.560 --> 00:11:47.300
+Saat agen AI Anda memanggil suatu alat,
+
+00:11:47.420 --> 00:11:50.200
+server MCP meneruskan identitas Anda ke layanan hilir.
+
+00:11:51.060 --> 00:11:52.620
+Akun penyimpanan melihat identitas Anda,
+
+00:11:52.780 --> 00:11:53.640
+bukan identitas server.
+
+00:11:54.400 --> 00:11:55.940
+Basis data melihat identitas Anda,
+
+00:11:56.080 --> 00:11:57.220
+bukan akun layanan bersama.
+
+00:11:57.800 --> 00:11:59.660
+Ini berarti setiap tindakan dapat dikaitkan dengan Anda.
+
+00:12:00.120 --> 00:12:01.520
+Setiap log audit menunjukkan siapa yang melakukan.
+
+00:12:01.940 --> 00:12:04.060
+Tidak ada akun layanan anonim yang melakukan hal yang tidak dapat dilacak.
+
+00:12:04.060 --> 00:12:05.820
+Server berkata saya di sini atas nama Miro.
+
+00:12:06.320 --> 00:12:07.920
+Dan layanan tersebut melihat Anda, bukan server.
+
+00:12:08.900 --> 00:12:10.700
+Untuk perusahaan yang membutuhkan kontrol lebih,
+
+00:12:10.980 --> 00:12:13.620
+Anda dapat menggunakan Azure API Management di server MCP.
+
+00:12:14.000 --> 00:12:15.540
+Ini memberi Anda kebijakan tetap kelola,
+
+00:12:15.680 --> 00:12:16.980
+pembatasan tarif, jejak audit,
+
+00:12:17.320 --> 00:12:19.000
+dan peneliksaan keamanan konten di lapisan protokol.
+
+00:12:19.400 --> 00:12:20.980
+Anda dapat mengontrol alat mana yang tersedia,
+
+00:12:21.320 --> 00:12:22.800
+siapa yang dapat menggunakannya, dan seberapa selesai.
+
+00:12:23.020 --> 00:12:24.920
+Ini adalah manajemen API yang sama yang sudah Anda gunakan
+
+00:12:24.920 --> 00:12:27.320
+untuk APRS Anda yang sekarang diterapkan ke alat MCP.
+
+00:12:27.960 --> 00:12:28.820
+Berikut inti pembahasannya.
+
+00:12:29.240 --> 00:12:31.880
+Server Azure MCP tidak menciptakan mekanisme keamanan baru
+
+00:12:31.880 --> 00:12:33.840
+yang menggunakan mekanisme yang sudah dimiliki Azure.
+
+00:12:34.200 --> 00:12:35.480
+Entra ID untuk autentikasi,
+
+00:12:35.720 --> 00:12:37.800
+RPC untuk otorisasi, SDK untuk keandalan,
+
+00:12:38.020 --> 00:12:39.380
+manajemen API untuk tata kelola.
+
+00:12:40.260 --> 00:12:42.680
+Jika Anda sudah mercayai Azure untuk menjalankan aplikasi Anda,
+
+00:12:42.780 --> 00:12:45.280
+berarti Anda sudah mercayai model keamanan yang digunakan server MCP.
+
+00:12:45.940 --> 00:12:46.960
+Contoh dunia nyata dalam tim.
+
+00:12:47.460 --> 00:12:49.360
+Mari kita buat ini nyata dengan contoh yang benar-benar Anda teman.
+
+00:12:49.820 --> 00:12:51.920
+Bayangkan Anda menjalankan aplikasi kontender di Azure.
+
+00:12:52.300 --> 00:12:54.540
+Anda membuka URL dan mendapatkan kesalahan 404.
+
+00:12:54.720 --> 00:12:55.640
+Aplikasi tidak dapat dimulai.
+
+00:12:55.640 --> 00:12:58.200
+Portal Azure menunjukkan kesalahan aktifasi tetapi tidak dapat.
+
+00:12:58.560 --> 00:12:59.960
+Tidak ada yang membuat. Anda terjebut.
+
+00:13:00.960 --> 00:13:02.180
+Cara lama menangan ini menyakitkan.
+
+00:13:02.580 --> 00:13:03.240
+Anda membuka portal.
+
+00:13:03.240 --> 00:13:04.880
+Anda menggali pengaturan aplikasi konten.
+
+00:13:05.420 --> 00:13:06.240
+Anda meriksa log penuh.
+
+00:13:06.880 --> 00:13:09.420
+Anda menulis perintah CLE untuk menarik informasi diagnostik.
+
+00:13:09.880 --> 00:13:11.920
+Anda membandingkan file konfigurasi antar lingkungan.
+
+00:13:12.660 --> 00:13:15.780
+Anda menelusuri urutan startup secara manual untuk mencari tahu apa yang rusak.
+
+00:13:16.360 --> 00:13:17.120
+Ini melakukan berjam-jam.
+
+00:13:17.620 --> 00:13:19.280
+Dan diasumsikan Anda sudah tahu apa yang harus dicari.
+
+00:13:19.740 --> 00:13:22.220
+Dengan server Azure MCP, pengalamannya benar-benar beda.
+
+00:13:22.340 --> 00:13:24.020
+Anda menyalin pesan kesalahan,
+
+00:13:24.240 --> 00:13:25.180
+melempelkannya ke kopilot,
+
+00:13:25.300 --> 00:13:26.560
+mengaktifkan alat Azure MCP,
+
+00:13:26.620 --> 00:13:27.980
+dan membiarkan agen melakukan diagnosis.
+
+00:13:28.280 --> 00:13:28.560
+Itu saja.
+
+00:13:29.020 --> 00:13:30.260
+Agen membaca file proyek Anda,
+
+00:13:30.260 --> 00:13:31.580
+melihat pengaturan aplikasi Anda,
+
+00:13:31.980 --> 00:13:33.380
+memeriksa konfigurasi aplikasi konten,
+
+00:13:33.440 --> 00:13:35.080
+dan mengidentifikasi masalahnya.
+
+00:13:35.340 --> 00:13:38.260
+String koneksi konfigurasi aplikasi Azure Anda adalah nilai placeholder.
+
+00:13:38.580 --> 00:13:39.900
+Itu tidak pernah dikonfigurasi untuk proyek.
+
+00:13:40.200 --> 00:13:41.740
+Ketika aplikasi konten mencoba mulai,
+
+00:13:41.900 --> 00:13:43.680
+ia tidak dapat terhubung ke konfigurasi aplikasi,
+
+00:13:43.820 --> 00:13:44.720
+munculkan pengecualian,
+
+00:13:44.900 --> 00:13:45.500
+dan gagal mulai.
+
+00:13:45.500 --> 00:13:47.060
+Agen tidak hanya menemukan masalahnya,
+
+00:13:47.160 --> 00:13:48.260
+tetapi juga mengusulkan perbaikan.
+
+00:13:48.620 --> 00:13:50.580
+Buat penyimpanan konfigurasi aplikasi yang sebenarnya
+
+00:13:50.580 --> 00:13:52.600
+tetapkan variabel lingkungan dalam aplikasi konten,
+
+00:13:52.740 --> 00:13:54.620
+perbarui kode untuk membaca dari variabel lingkungan
+
+00:13:54.620 --> 00:13:56.620
+alih-alih placeholder yang dikodekan secara permanen,
+
+00:13:56.880 --> 00:13:57.440
+terapkan ulang,
+
+00:13:57.520 --> 00:13:59.180
+dan agen memandu Anda melalui setiap langkah,
+
+00:13:59.340 --> 00:14:00.560
+meminta izin sebelum membuat perubahan.
+
+00:14:00.820 --> 00:14:01.860
+Disinilah hal itu menjadi musam.
+
+00:14:02.360 --> 00:14:05.020
+Agen mengatur beberapa operasi Azure secara berurutan.
+
+00:14:05.640 --> 00:14:07.000
+Agen meminta Azure Resource Graph
+
+00:14:07.000 --> 00:14:09.300
+untuk menemukan aplikasi konten yang terkait dengan proyek Anda.
+
+00:14:09.500 --> 00:14:11.360
+Agen mengidentifikasi grup sumber daya.
+
+00:14:11.360 --> 00:14:14.040
+Agen membuat penyimpanan konfigurasi aplikasi dalam grup yang sama.
+
+00:14:14.540 --> 00:14:17.360
+Agen memperbarui aplikasi konten dengan variabel lingkungan baru.
+
+00:14:17.820 --> 00:14:19.100
+Ia membuat perubahan kode dalam proyek Anda.
+
+00:14:19.680 --> 00:14:20.380
+Ia memulai penerapan.
+
+00:14:21.080 --> 00:14:22.760
+Lalu ia memverifikasi titik akhir berfungsi.
+
+00:14:23.040 --> 00:14:23.640
+Seluruh beberapa menit,
+
+00:14:24.260 --> 00:14:25.820
+Agen menangani setiap operasi Azure,
+
+00:14:26.100 --> 00:14:27.040
+membaca sumber daya,
+
+00:14:27.180 --> 00:14:27.780
+membuat yang baru,
+
+00:14:27.980 --> 00:14:28.940
+memperbarui konfigurasi,
+
+00:14:29.200 --> 00:14:29.940
+memicu penerapan,
+
+00:14:30.160 --> 00:14:31.020
+memverifikasi hasil.
+
+00:14:31.500 --> 00:14:32.880
+Anda tidak menulis ataupun perintah jeli.
+
+00:14:33.280 --> 00:14:34.380
+Anda tidak menafigasi portal.
+
+00:14:34.380 --> 00:14:36.320
+Anda hanya menjelaskan masalah dan menjelaskan langkah.
+
+00:14:36.940 --> 00:14:38.900
+Artinya bagi Anda adalah pemecahan masalah
+
+00:14:38.900 --> 00:14:40.140
+yang rumit menjadi percakapan,
+
+00:14:40.380 --> 00:14:41.220
+bukan proses manual.
+
+00:14:42.180 --> 00:14:43.480
+Anda tidak perlu menjadi pakar Azure
+
+00:14:43.480 --> 00:14:44.920
+untuk meniagnosis dan memperbaiki masalah.
+
+00:14:45.320 --> 00:14:46.200
+Agen memberikan keahlian,
+
+00:14:46.320 --> 00:14:48.020
+Anda memberikan konteks dan persetujuan.
+
+00:14:48.520 --> 00:14:50.100
+Dan Anda dapat mencobanya sendiri dengan aplikasi.
+
+00:14:50.280 --> 00:14:51.760
+Anda tidak memerlukan izin khusus.
+
+00:14:51.980 --> 00:14:52.960
+Anda tidak perlu menjadi pengembang.
+
+00:14:53.720 --> 00:14:55.220
+Anda hanya memerlukan langgana asisten AI
+
+00:14:55.220 --> 00:14:56.400
+yang kompatibel dengan MCP.
+
+00:14:57.520 --> 00:14:58.480
+Bagaimana semuanya terhubung?
+
+00:14:58.680 --> 00:14:59.100
+Gambaran besar.
+
+00:14:59.400 --> 00:15:00.820
+Jadi sekarang Anda memahami bagian-bagian.
+
+00:15:00.900 --> 00:15:02.480
+MCP adalah protokol standar.
+
+00:15:02.880 --> 00:15:05.100
+Server Azure MCP adalah implementasi Microsoft.
+
+00:15:05.520 --> 00:15:07.540
+Dan layanan Azure adalah alat yang terhubung dengan ini.
+
+00:15:07.540 --> 00:15:09.700
+Namun nilai sebenarnya bukanlah bagian tunggal.
+
+00:15:10.400 --> 00:15:11.980
+Semuanya bekerja bersama melalui satu protokol.
+
+00:15:12.380 --> 00:15:13.240
+Seperti apa praktiknya?
+
+00:15:13.660 --> 00:15:16.160
+Bayangkan satu agen yang dapat meminta log monitor Azure
+
+00:15:16.160 --> 00:15:18.220
+memeriksa pengaturan konfigurasi aplikasi,
+
+00:15:18.320 --> 00:15:19.100
+membuat sumber daya baru,
+
+00:15:19.180 --> 00:15:21.380
+dan menyebarkan kode yang diperbarui semuanya dalam satu sesi.
+
+00:15:21.600 --> 00:15:22.800
+Itu bukan empat integrasi terpisah.
+
+00:15:23.320 --> 00:15:25.980
+Itu satu server MCP yang melakukan empat hal secara berurutan
+
+00:15:25.980 --> 00:15:27.920
+dengan konteks yang dibawa melalui setiap langkah.
+
+00:15:28.420 --> 00:15:30.500
+Output dari satu alat menjadi input untuk alat berikutnya.
+
+00:15:31.200 --> 00:15:32.760
+Status sesi membuat semuanya tetap terhubung.
+
+00:15:32.880 --> 00:15:35.200
+Ini menciptakan efek interaksi yang tidak Anda dapatkan
+
+00:15:35.200 --> 00:15:36.120
+dengan alat yang terisolasi.
+
+00:15:36.120 --> 00:15:38.840
+Agen membaca log, menemukan masalah konfigurasi,
+
+00:15:38.940 --> 00:15:40.820
+membuat perbaikan, dan menyebarkannya tanpa Anda harus
+
+00:15:40.820 --> 00:15:43.180
+menyalin informasi secara manual di antara langkah-langkah.
+
+00:15:44.060 --> 00:15:44.940
+Efek jaringan juga berlaku.
+
+00:15:45.540 --> 00:15:47.100
+Saat lebih banyak server MCP dibangun,
+
+00:15:47.220 --> 00:15:49.660
+setiap asisten AE mendapatkan akses ke lebih banyak kemampuan.
+
+00:15:50.400 --> 00:15:51.720
+Microsoft telah memiliki server MCP
+
+00:15:51.720 --> 00:15:53.820
+untuk Azure DevOps, Playwright, dan pemrosesan dokumen.
+
+00:15:54.620 --> 00:15:55.740
+Pihak ketiga juga membangunnya.
+
+00:15:56.080 --> 00:15:57.300
+Setiap server baru menambahkan alat
+
+00:15:57.300 --> 00:15:59.360
+yang dapat digunakan oleh agen yang kompatibel dengan MCP.
+
+00:15:59.820 --> 00:16:02.220
+Ekosistem tumbuh lebih berharga dengan setiap server yang ditambahkan.
+
+00:16:02.220 --> 00:16:04.080
+Sekarang mari kita lihat ke mana arahnya.
+
+00:16:04.600 --> 00:16:07.840
+Server Azure MCP sudah terintegrasi ke dalam Visual Studio 2026.
+
+00:16:08.340 --> 00:16:10.700
+Server Azure DevOps MCP sudah tersedia secara umum.
+
+00:16:11.480 --> 00:16:13.340
+Azure IP Management kini mendukung MCP
+
+00:16:13.340 --> 00:16:15.980
+sehingga perusahaan dapat mengatur dan mengamankan alat MCP mereka
+
+00:16:15.980 --> 00:16:17.800
+dengan cara yang sama seperti mereka mengatur IP mereka.
+
+00:16:18.220 --> 00:16:21.800
+Microsoft juga mengumumkan Agent Orchestrator di Build 2026.
+
+00:16:22.300 --> 00:16:24.440
+Layanan terkelolai yang menangani penyeimbangan beban,
+
+00:16:24.440 --> 00:16:27.000
+pemantauan kesehatan, dan atribusi biaya di ribuan agen.
+
+00:16:27.000 --> 00:16:31.540
+Pengguna awal melihat pengurangan biaya komputasi per agen sebesar 30 hingga 45 persen
+
+00:16:31.540 --> 00:16:32.900
+lalui perutean model yang jelas.
+
+00:16:33.380 --> 00:16:34.180
+Gambaran besar yang jelas.
+
+00:16:34.720 --> 00:16:37.180
+MCP menjadi lapisan integrasi universal untuk AI.
+
+00:16:37.840 --> 00:16:40.500
+Dan server Azure MCP adalah jalan masuk bagi pengguna Azure.
+
+00:16:41.200 --> 00:16:44.200
+Organisasi yang mengadopsi MCP sekarang akan dapat terhubung ke platform AI
+
+00:16:44.200 --> 00:16:46.300
+manapun tanpa membangun kembali integrasi mereka.
+
+00:16:47.380 --> 00:16:49.040
+Alat, data, model keamanan Anda,
+
+00:16:49.040 --> 00:16:52.840
+semuanya dapat diakses melalui satu protokol dari asisten AI manapun yang menggunakannya.
+
+00:16:53.720 --> 00:16:54.980
+Itulah pengetahuan penting untuk hari ini.
+
+00:16:54.980 --> 00:16:58.240
+MCP memberi agen AI cara standar untuk berbicara dengan alat
+
+00:16:58.240 --> 00:17:01.640
+dan server Azure MCP memberi mereka akses ke seluruh lingkungan Azure Anda.
+
+00:17:02.400 --> 00:17:03.780
+Jika Anda membangun dengan AI di Azure,
+
+00:17:03.900 --> 00:17:05.100
+mulailah menjelajahi MCP hari ini.
+
+00:17:05.560 --> 00:17:07.320
+Berlanggananlah di platform podcast favorit Anda
+
+00:17:07.320 --> 00:17:09.300
+dan bagikan ini dengan seseorang yang memulai perjalanan mereka.
+
+00:17:09.580 --> 00:17:10.660
+Berikan komentar jika ada yang menarik.
+
+00:17:11.060 --> 00:17:11.720
+Saya membaca semuanya.
+
+00:17:12.480 --> 00:17:15.420
+Saya Mirko Peters dan ini adalah episode lain dari Microsoft Knowledge Nuggets.
+
+00:17:15.420 --> 00:17:16.840
+Terima kasih.

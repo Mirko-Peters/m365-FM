@@ -1,0 +1,979 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.320
+El tema de hoy es algo de lo que casi todos han oído hablar, pero pocos pueden explicar con claridad.
+
+00:00:03.860 --> 00:00:08.220
+MSP. Probablemente lo has visto mencionado como el HTTP para agentes de IA, pero ¿qué significa realmente?
+
+00:00:08.840 --> 00:00:15.140
+Al final de este episodio entenderás qué es MSP, qué hace el servidor Azure MSP y por qué es importante para cómo las herramientas de IA se conectan a tus datos.
+
+00:00:15.640 --> 00:00:23.080
+Lo dividiremos en los componentes principales, empezando por el panorama general, luego el protocolo en sí, después la implementación de Microsoft y, finalmente, un ejemplo real que puedes usar.
+
+00:00:24.100 --> 00:00:25.920
+Panorama general. ¿Por qué esto es importante ahora?
+
+00:00:26.360 --> 00:00:27.700
+Sí que esta es la situación en la que vamos a dar lo mismo.
+
+00:00:27.700 --> 00:00:33.520
+Todo el mundo está creando agentes de IA. No solo las empresas tecnológicas, sino bancos, hospitales, fabricantes e incluso pequeñas empresas.
+
+00:00:34.020 --> 00:00:38.780
+Todos intentan crear asistentes de IA que realmente puedan hacer cosas. No solo responder preguntas, sino tomar medidas reales.
+
+00:00:39.240 --> 00:00:42.660
+Actualizar un registro, revisar el inventario, implementar código o reparar un servidor averiado.
+
+00:00:43.300 --> 00:00:51.800
+Y aquí es donde aparece el problema. Estos agentes necesitan conectarse herramientas reales y datos reales, bases de datos, cuentas de almacenamiento, sistemas de tickets, plataformas CRM.
+
+00:00:51.800 --> 00:00:58.140
+La forma en que la mayoría de la gente hace esto en día de hoy. Escribe un código de integración personalizado para cada herramienta, cada app y cada fuente de datos.
+
+00:00:58.600 --> 00:01:02.140
+Un conector para la base de datos, otro para el almacenamiento de archivos, un tercero para el sistema móvil.
+
+00:01:02.420 --> 00:01:07.760
+Cada uno necesita su propia autenticación, su propio manejo de errores y su propia forma de formatear solicitudes y respuestas.
+
+00:01:08.340 --> 00:01:10.640
+Este enfoque es frágil, requiere mucho tiempo y no es escalable.
+
+00:01:10.640 --> 00:01:15.320
+Cada asistente de IA que construye necesita su propio montón de código de conexión por hablar con los servicios que necesita.
+
+00:01:15.760 --> 00:01:18.980
+Si cambias de una plataforma de IA a otra, tienes que reconstruir todo desde cero.
+
+00:01:19.440 --> 00:01:21.980
+La mayoría de las demostraciones de IA que ves funcionan muy bien de forma islam.
+
+00:01:22.320 --> 00:01:27.760
+Responden preguntas, generan texto, se ven impresionantes, pero en el momento en que necesitan tocar un sistema real, se desmorona.
+
+00:01:28.020 --> 00:01:29.060
+Ahí es donde reside la complejidad.
+
+00:01:29.620 --> 00:01:33.080
+MSP cambia esto. Lea la IA una forma estándar de buscar y obtener lo que necesita.
+
+00:01:33.740 --> 00:01:35.840
+Un protocolo, una forma de hablar con las herramientas.
+
+00:01:36.500 --> 00:01:39.640
+Cualquier asistente de IA que hable MSP puede usar cualquier servidor MSP.
+
+00:01:39.640 --> 00:01:46.140
+Es como la diferencia entre tener un control remoto separado para cada dispositivo en tu casa frente a un control remoto universal que funciona con todo.
+
+00:01:47.160 --> 00:01:48.740
+Así que comencemos con la definición más sencilla.
+
+00:01:49.400 --> 00:01:50.800
+¿Qué es MSP, el protocolo explicado?
+
+00:01:51.460 --> 00:01:53.680
+Exactamente MSP. Déjame explicarlo de forma sencilla.
+
+00:01:54.100 --> 00:02:01.200
+MCP significa Model Context Protocol, protocolo de contexto de modelo, y es un estándar abierto que indica a los agentes de IA cómo hablar con herramientas externas, APIs y fuentes de datos.
+
+00:02:01.840 --> 00:02:03.300
+Piénsalo como un lenguaje común para la IA.
+
+00:02:03.680 --> 00:02:07.880
+Antes de MCP, cada asistente de IA tenía que aprender un lenguaje diferente para cada herramienta que quisiera usar.
+
+00:02:07.880 --> 00:02:13.440
+MSP dice, pongámonos de acuerdo en un solo lenguaje y luego cada herramienta solo tendrá que hablar ese idioma.
+
+00:02:14.160 --> 00:02:19.500
+Internamente, se basa en JSON-RPC 2.0, un formato de mensaje sencillo para enviar solicitudes y obtener respuestas.
+
+00:02:20.040 --> 00:02:21.520
+Nada sofisticado y ha existido por años.
+
+00:02:22.360 --> 00:02:23.820
+Lo que MSP añade por encima es estructura.
+
+00:02:24.360 --> 00:02:27.760
+Define tres cosas clave que un agente de IA puede hacer con cualquier servidor MSP.
+
+00:02:28.160 --> 00:02:29.280
+Herramientas, recursos y prompts.
+
+00:02:29.280 --> 00:02:33.480
+Las herramientas son acciones que la IA puede realizar, como crear un registro o una consulta.
+
+00:02:34.080 --> 00:02:38.200
+Los recursos son piezas de datos que la IA puede leer, como un perfil de cliente o un archivo de registro.
+
+00:02:38.560 --> 00:02:42.160
+Y los prompts son plantillas que guían cómo debe comportarse la IA en ciertas situaciones.
+
+00:02:42.760 --> 00:02:43.640
+Aquí tienes la forma más sencilla.
+
+00:02:44.160 --> 00:02:46.060
+Imagina que tienes un control remoto universal.
+
+00:02:46.580 --> 00:02:49.400
+Ese control puede comunicarse con tu televisor, tu sistema de sonido, tu caja streaming.
+
+00:02:49.840 --> 00:02:51.080
+Un control muchos dispositivos.
+
+00:02:51.420 --> 00:02:53.040
+MSP es ese control remoto para agentes de IA.
+
+00:02:53.460 --> 00:02:54.560
+Protocolo muchas herramientas.
+
+00:02:54.560 --> 00:03:00.160
+Construyes un servidor MSP que expone tus herramientas y datos y cualquier agente de IA compatible con MSP puede usarlo.
+
+00:03:00.840 --> 00:03:04.840
+GitHub Copilot, Cloud, ChatGPT, agentes personalizados, todos hablan del mismo protocolo.
+
+00:03:05.320 --> 00:03:06.800
+Y esto no es algo exclusivo de Microsoft.
+
+00:03:07.560 --> 00:03:10.300
+MCP fue creado originalmente por Anthropic, la empresa detrás de Cloud,
+
+00:03:10.700 --> 00:03:13.500
+pero ha sido adoptado por OpenAI, Google, Microsoft y muchos otros.
+
+00:03:13.980 --> 00:03:17.280
+Se está convirtiendo en la forma estándar para que los agentes de IA se conecten al mundo exterior.
+
+00:03:17.860 --> 00:03:20.660
+No es un encierro con proveedores, sino un estándar abierto que todos pueden usar.
+
+00:03:21.360 --> 00:03:22.520
+El problema que resuelve MSP.
+
+00:03:22.520 --> 00:03:27.360
+Si es como se hacían las cosas antes de MSP, cada integración de IA era un proyecto personalizado.
+
+00:03:27.800 --> 00:03:30.860
+Digamos que quieres que tu asistente de IA verifique los niveles de inventario en tu base de datos.
+
+00:03:31.380 --> 00:03:31.620
+Genial.
+
+00:03:31.940 --> 00:03:32.880
+Ahora tienes que escribir código.
+
+00:03:33.320 --> 00:03:34.500
+Necesitas resolver la autenticación.
+
+00:03:34.960 --> 00:03:36.800
+¿Cómo demuestra la IA que tiene permiso para leer esos datos?
+
+00:03:37.360 --> 00:03:38.360
+Necesitas manejar errores.
+
+00:03:39.020 --> 00:03:40.320
+¿Qué sucede cuando la base de datos no funciona?
+
+00:03:40.720 --> 00:03:41.820
+Necesitas dar formato a la respuesta.
+
+00:03:42.200 --> 00:03:45.220
+¿Cómo se convierte la salida a la base de datos en algo que la IA pueda entender?
+
+00:03:46.080 --> 00:03:48.240
+Semanas de desarrollo por una conexión a una base de datos.
+
+00:03:48.660 --> 00:03:49.520
+Eso es impuesto a integración.
+
+00:03:49.520 --> 00:03:52.500
+Un asistente de IA, una base de datos, semanas de trabajo.
+
+00:03:53.060 --> 00:03:55.360
+Ahora, multiplica eso por cada herramienta que tu día necesite tocar.
+
+00:03:55.720 --> 00:03:58.480
+El sistema de tickets, el almacenamiento de archivos, los registros de monitoreo.
+
+00:03:59.360 --> 00:04:03.440
+Cada uno requiere su propio código personalizado, su propio patrón de autenticación, su propio manejo de errores.
+
+00:04:03.640 --> 00:04:05.240
+Y nada de ese código funciona con otra herramienta.
+
+00:04:05.780 --> 00:04:09.000
+Estás construyendo lo mismo una y otra vez, solo que ligeramente diferente cada uno.
+
+00:04:09.280 --> 00:04:10.120
+Aquí está el problema de seguridad.
+
+00:04:10.120 --> 00:04:12.800
+Cada integración personalizada tiene su propia autenticación.
+
+00:04:13.180 --> 00:04:14.220
+Algunas usan claves API.
+
+00:04:14.520 --> 00:04:16.120
+Otras AUTH, otras certificados.
+
+00:04:16.500 --> 00:04:17.300
+Autenticación básica.
+
+00:04:18.020 --> 00:04:21.980
+Terminas con una docena de formas distintas para tus datos de IA y sin una manera consistente de gobernar.
+
+00:04:22.140 --> 00:04:22.640
+Nada de eso.
+
+00:04:22.980 --> 00:04:23.500
+¿Quién es eso?
+
+00:04:23.720 --> 00:04:24.340
+¿Qué pueden hacer?
+
+00:04:24.740 --> 00:04:25.480
+¿Dónde están los registros?
+
+00:04:25.480 --> 00:04:34.300
+La mayoría de las organizaciones no pueden responder a esas preguntas sobre sus integraciones de IA porque fueron creadas por distintos equipos en momentos distintos y con estándares distintos y con estándares distintos.
+
+00:04:34.440 --> 00:04:35.720
+El problema de la fragmentación es real.
+
+00:04:36.080 --> 00:04:38.380
+Digamos que construyes tu asistente de IA en OpenAI.
+
+00:04:38.740 --> 00:04:41.560
+Escribes todas tus integraciones para el formato de llamadas o funciones de OpenAI.
+
+00:04:42.000 --> 00:04:45.860
+Luego, seis meses después, tu empresa decide cambiar a Cloud o quieres usar ambos.
+
+00:04:46.420 --> 00:04:47.820
+Ahora tienes que reconstruir cada uno de las integraciones.
+
+00:04:48.100 --> 00:04:49.740
+Mismas herramientas, mismos datos, formato diferente.
+
+00:04:50.100 --> 00:04:51.380
+Eso no es progreso, es trabajo innecesario.
+
+00:04:51.640 --> 00:04:52.880
+El costo real aumenta rápidamente.
+
+00:04:52.880 --> 00:04:55.860
+La mayoría de las grandes organizaciones ya ejecutan decenas de agentes de IA.
+
+00:04:56.360 --> 00:04:59.200
+Según IDC, la empresa promedio opera 47 de ellos.
+
+00:04:59.660 --> 00:05:01.720
+Cada uno tiene su propio conjunto de conectores personalizados.
+
+00:05:02.060 --> 00:05:03.480
+Y aquí hay una estadística que podría sorprender.
+
+00:05:03.780 --> 00:05:07.640
+El 68% de los CEO no pueden siquiera informar el gasto total en agentes de IA.
+
+00:05:07.980 --> 00:05:12.200
+No saben cuánto están gastando en estas integraciones porque está disperso entre equipos, proyectos y presupuestos.
+
+00:05:13.100 --> 00:05:14.120
+MCP cambia todo este modelo.
+
+00:05:14.660 --> 00:05:18.480
+En lugar de escribir código a medida para cada herramienta de IA, construyes un servidor MCP.
+
+00:05:19.140 --> 00:05:21.820
+Ese servidor expone tus herramientas y datos a través de una interfaz estándar.
+
+00:05:21.820 --> 00:05:24.080
+Entonces, cualquier agente compatible con MCP usar.
+
+00:05:24.660 --> 00:05:28.060
+Copilot, Cloud, Chat, GPT, agentes personalizados, tus propias herramientas internas.
+
+00:05:28.560 --> 00:05:29.620
+Escribe una vez, usa en todas partes.
+
+00:05:30.020 --> 00:05:30.640
+Ese es el cambio.
+
+00:05:31.060 --> 00:05:32.040
+¿Qué es el servidor MCP de Azure?
+
+00:05:32.500 --> 00:05:34.280
+Bien, ya cubrimos el problema que resuelve MCP.
+
+00:05:34.620 --> 00:05:36.400
+Ahora, hablemos de la respuesta de Microsoft al respecto.
+
+00:05:36.900 --> 00:05:39.700
+El servidor MCP de Azure es la propuesta oficial de Microsoft para MCP.
+
+00:05:40.340 --> 00:05:44.900
+Piénsalo como un puente que permite a los agentes de IA acceder de forma segura a tus recursos de Azure y gestionarlos.
+
+00:05:45.580 --> 00:05:47.480
+Y quiero ser claros sobre lo que esto es realmente.
+
+00:05:47.480 --> 00:05:49.180
+No es un producto independiente que...
+
+00:05:49.180 --> 00:05:50.420
+No es un nuevo servicio de Azure.
+
+00:05:50.940 --> 00:05:55.300
+Es una herramienta o un servidor de código abierto que se sitúa justo entre tu asistente de IA y tu entorno de Azure.
+
+00:05:55.660 --> 00:05:57.340
+Funciona con el modo agente de GitHub Copilot.
+
+00:05:57.680 --> 00:05:58.520
+Funciona con semantic kernel.
+
+00:05:58.880 --> 00:05:59.780
+Funciona con Cloud Desktop.
+
+00:06:00.240 --> 00:06:02.820
+Funciona con cualquier agente MCP personalizado que tú mismo construyas.
+
+00:06:03.380 --> 00:06:05.440
+Cualquier cliente que hable MCP puede conectarse a él.
+
+00:06:06.080 --> 00:06:09.620
+Una vez conectado, ese agente obtiene acceso a tus recursos de Azure mediante lenguaje natural simple.
+
+00:06:10.060 --> 00:06:11.660
+No necesitas conocer la llamada API exacta.
+
+00:06:12.180 --> 00:06:13.480
+No necesitas recordar el método SDK.
+
+00:06:13.480 --> 00:06:15.020
+Simplemente pregunto.
+
+00:06:15.080 --> 00:06:15.880
+Esta es la idea central.
+
+00:06:16.340 --> 00:06:17.560
+Azure tiene docenas de servicios.
+
+00:06:17.920 --> 00:06:20.420
+Almacenamiento, bases de datos, monitoreo, configuración, contenedores.
+
+00:06:20.820 --> 00:06:24.400
+Cada uno viene con su propio SDK, su propia API y su propio patrón de autenticación.
+
+00:06:25.100 --> 00:06:29.940
+El servidor Azure MSP envuelve a todos ellos en una interfaz unificada, un servidor, un protocolo y todas las herramientas.
+
+00:06:30.360 --> 00:06:31.260
+¿Por qué Microsoft creó eso?
+
+00:06:31.540 --> 00:06:34.040
+Porque el problema de la fragmentación es especialmente grave en Azure.
+
+00:06:34.040 --> 00:06:41.040
+Imagina que estás creando un agente de IA que necesita revisar los registros de Azure Monitor, actualizar una configuración de la aplicación y desplegar una nueva versión de contenedor.
+
+00:06:41.580 --> 00:06:46.080
+Eso implica tres SDK distintos, tres flujos de autenticación diferentes y tres formas distintas de manejar errores.
+
+00:06:47.180 --> 00:06:52.100
+El servidor Azure MSP reduce todo eso a una sola sesión, una sola autenticación y una forma de trabajo consistente.
+
+00:06:52.860 --> 00:06:53.960
+Ahora, aquí está la parte importante.
+
+00:06:54.400 --> 00:06:55.480
+Esto no es solo para desarrollador.
+
+00:06:55.480 --> 00:07:01.160
+Sí, los desarrolladores lo usarán, pero el verdadero poder es que permite el control de los recursos de Azure mediante lenguaje natural.
+
+00:07:01.860 --> 00:07:09.380
+Alguien que no conozca PowerShare o la CLI de Azure puede pedirle a su asistente de IA, muéstrame la última hora de errores del servicio de pagos y obtener una respuesta.
+
+00:07:09.800 --> 00:07:16.600
+El servidor MSP maneja la traducción, convierte la solicitud en lenguaje natural en la llamada a la API apropiada, la ejecuta en Azure Monitor y devuelve el resultado.
+
+00:07:17.040 --> 00:07:17.640
+Y devuelve el resultado.
+
+00:07:18.080 --> 00:07:21.520
+Desde hoy, el servidor Azure MSP está integrado en Visual Studio 2026.
+
+00:07:22.240 --> 00:07:23.060
+Es de código abierto en Git.
+
+00:07:23.060 --> 00:07:26.060
+Es mantenido activamente por el equipo del SDK de Azure de Microsoft.
+
+00:07:26.700 --> 00:07:31.100
+Y está en vista previa pública, lo que significa que puedes usarlo ahora mismo, con más capacidades añadidas regularmente.
+
+00:07:31.980 --> 00:07:33.380
+Servicios principales a los que puedes acceder.
+
+00:07:33.740 --> 00:07:35.960
+Entonces, ¿qué puedes hacer realmente con el servidor Azure MSP?
+
+00:07:36.440 --> 00:07:38.060
+Veamos los servicios específicos de lo que puede llegar.
+
+00:07:38.600 --> 00:07:40.800
+La lista está creciendo, pero esto es porque está soportado ahora mismo.
+
+00:07:41.280 --> 00:07:41.880
+Azure Storage.
+
+00:07:42.380 --> 00:07:46.980
+Puedes listar cuentas de almacenamiento, gestionar contenedores de blogs y consultar tablas, todo mediante lenguaje natural.
+
+00:07:47.360 --> 00:07:50.000
+En lugar de escribir un script para revisar tu almacenamiento, solo preguntas.
+
+00:07:50.560 --> 00:07:52.600
+Muéstrame los contenedores en mi cuenta de almacenamiento de producto.
+
+00:07:53.300 --> 00:07:57.020
+Servidor MSP maneja la llamada a la API, formatea la respuesta y te da la respuesta.
+
+00:07:57.640 --> 00:07:58.460
+Azure Cosmos DB.
+
+00:07:58.680 --> 00:07:59.120
+Este es enorme.
+
+00:07:59.660 --> 00:08:03.740
+Puedes consultar bases de datos, gestionar contenedores y ejecutar consultas SQL en tus datos no SQL.
+
+00:08:04.360 --> 00:08:09.160
+Si estás creando un agente de IA que necesita buscar registros de clientes o historiales de pedidos, así es como obtienes esos datos.
+
+00:08:09.560 --> 00:08:13.060
+Sin conectores personalizados, sin código SDK, solo una llamada herramienta a través de MSP.
+
+00:08:13.480 --> 00:08:15.780
+Azure Monitor aquí es donde se muestra el verdadero poder.
+
+00:08:15.780 --> 00:08:21.360
+Puedes consultar registros usando KQL, el lenguaje de consulta a custo, sin escribir ni un solo comando KQL tú mismo.
+
+00:08:21.880 --> 00:08:22.820
+Enumere las áreas de trabajo.
+
+00:08:23.100 --> 00:08:24.220
+Verifique las tablas disponibles.
+
+00:08:24.560 --> 00:08:27.060
+Pregunte, muéstrame los errores de las últimas 24 horas.
+
+00:08:27.220 --> 00:08:31.880
+Y el servidor MCP lo traduce a la consulta correcta, la ejecuta en Log Analytics y devuelve los resultados.
+
+00:08:31.880 --> 00:08:36.440
+Para cualquiera que haya tenido dificultades con la sintaxis KQL, solo esto ya vale la pena.
+
+00:08:37.220 --> 00:08:41.940
+Azure App Configuration le permite gestionar pareja de valor, manejar configuraciones habilitadas y bloquear ajustes.
+
+00:08:42.540 --> 00:08:49.780
+Si su aplicación lee la configuración desde Azure App Configuration, su agente de IA puede verificar esos valores, actualizarlos y confirmar cambios.
+
+00:08:49.940 --> 00:08:51.180
+Todo mediante conversación.
+
+00:08:52.280 --> 00:08:53.460
+Y no se trata solo de servicios.
+
+00:08:53.600 --> 00:08:56.720
+Azure Developers LA y AZD también están expuestos como herramientas.
+
+00:08:57.500 --> 00:09:00.560
+Esto significa que su agente de IA puede ejecutar cualquier comando de Azure CLI directamente.
+
+00:09:00.560 --> 00:09:04.000
+Pueda provisionar recursos, implementar aplicaciones y gestionar infraestructura.
+
+00:09:04.440 --> 00:09:08.460
+Los mismos comandos que escribe en una terminal pero activados por lenguaje natural mediante un asistente de IA.
+
+00:09:09.260 --> 00:09:14.180
+Lo que esto significa en la práctica es que un solo MSP puede reemplazar docenas de SDK y llamadas a API.
+
+00:09:15.160 --> 00:09:20.760
+No necesita instalar el SDK de Azure Storage, el de Cosmos DB o el de Monitor ni aprender tres patrones de autenticación diferentes.
+
+00:09:21.520 --> 00:09:26.360
+Tal un servidor MSP se autentica una vez y todas esas capacidades están disponibles a través de una única interfaz.
+
+00:09:26.880 --> 00:09:28.600
+Piense en un escenario típico de resolución de problema.
+
+00:09:28.880 --> 00:09:30.340
+Su aplicación está lanzando error.
+
+00:09:31.020 --> 00:09:36.340
+Necesita revisar los registros, mirar la configuración, verificar que la cuenta de almacenamiento sea accesible y comprobar la conexión a la base de datos.
+
+00:09:36.840 --> 00:09:40.800
+Antes de MSP eso implicaba cuatro herramientas distintas, cuatro inicios de sesión diferentes y obtener información.
+
+00:09:41.700 --> 00:09:43.920
+Con el servidor Azure MSP es una sola conversación.
+
+00:09:44.540 --> 00:09:48.380
+Muéstrame los errores, verifica mi configuración, comproba mi almacenamiento y proba mi conexión a la base de datos.
+
+00:09:48.940 --> 00:09:49.920
+El servidor se encarga de todo.
+
+00:09:50.540 --> 00:09:51.380
+¿Cómo funciona realmente?
+
+00:09:51.940 --> 00:09:52.700
+Amgo ahí bajo el capo.
+
+00:09:52.700 --> 00:09:54.780
+¿Cómo funciona esto realmente detrás de sí?
+
+00:09:55.200 --> 00:09:59.980
+La autenticación utiliza EntraID, su Azure Active Directory, a través de la biblioteca Azure Identity.
+
+00:10:00.680 --> 00:10:04.380
+Cuando su agente de IA realiza una solicitud, se autentica utilizando su identidad de Azure.
+
+00:10:04.940 --> 00:10:10.300
+Las mismas credenciales que usa para iniciar sesión en el portal de Azure, sin claves API separadas ni cuentas de servicio compartidas, solo su identidad.
+
+00:10:10.780 --> 00:10:11.740
+Piénselo como una recepción.
+
+00:10:12.320 --> 00:10:14.300
+El servidor verifica su identificación antes de dejarlo pasar.
+
+00:10:14.740 --> 00:10:18.180
+Ahora bien, la autorización respeta Azure RBA-C, el control de acceso basado en roles.
+
+00:10:18.900 --> 00:10:20.720
+¿El servidor MSP no otorga nuevos permisos?
+
+00:10:21.700 --> 00:10:23.960
+Solo permite lo que su cuenta ya tiene permiso para hacer.
+
+00:10:24.580 --> 00:10:28.180
+Si puede leer cuentas de almacenamiento en el portal, el servidor MSP puede leerlas.
+
+00:10:28.580 --> 00:10:31.120
+Si usted no puede eliminar bases de datos del servidor MSP, tampoco puede.
+
+00:10:31.560 --> 00:10:33.160
+Hereda el modelo de seguridad existente de Azure.
+
+00:10:33.320 --> 00:10:34.760
+No añade nueva superficie de ataque.
+
+00:10:35.100 --> 00:10:39.200
+Sí que, si ya confías en Azure para ejecutar tus aplicaciones, ya confías en el modelo de seguridad que se usa aquí.
+
+00:10:39.200 --> 00:10:40.620
+Para el transporte hay dos opciones.
+
+00:10:41.500 --> 00:10:43.900
+HTTP transmitible para conexiones remotas.
+
+00:10:44.060 --> 00:10:47.120
+Cuando tu asistente de IA está en la nube de otra máquina, ISTTO.
+
+00:10:47.480 --> 00:10:50.380
+Para desarrollo local, cuando ejecutas todo en tu propio equipo.
+
+00:10:51.180 --> 00:10:56.860
+La opción de HTTP transmitible es la que Microsoft recomienda para producción, porque funciona bien con balanceadores de carga y proxys.
+
+00:10:57.800 --> 00:11:00.880
+Piénsalo como una llamada telefónica para lo remoto y una conversación directa para lo local.
+
+00:11:01.340 --> 00:11:02.200
+Las sesiones son muy importantes.
+
+00:11:02.720 --> 00:11:05.040
+El servidor MSP mantiene un estado durante una conversación.
+
+00:11:05.040 --> 00:11:11.060
+Así, cuando tu agente hace una pregunta, obtiene una respuesta y luego hace una pregunta de seguimiento del servidor, recuerda lo que pasó antes.
+
+00:11:11.700 --> 00:11:13.000
+Las herramientas pueden basarse en pasos previos.
+
+00:11:13.620 --> 00:11:17.240
+Puedes consultar registros, identificar un problema, crear una solución y desplegarla.
+
+00:11:17.300 --> 00:11:19.880
+Todo en una sola sesión, sin perder el contexto.
+
+00:11:20.580 --> 00:11:22.740
+Es como una charla de café donde retomas justo donde te quedaste.
+
+00:11:23.520 --> 00:11:29.340
+El servidor usa SDKs de Azure, lo que significa que hereda toda la lógica de reintento y manejo de errores que proveen esos SDKs.
+
+00:11:29.340 --> 00:11:33.420
+Si una solicitud falla debido a un problema de retransitorio, se reintenta automáticamente.
+
+00:11:33.900 --> 00:11:36.920
+Si un servicio no está disponible, maneja el error de forma elegante.
+
+00:11:37.340 --> 00:11:38.660
+No tienes que escribir nada de eso por tu cuenta.
+
+00:11:39.220 --> 00:11:39.840
+Ya viene integrado.
+
+00:11:40.260 --> 00:11:43.620
+Ahora, el modelo de seguridad usa algo llamado autenticación en nombre de, o OVO.
+
+00:11:44.160 --> 00:11:44.740
+Esto es importante.
+
+00:11:45.340 --> 00:11:50.280
+Cuando tu agente de IA llama a una herramienta, el servidor MSP pasa tu identidad al servicio de destino.
+
+00:11:51.000 --> 00:11:53.560
+La cuenta de almacenamiento ve tu identidad, no la del servidor.
+
+00:11:54.260 --> 00:11:57.280
+La base de datos ve tu identidad, no una cuenta de servicio compartida.
+
+00:11:57.280 --> 00:11:59.700
+Esto significa que cada acción es atribuible a ti.
+
+00:12:00.100 --> 00:12:01.520
+Cada registro de auditoría muestra quién hizo.
+
+00:12:01.920 --> 00:12:04.280
+Nada de cuentas de servicio anónimas haciendo cosas que nadie puede arrastrar.
+
+00:12:04.480 --> 00:12:05.800
+El servidor dice, estoy aquí en nombre de Miro.
+
+00:12:06.320 --> 00:12:07.880
+¿Y el servicio te ve a ti, no al servidor?
+
+00:12:08.680 --> 00:12:13.520
+Para empresas que necesitan aún más control, puedes poner Azure AP Management frente a los servidores MSP.
+
+00:12:14.120 --> 00:12:18.900
+Esto te da políticas de gobierno, limitación de tasa, pistas de auditoría y controles de seguridad de contenido en la capa de protocolo.
+
+00:12:19.520 --> 00:12:22.560
+Puedes controlar qué herramientas están disponibles, quién puede usarlas y con qué frecuencia.
+
+00:12:22.560 --> 00:12:27.240
+Es el mismo AP Management que ya usas para tus AP REST, ahora aplicado a las herramientas MSP.
+
+00:12:27.880 --> 00:12:28.800
+Esta es la conclusión plana.
+
+00:12:29.220 --> 00:12:31.900
+El servidor MSP de Azure no inventa nuevos mecanismos de seguridad.
+
+00:12:32.440 --> 00:12:33.640
+Usa los que Azure ya tiene.
+
+00:12:34.160 --> 00:12:39.640
+Entra ID para autenticación, RBAs para autorización, SDKs para confiabilidad y API Management para gobierno.
+
+00:12:40.360 --> 00:12:45.120
+Si ya confías en Azure para ejecutar tus aplicaciones, ya confías en el modelo de seguridad que usa el servidor MSP.
+
+00:12:45.800 --> 00:12:46.980
+Ejemplo del mundo real en acción.
+
+00:12:47.460 --> 00:12:49.300
+Hagámoslo realidad con un ejemplo que realmente encontraría.
+
+00:12:49.300 --> 00:12:51.960
+Imagina que ejecutas una aplicación de contenedor en Azure.
+
+00:12:52.260 --> 00:12:54.580
+Entras a la URL y obtienes un error 404.
+
+00:12:54.840 --> 00:12:55.620
+La aplicación arranca.
+
+00:12:55.860 --> 00:12:58.240
+El portal de Azure muestra un error de activación pero sin registros.
+
+00:12:58.700 --> 00:12:59.000
+Nada más.
+
+00:12:59.440 --> 00:13:00.040
+Estás atascado.
+
+00:13:00.720 --> 00:13:02.040
+La vieja forma de manejar esto es tedioso.
+
+00:13:02.560 --> 00:13:03.140
+Ábrese el portal.
+
+00:13:03.600 --> 00:13:05.140
+Revisa los ajustes de la aplicación de contenedor.
+
+00:13:05.480 --> 00:13:06.220
+Comprueba la implementación.
+
+00:13:06.960 --> 00:13:09.360
+Escribes comandos CLI para extraer información de diagnóstico.
+
+00:13:09.980 --> 00:13:12.000
+Comparas los archivos de configuración entre entornos.
+
+00:13:12.700 --> 00:13:15.700
+Rastreas manualmente la secuencia de inicio tratando de descubrir qué falló.
+
+00:13:16.100 --> 00:13:17.020
+Esto toma horas.
+
+00:13:17.020 --> 00:13:19.100
+Y asume que ya sabes qué buscar.
+
+00:13:19.640 --> 00:13:22.460
+Con el servidor Azure MSP la experiencia es totalmente diferente.
+
+00:13:22.860 --> 00:13:27.880
+Copias el mensaje de error, lo pegas en Copilot, activas las herramientas Azure MSP y dejas que el agente haga el diagnóstico.
+
+00:13:28.300 --> 00:13:28.440
+Eso.
+
+00:13:28.960 --> 00:13:34.660
+El agente lee los archivos de tu proyecto, observa la configuración de tu aplicación, verifica la configuración del contenedor e identifica el problema.
+
+00:13:35.160 --> 00:13:38.220
+Tu cadena de conexión de configuración de la aplicación Azure es un valor de marca de otra posición.
+
+00:13:38.660 --> 00:13:39.780
+Nunca se configuró para producción.
+
+00:13:39.780 --> 00:13:45.340
+Cuando la aplicación de contenedor intenta iniciar, no puede conectar con la configuración, lanza una excepción y falla al arrancar.
+
+00:13:45.340 --> 00:13:59.940
+El agente no solo encuentra el problema, propone una solución, crear un almacén de configuración real, establecer las variables de entorno en la aplicación, actualizar el código para leer de variar de variables de entorno en lugar de marcadores fijos, volver a desplegar y te guía paso a paso pidiendo permiso antes de hacer cambios.
+
+00:13:59.940 --> 00:14:01.840
+Y es donde se vuelve impresionante.
+
+00:14:02.360 --> 00:14:05.000
+El agente orquesta múltiples operaciones de Azure en secuencia.
+
+00:14:05.620 --> 00:14:09.500
+Consulta el gráfico de recursos de Azure para encontrar las aplicaciones de contenedor relacionadas con tu proyecto.
+
+00:14:09.840 --> 00:14:11.020
+Identifica el grupo de recursos.
+
+00:14:11.580 --> 00:14:13.880
+Crea el almacén de configuración de la aplicación en ese mismo grupo.
+
+00:14:14.520 --> 00:14:17.260
+Actualiza la aplicación de contenedor con la nueva variable de entorno.
+
+00:14:17.740 --> 00:14:19.140
+Realiza los cambios de código en tu proyecto.
+
+00:14:19.680 --> 00:14:20.480
+Inicia la implementación.
+
+00:14:21.020 --> 00:14:22.860
+Y luego verifica que el punto de conexión esté funcionando.
+
+00:14:23.060 --> 00:14:23.960
+Todo el proceso toma minutos.
+
+00:14:23.960 --> 00:14:25.880
+El agente manejó cada operación de Azure.
+
+00:14:26.300 --> 00:14:31.040
+Leyendo recursos, creando nuevos, actualizando configuraciones, activando despliegues y verificando resultados.
+
+00:14:31.540 --> 00:14:32.960
+No escribiste ni un solo comando CLI.
+
+00:14:33.340 --> 00:14:34.220
+No navegaste por el portal.
+
+00:14:34.740 --> 00:14:36.340
+Solo escribiste el problema y probaste los pasos.
+
+00:14:37.080 --> 00:14:41.620
+Lo que esto significa para ti es que la resolución de problemas complejos se convierte en una conversación en lugar de un proceso manual.
+
+00:14:42.240 --> 00:14:44.960
+No necesitas ser un experto en Azure para diagnosticar y arreglar problemas.
+
+00:14:45.280 --> 00:14:47.940
+Si la gente aporta la experiencia, tú aportas el contexto y la aprobación.
+
+00:14:48.520 --> 00:14:50.200
+Y puedes probar esto tú mismo con una aplicación de prueba.
+
+00:14:50.580 --> 00:14:51.660
+No necesitas permiso especial.
+
+00:14:51.660 --> 00:14:52.840
+No necesitas un desarrollador.
+
+00:14:52.840 --> 00:14:56.920
+Solo necesitas una suscripción en Azure y una asistente de IA compatible con MSP-P.
+
+00:14:57.440 --> 00:14:58.300
+¿Cómo se conecta todo?
+
+00:14:58.440 --> 00:14:59.200
+El panorama general.
+
+00:14:59.720 --> 00:15:00.740
+Así que ahora entiende las partes.
+
+00:15:01.240 --> 00:15:02.260
+MSP es el protocolo estándar.
+
+00:15:02.900 --> 00:15:04.820
+Servidor MSP de Azure es la implementación de Microsoft.
+
+00:15:05.020 --> 00:15:07.540
+Y los servicios de Azure son las herramientas a las que se conecta.
+
+00:15:08.000 --> 00:15:09.600
+Pero el valor real no reside en una pieza de isla.
+
+00:15:10.000 --> 00:15:12.040
+Es que todas funcionan juntas a través del mismo protocolo.
+
+00:15:12.360 --> 00:15:13.380
+¿Cómo se ve esto en la práctica?
+
+00:15:13.640 --> 00:15:16.200
+Imagina a un único agente que puede consultar registros de Azure Monitor,
+
+00:15:16.400 --> 00:15:18.040
+revisar ajustes de configuración de aplicaciones,
+
+00:15:18.180 --> 00:15:20.060
+crear nuevos recursos y desplegar código actualizado.
+
+00:15:20.060 --> 00:15:21.080
+Todo en la misma sesión.
+
+00:15:21.080 --> 00:15:22.960
+Eso no son cuatro integraciones separadas.
+
+00:15:23.400 --> 00:15:27.380
+Es un servidor MSP haciendo cuatro cosas en secuencia con el contexto preservado en cada paso.
+
+00:15:28.180 --> 00:15:30.540
+La salida de una herramienta se convierte en la entrada de la siguiente.
+
+00:15:31.120 --> 00:15:32.720
+El estado de la sesión mantiene todo conectado.
+
+00:15:33.320 --> 00:15:36.300
+Esto crea efectos de interacción que no obtienes con herramientas aisladas.
+
+00:15:36.860 --> 00:15:39.260
+El agente lee registros, detecta un problema de configuración,
+
+00:15:39.400 --> 00:15:42.940
+construye una solución y la despliega sin que tengas que copiar información manualmente entre pasos.
+
+00:15:43.660 --> 00:15:44.980
+El efecto de red también entra en juego.
+
+00:15:44.980 --> 00:15:49.620
+A medida que se crean más servidores MSP, cada asistente de ella obtiene acceso a más capacidades.
+
+00:15:50.400 --> 00:15:54.300
+Microsoft ya cuenta con servidores MSP para Azure DevOps, PlayWrite y procesamiento de documento.
+
+00:15:54.560 --> 00:15:55.520
+Terceros también lo están creando.
+
+00:15:56.040 --> 00:15:59.340
+Cada nuevo servidor añade herramientas que cualquier agente compatible con MSP puede utilizar.
+
+00:15:59.880 --> 00:16:02.200
+El ecosistema gana valor con cada servidor que se añade.
+
+00:16:02.800 --> 00:16:04.100
+Ahora veamos hacia dónde se dirige esto.
+
+00:16:04.520 --> 00:16:07.660
+El servidor MSP de Azure ya viene integrado en Visual Studio 2026.
+
+00:16:08.480 --> 00:16:11.000
+Servidor MSP de Azure DevOps ya está disponible de forma general.
+
+00:16:11.580 --> 00:16:17.600
+Azure API Management ahora soporta MSP, por lo que las empresas pueden gobernar y asegurar sus herramientas MSP del mismo modo que gobiernan sus API.
+
+00:16:18.180 --> 00:16:21.560
+Y Microsoft anunció Agent Orchestrator en Build 2026,
+
+00:16:22.080 --> 00:16:26.880
+un servicio gestionado que maneja el balanceo de carga, monitoreo de salud y atribución de costos en miles de agentes.
+
+00:16:27.640 --> 00:16:31.460
+Los primeros usuarios experimentaron una reducción del 30 al 45% de costos de cómputo por agente,
+
+00:16:31.700 --> 00:16:32.940
+mediante un rutamente inteligente modelo.
+
+00:16:33.200 --> 00:16:34.200
+El panorama general es claro.
+
+00:16:34.720 --> 00:16:37.380
+MSP se está convirtiendo en la capa de integración universal para la IA.
+
+00:16:37.940 --> 00:16:40.440
+Y el servidor MSP de Azure es la vía de entrada para los usuarios de Azure.
+
+00:16:41.080 --> 00:16:46.320
+Las organizaciones que adopten MSP ahora podrán conectarse a cualquier plataforma de IA sin tener que reconstruir sus integraciones.
+
+00:16:47.380 --> 00:16:52.580
+Tus herramientas, tus datos, tu modelo de seguridad, todo accesiblemente en un solo protocolo desde cualquier asistente de IA que lo soporte.
+
+00:16:53.660 --> 00:16:54.880
+Esa es la pílda de reconocimiento de hoy.
+
+00:16:55.620 --> 00:16:58.880
+MSP brinda a los agentes de IA una forma estándar de hablar con las herramientas.
+
+00:16:58.880 --> 00:17:01.900
+Y el servidor MSP de Azure les da acceso a todo tu entorno de Azure.
+
+00:17:02.200 --> 00:17:05.040
+Si estás construyendo con IA en Azure, empieza a explorar MSP hoy mismo.
+
+00:17:05.040 --> 00:17:09.140
+Suscríbete en tu plataforma de podcast favorita y comparte esto con alguien que esté comenzando su camino.
+
+00:17:09.620 --> 00:17:10.540
+Deja un comentario si te útil.
+
+00:17:11.100 --> 00:17:11.600
+Leo a todos.
+
+00:17:12.500 --> 00:17:15.420
+Soy Mirko Peters y este ha sido otro episodio de Microsoft Knowledge Nuggets.

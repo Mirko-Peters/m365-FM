@@ -1,0 +1,952 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.640
+Seu copiloto não é inteligente. É um estagiário bem vestido, com preenchimento automático e cafeína
+
+00:00:04.640 --> 00:00:08.320
+em excesso, com um crachá da Microsoft, que parece confiante, mas está completamente perdido.
+
+00:00:08.440 --> 00:00:12.780
+O administrador médio o instala, faz uma pergunta ambiciosa, como resumir as vendas do último
+
+00:00:12.780 --> 00:00:16.740
+trimestre em todas as regiões, e então age surpreso quando ele responde com qualquer coisa
+
+00:00:16.740 --> 00:00:21.300
+que se encaixe em sua janela de contexto limitada. Isso não é insight, é suposição estatística
+
+00:00:21.300 --> 00:00:25.200
+entregue em um tom amigável. Veja, a maioria dos chamados copilotos de IA funcionam com algo
+
+00:00:25.200 --> 00:00:29.220
+chamado geração aumentada de recuperação, RAG para abreviar. Na teoria, é brilhante.
+
+00:00:29.220 --> 00:00:32.820
+Você faz uma pergunta, ele pesquisa em uma base de conhecimento, pega pedaços relevantes
+
+00:00:32.820 --> 00:00:35.920
+e os cola ao seu prompt para que o modelo de linguagem pareça informado. Na prática,
+
+00:00:36.160 --> 00:00:40.020
+é como pedir a uma única bibliotecária todo o conhecimento humano. Ela corre por um corredor,
+
+00:00:40.240 --> 00:00:43.880
+pega três livros aleatórios e grita a resposta enquanto corre de volta. Uma consulta, uma
+
+00:00:43.880 --> 00:00:47.780
+recuperação, uma chance de estar errado. Agora, compare isso com a forma como as decisões
+
+00:00:47.780 --> 00:00:52.540
+empresariais reais funcionam. Você já precisou de apenas um dado? Não. Você precisa da planilha
+
+00:00:52.540 --> 00:00:56.100
+do financeiro, do relatório de pesquisa do SharePoint, do warehouse de métricas no Microsoft
+
+00:00:56.100 --> 00:00:59.700
+Fabric e, geralmente, de alguns dados de mercado externos que nem estão em sua locação.
+
+00:00:59.820 --> 00:01:03.440
+O RAG clássico entra em colapso no momento em que sua verdade reside em mais de um lugar.
+
+00:01:03.640 --> 00:01:07.220
+Ele não consegue planejar várias pesquisas, não consegue validar contradições e certamente
+
+00:01:07.220 --> 00:01:10.680
+não consegue entender que o desempenho trimestral significa coisas diferentes para marketing
+
+00:01:10.680 --> 00:01:14.420
+e manufatura. Ainda assim, as pessoas seguem chamando esses sistemas de inteligentes.
+
+00:01:14.680 --> 00:01:18.800
+Errado. Eles são turistas de contexto. Eles visitam seu acervo de dados, tiram algumas
+
+00:01:18.800 --> 00:01:22.520
+selfies com PDFs e fingem que conhecem a cidade. Enquanto isso, o administrador médio
+
+00:01:22.520 --> 00:01:25.940
+acredita honestamente que o copiloto tem acesso onisciente a todas as pastas do SharePoint.
+
+00:01:26.180 --> 00:01:29.900
+Não tem. A menos que você crie conectores e raciocínios explícitos, ele está operando
+
+00:01:29.900 --> 00:01:34.500
+de olhos vendados. Isso não é apenas ineficiente, é perigoso. Sem recuperação de agentes, as
+
+00:01:34.500 --> 00:01:38.040
+empresas se afogam na fragmentação do contexto. As decisões são tomadas com base em dados
+
+00:01:38.040 --> 00:01:42.000
+parciais. Os riscos de conformidade passam despercebidos. As equipes perseguem insights
+
+00:01:42.000 --> 00:01:44.900
+alucinados produzidos por um modelo que nunca se preocupou em se autoverificar.
+
+00:01:45.080 --> 00:01:49.920
+A ironia? A solução já existe. Entra em cena o RAG agêntico. Ele não apenas busca
+
+00:01:49.920 --> 00:01:53.780
+informações. Ele pensa sobre elas. Ele planeja, faz verificações cruzadas e raciocina
+
+00:01:53.780 --> 00:01:57.040
+como uma equipe de pesquisa digital. Ao final deste episódio, você saberá exatamente
+
+00:01:57.040 --> 00:02:00.380
+como fazer seu copiloto parar de agir como um papagaio e começar a se comportar como um
+
+00:02:00.380 --> 00:02:04.960
+cientista. E sim, são quatro etapas. Vamos consertar seu copiloto idiota em quatro etapas
+
+00:02:04.960 --> 00:02:09.760
+precisas. O mito do trapo, por que a inteligência linear falha. Tudo bem, vamos dissecar o mito.
+
+00:02:09.860 --> 00:02:13.920
+A geração aumentada de recuperação parece sofisticada, mas, por baixo dos panos, é brutalmente
+
+00:02:13.920 --> 00:02:17.660
+linear. Etapa 1, recuperar algumas fatias de texto com base na similaridade do vetor.
+
+00:02:17.660 --> 00:02:23.120
+Etapa 2, inserir essas fatias no prompt. Etapa 3, gerar uma resposta e declarar vitória.
+
+00:02:23.280 --> 00:02:27.560
+É isso. Nenhuma memória de pesquisas anteriores, nenhum raciocínio sobre contradições, nenhum
+
+00:02:27.560 --> 00:02:31.120
+reconhecimento do contexto do usuário. É uma linha reta da consulta à resposta. Uma
+
+00:02:31.120 --> 00:02:35.160
+junção SQL glorificada escrita em inglês. O problema começa no momento em que a realidade
+
+00:02:35.160 --> 00:02:39.080
+fica confusa. Suponha que você pergunte. Compare a confiabilidade do nosso aparelho com
+
+00:02:39.080 --> 00:02:43.420
+a dos concorrentes. Um sistema simples acessa um índice, pega qualquer documento que mencione
+
+00:02:43.420 --> 00:02:47.520
+confiabilidade e exibe um resumo. Ele verificou os registros de fabricação no Fabric?
+
+00:02:47.520 --> 00:02:51.720
+Ele leu aquele novo relatório de teste enterrado no SharePoint? Ele validou dados externos
+
+00:02:51.720 --> 00:02:56.740
+da web? Claro que não. Ele nem sabe que essas fontes existem. Ele apenas disfarça a incerteza
+
+00:02:56.740 --> 00:03:00.740
+com eloquência. Pense nisso como uma analogia de biblioteca que se tornou trágica. Você
+
+00:03:00.740 --> 00:03:04.840
+entra e pergunta a uma bibliotecária sobre economia global. Ela corre para uma prateleira
+
+00:03:04.840 --> 00:03:09.100
+com o rótulo Economia, entrega a você um livro aleatório sobre câmbio de 2012 e declara
+
+00:03:09.100 --> 00:03:13.340
+a questão resolvida. Bom atendimento ao cliente, péssimo conhecimento acadêmico. A inteligência
+
+00:03:13.340 --> 00:03:16.860
+real recrutaria vários bibliotecários, um para finanças, um para história, um para políticas,
+
+00:03:16.860 --> 00:03:20.860
+e então sintetizar as suas descobertas. Essa é a diferença entre recuperação e raciocínio.
+
+00:03:21.060 --> 00:03:25.240
+Nas empresas, essa falha se multiplica. Uma única pergunta executiva geralmente afeta
+
+00:03:25.240 --> 00:03:29.740
+dezenas de sistemas. Documentos do SharePoint, conjuntos de dados Power BI, tabelas Azure e
+
+00:03:29.740 --> 00:03:34.140
+SQL e e-mails. O RAG clássico simplifica toda essa complexidade em um único salto.
+
+00:03:34.320 --> 00:03:39.220
+O resultado, resultados inconsistentes, resumos superficiais e dados alucinados formulados
+
+00:03:39.220 --> 00:03:44.440
+com dicção confiante. Conformidade regulatória? Esqueça. Quando o modelo extrai de qualquer texto
+
+00:03:44.440 --> 00:03:48.980
+que corresponda ao vetor, você perde a procedência. Tente explicar isso ao seu comitê de auditoria.
+
+00:03:49.160 --> 00:03:52.880
+No entanto, o marketing em torno do copiloto faz com que pareça onipotente. O sussurro do folheto.
+
+00:03:53.040 --> 00:03:57.180
+Pergunte qualquer coisa. O copiloto conhece o seu negócio. Não, não conhece. Ele executa a
+
+00:03:57.180 --> 00:04:01.760
+recuperação de texto com amnésia. Não consegue planejar, refletir ou verificar. Não sabe qual
+
+00:04:01.760 --> 00:04:05.460
+site do SharePoint contém o documento certo ou se o warehouse de malha está sincronizado.
+
+00:04:05.660 --> 00:04:10.000
+Mas como a formulação é suave, os executivos presumem compreensão onde há apenas correlação.
+
+00:04:10.000 --> 00:04:14.600
+Essa ilusão de inteligência é o que as empresas estão comprando. Um cobertor de conforto caro
+
+00:04:14.600 --> 00:04:18.920
+tecido a partir de distribuições de probabilidade. Eles comemoram quando o copiloto redige um e-mail
+
+00:04:18.920 --> 00:04:22.880
+corretamente, ignorando que não entendeu completamente os dados de origem. Ele se gabande
+
+00:04:22.880 --> 00:04:26.700
+em sites gerados por IA sem perceber que esses insights são reunidos a partir de contextos
+
+00:04:26.700 --> 00:04:31.480
+incompatíveis e instantâneos parciais. Aqui está a consequência econômica. Cada relatório mal
+
+00:04:31.480 --> 00:04:36.520
+resumido, cada KPI alucinado, resulta em decisões ruins. Os projetos mudam com base na ficção.
+
+00:04:36.520 --> 00:04:41.300
+As equipes de conformidade perseguem fantasmas. E quando a realidade os alcança, quando o insight
+
+00:04:41.300 --> 00:04:45.840
+fabricado falha na produção, a culpa recai sobre as limitações da IA, não sobre a arquitetura
+
+00:04:45.840 --> 00:04:49.600
+preguiçosa que garantiu o fracasso. A verdade é que a inteligência linear falha porque
+
+00:04:49.600 --> 00:04:53.480
+as empresas não são lineares. Os dados são distribuídos, contextuais e muitas vezes
+
+00:04:53.480 --> 00:04:57.520
+contraditórios. Um pipeline fixo de uma consulta não consegue se adaptar a esse ambiente mais
+
+00:04:57.520 --> 00:05:00.840
+do que um único neurônio consegue pensar. O que você precisa não é de um prompt melhor,
+
+00:05:01.100 --> 00:05:04.960
+você precisa de um sistema que possa planejar. Um que possa decidir quais serviços usar
+
+00:05:04.960 --> 00:05:09.300
+em que ordem e como verificar o resultado. Então, como ensinamos um copilô a operar
+
+00:05:09.300 --> 00:05:13.480
+como uma equipe de pesquisa em vez de um papagaio, é aí que entra o Agentic R.A.G.,
+
+00:05:13.480 --> 00:05:17.780
+o salto evolutivo da recuperação reativa para o raciocínio proativo. Ele adiciona camadas
+
+00:05:17.780 --> 00:05:21.780
+de planejamento, recuperadores especializados e looks de verificação. Em outras palavras,
+
+00:05:22.040 --> 00:05:26.580
+ele para de fingir que é inteligente e finalmente aprende a pensar. Entra o Agentic R.A.G.,
+
+00:05:26.580 --> 00:05:30.220
+da busca para o raciocínio. É aqui que passamos do truque para a inteligência.
+
+00:05:30.380 --> 00:05:34.060
+O Agentic R.A.G. não é mais um chavão, é a faculdade ausente sem a qual seu copiloto
+
+00:05:34.060 --> 00:05:38.520
+nasceu, a função executiva. Pense nele como um R.A.G. que desenvolveu um córtex pré-frontal.
+
+00:05:38.660 --> 00:05:42.700
+Em vez de executar uma consulta e cruzar os dedos digitais, ele divide um problema em partes,
+
+00:05:43.020 --> 00:05:46.660
+atribui tarefas a diferentes agentes especialistas, verifica o trabalho deles e,
+
+00:05:46.840 --> 00:05:50.720
+em seguida, sintetiza o resultado. Em resumo, ele converte modelos de linguagem
+
+00:05:50.720 --> 00:05:55.180
+de papagaios em planejadores. Mecanicamente, o Agnetic R.A.G. opera por meio da orquestração
+
+00:05:55.180 --> 00:05:59.620
+de vários agentes criada no Azure e AI Agent Service. Imagine três funções em movimento.
+
+00:05:59.880 --> 00:06:03.860
+Primeiro, o planejador, uma espécie de gerente de projeto digital. O planejador lê sua
+
+00:06:03.860 --> 00:06:08.140
+consulta e decide quais ferramentas ou fontes de dados são relevantes. Depois surgem os agentes
+
+00:06:08.140 --> 00:06:12.120
+recuperadores, especialistas em domínios treinados para acessar dados estruturados ou não.
+
+00:06:12.300 --> 00:06:17.060
+Por fim, o agente verificador ou raciocinador, que atua como editor-chefe, verifica a consistência,
+
+00:06:17.320 --> 00:06:21.520
+valida as citações e compila a resposta final. Juntos, eles executam o que chamamos de ciclo
+
+00:06:21.520 --> 00:06:26.300
+de raciocínio adaptativo. Consulta, recuperação, validação, refinamento e ação.
+
+00:06:26.300 --> 00:06:31.080
+A palavra crucial é adaptável. Ao contrário do R.A.G. padrão, esse ciclo não termina na primeira
+
+00:06:31.080 --> 00:06:35.400
+saída. Ele é redirecionado quando surgem contradições. Compare essa dança orquestrada
+
+00:06:35.400 --> 00:06:39.840
+a uma redação. O planejador é o editor-chefe que atribui pautas. Você verifica o SharePoint
+
+00:06:39.840 --> 00:06:44.040
+em busca de relatórios internos. Você extrai as métricas do sensor do Fabric. Você examina
+
+00:06:44.040 --> 00:06:48.420
+a web por dados de concorrentes. Cada agente recuperador busca sua parte. O verificador
+
+00:06:48.420 --> 00:06:51.700
+verifica os fatos do rascunho combinado, executa novamente as consultas se as citações
+
+00:06:51.700 --> 00:06:55.100
+forem conflitantes e só então publica o resumo. O resultado não é um pedaço de texto
+
+00:06:55.100 --> 00:06:59.500
+que apenas parece plausível. É uma percepção coerente e vinculada a evidências. O salto aqui
+
+00:06:59.500 --> 00:07:04.220
+não são modelos maiores, é raciocínio estruturado. Vamos nos aprofundar mais no cérebro do planejador.
+
+00:07:04.380 --> 00:07:08.260
+Ele interpreta sua pergunta em linguagem simples em um mapa de tarefas. Quais recuperadores usar,
+
+00:07:08.460 --> 00:07:12.580
+em qual ordem executá-los e como suas descobertas devem ser mescladas. É aqui que o serviço de
+
+00:07:12.580 --> 00:07:17.400
+agente de IA do Azure ganha sua existência. Ele fornece a camada de orquestração que permite
+
+00:07:17.400 --> 00:07:22.280
+que esses agentes se comuniquem. Microsserviços que se comunicam por meio de apps regidas pela
+
+00:07:22.280 --> 00:07:27.560
+autenticação Microsoft entra, sem suposições. Agora, sobre segurança, porque o responsável pela
+
+00:07:27.560 --> 00:07:32.360
+conformidade médio já está apertando o botão do pânico. O Agnetic RAG não corta atalhos. Ele é
+
+00:07:32.360 --> 00:07:36.680
+criado em prol da autenticação, o que significa que sua identidade viaja com a solicitação. O
+
+00:07:36.680 --> 00:07:41.280
+sistema não se faz passar por você. Ele usa seu token verificado para buscar apenas o que você tem
+
+00:07:41.280 --> 00:07:46.420
+permissão para ver. A segurança em nível de linha RLS e a segurança em nível de coluna CLS vêm integradas.
+
+00:07:46.420 --> 00:07:51.240
+A IA não pode revelar acidentalmente a previsão do CFO para um estagiário. Cada chamada de recuperação é
+
+00:07:51.240 --> 00:07:55.820
+registrada, auditável e reversível. Isso é importante porque o RAG estático não tem o conceito de contexto do
+
+00:07:55.820 --> 00:07:59.780
+usuário. Ele captura tudo o que sua camada de pesquisa permite, muitas vezes ignorando completamente
+
+00:07:59.780 --> 00:08:04.060
+o andame de permissão da empresa. O Agnetic RAG restaura essa disciplina. Quando o recuperador
+
+00:08:04.060 --> 00:08:08.460
+de malha consulta uma tabela Lakehouse, ele aplica as mesmas regras de RLS que seus painéis de bio
+
+00:08:08.460 --> 00:08:12.900
+obedecem. Quando o agente do SharePoint vasculha bibliotecas de documentos, ele respeita permissões
+
+00:08:12.900 --> 00:08:17.600
+de nível de site e rótulos do Microsoft Purview. Portanto, as mesmas políticas que protegem seus usuários
+
+00:08:17.600 --> 00:08:21.980
+humanos agora protegem seus usuários de IA. Vamos integrar isso de volta ao fluxo de trabalho.
+
+00:08:22.240 --> 00:08:25.620
+Suponha que a pergunta seja, em qual faixa de glicose o produto A tem desempenho
+
+00:08:25.620 --> 00:08:30.220
+inferior em comparação ao produto B, e qual é o impacto clínico. O RAG padrão descartará todos os
+
+00:08:30.220 --> 00:08:34.960
+trechos que mencionam o produto A e a glicose. O Agnetic RAG, com tecnologia do Azure AI Agent
+
+00:08:34.960 --> 00:08:39.620
+Service, primeiro faria seu planejador identificar três frentes de recuperação. Fabric para dados do
+
+00:08:39.620 --> 00:08:44.620
+sensor, SharePoint para notas clínicas e Bing para publicações externas. Cada agente recuperador traz
+
+00:08:44.620 --> 00:08:50.000
+evidências relevantes. O verificador compara conjuntos de dados, sinaliza discrepâncias e talvez até
+
+00:08:50.000 --> 00:08:54.960
+refine a consulta original do Fabric se um outlier aparecer. Somente após a validação ele sintetiza o
+
+00:08:54.960 --> 00:08:58.940
+insight final com as citações intactas. Esse é o raciocínio iterativo em ação.
+
+00:08:59.160 --> 00:09:04.660
+O RAG reativo para após a etapa 1. O RAG Agent aprende e se ajusta no meio da conversa. Ele pode
+
+00:09:04.660 --> 00:09:09.620
+decompor perguntas de acompanhamento automaticamente. Pergunte. Podemos melhorar a precisão usando estudos
+
+00:09:09.620 --> 00:09:14.360
+recentes? E os mesmos agentes se movem para buscar materiais emergentes sem perder o contexto. É
+
+00:09:14.360 --> 00:09:19.800
+compreensão contínua. Não perda de memória episódica. O bônus de conformidade é enorme. A ação de cada
+
+00:09:19.800 --> 00:09:23.800
+agente é rastreável em registros de auditoria, cada token autonticado, cada token documento
+
+00:09:23.800 --> 00:09:28.620
+registrado. Você tem a ilusão de onisciência com a papelada da prudência. Algo que os auditores
+
+00:09:28.620 --> 00:09:34.300
+adoram. Então, a mudança filosófica é esta. A recuperação sozinha fornece informações. A agência
+
+00:09:34.300 --> 00:09:38.360
+converte essas informações em processo. Ao introduzir planejamento, especialização e
+
+00:09:38.360 --> 00:09:42.480
+verificação, o Azure Agent Service transforma pools de dados aleatórios em cadeias de raciocínio
+
+00:09:42.480 --> 00:09:46.400
+responsáveis. No mundo empresarial, essa é a diferença entre um assistente em que você confia
+
+00:09:46.400 --> 00:09:50.200
+e um que você desativa silenciosamente. Agora que nosso copiloto tem um cérebro funcional,
+
+00:09:50.200 --> 00:09:54.100
+é hora de alimentá-lo com uma memória adequada. Em outras palavras, vamos dar a ele um lugar
+
+00:09:54.100 --> 00:09:57.220
+substancial para analisar, começando com o caos desestruturado do SharePoint.
+
+00:09:57.480 --> 00:10:01.820
+Integrando o SharePoint, transformando o caos em conhecimento. O SharePoint é onde o conhecimento
+
+00:10:01.820 --> 00:10:06.700
+corporativo se esconde. Toda empresa tem um, um sítio arqueolôsico de PowerPoints, notas de reuniões,
+
+00:10:06.980 --> 00:10:11.420
+especificações desatualizadas e documentos chamados Final V12 realmente final. E para os humanos,
+
+00:10:11.720 --> 00:10:16.800
+é um caos. Para um sistema de trapos em Xenu, é um caos elegível. A pesquisa por palavra-chave retorna
+
+00:10:16.800 --> 00:10:20.820
+obedientemente mil resultados, a maioria deles irrelevantes, e o usuário médio rola a tela
+
+00:10:20.820 --> 00:10:25.580
+até que o moral melhore. Então, eles pedem ajuda ao copiloto, e o copiloto prontamente resume a década
+
+00:10:25.580 --> 00:10:29.720
+errada. O Agent Kihag trata o SharePoint de forma diferente, não como uma biblioteca,
+
+00:10:29.880 --> 00:10:34.080
+mas como um substrato de conhecimento. Ele sabe que enterrados dentro dessas pastas estão os
+
+00:10:34.080 --> 00:10:39.440
+insights qualitativos que as tabelas estruturadas em tecido nunca capturaram, contexto, decisões,
+
+00:10:39.780 --> 00:10:44.060
+lógica. Então, em vez de fazer uma única busca por palavras-chave, o agente de recuperação do
+
+00:10:44.060 --> 00:10:48.160
+SharePoint usa embeddings semânticos e pesquisa vetorial para mapear o sentido, não apenas o
+
+00:10:48.160 --> 00:10:52.640
+texto. Pergunte sobre a confiabilidade do produto em ambientes úmidos, e ele não se fixa nessas
+
+00:10:52.640 --> 00:10:57.880
+palavras exatas. Ele detecta documentos que discutem modos de falha, resistência à condensação e
+
+00:10:57.880 --> 00:11:03.160
+desempenho adesivo. Ele reconhece a intenção. É aqui que a conscientização de permissão se torna
+
+00:11:03.160 --> 00:11:07.540
+o recurso decisivos. Cada site do SharePoint tem sua própria rede emaranhada de permissões,
+
+00:11:07.820 --> 00:11:12.380
+equipes, subsites e pastas confidenciais. Um rastreador burro ignora isso e acidentalmente
+
+00:11:12.380 --> 00:11:16.840
+revela reclamações de RH em um relatório de marketing. O modelo agente que, no entanto,
+
+00:11:17.120 --> 00:11:21.520
+autentica em seu nome, herdando seu contexto de segurança exato. Ele só pode ler o que você tem
+
+00:11:21.520 --> 00:11:25.760
+permissão para ver. A saída é ajustada automaticamente pela política. Ajuste de segurança,
+
+00:11:26.020 --> 00:11:30.520
+cortesia dos rótulos Microsoft entra e púrvio. Portanto, a inteligência da IA nunca supera sua
+
+00:11:30.520 --> 00:11:35.900
+autorização. Vamos executar um cenário prático. Um gerente de P&D digita um resumo das diferenças de
+
+00:11:35.900 --> 00:11:41.180
+desempenho do produto em climas costeiros. O planejador divide isso em submissões. Um recuperador de
+
+00:11:41.180 --> 00:11:45.120
+tecido se prepara para analisar dados numéricos do sensor, enquanto o agente do SharePoint mergulha
+
+00:11:45.120 --> 00:11:48.660
+em documentos de pesquisa internos, registros de manutenção e notas de engenharia marcados
+
+00:11:48.660 --> 00:11:53.380
+com termos relacionados à umidade. Ele encontra um relatório de teste de campo de 2023, um tópico
+
+00:11:53.380 --> 00:11:57.300
+de discussão sobre corrosão de materiais e um documento com as descobertas resumidas da equipe
+
+00:11:57.300 --> 00:12:02.220
+de confiabilidade. Cada documento é pontuado por vetor quanto à relevância semântica, recuperado e
+
+00:12:02.220 --> 00:12:07.180
+passado para o agente verificador. Esse verificador verifica esses resultados qualitativos em relação aos
+
+00:12:07.180 --> 00:12:11.540
+números de tecido. Se surgirem contradições, digamos que um documento desatualizado alegue
+
+00:12:11.540 --> 00:12:16.440
+corrosão mínima, ele sinaliza a inconsistência e solicita dados mais recentes. A resposta sintetizada
+
+00:12:16.440 --> 00:12:21.260
+final informa ao gerente de P&D precisamente quais conjuntos se degradam em alta umidade e cita as
+
+00:12:21.260 --> 00:12:26.100
+fontes validadas. O que costumava ser várias horas de escavação manual agora se transforma em um ciclo
+
+00:12:26.100 --> 00:12:30.940
+contínuo de raciocínio. O SharePoint muda de um repositório passivo para uma inteligência empresarial
+
+00:12:30.940 --> 00:12:35.800
+participante ativa, essencialmente uma memória neural de decisões corporativas. A camada de pano
+
+00:12:35.800 --> 00:12:40.080
+argentique não lê simplesmente documentos, ela aprende relacionamentos, linhagem de projetos,
+
+00:12:40.300 --> 00:12:44.080
+tendências de autoria, clusters contextuais e pode encadeá-los em argumentos coerentes.
+
+00:12:44.300 --> 00:12:47.840
+Agora, os responsáveis pela conformidade ainda podem se contorcer quando ouvem a recuperação
+
+00:12:47.840 --> 00:12:52.180
+autônoma. Relaxe. Cada consulta e toque em documento é registrado, as trilhas de auditoria
+
+00:12:52.180 --> 00:12:57.380
+permanecem intactas, estruturas regulatórias como ISO 27001 e GDPR dependem de responsabilidade,
+
+00:12:57.600 --> 00:13:01.900
+e esse sistema fornece isso automaticamente. O agente pode até anexar metadados citando o caminho do
+
+00:13:01.900 --> 00:13:05.860
+documento e o carimbo de data, hora de acesso a cada frase gerada. Isso significa que cada
+
+00:13:05.860 --> 00:13:09.420
+alegação feita pela IA pode ser rastreada até uma versão específica de um arquivo,
+
+00:13:09.420 --> 00:13:12.940
+o que é irrevogável para robôs. Em suma, integrar o SharePoint sob o pano
+
+00:13:12.940 --> 00:13:17.060
+argentique transforma o caos de conteúdo em coreografia de conhecimento. Seu passado não
+
+00:13:17.060 --> 00:13:21.580
+estruturado se torna pesquisável por significado, protegido por política e validado por referência
+
+00:13:21.580 --> 00:13:25.960
+cruzada. O SharePoint deixa de ser um sótão digital e se torna uma infraestrutura cognitiva.
+
+00:13:26.160 --> 00:13:30.560
+Mas o contexto qualitativo é apenas metade do cérebro. A outra metade, a verdade da estrutura
+
+00:13:30.560 --> 00:13:33.620
+numérica, reside no Microsoft Fabric, e é para lá que vamos a seguir.
+
+00:13:33.880 --> 00:13:38.440
+Microsoft Fabric, a contraparte estruturada. Bem-vindo ao outro hemisfério do seu cérebro
+
+00:13:38.440 --> 00:13:43.180
+empresarial, o lado estruturado. Se o SharePoint armazena seu conhecimento tribal, o Microsoft
+
+00:13:43.180 --> 00:13:47.540
+Fabric guarda sua verdade empírica. É a espinha dorsal de análise unificada onde números,
+
+00:13:47.780 --> 00:13:50.860
+modelos e fluxos de eventos convergem em algo que se aproxima da coerência.
+
+00:13:51.020 --> 00:13:54.800
+A maioria das organizações o trata como um data warehouse. Sob o agentique RAG,
+
+00:13:54.960 --> 00:13:58.460
+ele se torna um substrato de raciocínio. Aqui está o papel que o Fabric desempenha.
+
+00:13:58.460 --> 00:14:02.860
+Precisão. Ele não conta histórias, ele conta telemetria, transações e séries temporais.
+
+00:14:03.040 --> 00:14:07.480
+Na vida do Fabric, o Lake House, o Warehouse e o modelo semântico, cada um um dialeto diferente
+
+00:14:07.480 --> 00:14:11.980
+de estrutura. Um agente de dados do Fabric criado sobre o serviço de agente de Ia do Azuri traduz
+
+00:14:11.980 --> 00:14:15.740
+a linguagem natural em consultas estruturadas que atravessam essas camadas com segurança.
+
+00:14:15.920 --> 00:14:19.400
+Pergunte, mostre a variação de rendimento trimestral para o produto A por região e ele
+
+00:14:19.400 --> 00:14:23.740
+silenciosamente cria uma consulta otimizada semelhante a SQL direcionada às tabelas e partições
+
+00:14:23.740 --> 00:14:28.620
+certas. Executando em seu contexto autenticado, sem promptes, sem ferramentas do PowerBD,
+
+00:14:28.860 --> 00:14:33.000
+inteligência governada direta. Agora, o acesso bruto a números não tem sentido sem proteção,
+
+00:14:33.260 --> 00:14:37.080
+então a segurança asiática do Fabric não é uma opção, é arquitetura. Cada interação
+
+00:14:37.080 --> 00:14:41.260
+é criptografada e autenticada por meio do Microsoft EntraID, garantido que o agente
+
+00:14:41.260 --> 00:14:45.240
+opere sob seu token de usuário verificado. Lembra do caos dos atalhos de entidade de
+
+00:14:45.240 --> 00:14:48.880
+serviço que ignoram a segurança em nível de linha? Eles são proibidos aqui.
+
+00:14:48.880 --> 00:14:53.580
+O fluxo em nome do transporta sua identidade de ponta a ponta, aplicando RLS e segurança
+
+00:14:53.580 --> 00:14:56.980
+em nível de coluna automaticamente. Se o departamento financeiro marcar uma coluna
+
+00:14:56.980 --> 00:15:00.580
+como confidencial, a IA nunca a vislumbrará, e cada execução deixará rastros nos logs
+
+00:15:00.580 --> 00:15:04.120
+de auditoria do Fabric, satisfazendo os auditores que tratam os logs como histórias de Ninar.
+
+00:15:04.240 --> 00:15:08.300
+Além disso, está a governança do Curvio. Os rótulos de sensibilidade viajam com os
+
+00:15:08.300 --> 00:15:12.300
+dados, confidenciais, somente internos, com restrição de exportação. Quando o agente de
+
+00:15:12.300 --> 00:15:16.200
+dados do Fabric compõe uma consulta usando esses campos, as políticas interceptam instantaneamente.
+
+00:15:16.200 --> 00:15:19.960
+As tentativas de violação acionam a aplicação de DLP antes que um único byte escape. É
+
+00:15:19.960 --> 00:15:23.440
+essencialmente uma proteção contra bebês de nível empresarial para a IA. O modelo pode
+
+00:15:23.440 --> 00:15:27.220
+explorar, mas não se eletrocutar. Então, o que acontece quando combinamos essa disciplina
+
+00:15:27.220 --> 00:15:31.580
+estruturada com a intuição confusa do SharePoint? O serviço do agente de IA do Azur e orquestra
+
+00:15:31.580 --> 00:15:36.260
+isso. Imagine um tribunal. O agente do Fabric fornece as evidências concretas, gráficos,
+
+00:15:36.440 --> 00:15:40.280
+contagens, médias de sensores, enquanto o agente do SharePoint fornece os depoimentos das
+
+00:15:40.280 --> 00:15:44.300
+testemunhas. O agente verificador os interroga, garantido que os números e as narrativas estejam
+
+00:15:44.300 --> 00:15:47.960
+alinhados antes de apresentar o veredito como uma resposta unificada e rica em citações.
+
+00:15:48.180 --> 00:15:52.500
+Vamos usar um exemplo. Um líder de operações pergunta. Estamos perdendo eficiência devido
+
+00:15:52.500 --> 00:15:56.660
+a defeitos de embalagem? O planejador envia o agente Fabric para recuperar as taxas de rendimento
+
+00:15:56.660 --> 00:16:00.700
+por linha de produção do depósito. Simultaneamente, ele envia o agente SharePoint para vasculhar
+
+00:16:00.700 --> 00:16:04.500
+os registros de manutenção e a correspondência do fornecedor. O agente Fabric retorna um conjunto
+
+00:16:04.500 --> 00:16:08.740
+de dados que mostra pequenas quedas correlacionadas a picos de umidade. O agente SharePoint exibe
+
+00:16:08.740 --> 00:16:12.420
+uma sequência de e-mails citando materiais de embalagem deformados durante o mesmo período.
+
+00:16:12.420 --> 00:16:16.860
+O verificador corrobora ambos, rotula a correlação como confiável e o sistema elabora uma descoberta
+
+00:16:16.860 --> 00:16:20.940
+concisa completa com gráficos quantitativos e documentos de referência. Diagnóstico Six
+
+00:16:20.940 --> 00:16:25.440
+Sigma instantâneo sem os analistas insônias. Nos bastidores, o serviço do agente de IA do
+
+00:16:25.440 --> 00:16:29.320
+Azure lida com a simultaneidade, recuperações em lote por meio do que é efetivamente uma
+
+00:16:29.320 --> 00:16:33.060
+malha de microserviços. Cada agente publica um esquema descrevendo o que pode acessar,
+
+00:16:33.300 --> 00:16:38.220
+esquemas Fabric, metadados do SharePoint ou o contexto da web aberta do Bing. O planejador utiliza
+
+00:16:38.220 --> 00:16:42.700
+esse registro como um diretório de app. O resultado é inteligência modular. Troque
+
+00:16:42.700 --> 00:16:46.980
+ou estenda agentes conforme novos domínios de dados surgem sem reescrever todo o copilô.
+
+00:16:46.980 --> 00:16:50.840
+Em termos de desempenho, a inovação não são modelos maiores, mas uma ordem de recuperação
+
+00:16:50.840 --> 00:16:54.520
+mais inteligente. O planejador pode consultar o Fabric primeiro para definir limites numéricos
+
+00:16:54.520 --> 00:16:58.180
+e, em seguida, usá-los para restringir a exploração do SharePoint. Isso reduz o ruído
+
+00:16:58.180 --> 00:17:02.180
+e acelera a convergência. Pense nisso como uma poda de dados por meio da razão.
+
+00:17:02.180 --> 00:17:06.420
+Em vez de se afogar em 10 mil documentos, o sistema sabe quais 10 são importantes porque
+
+00:17:06.420 --> 00:17:09.980
+os números já enquadram a questão. Os gestores de Compliance adoram esta configuração,
+
+00:17:10.180 --> 00:17:13.860
+pois a governança escala com inteligência. Cada chamada de agente é registrada, cada
+
+00:17:13.860 --> 00:17:18.480
+transformação rastreável. Quando o CFO pergunta de onde veio esse número, você pode apontar
+
+00:17:18.480 --> 00:17:22.460
+diretamente para a tabela do Fabric, o registro de data e hora e o token do usuário em execução.
+
+00:17:22.640 --> 00:17:27.300
+Essa transparência converte medo em confiança, moeda essencial em setores regulamentados como
+
+00:17:27.300 --> 00:17:31.440
+finanças ou saúde. Combine essas propriedades e você terá criado uma sinfonia analítica,
+
+00:17:31.440 --> 00:17:35.280
+precisão estruturada do Fabric harmonizada com compreensão contextual do SharePoint.
+
+00:17:35.480 --> 00:17:39.720
+A empresa passa da busca e esperança para recuperação, verificação e decisão. E sim,
+
+00:17:39.940 --> 00:17:43.660
+a velocidade é assustadora. Agora, combine essa recuperação em várias camadas com o raciocínio
+
+00:17:43.660 --> 00:17:47.880
+e você terá velocidade. Uma velocidade assustadora. O ciclo de pesquisa para decisão
+
+00:17:47.880 --> 00:17:52.540
+que antes exigia um desfile de analistas agora se reduz a horas, o que nos leva diretamente ao
+
+00:17:52.540 --> 00:17:58.520
+movimento final. Impacto. O impacto empresarial de meses para minutos. Vamos falar sobre as consequências,
+
+00:17:58.520 --> 00:18:02.700
+as boas. Quando você faz o upgrade do RAG passivo para o RAG agente no Fabric e no SharePoint,
+
+00:18:02.940 --> 00:18:07.040
+o cronograma médio da empresa se curva. O que levava meses de relatórios se transforma em minutos
+
+00:18:07.040 --> 00:18:12.160
+de síntese verificada. A IA não espera mais que os humanos traduzam perguntas em consultas de dados.
+
+00:18:12.400 --> 00:18:17.820
+Ela executa essa tradução, validação e resumo automaticamente. Pense em P&D. As equipes
+
+00:18:17.820 --> 00:18:22.480
+costumavam montar comitês multifuncionais para se alinharem aos dados. Engenheiros exportando métricas
+
+00:18:22.480 --> 00:18:26.740
+de teste, analistas limpando-as, verificando permissões de conformidade e alguém inevitavelmente
+
+00:18:26.740 --> 00:18:31.240
+renomeando arquivos como final final. O RAG agente acaba com esse ciclo. O planejador
+
+00:18:31.240 --> 00:18:35.260
+orquestra agentes que recuperam tabelas de desempenho do Fabric e notas de design do SharePoint
+
+00:18:35.260 --> 00:18:39.560
+simultaneamente, mesclaram-nas e elaboram um resumo validado completo com citações e rótulos
+
+00:18:39.560 --> 00:18:44.600
+de segurança. Latência de decisão, quase zero. Conformidade e auditoria vivenciam ondas de
+
+00:18:44.600 --> 00:18:49.100
+choque semelhantes. Auditoriais tradicionais exigiam enviar pacotes de provas por e-mail. Agora,
+
+00:18:49.100 --> 00:18:53.540
+a mesma IAC escreveu o relatório pode regenerar sua trilha de raciocínio sob demanda. Toda chamada
+
+00:18:53.540 --> 00:18:57.620
+de busca, stream de consulta, caminho de arquivo e datas são registrados. Os auditores podem
+
+00:18:57.620 --> 00:19:00.960
+reproduzir as etapas exatas que levam a uma conclusão, transformando a diligência devida
+
+00:19:00.960 --> 00:19:04.680
+de uma caça ao tesouro em uma caixa de seleção. O que costumava ser uma exposição ao risco se
+
+00:19:04.680 --> 00:19:09.480
+torna uma joia da governança. A manufatura ganha uma vantagem preditiva. Os fluxos quantitativos
+
+00:19:09.480 --> 00:19:14.180
+do Fabric revelam desvios de processo. As notas qualitativas do SharePoint explicam as causas.
+
+00:19:14.180 --> 00:19:18.260
+O Argentique Loop os correlaciona antes que os alertas aumentem, realizando efetivamente a
+
+00:19:18.260 --> 00:19:22.100
+melhoria contínua sem um consultor Six Sigma. Imagine substituir uma sala de estagiários
+
+00:19:22.100 --> 00:19:25.620
+sobrecarregados por um painel de consultores especialistas que nunca dormem, nunca esquecem
+
+00:19:25.620 --> 00:19:29.480
+o contexto e nunca excedem o orçamento. Esse é o equivalente operacional da inteligência
+
+00:19:29.480 --> 00:19:34.240
+composta. Claro, a automação só importa se for responsável. O Argentique RAG preserva
+
+00:19:34.240 --> 00:19:38.360
+cada camada de herança empresarial, permissões, rótulos de sensibilidade e registros de auditoria,
+
+00:19:38.580 --> 00:19:42.640
+para que os CIUS possam dimensionar a inteligência sem dimensionar o risco. Cada insight é rastreável
+
+00:19:42.640 --> 00:19:47.460
+até a credencial do usuário e o repositório governado que o produziu. O sistema opera como um livro
+
+00:19:47.460 --> 00:19:52.740
+Razão Financeiro para pensamentos, transparente, reversível e inviolável. E o custo humano,
+
+00:19:53.000 --> 00:19:57.420
+menos tédio. Os profissionais param de copiar e colar de exportações e começam a interpretar
+
+00:19:57.420 --> 00:20:02.080
+verdades sintetizadas. As reuniões encurtam porque a IA chega com evidências pré-validadas.
+
+00:20:02.220 --> 00:20:06.640
+Os projetos aceleram porque os dados e a narrativa convergem instantaneamente. É a parte que a maioria
+
+00:20:06.640 --> 00:20:11.520
+dos executivos ignora. Agir rápido não é imprudente quando o raciocínio é documentado. A verdadeira
+
+00:20:11.520 --> 00:20:15.740
+imprudência ainda é criar copilotos idiotas, papagaios cegos ao contexto e de tiro único disfarçados
+
+00:20:15.740 --> 00:20:19.980
+de estrategistas. Esses pertencem ao museu das primeiras curiosidades da IA, ao lado do clipe.
+
+00:20:20.140 --> 00:20:23.600
+Portanto, se sua empresa ainda celebra um copiloto que apenas recupera, parabéns,
+
+00:20:23.780 --> 00:20:27.780
+você está financiando um autocompletar sofisticado. Os participantes sérios já estão usando agentes
+
+00:20:27.780 --> 00:20:32.260
+que planejam, verificam e agem. A regressão de meses para minutos é apenas o benefício superficial.
+
+00:20:32.580 --> 00:20:36.860
+O mais profundo é a integridade epistêmica. Decisões que realmente refletem a realidade porque
+
+00:20:36.860 --> 00:20:41.220
+a inteligência que as constrói é responsabilizada. É por isso que continuar a construir copilotos burros
+
+00:20:41.220 --> 00:20:45.660
+não é apenas ineficiente, é imprudente. O futuro da IA empresarial não são promptes maiores,
+
+00:20:45.900 --> 00:20:50.660
+são ciclos de feedback menores com melhor memória e governança. O Argentic Rag oferece ambos.
+
+00:20:50.860 --> 00:20:55.100
+A inteligência finalmente se comporta como um sistema, não como uma façanha. Pare de construir,
+
+00:20:55.460 --> 00:21:00.500
+comece a pensar. O Rag sem agência é obsoleto. É a arquitetura de ontem fingindo lidar com os
+
+00:21:00.500 --> 00:21:05.300
+problemas de amanhã. A empresa moderna não precisa de chatbots, precisa de infraestrutura cognitiva,
+
+00:21:05.560 --> 00:21:09.520
+sistemas que possam planejar, verificar e agir sob sua identidade, não ao lado dela.
+
+00:21:09.520 --> 00:21:14.300
+Esse é o Agnetic Rag, um ecossistema de raciocínio deliberado criado no Azure AI Agent Service que
+
+00:21:14.300 --> 00:21:18.360
+se comunica com segurança com o SharePoint e o Microsoft Fabric como uma equipe de especialistas
+
+00:21:18.360 --> 00:21:22.020
+compartilhando um cérebro autonticado. Se o seu copiloto ainda não consegue programar suas
+
+00:21:22.020 --> 00:21:26.120
+próprias recuperações, validar referências ou explicar sua trilha de raciocínio, pare de chamá-lo
+
+00:21:26.120 --> 00:21:31.040
+de inteligente, ele é decorativo. Inteligência implica intenção, verificação e consequência.
+
+00:21:31.260 --> 00:21:36.260
+A IA decorativa realiza monólogos, a IA Agnetic conduz experimentos. A diferença é a
+
+00:21:36.260 --> 00:21:41.740
+responsabilização. Uma cria resultados, a outra cria compreensão. Essa mudança arquitetônica
+
+00:21:41.740 --> 00:21:45.520
+não é mais opcional. No momento em que sua decisão abrange dados estruturados e não
+
+00:21:45.520 --> 00:21:49.500
+estruturados, o Estetic Rag entra em colapso. Os responsáveis pela conformidade já sabem
+
+00:21:49.500 --> 00:21:53.180
+disso, os analistas já sentem isso e a liderança em breve exigirá provas de raciocínio, não
+
+00:21:53.180 --> 00:21:56.940
+apenas confiança no tom. A pilha da Microsoft finalmente fornece a estrutura.
+
+00:21:57.120 --> 00:22:01.300
+O Azure AI Agent Service para orquestração, agentes de dados do Fabric para verdade quantitativa,
+
+00:22:01.540 --> 00:22:04.780
+recuperações do SharePoint para contexto e governança do curvio selando todo o sistema
+
+00:22:04.780 --> 00:22:09.480
+nervoso. Então, aqui está seu desafio. Pare de implantar pôneis de exibição. Crie
+
+00:22:09.480 --> 00:22:13.720
+agentes que discutam entre si até concordarem sobre a verdade. Experimente o planejamento
+
+00:22:13.720 --> 00:22:18.120
+multi-agente. Teste em nome da autenticação. Conecte o Fabric e o SharePoint até que sua
+
+00:22:18.120 --> 00:22:21.860
+IA possa realmente defender suas respostas. Porque inteligência sem ação não é inteligência
+
+00:22:21.860 --> 00:22:25.560
+de forma alguma. Se esta explicação esclareceu mais do que seu fornecedor jamais esclareceu,
+
+00:22:25.760 --> 00:22:29.660
+inscreva-se. O próximo mergulho profundo desconstrói o design multi-agente dentro da IA
+
+00:22:29.660 --> 00:22:35.220
+do Microsoft 365. Como tornar seu copiloto não apenas atento, mas sensível dentro da
+
+00:22:35.220 --> 00:22:40.420
+política. Eficiência não é mágica, é arquitetura. Bloqueie seu caminho de atualização, inscreva-se,
+
+00:22:40.600 --> 00:22:44.260
+habilite alertas e deixe novos insights serem implantados automaticamente. Prossiga.

@@ -1,0 +1,2089 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:01.680
+Começou com um aviso, depois do silêncio.
+
+00:00:02.440 --> 00:00:07.040
+A conta da GPU subiu como se o acelerador nunca dormisse, mas as saídas se arrastavam como se as luzes estivessem apagadas.
+
+00:00:07.600 --> 00:00:09.200
+Os painéis estavam verdes, os clientes não.
+
+00:00:10.460 --> 00:00:11.380
+Anomalia não fazia sentido.
+
+00:00:12.000 --> 00:00:14.860
+Utilização de GPU próxima de zero enquanto a latência disparava.
+
+00:00:15.260 --> 00:00:18.060
+Nenhum alerta foi disparado, nenhuma linha vermelha, apenas tempo evaporando.
+
+00:00:18.760 --> 00:00:21.800
+As evidências sugerem uma patologia única disfarçada de normalidade.
+
+00:00:22.220 --> 00:00:22.800
+Aqui está a promessa.
+
+00:00:23.380 --> 00:00:26.460
+Vamos rastrear os artefatos, nomear o culpado e corrigir a patologia.
+
+00:00:26.460 --> 00:00:32.540
+Examinaremos três modos de falha, fallback para a CPU, incompatibilidade de diversão entre CUDA e o ANX Tenso RT,
+
+00:00:32.980 --> 00:00:37.880
+configuração incorreta de container, provaremos isso com latência, taxa de transferência e utilização de GPU antes e depois.
+
+00:00:39.080 --> 00:00:41.140
+Configuração do caso, o ambiente e o perfil da vítima.
+
+00:00:41.840 --> 00:00:46.160
+Toda a configuração conta uma história, e esta começa com um cliente comum sob pressão.
+
+00:00:46.840 --> 00:00:48.780
+A carga de trabalho e difusão de texto para imagem.
+
+00:00:49.100 --> 00:00:53.700
+Variantes de stable diffusion rodando em 512 por 512 e escalando para 1024 por 1024.
+
+00:00:54.180 --> 00:00:55.040
+Tráfego intermitente.
+
+00:00:55.040 --> 00:00:57.880
+A concorrência pressiona entre 8 e 32 solicitações.
+
+00:00:58.340 --> 00:00:59.740
+Os tamanhos de lote variam de 1 a 8.
+
+00:01:00.300 --> 00:01:02.420
+Os níveis de serviço são rigorosos quanto à latência de cauda.
+
+00:01:02.640 --> 00:01:05.300
+Violações de P95 se traduzem diretamente em créditos e penalidades.
+
+00:01:05.800 --> 00:01:08.180
+Os modelos não são exóticos, mas suas escolhas importam.
+
+00:01:08.640 --> 00:01:11.060
+Pipelines de stable diffusion exportados em ONX 6,
+
+00:01:11.200 --> 00:01:14.420
+otimizações de atenção cruzada como Xformers ou Scale.Product Attention,
+
+00:01:14.580 --> 00:01:16.720
+e seleções de agendador que trocam passos por qualidade.
+
+00:01:17.560 --> 00:01:20.240
+O ecossistema deveria acelerar quando a estrutura é bem feita.
+
+00:01:21.240 --> 00:01:22.500
+O hardware parece respeitável no papel.
+
+00:01:22.500 --> 00:01:27.120
+Placas, CNVID, RTX e Série A na nuvem, 16 a 32 GB de verão.
+
+00:01:27.660 --> 00:01:30.220
+O PCI fica entre o host e o dispositivo como um pedágio.
+
+00:01:30.680 --> 00:01:34.320
+Rápido o suficiente quando configurado, punitivo quando os limites de erro recorrem a transferência de paginares.
+
+00:01:34.700 --> 00:01:35.960
+Neste ambiente, nada é acidental.
+
+00:01:36.600 --> 00:01:38.380
+A cadeia de ferramentas se organiza em camadas familiares.
+
+00:01:38.740 --> 00:01:42.500
+O PyTorch é usado para exportação, então ONIX Runtime ou Tenso RT assume a inferência.
+
+00:01:42.960 --> 00:01:44.160
+Os drives e escudas sustentam tudo.
+
+00:01:44.640 --> 00:01:47.480
+Os kernels de atenção prometem velocidade se as versões estiverem alinhadas.
+
+00:01:47.480 --> 00:01:50.000
+A implantação é estritamente containerizada.
+
+00:01:50.260 --> 00:01:53.360
+Imagens imutáveis, lançamentos controlados por CI e Blue Green por política.
+
+00:01:54.240 --> 00:01:55.520
+Essa restrição deveria criar segurança.
+
+00:01:56.020 --> 00:01:57.460
+Também pode congelar defeitos no tempo.
+
+00:01:57.960 --> 00:01:59.420
+Os riscos comerciais não são mistratos.
+
+00:01:59.880 --> 00:02:01.260
+O custo por solicitação define a margem.
+
+00:02:01.920 --> 00:02:04.440
+Reservas de GPU precificadas por hora que aos kernels rodem ou não.
+
+00:02:05.260 --> 00:02:08.140
+Quando a latência se estende de segundos para meio minuto, a taxa de transferência é colar.
+
+00:02:08.860 --> 00:02:11.340
+Uma configuração incorreta transforma um acelerador em um aquecedor.
+
+00:02:11.520 --> 00:02:13.820
+Caro, silencioso e ocupado sem fazer nada que ajude a fila.
+
+00:02:13.820 --> 00:02:17.060
+Após um exame mais detalhado, o perfil da vítima se estreita.
+
+00:02:17.760 --> 00:02:23.920
+Concorrência em 16 lotes em 2 para ficar abaixo dos limites de verã em 512, subindo para 1.024 por qualidade.
+
+00:02:24.860 --> 00:02:26.500
+O cliente espera um P95 consistente.
+
+00:02:27.180 --> 00:02:32.560
+Em vez disso, os rastreamentos mostram latências erráticas grandes deltas entre P50 e P95
+
+00:02:32.560 --> 00:02:36.260
+e ciclos de trabalho da GPU oscilando de 5% a 40% e uma razão óbvia.
+
+00:02:37.040 --> 00:02:38.780
+Os gráficos da CPU revelam uma verdade feira.
+
+00:02:39.000 --> 00:02:41.220
+Núcleos em carga máxima sem que o pré-processamento justifique.
+
+00:02:41.780 --> 00:02:43.220
+As evidências sugerem 3 caminhos.
+
+00:02:43.220 --> 00:02:44.620
+Primeiro, fallback para a CPU.
+
+00:02:45.080 --> 00:02:50.360
+Quando o provedor de execução CUDA ou TensoRT falha ao carregar, o motor seleciona silenciosamente o gráfico da CPU.
+
+00:02:50.840 --> 00:02:52.740
+O modelo funciona, mas com 10 a 30 vezes mais atento.
+
+00:02:53.140 --> 00:02:54.280
+Segundo, incompatibilidade de versões.
+
+00:02:55.140 --> 00:02:57.080
+ONQs Front Time compilado com CUDA.
+
+00:02:57.440 --> 00:03:01.260
+Nós rodando outro, motores TensoRT invalidados e reconstruídos com kernels genéricos.
+
+00:03:02.460 --> 00:03:04.980
+A utilização aparece, mas os caminhos rápidos desapareceram.
+
+00:03:04.980 --> 00:03:14.600
+Terceiro, erro de configuração de contêiner, imagens pesadas, montagem de GPU ausentes, configurações erradas do kit de ferramentas NVIDIA e alocações de memória que amplificam a latência sob carga.
+
+00:03:14.600 --> 00:03:17.640
+E, no fim das contas, isso não é um mistério sobre o modelo.
+
+00:03:17.980 --> 00:03:19.600
+Um caso sobre a veracidade da infraestrutura.
+
+00:03:19.600 --> 00:03:26.620
+Rastrearemos os artefatos, a ordem dos provedores, os logs de capacidade e as montagens de dispositivos, que relacionaremos a três métricas mutáveis.
+
+00:03:26.800 --> 00:03:28.960
+Latência, throughput e utilização da GPU.
+
+00:03:30.100 --> 00:03:32.800
+Arquivo de evidência A, fallback da CPU.
+
+00:03:33.480 --> 00:03:35.220
+O sabotador, silencioso.
+
+00:03:36.140 --> 00:03:38.420
+Começou com uma requisição que deveria levar segundos e não levou.
+
+00:03:38.880 --> 00:03:40.840
+O medidor da GPU estava quieto, quieto e mais.
+
+00:03:41.440 --> 00:03:43.780
+O gráfico da CPU, enquanto isso, disparou com um alarme de incêndio.
+
+00:03:44.120 --> 00:03:46.080
+Após um exame mais atento, o motor tinha feito uma escolha.
+
+00:03:46.480 --> 00:03:48.260
+Executou um trabalho de custo de GPU na CPU.
+
+00:03:48.260 --> 00:03:49.640
+Nem o alerta foi disparado.
+
+00:03:49.900 --> 00:03:51.120
+A saída foi retornada eventualmente.
+
+00:03:51.500 --> 00:03:53.700
+Este é o sabotador silencioso, o fallback da CPU.
+
+00:03:54.180 --> 00:03:55.140
+Por que isso importa é simples.
+
+00:03:55.740 --> 00:03:57.540
+Stable diffusion na CPU é uma perda de tempo.
+
+00:03:58.200 --> 00:04:02.680
+O modelo funciona, mas a latência se multiplica, 10 a 30 vezes mais lenta, e o throughput colapsa.
+
+00:04:03.180 --> 00:04:05.500
+Em um ambiente que vem de milissegundos, essa diferença é fatal.
+
+00:04:06.100 --> 00:04:09.060
+A conta continua cobrando tempo de GPU, mas o dispositivo não faz o trabalho.
+
+00:04:09.380 --> 00:04:10.480
+A linha do tempo revelou o padrão.
+
+00:04:10.900 --> 00:04:12.740
+Containers que rodavam localmente com CUDA voavam.
+
+00:04:13.620 --> 00:04:17.480
+Implantados em um node cluster com uma pilha de drivers ligeiramente diferente, os mesmos containers iniciavam.
+
+00:04:17.480 --> 00:04:19.480
+Respondiam a sondagem de saúde, então degradavam.
+
+00:04:20.140 --> 00:04:22.120
+O endpoint de saúde apenas verificava o servidor citativo.
+
+00:04:22.540 --> 00:04:24.540
+Portanto, nunca verificava se o GPU está realmente executando.
+
+00:04:25.700 --> 00:04:27.000
+Neste ambiente, nada é acidental.
+
+00:04:27.760 --> 00:04:28.800
+O silêncio é um artefato.
+
+00:04:29.180 --> 00:04:32.820
+O artefato principal é a ordem do provedor de execução no NNX Runtime.
+
+00:04:33.660 --> 00:04:34.680
+O motor aceita uma lista.
+
+00:04:35.080 --> 00:04:36.920
+Tente ter seu RT, depois CUDA, depois CPU.
+
+00:04:36.920 --> 00:04:42.080
+Se o CUDA falha ao inicializar, driver errado, bibliotecas ausentes, dispositivo não montado,
+
+00:04:42.280 --> 00:04:44.600
+o RT vinculará silenciosamente o provedor de execução da CPU.
+
+00:04:45.280 --> 00:04:48.300
+Sem exceção, sem travamento, apenas uma linha nos logs, frequentemente escondida.
+
+00:04:48.720 --> 00:04:50.300
+Provedor de execução CUDA não disponível.
+
+00:04:50.640 --> 00:04:51.380
+Recorrendo à CPU.
+
+00:04:52.040 --> 00:04:53.840
+Essa linha é a confissão que a maioria das equipes nunca lê.
+
+00:04:54.180 --> 00:04:55.020
+Aqui está a parte estranha.
+
+00:04:55.400 --> 00:04:58.140
+Os gráficos de utilização parecem enganosamente normais à primeira vista.
+
+00:04:58.480 --> 00:04:59.620
+As requisições ainda são concluídas.
+
+00:05:00.100 --> 00:05:03.640
+O mapa de serviço mostra verde, mas o ciclo de trabalho da GPU para em 5%
+
+00:05:03.640 --> 00:05:05.820
+e quanto o tempo de CPU do usuário dispara e estabiliza.
+
+00:05:06.660 --> 00:05:09.220
+A latência P50 quadruplica e a P95 se descontrola.
+
+00:05:09.920 --> 00:05:10.840
+Profil adjajada de apiação.
+
+00:05:11.400 --> 00:05:14.320
+Filas se acumulam e o escalonamento automático adiciona mais réplicas que a AirDom.
+
+00:05:14.840 --> 00:05:17.720
+Pense nisso como uma equipe de revezamento, onde o velocista nunca aparece,
+
+00:05:17.840 --> 00:05:19.020
+então o bibliotecário corre a etapa.
+
+00:05:19.460 --> 00:05:21.220
+O bastão se move, mas não na velocidade da corrida.
+
+00:05:21.580 --> 00:05:25.160
+Em outras palavras, o sistema entrega a correção à custa de todo o orçamento de SLO.
+
+00:05:25.820 --> 00:05:28.520
+Os artefatos se acumulam rapidamente quando você rastreia a sequência de desação.
+
+00:05:28.960 --> 00:05:31.580
+Os logs de carga do provedor mostram tentativas de inicialização do CUDA
+
+00:05:31.580 --> 00:05:32.740
+com verificações de versão do drive.
+
+00:05:32.740 --> 00:05:38.840
+Se o container foi criado para CUDA 2.2, mas o nosso Atena 12.0, a inicialização falha.
+
+00:05:39.940 --> 00:05:42.500
+Se o kit e ferramentas de container da NVIDIA não estiver configurado,
+
+00:05:42.580 --> 00:05:44.480
+a montagem do dispositivo nunca aparece dentro do container.
+
+00:05:44.860 --> 00:05:46.140
+Sem drive-by-Vidia, não há IBCU.
+
+00:05:46.600 --> 00:05:49.540
+Portanto, se a especificação do pod não solicitar GPUs explicitamente,
+
+00:05:50.000 --> 00:05:51.480
+o agendador nunca atribui o dispositivo.
+
+00:05:52.920 --> 00:05:54.960
+Qualquer um desses pontos dispara o downgrade silencioso.
+
+00:05:55.560 --> 00:05:56.420
+A reprodução é direta.
+
+00:05:56.420 --> 00:06:01.620
+Em um nó mal configurado, uma inferência simples exibe provedores de execução de CPU,
+
+00:06:01.800 --> 00:06:06.740
+onde você esperava provedores tenso RT ou CUDA ou CUDA.
+
+00:06:07.840 --> 00:06:10.180
+Envie um único prompt e a GPU permanece ociosa.
+
+00:06:11.060 --> 00:06:14.640
+As threads da CPU disparam e a imagem retorna em 20 a 40 segundos em vez de 2 a 6.
+
+00:06:15.300 --> 00:06:17.520
+Repita em um nó com drivers e montagens corretos.
+
+00:06:17.520 --> 00:06:19.520
+O mesmo prompt termina em uma fração do tempo
+
+00:06:19.520 --> 00:06:22.180
+e o ciclo de trabalho da GPU pula para uma faixa sustentada.
+
+00:06:22.900 --> 00:06:25.160
+As evidências sugerem que as proteções atuais são teatrais.
+
+00:06:25.900 --> 00:06:28.380
+As sondas de saúde retornam no 200 porque o servidor responde.
+
+00:06:28.800 --> 00:06:30.980
+Não há afirmação na inicialização de que o caminho da GPU esteja ativo.
+
+00:06:31.280 --> 00:06:32.200
+Sondas de desempenho não existem,
+
+00:06:32.300 --> 00:06:34.320
+então a orquestração acredita que as réplicas estão saudáveis.
+
+00:06:34.780 --> 00:06:37.360
+O sistema não consegue distinguir entre aceleração e emulação.
+
+00:06:38.420 --> 00:06:39.700
+A contramedida é deliberada mediária.
+
+00:06:40.320 --> 00:06:43.520
+Falha crítica se o provedor de execução da GPU estiver ausente ou degradado.
+
+00:06:44.480 --> 00:06:46.280
+Recuse-se iniciar com o CPU em produção.
+
+00:06:46.280 --> 00:06:49.060
+No lançamento do processo, enumere os provedores.
+
+00:06:49.220 --> 00:06:51.000
+Confirme se o tenso RT ao CUDA carregou
+
+00:06:51.000 --> 00:06:53.440
+e se a contagem de dispositivos corresponde às expectativas.
+
+00:06:54.300 --> 00:06:56.260
+Registre o conjunto de capacidades CUDA-NN,
+
+00:06:56.520 --> 00:06:58.400
+núcleo de tensor disponíveis, limite de memória
+
+00:06:58.400 --> 00:07:00.820
+e saia com código diferente de zero se algo estiver faltando.
+
+00:07:01.500 --> 00:07:02.980
+Troque disponibilidade por integridade.
+
+00:07:03.140 --> 00:07:05.140
+Deixe os orquestradores reagendarem em um nó saudável.
+
+00:07:05.840 --> 00:07:08.020
+Para garantir isso, imponha a verificação de vinculação de ava.
+
+00:07:08.660 --> 00:07:10.880
+Vincule entradas e saídas à memória do dispositivo
+
+00:07:10.880 --> 00:07:12.560
+e valide uma inferência trivial na inicialização.
+
+00:07:13.140 --> 00:07:15.680
+Uma execução de aquecimento que exercite o kernel de atenção fundida.
+
+00:07:15.680 --> 00:07:17.920
+Se o tempo exceder um limite de latência,
+
+00:07:18.160 --> 00:07:19.720
+assuma um caminho degradado e falha o POD.
+
+00:07:20.720 --> 00:07:22.920
+Adicione um conjunto de prompts de teste que não é coincidência.
+
+00:07:23.460 --> 00:07:25.200
+Compare a latência com a janela de referência.
+
+00:07:26.160 --> 00:07:27.360
+Se o desvio exceder sua tolerância,
+
+00:07:27.480 --> 00:07:29.100
+alerte a equipe de produção e interrompe o rolado.
+
+00:07:29.540 --> 00:07:31.460
+Isso pode parecer rigoroso, mas a alternativa é pior.
+
+00:07:32.400 --> 00:07:33.640
+Um cluster que funciona enquanto?
+
+00:07:34.040 --> 00:07:35.100
+Drena tempo e orçamento.
+
+00:07:35.800 --> 00:07:37.860
+Trave a ordem do provedor, rejeite o fallback do CPU
+
+00:07:37.860 --> 00:07:40.260
+e faça o sistema provar que é rápido antes de considerá-lo ativo.
+
+00:07:40.260 --> 00:07:43.020
+Só então o verde significa acelerado.
+
+00:07:44.120 --> 00:07:44.940
+Evidência e arquivo B.
+
+00:07:45.360 --> 00:07:46.160
+Incompatibilidade de versão.
+
+00:07:46.300 --> 00:07:48.340
+Cuda Onyx, Tenso RT, incompatíveis.
+
+00:07:49.340 --> 00:07:50.440
+Se a GPU não foi usada,
+
+00:07:50.620 --> 00:07:53.720
+a próxima pergunta é se ela conseguiria operar em velocidade máxima mesmo estando presente.
+
+00:07:54.240 --> 00:07:55.860
+A evidência sugere uma falha mais sutil.
+
+00:07:56.540 --> 00:07:58.240
+As versões alinham-se o suficiente para rodar,
+
+00:07:58.320 --> 00:07:59.720
+mas não o bastante para liberar o caminho rápido.
+
+00:08:00.140 --> 00:08:02.580
+O sistema parece acelerado até você observar os relógios.
+
+00:08:03.220 --> 00:08:04.320
+Porque isso importa é simples.
+
+00:08:05.000 --> 00:08:07.160
+Pipelines de difusão dependem inteiramente do desempenho de atenção.
+
+00:08:07.160 --> 00:08:11.440
+Quando o Onyx Runtime e o Tenso RT não conseguem carregar kernels fundidos que esperam,
+
+00:08:11.940 --> 00:08:14.300
+devido a versões divergentes de CUDA com o DNN ou Tenso RT,
+
+00:08:14.820 --> 00:08:17.020
+eles se redirecionam silenciosamente para implementações genéricas.
+
+00:08:17.600 --> 00:08:18.420
+O modelo funciona.
+
+00:08:19.200 --> 00:08:23.680
+A utilização oscila entre 30% e a latência ultrapassa o orçamento.
+
+00:08:24.800 --> 00:08:26.240
+O build parece o mesmo, trabalha mais lento.
+
+00:08:26.900 --> 00:08:28.840
+Em uma análise mais detalhada, os artefatos são precisos.
+
+00:08:29.720 --> 00:08:31.860
+Os logs de carga do provedor declaram sucesso uma pista.
+
+00:08:32.700 --> 00:08:35.600
+Retornando para kernels padrão ou com o XFarmers desabilitado,
+
+00:08:35.600 --> 00:08:40.620
+você verá a falha na deserialização do plano Tenso RT com a reconstrução do engine incompatível
+
+00:08:40.620 --> 00:08:42.040
+que aciona uma compilação no nó.
+
+00:08:42.700 --> 00:08:45.680
+Engines criados em uma versão secundária do Tenso RT não deserializam em outra.
+
+00:08:46.420 --> 00:08:49.680
+A reconstrução termina, mas o plano resultante pode omitir a tensão fundida,
+
+00:08:49.880 --> 00:08:51.180
+otimizações FP16.
+
+00:08:51.820 --> 00:08:52.620
+A corrida termina.
+
+00:08:53.060 --> 00:08:55.440
+Sem picos, os ciclos de trabalho e os tensor cores permanecem baixo.
+
+00:08:56.020 --> 00:08:57.200
+Aqui está a parte contra intuitiva.
+
+00:08:57.200 --> 00:08:59.900
+As equipes interpretam que se roda e está otimizado.
+
+00:09:00.780 --> 00:09:02.100
+Neste ambiente, nada é acidental.
+
+00:09:03.140 --> 00:09:06.320
+Se a tensão Scale.Product não está ativa, se o XFarmers está desligado,
+
+00:09:06.380 --> 00:09:09.680
+se o QDNN reporta espaço de trabalho ilimitado, o desempenho colapsa educadamente.
+
+00:09:10.900 --> 00:09:14.760
+A versão simples é que binários incompatíveis forçam kernels que usam mais movimentação de memória
+
+00:09:14.760 --> 00:09:15.840
+e menos densidade matemática.
+
+00:09:16.280 --> 00:09:17.720
+O PCI torna-se visível nos rastreamentos.
+
+00:09:18.240 --> 00:09:20.240
+As latências de cauda oscilam à medida que a concorrência aumenta.
+
+00:09:20.240 --> 00:09:22.100
+Pense na pilha como um conjunto de fechador.
+
+00:09:22.600 --> 00:09:28.020
+Driver, Toolkit, CUDA, CUDA-NN, flag de compilação do NNX Runtime e tensor RT.
+
+00:09:28.640 --> 00:09:30.460
+No dente fora do lugar, a chave gira apenas pela metade.
+
+00:09:31.160 --> 00:09:33.700
+O ART anuncia um gráfico de capacidade para o provedor de execução.
+
+00:09:34.520 --> 00:09:39.240
+Se o ART compilado espera CUDA 12.2, mas o driver dos nós põe 12.1,
+
+00:09:39.900 --> 00:09:42.340
+o CUDA carrega com recursos restritos, nem carrega.
+
+00:09:42.580 --> 00:09:46.580
+Se o tensor RT é 8.6 no nó, mas os planos foram gerados com 8.4,
+
+00:09:46.780 --> 00:09:49.640
+a deserialização falha e regenera com táticas conservadoras.
+
+00:09:50.240 --> 00:09:52.840
+O sistema prefere a correção à velocidade silenciosamente.
+
+00:09:53.480 --> 00:09:55.160
+Benchmarks comprovam a perda em termos práticos.
+
+00:09:55.580 --> 00:09:59.540
+Com X-Formers ou SDP ativos, a tensão de difusão reduz o tempo de processamento de forma mensurada.
+
+00:10:00.200 --> 00:10:03.760
+Pesquisas mostram consistentemente acelerações de 2x acima x no caminho de tensão,
+
+00:10:03.840 --> 00:10:05.340
+dependendo da resolução e do tamanho do lote.
+
+00:10:06.080 --> 00:10:08.280
+Desabilite-se por diversão e você perderá esses multiplicadores.
+
+00:10:09.160 --> 00:10:11.860
+A fusão de tokens, Tomy A, acumula-se com esses ganhos.
+
+00:10:12.940 --> 00:10:17.060
+Sem os cânions fundidos, benefício é limitado pela largura de banda da memória e layouts não otimizados.
+
+00:10:17.060 --> 00:10:21.140
+A lacuna aumenta em resoluções de 1024x1024, concorrência maior.
+
+00:10:21.840 --> 00:10:24.360
+Para rastrear os artefatos, comece pela numeração de capacidades.
+
+00:10:24.820 --> 00:10:28.160
+Na inicialização, imprima a lista exata de provedores e seus recursos reportados.
+
+00:10:28.840 --> 00:10:33.240
+Versão do tensor RT, disponibilidade de FP16 e NT8, espaço de trabalho máximo,
+
+00:10:33.820 --> 00:10:37.200
+heurística de convolução com o DNN, presença de NC-SERI para multi-GPU.
+
+00:10:38.480 --> 00:10:40.880
+Para o runtime ONNX, despeje as prioridades de EP.
+
+00:10:41.660 --> 00:10:43.180
+Tenso RT, CUDA, depois CPU.
+
+00:10:43.180 --> 00:10:46.600
+Verifique o que realmente se vincula aos nós do seu gráfico.
+
+00:10:46.840 --> 00:10:51.180
+Registre se os nós de atenção são atribuídos ao tensor RT com kernels fundidos ou a kernels CUDA genéricos.
+
+00:10:52.720 --> 00:10:53.880
+Em seguida, interrogue o ambiente.
+
+00:10:54.360 --> 00:10:55.020
+Consulte o driver.
+
+00:10:55.380 --> 00:10:58.180
+O NVDSME mostra o módulo do kernel e a compatibilidade com CUDA.
+
+00:10:58.640 --> 00:10:59.640
+Leia as versões das bibliotecas.
+
+00:10:59.640 --> 00:11:07.920
+Se a imagem contém bibliotecas CUDA 12.3, mas o driver host suporta até 12.2.
+
+00:11:08.060 --> 00:11:10.780
+O modo de compatibilidade de runtime pode carregar com restrições.
+
+00:11:11.520 --> 00:11:15.700
+Se a imagem espera cabeçalhos do tensor RT 8.6, mas o plugin do nó entrega 8.4,
+
+00:11:15.900 --> 00:11:18.400
+as chamadas de API degradarão ou anularão certas otimizações.
+
+00:11:18.860 --> 00:11:20.760
+A solução é uma matriz de compilação, não um desejo.
+
+00:11:21.300 --> 00:11:23.100
+Fiche versões exatas e uma única fonte da verdade.
+
+00:11:23.100 --> 00:11:26.640
+Imagem básica, compatibilidade de driver CUDA menor, CUDA NN,
+
+00:11:27.000 --> 00:11:30.780
+hash de compilação URT e versão do tensor RT e versão do tensor RT.
+
+00:11:30.960 --> 00:11:35.700
+Gere imagens de inferência contra essa matriz e rejeite nós que não correspondam via rótulos de nó e verificações de admissão.
+
+00:11:36.080 --> 00:11:41.360
+Precompile e armazena em caixa os mecanismos do tensor RT para cada variante de modelo resolução na versão exata do tensor RT que você implanta.
+
+00:11:41.900 --> 00:11:44.060
+Trate os arquivos de plano como artefatos vinculados à matriz.
+
+00:11:44.480 --> 00:11:46.940
+Nunca dependa da compilação de mecanismos no nó em produção.
+
+00:11:47.340 --> 00:11:49.280
+Isso mascara a deriva e infla as inicializações afetadas.
+
+00:11:49.280 --> 00:11:53.640
+Para consolidar, adicione testes de fumaça em si equivalirem às capacidades do kernel.
+
+00:11:54.140 --> 00:12:00.400
+Execute o container em um ambiente isolado com o driver-alvo e verifique se o tensor RT carrega kernels FP16 usados,
+
+00:12:00.880 --> 00:12:04.620
+nós de atenção fundidos, vinculação de IO ativo X-Formers ou SDP reconhecidos.
+
+00:12:05.620 --> 00:12:09.920
+Execute um conjunto de prompts determinísticos e fale a compilação se a latência se der janela base
+
+00:12:09.920 --> 00:12:12.380
+ou se os logs contiverem qualquer linguagem de retrocesso.
+
+00:12:13.400 --> 00:12:16.180
+Armazene instantâneo de capacidade junto com o digest da imagem
+
+00:12:16.180 --> 00:12:19.360
+para que reversões recuperem tanto o código quanto as características de desempenho.
+
+00:12:20.140 --> 00:12:22.380
+No final, as evidências dizem que a deriva de versão não é um bug, entende?
+
+00:12:22.800 --> 00:12:23.700
+Ou uma velocidade que você paga.
+
+00:12:24.160 --> 00:12:24.800
+O sistema irá rodar.
+
+00:12:25.180 --> 00:12:26.280
+Os cronômetros irão testemunhar.
+
+00:12:27.020 --> 00:12:28.960
+Arquivo de evidência C, container.
+
+00:12:30.000 --> 00:12:32.260
+Erosão de eficiência por má configuração ou por design.
+
+00:12:33.120 --> 00:12:36.700
+Mesmo quando as versões se alinham, o container pode sabotar a eficiência por dentro.
+
+00:12:36.700 --> 00:12:40.500
+As evidências sugerem um sangramento lento, imagem inchada,
+
+00:12:40.600 --> 00:12:43.960
+falta de conexão de GPU e comportamento do alocador que distorce a latência subcarga.
+
+00:12:44.320 --> 00:12:44.840
+Nada trava.
+
+00:12:44.840 --> 00:12:46.120
+Tudo degrada.
+
+00:12:47.820 --> 00:12:49.000
+O motivo de se botar é simples.
+
+00:12:49.360 --> 00:12:50.820
+Containers moldam a realidade do runtime.
+
+00:12:51.380 --> 00:12:54.220
+Se a imagem é obesa e as inicializações a frio são lentas,
+
+00:12:54.240 --> 00:12:55.860
+as réplicas chegam atrasadas ao incidente.
+
+00:12:56.560 --> 00:12:58.600
+Se os dispositivos de GPU não estiverem montados
+
+00:12:58.600 --> 00:13:00.080
+ou o runtime carece das flags corretas,
+
+00:13:00.140 --> 00:13:01.740
+os provedores de execução agem de forma inadequada.
+
+00:13:02.240 --> 00:13:03.860
+Se os arenas de memória acumulam alocações,
+
+00:13:03.860 --> 00:13:06.040
+a rotatividade de randes para paginação e picos de latência.
+
+00:13:06.660 --> 00:13:07.420
+O modelo parece bom.
+
+00:13:08.100 --> 00:13:10.100
+Container taxa silenciosamente cada requisição.
+
+00:13:10.820 --> 00:13:11.780
+Em uma análise mais detalhada,
+
+00:13:11.880 --> 00:13:13.440
+artefatos se acumulam no momento da compilação.
+
+00:13:13.440 --> 00:13:16.420
+Imagens excedem 2 GB carregadas com compiladores,
+
+00:13:16.580 --> 00:13:18.860
+headers e ativos de teste por falta de builds multi-estágio.
+
+00:13:19.660 --> 00:13:21.100
+Docker ignora ausente a tie notebooks,
+
+00:13:21.320 --> 00:13:23.560
+caches e pesos experimentais para as camadas de produção.
+
+00:13:24.600 --> 00:13:26.640
+Cada implantação puxa gigabytes pela rede.
+
+00:13:27.660 --> 00:13:30.660
+Escale isso entre o pulso de nós e o code start vira regra.
+
+00:13:30.660 --> 00:13:31.700
+Não exceção.
+
+00:13:32.100 --> 00:13:33.140
+As evidências não são misteriosas.
+
+00:13:33.360 --> 00:13:34.920
+O histórico do Docker conta a história em camadas.
+
+00:13:35.460 --> 00:13:37.280
+O tempo de execução revela o segundo nível de erosão.
+
+00:13:38.020 --> 00:13:40.240
+Sem flags de GPU explícitas no Docker
+
+00:13:40.240 --> 00:13:42.960
+ou configuração de plugin de dispositivo no Kubernetes,
+
+00:13:43.080 --> 00:13:46.480
+o processo não vê dispositivos dev NVIDIA.
+
+00:13:47.740 --> 00:13:49.980
+Má configurações no kit de ferramentas de contêiner NVIDIA
+
+00:13:49.980 --> 00:13:50.760
+ocultam a libicuda.
+
+00:13:51.720 --> 00:13:53.800
+Portanto, o provedor de execução carrega com restrições
+
+00:13:53.800 --> 00:13:54.560
+ou nem encarrega.
+
+00:13:55.680 --> 00:13:56.540
+O MIG não é aplicado,
+
+00:13:56.580 --> 00:13:58.480
+então as cargas de trabalho brigam por fatias de memória
+
+00:13:58.480 --> 00:14:00.240
+e criam um desperdício que os agendadores não entendem.
+
+00:14:00.620 --> 00:14:02.460
+Os logs permanecem educados enquanto o desmaias vai.
+
+00:14:02.780 --> 00:14:03.980
+O comportamento de memória é o terceiro nível.
+
+00:14:04.400 --> 00:14:06.660
+Por padrão, a arena de memória acuda do NNX Runtime
+
+00:14:06.660 --> 00:14:07.820
+cacheia locações agressivamente.
+
+00:14:08.700 --> 00:14:10.420
+Sob concorrência, isso parece estabilidade.
+
+00:14:10.800 --> 00:14:13.300
+Até que a arena reserve demais e prive novas requisições.
+
+00:14:14.300 --> 00:14:15.620
+Memória pinada não está definida,
+
+00:14:15.620 --> 00:14:17.240
+então transferências host-dispositivo
+
+00:14:17.240 --> 00:14:18.600
+ocorrem via buffers pagináveis,
+
+00:14:18.680 --> 00:14:19.860
+tornando o PCI um gargalo.
+
+00:14:20.280 --> 00:14:22.340
+A E barra Cs não está vinculada ao dispositivo,
+
+00:14:22.340 --> 00:14:24.160
+então tensores saltam entre CPU e GPU,
+
+00:14:24.300 --> 00:14:25.660
+criando taxas de latência invisíveis.
+
+00:14:26.280 --> 00:14:27.600
+O comportamento da cauda piora primeiro,
+
+00:14:27.700 --> 00:14:28.300
+depois é o mesmo caminho.
+
+00:14:28.840 --> 00:14:30.480
+É assim que o conjunto sintoma se parece na prática.
+
+00:14:31.260 --> 00:14:32.460
+O throughput efetivo atrasa,
+
+00:14:32.520 --> 00:14:33.980
+apesar de uma utilização moderada da GPU.
+
+00:14:34.440 --> 00:14:36.160
+A latência sob carga leve é aceitável,
+
+00:14:36.280 --> 00:14:37.980
+mas o P9 V5 oscila sob concorrência
+
+00:14:37.980 --> 00:14:39.360
+e depois dispara imprevisivelmente.
+
+00:14:40.140 --> 00:14:42.700
+O MQs ocasionais resetam réplicas no pico de tráfego,
+
+00:14:42.700 --> 00:14:43.760
+criando um efeito manada.
+
+00:14:44.500 --> 00:14:45.460
+Inicializações em cascata,
+
+00:14:45.520 --> 00:14:46.980
+autoscares instáveis e filas acumuladas.
+
+00:14:47.540 --> 00:14:48.880
+Operadores perseguem a causa errada,
+
+00:14:48.960 --> 00:14:50.000
+acreditando que o modelo é pesado,
+
+00:14:50.060 --> 00:14:51.860
+enquanto as políticas dos containers causam colapso.
+
+00:14:51.860 --> 00:14:53.160
+Pense na higiene com o containers
+
+00:14:53.160 --> 00:14:54.040
+como uma manipulação de videnda.
+
+00:14:54.400 --> 00:14:55.980
+Builds multi-estágio removem impressões digitais.
+
+00:14:56.360 --> 00:14:57.840
+Compiladores e ferramentas de desenvolvimento
+
+00:14:57.840 --> 00:14:58.820
+nunca entram no tempo de execução.
+
+00:14:59.240 --> 00:15:00.760
+Uma imagem em base de Strolless ou Slim
+
+00:15:00.760 --> 00:15:02.560
+reduz a superfície e diminui o tempo de pulo.
+
+00:15:03.260 --> 00:15:04.580
+Auditorias com Docker Slim ou Dive
+
+00:15:04.580 --> 00:15:05.720
+confirmam que sobreviveu ao build.
+
+00:15:06.320 --> 00:15:08.000
+Um Docker ignora e evita volume acidental.
+
+00:15:09.160 --> 00:15:10.400
+O resultado é uma limpeza forense.
+
+00:15:10.400 --> 00:15:12.680
+O que roda é apenas o que deveria rodar.
+
+00:15:13.220 --> 00:15:15.300
+A infraestrutura de GPU precisa de declarações explícitas.
+
+00:15:15.560 --> 00:15:17.000
+No Docker, declare GPUs como
+
+00:15:17.000 --> 00:15:18.340
+All ou a fatia exata do MIG.
+
+00:15:19.360 --> 00:15:21.260
+No Kubernetes, solicite recursos de GPU.
+
+00:15:21.260 --> 00:15:23.080
+O NVID garanta que o plugin de dispositivo
+
+00:15:23.080 --> 00:15:24.440
+corresponda à sua versão de driver.
+
+00:15:25.560 --> 00:15:27.440
+Na inicialização, verifique a presença do dispositivo
+
+00:15:27.440 --> 00:15:28.880
+e a compatibilidade do NVID.
+
+00:15:28.880 --> 00:15:30.080
+NVID, SME e configuração de LD
+
+00:15:30.080 --> 00:15:31.900
+não são decorativos, são verificações de admissão.
+
+00:15:32.160 --> 00:15:33.780
+Se algo estiver faltando ou incompatível,
+
+00:15:33.900 --> 00:15:35.100
+registre como violação e encerre.
+
+00:15:35.360 --> 00:15:37.700
+Então ajuste o NX Runtime e o TensoRT com propósito.
+
+00:15:38.260 --> 00:15:39.780
+Bloqueie a ordem do provedor de execução
+
+00:15:39.780 --> 00:15:41.320
+apenas para caminhos de GPU em produção.
+
+00:15:42.040 --> 00:15:43.640
+Considere desativar ou reajustar
+
+00:15:43.640 --> 00:15:44.480
+a arena de memória acuda
+
+00:15:44.480 --> 00:15:46.300
+quando ela acumular além do seu conjunto de trabalho.
+
+00:15:47.140 --> 00:15:47.940
+Limite o crescimento.
+
+00:15:48.100 --> 00:15:49.840
+Defina a pré-alocação para limites previsíveis.
+
+00:15:49.840 --> 00:15:52.500
+Habilite o FP16 por padrão
+
+00:15:52.500 --> 00:15:53.960
+quando as diretrizes de precisão permitirem.
+
+00:15:54.540 --> 00:15:56.380
+Condicione o NT8 a um teste de precisão.
+
+00:15:57.100 --> 00:15:59.120
+Vincule a E barra S a memória do dispositivo
+
+00:15:59.120 --> 00:16:01.160
+para que os inputs cheguem onde reside o processamento
+
+00:16:01.160 --> 00:16:02.440
+e escolhe streams deliberadamente
+
+00:16:02.440 --> 00:16:03.820
+para evitar o bloqueio de cabeça de fila.
+
+00:16:04.240 --> 00:16:05.440
+Garanta consistência com dois filtros,
+
+00:16:05.540 --> 00:16:06.300
+integridade e desempenho.
+
+00:16:10.110 --> 00:16:11.010
+Provedores carregados,
+
+00:16:11.130 --> 00:16:12.290
+kernels fundidos presentes,
+
+00:16:12.590 --> 00:16:13.690
+núcleos de tensores reconhecidos,
+
+00:16:14.070 --> 00:16:14.830
+e barra S vinculado.
+
+00:16:14.830 --> 00:16:17.450
+Desempenhe um conjunto base de prompts
+
+00:16:17.450 --> 00:16:18.990
+que roda pré-aquecido na inicialização
+
+00:16:18.990 --> 00:16:20.770
+com uma janela de latência e um piso de utilização.
+
+00:16:21.250 --> 00:16:22.530
+Se o container não atinge ambos,
+
+00:16:22.610 --> 00:16:23.750
+ele não é admitido no serviço.
+
+00:16:24.450 --> 00:16:26.310
+Anexe orçamentos de tamanho de pool a CI
+
+00:16:26.310 --> 00:16:28.250
+para que imagens que cedam os limites falhem no build.
+
+00:16:28.690 --> 00:16:30.830
+Mantenha um diff do conteúdo das imagens por digest
+
+00:16:30.830 --> 00:16:32.750
+para que rollbacks restaurem o código e a higiene.
+
+00:16:33.570 --> 00:16:35.070
+As evidências sugerem que containers
+
+00:16:35.070 --> 00:16:36.430
+não apenas implantam softwares
+
+00:16:36.430 --> 00:16:37.930
+que codificam o comportamento sob estresse.
+
+00:16:38.550 --> 00:16:40.350
+Quando são ruidosos, pesados ou vagos
+
+00:16:40.350 --> 00:16:40.930
+sobre a GPU,
+
+00:16:41.110 --> 00:16:42.550
+transformam a aceleração em cerimônia.
+
+00:16:42.550 --> 00:16:44.850
+Quando são enxutos, espícios e assertivos
+
+00:16:44.850 --> 00:16:46.570
+preservam o caminho rápido pelo qual você pagou.
+
+00:16:46.970 --> 00:16:48.250
+Neste ambiente, nada é acidental.
+
+00:16:48.830 --> 00:16:51.570
+Container ou ajuda a GPU a realizar seu trabalho ou atrapalha.
+
+00:16:52.450 --> 00:16:54.030
+Laboratório forense, métricas que condenam.
+
+00:16:54.490 --> 00:16:56.130
+Latência, vazão, utilização.
+
+00:16:56.870 --> 00:16:57.910
+Evidências superam opiniões.
+
+00:16:57.950 --> 00:16:59.190
+Então fixamos o conjunto de prompts,
+
+00:16:59.290 --> 00:17:00.710
+travamos as sítios, executamos o pré-aquecido.
+
+00:17:01.510 --> 00:17:02.630
+Mesmos schedulers,
+
+00:17:02.810 --> 00:17:03.650
+mesmos passos,
+
+00:17:03.710 --> 00:17:04.750
+20 para 512,
+
+00:17:04.870 --> 00:17:05.990
+expandidos para 50,
+
+00:17:06.370 --> 00:17:07.070
+para 1024,
+
+00:17:07.210 --> 00:17:07.850
+para 1024,
+
+00:17:07.970 --> 00:17:09.010
+para expor a tensão.
+
+00:17:10.150 --> 00:17:11.410
+A concorrência é mantida em 16
+
+00:17:11.410 --> 00:17:12.350
+com uma varredura TD2.
+
+00:17:13.030 --> 00:17:15.150
+A mãe do lote começa aumentando cuidadosamente
+
+00:17:15.150 --> 00:17:16.550
+até que os limites da verança se manifestem.
+
+00:17:16.850 --> 00:17:17.490
+Sem extrapolação,
+
+00:17:17.610 --> 00:17:18.090
+sem desculpas,
+
+00:17:18.190 --> 00:17:19.370
+apenas relógios e contadores.
+
+00:17:19.850 --> 00:17:21.010
+A latência testemunha primeiro.
+
+00:17:21.770 --> 00:17:22.630
+No estado degradado,
+
+00:17:22.710 --> 00:17:23.430
+o fallback de CPU,
+
+00:17:23.570 --> 00:17:25.070
+o caminho de atenção genérico P50,
+
+00:17:25.330 --> 00:17:26.550
+em 512 por 512,
+
+00:17:26.810 --> 00:17:27.830
+estica para dois dígitos.
+
+00:17:28.670 --> 00:17:29.210
+P95,
+
+00:17:29.350 --> 00:17:29.970
+conta beida da história.
+
+00:17:30.650 --> 00:17:32.110
+Ele varia de 20 a 40 segundos
+
+00:17:32.110 --> 00:17:33.050
+de forma imprevisível,
+
+00:17:33.150 --> 00:17:33.930
+porque filas compõem
+
+00:17:33.930 --> 00:17:35.070
+pequenas ineficiências.
+
+00:17:36.070 --> 00:17:37.250
+Em 1024 por 1024,
+
+00:17:37.390 --> 00:17:38.190
+com 50 passos,
+
+00:17:38.270 --> 00:17:39.130
+o P95 se torna
+
+00:17:39.130 --> 00:17:40.210
+uma violação logo na chegada.
+
+00:17:41.030 --> 00:17:41.910
+Após a remediação,
+
+00:17:41.990 --> 00:17:43.010
+com o GPU EP travado,
+
+00:17:43.110 --> 00:17:44.130
+a tensão fundida ativa
+
+00:17:44.130 --> 00:17:46.210
+e a RSS vinculada ao dispositivo,
+
+00:17:46.350 --> 00:17:47.890
+o P50 retorna um dígito baixo
+
+00:17:47.890 --> 00:17:49.330
+e o P95 comprime-se
+
+00:17:49.330 --> 00:17:50.050
+dentro do orçamento.
+
+00:17:51.050 --> 00:17:51.810
+O intervalo encolhe,
+
+00:17:51.870 --> 00:17:52.970
+o sistema se torna previsível.
+
+00:17:53.490 --> 00:17:54.350
+A vazão corrobora.
+
+00:17:55.130 --> 00:17:56.110
+Com concorrência 16,
+
+00:17:56.250 --> 00:17:56.970
+o caminho degradado
+
+00:17:56.970 --> 00:17:57.790
+resulta em gotejamento.
+
+00:17:57.790 --> 00:17:59.590
+Imagens por minuto mal
+
+00:17:59.590 --> 00:18:00.550
+aumentam com réplicas,
+
+00:18:00.630 --> 00:18:01.390
+pois cada instância
+
+00:18:01.390 --> 00:18:02.290
+trava a si mesmo.
+
+00:18:02.730 --> 00:18:03.470
+Escalar para 32
+
+00:18:03.470 --> 00:18:04.470
+multiplica com tensão.
+
+00:18:04.810 --> 00:18:05.210
+Não a saída.
+
+00:18:05.630 --> 00:18:06.110
+Pós-correção,
+
+00:18:06.170 --> 00:18:06.990
+a relação se estabiliza.
+
+00:18:07.510 --> 00:18:08.270
+Imagens por minuto
+
+00:18:08.270 --> 00:18:09.350
+sobem de forma quase linear
+
+00:18:09.350 --> 00:18:10.290
+até que o ciclo de trabalho
+
+00:18:10.290 --> 00:18:11.030
+dos núcleos tensores
+
+00:18:11.030 --> 00:18:11.870
+Satur ou Averan
+
+00:18:11.870 --> 00:18:12.550
+limite o lote.
+
+00:18:13.490 --> 00:18:14.350
+A diferença na inclinação
+
+00:18:14.350 --> 00:18:14.930
+é a condenação.
+
+00:18:15.230 --> 00:18:16.110
+O trabalho realmente cruza
+
+00:18:16.110 --> 00:18:16.650
+a linha de chegada
+
+00:18:16.650 --> 00:18:17.130
+mais rápida,
+
+00:18:17.150 --> 00:18:17.810
+não apenas mais alta.
+
+00:18:18.150 --> 00:18:19.230
+A utilização encerra o caso.
+
+00:18:19.930 --> 00:18:20.130
+Antes,
+
+00:18:20.210 --> 00:18:21.310
+o ciclo de trabalho da GPU
+
+00:18:21.310 --> 00:18:22.970
+oscilava entre 0% e 50%,
+
+00:18:22.970 --> 00:18:23.890
+com longos vales planos.
+
+00:18:24.690 --> 00:18:25.730
+Os contadores PCE
+
+00:18:25.730 --> 00:18:26.390
+mostram ruído.
+
+00:18:26.390 --> 00:18:27.950
+Vindo de transferências
+
+00:18:27.950 --> 00:18:28.590
+pagináveis.
+
+00:18:29.990 --> 00:18:30.350
+Depois,
+
+00:18:30.710 --> 00:18:31.550
+os ciclos de trabalho
+
+00:18:31.550 --> 00:18:32.470
+estabilizam uma faixa
+
+00:18:32.470 --> 00:18:33.390
+alta e consistente
+
+00:18:33.390 --> 00:18:34.390
+com engajamento visível
+
+00:18:34.390 --> 00:18:35.530
+dos núcleos de tensores.
+
+00:18:36.330 --> 00:18:37.150
+A CPU retorna
+
+00:18:37.150 --> 00:18:37.750
+para a orquestração
+
+00:18:37.750 --> 00:18:38.690
+e pré-processamento leve.
+
+00:18:39.250 --> 00:18:40.110
+Os picos de PCI
+
+00:18:40.110 --> 00:18:40.410
+diminuem
+
+00:18:40.410 --> 00:18:41.370
+porque a memória é fixada
+
+00:18:41.370 --> 00:18:42.510
+e a vinculação de EBR-CS
+
+00:18:42.510 --> 00:18:44.070
+eliminaram o tráfego desnecessário.
+
+00:18:44.530 --> 00:18:45.130
+Nada mais explica
+
+00:18:45.130 --> 00:18:45.610
+essa mudança
+
+00:18:45.610 --> 00:18:46.670
+a não ser uma aceleração real.
+
+00:18:47.010 --> 00:18:47.450
+Adicionamos uma
+
+00:18:47.450 --> 00:18:48.190
+verificação distracial.
+
+00:18:48.510 --> 00:18:50.610
+Em 512 por 512 com 20 passos,
+
+00:18:50.710 --> 00:18:51.370
+o caminho otimizado
+
+00:18:51.370 --> 00:18:52.230
+sustenta a concorrência
+
+00:18:52.230 --> 00:18:53.610
+16 sem picos residuais.
+
+00:18:54.150 --> 00:18:55.090
+Ao forçar para 32,
+
+00:18:55.230 --> 00:18:55.910
+o sistema degrada
+
+00:18:55.910 --> 00:18:56.510
+de forma gradual.
+
+00:18:56.910 --> 00:18:57.810
+O P95 expõe
+
+00:18:57.810 --> 00:18:58.530
+de forma previsível,
+
+00:18:58.610 --> 00:18:59.150
+não calótica.
+
+00:19:00.310 --> 00:19:01.590
+Em 1024 por 1024
+
+00:19:01.590 --> 00:19:02.570
+com 50 passos,
+
+00:19:02.610 --> 00:19:03.550
+a diferença é amplificada.
+
+00:19:04.890 --> 00:19:05.710
+O caminho não otimizado
+
+00:19:05.710 --> 00:19:06.530
+cede com tempos limites.
+
+00:19:07.010 --> 00:19:07.850
+O caminho endurecido
+
+00:19:07.850 --> 00:19:09.270
+mantém um P50 utilizável
+
+00:19:09.270 --> 00:19:10.510
+e um P95 aceitável
+
+00:19:10.510 --> 00:19:11.250
+com lote 1-2
+
+00:19:11.250 --> 00:19:12.210
+até atingir os limites
+
+00:19:12.210 --> 00:19:12.610
+da verã.
+
+00:19:13.070 --> 00:19:13.790
+É aqui que arenas
+
+00:19:13.790 --> 00:19:14.730
+e fluxos importam.
+
+00:19:15.190 --> 00:19:15.850
+Após o ajuste,
+
+00:19:15.910 --> 00:19:16.430
+o bloqueio de início
+
+00:19:16.430 --> 00:19:17.010
+de fila recua.
+
+00:19:17.650 --> 00:19:18.290
+O ângulo de custo
+
+00:19:18.290 --> 00:19:19.250
+é aritmética simples.
+
+00:19:19.570 --> 00:19:20.250
+Solicitações por hora
+
+00:19:20.250 --> 00:19:20.630
+de GPU
+
+00:19:20.630 --> 00:19:21.890
+sobem de 2 a 5 vezes
+
+00:19:21.890 --> 00:19:22.770
+quando a tensão fundida
+
+00:19:22.770 --> 00:19:23.350
+é FP-16
+
+00:19:23.350 --> 00:19:23.910
+e a vinculação
+
+00:19:23.910 --> 00:19:24.590
+de FP-16
+
+00:19:24.590 --> 00:19:25.210
+são verificadas.
+
+00:19:26.070 --> 00:19:26.830
+O custo efetivo
+
+00:19:26.830 --> 00:19:27.490
+por mil imagens
+
+00:19:27.490 --> 00:19:28.430
+cai consequentemente.
+
+00:19:29.030 --> 00:19:30.090
+As penalidades de inicialização
+
+00:19:30.090 --> 00:19:30.710
+a frio diminuem
+
+00:19:30.710 --> 00:19:31.650
+porque as imagens são leves
+
+00:19:31.650 --> 00:19:32.710
+e os motores são pré-compilados.
+
+00:19:33.330 --> 00:19:33.970
+Nós paramos de pagar
+
+00:19:33.970 --> 00:19:34.750
+o custo de compilação
+
+00:19:34.750 --> 00:19:35.450
+no primeiro toque.
+
+00:19:35.830 --> 00:19:36.510
+O registro concorda
+
+00:19:36.510 --> 00:19:36.850
+com os logs.
+
+00:19:37.250 --> 00:19:38.050
+A verificação evita
+
+00:19:38.050 --> 00:19:38.790
+execuções por sólidas.
+
+00:19:39.130 --> 00:19:40.190
+Em um segundo pool de nós
+
+00:19:40.190 --> 00:19:40.870
+com uma versão menor
+
+00:19:40.870 --> 00:19:41.770
+de driver diferente,
+
+00:19:42.530 --> 00:19:43.390
+a imagem endurecida
+
+00:19:43.390 --> 00:19:44.230
+se recusa a iniciar
+
+00:19:44.230 --> 00:19:44.990
+em uma incompatível
+
+00:19:44.990 --> 00:19:45.470
+por design.
+
+00:19:46.670 --> 00:19:47.490
+Assim, os resultados
+
+00:19:47.490 --> 00:19:48.150
+são comparáveis,
+
+00:19:48.210 --> 00:19:48.790
+não confundidos.
+
+00:19:49.350 --> 00:19:50.030
+Verifique cruzadamente
+
+00:19:50.030 --> 00:19:50.870
+o snapshot de capacidade.
+
+00:19:51.330 --> 00:19:52.350
+Mesma ordem de provedores,
+
+00:19:52.630 --> 00:19:53.290
+mesmo tenso RT,
+
+00:19:53.290 --> 00:19:54.730
+mesmo as assertões de care.
+
+00:19:55.130 --> 00:19:55.930
+Execute novamente
+
+00:19:55.930 --> 00:19:56.790
+o conjunto de promptos
+
+00:19:56.790 --> 00:19:57.730
+e recaptura as distribuições.
+
+00:19:58.090 --> 00:19:58.690
+Quando os histogramas
+
+00:19:58.690 --> 00:19:59.230
+se sobrepõem,
+
+00:19:59.290 --> 00:20:00.070
+a confiança aumenta.
+
+00:20:00.610 --> 00:20:01.290
+Quando não há diferença
+
+00:20:01.290 --> 00:20:01.890
+de capacidade,
+
+00:20:02.010 --> 00:20:02.630
+explica o porquê.
+
+00:20:03.290 --> 00:20:03.610
+No final,
+
+00:20:03.710 --> 00:20:04.590
+os números no argumento,
+
+00:20:04.630 --> 00:20:05.330
+eles condenam.
+
+00:20:05.870 --> 00:20:06.770
+A latência comprime,
+
+00:20:06.890 --> 00:20:07.650
+o rendimento escala,
+
+00:20:07.710 --> 00:20:08.650
+a utilização estabiliza.
+
+00:20:09.010 --> 00:20:10.250
+A patologia não é hipotética.
+
+00:20:10.870 --> 00:20:11.470
+É mensurável
+
+00:20:11.470 --> 00:20:13.150
+e depois deixa impressões digitais
+
+00:20:13.150 --> 00:20:13.950
+em cada gráfico.
+
+00:20:13.950 --> 00:20:16.390
+O protocolo de correção.
+
+00:20:16.750 --> 00:20:17.510
+Uma lista de verificação
+
+00:20:17.510 --> 00:20:18.230
+de endurecimento repetível.
+
+00:20:18.750 --> 00:20:19.550
+Controle de admissão
+
+00:20:19.550 --> 00:20:19.930
+vem primeiro.
+
+00:20:19.930 --> 00:20:21.230
+Recuse iniciar
+
+00:20:21.230 --> 00:20:22.170
+se os provedores de execução
+
+00:20:22.170 --> 00:20:23.070
+tenso RT ou CUDA
+
+00:20:23.070 --> 00:20:24.050
+não estiverem presentes.
+
+00:20:24.870 --> 00:20:25.670
+Enumere provedores,
+
+00:20:25.770 --> 00:20:26.390
+verifique a contagem
+
+00:20:26.390 --> 00:20:27.090
+de dispositivos,
+
+00:20:27.190 --> 00:20:27.670
+imprime o snapshot
+
+00:20:27.670 --> 00:20:28.310
+de capacidade,
+
+00:20:28.430 --> 00:20:28.810
+QDN,
+
+00:20:28.910 --> 00:20:29.470
+FP16,
+
+00:20:29.650 --> 00:20:30.150
+espaço de trabalho
+
+00:20:30.150 --> 00:20:30.810
+NT8.
+
+00:20:31.650 --> 00:20:32.350
+Se algo estiver faltando,
+
+00:20:32.450 --> 00:20:33.010
+sai com o código diferente.
+
+00:20:33.210 --> 00:20:34.190
+A disponibilidade
+
+00:20:34.190 --> 00:20:34.890
+segue a integridade.
+
+00:20:35.570 --> 00:20:36.410
+A fixação de versões
+
+00:20:36.410 --> 00:20:36.910
+é espiandosa.
+
+00:20:37.370 --> 00:20:38.270
+Mantenha uma única matriz,
+
+00:20:38.390 --> 00:20:39.170
+ramificação do driver,
+
+00:20:39.170 --> 00:20:39.990
+CUDA menor para CUDA,
+
+00:20:40.050 --> 00:20:40.310
+DNN,
+
+00:20:40.390 --> 00:20:41.610
+hash build do Anishka's runtime
+
+00:20:41.610 --> 00:20:42.130
+e tenso RT.
+
+00:20:42.810 --> 00:20:44.130
+Construa imagens de inferência
+
+00:20:44.130 --> 00:20:44.830
+com dessa matriz.
+
+00:20:45.390 --> 00:20:45.870
+Oture os nós
+
+00:20:45.870 --> 00:20:46.510
+para corresponder.
+
+00:20:46.950 --> 00:20:47.710
+Condicione a admissão
+
+00:20:47.710 --> 00:20:48.150
+e igualdade.
+
+00:20:49.110 --> 00:20:49.910
+Motores tenso RT
+
+00:20:49.910 --> 00:20:50.590
+pré-construídos
+
+00:20:50.590 --> 00:20:51.450
+por modelo e resolução.
+
+00:20:51.850 --> 00:20:52.690
+Planos são artefatos,
+
+00:20:52.790 --> 00:20:53.390
+não suposições
+
+00:20:53.390 --> 00:20:54.090
+em tempo de execução.
+
+00:20:54.590 --> 00:20:55.210
+A higiene de containers
+
+00:20:55.210 --> 00:20:55.790
+preserva a verdade.
+
+00:20:56.310 --> 00:20:56.890
+Use construções
+
+00:20:56.890 --> 00:20:57.690
+de múltiplos estágios.
+
+00:20:58.150 --> 00:20:58.710
+Mantenha um runtime
+
+00:20:58.710 --> 00:20:59.490
+de showless ou leve.
+
+00:21:00.130 --> 00:21:00.610
+Inclua um docker
+
+00:21:00.610 --> 00:21:01.350
+e ignore rigoroso.
+
+00:21:01.890 --> 00:21:02.670
+Verifique um histórico
+
+00:21:02.670 --> 00:21:03.090
+do docker
+
+00:21:03.090 --> 00:21:04.050
+e uma auditoria de julgamento.
+
+00:21:04.490 --> 00:21:05.010
+Defina orçamento
+
+00:21:05.010 --> 00:21:05.890
+de tamanho de pulmuciei.
+
+00:21:06.310 --> 00:21:07.430
+Fale imagens que incham.
+
+00:21:07.670 --> 00:21:08.290
+Assine imagens
+
+00:21:08.290 --> 00:21:09.110
+e compare conteúdos
+
+00:21:09.110 --> 00:21:09.730
+por digest.
+
+00:21:10.430 --> 00:21:11.490
+Configure a GPU primeiro,
+
+00:21:11.770 --> 00:21:12.390
+trave a ordem IP
+
+00:21:12.390 --> 00:21:13.290
+para a tenso RT CUDA
+
+00:21:13.290 --> 00:21:14.150
+e desative o provedor
+
+00:21:14.150 --> 00:21:14.930
+de CPU em produção.
+
+00:21:14.930 --> 00:21:17.090
+Verifique a presença
+
+00:21:17.090 --> 00:21:17.850
+de dev NVIDIA
+
+00:21:17.850 --> 00:21:18.630
+e a versão do NVIDIA
+
+00:21:18.630 --> 00:21:19.450
+contene a Toolkit.
+
+00:21:20.490 --> 00:21:21.150
+Solicite a GPU
+
+00:21:21.150 --> 00:21:21.810
+em NVIDIA.com
+
+00:21:21.810 --> 00:21:22.330
+explicitamente
+
+00:21:22.330 --> 00:21:23.010
+ou misture licenças
+
+00:21:23.010 --> 00:21:23.950
+e verifique na inicialização.
+
+00:21:24.430 --> 00:21:25.010
+Ajuste o runtime.
+
+00:21:25.890 --> 00:21:26.750
+Habilite a FP16
+
+00:21:26.750 --> 00:21:27.190
+por padrão.
+
+00:21:28.010 --> 00:21:28.710
+Limite NT8
+
+00:21:28.710 --> 00:21:29.690
+com verificações de precisão.
+
+00:21:30.950 --> 00:21:31.490
+Vincule a I.O.
+
+00:21:31.570 --> 00:21:32.030
+diretamente
+
+00:21:32.030 --> 00:21:33.090
+à memória do dispositivo.
+
+00:21:33.330 --> 00:21:34.350
+Habilite a memória paginada
+
+00:21:34.350 --> 00:21:35.050
+e escolhe streams
+
+00:21:35.050 --> 00:21:35.910
+para evitar bloqueio
+
+00:21:35.910 --> 00:21:36.490
+head offline.
+
+00:21:37.790 --> 00:21:38.870
+Reajuste ou desative
+
+00:21:38.870 --> 00:21:39.830
+a área na RT CUDA
+
+00:21:39.830 --> 00:21:40.430
+quando ela parar
+
+00:21:40.430 --> 00:21:41.510
+além do conjunto de trabalho.
+
+00:21:41.910 --> 00:21:42.550
+Define a celiose
+
+00:21:42.550 --> 00:21:43.010
+de desempenho
+
+00:21:43.010 --> 00:21:43.590
+como código
+
+00:21:43.590 --> 00:21:44.130
+autoteste
+
+00:21:44.130 --> 00:21:44.770
+de inicialização
+
+00:21:44.770 --> 00:21:45.590
+com janela de latência
+
+00:21:45.590 --> 00:21:46.550
+de prontos determinísticos
+
+00:21:46.550 --> 00:21:47.330
+e piso de utilização.
+
+00:21:47.710 --> 00:21:48.790
+Fale em backlogs crescentes.
+
+00:21:49.390 --> 00:21:50.470
+Adicione observabilidade,
+
+00:21:50.770 --> 00:21:51.370
+métricas de GPU
+
+00:21:51.370 --> 00:21:52.090
+por requisição,
+
+00:21:52.430 --> 00:21:53.490
+alertas de caminho degradado,
+
+00:21:53.610 --> 00:21:54.250
+prompt scannery,
+
+00:21:54.350 --> 00:21:55.330
+baselines comparáveis.
+
+00:21:56.410 --> 00:21:57.430
+Implemente blue bar green
+
+00:21:57.430 --> 00:21:58.390
+com gates de desempenho
+
+00:21:58.390 --> 00:21:59.150
+e reversão automática
+
+00:21:59.150 --> 00:21:59.910
+em caso de violação.
+
+00:22:00.790 --> 00:22:01.910
+Com protocolo aplicado,
+
+00:22:02.270 --> 00:22:03.350
+aceleração é comprovável,
+
+00:22:03.430 --> 00:22:03.950
+não presumido.
+
+00:22:03.950 --> 00:22:05.890
+Alisson é clean.
+
+00:22:06.630 --> 00:22:07.870
+Fallback silencioso de CPU,
+
+00:22:08.130 --> 00:22:08.690
+desvio de versão
+
+00:22:08.690 --> 00:22:09.470
+e inchaço de container
+
+00:22:09.470 --> 00:22:10.030
+não são bugs.
+
+00:22:10.610 --> 00:22:11.330
+São padrões de falha
+
+00:22:11.330 --> 00:22:12.330
+previsíveis que você pode bloquear.
+
+00:22:12.810 --> 00:22:13.710
+Execute o protocolo,
+
+00:22:13.770 --> 00:22:14.990
+instrumente a utilização da GPU,
+
+00:22:15.130 --> 00:22:16.130
+recuse caminhos degradados,
+
+00:22:16.250 --> 00:22:16.710
+fiche versões
+
+00:22:16.710 --> 00:22:17.290
+e trait engines
+
+00:22:17.290 --> 00:22:17.950
+como artefatos.
+
+00:22:18.410 --> 00:22:19.230
+Se você quer um mergulho
+
+00:22:19.230 --> 00:22:19.890
+mais profundo
+
+00:22:19.890 --> 00:22:20.990
+no comportamento de memória
+
+00:22:20.990 --> 00:22:21.990
+doar em ex-run time
+
+00:22:21.990 --> 00:22:22.650
+e tenso RT
+
+00:22:22.650 --> 00:22:23.730
+e quando desativar arenas,
+
+00:22:23.850 --> 00:22:24.630
+assista ao próximo caso
+
+00:22:24.630 --> 00:22:25.110
+desta série
+
+00:22:25.110 --> 00:22:25.610
+e inscreva-se
+
+00:22:25.610 --> 00:22:26.590
+para as notas de laboratório.
+
+00:22:26.590 --> 00:22:56.570
+e inscreva-se

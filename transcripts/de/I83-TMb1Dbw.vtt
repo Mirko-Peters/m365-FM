@@ -1,0 +1,835 @@
+WEBVTT
+
+00:00:00.120 --> 00:00:04.340
+Willkommen zu einer weiteren Episode der Microsoft Knowledge Nuggets hier auf M3 506 EFM.
+
+00:00:04.880 --> 00:00:05.880
+Ich bin Ihr Gastgeber Mirko Peters.
+
+00:00:06.300 --> 00:00:09.840
+Das heutige Thema ist etwas, von dem fast jeder schon gehört hat, aber das nur wenige wirklich erklären können.
+
+00:00:10.140 --> 00:00:11.280
+Co-Pilot für Microsoft Fabric.
+
+00:00:11.680 --> 00:00:13.400
+Man hört das Wort Co-Pilot heutzutage überall.
+
+00:00:13.660 --> 00:00:15.120
+In Word, in Teams, in GitHub, in Windows.
+
+00:00:15.700 --> 00:00:19.240
+Wenn also jemand von Co-Pilot für Fabric spricht, denken Sie wahrscheinlich, gleiche Sache, andere App.
+
+00:00:19.680 --> 00:00:20.100
+Falsch.
+
+00:00:20.540 --> 00:00:24.280
+Am Ende dieser Episode wissen Sie genau, was es ist, wo es funktioniert und warum es wichtig ist,
+
+00:00:24.360 --> 00:00:26.640
+selbst wenn Sie noch nie eine Zeile SQL geschrieben haben.
+
+00:00:27.560 --> 00:00:28.320
+Die Co-Pilot-Verwirrung.
+
+00:00:28.320 --> 00:00:32.220
+Die Sache ist die, Microsoft hat viele Co-Pilots und die meisten Leute werfen sie alle in einen Topf,
+
+00:00:32.280 --> 00:00:33.520
+aber sie sind keineswegs das Gleiche.
+
+00:00:34.020 --> 00:00:37.620
+Microsoft 365 Co-Pilot hilft Ihnen beim Schreiben von Dokumenten in Word,
+
+00:00:37.700 --> 00:00:39.840
+beim Zusammenfassen von E-Mails in Outlook und beim Notieren in Teams.
+
+00:00:40.420 --> 00:00:42.880
+GitHub Co-Pilot schlägt Code vor, wenn Sie in VS Code arbeiten.
+
+00:00:43.660 --> 00:00:47.280
+Es ist für Softwareentwickler gedacht, die Anwendungen zu bauen und dann gibt es noch Co-Pilot in Fabric.
+
+00:00:47.780 --> 00:00:48.600
+Das ist etwas völlig anderes.
+
+00:00:49.100 --> 00:00:51.960
+Es arbeitet spezifisch mit Daten und Analysen innerhalb von Microsoft Fabric.
+
+00:00:52.280 --> 00:00:52.880
+Stellen Sie sich so vor.
+
+00:00:53.200 --> 00:00:54.840
+Stellen Sie sich ein Unternehmen mit drei Spezialisten vor.
+
+00:00:55.040 --> 00:00:56.800
+Einer schreibt Berichte für das Führungsteam.
+
+00:00:56.920 --> 00:00:57.960
+Einer baut Softwareprodukte.
+
+00:00:58.320 --> 00:01:01.700
+Und einer kümmert sich um alle Unternehmensdaten, bereinigen, abfragen, Berichte daraus erstellen.
+
+00:01:02.240 --> 00:01:04.620
+Sie sind alle kluge Leute, aber sie machen völlig unterschiedliche Jobs.
+
+00:01:05.260 --> 00:01:06.680
+So funktionieren die Co-Pilots von Microsoft.
+
+00:01:07.220 --> 00:01:09.020
+M365 Co-Pilot ist Ihr Berichtsschreiber.
+
+00:01:09.320 --> 00:01:10.800
+GitHub Co-Pilot ist Ihr Softwareentwickler.
+
+00:01:11.160 --> 00:01:12.860
+Und Fabric Co-Pilot ist Ihr Datenspezialist.
+
+00:01:13.500 --> 00:01:16.320
+Nun, da wir wissen, was es nicht ist, lassen Sie uns darüber sprechen, was es tatsächlich ist.
+
+00:01:17.620 --> 00:01:19.120
+Was Co-Pilot für Fabric eigentlich ist.
+
+00:01:19.620 --> 00:01:20.820
+Willkommen zu einem weiteren Knowledge Nugget.
+
+00:01:20.820 --> 00:01:22.880
+Ich bin Mökko Peters von M365 FM.
+
+00:01:23.360 --> 00:01:26.760
+Das heutige Thema ist etwas, von dem viele Leute gehört haben, das aber nur wenige wirklich verstehen.
+
+00:01:27.120 --> 00:01:27.880
+Co-Pilot für Fabric.
+
+00:01:28.200 --> 00:01:28.780
+Was ist eigentlich?
+
+00:01:29.340 --> 00:01:30.320
+Hier ist die einfachste Definition.
+
+00:01:30.760 --> 00:01:34.020
+Co-Pilot für Fabric ist ein KI-Assistent, der direkt in Microsoft Fabric integriert ist.
+
+00:01:34.500 --> 00:01:36.140
+Sie geben ein, was Sie brauchen in einfacher Sprache.
+
+00:01:36.200 --> 00:01:36.800
+Und es schreibt den Code.
+
+00:01:36.880 --> 00:01:38.860
+Es stellt die Abfragen oder generiert die Berichte für Sie.
+
+00:01:39.560 --> 00:01:41.660
+Es nutzt große Sprachmodelle von Azure Open AI.
+
+00:01:42.300 --> 00:01:43.220
+Aber hier ist das Entscheidende.
+
+00:01:43.780 --> 00:01:46.800
+Es versteht Ihre spezifischen Schemata, Tabellen und Daten.
+
+00:01:47.740 --> 00:01:50.620
+Wenn Sie also eingeben, zeige mir den Gesamtumsatz nach Region für das letzte Quater.
+
+00:01:51.120 --> 00:01:54.360
+Dann weiß es bereits, welche Tabellen es betrachten muss und wie diese Abfrage zu schreiben ist.
+
+00:01:54.800 --> 00:01:59.180
+Stellen Sie es sich vor wie einen Junior-Datenanalysten, der unglaublich schnell arbeitet, aber Ihre Überprüfung der Arbeit benötigt.
+
+00:01:59.180 --> 00:02:02.560
+Sie geben Ihnen Anweisungen und Sekunden später liefern Sie etwas Nützliches.
+
+00:02:02.940 --> 00:02:06.800
+Es könnte sein, dass Ihre Anfrage falsch interpretiert würde, Code geschrieben würde, zwar funktioniert, aber nicht effizient ist.
+
+00:02:07.180 --> 00:02:10.400
+Deshalb sollten Sie die Ergebnisse immer überprüfen, bevor Sie sie in der Produktion einsetzen.
+
+00:02:10.400 --> 00:02:12.020
+Der eigentliche Vorteil ist jedoch eindeutig.
+
+00:02:12.420 --> 00:02:15.080
+Sie müssen kein SQL, DAX oder PySpark beherrschen, um loszulegen.
+
+00:02:15.620 --> 00:02:18.980
+Wenn Sie Ihre Daten verstehen und beschreiben können, was Sie benötigen, hilft Co-Pilot Ihnen dabei.
+
+00:02:19.760 --> 00:02:21.800
+Wo genau erscheint dieses Tool also innerhalb von Fabric?
+
+00:02:22.720 --> 00:02:23.680
+Hier ist es zu finden.
+
+00:02:23.920 --> 00:02:25.640
+Data Factory und Data Engineering.
+
+00:02:26.160 --> 00:02:28.300
+Co-Pilot ist in mehrere Fabric Workloads integriert.
+
+00:02:28.780 --> 00:02:30.480
+Es ist kein separates Tool, das Sie zusätzlich öffnen.
+
+00:02:30.820 --> 00:02:32.520
+Es befindet sich genau dort, wo Sie bereits arbeiten.
+
+00:02:32.880 --> 00:02:33.820
+Fangen wir mit Data Factory an.
+
+00:02:34.500 --> 00:02:37.040
+Hier stellen Sie Pipelines, um Daten zu verschieben und zu transformieren.
+
+00:02:37.040 --> 00:02:42.700
+Anstatt Aktivitäten manuell auf eine Arbeitsfläche zu ziehen und jede einzelne zu konfigurieren, beschreiben Sie einfach, was Sie brauchen.
+
+00:02:43.200 --> 00:02:45.680
+Zum Beispiel kombiniere diese beiden Tabellen und entferne Nullwerte.
+
+00:02:46.600 --> 00:02:48.560
+Co-Pilot generiert die Power Query-Schritte für Sie.
+
+00:02:49.300 --> 00:02:51.640
+Es erstellt die Zusammenführung, den Filter und die Datentypänderung.
+
+00:02:51.720 --> 00:02:53.040
+Alles basieren auf einem einzigen Satz.
+
+00:02:53.760 --> 00:02:56.500
+Sie überprüfen zwar weiterhin die Ausgabe, aber die repetitive Arbeit wird Ihnen abgenommen.
+
+00:02:56.880 --> 00:02:59.120
+Dann gibt es noch Data Engineering, speziell Fabric Notebooks.
+
+00:02:59.360 --> 00:03:03.640
+Hier schreiben Sie PySpark Code, um Daten im großen Stil zu laden, zu bereinigen und zu transformieren.
+
+00:03:03.640 --> 00:03:08.740
+Wenn Sie neu in der Spark-Syntax sind, kann sich selbst eine einfache Transformation anfühlen, als müssten Sie eine neue Sprache lernen.
+
+00:03:09.100 --> 00:03:09.800
+Co-Pilot ändert das.
+
+00:03:10.360 --> 00:03:11.240
+Sie beschreiben die Logik.
+
+00:03:11.600 --> 00:03:15.380
+Lade diese CSV aus dem Lake House, filtere stornierte Bestellungen heraus und kopiere nach Region.
+
+00:03:16.120 --> 00:03:17.460
+Und schon wird der PySpark Code generiert.
+
+00:03:17.920 --> 00:03:19.660
+Sie können ihn ausführen, anpassen und daraus lernen.
+
+00:03:20.120 --> 00:03:21.720
+Hier ist etwas, das vielen Menschen eigentlich bewusst ist.
+
+00:03:22.140 --> 00:03:23.580
+Co-Pilot kann auch bestehenden Code erklären.
+
+00:03:24.440 --> 00:03:27.560
+Sie öffnen ein Notebook, das jemand anderes geschrieben hat und haben keine Ahnung, was eine bestimmte Zelle bewirbt.
+
+00:03:28.000 --> 00:03:29.760
+Fragen Sie einfach, was macht diese Transformation?
+
+00:03:30.480 --> 00:03:33.000
+Co-Pilot liest den Code und fasst ihn in verständlicher Sprache zusammen.
+
+00:03:33.000 --> 00:03:34.220
+Dasselbe geht für Pipelines.
+
+00:03:34.600 --> 00:03:39.100
+Bitten Sie darum, eine komplexe Pipeline zusammenzufassen und es sagt Ihnen, was jeder Schritt bewirkt und in welcher Reihenfolge.
+
+00:03:39.340 --> 00:03:40.360
+Aber das ist nur die halbe Wahrheit.
+
+00:03:40.800 --> 00:03:42.700
+Co-Pilot befindet sich auch dort, wo Sie Ihre Daten konsumieren.
+
+00:03:43.600 --> 00:03:44.160
+Hier ist es zu finden.
+
+00:03:44.260 --> 00:03:45.260
+Data Warehouse und Power BI.
+
+00:03:46.000 --> 00:03:48.640
+Wo genau findet sich Co-Pilot eigentlich innerhalb von Microsoft 360?
+
+00:03:49.000 --> 00:03:50.960
+An zwei Hauptorten im Data Warehouse und im Power BI.
+
+00:03:51.280 --> 00:03:52.440
+Fangen wir mit dem Data Warehouse an.
+
+00:03:52.820 --> 00:03:54.960
+Hier können Sie SQL-Abfragen in einfacher Sprache anfordern.
+
+00:03:55.340 --> 00:03:57.680
+Geben Sie ein, zeigen mir den Gesamtumsatz pro Produkt für das letzte Quartal.
+
+00:03:58.120 --> 00:03:59.760
+Und Co-Pilot generiert das SQL für Sie.
+
+00:03:59.760 --> 00:04:03.480
+Sie müssen sich nicht die exakte Group-By- oder Ware-Syntax merken.
+
+00:04:04.240 --> 00:04:06.300
+Sie beschreiben einfach, was Sie wollen und Co-Pilot schreibt den Code.
+
+00:04:06.780 --> 00:04:09.960
+Die Sache ist die, viele Leute kennen ihre Daten in- und auswendig, schreiben aber nicht täglich SQL.
+
+00:04:10.520 --> 00:04:11.780
+Sie kennen die geschäftliche Fragestellung.
+
+00:04:12.080 --> 00:04:13.580
+Sie wissen, welche Tabellen die Antworten enthalten.
+
+00:04:13.740 --> 00:04:16.180
+Doch daraus eine korrekte, effiziente Abfrage zu erstellen, kostet Zeit.
+
+00:04:16.480 --> 00:04:17.560
+Co-Pilot beseitigt diese Hürde.
+
+00:04:17.880 --> 00:04:18.680
+Dann gibt es noch Power BI.
+
+00:04:19.120 --> 00:04:20.600
+Hier verbringen die meisten Geschäftsanfälle ihre Zeit.
+
+00:04:21.040 --> 00:04:23.140
+Co-Pilot hilft Ihnen dabei, Berichte von Grund auf neu zu erstellen.
+
+00:04:23.540 --> 00:04:24.400
+Beschreiben Sie einfach, was Sie möchten.
+
+00:04:24.400 --> 00:04:27.740
+Erstellen Sie einen Bericht, der den Umsatz pro Monat in einem Balkendiagramm zeigt.
+
+00:04:28.560 --> 00:04:32.840
+Co-Pilot schlägt die passenden Visualisierungen vor, ordnet Sie an und schreibt die DAX-Meshers im Hintergrund.
+
+00:04:33.340 --> 00:04:34.760
+Er kann für Sie auch ein Dashboard zusammenfassen.
+
+00:04:35.360 --> 00:04:38.900
+Stellen Sie sich vor, Sie öffnen einen Bericht mit 20 Diagrammen und haben nur 5 Minuten Zeit, ihn zu präsentieren.
+
+00:04:39.260 --> 00:04:43.440
+Bitten Sie Co-Pilot um eine Zusammenfassung und erhalten Sie einen klaren Überblick über die wichtigsten Trends und Zahlen.
+
+00:04:44.000 --> 00:04:46.080
+Co-Pilot kann zudem erklären, wie eine Kennzahl berechnet wird.
+
+00:04:46.160 --> 00:04:48.200
+Sie sehen eine Zahl und wissen nicht, wie sie zustande kommen.
+
+00:04:48.400 --> 00:04:49.000
+Fragen Sie einfach nach.
+
+00:04:49.240 --> 00:04:51.100
+Co-Pilot liest den DAX-Code und erklärt Ihnen dessen Funktion.
+
+00:04:51.100 --> 00:04:56.060
+Das bedeutet, dass Geschäftsanwender Fragen in natürlicher Sprache stellen und Antworten erhalten können, ohne auf das Datenteam zu warten.
+
+00:04:56.260 --> 00:04:57.420
+Sehen wir uns einige echte Beispiele an.
+
+00:04:57.820 --> 00:04:58.760
+Hier läuft alles zusammen.
+
+00:04:59.900 --> 00:05:01.540
+Echte Beispiele dafür, wie es in der Praxis funktioniert.
+
+00:05:02.280 --> 00:05:05.280
+Stellen Sie sich ein Einzelhandelsunternehmen vor, das sowohl online als auch in Filialen verkauft.
+
+00:05:05.500 --> 00:05:07.380
+Die Verkaufsdaten stammen aus verschiedenen Quellen.
+
+00:05:08.520 --> 00:05:12.960
+Transaktionsdatensätze aus dem POS-System, Kundendaten aus dem CRM und Inventarprotokolle aus dem Lager.
+
+00:05:13.420 --> 00:05:15.000
+Typische Geschäftsdaten, die analysiert werden müssen.
+
+00:05:15.360 --> 00:05:16.980
+Stellen Sie sich nun drei verschiedene Personen im Team vor.
+
+00:05:17.300 --> 00:05:18.840
+Jeder nutzt Co-Pilot auf eine andere Art und Weise.
+
+00:05:19.080 --> 00:05:20.020
+Beginnen wir mit dem Dateningenieur.
+
+00:05:20.020 --> 00:05:22.380
+Seine Aufgabe ist es, Rohdaten für die Analyse vorzubereiten.
+
+00:05:22.680 --> 00:05:24.760
+Er öffnet ein Fabric-Notebook und gibt etwas ein wie
+
+00:05:24.760 --> 00:05:27.000
+Lade die Verkaufs-CSV aus dem Lakehouse,
+
+00:05:27.420 --> 00:05:29.760
+filtere alle Zeilen mit dem Transaktionstyp Rückgabe heraus,
+
+00:05:30.000 --> 00:05:32.380
+kopiere dann nach Region und berechne den Gesamtumsatz für jede Gruppe.
+
+00:05:33.500 --> 00:05:35.600
+Co-Pilot generiert den PIS-Barcode in Sekunden.
+
+00:05:36.360 --> 00:05:38.240
+Der Ingenieur überprüft ihn, führt ihn aus und macht weiter.
+
+00:05:38.700 --> 00:05:40.460
+Was früher 20 Minuten dauerte, dauert jetzt nur zwei.
+
+00:05:40.820 --> 00:05:41.900
+Dann ist dann noch der Business Analyst.
+
+00:05:42.220 --> 00:05:44.020
+Er benötigt einen Bericht für das wöchentliche Vertriebsmeeting.
+
+00:05:44.420 --> 00:05:47.420
+Er öffnet Power BI, stellt eine Verbindung zu den bereinigten Daten her
+
+00:05:47.420 --> 00:05:50.700
+und bittet Co-Pilot, erstelle einen Bericht mit monatlichem Umsatz als Balkendiagramm
+
+00:05:50.700 --> 00:05:52.120
+und füge eine Linie für das Ziel hinzu.
+
+00:05:52.720 --> 00:05:55.220
+Co-Pilot erstellt das Layout, wählt die passenden Visuals
+
+00:05:55.220 --> 00:05:56.940
+und schreibt das DAX-Measure für den Zielvergleich.
+
+00:05:57.520 --> 00:05:59.240
+Der Analyst passt die Farben und das Layout an
+
+00:05:59.240 --> 00:06:01.640
+und hat den Minuten statt den Stunden einen ausgearbeiteten Bericht fertig.
+
+00:06:02.160 --> 00:06:04.760
+Schließlich gibt es noch jemanden, der SQL kennt, aber kein Datenbank-Experte ist.
+
+00:06:05.080 --> 00:06:07.360
+Er muss einer bestehenden Tabelle eine Spalte für die Gewinnmarge hinzu.
+
+00:06:07.720 --> 00:06:09.460
+Er öffnet das Data Warehouse und gibt ein,
+
+00:06:09.460 --> 00:06:12.040
+füge der Verkaufstabelle eine Spalte für die Gewinnmarge hinzu,
+
+00:06:12.040 --> 00:06:15.460
+berechnet als Umsatz minus kostengeteilt durch Umsatz, formatiert als Prozentsatz.
+
+00:06:16.420 --> 00:06:17.940
+Co-Pilot schreibt die Alter-Table-Anweisung.
+
+00:06:18.440 --> 00:06:20.600
+Der Benutzer führt sie aus, prüft die Zahlen und macht weiter.
+
+00:06:21.200 --> 00:06:22.560
+Eines vorweg, Co-Pilot ist nicht perfekt.
+
+00:06:23.280 --> 00:06:24.620
+Manchmal interpretiert er falsch, was sie meinen.
+
+00:06:25.160 --> 00:06:26.620
+Manchmal funktioniert der Code, ist aber nicht optimal.
+
+00:06:27.100 --> 00:06:28.260
+Manchmal wählt er das falsche Visuelement.
+
+00:06:28.800 --> 00:06:31.220
+Sie müssen den Output immer prüfen, bevor sie ihn produktiv nutzen.
+
+00:06:32.260 --> 00:06:34.340
+Aber für den Einstieg für Prototypen und zum Lernen
+
+00:06:34.340 --> 00:06:36.260
+ist es wie eine Vorlagenfabrik auf Knopfdruck.
+
+00:06:36.600 --> 00:06:39.020
+Sie beschreiben, was sie wollen, erhalten einen funktionierenden ersten Entwurf
+
+00:06:39.020 --> 00:06:39.720
+und verfeilen ihn dann.
+
+00:06:40.140 --> 00:06:41.940
+Was benötigen sie also eigentlich, um damit zu beginnen?
+
+00:06:42.740 --> 00:06:43.580
+Was sie zur Nutzung benötigen?
+
+00:06:43.860 --> 00:06:45.460
+Was genau brauchen sie also, um Co-Pilot zu nutzen?
+
+00:06:45.820 --> 00:06:47.520
+Die Anforderungen sind einfacher, als sie vielleicht erwarten.
+
+00:06:47.900 --> 00:06:50.260
+Erstens benötigen sie eine kostenpflichtige Fabrik-Kapazität,
+
+00:06:50.440 --> 00:06:51.900
+mindestens eine F2-Scooter Höhe.
+
+00:06:51.980 --> 00:06:54.620
+Falls sie eine Testkapazität oder Power BI Premium haben,
+
+00:06:54.720 --> 00:06:56.020
+könnten sie bereits Zugriff haben.
+
+00:06:56.720 --> 00:06:58.440
+Prüfen sie ein für ihre Mandanteneinstellung, um das zu bestätigen.
+
+00:06:58.860 --> 00:07:00.680
+Zweitens muss ihr Fabrik-Administrator-Co-Pilot
+
+00:07:00.680 --> 00:07:02.180
+in den Mandanteneinstellungen aktivieren.
+
+00:07:02.640 --> 00:07:04.560
+Es ist nicht in jeder Organisation standardmäßig eingeschränkt.
+
+00:07:05.000 --> 00:07:06.760
+Manche Administratoren führen es lieber schrittweise ein,
+
+00:07:06.760 --> 00:07:09.360
+testen es zuerst mit einer Pilotgruppe und geben es dann umfassend frei.
+
+00:07:09.360 --> 00:07:12.200
+Wenn Sie Fabrik öffnen und das Co-Pilot-Symbol nicht sehen,
+
+00:07:12.280 --> 00:07:13.060
+ist das wahrscheinlich der Grund.
+
+00:07:13.620 --> 00:07:15.040
+Am besten sprechen Sie mit Ihrem Administrator.
+
+00:07:15.580 --> 00:07:16.360
+Hier ist die gute Nachricht.
+
+00:07:16.620 --> 00:07:19.340
+Es gibt keine zusätzlichen Lizenzkosten über Ihre Fabrik-Kapazität hinaus.
+
+00:07:19.980 --> 00:07:20.840
+Co-Pilot ist inbegriffen.
+
+00:07:21.240 --> 00:07:22.760
+Sie müssen kein separates Abonnement kaufen
+
+00:07:22.760 --> 00:07:24.060
+oder sich für einen weiteren Dienst anmelden.
+
+00:07:24.780 --> 00:07:26.280
+Wenn Sie Fabrik haben, haben Sie auch Co-Pilot,
+
+00:07:26.380 --> 00:07:28.000
+solange Ihr Admin den Schalter umgelegt hat.
+
+00:07:28.820 --> 00:07:30.960
+Sobald es aktiviert ist, sehen Sie in den unterstützten Workloads
+
+00:07:30.960 --> 00:07:31.600
+ein Co-Pilot-Symbol.
+
+00:07:31.860 --> 00:07:33.580
+Klicken Sie darauf und ein Bereich öffnet sich,
+
+00:07:33.680 --> 00:07:34.760
+in dem Sie Ihre Prompts eingeben können.
+
+00:07:35.560 --> 00:07:36.460
+Das ist schon alles.
+
+00:07:37.280 --> 00:07:39.980
+Keine Konfiguration, kein Setup, keine Trainingsdaten müssen vorbereitet werden.
+
+00:07:40.480 --> 00:07:42.700
+Sie fangen einfach an zu tippen und Co-Pilot beginnt zu helfen.
+
+00:07:43.160 --> 00:07:44.280
+Aber hier ist eine wichtige Einschränkung.
+
+00:07:44.800 --> 00:07:47.000
+Co-Pilot arbeitet nur mit Daten, auf die Sie bereits Zugriff haben.
+
+00:07:47.840 --> 00:07:49.300
+Es respektiert Ihre bestehenden Berechtigungen.
+
+00:07:49.720 --> 00:07:51.340
+Wenn Sie eine Tabelle im Warehouse nicht sehen können,
+
+00:07:51.480 --> 00:07:52.740
+kann Co-Pilot Sie ebenfalls nicht sehen.
+
+00:07:53.440 --> 00:07:55.180
+Wenn Sie keinen Zugriff auf ein semantisches Modell haben,
+
+00:07:55.280 --> 00:07:56.880
+generiert Co-Pilot keine Abfragen dafür.
+
+00:07:57.720 --> 00:07:58.600
+Und das ist eigentlich eine gute Sache.
+
+00:07:58.600 --> 00:08:01.560
+Es bedeutet, dass Co-Pilot Ihre Sicherheitskontrollen nicht umgeht.
+
+00:08:02.060 --> 00:08:04.060
+Es arbeitet innerhalb der Grenzen, die Sie bereits festgelegt haben.
+
+00:08:04.420 --> 00:08:06.480
+Warum sollte das wichtig sein, wenn Sie neu in der Datenanalyse sind?
+
+00:08:07.280 --> 00:08:08.380
+Warum Anfänger darauf achten sollen?
+
+00:08:08.820 --> 00:08:12.180
+Die größte Hürde bei der Arbeit mit Daten war nie mangelnde Intelligenz oder Geschäftswissen.
+
+00:08:12.900 --> 00:08:14.220
+Es ging immer um technische Fähigkeiten.
+
+00:08:14.400 --> 00:08:15.380
+SQL, Python, DAX.
+
+00:08:15.940 --> 00:08:16.900
+Diese Dinge zu lernen, braucht Zeit.
+
+00:08:17.440 --> 00:08:19.980
+Monate, manchmal Jahre, bevor man wirklich produktiv ist.
+
+00:08:20.740 --> 00:08:22.920
+Und für jemanden, dessen Hauptaufgabe nicht Data Engineering ist,
+
+00:08:22.980 --> 00:08:23.860
+fehlt diese Zeit einfach.
+
+00:08:24.400 --> 00:08:26.820
+Sie müssen Berichte erstellen, Fragen beantworten und Entscheidungen treffen.
+
+00:08:26.820 --> 00:08:29.740
+Zu lernen, wie man eine perfekte Fensterfunktion schreibt, steht nicht auf der Liste.
+
+00:08:30.180 --> 00:08:31.800
+Co-Pilot senkt diese Hürde drastisch.
+
+00:08:32.340 --> 00:08:35.400
+Sie können in einfacher Sprache erklären, was Sie wollen und erhalten funktionierenden Code.
+
+00:08:35.820 --> 00:08:39.400
+Nicht immer perfekter Code, aber funktionierender Code, den Sie ausführen, prüfen und aus dem Sie lernen können.
+
+00:08:39.960 --> 00:08:41.060
+Das verändert die Dynamik und liegt.
+
+00:08:41.520 --> 00:08:44.160
+In der Praxis können nicht-technische Teammitglieder Daten erkunden,
+
+00:08:44.620 --> 00:08:47.460
+Berichte erstellen und Fragen stellen, ohne auf die IT zu warten.
+
+00:08:48.260 --> 00:08:50.700
+Die Person im Marketing, die die Kampagnenleistung verstehen muss,
+
+00:08:50.780 --> 00:08:53.080
+muss kein Ticket einreichen und drei Tage warten.
+
+00:08:53.500 --> 00:08:56.520
+Sie öffnen Fabrik, beschreiben, was Sie benötigen und erhalten einen Bericht.
+
+00:08:56.820 --> 00:09:00.540
+Der Betriebsleiter, der Bestandstrends verfolgen möchte, muss kein Piespark lernen.
+
+00:09:01.300 --> 00:09:01.860
+Sie fragen einfach.
+
+00:09:02.180 --> 00:09:05.640
+Für Self-Service-Analysen ist dies die Art von Wandel, die die Arbeitsweise von Teams verändert.
+
+00:09:06.080 --> 00:09:06.860
+Aber es gibt einen Haken.
+
+00:09:07.280 --> 00:09:09.740
+Es funktioniert nur gut, wenn die zugrunde liegenden Daten gut organisiert sind.
+
+00:09:10.300 --> 00:09:13.600
+Wenn Ihre Daten unordentlich sind, Tabellen nicht klar benannt oder Beziehungen nicht definiert sind,
+
+00:09:13.660 --> 00:09:14.660
+hat Co-Pilot Schwierigkeiten.
+
+00:09:15.220 --> 00:09:16.120
+Hat Co-Pilot Schwierigkeiten.
+
+00:09:16.460 --> 00:09:17.760
+Garbage in, garbage out geht nach wie vor.
+
+00:09:18.080 --> 00:09:20.220
+Die KI ist nur so gut wie das Fundament, auf dem sie aufbaut.
+
+00:09:20.680 --> 00:09:23.320
+Anfänger müssen immer noch verstehen, was sie abfragen und die Ergebnisse validieren.
+
+00:09:23.800 --> 00:09:27.240
+Co-Pilot kann eine Abfrage schreiben, die korrekt aussieht, aber die falsche Antwort liefert,
+
+00:09:27.320 --> 00:09:28.640
+weil sie die falsche Frage gestellt haben.
+
+00:09:29.000 --> 00:09:31.900
+Es kann einen Bericht erstellen, der schön aussieht, aber das falsche Maß verwendet.
+
+00:09:32.400 --> 00:09:34.880
+Das Tool beschleunigt Ihre Arbeit, ersetzt aber nicht Ihr Urteilsvermögen.
+
+00:09:35.320 --> 00:09:36.260
+Denken Sie einmal so darüber nach.
+
+00:09:36.540 --> 00:09:40.180
+Co-Pilot ist ein Werkzeug, das das Lernen beschleunigt, aber kein Ersatz für Verständnis ist.
+
+00:09:40.340 --> 00:09:44.180
+Sie müssen immer noch wissen, was ein Join ist, was ein Maß bewirkt und was ein Filter bedeutet.
+
+00:09:44.180 --> 00:09:49.380
+Aber anstatt wochenlang Syntax auswendig zu lernen, können Sie diese Zeit nutzen, um Konzepte zu verstehen.
+
+00:09:50.000 --> 00:09:52.740
+Sie sehen den Code, den Co-Pilot schreibt, Sie lesen ihn, passen ihn an und lernen dabei.
+
+00:09:53.180 --> 00:09:55.940
+Es ist, als hätten Sie einen Tutor, der erst die Antwort schreibt und Sie dann erklärt.
+
+00:09:56.480 --> 00:09:58.400
+Und mit der Zeit beginnen Sie, die Muster zu erkennen.
+
+00:09:59.180 --> 00:10:01.460
+Diese gleiche Join-Syntax, was ein Filter tatsächlich bewirkt.
+
+00:10:01.980 --> 00:10:04.840
+Sie bauen Ihre Fähigkeiten auf, ohne die Frustration auf einem leeren Bildschirm zu starten.
+
+00:10:05.160 --> 00:10:06.460
+Aber eines müssen Sie noch bedenken.
+
+00:10:07.480 --> 00:10:08.280
+Der Mensch spielt weidende Rolle.
+
+00:10:08.800 --> 00:10:09.440
+Hier ist die Wahrheit.
+
+00:10:09.580 --> 00:10:11.620
+Co-Pilot ist leistungsstark, aber nicht perfekt.
+
+00:10:11.620 --> 00:10:16.280
+Es kann Sie falsch verstehen, Code generieren, der zwar technisch funktioniert, aber langsam läuft.
+
+00:10:16.600 --> 00:10:19.920
+Oder eine DAX-Abfrage schreiben, die falsche Zahlen liefert, weil sie die falsche Tabelle verwendet.
+
+00:10:21.060 --> 00:10:21.940
+Und das ist kein seltener Fehler.
+
+00:10:22.580 --> 00:10:26.880
+Es kommt oft genug vor, dass man alles, was Co-Pilot erstellt, als ersten Entwurf behandeln sollte, nicht als endgültige Antwort.
+
+00:10:27.340 --> 00:10:32.200
+Ihre Aufgabe ist es also, den SQL-Code zu prüfen, DAX zu testen und jeden Pipeline-Schritt zu validieren, bevor er live geht.
+
+00:10:32.420 --> 00:10:34.280
+Hier geht es nicht um Misstrauen, sondern um Verantwortlichkeit.
+
+00:10:34.980 --> 00:10:38.420
+Wenn ein Bericht die falschen Zahlen anzeigt, interessiert es das Unternehmen nicht, dass Co-Pilot die Kennzahl erstellt.
+
+00:10:38.640 --> 00:10:40.360
+Sie interessieren sich dafür, dass Sie das Ergebnis freigegeben.
+
+00:10:40.360 --> 00:10:43.840
+Betrachten Sie Co-Pilot als intelligenten Assistenten, nicht als autonomen Mitarbeiter.
+
+00:10:44.240 --> 00:10:49.500
+Er erledigt die langweiligen Aufgaben, Standardabfragen, repetitive Skripte, den Startpunkt, der viel besser ist als ein leeres Blatt.
+
+00:10:50.260 --> 00:10:51.800
+Aber Sie sind immer noch derjenige, der die Entscheidung tritt.
+
+00:10:52.200 --> 00:10:55.560
+Sie bestimmen, was korrekt ist, was in die Produktion geht und was das Unternehmen tatsächlich sieht.
+
+00:10:56.000 --> 00:10:57.220
+Und Governance verschwindet nicht einfach.
+
+00:10:57.860 --> 00:11:00.620
+Datenqualität, Zugriffskontrolle, Compliance, das liegt weiterhin in Ihrer Verantwortung.
+
+00:11:01.080 --> 00:11:03.660
+Co-Pilot bereinigt weder Ihre Daten noch selbst der Sicherheitsrichtlinien durch.
+
+00:11:04.360 --> 00:11:06.440
+Er arbeitet innerhalb der von Ihnen gesetzten Berechtigungen,
+
+00:11:06.440 --> 00:11:09.440
+behebt aber kein fehlhaftes Datenmodell oder eine schlecht durchdachte Zugriffsstruktur.
+
+00:11:10.240 --> 00:11:13.140
+Diese Grundlagen müssen solide sein, bevor Co-Pilot einen echten Mehrwert bieten kann.
+
+00:11:13.720 --> 00:11:15.640
+Für IT-Profis gibt es hier tatsächlich einen Silberstreifer, Moritz.
+
+00:11:16.380 --> 00:11:20.840
+Co-Pilot übernimmt die Routinearbeit, Standardberichte, rundlegende Abfragen, alltägliche Pipelines.
+
+00:11:21.540 --> 00:11:23.000
+Das macht Sie frei für die schwierigen Aufgaben.
+
+00:11:23.180 --> 00:11:27.000
+Performance-Optimierung, Datenarchitektur, komplexe Modellierung, die Arbeit, die wirklich etwas bewegt.
+
+00:11:27.800 --> 00:11:30.380
+Und da Business-Anwender ihre grundlegenden Fragen selbst beantworten können,
+
+00:11:30.720 --> 00:11:33.720
+erhält Ihr Team weniger Routineanfragen und hat mehr Zeit für die wichtigen Analysen.
+
+00:11:33.720 --> 00:11:34.880
+Also hier ist das Fazit.
+
+00:11:35.720 --> 00:11:39.240
+Co-Pilot für Fabric ist ein KI-Assistent, der einfache Sprache in Datenarbeit verwandelt.
+
+00:11:39.780 --> 00:11:43.400
+Pipelines abfragen, Berichte sie beschreiben, was sie brauchen und Co-Pilot schreibt den Code.
+
+00:11:43.900 --> 00:11:47.120
+Es ist keine Magie, sondern ein Werkzeug, das Anfängern den Einstieg erleichtert
+
+00:11:47.120 --> 00:11:48.480
+und Experten hilft, schneller zu arbeiten.
+
+00:11:48.720 --> 00:11:51.600
+Wenn Sie neu bei Fabric sind, ist Co-Pilot der beste Freund, von dem Sie gar nicht wussten, dass Sie ihn haben.
+
+00:11:51.940 --> 00:11:54.080
+Abonnieren Sie uns auf Ihrer bevorzugten Podcast-Plattform
+
+00:11:54.080 --> 00:11:56.700
+und teilen Sie diese Folge mit jedem, der Microsoft Fabric verstehen möchte.
+
+00:11:56.700 --> 00:12:26.680
+Vielen Dank.

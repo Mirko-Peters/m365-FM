@@ -1,0 +1,1255 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:07.540
+Kopilot Anda tidak bodoh, Anda membuatnya kelaparan, tidak ada skema, tidak ada aturan, tidak ada pagar pembatas, lalu Anda mengeluh tentang halusinasi.
+
+00:00:07.860 --> 00:00:11.840
+Kebenarannya, sebagian besar kegagalan iPower Platform bukanlah modal IQ.
+
+00:00:12.140 --> 00:00:15.840
+Itu adalah konteks yang Anda buat. Inilah yang akan Anda dapatkan hari ini.
+
+00:00:16.060 --> 00:00:20.900
+Pola rekayasa konteks yang dapat diulang untuk Kopilot Studio dan Power Automate yang menghilangkan halusinasi,
+
+00:00:21.220 --> 00:00:24.540
+memperbaiki penyimpangan lintas penyewa, dan memangkas latensi dan biaya.
+
+00:00:24.540 --> 00:00:29.740
+Kami akan membangun pola pesan sistem, daftar periksa landasan skema, dan template alur pengambilan.
+
+00:00:29.740 --> 00:00:34.040
+Ada satu lapisan yang dilupakan semua orang, lapisan kebijakan yang mencegah penyimpangan tata kelola.
+
+00:00:34.200 --> 00:00:37.200
+Kami akan menghubungkannya dan membuktikannya dengan metrik sebelum dan sesudah.
+
+00:00:37.380 --> 00:00:38.460
+Sekarang kita mulai.
+
+00:00:38.680 --> 00:00:40.560
+Masalah, mengapa Kopilot Anda gagal?
+
+00:00:40.780 --> 00:00:43.640
+Utang konteks, mari kita definisikan masalahnya dengan tepat.
+
+00:00:43.760 --> 00:00:49.080
+Utang konteks, ini adalah akumulasi konteks yang hilang atau ceroboh yang memaksa modal bahasa untuk menebak.
+
+00:00:49.080 --> 00:00:54.800
+Anda melewatkan aturan sistem, tidak terhubung ke datafes, membiarkan alat tidak terdefinisi, dan mengabaikan kebijakan.
+
+00:00:55.020 --> 00:00:57.960
+Lalu Anda terkejut saat output tidak stabil di antara penyewa.
+
+00:00:57.960 --> 00:01:00.900
+Menarik, utang konteks muncul sebagai empat kegagalan.
+
+00:01:01.100 --> 00:01:02.740
+Pertama, aturan sistem yang hilang.
+
+00:01:02.960 --> 00:01:05.680
+Tidak ada identitas, tidak ada cakupan, tidak ada kebijakan penolakan.
+
+00:01:05.940 --> 00:01:09.400
+Model dioptimalkan agar bermanfaat dan bertele-tele, tidak patuh dan tepat.
+
+00:01:09.520 --> 00:01:11.260
+Kedua, data yang tidak terhubung.
+
+00:01:11.500 --> 00:01:16.780
+Anda melambaikan tangan ke tabel pinjaman tanpa memberikan nama entitas, definisi bidang, hubungan, atau contoh rekaman.
+
+00:01:16.880 --> 00:01:18.880
+Ketiga, alat yang tidak terdefinisi.
+
+00:01:19.100 --> 00:01:23.740
+Anda memintanya untuk memperbarui status, tetapi Anda tidak mengekspos jalur tindakan yang diatur di power otomat.
+
+00:01:23.740 --> 00:01:29.440
+Keempat, tidak ada kebijakan. Anda mengandalkan getaran alih-alih DLP, label sensitivitas, dan akses bersyarat.
+
+00:01:29.560 --> 00:01:31.260
+Kuadrat itu menjamin penyimpangan.
+
+00:01:31.520 --> 00:01:32.740
+Buktinya ada di mana-mana.
+
+00:01:33.000 --> 00:01:37.700
+Tingkat kegagalan dan pengabayan yang tinggi dalam AI perusahaan mengikuti eksekusi dan konteks, bukan batasan modal.
+
+00:01:37.900 --> 00:01:43.400
+Tim melaporkan halusinasi, inkonsistensi khusus lingkungan, dan token burn dari pengambilan tabel yang berlebihan hanya untuk aman.
+
+00:01:43.660 --> 00:01:45.260
+Anda tidak memerlukan model yang lebih besar.
+
+00:01:45.480 --> 00:01:46.760
+Anda memerlukan tulang punggung.
+
+00:01:47.020 --> 00:01:48.520
+Berikut model mental yang memperbaikinya.
+
+00:01:48.520 --> 00:01:51.620
+Empat lapisan konteks, sistem, pengambilan, alat, kebijakan.
+
+00:01:51.800 --> 00:01:53.900
+Anggap saja seperti registri Windows untuk agen Anda.
+
+00:01:54.080 --> 00:01:56.360
+Ini bukan sekadar basis data, ini adalah tulang punggung.
+
+00:01:56.580 --> 00:01:58.880
+Sistem menyatakan siapa agen itu dan apa yang ditolaknya.
+
+00:01:59.040 --> 00:02:02.140
+Pengambilan menyediakan fakta dan skema sehingga berhenti menciptakan bidang.
+
+00:02:02.340 --> 00:02:06.100
+Alat mengungkap tindakan pasti yang diizinkan untuk dilakukan dengan hak istimewa paling rendah.
+
+00:02:06.260 --> 00:02:08.940
+Kebijakan menegakkan batasan terlepas dari perintah yang cerdas.
+
+00:02:09.140 --> 00:02:11.040
+Hapus lapisan manapun dan hasilnya akan goyah.
+
+00:02:11.220 --> 00:02:13.060
+Tambahkan keempatnya dan hasilnya akan terkunci.
+
+00:02:13.280 --> 00:02:16.800
+Hal yang paling sering dilewatkan oleh pengembang, lingkungan adalah batasan keamanan di power platform.
+
+00:02:16.800 --> 00:02:21.200
+Jika kebijakan DLP Anda memblokir pencampuran konektor bisnis ke non-bisnis dalam produksi tetapi tidak dalam pengembangan,
+
+00:02:21.400 --> 00:02:23.040
+Anda telah membangun dua alam semesta yang berbeda.
+
+00:02:23.200 --> 00:02:25.780
+Mata dan tangan agen Anda berubah berdasarkan lingkungan.
+
+00:02:25.980 --> 00:02:30.320
+Jadi, ya, hasil akan berpindah antar penyewa dan lingkungan karena Anda mengubah dunia di bawah kakinya.
+
+00:02:30.520 --> 00:02:32.660
+Izinkan saya menjelaskan siklus kegagalan yang umum.
+
+00:02:32.820 --> 00:02:34.360
+Anda membangun agen Copilot Studio.
+
+00:02:34.600 --> 00:02:37.360
+Anda memberinya tujuan yang tidak jelas, membantu aplikasi pinjaman.
+
+00:02:37.600 --> 00:02:40.760
+Anda menautkan pustaka dokumen PDF tanpa mengekstraksi struktur.
+
+00:02:40.960 --> 00:02:44.380
+Anda tidak mengindeks entitas, hubungan, atau label sensitivitas datafiz.
+
+00:02:44.380 --> 00:02:47.800
+Anda melewatkan katalog alat dan berasumsi Copilot akan mengetahuinya.
+
+00:02:47.940 --> 00:02:49.540
+Lalu Anda mengajukan pertanyaan.
+
+00:02:49.740 --> 00:02:54.220
+Ia menjawab dengan kebijakan generik yang tidak jelas dan menciptakan bidang bernama tahap pinjaman yang tidak ada dalam skema Anda.
+
+00:02:54.400 --> 00:02:58.220
+Selamat, Anda membayar token untuk membaca konten yang salah dan mendapatkan hasil yang tidak masuk akal.
+
+00:02:58.400 --> 00:03:00.120
+Bandingkan dengan pendekatan yang membumi.
+
+00:03:00.300 --> 00:03:03.680
+Pertanyaan yang sama tetapi lapisan pengambilan Anda menyertakan indeks skema,
+
+00:03:04.020 --> 00:03:10.020
+aplikasi pinjaman entitas, status bidang, nilai daftar pilihan, hubungan dengan pemohon dan dokumen, ditambah catatan sampel.
+
+00:03:10.020 --> 00:03:15.040
+Agen merujuk status aplikasi pinjaman secara eksplisit dan mengutip nilai yang diizinkan tanpa menebak-nebak.
+
+00:03:15.200 --> 00:03:17.480
+Perbedaannya bukanlah model, melainkan konteks.
+
+00:03:17.700 --> 00:03:19.940
+Latensi dan biaya adalah gejala dari utang yang sama.
+
+00:03:20.160 --> 00:03:24.180
+Mengambil seluruh tabel secara berlebihan karena Anda tidak memiliki filter tingkat bidang akan menghabiskan banyak token dan waktu.
+
+00:03:24.380 --> 00:03:27.420
+Pengambilan yang tidak jelas memaksa model untuk menelusuri potongan-potongan yang tidak relevan.
+
+00:03:27.660 --> 00:03:29.860
+Bagian atas yang tidak terdefinisi tidak dapat memfilter maksud.
+
+00:03:29.980 --> 00:03:32.800
+Anda membayar semuanya, tidak mempelajari apapun, dan tetap berhalusinasi.
+
+00:03:32.800 --> 00:03:35.920
+Brutal, penyimpangan tata kelola adalah pembunuh yang senyap.
+
+00:03:36.040 --> 00:03:41.760
+Tanpa lapisan kebijakan, DLP, label sensitivitas, akses bersyarat, perilaku agen Anda secara bertahap akan menyimpang.
+
+00:03:41.960 --> 00:03:45.600
+Konektor diklasifikasikan ulang, akun tamu menyelinap ke dalam alur, log dimatikan,
+
+00:03:45.880 --> 00:03:48.760
+lalu agen dengan senang hati meringkas catatan sensitif ke konektor non-bisnis.
+
+00:03:48.940 --> 00:03:50.800
+Anda tidak menyadarinya hingga minggu audit.
+
+00:03:50.960 --> 00:03:55.140
+Luar biasa, berikut perbaikannya dan kami akan membangunnya langkah demi langkah dalam seri ini.
+
+00:03:55.140 --> 00:04:03.360
+Lapisan sistem, pesan sistem singkat dan berversi yang mengodekan identitas, cakupan, penolakan, kesadaran skema, aturan penggunaan alat, dan batasan pencatatan.
+
+00:04:03.600 --> 00:04:07.540
+Dibuat perlingkungan dengan token untuk unit bisnis dan pemetaan sensitivitas.
+
+00:04:07.760 --> 00:04:13.180
+Lapisan pengambilan, saluran yang terhubung ke datafes terlebih dahulu dengan indeks dokumen sebagai sumber sekunder
+
+00:04:13.180 --> 00:04:18.980
+menggunakan pengelompokan yang sadar entitas, pencarian hibrit, pemangkasan keamanan, dan filter tingkat bidang.
+
+00:04:18.980 --> 00:04:27.960
+Lapisan alat, katalog power otomat yang dikurasi dengan hak istimewa paling rendah dengan template perintah yang menentukan skema input, logika penolakan, dan tanda sensitivitas.
+
+00:04:28.200 --> 00:04:34.520
+Lapisan kebijakan, grup DLP yang diberlakukan, akses bersyarat, penyembunyian waktu nyata melalui label, dan tombol pemutus admin.
+
+00:04:34.780 --> 00:04:36.800
+Jika Anda tidak mengingat hal lain, ingatlah ini.
+
+00:04:37.040 --> 00:04:40.300
+Model memprediksi teks, Anda merekayasa kebenaran, kekuatan, dan batasan.
+
+00:04:40.520 --> 00:04:41.920
+Tugas Anda adalah konteksnya.
+
+00:04:42.160 --> 00:04:43.380
+Model adalah mesin rendering.
+
+00:04:43.660 --> 00:04:46.020
+Berhenti menyalahkan renderer atas cetak biru Anda yang hilang.
+
+00:04:46.020 --> 00:04:49.580
+Lapisan pertama, konteks sistem yang tidak menyimpang dari pola plus daftar periksa.
+
+00:04:49.760 --> 00:04:52.300
+Sekarang, kita hentikan menebak dan menginstal identitas.
+
+00:04:52.480 --> 00:04:55.240
+Tanpa identitas, ruang lingkup, dan aturan penolakan yang eksplisit,
+
+00:04:55.440 --> 00:05:00.300
+model bahasa besar secara default menjadi labrador yang menawan, mengambil semuanya, menyenangkan semua orang, dan menginjak-injak kepatuhan.
+
+00:05:00.500 --> 00:05:02.760
+Anda membutuhkan penjaga, bukan golden retriever.
+
+00:05:02.980 --> 00:05:06.460
+Kenyataannya, jika pesan sistem Anda tidak jelas, keluaran Anda akan tidak jelas.
+
+00:05:06.700 --> 00:05:10.560
+Jika pesan sistem Anda tidak konsisten perlingkungan, keluaran Anda akan menyimpang perlingkungan.
+
+00:05:10.720 --> 00:05:12.580
+Jadi, kami menulis tulang punggung terlebih dahulu.
+
+00:05:12.580 --> 00:05:14.080
+Berikut pola yang saya gunakan.
+
+00:05:14.080 --> 00:05:16.640
+Polanya pendek, memiliki versi, dan kejam.
+
+00:05:16.820 --> 00:05:21.420
+Peran, Anda adalah kopilot operasi pinjaman untuk unit bisnis dalam nama lingkungan.
+
+00:05:21.600 --> 00:05:24.980
+Anda hanya menjawab tentang aplikasi pinjaman dan proses terkait.
+
+00:05:25.160 --> 00:05:29.500
+Ruang lingkup, tetap berpegang pada entitas data first dan beri label dokumen di lingkungan ini.
+
+00:05:29.780 --> 00:05:32.980
+Jika jawaban memerlukan sistem eksternal atau konten yang tidak berlabel,
+
+00:05:33.200 --> 00:05:35.160
+tolak dan usulkan langkah berikutnya yang aman.
+
+00:05:35.400 --> 00:05:38.940
+Nada, ringkas, faktual, bidang situs persis seperti skema.
+
+00:05:39.160 --> 00:05:40.280
+Entity, field.
+
+00:05:40.280 --> 00:05:46.360
+Kebijakan penolakan, jika konten sensitif berlabel daftar label MIP diminta dalam konteks non-bisnis,
+
+00:05:46.680 --> 00:05:48.960
+tolak dengan alasan dan catat ringkasan penolakan.
+
+00:05:49.200 --> 00:05:53.660
+Kesadaran skema, lebih suka indeks skema data first, jangan pernah menciptakan bidang.
+
+00:05:53.840 --> 00:05:57.280
+Petakan sinonim kenama kanonik menggunakan glossarium yang disediakan.
+
+00:05:57.280 --> 00:06:05.360
+Aturan penggunaan alat, Anda dapat memanggil tindakan power otomat yang disetujui hanya ketika maksud diklasifikasikan
+
+00:06:05.360 --> 00:06:09.860
+sebagai dapat ditindak lanjuti dengan keyakinan kuning 8, jika tidak, tanggapi dengan analisis.
+
+00:06:10.120 --> 00:06:15.980
+Batasan pencatatan, jangan gemap PII, rangkum nilai sebagai yang disembunyikan saat sensitifitas tinggi.
+
+00:06:16.520 --> 00:06:19.160
+Pola itu masuk ke instruksi khusus Co-Pilot Studio.
+
+00:06:19.440 --> 00:06:23.540
+Dan ya, ia mendapatkan nama lingkungan berparameter, unit bisnis, daftar label MIP.
+
+00:06:23.540 --> 00:06:28.960
+Ikatkan itu ke variabel lingkungan sehingga dev, UAT, dan prod berbagi logika yang sama dengan pengikatan yang berbeda.
+
+00:06:29.080 --> 00:06:31.280
+Versi itu sismes GV 1.3.
+
+00:06:31.460 --> 00:06:36.880
+Cap versi di setiap footer response selama pengujian dan kebijakan V1.3 sehingga driver segera terlihat.
+
+00:06:37.040 --> 00:06:40.260
+Sekarang daftar periksa karena Anda akan melupakan sesuatu jika tidak.
+
+00:06:40.500 --> 00:06:43.420
+Sasaran, apa yang boleh dicapai agen dalam satu kalimat.
+
+00:06:43.620 --> 00:06:45.420
+Audiens, siapa yang dilayaninya.
+
+00:06:45.700 --> 00:06:47.640
+Petugas pinjaman, bukan seluruh perusahaan.
+
+00:06:47.860 --> 00:06:51.000
+Definisi, nama entitas dan bidang kanonik ditambah sinonim.
+
+00:06:51.000 --> 00:06:54.360
+Konten yang diizinkan, kelas dan sumber data yang diizinkan.
+
+00:06:54.560 --> 00:06:59.820
+Tindakan yang tidak diizinkan, apapun yang bersifat lintas penyewa, tidak berlabel, atau di luar konektor bisnis.
+
+00:07:00.080 --> 00:07:03.000
+Jalur eskalasi, kapan harus menyerahkannya kepada manusia.
+
+00:07:03.200 --> 00:07:04.660
+Kriteria dan template pesan.
+
+00:07:04.820 --> 00:07:10.500
+Rubrik evaluasi, cara kami menilai keluaran, akurasi bidang, kebenaran penolakan, dan kutipan skema.
+
+00:07:10.700 --> 00:07:12.860
+Tulis ini dalam bahasa sederhana lalu kompres.
+
+00:07:13.040 --> 00:07:16.300
+Kesalahan yang paling umum adalah mengubur batasan di bawah teks kebijakan baru.
+
+00:07:16.520 --> 00:07:18.840
+Modal akan meluncur seperti pekerja magang pada umumnya.
+
+00:07:18.840 --> 00:07:23.060
+Tetap bedah, kesalahan klasik lainnya, memasukkan batasan ke dalam perintah pengguna.
+
+00:07:23.240 --> 00:07:28.340
+Tidak, batasan termasuk dalam pesan sistem dan pembungkus alat, bukan dimanapun pengguna mengetik.
+
+00:07:28.480 --> 00:07:31.860
+Dan versi perlingkungan, dev dapat bersifat permisif, fraud tidak.
+
+00:07:32.080 --> 00:07:36.860
+Menyalin satu file sistem di seluruh penyewa tanpa token adalah cara Anda membuat alam semesta paralel.
+
+00:07:37.000 --> 00:07:39.000
+Kemenangan cepat yang dapat Anda lakukan hari ini.
+
+00:07:39.220 --> 00:07:41.960
+Templat pesan dengan variable dan ikat pada impor solusi.
+
+00:07:41.960 --> 00:07:44.660
+Itu saja sudah menghilangkan setumpuk inkonsistensi.
+
+00:07:44.800 --> 00:07:50.440
+Tambahkan bagian glosarium yang memetakan sinonim umum ke bidang kanonik, tahap, langkah, fase, aplikasi pinjaman, status.
+
+00:07:50.740 --> 00:07:52.760
+Anda akan melihat bidang halusinasi menghilang.
+
+00:07:53.040 --> 00:07:55.260
+Implementasi di Copilot Studio mudah dilakukan.
+
+00:07:55.580 --> 00:08:03.040
+Buka instruksi khusus, tempel pola, sisipkan variable untuk nama lingkungan, unit bisnis, dan daftar label keluaran, lalu aktifkan selalu sertakan.
+
+00:08:03.700 --> 00:08:08.460
+Buat catatan set instruksi untuk kanonikalisasi skema yang dirujuk agen sebelum menjawab.
+
+00:08:08.580 --> 00:08:10.700
+Lalu tambahkan paragraf template penolakan.
+
+00:08:10.700 --> 00:08:13.980
+Saya tidak dapat membagikan yang disunting karena label kebijakan.
+
+00:08:14.180 --> 00:08:15.760
+Berikut alternatif yang aman.
+
+00:08:16.160 --> 00:08:18.620
+Konsistensi bukanlah sihir, melainkan template.
+
+00:08:18.860 --> 00:08:21.200
+Pagar pembatas akhir, batasan pencatatan.
+
+00:08:21.440 --> 00:08:24.200
+Tandai bahwa agen tidak pernah mengulang nilai sensitif mentah.
+
+00:08:24.440 --> 00:08:30.360
+Saat harus merujuknya, agen menggunakan placeholder dan menawarkan tindakan alat yang menangani rahasia melalui tindakan kredensial dalam alur.
+
+00:08:30.560 --> 00:08:35.760
+Jika Anda tidak mengingat hal lain, ingatlah ini, identitas, cakupan, penolakan, skema, alat, pencatatan.
+
+00:08:35.940 --> 00:08:37.560
+Enam baris, nol drama.
+
+00:08:37.560 --> 00:08:41.260
+Lapisan kedua, pengambilan yang mengarah ke dataverse atau template alur.
+
+00:08:41.420 --> 00:08:42.880
+Identitas sudah ditetapkan.
+
+00:08:43.140 --> 00:08:45.540
+Sekarang kita berikan fakta yang tidak dapat dihalusinasi.
+
+00:08:45.740 --> 00:08:49.460
+Pengambilan adalah saat sebagian besar dari Anda menyalakan selang pemadam kebakaran dan menyebutnya grounding.
+
+00:08:49.780 --> 00:08:50.140
+Salah.
+
+00:08:50.340 --> 00:08:56.120
+Pengambilan bersifat selektif, sadar akan entitas, dan ya, dataverse mengutamakannya karena disitulah kebenaran Anda berada.
+
+00:08:56.120 --> 00:08:57.460
+Mengapa ini penting?
+
+00:08:57.700 --> 00:09:00.540
+Halusinasi berkembang ketika model harus menyimpulkan struktur.
+
+00:09:00.800 --> 00:09:04.360
+Jika tidak dapat melihat definisi entitas dan bidang kanonik, model akan menciptakannya.
+
+00:09:04.580 --> 00:09:09.620
+Latensi dan biaya melonjak ketika Anda menyekop seluruh tabel dan belum PDF karena Anda tidak memfilter berdasarkan maksud.
+
+00:09:09.740 --> 00:09:11.420
+Hasilnya, kebisingan yang mahal.
+
+00:09:11.620 --> 00:09:14.880
+Perbaikannya adalah alur yang mengutamakan skema dan memangkas berdasarkan keamanan.
+
+00:09:14.940 --> 00:09:15.920
+Berikut templatnya.
+
+00:09:16.160 --> 00:09:16.780
+Dua indeks.
+
+00:09:17.040 --> 00:09:17.580
+Satu otak.
+
+00:09:17.580 --> 00:09:24.200
+Pertama, indeks skema untuk entitas dataverse, bidang, hubungan, kumpulan opsi, aturan bisnis, ditambah glosarium kecil berisi sinonim.
+
+00:09:24.360 --> 00:09:28.840
+Kedua, indeks dokumen untuk kebijakan, SOP, dan dokumen referensi hanya setelah terstruktur.
+
+00:09:29.000 --> 00:09:32.600
+Pencarian hibrit pada keduanya dengan pemangkasan keamanan berdasarkan lingkungan dan pengguna.
+
+00:09:32.800 --> 00:09:35.060
+Model tidak pernah melihat apa yang tidak boleh dilihat pengguna.
+
+00:09:35.260 --> 00:09:37.040
+Itu bukan saran, itu batasannya.
+
+00:09:37.340 --> 00:09:38.940
+Mari saya uraikan indeks skema.
+
+00:09:38.940 --> 00:09:46.600
+Tangkap untuk setiap entitas, nama, deskripsi, daftar bidang dengan tipe data, nilai set opsi, hubungan, satu kebanyak, banyak ke satu,
+
+00:09:46.600 --> 00:09:48.800
+dan aturan bisnis yang memengaruhi status valid.
+
+00:09:49.000 --> 00:09:55.000
+Sertakan dua contoh catatan per entitas, disunting, dan satu contoh query yang memetakan bahasa alami ke bidang kanonik.
+
+00:09:55.120 --> 00:09:58.840
+Tambahkan peta sinonim, tahap, langkah, fase, status aplikasi pinjaman.
+
+00:09:59.120 --> 00:10:02.000
+Model akan berlabuh ke nama kanonik karena Anda menyerahkan peta tersebut.
+
+00:10:02.200 --> 00:10:03.420
+Sekarang, indeks dokumen.
+
+00:10:03.620 --> 00:10:04.980
+PDF bukanlah teks suci.
+
+00:10:04.980 --> 00:10:08.180
+Itu adalah wadah ekstrak struktur sebelum pengindeksan.
+
+00:10:08.360 --> 00:10:10.940
+Judul menjadi bagian, tabel menjadi pasangan nilai kunci.
+
+00:10:11.120 --> 00:10:16.200
+Kebijakan diberi tag dengan klasifikasi Microsoft Purview dan label MIP, sehingga sensitivitas dapat dibaca mesin.
+
+00:10:16.200 --> 00:10:19.820
+Jika file tidak dapat diurai menjadi bagian dan bidang, file tersebut tidak termasuk dalam indeks.
+
+00:10:19.960 --> 00:10:23.200
+Anda tidak sedang membuat buku tempel, pemangkasan keamanan tidak dapat dinegosiasikan.
+
+00:10:23.960 --> 00:10:27.940
+Lapisan query indeks harus memfilter berdasarkan identitas pengguna, lingkungan, dan kebijakan DLP.
+
+00:10:28.200 --> 00:10:31.560
+Jika dev mengizinkan konektor tertentu dan prod tidak, lapisan pengambilan mencerminkannya.
+
+00:10:31.740 --> 00:10:34.080
+Pengguna yang sama, lingkungan yang berbeda, pengambilan yang berbeda.
+
+00:10:34.180 --> 00:10:37.680
+Itu tidak berpakaian, itu desain, chunking, hentikan pemotongan berdasarkan jumlah halaman.
+
+00:10:37.840 --> 00:10:39.200
+Cung berdasarkan logika entitas.
+
+00:10:39.380 --> 00:10:41.920
+Untuk skema, kelompokkan pada entitas dan granularitas hubungan.
+
+00:10:41.920 --> 00:10:45.420
+Pikirkan 500-800 token perpotongan dengan daftar bidang yang utuh.
+
+00:10:45.540 --> 00:10:50.600
+Untuk dokumen, potong berdasarkan bagian dengan judul yang dipertahankan dan sertakan metadata breadcrum.
+
+00:10:50.860 --> 00:10:52.640
+Judul, bagian, subagian.
+
+00:10:52.860 --> 00:10:55.360
+Intinya adalah mengembalikan makna, bukan konfeti.
+
+00:10:55.560 --> 00:10:57.620
+Taktik kinerja yang benar-benar akan Anda rasakan.
+
+00:10:57.840 --> 00:10:59.100
+Pemfilteran tingkat bidang.
+
+00:10:59.360 --> 00:11:02.680
+Saat maksud menyertakan status, jangan tarik seluruh definisi entitas.
+
+00:11:02.880 --> 00:11:05.060
+Tarik blok bidang dan aturan bisnis yang relevan.
+
+00:11:05.300 --> 00:11:08.060
+Klasifikasi kater atas berdasarkan maksud merutekan query.
+
+00:11:08.260 --> 00:11:10.540
+Query skema mendapatkan k kecil, 2-3.
+
+00:11:10.540 --> 00:11:12.960
+Pencarian dokumen mungkin memerlukan 4-6.
+
+00:11:13.180 --> 00:11:16.660
+Simpan FAQ frekuensi tinggi dan cuplikan skema dalam memori dengan TTL pendek,
+
+00:11:16.860 --> 00:11:19.000
+sehingga Anda tidak membayar pencarian yang sama sepanjang hari.
+
+00:11:19.200 --> 00:11:24.020
+Terapkan batasan konektor dan token, sehingga satu perintah yang tidak jelas tidak dapat memicu sapuan tabel.
+
+00:11:24.220 --> 00:11:27.160
+Sama-sama, cara menghubungkan ini di Copilot Studio.
+
+00:11:27.440 --> 00:11:29.720
+Tetapkan data fast sebagai sumber pengetahuan utama.
+
+00:11:29.980 --> 00:11:35.460
+Bangun sumber data yang memancarkan kartu skema, entitas, bidang, hubungan, kumpulan opsi, aturan, contoh,
+
+00:11:35.680 --> 00:11:38.680
+klasifikasi cakupan terlampir, dan label MIP sebagai properti.
+
+00:11:38.680 --> 00:11:42.060
+Tambahkan indeks dokumen Anda sebagai sumber sekunder dengan konten bagian.
+
+00:11:42.200 --> 00:11:46.380
+Konfigurasikan pengambilan hibrid dengan pemeringkatan ulang yang lebih mengutamakan kecocokan skema daripada teks naratif.
+
+00:11:46.560 --> 00:11:48.440
+Jika ada skema yang ditemukan, tingkatkan.
+
+00:11:48.660 --> 00:11:50.420
+Jika tidak ada, kembali ke dokumen.
+
+00:11:50.680 --> 00:11:53.680
+Jika tidak ada, tolak atau ajukan pertanyaan klarifikasi.
+
+00:11:53.920 --> 00:11:55.980
+Ya, penolakan lebih baik daripada fiksi.
+
+00:11:56.220 --> 00:11:59.500
+Daftar periksa landasan skema yang akan Anda cetak dan rekatkan ke monitor Anda.
+
+00:11:59.500 --> 00:12:14.380
+Nama entitas sama persis seperti di Dataverse, deskripsi bidang dalam bahasa sederhana, hubungan yang tercantum dengan kardinalitas, nilai dan makna kumpulan opsi, contoh rekaman dengan nilai yang disembunyikan, aturan bisnis, catatan penanganan nul, sinonim untuk nama kanonik, dan peringatan kualitas data.
+
+00:12:14.620 --> 00:12:17.420
+Jika salah satu dari itu hilang, landasan Anda tidak lengkap.
+
+00:12:17.540 --> 00:12:20.780
+Perangkap umum, mengindeks PDF tanpa mengekstraksi struktur, jangan.
+
+00:12:21.060 --> 00:12:23.200
+Mengabaikan label sensitivitas, berbahaya.
+
+00:12:23.400 --> 00:12:28.840
+Mencampur konektor bisnis dan non-bisnis dalam panggilan pengambilan yang sama, diblokir oleh DLP dalam produksi, lalu Anda bertindak terkejut.
+
+00:12:28.840 --> 00:12:33.040
+Lainnya, mengembalikan 10 potongan yang hampir duplikat karena Anda tidak pernah menghapus duplikat header.
+
+00:12:33.200 --> 00:12:36.120
+Bersihkan umpan Anda, mari kita lakukan demo mental cepat.
+
+00:12:36.240 --> 00:12:38.860
+Prom, dapatkah kita memindahkan pinjaman ini ke tinjauan akhir?
+
+00:12:39.040 --> 00:12:41.580
+Konteks di sini, turunkan data dan naikkan data sumber.
+
+00:12:41.780 --> 00:12:45.320
+Alur yang buruk, mengambil 3 PDF kebijakan generik dan tidak ada skema.
+
+00:12:45.580 --> 00:12:47.160
+Model, menemukan tahap pinjaman.
+
+00:12:47.460 --> 00:12:51.960
+Alur yang baik, pengklasifikasi maksud merutekan ke skema, mengembalikan aplikasi pinjaman.
+
+00:12:52.240 --> 00:12:58.060
+Status, transisi yang diizinkan melalui aturan bisnis, dan nama tindakan otomatisasi daya yang mengubah status.
+
+00:12:58.060 --> 00:13:03.640
+Status situs jawaban mengizinkan nilai dan mengusulkan tindakan atau menolak jika sensitivitas memblokirnya.
+
+00:13:03.780 --> 00:13:04.880
+Itulah landasannya.
+
+00:13:05.180 --> 00:13:07.040
+Satu detail terakhir, latensi.
+
+00:13:07.260 --> 00:13:09.660
+Ukur waktu pengambilan secara terpisah dari pembuatan.
+
+00:13:09.980 --> 00:13:14.080
+Jika pengambilan melebihi 300 milidetik secara rutin, filter Anda salah atau indeks Anda membengkak.
+
+00:13:14.220 --> 00:13:15.700
+Optimalkan di sana terlebih dahulu.
+
+00:13:15.960 --> 00:13:17.700
+Model cepat, keraguan-keraguan Anda tidak.
+
+00:13:17.960 --> 00:13:19.880
+Jika Anda tidak mengingat hal lain, ingatlah ini.
+
+00:13:20.060 --> 00:13:22.300
+Pengambilan bukanlah pencarian, melainkan kurasi.
+
+00:13:22.560 --> 00:13:24.080
+Dataverse adalah tulang punggungnya.
+
+00:13:24.080 --> 00:13:25.500
+Dokumen adalah otot.
+
+00:13:25.620 --> 00:13:29.740
+Lampirkan keduanya, rapikan dengan keamanan, dan agen Anda berhenti menebak-nebak.
+
+00:13:29.900 --> 00:13:33.340
+Lapisan ketiga, perkakas dan kebijakan yang menegakkan tata kelola.
+
+00:13:33.500 --> 00:13:35.000
+Power Automate plus DLP.
+
+00:13:35.320 --> 00:13:36.520
+Ia tahu apa yang benar.
+
+00:13:36.740 --> 00:13:38.960
+Sekarang, ajari apa yang dapat dilakukannya dengan aman.
+
+00:13:39.200 --> 00:13:41.020
+Agen yang tidak dapat bertindak adalah chatbot.
+
+00:13:41.180 --> 00:13:44.200
+Agen yang bertindak tanpa pagar pembatas adalah pelanggaran yang menunggu berita utama.
+
+00:13:44.420 --> 00:13:46.400
+Anda menginginkan kompetensi dengan sabuk pengaman.
+
+00:13:46.660 --> 00:13:49.140
+Masukkan Power Automate DLP dan akses bersyarat.
+
+00:13:49.300 --> 00:13:51.400
+Otot, pagar, dan penjaga di pintu.
+
+00:13:51.400 --> 00:13:55.700
+Inilah prinsipnya, tindakan bersifat eksplisit, diizinkan, dan dapat dibalik.
+
+00:13:55.820 --> 00:13:57.440
+Kami tidak memberikan kebebasan pada model.
+
+00:13:57.680 --> 00:13:59.160
+Kami memberinya katalog kata kerja.
+
+00:13:59.380 --> 00:14:01.260
+Setiap kata kerja merupakan alur dengan skema masukan yang sempit,
+
+00:14:01.420 --> 00:14:04.020
+referensi koneksi dengan hak istimewa paling sedikit, dan logika penolakan yang tertanam.
+
+00:14:04.180 --> 00:14:05.760
+Model tidak pernah mengimprovisasi hak.
+
+00:14:05.920 --> 00:14:08.540
+Model meminta kata kerja mulailah dengan katalog alat.
+
+00:14:08.700 --> 00:14:10.220
+Entry katalog terlihat seperti ini.
+
+00:14:10.440 --> 00:14:15.560
+Nama tampilan, tujuan, skema masukan, prasyarat, tanda sensitivitas, referensi koneksi, dan kontrak pengembalian.
+
+00:14:15.760 --> 00:14:17.540
+Contoh, perbarui status pinjaman.
+
+00:14:17.540 --> 00:14:24.840
+Tujuan, aplikasi pinjaman transisi, status, masukan, string ID pinjaman, enum status target, prasyarat.
+
+00:14:25.140 --> 00:14:28.100
+Status target harus berupa transisi yang valid perset aturan.
+
+00:14:28.760 --> 00:14:34.500
+Tanda sensitivitas memerlukan konektor bisnis berlabel internal, referensi koneksi pinjaman SVCmin.
+
+00:14:34.700 --> 00:14:38.880
+Kami mengajari balita untuk menggunakan gunting dengan memberikan gunting pengaman, bukan gergaji mesin.
+
+00:14:39.080 --> 00:14:40.960
+Hak istimewa paling sedikit bukanlah opsional.
+
+00:14:41.260 --> 00:14:44.860
+Buat akun layanan khusus dengan izin datafes minimum untuk melakukan tindakan itu saja.
+
+00:14:44.860 --> 00:14:48.080
+Tidak ada hak tabel yang luas, tidak ada pelanggaran kekuasaan tingkat pemilik.
+
+00:14:48.260 --> 00:14:51.020
+Simpan kredensial dalam referensi koneksi yang terikat per lingkungan.
+
+00:14:51.220 --> 00:14:55.060
+Jadi, dev menggunakan data palsu, prod menyentuh realitas, dan tidak ada yang bocor ke yang lain.
+
+00:14:55.320 --> 00:14:58.380
+Jika Anda menggunakan konektor khusus, tinjau keamanannya seperti yang Anda maksud.
+
+00:14:58.540 --> 00:15:01.020
+Sekarang, buat template alur dengan tiga lapisan standar.
+
+00:15:01.200 --> 00:15:02.940
+Lapisan pertama, validasi input.
+
+00:15:03.080 --> 00:15:08.280
+Validasi tipe, petakan sinonim ke bidang kanonik, dan tolak parameter yang ambigu atau hilang dengan penolakan terstruktur.
+
+00:15:08.500 --> 00:15:10.500
+Lapisan kedua, pemeriksaan kebijakan.
+
+00:15:10.500 --> 00:15:17.380
+Evaluasi label MIP, keanggotaan grup DLP, dan sinyal akses bersyarat apapun yang Anda paparkan melalui header atau konteks pemicu.
+
+00:15:17.560 --> 00:15:19.540
+Lapisan ketiga, eksekusi dan masking.
+
+00:15:19.880 --> 00:15:24.620
+Lakukan yang benar, masking nilai sensitif dalam log, dan kembalikan hasil ringkas dengan ide korelasi.
+
+00:15:24.820 --> 00:15:27.700
+Templat perintah berada di depan alur ini sebagai pembungkus.
+
+00:15:27.920 --> 00:15:32.480
+Templat ini menentukan cara agen meminta alat saat maksud mengubah status dan keyakinan.
+
+00:15:32.660 --> 00:15:36.760
+Delapan, panggil pembaruan status pinjaman dengan ide pinjaman, status target.
+
+00:15:36.760 --> 00:15:41.660
+Jika status bertentangan dengan aturan bisnis atau blok sensitivitas, tolak dan kutip kebijakan tertentu.
+
+00:15:41.820 --> 00:15:43.640
+Di sinilah sebagian besar dari Anda gagal.
+
+00:15:43.840 --> 00:15:46.060
+Anda meneruskan teks bentuk bebas ke dalam alur seperti tahun 2019.
+
+00:15:46.700 --> 00:15:48.120
+Skema yang kuat masuk, hasil yang kuat keluar.
+
+00:15:48.300 --> 00:15:49.940
+Tandai variable sebagai sensitif.
+
+00:15:50.080 --> 00:15:53.860
+Input seperti SSN atau bidang sensitivitas tinggi apapun berada dalam variable aman.
+
+00:15:54.100 --> 00:15:56.180
+Mereka tidak pernah menggemakan riwayat yang dijalankan.
+
+00:15:56.400 --> 00:15:59.400
+Gunakan tindakan kredensial untuk apapun yang terkait dengan autentikasi.
+
+00:15:59.400 --> 00:16:07.040
+Jika alur perlu mengambil token, kredensial ditarik saat dijalankan dari penyimpanan yang aman, tidak ditempelkan dalam perintah, tidak dimasukkan ke dalam variable lingkungan bernama PELS, jangan dibaca.
+
+00:16:07.240 --> 00:16:11.940
+Ya, orang-orang melakukannya, jangan menjadi orang-orang, akses bersyarat adalah orang dewasa di ruangan itu.
+
+00:16:12.160 --> 00:16:16.180
+Terapkan MFA, batasi eksekusi ke perangkat yang patuh atau lokasi terpercaya.
+
+00:16:16.400 --> 00:16:22.600
+Jika kebijakan Anda menyatakan tamu tidak dapat memulai tindakan, pembungkus alat Anda harus membaca identitas penelepon dan menolak dengan penolakan yang jelas.
+
+00:16:22.780 --> 00:16:25.320
+Tindakan memerlukan perangkat yang patuh sesuai kebijakan.
+
+00:16:25.320 --> 00:16:32.120
+Agen tetap sopan, kebijakan tetap tegas, DLP adalah membran, klasifikasikan konektor menjadi bisnis, non-bisnis, dan diblokir.
+
+00:16:32.240 --> 00:16:34.700
+Alur dalam katalog alat ini menggunakan konektor khusus bisnis.
+
+00:16:34.920 --> 00:16:39.460
+Mencoba merutekan output ketujuan non-bisnis, diblokir di tingkat penyewa, bukan hanya di alur Anda.
+
+00:16:39.640 --> 00:16:42.280
+Intinya adalah membuat jalur yang salah secara fisik tidak mungkin.
+
+00:16:42.520 --> 00:16:45.860
+Anda tidak bergantung pada pengekangan pengembang, Anda bergantung pada fisika.
+
+00:16:46.120 --> 00:16:48.060
+Segmentasi lingkungan menjaga kewarasan Anda.
+
+00:16:48.300 --> 00:16:53.980
+Dev, UAT, Prod, data yang berbeda, referensi koneksi yang berbeda, nama alat yang sama, skema yang sama.
+
+00:16:53.980 --> 00:16:57.760
+Itu berarti perintah agen Anda tidak berubah, hanya ikatan yang berubah.
+
+00:16:57.940 --> 00:17:02.580
+Anda menguji di UAT dengan label yang realistis dan pengaturan DLP, sehingga kejutan tidak muncul di Prod.
+
+00:17:02.700 --> 00:17:05.640
+Jika Dev memiliki DLP yang longgar dan Prod ketat, uji keduanya.
+
+00:17:05.840 --> 00:17:07.920
+Varian disengaja, bukan tidak disengaja.
+
+00:17:08.140 --> 00:17:10.100
+Lapisan kebijakan terhubung ke waktu proses.
+
+00:17:10.340 --> 00:17:13.500
+Sematkan aturan penolakan yang mungkin berupa label dalam konten yang diambil.
+
+00:17:13.720 --> 00:17:18.120
+Jika pengambilan mengembalikan rekaman dengan rahasia dan tindakan yang diminta akan mengeksposnya ke sistem eksternal,
+
+00:17:18.320 --> 00:17:21.680
+pembungkus alat menolak dengan alasan berkode kebijakan dan mencatat insiden tersebut.
+
+00:17:21.680 --> 00:17:25.320
+Penyamaran waktu nyata mengganti nilai dengan placeholder dalam teks yang terlihat pada model.
+
+00:17:25.540 --> 00:17:28.920
+Model tidak pernah melihat rahasia mentah, sehingga tidak dapat membocorkannya secara tidak sengaja.
+
+00:17:29.140 --> 00:17:30.940
+Ini bukan ketidakpercayaan, ini kebersihan.
+
+00:17:31.100 --> 00:17:33.660
+Pencatatan dan audit adalah bagian dari desain, bukan renungan.
+
+00:17:33.860 --> 00:17:35.500
+Aktifkan log audit untuk setiap alur.
+
+00:17:35.680 --> 00:17:38.580
+Catat siapa yang meminta tindakan, parameter apa yang diteruskan, yang disembunyikan,
+
+00:17:38.800 --> 00:17:40.600
+pemeriksaan kebijakan apa yang dijalankan, dan hasilnya.
+
+00:17:40.760 --> 00:17:45.080
+Tinjauan triwulanan menemukan aset yang tidak terpakai, alur yang dibagikan secara berlebihan, dan konektor yang merayap.
+
+00:17:45.080 --> 00:17:47.320
+Cabut semua yang dimiliki oleh mantan karyawan.
+
+00:17:47.540 --> 00:17:51.860
+Abaikan ini dan Anda akhirnya akan menemukan alur hantu yang menulis ke produksi pada pukul 2 pagi.
+
+00:17:52.240 --> 00:17:56.880
+Menyenangkan, kesalahan umum, melewati rahasia dalam perintah pengguna, penyesalan instan.
+
+00:17:57.100 --> 00:17:59.720
+Mencatat PII dalam pesan sukses, juga penyesalan.
+
+00:18:00.000 --> 00:18:02.260
+Membangun alur tanpa perintah dan skema versi.
+
+00:18:02.500 --> 00:18:05.040
+Sekarang agen Anda memanggil api yang berubah minggu lalu.
+
+00:18:05.320 --> 00:18:07.160
+Lingkungan yang tidak dikelola tanpa DLP.
+
+00:18:07.500 --> 00:18:07.840
+Selamat.
+
+00:18:07.840 --> 00:18:10.040
+Bukti konsep Anda adalah sebuah kewajiban.
+
+00:18:10.280 --> 00:18:14.640
+Dan favorit saya, mencampur konektor bisnis dan non-bisnis karena kami hanya perlu mengirim email kepada seseorang.
+
+00:18:14.840 --> 00:18:17.180
+Tidak, gunakan email bisnis atau jangan kirim email.
+
+00:18:17.380 --> 00:18:18.700
+Mari kita bahas tombol pemutus.
+
+00:18:18.880 --> 00:18:24.460
+Anda memerlukan tombol pemutus insiden di pusat admin atau melalui otomatisasi yang menonaktifkan agen, menonaktifkan solusi alat, atau keduanya.
+
+00:18:24.680 --> 00:18:30.460
+Ketika pelanggaran kebijakan terjadi, Anda tidak berdebat, Anda berhenti, menyelidiki, dan hanya melanjutkan dengan log perubahan.
+
+00:18:30.760 --> 00:18:32.060
+Kecepatan adalah keamanan.
+
+00:18:32.320 --> 00:18:35.040
+Setelah Anda menyambungkan ini, sesuatu yang dapat diprediksi akan terjadi.
+
+00:18:35.040 --> 00:18:38.720
+Agen berhenti menjanjikan sesuatu yang berlebihan, ia mengusulkan tindakan yang benar-benar dapat diambilnya.
+
+00:18:38.900 --> 00:18:42.040
+Ketika kebijakan menolaknya, penolakan tersebut bersifat spesifik dan dicatat.
+
+00:18:42.160 --> 00:18:44.040
+Pengguna memercayainya karena konsisten.
+
+00:18:44.280 --> 00:18:49.100
+Dan ya, tim audit Anda berhenti mengintai seperti elang karena Anda akhirnya memberi mereka telemetri yang layak dibaca.
+
+00:18:49.300 --> 00:18:50.540
+Pembuatan menyeluruh.
+
+00:18:50.700 --> 00:18:54.000
+Copilot Studio plus Power Automate sebelum sesudah metrik.
+
+00:18:54.200 --> 00:18:57.100
+Mari kita satukan tulang punggung dengan pembuatan yang konkret.
+
+00:18:57.300 --> 00:18:58.700
+Copilot dukungan pinjaman.
+
+00:18:58.960 --> 00:19:03.560
+Copilot Studio menangani orkestrasi, data first adalah kebenarannya, Power Automate adalah tangannya.
+
+00:19:03.560 --> 00:19:07.560
+Arsitektur yang sama dalam pengembangan, UAT, produksi, pengikatan yang berbeda, logika yang sama.
+
+00:19:07.780 --> 00:19:09.580
+Langkah pertama, terapkan pola sistem.
+
+00:19:09.820 --> 00:19:13.280
+Di Copilot Studio, buat instruksi khusus menggunakan template versi kami.
+
+00:19:13.540 --> 00:19:14.920
+Nama lingkungan pengikatan.
+
+00:19:16.320 --> 00:19:25.840
+Unit bisnis UAT pinjaman eceran MIP daftar label rahasia sangat rahasia pada tahap glosarium fase langkah status aplikasi pinjaman aktifkan selalu sertakan.
+
+00:19:25.840 --> 00:19:31.300
+Kebijakan stempel V1.3 di footer pengujian sehingga penyimpangan terlihat.
+
+00:19:31.480 --> 00:19:37.660
+Langkah kedua, buat indeks skema, buat kartu skema untuk entitas, aplikasi pinjaman, dokumen pemohon,
+
+00:19:37.940 --> 00:19:42.640
+sertakan bidang, set opsi, hubungan, dan dua rekaman sampel bertopeng per entitas.
+
+00:19:42.640 --> 00:19:53.660
+Tambahkan aturan bisnis, transisi status, diizinkan, diajukan, tinjauan awal, tinjauan akhir, disetujui, ditolak, tidak langsung, diajukan, disetujui pada publikasi sebagai sumber pengetahuan utama di indeks dokumen,
+
+00:19:53.920 --> 00:19:59.400
+sob sekunder, kebijakan peminjaman, bagian pertampilan, klasifikasi, label MIP, judul dipertahankan.
+
+00:19:59.400 --> 00:20:04.980
+Langkah ketiga, konfigurasikan pengambilan, aktifkan pencarian hibrid dengan pemeringkatan ulang yang meningkatkan kecocokan skema,
+
+00:20:05.240 --> 00:20:11.240
+klasifikasikan pencarian skema yang intens, pencarian kebijakan, dapat ditindaklanjuti, K2 teratas untuk skema 4 untuk dokumen.
+
+00:20:11.240 --> 00:20:20.860
+Filter tingkat bidang berdasarkan maksud, istilah, status, pendapatan, KYC, aktifkan pemangkasan keamanan berdasarkan pengguna dan lingkungan, tunai, cuplikan skema frekuensi tinggi dengan TTL 10 menit.
+
+00:20:20.980 --> 00:20:23.040
+Langkah keempat, sambungkan katalog alat.
+
+00:20:23.180 --> 00:20:28.060
+Impor solusi terkelola dengan tiga alur, dapatkan ringkasan pinjaman, perbarui status pinjaman, minta dokumen.
+
+00:20:28.320 --> 00:20:34.220
+Setiap alur memiliki prasyarat skema masukan, bendera sensitivitas, referensi koneksi dengan hak istimewa paling rendah, terikat pada UAT.
+
+00:20:34.540 --> 00:20:39.020
+Masukkan ditandai sensitif jika sesuai, log diaktifkan dengan ID masking dan korelasi.
+
+00:20:39.020 --> 00:20:41.560
+Langkah kelima, tambahkan pembungkus perintah.
+
+00:20:41.740 --> 00:20:44.440
+Diko Pilot Studio, buat templat pemanggilan alat.
+
+00:20:44.580 --> 00:20:50.240
+Ketika niat mengubah status dan keyakinan, delapan panggilan memperbarui status pinjaman dengan status target ID pinjaman.
+
+00:20:50.520 --> 00:20:54.900
+Jika status target melanggar aturan bisnis, tolak dengan kode rubrik transisi status BR.
+
+00:20:55.080 --> 00:20:58.820
+Perwakilan menolak dengan saya tidak dapat melakukannya karena kode label kebijakan.
+
+00:20:59.040 --> 00:21:00.640
+Berikut langkah aman berikutnya.
+
+00:21:00.840 --> 00:21:05.580
+Loop validasi membangun rangkaian pengujian dari 25 contoh adversarial dan normal yang ambigu.
+
+00:21:05.580 --> 00:21:08.120
+Pindahkan LA4831 ke final.
+
+00:21:08.340 --> 00:21:09.860
+Bisakah kita langsung ke disetujui?
+
+00:21:10.040 --> 00:21:12.100
+Kirim email SSN pemohon ke broker mereka.
+
+00:21:12.340 --> 00:21:14.320
+Jalankan di seluruh dev, UAT, PRON.
+
+00:21:14.440 --> 00:21:20.540
+Verifikasi bahwa output, bidang kanonik situs, tindakan diusulkan hanya jika diizinkan, dan penolakan kebijakan bersifat spesifik dan dicatat.
+
+00:21:20.720 --> 00:21:25.300
+Bandingkan ide korelasi dalam log aliran dengan transkrip Copilot untuk mengonfirmasi keterlacakan.
+
+00:21:25.560 --> 00:21:31.000
+Sebelum metrik dari versi yang tidak di-ground, 37 persen jawaban merujuk ke bidang yang tidak ada.
+
+00:21:31.000 --> 00:21:34.880
+Penyimpangan lintas penyewa menghasilkan tiga nama status yang berbeda.
+
+00:21:35.040 --> 00:21:38.400
+Latensi median 4,2 detik karena sapuan tabel.
+
+00:21:39.080 --> 00:21:42.940
+Konsumsi token per key dan A rata-rata 9.800 token.
+
+00:21:43.940 --> 00:21:48.240
+Dua kebijakan nyaris gagal saat catatan sensitif dirangkum ketujuan non-bisnis,
+
+00:21:48.520 --> 00:21:50.400
+diblokir hanya oleh DLP penyewa.
+
+00:21:50.660 --> 00:21:54.660
+Setelah metrik dengan rekayasa konteks, bidang yang ditemukan di seluruh rangkaian,
+
+00:21:54.980 --> 00:21:58.840
+aplikasi pinjaman kanonik, status dikutip dalam 100 persen respon status.
+
+00:21:58.840 --> 00:22:02.760
+Latensi turun menjadi median 1,6 detik dengan pengambilan tingkat bidang.
+
+00:22:02.920 --> 00:22:05.620
+Penggunaan token per key dan A rata-rata 3.100.
+
+00:22:05.960 --> 00:22:10.680
+Pelanggaran kebijakan dicoba, empat semuanya ditolak dengan alasan yang jelas dan dicatat dengan ide.
+
+00:22:10.920 --> 00:22:16.360
+Perintah yang sama di seluruh dev, UAT, BOS, fraud menghasilkan referensi bidang yang identik.
+
+00:22:16.480 --> 00:22:19.600
+Perbedaan hanya pada tindakan yang diizinkan sebagaimana dimaksud.
+
+00:22:19.800 --> 00:22:24.020
+Sebuah cerita mikro singkat, seorang penguji bertanya, percepat LA-501 hingga disetujui.
+
+00:22:24.220 --> 00:22:28.080
+Sebelumnya, agen berkata, selesai, dan berhalusinasi tentang transisi.
+
+00:22:28.080 --> 00:22:30.060
+Sekarang, copilot merespons.
+
+00:22:30.260 --> 00:22:33.840
+Ditolak, transisi status BR yang diajukan disetujui tidak valid.
+
+00:22:33.980 --> 00:22:36.040
+Transisi yang valid diajukan tinjauan awal.
+
+00:22:36.380 --> 00:22:40.140
+Petik 2, kemudian menawarkan pembaruan status pinjaman ke tinjauan awal.
+
+00:22:40.360 --> 00:22:41.940
+Satu klik, jalur yang sesuai.
+
+00:22:42.240 --> 00:22:42.780
+Siap audit.
+
+00:22:43.020 --> 00:22:45.980
+Serahkan aset, kemas berkas pola pesan sistem dengan token,
+
+00:22:46.360 --> 00:22:47.760
+daftar periksa landasan skema,
+
+00:22:48.140 --> 00:22:49.860
+template JSON alur pengambilan,
+
+00:22:50.140 --> 00:22:51.360
+template perintah 3 alur,
+
+00:22:51.600 --> 00:22:54.500
+dan berkas pemetaan lingkungan untuk referensi dan label koneksi.
+
+00:22:54.780 --> 00:22:57.100
+Versikan semuanya, simpan dalam kontrol sumber.
+
+00:22:57.100 --> 00:22:59.480
+Saat mengimpor, variabel terikat perlingkungan.
+
+00:22:59.680 --> 00:23:01.340
+Tidak ada suntingan manual dalam produksi.
+
+00:23:01.580 --> 00:23:02.680
+Anda sudah dewasa.
+
+00:23:02.820 --> 00:23:04.720
+Terapkan ke UAT, jalankan rangkaian,
+
+00:23:04.960 --> 00:23:06.200
+rekam tabel sebelum sesudah,
+
+00:23:06.440 --> 00:23:07.760
+dan tampilkan dua tangkapan layar.
+
+00:23:07.960 --> 00:23:11.360
+Jawaban yang didasari yang mengutip status aplikasi pinjaman dan entry log audit
+
+00:23:11.360 --> 00:23:13.580
+dengan masukan yang disamarkan dan ide korelasi.
+
+00:23:13.800 --> 00:23:16.320
+Itulah bukti eksekutif Anda tanpa membocorkan apapun.
+
+00:23:16.540 --> 00:23:17.940
+Anda sekarang memiliki tulang punggung,
+
+00:23:18.080 --> 00:23:19.080
+identitas yang tidak melayang,
+
+00:23:19.260 --> 00:23:20.540
+pengambilan yang tidak berhalusinasi,
+
+00:23:20.840 --> 00:23:22.580
+alat yang bertindak dengan hak istimewa paling sedikit,
+
+00:23:22.800 --> 00:23:24.360
+dan kebijakan yang menolak dengan tanda terima.
+
+00:23:24.360 --> 00:23:26.680
+Itu dapat diulang, diaudit, dan cepat.
+
+00:23:26.780 --> 00:23:30.060
+Mengejutkan apa yang terjadi ketika Anda memberimakan kebenaran dan batasan model.
+
+00:23:30.260 --> 00:23:32.760
+Poin utama, rekayasa konteks, pengambilan sistem,
+
+00:23:33.080 --> 00:23:35.560
+alat, kebijakan mengubah copilot dari seorang penebak kata
+
+00:23:35.560 --> 00:23:37.960
+menjadi rekan setim yang diatur yang menentukan lokasi lapangan,
+
+00:23:38.240 --> 00:23:40.140
+bertindak dengan aman, dan menolak dengan tepat.
+
+00:23:40.320 --> 00:23:41.740
+Lakukan hal yang efisien sekarang.
+
+00:23:42.040 --> 00:23:43.680
+Cloning template, ikat variabel lingkungan,
+
+00:23:43.880 --> 00:23:44.920
+indeks data Anda dengan skema,
+
+00:23:45.160 --> 00:23:45.780
+terapkan DLP,
+
+00:23:46.060 --> 00:23:48.600
+dan jalankan rangkaian evaluasi di seluruh dev, UAT, dan prod.
+
+00:23:48.700 --> 00:23:51.920
+Kemudian promosikan ke UAT dengan tag versi dan tombol pemutus diaktifkan.
+
+00:23:51.920 --> 00:23:54.500
+Jika ini menghemat waktu Anda, lunasi utangnya.
+
+00:23:54.720 --> 00:23:58.900
+Berlangganan dan dapatkan panduan evaluasi lanjutan dan orkestrasi multiagen berikutnya.
+
+00:23:59.080 --> 00:23:59.680
+Lanjutkan.

@@ -8,6 +8,59 @@ import { parseFeed } from "../src/feeds.js";
 import { scoreOf, levelOf, levelName, CAPS, THRESH } from "../src/levels.js";
 import { handleSponsor } from "../src/sponsor.js";
 import { handleAdminPanel } from "../src/adminpanel.js";
+import { d1BackupExportArgs, d1BackupTables } from "../src/d1_backup.js";
+
+async function searchDb(failTrigram = false) {
+  const { DatabaseSync } = await import("node:sqlite");
+  const raw = new DatabaseSync(":memory:");
+  const dir = new URL("../migrations/", import.meta.url);
+  for (const f of readdirSync(dir).filter((f) => f.endsWith(".sql")).sort()) raw.exec(readFileSync(new URL(f, dir), "utf-8"));
+  let trigramFailed = false, indexWrites = 0, searchQueries = 0, maxBatch = 0;
+  const db = {
+    prepare(sql) {
+      if (sql.includes("eligible AS (")) searchQueries++;
+      const st = raw.prepare(sql); let args = [];
+      const o = {
+        bind(...a) {
+          if (a.length > 100) throw new Error("D1_ERROR: too many SQL variables");
+          args = a; return o;
+        },
+        all: async () => ({ results: st.all(...args) }),
+        first: async () => st.get(...args) ?? null,
+        run: async () => {
+          if (failTrigram && !trigramFailed && /CREATE VIRTUAL TABLE IF NOT EXISTS search_fts .*tokenize='trigram'/.test(sql)) {
+            trigramFailed = true;
+            throw new Error("no such tokenizer: trigram");
+          }
+          const r = st.run(...args), n = Number(r.changes);
+          if (/^\s*(INSERT|UPDATE|DELETE)/i.test(sql) && /search_doc|search_fts/.test(sql)) indexWrites += n;
+          return { meta: { changes: n } };
+        },
+      };
+      return o;
+    },
+    async batch(stmts) { maxBatch = Math.max(maxBatch, stmts.length); for (const st of stmts) await st.run(); },
+  };
+  return { db, raw, indexWrites: () => indexWrites, searchQueries: () => searchQueries, maxBatch: () => maxBatch };
+}
+
+function seedSearchDocs(raw, docs) {
+  raw.exec("CREATE VIRTUAL TABLE search_fts USING fts5(title,keywords,summary,tokenize='trigram'); INSERT INTO meta(k,v) VALUES('search_fts_tokenizer','trigram')");
+  const insert = raw.prepare("INSERT INTO search_doc(id,url,lang,type,title,summary,keywords,entities,date,image,h,gone,updated,grp) VALUES(?,?,?,?,?,?,?,?,?,?,?,0,1,?)");
+  const fts = raw.prepare("INSERT INTO search_fts(rowid,title,keywords,summary) VALUES(?,?,?,?)");
+  raw.exec("BEGIN");
+  try {
+    for (const doc of docs) {
+      insert.run(doc.id, doc.url, doc.lang, doc.type, doc.title, doc.summary || "", doc.keywords || "", (doc.entities || []).join(","), doc.date || "", "", doc.id, doc.group || "");
+      const { rowid } = raw.prepare("SELECT rowid FROM search_doc WHERE id=?").get(doc.id);
+      fts.run(rowid, doc.title, doc.keywords || "", doc.summary || "");
+    }
+    raw.exec("COMMIT");
+  } catch (error) {
+    raw.exec("ROLLBACK");
+    throw error;
+  }
+}
 
 test("util: Texte bereinigen und escapen", () => {
   assert.equal(cleanText("  a<b>c  ", 3), "a<b");
@@ -57,13 +110,28 @@ test("schema: Migrationen sind idempotent und enthalten jede zur Laufzeit angele
   assert.ok(files.length >= 1 && files[0] === "0001_baseline.sql");
   const sql = files.map((f) => readFileSync(new URL(f, dir), "utf-8")).join("\n");
   const stmts = sql.replace(/--[^\n]*/g, "").split(";").map((s) => s.trim()).filter(Boolean);
-  for (const s of stmts) assert.match(s, /^CREATE (TABLE|INDEX|UNIQUE INDEX) IF NOT EXISTS /i, "nur idempotente Anweisungen: " + s.slice(0, 60));
+  for (const s of stmts) {
+    if (/^ALTER TABLE search_doc ADD COLUMN grp TEXT NOT NULL DEFAULT ''$/i.test(s)) continue;
+    assert.match(s, /^CREATE (TABLE|INDEX|UNIQUE INDEX) IF NOT EXISTS /i, "nur idempotente Anweisungen: " + s.slice(0, 60));
+  }
   const inMig = new Set([...sql.matchAll(/CREATE (?:TABLE|UNIQUE INDEX|INDEX) IF NOT EXISTS (\w+)/gi)].map((m) => m[1]));
   const src = new URL("../src/", import.meta.url);
   for (const f of readdirSync(src).filter((f) => f.endsWith(".js"))) {
     const js = readFileSync(new URL(f, src), "utf-8");
     for (const m of js.matchAll(/CREATE (?:TABLE|UNIQUE INDEX|INDEX) IF NOT EXISTS (\w+)/gi)) assert.ok(inMig.has(m[1]), `${m[1]} (aus ${f}) fehlt in migrations/`);
   }
+});
+
+test("d1 backup: virtueller FTS-Index und Schatten werden vom Tabellenexport ausgeschlossen", () => {
+  const tables = d1BackupTables([
+    { name: "search_doc" }, { name: "search_fts" }, { name: "search_fts_data" }, { name: "search_fts_idx" },
+    { name: "search_fts_content" }, { name: "search_fts_docsize" }, { name: "search_fts_config" },
+    { name: "users" }, { name: "sqlite_sequence" }, { name: "unsafe;DROP_TABLE" },
+  ]);
+  assert.deepEqual(tables, ["search_doc", "users"]);
+  const args = d1BackupExportArgs(tables);
+  assert.deepEqual(args.slice(-2), ["--table=search_doc", "--table=users"]);
+  assert.deepEqual(d1BackupExportArgs([]), ["d1", "export", "m365-dub", "--remote", "--output=backup-d1.sql"]);
 });
 
 test("levels: Punkte sind je Art gedeckelt, Stufen 1-6 folgen Belegen und Bestaetigungen", () => {
@@ -331,4 +399,230 @@ test("entities: Abgleich ueberschreibt keine Menschen (freigegebener Vorschlag m
     assert.equal(raw.prepare("SELECT COUNT(*) n FROM entity_rev").get().n, before + 1, "bedingtes Schreiben greift nicht, wenn live gewechselt hat");
     assert.equal(live("w").name, "W2");
   } finally { globalThis.fetch = old; }
+});
+
+test("search: Import, Trigramm-Suche, Filter, Facetten und gone-Markierung (SQLite)", async () => {
+  const { db, raw, indexWrites } = await searchDb();
+  const docs = [
+    { id: "en:/entity/aaron-siller/", url: "https://www.m365.fm/entity/aaron-siller/", lang: "en", type: "person", title: "Aaron Siller", summary: "Cloud expert", keywords: "Azure identity", entities: ["azure"], date: "2024-05-01", image: "" },
+    { id: "de:/entity/purview/", url: "https://www.m365.fm/de/entity/purview/", lang: "de", type: "entity", title: "Microsoft Purview", summary: "Informationsschutz", keywords: "Azure Purview", entities: ["azure", "purview"], date: "2025-03-10", image: "" },
+    { id: "ja:/azure/", url: "https://www.m365.fm/ja/azure/", lang: "ja", type: "page", title: "Azure 日本語の検索", summary: "クラウド検索", keywords: "Azure 日本語 検索", entities: ["azure"], date: "2026-01-20", image: "" },
+  ];
+  let generated = "2026-11-01", parts = [[docs[0], docs[1]], [docs[2]]];
+  const oldFetch = globalThis.fetch;
+  let handleSearch;
+  globalThis.fetch = async (input) => {
+    const path = new URL(input).pathname;
+    if (path === "/search/manifest.json") return { ok: true, json: async () => ({ generated, parts: 2, count: parts.flat().length }) };
+    const number = Number(/part-(\d+)\.json$/.exec(path)?.[1]);
+    return { ok: true, json: async () => ({ part: number, docs: parts[number - 1] }) };
+  };
+  const env = { DB: db, SITE: "https://www.m365.fm" };
+  const call = async (params, ip = "203.0.113.8") => {
+    const request = new Request(`https://api.m365.fm/api/search?${params}`, { headers: { "cf-connecting-ip": ip } });
+    return handleSearch(env, request, new URL(request.url), (data, status = 200, headers = {}) => ({ data, status, headers }));
+  };
+  try {
+    const { importSearchIndex, handleSearch: search } = await import("../src/search.js");
+    handleSearch = search;
+    assert.equal((await importSearchIndex(env)).changed, 2);
+    const imported = await importSearchIndex(env);
+    assert.equal(imported.changed, 1);
+    assert.equal(imported.gone, 0);
+
+    const typo = await call("q=Aron+Soller");
+    assert.equal(typo.status, 200);
+    assert.equal(typo.data.results[0].title, "Aaron Siller");
+    assert.equal((await call("q=purvew")).data.results[0].title, "Microsoft Purview");
+    assert.equal((await call("q=" + encodeURIComponent("日本語の検索"))).data.results[0].lang, "ja");
+    assert.equal((await call("q=Mi")).data.results[0].title, "Microsoft Purview", "kurze Suche nutzt Titel-Praefix");
+
+    const all = await call("q=Azure");
+    assert.equal(all.data.total, 3);
+    assert.deepEqual(all.data.facets.type, { entity: 1, page: 1, person: 1 });
+    assert.deepEqual(all.data.facets.lang, { de: 1, en: 1, ja: 1 });
+    assert.deepEqual(all.data.facets.year, { 2024: 1, 2025: 1, 2026: 1 });
+    assert.equal(all.data.facets.entity.azure, 3);
+    assert.equal(all.data.facets.entity.purview, 1);
+    assert.equal((await call("q=Azure&lang=de")).data.total, 1);
+    const typeFiltered = await call("q=Azure&type=page");
+    assert.equal(typeFiltered.data.total, 1);
+    assert.equal(typeFiltered.data.facets.type.person, 1, "type-Facette ignoriert den eigenen Filter");
+    assert.equal((await call("q=Azure&entity=purview")).data.results[0].title, "Microsoft Purview");
+    assert.equal((await call("q=Azure&year=2025")).data.total, 1);
+
+    const before = indexWrites();
+    assert.equal((await importSearchIndex(env)).changed, 0);
+    assert.equal((await importSearchIndex(env)).changed, 0);
+    assert.equal(indexWrites(), before, "unveraenderte Dokumente werden nicht erneut geschrieben");
+
+    generated = "2026-11-02";
+    parts = [[{ ...docs[0], title: "Aaron Siller Updated" }, docs[1]], []];
+    assert.equal((await importSearchIndex(env)).changed, 1);
+    assert.equal(raw.prepare("SELECT title FROM search_doc WHERE id=?").get(docs[0].id).title, "Aaron Siller Updated");
+    const final = await importSearchIndex(env);
+    assert.equal(final.gone, 1);
+    assert.equal(raw.prepare("SELECT gone FROM search_doc WHERE id=?").get(docs[2].id).gone, 1);
+    assert.equal((await call("q=Azure")).data.total, 2, "gone-Dokumente erscheinen nicht in der Suche");
+
+    const limitedIp = "198.51.100.27";
+    let response;
+    for (let i = 0; i < 61; i++) response = await call("q=Azure", limitedIp);
+    assert.equal(response.status, 429);
+    assert.equal(raw.prepare("SELECT COUNT(*) n FROM ratelimit WHERE k LIKE ?").get(`%${limitedIp}%`).n, 0, "IP-Adresse wird nicht gespeichert");
+  } finally {
+    globalThis.fetch = oldFetch;
+  }
+});
+
+test("search: unicode61-Fallback findet Titel per LIKE (SQLite)", async () => {
+  const { db, raw } = await searchDb(true);
+  const doc = { id: "en:/purview/", url: "https://www.m365.fm/purview/", lang: "en", type: "entity", title: "Microsoft Purview", summary: "", keywords: "", entities: [], date: "", image: "" };
+  const oldFetch = globalThis.fetch;
+  globalThis.fetch = async (input) => {
+    const path = new URL(input).pathname;
+    if (path === "/search/manifest.json") return { ok: true, json: async () => ({ generated: "2026-11-01", parts: 1, count: 1 }) };
+    return { ok: true, json: async () => ({ part: 1, docs: [doc] }) };
+  };
+  try {
+    const { importSearchIndex, handleSearch } = await import("../src/search.js");
+    const env = { DB: db, SITE: "https://www.m365.fm" };
+    assert.equal((await importSearchIndex(env)).tokenizer, "unicode61");
+    const request = new Request("https://api.m365.fm/api/search?q=purview", { headers: { "cf-connecting-ip": "203.0.113.9" } });
+    const response = await handleSearch(env, request, new URL(request.url), (data, status = 200) => ({ data, status }));
+    assert.equal(response.status, 200);
+    assert.equal(response.data.results[0].title, "Microsoft Purview");
+    assert.equal(raw.prepare("SELECT v FROM meta WHERE k='search_fts_tokenizer'").get().v, "unicode61");
+  } finally {
+    globalThis.fetch = oldFetch;
+  }
+});
+
+test("search: Import hält D1-Parameterlimit und Dreier-Batches ein", async () => {
+  const { db, maxBatch } = await searchDb();
+  const docs = Array.from({ length: 120 }, (_, i) => ({
+    id: `en:bulk-${i}`, url: `https://www.m365.fm/bulk/${i}/`, lang: "en", type: "page", title: `Bulk document ${i}`,
+    summary: "", keywords: "", entities: [], date: "", image: "",
+  }));
+  const oldFetch = globalThis.fetch;
+  globalThis.fetch = async (input) => {
+    const path = new URL(input).pathname;
+    if (path === "/search/manifest.json") return { ok: true, json: async () => ({ generated: "2026-11-02", parts: 1, count: docs.length }) };
+    return { ok: true, json: async () => ({ part: 1, docs }) };
+  };
+  try {
+    const { importSearchIndex } = await import("../src/search.js");
+    const result = await importSearchIndex({ DB: db, SITE: "https://www.m365.fm" });
+    assert.equal(result.changed, docs.length);
+    assert.equal(maxBatch(), 99);
+  } finally {
+    globalThis.fetch = oldFetch;
+  }
+});
+
+test("search: Gruppen, Eingabe- und Herkunftsgrenzen sowie FTS-Wiederaufbau (SQLite)", async () => {
+  const { db, raw } = await searchDb();
+  const docs = [
+    { id: "en:episode-a", url: "https://www.m365.fm/en/episode-a/", group: "https://www.m365.fm/episode-a/", lang: "en", type: "episode", title: "Long title with search phrase", image: "https://img.m365.fm/episode.webp" },
+    { id: "de:episode-b", url: "https://www.m365.fm/de/anderer-slug/", group: "https://www.m365.fm/episode-a/", lang: "de", type: "dub_episode", title: "Long title with search phrase", image: "https://evil.example/cover.png" },
+    { id: "en:foreign", url: "https://evil.example/foreign/", lang: "en", type: "page", title: "Long title with search phrase" },
+  ];
+  let build = "2026-11-02T10:00:00Z";
+  const oldFetch = globalThis.fetch;
+  globalThis.fetch = async (input) => {
+    const path = new URL(input).pathname;
+    if (path === "/search/manifest.json") return { ok: true, json: async () => ({ generated: "2026-11-02", build, parts: 1, count: docs.length }) };
+    return { ok: true, json: async () => ({ part: 1, docs }) };
+  };
+  try {
+    const { importSearchIndex, handleSearch } = await import("../src/search.js");
+    const env = { DB: db, SITE: "https://www.m365.fm", SESSION_SECRET: "test-secret" };
+    assert.equal((await importSearchIndex(env)).changed, 2, "fremde Herkunft wird verworfen");
+    assert.equal(raw.prepare("SELECT image FROM search_doc WHERE id='en:episode-a'").get().image, "https://img.m365.fm/episode.webp");
+    assert.equal(raw.prepare("SELECT image FROM search_doc WHERE id='de:episode-b'").get().image, "");
+    raw.exec("DELETE FROM search_fts");
+    assert.equal((await importSearchIndex(env)).changed, 2, "leerer FTS-Index erzwingt Neuaufbau trotz gleicher Hashes");
+    const req = new Request("https://api.m365.fm/api/search?q=search+phrase", { headers: { "cf-connecting-ip": "203.0.113.11" } });
+    const result = await handleSearch(env, req, new URL(req.url), (data) => data);
+    assert.equal(result.total, 1, "Dub-Folge wird anhand der group-Adresse dedupliziert");
+    assert.equal(result.results[0].lang, "en", "ohne pref gewinnt en");
+    const deReq = new Request("https://api.m365.fm/api/search?q=search+phrase&pref=de", { headers: { "cf-connecting-ip": "203.0.113.12" } });
+    const deResult = await handleSearch(env, deReq, new URL(deReq.url), (data) => data);
+    assert.equal(deResult.results[0].lang, "de", "group-Deduplizierung bevorzugt pref");
+
+    build = "2026-11-02T11:00:00Z";
+    const newCycle = await importSearchIndex(env);
+    assert.equal(newCycle.part, 1, "Build-Zeitstempel beginnt einen neuen Importzyklus");
+    assert.equal(newCycle.gone, 0, "zweiter Build am selben Tag laesst aktuelle Dokumente bestehen");
+    const longQuery = "a".repeat(60);
+    const longReq = new Request(`https://api.m365.fm/api/search?q=${longQuery}`, { headers: { "cf-connecting-ip": "203.0.113.13" } });
+    assert.equal((await handleSearch(env, longReq, new URL(longReq.url), (data, status = 200) => ({ data, status }))).status, 200);
+    const nulReq = new Request("https://api.m365.fm/api/search?q=se%00arch+phrase", { headers: { "cf-connecting-ip": "203.0.113.14" } });
+    assert.equal((await handleSearch(env, nulReq, new URL(nulReq.url), (data, status = 200) => ({ data, status }))).status, 200);
+    const symbolsReq = new Request("https://api.m365.fm/api/search?q=%21%3F%3F", { headers: { "cf-connecting-ip": "203.0.113.15" } });
+    const symbols = await handleSearch(env, symbolsReq, new URL(symbolsReq.url), (data, status = 200) => ({ data, status }));
+    assert.equal(symbols.status, 200);
+    assert.equal(symbols.data.total, 0);
+  } finally {
+    globalThis.fetch = oldFetch;
+  }
+});
+
+test("search: Tippfehler-Ranking, Sprach-Deduplizierung und Titelprioritaet (SQLite)", async () => {
+  const { db, raw } = await searchDb();
+  const docs = [
+    { id: "en:aaron", url: "https://www.m365.fm/entity/aaron-siller/", lang: "en", type: "person", title: "Aaron Siller – Person", keywords: "Microsoft Azure" },
+    { id: "de:aaron", url: "https://www.m365.fm/de/entity/aaron-siller/", lang: "de", type: "person", title: "Aaron Siller – Person", keywords: "Microsoft Azure" },
+    { id: "en:patrick", url: "https://www.m365.fm/entity/patrick-gruenauer/", lang: "en", type: "person", title: "Patrick Gruenauer – Person" },
+    { id: "en:purview", url: "https://www.m365.fm/entity/microsoft-purview/", lang: "en", type: "entity", title: "Microsoft Purview – Produkt", entities: ["purview"] },
+    { id: "en:avd", url: "https://www.m365.fm/entity/azure-virtual-desktop/", lang: "en", type: "entity", title: "Azure Virtual Desktop – Product", entities: ["azure-virtual-desktop"] },
+  ];
+  for (let i = 0; i < 25; i++) docs.push({
+    id: `en:blog-${i}`, url: `https://www.m365.fm/blog/blog-${i}/`, lang: "en", type: "blog",
+    title: `Azure sollten Entwickler surveillance ${i}`, summary: "Microsoft developers should consider surveillance and privacy",
+  });
+  seedSearchDocs(raw, docs);
+  const { handleSearch } = await import("../src/search.js");
+  const env = { DB: db, SITE: "https://www.m365.fm" };
+  const call = async (q, extra = "") => {
+    const request = new Request(`https://api.m365.fm/api/search?q=${encodeURIComponent(q)}${extra}`, { headers: { "cf-connecting-ip": `${q}:${extra}` } });
+    return handleSearch(env, request, new URL(request.url), (data) => data);
+  };
+  const aron = await call("Aron Soller");
+  assert.equal(aron.results[0].title, "Aaron Siller – Person");
+  assert.equal(aron.results.filter((row) => row.title === "Aaron Siller – Person").length, 1, "de/en werden zusammengefuehrt");
+  const aronDe = await call("Aron Soller", "&pref=de");
+  assert.equal(aronDe.results[0].lang, "de", "bevorzugte Sprachfassung bleibt");
+  const patrick = await call("Patrik Grünauer");
+  assert.equal(patrick.results[0].title, "Patrick Gruenauer – Person");
+  const purview = await call("purvew");
+  assert.ok(purview.results.slice(0, 3).some((row) => row.title.startsWith("Microsoft Purview")));
+  const avd = await call("Azure Virtual Desktop");
+  assert.equal(avd.results[0].title, "Azure Virtual Desktop – Product");
+});
+
+test("search: 40.000 Dokumente mit einer Kandidatenabfrage unter 200 ms (SQLite)", async () => {
+  const { db, raw, searchQueries } = await searchDb();
+  const docs = Array.from({ length: 40000 }, (_, i) => ({
+    id: `en:synthetic-${i}`, url: `https://www.m365.fm/page/${i}/`, lang: "en", type: i % 8 ? "page" : "entity",
+    title: `Common search document ${i}`, summary: "Common content for performance testing", keywords: "Common search",
+  }));
+  seedSearchDocs(raw, docs);
+  const { handleSearch } = await import("../src/search.js");
+  const env = { DB: db, SITE: "https://www.m365.fm" };
+  const request = new Request("https://api.m365.fm/api/search?q=common", { headers: { "cf-connecting-ip": "load-test-ip" } });
+  const times = [];
+  const before = searchQueries();
+  let result;
+  for (let i = 0; i < 6; i++) {
+    const started = performance.now();
+    result = await handleSearch(env, request, new URL(request.url), (data) => data);
+    if (i) times.push(performance.now() - started);
+  }
+  times.sort((a, b) => a - b);
+  const median = times[Math.floor(times.length / 2)];
+  assert.ok(median < 300, `Suchmedian lag bei ${median.toFixed(1)} ms`);
+  assert.equal(result.results.length, 20);
+  assert.ok(result.total <= 1000, "Kandidatenpool ist begrenzt");
+  assert.equal(searchQueries() - before, 6, "pro Suchanfrage wird eine Kandidatenabfrage ausgefuehrt");
 });

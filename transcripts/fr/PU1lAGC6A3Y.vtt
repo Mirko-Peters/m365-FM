@@ -1,0 +1,1666 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.260
+Vous savez, les chatbots parlent, les agents agissent et les systèmes multi-agents font réellement avancer les choses.
+
+00:00:04.160 --> 00:00:07.880
+Si vous avez supplié un bot de réparer Intune et qui vous a répondu par un poème, ceci est pour vous.
+
+00:00:08.320 --> 00:00:09.860
+Voici le deal, Netflix pratique.
+
+00:00:10.460 --> 00:00:11.380
+Regardez, vous mangez des encas.
+
+00:00:11.900 --> 00:00:14.340
+J'applique le principe du service dangereux pour que personne ne détruise la production.
+
+00:00:14.800 --> 00:00:19.520
+Nous construisons un mini-système multi-agents auto-réparateur avec Azure AI Foundry et Semantic Kernel.
+
+00:00:20.020 --> 00:00:21.540
+Et Semanticam, de vrais points de contact.
+
+00:00:22.200 --> 00:00:25.140
+Intune, Entra, Graph, Azure Automation, Log Analytics.
+
+00:00:25.140 --> 00:00:28.840
+Un agent contre plusieurs agents en tête à tête, 12 minutes contre 3.
+
+00:00:28.840 --> 00:00:31.160
+Et la seule victime est mon crédit d'abonnement.
+
+00:00:32.220 --> 00:00:34.700
+Premièrement, pourquoi un agent cale pendant que Teams vole ?
+
+00:00:34.700 --> 00:00:36.120
+Pourquoi un agent ne suffit pas ?
+
+00:00:36.120 --> 00:00:38.360
+Les agents uniques sont le couteau suisse que vous avez dans une station service.
+
+00:00:39.080 --> 00:00:39.960
+Techniquement, il a des outils.
+
+00:00:40.140 --> 00:00:41.400
+En pratique, il plie à la première vis.
+
+00:00:42.300 --> 00:00:46.020
+Vous regroupez le plan, le raisonnement, l'exécution, les approbations et les rapports dans une seule invite.
+
+00:00:46.140 --> 00:00:49.080
+Et maintenant, elle est en manque de contexte, lente et étrangement confiante sur la mauvaise chose.
+
+00:00:50.020 --> 00:00:53.100
+La plupart des gens pensent qu'un modèle plus grand, un cerveau plus grand, boum, problème résolu.
+
+00:00:53.220 --> 00:00:55.320
+Mais le véritable échec est la confusion des rôles.
+
+00:00:55.320 --> 00:01:02.420
+Un agent essaie de planifier un changement, d'appeler un graphique, d'écrire un script de correction, de demander une approbation, de vérifier le résultat et de le documenter.
+
+00:01:03.260 --> 00:01:08.020
+C'est comme gérer un service d'assistance, un tableau des modifications et une autopsie avec un stagiaire très fatigué, très fatigué.
+
+00:01:08.360 --> 00:01:09.180
+Voici ce qui se passe réellement.
+
+00:01:09.480 --> 00:01:10.980
+L'agent unique jongle, avec trop d'état.
+
+00:01:11.580 --> 00:01:12.460
+Votre invite devient une nouvelle.
+
+00:01:13.020 --> 00:01:19.380
+La fenêtre contextuelle se remplit de journaux, de politiques et de la moitié du glossaire MDM, de sorte qu'elle tronque les éléments importants ou hallucinent des détails manquants.
+
+00:01:19.380 --> 00:01:23.560
+Les pics de latence, les jetons brûlés et les nouvelles tentatives donnent l'impression d'un déjà vu et qu'une facture.
+
+00:01:24.660 --> 00:01:27.620
+Entrez dans le multi-agent, les rôles, les limites, le parallélisme.
+
+00:01:28.220 --> 00:01:30.580
+Le planificateur se concentre sur l'intention et les contraintes.
+
+00:01:30.800 --> 00:01:32.820
+L'opérateur se concentre sur les outils et l'exécution.
+
+00:01:33.280 --> 00:01:37.720
+Le réviseur se concentre sur les garde-fous, les approbations et sommes-nous ancrés dans les faits ?
+
+00:01:37.720 --> 00:01:41.720
+Chaque agent conserve un jeu d'instructions court et propre avec le minimum de mémoire dont il a besoin.
+
+00:01:42.440 --> 00:01:45.560
+Ils transmettent des messages, des résultats d'outils ou un bref résumé et non intégralité d'Internet.
+
+00:01:45.560 --> 00:01:47.640
+Pourquoi cela est important dans l'entreprise ?
+
+00:01:47.640 --> 00:01:50.400
+Vous avez besoin de flux de travail de bout en bout avec des portes d'accès humains dans la boucle,
+
+00:01:50.520 --> 00:01:53.000
+des actions apportées d'identité, des nouvelles tentatives, des nouvelles tentatives et des pistes d'audit.
+
+00:01:53.100 --> 00:01:54.160
+Ce n'est pas une discussion à traite unique.
+
+00:01:54.600 --> 00:01:55.220
+C'est un sport d'équipe.
+
+00:01:55.860 --> 00:02:00.440
+Le modèle planificateur, exécutant, réviseur réduit les risques et les reprises car chaque étape a une deuxième paire d'yeux,
+
+00:02:00.660 --> 00:02:03.840
+des yeux automatisés qui ne sont pas sur nos onze d'une réunion Teams rapide.
+
+00:02:04.600 --> 00:02:05.720
+Le coût et la latence sont également gains.
+
+00:02:06.360 --> 00:02:08.460
+Utilisez de petits modèles de langage pour l'extraction et la classification.
+
+00:02:09.160 --> 00:02:12.000
+Utilisez des modèles de raisonnement premium uniquement lorsque la planification est réellement utile.
+
+00:02:15.560 --> 00:02:17.760
+Réalucination, des résultats plus rapides et des factures moins élevées.
+
+00:02:18.600 --> 00:02:21.720
+Petite histoire, j'ai vu un bot qui faisait tout essayer de faire tourner un secret.
+
+00:02:22.780 --> 00:02:23.540
+Il a mis à jour la clé.
+
+00:02:24.260 --> 00:02:26.860
+Oubliez le paramètre de l'application et la corrigez en supprimant la ressource.
+
+00:02:27.560 --> 00:02:29.480
+C'est le jour où nous avons inventé l'agent de révision.
+
+00:02:30.320 --> 00:02:32.180
+Système multi-agent 101, clair et simple.
+
+00:02:32.760 --> 00:02:35.440
+D'accord, qu'est-ce qu'un système multi-agent que vous pouvez réellement expédier ?
+
+00:02:35.440 --> 00:02:37.140
+Pensez à une équipe numérique, pas à un seul grand service.
+
+00:02:37.800 --> 00:02:41.160
+Chaque agent a un rôle, un ensemble d'instructions serrées et une boîte à outils limités.
+
+00:02:41.160 --> 00:02:45.560
+Le planificateur comprend l'objectif, les contraintes et l'environnement.
+
+00:02:46.460 --> 00:02:49.240
+Produit un plan avec des appels d'outils que l'opérateur peut exécuter.
+
+00:02:50.320 --> 00:02:53.720
+L'opérateur appelle des outils, un graphique, des applications logiques, des fonctions,
+
+00:02:54.000 --> 00:02:56.940
+des runbooks d'automatisation Azure et renvoie des résultats structurés.
+
+00:02:57.740 --> 00:03:00.820
+Le réviseur vérifie la mise à la terre, la portée de la conformité, les approbations
+
+00:03:00.820 --> 00:03:03.560
+et les résultats de sécurité avant que quelque chose de risqué ne se produise.
+
+00:03:03.560 --> 00:03:08.500
+Le concierge Messenger gère les notifications humaines, les approbations et les résumés
+
+00:03:08.500 --> 00:03:09.600
+pour la piste d'audit.
+
+00:03:10.620 --> 00:03:13.760
+Il communique par messages et contextes partagés comme le devraient les adultes de manière courte,
+
+00:03:13.860 --> 00:03:15.060
+claire et uniquement ce qui est nécessaire.
+
+00:03:15.860 --> 00:03:17.820
+Séquentiel lorsque les actions dépendent des résultats précédents,
+
+00:03:18.200 --> 00:03:20.500
+parallèle lorsque les sous-tâches peuvent être déployées en toute sécurité.
+
+00:03:21.680 --> 00:03:24.100
+Vous n'envoyez pas une politique de 50 pages, vous envoyez l'extrait pertinent,
+
+00:03:24.360 --> 00:03:26.160
+les identifiants des appareils et le changement prévu.
+
+00:03:26.580 --> 00:03:27.240
+Les outils sont les mains.
+
+00:03:27.680 --> 00:03:29.160
+API REST pour Microsoft Graph,
+
+00:03:29.420 --> 00:03:31.940
+RAC via Azure AI recherche des connaissances organisées,
+
+00:03:31.940 --> 00:03:33.560
+Interpréteur de code pour les extraits,
+
+00:03:33.740 --> 00:03:35.240
+Application logique pour les séquences orchestrées,
+
+00:03:35.380 --> 00:03:35.980
+Fonctions pour Glu,
+
+00:03:36.300 --> 00:03:38.180
+Automatisation Azure pour les tâches d'appareils répétables.
+
+00:03:38.640 --> 00:03:40.280
+Maintenez les entrées d'outils structurées avec des schémas,
+
+00:03:40.480 --> 00:03:42.920
+afin que l'opérateur ne puisse pas supprimer votre locateur de manière créative.
+
+00:03:43.960 --> 00:03:45.380
+La mémoire n'est pas magique, c'est un budget.
+
+00:03:45.840 --> 00:03:46.860
+Minimizez la mémoire par agent.
+
+00:03:47.280 --> 00:03:49.720
+Utilisez un état externe, des index de recherche, des magasins de lecteurs
+
+00:03:49.720 --> 00:03:51.280
+ou un petit magasin d'état pour les métadonnées de thread.
+
+00:03:51.580 --> 00:03:52.680
+Gardez les fenêtres de contexte légères.
+
+00:03:53.160 --> 00:03:55.240
+Si ce n'est pas nécessaire pour la décision suivante, il n'écrit pas.
+
+00:03:55.800 --> 00:03:58.240
+La planification par rapport à l'exécution est là où le noyau sémantique brille.
+
+00:03:58.560 --> 00:04:01.660
+Le planificateur délègue, l'opérateur choisit le bon outil avec des catalogues de fonctions.
+
+00:04:02.380 --> 00:04:05.900
+Le réviseur examine les résultats avec des invites d'évaluation et la sécurité du contenu.
+
+00:04:06.680 --> 00:04:09.240
+Si le réviseur signale un risque de portée, le planificateur révise...
+
+00:04:09.920 --> 00:04:11.040
+Une fois que vous avez compris cette boucle,
+
+00:04:11.120 --> 00:04:13.940
+vous arrêtez d'écrire des invites de 800 mots et commencez à établir des rôles clairs.
+
+00:04:14.600 --> 00:04:16.180
+Les limites de sécurité ne sont pas négociables.
+
+00:04:16.980 --> 00:04:19.280
+Appel d'outils à portée d'identité, avec des identités gérées.
+
+00:04:20.000 --> 00:04:22.380
+Ces autorisations d'agence sont réparties entre la lecture et la gestion.
+
+00:04:22.380 --> 00:04:24.740
+PM pour l'élévation des actions destructrices.
+
+00:04:25.060 --> 00:04:26.880
+Tous les appels d'outils sont consignés dans les analyses de jour.
+
+00:04:27.200 --> 00:04:28.680
+Sécurité du contenu en entrée et en sortie.
+
+00:04:29.380 --> 00:04:32.840
+Protection d'invite pour les jailbreak et injection indirecte d'invite à partir de sources de connaissances.
+
+00:04:33.720 --> 00:04:34.260
+Temps d'analogie.
+
+00:04:34.940 --> 00:04:36.800
+Chercheur, analyste, opérateur, assurance qualité.
+
+00:04:37.920 --> 00:04:39.040
+Chacun est responsable de sa part.
+
+00:04:39.560 --> 00:04:41.140
+L'opérateur n'approuve pas ses propres modifications.
+
+00:04:41.600 --> 00:04:42.960
+L'analyste ne s'immisce pas dans la production.
+
+00:04:43.400 --> 00:04:45.120
+L'assurance qualité n'écrit pas le code qui l'approuve.
+
+00:04:46.060 --> 00:04:46.940
+Ennuyeux. Sûr.
+
+00:04:46.940 --> 00:04:50.020
+Pourquoi Azure et iFoundry plus Sémantique Carnet ?
+
+00:04:50.020 --> 00:04:53.780
+Foundry vous offre l'orchestration des agents, les choix de modèles, la mise à la terre des connaissances,
+
+00:04:53.860 --> 00:04:57.560
+le câblage des outils, la sécurité du contenu, le traçage, les évaluations et la gouvernance en un seul endroit.
+
+00:04:58.080 --> 00:05:01.940
+Sémantique Carnet vous offre des planificateurs, des compétences, des pipelines, des nouvelles tentatives,
+
+00:05:02.260 --> 00:05:03.080
+et une annulation dans le code.
+
+00:05:03.080 --> 00:05:09.660
+Ensemble, vous mélangez des modèles par rôle, des SLM pour l'extraction, une classe GPT-4 pour la planification,
+
+00:05:10.000 --> 00:05:14.380
+des lots pour les résumés, et vous gardez vos invites courtes, votre rayon d'action réduit et vos week-ends à vous.
+
+00:05:15.100 --> 00:05:15.980
+Maintenant construisons la chose.
+
+00:05:16.620 --> 00:05:19.080
+Comment Azure et iFoundry permettent des workflows multi-agents ?
+
+00:05:19.660 --> 00:05:23.480
+C'est là qu'Azure et iFoundry cessent d'être un portail brillant et commencent à agir comme un atelier de production.
+
+00:05:24.500 --> 00:05:28.020
+Foundry vous offre des espaces pour définir des agents, connecter des modèles, ajouter des connaissances,
+
+00:05:28.120 --> 00:05:31.520
+relier des actions et tout observer sans vivre dans 6 lames différentes et un souhait, un souhait.
+
+00:05:31.520 --> 00:05:33.480
+C'est une orchestration sans ruban à désir.
+
+00:05:34.060 --> 00:05:35.360
+Commencez par les définitions d'agents.
+
+00:05:36.420 --> 00:05:40.940
+Dans Foundry, chaque agent reçoit des instructions, des directives de rôle précises, pas un manifeste,
+
+00:05:41.600 --> 00:05:43.420
+le déploiement, le modèle réel qui le soutient.
+
+00:05:43.780 --> 00:05:47.120
+Mélanger la classe GPT-4 pour la planification avec les SLM de classe Phi pour l'extraction.
+
+00:05:47.760 --> 00:05:52.260
+Connaissance, index de recherche Azure AI, fichiers téléchargés ou mis à la terre Bing lorsque vous souhaitez un contexte web.
+
+00:05:52.860 --> 00:05:57.680
+Action, outil d'API ouvert, application logique, fonction graph, runbooks, d'automatisation Azure
+
+00:05:57.680 --> 00:06:00.140
+ou interpréteur de code pour des calculs et une analyse rapide.
+
+00:06:00.140 --> 00:06:01.640
+Agent connecté, oui.
+
+00:06:01.940 --> 00:06:05.480
+Un agent peut traiter un autre agent comme un outil si cela permet de garder les rôles propres.
+
+00:06:06.480 --> 00:06:09.220
+Maintenant, c'est important car le noyau sémantique se connecte à ce même univers.
+
+00:06:10.220 --> 00:06:14.040
+Dans le code, vous créez des planificateurs, définissez des compétences et enregistrez des outils dans des catalogues de fonctions.
+
+00:06:14.840 --> 00:06:17.940
+Vous chorégraphiez la boucle du planificateur, de l'opérateur et du réviseur et laissez
+
+00:06:17.940 --> 00:06:20.660
+Foundry gérer les threads, l'historique et les rails de sécurité.
+
+00:06:21.220 --> 00:06:24.100
+Vous réduisez les invites et confiez le gros du travail aux outils avec des schémas.
+
+00:06:24.100 --> 00:06:27.280
+Traduction, moins d'hallucinations, moins d'erreurs, plus de week-ends.
+
+00:06:27.780 --> 00:06:28.700
+Les choix de modèles sont importants.
+
+00:06:29.040 --> 00:06:33.740
+Foundry fait abstraction de l'inférence via le point de terminaison du modèle, ce qui vous permet d'échanger des modèles sans réécrire toute votre application.
+
+00:06:34.120 --> 00:06:37.520
+De voie commune, des points de terminaison sans serveur pour les modèles premium et une itération rapide.
+
+00:06:38.180 --> 00:06:41.760
+Vous payez par jetons, évoluez à la demande et ne surveillez pas les GPU comme si nous étions en 2018.
+
+00:06:42.300 --> 00:06:45.520
+Calcul géré pour des modèles ouverts spécifiques que vous souhaitez associer à votre limite de locataire.
+
+00:06:46.280 --> 00:06:50.080
+Vous payez en fonction du temps de disponibilité, contrôlez la forme et Microsoft gère la plomberie du déploiement.
+
+00:06:50.840 --> 00:06:51.680
+Mélangez les modèles par eau.
+
+00:06:52.460 --> 00:06:54.800
+Magnificateur sur GPT-4 ou 4.1 mini pour le raisonnement.
+
+00:06:55.320 --> 00:06:58.300
+Opérateur sur un petit modèle qui excelle dans l'extraction et la mise en forme des paramètres.
+
+00:06:59.000 --> 00:07:02.040
+Regroupez vos longs résumés pendant la nuit afin que les humains obtiennent des rapports brillants le matin.
+
+00:07:02.940 --> 00:07:05.800
+Et si un modèle est retiré ou si vous souhaitez essayer les variantes DeepSync ou Lama,
+
+00:07:06.240 --> 00:07:09.800
+l'API d'inférence de Foundry vous permet de maintenir la stabilité de votre code pendant vos expérimentations.
+
+00:07:10.200 --> 00:07:12.380
+Les outils et les actions sont là où l'opérateur gagne son badge.
+
+00:07:12.380 --> 00:07:16.460
+C'est là que vous apportez un véritable pouvoir, sans donner à l'agent les clés de votre royaume.
+
+00:07:16.940 --> 00:07:19.340
+Outils API ouverts pour les services internes avec Swagger.
+
+00:07:20.080 --> 00:07:20.920
+Maintenez le contrat strict.
+
+00:07:21.480 --> 00:07:23.940
+Si le schéma indique que l'appareil est une chaîne, il vaut mieux que ce soit un ID d'appareil.
+
+00:07:24.720 --> 00:07:26.760
+Application logique pour les flux d'approbation et les portes humaines.
+
+00:07:27.360 --> 00:07:30.940
+Laissez le réviseur acheminer les modifications vers un approbateur de modification, puis reprenez l'exécution sur Oui.
+
+00:07:31.580 --> 00:07:33.820
+Fonction Azure pour le code de liaison et les transformations saines.
+
+00:07:34.680 --> 00:07:39.040
+Petite API de graphes versionnées et testables pour les tâches d'accès conditionnelles aux appareils Intune, Entra et Utilisateur.
+
+00:07:39.040 --> 00:07:43.680
+Donnez des étendues de lecture aux agents de surveillance, gérez les étendues uniquement au correcteur.
+
+00:07:44.700 --> 00:07:46.960
+Automatisation Azure pour les scripts d'appareils et les livres d'exécution.
+
+00:07:47.560 --> 00:07:49.460
+Traitez-les comme des objets pointus dans un tiroir verrouillé.
+
+00:07:50.320 --> 00:07:51.660
+Seul l'agent de réparation peut l'ouvrir.
+
+00:07:52.560 --> 00:07:54.060
+Comme la mise à la terre, conservez-les.
+
+00:07:54.700 --> 00:07:57.580
+Utilisez la recherche azurée AI avec le classement hybride et le reclassement sémantique.
+
+00:07:58.020 --> 00:07:59.040
+Partagez les connaissances par domaine.
+
+00:07:59.620 --> 00:08:01.840
+Politique Intune distingue des DSOP d'intégration.
+
+00:08:02.580 --> 00:08:03.760
+Vous n'expédiez donc pas l'évier de cuisine.
+
+00:08:04.300 --> 00:08:06.040
+L'opérateur doit transmettre un extrait, pas l'encyclopédie.
+
+00:08:06.040 --> 00:08:12.060
+Dimensionnez vos morceaux, stockez les citations et demandez au réviseur de vérifier la mise à la terre avant qu'ils n'entrent en production.
+
+00:08:12.640 --> 00:08:13.640
+La sécurité n'est pas facultative.
+
+00:08:13.940 --> 00:08:16.380
+Fandry intègre des filtres de sécurité de contenu pour les entrées et les sorties,
+
+00:08:16.480 --> 00:08:20.360
+des protections d'invite pour le jailbreak et l'injection indirecte et l'injection indirecte, ainsi que des contrôles matériaux protégés.
+
+00:08:21.060 --> 00:08:25.280
+Exécutez un pré-modèle et un post-modèle de sécurité afin de ne pas payer pour de mauvaises entrées ou des catastrophes PR de sortie.
+
+00:08:26.040 --> 00:08:28.960
+Associez cela à une identité gérée par agent, au moindre privilège airbag,
+
+00:08:29.440 --> 00:08:31.780
+et à la PM pour une élévation temporaire sur les outils destructeurs.
+
+00:08:31.780 --> 00:08:34.600
+Chaque appel d'outils est tracé, chaque approbation est consignée.
+
+00:08:34.960 --> 00:08:37.580
+Si quelqu'un demande qui a exécuté quoi, vous n'ouvrez pas Outlook.
+
+00:08:38.140 --> 00:08:39.280
+L'analyse des journaux le sait déjà.
+
+00:08:39.960 --> 00:08:41.160
+L'observabilité est en mode adulte.
+
+00:08:41.980 --> 00:08:49.120
+Activez le traçage pour pouvoir voir l'historique, des exécutions, quel agent a appelé, quel outil, avec quels paramètres, quelle latence et ce qui est revenu.
+
+00:08:49.520 --> 00:08:51.880
+Connectez les informations sur les applications pour les modèles de performance,
+
+00:08:52.140 --> 00:08:55.280
+les journaux d'application pour l'audit et les évaluations d'expédition dans l'intégration continue
+
+00:08:55.280 --> 00:08:58.020
+afin de détecter les écarts de pertinence, d'ancrage de pertinence, d'ancrage et de fluidité.
+
+00:08:58.020 --> 00:09:03.220
+Si l'ancrage diminue, le réviseur le signale, le planificateur restreint la requête de récupération et l'opérateur réessaye.
+
+00:09:03.900 --> 00:09:05.000
+Aucune panique humaine n'est nécessaire.
+
+00:09:05.400 --> 00:09:07.000
+Les primitifs de déploiement maintiennent le tout-en-art.
+
+00:09:07.300 --> 00:09:10.040
+Utilisez les projets fonderies pour les quotas de portée d'équipe et les lignes de base de stratégie.
+
+00:09:10.320 --> 00:09:13.320
+Placez la gestion des API Azure devant votre service d'outils afin de pouvoir gérer les versions,
+
+00:09:13.440 --> 00:09:17.260
+limiter, implémenter des disjoncteurs et acheminer entre les PTU et l'inférence de paiement à l'utilisation.
+
+00:09:17.920 --> 00:09:21.240
+Point de terminaison privée où la résidence des données ou la conformité indique que nous sommes sérieux.
+
+00:09:21.900 --> 00:09:24.420
+Régions qui correspondent à vos utilisateurs, pas seulement à vos aspirations.
+
+00:09:24.420 --> 00:09:26.460
+Et oui, le noyau sémantique fait le nœud.
+
+00:09:26.980 --> 00:09:28.200
+Vous décrivez le flux de travail dans le code.
+
+00:09:28.600 --> 00:09:29.600
+Le planificateur décompose.
+
+00:09:29.880 --> 00:09:33.040
+L'opérateur choisit les outils en fonction des catalogues de fonctions et de la disponibilité.
+
+00:09:33.700 --> 00:09:37.820
+Le réviseur applique des vérifications avec des invites d'évaluation et des résultats de sécurité du contenu.
+
+00:09:38.280 --> 00:09:41.340
+Et vous obtenez de nouvelles tentatives avec des jetons de retour en arrière et d'annulation
+
+00:09:41.340 --> 00:09:43.560
+lorsqu'une API externe prétend être en panne pour maintenance.
+
+00:09:44.700 --> 00:09:46.000
+SK vous donne le cerveau d'exécution.
+
+00:09:46.120 --> 00:09:47.440
+Fondry vous donne le bloc opératoire.
+
+00:09:48.100 --> 00:09:49.720
+Assemblez le tout et vous obtenez un modèle pratique.
+
+00:09:49.720 --> 00:09:53.460
+Définissez des agents d'enfronnerie avec des instructions et des identités strictes,
+
+00:09:53.500 --> 00:09:56.200
+orchestrez les rôles dans SK, mettez en place une recherche organisée,
+
+00:09:56.600 --> 00:09:59.640
+reliez les actions avec des API ouvertes, des applications logiques, des fonctions,
+
+00:09:59.740 --> 00:10:02.960
+l'automatisation, appliquez la sécurité avant et après l'inférence, et observez tout.
+
+00:10:03.520 --> 00:10:04.680
+C'est ennuyer dans le meilleur sens du terme.
+
+00:10:04.940 --> 00:10:09.100
+Comme les ceintures de sécurité ou le fait de ne pas donner l'administrateur global au stagiaire
+
+00:10:09.100 --> 00:10:10.080
+nommé clé par défaut.
+
+00:10:11.160 --> 00:10:12.240
+Scénario de démonstration 1.
+
+00:10:12.580 --> 00:10:13.380
+Nettoyage des appareils.
+
+00:10:13.720 --> 00:10:15.420
+Unité d'appareil fantôme CSI Intune.
+
+00:10:15.420 --> 00:10:21.000
+Vous connaissez ces appareils qui apparaissent comme gérés, retirés et non morts en même temps ?
+
+00:10:21.000 --> 00:10:22.060
+Bienvenue dans CSI Intune.
+
+00:10:22.880 --> 00:10:25.880
+Notre travail consiste à trouver du matériel obsolète en double ou désinscrit
+
+00:10:25.880 --> 00:10:29.300
+et elle corrige en toute sécurité avec approbation afin que personne ne s'en prenne aux emails juridiques.
+
+00:10:29.860 --> 00:10:30.600
+Ensemble d'agents.
+
+00:10:31.100 --> 00:10:35.160
+Surveillance, requête, analyse Microsoft Graph et log, classification des états des appareils,
+
+00:10:35.360 --> 00:10:37.020
+signalent les anomalies.
+
+00:10:37.700 --> 00:10:41.360
+Le remédiateur appelle Intune et Azure Automation pour mettre en quarantaine ou retirer les appareils.
+
+00:10:41.360 --> 00:10:47.260
+L'auditeur consigne tout, notifie les humains et écrit le roman après action pour la conformité.
+
+00:10:48.180 --> 00:10:49.300
+Le flux se déroule comme suit.
+
+00:10:49.860 --> 00:10:52.620
+Monitor extrait des enregistrements de l'appareil graphique, le dernier enregistrement,
+
+00:10:52.720 --> 00:10:55.940
+l'état de conformité, le type d'inscription, l'utilisateur principal, les indicateurs de retrait.
+
+00:10:56.820 --> 00:10:59.420
+Il récupère également les signaux d'analyse des journaux, les pulsations des fenders,
+
+00:10:59.600 --> 00:11:02.380
+la conformité des mises à jour et les événements d'extension de gestion Intune.
+
+00:11:03.260 --> 00:11:05.940
+Il les fusionne en un courant enregistrement structuré par appareil.
+
+00:11:06.660 --> 00:11:09.960
+Dernière vue, UTC, inscrit, conforme, candidat en double, signaux de risque.
+
+00:11:09.960 --> 00:11:11.200
+Pas de roman, juste échant.
+
+00:11:11.560 --> 00:11:12.840
+Maintenant le cerveau passe la main au muscle.
+
+00:11:13.260 --> 00:11:16.960
+Monitor envoie une classification proposée, obsolète, en double, sans pulsation ou bien.
+
+00:11:17.940 --> 00:11:19.140
+Le réviseur vérifie la mise à la tête.
+
+00:11:20.100 --> 00:11:22.420
+Ces champs proviennent-ils réellement du graphique et de LA ?
+
+00:11:22.420 --> 00:11:26.900
+La sécurité du contenu exécute un pré-modèle pour bloquer l'injection d'invite à partir de tout fichier téléchargé ou mise à la tête web.
+
+00:11:27.800 --> 00:11:30.680
+Si la classification est réussie, le correcteur prépare les actions.
+
+00:11:31.460 --> 00:11:34.060
+La première phase est la correction douce, l'étiquetage, et la mise en quarantaine.
+
+00:11:34.060 --> 00:11:44.440
+Nous appliquons un candidat à la catégorie d'appareils retirés, supprimons les liaisons de groupes dynamiques qui déclenchent la prolifération des stratégies et, si nécessaire, déplaçons l'appareil dans un groupe Azure AD de quarantaine qui bloque l'accès.
+
+00:11:45.520 --> 00:11:46.280
+Aucune suppression pour le monde.
+
+00:11:47.680 --> 00:11:49.120
+Les approbations arrivent dans une application logique.
+
+00:11:49.520 --> 00:11:54.440
+Le réviseur inclut un plan compact, les identifiant des appareils, les raisons, les actions proposées et la restauration.
+
+00:11:54.440 --> 00:11:59.720
+L'approbateur voit un condensé dans Teams avec des citations pour les requêtes graphiques et les analystes, deux journaux qu'à QL.
+
+00:12:00.820 --> 00:12:02.220
+Approuver le retour du jeton du capteur.
+
+00:12:02.400 --> 00:12:09.640
+Le correcteur exécute la mise hors service, effacer lorsque cela est justifié ou nettoyer les doublons en conservant l'appareil avec le rythme cardiaque le plus récent et en dissociant les fantômes.
+
+00:12:10.400 --> 00:12:12.040
+L'identité gérée nous permet de garder les mains propres.
+
+00:12:12.580 --> 00:12:14.280
+Le moniteur s'exécute avec l'appareil en lecture seule.
+
+00:12:14.700 --> 00:12:19.700
+Le correcteur utilise une identité distincte avec l'appareil en lecture seule et les autorisations à une tune dont il a exactement besoin.
+
+00:12:20.460 --> 00:12:21.480
+La suppression se retrouve d'ARP.
+
+00:12:21.480 --> 00:12:23.580
+L'agent du correcteur ne peut pas s'élever lui-même.
+
+00:12:23.580 --> 00:12:29.480
+Lorsqu'une élévation est demandée, l'application logique a besoin d'un humain et le compte à rebours commence pour l'autorisation temporaire.
+
+00:12:29.960 --> 00:12:31.300
+L'observabilité est la partie adulte.
+
+00:12:31.860 --> 00:12:32.900
+Chaque appel d'outil est tracé.
+
+00:12:33.320 --> 00:12:35.420
+Cap, les quoi, paramètres, latences, réponses ?
+
+00:12:35.420 --> 00:12:42.160
+L'auditeur écrit des enregistrements d'événements dans les analystes de journaux, avec des identifiants de corrélation afin que vous puissiez reconstituer la scène du crime sans archéologie Slack.
+
+00:12:42.800 --> 00:12:46.140
+Nous effectuons également une étape d'évaluation après le changement de l'ancrage, de la pertinence et de la fluidité.
+
+00:12:46.140 --> 00:12:53.580
+Si l'ancrage diminue, le réviseur bloque d'autres actions destructrices et renvoie le plan au planificateur pour affiner la récupération ou réduire la portée.
+
+00:12:53.940 --> 00:12:55.160
+Les modèles sont mélangés intentionnellement.
+
+00:12:55.460 --> 00:12:58.300
+La classification utilise un petit modèle pour maintenir les coûts et la latence à un niveau bas.
+
+00:12:59.240 --> 00:13:05.660
+Les cases extrêmes, comme deux appareils dont Autopilota renommé l'un et Casuradé pensait des jumeaux, obtiennent un chemin de raisonnement avec GPT-4 Mini.
+
+00:13:06.460 --> 00:13:07.220
+Les résumés sont regroupés.
+
+00:13:07.480 --> 00:13:08.960
+Personne n'a besoin de rapport Shakespeare 1 1400.
+
+00:13:09.220 --> 00:13:09.640
+Micro histoire.
+
+00:13:09.640 --> 00:13:15.380
+La semaine dernière, le test à agent unique a tenté de réparer un appareil obsolète en retirant tout ce qui se trouvait dans le même groupe dynamique.
+
+00:13:16.020 --> 00:13:20.700
+Le réviseur de notre flux multi-agents a signalé l'inadéquation de la portée, a demandé une confirmation au niveau de l'appareil et l'a arrêtée.
+
+00:13:21.280 --> 00:13:23.040
+C'est pourquoi nous séparons la planification de l'action et l'éducation.
+
+00:13:23.480 --> 00:13:26.200
+Résultat final, les appareils fantômes cessent de hanter la conformité.
+
+00:13:26.800 --> 00:13:32.160
+Vous réduisez le gaspillage de licence, réduisez les faux positifs et arrêtez d'expliquer à la direction pourquoi le retrait a échoué est un mode de vie.
+
+00:13:33.120 --> 00:13:37.000
+Et oui, la piste d'audit est lisible, ce qui est plus que ce que je peux dire pour la moitié de votre ticket de modification.
+
+00:13:37.000 --> 00:13:40.780
+Scénario de démonstration numéro 2, intégration sans contact.
+
+00:13:41.120 --> 00:13:45.800
+En fait, aucun contact, aucun contact pour l'utilisateur, 500 contacts pour l'ingénierie jusqu'aux agents.
+
+00:13:46.720 --> 00:13:50.260
+Objectif, d'un événement RH à un utilisateur, un appareil prêt sans intervention de la part des RH.
+
+00:13:50.980 --> 00:13:54.740
+Fluide, gouverné et réversible lorsque les RH épellent le nom de famille de trois manières différentes.
+
+00:13:55.320 --> 00:13:55.900
+Composition de l'équipe.
+
+00:13:56.640 --> 00:14:01.460
+Intake, écoute le webhook RH, normalise les charges utiles et valide les champs obligatoires.
+
+00:14:02.240 --> 00:14:06.980
+Provisionner, créer l'utilisateur dans ANTRA, attribuer des groupes et des licences, enregistre les profils autopilote.
+
+00:14:08.000 --> 00:14:12.800
+Validator, vérifier la conformité aux politiques et la posture d'accès conditionnel, avant de remettre un ordinateur portable brillant.
+
+00:14:13.720 --> 00:14:17.860
+Concierge, envoie le pack de bienvenue, les liens SharePoint et votre liste de contrôle du premier jour.
+
+00:14:18.520 --> 00:14:18.900
+Temps de flux.
+
+00:14:19.460 --> 00:14:23.720
+Intake obtient la charge utile RH, le nom, la date de début, le rôle, le service, le responsable, la région.
+
+00:14:24.400 --> 00:14:25.720
+Un petit modèle extrait et normalise.
+
+00:14:26.320 --> 00:14:29.680
+Il mappe les champs canoniques et détecte les absurdités comme une date de début en 2099.
+
+00:14:29.680 --> 00:14:34.660
+Si des champs obligatoires sont manquants, il envoie une erreur structurée au RH via Logic Apps, sans poésie libre.
+
+00:14:35.220 --> 00:14:38.060
+Provisionner appelle Graf avec une identité gérée limitée aux droits de l'utilisateur.
+
+00:14:38.660 --> 00:14:42.540
+Il crée l'utilisateur ANTRA, définit l'emplacement d'utilisation et applique un groupe de base.
+
+00:14:43.040 --> 00:14:45.400
+Il assemble ensuite les attributions de licence en fonction du rôle et de la région.
+
+00:14:46.120 --> 00:14:46.900
+Le raisonnant est utile ici.
+
+00:14:47.460 --> 00:14:50.540
+Cette personne a-t-elle besoin de la sécurité E5 ou de Business Premium ?
+
+00:14:50.540 --> 00:14:53.460
+Nous codons la politique dans les données et laissons le modèle choisir parmi les autorisés.
+
+00:14:54.020 --> 00:14:56.020
+Aucun modèle ne peut inventer de licence, c'est un menu strict.
+
+00:14:56.720 --> 00:14:57.580
+Autopilote vient ensuite.
+
+00:14:58.380 --> 00:15:03.660
+Provisionner, enregistrer un achage matériel que nous avons déjà ou prépare un profil juste à temps lié au groupe de l'utilisateur.
+
+00:15:04.580 --> 00:15:07.500
+Il marque les groupes d'appareils pour les politiques de base, puis le validateur se réveille.
+
+00:15:08.180 --> 00:15:10.840
+Il interroge Graf et Defender pour obtenir des signaux de conformité,
+
+00:15:11.260 --> 00:15:13.680
+vérifie que l'accès conditionnel n'interrompra pas la première connexion
+
+00:15:13.680 --> 00:15:16.140
+et vérifie que les bonnes politiques de configuration d'appareil s'appliqueront.
+
+00:15:16.480 --> 00:15:19.200
+Si l'accès conditionnel devait bloquer la nouvelle recrute dès le premier jour,
+
+00:15:19.660 --> 00:15:22.660
+le validateur ouvre une approbation avec une exception limitée dans le temps et la justification.
+
+00:15:23.460 --> 00:15:24.800
+Le concierge s'occupe des aspects humains.
+
+00:15:25.500 --> 00:15:28.160
+Il publie un message Teams, responsable avec l'UPN de la nouvelle recrue,
+
+00:15:28.260 --> 00:15:31.040
+l'état d'attribution de l'appareil et un lien vers un kit de démarrage SharePoint.
+
+00:15:32.060 --> 00:15:34.360
+Il envoie un email à la nouvelle recrue avec les étapes du premier jour,
+
+00:15:34.440 --> 00:15:37.360
+des conseils de configuration de l'authentification multifacteur et l'emplacement du portail informatique.
+
+00:15:37.900 --> 00:15:40.160
+Il ne colle pas vos plages d'adresses IP internes dans l'email.
+
+00:15:41.160 --> 00:15:43.820
+La sécurité du contenu vérifie les sorties pour détecter les fuites et le...
+
+00:15:43.820 --> 00:15:45.600
+La gouvernance est sur le même thème de la ceinture de sécurité.
+
+00:15:46.020 --> 00:15:48.560
+L'identité gérée par le fournisseur a le droit de licence mais pas de suppression.
+
+00:15:49.400 --> 00:15:51.260
+L'admission ne peut pas provisionner, elle ne fait que valider.
+
+00:15:53.460 --> 00:15:55.180
+Comme l'ajout d'utilisateur à un groupe sensible.
+
+00:15:55.640 --> 00:15:58.180
+Toutes les actions sont retracées dans les informations sur les applications et ce journaux.
+
+00:15:58.640 --> 00:16:00.200
+Si les RH envoient une charge utile corrigée,
+
+00:16:00.680 --> 00:16:03.880
+le planificateur recalcule le delta et l'opérateur met à jour uniquement ce qui a changé.
+
+00:16:04.240 --> 00:16:05.500
+Pas de yo-yo dans les appartenances au groupe.
+
+00:16:06.040 --> 00:16:07.400
+L'observabilité vous donne des jalons.
+
+00:16:08.320 --> 00:16:11.480
+Ingestion RH, création entra, attribution de licence, profil de pilote automatique,
+
+00:16:11.580 --> 00:16:14.140
+notification de verdict de conformité envoyé, hum...
+
+00:16:14.140 --> 00:16:17.820
+Vous obtenez des mesures SLA et des nouvelles tentatives automatiques sur les erreurs de graphique transitoires avec backoff.
+
+00:16:18.400 --> 00:16:20.660
+Si le système RH émet un RAW, le thread ne meurt pas.
+
+00:16:21.140 --> 00:16:23.420
+Il s'interrompt, se connecte et reprend une fois corrigé.
+
+00:16:24.460 --> 00:16:27.600
+Les évaluations s'exécutent en CI sur des charges utiles d'intégration synthétique
+
+00:16:27.600 --> 00:16:30.860
+pour détecter les régressions en termes de pertinence et de fondement avant qu'une véritable embauche n'en souffre.
+
+00:16:31.300 --> 00:16:33.060
+Le mélange de modèles permet de maintenir la facture SLA.
+
+00:16:33.200 --> 00:16:34.720
+SLM pour l'extraction et la normalisation.
+
+00:16:35.320 --> 00:16:37.660
+Un raisonnement passe uniquement sur les décisions de sélection de politique.
+
+00:16:38.320 --> 00:16:40.540
+Les résumés et les emails de bienvenue sont envoyés par l'eau lorsque cela est posé.
+
+00:16:41.100 --> 00:16:44.720
+L'objectif est un provisionnement à faible latence avec une clarté de niveau humain dans la piste d'audit.
+
+00:16:45.540 --> 00:16:46.040
+Petite anecdote.
+
+00:16:46.460 --> 00:16:49.460
+L'intégration d'un seul agent a tenté d'ajouter un utilisateur à l'ensemble du personnel et des sous-traitants
+
+00:16:49.460 --> 00:16:51.460
+car le titre indiquait « personnel sous-traitant ».
+
+00:16:51.460 --> 00:16:53.020
+Car le titre indiquait « personnel sous-traitant ».
+
+00:16:53.020 --> 00:16:55.860
+L'agent multiple a détecté la règle d'exclusivité mutuelle dans le validateur,
+
+00:16:55.940 --> 00:16:59.340
+a demandé une décision humaine et a évité un incendie immédiat du GRIP1 dans l'accès conditionnel.
+
+00:16:59.700 --> 00:17:01.500
+Résultat, une véritable absence d'intervention plus utilisable.
+
+00:17:01.880 --> 00:17:04.640
+Un thread, 4 agents, des approbations propres et une trace écrite
+
+00:17:04.640 --> 00:17:07.900
+que vous pouvez montrer à votre RSSI sans prier, les dieux de la démonstration.
+
+00:17:08.560 --> 00:17:10.900
+Et oui, lorsque les RH modifient inévitablement la date de début,
+
+00:17:10.980 --> 00:17:13.220
+le système recalcule sans mettre à mal le budget de la licence.
+
+00:17:13.220 --> 00:17:17.360
+Scénario de démonstration N2-3-3, renforcement automatisé de la sécurité
+
+00:17:17.360 --> 00:17:19.120
+Veuillez laisser BitLocker activé.
+
+00:17:19.700 --> 00:17:21.340
+La dérive de la sécurité est comme les mauvaises arbres.
+
+00:17:21.620 --> 00:17:23.360
+Vous en tirez trois à cinq fenêtres contextuelles s'affichent
+
+00:17:23.360 --> 00:17:24.920
+et l'une d'entre elles désactive BitLocker par dépit.
+
+00:17:25.560 --> 00:17:27.940
+Notre objectif est de détecter en permanence la dérive de la configuration
+
+00:17:27.940 --> 00:17:30.500
+et d'y remédier en toute sécurité avec des barrières qu'un avocat respecterait.
+
+00:17:31.120 --> 00:17:33.340
+Cast Drift Detector, Interroge Graph et Defender.
+
+00:17:34.200 --> 00:17:37.260
+Secure Score extrait les lignes de base de conformité Intune et de configuration des appareils
+
+00:17:37.260 --> 00:17:38.200
+et crée un delta de dérive.
+
+00:17:39.200 --> 00:17:42.800
+Fixer pousse les modifications de stratégie Intune, les paramètres, BitLocker
+
+00:17:42.800 --> 00:17:44.560
+et les anneaux, Mise à jour Windows.
+
+00:17:45.300 --> 00:17:49.360
+Exécute les scripts d'appareils via Azure Automation lorsque la stratégie ne peut pas aller assez loin.
+
+00:17:50.340 --> 00:17:52.160
+Reviewer applique les garde-fous, définit les modifications,
+
+00:17:52.380 --> 00:17:53.840
+exécute des vérifications de mise à la terre
+
+00:17:53.840 --> 00:17:56.220
+et enracine les approbations humaines pour les états prisqués.
+
+00:17:56.920 --> 00:18:00.800
+Messenger, incite les humains dans Teams ou par email avec des plans et des reçus compacts.
+
+00:18:02.100 --> 00:18:05.180
+Flow, Drift Detector s'exécute selon un calendrier et à la demande.
+
+00:18:06.180 --> 00:18:09.400
+Il extrait la conformité des appareils, l'état de BitLocker, l'état du TPM,
+
+00:18:09.400 --> 00:18:11.860
+la version du système d'exploitation, l'anneau de mise à jour
+
+00:18:11.860 --> 00:18:13.460
+et les affectations de stratégie via graph.
+
+00:18:14.180 --> 00:18:17.200
+Il compare chaque appareil à un profil de référence en tant que données structurées
+
+00:18:17.200 --> 00:18:18.840
+et non en tant que documents Vibes.
+
+00:18:19.800 --> 00:18:20.560
+Il marque les résultats.
+
+00:18:20.820 --> 00:18:23.840
+BitLocker manquant, méthode de cryptage faible, stratégie non appliquée,
+
+00:18:24.380 --> 00:18:26.400
+démarche sécurisé et désactivé, anneau de mise à jour hors limite.
+
+00:18:26.980 --> 00:18:29.860
+Le planificateur passe en revue, propose un plan minimal par groupe d'appareils.
+
+00:18:30.580 --> 00:18:33.700
+Pour BitLocker, utilisez la stratégie Intune BitLocker si l'appareil est compatible.
+
+00:18:34.560 --> 00:18:36.680
+Si la stratégie est déjà ciblée mais que l'état est désactivé,
+
+00:18:36.680 --> 00:18:39.000
+proposez un script d'automatisation pour relancer les protecteurs
+
+00:18:39.000 --> 00:18:40.300
+et mettre la clé sous ses caisses dans l'azur ADD.
+
+00:18:41.080 --> 00:18:44.520
+Pour la dérive de mise à jour, proposez de déplacer l'appareil vers un anneau de mise à jour par étape
+
+00:18:44.520 --> 00:18:45.880
+et non de corriger maintenant l'espoir.
+
+00:18:47.140 --> 00:18:49.980
+Pour les problèmes d'accès conditionnels, proposez une exception limitée dans le temps
+
+00:18:49.980 --> 00:18:51.240
+avec la justification requise.
+
+00:18:52.460 --> 00:18:53.800
+Le réviseur évalue la validité.
+
+00:18:54.840 --> 00:18:58.000
+DriftDetector a-t-il réellement cité les champs de Graph et Defender ?
+
+00:18:58.600 --> 00:19:01.900
+Il vérifie la portée, les ID d'appareil, les ID stratégies, le type de modification.
+
+00:19:02.140 --> 00:19:05.100
+Si quelque chose ressemble à tous les appareils, il est bloqué avec préjudice.
+
+00:19:05.100 --> 00:19:09.400
+La sécurité du contenu est assurée en entrée et en sortie, afin d'empêcher l'injection rapide
+
+00:19:09.400 --> 00:19:11.120
+de toute connaissance externe ou de journaux collés.
+
+00:19:11.520 --> 00:19:14.140
+Les actions à haut risque telles que la suppression d'une stratégie locale conflictuelle
+
+00:19:14.140 --> 00:19:15.640
+sont soumises à un contrôle de gestion de projet.
+
+00:19:16.000 --> 00:19:17.780
+L'identité du réparateur ne peut pas s'auto-élever.
+
+00:19:18.240 --> 00:19:20.480
+L'approbation réside dans une application logique avec une carte ordonnée.
+
+00:19:20.620 --> 00:19:21.260
+Quel est le problème ?
+
+00:19:21.260 --> 00:19:22.280
+Qu'est-ce qui va changer ?
+
+00:19:22.280 --> 00:19:23.480
+Étape de restauration et citation.
+
+00:19:23.900 --> 00:19:25.100
+Approuver et exécuter le réparateur.
+
+00:19:25.780 --> 00:19:28.140
+Les mises à jour de stratégies intunes sont ciblées et puissantes.
+
+00:19:28.680 --> 00:19:31.220
+Le correctif BitLocker utilise un runlook avec des paramètres explicites
+
+00:19:31.220 --> 00:19:32.320
+et une vérification de l'intégrité.
+
+00:19:35.100 --> 00:19:37.360
+Accès au dépôt XTS AS256, vérifié.
+
+00:19:38.120 --> 00:19:41.340
+Si une pré-vérification échoue, elle échoue avec une erreur conviviale et sans effet secondaire.
+
+00:19:42.420 --> 00:19:43.420
+Messenger ferme la boucle.
+
+00:19:43.940 --> 00:19:44.760
+L'appareil est réparé.
+
+00:19:45.200 --> 00:19:48.500
+Un condensé arrive dans Teams avec des décomptes, des liens vers des traces d'informations sur les applications
+
+00:19:48.500 --> 00:19:50.980
+et un fichier CSV pour la personne qui préfère toujours Excel à sa famille.
+
+00:19:52.240 --> 00:19:55.740
+Si un appareil refuse de se conformer, le réviseur ouvre un fil d'exception avec une horloge
+
+00:19:55.740 --> 00:19:57.080
+et de nouvelles tentatives sont planifiées.
+
+00:19:58.000 --> 00:20:00.280
+Observabilité de chaque appel d'outils tracés corrélés par fil.
+
+00:20:01.040 --> 00:20:04.240
+Nous verrouillons les deltas avant et après afin que l'audit puisse voir les éléments non conformes
+
+00:20:04.240 --> 00:20:05.140
+sans camper dans KQL.
+
+00:20:06.560 --> 00:20:09.340
+Nous exécutons également un agent d'évaluation sur les résumés post-modification
+
+00:20:09.340 --> 00:20:10.800
+pour vérifier la solidité et la clarté.
+
+00:20:11.800 --> 00:20:14.100
+Si la solidité diminue ou si les taux d'échec augmentent,
+
+00:20:14.280 --> 00:20:17.980
+le planificateur restreint la récupération, réduit la taille du lot ou suspend les actions destructrices.
+
+00:20:18.660 --> 00:20:20.780
+Mélanger le modèle SLM pour l'extraction et la classification,
+
+00:20:21.000 --> 00:20:23.700
+le modèle de raisonnement pour la synthèse du plan uniquement lorsque cela est nécessaire.
+
+00:20:24.220 --> 00:20:25.080
+Regrouper le rapport de nuit.
+
+00:20:25.400 --> 00:20:26.180
+Pas de sonnets sur les IA.
+
+00:20:26.700 --> 00:20:28.220
+Résultat final, BitLocker est réellement activé.
+
+00:20:28.360 --> 00:20:29.400
+Les anneaux de mise à jour dérivent moins.
+
+00:20:29.400 --> 00:20:31.960
+Les exceptions sont documentées, limitées dans le temps et révisables.
+
+00:20:32.260 --> 00:20:34.740
+Personne ne répare un appareil en réimaginant les ordinateurs portables financiers
+
+00:20:34.740 --> 00:20:35.760
+pendant la clôture du trimestre.
+
+00:20:36.720 --> 00:20:37.800
+Répartition de l'architecture.
+
+00:20:38.060 --> 00:20:40.400
+Fondry plus SK plus Tools plus Identity.
+
+00:20:40.840 --> 00:20:41.140
+N.A.
+
+00:20:41.780 --> 00:20:44.040
+Ouvrons le capot sans renverser d'huile moteur sur votre quota.
+
+00:20:44.920 --> 00:20:46.600
+Pensez à 4 couches qui maintiennent tout cela sain.
+
+00:20:47.040 --> 00:20:47.380
+Fondry.
+
+00:20:48.020 --> 00:20:48.660
+Noyau sémantique.
+
+00:20:48.940 --> 00:20:49.220
+Outils.
+
+00:20:49.680 --> 00:20:50.100
+Identité.
+
+00:20:50.880 --> 00:20:51.560
+Fondry est la base.
+
+00:20:52.340 --> 00:20:54.180
+Vous définissez des agents avec des instructions strictes,
+
+00:20:54.280 --> 00:20:55.380
+choisissez des déploiements par rôle,
+
+00:20:55.880 --> 00:20:57.420
+joignez des connaissances via la recherche Azure AI
+
+00:20:57.420 --> 00:20:58.420
+et enregistrez des actions.
+
+00:20:59.240 --> 00:20:59.960
+Outils API ouverts,
+
+00:21:00.040 --> 00:21:01.020
+applications logiques,
+
+00:21:01.120 --> 00:21:01.420
+fonctions,
+
+00:21:01.840 --> 00:21:02.200
+graphes,
+
+00:21:02.260 --> 00:21:03.280
+automatisation Azure,
+
+00:21:03.540 --> 00:21:04.360
+interpréteurs de code,
+
+00:21:04.760 --> 00:21:07.280
+menaces historiques d'exécution,
+
+00:21:07.380 --> 00:21:09.080
+traçage, évaluation et sécurité de la vie ici.
+
+00:21:09.480 --> 00:21:10.960
+Les boucliers d'invite de sécurité du contenu
+
+00:21:10.960 --> 00:21:12.440
+et les vérifications de matériel protégé
+
+00:21:12.440 --> 00:21:13.760
+exécutent des modèles pré-postes
+
+00:21:13.760 --> 00:21:15.120
+afin que les mauvaises entrées ne coûtent pas de jetons
+
+00:21:15.120 --> 00:21:16.460
+et que les mauvaises sorties ne coûtent pas de jetons.
+
+00:21:16.840 --> 00:21:18.320
+Le noyau sémantique est le chef d'orca.
+
+00:21:18.600 --> 00:21:19.180
+Dans le code,
+
+00:21:19.240 --> 00:21:21.440
+vous connectez la boucle de révision de l'opérateur du planificateur.
+
+00:21:22.000 --> 00:21:23.780
+Vous enregistrez des catalogues de fonctions pour les outils,
+
+00:21:23.780 --> 00:21:25.180
+désactivez les nouvelles tentatives
+
+00:21:25.180 --> 00:21:26.480
+et ajoutez des jetons d'annulation.
+
+00:21:27.120 --> 00:21:27.960
+Vous gardez les invites courtes,
+
+00:21:28.060 --> 00:21:29.300
+transmettez la complexité dans les schémas
+
+00:21:29.300 --> 00:21:30.600
+et laissez SK décider quel outil appeler
+
+00:21:30.600 --> 00:21:31.620
+en fonction de la disponibilité,
+
+00:21:31.700 --> 00:21:32.700
+de la politique et de la politique.
+
+00:21:33.420 --> 00:21:34.180
+Si le graphe expire,
+
+00:21:34.520 --> 00:21:35.620
+SK traite avec la gigue.
+
+00:21:36.260 --> 00:21:37.240
+Si la mise à la terre diminue,
+
+00:21:37.340 --> 00:21:38.760
+il revient au planificateur pour affiner.
+
+00:21:39.540 --> 00:21:40.240
+Les outils sont les mains.
+
+00:21:40.820 --> 00:21:42.500
+Maintenez les contrats stricts avec une API ouverte.
+
+00:21:43.240 --> 00:21:44.600
+Placez la gestion des API en amont
+
+00:21:44.600 --> 00:21:46.040
+pour limiter la version et la coupure de circuit.
+
+00:21:46.480 --> 00:21:47.960
+Les applications logiques gèrent les approbations
+
+00:21:47.960 --> 00:21:48.700
+et les flux de longue durée.
+
+00:21:49.260 --> 00:21:50.680
+Les fonctions effectuent la colle et la transformation.
+
+00:21:51.180 --> 00:21:52.720
+L'automatisation Azure exécute des scripts
+
+00:21:53.780 --> 00:21:54.620
+post-arrêtes.
+
+00:21:54.720 --> 00:21:56.260
+Graf est votre source de vérité pour Entune.
+
+00:21:56.440 --> 00:21:58.220
+Entra, la conformité, le score de sécurité.
+
+00:21:59.000 --> 00:22:00.540
+La recherche Azure AI propose des connaissances
+
+00:22:00.540 --> 00:22:01.300
+organisées par domaine.
+
+00:22:01.700 --> 00:22:02.380
+Pas de soupe de connaissances.
+
+00:22:02.780 --> 00:22:03.900
+L'identité est la ceinture de sécurité.
+
+00:22:04.320 --> 00:22:05.960
+Chaque agent possède sa propre identité gérée.
+
+00:22:06.500 --> 00:22:07.900
+Les agents de surveillance obtiennent des étendues de l'écriture.
+
+00:22:08.220 --> 00:22:09.720
+Les correcteurs obtiennent des étendues d'écriture.
+
+00:22:09.780 --> 00:22:10.300
+Jamais d'administrate.
+
+00:22:10.720 --> 00:22:12.120
+Le PM contrôle tout ce qui est destructeur.
+
+00:22:12.540 --> 00:22:14.260
+L'élévation nécessite une intervention humaine et expire.
+
+00:22:14.920 --> 00:22:15.900
+Point de terminaison privée
+
+00:22:15.900 --> 00:22:17.260
+où les limites des données sont importants.
+
+00:22:17.900 --> 00:22:19.700
+Les lignes de base des politiques sur les projets fonderies
+
+00:22:19.700 --> 00:22:21.720
+appliquent les modèles, les régions et les quotas autorisés.
+
+00:22:22.600 --> 00:22:24.740
+Les informations sur les applications et les analyses de journaux
+
+00:22:24.740 --> 00:22:26.200
+collectent les traces, les métriques et les audits
+
+00:22:26.200 --> 00:22:28.560
+afin que vous puissiez déterminer qui a fait quoi sans archéologie Slack.
+
+00:22:29.360 --> 00:22:31.560
+Les modèles se connectent via le point de terminaison d'inférence de Fondry.
+
+00:22:32.120 --> 00:22:34.200
+Utilisez le sans serveur pour un raisonnement de qualité supérieure.
+
+00:22:34.320 --> 00:22:35.700
+Gérez le calcul pour les modèles ouverts épinglés.
+
+00:22:36.200 --> 00:22:37.660
+Échangez les modèles sans réécrire le code,
+
+00:22:37.840 --> 00:22:40.380
+mais évaluez toujours la pertinence, l'ancrage et la fluidité dans l'IC
+
+00:22:40.380 --> 00:22:41.400
+avant de les promouvoir.
+
+00:22:42.140 --> 00:22:43.520
+Les régions correspondent à vos utilisateurs.
+
+00:22:43.640 --> 00:22:45.000
+Les zones de données correspondent à vos régulateurs.
+
+00:22:45.000 --> 00:22:47.320
+Ensemble, c'est une machine fiable et ennuyeuse.
+
+00:22:47.980 --> 00:22:49.180
+Les agents définis dans Fondry,
+
+00:22:49.440 --> 00:22:51.860
+orchestrés par SK, alimentés par des outils stricts,
+
+00:22:51.960 --> 00:22:52.860
+perrouillés par l'identité,
+
+00:22:53.240 --> 00:22:55.780
+mesurés par l'observabilité et protégés par la sécurité.
+
+00:22:56.980 --> 00:22:57.500
+L'ennui gagne.
+
+00:22:57.960 --> 00:22:58.580
+L'ennui évolue.
+
+00:22:59.020 --> 00:22:59.860
+L'ennui vous permet d'ormir.
+
+00:23:01.000 --> 00:23:02.420
+Les meilleures pratiques sont livrées sans regret.
+
+00:23:03.660 --> 00:23:06.180
+Storer la sagesse du temps pour ne pas passer le dimanche à défaire le samedi.
+
+00:23:06.480 --> 00:23:07.420
+Donnez une tâche à chaque agent.
+
+00:23:07.920 --> 00:23:09.720
+Le planificateur planifie, l'opérateur opère.
+
+00:23:09.980 --> 00:23:10.700
+Le réviseur révise.
+
+00:23:11.580 --> 00:23:13.300
+Si un agent commence à écrire un roman sincère,
+
+00:23:13.300 --> 00:23:15.240
+supprimer son invite et confier la prose à un outil.
+
+00:23:15.720 --> 00:23:17.440
+Gardez les instructions courtes, précises et ennuyeuses.
+
+00:23:17.900 --> 00:23:18.660
+Vous aurez moins de surprises.
+
+00:23:19.200 --> 00:23:20.540
+Préférez les appels d'outils à la prose long.
+
+00:23:20.960 --> 00:23:22.460
+Placez les contrats dans une API ouverte,
+
+00:23:22.600 --> 00:23:24.480
+les schémas sur les entrées et les garde-fous sur les sorties.
+
+00:23:25.120 --> 00:23:26.100
+Si un outil attend un appareil,
+
+00:23:26.220 --> 00:23:26.980
+envoyez-lui un appareil,
+
+00:23:27.060 --> 00:23:28.540
+pas peut-être cet appareil dans la finance.
+
+00:23:29.420 --> 00:23:30.620
+Les modèles sont créatifs, les outils ne le sont.
+
+00:23:31.080 --> 00:23:31.520
+C'est le but.
+
+00:23:32.400 --> 00:23:33.720
+Appliquez le principe du moins de privilèges
+
+00:23:33.720 --> 00:23:35.360
+comme si votre travail en dépendait, car c'est le cas.
+
+00:23:35.940 --> 00:23:36.700
+Identité distingue.
+
+00:23:37.140 --> 00:23:38.220
+Lecture seule pour le moniteur,
+
+00:23:38.300 --> 00:23:39.540
+écriture seule pour le remédiateur
+
+00:23:43.300 --> 00:23:45.820
+Si quelqu'un demande un administrateur global permanent,
+
+00:23:46.040 --> 00:23:47.680
+donnez-lui une balle anti-stress et un document de politique.
+
+00:23:48.100 --> 00:23:49.760
+Commencez petit deux agents, l'exécutant est vérifié.
+
+00:23:50.200 --> 00:23:51.780
+Ajoutez un planificateur une fois que la boucle est stable.
+
+00:23:52.120 --> 00:23:53.160
+Ensuite, si vous devez vous déployer,
+
+00:23:53.240 --> 00:23:55.100
+ne commencez pas avec une équipe Scrum numérique de 12 personnes.
+
+00:23:55.460 --> 00:23:57.400
+C'est comme ça que vous recréez votre organigramme en Yamel et que vous pleurez.
+
+00:23:57.720 --> 00:23:59.040
+Mélangez les modèles pour réduire les coups.
+
+00:23:59.140 --> 00:24:00.920
+Les SLM pour l'extraction, la classe GPT-4,
+
+00:24:01.020 --> 00:24:02.560
+uniquement pour le raisonnement là où c'est important.
+
+00:24:03.100 --> 00:24:04.360
+Réalisez des résumés par l'eau du jour au long.
+
+00:24:04.740 --> 00:24:06.920
+Vous ne payez pas de tarifs élevés pour formater une chaîne de date.
+
+00:24:07.580 --> 00:24:09.580
+Réservez le modèle lourd pour les décisions, pas pour la narration.
+
+00:24:10.540 --> 00:24:11.320
+Ajoutez de la mémoire en dernier.
+
+00:24:11.680 --> 00:24:14.500
+Utilisez l'état externe comme recherche d'IA ou un petit magasin d'état
+
+00:24:14.500 --> 00:24:17.380
+avant de commencer à remplir les fenêtres contextuelles comme un bagage à main.
+
+00:24:17.860 --> 00:24:19.080
+Les métadonnées des trades doivent être minuscules.
+
+00:24:19.540 --> 00:24:21.640
+Si elles ne sont pas nécessaires pour le tour suivant, elles ne sont pas transmises.
+
+00:24:22.020 --> 00:24:22.520
+Consignez tout.
+
+00:24:23.000 --> 00:24:23.700
+Activez le traçage.
+
+00:24:24.100 --> 00:24:26.060
+Identifiant des trades, paramètres des outils, résultats de latence.
+
+00:24:26.520 --> 00:24:28.220
+Envoyez les évaluations dans l'intégration continue
+
+00:24:28.220 --> 00:24:30.880
+afin de détecter les baisses de pertinence et de fiabilité avant la production.
+
+00:24:31.760 --> 00:24:33.860
+Alertez lorsque la fiabilité diminue, pas lorsque Twitter le fait.
+
+00:24:33.860 --> 00:24:36.380
+Des gardes-fous avant la vitesse, des approbations pour les outils destructeurs.
+
+00:24:37.380 --> 00:24:38.460
+Mode d'essai sans effet secondaire.
+
+00:24:39.080 --> 00:24:40.960
+Déploiement par étapes, par groupe d'appareils ou par région.
+
+00:24:42.000 --> 00:24:44.700
+Si votre plan de déploiement est global, j'espère que votre CV est à jour.
+
+00:24:45.040 --> 00:24:45.540
+Consignez l'échec.
+
+00:24:45.840 --> 00:24:46.480
+A essayer avec GIT.
+
+00:24:46.960 --> 00:24:48.000
+Reculez sur l'imitation des gras.
+
+00:24:48.540 --> 00:24:49.680
+Disjoncteur dans la gestion des API.
+
+00:24:50.180 --> 00:24:50.900
+Runboxy d'empotent.
+
+00:24:51.480 --> 00:24:53.580
+Si une étape peut être réexécutée en toute sécurité, vous dormez mieux.
+
+00:24:54.380 --> 00:24:55.940
+Faut documenter vos politiques sous forme de données.
+
+00:24:56.880 --> 00:24:59.260
+Règle d'exclusivité mutuelle, lot de licence, référence d'appareil,
+
+00:24:59.400 --> 00:25:00.480
+mettez-les sous forme structurée.
+
+00:25:01.200 --> 00:25:02.740
+Les modèles peuvent sélectionner, ils ne doivent pas inventer.
+
+00:25:03.240 --> 00:25:06.140
+C'est ainsi que vous gardez les agents utiles et que votre rayon d'action reste restreint.
+
+00:25:06.860 --> 00:25:09.400
+Si vous devez retenir une chose, les agents individuels sont utiles,
+
+00:25:09.400 --> 00:25:13.120
+mais les équipes d'agents, planifiées, pilotées par des outils et dotées d'une portée d'autorisation,
+
+00:25:13.340 --> 00:25:15.680
+transforment discrètement votre environnement pendant que vous faites semblant de dormir.
+
+00:25:16.420 --> 00:25:19.840
+Si cela vous a touché, abonnez-vous et regardez la suite où je dépose le dépôt du noyau sémantique
+
+00:25:19.840 --> 00:25:22.040
+et le modèle biceps pour que vous puissiez voler, sans vergogne.
+
+00:25:22.920 --> 00:25:25.540
+Vous voulez l'épisode des agents d'évaluation qui tient vos promesses ?
+
+00:25:25.540 --> 00:25:26.480
+Il est en fil d'attente la semaine prochaine.

@@ -1,0 +1,3097 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:01.760
+Dimulai dengan sebuah peringatan, lalu keningat.
+
+00:00:02.480 --> 00:00:05.000
+Tagian GPU melonjak seolah akselerator tidak pernah tidur,
+
+00:00:05.100 --> 00:00:06.920
+namun output merayap seolah lampu padam.
+
+00:00:07.640 --> 00:00:09.100
+Dasbor berwarna hijau pelanggan tidak.
+
+00:00:10.480 --> 00:00:11.520
+Anomal itu tidak masuk akal.
+
+00:00:12.020 --> 00:00:14.580
+Pemanfaatan GPU hampir nol saat latensi melonjak.
+
+00:00:15.260 --> 00:00:17.900
+Tidak ada peringatan, tidak ada garis merah, hanya waktu yang menguap.
+
+00:00:18.840 --> 00:00:21.680
+Bukti menunjukkan satu patologi yang menyamar sebagai kondisi normal.
+
+00:00:22.240 --> 00:00:22.820
+Inilah janjinya.
+
+00:00:23.360 --> 00:00:26.660
+Kami akan melacak artefak, menyebut pelakunya, dan memperbaiki patologi tersebut.
+
+00:00:26.660 --> 00:00:32.560
+Kami akan memeriksa tiga mode, kegagalan, cadangan CPU, ketidakcocokan versi dicuda, dan ON extensor RT,
+
+00:00:32.940 --> 00:00:34.320
+serta kesalahan konfigurasi kontainer,
+
+00:00:34.660 --> 00:00:38.280
+dan kami akan membuktikannya dengan atensi, throughput, dan pemanfaatan CPU sebelum dan sesudahnya.
+
+00:00:39.100 --> 00:00:41.000
+Pengaturan kasus, lingkungan, dan profil korban.
+
+00:00:41.900 --> 00:00:46.000
+Setiap konfigurasi memiliki cerita, dan ini dimulai dengan penyewa biasa di bawah tekanan.
+
+00:00:46.780 --> 00:00:48.500
+Beban kerjanya adalah difusi teks ke gambar,
+
+00:00:48.840 --> 00:00:54.140
+varian difusi stabil yang berjalan pada 512 x 512 dan ditingkatkan ke 1024 x 1024 x 1024.
+
+00:00:54.140 --> 00:00:55.060
+Lintas bersifat tidak menang.
+
+00:00:55.060 --> 00:00:58.180
+Konkurensi mendorong antara 8 hingga 32 permintaan.
+
+00:00:58.420 --> 00:00:59.780
+Ukuran batch berkisar dari 1 hingga 8.
+
+00:01:00.420 --> 00:01:02.160
+Tingkat layanan sangat ketat pada latensi ekor.
+
+00:01:02.580 --> 00:01:05.260
+Pelanggaran P95 berimplikasi langsung pada kredit dan penalti.
+
+00:01:05.880 --> 00:01:08.160
+Model-modelnya tidak eksotis, tetapi pilihannya penting.
+
+00:01:08.680 --> 00:01:10.580
+Pipa difusi stabil yang diekspor ONNX,
+
+00:01:10.680 --> 00:01:13.940
+pengoptimalan perhatian silang seperti eksformas atau atensi titik skala,
+
+00:01:14.080 --> 00:01:16.640
+dan pilihan penjatual yang menukar langkah demi kualitas.
+
+00:01:17.460 --> 00:01:20.480
+Ekosistem seharusnya berakselerasi, jika infrastrukturnya jujur.
+
+00:01:21.020 --> 00:01:22.460
+Rangkat keras terlihat ke sekertas.
+
+00:01:22.460 --> 00:01:27.120
+Kartu NVIDIA RTX dan seri A di Cloud 16 hingga 32 GB VRAM.
+
+00:01:27.760 --> 00:01:30.200
+PCEU berada di antara host dan perangkat seperti gerbang tol.
+
+00:01:30.700 --> 00:01:31.900
+Cukup cepat jika dikonfigurasi,
+
+00:01:32.000 --> 00:01:34.240
+menghukum jika ikatan EU beralih ke transfer yang dapat di page.
+
+00:01:34.660 --> 00:01:36.060
+Di lingkungan ini tidak ada yang kebetulan.
+
+00:01:36.640 --> 00:01:38.120
+Rantai alat bertumpuk dalam lapisan yang familiar.
+
+00:01:38.600 --> 00:01:39.840
+Pytouch digunakan untuk ekspor,
+
+00:01:40.000 --> 00:01:42.660
+lalu runtime ONNX atau tensor ET mengambil alih untuk inferensi.
+
+00:01:43.020 --> 00:01:44.220
+Driver Cuda berada di bawah segalanya.
+
+00:01:44.460 --> 00:01:47.380
+Kernel atensi menjanjikan kecepatan jika versinya selaras.
+
+00:01:47.380 --> 00:01:49.960
+Penyebaran dilakukan secara ketat dalam kontainer.
+
+00:01:50.160 --> 00:01:51.200
+Gambar yang tidak dapat diubah.
+
+00:01:51.300 --> 00:01:53.480
+Peluncuran yang dikontrol CA biru-hijau berdasarkan kebijakan.
+
+00:01:54.180 --> 00:01:55.420
+Kendala itu seharusnya menciptakan keaman.
+
+00:01:56.040 --> 00:01:57.300
+Juga bisa membuatkan cacat selamanya.
+
+00:01:58.060 --> 00:01:59.240
+Taruhan bisnisnya tidak abstrak.
+
+00:01:59.860 --> 00:02:01.240
+Biaya perpermintaan menentukan margin.
+
+00:02:01.800 --> 00:02:04.640
+Reservasi GPU dihargai per jam terlepas dari apakah kenal perjalanan nototip.
+
+00:02:04.640 --> 00:02:07.540
+Ketika latensi membentang dari detik menjadi setengah menit,
+
+00:02:07.780 --> 00:02:08.120
+trupu-trupu.
+
+00:02:08.820 --> 00:02:11.420
+Satu kesalahan konfigurasi mengubah akselerator menjadi pemanas,
+
+00:02:11.600 --> 00:02:14.160
+mahal, sunyi, dan sibuk melakukan sesuatu yang tidak membantu antrean.
+
+00:02:14.820 --> 00:02:16.920
+Setelah pemeriksaan lebih dekat, profil korban menyempit.
+
+00:02:17.640 --> 00:02:18.660
+Konkurensi pada 16,
+
+00:02:18.840 --> 00:02:21.420
+BATS pada 2 untuk tetap di bawah batas firam pada 512,
+
+00:02:21.760 --> 00:02:23.980
+meningkat ke 2025 untuk kualitas.
+
+00:02:24.840 --> 00:02:26.720
+Penyewa mengharapkan P-1005 yang konsisten.
+
+00:02:27.700 --> 00:02:30.020
+Sebaliknya, pelacakan menunjukkan latensi yang tidak menentu
+
+00:02:30.020 --> 00:02:32.200
+delta lebar antara P-50 dan P-1005.
+
+00:02:32.200 --> 00:02:35.720
+Dan siklus tugas GPU berosilasi dari 5% tanpa alasan yang jelas.
+
+00:02:37.020 --> 00:02:38.540
+Grafik CPU menunjukkan kebenaran yang berbeda.
+
+00:02:39.000 --> 00:02:41.220
+Inti prosesor bekerja penuh tanpa alasan pemrosesan awal.
+
+00:02:41.940 --> 00:02:43.200
+Bukti menunjukkan tiga kemungkinan.
+
+00:02:43.680 --> 00:02:44.500
+Pertama, fallback CPU.
+
+00:02:45.200 --> 00:02:47.920
+Saat penyedia eksekusi CUDA atau tensor RT gagal dimuat,
+
+00:02:48.020 --> 00:02:49.980
+mesin diam-diam memilih grafik CPU.
+
+00:02:50.460 --> 00:02:52.740
+Modal berjalan tetapi latensinya 10 kali lipat.
+
+00:02:53.180 --> 00:02:53.800
+Kedocokan versi.
+
+00:02:54.820 --> 00:02:57.000
+Runtime ONX dikompilasi dengan CUDA tertentu.
+
+00:02:57.000 --> 00:02:58.400
+Node menjalankan yang lain.
+
+00:02:58.540 --> 00:03:01.520
+Mesin tensor RT tidak valid dan dibangun ulang dengan kernel generik.
+
+00:03:02.600 --> 00:03:04.880
+Pemanfaatan terlihat tetapi jalur cepatnya hilang.
+
+00:03:05.760 --> 00:03:07.720
+Ketiga, kesalahan konfigurasi kontainer.
+
+00:03:07.860 --> 00:03:09.780
+Gambar membengkak, pemasangan perangkat GPU hilang,
+
+00:03:09.900 --> 00:03:11.580
+pengaturan toolkit kontainer NVIDIA salah,
+
+00:03:11.700 --> 00:03:13.040
+dan arena memori menahan alokasi
+
+00:03:13.040 --> 00:03:14.900
+yang memperburuk latensi TL di bawah beban.
+
+00:03:15.960 --> 00:03:17.600
+Pada akhirnya, ini bukan misteri tentang model.
+
+00:03:17.980 --> 00:03:19.400
+Ini adalah kasus tentang kebenaran versi.
+
+00:03:19.400 --> 00:03:22.540
+Kami akan melacak artefak, urutan penyedia,
+
+00:03:22.740 --> 00:03:24.220
+log kemampuan, pemasangan perangkat,
+
+00:03:24.360 --> 00:03:26.080
+dan mengorelasikannya dengan tiga metrik utama,
+
+00:03:26.240 --> 00:03:28.960
+latensi, throughput, dan pemanfaatan GPU.
+
+00:03:28.960 --> 00:03:38.420
+Semuanya dimulai dengan permintaan yang seharusnya butuh beberapa detik.
+
+00:03:38.960 --> 00:03:40.800
+Pengukur GPU diam, terlalu diam.
+
+00:03:41.560 --> 00:03:43.700
+Grafik CPU sementara itu melonjak seperti alam kebakaran.
+
+00:03:44.160 --> 00:03:45.140
+Setelah diperiksa lebih dekat,
+
+00:03:45.260 --> 00:03:46.040
+mesin telah membuat pilihan.
+
+00:03:46.480 --> 00:03:48.460
+Mesin menjalankan tugas berbiaya GPU di atas CPU.
+
+00:03:48.860 --> 00:03:49.580
+Tidak ada peringatan yang muncul.
+
+00:03:49.820 --> 00:03:50.760
+Output akhir dikembalikan.
+
+00:03:51.480 --> 00:03:52.440
+Inilah penyambut senyap itu.
+
+00:03:53.120 --> 00:03:53.680
+Fallback CPU.
+
+00:03:54.160 --> 00:03:55.240
+Mengapa hal ini penting sangatlah sederhan.
+
+00:03:55.680 --> 00:03:57.700
+Stable division di CPU adalah pemborosan waktu.
+
+00:03:58.180 --> 00:04:00.220
+Model bekerja, tetapi latensinya berlipat kendah.
+
+00:04:00.340 --> 00:04:01.800
+10 hingga 30 kali lebih lambat.
+
+00:04:01.960 --> 00:04:02.740
+Dan throughput runtuh.
+
+00:04:03.280 --> 00:04:04.440
+Dalam lingkungan yang menjual milik detik,
+
+00:04:04.500 --> 00:04:05.420
+kesenjangan itu fatal.
+
+00:04:06.140 --> 00:04:07.420
+Tagian terus menghitung waktu GPU,
+
+00:04:07.540 --> 00:04:09.000
+padahal perangkat tidak melakukan pekerjaan tersebut.
+
+00:04:09.360 --> 00:04:10.400
+Lini masa mengungkapkan polain.
+
+00:04:10.800 --> 00:04:12.860
+Kontainer yang berjalan secara lokal dengan cuda sangat cepat.
+
+00:04:13.380 --> 00:04:15.940
+Ditarapkan kemat kluster dengan tumpukan driver yang sedikit berbeda.
+
+00:04:16.060 --> 00:04:17.500
+Kontainer yang sama melakukan booting,
+
+00:04:17.620 --> 00:04:18.620
+layani pemeriksaan kesehatan,
+
+00:04:18.620 --> 00:04:19.500
+lalu kinerjanya menurun.
+
+00:04:20.180 --> 00:04:22.080
+Endpoint kesehatan hanya meniksa apakah server aktif.
+
+00:04:22.500 --> 00:04:24.760
+Jadi ia tidak pernah meniksa apakah GPU benar-benar mengeksekusi.
+
+00:04:25.500 --> 00:04:27.200
+Di lingkungan ini tidak ada yang terjadi secara kebetulan.
+
+00:04:27.740 --> 00:04:28.720
+Gendingan adalah sebuah artefak.
+
+00:04:29.200 --> 00:04:32.880
+Artefak utamanya adalah urutan penyedia eksekusi di runtime ONNX.
+
+00:04:33.740 --> 00:04:34.580
+Mesin menerima daftar.
+
+00:04:35.060 --> 00:04:37.080
+Coba tensor RT, lalu cuda, baru kemudian CPU.
+
+00:04:37.940 --> 00:04:40.280
+Jika cuda gagal melakukan inisialisasi driver salah,
+
+00:04:40.420 --> 00:04:42.240
+pustaka hilang, perangkat tidak terpasang ORT
+
+00:04:42.240 --> 00:04:44.340
+akan diam-diam mengikat penyedia eksekusi CPU.
+
+00:04:44.960 --> 00:04:46.640
+Tanpa pengecualian, tanpa crash,
+
+00:04:46.740 --> 00:04:48.400
+hanya satu baris dalam log seringkali tersembur.
+
+00:04:48.720 --> 00:04:50.040
+Penyedia eksekusi cuda tersedia,
+
+00:04:50.500 --> 00:04:51.280
+beralih ke CPU.
+
+00:04:52.060 --> 00:04:53.820
+Pada situ adalah pengakuan yang jarang dibaca tim.
+
+00:04:54.300 --> 00:04:54.960
+Inilah bagian aneh.
+
+00:04:55.400 --> 00:04:57.720
+Bagan pemanfaatan terlihat normal pada pandangan pertama.
+
+00:04:58.520 --> 00:04:59.420
+Permintaan tetap selesai.
+
+00:05:00.040 --> 00:05:01.580
+Peta layanan menunjukkan status hijau.
+
+00:05:01.760 --> 00:05:03.660
+Tetapi siklus tugas GPU tertahan di 5%
+
+00:05:03.660 --> 00:05:05.940
+sementara waktu pengguna CPU melonjak tinggi dan mendatar.
+
+00:05:06.560 --> 00:05:09.380
+Latensi P50 melonjak 4 kali lipat dan P95 menjadikan.
+
+00:05:09.740 --> 00:05:11.000
+Lalu intasi melonjak tiba-tiba meperlu.
+
+00:05:11.380 --> 00:05:13.460
+Antrean menumpuk dan peskalan otomatis menambah replika
+
+00:05:13.460 --> 00:05:14.680
+yang semuanya mewarisi kelemahan esat.
+
+00:05:14.900 --> 00:05:16.240
+Bayangkan ini seperti tim Estafet
+
+00:05:16.240 --> 00:05:17.780
+di mana pelari cepat tidak pernah muncul,
+
+00:05:17.780 --> 00:05:19.140
+sehingga pustakawan yang harus berlar.
+
+00:05:19.400 --> 00:05:21.180
+Tongkat Estafet berpindah tetapi tidak dengan kecepatan.
+
+00:05:21.320 --> 00:05:22.300
+Dengan kata lain,
+
+00:05:22.460 --> 00:05:23.600
+sistem Anda memberikan kebenaran
+
+00:05:23.600 --> 00:05:25.520
+dengan mengorbankan seluruh anggaran SLO.
+
+00:05:25.960 --> 00:05:27.140
+Artefak menumpuk dengan cepat
+
+00:05:27.140 --> 00:05:28.380
+saat Anda menelusuri urutan boot.
+
+00:05:29.060 --> 00:05:31.360
+Log pemuatan penyedia menunjukkan upaya inisialisasi cuda
+
+00:05:31.360 --> 00:05:32.460
+dengan pemeriksaan versi dev.
+
+00:05:33.260 --> 00:05:35.400
+Jika kontainer dibangun dengan cuda 12.2
+
+00:05:35.400 --> 00:05:37.320
+tetapi node hanya memiliki 12.0.
+
+00:05:37.880 --> 00:05:38.880
+Inisialisasi gagal.
+
+00:05:39.880 --> 00:05:41.660
+Jika perangkat lunak NVIDIA kontainer toolkit
+
+00:05:41.660 --> 00:05:42.540
+tidak dikonfigurasi,
+
+00:05:42.620 --> 00:05:44.500
+pemasangan perangkat tidak pernah muncul di dalam kontainer.
+
+00:05:44.500 --> 00:05:46.260
+Tanpa dev per NVIDIA tidak ada lipcuda.
+
+00:05:47.780 --> 00:05:49.460
+Sipot tidak meminta GPU secara eksplisit.
+
+00:05:49.740 --> 00:05:51.660
+Penjadwal tidak akan pernah menetapkan perangkat tersebut.
+
+00:05:52.840 --> 00:05:53.600
+Salah satu dari hal ini
+
+00:05:53.600 --> 00:05:55.020
+memicu penurunan performa secara diam-diam.
+
+00:05:55.560 --> 00:05:56.480
+Reproduksinya sangat mudah.
+
+00:05:57.000 --> 00:05:58.420
+Pada node yang salah konfigurasi,
+
+00:05:58.540 --> 00:06:00.940
+inferensi sederhana mencetak penyedia eksekusi CPU
+
+00:06:00.940 --> 00:06:02.800
+padahal Anda mengharapkan penyedia
+
+00:06:02.800 --> 00:06:06.320
+eksekusi tensor RT atau cuda.
+
+00:06:07.800 --> 00:06:09.400
+Kirim satu perintah 5.0.12.
+
+00:06:09.640 --> 00:06:10.460
+GPU tetap diam.
+
+00:06:11.100 --> 00:06:11.960
+Tread CPU melonjak,
+
+00:06:11.960 --> 00:06:14.800
+gambar muncul dalam 20-40 detik alih-alih 2 hingga 6 detik.
+
+00:06:15.280 --> 00:06:17.380
+Ulangi pada node dengan driver dan pemasangan yang tepat.
+
+00:06:17.780 --> 00:06:19.660
+Perintah yang sama selesai dalam waktu jauh lebih singkat
+
+00:06:19.660 --> 00:06:22.040
+dan siklus tugas GPU melonjak kerentang yang stabil.
+
+00:06:22.940 --> 00:06:23.720
+Bukti menunjukkan bahwa
+
+00:06:23.720 --> 00:06:25.100
+atasan keamanan saat ini hanya rasa dibara.
+
+00:06:25.940 --> 00:06:27.460
+Pemeriksaan kesehatan mengembalikan 200
+
+00:06:27.460 --> 00:06:28.540
+karena server merespon.
+
+00:06:28.920 --> 00:06:29.780
+Tidak ada pernyataan startup
+
+00:06:29.780 --> 00:06:30.760
+bahwa jalur GPU aktif.
+
+00:06:31.160 --> 00:06:32.340
+Pemeriksaan kinerja tidak ada
+
+00:06:32.340 --> 00:06:33.660
+sehingga orkestrasi menganggap replika
+
+00:06:33.660 --> 00:06:34.380
+dalam kondisi sehat.
+
+00:06:34.800 --> 00:06:35.920
+Sistem tidak bisa membedakan
+
+00:06:35.920 --> 00:06:37.480
+antara akselerasi dan emulasi.
+
+00:06:38.360 --> 00:06:39.820
+Tindakan pencegahannya dirancang dengan tekat.
+
+00:06:39.960 --> 00:06:41.960
+Gagal total jika penyedia eksekusi GPU
+
+00:06:41.960 --> 00:06:43.660
+tidak ada atau mengalami penurunan fungsi.
+
+00:06:43.660 --> 00:06:45.460
+Pala untuk memulai dengan CPU
+
+00:06:45.460 --> 00:06:46.300
+di lingkungan produksi.
+
+00:06:47.120 --> 00:06:48.200
+Saat proses diluncurkan,
+
+00:06:48.260 --> 00:06:48.820
+hitung penyedia,
+
+00:06:49.120 --> 00:06:50.980
+pastikan tensor LT atau CUDA dimuat
+
+00:06:50.980 --> 00:06:53.380
+dan jumlah perangkat sesuai harapan.
+
+00:06:54.420 --> 00:06:55.240
+Cotat set kemampuan,
+
+00:06:55.400 --> 00:06:57.040
+QDNN inti tensor yang tersedia
+
+00:06:57.040 --> 00:06:58.520
+batas memori dan keluar
+
+00:06:58.520 --> 00:07:00.580
+dengan kode 00 jika ada yang hilang.
+
+00:07:01.460 --> 00:07:03.040
+Tukarkan ketersediaan dengan integritas
+
+00:07:03.040 --> 00:07:04.660
+biarkan orkestrator menjadwalkan ulang
+
+00:07:04.660 --> 00:07:05.320
+di node yang sehat
+
+00:07:05.320 --> 00:07:06.640
+agar tetap terjaga
+
+00:07:06.640 --> 00:07:08.020
+terapkan verifikasi penggiatan IO.
+
+00:07:08.760 --> 00:07:09.620
+Ikat input dan output
+
+00:07:09.620 --> 00:07:10.400
+ke memori perangkat
+
+00:07:10.400 --> 00:07:11.720
+dan validasi inferensi sepele
+
+00:07:11.720 --> 00:07:12.340
+saat startup.
+
+00:07:13.180 --> 00:07:13.920
+Satu kali pemanasan
+
+00:07:13.920 --> 00:07:14.800
+yang menjalankan kernel-kernel
+
+00:07:14.800 --> 00:07:15.500
+fused attention.
+
+00:07:16.260 --> 00:07:17.840
+Jika waktu melampaui ambang latensi,
+
+00:07:18.100 --> 00:07:19.200
+anggap jalur mengalami penurunan
+
+00:07:19.200 --> 00:07:20.020
+dan gagalkan potosber.
+
+00:07:20.720 --> 00:07:21.920
+Tambahkan set perintah canari
+
+00:07:21.920 --> 00:07:23.020
+dengan benih deterministik.
+
+00:07:23.540 --> 00:07:24.420
+Bandikan latensi terhadap
+
+00:07:24.420 --> 00:07:25.180
+jendela garis dasar.
+
+00:07:26.060 --> 00:07:27.320
+Jika penyimpangan melebihi toleransi,
+
+00:07:27.380 --> 00:07:28.480
+Anda beri peringatan ke tim produksi
+
+00:07:28.480 --> 00:07:29.160
+dan hentikan peluncur.
+
+00:07:29.160 --> 00:07:30.360
+Ini mungkin terlihat keras
+
+00:07:30.360 --> 00:07:31.840
+tetapi alternatifnya jauh lebih buruk.
+
+00:07:32.340 --> 00:07:33.520
+Sebuah kluster yang berfungsi
+
+00:07:33.520 --> 00:07:35.300
+namun menghabiskan waktu dan anggaran.
+
+00:07:35.800 --> 00:07:36.640
+Kunci urutan penyedia
+
+00:07:36.640 --> 00:07:37.640
+tolak cadangan CPU
+
+00:07:37.640 --> 00:07:38.440
+dan paksa sistem
+
+00:07:38.440 --> 00:07:39.320
+membuktikan kecepatannya
+
+00:07:39.320 --> 00:07:40.320
+sebelum diandap aktif.
+
+00:07:40.840 --> 00:07:41.560
+Hanya dengan begitu,
+
+00:07:41.700 --> 00:07:42.960
+hijau berarti dipercepat.
+
+00:07:44.100 --> 00:07:44.840
+Bukti berkas B,
+
+00:07:45.000 --> 00:07:45.920
+ketidakcocokan versi,
+
+00:07:46.200 --> 00:07:48.540
+inkompatibilitas CUDA ONN X Tensor RT.
+
+00:07:49.400 --> 00:07:50.600
+Jika GPU tidak digunakan,
+
+00:07:50.780 --> 00:07:51.780
+pertanyaan berikutnya adalah
+
+00:07:51.780 --> 00:07:53.560
+apakah ia bisa bekerja maksimal saat ada?
+
+00:07:54.240 --> 00:07:55.320
+Bukti menunjukkan kegagalan
+
+00:07:55.320 --> 00:07:55.960
+yang lebih halus.
+
+00:07:56.580 --> 00:07:57.980
+Versi cukup selaras untuk berjalan,
+
+00:07:57.980 --> 00:07:59.680
+namun tidak cukup untuk membuka cadangan cepat.
+
+00:08:00.180 --> 00:08:01.140
+Sistem terlihat dipercepat
+
+00:08:01.140 --> 00:08:02.680
+sampai Anda melihat penunjuk waktunya.
+
+00:08:03.280 --> 00:08:04.660
+Alasan hal ini penting cukup sudah dipaham.
+
+00:08:05.120 --> 00:08:06.160
+Pipa difusi sangat bergantung
+
+00:08:06.160 --> 00:08:07.140
+pada performa atensi.
+
+00:08:07.660 --> 00:08:08.760
+Saat ONN X Runtime
+
+00:08:08.760 --> 00:08:09.460
+dan Tensor RT
+
+00:08:09.460 --> 00:08:10.860
+tidak bisa memuat kernal gabungan
+
+00:08:10.860 --> 00:08:11.460
+yang diharapkan
+
+00:08:11.460 --> 00:08:12.700
+karena versi CUDA,
+
+00:08:12.800 --> 00:08:13.300
+CUDA NN
+
+00:08:13.300 --> 00:08:14.620
+atau Tensor RT tidak cocok,
+
+00:08:14.740 --> 00:08:15.740
+mereka diam-diam beralih
+
+00:08:15.740 --> 00:08:16.740
+ke implementasi generik.
+
+00:08:17.600 --> 00:08:18.540
+Model tersebut berfungsi.
+
+00:08:19.240 --> 00:08:20.960
+Manfaatan berada di kisaran 30
+
+00:08:20.960 --> 00:08:21.980
+hingga 50%
+
+00:08:21.980 --> 00:08:23.820
+dan latensi melampaui anggaran.
+
+00:08:24.840 --> 00:08:25.500
+Pionnya terlihat sama,
+
+00:08:25.600 --> 00:08:26.200
+pekerjanya lebih lambat.
+
+00:08:26.200 --> 00:08:27.880
+Setelah diperiksa lebih teliti,
+
+00:08:27.980 --> 00:08:28.660
+artefaknya tepat.
+
+00:08:29.760 --> 00:08:30.580
+Rok pemuatan penyedia
+
+00:08:30.580 --> 00:08:31.720
+menyatakan sukses dengan sebuatan.
+
+00:08:32.720 --> 00:08:33.740
+Beralih ke kernel default
+
+00:08:33.740 --> 00:08:34.740
+atau X-Formers
+
+00:08:34.740 --> 00:08:35.540
+dinonaktifkan.
+
+00:08:36.340 --> 00:08:36.980
+Anda akan melihat
+
+00:08:36.980 --> 00:08:38.420
+deserialisasi rencana Tensor RT
+
+00:08:38.420 --> 00:08:39.440
+gagal dengan pembangunan
+
+00:08:39.440 --> 00:08:40.720
+ulang engine yang tidak kompatibel
+
+00:08:40.720 --> 00:08:42.140
+yang memicu kompilasi pada node.
+
+00:08:42.620 --> 00:08:43.720
+Engine yang dibuat pada satu versi
+
+00:08:43.720 --> 00:08:44.380
+Minotensor RT
+
+00:08:44.380 --> 00:08:45.920
+tidak akan bisa dideserialisasi perversi.
+
+00:08:46.320 --> 00:08:47.400
+Pembangunan ulang selesai,
+
+00:08:47.620 --> 00:08:48.700
+tetapi rencana yang dihasilkan
+
+00:08:48.700 --> 00:08:49.360
+mungkin menghilangkan
+
+00:08:49.360 --> 00:08:50.060
+atensi gabungan
+
+00:08:50.060 --> 00:08:51.260
+atau optimasi FP16.
+
+00:08:51.860 --> 00:08:52.600
+Perlombaan selesai.
+
+00:08:53.060 --> 00:08:53.720
+Tanpa lonjakan,
+
+00:08:53.720 --> 00:08:55.400
+siklus kerja Core Tensor tetap rendah.
+
+00:08:56.000 --> 00:08:56.700
+Inilah bagian yang berlawanan
+
+00:08:56.700 --> 00:08:57.140
+dengan intuisi.
+
+00:08:57.740 --> 00:08:58.420
+Tim menganggap bahwa
+
+00:08:58.420 --> 00:08:59.260
+jika program berjalan,
+
+00:08:59.360 --> 00:09:00.040
+berarti itu sudah optimal.
+
+00:09:00.720 --> 00:09:01.480
+Dalam lingkungan ini,
+
+00:09:01.640 --> 00:09:02.300
+tidak ada yang kebetulan.
+
+00:09:03.180 --> 00:09:04.380
+Jika scale dot product attention
+
+00:09:04.380 --> 00:09:05.000
+tidak aktif,
+
+00:09:05.160 --> 00:09:06.220
+jika X-Formers mati,
+
+00:09:06.400 --> 00:09:07.520
+jika 2DNN melaporkan
+
+00:09:07.520 --> 00:09:08.440
+ruang kerja terbatas,
+
+00:09:08.580 --> 00:09:09.840
+performa menurun secara halus.
+
+00:09:10.800 --> 00:09:11.780
+Versi sederhananya adalah
+
+00:09:11.780 --> 00:09:12.680
+binar yang tidak cocok
+
+00:09:12.680 --> 00:09:13.700
+memaksa kernel menggunakan
+
+00:09:13.700 --> 00:09:14.840
+lebih banyak pergerakan memori
+
+00:09:14.840 --> 00:09:16.020
+dan keberatan matematika yang lebih.
+
+00:09:16.280 --> 00:09:17.120
+PCI menjadi terlihat
+
+00:09:17.120 --> 00:09:17.700
+dalam pelacakan.
+
+00:09:18.280 --> 00:09:19.380
+Atensi ekor bergeser seiring,
+
+00:09:19.500 --> 00:09:20.320
+meningkatnya konkurensi.
+
+00:09:20.320 --> 00:09:22.020
+Anggap tumpukan sebagai perangkat kunci.
+
+00:09:22.540 --> 00:09:22.900
+Driver,
+
+00:09:23.220 --> 00:09:23.780
+Toolkit Cuda,
+
+00:09:24.320 --> 00:09:24.960
+2DNN,
+
+00:09:25.100 --> 00:09:26.520
+tanda Build Runtime ONX,
+
+00:09:26.700 --> 00:09:26.880
+dan
+
+00:09:26.880 --> 00:09:28.100
+Tensor RT.
+
+00:09:28.700 --> 00:09:29.740
+Satu geriknya tidak pas kunci
+
+00:09:29.740 --> 00:09:30.360
+hanya berputar satu.
+
+00:09:31.020 --> 00:09:32.280
+ORT mengiklankan grafik
+
+00:09:32.280 --> 00:09:33.720
+kapabilitas berpenyedia eksekusi.
+
+00:09:34.600 --> 00:09:35.680
+Jika ORT yang dikompilasi
+
+00:09:35.680 --> 00:09:37.120
+mengharapkan Cuda 12.2,
+
+00:09:37.300 --> 00:09:37.920
+namun driver node
+
+00:09:37.920 --> 00:09:39.200
+menampilkan 12.1.
+
+00:09:39.940 --> 00:09:41.300
+Cuda dimuat dengan fitur terbatas
+
+00:09:41.300 --> 00:09:42.240
+atau tidak sama sekali.
+
+00:09:42.800 --> 00:09:43.900
+Jika Tensor RT adalah
+
+00:09:43.900 --> 00:09:45.100
+8.6 pada node,
+
+00:09:45.200 --> 00:09:45.480
+tetapi
+
+00:09:45.480 --> 00:09:46.180
+rencana
+
+00:09:46.180 --> 00:09:47.660
+dibuat dengan 8.4
+
+00:09:47.660 --> 00:09:48.560
+deserialisasi gagal
+
+00:09:48.560 --> 00:09:49.080
+dan dibuat ulang
+
+00:09:49.080 --> 00:09:49.940
+dengan taktik konservatif.
+
+00:09:50.320 --> 00:09:51.400
+Sistem lebih memiliki kebenaran
+
+00:09:51.400 --> 00:09:52.940
+daripada kecepatan secara diam-diam.
+
+00:09:53.440 --> 00:09:54.180
+Polo ukur membuktikan
+
+00:09:54.180 --> 00:09:55.220
+kerugian tersebut secara praktis.
+
+00:09:55.580 --> 00:09:56.300
+Dengan X4 MERS
+
+00:09:56.300 --> 00:09:57.100
+atau SDP aktif,
+
+00:09:57.220 --> 00:09:58.240
+atensi difusi menurunkan
+
+00:09:58.240 --> 00:09:59.520
+waktu jam dinding secara terukur.
+
+00:10:00.080 --> 00:10:01.300
+Penelitian secara konsisten
+
+00:10:01.300 --> 00:10:02.580
+menunjukkan percepatan 2X
+
+00:10:02.580 --> 00:10:03.120
+hingga 5X
+
+00:10:03.120 --> 00:10:03.920
+pada jalur atensi
+
+00:10:03.920 --> 00:10:05.440
+tergantung pada resolusi dan ukuran B.
+
+00:10:05.880 --> 00:10:06.780
+Nonaktifkan fitur tersebut
+
+00:10:06.780 --> 00:10:07.540
+karena perkesan versi
+
+00:10:07.540 --> 00:10:08.600
+dan Anda akan kehilangan pengertian.
+
+00:10:09.140 --> 00:10:10.140
+Penggabungan token TOME
+
+00:10:10.140 --> 00:10:10.860
+bertumpuk
+
+00:10:10.860 --> 00:10:11.900
+dengan keuntungan ini.
+
+00:10:12.960 --> 00:10:13.880
+Tanpa kenal gabungan,
+
+00:10:14.060 --> 00:10:14.900
+manfaatnya terhambat oleh
+
+00:10:14.900 --> 00:10:15.480
+bandwidth memori
+
+00:10:15.480 --> 00:10:16.060
+dan tata letak
+
+00:10:16.060 --> 00:10:17.060
+yang tidak dioptimalkan.
+
+00:10:17.640 --> 00:10:18.600
+Senjangan semakin membesar
+
+00:10:18.600 --> 00:10:20.060
+pada 1024 x 1024
+
+00:10:20.060 --> 00:10:21.320
+dan konkurrensi yang lebih tinggi.
+
+00:10:21.880 --> 00:10:22.820
+Untuk mengacak artefak,
+
+00:10:22.960 --> 00:10:23.420
+mulailah dengan
+
+00:10:23.420 --> 00:10:24.340
+enumerasi kapabilitas.
+
+00:10:24.880 --> 00:10:25.560
+Saat startup,
+
+00:10:25.700 --> 00:10:26.680
+cetak daftar penyedia yang tepat
+
+00:10:26.680 --> 00:10:28.040
+dan fitur yang dilaporkan.
+
+00:10:28.880 --> 00:10:29.720
+Versi Tensor RT,
+
+00:10:29.960 --> 00:10:30.900
+ketersediaan FP16
+
+00:10:30.900 --> 00:10:31.740
+dan INT8,
+
+00:10:32.400 --> 00:10:33.280
+ruang kerja maksimum,
+
+00:10:33.760 --> 00:10:35.160
+heuristik konvolusi CU DNN,
+
+00:10:35.280 --> 00:10:35.660
+kehadiran,
+
+00:10:36.100 --> 00:10:37.380
+NCCL untuk multi-JPU.
+
+00:10:38.500 --> 00:10:39.640
+Untuk runtime ONX,
+
+00:10:39.940 --> 00:10:40.900
+tampilkan prioritas EP.
+
+00:10:41.620 --> 00:10:42.180
+Tensor RT,
+
+00:10:42.280 --> 00:10:42.480
+sudah,
+
+00:10:42.480 --> 00:10:44.960
+verifikasi mana yang sebenarnya
+
+00:10:44.960 --> 00:10:46.120
+terikat pada node graph Anda.
+
+00:10:46.760 --> 00:10:47.960
+Catat apakah node attention
+
+00:10:47.960 --> 00:10:49.400
+ditetapkan ke tensor RT
+
+00:10:49.400 --> 00:10:50.480
+dengan kernel gabungan
+
+00:10:50.480 --> 00:10:51.660
+atau ke kernel CUDA generik.
+
+00:10:52.700 --> 00:10:53.140
+Selanjutnya,
+
+00:10:53.240 --> 00:10:53.840
+periksa lingkungan.
+
+00:10:54.340 --> 00:10:55.020
+Query driver tersebut.
+
+00:10:55.460 --> 00:10:56.520
+NVIDIA SME menunjukkan
+
+00:10:56.520 --> 00:10:57.100
+modul kernel
+
+00:10:57.100 --> 00:10:58.160
+dan kompatibilitas CUDA.
+
+00:10:58.640 --> 00:10:59.200
+Baca versi lib
+
+00:10:59.200 --> 00:10:59.900
+di dalam kontainer.
+
+00:11:00.420 --> 00:11:00.840
+Lib CUDA,
+
+00:11:01.140 --> 00:11:01.440
+Lib 12,
+
+00:11:01.440 --> 00:11:02.240
+Lib Cuden,
+
+00:11:02.420 --> 00:11:03.180
+Lib Enfin Fur.
+
+00:11:03.980 --> 00:11:04.640
+Jika image membawa
+
+00:11:04.640 --> 00:11:06.000
+pustaka CUDA 12 di 3
+
+00:11:06.000 --> 00:11:06.840
+tetapi driver host
+
+00:11:06.840 --> 00:11:08.260
+hanya mendukung hingga 12 di 3,
+
+00:11:08.800 --> 00:11:09.820
+mode kompatibilitas runtime
+
+00:11:09.820 --> 00:11:10.980
+mungkin dimuat dengan batasan.
+
+00:11:10.980 --> 00:11:12.500
+Jika image mengharapkan
+
+00:11:12.500 --> 00:11:14.000
+header tensor RT 8.6
+
+00:11:14.000 --> 00:11:14.720
+tetapi plug-in node
+
+00:11:14.720 --> 00:11:15.800
+menyediakan 8.4,
+
+00:11:16.160 --> 00:11:17.100
+panggilan API akan menurun
+
+00:11:17.100 --> 00:11:18.720
+atau membatalkan optimalisasi tertentu.
+
+00:11:18.940 --> 00:11:19.620
+Remediasinya adalah
+
+00:11:19.620 --> 00:11:20.140
+matrix build,
+
+00:11:20.240 --> 00:11:20.800
+bukan sekadar harap.
+
+00:11:21.300 --> 00:11:22.160
+Sematkan versi yang tepat
+
+00:11:22.160 --> 00:11:23.100
+dalam satu sumber kebenaran.
+
+00:11:24.080 --> 00:11:24.680
+Image dasar
+
+00:11:24.680 --> 00:11:25.940
+dengan kompatibilitas driver,
+
+00:11:26.400 --> 00:11:26.900
+CUDA minor,
+
+00:11:27.220 --> 00:11:27.720
+CUDA NN,
+
+00:11:28.040 --> 00:11:28.860
+has build ORT,
+
+00:11:29.260 --> 00:11:30.220
+dan versi tensor RT.
+
+00:11:31.000 --> 00:11:31.700
+Buat image inferensi
+
+00:11:31.700 --> 00:11:32.740
+berdasarkan matrix tersebut
+
+00:11:32.740 --> 00:11:33.860
+dan tolak node yang tidak cocok
+
+00:11:33.860 --> 00:11:34.700
+melalui label node
+
+00:11:34.700 --> 00:11:35.560
+dan pemeriksaan penerimaan.
+
+00:11:36.140 --> 00:11:37.140
+Prabangun dan catch engine
+
+00:11:37.140 --> 00:11:37.680
+tensor RT
+
+00:11:37.680 --> 00:11:38.700
+untuk setiap varian model
+
+00:11:38.700 --> 00:11:40.120
+dan resolusi pada versi tensor RT
+
+00:11:40.120 --> 00:11:41.120
+yang tepat yang Anda terapkan.
+
+00:11:41.900 --> 00:11:42.760
+Perlakukan file rencana
+
+00:11:42.760 --> 00:11:44.160
+sebagai artefak yang terikat pada matrix.
+
+00:11:44.720 --> 00:11:45.600
+Jangan pernah mengandalkan
+
+00:11:45.600 --> 00:11:46.220
+pembuatan engine
+
+00:11:46.220 --> 00:11:47.020
+di node saat produksi.
+
+00:11:47.360 --> 00:11:48.380
+Hal itu menutupi penyimpangan
+
+00:11:48.380 --> 00:11:49.380
+dan memperlambat call start.
+
+00:11:50.180 --> 00:11:51.120
+Agar tetap konsisten,
+
+00:11:51.340 --> 00:11:52.180
+tambahkan uji smoke CE
+
+00:11:52.180 --> 00:11:53.460
+yang memastikan kapabilitas kernel.
+
+00:11:54.260 --> 00:11:55.580
+Jalankan container di runner
+
+00:11:55.580 --> 00:11:56.860
+terisolasi dengan driver target
+
+00:11:56.860 --> 00:11:57.580
+dan verifikasi.
+
+00:11:58.000 --> 00:11:59.620
+Tensor RT membuat kernel FP16
+
+00:11:59.620 --> 00:12:00.320
+yang digunakan.
+
+00:12:00.900 --> 00:12:01.880
+Node attention digabungkan.
+
+00:12:02.100 --> 00:12:02.880
+Binding IO aktif,
+
+00:12:02.960 --> 00:12:04.600
+exformers atau SDP diakui.
+
+00:12:05.600 --> 00:12:07.160
+Jalankan set prompt deterministic
+
+00:12:07.160 --> 00:12:08.240
+dan gadalkan build
+
+00:12:08.240 --> 00:12:09.220
+jika latensi melebihi
+
+00:12:09.220 --> 00:12:09.880
+jenela dasar
+
+00:12:09.880 --> 00:12:11.280
+atau jika log berisi
+
+00:12:11.280 --> 00:12:12.380
+bahasa fallback apapun.
+
+00:12:13.720 --> 00:12:15.000
+Simpan snapshot kapabilitas
+
+00:12:15.000 --> 00:12:16.000
+bersama di guest image
+
+00:12:16.000 --> 00:12:16.560
+agar rollback
+
+00:12:16.560 --> 00:12:17.440
+memulihkan kode
+
+00:12:17.440 --> 00:12:18.960
+dan karakteristik kinerja.
+
+00:12:20.120 --> 00:12:20.620
+Pada akhirnya,
+
+00:12:20.680 --> 00:12:21.380
+bukti menunjukkan bahwa
+
+00:12:21.380 --> 00:12:22.400
+penyimpangan versi bukan lapak.
+
+00:12:22.860 --> 00:12:23.660
+Itu adalah kecepatan yang harus.
+
+00:12:23.860 --> 00:12:24.880
+Sistem akan berjalan.
+
+00:12:25.220 --> 00:12:26.100
+Jam akan menjadi saksi.
+
+00:12:27.080 --> 00:12:27.840
+Bukti file C
+
+00:12:27.840 --> 00:12:28.500
+container
+
+00:12:28.500 --> 00:12:30.880
+erosi efisiensi
+
+00:12:30.880 --> 00:12:31.920
+akibat salah konfigurasi
+
+00:12:31.920 --> 00:12:32.480
+secara desain.
+
+00:12:33.000 --> 00:12:34.180
+Bahkan saat versi selaras,
+
+00:12:34.320 --> 00:12:35.500
+container dapat menyambut
+
+00:12:35.500 --> 00:12:36.860
+tasa efisiensi dari dalam.
+
+00:12:36.860 --> 00:12:39.620
+Bukti menunjukkan kebocoran perlahan,
+
+00:12:39.800 --> 00:12:40.440
+image membengkak,
+
+00:12:40.640 --> 00:12:41.520
+hilangnya plumbing GPU,
+
+00:12:41.700 --> 00:12:42.540
+dan perilaku alokator
+
+00:12:42.540 --> 00:12:43.380
+yang mendistorsi latensi
+
+00:12:43.380 --> 00:12:43.900
+di bawah beban.
+
+00:12:44.280 --> 00:12:44.940
+Tidak ada yang crash.
+
+00:12:45.400 --> 00:12:46.100
+Semuanya mengandungnya.
+
+00:12:47.740 --> 00:12:49.080
+Mengapa ini penting sangat sederhana?
+
+00:12:49.080 --> 00:12:49.980
+Container membingkai
+
+00:12:49.980 --> 00:12:50.700
+realitas runtime.
+
+00:12:51.700 --> 00:12:52.720
+Jika image terlalu besar
+
+00:12:52.720 --> 00:12:53.740
+dan cold start melambat,
+
+00:12:54.160 --> 00:12:54.840
+replika terlambat
+
+00:12:54.840 --> 00:12:55.680
+menangani inside den.
+
+00:12:56.560 --> 00:12:57.420
+Jika perangkat GPU
+
+00:12:57.420 --> 00:12:58.080
+tidak dipasang
+
+00:12:58.080 --> 00:12:59.600
+atau runtime kekurangan flag yang tepat,
+
+00:12:59.720 --> 00:13:00.240
+penyedia eksekusi
+
+00:13:00.240 --> 00:13:01.520
+akan berperilaku tidak semestinya.
+
+00:13:02.280 --> 00:13:02.980
+Jika arena memori
+
+00:13:02.980 --> 00:13:03.740
+menambung alokasi,
+
+00:13:03.960 --> 00:13:04.900
+Ramchon akan memicu paging
+
+00:13:04.900 --> 00:13:05.620
+dan lonjakan ekor
+
+00:13:05.620 --> 00:13:06.100
+TL spikes.
+
+00:13:06.680 --> 00:13:07.360
+Wadilan baik-baik saja.
+
+00:13:08.040 --> 00:13:08.940
+Container secara diam-diam
+
+00:13:08.940 --> 00:13:10.040
+membebani setiap permintaan.
+
+00:13:10.880 --> 00:13:11.900
+Setelah diperiksa lebih dekat,
+
+00:13:12.040 --> 00:13:12.680
+artefak menumpuk
+
+00:13:12.680 --> 00:13:13.340
+pada waktu build.
+
+00:13:14.060 --> 00:13:15.400
+Gambar melebihi 2 GB
+
+00:13:15.400 --> 00:13:16.300
+sarat dengan compiler,
+
+00:13:16.440 --> 00:13:16.620
+header,
+
+00:13:16.620 --> 00:13:17.640
+dan aset pengujian
+
+00:13:17.640 --> 00:13:18.280
+karena tidak ada
+
+00:13:18.280 --> 00:13:19.040
+multi-stage build.
+
+00:13:19.580 --> 00:13:20.100
+Docker ignore,
+
+00:13:20.280 --> 00:13:20.560
+hilang,
+
+00:13:20.760 --> 00:13:21.340
+mengundang notebook,
+
+00:13:21.480 --> 00:13:21.620
+charge,
+
+00:13:21.800 --> 00:13:22.720
+dan bobot eksperimental
+
+00:13:22.720 --> 00:13:23.760
+masuk ke lapisan produksi.
+
+00:13:24.560 --> 00:13:25.140
+Setiap deployment
+
+00:13:25.140 --> 00:13:26.020
+menarik gigabyte data
+
+00:13:26.020 --> 00:13:26.760
+melalui jaringan.
+
+00:13:27.680 --> 00:13:28.080
+Kalahkan itu
+
+00:13:28.080 --> 00:13:28.820
+ke seluruh node pool,
+
+00:13:29.340 --> 00:13:29.920
+maka cold start
+
+00:13:29.920 --> 00:13:30.660
+menjadi kebijakan,
+
+00:13:30.860 --> 00:13:31.640
+bukan pengecualian.
+
+00:13:32.120 --> 00:13:33.060
+Buktinya tidak misterius.
+
+00:13:33.360 --> 00:13:33.800
+Docker history
+
+00:13:33.800 --> 00:13:34.520
+menceritakan kisahnya
+
+00:13:34.520 --> 00:13:35.120
+dalam lapisan-lapisan.
+
+00:13:35.440 --> 00:13:36.360
+Rantai mengungkapkan
+
+00:13:36.360 --> 00:13:37.080
+tingkat erosi kedua.
+
+00:13:37.960 --> 00:13:39.440
+Tanpa flag GPU eksplisit,
+
+00:13:39.640 --> 00:13:40.740
+tidak ada GPU di Docker
+
+00:13:40.740 --> 00:13:42.400
+atau konfigurasi device plugin
+
+00:13:42.400 --> 00:13:43.280
+yang hilang di Kubernetes.
+
+00:13:43.780 --> 00:13:44.520
+Proses tidak melihat
+
+00:13:44.520 --> 00:13:45.240
+perangkat hash,
+
+00:13:45.240 --> 00:13:46.420
+dev, NVIDIA.
+
+00:13:47.760 --> 00:13:48.480
+Salah konfigurasi
+
+00:13:48.480 --> 00:13:49.560
+NVIDIA container toolkit
+
+00:13:49.560 --> 00:13:50.520
+menyembunyikan lib cuda.
+
+00:13:51.440 --> 00:13:52.040
+Begitu seterusnya,
+
+00:13:52.120 --> 00:13:53.080
+sehingga execution provider
+
+00:13:53.080 --> 00:13:53.900
+dimuat dengan batasan
+
+00:13:53.900 --> 00:13:54.940
+atau gagal dimuat sama sekali.
+
+00:13:55.700 --> 00:13:56.800
+MEG tidak ditegakkan,
+
+00:13:56.940 --> 00:13:57.700
+sehingga beban kerja
+
+00:13:57.700 --> 00:13:58.540
+berebut potongan memori
+
+00:13:58.540 --> 00:13:59.380
+dan membuang sumber daya
+
+00:13:59.380 --> 00:14:00.380
+yang tidak dipahami pencet wall.
+
+00:14:00.720 --> 00:14:01.360
+Log tetap tenang
+
+00:14:01.360 --> 00:14:01.960
+sementara performa
+
+00:14:01.960 --> 00:14:02.380
+terus menurun.
+
+00:14:02.800 --> 00:14:03.520
+Perilaku memori adalah
+
+00:14:03.520 --> 00:14:04.060
+tingkat ketika.
+
+00:14:04.440 --> 00:14:05.060
+Secara default,
+
+00:14:05.180 --> 00:14:06.000
+arena memori cuda pada
+
+00:14:06.000 --> 00:14:06.680
+ONN X rantai
+
+00:14:06.680 --> 00:14:07.820
+melakukan change alokasi ship.
+
+00:14:08.540 --> 00:14:09.220
+Di bawah konkurensi,
+
+00:14:09.280 --> 00:14:09.840
+itu tampak stabil.
+
+00:14:10.040 --> 00:14:10.320
+Sampai,
+
+00:14:10.860 --> 00:14:11.880
+arena melakukan over-reserve
+
+00:14:11.880 --> 00:14:12.580
+dan membuat permintaan
+
+00:14:12.580 --> 00:14:13.540
+baru kekurangan sumber daya.
+
+00:14:14.240 --> 00:14:15.340
+Pined memory tidak diatur,
+
+00:14:15.680 --> 00:14:16.440
+sehingga transfer host
+
+00:14:16.440 --> 00:14:17.120
+ke perangkat terjadi
+
+00:14:17.120 --> 00:14:18.260
+melalui buffer yang dapat di-patch,
+
+00:14:18.440 --> 00:14:19.840
+mengubah PCIe menjadi hambatan.
+
+00:14:20.400 --> 00:14:21.540
+IO tidak terikat ke perangkat,
+
+00:14:22.100 --> 00:14:22.980
+sehingga tensor memantul
+
+00:14:22.980 --> 00:14:23.920
+antara CPU dan GPU
+
+00:14:23.920 --> 00:14:25.000
+menciptakan beban latensi
+
+00:14:25.000 --> 00:14:25.660
+yang tak terlihat.
+
+00:14:26.300 --> 00:14:27.080
+Perilaku tail memburuk
+
+00:14:27.080 --> 00:14:27.440
+lebih dulu,
+
+00:14:27.540 --> 00:14:28.320
+kemudian median menyusup.
+
+00:14:28.860 --> 00:14:29.680
+Inilah tampilan rangkaian
+
+00:14:29.680 --> 00:14:30.520
+kejalannya di lapangan.
+
+00:14:31.400 --> 00:14:32.460
+Trueput efektif tertinggal
+
+00:14:32.460 --> 00:14:33.820
+meskipun penggunaan GPU moderat.
+
+00:14:34.400 --> 00:14:35.600
+Latensi di bawah beban ringan
+
+00:14:35.600 --> 00:14:36.140
+dapat diterima,
+
+00:14:36.140 --> 00:14:37.340
+tetapi P1N menggoyah
+
+00:14:37.340 --> 00:14:38.080
+di bawah konkurensi
+
+00:14:38.080 --> 00:14:38.680
+lalu melonjak
+
+00:14:38.680 --> 00:14:39.500
+secara tidak terduga.
+
+00:14:40.020 --> 00:14:40.460
+OM-Kill
+
+00:14:40.460 --> 00:14:41.240
+sesekali mengatur ulang
+
+00:14:41.240 --> 00:14:42.420
+replika pada lulintas puncak
+
+00:14:42.420 --> 00:14:43.220
+menciptakan perilaku
+
+00:14:43.220 --> 00:14:43.980
+kawanan hard behavior.
+
+00:14:44.400 --> 00:14:44.960
+Reset beruntung
+
+00:14:44.960 --> 00:14:46.060
+autoscaling menjadi kacau
+
+00:14:46.060 --> 00:14:47.080
+dan antrean terbentuk kembali.
+
+00:14:47.620 --> 00:14:48.280
+Operator mengejar
+
+00:14:48.280 --> 00:14:48.920
+penyebab yang salah
+
+00:14:48.920 --> 00:14:49.760
+mengira modelnya berat
+
+00:14:49.760 --> 00:14:50.860
+padahal kebijakan kontainernya
+
+00:14:50.860 --> 00:14:51.860
+yang menyebabkan keruntuhan.
+
+00:14:52.380 --> 00:14:53.280
+Anggap kebersihan kontainer
+
+00:14:53.280 --> 00:14:54.000
+sebagai penanganan buku.
+
+00:14:54.400 --> 00:14:54.980
+Multi-stage build
+
+00:14:54.980 --> 00:14:55.820
+menghapus sejak sidik-dik.
+
+00:14:56.300 --> 00:14:57.340
+Compiler dan alat pengembang
+
+00:14:57.340 --> 00:14:58.280
+tidak pernah masuk ke runtime.
+
+00:14:59.220 --> 00:15:00.120
+Image dasar distroles
+
+00:15:00.120 --> 00:15:00.520
+atau slim
+
+00:15:00.520 --> 00:15:01.380
+mempersempit permukaan
+
+00:15:01.380 --> 00:15:02.420
+dan mempersingkat waktu pull.
+
+00:15:03.200 --> 00:15:03.840
+Audit docker slim
+
+00:15:03.840 --> 00:15:04.200
+atau dev
+
+00:15:04.200 --> 00:15:05.340
+mengonfirmasi apa yang bertahan
+
+00:15:05.340 --> 00:15:05.760
+setelah build.
+
+00:15:06.320 --> 00:15:06.740
+Docker ignore
+
+00:15:06.740 --> 00:15:07.660
+yang mencegah penambahan ukuran
+
+00:15:07.660 --> 00:15:08.320
+yang tidak disengaja.
+
+00:15:09.180 --> 00:15:09.700
+Hasilnya adalah
+
+00:15:09.700 --> 00:15:10.380
+kebersihan forensik.
+
+00:15:11.120 --> 00:15:11.520
+Yang berjalan
+
+00:15:11.520 --> 00:15:12.720
+hanyalah apa yang seharusnya berjalan.
+
+00:15:13.320 --> 00:15:13.920
+Instalasi GPU
+
+00:15:13.920 --> 00:15:15.100
+membutuhkan pernyataan eksplisit.
+
+00:15:15.540 --> 00:15:15.920
+Di docker
+
+00:15:15.920 --> 00:15:16.800
+deklarasikan GPU
+
+00:15:16.800 --> 00:15:17.240
+sebagai all
+
+00:15:17.240 --> 00:15:17.840
+atau potongan
+
+00:15:17.840 --> 00:15:18.420
+MEG yang tepat.
+
+00:15:19.540 --> 00:15:20.060
+Di Kubernetes
+
+00:15:20.060 --> 00:15:21.060
+minta sumber daya
+
+00:15:21.060 --> 00:15:21.980
+NVIDIA.com GPU
+
+00:15:21.980 --> 00:15:23.040
+dan pastikan device plugin
+
+00:15:23.040 --> 00:15:24.380
+cocok dengan cabang refer Anda.
+
+00:15:25.580 --> 00:15:26.120
+Saat startup
+
+00:15:26.120 --> 00:15:27.260
+pastikan kehadiran perangkat
+
+00:15:27.260 --> 00:15:28.260
+dan kompetibilitas driver.
+
+00:15:28.260 --> 00:15:29.200
+NVIDIA SMA
+
+00:15:29.200 --> 00:15:29.880
+dan LDConfig
+
+00:15:29.880 --> 00:15:30.640
+bukan untuk hiasan
+
+00:15:30.640 --> 00:15:31.700
+melainkan pemeriksaan akses.
+
+00:15:32.100 --> 00:15:32.880
+Jika ada yang hilang
+
+00:15:32.880 --> 00:15:33.600
+atau tidak cocok
+
+00:15:33.600 --> 00:15:34.600
+catat sebagai pelanggaran
+
+00:15:34.600 --> 00:15:35.000
+dan keluar.
+
+00:15:35.420 --> 00:15:35.840
+Kemudian atur
+
+00:15:35.840 --> 00:15:36.460
+OLX runtime
+
+00:15:36.460 --> 00:15:37.060
+dan dansor RT
+
+00:15:37.060 --> 00:15:37.600
+dengan sengaja.
+
+00:15:38.320 --> 00:15:38.780
+Kunci urutan
+
+00:15:38.780 --> 00:15:39.600
+execution provider
+
+00:15:39.600 --> 00:15:40.220
+ke jalur GPU
+
+00:15:40.220 --> 00:15:41.100
+saja dalam produksi.
+
+00:15:41.980 --> 00:15:42.440
+Pertimbangkan
+
+00:15:42.440 --> 00:15:43.220
+untuk menonaktifkan
+
+00:15:43.220 --> 00:15:43.760
+atau mensuikan
+
+00:15:43.760 --> 00:15:44.660
+kembali arena memori
+
+00:15:44.660 --> 00:15:44.900
+CUDA
+
+00:15:44.900 --> 00:15:45.500
+saat ia menimbun
+
+00:15:45.500 --> 00:15:46.360
+melebihi working setan.
+
+00:15:47.100 --> 00:15:47.820
+Batasi pertumbuhan
+
+00:15:47.820 --> 00:15:48.420
+atau tetapkan
+
+00:15:48.420 --> 00:15:49.260
+praalkasi kebatas
+
+00:15:49.260 --> 00:15:49.960
+hingga pedipriksi.
+
+00:15:51.100 --> 00:15:51.920
+Aktifkan FP16
+
+00:15:51.920 --> 00:15:52.500
+secara default
+
+00:15:52.500 --> 00:15:53.320
+jika batas akurasi
+
+00:15:53.320 --> 00:15:53.860
+mengizinkannya.
+
+00:15:53.860 --> 00:15:55.300
+Batasi inti 8
+
+00:15:55.300 --> 00:15:56.320
+dibalik uji akurasi.
+
+00:15:57.380 --> 00:15:58.500
+Ikat IO ke memori perangkat
+
+00:15:58.500 --> 00:15:59.180
+agar input tiba
+
+00:15:59.180 --> 00:16:00.240
+di tempat komputasi berada
+
+00:16:00.240 --> 00:16:00.840
+dan pilih stream
+
+00:16:00.840 --> 00:16:01.500
+secara sengaja
+
+00:16:01.500 --> 00:16:02.160
+untuk mencegah
+
+00:16:02.160 --> 00:16:03.060
+head offline blocking.
+
+00:16:04.220 --> 00:16:04.860
+Terapkan ketetapan
+
+00:16:04.860 --> 00:16:05.440
+dengan dua gerbang
+
+00:16:05.440 --> 00:16:06.240
+kesehatan dan kinerja.
+
+00:16:06.880 --> 00:16:07.740
+Kesehatan bukan sekadar
+
+00:16:07.740 --> 00:16:08.320
+status 200
+
+00:16:08.320 --> 00:16:09.040
+melainkan snapshot
+
+00:16:09.040 --> 00:16:10.040
+kemampuan yang terverifikasi.
+
+00:16:10.240 --> 00:16:11.020
+Penyedia dimuat
+
+00:16:11.020 --> 00:16:12.060
+kernel gabungan hadir
+
+00:16:12.060 --> 00:16:12.640
+inti tensor
+
+00:16:12.640 --> 00:16:13.740
+diakui IO terikat
+
+00:16:13.740 --> 00:16:14.880
+IO terikat.
+
+00:16:15.840 --> 00:16:16.480
+Kinerja adalah
+
+00:16:16.480 --> 00:16:17.200
+set form dasar
+
+00:16:17.200 --> 00:16:17.900
+yang dijalankan
+
+00:16:17.900 --> 00:16:18.500
+saat startup
+
+00:16:18.500 --> 00:16:19.520
+dengan jendela latensi
+
+00:16:19.520 --> 00:16:20.540
+dan ambang pemanfaatan.
+
+00:16:21.200 --> 00:16:21.560
+Jika konter
+
+00:16:21.560 --> 00:16:22.620
+tidak dapat mencapai keduanya
+
+00:16:22.620 --> 00:16:23.800
+ia tidak diizinkan masuk klien.
+
+00:16:24.440 --> 00:16:25.120
+Lampirkan anggaran
+
+00:16:25.120 --> 00:16:25.920
+ukuran pool ke CI
+
+00:16:25.920 --> 00:16:26.880
+agar gambar yang melebihi
+
+00:16:26.880 --> 00:16:27.360
+ambang batas
+
+00:16:27.360 --> 00:16:28.080
+menggagalkan build.
+
+00:16:28.720 --> 00:16:29.640
+Simpan divisi gambar
+
+00:16:29.640 --> 00:16:30.100
+perdigias
+
+00:16:30.100 --> 00:16:30.800
+agar rollback
+
+00:16:30.800 --> 00:16:31.700
+memulihkan kode
+
+00:16:31.700 --> 00:16:32.740
+dan kebersihan.
+
+00:16:33.600 --> 00:16:34.220
+Bukti menunjukkan
+
+00:16:34.220 --> 00:16:34.860
+bahwa kontainer
+
+00:16:34.860 --> 00:16:35.680
+tidak hanya menyebarkan
+
+00:16:35.680 --> 00:16:36.180
+perangkat lunak
+
+00:16:36.180 --> 00:16:37.060
+tetapi juga menyandikan
+
+00:16:37.060 --> 00:16:37.900
+perilaku di bawah tekan.
+
+00:16:38.440 --> 00:16:39.220
+Saat mereka bising,
+
+00:16:39.440 --> 00:16:40.280
+berat atau tidak jelas
+
+00:16:40.280 --> 00:16:40.820
+tentang GPU
+
+00:16:40.820 --> 00:16:41.440
+mereka mengubah
+
+00:16:41.440 --> 00:16:42.680
+akselerasi menjadi seremonial.
+
+00:16:43.300 --> 00:16:44.040
+Saat mereka ramping
+
+00:16:44.040 --> 00:16:45.000
+eksplisit dan tegas
+
+00:16:45.000 --> 00:16:45.980
+mereka menjaga jalur cepat
+
+00:16:45.980 --> 00:16:46.500
+yang Anda bayar.
+
+00:16:46.500 --> 00:16:47.400
+Di lingkungan ini
+
+00:16:47.400 --> 00:16:48.060
+tidak ada yang terjadi
+
+00:16:48.060 --> 00:16:48.480
+secara kebetulan.
+
+00:16:48.820 --> 00:16:49.500
+Kontainer tersebut
+
+00:16:49.500 --> 00:16:50.140
+membantu GPU
+
+00:16:50.140 --> 00:16:50.880
+melakukan tugasnya
+
+00:16:50.880 --> 00:16:51.760
+atau justru menghalanginya.
+
+00:16:52.480 --> 00:16:53.340
+Laboratorium forensik
+
+00:16:53.340 --> 00:16:53.960
+metri yang menghukum.
+
+00:16:54.460 --> 00:16:55.340
+Latensi, throughput,
+
+00:16:55.660 --> 00:16:56.200
+pemanfaatan.
+
+00:16:56.920 --> 00:16:57.460
+Bukti lebih baik
+
+00:16:57.460 --> 00:16:58.020
+daripada opini
+
+00:16:58.020 --> 00:16:58.780
+jadi kita perbaiki
+
+00:16:58.780 --> 00:16:59.740
+set prompt, kunci seed
+
+00:16:59.740 --> 00:17:00.720
+dan jalankan pemanasan.
+
+00:17:01.280 --> 00:17:02.100
+Penjadwal yang sama,
+
+00:17:02.360 --> 00:17:02.940
+langkah yang sama.
+
+00:17:03.100 --> 00:17:04.780
+2025 untuk 5NAS12
+
+00:17:04.780 --> 00:17:05.920
+diperluas menjadi 50
+
+00:17:05.920 --> 00:17:07.600
+untuk 1024 x 1024
+
+00:17:07.600 --> 00:17:08.360
+x 1024
+
+00:17:08.360 --> 00:17:09.420
+untuk menunjukkan ketegangan.
+
+00:17:10.100 --> 00:17:11.320
+Konkurensi ditahan pada 16
+
+00:17:11.320 --> 00:17:12.440
+dengan penyapuan hingga 30.
+
+00:17:13.060 --> 00:17:14.360
+Ukuran batch dimulai dari 1
+
+00:17:14.360 --> 00:17:15.260
+meningkat dengan hati-hati
+
+00:17:15.260 --> 00:17:16.360
+hingga batas veram bicara.
+
+00:17:16.900 --> 00:17:17.700
+Tanpa ekstrapolasi,
+
+00:17:17.800 --> 00:17:18.360
+tanpa alasan,
+
+00:17:18.500 --> 00:17:19.360
+hanya jam dan penghitung.
+
+00:17:19.880 --> 00:17:20.880
+Latensi bersaksi lebih dulu.
+
+00:17:22.180 --> 00:17:23.280
+Dalam kondisi terdegradasi,
+
+00:17:23.400 --> 00:17:23.940
+fallback CPU
+
+00:17:23.940 --> 00:17:25.060
+atau jalur atensi generik
+
+00:17:25.060 --> 00:17:25.520
+P50
+
+00:17:25.520 --> 00:17:26.720
+pada 5 plus 12 kali
+
+00:17:26.720 --> 00:17:27.540
+5 plus 12 digit.
+
+00:17:28.600 --> 00:17:30.080
+P95 menceritakan kisah yang sebenar.
+
+00:17:30.540 --> 00:17:31.360
+Itu berkeliaran hingga
+
+00:17:31.360 --> 00:17:32.280
+24 politik
+
+00:17:32.280 --> 00:17:33.080
+secara tak terduga
+
+00:17:33.080 --> 00:17:34.120
+karena antren memperparah
+
+00:17:34.120 --> 00:17:35.300
+ketidakkevisienan kecil.
+
+00:17:36.020 --> 00:17:37.560
+Pada 1024 x 1024
+
+00:17:37.560 --> 00:17:38.440
+dengan 50 langkah,
+
+00:17:38.540 --> 00:17:39.280
+P90 sangkah
+
+00:17:39.280 --> 00:17:40.780
+P95 menjadi pelanggaran satimar.
+
+00:17:41.100 --> 00:17:41.740
+Setelah perbaikan,
+
+00:17:41.980 --> 00:17:42.960
+GPU EP terkunci,
+
+00:17:43.340 --> 00:17:44.240
+atensi gabungan aktif,
+
+00:17:44.240 --> 00:17:46.040
+IO terikat ke perangkat P50
+
+00:17:46.040 --> 00:17:47.500
+kembali ke 1 digit rendah
+
+00:17:47.500 --> 00:17:49.120
+dan P95 terkompresi
+
+00:17:49.120 --> 00:17:49.760
+sesuai anggaran.
+
+00:17:50.700 --> 00:17:51.620
+Rentang menyusut,
+
+00:17:51.720 --> 00:17:52.860
+sistem menjadi dapat diprediksi.
+
+00:17:53.500 --> 00:17:54.260
+Teruput menguatkan.
+
+00:17:55.080 --> 00:17:55.860
+Pada konkurensi 16,
+
+00:17:56.000 --> 00:17:56.700
+jalur terdegradasi
+
+00:17:56.700 --> 00:17:57.700
+hanya menghasilkan sedikit alir.
+
+00:17:58.520 --> 00:17:59.280
+Gambar per menit
+
+00:17:59.280 --> 00:17:59.980
+hampir tidak naik
+
+00:17:59.980 --> 00:18:00.540
+dengan replika
+
+00:18:00.540 --> 00:18:01.420
+karena setiap instans
+
+00:18:01.420 --> 00:18:02.220
+terhambat sendiri.
+
+00:18:02.980 --> 00:18:04.120
+Peningkatan ketiga persaingan
+
+00:18:04.120 --> 00:18:04.700
+bukan output.
+
+00:18:05.560 --> 00:18:06.260
+Setelah perbaikan,
+
+00:18:06.400 --> 00:18:07.080
+hubungan menjadi lur.
+
+00:18:07.460 --> 00:18:08.300
+Gambar per menit naik
+
+00:18:08.300 --> 00:18:08.840
+hampir linear
+
+00:18:08.840 --> 00:18:09.720
+hingga siklus kerja
+
+00:18:09.720 --> 00:18:10.540
+inti tensor jenuh
+
+00:18:10.540 --> 00:18:11.140
+atau virem
+
+00:18:11.140 --> 00:18:12.240
+membatasi batch.
+
+00:18:13.520 --> 00:18:14.260
+Perbedaan kemiringan
+
+00:18:14.260 --> 00:18:14.820
+adalah buktinya.
+
+00:18:15.200 --> 00:18:15.840
+Pekerjaan benar-benar
+
+00:18:15.840 --> 00:18:16.600
+melewati garis finish
+
+00:18:16.600 --> 00:18:17.040
+lebih cepat
+
+00:18:17.040 --> 00:18:17.760
+bukan hanya lebih bisik.
+
+00:18:18.100 --> 00:18:19.200
+Kemanfaatnya menutup kasus ini.
+
+00:18:19.980 --> 00:18:20.340
+Sebelumnya,
+
+00:18:20.420 --> 00:18:21.020
+siklus tugas GPU
+
+00:18:21.020 --> 00:18:21.660
+menganggur di antara
+
+00:18:21.660 --> 00:18:22.140
+persentase
+
+00:18:22.140 --> 00:18:23.000
+dan 50%
+
+00:18:23.000 --> 00:18:23.940
+dengan lembah datar yang panjang.
+
+00:18:25.100 --> 00:18:25.780
+Penghitung PCI
+
+00:18:25.780 --> 00:18:26.580
+menunjukkan derau
+
+00:18:26.580 --> 00:18:27.360
+dari transfer
+
+00:18:27.360 --> 00:18:28.600
+yang dapat di page.
+
+00:18:28.600 --> 00:18:30.540
+Setelahnya,
+
+00:18:30.740 --> 00:18:31.560
+siklus tugas stabil
+
+00:18:31.560 --> 00:18:32.540
+ke dalam pita yang tinggi
+
+00:18:32.540 --> 00:18:33.140
+dan konsisten
+
+00:18:33.140 --> 00:18:33.940
+dengan keterlibatan
+
+00:18:33.940 --> 00:18:34.620
+tensor core
+
+00:18:34.620 --> 00:18:35.480
+yang terlihat.
+
+00:18:36.360 --> 00:18:36.980
+GPU kembali
+
+00:18:36.980 --> 00:18:37.620
+ke orkestrasi
+
+00:18:37.620 --> 00:18:38.680
+dan prapemerosesan ringan.
+
+00:18:39.240 --> 00:18:40.520
+Lonjakan PCI terkompresi
+
+00:18:40.520 --> 00:18:41.400
+karena memori
+
+00:18:41.400 --> 00:18:41.920
+yang disematkan
+
+00:18:41.920 --> 00:18:42.680
+dan pengikatan IEO
+
+00:18:42.680 --> 00:18:43.540
+menghilangkan lalu lintas
+
+00:18:43.540 --> 00:18:44.000
+yang tidak perlu.
+
+00:18:44.480 --> 00:18:45.000
+Tidak ada hal lain
+
+00:18:45.000 --> 00:18:45.860
+yang menjelaskan perubahan itu
+
+00:18:45.860 --> 00:18:46.700
+selain akselerasi nyata.
+
+00:18:47.060 --> 00:18:47.540
+Kami menambahkan
+
+00:18:47.540 --> 00:18:48.080
+pemeriksaan silat.
+
+00:18:48.480 --> 00:18:50.240
+Di bawah 512 x 512
+
+00:18:50.240 --> 00:18:51.200
+langkah 2025
+
+00:18:51.200 --> 00:18:51.820
+jalur tetap
+
+00:18:51.820 --> 00:18:52.260
+mempertahankan
+
+00:18:52.260 --> 00:18:52.920
+konkurensi 16
+
+00:18:52.920 --> 00:18:53.860
+tanpa lonjakan ekor.
+
+00:18:54.140 --> 00:18:54.780
+Dorong ke 32
+
+00:18:54.780 --> 00:18:55.500
+dan sistem menurun
+
+00:18:55.500 --> 00:18:56.280
+dengan lancar.
+
+00:18:56.980 --> 00:18:57.720
+N95 meluas
+
+00:18:57.720 --> 00:18:58.340
+secara terprediksi
+
+00:18:58.340 --> 00:18:59.220
+bukan secara kacau.
+
+00:19:00.280 --> 00:19:00.600
+Di bawah
+
+00:19:00.600 --> 00:19:01.900
+1024 x 1024
+
+00:19:01.900 --> 00:19:02.720
+pada 50 langkah
+
+00:19:02.720 --> 00:19:03.720
+perbedaannya diperbesar.
+
+00:19:04.800 --> 00:19:05.320
+Jalur yang menurun
+
+00:19:05.320 --> 00:19:05.640
+tertekuk
+
+00:19:05.640 --> 00:19:06.700
+menjadi waktu tunggu time up.
+
+00:19:07.060 --> 00:19:07.780
+Jalur yang diperkelas
+
+00:19:07.780 --> 00:19:08.300
+mempertahankan
+
+00:19:08.300 --> 00:19:09.880
+P50 yang dapat digunakan
+
+00:19:09.880 --> 00:19:10.520
+dan P95
+
+00:19:10.520 --> 00:19:11.380
+yang dapat diterima
+
+00:19:11.380 --> 00:19:12.040
+dengan P12
+
+00:19:12.040 --> 00:19:12.980
+hingga batas veran tercap.
+
+00:19:13.160 --> 00:19:13.840
+Disinilah arena
+
+00:19:13.840 --> 00:19:14.760
+dan stream menjadi penting
+
+00:19:14.760 --> 00:19:15.840
+setelah penyetelan
+
+00:19:15.840 --> 00:19:16.700
+pemblokiran head of line
+
+00:19:16.700 --> 00:19:16.960
+berada.
+
+00:19:17.840 --> 00:19:18.560
+Sudut pandang biaya
+
+00:19:18.560 --> 00:19:19.300
+adalah aritematika
+
+00:19:19.300 --> 00:19:19.760
+sederhana
+
+00:19:19.760 --> 00:19:20.900
+permintaan per jam GPU
+
+00:19:20.900 --> 00:19:22.260
+naik 2 hingga 5 kali lipat
+
+00:19:22.260 --> 00:19:23.480
+ketika FP16 use attention
+
+00:19:23.480 --> 00:19:24.220
+dan pengikatan IO
+
+00:19:24.220 --> 00:19:24.920
+diverifikasi.
+
+00:19:25.820 --> 00:19:26.820
+Biaya efektif
+
+00:19:26.820 --> 00:19:27.580
+per seribu gambar
+
+00:19:27.580 --> 00:19:28.500
+turun dengan sesuai.
+
+00:19:29.080 --> 00:19:29.820
+Penalti cold start
+
+00:19:29.820 --> 00:19:30.680
+menyusut karena citra
+
+00:19:30.680 --> 00:19:31.360
+berukuran kecil
+
+00:19:31.360 --> 00:19:32.220
+dan mesin sudah dibangun
+
+00:19:32.220 --> 00:19:32.660
+sebelumnya.
+
+00:19:33.300 --> 00:19:33.680
+Note berhenti
+
+00:19:33.680 --> 00:19:34.660
+membayar pajak kompilasi
+
+00:19:34.660 --> 00:19:35.380
+pada sentuhan pertama.
+
+00:19:35.860 --> 00:19:36.820
+Puku besar secu dengan lock.
+
+00:19:37.260 --> 00:19:37.940
+Verifikasi mencegah
+
+00:19:37.940 --> 00:19:38.760
+berhasilan yang kebetulan.
+
+00:19:39.180 --> 00:19:39.820
+Ulangi pada kumpulan
+
+00:19:39.820 --> 00:19:40.240
+Note kedua
+
+00:19:40.240 --> 00:19:41.340
+dengan versi driver minor
+
+00:19:41.340 --> 00:19:41.860
+yang berbeda.
+
+00:19:42.560 --> 00:19:43.240
+Citra yang diperkeras
+
+00:19:43.240 --> 00:19:44.100
+menolak untuk memulai
+
+00:19:44.100 --> 00:19:44.880
+pada Note yang tidak
+
+00:19:44.880 --> 00:19:45.960
+cocok secara desain.
+
+00:19:46.960 --> 00:19:47.880
+Jadi hasilnya sebanding
+
+00:19:47.880 --> 00:19:48.700
+tidak membingungkan.
+
+00:19:49.400 --> 00:19:49.840
+Periksa silang
+
+00:19:49.840 --> 00:19:50.620
+snapshot kapabilitas.
+
+00:19:51.360 --> 00:19:52.240
+Urutan penyedia yang sama,
+
+00:19:52.500 --> 00:19:53.380
+tensor RT yang sama,
+
+00:19:53.620 --> 00:19:54.740
+penyataan kernel yang sama.
+
+00:19:55.360 --> 00:19:56.220
+Jalankan kembali set prom
+
+00:19:56.220 --> 00:19:57.480
+dan tangkap ulang distribusinya.
+
+00:19:58.000 --> 00:19:58.560
+Ketika histogram
+
+00:19:58.560 --> 00:19:59.220
+tumpang tindih,
+
+00:19:59.360 --> 00:19:59.980
+kepercayaan meningkat.
+
+00:20:00.620 --> 00:20:00.980
+Jika tidak,
+
+00:20:01.100 --> 00:20:01.880
+perbedaan kapabilitas
+
+00:20:01.880 --> 00:20:02.600
+menjelaskan alasannya.
+
+00:20:03.280 --> 00:20:03.740
+Pada akhirnya
+
+00:20:03.740 --> 00:20:04.640
+angka tidak berargumen,
+
+00:20:04.760 --> 00:20:05.340
+mereka menghukum.
+
+00:20:05.900 --> 00:20:06.840
+Latensi terkompresi,
+
+00:20:07.060 --> 00:20:07.700
+truput berskala
+
+00:20:07.700 --> 00:20:08.600
+pemanfaatan stabil.
+
+00:20:09.080 --> 00:20:10.240
+Patologinya bukan hipotetis.
+
+00:20:10.880 --> 00:20:11.420
+Ini terukur
+
+00:20:11.420 --> 00:20:12.000
+dan setelahnya
+
+00:20:12.000 --> 00:20:12.740
+setem meninggalkan
+
+00:20:12.740 --> 00:20:13.960
+sidik jari di setiap grafik.
+
+00:20:15.400 --> 00:20:16.240
+Protokol perbaikan,
+
+00:20:16.520 --> 00:20:17.120
+daftar periksa
+
+00:20:17.120 --> 00:20:18.300
+pengerasan yang dapat diulang.
+
+00:20:18.780 --> 00:20:19.380
+Kontrol penerimaan
+
+00:20:19.380 --> 00:20:19.980
+adalah yang utama.
+
+00:20:20.600 --> 00:20:21.340
+Tolak untuk memulai
+
+00:20:21.340 --> 00:20:21.900
+jika penyedia
+
+00:20:21.900 --> 00:20:22.760
+ekskusi tensor RT
+
+00:20:22.760 --> 00:20:23.660
+atau CUDA tidak ada.
+
+00:20:24.480 --> 00:20:25.380
+Hitung penyedia,
+
+00:20:25.500 --> 00:20:26.480
+verifikasi jumlah perangkat,
+
+00:20:26.600 --> 00:20:27.680
+cetak snapshot kapabilitas,
+
+00:20:27.800 --> 00:20:28.360
+CUDNN,
+
+00:20:28.660 --> 00:20:29.220
+FP16,
+
+00:20:29.440 --> 00:20:30.880
+ruang kerja INT8.
+
+00:20:31.680 --> 00:20:32.260
+Jika ada yang hilang,
+
+00:20:32.380 --> 00:20:33.060
+keluar dengan kode 00.
+
+00:20:33.500 --> 00:20:34.760
+Ketersediaan mengikuti integritas.
+
+00:20:35.620 --> 00:20:36.480
+Penyematan versi adalah
+
+00:20:36.480 --> 00:20:36.940
+tulang punggung.
+
+00:20:37.380 --> 00:20:38.320
+Pertahankan cabang driver
+
+00:20:38.320 --> 00:20:39.040
+matriks tunggal,
+
+00:20:39.180 --> 00:20:40.320
+CUDA minor ke CUDNN,
+
+00:20:40.400 --> 00:20:41.440
+has built runtime ONX,
+
+00:20:41.500 --> 00:20:42.060
+tensor RT.
+
+00:20:42.880 --> 00:20:43.800
+Bangun citra inferensi
+
+00:20:43.800 --> 00:20:44.840
+berdasarkan matriks tersebut.
+
+00:20:44.840 --> 00:20:46.340
+Tablinode agar cocok.
+
+00:20:46.920 --> 00:20:47.520
+Batasi penerimaan
+
+00:20:47.520 --> 00:20:48.220
+berdasarkan kestari.
+
+00:20:49.000 --> 00:20:49.760
+Mesin tensor RT
+
+00:20:49.760 --> 00:20:50.720
+yang telah dibangun sebelumnya
+
+00:20:50.720 --> 00:20:51.540
+permodel dan resolusi.
+
+00:20:51.920 --> 00:20:52.880
+Rencana adalah artefak,
+
+00:20:53.140 --> 00:20:53.820
+bukan tebakan runtime.
+
+00:20:54.600 --> 00:20:55.320
+Kebersihan kontainer
+
+00:20:55.320 --> 00:20:55.900
+menjaga kebenaran.
+
+00:20:56.540 --> 00:20:57.520
+Gunakan build multi tahap.
+
+00:20:58.080 --> 00:20:58.640
+Jaga runtime
+
+00:20:58.640 --> 00:20:59.500
+agar strol setelah.
+
+00:21:00.100 --> 00:21:01.280
+Sertakan docker ignore yang ketat.
+
+00:21:01.960 --> 00:21:02.580
+Verifikasi dengan
+
+00:21:02.580 --> 00:21:03.060
+rewrite docker
+
+00:21:03.060 --> 00:21:03.900
+dan audit perampingan.
+
+00:21:04.480 --> 00:21:05.040
+Tetapkan anggaran
+
+00:21:05.040 --> 00:21:05.860
+ukuran kumpulan di CAE.
+
+00:21:06.280 --> 00:21:07.420
+Gagalkan citra yang membengkak.
+
+00:21:07.420 --> 00:21:08.520
+Tanda tangani citra
+
+00:21:08.520 --> 00:21:09.840
+dan bedakan konten perdigest.
+
+00:21:10.560 --> 00:21:11.900
+Konfigurasikan GPU terlebih dahulu.
+
+00:21:12.100 --> 00:21:13.360
+Kunci urutan EP ke tensor RT
+
+00:21:13.360 --> 00:21:14.780
+Cuda nonaktifkan penyedia CPU
+
+00:21:14.780 --> 00:21:15.420
+dalam produksi.
+
+00:21:16.360 --> 00:21:17.260
+Pastikan keberadaan
+
+00:21:17.260 --> 00:21:17.840
+NVIDIA dev
+
+00:21:17.840 --> 00:21:18.600
+dan versi toolkit
+
+00:21:18.600 --> 00:21:19.540
+container NVIDIA.
+
+00:21:20.420 --> 00:21:21.600
+Minta GPU NVIDIA.com
+
+00:21:21.600 --> 00:21:22.260
+secara eksplisit
+
+00:21:22.260 --> 00:21:23.060
+atau campur lisensi
+
+00:21:23.060 --> 00:21:24.100
+dan verifikasi saat serp.
+
+00:21:24.460 --> 00:21:25.040
+Optimalkan tangan.
+
+00:21:25.780 --> 00:21:27.200
+Aktifkan FP16 secara default.
+
+00:21:27.980 --> 00:21:28.680
+Batasi Intel 8
+
+00:21:28.680 --> 00:21:29.580
+dengan pemeriksaan ukuras.
+
+00:21:31.000 --> 00:21:31.760
+Band I.O langsung
+
+00:21:31.760 --> 00:21:32.540
+ke memori perangkat.
+
+00:21:32.700 --> 00:21:33.260
+Aktifkan pin
+
+00:21:33.260 --> 00:21:33.980
+memori
+
+00:21:33.980 --> 00:21:34.480
+pilih stream
+
+00:21:34.480 --> 00:21:35.160
+untuk menghindari
+
+00:21:35.160 --> 00:21:36.440
+pemblokiran head offline.
+
+00:21:36.440 --> 00:21:38.420
+Soekan kembali
+
+00:21:38.420 --> 00:21:39.220
+atau nonaktifkan
+
+00:21:39.220 --> 00:21:40.100
+arena ORT Cuda
+
+00:21:40.100 --> 00:21:40.680
+saat berhenti
+
+00:21:40.680 --> 00:21:41.460
+di luar working set.
+
+00:21:41.980 --> 00:21:43.060
+Tetapkan SLO performa
+
+00:21:43.060 --> 00:21:43.600
+sebagai kode
+
+00:21:43.600 --> 00:21:44.380
+serta startup
+
+00:21:44.380 --> 00:21:45.140
+dengan jendela latensi
+
+00:21:45.140 --> 00:21:45.800
+prompt deterministik
+
+00:21:45.800 --> 00:21:46.860
+dan batas bawah utilisasi.
+
+00:21:47.720 --> 00:21:48.600
+Gagasa backlog menurun.
+
+00:21:49.360 --> 00:21:50.560
+Tambahkan observabilitas,
+
+00:21:50.700 --> 00:21:51.240
+metrik GPU,
+
+00:21:51.380 --> 00:21:51.960
+perpermintaan,
+
+00:21:52.040 --> 00:21:52.980
+peringatan jalur yang menurun,
+
+00:21:53.140 --> 00:21:53.580
+kenali prompt,
+
+00:21:53.780 --> 00:21:54.280
+dan baseline
+
+00:21:54.280 --> 00:21:55.500
+yang dapat dibandingkan.
+
+00:21:56.440 --> 00:21:57.200
+Terapkan browser green
+
+00:21:57.200 --> 00:21:58.040
+dengan gerbang performa
+
+00:21:58.040 --> 00:21:58.840
+dan robek otomatis
+
+00:21:58.840 --> 00:21:59.880
+saat terjadi pelanggaran.
+
+00:22:00.760 --> 00:22:01.880
+Dengan protokol yang ditegakkan,
+
+00:22:02.020 --> 00:22:03.120
+akselerasi dapat dibuktikan,
+
+00:22:03.300 --> 00:22:03.920
+bukan diasumsikan.
+
+00:22:05.220 --> 00:22:06.280
+Pelajaran ini sangat klinis.
+
+00:22:06.440 --> 00:22:07.220
+Fallback CPU
+
+00:22:07.220 --> 00:22:08.260
+senyap penyimpangan versi
+
+00:22:08.260 --> 00:22:08.820
+dan kontainer
+
+00:22:08.820 --> 00:22:09.940
+yang mengkakukanlah bug.
+
+00:22:10.440 --> 00:22:11.240
+Itu adalah pol kegagalan
+
+00:22:11.240 --> 00:22:11.800
+yang dapat diprediksi
+
+00:22:11.800 --> 00:22:12.380
+dan bisa anda cepat.
+
+00:22:12.840 --> 00:22:13.660
+Jalankan protokol,
+
+00:22:13.900 --> 00:22:15.180
+instrumentasikan utilisasi GPU,
+
+00:22:15.300 --> 00:22:16.040
+tolak jalur yang menurun,
+
+00:22:16.180 --> 00:22:16.680
+kunci versi,
+
+00:22:16.740 --> 00:22:17.300
+perlakukan engine
+
+00:22:17.300 --> 00:22:18.020
+sebagai artefak.
+
+00:22:18.400 --> 00:22:19.060
+Jika anda ingin
+
+00:22:19.060 --> 00:22:19.820
+pembahasan lebih dalam
+
+00:22:19.820 --> 00:22:20.860
+tentang runtime ONX
+
+00:22:20.860 --> 00:22:22.260
+dan perilaku memori tensor RT
+
+00:22:22.260 --> 00:22:23.000
+serta kapan harus
+
+00:22:23.000 --> 00:22:23.800
+menelaktifkan arena,
+
+00:22:24.120 --> 00:22:24.900
+tonton kasus berikutnya
+
+00:22:24.900 --> 00:22:25.460
+dalam seri ini
+
+00:22:25.460 --> 00:22:26.000
+dan penelengganan
+
+00:22:26.000 --> 00:22:26.560
+untuk catatan live.

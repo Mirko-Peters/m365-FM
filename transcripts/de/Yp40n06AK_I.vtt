@@ -1,0 +1,2215 @@
+WEBVTT
+
+00:00:00.040 --> 00:00:01.180
+Willkommen zu einem weiteren Wissensherb.
+
+00:00:01.500 --> 00:00:04.480
+Das heutige Thema hat jeder IT-Mitarbeiter schon einmal durchdacht.
+
+00:00:05.180 --> 00:00:06.580
+Stellen Sie sich vor, der Server Ihres Unternehmens stützt.
+
+00:00:07.000 --> 00:00:09.500
+Ihre File ist weg. Ihre Daten sind weg. Was tun Sie dann?
+
+00:00:09.760 --> 00:00:13.700
+Vor 20 Jahren bedeutete die Antwort, Sicherungsbänder oder externe Festplatten hervorzuholen
+
+00:00:13.700 --> 00:00:15.360
+oder den Backup-Server irgendwo im Schrank zu suchen.
+
+00:00:15.760 --> 00:00:18.160
+Sie mussten Medien wechseln, Kassetten beschriften und hoffen, dass nichts schief geht.
+
+00:00:18.700 --> 00:00:20.740
+Und das ist der Punkt. Sie wussten erst, ob Ihr Backup funktioniert,
+
+00:00:20.860 --> 00:00:22.120
+wenn Sie es tatsächlich wiederherstellen wollen.
+
+00:00:22.480 --> 00:00:23.860
+Azure Backup ändert diese Gleichung.
+
+00:00:24.280 --> 00:00:26.360
+Keine Bänder, keine lokalen Server, kein Daumendrücken mehr.
+
+00:00:26.360 --> 00:00:30.300
+Am Ende dieser Folge werden Sie genau verstehen, was Azure Backup ist,
+
+00:00:30.420 --> 00:00:32.420
+was es schützt und wie es im Hintergrund funktioniert.
+
+00:00:34.120 --> 00:00:35.900
+Beginnen wir mit der einfachsten Definition.
+
+00:00:36.640 --> 00:00:37.940
+Was Azure Backup eigentlich ist?
+
+00:00:38.540 --> 00:00:41.100
+Azure Backup ist Microsofts integrierter Sicherungsdienst für die Cloud.
+
+00:00:41.740 --> 00:00:43.740
+Doch diese einfache Antwort verbirgt etwas Größeres.
+
+00:00:44.260 --> 00:00:45.300
+Es ist überhaupt kein einzelnes Werkzeug.
+
+00:00:45.840 --> 00:00:49.720
+Es ist eine vernetzte Plattform, die virtuelle Maschinen, Datenbanken, Dateifreigaben
+
+00:00:49.720 --> 00:00:51.980
+und sogar Computer in ihrem eigenen Büro schützt.
+
+00:00:53.400 --> 00:00:55.720
+Anstatt Backup-Hardware und Software selbst zu verwalten,
+
+00:00:55.720 --> 00:00:58.200
+kümmert sich Azure um Speicher, Zeitplanung und Sicherheit.
+
+00:00:58.880 --> 00:01:01.580
+Sie sagen dem System, was geschützt werden soll und wie oft und es erledigt den Rest.
+
+00:01:01.920 --> 00:01:03.500
+Stellen Sie es sich wie ein Schließfach bei einer Bank vor.
+
+00:01:03.940 --> 00:01:06.580
+Sie legen Ihre Wertsachen hinein und die Bank kümmert sich um die Sicherheit,
+
+00:01:06.740 --> 00:01:07.720
+den Brandschutz und den Tresor.
+
+00:01:08.100 --> 00:01:09.880
+Wenn Sie etwas zurückhaben müssen, holen Sie es einfach an.
+
+00:01:10.180 --> 00:01:11.760
+Sie bauen sicher keinen eigenen Tresor in Ihren Keller.
+
+00:01:12.240 --> 00:01:13.360
+Azure Backup funktioniert genauso.
+
+00:01:13.940 --> 00:01:16.080
+Sie kaufen keine Backup-Server und verwalten keine Bandwechsel.
+
+00:01:16.840 --> 00:01:19.400
+Sie entscheiden nur, was wichtig ist und lassen Azure es sicher speichern.
+
+00:01:19.560 --> 00:01:21.580
+Das ist der wahre Unterschied zum herkömmlichen Backup.
+
+00:01:21.980 --> 00:01:24.000
+Keine Bandwechsel, keine Verwaltung externer Speicher
+
+00:01:24.000 --> 00:01:26.260
+und kein Daumen drückt mehr in der Hoffnung, dass es im Ernstfall funktioniert.
+
+00:01:26.860 --> 00:01:30.300
+Im Hintergrund nutzt Azure Backup für die meisten Workloads einen sogenannten Agenten.
+
+00:01:30.780 --> 00:01:32.980
+Das ist eine kleine Software, die auf Ihren Maschinen installiert wird.
+
+00:01:33.340 --> 00:01:35.120
+Egal, ob diese in Azure oder bei Ihnen im Büro stehen.
+
+00:01:35.740 --> 00:01:38.060
+Dieser Agent koordiniert den Backup-Prozess und sagt Azure,
+
+00:01:38.160 --> 00:01:40.300
+wann ein Snapshot erstellt werden soll, welche Daten sich geändert haben
+
+00:01:40.300 --> 00:01:41.460
+und wohin die Kopie gesendet werden soll.
+
+00:01:41.960 --> 00:01:44.200
+Nun ist es aber so, dass Sie bei virtuellen Azure-Maschinen
+
+00:01:44.200 --> 00:01:45.420
+nichts manuell installieren müssen.
+
+00:01:45.820 --> 00:01:48.320
+Wenn Sie das Backup für eine VM über das Portal aktivieren,
+
+00:01:48.420 --> 00:01:50.120
+installiert Azure diese Erweiterung automatisch.
+
+00:01:50.680 --> 00:01:51.500
+Ein Klick und es ist erledigt.
+
+00:01:52.020 --> 00:01:53.460
+Azure Backup ist wirklich ein verwalteter Dienst.
+
+00:01:53.460 --> 00:01:55.960
+Sie definieren die Richtlinie, es kümmert sich um die Ausführung.
+
+00:01:56.440 --> 00:01:58.840
+Kein Backup-Server zum Patchen, kein Speicher-Array zum Erweitern
+
+00:01:58.840 --> 00:02:01.860
+und kein Rätselraten, ob Ihr vollständiges Wochenend-Backup tatsächlich gelaufen ist.
+
+00:02:01.920 --> 00:02:03.160
+Aber was genau können Sie eigentlich sichern?
+
+00:02:03.580 --> 00:02:04.760
+Genau das sehen wir uns als nächstes an.
+
+00:02:05.220 --> 00:02:06.160
+Was Azure Backup schützt.
+
+00:02:06.560 --> 00:02:08.140
+Was können Sie also tatsächlich mit Azure Backup sichern?
+
+00:02:08.440 --> 00:02:09.580
+Gehen wir die wichtigsten Workloads durch?
+
+00:02:09.940 --> 00:02:11.800
+Azure VMs sind mit Abstand der häufigste Anwendungsfall.
+
+00:02:12.200 --> 00:02:14.220
+Sie aktivieren die Sicherung auf dem virtuellen Computer
+
+00:02:14.220 --> 00:02:16.200
+und Azure erstellt eine vollständige Kopie,
+
+00:02:16.360 --> 00:02:18.420
+einschließlich Betriebssystem, Anwendungen und Datenträger.
+
+00:02:18.820 --> 00:02:21.340
+Wenn diese VM beschädigt oder versehentlich gelöscht wird,
+
+00:02:21.340 --> 00:02:23.500
+können Sie das gesamte System aus der Sicherung wiederherstellen,
+
+00:02:23.580 --> 00:02:25.340
+das Sicherheitsnetz für Ihre Compute-Workloads.
+
+00:02:26.160 --> 00:02:27.180
+VMs sind jedoch nur der Anfang.
+
+00:02:27.640 --> 00:02:29.520
+Was ist mit den Datenbanken, die in diesen Faust geführt werden?
+
+00:02:29.880 --> 00:02:32.460
+SQL-Server und SAP HANA sind nicht einfach nur Dateien auf der Festplatte.
+
+00:02:32.840 --> 00:02:34.800
+Sie haben komplexe Strukturen, Transaktionsprotokolle
+
+00:02:34.800 --> 00:02:36.300
+und spezifische Wiederherstellungsanforderungen.
+
+00:02:36.760 --> 00:02:38.000
+Und Azure Backup versteht das.
+
+00:02:38.440 --> 00:02:41.000
+Wenn Sie eine SQL-Server-Datenbank in einer Azure VM sichern,
+
+00:02:41.120 --> 00:02:42.540
+koordiniert Azure Backup dies mit SQL,
+
+00:02:42.640 --> 00:02:44.800
+um sicherzustellen, dass die Sicherung anwendungskonsistent ist.
+
+00:02:45.300 --> 00:02:47.940
+Das bedeutet, dass die Datenbank bei der Wiederherstellung einwandfrei ist,
+
+00:02:47.940 --> 00:02:50.720
+ohne Beschädigung, fehlende Transaktionen oder Überraschungen oder Überraschungen.
+
+00:02:50.720 --> 00:02:53.580
+Sie können sogar Wiederherstellungspunkte mit einem Ziel von nur 15 Minuten
+
+00:02:53.580 --> 00:02:55.160
+für Ihre kritischsten Datenbanken festlegen.
+
+00:02:55.620 --> 00:02:57.160
+Dir ist etwas, das vielen Leuten nicht bewusst ist?
+
+00:02:57.600 --> 00:02:59.880
+Azure Backup ist nicht nur für Dienste gedacht, die in Azure ausgeführt werden.
+
+00:03:00.360 --> 00:03:03.660
+Es kann auch lokale Server, physische Computer und VMware VMs sichern.
+
+00:03:04.480 --> 00:03:06.220
+Sie senden deren Sicherungen direkt an Azure
+
+00:03:06.220 --> 00:03:08.980
+über den Microsoft Azure Backup-Server oder den Mars-Agenten.
+
+00:03:09.060 --> 00:03:11.120
+Das bedeutet, Sie können Ihre Bandbibliothek stilllegen
+
+00:03:11.120 --> 00:03:12.580
+und Azure als Offsite-Speicher nutzen,
+
+00:03:12.720 --> 00:03:14.540
+kein Versenden von Festplatten an einen Tresor mehr.
+
+00:03:14.940 --> 00:03:16.380
+Azure-Dateifreigaben sind ein weiterer Wirbel.
+
+00:03:16.620 --> 00:03:19.240
+Stellen Sie sich als cloudbasierte freigegebene Ordner vor,
+
+00:03:19.240 --> 00:03:21.500
+wie Sie Ihr Team für die Zusammenarbeit an Dokumenten nutzt.
+
+00:03:21.840 --> 00:03:23.420
+Azure Backup schützt diese Dateifreigaben.
+
+00:03:23.720 --> 00:03:25.460
+Wenn also jemand versehentlich einen Ordner löscht
+
+00:03:25.460 --> 00:03:26.960
+oder Ransomware Ihre Dateien verschlüsselt,
+
+00:03:27.020 --> 00:03:28.680
+können Sie auf eine saubere Version zurückgreifen.
+
+00:03:29.380 --> 00:03:31.340
+Azure Blobs decken Ihre unstrukturierten Daten,
+
+00:03:31.720 --> 00:03:33.600
+Bilder, Protokolle und Sicherungen anderer Systeme.
+
+00:03:33.960 --> 00:03:35.680
+Azure Backup kann auch Ihre Blob-Container schützen.
+
+00:03:36.320 --> 00:03:37.360
+Und dann gibt es noch Azure Discs.
+
+00:03:37.800 --> 00:03:39.640
+Manchmal müssen Sie nicht die gesamte VM sichern.
+
+00:03:40.360 --> 00:03:42.200
+Vielleicht müssen Sie nur einen bestimmten Datenträger schützen.
+
+00:03:42.700 --> 00:03:43.920
+Azure Backup unterstützt auch das.
+
+00:03:44.360 --> 00:03:45.320
+Hier ist ein praktisches Szenario.
+
+00:03:45.320 --> 00:03:47.320
+Stellen Sie sich ein Unternehmen vor,
+
+00:03:47.460 --> 00:03:49.100
+das seine Infrastruktur in Azure betreibt,
+
+00:03:49.240 --> 00:03:51.800
+mit einigen Produktions-VMs, SQL-Server, Datenbanken
+
+00:03:51.800 --> 00:03:52.920
+für seine Geschäftsanwendungen
+
+00:03:52.920 --> 00:03:54.680
+und einem alten Dateiserver im Büro,
+
+00:03:54.820 --> 00:03:55.900
+der noch nicht mikiliert wurde.
+
+00:03:57.040 --> 00:03:59.260
+Mit Azure Backup schützen Sie alles von einem Tresor aus.
+
+00:03:59.740 --> 00:04:00.900
+Die VMs, die Datenbanken,
+
+00:04:01.020 --> 00:04:02.780
+der lokale Dateiserver, eine Backup-Strategie,
+
+00:04:02.880 --> 00:04:04.740
+ein Ort zur Verwaltung, einheitliche Richtlinien.
+
+00:04:05.740 --> 00:04:06.900
+Das ist die Stärke einer einheitlichen.
+
+00:04:07.260 --> 00:04:08.600
+Azure Backup unterstützt eine Menge.
+
+00:04:08.920 --> 00:04:09.740
+Aber die eigentliche Frage ist,
+
+00:04:09.780 --> 00:04:10.760
+wie funktioniert es eigentlich?
+
+00:04:11.760 --> 00:04:13.600
+Find mir heraus, wie Backup tatsächlich funktioniert.
+
+00:04:13.600 --> 00:04:15.320
+Der zweistufige Prozess.
+
+00:04:15.880 --> 00:04:17.540
+Wenn ein Backup ausgelöst wird, passieren zwei Dinge.
+
+00:04:18.260 --> 00:04:20.040
+Diese Unterscheidung zu verstehen, ist der Schlüssel dazu,
+
+00:04:20.160 --> 00:04:22.120
+warum Azure Backup sowohl schnell als auch sicher ist.
+
+00:04:24.060 --> 00:04:24.940
+Phase 1 ist der Snapshot.
+
+00:04:25.320 --> 00:04:27.360
+Azure erstellt eine schreibgeschützte Point-and-Time-Kopie
+
+00:04:27.360 --> 00:04:27.940
+Ihrer Daten.
+
+00:04:29.000 --> 00:04:30.540
+Für einen virtuellen Computer bedeutet das,
+
+00:04:30.620 --> 00:04:31.740
+dass der Zustand der Festplatten
+
+00:04:31.740 --> 00:04:33.060
+genau in diesem Moment erfasst wird.
+
+00:04:33.580 --> 00:04:34.140
+Dies geschieht schnell,
+
+00:04:34.220 --> 00:04:35.220
+da es sich um einen Snapshot handelt.
+
+00:04:35.820 --> 00:04:37.500
+Es werden noch nicht alle Daten beitkopiert.
+
+00:04:38.260 --> 00:04:39.660
+Stellen Sie sich eher wie das Aufnehmen ins Fotos.
+
+00:04:39.660 --> 00:04:42.300
+Der Snapshot wird lokal direkt neben Ihrer VM gespeichert,
+
+00:04:42.340 --> 00:04:44.240
+sodass er für eine schnelle Wiederherstellung verfügbar ist.
+
+00:04:45.040 --> 00:04:46.800
+Phase 2 ist die Übertragung in den Vault.
+
+00:04:47.360 --> 00:04:49.460
+Diese Snapshot-Daten werden zur langfristigen Speicherung
+
+00:04:49.460 --> 00:04:51.940
+in Ihren Recovery Services Vault oder Backup Vault verschoben.
+
+00:04:52.520 --> 00:04:53.120
+Dies dauert länger,
+
+00:04:53.220 --> 00:04:55.000
+da die Daten tatsächlich kopiert und übertragen werden,
+
+00:04:55.100 --> 00:04:56.820
+aber es bietet Ihnen die Sicherheit eines externen Standorts.
+
+00:04:57.220 --> 00:04:59.100
+Sollte Ihre gesamte Azure-Region ausfallen,
+
+00:04:59.260 --> 00:05:00.780
+sind Ihre Backup-Daten im Vault sicher.
+
+00:05:01.640 --> 00:05:04.000
+Dieser zweistufige Ansatz ermöglicht eine sofortige Wiederherstellung.
+
+00:05:04.900 --> 00:05:06.440
+Da der Snapshot lokal gespeichert ist,
+
+00:05:06.440 --> 00:05:09.600
+können Sie eine VM anhand der Snapshots der letzten Tage fast sofort wiederherstellen,
+
+00:05:09.680 --> 00:05:11.520
+ohne auf die Daten aus dem Vault warten zu müssen.
+
+00:05:12.620 --> 00:05:13.840
+Für ältere Wiederherstellungspunkte,
+
+00:05:13.880 --> 00:05:15.180
+die bereits in den Vault verschoben wurden,
+
+00:05:15.460 --> 00:05:16.400
+dauert die Wiederherstellung länger,
+
+00:05:16.540 --> 00:05:17.900
+aber die Daten sind weiterhin vorhanden.
+
+00:05:18.440 --> 00:05:20.400
+Nach dem ersten Backup wird alles noch effizienter.
+
+00:05:21.060 --> 00:05:22.660
+Azure Backup verwendet inkrementelle Backups.
+
+00:05:23.380 --> 00:05:24.760
+Nach dem ersten vollständigen Backup
+
+00:05:24.760 --> 00:05:26.060
+werden nur noch die Änderungen übertragen,
+
+00:05:26.140 --> 00:05:27.280
+nicht jedes Mal die gesamte VM.
+
+00:05:27.880 --> 00:05:29.020
+Wenn Sie ein paar Dateien ändern,
+
+00:05:29.160 --> 00:05:30.920
+werden nur diese geänderten Blöcke übertragen,
+
+00:05:31.000 --> 00:05:32.400
+was Zeit und Speicherplatz spart.
+
+00:05:32.400 --> 00:05:34.380
+Richtlinien steuern alles.
+
+00:05:34.720 --> 00:05:35.700
+Sie definieren die Häufigkeit wie zum
+
+00:05:35.700 --> 00:05:37.260
+täglich, stündlich oder wöchentlich.
+
+00:05:37.580 --> 00:05:38.680
+Sie definieren die Aufbewahrung,
+
+00:05:38.760 --> 00:05:40.260
+also wie viele Tage, Wochen, Monate oder Jahre
+
+00:05:40.260 --> 00:05:41.740
+jeder Wiederherstellungspunkt behalten werden soll.
+
+00:05:42.080 --> 00:05:42.620
+Und Sie definieren,
+
+00:05:42.720 --> 00:05:43.860
+wann ältere Backups in einen kälteren,
+
+00:05:43.940 --> 00:05:44.760
+günstigen Speicher verschoben wird.
+
+00:05:45.080 --> 00:05:47.320
+Eine Richtlinie könnte eine VM einmal täglich sichern,
+
+00:05:47.560 --> 00:05:49.160
+die letzten 30 Tagespunkte behalten
+
+00:05:49.160 --> 00:05:51.500
+und alles Ältere in die Archivebene verschieben,
+
+00:05:51.580 --> 00:05:53.140
+wo die Speicherung nur einen Bruchteil kostet.
+
+00:05:54.180 --> 00:05:55.060
+Hier ist ein konkretes Beispiel.
+
+00:05:55.400 --> 00:05:55.920
+Nehmen wir an,
+
+00:05:56.020 --> 00:05:57.060
+Sie haben eine produktive VM,
+
+00:05:57.160 --> 00:05:58.200
+auf der eine Webanwendung läuft
+
+00:05:58.200 --> 00:05:59.440
+und Sie legen eine Richtlinie fest,
+
+00:05:59.520 --> 00:06:01.000
+die diese jede Nacht um zwei sichert.
+
+00:06:01.620 --> 00:06:03.040
+Sie behalten 30 tägliche Backups
+
+00:06:03.040 --> 00:06:04.620
+sowie 12 monatliche Backups zur Compliance.
+
+00:06:04.960 --> 00:06:06.280
+Nach dem ersten vollständigen Backup
+
+00:06:06.280 --> 00:06:07.720
+überträgt jedes nachfolgende Backup
+
+00:06:07.720 --> 00:06:08.320
+nur noch die Änderung.
+
+00:06:08.580 --> 00:06:10.500
+Wenn Ihre VM 100 GB an Daten hat,
+
+00:06:10.540 --> 00:06:12.100
+sich aber nur 2 GB pro Tag ändern,
+
+00:06:12.200 --> 00:06:13.720
+beträgt jedes nächtliche Backup etwa 2 GB.
+
+00:06:13.940 --> 00:06:14.640
+Das ist effizient.
+
+00:06:15.400 --> 00:06:16.500
+Jetzt kennen Sie die Mechanismen.
+
+00:06:16.720 --> 00:06:18.100
+Aber Azure Backup unterscheidet sich
+
+00:06:18.100 --> 00:06:19.320
+in einem Punkt von allem anderen,
+
+00:06:19.600 --> 00:06:20.620
+wie sicher es wirklich ist.
+
+00:06:21.660 --> 00:06:22.600
+Die Sicherheitsebene,
+
+00:06:22.720 --> 00:06:24.080
+warum Azure Backup so schwer anzugreifen.
+
+00:06:24.520 --> 00:06:25.500
+Sprechen wir über Sicherheit,
+
+00:06:25.620 --> 00:06:26.660
+denn hier hebt sich Azure Backup
+
+00:06:26.660 --> 00:06:28.380
+wirklich von der herkömmlichen Arbeitsweise ab.
+
+00:06:29.020 --> 00:06:30.080
+Jedes Backup, das Sie erstellen,
+
+00:06:30.160 --> 00:06:31.200
+wird standardmäßig verschlüsselt.
+
+00:06:31.560 --> 00:06:32.880
+Im Tresor wird es im Ruhezustand
+
+00:06:32.880 --> 00:06:35.400
+mit einer 256-Bit-AES-Verschlüsselung geschützt.
+
+00:06:35.740 --> 00:06:36.700
+Das ist der Industriestandard.
+
+00:06:37.280 --> 00:06:38.360
+Während die Daten von Ihrem Rechner
+
+00:06:38.360 --> 00:06:39.420
+in den Tresor übertragen werden,
+
+00:06:39.480 --> 00:06:41.420
+sind Sie durch HTTPS und TLS 1.2
+
+00:06:41.420 --> 00:06:42.120
+oder höher geschützt.
+
+00:06:42.740 --> 00:06:44.300
+Selbst wenn jemand den Datenstrom abfangen würde,
+
+00:06:44.400 --> 00:06:45.060
+könnte er nichts lesen.
+
+00:06:45.460 --> 00:06:46.360
+Aber das ist nur der Anfang.
+
+00:06:46.880 --> 00:06:48.260
+Jedes Backup-Tool bietet Verschlüsselung.
+
+00:06:48.520 --> 00:06:49.620
+Was Azure Backup besonders macht,
+
+00:06:49.700 --> 00:06:50.280
+ist das, was passiert,
+
+00:06:50.360 --> 00:06:50.940
+wenn jemand versucht,
+
+00:06:51.000 --> 00:06:51.780
+Ihre Backups zu löschen.
+
+00:06:52.180 --> 00:06:53.320
+Zuerst gibt es das Soft-Delete-Verfahren.
+
+00:06:53.320 --> 00:06:54.660
+Wenn ein Backup versehentlich
+
+00:06:54.660 --> 00:06:55.740
+oder absichtlich gelöscht wird,
+
+00:06:55.800 --> 00:06:56.440
+verschwindet es nicht.
+
+00:06:56.840 --> 00:06:58.480
+Es bleibt 14 Tage lang versteckt im Tresor.
+
+00:06:58.880 --> 00:06:59.720
+Sie können es wiederherstellen.
+
+00:07:00.100 --> 00:07:00.860
+Das gibt Ihnen die Chance,
+
+00:07:00.960 --> 00:07:02.020
+den Schaden rückgängig zu machen,
+
+00:07:02.080 --> 00:07:02.900
+bevor er permanent wird.
+
+00:07:03.360 --> 00:07:04.480
+Stellen Sie es sich wie einen Papierkorb
+
+00:07:04.480 --> 00:07:05.320
+mit einer Wiederherstellungsfrist.
+
+00:07:05.660 --> 00:07:06.640
+Sie haben immer noch die Option,
+
+00:07:06.740 --> 00:07:07.160
+ihn zu leeren,
+
+00:07:07.280 --> 00:07:08.860
+aber Sie müssen dies ausdrücklich bestätigen.
+
+00:07:09.420 --> 00:07:10.380
+Dann gibt es die Unveränderlichkeit,
+
+00:07:10.520 --> 00:07:11.620
+Immutability und das ist noch wichtiger.
+
+00:07:11.960 --> 00:07:13.160
+Sobald Sie eine Aufbewahrungsfrist
+
+00:07:13.160 --> 00:07:14.240
+für ein Backup festgelegt haben,
+
+00:07:14.320 --> 00:07:15.300
+kann dieser Wiederherstellungspunkt
+
+00:07:15.300 --> 00:07:16.160
+nicht vorzeitig gelöscht werden.
+
+00:07:16.460 --> 00:07:17.420
+Nicht von einem Administrator,
+
+00:07:17.640 --> 00:07:18.160
+nicht von jemandem,
+
+00:07:18.240 --> 00:07:19.560
+der ein Administrator-Konto kompromittiert.
+
+00:07:23.320 --> 00:07:25.600
+Wenn Ihre Richtlinie besagt,
+
+00:07:25.720 --> 00:07:26.420
+dass tägliche Backups
+
+00:07:26.420 --> 00:07:27.680
+30 Tage lang aufbewahrt werden,
+
+00:07:27.760 --> 00:07:29.280
+ist jeder dieser 30 Wiederherstellungspunkte
+
+00:07:29.280 --> 00:07:29.780
+sicher gesperrt.
+
+00:07:30.100 --> 00:07:31.900
+Ein Angreifer könnte Ihre Produktionsformen löschen,
+
+00:07:31.980 --> 00:07:33.540
+aber die Backup-Daten kann er nicht antasten.
+
+00:07:34.200 --> 00:07:35.060
+Und jetzt wird es interessant.
+
+00:07:35.800 --> 00:07:37.200
+Azure Backup unterstützt die sogenannte
+
+00:07:37.200 --> 00:07:39.280
+Multi-User-Autorisierung, kurz MUA.
+
+00:07:39.900 --> 00:07:40.660
+Kritische Vorgänge,
+
+00:07:41.060 --> 00:07:42.520
+wie das Deaktivieren von Soft-Delete
+
+00:07:42.520 --> 00:07:43.740
+oder der Unveränderlichkeit,
+
+00:07:44.180 --> 00:07:44.940
+erfordern die Zustimmung
+
+00:07:44.940 --> 00:07:46.360
+von zwei verschiedenen Personen.
+
+00:07:47.040 --> 00:07:48.860
+Eine einzelne Person kann das Backup nicht gefährden,
+
+00:07:48.920 --> 00:07:49.980
+nicht einmal ein globaler Administrator.
+
+00:07:50.180 --> 00:07:51.720
+Sie benötigen zwei autorisierte Benutzer,
+
+00:07:51.720 --> 00:07:52.180
+die zustimmen,
+
+00:07:52.280 --> 00:07:53.180
+bevor diese Sicherheitseinstellung
+
+00:07:53.180 --> 00:07:53.580
+geändert werden.
+
+00:07:53.800 --> 00:07:54.740
+Das ist eine ernstzunehmende
+
+00:07:54.740 --> 00:07:55.940
+Verteidigung gegen interne Bedrohung.
+
+00:07:56.380 --> 00:07:57.240
+Für Unternehmen mit strengen
+
+00:07:57.240 --> 00:07:58.080
+Netzwerkregeln können Sie
+
+00:07:58.080 --> 00:07:59.380
+private Endpunkte verwenden.
+
+00:08:00.260 --> 00:08:01.480
+Dadurch wird der gesamte Backup-Verkehr
+
+00:08:01.480 --> 00:08:02.740
+über Ihr virtuelles Azure-Netzwerk
+
+00:08:02.740 --> 00:08:04.080
+mittels privater IP-Adressen geleitet.
+
+00:08:04.620 --> 00:08:05.440
+Die Daten berühren niemals
+
+00:08:05.440 --> 00:08:06.080
+das öffentliche Internet.
+
+00:08:06.680 --> 00:08:07.600
+Wenn Ihr Compliance-Team
+
+00:08:07.600 --> 00:08:08.800
+eine Netzwerkisolierung verlangt,
+
+00:08:08.860 --> 00:08:09.900
+erreichen Sie diese auf diesem Weg.
+
+00:08:10.360 --> 00:08:11.080
+Doch hier ist die eigentliche
+
+00:08:11.080 --> 00:08:11.660
+Weiterentwicklung,
+
+00:08:11.720 --> 00:08:12.580
+die die meisten Leute nicht kennen.
+
+00:08:12.920 --> 00:08:13.800
+Azure Backup lässt sich jetzt
+
+00:08:13.800 --> 00:08:14.920
+mit Microsoft Defender for Cloud
+
+00:08:14.920 --> 00:08:15.400
+integrieren.
+
+00:08:15.860 --> 00:08:16.880
+Das bedeutet, dass Ihre Backup-
+
+00:08:16.880 --> 00:08:17.620
+Wiederherstellungspunkte
+
+00:08:17.620 --> 00:08:18.540
+auf Mauerwege gescannt werden können,
+
+00:08:18.540 --> 00:08:19.200
+bevor Sie sie wiederherstellen.
+
+00:08:19.440 --> 00:08:20.060
+Stellen Sie sich vor,
+
+00:08:20.120 --> 00:08:21.140
+einen Ransomware-Angriff trifft
+
+00:08:21.140 --> 00:08:21.560
+Ihr Unternehmen.
+
+00:08:21.920 --> 00:08:22.800
+Ihre Produktionssysteme
+
+00:08:22.800 --> 00:08:23.260
+sind verschlüsselt.
+
+00:08:23.760 --> 00:08:24.760
+Sie planen eine Wiederherstellung
+
+00:08:24.760 --> 00:08:25.380
+aus einem Backup,
+
+00:08:25.440 --> 00:08:26.340
+aber was ist, wenn das Backup
+
+00:08:26.340 --> 00:08:27.160
+selbst Mauerwege enthält?
+
+00:08:27.440 --> 00:08:28.560
+Das ist absolute Alptom-Szenar.
+
+00:08:28.980 --> 00:08:29.700
+Mit dieser Integration
+
+00:08:29.700 --> 00:08:30.700
+kann Defender Ihre
+
+00:08:30.700 --> 00:08:31.480
+Wiederherstellungspunkte
+
+00:08:31.480 --> 00:08:32.000
+und markiert alle,
+
+00:08:32.080 --> 00:08:33.220
+die Anzeichen einer Infektion aufweisen.
+
+00:08:33.500 --> 00:08:34.400
+Sie können dann einen sauberen
+
+00:08:34.400 --> 00:08:35.340
+Wiederherstellungspunkt wählen,
+
+00:08:35.400 --> 00:08:36.180
+anstatt das Problem erneut
+
+00:08:36.180 --> 00:08:36.580
+wiederherzigen.
+
+00:08:36.840 --> 00:08:38.040
+Bei einem echten Ransomware-Angriff
+
+00:08:38.040 --> 00:08:39.180
+versuchen Angreifer fast immer
+
+00:08:39.180 --> 00:08:40.160
+zuerst die Backups zu löschen.
+
+00:08:40.420 --> 00:08:41.380
+Das ist die gängige Vorgehensweise.
+
+00:08:41.380 --> 00:08:42.840
+Unveränderlichkeit unterbindet das.
+
+00:08:43.140 --> 00:08:43.840
+EMOA verhindert,
+
+00:08:43.920 --> 00:08:45.180
+dass ein einzelnes kompromittiertes Konto
+
+00:08:45.180 --> 00:08:46.140
+den Schutz deaktivieren kann.
+
+00:08:46.520 --> 00:08:47.260
+SoftDelete bietet Ihnen
+
+00:08:47.260 --> 00:08:48.360
+ein Zeitfenster für die Wiederherstellung.
+
+00:08:48.760 --> 00:08:49.480
+Und das Scan durch Defender
+
+00:08:49.480 --> 00:08:50.280
+stellt sicher, dass die Daten,
+
+00:08:50.340 --> 00:08:50.820
+die Sie wiederherstellen,
+
+00:08:50.880 --> 00:08:51.400
+auch wirklich sauber sind.
+
+00:08:51.680 --> 00:08:52.700
+Azure Backup ist also sicher,
+
+00:08:52.940 --> 00:08:53.800
+aber wie schneidet es im Vergleich
+
+00:08:53.800 --> 00:08:54.400
+zu den Tools ab,
+
+00:08:54.420 --> 00:08:55.240
+die Sie möglicherweise bereits nutzen?
+
+00:08:55.920 --> 00:08:56.900
+Azure Backup im Vergleich
+
+00:08:56.900 --> 00:08:57.600
+zu den Alternativen.
+
+00:08:58.180 --> 00:08:59.300
+Sprechen wir über Alternativen,
+
+00:08:59.500 --> 00:09:00.400
+denn Sie haben Optionen.
+
+00:09:00.760 --> 00:09:01.340
+Und die richtige Wahl
+
+00:09:01.340 --> 00:09:02.300
+hängt von Ihrer Situation ab.
+
+00:09:02.900 --> 00:09:04.060
+Herkömmliche On-Premises Backups
+
+00:09:04.060 --> 00:09:05.040
+sind das, was die meisten Unternehmen
+
+00:09:05.040 --> 00:09:05.680
+seit Jahrzehnten tun.
+
+00:09:06.300 --> 00:09:07.300
+Sie kaufen einen Backup-Server,
+
+00:09:07.300 --> 00:09:07.960
+Sie kaufen Speicher,
+
+00:09:08.040 --> 00:09:09.460
+Sie kaufen Backup-Software-Lizenzen.
+
+00:09:10.100 --> 00:09:11.020
+Sie verwalten Bandwechsel
+
+00:09:11.020 --> 00:09:11.860
+oder Festplatten-Erase.
+
+00:09:12.240 --> 00:09:12.820
+Sie kümmern sich selbst
+
+00:09:12.820 --> 00:09:13.540
+um die externe Speicherung.
+
+00:09:14.040 --> 00:09:15.400
+Die Anschaffungskosten sind beträchtlich.
+
+00:09:15.940 --> 00:09:16.920
+Server, Speicher, Software
+
+00:09:16.920 --> 00:09:18.160
+und das Personal für den Betrieb.
+
+00:09:18.880 --> 00:09:19.760
+Und Sie müssen diese Hardware
+
+00:09:19.760 --> 00:09:21.200
+alle drei bis fünf Jahre erneuern.
+
+00:09:21.740 --> 00:09:22.600
+Der betriebliche Aufwand
+
+00:09:22.600 --> 00:09:23.140
+summiert sich schnell.
+
+00:09:23.560 --> 00:09:24.560
+Azure Backup stellt dieses Modell auf.
+
+00:09:24.960 --> 00:09:25.720
+Sie zahlen Abonnement.
+
+00:09:26.060 --> 00:09:27.140
+Keine Hardware, keine Software,
+
+00:09:27.220 --> 00:09:28.000
+die auf einem Backup-Server
+
+00:09:28.000 --> 00:09:28.760
+installiert werden muss.
+
+00:09:28.840 --> 00:09:29.240
+Keine Bänder.
+
+00:09:29.640 --> 00:09:30.600
+Die Kosten sind vorhersehbar
+
+00:09:30.600 --> 00:09:31.260
+und skalieren mit dem,
+
+00:09:31.320 --> 00:09:32.060
+was Sie tatsächlich schützen.
+
+00:09:32.620 --> 00:09:33.740
+Dann gibt es Drittanbietertools
+
+00:09:33.740 --> 00:09:34.120
+wie Veeam.
+
+00:09:37.300 --> 00:09:38.860
+Multi-Cloud-Hybrid-On-Prem
+
+00:09:38.860 --> 00:09:40.300
+und erweiterte Wiederherstellung-Szenarien
+
+00:09:40.300 --> 00:09:40.700
+in der Cloud.
+
+00:09:41.180 --> 00:09:41.960
+Es bietet Funktionen
+
+00:09:41.960 --> 00:09:43.300
+wie sofortige VM-Wiederherstellung
+
+00:09:43.300 --> 00:09:44.440
+und tiefgreifende Ransom-Aschuld.
+
+00:09:44.940 --> 00:09:45.740
+Wenn Ihre Umgebung
+
+00:09:45.740 --> 00:09:46.560
+eine Mischung aus Azure,
+
+00:09:46.800 --> 00:09:48.420
+On-Prem-VMware und sogar AWS ist,
+
+00:09:48.560 --> 00:09:50.220
+bietet Veeam eine einheitliche Plattform
+
+00:09:50.220 --> 00:09:50.840
+zur Verwaltung.
+
+00:09:51.500 --> 00:09:52.100
+Das ist Leistungsstatt.
+
+00:09:52.360 --> 00:09:53.160
+Aber es gibt einen Kompromiss.
+
+00:09:53.660 --> 00:09:54.300
+Veeam ist teurer,
+
+00:09:54.420 --> 00:09:55.700
+insbesondere in kleinerem Maßstab.
+
+00:09:56.160 --> 00:09:57.040
+Eine kleine Azure VM
+
+00:09:57.040 --> 00:09:58.680
+mit 50 GB Festplattenspeicher
+
+00:09:58.680 --> 00:09:59.680
+kostet mit Azure Backup
+
+00:09:59.680 --> 00:10:00.860
+etwa 10 Dollar pro Monat.
+
+00:10:01.580 --> 00:10:02.160
+Der gleiche Schutz
+
+00:10:02.160 --> 00:10:03.160
+mit einem Drittanbietertool
+
+00:10:03.160 --> 00:10:04.460
+könnte das zwei- bis dreifache kosten.
+
+00:10:04.460 --> 00:10:05.760
+Und Sie müssen weiterhin
+
+00:10:05.760 --> 00:10:07.020
+die Backup-Infrastruktur verwalten,
+
+00:10:07.100 --> 00:10:07.680
+den Veeam-Server,
+
+00:10:07.760 --> 00:10:09.020
+die Repositories, die Proxies.
+
+00:10:09.760 --> 00:10:10.800
+Wo also gewinnt Azure Backup?
+
+00:10:11.120 --> 00:10:12.240
+Durch Einfachheit und Integration.
+
+00:10:12.720 --> 00:10:13.680
+Es ist direkt in Azure integriert.
+
+00:10:13.880 --> 00:10:15.080
+Sie müssen keinen Backup-Server bereitstellen.
+
+00:10:15.540 --> 00:10:15.960
+Sie müssen keinen
+
+00:10:15.960 --> 00:10:16.880
+separaten Speicher verwalten.
+
+00:10:17.220 --> 00:10:17.880
+Sie legen Richtlinien
+
+00:10:17.880 --> 00:10:18.980
+direkt über das Azure-Portal fest.
+
+00:10:19.220 --> 00:10:19.900
+Es funktioniert mit Ihren
+
+00:10:19.900 --> 00:10:21.080
+bestehenden Azure-ABC-Rollen.
+
+00:10:21.500 --> 00:10:22.320
+Es lässt sich zur Governance
+
+00:10:22.320 --> 00:10:23.260
+mit Azure Policy integrieren.
+
+00:10:23.740 --> 00:10:24.880
+Für eine reine Azure-Umgebung
+
+00:10:24.880 --> 00:10:26.060
+ist es die kostengünstigste
+
+00:10:26.060 --> 00:10:26.920
+und einfachste Option.
+
+00:10:27.520 --> 00:10:28.640
+Wo gewinnen Drittanbietertools?
+
+00:10:29.100 --> 00:10:29.820
+In komplexen Umgebungen.
+
+00:10:30.520 --> 00:10:31.300
+Wenn Sie Workloads
+
+00:10:31.300 --> 00:10:32.440
+über mehrere Clouds hinweg
+
+00:10:32.440 --> 00:10:34.280
+oder eine bedeutende On-Premises-Präsenz haben,
+
+00:10:34.580 --> 00:10:35.640
+rechtfertigt ein Tool wie Veeam
+
+00:10:35.640 --> 00:10:36.160
+seine Kosten
+
+00:10:36.160 --> 00:10:37.460
+durch eine einheitliche Verwaltung.
+
+00:10:38.300 --> 00:10:39.260
+Und für Organisationen
+
+00:10:39.260 --> 00:10:40.660
+mit strengen Ransomware-Anforderungen
+
+00:10:40.660 --> 00:10:41.940
+bieten Drittanbietertools
+
+00:10:41.940 --> 00:10:43.300
+oft eine tiefere Unveränderlichkeit
+
+00:10:43.300 --> 00:10:44.420
+und R-Gap-Architekturen.
+
+00:10:45.540 --> 00:10:46.520
+Die ehrliche Einschätzung ist,
+
+00:10:46.820 --> 00:10:47.560
+wenn Ihre Workloads
+
+00:10:47.560 --> 00:10:48.320
+primär in Azure liegen,
+
+00:10:48.560 --> 00:10:49.560
+beginnen Sie mit Azure Backup.
+
+00:10:50.140 --> 00:10:51.380
+Es ist einfach kosteneffizient
+
+00:10:51.380 --> 00:10:52.100
+und tief integriert.
+
+00:10:53.040 --> 00:10:54.240
+Wenn Ihre Umgebung komplex ist,
+
+00:10:54.420 --> 00:10:55.200
+Multicloud-Umfahrstack
+
+00:10:55.200 --> 00:10:55.960
+auf On-Premises setzt
+
+00:10:55.960 --> 00:10:56.680
+oder fortgeschrittenen
+
+00:10:56.680 --> 00:10:57.740
+Notfall-Wiederherstellung erfordert,
+
+00:10:57.800 --> 00:10:58.800
+evaluieren Sie Drittanbietertools.
+
+00:10:58.800 --> 00:10:59.680
+Sie kosten mehr,
+
+00:10:59.780 --> 00:11:00.700
+bieten in diesen Szenarien
+
+00:11:00.700 --> 00:11:01.180
+aber auch mehr.
+
+00:11:01.600 --> 00:11:01.980
+Sie haben gesehen,
+
+00:11:02.040 --> 00:11:02.480
+was es schützt
+
+00:11:02.480 --> 00:11:03.120
+und wie es funktioniert.
+
+00:11:03.580 --> 00:11:04.120
+Aber lassen Sie uns
+
+00:11:04.120 --> 00:11:04.820
+über den Teil sprechen,
+
+00:11:04.880 --> 00:11:05.700
+den niemand diskutieren möchte.
+
+00:11:06.240 --> 00:11:06.900
+Was kostet es?
+
+00:11:07.840 --> 00:11:08.840
+Die Kosten von Azure Backup.
+
+00:11:09.280 --> 00:11:10.180
+Lassen Sie uns über Geld sprechen.
+
+00:11:10.680 --> 00:11:11.480
+Azure Backup verwendet
+
+00:11:11.480 --> 00:11:12.580
+ein zweiteiliges Preismodell,
+
+00:11:12.660 --> 00:11:13.540
+das ziemlich unkompliziert ist.
+
+00:11:14.160 --> 00:11:15.160
+Sie zahlen eine Instanzgebühr
+
+00:11:15.160 --> 00:11:16.260
+für jede geschützte Ressource
+
+00:11:16.260 --> 00:11:17.240
+sowie Speicherkosten
+
+00:11:17.240 --> 00:11:18.040
+für den Tresor selbst.
+
+00:11:18.580 --> 00:11:19.540
+Die Instanzgebühr skaliert
+
+00:11:19.540 --> 00:11:20.320
+mit der Größe dessen,
+
+00:11:20.340 --> 00:11:20.740
+was Sie schützen.
+
+00:11:21.320 --> 00:11:22.820
+Eine kleine VM unter 50 GB
+
+00:11:22.820 --> 00:11:24.100
+kostet etwa 5 Dollar pro Mall.
+
+00:11:24.500 --> 00:11:25.300
+Eine mittlere VM
+
+00:11:25.300 --> 00:11:26.220
+bis 500 GB
+
+00:11:26.220 --> 00:11:27.380
+kostet etwa 10 Dollar.
+
+00:11:27.380 --> 00:11:28.780
+Für Datenbanken
+
+00:11:28.780 --> 00:11:29.600
+wie SQL-Server
+
+00:11:29.600 --> 00:11:30.780
+ist die Gebühr pro Instanz höher.
+
+00:11:31.160 --> 00:11:32.260
+Etwa 30 Dollar pro Monat
+
+00:11:32.260 --> 00:11:32.960
+für eine Datenbank
+
+00:11:32.960 --> 00:11:33.740
+unter 500 GB.
+
+00:11:34.620 --> 00:11:35.460
+Die Speicherkosten
+
+00:11:35.460 --> 00:11:35.980
+hängen davon ab,
+
+00:11:36.040 --> 00:11:36.400
+wie redundant
+
+00:11:36.400 --> 00:11:37.380
+Ihre Backups sein sollen.
+
+00:11:38.720 --> 00:11:39.840
+Lokal redundanter Speicher,
+
+00:11:39.960 --> 00:11:40.420
+kurz LAS,
+
+00:11:40.540 --> 00:11:41.420
+ist die günstigste Option.
+
+00:11:42.160 --> 00:11:42.900
+Ihre Backup-Daten
+
+00:11:42.900 --> 00:11:43.460
+werden dreifach
+
+00:11:43.460 --> 00:11:44.300
+innerhalb eines einzelnen
+
+00:11:44.300 --> 00:11:45.280
+Rechenzentrums repliziert.
+
+00:11:46.120 --> 00:11:47.060
+Georedundanter Speicher
+
+00:11:47.060 --> 00:11:47.720
+oder GRS
+
+00:11:47.720 --> 00:11:48.640
+repliziert Ihre Daten
+
+00:11:48.640 --> 00:11:49.720
+in eine gekoppelte Region
+
+00:11:49.720 --> 00:11:50.380
+an einem anderen
+
+00:11:50.380 --> 00:11:51.480
+geografischen Standort.
+
+00:11:52.140 --> 00:11:52.580
+Das schützt Sie,
+
+00:11:52.660 --> 00:11:53.260
+falls eine gesamte
+
+00:11:53.260 --> 00:11:54.080
+Azure-Region ausfällt.
+
+00:11:54.740 --> 00:11:55.400
+Es kostet zudem
+
+00:11:55.400 --> 00:11:56.200
+etwa doppelt so viel
+
+00:11:56.200 --> 00:11:56.660
+wie LAS.
+
+00:11:56.660 --> 00:11:57.840
+Hier ist ein praktisches
+
+00:11:57.840 --> 00:11:58.260
+Beispiel.
+
+00:11:59.020 --> 00:11:59.340
+Angenommen,
+
+00:11:59.420 --> 00:11:59.840
+Sie haben eine
+
+00:11:59.840 --> 00:12:00.860
+200 GB VM
+
+00:12:00.860 --> 00:12:01.780
+mit LAS-Speicher.
+
+00:12:02.520 --> 00:12:03.320
+Ihre Gesamtkosten,
+
+00:12:03.420 --> 00:12:04.480
+Instanzgebühr plus Speicher
+
+00:12:04.480 --> 00:12:05.040
+liegen bei etwa
+
+00:12:05.040 --> 00:12:06.240
+15 bis 20 Dollar
+
+00:12:06.240 --> 00:12:06.800
+pro Monat.
+
+00:12:08.040 --> 00:12:08.660
+Für eine Umgebung
+
+00:12:08.660 --> 00:12:09.340
+mit 10 VMs
+
+00:12:09.340 --> 00:12:09.920
+liegen Sie bei etwa
+
+00:12:09.920 --> 00:12:11.020
+etwa 150 Dollar
+
+00:12:11.020 --> 00:12:11.540
+pro Monat.
+
+00:12:12.480 --> 00:12:13.100
+Vergleichen Sie das
+
+00:12:13.100 --> 00:12:13.740
+mit dem Kauf eines
+
+00:12:13.740 --> 00:12:14.820
+dedizierten Backup-Servers,
+
+00:12:14.920 --> 00:12:15.420
+Speicher-Arrays
+
+00:12:15.420 --> 00:12:16.280
+und Software-Lizenzen.
+
+00:12:16.680 --> 00:12:17.440
+Und plötzlich erscheint
+
+00:12:17.440 --> 00:12:18.120
+die Cloud-Option
+
+00:12:18.120 --> 00:12:19.120
+sehr vernünftig.
+
+00:12:19.600 --> 00:12:20.320
+Aber es gibt Möglichkeiten,
+
+00:12:20.420 --> 00:12:20.840
+Geld zu sparen.
+
+00:12:21.140 --> 00:12:21.920
+Selektives Disk-Backup
+
+00:12:21.920 --> 00:12:22.600
+ist ein wichtiger Faktor.
+
+00:12:22.960 --> 00:12:23.480
+Wenn Ihre VM
+
+00:12:23.480 --> 00:12:24.340
+mehrere Festplatten hat,
+
+00:12:24.340 --> 00:12:24.840
+aber nur zwei
+
+00:12:24.840 --> 00:12:25.740
+kritische Daten enthalten,
+
+00:12:25.740 --> 00:12:26.820
+können Sie den Rest ausschließen.
+
+00:12:27.340 --> 00:12:28.520
+Weniger gesicherte Festplatten
+
+00:12:28.520 --> 00:12:29.280
+bedeuten niedrigere
+
+00:12:29.280 --> 00:12:29.900
+Instanzgebühren
+
+00:12:29.900 --> 00:12:30.680
+und weniger verbrauchten
+
+00:12:30.680 --> 00:12:30.900
+Speicher.
+
+00:12:31.200 --> 00:12:31.940
+Erweiterte Richtlinien
+
+00:12:31.940 --> 00:12:32.580
+sind ein weiterer Hebel.
+
+00:12:32.960 --> 00:12:33.620
+Anstatt tägliche
+
+00:12:33.620 --> 00:12:34.460
+Voll-Backups zu erstellen,
+
+00:12:34.540 --> 00:12:35.460
+können Sie eine Richtlinie nutzen,
+
+00:12:35.560 --> 00:12:36.540
+die häufigere inkrementelle
+
+00:12:36.540 --> 00:12:37.480
+und weniger vollständige
+
+00:12:37.480 --> 00:12:38.100
+Backups erstellt.
+
+00:12:38.380 --> 00:12:38.940
+Das erste Backup
+
+00:12:38.940 --> 00:12:39.600
+ist immer vollständig.
+
+00:12:39.980 --> 00:12:40.740
+Danach werden nur noch
+
+00:12:40.740 --> 00:12:41.600
+Änderungen übertragen.
+
+00:12:41.980 --> 00:12:42.680
+Im Laufe der Zeit
+
+00:12:42.680 --> 00:12:43.260
+reduziert das
+
+00:12:43.260 --> 00:12:44.080
+den Speicherverbrauch
+
+00:12:44.080 --> 00:12:44.540
+drastisch.
+
+00:12:45.340 --> 00:12:46.340
+Die Archivebene ist der Ort,
+
+00:12:46.400 --> 00:12:47.100
+an dem eine langfristige
+
+00:12:47.100 --> 00:12:47.680
+Aufbewahrung kommt.
+
+00:12:48.120 --> 00:12:48.880
+Wenn Sie Backups aus
+
+00:12:48.880 --> 00:12:49.520
+Compliance- oder
+
+00:12:49.520 --> 00:12:50.440
+regulatorischen Gründen
+
+00:12:50.440 --> 00:12:51.580
+über Jahre aufbewahren müssen,
+
+00:12:51.680 --> 00:12:52.260
+kann das Verschieben
+
+00:12:52.260 --> 00:12:53.520
+älterer Wiederherstellungspunkte
+
+00:12:53.520 --> 00:12:54.160
+in die Archivebene
+
+00:12:54.160 --> 00:12:55.080
+zehnmal günstiger sein
+
+00:12:55.080 --> 00:12:55.640
+als die Speicherung
+
+00:12:55.640 --> 00:12:56.340
+im Standardspeicher.
+
+00:12:57.040 --> 00:12:57.620
+Der Kompromiss
+
+00:12:57.620 --> 00:12:58.860
+sind längere Wiederherstellungszeiten,
+
+00:12:58.960 --> 00:12:59.420
+aber für Daten,
+
+00:12:59.480 --> 00:13:00.400
+auf die Sie fast nie zugreifen,
+
+00:13:00.460 --> 00:13:00.920
+ist das in Ordnung.
+
+00:13:01.340 --> 00:13:02.200
+Reservierte Kapazität
+
+00:13:02.200 --> 00:13:02.980
+ist ebenfalls verfügbar.
+
+00:13:03.340 --> 00:13:03.800
+Wenn Sie sich für
+
+00:13:03.800 --> 00:13:04.540
+eins oder drei Jahre
+
+00:13:04.540 --> 00:13:05.380
+auf ein berechenbares
+
+00:13:05.380 --> 00:13:06.280
+Backup-Speichervolumen
+
+00:13:06.280 --> 00:13:07.180
+festlegen, erhalten Sie
+
+00:13:07.180 --> 00:13:08.340
+bis zu 40% Rabatt
+
+00:13:08.340 --> 00:13:08.740
+gegenüber der
+
+00:13:08.740 --> 00:13:10.160
+nutzungsabhängigen Abrechnung.
+
+00:13:10.200 --> 00:13:10.860
+Das versteckte Risiko
+
+00:13:10.860 --> 00:13:11.780
+ist eine zu lange Aufbewahrung.
+
+00:13:11.960 --> 00:13:12.540
+Es ist einfach,
+
+00:13:12.620 --> 00:13:13.600
+eine Richtlinie festzulegen,
+
+00:13:13.660 --> 00:13:14.380
+die täglich Backups
+
+00:13:14.380 --> 00:13:15.200
+für alles sieben Jahre lang
+
+00:13:15.200 --> 00:13:15.540
+speichert,
+
+00:13:15.600 --> 00:13:16.480
+aber die meisten dieser Daten
+
+00:13:16.480 --> 00:13:17.120
+werden nie benötigt.
+
+00:13:17.340 --> 00:13:18.080
+Sie benötigen eine lange
+
+00:13:18.080 --> 00:13:18.720
+Aufbewahrungsfrist
+
+00:13:18.720 --> 00:13:19.340
+nur für Compliance-Daten.
+
+00:13:19.660 --> 00:13:20.660
+Alles andere kann gekürzt werden.
+
+00:13:21.040 --> 00:13:21.960
+Überprüfen Sie Ihre Richtlinien
+
+00:13:21.960 --> 00:13:22.360
+dann regelmäßig.
+
+00:13:22.760 --> 00:13:23.360
+Wenn eine Workload
+
+00:13:23.360 --> 00:13:23.900
+von Produktion
+
+00:13:23.900 --> 00:13:24.900
+auf Entwicklung umgestellt wurde,
+
+00:13:24.980 --> 00:13:25.720
+passen Sie die Aufbewahrung.
+
+00:13:25.960 --> 00:13:27.100
+Wenn eine VM stillgelegt wurde,
+
+00:13:27.180 --> 00:13:28.220
+entfernen Sie deren Backup-Element.
+
+00:13:28.720 --> 00:13:29.680
+Jeder Wiederherstellungspunkt,
+
+00:13:29.720 --> 00:13:30.440
+den Sie nicht benötigen,
+
+00:13:30.500 --> 00:13:31.160
+ist verschwendetes Geld.
+
+00:13:31.660 --> 00:13:32.620
+Da Sie nun die Kosten kennen,
+
+00:13:32.700 --> 00:13:33.960
+sprechen wir über die größte Falle
+
+00:13:33.960 --> 00:13:35.040
+und wie man sie vermeidet.
+
+00:13:36.900 --> 00:13:37.840
+Der größte Fehler,
+
+00:13:38.080 --> 00:13:39.180
+Ihre Backups nicht zu testen.
+
+00:13:39.680 --> 00:13:40.520
+Hier ist eine harte Wahrheit,
+
+00:13:40.560 --> 00:13:41.220
+die die meisten Unternehmen
+
+00:13:41.220 --> 00:13:42.120
+auf die schmerzhafte Tour lernen.
+
+00:13:42.420 --> 00:13:43.480
+Das einzige gute Backup
+
+00:13:43.480 --> 00:13:43.840
+ist eines,
+
+00:13:43.940 --> 00:13:44.400
+das Sie tatsächlich
+
+00:13:44.400 --> 00:13:45.500
+wiederhergestellt und validiert haben.
+
+00:13:45.740 --> 00:13:46.780
+Die Leute werden wirklich gut darin,
+
+00:13:46.840 --> 00:13:47.660
+täglich Backups zu erstellen.
+
+00:13:48.200 --> 00:13:49.360
+Sie konfigurieren Richtlinien,
+
+00:13:49.440 --> 00:13:50.080
+überwachen Jobs
+
+00:13:50.080 --> 00:13:51.120
+und fühlen sich gut,
+
+00:13:51.180 --> 00:13:51.800
+wenn das Dashboard
+
+00:13:51.800 --> 00:13:52.680
+grüne Häkchen zeigt.
+
+00:13:53.580 --> 00:13:54.360
+Aber Sie üben fast nie
+
+00:13:54.360 --> 00:13:55.040
+die Wiederherstellung
+
+00:13:55.040 --> 00:13:56.700
+und genau da geschieht das Desaster.
+
+00:13:57.540 --> 00:13:58.740
+Wenn ein echter Vorfall eintritt,
+
+00:13:58.800 --> 00:13:59.860
+eine beschädigte Datenbank,
+
+00:13:59.940 --> 00:14:00.700
+ein Ransomware-Angriff,
+
+00:14:00.780 --> 00:14:01.640
+ein versehentliches Löschen,
+
+00:14:01.900 --> 00:14:02.780
+entdecken Sie die Wahrheit.
+
+00:14:03.380 --> 00:14:04.540
+Vielleicht war das Backup beschädigt,
+
+00:14:04.800 --> 00:14:05.960
+vielleicht wurden die falschen Daten erfasst,
+
+00:14:06.040 --> 00:14:06.460
+vielleicht schlägt der
+
+00:14:06.460 --> 00:14:07.320
+Wiederherstellungsprozess
+
+00:14:07.320 --> 00:14:08.020
+mittendrin fehl.
+
+00:14:11.220 --> 00:14:11.860
+und die Uhr tickt.
+
+00:14:12.280 --> 00:14:13.060
+Häufige Fallstricke
+
+00:14:13.060 --> 00:14:14.140
+sind überraschend vorhersehbar.
+
+00:14:14.660 --> 00:14:15.840
+Wiederherstellung des gesamten Servers,
+
+00:14:15.920 --> 00:14:17.140
+obwohl nur die Datenbank benötigt wurde.
+
+00:14:17.580 --> 00:14:18.360
+Wiederherstellung der VM,
+
+00:14:18.540 --> 00:14:19.000
+aber vergessen,
+
+00:14:19.120 --> 00:14:19.780
+dass Anwendungen danach
+
+00:14:19.780 --> 00:14:20.880
+neu konfiguriert werden müssen.
+
+00:14:21.360 --> 00:14:22.560
+Wiederherstellung in ein anderes Netzwerk
+
+00:14:22.560 --> 00:14:23.000
+und feststellen,
+
+00:14:23.100 --> 00:14:23.780
+dass die IP-Adressen
+
+00:14:23.780 --> 00:14:24.460
+nicht übereinstimmen.
+
+00:14:25.100 --> 00:14:25.800
+Das sind die Probleme,
+
+00:14:25.900 --> 00:14:27.000
+die eine Wiederherstellungsoperation
+
+00:14:27.000 --> 00:14:28.300
+in eine mehrtägige Krise verwandeln.
+
+00:14:28.760 --> 00:14:29.520
+Die Lösung ist einfach,
+
+00:14:29.620 --> 00:14:30.200
+aber unbequem.
+
+00:14:30.620 --> 00:14:31.440
+Planen Sie regelmäßige
+
+00:14:31.440 --> 00:14:32.240
+Wiederherstellungsübungen.
+
+00:14:32.520 --> 00:14:33.560
+Vierteljährlich ist ein guter Rhythmus.
+
+00:14:33.880 --> 00:14:34.800
+Wählen Sie eine Test-VM,
+
+00:14:34.900 --> 00:14:36.160
+stellen Sie diese aus dem Backup wieder her,
+
+00:14:36.160 --> 00:14:36.660
+überprüfen Sie,
+
+00:14:36.700 --> 00:14:37.480
+ob die Daten intakt sind,
+
+00:14:37.540 --> 00:14:37.940
+stellen Sie sicher,
+
+00:14:38.020 --> 00:14:38.400
+dass die Anwendung
+
+00:14:38.400 --> 00:14:39.120
+ordnungsgemäß starten,
+
+00:14:39.140 --> 00:14:39.480
+löschen Sie sich.
+
+00:14:39.620 --> 00:14:40.760
+Das erste Mal wird es länger dauern.
+
+00:14:41.160 --> 00:14:42.080
+Beim zweiten Mal geht es schneller.
+
+00:14:42.600 --> 00:14:43.360
+Beim dritten Durchlauf
+
+00:14:43.360 --> 00:14:43.800
+hat Ihr Team
+
+00:14:43.800 --> 00:14:44.540
+einen dokumentierten,
+
+00:14:44.660 --> 00:14:45.440
+wiederholbaren Prozess.
+
+00:14:46.060 --> 00:14:47.180
+Azure Backup macht dies einfacher,
+
+00:14:47.280 --> 00:14:47.660
+als es klingt.
+
+00:14:48.360 --> 00:14:49.700
+Die Sofortwiederherstellungsfunktion
+
+00:14:49.700 --> 00:14:50.380
+ermöglicht es Ihnen,
+
+00:14:50.500 --> 00:14:51.600
+fast unmittelbar aus einem lokalen
+
+00:14:51.600 --> 00:14:52.420
+Snapshot wiederherzustellen.
+
+00:14:52.720 --> 00:14:53.380
+Sie müssen nicht daten,
+
+00:14:53.420 --> 00:14:54.660
+bis die Daten aus dem Tresor zurückkommen.
+
+00:14:55.020 --> 00:14:56.100
+Sie können eine wiederhergestellte
+
+00:14:56.100 --> 00:14:56.780
+VM hochfahren,
+
+00:14:56.880 --> 00:14:58.020
+überprüfen und in unter einer Stunde
+
+00:14:58.020 --> 00:14:58.640
+wieder herunterfahren.
+
+00:14:59.020 --> 00:14:59.720
+Das Fazit ist hart,
+
+00:14:59.780 --> 00:15:00.220
+aber notwendig.
+
+00:15:00.220 --> 00:15:01.600
+Eine Backup-Strategie
+
+00:15:01.600 --> 00:15:02.640
+ohne Wiederherstellungstest
+
+00:15:02.640 --> 00:15:03.560
+ist nur eine teure Hoffnung.
+
+00:15:04.020 --> 00:15:04.820
+Sie bezahlen für einen Schutz,
+
+00:15:04.940 --> 00:15:06.160
+dessen Funktion Sie nicht bestätigt haben.
+
+00:15:06.780 --> 00:15:07.600
+Planen Sie Ihre erste Übung
+
+00:15:07.600 --> 00:15:08.100
+für diesen Monat,
+
+00:15:08.140 --> 00:15:08.860
+nicht für das nächste Quartal.
+
+00:15:09.280 --> 00:15:09.800
+Diesen Monat.
+
+00:15:10.280 --> 00:15:10.820
+Erste Schritte.
+
+00:15:11.280 --> 00:15:12.100
+Ihre ersten drei Schritte.
+
+00:15:12.700 --> 00:15:13.680
+Sie müssen Ihr Backup testen.
+
+00:15:14.020 --> 00:15:14.560
+Nur fangen Sie an.
+
+00:15:15.240 --> 00:15:15.720
+Lassen Sie mich Sie
+
+00:15:15.720 --> 00:15:16.800
+durch drei einfache Schritte führen.
+
+00:15:17.360 --> 00:15:17.800
+Schritt 1.
+
+00:15:18.000 --> 00:15:18.540
+Finden Sie heraus,
+
+00:15:18.620 --> 00:15:19.420
+was Sie nicht verlieren dürfen.
+
+00:15:20.020 --> 00:15:20.880
+Ihre kritischen VMs,
+
+00:15:20.940 --> 00:15:21.500
+Ihre Datenbanken,
+
+00:15:21.500 --> 00:15:22.520
+Ihre Datei freigaben.
+
+00:15:23.140 --> 00:15:23.680
+Versuchen Sie nicht,
+
+00:15:23.760 --> 00:15:24.480
+alles auf einmal zu sichern.
+
+00:15:25.180 --> 00:15:26.140
+Beginnen Sie mit der Arbeitslast,
+
+00:15:26.200 --> 00:15:27.500
+deren Verlust am meisten schmerzen würde.
+
+00:15:27.920 --> 00:15:28.720
+Das hat oberste Priorität.
+
+00:15:29.200 --> 00:15:29.620
+Schritt 2.
+
+00:15:29.740 --> 00:15:30.100
+Erstellen Sie
+
+00:15:30.100 --> 00:15:31.320
+einen Recovery Services-Tresor.
+
+00:15:31.600 --> 00:15:32.160
+Betrachten Sie ihn
+
+00:15:32.160 --> 00:15:32.960
+als ein Safe für Ihre Backup.
+
+00:15:33.400 --> 00:15:33.860
+Stellen Sie sicher,
+
+00:15:33.940 --> 00:15:34.940
+dass Sie ihn in derselben Region
+
+00:15:34.940 --> 00:15:36.080
+wie Ihre Ressourcen erstellen.
+
+00:15:36.440 --> 00:15:37.280
+Das ist der häufigste Fehler,
+
+00:15:37.360 --> 00:15:37.780
+den Leute machen.
+
+00:15:38.180 --> 00:15:38.800
+Der Tresor landet
+
+00:15:38.800 --> 00:15:39.440
+in der falschen Region.
+
+00:15:39.920 --> 00:15:41.300
+Wenn Ihre VM in Westeuropa läuft,
+
+00:15:41.380 --> 00:15:41.920
+muss auch Ihr Tresor
+
+00:15:41.920 --> 00:15:42.580
+in Westeuropa sein.
+
+00:15:43.000 --> 00:15:43.600
+Halten Sie sie zusammen.
+
+00:15:44.060 --> 00:15:44.460
+Schritt 3.
+
+00:15:44.660 --> 00:15:45.660
+Legen Sie Ihre Backup-Richtlinie fest.
+
+00:15:46.080 --> 00:15:46.780
+Wie oft sollen Backups
+
+00:15:46.780 --> 00:15:47.280
+ausgeführt werden?
+
+00:15:47.580 --> 00:15:48.220
+Täglich ist Standard.
+
+00:15:48.580 --> 00:15:49.480
+Wie lange sollten Sie sie aufbauen?
+
+00:15:49.780 --> 00:15:50.500
+30 bis 90 Tage
+
+00:15:50.500 --> 00:15:51.280
+sind ein guter Ausgangspunkt.
+
+00:15:51.600 --> 00:15:52.300
+Was ist mit Rundanz?
+
+00:15:52.700 --> 00:15:53.660
+LRS speichert Kopien
+
+00:15:53.660 --> 00:15:54.420
+in einem Rechenzentrum
+
+00:15:54.420 --> 00:15:54.940
+und spart Kosten.
+
+00:15:55.360 --> 00:15:56.840
+GRS kopiert für zusätzliche Sicherheit
+
+00:15:56.840 --> 00:15:57.580
+in der zweiten Region.
+
+00:15:58.000 --> 00:15:59.260
+Sobald Ihre Richtlinie bereit ist,
+
+00:15:59.340 --> 00:16:00.100
+aktivieren Sie das Backup
+
+00:16:00.100 --> 00:16:00.700
+für Ihre erste Form.
+
+00:16:01.020 --> 00:16:01.940
+Azure Backup installiert
+
+00:16:01.940 --> 00:16:02.940
+die Erweiterung automatisch.
+
+00:16:03.360 --> 00:16:04.200
+Beginnen Sie mit einer VM,
+
+00:16:04.400 --> 00:16:04.880
+bestätigen Sie,
+
+00:16:04.960 --> 00:16:06.180
+dass das erste Backup abgeschlossen ist
+
+00:16:06.180 --> 00:16:06.880
+und erweitern Sie dann.
+
+00:16:07.580 --> 00:16:08.380
+Das Azure Backup Center
+
+00:16:08.380 --> 00:16:09.080
+bietet ein Dashboard
+
+00:16:09.080 --> 00:16:10.020
+zur Überwachung von allem.
+
+00:16:10.680 --> 00:16:11.460
+Das ist also Azure Backup.
+
+00:16:11.780 --> 00:16:12.720
+Es ist nicht nur ein Backup-Tool.
+
+00:16:13.120 --> 00:16:13.920
+Es ist ein Sicherheitsnetz,
+
+00:16:13.980 --> 00:16:14.540
+das Sie einmal einrichten.
+
+00:16:14.940 --> 00:16:16.100
+Sie brauchen keine Bänder oder Server
+
+00:16:16.100 --> 00:16:17.020
+und müssen sich nie fragen,
+
+00:16:17.100 --> 00:16:17.720
+ob es funktioniert hat.
+
+00:16:17.960 --> 00:16:18.860
+Sie legen Ihre Richtlinie fest.
+
+00:16:18.860 --> 00:16:19.820
+Sie aktivieren den Schutz.
+
+00:16:20.220 --> 00:16:21.160
+Sie testen Ihre Wiederherstellung.
+
+00:16:21.480 --> 00:16:21.760
+Einfach.
+
+00:16:22.120 --> 00:16:22.880
+Beginnen Sie diese Woche
+
+00:16:22.880 --> 00:16:23.880
+mit Ihrer kritischsten VM.
+
+00:16:24.140 --> 00:16:24.700
+Dieser eine Schritt
+
+00:16:24.700 --> 00:16:25.280
+bringt Sie bereits
+
+00:16:25.280 --> 00:16:26.260
+vor die meisten Unternehmen.
+
+00:16:26.660 --> 00:16:27.560
+Abonnieren Sie für mehr Tipps.

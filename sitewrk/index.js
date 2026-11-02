@@ -43,7 +43,7 @@ async function r2Page(request, env, ctx, url, p) {
   return new Response(request.method === "HEAD" ? null : hit.body, { status: 200, headers: h });
 }
 // Datenexporte des Seitenbaus: fuer Programme da, nicht fuer die Suche (Allowlist - .well-known, openapi.json, agent.json, episodes.json, llms*.txt bleiben sichtbar)
-const NOINDEX = /^\/(entities\.json|entities-src\.json|entities\.jsonld|og-manifest\.json|seo-report\.json|top\.json|show\/redirects\.json|show-notes\/|blog-import\/|blog-content\/)|\.jsonld$/i;
+const NOINDEX = /^\/(search\/|entities\.json|entities-src\.json|entities\.jsonld|og-manifest\.json|seo-report\.json|top\.json|show\/redirects\.json|show-notes\/|blog-import\/|blog-content\/)|\.jsonld$/i;
 
 async function redirectMap() {
   const r = await fetch("https://www.m365.fm/show/redirects.json", { cf: { cacheTtl: 3600, cacheEverything: true } });
@@ -90,6 +90,10 @@ export default {
     if (res.status === 404 && env.MIGRATED === "1" && /^(\/[a-z]{2})?\/show\/episodes\/[a-z0-9-]+\/?$/.test(p)) {   // T12: umbenannte Folge (show/redirects.json), vor dem R2-Rueckfall mit der alten Seite
       const to = (await redirectMap())[p.replace(/\/+$/, "")];
       if (to) return Response.redirect(url.origin + to + url.search, 301);
+    }
+    if (res.status === 404 && env.PAGES && /^\/search\/(manifest|part-\d{1,4})\.json$/.test(p)) {   // T37: Suchindex liegt im R2-Bucket (pages/search/...)
+      const obj = await env.PAGES.get("pages" + p).catch(() => null);
+      if (obj) return new Response(obj.body, { headers: { "content-type": "application/json; charset=utf-8", "cache-control": "public, max-age=300, s-maxage=600", "x-robots-tag": "noindex", "access-control-allow-origin": "*" } });
     }
     if (res.status === 404 && env.PAGES && !IMG.test(p) && (request.method === "GET" || request.method === "HEAD")) {
       const r2 = await r2Page(request, env, ctx, url, p);

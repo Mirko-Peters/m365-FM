@@ -1,0 +1,754 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.040
+El tema de hoy es algo de lo que casi todos han oído hablar, pero casi nadie puede explicar en términos sencillos.
+
+00:00:04.920 --> 00:00:06.500
+Regeneración aumentada por recuperación.
+
+00:00:06.900 --> 00:00:11.540
+Has visto el acroemo por todas partes, anuncios de Microsoft, charlas en conferencias de e-applogs, pero ¿qué significa realmente?
+
+00:00:12.340 --> 00:00:14.460
+Y lo más importante, porque es muy importante, aquí está el punto.
+
+00:00:14.920 --> 00:00:17.260
+Los modelos de lenguaje grandes como GPT-4O son potentes.
+
+00:00:17.900 --> 00:00:22.260
+Pueden escribir ensayos, presumir documentos, incluso generar código, pero vienen con dos grandes problemas.
+
+00:00:23.000 --> 00:00:24.340
+Primero, su conocimiento está con el tiempo.
+
+00:00:24.660 --> 00:00:27.260
+Pregúntale a ChatGPT sobre algo que pasó ayer y no tiene ni idea.
+
+00:00:27.260 --> 00:00:32.880
+Segundo, estos modelos nunca vieron los datos internos de tu empresa, tus políticas, detalles de productos, correos de clientes.
+
+00:00:33.460 --> 00:00:36.100
+Por eso, cuando le haces una pregunta a un LM sobre tu negocio, está adivinando.
+
+00:00:36.440 --> 00:00:38.580
+Así que ahí es donde entra la generación aumentada por recuperación.
+
+00:00:38.880 --> 00:00:41.080
+Rack no es un modelo nuevo, no es un GPT más grande o mejor.
+
+00:00:41.380 --> 00:00:42.480
+Es un enfoque totalmente diferente.
+
+00:00:43.380 --> 00:00:46.420
+En lugar de pedirle al LM que extraiga respuestas de su memoria y entrenamiento,
+
+00:00:46.540 --> 00:00:50.820
+Rack primero busca la información correcta en tus propios datos y se la entrega al modelo junto con la pregunta.
+
+00:00:52.020 --> 00:00:57.180
+El modelo luego usa ese contexto para darte respuestas basadas en contenido real y actualizado, no en suposiciones.
+
+00:00:57.880 --> 00:01:00.560
+Sin Rack, tu guía trabaja con una memoria de hace meses o años.
+
+00:01:01.080 --> 00:01:03.380
+Con Rack, trabaja con tus documentos reales en este momento.
+
+00:01:04.000 --> 00:01:06.740
+Esa es la diferencia entre una guía que suena segura pero puede estar equivocada
+
+00:01:06.740 --> 00:01:09.040
+y una que te muestra exactamente de dónde sacó su respuesta.
+
+00:01:09.700 --> 00:01:10.620
+Esto es lo que cubriremos hoy.
+
+00:01:11.100 --> 00:01:13.320
+Primero, veremos los dos problemas que hacen necesario el Rack.
+
+00:01:13.860 --> 00:01:15.440
+Luego analizaremos qué es realmente el Rack.
+
+00:01:15.580 --> 00:01:17.500
+La recuperación, la aumentación, la generación.
+
+00:01:18.000 --> 00:01:20.160
+Después recorreremos los servicios clave de Azure.
+
+00:01:20.260 --> 00:01:23.140
+Azure AI Search, Azure Open AI y Azure AI Foundry.
+
+00:01:23.740 --> 00:01:26.460
+Y terminaremos con un ejemplo real para que veas cómo encajan las piezas.
+
+00:01:27.140 --> 00:01:27.960
+Comencemos con el men sí.
+
+00:01:28.620 --> 00:01:30.280
+Una vez que lo ves, la solución se vuelve obvia.
+
+00:01:31.320 --> 00:01:32.580
+Los dos problemas que tienen los LLM.
+
+00:01:33.040 --> 00:01:34.540
+Entonces, ¿qué tienen de malo los modelos de lenguaje grano?
+
+00:01:34.780 --> 00:01:35.480
+Dos cosas son reales.
+
+00:01:36.420 --> 00:01:37.660
+Primero, su conocimiento está congelado.
+
+00:01:38.100 --> 00:01:38.460
+Piénsalo.
+
+00:01:38.840 --> 00:01:43.200
+Cuando se entrenó GPT-4O, aprendió de una instantánea de Internet que ahora tiene meses o años de antigüedad,
+
+00:01:43.580 --> 00:01:46.640
+así que no conoce nuevos productos, regulaciones recientes ni las noticias de ayer.
+
+00:01:47.220 --> 00:01:50.020
+Pregúntale sobre un cambio de política de la semana pasada y no tiene forma de saberlo.
+
+00:01:50.640 --> 00:01:52.440
+Esa información simplemente no está en sus datos de entrenamiento.
+
+00:01:53.840 --> 00:01:59.280
+Segundo, los LLM nunca vieron tus datos privados, tus documentos internos, correos de clientes, bases de datos propietarias.
+
+00:01:59.820 --> 00:02:01.480
+El modelo no tiene acceso a nada de eso.
+
+00:02:02.100 --> 00:02:05.780
+Entonces, cuando un empleado pregunta sobre sus procesos comerciales específicos, el modelo no puede responder.
+
+00:02:06.200 --> 00:02:07.080
+No sabe lo que usted sabe.
+
+00:02:07.520 --> 00:02:09.040
+Algunas personas creen que el ajuste fino resuelve.
+
+00:02:09.480 --> 00:02:11.820
+Toma el modelo base y lo entrena un poco más con sus propios datos.
+
+00:02:12.220 --> 00:02:13.500
+Pero el ajuste fino tiene sus propios problemas.
+
+00:02:13.900 --> 00:02:14.360
+Es costoso.
+
+00:02:14.780 --> 00:02:16.780
+Te paga por el tiempo de GPU y el esfuerzo de ingeniería.
+
+00:02:17.280 --> 00:02:18.260
+No soluciona la obsolescencia.
+
+00:02:18.940 --> 00:02:21.760
+Una vez que realiza el ajuste fino, el modelo queda congelado en ese momento.
+
+00:02:22.240 --> 00:02:25.880
+Y no puede manejar datos que cambian frecuentemente, como niveles de inventario o precios.
+
+00:02:26.460 --> 00:02:28.820
+El ajuste fino es como enseñarle un libro de texto a alguien de memoria.
+
+00:02:28.820 --> 00:02:31.580
+Útil para un asino, pueden consultar el periódico de hoy.
+
+00:02:32.220 --> 00:02:33.240
+La verdadera solución es simple.
+
+00:02:34.020 --> 00:02:39.160
+De al modelo acceso a su conocimiento en el momento que necesite responder, en lugar de intentar meter todo en su memoria.
+
+00:02:39.820 --> 00:02:40.720
+Lo obligue a memorizarlo todo.
+
+00:02:41.160 --> 00:02:43.760
+Permita que busque información en tiempo real, desde sus datos reales.
+
+00:02:43.840 --> 00:02:44.360
+Eso es lo que hace Rack.
+
+00:02:44.620 --> 00:02:45.940
+Una idea simple, pero que lo cambia todo.
+
+00:02:46.840 --> 00:02:47.400
+¿Qué es realmente?
+
+00:02:48.260 --> 00:02:49.520
+Entonces, aquí está Rack en una frase.
+
+00:02:49.520 --> 00:02:53.080
+En lugar de pedirle al modelo que extraiga una respuesta de sus datos de entrenamiento,
+
+00:02:53.180 --> 00:02:57.380
+primero buscamos la información relevante y luego se la proporcionamos al modelo junto con la pregunta.
+
+00:02:58.360 --> 00:02:59.080
+Esa es la idea central.
+
+00:02:59.540 --> 00:03:00.340
+Tres pasos simples.
+
+00:03:00.800 --> 00:03:02.420
+Recuperar, aumentar y generar.
+
+00:03:03.140 --> 00:03:04.180
+Permítame darle una analogía.
+
+00:03:04.580 --> 00:03:05.300
+Piensa en un bibliotecario.
+
+00:03:05.960 --> 00:03:07.460
+Entra en una biblioteca y hace una pregunta.
+
+00:03:08.160 --> 00:03:10.400
+No esperaría que el bibliotecario haya memorizado cada libro, ¿verdad?
+
+00:03:10.800 --> 00:03:11.220
+Eso es R.
+
+00:03:11.580 --> 00:03:15.540
+En cambio, le pide que busque el libro correcto, lo abra en la página adecuada y le lea la respuesta.
+
+00:03:15.960 --> 00:03:17.120
+El bibliotecario no memoriza nada.
+
+00:03:18.000 --> 00:03:19.080
+Primero recupera y luego lee.
+
+00:03:19.800 --> 00:03:21.000
+Y eso es exactamente lo que hace Rack.
+
+00:03:21.320 --> 00:03:23.060
+Primero la recuperación, segundo la generación.
+
+00:03:23.320 --> 00:03:24.720
+Así es como funciona realmente en la práctica.
+
+00:03:25.280 --> 00:03:26.200
+Un usuario es una pregunta.
+
+00:03:26.580 --> 00:03:30.560
+El sistema entonces busca una base de conocimiento, sus documentos, sus datos, su información privada.
+
+00:03:31.040 --> 00:03:35.620
+Lo que encuentre se envía al modelo de lenguaje grande y el modelo genera una respuesta basada en ese contexto.
+
+00:03:36.060 --> 00:03:37.100
+Y esta es la parte importante.
+
+00:03:37.380 --> 00:03:38.820
+El LM nunca ve sus datos sin procesar.
+
+00:03:38.920 --> 00:03:40.840
+Solo ve lo que el sistema de recuperación le entrega.
+
+00:03:41.140 --> 00:03:41.960
+Eso no es un inconveniente.
+
+00:03:42.140 --> 00:03:43.220
+Es una característica de seguridad.
+
+00:03:43.720 --> 00:03:45.880
+Sus documentos confidenciales permanecen en su propia nación.
+
+00:03:45.880 --> 00:03:49.820
+En el momento de la consulta, el modelo solo recibe los fragmentos relevantes que necesita para responder.
+
+00:03:50.160 --> 00:03:52.740
+Sin entrenamiento con sus datos, sin memorización, sin filtraciones.
+
+00:03:53.460 --> 00:03:54.740
+Sus datos se quedan donde pertenecen.
+
+00:03:54.980 --> 00:03:56.920
+Entonces, Rack resuelve ambos problemas de los que hablamos antes.
+
+00:03:57.500 --> 00:03:58.120
+Datos obsoletos.
+
+00:03:58.340 --> 00:03:58.800
+No es un problema.
+
+00:03:59.300 --> 00:04:00.720
+Su base de conocimiento se mantiene actualizada.
+
+00:04:00.960 --> 00:04:01.540
+Datos privados.
+
+00:04:01.920 --> 00:04:03.640
+El modelo solo ve lo que usted elige recuperar.
+
+00:04:03.980 --> 00:04:09.160
+Es como darle al bibliotecario acceso a su archivador, pero permitiéndole sacar solo la carpeta que necesita justo cuando la necesita.
+
+00:04:10.620 --> 00:04:11.820
+Incrustaciones vectoriales semánticas.
+
+00:04:12.420 --> 00:04:14.380
+Ahora quizás se pregunte cómo funciona realmente esa búsqueda.
+
+00:04:14.380 --> 00:04:18.000
+No se trata de hacer coincidir palabras clave ni de ejecutar un control más F en su documento.
+
+00:04:18.360 --> 00:04:19.320
+Es algo mucho más inteligente.
+
+00:04:19.600 --> 00:04:22.080
+Se llama búsqueda semántica y funciona con incrustaciones vectoriales.
+
+00:04:22.540 --> 00:04:23.760
+Permíteme explicarle qué es una incrustación.
+
+00:04:24.100 --> 00:04:28.700
+Una incrustación vectorial es una larga lista de números que captura el significado de un texto como si fueran coordenadas en un mapa.
+
+00:04:28.880 --> 00:04:31.380
+Cada documento obtiene su propia coordenada en ese mapa de significado.
+
+00:04:32.360 --> 00:04:37.180
+Cuando usted hace una pregunta, el sistema también convierte su pregunta en coordenadas y luego encuentra los documentos más cercanos a ella.
+
+00:04:37.580 --> 00:04:38.480
+La clave aquí es semántica.
+
+00:04:38.480 --> 00:04:42.060
+No se trata de encontrar las palabras exactas, sino de entender conceptos.
+
+00:04:42.540 --> 00:04:48.580
+Si busca hoteles económicos, el sistema puede encontrar documentos sobre alojamientos asequibles incluso si esas palabras exactas nunca aparecen.
+
+00:04:49.080 --> 00:04:49.380
+¿Por qué?
+
+00:04:49.820 --> 00:04:50.880
+Porque el significado es cercano.
+
+00:04:51.540 --> 00:04:55.040
+Las incrustaciones de económico y asequible se sitúan justo al lado de la otra en ese mapa.
+
+00:04:55.040 --> 00:04:59.260
+Un modelo pequeño y especial, como el Text Embedding 3 Large de Azure, que da estas incrustaciones.
+
+00:04:59.640 --> 00:05:03.400
+No es un modelo de lenguaje gigante, por lo que es una herramienta enfocada que realiza una sola tarea.
+
+00:05:04.260 --> 00:05:05.860
+Convertir texto en sus números de coordenada.
+
+00:05:06.340 --> 00:05:07.560
+Esto es lo que hace que Rack sea tan poderoso.
+
+00:05:07.840 --> 00:05:10.720
+Sus documentos se convierten en incrustaciones una vez durante la indexación.
+
+00:05:11.120 --> 00:05:18.020
+Luego, cuando llega una consulta, el sistema encuentra el contenido más relevante en milisegundos, incluso si las palabras exactas del usuario nunca aparecen en los documentos.
+
+00:05:18.540 --> 00:05:21.200
+Entiende la intención, no solo las palabras clave que usted escribe.
+
+00:05:22.160 --> 00:05:23.840
+Azure AI Search, el motor de recuperación.
+
+00:05:23.840 --> 00:05:25.860
+Entonces, ahora comprende el concepto.
+
+00:05:26.180 --> 00:05:27.520
+Primero, recuperarlo, generar.
+
+00:05:27.780 --> 00:05:29.500
+Pero, ¿dónde ocurre realmente toda esa recuperación?
+
+00:05:29.780 --> 00:05:31.360
+Ahí es donde entra en juego Azure AI Search.
+
+00:05:32.060 --> 00:05:35.600
+Azure AI Search es el servicio que almacena, indexa y recupera su contenido.
+
+00:05:36.480 --> 00:05:38.900
+Piénselo como el sistema de archivos para su aplicación Rage.
+
+00:05:39.560 --> 00:05:41.660
+Maneja dos tareas principales y vamos a revisarlas.
+
+00:05:42.180 --> 00:05:43.020
+Primero, la indexación.
+
+00:05:43.300 --> 00:05:44.780
+Es preparar sus datos para que puedan ser buscados.
+
+00:05:45.120 --> 00:05:45.900
+Segundo, la búsqueda.
+
+00:05:46.200 --> 00:05:48.980
+Es encontrar realmente el contenido adecuado cuando alguien hace una pregunta.
+
+00:05:49.520 --> 00:05:51.020
+Revisemos primero el proceso de indexación.
+
+00:05:51.020 --> 00:06:00.340
+Usted comienza apuntando Azure AI Search a su fuente de datos, que podría ser un contenedor de almacenamiento de blobs lleno de archivos PDF, una base de datos SQL con registros de clientes o cualquier otra fuente.
+
+00:06:01.460 --> 00:06:11.420
+El servicio lee esos documentos, los divide en partes más pequeñas llamadas fragmentos, crea incrustaciones vectoriales para cada fragmento usando el modelo de incrustación que mencionamos antes y almacena todo en un índice de búsqueda.
+
+00:06:11.420 --> 00:06:14.820
+Piensa en el índice como un catálogo gigante y altamente organizado.
+
+00:06:15.440 --> 00:06:20.360
+Cada fragmento de contenido recibe un ID único, un bloque de texto y un conjunto de coordenadas en ese mapa de significados.
+
+00:06:20.900 --> 00:06:21.800
+Ahora, proceso de búsqueda.
+
+00:06:22.260 --> 00:06:27.320
+Cuando un usuario hace una pregunta, AI Search convierte esa pregunta en un vector usando el mismo modelo de incrustación.
+
+00:06:27.740 --> 00:06:31.940
+Y luego escanea el índice para encontrar los bloques cuyas coordenadas estén más cerca de las coordenadas de la pregunta.
+
+00:06:32.600 --> 00:06:33.880
+Devuelve las mejores coincidencias.
+
+00:06:34.020 --> 00:06:37.360
+Normalmente las 5 a 10 más relevantes y hace todo esto en milisegundos.
+
+00:06:38.100 --> 00:06:39.260
+Aquí tienen unas opciones sólidas.
+
+00:06:39.260 --> 00:06:44.700
+La búsqueda vectorial pura encuentra contenido por significado, por lo que aparecen conceptos similares aunque las palabras exactas no coinciden.
+
+00:06:44.940 --> 00:06:48.560
+La búsqueda por palabras clave funciona como un buscador tradicional, encontrando coincidencias exactas.
+
+00:06:48.960 --> 00:06:53.140
+O puede usar la búsqueda híbrida, que combina ambos enfoques y esa suele ser la mejor elección.
+
+00:06:53.620 --> 00:06:59.440
+También existe algo llamado reclasificación semántica, que toma esos resultados iniciales y los reordena basándose en que también responden realmente a la pregunta.
+
+00:07:00.200 --> 00:07:02.800
+Es como una segunda pasada que captura cosas que la primera puede haber pasado por alto.
+
+00:07:03.680 --> 00:07:06.320
+Algo que debes saber, Azure AI Search puede resultar costoso.
+
+00:07:06.320 --> 00:07:09.820
+El nivel básico comienza alrededor de $75 al mes y sube a partir de ahí.
+
+00:07:10.440 --> 00:07:14.700
+Si solo está experimentando, usa el nivel gratuito o asegúrese de eliminar sus recursos cuando termine.
+
+00:07:15.480 --> 00:07:17.880
+Sin embargo, para uso en producción, el costo suele valer la pena.
+
+00:07:18.400 --> 00:07:20.400
+Está comprando velocidad y confiabilidad a gran escala.
+
+00:07:21.900 --> 00:07:24.900
+Azure Open AI más AI Foundry Generación y Orquestación.
+
+00:07:24.900 --> 00:07:31.580
+Entonces, ahora sus datos están indexados y listos para la recuperación, pero el LLM aún necesita entender su pregunta y generar una respuesta sólida.
+
+00:07:32.000 --> 00:07:34.340
+Ahí es donde entran Azure Open AI y Azure AI Foundry.
+
+00:07:35.020 --> 00:07:40.540
+Azure Open AI proporciona el modelo de lenguaje real, GPT-4O, GPT-4.1 o cualquier modelo que elija.
+
+00:07:41.080 --> 00:07:42.180
+Este es el motor de generación.
+
+00:07:42.560 --> 00:07:48.220
+Recibe una instrucción que incluye tanto la pregunta original del usuario como el contexto que Azure AI Search recuperó.
+
+00:07:48.700 --> 00:07:52.040
+El modelo lee ese contexto y produce una respuesta basada en lo que encuentra.
+
+00:07:52.700 --> 00:07:54.980
+Ahora, no puede simplemente volcar todo y esperarlo mejor.
+
+00:07:55.620 --> 00:07:59.700
+Necesita una instrucción de sistema, un conjunto de directrices que le da el modelo desde el principio sobre cómo comportarse.
+
+00:08:00.240 --> 00:08:05.340
+Le dice que use solo el contexto proporcionado, que cite sus fuentes y lo más importante, que diga, no lo sé.
+
+00:08:05.880 --> 00:08:08.520
+Sin la información relevante, no están los documentos recuperados.
+
+00:08:09.020 --> 00:08:10.020
+Eso es lo que mantiene el modelo honesto.
+
+00:08:10.360 --> 00:08:15.120
+Sin una buena instrucción de sistema, el modelo podría recurrir a sus datos de entrenamiento o, peor aún, inventar algo.
+
+00:08:15.540 --> 00:08:17.400
+Entonces, ¿cómo conecta realmente todas estas piezas?
+
+00:08:17.400 --> 00:08:19.240
+Ahí es donde entra Azure AI Foundry.
+
+00:08:19.840 --> 00:08:24.180
+Es el portal donde creas un proyecto, implementas tus modelos, conectas tus fuentes de datos y pruebas tu agente.
+
+00:08:24.620 --> 00:08:27.020
+Piénsalo como el centro de control para toda tu configuración de Rack.
+
+00:08:27.320 --> 00:08:33.160
+Dentro de Foundry puedes añadir tu índice de Azure AI Search como fuente de conocimiento a tu agente sin escribir código personalizado para la configuración básica.
+
+00:08:33.580 --> 00:08:37.720
+Solo creas una conexión, seleccionas tu índice y el agente puede empezar a consultarlo automáticamente.
+
+00:08:38.140 --> 00:08:39.540
+El portal se encarga de la orquestación.
+
+00:08:39.540 --> 00:08:48.700
+Cuando un usuario hace una pregunta, el agente sabe llamar AI Search, obtiene los fragmentos relevantes y pasárselos al LLM junto con la pregunta original, que hay un ejemplo concreto.
+
+00:08:49.160 --> 00:08:53.340
+En un tutorial que encontré, alguien creó un agente de recomendación de películas usando un conjunto de datos de Netflix.
+
+00:08:54.000 --> 00:08:58.560
+Subieron un archivo CSV con títulos de películas, descripciones e información del reparto a Azure Blob Storage.
+
+00:08:58.820 --> 00:09:00.880
+Luego usaron Azure AI Search para indexar esos datos.
+
+00:09:00.880 --> 00:09:06.420
+En Azure AI Foundry, crearon un agente con GPT-4O y conectaron el índice de AI Search.
+
+00:09:07.100 --> 00:09:09.760
+Cuando un usuario preguntó, me gustan los thrillers, dame algunas recomendaciones.
+
+00:09:10.120 --> 00:09:14.340
+El agente buscó en el índice, encontró películas de suspenso de ese conjunto de datos específico y devolvió recomendaciones.
+
+00:09:15.040 --> 00:09:18.080
+Y aquí está la clave, solo recomiendo películas que realmente estaban en ese conjunto de datos.
+
+00:09:18.360 --> 00:09:22.980
+No inventó nada, no recurrió a sus datos de entrenamiento y trabajó exclusivamente con el contenido que le proporcionaron.
+
+00:09:23.460 --> 00:09:24.320
+Ese es el poder de Rack.
+
+00:09:24.960 --> 00:09:26.100
+Rack clásico vs. Rackente
+
+00:09:26.100 --> 00:09:27.860
+Ahora, hablemos de cómo configurarlo.
+
+00:09:28.340 --> 00:09:30.560
+Existen dos patrones principales, Rack clásico y Rackente.
+
+00:09:30.880 --> 00:09:32.720
+Cuál elijas depende de lo que estés construyendo.
+
+00:09:33.040 --> 00:09:34.580
+Rack clásico es el enfoque sencillo.
+
+00:09:34.980 --> 00:09:37.760
+Entra a una consulta, se ejecuta una búsqueda y sale una respuesta.
+
+00:09:38.320 --> 00:09:39.340
+Simple, rápido, predecivo.
+
+00:09:39.760 --> 00:09:43.620
+Piénsalo como acercarte a la recepción de un edificio de oficinas y pedir un archivo específico.
+
+00:09:44.200 --> 00:09:46.040
+El recepcionista lo toma, te lo entrega y listo.
+
+00:09:46.660 --> 00:09:49.840
+Rack clásico funciona muy bien para preguntas y respuestas factuales sobre un solo tema,
+
+00:09:49.960 --> 00:09:51.840
+como ¿cuál es la política de la empresa sobre el trabajo remoto?
+
+00:09:52.320 --> 00:09:54.560
+O muéstrame los pasos de solución de problemas para este código.
+
+00:09:55.280 --> 00:09:59.140
+Es confiable, económico y fácil de arreglar cuando algo sale mal porque el flujo es lineal.
+
+00:09:59.140 --> 00:10:00.900
+Rackente es diferente.
+
+00:10:01.560 --> 00:10:03.540
+El agente de IA decide cómo recuperar la información.
+
+00:10:04.320 --> 00:10:07.240
+Puede hacer múltiples subpreguntas, buscar en diferentes índices,
+
+00:10:07.460 --> 00:10:10.220
+iterar sobre resultados y sintetizar entre fuentes antes de responder.
+
+00:10:10.900 --> 00:10:14.760
+Es como tener un administrador de edificio que coordina con diferentes departamentos para reunir todas las piezas.
+
+00:10:15.200 --> 00:10:17.600
+No solo toman un archivo, hablan con recursos humanos,
+
+00:10:17.760 --> 00:10:21.080
+revisan registros, verifican políticas cruzadas y luego regresan con una respuesta completa.
+
+00:10:21.080 --> 00:10:26.900
+Microsoft realizó sus propias pruebas y descubrió que el Rack agente ofrece una mejora de alrededor del 40% de las respuestas para preguntas complejas.
+
+00:10:27.120 --> 00:10:30.520
+Eso es significativo, pero utiliza de 3 a 10 veces más tokens y añade latencia.
+
+00:10:31.120 --> 00:10:33.300
+Para preguntas simples, ese trabajo adicional es un desperdicio.
+
+00:10:33.560 --> 00:10:35.020
+El Rack clásico las maneja perfectamente bien.
+
+00:10:35.420 --> 00:10:36.320
+Entonces, ¿cuándo usar cada uno?
+
+00:10:36.580 --> 00:10:40.260
+El clásico para consultas rutinarias y de gran volumen, donde la velocidad y el costo son lo más importante.
+
+00:10:40.260 --> 00:10:44.940
+El agente para preguntas de varios pasos, ambiguas o interdisciplinarias, donde la precisión vale el cómputo adicional.
+
+00:10:45.620 --> 00:10:47.340
+Sección de conexión ejemplo integral.
+
+00:10:47.340 --> 00:10:50.480
+Veamos cómo encajan todas estas piezas con un ejemplo real.
+
+00:10:51.060 --> 00:10:55.120
+Imagina que estás creando un agente de atención al cliente para una agencia de viajes llamada Marigold Travels.
+
+00:10:55.740 --> 00:11:00.160
+Tienes folletos de viajes, reseñas de hoteles y documentos de políticas dispersos por toda tu organización.
+
+00:11:00.960 --> 00:11:05.840
+Quieres que los clientes hagan preguntas y obtengan respuestas precisas basadas en tu contenido real, no en suposiciones genéricas.
+
+00:11:06.540 --> 00:11:09.400
+Paso 1. Almacena todo ese contenido en Azure Blobstory.
+
+00:11:10.000 --> 00:11:14.320
+Folletos en una carpeta, reseñas en otra, políticas en una tercera, simplemente archivos en un contenedor.
+
+00:11:14.320 --> 00:11:21.960
+Paso 2. Usa Azure AI Search para indexar esos datos ejecutando al asistente de importación, apuntando a tu almacenamiento de blobs y dejando que trabaje.
+
+00:11:22.680 --> 00:11:27.660
+El servicio lee cada documento, los divide en fragmentos, crea incrustaciones vectoriales y construye un índice de búsqueda.
+
+00:11:28.140 --> 00:11:29.500
+Todo el proceso tómanos minutos.
+
+00:11:30.340 --> 00:11:32.800
+Paso 3. Vea Azure AI Foundry y crea un agente.
+
+00:11:32.800 --> 00:11:39.420
+Despliega GPT-4O como tu modelo. Escribe un prompt del sistema que le indique usar solo el contexto proporcionado y citar sus fuentes.
+
+00:11:39.700 --> 00:11:42.620
+Luego conecta tu índice de Azure AI Search como fuente de conocimiento.
+
+00:11:43.320 --> 00:11:44.160
+Bueno, pocos clics y list.
+
+00:11:44.680 --> 00:11:48.240
+Ahora un cliente pregunta, ¿cuál es el hotel mejor valorado en Dubai por menos de 300 dólares?
+
+00:11:48.780 --> 00:11:51.440
+La gente toma esa pregunta y la envía a Azure AI Search.
+
+00:11:51.920 --> 00:11:56.240
+Azure AI Search la convierte en un vector y encuentra los fragmentos más relevantes de tus reseñas y folletos.
+
+00:11:56.880 --> 00:11:59.840
+Esos fragmentos se pasan a GPT-4O junto con la pregunta original.
+
+00:12:00.560 --> 00:12:05.380
+El modelo los lee, identifica la mejor coincidencia y genera una respuesta con citas que apuntan a tus documentos de origen.
+
+00:12:05.880 --> 00:12:08.440
+El punto es que el LM nunca memorizó esos datos.
+
+00:12:08.840 --> 00:12:10.360
+Nunca fue entrenado con tus reseñas de hoteles.
+
+00:12:10.740 --> 00:12:12.520
+Trabaja con tu contenido específico en cada ocasión.
+
+00:12:13.080 --> 00:12:15.680
+Agrega nuevas reseñas mañana y las respuestas se actualizarán automáticamente.
+
+00:12:16.040 --> 00:12:18.060
+Elimina un folleto desactualizado y dejará de aparecer.
+
+00:12:18.060 --> 00:12:21.340
+El modelo no necesita un rendimiento. Solo necesita la capa de recuperación adecuada.
+
+00:12:21.800 --> 00:12:23.520
+Entonces, ¿cómo empiezas realmente a construir Rack en Azure?
+
+00:12:24.140 --> 00:12:25.140
+Dividámoslo en tres pasos.
+
+00:12:25.140 --> 00:12:27.400
+Lo primero es lo primero. Conoce tus datos.
+
+00:12:28.260 --> 00:12:32.680
+Antes de elegir un servicio, averigua dónde reside tu contenido, cómo está organizado y quién era acceso.
+
+00:12:33.800 --> 00:12:35.760
+El éxito o fracaso de Rack depende de la calidad de tus datos.
+
+00:12:36.080 --> 00:12:38.580
+A continuación, mantélos sin. No compliques demasiado la configuración.
+
+00:12:39.040 --> 00:12:42.840
+Usa el asistente de importación de datos en Azure AI Search para indexar solo un conjunto de documentos.
+
+00:12:43.240 --> 00:12:44.120
+Prueba con consultas básicas.
+
+00:12:44.580 --> 00:12:47.440
+Asegúrate de que tu recuperación funcione perfectamente antes de añadir el LM.
+
+00:12:48.140 --> 00:12:51.620
+La mayoría de los fallos en Rack no son problemas. Son problemas de recuperación.
+
+00:12:52.080 --> 00:12:53.120
+Último paso. Añádele LM.
+
+00:12:53.120 --> 00:12:56.980
+Una vez que tu búsqueda devuelva los resultados correctos, entonces incorporas la generación.
+
+00:12:57.380 --> 00:13:00.000
+Es ahí cuando conectas a Azure Open AI y escribes tu PRAM del sistema.
+
+00:13:00.640 --> 00:13:03.620
+Punto. Es que Rack no es algo que compras. Es un patrón que construye.
+
+00:13:04.420 --> 00:13:08.540
+Azure te da las piezas, almacenamiento, búsqueda, modelos y el pegamento para conectarlo.
+
+00:13:09.680 --> 00:13:11.420
+Solo necesitas armarlo todo de la manera correcta.
+
+00:13:11.420 --> 00:13:15.160
+Si esto te ayudó a ver el panorama general, suscríbete para más explicaciones y lenguaje
+
+00:13:15.160 --> 00:13:17.520
+sencillo. Deja un comentario con tu caso de uso de Rack.
+
+00:13:18.040 --> 00:13:19.180
+Me encantaría saber qué estás construyendo.
