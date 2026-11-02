@@ -1,0 +1,988 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.580
+Willkommen zu einer weiteren Episode der Microsoft Knowledge Nuggets hier auf Android 1.60 FM.
+
+00:00:03.960 --> 00:00:05.040
+Ich bin Ihr Gastgeber, Milko Peters.
+
+00:00:05.440 --> 00:00:07.240
+Heute widmen wir uns einer Frage, die ich ständig höre.
+
+00:00:07.980 --> 00:00:10.460
+Was ist der Unterschied zwischen einer Canvas-App und einer modellgesteuerten App?
+
+00:00:11.020 --> 00:00:13.140
+Die meisten Leute denken, Power-App sei eine einzige Sache,
+
+00:00:13.260 --> 00:00:16.100
+aber eigentlich verbergen sich unter diesem Namen zwei völlig verschiedene App-Typen.
+
+00:00:16.640 --> 00:00:18.440
+Die falsche Wahl kann sie Wochenanacharbeit kosten.
+
+00:00:19.060 --> 00:00:22.500
+Die eine gibt Ihnen fällige Freiheit beim Design, erwartet aber, dass Sie alles selbst erledigen.
+
+00:00:23.100 --> 00:00:25.140
+Jeder Button, jede Formel, jede Datenverbindung liegt bei Ihnen.
+
+00:00:25.760 --> 00:00:28.640
+Die andere bietet Ihnen ein vollstrukturiertes Büro, aber Sie können die Wände nicht verschieben.
+
+00:00:28.640 --> 00:00:31.820
+Die Räume sind bereits vorhanden und Sie entscheiden nur, was hineinkommt.
+
+00:00:32.600 --> 00:00:34.900
+Am Ende dieser Folge wissen Sie genau, welche Sie wählen müssen.
+
+00:00:35.140 --> 00:00:39.260
+Und die Antwort könnte Sie überraschen, denn es geht nicht um das Aussehen, sondern darum, wo Sie anfangen.
+
+00:00:40.300 --> 00:00:41.580
+Schnappen Sie sich einen Kaffee und legen wir los.
+
+00:00:42.300 --> 00:00:44.380
+Die große Verwirrung. Canvas gegen Modellgesteuert.
+
+00:00:44.840 --> 00:00:47.660
+Stellen Sie sich vor, Sie starten ein neues Power-Apps-Projekt und öffnen das Make-up-Portat.
+
+00:00:48.000 --> 00:00:50.440
+Sie sehen zwei Optionen. Canvas-App oder modellgesteuerte App.
+
+00:00:50.720 --> 00:00:51.300
+Welche wählen Sie?
+
+00:00:52.100 --> 00:00:53.020
+Die meisten Leute im Aussehen.
+
+00:00:53.800 --> 00:00:56.080
+Sie öffnen Canvas-Designer, sehen einen leeren Bildschirm,
+
+00:00:56.080 --> 00:00:58.260
+ziehen ein paar Schaltflächen herum und denken, das fühlt sich richtig an,
+
+00:00:58.260 --> 00:01:00.720
+oder Sie sehen die modellgesteuerte Optionen und finden sie zu starrte Optionen,
+
+00:01:00.760 --> 00:01:01.680
+finden sie zu starr und geschäftsfähig.
+
+00:01:01.980 --> 00:01:02.420
+Großer Fehler.
+
+00:01:02.960 --> 00:01:04.480
+Der eigentliche Unterschied liegt überhaupt nicht im Aussehen.
+
+00:01:05.180 --> 00:01:06.100
+Es geht darum, wo Sie anfangen.
+
+00:01:06.720 --> 00:01:08.020
+Canvas-Apps beginnen mit einem Bildschirm.
+
+00:01:08.500 --> 00:01:10.720
+Sie gestalten jedes Pixel, jede Schaltfläche, jede Farbe.
+
+00:01:11.400 --> 00:01:13.740
+Sie entscheiden genau, was der Benutzer sieht und in welcher Reihenfolge.
+
+00:01:14.260 --> 00:01:16.180
+Der Bildschirm ist der Ausgangspunkt und die Daten kommen später.
+
+00:01:17.040 --> 00:01:18.600
+Modellgesteuerte Apps beginnen mit ihrem Datenmodell.
+
+00:01:19.280 --> 00:01:21.300
+Die Tabellen, die Beziehungen, die Geschäftsregeln.
+
+00:01:22.020 --> 00:01:25.940
+Sie definieren zuerst die Informationsstruktur und dann baut sich die App um diese Daten herum auf.
+
+00:01:25.940 --> 00:01:29.360
+Formulare erscheinen, Ansichten werden generiert, die Navigation funktioniert einfach.
+
+00:01:30.240 --> 00:01:31.380
+Dieser Unterschied verändert alles.
+
+00:01:31.800 --> 00:01:34.460
+Ihre Entwicklungsgeschwindigkeit, Ihre Kontrolle, wer die App nutzen kann
+
+00:01:34.460 --> 00:01:35.900
+und was passiert, wenn Ihre Anforderungen wachsen.
+
+00:01:36.440 --> 00:01:38.260
+Lassen Sie uns also beide in einfachem Deutsch definieren.
+
+00:01:38.440 --> 00:01:39.680
+Beginnt mit der die Vertraute wirkt.
+
+00:01:41.160 --> 00:01:42.240
+Was genau ist eine Canvas-App?
+
+00:01:42.820 --> 00:01:43.860
+Was genau ist eine Canvas-App?
+
+00:01:44.120 --> 00:01:45.180
+Lassen Sie es uns aufschlüsseln.
+
+00:01:45.360 --> 00:01:46.840
+Sie starten mit einem völlig leeren Whiteboard.
+
+00:01:47.220 --> 00:01:48.960
+Keine Vorlagen, keine vorgefertigten Formularen.
+
+00:01:49.520 --> 00:01:52.420
+Dann ziehen Sie Schaltflächen, Textfelder, Bilder und Galerien auf den Bildschirm.
+
+00:01:52.420 --> 00:01:54.660
+Sie wollen einen großen roten Knopf oben links?
+
+00:01:55.080 --> 00:01:55.660
+Das können Sie tun.
+
+00:01:55.980 --> 00:01:58.820
+Sie wollen, dass der Titel 28 Pixel groß und in einem bestimmten Blauton ist?
+
+00:01:59.180 --> 00:01:59.720
+Das ist Ihr Entscheid.
+
+00:02:00.180 --> 00:02:01.720
+Bei den Konnektoren zeigt sich die wahre Stärke.
+
+00:02:02.660 --> 00:02:04.880
+Canvas-Apps können mit fast jeder Datenquelle kommunizieren,
+
+00:02:04.980 --> 00:02:08.320
+darunter Sharepoint-Listen, Excel-Dateien, SQL-Datenbanken, Salesforce und hunderte mehr.
+
+00:02:09.080 --> 00:02:10.740
+Ihre Daten müssen nicht an einem einzigen Ort gespeichert sein.
+
+00:02:11.160 --> 00:02:12.540
+Wenn Sie auf drei Systeme verteilt sind,
+
+00:02:13.020 --> 00:02:15.080
+kann eine Canvas-App alles auf einem Bildschirm zusammenführen.
+
+00:02:15.640 --> 00:02:18.960
+Sie kontrollieren jedes Detail von Schriftgröße und Abständen bis hin zu Farben und Animationen.
+
+00:02:19.020 --> 00:02:21.520
+Sie können es pixelgenau gestalten oder ein komplettes Chaos anrichten.
+
+00:02:21.520 --> 00:02:22.520
+Das liegt ganz bei Ihnen.
+
+00:02:23.000 --> 00:02:23.700
+Aber hier ist der Haken.
+
+00:02:24.120 --> 00:02:26.700
+Bei all dieser Kontrolle müssen Sie auch alles von Grund auf neu erstellen.
+
+00:02:27.220 --> 00:02:31.280
+Jedes Formular, jede Ansicht, jede Validierungsregel und jeden Navigationsfluss bauen Sie selbst.
+
+00:02:32.100 --> 00:02:33.600
+Sie möchten ein Dropdown-Menü, das ist ein Listefilter?
+
+00:02:34.000 --> 00:02:34.780
+Sie schreiben die Formel dazu.
+
+00:02:35.300 --> 00:02:37.260
+Sie möchten einen Speichern-Button, der Pflichtfelder prüft?
+
+00:02:37.700 --> 00:02:38.480
+Das schreiben Sie ebenfalls jetzt.
+
+00:02:38.780 --> 00:02:40.820
+Canvas-Apps eignen sich am besten für aufgabenbasierte Tätigkeiten.
+
+00:02:41.360 --> 00:02:43.680
+Denken Sie an ein mobiles Prüftool für Techniker in der Produktion
+
+00:02:43.680 --> 00:02:45.420
+oder ein schnelles Formular für Urlaubsanträge.
+
+00:02:46.180 --> 00:02:49.760
+Oder ein Dashboard, das Daten aus drei verschiedenen Systemen abruft und an einem Ort anzeigt.
+
+00:02:49.760 --> 00:02:52.560
+Stellen Sie es sich wie den Bau eines individuellen Hauses von Grund auf.
+
+00:02:52.940 --> 00:02:55.060
+Sie wählen die Ziegel, die Fenster und die Farbe aus.
+
+00:02:55.600 --> 00:02:59.640
+Sie erhalten genau das, was Sie wollen, müssen aber auch die Sanitär- und Elektroinstallation selbst entwerfen.
+
+00:03:00.020 --> 00:03:02.800
+Vergleichen wir das nun mit dem anderen Ansatz, bei dem die Daten an erster Stelle stehen.
+
+00:03:03.540 --> 00:03:04.940
+Was genau ist eine modellgesteuerte App?
+
+00:03:05.720 --> 00:03:09.940
+Eine modellgesteuerte App beginnt mit Dataverse, der relationalen Datenbank von Microsoft für Geschäftsdaten.
+
+00:03:10.420 --> 00:03:14.720
+Sie definieren Ihre Tabellen, Beziehungen und Geschäftsregeln, bevor Sie überhaupt einen Bildschirm sehen.
+
+00:03:14.720 --> 00:03:20.080
+Sobald Ihr Datenmodell bereit ist, generiert die App automatisch Formulare, Ansichten, Dashboards und die Navigation für Sie.
+
+00:03:20.460 --> 00:03:21.700
+Sie entwerfen Bildschirme nicht direkt.
+
+00:03:22.100 --> 00:03:23.440
+Stattdessen konfigurieren Sie Komponenten.
+
+00:03:23.740 --> 00:03:27.240
+Sie teilen dem System mit, welche Felder auf einem Formular angezeigt werden sollen und es baut das Formular für Sie.
+
+00:03:27.400 --> 00:03:30.860
+Die Benutzeroberfläche ist konsistent, reaktionsschnell und barrierefrei ohne zusätzlichen Aufwand.
+
+00:03:31.180 --> 00:03:33.200
+Die Navigation folgt einem vorhersehbar-Musten.
+
+00:03:33.280 --> 00:03:36.300
+Klicken Sie auf einen Datensatz, um Details anzuzeigen und scrollen Sie dann nach unten um verknüpfte Daten.
+
+00:03:36.580 --> 00:03:40.460
+Alles fühlt sich verbunden an, da das Datenmodell die Beziehungen bereits definiert.
+
+00:03:40.460 --> 00:03:45.320
+Sie erhalten außerdem integrierte Governance wie rollenbasierte Sicherheit, Auditing und Geschäftsprozessflüsse.
+
+00:03:45.700 --> 00:03:49.180
+Dies sind Unternehmensfunktionen, für deren manuelle Erstellung an einer Canos-App Tage nötig wären,
+
+00:03:49.260 --> 00:03:50.720
+während Sie in modellgesteuerten Apps einfach vorhanden sind.
+
+00:03:50.860 --> 00:03:52.300
+Der Nachteil ist eine geringere Flexibilität.
+
+00:03:52.580 --> 00:03:57.020
+Sie können ein Feld nicht um zwei Pixel nach links verschieben, da die generierte Benutzeroberfläche einem Standardmuster folgt.
+
+00:03:57.400 --> 00:04:01.300
+Manche finden das frustrierend, aber für viele Geschäftsanwender ist genau diese Konsistenz der springende Punkt.
+
+00:04:02.120 --> 00:04:04.280
+Modellgesteuerte Apps eignen sich am besten für datenintensive Arbeit.
+
+00:04:04.920 --> 00:04:08.300
+Denken Sie an CRM-Systeme, die Konten, Kontakte und Verkaufschancen verfolgen.
+
+00:04:08.300 --> 00:04:10.580
+Forenmanagement, bei dem jede Interaktion protokolliert werden muss.
+
+00:04:11.360 --> 00:04:12.860
+Projektverfolgung mit Abhängigkeiten und Zeitplänen.
+
+00:04:13.300 --> 00:04:15.180
+Compliance-Workflows, bei denen Audits erforderlich sind.
+
+00:04:15.620 --> 00:04:17.660
+Stellen Sie es sich wie den Einzug in ein vorgefertigtes Bürogebäude vor.
+
+00:04:17.960 --> 00:04:20.520
+Die Räume, Flure und der Sicherheitsempfang sind bereits vorhanden.
+
+00:04:21.020 --> 00:04:24.540
+Sie richten die Räume ein und entscheiden, wer wo sitzt, aber Sie können keine Wände einreißen oder den Grundriss ändern.
+
+00:04:25.200 --> 00:04:28.780
+Da wir nun wissen, was das jeweils ist, schauen wir uns den eigentlichen Unterschied an und der liegt nicht im Aussehen.
+
+00:04:29.920 --> 00:04:31.940
+Der Kernunterschied Design-First gegenüber Data-First.
+
+00:04:32.460 --> 00:04:34.880
+Denken Sie einmal an die erste Frage, die bei jedem Einsatz gestellt wird.
+
+00:04:35.220 --> 00:04:38.240
+Canvas-Apps beginnen mit der Frage, was soll der Benutzer sehen und tun können?
+
+00:04:38.760 --> 00:04:42.160
+Sie gestalten zuerst die Bildschirme, das Layout, die Farben und den Ablauf von einem Bildschirm zum nächsten.
+
+00:04:42.840 --> 00:04:45.700
+Daten werden später verbunden, wie beim Einstecken einer Lampe in eine Steckdose.
+
+00:04:46.260 --> 00:04:47.540
+Modellgesteuerte Apps stellen diese Frage an.
+
+00:04:47.740 --> 00:04:49.180
+Sie fragen, was sind Ihre Geschäftsdaten?
+
+00:04:49.440 --> 00:04:49.900
+Wer kann sich sehen?
+
+00:04:50.240 --> 00:04:50.900
+Wie hängen sie zusammen?
+
+00:04:51.560 --> 00:04:54.300
+Sie modellieren zuerst die Daten, Tabellen, Spalten und Beziehungen.
+
+00:04:54.740 --> 00:04:57.000
+Die Bildschirme kommen später und werden aus diesem Modell generiert.
+
+00:04:57.440 --> 00:04:58.400
+Das verändert Ihre Arbeitsweilung.
+
+00:04:58.840 --> 00:05:03.020
+Bei Canvas entwerfen Sie einen Prototyp, verbinden ihn mit einer Datenquelle und passen die Formeln an, bis alles funktioniert.
+
+00:05:03.020 --> 00:05:07.460
+Wenn sich jedoch die Datenstruktur ändert, etwa wenn jemand eine Spalte in Ihrer SharePoint-Liste hinzufügt,
+
+00:05:07.540 --> 00:05:11.160
+müssen Sie jeden Bildschirm, der auf diese Daten zugreift, manuell einzeln aktualisieren.
+
+00:05:11.940 --> 00:05:12.840
+Modellgesteuerte Apps funktionieren.
+
+00:05:13.200 --> 00:05:16.660
+Sie aktualisieren das Tabellenschema, fügen eine Spalte hinzu oder ändern eine Beziehung.
+
+00:05:16.740 --> 00:05:18.620
+Und die Formulare und Ansichten werden automatisch aktualisiert.
+
+00:05:18.780 --> 00:05:19.900
+Sie müssen keinen einzigen Bildschirm anpassen.
+
+00:05:20.180 --> 00:05:21.380
+Auch die Datenquellen unterscheiden sich.
+
+00:05:21.600 --> 00:05:26.220
+Canvas-Apps können Daten aus SharePoint, SQL, Excel, API, Salesforce oder alle mit einem Connector abrufen.
+
+00:05:26.460 --> 00:05:27.640
+Sie sind nicht auf ein System festgelegt.
+
+00:05:27.640 --> 00:05:33.040
+Modellgesteuerte Apps nutzen nur Dataverse, eine strukturierte Datenbank, die alle Ihre Geschäftsdaten an einem Ort verwaltet.
+
+00:05:33.700 --> 00:05:37.800
+Dieser Kompromiss bietet Dataverse-Funktionen wie automatisch aktualisierte berechnete Spalten,
+
+00:05:38.120 --> 00:05:42.520
+Roll-up-Felder, serverseitige Geschäftsregeln und beziehungsbasierte Navigation ohne Code.
+
+00:05:43.520 --> 00:05:44.900
+Klicken Sie auf einen Kontakt, sehen Sie dessen Fälle.
+
+00:05:45.400 --> 00:05:46.900
+Klicken Sie auf einen Fall, sehen Sie dessen Aktivität.
+
+00:05:47.160 --> 00:05:47.880
+Es funktioniert einfach.
+
+00:05:48.360 --> 00:05:49.840
+Die Frage ist also, wo liegt Ihr Schwerpunkt?
+
+00:05:50.280 --> 00:05:53.680
+Liegt er auf der Benutzererfahrung, dem Aussehen, dem Gefühl, dem individuellen Ablauf
+
+00:05:53.680 --> 00:05:57.180
+oder liegt er auf den Daten und Prozessen, der Struktur, den Beziehungen und der Governance?
+
+00:05:57.640 --> 00:05:59.580
+Denken Sie daran, es geht darum, wo Sie Ihren Aufwand investieren.
+
+00:06:00.020 --> 00:06:02.160
+Schauen wir uns praktische Szenarien an, um das greifbar zu machen.
+
+00:06:02.820 --> 00:06:04.660
+Wann sollten Sie tatsächlich zu einer Canvas-App greifen?
+
+00:06:05.240 --> 00:06:06.160
+An glänzen Canvas-Apps.
+
+00:06:06.680 --> 00:06:07.460
+Echte Anwendungsfälle.
+
+00:06:07.940 --> 00:06:08.840
+Denken Sie an Außennheidsmitarbeit.
+
+00:06:09.300 --> 00:06:13.340
+Wenn Prüfer in einer Fabrikhalle Sicherheitschecks durchführen oder Technikereparaturen vor Ort erfassen müssen,
+
+00:06:13.460 --> 00:06:15.300
+funktionieren Canvas-Apps offline auf Smartphones.
+
+00:06:15.860 --> 00:06:19.280
+Sie nutzen Kamera, GPS und Mikrofon und sehen auf kleinen Bildschirmen großartig aus,
+
+00:06:19.340 --> 00:06:20.880
+da Sie speziell für dieses Gerät designen.
+
+00:06:21.140 --> 00:06:24.920
+Canvas-Apps werden für das Gerät in der Hand entwickelt, nicht für ein generisches Desktop-Layout.
+
+00:06:24.920 --> 00:06:28.340
+Ein weiterer Anwendungsfall ist, wenn Sie vorhandene Daten haben, die Sie nicht migrieren möchten.
+
+00:06:28.880 --> 00:06:31.340
+Vielleicht nutzt Ihr Unternehmen SharePoint-Listen für eine Sache,
+
+00:06:31.760 --> 00:06:35.320
+eine alte SQL-Datenbank für eine andere und ein Excel-Tracker, der seit Jahren läuft.
+
+00:06:36.220 --> 00:06:39.900
+Eine Canvas-App kann alle drei in einer Oberfläche zusammenführen, ohne dass etwas verschoben werden muss.
+
+00:06:40.280 --> 00:06:42.080
+Verbinden Sie jede Quelle, erstellen Sie ein Bildschirm und fertig.
+
+00:06:42.480 --> 00:06:43.640
+Keine Migration, keine Auswahlzeit.
+
+00:06:43.920 --> 00:06:47.400
+Damit ist Canvas ideal für die Integration von Altsystemen, ohne das Backend anzufassen.
+
+00:06:48.200 --> 00:06:52.520
+Wenn Branding wichtig ist, etwa bei einem Kundenportal, das exakte Farben, Schriftarten und Designsprache benötigt,
+
+00:06:52.520 --> 00:06:54.020
+bietet Canvas pixelgenaue Kontrolle.
+
+00:06:54.700 --> 00:06:56.860
+Sie können Ihre Markenrichtlinien bis ins letzte Detail umsetzen.
+
+00:06:57.340 --> 00:06:58.300
+Modellgesteuerte Apps können das nicht.
+
+00:06:58.740 --> 00:07:02.220
+Wenn das Aussehen der App Teil Ihrer Markenidentität ist, gibt Ihnen Canvas diese Kontrolle.
+
+00:07:02.940 --> 00:07:07.640
+Für einfache, aufgabenbasierte Apps wie ein Urlaubsantrag, ein wöchentlicher Stundenzettel oder eine Checkliste ist Canvas schnell.
+
+00:07:08.140 --> 00:07:11.500
+Sie brauchen kein komplexes Datenmodell, ein Bildschirm, eine Datenquelle, ein paar Formeln
+
+00:07:11.500 --> 00:07:12.880
+und Sie können es dann am Nachmittag veröffentlichen.
+
+00:07:13.540 --> 00:07:14.920
+Das ist das tägliche Brot von Canvas.
+
+00:07:15.120 --> 00:07:16.840
+Schnell, fokussiert und einfach zu warten.
+
+00:07:17.780 --> 00:07:19.200
+Schließlich Rapid Prototyping.
+
+00:07:19.200 --> 00:07:23.040
+Sie wollen eine Idee schnell testen, bauen an einem Nachmittag eine Canvas-App,
+
+00:07:23.340 --> 00:07:25.840
+zeigen Sie echten Leuten, holen Feedback ein und iterieren.
+
+00:07:26.500 --> 00:07:30.520
+Der Weg von der Idee zum funktionierenden Prototyp in wenigen Stunden ist bei modellgesteuerten Apps schwer,
+
+00:07:30.600 --> 00:07:31.920
+da Sie erst die Daten modellieren müssen.
+
+00:07:32.340 --> 00:07:35.760
+Es ist der schnellste Weg, eine Idee zu validieren, bevor man in ein vollständiges Datenmodell investiert.
+
+00:07:36.020 --> 00:07:36.900
+Aber hier ist der Nachteil.
+
+00:07:37.300 --> 00:07:39.000
+Canvas-Apps können unübersichtlich werden, wenn sie wachsen.
+
+00:07:39.320 --> 00:07:42.600
+Ohne sorgfältige Struktur enden Sie mit hunderten von Formeln, die über Bildschirme verteilt sind.
+
+00:07:42.600 --> 00:07:47.060
+Eine Person baut es, eine andere ändert es und bald weiß niemand mehr, was dieser Button eigentlich tut.
+
+00:07:47.060 --> 00:07:49.700
+Die Wartung wird mit jedem neuen Feature schwieriger.
+
+00:07:50.360 --> 00:07:54.600
+Canvas ist also großartig, wenn Sie Design-Flexibilität, mobile Funktionen oder schnelle Prototypen benötigen.
+
+00:07:54.860 --> 00:07:56.120
+Aber Sie müssen alles selbst verwalten.
+
+00:07:56.700 --> 00:07:58.060
+Lassen Sie uns nun die andere Seite betrachten.
+
+00:07:58.460 --> 00:08:00.020
+Wann ist eine modellgesteuerte App sinnvoller?
+
+00:08:00.880 --> 00:08:02.960
+Wann glänzen modellgesteuerte Apps echte Anwendungsfälle?
+
+00:08:03.540 --> 00:08:06.640
+Gehen wir die Szenarien durch, in denen modellgesteuerte Apps die offensichtliche Wahl sind.
+
+00:08:07.040 --> 00:08:07.940
+Beginnen wir mit Nummer 1.
+
+00:08:08.200 --> 00:08:09.340
+Sie bauen ein System of Record?
+
+00:08:09.340 --> 00:08:12.740
+Denken Sie an CRM, Konten, Kontakte, Verkaufschancen, Fälle.
+
+00:08:13.320 --> 00:08:14.500
+Diese Daten sind tief miteinander verknüpft.
+
+00:08:14.960 --> 00:08:18.460
+Ein Konto hat viele Kontakte, Vorgänge und Aktivitäten, die alle zusammenhängen.
+
+00:08:19.140 --> 00:08:20.840
+Modellgesteuerte Apps beherrschen dies von Haus aus.
+
+00:08:21.140 --> 00:08:25.840
+Sie definieren die Beziehungen einmal in Dataverse und die App weiß einfach, dass beim Klicken auf ein Konto alle zugehörigen Kontakte angezeigt.
+
+00:08:25.980 --> 00:08:26.740
+Kein Code erforderlich.
+
+00:08:27.100 --> 00:08:28.260
+Das ist fest in die Plattform integriert.
+
+00:08:29.260 --> 00:08:29.960
+Szenario 2.
+
+00:08:30.400 --> 00:08:32.800
+Komplexe Geschäftsprozesse, die Phasen und Genehmigungen erfordern.
+
+00:08:33.240 --> 00:08:34.420
+Mitarbeiter-Onboarding zum Beispiel.
+
+00:08:34.420 --> 00:08:37.360
+Die Personalabteilung erstellt das Profil, die IT richtet die Geräte ein.
+
+00:08:37.440 --> 00:08:38.480
+Manager weisen Schulungen zu.
+
+00:08:38.720 --> 00:08:39.580
+Sicherheit gewährt den Zugriff.
+
+00:08:40.060 --> 00:08:42.580
+Jeder Schritt erfolgt der Reihe nach und man kann keine Phasen überspringen.
+
+00:08:43.360 --> 00:08:45.640
+Modellgesteuerte Apps nutzen sogenannte Geschäftsprozessflüsse.
+
+00:08:46.020 --> 00:08:51.160
+Sie führen Benutzer durch jede Phase, sodass der nächste Schritt immer sichtbar ist und man stets weiß, an welchem Punkt im Prozess man sich befindet.
+
+00:08:51.760 --> 00:08:54.480
+Könnte man eine solche phasenbasierte Arbeitsabfolge in einer Canvas-App erstellen?
+
+00:08:54.920 --> 00:08:58.140
+Technisch gesehen ja, aber im Grunde bauen sie damit selbst eine kleine Workflow-Engine.
+
+00:08:58.840 --> 00:09:00.720
+Bei modellgesteuerten Apps ist es ein Konfigurationsschalter.
+
+00:09:02.280 --> 00:09:03.000
+Szenario 3.
+
+00:09:03.000 --> 00:09:06.080
+Mehrere Teams nutzen dieselben Daten, benötigen aber unterschiedliche Ansichten.
+
+00:09:06.380 --> 00:09:07.900
+Der Vertrieb sieht Verkaufschancen und Geschäfte.
+
+00:09:08.440 --> 00:09:10.180
+Der Service sieht offene Vorgänge und die Kundenhistorie.
+
+00:09:10.680 --> 00:09:12.700
+Führungskräfte sehen Dashboards mit KPIs und Trends.
+
+00:09:12.900 --> 00:09:14.300
+Dieselben Daten, unterschiedliche Perspektiven.
+
+00:09:15.120 --> 00:09:17.080
+Modellgesteuerte Apps lösen dies über Sicherheitsrollen.
+
+00:09:17.520 --> 00:09:19.100
+Sie definieren, was jede Rolle sehen und tun kann.
+
+00:09:19.440 --> 00:09:20.760
+Der Vertrieb erhält seine Pipeline-Ansicht.
+
+00:09:21.080 --> 00:09:21.900
+Der Service eine Warteschlange.
+
+00:09:22.400 --> 00:09:23.060
+Führungskräfte ergaben.
+
+00:09:23.420 --> 00:09:26.540
+Alle arbeiten mit derselben Datenquelle, aber niemand sieht mehr, als er sollte.
+
+00:09:27.300 --> 00:09:31.920
+Canvas-Apps können das auch, aber dann müssen sie die Filter- und Berechtigungslogik für jeden Bildschirm selbst erstellen.
+
+00:09:31.920 --> 00:09:33.040
+Szenario 4.
+
+00:09:33.120 --> 00:09:34.040
+Auditierung und Compliance.
+
+00:09:34.300 --> 00:09:35.240
+Wer hat diesen Datensatz erstellt?
+
+00:09:35.440 --> 00:09:35.980
+Wer hat ihn geändert?
+
+00:09:36.360 --> 00:09:36.520
+Wann?
+
+00:09:36.840 --> 00:09:37.620
+Was war der alte Wert?
+
+00:09:38.020 --> 00:09:39.800
+Im Dataverse wird dies standardmäßig protokolliert.
+
+00:09:40.100 --> 00:09:41.960
+Jedes Erstellen, jedes Aktualisieren, jedes Löschen.
+
+00:09:42.380 --> 00:09:45.680
+Sie können für jeden Datensatz einen Audit-Trail abrufen, ohne eine einzige Zeile Code zu schreiben.
+
+00:09:45.940 --> 00:09:47.540
+Canvas-Apps haben diese Funktion nicht integriert.
+
+00:09:47.940 --> 00:09:53.680
+Wenn Sie eine Auditierung benötigen, müssen Sie ein eigenes Protokollsystem bauen, Auditeinträge in eine separate Tabelle schreiben und Berichte zu deren Ansicht erstellen.
+
+00:09:53.680 --> 00:09:55.720
+Es ist machbar, aber es ist Arbeit, die Sie selbst leisten.
+
+00:09:56.440 --> 00:09:57.140
+Szenario 5.
+
+00:09:57.280 --> 00:10:00.620
+Sie verwenden bereits Dynamics 365, vielleicht für Vertrieb oder Kundenservice.
+
+00:10:01.580 --> 00:10:03.780
+Modellgesteuerte Apps erweitern diese Umgebung auf natürliche Weise.
+
+00:10:04.200 --> 00:10:05.780
+Sie fügen benutzerdefinierte Tabellen hinzu.
+
+00:10:06.640 --> 00:10:10.040
+Ihre neue App verwendet dasselbe Sicherheitsmodell, dieselbe Navigation und dasselbe Erscheinungsbild.
+
+00:10:10.320 --> 00:10:13.380
+Alles arbeitet zusammen, da es auf demselben Dataverse-Fundament basiert.
+
+00:10:13.980 --> 00:10:15.200
+Canvas-Apps stehen außerhalb dieser Welt.
+
+00:10:15.600 --> 00:10:20.400
+Sie können sich zwar mit Dataverse verbinden, übernehmen aber nicht die Dynamics 365-Oberfläche oder deren Verhalten.
+
+00:10:20.400 --> 00:10:22.340
+Hier ist nun der Punkt, auf den Sie achten müssen.
+
+00:10:22.920 --> 00:10:27.000
+Wenn Sie versuchen, eine stark angepasste Benutzeroberfläche in ein modellgesteuertes Design zu zwingen, kämpfen Sie gegen die Plattform.
+
+00:10:27.140 --> 00:10:31.520
+Ich habe Teams gesehen, die wochenlang versuchten, ein modellgesteuertes Formular wie ein benutzerdefiniertes Canvas-Bildschirm aussehen zu lassen.
+
+00:10:31.640 --> 00:10:36.340
+Sie überschreiben CSS, blenden Standardsteuerelemente aus und bauen benutzerdefiniertes JavaScript, um das DOM zu manipulieren.
+
+00:10:36.520 --> 00:10:38.600
+Dann veröffentlicht Microsoft ein Update und alles geht kaputt.
+
+00:10:39.660 --> 00:10:42.600
+Modellgesteuerte Apps sind nicht das richtige Werkzeug, wenn Sie ein pixelgenaues Design benötigen.
+
+00:10:42.920 --> 00:10:45.740
+Es ist das richtige Werkzeug für Datenintegrität und Prozesskonsistenz.
+
+00:10:45.920 --> 00:10:48.880
+Es gibt noch einen weiteren Faktor, der oft über die Wahl entscheidet, die Kosten.
+
+00:10:48.880 --> 00:10:51.660
+Die Realize-Lizenzierung ist eine einfache Regel.
+
+00:10:52.640 --> 00:10:54.760
+Modellgesteuerte Apps erfordern immer eine Premium-Lizenz.
+
+00:10:55.280 --> 00:10:58.700
+Canvas-Apps können mit Standard-Lizenzen ausgeführt werden, aber nur, wenn Sie sich an die Regeln halten.
+
+00:10:58.980 --> 00:10:59.640
+Schlüsseln wir das auch.
+
+00:10:59.960 --> 00:11:08.580
+Canvas-Apps, die nur Standard-Konnektoren wie SharePoint, Excel, OneDrive oder Outlook nutzen, sind oft in vielen Microsoft 365 Plänen ohne Aufpreis enthalten, ohne Aufpreis enthalten.
+
+00:11:08.800 --> 00:11:13.840
+Wenn Ihre Daten in SharePoint liegen und Sie nur ein benutzerdefiniertes Formular darüber benötigen, haben Sie die benötigte Lizenz möglicherweise bereits.
+
+00:11:14.240 --> 00:11:16.220
+Sobald Sie Dataverse berühren, ändert sich alles.
+
+00:11:16.220 --> 00:11:21.440
+Selbst wenn es sich um eine Canvas-App handelt, benötigen Sie eine Premium-Lizenz, sobald Sie Daten aus Dataverse liest oder dort schreibt.
+
+00:11:21.800 --> 00:11:24.160
+Dasselbe gilt für Premium-Konnektoren wie SQL, Salesforce oder SAP.
+
+00:11:25.040 --> 00:11:26.660
+Der Connector-Typ bestimmt die Lizenzstufe.
+
+00:11:27.340 --> 00:11:28.720
+Modellgesteuerte Apps basieren auf Dataverse.
+
+00:11:29.040 --> 00:11:31.640
+Sie erfordern eine Premium-Lizenzierung für jeden, der sie erstellt oder ausführt.
+
+00:11:32.100 --> 00:11:34.320
+Gehen Standard-Lizenzpfad für modellgesteuerte Apps. Punkt.
+
+00:11:34.320 --> 00:11:38.660
+Und es geht noch tiefer. Geschäftsprozessflüsse in modellgesteuerten Apps erfordern eine Premium-Lizenz.
+
+00:11:38.980 --> 00:11:41.740
+Echtzeit-Workflows und Plugins erfordern den vollständigen Plattformplan.
+
+00:11:42.120 --> 00:11:44.320
+Je mehr serverseitige Logik Sie hinzufügen, desto höher sind die Lizenzanforderungen.
+
+00:11:45.200 --> 00:11:46.660
+Die Wahl wird also oft sehr praxisnah getroffen.
+
+00:11:47.080 --> 00:11:50.040
+Können wir das mit Standard-Konnektoren unter unseren bestehenden Lizenzen erledigen?
+
+00:11:50.440 --> 00:11:51.500
+Wenn ja, ist Canvas günstig.
+
+00:11:51.900 --> 00:11:55.080
+Sie erstellen die App, teilen sie mit Benutzern und niemand benötigt ein neues Abonnement.
+
+00:11:55.080 --> 00:12:02.860
+Wenn Sie Dataverse ohnehin benötigen, weil Ihre Daten komplex sind, Governance erforderlich ist oder Sie ein Stammdatensystem aufbauen, sind die Lizenzkosten für beide Apptypen gleich.
+
+00:12:03.120 --> 00:12:05.260
+Entscheiden Sie sie also aufgrund der Funktionalität nicht aufgrund des Bespreises.
+
+00:12:05.520 --> 00:12:06.800
+Viele Unternehmen stellen diese Rechnung an.
+
+00:12:07.380 --> 00:12:12.980
+Für einfache Abteilungs-Apps, wie Urlaubsanträge oder wöchentliche Stundenzettel, kostet Canvas auf SharePoint keinen Aufpreis.
+
+00:12:13.600 --> 00:12:14.160
+Das ist ein Gewinn.
+
+00:12:14.640 --> 00:12:20.600
+Für unternehmensweite Lösungen, die Auditing, rollenbasierte Sicherheit und komplexe Prozesse erfordern, ist die Premium-Lizenz eine gute Investition.
+
+00:12:21.120 --> 00:12:23.300
+Sie zahlen für Governance, die Sie sonst selbst aufbauen müssten.
+
+00:12:23.500 --> 00:12:24.700
+Das ist, wenn Sie beides benötigen.
+
+00:12:24.700 --> 00:12:26.960
+Das Beste aus beiden Welten könnte näher sein, als Sie denken.
+
+00:12:27.960 --> 00:12:29.700
+Der hybride Ansatz, der beide zusammenbringt.
+
+00:12:30.340 --> 00:12:30.800
+Darum geht es.
+
+00:12:31.320 --> 00:12:33.340
+Sie müssen sich für Ihre gesamte App nicht auf einen Typ festlegen.
+
+00:12:33.720 --> 00:12:38.240
+Moderne Power-Apps-Projekte kombinieren beide Ansätze und Sie wählen das richtige Tool für jedes Puzzleteil aus.
+
+00:12:38.660 --> 00:12:40.040
+Das gängigste Muster sieht so aus.
+
+00:12:40.560 --> 00:12:43.160
+Beginnen Sie mit einer modellgesteuerten App als Ihr zentrales Datensystem.
+
+00:12:43.520 --> 00:12:47.360
+Dies deckt das Datenmodell, Ihre Geschäftsprozesse, Sicherheitsregeln und die Manager-Dashboards ab.
+
+00:12:47.640 --> 00:12:48.440
+Das ist Ihr Fundament.
+
+00:12:48.980 --> 00:12:52.360
+Betten Sie dann Canvas-Apps in diese modellgesteuerten Formulare für spezialisierte Ansichten ein.
+
+00:12:52.360 --> 00:12:55.360
+Nehmen wir an, Sie benötigen eine individuell geführte Erfahrung für einen Bestimmtschritt.
+
+00:12:55.680 --> 00:12:59.900
+Fügen Sie einfach eine Canvas-App hinzu und Ihre Benutzer bleiben in derselben Oberfläche, ohne den Wechsel zu bemerken.
+
+00:13:00.220 --> 00:13:04.440
+Oder erstellen Sie eigenständige Canvas-Apps für Außendienstmitarbeiter, die in dieselben Dataverse-Tabellen lesen und schreiben.
+
+00:13:04.980 --> 00:13:08.860
+Die modellgesteuerte App übernimmt Backoffice, Berichte vor Management und Compliance.
+
+00:13:08.860 --> 00:13:14.020
+Die Canvas-App übernimmt die Frontline, mobile Inspektion, schnelle Datenerfassung und Offline-Arbeit.
+
+00:13:14.560 --> 00:13:16.020
+Power-Automate-Flows verbinden alles miteinander.
+
+00:13:16.400 --> 00:13:22.280
+Wenn ein Außendienstmitarbeiter eine Inspektion über Canvas sendet, aktualisiert ein Flow den Fall in der modellgesteuerten App und löst die nächste Genehmigung aus.
+
+00:13:22.560 --> 00:13:24.760
+Eine Lösung mit verschiedenen Oberflächen für verschiedene Benutzer?
+
+00:13:25.140 --> 00:13:26.100
+Das ist das hybride Muster.
+
+00:13:26.640 --> 00:13:29.780
+Governance, wo sie nötig ist, Flexibilität, wo sie gebraucht wird, Sie gehen keine Kompromisse ein.
+
+00:13:30.280 --> 00:13:31.940
+Sie nutzen für jede Aufgabe das richtige Werkzeug.
+
+00:13:32.320 --> 00:13:33.180
+Wie entscheiden Sie sich also?
+
+00:13:33.600 --> 00:13:35.300
+Hier ist ein einfaches Framework für Ihr nächstes Projekt.
+
+00:13:35.800 --> 00:13:36.800
+Das Einfach-Entscheidungs-Framework.
+
+00:13:36.800 --> 00:13:38.640
+Stellen Sie sich der Reihe nach vier Fragen.
+
+00:13:39.080 --> 00:13:40.480
+Erste Frage, muss ich Dataverse verwenden?
+
+00:13:41.040 --> 00:13:46.520
+Wenn die Antwort Nein lautet, vielleicht liegen Ihre Daten in SharePoint oder einem anderen System, das Sie nicht verschieben, dann ist Canvas Ihre Wahl.
+
+00:13:47.460 --> 00:13:49.020
+Modellgesteuerte Apps funktionieren ohne Dataverse.
+
+00:13:49.560 --> 00:13:51.260
+Diese eine Frage schließt also eine Option aus.
+
+00:13:51.960 --> 00:13:55.720
+Zweite Frage, liegt der Wert hauptsächlich in der Benutzererfahrung oder in den Daten und Prozessen?
+
+00:13:56.440 --> 00:13:57.920
+Wenn die UX im Fokus steht, wählen Sie Canvas.
+
+00:13:58.440 --> 00:14:00.880
+Wenn Daten und Prozesse im Fokus stehen, wählen Sie modellgesteuert.
+
+00:14:01.240 --> 00:14:02.180
+Dies ist der Kern der Entscheidung.
+
+00:14:02.580 --> 00:14:05.300
+Wenn Ihre Benutzer eine benutzerdefinierte Schnittstelle benötigen, greifen Sie zu Canvas.
+
+00:14:05.300 --> 00:14:09.820
+Wenn Sie komplexe Daten mit konsistenten Prozessen verwalten müssen, ist die modellgesteuerte App die stärkere Wahl.
+
+00:14:10.300 --> 00:14:14.580
+Dritte Frage, benötigen Sie komplexe Geschäftsprozessabläufe, rollenbasierte Sicherheit oder Auditing?
+
+00:14:15.040 --> 00:14:16.060
+Wenn Ja, wählen Sie Modellgesteuert.
+
+00:14:16.320 --> 00:14:17.480
+Wenn Nein, kann Canvas funktionieren?
+
+00:14:18.040 --> 00:14:22.460
+Diese Enterprise-Funktionen sind in modellgesteuerten Apps integriert, während Sie sie in Canvas von Grund auf neu erstellen müssten.
+
+00:14:22.880 --> 00:14:24.520
+Vierte Frage, was ist mit Ihren bestehenden Lizenzen?
+
+00:14:24.520 --> 00:14:30.600
+Haben Sie Microsoft 3.560, das Standard-Canvas-Apps, abdeckt oder verfügen Sie bereits über Premium-Lizenzen für Dataverse?
+
+00:14:31.200 --> 00:14:32.620
+Das Budget bestimmt oft Ihren Ausgangsweg.
+
+00:14:32.960 --> 00:14:36.100
+Wenn Sie es bauen können, ohne zusätzliches Geld auszugeben, ist das ein klares Zeichen.
+
+00:14:36.500 --> 00:14:38.440
+Hier ist eine kurze Faustregel direkt von Microsoft.
+
+00:14:39.280 --> 00:14:42.960
+Ziehen Sie eine modellgesteuerte App in Betracht, es sei denn Ihre Nutzer benötigen spezifisch eine Canvas-App.
+
+00:14:43.380 --> 00:14:49.640
+Daten Sie standardmäßig mit Modell gesteuert und wechseln Sie nur zu Canvas, wenn Sie ein individuelles UI, eine Mobile-First-Erfahrung oder Daten aus mehreren Quellen brauchen.
+
+00:14:49.640 --> 00:14:53.040
+Ein letzter Tipp, wenn Sie immer noch unsicher sind, erstellen Sie zuerst ein Prototypen-Canvas.
+
+00:14:53.260 --> 00:14:54.580
+Das Design lässt sich dort schneller iterieren.
+
+00:14:55.120 --> 00:14:59.980
+Wenn die App wächst und später Governance benötigt, migrieren Sie die Daten zu Dataverse und fügen Sie modellgesteuerte Komponenten hinzu.
+
+00:15:00.420 --> 00:15:02.120
+Sie müssen am ersten Tag noch nicht alles perfekt haben.
+
+00:15:03.120 --> 00:15:03.860
+Also hier ist das Fazit.
+
+00:15:04.140 --> 00:15:06.560
+Canvas-Apps bieten völlige Designfreiheit bei jeder Datenquelle.
+
+00:15:07.380 --> 00:15:10.820
+Modellgesteuerte Apps bieten strukturiertes Datenmanagement und integrierte Regeln auf Dataverse.
+
+00:15:11.160 --> 00:15:12.160
+Sie stehen Konkurrenz zueinander.
+
+00:15:12.500 --> 00:15:15.200
+Jede erfüllt eine andere Aufgabe und die besten Lösungen nutzen beide.
+
+00:15:15.580 --> 00:15:18.620
+Wenn Sie das nächste Mal ein Power-Apps-Projekt starten, beginnen Sie mit diesen vier Fragen.
+
+00:15:18.620 --> 00:15:20.520
+Fangen Sie nicht einfach an, Steuerelemente zu verschieben.
+
+00:15:20.820 --> 00:15:21.660
+Finden Sie Ihren Schwerpunkt.
+
+00:15:22.120 --> 00:15:23.620
+Ist es die Benutzererfahrung oder sind es die Daten?
+
+00:15:23.980 --> 00:15:26.320
+Ein paar Minuten Überlegung sparen Ihnen jetzt wochenlange Nacharbeit.
+
+00:15:26.580 --> 00:15:27.040
+Das lohnt sich.
+
+00:15:27.480 --> 00:15:29.360
+Wenn Ihnen das geholfen hat, abonnieren Sie für weitere Wissens-Hippen.
+
+00:15:29.640 --> 00:15:31.420
+Ich würde gerne wissen, zu welchem App-Typ Sie zuerst greifen.
+
+00:15:31.840 --> 00:15:32.480
+Hinterlassenskommentar.

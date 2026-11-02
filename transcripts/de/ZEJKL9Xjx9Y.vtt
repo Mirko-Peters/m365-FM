@@ -1,0 +1,1252 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.540
+Man hat Ihnen gesagt, dass das Hinzufügen des Model Context Protocol, kurz MCP, zu Copilot Studio ganz einfach sei.
+
+00:00:04.800 --> 00:00:06.420
+Verwenden Sie einfach einen benutzerdefinierten Connectors.
+
+00:00:06.720 --> 00:00:09.120
+Technisch gesehen stimmt das. Funktional gesehen ist es eine Lüge.
+
+00:00:09.340 --> 00:00:13.840
+Es ist dieselbe Art von Lüge, wie stecken Sie einfach den USB-Stick ein, ohne Ihnen zu sagen, welche Seite nach oben gehört,
+
+00:00:13.940 --> 00:00:18.520
+oder dass Sie einen Treiber, drei Registry-Änderungen und ein kleines Gebet an die Cloud-Götter für die Paketstabilität benötigen.
+
+00:00:19.380 --> 00:00:21.760
+MCP wird als USB-Anschluss für KI-Agenten vermarktet.
+
+00:00:22.440 --> 00:00:23.240
+Die Idee klingt sauber.
+
+00:00:24.120 --> 00:00:29.220
+Jeder Agent kann mit jeder Wissensquelle kommunizieren, wenn beide dasselbe Protokoll befolgen, ein universeller Handshake für den Kontext.
+
+00:00:30.000 --> 00:00:32.920
+Aber Microsoft, ganz Minimalist, gibt Ihnen nur den Anschluss.
+
+00:00:33.720 --> 00:00:36.040
+Kein Kabel, kein Anschlussdiagramm, nicht einmal einen wahren Hinweis.
+
+00:00:36.540 --> 00:00:39.400
+Also ja, Sie können zwar etwas anschließen, aber meistens ist es nur reine Dekoration.
+
+00:00:40.160 --> 00:00:42.420
+Der Mythos hält sich hartnäckig, weil die Benutzeroberfläche so gehörsend.
+
+00:00:42.740 --> 00:00:43.780
+Ton hinzufügen soll sie ziehen.
+
+00:00:44.160 --> 00:00:45.480
+Nach Model Context Protokoll filtern.
+
+00:00:45.960 --> 00:00:47.820
+Sie klicken, ein Dropdown-Menü erscheint und voilà.
+
+00:00:48.540 --> 00:00:50.600
+Sofortige Interoperabilität. Nur eben nicht.
+
+00:00:51.120 --> 00:00:55.180
+Womit sie sich tatsächlich verbinden, sind integrierte MCPs, die direkt in das Produkt verdrahtet sind.
+
+00:00:55.660 --> 00:00:58.180
+Dataverse MCP. Das funktioniert, weil es von Microsoft selbst stammt.
+
+00:00:58.180 --> 00:00:59.600
+Ihr benutzerdefiniertes MCP.
+
+00:00:59.960 --> 00:01:03.800
+Co-Pilot erkennt es nicht einmal, bis Sie ein Übersetzer bauen, einen benutzerdefinierten Connector,
+
+00:01:03.880 --> 00:01:07.300
+der sich nicht wie eine Abkürzung verhält, sondern wie eine diplomatische Mission zwischen Systemen,
+
+00:01:07.340 --> 00:01:08.560
+die weder Vokabular noch Tempo teilen.
+
+00:01:09.040 --> 00:01:10.720
+Deshalb werden wir heute mit diesem Mythos aufräumen.
+
+00:01:11.140 --> 00:01:14.800
+Ich zeige Ihnen, was MCP wirklich ist, warum Ihr Connector nicht so verbunden ist, wie er vorgibt
+
+00:01:14.800 --> 00:01:18.720
+und wie man einen baut, der tatsächlich Kontext austauscht, statt nur Konnektivität vorzutäuschen.
+
+00:01:19.620 --> 00:01:20.820
+MCP ist keine Datenquelle.
+
+00:01:20.980 --> 00:01:24.360
+Es ist eine kontextuelle Brücke der Dolmetscher zwischen Ihrem Co-Pilot und Ihrer externen Intelligenz.
+
+00:01:25.000 --> 00:01:27.100
+Und benutzerdefinierte Connectoren sind keine Add-ons.
+
+00:01:27.200 --> 00:01:28.380
+Sie sind das Baugerüst für diese Brücke.
+
+00:01:28.380 --> 00:01:32.200
+Lassen Sie uns also den Marketing-Leg von Microsoft abkratzen und einen Blick darauf werfen,
+
+00:01:32.260 --> 00:01:35.080
+was wirklich im Co-Pilot Studio passiert, wenn Sie glauben, ein MCP verbunden zu haben.
+
+00:01:35.920 --> 00:01:36.880
+Illusion der Einfachheit.
+
+00:01:37.500 --> 00:01:41.620
+Auf den ersten Blick lässt Co-Pilot Studio die MCP-Integration so beiläufig aussehen wie Milch im Kaffee.
+
+00:01:41.620 --> 00:01:46.380
+Klicken Sie auf Tool hinzufügen, nach Model-Context-Protokoll filtern, Server auswählen, fertig.
+
+00:01:47.460 --> 00:01:50.320
+Ein paar Sekunden später ist es da und wird stolz unter den Tools aufgewiesen.
+
+00:01:51.120 --> 00:01:55.020
+Die meisten Benutzer hören dort auf und prallen in Foren, damit das hier externer Kontext nun live sei.
+
+00:01:55.440 --> 00:01:55.860
+Ist er nicht.
+
+00:01:56.280 --> 00:01:57.480
+Was Sie verbunden haben, ist ein Placebo.
+
+00:01:57.920 --> 00:01:58.360
+Ist der Grund.
+
+00:01:58.900 --> 00:02:02.160
+Dieser freundliche MCP-Filter zeigt nur die integrierten Funktionen von Microsoft an.
+
+00:02:02.160 --> 00:02:06.020
+Dataverse-MCP, SharePoint-MCP, vielleicht eines für GitHub, wenn Sie Glück haben.
+
+00:02:06.700 --> 00:02:08.520
+Sie leben tief in derselben Mandanten-Infrastruktur.
+
+00:02:09.160 --> 00:02:14.280
+In dem Moment, in dem Sie versuchen, ein externes MCP zu verknüpfen, etwa Microsoft Learn oder Ihre interne semantische Suche,
+
+00:02:14.320 --> 00:02:15.180
+entdecken Sie ein leeres Regal.
+
+00:02:15.540 --> 00:02:18.300
+Es gibt keinen Import-Slot, keine Authentifizierungs-Aufforderung, keinen echten Handshake.
+
+00:02:18.300 --> 00:02:22.740
+Die vermeintliche Protokoll-Option ist eigentlich nur ein Kategoriename für vorinstalliertes Spielzeug.
+
+00:02:23.720 --> 00:02:26.600
+Unter der Haube erwartet Co-Pilot eine sehr spezifische Formatierungsdisziplin.
+
+00:02:27.200 --> 00:02:31.160
+Es verlangt einen streamfähigen HTTP-Endpunkt, der dem MCP-Schema entspricht.
+
+00:02:32.160 --> 00:02:37.420
+Anfragen in Form von Context-to-MJSON, Antworten als Events ausgegeben, alles darauf ausgelegt, Token zu streamen, statt sie nur abzuladen.
+
+00:02:38.200 --> 00:02:41.800
+Ihr externer Dienst, egal wie intelligent er ist, bleibt unsichtbar, wenn er nicht in diesem Dialekt antwortet.
+
+00:02:42.300 --> 00:02:47.560
+Ohne ihn verhält sich Co-Pilot wie ein Tourist, der drei Reisesätze auswendig gelernt hat und darauf beharrt, dass die Einheimischen nicht richtig sprechen.
+
+00:02:48.100 --> 00:02:49.300
+Dies ist die zentrale Lüge.
+
+00:02:49.720 --> 00:02:51.640
+Was nach Plug-and-Play aussieht, ist in Wahrheit Code & Pray.
+
+00:02:52.660 --> 00:02:55.720
+Sichtbare Benutzeroberfläche verbirgt die Schema-Durchsetzung, die MCP erst ermöglicht.
+
+00:02:56.100 --> 00:02:59.520
+Wenn Sie ein MCP aus dem Menü wählen, betten Sie nicht Ihren eigenen Modellkontext ein.
+
+00:03:00.240 --> 00:03:02.020
+Sie rufen einen internen Abrufmechanismus auf.
+
+00:03:02.560 --> 00:03:09.380
+Er funktioniert genial gut mit Bing-artigen Indizes und Dataverse-APIs, fragt aber nie Ihren MCP Endpunkt ab, es sei denn, Sie bauen die Brücke manuell.
+
+00:03:10.460 --> 00:03:11.460
+Und hier liegt das Paradox an.
+
+00:03:11.820 --> 00:03:18.360
+Co-Pilot Studio ist gleichzeitig eines der mächtigsten Orchestrierungstools, das Microsoft je gebaut hat und eines der täuschend eingeschränktesten A.
+
+00:03:19.080 --> 00:03:24.460
+Es verspricht universellen Kontextaustausch, liefert aber selektive Amnesie, sofern man Ihnen nicht durch Konfigurationen neue Manieren beibringt.
+
+00:03:24.920 --> 00:03:27.540
+Die meisten Administratoren, die das zum ersten Mal entdecken, vermuten ein Fehler.
+
+00:03:27.540 --> 00:03:32.400
+Sie sind der Dokumentation gefolgt, haben die URL importiert, dreimal aktualisiert und trotzdem erscheint nichts.
+
+00:03:32.840 --> 00:03:34.760
+Das liegt daran, dass Sie die Brücke nicht gebaut haben.
+
+00:03:35.420 --> 00:03:37.040
+Sie haben lediglich einen Tunnel an die Wand gemalt.
+
+00:03:37.380 --> 00:03:39.520
+Diese Illusion zu erkennen, ist der erste Schritt zur Kompetenz.
+
+00:03:40.140 --> 00:03:41.960
+Ihr Connector Panel lügt nicht mit böser Absicht.
+
+00:03:41.960 --> 00:03:45.920
+Es erzählt lediglich die vereinfachte Version der Realität, die für Durchschnittsnutzer gedacht ist.
+
+00:03:46.380 --> 00:03:47.260
+Aber sie sind keine Durchschnittsung.
+
+00:03:47.540 --> 00:03:49.700
+Sie sind die Person, von der erwartet wird, dass es tatsächlich funktioniert.
+
+00:03:49.920 --> 00:03:51.240
+Und das ist der erste Schritt zur Erleuchtung.
+
+00:03:51.860 --> 00:03:55.020
+Zu wissen, dass dieses entzückende kleine Panel in Co-Pilot Studio Sie anlügt.
+
+00:03:55.580 --> 00:03:56.580
+Was MCP eigentlich ist.
+
+00:03:57.260 --> 00:03:58.780
+Okay, definieren wir das Geschöpft, mit dem wir es zu tun haben.
+
+00:03:59.240 --> 00:04:02.800
+MCP, das Model Context Protocol, ist kein Dateiformat oder ein API-Wrapper.
+
+00:04:03.920 --> 00:04:09.140
+Es ist eine lingua franca für KI-Systeme, ein Weg für verschiedene Gehirne, nicht Daten, sondern Bedeutung über Daten zu teilen.
+
+00:04:09.140 --> 00:04:17.600
+Microsoft nennt es USB für Agenten, nicht weil es Bytes überträgt, sondern weil es den Handshake standardisiert, wer sich wo anschließt, welcher Strom fließt und wie beide Seiten vereinbaren.
+
+00:04:17.840 --> 00:04:20.540
+Dass das, was übertragen wird, valider Kontext und kein Rauschen ist.
+
+00:04:21.600 --> 00:04:28.220
+Technisch definiert MCP, wie ein Agent und eine Kontextquelle strukturierte Metadaten, Toolchirmata-Aktion, Parameter und Kontext-Token austauschen.
+
+00:04:29.320 --> 00:04:30.960
+Betrachten Sie es als internationale Diplomatie.
+
+00:04:30.960 --> 00:04:34.220
+Der MCP-Server repräsentiert eine souveräne Informationsnation.
+
+00:04:34.880 --> 00:04:39.060
+Ein Regelwerk darüber, wie ein bestimmter Wissensbestand abgefragt, zusammengefasst oder aktualisiert werden kann.
+
+00:04:39.820 --> 00:04:44.380
+Der MCP-Client, in diesem Fall Copilot Studio, ist der Gastgesandte, der im Namen des Benutzers spricht.
+
+00:04:45.440 --> 00:04:53.340
+Die Brücke zwischen beiden schlägt der Connector, unser geduldiger Übersetzer, der sicherstellt, dass eine SharePoint-Abfrage in der einen Sprache zu einer Post-V1-Kontext-Anfrage in der anderen wird.
+
+00:04:53.880 --> 00:04:55.720
+Innerhalb des Protokolls ist alles JSON.
+
+00:04:56.400 --> 00:05:02.120
+Vorhersehbar, effizient und manchmal mühsam JSON, damit selbst ein großes Sprachmodell es ohne Tagträumerei pasen kann.
+
+00:05:03.060 --> 00:05:04.300
+Jede Anfrage enthält eine Absicht.
+
+00:05:04.880 --> 00:05:07.440
+Jede Antwort transportiert Kontext-Token und optionale Quellenangaben.
+
+00:05:07.440 --> 00:05:10.080
+Noch interessanter ist, dass diese Antworten gestreamt werden könnten.
+
+00:05:10.380 --> 00:05:13.420
+Copilot erhält Teilfragmente, während der MCP-Server die Bedeutung zusammensetzt.
+
+00:05:14.180 --> 00:05:17.620
+Das verhindert, dass TKI mitten im Gedanken einfriert und auf die vollständige Antwort wartet.
+
+00:05:18.000 --> 00:05:19.540
+Es ist ein Staffellauf, keine Paketzustelle.
+
+00:05:19.860 --> 00:05:22.960
+Die USB-Metapher von Microsoft ist verführerisch, weil sie Einfachheit suggeriert.
+
+00:05:23.740 --> 00:05:26.580
+Man steckt A in B und die Elektronen des Wissens beginnen zu fließen.
+
+00:05:27.100 --> 00:05:28.780
+Doch diese Analogie bricht fast sofort zusammen.
+
+00:05:28.780 --> 00:05:33.300
+Ein physisches USB-Kabel setzt feste Pins, stabile Spannungen und eine einzige Art von Strom voraus.
+
+00:05:34.100 --> 00:05:36.080
+MCP hingegen verhandelt dynamische Schemata.
+
+00:05:36.780 --> 00:05:42.580
+Jedes Gerät und jede Server-Implementierung kann eigene Verben, Eigenschaften und kontextuelle Möglichkeiten definieren.
+
+00:05:43.140 --> 00:05:46.160
+Stellen Sie sich einen USB-Stick vor, der seine Verdrahtung ändert, je nachdem, wo er eingesteckt wird.
+
+00:05:46.600 --> 00:05:47.560
+Was kommt der Realität näher?
+
+00:05:48.040 --> 00:05:49.140
+Also was genau befindet sich wo?
+
+00:05:49.140 --> 00:05:58.460
+Auf der Basisebene enthält der MCP-Server-Tool-Definitionen, Beschreibungen von Aktionen wie Dokumentensuche, Datensatzerstellung oder Tabellenauflistung zusammen mit erforderlichen Parametern und Datentypen, Datentypen.
+
+00:05:58.740 --> 00:05:59.820
+Es ist der Intelligenzkortex.
+
+00:06:00.160 --> 00:06:06.300
+Der MCP-Client Co-Pilot Studio beherbergt das Agentengehirn, das natürliche Sprachbefehle interpretiert und entscheidet, welche Aktionen aufgerufen werden sollen.
+
+00:06:06.540 --> 00:06:14.300
+Dazwischen implementiert der benutzerdefinierte Connector den Vertrag, übernimmt die Authentifizierung, validiert das Schema und streamt die Konversation über HTTP unter Beibehaltung der Struktur.
+
+00:06:14.300 --> 00:06:20.940
+Wenn Co-Pilot eine Aufforderung sendet, sagen wir in der Artikel über SharePoint-Indexierung, weil dann durchsucht es keine Webseiten.
+
+00:06:21.680 --> 00:06:29.320
+Es generiert eine kontextuelle Anfrage, eingebettet in JSON, schiebt diese durch den Connector an den MCP-Server und erhält ein strukturiertes, kontextuelles Paket zurück, keinen reinen Text.
+
+00:06:30.120 --> 00:06:37.820
+Dieses Paket enthält Metadaten, Quellen, Relevanzbewertungen und Textausschnitte, die das große Sprachmodell dann für den Benutzer in flüssiges Deutsch verdichtet.
+
+00:06:38.320 --> 00:06:40.260
+Es ist Kontextsynthese, keine einfache Datenanfrage.
+
+00:06:40.260 --> 00:06:44.800
+Ohne diese Disziplin agiert Co-Pilot wie ein Papagei, der Zusammenfassungen von dem wiederholt, was ihm gefüttert wird.
+
+00:06:45.420 --> 00:06:47.260
+Mit MCP erinnert es sich plötzlich an Zusammenhänge.
+
+00:06:47.820 --> 00:06:53.600
+Welches Dokument referenziert welche API, welches Feld in Dataverse entspricht, welcher Eigenschaft im CRM, welche Lizenzklausel regelt diese Aktion?
+
+00:06:54.580 --> 00:07:01.620
+Im Wesentlichen wertet MCP den Co-Pilot von einer Autovervollständigung mit Zweiger zu einem halbwegs zuverlässigen Analysten auf, der die Topologie der Daten ihres Unternehmens tatsächlich versteht.
+
+00:07:02.260 --> 00:07:09.080
+Ja, USB für Agenten klingt eingängig, doch praktisch bedeutet es, dass MCP eine höfliche Unterhaltung zwischen sehr eigensinnigen Systemen erzwingt.
+
+00:07:09.080 --> 00:07:12.780
+Als weiß Co-Pilot Studio anzufragen, darf ich dieses Schema abfragen?
+
+00:07:13.560 --> 00:07:15.060
+Anstatt herauszuposaunen, gib mir alles.
+
+00:07:15.660 --> 00:07:19.280
+Diese kleine Höflichkeit ist der Unterschied zwischen einer Halluzination und einer regelkonformen Antwort.
+
+00:07:19.880 --> 00:07:21.480
+Und hier ist der Kniff, den Microsoft nie erfolgen.
+
+00:07:21.880 --> 00:07:25.960
+Das MCP-Dropdown in Co-Pilot Studio spricht dieses Protokoll bereits, jedoch nur mit dem eigenen Dienst.
+
+00:07:26.660 --> 00:07:30.160
+Wenn Sie ein eigenes erstellen, verfassen Sie effektiv einen neuen Dialekt innerhalb dieses Abkommens.
+
+00:07:30.980 --> 00:07:33.820
+Sie definieren, was Kontext innerhalb Ihrer Unternehmensmauern tatsächlich bedeutet.
+
+00:07:33.820 --> 00:07:41.380
+Zu wissen, was MCP ist, eine dynamische, strukturierte Grammatik für Kontext, keine Datenquelle liefert die Theorie, bevor man das Verbrechen der Implementierung begeht.
+
+00:07:42.420 --> 00:07:44.020
+Denn als nächstes beginnen wir es gemeinsam.
+
+00:07:44.540 --> 00:07:50.160
+Wir werden den Handshake selbst bauen und beweisen, dass die Wabestärke von Co-Pilot Studio nicht im Menü liegt, sondern im Verständnis des Vertrags.
+
+00:07:50.160 --> 00:07:57.980
+Das ist unsere praktische Ketzerei, den eigenen, vollständig konformen, streamfähigen Custom-Connector zu konstruieren, der fließend MCP spricht, statt nur den Akzent zu imitieren.
+
+00:07:58.800 --> 00:08:00.100
+Einen echten Custom-Connector bauen.
+
+00:08:00.720 --> 00:08:03.860
+Jetzt kommen wir zu dem Teil, den alle überstürzen, die eigentliche Konstruktion.
+
+00:08:04.840 --> 00:08:08.040
+Die meisten Tutorials winken vage ab und sagen, importieren Sie einfach von GitHub.
+
+00:08:08.680 --> 00:08:14.880
+Sie verschweigen das Minenfeld aus Schemafehlern, Hostfehlkonfigurationen und Authentifizierungseigenheiten, die unter diesem harmlos aussehenden Button lauern.
+
+00:08:14.880 --> 00:08:20.980
+Heute gehen wir pedantisch vor, denn Präzision ist der Unterschied zwischen einem Agenten, der denkt, da denkt und einem, der schweigend schmollen wird.
+
+00:08:22.000 --> 00:08:23.560
+Verstehen Sie zuerst das Skelett des Workflows.
+
+00:08:24.440 --> 00:08:27.500
+GitHub-Import, Endpunkt-Konfiguration, Connector veröffentlicht.
+
+00:08:27.860 --> 00:08:28.200
+Bei Knochen.
+
+00:08:28.580 --> 00:08:30.280
+Fehlt ein Gelenk, haben Sie eine leblose Gliedmaße.
+
+00:08:31.060 --> 00:08:33.640
+Beginnen wir also dort, wo Microsoft die Knochen in PowerApps Make versteckt.
+
+00:08:34.100 --> 00:08:36.840
+Dort werden Custom-Connector geboren, nicht den Co-Pilot Studio selbst.
+
+00:08:37.780 --> 00:08:40.640
+Co-Pilot ist lediglich der Endverbraucher dessen, was Sie hier artikulieren.
+
+00:08:40.820 --> 00:08:44.560
+Wenn Sie auf neuer Custom-Connector klicken, erhalten Sie Optionen wie aus dem Zauberhut.
+
+00:08:44.880 --> 00:08:48.940
+Aus OpenAPI, aus Postman, von Grund auf, oder der gesegnete Import aus GitHub.
+
+00:08:49.700 --> 00:08:55.240
+Wählen Sie letzteres, da Microsoft stillschweigend ein Repository mit MCP-Connector-Vorlagen in seinem Entwicklerzweig pflegt.
+
+00:08:55.860 --> 00:08:58.520
+Die Vorlage, die Sie tatsächlich benötigen, ist, dass Sie MCP Streamable gekennzeichnet.
+
+00:08:59.040 --> 00:09:03.840
+Alles, was nicht streamfähig ist, scheint funktionsfähig zu sein, bis zu dem Moment, in dem Co-Pilot die erste Frage stellt,
+
+00:09:04.140 --> 00:09:05.720
+worauf in das stillschweigend scheitert.
+
+00:09:06.460 --> 00:09:08.640
+Kein Feuerwerk, keine Fehler, einfach ein höfliches Nichts.
+
+00:09:10.140 --> 00:09:13.600
+Nachdem Sie MCP Streamable gewählt haben, zeigen Sie auf den Dev-Zweig und klicken Sie auf Weiter.
+
+00:09:13.600 --> 00:09:17.160
+Das System ruft einen JSON-Blob ab, der die Parameter des Connectors definiert.
+
+00:09:18.360 --> 00:09:22.400
+Authentifizierung, meist keine, da MCP derzeit auf Mandanten-Isolation setzt,
+
+00:09:22.540 --> 00:09:27.000
+eine Handvoll erforderlicher Request-Bodies und kritische Header-Mappings für das Streaming.
+
+00:09:27.860 --> 00:09:28.500
+Fassen Sie diese noch nicht.
+
+00:09:29.000 --> 00:09:32.640
+Jeder hat den Instinkt, Sie sofort anzupassen, was zwangsläufig die gesamte Sequenz unterbricht.
+
+00:09:33.640 --> 00:09:34.700
+Scrollen Sie stattdessen zum Host.
+
+00:09:35.080 --> 00:09:38.240
+Microsofts Dokumentation erwähnt dies nur flüchtig in einer Fußnote, doch hier ist die Wahrheit.
+
+00:09:38.240 --> 00:09:40.260
+Das Hostfeld erwartet ausschließlich den Domainennamen.
+
+00:09:41.300 --> 00:09:45.960
+Wenn Sie eine vollständige URL mit HTTPS oder dem Pfad zur API MCP einfügen,
+
+00:09:46.360 --> 00:09:49.000
+schlägt die Validierung des Connectors stillschweigend fehl.
+
+00:09:50.500 --> 00:09:53.960
+Es meldet, dass alles korrekt validiert wurde, erscheint dann aber nicht in Co-Pilot.
+
+00:09:55.020 --> 00:09:58.760
+Entfernen Sie das Präfix, schneiden Sie API MCP ab und geben Sie nur den Host ein.
+
+00:09:59.300 --> 00:10:00.400
+Kein Schrägstrich, kein Protokoll.
+
+00:10:00.400 --> 00:10:04.660
+Dieser eine gezielte Schritt behebt 80% der Probleme, bei denen es nicht im Dropdown-Menü erscheint.
+
+00:10:05.180 --> 00:10:06.660
+Als nächstes müssen Sie die Basis URL an.
+
+00:10:07.080 --> 00:10:09.760
+Die Vorlage enthält standardmäßig slash API Slam SBIP.
+
+00:10:10.020 --> 00:10:10.500
+Entfernen Sie das.
+
+00:10:10.800 --> 00:10:10.980
+Warum?
+
+00:10:11.420 --> 00:10:14.800
+Weil Co-Pilot bei der internen Zusammenführung von Pfaden dieses Präfix bereits voraussetzt.
+
+00:10:15.340 --> 00:10:21.420
+Behalten Sie es bei, erhalten Sie doppelte Pfade wie slash app EP slash API slash API slash MCP slash Search,
+
+00:10:21.520 --> 00:10:23.400
+die des Server als redundant und unsinnig ablehnt.
+
+00:10:24.220 --> 00:10:25.080
+Kürzen Sie rigoros.
+
+00:10:26.080 --> 00:10:27.540
+Geben Sie Ihrer Kreation nun einen klaren Namen.
+
+00:10:28.040 --> 00:10:29.880
+Widerstehen Sie dem Drang, ihn Test-Connector zu nennen.
+
+00:10:30.400 --> 00:10:32.640
+Der interne Cache von Co-Pilot akzeptiert nur eindeutige Namen.
+
+00:10:33.220 --> 00:10:36.520
+Bei doppelten Namen versteckt sich Ihr neuer Connector wie ein schüchternes Kind hinter dem ersten.
+
+00:10:37.220 --> 00:10:41.800
+Wählen Sie beschreibende Titel, Microsoft Learn MCP oder Internal Research Context MCP.
+
+00:10:42.420 --> 00:10:43.320
+Klicken Sie dann auf Erstellen.
+
+00:10:44.100 --> 00:10:47.300
+An dieser Stelle legt Microsofts Benutzeroberfläche eine lange theatralische Pause ein.
+
+00:10:47.600 --> 00:10:52.640
+Der Connector-Dienst validiert die Struktur, registriert Metadaten der Umgebung und verteilt sie auf regionale Rechenzentren.
+
+00:10:53.280 --> 00:10:54.520
+Dies kann bis zu fünf Minuten dauern.
+
+00:10:54.520 --> 00:10:56.780
+In diesen Minuten werden Sie versucht, dann die Seite neu zu lassen.
+
+00:10:57.360 --> 00:11:00.180
+Jeder Refresh startet das Caching neu und verlängert Ihre Wartezeit,
+
+00:11:00.180 --> 00:11:01.100
+wie Sisyphus mit dem Rad.
+
+00:11:01.360 --> 00:11:02.060
+Holen Sie sich ein Getränk.
+
+00:11:02.620 --> 00:11:06.580
+Wenn die Validierung erfolgreich abgeschlossen ist, existiert der Connector offiziell in Ihrer Umgebung.
+
+00:11:07.100 --> 00:11:09.240
+Doch geboren zu sein bedeutet nicht automatisch nützlich zu sein.
+
+00:11:09.620 --> 00:11:13.460
+Der nächste Schritt, der von fast jedem Quickstart-Block ignoriert wird, ist die Schema-Anpassung.
+
+00:11:14.200 --> 00:11:18.380
+Antworten des MCP-Servers enthalten Felder wie Aktionsbeschreibung, Tool-Schema und Stream-Token-ID.
+
+00:11:19.160 --> 00:11:22.200
+Co-Pilot erwartet diese genau so, wie sie in der MCP-Spezifikation definiert sind.
+
+00:11:22.200 --> 00:11:28.120
+Wenn Ihr externer MCP-Server anders schreibt oder Metadaten unter Payload-Antwort statt unter Data-Tool verschachtelt,
+
+00:11:28.440 --> 00:11:30.080
+verwirft Co-Pilot dies als Kauderwelsch.
+
+00:11:31.260 --> 00:11:33.400
+Keine Warnung, kein Fehler. Wieder nur Stille.
+
+00:11:34.100 --> 00:11:37.600
+Das LLM hinter Co-Pilot interpretiert das als, ich weiß nicht, wie ich dabei helfen kann.
+
+00:11:38.560 --> 00:11:40.240
+Herzlichen Glückwunsch, Sie haben ein konformes Nichts gebaut.
+
+00:11:40.860 --> 00:11:44.100
+Öffnen Sie zur korrekten Anpassung den Reiter Definition in Ihrem neu erstellten Connector.
+
+00:11:44.100 --> 00:11:47.700
+Erweitern Sie den ersten Vorgang, meist Abfrage- oder Kontextabrufen,
+
+00:11:47.980 --> 00:11:50.820
+und vergleichen Sie den Antwortbereich mit dem aktuellen MCP-Schema auf GitHub.
+
+00:11:51.680 --> 00:11:55.600
+Passen Sie Eigenschaftsnamen und Typen so an, dass Arrays sind, Objekte sind
+
+00:11:55.600 --> 00:11:57.720
+und jeder String die korrekte Groß- und Kleinschreibung verwendet.
+
+00:11:58.040 --> 00:11:59.980
+Es wirkt bürokratisch. Wir kommen bei der Diplomatie.
+
+00:12:00.580 --> 00:12:01.980
+Übersetzer improvisieren, keine Grammatik.
+
+00:12:02.400 --> 00:12:04.920
+Sobald die Ausrichtung abgeschlossen ist, stellen Sie die Streaming-Unterstützung auf Ja.
+
+00:12:05.340 --> 00:12:08.180
+Wieder einmal versteckt die Dokumentation dies hinter einem Akkordeon namens
+
+00:12:08.180 --> 00:12:12.200
+Optionale erweiterte Einstellungen, als wäre es die Garnitur und nicht das Hauptgericht.
+
+00:12:12.200 --> 00:12:16.900
+Aber Co-Pilot benötigt streamfähige Endpunkte, da es KI-Antworten schrittweise rendert.
+
+00:12:17.500 --> 00:12:20.320
+Wenn Sie dies nicht markieren, authentifiziert sich der Connector zwar technisch,
+
+00:12:20.400 --> 00:12:22.760
+spricht jedoch mitten in der Antwort ab, was zu Halbsätzen oder, noch schlimmer,
+
+00:12:22.820 --> 00:12:24.260
+zu mitten im Wort abgebrochener Markdown führt.
+
+00:12:24.920 --> 00:12:27.100
+Irgendjemand fragte immer, kann ich stattdessen nicht einfach Synchron verwenden?
+
+00:12:27.940 --> 00:12:32.140
+MCP erwartet tokenisierte Streams keine Massendumps, genau um den Gesprächsfluss aufrechtzuerhalten.
+
+00:12:32.660 --> 00:12:36.000
+Stellen Sie es sich so vor, als würden Sie das Large Language Model über einen intravenösen Tropf ernähren,
+
+00:12:36.000 --> 00:12:38.040
+anstatt ihm eine ganze Mahlzeit in den Rachen zu stopfen.
+
+00:12:38.580 --> 00:12:40.000
+Der Tropf lässt es denken, während es ist.
+
+00:12:40.000 --> 00:12:42.540
+An diesem Punkt könnten Sie glauben, der Erfolg sei greifbar.
+
+00:12:43.040 --> 00:12:45.220
+Sie gehen zurück zu Co-Pilot Studio, klicken auf Tool hinzufügen,
+
+00:12:45.320 --> 00:12:47.860
+Filter nach MCP und Aktualisieren wiederholt, wenn Ihr Connector nicht erscheint.
+
+00:12:48.500 --> 00:12:50.620
+Hier ist die unbequeme Wahrheit, die Verbreitung in der Umgebung
+
+00:12:50.620 --> 00:12:52.460
+hinkt der Veröffentlichung um einige Minuten hinterher.
+
+00:12:53.260 --> 00:12:56.300
+Der Arbeitsbereich muss seine Liste der Connectors mit dem Power-Plattform-Dienst synchronisieren.
+
+00:12:56.740 --> 00:12:58.320
+Ständiges Aktualisieren verzögert die Synchronisierung.
+
+00:12:58.620 --> 00:12:59.940
+Der effiziente Administrator geht einfach weg.
+
+00:13:00.420 --> 00:13:03.640
+Der Ungeduldige verstrickt sich in ein selbst geschaffenes, zeitliches Paradoxon.
+
+00:13:04.240 --> 00:13:05.800
+Wenn Ihr Connector schließlich erscheint,
+
+00:13:06.060 --> 00:13:08.800
+werden Sie einen subtilen Unterschied zu den nativen Microsoft-Connectors bemerken.
+
+00:13:08.800 --> 00:13:10.680
+Seinem Symbol fehlt das integrierte Siegel.
+
+00:13:11.080 --> 00:13:12.860
+Es ist in Ordnung, Sie haben etwas Einzigartiges erschaffen.
+
+00:13:13.220 --> 00:13:16.040
+Wählen Sie ihn aus, klicken Sie auf Hinzufügen und authentifizieren Sie sich, falls dazu aufgefallen.
+
+00:13:16.780 --> 00:13:18.980
+Co-Pilot stellt nun eine Verbindung zu diesem Connector her
+
+00:13:18.980 --> 00:13:22.380
+und ruft dessen Tool Metadaten, Titel, Beschreibung und Parameter ab.
+
+00:13:23.120 --> 00:13:26.300
+Das Vorhandensein dieser Metadaten ist der Beweis dafür, dass der Handshake erfolgreich war.
+
+00:13:26.780 --> 00:13:28.820
+Wenn Sie nichts sehen, überprüfen Sie Ihre Schemausrichtung erneut.
+
+00:13:29.560 --> 00:13:31.800
+Der Endpunkt spricht zwar, aber Co-Pilot versteht den Akzent nicht.
+
+00:13:32.580 --> 00:13:34.820
+Es bleiben zwei Fallstricke, beide herrlich töricht.
+
+00:13:35.380 --> 00:13:36.640
+Erstens Zertifikatsvalidierung.
+
+00:13:36.640 --> 00:13:39.200
+Wenn Ihr MCP-Server selbstsigniertes TLS verwendet
+
+00:13:39.200 --> 00:13:41.640
+und Sie dieses Zertifikat nicht zur Connector-Umgebung hinzugefügt haben,
+
+00:13:41.720 --> 00:13:42.860
+werden Verbindungen sofort unterbrochen.
+
+00:13:43.560 --> 00:13:46.320
+Verwenden Sie ein gültiges, von einer öffentlichen C ausgestelltes Zertifikat
+
+00:13:46.320 --> 00:13:48.820
+oder laden Sie Ihr Root-Zertifikat über die Power-Plattform-Einstellung hoch.
+
+00:13:49.100 --> 00:13:50.420
+Zweitens Timeout-Budgetierung.
+
+00:13:51.260 --> 00:13:54.520
+Streamfähige Endpunkte müssen mit dem Header Transfer-Encoding, Chunked, antworten.
+
+00:13:55.000 --> 00:13:57.820
+Ohne diesen geht Co-Pilot von einem Standard-Http-Close aus,
+
+00:13:57.880 --> 00:14:00.420
+um das Ende der Nachricht zu signalisieren und bricht vorzeitig ab.
+
+00:14:00.900 --> 00:14:02.720
+Testen Sie mit Curl, bevor Sie Microsoft beschuldigt.
+
+00:14:02.720 --> 00:14:05.420
+Hier ist eine Kurzgeschichte, die dieses Ritual perfekt zusammenfasst.
+
+00:14:06.020 --> 00:14:08.600
+Ein Administrator beschwerte sich einmal, dass sein Connector plötzlich nicht mehr funktioniert.
+
+00:14:09.200 --> 00:14:11.200
+Nach einer forensischen Untersuchung entdeckten wir,
+
+00:14:11.320 --> 00:14:14.300
+dass Ihr Hosting-Techniker Cloudflare vor dem MCP-Endpunkt platziert hatte,
+
+00:14:14.860 --> 00:14:15.780
+angeblich zum Caching.
+
+00:14:16.640 --> 00:14:19.660
+Und Cloudflare hat in seiner wohlwollenden Ignoranz die Streaming-Header entfernt,
+
+00:14:19.700 --> 00:14:20.960
+um den Datenverkehr zu komprimieren.
+
+00:14:21.440 --> 00:14:22.600
+Ergebnis absolute Stille.
+
+00:14:23.040 --> 00:14:25.400
+Die Moral der Übertragungsweg schert sich nicht um Deine Optimierung.
+
+00:14:25.700 --> 00:14:28.120
+Halte Dich an die Spezifikationen oder genieße das Fegefeuer des Deepakings.
+
+00:14:28.280 --> 00:14:28.840
+Nun zur Erleuchtung.
+
+00:14:28.840 --> 00:14:31.240
+Dieser gesamte Prozess ist keine bösartige Komplexität.
+
+00:14:31.700 --> 00:14:34.560
+Microsoft hat keine Fallen gestellt, sondern setzt lediglich professionelle Geduld vor.
+
+00:14:35.160 --> 00:14:37.160
+Die Lüge der benutzerdefinierten Konnektoren besteht fort,
+
+00:14:37.220 --> 00:14:39.560
+weil die Benutzeroberfläche die grundlegenden Schritte zur Korrektheit auslässt.
+
+00:14:40.500 --> 00:14:42.720
+Sie erzählt nur eine halbe Wahrheit für die Gelegenheitsnutzer.
+
+00:14:43.240 --> 00:14:45.500
+Wenn Du immer noch zu siehst, hast Du diese Gruppe bereits hinter Dir gelassen.
+
+00:14:46.000 --> 00:14:47.500
+Richtig umgesetzt ist das, was Du gebaut hast,
+
+00:14:47.580 --> 00:14:49.760
+mehr als ein Connector-Assist, ein Brückenkopf für die Wahrheit.
+
+00:14:50.540 --> 00:14:52.500
+Dein Co-Pilot wird nicht länger Wissen von Bing vortäuschen.
+
+00:14:52.500 --> 00:14:57.240
+Er wird einen authentifizierten, schemakonformen und streamfähigen Kontextaustausch
+
+00:14:57.240 --> 00:14:59.120
+mit Dir freigegebener Intelligenzebene durchführen.
+
+00:14:59.720 --> 00:15:01.340
+Wenn das nächste Mal jemand in Deinem Unternehmen sagt,
+
+00:15:01.400 --> 00:15:03.060
+ich habe MCP verbunden, aber es antwortet nicht,
+
+00:15:03.220 --> 00:15:05.320
+wirst Du grimmig lächeln und antworten,
+
+00:15:05.380 --> 00:15:07.520
+ja, weil Du ein Tunnelgemälde gebaut hast, keine Brücke.
+
+00:15:08.260 --> 00:15:11.180
+Jetzt, da die Brücke steht, überprüfen wir, ob die Überquerung tatsächlich funktioniert.
+
+00:15:11.900 --> 00:15:15.040
+Denn eine schöne Hängebrücke ist nutzlos, solange nichts sie überquert.
+
+00:15:15.040 --> 00:15:18.320
+Testen und verifizieren der Integration
+
+00:15:18.320 --> 00:15:21.780
+Verifizierung ist der Teil, den jeder wie einen Nachtrag behandelt,
+
+00:15:21.940 --> 00:15:24.860
+bis sein Agent höflich lächelt und sagt, ich weiß nicht, wie ich dabei helfen kann.
+
+00:15:26.020 --> 00:15:28.360
+Dieser Satz ist die Co-Pilot-Version eines Blue Screens.
+
+00:15:28.980 --> 00:15:31.840
+Das Protokoll ist irgendwo zwischen dem Connector und dem Modell gescheitert.
+
+00:15:32.660 --> 00:15:34.620
+MCP zu testen ist nicht glamourös, aber so beweist Du,
+
+00:15:34.660 --> 00:15:36.480
+dass Du eine Brücke gebaut hast und keine Performance-Kunst.
+
+00:15:37.120 --> 00:15:38.240
+Beginne mit dem Lackmus-Test.
+
+00:15:38.760 --> 00:15:40.620
+Sieht Co-Pilot-Studio Deinem Connector überhaupt?
+
+00:15:41.460 --> 00:15:44.160
+Filtere im Tool-Bereich, noch einmal nach dem Model-Context-Protokoll.
+
+00:15:44.160 --> 00:15:47.200
+Dein neu erstellter Titel, vielleicht Microsoft Learn MCP,
+
+00:15:47.340 --> 00:15:49.500
+sollte neben dem offiziellen Dataverse-MCP erscheinen.
+
+00:15:50.080 --> 00:15:51.420
+Wenn nicht, halt sofort innen.
+
+00:15:51.760 --> 00:15:52.960
+Sichtbarkeit bedeutet Registrierung.
+
+00:15:53.360 --> 00:15:55.860
+Kein Eintrag bedeutet, dass Schema oder Host noch nicht korrekt ausgerichtet sind.
+
+00:15:56.260 --> 00:15:58.360
+Wenn es erscheint, füge das Tool zu Deinem Co-Pilot hinzu.
+
+00:15:58.860 --> 00:16:02.100
+Sobald Du es verbindest, ruft Co-Pilot-beschreibende Metadaten vom MCP-Server
+
+00:16:02.100 --> 00:16:06.280
+ab ein Verzeichnis verfügbarer Tools, jeweils mit Parametern und Beschreibungen in einfacher Sprache.
+
+00:16:07.160 --> 00:16:10.640
+Wenn Du siehst, dass sich das Beschreibungsfeld mit Microsoft DocSearch oder ähnlichem füllt,
+
+00:16:10.720 --> 00:16:12.320
+herzlichen Glückwunsch, der Handshake war erfolgreich.
+
+00:16:12.320 --> 00:16:15.320
+Der Kontext wird nun erkannt, nicht mehr erraten.
+
+00:16:15.760 --> 00:16:18.200
+Um die Funktionalität zu verifizieren, brauchst Du eine kontrollierte Frage.
+
+00:16:18.900 --> 00:16:23.780
+Nutze das Microsoft Learn MCP als Testgelände, da es öffentlich, höflich und kaum fehleranfällig ist.
+
+00:16:24.680 --> 00:16:27.020
+Frage Deinen Agenten, wie richte ich SharePoint als Wissensquelle ein?
+
+00:16:27.800 --> 00:16:29.760
+Wenn Deine Pipeline intakt ist, beobachte die Telemetrie.
+
+00:16:30.300 --> 00:16:34.320
+Der Prompt durchläuft diesen Pfad, Benutzer, benutzerdefinierter Connector, MCP-Server,
+
+00:16:34.480 --> 00:16:36.520
+Large Language Model, Antwort mit Quellenangaben.
+
+00:16:36.520 --> 00:16:39.320
+Jeder Abschnitt birgt ein potenzielles Fehlerrisiko.
+
+00:16:39.980 --> 00:16:45.780
+Wenn die Antwort inkohärentes Englisch liefert, mit Markdown-Zitaten, die auf das heilige Trio verweisen,
+
+00:16:45.960 --> 00:16:48.860
+Verbindung, Verständnis und Kontextualisierung.
+
+00:16:50.580 --> 00:16:53.080
+Das Markdown selbst ist der Beweis, dass der Streaming-Modus-Correct funktioniert.
+
+00:16:53.080 --> 00:16:55.700
+Sie sehen, wie der Text schrittweise gerendert wird.
+
+00:16:55.840 --> 00:16:58.560
+Satz, Pause, Satz, Zitat, anstatt alles auf einmal auszugeben.
+
+00:16:59.080 --> 00:17:00.860
+Dieser Rhythmus ist der Herzschlag von MCP.
+
+00:17:01.140 --> 00:17:03.400
+Doch bei Fehlern wird der Co-Pilot passiv-aggressiv.
+
+00:17:04.580 --> 00:17:05.540
+Entschlüsseln wir seine Laune.
+
+00:17:06.100 --> 00:17:06.540
+Wehre Antwort.
+
+00:17:06.960 --> 00:17:09.360
+Sie haben eine gültige Anfrage gestellt, der Co-Pilot hat genickt, aber nichts geliefert.
+
+00:17:09.940 --> 00:17:12.960
+Das liegt an der fehlerften URL, wahrscheinlich ein doppeltes Präfix bei RPSL MCP.
+
+00:17:13.400 --> 00:17:16.500
+Überprüfen Sie den vollständigen Pfad in der Definitionsregisterkarte ihres Connectors,
+
+00:17:16.580 --> 00:17:19.480
+entfernen Sie die Redundanz, beöffentlichen Sie neu und warten Sie die obligatorischen 5 Minuten.
+
+00:17:20.280 --> 00:17:22.800
+Abgebrochenes Markdown, die Antwort kommt an, endet aber mitten im Satz,
+
+00:17:22.880 --> 00:17:25.340
+wie ein gelangweilter Praktikant, der ein Gespräch vorzeitig beendet.
+
+00:17:25.800 --> 00:17:29.120
+Ihr Endpunkt deklariert kein Transfer-Encoding, chunked, chunked.
+
+00:17:29.480 --> 00:17:32.380
+Mit anderen Worten, Sie haben Streaming versprochen, aber einen statischen Datensatz gesendet.
+
+00:17:32.840 --> 00:17:35.480
+Passen Sie Ihre Header an die HTTP 1.1-Streaming-Regeln an.
+
+00:17:35.920 --> 00:17:36.740
+Ich weiß nicht, wie ich dabei helfen.
+
+00:17:37.200 --> 00:17:38.880
+Diese Meldung löst existenzielle Ängste aus.
+
+00:17:39.320 --> 00:17:42.320
+Sie bedeutet, dass der Co-Pilot den Connector zwar erreichen, das Schirm aber nicht verarbeiten kann.
+
+00:17:42.880 --> 00:17:46.500
+Ihre Eigenschaftsnamen weichen von der MCP-Spezifikation ab oder ein erforderliches Objekt wählen.
+
+00:17:46.940 --> 00:17:48.980
+Vergleichen Sie diese erneut mit dem Referenz-JSON von Microsoft.
+
+00:17:49.480 --> 00:17:51.020
+Die Lösung ist nicht mystisch, sondern rein formal.
+
+00:17:51.520 --> 00:17:54.420
+Sollten Verbindungsfehler auftreten, untersuchen Sie Ihre SS-Zertifikatskette.
+
+00:17:55.160 --> 00:17:58.200
+Selbstsignierte oder abgelaufene Zertifikate führen oft zu stellen Ablehnungen,
+
+00:17:58.360 --> 00:18:00.680
+da Power-Plattform-Dienste nicht verifizierten Roots misstrauen.
+
+00:18:01.320 --> 00:18:05.240
+Da setzen Sie es durch ein von einer vertrauenswürdigen CA ausgestelltes Zertifikat des Zertifikat explizit hoch.
+
+00:18:06.520 --> 00:18:08.700
+Bestätigungstests sind nicht nur technischer, sondern auch logischer Natur.
+
+00:18:09.400 --> 00:18:11.640
+Stellen Sie unterschiedliche Fragen, um semantische Abweichungen zu erkennen.
+
+00:18:12.280 --> 00:18:13.960
+Zeige mir SharePoint-Indizierungsdokumente.
+
+00:18:14.280 --> 00:18:16.480
+Sollte dieselbe Microsoft-Doc-Suchaktion auslösen wie
+
+00:18:16.480 --> 00:18:17.740
+Wie indiziert SharePoint-Dateien?
+
+00:18:17.740 --> 00:18:22.440
+Oh! Andere Formulierung, identische Werkzeugwahl, das ist Kontextverständnis, keine bloße Stichwortsuche.
+
+00:18:23.240 --> 00:18:25.560
+Wenn die Antworten über verschiedene Formulierungen hinweg stabil bleiben,
+
+00:18:25.640 --> 00:18:26.760
+müsst Ihr Co-Pilot offiziell fließen.
+
+00:18:27.380 --> 00:18:28.960
+Hier ist ein Diagnose-Trick, den kaum jemand kennt.
+
+00:18:29.420 --> 00:18:31.660
+Beobachten Sie die Stream-Header im Netzwerk-Tab Ihres Browsers.
+
+00:18:32.280 --> 00:18:34.320
+Sie sollten Antwort-Chunks sehen, die mit Data beginnen,
+
+00:18:34.720 --> 00:18:36.960
+gefolgt von JSON-Objekten für die inkrementellen Token.
+
+00:18:37.660 --> 00:18:39.140
+Jeder Chunk entspricht einem Teil der Antwort.
+
+00:18:39.140 --> 00:18:42.520
+Wenn Sie am Ende des Streams ein riesiges Paket sehen, ist das Streaming unterbrochen
+
+00:18:42.520 --> 00:18:44.240
+und es drohen Time-outs bei längeren Abfragen.
+
+00:18:44.680 --> 00:18:46.980
+Stellen Sie sich das Testen konzeptionell wie das Dirigieren eines Orquesters vor.
+
+00:18:47.600 --> 00:18:50.520
+Der MCP-Server spielt die Instrumente, Daten, Schema, Indizes.
+
+00:18:51.160 --> 00:18:52.540
+Der Connector führt den Taktstopp.
+
+00:18:52.880 --> 00:18:55.120
+Der Co-Pilot ist das Gehör des Dirigenten, das den Rhythmus interpretiert.
+
+00:18:55.660 --> 00:18:59.020
+Wenn ein Musiker zurückfällt oder an der falschen Tonart beginnt, zerfällt die Musik zu lärmen.
+
+00:18:59.020 --> 00:19:04.620
+Die Verifizierung ist Ihre Generalprobe, um das Timing aller Beteiligten vor dem Konzert für die Führungskräfte abzustimmen, die Magie erwarten.
+
+00:19:04.960 --> 00:19:09.520
+Wenn jeder Abschnitt harmoniert, Anfragen versandt, HTTP-Austausch, Stream-Sequenzierung,
+
+00:19:09.840 --> 00:19:13.580
+werden Sie ein kleines Wunder erleben, konsistente, zitierte, unternehmensgestellte Antworten
+
+00:19:13.580 --> 00:19:18.420
+statt des improvisierten Jazz, zu dem der Co-Pilot standardmäßig neigt, zu dem der Co-Pilot standardmäßig neigt.
+
+00:19:18.660 --> 00:19:20.480
+Erst dann können Sie die Integration als abgeschlossen betrachten.
+
+00:19:21.080 --> 00:19:24.620
+Sie haben die mechanische Ebene des MCP erreicht, den zuverlässigen Transport von Kontexten.
+
+00:19:25.040 --> 00:19:28.240
+Freuen Sie sich also über die sauberen Testergebnisse, aber denken Sie daran, dass dies nicht das Ende ist.
+
+00:19:28.240 --> 00:19:32.860
+Es ist das diagnostische Signal, das bestätigt, dass Ihr KI-Herzen im Takt Ihres Datenpulses schlägt.
+
+00:19:33.260 --> 00:19:36.080
+Das Mechanische ist erledigt. Als nächstes widmen wir uns dem Philosophischen.
+
+00:19:36.460 --> 00:19:39.020
+Warum sollte es jemanden interessieren, dass diese komplexe Symphonie überhaupt existiert?
+
+00:19:39.640 --> 00:19:42.600
+Warum ist das über die Demo hinaus von Bedeutung? Hier ist die unangenehme Wahrheit.
+
+00:19:43.120 --> 00:19:46.360
+Das Einrichten von MCP ist kein Party-Trick. Es ist Infrastruktur.
+
+00:19:46.860 --> 00:19:53.320
+Während andere beeindruckenden Antworten hinterherjagen, bauen Sie die Verfassung, die regelt, wie KI in Ihrem Unternehmen Wahrheit austauscht.
+
+00:19:54.080 --> 00:19:56.380
+Das Model-Kontext-Protokoll standardisiert diese Wahrheit.
+
+00:19:56.380 --> 00:19:59.640
+Jede Abfrage, jeder Abruf, alles begrenzt durch Schema-Konformität.
+
+00:20:00.540 --> 00:20:02.080
+Ohne dies schmied Co-Pilot die Dinge einfach aus.
+
+00:20:02.400 --> 00:20:04.320
+Mit MCP argumentiert er innerhalb definierter Grenzen.
+
+00:20:04.740 --> 00:20:10.280
+Das ist der Unterschied zwischen Vorstellungskraft und Governance zwischen einem launischen Praktikanten und einem regelkonformen Analysten und Analysten.
+
+00:20:10.640 --> 00:20:12.320
+Für Unternehmen ist dies von grundlegender Bedeutung.
+
+00:20:12.740 --> 00:20:17.380
+Ein korrekt integriertes MCP stellt sicher, dass jede Co-Pilot-Antwort aus sanktionierten Systemen stammt,
+
+00:20:17.380 --> 00:20:22.040
+SharePoint, Dataverse, interne APIs, wo, statt aus zusammengekratzten Fragmenten aus dem Bing-Netz.
+
+00:20:22.980 --> 00:20:25.120
+Ihre KI zieht nun Primärquellen heran. Keine Gerüchte.
+
+00:20:25.540 --> 00:20:26.300
+Sicherheit ergibt sich daraus.
+
+00:20:26.480 --> 00:20:33.480
+Im Jahr 2025 verzeichneten Sicherheitsforscher einen Anstieg bei Sicherheitsverletzungen durch falsch konfigurierte Benutzerdefinierte Konnektoren und Endpunkte mit zu vielen Berechtigungen,
+
+00:20:33.560 --> 00:20:35.220
+die Daten unbemerkt zwischen Mandanten abfließen ließen.
+
+00:20:35.920 --> 00:20:38.940
+Eine korrekt durchgeführte MCP-Integration stärkt das Zero-Trust-Prinzip.
+
+00:20:38.940 --> 00:20:41.100
+Der Connector fungiert wie eine Botschaftskontrolle.
+
+00:20:41.580 --> 00:20:46.180
+Das Prinzip der geringsten Rechte wird durchgesetzt, Anmeldinformationen begrenzt und Kontext nur unterdefinierten Verträgen ausgegeben.
+
+00:20:46.380 --> 00:20:49.300
+Governance-Teams schätzen einen nach tieferen Mehrwert ihre Visionsfähigkeit.
+
+00:20:50.220 --> 00:20:56.120
+Jede MCP-Transaktion erzeugt explizite Protokolle, wer gefragt hat, welches Schema geantwortet hat, welche Metadaten zurückgegeben wurden.
+
+00:20:56.760 --> 00:20:59.420
+Das ist eine Dokumentationsspur, die Ihr Compliance-Beauftragter nachts beruhigt einschlauft.
+
+00:20:59.760 --> 00:21:03.740
+Vergleichen Sie das mit generativen KI-Halluzinationen, deren Ursprünge irgendwo im Internet liegen.
+
+00:21:04.460 --> 00:21:05.960
+Zukunftssicherheit besiegelt das Argument.
+
+00:21:05.960 --> 00:21:11.600
+Da Microsoft OpenAI und andere auf standardisierte Interagentenprotokolle zusteuern,
+
+00:21:11.680 --> 00:21:15.280
+wird sich die MCP-Konformität von einer Kuriosität zu einer Anforderung entwickeln.
+
+00:21:16.140 --> 00:21:21.720
+Regulierte Branchen, Finanzen, Gesundheitswesen, Behörden werden dies für KI-Systeme, die Kontextdaten austauschen, vorschreiben, vorschreiben.
+
+00:21:22.060 --> 00:21:23.740
+Wenn dieses Memo eintrifft, werden Sie nicht in Stauchel geben.
+
+00:21:24.140 --> 00:21:26.840
+Sie werden bereits eine konforme Brücke haben, die im Hintergrund in der Produktion wird.
+
+00:21:27.380 --> 00:21:31.780
+Wenn Kollegen ihre sorgfältige Konfiguration also als Over-Engineering abtun, lächeln sie gelassen.
+
+00:21:32.480 --> 00:21:34.960
+Governance fühlt sich immer nach Bürokratie an, bis der Sicherheitsvorfall eintritt.
+
+00:21:34.960 --> 00:21:36.380
+Dann fühlt es sich nach Weitsicht an.
+
+00:21:36.680 --> 00:21:40.600
+Einmal richtig gemacht, erbt jede Co-Pilot-Instanz, die Sie danach bereitstellen, diese Disziplin,
+
+00:21:40.720 --> 00:21:43.180
+kontextuelles Bewusstsein innerhalb kontrollierter Grenzen.
+
+00:21:43.680 --> 00:21:44.760
+Was der Punkt, der über die Demo hinausgeht.
+
+00:21:45.100 --> 00:21:49.040
+Sie verbinden nicht nur ein Protokoll, sie definieren institutionelles Gedächtnis in Maschinenform.
+
+00:21:49.900 --> 00:21:55.080
+Wenn Co-Pilot das nächste Mal eine behördliche Anfrage unter Verwendung genau der von Ihnen autorisierten Quellen- und Zitatketten beantwortet,
+
+00:21:55.160 --> 00:21:58.960
+denken Sie an diesen Moment, an das stundenlange Kürzen von URLs, das Anpassen von Chimata und die Plausibilitätsprüfungen.
+
+00:21:58.960 --> 00:22:02.720
+Das ist die unsichtbare Technik hinter jeder verantwortungsbewussten KI.
+
+00:22:03.180 --> 00:22:06.860
+Nun, da die moralische Genugtuung wiederhergestellt und die Brücke baulich solide ist, bleibt eine Frage.
+
+00:22:07.520 --> 00:22:11.920
+Werden Sie weiterhin disziplinierte Intelligenz aufbauen oder sich von der Einfachheit des Marketings zurück ins Chaos locken lassen?
+
+00:22:12.380 --> 00:22:13.240
+Die Effizierdösung geklopft.
+
+00:22:13.240 --> 00:22:16.040
+Das Hinzufügen von MCP ist kein bloßes Umlegen erschertes.
+
+00:22:16.280 --> 00:22:19.960
+Es ist eine Neuverdrahtung des Gehirns von Co-Pilot Studio, damit es aufhört zu halluzinieren und beginnt zu schussvollen.
+
+00:22:20.200 --> 00:22:25.100
+Das faule Versprechen, einfach einen benutzerdefinierten Connector zu nutzen, bricht zusammen, wenn man erkennt, dass dieser Connector keine Tür ist,
+
+00:22:25.160 --> 00:22:28.720
+sondern ein ganzer Flur ist, sondern ein ganzer Flur, den man bauen, verstärken und auf Lecks prüfen muss.
+
+00:22:29.460 --> 00:22:32.200
+Doch sobald dies abgeschlossen ist, verändert es das Verhalten jedes zukünftigen Co-Pilot.
+
+00:22:32.580 --> 00:22:36.800
+Was Sie erreicht haben, ist ein strukturelles Kompetenzsystem, das darauf ausgelegt ist, seine Leitung zu verbergen.
+
+00:22:36.800 --> 00:22:43.240
+Sie haben Co-Pilot Studio beigebracht, höflich nach Kontext zu fragen, sich vor dem Sprechen zu authentifizieren und Zitate anstelle von kreativer Fiktion zurückzugeben.
+
+00:22:44.040 --> 00:22:47.280
+Diese Disziplin verwandelt es von einem glänzenden Chatbot in einen regelkonformen Analysten.
+
+00:22:48.020 --> 00:22:53.980
+Und ja, es erforderte Geduld, Schema-Validierung und eine heldenhafte Toleranz gegenüber Microsofts Aktualisierungsverzögerung, aber das gilt für alles, was Vertrauen verdient.
+
+00:22:54.160 --> 00:22:57.940
+Die sogenannte Lüge vom benutzerdefinierten Connector ist keine Verschwörung, sondern vereinfachendes Marketing.
+
+00:22:58.860 --> 00:23:03.120
+Microsoft sagt die Wahrheit, die für Demos geeignet ist, die haben die Version gebaut, die für die Produktion geeignet ist.
+
+00:23:03.120 --> 00:23:08.120
+Sie wissen jetzt, dass das Model-Context-Protokoll weniger Plug-and-Play ist, sondern eher ein Plug-and-Negotiate für Vertragsbedingungen.
+
+00:23:09.440 --> 00:23:14.560
+Behandeln Sie also jeden Connector, den Sie veröffentlichen, wie eine Verfassungsänderung, minimale Rechte, strenge Regeln, überprüfbare Ergebnisse.
+
+00:23:14.980 --> 00:23:17.240
+So skalieren Sie Governance, ohne Angeschwindigkeit einzubüßen.
+
+00:23:17.840 --> 00:23:23.300
+Wenn Sie das ignorieren, werden Sie Ihre Abende damit verbringen, Führungskräften zu erklären, warum der Chatbot Bing anstelle der Richtlinie zitiert hat.
+
+00:23:24.060 --> 00:23:29.920
+Sichern Sie Ihren Upgrade-Pfad, abonnieren Sie, aktivieren Sie Benachrichtigungen und lassen Sie diszipliniertes Wissen automatisch eintreffen.
+
+00:23:29.920 --> 00:23:36.540
+Keine manuellen Prüfungen, kein Händering bei halb funktionierenden Demos, nur die kontinuierliche Bereitstellung von Intelligenz, die Kontext und Compliance respektiert.
+
+00:23:36.840 --> 00:23:38.540
+Entropie gewinnt, wenn Sie sich nicht für Struktur entscheiden.
+
+00:23:38.840 --> 00:23:39.520
+Abonnieren Struktur.
+
+00:23:40.180 --> 00:23:44.400
+Drücken Sie auf Folgen, bauen Sie weiter rationale KI auf und das nächste Update wird pünktlich eintreffen,
+
+00:23:44.460 --> 00:23:48.480
+wie ein korrekt konfigurierter Connector, der genau einmal ausgeführt wird und die Wahrheit in Echtzeit streamt.
+
+00:23:49.160 --> 00:23:49.660
+Fahren Sie fort.
+
+00:23:49.660 --> 00:24:19.640
+Vielen Dank.

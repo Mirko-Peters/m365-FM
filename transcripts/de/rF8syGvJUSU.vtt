@@ -1,0 +1,889 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.900
+Sie setzen sich an Ihren Computer, geben Ihre E-Mail-Adresse und Ihr Passwort ein und drücken die Eingabetast.
+
+00:00:04.260 --> 00:00:06.840
+Es gibt eine kurze Pause, während das System entscheidet, ob Sie es wirklich sind.
+
+00:00:07.340 --> 00:00:09.720
+Die meisten Leute nehmen an, diese Pause sei nur eine Passwortprüfung.
+
+00:00:10.140 --> 00:00:11.760
+Wenn das Passwort übereinstimmt, sind Sie drin, oder?
+
+00:00:12.140 --> 00:00:12.680
+Tatsächlich nicht.
+
+00:00:13.060 --> 00:00:15.020
+Hinter den Kulissen passiert viel mehr, als Sie wahrscheinlich denken.
+
+00:00:15.600 --> 00:00:18.860
+Während Sie warten, führt Microsoft 365 im Hintergrund eine Reihe von Prüfungen durch.
+
+00:00:19.200 --> 00:00:22.780
+Welch wo Sie sind, welches Gerät Sie verwenden und ob die Anmeldung normal oder verdächtig erscheint.
+
+00:00:23.240 --> 00:00:25.040
+Und das alles geschieht, bevor Sie Zugang erhalten.
+
+00:00:25.500 --> 00:00:28.280
+Am Ende dieser Folge werden Sie verstehen, was bedingter Zugriff ist,
+
+00:00:28.280 --> 00:00:34.640
+wie er bei jeder Anmeldung funktioniert und warum er eine der wichtigsten Sicherheitskontrollen in Ihrem Microsoft 365-Tenant ist.
+
+00:00:35.100 --> 00:00:36.660
+Beginnen wir also mit der einfachsten Definition.
+
+00:00:37.360 --> 00:00:38.600
+Was ist bedingter Zugriff eigentlich?
+
+00:00:39.440 --> 00:00:41.000
+Hier ist die Definition in einfachen Worten.
+
+00:00:41.480 --> 00:00:45.020
+Bedingter Zugriff ist eine Richtlinien-Engine, die den Kontext prüft, bevor jemand hereingelassen wird.
+
+00:00:45.640 --> 00:00:47.520
+Sie schaut sich nicht nur Ihr Passwort an und sagt, das reicht.
+
+00:00:48.320 --> 00:00:52.040
+Stattdessen stellt Sie zusätzliche Fragen dazu, wer Sie sind und was bei Ihrer Anmeldung geschieht.
+
+00:00:52.820 --> 00:00:54.260
+Stellen Sie sich das wie ein Türsteher in einem Nachthupf.
+
+00:00:54.580 --> 00:00:57.120
+Sie zeigen Ihren Ausweis an der Tür, das entspricht Ihrem Benutzernamen und Passwort.
+
+00:00:57.120 --> 00:00:59.860
+Aber ein guter Türsteher wirft nicht nur einen Blick darauf und winkt Sie durch.
+
+00:01:00.300 --> 00:01:04.820
+Er prüft Ihren Namen auf der Gästeliste, sieht sich Ihre Kleidung an und erinnert sich vielleicht sogar, ob Sie früher schon einmal Ärger gemacht haben.
+
+00:01:05.380 --> 00:01:06.600
+Bedingter Zugriff macht genau das selten.
+
+00:01:07.000 --> 00:01:12.840
+Er prüft Ihre Identität anhand von Regeln, schaut, woher Sie kommen, überprüft Ihr Gerät und entscheidet, ob alles korrekt aussieht, bevor Sie hereinlässt.
+
+00:01:13.340 --> 00:01:14.160
+Nun ein wichtiger Punkt.
+
+00:01:14.640 --> 00:01:17.040
+Bedingter Zugriff läuft erst, nachdem Sie Ihr Passwort bereits eingegeben haben.
+
+00:01:17.380 --> 00:01:19.220
+Er ist kein Ersatz für die Multifaktor-Authentifizierung.
+
+00:01:19.580 --> 00:01:20.840
+Er ist eine zusätzliche Ebene obendrauf.
+
+00:01:20.840 --> 00:01:24.180
+Betrachten Sie es als den zweiten Kontrollpunkt, nachdem Sie Ihren Ausweis am Haupteingang dann gezeigt.
+
+00:01:24.400 --> 00:01:25.480
+Die Logik ist einfach Wenn-Dann.
+
+00:01:25.960 --> 00:01:29.940
+Wenn ein Benutzer versucht, auf eine Cloud-App zuzugreifen und bestimmte Bedingungen erfüllt, dann wird diese Regel erzwungen.
+
+00:01:30.580 --> 00:01:35.640
+Zum Beispiel, wenn jemand versucht, von außerhalb des Büros auf Outlook zuzugreifen, ist eine Multifaktor-Authentifizierung erforderlich.
+
+00:01:36.580 --> 00:01:39.080
+Das ist die grundlegende Struktur hinter jeder Richtlinie für bedingten Zugriff.
+
+00:01:39.820 --> 00:01:41.120
+Warum Passwörter nicht mehr ausreichen?
+
+00:01:41.800 --> 00:01:43.180
+Warum brauchen wir also diesen zusätzlichen Schritt?
+
+00:01:43.180 --> 00:01:44.940
+Weil jeden Tag Passwörter gestohlen werden.
+
+00:01:45.540 --> 00:01:48.840
+Phishing-Angriffe, Datenpannen, Leute, die dasselbe Passwort für mehrere Websites wiederverwenden.
+
+00:01:49.440 --> 00:01:52.340
+Ihr Passwort könnte genau jetzt kompromittiert sein, ohne dass Sie es überhaupt wissen.
+
+00:01:52.760 --> 00:01:53.880
+Vielleicht denken Sie nun, das ist in Ordnung.
+
+00:01:54.240 --> 00:01:55.480
+Wir haben die Multifaktor-Authentifizierung.
+
+00:01:55.820 --> 00:01:56.360
+Die schützt uns.
+
+00:01:56.840 --> 00:01:59.520
+Und Sie haben recht, MFA hilft zwar sehr, aber sie ist kein Allheilmittel.
+
+00:02:00.140 --> 00:02:02.600
+Stellen Sie sich vor, ein Hacker gelangt an das Passwort eines Ihrer Mitarbeiter.
+
+00:02:03.380 --> 00:02:08.000
+Er versucht, sich aus einem Land anzumelden, mit dem Sie nie Geschäfte machen, über ein Gerät, das Sie noch nie gesehen haben.
+
+00:02:08.620 --> 00:02:10.500
+MFA könnte ihn stoppen, wenn eine Abfrage ausgelöst wird.
+
+00:02:10.500 --> 00:02:13.460
+Aber was, wenn der Hacker auch Zugriff auf das Telefon des Mitarbeiters hat?
+
+00:02:14.000 --> 00:02:16.880
+Oder was, wenn er einen Phishing-Angriff nutzt, der auch den MFA-Code abfängt?
+
+00:02:17.440 --> 00:02:19.380
+Plötzlich wirkt MFA allein nicht mehr so kugelsicher.
+
+00:02:19.880 --> 00:02:21.000
+Hier ist ein Beispiel aus der Praxis.
+
+00:02:21.360 --> 00:02:23.480
+Die Zugangsdaten eines Vertriebsmitarbeiters landen in Duckworth.
+
+00:02:23.980 --> 00:02:27.240
+Ohne bedingten Zugriff kann sich ein Angreifer von überall auf der Welt anmelden.
+
+00:02:27.880 --> 00:02:30.420
+Er kann auf E-Mails, Dateien, Kundendaten, einfach alles zugreifen.
+
+00:02:30.940 --> 00:02:32.560
+Und Sie würden es erst bemerken, wenn es zu spät ist.
+
+00:02:32.860 --> 00:02:33.980
+Der alte Weg war alles oder nichts.
+
+00:02:34.340 --> 00:02:35.620
+Sie gaben einem Benutzer eine Lizenz.
+
+00:02:35.620 --> 00:02:38.460
+Und er konnte sich von jedem Gerät, jedem Ort und jedem Netzwerk anmelden.
+
+00:02:38.860 --> 00:02:40.180
+Kein Kontext, keine Intelligenz.
+
+00:02:40.500 --> 00:02:42.180
+Nur eine Passwortprüfung und dann voller Zugriff.
+
+00:02:42.500 --> 00:02:43.900
+Bedingter Zugriff ändert das Grundlegen.
+
+00:02:44.440 --> 00:02:45.960
+Er fügt jede Anmeldung Kontext hinzu.
+
+00:02:46.420 --> 00:02:49.740
+Er prüft, wo Sie sind, welches Gerät Sie nutzen, welche Apps Sie öffnen wollen
+
+00:02:49.740 --> 00:02:52.380
+und wie riskant die Anmeldung laut Microsoft-Analyse aussieht.
+
+00:02:53.220 --> 00:02:56.200
+Er macht aus einer einfachen Ja-Nein-Entscheidung ein intelligentes, abgestuftes Urteil.
+
+00:02:57.060 --> 00:02:59.080
+Die Signale, worauf der bedingte Zugriff achtet.
+
+00:02:59.700 --> 00:03:01.400
+Was genau überprüft der bedingte Zugriff also?
+
+00:03:01.820 --> 00:03:04.340
+Lassen Sie uns die Signale aufschlüsseln, die für die Entscheidung genutzt werden.
+
+00:03:04.580 --> 00:03:06.160
+Die Identität ist das erste Signal.
+
+00:03:06.580 --> 00:03:07.000
+Wer sind Sie?
+
+00:03:07.540 --> 00:03:10.240
+Sind Sie ein normaler Mitarbeiter, ein Administrator mit erweiterten Rechten
+
+00:03:10.240 --> 00:03:11.820
+oder ein Gast von außerhalb des Unternehmens?
+
+00:03:12.260 --> 00:03:15.200
+Bedingter Zugriff betrachtet Ihr Benutzerkonto und die Gruppen, denen Sie angehören.
+
+00:03:16.200 --> 00:03:18.680
+Für einen Administrator könnten bei der Anmeldung strengere Regeln gelten
+
+00:03:18.680 --> 00:03:19.560
+als für einen Standardbenutzer.
+
+00:03:19.840 --> 00:03:22.160
+Einem Gast könnte der Zugriff auf bestimmte Apps komplett verweigert werden.
+
+00:03:22.500 --> 00:03:24.700
+Ihre Identität bestimmt die Grundlage dessen, was erlaubt ist.
+
+00:03:25.100 --> 00:03:25.920
+Der Standard ist der nächste Punkt.
+
+00:03:26.220 --> 00:03:27.200
+Von wo erfolgt die Anmeldung?
+
+00:03:27.640 --> 00:03:30.420
+Wenn Sie sich aus dem Firmennetzwerk verbinden, ist das ein vertrauenswürdiger Ort.
+
+00:03:31.020 --> 00:03:33.560
+Bedingter Zugriff kennt den IP-Bereich Ihrer Unternehmenszentrale.
+
+00:03:33.560 --> 00:03:37.280
+Eine Anmeldung aus einem Café in einem anderen Land schlägt Alarm.
+
+00:03:37.820 --> 00:03:40.140
+Wenn das System gar nicht erst feststellen kann, wo Sie sind, ist das ein weiteres
+
+00:03:40.140 --> 00:03:40.620
+Warnsignal.
+
+00:03:41.000 --> 00:03:43.300
+Der Standort ist ein starkes Signal, da es schwer zu fälschen ist.
+
+00:03:43.700 --> 00:03:44.780
+Das Gerät spielt ebenfalls eine Rolle.
+
+00:03:45.140 --> 00:03:46.100
+Was benutzen Sie für die Anmeldung?
+
+00:03:46.400 --> 00:03:49.300
+Ein Firmenlaptop, der bei Intune verwaltet wird und Ihre Sicherheitsrichtlinien erfüllt?
+
+00:03:49.980 --> 00:03:52.280
+Oder ein privates Telefon ohne jegliche Sicherheitskontrollen?
+
+00:03:52.280 --> 00:03:56.160
+Der bedingte Zugriff kann prüfen, ob das Gerät registriert ist, Verschlüsselung aktiviert
+
+00:03:56.160 --> 00:03:58.220
+hat und bei Sicherheitspatches auf dem neuesten Stand ist.
+
+00:03:59.100 --> 00:04:01.460
+Ein nicht verwaltetes Gerät könnte blockiert oder eingeschränkt werden.
+
+00:04:01.680 --> 00:04:02.660
+Die Anwendung spielt ebenfalls eine Rolle.
+
+00:04:02.980 --> 00:04:03.960
+Auf welche App möchten Sie zugreifen?
+
+00:04:04.620 --> 00:04:07.440
+Outlook, SharePoint, Teams oder eine geschäftliche Spezialanwendung?
+
+00:04:08.120 --> 00:04:09.980
+Nicht alle Apps haben dieselben Sicherheitsanforderungen.
+
+00:04:10.680 --> 00:04:15.300
+Ein Finanzsystem mit sensiblen Daten erfordert eventuell strengere Kontrollen als ein Team-Arbeitsbereich.
+
+00:04:16.140 --> 00:04:19.140
+Mit dem bedingten Zugriff können Sie unterschiedliche Regeln für verschiedene Apps festlegen.
+
+00:04:19.140 --> 00:04:22.300
+Wenn Sie über die richtige Lizenz verfügen, gibt es eine weitere Ebene, das Anmelderisiko.
+
+00:04:22.620 --> 00:04:25.500
+Microsoft nutzt maschinelles Lernen, um jede Anmeldung in Echtzeit zu bewerten.
+
+00:04:25.920 --> 00:04:27.380
+Dabei wird auf verdächtige Muster geachtet.
+
+00:04:27.660 --> 00:04:31.260
+Unmögliche Reisen, bei denen Sie ein Nutzer aus New York und fünf Minuten später aus London anmeldet,
+
+00:04:31.340 --> 00:04:34.700
+anonyme IP-Adressen oder geleakte Zugangsdaten aus bekannten Datendiebstählen.
+
+00:04:35.340 --> 00:04:39.800
+Das System weist eine Risikostufe zu niedrig, mittel oder hoch und der bedingte Zugriff kann darauf reagieren.
+
+00:04:40.160 --> 00:04:41.140
+Es gibt auch das Benutzerrisiko.
+
+00:04:41.520 --> 00:04:42.780
+Dies unterscheidet sich vom Anmelderisiko.
+
+00:04:43.080 --> 00:04:44.620
+Das Benutzerrisiko betrachtet das Konto selbst.
+
+00:04:44.620 --> 00:04:46.740
+Ist das Passwort dieses Nutzers bei einer Datenpanne aufgetaucht?
+
+00:04:46.740 --> 00:04:48.680
+Gab es im Laufe der Zeit ungewöhnliche Aktivitäten?
+
+00:04:49.060 --> 00:04:51.320
+Wenn das System erkennt, dass ein Konto kompromittiert sein könnte,
+
+00:04:51.740 --> 00:04:54.020
+kann es den Zugriff sperren, bis der Nutzer sein Passwort zurücksetzt.
+
+00:04:54.620 --> 00:04:56.340
+Zuletzt gibt es noch den Authentifizierungskontext.
+
+00:04:56.580 --> 00:05:00.040
+Damit können Sie zusätzliche Sicherheitsanforderungen für bestimmte sensible Inhalte festlegen.
+
+00:05:00.380 --> 00:05:03.220
+Zum Beispiel muss jeder, der auf die SharePoint-Seite der Finanzabteilung zugreift,
+
+00:05:03.460 --> 00:05:06.220
+ein konformes Gerät und eine phishing-resistente MFA-Methode verwenden.
+
+00:05:06.740 --> 00:05:09.920
+Dies schützt Ihre wertvollsten Daten, ohne den restlichen Betrieb zu verlangsamen.
+
+00:05:10.500 --> 00:05:13.780
+Sobald diese Signale gesammelt sind, entscheidet die Richtlinie-Engine über das weitere Vorgang.
+
+00:05:14.140 --> 00:05:15.080
+Sehen wir uns an, wie das funktioniert.
+
+00:05:15.080 --> 00:05:17.660
+Die Entscheidungs-Engine, die Richtlinien funktionieren.
+
+00:05:18.180 --> 00:05:20.680
+Jede Richtlinie für bedingten Zugriff funktioniert wie eine Wenn-Dann-Regel.
+
+00:05:21.280 --> 00:05:24.140
+Sie wählen die Signale als Bedingungen aus und legen dann die zu ergreifenden Aktionen fest.
+
+00:05:24.460 --> 00:05:25.180
+Mehr ist es eigentlich nicht.
+
+00:05:25.640 --> 00:05:27.240
+Eine Richtlinie besteht also aus drei Hauptteilen.
+
+00:05:27.660 --> 00:05:28.960
+Der erste Teil sind die Zuweisungen.
+
+00:05:29.160 --> 00:05:32.640
+Für wen geht die Richtlinie, auf welche App wird zugegriffen und welche Bedingungen lösen die Regel aus?
+
+00:05:33.320 --> 00:05:35.000
+Der zweite Teil sind die Zugriffskontrollen.
+
+00:05:35.060 --> 00:05:36.540
+Was geschieht, wenn diese Bedingungen erfüllt sind?
+
+00:05:37.180 --> 00:05:41.360
+Gewähren Sie Zugriff, blockieren Sie ihn oder verlangen Sie etwas wie MFA oder ein konformes Gerät?
+
+00:05:41.360 --> 00:05:43.880
+Der dritte Teil sind die Sitzungskontrollen.
+
+00:05:43.940 --> 00:05:45.600
+Sie verwalten, was nach der Anmeldung geschieht.
+
+00:05:46.260 --> 00:05:48.580
+Zum Beispiel, wie oft eine erneute Authentifizierung erforderlich ist.
+
+00:05:48.940 --> 00:05:50.020
+Lassen Sie mich ein konkretes Beispiel nennen.
+
+00:05:50.400 --> 00:05:54.060
+Wenn ein Benutzer aus der Verkaufsgruppe von einem nicht verwalteten Gerät auf SharePoint zugreifen will,
+
+00:05:54.220 --> 00:05:55.340
+dann blockiere den Zugriff.
+
+00:05:55.780 --> 00:05:57.040
+Das ist bereits eine vollständige Richtlinie.
+
+00:05:57.300 --> 00:05:58.920
+Wer, welche App, welche Bedingungen, welche Aktion?
+
+00:05:59.340 --> 00:06:00.540
+Die Gewährungssteuerungen sind flexibel.
+
+00:06:00.920 --> 00:06:02.460
+Sie können mehrere Anforderungen gleichzeitig stellen.
+
+00:06:02.620 --> 00:06:06.020
+Nehmen wir an, Sie möchten, dass ein Benutzer die MFA abschließt und zudem ein konformes Gerät verwenden.
+
+00:06:06.360 --> 00:06:07.460
+Beide Bedingungen müssen erfüllt sein.
+
+00:06:07.460 --> 00:06:09.300
+Oder Sie sagen, dass Sie das ein oder benötigen.
+
+00:06:09.660 --> 00:06:10.560
+Das System lässt Ihnen die Wahl.
+
+00:06:10.900 --> 00:06:12.220
+Blockieren ist die wirkungsvollste Kontrolle.
+
+00:06:12.540 --> 00:06:14.300
+Wenn eine Richtlinie blockieren vorgibt, gewinnt die Blockierung.
+
+00:06:14.680 --> 00:06:17.320
+Es gibt keine Ausnahmen, außer den von Ihnen explizit festgelegten.
+
+00:06:17.640 --> 00:06:18.860
+Deshalb müssen Sie sehr vorsichtig sein.
+
+00:06:19.280 --> 00:06:21.420
+Ein Fehler und Sie könnten Ihr gesamtes Unternehmen aussperren.
+
+00:06:21.920 --> 00:06:24.980
+Bevor Sie eine Richtlinie aktivieren, sollten Sie eine wichtige Funktion kennen.
+
+00:06:25.940 --> 00:06:26.820
+Denn nur Berichtmodus.
+
+00:06:27.520 --> 00:06:30.240
+Damit sehen Sie, was eine Richtlinie bewirken würde, bevor sie wirklich greift.
+
+00:06:30.460 --> 00:06:33.920
+Sie können eine Richtlinie eine Woche lang testen, Anmeldeprotokolle prüfen
+
+00:06:33.920 --> 00:06:36.800
+und sehen, wie viele Nutzer blockiert oder zu MFA aufgefordert worden wären.
+
+00:06:36.800 --> 00:06:38.940
+Ein sicherer Weg, alles zu testen und unterbrechen.
+
+00:06:39.580 --> 00:06:43.320
+Nachdem Sie die Engine verstehen, sprechen wir über die gängigsten Richtlinien für jedes Unternehmen.
+
+00:06:44.520 --> 00:06:46.600
+Die drei wichtigsten Basisrichtlinien für den ersten Tag.
+
+00:06:47.140 --> 00:06:48.460
+Was sollten Sie also zuerst einrichten?
+
+00:06:49.180 --> 00:06:52.420
+Hier sind die drei Basisrichtlinien, die jedes Unternehmen vom ersten Tag an haben sollte.
+
+00:06:53.080 --> 00:06:54.880
+Nicht erst nach 30 Tagen oder nach einem Audit.
+
+00:06:55.840 --> 00:06:59.400
+Richtlinie 1 ist das Fundament MFA für alle Nutzer erforderlich.
+
+00:06:59.860 --> 00:07:01.200
+Nicht nur für Admin, sondern für alle.
+
+00:07:01.660 --> 00:07:05.400
+Jede Person, die sich bei Ihrem Tenent anmeldet, muss ihre Identität mit einem zweiten Faktor beweisen.
+
+00:07:05.400 --> 00:07:08.400
+Aber wichtig ist, nicht jede MFA ist gleichwertig.
+
+00:07:08.820 --> 00:07:10.820
+Sie sollten keine SMS-Codes oder Sprachanrufe verwenden.
+
+00:07:11.260 --> 00:07:12.080
+Diese Methoden sind schwach.
+
+00:07:12.400 --> 00:07:13.260
+Sie können abgefangen werden.
+
+00:07:13.700 --> 00:07:14.760
+Sie benötigen etwas Stärkeres.
+
+00:07:15.660 --> 00:07:20.120
+Microsoft bietet Authentifizierungsstärken an, mit denen Sie genau festlegen können, welche Methoden zulässig sind.
+
+00:07:21.460 --> 00:07:24.860
+Die Microsoft Authenticator App, FIDO2-Sicherheitsschlüssel, Windows Hello for Business.
+
+00:07:24.980 --> 00:07:25.900
+Das sind die guten Optionen.
+
+00:07:27.140 --> 00:07:31.100
+Wenn Sie also Ihre MFA-Richtlinie erstellen, aktivieren Sie nicht einfach nur das Feld MFA erforderlich.
+
+00:07:31.100 --> 00:07:32.380
+Seien Sie präziser.
+
+00:07:32.800 --> 00:07:33.980
+Wählen Sie nur die starken Methoden aus.
+
+00:07:34.640 --> 00:07:35.300
+Richtlinie 2.
+
+00:07:35.840 --> 00:07:37.040
+Legacy-Authentifizierung blockieren.
+
+00:07:37.240 --> 00:07:38.460
+Das klingt technisch, ist aber simpel.
+
+00:07:39.080 --> 00:07:41.900
+Es gibt alte Protokolle, die Microsoft iPhone 65 noch unterstützt.
+
+00:07:42.340 --> 00:07:45.680
+POP, IMAP, SMTP, ältere Exchange ActiveSync-Versionen.
+
+00:07:46.200 --> 00:07:50.460
+Diese Protokolle entstanden vor der Zeit der Multifaktor-Authentifizierung, unterstützen diese nicht.
+
+00:07:50.960 --> 00:07:56.020
+Wenn ein Angreifer also ein Passwort erhält, kann er diese alten Protokolle nutzen, um sich anzumelden und Ihre MFA komplett zu umgehen.
+
+00:07:56.340 --> 00:07:57.100
+Das ist eine enorme Sicherheit.
+
+00:07:57.100 --> 00:07:58.340
+Die Lösung kompliziert.
+
+00:07:58.860 --> 00:08:02.780
+Erstellen Sie eine Richtlinie für bedingten Zugriff, die die Legacy-Authentifizierung für alle Nutzer blockiert.
+
+00:08:03.540 --> 00:08:08.320
+Sofern Sie keinen spezifischen Bedarf für einen alten Scanner oder Drucker mit SMTP haben, schalten Sie es ab.
+
+00:08:08.920 --> 00:08:11.500
+Es ist eine der wirkungsvollsten Sicherheitskontrollen, die Sie aktivieren können.
+
+00:08:12.020 --> 00:08:12.520
+Richtlinie 3.
+
+00:08:12.600 --> 00:08:14.560
+Konforme Geräte für Administratoren erforderlich.
+
+00:08:15.140 --> 00:08:17.040
+Admin-Konten sind das Kronjuwel Ihres Tenants.
+
+00:08:17.460 --> 00:08:20.400
+Wenn jemand ein globales Administrator-Konto kompromittiert, hat er die volle Kontrolle.
+
+00:08:20.780 --> 00:08:22.940
+Daher müssen Sie diese Konten stärker absichern als alle anderen.
+
+00:08:22.940 --> 00:08:34.060
+Diese Richtlinie besagt, dass jeder mit einer Administratorrolle ein firmeneigenes Gerät verwenden muss, das Ihren Sicherheitsanforderungen entspricht, in der Verwaltung registriert, verschlüsselt wie mit BitLocker, mit aktivem Defender und aktuellen Updates.
+
+00:08:35.200 --> 00:08:40.700
+Wenn ein Administrator versucht, sich von einem privaten Laptop oder einem alten Gerät anzumelden, das diese Standards nicht erfüllt, wird der Zugriff blockiert.
+
+00:08:40.700 --> 00:08:44.620
+Es ist ein einfacher Weg, um sicherzustellen, dass Ihre mächtigsten Konten auch am besten geschützt sind.
+
+00:08:45.740 --> 00:08:48.080
+Bevor ich weitermache, muss ich über etwas Entscheidendes sprechen.
+
+00:08:49.520 --> 00:08:52.960
+Dies sind Notfalladministrator-Konten, die Sie von Ihren Richtlinien für bedingten Zugriff ausschließen.
+
+00:08:53.660 --> 00:08:58.860
+Sie erstellen mindestens zwei davon mit langen, komplexen Passwörtern und phishing-resistenter MFA wie einem FIDO-2-Sicherheitsschlüssel.
+
+00:08:59.580 --> 00:09:02.900
+Sie bewahren die Anmeldedaten sicher auf, vielleicht in einem Tresor oder einem verschlossenen Schrank.
+
+00:09:03.400 --> 00:09:04.060
+Der Zweck ist simpel.
+
+00:09:04.400 --> 00:09:09.460
+Falls Sie sich versehentlich mit einer fehlerhaften Richtlinie aus Ihrem Mandanten aussperren, können Sie ein Notfallkonto nutzen, um wieder Zugriff zu erhalten.
+
+00:09:09.460 --> 00:09:12.020
+Sie sind von jeder Richtlinie für bedingten Zugriff ausgenommen.
+
+00:09:12.400 --> 00:09:13.220
+Es ist so beabsichtigt.
+
+00:09:13.500 --> 00:09:16.220
+Ohne Sie riskieren Sie, aus Ihrem eigenen System ausgesperrt zu werden, ohne Weg zurück.
+
+00:09:16.520 --> 00:09:17.880
+Warum nur drei Richtlinien für den ersten Tag?
+
+00:09:18.160 --> 00:09:20.660
+Weil Sie sich zuerst auf die wirkungsvollsten Kontrollen konzentrieren sollen.
+
+00:09:20.920 --> 00:09:22.440
+Diese drei schließen die größten Sicherheitslücken.
+
+00:09:22.820 --> 00:09:24.880
+MFA stoppt den Großteil des Anmeldedaten diebstahls.
+
+00:09:24.900 --> 00:09:26.560
+Die Blockierung veralteter Authentifizierung schließt Ihnen.
+
+00:09:26.860 --> 00:09:29.520
+Konforme Geräte für Administratoren schützen Ihre sensibelsten Konten.
+
+00:09:30.020 --> 00:09:32.820
+Sie können später mit detaillierteren Richtlinien feinjustieren, aber fangen Sie an.
+
+00:09:33.480 --> 00:09:35.480
+Erweiterte Richtlinien, Risiko und Personas.
+
+00:09:35.480 --> 00:09:38.660
+Sobald die Grundlagen stehen, können Sie weitere erweiterte Kontrollen hinzufügen.
+
+00:09:38.960 --> 00:09:41.180
+Hier kommen risikobasierte Richtlinien und personabasierte Regeln.
+
+00:09:42.480 --> 00:09:45.980
+Anmelderisikorichtlinien nutzen das maschinelle Lernen von Microsoft, um jeden Anmeldeversuch in Echtzeit zu überwachen.
+
+00:09:46.920 --> 00:09:55.760
+Wenn jemand versucht, sich über eine anonyme IP-Adresse anzumelden oder das System unmögliche Reisen erkennt wie eine Anmeldung aus New York und zehn Minuten später aus Tokio, wird diese Anmeldung als hochriskant eingestuft.
+
+00:09:56.440 --> 00:10:00.820
+Dafür legen Sie eine Richtlinie fest, die bei hohem Risiko den Zugriff blockiert oder sofort MFA erzwingt.
+
+00:10:01.420 --> 00:10:07.500
+Der Haken ist, dass Sie eine Entra-ID-P-Zeit-Lizenz benötigen, aber dies ist eine der mächtigsten Kontrollen, die Sie hinzufügen können, da Sie Angriffe erkennt, die statischen Regeln entgehen.
+
+00:10:08.740 --> 00:10:12.240
+Benutzerrisikorichtlinien betrachten das Konto selbst über einen längeren Zeitraum, nicht nur ein einzelnes Anmeldeereignis.
+
+00:10:12.460 --> 00:10:17.260
+Wenn Microsoft erkennt, dass die Anmeldedaten eines Benutzers bei einer bekannten Datenpanne aufgetaucht sind, wird dieser Benutzer als hochriskant machen.
+
+00:10:17.440 --> 00:10:20.580
+Sie können dann eine Richtlinie festlegen, die den Zugriff blockiert, bis das Passwort zurückgesetzt wird.
+
+00:10:20.580 --> 00:10:21.960
+Aber ja, dafür ist es ebenfalls besonderlich.
+
+00:10:22.560 --> 00:10:27.620
+Anmelde-Risiko- und Benutzerrisikorichtlinien bilden zusammen eine dynamische Sicherheitsebene, die sich in Echtzeit an Bedrohungen anpasst.
+
+00:10:28.200 --> 00:10:30.180
+Personenbasierte Richtlinien gehen nun ein anderes Problem an.
+
+00:10:30.840 --> 00:10:33.040
+Nicht jeder in Ihrem Unternehmen hat dieselben Sicherheitsanforderungen.
+
+00:10:33.480 --> 00:10:37.880
+Ihre Administratoren benötigen die strengsten Regeln, während Auftragnehmer und Aushilfskräfte möglicherweise nur eingeschränkten Zugriff brauchen.
+
+00:10:38.200 --> 00:10:40.860
+Und Gäste von außerhalb Ihres Unternehmens benötigen ganz andere Kontrollen.
+
+00:10:42.000 --> 00:10:45.520
+Mit personenbasierten Richtlinien können Sie Benutzer nach Rollen kopieren und das passende Schutzniveau anwenden.
+
+00:10:45.980 --> 00:10:46.900
+Hier ist ein konkretes Beispiel.
+
+00:10:47.520 --> 00:10:49.740
+Auftragnehmer nutzen oft eigene, nicht verwaltete Geräte.
+
+00:10:49.740 --> 00:10:52.760
+Daher wissen Sie nicht, ob Sie Antiviren-Software nutzen oder Updates installieren.
+
+00:10:53.440 --> 00:10:58.500
+Anstatt Ihnen vollen Zugriff zu gewähren, erstellen Sie eine Richtlinie, die Sie auf den Browser beschränkt, keine Desktop- oder Mobil-Apps.
+
+00:10:59.000 --> 00:10:59.160
+App.
+
+00:10:59.500 --> 00:11:01.340
+Und selbst im Browser können Sie bestimmte Aktionen einschränken.
+
+00:11:01.720 --> 00:11:05.360
+Sie können Dateien zwar ansehen und bearbeiten, aber nicht auf Ihr Gerät herunterladen oder synchronisieren.
+
+00:11:05.740 --> 00:11:09.760
+So bleiben Auftragnehmer produktiv, ohne Ihre Daten unnötigen Risiken auszusetzen.
+
+00:11:11.900 --> 00:11:16.240
+Authentifizierungskontexte gehen noch weiter, indem Sie spezifische Inhalte innerhalb einer App schützen, statt die ganze App.
+
+00:11:16.240 --> 00:11:20.320
+Ihr Finanzteam hat beispielsweise eine SharePoint-Website mit sensiblen Finanzdaten.
+
+00:11:20.940 --> 00:11:30.180
+Sie können einen Authentifizierungskontext für diese Seite festlegen, sodass jeder Zugriff ein konformes Gerät und phishing-resistente MFA erfordert, selbst wenn er bereits bei Microsoft 365 angemeldet ist.
+
+00:11:30.680 --> 00:11:32.960
+Es ist eine präzise Steuerung für Ihre sensibelsten Informationen.
+
+00:11:33.660 --> 00:11:37.120
+Die fortlaufende Zugriffsbewertung entzieht Zugriffe nahezu in Echtzeit, sobald sich etwas ändert.
+
+00:11:37.120 --> 00:11:43.580
+Wenn ein Admin ein Konto deaktiviert oder ein Gerät als verloren gemeldet wird, endet die Sitzung sofort, ohne auf den Ablauf des Tokens zu warten.
+
+00:11:44.260 --> 00:11:46.260
+Das ist entscheidend, um schnell auf Vorfälle reagieren zu können.
+
+00:11:46.740 --> 00:11:50.000
+Das klingt alles sehr mächtig, doch wie fängt man an, ohne etwas zu geschädigen?
+
+00:11:50.840 --> 00:11:53.960
+Der Einstieg von Sicherheitsstandards zu benutzerdefinierten Richtlinien.
+
+00:11:54.500 --> 00:12:00.040
+Wenn Sie einen brandneuen Mandanten haben, fangen Sie nicht bei Null an, da Microsoft standardmäßig die sogenannten Sicherheitsstandards aktiviert.
+
+00:12:00.040 --> 00:12:06.000
+Es ist ein grundlegender Schutz, der MFA für Admins erzwingt und ältere Authentifizierungsmethoden blockiert.
+
+00:12:06.720 --> 00:12:08.660
+Es ist ein ordentlicher Ausgangspunkt, aber er ist begrenzt.
+
+00:12:09.260 --> 00:12:11.860
+Sie können ihn weder anpassen noch auf bestimmte Apps oder Benutzer zuschneiden.
+
+00:12:12.480 --> 00:12:13.900
+Es ist eine Einheitslösung für alle.
+
+00:12:14.600 --> 00:12:21.340
+Sobald Sie Ihre erste benutzerdefinierte Richtlinie für bedingten Zugriff erstellen, werden die Sicherheitsstandards automatisch deaktiviert und Sie haben die volle Kontrolle.
+
+00:12:21.480 --> 00:12:26.220
+Das ist gut, bedeutet aber auch, dass Sie wissen müssen, was Sie tun, dass Sie sich nicht mehr auf die automatischen Hilfen verlassen können.
+
+00:12:26.480 --> 00:12:27.580
+Erfahren Sie, wie Sie dabei sicher vorgehen.
+
+00:12:27.580 --> 00:12:31.980
+Starten Sie für jede neue Richtlinie zuerst im reinen Berichtsmodus und lassen Sie diesen mindestens eine Woche laufen.
+
+00:12:32.500 --> 00:12:37.540
+Prüfen Sie anschließend die Anmeldeprotokolle, um zu sehen, was passiert wäre, etwa wie viele Benutzer blockiert oder zur MFA aufgefordert worden wären.
+
+00:12:37.980 --> 00:12:41.620
+Diese Daten zeigen Ihnen vor der Durchsetzung, ob Ihre Richtlinie zu streng oder zu locker ist.
+
+00:12:42.460 --> 00:12:48.480
+Zweitens nutzen Sie das Was-wäre-wenn-Tool im Entra-Admin-Center, um eine Richtlinie für bestimmte Benutzer-Apps und Standorte zu testen, bevor Sie sie aktivieren.
+
+00:12:49.000 --> 00:12:53.980
+Sie können genau simulieren, was passiert, wenn jemand versucht, sich von einem Café in einem anderen Land mit einem privaten Gerät anzumelden.
+
+00:12:54.860 --> 00:12:57.440
+Es ist ein sicherer Weg, Probleme zu erkennen, bevor Sie real werden.
+
+00:12:58.520 --> 00:13:02.320
+Drittens, und das ist entscheidend, erstellen Sie Ihre Break-Lass-Konten, bevor Sie Richtlinien bereitstellen.
+
+00:13:02.720 --> 00:13:03.720
+Ich kann das nicht oft genug betonen.
+
+00:13:04.080 --> 00:13:11.780
+Wenn Sie versehentlich eine Richtlinie erstellen, die alle Administratoren blockiert und kein Notfallkonto eingerichtet haben, das von allem ausgenommen ist, sperren Sie sich aus Ihrem eigenen Mandanten aus.
+
+00:13:12.320 --> 00:13:16.840
+Der einzige Weg zurückführt über den Microsoft Support, wobei Sie den Besitz der Domäne nachweisen müssen, das kann Tage dauern.
+
+00:13:17.520 --> 00:13:21.300
+Richten Sie daher zwei Break-Lass-Konten ein, die sicher mit Phishing-resistenter MFA geschützt sind.
+
+00:13:21.580 --> 00:13:22.800
+Tun Sie dies, bevor Sie beginnen.
+
+00:13:22.800 --> 00:13:25.140
+Viertens, führen Sie die Bereitstellung in Phasen durch.
+
+00:13:25.600 --> 00:13:27.860
+Aktivieren Sie eine Richtlinie nicht für alle am ersten Tag.
+
+00:13:28.460 --> 00:13:32.220
+Beginnen Sie mit einer kleinen Testgruppe, etwa dem IT-Team, und lassen Sie sie einige Tage laufen.
+
+00:13:32.580 --> 00:13:34.860
+Prüfen Sie die Protokolle, um zu sehen, ob jemand unerwartet blockiert wird.
+
+00:13:35.240 --> 00:13:37.620
+Erweitern Sie dann auf eine größere Gruppe und schließlich auf alle Benutzer.
+
+00:13:37.620 --> 00:13:41.400
+Jede Phase gibt Ihnen die Möglichkeit, Probleme zu erkennen, bevor Sie das gesamte Unternehmen betreffen.
+
+00:13:41.780 --> 00:13:43.160
+Überwachen Sie durchgehend Ihr Anmeldeprotokoll.
+
+00:13:43.560 --> 00:13:47.240
+Sollten Sie unerwartete Blockierungen feststellen, passen Sie die Richtlinie an, bevor Sie zur nächsten Phase übergehen.
+
+00:13:48.060 --> 00:13:48.380
+Zusammenfassung
+
+00:13:48.380 --> 00:13:49.780
+Warum das für Ihr Unternehmen wichtig ist?
+
+00:13:50.260 --> 00:13:51.300
+Warum ist das alles so wichtig?
+
+00:13:51.880 --> 00:13:54.640
+Der bedingte Zugriff ist wie ein Türsteher, der nicht nur Ihren Ausweis prüft.
+
+00:13:55.220 --> 00:13:55.960
+Er schaut sich alles an.
+
+00:13:56.580 --> 00:14:01.540
+Wer Sie sind, von wo aus Sie sich verbinden, welches Gerät Sie verwenden und ob Ihr Konto möglicherweise kompromittiert wurde.
+
+00:14:01.540 --> 00:14:06.200
+Er macht aus einer einfachen Jan-Ein-Passwort-Prüfung eine intelligente Entscheidung, die auf dem Gesamtbild basiert.
+
+00:14:07.060 --> 00:14:12.140
+Ohne ihn kann jeder mit einem gestohlenen Passwort von überall auf der Welt direkt in Ihren Mandanten gelangen, ohne Fragen zu stellen.
+
+00:14:12.460 --> 00:14:16.440
+Und wenn man bedenkt, wie viele Passwörter jeden Tag gestohlen werden, ist das ein beängstigender Gedanke, ist Danke.
+
+00:14:16.700 --> 00:14:19.020
+Die drei Basisrichtlinien schließen allein schon die größten Sicherheitsniveau.
+
+00:14:19.500 --> 00:14:21.380
+MFA verhindert den Großteil an, meldet er lieb still.
+
+00:14:21.800 --> 00:14:24.680
+Das Blockieren veralteter Authentifizierung schließt eine Hintertür, die Angreifer lieben.
+
+00:14:25.420 --> 00:14:28.600
+Die Anforderung konformer Geräte für Administratoren schützt ihre sensibelsten Konten.
+
+00:14:28.600 --> 00:14:31.940
+Allein diese drei Richtlinien heben Ihr Sicherheitsniveau drastisch an.
+
+00:14:32.540 --> 00:14:37.380
+Und wenn Sie bereit für den nächsten Schritt sind, bieten Ihnen erweiterte Richtlinien präzisen Schutz, ohne die Produktivität zu beeinträchtigen.
+
+00:14:37.940 --> 00:14:39.860
+Risikobasierte Kontrollen erkennen Angriffe in Echtzeit.
+
+00:14:40.560 --> 00:14:42.820
+Personenbasierte Regeln behandeln verschiedene Benutzer unterschiedlich.
+
+00:14:44.040 --> 00:14:46.740
+Authentifizierungskontexte schützen Ihre sensibelsten Daten mit chirurgischer Genauigkeit.
+
+00:14:47.460 --> 00:14:49.100
+Sie können sowohl sicher als auch flexibel sein.
+
+00:14:49.640 --> 00:14:50.540
+Wir sind also Ihre Hausaufgaben.
+
+00:14:50.760 --> 00:14:52.300
+Melden Sie sich bei Ihrem Entratmen-Center an.
+
+00:14:52.620 --> 00:14:53.620
+Navigieren Sie zum Bedingten zu.
+
+00:14:54.000 --> 00:14:56.540
+Prüfen Sie, ob Sie mindestens diese drei Basisrichtlinien eingerichtet haben.
+
+00:14:56.540 --> 00:14:59.360
+Falls nicht, beginnen Sie mit dem Nur-Bericht-Modus und bauen Sie darauf auf.
+
+00:14:59.780 --> 00:15:01.840
+Warten Sie nicht auf eine Prüfung oder einen Sicherheitsvorfall, um zu haben.
+
+00:15:02.340 --> 00:15:04.520
+Wenn Ihnen diese Folge geholfen hat, den Überblick zu gewinnen,
+
+00:15:04.700 --> 00:15:09.040
+abonnieren Sie Microsoft Knowledge Nuggets für weitere verständliche Erklärungen zur Sicherheit und Identität.
+
+00:15:09.820 --> 00:15:12.900
+Und teilen Sie sie mit jemandem, der gerade erst mit Microsoft 365 beginnt.
+
+00:15:13.240 --> 00:15:13.920
+Wir werden es Ihnen danken.

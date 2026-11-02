@@ -1,0 +1,1096 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.180
+Het begon met een waarschuwing, daarna stilte.
+
+00:00:02.340 --> 00:00:07.860
+De GPU-belasting liep op alsof de accelerator nooit in slaap was gevallen, terwijl de output tergend langzaam was, alsof de lichten uitgingen.
+
+00:00:08.000 --> 00:00:09.780
+Dashboards waren groen, klanten niet.
+
+00:00:10.340 --> 00:00:11.780
+De anomalie klopte niet.
+
+00:00:12.020 --> 00:00:14.820
+Bijna nul GPU gebruikt terwijl de latentie piekte.
+
+00:00:15.100 --> 00:00:18.520
+Geen waarschuwingen, geen rode lijnen, alleen maar tijd die verdampte.
+
+00:00:18.680 --> 00:00:21.920
+Het bewijs suggereert één pathologie die zich voordeed als normaal.
+
+00:00:22.140 --> 00:00:22.960
+Dit is de belofte.
+
+00:00:23.200 --> 00:00:27.100
+We zullen de artefacten traceren, de boosdoener benoemen en de pathologie verhelpen.
+
+00:00:27.100 --> 00:00:34.880
+We zullen drie faalmodi onderzoeken, CPU-terugval, versie mismatch tussen Koede en ONNX-Tensor RT en verkeerde containerconfiguratie.
+
+00:00:35.100 --> 00:00:38.580
+En we zullen dit bewijzen met latentie, doorvoer en GPU-gebruik voor en na.
+
+00:00:38.760 --> 00:00:41.540
+Casus opzet, de omgeving en het slachtofferprofiel.
+
+00:00:41.740 --> 00:00:46.300
+Elke configuratie vertelt een verhaal en dit verhaal begint met een gewone tenant onder druk.
+
+00:00:46.480 --> 00:00:53.840
+De workload bestaat uit tekst-naar-beeldconversie met stabiele diffusievarianten die draaien op 512x512 pixels en schalen naar 1024x1024 pixels.
+
+00:00:53.840 --> 00:00:58.120
+Het verkeer is onregelmatig. Het aantal gelijktijdige verzoeken schommelt tussen 8 en 32.
+
+00:00:58.540 --> 00:01:00.100
+De batchgrootte varieert van 1 tot 8.
+
+00:01:00.400 --> 00:01:01.840
+De serviceniveaus zijn streng wat betreft staartlatentie.
+
+00:01:02.780 --> 00:01:05.320
+P95 schendingen leiden direct tot credits en boetes.
+
+00:01:05.560 --> 00:01:08.840
+De modellen zijn niet exotisch, maar de keuzes die gemaakt worden zijn wel degelijk van belang.
+
+00:01:09.020 --> 00:01:16.980
+ONNX exporteert stabiele diffusiepipelines, cross-attention-optimalisaties zoals X-formers of geschaalde dot-productattention en schedulerselecties die stappen inruilen voor kwaliteit.
+
+00:01:17.180 --> 00:01:20.800
+Het ecosysteem zou moeten versnellen wanneer de onderliggende infrastructuur eerlijk is.
+
+00:01:20.800 --> 00:01:27.440
+De hardware ziet er op papier respectabel uit. NVIDIA RTX en A-serie kaarten in de cloud, 16 tot 32 GB VRAM.
+
+00:01:27.740 --> 00:01:30.540
+PCIe fungeert als een tollport tussen de host en het apparaat.
+
+00:01:30.700 --> 00:01:34.540
+Snel genoeg wanneer geconfigureerd, maar strafend wanneer I-O-bindingen terugvallen op pagina-overdrachten.
+
+00:01:34.740 --> 00:01:36.340
+In deze omgeving is niets toeval.
+
+00:01:36.540 --> 00:01:38.460
+De toolchain is opgebouwd uit bekende lagen.
+
+00:01:38.620 --> 00:01:42.760
+PyTorch wordt gebruikt voor de export, waarna ONNX Runtime of TensorRT het overneemt voor inferentie.
+
+00:01:42.920 --> 00:01:44.800
+Coupede drivers bevinden zich op de achtergrond.
+
+00:01:44.980 --> 00:01:47.980
+De kernels beloven snelheid als de versies op elkaar zijn afgestemd.
+
+00:01:47.980 --> 00:01:53.400
+De implementatie is strikt gecontaineriseerd met onveranderlijke images, CI-gestuurde uitrol en bluegreen beleid.
+
+00:01:53.580 --> 00:01:55.640
+Deze beperking zou de veiligheid moeten garanderen.
+
+00:01:55.760 --> 00:01:58.000
+Het kan echter ook defecten in een amberkleurige status bevriezen.
+
+00:01:58.180 --> 00:01:59.740
+De zakelijke belangen zijn niet abstract.
+
+00:01:59.960 --> 00:02:01.720
+De kosten per aanvraag bepalen de marge.
+
+00:02:01.900 --> 00:02:05.220
+GPU-reserveringen worden per uur berekend, ongeacht of de kernels draaien of niet.
+
+00:02:05.420 --> 00:02:08.620
+Wanneer de latentie oploopt van seconde tot een halve minuut, stort de doorvoer in.
+
+00:02:08.780 --> 00:02:14.640
+Een verkeerde configuratie verandert een accelerator in een verwarmingselement, duur, stil en nutteloos, waardoor de wachtrij niet wordt geholpen.
+
+00:02:14.640 --> 00:02:17.320
+Bij nader onderzoek wordt het slachtofferprofiel duidelijker.
+
+00:02:17.740 --> 00:02:24.500
+Gelijktijdigheid op 16, badges op 2 om onder de VRM-limieten van 512 te blijven, met een verhoging naar 2025 voor kwaliteit.
+
+00:02:24.680 --> 00:02:26.940
+De tenant verwacht een consistente P95.
+
+00:02:27.360 --> 00:02:36.500
+In plaats daarvan laten de traceringen grillen gelatend iets zien, grote verschillen tussen P50 en P95 en GPU-gebruiksycline die zonder duidelijke reden schommelen tussen 5% en 40%.
+
+00:02:36.500 --> 00:02:38.560
+CPU-grafieken vertellen een ander verhaal.
+
+00:02:38.700 --> 00:02:41.600
+Cores worden maximaal belast, terwijl geen enkele preprocessing dat rechtvaardigt.
+
+00:02:41.600 --> 00:02:43.560
+Het bewijs wijst op drie mogelijke oorzaken.
+
+00:02:43.720 --> 00:02:45.340
+Ten eerste, terugval naar de CPU.
+
+00:02:45.600 --> 00:02:50.280
+Wanneer de CUDA- of TensorRT-uitvoeringsprovider niet laat, selecteert de engine stilletjes de CPU-grafiek.
+
+00:02:50.420 --> 00:02:52.880
+Het model werkt, maar met een 10 tot 30 keer hogere latentie.
+
+00:02:53.040 --> 00:02:54.720
+Ten tweede, versie incompatibiliteit.
+
+00:02:54.880 --> 00:02:58.660
+De ONNX Runtime is gecompileerd met een bepaalde CUDA-versie, terwijl de notes een andere versie draaien.
+
+00:02:58.800 --> 00:03:02.500
+De TensorRT-engines zijn ongeldig gemaakt en opnieuw gecompileerd met generieke kernels.
+
+00:03:02.680 --> 00:03:05.520
+Het gebruik lijkt wel te werken, maar de snelle paden zijn verdwenen.
+
+00:03:05.520 --> 00:03:15.620
+Ten derde, verkeerde containerconfiguratie, opgeblazen images, ontbrekende GPU-apparaatkoppelingen, verkeerde NVIDIA-containertoolkit-instellingen en geheugenarena's die allocaties vasthouden en de staartlatentie onder belasting versterken.
+
+00:03:15.800 --> 00:03:17.700
+Uiteindelijk is dit geen mysterie over modellen.
+
+00:03:17.920 --> 00:03:20.400
+Het is een kwestie van de betrouwbaarheid van de infrastructuur.
+
+00:03:20.580 --> 00:03:29.820
+We zullen de artefacten, de volgorde van de providers, de capaciteitslogboeken en de apparaatkoppelingen traceren en deze correleren met drie constante meetwaarden, latentie, doorvoer en GPU gebruik.
+
+00:03:29.820 --> 00:03:34.820
+Bewijsbestand A, CPU-terugval, de stille saboteur
+
+00:03:34.820 --> 00:03:38.500
+Het begon met een verzoek dat seconden had moeten duren, maar dat niet deed.
+
+00:03:38.680 --> 00:03:41.120
+De GPU-meter bleef stil, TE-accent stil.
+
+00:03:41.300 --> 00:03:43.800
+De CPU-grafiek daarentegen schoot omhoog als een brandalarm.
+
+00:03:44.000 --> 00:03:46.140
+Bij nader onderzoek bleek dat de engine een keuze had gemaakt.
+
+00:03:46.140 --> 00:03:48.380
+Hij voerde een GPU-belastentaak uit op de CPU.
+
+00:03:48.560 --> 00:03:49.940
+Er werden geen waarschuwingen gegeven.
+
+00:03:50.140 --> 00:03:51.560
+De output kwam uiteindelijk terug.
+
+00:03:51.780 --> 00:03:53.860
+Dit is de stille saboteur, CPU-terugval.
+
+00:03:54.060 --> 00:03:55.600
+Waarom dit belangrijk is, is simpel.
+
+00:03:55.820 --> 00:03:58.360
+Stabiele diffusie op een CPU is een tijdsynchronisatie.
+
+00:03:58.360 --> 00:04:02.880
+Het model werkt, maar de latentie neemt toe tot 10 tot 30 keer trager en de doorvoer stort in.
+
+00:04:03.000 --> 00:04:05.800
+In een omgeving waar milliseconden tellen, is dat verschil fataal.
+
+00:04:05.940 --> 00:04:09.100
+De factuur blijft GPU-tijd registreren, maar het apparaat doet het werk niet.
+
+00:04:09.240 --> 00:04:10.700
+De tijdlijn onthulde het patroon.
+
+00:04:10.880 --> 00:04:13.520
+Containers die lokaal met koele draaiden, presteerden razendsnel.
+
+00:04:13.700 --> 00:04:19.620
+De containers werden geïmplementeerd op een clusterknooppunt met een iets andere driverstack, start en op, voerde health probes uit en verslechterde vervolgens.
+
+00:04:19.780 --> 00:04:22.340
+Het health-and-point controleerde alleen of de server actief was.
+
+00:04:22.520 --> 00:04:25.520
+Het controleerde dus nooit of de GPU daadwerkelijk taken uitvoerde.
+
+00:04:25.520 --> 00:04:28.960
+In deze omgeving is niets toevallig. Stilte is een artefact.
+
+00:04:29.160 --> 00:04:33.420
+Het belangrijkste artefact is de volgorde van de uitvoeringsproviders in de ONNX Runtime.
+
+00:04:33.600 --> 00:04:37.500
+De engine accepteert een lijst, probeert TensorRT, dan koele, dan CPU.
+
+00:04:37.760 --> 00:04:44.760
+Als koele niet initialiseert, verkeerde driver, ontbrekende bibliotheken, apparaat niet gemount, zal oortstilletjes de CPU-uitvoeringsprovider binden.
+
+00:04:44.980 --> 00:04:48.480
+Geen uitzondering, geen crash, alleen een regel in de logs, vaak onderaan de pagina.
+
+00:04:48.640 --> 00:04:51.580
+Koele uitvoeringsprovider niet beschikbaar, terugvallen op CPU.
+
+00:04:51.820 --> 00:04:54.100
+Die regel is de bekentenis die de meeste teams nooit lezen.
+
+00:04:54.100 --> 00:04:58.360
+En hier komt het vreemde. Gebruiksgrafieken zien er op het eerste gezicht bedriegelijk normaal uit.
+
+00:04:58.520 --> 00:05:00.020
+Verzoeken worden nog steeds voltooid.
+
+00:05:00.180 --> 00:05:06.020
+Een surface map toont groen, maar de GPU-duty cycle schommelt rond de 5%, terwijl de CPU-gebruikstijd hoog en constant blijft.
+
+00:05:06.140 --> 00:05:09.660
+De P50-latentie vervjevoudigt en de P95-latentie loopt volledig uit de hand.
+
+00:05:09.800 --> 00:05:11.280
+Pieken in het verkeer verergeren het.
+
+00:05:11.460 --> 00:05:15.020
+Wachtrijen bouwen zich op en automatisch schalen voeg meer replica's toe die allemaal dezelfde fout erven.
+
+00:05:15.220 --> 00:05:19.280
+Zie het als een estafette team waarbij de sprinter nooit komt opdagen, dus de bibliothecaris loopt het deel.
+
+00:05:19.280 --> 00:05:21.520
+Het stokje beweegt wel, maar niet op race-snelheid.
+
+00:05:21.700 --> 00:05:25.660
+Met andere woorden, uw systeem levert correctheid ten koste van het volledige SLO-budget.
+
+00:05:25.880 --> 00:05:28.860
+Artefacten stapelen zich snel op wanneer u de opstartsequentie traceert.
+
+00:05:29.020 --> 00:05:33.320
+Provider laat logboeken tonen pogingen tot CUDA-initialisatie met controles van de driverversie.
+
+00:05:33.480 --> 00:05:39.360
+Als de container is gebouwd met CUDA 12.2, maar het knooppunt heeft alleen 12, mislukt de initialisatie.
+
+00:05:39.580 --> 00:05:44.480
+Als de NVIDIA-containertoolkit niet is geconfigureerd, verschijnt de device mount nooit in de container.
+
+00:05:44.480 --> 00:05:52.360
+Geen dev-NVIDIA, geen lib-cuda. Dus als de pad-specificatie niet expliciet GPU's aanvraagt, wijst de scheduler het apparaat nooit toe.
+
+00:05:52.620 --> 00:05:55.280
+Elk van deze factoren triggert de stille downgrade.
+
+00:05:55.680 --> 00:06:02.060
+Reproductie is eenvoudig. Op een verkeerd geconfigureerde node print een eenvoudige inferentie de CPU-uitvoeringsprovider,
+
+00:06:02.300 --> 00:06:06.740
+terwijl je de Tensor RT-uitvoeringsprovider en de CUDA-uitvoeringsprovider zou verwachten.
+
+00:06:07.000 --> 00:06:10.880
+Bij het uitvoeren van een enkele prompt met 5 componenten en 12 threads blijft de GPU inactief.
+
+00:06:10.880 --> 00:06:15.480
+De CPU-treads pieken, maar de afbeelding wordt pas na 20 tot 40 seconden geretourneerd in plaats van 2 tot 6 seconden.
+
+00:06:15.600 --> 00:06:17.780
+Herhaal dit op een node met de juiste drivers en mounts.
+
+00:06:17.980 --> 00:06:22.200
+Dezelfde prompt wordt in een fractie van de tijd voltooid en de GPU-belasting stijgt naar een constant niveau.
+
+00:06:22.460 --> 00:06:25.580
+Het bewijs suggereert dat de huidige beveiligingsmaatregelen slecht schijn zijn.
+
+00:06:26.080 --> 00:06:28.480
+Statuscontroles retourneren 200 omdat de server reageert.
+
+00:06:28.660 --> 00:06:31.200
+Er is geen opstartcontrole die bevestigt dat het GPU-pad actief is.
+
+00:06:31.700 --> 00:06:34.760
+Prestatiecontroles bestaan niet, waardoor de orkestratie ervan uitgaat dat de replica's gezond zijn.
+
+00:06:34.920 --> 00:06:38.120
+Het systeem kan geen onderscheid maken tussen acceleratie en emulatie.
+
+00:06:38.120 --> 00:06:40.040
+De tegenmaatregel is opzettelijk bot.
+
+00:06:40.200 --> 00:06:44.220
+Een harde foutmelding als de GPU-uitvoeringsprovider ontbreekt of verslechterd is.
+
+00:06:44.420 --> 00:06:46.760
+Weigeren om in productie met de CPU te starten.
+
+00:06:46.920 --> 00:06:54.200
+Bij het opstarten van een proces, inventariseer de providers, controleer of TensorRT of CUDA is geladen en of het aantal apparaten overeenkomt met de verwachtingen.
+
+00:06:54.420 --> 00:07:00.880
+Log de mogelijkheden, QDNN, beschikbare TensorCores, geheugenlimieten en sluit af met een niet-nulwaarde als er iets ontbreekt.
+
+00:07:01.080 --> 00:07:05.540
+Ruil beschikbaarheid in voor integriteit en laat orchestrators de taken opnieuw inplannen op een gezond knooppunt.
+
+00:07:05.540 --> 00:07:08.580
+Om dit te garanderen, dwing verificatie van IO-binding af.
+
+00:07:08.700 --> 00:07:12.980
+Koppel inputs en outputs aan het apparaatgeheugen en valideer een triviale inferentie bij het opstarten.
+
+00:07:13.200 --> 00:07:15.900
+Voer één te strong uit die de fused attention kernel test.
+
+00:07:16.100 --> 00:07:20.540
+Als de timing een latency-drempel overschrijdt, ga dan uit van een verslechterd pad en laat de pad mislukken.
+
+00:07:20.740 --> 00:07:23.160
+Voeg een canary-prompt toe met deterministische seeds.
+
+00:07:23.480 --> 00:07:25.540
+Vergelijk de latency met het baseline-venster.
+
+00:07:25.780 --> 00:07:29.540
+Als de afwijking uw tolerantie overschrijdt, onderbreek dan de productie en stopt de uitrol.
+
+00:07:29.760 --> 00:07:32.080
+Dit lijkt misschien hard, maar het alternatief is erger.
+
+00:07:32.080 --> 00:07:35.440
+Een cluster dat werkt terwijl er enorm veel tijd en budget verloren gaat.
+
+00:07:35.640 --> 00:07:41.160
+Vergrendel de providervolgorde, weiger CPU-fallback en laat het systeem bewijzen dat het snel is voordat het als actief wordt beschouwd.
+
+00:07:41.300 --> 00:07:43.000
+Pas dan betekent groen versneld.
+
+00:07:44.220 --> 00:07:48.080
+Bewijsbestand B, versie mismatch, coode ONNX, TensorRT incompatibiliteit.
+
+00:07:48.920 --> 00:07:53.940
+Als de GPU niet gebruikt werd, is de volgende vraag of deze wel op volle snelheid zou presteren, zelfs als deze wel aanwezig was.
+
+00:07:54.120 --> 00:07:56.240
+Het bewijsmateriaal wijst op een subtielere fout.
+
+00:07:56.460 --> 00:08:00.060
+De versies komen voldoende overeen om te draaien, maar niet genoeg om het snelle pad te activeren.
+
+00:08:00.060 --> 00:08:02.900
+Het systeem lijkt versneld totdat je de kloksnelheden bekijkt.
+
+00:08:03.060 --> 00:08:04.960
+Waarom dit belangrijk is, is eenvoudig.
+
+00:08:05.540 --> 00:08:07.720
+Diffusiepipelines vallen of staan met de aandachtsprestaties.
+
+00:08:07.960 --> 00:08:15.000
+Wanneer de ONNX Runtime en TensorRT de verwachte kernels niet kunnen laden of fuseren omdat de coode, CUDNN of TensorRT-versies niet overeen komen,
+
+00:08:15.200 --> 00:08:17.540
+schakelen ze stilletjes over naar generieke implementaties.
+
+00:08:17.700 --> 00:08:18.680
+Het model werkt.
+
+00:08:19.180 --> 00:08:23.740
+Het gebruik schommelt rond de 30 tot 50 procent en de latentie overschrijdt het budget.
+
+00:08:24.100 --> 00:08:26.620
+De beeld ziet er hetzelfde uit, maar het werk is trager.
+
+00:08:26.860 --> 00:08:29.440
+Bij nader onderzoek blijken de artefacten precies te kloppen.
+
+00:08:29.440 --> 00:08:32.440
+De laadlogboeken van de provider geven succes aan met een tel.
+
+00:08:32.760 --> 00:08:35.840
+Terugvallen op standaard kernels of uitgeschakelde X-formers.
+
+00:08:36.020 --> 00:08:40.460
+Je zult zien dat de deserrealisatie van een TensorRT-plan mislukt door een incompatibele herbouw van de engine,
+
+00:08:40.680 --> 00:08:42.240
+wat een compilatie op de nood activeert.
+
+00:08:42.400 --> 00:08:46.320
+Engines die gebouwd zijn op een bepaalde minor versie van TensorRT kunnen niet worden gedeserrealiseerd op een andere.
+
+00:08:46.520 --> 00:08:51.620
+De herbouw wordt voltooid, maar het resulterende plan mist mogelijk fused attention of FP16-optimalisaties.
+
+00:08:51.820 --> 00:08:52.680
+De race eindigt.
+
+00:08:52.920 --> 00:08:55.820
+Zonder pieken blijven de duty cycles van de Tensor cores laag.
+
+00:08:55.920 --> 00:08:58.100
+En hier komt het contra-intuitieve gedeelte.
+
+00:08:58.100 --> 00:09:00.260
+Teams interpreteren het als optimaal.
+
+00:09:00.620 --> 00:09:02.700
+In deze omgeving is niets toevallig.
+
+00:09:02.820 --> 00:09:06.520
+Als skilled product attention niet actief is, als X-formers is uitgeschakeld,
+
+00:09:06.680 --> 00:09:10.340
+als CUDNN een beperkte werkruimte meldt, stort de prestatie geleidelijk in.
+
+00:09:10.540 --> 00:09:15.980
+Simpel gezegd, niet overeenkomende binaire bestanden dwingen kernels af die meer geheugenverplaatsing en minder wiskundige dichtheid gebruiken.
+
+00:09:16.120 --> 00:09:17.920
+PCIE wordt zichtbaar in de traces.
+
+00:09:18.240 --> 00:09:21.080
+De staartlatencie neemt toe naarmate de gelijktijdigheid toeneemt.
+
+00:09:21.080 --> 00:09:28.220
+Beschouw de stack als een set vergrendelingen, driver, CUDNN, ONNX Runtime Buildflex en TensorRT.
+
+00:09:28.420 --> 00:09:31.000
+Eén tandje verkeert en de sleutel draait maar half.
+
+00:09:31.200 --> 00:09:34.340
+Ord adverteert een mogelijkheden grafiek per uitvoeringsprovider.
+
+00:09:34.600 --> 00:09:42.440
+Als de gecompileerde Ord CUDE 12.2 verwacht, maar de Node Driver 12.1 beschikbaar stelt, laat CUDE met beperkte functionaliteit of helemaal niet.
+
+00:09:42.600 --> 00:09:49.940
+Als TensorRT versie 8.6 op de nood is, maar de plannen zijn gegenereerd met 8.4, mislukt de deserrealisatie en wordt het plan opnieuw gegenereerd met conservatieve tactieken.
+
+00:09:49.940 --> 00:09:53.240
+Het systeem geeft stilletjes de voorkeur aan correctheid boven snelheid.
+
+00:09:53.460 --> 00:09:55.420
+Benchmarks bewijzen het verlies in de praktijk.
+
+00:09:55.620 --> 00:09:59.920
+Met actieve X-formers of SDP zorgt de fusie aandacht voor een meetbare afname van de rekentijd.
+
+00:10:00.140 --> 00:10:05.680
+Onderzoek toont consistent een snelheidsverbetering van 2x tot 5x in het aandachtspad afhankelijk van de resolutie en batchgrootte.
+
+00:10:05.900 --> 00:10:09.280
+Schakel ze uit door versie instabiliteit en je verliest die vermenigvuldigers.
+
+00:10:09.500 --> 00:10:12.020
+Token Merging Tone profiteert van deze winst.
+
+00:10:12.360 --> 00:10:17.060
+Zonder de samengevoegde kernels wordt het voordeel beperkt door de geheugenbandbreedte en niet geoptimaliseerde layouts.
+
+00:10:17.060 --> 00:10:21.620
+Het verschil wordt groter bij een gelijktijdigheid van 1024x1024 en hoger.
+
+00:10:21.740 --> 00:10:24.800
+Om de artefacten te traceren, begin je met het opzommen van de mogelijkheden.
+
+00:10:24.960 --> 00:10:28.720
+Print bij het opstarten de exacte lijst met providers en hun gerapporteerde functies.
+
+00:10:28.880 --> 00:10:38.000
+Tensor RT-versie, beschikbaarheid van FP16 en INT8, maximale werkruimte, CUD-NN-canvolusie heuristieke en CCL-aanwezigheid voor multi-GPU.
+
+00:10:38.240 --> 00:10:41.140
+Voor ONNX Runtime, dump de EP-prioriteiten.
+
+00:10:41.340 --> 00:10:43.720
+Tensor RT, coode, vervolgens CPU.
+
+00:10:43.720 --> 00:10:46.900
+Controleer welke daadwerkelijk aan je grafieknooppunten is gekoppeld.
+
+00:10:47.100 --> 00:10:52.240
+Log- of aandachtsknooppunten zijn toegewezen aan Tensor RT met fused kernels of aan generieke coode kernels.
+
+00:10:52.440 --> 00:10:53.980
+Onderzoek vervolgens de omgeving.
+
+00:10:54.220 --> 00:10:55.220
+Vraag de driver op.
+
+00:10:55.380 --> 00:10:58.460
+NVIDIA SMI toont de kernelmodule en coode-compatibiliteit.
+
+00:10:58.700 --> 00:11:00.600
+Lees de bibliotheek versies in de container.
+
+00:11:00.880 --> 00:11:03.600
+Libcuda, Libcublas, Libcute, Libvinfer.
+
+00:11:03.600 --> 00:11:11.340
+Als de image coode 12.3 bibliotheken bevat, maar de host driver tot 12.2 ondersteunt, kan de runtime compatibiliteitsmodus met beperkingen laden.
+
+00:11:11.480 --> 00:11:18.700
+Als de image Tensor RT 8.6 headers verwacht, maar de noodplugin 8.4 levert, zullen API aanroepen bepaalde optimalisaties verslechteren of zelfs te niet doen.
+
+00:11:18.860 --> 00:11:21.040
+De oplossing is een beeldmatrix, geen wens.
+
+00:11:21.320 --> 00:11:23.840
+Leg de exacte versies vast in één betrouwbare bron.
+
+00:11:23.840 --> 00:11:30.440
+Een basis-image met driver-compatibiliteit, coode-minor, c-u-d-n-n, ort-build-hash en Tensor RT-versie.
+
+00:11:30.620 --> 00:11:35.800
+Genereer inferentie-images op basis van die matrix- en verwerpnoods die niet overeenkomen via noodlabels en toelatingscontroles.
+
+00:11:36.060 --> 00:11:41.560
+Bouw en cache Tensor RT-engines voor elke modelvariant en resolutie vooraf op basis van de exacte Tensor RT-versie die u implementeert.
+
+00:11:41.720 --> 00:11:44.360
+Beschouw planbestanden als artefacten die aan de matrix zijn gekoppeld.
+
+00:11:44.540 --> 00:11:47.200
+Vertrouw in productie nooit op het bouwen van de engine op de nood zelf.
+
+00:11:47.420 --> 00:11:50.020
+Dit maskeert afwijkingen en verhoogt het aantal coldstarts.
+
+00:11:50.020 --> 00:11:54.160
+Om dit te waarborgen, voegt u CI smoke tests toe die de kernelmogelijkheden controleren.
+
+00:11:54.320 --> 00:12:00.180
+Start de container in een geïsoleerde runner met de dual driver en controleer of Tensor RT de gebruikte FP16 kernels laat,
+
+00:12:00.360 --> 00:12:05.500
+of de attention nodes zijn samengevoegd, of de IO-binding actief is en of X-formers of SDP zijn bevestigd.
+
+00:12:05.640 --> 00:12:12.880
+Voer een deterministische prompt zit uit en laat de beeld mislukken als de latentie de basislijn overschrijdt of als de logboeken terugvalinformatie bevatten.
+
+00:12:13.060 --> 00:12:19.180
+Sla de momentopname van de mogelijkheden op samen met de Image Digest, zodat rollbacks zowel de code als de prestatiekenmerken herstellen.
+
+00:12:19.180 --> 00:12:22.240
+Uiteindelijk wijst het bewijs erop dat versieafwijking geen bak is.
+
+00:12:22.420 --> 00:12:24.300
+Het is een snelheidsoverschrijding waar je voor betaalt.
+
+00:12:24.440 --> 00:12:25.580
+Het systeem zal draaien.
+
+00:12:25.740 --> 00:12:27.140
+De klokken zullen het bevestigen.
+
+00:12:27.660 --> 00:12:29.080
+Bewijsbestand C, container.
+
+00:12:29.760 --> 00:12:32.740
+Efficiëntieverlies door verkeerde configuratie, opzettelijk.
+
+00:12:32.980 --> 00:12:37.360
+Zelfs wanneer versies overeen komen, kan de container de efficiëntie van binnenuit saboteren.
+
+00:12:37.560 --> 00:12:44.360
+Het bewijs suggereert een langzame bleed, een opgeblazen image, ontbrekende GPU-ondersteuning en allocatorgedrag dat de latentie onder belasting verstoort.
+
+00:12:44.560 --> 00:12:46.420
+Niet scratch, alles verslechtert.
+
+00:12:46.420 --> 00:12:49.160
+Waarom dit belangrijk is, is simpel.
+
+00:12:49.480 --> 00:12:51.560
+Containers bepalen de runtime realiteit.
+
+00:12:51.780 --> 00:12:56.240
+Als de image te groot is en cold starts traag verlopen, komen replica's te laat bij het incident aan.
+
+00:12:56.380 --> 00:13:01.780
+Als GPU-apparaten niet zijn gemount of de runtime de juiste vlag gemist, gedragen execution providers zich onjuist.
+
+00:13:01.960 --> 00:13:06.460
+Als geheugenarena's allocaties hamsteren via rampchurn, veroorzaakt dit paging en pieken in de staart.
+
+00:13:06.600 --> 00:13:08.080
+Het model ziet er prima uit.
+
+00:13:08.280 --> 00:13:10.520
+De container belast stilletjes elk verzoek.
+
+00:13:10.520 --> 00:13:13.680
+Bij nader onderzoek blijkt dat er tijdens het bouwen artefacten ophopen.
+
+00:13:13.860 --> 00:13:19.280
+Images overschrijden de 2 gigabyte, geladen met compilers, headers en testbestanden, omdat er geen multistagebeeld is.
+
+00:13:19.460 --> 00:13:24.440
+Een ontbrekende Docker-ubnoor zorgt ervoor dat notebooks, caches en experimentele gewichten in de productielagen terechtkomen.
+
+00:13:24.640 --> 00:13:27.420
+Elke deployment trekt gigabytes aan data over het netwerk.
+
+00:13:27.420 --> 00:13:31.440
+Schaal dit op overnode-poles en een cold start wordt de norm, geen uitzondering.
+
+00:13:31.640 --> 00:13:33.220
+Het bewijs is niet mysterieus.
+
+00:13:33.400 --> 00:13:35.440
+De Docker-geschiedenis vertelt het verhaal in lagen.
+
+00:13:35.640 --> 00:13:37.800
+Runtime onthult de tweede laag van erosie.
+
+00:13:38.020 --> 00:13:47.100
+Zonder expliciete GPU-vlaggen, geen GPU's in Docker of een ontbrekende configuratie van de device-plugin in Kubernetes, ziet het proces geen HDF-NVIDIA-apparaten.
+
+00:13:47.840 --> 00:13:51.060
+Misconfiguraties van de NVIDIA-container-toolkit verbergen libcuda.
+
+00:13:51.300 --> 00:13:55.160
+En zo gaat het maar door, waardoor de execution provider laat met beperkingen of helemaal niet.
+
+00:13:55.160 --> 00:14:00.420
+MIG's worden niet afgedwongen, waardoor workloads vechten om geheugenslicers en schedulers geheugen verspillen dat ze niet begrijpen.
+
+00:14:00.620 --> 00:14:02.680
+Locks blijven netjes, maar de prestaties slinken.
+
+00:14:03.120 --> 00:14:04.560
+Geheugengedrag is de derde laag.
+
+00:14:04.720 --> 00:14:08.420
+Standaard cachet ONNX runtimes koele geheugen op agressieve wijze.
+
+00:14:08.600 --> 00:14:13.800
+Onder gelijktijdige belasting lijkt dit stabiel, totdat de arena-overvoel raakt en nieuwe verzoeken worden geweigerd.
+
+00:14:13.940 --> 00:14:20.180
+Vastgezet geheugen is niet ingesteld, waardoor overdrachten van hostapparaten via page-bear-buffers plaatsvinden, wat PCI-E tot een knelpunt maakt.
+
+00:14:20.180 --> 00:14:25.900
+I.O. is niet gebonden aan een apparaat, waardoor tensors heen en weer springen tussen CPU en GPU, wat onzichtbare latentie veroorzaakt.
+
+00:14:26.060 --> 00:14:28.880
+Het extreme gedrag verergert eerst, daarna volgt het gemiddelde.
+
+00:14:29.060 --> 00:14:34.040
+Dit is hoe de symptomen er in de praktijk uitzien, de effectieve doorvoer blijft achter ondanks een matige GPU-benutting.
+
+00:14:34.220 --> 00:14:39.900
+De latentie onder lichte belasting is acceptabel, maar de P95-score schommelt onder gelijktijdige belasting en piekt vervolgens onvoorspelbaar.
+
+00:14:40.240 --> 00:14:43.900
+Incidentele ohm-kills resetten replica's tijdens piekbelasting, wat leidt tot kudde gedrag.
+
+00:14:43.900 --> 00:14:47.540
+Herstarts leiden tot een kaskade, autoscaling raakt overbelast en wachtrijen worden opnieuw opgebouwd.
+
+00:14:47.660 --> 00:14:52.000
+Operators zoeken de verkeerde oorzaak in de veronderstelling dat het model zwaar is, terwijl het containerbeleid de oorzaak van de crash is.
+
+00:14:52.200 --> 00:14:54.220
+Zie containerhygiëne als bewijsmateriaalbeheer.
+
+00:14:54.400 --> 00:14:56.360
+Beelds in meerdere fases verwijderen vingerafdrukken.
+
+00:14:56.520 --> 00:14:58.920
+Compilers en ontwikkeltools komen nooit in de runtime terecht.
+
+00:14:59.140 --> 00:15:03.020
+Een basisimage zonder distributie of een slanke image verkleint het oppervlak en verkort de downloadtijd.
+
+00:15:03.280 --> 00:15:06.140
+Docker slim of div-addits bevestigen wat de beeld heeft overleefd.
+
+00:15:06.240 --> 00:15:08.580
+Een Docker-ignore voorkomt onbedoelde bulk uploads.
+
+00:15:08.580 --> 00:15:10.960
+Het resultaat is een onberispelijk schone omgeving.
+
+00:15:11.180 --> 00:15:13.240
+Alleen datgene wat zou moeten draaien, wordt uitgevoerd.
+
+00:15:13.420 --> 00:15:15.780
+GPU-configuratie vereist expliciete instructies.
+
+00:15:16.120 --> 00:15:19.120
+Declareer in Docker alle GPU's of de exacte MIG-slice.
+
+00:15:19.320 --> 00:15:24.920
+Vraag in Kubernetes-NVIDIA.com GPU-resources aan en zorg ervoor dat de apparaat-plugin overeenkomt met uw driverbranche.
+
+00:15:25.100 --> 00:15:28.380
+Controleer bij het opstarten de aanwezigheid van het apparaat en de compatibiliteit van de driver.
+
+00:15:28.580 --> 00:15:31.880
+NVIDIA SME en LD-configuratie zijn geen decoratie, maar toegangscontroles.
+
+00:15:32.040 --> 00:15:35.220
+Als er iets ontbreekt of niet overeenkomt, registreer dit dan als een overtreding en sluit af.
+
+00:15:35.220 --> 00:15:38.180
+Configureer vervolgens ONNX Runtime en TensorRT doelgericht.
+
+00:15:38.340 --> 00:15:41.920
+Vergrendel de uitvoeringsvolgorde van de provider alleen voor GPU-paden in productie.
+
+00:15:42.100 --> 00:15:46.960
+Overweeg het uitschakelen of opnieuw configureren van de koe de geheugenomgeving wanneer deze uw werkset overschrijdt.
+
+00:15:47.140 --> 00:15:50.400
+Beperk de groei- of stelpre-allocatie in opvoorspelbare grenzen.
+
+00:15:50.640 --> 00:15:54.200
+Schakel FP16 standaard in wanneer nauwkeurigheidslimieten dit toelaten.
+
+00:15:54.440 --> 00:15:57.000
+Schakel INT8 uit na een nauwkeurigheidstest.
+
+00:15:57.200 --> 00:16:01.080
+Koppel I.O. aan het apparaatgeheugen, zodat invoer aankomt waar de berekening plaatsvindt,
+
+00:16:01.080 --> 00:16:03.600
+en kies bewust streams om head-of-line-blocking te voorkomen.
+
+00:16:05.220 --> 00:16:06.640
+Gezondheid en prestaties.
+
+00:16:06.800 --> 00:16:10.480
+Gezondheid is niet zomaar een score van 200, maar een geverifieerde momentopname van de functionaliteit.
+
+00:16:10.720 --> 00:16:15.380
+Providers geladen, samengevoegde kernels aanwezig, Tensor Chorus herkent, I.O. beperkingen.
+
+00:16:15.600 --> 00:16:20.820
+Prestaties zijn een basisetprompt die bij het opstarten warm draaien met een latentievenster en een minimale gebruikslimiet.
+
+00:16:20.960 --> 00:16:24.060
+Als de container niet aan beide eisen voldoet, wordt deze niet toegelaten.
+
+00:16:24.240 --> 00:16:28.720
+Koppel budgetten voor de poolgrootte aan CI, zodat images die de drempelwaarden overschrijden, de beeld laten mislukken.
+
+00:16:28.720 --> 00:16:33.180
+Bewaar een diff van de imageinhoud per digest, zodat rollbacks de code en de integriteit herstellen.
+
+00:16:33.180 --> 00:16:38.240
+Het bewijs suggereert dat containers niet alleen software implementeren, maar ook gedrag onder stress coderen.
+
+00:16:38.460 --> 00:16:42.840
+Wanneer ze luidruchtig, zwaar of vaag zijn over de GPU, maken ze acceleratie tot een formaliteit.
+
+00:16:43.100 --> 00:16:46.960
+Wanneer ze slank, expliciet en assertief zijn, behouden ze het snelle pad waarvoor je hebt betaald.
+
+00:16:47.100 --> 00:16:48.960
+In deze omgeving is niets toevallig.
+
+00:16:49.100 --> 00:16:52.040
+De container helpt de GPU bij zijn werk of staat in de weg.
+
+00:16:52.600 --> 00:16:54.420
+Forensieslab, meetwaarden die veroordelen.
+
+00:16:54.740 --> 00:16:56.320
+Latentie, doorvoer, benutting.
+
+00:16:56.560 --> 00:17:01.180
+Bewijs weegt zwaarder dan meningen, dus we stellen de prompts het vast, vergrendelen de seats en draaien warm.
+
+00:17:01.180 --> 00:17:09.700
+Dezelfde schedulers, dezelfde stappen, 2025 voor 512 uitgebreid naar 50 voor 1024 bij 1024 om de belasting bloot te leggen.
+
+00:17:09.860 --> 00:17:12.340
+De gelijktijdigheid wordt op 16 gehouden met een zweep naar 32.
+
+00:17:12.940 --> 00:17:16.580
+De batchgrootte begint bij 1 en 1 voorzichtig toe totdat de VRAM-grenzen zich laten gelden.
+
+00:17:16.760 --> 00:17:19.720
+Geen extrapolatie, geen excuses, alleen klokken en tellers.
+
+00:17:19.940 --> 00:17:21.480
+Latentie is het eerste bewijs.
+
+00:17:21.640 --> 00:17:28.280
+In de verslechterde toestand loopt het CPU-fallback of generieke aandachtspad, P50 bij 512 bij 512, op tot dubbele cijfers.
+
+00:17:28.280 --> 00:17:30.640
+P95 vertelt het ware verhaal.
+
+00:17:30.780 --> 00:17:35.780
+Het schommelt onvoorspelbaar tussen de 20 en 40 seconden omdat wachtrijen kleine inefficiënties versterken.
+
+00:17:35.980 --> 00:17:40.940
+Bij 1024 bij 1024 met 50 stappen wordt P95 een inbreuk bij aankomst.
+
+00:17:41.120 --> 00:17:46.320
+Na de herstelwerkzaamheden is de GPU-EP vergrendeld, is de fused attention actief, is de IO gebonden aan het apparaat,
+
+00:17:46.460 --> 00:17:50.620
+keert de P50 terug naar een laag enkelcijferig getal en comprimeert de P95 binnen het budget.
+
+00:17:50.840 --> 00:17:53.160
+Het bereik krimpt, het systeem wordt voorspelbaar.
+
+00:17:53.160 --> 00:17:58.280
+De doorvoer bevestigt dit. Bij een gelijktijdigheid van 16 levert het verslechterde pad slechts een klein beetje data op.
+
+00:17:58.460 --> 00:18:02.460
+Het aantal afbeeldingen per minuut stijgt nauwelijks met replica's, omdat elke instantie zichzelf blokkeert.
+
+00:18:02.660 --> 00:18:05.440
+Schalen naar 32 vermenigvuldigt de concurrentie, niet de output.
+
+00:18:05.680 --> 00:18:07.500
+Na de correctie is de relatie rechtgetrokken.
+
+00:18:07.680 --> 00:18:13.120
+Het aantal afbeeldingen per minuut stijgt bijna lineair totdat de duty cycle van de Tensor Core verzadigd raakt of de VRM de batch beperkt.
+
+00:18:13.260 --> 00:18:15.040
+Het verschil in helling is overtuigend.
+
+00:18:15.220 --> 00:18:18.020
+Het werk wordt daadwerkelijk sneller voltooid, niet alleen luider.
+
+00:18:18.020 --> 00:18:25.000
+Het gebruik sluit de zaak af. Voorheen lag de duty cycle van de GPU tussen de 50% en 50% met lange, vlakke dalen.
+
+00:18:25.280 --> 00:18:28.900
+PCIe-tellers lieten activiteit zien van page-able transfers.
+
+00:18:29.680 --> 00:18:35.840
+Na de correctie stabiliseert de duty cycle zich in een hoge, consistente band met zichtbare betrokkenheid van de Tensor Core.
+
+00:18:36.020 --> 00:18:39.040
+De CPU keert terug naar orkestratie en lichte voorverwerking.
+
+00:18:39.280 --> 00:18:44.140
+PCIe-pieken worden gecomprimeerd omdat vastgezet geheugen en I.O.-binding het onnodige verkeer elimineren.
+
+00:18:44.380 --> 00:18:46.980
+Niets anders verklaart die verschuiving dan daadwerkelijke versnelling.
+
+00:18:46.980 --> 00:18:48.340
+We voegen een stresstest toe.
+
+00:18:48.480 --> 00:18:54.060
+Onder 512 bij 512 stappen met 2025 behoudt het vaste pad een gelijktijdigheid van 16 zonder pieken.
+
+00:18:54.280 --> 00:18:56.820
+Bij 32 stappen verslechtert het systeem geleidelijk.
+
+00:18:56.980 --> 00:18:59.760
+P95 neemt voorspelbaar toe, niet chaotisch.
+
+00:18:59.940 --> 00:19:04.440
+Onder 1024 bij 1024 stappen met 50 stappen wordt het verschil vergroot.
+
+00:19:04.560 --> 00:19:06.660
+Het verslechterde pad bezwijkt onder time-outs.
+
+00:19:06.900 --> 00:19:13.040
+Het versterkte pad behoudt een bruikbare P50 en een acceptabele P95 met batch 1 tot 2 totdat de VRAM grens 1 bereikt.
+
+00:19:13.220 --> 00:19:14.980
+Dit is waar arena's en streams ertoe doen.
+
+00:19:14.980 --> 00:19:17.600
+Na optimalisatie neemt het offline blocking af.
+
+00:19:17.740 --> 00:19:19.460
+De kosten zijn eenvoudig te berekenen.
+
+00:19:19.580 --> 00:19:25.420
+Het aantal aanvragen per GPU-uur stijgt 2 tot 5 keer wanneer FP16-aandacht en I.O.-binding worden geverifieerd.
+
+00:19:25.580 --> 00:19:28.860
+De effectieve kosten per 1000 afbeeldingen dalen dien overeenkomstig.
+
+00:19:28.980 --> 00:19:32.820
+De straffen voor een koude start worden kleiner omdat de images compact zijn en de engines vooraf zijn gebouwd.
+
+00:19:32.980 --> 00:19:35.460
+Notes betalen geen compilatiekosten meer bij de eerste aanraking.
+
+00:19:35.640 --> 00:19:37.320
+Het grootboek komt overeen met de logboeken.
+
+00:19:37.720 --> 00:19:39.280
+Verificatie voorkomt gelukkige runs.
+
+00:19:39.500 --> 00:19:42.440
+Herhaal dit op een tweede Notebo met een andere MinorDriver versie.
+
+00:19:42.440 --> 00:19:46.380
+De geharde image weigert per definitie te starten op een niet-overeenkomende node.
+
+00:19:46.520 --> 00:19:48.980
+De resultaten zijn dus vergelijkbaar, niet verwarrend.
+
+00:19:49.260 --> 00:19:51.100
+Controleer de mogelijkheden van snapshots.
+
+00:19:51.320 --> 00:19:55.020
+Dezelfde providervolgorde, dezelfde tensor RT, dezelfde kernel asserties.
+
+00:19:55.240 --> 00:19:57.740
+Voer de prompts het opnieuw uit en leg de verdelingen opnieuw vast.
+
+00:19:57.980 --> 00:20:00.300
+Wanneer de histogrammen overlappen, neemt het vertrouwen toe.
+
+00:20:00.520 --> 00:20:03.060
+Wanneer ze niet overlappen, verklaart het capaciteitsverschil waarom.
+
+00:20:03.260 --> 00:20:05.860
+Uiteindelijk spreken de cijfers voor zich, ze bewijzen het tegendeel.
+
+00:20:05.980 --> 00:20:09.020
+De latentie neemt af, de doorvoer schaalt, het gebruik stabiliseert.
+
+00:20:09.020 --> 00:20:14.840
+De patologie is niet hypothetisch. Het is meetbaar en aantoonbaar en het laat sporen na op elke grafiek.
+
+00:20:15.000 --> 00:20:18.200
+Het oplossingsprotocol, een herhaalbaar checklist voor hardening.
+
+00:20:18.700 --> 00:20:20.420
+Toegangscontrole komt op de eerste plaats.
+
+00:20:20.660 --> 00:20:24.440
+Weigert te starten als tensor RT of CODE-uitvoeringsproviders niet aanwezig zijn.
+
+00:20:24.660 --> 00:20:30.960
+Lijst providers op controleer het aantal apparaten, print momentopname van mogelijkheden, CUD-NN, FP-16, in het achtwerkruimte.
+
+00:20:31.120 --> 00:20:33.600
+Als er iets ontbreekt, verlaat het proces met een niet-nulwaarde.
+
+00:20:33.940 --> 00:20:37.140
+Beschikbaarheid volgt integriteit. Versiebeheer is de ruggengraat.
+
+00:20:37.280 --> 00:20:38.980
+Onderhoud één enkele matrix-driverbranche.
+
+00:20:39.140 --> 00:20:42.520
+CODE-minor naar CUD-NN, ONNX Runtime Build Hash, TensorRT.
+
+00:20:42.760 --> 00:20:44.900
+Bouw inferentie-images op basis van die matrix.
+
+00:20:45.180 --> 00:20:46.760
+Label knooppunten die overeen komen.
+
+00:20:46.940 --> 00:20:48.840
+Toegang beperken op basis van gelijkheid.
+
+00:20:49.080 --> 00:20:51.800
+Voorgebouwde TensorRT-engines per model en resolutie.
+
+00:20:51.960 --> 00:20:54.160
+Plannen zijn artefacten, geen runtime-gissingen.
+
+00:20:54.360 --> 00:20:56.220
+Container hygiëne bewaart de waarheid.
+
+00:20:56.440 --> 00:20:58.020
+Gebruik multistage-builds.
+
+00:20:58.020 --> 00:20:59.940
+Hou de runtime distro-les of slank.
+
+00:21:00.120 --> 00:21:01.660
+Voeg een strikte Docker-ignore toe.
+
+00:21:01.900 --> 00:21:04.060
+Controleer met Docker-history en een slimming audit.
+
+00:21:04.320 --> 00:21:06.240
+Stel budgetten voor polgrootte in CI in.
+
+00:21:06.400 --> 00:21:08.100
+Voud bij het opblazen van de grootte van images.
+
+00:21:08.360 --> 00:21:10.340
+Onderteken images en vergelijk de inhoud per digest.
+
+00:21:10.620 --> 00:21:11.680
+Configureer eerst de GPU.
+
+00:21:11.900 --> 00:21:13.920
+Vergrendel de EP-volgorde op TensorRT-cuden.
+
+00:21:14.120 --> 00:21:15.860
+Schakel de CPU-provider uit in productie.
+
+00:21:16.040 --> 00:21:20.000
+Controleer de aanwezigheid van NVIDIA in de ontwikkelomgeving en de versie van de NVIDIA-containertoolkit.
+
+00:21:20.200 --> 00:21:24.200
+Vraag expliciet een GPU aan via NVIDIA.com of combineer licenties en controleer dit bij het opstarten.
+
+00:21:24.660 --> 00:21:25.500
+Optimaliseer de runtime.
+
+00:21:25.500 --> 00:21:27.740
+Schakel FP-16 standaard in.
+
+00:21:27.900 --> 00:21:30.480
+Beperk INT-8 met nauwkeurigheidscontroles.
+
+00:21:30.640 --> 00:21:32.880
+Koppel I.O. direct aan het apparaatgeheugen.
+
+00:21:33.140 --> 00:21:37.140
+Schakel vastgezet geheugen in en kies streams om head-offline-blocking te voorkomen.
+
+00:21:37.620 --> 00:21:41.560
+Heroptimaliseer of schakel de Oort-coede-arena uit wanneer deze vastloopt buiten de werkzet.
+
+00:21:41.760 --> 00:21:43.340
+Stel prestatie-SLO's in als code.
+
+00:21:43.580 --> 00:21:47.560
+Voer een zelftest uit bij het opstarten met deterministische prompts, een latentievenster en een minimale benutting.
+
+00:21:47.760 --> 00:21:49.140
+Vaal bij dalende backlogs.
+
+00:21:49.140 --> 00:21:55.980
+Voeg observeerbaarheid toe, GPU-metrie-eken per verzoek, waarschuwingen voor verslechterde paden, canary-prompts en differentiëerbare baselines.
+
+00:21:56.360 --> 00:22:00.520
+Implementeer Blue-Green met prestatieporten en automatische terugdraaiing bij overschrijding.
+
+00:22:00.720 --> 00:22:04.680
+Met het afgedwongen protocol is versnelling aantoonbaar, niet vanzelfsprekend.
+
+00:22:05.100 --> 00:22:06.080
+De lay is klinisch.
+
+00:22:06.080 --> 00:22:10.120
+Stille CPU-terugval, versieafwijkingen en container Blue-Aid zijn geen bugs.
+
+00:22:10.340 --> 00:22:12.760
+Het zijn voorspelbare faalpatronen die je kunt blokkeren.
+
+00:22:13.000 --> 00:22:18.500
+Voer het protocol uit, meet het GPU-gebruik, weiger paden met verminderde prestaties, pinversies en behandel-engines als artefacten.
+
+00:22:18.500 --> 00:22:26.980
+Als je dieper wilt ingaan op het ONNX Runtime en TensorRT-geheugengedrag en wanneer je arena's moet uitschakelen, bekijk dan de volgende casus in deze serie en abonneer je op de labnotices.

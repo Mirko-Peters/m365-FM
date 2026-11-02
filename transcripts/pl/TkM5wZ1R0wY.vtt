@@ -1,0 +1,721 @@
+WEBVTT
+
+00:00:00.160 --> 00:00:04.320
+Dzisiejszy temat to coś, o czym niemal każdy słyszał, ale prawie nikt nie potrafi wyjaśnić prostymi słowami.
+
+00:00:04.520 --> 00:00:06.780
+RAK, czyli generowanie z rozszerzeniem o wyszukiwanie.
+
+00:00:06.940 --> 00:00:11.860
+Ten skrót widzieliście wszędzie w ogłoszeniach Microsoftu, na konferencjach AI, we wpisach na blogach, ale co on właściwie oznacza?
+
+00:00:12.000 --> 00:00:14.040
+A co ważniejsze, dlaczego powinno Was to obchodzić?
+
+00:00:14.140 --> 00:00:14.860
+Oto w czym rzecz.
+
+00:00:15.060 --> 00:00:17.900
+Duże modele językowe, takie jak GPT-4O, są potężne.
+
+00:00:18.100 --> 00:00:22.520
+Potrafią pisać wypracowania, streszczać dokumenty, a nawet generować kod, ale mają dwa poważne problemy.
+
+00:00:22.660 --> 00:00:24.600
+Po pierwsze, ich wiedza jest zamrożona w czasie.
+
+00:00:24.880 --> 00:00:27.680
+Zapytaj Szapt o coś, co wydarzyło się wczoraj, a nie będzie miał pojęcia.
+
+00:00:27.680 --> 00:00:32.960
+Po drugie, te modele nigdy nie widziały wewnętrznych danych Twojej firmy, Twoich polityk, szczegółów produktów czy maili od klientów.
+
+00:00:33.100 --> 00:00:36.100
+Więc kiedy zadajesz modelowi LLM pytanie o swój biznes, on po prostu zgaduje.
+
+00:00:36.260 --> 00:00:38.840
+I właśnie tutaj pojawia się generowanie z rozszerzeniem o wyszukiwanie, czyli RAK.
+
+00:00:38.980 --> 00:00:41.620
+RAK to nie jest nowy model, to nie jest większy ani lepszy GPT.
+
+00:00:41.760 --> 00:00:43.100
+To zupełnie inne podejście.
+
+00:00:43.360 --> 00:00:46.860
+Zamiast prosić model LLM o wyciąganie odpowiedzi z pamięci treningowej,
+
+00:00:46.980 --> 00:00:51.880
+RAK najpierw wyszukuje odpowiednie informacje w Twoich własnych danych i przekazuje je modelowi wraz z pytaniem.
+
+00:00:54.600 --> 00:01:03.900
+Dzięki RAK działa w oparciu o Twoje aktualne dokumenty tu i teraz.
+
+00:01:04.120 --> 00:01:09.520
+Na tym polega różnica między AI, które brzmi pewnie, ale może się mylić, a takim, które wskazuje dokładnie, skąd wzięło odpowiedź.
+
+00:01:09.600 --> 00:01:10.720
+Oto co dzisiaj omówimy.
+
+00:01:10.940 --> 00:01:14.040
+Najpierw przyjrzymy się dwóm problemom, które sprawiają, że RAK jest niezbędny.
+
+00:01:14.240 --> 00:01:17.900
+Następnie rozłożymy RAK na czynniki pierwsze, wyszukiwanie, rozszerzanie i generowanie.
+
+00:01:18.180 --> 00:01:23.180
+Potem przejdziemy przez kluczowe usługi Azure, Azure AI Search, Azure OpenAI i Azure AI Foundry.
+
+00:01:23.180 --> 00:01:26.840
+A na koniec pokażemy realny przykład, żebyście zobaczyli, jak te elementy pasują do siebie.
+
+00:01:27.160 --> 00:01:28.540
+Zacznijmy od samego problemu.
+
+00:01:28.700 --> 00:01:30.800
+Gdy go zrozumiesz, rozwiązanie stanie się oczywiste.
+
+00:01:31.020 --> 00:01:32.780
+Dwa problemy, jakie mają modele LLM.
+
+00:01:32.980 --> 00:01:34.960
+Więc co jest nie tak z dużymi modelami językowymi?
+
+00:01:35.180 --> 00:01:36.080
+Właściwie dwie rzeczy.
+
+00:01:36.280 --> 00:01:38.080
+Po pierwsze, ich wiedza jest zamrożona.
+
+00:01:38.380 --> 00:01:39.140
+Pomyślcie o tym.
+
+00:01:39.340 --> 00:01:43.240
+Kiedy trenowano GPT-4O, uczył się on na migawce internetu sprzed miesięcy lub lat,
+
+00:01:43.340 --> 00:01:46.760
+więc nie wie nic o nowych produktach, świeżych przepisach czy wczorajszych wiadomościach.
+
+00:01:46.920 --> 00:01:50.320
+Zapytaj go o zmianę polityki z zeszłego tygodnia, a nie będzie miał jak o tym wiedzieć.
+
+00:01:50.320 --> 00:01:53.360
+Te informacje po prostu nie znajdują się w jego danych treningowych.
+
+00:01:53.500 --> 00:01:59.660
+Po drugie, modele LLM nigdy nie widziały Twoich prywatnych danych, dokumentów wewnętrznych, maili, klientów czy zastrzeżonych baz danych.
+
+00:01:59.920 --> 00:02:05.920
+Model nie ma żadnego dostępu do tych zasobów, więc kiedy pracownik pyta o konkretne procesy biznesowe, model nie zna odpowiedzi.
+
+00:02:06.140 --> 00:02:07.180
+Nie wie tego, co Ty wiesz.
+
+00:02:07.400 --> 00:02:09.500
+Niektórzy myślą, że rozwiązaniem jest dostrajanie.
+
+00:02:09.700 --> 00:02:11.880
+Bierzesz model bazowy i douczasz go na własnych danych.
+
+00:02:12.060 --> 00:02:13.880
+Ale dostrajanie ma swoje własne problemy.
+
+00:02:14.060 --> 00:02:14.320
+Jest kosztowne.
+
+00:02:14.980 --> 00:02:17.100
+Płacisz za czas GPU i pracę inżynierów.
+
+00:02:17.280 --> 00:02:18.320
+Nie rozwiązuje problemu nieaktualności.
+
+00:02:18.320 --> 00:02:26.260
+Po dostrojeniu model pozostaje zamrożony w danym punkcie w czasie i nie radzi sobie z danymi, które często się zmieniają, jak stany magazynowe czy ceny.
+
+00:02:26.440 --> 00:02:29.140
+Dostrajanie jest jak nauczenie kogoś podręcznika na pamięć.
+
+00:02:29.280 --> 00:02:32.040
+Przydatne, ale taka osoba nadal nie sprawdzi dzisiejszej gazety.
+
+00:02:32.220 --> 00:02:33.940
+Prawdziwe rozwiązanie jest prostsze.
+
+00:02:34.160 --> 00:02:39.020
+Daj modelowi dostęp do Twojej wiedzy w momencie, gdy musi odpowiedzieć, zamiast upychać wszystko w jego pamięci.
+
+00:02:39.240 --> 00:02:40.980
+Nie każ mu uczyć się wszystkiego na pamięć.
+
+00:02:41.120 --> 00:02:43.760
+Pozwól mu sprawdzać informacje w czasie rzeczywistym z Twoich faktycznych danych.
+
+00:02:44.000 --> 00:02:44.900
+Właśnie to robi rak.
+
+00:02:44.900 --> 00:02:46.840
+Prosty pomysł, który zmienia wszystko.
+
+00:02:47.040 --> 00:02:48.260
+Czym właściwie jest rak?
+
+00:02:48.440 --> 00:02:49.740
+Oto rak w jednym zdaniu.
+
+00:02:50.000 --> 00:02:58.040
+Zamiast prosić model o wyciągnięcie odpowiedzi z danych treningowych, najpierw wyszukujemy odpowiednie informacje, a potem przekazujemy je modelowi wraz z pytaniem.
+
+00:02:58.220 --> 00:02:59.320
+To jest główna idea.
+
+00:02:59.580 --> 00:03:00.480
+Trzy proste kroki.
+
+00:03:00.720 --> 00:03:02.760
+Wyszukiwanie, rozszerzanie i generowanie.
+
+00:03:03.020 --> 00:03:04.060
+Podam Ci analogię.
+
+00:03:04.260 --> 00:03:04.900
+Pomyśl o bibliotekarzu.
+
+00:03:04.900 --> 00:03:07.600
+Wchodzisz do biblioteki i zadajesz pytanie.
+
+00:03:07.840 --> 00:03:10.620
+Nie oczekiwałbyś, że bibliotekarz zna każdą książkę na pamięć, prawda?
+
+00:03:10.820 --> 00:03:11.840
+To byłoby niedorzeczne.
+
+00:03:12.080 --> 00:03:15.920
+Zamiast tego prosisz go o znalezienie odpowiedniej książki, otwarcie na właściwej stronie i przeczytanie odpowiedzi.
+
+00:03:16.280 --> 00:03:17.820
+Bibliotekarz nie zapamiętuje niczego.
+
+00:03:18.080 --> 00:03:19.600
+Najpierw wyszukuje, potem czyta.
+
+00:03:19.740 --> 00:03:21.260
+I właśnie to dokładnie robi rak.
+
+00:03:21.440 --> 00:03:23.300
+Najpierw wyszukiwanie, potem generowanie.
+
+00:03:23.300 --> 00:03:24.960
+Oto jak to działa w praktyce.
+
+00:03:25.260 --> 00:03:26.500
+Użytkownik zadaje pytanie.
+
+00:03:26.800 --> 00:03:30.760
+System przeszukuje bazę wiedzy, Twoje dokumenty, Twoje dane, Twoje prywatne informacje.
+
+00:03:31.020 --> 00:03:35.640
+Wszystko, co znajdzie, trafia do dużego modelu językowego, który generuje odpowiedź na podstawie tego kontekstu.
+
+00:03:35.740 --> 00:03:37.000
+I oto najważniejsza część.
+
+00:03:37.200 --> 00:03:39.020
+LLM nigdy nie widzi Twoich surowych danych.
+
+00:03:39.280 --> 00:03:41.180
+Widzi tylko to, co dostarczy mu system wyszukiwania.
+
+00:03:41.340 --> 00:03:42.080
+To nie jest wada.
+
+00:03:42.260 --> 00:03:43.520
+To funkcja bezpieczeństwa.
+
+00:03:43.720 --> 00:03:46.380
+Twoje poufne dokumenty pozostają w Twoim własnym magazynie danych.
+
+00:03:46.380 --> 00:03:52.780
+W momencie zapytania model otrzymuje tylko odpowiednie fragmenty potrzebne do udzielenia odpowiedzi bez uczenia się na Twoich danych, bez zapamiętywania i bez wycieków.
+
+00:03:52.940 --> 00:03:54.660
+Twoje dane pozostają tam, gdzie ich miejsce.
+
+00:03:54.920 --> 00:03:57.100
+Rak rozwiązuje oba problemy, o których mówiliśmy wcześniej.
+
+00:03:57.500 --> 00:03:58.140
+Nieaktualne dane?
+
+00:03:58.300 --> 00:03:59.060
+To już nie problem.
+
+00:03:59.320 --> 00:04:01.000
+Twoja baza wiedzy pozostaje aktualna.
+
+00:04:01.200 --> 00:04:01.820
+Prywatne dane?
+
+00:04:02.100 --> 00:04:04.240
+Model widzi tylko to, co zdecydujesz się pobrać.
+
+00:04:04.340 --> 00:04:09.880
+To jak danie bibliotekarzowi dostępu do Twojej szafki na dokumenty, ale pozwalanie mu wyciągnąć tylko ten jeden folder, którego potrzebujesz w danej chwili.
+
+00:04:10.120 --> 00:04:12.060
+Wektory osadzeń i wyszukiwanie semantyczne.
+
+00:04:12.060 --> 00:04:14.600
+Być może zastanawiasz się, jak to wyszukiwanie faktycznie działa.
+
+00:04:14.800 --> 00:04:18.020
+Nie chodzi o dopasowywanie słów kluczowych, ani używanie funkcji znajdź w dokumentach.
+
+00:04:18.100 --> 00:04:19.560
+To coś znacznie inteligentniejszego.
+
+00:04:19.800 --> 00:04:22.600
+Nazywa się to wyszukiwaniem semantycznym i opiera się na wektorach osadzeń.
+
+00:04:22.840 --> 00:04:24.220
+Wyjaśnię, czym jest osadzenie.
+
+00:04:24.460 --> 00:04:28.700
+Wektor osadzenia to długa lista liczb, która oddaje znaczenie tekstu niczym współrzędne na mapie.
+
+00:04:28.900 --> 00:04:32.100
+Każdy dokument otrzymuje swoją własną współrzędną na tej mapie znaczeń.
+
+00:04:32.340 --> 00:04:37.420
+Gdy zadajesz pytanie, system również zamienia je na współrzędne, a następnie znajduje dokumenty, które są do nich najbliżej.
+
+00:04:37.620 --> 00:04:39.180
+Kluczem jest tutaj semantyka.
+
+00:04:39.180 --> 00:04:42.480
+Nie chodzi o znajdowanie dokładnych słów, lecz o zrozumienie pojęć.
+
+00:04:42.640 --> 00:04:48.860
+Jeśli szukasz tanich hoteli, system znajdzie dokumenty o przystępnych cenowo noclegach, nawet jeśli te konkretne słowa w nich nie występują.
+
+00:04:49.120 --> 00:04:51.420
+Dlaczego? Ponieważ ich znaczenie jest bliskie.
+
+00:04:51.600 --> 00:04:55.260
+Osadzenia dla tanich i przystępnych znajdują się obok siebie na tej mapie.
+
+00:04:55.520 --> 00:04:59.580
+Specjalny, niewielki model, taki jak Azure Text Embedding 3 Large, tworzy te osadzenia.
+
+00:04:59.780 --> 00:05:03.720
+To nie jest gigantyczny model językowy, lecz wyspecjalizowane narzędzie do jednego zadania.
+
+00:05:03.960 --> 00:05:05.960
+Przekształcanie tekstów te liczbowe współrzędne.
+
+00:05:06.080 --> 00:05:08.040
+To właśnie czyni rak tak potężnym rozwiązaniem.
+
+00:05:08.040 --> 00:05:11.240
+Twoje dokumenty są zamieniane na osadzenia tylko raz podczas indeksowania.
+
+00:05:11.460 --> 00:05:18.520
+Gdy pojawia się zapytanie, system w milisekundach znajduje najbardziej odpowiednią treść, nawet jeśli dokładne słowa użytkownika nie występują w dokumentach.
+
+00:05:18.740 --> 00:05:21.600
+Rozumie intencje, a nie tylko wpisane słowa kluczowe.
+
+00:05:21.820 --> 00:05:23.880
+Azure AI Search – silnik wyszukiwania.
+
+00:05:24.120 --> 00:05:25.920
+Teraz rozumiesz już całą koncepcję.
+
+00:05:26.160 --> 00:05:27.780
+Najpierw pobierz, potem wygeneruj.
+
+00:05:27.940 --> 00:05:29.740
+Ale gdzie właściwie odbywa się to pobieranie?
+
+00:05:29.940 --> 00:05:31.920
+Tutaj do gry wkracza Azure AI Search.
+
+00:05:32.080 --> 00:05:36.020
+Azure AI Search to usługa, która przechowuje, indeksuje i pobiera Twoje treści.
+
+00:05:36.020 --> 00:05:39.180
+Potraktuj to jako system kartoteczny dla swojej aplikacji RAK.
+
+00:05:39.320 --> 00:05:41.760
+Obsługuje dwa główne zadania, omówmy je po kolei.
+
+00:05:41.900 --> 00:05:45.040
+Po pierwsze – indeksowanie, czyli przygotowanie danych do przeszukiwania.
+
+00:05:45.200 --> 00:05:49.580
+Po drugie – wyszukiwanie, czyli faktyczne znajdowanie odpowiednich treści, gdy ktoś zadaje pytanie.
+
+00:05:49.840 --> 00:05:51.580
+Zacznijmy od procesu indeksowania.
+
+00:05:51.580 --> 00:06:00.980
+Zaczynasz od wskazania usłudze Azure AI Search źródła danych, którym może być kontener Blob Storage z plikami PDF, baza SQL z danymi klientów lub wiele innych źródeł.
+
+00:06:01.500 --> 00:06:11.500
+Usługa odczytuje te dokumenty, dzieli je na mniejsze fragmenty zwane chunks, tworzy dla nich wektory osadzeń przy użyciu wspomnianego wcześniej modelu i zapisuje wszystko w indeksie wyszukiwania.
+
+00:06:11.780 --> 00:06:15.080
+Wyobraź sobie indeks jako ogromny, wysoce zorganizowany katalog.
+
+00:06:15.080 --> 00:06:20.660
+Każdy element treści otrzymuje unikalny identyfikator, fragment tekstu oraz zestaw współrzędnych na tej mapie znaczeń.
+
+00:06:20.820 --> 00:06:22.220
+A teraz proces wyszukiwania.
+
+00:06:22.480 --> 00:06:32.280
+Gdy użytkownik zadaje pytanie, AI Search konwertuje je na wektor przy użyciu tego samego modelu osadzania, a następnie skanuje indeks, aby znaleźć fragmenty, których współrzędne są najbliższe współrzędnym pytania.
+
+00:06:32.520 --> 00:06:37.800
+Zwraca najlepsze do pasowania, zazwyczaj od 5 do 10 najbardziej istotnych, a wszystko to w milisekundach.
+
+00:06:38.000 --> 00:06:39.520
+Masz tutaj kilka solidnych opcji.
+
+00:06:39.520 --> 00:06:44.860
+Czyste wyszukiwanie wektorowe znajduje treść na podstawie znaczenia, więc podobne koncepcje pojawiają się, nawet jeśli dokładne słowa się nie zgadzają.
+
+00:06:45.080 --> 00:06:49.020
+Wyszukiwanie słów kluczowych działa jak tradycyjna wyszukiwarka, znajdując dokładne dopasowania słów.
+
+00:06:49.200 --> 00:06:53.480
+Możesz też użyć wyszukiwania hybrydowego, które łączy oba podejścia i zazwyczaj jest to najlepszy wybór.
+
+00:06:53.660 --> 00:06:59.900
+Istnieje również tak zwane semantyczne przewartościowanie, które pobiera te początkowe wyniki i sortuje je ponownie na podstawie tego, jak dobrze faktycznie odpowiadają na pytanie.
+
+00:07:00.080 --> 00:07:03.280
+To jak drugie przejście, które wyłapuje rzeczy, które pierwsze mogło pominąć.
+
+00:07:03.280 --> 00:07:06.720
+Jedna rzecz, o której powinieneś wiedzieć Azure, a i Search może być kosztowne.
+
+00:07:06.840 --> 00:07:10.480
+Podstawowy poziom zaczyna się od około 75 dolarów miesięcznie i rośnie w górę.
+
+00:07:10.480 --> 00:07:15.220
+Jeśli tylko eksperymentujesz, użyj darmowego poziomu lub upewnij się, że usuniesz zasoby, gdy skończysz.
+
+00:07:15.420 --> 00:07:18.300
+W przypadku użycia produkcyjnego koszt ten zazwyczaj się zwraca.
+
+00:07:18.480 --> 00:07:21.140
+Kupujesz szybkość i niezawodność na dużą skalę.
+
+00:07:21.700 --> 00:07:23.660
+Azure OpenAI oraz AI Foundry.
+
+00:07:23.820 --> 00:07:25.200
+Generowanie i orkiestracja.
+
+00:07:25.200 --> 00:07:31.720
+Więc teraz twoje dane są zindeksowane i gotowe do pobrania, ale model LLM nadal musi zrozumieć twoje pytanie i wygenerować solidną odpowiedź.
+
+00:07:31.880 --> 00:07:34.860
+W tym miejscu wkraczają Azure OpenAI i Azure AI Foundry.
+
+00:07:35.020 --> 00:07:40.920
+Azure OpenAI dostarcza właściwy model językowy GPT-4O, GPT-4-1 lub dowolny model, który wybierzesz.
+
+00:07:41.060 --> 00:07:42.520
+To jest silnik generujący.
+
+00:07:42.720 --> 00:07:48.520
+Otrzymuje on monit, który zawiera zarówno oryginalne pytanie użytkownika, jak i kontekst pobrany przez Azure AI Search.
+
+00:07:48.740 --> 00:07:52.260
+Model czyta ten kontekst i tworzy odpowiedź w oparciu o to, co znajdzie.
+
+00:07:52.260 --> 00:07:55.280
+Nie możesz po prostu wrzucić wszystkiego i mieć nadzieję, że zadziała.
+
+00:07:55.500 --> 00:08:00.400
+Potrzebujesz systemowego monitu, zestawu instrukcji, które przekazujesz modelowi z góry dotyczących tego, jak ma się zachowywać.
+
+00:08:00.620 --> 00:08:08.460
+Mówisz mu, aby używał tylko dostarczonego kontekstu, cytował źródła, a co najważniejsze, mówił, nie wiem, jeśli odpowiednie informacje nie znajdują się w pobranych dokumentach.
+
+00:08:08.580 --> 00:08:10.600
+To właśnie sprawia, że model jest uczciwy.
+
+00:08:10.820 --> 00:08:15.200
+Bez dobrego systemowego monitu model może oprzeć się na swoich danych treningowych lub, co gorsza, zmyślić coś.
+
+00:08:15.380 --> 00:08:17.760
+Jak więc faktycznie połączyć te wszystkie elementy w całość?
+
+00:08:17.920 --> 00:08:19.920
+Tutaj właśnie przydaje się Azure AI Foundry.
+
+00:08:19.920 --> 00:08:24.300
+To portal, w którym tworzysz projekt, wdrażasz modele, łączysz źródła danych i testujesz swojego agenta.
+
+00:08:24.500 --> 00:08:27.400
+Pomyśl o tym, jak o centrum sterowania dla całej swojej konfiguracji RAC.
+
+00:08:27.580 --> 00:08:33.440
+Wewnątrz Foundry możesz dodać indeks Azure AI Search jako źródło wiedzy dla swojego agenta, bez pisania własnego kodu na potrzeby podstawowej konfiguracji.
+
+00:08:33.680 --> 00:08:37.980
+Wystarczy utworzyć połączenie, wybrać indeks, a agent może automatycznie zacząć go przeszukiwać.
+
+00:08:38.140 --> 00:08:40.060
+Portal zajmuje się całą orkiestracją.
+
+00:08:40.320 --> 00:08:47.620
+Gdy użytkownik zadaje pytanie, agent wie, że ma wywołać AI Search, pobrać odpowiednie fragmenty i przekazać je do modelu LLM wraz z oryginalnym pytaniem.
+
+00:08:47.620 --> 00:08:53.980
+Oto konkretny przykład. W jednym z samouczków, na które trafiłem, ktoś stworzył agenta rekomendacji filmowych przy użyciu zbioru danych Netflixa.
+
+00:08:54.100 --> 00:09:01.320
+Przesłali plik CSV z tytułami filmów, opisami i informacjami o obsadzie do Azure Blob Storage, a następnie użyli Azure AI Search do zindeksowania tych danych.
+
+00:09:01.520 --> 00:09:06.740
+W Azure AI Foundry stworzyli agenta opartego na GPT-4O i podłączyli do niego indeks AI Search.
+
+00:09:06.740 --> 00:09:10.060
+Kiedy użytkownik zapytał, lubię trillery, daj mi jakieś rekomendacje.
+
+00:09:10.220 --> 00:09:14.560
+Agent przeszukał indeks, znalazł trillery z tego konkretnego zbioru danych i zwrócił rekomendacje.
+
+00:09:14.740 --> 00:09:18.420
+I to jest kluczowe, polecił tylko te filmy, które faktycznie znajdowały się w tym zbiorze danych.
+
+00:09:18.660 --> 00:09:23.120
+Nic nie wymyślił, nie korzystał z własnych danych treningowych i pracował wyłącznie na udostępnionej mu treści.
+
+00:09:23.360 --> 00:09:24.540
+Na tym polega siła RAK.
+
+00:09:24.720 --> 00:09:26.340
+Klasyczny RAK kontra RAK agentowy.
+
+00:09:26.520 --> 00:09:28.140
+Teraz porozmawiajmy o konfiguracji.
+
+00:09:28.380 --> 00:09:30.780
+Istnieją dwa główne wzorce, klasyczny RAK i RAK agentowy.
+
+00:09:30.920 --> 00:09:32.940
+To, który wybierzesz, zależy od tego, co budujesz.
+
+00:09:32.940 --> 00:09:34.960
+Klasyczny RAK to bardzo bezpośrednie podejście.
+
+00:09:35.200 --> 00:09:38.280
+Jedno zapytanie wchodzi, jedno wyszukiwanie się wykonuje i otrzymujemy odpowiedź.
+
+00:09:38.360 --> 00:09:39.880
+Proste, szybkie, przewidywalne.
+
+00:09:40.040 --> 00:09:43.980
+Pomyśl o tym, jak o podejściu do recepcji w biurowcu i poproszeniu o jeden konkretny dokument.
+
+00:09:44.540 --> 00:09:46.460
+Recepcjonista bierze go, wręcza ci i gotowe.
+
+00:09:46.640 --> 00:09:49.480
+Klasyczny RAK świetnie sprawdza się w przypadku pytań o fakty na jeden temat,
+
+00:09:49.620 --> 00:09:52.200
+jak na przykład, jaka jest polityka firmy dotycząca pracy zdalnej?
+
+00:09:52.340 --> 00:09:55.240
+Albo, pokaż mi kroki rozwiązywania problemów dla tego kodu błędu.
+
+00:09:55.240 --> 00:09:59.920
+Jest niezawodny, tani i łatwy w naprawie, gdy coś pójdzie nie tak, ponieważ przepływ jest liniowy.
+
+00:10:02.940 --> 00:10:06.820
+Jak pobrać informacje? Potrafi zadawać wiele podpytań, przeszukiwać różne indeksy,
+
+00:10:06.920 --> 00:10:10.580
+iterować wyniki i syntetyzować informacje z różnych źródeł przed udzieleniem odpowiedzi.
+
+00:10:10.720 --> 00:10:15.140
+To jak posiadanie zarządcy budynku, który koordynuje pracę różnych działów, aby zebrać wszystkie potrzebne elementy.
+
+00:10:15.320 --> 00:10:19.620
+Nie bierze tylko jednego pliku, rozmawia z działem kadr, sprawdza dokumentację, porównuje zasady,
+
+00:10:19.720 --> 00:10:21.260
+a potem wraca z pełną odpowiedzią.
+
+00:10:21.440 --> 00:10:26.840
+Firma Microsoft przeprowadziła własne testy i odkryła, że agentowy RAK daje około 40% poprawy w trafności odpowiedzi na złożone pytania.
+
+00:10:26.840 --> 00:10:30.720
+To znacząca różnica, ale zużywa od 3 do 10 razy więcej tokenów i zwiększa opóźnienia.
+
+00:10:30.720 --> 00:10:33.240
+W przypadku prostych pytań ta dodatkowa praca jest zbędna.
+
+00:10:33.380 --> 00:10:35.300
+Klasyczny RAK radzi sobie z nimi wystarczająco dobrze.
+
+00:10:35.520 --> 00:10:36.920
+Kiedy więc użyć którego rozwiązania?
+
+00:10:37.080 --> 00:10:40.360
+Klasycznego do rutynowych, masowych zapytań, gdzie najważniejsze są szybkość i koszty.
+
+00:10:40.540 --> 00:10:43.280
+Agentowego do pytań wieloetapowych, niejednoznacznych lub międzybranżowych,
+
+00:10:43.440 --> 00:10:45.540
+gdzie dokładność jest warta dodatkowej mocy obliczeniowej.
+
+00:10:45.780 --> 00:10:47.720
+Sekcja połączenia, przykład kompleksowy.
+
+00:10:47.960 --> 00:10:50.980
+Zobaczmy, jak te wszystkie elementy łączą się w rzeczywistym przykładzie.
+
+00:10:51.200 --> 00:10:55.780
+Wyobraź sobie, że tworzysz agenta obsługi klienta dla biura podróży o nazwie Marigold Travels.
+
+00:10:55.780 --> 00:11:00.400
+Masz broszury wycieczek, opinie o hotelach i dokumenty z zasadami rozsiane po całej firmie.
+
+00:11:00.640 --> 00:11:05.000
+Chcesz, aby klienci zadawali pytania i otrzymywali dokładne odpowiedzi oparte na realnych treściach,
+
+00:11:05.140 --> 00:11:06.400
+a nie na ogólnych przypuszczeniach.
+
+00:11:06.540 --> 00:11:09.980
+Krok pierwszy – przechowuj wszystkie te treści w usłudze Azure Blob Storage.
+
+00:11:10.200 --> 00:11:14.740
+Broszury w jednym folderze, opinie w innym, zasady w trzecim po prostu pliki w kontenerze.
+
+00:11:14.900 --> 00:11:17.900
+Krok drugi – użyj Azure AI Search do indeksowania tych danych,
+
+00:11:18.040 --> 00:11:22.480
+uruchamiając kreator importu danych, wskazując na magazyn Blob i pozwalając mu działać.
+
+00:11:22.480 --> 00:11:28.200
+Usługa odczytuje każdy dokument, dzieli je na fragmenty, tworzy wektorowe osadzenia i buduje przeszukiwalny indeks.
+
+00:11:28.400 --> 00:11:30.160
+Cały proces zajmuje kilka minut.
+
+00:11:30.340 --> 00:11:33.420
+Krok trzeci – wejdź do Azure AI Foundry i utwórz agenta.
+
+00:11:33.680 --> 00:11:39.640
+Wdruż GPT-4O jako swój model, napisz systemowy prompt nakazujący używanie wyłącznie podanego kontekstu i cytowanie źródeł,
+
+00:11:39.700 --> 00:11:42.980
+a następnie podłącz swój indeks Azure AI Search jako źródło wiedzy.
+
+00:11:43.180 --> 00:11:44.480
+Kilka kliknięć i gotowe.
+
+00:11:44.660 --> 00:11:48.720
+Teraz klient pyta, jaki jest najlepiej oceniany hotel w Dubaju poniżej 300 dolarów.
+
+00:11:48.860 --> 00:11:51.780
+Agent przyjmuje to pytanie i wysyła je do Azure AI Search.
+
+00:11:51.780 --> 00:11:56.580
+Azure AI Search konwertuje je na wektor i znajduje najbardziej istotne fragmenty z Twoich opinii i broszur.
+
+00:11:56.740 --> 00:12:00.300
+Te fragmenty są przekazywane do GPT-4 o wraz z oryginalnym pytaniem.
+
+00:12:00.520 --> 00:12:05.500
+Model czyta je, identyfikuje najlepsze dopasowanie i generuje odpowiedź z cytatami wskazującymi na Twoje dokumenty źródłowe.
+
+00:12:05.740 --> 00:12:08.300
+Rzecz w tym, że model LLM nigdy nie zapamiętał tych danych.
+
+00:12:08.540 --> 00:12:10.600
+Nigdy nie był trenowany na Twoich opiniach o hotelach.
+
+00:12:10.760 --> 00:12:12.960
+Za każdym razem pracuje w oparciu o Twoje konkretne treści.
+
+00:12:13.200 --> 00:12:15.780
+Dodaj nowe opinie jutro, a odpowiedzi zaktualizują się automatycznie.
+
+00:12:15.940 --> 00:12:18.120
+Usuń przestarzałą broszurę, a przestanie się ona pojawiać.
+
+00:12:18.120 --> 00:12:21.800
+Model nie wymaga ponownego trenowania. Potrzebuje tylko odpowiedniej warstwy wyszukiwania.
+
+00:12:22.000 --> 00:12:24.280
+Jak więc faktycznie zacząć budować RAK na platformie Azure?
+
+00:12:24.440 --> 00:12:25.720
+Podzielmy to na trzy kroki.
+
+00:12:26.080 --> 00:12:27.920
+Najważniejsza sprawa – poznaj swoje dane.
+
+00:12:28.160 --> 00:12:33.060
+Zanim wybierzesz usługę, ustal gdzie znajdują się Twoje treści, jak są zorganizowane i kto powinien mieć do nich dostęp.
+
+00:12:33.340 --> 00:12:35.840
+Skuteczność RAK zależy bezpośrednio od jakości Twoich danych.
+
+00:12:36.000 --> 00:12:37.380
+Po drugie, postaw na prostotę.
+
+00:12:37.540 --> 00:12:39.060
+Nie komplikuj nadmiernie konfiguracji.
+
+00:12:39.260 --> 00:12:42.920
+Użyj kreatora importu danych w Azure AI Search, aby zindeksować tylko jeden zestaw dokumentów.
+
+00:12:42.920 --> 00:12:44.820
+Przetestuj go za pomocą prostych zapytań.
+
+00:12:44.940 --> 00:12:48.060
+Upewnij się, że wyszukiwanie działa idealnie, zanim dodasz LLM.
+
+00:12:48.240 --> 00:12:51.860
+Większość awarii RAK to nie problemy z modelem, to problemy z wyszukiwaniem.
+
+00:12:52.100 --> 00:12:53.800
+Ostatni krok – dodaj LLM.
+
+00:12:54.000 --> 00:12:56.980
+Gdy wyszukiwarka zwraca właściwe wyniki, dodaj warstwę generowania.
+
+00:12:57.180 --> 00:13:00.420
+To moment, w którym łączysz Azure OpenAI i tworzysz swój systemowy prompt.
+
+00:13:00.640 --> 00:13:02.760
+Rzecz w tym, że RAK nie jest czymś, co kupujesz.
+
+00:13:02.920 --> 00:13:04.300
+To wzorzec, który budujesz.
+
+00:13:04.500 --> 00:13:08.940
+Azure dostarcza części, pamięć, wyszukiwanie, modele oraz spoiwo, by to połączyć.
+
+00:13:09.180 --> 00:13:11.520
+Musisz tylko złożyć to wszystko we właściwy sposób.
+
+00:13:11.520 --> 00:13:15.740
+Jeśli pomogło Ci to spojrzeć szerzej, zasubskrybuj kanał po więcej wyjaśnień prostym językiem.
+
+00:13:15.960 --> 00:13:17.920
+Zostaw komentarz ze swoim zastosowaniem RAK.
+
+00:13:18.080 --> 00:13:19.540
+Chętnie dowiem się, co budujesz.

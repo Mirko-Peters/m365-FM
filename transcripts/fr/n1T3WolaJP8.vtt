@@ -1,0 +1,1471 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.420
+La validation unique qui empêche les agents intelligents de faire des bêtises.
+
+00:00:03.600 --> 00:00:07.820
+Il existe un verrou qui transforme l'intelligence en compétence, le contrôle du contrat pré-exécution.
+
+00:00:08.020 --> 00:00:11.480
+Avant l'exécution de tout outil, le validateur vérifie trois points dans l'ordre.
+
+00:00:11.680 --> 00:00:15.040
+L'intention correspond à une capacité réelle, l'appelant à les droits requis,
+
+00:00:15.400 --> 00:00:18.020
+et le résultat est réalisable dans les limites des données déclarées.
+
+00:00:18.160 --> 00:00:20.600
+En cas d'échec sur un seul point, rien n'est exécuté.
+
+00:00:20.720 --> 00:00:22.580
+Pas de « sois prudent », pas d'essai malgré tout.
+
+00:00:22.760 --> 00:00:24.420
+Refus immédiat avec motif et alternatif.
+
+00:00:24.620 --> 00:00:26.240
+Commençons par la correspondance des capacités.
+
+00:00:26.400 --> 00:00:28.860
+Le plan indique « mettre à jour un élément de liste cher point ».
+
+00:00:28.860 --> 00:00:32.520
+Le validateur demande « Quel outil ? » « Quelle méthode ? » « Quelle version de schéma ? »
+
+00:00:32.520 --> 00:00:34.540
+Les arguments sont vérifiés dans le registre.
+
+00:00:34.940 --> 00:00:38.240
+Champs requis présents, type correct, plage de valeur cohérente,
+
+00:00:38.620 --> 00:00:41.300
+et aucun champ parasite ajouté en espérant qu'il soit ignoré.
+
+00:00:41.600 --> 00:00:42.980
+L'alias d'outils est interdit.
+
+00:00:43.180 --> 00:00:45.200
+Utilisez le nom canonique ou soyez rejetés.
+
+00:00:45.400 --> 00:00:49.120
+Cela élimine les outils hallucinés et les paramètres devinés avant qu'ils ne causent des problèmes.
+
+00:00:49.360 --> 00:00:51.460
+Ensuite, la conformité aux politiques.
+
+00:00:52.420 --> 00:00:55.960
+Le moteur de règles évalue l'appel proposé par rapport aux politiques actives,
+
+00:00:55.960 --> 00:01:01.120
+liste blanche, contrôle RBAC à BAC lié aux revendications et portées intra-ID,
+
+00:01:01.620 --> 00:01:03.760
+règles d'environnement et classification de données.
+
+00:01:04.660 --> 00:01:07.500
+Si l'agent est limité aux fichiers en lecture sur un site spécifique,
+
+00:01:07.840 --> 00:01:10.160
+une mise à jour ou un autre site est strictement refusée.
+
+00:01:10.340 --> 00:01:13.900
+Si la charge utile touche à une classification restreinte sans intervention humaine,
+
+00:01:14.220 --> 00:01:14.920
+c'est également non.
+
+00:01:15.080 --> 00:01:17.620
+Les jetons sont vérifiés, les portées sont exactes,
+
+00:01:17.840 --> 00:01:21.480
+et toute escalade de privilèges, juste pour cette fois, est traitée comme ce qu'elle est,
+
+00:01:21.780 --> 00:01:22.840
+une tentative d'intrusion.
+
+00:01:22.840 --> 00:01:25.500
+Puis, la faisabilité des conditions post-exécution.
+
+00:01:25.640 --> 00:01:29.220
+Il ne suffit pas de vouloir un résultat, il doit être réalisable et vérifiable.
+
+00:01:29.440 --> 00:01:30.380
+Le validateur demande.
+
+00:01:30.740 --> 00:01:32.900
+La destination supporte-t-elle les clés d'idempotence ?
+
+00:01:32.900 --> 00:01:36.300
+Le système émettra-t-il un identifiant durable ou un ETAG que nous pourrons vérifier après ?
+
+00:01:36.300 --> 00:01:38.620
+Existe-t-il une action compensatoire en cas d'échec en aval ?
+
+00:01:38.620 --> 00:01:39.220
+Guillemets double.
+
+00:01:39.420 --> 00:01:42.060
+Si le plan ne permet pas de produire des conditions post-exécution vérifiables,
+
+00:01:42.280 --> 00:01:43.140
+il est rejeté ou réécrit.
+
+00:01:43.280 --> 00:01:45.760
+Nous n'acceptons pas le « fais-moi confiance », je le noterai plus tard.
+
+00:01:45.920 --> 00:01:47.480
+Le « plus tard » est la source des incidents.
+
+00:01:47.680 --> 00:01:49.160
+Réunis, ils forment le trio de verrouillages.
+
+00:01:49.160 --> 00:01:52.300
+Correspondance des capacités, conformité aux politiques et faisabilité post-exécution.
+
+00:01:52.480 --> 00:01:54.640
+Si les trois sont validés, l'exécuteur procède.
+
+00:01:54.800 --> 00:01:57.320
+En cas d'échec, le chemin de rejet motivé s'active.
+
+00:01:57.560 --> 00:02:00.080
+Ce chemin est poli, exhaustif et sans ambiguïté.
+
+00:02:00.280 --> 00:02:01.420
+Voici ce que vous avez tenté.
+
+00:02:01.620 --> 00:02:03.840
+Voici la politique ou le schéma précis que vous avez enfreint.
+
+00:02:04.040 --> 00:02:05.460
+Voici des alternatives sûres.
+
+00:02:05.600 --> 00:02:07.960
+Si l'intention peut être corrigée, réduisez la portée,
+
+00:02:08.280 --> 00:02:11.160
+passez à un résumé en lecture seule ou redirigez vers un site autorisé.
+
+00:02:11.160 --> 00:02:14.380
+Le validateur propose un plan conforme et demande une approbation.
+
+00:02:14.600 --> 00:02:18.980
+Si cela ne peut être réparé, transférez à un contrôle humain avec tout le contexte ou arrêtez tout.
+
+00:02:18.980 --> 00:02:20.400
+Pas de blocage mystérieux.
+
+00:02:20.520 --> 00:02:21.760
+Pas de succès silencieux.
+
+00:02:22.280 --> 00:02:25.020
+Une micro-histoire que vous avez vécue, même sans le savoir.
+
+00:02:25.280 --> 00:02:29.440
+L'agent doit résumer tous les documents RH du trimestre dernier et les envoyer au service juridique.
+
+00:02:29.580 --> 00:02:32.640
+La recherche propose des requêtes graphiques sur les sites RH et juridiques.
+
+00:02:32.800 --> 00:02:34.940
+Le validateur détecte un franchissement de frontières.
+
+00:02:35.140 --> 00:02:36.200
+Les RH sont restreints.
+
+00:02:36.400 --> 00:02:37.640
+Le juridique est interne.
+
+00:02:37.640 --> 00:02:40.520
+La passerelle trio bloque la lecture croisée et l'email sortant.
+
+00:02:40.680 --> 00:02:42.420
+Le chemin de refus envoie une réponse.
+
+00:02:42.640 --> 00:02:43.920
+Contenu restreint détecté.
+
+00:02:44.160 --> 00:02:45.040
+Alternatives proposées.
+
+00:02:45.040 --> 00:02:50.300
+Résumer l'index des politiques internes et fournir un lien de demande d'accès pour le résumé RH aux examinateurs autorisés.
+
+00:02:50.480 --> 00:02:52.420
+L'utilisateur approuve le plan conforme.
+
+00:02:52.540 --> 00:02:56.960
+L'exécuteur l'exécute, cite le contenu interne et joint une demande d'autorisation pour les documents RH.
+
+00:02:57.140 --> 00:02:59.020
+Pas de fuite, pas de drame, toujours utile.
+
+00:02:59.220 --> 00:03:00.960
+L'implémentation est volontairement ennuyeuse.
+
+00:03:00.960 --> 00:03:04.740
+Un langage de politique, DSL, définit qui peut faire quoi, où et avec quels effets secondaires.
+
+00:03:04.880 --> 00:03:09.680
+Un registre de schéma stocke les contrats d'outils, les noms, les versions, les formes d'arguments et les post-conditions.
+
+00:03:09.840 --> 00:03:14.000
+Un résolveur de listes d'autorisation mappe les domaines, cite et porté vers les niveaux d'environnement.
+
+00:03:14.160 --> 00:03:22.500
+Le validateur les compose, tamponne chaque décision avec un enregistrement d'audit, des entrées, des évaluations de politique, des résultats, et transmet un feu vert ou un plan de réparation à l'exécuteur.
+
+00:03:22.660 --> 00:03:25.300
+L'exécuteur ne contourne jamais un feu rouge de sa propre initiative.
+
+00:03:25.620 --> 00:03:27.180
+Il applique la décision ou s'arrête.
+
+00:03:27.180 --> 00:03:31.320
+Le modèle mental est assez clair pour être tatoué sur le front de votre diagramme d'architecture.
+
+00:03:31.480 --> 00:03:35.880
+Les exécuteurs appliquent, les graphes contraignent, les validateurs décident, dans cet ordre.
+
+00:03:35.880 --> 00:03:43.620
+Le modèle propose uniquement dans le périmètre autorisé, et dès qu'il tente de franchir la limite, le validateur le ramène, explique pourquoi et montre la porte.
+
+00:03:43.800 --> 00:03:48.220
+Ordre préservé, sécurité appliquée, progression débloquée selon les politiques.
+
+00:03:48.680 --> 00:03:52.140
+Vous vouliez une solution pour empêcher les agents intelligents de faire des bêtises.
+
+00:03:52.320 --> 00:03:58.940
+La voici, une vérification de contrat pré-exécution qui prouve la capacité, l'autorisation et le résultat vérifiable avant toute mutation réelle.
+
+00:03:59.140 --> 00:04:03.780
+Cela transforme, je pense pouvoir, en, j'y suis autorisé, je sais comment, et je peux prouver que je l'ai fait.
+
+00:04:03.780 --> 00:04:06.180
+L'idée de la non-pertinence ne nous avait pas effleuré.
+
+00:04:06.500 --> 00:04:08.960
+Vous avez maintenant l'architecture, utilisez-la.
+
+00:04:09.120 --> 00:04:10.720
+Point clé et bonus technique.
+
+00:04:10.920 --> 00:04:11.320
+Point clé.
+
+00:04:11.660 --> 00:04:15.260
+Les prongs sont des opinions, les exécuteurs et graphes validés sont des opérations,
+
+00:04:15.620 --> 00:04:19.400
+et la vérification de contrat pré-exécution est la barrière qui garantit l'intégrité des deux.
+
+00:04:19.580 --> 00:04:22.180
+Si cela vous a fait gagner du temps, remboursez la dette.
+
+00:04:22.360 --> 00:04:22.880
+Abonnez-vous.
+
+00:04:23.080 --> 00:04:27.780
+Ensuite, regardez l'analyse comparative entre l'Angraph et le Microsoft Agent Framework sur les performances,
+
+00:04:28.220 --> 00:04:31.120
+l'observabilité, les traces réelles, les coûts et les P95.
+
+00:04:31.120 --> 00:04:35.620
+Verrouillez votre parcours de mise à niveau, activez les alertes et recevez le prochain épisode à temps.
+
+00:04:35.900 --> 00:04:36.300
+Procédez.
+
+00:04:36.460 --> 00:04:39.060
+La plupart des gens pensent que de meilleurs prongs corrigent les agents instables.
+
+00:04:39.300 --> 00:04:39.920
+Jolie théorie.
+
+00:04:40.160 --> 00:04:41.180
+Les prongs guident la pensée.
+
+00:04:41.380 --> 00:04:42.680
+Ils n'exécutent pas d'opérations.
+
+00:04:42.900 --> 00:04:46.540
+La vérité, c'est que la fiabilité vient des exécuteurs et de la validation des graphes.
+
+00:04:46.640 --> 00:04:49.700
+La colonne vertébrale qui empêche les agents de s'effondrer face à la réalité.
+
+00:04:49.940 --> 00:04:51.940
+Nous allons connecter tout cela au scénario Microsoft,
+
+00:04:52.180 --> 00:04:54.640
+à la récupération via Microsoft 365 Graph,
+
+00:04:54.920 --> 00:04:57.820
+au raisonnement Azure OpenAI et aux agents Copilot Studio qui ne dérapent pas.
+
+00:04:57.820 --> 00:05:02.340
+Les enjeux sont simples. Précision, latence, coût et auditabilité.
+
+00:05:02.780 --> 00:05:04.680
+Mesurable, pas basé sur des ressentis.
+
+00:05:04.840 --> 00:05:06.420
+Je vais vous donner un modèle mental simple,
+
+00:05:06.700 --> 00:05:08.220
+des schémas en mots dont vous vous souviendrez,
+
+00:05:08.580 --> 00:05:12.040
+et une étape de validation qui empêche les agents intelligents de faire des erreurs bêtes.
+
+00:05:12.260 --> 00:05:15.180
+Voici l'architecture que vous auriez dû utiliser dès le premier jour.
+
+00:05:15.320 --> 00:05:18.360
+Pourquoi les prongs et choula ou les exécuteurs d'opérations réussissent ?
+
+00:05:18.360 --> 00:05:19.680
+Bon, voici le problème.
+
+00:05:19.920 --> 00:05:21.340
+Les LLM gèrent la cognition.
+
+00:05:21.680 --> 00:05:23.540
+Les exécuteurs gèrent les opérations.
+
+00:05:23.780 --> 00:05:25.760
+Mélanger les deux, c'est la recette du chaos.
+
+00:05:25.760 --> 00:05:27.540
+Le modèle peut proposer un plan.
+
+00:05:27.720 --> 00:05:29.900
+Il ne peut pas garantir que l'email a été envoyé,
+
+00:05:30.220 --> 00:05:32.560
+le fichier enregistré ou que l'autorisation existait.
+
+00:05:32.720 --> 00:05:35.820
+Il parle en probabilité, les opérations exigent des garanties.
+
+00:05:35.980 --> 00:05:37.040
+Place à l'exécuteur.
+
+00:05:37.320 --> 00:05:38.760
+Voyez-le comme l'adulte dans la pièce,
+
+00:05:39.060 --> 00:05:41.040
+un exécuteur de fonction soumis aux politiques,
+
+00:05:41.340 --> 00:05:43.060
+avec des contraintes d'État et d'idempotence.
+
+00:05:43.580 --> 00:05:46.200
+Il ne croit pas qu'une action a réussi, il vérifie.
+
+00:05:46.640 --> 00:05:48.440
+Il ne suppose pas qu'un outil existe.
+
+00:05:48.760 --> 00:05:52.600
+Il valide la capacité, les paramètres et les permissions avant même d'essayer.
+
+00:05:52.600 --> 00:05:57.920
+Et quand il échoue, il échoue clairement, classifie l'erreur et suit le chemin de récupération prescrit.
+
+00:05:58.120 --> 00:06:01.560
+La plupart des agents basés uniquement sur des prompts tombent dans trois modes d'échec.
+
+00:06:01.860 --> 00:06:03.700
+Premièrement, les outils hallucinés.
+
+00:06:04.340 --> 00:06:08.360
+Le modèle demande une fonction non enregistrée ou l'appel avec des champs inexistants.
+
+00:06:08.660 --> 00:06:10.600
+Deuxièmement, les préconditions manquantes.
+
+00:06:10.780 --> 00:06:14.120
+Il tente de modifier un fichier SharePoint sans vérifier s'il peut accéder au site,
+
+00:06:14.360 --> 00:06:15.700
+à la liste ou à la version de l'élément.
+
+00:06:15.920 --> 00:06:17.800
+Troisièmement, les échecs partiels silencieux.
+
+00:06:17.960 --> 00:06:21.140
+L'étape 2 échoue, mais l'agent continue et déclare la victoire parce que le texte semble confiant.
+
+00:06:21.140 --> 00:06:23.940
+Vous avez déjà vu ça. Vous avez juste appelé ça un comportement erratique.
+
+00:06:24.100 --> 00:06:26.860
+Les exécuteurs suivent une boucle qui semble ennuyeuse, et c'est pour ça que ça marche.
+
+00:06:27.160 --> 00:06:30.300
+Précondition, vérification des entrées, des permissions et des invariants.
+
+00:06:30.440 --> 00:06:35.100
+Action, appel de l'outil avec une clé d'idempotence pour éviter les doubles facturations ou publications.
+
+00:06:35.360 --> 00:06:39.120
+Post conditions, confirmation des effets par rapport à la source de vérité.
+
+00:06:39.480 --> 00:06:44.720
+Taxonomie des erreurs, validation, transitoire, limite de débit, jeunesse ou politique.
+
+00:06:44.720 --> 00:06:53.120
+Récupération, attente et nouvel essai pour le transitoire, réauthentification pour l'accès, solution de repli, et arrêt strict pour violation de politique.
+
+00:06:53.300 --> 00:06:54.940
+L'idempotence est non négociable.
+
+00:06:55.160 --> 00:06:59.700
+Si une action peut être répétée, il faut une clé pour que la seconde tentative soit neutre ou cohérente.
+
+00:06:59.920 --> 00:07:01.900
+Les délais d'expiration empêchent les appels zombies.
+
+00:07:02.140 --> 00:07:04.200
+Le « back-off » respecte les limites de débit.
+
+00:07:04.380 --> 00:07:08.800
+C'est un comportement déterministe régissant une génération de texte intrinsèquement stochastique.
+
+00:07:08.800 --> 00:07:12.080
+L'exécuteur est la boîte de vitesse, le LLM et le moteur.
+
+00:07:12.160 --> 00:07:14.780
+On ne presse pas le moteur à fond en espérant que les roues comprennent.
+
+00:07:14.980 --> 00:07:18.040
+Les sorties basées sur des contrats sont l'antidote au paragraphe, au mieux.
+
+00:07:18.240 --> 00:07:20.280
+Le modèle de raisonnement n'a pas le droit de divaguer.
+
+00:07:20.440 --> 00:07:22.140
+Il émet du JSON conforme à un schéma.
+
+00:07:22.540 --> 00:07:24.740
+Nom de l'outil, argument et post conditions attendus.
+
+00:07:24.900 --> 00:07:27.700
+Des validateurs vérifient la conformité au schéma avant toute exécution.
+
+00:07:27.900 --> 00:07:32.080
+Si la forme est incorrecte, l'exécuteur refuse avec un motif, demande un plan corrigé ou escalade.
+
+00:07:32.260 --> 00:07:34.940
+C'est ainsi que l'on évite que des salades de mots ne deviennent des incidents de production.
+
+00:07:34.940 --> 00:07:38.540
+Maintenant, vous vous dites peut-être, ne puis-je pas simplement demander au modèle de vérifier son travail ?
+
+00:07:38.540 --> 00:07:39.280
+Vous pouvez demander.
+
+00:07:39.520 --> 00:07:40.120
+Il dira oui.
+
+00:07:40.260 --> 00:07:41.120
+Il le dit toujours.
+
+00:07:41.280 --> 00:07:42.840
+L'utilisateur moyen s'en contente.
+
+00:07:43.020 --> 00:07:44.560
+Les professionnels exigent des preuves.
+
+00:07:44.720 --> 00:07:49.180
+Les preuves résident dans des post conditions vérifiées via des systèmes comme Microsoft Graph, SharePoint ou Exchange.
+
+00:07:49.400 --> 00:07:51.580
+De vraies sources de vérité, pas la mémoire du modèle.
+
+00:07:51.780 --> 00:07:53.100
+Mais c'est là que ça devient intéressant.
+
+00:07:53.340 --> 00:07:54.700
+Les étapes uniques sont correctes.
+
+00:07:54.800 --> 00:07:58.600
+Les flux de travail réels ont des embranchements, du parallélisme, des compensations et des points de contrôle humain.
+
+00:07:58.720 --> 00:08:00.160
+Il vous faut plus qu'un simple exécuteur.
+
+00:08:00.320 --> 00:08:01.980
+Il vous faut une carte que l'exécuteur peut lire.
+
+00:08:01.980 --> 00:08:03.380
+C'est ce qu'on appelle un graph de workflow.
+
+00:08:03.380 --> 00:08:06.120
+Dans un graph, les nœuds sont des tâches ou des sous-agents avec des contrats explicites.
+
+00:08:06.240 --> 00:08:08.040
+Les arrêtes définissent le flux de contrôle et le flux de données.
+
+00:08:08.220 --> 00:08:09.440
+L'état est traité comme une priorité.
+
+00:08:09.620 --> 00:08:10.440
+Qu'est-ce qui persiste ?
+
+00:08:10.440 --> 00:08:11.400
+Qu'est-ce qui est sauvegardé ?
+
+00:08:11.400 --> 00:08:12.400
+Qu'est-ce qui est éphémère ?
+
+00:08:12.400 --> 00:08:16.680
+L'exécuteur parcourt le graph de manière déterministe, en respectant les listes autorisées et les schémas à chaque arrête.
+
+00:08:16.880 --> 00:08:21.860
+Si un nœud échoue, le graph spécifie les compensations, l'annulation, la réparation ou l'escalade.
+
+00:08:22.000 --> 00:08:23.400
+Pas de tuyauterie mystérieuse.
+
+00:08:23.540 --> 00:08:24.060
+Pas de...
+
+00:08:24.060 --> 00:08:25.320
+Et ensuite la magie opère.
+
+00:08:25.500 --> 00:08:27.180
+C'est le moment où la fiabilité bascule.
+
+00:08:27.180 --> 00:08:32.060
+Le LLM propose, l'exécuteur applique, le graph contraint, la validation décide.
+
+00:08:32.260 --> 00:08:33.140
+L'ordre est rétabli.
+
+00:08:33.320 --> 00:08:38.180
+Une fois que vous séparez la cognition des opérations, vos agents arrêtent d'improviser et commencent à se comporter correctement.
+
+00:08:38.320 --> 00:08:42.160
+Et oui, ils se sentent toujours intelligents parce qu'ils le sont, mais maintenant ils sont supervisés.
+
+00:08:42.280 --> 00:08:42.700
+Plan prêt.
+
+00:08:42.900 --> 00:08:47.180
+Connectons cela à Microsoft 365 sans transformer votre tenant en champ de ruines.
+
+00:08:47.540 --> 00:08:49.020
+Initiation aux workflows de graph.
+
+00:08:49.260 --> 00:08:51.160
+Ne, arrête et un état qui ne fuit pas.
+
+00:08:51.400 --> 00:08:52.120
+Imaginez ceci.
+
+00:08:52.120 --> 00:08:54.580
+Vous avez un exécuteur fiable, mais aucune carte.
+
+00:08:54.760 --> 00:08:56.560
+Il suivra les ordres, mais vers où ?
+
+00:08:56.560 --> 00:08:59.200
+Entrez dans le graphe de workflow, votre manuel d'utilisation.
+
+00:08:59.420 --> 00:09:02.100
+Les nœuds sont des tâches ou des sous-agents avec des contrats explicites.
+
+00:09:02.280 --> 00:09:04.540
+Les arrêtes définissent le flux de contrôle et le flux de données.
+
+00:09:04.740 --> 00:09:08.760
+Le graphe encode ce qui s'exécute, quand cela s'exécute, et quelles données peuvent franchir les frontières.
+
+00:09:08.880 --> 00:09:10.440
+Pas d'improvisation, pas de jazz.
+
+00:09:10.660 --> 00:09:12.240
+Ceci est une partition musicale.
+
+00:09:12.380 --> 00:09:13.340
+Commencez par la forme.
+
+00:09:13.560 --> 00:09:19.720
+La plupart des graphes de production sont des DAG, des graphes orientés à cycliques, car les cycles entraînent des boucles infinies et la corruption d'état.
+
+00:09:19.720 --> 00:09:26.300
+Vous pouvez toujours avoir des boucles, mais vous les marquez intentionnellement avec des compteurs, des gardes, des itérations maximales, des prédicats de sortie et des time-outs.
+
+00:09:26.520 --> 00:09:30.580
+C'est ainsi que vous évitez que « réfléchir plus intensément » ne devienne « réfléchir pour toujours ».
+
+00:09:30.580 --> 00:09:32.520
+Le routage conditionnel est explicite.
+
+00:09:32.720 --> 00:09:36.220
+Si la confiance de récupération dépasse le seuil, bifurquez vers la synthèse.
+
+00:09:36.440 --> 00:09:38.340
+Sinon, bifurquez vers une nouvelle requête.
+
+00:09:38.500 --> 00:09:40.660
+Le parallélisme est une fonctionnalité de premier plan.
+
+00:09:40.900 --> 00:09:47.280
+Exécutez la synthèse et l'extraction de citations en parallèle, puis rejoignez un nœud barrière qui vérifie que les deux ont rempli leurs conditions finales.
+
+00:09:47.400 --> 00:09:49.460
+L'état n'est pas une ambiance, c'est un registre.
+
+00:09:49.460 --> 00:09:50.480
+Vous en maintenez trois types.
+
+00:09:50.740 --> 00:09:55.760
+L'état persistant, des points de contrôle durables pour récupérer après un crash, les entrées, les décisions, les actions signées.
+
+00:09:55.880 --> 00:10:00.660
+L'état éphémère, des tampons à courte durée de vie comme les sorties de modèles intermédiaires que vous ne voulez pas polluer la mémoire à long terme.
+
+00:10:00.820 --> 00:10:05.940
+L'état dérivé, des artefacts recalculables comme des embeddings ou des résultats filtrés que vous pouvez reconstruire de manière déterministe.
+
+00:10:06.080 --> 00:10:08.980
+La règle est simple, ne persistez que ce que vous pouvez défendre lors d'un audit.
+
+00:10:09.180 --> 00:10:10.680
+Tout le reste est jetable par conception.
+
+00:10:10.960 --> 00:10:12.980
+La stratégie de retour en arrière est importante.
+
+00:10:12.980 --> 00:10:21.240
+Lorsqu'un nœud modifie le monde extérieur, crée un événement de calendrier, met à jour une liste, nous enregistrons une action inverse si elle existe ou un plan compensatoire sinon.
+
+00:10:21.480 --> 00:10:25.660
+Si un nœud en aval échoue fatalement, le graph peut parcourir ses compensations dans l'ordre inverse.
+
+00:10:25.880 --> 00:10:31.620
+Non, ce n'est pas excessif, c'est ainsi que vous évitez qu'un « oups, j'ai double réservé le PDG » ne devienne « oups, nous ne pouvons pas le corriger ».
+
+00:10:31.620 --> 00:10:33.020
+Les arêtes portent des contrats.
+
+00:10:33.180 --> 00:10:36.200
+Une arête n'est pas un tuyau mystérieux, c'est une API entre les nœuds.
+
+00:10:36.480 --> 00:10:40.220
+Définissez les schémas 2S, les types, les champs requis, les valeurs autorisées.
+
+00:10:40.440 --> 00:10:43.780
+Définissez des listes d'autorisation, quels outils ou domaines le prochain nœud peut appeler.
+
+00:10:44.080 --> 00:10:48.000
+Définissez des tags de capacité, ce que le nœud récepteur promet de faire et ce qu'il refusera.
+
+00:10:48.180 --> 00:10:50.160
+L'exécuteur les applique lors de l'exécution.
+
+00:10:50.340 --> 00:10:53.780
+Un nœud ne peut pas faire passer clandestinement un jeton « cher point » via une arête de résumé.
+
+00:10:53.780 --> 00:10:58.140
+Ce n'est pas du théâtre de sécurité, c'est ainsi que vous empêchez le mouvement latéral de votre propre agent.
+
+00:10:58.140 --> 00:11:01.440
+La gestion des erreurs réside dans le graphe, pas dans les intuitions.
+
+00:11:02.020 --> 00:11:03.880
+Chaque nœud déclare sa taxonomie d'erreur.
+
+00:11:04.320 --> 00:11:12.200
+Erreur de validation, infrastructure transitoire, limitation de débit, authentification, autorisation, violation de politique et inconnue.
+
+00:11:12.320 --> 00:11:14.480
+Pour chaque classe, le graphe fournit un chemin.
+
+00:11:14.700 --> 00:11:18.620
+Réessayez avec un back-off exponentiel pour le transitoire, rafraîchissez le jeton pour l'authentification,
+
+00:11:19.020 --> 00:11:22.180
+utilisez un outil alternatif pour la limitation, refusez avec motif pour la politique.
+
+00:11:22.360 --> 00:11:24.680
+Les files d'attente de lettres mortes existent pour les inconnues.
+
+00:11:24.680 --> 00:11:30.240
+Les charges utiles échouées vont en quarantaine avec le contexte complet pour que les humains inspectent sans rejouer le chaos en production.
+
+00:11:30.500 --> 00:11:34.200
+Les points de contrôle avec intervention humaine sont des nœuds, pas des messages Slack ad hoc.
+
+00:11:34.360 --> 00:11:39.860
+Ils figent l'exécution, présentent l'action proposée et les preuves, et nécessitent une approbation ou une modification journalisée et signée.
+
+00:11:40.000 --> 00:11:41.840
+Une fois approuvée, l'exécution reprend.
+
+00:11:42.020 --> 00:11:44.860
+Si refusé, le graphe se redirige vers une solution de secours sûr.
+
+00:11:45.260 --> 00:11:50.020
+Félicitations, vous venez d'implémenter un contrôle des changements que les développeurs suivront vraiment car c'est plus rapide que l'email.
+
+00:11:50.020 --> 00:11:57.320
+L'isolation de la mémoire n'est pas négociable. Chaque session obtient un contexte limité, uniquement les documents, jetons et résultats intermédiaires dont elle a besoin.
+
+00:11:57.480 --> 00:12:03.620
+L'empoisonnement inter-session, ou l'injection de pronds d'une conversation déteint sur une autre, est la façon dont vous exfiltrez accidentellement des données.
+
+00:12:03.820 --> 00:12:05.220
+Le graphe impose des frontières.
+
+00:12:05.360 --> 00:12:10.560
+Pas de mémoire mutable partagée, seulement des lectures autorisées depuis un dépôt vérifié avec filtre de contenu et validateur de schéma.
+
+00:12:10.720 --> 00:12:15.920
+Oui, vous pouvez mettre en cache les embeddings et résumés, mais vous devez les marquer avec leurs provenances et permissions, et les supprimer si la politique change.
+
+00:12:16.080 --> 00:12:18.820
+L'observabilité est intégrée dès la conception, pas ajoutée après coup.
+
+00:12:18.820 --> 00:12:22.940
+Les traces au niveau des nœuds montrent les entrées, sorties, durées, tentatives et effets en aval.
+
+00:12:23.100 --> 00:12:28.220
+Vous assemblez les traces dans un idée d'exécution de graphe, pour pouvoir rejouer, diagnostiquer et prouver la conformité.
+
+00:12:28.400 --> 00:12:30.020
+Qui a fait quoi, quand et pourquoi ?
+
+00:12:30.020 --> 00:12:32.360
+La détection d'anomalies signale les schémas étranges.
+
+00:12:32.520 --> 00:12:35.760
+Pique soudain d'appels d'outils, domaines inhabituels, explosions de jetons.
+
+00:12:35.920 --> 00:12:38.780
+C'est votre système d'alerte précoce avant que l'anomalie ne devienne un incident.
+
+00:12:39.240 --> 00:12:40.880
+Essentiellement, le graphe est la constitution.
+
+00:12:41.160 --> 00:12:42.700
+L'exécuteur est la force de l'ordre.
+
+00:12:42.900 --> 00:12:44.800
+Le LLM est le conseiller, pas le juge.
+
+00:12:44.800 --> 00:12:49.680
+Lorsque vous encodez ainsi les nœuds, les arrêtes et l'état, vous n'obtenez pas seulement des flux de travail qui réussissent.
+
+00:12:49.840 --> 00:12:53.840
+Vous obtenez des flux qui échouent en toute sécurité, s'expliquent eux-mêmes et récupèrent de manière prévisible.
+
+00:12:54.100 --> 00:12:59.180
+Maintenant, plan en main, nous pouvons nous connecter à Microsoft 365 sans transformer votre tenant en buffet libre.
+
+00:12:59.500 --> 00:13:00.520
+Sécurisé par conception.
+
+00:13:00.820 --> 00:13:03.060
+La validation de graphe surpasse le chaos engineering.
+
+00:13:03.420 --> 00:13:07.880
+On ne prouve pas la fiabilité en semant le chaos en production et en espérant que les survivants soient résilients.
+
+00:13:08.020 --> 00:13:10.960
+On la prouve en rejetant les flux non sécurisés avant même leur exécution.
+
+00:13:11.160 --> 00:13:12.740
+C'est ça, la validation de graphe.
+
+00:13:12.740 --> 00:13:16.280
+Contrôle statique pour écarter l'absurde, garde-fou à l'exécution pour confiner le danger.
+
+00:13:16.460 --> 00:13:18.320
+La validation statique et le contrôle avant-vol.
+
+00:13:18.520 --> 00:13:20.300
+Vous vérifiez la structure avant le décollage.
+
+00:13:20.500 --> 00:13:24.480
+Les cycles créant des boucles infinies sont rejetés ou doivent déclarer des garde-fous d'itération.
+
+00:13:24.720 --> 00:13:27.880
+Neu inaccessible, code mort, à supprimer ou à justifier.
+
+00:13:28.060 --> 00:13:28.700
+Contrat manquant.
+
+00:13:29.180 --> 00:13:33.700
+Chaque nœud doit déclarer ses schémas d'entrée, sortie, capacité requise et effets secondaires.
+
+00:13:33.900 --> 00:13:34.940
+Frontière de privilège.
+
+00:13:35.340 --> 00:13:41.020
+Les nœuds modifiants des systèmes externes doivent tourner dans des segments avec un accès minimal et des listes blanches explicites.
+
+00:13:41.020 --> 00:13:46.880
+Et oui, si votre nœud de résumé demande soudain un accès en écriture à cher point, le validateur refuse catégoriquement.
+
+00:13:47.040 --> 00:13:48.100
+Passons à l'exécution.
+
+00:13:48.340 --> 00:13:49.740
+C'est là que les gens deviennent négligents.
+
+00:13:49.880 --> 00:13:52.820
+Un moteur de politique siège à côté de l'exécuteur, pas derrière.
+
+00:13:53.100 --> 00:13:57.020
+Les listes blanches d'outils et de domaines ne sont pas de la documentation, ce sont des décisions appliquées.
+
+00:13:57.220 --> 00:14:05.080
+Lors de l'appel, le moteur vérifie le RBAC ou l'ABAC par rapport aux principes actifs, aux jetons d'identité, aux portées et aux revendications, et propage tout correctement.
+
+00:14:05.080 --> 00:14:06.540
+Pas de super pouvoirs ambiants.
+
+00:14:06.700 --> 00:14:10.900
+Les jetons sont limités, rafraîchis quand autorisés, et jamais transmis via des arrêtes non sécurisées.
+
+00:14:11.040 --> 00:14:13.780
+L'agent mérite son accès à chaque appel, sinon il ne peut pas appeler.
+
+00:14:13.940 --> 00:14:17.020
+L'assainissement des entrées et sorties est une règle d'hygiène, pas une option.
+
+00:14:17.240 --> 00:14:19.860
+L'injection de PRON n'est pas ingénieuse, elle est prévisible.
+
+00:14:20.200 --> 00:14:27.260
+Tout contenu entrant passe par des filtres, nettoyeurs HTML et Markdown, et par feu d'instruction qui neutralise les absurdités.
+
+00:14:27.800 --> 00:14:29.940
+La sortie passe par des validateurs de schémas.
+
+00:14:29.940 --> 00:14:34.360
+Si un nœud promet du JSON, l'exécuteur rejette la prose et demande une correction.
+
+00:14:34.660 --> 00:14:38.000
+Le modèle peut argumenter, le validateur, lui, ne négocie pas.
+
+00:14:38.140 --> 00:14:40.660
+Il impose des types, des plages de valeurs et des invariants.
+
+00:14:40.840 --> 00:14:43.600
+Le sandboxing et la segmentation limitent le rayon d'action.
+
+00:14:44.620 --> 00:14:48.820
+Les nœuds appelants du code externe ou des connecteurs non fiables tournent en environnement contraint,
+
+00:14:49.240 --> 00:14:53.460
+avec des API gateways limitées, des politiques réseau empêchant les mouvements latéraux
+
+00:14:53.460 --> 00:14:55.460
+et des contrôles de sortie filtrant les domaines.
+
+00:14:55.460 --> 00:15:00.600
+Vous ne laissez pas un nœud de recherche découvrir une nouvelle source de données en production.
+
+00:15:00.900 --> 00:15:04.940
+La découverte se fait en dev, derrière des tests avec des mises à jour signées de la liste blanche.
+
+00:15:05.120 --> 00:15:08.160
+L'observabilité ne se contente pas d'être journalisée, elle est chirurgicale.
+
+00:15:08.260 --> 00:15:12.940
+Le traçage au niveau du nœud enregistre les entrées, sorties, durées, tentatives et décisions du moteur de politique.
+
+00:15:13.140 --> 00:15:15.160
+Vous corrélez tout sous un idée d'exécution unique.
+
+00:15:15.360 --> 00:15:17.140
+Les logs d'audit sont immuables et attribués.
+
+00:15:17.380 --> 00:15:21.980
+Quel principe a autorisé quelle action, avec quel scope, à quel moment et pourquoi la politique l'a permis.
+
+00:15:21.980 --> 00:15:25.840
+Quand un régulateur demande qui a fait quoi, vous ne haussez pas les épaules, vous effectuez une recherche.
+
+00:15:26.040 --> 00:15:28.500
+Être conforme signifie que vos preuves sont banales et complètes.
+
+00:15:28.640 --> 00:15:31.200
+Les correctifs et les risques tiers sont des problèmes de chaîne d'approvisionnement.
+
+00:15:31.380 --> 00:15:32.180
+Traitez-les comme tels.
+
+00:15:32.380 --> 00:15:34.340
+L'analyse des dépendances s'exécute à chaque build.
+
+00:15:34.540 --> 00:15:38.400
+Les connecteurs et plugins sont audités, versionnés et examinés pour éviter toute dérive des permissions.
+
+00:15:38.660 --> 00:15:45.560
+Si vous importez une spécification MCP ou OpenAPI, vérifiez que les méthodes déclarées correspondent au principe du moindre privilège attendu.
+
+00:15:45.740 --> 00:15:49.960
+Pas de point de terminaison joker, pas de chemin d'écriture caché déguisé en lecture.
+
+00:15:50.360 --> 00:15:51.540
+L'hygiène n'est pas glamour.
+
+00:15:51.540 --> 00:15:53.880
+C'est pourtant la raison pour laquelle vous dormez tranquille.
+
+00:15:54.040 --> 00:16:00.080
+La validation par grave de vérité surpasse le chaos engineering car elle prévient des classes d'incidents au lieu d'en documenter les dégâts.
+
+00:16:00.240 --> 00:16:05.340
+Vous testez toujours les modes de défaillance, mais pour confirmer les garde-fous, pas pour découvrir que vous avez oublié de les installer.
+
+00:16:05.580 --> 00:16:06.780
+Revenons au modèle mental.
+
+00:16:07.080 --> 00:16:09.640
+Les vérifications statiques maintiennent la cohérence des plans.
+
+00:16:09.780 --> 00:16:13.560
+Pas de chemin impossible, pas de tâches orphelines, pas de fuite de privilèges.
+
+00:16:13.740 --> 00:16:16.400
+Les garde-fous au runtime maintiennent la cohérence des comportements.
+
+00:16:16.640 --> 00:16:20.140
+Chaque appel est authentifié, autorisé, nettoyé et observé.
+
+00:16:20.140 --> 00:16:27.260
+L'exécuteur impose les contraintes du graphe, le validateur arbitre le modèle, qui propose dans les limites fixées et est recadré s'il s'en écarte.
+
+00:16:27.480 --> 00:16:30.320
+N'est-ce pas trop lourd ? Seulement si vous appréciez les failles de sécurité.
+
+00:16:30.600 --> 00:16:32.520
+La surcharge est mécanique et automatisée.
+
+00:16:32.720 --> 00:16:35.420
+La validation statique s'exécute lors du build et du déploiement.
+
+00:16:35.420 --> 00:16:38.140
+La politique au runtime est un sidecar, rapide et local.
+
+00:16:38.340 --> 00:16:40.520
+Les vérifications de schéma prennent quelques millisecondes.
+
+00:16:40.680 --> 00:16:45.940
+Le coût que vous éliminez, incident, revue manuelle, correctif, éclipse la micro-latence que vous ajoutez.
+
+00:16:46.100 --> 00:16:47.220
+Et le gain est mesurable.
+
+00:16:47.820 --> 00:16:53.420
+Moins d'appels non autorisés, moins de jetons et beaucoup moins de post-mortem sur les comportements inexplicables.
+
+00:16:54.760 --> 00:16:56.960
+Un dernier point qui échappe à l'utilisateur moyen.
+
+00:16:57.200 --> 00:16:58.700
+La validation est composable.
+
+00:16:58.700 --> 00:17:04.820
+Vous pouvez encapsuler des outils tiers avec des nœuds proxy qui imposent des contrats et des politiques sans avoir à faire confiance à l'outil lui-même.
+
+00:17:05.000 --> 00:17:12.800
+Vous pouvez segmenter les graphes par sensibilité, public, interne, restreint, et promouvoir les flux entre les niveaux seulement après validation des nouvelles limites.
+
+00:17:13.000 --> 00:17:14.720
+C'est ainsi que vous évoluez en toute sécurité.
+
+00:17:14.940 --> 00:17:18.040
+La sécurité par conception n'est pas un slogan, c'est une propriété de flux de travail.
+
+00:17:18.240 --> 00:17:19.980
+Vous n'espérez pas que les agents se comportent bien.
+
+00:17:20.180 --> 00:17:23.620
+Vous rendez les comportements déviants structurellement difficiles et opérationnellement visibles.
+
+00:17:23.620 --> 00:17:28.440
+Avec des garde-fous en place, connecter Microsoft 365 Graph et Azure OpenAI n'est pas un jeu de hasard.
+
+00:17:28.440 --> 00:17:30.680
+C'est une puissance contrôlée selon vos propres termes.
+
+00:17:30.780 --> 00:17:33.600
+Nous pouvons maintenant parler d'architecture, pas d'extinction d'incendie.
+
+00:17:33.740 --> 00:17:34.880
+Le scénario Microsoft.
+
+00:17:35.940 --> 00:17:38.920
+M365 Graph, Azure OpenAI et Copilot Studio.
+
+00:17:39.420 --> 00:17:40.360
+Réunissons l'équipe.
+
+00:17:40.640 --> 00:17:45.440
+L'agent de recherche, un bibliothécaire discipliné qui ne puise dans Microsoft Graph qu'avec le moindre privilège.
+
+00:17:46.260 --> 00:17:51.540
+L'agent de raisonnement, un modèle Azure OpenAI qui planifie, cite et ne s'écarte jamais de sa mission.
+
+00:17:51.540 --> 00:17:57.800
+L'exécuteur, un opérateur lié aux politiques qui utilisent des outils avec idempotence et vérification post-condition.
+
+00:17:57.800 --> 00:18:02.100
+Le validateur, le portier, qui applique le schéma, les politiques et les limites.
+
+00:18:02.240 --> 00:18:06.940
+Le garde de politique, un sidecar d'exécution qui lie tout au portée entre AID et au contrôle d'accès basé sur les rôles, RBAC.
+
+00:18:07.180 --> 00:18:10.300
+Ensemble, ils agissent comme une équipe compétente plutôt que comme une menace bureaucratique.
+
+00:18:10.440 --> 00:18:12.680
+L'accès aux données commence par graph, pas par des suppositions.
+
+00:18:12.840 --> 00:18:15.640
+L'agent de recherche détient une inscription d'application avec des portées granulaires.
+
+00:18:15.800 --> 00:18:17.600
+Fichier, lecture pour un site spécifique.
+
+00:18:17.760 --> 00:18:19.900
+Email, lecture basique pour une boîte aux lettres confinées.
+
+00:18:20.140 --> 00:18:22.260
+Calendrier, lecture pour un calendrier de ressources.
+
+00:18:22.420 --> 00:18:24.260
+Pas d'héroïsme avec Graph Read Write All.
+
+00:18:24.260 --> 00:18:27.660
+Les requêtes utilisent des deltas et des champs sélectifs pour alléger les charges utiles.
+
+00:18:27.840 --> 00:18:29.260
+La pagination est une priorité.
+
+00:18:29.460 --> 00:18:33.720
+L'exécuteur suit les liens suivants de manière déterministe avec des délais d'attente, en respectant la limitation de débit.
+
+00:18:33.860 --> 00:18:36.420
+Et en cas d'erreur 429, le retrait est mathématique.
+
+00:18:36.560 --> 00:18:38.720
+Pas de caprice, juste une patience exponentielle.
+
+00:18:38.880 --> 00:18:41.280
+L'ancrage, grounding, n'est pas une intuition, c'est un pipeline.
+
+00:18:41.280 --> 00:18:44.560
+Récupérer les documents candidats via la recherche graphe ou des requêtes de liste.
+
+00:18:44.720 --> 00:18:48.500
+Dédupliquer par idées d'éléments et e-tacs de version, pour ne pas mélanger l'obsolète et l'actuelle.
+
+00:18:48.740 --> 00:18:58.080
+Découper par frontières sémantiques, en tête de section, saut de diapositive, puis joigner la provenance, le lecteur, le site, le chemin, l'idée d'éléments, la date de modification et le hash.
+
+00:18:58.240 --> 00:19:03.040
+L'agent de raisonnement ne voit que les segments et les métadonnées et doit produire des citations liées à ces idées.
+
+00:19:03.200 --> 00:19:04.920
+Pas de citations, pas d'affirmations.
+
+00:19:04.920 --> 00:19:08.700
+L'exécuteur impose cela comme condition post-action avant toute exécution externe.
+
+00:19:08.800 --> 00:19:10.740
+Place à Copilot Studio pour l'orchestration.
+
+00:19:10.740 --> 00:19:19.520
+Vous définissez des outils déclaratifs, des packs de requêtes graphes, des actions d'écriture SharePoint, des publications Team, des envois Outlook, chacun derrière un proxy avec des schémas explicites et des listes d'autorisation.
+
+00:19:19.720 --> 00:19:21.640
+La coordination entre agents est structurée.
+
+00:19:21.840 --> 00:19:24.000
+L'agent de recherche expose un outil d'ancrage.
+
+00:19:24.220 --> 00:19:26.720
+L'agent de raisonnement le sollicite avec des paramètres.
+
+00:19:26.920 --> 00:19:30.660
+L'exécuteur sert de médiateur, valide et renvoie un contexte ancré.
+
+00:19:31.420 --> 00:19:33.240
+Les points de contrôle humain sont natifs.
+
+00:19:33.240 --> 00:19:38.640
+Un nœud d'action proposé met l'exécution en pause, présente le plan avec les citations et requiert une approbation.
+
+00:19:38.840 --> 00:19:40.640
+L'approbation est signée et journalisée.
+
+00:19:40.840 --> 00:19:43.400
+Le refus redirige vers une alternative sûre ou une escalade.
+
+00:19:43.600 --> 00:19:46.180
+Les jetons et la latence sont gérés, pas ignorés par souhait.
+
+00:19:46.360 --> 00:19:50.580
+Un contexte sélectif signifie que vous ne fournissez que les fragments pertinents, pas tout votre tenant.
+
+00:19:50.800 --> 00:19:55.000
+Les résumés sont pré-calculés et mis en cache avec des embeddings indexés par âge de contenu et permission.
+
+00:19:55.280 --> 00:19:56.080
+Modifier le document.
+
+00:19:56.480 --> 00:19:57.040
+Changer la clé.
+
+00:19:57.420 --> 00:19:58.020
+Rater le cache.
+
+00:19:58.400 --> 00:19:58.840
+Recalculer.
+
+00:19:58.840 --> 00:20:04.700
+Les réponses en streaming maintiennent l'interface active tandis que l'exécuteur gère les effets de bord seulement après réception du plan valide.
+
+00:20:04.900 --> 00:20:09.360
+Les conditions de sortie anticipées arrêtent la boucle de raisonnement quand confiance et couverture atteignent le seuil.
+
+00:20:09.500 --> 00:20:12.280
+Pas de réflexion inutile parce que le modèle se sentait d'humeur poétique.
+
+00:20:12.280 --> 00:20:14.440
+L'auditabilité est intégrée par conception.
+
+00:20:14.740 --> 00:20:23.720
+Chaque action est signée par le principal de service où l'utilisateur délégué est marqué par idées d'exécution, outils, paramètres, occultation si besoin, portées et résultats.
+
+00:20:23.880 --> 00:20:26.420
+Les journaux immuables résident dans votre pile d'observabilité.
+
+00:20:26.660 --> 00:20:27.700
+Choisissez votre préféré.
+
+00:20:27.900 --> 00:20:30.780
+Ainsi, vous pouvez rejouer une exécution sans réitérer les effets de bord.
+
+00:20:30.980 --> 00:20:34.040
+Savoir qui a fait quoi, quand et pourquoi devient une requête, pas une chasse aux sorcières.
+
+00:20:34.180 --> 00:20:39.700
+Et oui, les citations restent intactes, vous permettant de vérifier que la réponse provient du contenu réel du tenant, pas d'une invention du modèle.
+
+00:20:39.920 --> 00:20:41.480
+L'échec est normalisé et banal.
+
+00:20:41.480 --> 00:20:47.360
+Erreur 429, l'exécuteur retente avec jitter, puis bascule vers une requête moins coûteuse ou une taille de page réduite.
+
+00:20:47.500 --> 00:20:51.700
+Cache obsolète, le validateur détecte les e-tags non correspondants et force un rafraîchissement.
+
+00:20:51.940 --> 00:20:58.640
+Refus de permission, le garde-fou de politique refuse avec motif, propose un chemin de demande de consentement ou redirige vers un résumé occulté sans fuite.
+
+00:20:58.780 --> 00:21:04.980
+Panne d'outils, le grave déclare des alternatives ou place l'exécution dans une file d'attente de messages non traités avec tout le contexte pour remédiation humaine.
+
+00:21:05.160 --> 00:21:08.060
+Les solutions de repli déterministes transforment l'incident en ticket.
+
+00:21:08.300 --> 00:21:09.820
+Maintenant, un très court aperçu.
+
+00:21:09.820 --> 00:21:14.080
+L'utilisateur demande, rédige un résumé des décisions de la feuille de route du dernier trimestre avec des liens.
+
+00:21:14.220 --> 00:21:21.180
+L'agent de raisonnement propose, utiliser la recherche grave sur un site SharePoint et un canal Team spécifique, filtré par dernier trimestre, puis synthétisé.
+
+00:21:21.320 --> 00:21:24.760
+Le validateur vérifie que les portées demandées correspondent au rôle de l'agent.
+
+00:21:24.960 --> 00:21:25.400
+C'est le cas.
+
+00:21:25.400 --> 00:21:32.040
+L'exécuteur émet des appels graphes avec pagination et sélection de champs, dédoublonne par idées d'éléments, fragmente et renvoie le contexte avec provenance.
+
+00:21:32.220 --> 00:21:35.940
+Le raisonnement produit un résumé avec des citations intégrées mappées aux idées d'éléments.
+
+00:21:36.140 --> 00:21:39.040
+Le validateur vérifie le schéma et les citations, valide.
+
+00:21:39.200 --> 00:21:41.760
+Un point de contrôle humain apparaît avec le résumé et les preuves.
+
+00:21:41.940 --> 00:21:43.320
+L'approbateur clique sur Valider.
+
+00:21:43.500 --> 00:21:49.480
+L'exécuteur publie le résultat d'antime et informe les parties prenantes par e-mail, chaque action utilisant des clés d'idempotence pour éviter les doublons.
+
+00:21:49.680 --> 00:21:50.560
+Notez la discipline.
+
+00:21:50.560 --> 00:21:52.060
+Aucun agent n'invente d'outils.
+
+00:21:52.240 --> 00:21:54.840
+Aucun nœud ne traverse un domaine hors de sa liste autorisée.
+
+00:21:55.040 --> 00:22:00.100
+Les jetons sont limités en portée et propagés correctement via EntraID, pas copier-coller entre les nœuds.
+
+00:22:00.260 --> 00:22:02.320
+Le modèle ne conclut jamais au succès tout seul.
+
+00:22:02.520 --> 00:22:04.980
+L'exécuteur le prouve avec des post-conditions graphes.
+
+00:22:05.080 --> 00:22:09.820
+Idées de messages créés, étag d'éléments mis à jour, idées d'événements de calendrier, puis marquent l'exécution comme terminée.
+
+00:22:09.920 --> 00:22:15.240
+Et oui, vous pouvez étendre cela en toute sécurité, intégrer Planner, Viva ou des servistières via MCP ou une API ouverte,
+
+00:22:15.240 --> 00:22:18.480
+mais uniquement derrière des outils proxy avec des schémas stricts et des contrôles de sortie réseau.
+
+00:22:18.480 --> 00:22:21.960
+Encapsulez chaque connecteur avec la même logique de validation et la même politique de garde-fou.
+
+00:22:22.100 --> 00:22:25.620
+La promotion entre environnements nécessite des phases de validation correspondant aux nouvelles limites.
+
+00:22:25.760 --> 00:22:29.100
+Du dévotest, puis à la prod, avec des augmentations de périmètres examinés et non présumés.
+
+00:22:29.280 --> 00:22:31.640
+C'est ainsi qu'une architecture Microsoft est correctement réalisée.
+
+00:22:31.840 --> 00:22:32.800
+Graphes pour la vérité.
+
+00:22:32.980 --> 00:22:34.460
+Azure OpenAI pour la réflexion.
+
+00:22:34.700 --> 00:22:36.200
+Copilot Studio pour l'orchestration.
+
+00:22:36.580 --> 00:22:38.000
+Les exécuteurs pour les opérations.
+
+00:22:38.280 --> 00:22:40.020
+Les validateurs et politiques pour la sécurité.
+
+00:22:40.420 --> 00:22:41.800
+Et l'observabilité pour la preuve.
+
+00:22:41.800 --> 00:22:43.800
+Des chiffres ensuite, pas des impressions.
+
+00:22:44.100 --> 00:22:45.160
+Des métriques avant-après.
+
+00:22:45.360 --> 00:22:47.800
+Précision, latence, coût, frais administratifs.
+
+00:22:48.480 --> 00:22:50.180
+Belle architecture, prouvez-le.
+
+00:22:50.340 --> 00:22:51.660
+Des chiffres, pas des impressions.
+
+00:22:51.940 --> 00:22:52.960
+D'abord une base de référence.
+
+00:22:53.260 --> 00:22:55.200
+Les agents basés uniquement sur des prompts sont des dramaturges.
+
+00:22:55.360 --> 00:22:58.700
+La précision est incohérente car ils inventent des sources et oublient les citations.
+
+00:22:58.940 --> 00:23:02.140
+Sans ancrage, vous obtenez une prose confiante qui ne mène nulle part.
+
+00:23:02.440 --> 00:23:03.900
+La latence de queue est brutale.
+
+00:23:04.100 --> 00:23:09.060
+Une longue chaîne d'appels séquentielle réfléchit davantage, chacun surchargé d'un contexte redondant.
+
+00:23:09.220 --> 00:23:12.240
+Les coûts explosent car chaque tour renvoie des transcriptions complètes
+
+00:23:12.240 --> 00:23:15.480
+et des documents bruts au modèle comme un service de messagerie surpayé.
+
+00:23:15.480 --> 00:23:22.560
+Frais administratifs, élevé, incidents, correctifs urgents, panne mystérieuse et audite qui ressemble à de l'archéologie à l'aveugle.
+
+00:23:22.760 --> 00:23:25.640
+Maintenant, l'État a prêt avec les exécuteurs et les graphes validés.
+
+00:23:25.800 --> 00:23:28.340
+La précision bondit car les affirmations exigent des preuves.
+
+00:23:28.560 --> 00:23:35.540
+Des citations ancrées liées aux idées d'éléments du graphe, aux e-tags et aux achises signées signifient qu'une réponse sans provenance est rejetée par le validateur.
+
+00:23:35.720 --> 00:23:36.700
+L'effet est immédiat.
+
+00:23:36.880 --> 00:23:42.300
+Moins de mauvaises réponses envoyées, moins de boucles de retravail et une amélioration mesurable des taux de réussite des tâches sur les jeux d'évaluation.
+
+00:23:42.300 --> 00:23:47.100
+Lorsqu'une affirmation ne peut être étayée, l'agent refuse avec motif ou demande une approbation humaine.
+
+00:23:47.380 --> 00:23:49.320
+Prévisible, vérifiable, sûr.
+
+00:23:49.480 --> 00:23:51.160
+La latence se comprime pour trois raisons.
+
+00:23:51.360 --> 00:23:57.340
+Premièrement, le parallélisme, la récupération, le re-ranking et l'extraction de citations s'exécutent simultanément puis se synchronisent à un nœud barrière.
+
+00:23:57.560 --> 00:24:03.080
+Deuxièmement, la mise en cache, les embeddings et les résumés indexés par h de contenu et périmètre de permission évitent de recalculer ce qui n'a pas changé.
+
+00:24:03.340 --> 00:24:04.900
+Troisièmement, la sortie anticipée.
+
+00:24:04.900 --> 00:24:08.180
+Une fois que la couverture et la confiance atteignent le seuil, le graphe interrompt la boucle.
+
+00:24:08.360 --> 00:24:13.280
+Comparez cela au prompt inséquentiel où le modèle réfléchit pendant un paragraphe et vos utilisateurs réfléchissent à abandonner.
+
+00:24:13.440 --> 00:24:16.360
+Le coût diminue car la discipline des jetons est imposée et non mendier.
+
+00:24:16.540 --> 00:24:18.980
+Les contraintes de schéma sur les sorties empêchent le bavardage.
+
+00:24:19.160 --> 00:24:23.560
+Un contexte sélectif n'alimente que les extraits pertinents avec des métadonnées, pas des sites entiers.
+
+00:24:23.760 --> 00:24:26.760
+Des prompts plus courts, des réponses plus petites, moins de tentatives.
+
+00:24:26.940 --> 00:24:31.400
+L'idempotence de l'exécuteur et la logique de back-off évitent les appels en double et les cycles gaspillés.
+
+00:24:31.400 --> 00:24:34.840
+L'effet net est moins de jetons par résultat réussi et beaucoup moins de variances.
+
+00:24:35.080 --> 00:24:37.140
+La finance apprécie la réduction de la variance.
+
+00:24:37.360 --> 00:24:40.940
+Les frais administratifs diminuent car l'observabilité est conçue et non improvisée.
+
+00:24:41.080 --> 00:24:44.660
+Les traces au niveau des nœuds et les journaux immuables réduisent le temps de diagnostic des incidents.
+
+00:24:44.860 --> 00:24:49.400
+Vous voyez quel nœud a échoué, pourquoi le moteur de règle a refusé, et ce que l'exécuteur a tenté ensuite.
+
+00:24:49.560 --> 00:24:53.080
+Les déploiements répétables mettent fin au théâtre du « ça marche sur ma machine ».
+
+00:24:53.080 --> 00:24:58.340
+La conformité n'est plus une crise saisonnière car chaque exécution contient déjà le qui, quoi, quand et pourquoi.
+
+00:24:58.340 --> 00:25:01.880
+Concrétisons cela avec un dispositif de mesure que vous pouvez réellement exécuter.
+
+00:25:02.000 --> 00:25:07.860
+Construisez un ensemble d'évaluations de tâches représentatives, questions-réponses avec citations, résumées avec liens et propositions d'actions avec approbation.
+
+00:25:08.000 --> 00:25:11.380
+Pour chacune, définissez des réponses de référence ou des critères d'acceptation.
+
+00:25:11.620 --> 00:25:15.700
+Fait correct avec identifiant d'éléments mappés, couverture des citations et variances autorisées.
+
+00:25:15.960 --> 00:25:21.860
+Instrumentez les SLO, la latence de boue en boue P50 et P95, les jetons consommés par tâches réussies et les taux de refus des règles.
+
+00:25:22.060 --> 00:25:25.240
+Reliez chaque mesure aux traces pour que toute régression laisse une piste exploitable.
+
+00:25:25.240 --> 00:25:29.220
+Résultat que vous devriez attendre si vous suivez l'architecture au lieu de l'improviser.
+
+00:25:29.340 --> 00:25:33.300
+Une validité de réponse accrue car les affirmations non étayées ne quittent jamais la pré-production.
+
+00:25:33.600 --> 00:25:38.900
+Une latence P95 plus faible car les files d'attente sont réduites par des nœuds parallèles et des sorties anticipées.
+
+00:25:39.380 --> 00:25:43.700
+Moins de consommation de jetons car vous arrêtez d'envoyer des romans pour envoyer des extraits pertinents.
+
+00:25:43.900 --> 00:25:48.240
+Moins d'alerte pour les administrateurs car la plupart des échecs sont gérés par des solutions de repli déterministes.
+
+00:25:48.900 --> 00:25:51.060
+Et oui, la métrique ennuyeuse que tout le monde oublie.
+
+00:25:51.220 --> 00:25:55.040
+Le taux de réussite au premier passage pour que plus d'exécutions se terminent sans intervention humaine.
+
+00:25:55.200 --> 00:25:55.800
+Impact commercial.
+
+00:25:56.120 --> 00:25:58.980
+Des résolutions plus rapides signifient que les utilisateurs cessent d'ouvrir des tickets en double.
+
+00:25:59.160 --> 00:26:02.160
+Des dépenses prévisibles signifient un budget sans mauvaise surprise lié au jeton.
+
+00:26:02.320 --> 00:26:06.120
+La confiance en la conformité signifie moins de cycles d'audit qui détournent votre feuille de route.
+
+00:26:06.280 --> 00:26:08.460
+Le gain moins évident est celui de la réputation.
+
+00:26:08.660 --> 00:26:11.960
+Quand les réponses de l'agent citent le contenu du client et que les liens fonctionnent,
+
+00:26:11.960 --> 00:26:17.900
+les gens font confiance, utilisent l'outil et arrêtent de transférer des captures d'écran commençant par « Pourquoi a-t-il dit ça ? »
+
+00:26:17.900 --> 00:26:18.860
+Conseil impératif.
+
+00:26:19.320 --> 00:26:22.680
+Mesurez le lien entre traces et métriques, sinon vous pilotez à l'aveugle.
+
+00:26:22.840 --> 00:26:27.200
+Si vous ne pouvez pas ouvrir une exécution et voir exactement quel nœud a gonflé les jetons ou ralentit la latence,
+
+00:26:27.540 --> 00:26:30.740
+vous n'avez pas d'observabilité, juste des impressions avec des orodatages.
+
+00:26:30.880 --> 00:26:34.300
+Tout change quand le validateur se place entre le beau plan et l'action réelle.
+
+00:26:34.640 --> 00:26:39.660
+La précision se stabilise, la latence se réduit, les coups se lissent, les administrateurs dorment.
+
+00:26:39.660 --> 00:26:45.720
+Ce n'est pas de la magie, ce sont des exécuteurs, des graphes et de la validation qui font le travail que vous aviez attribué à tort au prompt.

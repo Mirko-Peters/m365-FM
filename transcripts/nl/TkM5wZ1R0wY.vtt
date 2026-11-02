@@ -1,0 +1,877 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.560
+Het onderwerp van vandaag is iets waar bijna iedereen van gehoord heeft, maar wat bijna niemand in gewone mensentouw kan uitleggen.
+
+00:00:04.680 --> 00:00:06.560
+RAG, Retrieval Augmented Generation.
+
+00:00:06.800 --> 00:00:10.880
+Je hebt het acroniem overal gezien, in Microsoft-aankondigingen, AI-conferenties en blogposts.
+
+00:00:10.960 --> 00:00:11.880
+Maar wat betekent het eigenlijk?
+
+00:00:12.040 --> 00:00:14.020
+En nog belangrijker, waarom zou het je interesseren?
+
+00:00:14.160 --> 00:00:14.840
+Dit is het punt.
+
+00:00:15.080 --> 00:00:17.780
+Grote taalmodellen zoals GPT-4O zijn krachtig.
+
+00:00:17.940 --> 00:00:22.580
+Ze kunnen essays schrijven, documenten samenvatten en zelfs code genereren, maar ze hebben twee grote problemen.
+
+00:00:22.720 --> 00:00:24.580
+Ten eerste is hun kennis bevroren in de tijd.
+
+00:00:24.820 --> 00:00:27.720
+Vraagt chat GPT naar iets wat gisteren is gebeurd en het heeft geen idee.
+
+00:00:27.720 --> 00:00:32.980
+Ten tweede hebben deze modellen nooit de interne gegevens van jouw bedrijf gezien, je beleid, productdetails of klant-emails.
+
+00:00:33.200 --> 00:00:36.080
+Dus als je een LLM een vraag stelt over jouw bedrijf, is het aan het gokken.
+
+00:00:36.240 --> 00:00:38.700
+En dat is waar Retrieval Augmented Generation om de hoek komt kijken.
+
+00:00:38.940 --> 00:00:41.500
+RAG is geen nieuw model, het is geen grotere of betere GPT.
+
+00:00:41.700 --> 00:00:43.220
+Het is een totaal andere aanpak.
+
+00:00:43.380 --> 00:00:51.800
+In plaats van de LLM te vragen antwoorden uit zijn trainingsgeheugen te halen, zoekt RAG eerst de juiste informatie uit jouw eigen data en geeft die informatie samen met de vraag aan het model.
+
+00:00:51.800 --> 00:00:57.680
+Het model gebruikt die context vervolgens om antwoorden te geven die gebaseerd zijn op echte, actuele inhoud en niet op gokwerk.
+
+00:00:57.820 --> 00:01:00.860
+Zonder RAG werkt je AI vanuit een geheugen dat maanden of jaren oud is.
+
+00:01:01.080 --> 00:01:03.700
+Met RAG werkt het vanuit jouw eigen documenten van dit moment.
+
+00:01:03.980 --> 00:01:09.440
+Dat is het verschil tussen een AI die zelfverzekerd klinkt maar ongelijk kan hebben, en een AI die precies laat zien waar het antwoord vandaan komt.
+
+00:01:09.640 --> 00:01:10.860
+Dit gaan we vandaag behandelen.
+
+00:01:11.080 --> 00:01:13.760
+Eerst kijken we naar de twee problemen die RAG noodzakelijk maken.
+
+00:01:14.000 --> 00:01:17.820
+Daarna ontleden we wat RAG werkelijk is, de Retrieval, de Augmentation en de Generation.
+
+00:01:18.200 --> 00:01:23.360
+Vervolgens lopen we door de belangrijkste Azure services heen, Azure ISARG, Azure OpenAI en Azure AI Foundry.
+
+00:01:23.520 --> 00:01:26.860
+En we sluiten af met een echt voorbeeld zodat je kunt zien hoe de puzzelstukjes in elkaar passen.
+
+00:01:27.040 --> 00:01:28.640
+Laten we beginnen bij het probleem zelf.
+
+00:01:28.900 --> 00:01:30.980
+Zodra je dat ziet, wordt de oplossing duidelijk.
+
+00:01:31.140 --> 00:01:32.800
+De twee problemen die LLMs hebben.
+
+00:01:33.040 --> 00:01:34.780
+Dus, wat is er mis met grote taalmodellen?
+
+00:01:34.960 --> 00:01:35.920
+Twee dingen, eigenlijk.
+
+00:01:36.220 --> 00:01:37.880
+Ten eerste is hun kennis bevroren.
+
+00:01:38.100 --> 00:01:39.100
+Denk er maar eens over na.
+
+00:01:39.100 --> 00:01:46.920
+Toen GPT-4O werd getraind, leerde het van een momentopname van het internet die nu maanden of jaren oud is, dus het weet niets over nieuwe producten, recente regelgeving of het nieuws van gisteren.
+
+00:01:47.040 --> 00:01:50.500
+Vraag het naar een beleidswijziging van vorige week en het heeft geen manier om dat te weten.
+
+00:01:50.720 --> 00:01:53.140
+Die informatie zit simpelweg niet in de trainingsdata.
+
+00:01:53.380 --> 00:01:59.360
+Ten tweede hebben LLMs nooit jouw privégegevens gezien, je interne documenten, klantemails of bedrijfseigen databases.
+
+00:01:59.660 --> 00:02:01.880
+Het model heeft totaal geen toegang tot dat alles.
+
+00:02:02.080 --> 00:02:06.060
+Dus, wanneer een werknemer naar uw specifieke bedrijfsprocessen vraagt, kan het model geen antwoord geven.
+
+00:02:06.060 --> 00:02:07.260
+Het weet niet wat u weet.
+
+00:02:07.260 --> 00:02:09.360
+Sommige mensen denken dat fine-tuning dit oplost.
+
+00:02:09.500 --> 00:02:11.980
+U neemt het basismodel en traint het wat verder op uw eigen gegevens.
+
+00:02:12.160 --> 00:02:14.040
+Maar fine-tuning heeft zo zijn eigen problemen.
+
+00:02:14.180 --> 00:02:17.260
+Het is duur, u betaalt voor GPU-tijd en de inzet van technici.
+
+00:02:17.420 --> 00:02:18.840
+Het lost veroudering niet op.
+
+00:02:19.040 --> 00:02:22.220
+Zodra u fine-tunt, blijft het model bevroren op dat moment in de tijd.
+
+00:02:22.400 --> 00:02:26.320
+En het kan niet omgaan met gegevens die vaak veranderen, zoals voorraadniveaus of prijzen.
+
+00:02:26.540 --> 00:02:29.080
+Fine-tuning is als iemand een leerboek uit het hoofd laten leren.
+
+00:02:29.300 --> 00:02:31.980
+Nuttig, maar ze kunnen nog steeds de krant van vandaag niet opzoeken.
+
+00:02:32.160 --> 00:02:33.840
+De echte oplossing is eenvoudiger.
+
+00:02:33.840 --> 00:02:39.200
+Geef het model toegang tot uw kennis op het moment dat het moet antwoorden, in plaats van alles in zijn geheugen te proppen.
+
+00:02:39.440 --> 00:02:40.900
+Laat het niet alles uit het hoofd leren.
+
+00:02:41.140 --> 00:02:43.640
+Laat de dingen in real-time opzoeken in uw werkelijke gegevens.
+
+00:02:43.900 --> 00:02:44.760
+Dat is wat RAG doet.
+
+00:02:44.960 --> 00:02:46.860
+Een simpel idee, maar het verandert alles.
+
+00:02:47.100 --> 00:02:48.220
+Wat RAG eigenlijk is.
+
+00:02:48.440 --> 00:02:49.880
+Dus, hier is RAG in één zin.
+
+00:02:49.880 --> 00:02:57.900
+In plaats van het model te vragen een antwoord uit zijn trainingsdata te halen, zoeken we eerst de relevante informatie en voeren die samen met de vraag aan het model.
+
+00:02:58.160 --> 00:02:59.240
+Dat is het kern-idee.
+
+00:02:59.440 --> 00:03:02.520
+Drie eenvoudige stappen ophalen, aanvullen en genereren.
+
+00:03:02.780 --> 00:03:04.120
+Laat me een vergelijking geven.
+
+00:03:04.400 --> 00:03:05.720
+Denk aan een bibliothecaris.
+
+00:03:05.880 --> 00:03:07.860
+U loopt een bibliotheek binnen en stelt een vraag.
+
+00:03:08.020 --> 00:03:10.680
+U verwacht toch niet dat de bibliothecaris elk boek uit zijn hoofd heeft geleerd?
+
+00:03:10.860 --> 00:03:11.900
+Dat zou belachelijk zijn.
+
+00:03:12.100 --> 00:03:15.900
+In plaats daarvan vraagt u hen het juiste boek te vinden, naar de juiste pagina te openen en u het antwoord voor te lezen.
+
+00:03:16.060 --> 00:03:17.660
+De bibliothecaris onthoudt niets.
+
+00:03:17.660 --> 00:03:19.700
+Ze halen het eerst op en lezen het daarna voor.
+
+00:03:19.860 --> 00:03:21.300
+En dat is precies wat RAG doet.
+
+00:03:21.500 --> 00:03:23.100
+Eerst ophalen, daarna genereren.
+
+00:03:23.320 --> 00:03:25.060
+Dus, dit is hoe het in de praktijk werkt.
+
+00:03:25.220 --> 00:03:26.540
+Een gebruiker stelt een vraag.
+
+00:03:26.740 --> 00:03:31.000
+Het systeem doorzoekt vervolgens een kennisbank, uw documenten, uw gegevens, uw privéinformatie.
+
+00:03:31.200 --> 00:03:35.600
+Wat het ook vindt, wordt aan het grote taalmodel gevoerd en het model genereert een antwoord op basis van die context.
+
+00:03:35.820 --> 00:03:37.120
+En dit is het belangrijke deel.
+
+00:03:37.300 --> 00:03:38.900
+Het LLM ziet nooit uw ruwe data.
+
+00:03:39.160 --> 00:03:40.940
+Het ziet alleen wat het ophaalsysteem aanreikt.
+
+00:03:41.160 --> 00:03:42.020
+Dat is geen nadeel.
+
+00:03:42.200 --> 00:03:43.820
+Het is eigenlijk een beveiligingsfunctie.
+
+00:03:43.980 --> 00:03:46.200
+Uw gevoelige documenten blijven in uw eigen opslag.
+
+00:03:46.200 --> 00:03:50.640
+Op het moment van de vraag krijgt het model alleen de relevante fragmenten die nodig zijn om die specifieke vraag te beantwoorden.
+
+00:03:50.860 --> 00:03:53.300
+Geen training op uw data, geen memorisatie, geen lekken.
+
+00:03:53.420 --> 00:03:54.740
+Uw gegevens blijven waar ze horen.
+
+00:03:54.960 --> 00:03:57.180
+Dus, RAG lost beide problemen op waar we het eerder over hadden.
+
+00:03:57.460 --> 00:03:58.340
+Verouderde gegevens?
+
+00:03:58.560 --> 00:03:59.260
+Geen probleem.
+
+00:03:59.400 --> 00:04:00.840
+Uw kennisbank blijft actueel.
+
+00:04:01.000 --> 00:04:01.920
+Privé gegevens?
+
+00:04:02.120 --> 00:04:04.140
+Het model ziet alleen wat je besluit op te halen.
+
+00:04:04.300 --> 00:04:08.880
+Het is alsof je de bibliothecaris toegang geeft tot je archiefkast, maar hen alleen de ene map laat pakken die je nodig hebt.
+
+00:04:09.060 --> 00:04:10.140
+Precies wanneer je die nodig hebt.
+
+00:04:10.340 --> 00:04:12.040
+Vector embeddings en semantisch zoeken.
+
+00:04:12.240 --> 00:04:14.360
+Nu vraag je je misschien af hoe dat zoeken eigenlijk werkt.
+
+00:04:14.360 --> 00:04:18.200
+Het gaat niet om het matchen van trefwoorden of het uitvoeren van een Ctrl plus F in je documenten.
+
+00:04:18.340 --> 00:04:19.460
+Het is iets veel slimmers.
+
+00:04:19.760 --> 00:04:22.340
+Het heet semantisch zoeken en het draait op vector embeddings.
+
+00:04:22.580 --> 00:04:24.120
+Laat me uitleggen wat een embedding is.
+
+00:04:24.300 --> 00:04:28.880
+Een vector embedding is een lange lijst getallen die de betekenis van een stuk tekst vastlegt, als coördinaten op een kaart.
+
+00:04:29.040 --> 00:04:32.100
+Elk document krijgt zijn eigen coördinaat op die betekeniskaart.
+
+00:04:32.320 --> 00:04:37.500
+Wanneer je een vraag stelt, zet het systeem je vraag ook om in coördinaten en vindt vervolgens de documenten die daar het dichtst bij liggen.
+
+00:04:37.640 --> 00:04:38.960
+De sleutel hier is semantisch.
+
+00:04:39.160 --> 00:04:42.540
+Het gaat niet om het vinden van de exacte woorden, maar om het begrijpen van concepten.
+
+00:04:42.540 --> 00:04:48.900
+Als je zoekt naar budgethotels, kan het systeem documenten over betaalbare accommodaties vinden, zelfs als die exacte woorden nooit voorkomen.
+
+00:04:49.120 --> 00:04:49.460
+Waarom?
+
+00:04:49.620 --> 00:04:51.480
+Omdat de betekenis dicht bij elkaar ligt.
+
+00:04:51.680 --> 00:04:55.400
+De embeddings voor budget en betaalbaar staan vlak naast elkaar op die kaart.
+
+00:04:55.560 --> 00:04:59.700
+Een speciaal klein model, zoals Azure Text Embedding 3 Large, creëert deze embeddings.
+
+00:04:59.900 --> 00:05:03.920
+Het is geen gigantisch taalmodel, dus het is een gericht hulpmiddel dat één taak uitvoert.
+
+00:05:04.100 --> 00:05:06.020
+Text omzetten in die coördinaatgetallen.
+
+00:05:06.280 --> 00:05:07.700
+Dit is wat Rach zo krachtig maakt.
+
+00:05:07.860 --> 00:05:11.120
+Je documenten worden eenmalig geconverteerd naar embeddings tijdens het indexeren.
+
+00:05:11.120 --> 00:05:15.580
+Wanneer er vervolgens een zoekopdracht binnenkomt, vindt het systeem binnen milliseconden de meest relevante inhoud,
+
+00:05:15.780 --> 00:05:18.520
+zelfs als de exacte woorden van de gebruiker nergens in de documenten staan.
+
+00:05:18.700 --> 00:05:21.700
+Het begrijpt de intentie, niet alleen de trefwoorden die je typt.
+
+00:05:22.040 --> 00:05:24.080
+Azure Ise Arch, de retrieval engine.
+
+00:05:24.360 --> 00:05:25.820
+Dus, nu begrijp je het concept.
+
+00:05:26.060 --> 00:05:27.700
+Eerst ophalen, dan genereren.
+
+00:05:27.900 --> 00:05:29.580
+Maar waar gebeurt al dat ophalen eigenlijk?
+
+00:05:29.880 --> 00:05:31.980
+Dat is waar Azure Ise Arch in beeld komt.
+
+00:05:32.200 --> 00:05:36.200
+Azure Ise Arch is de service die je inhoud opslaat, indexeert en ophaalt.
+
+00:05:36.440 --> 00:05:38.900
+Zie het als het archiefsysteem voor je RAG-applicatie.
+
+00:05:38.900 --> 00:05:41.640
+Het verwerkt twee hoofdtaken en laten we die eens doornemen.
+
+00:05:41.820 --> 00:05:43.060
+Ten eerste, indexeren.
+
+00:05:43.280 --> 00:05:45.040
+Dat is je data gereedmaken om doorzocht te worden.
+
+00:05:45.240 --> 00:05:46.220
+Ten tweede, zoeken.
+
+00:05:46.460 --> 00:05:49.480
+Dat is het daadwerkelijk vinden van de juiste inhoud wanneer iemand een vraag stelt.
+
+00:05:49.700 --> 00:05:51.820
+Laten we eerst het indexeringsproces doorlopen.
+
+00:05:52.020 --> 00:05:54.680
+Je begint door Azure Ise Arch te koppelen aan je gegevensbron,
+
+00:05:54.820 --> 00:05:57.380
+wat een blob storage container vol PDF's kan zijn,
+
+00:05:57.520 --> 00:06:01.040
+een SQL database met klantgegevens of talloze andere bronnen.
+
+00:06:01.280 --> 00:06:05.040
+De service leest die documenten, verdeelt ze in kleinere stukken genaamd chunks,
+
+00:06:05.040 --> 00:06:09.920
+creëert vector embeddings voor elke chunk met behulp van dat embeddingmodel waar we het eerder over hadden
+
+00:06:09.920 --> 00:06:11.600
+en slaat alles op in een zoekindex.
+
+00:06:11.840 --> 00:06:15.320
+Zie de index als een gigantische, uiterst georganiseerde catalogus.
+
+00:06:15.560 --> 00:06:20.740
+Elk stukje content krijgt een uniek idee, een tekstblok en een set coördinaten op die betekeniskaart.
+
+00:06:20.920 --> 00:06:22.060
+Nu, het zoekproces.
+
+00:06:22.340 --> 00:06:23.940
+Wanneer een gebruiker een vraag stelt,
+
+00:06:23.940 --> 00:06:27.540
+zet Ise Arch die vraag om in een vector met hetzelfde embeddingmodel
+
+00:06:27.540 --> 00:06:32.220
+en scant dan de index om blokken te vinden waarvan de coördinaten het dichtst bij die van de vraag liggen.
+
+00:06:32.220 --> 00:06:37.780
+Het retourneert de beste matches, meestal de 5 tot 10 meest relevante en doet dit alles in milliseconden.
+
+00:06:37.900 --> 00:06:39.500
+Je krijgt hier een paar sterke opties.
+
+00:06:39.700 --> 00:06:42.060
+Pure vector zoekopdrachten vinden content op basis van betekenis,
+
+00:06:42.200 --> 00:06:45.040
+dus vergelijkbare concepten verschijnen zelfs als de exacte woorden niet overeenkomen.
+
+00:06:45.240 --> 00:06:48.880
+Zoeken op trefwoorden werkt als een traditionele zoekmachine en vindt exacte woordmatches.
+
+00:06:49.040 --> 00:06:53.540
+Of je kunt hybride zoeken gebruiken, wat beide benaderingen combineert en dat is meestal de beste keuze.
+
+00:06:53.700 --> 00:06:56.820
+Er is ook zoiets als semantische herrangerschikking die de eerste resultaten neemt
+
+00:06:56.820 --> 00:06:59.880
+en ze opnieuw sorteert op basis van hoe goed ze de vraag daadwerkelijk beantwoorden.
+
+00:06:59.880 --> 00:07:03.620
+Het is als een tweede ronde die zaken opvangt die de eerste ronde mogelijk heeft gemist.
+
+00:07:03.780 --> 00:07:06.360
+Eén ding dat je moet weten, Azure ISR kan duur worden.
+
+00:07:06.580 --> 00:07:10.360
+De basislaag begint bij ongeveer 75 dollar per maand en loopt vanaf daarop.
+
+00:07:10.480 --> 00:07:13.240
+Als je alleen aan het experimenteren bent, gebruik dan de gratis laag
+
+00:07:13.240 --> 00:07:15.220
+of zorg dat je je resources verwijdert als je klaar bent.
+
+00:07:15.460 --> 00:07:18.500
+Voor productiegebruik betaalt de kostprijs zich echter meestal terug.
+
+00:07:18.660 --> 00:07:20.860
+Je koopt snelheid en betrouwbaarheid op schaal.
+
+00:07:21.660 --> 00:07:25.280
+Azure Open AI plus AI Foundry, generatie en orkestratie.
+
+00:07:25.280 --> 00:07:30.180
+Dus nu is je data geïndexeerd en klaar voor ophalen, maar het LLM moet nog steeds je vraag begrijpen
+
+00:07:30.180 --> 00:07:31.520
+en een solide antwoord genereren.
+
+00:07:31.740 --> 00:07:34.840
+Dat is waar Azure Open AI en Azure AI Foundry om de hoek komen kijken.
+
+00:07:35.060 --> 00:07:40.960
+Azure Open AI levert het eigenlijke taalmodel, GPT-4O, GPT-4.1 of welk model je ook kiest.
+
+00:07:41.160 --> 00:07:42.480
+Dit is de generatie engine.
+
+00:07:42.720 --> 00:07:46.080
+Het ontvangt een prompt die zowel de oorspronkelijke vraag van de gebruiker bevat
+
+00:07:46.080 --> 00:07:48.420
+als de context die Azure ISR heeft opgehaald.
+
+00:07:48.580 --> 00:07:52.420
+Het model leest die context door en produceert een antwoord op basis van wat het vindt.
+
+00:07:52.420 --> 00:07:55.420
+Je kunt natuurlijk niet zomaar alles erin dumpen en hopen op het beste.
+
+00:07:55.640 --> 00:07:59.420
+Je hebt een systeemprompt nodig, een set instructies die je vooraf aan het model geeft over hoe het
+
+00:07:59.420 --> 00:08:00.040
+zich moet gedragen.
+
+00:08:00.240 --> 00:08:03.640
+Je vertelt het om alleen de geboden context te gebruiken, bronnen te vermelden en, het
+
+00:08:03.640 --> 00:08:05.640
+allerbelangrijkste, te zeggen, ik weet het niet.
+
+00:08:05.760 --> 00:08:08.800
+Als de relevante informatie niet in de opgehaalde documenten staat.
+
+00:08:09.060 --> 00:08:10.640
+Dat is wat het model eerlijk houdt.
+
+00:08:10.820 --> 00:08:14.480
+Zonder een goede systeemprompt kan het model terugvallen op zijn trainingsdata of, erger nog,
+
+00:08:14.620 --> 00:08:15.180
+dingen verzinnen.
+
+00:08:15.380 --> 00:08:17.660
+Dus, hoe verbind je al deze stukken daadwerkelijk met elkaar?
+
+00:08:17.880 --> 00:08:19.900
+Dat is waar Azure AI Foundry in beeld komt.
+
+00:08:19.900 --> 00:08:23.660
+Dit is de portal waar je een project aanmaakt, je modellen implementeert, je gegevensbronnen
+
+00:08:23.660 --> 00:08:24.560
+koppelt en je agent test.
+
+00:08:24.740 --> 00:08:27.380
+Zie het als het controlecentrum voor je volledige RACH opzet.
+
+00:08:27.540 --> 00:08:31.560
+In Foundry kun je je Azure AI Search Index als kennisbron aan je agent toevoegen zonder
+
+00:08:31.560 --> 00:08:33.280
+aangepaste code voor de basis opzet.
+
+00:08:33.440 --> 00:08:37.400
+Je maakt gewoon een verbinding, selecteert je index en de agent kan deze automatisch
+
+00:08:37.400 --> 00:08:37.940
+gaan bevragen.
+
+00:08:38.140 --> 00:08:40.000
+De portal regelt de orkestratie.
+
+00:08:40.260 --> 00:08:43.460
+Wanneer een gebruiker een vraag stelt, weet de agent dat hij AI Search moet aanroepen, de
+
+00:08:43.460 --> 00:08:46.980
+relevante fragmenten moet ophalen en deze samen met de oorspronkelijke vraag aan de LLM
+
+00:08:46.980 --> 00:08:47.600
+moet doorgeven.
+
+00:08:47.600 --> 00:08:49.120
+Hier is een concreet voorbeeld.
+
+00:08:49.320 --> 00:08:53.240
+In een tutorial die ik tegenkwam, bouwde iemand een aanbevelingsagent voor films met een Netflix
+
+00:08:53.240 --> 00:08:53.640
+dataset.
+
+00:08:53.960 --> 00:08:58.160
+Ze uploaden een CSV bestand met filmtitels, beschrijvingen en kastinformatie naar Azure
+
+00:08:58.160 --> 00:09:01.460
+Blob Storage en gebruikten vervolgens Azure AI Search om die gegevens te indexeren.
+
+00:09:01.640 --> 00:09:06.620
+In Azure AI Foundry maakten ze een agent met GPT-4O aan en koppelden ze de AI Search Index.
+
+00:09:06.860 --> 00:09:09.980
+Toen een gebruiker vroeg, ik hou van thrillers, geef me wat aanbevelingen.
+
+00:09:10.200 --> 00:09:14.320
+Doorzocht de agentenindex, vond thrillerfilms uit die specifieke dataset en gaf aanbevelingen
+
+00:09:14.320 --> 00:09:14.640
+terug.
+
+00:09:14.800 --> 00:09:18.100
+En dit is het cruciale punt, hij raadde alleen films aan die daadwerkelijk in die dataset
+
+00:09:18.100 --> 00:09:18.440
+stonden.
+
+00:09:18.640 --> 00:09:22.640
+Hij verzon niets, haalde niets uit zijn trainingsdata en werkte uitsluitend met de inhoud die zij
+
+00:09:22.640 --> 00:09:23.140
+verstrekte.
+
+00:09:23.360 --> 00:09:24.520
+Dat is de kracht van Ragh.
+
+00:09:24.760 --> 00:09:26.320
+Klassieke versus agentische Ragh.
+
+00:09:26.540 --> 00:09:28.200
+Laten we het nu hebben over het instellen hiervan.
+
+00:09:28.380 --> 00:09:30.980
+Er zijn twee hoofdpatronen, klassieke Ragh en agentische Ragh.
+
+00:09:31.180 --> 00:09:32.940
+Welke je kiest, angt af van wat je bouwt.
+
+00:09:33.100 --> 00:09:34.860
+Klassieke Ragh is de eenvoudige aanpak.
+
+00:09:34.860 --> 00:09:38.140
+Eén vraag gaat erin, één zoekopdracht wordt uitgevoerd en een antwoord komt eruit.
+
+00:09:38.340 --> 00:09:39.860
+Simpel, snel, voorspelbaar.
+
+00:09:40.080 --> 00:09:43.980
+Zie het als naar de receptie in een kantoorgebouw lopen en om één specifiek dossier vragen.
+
+00:09:44.180 --> 00:09:46.500
+De receptioniste pakt het, geeft het aan je, klaar.
+
+00:09:46.720 --> 00:09:50.740
+Klassieke Ragh werkt uitstekend voor feitelijke vragen over één onderwerp, zoals wat is het
+
+00:09:50.740 --> 00:09:52.220
+bedrijfsbeleid voor werken op afstand?
+
+00:09:52.400 --> 00:09:55.100
+Of toon me de probleemoplossing stappen voor deze foutcode.
+
+00:09:55.300 --> 00:09:59.140
+Het is betrouwbaar, goedkoop en makkelijk te herstellen als er iets misgaat omdat de stroom
+
+00:09:59.140 --> 00:09:59.840
+lineair is.
+
+00:10:00.140 --> 00:10:01.300
+Agentische Ragh is anders.
+
+00:10:01.300 --> 00:10:04.240
+De AI-agent beslist zelf hoe hij informatie ophaalt.
+
+00:10:04.240 --> 00:10:08.740
+Hij kan meerdere sub-vragen stellen, verschillende indexen doorzoeken, resultaten herhalen en
+
+00:10:08.740 --> 00:10:10.540
+bronnen samenvoegen voordat hij antwoord geeft.
+
+00:10:10.720 --> 00:10:14.000
+Het is alsof je een gebouwbeheerder hebt die afstemt met verschillende afdelingen om alle
+
+00:10:14.000 --> 00:10:14.920
+stukjes te verzamelen.
+
+00:10:15.100 --> 00:10:16.600
+Hij pakt niet zomaar één dossier.
+
+00:10:16.820 --> 00:10:20.440
+Hij spreekt met ouwer, controleert gegevens, vergelijkt beleidsregels en komt dan terug
+
+00:10:20.440 --> 00:10:21.360
+met een volledig antwoord.
+
+00:10:21.520 --> 00:10:24.300
+Microsoft heeft eigen tests uitgevoerd en ontdekte dat agentgebaseerde Ragh zorgt voor een
+
+00:10:24.300 --> 00:10:27.000
+verbetering van ongeveer 40% in relevantie van antwoorden bij complexe vragen.
+
+00:10:27.000 --> 00:10:30.380
+Dat is aanzienlijk, maar het verbruikt drie tot tien keer meer tokens en zorgt voor extra
+
+00:10:30.380 --> 00:10:30.860
+latentie.
+
+00:10:30.860 --> 00:10:33.340
+Bij eenvoudige vragen is dat extra werkverspilling.
+
+00:10:33.540 --> 00:10:35.220
+Klassieke Ragh handelt die prima af.
+
+00:10:35.400 --> 00:10:36.680
+Dus, wanneer gebruik je welke?
+
+00:10:36.800 --> 00:10:39.800
+Klassiek voor routinematige vragen met een hoog volume, waarbij snelheid en kosten het
+
+00:10:39.800 --> 00:10:40.380
+belangrijkst zijn.
+
+00:10:40.580 --> 00:10:43.500
+Agent gebaseerd voor vragen die uit meerdere stappen bestaan, ambigu zijn of over verschillende
+
+00:10:43.500 --> 00:10:45.560
+domeinen gaan, waar nauwkeurigheid de extra rekenkracht waard is.
+
+00:10:46.140 --> 00:10:47.720
+Verbindingssectie, end-to-end voorbeeld.
+
+00:10:47.960 --> 00:10:51.080
+Laten we kijken hoe al deze onderdelen samenkomen in een echt voorbeeld.
+
+00:10:51.080 --> 00:10:55.500
+Stel je voor dat je een klantenservice-agent bouwt voor een reisbureau genaamd Maribold Travels.
+
+00:10:55.500 --> 00:11:00.620
+Je hebt reisbrochures, hotelbeoordelingen en beleidsdocumenten verspreid over je organisatie.
+
+00:11:00.780 --> 00:11:04.740
+Je wilt dat klanten vragen stellen en nauwkeurige antwoorden krijgen op basis van je eigen inhoud,
+
+00:11:04.980 --> 00:11:06.440
+niet op basis van algemene gissingen.
+
+00:11:06.680 --> 00:11:07.140
+Stap 1.
+
+00:11:07.300 --> 00:11:09.620
+Sla al die inhoud op in Azure Blob Storage.
+
+00:11:09.980 --> 00:11:14.080
+Brochures in de ene map, beoordelingen in de andere, beleid in een derde, gewoon bestanden
+
+00:11:14.080 --> 00:11:14.740
+in een container.
+
+00:11:15.060 --> 00:11:15.520
+Stap 2.
+
+00:11:15.520 --> 00:11:20.040
+Gebruik Azure Isearch om die gegevens te indexeren door de wizard voor gegevensimport te draaien,
+
+00:11:20.220 --> 00:11:22.540
+deze naar je blob storage te wijzen en het werk te laten doen.
+
+00:11:22.720 --> 00:11:27.080
+De service leest elk document, hakt ze in stukken, creëert vector embeddings en bouwt
+
+00:11:27.080 --> 00:11:28.080
+een doorzoekbare index.
+
+00:11:28.320 --> 00:11:30.180
+Het hele proces duurt een paar minuten.
+
+00:11:30.440 --> 00:11:30.880
+Stap 3.
+
+00:11:31.040 --> 00:11:33.480
+Ga naar Azure AI Foundry en maak een agent aan.
+
+00:11:33.740 --> 00:11:38.340
+Zet GPT-4O in als je model, schrijf een systeemprompt die het instrueert om alleen de verstrekte
+
+00:11:38.340 --> 00:11:42.320
+context te gebruiken en bronnen te citeren en verbind vervolgens je Azure Isearch-index
+
+00:11:42.320 --> 00:11:42.960
+als kennisbron.
+
+00:11:43.120 --> 00:11:44.500
+Een paar klikken en het is klaar.
+
+00:11:44.500 --> 00:11:48.260
+Nu stelt een klant de vraag, wat is het best beoordeelde hotel in Dubai onder de 300
+
+00:11:48.260 --> 00:11:48.600
+dollar?
+
+00:11:48.840 --> 00:11:51.720
+De agent neemt die vraag aan en stuurt deze naar Azure Isearch.
+
+00:11:51.880 --> 00:11:55.300
+Azure Isearch zet dit om naar een vector en vindt de meest relevante tekstfragmenten uit
+
+00:11:55.300 --> 00:11:56.460
+je beoordelingen en brochures.
+
+00:11:56.720 --> 00:12:00.500
+Die fragmenten worden samen met de oorspronkelijke vraag doorgegeven aan GPT-4O.
+
+00:12:00.640 --> 00:12:04.440
+Het model leest ze door, identificeert de beste match en genereert een antwoord met verwijzingen
+
+00:12:04.440 --> 00:12:05.420
+naar je brondocumenten.
+
+00:12:05.580 --> 00:12:08.400
+Het punt is, het LLM heeft die gegevens nooit uit het hoofd geleerd.
+
+00:12:08.580 --> 00:12:10.480
+Het is nooit getraind op jouw hotelbeoordelingen.
+
+00:12:10.640 --> 00:12:12.920
+Het werkt elke keer weer op basis van jouw specifieke inhoud.
+
+00:12:12.920 --> 00:12:15.820
+Voeg morgen nieuwe beoordelingen toe en de antwoorden worden automatisch bijgewerkt.
+
+00:12:15.940 --> 00:12:18.140
+Verwijder een verouderde brochure en deze verschijnt niet meer.
+
+00:12:18.260 --> 00:12:19.860
+Het model hoeft niet opnieuw getraind te worden.
+
+00:12:20.060 --> 00:12:21.720
+Het heeft alleen de juiste ophalaag nodig.
+
+00:12:21.940 --> 00:12:24.160
+Dus, hoe begin je nu echt met het bouwen van RAG op Azure?
+
+00:12:24.380 --> 00:12:26.080
+Laten we het opdelen in drie stappen.
+
+00:12:26.480 --> 00:12:27.700
+Allereerst, ken je data.
+
+00:12:28.020 --> 00:12:31.840
+Voordat je überhaupt een dienst kiest, moet je weten waar je content staat, hoe het is
+
+00:12:31.840 --> 00:12:33.360
+georganiseerd en wie toegang moet hebben.
+
+00:12:33.560 --> 00:12:35.780
+RAG valt of staat bij de kwaliteit van je data.
+
+00:12:36.020 --> 00:12:37.020
+Hou het daarna simpel.
+
+00:12:37.280 --> 00:12:39.060
+Maak de configuratie niet te ingewikkeld.
+
+00:12:39.060 --> 00:12:42.920
+Gebruik de import wizard in Azure ISARG om slechts één set documenten te indexeren.
+
+00:12:43.080 --> 00:12:44.700
+Test met eenvoudige zoekopdrachten.
+
+00:12:44.980 --> 00:12:47.840
+Zorg dat je retrieval perfect werkt voordat je het LLM toevoegt.
+
+00:12:48.060 --> 00:12:50.360
+De meeste RAG fouten zijn geen modelproblemen.
+
+00:12:50.500 --> 00:12:51.960
+Het zijn retrieval problemen.
+
+00:12:52.160 --> 00:12:53.720
+Laatste stap, voeg het LLM toe.
+
+00:12:53.920 --> 00:12:57.140
+Zodra je zoekfunctie de juiste resultaten geeft, voeg je de generatie toe.
+
+00:12:57.340 --> 00:13:00.520
+Dat is het moment om Azure OpenAI te verbinden en je systeem prompt te schrijven.
+
+00:13:00.680 --> 00:13:02.680
+Hier is het punt, RAG is niet iets wat je koopt.
+
+00:13:02.860 --> 00:13:04.340
+Het is een patroon dat je bouwt.
+
+00:13:04.340 --> 00:13:09.100
+Azure geeft je de onderdelen, opslag, zoekfunctie, modellen en de lijm om ze te verbinden.
+
+00:13:09.320 --> 00:13:11.460
+Je moet het alleen op de juiste manier samenvoegen.
+
+00:13:11.640 --> 00:13:15.480
+Als dit je hielp het grote geheel te zien, abonneer je dan voor meer uitleg in begrijpelijke taal.
+
+00:13:15.660 --> 00:13:17.780
+Laat een reactie achter met jouw RAG gebruikssituatie.
+
+00:13:17.940 --> 00:13:19.520
+Ik ben erg benieuwd wat je aan het bouwen bent.

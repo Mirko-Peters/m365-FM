@@ -1,0 +1,1252 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:05.260
+Tu copiloto no es tonto. Tú lo mataste de hambre. Sin esquema, sin reglas, sin barandales,
+
+00:00:05.540 --> 00:00:09.480
+y luego te quejas de las alucinaciones. ¿La verdad? La mayoría de los fallos de guía
+
+00:00:09.480 --> 00:00:13.300
+en Power Platform no son por el coeficiente intelectual del modelo, son por el contexto
+
+00:00:13.300 --> 00:00:16.960
+que tú creaste. Esto es lo que obtendrás hoy. Un patrón de ingeniería de contexto
+
+00:00:16.960 --> 00:00:21.420
+repetible para Copilot Studio y Power Automate que elimina alucinaciones, corrige la deriva
+
+00:00:21.420 --> 00:00:25.360
+entre inquilinos y reduce drásticamente la latencia y los costos. Construiremos el patrón
+
+00:00:25.360 --> 00:00:29.440
+de mensajes del sistema, una lista de verificación de base de esquemas y una plantilla de canalización
+
+00:00:29.440 --> 00:00:33.640
+de recuperación. Hay una capa que todos olvidan, la capa de políticas que evita la deriva
+
+00:00:33.640 --> 00:00:38.400
+en la gobernanza. La integraremos y lo probaremos con métricas de antes y después. Ahora comenzamos.
+
+00:00:38.600 --> 00:00:43.400
+Problema. ¿Por qué falla tu copiloto? Deuda de contexto. Definamos el problema con precisión.
+
+00:00:43.620 --> 00:00:47.960
+Deuda de contexto. Es la acumulación de contexto faltante o descuidado que obliga a un modelo
+
+00:00:47.960 --> 00:00:52.500
+de lenguaje a adivinar. Te saltas las reglas del sistema, no lo basas en dataverse, dejas
+
+00:00:52.500 --> 00:00:57.060
+las herramientas indefinidas e ignoras las políticas. Luego te sorprendes cuando los resultados oscilan
+
+00:00:57.060 --> 00:01:01.560
+entre inquilinos. Fascinante. La deuda de contexto aparece como cuatro fallos. Primero,
+
+00:01:01.800 --> 00:01:06.160
+falta de reglas de sistema. Sin identidad, sin alcance, sin política de rechazo. El modelo
+
+00:01:06.160 --> 00:01:11.080
+se optimiza para ser servicial y verboso, no cumplidor y preciso. Segundo, datos sin base.
+
+00:01:11.320 --> 00:01:15.860
+Apuntas a la tabla de préstamos sin dar nombres de entidades, definiciones de campos, relaciones
+
+00:01:15.860 --> 00:01:20.460
+o registros de muestra. Tercero, herramientas indefinidas. Le pides que actualice el Estado,
+
+00:01:20.460 --> 00:01:25.300
+pero no expones una ruta de acción gobernada en Power Automate. Cuarto, ausencia de políticas.
+
+00:01:25.300 --> 00:01:30.280
+Confías en corazonadas en lugar de DLP, etiquetas de sensibilidad y acceso condicional. Ese cuadrante
+
+00:01:30.280 --> 00:01:34.400
+garantiza la deriva. La evidencia está en todas partes. Las altas tasas de fallo y abandono en
+
+00:01:34.400 --> 00:01:37.720
+la IA empresarial se deben a la ejecución y el contexto, no a los límites del modelo.
+
+00:01:37.940 --> 00:01:41.960
+Los equipos reportan alucinaciones, inconsistencias según el entorno y consumo excesivo de tokens
+
+00:01:41.960 --> 00:01:46.040
+por traer tablas completas solo por seguridad. No necesitas un modelo más grande. Necesitas una
+
+00:01:46.040 --> 00:01:50.060
+estructura sólida. Aquí está el modelo mental que lo soluciona. Cuatro capas de contexto. Sistema,
+
+00:01:50.300 --> 00:01:54.260
+recuperación, herramientas y políticas. Piénsalo como el registro de Windows para tu agente. No
+
+00:01:54.260 --> 00:01:58.740
+es solo una base de datos, es su columna vertebral. El sistema declara quién es el agente y qué rechaza.
+
+00:01:58.900 --> 00:02:02.800
+La recuperación proporciona hechos y esquemas para que deje de inventar campos. Las herramientas
+
+00:02:02.800 --> 00:02:06.360
+exponen las acciones exactas que puede realizar bajo el principio de menor privilegio. Las
+
+00:02:06.360 --> 00:02:10.200
+políticas imponen límites independientemente de los prompts ingeniosos. Elimina cualquier capa y
+
+00:02:10.200 --> 00:02:13.640
+los resultados oscilarán. Agrega las cuatro y se consolidarán, lo que la mayoría de los
+
+00:02:13.640 --> 00:02:17.360
+desarrolladores pierde de vista. Los entornos son el límite de seguridad en Power Platform. Si tu
+
+00:02:17.360 --> 00:02:21.200
+política DLP bloquea la mezcla de conectores de negocio y no comerciales en producción pero no en
+
+00:02:21.200 --> 00:02:25.380
+desarrollo, has construido dos universos diferentes. Los ojos y manos de tu agente cambian según el
+
+00:02:25.380 --> 00:02:29.740
+entorno. Así es, los resultados varían entre inquilinos y entornos porque cambias el mundo
+
+00:02:29.740 --> 00:02:33.920
+bajo sus pies. Permíteme explicarte el ciclo de fracaso típico. Creas un agente en Copilot
+
+00:02:33.920 --> 00:02:38.580
+Studio. Le das un objetivo vago, ayudar con las solicitudes de préstamo. Vinculas una biblioteca
+
+00:02:38.580 --> 00:02:43.160
+de documentos PDF sin extraer su estructura. No indexas las entidades, relaciones ni etiquetas
+
+00:02:43.160 --> 00:02:47.200
+de confidencialidad de Dataverse. Omites el catálogo de herramientas y asumes que Copilot lo
+
+00:02:47.200 --> 00:02:51.320
+resolverás solo. Luego, haces una pregunta. Responde con frases genéricas y se inventa
+
+00:02:51.320 --> 00:02:55.980
+un campo llamado etapa del préstamo, que no existe en tu esquema. Felicidades, pagaste por tokens para
+
+00:02:55.980 --> 00:02:59.740
+leer contenido incorrecto y obtuviste un sinsentido. Compara eso con un enfoque basado en datos
+
+00:02:59.740 --> 00:03:03.540
+concretos. Es la misma pregunta, pero tu capa de recuperación incluye un índice de esquema,
+
+00:03:03.840 --> 00:03:08.460
+entidad de solicitud de préstamo, campo de estado, valores de lista, relaciones con el solicitante y el
+
+00:03:08.460 --> 00:03:12.640
+documento, además de registros de muestra. El agente hace referencia explícita al estado de la
+
+00:03:12.640 --> 00:03:17.000
+solicitud y cita los valores permitidos, sin adivinar. La diferencia no es el modelo, es el
+
+00:03:17.000 --> 00:03:21.360
+contexto. La latencia y el costo son síntomas de la misma deuda técnica. Obtener tablas completas por
+
+00:03:21.360 --> 00:03:25.200
+falta de filtros a nivel de campo dispara el consumo de tokens y el tiempo. Una recuperación
+
+00:03:25.200 --> 00:03:29.320
+vaga obliga al modelo a procesar fragmentos irrelevantes. Un tema indefinido no permite filtrar
+
+00:03:29.320 --> 00:03:34.520
+la intención. Páginas por todo, no aprendes nada y aún así alucina. Brutal. La deriva en la gobernanza
+
+00:03:34.520 --> 00:03:38.940
+es el asesino silencioso. Sin una capa de políticas, prevención de pérdida de datos, DLP, etiquetas de
+
+00:03:38.940 --> 00:03:42.180
+confidencialidad y acceso condicional, el comportamiento de tu agente diverge gradualmente. Un
+
+00:03:42.180 --> 00:03:46.180
+conector se reclasifica, una cuenta de invitados se cuela en un flujo, los registros se desactivan
+
+00:03:46.180 --> 00:03:49.920
+y el agente resume notas confidenciales en un conector no empresarial. No te das cuenta hasta
+
+00:03:49.920 --> 00:03:54.500
+la semana de auditoría. ¡Excelente! Aquí está la solución y la construiremos paso a paso en esta
+
+00:03:54.500 --> 00:03:58.420
+serie. Capa de sistema. Un mensaje de sistema conciso y versionado que codifica la identidad,
+
+00:03:58.680 --> 00:04:02.900
+el alcance, la negativa, el conocimiento del esquema, las reglas de uso de herramientas y los
+
+00:04:02.900 --> 00:04:07.360
+límites de registro. Creado por entorno con tokens para la unidad de negocio y el mapeo de sensibilidad.
+
+00:04:07.560 --> 00:04:11.840
+Capa de recuperación. Una tubería que se basa primero en Dataverse, con un índice de
+
+00:04:11.840 --> 00:04:15.460
+documentos como fuente secundaria, usando fragmentación consciente de entidades,
+
+00:04:15.860 --> 00:04:20.720
+búsqueda híbrida, recorte de seguridad y filtros a nivel de campo. Capa de herramientas. Un catálogo
+
+00:04:20.720 --> 00:04:24.740
+curado de Power Automate bajo el principio de menor privilegio, con plantillas de prompts que
+
+00:04:24.740 --> 00:04:28.700
+definen esquemas de entrada, lógica de negativa y alertas de sensibilidad. Capa de políticas.
+
+00:04:29.060 --> 00:04:33.040
+Grupos de LP forzados, acceso condicional, enmascaramiento en tiempo real mediante etiquetas
+
+00:04:33.040 --> 00:04:36.880
+y un interruptor de emergencia para administradores. Si no recuerdas nada más, recuerda esto.
+
+00:04:36.880 --> 00:04:41.320
+Los modelos predicen texto. Tú diseñas la verdad, el poder y los límites. Tu trabajo es el
+
+00:04:41.320 --> 00:04:45.480
+contexto. El modelo es el motor de renderizado. Deja de culpar al renderizador por la falta de
+
+00:04:45.480 --> 00:04:49.620
+tu plano. Capa 1. Patrón de contexto de sistema que no deriva. Más una lista de verificación.
+
+00:04:49.960 --> 00:04:53.840
+Ahora, dejamos de adivinar e instalamos la identidad. Sin una identidad, alcance y reglas
+
+00:04:53.840 --> 00:04:57.460
+de rechazo explícitos, los modelos de lenguaje grandes actúan como labradores encantadores,
+
+00:04:57.840 --> 00:05:02.300
+buscando todo, complaciendo a todos e ignorando el cumplimiento. Necesitas un portero, no un Golden
+
+00:05:02.300 --> 00:05:07.320
+Retriever. La verdad, si tu mensaje del sistema es vago, tus resultados serán vagos. Si tu mensaje del
+
+00:05:07.320 --> 00:05:11.120
+sistema es inconsistente por entorno, tus resultados variarán según el entorno. Por eso,
+
+00:05:11.120 --> 00:05:15.640
+primero redactamos la estructura base. Este es el patrón que utilizo. Es corto, versionado y
+
+00:05:15.640 --> 00:05:20.120
+riguroso. Role. Eres el copiloto de operaciones de préstamos para la unidad de negocio en el
+
+00:05:20.120 --> 00:05:24.360
+entorno. Nombre del entorno. Solo responde sobre solicitudes de préstamos y procesos
+
+00:05:24.360 --> 00:05:29.280
+relacionados. Alcance. Cíñete a las entidades de Dataverse y los documentos etiquetados en este
+
+00:05:29.280 --> 00:05:34.060
+entorno. Si la respuesta requiere sistemas externos o contenido sin etiqueta, recházala y propone un
+
+00:05:34.060 --> 00:05:39.120
+siguiente paso seguro. Tono. Conciso. Factual. Cita los campos exactamente como en el esquema.
+
+00:05:39.120 --> 00:05:44.100
+Entidad. Campo. Política de rechazo. Si se solicita contenido sensible de la lista de
+
+00:05:44.100 --> 00:05:48.540
+etiquetas MIP en un contexto no comercial, rechaza con una razón y registra un resumen
+
+00:05:48.540 --> 00:05:53.300
+del rechazo. Conocimiento del esquema. Prefiere el índice de esquema de Dataverse. Nunca inventes
+
+00:05:53.300 --> 00:06:00.090
+campos. Asocia sinónimos a nombres canónicos usando el glosario proporcionado. Reglas de uso
+
+00:06:00.090 --> 00:06:04.350
+de herramientas. Solo puedes llamar a acciones aprobadas de Power Automate cuando una intención
+
+00:06:04.350 --> 00:06:09.850
+se clasifique como ejecutable con una confianza de 8 o superior. De lo contrario, responde con un análisis.
+
+00:06:09.850 --> 00:06:14.970
+Límites de registro. No repitas información personal. PII. Resume los valores como enmascarados
+
+00:06:14.970 --> 00:06:18.870
+cuando la sensibilidad sea alta. Ese patrón va a las instrucciones personalizadas de Copilot
+
+00:06:18.870 --> 00:06:23.810
+Studio. Y sí, se parametriza. Nombre del entorno. Unidad de negocio. Lista de etiquetas MIP.
+
+00:06:24.070 --> 00:06:28.130
+Vincula los a variables de entorno para que DEV, UAT y PROD compartan la misma lógica con diferentes
+
+00:06:28.130 --> 00:06:32.910
+enlaces. Versiona el mensaje del sistema. V1.3. Estampa la versión en el pie de página de cada
+
+00:06:32.910 --> 00:06:37.170
+respuesta durante las pruebas y la política V1.3 para que la desviación sea visible de inmediato.
+
+00:06:37.170 --> 00:06:42.010
+Ahora la lista de verificación, porque si no, olvidarás algo. Objetivos. Lo que el agente
+
+00:06:42.010 --> 00:06:46.470
+puede lograr en una sola oración. Audiencia. ¿A quién sirve? A los oficiales de préstamos,
+
+00:06:46.670 --> 00:06:50.310
+no a toda la empresa. Definiciones. Nombres canónicos de entidades y campos,
+
+00:06:50.490 --> 00:06:54.510
+además de sinónimos. Contenido permitido. Clases de datos y fuentes permitidas.
+
+00:06:54.730 --> 00:06:59.350
+Acciones no permitidas. Cualquier cosa entre inquilinos, sin etiqueta o fuera de los conectores
+
+00:06:59.350 --> 00:07:04.450
+comerciales. Ruta de escalamiento. ¿Cuándo transferir a un humano? Criterios y plantilla de mensaje.
+
+00:07:04.450 --> 00:07:08.470
+Rúbrica de evaluación. ¿Cómo calificamos los resultados? Precisión de los campos,
+
+00:07:08.690 --> 00:07:12.930
+corrección en el rechazo y cita del esquema. Redacta esto en lenguaje sencillo y luego comprime.
+
+00:07:13.090 --> 00:07:17.190
+El error más común es enterrar las restricciones bajo una novela de texto normativo. El modelo leerá
+
+00:07:17.190 --> 00:07:22.210
+por encima como un pasante promedio. C. Quirúrgico. Otro error clásico. Meter las restricciones en el
+
+00:07:22.210 --> 00:07:26.630
+prompt del usuario. No. Las restricciones pertenecen al mensaje del sistema y a los envoltorios de
+
+00:07:26.630 --> 00:07:31.410
+herramientas, no donde el usuario escriba. Y versiona por entorno. Dev puede ser permisivo,
+
+00:07:31.410 --> 00:07:36.250
+prod no. Copiar un solo archivo de sistema entre tenants sin tokens es como creas universos
+
+00:07:36.250 --> 00:07:40.550
+paralelos. Una victoria rápida que puedes lograr hoy. Crea plantillas para el mensaje con variables
+
+00:07:40.550 --> 00:07:44.490
+y vínculalas al importar la solución. Eso por sí solo elimina un montón de inconsistencias.
+
+00:07:44.710 --> 00:07:49.130
+Añade una sección de glosario que asigne sinónimos comunes a campos canónicos. Etapa. Paso. Fase.
+
+00:07:49.450 --> 00:07:52.810
+Solicitud de préstamo. Estado. Verás cómo desaparecen los campos alucinados.
+
+00:07:53.030 --> 00:07:57.330
+La implementación en Copilot Studio es sencilla. Abre las instrucciones personalizadas. Pega el
+
+00:07:57.330 --> 00:08:01.450
+patrón. Inserta variables para el nombre del entorno. Unidad de negocio. Emite la lista de
+
+00:08:01.450 --> 00:08:05.270
+etiquetas y activa la opción siempre incluir. Crea una nota de conjunto de instrucciones para
+
+00:08:05.270 --> 00:08:09.530
+la canonicalización del esquema que el agente consulte antes de responder. Luego, añade un
+
+00:08:09.530 --> 00:08:13.770
+párrafo de plantilla de rechazo. No puedo compartir. Redactado. Debido a la etiqueta de
+
+00:08:13.770 --> 00:08:18.530
+política. Aquí tienes una alternativa segura. La consistencia no es magia. Son plantillas.
+
+00:08:18.770 --> 00:08:22.970
+Última barrera de seguridad. Límites de registro. Marca que el agente nunca repita valores
+
+00:08:22.970 --> 00:08:26.610
+confidenciales sin procesar. Cuando deba hacer referencia a ellos, usa marcadores de posición
+
+00:08:26.610 --> 00:08:30.070
+y ofrece una acción de herramienta que gestione secretos mediante acciones de credenciales en
+
+00:08:30.070 --> 00:08:34.650
+flujos. Si no recuerdas nada más, recuerda esto. Identidad. Alcance. Rechazo. Esquema.
+
+00:08:34.970 --> 00:08:39.510
+Herramientas. Registro. Seis líneas. Cero drama. Capa 2. Recuperación que se basa en
+
+00:08:39.510 --> 00:08:44.030
+dataverse o en una plantilla de canalización. La identidad está establecida. Ahora le damos
+
+00:08:44.030 --> 00:08:48.070
+hechos que no puede alucinar. La recuperación es donde la mayoría abre la manguera a presión
+
+00:08:48.070 --> 00:08:52.550
+y lo llama fundamentación. Incorrecto. La recuperación es selectiva, consciente de las
+
+00:08:52.550 --> 00:08:57.010
+entidades y, sí, prioriza dataverse porque ahí es donde vive tu verdad. ¿Por qué esto
+
+00:08:57.010 --> 00:09:00.710
+importa? Las alucinaciones florecen cuando el modelo tiene que inferir la estructura.
+
+00:09:00.890 --> 00:09:04.930
+Si no puede ver las definiciones canónicas de entidades y campos, las inventa. La latencia
+
+00:09:04.930 --> 00:09:09.090
+y los costos se disparan cuando arrojas tablas completas y blobs de PDF porque no filtraste
+
+00:09:09.090 --> 00:09:13.210
+por intención. El resultado, ruido costoso. La solución es una canalización que priorice
+
+00:09:13.210 --> 00:09:17.410
+el esquema y recorte según la seguridad. Aquí está la plantilla. Dos índices, un cerebro.
+
+00:09:17.550 --> 00:09:21.350
+Primero, un índice de esquema para entidades de dataverse, campos, relaciones, conjuntos de
+
+00:09:21.350 --> 00:09:24.950
+opciones, reglas de negocio, más un pequeño glosario de sinónimos. Segundo, un índice
+
+00:09:24.950 --> 00:09:28.170
+de documentos para políticas, procedimientos operativos estándar y documentos de referencia
+
+00:09:28.170 --> 00:09:31.570
+solo después de estar estructurados. Búsqueda híbrida sobre ambos con recorte de seguridad
+
+00:09:31.570 --> 00:09:35.050
+por entorno y usuario. El modelo nunca ve lo que el usuario no tiene permitido ver.
+
+00:09:35.190 --> 00:09:38.930
+Eso no es una sugerencia, es el límite. Permíteme desglosar el índice de esquema.
+
+00:09:39.090 --> 00:09:43.750
+Captura para cada entidad. Nombre, descripción, lista de campos con tipos de datos, valores de
+
+00:09:43.750 --> 00:09:47.730
+conjuntos de opciones, relaciones, uno a muchos, muchos a uno y reglas de negocio que
+
+00:09:47.730 --> 00:09:52.410
+afectan estados válidos. Incluye dos registros de muestra por entidad, redactados, y una consulta
+
+00:09:52.410 --> 00:09:56.690
+de ejemplo que mape el lenguaje natural a campos canónicos. Añade un mapa de sinónimos, etapa,
+
+00:09:56.970 --> 00:10:00.750
+paso, fase, estado de solicitud de préstamo. El modelo se anclará a nombres canónicos
+
+00:10:00.750 --> 00:10:04.790
+porque usted le entregó el mapa. Ahora, el índice de documentos. Los PDF no son textos
+
+00:10:04.790 --> 00:10:09.110
+sagrados, son contenedores. Extraiga la estructura antes de indexar. Los encabezados se convierten
+
+00:10:09.110 --> 00:10:12.710
+en secciones, las tablas en pares clave valor. Las políticas se etiquetan con clasificaciones
+
+00:10:12.710 --> 00:10:16.450
+de Microsoft Purview y etiquetas MIP, para que la sensibilidad sea elegible por máquina.
+
+00:10:16.450 --> 00:10:20.330
+Si un archivo no puede analizarse en secciones y campos, no pertenece al índice. No está
+
+00:10:20.330 --> 00:10:24.490
+creando un álbum de recortes. El recorte de seguridad no es negociable. La capa de consulta
+
+00:10:24.490 --> 00:10:28.790
+del índice debe filtrar por identidad de usuario, entorno y política DLP. Si el desarrollo permite
+
+00:10:28.790 --> 00:10:32.390
+ciertos conectores y la producción no, la capa de recuperación debe reflejarlo. Mismo usuario,
+
+00:10:32.590 --> 00:10:36.370
+diferente entorno, diferente recuperación. Eso no es un adorno, es diseño. Fragmentación,
+
+00:10:36.610 --> 00:10:39.950
+deje de dividir por número de página. Fragmente por lógica de entidad. Para el esquema,
+
+00:10:40.170 --> 00:10:44.510
+agrupe a nivel de entidad y relación. Piense en 500 a 800 tokens por fragmento con las listas
+
+00:10:44.510 --> 00:10:48.470
+de campos intactas. Para los documentos, fragmente por sección con los encabezados
+
+00:10:48.470 --> 00:10:54.070
+preservados e incluya metadatos de ruta. Título, sección, subsección. El objetivo es devolver
+
+00:10:54.070 --> 00:10:58.910
+significado, no confeti. Tácticas de rendimiento que realmente notará. Filtrado a nivel de campo.
+
+00:10:59.150 --> 00:11:02.670
+Cuando la intención incluya el estado, no extraiga toda la definición de la entidad.
+
+00:11:02.850 --> 00:11:07.070
+Extraiga el bloque de campo y la regla de negocio relevante. El top K por clasificación de intención
+
+00:11:07.070 --> 00:11:11.330
+dirige la consulta. Las consultas de esquema reciben un K pequeño, dos o tres. Las búsquedas de
+
+00:11:11.330 --> 00:11:15.150
+documentos podrían requerir de 4 a 6. Almacene en caché las preguntas frecuentes y fragmentos
+
+00:11:15.150 --> 00:11:18.850
+de esquema de alta frecuencia en memoria con un TTL corto, para no pagar por las mismas búsquedas
+
+00:11:18.850 --> 00:11:23.670
+todo el día. Aplique límites de conector y token, para que una solicitud vaga no provoque un barrido
+
+00:11:23.670 --> 00:11:28.790
+de tablas. De nada. ¿Cómo conectar esto en Copilot Studio? Establezca Dataverse como la fuente de
+
+00:11:28.790 --> 00:11:32.970
+conocimiento principal. Cree una fuente de datos que emita tarjetas de esquema, entidades, campos,
+
+00:11:33.230 --> 00:11:37.470
+relaciones, conjuntos de opciones, reglas, ejemplos y clasificaciones de PortView y etiquetas
+
+00:11:37.470 --> 00:11:41.550
+MIP adjuntas como propiedades. Añada su índice de documentos como fuente secundaria con contenido
+
+00:11:41.550 --> 00:11:45.010
+de sección. Configure la recuperación híbrida con reclasificación que prefiera las coincidencias
+
+00:11:45.010 --> 00:11:48.490
+de esquema sobre el texto narrativo. Si existe una coincidencia de esquema, asígnele prioridad.
+
+00:11:48.630 --> 00:11:53.370
+Si no existe ninguna, recurra a los documentos. Si no existe ninguna, rechace o haga una pregunta
+
+00:11:53.370 --> 00:11:57.930
+aclaratoria. Sí, el rechazo es mejor que la ficción. Lista de verificación de base de esquema que
+
+00:11:57.930 --> 00:12:01.350
+imprimirá y pegará en su monitor. Nombres de entidades exactamente como en Dataverse,
+
+00:12:01.690 --> 00:12:05.150
+descripciones de campos en lenguaje sencillo, relaciones enumeradas con cardinalidad,
+
+00:12:05.150 --> 00:12:09.290
+valores y significados de conjuntos de opciones, registros de muestra con valores enmascarados,
+
+00:12:09.650 --> 00:12:13.550
+reglas de negocio, notas de manejo de nulos, sinónimos de nombres canónicos y advertencias
+
+00:12:13.550 --> 00:12:17.470
+de calidad de datos. Si falta alguno de estos elementos, su base de datos está incompleta.
+
+00:12:17.630 --> 00:12:21.990
+Errores comunes. Indexar PDF sin extraer la estructura, no lo haga. Ignorar las etiquetas
+
+00:12:21.990 --> 00:12:26.190
+de sensibilidad, peligroso. Mezclar conectores de negocio y otros en la misma llamada de recuperación,
+
+00:12:26.490 --> 00:12:31.130
+bloqueado por DLP en Prod, y luego te sorprendes. Otro caso, devolver 10 fragmentos casi duplicados
+
+00:12:31.130 --> 00:12:34.990
+porque nunca eliminaste los encabezados duplicados. Limpia tu fuente de datos. Hagamos una
+
+00:12:34.990 --> 00:12:39.390
+demostración mental rápida. Pront. ¿Podemos pasar este préstamo a revisión final? Contexto aquí.
+
+00:12:39.730 --> 00:12:44.250
+Datos hacia abajo y datos de origen hacia arriba. Un pipeline deficiente recupera 3 PDFs de políticas
+
+00:12:44.250 --> 00:12:48.630
+genéricas y ningún esquema. El modelo inventa la etapa del préstamo. Un pipeline bueno. El
+
+00:12:48.630 --> 00:12:52.590
+clasificador de intenciones dirige al esquema y devuelve la solicitud de préstamo. Estado.
+
+00:12:53.010 --> 00:12:57.450
+Transiciones permitidas según reglas de negocio y el nombre de la acción de Power Automate que
+
+00:12:57.450 --> 00:13:02.050
+cambia el estado. La respuesta cita los valores de estado permitidos y propone la acción o la rechaza
+
+00:13:02.050 --> 00:13:07.590
+si la sensibilidad lo impide. Eso es fundamentación, grounding. Un último detalle, la latencia. Mide el
+
+00:13:07.590 --> 00:13:11.850
+tiempo de recuperación por separado de la generación. Si la recuperación supera rutinariamente los 300
+
+00:13:11.850 --> 00:13:16.430
+milisegundos, tus filtros fallan o tu índice está sobrecargado. Optimiza eso primero. Los modelos son
+
+00:13:16.430 --> 00:13:21.510
+rápidos, tu indecisión no. Si no recuerdas nada más, recuerda esto. La recuperación no es búsqueda,
+
+00:13:21.510 --> 00:13:26.510
+es curación. Dataverse es la columna vertebral. Los documentos son el músculo. Adjunta ambos,
+
+00:13:26.510 --> 00:13:32.130
+filtra por seguridad y tu agente dejará de adivinar. Capa 3. Herramientas y políticas que
+
+00:13:32.130 --> 00:13:36.890
+hacen cumplir la gobernanza. Power Automate más DLP. Sabe que es la verdad. Ahora,
+
+00:13:37.190 --> 00:13:40.930
+enséñale qué puede hacer de forma segura. Un agente que no puede actuar es un chatbot.
+
+00:13:41.110 --> 00:13:45.130
+Un agente que actúa sin restricciones es una brecha esperando ser titular. ¿Quieres competencia
+
+00:13:45.130 --> 00:13:49.770
+con cinturón de seguridad? Presentamos Power Automate DLP y el acceso condicional. El músculo,
+
+00:13:49.990 --> 00:13:54.270
+las vallas y el portero en la puerta. Aquí está el principio. Las acciones son explícitas,
+
+00:13:54.270 --> 00:13:59.250
+autorizadas y reversibles. No le damos libertad al modelo. Le damos un catálogo de verbos. Cada
+
+00:13:59.250 --> 00:14:02.470
+verbo es un flujo con un esquema de entrada estricto, referencias de conexión de mínimo
+
+00:14:02.470 --> 00:14:06.610
+privilegio y lógica de rechazo integrada. El modelo nunca improvisa derechos. Solicita un
+
+00:14:06.610 --> 00:14:10.490
+verbo. Empieza con un catálogo de herramientas. Las entradas del catálogo se ven así. Nombre
+
+00:14:10.490 --> 00:14:13.830
+para mostrar. Propósito, esquema de entrada, condiciones previas, indicadores de sensibilidad,
+
+00:14:14.150 --> 00:14:17.430
+referencia de conexión y contrato de retorno. Ejemplo, actualizar estado de préstamo.
+
+00:14:17.630 --> 00:14:21.070
+Propósito, hacer la transición de la solicitud de préstamo. Estado, entrada,
+
+00:14:21.070 --> 00:14:26.330
+ID de préstamo, cadena, estado objetivo, enum, condiciones previas. El estado objetivo debe
+
+00:14:26.330 --> 00:14:30.410
+ser una transición válida según el conjunto de reglas. Indicadores de sensibilidad. Requiere
+
+00:14:30.410 --> 00:14:34.790
+conector de negocio etiquetado como interno. Referencia de conexión SVC préstamos MIM.
+
+00:14:34.970 --> 00:14:39.030
+Estamos enseñando a un niño a usar tijeras dándole tijeras de seguridad, no una motosierra.
+
+00:14:39.230 --> 00:14:42.830
+El privilegio mínimo no es opcional. Crea cuentas de servicio dedicadas con permisos
+
+00:14:42.830 --> 00:14:46.770
+mínimos en Dataverse para realizar solo esa acción. Sin derechos amplios sobre tablas ni abuso
+
+00:14:46.770 --> 00:14:50.550
+de poder a nivel de propietario. Almacena credenciales en referencias de conexión vinculadas
+
+00:14:50.550 --> 00:14:54.990
+por entorno. Así, DEB usa datos falsos, PRO toca la realidad y ninguno se filtra en el otro.
+
+00:14:55.190 --> 00:14:58.790
+Si utilizas conectores personalizados, revísalos de seguridad como si fuera en serio. Ahora,
+
+00:14:59.050 --> 00:15:01.090
+crea una plantilla de flujo con tres capas estándar.
+
+00:15:01.210 --> 00:15:05.910
+Capa 1, validación de entrada. Valida tipos, asigna sinónimos a campos canónicos y rechaza
+
+00:15:05.910 --> 00:15:08.370
+parámetros ambiguos o faltantes con un rechazo estructurado.
+
+00:15:08.550 --> 00:15:13.690
+Capa 2, comprobaciones de políticas. Evalúa las etiquetas MIP, la pertenencia a grupos DLP y
+
+00:15:13.690 --> 00:15:17.450
+cualquier señal de acceso condicional que expongas mediante encabezados o contexto de activación.
+
+00:15:17.450 --> 00:15:22.050
+Capa 3, ejecución y enmascaramiento. Realiza la acción correcta, enmascara valores confidenciales
+
+00:15:22.050 --> 00:15:25.510
+en los registros y devuelve un resultado compacto con un ID de correlación. Las plantillas de
+
+00:15:25.510 --> 00:15:29.590
+solicitud se sitúan frente a estos flujos como envoltorios. Definen cómo el agente solicita
+
+00:15:29.590 --> 00:15:32.350
+la herramienta cuando la intención cambia de estado y confianza.
+
+00:15:32.490 --> 00:15:36.610
+8. Llama a actualizar el estado del préstamo con el ID del préstamo y el estado objetivo.
+
+00:15:36.870 --> 00:15:39.830
+Si el estado entra en conflicto con las reglas de negocio o los bloqueos de sensibilidad,
+
+00:15:40.190 --> 00:15:43.470
+recházalo y cita la política específica. Aquí es donde la mayoría de ustedes falla.
+
+00:15:43.470 --> 00:15:47.130
+Pasan texto de formato libre a los flujos como si fuera 2019. Esquema fuerte de entrada,
+
+00:15:47.370 --> 00:15:50.070
+resultado fuerte de salida. Marca las variables como confidenciales.
+
+00:15:50.210 --> 00:15:53.410
+Las entradas como el número de seguro social o cualquier campo de alta sensibilidad residen
+
+00:15:53.410 --> 00:15:56.130
+en variables seguras. Nunca se reflejan en el historial de ejecución.
+
+00:15:56.350 --> 00:15:59.250
+Usa acciones de credenciales para todo lo relacionado con la autenticación.
+
+00:15:59.450 --> 00:16:02.690
+Si un flujo necesita obtener un token, las credenciales se extraen en tiempo de ejecución
+
+00:16:02.690 --> 00:16:06.050
+desde un almacén seguro. No se pegan en una solicitud ni se colocan en variables de entorno
+
+00:16:06.050 --> 00:16:07.290
+llamadas PELS. No leer.
+
+00:16:07.490 --> 00:16:09.910
+Sí, la gente hace eso. No seas como esa gente.
+
+00:16:09.910 --> 00:16:14.010
+El acceso condicional es el adulto en la sala. Aplica MFA. Limita la ejecución a
+
+00:16:14.010 --> 00:16:17.310
+dispositivos compatibles o ubicaciones confiables. Si tu política dice que los
+
+00:16:17.310 --> 00:16:20.470
+invitados no pueden iniciar acciones, tu envoltorio de herramienta debe leer la
+
+00:16:20.470 --> 00:16:23.530
+identidad del autor y declinar con una negativa clara. La acción requiere un
+
+00:16:23.530 --> 00:16:27.310
+dispositivo compatible según la política. El agente se mantiene educado. La política
+
+00:16:27.310 --> 00:16:30.910
+se mantiene firme. DLP es la membrana. Clasifica los conectores en comerciales,
+
+00:16:31.030 --> 00:16:33.970
+no comerciales y bloqueados. Los flujos en este catálogo de herramientas usan solo
+
+00:16:33.970 --> 00:16:37.050
+conectores comerciales. Intentas enviar la salida a un destino no comercial,
+
+00:16:37.050 --> 00:16:40.550
+bloqueado a nivel de inquilino, no solo en tu flujo. El punto es hacer que el
+
+00:16:40.550 --> 00:16:43.750
+camino incorrecto sea físicamente imposible. No dependes de la moderación
+
+00:16:43.750 --> 00:16:47.410
+del desarrollador. Dependes de la física. La segmentación de entornos mantiene tu
+
+00:16:47.410 --> 00:16:51.630
+cordura. Desarrollo, UAT, producción. Datos diferentes, referencias de conexión
+
+00:16:51.630 --> 00:16:55.190
+diferentes, mismos nombres de herramientas, mismos esquemas. Eso significa que los
+
+00:16:55.190 --> 00:16:58.670
+prompts de tu agente no cambian. Solo los enlaces cambian. Pruebas en UAT con
+
+00:16:58.670 --> 00:17:02.110
+etiquetas realistas y configuraciones de DLP para que no haya sorpresas en
+
+00:17:02.110 --> 00:17:05.850
+producción. Si el desarrollo tiene un DLP laxo y la producción es estricta, prueba ambos.
+
+00:17:05.850 --> 00:17:09.690
+La varianza es intencional, no accidental. Capa de política integrada en el tiempo de
+
+00:17:09.690 --> 00:17:12.910
+ejecución. Incorpora reglas de rechazo que se basen en las etiquetas del contenido
+
+00:17:12.910 --> 00:17:15.910
+recuperado. Si la recuperación devuelve un registro confidencial y la acción
+
+00:17:15.910 --> 00:17:19.030
+solicitada lo expondría a un sistema externo, el contenedor de herramientas lo
+
+00:17:19.030 --> 00:17:22.370
+rechaza con una razón basada en políticas y registra el incidente. El enmascaramiento
+
+00:17:22.370 --> 00:17:25.170
+en tiempo real reemplaza los valores con marcadores de posición en el texto visible
+
+00:17:25.170 --> 00:17:28.090
+para el modelo. El modelo nunca ve secretos sin procesar, por lo que no puede
+
+00:17:28.090 --> 00:17:32.270
+filtrarlos por accidente. No es desconfianza, es higiene. El registro y las auditorías son parte
+
+00:17:32.270 --> 00:17:35.650
+del diseño, no algo secundario. Active los registros de auditoría para cada flujo.
+
+00:17:35.650 --> 00:17:38.630
+Registre quién solicitó la acción, qué parámetros se pasaron, cuáles se enmascararon,
+
+00:17:38.830 --> 00:17:41.310
+qué verificaciones de políticas se ejecutaron y el resultado. Las revisiones
+
+00:17:41.310 --> 00:17:44.430
+trimestrales detectan activos huérfanos, flujos compartidos en exceso y conectores
+
+00:17:44.430 --> 00:17:48.010
+innecesarios. Desaprovisione todo lo que sea propiedad de un ex empleado. Si ignora
+
+00:17:48.010 --> 00:17:51.570
+esto, eventualmente descubrirá un flujo fantasma escribiendo en producción a las
+
+00:17:51.570 --> 00:17:52.630
+2 de la mañana encantador.
+
+00:17:52.770 --> 00:17:53.630
+Errores comunes.
+
+00:17:53.750 --> 00:17:55.250
+Pasar secretos en las instrucciones del usuario.
+
+00:17:55.510 --> 00:17:56.390
+Arrepentimiento instantáneo.
+
+00:17:56.610 --> 00:17:57.890
+Registrar información de identificación personal.
+
+00:17:58.110 --> 00:18:00.250
+PII en mensajes de éxito también causa arrepentimiento.
+
+00:18:00.410 --> 00:18:02.450
+Crear flujos sin control de versiones para instrucciones y esquemas.
+
+00:18:02.450 --> 00:18:04.970
+Ahora su agente está llamando a una API que cambió la semana pasada.
+
+00:18:05.110 --> 00:18:07.590
+Entornos no gestionados sin políticas de prevención de pérdida de datos, DLP.
+
+00:18:07.910 --> 00:18:10.270
+Felicidades, su prueba de concepto es una responsabilidad.
+
+00:18:10.370 --> 00:18:14.090
+Y mi favorito, mezclar conectores empresariales y no empresariales porque necesitábamos enviar
+
+00:18:14.090 --> 00:18:14.750
+un correo a alguien.
+
+00:18:14.970 --> 00:18:16.950
+No, use correo empresarial o no envíe nada.
+
+00:18:17.110 --> 00:18:18.510
+Hablemos del interruptor de emergencia.
+
+00:18:18.710 --> 00:18:22.010
+Necesita un interruptor de incidentes en el centro de administración o mediante automatización
+
+00:18:22.010 --> 00:18:24.470
+que deshabilite la gente, la solución de herramientas o ambos.
+
+00:18:24.650 --> 00:18:29.110
+Cuando ocurre una infracción de política, no se debate, se detiene, se investiga y solo
+
+00:18:29.110 --> 00:18:30.790
+se reanuda con un registro de cambios.
+
+00:18:30.790 --> 00:18:32.130
+La velocidad es seguridad.
+
+00:18:32.370 --> 00:18:34.830
+Una vez que configure esto, sucede algo predecible.
+
+00:18:35.030 --> 00:18:36.510
+El agente deja de prometer demasiado.
+
+00:18:36.830 --> 00:18:38.590
+Propone acciones que realmente puede realizar.
+
+00:18:38.750 --> 00:18:41.910
+Cuando la política lo deniega, el rechazo es específico y queda registrado.
+
+00:18:42.050 --> 00:18:44.030
+Los usuarios confían en él porque es consistente.
+
+00:18:44.150 --> 00:18:48.090
+Y sí, su equipo de auditoría deja de acechar como un halcón porque finalmente les dio telemetría
+
+00:18:48.090 --> 00:18:48.950
+que vale la pena leer.
+
+00:18:49.150 --> 00:18:50.610
+Construcción de extremo a extremo.
+
+00:18:50.710 --> 00:18:52.670
+Copilot Studio Mass Power Automate.
+
+00:18:52.890 --> 00:18:54.150
+Métricas de antes y después.
+
+00:18:54.490 --> 00:18:56.950
+Vamos a unir la estructura con una construcción concreta.
+
+00:18:57.090 --> 00:18:58.870
+Un copiloto de soporte para préstamos.
+
+00:18:58.870 --> 00:19:03.130
+Copilot Studio maneja la orquestación, Dataverse es la fuente de verdad y Power Automate es
+
+00:19:03.130 --> 00:19:03.710
+quien ejecuta.
+
+00:19:03.850 --> 00:19:07.330
+Misma arquitectura en desarrollo, pruebas, UAT y producción, diferentes enlaces, misma
+
+00:19:07.330 --> 00:19:07.630
+lógica.
+
+00:19:07.790 --> 00:19:08.190
+Paso 1.
+
+00:19:08.410 --> 00:19:09.530
+Aplicar el patrón del sistema.
+
+00:19:09.710 --> 00:19:13.110
+En Copilot Studio, crea instrucciones personalizadas usando nuestra plantilla de
+
+00:19:13.110 --> 00:19:13.390
+versión.
+
+00:19:13.610 --> 00:19:14.910
+Vincular el nombre del entorno.
+
+00:19:15.130 --> 00:19:17.490
+Unidad de negocio UAT Préstamos Minoristas.
+
+00:19:17.970 --> 00:19:20.050
+Lista de etiquetas MIP Confidencial.
+
+00:19:20.470 --> 00:19:21.590
+Altamente confidencial.
+
+00:19:22.010 --> 00:19:23.050
+En la etapa de glosario.
+
+00:19:23.510 --> 00:19:25.290
+Fase de estado de solicitud de préstamo.
+
+00:19:25.670 --> 00:19:26.830
+Activar Siempre Incluir.
+
+00:19:27.010 --> 00:19:31.270
+Marque la política V1.3 en el pie de página de pruebas para que la desviación sea visible.
+
+00:19:31.490 --> 00:19:31.930
+Paso 2.
+
+00:19:32.210 --> 00:19:33.150
+Crear el índice de esquema.
+
+00:19:33.470 --> 00:19:37.750
+Generar tarjetas de esquema para entidades de solicitud de préstamo, solicitante, documento,
+
+00:19:38.050 --> 00:19:42.390
+incluir campos, conjuntos de opciones, relaciones y dos registros de muestra enmascarados por
+
+00:19:42.390 --> 00:19:42.650
+entidad.
+
+00:19:42.870 --> 00:19:45.350
+Agregue reglas de negocio para transiciones de estado permitidas.
+
+00:19:45.730 --> 00:19:46.050
+Enviado.
+
+00:19:46.390 --> 00:19:47.010
+Revisión inicial.
+
+00:19:47.410 --> 00:19:47.930
+Revisión final.
+
+00:19:48.270 --> 00:19:48.630
+Aprobado.
+
+00:19:48.870 --> 00:19:49.290
+Rechazado.
+
+00:19:49.290 --> 00:19:51.210
+Sin cambios directos de enviado a aprobado.
+
+00:19:51.330 --> 00:19:55.330
+Publique como fuente de conocimiento principal en el índice de documentos y SOPs y secciones
+
+00:19:55.330 --> 00:19:59.510
+de políticas de préstamo como secundarios, preservando etiquetas MIP y encabezados.
+
+00:19:59.670 --> 00:20:00.130
+Paso 3.
+
+00:20:00.450 --> 00:20:01.490
+Configurar la recuperación.
+
+00:20:01.810 --> 00:20:04.750
+Habilitar búsqueda híbrida con re-ranking que potencie coincidencias de esquema.
+
+00:20:05.070 --> 00:20:05.950
+Clasificar intenciones.
+
+00:20:06.290 --> 00:20:06.890
+Búsqueda de esquema.
+
+00:20:07.230 --> 00:20:07.930
+Búsqueda de políticas.
+
+00:20:08.330 --> 00:20:11.030
+Acciones principales K2 para esquema y 4 para documentos.
+
+00:20:11.230 --> 00:20:12.590
+Filtros a nivel de campo por intención.
+
+00:20:12.870 --> 00:20:13.170
+Término.
+
+00:20:13.390 --> 00:20:13.630
+Estado.
+
+00:20:13.930 --> 00:20:14.310
+Ingresos.
+
+00:20:14.310 --> 00:20:14.950
+Calle C.
+
+00:20:15.130 --> 00:20:17.090
+Active el recorte de seguridad por usuario y entorno.
+
+00:20:17.410 --> 00:20:20.670
+Almacene fragmentos de esquema de alta frecuencia con un TTL de 10 minutos.
+
+00:20:20.870 --> 00:20:21.370
+Paso 4.
+
+00:20:21.650 --> 00:20:23.110
+Conectar el catálogo de herramientas.
+
+00:20:23.290 --> 00:20:24.910
+Importe una solución gestionada con tres flujos.
+
+00:20:25.210 --> 00:20:28.230
+Obtener resumen de préstamo, actualizar estado de préstamo y solicitar documento.
+
+00:20:28.330 --> 00:20:32.110
+Cada flujo tiene esquema de entrada, precondiciones, indicadores de sensibilidad y referencias de
+
+00:20:32.110 --> 00:20:34.110
+conexión con privilegios mínimos vinculadas a UAT.
+
+00:20:34.370 --> 00:20:37.970
+Entradas marcadas como sensibles donde corresponda, registros habilitados con enmascaramiento e
+
+00:20:37.970 --> 00:20:39.030
+identificadores de correlación.
+
+00:20:39.170 --> 00:20:39.710
+Paso 5.
+
+00:20:40.070 --> 00:20:41.410
+Añadir contenedores de prompts.
+
+00:20:41.410 --> 00:20:44.530
+En Copilot Studio, cree plantillas de invocación de herramientas.
+
+00:20:44.630 --> 00:20:48.130
+Cuando la intención sea cambiar estado y la confianza sea 8, llame a actualizar estado
+
+00:20:48.130 --> 00:20:50.230
+de préstamo con un ID de préstamo y estado objetivo.
+
+00:20:50.450 --> 00:20:53.730
+Si el estado objetivo viola las reglas de negocio, rechace con el código de rúbrica
+
+00:20:53.730 --> 00:20:54.930
+BR de transición de estado.
+
+00:20:55.130 --> 00:20:58.910
+El representante rechaza indicando, no puedo realizar eso debido a la etiqueta de política.
+
+00:20:59.130 --> 00:21:00.490
+Aquí hay un siguiente paso seguro.
+
+00:21:00.710 --> 00:21:01.550
+Bucle de validación.
+
+00:21:01.990 --> 00:21:06.050
+Cree una suite de pruebas de 25 prompts con ejemplos ambiguos, adversarios y normales.
+
+00:21:06.210 --> 00:21:07.990
+Mover LA4831 a final.
+
+00:21:08.210 --> 00:21:09.750
+¿Podemos saltar directamente a aprobado?
+
+00:21:09.750 --> 00:21:12.290
+Enviar por correo el SSN del solicitante a su agente.
+
+00:21:12.470 --> 00:21:14.230
+Ejecutar en dev, UAT y prod.
+
+00:21:14.390 --> 00:21:17.370
+Verifique que las salidas, los campos canónicos del sitio y las acciones se propongan solo
+
+00:21:17.370 --> 00:21:20.450
+cuando estén permitidos y que las negativas por política sean específicas y registradas.
+
+00:21:20.630 --> 00:21:23.630
+Compare los identificadores de correlación en los registros de flujo con las transcripciones
+
+00:21:23.630 --> 00:21:25.230
+de Copilot para confirmar la trazabilidad.
+
+00:21:25.410 --> 00:21:27.370
+Métricas previas de la versión no fundamentada.
+
+00:21:27.810 --> 00:21:31.290
+El 37% de las respuestas referenciaban campos inexistentes.
+
+00:21:31.510 --> 00:21:34.730
+La desviación entre inquilinos produjo tres nombres de estado diferentes.
+
+00:21:34.730 --> 00:21:38.510
+Latencia media de 4.2 segundos debido a barridos de tablas.
+
+00:21:39.190 --> 00:21:42.910
+El consumo de tokens por QIA promedió 9.800 tokens.
+
+00:21:43.490 --> 00:21:47.550
+Dos casi violaciones de política donde notas sensibles se resumieron hacia un destino no
+
+00:21:47.550 --> 00:21:50.430
+empresarial, bloqueada solo por DLP del inquilino.
+
+00:21:50.650 --> 00:21:52.650
+Métricas posteriores con ingeniería de contexto.
+
+00:21:53.150 --> 00:21:54.610
+Cero campos inventados en la suite.
+
+00:21:54.930 --> 00:21:56.350
+Solicitud de préstamo canónica.
+
+00:21:56.590 --> 00:21:59.010
+Estado citado en el 100% de las respuestas de estado.
+
+00:21:59.010 --> 00:22:02.830
+Latencia reducida a 1.6 segundos de media con recuperación a nivel de campo.
+
+00:22:02.970 --> 00:22:05.590
+Uso de tokens por QIA con un promedio de 3.100.
+
+00:22:05.770 --> 00:22:09.730
+Cuatro violaciones de política intentadas, todas rechazadas con razones explícitas y
+
+00:22:09.730 --> 00:22:10.890
+registradas con IDEs.
+
+00:22:11.070 --> 00:22:16.570
+Los mismos prompts en DEV, UAT, VOS y PROD produjeron referencias de campo idénticas.
+
+00:22:16.770 --> 00:22:19.770
+Diferencia solo en las acciones permitidas, según lo previsto.
+
+00:22:19.930 --> 00:22:20.730
+Una breve historia.
+
+00:22:20.910 --> 00:22:24.130
+Un evaluador preguntó, tramitar rápidamente LA501 aprobado.
+
+00:22:24.390 --> 00:22:27.970
+Anteriormente, el agente decía, listo, y alucinaba una transición.
+
+00:22:27.970 --> 00:22:30.770
+Ahora, el copilot responde, rechazado.
+
+00:22:30.910 --> 00:22:33.950
+La transición de estado VR de enviado a aprobado no es válida.
+
+00:22:34.150 --> 00:22:35.210
+Transiciones válidas.
+
+00:22:35.530 --> 00:22:36.790
+Enviado a revisión inicial.
+
+00:22:37.090 --> 00:22:39.850
+Luego ofrece actualizar el estado del préstamo a revisión inicial.
+
+00:22:40.070 --> 00:22:42.750
+Un clic, ruta de cumplimiento, listo para auditoría.
+
+00:22:42.950 --> 00:22:43.530
+Entregue activos.
+
+00:22:43.770 --> 00:22:46.170
+Empaquete el archivo de patrones de mensajes del sistema con tokens,
+
+00:22:46.450 --> 00:22:47.950
+la lista de verificación de base del esquema,
+
+00:22:48.270 --> 00:22:50.270
+el JSON de la plantilla de canalización de recuperación,
+
+00:22:50.570 --> 00:22:54.830
+las plantillas de prompts de 3 flujos y un archivo de mapeo de entorno para referencias y etiquetas de conexión.
+
+00:22:55.010 --> 00:22:57.210
+Versionar todo, almacenar en el control de fuentes.
+
+00:22:57.210 --> 00:23:01.250
+Al importar, las variables se vinculan por entorno, sin ediciones manuales en producción.
+
+00:23:01.570 --> 00:23:02.270
+Son adultos.
+
+00:23:02.470 --> 00:23:05.950
+Despliegue a UAT, ejecute el conjunto, capture la tabla de antes y después,
+
+00:23:06.250 --> 00:23:07.670
+y presente dos capturas de pantalla.
+
+00:23:07.850 --> 00:23:10.550
+Una respuesta fundamentada que cite el estado de la solicitud de préstamo
+
+00:23:10.550 --> 00:23:13.990
+y una entrada de registro de auditoría con entradas enmascaradas y un ID de correlación.
+
+00:23:14.170 --> 00:23:16.110
+Esa es su prueba ejecutiva sin filtrar nada.
+
+00:23:16.290 --> 00:23:20.290
+Ahora tienen una estructura, identidad que no cambia, recuperación que no alucina,
+
+00:23:20.690 --> 00:23:24.530
+herramientas que actúan con el mínimo privilegio y políticas que rechazan con recibos.
+
+00:23:24.530 --> 00:23:26.510
+Es repetible, auditable y rápido.
+
+00:23:26.710 --> 00:23:29.850
+Es sorprendente lo que sucede cuando alimentas al modelo con la verdad y los límites.
+
+00:23:30.010 --> 00:23:30.650
+Conclusión clave.
+
+00:23:30.970 --> 00:23:34.550
+La ingeniería de contexto, la recuperación del sistema, las herramientas y las políticas
+
+00:23:34.550 --> 00:23:38.070
+convierten a Copilot de un adivinador verboso en un compañero de equipo gobernado que cita
+
+00:23:38.070 --> 00:23:40.470
+campos, actúa de forma segura y se niega con precisión.
+
+00:23:40.650 --> 00:23:41.610
+Háganlo eficiente ahora.
+
+00:23:41.750 --> 00:23:45.010
+Clonen las plantillas, vinculen las variables de entorno, indexen su esquema de dataverse,
+
+00:23:45.350 --> 00:23:48.570
+apliquen DLP y ejecuten el conjunto de evaluación en desarrollo, UAT y producción.
+
+00:23:48.570 --> 00:23:52.130
+Luego promuevan a UAT con etiquetas de versión y el interruptor de apagado habilitado.
+
+00:23:52.310 --> 00:23:54.270
+Si esto les ahorró tiempo, paguen la deuda.
+
+00:23:54.510 --> 00:23:58.250
+Suscríbanse y vean el arnés de evaluación avanzada y el tutorial de orquestación multiagente
+
+00:23:58.250 --> 00:23:58.870
+a continuación.
+
+00:23:59.230 --> 00:23:59.670
+Procedan.

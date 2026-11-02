@@ -1,0 +1,997 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.500
+Il tuo Data Warehouse Fabric è solo un cimitero di CSV. So che fa schifo, ma guarda come lo stai
+
+00:00:04.500 --> 00:00:08.980
+usando. Dump CSV infiniti, tabelle inattive, processi ETL pianificati che procedono lentamente
+
+00:00:08.980 --> 00:00:12.280
+come se fossimo nel 2015. Hai acquistato Fabric per lanciare i tuoi dati nell'era
+
+00:00:12.280 --> 00:00:15.680
+dell'intelligenza artificiale e poi li hai trasformati in un archivio. L'ironia è squisita.
+
+00:00:15.900 --> 00:00:19.300
+Fabric è stato creato per l'intelligenza, le informazioni in tempo reale, il ragionamento
+
+00:00:19.300 --> 00:00:23.420
+contestuale, l'analisi autoregolante. Eppure eccolo qui a trattarlo come un tupperware digitale.
+
+00:00:23.600 --> 00:00:26.620
+Nel frattempo, il livello di intelligenza artificiale per cui hai pagato, gli agenti
+
+00:00:26.620 --> 00:00:30.140
+dati, la governance contestuale, il ragionamento semantico rimangono dormienti in attesa di
+
+00:00:30.140 --> 00:00:33.700
+istruzioni che non arrivano mai. Quindi, il problema non è la capacità e non è la qualità
+
+00:00:33.700 --> 00:00:38.140
+dei dati. È il pensiero. Non hai un problema di dati, ne hai uno concettuale, scambiando
+
+00:00:38.140 --> 00:00:42.260
+l'infrastruttura di intelligence per l'archiviazione. Sistemiamo quel modello mentale prima che il
+
+00:00:42.260 --> 00:00:45.640
+tuo CFO si renda conto che hai reinventato un'unità di rete con un marchio migliore.
+
+00:00:45.780 --> 00:00:50.040
+Il problema dei dati morti. I comportamenti legacy sono duri a morire. La maggior parte delle
+
+00:00:50.040 --> 00:00:54.080
+organizzazioni esegue ancora processi ETL notturni che analizzano i sistemi operativi, appiattiscono
+
+00:00:54.080 --> 00:00:57.580
+le tabelle in reliquie separate da virgole e caricano i cadaveri in one-lake. È rassicurante,
+
+00:00:57.780 --> 00:01:02.280
+prevedibile, misurabile, seducentemente semplice. Ma ciò che si ottiene è un museo statico di
+
+00:01:02.280 --> 00:01:05.920
+istantanee. Ogni file rappresenta l'aspetto delle cose in un momento e inizia immediatamente
+
+00:01:05.920 --> 00:01:10.560
+a decadere. Non c'è movimento, nessuna relazione, nessun contesto in evoluzione, solo file, tantissimi.
+
+00:01:10.720 --> 00:01:13.880
+La verità, questo approccio aveva senso quando i dati erano memorizzati in locale
+
+00:01:13.880 --> 00:01:17.540
+in sistemi vincolati. Fabric è stato progettato per qualcosa di completamente diverso. Dati dinamici,
+
+00:01:17.780 --> 00:01:21.200
+dati in streaming, intelligenza contestuale. One-lake non è un archivio. Dovrebbe essere
+
+00:01:21.200 --> 00:01:25.260
+il sistema circolatorio del flusso di informazioni della tua organizzazione. Trattarlo come un archivio
+
+00:01:25.260 --> 00:01:28.460
+a freddo è l'equivalente digitale dell'imbalsamazione delle metriche aziendali.
+
+00:01:28.680 --> 00:01:33.360
+Senza modelli semantici, i tuoi dati non hanno linguaggio. Senza relazioni, non hanno memoria.
+
+00:01:33.520 --> 00:01:38.660
+Un CSV dalle vendite, un CSV dal marketing, un CSV dalla finanza, possono coesistere pacificamente
+
+00:01:38.660 --> 00:01:42.660
+nello stesso lache e non comunicare mai tra loro. Mancano strutture di governance e apparentemente
+
+00:01:42.660 --> 00:01:46.840
+i metadati sono facoltativi. Il risultato è un isolamento così puro che persino Copilot,
+
+00:01:47.240 --> 00:01:49.200
+l'IA di Microsoft, non riesce a interpretarlo.
+
+00:01:49.200 --> 00:01:53.080
+Se chiedi a Copilot quali sono stati i fattori trainanti del fatturato dell'ultimo trimestre,
+
+00:01:53.280 --> 00:01:56.800
+non sa dove cercare perché non gli hai mai detto cosa significa fatturato nel tuo schema.
+
+00:01:57.040 --> 00:02:00.680
+Facciamo un esempio micro. Supponiamo che il tuo set di dati sulle vendite contenga record
+
+00:02:00.680 --> 00:02:05.040
+di transazioni, date, importi, scudi prodotti e codici regione. Li scarichi tranquillamente
+
+00:02:05.040 --> 00:02:08.480
+in un lache. Nessun modello semantico, nessuna relazione denominata, solo colonne di tabelle
+
+00:02:08.480 --> 00:02:11.520
+non elaborate. Ora, chiedi all'intelligenza artificiale di fabbrica di identificare le regioni
+
+00:02:11.520 --> 00:02:15.200
+con le migliori prestazioni. Scrolla le spalle. Non può contestualizzare il codice regione
+
+00:02:15.200 --> 00:02:18.060
+senza metadati che lo colleghino alla geografia o alle unità organizzative.
+
+00:02:18.060 --> 00:02:22.380
+Per la macchina, USN potrebbe significare Nord America o segmento utente Nord. Gli esseri
+
+00:02:22.380 --> 00:02:25.860
+umani si affidano all'inferenza. L'intelligenza artificiale richiede una struttura esplicita.
+
+00:02:26.000 --> 00:02:28.940
+Questo è il divario che trasforma il tuo magazzino in un obitorio. Ecco cosa sfugge
+
+00:02:28.940 --> 00:02:32.460
+alla maggior parte delle persone. Fabric non tratta i dati inattivi e quelli in movimento
+
+00:02:32.460 --> 00:02:36.280
+come specie separate. Presuppone che ogni set di dati possa un giorno diventare un partecipante
+
+00:02:36.280 --> 00:02:40.800
+intelligente, interrogato in tempo reale, arricchito dal contesto, rimodellato da regole di governance
+
+00:02:40.800 --> 00:02:45.000
+e persino ragionato da agenti. Quando si conservano i CSV senza attivare tali connessioni,
+
+00:02:45.000 --> 00:02:49.680
+si ignora la progettazione metabolica di Fabric. Si taglia il suo sistema nervoso. Confronta
+
+00:02:49.680 --> 00:02:53.780
+questo con i dati in movimento. In Fabric, i moduli di intelligenza in tempo reale acquisiscono
+
+00:02:53.780 --> 00:02:57.960
+segnali di streaming, eventi IoT, registri delle transazioni, ping dei sensori e li inseriscono
+
+00:02:57.960 --> 00:03:01.220
+in set di dati in tempo reale che possono attivare risposte immediate. Il rilevamento
+
+00:03:01.220 --> 00:03:05.140
+delle anomalie non viene eseguito settimanalmente, ma in modo continuo. L'analisi delle tendenze
+
+00:03:05.140 --> 00:03:09.020
+non attende la fine del trimestre, ma si aggiorna a ogni nuovo record. Ecco come appaiono
+
+00:03:09.020 --> 00:03:13.480
+i dati in tempo reale, costantemente valutati, contestualizzati da agenti di intelligenza
+
+00:03:13.480 --> 00:03:17.640
+artificiale e soggetti a regole di governance in millisecondi. La differenza tra dati inattivi
+
+00:03:17.640 --> 00:03:21.400
+e dati in movimento è fondamentale. I dati inattivi rispondono a ciò che è accaduto,
+
+00:03:21.780 --> 00:03:25.040
+ma i dati in movimento rispondono a ciò che sta accadendo e a cosa dovremmo fare dopo.
+
+00:03:25.240 --> 00:03:29.120
+Se il tuo magazzino fa solo la prima cosa, stai gestendo un archivio storico, non un motore
+
+00:03:29.120 --> 00:03:33.100
+decisionale. Lo scopo di Fabric è comprimere quella sequenza temporale fino a quando osservazione
+
+00:03:33.100 --> 00:03:37.160
+e azione non siano distinguibili. Senza l'attivazione dell'intelligenza artificiale, stai immagazzinando
+
+00:03:37.160 --> 00:03:41.200
+fossili. Con essa, stai gestendo organismi viventi che si adattano al contesto. Pensa
+
+00:03:41.200 --> 00:03:45.180
+al tuo magazzino come a un corpo. Un lago è il flusso sanguigno. I modelli semantici
+
+00:03:45.180 --> 00:03:49.040
+sono il DNA e gli agenti di dati sono le cellule cerebrali che inviano segnali tra i sistemi.
+
+00:03:49.200 --> 00:03:52.320
+In questo momento, la maggior parte di voi ha il flusso sanguigno ma nessuna funzione.
+
+00:03:52.500 --> 00:03:57.380
+Gli organi esistono, ma niente si coordina. E sì, è comodo così. Nessuna sorpresa, nessuna
+
+00:03:57.380 --> 00:04:01.780
+automazione improvvisa, nessuna raccomandazione non autorizzata. I sistemi statici non disobbediscono,
+
+00:04:01.980 --> 00:04:06.620
+ma non competono nemmeno. In un ambiente in cui il 90% delle grandi aziende alimenta i propri magazzini
+
+00:04:06.620 --> 00:04:10.560
+con agenti di intelligenza artificiale. Lasciare i dati inerti è come riempire un acquario di
+
+00:04:10.560 --> 00:04:14.660
+lusso con pesci di plastica perché preferisci la prevedibilità alla vita. Quindi, cosa dovrebbe
+
+00:04:14.660 --> 00:04:19.320
+essere vivo nel tuo lago? Le relazioni. Il contesto e l'intelligenza che collegano i tuoi set di dati
+
+00:04:19.320 --> 00:04:23.020
+in una visione del mondo coesa. Una volta che smetti di scaricare file CSV non elaborati e
+
+00:04:23.020 --> 00:04:26.600
+inizi a modellare le informazioni per il consumo tramite intelligenza artificiale, Fabric inizia a
+
+00:04:26.600 --> 00:04:30.960
+comportarsi come previsto. Un ecosistema di dati viventi e pensanti anziché una ghiacciaia di numeri
+
+00:04:30.960 --> 00:04:35.720
+obsoleti. Se la tua pipeline ETL termina ancora con l'archiviazione di file CSV, congratulazioni.
+
+00:04:35.720 --> 00:04:39.900
+Hai automatizzato il processo di sepoltura più costoso al mondo. Nella prossima sezione,
+
+00:04:40.200 --> 00:04:44.680
+riesumeremo quei file. Daremo loro un cervello e ti mostreremo cosa rende Fabric intelligente gli
+
+00:04:44.680 --> 00:04:49.380
+agenti dati. Il livello di intelligenza mancante. Ecco la parte che tutti saltano, il livello di
+
+00:04:49.380 --> 00:04:53.480
+intelligenza vero e proprio. Ciò che separa un magazzino da un cervello. Microsoft li chiama
+
+00:04:53.480 --> 00:04:57.660
+agenti dati, ma pensali come neuroni che finalmente iniziano a funzionare quando smetti di trattare un lago
+
+00:04:57.660 --> 00:05:02.200
+come un armadietto di stoccaggio. Questi agenti non sono funzionalità decorative. Sono la corteccia
+
+00:05:02.200 --> 00:05:06.220
+operativa che Fabric installa silenziosamente per te e che la maggior parte di voi ignora
+
+00:05:06.220 --> 00:05:11.080
+eroicamente. Cominciamo dall'errore. Le persone sono ossessionate dalle dashboard. Pensano che se
+
+00:05:11.080 --> 00:05:14.980
+Power B mostra una linea colorata che tende verso l'alto, hanno raggiunto l'illuminazione. Nel
+
+00:05:14.980 --> 00:05:18.900
+frattempo, hanno lasciato scollegato il livello di ragionamento, l'elemento dinamico che interpreta
+
+00:05:18.900 --> 00:05:23.540
+i modelli e agisce su di essi. È come acquistare una Tesla. Ammirare la grafica dello schermo e non
+
+00:05:23.540 --> 00:05:27.680
+premere mai l'acceleratore. L'utente medio ritiene che la bellezza di Fabric risieda nelle
+
+00:05:27.680 --> 00:05:32.160
+metriche uniformi. In realtà, risiede nell'attività sinaptica negli agenti che pensano. Quindi,
+
+00:05:32.440 --> 00:05:36.620
+cosa sono esattamente questi agenti di dati? Sono interfacce basate sull'intelligenza artificiale
+
+00:05:36.620 --> 00:05:39.840
+tra il tuo warehouse e i servizi cognitivi di Azure, creati per ragionare sui dati,
+
+00:05:40.000 --> 00:05:43.920
+non solo per interrogarli. Vivono su un unico lake, ma si integrano tramite Azure i Fundry,
+
+00:05:44.240 --> 00:05:48.180
+dove ereditano la capacità di recuperare, dedurre e applicare la logica in base al contesto
+
+00:05:48.180 --> 00:05:52.860
+della tua organizzazione. Ed ecco il colpo di scena cruciale. Partecipano a un framework denominato
+
+00:05:52.860 --> 00:05:57.140
+protocolli di contesto del modello. Ciò consente a più agenti di condividere memoria e obiettivi,
+
+00:05:57.140 --> 00:06:01.280
+in modo che possano collaborare, trasferire attività e persino negoziare risultati come
+
+00:06:01.280 --> 00:06:05.120
+colleghi che leggono effettivamente il manuale aziendale. Ogni agente può essere configurato
+
+00:06:05.120 --> 00:06:09.240
+per rispettare i limiti di governance e sicurezza. Non si aggirano alla cieca nei dati sensibili
+
+00:06:09.240 --> 00:06:13.580
+perché Fabric applica i criteri tramite l'accesso basato su competenza e ruolo. Questo collegamento
+
+00:06:13.580 --> 00:06:17.620
+di governance fornisce loro qualcosa di simile a ciò che l'analisi non ha mai avuto, un freno morale.
+
+00:06:17.820 --> 00:06:21.360
+L'agente finanziario del tuo CFO non può leggere accidentalmente i dati sugli stipendi delle
+
+00:06:21.360 --> 00:06:25.680
+risorse umane a meno che non gli venga espressamente consentito. È la differenza tra ragionare e frugare.
+
+00:06:25.680 --> 00:06:30.100
+Ora, confronta questi agenti dati con Copilot, l'assistente celebrità con cui tutti amano
+
+00:06:30.100 --> 00:06:35.000
+parlare. Copilot si trova all'interno di Teams o Power B. È affascinante, reattivo e in un certo
+
+00:06:35.000 --> 00:06:39.760
+senso superficiale. Risponde a ciò che chiedi. Gli agenti dati, al contrario, sono quelli che hanno
+
+00:06:39.760 --> 00:06:43.960
+già letto le previsioni trimestrali, individuato incongruenze e redatto raccomandazioni prima
+
+00:06:43.960 --> 00:06:49.580
+ancora che tu aprissi la dashboard. Copilot è uno studente. Gli agenti sono revisori. Uno obbedisce,
+
+00:06:49.840 --> 00:06:53.640
+l'altro anticipa. Facciamo un esempio. La tua attività di vendita al dettaglio
+
+00:06:53.640 --> 00:06:57.880
+elabora transazioni giornaliere tramite Fabric. Senza agenti, passeresti i venerdì
+
+00:06:57.880 --> 00:07:02.860
+a esportare riepiloghi. Prodotti più venduti, regioni in crescita, anomalie oltre la soglia.
+
+00:07:03.000 --> 00:07:08.220
+Con gli agenti, il magazzino diviene senziente e nota che le vendite a Est superano del 20%
+
+00:07:08.220 --> 00:07:13.380
+le previsioni, mentre i registri segnalano consegne in ritardo. Un agente rileva la discrepanza.
+
+00:07:13.740 --> 00:07:17.900
+La segna come rischio di evasione, avvisa e propone di ridistribuire l'inventario.
+
+00:07:17.900 --> 00:07:21.800
+Nessuno ha chiesto, ha dedotto. Questa non è fantascienza. È l'intelligenza in tempo
+
+00:07:21.800 --> 00:07:25.260
+reale di fabbrica unita al ragionamento agentico. Fermati un attimo a riflettere su cosa significa.
+
+00:07:25.480 --> 00:07:28.560
+Il tuo magazzino ha appena eseguito un giudizio. Non una query, non un avviso,
+
+00:07:28.720 --> 00:07:32.300
+ma un'analisi che richiedeva la comprensione dell'intento aziendale. Ha identificato un'anomalia,
+
+00:07:32.700 --> 00:07:37.240
+incrociato i dati e agito con responsabilità. Questa è la soglia in cui il data warehouse diventa
+
+00:07:37.240 --> 00:07:41.460
+un sistema decisionale. Senza agenti, continueresti a esportare elementi visivi di Power
+
+00:07:41.460 --> 00:07:45.700
+Bean Slide fingendo di aver scoperto il problema manualmente. Ecco la parte strana. La maggior parte
+
+00:07:45.700 --> 00:07:48.780
+delle aziende ha già attivato questa funzionalità all'interno delle proprie capacità Fabric.
+
+00:07:49.200 --> 00:07:52.680
+Semplicemente non l'hanno configurata. Hanno speso soldi. Hanno acquistato il software e si
+
+00:07:52.680 --> 00:07:56.020
+sono dimenticati di inizializzare la cognizione. Perché ciò richiede di pensare in termini di
+
+00:07:56.020 --> 00:07:59.700
+architettura. Definire relazioni semantiche. Stabilire istruzioni di intelligenza artificiale
+
+00:07:59.700 --> 00:08:03.860
+e collegare gli Endpoint One Lake all'infrastruttura di ragionamento. Ma una volta fatto, tutto cambia.
+
+00:08:04.020 --> 00:08:07.740
+Le dashboard diventano effetti collaterali dell'intelligence anziché destinazioni per
+
+00:08:07.740 --> 00:08:12.680
+l'analisi. Ripensa alla metafora del cimitero dei file CSV. Quei file CSV erano lapidi che segnavano
+
+00:08:12.680 --> 00:08:16.320
+dove i vecchi set di dati andavano a morire. Attiva gli agenti ed è il giorno della resurrezione.
+
+00:08:16.460 --> 00:08:20.440
+Il magazzino inizia a respirare. Le tabelle si allineano. Gli attributi acquisiscono significato
+
+00:08:20.440 --> 00:08:23.840
+e le metriche si sincronizzano in modo autonomo. Il sistema non si limita a segnalare la realtà.
+
+00:08:24.200 --> 00:08:28.360
+La interpreta mentre stai ancora scrivendo un email sui KP dell'ultimo trimestre. Naturalmente,
+
+00:08:28.600 --> 00:08:31.780
+questo cambiamento richiede un aggiornamento mentale, dalla gestione dell'archiviazione
+
+00:08:31.780 --> 00:08:36.680
+all'orchestrazione cognitiva. I data agent non attendono istruzioni, seguono obiettivi. Utilizzano
+
+00:08:36.680 --> 00:08:40.780
+protocolli di contesto del modello per comunicare con altri Microsoft agent, quelli in Power Automate
+
+00:08:40.780 --> 00:08:45.160
+365 nei servizi di intelligenza artificiale di Azure, condividendo il contesto di ragionamento
+
+00:08:45.160 --> 00:08:48.760
+tra le piattaforme. Ecco come una fluttuazione dei dati può innescare un flusso di lavoro
+
+00:08:48.760 --> 00:08:53.140
+adattivo o generare nuove informazioni in Excel senza la mediazione umana. E sì, se configurata
+
+00:08:53.140 --> 00:08:57.180
+male, questa autonomia può sembrare snervante, come avere stegisti che agiscono in modo deciso
+
+00:08:57.180 --> 00:09:01.000
+dopo aver letto male un foglio di calcolo. Ecco perché esiste la governance che raggiungeremo
+
+00:09:01.000 --> 00:09:04.920
+presto. Ma prima, accetta questa verità, un ritardo nell'intelligenza è un vantaggio perso.
+
+00:09:05.040 --> 00:09:08.460
+Più a lungo tratti Fabric come un archivio a freddo, più paghi per una piattaforma di intelligenza
+
+00:09:08.460 --> 00:09:12.320
+artificiale che funziona come un backup glorificato. Quindi, smettila di piangere il potenziale
+
+00:09:12.320 --> 00:09:16.120
+dei tuoi dati. Risveglia gli agenti, lascia che il tuo magazzino passi dall'essere un archivio
+
+00:09:16.120 --> 00:09:20.240
+a un organismo. Perché la prossima era dell'analisi non riguarda il porre domande migliori, riguarda
+
+00:09:20.240 --> 00:09:24.120
+il possedere sistemi che rispondono prima che tu possa digitarle. Come resuscitare il tuo
+
+00:09:24.120 --> 00:09:27.760
+magazzino con l'intelligenza artificiale? È il momento di riportare in vita il cadavere.
+
+00:09:27.960 --> 00:09:32.400
+La resurrezione non inizia dal codice, ma dal contesto. Perché il contesto è ossigeno per i dati.
+
+00:09:32.400 --> 00:09:36.480
+Il primo passo è infondere significato al tuo magazzino. Ciò significa creare modelli
+
+00:09:36.480 --> 00:09:40.440
+semantici. Questi modelli definiscono il modo in cui i tuoi dati pensano a se stessi. Le vendite
+
+00:09:40.440 --> 00:09:44.120
+sono legate ai clienti, i clienti alle regioni, le regioni alle strutture dei ricavi. Senza
+
+00:09:44.120 --> 00:09:48.200
+di essi, ogni potente agente AI è come un linguista con un dizionario ma senza la sintassi.
+
+00:09:48.320 --> 00:09:51.580
+In Fabric, utilizzi il livello di modellazione dei dati per dichiarare queste relazioni in
+
+00:09:51.580 --> 00:09:54.600
+modo esplicito, in modo che i tuoi agenti possano ragionare invece di indovinare.
+
+00:09:54.740 --> 00:09:59.420
+Passiamo al secondo passaggio, la distribuzione di un agente dati Fabric. In questo modo fornisce
+
+00:09:59.420 --> 00:10:04.020
+al tuo magazzino non solo un cervello ma anche una personalità, una mente operativa che sa cosa
+
+00:10:04.020 --> 00:10:09.040
+cercare. Quando avvisarti è come collegare i punti in un unico datalac. In pratica, apri
+
+00:10:09.040 --> 00:10:13.680
+Azure AI Fundry, definisci un agente dati e lo indirizzi ai tuoi set di dati Fabric.
+
+00:10:14.120 --> 00:10:18.420
+Immediatamente, eredita l'accesso all'intero livello semantico. Non è un chatbot, è un
+
+00:10:18.420 --> 00:10:21.940
+indicizzatore senziente addestrato sulla tua effettiva struttura aziendale. Da questo
+
+00:10:21.940 --> 00:10:25.740
+momento in poi, ogni tabella ha un angelo custode in grado di riconoscere modelli e inferenza.
+
+00:10:25.920 --> 00:10:29.680
+Il terzo passaggio riguarda le istruzioni. Un agente senza parametri è un bambino con
+
+00:10:29.680 --> 00:10:34.620
+accesso alla VPN aziendale. Devi fornire direttive specifiche per l'organizzazione. Cosa significano
+
+00:10:34.620 --> 00:10:39.480
+rischio, ricavi o priorità? Quali origini dati sono autorevoli? Quali sistemi non devono
+
+00:10:39.480 --> 00:10:43.600
+essere toccati senza l'approvazione umana? I criteri di governance di Purview si sincronizzano
+
+00:10:43.600 --> 00:10:48.040
+automaticamente, ma devi definire l'intento logico. Indica al tuo agente come comportarsi.
+
+00:10:48.200 --> 00:10:52.240
+Più chiare sono le tue definizioni, più coerente sarà il suo ragionamento. Pensa a questo come
+
+00:10:52.240 --> 00:10:56.160
+alla stesura del manuale aziendale per un dipendente che non dorme mai. Il quarto passaggio
+
+00:10:56.160 --> 00:11:00.020
+è l'integrazione, la parte che trasforma prototipi intelligenti in compagni quotidiani.
+
+00:11:00.180 --> 00:11:04.860
+Collega il tuo agente dati a Copilot Studio. Perché? Perché Copilot fornisce l'interfaccia
+
+00:11:04.860 --> 00:11:08.600
+in linguaggio naturale che i tuoi dipendenti già comprendono. Quando un addetto alle vendite
+
+00:11:08.600 --> 00:11:12.780
+digita, mostrami i modelli di abbandono emergenti, Copilot inoltre ha cortesemente la richiesta al
+
+00:11:12.780 --> 00:11:16.840
+tuo agente, che esegue un ragionamento genuino sui set di dati e invia un riepilogo leggibile
+
+00:11:16.840 --> 00:11:21.440
+dall'uomo, completo di citazioni e discendenza tracciabile. Questa è intelligenza servita in modo
+
+00:11:21.440 --> 00:11:25.460
+conversazionale. Una volta che questa base è attiva, il sistema inizia a compiere miracoli
+
+00:11:25.460 --> 00:11:29.980
+silenziosi. Prendi in considerazione il rilevamento delle tendenze. Il tuo agente esamina continuamente
+
+00:11:29.980 --> 00:11:34.060
+i dati transazionali, i livelli di inventario e le metriche di previsione. Quando il comportamento
+
+00:11:34.060 --> 00:11:38.000
+devia dalle aspettative, ad esempio un picco di vendite durante le festività che si verifica
+
+00:11:38.000 --> 00:11:42.260
+prima del previsto, avvisa il marketing due settimane prima che l'anomalia venga visualizzata
+
+00:11:42.260 --> 00:11:47.180
+in una dashboard, oppure invia avvisi KPI di immagini. Invece di regole di soglia manuali,
+
+00:11:47.420 --> 00:11:52.400
+l'agente riconosce le traiettorie che storicamente precedono le mancate consegne e le segnala preventivamente.
+
+00:11:52.400 --> 00:11:55.960
+Previsione del passo di abbandono, ottimizzazione della supply chain, verifica della conformità,
+
+00:11:56.260 --> 00:11:59.280
+ognuno di questi elementi diventa un processo dinamico, non un report trimestrale. Ed è qui
+
+00:11:59.280 --> 00:12:03.560
+che il design di Fabric eccelle. Questi agenti non vivono in isolamento. Comunicano tramite
+
+00:12:03.560 --> 00:12:07.420
+protocolli di contesto del modello con altri servizi Microsoft, creando un'orchestrazione
+
+00:12:07.420 --> 00:12:11.820
+multiagente. Un agente dati Fabric può identificare uno scu a rotazione lenta, inviare una notifica
+
+00:12:11.820 --> 00:12:15.600
+a un agente Power Automate per attivare un flusso di lavoro di sconto, sincronizzare i risultati
+
+00:12:15.600 --> 00:12:19.080
+in Dynamics tramite un altro agente Azure e infine presentare il risultato all'interno di Teams
+
+00:12:19.080 --> 00:12:23.220
+come avviso aziendale. Tale sequenza non richiede script personalizzati, ma solo intenzioni e
+
+00:12:23.220 --> 00:12:26.860
+connessioni definite correttamente. Hai appena assistito all'esecuzione di un lavoro autentico
+
+00:12:26.860 --> 00:12:30.900
+da parte dell'intelligenza distribuita. Questo è il vero punto che molti trascurano. Fabric
+
+00:12:30.900 --> 00:12:34.720
+non è un luogo in cui archiviare risultati. È un ambiente operativo per il ragionamento
+
+00:12:34.720 --> 00:12:38.900
+continuo. Trattarlo come un volt di dati statico spreca l'unica innovazione architettonica
+
+00:12:38.900 --> 00:12:43.540
+che lo distingue. Dovresti pensare in termini di agenti. Ogni set di dati diventa un attore.
+
+00:12:43.740 --> 00:12:48.500
+Ogni intuizione diventa un evento. Ogni processo aziendale diventa una conversazione adattiva
+
+00:12:48.500 --> 00:12:52.600
+orchestrata tra di loro. Il tuo lavoro passa dalla creazione di pipeline alla definizione
+
+00:12:52.600 --> 00:12:56.840
+delle intenzioni. Alcuni si tirano indietro. Vogliono un determinismo rassicurante. La
+
+00:12:56.840 --> 00:13:00.760
+certezza che nulla cambia meno che un essere umano non prema. Esegui. Ma i sistemi intelligenti
+
+00:13:00.760 --> 00:13:04.360
+prosperano sui cicli di feedback. Quando un agente perfeziona una metrica o automatizza
+
+00:13:04.360 --> 00:13:08.040
+un avviso, non sta assumendo il controllo, si sta assumendo la responsabilità. È così
+
+00:13:08.040 --> 00:13:12.060
+che i dati alla fine si guadagnano da vivere rilevando problemi, formulando raccomandazioni
+
+00:13:12.060 --> 00:13:15.680
+e imparando dalle correzioni. Se vi siete mai chiesti perché i concorrenti si muovono più
+
+00:13:15.680 --> 00:13:19.580
+velocemente con gli stessi set di dati. È perché i loro magazzini non aspettano istruzioni.
+
+00:13:19.960 --> 00:13:23.520
+Stanno dialogando internamente, risolvendo microproblemi prima ancora che i dirigenti
+
+00:13:23.520 --> 00:13:28.840
+ne vengano a conoscenza. Ecco come appare un ambiente fabric risorto. Vivo. Autocosciente
+
+00:13:28.840 --> 00:13:33.060
+e implacabilmente analitico. E sì. Dare vita ai tuoi dati richiede di dar loro dei limiti
+
+00:13:33.060 --> 00:13:36.580
+perché un'autonomia incontrollata si trasforma rapidamente in caos. Quindi, prima di lasciare
+
+00:13:36.580 --> 00:13:39.780
+che questi agenti vaghino liberamente, installiamo delle barriere di protezione che impediscano
+
+00:13:39.780 --> 00:13:43.360
+all'intelligence di diventare in subordinazione. La governance come barriera di protezione.
+
+00:13:43.360 --> 00:13:47.440
+Parliamo di moderazione. La parte che tutti ignorano finché qualcosa non prende fuoco.
+
+00:13:47.640 --> 00:13:51.240
+Fornire informazioni al tuo magazzino senza governance è come dare l'accesso ruta a uno
+
+00:13:51.240 --> 00:13:54.940
+stagista dell'ufficio e dire, sii creativo. La preparazione all'intelligenza artificiale
+
+00:13:54.940 --> 00:13:58.700
+non è una fede cieca, è una fiducia ingegnerizzata. E nell'universo Fabric, questa fiducia indossa
+
+00:13:58.700 --> 00:14:02.120
+tre uniformi. Competenza. Prevenzione della perdita di dati e livello di governance integrato
+
+00:14:02.120 --> 00:14:06.280
+di Fabric. Insieme. Tracciano le linee perimetrali che mantengono i tuoi agenti di dati brillanti
+
+00:14:06.280 --> 00:14:10.660
+ma obbedienti. In termini umani, la governance impedisce alla curiosità di intrufolarsi.
+
+00:14:10.660 --> 00:14:16.300
+Purview definisce chi vede cosa. La DLP evita fughe di dati in query imprudenti e la governance
+
+00:14:16.300 --> 00:14:20.620
+di Fabric applica le policy nelle vene della piattaforma. Se configurati correttamente,
+
+00:14:20.960 --> 00:14:24.680
+questi sistemi formano un sistema nervoso che rileva gli eccessi e applica la disciplina
+
+00:14:24.680 --> 00:14:28.640
+alla velocità della macchina. I tuoi agenti potrebbero ragionare, ma lo fanno all'interno
+
+00:14:28.640 --> 00:14:33.060
+di una sandbox rivestita di vetro di conformità. La sfumatura cruciale è che Fabric non tratta
+
+00:14:33.060 --> 00:14:37.520
+la governance come un compito esterno. È nativa di ogni transazione. Ogni set di dati
+
+00:14:37.520 --> 00:14:42.060
+ha il proprio passaporto di metadati, discendenza, classificazione e ruoli di accesso. Quindi,
+
+00:14:42.260 --> 00:14:46.340
+ogni volta che un agente estrae dati, trascina con sé il contesto dei metadati. Ecco come
+
+00:14:46.340 --> 00:14:50.020
+Fabric garantisce un'intelligenza artificiale sensibile al contesto. Le informazioni non vengono
+
+00:14:50.020 --> 00:14:53.560
+semplicemente recuperate, ma tracciate. È possibile vedere chi le ha toccate, quando
+
+00:14:53.560 --> 00:14:57.320
+e come si sono ramificate nei flussi di lavoro. È una contabilità forense per la cognizione.
+
+00:14:57.480 --> 00:15:01.840
+Ora, affrontiamo la fantasia dell'intelligence non governata. Molti team abilitano gli agenti,
+
+00:15:02.060 --> 00:15:05.480
+celebrano l'autonomia e tre settimane dopo si chiedono perché un bot utile abbia inviato
+
+00:15:05.480 --> 00:15:09.680
+numeri riservati a un canale condiviso. Perché in assenza di strutture di autorità esplicite,
+
+00:15:10.040 --> 00:15:14.760
+ogni agente diventa uno stagista improvvisato convinto di esibirsi in modo eroico. La governance
+
+00:15:14.760 --> 00:15:19.300
+trasforma quelle improvvisazioni in prove con un copione. Ruoli e autorizzazioni stabiliscono
+
+00:15:19.300 --> 00:15:23.740
+quali set di dati un agente può interrogare e quali azioni richiedono conferma. L'intelligenza
+
+00:15:23.740 --> 00:15:27.600
+artificiale pensa ancora in modo creativo, ma lo fa recitando il manuale di etica aziendale
+
+00:15:27.600 --> 00:15:31.220
+in tempo reale. L'arricchimento dei metadati svolge un ruolo discreto ma decisivo in questo
+
+00:15:31.220 --> 00:15:35.420
+caso. Ogni record ottiene livelli descrittivi, proprietà, sensibilità, discendenza.
+
+00:15:35.480 --> 00:15:40.480
+Quindi, quando un agente redige un riepilogo, sa già se il contenuto è pubblico o riservato.
+
+00:15:40.680 --> 00:15:45.280
+Con il grafico di discendenza di Fabric puoi ricondurre ogni conclusione dell'IA direttamente
+
+00:15:45.280 --> 00:15:49.360
+alla fonte dei dati grezzi. Ciò chiude il ciclo di interpretabilità, rendendo possibili
+
+00:15:49.360 --> 00:15:53.280
+gli audita anche nelle operazioni autonome. È la differenza tra automazione spiegabile
+
+00:15:53.280 --> 00:15:58.000
+e negazione plausibile. Il vantaggio psicologico è immenso. I dirigenti non temono più l'IA
+
+00:15:58.000 --> 00:16:02.080
+canaglia, potendone esaminare il ragionamento. I responsabili dei dati smettono di scrivere
+
+00:16:02.080 --> 00:16:05.520
+promemoria di governance perché le policy viaggiano insieme ai dati stessi. Fabric
+
+00:16:05.520 --> 00:16:09.880
+ottiene ciò che i vecchi sistemi B non sono mai riusciti a fare, la conformità autoapplicativa.
+
+00:16:10.100 --> 00:16:14.020
+Ogni intuizione ha una provenienza integrata. Ogni azione viene registrata con la precisione
+
+00:16:14.020 --> 00:16:17.880
+di un registratore di dati di volo. Naturalmente, le regole da sole non garantiscono saggezza.
+
+00:16:18.060 --> 00:16:22.040
+Si può governare troppo e soffocare la creatività con facilità. La governance è pensata per
+
+00:16:22.040 --> 00:16:26.100
+incanalare l'intelligenza, non per imbavagliarla. La genialità del modello di Fabric sta nella sua
+
+00:16:26.100 --> 00:16:29.940
+proporzionalità, nell'equilibrio tra automazione e responsabilità. Gli agenti agiscono
+
+00:16:29.940 --> 00:16:33.580
+rapidamente ma entro soglie definibili. Le decisioni che richiedono empatia, giudizio
+
+00:16:33.580 --> 00:16:37.440
+o responsabilità vengono automaticamente trasferite agli esseri umani. Mantieni la macchina veloce
+
+00:16:37.440 --> 00:16:41.880
+e gli esseri umani responsabili. Elegante. Ecco la cartina di tornasole. Se il tuo ambiente
+
+00:16:41.880 --> 00:16:45.600
+Fabric sembra selvaggio, hai una governance insufficiente. Se sembra paralizzato, hai una
+
+00:16:45.600 --> 00:16:49.860
+governance eccessiva. Il punto ottimale è l'orchestrazione. Una sinfonia in cui gli agenti
+
+00:16:49.860 --> 00:16:53.460
+suonano con sicurezza all'interno della partitura e la conformità risuona al ritmo anziché
+
+00:16:53.460 --> 00:16:57.960
+interruzioni tambureggianti. Una volta raggiunta la fiducia, è allora che Fabric mostra la sua
+
+00:16:57.960 --> 00:17:02.840
+vera natura. Una collaborazione disciplinata e senziente tra logica e legge. Il caos si
+
+00:17:02.840 --> 00:17:06.820
+placa. Le informazioni fluiscono e per la prima volta i tuoi dati non si comportano come un
+
+00:17:06.820 --> 00:17:11.240
+adolescente indisciplinato, ma come un professionista ben addestrato che sa esattamente fino a che
+
+00:17:11.240 --> 00:17:16.860
+punto può arrivare la genialità prima di violare le policy. L'ecosistema intelligente. Ciò che
+
+00:17:16.860 --> 00:17:21.580
+hai costruito finora, modelli semantici, agenti e governance, non è semplicemente un data
+
+00:17:21.580 --> 00:17:26.560
+warehouse, è una colonia. Ogni elemento in Microsoft Fabric è progettato per coesistere e cooperare.
+
+00:17:26.560 --> 00:17:31.860
+La bellezza sta nell'unificazione. Data engineering. Business intelligence e AI condividono lo stesso
+
+00:17:31.860 --> 00:17:36.740
+ossigeno. Separatamente. Sono impressionanti. Insieme. Si evolvono in qualcosa che rasenta
+
+00:17:36.740 --> 00:17:40.520
+il coordinamento senziente. Fabric non è un altro strumento nel tuo stack tecnologico,
+
+00:17:40.800 --> 00:17:44.060
+è il sistema operativo per l'intelligence aziendale. All'interno di un'unica area di
+
+00:17:44.060 --> 00:17:48.080
+lavoro, puoi progettare pipeline di dati, gestire magazzini, orchestrare analisi in tempo reale e
+
+00:17:48.080 --> 00:17:51.520
+invitare agenti di intelligenza artificiale a ragionare su tutto questo. Non c'è alcun passaggio
+
+00:17:51.520 --> 00:17:55.260
+di consegne tra i reparti, solo un flusso di lavoro continuo che inizia con l'inserimento e
+
+00:17:55.260 --> 00:17:59.480
+termina con l'analisi approfondita. Confronta questo con l'era pre-fabric, in cui erano necessarie
+
+00:17:59.480 --> 00:18:03.760
+quattro piattaforme e sei strette di mano prima che i dati avessero senso. Oggi, OneLake alimenta
+
+00:18:03.760 --> 00:18:08.300
+tutto. PowerB lo visualizza. L'intelligence in tempo reale reagisce e gli agenti di dati lo
+
+00:18:08.300 --> 00:18:12.760
+interpretano. Hai finalmente un'orchestrazione anziché un caos di coordinamento. Considera la
+
+00:18:12.760 --> 00:18:17.000
+manutenzione predittiva. In un ambiente fabric, i dati dei sensori vengono trasmessi tramite
+
+00:18:17.000 --> 00:18:20.860
+l'intelligence in tempo reale. Il livello di ingegneria dei dati li modella. L'agente di dati
+
+00:18:20.860 --> 00:18:24.420
+rileva frequenze di vibrazione irregolari e prima ancora che un tecnico veda una dashboard,
+
+00:18:24.740 --> 00:18:28.380
+un agente di power automate ha pianificato i ticket di ispezione. Questa è cognizione
+
+00:18:28.380 --> 00:18:31.940
+a ciclo chiuso, un sistema che non attende l'autorizzazione per prevenire un problema.
+
+00:18:32.140 --> 00:18:36.800
+Passa al marketing. I dati della campagna confluiscono in OneLake da Dynamics, elaborati
+
+00:18:36.800 --> 00:18:41.260
+da Data Factory, contestualizzati da modelli semantici e interpretati da un agente addestrato
+
+00:18:41.260 --> 00:18:46.060
+su modelli di risposta storici. Quando il tasso di click diminuisce, l'agente esegue un riferimento
+
+00:18:46.060 --> 00:18:50.400
+incrociato alla stagionalità, propone nuove tempistiche e invia suggerimenti al pannello
+
+00:18:50.400 --> 00:18:55.140
+copilot di Power B affinché il responsabile del marketing umano li approvi. Fabric non
+
+00:18:55.140 --> 00:18:59.620
+sostituisce la creatività, la amplifica con una consapevolezza situazionale continua.
+
+00:18:59.820 --> 00:19:04.140
+E la produzione? Un agente operativo correla i dati di produzione con i livelli di fornitura,
+
+00:19:04.460 --> 00:19:08.460
+istruendo un altro agente in Azure a riequilibrare automaticamente gli ordini di approvvigionamento.
+
+00:19:08.620 --> 00:19:13.520
+Quando la domanda aumenta, il sistema non va nel panico, si reindirizza in millisecondi.
+
+00:19:13.520 --> 00:19:17.920
+Ecco cosa significa realmente intelligenza autoregolante. Dati che possono percepire
+
+00:19:17.920 --> 00:19:21.300
+il proprio squilibrio e correggerlo prima che qualcuno scriva un'email di escalation.
+
+00:19:21.480 --> 00:19:25.260
+Ogni volta che Fabric collega queste parti in movimento, il valore si accumula. I dati
+
+00:19:25.260 --> 00:19:28.580
+hanno una discendenza, le informazioni hanno una paternità e le azioni hanno una logica.
+
+00:19:28.740 --> 00:19:32.520
+Power B non è solo un endpoint di visualizzazione, è una superficie di espressione per la mente
+
+00:19:32.520 --> 00:19:35.800
+della macchina. Data Factory cessa di essere un motore di acquisizione e diventa un'arteria
+
+00:19:35.800 --> 00:19:39.860
+vivente che alimenta una cognizione continua. Intelligenza in tempo reale, ecco i riflessi di
+
+00:19:39.860 --> 00:19:43.380
+Fabric. Senza di essa, il sistema capirebbe ma non risponderebbe mai. Insieme,
+
+00:19:43.520 --> 00:19:46.880
+questi livelli costituiscono quello che potrebbe essere il primo ecosistema digitale veramente
+
+00:19:46.880 --> 00:19:51.000
+cooperativo. Un ambiente in cui archiviazione, ragionamento e azione sono indistinguibili
+
+00:19:51.000 --> 00:19:55.240
+nella pratica. La svolta democratizzante è Copilot. Trasforma tutta questa complessità
+
+00:19:55.240 --> 00:20:00.580
+in conversazione. Gli utenti aziendali non devono imparare KQL o DAX, digitano domande in Teams.
+
+00:20:00.820 --> 00:20:05.400
+Dietro le quinte, Copilot delega il ragionamento agli agenti dati, che recuperano risposte convalidate
+
+00:20:05.400 --> 00:20:09.300
+e conformi alle policy. I dipendenti hanno una chiarezza immediata, mentre i responsabili
+
+00:20:09.300 --> 00:20:12.900
+della governance dormono tranquilli sapendo che ogni dato ha una provenienza certa. È
+
+00:20:12.900 --> 00:20:16.840
+l'unione di accessibilità e autorevolezza. Il raro momento in cui la facilità ad uso non
+
+00:20:16.840 --> 00:20:21.240
+diluisce il rigore. È qui che la tradizionale mentalità bicrolla definitivamente. Gli ecosistemi
+
+00:20:21.240 --> 00:20:26.260
+di dati di ieri producevano report retrospettivi. L'ecosistema Fabric di oggi produce consapevolezza
+
+00:20:26.260 --> 00:20:30.880
+della situazione. Non misuri le prestazioni, le sperimenti continuamente. Il magazzino non
+
+00:20:30.880 --> 00:20:35.080
+è più un'infrastruttura passiva, è il sistema nervoso strategico dell'azienda.
+
+00:20:35.080 --> 00:20:40.220
+L'intelligenza di Fabric non è brillantezza isolata, è genio cooperativo. Pensa al cambiamento
+
+00:20:40.220 --> 00:20:44.380
+visivamente. Il vecchio lago era orizzontale, i dati scorrevano in una direzione e poi si
+
+00:20:44.380 --> 00:20:48.320
+fermavano. Fabric è verticale. I dati salgono attraverso l'ingegneria, la modellazione,
+
+00:20:48.540 --> 00:20:51.660
+il ragionamento, la visualizzazione e l'azione in una salita perpetua come il calore che
+
+00:20:51.660 --> 00:20:55.580
+sale attraverso un'atmosfera. Ciò che emerge in cima non è solo analisi, è lungimiranza.
+
+00:20:55.720 --> 00:21:00.040
+Quindi, la domanda diventa dolorosamente semplice. Popolerai questo ambiente vivente con entità
+
+00:21:00.040 --> 00:21:03.960
+intelligenti o continuerai ad accumulare file piatti come lapidi? Perché a questo stadio
+
+00:21:03.960 --> 00:21:08.560
+l'ignoranza è una scelta. Fabric ti fornisce il tessuto e i neuroni. Rifiutare l'attivazione
+
+00:21:08.560 --> 00:21:12.300
+è come acquistare un cervello e insistere per andare in coma. Quando funziona correttamente,
+
+00:21:12.600 --> 00:21:16.660
+il tuo ecosistema Fabric si comporta meno come un software e più come un organismo sincronizzato
+
+00:21:16.660 --> 00:21:20.280
+dal feedback. Ogni volta che un set di dati cambia, ogni livello si adatta, garantendo
+
+00:21:20.280 --> 00:21:23.840
+che l'intelligenza non si cristallizzi mai. Questo è, in fin dei conti, lo scopo per cui
+
+00:21:23.840 --> 00:21:27.460
+è stato creato. Non una reportistica statica, ma uno stato di apprendimento perpetuo.
+
+00:21:27.600 --> 00:21:32.320
+E ora giungiamo all'inevitabile bibio. Che tu intenda mantenere quel ciclo evolutivo o chiuderlo
+
+00:21:32.320 --> 00:21:37.400
+di nuovo con il tuo prossimo caricamento CSV. La scelta. Ecco la cruda verità. Microsoft
+
+00:21:37.400 --> 00:21:41.060
+Fabric non è un prodotto di archiviazione. È un motore di intelligenza che si maschera
+
+00:21:41.060 --> 00:21:44.940
+da tale per evitare di spaventare i tradizionalisti. Non hai acquistato spazio su disco. Hai
+
+00:21:44.940 --> 00:21:48.660
+acquistato la cognizione come servizio. Il tuo data warehouse respira solo quando i tuoi
+
+00:21:48.660 --> 00:21:53.040
+agenti sono svegli. Quando dormono, l'ecosistema torna a essere un archivio silenzioso che finge
+
+00:21:53.040 --> 00:21:56.760
+di essere moderno. I tuoi concorrenti non ti stanno superando con set di dati più grandi.
+
+00:21:56.900 --> 00:21:59.960
+Ti stanno superando in astuzia con gli stessi dati configurati in modo intelligente.
+
+00:21:59.960 --> 00:22:03.240
+Lasciano che i loro agenti interpretino le tendenze prima che inizino le riunioni. Stai
+
+00:22:03.240 --> 00:22:07.620
+ancora formatando le esportazioni. Il divario tecnologico è minimo. Il divario cognitivo
+
+00:22:07.620 --> 00:22:11.520
+è abissale. Quindi, scegli il tuo futuro con saggezza. Continua a trattare Fabric come
+
+00:22:11.520 --> 00:22:15.040
+un costoso obitorio di dati o invitalo ad agire come ciò per cui è stato progettato, ovvero
+
+00:22:15.040 --> 00:22:19.160
+un framework di pensiero per la tua azienda. Rianima quei set di dati. Lascia che gli agenti
+
+00:22:19.160 --> 00:22:22.500
+ragionino. Lascia che la governance li guidi e lascia che l'intuizione diventi un riflesso
+
+00:22:22.500 --> 00:22:26.520
+piuttosto che un rituale. E se questa rivelazione ti ha anche solo un po' ferito, bene, questo
+
+00:22:26.520 --> 00:22:30.920
+è il segno di una rianimazione concettuale. Ora, prima che il tuo prossimo lavoro ETL imbalsami
+
+00:22:30.920 --> 00:22:34.520
+un altro mese di metriche, iscriviti per analisi più approfondite su come integrare l'intelligenza
+
+00:22:34.520 --> 00:22:38.780
+in Microsoft Fabric stesso. Continua a trattarlo come un cimitero di CSV. Semplicemente non
+
+00:22:38.780 --> 00:22:39.520
+chiamarlo Fabric.

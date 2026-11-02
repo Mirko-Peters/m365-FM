@@ -1,0 +1,952 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.680
+Sie verbringen den halben Tag damit, auf Genehmigungen zu warten.
+
+00:00:02.840 --> 00:00:08.980
+Jemand ist im Urlaub, ein anderer hat die E-Mail übersehen und wenn die Entscheidung endlich eintrifft, ist der Kontext der Anfrage bereits hinfällig.
+
+00:00:09.080 --> 00:00:12.800
+Ein unternehmerisches Fegefeuer, in dem der Fortschritt von Leuten gebremst wird, die behaupten, beschäftigt zu sein.
+
+00:00:12.980 --> 00:00:15.180
+Stellen Sie sich nun ein System vor, das schlichtweg nicht wartet.
+
+00:00:15.340 --> 00:00:18.340
+Ein Workflow, der genau in dem Moment fortfährt, in dem die Bedingungen erfüllt sind.
+
+00:00:18.480 --> 00:00:22.860
+Hier kommen die Agent-Flows von Microsoft Co-Pilot Studio ins Spiel der Bürokratikiller im Gewand der Automatisierung.
+
+00:00:23.060 --> 00:00:24.780
+Hier wird die Key zu ihrem ersten Prüfer.
+
+00:00:24.780 --> 00:00:31.120
+Sie liest die Daten, gleicht sie mit Richtlinien ab und entscheidet fundiert über Genehmigung oder Ablehnung, noch bevor ein Mensch blinzeln kann.
+
+00:00:31.300 --> 00:00:36.400
+Nur Grenzwertfälle landen im Posteingang eines Managers, das bedeutet Geschwindigkeit ohne Einbußen bei der Kontrolle.
+
+00:00:36.560 --> 00:00:45.060
+Und anders als herkömmliche Genehmigungsprozesse, die an komplexen Bedingungen scheitern, skalieren diese Key-gesteuerten Abläufe und verzweigen, validieren und prüfen sich selbst.
+
+00:00:45.220 --> 00:00:52.860
+In dieser Anleitung zeige ich Ihnen, wie Sie ein mehrstufiges, bedingtes Genehmigungssystem aufbauen, das schneller entscheidet, als Ihre Kollegen, die allen Antworten, Taste finden können.
+
+00:00:52.860 --> 00:01:04.300
+Sie erfahren, wie Sie eine Key-Stufe mit benutzerdefinierter Logik einrichten, gezielte menschliche Prüfungen ergänzen, dynamische Bedingungen für intelligentes Routing entwerfen und eine echte Dokumentenvalidierung zur Compliance integrieren.
+
+00:01:04.440 --> 00:01:09.480
+Am Ende verfügen Sie über einen automatisierten Prozess, der weiß, wann er wie eine Maschine denken und wann er menschlichem Urteilsvermögen den Vorzug geben muss.
+
+00:01:09.600 --> 00:01:11.340
+Hören Sie auf, in einer Warteschlange zu stehen.
+
+00:01:11.560 --> 00:01:13.060
+Lassen Sie die Logik die Führung übernehmen.
+
+00:01:13.280 --> 00:01:15.060
+Das Problem mit herkömmlichen Genehmigungen
+
+00:01:15.060 --> 00:01:19.000
+Traditionelle Genehmigungsketten sind eine tragische Neuauflage derselben Ineffizienz.
+
+00:01:19.000 --> 00:01:26.020
+Jemand reicht ein Formular ein, E-Mails fliegen hin und her, Tabellen laufen auseinander und zwischen all den Weiterleitungen weiß niemand mehr, welche Version die Finale war.
+
+00:01:26.180 --> 00:01:28.780
+Jeder Beteiligte erzeugt Verzögerungen, keinen Mehrwert.
+
+00:01:28.920 --> 00:01:31.720
+Der Prozess verwaltet nicht die Arbeit, er produziert Latenz.
+
+00:01:31.860 --> 00:01:37.440
+Typische Power-Automate-Genehmigungsabläufe versuchen dies zu lösen, stoßen aber an ihre Grenzen, sobald es nuanciert wird.
+
+00:01:37.580 --> 00:01:41.260
+Ein einziger Genehmigungspfad funktioniert gut, wenn Sie nur ein Ja oder Nein benötigen.
+
+00:01:41.260 --> 00:01:46.460
+Sobald Sie Management-Ebenen, Ausgabengrenzen oder spezielle Regeln hinzufügen, beginnt das Design zu zersplittern.
+
+00:01:46.600 --> 00:01:51.800
+Sie enden damit, Bedingungen wie Matroschka-Puppen zu verschachteln, unelegant, instabil und nach sechs Monaten unmöglich zu debuggen.
+
+00:01:51.900 --> 00:01:54.940
+Ein defekter Connector und das gesamte System versagt geräuschlos.
+
+00:01:55.120 --> 00:01:59.040
+Menschen werden zum Flaschenhals oder, um es brutal genau zu sagen, zu Latenzknoten.
+
+00:01:59.220 --> 00:02:02.400
+Jede Nachricht, die Sie erhalten, wird zu einem weiteren Asynchronen hin und her.
+
+00:02:02.560 --> 00:02:06.420
+E-Mail als Genehmigungsmechanismus ist so, als würde man in einer Glasfaserwelt Brieftauben einsetzen.
+
+00:02:06.580 --> 00:02:08.680
+Es funktioniert technisch gesehen, sollte es aber nicht.
+
+00:02:08.680 --> 00:02:10.640
+Microsoft Co-Pilot Studio tritt an.
+
+00:02:10.780 --> 00:02:13.740
+Dies ist nicht nur eine schrittweise Weiterentwicklung von Power-Automate.
+
+00:02:13.920 --> 00:02:21.620
+Es führt Agent Flos ein Genehmigungssysteme, die von Key angetrieben und vollständig in die Datenquellen, Rollen und Logikstrukturen ihres Unternehmens integriert sind.
+
+00:02:21.780 --> 00:02:25.800
+Es schlägt eine Brücke zwischen deterministischer Richtliniendurchsetzung und adaptiver Entscheidungsfindung.
+
+00:02:25.900 --> 00:02:28.980
+Die Genialität liegt in der Art und Weise, wie es die Stufen voneinander trennt.
+
+00:02:29.200 --> 00:02:32.920
+Automatisiert, wo Geschwindigkeit gefragt ist, menschlich, wo Validierung erforderlich bleibt.
+
+00:02:33.080 --> 00:02:35.300
+Betrachten Sie es als eine Neugestaltung der Hierarchie.
+
+00:02:35.300 --> 00:02:41.140
+Die Key-Stufe bewertet feste Regeln, Betragsgrenzen, Kategorietypen und Datumsbereiche mit klinischer Effizienz.
+
+00:02:41.260 --> 00:02:47.440
+Wenn eine Entscheidung dann uneindeutig ist, wird der Prozess an die menschliche Prüfung eskaliert, ohne jeden trivialen Fall in eine Warteschlange zu zwingen.
+
+00:02:47.560 --> 00:02:49.300
+Dies allein eliminiert exponentielle Verzögerungen.
+
+00:02:50.100 --> 00:02:55.680
+Anstatt dass 10 Personen serielle Prüfungen durchführen, erledigt die Key 80% sofort und leitet nur Ausreißer weiter.
+
+00:02:55.680 --> 00:03:03.580
+Und ja, Co-Pilot Studio verfolgt alles über sein Dataverse-Rückgrat und erstellt überprüfbare Protokolle, ohne dass ihr Team E-Mail-Archive durchsuchen muss.
+
+00:03:03.760 --> 00:03:05.800
+Frühere Workflows wurden für Menschen gebaut.
+
+00:03:06.120 --> 00:03:11.140
+Agentenflows sind um sie herum aufgebaut und halten Menschen nur dann im Loop, wenn Interpretation statt Wiederholung gefragt ist.
+
+00:03:11.320 --> 00:03:16.860
+Sobald Sie sehen, wie diese Architektur funktioniert, wirken herkömmliche Genehmigungen primitiv, wie das Führen von Kassenbüchern bei Kerzenschein.
+
+00:03:16.860 --> 00:03:20.200
+Es geht um einfache Dinge, Compliance, Konsistenz und Skalierbarkeit.
+
+00:03:20.340 --> 00:03:25.980
+Moderne Betriebsabläufe gehen ohne automatisierte Validierung unter und Key-gestützte Logik ist heute die Grundlage für Zuverlässigkeit.
+
+00:03:26.140 --> 00:03:33.920
+Wenn Sie von statischen Abläufen zu konditionalen, prüfbaren Agentenflos migrieren, hören Sie auf, Genehmigungen reaktiv zu verwalten und beginnen, sie als lebendige Systeme zu behandeln.
+
+00:03:34.040 --> 00:03:37.540
+Der Unterschied liegt nicht nur in der Geschwindigkeit, sondern in der strukturellen Vernunft.
+
+00:03:37.700 --> 00:03:40.420
+Die Key-Stufe aufbauen, den ersten Genehmiger anlernen.
+
+00:03:40.640 --> 00:03:44.360
+Jetzt kommt der interessante Teil, das Training Ihres ersten digitalen Bürokraten.
+
+00:03:44.360 --> 00:03:47.580
+Die Key-Stufe ist der logische Pförtner Ihres Genehmigungsprozesses.
+
+00:03:47.720 --> 00:03:52.800
+Ihre Aufgabe ist es nicht, wie ein Mensch zu denken, sondern strukturiertes Schlussfolgern mit übermenschlicher Beständigkeit durchzuführen.
+
+00:03:52.980 --> 00:03:57.820
+Sie liest Anweisungen, prüft sie gegen Eingaben und gibt eines von zwei Urteilen aus, genehmigt oder abgelehnt.
+
+00:03:57.920 --> 00:03:59.720
+Keine Politik, keine Kaffeepausen.
+
+00:03:59.860 --> 00:04:02.120
+Sie beginnen mit der Definition eines neuen Agentenflos.
+
+00:04:02.300 --> 00:04:06.780
+Bei der Erstellung steht die Key-Stufe im Mittelpunkt wie ein leeres Prüfungsblatt, das auf seinen Antwortschlüssel wartet.
+
+00:04:06.940 --> 00:04:11.680
+Der Auslöser kommt meist aus Dataverse, einem Datensatz, der in ihrer Vorderangs- oder Spesentabelle hinzugefügt oder geändert wurde.
+
+00:04:11.680 --> 00:04:16.260
+Sobald eine Forderung erstellt wurde, aktiviert sich diese Stufe, bewertet die Daten und entscheidet entsprechend.
+
+00:04:16.440 --> 00:04:20.520
+Innerhalb der Stufe ist das wichtigste Feld der Anweisungsprompt, das Gehirn des Vorgangs.
+
+00:04:20.680 --> 00:04:24.080
+Hier beschreiben Sie die Genehmigungslogik in einfacher, aber präziser Sprache.
+
+00:04:24.280 --> 00:04:27.600
+Schreiben Sie es so, als würden Sie einen Anwalt anweisen, der niemals improvisiert.
+
+00:04:27.760 --> 00:04:36.040
+Zum Beispiel, genehmigen Sie die Forderung, wenn der Betrag unter 500 liegt, die Beschreibung die körperliche oder geistige Gesundheit unterstützt und das Kaufdatum innerhalb von 30 Tagen nach Einreichung liegt.
+
+00:04:36.200 --> 00:04:38.120
+Ablehnen, wenn eine Regel nicht erfüllt ist.
+
+00:04:38.240 --> 00:04:39.720
+Das war's, binäre Klarheit.
+
+00:04:39.720 --> 00:04:42.060
+Definieren Sie als nächstes Ihre dynamischen Eingaben.
+
+00:04:42.200 --> 00:04:45.220
+Betrachten Sie diese als Variablen, die reale Daten in Ihre Logik einspeisen.
+
+00:04:45.400 --> 00:04:48.940
+Sie werden höchstwahrscheinlich einen Betrag, eine Beschreibung und ein Kaufdatum einbeziehen.
+
+00:04:49.140 --> 00:04:54.580
+Jeder wird als Inhalts-, Text- oder Zahleneingabe hinzugefügt, die die Key bei einer Entscheidung durchläuft.
+
+00:04:54.820 --> 00:04:59.720
+Copilot Studio klassifiziert diese Eingaben nach Typ, Text, Zahl oder Bilddokument.
+
+00:04:59.920 --> 00:05:05.440
+Wählen Sie richtig, denn das Mischen von Typen, etwa eine als Text gespeicherte Zahl, verwirrt Mensch und Maschine.
+
+00:05:05.440 --> 00:05:11.100
+Stellen Sie unter jeder Eingabe Beispieldaten für Tests bereit. Dies dient als Gerüst, während Sie die Logik kalibrieren.
+
+00:05:11.280 --> 00:05:17.260
+Geben Sie beispielsweise einen Beispielantrag ein, wie Fitness-Yoga-Matte, Betrag 300, Kaufdatum 22. August.
+
+00:05:17.460 --> 00:05:24.920
+Wenn Sie auf Testen klicken, führt Copilot Studio das Reasoning-Modell aus, GPT basiert im Hintergrund und gibt eine Entscheidung sowie eine Erklärung aus.
+
+00:05:24.920 --> 00:05:30.500
+Wenn das Ergebnis Ihrer Erwartung entspricht, gut. Wenn nicht, mangelt es Ihren Anweisungen an Determiniertheit.
+
+00:05:30.640 --> 00:05:32.720
+Und genau da machen die meisten Anfänger Fehler.
+
+00:05:32.940 --> 00:05:37.960
+Waage oder zweideutige Formulierungen wie angemessene Ausgabe oder kürzlicher Kauf sind Gift für die Key.
+
+00:05:38.120 --> 00:05:41.720
+Das System kann keine Unternehmensstimmung lesen. Es benötigt mathematische Definitionen.
+
+00:05:41.860 --> 00:05:45.320
+Verfeinern Sie daher Ihre Anweisungen unermüdlich, bis die Testergebnisse konsistent sind.
+
+00:05:45.500 --> 00:05:49.220
+Jedes Mal, wenn Sie umformulieren, stimmen Sie die Beurteilungs-Engine auf Reproduzierbarkeit ab.
+
+00:05:49.320 --> 00:05:53.160
+Das Muster, das Sie wollen, ist identischer Input, führt jedes Mal zu identischem Output.
+
+00:05:53.160 --> 00:05:55.160
+Maschinen-Logik, kein Büro-Klatsch.
+
+00:05:55.280 --> 00:06:00.760
+Sobald Ihr prompt zuverlässige Entscheidungen über mehrere Testfälle hinweg liefert, haben Sie Ihren Key-Genehmiger effektiv trainiert.
+
+00:06:00.960 --> 00:06:06.960
+Speisen Sie nun die echten dynamischen Daten ein, indem Sie Token aus Dataverse verwenden, wie Antragsbetrag, Kauf- oder Einreichungsdatum.
+
+00:06:07.100 --> 00:06:09.700
+Diese ersetzen Ihre Testwerte während der Live-Durchläufe.
+
+00:06:09.860 --> 00:06:15.580
+Ab diesem Punkt bewertet die Key jeden Antrag im Kontext und gibt ein Genehmigungsurteil ab, sobald neue Daten erscheinen.
+
+00:06:15.720 --> 00:06:18.520
+Bevor Sie den Sieg verkünden, führen Sie iterative Tests durch.
+
+00:06:18.520 --> 00:06:22.380
+Ändern Sie den Betrag auf 600, lehnt er ab, ändern Sie das Datum auf vor drei Monaten,
+
+00:06:22.380 --> 00:06:26.980
+wird es als ungültig markiert, fügen Sie einen unsinnigen Antrag hinzu, wie iPad-Kauf, erkennt er die Unstimmigkeit.
+
+00:06:27.180 --> 00:06:30.080
+Jeder Durchlauf sollte eine konsistente Ursache-Wirkungsbeziehung zeigen.
+
+00:06:30.280 --> 00:06:33.980
+Wenn die Antworten schwanken, liegt das Problem an der Klarheit Ihres Prompts, nicht am Key-Modell.
+
+00:06:34.120 --> 00:06:38.260
+Wenn konsistente Muster entstehen, etablieren Sie eine Namenskonvention für Ihre Inhaltsvariablen,
+
+00:06:38.420 --> 00:06:43.440
+Präfixe wie Straße-Antragsbetrag für Zeichenfolgen oder Nam-Kaufdatum für numerische Werte.
+
+00:06:43.620 --> 00:06:47.760
+Diese kleine Disziplin verhindert Chaos, wenn Sie später zu mehrstufiger Logik erweitern.
+
+00:06:47.760 --> 00:06:53.360
+In diesem Stadium kann Ihr automatisierter Genehmiger nun unabhängige Entscheidungen auf Basis von Richtlinien ohne Aufsicht treffen.
+
+00:06:53.500 --> 00:06:56.140
+Aber Automatisierung ist keine Diktatur, sondern Delegation.
+
+00:06:56.300 --> 00:06:58.760
+Die Maschine sorgt für Geschwindigkeit und Präzision, nicht für das Urteilsvermögen.
+
+00:06:59.460 --> 00:07:05.200
+Für Grenzfälle benötigen Sie eine Eskalation, einen Menschen, in the loop, der überprüft, was die Key ablehnt oder als unsicher erachtet.
+
+00:07:05.400 --> 00:07:06.920
+Hier kommt die nächste Stufe ins Spiel.
+
+00:07:07.180 --> 00:07:10.060
+Und so wird die Autorität zwischen Silizium und Personal geteilt.
+
+00:07:10.360 --> 00:07:13.540
+Hinzufügen menschlicher Aufsicht, mehrstufiger und bedingter Logik.
+
+00:07:13.540 --> 00:07:19.420
+Sobald Ihre Key sicher Anträge beurteilt, können Sie das hinzufügen, was Bürokratien ironischerweise als menschliche Note bezeichnen.
+
+00:07:19.580 --> 00:07:25.260
+In Co-Pilot Studio bedeutet das eine manuelle Phase, einen Kontrollpunkt, an dem eine echte Person Ihr Ermessen ausüben kann.
+
+00:07:25.400 --> 00:07:27.300
+Betrachten Sie es als Ihr Sicherheitsventil.
+
+00:07:27.480 --> 00:07:29.560
+Alles Vorhersehbare läuft automatisch durch.
+
+00:07:29.760 --> 00:07:32.220
+Alles Nuancierte landet auf dem Schreibtisch eines Managers.
+
+00:07:32.440 --> 00:07:36.460
+Sie beginnen im Genehmigungsdesigner, indem Sie direkt nach der Key-Phase eine manuelle Phase hinzufügen.
+
+00:07:36.620 --> 00:07:38.960
+Dies schafft ein zweites Tor in Ihrem Agenten-Workflow.
+
+00:07:38.960 --> 00:07:40.240
+Die Übergabe ist bedingt.
+
+00:07:40.440 --> 00:07:44.040
+Nur wenn das Urteil der Key genehmigt, lautet, gehen wir zur menschlichen Phase über.
+
+00:07:44.200 --> 00:07:46.920
+Wenn die Key abgelehnt, sagt, endet der Prozess genau dort.
+
+00:07:47.120 --> 00:07:50.720
+Warum Zeit damit verschwenden, Manager etwas bestätigen zu lassen, dass die Richtlinie bereits ausgeschlossen hat?
+
+00:07:50.900 --> 00:07:51.960
+Effizienz ist selektive Aufmerksamkeit.
+
+00:07:52.680 --> 00:07:53.700
+Getarnt als Automatisierung.
+
+00:07:53.940 --> 00:07:55.500
+Lassen Sie uns ein Beispielszenario erstellen.
+
+00:07:55.680 --> 00:07:58.960
+Angenommen, ein Mitarbeiter reicht einen Spessennachweis für eine Fitnessstudio-Mitgliedschaft ein.
+
+00:07:59.080 --> 00:08:01.760
+Die Key genehmigt dies, da alle Kriterien der Richtlinie entsprechen.
+
+00:08:02.000 --> 00:08:06.440
+Nun löst diese Entscheidung eine manuelle Phase auf Manager-Ebene namens Manager-Genehmigung aus.
+
+00:08:06.440 --> 00:08:11.880
+Im Hintergrund konfigurieren Sie diese Phase mit einem Titel wie Antrag auf Genehmigung von Antragsteller.
+
+00:08:12.060 --> 00:08:14.840
+Diese Variablen beziehen Daten dynamisch aus Dataverse.
+
+00:08:15.000 --> 00:08:20.160
+Im Feld Zuweisen an definieren Sie, wer die Aufgabe erhält, typischerweise der Vorgesetzte des Antragstellers.
+
+00:08:20.320 --> 00:08:25.640
+Um dieses Routing zu automatisieren, ermöglicht Copilot Studio die Integration des Office 365 Benutzer-Connectors.
+
+00:08:25.840 --> 00:08:31.780
+Rufen Sie zuerst den Benutzerdatensatz des Erstellers des Antrags ab, indem Sie die Aktion Zeile nach ID abrufen für die Benutzertabelle in Dataverse verwenden.
+
+00:08:31.960 --> 00:08:34.000
+Dies ruft die Informationen des Antragstellers ab.
+
+00:08:34.000 --> 00:08:38.340
+Als nächstes ruft die Aktion, Vorgesetzten abrufen, den Manager dieses Benutzers über dessen primäre E-Mail-Adresse ab.
+
+00:08:38.440 --> 00:08:42.320
+Geben Sie dieses Ergebnis als Variable wie Straße-Manager-E-Mail in Ihre manuelle Phase zurück.
+
+00:08:42.460 --> 00:08:45.120
+Das Ergebnis, kein Hardcoding, keine veralteten Hierarchien.
+
+00:08:45.320 --> 00:08:47.940
+Manager ändern sich, die Hierarchie aktualisiert sich von selbst.
+
+00:08:48.160 --> 00:08:49.320
+Jetzt kommt die bedingte Verzweigung.
+
+00:08:49.500 --> 00:08:52.080
+Der eigentliche Grund, warum mehrstufige Genehmigungen existieren.
+
+00:08:52.260 --> 00:08:54.540
+Sie können Logik direkt in den Agenten-Flow einbauen.
+
+00:08:54.740 --> 00:08:59.740
+Wenn der Antragsbetrag größer oder gleich 150 ist, fügen Sie eine zusätzliche Phase für die Admin-Genehmigung hinzu.
+
+00:08:59.740 --> 00:09:01.420
+Andernfalls beenden Sie den Prozess.
+
+00:09:01.420 --> 00:09:06.540
+Dies macht aus einer einfachen Routine mit zwei Schritten einen mehrstufigen Entscheidungsbaum, der sich dem Kontext anpasst.
+
+00:09:06.620 --> 00:09:08.780
+Anträge mit geringem Wert benötigen nur eine Person.
+
+00:09:08.980 --> 00:09:12.060
+Anträge mit höherem Wert oder Risiken werden zur zusätzlichen Prüfung eskaliert.
+
+00:09:12.240 --> 00:09:15.020
+Fügen Sie im Designer eine Bedingungsaktion ein, bevor Sie den Flow schließen.
+
+00:09:15.220 --> 00:09:18.620
+Verweisen Sie auf Ihre numerische Variable, beispielsweise Nam-Antragsbetrag.
+
+00:09:18.800 --> 00:09:23.540
+Wählen Sie den Operator, größer oder gleich, und setzen Sie den Schwellenwert, beispielsweise auf 150.
+
+00:09:23.860 --> 00:09:27.560
+Fügen Sie im Benbar-Zweig eine weitere manuelle Phase namens Admin-Genehmigung hinzu.
+
+00:09:27.560 --> 00:09:30.720
+Weisen Sie diese einem festen Genehmiger zu, wie etwa dem Compliance-Administrator.
+
+00:09:30.880 --> 00:09:33.220
+Im Benfalsch-Zweig beenden Sie mit Genehmigt.
+
+00:09:33.340 --> 00:09:37.980
+Der Effekt, der Workflow verhält sich wie eine rationale Organisation statt wie ein universeller Flaschenhals.
+
+00:09:38.140 --> 00:09:40.080
+Ein wenig praktischer Humor ist hier angebracht.
+
+00:09:40.280 --> 00:09:42.360
+Ja, Delegation erfordert immer noch Vertrauen.
+
+00:09:42.660 --> 00:09:43.240
+Kein Wunschdenken.
+
+00:09:43.440 --> 00:09:46.260
+Vergeben Sie keine weitreichenden Sicherheitsrollen, die alles genehmigen können.
+
+00:09:46.440 --> 00:09:50.760
+Beschränken Sie die Berechtigungen auf relevante Benutzer oder Gruppen über die rollenbasierte Zugriffskontrolle von Dataverse.
+
+00:09:50.940 --> 00:09:52.660
+Andernfalls automatisieren Sie das Chaos.
+
+00:09:52.840 --> 00:09:55.920
+Das Testen der Struktur zeigt, wie reibungslos jedes Teil ineinander greift.
+
+00:09:55.920 --> 00:10:00.900
+Wenn ein Anspruch unter 150 Dollar die Key-Prüfung besteht, endet der Ablauf nach der Genehmigung durch den Manager.
+
+00:10:01.080 --> 00:10:05.960
+Bei Beträgen über 150 Dollar stellt das System den Vorgang höflich für die Admin-Prüfung zurück, bevor er abgeschlossen wird.
+
+00:10:06.100 --> 00:10:11.860
+Jeder Pfad hinterlässt einen Prüfpfad, das Key-Begründungsprotokoll mit Zeitstempel versehene Genehmigungen und aufgezeichnete Ergebnisse, die in Dataverse gespeichert sind.
+
+00:10:12.020 --> 00:10:14.160
+Niemand kann später behaupten, das habe ich nie gesehen.
+
+00:10:14.300 --> 00:10:15.800
+Die Datenbank beweist das Gegenteil.
+
+00:10:15.960 --> 00:10:17.920
+Achten Sie bei der Verfeinerung auf disziplinierte Namenskonventionen.
+
+00:10:18.860 --> 00:10:24.640
+Stellen Sie menschliche Phasen klar voran, Z, B, Manager genehmigt oder Admin genehmigt, damit Sie Zweige visuell nachverfolgen können.
+
+00:10:24.640 --> 00:10:27.540
+Das Flussdiagramm sollte wie Logik lesbar sein, nicht wie abstrakte Kunst.
+
+00:10:27.720 --> 00:10:30.680
+Sobald Sie zufrieden sind, veröffentlichen Sie es und testen Sie es mit realen Szenarien.
+
+00:10:30.820 --> 00:10:32.580
+Beobachten Sie, wie sich die Kette entfaltet.
+
+00:10:32.760 --> 00:10:33.860
+Die Key bewertet sofort.
+
+00:10:34.020 --> 00:10:36.340
+Der Manager erhält eine gezielte Genehmigungsaufgabe.
+
+00:10:36.500 --> 00:10:39.000
+Der Admin schaltet sich nur ein, wenn die Bedingungen es erfordern.
+
+00:10:39.140 --> 00:10:45.060
+Das Ergebnis fühlt sich weniger nach einer Automatisierung an, die alles erledigt, sondern eher wie eine transparente Hierarchie, die sich selbst verwaltet.
+
+00:10:45.240 --> 00:10:49.380
+Diese mehrschichtige Orchestrierung eröffnet zudem ein neues Feld, die Dokumentenvalidierung.
+
+00:10:49.380 --> 00:10:52.240
+Denn manchmal lügt ein Formularfeld, aber der Beleg nicht.
+
+00:10:52.380 --> 00:10:57.100
+Der nächste Schritt besteht darin, die Key die physischen Beweise prüfen zu lassen, bevor sie überhaupt ihren Posteingang erreicht.
+
+00:10:57.280 --> 00:11:01.360
+Hier setzt die Belegvalidierung an, die Bürokratie in verifizierbare Wissenschaft verwandelt.
+
+00:11:01.540 --> 00:11:03.580
+Dynamische Eingaben- und Dokumentenvalidierung.
+
+00:11:03.820 --> 00:11:10.020
+Sprechen wir über Belege die kleinen, zerknitterten Papierstücke, die auf mysteriöse Weise zu kritischen Beweisen werden, sobald jemand eine Rückerstattung möchte.
+
+00:11:10.180 --> 00:11:13.780
+In einem manuellen Genehmigungsprozess überprüfen Menschen diese durch bloßes Hinsehen.
+
+00:11:13.780 --> 00:11:16.460
+Ja, das sieht nach einer Yogamatte aus, nicht nach einer Yacht.
+
+00:11:16.620 --> 00:11:20.960
+In einem automatisierten Prozess lassen wir die Key dieselbe Prüfung ohne Ermüdungserscheinungen durchführen.
+
+00:11:21.120 --> 00:11:25.720
+In den Agent Floß von Copilot Studio wird die Dokumentenvalidierung durch dynamische Inhaltseingaben lebendig,
+
+00:11:25.880 --> 00:11:29.600
+insbesondere durch die Möglichkeit, ein Bild oder eine Datei an ihre Genehmigungslogik zu übergeben.
+
+00:11:29.760 --> 00:11:32.700
+Dies verleiht ihrem Key-Genehmiger einen dritten Sinn, das Sehvermögen.
+
+00:11:32.860 --> 00:11:38.060
+Anstatt sich nur auf Textfelder zu verlassen, liest das Modell das Dokument und vergleicht das Geschriebene mit dem Hochgeladenen.
+
+00:11:38.060 --> 00:11:43.840
+Hier ist die Struktur. Innerhalb Ihrer Key-Phase fügen Sie einen neuen Eingabetyp hinzu, der Bild oder Dokument heißt.
+
+00:11:44.000 --> 00:11:46.360
+Beschriften Sie ihn klar, etwa als Belegdatei.
+
+00:11:46.520 --> 00:11:51.140
+Laden Sie einen Beispielbeleg für Testzwecke hoch. Dies geht nicht live, sondern trainiert nur das Logik-Layout.
+
+00:11:51.320 --> 00:11:54.940
+Passen Sie nun Ihre Anweisungsprompt an, um die Dokumenten-Kreuzvalidierung einzubeziehen.
+
+00:11:55.120 --> 00:11:58.640
+Sie erweitern Ihre bisherige Logik. Genehmigen Sie den Anspruch, wenn alles Folgende zutrifft.
+
+00:11:58.720 --> 00:12:03.140
+Betrag 500, Anspruchsdetails unterstützen physische oder psychische Gesundheit, Kaufdatum innerhalb von 30 Tagen
+
+00:12:03.140 --> 00:12:06.120
+und das Belegdokument stimmt mit dem deklarierten Artikel, Betrag und Datum überein.
+
+00:12:06.120 --> 00:12:11.180
+Diese vierte Bedingung verwandelt Ihren Key-Genehmiger vom Richtlinienvollstrecker zum forensischen Buchhalter.
+
+00:12:11.320 --> 00:12:17.880
+Wenn der Test läuft, extrahiert das Modell lesbaren Text aus dem Dokument und prüft die Übereinstimmung mit Ihren strukturierten Eingaben.
+
+00:12:18.120 --> 00:12:24.860
+Wenn auf der Quittung eine Fitnessmatte für 300 Dollar am 22. August steht und Ihr Antrag etwas anderes besagt, wird das Ergebnis abgelehnt.
+
+00:12:25.000 --> 00:12:28.480
+Für die Implementierung müssen Sie das Dokument abrufen, bevor die Genehmigung erfolgt.
+
+00:12:28.660 --> 00:12:31.800
+Verwenden Sie die Aktion, Datei oder Bild herunterladen aus Dataverse.
+
+00:12:31.800 --> 00:12:35.560
+Wählen Sie dieselbe Tabelle, in der sich der Antragsdatensatz befindet, wahrscheinlich Claims.
+
+00:12:35.680 --> 00:12:39.800
+Wählen Sie unter Dateispalte das Anhangsfeld, oft so etwas wie Quittung genannt.
+
+00:12:39.960 --> 00:12:44.720
+Geben Sie dann die Zeilen ID dynamisch über den Trigger an, den eindeutigen Bezeichner des Antrags.
+
+00:12:44.840 --> 00:12:49.040
+Diese Aktion liefert Dateimetadaten und den Inhalt zurück, aber hier lauert eine kleine Falle.
+
+00:12:49.140 --> 00:12:53.320
+Die Inhaltsausgabe muss leicht angepasst werden, damit die Key sie korrekt interpretieren kann.
+
+00:12:53.500 --> 00:13:00.100
+Wenn Sie den Dateienhalt Ihrer Dokumenteingabe zuordnen, öffnen Sie den Ausdruckseditor und hängen Sie Content an die Body-Referenz an.
+
+00:13:00.100 --> 00:13:04.300
+Diese kleine Anpassung liefert die tatsächlichen Dateibytes anstelle der Metadaten-Rapper.
+
+00:13:04.500 --> 00:13:07.780
+Lassen Sie dies weg und Ihre Key wird freudig leere Quittungen genehmigen.
+
+00:13:07.960 --> 00:13:11.640
+Kommen wir zur Synchronisierung der Achilles-Verse von Dokumenten-Workflows.
+
+00:13:11.800 --> 00:13:16.340
+Die meisten Dataverse-Tabellen speichern Anhänge erst nach dem ersten Speichern des Datensatzes.
+
+00:13:16.480 --> 00:13:20.440
+Wenn Ihr Flow bei Erstellung auslöst, startet er oft, bevor die Datei existiert.
+
+00:13:20.660 --> 00:13:23.900
+Symptom? Der Flow schlägt fehl oder der Quittungsinhalt ist leer.
+
+00:13:23.900 --> 00:13:31.180
+Die Lösung ist elegant. Ändern Sie die Trigger-Bedingung auf Bei Elementänderung, beschränken Sie sie aber darauf, nur auszulösen, wenn sich die Quittungsspalte ändert.
+
+00:13:31.340 --> 00:13:36.040
+Auf diese Weise beginnt die Validierung genau in dem Moment, in dem jemand eine Datei hochlädt oder ersetzt.
+
+00:13:36.200 --> 00:13:45.560
+Öffnen Sie zur Konfiguration die Trigger-Einstellungen, wählen Sie Geänderte Spalten und fügen Sie den logischen Namen Ihrer Quittungsspalte ein, den Sie unter den erweiterten Dataverse-Spalten-Details finden.
+
+00:13:45.780 --> 00:13:47.800
+Sobald alles eingestellt ist, veröffentlichen.
+
+00:13:47.800 --> 00:13:52.580
+Jetzt verhält sich Ihre Automatisierung höflich. Sie wartet, bis tatsächlich etwas zu validieren ist.
+
+00:13:52.740 --> 00:13:56.060
+Wenn der Antrag mit einer neuen Quittung aktualisiert wird, startet der Flow neu.
+
+00:13:56.220 --> 00:14:00.800
+Er lädt die Datei herunter, leitet sie durch die Key-Stufe und prüft alle Eingaben gegeneinander.
+
+00:14:01.120 --> 00:14:07.800
+Bei Unstimmigkeiten wie falscher Betrag, veraltetes Datum oder inkonsistente Beschreibungen lehnt die Key mit Begründung ab.
+
+00:14:07.940 --> 00:14:13.300
+Das Begründungsprotokoll könnte lauten, der beantragte Betrag von 305 Dollar unterscheidet sich von der Gesamtsumme auf dem Dokument von 300 Dollar.
+
+00:14:13.300 --> 00:14:18.160
+Das ist Compliance ohne Beschwerde. Der praktische Nutzen? Jede Einreichung wird selbstrevidierend.
+
+00:14:18.280 --> 00:14:22.420
+Mitarbeiter können keine fragwürdigen Quittungen oder wagen Beschreibungen mehr durchschmuggeln.
+
+00:14:22.540 --> 00:14:27.020
+Die Key urteilt, Dataverse liefert den Beweis und beide machen keine Kaffeepause.
+
+00:14:27.220 --> 00:14:32.440
+Also nein, Dokumentenvalidierung ist kein Overkill. Es ist ein Immungedächtnis für Ihre Workflows.
+
+00:14:32.640 --> 00:14:40.100
+Ausreißer werden auf molekularer Ebene entdeckt, bei den Zeichen auf den echten Quittungen und der menschliche Prüfer wird vom manuellen Kontrolleur zum Ausnahmebehandler.
+
+00:14:40.100 --> 00:14:43.680
+Herzlichen Glückwunsch! Sie haben soeben die Ehrlichkeit an sich automatisiert.
+
+00:14:44.000 --> 00:14:47.480
+Zuverlässigkeit aufbauen, testen, versionieren und veröffentlichen.
+
+00:14:47.640 --> 00:14:50.340
+Jede Automatisierung sieht perfekt aus, bis sie ausgeführt wird.
+
+00:14:50.480 --> 00:14:53.260
+Deshalb ist Zuverlässigkeit keine Phase, sondern eine Disziplin.
+
+00:14:53.440 --> 00:14:59.740
+Copilot Studio macht diese Disziplin überraschend einfach durch Versionierungs-, Test- und Veröffentlichungsfunktionen, die direkt in Agentenflows integriert sind.
+
+00:14:59.880 --> 00:15:01.480
+Beginnen Sie mit iterativen Tests.
+
+00:15:01.700 --> 00:15:04.080
+Jeder Genehmigungsflow ist ein kleines Ökosystem.
+
+00:15:04.320 --> 00:15:07.000
+Schon ein falsch benannter Variablenname kann Chaos verursachen.
+
+00:15:07.000 --> 00:15:09.700
+Betrachten Sie das Testen daher als wissenschaftlichen Prozess.
+
+00:15:09.840 --> 00:15:13.060
+Isolieren Sie Änderungen, wenden Sie Daten an, beobachten Sie das Ergebnis.
+
+00:15:13.280 --> 00:15:18.220
+Im Flow-Editor können Sie mit Copilot Studio Beispieldaten simulieren, ohne Produktionsträger einzusetzen.
+
+00:15:18.400 --> 00:15:25.320
+Füttern Sie das System mit verschiedenen Szenarien zu hohe Beträge, veraltete Daten, irrelevante Artikelnamen und stellen Sie sicher, dass jedes das richtige Urteil liefert.
+
+00:15:25.460 --> 00:15:30.360
+Gehen Sie dann zu Namenskonventionen über langweilig, absolut, essentiell, überlebenswichtig.
+
+00:15:30.600 --> 00:15:32.600
+Stellen Sie jeder Variablen systematisch ein Präfix voran.
+
+00:15:32.740 --> 00:15:35.420
+S-T-R für Zeichenfolgen, Namen für Zahlen, Doc für Dateien.
+
+00:15:35.420 --> 00:15:37.400
+Beschriften Sie ebenso Aktionen eindeutig.
+
+00:15:37.500 --> 00:15:40.980
+Belegdatei herunterladen, Manager-Genehmigung prüfen, Antragsstatus aktualisieren.
+
+00:15:41.120 --> 00:15:46.700
+Denn wenn Sie in drei Monaten jemand fragt, warum Aktion 7 fehlgeschlagen ist, werden Sie froh sein, dass Hinweise hilfreicher sind als Ursachenforschung.
+
+00:15:46.860 --> 00:15:50.480
+Sobald Einzeltests erfolgreich sind, weiten Sie diese auf Grenzfall-Szenarien aus.
+
+00:15:50.660 --> 00:15:52.400
+Spielen Sie den inkompetenten Benutzer.
+
+00:15:52.620 --> 00:15:57.060
+Laden Sie keinen Beleg hoch, ändern Sie ein Datum auf nächstes Jahr, geben Sie 500 statt 500 ein.
+
+00:15:57.240 --> 00:16:00.560
+Stellen Sie sicher, dass die Key dies erklärt und ablehnt, ohne abzustürzen.
+
+00:16:00.560 --> 00:16:03.700
+Das sind keine hypothetischen Fehler, sondern Übungen für den Ernstfall.
+
+00:16:03.860 --> 00:16:09.960
+Je mehr Fehlerquellen Sie im Vorfeld ausschalten, desto weniger nächtliche Teams-Nachrichten erhalten Sie, dass der Flow wieder gestoppt ist.
+
+00:16:10.420 --> 00:16:11.740
+Veröffentlichung führt Governance ein.
+
+00:16:11.920 --> 00:16:16.160
+Jedes Mal, wenn Sie eine wichtige Änderung speichern, erstellt Copilot Studio im Hintergrund eine neue Version.
+
+00:16:16.400 --> 00:16:18.220
+Sie können jederzeit zur vorherigen zurückkehren.
+
+00:16:18.380 --> 00:16:19.600
+Keine Angst vor dem Überschreiben.
+
+00:16:19.840 --> 00:16:23.100
+Nutzen Sie dies, um experimentelle Logik-Sandboxes von der Produktion zu trennen.
+
+00:16:23.280 --> 00:16:26.720
+Ein Flow namens Antragsgenehmigung dev, ein anderer Antragsgenehmigung prod.
+
+00:16:26.860 --> 00:16:29.740
+Testen Sie in der Entwicklung und veröffentlichen Sie erst, wenn alles stabil ist.
+
+00:16:29.740 --> 00:16:34.300
+Denken Sie daran, Zuverlässigkeit bedeutet nicht nur Korrektheit, sondern Kontrolle bei Veränderungen.
+
+00:16:34.500 --> 00:16:37.140
+Nutzen Sie nach der Veröffentlichung die Aktivitätsprotokolle.
+
+00:16:37.260 --> 00:16:41.420
+Sie sind nicht dekorativ, sondern rechtsverbindliche Aufzeichnungen der Interaktionen zwischen Key und Mensch.
+
+00:16:41.580 --> 00:16:44.700
+Zeitstempel, Identitäten der Genehmiger, Zusammenfassungen der Entscheidungsfindung.
+
+00:16:44.840 --> 00:16:46.600
+Überprüfen Sie diese Protokolle regelmäßig.
+
+00:16:46.820 --> 00:16:47.820
+Muster werden sichtbar.
+
+00:16:48.020 --> 00:16:50.020
+Welche Regeln führen zu den meisten Ablehnungen?
+
+00:16:50.280 --> 00:16:51.760
+Welche Manager überstimmten die Key?
+
+00:16:52.000 --> 00:16:53.420
+Wie oft greifen Compliance-Schritte?
+
+00:16:53.600 --> 00:16:56.320
+Diese Erkenntnisse verfeinern sowohl Richtlinien als auch Design.
+
+00:16:56.320 --> 00:17:02.040
+Ein weiteres subtiles Best Practice? Automatisieren Sie Status-Updates zurück in Dataverse-Datensätze am Ende jedes Zweigs.
+
+00:17:02.160 --> 00:17:07.240
+Die Aktion, Zeile aktualisieren, sollte ein klares Feld setzen, wie etwa Antragsstatus gleich genehmigt oder abgelehnt.
+
+00:17:07.360 --> 00:17:09.320
+Dieser sichtbare Endpunkt stärkt das Vertrauen.
+
+00:17:09.480 --> 00:17:12.200
+Benutzer sehen Entscheidungen direkt in ihren eigenen Tabellenansichten.
+
+00:17:12.400 --> 00:17:14.960
+Keine separaten Tracking-Tabellen, keine Phantom-Genehmigungen.
+
+00:17:15.180 --> 00:17:18.420
+Sobald Ihr System alle Tests besteht, veröffentlichen Sie es mit ruhigem Gewissen.
+
+00:17:18.420 --> 00:17:27.160
+Im Gegensatz zu früheren Generationen von Power-Automate-Flows behalten Agenten-Flows kontextuelle Metadaten, das Key-Entscheidungsschema, dynamische Inhaltsbindungen und Versions-Tags bei.
+
+00:17:27.280 --> 00:17:32.180
+Das Ergebnis ist nicht nur ein laufender Prozess, sondern ein reproduzierbares Artefakt, eine prüfbare Automatisierung.
+
+00:17:32.360 --> 00:17:34.600
+Die letzte Zuverlässigkeitsprüfung findet im Kopf statt.
+
+00:17:34.780 --> 00:17:36.280
+Widerstehen Sie dem Over-Engineering.
+
+00:17:36.500 --> 00:17:39.700
+Manchmal offenbart ein fehlerhafter Ablauf zu komplexen Regeln, nicht technische Fehler.
+
+00:17:39.900 --> 00:17:41.920
+Optimieren Sie die Logik, wo immer es möglich ist.
+
+00:17:42.060 --> 00:17:45.400
+Weniger Stufen, klarere Anweisungen, minimale Mehrdeutigkeit.
+
+00:17:45.400 --> 00:17:49.100
+Automatisierung ist keine Willkür, sondern unnötige Komplexität.
+
+00:17:49.280 --> 00:17:55.840
+Wenn Sie diese Stufe abschließen, erreicht Ihr Genehmigungssystem operative Reife, getestet, versioniert, rollbackfähig und verifizierbar.
+
+00:17:56.040 --> 00:18:01.080
+Jedes Ergebnis, vom Key-Urteil bis zur Admin-Freigabe, hinterlässt einen digitalen Fußabdruck, der einer Prüfung standhält.
+
+00:18:01.240 --> 00:18:08.740
+Das ist quantifizierte Zuverlässigkeit kein Gefühl, kein Glück, sondern strukturierte Logik, zuverlässig aufgezeichnet durch die Tools, die Sie gebaut haben, damit Sie arbeiten, während Sie schlafen.
+
+00:18:08.940 --> 00:18:10.540
+Ergebnisse und Nutzen in der Praxis
+
+00:18:10.540 --> 00:18:13.300
+Was passiert, wenn man Bürokratie der Mathematik überlässt?
+
+00:18:13.400 --> 00:18:14.980
+Das Warten auf Genehmigungen hat ein Ende.
+
+00:18:14.980 --> 00:18:21.840
+Ein Key-gestützter, mehrstufiger Agenten-Workflow verkürzt die Bearbeitungszeit von Tagen auf Minuten, da Entscheidungen nicht mehr von der Kalenderverfügbarkeit abhängen.
+
+00:18:22.000 --> 00:18:25.160
+Jeder Antrag, der objektive Richtlinien erfüllt, wird sofort genehmigt.
+
+00:18:25.340 --> 00:18:29.920
+Jeder Ausnahmefall landet ordentlich in der Warteschlange eines Managers, inklusive des bereits angehängten Kontextes.
+
+00:18:30.060 --> 00:18:32.940
+Menschen treffen Werturteile, keine bürokratischen Bestätigungen.
+
+00:18:33.120 --> 00:18:35.300
+Die Wirkung zeigt sich zunächst als Zeitersparnis.
+
+00:18:35.440 --> 00:18:40.120
+Eine Erstattung, für die früher vier E-Mails und zwei Erinnerungen nötig waren, ist jetzt vor dem Mittagessen erledigt.
+
+00:18:40.120 --> 00:18:46.020
+Abteilungen erleben kürzere Bearbeitungszyklen, weniger Stillstand und perfekt protokollierte Entscheidungswege.
+
+00:18:46.140 --> 00:18:48.860
+Der Genehmigungsmechanismus ist keine Unterbrechung mehr.
+
+00:18:49.180 --> 00:18:50.400
+Er wird zur Infrastruktur.
+
+00:18:50.780 --> 00:18:52.240
+Dann folgt die Fehlerreduzierung.
+
+00:18:52.420 --> 00:18:57.800
+Durch die Durchsetzung deterministischer Regeln mittels Key eliminieren sie subjektive Abweichungen, den Fluch manueller Genehmigungen.
+
+00:18:57.980 --> 00:19:00.880
+Kein, ich dachte, das zählt als Gesundheit und Wellness, mehr.
+
+00:19:01.040 --> 00:19:03.780
+Die Key interpretiert die Kriterien jedes Mal auf die gleiche Weise.
+
+00:19:04.100 --> 00:19:07.200
+Konsistenz skaliert in der administrativen Logik besser als Mitgefühl.
+
+00:19:07.360 --> 00:19:11.120
+Manager befassen sich nur noch mit Anomalien, und selbst diese verfügen über einen Audit-Trail.
+
+00:19:11.500 --> 00:19:14.120
+Dateneingaben, Entscheidungshistorie, Modellerklärung.
+
+00:19:14.260 --> 00:19:17.380
+Audits verwandeln sich von Panikübungen in höfliche Verifizierungen.
+
+00:19:17.580 --> 00:19:20.920
+Auf organisatorischer Ebene ist dies nicht nur schneller, sondern auch sicherer.
+
+00:19:21.060 --> 00:19:23.520
+Compliance verlässt sich nicht mehr auf Erinnerung oder Stimmung.
+
+00:19:23.740 --> 00:19:24.580
+Sie ist integriert.
+
+00:19:24.720 --> 00:19:27.760
+Die Dataverse-Protokolle zeigen, wer wann und warum zugestimmt hat.
+
+00:19:27.760 --> 00:19:32.980
+Diese Transparenz unterbindet eine Kultur der Abkürzungen, da jede Entscheidung nun in durchsuchbarer Beständigkeit existiert.
+
+00:19:32.980 --> 00:19:38.540
+Philosophisch betrachtet verschiebt sich der Workflow von Mensch zuerst mit Key-Unterstützung zu Key zuerst mit menschlicher Korrektur.
+
+00:19:38.680 --> 00:19:40.600
+Praktische Governance, keine Science-Fiction.
+
+00:19:40.780 --> 00:19:43.640
+Key übernimmt die Regelbefolgung, Menschen übernehmen das Urteilsvermögen.
+
+00:19:43.800 --> 00:19:47.140
+Dieser Hybrid schafft fairere, schnellere und letztlich vertrauenswürdigere Systeme.
+
+00:19:47.280 --> 00:19:49.420
+Stellen Sie sich vor, Sie erklären das einem Wirtschaftsprüfer.
+
+00:19:49.540 --> 00:19:52.360
+Das Lächeln, das darauf folgt, ist die Automatisierung allein schon wert.
+
+00:19:52.500 --> 00:19:53.220
+Das war es also.
+
+00:19:53.400 --> 00:19:56.400
+Microsoft Co-Pilot Studio ist nicht einfach nur ein weiteres Automatisierungstool.
+
+00:19:56.400 --> 00:19:59.980
+Es ist der Ort, an dem die Unentschlossenheit Ihrer Organisation endlich in den Ruhestand geht.
+
+00:19:59.980 --> 00:20:06.860
+Sie bauen eine Genehmigungs-Engine, die in Bedingungen denken, verantwortungsbewusst eskalieren, Belege mit der Realität abgleichen und jeden Schritt dokumentieren kann.
+
+00:20:06.980 --> 00:20:09.200
+Das ist kein Workflow, das ist ein Governance-Modell.
+
+00:20:09.380 --> 00:20:11.380
+Wenn Sie sich nur eines merken, dann dieses.
+
+00:20:11.560 --> 00:20:14.840
+Key sollte Entscheidungen berechenbar machen und Menschen außergewöhnlich.
+
+00:20:15.000 --> 00:20:17.800
+Hören Sie auf, aus Gewohnheit alles über Menschen laufen zu lassen.
+
+00:20:17.980 --> 00:20:21.200
+Überlassen Sie die Routine der Logik, damit Manager sich um Ausnahmen kümmern können.
+
+00:20:21.200 --> 00:20:26.460
+Wenn diese Anleitung Sie nun vor einer weiteren Woche mit ausstehender Manager-Prüfung bewahrt hat, sollten Sie ein Abo in Betracht ziehen.
+
+00:20:26.620 --> 00:20:34.260
+Das nächste Tutorial befasst sich eingehender mit fortgeschrittenen Co-Pilot Studio Automatisierungen, bei denen diese Agenten floß mit Power Platform Analytics und adaptiven Richtlinien verbunden werden.
+
+00:20:34.460 --> 00:20:39.120
+Sichern Sie Ihren Upgrade-Pfad, abonnieren Sie, aktivieren Sie Benachrichtigungen und lassen Sie neue Episoden automatisch bereitstellen.
+
+00:20:39.280 --> 00:20:43.200
+Keine manuellen Prüfungen, keine verpassten Releases, nur die kontinuierliche Bereitstellung von nützlichem Wissen.
+
+00:20:43.200 --> 00:20:44.060
+Fahren Sie fort!

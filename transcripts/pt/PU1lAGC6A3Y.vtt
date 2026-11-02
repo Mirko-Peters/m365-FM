@@ -1,0 +1,1579 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.720
+Subchat, bots, conversam, agentes, agentes, sistemas multiagentes realmente fazem as coisas acontecerem.
+
+00:00:04.160 --> 00:00:07.740
+Se você já implorou para um bot consertar o Intune e ele respondeu com um poema, isso é para você.
+
+00:00:08.260 --> 00:00:09.940
+O esquema é o seguinte, estilo Netflix, mão na massa.
+
+00:00:10.380 --> 00:00:11.340
+Você assiste com uma coisa.
+
+00:00:11.980 --> 00:00:14.400
+Eu cuido da parte perigosa do service principal para que ninguém destrua a produção.
+
+00:00:14.980 --> 00:00:20.220
+Vamos construir um mini sistema multiagente autocurável e governado com Azure AI Foundry e Semantic Kernel,
+
+00:00:20.760 --> 00:00:21.520
+ou de contato reais.
+
+00:00:22.200 --> 00:00:25.340
+Intune entra Graph Azure Automation Log Analytics.
+
+00:00:26.360 --> 00:00:28.900
+Um agente versus multiagente, frente a frente, 12 minutos contra 3.
+
+00:00:28.900 --> 00:00:31.280
+E a única vítima é o crédito da minha assinatura.
+
+00:00:32.140 --> 00:00:33.860
+Primeiro, porque um agente trava enquanto times decola.
+
+00:00:34.680 --> 00:00:35.600
+Porque um agente só não é suficiente.
+
+00:00:36.120 --> 00:00:38.540
+Agentes únicos são como aquele canivete suíço que você compra em posto de gasolina.
+
+00:00:39.080 --> 00:00:41.500
+Tecnicamente tem ferramentas, mas na prática ele entorta no primeiro parafuso.
+
+00:00:42.320 --> 00:00:45.980
+Você empilha planejamento, raciocínio, execução, aprovações e relatórios em um prompt só,
+
+00:00:46.100 --> 00:00:48.920
+e agora ele fica sem contexto lento e estranhamente confiante no que está errado.
+
+00:00:50.060 --> 00:00:53.000
+A maioria das pessoas acha que modelo maior, cérebro maior, pronto, problema resolvido.
+
+00:00:53.360 --> 00:00:55.340
+Mas a verdadeira falha é a confusão de papéis.
+
+00:00:55.340 --> 00:00:59.220
+Um agente tentando planejar uma mudança, chamar o Graph, escrever um script de remediação,
+
+00:00:59.340 --> 00:01:02.200
+pedir aprovação, verificar o resultado e documentar tudo.
+
+00:01:03.260 --> 00:01:07.780
+É como gerenciar um helpdesk, um comitê de mudanças e uma análise pós-incidente com um único estagiário muito cansado.
+
+00:01:08.340 --> 00:01:09.000
+Veja o que realmente é bom.
+
+00:01:09.380 --> 00:01:11.040
+O agente único tenta equilibrar estado demais.
+
+00:01:11.580 --> 00:01:12.500
+Seu prompt vira um romance.
+
+00:01:12.980 --> 00:01:16.560
+A janela de contexto se enche de logs, políticas e metade do glossário de MDM.
+
+00:01:16.640 --> 00:01:19.420
+Então ele ou corta as partes importantes ou alucina detalhes faltantes.
+
+00:01:19.800 --> 00:01:23.320
+A latência dispara, os tokens queimam e as tentativas de repetição parecem um déjà vu com uma conta.
+
+00:01:23.320 --> 00:01:27.660
+Aí entram os multiagentes, papéis, limites e paralelismo.
+
+00:01:28.180 --> 00:01:30.100
+O planejador foca na intenção e nas restrições.
+
+00:01:30.620 --> 00:01:32.760
+O operador foca nas ferramentas e na execução.
+
+00:01:33.260 --> 00:01:36.860
+O revisor foca nas diretrizes e aprovações e estamos baseados em fatos.
+
+00:01:37.600 --> 00:01:41.540
+Cada agente mantém um conjunto de instruções curto e limpo, com a memória mínima necessária.
+
+00:01:42.400 --> 00:01:45.680
+Eles passam mensagens, resultados de ferramentas ou um resumo curto na internet inteira.
+
+00:01:46.100 --> 00:01:47.180
+Por que isso importa na empresa?
+
+00:01:47.180 --> 00:01:52.720
+Você precisa de fluxos de trabalho completos com supervisão humana, ações baseadas em identidade, tentativas e trilha de auditoria.
+
+00:01:52.940 --> 00:01:54.100
+Isso não é um chat de linha única.
+
+00:01:54.580 --> 00:01:55.240
+Isso é um trabalho em equipe.
+
+00:01:55.800 --> 00:02:01.200
+Padrão planejador, executor e revisor reduz riscos e retrabalho porque cada etapa tem um segundo par de olhos automatizados
+
+00:02:01.200 --> 00:02:03.860
+e que não precisam de uma reunião rápida no Team Sims.
+
+00:02:04.620 --> 00:02:05.940
+Custe latência também sem ganhando.
+
+00:02:06.360 --> 00:02:08.640
+Use modelos de linguagem pequenos para extração e classificação.
+
+00:02:09.300 --> 00:02:11.580
+Use modelos de raciocínio premium apenas onde o planejamento ajuda.
+
+00:02:12.360 --> 00:02:14.500
+Use processamento em lote para resumos enquanto os usuários dormem.
+
+00:02:14.500 --> 00:02:17.600
+Você terá menos alucinações, resultados mais rápidos e contas menores.
+
+00:02:18.640 --> 00:02:19.420
+Uma breve história.
+
+00:02:19.620 --> 00:02:21.880
+Vem um bot faz tudo tentar rotacionar um segredo.
+
+00:02:22.880 --> 00:02:23.860
+Ele atualizou a chave.
+
+00:02:24.160 --> 00:02:26.760
+Esqueceu a configuração do app e consertou, deletando o recurso.
+
+00:02:27.600 --> 00:02:29.460
+Foi nesse dia que inventamos o agente revisor.
+
+00:02:30.260 --> 00:02:32.020
+Sistemas multiagentes 101, claro e simples.
+
+00:02:32.740 --> 00:02:35.000
+Ok, então o que é um sistema multiagente que você realmente consegue entregar?
+
+00:02:35.500 --> 00:02:37.140
+Pense em uma equipe digital, não em um super-servo.
+
+00:02:37.780 --> 00:02:41.620
+Cada agente tem uma função, conjunto restrito de instruções e ferramentas limitadas.
+
+00:02:41.620 --> 00:02:43.400
+Planejador.
+
+00:02:43.640 --> 00:02:45.460
+Entende objetivas, restrições e o ambiente.
+
+00:02:46.260 --> 00:02:49.420
+Produz um plano com chamadas de ferramentas que o operador pode executar.
+
+00:02:50.260 --> 00:02:50.740
+Operador.
+
+00:02:51.060 --> 00:02:56.900
+Chama ferramentas, graph, logic apps, funções, runbooks do Azure Automation e retorna resultados estruturados.
+
+00:02:58.080 --> 00:02:58.380
+Revisor.
+
+00:02:58.760 --> 00:03:03.300
+Verifica fundamentação, conformidade, aprovações e segurança antes de qualquer ação de risco.
+
+00:03:03.300 --> 00:03:09.620
+Mensageiro barra conciagem cuida de notificações humanas, aprovações e resumos para trilhas de auditoria.
+
+00:03:10.620 --> 00:03:13.560
+Eles se comunicam por mensagens e contexto compartilhado como adultos.
+
+00:03:13.680 --> 00:03:15.040
+Curto, claro e apenas o necessário.
+
+00:03:15.780 --> 00:03:18.100
+Sequencial quando ações dependem de resultados anteriores.
+
+00:03:18.320 --> 00:03:20.720
+Paralelo quando subtarefas podem ser distribuídas com segurança.
+
+00:03:21.580 --> 00:03:23.320
+Você não envia uma política de 50 páginas.
+
+00:03:23.420 --> 00:03:24.320
+Envia o trecho relevante.
+
+00:03:24.400 --> 00:03:26.220
+Usa edis do dispositivo e a alteração pretendida.
+
+00:03:26.560 --> 00:03:27.440
+As ferramentas são as mãos.
+
+00:03:27.440 --> 00:03:29.460
+API's REST para Microsoft Graph.
+
+00:03:29.720 --> 00:03:32.100
+Hag via Azure AI Search para conhecimento curado.
+
+00:03:32.460 --> 00:03:33.840
+Interpretador de código para snippets.
+
+00:03:33.940 --> 00:03:37.840
+Logic Apps para sequências, funções como cola e Azure Automation para tarefas repetitivas.
+
+00:03:38.620 --> 00:03:42.980
+Mantenha as entradas das ferramentas estruturadas com esquemas para que o operador não delete seu tenant criativamente.
+
+00:03:43.920 --> 00:03:45.360
+Memória não é mágica, é um orçamento.
+
+00:03:45.840 --> 00:03:46.900
+Minimize a memória por agente.
+
+00:03:47.260 --> 00:03:51.420
+Use estado externo, índices de busca, bancos vetoriais ou um pequeno armazenamento de estado para metadose track.
+
+00:03:51.600 --> 00:03:52.760
+Mantenha janela de contexto em chão.
+
+00:03:53.140 --> 00:03:55.380
+Se não é necessário para a próxima decisão, não deve ser carregado junto.
+
+00:03:55.380 --> 00:03:58.140
+O planejamento versus execução é onde o semantic kernel brilha.
+
+00:03:58.480 --> 00:04:01.640
+O planejador delega ou o operador escolhe a ferramenta certa com catálogo de funções.
+
+00:04:02.320 --> 00:04:05.780
+O revisor critica saídas com promptes de avaliação e segurança de conteúdo.
+
+00:04:06.660 --> 00:04:09.420
+Se o revisor sinalizar um risco de escopo, o planejador revisa.
+
+00:04:09.960 --> 00:04:13.860
+Ao entender esse ciclo, você para de escrever promptes de 800 palavras e começa a definir papéis claros.
+
+00:04:14.600 --> 00:04:16.180
+Limites de segurança são inegociáveis.
+
+00:04:16.840 --> 00:04:19.560
+Identidade limitada em chamadas de ferramentas com identidade gerenciada.
+
+00:04:19.960 --> 00:04:22.220
+Permissões de agente divididas entre leitura e gerenciamento.
+
+00:04:22.800 --> 00:04:24.560
+PIN para elevação em ações destrutivas.
+
+00:04:24.560 --> 00:04:26.820
+Todas as chamadas de ferramentas registradas no Ognari.
+
+00:04:27.160 --> 00:04:28.940
+Segurança de conteúdo tanto na entrada quanto na saída.
+
+00:04:29.380 --> 00:04:32.820
+Prom shields para jailbreaks e injeções indiretas de fontes de conhecimento.
+
+00:04:33.680 --> 00:04:34.280
+Hora da analogia.
+
+00:04:34.940 --> 00:04:37.160
+Pesquisador, analista, operador, QA.
+
+00:04:37.820 --> 00:04:39.140
+Cada um é responsável por sua parte.
+
+00:04:39.620 --> 00:04:41.040
+O operador não aprova sua própria alteração.
+
+00:04:41.600 --> 00:04:42.820
+O analista não mexe na produção.
+
+00:04:43.380 --> 00:04:45.020
+O QA não escreve o código que está aprovando.
+
+00:04:46.020 --> 00:04:46.320
+Honório.
+
+00:04:46.720 --> 00:04:46.960
+Segundo.
+
+00:04:46.960 --> 00:04:49.720
+O QA e Júriar e Founder mais Semantic Kernel.
+
+00:04:50.180 --> 00:04:57.180
+O Founder é a extração de agentes, escolhas de modelos, fundamentação de conhecimento, conexão de ferramentas, segurança de conteúdo, rastreamento, avaliações e coordenações no seu lugar.
+
+00:04:58.020 --> 00:05:02.940
+O Semantic Kernel oferece planejadores, habilidades, pipelines, novas tentativas e cancelamento em código.
+
+00:05:02.940 --> 00:05:05.920
+Juntos, você mistura modelos por função.
+
+00:05:06.320 --> 00:05:14.260
+SLMs para extração, classe GPT-4 para planejamento, processamento em lote para resumos, mantendo promptes curtos, raio de impacto pequeno e seus fins de semana livres.
+
+00:05:15.100 --> 00:05:16.000
+Agora vamos construir isso.
+
+00:05:16.500 --> 00:05:19.000
+Como o Azure AI Founder possibilita fluxo de trabalho multiagentes?
+
+00:05:19.580 --> 00:05:23.660
+É aqui que o Azure AI Founder deixa de ser apenas um portal atraente e começa a agir como um ambiente de produção.
+
+00:05:24.400 --> 00:05:31.520
+O Founder oferece locais para definir agentes, conectar modelos, adicionar conhecimento, conectar ações e observar tudo sem precisar navegar em seis abas diferentes contando com a sorte.
+
+00:05:31.520 --> 00:05:33.460
+É a orquestração sem improvisos.
+
+00:05:34.120 --> 00:05:35.480
+Comece pelas definições dos agentes.
+
+00:05:36.340 --> 00:05:41.160
+No Founder, cada agente recebe instruções, uma orientação de função precisa, não um manifesto.
+
+00:05:41.760 --> 00:05:43.300
+Implantação, modelo real por trás dele.
+
+00:05:43.780 --> 00:05:47.160
+Misture modelos, classe GPT-4 para planejamento com SLMs, classifique para extração.
+
+00:05:47.740 --> 00:05:52.180
+Conhecimento, índices do Azure AI Search, arquivos carregados ou fundamentação no Bing quando desejar contexto da web.
+
+00:05:52.760 --> 00:06:00.200
+Ações, ferramentas de API aberta, logic apps, funções, graphy, runbooks do Azure Automation ou interpretador de código para cálculos e análises rápidos.
+
+00:06:00.200 --> 00:06:01.780
+Agentes conectados.
+
+00:06:01.880 --> 00:06:05.980
+Sim, um agente pode tratar outro agente como uma ferramenta se isso mantiver as funções claras.
+
+00:06:06.580 --> 00:06:09.380
+Isso é importante porque o Semanticern se conecta a esse mesmo universo.
+
+00:06:10.220 --> 00:06:13.980
+No código, você cria planejadores, define habilidades e registra ferramentas em catálogos de funções.
+
+00:06:14.860 --> 00:06:20.600
+Você coreografa o ciclo de planejador, operador e revisor, deixando o Founder cuidar dos tópicos históricos e travas de segurança.
+
+00:06:21.200 --> 00:06:24.320
+Você mantém os prontos curtos e coloca o trabalho pesado em ferramentas com esquemas.
+
+00:06:24.840 --> 00:06:27.220
+Tradução, menos alucinações, menos erros, mais fim de semana.
+
+00:06:27.760 --> 00:06:28.620
+Escolha de modelos importa.
+
+00:06:28.620 --> 00:06:33.820
+O Foundry abstrai a inferência ao primeiro do endpoint do modelo, para que você possa trocar modelos sem reescrever todo o seu aplicativo.
+
+00:06:34.160 --> 00:06:35.020
+Dois caminhos comuns.
+
+00:06:35.120 --> 00:06:37.620
+Endpoints sem servidor para modelos premium e iteração rápida.
+
+00:06:38.160 --> 00:06:41.300
+Você paga por token em escala sob demanda e não precisa cuidar de GPUs como em 2018.
+
+00:06:42.180 --> 00:06:45.900
+Computação gerenciada para modelos abertos e específicos que você deseja manter dentro do limite do seu tempo.
+
+00:06:46.260 --> 00:06:50.000
+Você paga pelo tempo de atividade e controla o formato, mas a Microsoft cuida da infraestrutura de implantação.
+
+00:06:50.860 --> 00:06:51.820
+Misture modelos por função.
+
+00:06:52.260 --> 00:06:54.860
+Planejador no GPT-4 ou 4.1 Mini para raciocínio.
+
+00:06:54.860 --> 00:06:58.360
+Operador em um modelo pequeno que se destaca em extração e estruturação de parâmetros.
+
+00:06:58.960 --> 00:07:02.120
+Processe seus resumos longos durante a noite para que as pessoas recebam relatórios para amanhã.
+
+00:07:02.900 --> 00:07:06.580
+E se um modelo for desativado, você quiser experimentar variantes do DeepSeq ou LAMA,
+
+00:07:06.900 --> 00:07:09.880
+a API de inferência do Foundry permite manter seu código estável enquanto você experimenta.
+
+00:07:09.880 --> 00:07:12.500
+Ferramentas e ações são onde o operador ganha seu mérito.
+
+00:07:13.240 --> 00:07:16.300
+É aqui que você oferece poder real sem dar ao agente as chaves do seu reino.
+
+00:07:17.020 --> 00:07:19.540
+Ferramentas de API aberta para serviços internos com sua águia.
+
+00:07:20.060 --> 00:07:20.920
+Mantenha o contrato RIR.
+
+00:07:21.440 --> 00:07:24.120
+Se o esquema diz que o dispositivo é uma stringa, é melhor que seja uma ID de dispositivo.
+
+00:07:24.660 --> 00:07:26.580
+Lodge Caps para fluxo de aprovação e bloqueios humanos.
+
+00:07:27.420 --> 00:07:30.800
+Deixe o revisor encaminhar as mudanças para um aprovador e então retomar a execução após o SIM.
+
+00:07:31.540 --> 00:07:33.980
+Azure Functions para código de integração e transformações coerentes.
+
+00:07:33.980 --> 00:07:39.500
+API de grafo pequena, testável e versionada para tarefas do Intune entre acesso condicional de dispositivos.
+
+00:07:40.340 --> 00:07:43.800
+Deixe copos de leitura para agentes de monitoramento e apenas scopes de gerenciamento para remediadores.
+
+00:07:44.520 --> 00:07:46.700
+Azure Automation para scripts de dispositivos e runbooks.
+
+00:07:47.580 --> 00:07:49.620
+Trate isso como objetos cortantes e uma gaveta trancada.
+
+00:07:50.260 --> 00:07:51.500
+Apenas o agente de reparo pode olhar.
+
+00:07:52.500 --> 00:07:54.220
+Assim como o grounding e mantém-se curado,
+
+00:07:54.440 --> 00:07:57.520
+use o Azure AI Search com classificação híbrida e reclassificação semântica.
+
+00:07:58.020 --> 00:07:59.140
+Seguimente o conhecimento por domínio.
+
+00:07:59.600 --> 00:08:01.800
+Políticas do Intune separadas dos POPs de integração.
+
+00:08:02.580 --> 00:08:03.840
+Para não enviar tudo o que você tem de uma vez.
+
+00:08:04.320 --> 00:08:06.560
+O operador deve passar um trecho, não a enciclopédia inteira.
+
+00:08:07.260 --> 00:08:12.000
+Defina o tamanho dos fragmentos, armazena e citações e peça ao revisor que verifique a fundamentação antes que chegue à produção.
+
+00:08:12.680 --> 00:08:13.480
+Segurança não é opcional.
+
+00:08:14.040 --> 00:08:16.560
+Foundry já inclui filtros de segurança de conteúdo para entrada e saída,
+
+00:08:16.680 --> 00:08:19.920
+proteção contra jailbreak e injeção indireta, além de verificações de material protegido.
+
+00:08:20.760 --> 00:08:24.780
+Execute a segurança antes e depois do modelo para não pagar por entradas ruins ou gerar ações públicas.
+
+00:08:25.820 --> 00:08:29.280
+Combine isso com identidade gerenciada por agente, R-back de privilégio mínimo,
+
+00:08:29.280 --> 00:08:31.740
+e PM para elevação temporária em ferramentas destrutivas.
+
+00:08:31.960 --> 00:08:33.360
+Cada chamada de ferramenta é rastreada.
+
+00:08:33.360 --> 00:08:34.680
+Cada aprovação é registrada.
+
+00:08:35.000 --> 00:08:37.760
+Se alguém perguntar quem executou o quê, você não precisa ver o Outlook.
+
+00:08:38.160 --> 00:08:39.160
+O Log Analytics já sabe.
+
+00:08:40.320 --> 00:08:41.280
+Observabilidade é modo profissional.
+
+00:08:41.940 --> 00:08:44.120
+Ative o rastreamento para ver o histórico de execução.
+
+00:08:44.280 --> 00:08:45.140
+Qual agente chamou?
+
+00:08:45.320 --> 00:08:45.980
+Qual ferramenta?
+
+00:08:46.080 --> 00:08:46.860
+Com quais parâmetros?
+
+00:08:47.060 --> 00:08:47.580
+Qual latência?
+
+00:08:47.720 --> 00:08:49.020
+E qual foi o retorno?
+
+00:08:49.020 --> 00:08:53.540
+Conecte o application insights para padrões de desempenho, logs de aplicativo para auditoria
+
+00:08:53.540 --> 00:08:57.300
+e envie avaliações para CI para detectar desvios em relevância, fundamentação e fluência
+
+00:08:57.300 --> 00:08:57.920
+antes do usuário.
+
+00:08:58.720 --> 00:09:02.340
+Se a fundamentação cair, o revisor sinaliza, o planejador refina a consulta de busca e o
+
+00:09:02.340 --> 00:09:03.340
+operador tenta novamente.
+
+00:09:03.340 --> 00:09:04.880
+Não é necessário o pânico humano.
+
+00:09:05.400 --> 00:09:06.920
+Primitivas de implantação não têm tudo a organizar.
+
+00:09:07.300 --> 00:09:10.000
+Use projetos do Foundry, pacotas de escopo de equipe e linhas de base de política.
+
+00:09:10.320 --> 00:09:13.660
+Coloque o Azure API Management na frente do seu serviço de ferramentas para versionar,
+
+00:09:13.760 --> 00:09:17.240
+limitar, implementar disjuntores e rotear entre PTU e inferências sob demanda.
+
+00:09:17.960 --> 00:09:21.120
+Endpoints privados onde a residência de dados ou conformidade exige seriedade.
+
+00:09:21.860 --> 00:09:24.560
+Regiões que correspondam aos seus usuários, não apenas às suas aspirações.
+
+00:09:24.560 --> 00:09:26.580
+E sim, o Semantic Care não fecha o pacote.
+
+00:09:27.080 --> 00:09:28.240
+Se inscreve o fluxo e trabalha em conta.
+
+00:09:28.700 --> 00:09:29.500
+Decompõe as tarefas.
+
+00:09:29.860 --> 00:09:33.020
+O operador escolhe as ferramentas com base em catálogos de funções e disponibilidade.
+
+00:09:33.680 --> 00:09:37.500
+O revisor aplica verificações com prompts de avaliação e resultados de segurança de
+
+00:09:37.500 --> 00:09:41.600
+conteúdo, e você obtém novas tentativas com back-off e tokens de cancelamento quando
+
+00:09:41.600 --> 00:09:43.540
+uma API externa finge estar em manutenção.
+
+00:09:44.620 --> 00:09:47.440
+O SK lhe dá o cérebro de execução, o Foundry lhe dá a sala de cirurgia.
+
+00:09:48.120 --> 00:09:49.780
+Junte tudo e você terá um padrão prático.
+
+00:09:50.600 --> 00:09:53.660
+Defina agentes no Foundry com instruções e identidades estritas,
+
+00:09:53.660 --> 00:09:56.540
+orquestra funções no SK Fundamente com Pesquisa Curada.
+
+00:09:56.780 --> 00:10:00.540
+Conecte ações com APIs abertas, logic apps, funções, automação, aplique segurança
+
+00:10:00.540 --> 00:10:02.660
+antes e depois da inferência e observe tudo.
+
+00:10:03.520 --> 00:10:04.640
+Entra diante da melhor maneira possível.
+
+00:10:05.120 --> 00:10:07.100
+Como cinto de segurança ou não dar privilégios.
+
+00:10:07.180 --> 00:10:10.040
+De administrador global ou estagiário chamado chave padrão.
+
+00:10:11.160 --> 00:10:12.240
+Cenário de demonstração 1.
+
+00:10:12.520 --> 00:10:15.580
+Limpeza de dispositivos, unidade de dispositivos fantasma do CS Intune.
+
+00:10:16.200 --> 00:10:20.020
+Sabe aqueles dispositivos que aparecem como gerenciados, retirados e mortos-vivos ao mesmo tempo?
+
+00:10:20.980 --> 00:10:22.100
+Bem-vindo ao CS Intune.
+
+00:10:22.100 --> 00:10:23.440
+Nosso trabalho.
+
+00:10:23.600 --> 00:10:27.340
+Encontra hardware obsoleto, duplicado ou não escrito e remediar com segurança e aprovação
+
+00:10:27.340 --> 00:10:29.280
+para que ninguém envie e-mails furiosos para o jurídico.
+
+00:10:29.780 --> 00:10:30.560
+Elenco de agentes.
+
+00:10:31.000 --> 00:10:31.300
+Monitor.
+
+00:10:31.820 --> 00:10:32.300
+Consultas.
+
+00:10:32.560 --> 00:10:34.000
+Microsoft Graph e Log Analytics.
+
+00:10:34.200 --> 00:10:35.400
+Classifica estados de dispositivos.
+
+00:10:35.520 --> 00:10:36.980
+Sinaliza amalias.
+
+00:10:36.980 --> 00:10:41.400
+O remediador chama o Intune e a automação do Azure para colocar em quarentena ou retirar dispositivos.
+
+00:10:42.160 --> 00:10:47.500
+O auditor registra tudo, notifica os humanos e escreve o relatório pós-ação para conformidade.
+
+00:10:48.160 --> 00:10:49.240
+O fluxo funciona assim.
+
+00:10:49.780 --> 00:10:54.220
+O monitor extrai do Graph, registra os dispositivos, último check-in, estado de conformidade e tipo de inscrição.
+
+00:10:54.220 --> 00:10:56.000
+O usuário principal é o sinalizador de retirada.
+
+00:10:56.840 --> 00:11:02.360
+Ele também captura sinais do Log Analytics, pulsação do Defender, conformidade de atualização e eventos da extensão de gerenciamento do Intune.
+
+00:11:03.260 --> 00:11:05.980
+Ele funde isso em um registro curto e estruturado por dispositivo.
+
+00:11:06.520 --> 00:11:10.080
+Última visualização em ETC é inscrito, compatível, candidato a duplicata, sinais de risco.
+
+00:11:10.080 --> 00:11:11.500
+Sem romances, apenas campos.
+
+00:11:11.700 --> 00:11:12.960
+Agora a passagem do cérebro, o músculo.
+
+00:11:13.220 --> 00:11:14.900
+O monitor envia uma classificação proposta.
+
+00:11:15.240 --> 00:11:17.060
+Obsoleto, duplicado, sem pulsação normal.
+
+00:11:17.960 --> 00:11:19.020
+O revisor verifica a fundamentação.
+
+00:11:20.000 --> 00:11:21.640
+Esses campos realmente vieram do Graph e do LE.
+
+00:11:22.400 --> 00:11:27.020
+A segurança de conteúdo é executada antes do modelo para bloquear a injeção de prompt de qualquer arquivo carregado ou fundamentação leve.
+
+00:11:27.780 --> 00:11:30.540
+Se a classificação for aprovada, o remediador prepara as ações.
+
+00:11:31.440 --> 00:11:34.000
+Primeira fase é a remediação leve, marcar e colocar em quarentena.
+
+00:11:35.120 --> 00:11:37.680
+Aplicamos uma categoria de candidato a dispositivo retirado.
+
+00:11:37.680 --> 00:11:40.740
+Removemos vínculos de grupos dinâmicos que disparam a expansão de políticas
+
+00:11:40.740 --> 00:11:44.620
+e, se necessário, movemos o dispositivo para um grupo de quarentena do Azure AD que bloqueia o acesso.
+
+00:11:45.460 --> 00:11:46.300
+As exclusões, por enquanto.
+
+00:11:47.660 --> 00:11:48.840
+As aprovações caem em um logic app.
+
+00:11:49.640 --> 00:11:54.240
+O revisor inclui um plano compacto, ID's de dispositivo, motivos, ações propostas e reversão.
+
+00:11:55.060 --> 00:11:59.740
+O aprovador vê um resumo no Teams com citações para consultas do Graph e QQL do Log Analytics.
+
+00:12:00.640 --> 00:12:03.980
+Ao aprovar, o token de sensor retorna, o remediador executa a retirada,
+
+00:12:04.360 --> 00:12:06.340
+limpa como justificado ou remove duplicatas,
+
+00:12:06.340 --> 00:12:09.460
+mantendo o dispositivo com a pulsação mais recente e desvinculando fantasmas.
+
+00:12:10.320 --> 00:12:12.280
+A identidade herenciada mantém nossas mãos limpas.
+
+00:12:12.360 --> 00:12:14.500
+Um monitor executado com permissão de leitura total de dispositivo.
+
+00:12:14.780 --> 00:12:18.520
+O remediator usa uma identidade separada com permissões de leitura e escrita de dispositivo
+
+00:12:18.520 --> 00:12:20.080
+e exatamente as permissões necessárias no intune.
+
+00:12:20.460 --> 00:12:21.300
+A exclusão é protegida.
+
+00:12:21.520 --> 00:12:23.720
+O agente remediador não pode elevar seus privilégios.
+
+00:12:24.280 --> 00:12:27.100
+Quando a elevação é solicitada, o logic app exige um humano
+
+00:12:27.100 --> 00:12:29.080
+e o temporizador da permissão começa a correr.
+
+00:12:29.800 --> 00:12:31.200
+A observabilidade é a parte séria do processo.
+
+00:12:31.660 --> 00:12:33.020
+Cada chamada de ferramenta é rastreada.
+
+00:12:33.020 --> 00:12:35.360
+Quem chamou o quê? Parâmetros, latência, resposta.
+
+00:12:35.920 --> 00:12:39.500
+O auditor grava registros de eventos no Log Analytics com IDs de correlação
+
+00:12:39.500 --> 00:12:41.780
+para que você reconstrua a cena sem arqueologia no Slack.
+
+00:12:42.160 --> 00:12:42.220
+É.
+
+00:12:42.740 --> 00:12:46.220
+Também executamos uma etapa de avaliação, pós-alteração, fundamentação, relevância e fluidez.
+
+00:12:46.640 --> 00:12:49.620
+Se a fundamentação cai, o revisor bloqueia ações destrutivas
+
+00:12:49.620 --> 00:12:53.020
+e devolve o plano ao planejador para refinar a recuperação ou restringir o escopo.
+
+00:12:53.880 --> 00:12:55.160
+Os modelos são misturados intencionalmente.
+
+00:12:55.480 --> 00:12:58.280
+A classificação usa um modelo pequeno para manter o custo e a latência baixos.
+
+00:12:58.280 --> 00:13:03.100
+Casos extremos, como dois dispositivos onde o Autopilot renomeou um e o Azure AD acha que são gêmeos,
+
+00:13:03.180 --> 00:13:05.700
+recebem um caminho de raciocínio com o GPT-4 Mini.
+
+00:13:06.300 --> 00:13:07.160
+Os campos acessados e noices.
+
+00:13:07.580 --> 00:13:10.180
+Ninguém precisa de um relatório shakesperiano às 14 horas apenas uma micro-história.
+
+00:13:10.740 --> 00:13:13.500
+Semana passada, o teste de agente único tentou corrigir um dispositivo inativo,
+
+00:13:13.620 --> 00:13:15.340
+aposentando tudo no mesmo grupo dinâmico.
+
+00:13:15.920 --> 00:13:18.580
+O revisor em nosso fluxo multiagente sinalizou a incompatibilidade de escopo,
+
+00:13:18.680 --> 00:13:20.780
+pediu confirmação em nível de dispositivo e interrompiu o processo.
+
+00:13:20.840 --> 00:13:22.880
+É por isso que separamos planejar a GIVK.
+
+00:13:23.280 --> 00:13:26.180
+Resultado final. Dispositivos fantasmas, para onde assombrar a conformidade.
+
+00:13:26.180 --> 00:13:30.200
+Você reduz desperdício de licença, corta falsos positivos e para de explicar a liderança
+
+00:13:30.200 --> 00:13:32.580
+porque é falha na aposentadoria. Virou um estilo de vida.
+
+00:13:33.260 --> 00:13:34.700
+E sim, a trilha de auditoria é legível.
+
+00:13:34.860 --> 00:13:37.200
+O que é mais do que posso dizer sobre metade dos seus chamados de mudança.
+
+00:13:38.880 --> 00:13:40.600
+Cenário de demonstração 2. Integração zero-touch.
+
+00:13:41.120 --> 00:13:41.940
+Realmente zero-touch.
+
+00:13:42.660 --> 00:13:45.480
+Zero-touch para o usuário. 500 toques para a engenharia antes dos agentes.
+
+00:13:46.760 --> 00:13:50.140
+Objetivo. De um evento de RH a um usuário e dispositivo pronto, sem alternância manual.
+
+00:13:51.020 --> 00:13:54.720
+Fluido, governado e reversível quando o RH escreve o sobrenome de três formas diferentes.
+
+00:13:55.300 --> 00:13:55.800
+Alinhamento aqui.
+
+00:13:56.740 --> 00:14:01.340
+O intake. Escuta o webhook do RH, normaliza payloads e valida os campos obrigatórios.
+
+00:14:02.220 --> 00:14:06.640
+O provisioner cria o usuário no entra, atribui grupos e licenças e registra perfis de autopilot.
+
+00:14:07.640 --> 00:14:12.640
+O validator verifica a conformidade de políticas e o acesso condicional antes de entregar-nos um laptop novo.
+
+00:14:13.720 --> 00:14:17.900
+Concierge. Envia o pacote de boas-vindas. Links do SharePoint e a lista de verificação do primeiro dia.
+
+00:14:18.520 --> 00:14:19.160
+Hora do fluxo.
+
+00:14:19.400 --> 00:14:23.720
+O intake recebe o payload do RH. Nome, data de início, cargo, departamento, gestor, região.
+
+00:14:23.720 --> 00:14:29.760
+Um modelo pequeno extrai e normaliza os dados. Ele mapeia para campos canônicos e detecta absurdos com uma data de início em 2022.
+
+00:14:29.760 --> 00:14:34.660
+Se campos obrigatórios faltarem, notifica RH com um erro estruturado via Logic Apps. Nada de textos livres.
+
+00:14:34.660 --> 00:14:37.980
+O provisioner chama o gráfico uma identidade gerenciada com o escopo de usuário.
+
+00:14:38.700 --> 00:14:42.280
+Ele cria o usuário no entra, define o local de uso e aplica um grupo base.
+
+00:14:43.060 --> 00:14:45.280
+Em seguida, ele reúne as atribuições de licença com base na região.
+
+00:14:46.120 --> 00:14:46.800
+Rá, seu senhor ajuda aqui.
+
+00:14:47.420 --> 00:14:49.660
+Esta pessoa precisa do I5 Security ou do Business Premium.
+
+00:14:50.660 --> 00:14:53.480
+Codificamos a política em dados e permitimos que o modelo escolha esses pacotes permitidos.
+
+00:14:54.040 --> 00:14:56.280
+Nenhum modelo pode inventar licenças. É um menu rigoroso.
+
+00:14:56.740 --> 00:14:57.500
+O autopilot vem a seguir.
+
+00:14:57.500 --> 00:15:03.620
+O provisionador registra um hash de hardware que já temos ou prepara um perfil just-in-time vinculado ao grupo do usuário.
+
+00:15:04.480 --> 00:15:07.860
+Ele marca os grupos de dispositivos para políticas de linha de base. Então, o validador é ativado.
+
+00:15:08.260 --> 00:15:13.220
+Ele consulta o Graph e o Defender por sinais de conformidade, verifica se o acesso condicional não impedirá o primeiro login
+
+00:15:13.220 --> 00:15:16.180
+e confere se as políticas de configuração de dispositivo correta serão aplicadas.
+
+00:15:16.640 --> 00:15:19.240
+Se o acesso condicional bloquear o novo funcionário no primeiro dia,
+
+00:15:19.580 --> 00:15:22.900
+o validador abre uma aprovação com uma exceção por tempo limitado e a justificativa.
+
+00:15:22.900 --> 00:15:24.860
+O conselho cuida das tarefas humano.
+
+00:15:25.280 --> 00:15:29.920
+Ele envia uma mensagem no Teams ao gerente com o PN do novo funcionário e o status de atribuição do dispositivo
+
+00:15:29.920 --> 00:15:31.440
+em um link para um kit inicial do SharePoint.
+
+00:15:32.220 --> 00:15:34.700
+Ele envia um e-mail ao novo funcionário com os passos para o primeiro dia,
+
+00:15:34.800 --> 00:15:37.280
+orientações de configuração de MFA e onde encontrar o portal de T.
+
+00:15:37.680 --> 00:15:40.200
+Ele não cola seus intervalos de IP internos no e-mail.
+
+00:15:41.180 --> 00:15:43.380
+A segurança de conteúdo verifica as saídas quanto a vazamentos.
+
+00:15:43.800 --> 00:15:45.420
+A governança segue o mesmo tema de segurança.
+
+00:15:45.920 --> 00:15:48.800
+A identidade gerenciada do provisionador tem direito à licença, mas não à exclusão.
+
+00:15:49.360 --> 00:15:51.240
+O intake não pode provisionar, ele é apenas valido.
+
+00:15:51.240 --> 00:15:55.360
+O PM bloqueia quaisquer ações de alto risco, como adicionado usuários a um grupo sensível.
+
+00:15:55.640 --> 00:15:57.920
+Todas as ações são rastreadas no App Insights e no Log Analytics.
+
+00:15:58.620 --> 00:16:01.940
+Se o RH enviar um payload corrigido, o planejador recalcula a diferença
+
+00:16:01.940 --> 00:16:05.540
+e o operador atualiza apenas o que mudou, sem oscilações nas associações de grupo.
+
+00:16:06.060 --> 00:16:07.480
+A observabilidade fornece marcos.
+
+00:16:08.280 --> 00:16:11.500
+Ingestão de RH, criação no entra, atribuição de licença, perfil de autopilot,
+
+00:16:11.640 --> 00:16:13.500
+notificação de veredito de conformidade enviada.
+
+00:16:14.240 --> 00:16:17.800
+Você obtém métricas de SLA e novas tentativas automáticas em os transitórios do Graphicom Backoff.
+
+00:16:17.800 --> 00:16:20.600
+Se o sistema de RH falhar, o thread não morre.
+
+00:16:21.140 --> 00:16:23.400
+Ele pausa, registra e retoma quando corrigido.
+
+00:16:24.560 --> 00:16:27.640
+As avaliações são executadas em si em payloads de integração sintéticos
+
+00:16:27.640 --> 00:16:31.200
+para detectar regressões em relevância e fundamentação, antes que um funcional sova.
+
+00:16:31.320 --> 00:16:32.960
+A combinação de modelos mantém a conta em nível de licença.
+
+00:16:33.320 --> 00:16:34.700
+SLM para extração e normalização.
+
+00:16:35.360 --> 00:16:37.720
+Uma etapa de raciocínio apenas nas decisões de seleção de política.
+
+00:16:38.460 --> 00:16:40.460
+Resumos e e-mails de boas-vingas são agrupados quando possível.
+
+00:16:41.080 --> 00:16:44.900
+O objetivo é um provisionamento de baixa latência com clareza de nível humano na trilha de auditorio.
+
+00:16:45.620 --> 00:16:46.200
+História rápida.
+
+00:16:46.200 --> 00:16:50.260
+A integração com agente único tentou adicionar um usuário a todos os funcionários e contratados,
+
+00:16:50.360 --> 00:16:51.980
+porque o cargo dizia equipe de contratados.
+
+00:16:53.240 --> 00:16:55.980
+O multiagente detectou a regra de exclusividade mútua no validador,
+
+00:16:56.100 --> 00:16:59.120
+pediu uma decisão humana e evitou um problema imediato no acesso condicional.
+
+00:16:59.820 --> 00:17:01.340
+Resultado verdadeiramente zero toque para o usuário.
+
+00:17:01.840 --> 00:17:05.100
+Um thread, quatro agentes, aprovações limpas e uma trilha de auditoria
+
+00:17:05.100 --> 00:17:08.000
+que você pode mostrar ao seu CISO sem precisar rezar para os deuses das demonstrações.
+
+00:17:08.480 --> 00:17:10.880
+E sim, quando o RH inevitavelmente altera a data de início,
+
+00:17:10.980 --> 00:17:13.320
+o sistema recalcula sem estourar o orçamento de licenças.
+
+00:17:13.320 --> 00:17:17.260
+Cenário de demonstração 3. Fortalecimento de segurança automatizado.
+
+00:17:17.640 --> 00:17:19.200
+Por favor, mantenha o BitLocker ativado.
+
+00:17:19.760 --> 00:17:21.020
+O desvio de segurança é como ervas da linha.
+
+00:17:21.420 --> 00:17:24.820
+Se a ranca 3 e 5 aparece e uma delas desativa o BitLocker por pura maldade.
+
+00:17:25.540 --> 00:17:28.200
+Nosso objetivo, detectar desvios de configuração continuamente
+
+00:17:28.200 --> 00:17:30.660
+e remediar com segurança com salvaguardas que o advogado respeitaria.
+
+00:17:30.660 --> 00:17:33.420
+O detector de desvios consulta o Graph e o Defender.
+
+00:17:34.020 --> 00:17:37.400
+Secure Score extrai a conformidade do Intune e as linhas de base de configuração de dispositivo,
+
+00:17:37.480 --> 00:17:38.260
+criando um delta desvio.
+
+00:17:39.060 --> 00:17:42.600
+O corretor aplica mudanças de política do Intune e configurações de BitLocker
+
+00:17:42.600 --> 00:17:44.600
+e anéis de atualização do Windows e Endos.
+
+00:17:45.340 --> 00:17:47.660
+Executa scripts de dispositivo via Azure Automation,
+
+00:17:47.940 --> 00:17:49.160
+quando a política não é suficiente.
+
+00:17:50.260 --> 00:17:52.780
+O revisor impõe limite, define o escopo das mudanças,
+
+00:17:52.900 --> 00:17:56.280
+executa verificações de base e exige aprovação humana para passos de risco.
+
+00:17:56.280 --> 00:18:00.980
+O mensageiro notifica os responsáveis no Teams ou e-mail com planos compactos e comprovantes.
+
+00:18:02.000 --> 00:18:05.100
+Fluxo, detecta o desvios executado de forma agendada ou sob demanda.
+
+00:18:06.140 --> 00:18:08.600
+Ele extrai via Graph a conformidade do dispositivo,
+
+00:18:08.760 --> 00:18:11.620
+status do BitLocker, status do TPM, versão do SO,
+
+00:18:11.980 --> 00:18:13.540
+anéis de atualização e atribuições de política.
+
+00:18:14.300 --> 00:18:17.480
+Ele compara cada dispositivo com um perfil ideal como dados estruturados,
+
+00:18:17.600 --> 00:18:18.700
+não como um documento vago.
+
+00:18:19.720 --> 00:18:21.540
+Ele marca as descobertas, BitLocker ausente,
+
+00:18:21.800 --> 00:18:23.820
+método de criptografia fraco, política não aplicada,
+
+00:18:23.820 --> 00:18:26.500
+se criboot desativado, anel de atualização fora dos limites.
+
+00:18:26.880 --> 00:18:30.160
+A etapa de planejamento entra em ação propondo um plano mínimo por grupo de dispositivo.
+
+00:18:30.540 --> 00:18:33.780
+Para o BitLocker, use a política de BitLocker no intone se o dispositivo for compatível.
+
+00:18:34.540 --> 00:18:37.260
+Se a política já estiver direcionada, mas o status estiver desativado,
+
+00:18:37.380 --> 00:18:40.380
+propõe um script de automação para reiniciar as proteções e salvar a chave no Azure AD.
+
+00:18:41.160 --> 00:18:44.540
+Para desvio de atualização, propõe mover o dispositivo para um anel de atualização gradual
+
+00:18:44.540 --> 00:18:45.700
+em vez de aplicar agora e torcer.
+
+00:18:47.060 --> 00:18:51.000
+Para problemas de acesso condicional, propõe uma exceção temporária com a devida justificativa.
+
+00:18:51.000 --> 00:18:53.840
+O revisor avalia a fundamentação.
+
+00:18:54.640 --> 00:18:57.600
+O detector de desvios realmente citou os campos do Graph e do Defender.
+
+00:18:58.780 --> 00:19:01.740
+Ele verifica o escopo, a digipositiva, a digipolítica e tipo de alteração.
+
+00:19:02.400 --> 00:19:05.000
+Se algo sugerir todos os dispositivos, é bloqueado imediatamente.
+
+00:19:05.700 --> 00:19:07.860
+A segurança de conteúdo é aplicada na entrada e saída
+
+00:19:07.860 --> 00:19:11.020
+para evitar a injeção de prompt de qualquer conhecimento externo ou logs colados.
+
+00:19:11.560 --> 00:19:14.240
+Ações de alto risco, como remover uma política local conflitante,
+
+00:19:14.340 --> 00:19:15.640
+exigem aprovação do gerente produto.
+
+00:19:16.020 --> 00:19:17.700
+A identidade do corretor não pode se auto-elevar.
+
+00:19:17.700 --> 00:19:20.360
+A aprovação ocorre em um aplicativo lógico com cartão organizado.
+
+00:19:20.560 --> 00:19:20.840
+Errado.
+
+00:19:21.260 --> 00:19:21.700
+O que mudará?
+
+00:19:22.260 --> 00:19:23.460
+Passos de reversão e citações.
+
+00:19:23.960 --> 00:19:25.040
+Aprove e o corretor executa.
+
+00:19:25.720 --> 00:19:28.160
+As atualizações de política do Intune são ainda impotentes e direcionadas.
+
+00:19:28.700 --> 00:19:32.360
+A correção do BitLocker usa um handbook com parâmetros explícitos e uma verificação de integridade.
+
+00:19:32.820 --> 00:19:37.480
+TPM presente, SO, suporta XTS, AS, 256, caminho e custódia verificado.
+
+00:19:38.120 --> 00:19:41.520
+Se qualquer pré-verificação falhar, ele falha com um erro compreensível e sem efeitos colaterais.
+
+00:19:42.420 --> 00:19:43.420
+Mensageiro fecha o ciclo.
+
+00:19:43.900 --> 00:19:44.720
+Dispositivo corrigido.
+
+00:19:44.720 --> 00:19:48.520
+Um resumo enxerga o Teams com contagens, links para rastreamentos do App Insights e
+
+00:19:48.520 --> 00:19:51.040
+um CSV para a pessoa que ainda ama o Excel mais do que a própria família.
+
+00:19:52.040 --> 00:19:55.960
+Se um dispositivo se recusou a cumprir, o revisor abre um tópico de exceção com um cronômetro
+
+00:19:55.960 --> 00:19:57.100
+e novas tentativas agendadas.
+
+00:19:57.960 --> 00:19:58.360
+Observabilidade.
+
+00:19:58.480 --> 00:20:00.720
+Cada chamada de ferramenta é rastreada e correlacionada para o tópico.
+
+00:20:01.260 --> 00:20:04.380
+Bloqueamos os deltas antes e depois para que a auditoria possa ver o que não está em
+
+00:20:04.380 --> 00:20:05.880
+conformidade sem precisar ficar no KQE.
+
+00:20:06.640 --> 00:20:10.400
+Também executamos um agente de avaliação nos resumos pós-alteração para verificar a fundamentação
+
+00:20:10.400 --> 00:20:10.860
+e clareza.
+
+00:20:10.860 --> 00:20:15.920
+Se a fundamentação cair ou as taxas de falha aumentarem, o planejador restringe a recuperação,
+
+00:20:16.040 --> 00:20:18.080
+reduz o tamanho do lote ou pausações destrutivas.
+
+00:20:18.580 --> 00:20:22.200
+Combinação de modelos, SLM para extração e classificação, modelo de raciocínio para
+
+00:20:22.200 --> 00:20:23.880
+síntese de planos apenas quando necessário.
+
+00:20:24.200 --> 00:20:25.320
+Agrupio relatório no Tupo.
+
+00:20:25.460 --> 00:20:26.240
+Adicione sobre IAS.
+
+00:20:26.620 --> 00:20:28.100
+Resultado final, o BitLocker está realmente ativado.
+
+00:20:28.320 --> 00:20:29.600
+Os anéis de atualização apresentam menos.
+
+00:20:29.860 --> 00:20:31.940
+As exceções são documentadas com prazo definido e revisável.
+
+00:20:31.940 --> 00:20:35.580
+E ninguém conserta um dispositivo reformatando os notebooks do financeiro durante o fechamento
+
+00:20:35.580 --> 00:20:36.020
+do trimestre.
+
+00:20:36.020 --> 00:20:44.020
+Vamos abrir o capô sem derramar óleo do motor na sua cota.
+
+00:20:45.020 --> 00:20:47.020
+Pense em quatro camadas que mantêm tudo sob controle.
+
+00:20:47.160 --> 00:20:49.880
+Foundry, Semantic Kernel, Ferramentas e Identidade.
+
+00:20:50.880 --> 00:20:51.420
+Foundry é a base.
+
+00:20:52.240 --> 00:20:55.380
+Você define agentes com instruções rígidas, escolhe implantações por função,
+
+00:20:55.520 --> 00:20:58.480
+anexa conhecimento via Azure AI Search e registrações.
+
+00:20:58.480 --> 00:21:04.080
+Ferramentas, OpenAPI, Logic Apps, Funções, Graph, Azure Automation, Interpretador de
+
+00:21:04.080 --> 00:21:08.880
+Código, Ameaças, Histórico de Execução, Rastreamento, Avaliações e Segurança vivem
+
+00:21:08.880 --> 00:21:09.040
+aqui.
+
+00:21:09.500 --> 00:21:12.620
+Os contos de prompt de segurança de conteúdo e verificações de material protegido são
+
+00:21:12.620 --> 00:21:15.840
+executados antes e depois dos modelos, para que entradas ruins não custem tokens e saídas
+
+00:21:15.840 --> 00:21:16.680
+ruins não custem empregos.
+
+00:21:17.060 --> 00:21:18.240
+O Semantic Kernel é um maestro.
+
+00:21:18.480 --> 00:21:21.360
+No código, você conecta o loop de planejador, operador e revisor.
+
+00:21:21.920 --> 00:21:25.400
+Você registra catálogos de funções para ferramentas, define o tempo de espera de novas tentativas
+
+00:21:25.400 --> 00:21:26.580
+e adiciona tokens de cancelamento.
+
+00:21:27.200 --> 00:21:29.880
+Você mantém os promptos curtos, transfere a complexidade para esquemas e deixa o SK
+
+00:21:29.880 --> 00:21:32.400
+decidir qual ferramenta chamar com base na disponibilidade e na política.
+
+00:21:33.380 --> 00:21:35.440
+Se o Graph atingir o tempo limite, o SK trata com o JIT.
+
+00:21:35.940 --> 00:21:38.860
+Se a fundamentação diminuir, ele retorna ao planejador para refinamento.
+
+00:21:39.580 --> 00:21:40.120
+As ferramentas.
+
+00:21:40.800 --> 00:21:42.480
+Mantenha contratos rígidos com OpenAPI.
+
+00:21:43.160 --> 00:21:46.120
+Coloque o AP Management na frente para limitar a controlar a versões e interromper o circuito.
+
+00:21:46.440 --> 00:21:48.680
+Logic Apps lidam com aprovações e fluxos de longa duração.
+
+00:21:49.200 --> 00:21:50.820
+As funções fazem a integração e a transformação.
+
+00:21:50.820 --> 00:21:53.960
+O Azure Automation executa scripts com proteções e verificações posterior.
+
+00:21:53.960 --> 00:21:58.200
+O Graph é sua fonte da verdade para Intune e entra conformidade Secure Score.
+
+00:21:58.940 --> 00:22:01.340
+O Azure AI Search fornece conhecimento curado por domínio.
+
+00:22:01.640 --> 00:22:02.500
+Nada de bagunça de um isso mesmo.
+
+00:22:02.840 --> 00:22:03.900
+A identidade é o cinto de segurança.
+
+00:22:04.320 --> 00:22:05.980
+Cada agente tem sua própria identidade gerenciada.
+
+00:22:06.600 --> 00:22:07.900
+Agente de monitoramento obtém scope.
+
+00:22:08.240 --> 00:22:09.820
+Agentes de remediação obtêm scope descrita.
+
+00:22:10.460 --> 00:22:11.960
+PM bloqueia coisa destrutiva.
+
+00:22:12.600 --> 00:22:14.260
+A elevação requer um ano e expira.
+
+00:22:15.000 --> 00:22:16.940
+Endpoints privados onde os limites de dados são importantes.
+
+00:22:16.940 --> 00:22:21.740
+As políticas de referência nos projetos do Foundry aplicam os modelos, regiões e cotas permitidos.
+
+00:22:21.740 --> 00:22:26.240
+O App Insights e Log Analytics coletam rastreamentos, métricas e auditorias para que você possa
+
+00:22:26.240 --> 00:22:28.620
+responder quem fez o que sem precisar fazer arqueologia no Slack.
+
+00:22:29.340 --> 00:22:31.540
+Modelos são conectados via endpoint de diferença do FAM.
+
+00:22:32.040 --> 00:22:35.520
+Use serverless para raciocínio premium, gerencia e computação para modelos abertos fixos.
+
+00:22:36.120 --> 00:22:40.360
+Troque modelos sem reescrever código, mas avalie relevância, embasamento e fluidez no CIE
+
+00:22:40.360 --> 00:22:41.340
+antes de promover.
+
+00:22:42.120 --> 00:22:44.880
+As regiões correspondem aos seus usuários, zonas de dados aos seus reguladores.
+
+00:22:44.880 --> 00:22:47.560
+Juntando tudo, temos uma máquina confiável e previsível.
+
+00:22:47.980 --> 00:22:52.420
+Agentes definidos no Foundry, orquestrados pelo SK, movidos por ferramentas rígidas,
+
+00:22:52.520 --> 00:22:53.520
+bloqueados por identidade.
+
+00:22:53.980 --> 00:22:56.160
+Medidos por observabilidade e protegidos por segurança.
+
+00:22:56.940 --> 00:22:57.480
+Previsível vence.
+
+00:22:57.920 --> 00:22:58.600
+Previsível escapa.
+
+00:22:58.960 --> 00:22:59.840
+Previsível te deixa dormir.
+
+00:23:00.940 --> 00:23:02.560
+Boas práticas permitem lançamento sempre.
+
+00:23:03.700 --> 00:23:06.140
+Construa sabedoria de tempo para não passar o domingo desfazendo sábado.
+
+00:23:06.500 --> 00:23:07.620
+Dê a cada agente uma única tarefa.
+
+00:23:07.960 --> 00:23:08.720
+Planejador planeja.
+
+00:23:08.780 --> 00:23:09.440
+Operador opera.
+
+00:23:09.920 --> 00:23:10.620
+O revisor revisa.
+
+00:23:10.620 --> 00:23:14.540
+Se um agente começar a escrever um romance emocionante, corte o prompt e dê o texto
+
+00:23:14.540 --> 00:23:15.140
+a uma ferramenta.
+
+00:23:15.640 --> 00:23:18.840
+Mantenha as instruções curtas e copadas e simples, para você terá menos surpresas.
+
+00:23:19.200 --> 00:23:20.760
+Prefira chamadas de ferramenta a textos longos.
+
+00:23:21.080 --> 00:23:24.440
+Coloque contratos em APIs abertas, esquemas nas entradas e guardrails nas saídas.
+
+00:23:25.020 --> 00:23:27.360
+Se uma ferramenta espera um ID de dispositivo, envie um ID.
+
+00:23:27.500 --> 00:23:28.800
+Não, talvez este dispositivo nas finanças.
+
+00:23:29.480 --> 00:23:30.700
+Modelos são criativos, ferramentos longos.
+
+00:23:31.040 --> 00:23:31.560
+Esse é o ponto.
+
+00:23:32.440 --> 00:23:35.220
+Aplique o privilégio mínimo, como se seu emprego dependesse disso, porque depende.
+
+00:23:35.820 --> 00:23:36.620
+Separe as identidades.
+
+00:23:37.000 --> 00:23:40.600
+Leitura apenas para monitor, escrita apenas para remediador e nenhuma identidade deleta.
+
+00:23:40.620 --> 00:23:41.140
+Sem PM.
+
+00:23:41.760 --> 00:23:43.760
+A elevação é temporária, justificada e registrada.
+
+00:23:44.220 --> 00:23:47.420
+Se alguém pedir admin global permanente, dê uma bola anti-estresse e um documento de
+
+00:23:47.420 --> 00:23:47.720
+política.
+
+00:23:48.200 --> 00:23:49.740
+Comece pequeno, dois agentes, executor e ficador.
+
+00:23:50.180 --> 00:23:51.800
+Adicione um planejador quando o ciclo de FaceTime.
+
+00:23:52.080 --> 00:23:54.820
+Então, se precisar expandir, não comece com um time screen digital de 12.
+
+00:23:55.280 --> 00:23:57.440
+É assim que você recria seu organograma em emo e acaba chorando.
+
+00:23:57.780 --> 00:23:58.960
+Misture modelos para executar.
+
+00:23:59.160 --> 00:24:02.440
+SLMs, prestação, classe GPT-4, apenas para raciocínio onde importa.
+
+00:24:03.220 --> 00:24:04.220
+Resume um lote durante a noite.
+
+00:24:04.720 --> 00:24:06.920
+Você não está pagando taxas premium para formatar uma string de dados.
+
+00:24:07.520 --> 00:24:09.560
+Guarde um modelo pesado para decisões, não para narração.
+
+00:24:09.560 --> 00:24:11.280
+Adicione memória cruda.
+
+00:24:11.600 --> 00:24:15.460
+Use estado externo como busca de IA ou um pequeno armazenamento de estado antes de lotar
+
+00:24:15.460 --> 00:24:17.440
+janelas de contexto como uma aula de mão.
+
+00:24:17.960 --> 00:24:19.160
+Meta dados de thread, vc minúsculo.
+
+00:24:19.600 --> 00:24:21.480
+Se não for necessário para o próximo turno, não entra.
+
+00:24:21.900 --> 00:24:22.540
+Registre tudo.
+
+00:24:22.960 --> 00:24:23.560
+Ative o rastreamento.
+
+00:24:23.980 --> 00:24:26.020
+IDs de thread, parâmetros de ferramentas e estado de latência.
+
+00:24:26.580 --> 00:24:29.900
+Envie avaliações para o CI para detectar quedas de relevância e embasamento antes
+
+00:24:29.900 --> 00:24:30.680
+que cheguem à produção.
+
+00:24:31.720 --> 00:24:33.640
+Alerte quando o embasamento cair, não quando o Twitter cair.
+
+00:24:34.080 --> 00:24:36.680
+Guardrails, antes da velocidade e aprovações para ferramentas destrutivas.
+
+00:24:36.680 --> 00:24:38.640
+Modos de teste de armazenamento sem efeitos colaterais.
+
+00:24:39.060 --> 00:24:41.020
+Rollouts faseados por grupo de dispositivos ou região.
+
+00:24:41.840 --> 00:24:44.580
+Se seu plano de rollout é tudo de uma vez, espero que seu currículo esteja atualizado.
+
+00:24:44.900 --> 00:24:45.600
+Tranjete para falhas.
+
+00:24:45.800 --> 00:24:46.680
+Tente novamente com GIT.
+
+00:24:46.980 --> 00:24:48.080
+Reduza o estrangulamento de grafo.
+
+00:24:48.460 --> 00:24:49.820
+Circuit breakers no gerenciamento de API.
+
+00:24:50.280 --> 00:24:51.060
+Armbooks e impotentes.
+
+00:24:51.520 --> 00:24:53.580
+Se uma etapa pode ser refeita com segurança, cedo é melhor.
+
+00:24:54.360 --> 00:24:55.780
+Por fim, documente suas políticas como dados.
+
+00:24:56.740 --> 00:24:59.780
+Regras de exclusividade mútua, pacotes de licença, baselines de dispositivos.
+
+00:24:59.900 --> 00:25:00.800
+Coloque-se em formato estruturado.
+
+00:25:01.220 --> 00:25:02.800
+Modelos podem selecionar, eles não devem inventar.
+
+00:25:02.800 --> 00:25:06.040
+É assim que você mantém os agentes úteis e seu raio de impacto pequeno.
+
+00:25:06.880 --> 00:25:09.120
+Se for para lembrar de uma coisa, agentes únicos ajudam.
+
+00:25:09.320 --> 00:25:13.460
+Mas equipes de agentes, planejadas, orientadas por ferramentas e com permissões delimitadas,
+
+00:25:13.600 --> 00:25:15.720
+transformam silenciosamente seu ambiente enquanto você finge dormir.
+
+00:25:16.120 --> 00:25:18.760
+Se isso faz sentido para você, inscreva-se e assista ao próximo vídeo,
+
+00:25:18.840 --> 00:25:22.380
+onde disponibiliza o repositório do seu monte de kernel e o template Bicep para você copiar sem vergonha.
+
+00:25:22.640 --> 00:25:25.280
+Quer o episódio sobre agentes de avaliação que mantém suas promessas íntegras?
+
+00:25:25.500 --> 00:25:26.580
+Já está na fila na próxima semana.
