@@ -1,0 +1,222 @@
+{
+  "episode_id": "67981346",
+  "slug": "r-vs-t-sql-performance-compute-context-batch-size-parallel-queries",
+  "title": "R vs T‑SQL Performance: Compute Context, Batch Size, Parallel Queries & How To Fix Slow R‑SQL Pipelines",
+  "lang": "en",
+  "duration_s": 1170,
+  "transcript_source": "data/en_transcripts/551e538b3106.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "r-programming-language",
+      "name": "R (programming language)",
+      "type": "product",
+      "score": 90,
+      "mentions": 37,
+      "first_mention_s": 17,
+      "quote": "pushed the R script to run directly on the server",
+      "url": "https://www.m365.fm/entity/r-programming-language/"
+    },
+    {
+      "slug": "compute-context",
+      "name": "Compute context (RevoScaleR)",
+      "type": "concept",
+      "score": 90,
+      "mentions": 18,
+      "first_mention_s": 7,
+      "quote": "The root cause wasn't the algorithm at all, it was compute context",
+      "url": "https://www.m365.fm/entity/compute-context/"
+    },
+    {
+      "slug": "sql-server",
+      "name": "Microsoft SQL Server",
+      "type": "product",
+      "score": 85,
+      "mentions": 12,
+      "first_mention_s": 62,
+      "quote": "Every row from Cycle server has to travel across the net work",
+      "url": "https://www.m365.fm/entity/sql-server/"
+    },
+    {
+      "slug": "revoscaler",
+      "name": "RevoScaleR",
+      "type": "product",
+      "score": 70,
+      "mentions": 3,
+      "first_mention_s": 480,
+      "quote": "not using revoscale are functions",
+      "url": "https://www.m365.fm/entity/revoscaler/"
+    },
+    {
+      "slug": "transact-sql",
+      "name": "Transact-SQL (T-SQL)",
+      "type": "product",
+      "score": 55,
+      "mentions": 2,
+      "first_mention_s": 719,
+      "quote": "apply them through t sqal in a view",
+      "url": "https://www.m365.fm/entity/transact-sql/"
+    },
+    {
+      "slug": "sql-server-management-studio",
+      "name": "SQL Server Management Studio (SSMS)",
+      "type": "product",
+      "score": 45,
+      "mentions": 2,
+      "first_mention_s": 517,
+      "quote": "check your query in management studio before ever running it",
+      "url": "https://www.m365.fm/entity/sql-server-management-studio/"
+    },
+    {
+      "slug": "etl",
+      "name": "Extract, transform, load (ETL)",
+      "type": "concept",
+      "score": 25,
+      "mentions": 1,
+      "first_mention_s": 105,
+      "quote": "you'll still need to plan etl to bring them in",
+      "url": "https://www.m365.fm/entity/etl/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "r-programming-language",
+      "name": "R (programming language)",
+      "type": "product",
+      "mentions": 37,
+      "first_mention_s": 17,
+      "quote": "pushed the R script to run directly on the server",
+      "status": "review"
+    },
+    {
+      "slug": "compute-context",
+      "name": "Compute context (RevoScaleR)",
+      "type": "concept",
+      "mentions": 18,
+      "first_mention_s": 7,
+      "quote": "The root cause wasn't the algorithm at all, it was compute context",
+      "status": "review"
+    },
+    {
+      "slug": "revoscaler",
+      "name": "RevoScaleR",
+      "type": "product",
+      "mentions": 3,
+      "first_mention_s": 480,
+      "quote": "not using revoscale are functions",
+      "status": "review"
+    },
+    {
+      "slug": "transact-sql",
+      "name": "Transact-SQL (T-SQL)",
+      "type": "product",
+      "mentions": 2,
+      "first_mention_s": 719,
+      "quote": "apply them through t sqal in a view",
+      "status": "review"
+    },
+    {
+      "slug": "sql-server-management-studio",
+      "name": "SQL Server Management Studio (SSMS)",
+      "type": "product",
+      "mentions": 2,
+      "first_mention_s": 517,
+      "quote": "check your query in management studio before ever running it",
+      "status": "review"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "But if the rows themselves are making round trips over the network, no amount of clever code will win. You're simply locked into bandwidth drag.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "entities": [
+        "compute-context",
+        "sql-server"
+      ],
+      "why": "Explains why data movement, not code, is the real bottleneck.",
+      "time_s": 132
+    },
+    {
+      "text": "batch size is a knob that lets you choose between throughput and resource safety, and only trial runs tell you where your system maxes out.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "entities": [
+        "revoscaler",
+        "sql-server"
+      ],
+      "why": "Frames batch size tuning as a measurable trade-off rather than a default.",
+      "time_s": 350
+    },
+    {
+      "text": "Beyond speed, this has a stability payoff. Predefining factor levels ensures that training and scoring data agree on how categories are encoded.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "entities": [
+        "r-programming-language",
+        "revoscaler"
+      ],
+      "why": "Shows that factor definitions matter for model stability, not only speed.",
+      "time_s": 1030
+    },
+    {
+      "text": "That's why the rule is simple. Transform before the model loop, never during it. Treat this as table stakes.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "entities": [
+        "transact-sql",
+        "r-programming-language"
+      ],
+      "why": "A memorable rule for staging transformations in SQL instead of R.",
+      "time_s": 847
+    },
+    {
+      "text": "Here's the bottom line. Performance gains don't come from flashy algorithms. They come from discipline. In setup, there are three rules worth burning into memory.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "entities": [
+        "compute-context"
+      ],
+      "why": "Summarizes the episode's thesis about disciplined setup.",
+      "time_s": 1126
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "Why compute context decides speed"
+    },
+    {
+      "start_s": 36,
+      "title": "The invisible bottleneck"
+    },
+    {
+      "start_s": 190,
+      "title": "Batch size: rowsPerRead tuning"
+    },
+    {
+      "start_s": 387,
+      "title": "Queries that unlock parallelism"
+    },
+    {
+      "start_s": 650,
+      "title": "The trap of on-the-fly transformations"
+    },
+    {
+      "start_s": 870,
+      "title": "The categorical curse"
+    },
+    {
+      "start_s": 1120,
+      "title": "Three rules for fast R-SQL pipelines"
+    }
+  ],
+  "takeaways": [
+    "Use the SQL Server compute context for large data so R runs next to the data instead of pulling every row across the network.",
+    "Tune the batch size step by step while watching memory, and write lean, well-shaped queries so the optimizer can build parallel plans.",
+    "Do transformations in T-SQL views or staging tables before the model loop, and define factor levels up front with colInfo for speed and stable models."
+  ],
+  "hook": "Slow R pipelines on SQL Server are usually caused by setup, not algorithms. This episode helps data scientists and SQL professionals fix compute context, batch size, query shape, transformations and factor handling so R-SQL workloads run fast and stay stable.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-02T23:36:25Z"
+}
