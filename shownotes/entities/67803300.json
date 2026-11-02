@@ -1,0 +1,180 @@
+{
+  "episode_id": "67803300",
+  "slug": "why-dirty-code-always-wins-until-it-doesnt-cross-cutting-concerns-middleware-decorators",
+  "title": "Why Dirty Code Always Wins (Until It Doesn’t): Cross‑Cutting Concerns, Middleware, Decorators & How To Keep Business Logic Clean",
+  "lang": "en",
+  "duration_s": 1165,
+  "transcript_source": "data/en_transcripts/bf9a1864da69.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "cross-cutting-concerns",
+      "name": "Cross-cutting concerns",
+      "type": "concept",
+      "score": 95,
+      "mentions": 9,
+      "first_mention_s": 21,
+      "quote": "we'll unpack how cross cutting concerns silently drain your productivity",
+      "url": "https://www.m365.fm/entity/cross-cutting-concerns/"
+    },
+    {
+      "slug": "middleware",
+      "name": "Middleware",
+      "type": "concept",
+      "score": 85,
+      "mentions": 14,
+      "first_mention_s": 24,
+      "quote": "You'll hear how middleware and decorator style wrappers let you strip out boiler plate",
+      "url": "https://www.m365.fm/entity/middleware/"
+    },
+    {
+      "slug": "decorator-pattern",
+      "name": "Decorator pattern",
+      "type": "concept",
+      "score": 85,
+      "mentions": 8,
+      "first_mention_s": 452,
+      "quote": "One of the simplest illustrations is the decorator pattern",
+      "url": "https://www.m365.fm/entity/decorator-pattern/"
+    },
+    {
+      "slug": "technical-debt",
+      "name": "Technical debt",
+      "type": "concept",
+      "score": 55,
+      "mentions": 3,
+      "first_mention_s": 205,
+      "quote": "Messy code looks like progress, but the debt it carries compounds",
+      "url": "https://www.m365.fm/entity/technical-debt/"
+    },
+    {
+      "slug": "telemetry",
+      "name": "Telemetry",
+      "type": "concept",
+      "score": 45,
+      "mentions": 4,
+      "first_mention_s": 235,
+      "quote": "audit trails, exception handling, telemetry",
+      "url": "https://www.m365.fm/entity/telemetry/"
+    },
+    {
+      "slug": "gdpr",
+      "name": "GDPR",
+      "type": "concept",
+      "score": 35,
+      "mentions": 1,
+      "first_mention_s": 317,
+      "quote": "under data protection rules like GDPR",
+      "url": "https://www.m365.fm/entity/gdpr/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "cross-cutting-concerns",
+      "name": "Cross-cutting concerns",
+      "type": "concept",
+      "mentions": 9,
+      "first_mention_s": 21,
+      "quote": "we'll unpack how cross cutting concerns silently drain your productivity",
+      "status": "review"
+    },
+    {
+      "slug": "decorator-pattern",
+      "name": "Decorator pattern",
+      "type": "concept",
+      "mentions": 8,
+      "first_mention_s": 452,
+      "quote": "One of the simplest illustrations is the decorator pattern",
+      "status": "review"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "Cross Cutting concerns are the kinds of features every system needs but that don't belong inside business logic logging, authentication, validation, audit trails, exception handling, telemetry, None of these are optional.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 228,
+      "entities": [
+        "cross-cutting-concerns",
+        "telemetry"
+      ],
+      "why": "Clear definition of cross-cutting concerns with concrete examples."
+    },
+    {
+      "text": "Messy code looks like progress, but the debt it carries compounds. The larger the code base grows, the heavier the interest gets, until the shortcuts block real development.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 205,
+      "entities": [
+        "technical-debt"
+      ],
+      "why": "Vivid explanation of how shortcuts turn into compounding technical debt."
+    },
+    {
+      "text": "When requirements change, like adjusting authentication rules, you update one middleware component rather than dozens of controllers. The pattern ensures consistency and keeps domain code focused only on domain tasks.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 506,
+      "entities": [
+        "middleware",
+        "cross-cutting-concerns"
+      ],
+      "why": "Shows the concrete maintenance payoff of centralizing concerns in middleware."
+    },
+    {
+      "text": "A useful rule of thumb is this only extract concerns that truly appear across multiple places in your system.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 575,
+      "entities": [
+        "cross-cutting-concerns",
+        "decorator-pattern"
+      ],
+      "why": "Practical rule against over-abstraction."
+    },
+    {
+      "text": "Clean code isn't about elegance. It's about keeping your system flexible enough to change without fighting the plumbing every time.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 1127,
+      "entities": [
+        "cross-cutting-concerns"
+      ],
+      "why": "Reframes clean code as a delivery-speed concern rather than aesthetics."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "Why messy code feels like the fastest code"
+    },
+    {
+      "start_s": 221,
+      "title": "The rise of cross-cutting concerns"
+    },
+    {
+      "start_s": 400,
+      "title": "Design patterns: decorators and middleware"
+    },
+    {
+      "start_s": 655,
+      "title": "A real API before and after cleanup"
+    },
+    {
+      "start_s": 848,
+      "title": "Knowing when your code has crossed the line"
+    },
+    {
+      "start_s": 1120,
+      "title": "Clean structure outpaces dirty code"
+    }
+  ],
+  "takeaways": [
+    "Inline logging, validation and authentication feel fast under deadline pressure but create compounding debt that buries business logic.",
+    "Decorators, middleware and filters centralize cross-cutting concerns so endpoints express only intent; start with authentication, then logging and telemetry, then validation.",
+    "Watch for warning signs such as methods longer than one screen, duplicated validation rules and logs outnumbering business lines, and refactor one endpoint this week."
+  ],
+  "hook": "Shipping fast often means logging, validation and authentication scattered through every controller until nobody wants to touch the code. This episode is for developers and tech leads fighting growing code bases. You learn how middleware and decorators keep business logic clean without slowing delivery.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-02T23:43:38Z"
+}
