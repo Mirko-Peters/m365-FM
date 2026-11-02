@@ -193,6 +193,47 @@ def load():
     return eps, pub, seo
 
 
+def finish_hreflang(roots):
+    """T42: Abschluss des Baus. (1) Seiten ohne eigene Alternates, die es unter gleichem Pfad in mehreren Sprachen gibt, bekommen
+    hreflang (gegenseitig; x-default nur, wenn es eine englische Fassung gibt) - nur indexierbare, selbstkanonische Seiten, keine
+    Folgeseiten /page/N/. (2) Der Sprachumschalter jeder Seite zeigt auf die vorhandene Fassung derselben Seite in der anderen
+    Sprache (auch noindex-Fassungen; eigene Alternates/switch= gehen vor), sonst bleibt die Startseite der Sprache.
+    Gibt (Seiten mit hreflang, Seiten mit neuem Umschalter) zurueck."""
+    def base_of(u):
+        rel = u[len(BASE):]
+        return rel[3:] if re.match(r"^/[a-z]{2}/", rel) and rel[1:3] in LANGS else rel
+    page1 = lambda b: re.sub(r"page/\d+/$", "", b)
+    members, indexable = {}, {}
+    for lang, u, noidx, auto, alts, sw in SW_REG:
+        lg = lang if lang in LANGS else "en"
+        members.setdefault(base_of(u), {}).setdefault(lg, u)
+        if auto: indexable.setdefault(base_of(u), {})[lg] = u
+    n_hl = n_sw = 0; clusters = {}
+    for lang, u, noidx, auto, alts, sw in SW_REG:
+        b = base_of(u)
+        grp = members.get(page1(b), {}) if page1(b) != b else members.get(b, {})   # Folgeseite N: Umschalter auf Seite 1 der anderen Sprachen
+        target = {**grp, **(alts or {}), **(sw or {}), (lang if lang in LANGS else "en"): u}   # die eigene Sprache zeigt immer auf diese Seite
+        need_sw = any(l not in (alts or {}) and l not in (sw or {}) for l in grp if grp[l] != u)
+        if not auto and not need_sw: continue
+        rel = u[len(BASE) + 1:] + "index.html"
+        f = next((r / rel for r in roots if (r / rel).is_file()), None)
+        if not f: continue
+        h = f.read_text("utf-8"); h0 = h
+        if auto and "<!--hl-auto-->" in h:
+            hl = indexable.get(b, {}) if page1(b) == b else {}
+            link = ""
+            if len(hl) > 1 and f'<link rel="canonical" href="{u}">' in h:   # nachtraeglich umgebogene Kanonische bleiben ohne hreflang
+                link = "".join(f'<link rel="alternate" hreflang="{LANGS[l][1] if l in LANGS else l}" href="{v}">\n' for l, v in sorted(hl.items(), key=lambda x: (x[0] != "en", x[0])))
+                if "en" in hl: link += f'<link rel="alternate" hreflang="x-default" href="{hl["en"]}">\n'
+                n_hl += 1; clusters[u] = dict(hl)
+            h = h.replace("<!--hl-auto-->", link, 1)
+        if need_sw: h = switch_from(h, target)
+        if h != h0:
+            f.write_text(h, "utf-8")
+            if need_sw: n_sw += 1
+    return n_hl, n_sw, clusters
+
+
 def lang_switch(cur, alt_urls, home_langs):
     items = [(l, LANGS[l][0], alt_urls.get(l) or f"{BASE}/{l}/", LANGS[l][1]) for l in home_langs]
     if alt_urls.get("en"): items = [("en", "English", alt_urls["en"], "en")] + items   # Wechsel auf Seitenebene zum englischen Original (sonst /show/)
@@ -402,17 +443,33 @@ def single_main(html_):
 FXCSS = re.sub(r"/\*.*?\*/|\s*([{};:,])\s*", lambda m: m.group(1) or "", (ROOT / "assets" / "fx.css").read_text(encoding="utf-8"), flags=re.S).strip()   # kleines CSS inline statt eigener Anfrage (Ladezeit)
 
 
-def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefault=None, og_type="article", extra_head="", noindex=False, side="", og_of=None):
+SW_REG = []   # T42: (lang, url, noindex, auto, alternates, switch) je Seite; finish_hreflang() verknuepft am Ende Sprachfassungen unter gleichem Pfad
+
+
+def switch_from(body, alts):
+    """T42: Sprachumschalter auf die Sprachfassungen dieser Seite (statt Startseite der Sprache); fehlende Sprachen behalten ihr Ziel."""
+    if not alts: return body
+    m = {(LANGS[l][1] if l in LANGS else l): u for l, u in alts.items() if l != "x-default"}
+    return re.sub(r'<details class="lsw">.*?</details>', lambda b: re.sub(r'<a href="([^"]*)" hreflang="([^"]+)"', lambda a: f'<a href="{m.get(a.group(2), a.group(1))}" hreflang="{a.group(2)}"', b.group(0)), body, count=1, flags=re.S)
+
+
+def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefault=None, og_type="article", extra_head="", noindex=False, side="", og_of=None, switch=None, self_url=None):
     if lang in COMM_LANGS[2:] and any(k in canonical for k in ("/community/", "/entity/", "/glossary/")):
         extra_head += f'<script defer src="{BASE}/assets/ui-{lang}.js"></script>'
     hl = LANGS[lang][1] if lang in LANGS else "en"
     d = LANGS[lang][2] if lang in LANGS else "ltr"
     loc = LANGS[lang][4] if lang in LANGS else "en_US"
     alt = ""
-    if alternates:
+    if alternates and not noindex:   # T42: noindex-Seiten tragen kein hreflang
         for l, u in alternates.items():
             alt += f'<link rel="alternate" hreflang="{LANGS[l][1] if l in LANGS else l}" href="{u}">\n'
-        alt += f'<link rel="alternate" hreflang="x-default" href="{xdefault or alternates.get("en") or BASE + "/"}">\n'   # x-default = englische Fassung des Clusters, sonst Startseite
+        if xdefault or alternates.get("en"): alt += f'<link rel="alternate" hreflang="x-default" href="{xdefault or alternates["en"]}">\n'   # x-default = englische Fassung des Clusters (T42: sonst keins statt der Startseite)
+    _self = self_url or canonical
+    _auto = not alternates and not noindex and _self == canonical
+    if _self.startswith(BASE + "/") and not _self.endswith(".html"):
+        SW_REG.append((lang, _self, noindex, _auto, alternates, switch))   # T42: fuer Umschalter (alle Seiten) und hreflang (nur _auto) am Ende des Baus
+        if _auto: alt = "<!--hl-auto-->"
+    body = switch_from(body, {**(switch or alternates or {}), (lang if lang in LANGS else "en"): _self})   # T42: eigene Sprache = diese Seite
     ld = "".join(f'<script type="application/ld+json">{json.dumps(j, ensure_ascii=False)}</script>\n' for j in complete_ld(jsonld))
     desc = meta_desc(desc)   # T7: Beschreibung einheitlich begrenzt
     if canonical.endswith("404.html") or noindex:
@@ -997,6 +1054,8 @@ def build():
     except Exception as _ex:
         print("Original-Zuordnung:", _ex)
     ORIG_ALTS = {}
+    _I18 = ROOT / "data" / "podpage_i18n"   # T42: Sprachen, in denen die englische Folge eine lokalisierte Fassung hat (Titel uebersetzt)
+    TRL_SLUGS = {l: {k for k, v in json.load(open(_I18 / f"{l}.json", encoding="utf-8")).items() if v and v[0]} for l in LANGS if (_I18 / f"{l}.json").exists()}
     try:   # Speaker der M365Con-Programme: zusammengefuehrte Personen (tools/build_speakers.py) -> Entitaetsseiten und /speakers.json fuer den Worker
         _sp = json.loads((ROOT / "data" / "speakers.json").read_text("utf-8")).get("speakers", [])
         ENT.SPEAKERS.update({x["id"]: x for x in _sp})
@@ -1009,7 +1068,10 @@ def build():
         e = it["e"]; ui = UI[l]
         intro, hdr, bullets, aud = parse_desc(e["desc"])
         alts = {x: url_of(by_vid[vid][x]) for x in by_vid[vid]}
-        if vid in ORIG: alts["en"] = f"{BASE}/show/episodes/{ORIG[vid]}/"   # T3: englisches Original gehoert zum Cluster der Dub-Fassungen
+        if vid in ORIG:
+            alts["en"] = f"{BASE}/show/episodes/{ORIG[vid]}/"   # T3: englisches Original gehoert zum Cluster der Dub-Fassungen
+            for _l2, _sl in TRL_SLUGS.items():   # T42: Sprachen ohne Dub sind im Cluster mit ihrer lokalisierten Fassung (gegenseitig zur englischen Seite)
+                if _l2 not in alts and ORIG[vid] in _sl: alts[_l2] = f"{BASE}/{_l2}/show/episodes/{ORIG[vid]}/"
         canonical = url_of(it)
         _xab = [{"@id": f"{BASE}/entity/{_s}/#entity"} for _s, _ in (SX.BY_EPISODE.get(str(it["eid"])) or {}).get("entities", []) if _s in LRN.ENTS][:8]   # T27: Entitaeten aus der QA-geprueften Extraktion
         spk = f'https://www.spreaker.com/episode/{it["eid"]}'
@@ -1100,7 +1162,7 @@ def build():
         btns += f'<a class="btn" href="{yt}" rel="noopener">▶ {esc(ui[1])}</a>'
         if tr: btns += f'<a class="btn" href="{tr}">📄 {esc(ui[2])}</a>'
         rel = "".join(f'<a class="row" href="{url_of(x)}" title="{esc(x["e"]["title"])}"><h3>{esc(anchor_title(x["e"]["title"]))}</h3></a>' for x in more)
-        body = f"""{header(l, lang_switch(l, alts, [x for x in LANGS if x in alts]))}
+        body = f"""{header(l, lang_switch(l, alts, active))}
 <main class="wrap"><article>
 <nav class="crumbs" aria-label="breadcrumb"><a href="{BASE}/{l}/">{esc(ui[7])}</a> / {esc(LANGS[l][0])} / {it["date"]}</nav>
 <div class="kicker">M365.FM · {esc(LANGS[l][0])}</div>{('<p class="mut"><a href="' + BASE + '/show/episodes/' + ORIG[vid] + '/" hreflang="en">' + ("Original (English)" if l != "de" else "Original (Englisch)") + '</a></p>') if vid in ORIG else ""}
@@ -1196,7 +1258,7 @@ def build():
           "Blog posts, podcasts and events from the Microsoft community plus animated explainers on Microsoft 365, Copilot, Azure and Power Platform by Microsoft MVP Mirko Peters – in 14 languages.",
           f"{BASE}/", root_body, alts_home, [person_ld(), org_ld(), event_ld(), faq_ld("en"), {"@context": "https://schema.org", "@type": "WebSite", "@id": f"{BASE}/#website", "name": "M365.FM international", "url": f"{BASE}/",
            "potentialAction": {"@type": "SearchAction", "target": {"@type": "EntryPoint", "urlTemplate": f"{BASE}/search/?q={{search_term_string}}"}, "query-input": "required name=search_term_string"}, "inLanguage": [LANGS[x][1] for x in active], "publisher": {"@id": f"{BASE}/#org"}, "author": {"@id": f"{BASE}/entity/mirko-peters/#entity"}}], og_type="website"))
-    sitemap.append((f"{BASE}/", TODAY, None))
+    sitemap.append((f"{BASE}/", TODAY, alts_home))   # T42: wie im HTML
     for _hk, _hc in HUB.MORE.items():   # T6: Karten jenseits der ersten 24 je Hub als JSON (Mehr laden / Filter)
         write(("" if _hk == "root" else _hk + "/") + "hub-more.json", json.dumps({"cards": _hc}, ensure_ascii=False))
     import site_updates as _SU2; _SU2.load(COMMUNITY_API)
@@ -1212,17 +1274,19 @@ def build():
     import site_legal as SL
     for path, fn, lg, ttl in (("impressum", SL.impressum_de, "de", "Impressum"), ("legal", SL.impressum_en, "en", "Legal notice"),
                               ("datenschutz", SL.privacy_de, "de", "Datenschutz"), ("privacy", SL.privacy_en, "en", "Privacy policy")):
-        write(f"{path}/index.html", page(lg, f"{ttl} – M365.FM", ttl, f"{BASE}/{path}/", f"{header(lg, '')}<main class=\"wrap\" style=\"max-width:46em\">{fn()}</main>{footer(lg)}", og_type="website", noindex=True))
+        _pair = {"impressum": "legal", "legal": "impressum", "datenschutz": "privacy", "privacy": "datenschutz"}[path]   # T42: Umschalter auf das Gegenstueck
+        _lsw = {lg: f"{BASE}/{path}/", ("en" if lg == "de" else "de"): f"{BASE}/{_pair}/"}
+        write(f"{path}/index.html", page(lg, f"{ttl} – M365.FM", ttl, f"{BASE}/{path}/", f"{header(lg, '')}<main class=\"wrap\" style=\"max-width:46em\">{fn()}</main>{footer(lg)}", og_type="website", noindex=True, switch=_lsw))
 
     # Barrierefreiheitserklaerung je Sprache
     for lg in ["en"] + list(active):
         if lg not in _AST and lg != "en":
             continue
         u = ast_url(lg)
-        alts_ast = {x: ast_url(x) for x in active if x in _AST}
+        alts_ast = {"en": ast_url("en"), **{x: ast_url(x) for x in active if x in _AST}}   # T42: Englisch gehoert in den Cluster (Umschalter, Sitemap)
         write(("accessibility" if lg == "en" else f"{lg}/accessibility") + "/index.html", page(lg, ast_label(lg) + " – M365.FM", (_AST.get(lg) or _AST["en"]).get("meta", ""), u,
-              f'{header(lg, "")}<main class="wrap" style="max-width:46em">{ast_body(lg)}</main>{footer(lg)}', alts_ast or None, [], xdefault=ast_url("en"), og_type="website", extra_head=f'<link rel="alternate" hreflang="en" href="{ast_url("en")}">\n'))
-        sitemap.append((u, TODAY, alts_ast or None))
+              f'{header(lg, "")}<main class="wrap" style="max-width:46em">{ast_body(lg)}</main>{footer(lg)}', alts_ast if len(alts_ast) > 1 else None, [], xdefault=ast_url("en"), og_type="website"))
+        sitemap.append((u, TODAY, alts_ast if len(alts_ast) > 1 else None))
 
     # Community-Seite je Sprache (noindex) + Service Worker fuer Web-Push
     for l in list(active) + ["en"]:
@@ -1445,13 +1509,14 @@ def build():
               {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
                   {"@type": "ListItem", "position": 1, "name": "M365.FM", "item": f"{BASE}/"}, {"@type": "ListItem", "position": 2, "name": LANGS[l][0], "item": f"{BASE}/{l}/"},
                   {"@type": "ListItem", "position": 3, "name": label, "item": u}]}]
-        alts = {x: f"{BASE}/{x}/top/" for x in active if top_for(x, 1)}
-        body = f"""{header(l, lang_switch(l, alts, active))}
+        sw_top = {x: f"{BASE}/{x}/top/" for x in active if top_for(x, 1)}
+        alts = {x: v for x, v in sw_top.items() if not is_prov(x)}   # T42: vorlaeufige (noindex) Fassungen nicht im Cluster
+        body = f"""{header(l, lang_switch(l, sw_top, active))}
 <main class="wrap"><nav class="crumbs" aria-label="breadcrumb"><a href="{BASE}/{l}/">{esc(ui[7])}</a> / {esc(LANGS[l][0])}</nav>
 <div class="kicker">★ {esc(LANGS[l][0])} · {esc(wk)}</div><h1>{esc(label)}</h1>
 <h2>{esc(ui[3])}</h2><div class="list">{rows}</div>
 <p style="margin-top:1.6em"><a class="btn" href="{BASE}/{l}/">{esc(ui[3])} →</a></p></main>{footer(l)}"""
-        write(f"{l}/top/index.html", page(l, f"{label} – M365.FM {LANGS[l][0]}", short(" · ".join(strip_tags(x["e"]["title"]).split(":")[0] for x in t[:3]), 155), u, body, alts, ld, og_type="website", noindex=prov, side=side_for(l, label, body)))
+        write(f"{l}/top/index.html", page(l, f"{label} – M365.FM {LANGS[l][0]}", short(" · ".join(strip_tags(x["e"]["title"]).split(":")[0] for x in t[:3]), 155), u, body, None if prov else alts, ld, og_type="website", noindex=prov, side=side_for(l, label, body), switch=sw_top))
         if not prov:
             sitemap.append((u, wk, alts))
         topfeed[l] = [{"rank": n + 1, "title": strip_tags(x["e"]["title"]), "url": url_of(x), "episode": x["eid"]} for n, x in enumerate(t)]
@@ -1464,16 +1529,19 @@ def build():
     # Sitemap-Index je Sprache und Typ (T1): sitemap-<sprache>-<typ>.xml mit echtem lastmod und x-default; Hubs (lastmod = Baudatum)
     # bekommen das juengste Datum ihrer Gruppe, der Index das juengste Datum je Datei. Grenzen je Datei: 45.000 URLs.
     import site_sitemaps as SMAP
+    _nhl, _nsw, _clu = finish_hreflang([OUT, R2OUT]); print("hreflang (gleicher Pfad) / Sprachumschalter auf Seitenebene:", _nhl, _nsw)   # T42
+    sitemap[:] = [(u, lm, a or _clu.get(u)) for u, lm, a in sitemap]   # T42: Sitemap-Alternates wie im HTML
     files = SMAP.write_all(sitemap, write, BASE, LANGS, TODAY)
     print(f"Sitemaps: {len(files)} Dateien, {len(sitemap)} URLs")
     # T37 Seitensuche: Index aus allen indexierbaren Seiten (alle Sprachen) nach r2out/search/, Suchseite je Sprache (noindex)
     import site_search as SRCH
     _sdocs = SRCH.build_index(sitemap, [OUT, R2OUT], write_r2, BASE, LANGS)
     _ln = {"en": "English", **{x: LANGS[x][0] for x in LANGS}}
+    _sw_search = {x: (f"{BASE}/search/" if x == "en" else f"{BASE}/{x}/search/") for x in ["en"] + list(active)}   # T42: Umschalter auf die Suchseite der Sprache (entsteht nach finish_hreflang)
     for _l in ["en"] + list(active):
-        _su, _st = (f"{BASE}/search/" if _l == "en" else f"{BASE}/{_l}/search/"), SRCH.ui(_l)
+        _su, _st = _sw_search[_l], SRCH.ui(_l)
         write(("search" if _l == "en" else f"{_l}/search") + "/index.html", page(_l, _st[0] + " – M365.FM", _st[1], _su,
-              f'{header(_l, "")}<main class="wrap">{SRCH.page_body(_l, COMMUNITY_API, BASE, _ln)}</main>{footer(_l)}', None, [], og_type="website", noindex=True))
+              f'{header(_l, "")}<main class="wrap">{SRCH.page_body(_l, COMMUNITY_API, BASE, _ln)}</main>{footer(_l)}', None, [], og_type="website", noindex=True, switch=_sw_search))
     print(f"Suche: {len(_sdocs)} Dokumente im Index, {len(_sdocs) // SRCH.PART + 1} Teile")
     _showix = PP.episode_index(BASE)
     # T36: Spreaker-Folge -> eigene Episodenseite (kanonisch, ohne UTM) fuer das Website-Feld bei Spreaker (tools/set_spreaker_links.py)

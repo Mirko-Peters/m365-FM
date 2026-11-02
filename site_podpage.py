@@ -479,15 +479,20 @@ def build(g):
             if r and r.get("audio"): lald["associatedMedia"] = {"@type": "AudioObject", "contentUrl": r["audio"]}
             # Sprachfassung (uebersetzter Titel und Teaser, bei 150 Folgen je Sprache auch Show Notes): indexierbar, in Sitemap und hreflang; liegt im R2-Bucket statt in GitHub Pages
             _lalts = None if l in oa else alts   # T3: Sprache mit Dub-Fassung: diese Kopie bleibt ohne hreflang (ein Vertreter je Sprache im Cluster)
-            (g.get("write_r2") or write)(f"{l}/show/episodes/{e['slug']}/index.html", g["page"](l, f"{lt} – {NAME}", ls[:300], lu, f'{g["header"](l, "")}<main class="wrap">{lbody}</main>{g["footer"](l)}', _lalts, [lald], xdefault=ep_url(e), og_type="article", og_of=ep_url(e)))
-            sitemap.append((lu, day(e.get("update_time")) or TODAY, _lalts))
+            _lcan = oa[l][0] if l in oa else lu   # T42: Kopie in einer Sprache mit Dub-Folge -> kanonisch (auch og:url, Teilen, JSON-LD) die Dub-Folge, nicht in die Sitemap
+            if l in oa: lald["url"] = _lcan
+            _lh = g["page"](l, f"{lt} – {NAME}", ls[:300], _lcan, f'{g["header"](l, "")}<main class="wrap">{lbody}</main>{g["footer"](l)}', _lalts, [lald], xdefault=ep_url(e), og_type="article", og_of=ep_url(e), switch=alts, self_url=lu)
+            (g.get("write_r2") or write)(f"{l}/show/episodes/{e['slug']}/index.html", _lh)
+            if l not in oa: sitemap.append((lu, day(e.get("update_time")) or TODAY, _lalts))
 
     # Listen (paginiert)
+    _list_langs = [l for l in TRL if any(TRL[l].get(e["slug"]) and TRL[l][e["slug"]][0] for e in eps)]
+    _list_alts = {"en": f"{root}episodes/", **{l: loc_url(l, "episodes/") for l in _list_langs}}   # T42: englische Liste und Sprachlisten gegenseitig
     pages_n = (len(eps) + PER - 1) // PER
     for p in range(pages_n):
         part = eps[p * PER:(p + 1) * PER]
         pg = "".join(f'<a href="{root}episodes/{"" if q == 0 else f"page/{q + 1}/"}"{" style=font-weight:700" if q == p else ""}>{q + 1}</a> ' for q in range(pages_n))
-        pub("episodes/" if p == 0 else f"episodes/page/{p + 1}/", "All episodes" + (f" – page {p + 1}" if p else ""), f"All {len(eps)} episodes of the {NAME}.", f'<h1>All episodes</h1><ul style="list-style:none;padding:0">{"".join(card(e) for e in part)}</ul><p>{pg}</p>', noindex=bool(p))
+        pub("episodes/" if p == 0 else f"episodes/page/{p + 1}/", "All episodes" + (f" – page {p + 1}" if p else ""), f"All {len(eps)} episodes of the {NAME}.", f'<h1>All episodes</h1><ul style="list-style:none;padding:0">{"".join(card(e) for e in part)}</ul><p>{pg}</p>', noindex=bool(p), alts=(_list_alts if not p and len(_list_alts) > 1 else None))
 
     # Lokalisierte Folgenlisten (paginiert) je Sprache mit uebersetzten Titeln/Zusammenfassungen
     for l in TRL:
@@ -496,15 +501,16 @@ def build(g):
         npg = (len(les) + PER - 1) // PER
         for p in range(npg):
             part = les[p * PER:(p + 1) * PER]
-            lis = "".join(f'<li style="margin:.9em 0"><a href="{loc_url(l, "episodes/" + e["slug"] + "/")}"><strong>{esc(TRL[l][e["slug"]][0])}</strong></a><br><span class="mut">{day(e["create_time"])}</span><br>{esc((TRL[l][e["slug"]][1] or "")[:200])}</li>' for e in part)
+            _oa_l = lambda e: ((g.get("orig_alts") or {}).get(e["slug"]) or {}).get(l)   # T42: gibt es die Folge als Dub in dieser Sprache, verlinkt die Liste die Dub-Folge
+            lis = "".join(f'<li style="margin:.9em 0"><a href="{(_oa_l(e) or (None,))[0] or loc_url(l, "episodes/" + e["slug"] + "/")}"><strong>{esc(TRL[l][e["slug"]][0])}</strong></a><br><span class="mut">{day(e["create_time"])}</span><br>{esc((TRL[l][e["slug"]][1] or "")[:200])}</li>' for e in part)
             pg = "".join(f'<a href="{loc_url(l, "episodes/" + ("" if q == 0 else f"page/{q + 1}/"))}"{" style=font-weight:700" if q == p else ""}>{q + 1}</a> ' for q in range(npg))
             lrel = "episodes/" if p == 0 else f"episodes/page/{p + 1}/"
             lu = loc_url(l, lrel)
             ttl = f"{NAME} – {LG[l][0]}" + (f" ({p + 1})" if p else "")
-            lal = {"en": f"{root}episodes/", l: lu} if p == 0 else None   # T3: Folgenliste der Sprache im Cluster mit der englischen Liste
+            lal = _list_alts if p == 0 else None   # T3/T42: Folgenliste der Sprache im Cluster mit der englischen Liste und allen anderen Sprachlisten
             write(f"{l}/show/{lrel}index.html", g["page"](l, ttl, f"{NAME}: {len(les)} · {LG[l][0]}", lu, f'{g["header"](l, "")}<main class="wrap"><h1>{esc(ttl)}</h1><ul style="list-style:none;padding:0">{lis}</ul><p>{pg}</p></main>{g["footer"](l)}',
                                                          lal, None, xdefault=lu if p else f"{root}episodes/", og_type="website", noindex=bool(p)))
-            if not p: sitemap.append((lu, TODAY, None))
+            if not p: sitemap.append((lu, TODAY, lal))   # T42: Alternates wie im HTML
 
     # Gaeste
     gl = ""

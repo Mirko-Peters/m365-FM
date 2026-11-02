@@ -5,7 +5,7 @@ show-episodes (Hauptshow, auch Sprachfassungen), episodes (Dub-Folgen der Sprach
 Podcast, Video, Feed, Shows), events (Events, Live), pages (Startseiten, Lernen, Glossar, Updates, Presse, Rechtliches, sonstige).
 Ausgabe: sitemap-<lang>-<typ>.xml (bei mehr als 45.000 URLs in Teilen -2, -3 ...), sitemap.xml als Index. lastmod: Hub-Seiten, die der
 Seitenbau mit dem Baudatum meldet, bekommen das juengste Datum ihrer Gruppe (sie aendern sich, wenn Inhalte dazukommen); der Index
-fuehrt je Datei das juengste Datum. Alternates erhalten zusaetzlich x-default (= englische Fassung, sonst die erste)."""
+fuehrt je Datei das juengste Datum. Alternates erhalten zusaetzlich x-default, wenn es eine englische Fassung gibt (T42: wie im HTML)."""
 import re
 from urllib.parse import urlsplit
 
@@ -47,8 +47,7 @@ def _xml(entries, langs):
         if alts:
             for k, au in alts.items():
                 x.append(f'<xhtml:link rel="alternate" hreflang="{langs[k][1] if k in langs else k}" href="{au}"/>')
-            xd = alts.get("en") or next(iter(alts.values()))
-            x.append(f'<xhtml:link rel="alternate" hreflang="x-default" href="{xd}"/>')
+            if alts.get("en"): x.append(f'<xhtml:link rel="alternate" hreflang="x-default" href="{alts["en"]}"/>')   # T42: wie im HTML - x-default nur mit englischer Fassung
         x.append("</url>")
     x.append("</urlset>")
     return "\n".join(x)
