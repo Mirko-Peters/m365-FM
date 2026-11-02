@@ -1,6 +1,6 @@
-# Prüfbericht Podpage-Migration (2026-11-01T15:00Z)
+# Prüfbericht Podpage-Migration (2026-11-02T06:55Z)
 
-Geprüft gegen https://www.m365.fm: 3645 frühere Adressen in 148 s.
+Geprüft gegen https://www.m365.fm: 3645 frühere Adressen in 103 s.
 
 | Art | gesamt | genau eine 301 auf 200 | 200 ohne 301 | mehrere 301 | Fehler |
 |---|---|---|---|---|---|
@@ -13,5 +13,5 @@ Geprüft gegen https://www.m365.fm: 3645 frühere Adressen in 148 s.
 
 Antwort auf dub.m365.fm: server=cloudflare, cf-ray=ja
 
-Stichprobe Blog: 20 von 20 Beiträgen ohne Befund.
+Stichprobe Blog: 50 von 50 Beiträgen ohne Befund.
 
