@@ -1,0 +1,203 @@
+{
+  "episode_id": "67810642",
+  "slug": "linq-to-sql-with-ef-core-explained-expression-trees-query-provider-caching",
+  "title": "LINQ to SQL With EF Core Explained: Expression Trees, Query Provider, Caching & Why Your LINQ Becomes Weird SQL",
+  "lang": "en",
+  "duration_s": 1198,
+  "transcript_source": "data/en_transcripts/6e3ba2ce0fac.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "entity-framework-core",
+      "name": "Entity Framework Core",
+      "type": "product",
+      "score": 95,
+      "mentions": 70,
+      "first_mention_s": 20,
+      "quote": "If you've suspected there's black box magic inside Entity Framework COLL",
+      "url": "https://www.m365.fm/entity/entity-framework-core/"
+    },
+    {
+      "slug": "linq",
+      "name": "LINQ (Language Integrated Query)",
+      "type": "product",
+      "score": 88,
+      "mentions": 16,
+      "first_mention_s": 1,
+      "quote": "Have you ever written the link U query that worked perfectly in CRS",
+      "url": "https://www.m365.fm/entity/linq/"
+    },
+    {
+      "slug": "expression-trees",
+      "name": "Expression trees",
+      "type": "concept",
+      "score": 86,
+      "mentions": 14,
+      "first_mention_s": 13,
+      "quote": "how expression trees control translation, how caching shapes performance and memory use",
+      "url": "https://www.m365.fm/entity/expression-trees/"
+    },
+    {
+      "slug": "sql",
+      "name": "SQL",
+      "type": "concept",
+      "score": 80,
+      "mentions": 50,
+      "first_mention_s": 5,
+      "quote": "but when you checked the sequel it generated, you wondered",
+      "url": "https://www.m365.fm/entity/sql/"
+    },
+    {
+      "slug": "client-side-evaluation",
+      "name": "Client-side evaluation (EF Core)",
+      "type": "concept",
+      "score": 72,
+      "mentions": 8,
+      "first_mention_s": 175,
+      "quote": "a warning or sequel falling back to client side evaluation.",
+      "url": "https://www.m365.fm/entity/client-side-evaluation/"
+    },
+    {
+      "slug": "csharp",
+      "name": "C#",
+      "type": "product",
+      "score": 55,
+      "mentions": 12,
+      "first_mention_s": 1,
+      "quote": "Have you ever written the link U query that worked perfectly in CRS",
+      "url": "https://www.m365.fm/entity/csharp/"
+    },
+    {
+      "slug": "dotnet",
+      "name": ".NET",
+      "type": "platform",
+      "score": 50,
+      "mentions": 12,
+      "first_mention_s": 292,
+      "quote": "is it something net alone can execute.",
+      "url": "https://www.m365.fm/entity/dotnet/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "entity-framework-core",
+      "name": "Entity Framework Core",
+      "type": "product",
+      "mentions": 70,
+      "first_mention_s": 20,
+      "quote": "If you've suspected there's black box magic inside Entity Framework COLL",
+      "status": "review"
+    },
+    {
+      "slug": "linq",
+      "name": "LINQ (Language Integrated Query)",
+      "type": "product",
+      "mentions": 16,
+      "first_mention_s": 1,
+      "quote": "Have you ever written the link U query that worked perfectly in CRS",
+      "status": "review"
+    },
+    {
+      "slug": "expression-trees",
+      "name": "Expression trees",
+      "type": "concept",
+      "mentions": 14,
+      "first_mention_s": 13,
+      "quote": "how expression trees control translation, how caching shapes performance and memory use",
+      "status": "review"
+    },
+    {
+      "slug": "client-side-evaluation",
+      "name": "Client-side evaluation (EF Core)",
+      "type": "concept",
+      "mentions": 8,
+      "first_mention_s": 175,
+      "quote": "a warning or sequel falling back to client side evaluation.",
+      "status": "review"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "And that's why expression trees matter to developers working with EF. They aren't just an internal detail, they are the roadmap EF uses before SQL even enters the picture.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 208,
+      "entities": [
+        "expression-trees",
+        "entity-framework-core",
+        "sql"
+      ],
+      "why": "Explains why expression trees are central to how EF Core translates queries."
+    },
+    {
+      "text": "The provider's guardrails matter here, and in many cases it's safer to get an error than to let EF try to do something inefficient.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 397,
+      "entities": [
+        "entity-framework-core",
+        "client-side-evaluation"
+      ],
+      "why": "A clear stance on why a translation error beats silent client-side evaluation."
+    },
+    {
+      "text": "In practice, the best advice is to let ef core handle caching automatically, but to be intentional about how you write queries.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 629,
+      "entities": [
+        "entity-framework-core"
+      ],
+      "why": "A concise, actionable recommendation on EF Core query caching."
+    },
+    {
+      "text": "if a query involving nulls behaves oddly, check for translation differences or hidden rewrites. These are not mistakes so much as protective guardrails ef core has built in.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 842,
+      "entities": [
+        "entity-framework-core",
+        "sql"
+      ],
+      "why": "Reframes EF Core's complex null-handling SQL as a deliberate safety mechanism."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "Why your LINQ turns into weird SQL"
+    },
+    {
+      "start_s": 37,
+      "title": "From LINQ to expression trees"
+    },
+    {
+      "start_s": 221,
+      "title": "The gatekeeper: EF Core's query provider"
+    },
+    {
+      "start_s": 442,
+      "title": "Caching as EF's performance weapon"
+    },
+    {
+      "start_s": 663,
+      "title": "Null semantics in C# versus SQL"
+    },
+    {
+      "start_s": 884,
+      "title": "SQL generation and materialization"
+    },
+    {
+      "start_s": 1142,
+      "title": "Recap and practical next steps"
+    }
+  ],
+  "takeaways": [
+    "EF Core does not execute your LINQ directly; it captures it as an expression tree that the query provider checks against known SQL translation patterns.",
+    "Untranslatable parts can trigger errors or client-side evaluation, so test queries against realistic data volumes and inspect the generated SQL.",
+    "Query caching speeds up repeated query shapes but costs memory when many unique shapes are generated, and null-handling rewrites explain much of EF Core's longer SQL."
+  ],
+  "hook": "Your LINQ query works perfectly in C#, but the SQL it generates looks like a monster and performance collapses in production. This episode is for .NET developers working with Entity Framework Core. You learn how expression trees, the query provider, caching, null semantics and materialization shape every query, and what to check before it hurts.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-02T23:35:39Z"
+}
