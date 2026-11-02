@@ -2,6 +2,7 @@
 Liest data/spreaker_links.tsv (letzter Eintrag je Folge mit Status ok) und die RSS-Feeds der Hauptshow und der 14 Sprach-Shows.
 Bericht: reports/spreaker-links-feed.md/.json (nur Folgen-IDs, Adressen und Zahlen). Nur lesen, aendert nichts bei Spreaker."""
 import json, re, sys, time, urllib.request
+from datetime import datetime, timezone
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
@@ -9,6 +10,7 @@ ROOT = Path(__file__).resolve().parent.parent
 LOG = ROOT / "data" / "spreaker_links.tsv"
 OUT = ROOT / "reports" / "spreaker-links-feed"
 MAIN_SHOW = 6704921
+FRESH_MIN = 20   # so frisch gesetzte Folgen darf der Feed noch alt zeigen (Spreaker erneuert den Feed mit Verzoegerung)
 
 
 def get(u):
@@ -32,8 +34,13 @@ def main():
     if LOG.exists():
         for line in LOG.read_text("utf-8").splitlines():
             f = line.split("\t")
-            if len(f) >= 5 and f[1].isdigit(): want[f[1]] = (f[2], f[4])   # letzter Eintrag zaehlt
+            if len(f) >= 5 and f[1].isdigit(): want[f[1]] = (f[2], f[4], f[0])   # letzter Eintrag zaehlt
+    when = {k: v[2] for k, v in want.items()}
     want = {k: v[1] for k, v in want.items() if v[0] == "ok" and v[1]}
+    now = datetime.now(timezone.utc)
+    def fresh(eid):
+        try: return (now - datetime.strptime(when.get(eid, ""), "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)).total_seconds() < FRESH_MIN * 60
+        except ValueError: return False
     feed, errs = {}, []
     for sid in shows():
         u = f"https://www.spreaker.com/show/{sid}/episodes/feed"
@@ -43,18 +50,19 @@ def main():
             ids = re.findall(r"/episode/(\d+)|episode[_/-]?(\d{6,})", (it.findtext("guid") or "") + " " + " ".join(x.get("url", "") for x in it.iter("enclosure")))
             ids = {a or b for a, b in ids}
             for i in ids: feed[i] = (it.findtext("link") or "").strip()
-    rows, n = [], {"ok": 0, "anders": 0, "nicht_im_feed": 0}
+    rows, n = [], {"ok": 0, "anders": 0, "nicht_im_feed": 0, "ausstehend": 0}
     for eid, url in sorted(want.items()):
         got = feed.get(eid)
         st = "nicht_im_feed" if got is None else ("ok" if got.rstrip("/") == url.rstrip("/") else "anders")
+        if st != "ok" and fresh(eid): st = "ausstehend"   # vor weniger als FRESH_MIN Minuten gesetzt: Feed noch nicht erneuert
         n[st] += 1
         if st != "ok": rows.append({"id": eid, "soll": url, "feed": got, "status": st})
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.with_suffix(".json").write_text(json.dumps({"gesetzt": len(want), **n, "feed_fehler": errs, "abweichungen": rows[:500]}, ensure_ascii=False, indent=1), "utf-8")
     md = [f"# Spreaker-Website-Feld im RSS ({time.strftime('%Y-%m-%d %H:%M UTC', time.gmtime())})", "",
-          f"Gesetzt laut Protokoll: {len(want)} · im Feed gleich: {n['ok']} · im Feed anders: {n['anders']} · nicht im Feed: {n['nicht_im_feed']}", ""]
+          f"Gesetzt laut Protokoll: {len(want)} · im Feed gleich: {n['ok']} · im Feed anders: {n['anders']} · nicht im Feed: {n['nicht_im_feed']} · ausstehend (frisch gesetzt, Feed noch nicht erneuert): {n['ausstehend']}", ""]
     if errs: md += ["Feeds nicht lesbar: " + ", ".join(errs), ""]
-    md += [f"- {r['id']}: {r['status']} · soll {r['soll']} · Feed {r['feed']}" for r in rows[:100]]
+    md += [f"- {r['id']}: {r['status']} · soll {r['soll']} · Feed {r['feed']}" for r in rows if r["status"] != "ausstehend"][:100]
     (OUT.with_suffix(".md")).write_text("\n".join(md) + "\n", "utf-8")
     print("\n".join(md[:4]))
     return 1 if n["anders"] else 0
