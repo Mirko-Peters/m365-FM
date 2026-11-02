@@ -208,7 +208,7 @@ def finish_hreflang(roots):
         lg = lang if lang in LANGS else "en"
         members.setdefault(base_of(u), {}).setdefault(lg, u)
         if auto: indexable.setdefault(base_of(u), {})[lg] = u
-    n_hl = n_sw = 0
+    n_hl = n_sw = 0; clusters = {}
     for lang, u, noidx, auto, alts, sw in SW_REG:
         b = base_of(u)
         grp = members.get(page1(b), {}) if page1(b) != b else members.get(b, {})   # Folgeseite N: Umschalter auf Seite 1 der anderen Sprachen
@@ -225,13 +225,13 @@ def finish_hreflang(roots):
             if len(hl) > 1 and f'<link rel="canonical" href="{u}">' in h:   # nachtraeglich umgebogene Kanonische bleiben ohne hreflang
                 link = "".join(f'<link rel="alternate" hreflang="{LANGS[l][1] if l in LANGS else l}" href="{v}">\n' for l, v in sorted(hl.items(), key=lambda x: (x[0] != "en", x[0])))
                 if "en" in hl: link += f'<link rel="alternate" hreflang="x-default" href="{hl["en"]}">\n'
-                n_hl += 1
+                n_hl += 1; clusters[u] = dict(hl)
             h = h.replace("<!--hl-auto-->", link, 1)
         if need_sw: h = switch_from(h, target)
         if h != h0:
             f.write_text(h, "utf-8")
             if need_sw: n_sw += 1
-    return n_hl, n_sw
+    return n_hl, n_sw, clusters
 
 
 def lang_switch(cur, alt_urls, home_langs):
@@ -460,7 +460,7 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
     d = LANGS[lang][2] if lang in LANGS else "ltr"
     loc = LANGS[lang][4] if lang in LANGS else "en_US"
     alt = ""
-    if alternates:
+    if alternates and not noindex:   # T42: noindex-Seiten tragen kein hreflang
         for l, u in alternates.items():
             alt += f'<link rel="alternate" hreflang="{LANGS[l][1] if l in LANGS else l}" href="{u}">\n'
         if xdefault or alternates.get("en"): alt += f'<link rel="alternate" hreflang="x-default" href="{xdefault or alternates["en"]}">\n'   # x-default = englische Fassung des Clusters (T42: sonst keins statt der Startseite)
@@ -469,7 +469,7 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
     if _self.startswith(BASE + "/") and not _self.endswith(".html"):
         SW_REG.append((lang, _self, noindex, _auto, alternates, switch))   # T42: fuer Umschalter (alle Seiten) und hreflang (nur _auto) am Ende des Baus
         if _auto: alt = "<!--hl-auto-->"
-    body = switch_from(body, switch or alternates)   # T42
+    body = switch_from(body, {**(switch or alternates or {}), (lang if lang in LANGS else "en"): _self})   # T42: eigene Sprache = diese Seite
     ld = "".join(f'<script type="application/ld+json">{json.dumps(j, ensure_ascii=False)}</script>\n' for j in complete_ld(jsonld))
     desc = meta_desc(desc)   # T7: Beschreibung einheitlich begrenzt
     if canonical.endswith("404.html") or noindex:
@@ -1258,7 +1258,7 @@ def build():
           "Blog posts, podcasts and events from the Microsoft community plus animated explainers on Microsoft 365, Copilot, Azure and Power Platform by Microsoft MVP Mirko Peters – in 14 languages.",
           f"{BASE}/", root_body, alts_home, [person_ld(), org_ld(), event_ld(), faq_ld("en"), {"@context": "https://schema.org", "@type": "WebSite", "@id": f"{BASE}/#website", "name": "M365.FM international", "url": f"{BASE}/",
            "potentialAction": {"@type": "SearchAction", "target": {"@type": "EntryPoint", "urlTemplate": f"{BASE}/search/?q={{search_term_string}}"}, "query-input": "required name=search_term_string"}, "inLanguage": [LANGS[x][1] for x in active], "publisher": {"@id": f"{BASE}/#org"}, "author": {"@id": f"{BASE}/entity/mirko-peters/#entity"}}], og_type="website"))
-    sitemap.append((f"{BASE}/", TODAY, None))
+    sitemap.append((f"{BASE}/", TODAY, alts_home))   # T42: wie im HTML
     for _hk, _hc in HUB.MORE.items():   # T6: Karten jenseits der ersten 24 je Hub als JSON (Mehr laden / Filter)
         write(("" if _hk == "root" else _hk + "/") + "hub-more.json", json.dumps({"cards": _hc}, ensure_ascii=False))
     import site_updates as _SU2; _SU2.load(COMMUNITY_API)
@@ -1274,7 +1274,9 @@ def build():
     import site_legal as SL
     for path, fn, lg, ttl in (("impressum", SL.impressum_de, "de", "Impressum"), ("legal", SL.impressum_en, "en", "Legal notice"),
                               ("datenschutz", SL.privacy_de, "de", "Datenschutz"), ("privacy", SL.privacy_en, "en", "Privacy policy")):
-        write(f"{path}/index.html", page(lg, f"{ttl} – M365.FM", ttl, f"{BASE}/{path}/", f"{header(lg, '')}<main class=\"wrap\" style=\"max-width:46em\">{fn()}</main>{footer(lg)}", og_type="website", noindex=True))
+        _pair = {"impressum": "legal", "legal": "impressum", "datenschutz": "privacy", "privacy": "datenschutz"}[path]   # T42: Umschalter auf das Gegenstueck
+        _lsw = {lg: f"{BASE}/{path}/", ("en" if lg == "de" else "de"): f"{BASE}/{_pair}/"}
+        write(f"{path}/index.html", page(lg, f"{ttl} – M365.FM", ttl, f"{BASE}/{path}/", f"{header(lg, '')}<main class=\"wrap\" style=\"max-width:46em\">{fn()}</main>{footer(lg)}", og_type="website", noindex=True, switch=_lsw))
 
     # Barrierefreiheitserklaerung je Sprache
     for lg in ["en"] + list(active):
@@ -1527,7 +1529,8 @@ def build():
     # Sitemap-Index je Sprache und Typ (T1): sitemap-<sprache>-<typ>.xml mit echtem lastmod und x-default; Hubs (lastmod = Baudatum)
     # bekommen das juengste Datum ihrer Gruppe, der Index das juengste Datum je Datei. Grenzen je Datei: 45.000 URLs.
     import site_sitemaps as SMAP
-    print_hl = finish_hreflang([OUT, R2OUT]); print("hreflang (gleicher Pfad) / Sprachumschalter auf Seitenebene:", *print_hl)   # T42
+    _nhl, _nsw, _clu = finish_hreflang([OUT, R2OUT]); print("hreflang (gleicher Pfad) / Sprachumschalter auf Seitenebene:", _nhl, _nsw)   # T42
+    sitemap[:] = [(u, lm, a or _clu.get(u)) for u, lm, a in sitemap]   # T42: Sitemap-Alternates wie im HTML
     files = SMAP.write_all(sitemap, write, BASE, LANGS, TODAY)
     print(f"Sitemaps: {len(files)} Dateien, {len(sitemap)} URLs")
     # T37 Seitensuche: Index aus allen indexierbaren Seiten (alle Sprachen) nach r2out/search/, Suchseite je Sprache (noindex)

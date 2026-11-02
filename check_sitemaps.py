@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Prueft die gebauten Sitemaps (docs/sitemap.xml und die darin genannten Dateien): wohlgeformtes XML, jede Datei <= 50.000 URLs und
 <= 50 MB, loc absolut auf der eigenen Domain, lastmod als Datum, keine doppelten URLs ueber alle Dateien, hreflang-Alternates mit
-x-default, Index verweist nur auf vorhandene Dateien. Exit 1 bei Fehlern (blockierend im Seitenbau)."""
+x-default genau bei englischer Fassung (T42), Index verweist nur auf vorhandene Dateien. Exit 1 bei Fehlern (blockierend im Seitenbau)."""
 import re, sys
 import xml.etree.ElementTree as ET
 from pathlib import Path
@@ -44,7 +44,10 @@ def main():
             if l in seen: errs.append(f"doppelt: {l[:80]} in {seen[l]} und {f.name}")
             seen[l] = f.name
             alts = u.findall("x:link", NS)
-            if alts and not any(a.get("hreflang") == "x-default" for a in alts): errs.append(f"{f.name}: Alternates ohne x-default bei {l[:80]}")
+            if alts:   # T42: x-default genau dann, wenn es eine englische Fassung gibt, und dann gleich dieser
+                _en = [a.get("href") for a in alts if a.get("hreflang") == "en"]; _xd = [a.get("href") for a in alts if a.get("hreflang") == "x-default"]
+                if _en and _xd != _en[:1]: errs.append(f"{f.name}: x-default fehlt oder ist nicht die englische Fassung bei {l[:80]}")
+                if not _en and _xd: errs.append(f"{f.name}: x-default ohne englische Fassung bei {l[:80]}")
     for e in errs[:40]: print("FEHLER", e)
     print(f"{len(files)} Sitemap-Dateien, {total} URLs, {len(errs)} Fehler")
     return 1 if errs else 0

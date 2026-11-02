@@ -510,7 +510,7 @@ def build(g):
             lal = _list_alts if p == 0 else None   # T3/T42: Folgenliste der Sprache im Cluster mit der englischen Liste und allen anderen Sprachlisten
             write(f"{l}/show/{lrel}index.html", g["page"](l, ttl, f"{NAME}: {len(les)} · {LG[l][0]}", lu, f'{g["header"](l, "")}<main class="wrap"><h1>{esc(ttl)}</h1><ul style="list-style:none;padding:0">{lis}</ul><p>{pg}</p></main>{g["footer"](l)}',
                                                          lal, None, xdefault=lu if p else f"{root}episodes/", og_type="website", noindex=bool(p)))
-            if not p: sitemap.append((lu, TODAY, None))
+            if not p: sitemap.append((lu, TODAY, lal))   # T42: Alternates wie im HTML
 
     # Gaeste
     gl = ""
