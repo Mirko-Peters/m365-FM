@@ -66,6 +66,8 @@ def extract(url, html, lang_default, typ, allow_noindex=False):
     g = lambda k: (_RX[k].search(html) or [None, ""])[1]
     if "noindex" in g("robots").lower() and not allow_noindex: return None
     if 'http-equiv="refresh"' in html[:4000]: return None   # Weiterleitungsseite
+    _can = re.search(r'<link rel="canonical" href="([^"]+)"', html[:6000])
+    if _can and _can.group(1).split("#")[0] != url: return None   # T42: kanonisch eine andere Seite (z. B. Sprachkopie einer Dub-Folge) - nur das Original in die Suche
     path = urlsplit(url).path
     if re.search(r"/page/\d+/?$", path): return None   # Listen-Seite 2, 3 ...
     lds, types, date, kw = [], set(), "", []
