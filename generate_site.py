@@ -1534,10 +1534,11 @@ def build():
     import site_search as SRCH
     _sdocs = SRCH.build_index(sitemap, [OUT, R2OUT], write_r2, BASE, LANGS)
     _ln = {"en": "English", **{x: LANGS[x][0] for x in LANGS}}
+    _sw_search = {x: (f"{BASE}/search/" if x == "en" else f"{BASE}/{x}/search/") for x in ["en"] + list(active)}   # T42: Umschalter auf die Suchseite der Sprache (entsteht nach finish_hreflang)
     for _l in ["en"] + list(active):
-        _su, _st = (f"{BASE}/search/" if _l == "en" else f"{BASE}/{_l}/search/"), SRCH.ui(_l)
+        _su, _st = _sw_search[_l], SRCH.ui(_l)
         write(("search" if _l == "en" else f"{_l}/search") + "/index.html", page(_l, _st[0] + " – M365.FM", _st[1], _su,
-              f'{header(_l, "")}<main class="wrap">{SRCH.page_body(_l, COMMUNITY_API, BASE, _ln)}</main>{footer(_l)}', None, [], og_type="website", noindex=True))
+              f'{header(_l, "")}<main class="wrap">{SRCH.page_body(_l, COMMUNITY_API, BASE, _ln)}</main>{footer(_l)}', None, [], og_type="website", noindex=True, switch=_sw_search))
     print(f"Suche: {len(_sdocs)} Dokumente im Index, {len(_sdocs) // SRCH.PART + 1} Teile")
     _showix = PP.episode_index(BASE)
     # T36: Spreaker-Folge -> eigene Episodenseite (kanonisch, ohne UTM) fuer das Website-Feld bei Spreaker (tools/set_spreaker_links.py)
