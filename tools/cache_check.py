@@ -1,7 +1,7 @@
 """Nur lesen: misst die Cache-Header der Seite (www.m365.fm, img.m365.fm), liest die Cache-Einstellungen der Cloudflare-Zone
 und den Traffic der letzten 30 Tage (fuer Kostenschaetzungen wie Argo). Gibt keine Secrets und keine Zonen-ID aus.
 Aufruf: python tools/cache_check.py  (Umgebung: CLOUDFLARE_API_TOKEN, CF_ZONE_ID optional)"""
-import datetime as dt, json, os, re, time, urllib.error, urllib.request
+import datetime as dt, json, os, re, time, urllib.error, urllib.parse, urllib.request
 
 B = "https://www.m365.fm"
 URLS = [
@@ -22,6 +22,7 @@ URLS = [
     ("llms.txt", B + "/llms.txt"),
     ("R2-Bild", "https://img.m365.fm/i/5254f600109b589b2c2d.webp"),
     ("404", B + "/gibt-es-nicht-cache-check/"),
+    ("Suchseite de", B + "/de/search/"),
 ]
 KEEP = ("cache-control", "cf-cache-status", "x-m365-cache", "age", "etag", "last-modified", "expires", "vary", "content-encoding", "content-type", "server", "x-cache", "alt-svc", "x-robots-tag")
 
@@ -75,6 +76,22 @@ for name, url in URLS:
             except Exception as e: print(f"- bedingter Abruf: Fehler {type(e).__name__}")
         else: print("- bedingter Abruf: weder ETag noch Last-Modified vorhanden")
     print()
+
+print("## Suche live (T40)\n")
+try:
+    st, hd, ttfb, total, n, body = get(B + "/search/manifest.json", {"Accept-Encoding": "identity", "Accept": "application/json"})
+    m = json.loads(body.decode("utf-8")) if st == 200 else {}
+    print(f"- /search/manifest.json: HTTP {st}, Docs {m.get('count')}, Teile {m.get('parts')}, Bau {m.get('build') or m.get('generated')}")
+except Exception as e: print(f"- /search/manifest.json: Fehler {type(e).__name__}")
+for q in ("Aron Soller", "Copilot", "purvew"):
+    try:
+        u = "https://api-dub.m365.fm/api/search?" + urllib.parse.urlencode({"q": q, "pref": "de"})
+        st, hd, ttfb, total, n, body = get(u, {"Accept-Encoding": "identity", "Accept": "application/json", "Origin": B})
+        d = json.loads(body.decode("utf-8")) if st == 200 else {}
+        top = " | ".join(f"{x.get('title', '')[:40]} [{x.get('lang')}/{x.get('type')}]" for x in (d.get("results") or [])[:3])
+        print(f"- /api/search?q={q}: HTTP {st}, {ttfb:.0f} ms, Treffer {d.get('total')}, Top: {top}")
+    except Exception as e: print(f"- /api/search?q={q}: Fehler {type(e).__name__}")
+print()
 
 print("## Cloudflare-Zone (nur lesen)\n")
 tok = os.environ.get("CLOUDFLARE_API_TOKEN", "")
