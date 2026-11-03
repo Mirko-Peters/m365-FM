@@ -105,7 +105,7 @@ async function currentRows(db, ids) {
 }
 
 async function backfillSearchTitleNorm(db) {
-  const rows = (await db.prepare("SELECT id,title FROM search_doc WHERE title_norm='' AND gone=0 LIMIT 1000").all()).results || [];
+  const rows = (await db.prepare("SELECT id,title FROM search_doc WHERE title_norm='' AND gone=0 LIMIT 5000").all()).results || [];
   const updates = rows.map((row) => db.prepare("UPDATE search_doc SET title_norm=? WHERE id=? AND title_norm=''")
     .bind(normalizeTitle(row.title), row.id));
   for (let i = 0; i < updates.length; i += 99) await db.batch(updates.slice(i, i + 99));
@@ -199,6 +199,10 @@ function trigramQuery(query) {
   return [...grams].map((gram) => `"${gram.replaceAll('"', '""')}"`).join(" OR ");
 }
 
+function escapeLike(query) {
+  return query.replace(/[\\%_]/g, "\\$&");
+}
+
 function filtersSql(filters) {
   const clauses = [], values = [];
   if (filters.lang) { clauses.push("d.lang=?"); values.push(filters.lang); }
@@ -235,23 +239,23 @@ function candidateQuery(tokenizer, query, normalizedQuery, filters, pref) {
     if (short) {
       const exact = ` ${normalizedQuery} `;
       const prefix = ` ${normalizedQuery}`;
-      const matches = [
-        { priority: 3, condition: "instr(d.title_norm,?)>0", values: [exact] },
-        { priority: 2, condition: "instr(d.title_norm,?)>0 AND instr(d.title_norm,?)=0", values: [prefix, exact] },
+      const priority = [
+        "WHEN instr(d.title_norm,?)>0 THEN 3",
+        "WHEN instr(d.title_norm,?)>0 THEN 2",
       ];
+      const titleValues = [exact, prefix];
       if (/[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Hangul}]/u.test(normalizedQuery)) {
-        matches.push({
-          priority: 1,
-          condition: "instr(d.title_norm,?)>0 AND instr(d.title_norm,?)=0",
-          values: [normalizedQuery, prefix],
-        });
+        priority.push("WHEN instr(d.title_norm,?)>0 THEN 1");
+        titleValues.push(normalizedQuery);
       }
-      const candidates = matches.map(({ priority, condition, values }) => {
-        params.push(...values, ...filter.values);
-        return `SELECT * FROM (SELECT d.rowid,0 score,${priority} exact FROM search_doc d ` +
-          `WHERE d.gone=0 AND ${condition}${filter.sql} ORDER BY d.rowid LIMIT 1000)`;
-      });
-      ctes.push(`${name} AS MATERIALIZED (SELECT rowid,score,exact FROM (${candidates.join(" UNION ALL ")}) ORDER BY exact DESC LIMIT 1000)`);
+      priority.push("WHEN d.title_norm='' AND d.title LIKE ? ESCAPE '\\' COLLATE NOCASE THEN 0");
+      titleValues.push(`${escapeLike(query)}%`);
+      params.push(...titleValues, ...filter.values);
+      ctes.push(
+        `${name} AS MATERIALIZED (SELECT rowid,0 score,exact FROM (` +
+        `SELECT d.rowid,CASE ${priority.join(" ")} ELSE -1 END exact FROM search_doc d WHERE d.gone=0${filter.sql}` +
+        `) WHERE exact>=0 ORDER BY exact DESC,rowid LIMIT 1000)`,
+      );
     } else if (tokenizer === "trigram") {
       ctes.push(
         `${name} AS MATERIALIZED (SELECT d.rowid,bm25(search_fts,10,5,1) score,CASE WHEN instr(lower(d.title),lower(?))>0 THEN 1 ELSE 0 END exact ` +

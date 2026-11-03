@@ -488,7 +488,7 @@ test("search: Import, Trigramm-Suche, Filter, Facetten und gone-Markierung (SQLi
 });
 
 test("search: normalisierte Kurzsuche in mehreren Schriften und Import-Backfill (SQLite)", async () => {
-  const { db, raw } = await searchDb();
+  const { db, raw, lastSearchQuery } = await searchDb();
   const docs = [
     { id: "ru:ai", url: "https://www.m365.fm/ru/ai/", lang: "ru", type: "page", title: "Что такое ИИ-агенты", entities: ["azure"], date: "2024-01-01" },
     { id: "en:copilot", url: "https://www.m365.fm/copilot/", lang: "en", type: "page", title: "Copilot AI agents explained", entities: ["azure"], date: "2024-02-01" },
@@ -522,6 +522,9 @@ test("search: normalisierte Kurzsuche in mehreren Schriften und Import-Backfill 
     assert.equal((await call("ИИ")).data.results[0].title, "Что такое ИИ-агенты");
     assert.equal((await call("ии")).data.results[0].title, "Что такое ИИ-агенты");
     assert.equal((await call("Co")).data.results[0].title, "Copilot AI agents explained", "Wortanfang mitten im Titel wird gefunden");
+    raw.prepare("UPDATE search_doc SET title_norm='' WHERE id='en:copilot'").run();
+    assert.equal((await call("Co")).data.results[0].title, "Copilot AI agents explained", "Legacy-Zeilen bleiben über den alten Titelpräfix auffindbar");
+    raw.prepare("UPDATE search_doc SET title_norm=' copilot ai agents explained ' WHERE id='en:copilot'").run();
     assert.deepEqual((await call("AI")).data.results.map((row) => row.title).sort(), ["AI-Governance", "AI agents", "Copilot AI agents explained"].sort());
     assert.ok(!(await call("AI")).data.results.some((row) => row.title === "Maintainable systems"), "Treffer nur am Wortanfang, nicht mitten im Wort");
     assert.equal((await call("管理")).data.results[0].title, "Microsoft Entra の管理ポリシー");
@@ -539,6 +542,11 @@ test("search: normalisierte Kurzsuche in mehreren Schriften und Import-Backfill 
     assert.equal((await call("AI", "&entity=azure")).data.total, 2);
     assert.equal((await call("AI", "&year=2024")).data.total, 1);
     assert.equal((await call("Copilot AI agents")).data.results[0].title, "Copilot AI agents explained", "Suchanfragen ab drei Zeichen bleiben im bisherigen FTS-Zweig");
+    await call("AI", "&lang=de&type=entity&entity=powerbi&year=2026");
+    const facetQuery = lastSearchQuery();
+    assert.doesNotMatch(facetQuery.sql.slice(0, facetQuery.sql.indexOf(",eligible AS")), /UNION ALL/, "Kurzsuche hat je Kontext einen CASE-Scan statt drei UNION-Scans");
+    const facetPlan = raw.prepare(`EXPLAIN QUERY PLAN ${facetQuery.sql}`).all(...facetQuery.params);
+    assert.equal(facetPlan.filter(({ detail }) => /(?:SCAN d\b|SEARCH d USING INDEX)/.test(detail)).length, 5, "fuenf Facettenkontexte bedeuten hoechstens fuenf Titel-Scans");
   } finally {
     globalThis.fetch = oldFetch;
   }
@@ -710,4 +718,5 @@ test("search: 80.000 Dokumente mit einer Kandidatenabfrage unter 300 ms (SQLite)
   assert.match(query.sql, /instr\(d\.title_norm/);
   const plan = raw.prepare(`EXPLAIN QUERY PLAN ${query.sql}`).all(...query.params);
   assert.ok(plan.length > 0);
+  assert.equal(plan.filter(({ detail }) => /(?:SCAN d\b|SEARCH d USING INDEX)/.test(detail)).length, 1);
 });
