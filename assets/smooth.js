@@ -8,6 +8,7 @@ function t(t,e,i){return Math.max(t,Math.min(e,i))}var e=class{isRunning=!1;valu
     var l = new Lenis({ lerp: 0.1, wheelMultiplier: 1, smoothWheel: true, anchors: true, allowNestedScroll: true });
     (function raf(t) { l.raf(t); requestAnimationFrame(raf); })(performance.now());
     window.m365Lenis = l;
-    new MutationObserver(function () { if (H.classList.contains("a11y-nomo")) { l.destroy(); } }).observe(H, { attributes: true, attributeFilter: ["class"] });
+    var mo = new MutationObserver(function () { if (H.classList.contains("a11y-nomo")) { mo.disconnect(); l.destroy(); } });   // T29: erst trennen - destroy() schreibt className und loeste das Observer-Ereignis endlos neu aus (Seite fror ein)
+    mo.observe(H, { attributes: true, attributeFilter: ["class"] });
   } catch (e) {}
 })();
