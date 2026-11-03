@@ -2,6 +2,7 @@
 from datetime import datetime, timezone
 from site_i18n import COMM_LANGS, pfx, pfx2, T
 from site_learn import ENTS, esc, _fetch_json, LCSS
+from site_design import pager as PG, neighbours as NB   # Vor/Zurueck am Seitenende (rel=prev/next)
 
 
 def fetch_eps(api):
@@ -35,6 +36,7 @@ def build(g, eps, people, api):
             write(f"{pfx2(lang)}community/podcast/index.html", page(lang, f"{t0} – M365.FM", intro, ru, b, None, None, og_type="website", extra_head=LCSS, noindex=True))
             continue
         croot = f"{BASE}{pfx(lang)}/community/"; ttl = T(lang, "Community podcast", "Community-Podcast")
+        _seq = sorted(mine, key=lambda x: -x["published"]); _pos = {x["slug"]: i for i, x in enumerate(_seq)}   # neueste zuerst wie die Liste
         for e in mine:
             u = f"{croot}podcast/{e['slug']}/"; au = f"{BASE}/community/u/{e['handle']}/"
             topics = [t for t in e.get("topics", []) if t in ENTS]
@@ -46,7 +48,7 @@ def build(g, eps, people, api):
                             f'<p class="mut">{esc(T(lang, "By", "Von"))} <a href="{croot}u/{e["handle"]}/" rel="author">{esc(e["name"])}</a> · {iso(e["published"])}</p>{guests_html}{player}'
                             f'{"".join("<p>" + esc(par) + "</p>" for par in (e.get("description") or "").split(chr(10) * 2) if par.strip())}'
                             f'{"<p class=mut>" + esc(T(lang, "The author disclosed the use of AI.", "Die Autorin bzw. der Autor hat den KI-Einsatz offengelegt.")) + "</p>" if e.get("ai") else ""}</article><p>{tl}</p>'
-                            f'<p><a class="btn" href="{esc(e["ep_url"])}" rel="noopener">{esc(T(lang, "Listen on Spreaker", "Bei Spreaker anhören"))}</a> <a href="{croot}podcast/feed.xml">RSS</a></p><section id="c-comments"></section>'
+                            f'<p><a class="btn" href="{esc(e["ep_url"])}" rel="noopener">{esc(T(lang, "Listen on Spreaker", "Bei Spreaker anhören"))}</a> <a href="{croot}podcast/feed.xml">RSS</a></p>' + PG(lang, *[(f"{croot}podcast/{x['slug']}/", x["title"]) if x else None for x in NB(_seq, _pos[e['slug']])], kind="episode") + '<section id="c-comments"></section>'
                             + (ctags(lang, "podcast%d" % e["id"]) if ctags else ""))
             ld = [{"@context": "https://schema.org", "@type": "PodcastEpisode", "@id": u + "#episode", "url": u, "name": e["title"], "description": (e.get("description") or "")[:500], "inLanguage": lang,
                    "datePublished": iso(e["published"]), "author": {"@type": "Person", "@id": au + "#person", "name": e["name"], "url": au}, **({"actor": [{"@type": "Person", "@id": f"{BASE}/community/u/{g['handle']}/#person", "name": g["name"], "url": f"{BASE}/community/u/{g['handle']}/"} for g in gs]} if gs else {}),

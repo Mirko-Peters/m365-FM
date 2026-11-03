@@ -2,6 +2,7 @@
 from datetime import datetime, timezone
 from site_i18n import COMM_LANGS, pfx, pfx2, T
 from site_learn import ENTS, esc, _fetch_json, LCSS
+from site_design import pager as PG, neighbours as NB   # Vor/Zurueck am Seitenende (rel=prev/next)
 
 
 def fetch_videos(api):
@@ -35,6 +36,7 @@ def build(g, vids, people, api):
             write(f"{pfx2(lang)}community/video/index.html", page(lang, f"{t0} – M365.FM", intro, ru, b, None, None, og_type="website", extra_head=LCSS, noindex=True))
             continue
         croot = f"{BASE}{pfx(lang)}/community/"; ttl = T(lang, "Creator videos", "Creator-Videos")
+        _seq = sorted(mine, key=lambda x: -x["published"]); _pos = {x["slug"]: i for i, x in enumerate(_seq)}   # neueste zuerst wie die Liste
         for v in mine:
             u = f"{croot}video/{v['slug']}/"; au = f"{BASE}/community/u/{v['handle']}/"
             topics = [t for t in v.get("topics", []) if t in ENTS]
@@ -46,7 +48,7 @@ def build(g, vids, people, api):
                             f'<p class="mut">{esc(T(lang, "By", "Von"))} <a href="{croot}u/{v["handle"]}/" rel="author">{esc(v["name"])}</a> · {iso(v["published"])}</p>{guests_html}{player}'
                             f'{"".join("<p>" + esc(par) + "</p>" for par in (v.get("description") or "").split(chr(10) * 2) if par.strip())}'
                             f'{"<p class=mut>" + esc(T(lang, "The author disclosed the use of AI.", "Die Autorin bzw. der Autor hat den KI-Einsatz offengelegt.")) + "</p>" if v.get("ai") else ""}</article><p>{tl}</p>'
-                            f'<p><a class="btn" href="https://youtu.be/{v["video_id"]}" rel="noopener">{esc(T(lang, "Watch on YouTube", "Auf YouTube ansehen"))}</a> <a href="{croot}video/feed.xml">RSS</a></p><section id="c-comments"></section>'
+                            f'<p><a class="btn" href="https://youtu.be/{v["video_id"]}" rel="noopener">{esc(T(lang, "Watch on YouTube", "Auf YouTube ansehen"))}</a> <a href="{croot}video/feed.xml">RSS</a></p>' + PG(lang, *[(f"{croot}video/{x['slug']}/", x["title"]) if x else None for x in NB(_seq, _pos[v['slug']])], kind="video") + '<section id="c-comments"></section>'
                             + (ctags(lang, "video%d" % v["id"]) if ctags else ""))
             ld = [{"@context": "https://schema.org", "@type": "VideoObject", "@id": u + "#video", "url": u, "name": v["title"], "description": (v.get("description") or "")[:500], "inLanguage": lang,
                    "uploadDate": iso(v["published"]), "thumbnailUrl": f"https://i.ytimg.com/vi/{v['video_id']}/hqdefault.jpg", "embedUrl": f"https://www.youtube.com/embed/{v['video_id']}",

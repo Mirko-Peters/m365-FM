@@ -159,6 +159,7 @@ button.btn{background:transparent;color:var(--fg);font-size:.88rem;cursor:pointe
 footer a.soc{display:inline-flex;align-items:center;gap:6px;color:var(--mut)}footer a.soc .ic{width:18px;height:18px;margin:0;color:currentColor}footer a.soc:hover{color:var(--bc)}footer a.soc:hover .ic{color:var(--bc)}
 @media(max-width:1180px){.fshare{top:auto;bottom:0;left:0;right:0;transform:none;flex-direction:row;border:0;border-top:1px solid var(--bd)}.fshare b{display:none}.fshare a,.fshare button{flex:1;width:auto;border-top:0;border-left:1px solid var(--bd)}body{padding-bottom:46px}}
 
+.pnav{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:2.2em 0 1.4em}.pnav a{display:block;border:1px solid var(--bd);background:var(--card);padding:12px 14px;color:var(--fg);text-decoration:none;min-height:44px}.pnav a:hover,.pnav a:focus-visible{border-color:var(--ac)}.pnav a:hover b{color:var(--ac)}.pnav small{display:block;color:var(--mut);font:600 .78rem/1.3 "Barlow Condensed","Barlow Condensed FB0","Barlow Condensed FB1","Barlow Condensed FB2",sans-serif;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}.pnav b{display:block;font-weight:600;line-height:1.3;overflow-wrap:anywhere}.pnav .nx{grid-column:2;text-align:end}@media(max-width:560px){.pnav{grid-template-columns:1fr}.pnav .nx{grid-column:auto}}
 """
 
 EN_NAMES = {"de": "German", "es": "Spanish", "fr": "French", "it": "Italian", "pt": "Portuguese", "nl": "Dutch", "pl": "Polish",
@@ -244,3 +245,42 @@ def site_header(home, brand_href, menu, lang_html, bar_html=""):
             f'<nav class="menu" aria-label="Menu">{m}</nav>{_search_link(home)}{lang_html}<details class="mm"><summary aria-label="Menu">☰</summary><div class="pn">{mm}</div></details></div></div></header>')
 
 
+
+
+# Vor/Zurueck am Ende von Folgen-, Artikel- und Videoseiten: rel="prev" = frueher erschienen, rel="next" = spaeter erschienen (wie die bisherige
+# Leiste der englischen Hauptshow). Sichtbare Links mit rel auf <a> (gueltiges HTML); kein <link rel=prev/next> im Kopf, das ist fuer Seitenfolgen gedacht.
+PAGER_T = {   # (zurueck, weiter, Name der Navigation) je Art
+    "en": {"episode": ("Previous episode", "Next episode", "More episodes"), "article": ("Previous article", "Next article", "More articles"), "video": ("Previous video", "Next video", "More videos")},
+    "de": {"episode": ("Vorherige Folge", "Nächste Folge", "Weitere Folgen"), "article": ("Vorheriger Artikel", "Nächster Artikel", "Weitere Artikel"), "video": ("Vorheriges Video", "Nächstes Video", "Weitere Videos")},
+    "es": {"episode": ("Episodio anterior", "Episodio siguiente", "Más episodios"), "article": ("Artículo anterior", "Artículo siguiente", "Más artículos"), "video": ("Vídeo anterior", "Vídeo siguiente", "Más vídeos")},
+    "fr": {"episode": ("Épisode précédent", "Épisode suivant", "Autres épisodes"), "article": ("Article précédent", "Article suivant", "Autres articles"), "video": ("Vidéo précédente", "Vidéo suivante", "Autres vidéos")},
+    "it": {"episode": ("Episodio precedente", "Episodio successivo", "Altri episodi"), "article": ("Articolo precedente", "Articolo successivo", "Altri articoli"), "video": ("Video precedente", "Video successivo", "Altri video")},
+    "pt": {"episode": ("Episódio anterior", "Próximo episódio", "Mais episódios"), "article": ("Artigo anterior", "Próximo artigo", "Mais artigos"), "video": ("Vídeo anterior", "Próximo vídeo", "Mais vídeos")},
+    "nl": {"episode": ("Vorige aflevering", "Volgende aflevering", "Meer afleveringen"), "article": ("Vorig artikel", "Volgend artikel", "Meer artikelen"), "video": ("Vorige video", "Volgende video", "Meer video's")},
+    "pl": {"episode": ("Poprzedni odcinek", "Następny odcinek", "Więcej odcinków"), "article": ("Poprzedni artykuł", "Następny artykuł", "Więcej artykułów"), "video": ("Poprzedni film", "Następny film", "Więcej filmów")},
+    "id": {"episode": ("Episode sebelumnya", "Episode berikutnya", "Episode lainnya"), "article": ("Artikel sebelumnya", "Artikel berikutnya", "Artikel lainnya"), "video": ("Video sebelumnya", "Video berikutnya", "Video lainnya")},
+    "ru": {"episode": ("Предыдущий выпуск", "Следующий выпуск", "Другие выпуски"), "article": ("Предыдущая статья", "Следующая статья", "Другие статьи"), "video": ("Предыдущее видео", "Следующее видео", "Другие видео")},
+    "uk": {"episode": ("Попередній випуск", "Наступний випуск", "Інші випуски"), "article": ("Попередня стаття", "Наступна стаття", "Інші статті"), "video": ("Попереднє відео", "Наступне відео", "Інші відео")},
+    "ar": {"episode": ("الحلقة السابقة", "الحلقة التالية", "حلقات أخرى"), "article": ("المقال السابق", "المقال التالي", "مقالات أخرى"), "video": ("الفيديو السابق", "الفيديو التالي", "فيديوهات أخرى")},
+    "he": {"episode": ("הפרק הקודם", "הפרק הבא", "פרקים נוספים"), "article": ("המאמר הקודם", "המאמר הבא", "מאמרים נוספים"), "video": ("הסרטון הקודם", "הסרטון הבא", "סרטונים נוספים")},
+    "ja": {"episode": ("前のエピソード", "次のエピソード", "ほかのエピソード"), "article": ("前の記事", "次の記事", "ほかの記事"), "video": ("前の動画", "次の動画", "ほかの動画")},
+    "ko": {"episode": ("이전 에피소드", "다음 에피소드", "다른 에피소드"), "article": ("이전 글", "다음 글", "다른 글"), "video": ("이전 동영상", "다음 동영상", "다른 동영상")},
+}
+_RTL = ("ar", "he")
+
+
+def pager(lang, prev=None, nxt=None, kind="episode"):
+    """Leiste am Seitenende. prev/nxt = (url, titel) oder None; prev ist der frueher erschienene Beitrag. Leer, wenn es keinen Nachbarn gibt."""
+    if not prev and not nxt:
+        return ""
+    t = (PAGER_T.get(lang) or PAGER_T["en"]).get(kind) or PAGER_T["en"][kind]
+    back, fwd = ("→", "←") if lang in _RTL else ("←", "→")
+    a = lambda it, cls, rel, lab: f'<a class="{cls}" rel="{rel}" href="{_e(it[0])}"><small>{lab}</small><b>{_e(it[1])}</b></a>'
+    return (f'<nav class="pnav" aria-label="{_e(t[2])}">'
+            + (a(prev, "pv", "prev", f"{back} {_e(t[0])}") if prev else "")
+            + (a(nxt, "nx", "next", f"{_e(t[1])} {fwd}") if nxt else "") + "</nav>")
+
+
+def neighbours(seq, i):
+    """seq ist neueste zuerst sortiert: (frueher erschienen, spaeter erschienen) zum Eintrag i."""
+    return (seq[i + 1] if i + 1 < len(seq) else None), (seq[i - 1] if i > 0 else None)
