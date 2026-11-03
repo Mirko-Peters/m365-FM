@@ -591,7 +591,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                    **({"hasPart": {"@id": u + "#articles"}} if arturls else {}),
                    "breadcrumb": {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": s["entities"], "item": root}, {"@type": "ListItem", "position": 2, "name": e["name"], "item": u}]}}]
             if e["id"] == MUSICGROUP_ID and person_aka.get(e["id"]):
-                ld.append(musicgroup_ld(BASE))
+                ld.append({"@context": "https://schema.org", **musicgroup_ld(BASE)})   # eigener <script>-Block auf der Seite: braucht @context
             if arturls:
                 ld.append({"@context": "https://schema.org", "@type": "ItemList", "@id": u + "#articles", "name": T(lang, "Articles about {t}", "Artikel zu {t}").format(t=e["name"]), "numberOfItems": len(arturls),
                            "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": x} for i, x in enumerate(arturls[:50])]})
