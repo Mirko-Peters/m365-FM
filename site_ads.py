@@ -12,7 +12,12 @@ CFG_FILE = Path(__file__).parent / "data" / "adsense.json"
 LABEL = {"de": "Anzeige", "en": "Advertisement", "es": "Publicidad", "fr": "Publicité", "it": "Pubblicità", "pt": "Publicidade", "nl": "Advertentie", "pl": "Reklama"}
 CSS = (".ad{margin:2rem auto;max-width:50rem;padding:.8rem 1rem 1rem;border:1px solid var(--bd,#1412101f);border-radius:14px;background:var(--card,transparent);text-align:center;min-height:280px;clear:both}"
        ".ad small{display:block;font:600 .7rem system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--mut,#6b645c);margin-bottom:.5rem}"
-       ".ad ins{display:block;min-height:250px}.ad:has(ins[data-ad-status=unfilled]){display:none}")
+       ".ad ins{display:block;min-height:250px}"
+       # Leerer Block (AdSense meldet unfilled, z. B. nach spaeter Einwilligung im EWR): nicht zusammenklappen - das verschiebt alles darunter (CLS).
+       # Stattdessen behaelt der Block seine Hoehe und zeigt den eigenen Hinweis auf die Sponsor-Seite.
+       ".ad .ad-house{display:none}.ad:has(ins[data-ad-status=unfilled]) ins{display:none}"
+       ".ad:has(ins[data-ad-status=unfilled]) .ad-house{display:flex;min-height:250px;flex-direction:column;align-items:center;justify-content:center;gap:.4rem;text-decoration:none;color:var(--fg,#17191c)}"
+       ".ad-house b{font-size:1.15rem}.ad-house span{color:var(--mut,#6b645c);font-size:.95rem}")
 
 
 def cfg():
@@ -68,10 +73,17 @@ def head(base, body="", canonical="", noindex=False):
     return out
 
 
-def _block(lang, slot, pub):
+def _house(base, lang):
+    """Eigener Hinweis fuer einen leer gebliebenen Block (nur sichtbar bei data-ad-status=unfilled): fuehrt zur Sponsor-Seite."""
+    import site_sponsor as SPN
+    return (f'<a class="ad-house" href="{escape(SPN.url(base, lang))}"><b>{escape(SPN.label(lang))}</b>'
+            f'<span>{escape(SPN.tx(lang if lang in SPN.LANGS_ALL else "en", "h1"))}</span></a>')
+
+
+def _block(lang, slot, pub, base=""):
     return (f'<aside class="ad" aria-label="{escape(LABEL.get(lang, LABEL["en"]))}"><small>{escape(LABEL.get(lang, LABEL["en"]))}</small>'
             f'<ins class="adsbygoogle" data-ad-client="ca-{pub}" data-ad-slot="{escape(slot)}" data-ad-format="auto" data-full-width-responsive="true"></ins>'
-            '<script>(adsbygoogle=window.adsbygoogle||[]).push({});</script></aside>')
+            + _house(base, lang) + '<script>(adsbygoogle=window.adsbygoogle||[]).push({});</script></aside>')
 
 
 def inject(base, body, lang, canonical, noindex=False):
@@ -91,8 +103,8 @@ def inject(base, body, lang, canonical, noindex=False):
         if a >= 0 and z > a:
             region = body[a:z]; parts = re.split(r"(?=<h2\b)", region)
             if len(parts) > 3:   # Einleitung + mindestens zwei Abschnitte davor
-                parts.insert(3, _block(lang, slots["mid"], pub))
+                parts.insert(3, _block(lang, slots["mid"], pub, base))
                 body = body[:a] + "".join(parts) + body[z:]
     if slots.get("end") and "<footer>" in body:
-        body = body.replace("<footer>", _block(lang, slots["end"], pub) + "<footer>", 1)
+        body = body.replace("<footer>", _block(lang, slots["end"], pub, base) + "<footer>", 1)
     return body
