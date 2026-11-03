@@ -1,0 +1,278 @@
+{
+ "episode_id": "67312816",
+ "slug": "using-microsoft-graph-for-custom-app-integrations-why-delegated-permissions-break-automation-and-how-app-only-access-fixes-it",
+ "title": "Using Microsoft Graph for Custom App Integrations: Why Delegated Permissions Break Automation and How App‑Only Access Fixes It",
+ "lang": "en",
+ "duration_s": 1407,
+ "transcript_source": "data/en_transcripts/ede959e70ed6.txt",
+ "time_basis": "estimated",
+ "entities": [
+  {
+   "slug": "microsoft-graph-permissions",
+   "name": "Microsoft Graph permissions",
+   "type": "concept",
+   "score": 95,
+   "mentions": 40,
+   "first_mention_s": 18,
+   "quote": "Almost nobody talks about app only permissions in Microsoft graph.",
+   "url": "https://www.m365.fm/entity/microsoft-graph-permissions/"
+  },
+  {
+   "slug": "graph",
+   "name": "Microsoft Graph",
+   "type": "product",
+   "score": 90,
+   "mentions": 11,
+   "first_mention_s": 18,
+   "quote": "Almost nobody talks about app only permissions in Microsoft graph.",
+   "url": "https://www.m365.fm/entity/graph/"
+  },
+  {
+   "slug": "app-registration",
+   "name": "Application registration",
+   "type": "concept",
+   "score": 75,
+   "mentions": 8,
+   "first_mention_s": 460,
+   "quote": "Registering an app means navigating menus, picking an authentication method",
+   "url": "https://www.m365.fm/entity/app-registration/"
+  },
+  {
+   "slug": "client-secret",
+   "name": "Client secret",
+   "type": "concept",
+   "score": 65,
+   "mentions": 12,
+   "first_mention_s": 482,
+   "quote": "You'll see quick demos of setting up client secret or certificates",
+   "url": "https://www.m365.fm/entity/client-secret/"
+  },
+  {
+   "slug": "service-principal",
+   "name": "Service principal",
+   "type": "concept",
+   "score": 60,
+   "mentions": 2,
+   "first_mention_s": 261,
+   "quote": "Unlike true service principles, users get deprovisioned, their accounts age out",
+   "url": "https://www.m365.fm/entity/service-principal/"
+  },
+  {
+   "slug": "change-notifications",
+   "name": "Change notifications and webhooks",
+   "type": "concept",
+   "score": 60,
+   "mentions": 7,
+   "first_mention_s": 1033,
+   "quote": "That's where web hooks and modern toolkits can really expand your automation landscape",
+   "url": "https://www.m365.fm/entity/change-notifications/"
+  },
+  {
+   "slug": "admin-consent",
+   "name": "Admin consent (Microsoft Entra ID)",
+   "type": "concept",
+   "score": 60,
+   "mentions": 8,
+   "first_mention_s": 490,
+   "quote": "the admin consent process goes sideways",
+   "url": "https://www.m365.fm/entity/admin-consent/"
+  },
+  {
+   "slug": "least-privilege",
+   "name": "Least privilege",
+   "type": "concept",
+   "score": 55,
+   "mentions": 2,
+   "first_mention_s": 420,
+   "quote": "That's the principle of least privilege in action.",
+   "url": "https://www.m365.fm/entity/least-privilege/"
+  },
+  {
+   "slug": "automation",
+   "name": "Automation",
+   "type": "concept",
+   "score": 55,
+   "mentions": 26,
+   "first_mention_s": 30,
+   "quote": "I'll show you the step by step fix that unlocks seamless secure automation.",
+   "url": "https://www.m365.fm/entity/automation/"
+  },
+  {
+   "slug": "sharepoint",
+   "name": "SharePoint",
+   "type": "product",
+   "score": 50,
+   "mentions": 17,
+   "first_mention_s": 176,
+   "quote": "Maybe your workflow needs to touch resources across SharePoint, exchange and teams.",
+   "url": "https://www.m365.fm/entity/sharepoint/"
+  },
+  {
+   "slug": "service-account",
+   "name": "Service account",
+   "type": "concept",
+   "score": 40,
+   "mentions": 4,
+   "first_mention_s": 156,
+   "quote": "Even if you assign a special service account, someone's going to forget the password expiration",
+   "url": "https://www.m365.fm/entity/service-account/"
+  },
+  {
+   "slug": "global-administrator",
+   "name": "Global Administrator",
+   "type": "concept",
+   "score": 40,
+   "mentions": 3,
+   "first_mention_s": 195,
+   "quote": "teams sometimes grant global admin status to these accounts",
+   "url": "https://www.m365.fm/entity/global-administrator/"
+  },
+  {
+   "slug": "entra-id",
+   "name": "Microsoft Entra ID",
+   "type": "product",
+   "score": 40,
+   "mentions": 3,
+   "first_mention_s": 454,
+   "quote": "The interface is scattered across azure ad, the graph portal, and sometimes even the classic legacy admin pages.",
+   "url": "https://www.m365.fm/entity/entra-id/"
+  },
+  {
+   "slug": "power-automate",
+   "name": "Power Automate",
+   "type": "product",
+   "score": 35,
+   "mentions": 2,
+   "first_mention_s": 46,
+   "quote": "You've set up Power Automated to sync files for accounting",
+   "url": "https://www.m365.fm/entity/power-automate/"
+  },
+  {
+   "slug": "azure-key-vault",
+   "name": "Azure Key Vault",
+   "type": "product",
+   "score": 30,
+   "mentions": 1,
+   "first_mention_s": 901,
+   "quote": "Always store secrets in a secure vault as you're a key vault if possible",
+   "url": "https://www.m365.fm/entity/azure-key-vault/"
+  },
+  {
+   "slug": "microsoft-graph-toolkit",
+   "name": "Microsoft Graph Toolkit (MGT)",
+   "type": "product",
+   "score": 30,
+   "mentions": 1,
+   "first_mention_s": 1191,
+   "quote": "The Graph toolkit can smooth out a lot of the Graph API's rough edges",
+   "url": "https://www.m365.fm/entity/microsoft-graph-toolkit/"
+  },
+  {
+   "slug": "throttling",
+   "name": "Throttling",
+   "type": "concept",
+   "score": 25,
+   "mentions": 1,
+   "first_mention_s": 1269,
+   "quote": "Rate limits hit hard with app only calls",
+   "url": "https://www.m365.fm/entity/throttling/"
+  }
+ ],
+ "new_entities": [],
+ "quotes": [
+  {
+   "text": "The delegated permissions tie your automation to an actual human user. Under the hood, every API call is piggybacking on a real person's permissions and session.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 85,
+   "entities": [
+    "microsoft-graph-permissions",
+    "automation"
+   ],
+   "why": "Explains in two sentences why delegated permissions make background automation fragile."
+  },
+  {
+   "text": "Every action is tied back to the app's identity, not a person. Of course, app only permissions don't mean you throw out best practices. You still need to be smart about which specific permissions you select.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 625,
+   "entities": [
+    "microsoft-graph-permissions",
+    "least-privilege"
+   ],
+   "why": "Balances the benefit of app-only access with the need for careful permission selection."
+  },
+  {
+   "text": "That secret is your app's identity card for Microsoft graph and exposing it even briefly is an open door for attackers.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 894,
+   "entities": [
+    "client-secret",
+    "graph"
+   ],
+   "why": "A memorable analogy for why client secrets must be protected."
+  },
+  {
+   "text": "Register the app, pick only application permissions, secure and regularly rotate your secrets and confirm admin consent actually went through. Get this chain right, and your automation becomes both safer and almost completely self sufficient.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 1000,
+   "entities": [
+    "app-registration",
+    "microsoft-graph-permissions",
+    "client-secret"
+   ],
+   "why": "Condenses the whole app-only setup into an actionable checklist."
+  },
+  {
+   "text": "Every webhook subscription has to be created and renewed by your app itself using its identity, not a random service account.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 1163,
+   "entities": [
+    "change-notifications",
+    "service-account"
+   ],
+   "why": "Clarifies a practical rule for running Graph webhooks without users."
+  }
+ ],
+ "chapters": [
+  {
+   "start_s": 0,
+   "title": "Why custom app integrations feel risky"
+  },
+  {
+   "start_s": 34,
+   "title": "Why delegated permissions break your automation"
+  },
+  {
+   "start_s": 360,
+   "title": "How app-only permissions change the game"
+  },
+  {
+   "start_s": 706,
+   "title": "Step by step: setting up app-only permissions without the gotchas"
+  },
+  {
+   "start_s": 1041,
+   "title": "Real-world benefits and live notifications with webhooks"
+  },
+  {
+   "start_s": 1277,
+   "title": "End-to-end scenario: headless Power Platform automation"
+  },
+  {
+   "start_s": 1370,
+   "title": "Wrap-up: building automation that survives org changes"
+  }
+ ],
+ "takeaways": [
+  "Delegated permissions tie automations to a real user's session, password and license, so background jobs break when that person changes roles, resets a password or leaves.",
+  "App-only permissions give an application its own identity in Microsoft Graph, enabling least-privilege access, unattended runs and cleaner audit trails.",
+  "A reliable setup requires registering the app, choosing only the needed application permissions, confirming admin consent and storing and rotating secrets securely."
+ ],
+ "hook": "Your Microsoft 365 automations keep failing at 2 AM because they run on a user's delegated permissions. This episode is for admins and developers building custom Graph integrations who want background jobs that survive password resets and staff turnover. Learn how app-only permissions, app registrations and proper consent make automation secure and reliable.",
+ "youtube_video_id": null,
+ "generated_at": "2026-11-03T03:36:59Z"
+}
