@@ -1,0 +1,257 @@
+{
+ "episode_id": "76145264",
+ "slug": "ai-agents-architecture-the-secret-architecture-that-makes-ai-agents-actually-work",
+ "title": "Architektura agentów AI: egzekutory, grafy przepływu pracy i walidacja, dzięki którym agenci działają niezawodnie",
+ "lang": "pl",
+ "duration_s": 1605,
+ "transcript_source": "transcripts/pl/LLxvoiKP3XA.vtt",
+ "time_basis": "vtt",
+ "entities": [
+  {
+   "slug": "ai-agent",
+   "name": "AI agent",
+   "type": "concept",
+   "score": 90,
+   "mentions": 28,
+   "first_mention_s": 0,
+   "quote": "Agent uzyskuje dostęp przy każdym wywołaniu lub nie wywołuje go wcale.",
+   "url": "https://www.m365.fm/pl/entity/ai-agent/"
+  },
+  {
+   "slug": "prompt",
+   "name": "Prompt",
+   "type": "concept",
+   "score": 60,
+   "mentions": 8,
+   "first_mention_s": 250,
+   "quote": "Monity kierują myślami, nie wykonują operacji.",
+   "url": "https://www.m365.fm/pl/entity/prompt/"
+  },
+  {
+   "slug": "human-in-the-loop",
+   "name": "Human in the loop",
+   "type": "concept",
+   "score": 55,
+   "mentions": 8,
+   "first_mention_s": 70,
+   "quote": "Punkty kontrolne z udziałem człowieka nie są doraźnymi wiadomościami Slacka.",
+   "url": "https://www.m365.fm/pl/entity/human-in-the-loop/"
+  },
+  {
+   "slug": "agent-observability",
+   "name": "Agent observability",
+   "type": "concept",
+   "score": 50,
+   "mentions": 6,
+   "first_mention_s": 263,
+   "quote": "Obserwowalność jest wbudowana, a nie dodana.",
+   "url": "https://www.m365.fm/pl/entity/agent-observability/"
+  },
+  {
+   "slug": "audit-logs",
+   "name": "Audit logs",
+   "type": "concept",
+   "score": 40,
+   "mentions": 4,
+   "first_mention_s": 194,
+   "quote": "Dzienniki audytu są niezmienne i przypisywane do tego, która zasada autoryzowała daną akcję,",
+   "url": "https://www.m365.fm/pl/entity/audit-logs/"
+  },
+  {
+   "slug": "graph",
+   "name": "Microsoft Graph",
+   "type": "product",
+   "score": 60,
+   "mentions": 4,
+   "first_mention_s": 464,
+   "quote": "Zdyscyplinowany bibliotekarz, który pobiera dane z Microsoft Graph tylko z minimalnymi uprawnieniami.",
+   "url": "https://www.m365.fm/pl/entity/graph/"
+  },
+  {
+   "slug": "azure-openai",
+   "name": "Azure OpenAI Service",
+   "type": "product",
+   "score": 60,
+   "mentions": 5,
+   "first_mention_s": 289,
+   "quote": "Model Azure OpenAI, który planuje, lokalizuje i nigdy nie wykonuje zleceń poza wyznaczonymi zadaniami.",
+   "url": "https://www.m365.fm/pl/entity/azure-openai/"
+  },
+  {
+   "slug": "copilot-studio",
+   "name": "Copilot Studio",
+   "type": "product",
+   "score": 55,
+   "mentions": 4,
+   "first_mention_s": 289,
+   "quote": "Skorzystaj z Copilot Studio do orkiestracji.",
+   "url": "https://www.m365.fm/pl/entity/copilot-studio/"
+  },
+  {
+   "slug": "sharepoint",
+   "name": "SharePoint",
+   "type": "product",
+   "score": 45,
+   "mentions": 7,
+   "first_mention_s": 26,
+   "quote": "Plan zakłada aktualizację elementu listy programu SharePoint.",
+   "url": "https://www.m365.fm/pl/entity/sharepoint/"
+  },
+  {
+   "slug": "entra-id",
+   "name": "Microsoft Entra ID",
+   "type": "product",
+   "score": 40,
+   "mentions": 2,
+   "first_mention_s": 1082,
+   "quote": "Strażnik polityki, sidecar środowiska wykonawczego, który łączy wszystko z zakresami identyfikatorów Entra i RBAC.",
+   "url": "https://www.m365.fm/pl/entity/entra-id/"
+  },
+  {
+   "slug": "teams",
+   "name": "Microsoft Teams",
+   "type": "product",
+   "score": 30,
+   "mentions": 3,
+   "first_mention_s": 1151,
+   "quote": "Wykonawca publikuje wynik w Teams i wysyła e-maile do interesariuszy.",
+   "url": "https://www.m365.fm/pl/entity/teams/"
+  },
+  {
+   "slug": "mcp",
+   "name": "Model Context Protocol (MCP)",
+   "type": "concept",
+   "score": 30,
+   "mentions": 2,
+   "first_mention_s": 938,
+   "quote": "Jeśli importujesz specyfikację MCP lub otwartego API, weryfikujesz, czy zadeklarowane metody spełniają",
+   "url": "https://www.m365.fm/pl/entity/mcp/"
+  }
+ ],
+ "new_entities": [
+  {
+   "slug": "large-language-model",
+   "name": "Large language model (LLM)",
+   "type": "concept",
+   "mentions": 4,
+   "first_mention_s": 318,
+   "quote": "LLM jest doradcą, a nie sędzią.",
+   "status": "review"
+  },
+  {
+   "slug": "idempotency",
+   "name": "Idempotency",
+   "type": "concept",
+   "mentions": 2,
+   "first_mention_s": 413,
+   "quote": "który uruchamia narzędzia z idempotentnością i sprawdzaniem warunków końcowych.",
+   "status": "review"
+  },
+  {
+   "slug": "least-privilege",
+   "name": "Least privilege",
+   "type": "concept",
+   "mentions": 3,
+   "first_mention_s": 813,
+   "quote": "muszą działać w segmentach z najmniejszymi uprawnieniami i jawnymi listami dozwolonych.",
+   "status": "review"
+  }
+ ],
+ "quotes": [
+  {
+   "text": "Kluczowy wniosek, monity to opinie, wykonawcy i zwalidowane grafy to operacje, a sprawdzenie kontraktu przed wykonaniem to bariera ochronna, która zapewnia uczciwość obu stron.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 250,
+   "entities": [
+    "prompt",
+    "ai-agent"
+   ],
+   "why": "Kernaussage: Prompts sind Meinungen, Executor und Graphen sind Operationen"
+  },
+  {
+   "text": "LLMY zajmują się poznaniem. Wykonawcy zajmują się operacjami. Mieszanie tych elementów prowadzi do chaosu. Model może zaproponować plan. Nie może zagwarantować, że wiadomość e-mail została wysłana, plik został zapisany, ani że uprawnienie istniało.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 318,
+   "entities": [
+    "large-language-model"
+   ],
+   "why": "Trennung von Kognition (LLM) und Operationen (Executor)"
+  },
+  {
+   "text": "LLM proponuje. Wykonawca egzekwuje. Walidacja ograniczeń grafu decyduje. Porządek przywrócony. Gdy oddzielisz poznanie od operacji, Twoi agenci przestaną improwizować i zaczną się zachowywać.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 507,
+   "entities": [
+    "large-language-model",
+    "ai-agent"
+   ],
+   "why": "Rollenverteilung: LLM schlägt vor, Executor erzwingt, Validierung entscheidet"
+  },
+  {
+   "text": "Punkty kontrolne z udziałem człowieka nie są doraźnymi wiadomościami Slacka. Zamrażają one wykonywanie, prezentują proponowane działanie i dowody oraz wymagają zatwierdzenia lub edycji, która jest rejestrowana i podpisywana.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 690,
+   "entities": [
+    "human-in-the-loop"
+   ],
+   "why": "Human-in-the-loop als protokollierte Freigabe im Graphen"
+  },
+  {
+   "text": "To jest poprawnie wykonana architektura Microsoftu. Graf dla prawdy, Azure OpenAI dla myślenia, Copilot Studio dla orkiestracji, wykonawcy dla operacji, walidatory i zasady dla bezpieczeństwa oraz obserwowalność dla dowodu.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 1349,
+   "entities": [
+    "graph",
+    "azure-openai",
+    "copilot-studio",
+    "agent-observability"
+   ],
+   "why": "Zusammenfassung der Microsoft-Referenzarchitektur"
+  }
+ ],
+ "chapters": [
+  {
+   "start_s": 0,
+   "title": "Walidacja przed wykonaniem: bramka trio"
+  },
+  {
+   "start_s": 276,
+   "title": "Dlaczego lepsze monity nie naprawiają agentów"
+  },
+  {
+   "start_s": 315,
+   "title": "Monity zawodzą w operacjach, wykonawcy nie"
+  },
+  {
+   "start_s": 527,
+   "title": "Grafy przepływu pracy 101: węzły, krawędzie i stan"
+  },
+  {
+   "start_s": 779,
+   "title": "Bezpieczeństwo z założenia: walidacja grafów"
+  },
+  {
+   "start_s": 1053,
+   "title": "Scenariusz: Microsoft Graph, Azure OpenAI i Copilot Studio"
+  },
+  {
+   "start_s": 1361,
+   "title": "Liczby: dokładność, opóźnienie, koszt i narzut"
+  }
+ ],
+ "takeaways": [
+  "Prompty kierują myśleniem, ale niezawodność agentów AI zapewniają wykonawcy: sprawdzają warunki wstępne, uprawnienia i warunki końcowe oraz działają idempotentnie.",
+  "Grafy przepływu pracy z jawnymi kontraktami, obsługą błędów i punktami kontrolnymi z udziałem człowieka zastępują improwizację deterministycznym, audytowalnym przebiegiem.",
+  "W Microsoft 365 sprawdza się podział ról: Microsoft Graph jako źródło prawdy, Azure OpenAI do rozumowania, Copilot Studio do orkiestracji, a walidatory i obserwowalność dla bezpieczeństwa i dowodów."
+ ],
+ "hook": "Lepsze prompty nie naprawią niestabilnych agentów AI. W tym odcinku zobaczysz, jak wykonawcy, grafy przepływu pracy i walidacja przed wykonaniem sprawiają, że agenci z Microsoft Graph, Azure OpenAI i Copilot Studio działają niezawodnie, mierzalnie i bezpiecznie.",
+ "youtube_video_id": "LLxvoiKP3XA",
+ "source_video_id": "LLxvoiKP3XA",
+ "show_id": 7393242,
+ "generated_at": "2026-11-03T03:05:09Z"
+}
