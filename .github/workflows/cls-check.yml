@@ -35,8 +35,8 @@ jobs:
       - name: Messen
         env:
           PATHS_IN: ${{ github.event.inputs.paths }}
-          CLS_ADS: ${{ github.event.inputs.ads || 'none,lazyunfilled,lazytall' }}
-          CLS_REAL_PATHS: ${{ github.event_name == 'push' && '/show/episodes/stop-using-entity-framework-like-this/ /show/episodes/azure-bastion-simply-explained/ /de/copilot-agenten-im-griff-governance-mit-microsoft-365-admin-center/ /entity/azure-service-bus/ /show/ /de/' || github.event.inputs.real_paths }}
+          CLS_ADS: ${{ github.event.inputs.ads || 'none' }}
+          CLS_REAL_PATHS: ${{ github.event.inputs.real_paths }}
           CLS_VIEWS: desktop-1366,desktop-1920,mobil-390
         run: |
           if [ -n "$PATHS_IN" ]; then printf '%s\n' $PATHS_IN > /tmp/urls.txt; else cp tools/cls_urls_ads.txt /tmp/urls.txt; fi

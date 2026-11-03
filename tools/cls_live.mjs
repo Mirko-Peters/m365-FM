@@ -71,7 +71,9 @@ async function measure(browser, view, path, ad) {
   const out = { view: view.name, path, ad, status: 0, cls: 0, n: 0, top: [], ads: 0, imgNoDim: 0, err: "" };
   try {
     const res = await page.goto(BASE + path, { waitUntil: "load", timeout: 45000 });
-    out.status = res ? res.status() : 0;
+    out.status = res ? res.status() : 0; out.final = page.url().replace(BASE, "");
+    out.footer = await page.evaluate(() => { const a = [...document.querySelectorAll("footer a")].find((x) => /\/sponsor\/$/.test(x.getAttribute("href") || "")); return a ? a.textContent.trim() + " -> " + a.getAttribute("href").replace(location.origin, "") : "-"; });
+    out.h1 = await page.evaluate(() => (document.querySelector("h1") || {}).textContent || "").then((t) => t.trim().slice(0, 60));
     await page.waitForTimeout(3000);
     for (let i = 0; i < 60; i++) {
       const done = await page.evaluate(() => { window.scrollBy(0, Math.round(innerHeight * 0.7)); return innerHeight + scrollY >= document.documentElement.scrollHeight - 2; });
@@ -111,7 +113,7 @@ await Promise.all(Array.from({ length: PAR }, async () => {
     const j = jobs[next++];
     const r = await measure(browser, j.view, j.path, j.ad);
     results.push(r);
-    console.error(`${r.view.padEnd(13)} ${r.ad.padEnd(8)} ${String(r.cls).padEnd(7)} ${r.status} ${r.path}${r.err ? "  ERR " + r.err : ""}`);
+    console.error(`${r.view.padEnd(13)} ${r.ad.padEnd(8)} ${String(r.cls).padEnd(7)} ${r.status} ${r.path}${r.final && r.final !== r.path ? " => " + r.final : ""} | footer: ${r.footer} | h1: ${r.h1}${r.err ? "  ERR " + r.err : ""}`);
   }
 }));
 await browser.close();
