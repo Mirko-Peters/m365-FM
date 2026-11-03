@@ -27,8 +27,7 @@ jobs:
       - run: python generate_site.py
       - name: Vor/Zurueck pruefen
         run: python tools/check_pager.py
-      - name: Interne Links pruefen (wie im Seitenbau nicht blockierend, bekannte Altfaelle)
-        continue-on-error: true
+      - name: Interne Links pruefen (blockierend wie im Seitenbau)
         run: python check_links.py --all --out reports/broken_links.tsv
       - name: Liste der kaputten Links sichern
         if: always()

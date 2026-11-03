@@ -187,9 +187,8 @@ jobs:
               echo "::error::Money-Keywords, Profil-Export, Entitaets-Aenderungsdaten und Folgen-Slugs konnten nicht gesichert werden"; exit 1
             )
           fi
-      - name: Interne Links prüfen
-        continue-on-error: true
-        run: python check_links.py
+      - name: Interne Links prüfen (blockierend, Bau-Probe 3.11. ohne Fehler; neue tote Links in Beiträgen/Show Notes -> data/link_fixes.json)
+        run: python check_links.py --all
       - name: Schema.org (JSON-LD) prüfen (blockierend seit T7, Integrationsbau 1.11. ohne Fehler)
         run: python check_schema.py
       - name: Sitemaps prüfen (blockierend)
