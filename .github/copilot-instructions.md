@@ -15,7 +15,7 @@ Willkommen im Team. Dieses Repo baut **www.m365.fm**. Der Dev-Chef (Claude) prü
 3. **Bilder** liegen nur im eigenen R2-Bucket und werden über `https://img.m365.fm/…` ausgeliefert (siehe `CLAUDE.md`). Fremde Bild-URLs nicht neu einbauen.
 4. **Nicht anfassen:**
    - `shownotes/`: Bereich der Shownotes-Generator- und QA-Sitzungen, einschließlich `APPROVED` und `PAUSED`.
-   - `data/r2_map.json`: wird nur vom Workflow `r2-images.yml` geschrieben.
+   - `data/r2_map.json` und `data/r2_dims.json`: werden nur vom Workflow `r2-images.yml` geschrieben.
    - `data/podpage/*`.
 5. **Sprache:** Kommentare, Commit-Messages, PR-Titel und PR-Texte auf Deutsch, kurz und sachlich.
 6. **Kleine, gezielte Änderungen.** Bitte keine Umformatierung ganzer Dateien und keine neuen Abhängigkeiten ohne Grund.
