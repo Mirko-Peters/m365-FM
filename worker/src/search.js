@@ -86,13 +86,30 @@ function normalizeDoc(doc, siteOrigin) {
   };
 }
 
+function normalizeSearchText(value) {
+  return String(value || "").toLocaleLowerCase().normalize("NFKD").replace(/\p{M}/gu, "")
+    .replace(/[^\p{L}\p{N}]+/gu, " ").trim().replace(/\s+/g, " ");
+}
+
+function normalizeTitle(value) {
+  return ` ${normalizeSearchText(value)} `;
+}
+
 async function currentRows(db, ids) {
   const rows = new Map();
   if (!ids.length) return rows;
-  const found = await db.prepare("SELECT id,h,gone FROM search_doc WHERE id IN (SELECT value FROM json_each(?))")
+  const found = await db.prepare("SELECT id,h,gone,title_norm FROM search_doc WHERE id IN (SELECT value FROM json_each(?))")
     .bind(JSON.stringify(ids)).all();
   for (const row of found.results || []) rows.set(row.id, row);
   return rows;
+}
+
+async function backfillSearchTitleNorm(db) {
+  const rows = (await db.prepare("SELECT id,title FROM search_doc WHERE title_norm='' AND gone=0 LIMIT 5000").all()).results || [];
+  const updates = rows.map((row) => db.prepare("UPDATE search_doc SET title_norm=? WHERE id=? AND title_norm=''")
+    .bind(normalizeTitle(row.title), row.id));
+  for (let i = 0; i < updates.length; i += 99) await db.batch(updates.slice(i, i + 99));
+  return rows.length;
 }
 
 export async function importSearchIndex(env) {
@@ -102,6 +119,7 @@ export async function importSearchIndex(env) {
       !Number.isInteger(manifest.parts) || manifest.parts < 1 || manifest.parts > 1000) {
     return { skipped: "Suchmanifest nicht erreichbar oder ungueltig" };
   }
+  await backfillSearchTitleNorm(db);
   const tokenizer = await ensureSearchFts(db);
   const ftsRows = await db.prepare("SELECT COUNT(*) n FROM search_fts").first();
   const docRows = await db.prepare("SELECT COUNT(*) n FROM search_doc").first();
@@ -123,13 +141,20 @@ export async function importSearchIndex(env) {
   let changed = 0;
   for (const doc of docs) {
     const h = hash(JSON.stringify(doc));
+    const titleNorm = normalizeTitle(doc.title);
     const old = existing.get(doc.id);
-    if (old?.h === h && !old.gone) continue;
+    if (old?.h === h && !old.gone) {
+      if (old.title_norm !== titleNorm) {
+        statements.push(db.prepare("UPDATE search_doc SET title_norm=? WHERE id=? AND title_norm<>?")
+          .bind(titleNorm, doc.id, titleNorm));
+      }
+      continue;
+    }
     statements.push(db.prepare(
-      "INSERT INTO search_doc(id,url,lang,type,title,summary,keywords,entities,date,image,h,gone,updated,grp) VALUES(?,?,?,?,?,?,?,?,?,?,?,0,?,?) " +
-      "ON CONFLICT(id) DO UPDATE SET url=excluded.url,lang=excluded.lang,type=excluded.type,title=excluded.title,summary=excluded.summary,keywords=excluded.keywords,entities=excluded.entities,date=excluded.date,image=excluded.image,h=excluded.h,gone=0,updated=excluded.updated,grp=excluded.grp " +
+      "INSERT INTO search_doc(id,url,lang,type,title,title_norm,summary,keywords,entities,date,image,h,gone,updated,grp) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,0,?,?) " +
+      "ON CONFLICT(id) DO UPDATE SET url=excluded.url,lang=excluded.lang,type=excluded.type,title=excluded.title,title_norm=excluded.title_norm,summary=excluded.summary,keywords=excluded.keywords,entities=excluded.entities,date=excluded.date,image=excluded.image,h=excluded.h,gone=0,updated=excluded.updated,grp=excluded.grp " +
       "WHERE search_doc.h<>excluded.h OR search_doc.gone=1",
-    ).bind(doc.id, doc.url, doc.lang, doc.type, doc.title, doc.summary, doc.keywords, doc.entities, doc.date, doc.image, h, timestamp, doc.grp));
+    ).bind(doc.id, doc.url, doc.lang, doc.type, doc.title, titleNorm, doc.summary, doc.keywords, doc.entities, doc.date, doc.image, h, timestamp, doc.grp));
     statements.push(db.prepare("DELETE FROM search_fts WHERE rowid=(SELECT rowid FROM search_doc WHERE id=?)").bind(doc.id));
     statements.push(db.prepare("INSERT INTO search_fts(rowid,title,keywords,summary) SELECT rowid,?,?,? FROM search_doc WHERE id=?").bind(doc.title, doc.keywords, doc.summary, doc.id));
     changed++;
@@ -192,10 +217,9 @@ function filtersForFacet(filters, facet) {
   return { ...filters, ...(facet === "main" ? {} : { [facet]: "" }) };
 }
 
-function candidateQuery(tokenizer, query, filters, pref) {
+function candidateQuery(tokenizer, query, normalizedQuery, filters, pref) {
   const short = Array.from(query).length < 3;
   const params = [];
-  const escaped = escapeLike(query);
   const expression = tokenizer === "trigram"
     ? trigramQuery(query)
     : query.split(/\s+/).filter(Boolean).map((term) => `"${term.replaceAll('"', '""')}"`).join(" OR ");
@@ -213,11 +237,25 @@ function candidateQuery(tokenizer, query, filters, pref) {
     const filter = filtersSql(context.filters);
     const name = `candidates_${branches.length}`;
     if (short) {
+      const exact = ` ${normalizedQuery} `;
+      const prefix = ` ${normalizedQuery}`;
+      const priority = [
+        "WHEN instr(d.title_norm,?)>0 THEN 3",
+        "WHEN instr(d.title_norm,?)>0 THEN 2",
+      ];
+      const titleValues = [exact, prefix];
+      if (/[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Hangul}]/u.test(normalizedQuery)) {
+        priority.push("WHEN instr(d.title_norm,?)>0 THEN 1");
+        titleValues.push(normalizedQuery);
+      }
+      priority.push("WHEN d.title_norm='' AND d.title LIKE ? ESCAPE '\\' COLLATE NOCASE THEN 0");
+      titleValues.push(`${escapeLike(query)}%`);
+      params.push(...titleValues, ...filter.values);
       ctes.push(
-        `${name} AS MATERIALIZED (SELECT d.rowid,0 score,CASE WHEN d.title LIKE ? ESCAPE '\\' COLLATE NOCASE THEN 1 ELSE 0 END exact ` +
-        `FROM search_doc d WHERE d.gone=0 AND d.title LIKE ? ESCAPE '\\' COLLATE NOCASE${filter.sql} ORDER BY exact DESC LIMIT 1000)`,
+        `${name} AS MATERIALIZED (SELECT rowid,0 score,exact FROM (` +
+        `SELECT d.rowid,CASE ${priority.join(" ")} ELSE -1 END exact FROM search_doc d WHERE d.gone=0${filter.sql}` +
+        `) WHERE exact>=0 ORDER BY exact DESC,rowid LIMIT 1000)`,
       );
-      params.push(`${escaped}%`, `${escaped}%`, ...filter.values);
     } else if (tokenizer === "trigram") {
       ctes.push(
         `${name} AS MATERIALIZED (SELECT d.rowid,bm25(search_fts,10,5,1) score,CASE WHEN instr(lower(d.title),lower(?))>0 THEN 1 ELSE 0 END exact ` +
@@ -363,7 +401,7 @@ export async function handleSearch(env, request, url, J) {
   if (request.method !== "GET") return J({ error: "bad_request" }, 405);
   const q = (url.searchParams.get("q") || "").replace(/\p{Cc}/gu, "").trim().replace(/\s+/g, " ");
   const qLength = Array.from(q).length;
-  if (qLength < 2 || qLength > 100) return J({ error: "bad_request" }, 400);
+  if (qLength < 1 || qLength > 100) return J({ error: "bad_request" }, 400);
   const rawPage = url.searchParams.get("page"), rawSize = url.searchParams.get("size");
   const page = rawPage === null ? 1 : Number(rawPage), size = rawSize === null ? 20 : Number(rawSize);
   if (!Number.isSafeInteger(page) || page < 1 || page > 100000 || !Number.isInteger(size) || size < 1 || size > 50) return J({ error: "bad_request" }, 400);
@@ -379,12 +417,13 @@ export async function handleSearch(env, request, url, J) {
   const day = new Date().toISOString().slice(0, 10);
   const ipHash = await sha256hex(`${request.headers.get("cf-connecting-ip") || ""}|${day}|${env.SESSION_SECRET || ""}`);
   if (!(await rateLimit(env.DB, `search:${ipHash}`, 60, 60))) return J({ error: "rate_limit" }, 429);
-  if (!/[\p{L}\p{N}]/u.test(q)) {
+  const normalizedQuery = normalizeSearchText(q);
+  if (!/[\p{L}\p{N}]/u.test(q) || !normalizedQuery) {
     return J({ q, total: 0, page, results: [], facets: { type: {}, lang: {}, entity: {}, year: {} } }, 200, { "cache-control": "public, max-age=300" });
   }
 
   const tokenizer = await ensureSearchFts(env.DB);
-  const candidates = candidateQuery(tokenizer, q, filters, pref);
+  const candidates = candidateQuery(tokenizer, q, normalizedQuery, filters, pref);
   const rawRows = (await env.DB.prepare(candidates.sql).bind(...candidates.params).all()).results || [];
   const ranked = rankCandidates(rawRows, q, pref);
   const rowsFor = (scope) => {
