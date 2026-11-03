@@ -464,6 +464,21 @@ PRELOAD_FONTS = (("barlow-latin-400", "", ""), ("barlow-condensed-latin-600", ""
                  ("barlow-condensed-latin-500", "(max-width: 700px)", "low"), ("barlow-condensed-latin-700", "(max-width: 700px)", "low"))
 
 
+def pn_head(body, extra_head=""):
+    """<link rel=prev/next> im Kopf aus der sichtbaren Vor/Zurueck-Leiste (nav.pnav) bzw. den Seitenzahlen einer Liste (a rel=prev/next).
+    SEO-Werkzeuge und Bing lesen die Angabe nur im <head>. Steht sie schon dort (Blog-Listen), bleibt es dabei."""
+    if 'rel="prev"' in extra_head or 'rel="next"' in extra_head:
+        return ""
+    nav = re.search(r'<nav class="pnav"[^>]*>(.*?)</nav>', body, re.S)
+    src = nav.group(1) if nav else body
+    out = ""
+    for rel in ("prev", "next"):
+        m = (re.search(rf'<a class="(?:pv|nx)" rel="{rel}" href="([^"]+)"', src) if nav
+             else re.search(rf'<a href="([^"]+)" rel={rel}>', src))   # Seitenzahlen der Folgenlisten (site_podpage)
+        if m: out += f'<link rel="{rel}" href="{m.group(1)}">'
+    return out
+
+
 def font_preloads():
     q = chr(34)
     return "".join(f'<link rel="preload" href="{BASE}/assets/fonts/{f}-normal.woff2" as="font" type="font/woff2" crossorigin'
@@ -523,7 +538,7 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
 <title>{esc(seo_title(title))}</title>
 <meta name="description" content="{esc(desc)}">
 <meta name="author" content="Mirko Peters"><meta name="robots" content="{'noindex,follow' if noindex else 'index,follow,max-image-preview:large,max-snippet:-1'}">
-<link rel="canonical" href="{canonical}">
+<link rel="canonical" href="{canonical}">{pn_head(body, extra_head)}
 <link rel="icon" href="{BASE}/assets/favicon.svg" type="image/svg+xml"><link rel="icon" href="{BASE}/assets/favicon-32.png" sizes="32x32" type="image/png"><link rel="shortcut icon" href="{BASE}/assets/favicon.ico"><link rel="apple-touch-icon" href="{BASE}/assets/apple-touch-icon.png"><meta name="theme-color" content="#1d2126">
 {alt}<meta property="og:type" content="{og_type}"><meta property="og:title" content="{esc(bare_title(title))}"><meta property="og:description" content="{esc(desc)}">
 <meta property="og:url" content="{canonical}"><meta property="og:locale" content="{loc}"><meta property="og:site_name" content="M365.FM">
