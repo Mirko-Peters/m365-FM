@@ -1,0 +1,125 @@
+{
+  "episode_id": "68692511",
+  "slug": null,
+  "title": "GPU Inference Performance: The Compute Lie Killing Your AI Latency",
+  "lang": "en",
+  "duration_s": 1348,
+  "transcript_source": "data/en_transcripts/000dc0de31b1.txt",
+  "time_basis": "estimated",
+  "entities": [],
+  "new_entities": [
+    {
+      "slug": "onnx-runtime",
+      "name": "ONNX Runtime",
+      "type": "product"
+    },
+    {
+      "slug": "tensorrt",
+      "name": "NVIDIA TensorRT",
+      "type": "product"
+    },
+    {
+      "slug": "cuda",
+      "name": "NVIDIA CUDA",
+      "type": "product"
+    },
+    {
+      "slug": "gpu",
+      "name": "Graphics processing unit (GPU)",
+      "type": "concept"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "The health endpoint only checked is the server up, so it never checked is the GPU actually executing.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 264,
+      "entities": [
+        "gpu"
+      ],
+      "why": "Shows why standard health probes miss a silent CPU fallback."
+    },
+    {
+      "text": "Lock the provider order, reject CPU fallback, and make the system prove it's fast before it's considered alive. Only then does green mean accelerated.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 464,
+      "entities": [
+        "onnx-runtime",
+        "gpu"
+      ],
+      "why": "A concrete, actionable rule for hardening GPU inference deployments."
+    },
+    {
+      "text": "In the end, the evidence says version drift is not a bug you see. It's a speed you pay.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 744,
+      "entities": [
+        "cuda",
+        "tensorrt"
+      ],
+      "why": "Memorably captures the hidden performance cost of mismatched CUDA and TensorRT versions."
+    },
+    {
+      "text": "The evidence suggests that containers don't just deploy software, they encode behavior under stress. When they're noisy, heavy or vague about the GPU, they turn acceleration into ceremony.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 1004,
+      "entities": [
+        "gpu"
+      ],
+      "why": "Explains why container hygiene directly affects inference latency."
+    },
+    {
+      "text": "Silent CPU fallback, version drift and container bloat aren't bugs. They are predictable failure patterns you can block.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 1324,
+      "entities": [
+        "gpu",
+        "onnx-runtime"
+      ],
+      "why": "Summarizes the three failure modes and frames them as preventable."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "The anomaly: idle GPUs, rising latency"
+    },
+    {
+      "start_s": 38,
+      "title": "Case setup: environment and workload"
+    },
+    {
+      "start_s": 213,
+      "title": "Evidence A: silent CPU fallback"
+    },
+    {
+      "start_s": 472,
+      "title": "Evidence B: CUDA and TensorRT version mismatch"
+    },
+    {
+      "start_s": 752,
+      "title": "Evidence C: container misconfiguration"
+    },
+    {
+      "start_s": 1026,
+      "title": "Forensics lab: latency, throughput, utilization"
+    },
+    {
+      "start_s": 1221,
+      "title": "The remedy protocol"
+    }
+  ],
+  "takeaways": [
+    "If the CUDA or TensorRT execution provider fails to load, ONNX Runtime silently falls back to CPU, so inference services should refuse to start without a verified GPU path.",
+    "Pin driver, CUDA, cuDNN, ONNX Runtime and TensorRT versions in one build matrix and prebuild TensorRT engines, because version drift quietly disables fused kernels.",
+    "Lean multi-stage container images, explicit GPU device configuration, pinned memory and I/O binding restore predictable P95 latency and throughput."
+  ],
+  "hook": "Paying for GPUs while your AI inference crawls and dashboards stay green? This episode walks engineers and platform teams through three hidden causes: silent CPU fallback, CUDA and TensorRT version drift, and container misconfiguration. You get a hardening checklist that makes acceleration provable instead of assumed.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-03T04:22:35+00:00"
+}
