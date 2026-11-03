@@ -27,7 +27,10 @@
     document.addEventListener("keydown", function (e) { if (e.key === "Escape" && p && !p.hidden) { show(p, b, false); b.focus(); } });
   }
   // T29: Fokus erst nach dem naechsten Frame setzen (vorher erzwungenes Layout direkt nach dem Einblenden, bis 37 ms je Frame)
-  function show(p, b, o) { p.hidden = !o; b.setAttribute("aria-expanded", o ? "true" : "false"); if (o) { var f = p.querySelector("button"); if (f) requestAnimationFrame(function () { setTimeout(function () { try { f.focus({ preventScroll: true }); } catch (e) { f.focus(); } }); }); } }
+  function show(p, b, o) {
+    p.hidden = !o; b.setAttribute("aria-expanded", o ? "true" : "false");
+    if (o) { p.scrollTop = 0; var f = p.querySelector("button"); if (f) requestAnimationFrame(function () { setTimeout(function () { var ae = document.activeElement; if (!p.hidden && (!ae || ae === b || ae === document.body)) f.focus(); }); }); }
+  }
   function panel(b, fs) {   // T29: Panel erst beim ersten Klick bauen (vorher bei DOMContentLoaded auf jeder Seite)
     var p = h("div", { class: "a11yp", id: "a11yp", role: "dialog", "aria-label": T.a11y, hidden: "" });
     if (fs) p.classList.add("inbar");
