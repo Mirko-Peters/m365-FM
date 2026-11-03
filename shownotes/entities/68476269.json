@@ -1,0 +1,197 @@
+{
+  "episode_id": "68476269",
+  "slug": null,
+  "title": "SharePoint is not a database: why your Power Apps will collapse at scale",
+  "lang": "en",
+  "duration_s": 1367,
+  "transcript_source": "data/en_transcripts/9b79cc10e51b.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "sharepoint",
+      "name": "SharePoint",
+      "type": "product",
+      "score": 100,
+      "mentions": 64,
+      "first_mention_s": 5,
+      "quote": "Oh, we'll just use SharePoint as the database for our power app.",
+      "url": "https://www.m365.fm/entity/sharepoint/"
+    },
+    {
+      "slug": "power-apps",
+      "name": "Power Apps",
+      "type": "product",
+      "score": 90,
+      "mentions": 21,
+      "first_mention_s": 6,
+      "quote": "we'll just use SharePoint as the database for our power app",
+      "url": "https://www.m365.fm/entity/power-apps/"
+    },
+    {
+      "slug": "dataverse",
+      "name": "Dataverse",
+      "type": "product",
+      "score": 85,
+      "mentions": 12,
+      "first_mention_s": 80,
+      "quote": "Sequel server and data verse handle this beautifully.",
+      "url": "https://www.m365.fm/entity/dataverse/"
+    },
+    {
+      "slug": "microsoft-lists",
+      "name": "Microsoft Lists",
+      "type": "product",
+      "score": 70,
+      "mentions": 18,
+      "first_mention_s": 33,
+      "quote": "SharePoint lists look structured.",
+      "url": "https://www.m365.fm/entity/microsoft-lists/"
+    },
+    {
+      "slug": "power-platform",
+      "name": "Power Platform",
+      "type": "platform",
+      "score": 30,
+      "mentions": 3,
+      "first_mention_s": 193,
+      "quote": "optimized for delegation and built for power platform from the ground up",
+      "url": "https://www.m365.fm/entity/power-platform/"
+    },
+    {
+      "slug": "excel",
+      "name": "Microsoft Excel",
+      "type": "product",
+      "score": 15,
+      "mentions": 3,
+      "first_mention_s": 28,
+      "quote": "anymore than Excel becomes a server when you save two worksheets",
+      "url": "https://www.m365.fm/entity/excel/"
+    },
+    {
+      "slug": "microsoft-365",
+      "name": "Microsoft 365",
+      "type": "platform",
+      "score": 15,
+      "mentions": 2,
+      "first_mention_s": 37,
+      "quote": "it's already included in Microsoft three sixty five",
+      "url": "https://www.m365.fm/entity/microsoft-365/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "sql-server",
+      "name": "Microsoft SQL Server",
+      "type": "product"
+    },
+    {
+      "slug": "power-apps-delegation",
+      "name": "Delegation (Power Apps)",
+      "type": "concept"
+    },
+    {
+      "slug": "referential-integrity",
+      "name": "Referential integrity",
+      "type": "concept"
+    },
+    {
+      "slug": "database-normalization",
+      "name": "Database normalization",
+      "type": "concept"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "SharePoint was not designed to manage transactions at scale. Its DNA is collaboration, version, history, permissions, and file storage.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 100,
+      "entities": [
+        "sharepoint"
+      ],
+      "why": "Sums up why SharePoint is a collaboration platform rather than a transactional database."
+    },
+    {
+      "text": "Power apps can connect to SharePoint, but that's all it does. Connect. It borrows the data source, but it doesn't make SharePoint any smarter.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 167,
+      "entities": [
+        "power-apps",
+        "sharepoint"
+      ],
+      "why": "Clears up the misconception that a Power Apps connection turns SharePoint into a database."
+    },
+    {
+      "text": "But the problem is that the number is marketing, not math. That limit describes what share Point can physically contain, not what it can functionally handle.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 269,
+      "entities": [
+        "sharepoint",
+        "microsoft-lists"
+      ],
+      "why": "Separates the documented list item limit from practical performance."
+    },
+    {
+      "text": "The core culprit here is a polite little concept called delegation. It's power App's way of saying, I can't handle that query locally, so I'll ask the data source to compute it for me.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 303,
+      "entities": [
+        "power-apps-delegation",
+        "power-apps"
+      ],
+      "why": "Explains delegation in plain words as the root of Power Apps performance problems."
+    },
+    {
+      "text": "They're lightweight pointers that store the ID and a bit of display text, nothing more. They don't validate consistency, they don't prevent duplicates.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 672,
+      "entities": [
+        "referential-integrity",
+        "sharepoint"
+      ],
+      "why": "Shows why SharePoint lookup columns are not real relationships."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "The SharePoint-as-database myth"
+    },
+    {
+      "start_s": 60,
+      "title": "What a database actually is"
+    },
+    {
+      "start_s": 245,
+      "title": "The scale myth and delegation"
+    },
+    {
+      "start_s": 618,
+      "title": "Lookups and broken relationships"
+    },
+    {
+      "start_s": 954,
+      "title": "Security, lifecycle and technical debt"
+    },
+    {
+      "start_s": 1218,
+      "title": "The licensing trap"
+    },
+    {
+      "start_s": 1284,
+      "title": "Filing cabinets are not engines"
+    }
+  ],
+  "takeaways": [
+    "SharePoint lists are built for collaboration and documents, not for transactional, relational workloads at scale.",
+    "Limited delegation, lookup columns without referential integrity and item-level permissions make Power Apps on SharePoint slow down sharply as data grows.",
+    "When an app needs scale, concurrency and integrity, move the data to Dataverse or SQL and budget for it instead of relying on the free option."
+  ],
+  "hook": "Many Power Apps start on SharePoint lists because they are included and quick to set up. This episode is for makers and IT decision makers who want to understand why those apps stall at a few thousand records, break their lookups and pile up technical debt. You will learn where SharePoint's limits are and when Dataverse or SQL is the better foundation.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-03T06:29:33+00:00"
+}

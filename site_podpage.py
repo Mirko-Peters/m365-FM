@@ -5,6 +5,8 @@ import site_notes as SNT
 import site_shownotes as SNS   # T26: Vollfassungen shownotes/site/<episode_id>.md
 import site_extract as SX   # T27: Folgen <-> Entitaeten aus der QA-geprueften Extraktion
 import site_media as MED
+import site_img_dims as IMG
+import site_sponsorships as SPM   # T37 Sponsor: Kennzeichnung gesponserter Folgen (data/sponsorships.json)
 import gzip, json, re, unicodedata, html as _h
 from html.parser import HTMLParser
 from pathlib import Path
@@ -35,6 +37,8 @@ class _San(HTMLParser):
             at = f' href="{esc(d["href"])}" rel="noopener"' + ("" if d["href"].startswith(("/", "#")) else ' target="_blank"')
         if t == "img" and d.get("src", "").startswith("https://"):
             at = f' src="{esc(d["src"])}" alt="{esc(d.get("alt", ""))}" loading="lazy"'
+            for name in ("width", "height"):
+                if re.fullmatch(r"\d+", d.get(name, "")): at += f' {name}="{d[name]}"'
         elif t == "img": return
         self.o.append(f"<{t}{at}>")
 
@@ -48,7 +52,7 @@ class _San(HTMLParser):
 
 
 def san(s):
-    p = _San(); p.feed(s or ""); return "".join(p.o)
+    p = _San(); p.feed(s or ""); return IMG.enhance("".join(p.o))
 
 
 def plain(s):
@@ -425,8 +429,12 @@ def build(g):
         snx = SNALL.get(str(_sid)) if _sid else None   # T26: Vollfassung (Hook, Kapitel, Takeaways, Entitaeten mit Hover, FAQ) statt Podpage-Show-Notes
         if snx:
             _snh, _snld, _snfaq = SNS.render(snx, "en", ENTS_ALL, BASE)
-            nnotes, nld = _snh + f"<style>{SNS.CSS}</style>", [x for x in nld if x.get("@type") != "FAQPage"] + _snld
+            nnotes, nld = IMG.enhance(_snh) + f"<style>{SNS.CSS}</style>", [x for x in nld if x.get("@type") != "FAQPage"] + _snld
             if _snfaq: nfaq = ""   # die FAQ der Vollfassung ersetzt aeltere FAQ-Bloecke (kein doppeltes FAQPage-Schema)
+        elif nrec and nrec.get("markup"):
+            nnotes = IMG.enhance(nnotes)
+        else:
+            nnotes = san(e.get("show_notes"))
         nnotes = rename_links(nnotes)   # T12: Show Notes verlinken die Folge oft ueber die alte Podpage-Adresse
         prev_, next_ = (eps[k + 1] if k + 1 < len(eps) else None), (eps[k - 1] if k else None)
         aud = f'<audio controls preload="none" style="width:100%" src="{esc(r["audio"])}"></audio>' if r and r.get("audio") else ""
@@ -438,9 +446,10 @@ def build(g):
         oa = (g.get("orig_alts") or {}).get(e["slug"]) or {}
         also = ('<h2>Also available in other languages</h2><ul>' + "".join(f'<li><a href="{u}" hreflang="{lg}">{esc(t)}</a> <span class="mut">({lg})</span></li>' for lg, (u, t) in sorted(oa.items())) + "</ul>") if oa else ""
         gl = "".join(f'<li><a href="{root}guests/{gg["slug"]}/">{esc(gg["name"])}</a></li>' for gg in eg[e["slug"]])
+        _spr = SPM.episode(slug=e["slug"])   # T37 Sponsor: Folge aus einem Sponsoring (dauerhaft, auch die Sprachfassungen)
         tx = f'<h2>Transcript</h2><details open><summary>Read the full transcript</summary><p style="white-space:pre-wrap;line-height:1.6">{esc(tr)}</p></details>' if len(tr) > 200 else ""
-        body = (f'<article><p class="mut">{day(e["create_time"])}{" · Season " + str(e["season"]) if e.get("season") else ""}</p><h1>{esc(e["name"])}</h1>{aud}'
-                f'<div style="display:flex;gap:1rem;align-items:flex-start;margin:1em 0">{img_tag(thumb_of(e, nrec), e["name"], 160)}<div><strong>{esc(short_desc(e, nrec, 300))}</strong></div></div>{nkp}<div class="pp-notes">{(nnotes if snx or (nrec and nrec.get("markup")) else rename_links(san(e.get("show_notes"))))}</div>{nfaq}{SNT.CSS if (nkp or nnotes or nfaq) else ""}'
+        body = (f'<article><p class="mut">{day(e["create_time"])}{" · Season " + str(e["season"]) if e.get("season") else ""}</p><h1>{esc(e["name"])}</h1>{SPM.note("en", _spr)}{aud}'
+                f'<div style="display:flex;gap:1rem;align-items:flex-start;margin:1em 0">{img_tag(thumb_of(e, nrec), e["name"], 160)}<div><strong>{esc(short_desc(e, nrec, 300))}</strong></div></div>{nkp}<div class="pp-notes">{nnotes}{IMG.CSS if IMG.needs_responsive_css(nnotes) else ""}</div>{nfaq}{SNT.CSS if (nkp or nnotes or nfaq) else ""}'
                 + (f"<p>{ext}</p>" if ext else "") + (f'<p class="mut">Host: {hl}</p>' if hl else "") + (f"<h2>Guests</h2><ul>{gl}</ul>" if gl else "") + also
                 + (("<h2>Related articles</h2><ul>" + "".join(f'<li><a href="{bp_url(p)}">{esc(p["title"])}</a></li>' for p in related_posts(e["slug"])) + "</ul>") if related_posts(e["slug"]) else "") + tx + "</article>" + (g.get("author_box")("en") if g.get("author_box") else "")
                 + '<p style="display:flex;justify-content:space-between;gap:1em;margin-top:2em">' + (f'<a href="{ep_url(prev_)}">← {esc(prev_["name"][:60])}</a>' if prev_ else "<span></span>") + (f'<a href="{ep_url(next_)}">{esc(next_["name"][:60])} →</a>' if next_ else "") + "</p>")
@@ -458,6 +467,7 @@ def build(g):
         if r and r.get("audio"): ld["associatedMedia"] = {"@type": "AudioObject", "contentUrl": r["audio"]}
         if plat_links: ld["sameAs"] = [u for _, u in plat_links]
         if len(tr) > 200: ld["transcript"] = tr[:5000]
+        if _spr: ld["sponsor"] = SPM.ld(_spr); body = SPM.mark(body, _spr)   # T37 Sponsor: PodcastEpisode.sponsor, Links zum Sponsor mit rel="sponsored"
         # Alternates nur fuer Sprachfassungen mit uebersetzten Show Notes (150 je Sprache); die uebrigen ~14.000 Fassungen (nur Titel + Teaser) bleiben noindex und ausserhalb der Sitemap
         alts = {"en": ep_url(e), **{l: loc_url(l, f"episodes/{e['slug']}/") for l in TRL if e["slug"] in TRL[l] and TRL[l][e["slug"]][0]}}   # alle Sprachfassungen (uebersetzte Titel/Teaser, teils Show Notes) sind indexierbar und verknuepft
         for _dl, (_du, _) in oa.items(): alts[_dl] = _du   # T3: die Dub-Fassung (eigene Folge in der Sprache) ist die Sprachalternative, nicht die duenne Show-Kopie
@@ -469,14 +479,16 @@ def build(g):
             if not tt or not tt[0]: continue
             lt, ls = tt[0], tt[1] or short_desc(e, nrec, 300)
             ln = NTL.get(l, {}).get(e["slug"])
+            ln_html = san(ln) if ln else ""
             lu = loc_url(l, f"episodes/{e['slug']}/")
-            lbody = (f'<article><p class="mut">{day(e["create_time"])}</p><h1>{esc(lt)}</h1>{aud}'
+            lbody = (f'<article><p class="mut">{day(e["create_time"])}</p><h1>{esc(lt)}</h1>{SPM.note(l, _spr)}{aud}'
                      f'<div style="display:flex;gap:1rem;align-items:flex-start;margin:1em 0">{img_tag(thumb_of(e, nrec), lt, 160)}<div><strong>{esc(ls)}</strong></div></div>'
-                     + (f'<div class="pp-notes">{san(ln)}</div>' if ln else "") + (f"<p>{ext}</p>" if ext else "")
+                     + (f'<div class="pp-notes">{ln_html}{IMG.CSS if IMG.needs_responsive_css(ln_html) else ""}</div>' if ln else "") + (f"<p>{ext}</p>" if ext else "")
                      + f'<p class="mut"><a href="{ep_url(e)}" hreflang="en" lang="en">{esc(e["name"])}</a> (English)</p></article>')
             lald = {"@context": "https://schema.org", "@type": "PodcastEpisode", "name": lt, "url": lu, "datePublished": day(e["create_time"]), "description": ls[:500],
                     "inLanguage": LG[l][1], "partOfSeries": {"@type": "PodcastSeries", "name": NAME, "url": root}, "author": {"@id": f"{BASE}/entity/mirko-peters/#entity"}}
             if r and r.get("audio"): lald["associatedMedia"] = {"@type": "AudioObject", "contentUrl": r["audio"]}
+            if _spr: lald["sponsor"] = SPM.ld(_spr); lbody = SPM.mark(lbody, _spr)
             # Sprachfassung (uebersetzter Titel und Teaser, bei 150 Folgen je Sprache auch Show Notes): indexierbar, in Sitemap und hreflang; liegt im R2-Bucket statt in GitHub Pages
             _lalts = None if l in oa else alts   # T3: Sprache mit Dub-Fassung: diese Kopie bleibt ohne hreflang (ein Vertreter je Sprache im Cluster)
             _lcan = oa[l][0] if l in oa else lu   # T42: Kopie in einer Sprache mit Dub-Folge -> kanonisch (auch og:url, Teilen, JSON-LD) die Dub-Folge, nicht in die Sitemap
@@ -581,7 +593,7 @@ def build(g):
     from pathlib import Path as _P
     _docs = _P(__file__).parent / "docs"   # belegt ist ein Pfad nur, wenn dort eine Seite liegt (docs/about/ hat nur about/mirko-peters/, /about wurde sonst nie umgeleitet)
     taken = {x.name for x in _docs.iterdir() if x.is_file() or (x / "index.html").exists()} if _docs.exists() else set()
-    taken |= {"show", "shows", "community", "entity", "glossary", "learn", "assets", "updates", "de", "en", "es", "fr", "it", "pt", "nl", "pl", "id", "ru", "uk", "ar", "he", "hi", "ja", "ko", "ml", "pa", "ta", "te"}
+    taken |= {"show", "shows", "community", "entity", "glossary", "learn", "assets", "updates", "sponsor", "de", "en", "es", "fr", "it", "pt", "nl", "pl", "id", "ru", "uk", "ar", "he", "hi", "ja", "ko", "ml", "pa", "ta", "te"}
     rd, clash = {}, []
     def add(old, new):
         top = old.strip("/").split("/")[0]
@@ -603,7 +615,8 @@ def build(g):
         rd.setdefault(f"/videos/{_old}", f"/show/episodes/{_new}/"); rd[f"/m365-fm-podcast/{_old}"] = f"/show/episodes/{_new}/"
     if "mirko-peters" in _ren: rd["/mirko-peters"] = "/entity/mirko-peters/"
     # T8: weitere Podpage-Seiten ohne eigenen Inhalt (SKIPP), die in alten Beitraegen verlinkt sind
-    for old, new in (("/community-events", "/community/events/"), ("/sponsor", "/show/sponsors/"), ("/follow", "/show/listen/"), ("/subscribe", "/show/listen/"), ("/contact", "/about/mirko-peters/"), ("/voicemail", "/about/mirko-peters/"),
+    # T37: ("/sponsor", "/show/sponsors/") entfernt - /sponsor/ ist jetzt die Sponsor-Seite (der Site-Worker prueft die Tabelle vor der Seite, sonst 301 auf die alte Liste)
+    for old, new in (("/community-events", "/community/events/"), ("/follow", "/show/listen/"), ("/subscribe", "/show/listen/"), ("/contact", "/about/mirko-peters/"), ("/voicemail", "/about/mirko-peters/"),
                      ("/guest_intake", "/about/mirko-peters/"), ("/join", "/community/"), ("/newsletter", "/community/"), ("/leave_review", "/show/reviews/"), ("/rate", "/show/reviews/"),
                      ("/courses", "/glossary/"), ("/store", "/show/")):
         rd.setdefault(old, new)

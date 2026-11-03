@@ -32,7 +32,7 @@ def classify(path, langs):
         return lang, "community"
     if a in ("live", "events"):
         return lang, "events"
-    if a in ("learn", "glossary", "updates", "press", "legal", "privacy", "datenschutz", "imprint", "impressum", "accessibility", "top", "podcast", "shows", "mcp", "about", "sessions", "speakers", "m365con", "search"):
+    if a in ("learn", "glossary", "updates", "press", "legal", "privacy", "datenschutz", "imprint", "impressum", "accessibility", "top", "podcast", "shows", "mcp", "about", "sessions", "speakers", "m365con", "search", "sponsor"):   # T37: /<lang>/sponsor/ ist keine Dub-Folge
         return lang, "pages"
     # Dub-Folgen: /<lang>/<slug>/ (eine Ebene) in den Sprach-Shows; auf Englisch gibt es diese Ebene fuer Kernseiten
     if lang != "en" and len(seg) == 1:

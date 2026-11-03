@@ -1,0 +1,165 @@
+{
+  "episode_id": "68242439",
+  "slug": null,
+  "title": "Fabric data lake performance: fix slow workloads with Azure Container Storage v2 and local NVMe for real‑time analytics",
+  "lang": "en",
+  "duration_s": 1258,
+  "transcript_source": "data/en_transcripts/0b23a5ec88d6.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "fabric",
+      "name": "Microsoft Fabric",
+      "type": "platform",
+      "score": 75,
+      "mentions": 15,
+      "first_mention_s": 0,
+      "quote": "Most fabric deployments today are dragging their own anchors.",
+      "url": "https://www.m365.fm/entity/fabric/"
+    },
+    {
+      "slug": "azure",
+      "name": "Microsoft Azure",
+      "type": "platform",
+      "score": 60,
+      "mentions": 17,
+      "first_mention_s": 42,
+      "quote": "That's what as your container storage V two delivers",
+      "url": "https://www.m365.fm/entity/azure/"
+    },
+    {
+      "slug": "power-platform",
+      "name": "Power Platform",
+      "type": "platform",
+      "score": 45,
+      "mentions": 6,
+      "first_mention_s": 20,
+      "quote": "Modern fabric and power platform setups rely on managed storage tiers",
+      "url": "https://www.m365.fm/entity/power-platform/"
+    },
+    {
+      "slug": "power-bi",
+      "name": "Power BI",
+      "type": "product",
+      "score": 35,
+      "mentions": 3,
+      "first_mention_s": 172,
+      "quote": "So when your powerbi dashboard takes twenty seconds to refresh",
+      "url": "https://www.m365.fm/entity/power-bi/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "azure-container-storage",
+      "name": "Azure Container Storage",
+      "type": "product"
+    },
+    {
+      "slug": "nvme",
+      "name": "NVMe (NVM Express)",
+      "type": "concept"
+    },
+    {
+      "slug": "apache-spark",
+      "name": "Apache Spark",
+      "type": "product"
+    },
+    {
+      "slug": "azure-kubernetes-service",
+      "name": "Azure Kubernetes Service (AKS)",
+      "type": "product"
+    },
+    {
+      "slug": "direct-lake",
+      "name": "Direct Lake",
+      "type": "concept"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "The fix isn't more nodes or stronger compute its proximity. When data sits closer to the processor, everything accelerates.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 35,
+      "entities": [
+        "nvme"
+      ],
+      "why": "States the central performance thesis."
+    },
+    {
+      "text": "Here's the paradox. Scaling up your managed storage costs you more and slows you down.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 134,
+      "entities": [],
+      "why": "Challenges the common reflex of scaling managed storage."
+    },
+    {
+      "text": "The data here doesn't need to live forever, it just needs to move fast while it's alive.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 553,
+      "entities": [
+        "nvme",
+        "azure-container-storage"
+      ],
+      "why": "Clarifies which data belongs on ephemeral local storage."
+    },
+    {
+      "text": "Think of durability like insurance. It's supposed to live outside the car, not welded onto the engine. You only notice it when you crash.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 875,
+      "entities": [],
+      "why": "Explains why resilience belongs in the application layer."
+    },
+    {
+      "text": "Performance has never been about buying bigger clusters. It's about smarter proximity. Move the data closer, remove the intermediaries, and let compute breathe.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 1228,
+      "entities": [
+        "azure-container-storage"
+      ],
+      "why": "Summarizes the episode in a clear recommendation."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "Storage is the hidden bottleneck"
+    },
+    {
+      "start_s": 53,
+      "title": "Why Fabric and Power Platform feel slow"
+    },
+    {
+      "start_s": 187,
+      "title": "Azure Container Storage v2"
+    },
+    {
+      "start_s": 406,
+      "title": "How local NVMe outruns managed storage"
+    },
+    {
+      "start_s": 703,
+      "title": "The durability dilemma"
+    },
+    {
+      "start_s": 942,
+      "title": "Fabric use cases reimagined"
+    },
+    {
+      "start_s": 1211,
+      "title": "The local secret you already own"
+    }
+  ],
+  "takeaways": [
+    "Slow Fabric and Power Platform workloads are often caused by the distance between compute and remote managed storage, not by compute power.",
+    "Azure Container Storage v2 stripes the local NVMe disks of AKS nodes into fast ephemeral volumes at no extra cost on suitable VM series.",
+    "Local NVMe is ephemeral, so use it for caches, shuffles, staging and model weights while keeping durability through replication and backups in higher layers."
+  ],
+  "hook": "Fabric, Power BI and Spark workloads often crawl because data travels to remote managed storage. This episode shows data platform engineers how Azure Container Storage v2 uses the local NVMe disks already inside AKS nodes for much faster analytics, and how to handle the durability trade-off.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-03T06:28:54+00:00"
+}

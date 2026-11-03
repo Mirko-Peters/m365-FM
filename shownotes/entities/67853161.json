@@ -1,0 +1,162 @@
+{
+  "episode_id": "67853161",
+  "slug": null,
+  "title": "GitHub, Azure DevOps, or Fabric – Who’s Actually In Charge? Medallion Architecture, CI/CD & GitOps for Fabric Warehouse",
+  "lang": "en",
+  "duration_s": 1084,
+  "transcript_source": "data/en_transcripts/2c083ce4e559.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "fabric",
+      "name": "Microsoft Fabric",
+      "type": "platform",
+      "score": 90,
+      "mentions": 13,
+      "first_mention_s": 18,
+      "quote": "keep fabric warehouse assets versioned, tested and promotable without midnight firefights",
+      "url": "https://www.m365.fm/entity/fabric/"
+    },
+    {
+      "slug": "azure-devops",
+      "name": "Azure DevOps",
+      "type": "product",
+      "score": 75,
+      "mentions": 10,
+      "first_mention_s": 601,
+      "quote": "Who's actually in charge GitHub as your DevOps or Fabric",
+      "url": "https://www.m365.fm/entity/azure-devops/"
+    },
+    {
+      "slug": "github",
+      "name": "GitHub",
+      "type": "org",
+      "score": 75,
+      "mentions": 10,
+      "first_mention_s": 601,
+      "quote": "Who's actually in charge GitHub as your DevOps or Fabric",
+      "url": "https://www.m365.fm/entity/github/"
+    },
+    {
+      "slug": "fabric-notebooks",
+      "name": "Fabric notebooks",
+      "type": "product",
+      "score": 40,
+      "mentions": 4,
+      "first_mention_s": 161,
+      "quote": "treat notebooks and configs like real deployable code",
+      "url": "https://www.m365.fm/entity/fabric-notebooks/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "medallion-architecture",
+      "name": "Medallion architecture",
+      "type": "concept"
+    },
+    {
+      "slug": "ci-cd",
+      "name": "CI/CD (continuous integration and continuous delivery)",
+      "type": "concept"
+    },
+    {
+      "slug": "fabric-warehouse",
+      "name": "Fabric Data Warehouse",
+      "type": "product"
+    },
+    {
+      "slug": "pull-request",
+      "name": "Pull request",
+      "type": "concept"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "Bronze pipelines are not temporary throwaway scripts. They live longer than you think, and if they're not branchable, reviewable, and version controlled, they'll eventually blow up.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 122,
+      "entities": [
+        "medallion-architecture"
+      ],
+      "why": "Argues for treating ingestion code like real code."
+    },
+    {
+      "text": "If bronze chaos is messy but obvious, silver chaos is clean but invisible, and invisible failures are worse because leadership doesn't care that your layer looked tidy.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 390,
+      "entities": [
+        "medallion-architecture"
+      ],
+      "why": "Memorable contrast between failure modes of the medallion layers."
+    },
+    {
+      "text": "All this boils down to one blunt truth. Gold is not a finish line, its production software.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 561,
+      "entities": [
+        "medallion-architecture",
+        "ci-cd"
+      ],
+      "why": "Reframes the gold layer as production software."
+    },
+    {
+      "text": "Flip the question from which product should we standardize on to which part of governance does each cover best. Suddenly it's less about opinions and more about architecture.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 752,
+      "entities": [
+        "fabric",
+        "github",
+        "azure-devops"
+      ],
+      "why": "Turns the tool war into an architecture decision."
+    },
+    {
+      "text": "If you don't enforced discipline, CIICD doesn't prevent chaos, It just automates it faster. And the truth is, most blow ups aren't some exotic zero day bug.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 844,
+      "entities": [
+        "ci-cd"
+      ],
+      "why": "Warns that automation without discipline amplifies mistakes."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "Why medallion needs CI/CD"
+    },
+    {
+      "start_s": 32,
+      "title": "Bronze without rollback: the CSV graveyard"
+    },
+    {
+      "start_s": 235,
+      "title": "Silver layer: where governance dies quietly"
+    },
+    {
+      "start_s": 416,
+      "title": "Gold layer: analytics at 3 AM"
+    },
+    {
+      "start_s": 601,
+      "title": "GitHub, Azure DevOps or Fabric: who's in charge"
+    },
+    {
+      "start_s": 827,
+      "title": "Avoiding the deployment nightmare"
+    }
+  ],
+  "takeaways": [
+    "Treat every medallion layer, from bronze ingestion to gold analytics, as code in source control with branching and reviews.",
+    "Never promote a change without automated schema and data quality tests, approval gates and a one-step rollback to the last good build.",
+    "Use the tools together: GitHub for collaboration, Fabric deployment features for packaging, and Azure DevOps for governance and approvals."
+  ],
+  "hook": "Without CI/CD, a medallion architecture in Fabric Warehouse quickly turns into an expensive data swamp. This episode shows data engineers how to version, test and promote bronze, silver and gold layers, and how GitHub, Azure DevOps and Fabric share the work.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-03T08:29:15+00:00"
+}

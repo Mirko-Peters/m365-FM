@@ -1,0 +1,196 @@
+{
+  "episode_id": "67971747",
+  "slug": null,
+  "title": "Dev Containers In CI/CD: How To Fix Environment Drift, Speed Up Onboarding & Ship Reliable Azure Builds",
+  "lang": "en",
+  "duration_s": 1160,
+  "transcript_source": "data/en_transcripts/d9c4fa67d055.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "vs-code",
+      "name": "Visual Studio Code",
+      "type": "product",
+      "score": 75,
+      "mentions": 12,
+      "first_mention_s": 166,
+      "quote": "Everyone pulls the same container, launches vs code inside it",
+      "url": "https://www.m365.fm/entity/vs-code/"
+    },
+    {
+      "slug": "azure",
+      "name": "Microsoft Azure",
+      "type": "platform",
+      "score": 70,
+      "mentions": 18,
+      "first_mention_s": 12,
+      "quote": "If you work with Azure and teams, you care about one thing, consistent developer environments.",
+      "url": "https://www.m365.fm/entity/azure/"
+    },
+    {
+      "slug": "github-actions",
+      "name": "GitHub Actions",
+      "type": "product",
+      "score": 50,
+      "mentions": 2,
+      "first_mention_s": 620,
+      "quote": "The environments spun up in GitHub actions or as your DevOps mirror your local def setup exactly.",
+      "url": "https://www.m365.fm/entity/github-actions/"
+    },
+    {
+      "slug": "terraform",
+      "name": "Terraform",
+      "type": "product",
+      "score": 45,
+      "mentions": 4,
+      "first_mention_s": 446,
+      "quote": "Get terra form as your cli whatever your project needs.",
+      "url": "https://www.m365.fm/entity/terraform/"
+    },
+    {
+      "slug": "bicep",
+      "name": "Bicep",
+      "type": "product",
+      "score": 45,
+      "mentions": 2,
+      "first_mention_s": 123,
+      "quote": "that translates into missing BICEP compiler's outdated PowerShell modules",
+      "url": "https://www.m365.fm/entity/bicep/"
+    },
+    {
+      "slug": "github",
+      "name": "GitHub",
+      "type": "org",
+      "score": 40,
+      "mentions": 4,
+      "first_mention_s": 563,
+      "quote": "they can live in GitHub container registry, Docker Hub, or your Azure container registry",
+      "url": "https://www.m365.fm/entity/github/"
+    },
+    {
+      "slug": "azure-devops",
+      "name": "Azure DevOps",
+      "type": "product",
+      "score": 35,
+      "mentions": 1,
+      "first_mention_s": 621,
+      "quote": "GitHub actions or as your DevOps mirror your local def setup exactly",
+      "url": "https://www.m365.fm/entity/azure-devops/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "dev-containers",
+      "name": "Dev Containers",
+      "type": "concept"
+    },
+    {
+      "slug": "docker",
+      "name": "Docker",
+      "type": "product"
+    },
+    {
+      "slug": "azure-cli",
+      "name": "Azure CLI",
+      "type": "product"
+    },
+    {
+      "slug": "ci-cd",
+      "name": "CI/CD (continuous integration and continuous delivery)",
+      "type": "concept"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "The root cause is local installs. Everyone outfits their laptop with a personal stack of SDKs and CLIs, then crosses their fingers that nothing conflicts.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 67,
+      "entities": [
+        "dev-containers"
+      ],
+      "why": "Names the root cause of environment drift in plain terms."
+    },
+    {
+      "text": "They burn days installing run times, patching modules, and hunting missing dependencies before they can write a single line of useful code. That wasted time isn't laziness. It's the tax of unmanaged drift.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 103,
+      "entities": [
+        "dev-containers"
+      ],
+      "why": "Frames slow onboarding as a cost of unmanaged tooling drift."
+    },
+    {
+      "text": "Templates transform setup from a dice roll into a repeatable contract. Every project starts on predictable ground, Every laptop mirrors the same working environment, and your build server gets to play by the same rules.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 406,
+      "entities": [
+        "dev-containers",
+        "ci-cd"
+      ],
+      "why": "Summarizes the value of dev container templates."
+    },
+    {
+      "text": "Automation is critical because keeping images current shouldn't be manual labor. A simple pattern is to rebuild nightly or whenever dependency versions bump CI kicks off, produces the updated image, and pushes it to your registry the next morning.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 772,
+      "entities": [
+        "ci-cd",
+        "dev-containers"
+      ],
+      "why": "Gives a concrete prebuild refresh pattern."
+    },
+    {
+      "text": "Workspace trust forces a conscious decision point. Only after you grant trust can background tasks and extensions execute, minimizing chance of silent surprises.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 957,
+      "entities": [
+        "vs-code",
+        "dev-containers"
+      ],
+      "why": "Explains the security role of VS Code workspace trust."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "Why consistent dev environments matter"
+    },
+    {
+      "start_s": 50,
+      "title": "Environment drift and local installs"
+    },
+    {
+      "start_s": 240,
+      "title": "Templates as pre-built classes"
+    },
+    {
+      "start_s": 433,
+      "title": "Features as modular upgrades"
+    },
+    {
+      "start_s": 691,
+      "title": "Prebuilding images for fast starts"
+    },
+    {
+      "start_s": 916,
+      "title": "Securing credentials and workspace trust"
+    },
+    {
+      "start_s": 1115,
+      "title": "Wrap-up"
+    }
+  ],
+  "takeaways": [
+    "A shared devcontainer.json makes laptops, VS Code and CI pipelines run identical runtimes and tools, eliminating environment drift.",
+    "Templates and features turn setup into a declarative, reusable contract, and prebuilt images pushed to a registry remove slow startups.",
+    "Workspace trust, mounted SSH credentials and dotfiles keep dev containers secure without baking secrets into images."
+  ],
+  "hook": "Works on my machine tickets, slow onboarding and broken Azure builds usually come from environment drift. This episode shows developers and DevOps teams how dev containers, templates, features and prebuilt images give every laptop and CI pipeline the same reliable toolchain.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-03T08:24:18+00:00"
+}

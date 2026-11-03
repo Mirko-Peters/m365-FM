@@ -1,0 +1,178 @@
+{
+  "episode_id": "68272709",
+  "slug": null,
+  "title": "Azure File Sync security: replace certificates and SAS keys with managed identities before they explode",
+  "lang": "en",
+  "duration_s": 1386,
+  "transcript_source": "data/en_transcripts/1ccb4366c43e.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "zero-trust",
+      "name": "Zero Trust",
+      "type": "concept",
+      "score": 40,
+      "mentions": 2,
+      "first_mention_s": 229,
+      "quote": "designed before zero trust was even a phrase",
+      "url": "https://www.m365.fm/entity/zero-trust/"
+    },
+    {
+      "slug": "conditional-access",
+      "name": "Conditional Access",
+      "type": "concept",
+      "score": 35,
+      "mentions": 4,
+      "first_mention_s": 368,
+      "quote": "no conditional access logic that can say this server isn't supposed to be here",
+      "url": "https://www.m365.fm/entity/conditional-access/"
+    },
+    {
+      "slug": "mfa",
+      "name": "Multifactor authentication (MFA)",
+      "type": "concept",
+      "score": 15,
+      "mentions": 1,
+      "first_mention_s": 1171,
+      "quote": "policies like conditional access or MFAE enforcement",
+      "url": "https://www.m365.fm/entity/mfa/"
+    },
+    {
+      "slug": "entra-id",
+      "name": "Microsoft Entra ID",
+      "type": "product",
+      "score": 75,
+      "mentions": 15,
+      "first_mention_s": 137,
+      "quote": "There was no entra id integration for back end services",
+      "url": "https://www.m365.fm/entity/entra-id/"
+    },
+    {
+      "slug": "azure",
+      "name": "Microsoft Azure",
+      "type": "platform",
+      "score": 70,
+      "mentions": 47,
+      "first_mention_s": 0,
+      "quote": "Most as your filecinc environments today are quietly rotting",
+      "url": "https://www.m365.fm/entity/azure/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "managed-identity",
+      "name": "Managed identity",
+      "type": "concept"
+    },
+    {
+      "slug": "azure-file-sync",
+      "name": "Azure File Sync",
+      "type": "product"
+    },
+    {
+      "slug": "shared-access-signature",
+      "name": "Shared access signature (SAS) token",
+      "type": "concept"
+    },
+    {
+      "slug": "azure-arc",
+      "name": "Azure Arc",
+      "type": "product"
+    },
+    {
+      "slug": "azure-rbac",
+      "name": "Azure role-based access control (Azure RBAC)",
+      "type": "concept"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "The problem is not just that these secrets expire. It's that they exist as transferable objects. Nothing binds them to a particular machine or application.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 155,
+      "entities": [
+        "shared-access-signature"
+      ],
+      "why": "Explains in one image why possession-based secrets are not real identity."
+    },
+    {
+      "text": "Security debt behaves exactly like financial debt, small invisible interest that multiplies while you sleep. The older your system, the higher the interest rate",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 295,
+      "entities": [],
+      "why": "Frames postponed security modernization as compounding debt."
+    },
+    {
+      "text": "Tokens last minutes, not years. They renew automatically and revoke effortlessly. If you remove a server or disable its identity, it stops existing to the ecosystem instantly.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 543,
+      "entities": [
+        "managed-identity",
+        "entra-id"
+      ],
+      "why": "Summarizes the operational advantage of managed identities over static secrets."
+    },
+    {
+      "text": "Picture every authentication event as a short lived conversation instead of an eternal handshake. Each side verifies the other using live, cryptographically issued trust. No stored objects, no shared anything.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 555,
+      "entities": [
+        "managed-identity",
+        "zero-trust"
+      ],
+      "why": "Gives a clear mental model for token-based, zero-trust authentication."
+    },
+    {
+      "text": "Managed Identity doesn't secure secrets, it erases them. There's nothing to steal because there's nothing static to find.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 1348,
+      "entities": [
+        "managed-identity"
+      ],
+      "why": "Concise thesis of the whole episode."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "Why Azure File Sync authentication is rotting"
+    },
+    {
+      "start_s": 93,
+      "title": "The legacy model: certificates and SAS tokens"
+    },
+    {
+      "start_s": 249,
+      "title": "The \"but it still works\" syndrome"
+    },
+    {
+      "start_s": 463,
+      "title": "Managed identities explained"
+    },
+    {
+      "start_s": 747,
+      "title": "Migration playbook: Azure VMs and Azure Arc"
+    },
+    {
+      "start_s": 1061,
+      "title": "After the switch: security that scales"
+    },
+    {
+      "start_s": 1288,
+      "title": "Why migration is the only sensible move"
+    }
+  ],
+  "takeaways": [
+    "Certificates and SAS tokens in legacy Azure File Sync deployments are transferable secrets that grant access to whoever holds them, regardless of identity.",
+    "Managed identities replace both authentication legs with short-lived Entra ID tokens and automatic RBAC role assignments, removing manual rotation and extra firewall URLs.",
+    "Migration means updating the sync agent to version 20 or later, enabling system-assigned identities on Azure VMs or via Azure Arc for other servers, then switching the Storage Sync Service to managed identity."
+  ],
+  "hook": "Many Azure File Sync environments still authenticate with certificates and SAS tokens that can be copied, leaked and reused. This episode is for Azure and hybrid infrastructure admins who want to understand the risk and move to managed identities with a clear, step-by-step migration path via Azure VMs and Azure Arc.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-03T06:28:54+00:00"
+}

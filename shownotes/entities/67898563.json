@@ -1,0 +1,206 @@
+{
+  "episode_id": "67898563",
+  "slug": null,
+  "title": "Power BI deployment pipeline: stop guessing and use Dev-Test-Prod environments for governed, reliable report releases",
+  "lang": "en",
+  "duration_s": 1159,
+  "transcript_source": "data/en_transcripts/f00c2bf89e11.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "semantic-model",
+      "name": "Semantic model",
+      "type": "concept",
+      "score": 65,
+      "mentions": 5,
+      "first_mention_s": 304,
+      "quote": "take one data set, export just a piece of its model into a text format",
+      "url": "https://www.m365.fm/entity/semantic-model/"
+    },
+    {
+      "slug": "dax",
+      "name": "DAX",
+      "type": "concept",
+      "score": 55,
+      "mentions": 4,
+      "first_mention_s": 70,
+      "quote": "Somebody fixes a DAX measure, another person reworks a relationship",
+      "url": "https://www.m365.fm/entity/dax/"
+    },
+    {
+      "slug": "power-bi",
+      "name": "Power BI",
+      "type": "product",
+      "score": 90,
+      "mentions": 6,
+      "first_mention_s": 10,
+      "quote": "how to treat POWERBI models as code",
+      "url": "https://www.m365.fm/entity/power-bi/"
+    },
+    {
+      "slug": "power-bi-desktop",
+      "name": "Power BI Desktop",
+      "type": "product",
+      "score": 40,
+      "mentions": 1,
+      "first_mention_s": 369,
+      "quote": "You still open Powerbi desktop, you still click buttons",
+      "url": "https://www.m365.fm/entity/power-bi-desktop/"
+    },
+    {
+      "slug": "azure-devops",
+      "name": "Azure DevOps",
+      "type": "product",
+      "score": 25,
+      "mentions": 1,
+      "first_mention_s": 984,
+      "quote": "could be Jira as you're DevOps service now, or even Planner doesn't matter",
+      "url": "https://www.m365.fm/entity/azure-devops/"
+    },
+    {
+      "slug": "microsoft-planner",
+      "name": "Microsoft Planner",
+      "type": "product",
+      "score": 10,
+      "mentions": 1,
+      "first_mention_s": 984,
+      "quote": "could be Jira as you're DevOps service now, or even Planner doesn't matter",
+      "url": "https://www.m365.fm/entity/microsoft-planner/"
+    },
+    {
+      "slug": "powerpoint",
+      "name": "Microsoft PowerPoint",
+      "type": "product",
+      "score": 10,
+      "mentions": 1,
+      "first_mention_s": 115,
+      "quote": "Imagine ten people trying to co author a PowerPoint deck, but not in one drive",
+      "url": "https://www.m365.fm/entity/powerpoint/"
+    },
+    {
+      "slug": "onedrive",
+      "name": "OneDrive",
+      "type": "product",
+      "score": 10,
+      "mentions": 1,
+      "first_mention_s": 115,
+      "quote": "Imagine ten people trying to co author a PowerPoint deck, but not in one drive",
+      "url": "https://www.m365.fm/entity/onedrive/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "git",
+      "name": "Git",
+      "type": "product"
+    },
+    {
+      "slug": "fabric-deployment-pipelines",
+      "name": "Deployment pipelines (Microsoft Fabric and Power BI)",
+      "type": "product"
+    },
+    {
+      "slug": "pbix",
+      "name": "PBIX file",
+      "type": "concept"
+    },
+    {
+      "slug": "application-lifecycle-management",
+      "name": "Application lifecycle management (ALM)",
+      "type": "concept"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "The only way out is to stop treating PBIX as a sacred artifact and start thinking of your model as code. That mental shift means better history, cleaner teamwork, and fewer nights spent piecing together ten mismatched final files.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 209,
+      "entities": [
+        "pbix",
+        "power-bi"
+      ],
+      "why": "States the central mindset shift of the episode."
+    },
+    {
+      "text": "Treating models like code doesn't mean learning c paws at midnight. It just means the things you're already doing, editing docks, adding relationships, adjusting tables, get locked in a structured format.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 359,
+      "entities": [
+        "power-bi",
+        "git"
+      ],
+      "why": "Addresses the common objection that BI people don't code."
+    },
+    {
+      "text": "You build in development, validate in tests, then promote into production. It's moving from wild west published directly to controlled stage by stage promotion.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 720,
+      "entities": [
+        "fabric-deployment-pipelines"
+      ],
+      "why": "Concise description of the Dev-Test-Prod principle."
+    },
+    {
+      "text": "At minimum, snapshot your production data set and tag the corresponding Git commit before you publish. That gives you a rollback point.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 788,
+      "entities": [
+        "git",
+        "semantic-model"
+      ],
+      "why": "Practical mitigation step teams can apply immediately."
+    },
+    {
+      "text": "Fixing a metric without documenting the reason is like patching a leaky pipe and throwing away the blueprint.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 955,
+      "entities": [
+        "power-bi"
+      ],
+      "why": "Memorable argument for linking changes to tickets."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "Why BI needs ALM"
+    },
+    {
+      "start_s": 34,
+      "title": "Stop emailing PBIX files"
+    },
+    {
+      "start_s": 230,
+      "title": "Treating Power BI models like real code"
+    },
+    {
+      "start_s": 431,
+      "title": "Git, the secret weapon for BI teams"
+    },
+    {
+      "start_s": 665,
+      "title": "From chaos to deployment pipelines"
+    },
+    {
+      "start_s": 889,
+      "title": "Connecting tickets, tracking and teamwork"
+    },
+    {
+      "start_s": 1124,
+      "title": "Wrap-up: three takeaways"
+    }
+  ],
+  "takeaways": [
+    "Extract Power BI models from binary PBIX files into text so Git can show meaningful diffs and history.",
+    "Use Dev, Test and Prod stages in deployment pipelines so changes are validated before they reach end users.",
+    "Link every commit and promotion to a ticket so the business reason behind each change stays traceable."
+  ],
+  "hook": "Emailing PBIX files and publishing straight to production turns Power BI work into firefighting. This episode shows BI teams how to treat models as code, use Git and Dev-Test-Prod deployment pipelines, and tie changes to tickets for governed, reliable releases.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-03T08:29:15+00:00"
+}

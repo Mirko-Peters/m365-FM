@@ -1,6 +1,6 @@
-# Prüfbericht Podpage-Migration (2026-11-02T06:55Z)
+# Prüfbericht Podpage-Migration (2026-11-03T06:54Z)
 
-Geprüft gegen https://www.m365.fm: 3645 frühere Adressen in 103 s.
+Geprüft gegen https://www.m365.fm: 3645 frühere Adressen in 160 s.
 
 | Art | gesamt | genau eine 301 auf 200 | 200 ohne 301 | mehrere 301 | Fehler |
 |---|---|---|---|---|---|

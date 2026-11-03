@@ -13,6 +13,7 @@ from PIL import Image
 
 ROOT = Path(__file__).resolve().parent.parent
 MAP = ROOT / "data" / "r2_map.json"
+DIMS = ROOT / "data" / "r2_dims.json"
 PUBLIC = "https://img.m365.fm"
 EXT = {"image/jpeg": ".jpg", "image/png": ".png", "image/gif": ".gif", "image/webp": ".webp", "image/svg+xml": ".svg", "image/avif": ".avif",
        "application/pdf": ".pdf"}   # PDFs: Podpage-Downloads (Archiv vor der Kuendigung)
@@ -40,10 +41,53 @@ def urls():
                   and (re.search(r"\.(jpe?g|jfif|png|gif|webp|svg|avif|pdf)(\?|$)", u, re.I) or "redwood-labs" in u or "neuroncdn" in u))
 
 
+def image_dimensions(data):
+    try:
+        with Image.open(io.BytesIO(data)) as im:
+            width, height = im.size
+        return [int(width), int(height)] if width > 0 and height > 0 else None
+    except Exception:
+        return None
+
+
+def fill_dimensions(mapping, dims):
+    missing = [u for u in mapping.values() if u.startswith(PUBLIC + "/") and u not in dims]
+    original_count = len(dims)
+    failed = []
+
+    def one(u):
+        try:
+            req = urllib.request.Request(u, headers={"User-Agent": "Mozilla/5.0 (m365.fm image dimensions)"})
+            with urllib.request.urlopen(req, timeout=40) as r:
+                data = r.read(15_000_001)
+            if len(data) > 15_000_000:
+                raise ValueError("Bild zu gross")
+            size = image_dimensions(data)
+            if size:
+                dims[u] = size
+            else:
+                raise ValueError("Masse nicht lesbar")
+        except Exception as e:
+            failed.append((u, str(e)[:80]))
+
+    with ThreadPoolExecutor(8) as ex:
+        list(ex.map(one, missing))
+    DIMS.write_text(json.dumps(dict(sorted(dims.items())), separators=(",", ":"), ensure_ascii=False), encoding="utf-8")
+    print(f"{len(dims) - original_count} Masse ergaenzt, {len(failed)} fehlgeschlagen")
+    for u, e in failed[:20]:
+        print("  FEHLER", u[:90], e)
+
+
 def main():
     apply = "--apply" in sys.argv
+    if "--fill-dims" in sys.argv:
+        done = json.load(open(MAP, encoding="utf-8")) if MAP.exists() else {}
+        dims = json.load(open(DIMS, encoding="utf-8")) if DIMS.exists() else {}
+        fill_dimensions(done, dims)
+        return
     todo = urls()
     done = json.load(open(MAP, encoding="utf-8")) if MAP.exists() else {}
+    dims = json.load(open(DIMS, encoding="utf-8")) if DIMS.exists() else {}
     todo = [u for u in todo if u not in done]
     print(f"{len(todo)} Bilder offen, {len(done)} schon in R2")
     if not apply:
@@ -74,15 +118,19 @@ def main():
                         data, ct = buf.getvalue(), "image/webp"
                 except Exception:
                     pass
+            size = image_dimensions(data)
             key = "i/" + hashlib.sha1(u.encode()).hexdigest()[:20] + EXT[ct]
             s3.put_object(Bucket=bucket, Key=key, Body=data, ContentType=ct, CacheControl="public, max-age=31536000, immutable")
             done[u] = f"{PUBLIC}/{key}"
+            if size:
+                dims[done[u]] = size
         except Exception as e:
             failed.append((u, str(e)[:80]))
 
     with ThreadPoolExecutor(8) as ex:
         list(ex.map(one, todo))
     MAP.write_text(json.dumps(dict(sorted(done.items())), indent=0, ensure_ascii=False), encoding="utf-8")
+    DIMS.write_text(json.dumps(dict(sorted(dims.items())), separators=(",", ":"), ensure_ascii=False), encoding="utf-8")
     print(f"{len(todo) - len(failed)} hochgeladen, {len(failed)} fehlgeschlagen (bleiben beim Original)")
     for u, e in failed[:20]:
         print("  FEHLER", u[:90], e)

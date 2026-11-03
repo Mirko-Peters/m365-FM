@@ -1,0 +1,150 @@
+{
+  "episode_id": "67835305",
+  "slug": null,
+  "title": "The Power BI Gateway Horror Story No One Warned You About: Firewall Rules, Outbound Traffic & How To Bulletproof Your Setup",
+  "lang": "en",
+  "duration_s": 1119,
+  "transcript_source": "data/en_transcripts/4f2d76a9b1e6.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "power-bi",
+      "name": "Power BI",
+      "type": "product",
+      "score": 85,
+      "mentions": 3,
+      "first_mention_s": 39,
+      "quote": "installing a powerbi gateway feels like the sort of thing you could kick off before your first coffee",
+      "url": "https://www.m365.fm/entity/power-bi/"
+    },
+    {
+      "slug": "azure",
+      "name": "Microsoft Azure",
+      "type": "platform",
+      "score": 55,
+      "mentions": 13,
+      "first_mention_s": 177,
+      "quote": "did Azure silently reject us because of some invisible service dependency",
+      "url": "https://www.m365.fm/entity/azure/"
+    },
+    {
+      "slug": "azure-service-bus",
+      "name": "Azure Service Bus",
+      "type": "product",
+      "score": 40,
+      "mentions": 2,
+      "first_mention_s": 280,
+      "quote": "the logs started stacking up with repeated service bus errors",
+      "url": "https://www.m365.fm/entity/azure-service-bus/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "on-premises-data-gateway",
+      "name": "On-premises data gateway",
+      "type": "product"
+    },
+    {
+      "slug": "virtual-network-data-gateway",
+      "name": "Virtual network (VNet) data gateway",
+      "type": "product"
+    },
+    {
+      "slug": "service-account",
+      "name": "Service account",
+      "type": "concept"
+    },
+    {
+      "slug": "fully-qualified-domain-name",
+      "name": "Fully qualified domain name (FQDN)",
+      "type": "concept"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "Passing a connection test in the portal didn't mean much. It meant only that the specific handshake at that moment worked.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 194,
+      "entities": [
+        "on-premises-data-gateway"
+      ],
+      "why": "Warns against trusting green checks in test environments."
+    },
+    {
+      "text": "The gateway isn't sitting around hoping clients connect in. It reaches outward, and in our deployment we saw it trying to make dynamic outbound connections to Azure services.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 271,
+      "entities": [
+        "on-premises-data-gateway",
+        "azure"
+      ],
+      "why": "Explains the outbound communication pattern behind the outage."
+    },
+    {
+      "text": "Instead of chasing IP addresses that changed faster than Microsoft product names. We whitelisted actual service names.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 342,
+      "entities": [
+        "fully-qualified-domain-name"
+      ],
+      "why": "Concise, practical firewall recommendation."
+    },
+    {
+      "text": "The service account isn't a plug and forget detail. It's a fragile central piece. If you're seeing inconsistent data set behavior, suspect two things first, outbound firewall rules or the service account.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 633,
+      "entities": [
+        "service-account"
+      ],
+      "why": "Gives a clear troubleshooting priority."
+    },
+    {
+      "text": "Technically, clustering is labeled as optional, but if you care about keeping reporting alive in production, treated as mandatory, one gateway works until it doesn't.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 728,
+      "entities": [
+        "on-premises-data-gateway"
+      ],
+      "why": "Strong recommendation on gateway high availability."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "A gateway horror story"
+    },
+    {
+      "start_s": 33,
+      "title": "Simple setup, production collapse"
+    },
+    {
+      "start_s": 246,
+      "title": "The outbound firewall rule"
+    },
+    {
+      "start_s": 417,
+      "title": "Service accounts as saboteurs"
+    },
+    {
+      "start_s": 660,
+      "title": "Architecture mistakes and clustering"
+    },
+    {
+      "start_s": 866,
+      "title": "VNet data gateways as the alternative"
+    }
+  ],
+  "takeaways": [
+    "A Power BI gateway that passes portal tests can still fail in production when strict outbound filtering blocks its dynamic connections to Azure services.",
+    "Gateway service accounts need consistent credential mappings and sufficient rights on every data source, otherwise refreshes fail seemingly at random.",
+    "Run gateways on dedicated hosts, cluster across failure domains, keep them close to the data, and consider a VNet data gateway when data already lives in Azure."
+  ],
+  "hook": "A Power BI gateway that works in test can collapse in production because of one missed outbound firewall rule. This episode walks admins and BI teams through the real gateway communication pattern, service account pitfalls and architecture mistakes, plus when a VNet data gateway is the better choice.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-03T08:29:15+00:00"
+}

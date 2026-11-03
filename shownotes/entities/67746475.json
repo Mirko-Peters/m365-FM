@@ -1,0 +1,157 @@
+{
+  "episode_id": "67746475",
+  "slug": null,
+  "title": "Why ARM Templates Are Holding You Back (And How Bicep Fixes Azure Deployments)",
+  "lang": "en",
+  "duration_s": 1075,
+  "transcript_source": "data/en_transcripts/63016a77f378.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "infrastructure-as-code",
+      "name": "Infrastructure as code",
+      "type": "concept",
+      "score": 75,
+      "mentions": 4,
+      "first_mention_s": 416,
+      "quote": "That's why configuration drift is sometimes referred to as the silent killer of infrastructure as code.",
+      "url": "https://www.m365.fm/entity/infrastructure-as-code/"
+    },
+    {
+      "slug": "bicep",
+      "name": "Bicep",
+      "type": "product",
+      "score": 95,
+      "mentions": 21,
+      "first_mention_s": 13,
+      "quote": "That's where BICEP comes in.",
+      "url": "https://www.m365.fm/entity/bicep/"
+    },
+    {
+      "slug": "azure",
+      "name": "Microsoft Azure",
+      "type": "platform",
+      "score": 65,
+      "mentions": 15,
+      "first_mention_s": 20,
+      "quote": "walk through examples you can actually reuse in your own Azure environment",
+      "url": "https://www.m365.fm/entity/azure/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "arm-template",
+      "name": "ARM template",
+      "type": "concept"
+    },
+    {
+      "slug": "configuration-drift",
+      "name": "Configuration drift",
+      "type": "concept"
+    },
+    {
+      "slug": "bicep-module",
+      "name": "Bicep module",
+      "type": "concept"
+    },
+    {
+      "slug": "azure-verified-modules",
+      "name": "Azure Verified Modules",
+      "type": "product"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "It's less like writing infrastructure code and more like juggling brackets until something finally compiles.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 90,
+      "entities": [
+        "arm-template"
+      ],
+      "why": "Vivid description of the everyday pain of authoring ARM JSON."
+    },
+    {
+      "text": "Because templates are supposed to act as the single source of truth. Anytime someone bypasses them with manual changes, that truth erodes.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 193,
+      "entities": [
+        "configuration-drift",
+        "infrastructure-as-code"
+      ],
+      "why": "Explains how manual portal fixes undermine infrastructure as code."
+    },
+    {
+      "text": "Think of drift like a clock that loses small fractions of a second. Early on, the difference invisible, but over time the gap grows until you can't trust the clock at all.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 360,
+      "entities": [
+        "configuration-drift"
+      ],
+      "why": "Memorable analogy for how configuration drift accumulates."
+    },
+    {
+      "text": "Fix a rule or update a dependency once in the module, then redeploy instead of chasing down changes across dozens of separate files.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 923,
+      "entities": [
+        "bicep-module",
+        "bicep"
+      ],
+      "why": "Concrete benefit of modular Bicep deployments."
+    },
+    {
+      "text": "Start with one of your most used ARM templates. Convert it into a modular BICEP template. Use that as the first entry in your team's library, then expand from there.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 986,
+      "entities": [
+        "arm-template",
+        "bicep",
+        "bicep-module"
+      ],
+      "why": "Actionable first step for migrating from ARM to Bicep."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "The trouble with ARM templates"
+    },
+    {
+      "start_s": 44,
+      "title": "Why ARM templates break more than they build"
+    },
+    {
+      "start_s": 257,
+      "title": "Configuration drift, the silent killer"
+    },
+    {
+      "start_s": 467,
+      "title": "When ARM templates collapse at scale"
+    },
+    {
+      "start_s": 613,
+      "title": "The Bicep revolution"
+    },
+    {
+      "start_s": 821,
+      "title": "Future-proofing with verified and private modules"
+    },
+    {
+      "start_s": 1043,
+      "title": "Start small with Bicep"
+    }
+  ],
+  "takeaways": [
+    "Verbose JSON, vague errors and brittle syntax make ARM templates hard to maintain and push teams into manual portal fixes.",
+    "Those manual fixes cause configuration drift, so templates stop reflecting what actually runs in Azure.",
+    "Bicep compiles to ARM but adds concise syntax and reusable modules, including Azure Verified Modules, so start by converting one frequently used template."
+  ],
+  "hook": "ARM templates promise consistent Azure deployments but often deliver JSON sprawl, cryptic errors and configuration drift. This episode shows Azure admins and DevOps teams why Bicep, with its cleaner syntax and reusable modules, makes infrastructure as code simpler and more reliable.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-03T08:24:18+00:00"
+}

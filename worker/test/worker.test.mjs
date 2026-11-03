@@ -15,15 +15,20 @@ async function searchDb(failTrigram = false) {
   const raw = new DatabaseSync(":memory:");
   const dir = new URL("../migrations/", import.meta.url);
   for (const f of readdirSync(dir).filter((f) => f.endsWith(".sql")).sort()) raw.exec(readFileSync(new URL(f, dir), "utf-8"));
-  let trigramFailed = false, indexWrites = 0, searchQueries = 0, maxBatch = 0;
+  let trigramFailed = false, indexWrites = 0, searchQueries = 0, maxBatch = 0, lastSearchQuery;
   const db = {
     prepare(sql) {
-      if (sql.includes("eligible AS (")) searchQueries++;
+      if (sql.includes("eligible AS (")) {
+        searchQueries++;
+        lastSearchQuery = { sql, params: [] };
+      }
       const st = raw.prepare(sql); let args = [];
       const o = {
         bind(...a) {
           if (a.length > 100) throw new Error("D1_ERROR: too many SQL variables");
-          args = a; return o;
+          args = a;
+          if (lastSearchQuery?.sql === sql) lastSearchQuery.params = [...a];
+          return o;
         },
         all: async () => ({ results: st.all(...args) }),
         first: async () => st.get(...args) ?? null,
@@ -41,17 +46,18 @@ async function searchDb(failTrigram = false) {
     },
     async batch(stmts) { maxBatch = Math.max(maxBatch, stmts.length); for (const st of stmts) await st.run(); },
   };
-  return { db, raw, indexWrites: () => indexWrites, searchQueries: () => searchQueries, maxBatch: () => maxBatch };
+  return { db, raw, indexWrites: () => indexWrites, searchQueries: () => searchQueries, maxBatch: () => maxBatch, lastSearchQuery: () => lastSearchQuery };
 }
 
 function seedSearchDocs(raw, docs) {
   raw.exec("CREATE VIRTUAL TABLE search_fts USING fts5(title,keywords,summary,tokenize='trigram'); INSERT INTO meta(k,v) VALUES('search_fts_tokenizer','trigram')");
-  const insert = raw.prepare("INSERT INTO search_doc(id,url,lang,type,title,summary,keywords,entities,date,image,h,gone,updated,grp) VALUES(?,?,?,?,?,?,?,?,?,?,?,0,1,?)");
+  const insert = raw.prepare("INSERT INTO search_doc(id,url,lang,type,title,title_norm,summary,keywords,entities,date,image,h,gone,updated,grp) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,0,1,?)");
   const fts = raw.prepare("INSERT INTO search_fts(rowid,title,keywords,summary) VALUES(?,?,?,?)");
   raw.exec("BEGIN");
   try {
     for (const doc of docs) {
-      insert.run(doc.id, doc.url, doc.lang, doc.type, doc.title, doc.summary || "", doc.keywords || "", (doc.entities || []).join(","), doc.date || "", "", doc.id, doc.group || "");
+      const titleNorm = ` ${doc.title.toLocaleLowerCase().normalize("NFKD").replace(/\p{M}/gu, "").replace(/[^\p{L}\p{N}]+/gu, " ").trim().replace(/\s+/g, " ")} `;
+      insert.run(doc.id, doc.url, doc.lang, doc.type, doc.title, titleNorm, doc.summary || "", doc.keywords || "", (doc.entities || []).join(","), doc.date || "", "", doc.id, doc.group || "");
       const { rowid } = raw.prepare("SELECT rowid FROM search_doc WHERE id=?").get(doc.id);
       fts.run(rowid, doc.title, doc.keywords || "", doc.summary || "");
     }
@@ -111,7 +117,7 @@ test("schema: Migrationen sind idempotent und enthalten jede zur Laufzeit angele
   const sql = files.map((f) => readFileSync(new URL(f, dir), "utf-8")).join("\n");
   const stmts = sql.replace(/--[^\n]*/g, "").split(";").map((s) => s.trim()).filter(Boolean);
   for (const s of stmts) {
-    if (/^ALTER TABLE search_doc ADD COLUMN grp TEXT NOT NULL DEFAULT ''$/i.test(s)) continue;
+    if (/^ALTER TABLE search_doc ADD COLUMN (?:grp|title_norm) TEXT NOT NULL DEFAULT ''$/i.test(s)) continue;
     assert.match(s, /^CREATE (TABLE|INDEX|UNIQUE INDEX) IF NOT EXISTS /i, "nur idempotente Anweisungen: " + s.slice(0, 60));
   }
   const inMig = new Set([...sql.matchAll(/CREATE (?:TABLE|UNIQUE INDEX|INDEX) IF NOT EXISTS (\w+)/gi)].map((m) => m[1]));
@@ -330,8 +336,8 @@ test("sponsor: Anfragen, Honeypot, Rate-Limit und Admin-Panel (SQLite)", async (
   assert.deepEqual(outbox.map((x) => x.user_id), [1, 2], "beide Admin-Konten bekommen eine Outbox-Mail");
   assert.ok(outbox.some((x) => x.key === `sponsor:${rows[0].id}`));
   assert.match(outbox[0].html, /Contoso/);
-  assert.match(outbox[0].html, /USD 500\/Monat/);
-  assert.match(outbox[0].html, /\/admin\//);
+  assert.match(outbox[0].html, /\$500\/Monat · \$1,500 gesamt/, "aeltere Anfragen mit Zahlen: gleiches Format wie die Sponsor-Seite");
+  assert.match(outbox[0].html, /href="https:\/\/www\.m365\.fm\/admin\/#sponsor"/, "Link oeffnet den Reiter Sponsor-Anfragen");
 
   response = await post(payload({ website: "gefüllt" }));
   assert.equal(response.status, 200);
@@ -456,6 +462,12 @@ test("search: Import, Trigramm-Suche, Filter, Facetten und gone-Markierung (SQLi
     assert.equal((await importSearchIndex(env)).changed, 0);
     assert.equal(indexWrites(), before, "unveraenderte Dokumente werden nicht erneut geschrieben");
 
+    raw.prepare("UPDATE search_doc SET title_norm='' WHERE id=?").run(docs[0].id);
+    const beforeTitleNormBackfill = indexWrites();
+    assert.equal((await importSearchIndex(env)).changed, 0);
+    assert.equal(indexWrites(), beforeTitleNormBackfill + 1, "Titel-Normalisierung baut FTS nicht neu auf");
+    assert.equal(raw.prepare("SELECT title_norm FROM search_doc WHERE id=?").get(docs[0].id).title_norm, " aaron siller ");
+
     generated = "2026-11-02";
     parts = [[{ ...docs[0], title: "Aaron Siller Updated" }, docs[1]], []];
     assert.equal((await importSearchIndex(env)).changed, 1);
@@ -470,6 +482,71 @@ test("search: Import, Trigramm-Suche, Filter, Facetten und gone-Markierung (SQLi
     for (let i = 0; i < 61; i++) response = await call("q=Azure", limitedIp);
     assert.equal(response.status, 429);
     assert.equal(raw.prepare("SELECT COUNT(*) n FROM ratelimit WHERE k LIKE ?").get(`%${limitedIp}%`).n, 0, "IP-Adresse wird nicht gespeichert");
+  } finally {
+    globalThis.fetch = oldFetch;
+  }
+});
+
+test("search: normalisierte Kurzsuche in mehreren Schriften und Import-Backfill (SQLite)", async () => {
+  const { db, raw, lastSearchQuery } = await searchDb();
+  const docs = [
+    { id: "ru:ai", url: "https://www.m365.fm/ru/ai/", lang: "ru", type: "page", title: "Что такое ИИ-агенты", entities: ["azure"], date: "2024-01-01" },
+    { id: "en:copilot", url: "https://www.m365.fm/copilot/", lang: "en", type: "page", title: "Copilot AI agents explained", entities: ["azure"], date: "2024-02-01" },
+    { id: "en:ai", url: "https://www.m365.fm/ai/", lang: "en", type: "blog", title: "AI agents", entities: ["azure"], date: "2025-01-01" },
+    { id: "en:maintain", url: "https://www.m365.fm/maintain/", lang: "en", type: "blog", title: "Maintainable systems", entities: ["other"], date: "2025-02-01" },
+    { id: "de:ai", url: "https://www.m365.fm/de/governance/", lang: "de", type: "entity", title: "AI-Governance", entities: ["powerbi"], date: "2026-01-01" },
+    { id: "ja:admin", url: "https://www.m365.fm/ja/admin/", lang: "ja", type: "page", title: "Microsoft Entra の管理ポリシー", date: "2026-02-01" },
+    { id: "el:omega", url: "https://www.m365.fm/el/omega/", lang: "el", type: "page", title: "Ωμέγα", date: "2026-03-01" },
+    { id: "he:aleph", url: "https://www.m365.fm/he/aleph/", lang: "he", type: "page", title: "אבטחת מידע", date: "2026-04-01" },
+    { id: "ar:ain", url: "https://www.m365.fm/ar/ain/", lang: "ar", type: "page", title: "عالم البيانات", date: "2026-05-01" },
+  ];
+  raw.prepare("INSERT INTO search_doc(id,url,lang,type,title,summary,keywords,entities,date,image,h,gone,updated,grp) VALUES(?,?,?,?,?,'','','','','','',0,1,'')")
+    .run("legacy:cafe", "https://www.m365.fm/legacy/cafe/", "fr", "page", "Cafe\u0301 ancien");
+  const oldFetch = globalThis.fetch;
+  globalThis.fetch = async (input) => {
+    const path = new URL(input).pathname;
+    if (path === "/search/manifest.json") return { ok: true, json: async () => ({ generated: "2026-11-03", parts: 2, count: docs.length }) };
+    return { ok: true, json: async () => ({ part: 1, docs }) };
+  };
+  try {
+    const { importSearchIndex, handleSearch } = await import("../src/search.js");
+    const env = { DB: db, SITE: "https://www.m365.fm" };
+    assert.equal((await importSearchIndex(env)).changed, docs.length);
+    assert.equal(raw.prepare("SELECT title_norm FROM search_doc WHERE id='legacy:cafe'").get().title_norm, " cafe ancien ", "bestehende Zeilen werden ohne Vollimport nachgefüllt");
+    let ip = 0;
+    const call = async (q, extra = "") => {
+      const request = new Request(`https://api.m365.fm/api/search?q=${encodeURIComponent(q)}${extra}`, { headers: { "cf-connecting-ip": `short-search-${ip++}` } });
+      return handleSearch(env, request, new URL(request.url), (data, status = 200) => ({ data, status }));
+    };
+
+    assert.equal((await call("ИИ")).data.results[0].title, "Что такое ИИ-агенты");
+    assert.equal((await call("ии")).data.results[0].title, "Что такое ИИ-агенты");
+    assert.equal((await call("Co")).data.results[0].title, "Copilot AI agents explained", "Wortanfang mitten im Titel wird gefunden");
+    raw.prepare("UPDATE search_doc SET title_norm='' WHERE id='en:copilot'").run();
+    assert.equal((await call("Co")).data.results[0].title, "Copilot AI agents explained", "Legacy-Zeilen bleiben über den alten Titelpräfix auffindbar");
+    raw.prepare("UPDATE search_doc SET title_norm=' copilot ai agents explained ' WHERE id='en:copilot'").run();
+    assert.deepEqual((await call("AI")).data.results.map((row) => row.title).sort(), ["AI-Governance", "AI agents", "Copilot AI agents explained"].sort());
+    assert.ok(!(await call("AI")).data.results.some((row) => row.title === "Maintainable systems"), "Treffer nur am Wortanfang, nicht mitten im Wort");
+    assert.equal((await call("管理")).data.results[0].title, "Microsoft Entra の管理ポリシー");
+    assert.equal((await call("Ω")).data.results[0].title, "Ωμέγα");
+    assert.equal((await call("א")).data.results[0].title, "אבטחת מידע");
+    assert.equal((await call("ع")).data.results[0].title, "عالم البيانات");
+    assert.equal((await call("!!")).data.total, 0, "Satzzeichen ergeben keine Treffer");
+
+    const filtered = await call("AI", "&type=page");
+    assert.equal(filtered.data.total, 1);
+    assert.deepEqual(filtered.data.facets.type, { blog: 1, entity: 1, page: 1 }, "Typ-Facette ignoriert den eigenen Filter");
+    assert.deepEqual(filtered.data.facets.year, { 2024: 1 }, "andere Facetten behalten den Typfilter");
+    assert.equal((await call("AI", "&lang=de")).data.total, 1);
+    assert.deepEqual((await call("AI", "&lang=de")).data.facets.lang, { de: 1, en: 2 }, "Sprach-Facette ignoriert den eigenen Filter");
+    assert.equal((await call("AI", "&entity=azure")).data.total, 2);
+    assert.equal((await call("AI", "&year=2024")).data.total, 1);
+    assert.equal((await call("Copilot AI agents")).data.results[0].title, "Copilot AI agents explained", "Suchanfragen ab drei Zeichen bleiben im bisherigen FTS-Zweig");
+    await call("AI", "&lang=de&type=entity&entity=powerbi&year=2026");
+    const facetQuery = lastSearchQuery();
+    assert.doesNotMatch(facetQuery.sql.slice(0, facetQuery.sql.indexOf(",eligible AS")), /UNION ALL/, "Kurzsuche hat je Kontext einen CASE-Scan statt drei UNION-Scans");
+    const facetPlan = raw.prepare(`EXPLAIN QUERY PLAN ${facetQuery.sql}`).all(...facetQuery.params);
+    assert.equal(facetPlan.filter(({ detail }) => /(?:SCAN d\b|SEARCH d USING INDEX)/.test(detail)).length, 5, "fuenf Facettenkontexte bedeuten hoechstens fuenf Titel-Scans");
   } finally {
     globalThis.fetch = oldFetch;
   }
@@ -601,9 +678,9 @@ test("search: Tippfehler-Ranking, Sprach-Deduplizierung und Titelprioritaet (SQL
   assert.equal(avd.results[0].title, "Azure Virtual Desktop – Product");
 });
 
-test("search: 40.000 Dokumente mit einer Kandidatenabfrage unter 200 ms (SQLite)", async () => {
-  const { db, raw, searchQueries } = await searchDb();
-  const docs = Array.from({ length: 40000 }, (_, i) => ({
+test("search: 80.000 Dokumente mit einer Kandidatenabfrage unter 300 ms (SQLite)", async () => {
+  const { db, raw, searchQueries, lastSearchQuery } = await searchDb();
+  const docs = Array.from({ length: 80000 }, (_, i) => ({
     id: `en:synthetic-${i}`, url: `https://www.m365.fm/page/${i}/`, lang: "en", type: i % 8 ? "page" : "entity",
     title: `Common search document ${i}`, summary: "Common content for performance testing", keywords: "Common search",
   }));
@@ -625,4 +702,21 @@ test("search: 40.000 Dokumente mit einer Kandidatenabfrage unter 200 ms (SQLite)
   assert.equal(result.results.length, 20);
   assert.ok(result.total <= 1000, "Kandidatenpool ist begrenzt");
   assert.equal(searchQueries() - before, 6, "pro Suchanfrage wird eine Kandidatenabfrage ausgefuehrt");
+
+  const shortRequest = new Request("https://api.m365.fm/api/search?q=qq", { headers: { "cf-connecting-ip": "short-load-test-ip" } });
+  const shortTimes = [];
+  for (let i = 0; i < 6; i++) {
+    const started = performance.now();
+    result = await handleSearch(env, shortRequest, new URL(shortRequest.url), (data) => data);
+    if (i) shortTimes.push(performance.now() - started);
+  }
+  shortTimes.sort((a, b) => a - b);
+  const shortMedian = shortTimes[Math.floor(shortTimes.length / 2)];
+  assert.ok(shortMedian < 300, `Kurzsuche lag bei ${shortMedian.toFixed(1)} ms`);
+  assert.equal(result.total, 0);
+  const query = lastSearchQuery();
+  assert.match(query.sql, /instr\(d\.title_norm/);
+  const plan = raw.prepare(`EXPLAIN QUERY PLAN ${query.sql}`).all(...query.params);
+  assert.ok(plan.length > 0);
+  assert.equal(plan.filter(({ detail }) => /(?:SCAN d\b|SEARCH d USING INDEX)/.test(detail)).length, 1);
 });

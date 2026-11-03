@@ -4,10 +4,18 @@ from site_i18n import T
 import site_updates as SU
 import site_quotes as SQ   # Quotes an Personen-Entitaeten
 import site_media as MED
+import site_sponsorships as SPM   # T37 Sponsor: Kennzeichnung gesponserter Entitaeten (data/sponsorships.json)
 import json
+import re
+from datetime import date
+from urllib.parse import urlsplit
 from site_i18n import COMM_LANGS, pfx, pfx2, overlay
 from pathlib import Path
 from site_learn import (ENTS, esc, ent_names, fetch_wiki, wiki_block, WCSS, LCSS, WT, GLOSS, GLOSS_JS, write_wk_js)
+
+AKA_FILE = Path(__file__).parent / "data" / "person_aka.json"
+MUSICGROUP_ID = "mirko-peters"
+MUSICGROUP_NAME = "Mirko Peters & The Music Valued People"
 
 TL = {"product": ("Product", "Produkt"), "platform": ("Platform", "Plattform"), "concept": ("Concept", "Konzept"), "org": ("Organization", "Organisation"), "person": ("Person", "Person"),
       "cert": ("Certification", "Zertifizierung"), "event": ("Event", "Veranstaltung"), "media": ("Media", "Medium"), "category": ("Category", "Kategorie")}
@@ -48,8 +56,107 @@ def inverse_index():
     return inv
 
 
-def ent_ld(BASE, e, lang, glossary_set=None):
+def load_person_aka(recs, path=AKA_FILE):
+    """Liest freigegebene öffentliche Namen und prüft sie vor dem Seitenbau."""
+    if not path.exists():
+        return {}
+    try:
+        raw = path.read_text("utf-8")
+        if not raw.strip():
+            return {}
+        data = json.loads(raw)
+    except (OSError, ValueError) as ex:
+        raise ValueError(f"Ungültige AKA-Datei: {path}") from ex
+    if not isinstance(data, dict) or data.get("version") != 1 or not isinstance(data.get("aka"), dict):
+        raise ValueError("AKA-Datei braucht version 1 und ein aka-Objekt")
+    entities = {e["id"]: e for e in recs}
+    out = {}
+    email = re.compile(r"(?<![\w.+-])[^@\s]+@[^@\s]+\.[^@\s]+(?![\w.-])")
+    phone = re.compile(r"(?<!\w)\+?\d[\d\s().-]{7,}\d(?!\w)")
+    for eid, entries in data["aka"].items():
+        if eid not in entities:
+            raise ValueError(f"Unbekannte AKA-Entität: {eid}")
+        entity = entities[eid]
+        if entity.get("type") != "person":
+            raise ValueError(f"AKA ist nur für Personen erlaubt: {eid}")
+        if not isinstance(entries, list):
+            raise ValueError(f"AKA-Einträge müssen eine Liste sein: {eid}")
+        seen = {str(n).strip().casefold() for n in [entity.get("name", ""), *(entity.get("aliases") or [])]}
+        out[eid] = []
+        for entry in entries:
+            if not isinstance(entry, dict):
+                raise ValueError(f"Ungültiger AKA-Eintrag: {eid}")
+            name, kind, source, added = (entry.get(k) for k in ("name", "kind", "source", "added"))
+            if not isinstance(name, str) or name != name.strip() or not 2 <= len(name) <= 80 or email.search(name) or phone.search(name):
+                raise ValueError(f"Unsicherer AKA-Name: {eid}")
+            if name.casefold() in seen:
+                raise ValueError(f"Doppelter AKA-Name: {eid}: {name}")
+            if kind not in ("artist", "handle", "community"):
+                raise ValueError(f"Ungültige AKA-Art: {eid}: {kind}")
+            if not isinstance(source, str) or (source and (urlsplit(source).scheme != "https" or not urlsplit(source).netloc)):
+                raise ValueError(f"AKA-Quelle muss HTTPS sein: {eid}: {name}")
+            try:
+                if not isinstance(added, str) or date.fromisoformat(added).isoformat() != added:
+                    raise ValueError
+            except ValueError as ex:
+                raise ValueError(f"Ungültiges AKA-Datum: {eid}: {added}") from ex
+            seen.add(name.casefold())
+            out[eid].append(entry)
+    return out
+
+
+def person_names(e, person_aka):
+    names = []
+    seen = set()
+    for name in [*(e.get("aliases") or []), *(x["name"] for x in person_aka.get(e["id"], []))]:
+        key = name.casefold()
+        if key not in seen:
+            seen.add(key)
+            names.append(name)
+    return names
+
+
+def merge_names(*groups):
+    names = []
+    seen = set()
+    for group in groups:
+        for name in group or []:
+            key = name.casefold()
+            if key not in seen:
+                seen.add(key)
+                names.append(name)
+    return names
+
+
+def aka_fact(e, lang, person_aka):
+    entries = person_aka.get(e["id"], []) if e["type"] == "person" else []
+    if e["type"] != "person":
+        if not e.get("aliases"):
+            return None
+        return S[lang]["aka"], esc(", ".join(e["aliases"]))
+    names = person_names(e, person_aka)
+    if not names:
+        return None
+    sources = {x["name"].casefold(): x.get("source") for x in entries}
+    value = ", ".join(
+        esc(name) + (
+            f' <small><a href="{esc(sources[name.casefold()])}" rel="nofollow noopener">{esc(T(lang, "source", "Quelle"))}</a></small>'
+            if sources.get(name.casefold()) else ""
+        )
+        for name in names
+    )
+    return S[lang]["aka"], value
+
+
+def musicgroup_ld(BASE):
+    person = {"@id": eid_of(BASE, MUSICGROUP_ID)}
+    return {"@type": "MusicGroup", "@id": f"{BASE}/entity/{MUSICGROUP_ID}/#musicgroup", "name": MUSICGROUP_NAME,
+            "founder": person, "member": [person]}
+
+
+def ent_ld(BASE, e, lang, glossary_set=None, person_aka=None):
     """Schema.org-Knoten einer Entitaet (sprachneutrale @id)."""
+    person_aka = person_aka or {}
     t = e["type"]; i = e["id"]; d = e["desc"].get(lang) or e["desc"].get("en") or e["desc"].get("de") or ""
     ref = lambda x: {"@id": eid_of(BASE, x)}
     rel = {}
@@ -63,8 +170,9 @@ def ent_ld(BASE, e, lang, glossary_set=None):
         same.append(f"{BASE}/community/u/{CLAIMS[i]}/")
     n = {"@type": {"product": "SoftwareApplication", "platform": "SoftwareApplication", "concept": "DefinedTerm", "category": "DefinedTerm", "org": "Organization", "person": "Person", "cert": "EducationalOccupationalCredential",
                    "event": "Event", "media": "PodcastSeries"}[t], "@id": eid_of(BASE, i), "name": e["name"], "url": eurl(BASE, "en", i), "description": d}
-    if e.get("aliases"):
-        n["alternateName"] = e["aliases"]
+    names = person_names(e, person_aka) if t == "person" else (e.get("aliases") or [])
+    if names:
+        n["alternateName"] = names
     if e.get("logo"):
         n["logo" if t == "org" else "image"] = e["logo"]
     if e.get("web") and t in ("org", "product", "platform", "media", "event"):
@@ -154,6 +262,10 @@ def ent_ld(BASE, e, lang, glossary_set=None):
     elif t == "person":
         if i == AUTHOR_EID and PERSON_LD:   # T4: Seitenautor = derselbe Knoten wie auf allen anderen Seiten (keine vier Fassungen derselben @id)
             base = PERSON_LD(); n.update({k: v for k, v in base.items() if k != "@context"}); n["mainEntityOfPage"] = eurl(BASE, "en", i)
+            if names:
+                n["alternateName"] = merge_names(base.get("alternateName"), names)
+        if i == MUSICGROUP_ID and person_aka.get(i):
+            n["memberOf"] = {"@id": f"{BASE}/entity/{MUSICGROUP_ID}/#musicgroup"}
         if e.get("job"):
             n["jobTitle"] = e["job"]
         if e.get("image") and str(e["image"]).startswith("https://"):
@@ -270,11 +382,15 @@ def build(g, wiki_links, experts_by_ent, ep_find):
 
     # --- Exporte ---
     recs = sorted(ENTS.values(), key=lambda e: e["id"])
+    person_aka = load_person_aka(recs)
     MOD = mod_dates(recs, TODAY)
     write("entities.json", json.dumps({"version": 1, "generated": TODAY, "license": "CC BY 4.0, M365.FM community", "entities": recs}, ensure_ascii=False, indent=1))
     import site_learn as _SL   # T30: Repo-Fassung ohne D1 - Grundlage fuer den Abgleich im Worker (syncEntitiesFromSite)
     write("entities-src.json", json.dumps({"version": 1, "generated": TODAY, "entities": sorted(_SL.SRC_ENTS.values(), key=lambda e: e["id"])}, ensure_ascii=False))
-    write("entities.jsonld", json.dumps({"@context": "https://schema.org", "@graph": [ent_ld(BASE, e, "en", gl_ids) for e in recs]}, ensure_ascii=False))
+    entity_graph = [ent_ld(BASE, e, "en", gl_ids, person_aka) for e in recs]
+    if person_aka.get(MUSICGROUP_ID):
+        entity_graph.append(musicgroup_ld(BASE))
+    write("entities.jsonld", json.dumps({"@context": "https://schema.org", "@graph": entity_graph}, ensure_ascii=False))
 
     cfg_t = lambda lang: S[lang]
     for lang in COMM_LANGS:
@@ -287,7 +403,8 @@ def build(g, wiki_links, experts_by_ent, ep_find):
         def card(e):
             d = (e["desc"].get(lang) or e["desc"].get("en") or "")[:140]
             old = is_old(e, TODAY)
-            return (f'<li class="en-i" data-t="{e["type"]}"{" data-old=1 hidden" if old else ""}><a href="{root}{e["id"]}/"><b>{esc(e["name"])}</b></a> <span class="mut">· {esc(TL[e["type"]][li])}{(" · " + OLD[lang][0]) if old else ""}</span><br><span class="mut">{esc(d)}</span></li>')
+            _spb = SPM.badge(lang, SPM.entity(e["id"]))   # T37 Sponsor: Badge auch in der Liste (Teaser)
+            return (f'<li class="en-i" data-t="{e["type"]}"{" data-old=1 hidden" if old else ""}><a href="{root}{e["id"]}/"><b>{esc(e["name"])}</b></a> <span class="mut">· {esc(TL[e["type"]][li])}{(" · " + OLD[lang][0]) if old else ""}{(" · <strong>" + esc(_spb) + "</strong>") if _spb else ""}</span><br><span class="mut">{esc(d)}</span></li>')
         counts = {}
         for e in recs:
             counts[e["type"]] = counts.get(e["type"], 0) + 1
@@ -317,12 +434,14 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                 if frm not in groups.get(lab, []) and not (p in ("related_to", "similar_to") and frm in groups.get(FWD[p][li], [])):
                     groups.setdefault(lab, []).append(frm)
             rb = "".join(f'<h3>{esc(k)}</h3><ul>' + "".join(f'<li><a href="{root}{x}/">{esc(ENTS[x]["name"])}</a> <span class="mut">· {esc(TL[ENTS[x]["type"]][li])}</span></li>' for x in dict.fromkeys(v)) + "</ul>" for k, v in groups.items())
+            _spr, _spown = SPM.entity(e["id"]), SPM.entity_own(e["id"])   # T37 Sponsor: laufende Sponsorings dieser Entitaet
             facts = [(s["type"], esc(TL[e["type"]][li]))]
-            if e.get("aliases"):
-                facts.append((s["aka"], esc(", ".join(e["aliases"]))))
+            _aka = aka_fact(e, lang, person_aka)
+            if _aka:
+                facts.append(_aka)
             for k, key in (("website", "web"), ("docs", "docs"), ("wikipedia", "wikipedia")):
                 if e.get(key):
-                    facts.append((s[k], f'<a href="{esc(e[key])}" rel="noopener">{esc(e[key].replace("https://", "").rstrip("/"))}</a>'))
+                    facts.append((s[k], f'<a href="{esc(e[key])}" rel="{SPM.link_rel(_spr, e[key], own=_spown and key == "web")}">{esc(e[key].replace("https://", "").rstrip("/"))}</a>'))
             LIC = {"free": ("free", "kostenlos"), "included": ("included in Microsoft 365", "in Microsoft 365 enthalten"), "addon": ("add-on", "Add-on"), "paid": ("paid", "kostenpflichtig")}
             for lab_en, lab_de, val in (("Version", "Version", e.get("version")), ("Released", "Veröffentlicht", e.get("released")), ("Licence", "Lizenz", (T(lang, *LIC[e["license"]]) if True else "") if e.get("license") in LIC else ""),
                                         ("Level", "Stufe", (e.get("level") or "").capitalize()), ("Exam code", "Prüfungscode", e.get("exam")), ("Valid for", "Gültig für", (f"{e['valid_months']} " + (T(lang, "months", "Monate"))) if e.get("valid_months") else "")):
@@ -452,19 +571,21 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             _src = [(T(lang, "Official website", "Offizielle Website"), e.get("web")), (T(lang, "Documentation", "Dokumentation"), e.get("docs")), ("Wikipedia", e.get("wikipedia")),
                     ("Wikidata", f"https://www.wikidata.org/wiki/{e['wikidata']}" if e.get("wikidata") else "")] + [(T(lang, "Profile", "Profil"), u_) for u_ in (e.get("same_as") or [])[:4]]
             _src = [(n_, u_) for n_, u_ in _src if u_ and str(u_).startswith("http")]
-            srcbox = (f'<section class="en-src"><h2>{esc(T(lang, "Sources", "Quellen"))}</h2><ul>' + "".join(f'<li>{esc(n_)}: <a href="{esc(u_)}" rel="noopener">{esc(u_.replace("https://", "").rstrip("/"))}</a></li>' for n_, u_ in _src)
+            srcbox = (f'<section class="en-src"><h2>{esc(T(lang, "Sources", "Quellen"))}</h2><ul>' + "".join(f'<li>{esc(n_)}: <a href="{esc(u_)}" rel="{SPM.link_rel(_spr, u_, own=_spown and u_ == e.get("web"))}">{esc(u_.replace("https://", "").rstrip("/"))}</a></li>' for n_, u_ in _src)
                       + (f'<li>{esc(T(lang, "Feed for this topic (RSS)", "Feed zu diesem Thema (RSS)"))}: <a href="{BASE}/entity/{e["id"]}/feed.xml">entity/{e["id"]}/feed.xml</a></li>' if (eps or _arts) else "")
                       + (f'<li>{esc(T(lang, "M365.FM episodes on this topic", "M365.FM-Folgen zum Thema"))}: {len(eps)}</li>' if eps else "") + (f'<li>{esc(T(lang, "Articles on this topic", "Artikel zum Thema"))}: {len(_arts)}</li>' if _arts else "") + "</ul></section>") if (_src or eps or _arts) else ""
             _au = ENTS.get(AUTHOR_EID)
             updline = (f'<p class="mut en-upd">' + (f'{esc(T(lang, "Maintained by", "Gepflegt von"))} <a href="{root}{AUTHOR_EID}/">{esc(_au["name"])}</a> (Microsoft MVP) · ' if _au and e["id"] != AUTHOR_EID else "")
                        + f'{esc(T(lang, "Last updated", "Zuletzt aktualisiert"))}: <time datetime="{_mod}">{_mod}</time></p>')
-            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{root}">{esc(s["entities"])}</a></nav><h1>{esc(e["name"])}</h1><p class="mut">{esc(TL[e["type"]][li])}</p><p class="en-def" style="font-size:1.1em">{esc(d)}</p>{oldbanner}{claim_html(e["id"], lang)}{hero}{longbox}{ft}{evl}{kpbox}{eb}{tline}{artbox}'
+            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{root}">{esc(s["entities"])}</a></nav><h1>{esc(e["name"])}</h1>{SPM.note(lang, _spr)}<p class="mut">{esc(TL[e["type"]][li])}</p><p class="en-def" style="font-size:1.1em">{esc(d)}</p>{oldbanner}{claim_html(e["id"], lang)}{hero}{longbox}{ft}{evl}{kpbox}{eb}{tline}{artbox}'
                           f'{qbox}{faqbox}{relmap}{relx}<div class="en-rel">{rb}</div>{gloss}{SU.block(lang, e["id"])}{wb}{("<h2>" + esc(s["experts"]) + "</h2>" + ehtml) if ehtml else ""}{srcbox}{updline}{edit}'
                           f'<script>window.M365E={{api:"{api}",lang:"{lang}",base:"{BASE}",s:{json.dumps({k: s[k] for k in ("edit_e",)}, ensure_ascii=False)}}};'
                           f'(function(){{var d=0,u="{BASE}/assets/entity.js";function go(){{if(d)return;d=1;var s=document.createElement("script");s.src=u;document.body.appendChild(s)}}'
                           f'var t=document.getElementById("en-qa")||document.getElementById("en-edit");if(!t||!("IntersectionObserver" in window)||location.hash)return go();'
                           f'var o=new IntersectionObserver(function(x){{if(x.some(function(y){{return y.isIntersecting}})){{o.disconnect();go()}}}},{{rootMargin:"600px"}});o.observe(t)}})();</script>')
-            node = ent_ld(BASE, e, lang, gl_ids)
+            if _spr:   # T37 Sponsor: alle Links auf die Website des Sponsors als bezahlt kennzeichnen
+                b = SPM.mark(b, _spr)
+            node = ent_ld(BASE, e, lang, gl_ids, person_aka)
             _qld = SQ.ld(BASE, e["id"], lang, _qurl) if e["type"] == "person" else []
             if arturls:
                 node["subjectOf"] = [{"@id": x + "#post"} for x in arturls[:20]]   # Artikel ueber diese Entitaet (Gegenrichtung zu BlogPosting.about)
@@ -474,6 +595,10 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                    "isPartOf": {"@id": f"{BASE}/#website"}, "relatedLink": [f"{root}{x}/" for k, v in groups.items() for x in v][:25],
                    **({"hasPart": {"@id": u + "#articles"}} if arturls else {}),
                    "breadcrumb": {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": s["entities"], "item": root}, {"@type": "ListItem", "position": 2, "name": e["name"], "item": u}]}}]
+            if _spr:
+                ld[0]["sponsor"] = SPM.ld(_spr)   # T37 Sponsor: an der Seite (WebPage), nicht an der Entitaet selbst (/entities.jsonld bleibt neutral)
+            if e["id"] == MUSICGROUP_ID and person_aka.get(e["id"]):
+                ld.append({"@context": "https://schema.org", **musicgroup_ld(BASE)})   # eigener <script>-Block auf der Seite: braucht @context
             if arturls:
                 ld.append({"@context": "https://schema.org", "@type": "ItemList", "@id": u + "#articles", "name": T(lang, "Articles about {t}", "Artikel zu {t}").format(t=e["name"]), "numberOfItems": len(arturls),
                            "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": x} for i, x in enumerate(arturls[:50])]})

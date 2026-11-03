@@ -1,0 +1,185 @@
+{
+ "episode_id": "76145242",
+ "slug": "gpu-inference-performance-the-compute-lie-killing-your-ai-latency",
+ "title": "Wolna inferencja na GPU zdemaskowana: fallback na CPU, konflikty wersji CUDA/TensorRT i błędy kontenerów",
+ "lang": "pl",
+ "duration_s": 1347,
+ "transcript_source": "transcripts/pl/7rNV_vcD-Fg.vtt",
+ "time_basis": "vtt",
+ "entities": [
+  {
+   "slug": "prompt",
+   "name": "Prompt",
+   "type": "concept",
+   "score": 55,
+   "mentions": 7,
+   "first_mention_s": 367,
+   "quote": "Ten sam prompt kończy się w ułamku czasu, a cykl pracy GPU wchodzi w stabilny zakres.",
+   "url": "https://www.m365.fm/pl/entity/prompt/"
+  }
+ ],
+ "new_entities": [
+  {
+   "slug": "gpu",
+   "name": "Graphics processing unit (GPU)",
+   "type": "concept",
+   "mentions": 37,
+   "first_mention_s": 2,
+   "quote": "Bliskie zeru wykorzystanie GPU przy gwałtownym wzroście opóźnień.",
+   "status": "review"
+  },
+  {
+   "slug": "cuda",
+   "name": "NVIDIA CUDA",
+   "type": "product",
+   "mentions": 28,
+   "first_mention_s": 26,
+   "quote": "Sterowniki cuda znajdują się pod wszystkim.",
+   "status": "review"
+  },
+  {
+   "slug": "tensorrt",
+   "name": "NVIDIA TensorRT",
+   "type": "product",
+   "mentions": 27,
+   "first_mention_s": 26,
+   "quote": "Wstępnie buduj i buforuj silniki TensorSt dla każdego wariantu modelu i rozdzielczości",
+   "status": "review"
+  },
+  {
+   "slug": "onnx-runtime",
+   "name": "ONNX Runtime",
+   "type": "product",
+   "mentions": 17,
+   "first_mention_s": 26,
+   "quote": "Domyślnie obszar pamięci cuda w ONNX Runtime agresywnie cachuje alokację.",
+   "status": "review"
+  },
+  {
+   "slug": "nvidia",
+   "name": "NVIDIA",
+   "type": "org",
+   "mentions": 12,
+   "first_mention_s": 83,
+   "quote": "Karty Nvidia RTX i serii A w chmurze 16 do 32 GB VRAM.",
+   "status": "review"
+  },
+  {
+   "slug": "docker",
+   "name": "Docker",
+   "type": "product",
+   "mentions": 8,
+   "first_mention_s": 799,
+   "quote": "Historia Dockera opowiada historię w warstwach.",
+   "status": "review"
+  },
+  {
+   "slug": "stable-diffusion",
+   "name": "Stable Diffusion",
+   "type": "product",
+   "mentions": 3,
+   "first_mention_s": 46,
+   "quote": "Stable diffusion na procesorze to strata czasu.",
+   "status": "review"
+  },
+  {
+   "slug": "kubernetes",
+   "name": "Kubernetes",
+   "type": "product",
+   "mentions": 2,
+   "first_mention_s": 822,
+   "quote": "W Kubernetes żądaj zasobów GPU NVIDIA",
+   "status": "review"
+  }
+ ],
+ "quotes": [
+  {
+   "text": "Ostatecznie nie jest to zagadka dotycząca modeli, to sprawa dotycząca uczciwości infrastruktury. Prześledzimy artefakty, kolejność dostawców, logi możliwości, punkty montowania urządzeń i powiążemy je z trzema niezmiennymi metrykami, opóźnieniem, przepustowością i wykorzystaniem GPU.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 195,
+   "entities": [
+    "gpu"
+   ],
+   "why": "Kernthese: kein Modellproblem, sondern Infrastruktur – gemessen an drei Metriken."
+  },
+  {
+   "text": "Stable diffusion na procesorze to strata czasu. Model działa, ale opóźnienie rośnie wielokrotnie od 10 do 30 razy wolniej, a przepustowość drastycznie spada. W środowisku, gdzie sprzedaje się milisekundy, ta różnica jest krytyczna.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 235,
+   "entities": [
+    "stable-diffusion"
+   ],
+   "why": "Macht die Kosten des stillen CPU-Fallbacks greifbar."
+  },
+  {
+   "text": "Punkt końcowy zdrowia sprawdzał tylko, czy serwer działa, więc nigdy nie sprawdzał, czy GPU faktycznie wykonuje pracę.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 259,
+   "entities": [
+    "gpu"
+   ],
+   "why": "Zeigt, warum Health-Probes Beschleunigung nicht beweisen."
+  },
+  {
+   "text": "Zablokuj kolejność dostawców, odrzuć użycie procesora, fallback i wymuś, by system udowodnił szybkość, zanim uznamy go za sprawny. Dopiero wtedy zielony kolor oznacza akcelerację.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 455,
+   "entities": [],
+   "why": "Klare Handlungsanweisung: Fail-fast statt stiller Degradierung."
+  },
+  {
+   "text": "Dowody wskazują, że kontenery nie tylko wdrażają oprogramowanie, one kodują zachowanie pod obciążeniem. Gdy są hałaśliwe, ciężkie lub niejasne w kwestii GPU, zmieniają akcelerację w ceremonie. Gdy są lekkie, konkretne i asertywne, zachowują szybką ścieżkę, za którą zapłaciłeś.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 993,
+   "entities": [
+    "gpu"
+   ],
+   "why": "Prägnantes Fazit zur Container-Hygiene."
+  }
+ ],
+ "chapters": [
+  {
+   "start_s": 0,
+   "title": "Anomalia: wysoki rachunek za GPU przy niskim wykorzystaniu"
+  },
+  {
+   "start_s": 38,
+   "title": "Konfiguracja przypadku: środowisko i profil ofiary"
+  },
+  {
+   "start_s": 210,
+   "title": "Dowód A: ciche przełączenie na CPU"
+  },
+  {
+   "start_s": 464,
+   "title": "Dowód B: niezgodność wersji CUDA, ONNX Runtime i TensorRT"
+  },
+  {
+   "start_s": 747,
+   "title": "Dowód C: błędna konfiguracja kontenera"
+  },
+  {
+   "start_s": 1012,
+   "title": "Laboratorium: opóźnienie, przepustowość, wykorzystanie"
+  },
+  {
+   "start_s": 1215,
+   "title": "Protokół naprawczy: powtarzalna lista kontrolna"
+  }
+ ],
+ "takeaways": [
+  "Odmawiaj startu w produkcji, jeśli dostawca wykonawczy TensorRT lub CUDA się nie załadował – ciche przełączenie na CPU spowalnia inferencję od 10 do 30 razy.",
+  "Przypnij sterownik, CUDA, cuDNN, ONNX Runtime i TensorRT w jednej macierzy wersji i buduj silniki TensorRT z góry jako artefakty, a nie na węźle.",
+  "Utrzymuj kontenery lekkie i jawne wobec GPU: budowanie wieloetapowe, Docker Ignore, NVIDIA Container Toolkit oraz bramki wydajności zamiast samych sond zdrowia."
+ ],
+ "hook": "Rachunek za GPU rośnie, wykorzystanie akceleratora jest bliskie zeru, a dashboardy wciąż świecą na zielono. Mirko Peters prowadzi śledztwo w sprawie trzech cichych zabójców inferencji – przełączenia na CPU, konfliktów wersji CUDA/TensorRT i błędnej konfiguracji kontenerów – i pokazuje, jak je zablokować.",
+ "youtube_video_id": "7rNV_vcD-Fg",
+ "source_video_id": "7rNV_vcD-Fg",
+ "show_id": 7393242,
+ "generated_at": "2026-11-03T09:06:43Z"
+}

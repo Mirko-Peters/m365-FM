@@ -1,0 +1,196 @@
+{
+  "episode_id": "67960173",
+  "slug": null,
+  "title": "Business Central Telemetry With Power BI: How To Use Application Insights, Fix Blind Spots & Spot Performance Problems Early",
+  "lang": "en",
+  "duration_s": 1141,
+  "transcript_source": "data/en_transcripts/1d4d83d529cf.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "kql",
+      "name": "Kusto Query Language (KQL)",
+      "type": "concept",
+      "score": 40,
+      "mentions": 3,
+      "first_mention_s": 1057,
+      "quote": "remember you can export KQL directly from Azure locks to powerbi",
+      "url": "https://www.m365.fm/entity/kql/"
+    },
+    {
+      "slug": "dynamics-365-business-central",
+      "name": "Dynamics 365 Business Central",
+      "type": "product",
+      "score": 95,
+      "mentions": 13,
+      "first_mention_s": 2,
+      "quote": "just to see if business Central will behave no telemetry",
+      "url": "https://www.m365.fm/entity/dynamics-365-business-central/"
+    },
+    {
+      "slug": "power-bi",
+      "name": "Power BI",
+      "type": "product",
+      "score": 85,
+      "mentions": 27,
+      "first_mention_s": 15,
+      "quote": "I'll show you how to connect the Powerbi telemetry app to Azure Application Insights",
+      "url": "https://www.m365.fm/entity/power-bi/"
+    },
+    {
+      "slug": "azure",
+      "name": "Microsoft Azure",
+      "type": "platform",
+      "score": 55,
+      "mentions": 16,
+      "first_mention_s": 18,
+      "quote": "Azure Application Insights and why one field",
+      "url": "https://www.m365.fm/entity/azure/"
+    },
+    {
+      "slug": "microsoft-appsource",
+      "name": "Microsoft AppSource",
+      "type": "product",
+      "score": 45,
+      "mentions": 4,
+      "first_mention_s": 216,
+      "quote": "both sitting in Powerbi's Appsorce store",
+      "url": "https://www.m365.fm/entity/microsoft-appsource/"
+    },
+    {
+      "slug": "microsoft-entra",
+      "name": "Microsoft Entra",
+      "type": "platform",
+      "score": 35,
+      "mentions": 3,
+      "first_mention_s": 613,
+      "quote": "And because everything lives under Microsoft Entra tenants",
+      "url": "https://www.m365.fm/entity/microsoft-entra/"
+    },
+    {
+      "slug": "power-bi-service",
+      "name": "Power BI Service",
+      "type": "product",
+      "score": 25,
+      "mentions": 1,
+      "first_mention_s": 759,
+      "quote": "how often the data set updates in powerbi service",
+      "url": "https://www.m365.fm/entity/power-bi-service/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "application-insights",
+      "name": "Application Insights",
+      "type": "product"
+    },
+    {
+      "slug": "telemetry",
+      "name": "Telemetry",
+      "type": "concept"
+    },
+    {
+      "slug": "power-bi-pro",
+      "name": "Power BI Pro",
+      "type": "product"
+    },
+    {
+      "slug": "oauth-2-0",
+      "name": "OAuth 2.0",
+      "type": "concept"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "Telemetry only captures behavior signals like sessions, errors, and performance, not customer invoice data. It's privacy by design, meant for system health, not business secrets.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 28,
+      "entities": [
+        "telemetry",
+        "dynamics-365-business-central"
+      ],
+      "why": "Addresses the common privacy concern about enabling telemetry."
+    },
+    {
+      "text": "Users only raise their hand when something hurts, and by then it's already failed. Telemetry keeps the loop tight. It shows performance shifts and error patterns as they build, not just when the roof caves in.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 65,
+      "entities": [
+        "telemetry"
+      ],
+      "why": "Explains why telemetry beats ticket-driven reaction."
+    },
+    {
+      "text": "The instrumentation key is legacy used for writing telemetry into Insights. The application ID is modern used for reading telemetry out into tools like Powerbi.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 518,
+      "entities": [
+        "application-insights",
+        "power-bi"
+      ],
+      "why": "Clears up the most common setup mistake."
+    },
+    {
+      "text": "Set the wrong look back and you only pull a slice of your histories. Set the wrong application ID and you get nothing at all.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 644,
+      "entities": [
+        "application-insights",
+        "power-bi"
+      ],
+      "why": "Distinguishes two settings admins often confuse."
+    },
+    {
+      "text": "Telemetry changes your role from putting out fires to working with clear, measurable signals. It moves you from reacting after tickets explode to steering production with data you can trust.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 1103,
+      "entities": [
+        "telemetry"
+      ],
+      "why": "Summarizes the operational payoff of telemetry."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "Running Business Central blind"
+    },
+    {
+      "start_s": 46,
+      "title": "Why telemetry matters"
+    },
+    {
+      "start_s": 228,
+      "title": "Choosing between the two Power BI apps"
+    },
+    {
+      "start_s": 460,
+      "title": "Finding the application ID in the Azure portal"
+    },
+    {
+      "start_s": 678,
+      "title": "Wiring live data into the dashboards"
+    },
+    {
+      "start_s": 855,
+      "title": "The four reports: usage, errors, performance, administration"
+    },
+    {
+      "start_s": 1095,
+      "title": "From firefighting to data-driven operations"
+    }
+  ],
+  "takeaways": [
+    "Business Central telemetry in Application Insights captures behavior signals such as sessions, errors and query durations, not business data, and exposes problems like deadlocks before users report them.",
+    "Use the environment Usage app for system-wide telemetry and the App Usage app for a single extension, both requiring a Power BI Pro license for live data.",
+    "Connect with the Application Insights application ID (not the instrumentation key), OAuth 2.0, the right tenant and a sensible lookback and refresh schedule."
+  ],
+  "hook": "Without telemetry, Business Central admins only learn about problems when tickets pile up. This episode walks through connecting the Power BI telemetry apps to Azure Application Insights, avoiding the application ID trap and using the four reports to spot performance problems early.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-03T08:24:18+00:00"
+}

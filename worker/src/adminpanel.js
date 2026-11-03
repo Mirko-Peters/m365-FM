@@ -25,6 +25,7 @@ export async function handleAdminPanel(env, request, url, path, user, J) {
         claims: await n(db, "SELECT COUNT(*) n FROM entity_claims WHERE status='pending'"),
         certs: await n(db, "SELECT COUNT(*) n FROM cert_check WHERE status='pending'"),
         reports: await n(db, "SELECT COUNT(*) n FROM reports"),
+        sponsor: await n(db, "SELECT COUNT(*) n FROM sponsor_requests WHERE status='new'"),   // T37: neue Sponsor-Anfragen (Reiter Sponsor-Anfragen)
       },
       db: {
         entities_db: await n(db, "SELECT COUNT(DISTINCT eid) n FROM entity_rev WHERE status='live'"), entities_file: base,

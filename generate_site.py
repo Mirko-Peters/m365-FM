@@ -8,6 +8,7 @@ import site_learn as LRN
 import site_fetch as SF
 import time
 import site_press as PRS
+import site_sponsor as SPN   # T37 Sponsor-Seite /sponsor/ (Seite, Fusszeilen-Link)
 import site_entities as ENT
 from site_i18n import COMM_LANGS, pfx
 import site_members as MEM
@@ -24,6 +25,7 @@ import site_ads as ADS
 import site_media as MED
 import site_sidebar as SBR
 import site_r2 as R2
+import site_sponsorships as SPM   # T37 Sponsor: Kennzeichnung bezahlter Inhalte (data/sponsorships.json)
 import glob, hashlib, html, json, os, re, shutil, sys, unicodedata
 from datetime import date
 from pathlib import Path
@@ -453,7 +455,7 @@ def switch_from(body, alts):
     return re.sub(r'<details class="lsw">.*?</details>', lambda b: re.sub(r'<a href="([^"]*)" hreflang="([^"]+)"', lambda a: f'<a href="{m.get(a.group(2), a.group(1))}" hreflang="{a.group(2)}"', b.group(0)), body, count=1, flags=re.S)
 
 
-def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefault=None, og_type="article", extra_head="", noindex=False, side="", og_of=None, switch=None, self_url=None):
+def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefault=None, og_type="article", extra_head="", noindex=False, side="", og_of=None, switch=None, self_url=None, share=True):
     if lang in COMM_LANGS[2:] and any(k in canonical for k in ("/community/", "/entity/", "/glossary/")):
         extra_head += f'<script defer src="{BASE}/assets/ui-{lang}.js"></script>'
     hl = LANGS[lang][1] if lang in LANGS else "en"
@@ -476,12 +478,12 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
         ogimg = f"{BASE}/assets/og-default.png"
     elif og_of:   # lokalisierte Show-Seiten teilen das Teilen-Bild der englischen Seite (spart Zehntausende Bilder)
         ogimg = f"{BASE}/og/{og_of.replace(BASE, '').strip('/') or 'index'}.png"
-        body = body.replace("<footer>", share_html(lang, canonical, title) + "<footer>", 1)
+        if share: body = body.replace("<footer>", share_html(lang, canonical, title) + "<footer>", 1)
     else:
         rel = canonical.replace(BASE, "").strip("/") or "index"
         OGLIST.append({"path": f"og/{rel}.png", "title": bare_title(title), "lang": lang, "seed": canonical, "cover": OG_COVER.get(canonical)})
         ogimg = f"{BASE}/og/{rel}.png"
-        body = body.replace("<footer>", share_html(lang, canonical, title) + "<footer>", 1)
+        if share: body = body.replace("<footer>", share_html(lang, canonical, title) + "<footer>", 1)   # T37: share=False (Sponsor-Seite, keine Fremdmarken)
     if side:   # Sidebar neben dem Hauptinhalt (wie auf den Show-Seiten): erstes <main> in zwei Spalten
         body = re.sub(r'<main class="wrap"([^>]*)>(.*?)</main>', lambda m: f'<main class="wrap shw"{m.group(1)}><div class="shmain">{m.group(2)}</div>{side}</main>', body, count=1, flags=re.S)
         extra_head += f'<link rel="stylesheet" href="{BASE}/assets/sbar.css">'
@@ -768,7 +770,8 @@ def footer(lang):
     _nw = f'<a href="{BASE}/{"de/" if lang == "de" else ""}updates/">{"Updates & Roadmap" if lang == "de" else "Updates & roadmap"}</a>'
     return (f'<footer><div class="wrap">{_top}{_nw}<a href="https://www.m365.fm">m365.fm</a>'
             f'<a href="https://m365con.net">M365Con</a><a class="soc" href="{LINKEDIN}" rel="me" style="--bc:#0A66C2">{brand_icon("LinkedIn")}<span>LinkedIn</span></a><a class="soc" href="{YT_CHANNEL}" style="--bc:#FF0000">{brand_icon("YouTube")}<span>YouTube</span></a>'
-            f'<a href="{ast_url(lang)}">{esc(ast_label(lang))}</a><a href="{BASE}/{"de/" if lang == "de" else ""}press/">{"Pressekit" if lang == "de" else "Press kit"}</a><a href="{BASE}/impressum/" rel="nofollow">Impressum</a><a href="{BASE}/legal/" rel="nofollow">Legal notice</a>'
+            f'<a href="{ast_url(lang)}">{esc(ast_label(lang))}</a><a href="{BASE}/{"de/" if lang == "de" else ""}press/">{"Pressekit" if lang == "de" else "Press kit"}</a>'
+            f'<a href="{SPN.url(BASE, _tl)}">{esc(SPN.label(_tl))}</a><a href="{BASE}/impressum/" rel="nofollow">Impressum</a><a href="{BASE}/legal/" rel="nofollow">Legal notice</a>'
             f'<a href="{BASE}/datenschutz/" rel="nofollow">Datenschutz</a><a href="{BASE}/privacy/" rel="nofollow">Privacy</a>'
             f'<div style="margin-top:10px">© {date.today().year} Mirko Peters · M365.FM</div></div></footer>')
 
@@ -961,7 +964,8 @@ def build():
     def write(rel, content):
         p = OUT / rel
         p.parent.mkdir(parents=True, exist_ok=True)
-        p.write_text(R2.rewrite(content) if rel.endswith(R2_EXT) else content, encoding="utf-8")
+        c = R2.rewrite(content) if rel.endswith(R2_EXT) else content
+        p.write_text(c, encoding="utf-8")
 
     # Taxonomie: Kategorien (video-weit) + sprachbezogene Tags
     cat_of = {}
@@ -1056,6 +1060,8 @@ def build():
     ORIG_ALTS = {}
     _I18 = ROOT / "data" / "podpage_i18n"   # T42: Sprachen, in denen die englische Folge eine lokalisierte Fassung hat (Titel uebersetzt)
     TRL_SLUGS = {l: {k for k, v in json.load(open(_I18 / f"{l}.json", encoding="utf-8")).items() if v and v[0]} for l in LANGS if (_I18 / f"{l}.json").exists()}
+    import site_podpage as _PPs   # T37 Sponsor: data/sponsorships.json pruefen (Entitaeten, Themen, Folgen, Daten, max. 3 je Thema) - Fehler brechen den Bau ab
+    SPM.init(TODAY, LRN.ENTS, episodes={e["slug"] for e in _PPs.load("episodes")}, dubs={(it["lang"], it["slug"]): it["vid"] for it in items.values()}, orig=ORIG)
     try:   # Speaker der M365Con-Programme: zusammengefuehrte Personen (tools/build_speakers.py) -> Entitaetsseiten und /speakers.json fuer den Worker
         _sp = json.loads((ROOT / "data" / "speakers.json").read_text("utf-8")).get("speakers", [])
         ENT.SPEAKERS.update({x["id"]: x for x in _sp})
@@ -1086,6 +1092,7 @@ def build():
         notes_block = _nkp + _nnotes + _nfaq + (SNT.CSS if (_nkp or _nnotes or _nfaq) else "")
         _el = {k: u for k, u in elinks.get(f"{vid}:{l}", {}).items() if u}   # zugeordnete Plattform-Folgenlinks -> sameAs
         more = related(it, by_lang[l], tagsets[l], catsets[l])
+        _spr = SPM.episode(vid=vid)   # T37 Sponsor: Dub-Folge aus einem Sponsoring (dauerhaft)
         ld = [
             {"@context": "https://schema.org", "@type": "PodcastEpisode", "@id": canonical + "#episode", "name": e["title"], "description": strip_tags(intro),
              "url": canonical, "inLanguage": LANGS[l][1], "datePublished": it["date"],
@@ -1107,6 +1114,8 @@ def build():
             person_ld(), org_ld(),
         ]
         ld[0]["video"] = {"@id": canonical + "#video"}
+        for _n in (ld if _spr else []):   # T37 Sponsor: PodcastEpisode und VideoObject derselben Folge
+            if _n.get("@type") in ("PodcastEpisode", "VideoObject"): _n["sponsor"] = SPM.ld(_spr)
         for _n in ld:
             if _xab and _n.get("@type") == "VideoObject": _n["about"] = _xab   # T27: das Video behandelt dieselben Entitaeten wie die Folge
         pc = [c for c in ORDER if c in cat_of[vid]][0]
@@ -1166,7 +1175,7 @@ def build():
 <main class="wrap"><article>
 <nav class="crumbs" aria-label="breadcrumb"><a href="{BASE}/{l}/">{esc(ui[7])}</a> / {esc(LANGS[l][0])} / {it["date"]}</nav>
 <div class="kicker">M365.FM · {esc(LANGS[l][0])}</div>{('<p class="mut"><a href="' + BASE + '/show/episodes/' + ORIG[vid] + '/" hreflang="en">' + ("Original (English)" if l != "de" else "Original (Englisch)") + '</a></p>') if vid in ORIG else ""}
-<h1>{esc(h1_main)}</h1>{("<p class=sub>" + esc(h1_rest) + "</p>") if h1_rest else ""}
+<h1>{esc(h1_main)}</h1>{("<p class=sub>" + esc(h1_rest) + "</p>") if h1_rest else ""}{SPM.note(l, _spr)}
 {chips_html(l, it)}<p class="lede">{intro}</p>
 <figure class="cover" style="margin-inline:0">{art_svg(vid, LANGS[l][0], "M365.FM · " + ui[0], l)}</figure>
 <div class="panel"><iframe src="https://widget.spreaker.com/player?episode_id={it["eid"]}&amp;theme=light&amp;playlist=false" height="131" loading="lazy" title="{esc(e["title"])}"></iframe>
@@ -1182,6 +1191,7 @@ def build():
 <p style="margin-top:1.6em"><a class="btn" href="{BASE}/{l}/">{esc(ui[3])} →</a></p>
 <section id="c-comments"></section><section id="c-sub"></section></main>
 {footer(l)}{community_tags(l, vid)}"""
+        if _spr: body = SPM.mark(body, _spr)   # T37 Sponsor: Links zum Sponsor mit rel="sponsored"
         OG_COVER[canonical] = art_svg(vid, LANGS[l][0], lang=l)
         write(f'{l}/{it["slug"]}/index.html',
               page(l, e["title"], short(intro), canonical, body, alts, ld + _nld, xdefault=alts.get("en"), side=side_for(l, e["title"], body), extra_head=f'<meta property="article:section" content="{esc(cat_name(pc, l))}">' + "".join(f'<meta property="article:tag" content="{esc(t)}">' for t in tagraw[l][vid])))
@@ -1400,6 +1410,7 @@ def build():
     import site_legacy_blog as LBL
     _posts = BLG.fetch_posts(COMMUNITY_API); _have = {(p["slug"], p.get("lang") or "en") for p in _posts if p["handle"] == "mirko-p"}
     _posts += [p for p in LBL.items(BASE) if (p["slug"], p.get("lang") or "en") not in _have]   # plus die frueheren Podpage-Blogbeitraege als Community-Beitraege von mirko-p; T6: je Slug UND Sprache (die deutschen Fassungen blieben sonst beim D1-Import auf der Strecke)
+    SPM.check_posts(_posts)   # T37 Sponsor: Beitraege in data/sponsorships.json muessen existieren
     LBL.publish(write, BASE); MEM.BLOGLANGS = {p["lang"] for p in _posts}   # stand seit T6 versehentlich im Kommentar: blog-import/ fuer den Worker und die Blog-Sprachen der Profile
     import site_content_blog as CBL; CBL.publish(write, LRN.ENTS)   # T15: freigegebene Content-Pakete imports/blog/<sprache>/*.md -> blog-content/index.json (Worker-Cron importContentBlog)
     for _p in _posts:
@@ -1444,6 +1455,9 @@ def build():
 
     PRS.build_press(dict(write=write, page=page, header=header, footer=footer, footer_en=footer_en, BASE=BASE, LANGS=LANGS, sitemap=sitemap, TODAY=TODAY, n_eps=len(items), n_langs=len(active),
                          EMAIL=SL.CONTACT_EMAIL, MVP=MVP, LINKEDIN=LINKEDIN, YT=YT_CHANNEL, person_ld=person_ld, org_ld=org_ld))
+    # T37 Sponsor-Seite: /sponsor/ + /<lang>/sponsor/ (alle Sprachen, ein hreflang-Cluster, Sitemap, Suchindex); vor finish_hreflang/Sitemaps/Suche
+    SPN.build(dict(write=write, page=page, header=header, footer=footer, BASE=BASE, LANGS=LANGS, sitemap=sitemap, TODAY=TODAY, api=COMMUNITY_API,
+                   n_main=len(PP.episode_index(BASE)["items"]), n_langs=len(active), ents=LRN.ENTS, day=_SU.day))
 
     # Kategorie-Seiten (indexierbar, in Sitemap) und Tag-Seiten (noindex,follow – nur für die interne Verlinkung)
     def rows_html(lst):
