@@ -1,0 +1,865 @@
+WEBVTT
+
+00:00:03.500 --> 00:00:07.200
+Heute sprechen wir über ein Azure Feature, von dem Sie sicher schon gehört haben, das Sie aber vielleicht noch nicht ganz verstehen.
+
+00:00:07.800 --> 00:00:10.860
+Azure Policy ist eines der mächtigsten Governance-Tools der gesamten Plattform.
+
+00:00:11.320 --> 00:00:14.280
+Doch die meisten ignorieren es oder halten es nur für IT-Administratoren für relevant.
+
+00:00:15.480 --> 00:00:21.100
+Am Ende dieser Folge werden Sie wissen, was Azure Policy eigentlich ist, wie es wie ein unsichtbares Regelwerk funktioniert
+
+00:00:21.100 --> 00:00:23.780
+und warum es für eine sichere Azure-Umgebung unverzichtbar ist.
+
+00:00:25.300 --> 00:00:28.340
+Wir unterteilen es in klare Bausteine, angefangen bei dem Problem, das es löst.
+
+00:00:28.860 --> 00:00:30.240
+Schnappen Sie sich Ihren Kaffee und legen wir los.
+
+00:00:30.240 --> 00:00:33.320
+Das Problem, warum die Cloud Light Planken braucht.
+
+00:00:33.940 --> 00:00:35.380
+Denken Sie an die alte Vorgehensweise.
+
+00:00:36.160 --> 00:00:40.100
+On-Premises mussten Sie eine Anfrage an das Betriebsteam stellen, wenn Sie einen Server benötigten.
+
+00:00:40.900 --> 00:00:45.420
+Die prüften die Regeln, Unternehmensrichtlinien, Sicherheitsstandards und vielleicht regulatorische Vorgaben
+
+00:00:45.420 --> 00:00:47.300
+und stellten dann den Server für Sie bereit.
+
+00:00:47.860 --> 00:00:50.060
+Ein menschlicher Wächter stand zwischen Ihnen und der Infrastruktur.
+
+00:00:50.520 --> 00:00:52.760
+Diese Person kannte die Regeln und stellte sicher, dass nichts durchs Wasser fiel.
+
+00:00:53.100 --> 00:00:54.240
+Die Cloud stellt das komplett auf den Kopf.
+
+00:00:54.720 --> 00:00:57.460
+Jetzt hat der App-Besitzer direkten Zugriff, ohne dass ein Mensch dazwischen steht.
+
+00:00:57.460 --> 00:01:00.460
+Klicken Sie im Azure-Portal auf Erstellen und es passiert sofort.
+
+00:01:01.540 --> 00:01:05.540
+Sie können auch die Befehlszeile einer API oder Infrastructure-as-Code-Tools wie Terraform nutzen.
+
+00:01:06.200 --> 00:01:08.900
+Der Punkt ist, niemand prüft Ihre Arbeit, bevor die Ressource erstellt wird.
+
+00:01:09.360 --> 00:01:10.300
+Und genau da beginnt das Problem.
+
+00:01:10.720 --> 00:01:12.100
+Die meisten App-Besitzer kennen nicht alle Regeln.
+
+00:01:12.500 --> 00:01:15.880
+Vielleicht ist Ihnen nicht klar, dass die Unternehmensrichtlinie vorschreibt, dass alle Daten in Europa bleiben müssen.
+
+00:01:16.400 --> 00:01:18.440
+Oder dass Storage-Accounts den öffentlichen Zugriff blockieren müssen.
+
+00:01:18.580 --> 00:01:21.920
+Oder dass bestimmte VM-Größen teuer sind und nur in der Produktion verwendet werden sollten.
+
+00:01:22.400 --> 00:01:24.480
+Sie erstellen also Ressourcen und manchmal passieren Fehler.
+
+00:01:24.480 --> 00:01:28.680
+Eine virtuelle Maschine wird mit einer öffentlichen IP und offenen Ports zum Internet bereitgestellt.
+
+00:01:29.020 --> 00:01:32.980
+Ein Storage-Account wird mit öffentlichem Block-Zugriff erstellt, wodurch sensible Daten exponiert werden.
+
+00:01:33.600 --> 00:01:37.380
+Jemand startet eine teure GPU-Instanz für einen kurzen Test und vergisst sie zu löschen.
+
+00:01:37.900 --> 00:01:38.900
+So etwas passiert ständig.
+
+00:01:39.640 --> 00:01:44.580
+Was wir brauchen ist ein automatisches Durchsetzungssystem, das jedes Mal funktioniert, egal wer die Ressource erstellt oder wie er es tut.
+
+00:01:45.420 --> 00:01:48.920
+Egal ob über das Portal, das CLI, eine API-Aufruf oder eine Terraform-Bereitstellung.
+
+00:01:48.920 --> 00:01:50.740
+Die Regeln sollten automatisch geprüft werden.
+
+00:01:51.360 --> 00:01:52.940
+Und genau das bietet Azure Policy.
+
+00:01:54.200 --> 00:01:56.400
+Was ist Azure Policy, das unsichtbare Regelwerk?
+
+00:01:56.840 --> 00:01:57.700
+Was also ist Azure Policy?
+
+00:01:58.040 --> 00:01:59.000
+Ist die einfachste Definition.
+
+00:01:59.440 --> 00:02:04.100
+Azure Policy ist ein Dienst, mit dem Sie Regeln für Ihre Azure-Ressourcen festlegen und diese automatisch durchsetzen können.
+
+00:02:04.580 --> 00:02:06.200
+Stellen Sie es sich wie das Regelbuch für ein Brettspiel vor.
+
+00:02:06.560 --> 00:02:10.340
+Das Spiel bietet viele mögliche Spielzüge, aber das Regelbuch legt fest, welche davon tatsächlich erlaubt sind.
+
+00:02:10.700 --> 00:02:12.400
+Sie können Ihre Spielfigur nicht einfach beliebig bewegen.
+
+00:02:12.960 --> 00:02:14.540
+Die Regeln sagen dir, was erlaubt ist und was nicht.
+
+00:02:15.080 --> 00:02:16.100
+Hier ist nun ein entscheidender Unterschied.
+
+00:02:16.100 --> 00:02:19.380
+Azure Policy ist nicht dasselbe wie eine rollenbasierte Zugriffskontrolle oder RBC.
+
+00:02:19.740 --> 00:02:21.080
+RBC steuert, wer etwas tun darf.
+
+00:02:21.680 --> 00:02:24.700
+Es beantwortet die Frage, wer darf Ressourcen in diesem Abonnement erstellen.
+
+00:02:25.380 --> 00:02:27.020
+Azure Policy steuert, was getan werden kann.
+
+00:02:27.340 --> 00:02:29.320
+Oder genauer gesagt, welche Konfigurationen zulässig sind.
+
+00:02:29.760 --> 00:02:33.420
+Es beantwortet die Frage, welche Art von Ressourcen dürfen erstellt werden und wie müssen sie konfiguriert sein.
+
+00:02:34.280 --> 00:02:36.600
+Also RBC sagt, Mirko darf Speicherkonten erstellen.
+
+00:02:36.920 --> 00:02:39.860
+Und Azure Policy sagt, Speicherkonten müssen HTTPS aktiviert haben.
+
+00:02:40.380 --> 00:02:41.540
+Zwei verschiedene Dinge und du brauchst beides.
+
+00:02:41.920 --> 00:02:42.680
+Hier ist der entscheidende Punkt.
+
+00:02:43.060 --> 00:02:45.200
+Azure Policy ist immer aktiv und wird immer durchgesetzt.
+
+00:02:45.200 --> 00:02:51.320
+Jede einzelne Anfrage zum Erstellen, Aktualisieren oder Löschen eine Ressource durchläuft Azure Policy und es gibt keinen Weg, dies zu umgehen.
+
+00:02:51.760 --> 00:02:54.800
+Es steht zwischen dir und dem Azure Resource Manager, der Steuerungsebene von Azure.
+
+00:02:55.500 --> 00:02:56.720
+Stell sie wie einen automatischen Filter vor.
+
+00:02:57.180 --> 00:03:01.260
+Jede Anfrage geht durch diesen Filter, entspricht sie nicht den Regeln, wird die Anfrage blockiert oder markiert.
+
+00:03:01.700 --> 00:03:03.000
+Und das gilt nicht nur für neue Ressourcen.
+
+00:03:03.920 --> 00:03:08.520
+Azure Policy bewertet auch vorhandene Ressourcen und erkennt so Konfigurationsabweichungen im Laufe der Zeit.
+
+00:03:08.520 --> 00:03:15.120
+Wenn jemand eine Einstellung an einer bereits bereitgestellten Ressource ändert und diese Änderung gegen eine Richtlinie verstößt, markiert Azure Policy dies.
+
+00:03:15.660 --> 00:03:16.960
+Wie schreibt man also eigentlich diese Regeln?
+
+00:03:17.280 --> 00:03:18.620
+Hier kommen Richtliniendefinitionen ins Spiel.
+
+00:03:20.120 --> 00:03:21.520
+Richtliniendefinitionen, das Schreiben der Regeln.
+
+00:03:22.180 --> 00:03:23.440
+Wie schreibt man also eigentlich diese Regeln?
+
+00:03:23.920 --> 00:03:25.120
+Hier kommen Richtliniendefinitionen ins Spiel.
+
+00:03:25.600 --> 00:03:28.800
+Eine Richtliniendefinition ist die Regel selbst und sie ist als JSON-Dokument geschrieben.
+
+00:03:29.260 --> 00:03:31.840
+JSON mag technisch klingen, aber die Struktur ist eigentlich ziemlich einfach.
+
+00:03:32.360 --> 00:03:33.380
+Sie folgt einem Grundlängenmuster.
+
+00:03:33.380 --> 00:03:36.080
+Wenn diese Bedingung wahr ist, dann wende diesen Effekt.
+
+00:03:36.660 --> 00:03:37.860
+Ich gebe dir ein praktisches Beispiel.
+
+00:03:38.340 --> 00:03:42.460
+Es gibt eine integrierte Richtlinie, die besagt, wenn dein Speicherkonto kein HTTPS aktiviert hat, verweigere es.
+
+00:03:43.120 --> 00:03:43.480
+Das ist alles.
+
+00:03:43.940 --> 00:03:46.640
+Wenn die Bedingung wahr ist, greift der Effekt und blockiert die Bereitstellung.
+
+00:03:47.200 --> 00:03:48.860
+Jede Richtliniendefinition hat drei wichtige Teile.
+
+00:03:49.360 --> 00:03:50.260
+Erstens die Bedingungen.
+
+00:03:50.700 --> 00:03:51.340
+Das ist der Wenn-Teil.
+
+00:03:51.700 --> 00:03:52.380
+Worauf prüfst du?
+
+00:03:52.740 --> 00:03:54.800
+Auf den Ressourcentyp, den Standort, eine bestimmte Einstellung?
+
+00:03:55.360 --> 00:03:56.240
+Zweitens die Effekte.
+
+00:03:56.620 --> 00:03:57.340
+Das ist der Dann-Teil.
+
+00:03:57.780 --> 00:03:59.080
+Was passiert, wenn die Bedingung erfüllt ist?
+
+00:03:59.360 --> 00:04:00.780
+Blockierst du die Bereitstellung oder markierst du sie nur?
+
+00:04:01.480 --> 00:04:02.380
+Drittens Parameter.
+
+00:04:02.380 --> 00:04:04.960
+Das sind die Lückenfüller, die die Richtlinie wiederverwendbar machen.
+
+00:04:05.760 --> 00:04:07.620
+Parameter sind der Punkt, an dem die wahre Stärke liegt.
+
+00:04:08.240 --> 00:04:12.160
+Stell dir vor, du möchtest eine Richtlinie schreiben, die nur Ressourcen in bestimmten Regionen zulässt.
+
+00:04:12.660 --> 00:04:15.700
+Du möchtest nicht für jede mögliche Kombination von Regionen eine eigene Richtlinie schreiben.
+
+00:04:16.200 --> 00:04:18.600
+Stattdessen schreibst du eine Definition namens zulässige Standorte.
+
+00:04:19.100 --> 00:04:20.920
+Und sie fügen ein Parameter für die zulässigen Regionen.
+
+00:04:21.380 --> 00:04:23.160
+Wenn sie die Richtlinie zuweisen, füllen sie die Lücke.
+
+00:04:23.600 --> 00:04:28.240
+Vielleicht wählen sie für eine Subscription West Europe und North Europe und für eine andere East US und West US.
+
+00:04:28.620 --> 00:04:30.240
+Gleiche Definition, andere Parameter.
+
+00:04:30.240 --> 00:04:31.420
+So halten sie alles überschaubar.
+
+00:04:31.420 --> 00:04:32.500
+Ist die gute Nachricht.
+
+00:04:32.840 --> 00:04:34.320
+Sie müssen nicht alles von Grund auf neu schreiben.
+
+00:04:34.680 --> 00:04:38.560
+Microsoft stellt hunderte von integrierten Richtliniendefinitionen bereit, die sie sofort nutzen können.
+
+00:04:39.280 --> 00:04:43.660
+Sie decken Kategorien wie Compute, Storage, Netzwerk, Security Center, Tagging, Kostenmanagement und mehr ab.
+
+00:04:44.300 --> 00:04:47.500
+Sie finden sie im Azure Portal, können nach dem Gewünschten suchen und es sofort zuweisen.
+
+00:04:48.280 --> 00:04:50.160
+Sie benötigen kein JSON, wenn sie es nicht selbst schreiben möchten.
+
+00:04:50.660 --> 00:04:52.660
+Aber eine Definition, die nur in einer Datei liegt, bewirbt nicht.
+
+00:04:52.920 --> 00:04:54.240
+Sie müssen sie zuweisen, damit sie funktioniert.
+
+00:04:55.340 --> 00:04:56.700
+Richtlinienzuweisung regeln die Praxis umsetzt.
+
+00:04:56.700 --> 00:05:00.660
+Bei einer Richtlinienzuweisung nehmen sie ihre Definition und weisen sie einem bestimmten Bereich zu.
+
+00:05:01.060 --> 00:05:02.960
+Ein Bereich ist einfach die Grenze, innerhalb derer die Regel gilt.
+
+00:05:03.460 --> 00:05:05.800
+Sie haben drei Möglichkeiten vom weitesten bis zum engsten Bereich.
+
+00:05:06.180 --> 00:05:09.360
+Weisen sie auf Managementgruppenebene zu, deckt sie eine ganze Reihe von Subscriptions ab.
+
+00:05:09.940 --> 00:05:12.820
+Weisen sie auf Subscription-Ebene zu, gilt sie für alles innerhalb dieser Subscription.
+
+00:05:13.400 --> 00:05:17.360
+Oder weisen sie sie auf Ressourcengruppenebene zu, dann gilt sie nur für die Ressourcen innerhalb dieser Gruppe.
+
+00:05:17.720 --> 00:05:18.900
+Lassen Sie uns nun über Färbung sprechen.
+
+00:05:19.220 --> 00:05:20.020
+Dies ist ein Schlüsselkonzept.
+
+00:05:20.020 --> 00:05:26.320
+Wenn Sie eine Richtlinie auf Managementgruppenebene zuweisen, wird sie automatisch auf alle darunterliegenden Subscriptions und Ressourcengruppen übertragen.
+
+00:05:26.780 --> 00:05:28.120
+Sie müssen sie nicht immer wieder neu zuweisen.
+
+00:05:28.540 --> 00:05:31.480
+Es ist wie ein Aushang am Hauptbrett am Eingang eines Bürogebäudes.
+
+00:05:32.340 --> 00:05:33.900
+Jeder, der dort vorbeikommt, muss sich daran halten.
+
+00:05:34.340 --> 00:05:36.180
+Sie würden die gleiche Regel nicht auf jeder Etage aushängen.
+
+00:05:36.860 --> 00:05:37.760
+Das wäre verschwendete Mühe.
+
+00:05:38.000 --> 00:05:38.980
+Die Regel wird einfach nach unten fangen.
+
+00:05:39.300 --> 00:05:40.860
+Aber was passiert, wenn Sie eine Ausnahme benötigen?
+
+00:05:41.180 --> 00:05:43.600
+Vielleicht schreibt Ihr Unternehmen vor, dass alle Daten in Europa bleiben müssen,
+
+00:05:43.600 --> 00:05:46.440
+aber ein Projekt hat einen triftigen Grund, ein Rechenzentrum in Asien zu nutzen.
+
+00:05:46.820 --> 00:05:49.780
+Sie möchten nicht die gesamte Richtlinie entfernen, da dies alles ungeschützt ließen.
+
+00:05:50.160 --> 00:05:51.080
+Also erstellen Sie eine Ausnahme.
+
+00:05:51.580 --> 00:05:54.720
+Ausnahmen ermöglichen es Ihnen, bestimmte Ressourcen oder Ressourcengruppen auszunehmen,
+
+00:05:55.080 --> 00:05:56.780
+ohne die Richtlinie überall sonst aufzuheben.
+
+00:05:57.040 --> 00:05:58.520
+Das ist eine saubere Methode, um Sonderfälle zu behalten.
+
+00:05:58.940 --> 00:05:59.920
+Hier sind praktische Empfehlungen.
+
+00:06:01.440 --> 00:06:04.440
+Weisen Sie Ihre umfassenden Basisrichtlinien auf Managementgruppenebene zu.
+
+00:06:04.940 --> 00:06:08.140
+Dinge wie zulässige Standorte oder erforderliche Tags sollten für alles gelten.
+
+00:06:08.600 --> 00:06:11.760
+Weisen Sie dann spezifischere Richtlinien auf Subscription- oder Ressourcengruppenebene zu.
+
+00:06:11.820 --> 00:06:15.180
+Vielleicht hat Ihre Entwicklungssubscription lockere Regeln als Ihre Produktionssubscription.
+
+00:06:15.500 --> 00:06:16.760
+Das ist vollkommen in Ordnung.
+
+00:06:16.840 --> 00:06:18.880
+Die spezifischen Richtlinien ergänzen die allgemeinen Richtlinien.
+
+00:06:18.880 --> 00:06:21.680
+Lassen Sie uns jetzt darüber sprechen, was tatsächlich passiert und jemand gegen eine Regel verstößt.
+
+00:06:21.940 --> 00:06:22.740
+Wir kommen Effekte ins Spiel.
+
+00:06:23.880 --> 00:06:25.760
+Effekte, was passiert, wenn Regeln gebrochen werden.
+
+00:06:26.340 --> 00:06:27.720
+Der Mäuse eine Regel erstellt und zugewiesen.
+
+00:06:28.180 --> 00:06:29.420
+Was passiert, wenn jemand dagegen verstößt?
+
+00:06:29.680 --> 00:06:30.480
+Wir kommen Effekte ins Spiel.
+
+00:06:30.960 --> 00:06:32.760
+Effekte sind dann Teil einer Richtlinie.
+
+00:06:33.800 --> 00:06:36.440
+Sie bestimmen, was passiert, wenn eine Ressource nicht der Regel entspricht.
+
+00:06:36.800 --> 00:06:37.900
+Es gibt vier Hauptdaten, die Sie kennen sollen.
+
+00:06:38.340 --> 00:06:39.240
+Erstens, ablehnen den DINI.
+
+00:06:39.680 --> 00:06:41.540
+Dies ist der häufigste Effekt für kritische Regeln.
+
+00:06:41.540 --> 00:06:45.360
+Wenn eine DINI-Richtlinie ausgelöst wird, wird die Bereitstellung vollständig blockiert.
+
+00:06:45.700 --> 00:06:50.140
+Der Benutzer erhält eine klare Fehlermeldung, dass die Validierung fehlgeschlagen ist und welche Richtlinie ihn gestoppt hat.
+
+00:06:50.920 --> 00:06:52.600
+Es wird keine Ressource erstellt, es entsteht kein Schaden.
+
+00:06:53.180 --> 00:06:55.040
+Verwenden Sie dies für Regeln, die niemals gebrochen werden dürfen.
+
+00:06:55.560 --> 00:07:00.120
+Zum Beispiel kein öffentlicher Blobzugriff auf Speicherkonten oder keine Bereitstellungen außerhalb genehmigter Regionen.
+
+00:07:01.180 --> 00:07:02.020
+Zweitens, überprüfen.
+
+00:07:02.400 --> 00:07:03.260
+Dies funktioniert anders.
+
+00:07:03.760 --> 00:07:07.760
+Die Bereitstellung wird durchgeführt, aber die Ressource wird im Compliance-Dashboard als nicht konform markiert.
+
+00:07:07.760 --> 00:07:12.060
+Audit ist unglaublich nützlich, wenn Sie sich nicht sicher sind, wie sich eine neue Regel auf Ihre Umgebung auswirbt.
+
+00:07:12.300 --> 00:07:14.260
+Sie können sehen, was passiert, ohne etwas zu beschädigen.
+
+00:07:14.680 --> 00:07:16.940
+Es ist, als würde man eine Messung durchführen, bevor man eine Änderung ist.
+
+00:07:17.640 --> 00:07:19.040
+Drittens, modifizieren und anhängen.
+
+00:07:19.520 --> 00:07:22.260
+Diese Effekte beheben das Problem automatisch, anstatt es zu blockieren.
+
+00:07:22.900 --> 00:07:24.920
+Modify ändert bestehende Einstellungen während der Bereitstellung.
+
+00:07:25.440 --> 00:07:26.860
+Append fügt einen bestehenden Filteres hinzu.
+
+00:07:27.460 --> 00:07:31.420
+Sie können zum Beispiel eine Richtlinie erstellen, die automatisch ein erforderliches Tag mit einem Standardwert hinzufügt.
+
+00:07:31.740 --> 00:07:35.480
+Wenn jemand vergisst, einen Kostenstellentag hinzuzufügen, ergänzt die Richtlinie es,
+
+00:07:35.480 --> 00:07:38.360
+die Bereitstellung erfolgt und die Ressource ist ohne Zusatzaufwand konform.
+
+00:07:39.560 --> 00:07:41.180
+Viertens, bereitstellen, wenn nicht vorhanden existen.
+
+00:07:41.580 --> 00:07:44.020
+Dies behandelt Situationen, in denen eine unterstützende Ressource fehlt.
+
+00:07:44.460 --> 00:07:47.200
+Angenommen, Sie möchten, dass die Diagnoseprotokollierung für jedes Speicherkonto aktiviert ist.
+
+00:07:47.520 --> 00:07:50.040
+Wenn jemand ein Speicherkonto ohne Diagnoseeinstellungen erstellt,
+
+00:07:50.220 --> 00:07:53.580
+greift DeployIfNotExists ein und stellt die fehlende Konfiguration automatisch bereit.
+
+00:07:54.120 --> 00:07:55.680
+Es ist, als hätte man einen Helfer dahinter am Aufräumen.
+
+00:07:56.040 --> 00:07:57.060
+Hier ist die bewährte Vorgehensweise.
+
+00:07:57.380 --> 00:07:58.080
+Beginnen Sie mit Audit.
+
+00:07:58.400 --> 00:08:00.360
+Sehen Sie sich zuerst an, was in Ihrer Umgebung tatsächlich passiert.
+
+00:08:00.680 --> 00:08:03.140
+Finden Sie heraus, wie viele Ressourcen von einer neuen Regel betroffen wären.
+
+00:08:03.140 --> 00:08:06.040
+Wechseln Sie dann zu den EI, sobald Sie sicher sind, dass die Regel korrekt ist
+
+00:08:06.040 --> 00:08:07.560
+und keine legitimen Bereitstellungen stört.
+
+00:08:07.980 --> 00:08:09.360
+Die Verwaltung einer einzelnen Richtlinie ist ab.
+
+00:08:09.640 --> 00:08:12.900
+Aber was ist, wenn Sie 50 davon benötigen, alle mit Bezug auf Sicherheit oder Compliance?
+
+00:08:13.260 --> 00:08:14.280
+Wir kommen Initiativen ins Spiel.
+
+00:08:15.480 --> 00:08:16.600
+Initiativen, bündeln, regeln.
+
+00:08:17.180 --> 00:08:18.020
+Was ist also eine Initiative?
+
+00:08:18.480 --> 00:08:21.580
+Betrachten Sie sie als eine Sammlung von Richtlinien, die alle um ein gemeinsames Ziel gruppiert sind.
+
+00:08:21.940 --> 00:08:24.620
+Anstatt 50 einzelne Richtlinien nacheinander zuzuweisen,
+
+00:08:24.980 --> 00:08:27.520
+weisen Sie eine einzige Initiative zu, die alle enthält.
+
+00:08:27.800 --> 00:08:30.460
+Es ist wie ein vorgepackter Werkzeugkasten für eine bestimmte Aufgabe.
+
+00:08:30.880 --> 00:08:33.100
+Sie nehmen nicht einzeln einen Hammer, einen Schraubendreher und einen Raubenschlüssel zu haben.
+
+00:08:33.360 --> 00:08:34.620
+Sie schnappen sich ein mit den ganzen Leckerkasten.
+
+00:08:34.940 --> 00:08:36.140
+Alles, was Sie brauchen, ist an einem Ort.
+
+00:08:36.460 --> 00:08:38.180
+Der eigentliche Vorteil hier ist die Compliance-Berichterstattung.
+
+00:08:38.440 --> 00:08:41.980
+Wenn Sie eine Initiative zuweisen, erhalten Sie eine einzige Compliance-Ansicht für die gesamte Gruppe.
+
+00:08:42.160 --> 00:08:45.040
+Sie sehen auf einen Blick, ob Ihre Umgebung den allgemeinen Standard erfüllt.
+
+00:08:45.680 --> 00:08:49.480
+Und wenn etwas nicht konform ist, können Sie direkt in die spezifische Richtlinie eintauchen, die nicht erfüllt ist.
+
+00:08:49.940 --> 00:08:52.320
+Das ist wesentlich übersichtlicher als 50 einzelne Richtlinien nachzuverfahren.
+
+00:08:52.720 --> 00:08:56.060
+Microsoft stellt integrierte Initiativen bereit, die die wichtigsten Compliance-Frameworks abdecken.
+
+00:08:56.580 --> 00:09:03.060
+Dinge wie den Azure Security Benchmark, CIS, NIST, PCI, DSS, HIPA, ISO, 27, KULDA1 und mehr und mehr.
+
+00:09:03.720 --> 00:09:05.400
+Diese sind bereits erstellt und bereit zu zuweisen.
+
+00:09:05.820 --> 00:09:09.240
+Sie müssen nicht herausfinden, welche Richtlinien zu welcher Compliance-Anforderung gehören.
+
+00:09:09.540 --> 00:09:10.960
+Microsoft hat diese Arbeit bereits, wie Sie erledigt.
+
+00:09:11.300 --> 00:09:13.780
+Einige dieser Initiativen enthalten hunderte von einzelnen Richtlinien.
+
+00:09:14.040 --> 00:09:15.740
+Stellen Sie sich vor, Sie müssten all diese einzeln zuweisen.
+
+00:09:16.080 --> 00:09:16.660
+Das würden Sie nicht tun.
+
+00:09:16.660 --> 00:09:17.880
+Sie würden die Initiative verwenden.
+
+00:09:18.140 --> 00:09:20.480
+Sie können auch benutzerdefinierte Initiativen für Ihre eigenen Standards stellen.
+
+00:09:20.480 --> 00:09:25.360
+Vielleicht haben Sie eine Produktions-Baseline, die Richtlinien für Verschlüsselung, Protokollierung und Netzwerksicherheit enthält.
+
+00:09:26.140 --> 00:09:30.100
+Oder eine Initiative für Kostenkontrollstandards, die VM-Größen begrenzt und Kostenstellen tags erfordert.
+
+00:09:30.760 --> 00:09:31.320
+Gleiches Prinzip.
+
+00:09:31.660 --> 00:09:34.860
+Bündeln Sie die Richtlinien, weisen Sie das Bündel zu und verfolgen Sie die Compliance als eine Einheit.
+
+00:09:35.280 --> 00:09:39.020
+Lassen Sie uns dies mit realen Beispielen konkretisieren, wie Leute Azure Policy tatsächlich nutzen.
+
+00:09:40.000 --> 00:09:41.900
+Reale Beispiele, Richtlinien der Praxis.
+
+00:09:42.460 --> 00:09:43.360
+Lassen Sie uns dies konkret machen.
+
+00:09:43.940 --> 00:09:46.980
+Hier sind fünf gängige Szenarien, in denen Azure Policy echte Probleme löst.
+
+00:09:47.660 --> 00:09:49.700
+Erstens regionale Einschränkungen für Datencompliance.
+
+00:09:49.700 --> 00:09:53.860
+Stellen Sie sich vor, Ihr Unternehmen hat die Richtlinie, dass alle Kundendaten in Europa bleiben müssen, müssen.
+
+00:09:54.680 --> 00:09:58.620
+Sie können die integrierte Richtlinie für zulässige Standorte auf der Ebene der Stammverwaltungsgruppe zuweisen
+
+00:09:58.620 --> 00:10:01.540
+und nur EU-Regionen wie Westeuropa und Nordeuropa erlauben.
+
+00:10:02.020 --> 00:10:04.900
+Wenn nun jemand ein neues Abonnement erstellt, erbt es automatisch diese Regel.
+
+00:10:05.720 --> 00:10:08.620
+Sie können keine Ressourcen in den USA oder Asien bereitstellen, selbst wenn Sie es versuchen.
+
+00:10:08.880 --> 00:10:09.740
+Die Richtlinie blockiert dies.
+
+00:10:10.020 --> 00:10:11.940
+Keine manuellen Prüfungen, kein Einholen von Genehmigungen.
+
+00:10:12.080 --> 00:10:13.160
+Die Regel wird einfach durchgesetzt.
+
+00:10:13.520 --> 00:10:15.280
+Zweitens Tagdurchsetzung für die Kostenaufteilung.
+
+00:10:15.280 --> 00:10:18.160
+Ihr Finanzteam muss die Ausgaben nach Abteilungen verfolgen.
+
+00:10:18.160 --> 00:10:21.120
+Was jedoch nicht möglich ist, wenn Ressourcen nicht die richtigen Tags haben.
+
+00:10:21.940 --> 00:10:26.180
+Also erstellen Sie eine Richtlinie, die für jede Ressource einen Kostenstellentag und einen Umgebungstag erfordert.
+
+00:10:27.360 --> 00:10:28.260
+Willkommt der intelligente Tag.
+
+00:10:28.540 --> 00:10:29.560
+Sie verwenden den Modify-Effekt.
+
+00:10:29.980 --> 00:10:33.640
+Wenn jemand vergisst, das Tag hinzuzufügen, fügt die Richtlinie es automatisch mit einem Standardwert hinzu.
+
+00:10:33.880 --> 00:10:36.160
+Die Bereitstellung wird durchgeführt und die Ressource ist konform.
+
+00:10:36.520 --> 00:10:39.840
+Die Finanzabteilung erhält genaue Kostendaten und Entwickler werden nicht durch ein fehlendes Tag blockiert.
+
+00:10:40.120 --> 00:10:41.500
+Drittens Kostenkontrolle in der Entwicklung.
+
+00:10:41.500 --> 00:10:45.220
+Entwicklungsteams experimentieren gerne, doch Experimente können schnell teuer werden.
+
+00:10:45.640 --> 00:10:49.040
+Jemand könnte eine GPU-Instanz mit 24 Kernen starten, nur um ein einfaches Skript zu testen.
+
+00:10:49.400 --> 00:10:53.360
+Also erstellen Sie eine Richtlinie, die VM-Größen in Entwicklungsabonnements auf kleinere SKUs beschränkt.
+
+00:10:53.840 --> 00:10:56.100
+Zum Beispiel B-Serien oder D-Serien mit begrenzten Kernen.
+
+00:10:56.580 --> 00:11:01.720
+Wenn jemand versucht, eine teure GPU oder eine VM mit viel Arbeitsspeicher bereitzustellen, greift der Denier-Effekt und blockiert dies.
+
+00:11:02.240 --> 00:11:04.780
+Entwickler können weiterhin experimentieren, aber das Budget nicht sprengen.
+
+00:11:05.320 --> 00:11:06.820
+Viertens Sicherheitsgrundlage für Speichern.
+
+00:11:06.820 --> 00:11:10.200
+Speicherkonten sind einer der häufigsten Orte für Sicherheitsfehler.
+
+00:11:11.180 --> 00:11:16.000
+Jemand erstellt ein Speicherkonto mit öffentlichem Blob-Zugriff und plötzlich sind sensible Daten im Internet verfügbar.
+
+00:11:16.740 --> 00:11:20.660
+Sie erstellen also eine Richtlinie, die nur HTTPS-Verkehr zulässt und den öffentlichen Blob-Zugriff blockiert.
+
+00:11:21.360 --> 00:11:26.840
+Und Sie nutzen Deploy-If-Not-Exist, um automatisch die Diagnose-Protokollierung für jedes Speicherkonto zu aktivieren, das diese noch nicht hat.
+
+00:11:27.500 --> 00:11:29.420
+Die Richtlinie löst das Problem, bevor es zu einem wird.
+
+00:11:30.140 --> 00:11:31.460
+Fünftens Namenskonventionen.
+
+00:11:31.460 --> 00:11:36.980
+Ihr Team möchte, dass alle Ressourcen mit POT oder DEV beginnen, um die Umgebung leicht zuordnen zu können.
+
+00:11:39.270 --> 00:11:43.970
+Sie erstellen eine Richtlinie, die den Ressourcenamen prüft, aber statt die Bereitstellung zu blockieren, nutzen Sie den Audit-Effekt.
+
+00:11:44.130 --> 00:11:44.970
+Nutzen Sie den Audit-Effekt.
+
+00:11:45.290 --> 00:11:47.430
+Die Ressource wird erstellt, aber ist nicht konform markiert.
+
+00:11:47.850 --> 00:11:51.090
+Dann erstellen Sie einen monatlichen Compliance-Bericht und bitten das Team, die Benennung zu korrigieren.
+
+00:11:51.170 --> 00:11:54.110
+Das ist eine sanfte Methode, Standards durchzusetzen, ohne Arbeitsabläufe zu unterbrechen.
+
+00:11:54.110 --> 00:11:56.230
+Jedes dieser Beispiele folgt demselben Muster.
+
+00:11:56.990 --> 00:12:02.810
+Problem identifizieren, Richtlinie wählen oder erstellen, Effekt festlegen, Bereich zuweisen, Compliance überwachen.
+
+00:12:03.290 --> 00:12:03.970
+Das ist Regelwerk.
+
+00:12:04.530 --> 00:12:08.310
+Lassen Sie uns nun herauszoomen und sehen, wie diese Teile in das größere Azure-Governance-Bild passen.
+
+00:12:09.110 --> 00:12:10.850
+Das große Ganze, wie alles zusammenhängt.
+
+00:12:11.690 --> 00:12:13.490
+Wo passt Azure Policy also in das Gesamtbild?
+
+00:12:14.050 --> 00:12:14.710
+Trachten wir es einmal so.
+
+00:12:15.550 --> 00:12:21.870
+Azure Policy arbeitet auf der Ebene der Steuerungsebene direkt über dem Azure-Resource-Manager und bewertet jede eingehende Anfrage.
+
+00:12:21.870 --> 00:12:27.030
+Jedes Mal, wenn jemand eine Ressource erstellt, aktualisiert oder löscht, prüft Azure Policy die Regeln.
+
+00:12:27.530 --> 00:12:29.010
+Es fungiert als Türsteher am Eingang.
+
+00:12:29.450 --> 00:12:31.590
+Es ist jedoch nicht das einzige Werkzeug im Governance-Werkzeugkasten.
+
+00:12:32.190 --> 00:12:34.110
+Azure Policy ist nur ein Teil eines größeren Systems.
+
+00:12:35.010 --> 00:12:38.830
+Verwaltungsgruppen bilden die Hierarchie, um Abonnements zu organisieren und Regeln skaliert anzuwenden.
+
+00:12:39.690 --> 00:12:42.390
+Die rollenbasierte Zugriffssteuerung entscheidet, wer Zugriff worauf hat,
+
+00:12:42.610 --> 00:12:45.070
+während Azure Policy steuert, welche Konfigurationen zulässig sind.
+
+00:12:45.750 --> 00:12:47.650
+Zusammen bilden sie das Fundament der Cloud-Governance.
+
+00:12:48.030 --> 00:12:48.830
+Nun, hier ist der entscheidende Punkt.
+
+00:12:48.830 --> 00:12:52.250
+Azure Policy ist auch die Engine hinter anderen Diensten, die sie möglicherweise bereits nutzen.
+
+00:12:52.770 --> 00:12:56.710
+Microsoft Defender for Cloud verwendet Azure Policy, um seine Compliance-Empfehlungen zu generieren.
+
+00:12:57.410 --> 00:13:01.490
+Wenn Defender Ihnen meldet, dass ein Speicherkonto nicht konform ist, führt es eigentlich eine Richtlinienbewertung durch.
+
+00:13:02.050 --> 00:13:06.510
+Azure Advisor bezieht viele seiner Empfehlungen zu Kosten und Zuverlässigkeit aus denselben Richtlinienbewertungen.
+
+00:13:07.110 --> 00:13:07.250
+Äh.
+
+00:13:07.250 --> 00:13:11.110
+Und das Compliance-Dashboard im Azure-Portal basiert vollständig auf Richtliniendaten.
+
+00:13:11.470 --> 00:13:15.330
+Auch wenn Sie selbst noch nie eine Richtlinie erstellt haben, haben Sie diese wahrscheinlich unwissentlich bereits genutzt.
+
+00:13:15.810 --> 00:13:17.710
+Es gibt eine weitere Praxis namens Policy as Code.
+
+00:13:18.150 --> 00:13:22.610
+Anstatt Richtlinien über das Portal zu erstellen, speichern Sie diese als JSON-Dateien in einem Git-Repository
+
+00:13:22.610 --> 00:13:25.910
+und stellen sie über CI-CCD-Pipelines bereit, genau wie Anwendungscode.
+
+00:13:26.550 --> 00:13:30.430
+Das ermöglicht Inversionskontrolle, Code-Reviews und automatisierte Tests für Ihre Governance-Regeln.
+
+00:13:30.430 --> 00:13:33.970
+Es ist eine besser skalierbare Methode zur Verwaltung von Richtlinien in großen Unternehmen.
+
+00:13:34.550 --> 00:13:35.930
+Hier ist das Wichtigste, das Sie mitnehmen sollten.
+
+00:13:36.530 --> 00:13:39.650
+Sobald Sie Azure Policy richtig eingerichtet haben, läuft es unbemerkt im Hintergrund.
+
+00:13:40.170 --> 00:13:43.110
+Es ist die automatische Leitplanke, die Probleme verhindert, bevor sie entstehen.
+
+00:13:43.870 --> 00:13:47.410
+Benutzer merken vielleicht gar nicht, dass es da ist, aber Sie profitieren bei jeder Ressourcenbereitstellung davon.
+
+00:13:48.010 --> 00:13:52.970
+Sie erhalten jedes Mal eine konsistente Durchsetzung, ohne manuelle Prüfungen, Genehmigungstickets oder menschliche Fehler.
+
+00:13:53.830 --> 00:13:57.610
+Dass es also Azure Policy einfach erklärt, es ist ein unsichtbares Regelwerk,
+
+00:13:57.610 --> 00:14:00.870
+das die Standards Ihres Unternehmens für jede Ressource jederzeit durchsetzt.
+
+00:14:01.570 --> 00:14:04.370
+Wenn Sie eine einzige Handlung aus dieser Folge mitnehmen möchten, dann diese.
+
+00:14:04.990 --> 00:14:10.570
+Gehen Sie in das Azure-Portal, suchen Sie nach Policy und weisen Sie die integrierte Richtlinie für erlaubte Standorte einer Testsubscription zu.
+
+00:14:11.010 --> 00:14:12.410
+Beginnen Sie mit der Überwachung und sehen Sie, was passiert.
+
+00:14:12.750 --> 00:14:14.550
+Das ist der schnellste Weg, um zu verstehen, wie das funktioniert.
+
+00:14:15.090 --> 00:14:19.290
+Abonnieren Sie für weitere Microsoft-Wissens-Häppchen und teilen Sie dies mit jemandem, der seine Azure-Reise beginnt.
+
+00:14:19.690 --> 00:14:21.750
+Hinterlassen Sie einen Kommentar mit dem, was Sie als nächstes erklären sollen.

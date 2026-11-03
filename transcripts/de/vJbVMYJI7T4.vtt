@@ -1,0 +1,2077 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.420
+Was wäre, wenn eines Ihrer Administrator-Konten genau jetzt gestohlen wird?
+
+00:00:02.660 --> 00:00:05.340
+Kein normales Benutzerkonto, sondern eines von denen mit Zugriff auf alles.
+
+00:00:05.600 --> 00:00:07.940
+Ihr E-Mail-System, Ihre Dateispeicher, Ihre Benutzer-Datenbank.
+
+00:00:08.660 --> 00:00:10.680
+Wie groß wäre der Schaden, bevor Sie es überhaupt bemerken?
+
+00:00:11.180 --> 00:00:12.240
+Hier ist die unbequeme Antwort.
+
+00:00:12.600 --> 00:00:15.220
+Wenn dieser Administrator permanenten Zugriff hat und die meisten haben das,
+
+00:00:15.300 --> 00:00:16.840
+muss der Angreifer nicht erneut einbrechen.
+
+00:00:17.280 --> 00:00:21.020
+Er ist bereits im System, kann jede E-Mail lesen, jedes Passwort ändern und jeden Benutzer löschen.
+
+00:00:21.740 --> 00:00:24.380
+Und er kann das um 3 Uhr morgens an einem Samstag tun, wenn jemand aufpasst.
+
+00:00:24.820 --> 00:00:26.760
+Die meisten Leute halten schwache Passwörter für das Risiko.
+
+00:00:27.000 --> 00:00:27.860
+Und ja, das ist ein Teil davon.
+
+00:00:27.860 --> 00:00:31.120
+Aber das größere Problem ist etwas, worüber die meisten Unternehmen nie nachdenken.
+
+00:00:31.600 --> 00:00:34.420
+Es geht nicht darum, dass Leute Atmanrechte haben, sondern dass sie diese ständig haben,
+
+00:00:34.500 --> 00:00:35.340
+auch wenn sie sie nicht brauchen.
+
+00:00:35.920 --> 00:00:37.900
+Das ist so, als ließe man die Haustür sperrangelweit offen,
+
+00:00:37.940 --> 00:00:39.460
+weil man später vielleicht etwas aus dem Auto holen muss.
+
+00:00:40.160 --> 00:00:43.100
+Am Ende dieser Folge werden Sie verstehen, was Privileged Identity Management ist
+
+00:00:43.100 --> 00:00:44.280
+und warum es diese Probleme löst.
+
+00:00:44.620 --> 00:00:46.660
+Es ist, als würde man jemandem eine Hotelzimmerkarte geben,
+
+00:00:46.720 --> 00:00:49.340
+die genau für die benötigte Zeit funktioniert und sich beim Checkout selbst deaktiviert.
+
+00:00:49.620 --> 00:00:51.640
+Kein permanenter Zugriff, keine offenen Türen.
+
+00:00:52.260 --> 00:00:55.400
+Zuerst sprechen wir darüber, warum permanente Privilegien ein solches Problem darstellen.
+
+00:00:55.400 --> 00:00:57.980
+Das Problem der permanenten Privilegien
+
+00:00:57.980 --> 00:01:01.680
+Permanente Privilegien sind der Fachbegriff für Berechtigungen, die immer aktiv sind,
+
+00:01:01.740 --> 00:01:03.420
+auch wenn man sie nicht benötigt und sie sind überall.
+
+00:01:04.840 --> 00:01:06.040
+Stellen Sie sich das wie ein Bürogebäude vor.
+
+00:01:06.500 --> 00:01:08.720
+Sie haben einen Sicherheitsdienst am Eingang und vielleicht ein Ausweissystem,
+
+00:01:09.100 --> 00:01:11.220
+aber drinnen sind alle Türen die ganze Nacht umverschlossen.
+
+00:01:11.880 --> 00:01:14.160
+Der Serverraum, die Aktenschränke mit Personalunterlagen,
+
+00:01:14.260 --> 00:01:15.740
+die Büros der Geschäftsleitung, alles offen,
+
+00:01:15.740 --> 00:01:18.200
+nur weil eine Person nach Feierabend hereinkommen könnte.
+
+00:01:18.640 --> 00:01:21.240
+Das sind permanente Privilegien in der physischen Welt.
+
+00:01:21.240 --> 00:01:26.500
+Es klingt lächerlich, wenn man es laut ausspricht, aber genau so handhaben die meisten Unternehmen den Admin-Zugriff.
+
+00:01:27.100 --> 00:01:28.220
+Das Problem ist die Angriffsfläche.
+
+00:01:29.020 --> 00:01:33.060
+Wenn ein Admin-Konto durch Phishing, Credential-Stuffing oder einen gestohlenen Laptop kompromittiert wird,
+
+00:01:33.240 --> 00:01:34.800
+hat der Angreifer bereits den Schlüssel zu allem.
+
+00:01:35.660 --> 00:01:38.480
+Er muss keine Rechte eskalieren, da die Privilegien bereits vorhanden sind,
+
+00:01:38.860 --> 00:01:41.440
+und er muss keine zweite Schwachstelle finden, da die erste ihm alles gab.
+
+00:01:42.020 --> 00:01:43.820
+Und hier ist der Teil, der die meisten überrascht.
+
+00:01:44.340 --> 00:01:47.480
+Ein typischer Administrator hat 168 Stunden Zugriff pro Woche.
+
+00:01:48.000 --> 00:01:48.860
+Das ist rund um die Uhr.
+
+00:01:48.860 --> 00:01:51.880
+Aber er nutzt diese Admin-Rechte tatsächlich nur für vielleicht 30 Minuten.
+
+00:01:52.580 --> 00:01:54.240
+30 Minuten von 168 Stunden.
+
+00:01:54.720 --> 00:02:00.080
+Das bedeutet, dass ein erweiterter Zugriff jede Woche 167,5 Stunden lang ungenutzt und ungeschützt herumliegt.
+
+00:02:00.760 --> 00:02:02.220
+Das ist ein riesiges Zeitfenster für einen Angreifer.
+
+00:02:02.680 --> 00:02:04.500
+Realistische Szenarien machen das Ganze noch beängstigender.
+
+00:02:05.040 --> 00:02:06.020
+Eine Phishing-E-Mail kommt durch.
+
+00:02:06.120 --> 00:02:08.460
+Jemand klickt auf den Link und die Anmeldedaten werden gestohlen.
+
+00:02:09.240 --> 00:02:13.080
+Der Angreifer meldet sich um zwei Uhr morgens mit vollem Administrator-Zugriff an, ohne weitere Schritte.
+
+00:02:13.080 --> 00:02:18.740
+Oder ein Laptop wird in einem Café vergessen und der Dieb hat nun ein Gerät mit Zugriff auf ihren gesamten Mandanten.
+
+00:02:19.160 --> 00:02:25.020
+Oder jemand verwendet dasselbe Passwort auf mehreren Seiten, eine wird gehackt und die Admin-Zugangsdaten landen im Dark Web.
+
+00:02:25.600 --> 00:02:28.520
+Das Fazit ist, das Problem ist nicht, dass Leute Admin-Rechte haben.
+
+00:02:29.280 --> 00:02:30.760
+Das Problem ist, dass sie diese ständig haben.
+
+00:02:31.460 --> 00:02:34.800
+Dauerhafte Berechtigungen machen jedes kompromittierte Konto zu einer potenziellen Katastrophe.
+
+00:02:35.380 --> 00:02:38.920
+Und der Schlimmste, die meisten Unternehmen wissen nicht einmal, wie viele permanente Admins sie haben.
+
+00:02:39.560 --> 00:02:43.020
+Was wäre also, wenn es eine Möglichkeit gäbe, den Leuten den Zugriff nur dann zu gewähren, wenn sie ihn wirklich brauchen?
+
+00:02:43.720 --> 00:02:44.220
+Was ist PIM?
+
+00:02:44.960 --> 00:02:46.960
+Genau das leistet Privileged Identity Management.
+
+00:02:47.620 --> 00:02:48.100
+Kurz PIM.
+
+00:02:48.620 --> 00:02:53.580
+Es ist ein Dienst innerhalb von Microsoft Entra, der die Zuweisung von Rollen ändert, nicht die Rollen selbst, diese bleiben gleich arm.
+
+00:02:54.020 --> 00:02:56.000
+Es steuert, wie und wann jemand sie tatsächlich nutzen darf.
+
+00:02:56.400 --> 00:02:57.340
+Hier ist die einfachste Definition.
+
+00:02:57.340 --> 00:03:01.380
+Anstatt jemandem dauerhaft eine Adminrolle zu geben, machen sie ihn berechtigt, sie zu beantragen.
+
+00:03:01.860 --> 00:03:03.520
+Er hat die Befugnisse nicht, bis er sie anfordert.
+
+00:03:03.980 --> 00:03:07.380
+Wenn er anfragt, muss er belegen, dass er sie wirklich benötigt, dann erhält er sie für eine begrenzte Zeit.
+
+00:03:07.820 --> 00:03:09.540
+Und wenn diese Zeit abgelaufen ist, verschwinden die Rechte.
+
+00:03:10.020 --> 00:03:11.660
+Stellen Sie sich wie eine Hotelschlüsselkarte vor.
+
+00:03:12.100 --> 00:03:17.340
+Beim Einchecken erhalten Sie einen Schlüssel für Ihr Zimmer während Ihres Aufenthalts nicht permanenten Zugang zu jedem Zimmer für immer.
+
+00:03:18.040 --> 00:03:20.220
+Wenn Sie versuchen, ihn nach dem Auschecken zu benutzen, bleibt die Tür verschlossen.
+
+00:03:20.580 --> 00:03:21.340
+PIM funktioniert genauso.
+
+00:03:21.660 --> 00:03:26.660
+Sie erhalten keinen permanenten Zugang zur Penthouse Suite, sondern einen Schlüssel, der für ein paar Stunden funktioniert und sich dann selbst entwertet.
+
+00:03:26.660 --> 00:03:28.240
+Lassen Sie uns nur mit einigen Müden auf.
+
+00:03:28.580 --> 00:03:29.640
+PIM ist kein neuer Ersatz von Rollen.
+
+00:03:30.020 --> 00:03:31.520
+Es schafft keine neuen Administratorfunktionen.
+
+00:03:31.940 --> 00:03:33.360
+Es ersetzt weder Passwörter noch MFA.
+
+00:03:33.860 --> 00:03:35.040
+Und es ist nicht nur für IT-Profis.
+
+00:03:35.420 --> 00:03:37.380
+Jede Organisation mit Microsoft Entra kann es nutzen.
+
+00:03:38.060 --> 00:03:40.920
+Es fügt den bereits vorhandenen Rollen lediglich eine Kontrollschicht hinzu.
+
+00:03:41.640 --> 00:03:44.400
+Das Grundkonzept nennt sich Just-in-Time-Zugriff oder JIT.
+
+00:03:44.880 --> 00:03:47.600
+Dänse es sich wie ein zeitlich begrenztes Ticket anstelle eines permanenten Ausweises.
+
+00:03:47.660 --> 00:03:50.420
+Sie erscheinen, fordern das Ticket an, nutzen es und es läuft ab.
+
+00:03:50.880 --> 00:03:52.100
+Keine verbleibenden Berechtigungen.
+
+00:03:52.460 --> 00:03:55.600
+Keine vergessenen Adminkonten, die vor fünf Jahren jemand nutzte und nie gelöscht hat.
+
+00:03:55.600 --> 00:03:58.180
+Sie gibt zwei Arten von Zuweisungen in PIM, berechtigt und aktiv.
+
+00:03:58.580 --> 00:04:00.720
+Berechtigt bedeutet, dass Sie das Recht haben, die Rolle anzufordern.
+
+00:04:01.380 --> 00:04:02.320
+Aktiv bedeutet, Sie haben es bereits.
+
+00:04:02.720 --> 00:04:04.320
+Das ist die alte Methode permanenter Zugriff.
+
+00:04:04.640 --> 00:04:07.440
+Der ganze Sinn von PIM ist, Personen von aktiv auf berechtigt umzustellen.
+
+00:04:07.840 --> 00:04:09.900
+Sie können Ihre Arbeit immer noch erledigen, müssen aber erst anfragen.
+
+00:04:10.240 --> 00:04:12.340
+Wie wirken sich diese zwei Zuweisungsarten der Praxis aus?
+
+00:04:12.700 --> 00:04:13.380
+Schlüsseln wir das auf.
+
+00:04:14.120 --> 00:04:15.740
+Berechtigte versus aktive Zuweisungen.
+
+00:04:16.120 --> 00:04:17.760
+Was ist also der Unterschied zwischen berechtigt und aktiv?
+
+00:04:18.140 --> 00:04:18.780
+Machen wir es konkret.
+
+00:04:19.280 --> 00:04:22.260
+Berechtigt bedeutet, Sie haben das Anrecht auf eine Rolle, besitzen Sie aber noch nicht.
+
+00:04:22.260 --> 00:04:25.480
+Stellen Sie es sich wie eine Mitgliedskarte vor, mit der Sie eine Tür öffnen können,
+
+00:04:25.680 --> 00:04:28.000
+aber nur, wenn Sie sie durchziehen und das System Ihre Berechtigung prüft.
+
+00:04:28.500 --> 00:04:30.200
+Ohne das Durchziehen bewirkt Sie von selbst gar nichts.
+
+00:04:30.840 --> 00:04:32.500
+Sie haben die Karte in der Tasche, aber die Tür bleibt verschlossen.
+
+00:04:32.960 --> 00:04:34.320
+Aktiv bedeutet, Sie haben die Rolle bereits.
+
+00:04:34.820 --> 00:04:36.240
+Das ist die alte Methode permanenter Zugriff.
+
+00:04:36.620 --> 00:04:39.020
+Sie gehen jederzeit durch jede Tür, weil der Ausweis nie abläuft.
+
+00:04:39.600 --> 00:04:42.500
+Das ist sicher praktisch, macht kompromittierte Konten aber auch so gefährlich.
+
+00:04:43.140 --> 00:04:44.700
+Einfach ausgedrückt berechtigt bedeutet, Sie können.
+
+00:04:45.140 --> 00:04:45.860
+Aktiv bedeutet, Sie tun.
+
+00:04:46.200 --> 00:04:47.380
+Dieser Unterschied ist alles entscheidend.
+
+00:04:47.860 --> 00:04:48.800
+Hier ist ein Beispiel aus der Praxis.
+
+00:04:48.800 --> 00:04:50.980
+Stellen Sie sich eine Helpdesk-Technikerin namens Sarah vor.
+
+00:04:51.300 --> 00:04:53.460
+Sie benötigt gelegentlich globalen Administratorzugriff,
+
+00:04:53.600 --> 00:04:55.360
+um ein verzeichnetes Synchronisierungsproblem zu beheben,
+
+00:04:55.440 --> 00:04:56.860
+vielleicht einmal im Monat für etwa 30 Minuten.
+
+00:04:57.340 --> 00:04:59.600
+Ohne PIM würden Sie ihr dauerhaft globale Administratorrechte geben.
+
+00:05:00.020 --> 00:05:01.700
+Nun hat sie diese Macht und um die Uhr,
+
+00:05:02.080 --> 00:05:04.020
+selbst wenn sie schläft oder im Urlaub isst.
+
+00:05:04.860 --> 00:05:06.320
+Wenn Ihr Konto durch Fischen kompromittiert wird,
+
+00:05:06.380 --> 00:05:08.120
+hat der Angreifer die volle Kontrolle über Ihren Mandanten.
+
+00:05:08.480 --> 00:05:10.620
+Mit PIM machen Sie Sarah für den globalen Administrator berechtigt.
+
+00:05:10.960 --> 00:05:12.000
+Sie hat die Rolle im Alltag nicht.
+
+00:05:12.660 --> 00:05:14.140
+Wenn das Synchronisierungsproblem auftritt,
+
+00:05:14.140 --> 00:05:15.660
+aktiviert sie die Rolle für 30 Minuten,
+
+00:05:15.780 --> 00:05:17.340
+behebt das Problem und sie läuft ab.
+
+00:05:17.340 --> 00:05:19.700
+Der Angreifer, der später Ihrer Anmeldedaten steht,
+
+00:05:19.780 --> 00:05:20.220
+findet nichts vor.
+
+00:05:20.920 --> 00:05:22.840
+Keine ständigen Berechtigungen, keine offenen Türen.
+
+00:05:23.240 --> 00:05:24.600
+Dies ist der entscheidende Sicherheitsvorteil.
+
+00:05:25.060 --> 00:05:26.740
+Berechtigt zu sein, bietet einem Angreifer nichts.
+
+00:05:27.360 --> 00:05:28.740
+Er müsste die Rolle ebenfalls aktivieren,
+
+00:05:28.800 --> 00:05:30.960
+was MFA, eine Begründung und eine Genehmigung erfordert.
+
+00:05:31.400 --> 00:05:32.400
+Jeder Schritt ist eine weitere Hürde.
+
+00:05:32.840 --> 00:05:34.820
+Die meisten Angreifer werden sich ein einfacheres Ziel suchen.
+
+00:05:35.280 --> 00:05:36.960
+Nur noch ein kurzer Hinweis zur permanenten Berechtigung.
+
+00:05:37.580 --> 00:05:39.560
+Sie können jemanden dauerhaft für eine Rolle berechtigen,
+
+00:05:39.640 --> 00:05:41.660
+was bedeutet, dass er sie jederzeit ohne Ablaufdatum
+
+00:05:41.660 --> 00:05:42.760
+der Berechtigung aktivieren kann,
+
+00:05:42.760 --> 00:05:44.640
+aber bewährte Methoden raten davon ab.
+
+00:05:45.300 --> 00:05:46.940
+Legen Sie stattdessen eine zeitlich begeinstellte Berechtigung weg.
+
+00:05:47.280 --> 00:05:48.820
+Machen Sie jemanden für ein Jahr, sechs Monate
+
+00:05:48.820 --> 00:05:50.880
+oder was auch immer für Ihr Unternehmen sinnvoll ist, berechtigt.
+
+00:05:51.340 --> 00:05:52.440
+Das erzwingende Überprüfung.
+
+00:05:52.500 --> 00:05:53.200
+Wird das noch benötigt?
+
+00:05:53.560 --> 00:05:54.360
+Wenn ja, verlängern Sie es.
+
+00:05:54.560 --> 00:05:55.160
+Wenn nein, dann Sie es.
+
+00:05:55.640 --> 00:05:57.420
+Andernfalls häufen sich Berechtigungen mit der Zeit an
+
+00:05:57.420 --> 00:05:59.280
+und Sie enden mit dem gleichen Problem wie am Anfang.
+
+00:05:59.700 --> 00:06:01.360
+Zu viele Personen, die zu viel Macht beanspruchen können.
+
+00:06:01.840 --> 00:06:03.920
+Sobald jemand berechtigt ist, wie aktiviert er dann die Rolle?
+
+00:06:04.460 --> 00:06:06.060
+Hier kommen die eigentlichen Sicherheitsschranken ins Spiel.
+
+00:06:07.000 --> 00:06:07.320
+Aktivierungsworkflow.
+
+00:06:07.700 --> 00:06:08.780
+Der Aktivierungsprozess ist der Punkt,
+
+00:06:08.780 --> 00:06:09.960
+an dem PIM seinen Wert wirklich beweist.
+
+00:06:10.160 --> 00:06:11.980
+Gehen wir das Ganze aus der Perspektive des Benutzers.
+
+00:06:12.460 --> 00:06:13.640
+Denken Sie sich vor, jemand namens Sarah
+
+00:06:13.640 --> 00:06:15.600
+muss ein Problem mit der Verzeichnissynchronisierung beheben.
+
+00:06:16.020 --> 00:06:18.360
+Sie öffnet das PIM-Portal innerhalb des Azure-Portals
+
+00:06:18.360 --> 00:06:19.700
+oder des Entra-Admin-Centers,
+
+00:06:19.920 --> 00:06:21.260
+sucht die Rolle, für die sie berechtigt ist,
+
+00:06:21.340 --> 00:06:22.700
+in diesem Fall globale Administrator,
+
+00:06:22.780 --> 00:06:23.720
+und klickt auf Aktivieren.
+
+00:06:24.600 --> 00:06:26.240
+Zuerst wählt sie aus, wie lange sie die Rolle benötigt.
+
+00:06:26.580 --> 00:06:28.120
+Die Standardeinstellung mag acht Stunden sein,
+
+00:06:28.180 --> 00:06:29.900
+aber sie weiß, dass diese Reparatur 30 Minuten dauert.
+
+00:06:30.120 --> 00:06:31.320
+Also setzt sie den Zeitraum auf eine Stunde.
+
+00:06:31.740 --> 00:06:32.800
+Klug, denn kürzer ist immer besser.
+
+00:06:32.980 --> 00:06:34.880
+Der Administrator kann eine maximale Dauer
+
+00:06:34.880 --> 00:06:37.540
+für jede Rolle von 30 Minuten bis zu 24 Stunden festlegen.
+
+00:06:37.980 --> 00:06:39.120
+Sarahs Anfrage für eine Stunde
+
+00:06:39.120 --> 00:06:40.140
+liegt innerhalb dieser Richtlinien.
+
+00:06:40.920 --> 00:06:42.580
+Als nächstes muss sie eine Begründung angeben.
+
+00:06:43.480 --> 00:06:44.020
+Ein echter Grund,
+
+00:06:44.100 --> 00:06:45.360
+nicht einfach nur, ich brauche Admin-Rechte.
+
+00:06:46.100 --> 00:06:46.560
+Sie tippt ein,
+
+00:06:46.640 --> 00:06:48.480
+Behebung des Verzeichnissynchronisierungsproblems,
+
+00:06:48.500 --> 00:06:49.040
+Ticket 98.
+
+00:06:49.340 --> 00:06:50.560
+Das ist keine Bürokratie,
+
+00:06:50.640 --> 00:06:51.600
+sondern schafft eine Prüffahrt.
+
+00:06:52.320 --> 00:06:53.220
+Falls später jemand fragt,
+
+00:06:53.240 --> 00:06:54.440
+warum Sarah am Dienstag um 14
+
+00:06:54.440 --> 00:06:55.980
+globalen Administrator Zugriff hatte,
+
+00:06:56.080 --> 00:06:57.440
+gibt es einen Datensatz mit dieser Begründung.
+
+00:06:57.820 --> 00:06:58.920
+Wenn MFA erforderlich ist,
+
+00:06:58.940 --> 00:06:59.680
+und das sollte es sein,
+
+00:06:59.680 --> 00:07:00.840
+wird Sarah erneut aufgefordert,
+
+00:07:00.900 --> 00:07:02.260
+obwohl sie bereits im Portal angemeldet ist.
+
+00:07:02.620 --> 00:07:03.740
+PIM verlangt einen aktuellen Nachweis.
+
+00:07:04.200 --> 00:07:05.340
+Sie öffnet ihre Authenticator-App,
+
+00:07:05.340 --> 00:07:06.240
+bestätigt die Aufforderung
+
+00:07:06.240 --> 00:07:06.760
+und macht weiter.
+
+00:07:07.260 --> 00:07:07.880
+Das ist entscheidend.
+
+00:07:08.360 --> 00:07:09.720
+Wenn Sarahs Passwort gestohlen wurde,
+
+00:07:09.800 --> 00:07:11.300
+der Angreifer aber ihr Telefon nicht besitzt,
+
+00:07:11.360 --> 00:07:12.460
+kann er die Rolle nicht aktivieren.
+
+00:07:13.200 --> 00:07:14.100
+MFA bei der Aktivierung
+
+00:07:14.100 --> 00:07:14.540
+ist der Unterschied
+
+00:07:14.540 --> 00:07:15.620
+zwischen einem kompromittierten Konto
+
+00:07:15.620 --> 00:07:16.620
+und einem eingedämmten Vorfall.
+
+00:07:17.280 --> 00:07:18.640
+Wenn eine Genehmigung erforderlich ist,
+
+00:07:18.680 --> 00:07:20.260
+geht die Anfrage an einen benannten Genehmiger,
+
+00:07:20.980 --> 00:07:22.120
+vielleicht Sarahs Manager
+
+00:07:22.120 --> 00:07:23.440
+oder ein Mitglied des Sicherheitsteams.
+
+00:07:24.060 --> 00:07:25.260
+Sie erhalten eine Benachrichtigung,
+
+00:07:25.260 --> 00:07:26.020
+prüfen die Begründung
+
+00:07:26.020 --> 00:07:27.120
+und genehmigen oder lehnen ihn an.
+
+00:07:27.600 --> 00:07:28.700
+Einige Organisationen
+
+00:07:28.700 --> 00:07:30.060
+verlangen für die sensibelsten Rollen
+
+00:07:30.060 --> 00:07:30.780
+mehrere Genehmiger.
+
+00:07:31.120 --> 00:07:32.080
+Die Idee dahinter ist einfach,
+
+00:07:32.460 --> 00:07:33.380
+keine einzelne Person
+
+00:07:33.380 --> 00:07:34.060
+sollte sich selbst
+
+00:07:34.060 --> 00:07:35.300
+unbegrenzte Rechte einräumen können,
+
+00:07:35.360 --> 00:07:36.540
+ohne dass jemand anderes zustimmt,
+
+00:07:36.620 --> 00:07:37.240
+ohne dass zustimmt.
+
+00:07:37.600 --> 00:07:38.160
+Nach der Genehmigung
+
+00:07:38.160 --> 00:07:38.800
+wird die Rolle aktiviert.
+
+00:07:39.380 --> 00:07:40.160
+Sarah hat nun für eine Stunde
+
+00:07:40.160 --> 00:07:41.200
+globalen Administrator zugrückt.
+
+00:07:41.680 --> 00:07:43.080
+Sie eröffnet das Entra-Admin-Center,
+
+00:07:43.360 --> 00:07:43.940
+navigiert zu den
+
+00:07:43.940 --> 00:07:44.980
+Synchronisierungseinstellungen,
+
+00:07:45.100 --> 00:07:45.740
+behebt das Problem,
+
+00:07:45.900 --> 00:07:46.520
+schließt das Portal
+
+00:07:46.520 --> 00:07:48.320
+und kehrt zu ihrer normalen Arbeit zurück.
+
+00:07:48.820 --> 00:07:49.520
+Der Clou dabei ist,
+
+00:07:49.540 --> 00:07:50.260
+sie muss nicht daran denken,
+
+00:07:50.320 --> 00:07:50.980
+es wieder auszuschalten.
+
+00:07:51.800 --> 00:07:53.280
+Pim übernimmt das Ablaufdatum automatisch.
+
+00:07:53.400 --> 00:07:54.580
+Wenn die Stunde um ist,
+
+00:07:54.640 --> 00:07:55.660
+wird die Rolle deaktiviert
+
+00:07:55.660 --> 00:07:56.820
+und Sarahs Zugriff
+
+00:07:56.820 --> 00:07:57.800
+fällt auf ihre normalen
+
+00:07:57.800 --> 00:07:58.940
+Benutzerberechtigungen zurück.
+
+00:07:59.480 --> 00:08:00.780
+Es gibt keine verbleibenden Privilegien
+
+00:08:00.780 --> 00:08:01.900
+oder vergessene Admin-Sitzungen.
+
+00:08:02.440 --> 00:08:03.160
+Sie kann die Rolle auch
+
+00:08:03.160 --> 00:08:04.440
+manuell vorzeitig deaktivieren,
+
+00:08:04.500 --> 00:08:05.320
+wenn sie schneller fertig ist
+
+00:08:05.320 --> 00:08:05.880
+als erwartet.
+
+00:08:06.540 --> 00:08:07.700
+Sarah hat also genau den Zugriff,
+
+00:08:07.740 --> 00:08:08.260
+den sie brauchte,
+
+00:08:08.280 --> 00:08:08.860
+für genau die Zeit,
+
+00:08:08.920 --> 00:08:09.500
+die sie benötigte,
+
+00:08:09.540 --> 00:08:10.720
+bei vollständiger Nachvollziehbarkeit.
+
+00:08:11.260 --> 00:08:11.980
+Hätte in dieser Stunde
+
+00:08:11.980 --> 00:08:13.360
+jemand ihre Zugangsdaten gestohlen,
+
+00:08:13.600 --> 00:08:14.680
+wäre das Zeitfenster für Schäden
+
+00:08:14.680 --> 00:08:15.260
+sehr klein gewesen
+
+00:08:15.260 --> 00:08:16.580
+und jede Aktion wäre protokolliert worden.
+
+00:08:16.820 --> 00:08:17.900
+Das ist der Kernarbeitsablauf
+
+00:08:17.900 --> 00:08:18.420
+für Entrarollen,
+
+00:08:18.540 --> 00:08:19.520
+aber Pim kann noch mehr.
+
+00:08:20.060 --> 00:08:20.640
+Es funktioniert auch
+
+00:08:20.640 --> 00:08:21.680
+für Gruppen und Azure-Ressourcen.
+
+00:08:23.750 --> 00:08:24.270
+Pim für Gruppen.
+
+00:08:24.830 --> 00:08:25.350
+Pim ist nicht nur
+
+00:08:25.350 --> 00:08:26.550
+für einzelne Admin-Rollen gedacht,
+
+00:08:26.630 --> 00:08:28.030
+es verwaltet auch Gruppenmitgliedschaften
+
+00:08:32.090 --> 00:08:32.330
+können.
+
+00:08:33.090 --> 00:08:35.070
+Microsoft 365 Gruppen,
+
+00:08:35.170 --> 00:08:35.890
+die sie für Teams,
+
+00:08:36.310 --> 00:08:37.270
+gemeinsame Postfächer
+
+00:08:37.270 --> 00:08:38.350
+und Zusammenarbeit nutzen,
+
+00:08:38.710 --> 00:08:39.690
+sowie Sicherheitsgruppen,
+
+00:08:39.930 --> 00:08:41.070
+mit denen sie Zugriff auf Apps,
+
+00:08:41.230 --> 00:08:42.890
+Ressourcen oder Berechtigungen gewähren.
+
+00:08:44.330 --> 00:08:45.590
+Pim arbeitet mit zugewiesenen Gruppen,
+
+00:08:45.690 --> 00:08:46.290
+nicht mit dynamischen.
+
+00:08:46.730 --> 00:08:48.170
+Dynamische Gruppen basieren auf Regeln,
+
+00:08:48.230 --> 00:08:48.970
+sodass sich die Mitgliedschaft
+
+00:08:48.970 --> 00:08:49.710
+automatisch ändert,
+
+00:08:49.810 --> 00:08:50.690
+aber Pim benötigt Gruppen,
+
+00:08:50.750 --> 00:08:51.330
+in denen sie Personen
+
+00:08:51.330 --> 00:08:52.490
+explizit hinzufügen und entfernen.
+
+00:08:52.590 --> 00:08:53.290
+Wie funktioniert das also?
+
+00:08:53.550 --> 00:08:54.130
+Sie können jemanden
+
+00:08:54.130 --> 00:08:54.970
+als berechtigten Besitzer
+
+00:08:54.970 --> 00:08:56.130
+oder Mitglied einer Gruppe einsetzen.
+
+00:08:56.370 --> 00:08:57.290
+Die Mitgliedschaft besteht erst,
+
+00:08:57.330 --> 00:08:58.170
+wenn die Person sie aktiviert.
+
+00:08:58.630 --> 00:08:59.330
+Sobald dies geschieht,
+
+00:08:59.410 --> 00:09:00.270
+erhält sie alle mit der Gruppe
+
+00:09:00.270 --> 00:09:01.270
+verbundenen Berechtigungen
+
+00:09:02.090 --> 00:09:02.450
+Aktivierung,
+
+00:09:02.530 --> 00:09:03.310
+wird sie wieder entfernt.
+
+00:09:03.770 --> 00:09:04.490
+Hier ist ein praktisches Beispiel.
+
+00:09:05.010 --> 00:09:06.190
+Stellen Sie sich ein Projektteam vor,
+
+00:09:06.250 --> 00:09:07.010
+das an einer vertraulichen
+
+00:09:07.010 --> 00:09:08.230
+Dokumentenbibliothek arbeitet,
+
+00:09:08.330 --> 00:09:08.790
+die nur Mitglieder
+
+00:09:08.790 --> 00:09:09.330
+in einer bestimmten
+
+00:09:09.330 --> 00:09:10.350
+Sicherheitsgruppe zugänglich ist.
+
+00:09:10.910 --> 00:09:11.670
+Normalerweise ist niemand
+
+00:09:11.670 --> 00:09:12.990
+im Unternehmen Mitglied dieser Gruppe.
+
+00:09:13.910 --> 00:09:14.830
+Wenn jemand aus dem Projekt
+
+00:09:14.830 --> 00:09:15.590
+Zugriff benötigt,
+
+00:09:15.670 --> 00:09:16.290
+aktiviert er seine
+
+00:09:16.290 --> 00:09:17.110
+Mitgliedschaft in Pim,
+
+00:09:17.210 --> 00:09:18.470
+erhält für einige Stunden Zugriff,
+
+00:09:18.570 --> 00:09:19.390
+erledigt seine Arbeit
+
+00:09:19.390 --> 00:09:20.690
+und die Mitgliedschaft läuft ab.
+
+00:09:21.750 --> 00:09:22.750
+Danach ist die Dokumentenbibliothek
+
+00:09:22.750 --> 00:09:23.190
+wieder gesperrt.
+
+00:09:23.830 --> 00:09:25.170
+Der Aktivierungsprozess für Gruppen
+
+00:09:25.170 --> 00:09:26.570
+funktioniert genauso wie bei Rollen.
+
+00:09:27.350 --> 00:09:28.370
+MFA, falls erforderlich,
+
+00:09:28.450 --> 00:09:29.730
+Begründung, Genehmigung bei Bedarf,
+
+00:09:29.730 --> 00:09:30.190
+Nachzeitlimit,
+
+00:09:30.270 --> 00:09:31.250
+alles wird protokolliert.
+
+00:09:31.810 --> 00:09:32.450
+Es gelten dieselben
+
+00:09:32.450 --> 00:09:32.990
+Sicherheitsmöglichkeiten.
+
+00:09:33.470 --> 00:09:34.030
+Warum ist das wichtig?
+
+00:09:34.450 --> 00:09:35.570
+Weil Gruppen viel mehr steuern,
+
+00:09:35.670 --> 00:09:36.290
+als sie vielleicht denken.
+
+00:09:37.650 --> 00:09:38.090
+Gruppenmitgliedschaften
+
+00:09:38.090 --> 00:09:39.130
+können Zugriff auf Anwendungen
+
+00:09:39.130 --> 00:09:39.450
+gewähren,
+
+00:09:39.550 --> 00:09:40.290
+Lizenzen zuweisen,
+
+00:09:40.370 --> 00:09:41.050
+oder Berechtigungen für
+
+00:09:41.050 --> 00:09:41.770
+SharePoint-Websites,
+
+00:09:41.890 --> 00:09:42.550
+Teams-Kanäle oder
+
+00:09:42.550 --> 00:09:43.550
+Azure-Ressourcen erteilen.
+
+00:09:44.110 --> 00:09:45.190
+Indem Sie die Gruppenmitgliedschaft
+
+00:09:45.190 --> 00:09:45.990
+berechtigungsbasiert
+
+00:09:45.990 --> 00:09:46.870
+statt dauerhaft gestalten,
+
+00:09:46.970 --> 00:09:47.770
+steuern Sie all diese Dinge
+
+00:09:47.770 --> 00:09:49.050
+über eine einzige PIM-Richtlinie.
+
+00:09:49.670 --> 00:09:50.230
+Wichtig ist,
+
+00:09:50.310 --> 00:09:50.950
+Sie müssen die Gruppen
+
+00:09:50.950 --> 00:09:52.450
+zuerst für PIM-Onboarden.
+
+00:09:52.910 --> 00:09:54.110
+Sie erscheinen nicht automatisch.
+
+00:09:54.550 --> 00:09:55.590
+Sie gehen in das PIM-Portal,
+
+00:09:55.930 --> 00:09:56.430
+suchen die Gruppen
+
+00:09:56.430 --> 00:09:57.170
+in Ihrem Mandanten
+
+00:09:57.170 --> 00:09:58.290
+und wählen diejenige aus,
+
+00:09:58.330 --> 00:09:59.050
+die Sie verwalten möchten.
+
+00:09:59.430 --> 00:10:00.010
+Sobald eine Gruppe
+
+00:10:00.010 --> 00:10:00.710
+eingebunden ist,
+
+00:10:00.770 --> 00:10:01.270
+können Sie es nicht mehr
+
+00:10:01.270 --> 00:10:01.690
+aus PIM informieren.
+
+00:10:01.950 --> 00:10:02.950
+Überlegen Sie also sorgfältig,
+
+00:10:03.010 --> 00:10:03.450
+welche Gruppen
+
+00:10:03.450 --> 00:10:04.690
+dieses Maß an Kontrolle benötigen.
+
+00:10:05.230 --> 00:10:05.990
+Für die meisten Unternehmen
+
+00:10:05.990 --> 00:10:06.470
+sind Gruppen,
+
+00:10:06.570 --> 00:10:07.810
+die Zugriff auf sensible Daten
+
+00:10:07.810 --> 00:10:08.750
+oder kritische Anwendungen
+
+00:10:08.750 --> 00:10:09.110
+gewähren,
+
+00:10:09.190 --> 00:10:10.070
+die besten Kandidaten,
+
+00:10:10.230 --> 00:10:10.930
+die besten Kandidaten.
+
+00:10:11.230 --> 00:10:11.690
+Fangen Sie damit an,
+
+00:10:11.710 --> 00:10:12.110
+Sie können später
+
+00:10:12.110 --> 00:10:13.130
+jederzeit weiterhin zuführen.
+
+00:10:13.490 --> 00:10:13.990
+Und dann gibt es noch
+
+00:10:13.990 --> 00:10:14.650
+Azure-Ressourcen,
+
+00:10:14.750 --> 00:10:15.870
+also die eigentliche Infrastruktur
+
+00:10:15.870 --> 00:10:16.730
+wie virtuelle Maschinen
+
+00:10:16.730 --> 00:10:17.370
+und Datenbanken.
+
+00:10:17.370 --> 00:10:19.630
+PIM für Azure-Ressourcen
+
+00:10:19.630 --> 00:10:20.850
+PIM funktioniert auch
+
+00:10:20.850 --> 00:10:21.770
+für Azure-ABRC-Rolle.
+
+00:10:22.110 --> 00:10:23.270
+Das ist das Berechtigungssystem,
+
+00:10:23.370 --> 00:10:23.730
+das steuert,
+
+00:10:23.810 --> 00:10:24.330
+wer innerhalb ihrer
+
+00:10:24.330 --> 00:10:24.970
+Azure-Abonnements,
+
+00:10:25.070 --> 00:10:25.630
+Ressourcengruppen
+
+00:10:25.630 --> 00:10:26.350
+und einzelnen Ressourcen
+
+00:10:26.350 --> 00:10:26.810
+was tun darf.
+
+00:10:27.250 --> 00:10:28.030
+Das Modell ist dasselbe.
+
+00:10:28.330 --> 00:10:29.330
+Jemand wird für eine Besitzerrolle
+
+00:10:29.330 --> 00:10:30.270
+in einem Abonnement berechtigt,
+
+00:10:30.330 --> 00:10:30.890
+aber diese wird nur
+
+00:10:30.890 --> 00:10:31.990
+für eine Stunde aktiviert,
+
+00:10:32.190 --> 00:10:32.750
+wenn eine Änderung
+
+00:10:32.750 --> 00:10:33.550
+vorgenommen werden muss.
+
+00:10:33.930 --> 00:10:34.950
+Die Person beantragt die Rolle,
+
+00:10:35.050 --> 00:10:35.670
+bekundet den Bedarf,
+
+00:10:35.750 --> 00:10:36.670
+absolviert bei Bedarf MFA
+
+00:10:36.670 --> 00:10:37.190
+und erhält,
+
+00:10:37.330 --> 00:10:37.810
+falls nötig,
+
+00:10:37.910 --> 00:10:38.450
+eine Genehmigung.
+
+00:10:38.850 --> 00:10:39.630
+Dann wird die Rolle aktiviert.
+
+00:10:39.990 --> 00:10:41.010
+Wenn die Zeit abgelaufen ist,
+
+00:10:41.010 --> 00:10:42.110
+wird sie automatisch deaktiviert.
+
+00:10:42.350 --> 00:10:43.170
+Kein dauerhafter Zugriff.
+
+00:10:43.410 --> 00:10:44.090
+Warum ist das getrennt
+
+00:10:44.090 --> 00:10:44.850
+von Intune-Rollen wichtig?
+
+00:10:45.310 --> 00:10:46.050
+Weil Azure-Ressourcen
+
+00:10:46.050 --> 00:10:46.410
+rollen ihre
+
+00:10:46.410 --> 00:10:47.570
+tatsächlich Infrastruktursteuer.
+
+00:10:48.030 --> 00:10:48.790
+Die virtuellen Maschinen,
+
+00:10:48.910 --> 00:10:49.450
+die Datenbanken,
+
+00:10:49.570 --> 00:10:50.230
+die Speicherkonten,
+
+00:10:50.350 --> 00:10:51.230
+das Netzwerk,
+
+00:10:51.830 --> 00:10:52.350
+das sind die Dinge,
+
+00:10:52.450 --> 00:10:52.850
+die ihr Geschäft
+
+00:10:52.850 --> 00:10:53.490
+am Laufen halten.
+
+00:10:53.930 --> 00:10:54.970
+Wenn jemand permanenten
+
+00:10:54.970 --> 00:10:55.790
+Besitzerzugriff auf
+
+00:10:55.790 --> 00:10:56.910
+ein Produktionsabonnement hat,
+
+00:10:57.010 --> 00:10:57.810
+kann er alles löschen
+
+00:10:57.810 --> 00:10:59.430
+und wenn dieses Konto
+
+00:10:59.430 --> 00:11:00.150
+kompromittiert wird,
+
+00:11:00.230 --> 00:11:01.030
+kann das auch der Angreifer.
+
+00:11:01.630 --> 00:11:02.430
+Hier ist ein typisches Beispiel.
+
+00:11:02.950 --> 00:11:03.730
+Ein Entwickler benötigt
+
+00:11:03.730 --> 00:11:04.530
+mitwirkenden Zugriff,
+
+00:11:04.630 --> 00:11:05.250
+um Effekte in einer
+
+00:11:05.250 --> 00:11:06.010
+Produktionsumgebung
+
+00:11:06.010 --> 00:11:06.570
+bereitzustellen.
+
+00:11:06.570 --> 00:11:07.330
+Ohne PIM
+
+00:11:07.330 --> 00:11:08.030
+würden sie ihm
+
+00:11:08.030 --> 00:11:08.870
+permanenten Mitwirkenden
+
+00:11:08.870 --> 00:11:09.390
+Zugriff geben
+
+00:11:09.390 --> 00:11:10.430
+und nun hat er diese Befugnis
+
+00:11:10.430 --> 00:11:11.030
+jeden Tag selbst,
+
+00:11:11.110 --> 00:11:11.830
+wenn er nichts bereitstellt.
+
+00:11:12.350 --> 00:11:13.430
+Mit PIM ist er lediglich berechtigt.
+
+00:11:13.950 --> 00:11:14.590
+Er aktiviert die Rolle
+
+00:11:14.590 --> 00:11:15.890
+beim Öffnen des Bereitstellungsfensters,
+
+00:11:15.990 --> 00:11:16.690
+erledigt seine Arbeit
+
+00:11:16.690 --> 00:11:17.550
+und die Rolle läuft ab.
+
+00:11:18.090 --> 00:11:18.810
+Die restliche Zeit
+
+00:11:18.810 --> 00:11:20.010
+hat er keinen speziellen Zugriff
+
+00:11:20.010 --> 00:11:20.670
+auf die Produktion.
+
+00:11:21.490 --> 00:11:21.930
+Der Kontrast
+
+00:11:21.930 --> 00:11:22.530
+zu permanenten
+
+00:11:22.530 --> 00:11:23.330
+RBC-Zuweisungen
+
+00:11:23.330 --> 00:11:23.810
+ist gravierend.
+
+00:11:24.390 --> 00:11:25.390
+Die meisten Azure-Umgebungen
+
+00:11:25.390 --> 00:11:26.610
+viel zu viele permanente Besitzer.
+
+00:11:27.070 --> 00:11:27.930
+Leute sammeln über Jahre
+
+00:11:27.930 --> 00:11:28.710
+Berechtigungen an
+
+00:11:28.710 --> 00:11:29.770
+und geben sie nie wieder zurück.
+
+00:11:30.270 --> 00:11:30.790
+PIM erzwingt
+
+00:11:30.790 --> 00:11:31.430
+einen sauberen Schnitt.
+
+00:11:31.910 --> 00:11:32.870
+Wenn sie es gerade nicht brauchen,
+
+00:11:32.870 --> 00:11:33.430
+dann haben sie es auch nicht.
+
+00:11:33.830 --> 00:11:34.290
+All dies schafft
+
+00:11:34.290 --> 00:11:35.410
+eine viel sicherere Umgebung,
+
+00:11:35.510 --> 00:11:36.010
+aber wie sieht das
+
+00:11:36.010 --> 00:11:37.110
+in Bezug auf reale Vorteile
+
+00:11:37.110 --> 00:11:37.790
+tatsächlich aus?
+
+00:11:38.950 --> 00:11:39.710
+Sicherheitsvorteil und Audit.
+
+00:11:40.190 --> 00:11:41.290
+Der größte Vorteil ist einfach.
+
+00:11:41.690 --> 00:11:42.710
+Die Reduzierung der Angriffsfläche.
+
+00:11:43.150 --> 00:11:44.370
+Wenn ein Konto kompromittiert wird,
+
+00:11:44.430 --> 00:11:45.650
+aber keine aktiven Rollen besitzt,
+
+00:11:45.730 --> 00:11:46.690
+erreicht der Angreifer nichts.
+
+00:11:47.170 --> 00:11:48.050
+Er ist als Standardbenutzer
+
+00:11:48.050 --> 00:11:49.250
+ohne spezielle Rechte angemeldet.
+
+00:11:49.830 --> 00:11:50.970
+Er kann keine Ressourcen löschen,
+
+00:11:51.070 --> 00:11:52.190
+keine sensiblen Daten lesen,
+
+00:11:52.250 --> 00:11:53.350
+keine Konfigurationen ändern.
+
+00:11:53.910 --> 00:11:55.010
+Die Kompromittierung ist eingedämmt.
+
+00:11:55.550 --> 00:11:56.510
+Aber selbst wenn der Angreifer
+
+00:11:56.510 --> 00:11:57.650
+versucht, eine Rolle zu aktivieren,
+
+00:11:57.730 --> 00:11:58.650
+stößt er auf mehrere Hürden.
+
+00:11:59.450 --> 00:12:00.270
+MFA stoppt jeden,
+
+00:12:00.270 --> 00:12:01.690
+der nicht das Telefon des Benutzers hat.
+
+00:12:02.450 --> 00:12:03.330
+Eine Begründung erfordert
+
+00:12:03.330 --> 00:12:03.830
+eine Erklärung,
+
+00:12:03.890 --> 00:12:04.530
+was getan werden soll.
+
+00:12:04.770 --> 00:12:05.650
+Eine Genehmigung bedeutet,
+
+00:12:05.770 --> 00:12:06.530
+dass jemand anderes zustimmen.
+
+00:12:06.910 --> 00:12:07.530
+Jede Hürde macht es
+
+00:12:07.530 --> 00:12:08.210
+für den Angreifer schwer.
+
+00:12:08.530 --> 00:12:09.890
+Die meisten Angreifer werden aufgeben
+
+00:12:09.890 --> 00:12:10.910
+und sich ein einfacheres Ziel suchen.
+
+00:12:11.070 --> 00:12:11.970
+Dann gibt es noch den Prüffat.
+
+00:12:12.390 --> 00:12:13.450
+Jede Aktivierung wird protokolliert.
+
+00:12:13.710 --> 00:12:14.550
+Wer hat welche Rolle aktiviert?
+
+00:12:14.930 --> 00:12:15.110
+Wann?
+
+00:12:15.430 --> 00:12:15.770
+Wie lange?
+
+00:12:16.270 --> 00:12:16.910
+Welcher Begründung?
+
+00:12:17.370 --> 00:12:17.930
+Wird sie genehmigt?
+
+00:12:18.310 --> 00:12:19.630
+Das ist kein einfaches Anmeldeprotokoll.
+
+00:12:19.970 --> 00:12:21.130
+Es ist eine vollständige Historie
+
+00:12:21.130 --> 00:12:22.010
+jeder privilegierten Aktion.
+
+00:12:22.350 --> 00:12:23.070
+Auditoren lieben das.
+
+00:12:23.350 --> 00:12:24.050
+Sie können nachweisen,
+
+00:12:24.150 --> 00:12:25.110
+dass privilegierter Zugriff
+
+00:12:25.110 --> 00:12:26.230
+zeitlich begrenzt und gründet
+
+00:12:26.230 --> 00:12:26.790
+und genehmigt war.
+
+00:12:26.950 --> 00:12:27.710
+Kein Rätselrat mehr,
+
+00:12:27.810 --> 00:12:28.270
+wer vor sechs Monaten
+
+00:12:28.270 --> 00:12:28.970
+ein Missrater euch gab.
+
+00:12:29.250 --> 00:12:29.930
+PIM unterstützt auch
+
+00:12:29.930 --> 00:12:30.670
+Zugriffsüberprüfungen.
+
+00:12:30.950 --> 00:12:31.870
+Dies sind geplante Prüfungen,
+
+00:12:31.930 --> 00:12:32.930
+bei denen Manager abgleichen,
+
+00:12:33.210 --> 00:12:33.850
+wer noch Anspruch
+
+00:12:33.850 --> 00:12:34.830
+auf bestimmte Rollen hat.
+
+00:12:35.370 --> 00:12:36.050
+Wenn jemand eine Rolle
+
+00:12:36.050 --> 00:12:36.770
+seit sechs Monaten
+
+00:12:36.770 --> 00:12:37.610
+nicht aktiviert hat,
+
+00:12:38.050 --> 00:12:39.190
+benötigt er sie vielleicht nicht mehr.
+
+00:12:39.830 --> 00:12:40.510
+Die Überprüfung kann
+
+00:12:40.510 --> 00:12:41.410
+veraltete Zuweisungen
+
+00:12:41.410 --> 00:12:42.390
+automatisch entfernen.
+
+00:12:43.070 --> 00:12:44.390
+Dies verhindert Privilege Creep.
+
+00:12:45.110 --> 00:12:45.990
+Die schleichende Ansammlung
+
+00:12:45.990 --> 00:12:46.710
+von Berechtigungen,
+
+00:12:46.890 --> 00:12:47.790
+wenn niemand aufräumt.
+
+00:12:48.270 --> 00:12:49.270
+Und es gibt einen direkten Vorteil
+
+00:12:49.270 --> 00:12:50.030
+für den Sicherheitsscore.
+
+00:12:50.530 --> 00:12:51.230
+Die Nutzung von PIM
+
+00:12:51.230 --> 00:12:52.790
+verbessert ihren Identity Secure Score
+
+00:12:52.790 --> 00:12:53.510
+an Microsoft Entra.
+
+00:12:54.030 --> 00:12:54.910
+Microsoft verfolgt,
+
+00:12:54.990 --> 00:12:56.150
+wie gut sie ihre Umgebung schützen
+
+00:12:56.150 --> 00:12:56.930
+und die PIM-Nutzung
+
+00:12:56.930 --> 00:12:57.950
+ist ein wichtiger Faktor.
+
+00:12:58.550 --> 00:12:59.170
+Je mehr rollen sie
+
+00:12:59.170 --> 00:13:00.590
+von permanent aufberechtigt umstellen,
+
+00:13:00.690 --> 00:13:01.530
+desto höher ist ihre Punktzahl.
+
+00:13:02.210 --> 00:13:03.170
+Aber hier ein ehrlicher Hinweis.
+
+00:13:03.650 --> 00:13:04.870
+PIM allein ist kein Allheilmittel.
+
+00:13:05.370 --> 00:13:06.550
+Es muss Teil einer umfassenderen
+
+00:13:06.550 --> 00:13:07.350
+Sicherheitsstrategie sein.
+
+00:13:07.710 --> 00:13:08.330
+Sie benötigen weiterhin
+
+00:13:08.330 --> 00:13:09.290
+sicherer Atme in Starboxdation.
+
+00:13:09.610 --> 00:13:10.350
+Sie benötigen weiterhin
+
+00:13:10.350 --> 00:13:11.130
+richtigen Zugriff.
+
+00:13:11.530 --> 00:13:12.170
+Sie benötigen weiterhin
+
+00:13:12.170 --> 00:13:12.970
+eine gute Passworthygiene.
+
+00:13:14.090 --> 00:13:15.570
+PIM löst ein spezifisches Problem,
+
+00:13:15.690 --> 00:13:16.690
+dauerhafte Privilegien
+
+00:13:16.690 --> 00:13:17.530
+und das sehr gut.
+
+00:13:18.410 --> 00:13:19.090
+Aber es ersetzt nicht
+
+00:13:19.090 --> 00:13:20.090
+alle anderen Sicherheitskontrollen.
+
+00:13:20.750 --> 00:13:21.050
+Dennoch,
+
+00:13:21.170 --> 00:13:22.010
+wenn sie sonst nichts tun,
+
+00:13:22.150 --> 00:13:22.690
+ist die Umstellung
+
+00:13:22.690 --> 00:13:24.130
+ihrer globalen Administratorkonten
+
+00:13:24.130 --> 00:13:25.190
+von permanent aufberechtigt
+
+00:13:25.190 --> 00:13:26.390
+eine der wirkungsvollsten Änderungen.
+
+00:13:26.910 --> 00:13:28.210
+Sie reduzieren ihre Angriffsfläche
+
+00:13:28.210 --> 00:13:29.810
+von 100 Artort 1860 Stunden pro Woche
+
+00:13:29.810 --> 00:13:30.730
+auf ein von ihnen gewähltes
+
+00:13:30.730 --> 00:13:31.530
+kleines Zeitfenster.
+
+00:13:31.890 --> 00:13:32.590
+Das ist schwer zu übertreffen.
+
+00:13:33.170 --> 00:13:33.930
+Häufige Fallstricke
+
+00:13:33.930 --> 00:13:34.650
+und Best Practices.
+
+00:13:35.350 --> 00:13:35.970
+PIM ist mächtig,
+
+00:13:36.030 --> 00:13:36.810
+aber nicht nah und sicher.
+
+00:13:37.330 --> 00:13:38.030
+Menschen machen Fehler.
+
+00:13:38.730 --> 00:13:39.770
+Gehen wir die häufigsten durch,
+
+00:13:39.830 --> 00:13:40.790
+damit sie sie nicht wiederholen.
+
+00:13:41.390 --> 00:13:42.090
+Erstens PIM
+
+00:13:42.090 --> 00:13:44.090
+wie eine Fire-and-Forget-Rakete behandeln.
+
+00:13:44.450 --> 00:13:45.550
+Sie können es nicht einfach einmal einrichten
+
+00:13:45.550 --> 00:13:46.070
+und dann vergessen.
+
+00:13:46.450 --> 00:13:47.410
+Sie müssen regelmäßig nachsehen.
+
+00:13:47.410 --> 00:13:49.050
+Sind die richtigen Rollen abgedeckt?
+
+00:13:49.450 --> 00:13:50.510
+Sind Ihre Aktivierungszeiten
+
+00:13:50.510 --> 00:13:50.990
+noch angemessen?
+
+00:13:51.430 --> 00:13:52.050
+Sind die Genehmigenden
+
+00:13:52.050 --> 00:13:52.850
+immer noch die richtigen Personen?
+
+00:13:53.290 --> 00:13:54.670
+PIM erfordert ständige Aufmerksamkeit.
+
+00:13:55.030 --> 00:13:55.830
+Handeln Sie es wie eine Pflanze,
+
+00:13:55.890 --> 00:13:56.350
+nicht wie einen Stein.
+
+00:13:56.950 --> 00:13:57.310
+Zweitens,
+
+00:13:57.370 --> 00:13:59.170
+zu viele permanent aktive Zuweisungen belassen.
+
+00:13:59.510 --> 00:14:00.490
+Das macht den ganzen Sinn zunichte.
+
+00:14:00.910 --> 00:14:02.290
+Wenn Sie einen globalen Administrator
+
+00:14:02.290 --> 00:14:02.850
+berechtigt machen,
+
+00:14:02.950 --> 00:14:04.530
+aber drei andere permanent aktiv lassen,
+
+00:14:05.030 --> 00:14:06.570
+haben Sie die Angriffsfläche kaum verkleinert.
+
+00:14:07.330 --> 00:14:08.970
+Sie wollen dauerhafte Privilegien eliminieren,
+
+00:14:09.050 --> 00:14:10.030
+nicht nur ein paar Konten verschieben.
+
+00:14:10.550 --> 00:14:11.190
+Seien Sie konsequent.
+
+00:14:11.630 --> 00:14:13.530
+Wenn jemand keinen permanenten Zugriff benötigt,
+
+00:14:13.610 --> 00:14:14.370
+machen Sie ihn berechtigt.
+
+00:14:14.870 --> 00:14:15.610
+Lässt die ganze Idee dahin.
+
+00:14:15.610 --> 00:14:16.250
+Drittens,
+
+00:14:16.390 --> 00:14:17.950
+Aktivierungszeiträume viel zu lang einstellen.
+
+00:14:18.370 --> 00:14:19.870
+Ein 24-Stunden-Aktivierungsfenster
+
+00:14:19.870 --> 00:14:20.970
+ist im Grunde permanenter Zugriff.
+
+00:14:21.290 --> 00:14:22.710
+Der Punkt ist der zeitlich begrenzte Zugriff.
+
+00:14:23.030 --> 00:14:24.550
+Halten Sie die Dauer so kurz wie praktisch möglich.
+
+00:14:24.890 --> 00:14:26.090
+Eine Stunde für die meisten Aufgaben,
+
+00:14:26.190 --> 00:14:27.650
+vier Stunden für größere Wartungsfenster.
+
+00:14:28.150 --> 00:14:28.810
+Alles, was länger ist,
+
+00:14:28.870 --> 00:14:30.030
+benötigt eine ernsthafte Begründung.
+
+00:14:30.910 --> 00:14:31.210
+Viertens,
+
+00:14:31.290 --> 00:14:32.810
+keine MFA bei der Aktivierung verlangt.
+
+00:14:33.150 --> 00:14:34.850
+Dies ist das wichtigste Sicherheitselement überhaupt.
+
+00:14:35.230 --> 00:14:37.130
+Wenn Sie die Rollenaktivierung ohne MFA erlauben,
+
+00:14:37.310 --> 00:14:37.910
+reicht am Angreifer
+
+00:14:37.910 --> 00:14:39.110
+ein gestohlenes Passwort völlig aus.
+
+00:14:39.590 --> 00:14:40.510
+MFA bei der Aktivierung
+
+00:14:40.510 --> 00:14:42.150
+ist für jede sensible Rolle unverzichtbar.
+
+00:14:42.470 --> 00:14:44.010
+Stellen Sie es sich wie einen Empfang vor,
+
+00:14:45.610 --> 00:14:45.990
+würde betreten.
+
+00:14:46.790 --> 00:14:47.190
+Fünftens,
+
+00:14:47.370 --> 00:14:49.150
+ein zu starkes Vertrauen auf berechtigte Zuweisungen
+
+00:14:49.150 --> 00:14:50.530
+ohne angemessene Genehmigungsworkflows.
+
+00:14:51.310 --> 00:14:52.330
+Berechtigt zu sein ist besser,
+
+00:14:52.410 --> 00:14:53.510
+als permanent aktiv zu sein,
+
+00:14:53.570 --> 00:14:54.410
+reicht aber allein nicht aus.
+
+00:14:55.010 --> 00:14:56.150
+Wenn jeder jederzeit
+
+00:14:56.150 --> 00:14:57.810
+und ohne Aufsicht eine Rolle aktivieren kann,
+
+00:14:57.990 --> 00:14:59.630
+haben Sie den Prozess nur um einen Klick erweitert,
+
+00:14:59.710 --> 00:15:00.830
+ohne die Sicherheit wirklich zu erhöhen.
+
+00:15:01.570 --> 00:15:03.130
+Kombinieren Sie für die sensibelsten Rollen
+
+00:15:03.130 --> 00:15:04.530
+die Berechtigung mit einer Genehmigung.
+
+00:15:05.650 --> 00:15:06.010
+Sechstens,
+
+00:15:06.070 --> 00:15:07.130
+das Ignorieren von Notfallkonten,
+
+00:15:07.170 --> 00:15:07.550
+Break Lasker.
+
+00:15:07.990 --> 00:15:09.190
+Sie benötigen Notfallkonten,
+
+00:15:09.230 --> 00:15:10.390
+die PIM vollständig umgehen.
+
+00:15:11.150 --> 00:15:11.890
+Falls etwas schief geht,
+
+00:15:11.950 --> 00:15:13.150
+ein Genehmiger nicht verfügbar ist,
+
+00:15:13.210 --> 00:15:14.050
+eine Richtlinie versagt
+
+00:15:14.050 --> 00:15:15.150
+oder jemand ausgesperrt wird,
+
+00:15:15.250 --> 00:15:16.470
+brauchen Sie einen Zugang.
+
+00:15:17.070 --> 00:15:18.570
+Erstellen Sie ein oder zwei Notfallkonten
+
+00:15:18.570 --> 00:15:20.130
+dauerhaften Zugriff als globale Administrator.
+
+00:15:20.670 --> 00:15:21.730
+Sichern Sie diese mit langen,
+
+00:15:21.850 --> 00:15:22.630
+komplexen Passwörtern.
+
+00:15:23.130 --> 00:15:24.050
+Bewahren Sie sie sicher auf
+
+00:15:24.050 --> 00:15:24.970
+und überwachen Sie sie genau.
+
+00:15:25.350 --> 00:15:26.370
+Sie sollten im normalen Betrieb
+
+00:15:26.370 --> 00:15:27.130
+niemals verwendet werden.
+
+00:15:27.650 --> 00:15:28.870
+Die beste Vorgehensweise ist generell,
+
+00:15:28.930 --> 00:15:29.450
+fangen Sie klein an.
+
+00:15:29.930 --> 00:15:31.390
+Wählen Sie eine risikoreiche Rolle aus.
+
+00:15:31.470 --> 00:15:32.950
+Globaler Administrator ist die logische Wahl
+
+00:15:32.950 --> 00:15:34.450
+und machen Sie diese nur berechtigungsbasiert.
+
+00:15:34.830 --> 00:15:35.690
+Testen Sie den Workflow,
+
+00:15:35.790 --> 00:15:36.790
+schulen Sie Ihre Administratoren
+
+00:15:36.790 --> 00:15:37.790
+und erweitern Sie dies schrittweise
+
+00:15:37.790 --> 00:15:38.370
+auf andere Rollen.
+
+00:15:38.490 --> 00:15:39.670
+Bewachen Sie die Warnmeldung in PIM.
+
+00:15:40.050 --> 00:15:40.510
+Es zeigt Ihnen,
+
+00:15:40.510 --> 00:15:42.130
+ob Sie zu viele globale Administratoren haben,
+
+00:15:42.210 --> 00:15:43.150
+ob Rollen nicht aktiviert werden
+
+00:15:43.150 --> 00:15:44.270
+oder ob etwas ungewöhnlich erscheint.
+
+00:15:44.710 --> 00:15:45.670
+Achten Sie auf diese Signale
+
+00:15:45.670 --> 00:15:46.350
+und kombinieren Sie PIM
+
+00:15:46.350 --> 00:15:47.770
+mit dem bedingten Zugriff Conditional Access.
+
+00:15:47.990 --> 00:15:48.570
+Verlangen Sie stärker
+
+00:15:48.570 --> 00:15:49.590
+Authentifizierungsmethoden
+
+00:15:49.590 --> 00:15:50.390
+für die Rollenaktivierung.
+
+00:15:50.850 --> 00:15:51.190
+Erzwingen Sie,
+
+00:15:51.290 --> 00:15:51.790
+dass die Aktivierung
+
+00:15:51.790 --> 00:15:52.850
+nur von konformen Geräten erfolgt.
+
+00:15:53.150 --> 00:15:54.430
+Fügen Sie Standortbeschränkungen hinzu.
+
+00:15:54.790 --> 00:15:55.830
+Je mehr Ebenen Sie hinzufügen,
+
+00:15:55.910 --> 00:15:56.670
+desto schwieriger machen Sie es
+
+00:15:56.670 --> 00:15:57.150
+für einen Angreifer.
+
+00:15:57.850 --> 00:15:58.770
+Das ist also unser Fazit.
+
+00:15:59.170 --> 00:16:00.250
+Permanenter Administratorzugriff
+
+00:16:00.250 --> 00:16:01.290
+stellt ein enormes Risiko dar.
+
+00:16:01.590 --> 00:16:02.750
+Es ist wie eine unverschlossene Tür,
+
+00:16:02.810 --> 00:16:03.650
+die die ganze Nacht offen steht.
+
+00:16:03.650 --> 00:16:04.750
+PIM ersetzt dies
+
+00:16:04.750 --> 00:16:05.430
+durch temporären
+
+00:16:05.430 --> 00:16:06.430
+Just-in-Time-Zugriff.
+
+00:16:06.870 --> 00:16:07.290
+Ein Schlüssel,
+
+00:16:07.390 --> 00:16:08.330
+der für ein paar Stunden funktioniert
+
+00:16:08.330 --> 00:16:09.190
+und danach seine Gültigkeit.
+
+00:16:09.690 --> 00:16:10.550
+Die wichtigste Maßnahme,
+
+00:16:10.630 --> 00:16:11.490
+die Sie heute ergreifen können,
+
+00:16:11.810 --> 00:16:12.250
+gehen Sie in Ihr
+
+00:16:12.250 --> 00:16:12.910
+Entra-Admin-Center,
+
+00:16:13.150 --> 00:16:13.630
+öffnen Sie PIM,
+
+00:16:14.150 --> 00:16:14.850
+suchen Sie Ihre globalen
+
+00:16:14.850 --> 00:16:15.610
+Administrator-Konten
+
+00:16:15.610 --> 00:16:16.370
+und machen Sie mindestens
+
+00:16:16.370 --> 00:16:17.450
+eines davon berechtigungsbasiert
+
+00:16:17.450 --> 00:16:18.170
+statt permanent aktiv.
+
+00:16:18.550 --> 00:16:19.270
+Diese eine Änderung
+
+00:16:19.270 --> 00:16:20.330
+reduziert Ihre Angriffsfläche
+
+00:16:20.330 --> 00:16:21.790
+von 168 Stunden pro Woche
+
+00:16:21.790 --> 00:16:23.150
+auf das kleine Zeitfenster Ihrer Wahl.
+
+00:16:23.810 --> 00:16:24.110
+Wissen Sie,
+
+00:16:24.190 --> 00:16:25.410
+wie viele permanente Administratoren
+
+00:16:25.410 --> 00:16:25.990
+Sie aktuell haben?
+
+00:16:26.470 --> 00:16:27.310
+Die meisten wissen es nicht
+
+00:16:27.310 --> 00:16:28.110
+und genau das ist das Problem.
+
+00:16:28.550 --> 00:16:29.770
+Wenn Ihnen diese Folge geholfen hat,
+
+00:16:29.870 --> 00:16:30.610
+abonnieren Sie den Kanal
+
+00:16:30.610 --> 00:16:31.890
+für weitere einfache Erklärungen
+
+00:16:31.890 --> 00:16:32.850
+zur Microsoft-Sicherheit.
+
+00:16:33.470 --> 00:16:34.650
+Klicken Sie auf das nächste Video,
+
+00:16:34.790 --> 00:16:35.990
+um mehr über Zugriffsüberprüfungen
+
+00:16:35.990 --> 00:16:36.450
+zu erfahren,
+
+00:16:36.730 --> 00:16:37.230
+wie Sie prüfen,
+
+00:16:37.310 --> 00:16:38.290
+wer noch Berechtigung benötigt.
+
+00:16:38.350 --> 00:16:38.750
+Denn zu wissen,
+
+00:16:38.850 --> 00:16:39.250
+wer Macht hat,
+
+00:16:39.270 --> 00:16:39.850
+ist der erste Schritt,
+
+00:16:39.930 --> 00:16:40.630
+um Sie zu kontrollieren.

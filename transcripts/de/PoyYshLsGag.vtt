@@ -1,0 +1,754 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.360
+Stellen Sie sich einen Sicherheitsschalter am Eingang eines Bürogebäudes vor.
+
+00:00:02.580 --> 00:00:05.540
+Ihr Mann tritt ein, zeigt seinen Ausweis und der Wachmann prüft ihn anhand einer Liste.
+
+00:00:05.900 --> 00:00:07.520
+Die Person trägt sich ein und erhält vielleicht einen Besuch aus.
+
+00:00:07.960 --> 00:00:10.020
+Stellen Sie sich nun vor, dasselbe Gebäude hätte keine Türen oder wenn.
+
+00:00:10.380 --> 00:00:12.540
+Leute könnten jederzeit von überall auf der Welt einfach hineinspazieren.
+
+00:00:13.100 --> 00:00:15.740
+Genau das ist der Unterschied zwischen einem herkömmlichen Netzwerk und einem Cloud-Netzwerk.
+
+00:00:16.440 --> 00:00:19.560
+Am Ende dieser Folge werden Sie verstehen, was Azure Firewall eigentlich ist,
+
+00:00:19.800 --> 00:00:23.840
+warum Cloud-Firewalls völlig anders funktionieren als die physischen Geräte, die sich die meisten vorstellen
+
+00:00:23.840 --> 00:00:28.240
+und wie ein einzelner Dienst den Datenverkehr in ihrer gesamten Azure-Umgebung prüft und steuert.
+
+00:00:28.840 --> 00:00:29.640
+Schlüsseln wir es auf.
+
+00:00:30.000 --> 00:00:32.320
+Zuerst, was eine Firewall ist, ganz ohne Fachchinesisch.
+
+00:00:32.700 --> 00:00:35.340
+Dann, warum die Cloud alles verändert, wie Firewalls funktionieren müssen.
+
+00:00:35.880 --> 00:00:39.560
+Und schließlich, wie Azure Firewall alles zu einem System zusammenfügt, das Sie nutzen können.
+
+00:00:40.220 --> 00:00:41.800
+Schnappen Sie sich einen Kaffee. Fangen wir an.
+
+00:00:42.280 --> 00:00:43.080
+Was ist eine Firewall?
+
+00:00:43.840 --> 00:00:47.880
+Die meisten Leute haben das Wort Firewall tausendmal gehört, aber wenn man Sie bittet zu erklären,
+
+00:00:47.960 --> 00:00:49.820
+was Sie eigentlich tut, werden Sie wahrscheinlich vage.
+
+00:00:50.480 --> 00:00:51.180
+Bleiben wir also einfach.
+
+00:00:51.820 --> 00:00:53.520
+Eine Firewall ist ein Wächter an der Netzwerktür.
+
+00:00:54.300 --> 00:00:57.200
+Jedes Datenpaket, das in Ihr Netzwerk gelangen oder es verlassen will, muss nicht passieren.
+
+00:00:57.200 --> 00:01:00.540
+Und die Firewall prüft jedes Paket, um zu entscheiden, ob es durchgelassen oder blockiert wird.
+
+00:01:01.180 --> 00:01:03.500
+Lange Zeit waren Firewalls physische Geräte.
+
+00:01:04.160 --> 00:01:07.600
+Man kaufte eine, schloss sie im Serverraum an, konfigurierte sie und wartete sie jahrelang.
+
+00:01:08.200 --> 00:01:11.060
+Diese Geräte funktionierten gut, als Ihr Netzwerk noch eine klare Grenze hatte.
+
+00:01:11.720 --> 00:01:14.300
+Ein Büro, eine Internetverbindung, eine einzige Eingangstür.
+
+00:01:15.020 --> 00:01:15.960
+Aber die Cloud funktioniert nicht so.
+
+00:01:16.380 --> 00:01:20.760
+Ihre Anwendungen laufen vielleicht in einer Region, Ihre Datenbank in einer anderen und Ihre Benutzer sind weltweit verstreut.
+
+00:01:21.200 --> 00:01:23.540
+Einige Ihrer Dienste befinden sich in Azure, andere woanders.
+
+00:01:23.880 --> 00:01:24.540
+Es gibt keine Eingangstür.
+
+00:01:25.020 --> 00:01:25.500
+Das ist der Punkt.
+
+00:01:26.200 --> 00:01:29.580
+Sie können keine physische Firewallbox in einem Rechenzentrum installieren, das Ihnen nicht gehört.
+
+00:01:30.140 --> 00:01:33.860
+Und selbst wenn Sie es könnten, würde es nichts nützen, da es keine einzelne Tür mehr zu bewachen gibt.
+
+00:01:34.420 --> 00:01:35.820
+Warum Cloud Firewalls anders sind.
+
+00:01:36.340 --> 00:01:37.940
+In Azure erstellen Sie virtuelle Netzwerke.
+
+00:01:38.380 --> 00:01:41.460
+Stellen Sie sich diese wie private Bereiche in der Cloud vor, in denen Ihre Anwendungen leben.
+
+00:01:41.720 --> 00:01:43.300
+Sie sind nicht an ein physisches Gebäude gebunden.
+
+00:01:43.740 --> 00:01:44.820
+Es sind lediglich logische Räume.
+
+00:01:45.220 --> 00:01:46.100
+Lassen Sie den Datenverkehr betreffen.
+
+00:01:46.480 --> 00:01:48.800
+Der Datenverkehr in diesen virtuellen Netzwerken bewegt sich in zwei Richtungen.
+
+00:01:48.800 --> 00:01:53.700
+Nord-Süd-Verkehr sind Daten, die aus dem Internet in Ihr Netzwerk kommen oder von Ihrem Netzwerk ins Internet gehen.
+
+00:01:54.100 --> 00:01:57.700
+Denn sie ist sich wie Besucher vor, die an Ihrem Gebäude ankommen oder wie Pakete, die nach außen versandt werden.
+
+00:01:58.120 --> 00:02:02.540
+Dann gibt es den Ost-West-Datenverkehr, also Daten, die sich zwischen Ihren eigenen Workloads innerhalb von Azure bewegen.
+
+00:02:02.640 --> 00:02:04.540
+Zwischen Anwendungen, Datenbanken und Speicherkonten.
+
+00:02:05.360 --> 00:02:07.720
+Das ist wie Mitarbeiter, die innerhalb eines Unternehmens zwischen Abteilungen hin und.
+
+00:02:08.080 --> 00:02:09.440
+Beide Richtungen müssen überprüft werden.
+
+00:02:10.060 --> 00:02:13.460
+Wenn ein Hacker in eine Workload eindringt, möchten Sie nicht, dass er sich frei zu anderen bewegt.
+
+00:02:13.940 --> 00:02:14.940
+So verbreiten sich Sicherheitsungen.
+
+00:02:14.940 --> 00:02:20.400
+Ihre Anwendungen verbinden sich auch mit anderen Diensten, Speicherkonten, E-Mail-Diensten oder Drittanbieter-APIs.
+
+00:02:20.880 --> 00:02:23.280
+Und die Firewall kontrolliert auch diese ausgehenden Verbindungen.
+
+00:02:23.860 --> 00:02:26.140
+Sie entscheidet, mit wem Ihre Apps kommunizieren dürfen und mit wem nicht.
+
+00:02:26.460 --> 00:02:26.920
+Das ist der Punkt.
+
+00:02:27.320 --> 00:02:28.940
+Diese Firewall ist kein Gerät, das Sie warten müssen.
+
+00:02:29.340 --> 00:02:31.960
+Sie müssen sie nicht patchen, aktualisieren oder sich sorgen um mangelnde Kapazität machen.
+
+00:02:32.160 --> 00:02:32.740
+Es ist ein Dienst.
+
+00:02:33.080 --> 00:02:34.460
+Microsoft kümmert die gesamte Infrastruktur.
+
+00:02:34.960 --> 00:02:38.520
+Sie legen einfach die Regeln fest und der Dienst setzt sie automatisch skaliert durch.
+
+00:02:38.520 --> 00:02:42.500
+Wenn also Ihr Datenverkehr am Dienstag um 15 Uhr stark ansteigt, wächst die Firewall einfach mehr.
+
+00:02:42.860 --> 00:02:46.140
+Wenn Microsoft einen Sicherheitspatch veröffentlicht, wird diese angewendet, ohne dass Sie es bemerken.
+
+00:02:46.500 --> 00:02:47.280
+Das ist der Cloud-Unterschied.
+
+00:02:47.800 --> 00:02:49.820
+Die Firewall wird zu einer unsichtbaren Infrastruktur.
+
+00:02:50.660 --> 00:02:51.720
+Wir präsentieren Azure Firewall.
+
+00:02:52.180 --> 00:02:53.480
+Was genau ist also Azure Firewall?
+
+00:02:53.920 --> 00:02:56.540
+Es ist eine vollständig verwaltete Cloud-Native-Firewall als Dienst.
+
+00:02:56.860 --> 00:02:58.580
+Ein langer Begriff, aber hier ist, was es in der Praxis bedeutet.
+
+00:02:59.100 --> 00:03:01.300
+Sie stellen Sie über das Azure-Portal in wenigen Minuten bereit.
+
+00:03:01.300 --> 00:03:06.220
+Keine Hardware zu bestellen, keine virtuellen Maschinen zu konfigurieren, kein Betriebssystem zu patchen.
+
+00:03:06.860 --> 00:03:09.680
+Ein paar Klicks Ihr Netzwerk definieren und die Firewall läuft höher.
+
+00:03:10.360 --> 00:03:12.060
+Sie bietet eine integrierte Hochverfügbarkeit.
+
+00:03:12.440 --> 00:03:14.500
+Fällt eine Instanz aus, übernimmt sofort eine andere.
+
+00:03:15.280 --> 00:03:16.400
+Und sie skaliert automatisch.
+
+00:03:17.020 --> 00:03:19.320
+Wenn sich Ihr Datenverkehr verdoppelt, wächst die Firewall mit.
+
+00:03:19.840 --> 00:03:21.800
+Sie müssen nie schätzen, wie viel Kapazität Sie benötigen werden.
+
+00:03:22.300 --> 00:03:25.940
+Am einfachsten lässt es sich mit einem Sicherheitsteam für Ihr Cloud-Bürogebäude vergleichen.
+
+00:03:26.320 --> 00:03:29.940
+Sie müssen nicht jeden Wachmann einzeln verwalten, Schulen oder deren Schichten planen.
+
+00:03:29.940 --> 00:03:36.220
+Sie legen die Richtlinien fest, wer Zutritt hat und welche Pakete erlaubt sind und Sie setzen diese Richtlinien rund um die Uhr durch.
+
+00:03:37.080 --> 00:03:40.840
+Azure Firewall sitzt an einem zentralen Punkt Ihres Netzwerks und prüft alles, was hindurch geht.
+
+00:03:41.600 --> 00:03:46.040
+Sie prüft den Datenverkehr anhand von drei Regeltypen, Nahtregeln, Netzwerkregeln und Anwendungsregeln.
+
+00:03:46.740 --> 00:03:48.120
+Wir gehen gleich auf jeden einzelnen Punkt ein.
+
+00:03:48.540 --> 00:03:50.280
+Hier ist etwas, das den meisten Leuten nicht bewusst ist.
+
+00:03:50.880 --> 00:03:53.120
+Azure Firewall verfügt über integrierte Bedrohungserkennung.
+
+00:03:53.820 --> 00:03:56.060
+Microsoft überwacht ständig globale Angriffsmuster.
+
+00:03:56.060 --> 00:04:01.460
+Bekannte schädliche IP-Adressen, gefährliche Domains und neue Bedrohungen fließen automatisch in Ihre Firewall ein.
+
+00:04:02.340 --> 00:04:09.020
+Wenn also eine Hackergruppe in einem anderen Land Azure Kunden angreift, weiß Ihre Firewall bereits, dass sie diese blockieren muss, bevor sie Ihr Netzwerk erreicht.
+
+00:04:09.580 --> 00:04:12.120
+Der Schutz verbessert sich kontinuierlich, ohne dass Sie etwas tun müssen.
+
+00:04:12.640 --> 00:04:14.980
+Keine manuellen Updates, kein Signatur-Downloads, es passiert einfach.
+
+00:04:15.300 --> 00:04:16.840
+Nicht jeder benötigt das gleiche Schutzniveau.
+
+00:04:16.840 --> 00:04:21.660
+Ein kleines Unternehmen mit einer einzigen Anwendung hat andere Anforderungen, als eine Bank die Finanztransaktionen verarbeitet.
+
+00:04:22.160 --> 00:04:24.200
+Deshalb gibt es Azure Firewall in drei Versionen.
+
+00:04:25.360 --> 00:04:26.060
+Die drei SKUs.
+
+00:04:26.400 --> 00:04:27.760
+Basic, Standard und Premium.
+
+00:04:28.520 --> 00:04:33.020
+Beginnen wir mit Azure Firewall Basic, der Einstiegsoption für kleine Unternehmen und einfachere Umgebungen.
+
+00:04:34.020 --> 00:04:39.860
+Sie verarbeitet bis zu 250 Megabit pro Sekunde an Datenverkehr, was für eine bescheidene Anwendung oder eine Entwicklungsumgebung ausreicht.
+
+00:04:39.860 --> 00:04:48.080
+Basic umfasst grundlegende Netzwerkfilterung, die den Datenverkehr prüft und Regeln basierend auf IP-Adressen und Ports anwendet, sowie Threat Intelligence nur im Warnmodus.
+
+00:04:48.680 --> 00:04:52.040
+Sie warnt Sie also, wenn etwas Verdächtiges auftaucht, blockiert es jedoch nicht automatisch.
+
+00:04:52.660 --> 00:04:58.640
+Stellen Sie sich Basic wie einen Sicherheitsdienst vor, der den Eingang genau beobachtet, ein Problem erkennt und meldet, aber eine Erlaubnis benötigt, bevor er jemanden aufhält.
+
+00:04:59.480 --> 00:05:03.260
+Dann gibt es Azure Firewall-Standard, aus gutem Grund die häufigste Wahl für Unternehmensworkloads.
+
+00:05:03.840 --> 00:05:09.200
+Sie skaliert auf bis zu 30 Gigabit pro Sekunde und bewältigt den Produktionsverkehr der meisten Organisationen problemlos.
+
+00:05:09.860 --> 00:05:16.900
+Bei Standard funktioniert Threat Intelligence sowohl im Warn- als auch im Blockiermodus, sodass die Firewall-bekannte Angreifer automatisch abwehren kann, ohne auf Sie zu warten.
+
+00:05:17.680 --> 00:05:19.220
+Zudem kommt Webkategorienfilterung hinzu.
+
+00:05:19.620 --> 00:05:25.180
+Sie können ganze Kategorien wie soziale Medien oder Glücksspiel im gesamten Netzwerk blockieren und benutzerdefinierte DNS-Konfigurationen nutzen.
+
+00:05:25.680 --> 00:05:28.360
+Standard ist Ihr voll ausgestattetes Sicherheitsteam mit Befugnis zum Handeln.
+
+00:05:28.720 --> 00:05:31.180
+Sie erkennen ein Problem und lösen es sofort, ohne auf eine Genehmigung zu warten.
+
+00:05:31.960 --> 00:05:38.800
+Schließlich gibt es Azure Firewall Premium, entwickelt für hochsensible Umgebungen wie Finanzwesen, Gesundheitswesen, Behörden oder Bereiche mit regulierten Daten.
+
+00:05:38.800 --> 00:05:43.060
+Sie skaliert auf bis zu 100 Gigabit pro Sekunde, aber der eigentliche Unterschied liegt in der Prüftiefe.
+
+00:05:43.460 --> 00:05:49.140
+Premium fügt TLS-Inspektion hinzu, die verschlüsselten Datenverkehr entschlüsselt, den Inhalt prüft und ihn vor der Weiterleitung wieder verschlüsselt.
+
+00:05:49.580 --> 00:05:53.140
+Das ist wichtig, da sich schädlicher Datenverkehr heute meist in verschlüsselten Verbindungen versteckt.
+
+00:05:53.600 --> 00:05:55.240
+Ohne TLS-Inspektion sind Sie praktisch blind.
+
+00:05:55.740 --> 00:06:03.680
+Premium bietet zudem IDPS ein Intrusion Detection and Prevention System mit über 67.000 Signaturen aus mehr als 50 Kategorien, die in Echtzeit aktualisiert werden.
+
+00:06:03.680 --> 00:06:10.200
+Es prüft jedes Paket auf bekannte Angriffsmuster wie SQL-Injection, Malware-Callbacks und Port-Scanning und verwirft den Datenverkehr sofort bei Funden.
+
+00:06:11.020 --> 00:06:18.060
+Premium bietet außerdem URL-Filterungen, mit der Sie gezielt bestimmte Web-Adressen statt ganzer Kategorien erlauben oder blockieren können eine granulare Steuerung auf Seitenebene.
+
+00:06:18.720 --> 00:06:19.800
+Es ist Schutz auf militärischem Niveau.
+
+00:06:20.160 --> 00:06:21.200
+Aber hier ist der intelligenter Ansatz.
+
+00:06:21.620 --> 00:06:23.500
+Stimmen Sie die SGO auf das ab, was Sie wirklich benötigen.
+
+00:06:23.780 --> 00:06:25.660
+Standard deckt die meisten Unternehmensanforderungen ab.
+
+00:06:25.660 --> 00:06:33.280
+Nutzen Sie Premium nur dort, wo sensible Daten eine tiefgreifende Prüfung erfordern, Basic für kleine Umgebungen oder Testzwecke, und zahlen Sie nicht für Funktionen, die Sie nicht nutzen.
+
+00:06:34.380 --> 00:06:35.220
+Architektur und Datenfluss
+
+00:06:35.220 --> 00:06:37.880
+Sobald Sie Ihre SGO ausgewählt haben, stellt sich die nächste Frage.
+
+00:06:38.140 --> 00:06:41.100
+Wie gestalten Sie Ihr Netzwerk, damit die Firewall den Datenverkehr auch tatsächlich prüfen kann?
+
+00:06:41.260 --> 00:06:41.960
+Denn hier ist der Punkt.
+
+00:06:42.500 --> 00:06:45.380
+Eine Firewall funktioniert nur, wenn der Datenverkehr Sie auch wirklich passiert.
+
+00:06:45.540 --> 00:06:48.240
+Wenn Sie sie an der falschen Stelle platzieren, können Sie sie auch gleich weglassen.
+
+00:06:48.940 --> 00:06:51.460
+Der gängigste Ansatz ist die sogenannte Hub-and-Spoke-Architektur.
+
+00:06:52.160 --> 00:06:53.080
+Denken Sie sich ein Fahrradrad vor.
+
+00:06:53.080 --> 00:06:56.340
+Die Nabe-Hoop ist die Mitte, von der die Speichenspokes nach außen führen.
+
+00:06:56.980 --> 00:06:59.040
+In Azure erstellen Sie ein zentrales virtuelles Netzwerk.
+
+00:06:59.520 --> 00:07:01.640
+Das ist der Hub, in dem Ihre Azure Firewall Ihren Platz hat.
+
+00:07:02.040 --> 00:07:05.360
+Dann erstellen Sie mehrere Spoke-Netzwerke, jedes davon für eine separate Workload-Umgebung.
+
+00:07:05.720 --> 00:07:10.200
+Vielleicht ein Spoke für Ihre Web-Anwendung, eines für Ihre Datenbank und ein drittes für Ihre Entwicklungsumgebung.
+
+00:07:10.560 --> 00:07:14.680
+Der gesamte Datenverkehr zwischen den Spokes sowie zwischen den Spokes und dem Internet wird zur Prüfung durch den Hub geleitet.
+
+00:07:15.060 --> 00:07:22.340
+Sie erhalten einen zentralen Sicherheitspunkt für Ihr gesamtes Netzwerk effizient, einheitlich und wesentlich einfacher zu verwalten, als in jedem Spoke eine eigene Firewall zu platzieren.
+
+00:07:23.080 --> 00:07:29.180
+Für größere Unternehmen gibt es außerdem Virtual Van, einen verwalteten Netzwerkdienst, bei dem die Azure Firewall direkt im Hub integriert ist, bei SIT.
+
+00:07:30.020 --> 00:07:31.800
+Der große Vorteil hier ist die Automatisierung.
+
+00:07:32.400 --> 00:07:39.820
+Virtual Van übernimmt das Routing für Sie, sodass der Datenverkehr von Niederlassungen, Remote-Benutzern und Spoke-Netzwerken ohne manuelle Konfiguration durch die Firewall fließt.
+
+00:07:40.420 --> 00:07:42.980
+Es erfordert weniger manuellen Aufwand, ist aber besser für globale Bereitstellung.
+
+00:07:42.980 --> 00:07:44.860
+Was genau prüft die Firewall nun eigentlich?
+
+00:07:45.360 --> 00:07:51.280
+Drei Dinge. Eingehenden Datenverkehr aus dem Internet, ausgehenden Datenverkehr ins Internet und den Ost-West-Datenverkehr zwischen Ihren eigenen Workloads in Nahe von Azure.
+
+00:07:51.800 --> 00:07:52.800
+Dieser dritte Punkt ist entscheidend.
+
+00:07:53.280 --> 00:07:57.280
+Wenn es bei einer Workload zu einer Sicherheitsverletzung kommt, verhindert die Ost-West-Prüfung, dass sie sich auf andere ausbreitet.
+
+00:07:57.620 --> 00:08:00.960
+Ohne sie könnte ein Hacker, der in Ihren Web-Server eindringt, sich ungehindert zu Ihrer Datenbank weiterbewegen.
+
+00:08:01.420 --> 00:08:02.600
+Mit ihr wird diese Bewegung blockiert.
+
+00:08:03.240 --> 00:08:03.940
+Hier ist der Kernpunkt.
+
+00:08:04.280 --> 00:08:06.180
+Datenverkehr wird nur geprüft, wenn da die Firewall passiert.
+
+00:08:06.660 --> 00:08:09.440
+Der Architektur muss also den Datenverkehr zwingend durch diesen zentralen Punkt leiten.
+
+00:08:09.440 --> 00:08:12.120
+Sie müssen das Design so auslegen, dass es keinen alternativen Pfad gibt.
+
+00:08:12.360 --> 00:08:15.040
+Deshalb ist das Bereitstellungsdesign genauso wichtig wie die Regeln selbst.
+
+00:08:15.660 --> 00:08:19.340
+Ein perfektes Regelwerk nützt nichts, wenn der Datenverkehr die Firewall komplett umgehen kann.
+
+00:08:20.160 --> 00:08:20.800
+Vertiefung der Regeln.
+
+00:08:21.360 --> 00:08:24.940
+Sprechen wir nun über die Regeln selbst, denn damit steuern Sie, was durchgelassen wird.
+
+00:08:25.900 --> 00:08:29.300
+Azure Firewall verwendet drei Arten von Regeln und jede erfüllt eine andere Aufgabe.
+
+00:08:30.180 --> 00:08:32.260
+Zunächst Nahtregeln, also die Netzwerkadressübersetzung.
+
+00:08:32.840 --> 00:08:37.040
+Stellen Sie es sich wie einen Empfang vor, der Ihre internen Server hinter der öffentlichen IP-Adresse der Firewall verbirgt.
+
+00:08:37.040 --> 00:08:43.600
+Jemand aus dem Internet verbindet sich mit der IP Ihrer Firewall und diese übersetzt die öffentliche Adresse in die private Adresse Ihres Backend-Servers.
+
+00:08:44.440 --> 00:08:46.180
+Die Außenwelt sieht niemals ihr internes Netzwerk.
+
+00:08:46.680 --> 00:08:47.660
+Ihre Server bleiben unsichtbar.
+
+00:08:48.100 --> 00:08:49.140
+Dann gibt es noch die Netzwerkregeln.
+
+00:08:49.640 --> 00:08:51.740
+Diese basieren auf IP-Adressen, Ports und Protokollen.
+
+00:08:52.320 --> 00:08:55.080
+Layer 3 und Layer 4 Filterung, falls Sie die technischen Begriffe interessieren.
+
+00:08:56.040 --> 00:09:00.240
+Sie können sagen, erlaube Datenverkehr von dieser IP-Adresse an Port, führere ein IP-Adress und blockiere alles andere.
+
+00:09:01.260 --> 00:09:02.260
+Einfach und leistungsstark.
+
+00:09:02.260 --> 00:09:06.160
+Aber hier liegt die Grenze, Netzwerkregeln verstehen nicht um welche Art von Datenverkehr sich an.
+
+00:09:06.600 --> 00:09:08.480
+Sie wissen nur, wohin er geht und welchen Port er verwendet.
+
+00:09:08.820 --> 00:09:10.040
+Drittens, Anwendungsregeln.
+
+00:09:10.660 --> 00:09:11.300
+Diese sind intelligent.
+
+00:09:11.740 --> 00:09:14.620
+Sie filtern basierend auf vollqualifizierten Domänen-Namen und URL-Mustern.
+
+00:09:14.900 --> 00:09:20.840
+Anstatt also Datenverkehr zu einer bestimmten IP-Adresse zuzulassen, sagen Sie, erlaube Datenverkehr zu Microsoft.com oder erlaube Windows-Update-Datenverkehr.
+
+00:09:21.320 --> 00:09:23.020
+Nun versteht die Firewall die Anwendungsschicht.
+
+00:09:23.660 --> 00:09:26.880
+Sie kann basierend auf der Art des Datenverkehrs blockieren oder zulassen, nicht nur basierend auf dem Ziel.
+
+00:09:27.100 --> 00:09:29.100
+Regeln werden nicht einfach in eine flache Liste geworfen.
+
+00:09:29.520 --> 00:09:31.980
+Sie sind in Regelsammlungsgruppen und Regelsammlungen organisiert.
+
+00:09:32.620 --> 00:09:34.200
+Stellen Sie sich diese wie Ordner und unter anderem.
+
+00:09:34.640 --> 00:09:38.340
+Sie könnten eine Gruppe für A-Systeme haben, eine andere für Finanzen, jede mit ihrer eigenen Priorität.
+
+00:09:38.800 --> 00:09:41.620
+Das sorgt für Ordnung, wenn Sie Dutzende oder Hunderte von Regeln haben.
+
+00:09:42.260 --> 00:09:43.140
+Die Reihenfolge ist sehr wichtig.
+
+00:09:43.700 --> 00:09:45.940
+Die Firewall verarbeitet Regeln in einer bestimmten Abfolge.
+
+00:09:46.600 --> 00:09:49.220
+Zuerst Nahtregeln, dann Netzwerkregeln, dann Anwendungsregeln.
+
+00:09:49.780 --> 00:09:51.940
+Innerhalb jedes Typs werden Regeln nach Priorität verarbeitet.
+
+00:09:52.480 --> 00:09:54.000
+Niedrigere Zahlen werden zuerst ausgewertet.
+
+00:09:54.000 --> 00:09:57.880
+Dies ist wichtig, da umfassende Netzwerkregeln, die den gesamten Datenverkehr zulassen, zuerst greifen.
+
+00:09:58.220 --> 00:10:01.760
+Wenn eine Netzwerkregel alles erlaubt, werden die weiter unten stehenden Anwendungsregeln
+
+00:10:01.760 --> 00:10:03.040
+möglicherweise nie ausgewertet.
+
+00:10:03.560 --> 00:10:05.980
+All Ihre sorgfältig erstellten Anwendungsregeln werden nutzlos.
+
+00:10:06.640 --> 00:10:08.460
+IP-Gruppen sind ein weiteres Werkzeug, das man kennen soll.
+
+00:10:08.880 --> 00:10:12.700
+Sie erstellen eine Gruppe von IP-Adressen, geben ihr einen Namen und referenzieren sie in mehreren Regeln.
+
+00:10:13.420 --> 00:10:16.460
+Ändern Sie eine IP-Gruppe, aktualisiert sich jede Regel, die Sie verwendet, automatisch.
+
+00:10:16.800 --> 00:10:18.460
+Das spart Zeit und reduziert Fehler.
+
+00:10:18.620 --> 00:10:22.420
+Besonders nützlich, wenn dieselben IPs in mehreren Regeln vorkommen.
+
+00:10:22.420 --> 00:10:25.240
+Erweiterte Schutzfunktionen.
+
+00:10:25.240 --> 00:10:28.300
+Wege entdecken die Grundlagen ab, aber Azure Firewall Premium geht viel tiefer.
+
+00:10:28.880 --> 00:10:29.940
+Beginnen wir mit Threat Intelligence.
+
+00:10:30.780 --> 00:10:35.460
+Dies ist ein ständig aktualisierter Feed von Microsoft mit bekannten schädlichen IPs, Domänen und URLs.
+
+00:10:36.200 --> 00:10:39.240
+Jede Verbindung, die Ihre Firewall verarbeitet, wird mit diesem Feed abgeglichen.
+
+00:10:39.620 --> 00:10:42.120
+Wenn eine Übereinstimmung gefunden wird, kann Sie sie benachrichtigen oder den Zugriff auf.
+
+00:10:42.260 --> 00:10:44.440
+Keine manuellen Regeln zum Schreiben, keine Listen zur Pflege.
+
+00:10:44.760 --> 00:10:47.320
+Das globale Sicherheitsteam von Microsoft erledigt diese Arbeit für Sie.
+
+00:10:47.320 --> 00:10:50.660
+Dann gibt es noch IDPS, das Intrusion Detection and Prevention System.
+
+00:10:51.000 --> 00:10:54.960
+Das sind über 67.000 Signaturen, die jedes Paket auf bekannte Angriffsmuster prüfen.
+
+00:10:55.340 --> 00:10:59.940
+Dinge wie SQL-Injection-Versuche, bei denen jemand versucht, schädliche Datenbankbefehle über ein Webformular einzuschleusen.
+
+00:11:00.380 --> 00:11:02.740
+Portscanning bei dem Angreifer ihr Netzwerk nach offenen Türen absuchen.
+
+00:11:03.320 --> 00:11:06.660
+Malware-Callbacks, bei denen infizierte Systeme versuchen, einen Befehlsserver zu kontaktieren.
+
+00:11:07.280 --> 00:11:10.780
+Die Firewall erkennt das Muster und verwirft den Datenverkehr, bevor er sein Ziel erreicht.
+
+00:11:11.440 --> 00:11:13.160
+Diese Signaturen werden in Echtzeit aktualisiert.
+
+00:11:13.160 --> 00:11:17.240
+Wenn Microsoft-Sicherheitsteams ein neues Angriffsmuster identifizieren, wird es dem Feed hinzugefügt.
+
+00:11:17.740 --> 00:11:19.420
+Ihre Firewall beginnt sofort damit, es zu blockieren.
+
+00:11:19.880 --> 00:11:21.080
+Kein Warten auf den Patch-Dienstag.
+
+00:11:21.300 --> 00:11:22.280
+Kommen wir zur TLS-Inspektion.
+
+00:11:22.660 --> 00:11:24.380
+Dies ist besonders wichtig für regulierte Umgebung.
+
+00:11:24.780 --> 00:11:28.420
+Verschlüsselter Datenverkehr ist gut für die Privatsphäre, aber auch ideal, um Schadsoftware zu verbergen.
+
+00:11:28.760 --> 00:11:29.480
+Es wissen auch Angreifer.
+
+00:11:29.800 --> 00:11:33.720
+Sie verpacken Ihre Payloads in HTTPS-Verbindungen, da die meisten Firewalls nicht hineinsehen können.
+
+00:11:34.500 --> 00:11:35.320
+Premium-Version kann es.
+
+00:11:35.460 --> 00:11:38.800
+Sie entschlüsselt den Datenverkehr, prüft die Nutzlast, verschlüsselt sie erneut und sendet sie weiter.
+
+00:11:38.980 --> 00:11:40.280
+Der gesamte Vorgang dauert nur mit Risiko.
+
+00:11:40.460 --> 00:11:43.300
+Ohne diese Funktion gelangen verschlüsselte Angriffe unentdeckt hindurch.
+
+00:11:43.300 --> 00:11:45.600
+URL-Filterung geht über Domain-Namen hinaus.
+
+00:11:45.960 --> 00:11:48.100
+Sie können bestimmte Pfade auf einer Website zulassen oder blockieren.
+
+00:11:48.560 --> 00:11:51.640
+Vielleicht möchten Sie den Zugriff auf Microsoft erlauben, aber die Download-Seite blockieren
+
+00:11:51.640 --> 00:11:55.420
+oder einen bestimmten API-Endpunkt freigeben, während alles andere auf dieser Domain gesperrt bleibt.
+
+00:11:55.720 --> 00:11:56.580
+All dies greift ineinander.
+
+00:11:56.580 --> 00:11:58.800
+Threat Intelligence erfasst bekannte Angreifer.
+
+00:11:59.160 --> 00:12:00.540
+IDPS erkennt Angriffsmuster.
+
+00:12:00.720 --> 00:12:02.600
+TLS-Inspektion entdeckt versteckte Payloads.
+
+00:12:02.760 --> 00:12:04.900
+Mehrere Verteidigungsebenen, die als ein System zusammenarbeiten.
+
+00:12:05.800 --> 00:12:07.660
+Wie alles zusammenhängt, plus konkrete Empfehlungen.
+
+00:12:08.340 --> 00:12:09.520
+Hier ist also, wie alles zusammenpasst.
+
+00:12:10.640 --> 00:12:12.380
+Azure Firewall ist nicht nur ein einzelner Dienst.
+
+00:12:12.860 --> 00:12:14.860
+Es ist ein System aus Komponenten, die als Team zusammenarbeiten.
+
+00:12:15.260 --> 00:12:17.760
+Die Architektur leitet den gesamten Datenverkehr durch einen zentralen Punkt.
+
+00:12:17.760 --> 00:12:22.520
+Dann entscheiden Regeln, was zulässig ist, während Threat Intelligence und IDPS-Verdächtiges abfangen und
+
+00:12:22.520 --> 00:12:25.760
+die TLS-Inspektion enthüllt, was sich in verschlüsselten Verbindungen verbirgt.
+
+00:12:26.680 --> 00:12:28.260
+Jede Ebene fügt eine weitere Prüfung hinzu.
+
+00:12:28.380 --> 00:12:29.780
+Das ist Verteidigung in der Tiefe in der Praxis.
+
+00:12:30.360 --> 00:12:34.760
+Wenn Sie mehrere Firewalls in verschiedenen Regionen verwalten, ist Azure Firewall Manager Ihr Werkzeug.
+
+00:12:35.340 --> 00:12:38.300
+Es ist kostenlos und Sie erstellen Richtlinien einmal und wenden sie überall an.
+
+00:12:38.900 --> 00:12:43.560
+Sie können globale Richtlinien festlegen, die für alle Firewalls gelten und dann lokale Richtlinien pro Team oder Region anpassen.
+
+00:12:44.240 --> 00:12:46.140
+Ein Tool zur Verwaltung Ihrer gesamten Firewall-Landschaft.
+
+00:12:46.320 --> 00:12:50.240
+Lassen Sie uns nun über Kosten sprechen, da Firewalls rund um die Uhr laufen und viele Daten verarbeiten.
+
+00:12:50.700 --> 00:12:55.380
+Eine einfache Möglichkeit, Kosten zu senken, ist die Nutzung des Basistabellenplans von LogAnalytics für Ihre Firewall-Protokolle.
+
+00:12:55.880 --> 00:12:57.840
+Sie können bis zu 80 Prozent der Erfassungskosten einsparen.
+
+00:12:58.240 --> 00:13:00.740
+Das macht den Unterschied zwischen angemessenen und einer überraschend hohen Rechnung.
+
+00:13:01.060 --> 00:13:06.580
+Nutzen Sie für Nicht-Produktionsumgebungen Azure Automation, um die Firewall außerhalb der Arbeitszeiten zu stoppen und morgens wieder zu starten.
+
+00:13:07.280 --> 00:13:11.360
+Entwicklungs- und Testumgebungen benötigen nachts um zwei keinen Schutz, was auf Dauer eine große Sparnis bedeutet.
+
+00:13:11.840 --> 00:13:16.820
+Überprüfen Sie zur Reduzierung der Datenverarbeitungsgebühren Ihr Routing und stellen Sie sicher, dass nur notwendiger Datenverkehr die Firewall passiert.
+
+00:13:16.820 --> 00:13:23.860
+Nutzen Sie nach Möglichkeit private Endpunkte für Azure-Dienste, damit vertrauenswürdige Dienste direkt kommunizieren können, anstatt alles zur Überprüfung umzuleiten.
+
+00:13:25.160 --> 00:13:29.920
+Der wichtigste Schritt, den Sie heute unternehmen können, ist der Start mit einer Standard-School in einer Hub-and-Spoke-Architektur.
+
+00:13:30.860 --> 00:13:35.700
+Aktivieren Sie strukturierte Protokolle mit dem Basistabellenplan und richten Sie Threat Intelligence zunächst im Warnmodus ein.
+
+00:13:35.700 --> 00:13:38.860
+Beobachten Sie, was Ihr Netzwerk erreicht, bevor Sie vollständig auf Prävention umstellen.
+
+00:13:39.140 --> 00:13:40.980
+Das verschafft Ihnen Transparenz ohne Überraschungen.
+
+00:13:41.880 --> 00:13:48.860
+Das ist also Azure Firewall, ein cloud-nativer Sicherheitsdienst, der Datenverkehr überprüft, Bedrohungen blockiert und mit Ihrem Netzwerk skaliert ganz ohne Serververwaltung.
+
+00:13:49.460 --> 00:13:51.040
+Beginnen Sie mit Standard in einem Hub-and-Spoke-Seller.
+
+00:13:51.480 --> 00:13:52.680
+Das ist Ihr wichtigster Schritt für heute.
+
+00:13:53.180 --> 00:13:57.580
+Abonnieren Sie uns auf Ihrer bevorzugten Podcast-Plattform und teilen Sie diese Folge mit jemandem, der gerade seine Azure-Reise beginnt.
