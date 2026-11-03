@@ -1,0 +1,91 @@
+name: Belegzahlen für /sponsor/ (monatlich, T37)
+# tools/update_ai_stats.py pflegt data/stats/ai_performance.json (Felder im Kopf des Werkzeugs; site_sponsor.py liest sie):
+# - bing_ai: Bing Webmaster Tools, AI Performance (Copilot-Zitate). Keine API -> Werte aus dem monatlichen Export von Hand ueber die
+#   Eingaben unten ("Run workflow"). citations, pages_per_day, from und to nur zusammen; weekly und retrieved optional.
+# - gsc: Google Search Console, Search Analytics (letzte 3 volle Monate: Klicks, Impressionen, Seiten) per Dienstkonto.
+#   Einrichtung: Dienstkonto in Google Cloud mit aktivierter "Google Search Console API", JSON-Schluessel als Secret
+#   GSC_SERVICE_ACCOUNT_JSON, die E-Mail des Dienstkontos in der Search Console als Nutzer (eingeschraenkt) der Property eintragen;
+#   Repo-Variable GSC_SITE (Standard sc-domain:m365.fm, sonst z. B. https://www.m365.fm/).
+# Fehlt das Secret oder antwortet die API mit einem Fehler, bleiben die alten Werte stehen (status + note in der Datei), der Lauf bleibt
+# gruen. Ungueltige Eingaben oder Daten lassen den Lauf scheitern; dann wird nichts gespeichert.
+# Seitenbau: site.yml laeuft bei Pushes auf data/** - aber nicht bei Commits mit dem Standard-Token (GitHub-Regel, TECH-AUDIT.md).
+# Deshalb startet der letzte Schritt site.yml per workflow_dispatch (wie import-entities.yml); sonst kaeme die Aenderung erst mit dem
+# taeglichen Bau (17 5 * * *, spaetestens nach 24 h) auf die Seite.
+on:
+  schedule:
+    - cron: "37 6 4 * *"   # am 4. des Monats: die Search-Console-Daten des Vormonats sind dann endgueltig
+  workflow_dispatch:
+    inputs:
+      bing_citations:
+        description: "Bing AI Performance: Zitate im Zeitraum (z. B. 1100000, 1,100,000 oder 1.1M)"
+        required: false
+      bing_pages_per_day:
+        description: "Bing AI Performance: zitierte Seiten pro Tag im Mittel (z. B. 622)"
+        required: false
+      bing_from:
+        description: "Zeitraum von (YYYY-MM-DD)"
+        required: false
+      bing_to:
+        description: "Zeitraum bis (YYYY-MM-DD)"
+        required: false
+      bing_weekly:
+        description: "Optional: Wochenwerte 'YYYY-MM-DD=Zahl, ...' (Datum = Wochenbeginn) oder CSV-Text des Zeitreihen-Exports (Tageswerte werden zu Wochen ab Montag summiert); leer = bisherige Wochen im Zeitraum behalten"
+        required: false
+      bing_retrieved:
+        description: "Optional: Datum des Exports (YYYY-MM-DD, Standard heute)"
+        required: false
+      dry_run:
+        description: "Nur prüfen und anzeigen, nichts speichern"
+        type: boolean
+        default: false
+permissions:
+  contents: write
+  actions: write   # Seitenbau per workflow_dispatch starten (Commits mit dem Standard-Token loesen keinen Push-Lauf aus)
+concurrency:
+  group: ai-stats
+  cancel-in-progress: false
+jobs:
+  stats:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Signatur fuer das Dienstkonto (JWT RS256)
+        run: pip install -q cryptography
+      - name: Selbsttest (ohne Netz, ohne Secrets)
+        run: python tools/test_update_ai_stats.py
+      - name: Zahlen holen und pruefen
+        env:
+          GSC_SERVICE_ACCOUNT_JSON: ${{ secrets.GSC_SERVICE_ACCOUNT_JSON }}
+          GSC_SITE: ${{ vars.GSC_SITE }}
+          BING_CITATIONS: ${{ inputs.bing_citations }}
+          BING_PAGES_PER_DAY: ${{ inputs.bing_pages_per_day }}
+          BING_FROM: ${{ inputs.bing_from }}
+          BING_TO: ${{ inputs.bing_to }}
+          BING_WEEKLY: ${{ inputs.bing_weekly }}
+          BING_RETRIEVED: ${{ inputs.bing_retrieved }}
+        run: python tools/update_ai_stats.py ${{ inputs.dry_run && '--dry-run' || '' }}
+      - name: Speichern
+        if: ${{ !inputs.dry_run }}
+        run: |
+          git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
+          git add data/stats
+          if git diff --cached --quiet; then echo "Nichts zu speichern"; exit 0; fi
+          git commit -q -m "Belegzahlen /sponsor/ aktualisiert (KI-Zitate, Search Console)"
+          # main bewegt sich oft (Bots): vor dem Push nachziehen und wiederholen; ein endgueltiger Fehlschlag faellt auf (kein || echo)
+          for i in 1 2 3 4 5; do
+            if git pull --rebase --autostash -q origin main; then
+              if git push -q origin HEAD:main; then echo "PUSHED=1" >> "$GITHUB_ENV"; exit 0; fi
+            else
+              git rebase --abort 2>/dev/null || true
+            fi
+            sleep $((i*5))
+          done
+          echo "::error::Belegzahlen konnten nicht gesichert werden"; exit 1
+      - name: Seitenbau starten (neue Belegzahlen)
+        if: env.PUSHED == '1'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run site.yml --ref main
