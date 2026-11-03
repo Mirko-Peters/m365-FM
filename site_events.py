@@ -207,10 +207,7 @@ def build(g, events, people, orgs):
                       + f'<p><a class="btn" href="{croot}?propose={esc(ev["handle"])}#c-events">{esc(s["propose"])}</a></p>' + css)
             ld = [{"@context": "https://schema.org", **event_ld(BASE, ev, pb, ob)}]
             write(f"{pfx2(lang)}community/events/{ev['handle']}/index.html", page(lang, f'{ev["title"]} – {s["events"]} | M365.FM', (ev.get("summary") or ev.get("about") or "")[:155], u, b, None, ld, og_type="website", extra_head=LCSS, noindex=noidx))
-            if lang == "en":
-                write(f"community/events/{ev['handle']}/event.ics", ics_for(ev, BASE))
-            else:
-                write(f"de/community/events/{ev['handle']}/event.ics", ics_for(ev, BASE))
+            write(f"{pfx2(lang)}community/events/{ev['handle']}/event.ics", ics_for(ev, BASE))   # je Sprache neben der Seite (vorher landete jede Nicht-Englisch-Fassung unter de/ -> toter Kalender-Button in 13 Sprachen)
             if not noidx:
                 sitemap.append((u, TODAY, None))
         # Verzeichnis
