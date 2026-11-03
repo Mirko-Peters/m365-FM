@@ -10,6 +10,7 @@ const VARIANTS = {
   A_zwei: F("barlow-latin-400") + F("barlow-condensed-latin-600"),
   B_vier: F("barlow-latin-400") + F("barlow-condensed-latin-500") + F("barlow-condensed-latin-600") + F("barlow-condensed-latin-700"),
   C_zwei_plus_zwei_low: F("barlow-latin-400") + F("barlow-condensed-latin-600") + F("barlow-condensed-latin-500", ' fetchpriority="low"') + F("barlow-condensed-latin-700", ' fetchpriority="low"'),
+  D_zwei_plus_zwei_ab701: F("barlow-latin-400") + F("barlow-condensed-latin-600") + F("barlow-condensed-latin-500", ' media="(min-width: 701px)"') + F("barlow-condensed-latin-700", ' media="(min-width: 701px)"'),
 };
 const BLOCK = /(googlesyndication|googleads|doubleclick|adservice|fundingchoices|adtrafficquality|clarity\.ms|media\.net|googletagservices)/i;
 const RX = /(<link rel="preload" href="https:\/\/www\.m365\.fm\/assets\/fonts\/[^"]+" as="font" type="font\/woff2" crossorigin[^>]*>)+/;

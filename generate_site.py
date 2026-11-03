@@ -452,14 +452,17 @@ FXCSS = _mini_css("fx.css")   # kleines CSS inline statt eigener Anfrage (Ladeze
 # Barrierefreiheits-Regeln stehen im gehashten site.css statt in einer eigenen Datei: vorher lag a11y.css als zweites renderblockierendes
 # Stylesheet am Anfang von <body> (eigene Anfrage, nur 1 h Cache). assets/a11y.css bleibt fuer noch gecachte alte Seiten liegen.
 A11Y_CSS = _mini_css("a11y.css")
-# Vorgeladen werden genau die Schnitte, die auf jeder Seite im ersten Bildschirm Text zeigen (gemessen auf Start-, Sprach-, Show- und
-# Entitaetsseiten, Desktop und Handy, alle 15 Sprachen - Navigation, Logo und Ziffern/Leerzeichen sind lateinisch): Barlow 400 (Fliesstext),
-# Condensed 500 (Menue), 600 (Ueberschriften), 700 (Logo). Barlow 500/600 stehen fast nur weiter unten und laden wie bisher ueber das CSS.
-PRELOAD_FONTS = ("barlow-latin-400", "barlow-condensed-latin-500", "barlow-condensed-latin-600", "barlow-condensed-latin-700")
+# Vorgeladen werden die Schnitte, die auf jeder Seite im ersten Bildschirm Text zeigen (gemessen auf Start-, Sprach-, Show- und Entitaetsseiten,
+# alle 15 Sprachen - Navigation, Logo und Ziffern/Leerzeichen sind lateinisch): Barlow 400 (Fliesstext) und Condensed 600 (Ueberschriften) immer,
+# Condensed 500 (Menue) und 700 (Logo) nur ab 701 px Breite. Live-A/B 3.11.2026 (tools/preload_ab.mjs, je 7 Laeufe): auf dem Handy mit langsamem
+# 4G kosteten alle vier Preloads ~100 ms FCP/LCP (die 44 KB nehmen dem CSS Bandbreite), auf dem Desktop nichts - dort verhindern sie den
+# Schriftwechsel und kuerzen die kritische Kette. Barlow 500/600 stehen fast nur weiter unten und laden wie bisher ueber das CSS.
+PRELOAD_FONTS = (("barlow-latin-400", ""), ("barlow-condensed-latin-600", ""),
+                 ("barlow-condensed-latin-500", "(min-width: 701px)"), ("barlow-condensed-latin-700", "(min-width: 701px)"))
 
 
 def font_preloads():
-    return "".join(f'<link rel="preload" href="{BASE}/assets/fonts/{f}-normal.woff2" as="font" type="font/woff2" crossorigin>' for f in PRELOAD_FONTS)
+    return "".join(f'<link rel="preload" href="{BASE}/assets/fonts/{f}-normal.woff2" as="font" type="font/woff2" crossorigin{f" media={chr(34)}{m}{chr(34)}" if m else ""}>' for f, m in PRELOAD_FONTS)
 
 
 SW_REG = []   # T42: (lang, url, noindex, auto, alternates, switch) je Seite; finish_hreflang() verknuepft am Ende Sprachfassungen unter gleichem Pfad
