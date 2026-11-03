@@ -1,4 +1,4 @@
-import { regionOf, conditional, markHtml } from "./consent.js";   // T32: Einwilligungs-Region je Anfrage
+import { regionOf, conditional, markHtml, isHtmlPath } from "./consent.js";   // T32: Einwilligungs-Region je Anfrage
 // Worker vor der Plattform (GitHub Pages): Cache- und Sicherheits-Header, Bild-Optimierung (Polish), Weiterleitungen fuer den Umzug von www.m365.fm.
 const SEC = {
   "strict-transport-security": "max-age=31536000; includeSubDomains",
@@ -86,7 +86,8 @@ export default {
       : isStatic ? { cacheEverything: true, cacheTtl: 86400 }
       : { cacheEverything: true, cacheTtlByStatus: { "200-299": EDGE_HTML, "404": 60, "500-599": 0 } };   // HTML: 4 h am Rand, Purge nach jedem Deploy
     // T41: ohne Query zum Ursprung - GitHub Pages ist statisch, so landen ?utm_…/?fbclid=… im selben Cache-Eintrag (Zone steht auf Caching-Level "basic": mit Query sonst gar kein Cache)
-    const cr = regionOf(request, env), cnd = conditional(request, cr), rq = cnd.req;   // T32: Region nie im Cache-Schluessel oder Ursprungsabruf
+    const page = !isImg && !isStatic && isHtmlPath(p);   // T32: nur HTML-Adressen bekommen Region und Regions-Validatoren
+    const cr = regionOf(request, env), rq = page && (request.method === "GET" || request.method === "HEAD") ? conditional(request, cr).req : request;   // Region nie im Cache-Schluessel oder Ursprungsabruf
     const res = await fetch(url.search ? new Request(url.origin + p, rq) : rq, { cf });
     // Seiten aus dem R2-Bucket (Paket 20): uebersetzte Seiten (Blog-Sprachfassungen, Sprachfassungen der Folgen) liegen unter pages/<pfad>/index.html im Bucket statt in GitHub Pages - gleiche Adressen, indexierbar
     if (res.status === 404 && env.MIGRATED === "1" && /^(\/[a-z]{2})?\/show\/episodes\/[a-z0-9-]+\/?$/.test(p)) {   // T12: umbenannte Folge (show/redirects.json), vor dem R2-Rueckfall mit der alten Seite
@@ -99,7 +100,7 @@ export default {
     }
     if (res.status === 404 && env.PAGES && !IMG.test(p) && (request.method === "GET" || request.method === "HEAD")) {
       const r2 = await r2Page(rq, env, ctx, url, p);
-      if (r2) return markHtml(r2, request, cr, cnd.stripped);
+      if (r2) return page ? markHtml(r2, request, cr) : r2;
       const m = /^\/(de|es|fr|it|pt|nl|pl|id|ru|uk|ar|he|ja|ko)\/show\/episodes\/([a-z0-9-]+)\/?$/.exec(p);   // noch nicht hochgeladen: englisches Original statt 404
       if (m) return Response.redirect(url.origin + "/show/episodes/" + m[2] + "/", 301);
     }
@@ -113,6 +114,6 @@ export default {
     if (p === "/") h.set("link", '</.well-known/api-catalog>; rel="api-catalog", </openapi.json>; rel="service-desc"; type="application/vnd.oai.openapi+json", </llms.txt>; rel="service-doc"; type="text/plain", </.well-known/agent.json>; rel="describedby"; type="application/json"');   // RFC 8288 / 9727: Startseite verweist auf maschinenlesbare Ressourcen
     if (p === "/.well-known/api-catalog") { h.set("content-type", 'application/linkset+json; profile="https://www.rfc-editor.org/info/rfc9727"'); h.set("access-control-allow-origin", "*"); }
     const out = new Response(res.body, { status: res.status, statusText: res.statusText, headers: h });
-    return isImg || isStatic ? out : markHtml(out, request, cr, cnd.stripped);   // Assets/Bilder bleiben unberuehrt (auch bei falschem Content-Type)
+    return page ? markHtml(out, request, cr) : out;   // Assets, Bilder und Dateien bleiben unberuehrt (auch bei falschem Content-Type)
   },
 };
