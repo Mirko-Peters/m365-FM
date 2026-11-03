@@ -1,0 +1,210 @@
+{
+  "episode_id": "68113677",
+  "slug": null,
+  "title": "Active Directory Security: Attack Paths, Golden Tickets & How Hackers Hunt The Crown Jewel",
+  "lang": "en",
+  "duration_s": 1234,
+  "transcript_source": "data/en_transcripts/d8441665f476.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "conditional-access",
+      "name": "Conditional Access",
+      "type": "concept",
+      "score": 50,
+      "mentions": 4,
+      "first_mention_s": 1062,
+      "quote": "without inspecting closer conditional access rules at one more guardrail",
+      "url": "https://www.m365.fm/entity/conditional-access/"
+    },
+    {
+      "slug": "mfa",
+      "name": "Multifactor authentication (MFA)",
+      "type": "concept",
+      "score": 50,
+      "mentions": 10,
+      "first_mention_s": 767,
+      "quote": "push too many MFA prompts, and somebody notices",
+      "url": "https://www.m365.fm/entity/mfa/"
+    },
+    {
+      "slug": "active-directory",
+      "name": "Active Directory",
+      "type": "product",
+      "score": 100,
+      "mentions": 35,
+      "first_mention_s": 7,
+      "quote": "YEP, it's active directory.",
+      "url": "https://www.m365.fm/entity/active-directory/"
+    },
+    {
+      "slug": "entra-connect",
+      "name": "Microsoft Entra Connect",
+      "type": "product",
+      "score": 55,
+      "mentions": 5,
+      "first_mention_s": 949,
+      "quote": "Synchronization tools like asure, ad connect, password hash sync",
+      "url": "https://www.m365.fm/entity/entra-connect/"
+    },
+    {
+      "slug": "entra-id",
+      "name": "Microsoft Entra ID",
+      "type": "product",
+      "score": 35,
+      "mentions": 1,
+      "first_mention_s": 949,
+      "quote": "Hybrid identity setups connect your on prem ad with Azure AD or Microsoft Pre sixty five",
+      "url": "https://www.m365.fm/entity/entra-id/"
+    },
+    {
+      "slug": "microsoft-365",
+      "name": "Microsoft 365",
+      "type": "platform",
+      "score": 25,
+      "mentions": 3,
+      "first_mention_s": 949,
+      "quote": "Hybrid identity setups connect your on prem ad with Azure AD or Microsoft Pre sixty five",
+      "url": "https://www.m365.fm/entity/microsoft-365/"
+    },
+    {
+      "slug": "exchange-online",
+      "name": "Exchange Online",
+      "type": "product",
+      "score": 10,
+      "mentions": 1,
+      "first_mention_s": 1035,
+      "quote": "Suddenly an attacker is inside exchange mail, OneDrive folders, and teams conversations.",
+      "url": "https://www.m365.fm/entity/exchange-online/"
+    },
+    {
+      "slug": "onedrive",
+      "name": "OneDrive",
+      "type": "product",
+      "score": 10,
+      "mentions": 1,
+      "first_mention_s": 1035,
+      "quote": "Suddenly an attacker is inside exchange mail, OneDrive folders, and teams conversations.",
+      "url": "https://www.m365.fm/entity/onedrive/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "active-directory-certificate-services",
+      "name": "Active Directory Certificate Services (AD CS)",
+      "type": "product"
+    },
+    {
+      "slug": "active-directory-tiering",
+      "name": "Active Directory administrative tiering",
+      "type": "concept"
+    },
+    {
+      "slug": "service-account",
+      "name": "Service account",
+      "type": "concept"
+    },
+    {
+      "slug": "domain-controller",
+      "name": "Domain controller",
+      "type": "concept"
+    },
+    {
+      "slug": "pass-through-authentication",
+      "name": "Microsoft Entra pass-through authentication (PTA)",
+      "type": "concept"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "Monitoring systems are primed for red flags like brute forcing or failed logins, but lateral movement is just a series of valid connections",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 357,
+      "entities": [
+        "active-directory"
+      ],
+      "why": "Explains why lateral movement in Active Directory often goes unnoticed."
+    },
+    {
+      "text": "This is why treating a single stolen credential as low impact is a critical mistake in an active directory context that one login can become the master key.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 451,
+      "entities": [
+        "active-directory"
+      ],
+      "why": "Makes the point that one compromised user account can lead to full domain takeover."
+    },
+    {
+      "text": "Security pros consistently recommend implementing least privilege alongside a proper tiered admin model. That way help desk staff, system admins, and enterprise architects all have access scope to their actual roles instead of everyone wearing the same crown.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 519,
+      "entities": [
+        "active-directory-tiering",
+        "active-directory"
+      ],
+      "why": "Gives a concrete recommendation to shrink the admin blast radius."
+    },
+    {
+      "text": "The danger isn't with encryption algorithms, they're solid. The problem is with how certificate templates are configured, who's allowed to request them, and what privileges those templates grant.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 672,
+      "entities": [
+        "active-directory-certificate-services"
+      ],
+      "why": "Pinpoints certificate template configuration as the real PKI risk."
+    },
+    {
+      "text": "Hybrid connections don't guarantee insecurity, but they do create new pathways. Just like your domain controllers, those connections need to be hardened with the same rigor",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 962,
+      "entities": [
+        "entra-connect",
+        "domain-controller"
+      ],
+      "why": "Gives a balanced view of hybrid identity risk and the need to harden sync connections."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "Why Active Directory is the crown jewel"
+    },
+    {
+      "start_s": 36,
+      "title": "Why attackers treat AD like a treasure chest"
+    },
+    {
+      "start_s": 280,
+      "title": "One user account and lateral movement"
+    },
+    {
+      "start_s": 483,
+      "title": "Misconfigurations that scream hack me"
+    },
+    {
+      "start_s": 651,
+      "title": "PKI and certificate templates"
+    },
+    {
+      "start_s": 946,
+      "title": "Hybrid identity as a ghost bridge"
+    },
+    {
+      "start_s": 1197,
+      "title": "Three steps to start"
+    }
+  ],
+  "takeaways": [
+    "A single compromised user account can escalate to domain admin through lateral movement, cached credentials and pass-the-hash if Active Directory is left on defaults.",
+    "Reducing domain admins, enforcing a tiered least-privilege model and restricting service accounts removes the most common escalation paths.",
+    "Certificate templates and hybrid sync connectors need regular audits, logging and consistent MFA and Conditional Access, or they become hidden paths into both on-premises and cloud."
+  ],
+  "hook": "Active Directory still holds the keys to logins, files and email in most organizations, and attackers know it. This episode is for IT admins and security teams running on-premises or hybrid identity. It walks through the attack paths from one stolen account to domain control and the three areas to fix first: admin blast radius, PKI templates and hybrid connector hygiene.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-03T06:29:33+00:00"
+}
