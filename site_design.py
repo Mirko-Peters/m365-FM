@@ -266,6 +266,9 @@ PAGER_T = {   # (zurueck, weiter, Name der Navigation) je Art
     "ja": {"episode": ("前のエピソード", "次のエピソード", "ほかのエピソード"), "article": ("前の記事", "次の記事", "ほかの記事"), "video": ("前の動画", "次の動画", "ほかの動画")},
     "ko": {"episode": ("이전 에피소드", "다음 에피소드", "다른 에피소드"), "article": ("이전 글", "다음 글", "다른 글"), "video": ("이전 동영상", "다음 동영상", "다른 동영상")},
 }
+for _l, _v in {'en': ('Previous page', 'Next page', 'Pages'), 'de': ('Vorherige Seite', 'Nächste Seite', 'Seiten'), 'es': ('Página anterior', 'Página siguiente', 'Páginas'), 'fr': ('Page précédente', 'Page suivante', 'Pages'), 'it': ('Pagina precedente', 'Pagina successiva', 'Pagine'), 'pt': ('Página anterior', 'Próxima página', 'Páginas'), 'nl': ('Vorige pagina', 'Volgende pagina', "Pagina's"), 'pl': ('Poprzednia strona', 'Następna strona', 'Strony'), 'id': ('Halaman sebelumnya', 'Halaman berikutnya', 'Halaman'), 'ru': ('Предыдущая страница', 'Следующая страница', 'Страницы'), 'uk': ('Попередня сторінка', 'Наступна сторінка', 'Сторінки'), 'ar': ('الصفحة السابقة', 'الصفحة التالية', 'الصفحات'), 'he': ('העמוד הקודם', 'העמוד הבא', 'עמודים'), 'ja': ('前のページ', '次のページ', 'ページ'), 'ko': ('이전 페이지', '다음 페이지', '페이지')}.items():
+    PAGER_T[_l]["page"] = _v   # Seiten einer Liste (Hub /page/N/)
+PAGE_WORD = {'en': 'Page', 'de': 'Seite', 'es': 'Página', 'fr': 'Page', 'it': 'Pagina', 'pt': 'Página', 'nl': 'Pagina', 'pl': 'Strona', 'id': 'Halaman', 'ru': 'Страница', 'uk': 'Сторінка', 'ar': 'الصفحة', 'he': 'עמוד', 'ja': 'ページ', 'ko': '페이지'}
 _RTL = ("ar", "he")
 
 

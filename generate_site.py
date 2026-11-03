@@ -474,7 +474,7 @@ def pn_head(body, extra_head=""):
     out = ""
     for rel in ("prev", "next"):
         m = (re.search(rf'<a class="(?:pv|nx)" rel="{rel}" href="([^"]+)"', src) if nav
-             else re.search(rf'<a href="([^"]+)" rel={rel}>', src))   # Seitenzahlen der Folgenlisten (site_podpage)
+             else re.search(rf'<a\b[^>]*?\bhref="([^"]+)"[^>]*?\brel={rel}[\s>]', src))   # Seitenzahlen der Folgenlisten (site_podpage), "Mehr laden" des Hubs
         if m: out += f'<link rel="{rel}" href="{m.group(1)}">'
     return out
 
@@ -1313,6 +1313,22 @@ def build():
     sitemap.append((f"{BASE}/", TODAY, alts_home))   # T42: wie im HTML
     for _hk, _hc in HUB.MORE.items():   # T6: Karten jenseits der ersten 24 je Hub als JSON (Mehr laden / Filter)
         write(("" if _hk == "root" else _hk + "/") + "hub-more.json", json.dumps({"cards": _hc}, ensure_ascii=False))
+        # Jede Seite mit eigener Adresse: dieselben Karten als /page/2/, /page/3/ ... (je 24, kanonisch auf sich selbst, Vor/Zurueck mit rel),
+        # "Mehr laden" auf der Startseite verlinkt Seite 2 - ohne JavaScript und fuer Crawler erreichbar statt nur per fetch().
+        _hp = HUB.PAGES.get(_hk) or {"lang": "en" if _hk == "root" else _hk, "prefix": "" if _hk == "root" else _hk + "/"}
+        _hl, _pre, _pw = _hp["lang"], _hp["prefix"], _SD.PAGE_WORD.get(_hp["lang"], "Page")
+        _chunks = [_hc[i:i + HUB.N_FIRST] for i in range(0, len(_hc), HUB.N_FIRST)]
+        _purl = lambda n: f"{BASE}/{_pre}" if n == 1 else f"{BASE}/{_pre}page/{n}/"
+        _hname = "M365.FM Community" + ("" if _hk == "root" else f" · {LANGS[_hl][0]}")
+        for _i, _ch in enumerate(_chunks):
+            _n = _i + 2
+            _pv = (_purl(_n - 1), f"{_pw} {_n - 1}")
+            _nx = (_purl(_n + 1), f"{_pw} {_n + 1}") if _i + 1 < len(_chunks) else None
+            _ttl = f"{_hname} – {_pw} {_n}"
+            _b = (f'{header(_hl, "")}<main class="wrap"><p class="mut"><a href="{_purl(1)}">{esc(_hname)}</a></p><h1>{esc(_ttl)}</h1>{HUB.CSS}'
+                  f'<div class="thumbs">{"".join(_ch)}</div>{PAGER(_hl, _pv, _nx, kind="page")}</main>{footer(_hl) if _hl in LANGS else footer_en()}')
+            write(f"{_pre}page/{_n}/index.html", page(_hl, _ttl, f"{_hname}: blog posts, podcasts, events and more from the Microsoft community – {_pw} {_n}.", _purl(_n), _b,
+                                                         og_type="website", og_of=_purl(1)))
     import site_updates as _SU2; _SU2.load(COMMUNITY_API)
     from site_learn import ENTS as _E2
     for _nl in ("en", "de"):
