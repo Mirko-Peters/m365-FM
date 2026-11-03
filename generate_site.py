@@ -325,7 +325,10 @@ def share_html(lang, url, title):
             ("Telegram", f"https://t.me/share/url?url={u}&text={t}"), ("Reddit", f"https://www.reddit.com/submit?url={u}&title={t}"),
             ("E-Mail", f"mailto:?subject={t}&body={u}")]
     links = "".join(f'<a class="btn" href="{h}" target="_blank" rel="noopener nofollow">{n}</a>' for n, h in nets)
-    fl = "".join(f'<a href="{h}" target="_blank" rel="noopener nofollow" aria-label="{n}" title="{n}" style="--bc:#{BRAND_ICONS[n][1]}">{brand_icon(n)}</a>' for n, h in nets)
+    # Der Mail-Link (mailto:?subject=...) enthaelt keine Adresse. Ohne email_off schreibt Cloudflares E-Mail-Schutz ihn trotzdem um und
+    # laedt dafuer auf JEDER Seite email-decode.min.js (synchrones Skript in der kritischen Kette; ohne JS ginge der Link ins Leere).
+    _off = lambda n, a: f"<!--email_off-->{a}<!--/email_off-->" if n == "E-Mail" else a
+    fl = "".join(_off(n, f'<a href="{h}" target="_blank" rel="noopener nofollow" aria-label="{n}" title="{n}" style="--bc:#{BRAND_ICONS[n][1]}">{brand_icon(n)}</a>') for n, h in nets)
     fbar = (f'<aside class="fshare" aria-label="{esc(SHARE_L.get(lang, "Share"))}">{fl}'
             f'<button type="button" data-share data-url="{url}" data-title="{esc(strip_tags(title))}" aria-label="{esc(COPY_L.get(lang, "Copy link"))}" title="{esc(COPY_L.get(lang, "Copy link"))}" style="--bc:#6B7280">{brand_icon("Copy")}</button></aside>')
     return fbar   # Klick-Logik in assets/page.js
@@ -389,8 +392,7 @@ A11Y_EARLY = ("<script>try{var a=JSON.parse(localStorage.getItem('m365-a11y')||'
 def a11y_tags(lang):
     t = dict(_A11Y.get("en", {}))
     t.update(_A11Y.get(lang, {}))
-    return (f'<link rel="stylesheet" href="{BASE}/assets/a11y.css">'
-            f'<script>window.M365A={{t:{json.dumps(t, ensure_ascii=False).replace("</", "<\\/")}}}</script><script defer src="{BASE}/assets/a11y.js"></script>')
+    return (f'<script>window.M365A={{t:{json.dumps(t, ensure_ascii=False).replace("</", "<\\/")}}}</script><script defer src="{BASE}/assets/a11y.js"></script>')
 
 
 _QUI = {}
@@ -442,7 +444,22 @@ def single_main(html_):
     return "".join(parts)
 
 
-FXCSS = re.sub(r"/\*.*?\*/|\s*([{};:,])\s*", lambda m: m.group(1) or "", (ROOT / "assets" / "fx.css").read_text(encoding="utf-8"), flags=re.S).strip()   # kleines CSS inline statt eigener Anfrage (Ladezeit)
+def _mini_css(name):
+    return re.sub(r"/\*.*?\*/|\s*([{};:,])\s*", lambda m: m.group(1) or "", (ROOT / "assets" / name).read_text(encoding="utf-8"), flags=re.S).strip()
+
+
+FXCSS = _mini_css("fx.css")   # kleines CSS inline statt eigener Anfrage (Ladezeit)
+# Barrierefreiheits-Regeln stehen im gehashten site.css statt in einer eigenen Datei: vorher lag a11y.css als zweites renderblockierendes
+# Stylesheet am Anfang von <body> (eigene Anfrage, nur 1 h Cache). assets/a11y.css bleibt fuer noch gecachte alte Seiten liegen.
+A11Y_CSS = _mini_css("a11y.css")
+# Vorgeladen werden genau die Schnitte, die auf jeder Seite im ersten Bildschirm Text zeigen (gemessen auf Start-, Sprach-, Show- und
+# Entitaetsseiten, Desktop und Handy, alle 15 Sprachen - Navigation, Logo und Ziffern/Leerzeichen sind lateinisch): Barlow 400 (Fliesstext),
+# Condensed 500 (Menue), 600 (Ueberschriften), 700 (Logo). Barlow 500/600 stehen fast nur weiter unten und laden wie bisher ueber das CSS.
+PRELOAD_FONTS = ("barlow-latin-400", "barlow-condensed-latin-500", "barlow-condensed-latin-600", "barlow-condensed-latin-700")
+
+
+def font_preloads():
+    return "".join(f'<link rel="preload" href="{BASE}/assets/fonts/{f}-normal.woff2" as="font" type="font/woff2" crossorigin>' for f in PRELOAD_FONTS)
 
 
 SW_REG = []   # T42: (lang, url, noindex, auto, alternates, switch) je Seite; finish_hreflang() verknuepft am Ende Sprachfassungen unter gleichem Pfad
@@ -504,7 +521,7 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
 <meta property="og:url" content="{canonical}"><meta property="og:locale" content="{loc}"><meta property="og:site_name" content="M365.FM">
 <meta property="og:image" content="{ogimg}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="{esc(bare_title(title))}">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{esc(bare_title(title))}"><meta name="twitter:description" content="{esc(desc)}"><meta name="twitter:image" content="{ogimg}">
-{"" if lang in ("ar", "he", "ja", "ko", "ru", "uk") else f'<link rel="preload" href="{BASE}/assets/fonts/barlow-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="{BASE}/assets/fonts/barlow-condensed-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>'}
+{font_preloads()}
 {extra_head}{ADS.head(BASE, body, canonical, noindex)}{css_link()}<style>{FXCSS}</style>{A11Y_EARLY}
 {ld}</head>
 <body>
@@ -527,7 +544,7 @@ def css_link():
     """Das gesamte Stylesheet liegt einmal als Datei mit Inhalts-Hash unter /assets/ (statt ~33 KB inline in jeder Seite): kleinere Seiten, Browser- und CDN-Cache."""
     if not _CSSF:
         import hashlib
-        css = CSS + (ADS.CSS if ADS.active(BASE) else "")
+        css = CSS + (ADS.CSS if ADS.active(BASE) else "") + "\n" + A11Y_CSS + "\n"
         name = "site." + hashlib.sha1(css.encode("utf-8")).hexdigest()[:10] + ".css"
         (OUT / "assets").mkdir(parents=True, exist_ok=True); (OUT / "assets" / name).write_text(css, encoding="utf-8")
         _CSSF["u"] = f"{BASE}/assets/{name}"
