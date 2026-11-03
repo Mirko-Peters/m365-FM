@@ -1,0 +1,199 @@
+{
+ "episode_id": "76083512",
+ "slug": "microsoft-graph-webhooks-simply-explained",
+ "title": "Microsoft Graph-webhooks uitgelegd: realtime meldingen in plaats van eindeloos pollen",
+ "lang": "nl",
+ "duration_s": 1172,
+ "transcript_source": "transcripts/nl/ra62dODpiag.vtt",
+ "time_basis": "vtt",
+ "entities": [
+  {
+   "slug": "change-notifications",
+   "name": "Change notifications and webhooks",
+   "type": "concept",
+   "score": 100,
+   "mentions": 42,
+   "first_mention_s": 77,
+   "quote": "Microsoft Graph gebruikt ook webhooks, maar Microsoft noemt ze wijzigingsmeldingen.",
+   "url": "https://www.m365.fm/nl/entity/change-notifications/"
+  },
+  {
+   "slug": "graph",
+   "name": "Microsoft Graph",
+   "type": "product",
+   "score": 90,
+   "mentions": 66,
+   "first_mention_s": 77,
+   "quote": "Je abonneert je, Graph kijkt mee, Graph stuurt een post wanneer er iets verandert.",
+   "url": "https://www.m365.fm/nl/entity/graph/"
+  },
+  {
+   "slug": "sharepoint",
+   "name": "SharePoint",
+   "type": "product",
+   "score": 35,
+   "mentions": 5,
+   "first_mention_s": 260,
+   "quote": "Je hebt een SharePoint documentbibliotheek waar bonnen worden geüpload.",
+   "url": "https://www.m365.fm/nl/entity/sharepoint/"
+  },
+  {
+   "slug": "entra-id",
+   "name": "Microsoft Entra ID",
+   "type": "product",
+   "score": 30,
+   "mentions": 1,
+   "first_mention_s": 1094,
+   "quote": "het account in Entra ID heeft aangemaakt.",
+   "url": "https://www.m365.fm/nl/entity/entra-id/"
+  },
+  {
+   "slug": "microsoft-365",
+   "name": "Microsoft 365",
+   "type": "platform",
+   "score": 30,
+   "mentions": 2,
+   "first_mention_s": 71,
+   "quote": "Wanneer er iets verandert in Microsoft 365, stuurt Graph een HTTP-post naar een URL die jij opgeeft.",
+   "url": "https://www.m365.fm/nl/entity/microsoft-365/"
+  },
+  {
+   "slug": "azure-service-bus",
+   "name": "Azure Service Bus",
+   "type": "product",
+   "score": 20,
+   "mentions": 1,
+   "first_mention_s": 821,
+   "quote": "een Azure wachtrij, een servicebus of zelfs een eenvoudige database-tabel.",
+   "url": "https://www.m365.fm/nl/entity/azure-service-bus/"
+  },
+  {
+   "slug": "teams",
+   "name": "Microsoft Teams",
+   "type": "product",
+   "score": 20,
+   "mentions": 1,
+   "first_mention_s": 264,
+   "quote": "een bericht verzonden in Teams, een agenda-item gewijzigd of een groep krijgt een nieuw lid.",
+   "url": "https://www.m365.fm/nl/entity/teams/"
+  },
+  {
+   "slug": "onedrive",
+   "name": "OneDrive",
+   "type": "product",
+   "score": 20,
+   "mentions": 1,
+   "first_mention_s": 512,
+   "quote": "Voor Drive Items in SharePoint of OneDrive kan dit tot 30 dagen zijn.",
+   "url": "https://www.m365.fm/nl/entity/onedrive/"
+  },
+  {
+   "slug": "m365fm",
+   "name": "M365.FM",
+   "type": "media",
+   "score": 20,
+   "mentions": 1,
+   "first_mention_s": 64,
+   "quote": "welkom bij een nieuwe aflevering van Microsoft Knowledge Nuggets hier op M365FM.",
+   "url": "https://www.m365.fm/nl/entity/m365fm/"
+  }
+ ],
+ "new_entities": [
+  {
+   "slug": "throttling",
+   "name": "Throttling",
+   "type": "concept",
+   "mentions": 3,
+   "first_mention_s": 146,
+   "quote": "Dit is hoe de throttling werkt.",
+   "status": "review"
+  }
+ ],
+ "quotes": [
+  {
+   "text": "En het punt is, zelfs als je elke vijf minuten polt, ontvang je nog steeds geen real-time updates. Een wijziging kan één minuut na je laatste pol plaatsvinden. Je weet het dan de komende vier minuten nog niet.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 183,
+   "entities": [
+    "change-notifications"
+   ],
+   "why": "Zeigt, warum Polling trotz Aufwand nicht echtzeitfähig ist."
+  },
+  {
+   "text": "Een webhook is een HTTP-verzoek dat automatisch wordt verstuurd wanneer er iets gebeurt. Je vraagt er niet om.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 212,
+   "entities": [
+    "change-notifications"
+   ],
+   "why": "Einfachste Definition eines Webhooks."
+  },
+  {
+   "text": "Bevestig onmiddellijk en verwerk asynchroon. Je eindpunt moet de status van de client valideren, de notificatie accepteren en zo snel mogelijk een 200 of 202 reactie terugsturen.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 812,
+   "entities": [
+    "change-notifications",
+    "graph"
+   ],
+   "why": "Zentrale Best Practice für den Notification-Endpunkt."
+  },
+  {
+   "text": "Webhooks zijn snel, maar ze zijn niet perfect. Meldingen kunnen verloren gaan, abonnementen kunnen verlopen en uw eindpunt kan uitvallen. Maar Delta Query is betrouwbaar.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 996,
+   "entities": [
+    "change-notifications"
+   ],
+   "why": "Begründet die Kombination aus Webhooks und Delta Query."
+  }
+ ],
+ "chapters": [
+  {
+   "start_s": 64,
+   "title": "Welkom: brievenbus versus deurbel"
+  },
+  {
+   "start_s": 105,
+   "title": "Het pollingprobleem"
+  },
+  {
+   "start_s": 208,
+   "title": "Wat zijn webhooks en hoe werken ze in Microsoft Graph?"
+  },
+  {
+   "start_s": 434,
+   "title": "Een abonnement aanmaken"
+  },
+  {
+   "start_s": 583,
+   "title": "De validatie-handshake"
+  },
+  {
+   "start_s": 699,
+   "title": "Notificaties en beveiliging afhandelen"
+  },
+  {
+   "start_s": 853,
+   "title": "Lifecycle, verlenging en Delta Query"
+  },
+  {
+   "start_s": 1042,
+   "title": "Praktijkvoorbeeld en volgende stappen"
+  }
+ ],
+ "takeaways": [
+  "Polling verspilt verzoeken, riskeert throttling en levert toch geen realtime updates; met Microsoft Graph-webhooks (wijzigingsmeldingen) stuurt Graph zelf een melding zodra er iets verandert.",
+  "Een abonnement heeft een notification URL, resource, change type en vervaldatum nodig; het eindpunt moet de validatie-handshake als platte tekst beantwoorden en client state controleren.",
+  "Bevestig meldingen binnen enkele seconden, verwerk ze asynchroon, verleng abonnementen op tijd en gebruik Delta Query als vangnet voor gemiste meldingen."
+ ],
+ "hook": "Steeds opnieuw naar de brievenbus lopen of wachten tot de bel gaat: dat is het verschil tussen polling en webhooks. In deze aflevering legt Mirko Peters uit hoe Microsoft Graph-webhooks werken, van abonnement en validatie-handshake tot Delta Query als vangnet.",
+ "youtube_video_id": "ra62dODpiag",
+ "source_video_id": "ra62dODpiag",
+ "show_id": 7393222,
+ "generated_at": "2026-11-03T01:07:25Z"
+}
