@@ -1,0 +1,205 @@
+{
+  "episode_id": "68384329",
+  "slug": null,
+  "title": "Stop Wasting Money: The 3 Architectures for Fabric Data Flows Gen 2",
+  "lang": "en",
+  "duration_s": 1433,
+  "transcript_source": "data/en_transcripts/3e4a7d26af7b.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "semantic-model",
+      "name": "Semantic model",
+      "type": "concept",
+      "score": 60,
+      "mentions": 10,
+      "first_mention_s": 371,
+      "quote": "meaning notebooks, data pipelines, and semantic models can all read it directly",
+      "url": "https://www.m365.fm/entity/semantic-model/"
+    },
+    {
+      "slug": "governance",
+      "name": "Governance",
+      "type": "concept",
+      "score": 55,
+      "mentions": 14,
+      "first_mention_s": 80,
+      "quote": "governance stops looking like duct taped chaos",
+      "url": "https://www.m365.fm/entity/governance/"
+    },
+    {
+      "slug": "fabric-workspace",
+      "name": "Fabric workspace",
+      "type": "concept",
+      "score": 45,
+      "mentions": 16,
+      "first_mention_s": 136,
+      "quote": "You set up a dedicated workspace, call it data ingestion",
+      "url": "https://www.m365.fm/entity/fabric-workspace/"
+    },
+    {
+      "slug": "fabric",
+      "name": "Microsoft Fabric",
+      "type": "platform",
+      "score": 95,
+      "mentions": 30,
+      "first_mention_s": 1,
+      "quote": "a data analyst is heroically exporting one hundred megaby CSV from Microsoft Fabric again",
+      "url": "https://www.m365.fm/entity/fabric/"
+    },
+    {
+      "slug": "power-bi",
+      "name": "Power BI",
+      "type": "product",
+      "score": 60,
+      "mentions": 16,
+      "first_mention_s": 21,
+      "quote": "burn more compute in refreshed cycles than they did in entire Powerbi workspaces",
+      "url": "https://www.m365.fm/entity/power-bi/"
+    },
+    {
+      "slug": "power-query",
+      "name": "Power Query",
+      "type": "product",
+      "score": 40,
+      "mentions": 3,
+      "first_mention_s": 39,
+      "quote": "They are pipelines wearing polite power Query clothing",
+      "url": "https://www.m365.fm/entity/power-query/"
+    },
+    {
+      "slug": "fabric-notebooks",
+      "name": "Fabric notebooks",
+      "type": "product",
+      "score": 30,
+      "mentions": 7,
+      "first_mention_s": 371,
+      "quote": "meaning notebooks, data pipelines, and semantic models can all read it directly",
+      "url": "https://www.m365.fm/entity/fabric-notebooks/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "dataflow-gen2",
+      "name": "Dataflow Gen2",
+      "type": "product"
+    },
+    {
+      "slug": "medallion-architecture",
+      "name": "Medallion architecture",
+      "type": "concept"
+    },
+    {
+      "slug": "direct-lake",
+      "name": "Direct Lake",
+      "type": "concept"
+    },
+    {
+      "slug": "data-lineage",
+      "name": "Data lineage",
+      "type": "concept"
+    },
+    {
+      "slug": "delta-lake",
+      "name": "Delta Lake",
+      "type": "product"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "Bronze is about reliable landings. Everything landing here should be traceable back to an external source historically intact and refreshable, independently, think raw but usable, not pretty and modeled.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 329,
+      "entities": [
+        "medallion-architecture",
+        "dataflow-gen2"
+      ],
+      "why": "Defines the purpose of the bronze layer in one clear rule."
+    },
+    {
+      "text": "Every time you compute revenue, apply exchange rates, map cost centers, or harmonized customer IDs, you should do it once here, not forty two times across individual data sets.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 553,
+      "entities": [
+        "medallion-architecture",
+        "governance"
+      ],
+      "why": "Makes the case for centralizing business logic in the silver layer."
+    },
+    {
+      "text": "Models describe relationships. Gold defines lineage. If your semantic model pulls from direct Delta references without an intervening Gold layer, you lose orchestration control.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 1074,
+      "entities": [
+        "semantic-model",
+        "data-lineage",
+        "medallion-architecture"
+      ],
+      "why": "Explains why a semantic model does not replace a gold layer."
+    },
+    {
+      "text": "Keep Bronze data flows purely for extraction and landing. Create Silver ones that reference those outputs for logic. You'll thank yourself when lineage diagrams actually make sense and capacity doesn't melt during refresh peaks.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 1277,
+      "entities": [
+        "dataflow-gen2",
+        "medallion-architecture",
+        "data-lineage"
+      ],
+      "why": "A concrete design rule for separating ingestion and transformation."
+    },
+    {
+      "text": "Stop building POWERBI pipelines in fabric clothes. Because fabric isn't a reporting tool, it's a data operating system. Treat it like one.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 1407,
+      "entities": [
+        "fabric",
+        "power-bi"
+      ],
+      "why": "Sums up the mindset shift the episode argues for."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "Why Fabric dataflows waste money"
+    },
+    {
+      "start_s": 88,
+      "title": "The core misunderstanding: compute is the meter"
+    },
+    {
+      "start_s": 248,
+      "title": "Architecture 1: bronze staging for shared ingestion"
+    },
+    {
+      "start_s": 501,
+      "title": "Architecture 2: silver transformation and quality"
+    },
+    {
+      "start_s": 814,
+      "title": "Architecture 3: gold serving for consumption"
+    },
+    {
+      "start_s": 1144,
+      "title": "Choosing the right architecture"
+    },
+    {
+      "start_s": 1371,
+      "title": "Closing argument"
+    }
+  ],
+  "takeaways": [
+    "In Microsoft Fabric compute, not storage, drives cost, so every duplicated ingestion or refresh directly multiplies the bill.",
+    "Use bronze Dataflows Gen2 to land each external source once, silver dataflows to centralize business logic and quality, and a gold layer with Direct Lake to serve consumers without extra refreshes.",
+    "Never mix ingestion and transformation in the same dataflow, and expose gold outputs centrally instead of copying tables into every department's workspace."
+  ],
+  "hook": "Many Microsoft Fabric projects burn compute because teams still use Dataflows Gen2 like Power BI's old import sidecar. This episode is for data engineers and Power BI teams who want lower Fabric bills and cleaner lineage. It explains the three architectures - bronze staging, silver transformation and gold serving - and when to use each.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-03T06:23:01+00:00"
+}

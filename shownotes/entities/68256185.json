@@ -1,0 +1,148 @@
+{
+  "episode_id": "68256185",
+  "slug": null,
+  "title": "Azure PostgreSQL cost optimization: stop overpaying for Flexible Server compute, storage, and HA",
+  "lang": "en",
+  "duration_s": 1228,
+  "transcript_source": "data/en_transcripts/e78ea48a37fd.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "azure",
+      "name": "Microsoft Azure",
+      "type": "platform",
+      "score": 85,
+      "mentions": 23,
+      "first_mention_s": 0,
+      "quote": "Your Azure postcrescuil bill isn't high because of traffic.",
+      "url": "https://www.m365.fm/entity/azure/"
+    },
+    {
+      "slug": "power-bi",
+      "name": "Power BI",
+      "type": "product",
+      "score": 10,
+      "mentions": 1,
+      "first_mention_s": 688,
+      "quote": "your main instance stops hyperventilating underpower bi abuse",
+      "url": "https://www.m365.fm/entity/power-bi/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "azure-database-for-postgresql-flexible-server",
+      "name": "Azure Database for PostgreSQL flexible server",
+      "type": "product"
+    },
+    {
+      "slug": "high-availability",
+      "name": "High availability",
+      "type": "concept"
+    },
+    {
+      "slug": "read-replica",
+      "name": "Read replica",
+      "type": "concept"
+    },
+    {
+      "slug": "iops",
+      "name": "IOPS",
+      "type": "concept"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "Managed means patched, it doesn't mean optimized. Consider managed like hotel housekeeping. They'll make the bed and replace towels, but if you leave the faucet running, that water charge is yours.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 161,
+      "entities": [
+        "azure-database-for-postgresql-flexible-server"
+      ],
+      "why": "Corrects the common misconception that a managed database is automatically cost-optimized."
+    },
+    {
+      "text": "Compute you can stop. Storage never sleeps. Every megabyte provision has a permanent price tag, whether a single query runs or not.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 212,
+      "entities": [
+        "azure-database-for-postgresql-flexible-server",
+        "azure"
+      ],
+      "why": "Explains concisely why storage is the hidden cost driver even when compute is paused."
+    },
+    {
+      "text": "Resilience is not redundancy. Real resilience means measured recovery, not blind duplication. Protect critical transactions, ignore vanity staging, and keep paranoia proportional to revenue risk.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 582,
+      "entities": [
+        "high-availability"
+      ],
+      "why": "Gives a clear rule for when high availability is worth paying for."
+    },
+    {
+      "text": "Most teams never attempt a restore until it's too late. Backups you've never tested are Schrodinger's safety net, both valid and worthless.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 1091,
+      "entities": [
+        "azure-database-for-postgresql-flexible-server"
+      ],
+      "why": "Memorable reminder that untested backups provide no real assurance."
+    },
+    {
+      "text": "Defaults are designed to prevent support tickets, not optimize invoices. Profiling, alerting and observable metrics replace guesswork far better than recommended modes ever will.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 1150,
+      "entities": [
+        "azure"
+      ],
+      "why": "Challenges default bias in cloud deployments and recommends measurement instead."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "Why your bill is high"
+    },
+    {
+      "start_s": 49,
+      "title": "The illusion of managed"
+    },
+    {
+      "start_s": 197,
+      "title": "Storage, the silent bill multiplier"
+    },
+    {
+      "start_s": 394,
+      "title": "High availability: paying twice"
+    },
+    {
+      "start_s": 604,
+      "title": "Read replicas"
+    },
+    {
+      "start_s": 787,
+      "title": "Maintenance and hidden downtime"
+    },
+    {
+      "start_s": 951,
+      "title": "Backups and false security"
+    },
+    {
+      "start_s": 1110,
+      "title": "The psychology of cloud waste"
+    }
+  ],
+  "takeaways": [
+    "Azure Database for PostgreSQL flexible server bills like a dedicated VM, so compute must be right-sized, scheduled and kept off Burstable tiers for steady production loads.",
+    "Storage auto-grow never shrinks and Premium SSD v2 bills capacity, IOPS and throughput separately, so cap growth and size disks to observed need.",
+    "Use high availability only for mission-critical workloads, offload reads to asynchronous read replicas, control maintenance windows and add tested logical backups."
+  ],
+  "hook": "Azure Database for PostgreSQL flexible server bills can climb even without more traffic. This episode is for database admins and cloud architects who trusted the default settings. It shows where compute, storage, high availability, replicas, maintenance and backups quietly add cost, and how to cut them without losing resilience.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-03T06:28:54+00:00"
+}

@@ -1,0 +1,226 @@
+{
+  "episode_id": "68487095",
+  "slug": null,
+  "title": "Master AD to Entra ID migration: fix source of authority without breaking logins",
+  "lang": "en",
+  "duration_s": 1349,
+  "transcript_source": "data/en_transcripts/aca7b751ff6e.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "conditional-access",
+      "name": "Conditional Access",
+      "type": "concept",
+      "score": 65,
+      "mentions": 9,
+      "first_mention_s": 41,
+      "quote": "a conditional access rule fails, or an app denies authorization",
+      "url": "https://www.m365.fm/entity/conditional-access/"
+    },
+    {
+      "slug": "mfa",
+      "name": "Multifactor authentication (MFA)",
+      "type": "concept",
+      "score": 55,
+      "mentions": 5,
+      "first_mention_s": 33,
+      "quote": "Your on premises ad enforces outdated password policies while entra Id insists on modern MFA.",
+      "url": "https://www.m365.fm/entity/mfa/"
+    },
+    {
+      "slug": "zero-trust",
+      "name": "Zero Trust",
+      "type": "concept",
+      "score": 45,
+      "mentions": 1,
+      "first_mention_s": 110,
+      "quote": "Because dual control obliterates the core of zero trust.",
+      "url": "https://www.m365.fm/entity/zero-trust/"
+    },
+    {
+      "slug": "audit-logs",
+      "name": "Audit logs",
+      "type": "concept",
+      "score": 35,
+      "mentions": 3,
+      "first_mention_s": 1255,
+      "quote": "the fewer oops moments appear in your audit logs",
+      "url": "https://www.m365.fm/entity/audit-logs/"
+    },
+    {
+      "slug": "identity-lifecycle",
+      "name": "Identity lifecycle management",
+      "type": "concept",
+      "score": 35,
+      "mentions": 2,
+      "first_mention_s": 657,
+      "quote": "Introduce automation via live cycle workflows.",
+      "url": "https://www.m365.fm/entity/identity-lifecycle/"
+    },
+    {
+      "slug": "entra-id",
+      "name": "Microsoft Entra ID",
+      "type": "product",
+      "score": 95,
+      "mentions": 13,
+      "first_mention_s": 15,
+      "quote": "Meanwhile, Microsoft entra Id is already running the global authentication marathon",
+      "url": "https://www.m365.fm/entity/entra-id/"
+    },
+    {
+      "slug": "active-directory",
+      "name": "Active Directory",
+      "type": "product",
+      "score": 90,
+      "mentions": 19,
+      "first_mention_s": 10,
+      "quote": "Active directory still sits in your server room, humming along like its two thousand and three.",
+      "url": "https://www.m365.fm/entity/active-directory/"
+    },
+    {
+      "slug": "entra-connect",
+      "name": "Microsoft Entra Connect",
+      "type": "product",
+      "score": 75,
+      "mentions": 8,
+      "first_mention_s": 28,
+      "quote": "Hybrid Sync models were designed as a bridge, not a forever Home entra connect",
+      "url": "https://www.m365.fm/entity/entra-connect/"
+    },
+    {
+      "slug": "microsoft-entra",
+      "name": "Microsoft Entra",
+      "type": "platform",
+      "score": 70,
+      "mentions": 47,
+      "first_mention_s": 15,
+      "quote": "Meanwhile, Microsoft entra Id is already running the global authentication marathon",
+      "url": "https://www.m365.fm/entity/microsoft-entra/"
+    },
+    {
+      "slug": "graph",
+      "name": "Microsoft Graph",
+      "type": "product",
+      "score": 45,
+      "mentions": 6,
+      "first_mention_s": 508,
+      "quote": "Each object's ide is its passport for any graph or PowerShell command.",
+      "url": "https://www.m365.fm/entity/graph/"
+    },
+    {
+      "slug": "entra-cloud-sync",
+      "name": "Microsoft Entra Cloud Sync",
+      "type": "product",
+      "score": 30,
+      "mentions": 1,
+      "first_mention_s": 138,
+      "quote": "or its lighter sibling, Cloud Zync plays courier between your directories",
+      "url": "https://www.m365.fm/entity/entra-cloud-sync/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "source-of-authority",
+      "name": "Source of authority (SOA)",
+      "type": "concept"
+    },
+    {
+      "slug": "powershell",
+      "name": "PowerShell",
+      "type": "product"
+    },
+    {
+      "slug": "access-reviews",
+      "name": "Access reviews",
+      "type": "concept"
+    },
+    {
+      "slug": "fido2",
+      "name": "FIDO2",
+      "type": "concept"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "In directory terms, the source of authority determines which system has final say over an object's identity attributes.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 87,
+      "entities": [
+        "source-of-authority"
+      ],
+      "why": "A concise definition of the episode's core concept."
+    },
+    {
+      "text": "Running two authoritative systems is like maintaining two versions of reality. You'll never be entirely sure who a user truly is at any given moment.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 126,
+      "entities": [
+        "source-of-authority",
+        "active-directory",
+        "entra-id"
+      ],
+      "why": "Explains vividly why dual sources of authority undermine identity security."
+    },
+    {
+      "text": "When you flip an object to cloud management, Entra will treat that data as canonical truth. Garbage in becomes garbage immortalized.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 310,
+      "entities": [
+        "entra-id"
+      ],
+      "why": "Makes the case for cleaning directory data before migration."
+    },
+    {
+      "text": "The most common administrative blunder at this stage is skipping the verification step. Patch first, assume success later. That's how authentication collapses midday.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 889,
+      "entities": [
+        "entra-id",
+        "graph"
+      ],
+      "why": "A practical warning about verifying each source of authority change."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "Why two identity systems hurt"
+    },
+    {
+      "start_s": 80,
+      "title": "Understanding the source of authority"
+    },
+    {
+      "start_s": 244,
+      "title": "Preparing the environment"
+    },
+    {
+      "start_s": 475,
+      "title": "Migrating groups to cloud management"
+    },
+    {
+      "start_s": 713,
+      "title": "Migrating user accounts"
+    },
+    {
+      "start_s": 925,
+      "title": "Troubleshooting sync issues"
+    },
+    {
+      "start_s": 1127,
+      "title": "Optimization and long-term strategy"
+    }
+  ],
+  "takeaways": [
+    "The source of authority decides which directory owns an object's attributes, and dual control between Active Directory and Entra ID causes sync drift, lockouts and inconsistent policies.",
+    "Clean up duplicates and sync scope, enforce modern MFA and document Entra Connect configuration before flipping isCloudManaged on any object.",
+    "Migrate groups first, then pilot users, verify every change via Graph and sign-in logs, and then use access reviews, Conditional Access and lifecycle workflows to govern from the cloud."
+  ],
+  "hook": "Running Active Directory and Microsoft Entra ID side by side means double policies, sync drift and broken logins. This episode is for identity admins planning a move to cloud-managed identities. It shows how to shift the source of authority for groups and users step by step without breaking authentication.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-03T06:23:01+00:00"
+}

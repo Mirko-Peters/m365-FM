@@ -1,0 +1,1 @@
+ALTER TABLE search_doc ADD COLUMN title_norm TEXT NOT NULL DEFAULT '';
