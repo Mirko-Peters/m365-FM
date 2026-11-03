@@ -5,6 +5,7 @@ import site_notes as SNT
 import site_shownotes as SNS   # T26: Vollfassungen shownotes/site/<episode_id>.md
 import site_extract as SX   # T27: Folgen <-> Entitaeten aus der QA-geprueften Extraktion
 import site_media as MED
+import site_img_dims as IMG
 import site_sponsorships as SPM   # T37 Sponsor: Kennzeichnung gesponserter Folgen (data/sponsorships.json)
 import gzip, json, re, unicodedata, html as _h
 from html.parser import HTMLParser
@@ -36,6 +37,8 @@ class _San(HTMLParser):
             at = f' href="{esc(d["href"])}" rel="noopener"' + ("" if d["href"].startswith(("/", "#")) else ' target="_blank"')
         if t == "img" and d.get("src", "").startswith("https://"):
             at = f' src="{esc(d["src"])}" alt="{esc(d.get("alt", ""))}" loading="lazy"'
+            for name in ("width", "height"):
+                if re.fullmatch(r"\d+", d.get(name, "")): at += f' {name}="{d[name]}"'
         elif t == "img": return
         self.o.append(f"<{t}{at}>")
 
@@ -49,7 +52,7 @@ class _San(HTMLParser):
 
 
 def san(s):
-    p = _San(); p.feed(s or ""); return "".join(p.o)
+    p = _San(); p.feed(s or ""); return IMG.enhance("".join(p.o))
 
 
 def plain(s):
@@ -332,7 +335,7 @@ def build(g):
     root = f"{BASE}/show/"; NAME = pod.get("name") or "M365.FM Podcast"
     navitems = (("", "Home"), ("episodes/", "Episodes"), *(((f"{BASE}/community/u/mirko-p/blog/", "Blog"),) if (PD / "blog_posts.json.gz").exists() else ()), *((("guests/", "Guests"),) if guests else ()), ("hosts/", "Hosts"), ("sponsors/", "Sponsors"), ("reviews/", "Reviews"), ("work-with-me/", "Work with me"), ("about/", "About"))
     nav = '<section class="sb-card sb-nav"><h2>M365.FM Show</h2><ul class="sb-navl">' + "".join(f'<li><a href="{p if p.startswith("https://") else root + p}">{t}</a></li>' for p, t in navitems) + "</ul></section>"   # frueher zweite Menueleiste ueber dem Inhalt, jetzt Karte in der Sidebar
-    shell = lambda b, side="": f'{header("en", "")}<link rel="stylesheet" href="{BASE}/assets/sbar.css"><main class="wrap shw"><div class="shmain">{b}</div>{side}</main>{footer_en()}'
+    shell = lambda b, side="": f'{header("en", "")}<link rel="stylesheet" href="{BASE}/assets/sbar.css"><style>.pp-notes img,.wk-body img{{max-width:100%;height:auto}}.pp-notes img.img-no-dims,.wk-body img.img-no-dims{{width:100%;aspect-ratio:16/9;object-fit:contain}}</style><main class="wrap shw"><div class="shmain">{b}</div>{side}</main>{footer_en()}'
 
     SBX = SBR.Index(); SHP = json.loads((D / "platforms.json").read_text("utf-8")).get("en", {}) if (D / "platforms.json").exists() else {}
 

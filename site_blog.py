@@ -54,7 +54,8 @@ FOLLOWJS = ('(function(){var A="%API%",b=document.querySelector(".bl-follow");if
             'b.addEventListener("click",function(){var on=b.getAttribute("aria-pressed")!=="true";f("/api/blog/follow",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({handle:H,on:on})}).then(function(d){if(d.error==="login"){location.href=A.replace("api-","")+"/community/";return}if(d.ok)set(on)}).catch(function(){})})})();')
 
 CSS = ('<style>.bl-list{padding:0}.bl-list li{list-style:none;padding:.8em 0;border-bottom:1px solid var(--bd)}.bl-vote{font:inherit;cursor:pointer;border:1px solid var(--bd);border-radius:2em;padding:.25em .8em;background:var(--card);color:inherit}'
-       '.bl-vote[aria-pressed=true]{border-color:var(--ac)}.bl-rel{margin:1.5em 0}.bl-rel h2{font-size:1.15rem}.en-al{text-decoration:underline dotted;text-underline-offset:.15em}</style>')
+       '.bl-vote[aria-pressed=true]{border-color:var(--ac)}.bl-rel{margin:1.5em 0}.bl-rel h2{font-size:1.15rem}.en-al{text-decoration:underline dotted;text-underline-offset:.15em}'
+       '.wk-body img{max-width:100%;height:auto}.wk-body img.img-no-dims{width:100%;aspect-ratio:16/9;object-fit:contain}</style>')
 
 
 def build(g, posts, people, api):
