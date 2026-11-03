@@ -1,0 +1,197 @@
+{
+  "episode_id": "67321742",
+  "slug": "deploying-dynamics-365-customizations-with-alm-pipelines-how-to-stop-green-in-dev-broken-in-prod-deployments-for-good",
+  "title": "Deploying Dynamics 365 Customizations with ALM Pipelines: How to Stop “Green in Dev, Broken in Prod” Deployments for Good",
+  "lang": "en",
+  "duration_s": 1307,
+  "transcript_source": "data/en_transcripts/51aa99cd8de6.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "dynamics-365",
+      "name": "Dynamics 365",
+      "type": "platform",
+      "score": 92,
+      "mentions": 14,
+      "first_mention_s": 2,
+      "quote": "Ever spend hours perfecting a Dynamics three sixty five solution only to have it break during deployment",
+      "url": "https://www.m365.fm/entity/dynamics-365/"
+    },
+    {
+      "slug": "managed-solution",
+      "name": "Managed and unmanaged solutions",
+      "type": "concept",
+      "score": 90,
+      "mentions": 19,
+      "first_mention_s": 156,
+      "quote": "a whole lot of confusion about managed and unmanaged solutions",
+      "url": "https://www.m365.fm/entity/managed-solution/"
+    },
+    {
+      "slug": "solution-dependencies",
+      "name": "Solution component dependencies",
+      "type": "concept",
+      "score": 88,
+      "mentions": 22,
+      "first_mention_s": 111,
+      "quote": "A major headache comes from dependencies you can't always see.",
+      "url": "https://www.m365.fm/entity/solution-dependencies/"
+    },
+    {
+      "slug": "power-platform-solution",
+      "name": "Power Platform solution",
+      "type": "concept",
+      "score": 80,
+      "mentions": 10,
+      "first_mention_s": 23,
+      "quote": "Why solution packaging breaks even when it looks right.",
+      "url": "https://www.m365.fm/entity/power-platform-solution/"
+    },
+    {
+      "slug": "solution-layers",
+      "name": "Solution layers",
+      "type": "concept",
+      "score": 70,
+      "mentions": 15,
+      "first_mention_s": 98,
+      "quote": "If layering isn't done right, those critical rules can get swallowed up",
+      "url": "https://www.m365.fm/entity/solution-layers/"
+    },
+    {
+      "slug": "environment-variables",
+      "name": "Environment variables (Power Platform)",
+      "type": "concept",
+      "score": 65,
+      "mentions": 5,
+      "first_mention_s": 966,
+      "quote": "what your solution package doesn't actually carry over, environment variables, connection references",
+      "url": "https://www.m365.fm/entity/environment-variables/"
+    },
+    {
+      "slug": "connection-references",
+      "name": "Connection references (Power Platform)",
+      "type": "concept",
+      "score": 55,
+      "mentions": 3,
+      "first_mention_s": 967,
+      "quote": "environment variables, connection references, and real business data",
+      "url": "https://www.m365.fm/entity/connection-references/"
+    },
+    {
+      "slug": "dataverse-plug-in",
+      "name": "Dataverse plug-in",
+      "type": "concept",
+      "score": 45,
+      "mentions": 6,
+      "first_mention_s": 62,
+      "quote": "You group up your plugins, flows, entities, all the bits and pieces you've built.",
+      "url": "https://www.m365.fm/entity/dataverse-plug-in/"
+    },
+    {
+      "slug": "power-automate",
+      "name": "Power Automate",
+      "type": "product",
+      "score": 40,
+      "mentions": 4,
+      "first_mention_s": 271,
+      "quote": "maybe a power automate flow that references an old field or an apikey from DEV",
+      "url": "https://www.m365.fm/entity/power-automate/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "solution-dependencies",
+      "name": "Solution component dependencies",
+      "type": "concept",
+      "mentions": 22,
+      "first_mention_s": 111,
+      "quote": "A major headache comes from dependencies you can't always see.",
+      "status": "review"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "Packaging in Dynamics three sixty five is closer to city planning than simple file transfer.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 305,
+      "entities": [
+        "dynamics-365",
+        "power-platform-solution"
+      ],
+      "why": "A memorable analogy for why solution packaging needs planning."
+    },
+    {
+      "text": "Unmapped dependencies are the single most common source of solution deployment headaches. Dynamics doesn't forget what's linked. It just silently expects you to connect all the dots yourself.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 480,
+      "entities": [
+        "solution-dependencies",
+        "dynamics-365"
+      ],
+      "why": "States the main cause of failed imports and who is responsible for it."
+    },
+    {
+      "text": "Always convert to managed before you push to production, and don't trust that it'll work just because it imported fine elsewhere.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 873,
+      "entities": [
+        "managed-solution"
+      ],
+      "why": "Clear, actionable deployment rule."
+    },
+    {
+      "text": "Use unmanaged for rapid builds, manage for stability, and always check imports in a sandbox first.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 901,
+      "entities": [
+        "managed-solution",
+        "solution-layers"
+      ],
+      "why": "Sums up the layering strategy in one sentence."
+    },
+    {
+      "text": "Environment variables are valuable if you use them with intention, but setting them wrong is like giving someone the right key for the wrong door.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 1067,
+      "entities": [
+        "environment-variables"
+      ],
+      "why": "Vivid warning about misconfigured environment variables."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "Why solution packaging breaks even when it looks right"
+    },
+    {
+      "start_s": 330,
+      "title": "Mapping dependencies before you migrate"
+    },
+    {
+      "start_s": 625,
+      "title": "Managed vs. unmanaged: getting the layers right"
+    },
+    {
+      "start_s": 930,
+      "title": "Environment variables, data migration and automation"
+    },
+    {
+      "start_s": 1240,
+      "title": "Treating deployment as a sequence"
+    }
+  ],
+  "takeaways": [
+    "Most failed Dynamics 365 imports come from hidden dependencies, so map every field, table, flow and script a solution relies on before you export it.",
+    "Use unmanaged solutions for development only and always ship managed solutions to production, tested in a sandbox, to keep layers clean and rollbacks possible.",
+    "Environment variables, connection references and reference data are not carried by the package, so document them per environment and follow the order import, configure, migrate, validate."
+  ],
+  "hook": "A Dynamics 365 solution that is green in dev can still break the moment it lands in test or production. This episode shows Dynamics and Power Platform teams how dependency mapping, the right managed and unmanaged layering, and careful handling of environment variables and reference data turn fragile deployments into repeatable releases.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-03T03:36:35Z"
+}
