@@ -35,7 +35,7 @@ class PersonAkaTests(unittest.TestCase):
             self.load([ENTRY], [dict(PERSON, id="other")])
         with self.assertRaisesRegex(ValueError, "nur für Personen"):
             self.load([ENTRY], [dict(PERSON, type="concept")])
-        for name in ("A", "person@example.com", "+1 555 123 4567", "x" * 81):
+        for name in ("A", "person@example.com", "Artist person@example.com", "+1 555 123 4567", "x" * 81):
             with self.subTest(name=name), self.assertRaisesRegex(ValueError, "Unsicherer"):
                 self.load([dict(ENTRY, name=name)])
         with self.assertRaisesRegex(ValueError, "Doppelter"):

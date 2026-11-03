@@ -86,7 +86,7 @@ def load_person_aka(recs, path=AKA_FILE):
             if not isinstance(entry, dict):
                 raise ValueError(f"Ungültiger AKA-Eintrag: {eid}")
             name, kind, source, added = (entry.get(k) for k in ("name", "kind", "source", "added"))
-            if not isinstance(name, str) or name != name.strip() or not 2 <= len(name) <= 80 or email.fullmatch(name) or phone.search(name):
+            if not isinstance(name, str) or name != name.strip() or not 2 <= len(name) <= 80 or email.search(name) or phone.search(name):
                 raise ValueError(f"Unsicherer AKA-Name: {eid}")
             if name.casefold() in seen:
                 raise ValueError(f"Doppelter AKA-Name: {eid}: {name}")
