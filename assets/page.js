@@ -20,9 +20,10 @@ function show(a){cur=a;pop.textContent="";var b=document.createElement("b");b.te
 if(touch){var m=document.createElement("a");m.href=a.href;m.textContent=" →";m.setAttribute("aria-label",a.dataset.gt);pop.appendChild(m)}
 pop.hidden=false;a.setAttribute("aria-describedby","glpop");var r=a.getBoundingClientRect(),x=Math.max(8,Math.min(r.left+scrollX,scrollX+document.documentElement.clientWidth-pop.offsetWidth-8));pop.style.left=x+"px";pop.style.top=(r.bottom+scrollY+6)+"px"}
 function hide(){pop.hidden=true;if(cur)cur.removeAttribute("aria-describedby");cur=null}
-L.forEach(function(a){a.addEventListener("mouseenter",function(){if(!touch)show(a)});a.addEventListener("mouseleave",function(){setTimeout(function(){if(!pop.matches(":hover"))hide()},120)});a.addEventListener("focus",function(){show(a)});a.addEventListener("blur",function(){setTimeout(function(){if(!pop.contains(document.activeElement))hide()},120)});
+var tp=0;   // T29: Tippen fokussiert den Begriff vor dem Klick - dann zeigt erst der Klick die Erklaerung (vorher navigierte der erste Tipp weg)
+L.forEach(function(a){a.addEventListener("pointerdown",function(e){if(e.pointerType&&e.pointerType!=="mouse")tp=Date.now()});a.addEventListener("mouseenter",function(){if(!touch)show(a)});a.addEventListener("mouseleave",function(){if(!touch)setTimeout(function(){if(!pop.matches(":hover"))hide()},120)});a.addEventListener("focus",function(){if(Date.now()-tp>700)show(a)});a.addEventListener("blur",function(){setTimeout(function(){if(!pop.contains(document.activeElement))hide()},120)});
 a.addEventListener("click",function(e){if(touch&&cur!==a){e.preventDefault();show(a)}})});
-pop.addEventListener("mouseleave",hide);document.addEventListener("keydown",function(e){if(e.key==="Escape")hide()});document.addEventListener("click",function(e){if(cur&&!pop.contains(e.target)&&e.target!==cur)hide()})}catch(e){}})();
+pop.addEventListener("mouseleave",function(){if(!touch)hide()});document.addEventListener("keydown",function(e){if(e.key==="Escape")hide()});document.addEventListener("click",function(e){if(cur&&!pop.contains(e.target)&&!cur.contains(e.target))hide()})}catch(e){}})();
 (function(){try{var Q=document.getElementById("quiz");if(!Q)return;var C=JSON.parse(Q.querySelector(".qcfg").textContent),T=C.t,qs=[].slice.call(Q.querySelectorAll(".qq")),ctl=Q.querySelector(".qctl"),fb=Q.querySelector(".qfb"),i=0,score=0,done=false;
 function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
 function btn(x,f,m){var b=el("button","btn"+(m?" main":""),x);b.type="button";b.onclick=f;return b}
@@ -36,11 +37,15 @@ var a=el("a","btn","LinkedIn");a.href="https://www.linkedin.com/sharing/share-of
 show(0)}catch(e){}})();
 (function(){try{document.querySelectorAll('.yt').forEach(function(b){b.addEventListener('click',function(){var i=document.createElement('iframe');i.src='https://www.youtube-nocookie.com/embed/'+b.dataset.id+'?autoplay=1&rel=0';i.allow='accelerometer;autoplay;encrypted-media;picture-in-picture';i.allowFullscreen=true;i.title='YouTube';b.innerHTML='';b.appendChild(i)},{once:true})});}catch(e){}})();
 ;(function(){   // T10: Menues (Sprachwahl, Menuegruppen, Burger) schliessen mit Escape, Klick daneben oder wenn der Fokus sie verlaesst
-  var SEL = "details.lsw[open],details.mg[open],details.mm[open]";
-  function closeAll(except){ document.querySelectorAll(SEL).forEach(function(d){ if (d !== except && !d.contains(except)) d.removeAttribute("open"); }); }
+  var SEL = "details.lsw[open],details.mg[open],details.mm[open]", MENU = "details.lsw,details.mg,details.mm";
+  // T29: offene Menues ueber das toggle-Ereignis merken statt bei jedem Klick und Fokuswechsel den ganzen DOM zu durchsuchen (6-15 ms auf grossen Seiten)
+  var OPEN = [].slice.call(document.querySelectorAll(SEL));
+  document.addEventListener("toggle", function(e){ var d = e.target; if (!d || !d.matches || !d.matches(MENU)) return; var i = OPEN.indexOf(d); if (d.open) { if (i < 0) OPEN.push(d); } else if (i >= 0) OPEN.splice(i, 1); }, true);
+  function closeAll(except){ if (!OPEN.length) return; OPEN.slice().forEach(function(d){ if (d !== except && !d.contains(except)) d.removeAttribute("open"); }); }
   document.addEventListener("keydown", function(e){
     if (e.key !== "Escape") return;
     var d = document.activeElement && document.activeElement.closest && document.activeElement.closest(SEL);
+    if (d) d.removeAttribute("open");   // auch ein Menue, dessen toggle-Ereignis noch aussteht
     closeAll(null); if (d) { var s = d.querySelector("summary"); if (s) s.focus(); }
   });
   document.addEventListener("click", function(e){ closeAll(e.target.closest ? e.target.closest("details") : null); });
