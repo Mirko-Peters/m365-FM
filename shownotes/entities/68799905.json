@@ -1,0 +1,194 @@
+{
+  "episode_id": "68799905",
+  "slug": null,
+  "title": "Azure Quantum Hybrid for Real-World Scheduling and Routing",
+  "lang": "en",
+  "duration_s": 1778,
+  "transcript_source": "data/en_transcripts/d6cf33eee953.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "governance",
+      "name": "Governance",
+      "type": "concept",
+      "score": 40,
+      "mentions": 3,
+      "first_mention_s": 1424,
+      "quote": "Your scripts, pipelines, and governance won't write themselves",
+      "url": "https://www.m365.fm/entity/governance/"
+    },
+    {
+      "slug": "azure",
+      "name": "Microsoft Azure",
+      "type": "platform",
+      "score": 90,
+      "mentions": 21,
+      "first_mention_s": 21,
+      "quote": "Classical stalls at the exact moment costs start leaking and Azure's hybrid quantum tools already live in your tenant.",
+      "url": "https://www.m365.fm/entity/azure/"
+    },
+    {
+      "slug": "azure-functions",
+      "name": "Azure Functions",
+      "type": "product",
+      "score": 55,
+      "mentions": 4,
+      "first_mention_s": 482,
+      "quote": "Azure functions, schedules runs.",
+      "url": "https://www.m365.fm/entity/azure-functions/"
+    },
+    {
+      "slug": "azure-logic-apps",
+      "name": "Azure Logic Apps",
+      "type": "product",
+      "score": 45,
+      "mentions": 3,
+      "first_mention_s": 826,
+      "quote": "A logic app posts the clinical summary to teams",
+      "url": "https://www.m365.fm/entity/azure-logic-apps/"
+    },
+    {
+      "slug": "azure-key-vault",
+      "name": "Azure Key Vault",
+      "type": "product",
+      "score": 35,
+      "mentions": 2,
+      "first_mention_s": 1324,
+      "quote": "workspace, storage, key vault, for external secrets you can't avoid",
+      "url": "https://www.m365.fm/entity/azure-key-vault/"
+    },
+    {
+      "slug": "github-actions",
+      "name": "GitHub Actions",
+      "type": "product",
+      "score": 35,
+      "mentions": 1,
+      "first_mention_s": 1227,
+      "quote": "GitHub actions packages, q+ and Python into a deployable unit, stamps versions",
+      "url": "https://www.m365.fm/entity/github-actions/"
+    },
+    {
+      "slug": "teams",
+      "name": "Microsoft Teams",
+      "type": "product",
+      "score": 20,
+      "mentions": 2,
+      "first_mention_s": 826,
+      "quote": "A logic app posts the clinical summary to teams",
+      "url": "https://www.m365.fm/entity/teams/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "qaoa",
+      "name": "Quantum Approximate Optimization Algorithm (QAOA)",
+      "type": "concept"
+    },
+    {
+      "slug": "max-cut",
+      "name": "Maximum cut (Max-Cut)",
+      "type": "concept"
+    },
+    {
+      "slug": "azure-quantum",
+      "name": "Azure Quantum",
+      "type": "product"
+    },
+    {
+      "slug": "qubit",
+      "name": "Qubit",
+      "type": "concept"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "This is why Azure's approach is hybrid first. You run a parameterized quantum circuit, then let a classical optimizer adjust the knobs.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 179,
+      "entities": [
+        "azure-quantum",
+        "qaoa"
+      ],
+      "why": "Concise explanation of the hybrid quantum-classical loop."
+    },
+    {
+      "text": "These circuits aren't deterministic programs. They're statistical experiments. You don't read the answer. You read a histogram and translate it back to the thing you're optimizing.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 269,
+      "entities": [
+        "qaoa"
+      ],
+      "why": "Names the mental shift that trips up most teams new to quantum."
+    },
+    {
+      "text": "The counter-intuitive part. Fewer, cleaner layers often beat deeper stacks on today's hardware. Shallow circuits well tuned angles and enough shots to trust the histogram.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 543,
+      "entities": [
+        "qaoa"
+      ],
+      "why": "Practical guidance for running QAOA on noisy hardware."
+    },
+    {
+      "text": "Never trust a single winner. Consensus across the top cluster is the signal. If multiple high probability bit strings converge on similar rosters, you've got a robust plan.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 1057,
+      "entities": [
+        "qaoa"
+      ],
+      "why": "Clear rule for interpreting quantum sampling results."
+    },
+    {
+      "text": "Key takeaway, quantum doesn't replace classical, it pressures it into better answers through a disciplined hybrid loop that stops the bleeding faster.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 1744,
+      "entities": [
+        "azure-quantum"
+      ],
+      "why": "Anti-hype summary of what hybrid quantum delivers today."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "Why quantum exists"
+    },
+    {
+      "start_s": 297,
+      "title": "Hybrid QAOA on Azure"
+    },
+    {
+      "start_s": 602,
+      "title": "Case A: logistics network Max-Cut"
+    },
+    {
+      "start_s": 895,
+      "title": "Case B: workforce scheduling"
+    },
+    {
+      "start_s": 1156,
+      "title": "Hybrid quantum architecture in Azure"
+    },
+    {
+      "start_s": 1390,
+      "title": "Why Microsoft wants you early"
+    },
+    {
+      "start_s": 1568,
+      "title": "Best practices and the statistical gotcha"
+    }
+  ],
+  "takeaways": [
+    "Hybrid QAOA pairs a parameterized quantum circuit with a classical optimizer, which suits combinatorial problems like routing (Max-Cut) and workforce scheduling.",
+    "Quantum circuits are statistical experiments, so results must be read as histograms, decoded into domain terms and validated against hard constraints.",
+    "Run hybrid jobs like any Azure workload: managed identity, least-privilege RBAC, Functions and Logic Apps orchestration, monitoring, cost caps and immutable evidence logs."
+  ],
+  "hook": "Classical optimization stalls exactly where routing and scheduling problems explode combinatorially. This episode is for Azure architects and operations leaders curious about practical quantum, not hype. Learn how hybrid QAOA on Azure Quantum works, two real-world case patterns, and the architecture and practices that keep it reliable and governable.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-03T02:33:01+00:00"
+}

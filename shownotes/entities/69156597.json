@@ -1,0 +1,240 @@
+{
+  "episode_id": "69156597",
+  "slug": null,
+  "title": "Securing AI Agents in Microsoft 365: Governance, Blast Radius, and Safe Control Plane Design",
+  "lang": "en",
+  "duration_s": 3951,
+  "transcript_source": "data/en_transcripts/8eafd21c12e9.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "ai-agent",
+      "name": "AI agent",
+      "type": "concept",
+      "score": 92,
+      "mentions": 100,
+      "first_mention_s": 0,
+      "quote": "Most organizations will soon give their agent a face and a voice.",
+      "url": "https://www.m365.fm/entity/ai-agent/"
+    },
+    {
+      "slug": "conditional-access",
+      "name": "Conditional Access",
+      "type": "concept",
+      "score": 85,
+      "mentions": 23,
+      "first_mention_s": 64,
+      "quote": "Conditional access can evaluate signals and decide whether that identity should get a token right now",
+      "url": "https://www.m365.fm/entity/conditional-access/"
+    },
+    {
+      "slug": "governance",
+      "name": "Governance",
+      "type": "concept",
+      "score": 75,
+      "mentions": 14,
+      "first_mention_s": 36,
+      "quote": "Let's start with the strongest counter argument you'll hear. We already have governance.",
+      "url": "https://www.m365.fm/entity/governance/"
+    },
+    {
+      "slug": "rag",
+      "name": "Retrieval-augmented generation (RAG)",
+      "type": "concept",
+      "score": 70,
+      "mentions": 6,
+      "first_mention_s": 2737,
+      "quote": "Rage as a security boundary, not a knowledge feature. Most teams treat rag like a search plug-in.",
+      "url": "https://www.m365.fm/entity/rag/"
+    },
+    {
+      "slug": "zero-trust",
+      "name": "Zero Trust",
+      "type": "concept",
+      "score": 30,
+      "mentions": 1,
+      "first_mention_s": 73,
+      "quote": "The model treats agents as first class citizens in a zero trust world.",
+      "url": "https://www.m365.fm/entity/zero-trust/"
+    },
+    {
+      "slug": "microsoft-entra",
+      "name": "Microsoft Entra",
+      "type": "platform",
+      "score": 68,
+      "mentions": 7,
+      "first_mention_s": 59,
+      "quote": "Entra goes further. The agent ID model acknowledges the obvious.",
+      "url": "https://www.m365.fm/entity/microsoft-entra/"
+    },
+    {
+      "slug": "agent-id",
+      "name": "Microsoft Entra Agent ID",
+      "type": "product",
+      "score": 65,
+      "mentions": 5,
+      "first_mention_s": 60,
+      "quote": "The agent ID model acknowledges the obvious. Agents are non-human identities.",
+      "url": "https://www.m365.fm/entity/agent-id/"
+    },
+    {
+      "slug": "purview",
+      "name": "Microsoft Purview",
+      "type": "product",
+      "score": 55,
+      "mentions": 9,
+      "first_mention_s": 44,
+      "quote": "Per view captures co-pilot conversation transcripts, co-pilot studio logs activities.",
+      "url": "https://www.m365.fm/entity/purview/"
+    },
+    {
+      "slug": "graph",
+      "name": "Microsoft Graph",
+      "type": "product",
+      "score": 45,
+      "mentions": 3,
+      "first_mention_s": 295,
+      "quote": "An enterprise rolls out a productivity agent with SharePoint and Microsoft Graph write scopes.",
+      "url": "https://www.m365.fm/entity/graph/"
+    },
+    {
+      "slug": "sharepoint",
+      "name": "SharePoint",
+      "type": "product",
+      "score": 40,
+      "mentions": 5,
+      "first_mention_s": 295,
+      "quote": "An enterprise rolls out a productivity agent with SharePoint and Microsoft Graph write scopes.",
+      "url": "https://www.m365.fm/entity/sharepoint/"
+    },
+    {
+      "slug": "copilot-studio",
+      "name": "Copilot Studio",
+      "type": "product",
+      "score": 35,
+      "mentions": 2,
+      "first_mention_s": 44,
+      "quote": "Per view captures co-pilot conversation transcripts, co-pilot studio logs activities.",
+      "url": "https://www.m365.fm/entity/copilot-studio/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "control-plane",
+      "name": "Control plane",
+      "type": "concept"
+    },
+    {
+      "slug": "data-provenance",
+      "name": "Data provenance",
+      "type": "concept"
+    },
+    {
+      "slug": "idempotency",
+      "name": "Idempotency",
+      "type": "concept"
+    },
+    {
+      "slug": "non-human-identity",
+      "name": "Non-human identity",
+      "type": "concept"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "Conditional access decides who may try. A policy gate decides what may happen. Treat one as necessary the other as non-negotiable.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 2724,
+      "entities": [
+        "conditional-access",
+        "ai-agent"
+      ],
+      "why": "Crisp distinction between token-time and action-time control for agents."
+    },
+    {
+      "text": "Audit tells you what happened. Provenance tells you why you think it happened. A policy gate decides whether it's allowed to happen at all.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 1808,
+      "entities": [
+        "data-provenance",
+        "governance"
+      ],
+      "why": "Memorable framework separating forensics, explanation and prevention."
+    },
+    {
+      "text": "If an event can't be safely replayed, it shouldn't control state. That applies to deletes, emails, shares, payments and anything with a blast radius.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 1273,
+      "entities": [
+        "idempotency"
+      ],
+      "why": "Practical design rule for event-driven agent workflows."
+    },
+    {
+      "text": "If a chunk is not eligible for this actor, in this venue, at this moment, it does not exist. Eligibility is computed before similarity, not after generation.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 2762,
+      "entities": [
+        "rag"
+      ],
+      "why": "Reframes retrieval as an authorization event rather than a search feature."
+    },
+    {
+      "text": "Least privilege is not only about breadth, it's also about time. The right to act should be the exception, not the baseline.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 1723,
+      "entities": [
+        "non-human-identity",
+        "ai-agent"
+      ],
+      "why": "Clear recommendation for time-bound agent permissions."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "An agent with a face and a voice"
+    },
+    {
+      "start_s": 287,
+      "title": "Three agent failure case studies"
+    },
+    {
+      "start_s": 1058,
+      "title": "Events aren't state"
+    },
+    {
+      "start_s": 1311,
+      "title": "Experience plane tax and NHIs as super users"
+    },
+    {
+      "start_s": 1804,
+      "title": "Audit, provenance, policy gate"
+    },
+    {
+      "start_s": 2264,
+      "title": "Deterministic patterns that work"
+    },
+    {
+      "start_s": 2737,
+      "title": "RAG as a security boundary"
+    },
+    {
+      "start_s": 3283,
+      "title": "Five-question governance audit"
+    }
+  ],
+  "takeaways": [
+    "Conditional Access and Purview audit are necessary but act at token time and after the fact, so high-risk agent tool calls need a deterministic per-call policy gate.",
+    "Treat events as proposals, not state: idempotency keys, an authoritative state store and segmented read, write and egress identities keep agent failures small.",
+    "Retrieval should be an authorization boundary with venue-aware filtering, cite-or-silent generation and persisted policy outcomes as proof."
+  ],
+  "hook": "Giving AI agents a face and a voice makes them feel trustworthy, but it does nothing to stop a mis-scoped delete or an overshared answer. This episode is for Microsoft 365 architects and security leaders deploying agents with Entra Agent ID, Copilot Studio and Purview. Learn how per-tool policy gates, segmented identities and retrieval boundaries turn eloquent outages into denied decisions.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-03T02:33:01+00:00"
+}
