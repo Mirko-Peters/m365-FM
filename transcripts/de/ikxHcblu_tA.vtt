@@ -1,0 +1,3049 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:01.300
+Die Branche hat uns ein Mythos verkauft.
+
+00:00:01.740 --> 00:00:04.620
+Sie erzählte uns, dass Einbettungen das Allheilmittel für Enterprise Intelligence seien.
+
+00:00:05.080 --> 00:00:08.220
+Sie haben die Vektordatenbank erstellt, die Dokumente aufgenommen, das Budget ausgegeben
+
+00:00:08.220 --> 00:00:10.580
+und trotzdem haben die Halluzinationen nicht aufgehört.
+
+00:00:11.020 --> 00:00:14.220
+In Wirklichkeit ist mathematische Ähnlichkeit nicht dasselbe wie geschäftliche Relevanz.
+
+00:00:14.900 --> 00:00:16.060
+Wir sind in die Top-K-Falle getappt.
+
+00:00:16.660 --> 00:00:20.880
+Dies ist der Moment, in dem Ihr Co-Pilot den ähnlichsten Datenpunkt im hochdimensionalen Raum abruft.
+
+00:00:21.460 --> 00:00:24.020
+Diese Daten aber für die jeweilige Aufgabe zu 100% falsch sind,
+
+00:00:24.420 --> 00:00:27.140
+da im Jahr 2026 näher ein billiger Ersatz für Wahrheit ist.
+
+00:00:27.140 --> 00:00:30.320
+Wenn Ihr RAK-Projekt derzeit in der Pilotphase ins Stocken gerät,
+
+00:00:30.560 --> 00:00:31.960
+liegt das nicht daran, dass die KI dumm ist.
+
+00:00:32.500 --> 00:00:34.860
+Es liegt daran, dass Ihre Abrufstrategie auf einer Illusion beruht.
+
+00:00:35.320 --> 00:00:37.240
+Es ist das strukturelle Versagen reiner Vektormodelle.
+
+00:00:38.140 --> 00:00:42.020
+Die Vektorsuche ist eine Standardschicht in der Architektur eines modernen KI-Systems.
+
+00:00:42.740 --> 00:00:46.080
+Sie ist das Untergeschoss des Stapels, nicht das Penthouse, aber wir haben sie wie das Gehirn behandelt.
+
+00:00:46.860 --> 00:00:50.800
+Der grundlegende Fehler bei hochdimensionalen Einbettungen besteht darin, dass sie von Natur aus unscharf sind.
+
+00:00:51.500 --> 00:00:53.080
+Sie stellen Konzepte als Koordinaten dar.
+
+00:00:53.520 --> 00:00:55.980
+Das funktioniert wunderbar, wenn man nach Vibes oder allgemeinen Themen sucht.
+
+00:00:55.980 --> 00:00:57.940
+Aber die Arbeit findet nicht im Land der Vibes statt.
+
+00:00:58.380 --> 00:00:59.800
+Die Arbeit findet im Land der Einstleiten statt.
+
+00:01:00.160 --> 00:01:01.640
+Und hier scheitert das reine Vektormodell.
+
+00:01:02.080 --> 00:01:03.780
+Vektoren haben Probleme mit exakten Begriffen.
+
+00:01:03.840 --> 00:01:08.180
+Denken Sie an Produktcodes, SKUs, juristische Terminologie, interne Projektcodenamen.
+
+00:01:08.860 --> 00:01:13.920
+Für ein Vektormodell sehen die Projekte Phoenix und Firebird möglicherweise mathematisch identisch aus,
+
+00:01:14.000 --> 00:01:15.380
+weil sie einen semantischen Cluster teilen.
+
+00:01:15.680 --> 00:01:18.220
+Aber für Ihr Finanzteam stellen sie zwei völlig verschiedene Budgets dar.
+
+00:01:18.940 --> 00:01:20.940
+Wenn Sie sich ausschließlich auf dichte Einbettungen verlassen,
+
+00:01:21.040 --> 00:01:23.660
+bitten Sie die KI im Wesentlichen auf der Grundlage der Nachbarschaft zu raten.
+
+00:01:23.660 --> 00:01:26.820
+Das Ergebnis ist eine Fehlerquote von 27% bei den Geschäftsregeln.
+
+00:01:27.140 --> 00:01:28.320
+Das ist nicht nur eine technische Kennzahl.
+
+00:01:28.920 --> 00:01:32.980
+Diese Fehlerquote bedeutet, dass jede Woche 1,8 Stunden Arbeitszeit der Mitarbeiter verschwendet werden.
+
+00:01:34.060 --> 00:01:36.100
+Die Mitarbeiter verwenden Co-Pilot nicht, um schneller zu arbeiten.
+
+00:01:36.720 --> 00:01:38.100
+Sie verwenden es, um Entwürfe zu erstellen,
+
+00:01:38.160 --> 00:01:40.320
+die sie dann zwei Stunden lang auf ihre Richtigkeit überprüfen müssen,
+
+00:01:40.380 --> 00:01:41.620
+weil der Abfragesatz verrauscht war.
+
+00:01:42.240 --> 00:01:43.240
+Wir haben eine Genauigkeitskrise.
+
+00:01:43.340 --> 00:01:44.220
+Und das ist kein LM-Problem.
+
+00:01:44.880 --> 00:01:47.780
+Das lässt sich nicht beheben, indem man von GPT-4 auf GPT-5 umsteigt
+
+00:01:47.780 --> 00:01:49.360
+oder zu einem größeren Kontextfenster wechselt.
+
+00:01:49.360 --> 00:01:51.120
+Es handelt sich um ein Problem der Abruftechnik.
+
+00:01:51.460 --> 00:01:52.520
+Wir haben eine weitreichende Annahme gebracht.
+
+00:01:52.840 --> 00:01:54.820
+Sie sind davon ausgegangen, dass die Mathematik den Kontext verarbeitet.
+
+00:01:54.860 --> 00:01:57.520
+Wir dachten, wenn wir einfach jedes Dokument in eine Liste von Zahlen umwandeln,
+
+00:01:57.920 --> 00:02:00.120
+würden die Beziehungen hervorgehen, aber der Kontext ist strukturell.
+
+00:02:00.880 --> 00:02:01.940
+Er ist nicht nur probabilistisch.
+
+00:02:02.520 --> 00:02:04.860
+In einer Unternehmensumgebung liegt die Bedeutung eines Dokuments
+
+00:02:04.860 --> 00:02:06.960
+nicht nur in den Wörtern, sondern in den Metadaten,
+
+00:02:07.140 --> 00:02:09.040
+den Berechtigungen und der spezifischen Versionierung,
+
+00:02:09.120 --> 00:02:10.740
+die ein Vektormodell völlig ignoriert.
+
+00:02:11.440 --> 00:02:13.360
+Wenn Sie nach der neuesten Reiserichtlinie suchen,
+
+00:02:13.460 --> 00:02:14.840
+findet eine Vektorsuche die Richtlinie,
+
+00:02:14.840 --> 00:02:16.640
+die am ehesten nach einer Reiserichtlinie klingt.
+
+00:02:16.640 --> 00:02:19.380
+Sie findet nicht unbedingt die, die gestern genehmigt wurde.
+
+00:02:20.100 --> 00:02:21.080
+Sie findet die ähnlichste.
+
+00:02:21.980 --> 00:02:24.380
+Und wenn die ähnlichste Version die Version von 2022 ist,
+
+00:02:24.420 --> 00:02:25.740
+weil sie einen außergekräftigen Text enthält,
+
+00:02:25.800 --> 00:02:26.620
+dann erhält die LM diese.
+
+00:02:27.140 --> 00:02:29.700
+Dann teilt die KI ihre Mitarbeiter mit, dass er Business Class buchen kann,
+
+00:02:29.820 --> 00:02:31.460
+obwohl die neue Richtlinie nur Economy vorsieht.
+
+00:02:31.860 --> 00:02:34.200
+Das sind Halluzinationen, die durch eine schlechte Datengrundlage verursacht wurden.
+
+00:02:34.560 --> 00:02:35.360
+Das Modell hat nicht gelogen.
+
+00:02:35.460 --> 00:02:36.860
+Es hat nur die falschen Zahlen zusammengefasst.
+
+00:02:37.460 --> 00:02:39.960
+Das passiert, wenn man ein für die Datenanalyse entwickeltes Modell verwendet
+
+00:02:39.960 --> 00:02:41.420
+und versucht, es für die Präzisionssuche zu nutzen.
+
+00:02:41.820 --> 00:02:43.620
+Die Vektorsuche eignet sich hervorragend,
+
+00:02:43.660 --> 00:02:44.880
+um die Nadel im Heuhaufen zu finden,
+
+00:02:44.940 --> 00:02:46.460
+wenn es einem egal ist, welche Nadel man bekommt,
+
+00:02:46.460 --> 00:02:48.120
+und aber im Unternehmen gibt es nur eine richtige Nadel.
+
+00:02:48.720 --> 00:02:49.800
+Die anderen Neuen sind Schwachstellen.
+
+00:02:50.300 --> 00:02:52.720
+Wir haben die Grenzen dessen erreicht, was uns reine Ähnlichkeit bieten kann.
+
+00:02:53.320 --> 00:02:57.000
+Wenn wir die von regulierten Branchen geforderte Genauigkeitsschwelle von 0,9% erreichen wollen,
+
+00:02:57.320 --> 00:02:59.660
+müssen wir die Datenabfrage nicht mehr wie ein mathematisches Problem behandeln,
+
+00:02:59.740 --> 00:03:01.520
+sondern anfangen, sie wie ein redaktionelles Problem zu behandeln.
+
+00:03:02.280 --> 00:03:03.600
+Wir müssen uns von der Vorstellung lösen,
+
+00:03:03.860 --> 00:03:06.160
+dass eine ausreichende Genauigkeit für ein System akzeptabel ist,
+
+00:03:06.200 --> 00:03:07.860
+das die Entscheidungsfindung von Führungskräften unterstützt.
+
+00:03:08.260 --> 00:03:11.080
+Denn im Moment sind die Top-K-Ergebnisse, die sie ihrem Co-Piloten liefern,
+
+00:03:11.080 --> 00:03:13.380
+nur eine Ansammlung von mathematisch verwandtem Rauschen.
+
+00:03:14.040 --> 00:03:15.540
+Sie bitten eine logische Schlussfolgerung,
+
+00:03:15.540 --> 00:03:17.080
+ein Haus auf einem Fundament aus Sand zu bauen.
+
+00:03:17.480 --> 00:03:18.960
+Und dann wundern wir uns, warum das Dach undicht ist.
+
+00:03:19.240 --> 00:03:22.220
+Die Verschiebung von 2025 auf 20 Christus 20 ist die Erkenntnis,
+
+00:03:22.320 --> 00:03:24.000
+dass Einbettungen nur der Ausgangspunkt sind.
+
+00:03:24.700 --> 00:03:25.640
+Sie sind ja vielleicht Stapel.
+
+00:03:26.120 --> 00:03:28.400
+Und zum Ja-Stapel zu gelangen, brauchen wir eine andere Art von Logik.
+
+00:03:28.800 --> 00:03:30.180
+Wir müssen genau die Dinge wieder einführen,
+
+00:03:30.240 --> 00:03:31.600
+von denen wir dachten, dass Einbettungen sie ersetzen.
+
+00:03:32.100 --> 00:03:33.860
+Wir brauchen Struktur, wir brauchen lexikalische Anker.
+
+00:03:34.660 --> 00:03:36.560
+Und am wichtigsten ist, dass wir einen Supervisor brauchen,
+
+00:03:36.680 --> 00:03:38.980
+der den Unterschied zwischen einer ähnlichen und einer richtigen Antwort kennt.
+
+00:03:39.540 --> 00:03:42.040
+Ohne das ist ihr RAK-Projekt kein Intelligenzwerkzeug,
+
+00:03:42.200 --> 00:03:44.700
+sondern nur ein sehr teurer und sehr schneller Weg, falsch zu liegen.
+
+00:03:44.700 --> 00:03:47.260
+Aber hier versagt das Modell.
+
+00:03:47.800 --> 00:03:49.660
+Denn Ähnlichkeit ist ein billiger Ersatz für Wahrheit.
+
+00:03:50.640 --> 00:03:52.360
+Die Nachbarschaft ist ein gefährlicher Ort zum Leben.
+
+00:03:52.980 --> 00:03:54.620
+Wir haben uns zu lange auf diese dichten Cluster verlassen
+
+00:03:54.620 --> 00:03:57.160
+und angenommen, dass zwei Dinge, die in einem Vektorraum nahe beieinander liegen,
+
+00:03:57.220 --> 00:03:59.140
+in einem geschäftlichen Sinne miteinander in Beziehung stehen müssen,
+
+00:03:59.200 --> 00:03:59.720
+ablösen sie nicht.
+
+00:04:00.820 --> 00:04:03.060
+Ähnlichkeit ist nur eine Widerspiegelung von Wortverwendungsmustern.
+
+00:04:03.280 --> 00:04:04.780
+Es ist ein billiger Proxy für die Wahrheit.
+
+00:04:04.880 --> 00:04:06.620
+Und im Jahr 2000, der zusammen, weil wir aufgehört haben,
+
+00:04:06.700 --> 00:04:09.140
+nach verwandten Dingen zu suchen, stattdessen verifizierte Dinge zu suchen,
+
+00:04:09.240 --> 00:04:10.460
+stattdessen verifizierte Dinge benötigen.
+
+00:04:10.460 --> 00:04:12.840
+Wenn Sie von einer Pilot in eine Produktionsumgebung wechseln,
+
+00:04:12.880 --> 00:04:13.480
+ändern sich die Einsätze.
+
+00:04:13.480 --> 00:04:14.840
+Der Proxy reicht nicht mehr aus.
+
+00:04:15.200 --> 00:04:17.540
+Sie benötigen etwas, das die KI wieder in der tatsächlichen Sprache
+
+00:04:17.540 --> 00:04:18.540
+Ihres Unternehmens verankert.
+
+00:04:19.360 --> 00:04:21.380
+Sie benötigen die Präzision, die wir versehentlich verworfen haben,
+
+00:04:21.440 --> 00:04:23.060
+als wir uns voll und ganz auf Einbettung konzentriert haben.
+
+00:04:23.660 --> 00:04:24.420
+Der hybride Standard.
+
+00:04:24.780 --> 00:04:26.240
+Warum BM25 immer noch wichtig ist.
+
+00:04:26.620 --> 00:04:29.340
+Wenn Sie sich die Produktionsbasislinie für 2026 ansehen,
+
+00:04:29.400 --> 00:04:30.300
+hat sich die Landschaft verschoben.
+
+00:04:30.580 --> 00:04:32.580
+Wir sprechen nicht mehr von experimentellen Vektorspeichern.
+
+00:04:32.900 --> 00:04:34.120
+Wir sprechen vom hybriden Standard.
+
+00:04:34.660 --> 00:04:35.540
+Die Daten sind eindeutig.
+
+00:04:36.060 --> 00:04:38.440
+72% der erfolgreichen Enterprise Rack-Systeme
+
+00:04:38.440 --> 00:04:40.160
+haben sich von der reinen Vektorabfrage verabschiedet.
+
+00:04:40.700 --> 00:04:42.460
+Sie haben ein duales Pfadsystem implementiert,
+
+00:04:42.460 --> 00:04:44.300
+das die Bedeutung von Vektoren mit der Präzision
+
+00:04:44.300 --> 00:04:45.520
+des Schlüsselwortabgleichs kombiniert.
+
+00:04:45.920 --> 00:04:48.340
+Konkret haben Sie den BM25-Algorithmus zurückgebracht.
+
+00:04:48.820 --> 00:04:50.300
+Für diejenigen, die noch keine 20 Jahre
+
+00:04:50.300 --> 00:04:51.740
+in der Suchmaschinenentwicklung verbracht haben,
+
+00:04:51.800 --> 00:04:54.000
+BM25 ist die klassische Methode für die spärliche Abfrage.
+
+00:04:54.120 --> 00:04:56.260
+Es ist die Logik, die nach exakten Wortüberschneidungen sucht.
+
+00:04:56.320 --> 00:04:57.820
+Es ist die alte Methode, von der wir dachten,
+
+00:04:57.920 --> 00:04:59.160
+dass Einbettungen sie abschaffen würden.
+
+00:04:59.280 --> 00:05:01.220
+Aber es stellt sich heraus, dass die alte Methode die einzige ist,
+
+00:05:01.260 --> 00:05:01.980
+die die neue Methode erlitt.
+
+00:05:02.120 --> 00:05:04.200
+Wenn Sie diese beiden kombinieren, geschieht etwas Interessantes.
+
+00:05:04.520 --> 00:05:06.320
+Wir erhalten einen Trefferquotengewinn von 17%
+
+00:05:06.320 --> 00:05:07.120
+über ihren gesamten Daten.
+
+00:05:07.120 --> 00:05:09.960
+Diese 17% machen den Unterschied zwischen einem Mitarbeiter aus,
+
+00:05:10.020 --> 00:05:11.260
+der die Antwort in 10 Sekunden findet
+
+00:05:11.260 --> 00:05:13.580
+oder der nach drei fehlgeschlagenen Eingabeaufforderungen aufgibt.
+
+00:05:14.120 --> 00:05:15.260
+Denken Sie darüber nach, was passiert,
+
+00:05:15.340 --> 00:05:17.060
+wenn Sie aufhören, die spezifischen Wörter zu ignorieren,
+
+00:05:17.100 --> 00:05:18.180
+die Ihre Benutzer tatsächlich eingehen.
+
+00:05:19.020 --> 00:05:20.920
+Wenn ein Benutzer in einem reinen Vektorsystem
+
+00:05:20.920 --> 00:05:22.360
+Formular 10K 2000 Modell
+
+00:05:22.360 --> 00:05:24.000
+möglicherweise einen allgemeinen Artikel
+
+00:05:24.000 --> 00:05:25.120
+über Finanzberichterstattung,
+
+00:05:25.280 --> 00:05:26.620
+da die Stimmung ähnlich ist.
+
+00:05:28.500 --> 00:05:30.080
+Wenn jedoch BM25 im Spiel ist,
+
+00:05:30.340 --> 00:05:33.020
+sieht das System diese spezifische Zeichenfolge 10K und 2025.
+
+00:05:36.540 --> 00:05:38.600
+Dank des hybriden Abrufs kann das System sagen,
+
+00:05:38.600 --> 00:05:40.580
+Ich weiß, dass Sie sich für Finanzberichte interessieren,
+
+00:05:40.820 --> 00:05:41.380
+aber ich sehe auch,
+
+00:05:41.460 --> 00:05:43.240
+dass Sie speziell nach diesem genauen Dokument gefragt haben.
+
+00:05:43.820 --> 00:05:45.780
+Es löst das Problem von Abfragen außerhalb des Fachgebiets.
+
+00:05:46.480 --> 00:05:47.440
+Dies ist die größte Hürde
+
+00:05:47.440 --> 00:05:49.080
+für jedes vortrainierte Einbettungsmodell.
+
+00:05:49.500 --> 00:05:50.480
+Ihr Vektor-Modell wurde wahrscheinlich
+
+00:05:50.480 --> 00:05:52.620
+anhand eines allgemeinen Korpus von Internettexten trainiert.
+
+00:05:53.140 --> 00:05:54.320
+Es weiß, was ein Vertrag ist,
+
+00:05:54.560 --> 00:05:56.740
+kennt aber nicht den spezifischen Jargon Ihrer Branche.
+
+00:05:57.380 --> 00:05:59.020
+Es versteht nicht die proprietären Akronyme,
+
+00:05:59.100 --> 00:06:00.800
+die in Ihrer Entwicklungsabteilung verwendet werden.
+
+00:06:01.220 --> 00:06:02.640
+Es hat die internen Abkürzungen nicht gesehen,
+
+00:06:02.700 --> 00:06:04.920
+die Ihr Logistik-Team zur Beschreibung von Versandverzögerungen verwendet.
+
+00:06:05.120 --> 00:06:06.560
+Für ein allgemeines Einbettungsmodell
+
+00:06:06.560 --> 00:06:07.440
+sind diese Wörter Rauschen.
+
+00:06:07.760 --> 00:06:08.720
+Sie liegen außerhalb des Fachgebiets.
+
+00:06:09.360 --> 00:06:11.460
+Aber für BM25 sind diese Wörter Signale.
+
+00:06:12.060 --> 00:06:13.140
+Indem Sie neben der Vektorsuche
+
+00:06:13.140 --> 00:06:14.480
+auch eine Schlagwortsuche durchführen,
+
+00:06:14.560 --> 00:06:15.620
+schaffen Sie ein Sicherheitsnetz.
+
+00:06:16.260 --> 00:06:16.840
+Sie stellen sicher,
+
+00:06:16.940 --> 00:06:18.000
+dass das System das Dokument
+
+00:06:18.000 --> 00:06:20.000
+anhand des wörtlichen Textes trotzdem finden kann,
+
+00:06:20.080 --> 00:06:21.580
+wenn ein Benutzer einen bestimmten Begriff eingibt,
+
+00:06:21.620 --> 00:06:23.220
+den das Einbettungsmodell nicht versteht,
+
+00:06:23.340 --> 00:06:23.960
+den nicht versteht.
+
+00:06:24.700 --> 00:06:26.720
+So erreichen Sie die Genauigkeitsschwelle von 0,8.
+
+00:06:27.240 --> 00:06:28.860
+Im Jahr 2025 waren wir froh,
+
+00:06:28.860 --> 00:06:30.260
+wenn die KI größtenteils richtig lag.
+
+00:06:30.600 --> 00:06:32.860
+Im Jahr 2026 sind 80% Genauigkeit
+
+00:06:32.860 --> 00:06:33.920
+das absolute Minimo für den Einstieg.
+
+00:06:34.080 --> 00:06:34.880
+Hybrid ist der erste Schritt
+
+00:06:34.880 --> 00:06:35.640
+auf dem Weg zu diesem Ziel.
+
+00:06:35.640 --> 00:06:37.420
+Es geht darum, die KI in der Realität zu Franka.
+
+00:06:37.680 --> 00:06:38.100
+Denn sie ist sicher
+
+00:06:38.100 --> 00:06:39.080
+als ein duales Kontrollsystem.
+
+00:06:39.340 --> 00:06:40.700
+Der Vektorpfad behandelt die Absichten.
+
+00:06:41.200 --> 00:06:41.960
+Was versuchen Sie zu tun?
+
+00:06:42.420 --> 00:06:43.920
+Der Schlüsselwortpfad behandelt die Fakten.
+
+00:06:44.860 --> 00:06:45.780
+Was haben Sie tatsächlich gesagt?
+
+00:06:46.560 --> 00:06:48.200
+Wenn beide Pfade in einem Dokument übereinstimmen,
+
+00:06:48.420 --> 00:06:49.900
+haben Sie einen Kandidaten mit hoher Konfidenz.
+
+00:06:50.300 --> 00:06:51.120
+Wenn Sie nicht übereinstimmen,
+
+00:06:51.160 --> 00:06:51.660
+ist das ein Signal,
+
+00:06:51.760 --> 00:06:52.880
+dass Sie mehr Verarbeitung benötigen.
+
+00:06:53.200 --> 00:06:54.420
+Aber selbst mit diesem hybriden Ansatz
+
+00:06:54.420 --> 00:06:55.240
+haben wir immer noch ein Problem.
+
+00:06:55.740 --> 00:06:56.880
+Sie haben den vielleicht Stapel verbessert.
+
+00:06:56.880 --> 00:06:59.140
+Sie sind von 78% Trefferquote gekommen.
+
+00:06:59.940 --> 00:07:01.240
+Sie finden mehr der richtigen Dinge.
+
+00:07:01.640 --> 00:07:02.820
+Aber Sie übergeben dem LLM
+
+00:07:02.820 --> 00:07:04.120
+immer noch einen Haufen Kandidaten.
+
+00:07:04.120 --> 00:07:05.480
+Und wenn Sie sich schon einmal
+
+00:07:05.480 --> 00:07:06.600
+ein Retrieval-Set angesehen haben,
+
+00:07:06.680 --> 00:07:07.820
+wissen Sie, dass die Top-10-Ergebnisse
+
+00:07:07.820 --> 00:07:08.600
+oft dann durcheinander sind.
+
+00:07:08.980 --> 00:07:09.920
+Sie können die perfekte Antwort
+
+00:07:09.920 --> 00:07:10.780
+auf Position 4 haben.
+
+00:07:11.500 --> 00:07:13.180
+Aber auf Position 1 haben Sie ein Dokument,
+
+00:07:13.280 --> 00:07:13.980
+in dem das Schlüsselwort
+
+00:07:13.980 --> 00:07:15.420
+zufällig 20 Mal wiederholt wird.
+
+00:07:15.820 --> 00:07:17.340
+Oder Sie haben ein Dokument,
+
+00:07:17.440 --> 00:07:18.300
+das mathematisch ähnlich ist,
+
+00:07:18.340 --> 00:07:19.120
+aber für das aktuelle Jahr
+
+00:07:19.120 --> 00:07:20.020
+völlig irrelevant ist.
+
+00:07:20.520 --> 00:07:21.600
+Die hybride Suche liefert Ihnen
+
+00:07:21.600 --> 00:07:22.300
+die Teile des Puzzles.
+
+00:07:22.720 --> 00:07:23.480
+Sie setzt das Puzzle
+
+00:07:23.480 --> 00:07:24.320
+nicht unbedingt zusammen.
+
+00:07:24.800 --> 00:07:25.640
+Wir gehen davon aus,
+
+00:07:25.720 --> 00:07:26.960
+dass das LLM intelligent genug wäre,
+
+00:07:27.020 --> 00:07:27.700
+das Richtige auszuwählen,
+
+00:07:27.740 --> 00:07:29.000
+wenn wir Ihnen die 5 besten Ergebnisse geben.
+
+00:07:29.560 --> 00:07:30.700
+LLMs sind jedoch anfällig
+
+00:07:30.700 --> 00:07:31.760
+für störende Dokumente.
+
+00:07:31.760 --> 00:07:33.600
+Wenn das erste Ergebnis
+
+00:07:33.600 --> 00:07:34.340
+ein sehr langes,
+
+00:07:34.400 --> 00:07:35.560
+sehr sicher klingendes Dokument ist,
+
+00:07:35.600 --> 00:07:36.340
+das tatsächlich falsch ist,
+
+00:07:36.580 --> 00:07:37.420
+priorisiert das LLM
+
+00:07:37.420 --> 00:07:38.280
+diese Information häufig
+
+00:07:38.280 --> 00:07:39.080
+gegenüber dem korrekten,
+
+00:07:39.220 --> 00:07:40.480
+kürzeren A an dritter Stelle
+
+00:07:40.480 --> 00:07:41.280
+an dritter Stelle.
+
+00:07:41.720 --> 00:07:42.400
+Dies ist das Phänomen
+
+00:07:42.400 --> 00:07:43.580
+des in der Mitte verlorenen Dokuments.
+
+00:07:43.920 --> 00:07:44.940
+Die Reihenfolge der Informationen
+
+00:07:44.940 --> 00:07:46.080
+bestimmt die Qualität der Antwort.
+
+00:07:46.760 --> 00:07:48.120
+Die hybride Suche ist zwar die Basis,
+
+00:07:48.180 --> 00:07:49.180
+aber nicht die endgültige Antwort.
+
+00:07:49.760 --> 00:07:50.560
+Sie ist das Filtersystem.
+
+00:07:51.260 --> 00:07:52.120
+Sie reduziert die Anzahl
+
+00:07:52.120 --> 00:07:53.700
+der Dokumente von einer Million auf 50.
+
+00:07:53.840 --> 00:07:55.040
+Allerdings sind 50 Dokumente
+
+00:07:55.040 --> 00:07:55.880
+immer noch zu viel Rauschen
+
+00:07:55.880 --> 00:07:57.100
+für eine wichtige Geschäftsentscheidung.
+
+00:07:57.560 --> 00:07:58.240
+Sie sehen sich immer noch
+
+00:07:58.240 --> 00:07:59.240
+nur einen Haufen von Kandidaten.
+
+00:07:59.800 --> 00:08:00.760
+Sie haben die Nadel bewegt,
+
+00:08:00.760 --> 00:08:01.720
+aber die Lücke nicht geschlossen.
+
+00:08:02.200 --> 00:08:03.200
+Um die im Gesundheitswesen
+
+00:08:03.200 --> 00:08:03.860
+und im Finanzwesen
+
+00:08:03.860 --> 00:08:04.720
+erforderliche Genauigkeit
+
+00:08:04.720 --> 00:08:05.980
+von 0,9 tatsächlich zu erreichen,
+
+00:08:06.080 --> 00:08:06.640
+können Sie es nicht einfach
+
+00:08:06.640 --> 00:08:07.260
+beim Abruf belassen.
+
+00:08:07.700 --> 00:08:09.380
+Sie müssen eine Argumentationsebene hinzufügen,
+
+00:08:09.480 --> 00:08:10.240
+bevor die Daten überhaupt
+
+00:08:10.240 --> 00:08:10.960
+an das LLM gelangen.
+
+00:08:11.300 --> 00:08:12.520
+Sie benötigen einen Vorgesetzten,
+
+00:08:12.560 --> 00:08:14.080
+der sich diese 50 Kandidaten ansieht
+
+00:08:14.080 --> 00:08:15.300
+und sie anhand tatsächlicher Logik
+
+00:08:15.300 --> 00:08:16.360
+und nicht nur anhand von Häufigkeit
+
+00:08:16.360 --> 00:08:17.300
+oder Koordinaten einordnet.
+
+00:08:17.560 --> 00:08:18.120
+Denn im Moment
+
+00:08:18.120 --> 00:08:19.080
+rät Ihr Co-Pilot selbst
+
+00:08:19.080 --> 00:08:20.400
+bei der hybriden Suche immer noch,
+
+00:08:21.120 --> 00:08:22.740
+er trifft nur eine viel fundiertere Vermutung
+
+00:08:22.740 --> 00:08:23.240
+als zuvor.
+
+00:08:23.700 --> 00:08:24.900
+Wir haben das Problem des Findens gelöst.
+
+00:08:25.340 --> 00:08:26.020
+Jetzt müssen wir das Problem
+
+00:08:26.020 --> 00:08:26.780
+der Einstufung lösen.
+
+00:08:26.780 --> 00:08:27.820
+Und das erfordert
+
+00:08:27.820 --> 00:08:29.360
+eine völlig andere Architekturebene.
+
+00:08:30.240 --> 00:08:31.220
+Erst bei der hybriden Suche
+
+00:08:31.220 --> 00:08:32.180
+sehen Sie sich immer noch
+
+00:08:32.180 --> 00:08:33.120
+nur einen Haufen Kandidaten,
+
+00:08:33.420 --> 00:08:34.360
+benötigend Vorgesetzten.
+
+00:08:35.660 --> 00:08:36.900
+Das Problem mit dem hybriden Modell
+
+00:08:36.900 --> 00:08:37.900
+ist, dass es keine Meinung hat.
+
+00:08:38.560 --> 00:08:39.320
+Es generiert eine Liste
+
+00:08:39.320 --> 00:08:39.860
+auf der Grundlage
+
+00:08:39.860 --> 00:08:41.320
+von zwei verschiedenen Bewertungssystemen,
+
+00:08:41.340 --> 00:08:41.780
+die nicht wirklich
+
+00:08:41.780 --> 00:08:42.760
+dieselbe Sprache sprechen.
+
+00:08:43.320 --> 00:08:44.060
+Sie führen Koordinaten
+
+00:08:44.060 --> 00:08:44.760
+aus einem Vektorraum
+
+00:08:44.760 --> 00:08:45.720
+mit Häufigkeitsbewertungen
+
+00:08:45.720 --> 00:08:46.960
+aus einem Schlüsselwortindex zusammen.
+
+00:08:47.600 --> 00:08:48.320
+Das Ergebnis ist
+
+00:08:48.320 --> 00:08:49.680
+eine kombinierte Top-50-Liste,
+
+00:08:49.800 --> 00:08:51.020
+die technisch besser ist als zuvor,
+
+00:08:51.340 --> 00:08:51.800
+aber immer noch
+
+00:08:51.800 --> 00:08:52.860
+grundlegend ungeprüft ist.
+
+00:08:53.200 --> 00:08:53.900
+Es ist, als würde Ihnen
+
+00:08:53.900 --> 00:08:54.800
+eine Personalagentur
+
+00:08:54.800 --> 00:08:55.800
+50 Lebensläufe schicken,
+
+00:08:55.800 --> 00:08:56.600
+ohne sie wirklich zu lesen.
+
+00:08:56.800 --> 00:08:57.620
+Sie haben nach Schlüsselwörtern
+
+00:08:57.620 --> 00:08:58.980
+und allgemeiner Erfahrung gefiltert,
+
+00:08:59.060 --> 00:08:59.700
+aber nicht überprüft,
+
+00:08:59.740 --> 00:09:00.520
+ob die Person tatsächlich
+
+00:09:00.520 --> 00:09:01.240
+für die Stelle geeignet.
+
+00:09:01.460 --> 00:09:02.340
+In der RAG-Pipeline
+
+00:09:02.340 --> 00:09:03.740
+ist der LLMI einstellender Manager.
+
+00:09:04.200 --> 00:09:04.920
+Wenn Sie diesem Manager
+
+00:09:04.920 --> 00:09:05.960
+50 Lebensläufe geben,
+
+00:09:06.020 --> 00:09:06.820
+wird er überfordert sein.
+
+00:09:07.180 --> 00:09:08.340
+Er wird sich die ersten drei ansehen,
+
+00:09:08.540 --> 00:09:09.740
+sich von einer gut formatierten Lüge
+
+00:09:09.740 --> 00:09:10.320
+ablenken lassen
+
+00:09:10.320 --> 00:09:11.180
+und eine Schlechtstellung vornehmen.
+
+00:09:11.560 --> 00:09:12.140
+Um das zu beheben,
+
+00:09:12.220 --> 00:09:12.740
+müssen wir aufhören,
+
+00:09:12.800 --> 00:09:13.360
+die Suche als einen
+
+00:09:13.360 --> 00:09:14.240
+einstufigen Prozess zu bitten.
+
+00:09:14.820 --> 00:09:16.340
+Wir müssen eine zweite Ebene einführen,
+
+00:09:16.400 --> 00:09:17.560
+die als Gatekeeper fungiert.
+
+00:09:18.000 --> 00:09:18.560
+Denn im Moment
+
+00:09:18.560 --> 00:09:19.580
+geben Sie keine Antwort.
+
+00:09:20.120 --> 00:09:21.280
+Sie geben eine Hausaufgabe
+
+00:09:21.280 --> 00:09:22.680
+und Ihre KI ist nicht dafür gemacht,
+
+00:09:22.740 --> 00:09:23.440
+Hausaufgaben zu erledigen.
+
+00:09:23.640 --> 00:09:24.420
+Sie ist dafür gemacht, zu denken.
+
+00:09:24.700 --> 00:09:25.180
+Wenn Sie möchten,
+
+00:09:25.260 --> 00:09:25.920
+dass sie richtig denkt,
+
+00:09:26.020 --> 00:09:26.380
+müssen Sie ihr
+
+00:09:26.380 --> 00:09:27.440
+den richtigen Ausgangspunkt geben.
+
+00:09:27.900 --> 00:09:28.940
+Sie brauchen einen Vorgesetzten,
+
+00:09:29.000 --> 00:09:30.360
+der sich die 50 besten Kandidaten
+
+00:09:30.360 --> 00:09:31.420
+ansehen und entscheiden kann,
+
+00:09:31.500 --> 00:09:32.820
+welcher tatsächlich die Wahrheit sagt.
+
+00:09:33.620 --> 00:09:34.300
+Semantisches Ranking,
+
+00:09:34.400 --> 00:09:35.440
+der letzte Filter für die Wahrheit.
+
+00:09:36.000 --> 00:09:37.820
+Hier führen wir den L2-Reranker ein.
+
+00:09:38.560 --> 00:09:40.020
+In der Architektur von 2026
+
+00:09:40.020 --> 00:09:41.740
+ist dies die nicht verhandelbare zweite Ebene.
+
+00:09:42.440 --> 00:09:43.280
+Sie fungiert als Editor
+
+00:09:43.280 --> 00:09:44.140
+für Ihre Suchergebnisse.
+
+00:09:44.720 --> 00:09:45.580
+Denken Sie an den Workflow,
+
+00:09:45.640 --> 00:09:46.260
+den wir bisher erstellen.
+
+00:09:47.140 --> 00:09:47.920
+Die hybride Suche
+
+00:09:47.920 --> 00:09:49.020
+ruft zunächst eine breite Palette
+
+00:09:49.020 --> 00:09:49.560
+von Kandidaten.
+
+00:09:49.560 --> 00:09:50.820
+Sie ist schnell, effizient
+
+00:09:50.820 --> 00:09:52.340
+und durchsucht Millionen von Dokumenten
+
+00:09:52.340 --> 00:09:52.900
+in Millisekunden,
+
+00:09:53.000 --> 00:09:53.720
+ist aber auch oberflächlich.
+
+00:09:54.660 --> 00:09:56.040
+Der L2-Reranker ist das Gegenteil.
+
+00:09:56.440 --> 00:09:57.800
+Er durchsucht nicht Millionen von Dokumenten.
+
+00:09:58.140 --> 00:09:59.800
+Er betrachtet nur die obersten 50,
+
+00:09:59.900 --> 00:10:01.280
+aber er betrachtet sie mit einer Tiefe,
+
+00:10:01.340 --> 00:10:02.280
+die die erste Suchebene
+
+00:10:02.280 --> 00:10:03.340
+niemals erreichen könnte.
+
+00:10:04.100 --> 00:10:04.820
+Insbesondere sprechen wir
+
+00:10:04.820 --> 00:10:05.740
+im Microsoft-Ökosystem
+
+00:10:05.740 --> 00:10:07.300
+von von Bing abgeleiteten Modellen.
+
+00:10:08.220 --> 00:10:09.560
+Dies sind Cross-Attention-Transformer.
+
+00:10:10.600 --> 00:10:12.000
+Im Gegensatz zur ersten Vektorsuche,
+
+00:10:12.280 --> 00:10:12.900
+die eine Abfrage
+
+00:10:12.900 --> 00:10:13.840
+mit einer vorkalkulierten
+
+00:10:13.840 --> 00:10:14.960
+Dokumenteinbettung vergleicht,
+
+00:10:15.120 --> 00:10:15.980
+betrachtet der Reranker
+
+00:10:15.980 --> 00:10:17.540
+die Abfrage und das Dokument gleichzeitig.
+
+00:10:17.540 --> 00:10:19.300
+Er führt einen tiefen,
+
+00:10:19.360 --> 00:10:20.080
+semantischen Vergleich
+
+00:10:20.080 --> 00:10:21.220
+des tatsächlichen Textes durch.
+
+00:10:21.680 --> 00:10:22.700
+Er betrachtet nicht mehr nur
+
+00:10:22.700 --> 00:10:23.520
+Koordinaten in einem
+
+00:10:23.520 --> 00:10:24.420
+hochdimensionalen Raum.
+
+00:10:25.040 --> 00:10:26.460
+Er führt tiefgreifende Überlegungen durch,
+
+00:10:26.500 --> 00:10:26.960
+um zu verstehen,
+
+00:10:27.060 --> 00:10:28.080
+ob das Dokument tatsächlich
+
+00:10:28.080 --> 00:10:29.700
+die Antwort auf die gestellte Frage enthält.
+
+00:10:30.440 --> 00:10:31.640
+Hier kommt der Reranker-Score,
+
+00:10:31.800 --> 00:10:32.980
+der Anzeigensuche ins Spiel,
+
+00:10:33.380 --> 00:10:33.520
+E.
+
+00:10:35.120 --> 00:10:36.320
+Dieser Score unterscheidet sich
+
+00:10:36.320 --> 00:10:37.240
+von den Ähnlichkeitsscores,
+
+00:10:37.320 --> 00:10:38.220
+die Sie in der ersten Ebene sehen.
+
+00:10:38.660 --> 00:10:39.760
+Ein Ähnlichkeitswert sagt Ihnen,
+
+00:10:39.920 --> 00:10:41.420
+dieses Dokument ist mathematisch nah dran.
+
+00:10:42.040 --> 00:10:43.240
+Der Reranker-Wert sagt Ihnen,
+
+00:10:43.600 --> 00:10:44.720
+dieses Dokument ist für die Absicht
+
+00:10:44.720 --> 00:10:45.340
+des Nutzers relevant.
+
+00:10:45.820 --> 00:10:46.860
+Er verschiebt die Messlatte von
+
+00:10:46.860 --> 00:10:47.480
+Ist das nah dran?
+
+00:10:47.960 --> 00:10:49.060
+So beantwortet das die Frage.
+
+00:10:49.880 --> 00:10:51.500
+Diese Unterscheidung ist die einzige Möglichkeit,
+
+00:10:51.620 --> 00:10:52.760
+in regulierten Branchen zu überleben.
+
+00:10:53.080 --> 00:10:55.040
+Wenn Sie im Finanz-, Gesundheits- oder Rechtswesen tätig sind,
+
+00:10:55.100 --> 00:10:56.760
+ist eine Genauigkeit für 0,8 ein Fehlstand.
+
+00:10:57.060 --> 00:10:58.440
+Sie benötigen 0,9 oder höher.
+
+00:10:58.820 --> 00:11:00.380
+Mit einem einstufigen Abrufprozess
+
+00:11:00.380 --> 00:11:02.240
+können Sie diese Genauigkeit nicht erreichen.
+
+00:11:03.200 --> 00:11:04.380
+Der Reranker ermöglicht es Ihnen,
+
+00:11:04.440 --> 00:11:05.520
+die Nadel von meistrichtig
+
+00:11:05.520 --> 00:11:07.040
+auf unternehmens-tauglich zu bewegen.
+
+00:11:07.720 --> 00:11:09.780
+Er behebt den häufigsten Fehlermodus bei der Suche,
+
+00:11:09.820 --> 00:11:11.120
+das Problem der falschen Reihenfolge.
+
+00:11:11.120 --> 00:11:12.980
+Bei einer Standardsuche befindet sich
+
+00:11:12.980 --> 00:11:14.980
+die perfekte Antwort möglicherweise an Position 8,
+
+00:11:15.080 --> 00:11:16.880
+aber da sie nicht die richtige Keyword-Dichte aufwies
+
+00:11:16.880 --> 00:11:18.220
+oder die Einbettung etwas unscharf war,
+
+00:11:18.460 --> 00:11:19.360
+schaffte sie es nicht nach oben.
+
+00:11:20.120 --> 00:11:21.020
+Der LLM ist träge
+
+00:11:21.020 --> 00:11:22.880
+und konzentriert sich auf die ersten drei Ergebnisse.
+
+00:11:23.640 --> 00:11:25.160
+Er übersieht die Wahrheit an Position 8
+
+00:11:25.160 --> 00:11:26.280
+und erzeugt eine Halluzination
+
+00:11:26.280 --> 00:11:27.840
+basierend auf dem Rauschen an Position 1.
+
+00:11:28.400 --> 00:11:29.380
+Der Reranker unterbindet dies.
+
+00:11:29.860 --> 00:11:31.620
+Er nimmt die perfekte Antwort auf Position 8
+
+00:11:31.620 --> 00:11:32.840
+und rückt sie auf Position 1 vor.
+
+00:11:33.320 --> 00:11:34.360
+Er erkennt, dass Dokument 1
+
+00:11:34.360 --> 00:11:35.440
+zwar mehr Schlüsselwörter enthält,
+
+00:11:35.560 --> 00:11:36.700
+Dokument 8 jedoch die tatsächliche
+
+00:11:36.700 --> 00:11:37.840
+semantische Substanz besitzt,
+
+00:11:37.900 --> 00:11:39.400
+die zur Beantwortung der Suchanfrage forderlich ist.
+
+00:11:39.400 --> 00:11:41.680
+Diese Verlagerung von der Abfrage zur Rangfolge
+
+00:11:41.680 --> 00:11:43.240
+ist die wichtigste architektonische Änderung,
+
+00:11:43.320 --> 00:11:44.320
+die Sie in diesem Jahr vornehmen können.
+
+00:11:44.660 --> 00:11:45.320
+Wir müssen aufhören,
+
+00:11:45.400 --> 00:11:46.320
+uns darüber den Kopf zu zerbrechen,
+
+00:11:46.380 --> 00:11:47.360
+wie viele Informationen wir finden können.
+
+00:11:47.580 --> 00:11:48.160
+Wir müssen anfangen,
+
+00:11:48.240 --> 00:11:49.620
+uns über die Reihenfolge Gedanken zu machen,
+
+00:11:49.700 --> 00:11:51.080
+in der diese Informationen präsentiert werden.
+
+00:11:51.160 --> 00:11:52.080
+Denn die Reihenfolge der Informationen
+
+00:11:52.080 --> 00:11:53.320
+ist wichtiger als die Menge der Informationen,
+
+00:11:53.480 --> 00:11:54.600
+ist wichtiger als die Menge der Informationen.
+
+00:11:54.840 --> 00:11:55.700
+Wenn sich die richtige Antwort
+
+00:11:55.700 --> 00:11:56.840
+ganz unten im Stapel befindet,
+
+00:11:56.960 --> 00:11:58.200
+könnte sie genauso gut nicht existieren.
+
+00:11:58.560 --> 00:11:59.400
+Der Reranker stellt sicher,
+
+00:11:59.480 --> 00:12:00.640
+dass die Wahrheit immer ganz oben steht.
+
+00:12:01.280 --> 00:12:02.060
+Es geht aber nicht nur darum,
+
+00:12:02.120 --> 00:12:02.880
+Dokumente zu verschieben.
+
+00:12:03.300 --> 00:12:04.320
+Die L2-Schicht bietet auch
+
+00:12:04.320 --> 00:12:05.940
+semantische Beschriftungen und Hervorhebungen.
+
+00:12:06.640 --> 00:12:08.080
+Sie identifiziert die spezifischen
+
+00:12:08.080 --> 00:12:09.320
+wörtlichen Sätze im Dokument,
+
+00:12:09.420 --> 00:12:10.440
+die am relevantesten sind.
+
+00:12:11.560 --> 00:12:12.940
+Dies gibt dem LLM einen Spickzettel.
+
+00:12:13.640 --> 00:12:14.780
+Anstatt das Modell zu bitten,
+
+00:12:14.900 --> 00:12:16.280
+ein zehnseitiges PDF zu lesen
+
+00:12:16.280 --> 00:12:17.120
+und die Nadel zu finden,
+
+00:12:17.220 --> 00:12:18.600
+zeigt der Reranker direkt auf die Nadel
+
+00:12:18.600 --> 00:12:18.980
+und sagt,
+
+00:12:19.180 --> 00:12:21.040
+lies dir diese drei Sätze genau durch.
+
+00:12:22.080 --> 00:12:24.220
+Dies reduziert die kognitive Belastung des LLM.
+
+00:12:24.800 --> 00:12:25.560
+Emimiert das Risiko,
+
+00:12:25.660 --> 00:12:27.120
+dass das Modell durch irrelevanten Kontext
+
+00:12:27.120 --> 00:12:28.720
+an anderer Stelle im Dokument abgelenkt wird.
+
+00:12:29.200 --> 00:12:29.740
+Es ist der Unterschied
+
+00:12:29.740 --> 00:12:30.620
+zwischen dem Geben eines Buchs
+
+00:12:30.620 --> 00:12:31.860
+und dem Geben eines erfolgenden Absatzes
+
+00:12:31.860 --> 00:12:32.700
+an jemanden.
+
+00:12:32.700 --> 00:12:33.600
+Was führt Ihrer Meinung nach
+
+00:12:33.600 --> 00:12:35.080
+zu einer schnelleren und genaueren Antwort?
+
+00:12:35.840 --> 00:12:38.200
+Auf diese Weise schließen wir im Jahr 2026 die Vertrauen.
+
+00:12:38.900 --> 00:12:40.120
+Benutzervertrauen Co-Pilot nicht mehr,
+
+00:12:40.280 --> 00:12:41.740
+wenn es Ihnen drei mögliche Antworten gibt
+
+00:12:41.740 --> 00:12:43.480
+und die eine eindeutige Antwort übersieht.
+
+00:12:43.960 --> 00:12:44.920
+Der Reranker ist das Tool,
+
+00:12:45.000 --> 00:12:45.420
+das sicherstellt,
+
+00:12:45.500 --> 00:12:46.320
+dass die eindeutige Antwort
+
+00:12:46.320 --> 00:12:47.040
+immer das Erste ist,
+
+00:12:47.100 --> 00:12:47.740
+was der Benutzer sieht.
+
+00:12:48.240 --> 00:12:49.560
+Er fungiert als Letzter für die Wahrheit.
+
+00:12:50.200 --> 00:12:50.740
+Er schließt die Lücke
+
+00:12:50.740 --> 00:12:51.460
+zwischen Rohdaten
+
+00:12:51.460 --> 00:12:52.540
+und umsetzbaren Informationen.
+
+00:12:53.500 --> 00:12:54.240
+Wir müssen jedoch ehrlich
+
+00:12:54.240 --> 00:12:55.220
+über die Kompromisse sein.
+
+00:12:55.840 --> 00:12:56.740
+Dieses Maß an Präzision
+
+00:12:56.740 --> 00:12:57.380
+ist nicht umsonst.
+
+00:12:57.840 --> 00:12:58.720
+Wenn Sie von einer einfachen
+
+00:12:58.720 --> 00:12:59.500
+mathematischen Suche
+
+00:12:59.500 --> 00:13:00.420
+zu einem auf Argumentation
+
+00:13:00.420 --> 00:13:01.480
+basierenden Ranker wechseln,
+
+00:13:01.520 --> 00:13:02.340
+ändert sich die Wirtschaftlichkeit
+
+00:13:02.340 --> 00:13:02.860
+Ihres Systems.
+
+00:13:03.060 --> 00:13:04.000
+Sie fügen Rechenleistungen zu.
+
+00:13:04.220 --> 00:13:05.120
+Sie fügen Latenz hinzu.
+
+00:13:05.620 --> 00:13:07.120
+Und in einer Cloud-gehosteten Umgebung
+
+00:13:07.120 --> 00:13:07.420
+wie Azure
+
+00:13:07.420 --> 00:13:08.760
+fügen Sie direkte Kosten hinzu.
+
+00:13:09.320 --> 00:13:10.160
+Wenn Sie diese Ebene
+
+00:13:10.160 --> 00:13:11.020
+nicht richtig verwalten,
+
+00:13:11.200 --> 00:13:12.200
+wird die gewonnete Präzision
+
+00:13:12.200 --> 00:13:13.320
+durch die Infrastrukturrechnung,
+
+00:13:13.340 --> 00:13:14.440
+die Sie am Ende des Monats erhalten,
+
+00:13:14.540 --> 00:13:15.060
+zunichte gemacht.
+
+00:13:15.860 --> 00:13:16.800
+Wir müssen die Wirtschaftlichkeit
+
+00:13:16.800 --> 00:13:17.700
+der Präzision verstehen,
+
+00:13:18.060 --> 00:13:18.540
+denn im Unternehmen
+
+00:13:18.540 --> 00:13:19.520
+ist eine perfekte Antwort,
+
+00:13:19.640 --> 00:13:21.220
+deren Generierung 10 US-Dollar kostet,
+
+00:13:21.280 --> 00:13:21.880
+der auf weniger Wert
+
+00:13:21.880 --> 00:13:22.980
+als eine ausreichend gute Antwort,
+
+00:13:23.100 --> 00:13:23.860
+die 10 Cent kostet.
+
+00:13:24.720 --> 00:13:26.480
+Die Herausforderung für 2026
+
+00:13:26.480 --> 00:13:27.040
+besteht darin,
+
+00:13:27.080 --> 00:13:28.180
+die Notwendigkeit einer Präzision
+
+00:13:28.180 --> 00:13:29.380
+von 0,9 mit der Realität
+
+00:13:29.380 --> 00:13:30.180
+eines begrenzten Budgets
+
+00:13:30.180 --> 00:13:30.780
+in Einklang zu bringen.
+
+00:13:31.100 --> 00:13:32.160
+Sie benötigen den Supervisor,
+
+00:13:32.300 --> 00:13:33.260
+aber Sie müssen auch sicherstellen,
+
+00:13:33.340 --> 00:13:33.900
+dass der Supervisor
+
+00:13:33.900 --> 00:13:34.740
+nicht die teuerste Person
+
+00:13:34.740 --> 00:13:35.400
+im Gebäude ist.
+
+00:13:36.160 --> 00:13:36.920
+Aber diese Präzision
+
+00:13:36.920 --> 00:13:37.860
+ist mit Kosten verbunden
+
+00:13:37.860 --> 00:13:38.920
+und wenn Sie die Infrastruktur
+
+00:13:38.920 --> 00:13:39.520
+nicht verwalten,
+
+00:13:39.620 --> 00:13:40.400
+verschwindet der ROI.
+
+00:13:41.720 --> 00:13:42.180
+Die Umstellung
+
+00:13:42.180 --> 00:13:43.060
+auf eine mehrstufige
+
+00:13:43.060 --> 00:13:43.940
+Abrufarchitektur
+
+00:13:43.940 --> 00:13:44.860
+führt zu einer grundlegenden
+
+00:13:44.860 --> 00:13:45.980
+Spannung zwischen der Qualität
+
+00:13:45.980 --> 00:13:46.380
+der Antwort
+
+00:13:46.380 --> 00:13:47.700
+und der Nachhaltigkeit des Budgets.
+
+00:13:48.500 --> 00:13:49.440
+Wir haben einen Punkt erreicht,
+
+00:13:49.540 --> 00:13:50.640
+an dem die technische Möglichkeit
+
+00:13:50.640 --> 00:13:52.600
+einer Präzision von 0,9 real ist,
+
+00:13:52.740 --> 00:13:53.640
+die finanzielle Machbarkeit
+
+00:13:53.640 --> 00:13:54.660
+jedoch oft ignoriert wird.
+
+00:13:55.100 --> 00:13:56.080
+In den frühen Tagen von RAH
+
+00:13:56.080 --> 00:13:57.080
+konzentrierten wir uns darauf,
+
+00:13:57.160 --> 00:13:57.500
+zu beweisen,
+
+00:13:57.580 --> 00:13:58.420
+dass das Konzept funktioniert.
+
+00:13:59.120 --> 00:13:59.940
+Die Kosten pro Abfrage
+
+00:13:59.940 --> 00:14:00.400
+waren uns egal,
+
+00:14:00.480 --> 00:14:01.060
+die Volumine gering.
+
+00:14:01.580 --> 00:14:02.420
+Wenn Sie jedoch von 10
+
+00:14:02.420 --> 00:14:03.700
+auf 10.000 Benutzer skalieren,
+
+00:14:03.800 --> 00:14:04.560
+ändern sich die Zahlen.
+
+00:14:05.360 --> 00:14:06.820
+Die sekundäre Argumentationsebene,
+
+00:14:06.880 --> 00:14:07.340
+die das System
+
+00:14:07.340 --> 00:14:08.160
+vertrauenswürdig macht,
+
+00:14:08.240 --> 00:14:09.280
+ist gleichzeitig auch die Ebene,
+
+00:14:09.360 --> 00:14:10.600
+die es unerschwinglich teuer machen kann.
+
+00:14:11.060 --> 00:14:11.600
+Denn Genauigkeit
+
+00:14:11.600 --> 00:14:12.180
+ist im Unternehmen
+
+00:14:12.180 --> 00:14:12.800
+ein Luxusgut.
+
+00:14:13.320 --> 00:14:14.380
+Wenn Sie Ihre Infrastruktur
+
+00:14:14.380 --> 00:14:15.440
+nicht so konzipiert haben,
+
+00:14:15.560 --> 00:14:16.880
+dass sie diesem Luxus gerecht wird,
+
+00:14:17.000 --> 00:14:17.720
+verbraucht Ihr Projekt
+
+00:14:17.720 --> 00:14:18.700
+seinen eigenen ROI,
+
+00:14:19.100 --> 00:14:19.700
+bevor es auch nur
+
+00:14:19.700 --> 00:14:20.640
+einen einzigen Dollar
+
+00:14:20.640 --> 00:14:21.940
+an messbarem Wert liefert.
+
+00:14:21.940 --> 00:14:28.120
+Die Realität des Standardtarifs
+
+00:14:28.120 --> 00:14:29.020
+in Azure AI Search
+
+00:14:29.020 --> 00:14:30.240
+ist, dass die semantische Rangfolge
+
+00:14:30.240 --> 00:14:31.340
+ein Pay-to-Play-Spiel ist.
+
+00:14:31.940 --> 00:14:32.520
+Sie können nicht einfach
+
+00:14:32.520 --> 00:14:33.260
+einen Schalter umlegen
+
+00:14:33.260 --> 00:14:33.700
+und erwarten,
+
+00:14:33.820 --> 00:14:34.880
+dass Ihr vorhandenes Budget ausreicht.
+
+00:14:35.480 --> 00:14:36.200
+Wenn Sie die Funktion
+
+00:14:36.200 --> 00:14:37.160
+zur erneuten Rangfolge
+
+00:14:37.160 --> 00:14:38.160
+der App-Suche aktivieren,
+
+00:14:38.520 --> 00:14:39.180
+verlassen Sie die Welt
+
+00:14:39.180 --> 00:14:39.820
+der Fixkosten
+
+00:14:39.820 --> 00:14:40.760
+für einfache Sucheinheiten
+
+00:14:40.760 --> 00:14:41.600
+und steigen in eine Welt
+
+00:14:41.600 --> 00:14:42.140
+der Abrechnung
+
+00:14:42.140 --> 00:14:43.540
+mit variabler Abfragezeit ein.
+
+00:14:44.020 --> 00:14:44.460
+Werfen wir einen Blick
+
+00:14:44.460 --> 00:14:44.860
+auf die Zahlen.
+
+00:14:45.280 --> 00:14:46.380
+Bei einem moderaten Abfragevolumen
+
+00:14:46.380 --> 00:14:47.040
+von beispielsweise
+
+00:14:47.040 --> 00:14:48.560
+50.000 Suchanfragen pro Monat
+
+00:14:48.560 --> 00:14:49.840
+bei einem 20 GB Datensatz
+
+00:14:49.840 --> 00:14:51.040
+entstehen monatliche Gemeinkosten
+
+00:14:51.040 --> 00:14:52.540
+zwischen 300 und 800 US-Dollar.
+
+00:14:52.740 --> 00:14:53.960
+Das mag für eine einzelne Abteilung
+
+00:14:53.960 --> 00:14:54.540
+überschaubar klingen.
+
+00:14:55.080 --> 00:14:55.900
+Wenn man jedoch bedenkt,
+
+00:14:55.980 --> 00:14:56.460
+dass es sich dabei
+
+00:14:56.460 --> 00:14:57.560
+nur um die Suchebene handelt
+
+00:14:57.560 --> 00:14:58.300
+und zusätzlich noch
+
+00:14:58.300 --> 00:14:59.120
+für die LLM-Token
+
+00:14:59.120 --> 00:15:00.100
+und die Einbettungsgenerierung
+
+00:15:00.100 --> 00:15:00.880
+bezahlt werden muss,
+
+00:15:01.020 --> 00:15:02.160
+steigen die Gesamtbetriebskosten
+
+00:15:02.160 --> 00:15:02.680
+rapide an.
+
+00:15:03.200 --> 00:15:03.660
+Wir haben erlebt,
+
+00:15:03.740 --> 00:15:04.200
+dass Unternehmen
+
+00:15:04.200 --> 00:15:05.420
+ein Co-Pilot-Pilot-Projekt
+
+00:15:05.420 --> 00:15:06.600
+starten, enorme Erfolge
+
+00:15:06.600 --> 00:15:07.560
+bei der Benutzerzufriedenheit
+
+00:15:07.560 --> 00:15:08.520
+verzeichnen und dann sofort
+
+00:15:08.520 --> 00:15:09.180
+den Stecker ziehen,
+
+00:15:09.280 --> 00:15:09.700
+als die erste
+
+00:15:09.700 --> 00:15:10.900
+vollständige Rechnung eintrifft.
+
+00:15:11.560 --> 00:15:12.440
+Sie waren so auf die Leistung
+
+00:15:12.440 --> 00:15:13.420
+fokussiert, dass sie vergaßen,
+
+00:15:13.480 --> 00:15:14.280
+den Preis dieser Leistung
+
+00:15:14.280 --> 00:15:14.840
+zu überprüfen.
+
+00:15:15.560 --> 00:15:16.360
+Dies ist der Hauptgrund,
+
+00:15:16.480 --> 00:15:17.280
+warum RAK-Projekte
+
+00:15:17.280 --> 00:15:18.280
+beim Übergang vom Labor
+
+00:15:18.280 --> 00:15:19.280
+zur Produktion scheitern.
+
+00:15:19.700 --> 00:15:20.720
+Die Kosten dafür richtig zu liegen
+
+00:15:20.720 --> 00:15:21.000
+sind höher,
+
+00:15:21.060 --> 00:15:22.000
+als die Kosten dafür falsch zu liegen.
+
+00:15:22.300 --> 00:15:23.180
+Wie lösen wir das Problem also?
+
+00:15:23.560 --> 00:15:24.360
+Wie können wir die Präzision
+
+00:15:24.360 --> 00:15:24.940
+aufrechterhalten,
+
+00:15:25.000 --> 00:15:25.840
+ohne den Ruin zu treiben,
+
+00:15:25.860 --> 00:15:26.580
+um in den Ruin zu treiben?
+
+00:15:26.820 --> 00:15:27.300
+Die Antwort liegt
+
+00:15:27.300 --> 00:15:28.020
+im semantischen Caching.
+
+00:15:28.520 --> 00:15:29.580
+Im Jahr 2026
+
+00:15:29.580 --> 00:15:30.560
+ist semantisches Caching
+
+00:15:30.560 --> 00:15:31.640
+der ROI-Ratter für Unternehmen.
+
+00:15:32.460 --> 00:15:32.880
+Das Problem,
+
+00:15:32.980 --> 00:15:33.980
+das wir lösen, ist folgendes.
+
+00:15:34.380 --> 00:15:35.260
+Mitarbeiter neigen dazu,
+
+00:15:35.340 --> 00:15:35.940
+dieselben Fragen
+
+00:15:35.940 --> 00:15:36.980
+auf leicht unterschiedliche Weise
+
+00:15:36.980 --> 00:15:37.380
+zu stellen.
+
+00:15:37.700 --> 00:15:38.660
+Wie sind die Urlaubsrichtlinien?
+
+00:15:39.440 --> 00:15:40.120
+Können Sie mir die Regeln
+
+00:15:40.120 --> 00:15:40.840
+für Freizeit zeigen?
+
+00:15:41.600 --> 00:15:42.360
+Wie viele Urlaubstage
+
+00:15:42.360 --> 00:15:42.840
+bekomme ich?
+
+00:15:43.260 --> 00:15:44.320
+In einer Standard-RAG-Pipeline
+
+00:15:44.320 --> 00:15:45.180
+löst jede dieser Fragen
+
+00:15:45.180 --> 00:15:46.100
+einen vollständigen Abruf,
+
+00:15:46.160 --> 00:15:47.200
+eine semantische Neubewertung
+
+00:15:47.200 --> 00:15:48.420
+und einen LLM-Aufruf aus.
+
+00:15:48.740 --> 00:15:49.380
+Sie zahlen dreimal
+
+00:15:49.380 --> 00:15:50.180
+für dieselbe Antwort.
+
+00:15:50.680 --> 00:15:51.380
+Semantisches Caching
+
+00:15:51.380 --> 00:15:52.180
+stoppt diese Verschwendung.
+
+00:15:52.440 --> 00:15:53.400
+Es verwendet ein einfaches
+
+00:15:53.400 --> 00:15:54.060
+Einbettungsmodell,
+
+00:15:54.140 --> 00:15:54.540
+um zu erkennen,
+
+00:15:54.640 --> 00:15:55.340
+dass diese drei Fragen
+
+00:15:55.340 --> 00:15:56.340
+dieselbe Absicht haben.
+
+00:15:57.160 --> 00:15:57.980
+Anstatt zur teuren
+
+00:15:57.980 --> 00:15:58.880
+Argumentations-Engine
+
+00:15:58.880 --> 00:15:59.580
+zurückzukehren,
+
+00:15:59.820 --> 00:16:00.300
+ruft das System
+
+00:16:00.300 --> 00:16:01.160
+die verifizierte Antwort
+
+00:16:01.160 --> 00:16:02.320
+aus einem Hochgeschwindigkeits-Cache ab.
+
+00:16:02.580 --> 00:16:03.780
+Dies kann ihre LLM-Aufrufe
+
+00:16:03.780 --> 00:16:05.340
+um 60 bis 80 Prozent reduzieren.
+
+00:16:05.760 --> 00:16:06.300
+Und die Transformation
+
+00:16:06.300 --> 00:16:07.100
+der Benutzererfahrung
+
+00:16:07.100 --> 00:16:07.820
+ist noch dramatischer.
+
+00:16:08.280 --> 00:16:09.000
+Sie wechseln von einer
+
+00:16:09.000 --> 00:16:10.140
+Wartezeit von drei Sekunden
+
+00:16:10.140 --> 00:16:11.480
+auf eine Live-GPT4-Inferenz
+
+00:16:11.480 --> 00:16:12.060
+zu einem Cache-Treffer
+
+00:16:12.060 --> 00:16:13.020
+von unter 50 Millisec.
+
+00:16:13.120 --> 00:16:14.080
+Das ist eine 250-fache
+
+00:16:14.080 --> 00:16:14.840
+Geschwindigkeitsverbesserung.
+
+00:16:15.120 --> 00:16:15.720
+Plötzlich fühlt sich
+
+00:16:15.720 --> 00:16:16.780
+der Co-Pilot sofort an.
+
+00:16:17.440 --> 00:16:17.960
+Es entwickelt sich
+
+00:16:17.960 --> 00:16:18.800
+von einem langsamen Tool,
+
+00:16:18.860 --> 00:16:19.640
+das die Leute tolerieren,
+
+00:16:19.700 --> 00:16:21.040
+zu einem reaktionsschnellen Assistenten,
+
+00:16:21.080 --> 00:16:21.840
+den die Leute tatsächlich
+
+00:16:21.840 --> 00:16:22.480
+gerne verwenden.
+
+00:16:23.020 --> 00:16:23.740
+Allerdings ist das Caching
+
+00:16:23.740 --> 00:16:24.300
+nur die halbe Miete.
+
+00:16:24.720 --> 00:16:25.360
+Die andere Hälfte
+
+00:16:25.360 --> 00:16:26.380
+ist die selektive Aktivierung.
+
+00:16:26.760 --> 00:16:27.600
+Einer der größten Fehler,
+
+00:16:27.680 --> 00:16:28.440
+den Architekten machen,
+
+00:16:28.540 --> 00:16:29.120
+ist die Anwendung
+
+00:16:29.120 --> 00:16:30.160
+eines semantischen Rankings
+
+00:16:30.160 --> 00:16:31.240
+auf jede einzelne Abfrage.
+
+00:16:31.240 --> 00:16:32.480
+Sie benötigen keinen
+
+00:16:32.480 --> 00:16:33.500
+Deep Reasoning-Transformer,
+
+00:16:33.560 --> 00:16:34.520
+um ein Dokument mit dem Titel
+
+00:16:34.520 --> 00:16:35.620
+Vorlage für Spesenabrechnung
+
+00:16:35.620 --> 00:16:36.780
+2025 zu finden.
+
+00:16:37.100 --> 00:16:38.380
+Eine einfache Keyword-Übereinstimmung
+
+00:16:38.380 --> 00:16:39.220
+ist dafür mehr als ausreichend.
+
+00:16:39.340 --> 00:16:40.680
+Die Strategie für 2026
+
+00:16:40.680 --> 00:16:41.200
+besteht darin,
+
+00:16:41.220 --> 00:16:41.820
+die einfachen Treffer
+
+00:16:41.820 --> 00:16:42.680
+auf der kostengünstigen Ebene
+
+00:16:42.680 --> 00:16:43.040
+zu belassen.
+
+00:16:43.180 --> 00:16:44.360
+Sie sollten den L2-Reranking
+
+00:16:44.360 --> 00:16:45.580
+nur bei komplexen Abfragen
+
+00:16:45.580 --> 00:16:46.920
+in natürlicher Sprache auslösen,
+
+00:16:46.960 --> 00:16:47.520
+bei denen die Absicht
+
+00:16:47.520 --> 00:16:48.040
+mehrdeutig ist.
+
+00:16:48.180 --> 00:16:48.980
+Durch die Implementierung
+
+00:16:48.980 --> 00:16:49.660
+eines Logik-Gatters
+
+00:16:49.660 --> 00:16:50.640
+am Anfang Ihrer Pipeline
+
+00:16:50.640 --> 00:16:51.400
+können Sie Ihr Budget
+
+00:16:51.400 --> 00:16:52.360
+für die Abfragen reservieren,
+
+00:16:52.420 --> 00:16:52.860
+die tatsächlich
+
+00:16:52.860 --> 00:16:54.320
+die zusätzliche Präzision benötigen.
+
+00:16:54.700 --> 00:16:55.200
+Stellen Sie sich das
+
+00:16:55.200 --> 00:16:56.040
+für ein Triage-System vor.
+
+00:16:56.320 --> 00:16:57.300
+Die kostengünstige Ebene
+
+00:16:57.300 --> 00:16:58.880
+bearbeitet 70% der Routineanfragen.
+
+00:16:59.240 --> 00:17:00.300
+Die teure, semantische Ebene
+
+00:17:00.300 --> 00:17:01.580
+bearbeitet die 30%,
+
+00:17:01.580 --> 00:17:02.100
+die tatsächlich
+
+00:17:02.100 --> 00:17:03.060
+den Geschäftswert steigern.
+
+00:17:03.420 --> 00:17:03.920
+Auf diese Weise
+
+00:17:03.920 --> 00:17:04.780
+gleichen Sie das Budget aus.
+
+00:17:05.040 --> 00:17:05.600
+Sie stellen sicher,
+
+00:17:05.700 --> 00:17:06.540
+dass die Kosten der Suche
+
+00:17:06.540 --> 00:17:07.180
+den Wert der Antwort
+
+00:17:07.180 --> 00:17:07.740
+nicht übersteigen.
+
+00:17:08.140 --> 00:17:08.860
+Wenn eine Abfrage
+
+00:17:08.860 --> 00:17:10.520
+10 Cent an Produktivität wert ist,
+
+00:17:10.600 --> 00:17:11.300
+geben Sie keinen Dollar
+
+00:17:11.300 --> 00:17:12.140
+für Ihre Lösung aus.
+
+00:17:12.620 --> 00:17:13.680
+Wir müssen auch die Datenstaffelung
+
+00:17:13.680 --> 00:17:14.560
+selbst berücksichtigen.
+
+00:17:15.240 --> 00:17:15.960
+Nicht alle Dokumente
+
+00:17:15.960 --> 00:17:17.060
+erfordern eine Genauigkeit von Neuen.
+
+00:17:17.500 --> 00:17:18.580
+Ihr internes Cafeteria-Menü
+
+00:17:18.580 --> 00:17:19.120
+benötigt keinen
+
+00:17:19.120 --> 00:17:20.380
+von Bing abgeleiteten Re-Rangierer.
+
+00:17:20.580 --> 00:17:21.040
+Ihre Dokumente
+
+00:17:21.040 --> 00:17:21.840
+zur Einhaltung gesetzlicher
+
+00:17:21.840 --> 00:17:22.500
+Vorschriften jedoch schon.
+
+00:17:22.780 --> 00:17:23.680
+Durch die Partitionierung
+
+00:17:23.680 --> 00:17:24.480
+Ihrer Suchindizes
+
+00:17:24.480 --> 00:17:25.180
+und die Anwendung
+
+00:17:25.180 --> 00:17:25.700
+unterschiedlicher
+
+00:17:25.700 --> 00:17:26.560
+Rangfolgestrategien
+
+00:17:26.560 --> 00:17:27.340
+auf jeden Index
+
+00:17:27.340 --> 00:17:28.180
+können Sie Ihre Ausgaben
+
+00:17:28.180 --> 00:17:29.340
+basierend auf der Kritikalität
+
+00:17:29.340 --> 00:17:30.300
+der Informationen optimieren.
+
+00:17:31.280 --> 00:17:31.820
+Das nennen wir
+
+00:17:31.820 --> 00:17:32.920
+wertbasiertes Abrufen.
+
+00:17:33.480 --> 00:17:34.200
+Es ist die Erkenntnis,
+
+00:17:34.300 --> 00:17:34.840
+dass Genauigkeit
+
+00:17:34.840 --> 00:17:36.020
+keine binäre Wahl ist.
+
+00:17:36.660 --> 00:17:37.560
+Es ist eine gleitende Skala.
+
+00:17:38.020 --> 00:17:38.600
+Und als Architekt
+
+00:17:38.600 --> 00:17:39.580
+besteht Ihre Aufgabe darin,
+
+00:17:39.640 --> 00:17:40.220
+diesen Schieberegler
+
+00:17:40.220 --> 00:17:41.160
+basierend auf den spezifischen
+
+00:17:41.160 --> 00:17:42.060
+Anforderungen des Geschäftsbereichs
+
+00:17:42.060 --> 00:17:42.360
+zu verschieben.
+
+00:17:42.660 --> 00:17:43.540
+Das Ziel besteht nicht darin,
+
+00:17:43.580 --> 00:17:44.740
+das genaueste System zu entwickeln,
+
+00:17:44.800 --> 00:17:45.240
+das Mögliche.
+
+00:17:45.540 --> 00:17:46.300
+Das Ziel besteht darin,
+
+00:17:46.340 --> 00:17:47.500
+das genaueste System zu entwickeln,
+
+00:17:47.580 --> 00:17:48.140
+das sich das Unternehmen
+
+00:17:48.140 --> 00:17:48.960
+tatsächlich leisten kann.
+
+00:17:49.460 --> 00:17:50.480
+Denn eine perfekte KI,
+
+00:17:50.600 --> 00:17:51.500
+deren Einsatz teuer ist,
+
+00:17:51.540 --> 00:17:52.720
+ist nur ein sehr ausgeklügelter
+
+00:17:52.720 --> 00:17:53.360
+Briefbeschwerber.
+
+00:17:53.960 --> 00:17:55.680
+Im Jahr 2026 werden die Gewinner
+
+00:17:55.680 --> 00:17:56.200
+nicht diejenigen
+
+00:17:56.200 --> 00:17:57.120
+mit den höchsten Benchmarks sein.
+
+00:17:57.420 --> 00:17:58.360
+Sie werden diejenigen sein,
+
+00:17:58.420 --> 00:17:59.320
+die herausgefunden haben,
+
+00:17:59.440 --> 00:18:00.800
+wie sie 0,85 Cent
+
+00:18:00.800 --> 00:18:01.740
+zu Kosten liefern können,
+
+00:18:01.820 --> 00:18:03.420
+die linear mit ihrem Wachstum skalieren.
+
+00:18:03.780 --> 00:18:04.340
+Sie sind diejenigen,
+
+00:18:04.420 --> 00:18:05.080
+die die Infrastruktur
+
+00:18:05.080 --> 00:18:05.680
+als Einschränkung
+
+00:18:05.680 --> 00:18:06.540
+und nicht als nachträglichen
+
+00:18:06.540 --> 00:18:07.300
+Einfall betrachtet haben.
+
+00:18:07.800 --> 00:18:08.600
+Das Kostenmanagement
+
+00:18:08.600 --> 00:18:09.540
+ist die technische Seite
+
+00:18:09.540 --> 00:18:10.080
+der Gleichung.
+
+00:18:10.560 --> 00:18:11.120
+Aber selbst wenn die
+
+00:18:11.120 --> 00:18:11.880
+Wirtschaftlichkeit stimmt,
+
+00:18:11.980 --> 00:18:12.420
+gibt es immer noch
+
+00:18:12.420 --> 00:18:13.160
+ein menschliches Problem.
+
+00:18:13.660 --> 00:18:14.160
+Sie müssen die Lücke
+
+00:18:14.160 --> 00:18:15.400
+zwischen den erworbenen Lizenzen
+
+00:18:15.400 --> 00:18:16.520
+und dem tatsächlichen Vertrauen
+
+00:18:16.520 --> 00:18:17.140
+ihrer Benutzer
+
+00:18:17.140 --> 00:18:18.200
+in das System schließen.
+
+00:18:18.700 --> 00:18:19.260
+Denn wenn sie der Antwort
+
+00:18:19.260 --> 00:18:19.740
+nicht vertrauen,
+
+00:18:19.820 --> 00:18:20.360
+spielt es keine Rolle,
+
+00:18:20.400 --> 00:18:20.900
+wie viel es kostet,
+
+00:18:20.940 --> 00:18:21.500
+hat sie zu generieren.
+
+00:18:21.880 --> 00:18:22.400
+Sie suchen einfach
+
+00:18:22.400 --> 00:18:23.180
+wieder auf die alte A.
+
+00:18:23.720 --> 00:18:24.420
+Und das bringt uns
+
+00:18:24.420 --> 00:18:25.160
+zur Governance-Lücke.
+
+00:18:25.800 --> 00:18:26.580
+Denn Vertrauen hat nicht nur
+
+00:18:26.580 --> 00:18:27.700
+mit technischer Genauigkeit zu tun.
+
+00:18:28.200 --> 00:18:28.920
+Es geht um den Rahmen,
+
+00:18:29.000 --> 00:18:29.840
+der diese Genauigkeit umgibt.
+
+00:18:30.260 --> 00:18:31.060
+Es geht darum zu wissen,
+
+00:18:31.180 --> 00:18:32.540
+dass die KI nicht nur richtig ist,
+
+00:18:32.820 --> 00:18:33.280
+sondern dass sie
+
+00:18:33.280 --> 00:18:34.260
+überhaupt richtig sein darf.
+
+00:18:35.460 --> 00:18:36.200
+Das Kostenmanagement
+
+00:18:36.200 --> 00:18:37.160
+ist die technische Seite,
+
+00:18:37.380 --> 00:18:38.260
+aber auf der ausführenden Seite
+
+00:18:38.260 --> 00:18:39.240
+geht es um die Governance-Lücke.
+
+00:18:40.140 --> 00:18:40.720
+Die Optimierung
+
+00:18:40.720 --> 00:18:41.420
+ihrer Infrastruktur
+
+00:18:41.420 --> 00:18:42.180
+löst nur einen Teil
+
+00:18:42.180 --> 00:18:42.700
+der Gleichung.
+
+00:18:42.700 --> 00:18:44.580
+Sie können die kosteneffizienteste
+
+00:18:44.580 --> 00:18:45.360
+Präzisions-Engine
+
+00:18:45.360 --> 00:18:46.040
+der Welt entwickeln.
+
+00:18:46.160 --> 00:18:46.940
+Doch wenn ihr Führungsteam
+
+00:18:46.940 --> 00:18:47.580
+Angst vor dem hat,
+
+00:18:47.640 --> 00:18:48.520
+was sie ans Licht bringen könnte,
+
+00:18:48.820 --> 00:18:49.300
+wird das Projekt
+
+00:18:49.300 --> 00:18:50.420
+nie den Sandkasten verlassen.
+
+00:18:51.180 --> 00:18:51.920
+Wir haben einen Punkt erreicht,
+
+00:18:52.000 --> 00:18:52.580
+an dem der Engpass
+
+00:18:52.580 --> 00:18:53.500
+nicht mehr das Rechenbudget
+
+00:18:53.500 --> 00:18:54.920
+oder die Latenz des Rerankers ist.
+
+00:18:55.720 --> 00:18:56.520
+Die eigentliche Reibung
+
+00:18:56.520 --> 00:18:56.900
+ist die Lücke
+
+00:18:56.900 --> 00:18:57.660
+zwischen den von ihnen
+
+00:18:57.660 --> 00:18:58.580
+zugewiesenen Lizenzen
+
+00:18:58.580 --> 00:18:59.640
+und der tatsächlichen Autorität,
+
+00:18:59.740 --> 00:19:00.800
+die die KI zum Arbeiten hat.
+
+00:19:01.800 --> 00:19:02.580
+Die Governance-Lücke,
+
+00:19:02.960 --> 00:19:03.640
+warum Richtlinien
+
+00:19:03.640 --> 00:19:04.340
+nicht genutzt werden.
+
+00:19:04.840 --> 00:19:05.320
+Wir haben derzeit
+
+00:19:05.320 --> 00:19:05.900
+15 Millionen
+
+00:19:05.900 --> 00:19:07.000
+kostenpflichtige Arbeitsplätze
+
+00:19:07.000 --> 00:19:07.560
+im Ökosystem.
+
+00:19:08.060 --> 00:19:08.740
+Dennoch stagniert
+
+00:19:08.740 --> 00:19:09.500
+die Konversionsrate
+
+00:19:09.500 --> 00:19:10.120
+am Arbeitsplatz
+
+00:19:10.120 --> 00:19:11.620
+bei unglaublichen 35 Prozent.
+
+00:19:12.340 --> 00:19:12.840
+Das bedeutet,
+
+00:19:12.980 --> 00:19:13.620
+dass zwei von drei
+
+00:19:13.620 --> 00:19:14.480
+lizenzierten Benutzern
+
+00:19:14.480 --> 00:19:15.860
+das Tool im Wesentlichen ignorieren.
+
+00:19:16.320 --> 00:19:17.020
+Sie hören nach der dritten
+
+00:19:17.020 --> 00:19:17.840
+Halluzination auf,
+
+00:19:17.860 --> 00:19:18.260
+es zu verwenden.
+
+00:19:18.660 --> 00:19:19.820
+Vertrauen ist zerbrechlich
+
+00:19:19.820 --> 00:19:20.800
+und ein schlechter Abruf
+
+00:19:20.800 --> 00:19:21.580
+zerstört es schneller,
+
+00:19:21.720 --> 00:19:22.280
+als jede Schulung
+
+00:19:22.280 --> 00:19:23.020
+es aufbauen kann.
+
+00:19:24.480 --> 00:19:25.140
+Governance ist nicht
+
+00:19:25.140 --> 00:19:25.720
+nur ein Dokument.
+
+00:19:26.200 --> 00:19:27.200
+Es ist eine technische Konkurrenz.
+
+00:19:28.180 --> 00:19:28.540
+Ohne sie
+
+00:19:28.540 --> 00:19:29.540
+stirbt ihr RHG-Projekt
+
+00:19:29.540 --> 00:19:30.180
+in Woche 12.
+
+00:19:30.300 --> 00:19:31.620
+Wie sieht das neue Modell
+
+00:19:31.620 --> 00:19:32.540
+also in der Praxis aus?
+
+00:19:33.140 --> 00:19:33.640
+Es ist ein Schritt
+
+00:19:33.640 --> 00:19:34.620
+in Richtung gesteuerte Agenten.
+
+00:19:35.460 --> 00:19:36.620
+Die Ära des Chatfensters
+
+00:19:36.620 --> 00:19:37.120
+geht zu Ende.
+
+00:19:37.780 --> 00:19:38.460
+Wir bewegen uns weg
+
+00:19:38.460 --> 00:19:38.940
+von einer Welt,
+
+00:19:38.940 --> 00:19:39.900
+in der man eine Frage stellt
+
+00:19:39.900 --> 00:19:40.260
+und hofft,
+
+00:19:40.340 --> 00:19:40.900
+dass die Mathematik
+
+00:19:40.900 --> 00:19:41.680
+ein Dokument findet.
+
+00:19:42.220 --> 00:19:42.800
+Das neue Modell
+
+00:19:42.800 --> 00:19:43.600
+dreht sich um Delegation.
+
+00:19:43.940 --> 00:19:44.720
+Es geht um den Übergang
+
+00:19:44.720 --> 00:19:45.300
+von einem System,
+
+00:19:45.400 --> 00:19:46.400
+das lediglich Daten abruft
+
+00:19:46.400 --> 00:19:46.920
+zu einem System,
+
+00:19:47.000 --> 00:19:47.460
+das tatsächlich
+
+00:19:47.460 --> 00:19:48.140
+über den Suchprozess
+
+00:19:48.140 --> 00:19:48.640
+selbst nachdenkt.
+
+00:19:48.980 --> 00:19:50.000
+Wir treten in das Zeitalter
+
+00:19:50.000 --> 00:19:51.040
+des gesteuerten Agenten ein.
+
+00:19:51.680 --> 00:19:52.220
+Ein System,
+
+00:19:52.320 --> 00:19:53.440
+das nicht nur nach Daten sucht,
+
+00:19:53.620 --> 00:19:54.780
+sondern die Hausregeln versteht,
+
+00:19:54.860 --> 00:19:56.140
+noch bevor es den Motor startet.
+
+00:19:57.280 --> 00:19:57.940
+Die Roadmap 2026
+
+00:19:58.600 --> 00:19:59.140
+von der Abfrage
+
+00:19:59.140 --> 00:19:59.900
+bis zur Argumentation.
+
+00:20:00.340 --> 00:20:00.920
+Wenn Sie in den nächsten
+
+00:20:00.920 --> 00:20:02.580
+24 Monaten relevant bleiben wollen,
+
+00:20:02.740 --> 00:20:03.440
+muss sich Ihre Roadmap
+
+00:20:03.440 --> 00:20:04.940
+in Richtung agentenbasiertes RAG verschieben.
+
+00:20:05.120 --> 00:20:05.860
+Das ist die nächste Grenze.
+
+00:20:05.860 --> 00:20:07.220
+In einem Standard-Setup
+
+00:20:07.220 --> 00:20:07.800
+nimmt das System
+
+00:20:07.800 --> 00:20:08.700
+Ihre Anfrage entgegen
+
+00:20:08.700 --> 00:20:09.760
+und führt eine einzelne Suche durch.
+
+00:20:09.880 --> 00:20:11.080
+In einem agentenbasierten Setup
+
+00:20:11.080 --> 00:20:11.940
+plant die KI die Suche.
+
+00:20:12.220 --> 00:20:13.140
+Sie prüft Ihre Anfrage
+
+00:20:13.140 --> 00:20:13.780
+und entscheidet,
+
+00:20:13.860 --> 00:20:15.080
+ob Sie den Vektorspeicher aufrufen,
+
+00:20:15.180 --> 00:20:16.520
+eine SQL-Datenbank abfragen
+
+00:20:16.520 --> 00:20:16.940
+oder vielleicht
+
+00:20:16.940 --> 00:20:18.300
+eine Echtzeit-ABI überprüfen muss.
+
+00:20:18.700 --> 00:20:19.360
+Sie überlegt die Schritte,
+
+00:20:19.460 --> 00:20:19.980
+die erforderlich sind,
+
+00:20:20.020 --> 00:20:20.600
+um die Wahrheit zu finden.
+
+00:20:21.120 --> 00:20:21.820
+Hier wird GrafRAG
+
+00:20:21.820 --> 00:20:22.640
+zum Goldstandard.
+
+00:20:23.280 --> 00:20:24.480
+In Umgebungen mit hohem Risiko,
+
+00:20:24.580 --> 00:20:25.420
+in denen eine Genauigkeit
+
+00:20:25.420 --> 00:20:26.760
+von 90 Prozent erforderlich ist,
+
+00:20:26.840 --> 00:20:27.320
+können Sie sich nicht
+
+00:20:27.320 --> 00:20:28.460
+auf flache Dokumentblöcke verlassen.
+
+00:20:29.040 --> 00:20:30.280
+Sie benötigen einen Wissensgrafen,
+
+00:20:30.360 --> 00:20:30.820
+der die Beziehungen
+
+00:20:30.820 --> 00:20:31.500
+zwischen Entitäten,
+
+00:20:31.720 --> 00:20:32.420
+Personenprojekten
+
+00:20:32.420 --> 00:20:33.400
+und Richtlinien abbildet.
+
+00:20:34.120 --> 00:20:35.160
+So kann die KI verstehen,
+
+00:20:35.380 --> 00:20:36.180
+dass sie bei Ihrer Frage
+
+00:20:36.180 --> 00:20:36.900
+nach dem Budget
+
+00:20:36.900 --> 00:20:37.880
+des leitenden Ingenieurs
+
+00:20:37.880 --> 00:20:38.440
+die Person,
+
+00:20:38.720 --> 00:20:39.900
+dann das von ihr geleitete Projekt
+
+00:20:39.900 --> 00:20:41.020
+und dann das mit diesem Projekt
+
+00:20:41.020 --> 00:20:41.500
+verknüpfte,
+
+00:20:41.620 --> 00:20:42.700
+spezifische Finanzbuchhaltung
+
+00:20:42.700 --> 00:20:43.160
+finden muss.
+
+00:20:43.780 --> 00:20:44.260
+Es handelt sich
+
+00:20:44.260 --> 00:20:44.940
+um eine mehrstufige
+
+00:20:44.940 --> 00:20:45.700
+Argumentationskette,
+
+00:20:45.780 --> 00:20:46.500
+die die flache Vektorsuche
+
+00:20:46.500 --> 00:20:47.260
+einfach nicht leisten kann.
+
+00:20:47.800 --> 00:20:48.620
+Aber hier ist die harte Wahrheit.
+
+00:20:49.140 --> 00:20:49.860
+Ihre KI wird durch
+
+00:20:49.860 --> 00:20:50.540
+Ihre Metadaten
+
+00:20:50.540 --> 00:20:50.900
+und nicht durch
+
+00:20:50.900 --> 00:20:52.220
+Ihre Lizenzanzahl eingeschränkt.
+
+00:20:52.900 --> 00:20:53.920
+Wenn Ihre SharePoint-Websites
+
+00:20:53.920 --> 00:20:54.680
+ein einziger Friedhof
+
+00:20:54.680 --> 00:20:55.200
+aus Dokumenten
+
+00:20:55.200 --> 00:20:56.140
+im Format Docs 1 dort,
+
+00:20:56.280 --> 00:20:57.040
+Final 4 2 wirklich
+
+00:20:57.040 --> 00:20:58.220
+die final im Formal-PDFs sind,
+
+00:20:58.320 --> 00:20:59.280
+wird sie kein noch so großes
+
+00:20:59.280 --> 00:21:00.200
+identisches Denken wetten.
+
+00:21:00.780 --> 00:21:01.320
+Die Vorbereitung
+
+00:21:01.320 --> 00:21:02.140
+Ihrer Datengrundlage
+
+00:21:02.140 --> 00:21:02.900
+ist die einzige Möglichkeit,
+
+00:21:03.020 --> 00:21:03.800
+den bevorstehenden Rückstand
+
+00:21:03.800 --> 00:21:05.020
+im Wettbewerb zu formen.
+
+00:21:05.100 --> 00:21:05.500
+Unternehmen,
+
+00:21:05.620 --> 00:21:06.320
+die mit der Behebung
+
+00:21:06.320 --> 00:21:07.320
+ihrer Abrufschicht warten,
+
+00:21:07.460 --> 00:21:08.780
+werden mit einer Akzeptanzrate
+
+00:21:08.780 --> 00:21:10.300
+von 35% feststecken,
+
+00:21:10.720 --> 00:21:11.660
+während ihre Wettbewerber
+
+00:21:11.660 --> 00:21:12.820
+ganze Arbeitsabläufe
+
+00:21:12.820 --> 00:21:13.560
+automatisieren.
+
+00:21:14.500 --> 00:21:15.120
+Wir bewegen uns
+
+00:21:15.120 --> 00:21:15.880
+von der Vektorsuche
+
+00:21:15.880 --> 00:21:16.540
+als Werkzeug
+
+00:21:16.540 --> 00:21:17.880
+hin zur semantischen Strategie
+
+00:21:17.880 --> 00:21:18.740
+als Kernkompetenz
+
+00:21:18.740 --> 00:21:19.360
+des Unternehmens.
+
+00:21:20.200 --> 00:21:20.920
+Ihre Transformation
+
+00:21:20.920 --> 00:21:21.660
+beginnt mit einem
+
+00:21:21.660 --> 00:21:22.300
+Retrieval Audit.
+
+00:21:22.780 --> 00:21:23.540
+Hören Sie auf zu messen,
+
+00:21:23.600 --> 00:21:24.560
+wie schnell die KI reagiert
+
+00:21:24.560 --> 00:21:25.360
+und messen Sie stattdessen,
+
+00:21:25.440 --> 00:21:26.080
+wie oft sie tatsächlich
+
+00:21:26.080 --> 00:21:26.580
+richtig liegt.
+
+00:21:27.340 --> 00:21:27.820
+Identifizieren Sie
+
+00:21:27.820 --> 00:21:28.620
+die Top 10%
+
+00:21:28.620 --> 00:21:29.520
+Ihrer komplexesten
+
+00:21:29.520 --> 00:21:30.160
+Anwendungsfälle,
+
+00:21:30.500 --> 00:21:31.200
+bei denen Genauigkeit
+
+00:21:31.200 --> 00:21:32.020
+eine Anforderung
+
+00:21:32.020 --> 00:21:33.000
+und keine Empfehlung ist
+
+00:21:33.000 --> 00:21:34.120
+und implementieren Sie
+
+00:21:34.120 --> 00:21:35.000
+den L2-Reranker
+
+00:21:35.000 --> 00:21:36.000
+noch heute in diesen Pipelines.
+
+00:21:36.540 --> 00:21:37.120
+Wenn diese Änderung
+
+00:21:37.120 --> 00:21:37.520
+des Modells
+
+00:21:37.520 --> 00:21:38.040
+Ihre Denkweise
+
+00:21:38.040 --> 00:21:38.960
+in Bezug auf Ihre Architektur
+
+00:21:38.960 --> 00:21:39.380
+verändert hat,
+
+00:21:39.480 --> 00:21:39.860
+folgen Sie mir,
+
+00:21:40.020 --> 00:21:40.460
+Mirko Peters,
+
+00:21:40.560 --> 00:21:40.860
+auf LinkedIn,
+
+00:21:41.020 --> 00:21:41.600
+um weitere Deep Dives
+
+00:21:41.600 --> 00:21:41.880
+zu erhalten.
+
+00:21:42.320 --> 00:21:42.800
+Wenn Ihnen dies
+
+00:21:42.800 --> 00:21:43.380
+bei der Diagnose
+
+00:21:43.380 --> 00:21:44.160
+der Gründe für das Scheitern
+
+00:21:44.160 --> 00:21:45.020
+Ihres RAG-Projekts
+
+00:21:45.020 --> 00:21:45.420
+geholfen hat,
+
+00:21:45.500 --> 00:21:46.340
+hinterlassen Sie eine Bewertung.
+
+00:21:46.600 --> 00:21:47.420
+So kann dieser Podcast
+
+00:21:47.420 --> 00:21:48.320
+die Architekten erreichen,
+
+00:21:48.320 --> 00:21:48.760
+die immer noch
+
+00:21:48.760 --> 00:21:49.400
+mit der Top-Kar-Falle
+
+00:21:49.400 --> 00:21:50.060
+zu kämpfen haben.
+
+00:21:50.840 --> 00:21:51.700
+Als nächstes sollten Sie
+
+00:21:51.700 --> 00:21:52.460
+sich unseren Deep Dive
+
+00:21:52.460 --> 00:21:53.580
+zu Agenten-Workflows ansehen,
+
+00:21:53.680 --> 00:21:54.100
+um zu erfahren,
+
+00:21:54.180 --> 00:21:54.960
+wohin diese Präzision
+
+00:21:54.960 --> 00:21:55.840
+als nächstes führen wird.

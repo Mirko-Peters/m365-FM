@@ -1,0 +1,910 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.440
+Das heutige Thema ist eines, von dem fast jeder schon einmal gehört hat, das aber nur wenige wirklich versteht.
+
+00:00:03.740 --> 00:00:05.080
+Co-Pilot in Microsoft Entra-ID.
+
+00:00:05.780 --> 00:00:08.720
+Sie haben den Namen wahrscheinlich schon einmal in Ihrem Admin-Center gesehen oder auf einer Konferenz davon gehört.
+
+00:00:09.200 --> 00:00:09.940
+Was macht er also genau?
+
+00:00:10.300 --> 00:00:13.440
+Es ist nur ein Chatbot, der grundlegende Fragen beantwortet oder schickt dahinter etwas viel Umfangreichung.
+
+00:00:13.740 --> 00:00:15.120
+Am einfachsten kann man sich das vorstellen.
+
+00:00:15.240 --> 00:00:19.720
+Stellen Sie sich vor, Sie sind ein IT-Administrator und ein Benutzer ruft frustriert beim Helpdesk an, weil er nicht auf das CRM zugreifen kann.
+
+00:00:20.020 --> 00:00:21.340
+Er verliert Zeit und braucht sofort eine Anzahl.
+
+00:00:21.700 --> 00:00:22.960
+Ihre Aufgabe ist es, den Grunde fällig aus.
+
+00:00:23.320 --> 00:00:26.160
+Sie öffnen das Entra-Admin-Center, navigieren zu den Anmeldeprotokollen,
+
+00:00:26.160 --> 00:00:31.480
+filtern nach Benutzernamen und sehen eine Tabelle mit Rohdaten, Korrelations-IDs, Fehlercodes, Zeitstempeln und JSON-Blobs.
+
+00:00:32.080 --> 00:00:34.620
+Irgendwo in diesem Durcheinander befindet sich die Antwort, aber es kostet Zeit, sie zu finden.
+
+00:00:35.040 --> 00:00:38.080
+Wenn Sie ein Junior-Administrator oder neu bei Entra sind, wissen Sie nicht, wo Sie anfangen sollen.
+
+00:00:38.480 --> 00:00:39.620
+Genau dieses Problem löst Co-Pilot.
+
+00:00:40.020 --> 00:00:43.580
+Am Ende dieses Wissenshippchens werden Sie verstehen, was Co-Pilot in Entra-ID eigentlich ist,
+
+00:00:43.660 --> 00:00:47.700
+wie es komplexe Protokolle in einfache Antworten umwandelt und warum es das Identitätsmanagement verändert.
+
+00:00:48.180 --> 00:00:51.980
+Kein Marketing-Geschwafel, nur die Bausteine des Identitätsfehlerbehebungsproblems.
+
+00:00:52.500 --> 00:00:54.660
+Werfen wir einen Blick auf das Problem, das Co-Pilot löst.
+
+00:00:54.660 --> 00:00:57.760
+Denn um zu verstehen, warum ein KI-Assistent wichtig ist, müssen Sie zunächst einmal sehen,
+
+00:00:57.840 --> 00:00:59.920
+wie schwierig die Identitätsfehlerbehebung sein kann.
+
+00:01:01.120 --> 00:01:02.560
+Denken Sie an den Umfang moderner Identitäten.
+
+00:01:03.100 --> 00:01:05.720
+In einer typischen Organisation erfolgen täglich tausende von Anmeldungen.
+
+00:01:06.380 --> 00:01:08.820
+Einige sind erfolgreich, andere schlagen fehl, einige werden durch Richtlinien geblieben.
+
+00:01:09.200 --> 00:01:12.880
+Sie haben hunderte von Richtlinien für bedingten Zugriff, die auf unvorhersehbare Weise interagieren.
+
+00:01:13.120 --> 00:01:17.500
+Und darüber hinaus generiert der Identitätsschutz Risikosignale für Benutzer, die möglicherweise kompromittiert sind.
+
+00:01:17.900 --> 00:01:19.700
+Das sind eine Menge Daten aus einer Vielzahl von Quellen.
+
+00:01:20.280 --> 00:01:23.300
+Stellen Sie sich nun vor, Sie versuchen herauszufinden, warum ein bestimmter Benutzer blockiert wurde.
+
+00:01:23.300 --> 00:01:25.860
+Sie beginnen den Anmeldeprotokollen und suchen nach dem Ereignis.
+
+00:01:26.040 --> 00:01:27.840
+Aber es wird Ihnen nur mitgeteilt, dass die Anmeldung fehlgeschlagen ist.
+
+00:01:27.900 --> 00:01:28.300
+Nicht, aber warum?
+
+00:01:28.640 --> 00:01:32.880
+Sie wechseln also zur Registerkarte bedingter Zugriff, überprüfen dann die Gerätekonformität des Benutzers,
+
+00:01:33.000 --> 00:01:35.940
+dann die Überwachungsprotokolle, um zu sehen, ob sich kürzlich Richtlinien geändert haben
+
+00:01:35.940 --> 00:01:38.300
+und öffnen dann den Identitätsschutz, um nach Risikoerkennung zu suchen.
+
+00:01:38.480 --> 00:01:41.380
+Jeder einzelne dieser Schritte ist ein separates Blatt mit eigener Ansicht und eigenem Feld.
+
+00:01:41.840 --> 00:01:44.820
+Bis Sie alle Punkte verbunden haben, sind 15 oder 20 Minuten vergangen.
+
+00:01:45.560 --> 00:01:46.800
+Die Sprachbarriere macht es noch schlimmer.
+
+00:01:47.380 --> 00:01:48.880
+Rohprotokolle sind nicht in einfachem Englischwiffen.
+
+00:01:48.880 --> 00:01:53.340
+Sie enthalten technische Codes, Korrelations-IDs, die wie zufällige Zeichenfolgen aussehen,
+
+00:01:53.580 --> 00:01:54.760
+Fehlernummern, die Sie nachschlagen müssen,
+
+00:01:55.180 --> 00:01:57.700
+und JSON-Blobs mit verschachtelten Feldern, die schwer zu analysieren sind.
+
+00:01:58.320 --> 00:02:01.420
+Wenn Sie einen Junior-Administrator oder im Helpdesk arbeiten, wissen Sie nicht, welches Feld Sie sich ansetzen.
+
+00:02:01.580 --> 00:02:04.940
+Also eskalieren Sie das Problem an einen leitenden Administrator, der bereits überlastet ist.
+
+00:02:05.080 --> 00:02:06.180
+Hier ist ein Beispiel aus der Praxis.
+
+00:02:06.320 --> 00:02:09.580
+Ein Benutzer ruft beim Helpdesk an und sagt, dass er nicht auf Microsoft Teams zugreifen kann.
+
+00:02:09.580 --> 00:02:11.400
+Das sind alle Informationen, die Sie haben.
+
+00:02:11.740 --> 00:02:12.520
+Wo fangen Sie überhaupt an?
+
+00:02:12.860 --> 00:02:16.360
+Überprüfen Sie die Benutzerlizenz, die Gerätekonformität, die Richtlinien für bedingten Zugriff,
+
+00:02:16.440 --> 00:02:18.020
+die Anmeldeprotokolle und die Risikobewertung.
+
+00:02:18.300 --> 00:02:21.120
+Ohne fundierte Kenntnisse von Entra müssen Sie im Grunde nur raten und das kostet Zeit.
+
+00:02:21.400 --> 00:02:22.580
+Genau hier kommt Co-Pilot ins Spiel.
+
+00:02:23.400 --> 00:02:24.760
+Was ist Security Co-Pilot in Entra-ID?
+
+00:02:25.760 --> 00:02:27.700
+Was genau ist Security Co-Pilot in Entra-ID?
+
+00:02:28.180 --> 00:02:29.200
+Ist die einfachste Definition.
+
+00:02:29.620 --> 00:02:32.680
+Es handelt sich um einen KI-Assistenten, der direkt in das Entreatment-Center integriert ist
+
+00:02:32.680 --> 00:02:35.380
+und nicht um eine separate Website oder ein Portal, bei dem Sie sich separat anmelden müssen.
+
+00:02:35.380 --> 00:02:41.140
+Er ist dort eingebettet, wo Sie bereits arbeiten, wie ein Wachmann, der jedes Protokoll, jede Richtlinie und jeden Benutzer im Gebäude kannte.
+
+00:02:41.760 --> 00:02:43.220
+Sie müssen nicht mehr nach Informationen suchen.
+
+00:02:43.820 --> 00:02:44.400
+Sie fragen einfach.
+
+00:02:45.500 --> 00:02:46.300
+So funktioniert es.
+
+00:02:46.460 --> 00:02:48.400
+Sie geben eine Frage in einfachem Englisch ein, etwa
+
+00:02:48.400 --> 00:02:50.260
+Zeige mir Hochrisiko-Benutzer an meinem Mandanten.
+
+00:02:50.540 --> 00:02:51.900
+Oder warum ist diese Anmeldung fehlgeschlagen?
+
+00:02:52.500 --> 00:02:55.400
+Oder fasse die Anmeldeaktivitäten der letzten 24 Stunden zusammen.
+
+00:02:56.060 --> 00:03:00.240
+Co-Pilot beantwortet diese Frage, fragt Ihre Entra-Daten ab und gibt Ihnen eine Antwort in natürlicher Sprache.
+
+00:03:00.720 --> 00:03:04.040
+Es stellt eine Verbindung zu Anmeldeprotokollen, Prüfprotokollen, Richtlinien für bedingten Zugriff,
+
+00:03:04.040 --> 00:03:05.620
+Identitätsschutz und Benutzerdetails her.
+
+00:03:06.080 --> 00:03:10.100
+All diese Daten sind bereits in Entra vorhanden, aber Co-Pilot fasst sie innerhalb von Sekunden statt Minuten zusammen.
+
+00:03:10.360 --> 00:03:11.220
+Und hier ist der springende Punkt.
+
+00:03:11.660 --> 00:03:13.400
+Co-Pilot überträgt nicht einfach nur Rohdaten auf Sie.
+
+00:03:13.840 --> 00:03:16.220
+Es liefert Ihnen eine Zusammenfassung, einen Text und eine Erklärung.
+
+00:03:16.580 --> 00:03:20.000
+Anstatt auf eine Tabelle mit Fehlercodes zu starren, erhalten Sie Informationen, wie
+
+00:03:20.000 --> 00:03:23.980
+dieser Benutzer wurde blockiert, weil die Richtlinie X für bedingten Zugriff ein konformes Gerät erforderte,
+
+00:03:24.060 --> 00:03:25.280
+das Gerät jedoch nicht konform war.
+
+00:03:26.000 --> 00:03:27.200
+Darauf können Sie sofort reagieren.
+
+00:03:27.920 --> 00:03:30.540
+Co-Pilot schlägt außerdem kontextbasierte Folgeanweisungen vor.
+
+00:03:31.160 --> 00:03:33.240
+Nach Beantwortung Ihrer ersten Frage könnte es heißen,
+
+00:03:33.780 --> 00:03:37.260
+möchten Sie alle fehlgeschlagenen Anmeldungen für diesen Benutzer in den letzten sieben Tagen sehen?
+
+00:03:38.000 --> 00:03:40.220
+Oder möchten Sie wissen, welche anderen Richtlinien gelten?
+
+00:03:40.680 --> 00:03:43.880
+Es führt Sie Schritt für Schritt, anstatt Sie mit der Entscheidung für den nächsten Schritt allein zu lassen.
+
+00:03:44.480 --> 00:03:45.060
+Hier ein Beispiel.
+
+00:03:45.580 --> 00:03:49.240
+Entradaten sind eine Bibliothek voller Informationen, aber es braucht Zeit, das richtige Buch zu finden.
+
+00:03:49.640 --> 00:03:52.100
+Co-Pilot ist der Bibliothekar, der genau weiß, wo sich alles befindet.
+
+00:03:52.520 --> 00:03:54.160
+Sie sagen ihm, was Sie benötigen, und er bringt es Ihnen.
+
+00:03:54.500 --> 00:03:57.360
+Kein Herumirren in Gängen, kein Raten in Regal, einfach nur die Antwort, wenn Sie sie brauchen.
+
+00:03:57.980 --> 00:04:00.060
+Anwendungsfall 1. Fehlerbehebung bei der Anmeldung.
+
+00:04:00.480 --> 00:04:02.080
+Verdeutlichen wir das anhand eines realen Beispiels.
+
+00:04:02.500 --> 00:04:04.620
+Ein Mitarbeiter meldet, dass er nicht auf Microsoft Teams zugreifen kann.
+
+00:04:05.040 --> 00:04:07.660
+Er versucht es seit einer Stunde, startet sein Computer neu, aber nichts funktioniert.
+
+00:04:08.200 --> 00:04:09.240
+Also ruft er den Helpdesk an.
+
+00:04:09.780 --> 00:04:12.300
+Bei der bisherigen Vorgehensweise haben sie die Anmeldeprotokolle geöffnet,
+
+00:04:12.300 --> 00:04:15.460
+nach dem Namen des Benutzers gefiltert und mussten dann das richtige Datum zum Zeitfenster erhalten.
+
+00:04:15.840 --> 00:04:17.780
+Hat der Benutzer versucht, Sie vor 10 Minuten anzumelden oder vor 20?
+
+00:04:18.180 --> 00:04:21.100
+Sie scrollen durch die Ereignisse, um nach dem fehlgeschlagenen Ereignis zu suchen.
+
+00:04:21.260 --> 00:04:25.400
+Und wenn Sie es gefunden haben, sehen Sie einen Fehlercode mit dem Status Fehlergut, mit dem Status Fehlerü.
+
+00:04:25.560 --> 00:04:27.160
+Keine Erklärung, nur eine Zahl, die Sie nachschlagen.
+
+00:04:27.280 --> 00:04:29.640
+Dann klicken Sie auf die Registerkarte bedingter Zugriff-Türen, um festzustellen,
+
+00:04:29.720 --> 00:04:31.180
+ob die Anmeldung durch eine Richtlinie blockiert wurde.
+
+00:04:31.280 --> 00:04:34.460
+Überprüfen die Geräte Details auf Konformität und die Rails auf Konformität und die Risikostufe des Benutzers.
+
+00:04:34.460 --> 00:04:38.520
+Jeder Schritt ist ein separater Klick, eine separate Ansicht, ein separater mentaler Kontextwechsel.
+
+00:04:39.400 --> 00:04:42.320
+15 Minuten später haben Sie möglicherweise in Antwort oder sind noch verwirrter.
+
+00:04:42.840 --> 00:04:46.180
+So funktioniert Co-Pilot. Sie öffnen das Entry Admin Center und geben einen Satz ein.
+
+00:04:47.040 --> 00:04:49.000
+Warum konnte sich dieser Benutzer nicht bei Teams anmelden?
+
+00:04:49.640 --> 00:04:52.400
+Das ist alles. Keine Filter, kein Rätselraten, kein Wechseln zwischen Registergarten.
+
+00:04:52.720 --> 00:04:55.320
+Im Hintergrund erledigt Co-Pilot die Arbeit, die Sie früher manuell erledigt haben.
+
+00:04:55.740 --> 00:04:57.900
+Es ruft die letzten Anmeldeprotokolle des Benutzers ab,
+
+00:04:58.200 --> 00:04:59.880
+überprüft die Auswertung des bedingten Zugriffs,
+
+00:05:00.060 --> 00:05:03.640
+betrachtet den Konformitätsstatus des Geräts und identifiziert die Fehlerursache.
+
+00:05:04.820 --> 00:05:06.580
+Dann erhalten Sie eine Rückmeldung wie diese.
+
+00:05:07.160 --> 00:05:09.680
+Die Anmeldung ist fehlgeschlagen, da die Richtlinie für bedingten Zugriff,
+
+00:05:09.720 --> 00:05:11.740
+die ein konformes Gerät erfordert, die Sitzung blockiert hat.
+
+00:05:12.400 --> 00:05:14.200
+Das Gerät des Benutzers wurde als nicht konform markiert.
+
+00:05:14.780 --> 00:05:16.160
+Das ist die ganze Geschichte in einem Satz.
+
+00:05:16.620 --> 00:05:18.260
+Sie wissen genau, was passiert ist und was sich ändern muss.
+
+00:05:19.000 --> 00:05:20.600
+Das Gerät des Benutzers muss konform werden.
+
+00:05:21.060 --> 00:05:22.780
+Oder Sie müssen eine Ausnahme erstellen.
+
+00:05:23.280 --> 00:05:25.160
+In beiden Fällen haben Sie einen klaren Weg nach vorn.
+
+00:05:25.640 --> 00:05:26.700
+Aber Co-Pilot hört hier nicht auf.
+
+00:05:27.080 --> 00:05:28.580
+Es kann auch zusätzlichen Kontext anzeigen.
+
+00:05:29.500 --> 00:05:33.440
+Geräteplattform, Betriebssystemversion, Browser, IP-Adresse, Standort und Authentifizierungsmethode.
+
+00:05:33.440 --> 00:05:36.340
+All diese Informationen sind mit einer einfachen Folgeabfrage verfügbar.
+
+00:05:36.520 --> 00:05:39.520
+Zeige mir alle fehlgeschlagenen Anmeldungen dieses Benutzers in den letzten sieben Tagen.
+
+00:05:40.260 --> 00:05:41.720
+Oder welche anderen Richtlinien gelten.
+
+00:05:42.440 --> 00:05:43.620
+Die Zeit der Sparnis ist enorm.
+
+00:05:44.060 --> 00:05:46.600
+Was früher 15 Minuten dauerte, dauert jetzt nur noch etwa 30 Sekunden.
+
+00:05:47.300 --> 00:05:48.720
+Und hier liegt der eigentliche Vorteil.
+
+00:05:48.720 --> 00:05:51.260
+Nachwuchskräfte können diese Probleme beheben, ohne sie zu eskalieren.
+
+00:05:51.640 --> 00:05:56.940
+Jemand im Helpdesk, der keine tiefgreifenden Entra-Kenntnisse hat, kann Co-Pilot dieselbe Frage stellen und dieselbe klare Antwort erhalten.
+
+00:05:57.460 --> 00:06:04.320
+Das bedeutet, dass leitende Administratoren weniger Zeit mit der routinemäßigen Fehlerbehebung verbringen und mehr Zeit für die komplexen Probleme haben, die tatsächlich ihr Fachwissen erfordern.
+
+00:06:05.060 --> 00:06:07.060
+Anwendungsfall 2. Untersuchung riskanter Benutzer.
+
+00:06:07.060 --> 00:06:11.140
+Anmeldefehler sind eine Sache, aber Identitätsrisiken, das ist eine ganz andere Ebene.
+
+00:06:11.660 --> 00:06:14.680
+Der Identitätsschutz von Entra-ID generiert Risikobewertungen für Benutzer.
+
+00:06:15.420 --> 00:06:19.740
+Das klingt zwar einfach, aber herauszufinden, warum jemand als Hochrisiko-Benutzer gekennzeichnet wurde, ist eine ganz andere Herausforderung.
+
+00:06:20.200 --> 00:06:23.420
+Die Ruhrdaten des Identitätsschutzes können sich anfühlen, als würde man aus einem Feuerwehrschlauch trinken.
+
+00:06:23.800 --> 00:06:28.520
+Sie sehen eine Risikobewertung und eine Liste von Erkennungen, aber es dauert eine Weile diese Punkte mit dem tatsächlichen Benutzerverknüpfen.
+
+00:06:28.800 --> 00:06:33.980
+Sie müssen jede Erkennung einzeln prüfen, Zeitstempel abgleichen, Anmeldeaktivitäten abgleichen und dann entscheiden, was zu tun ist.
+
+00:06:34.600 --> 00:06:35.720
+Das ist machbar, aber langsam.
+
+00:06:35.720 --> 00:06:39.200
+Und wenn Sie es mit hunderten von Benutzern zu tun haben, ist diese Geschwindigkeit wichtig.
+
+00:06:39.900 --> 00:06:42.880
+Co-Pilot ändert die Spielregeln mit der sogenannten Zusammenfassung riskanter Benutzer.
+
+00:06:43.440 --> 00:06:47.060
+Dies ist eine der praktischsten Funktionen im integrierten Co-Pilot-Erlebnis und so funktioniert sie.
+
+00:06:47.720 --> 00:06:51.720
+Sie öffnen den Bericht zu riskanten Benutzern im Identitätsschutz und erkennen einen Benutzer mit einer hohen Risikobewertung.
+
+00:06:52.940 --> 00:06:55.980
+Anstatt jede Erkennung manuell durchzugehen, weisen Sie Co-Pilot einfach an.
+
+00:06:56.480 --> 00:06:58.620
+Fassen Sie die Risikoaktivität für diesen Benutzer zusammen.
+
+00:06:59.280 --> 00:06:59.620
+Das ist alles.
+
+00:07:00.320 --> 00:07:03.020
+Co-Pilot ruft die Risikoerkennung ab zum
+
+00:07:03.020 --> 00:07:10.440
+B-unbekannte Anmelde-Eigenschaften, kompromittierte Anmeldeinformationen und verdächtige IP-Adressen und korreliert sie mit den letzten Anmeldeaktivitäten des Benutzers.
+
+00:07:11.020 --> 00:07:12.680
+Anschließend wird alles in Form einer Beschreibung dargestellt.
+
+00:07:13.540 --> 00:07:14.860
+Die Ausgabe könnte in etwa so aussehen.
+
+00:07:15.420 --> 00:07:18.500
+Dieser Benutzer wird aufgrund von zwei Erkennungen als Hochrisiko-Benutzer gekennzeichnet.
+
+00:07:18.500 --> 00:07:26.700
+Eine Anmeldung von einem unbekannten Standort in einem Land, auf das der Benutzer noch nie zugegriffen hat und eine Aktivität, die mit bekannten, kompromittierten Anmeldeinformationen übereinstimmt, dem Darknet gefunden wurde.
+
+00:07:27.240 --> 00:07:27.860
+Das ist leistungsstark.
+
+00:07:28.160 --> 00:07:30.040
+Anstelle einer Liste von Ereignissen erhalten Sie eine Historie.
+
+00:07:30.340 --> 00:07:33.520
+Sie verstehen, was passiert ist, warum es verdächtig ist und wie schweigend es ist.
+
+00:07:33.780 --> 00:07:35.420
+Co-Pilot beschränkt sich jedoch nicht auf die Zusammenfassung.
+
+00:07:35.840 --> 00:07:41.660
+Sie erhalten auch Empfehlungen für die nächsten Schritte, setzen das Kennwort zurück, blockieren weitere Anmeldungen oder überprüfen, ob die Aktivität legitim war.
+
+00:07:42.300 --> 00:07:45.700
+Die Empfehlung ist auf die spezifischen Risikoerkennungen zugeschnitten und keine allgemeinen Ratschläge.
+
+00:07:46.260 --> 00:07:47.840
+Dies verändert die Konversation grundlegend.
+
+00:07:48.240 --> 00:07:52.040
+Anstatt sich zu fragen, ob dieser Benutzer kompromittiert wurde, können Sie fragen, wie Sie reagieren sollen.
+
+00:07:52.840 --> 00:07:57.260
+Co-Pilot bietet Ihnen einen klaren Weg nach vorn, sodass Identitätsteams schneller und sicherer reagieren können.
+
+00:07:57.740 --> 00:07:59.020
+Die Auswirkungen der Praxis sind enorm.
+
+00:07:59.400 --> 00:08:06.100
+Anstatt 20 Minuten mit der Untersuchung eines riskanten Benutzers zu verbringen und sich immer noch unsicher zu fühlen, erhalten Sie in Sekundschnelle ein vollständiges Bild sowie umsetzbare nächste Schritte.
+
+00:08:06.860 --> 00:08:11.260
+Für Unternehmen, die mit tausenden von Benutzern und ständigen Risikosignalen zu tun haben, ist das nicht nur praktisch, sondern unerlässlich.
+
+00:08:11.660 --> 00:08:14.880
+Anwendungsfall 3 – Erkenntnisse zum bedingten Zugriff
+
+00:08:14.880 --> 00:08:17.480
+Der bedingte Zugriff ist eine leistungsstärkste Funktion in Android.
+
+00:08:17.840 --> 00:08:18.960
+Er ist auch eine der komplexesten.
+
+00:08:19.420 --> 00:08:25.380
+Wenn Sie über Dutzende oder sogar Hunderte von Richtlinien verfügen, kann es überraschend schwierig sein, zu verstehen, was während einer Anmeldung tatsächlich passiert ist.
+
+00:08:25.720 --> 00:08:26.560
+Hier ist der manuelle Pfad.
+
+00:08:27.080 --> 00:08:34.860
+Sie suchen den Anmeldedatensatz, scrollen nach unten zur Registerkarte Bedingter Zugriff und sehen eine Liste der Richtliniennamen mit Ihren Ergebnissen Erfolg, Misserfolg nicht angewendet.
+
+00:08:35.760 --> 00:08:37.660
+Das ist nützlich, aber es erzählt Ihnen nur einen Teil der Geschichte.
+
+00:08:37.660 --> 00:08:44.220
+Sie müssen noch herausfinden, welche Bedingungen die Richtlinie ausgelöst haben, warum sie auf den jeweiligen Benutzer angewendet wurde und ob das Ergebnis Sinn macht.
+
+00:08:44.920 --> 00:08:45.920
+Hier ist nun der Co-Pilot-Pfad.
+
+00:08:46.360 --> 00:08:47.100
+Sie stellen eine Frage.
+
+00:08:47.460 --> 00:08:50.560
+Welche Richtlinien für bedingten Zugriff wurden auf diese Anmeldung angewendet und was haben Sie bewirkt?
+
+00:08:51.060 --> 00:08:56.220
+Co-Pilot gibt eine übersichtliche Liste der ausgewerteten Richtlinien, Ihre Ergebnisse und der spezifischen Bedingungen, die Sie ausgelöst haben, zurück.
+
+00:08:56.740 --> 00:08:58.780
+Anstatt eine Tabelle zu lesen, erhalten Sie eine Erklärung.
+
+00:08:58.780 --> 00:09:03.000
+Richtlinie X erforderte MFA, da die Anmeldung von einem nicht vertrauenswürdigen Ort erfolgte.
+
+00:09:03.480 --> 00:09:06.320
+Richtlinie Y blockierte die Sitzung, da das Gerät nicht konform war.
+
+00:09:07.040 --> 00:09:09.120
+Diese Art von Einblick spart Zeit und reduziert Fehler.
+
+00:09:09.800 --> 00:09:14.520
+Denn wenn Sie genau verstehen, warum eine Richtlinie angewendet wurde, können Sie bessere Entscheidungen darüber treffen, ob sie angepasst werden muss.
+
+00:09:15.180 --> 00:09:16.640
+Co-Pilot kann auch auf einer höheren Ebene helfen.
+
+00:09:17.200 --> 00:09:19.840
+Sie können fragen, zeige mir Richtlinien, die Anmeldung am häufigsten blockieren.
+
+00:09:19.840 --> 00:09:24.480
+Dies ist unglaublich nützlich, um zu restriktive Richtlinien oder Fehlkonfigurationen zu identifizieren.
+
+00:09:25.480 --> 00:09:29.200
+Möglicherweise blockiert eine Richtlinie zu viele legitime Benutzer, weil ihre Bedingungen zu weit gefasst sind.
+
+00:09:29.540 --> 00:09:32.300
+Oder eine Richtlinie enthält zu viele Ausschlüsse, wodurch Lücken in der Abdeckung entstehen.
+
+00:09:32.860 --> 00:09:37.820
+Co-Pilot zeigt diese Muster auf, sodass Sie proaktiv dagegen vorgehen können, anstatt darauf zu warten, dass sich Benutzer beschweren.
+
+00:09:38.240 --> 00:09:39.740
+Es gibt eine neuere Entwicklung, die es wert ist, erwähnt.
+
+00:09:40.220 --> 00:09:44.920
+Microsoft hat einen Agenten für die Optimierung des bedingten Zugriffs eingeführt, der mit Co-Pilot zusammenarbeitet.
+
+00:09:45.380 --> 00:09:48.200
+Dieser Agent analysiert ihre vorhandenen Richtlinien und schlägt Änderungen vor.
+
+00:09:48.200 --> 00:09:51.560
+Beispielsweise könnte er sagen, diese Richtlinie enthält zu viele Ausschlüsse.
+
+00:09:52.100 --> 00:09:53.040
+Erwägen Sie den Geltungsbereichen.
+
+00:09:53.520 --> 00:09:55.100
+Oder diese beiden Richtlinien überschneiden Sie.
+
+00:09:55.400 --> 00:09:56.500
+Erwägen Sie sie zusammenzulegen.
+
+00:09:57.280 --> 00:10:00.920
+Die Vorschläge basieren auf echten Daten Ihres Mandanten und nicht auf generischen Best Practices.
+
+00:10:01.440 --> 00:10:03.660
+Dadurch werden Richtlinienanpassungen sicherer und zielgerichteter.
+
+00:10:04.240 --> 00:10:07.980
+Das Fazit lautet, bedingter Zugriff ist leistungsstark, aber auch fehleranfällig.
+
+00:10:08.880 --> 00:10:11.860
+Co-Pilot verschafft Ihnen Einblick in das tatsächliche Verhalten Ihrer Richtlinien,
+
+00:10:11.860 --> 00:10:14.540
+sodass Sie diese zuverlässig und ohne Rätselraten optimieren können.
+
+00:10:15.380 --> 00:10:16.820
+Der Beweis hilft es tatsächlich?
+
+00:10:16.820 --> 00:10:20.100
+Co-Pilot klingt in der Theorie großartig, aber funktioniert es auch wirklich?
+
+00:10:20.600 --> 00:10:23.920
+Microsoft hat eine Studie zu Co-Pilot in Entra durchgeführt und die Zahlen sind ein Blick wert.
+
+00:10:24.260 --> 00:10:25.200
+Das haben sie herausgefunden.
+
+00:10:25.560 --> 00:10:29.320
+Administratoren, die Co-Pilot verwenden, schlossen Aufgaben zur Fehlerbehebung bei der Anmeldung 46% schneller.
+
+00:10:29.600 --> 00:10:30.520
+Das ist fast die Hälfte der Zeit.
+
+00:10:30.940 --> 00:10:33.100
+Anstatt 15 Minuten mit der Suche in Protokollen zu verbringen,
+
+00:10:33.240 --> 00:10:34.980
+hatten sie Antworten innerhalb von Minuten oder sogar Sekunden.
+
+00:10:35.420 --> 00:10:36.860
+Und das ist der Clou, sie waren auch genauer.
+
+00:10:37.320 --> 00:10:39.700
+Die Genauigkeit verbesserte sich um 46,8%.
+
+00:10:39.700 --> 00:10:42.440
+Sie waren also nicht nur schneller, sondern erhielten auch mit höherer Wahrscheinlichkeit die richtige Antwort.
+
+00:10:42.780 --> 00:10:46.160
+Das ist wichtig, wenn ein Fehler einen legitimen Benutzer aussperren oder eine echte Bedrohung übersehen können.
+
+00:10:46.160 --> 00:10:49.720
+95% der Administratoren gaben an, dass Co-Pilot die Qualität ihrer Arbeit verbessert.
+
+00:10:49.940 --> 00:10:52.240
+Das ist eine ziemlich solide Bestätigung von den Leuten, die es täglich verwenden.
+
+00:10:52.740 --> 00:10:56.080
+Und 96,7% gaben an, dass sie es weiterhin in ihren Arbeitsabläufen verwenden möchten.
+
+00:10:56.640 --> 00:10:59.500
+Wenn fast jeder, der es ausprobiert, es auch weiterhin verwenden möchte, sagt ihnen das etwas.
+
+00:10:59.920 --> 00:11:01.280
+Was bedeuten diese Zahlen in der Praxis?
+
+00:11:01.780 --> 00:11:05.280
+Weniger Eskalation an leitenden Administratoren, schnellere Reaktionszeiten bei Vorfällen,
+
+00:11:05.520 --> 00:11:06.800
+weniger Stress für Identitätsteams.
+
+00:11:07.280 --> 00:11:09.040
+Anstatt Stunden mit Routineuntersuchungen zu verbringen,
+
+00:11:09.440 --> 00:11:12.360
+können sich Administratoren auf die Probleme konzentrieren, die tatsächliche Fachwissen erfordern.
+
+00:11:13.120 --> 00:11:15.340
+Eine Einschränkung. Diese Zahlen stammen aus Kontrollen Studien.
+
+00:11:15.340 --> 00:11:18.720
+Ihre Ergebnisse hängen von ihrer Umgebung, ihrer Datenqualität und der Art und Weise ab,
+
+00:11:18.780 --> 00:11:19.880
+wie ihr Team das Tool einsetzt.
+
+00:11:20.860 --> 00:11:21.680
+Aber die Richtung ist klar.
+
+00:11:22.340 --> 00:11:25.020
+KI macht das Identitätsmanagement zugänglicher und effizienter.
+
+00:11:25.860 --> 00:11:27.280
+Und dieser Trend beschleunigt sich nur noch.
+
+00:11:27.920 --> 00:11:28.400
+Ist es sicher?
+
+00:11:29.160 --> 00:11:29.880
+Gaberlens und Sicherheit.
+
+00:11:30.680 --> 00:11:32.020
+Eine Frage, die ich ständig höre.
+
+00:11:32.220 --> 00:11:32.680
+Ist es sicher?
+
+00:11:33.340 --> 00:11:35.280
+Umgeht Co-Pilot ihre Sicherheits- und Zugriffskontrollen?
+
+00:11:35.780 --> 00:11:36.440
+Berechtigte Bedingungen.
+
+00:11:36.740 --> 00:11:39.300
+Sie gewähren einem KI-Assistenten Zugriff auf ihre Anmeldeprotokolle,
+
+00:11:39.300 --> 00:11:41.300
+ihre Richtlinien für bedingten Zugriff und ihre Benutzerdaten.
+
+00:11:41.300 --> 00:11:42.300
+Das klingt nach viel Vertrauen.
+
+00:11:42.640 --> 00:11:43.120
+Hier ist die Antwort.
+
+00:11:43.480 --> 00:11:45.720
+Co-Pilot erbt ihre vorhandenen Entrach-Rollen und Berechtigung.
+
+00:11:45.980 --> 00:11:46.700
+Das ist der springende Punkt.
+
+00:11:47.060 --> 00:11:49.680
+Wenn Sie keine Berechtigung zum Anzeigen eines bestimmten Protokolls oder einer bestimmten
+
+00:11:49.680 --> 00:11:51.260
+Ressource haben, kann Co-Pilot diese auch nicht sehen.
+
+00:11:51.500 --> 00:11:52.920
+Keine Hintertür, keine rechte Erweiterung.
+
+00:11:53.400 --> 00:11:55.260
+Es funktioniert innerhalb der Galenzen, die Sie bereits festgelegt haben.
+
+00:11:55.600 --> 00:11:57.160
+Der bedingte Zugriff gilt auch für Co-Pilot.
+
+00:11:57.580 --> 00:12:00.800
+Wenn Ihr Richtlinie MFI für das Admin-Center erfordert, respektiert Co-Pilot dies.
+
+00:12:00.800 --> 00:12:04.740
+Wenn Sie Anmeldungen von nicht vertrauenswürdigen Standorten blockieren, respektiert Co-Pilot dies ebenfalls.
+
+00:12:05.000 --> 00:12:06.200
+Gleiche Regeln, gleiches Framework.
+
+00:12:06.200 --> 00:12:10.020
+Alle Co-Pilot-Eingabeaufforderungen und Antworten werden in standardmäßigen Entrach-Überwachungsprotokolliert.
+
+00:12:10.340 --> 00:12:13.340
+Wenn also jemand eine Frage stellt, die er nicht stellen sollte, wird diese Interaktion aufgezeichnet.
+
+00:12:14.140 --> 00:12:17.260
+Sicherheitsteams können diese Protokolle wie jede andere Administratoraktivität überprüfen.
+
+00:12:17.560 --> 00:12:18.160
+Kein Blenderfleck.
+
+00:12:18.440 --> 00:12:19.620
+Die Datenresidenz ist ein weiterer Punkt.
+
+00:12:19.960 --> 00:12:21.500
+Co-Pilot wird innerhalb Ihres Mandanten ausgeführt.
+
+00:12:21.740 --> 00:12:22.880
+Ihre Daten bleiben dort, wo sie hingehört.
+
+00:12:23.120 --> 00:12:25.880
+Die KI arbeitet unter Ihrer Kontrolle an Ihren Daten in Ihrem Mandanten.
+
+00:12:25.880 --> 00:12:27.480
+Und hier ist das Prinzip auf, dass es wirklich an.
+
+00:12:27.880 --> 00:12:30.360
+Co-Pilot schlägt Aktionen vor, führt diese aber nicht automatisch aus.
+
+00:12:30.800 --> 00:12:34.300
+Es empfiehlt möglicherweise, das Kennwort eines Benutzers zurückzusetzen oder eine Anmeldung zu blockieren,
+
+00:12:34.300 --> 00:12:36.420
+und führt jedoch keines von beiden ohne die Genehmigung eines Administrators.
+
+00:12:36.800 --> 00:12:37.700
+Der Mensch behält die Kontrolle.
+
+00:12:38.180 --> 00:12:39.100
+Ein konkretes Beispiel.
+
+00:12:39.320 --> 00:12:43.720
+Ein Helpdesk-Benutzer mit eingeschränkten Berechtigungen kann Co-Pilot nach den Benutzern fragen, die er unterstützt.
+
+00:12:44.100 --> 00:12:47.020
+Er kann Zusammenfassungen von Anmeldefehlern und Risikoerkennungen abrufen,
+
+00:12:47.140 --> 00:12:51.400
+kann jedoch keine Fragen zu globalen Administrator-Konten oder vertraulichen Ressourcen stellen, für die er keine Anzeige berechtigt hat.
+
+00:12:51.660 --> 00:12:53.500
+Co-Pilot erzwingt diese Grenzen automatisch.
+
+00:12:53.700 --> 00:12:55.000
+Dies ist ein Governance-First-Design.
+
+00:12:55.340 --> 00:12:59.380
+Microsoft hat Co-Pilot so konzipiert, dass es innerhalb ihres vorhandenen Sicherheitsmodells funktioniert und nicht darum herum.
+
+00:12:59.740 --> 00:13:01.080
+Das macht die Verwendung in der Produktion sich.
+
+00:13:01.760 --> 00:13:02.680
+Für wen ist das wirklich gedacht?
+
+00:13:02.680 --> 00:13:05.320
+Wer profitiert also tatsächlich von Co-Pilot und Entry-ID?
+
+00:13:05.740 --> 00:13:06.840
+Nicht nur die Leitenden-Administratoren.
+
+00:13:07.800 --> 00:13:09.160
+Identitätsadministratoren erhalten die offensichtlichste Tipp.
+
+00:13:09.300 --> 00:13:10.820
+Sie beheben täglich Probleme mit Richtlinien.
+
+00:13:10.940 --> 00:13:13.500
+Jetzt wird aus einer 15-minütigen Untersuchung eine 30-sekündige Antwort.
+
+00:13:13.760 --> 00:13:15.380
+Co-Pilot zeigt Muster auf, die ihnen möglicherweise sind.
+
+00:13:15.800 --> 00:13:18.120
+Es hilft ihnen, die Komplexität zu bewältigen, ohne daran zu ertrinken.
+
+00:13:18.580 --> 00:13:20.060
+Helpdesk-Teams profitieren genauso viel davon.
+
+00:13:20.600 --> 00:13:24.180
+Mitarbeiter des First-Line-Supports können Anmelde-Probleme selbstständig lösen, ohne das Problem zu eskalieren.
+
+00:13:24.540 --> 00:13:27.080
+Sie stellen Co-Pilot dieselbe Frage und erhalten dieselbe klare Antwort.
+
+00:13:27.540 --> 00:13:30.520
+Das bedeutet, dass weniger Tickets in der Wartsteine hängenbleiben und auf ein Leitendes drauf warten müssen.
+
+00:13:30.520 --> 00:13:32.600
+Es ist, als hätten Sie direkt einen Experten am Schreibtisch.
+
+00:13:33.020 --> 00:13:35.100
+Auch Sicherheitsanalysten erhalten schnellere Reaktionszeiten.
+
+00:13:35.460 --> 00:13:38.220
+Wenn eine mögliche Gefährdung erkannt wird, können Sie Co-Pilot um ein Gesamtbild,
+
+00:13:38.540 --> 00:13:41.080
+Benutzeraktivitäten, erkannte Risiken und empfohlene nächste Schritte bitten.
+
+00:13:41.460 --> 00:13:44.940
+Anstatt eine Stunde mit dem Sammeln von Daten zu verbringen, verbringen Sie nur wenige Minuten, damit diese zu verstehen.
+
+00:13:45.840 --> 00:13:47.520
+Auch App-Besitzer und Citizen-Developer profitieren?
+
+00:13:48.140 --> 00:13:53.340
+Wenn sich Ihre eigene App nicht authentifizieren lässt oder gegen eine Richtlinie verstößt, von der Sie nichts wussten, fragen Sie einfach um.
+
+00:13:53.640 --> 00:13:55.200
+Sie müssen kein Identitätsexperte sein.
+
+00:13:55.280 --> 00:13:57.580
+Sie müssen nur wissen, was schiefgelaufen ist und wie Sie es beheben können.
+
+00:13:57.960 --> 00:13:59.500
+Hier ist eine Gruppe, die oft vergessen wird.
+
+00:13:59.500 --> 00:14:01.560
+Manager und Personen mit nicht-technischen Funktionen.
+
+00:14:01.900 --> 00:14:05.800
+Sie müssen die Sicherheitslage Ihrer Abteilung verstehen, haben aber keine Zeit, sich durch Protokolle zu wühlen.
+
+00:14:06.380 --> 00:14:08.060
+Co-Pilot liefert Ihnen Zusammenfassungen in einfache Menge.
+
+00:14:08.860 --> 00:14:09.880
+Wir sind Ihre Hochrisiko benutzt.
+
+00:14:10.220 --> 00:14:11.000
+Hier ist, was wir empfehlen.
+
+00:14:11.440 --> 00:14:13.320
+Das sind nützliche Informationen, auf die Sie tatsächlich reagieren können.
+
+00:14:13.760 --> 00:14:16.500
+Im Endeffekt vereinfacht Co-Pilot die Identitätsverwaltung für alle.
+
+00:14:17.000 --> 00:14:19.260
+Es ersetzt nicht das Fachwissen, sondern verteilt es im gesamten Team.
+
+00:14:20.080 --> 00:14:22.960
+Identitätsverwaltung war früher eine spezialisierte Fähigkeit, die auf eine kleine Gruppe beschränkt war.
+
+00:14:23.320 --> 00:14:26.760
+Da können mehr Personen teilnehmen, da Ihnen ein KI-Assistent zur Seite steht, der ihre Sprache spricht.
+
+00:14:26.760 --> 00:14:29.120
+Identitätsverwaltung ist jetzt die Aufgabe aller.
+
+00:14:29.600 --> 00:14:31.060
+Mit Co-Pilot wird sie zum Tool für alle.
+
+00:14:31.660 --> 00:14:33.120
+Das ist Co-Pilot im Microsoft N3-ID.
+
+00:14:33.580 --> 00:14:36.200
+Es verwandelt ein komplexes Verzeichnis in etwas, mit dem man tatsächlich sprechen kann.
+
+00:14:36.720 --> 00:14:40.860
+Wenn Ihnen das geholfen hat, den Überblick zu behalten, teilen Sie es mit jemandem, der gerade erst seine Identitätsreise beginnt.
+
+00:14:40.860 --> 00:14:43.160
+Abonnieren Sie den Podcast auf Ihrer Bevorzugenplattform.
+
+00:14:43.680 --> 00:14:45.200
+Ich sehe Sie beim nächsten Wissenshäppchen.

@@ -1,0 +1,985 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.540
+Willkommen zu einer weiteren Episode der Microsoft Knowledge Nuggets hier auf M365.fm.
+
+00:00:03.940 --> 00:00:05.080
+Ich bin Ihr Gastgeber Mirko Peters.
+
+00:00:05.440 --> 00:00:06.240
+Hier ist eine Frage an Sie.
+
+00:00:06.760 --> 00:00:09.240
+Was wäre, wenn Copilot Ihr gesamtes Unternehmen durchsuchen könnte?
+
+00:00:09.480 --> 00:00:11.060
+Nicht nur E-Mails und Dateien in SharePoint,
+
+00:00:11.400 --> 00:00:15.380
+sondern auch Ihr CRM, Ihr Ticketsystem, Ihr HR-Datenbank, Ihr Projektwiki, ePiki.
+
+00:00:15.780 --> 00:00:18.000
+Was wäre, wenn Sie eine Frage stellen und eine Antwort erhalten könnten,
+
+00:00:18.080 --> 00:00:21.760
+die alle diese Systeme gleichzeitig einbezieht, ohne jemals Microsoft 365 zu verlassen?
+
+00:00:22.200 --> 00:00:23.660
+Das ist das Versprechen, aber hier ist die Realität.
+
+00:00:24.120 --> 00:00:27.480
+Microsoft 365 Copilot greift standardmäßig nur auf Inhalte zu,
+
+00:00:27.480 --> 00:00:29.360
+die in SharePoint Online und OneDrive gespeichert sind.
+
+00:00:30.000 --> 00:00:30.340
+Das war's.
+
+00:00:30.620 --> 00:00:33.140
+Ihre E-Mails, Ihre Teams-Nachrichten, Ihre Dokumente, das ist alles abgedeckt.
+
+00:00:33.900 --> 00:00:36.920
+Aber der Großteil der wichtigen Geschäftsdaten Ihres Unternehmens liegt woanders.
+
+00:00:37.880 --> 00:00:40.760
+Denken Sie an Ihr CRM wie Salesforce, Ihr Ticketsystem wie ServiceNow,
+
+00:00:40.840 --> 00:00:43.600
+Ihr Wiki wie Confluence, vielleicht sogar ein Google Drive, das Sie noch nicht migriert haben.
+
+00:00:44.480 --> 00:00:46.200
+Copilot kann das alles nicht sehen, zumindest nicht standardmäßig.
+
+00:00:46.680 --> 00:00:49.780
+Das ist ein riesiger blinder Fleck und genau das sollen Copilot-Konnektoren lösen.
+
+00:00:50.260 --> 00:00:52.700
+Am Ende dieser Episode werden Sie verstehen, was Graph-Konnektoren sind.
+
+00:00:53.340 --> 00:00:54.920
+Übrigens heißen sie jetzt Copilot-Konnektoren.
+
+00:00:55.480 --> 00:00:59.200
+Sie lernen die zwei sehr unterschiedlichen Typen kennen und welche Sie je nach Situation verwenden sollten.
+
+00:01:00.000 --> 00:01:01.480
+Nehmen Sie sich einen Kaffee und lassen Sie uns eintauchen.
+
+00:01:02.220 --> 00:01:02.560
+Das Problem.
+
+00:01:03.120 --> 00:01:03.800
+Ihre Daten sind überall.
+
+00:01:04.300 --> 00:01:04.800
+Die Sache ist die.
+
+00:01:05.360 --> 00:01:08.100
+Die meisten Unternehmen speichern nicht alles innerhalb von Microsoft 390.
+
+00:01:08.720 --> 00:01:11.620
+Sie haben vielleicht ein CRM wie Salesforce für Kundendaten,
+
+00:01:11.820 --> 00:01:14.100
+ein Ticketsystem wie ServiceNow für IT-Support,
+
+00:01:14.560 --> 00:01:16.820
+ein Wiki wie Confluence für Dokumentationen
+
+00:01:16.820 --> 00:01:20.100
+oder sogar ein Google Drive oder Dropbox des Teams nutzten,
+
+00:01:20.180 --> 00:01:22.480
+bevor Ihr Unternehmen auf Microsoft umstellte.
+
+00:01:22.480 --> 00:01:25.220
+Wenn Sie Copilot also eine Frage stellen wie,
+
+00:01:25.280 --> 00:01:26.640
+wie ist der Status des Contoso-Deals
+
+00:01:26.640 --> 00:01:29.540
+oder zeig mir das neueste Support-Ticket dieses Kunden,
+
+00:01:30.240 --> 00:01:31.200
+dann antwortet Copilot mit nichts.
+
+00:01:31.640 --> 00:01:32.520
+Er kann diese Daten nicht sehen.
+
+00:01:32.960 --> 00:01:34.380
+Es ist, als hätten Sie einen Bibliotheksausweis,
+
+00:01:34.460 --> 00:01:36.360
+der nur für ein Regal im Gebäude mit 50 Räumen gilt.
+
+00:01:36.720 --> 00:01:38.280
+Sie können auf die Bücher direkt vor Ihnen zugreifen,
+
+00:01:38.380 --> 00:01:39.800
+aber alles andere existiert praktisch nicht.
+
+00:01:40.260 --> 00:01:41.920
+Ohne Copilot müssten Sie ständig den Kontext hören.
+
+00:01:42.500 --> 00:01:44.080
+Stellen Sie sich vor, Sie suchen den Kunden in Salesforce
+
+00:01:44.080 --> 00:01:45.340
+und kopieren die Kontodetails.
+
+00:01:45.920 --> 00:01:48.560
+Als nächstes öffnen Sie ServiceNow, suchen das Ticket und kopieren auch das.
+
+00:01:48.560 --> 00:01:51.280
+Danach gehen Sie zu Confluence, um die Projektnotizen zu finden.
+
+00:01:51.920 --> 00:01:54.400
+Schließlich fügen Sie alles in eine E-Mail oder eine Teams-Nachricht ein.
+
+00:01:54.800 --> 00:01:56.880
+Sie springen zwischen fünf verschiedenen Browser-Tabs hin und her,
+
+00:01:57.000 --> 00:01:58.340
+melden sich separat in jedem System an
+
+00:01:58.340 --> 00:01:59.820
+und setzen die Informationen manuell zusammen.
+
+00:02:00.560 --> 00:02:02.300
+Das kostet Zeit, unterbricht Ihren Arbeitsfluss
+
+00:02:02.300 --> 00:02:03.540
+und ist genau die Art von Routinearbeit,
+
+00:02:03.620 --> 00:02:04.960
+die Copilot eigentlich eliminieren sollte.
+
+00:02:05.380 --> 00:02:07.020
+Aber die wahren Kosten sind nicht nur verschwendete Zeit.
+
+00:02:07.300 --> 00:02:09.560
+Wenn Copilot die Zusammenhänge Ihrer Daten nicht erkennt,
+
+00:02:09.620 --> 00:02:11.060
+erhalten Sie unvollständige Antworten.
+
+00:02:11.440 --> 00:02:14.480
+Sie treffen vielleicht eine Entscheidung auf Basis der vorliegenden Informationen,
+
+00:02:14.640 --> 00:02:16.860
+ohne zu wissen, dass die entscheidenden Daten in einem System liegen,
+
+00:02:16.940 --> 00:02:18.100
+auf das Copilot keinen Zugriff hat.
+
+00:02:18.560 --> 00:02:21.900
+Diese fehlende Erkenntnis könnte eine Kundenbeschwerde in Ihrem CRM sein,
+
+00:02:21.980 --> 00:02:23.180
+die nie in Ihrer E-Mail auftauchte
+
+00:02:23.180 --> 00:02:25.500
+oder ein Vertragsverlängerungsdatum in Ihrem ERP-System,
+
+00:02:25.600 --> 00:02:26.620
+das nicht in Ihrem Kalender steht.
+
+00:02:27.300 --> 00:02:29.800
+Diese Lücken summieren sich und können echte Konsequenzen haben.
+
+00:02:30.100 --> 00:02:31.100
+Also hat Microsoft eine Brücke gebaut.
+
+00:02:31.420 --> 00:02:32.820
+Schauen wir uns an, was diese Brücke eigentlich ist.
+
+00:02:33.660 --> 00:02:34.560
+Was ist ein Graph-Connector?
+
+00:02:35.220 --> 00:02:36.600
+Ein Graph-Connector ist eine Software,
+
+00:02:36.780 --> 00:02:38.980
+die externe Daten in den Microsoft Graph integriert.
+
+00:02:39.620 --> 00:02:40.940
+Der Microsoft Graph ist der selbe Index,
+
+00:02:41.000 --> 00:02:42.360
+der Microsoft Search, SharePoint Search
+
+00:02:42.360 --> 00:02:43.740
+und jetzt auch Copilot antreibt.
+
+00:02:44.900 --> 00:02:47.420
+Stellen Sie in sich als das zentrale Nervensystem von Microsoft 365.
+
+00:02:47.420 --> 00:02:49.580
+Es ist der Ort, an dem alle Ihre Daten gespeichert
+
+00:02:49.580 --> 00:02:50.520
+und miteinander verknüpft werden.
+
+00:02:50.760 --> 00:02:52.460
+Ein Graph-Connector funktioniert also wie ein Fließband.
+
+00:02:53.020 --> 00:02:55.140
+Sie laden Daten aus Ihrem externen System auf das Band
+
+00:02:55.140 --> 00:02:57.940
+und Sie werden in den Microsoft 365 Index geliefert.
+
+00:02:58.360 --> 00:02:59.260
+Sobald die Daten dort sind,
+
+00:02:59.360 --> 00:03:01.060
+kann Copilot Sie durchsuchen, zusammenfassen
+
+00:03:01.060 --> 00:03:02.380
+und Fragen dazu beantworten genau,
+
+00:03:02.620 --> 00:03:03.900
+wie bei Ihren E-Mails und Dateien.
+
+00:03:04.720 --> 00:03:06.860
+Diesen Salesforce-Konto-Datensatz kann Copilot jetzt finden.
+
+00:03:07.320 --> 00:03:09.200
+Dieses ServiceNow-Ticket kann Copilot zusammenfassen.
+
+00:03:09.880 --> 00:03:12.380
+Diese Confluence-Wiki-Seite kann Copilot für Fragen nutzen.
+
+00:03:12.960 --> 00:03:14.240
+Hier ist etwas, das Sie vielleicht überraschen würden.
+
+00:03:14.240 --> 00:03:15.480
+Graph-Connectoren sind nicht neu.
+
+00:03:16.020 --> 00:03:18.060
+Sie existieren schon seit Jahren und treiben die SharePoint-Suche an.
+
+00:03:18.600 --> 00:03:20.180
+Möglicherweise haben Sie sie verwendet, ohne es zu wissen.
+
+00:03:20.520 --> 00:03:21.960
+Wenn Sie jemals in SharePoint gesucht
+
+00:03:21.960 --> 00:03:23.660
+und Ergebnisse aus einem externen System
+
+00:03:23.660 --> 00:03:25.200
+in einer separaten Spalte gesehen haben,
+
+00:03:25.260 --> 00:03:26.540
+war das ein Graph-Connector bei der Arbeit?
+
+00:03:27.500 --> 00:03:29.240
+Neu ist, dass Copilot Sie jetzt nutzt.
+
+00:03:29.620 --> 00:03:31.760
+Und das verändert alles, denn Copilot findet die Daten nicht nur,
+
+00:03:31.840 --> 00:03:33.340
+sondern analysiert sie, fasst sie zusammen
+
+00:03:33.340 --> 00:03:35.340
+und beantwortet Fragen dazu in natürlicher Sprache.
+
+00:03:35.920 --> 00:03:36.580
+Aber es gibt einen Haken.
+
+00:03:36.900 --> 00:03:39.720
+Microsoft bietet tatsächlich zwei sehr unterschiedliche Arten von Konnektoren an.
+
+00:03:40.000 --> 00:03:41.640
+Sie funktionieren auf grundlegend verschiedene Arten.
+
+00:03:41.720 --> 00:03:42.580
+Lassen Sie mich den Unterschied erklären.
+
+00:03:42.580 --> 00:03:44.820
+Die beiden Modelle synchronisiert versus föderiert.
+
+00:03:45.140 --> 00:03:45.940
+Hier wird es also interessant.
+
+00:03:46.680 --> 00:03:48.740
+Microsoft bietet Ihnen zwei völlig unterschiedliche Wege,
+
+00:03:48.880 --> 00:03:50.440
+um externe Daten Copilot einzubinden.
+
+00:03:51.100 --> 00:03:53.120
+Die Wahl zwischen Ihnen hängt von einer grundlegenden Frage ab.
+
+00:03:53.780 --> 00:03:56.280
+Möchten Sie die Daten kopieren oder live abfragen?
+
+00:03:56.900 --> 00:03:58.820
+Das erste Modell nennt sich synchronisierter Connector.
+
+00:03:59.260 --> 00:04:00.800
+Bei diesem Ansatz kopieren Sie die Daten
+
+00:04:00.800 --> 00:04:02.640
+aus dem externen System in den Microsoft Graph.
+
+00:04:03.080 --> 00:04:05.400
+Sie werden indexiert, gespeichert und semantisch verarbeitet.
+
+00:04:06.060 --> 00:04:07.620
+Stellen Sie sich vor, Sie würden Ihren Aktenschrank
+
+00:04:07.620 --> 00:04:09.240
+in dasselbe Gebäude wie Ihren Schreibtisch bringen.
+
+00:04:09.240 --> 00:04:12.260
+Anstatt jedes Mal in einen anderen Raum zu gehen, wenn Sie eine Datei benötigen,
+
+00:04:12.360 --> 00:04:15.120
+steht der Schrank direkt bei Ihnen organisiert, durchsuchbar und einsatzbereit.
+
+00:04:15.800 --> 00:04:19.160
+Die Daten werden zu einem dauerhaften Bestandteil Ihres Microsoft 365 Tenants.
+
+00:04:19.620 --> 00:04:21.480
+Das zweite Modell wird als föderierter Connector bezeichnet.
+
+00:04:21.860 --> 00:04:22.780
+Es funktioniert völlig anders.
+
+00:04:23.120 --> 00:04:23.640
+Kopieren keine Daten.
+
+00:04:23.640 --> 00:04:27.860
+Wenn ein Benutzer eine Frage stellt, kontaktiert Co-Pilot das externe System in Echtzeit,
+
+00:04:27.960 --> 00:04:30.700
+fragt es nach relevanten Informationen und liefert die Antwort zurück.
+
+00:04:31.220 --> 00:04:33.240
+Es werden keine Daten in Microsoft 365 gespeichert.
+
+00:04:33.560 --> 00:04:36.080
+Es ist so, als würden Sie einen Bibliotheker in einem anderen Gebäude bitten, etwas für
+
+00:04:36.080 --> 00:04:36.540
+Sie nachzuschlagen.
+
+00:04:36.840 --> 00:04:40.200
+Er sucht das Buch heraus, liest Ihnen die Antwort vor und das Buch bleibt in seinem Regal.
+
+00:04:40.720 --> 00:04:41.620
+Sie erhalten das Dokumentzeitpunkt.
+
+00:04:41.940 --> 00:04:43.220
+Warum bieten Microsoft zwei Modelle an?
+
+00:04:43.720 --> 00:04:45.360
+Weil unterschiedliche Daten unterschiedliche Anforderungen haben.
+
+00:04:45.820 --> 00:04:46.840
+Manche Daten ändern sich nur selten.
+
+00:04:47.280 --> 00:04:49.760
+Denken Sie an HR-Richtlinien, Projekt-Wegis oder archivierte Vertragung.
+
+00:04:49.760 --> 00:04:51.320
+Diese Art von Daten kann problemlos kopiert werden.
+
+00:04:51.320 --> 00:04:54.060
+Sie indexieren sie einmal, aktualisieren sie vielleicht täglich und das reicht aus.
+
+00:04:54.440 --> 00:04:55.240
+Andere Daten sieht auch leicht.
+
+00:04:55.860 --> 00:04:58.220
+Lagerbestände, aktueller Support-Ticket-Status, Echtzeitpreise.
+
+00:04:58.780 --> 00:05:01.160
+Wenn Sie diese Daten kopieren, sind Sie in dem Moment veraltet, in dem Sie ankommen.
+
+00:05:01.540 --> 00:05:03.440
+Sie benötigen jedes Mal die aktuellste Antwort.
+
+00:05:04.020 --> 00:05:04.980
+Es gibt ein weiteres Wesentliche.
+
+00:05:05.540 --> 00:05:08.560
+Synchronisierte Konnektoren werden von einem Administrator für die gesamte Organisation eingerichtet.
+
+00:05:08.860 --> 00:05:12.440
+Eine Person konfiguriert die Verbindung und jeder mit den entsprechenden Berechtigungen kann sie nutzen.
+
+00:05:12.940 --> 00:05:15.800
+Föderierte Konnektoren erfordern, dass sich jeder Benutzer einzeln authentifiziert.
+
+00:05:16.200 --> 00:05:21.180
+Wenn Sie also eine Verbindung zu Salesforce herstellen, muss sich jede Person die Co-Pilot zu Salesforce-Daten befragen möchte.
+
+00:05:21.320 --> 00:05:22.500
+Selbst bei Salesforce anmelden.
+
+00:05:23.260 --> 00:05:26.760
+Das bedeutet mehr Einrichtungsaufwand pro Benutzer, aber auch, dass jeder nur das sieht, was er sehen darf.
+
+00:05:27.200 --> 00:05:30.280
+Lassen Sie uns tiefer in jedes Modell eintauchen, damit Sie wissen, welches zu Ihres Ziel anpasst.
+
+00:05:31.000 --> 00:05:32.560
+Synchronisierte Konnektoren, ein tiefer Einblick.
+
+00:05:33.140 --> 00:05:38.180
+Beginnen wir mit synchronisierten Konnektoren, da dies das etabliertere Modell ist, auf das Sie wahrscheinlich zuerst stoßen werden.
+
+00:05:38.680 --> 00:05:39.400
+So funktioniert es.
+
+00:05:39.400 --> 00:05:46.060
+Ein Administrator geht in das Microsoft 365 Admin Center, navigiert zur Suche und Intelligenz und öffnet den Bereich für Datenquellen.
+
+00:05:46.820 --> 00:05:49.200
+Sie sehen dort eine Galerie mit über 100 vorgefertigten Konnektoren.
+
+00:05:49.680 --> 00:05:55.100
+Sie wählen den gewünschten aus, zum Beispiel ServiceNow, Jira oder Confluence und authentifizieren sich über OAuth 2.0.
+
+00:05:55.180 --> 00:05:57.580
+Das bedeutet, dass keine Passwörter im Klartext gespeichert werden.
+
+00:05:58.220 --> 00:06:01.680
+Anschließend konfigurieren Sie, welche Daten abgerufen werden sollen, wie häufig synchronisiert wird oder wie das überdächtet wird.
+
+00:06:01.680 --> 00:06:05.140
+Sobald dies erledigt ist, beginnt der Connector, Daten in den Microsoft Graph zu ziehen.
+
+00:06:05.480 --> 00:06:07.160
+Und genau das macht Copilot so leistungsstark.
+
+00:06:07.740 --> 00:06:09.280
+Die Daten erhalten einen semantischen Index.
+
+00:06:09.760 --> 00:06:13.740
+Das bedeutet Copilot gleich nicht nur Schlüsselwörter ab, sondern versteht die Bedeutung hinter Ihrer Frage.
+
+00:06:14.600 --> 00:06:19.880
+Wenn Sie also nach dem Budget für das dritten Quartal suchen, kann Copilot ein Dokument mit dem Titel Finanzbericht 2025 finden,
+
+00:06:19.880 --> 00:06:21.860
+da es die Zusammenhänge zwischen den Begriffen versteht.
+
+00:06:22.560 --> 00:06:26.740
+Das ist ein großer Fortschritt gegenüber der herkömmlichen Suche, bei der man den genauen Titel oder das Schlüsselwort benötigt.
+
+00:06:27.200 --> 00:06:28.980
+Sicherheit ist bei diesem Modell von Grund auf integriert.
+
+00:06:28.980 --> 00:06:35.120
+Jedes indizierte Element enthält eine Zugriffskontrollliste ECL, die Microsoft 365 mitteilt, wer es sehen darf.
+
+00:06:35.780 --> 00:06:39.180
+Wenn ein Benutzer im Quellsystem keine Berechtigung hat, wird er es auch in Copilot nicht sehen.
+
+00:06:39.760 --> 00:06:40.820
+Die Berechtigungen folgen den Daten.
+
+00:06:41.300 --> 00:06:44.920
+Wenn Ihr Salesforce-Konto also nur Ihrem Vertriebsteam erlaubt, bestimmte Datensätze zu sehen,
+
+00:06:45.220 --> 00:06:47.040
+gelten diese Einschränkungen auch innerhalb von Copilot.
+
+00:06:47.740 --> 00:06:49.640
+Es gibt einige Einschränkungen, die man kennen soll.
+
+00:06:50.080 --> 00:06:55.700
+Jedes Element kann bis zu 4 MB groß sein und der Connector kann bis zu 25 gleichzeitige Vorgänge über eine einzige Verbindung verarbeiten.
+
+00:06:55.700 --> 00:07:01.640
+Und wenn Ihre Daten lokal gespeichert sind, etwa auf einem lokalen Dateiserver oder einer SQL-Datenbank in Ihrem eigenen Rechenzentrum,
+
+00:07:01.720 --> 00:07:03.680
+müssen Sie den Microsoft Graph Connector Agent installieren.
+
+00:07:04.500 --> 00:07:09.800
+Dieser Agent liest Ihre lokalen Daten und sendet nur den Text und die Metadaten in die Cloud, während Ihre eigentlichen Dateien vor Ort bleiben.
+
+00:07:10.680 --> 00:07:13.980
+Die gute Nachricht ist jedoch, dass Sie das alles nicht von Grund auf neu erstellen müssen.
+
+00:07:13.980 --> 00:07:21.720
+Microsoft und seine Partner bieten über 100 vorgefertigte Konnektoren für Salesforce, ServiceNow, Jira, Confluence, Google Drive, GitHub, Box, Dropbox und viele mehr.
+
+00:07:22.380 --> 00:07:25.780
+Wenn Ihr Unternehmen eine gängige Geschäftsanwendung nutzt, gibt es wahrscheinlich bereits einen passenden Connector.
+
+00:07:26.260 --> 00:07:27.900
+Aber was ist, wenn Sie Daten in Echtzeit benötigen?
+
+00:07:28.260 --> 00:07:29.440
+Hier kommt das zweite Modell ins Spiel.
+
+00:07:30.240 --> 00:07:31.920
+Föderierte Connectoren, ein tiefer Einblick.
+
+00:07:32.580 --> 00:07:35.760
+Brechen wir nun über das zweite Modell, da es das neuere ist und völlig anders funktioniert.
+
+00:07:35.980 --> 00:07:39.780
+Bei einem föderierten Connector werden überhaupt keine Daten in Microsoft iPhone 60 speichert.
+
+00:07:39.780 --> 00:07:46.260
+Wenn ein Benutzer Co-Pilot eine Frage stellt, sendet Co-Pilot eine Anfrage über das Model Context Protocol, MCP, an das externe System.
+
+00:07:47.000 --> 00:07:50.880
+Stellen Sie es sich als einen Standardweg für Co-Pilot vor, zu sagen, hey, ich brauche Informationen zu diesem Thema.
+
+00:07:51.280 --> 00:07:53.900
+Und für das externe System, um mit den vorhandenen Informationen zu antworten.
+
+00:07:54.280 --> 00:07:59.400
+Das externe System führt die Suche durch, findet die relevanten Ergebnisse, sendet sie zurück und Co-Pilot präsentiert diese Antwort dem Benutzer.
+
+00:07:59.820 --> 00:08:01.820
+Die ursprünglichen Daten verlassen niemals das Quersystem.
+
+00:08:02.180 --> 00:08:03.820
+Dieses Modell ist hervorragend für Live-Daten geeignet.
+
+00:08:04.160 --> 00:08:06.620
+Ich spreche hier von Lagerbeständen, die sich minütlich ändern.
+
+00:08:06.620 --> 00:08:10.380
+Support-Ticket-Status, die jedes Mal aktualisiert werden, wenn ein Mitarbeiter einen Fall bearbeitet.
+
+00:08:10.520 --> 00:08:11.760
+Oder Echtzeitpreisen, die schwanken.
+
+00:08:12.580 --> 00:08:16.280
+Wenn Sie diese Art von Daten synchronisieren, sind Sie beim Erreichen des Index bereits veraltet,
+
+00:08:16.420 --> 00:08:20.520
+aber mit einem föderierten Connector erhalten Sie immer die aktuellste Antwort, da jede Anfrage direkt an die Quelle geht.
+
+00:08:20.860 --> 00:08:21.760
+Es gibt jedoch einen Kompromiss.
+
+00:08:22.140 --> 00:08:23.920
+Die Benutzer-Authentifizierung funktioniert hier anders.
+
+00:08:24.280 --> 00:08:27.160
+Beim synchronisierten Connector richtet ein Administrator ihn einmal ein und alle können ihn.
+
+00:08:27.500 --> 00:08:31.220
+Bei einem föderierten Connector muss sich jede Person selbst beim externen Dienst anmelden.
+
+00:08:31.540 --> 00:08:35.880
+Wenn Sie also Co-Pilot nach einem Salesforce-Datensatz fragen möchten, müssen Sie sich zuerst bei Salesforce authentifizieren.
+
+00:08:36.340 --> 00:08:38.900
+Co-Pilot respektiert dann alle Berechtigungen, die Sie in diesem System haben.
+
+00:08:39.200 --> 00:08:43.420
+Wenn Sie in Salesforce nur Ihre eigenen Konten sehen können, liefert Co-Pilot auch nur Ergebnisse für diese Konten.
+
+00:08:43.980 --> 00:08:45.280
+Das gilt pro Benutzer und pro Sitzung.
+
+00:08:45.640 --> 00:08:47.320
+Föderierte Connectors werden derzeit noch eingeführt.
+
+00:08:47.840 --> 00:08:50.840
+Im Moment sind Sie auf die Researcher-Umgebung im Co-Pilot-Chat beschränkt,
+
+00:08:51.180 --> 00:08:56.500
+wo Sie tiefgehende, forschungsorientierte Fragen stellen können und Co-Pilot nach Antworten in mehreren Quellen sucht.
+
+00:08:56.500 --> 00:09:01.660
+Es ist noch nicht überall in Co-Pilot verfügbar, nicht in Teams, nicht in Outlook, nicht im Seitenbereich von Word oder Excel.
+
+00:09:02.140 --> 00:09:03.360
+Aber Microsoft baut dies weiter aus.
+
+00:09:03.780 --> 00:09:09.240
+Der Connector-Katalog wächst und es wird erwartet, dass föderierte Connectors mit der Zeit in weiteren Co-Pilot-Umgebungen verfügbar werden.
+
+00:09:09.820 --> 00:09:10.740
+Noch ein wichtiger Hinweis.
+
+00:09:10.940 --> 00:09:12.820
+Föderierte Connectors sind standardmäßig schreibgeschützt.
+
+00:09:13.260 --> 00:09:16.660
+Co-Pilot kann Daten suchen und abrufen, aber nicht in das externe System zurückschreiben.
+
+00:09:17.160 --> 00:09:20.660
+Er kann kein neues Ticket und Service neu erstellen oder einen Kontaktdatensatz in Salesforce aktualisieren.
+
+00:09:21.180 --> 00:09:22.580
+Das ist so beabsichtigt, um die sicher zu gewählen.
+
+00:09:23.060 --> 00:09:26.540
+Wenn Co-Pilot-Aktionen ausführen soll, ist das ein anderes Erweiterbarkeitsmodell namens Plugins.
+
+00:09:27.120 --> 00:09:30.080
+Aber für Suche und Abruf leisten föderierte Connectors genau das, was Sie brauchen.
+
+00:09:30.700 --> 00:09:31.720
+Welchen sollten Sie also verwenden?
+
+00:09:32.100 --> 00:09:33.200
+Das hängt von im Szenario ab.
+
+00:09:33.900 --> 00:09:35.140
+Welches Connector-Modell sollten Sie verwenden?
+
+00:09:35.920 --> 00:09:37.380
+Also welches Connector-Modell sollten Sie verwenden?
+
+00:09:37.940 --> 00:09:38.520
+Machen wir es praktisch.
+
+00:09:39.120 --> 00:09:41.660
+Sie benötigen einen synchronisierten Connector, wenn sich die Daten nicht häufig ändern.
+
+00:09:41.980 --> 00:09:46.960
+Denken Sie an HR-Richtlinien, die einmal pro Quartal aktualisiert werden oder Projekt-Wikis, deren Inhalt weitgehend stabil ist.
+
+00:09:47.140 --> 00:09:49.780
+Oder archivierte Verträge, auf die Sie zugreifen, die Sie aber selten ändern müssen.
+
+00:09:50.660 --> 00:09:52.260
+Synchronisierte Connectors bieten Ihnen semantische Suche.
+
+00:09:52.760 --> 00:09:55.240
+Co-Pilot versteht die Bedeutung Ihrer Frage, nicht nur die Schlüsselwörter.
+
+00:09:55.960 --> 00:10:00.700
+Und die Daten sind überall im Microsoft 365 verfügbar in der Suche in Co-Pilot in SharePoint auf der gesamten Plattform.
+
+00:10:01.280 --> 00:10:03.140
+Sie indizieren sie einmal und sie sind für alle verfügbar.
+
+00:10:03.860 --> 00:10:08.940
+Verwenden Sie einen föderierten Connector, wenn sich die Daten ständig ändern und Sie jedes Mal die neueste Antwort benötigen.
+
+00:10:09.620 --> 00:10:12.680
+Live-Support-Tickets, deren Status sich während Ihrer Anfrage ändern könnte.
+
+00:10:13.160 --> 00:10:14.840
+Lagerbestände, die im Laufe des Tages schwanken.
+
+00:10:15.100 --> 00:10:19.140
+Oder aktueller Projektstatus, der in Echtzeit aktualisiert wird, der in Echtzeit aktualisiert wird.
+
+00:10:19.140 --> 00:10:23.180
+Bei föderierten Connectors speichern Sie keine Kopie, sodass Sie sich nie sorgen um veraltete Daten machen müssen.
+
+00:10:23.520 --> 00:10:25.620
+Sie erhalten die aktuellste Antwort direkt aus der Quelle.
+
+00:10:26.140 --> 00:10:28.060
+Aber das Wichtige ist, Sie müssen sich nicht für eines entscheiden.
+
+00:10:28.720 --> 00:10:29.620
+Viele Unternehmen nutzen beides.
+
+00:10:29.620 --> 00:10:38.320
+Sie verwenden synchronisierte Connectors für Ihre statische Wissensdatenbank, HI-Richtlinien, Onboarding-Dokumente und Referenzmaterialien und Sie nutzen föderierte Connectors für Ihre dynamischen Betriebsdaten.
+
+00:10:38.880 --> 00:10:41.340
+Live-Tickets, aktueller Bestand, Echtzeit-Projekt-Status.
+
+00:10:41.960 --> 00:10:44.140
+Es ist keine Entweder-Oder-Entscheidung, sondern eine Sowohl-als-Auf-Strategie.
+
+00:10:44.460 --> 00:10:45.720
+Lassen Sie uns nun über die Kosten sprechen.
+
+00:10:45.720 --> 00:10:49.260
+Synchronisierte Connectors nutzen Speicher- und Rechenleistung innerhalb von Microsoft-Dano.
+
+00:10:49.520 --> 00:10:53.080
+Jedes Element, das Sie indizieren, beansprucht Speicherplatz und wird vom semantischen Index verarbeitet.
+
+00:10:53.480 --> 00:10:56.160
+Dies ist in Ihrer Lizenz enthalten, aber je nach Plan gibt es Einschränkungen.
+
+00:10:57.040 --> 00:11:01.440
+Föderierte Connectors speichern keine Daten in Microsoft 365 und verbrauchen daher diesen Speicher nicht.
+
+00:11:02.040 --> 00:11:05.380
+Sie erfordern jedoch, dass das externe System jede Abfrage in Echtzeit verarbeitet.
+
+00:11:05.540 --> 00:11:11.440
+Wenn Ihre Salesforce-Instanz bereits mit der Leistung zu kämpfen hat, könnten hunderte von zusätzlichen Co-Pilot-Abfragen zu Problemen führen.
+
+00:11:12.000 --> 00:11:13.340
+Behalten Sie das also bei Ihrer Planung im Hintergrund.
+
+00:11:13.340 --> 00:11:15.200
+Sicherheit und Compliance
+
+00:11:15.200 --> 00:11:18.900
+Bevor Sie etwas einrichten, gibt es eine Sache, die Sie unbedingt richtig machen müssen.
+
+00:11:19.260 --> 00:11:19.720
+Die Sicherheit.
+
+00:11:20.480 --> 00:11:24.080
+Jedes einzelne Element, das durch einen Connector läuft, benötigt eine zugehörige Zugriffssteuerungsliste.
+
+00:11:24.300 --> 00:11:24.720
+Das ist eine ACL.
+
+00:11:25.180 --> 00:11:27.920
+Sie teilt Microsoft 365 mit, wer diese Daten sehen darf.
+
+00:11:28.320 --> 00:11:29.960
+Wenn Sie vergessen, diese einzubinden, können zwei Dinge passieren.
+
+00:11:29.960 --> 00:11:34.340
+Die Daten könnten für jeden in Ihrer Organisation sichtbar oder für niemanden mehr sichtbar werden.
+
+00:11:34.920 --> 00:11:35.440
+Beides ist nicht gut.
+
+00:11:35.800 --> 00:11:40.580
+Achten Sie daher bei der Konfiguration eines Connectors genau darauf, wie Berechtigungen aus dem Quellsystem zugeordnet werden.
+
+00:11:40.580 --> 00:11:43.680
+Alle Connectors verwenden OAuths 2.0 zur Authentifizierung.
+
+00:11:44.000 --> 00:11:44.780
+Das sind der moderne Standard.
+
+00:11:45.240 --> 00:11:49.180
+Keine Passwörter im Klartext, keine gemeinsamen Dienstkonten mit schwachen Anmeldedaten.
+
+00:11:49.540 --> 00:11:53.560
+Es ist dasselbe Protokoll, das Sie verwenden, wenn Sie sich bei einer Website mit Ihrem Google- oder Microsoft-Konto anmelden.
+
+00:11:54.120 --> 00:11:58.160
+Der Connector authentifiziert sich sicher und ruft dann Daten basierend auf den von Ihnen erteilten Berechtigungen.
+
+00:11:58.220 --> 00:11:59.600
+Daten bei der Übertragung sind verschlüsselt.
+
+00:11:59.600 --> 00:12:04.940
+Wenn Ihr Connector-Daten von Salesforce oder ServiceNow nach Microsoft 365 verschiebt, ist dieser Daten verkehrgeschützt.
+
+00:12:05.120 --> 00:12:09.220
+Bei synchronisierten Connectors sind Daten im Ruhezustand innerhalb von Microsoft 365 ebenfalls verschlüsselt.
+
+00:12:09.480 --> 00:12:13.840
+Selbst wenn jemand irgendwie Zugriff auf die Ebene erlangen würde, könnte er die Daten ohne die Verschlüsselungsschlüssel nicht lesen.
+
+00:12:14.700 --> 00:12:16.160
+Was ist nun mit Daten, die lokal gespeichert sind?
+
+00:12:16.480 --> 00:12:20.580
+Vielleicht haben Sie einen Dateiserver in Ihrem Büro oder eine SQL-Datenbank, die in Ihrem eigenen Rechenzentrum läuft.
+
+00:12:21.140 --> 00:12:22.780
+Sie möchten diese Daten nicht in die Cloud verschieben.
+
+00:12:23.060 --> 00:12:23.620
+Und das müssen Sie auch.
+
+00:12:23.960 --> 00:12:27.240
+Sie installieren den Microsoft Graph Connector Agent auf einem Computer in Ihrem Netzwerk.
+
+00:12:27.240 --> 00:12:31.420
+Dieser Agent liest Ihre lokalen Daten und sendet nur den Text und die Metadaten in die Cloud.
+
+00:12:31.960 --> 00:12:33.860
+Ihre eigentlichen Datendateien verbleiben lokal bei Ihnen.
+
+00:12:34.400 --> 00:12:39.320
+Das Einzige, was über das Internet übertragen wird, sind die zu indexierenden Inhalte, nicht die Originaldateien selbst.
+
+00:12:40.080 --> 00:12:42.420
+Und hier ist etwas, das wichtig ist, wenn Sie in einer regulierten Branche tätig sind.
+
+00:12:42.740 --> 00:12:50.480
+Microsoft Graph Connectors erben die Compliance-Zertifizierungen von Microsoft 365, ISO 2701, SOXY2, HIPAA, FETRAMP.
+
+00:12:51.220 --> 00:12:56.660
+Wenn Ihr Unternehmen Microsoft 365 bereits für konforme Arbeitslasten nutzt, gelten dieselben Zertifizierungen für die Daten,
+
+00:12:56.660 --> 00:12:58.640
+die Sie über Connectors einbinden, die Sie über Connectors.
+
+00:12:58.980 --> 00:13:02.820
+Sie benötigen keine separaten Audits oder zusätzlichen Zertifizierungen für die Connectorebene.
+
+00:13:03.400 --> 00:13:04.260
+Bereit ist, auszuprobieren.
+
+00:13:04.760 --> 00:13:05.320
+So fangen Sie an.
+
+00:13:06.280 --> 00:13:06.780
+Erste Schritte.
+
+00:13:07.300 --> 00:13:08.260
+Wo fängt man also tatsächlich an?
+
+00:13:08.740 --> 00:13:11.080
+Der erste Anlaufpunkt ist das Microsoft 365 Admin Center.
+
+00:13:11.580 --> 00:13:13.860
+Gehen Sie zur Suche und Intelligenz und öffnen Sie dann die Datenquellen.
+
+00:13:14.260 --> 00:13:15.720
+Dort finden Sie den Connector-Katalog.
+
+00:13:16.240 --> 00:13:18.780
+Es ist eine Liste von über 100 vorgefertigten Connectors, die sofort einsatzbar sind.
+
+00:13:19.020 --> 00:13:19.580
+Rehen Sie eine aus.
+
+00:13:19.820 --> 00:13:20.780
+Nehmen wir zum Beispiel ServiceNow.
+
+00:13:21.120 --> 00:13:23.720
+Klicken Sie darauf und der Einrichtungsassistent führt sich den gesamten Prozess.
+
+00:13:23.720 --> 00:13:26.540
+Sie authentifizieren sich bei ServiceNow über Auth 2.0.
+
+00:13:26.880 --> 00:13:28.460
+Dann wählen Sie aus, welche Daten synchronisiert werden.
+
+00:13:28.740 --> 00:13:31.240
+Vielleicht nur Vorfälle und Wissensartikel statt der gesamten Datenbank.
+
+00:13:31.900 --> 00:13:34.700
+Sie ordnen die Felder von ServiceNow dem Microsoft Graph-Schema zu.
+
+00:13:35.220 --> 00:13:37.580
+Und Sie konfigurieren die ACLs, damit die Berechtigungen umwerden.
+
+00:13:38.040 --> 00:13:40.860
+Bei einer unkomplizierten Einrichtung dauert der gesamte Prozess etwa 30 Minuten.
+
+00:13:41.320 --> 00:13:43.400
+Was ist, wenn Ihre Datenquelle keinen vorgefertigten Connector hat?
+
+00:13:43.740 --> 00:13:44.580
+Sie können den eigenen erstellen.
+
+00:13:44.940 --> 00:13:49.280
+Verwenden Sie die Microsoft Graph Connectors API oder das Microsoft 365 Agent Toolkit.
+
+00:13:49.280 --> 00:13:50.580
+Sie müssen drei Dinge erstellen.
+
+00:13:51.000 --> 00:13:54.120
+Erstens, eine Verbindung, die Microsoft 365 mitteilt, wo die Daten liegen.
+
+00:13:54.760 --> 00:13:57.920
+Zweitens, ein Schema, das definiert, welche Felder existieren und wie sie zugeordnet werden.
+
+00:13:58.660 --> 00:14:00.660
+Drittens, eine Möglichkeit, die externen Elemente zu verwalten.
+
+00:14:01.660 --> 00:14:04.840
+Hinzufügen, aktualisieren und löschen, wenn Sie sich im Quellsystem ändern.
+
+00:14:05.400 --> 00:14:08.380
+Es ist mehr Arbeit, aber es gibt Ihnen die volle Kontrolle darüber, was und wie indexiert wird.
+
+00:14:09.000 --> 00:14:10.640
+Sobald Ihr Connector eingerichtet ist, testen Sie ihn.
+
+00:14:11.060 --> 00:14:13.920
+Stellen Sie Co-Pilot eine Frage, die Informationen aus Ihrer neuen Quelle abrufen sollte.
+
+00:14:14.140 --> 00:14:18.260
+Etwa, zeige mir offene Vorfälle aus ServiceNow oder was ist der neueste Vertrag in Salesforce?
+
+00:14:18.260 --> 00:14:20.520
+Überprüfen Sie, ob die Ergebnisse erscheinen.
+
+00:14:20.840 --> 00:14:23.480
+Prüfen Sie dann, ob nur autorisierte Benutzer die richtigen Ergebnisse sehen.
+
+00:14:23.760 --> 00:14:26.720
+Wenn jemand aus dem Marketing nach einem Nur-Vertriebskonto fragt, sollte er es nicht sehen.
+
+00:14:27.080 --> 00:14:28.840
+Falls doch, müssen Ihre ACLs überarbeitet werden.
+
+00:14:29.140 --> 00:14:30.120
+Fassen wir das Ganze zusammen.
+
+00:14:31.060 --> 00:14:32.520
+Jetzt wissen Sie also, was Graph Connectors sind.
+
+00:14:32.880 --> 00:14:35.260
+Sie ermöglichen es Ihnen, externe Daten in Microsoft 365 einzubinden.
+
+00:14:36.240 --> 00:14:37.900
+Daten, die Co-Pilot von sich aus nicht sehen kann.
+
+00:14:38.380 --> 00:14:39.500
+Sie können zwischen zwei Modellen wählen.
+
+00:14:40.200 --> 00:14:44.060
+Synchronisierte Connectors kopieren und indizieren die Daten für semantische Suche und breite Verfügbarkeit.
+
+00:14:44.060 --> 00:14:50.160
+Föderierte Connectors fragen die Quelle in Echtzeit ab und liefern aktuelle Antworten, ohne Kopien zu speichern, ohne Kopien zu speichern.
+
+00:14:50.280 --> 00:14:51.260
+Ist der Grund, warum das wichtig ist.
+
+00:14:51.400 --> 00:14:54.300
+Co-Pilot wird erst dann richtig nützlich, wenn er alle Unternehmensdaten sieht.
+
+00:14:54.640 --> 00:14:56.220
+Nicht nur die in SharePoint und OneDrive.
+
+00:14:57.020 --> 00:15:00.060
+Ein Co-Pilot, der nur Ihre E-Mails und Dokumente kennt, ist ein eingeschränkter Assistent.
+
+00:15:00.520 --> 00:15:08.160
+Ein Co-Pilot, der auch Ihr CRM, Ihr Ticketsystem, Ihre HDR-Datenbank und Ihr Projekt-Wiki kennt, das ist ein Co-Pilot, der Ihre Arbeitsweise wirklich verändern kann.
+
+00:15:08.160 --> 00:15:10.260
+Ihr nächster Schritt ist einfach.
+
+00:15:10.540 --> 00:15:12.820
+Wählen Sie ein externes System mit kritischen Daten für Ihr Team.
+
+00:15:13.400 --> 00:15:14.680
+Richten Sie diese Woche einen Connector dafür ein.
+
+00:15:15.060 --> 00:15:16.680
+Erleben Sie, wie es Ihre Co-Pilot-Erfahrung verändert.
+
+00:15:17.020 --> 00:15:21.760
+Sie werden überrascht sein, wie viel nützlicher Co-Pilot wird, wenn er Zugriff auf die Daten hat, die Ihr Geschäft wirklich antreiben.
+
+00:15:22.620 --> 00:15:26.280
+Das war eine weitere Folge der Microsoft Knowledge Nuggets hier auf M365FM.
+
+00:15:26.900 --> 00:15:27.980
+Ich bin Ihr Gastgeber Mirko Peters.
+
+00:15:28.480 --> 00:15:32.600
+Wenn Ihnen das geholfen hat, Graph Connectors besser zu verstehen, abonnieren Sie uns auf Ihrer Lieblingsplattform.
+
+00:15:32.800 --> 00:15:37.580
+Und teilen Sie diese Folge mit einem Kollegen, der sich fragt, warum Co-Pilot seine Salesforce-Daten nicht finden kann.
+
+00:15:38.160 --> 00:15:39.060
+Bis zum nächsten Mal.
+
+00:15:41.090 --> 00:15:41.530
+Glück!
