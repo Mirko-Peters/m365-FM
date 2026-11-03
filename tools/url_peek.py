@@ -28,5 +28,7 @@ for url in sys.argv[1:]:
             print(f"\n[{m.group(1)}] unter «{text(heads[-1])[:90] if heads else '-'}»:\n  {t[:900]}")
             for a in re.finditer(r'<a\b[^>]*href="([^"]+)"[^>]*>(.*?)</a>', m.group(2), re.S | re.I): print("   Link:", a.group(1), "|", text(a.group(2))[:100])
     for a in sorted(set(re.findall(r'href="(https?://[^"]*(?:m365\.fm|m365\.show|m365con\.net|youtube\.com/@m365|linkedin\.com/in/mirko)[^"]*)"', h, re.I))): print("Link auf Mirko-Seiten:", a)
+    for m in re.finditer(r'href="https?://[^"]*(?:m365\.fm|m365\.show|m365con\.net|linkedin\.com/in/m365showpodcast)[^"]*"', body, re.I):   # Umgebung jedes Links als Text
+        print("\nUmgebung von", re.search(r'"([^"]+)"', m.group(0)).group(1), ":\n  ", text(body[max(0, m.start() - 1500):m.end() + 900])[-1200:])
     hs = [text(x)[:80] for x in re.findall(r"<h[1-3]\b[^>]*>(.*?)</h[1-3]>", body, re.S | re.I)]
     print("\nUeberschriften:", json.dumps(hs[:40], ensure_ascii=False))
