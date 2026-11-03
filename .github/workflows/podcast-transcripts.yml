@@ -1,0 +1,46 @@
+name: Podcast-Transkripte nach Spreaker
+# Traegt fuer jede Datei transcripts/podcast/<spreaker_episode_id>.vtt|.txt die oeffentliche raw-URL
+# als transcript_url in die Spreaker-Episode ein (auch bei Entwuerfen; es wird nichts veroeffentlicht).
+# Dateien legt der Podcast-Agent auf U8 nach jeder Folge ab (VoiceStudio-Kette).
+on:
+  push:
+    branches: [main]
+    paths: ["transcripts/podcast/**"]
+  schedule:
+    - cron: "41 */6 * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Nur anzeigen, nichts bei Spreaker aendern"
+        type: boolean
+        default: false
+permissions:
+  contents: write
+concurrency:
+  group: podcast-transcripts
+  cancel-in-progress: false
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -q requests cryptography
+      - name: Dateien pruefen
+        run: python tools/apply_podcast_transcripts.py --check || echo "::warning::Fehlerhafte Dateien werden uebersprungen"
+      - name: transcript_url setzen
+        env:
+          SPREAKER_TOKEN: ${{ secrets.SPREAKER_TOKEN }}
+          SPREAKER_CLIENT_ID: ${{ secrets.SPREAKER_CLIENT_ID }}
+          SPREAKER_CLIENT_SECRET: ${{ secrets.SPREAKER_CLIENT_SECRET }}
+          DRY: ${{ inputs.dry_run == true && '--dry-run' || '' }}
+        run: python tools/apply_podcast_transcripts.py $DRY
+      - name: Protokoll speichern
+        if: always()
+        run: |
+          git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
+          for f in transcripts/podcast/APPLIED.txt data/spreaker_auth.enc; do [ -e "$f" ] && git add -A "$f"; done
+          if git diff --cached --quiet; then echo "Nichts zu speichern"; exit 0; fi
+          git commit -q -m "Podcast-Transkripte -> Spreaker: Protokoll $(date -u +%Y-%m-%dT%H:%MZ)"
+          (git pull --rebase --autostash -q -X theirs || git rebase --abort) && git push -q
