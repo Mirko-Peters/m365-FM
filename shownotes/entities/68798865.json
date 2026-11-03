@@ -1,0 +1,206 @@
+{
+  "episode_id": "68798865",
+  "slug": null,
+  "title": "PowerShell Microsoft Graph API: No Modules, No Dependencies, No Limits",
+  "lang": "en",
+  "duration_s": 1360,
+  "transcript_source": "data/en_transcripts/967d371d0b1b.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "automation",
+      "name": "Automation",
+      "type": "concept",
+      "score": 60,
+      "mentions": 16,
+      "first_mention_s": 61,
+      "quote": "automation that doesn't depend on a human remembering a password",
+      "url": "https://www.m365.fm/entity/automation/"
+    },
+    {
+      "slug": "graph",
+      "name": "Microsoft Graph",
+      "type": "product",
+      "score": 98,
+      "mentions": 53,
+      "first_mention_s": 35,
+      "quote": "Everything you care about lives in Microsoft Graph now.",
+      "url": "https://www.m365.fm/entity/graph/"
+    },
+    {
+      "slug": "intune",
+      "name": "Microsoft Intune",
+      "type": "product",
+      "score": 70,
+      "mentions": 5,
+      "first_mention_s": 38,
+      "quote": "Users, groups, devices, Intune Teams, SharePoint licenses, app registrations",
+      "url": "https://www.m365.fm/entity/intune/"
+    },
+    {
+      "slug": "entra-id",
+      "name": "Microsoft Entra ID",
+      "type": "product",
+      "score": 55,
+      "mentions": 5,
+      "first_mention_s": 0,
+      "quote": "If your script is still lean on MS Online or Azure AD, they're already legacy.",
+      "url": "https://www.m365.fm/entity/entra-id/"
+    },
+    {
+      "slug": "azure-functions",
+      "name": "Azure Functions",
+      "type": "product",
+      "score": 50,
+      "mentions": 9,
+      "first_mention_s": 75,
+      "quote": "Azure Automation, Functions, GitHub Actions, Containers, Linux, Local",
+      "url": "https://www.m365.fm/entity/azure-functions/"
+    },
+    {
+      "slug": "azure-automation",
+      "name": "Azure Automation",
+      "type": "product",
+      "score": 50,
+      "mentions": 2,
+      "first_mention_s": 75,
+      "quote": "Azure Automation, Functions, GitHub Actions",
+      "url": "https://www.m365.fm/entity/azure-automation/"
+    },
+    {
+      "slug": "github-actions",
+      "name": "GitHub Actions",
+      "type": "product",
+      "score": 45,
+      "mentions": 2,
+      "first_mention_s": 76,
+      "quote": "Functions, GitHub Actions, Containers, Linux",
+      "url": "https://www.m365.fm/entity/github-actions/"
+    },
+    {
+      "slug": "azure-key-vault",
+      "name": "Azure Key Vault",
+      "type": "product",
+      "score": 45,
+      "mentions": 3,
+      "first_mention_s": 1000,
+      "quote": "short lifetime stored in key vault rotated on a schedule",
+      "url": "https://www.m365.fm/entity/azure-key-vault/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "powershell",
+      "name": "PowerShell",
+      "type": "product"
+    },
+    {
+      "slug": "managed-identity",
+      "name": "Managed identity",
+      "type": "concept"
+    },
+    {
+      "slug": "throttling",
+      "name": "Throttling",
+      "type": "concept"
+    },
+    {
+      "slug": "client-credentials-flow",
+      "name": "OAuth 2.0 client credentials flow",
+      "type": "concept"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "Rest beats modules because it cuts out the middle mess, no load times, no dependency, roulette, no version drama. You call the endpoint, you get the data, you move on with your day.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 45,
+      "entities": [
+        "graph",
+        "powershell"
+      ],
+      "why": "Sums up the core argument for calling Graph via REST instead of PowerShell modules."
+    },
+    {
+      "text": "Managed identity means no secrets at all. That's the point. Less to steal, less to rotate, less to screw up.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 67,
+      "entities": [
+        "managed-identity"
+      ],
+      "why": "Concise security rationale for managed identities."
+    },
+    {
+      "text": "Scripts don't fail because of PowerShell. They fail because of assumptions. So stop assuming magic. Build the three pieces every time and you'll sleep at night.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 224,
+      "entities": [
+        "powershell",
+        "graph"
+      ],
+      "why": "Frames reliability as a matter of a repeatable token, headers and call pattern."
+    },
+    {
+      "text": "Reality check compliance isn't a state. It's a drifting target you have to chase. That's why we use delta where possible.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 929,
+      "entities": [
+        "intune",
+        "graph"
+      ],
+      "why": "Clear framing of compliance as continuous drift management."
+    },
+    {
+      "text": "Microsoft wants you on graph because it's the one surface they can actually ship to at speed. Identity devices, apps, content, the portal rights graph, so your code should too.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 1127,
+      "entities": [
+        "graph"
+      ],
+      "why": "Explains why Graph is the strategic API surface."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "Why PowerShell modules are legacy"
+    },
+    {
+      "start_s": 212,
+      "title": "The core pattern: token, headers, REST"
+    },
+    {
+      "start_s": 461,
+      "title": "Demo 1: Intune device cleanup"
+    },
+    {
+      "start_s": 635,
+      "title": "Demo 2: Identity onboarding via Graph"
+    },
+    {
+      "start_s": 800,
+      "title": "Demo 3: Compliance drift remediation"
+    },
+    {
+      "start_s": 974,
+      "title": "Architecture and best practices"
+    },
+    {
+      "start_s": 1250,
+      "title": "The token audience gotcha"
+    }
+  ],
+  "takeaways": [
+    "Calling Microsoft Graph directly with Invoke-RestMethod removes module load times, dependency conflicts and the lag between new Graph features and module releases.",
+    "Use device code for local testing, client credentials with a certificate for unattended automation, and managed identity wherever the workload runs in Azure.",
+    "Production Graph scripts need paging via nextLink, retry with backoff on throttling, a dry-run flag, logging of request IDs and a token audience that matches Graph."
+  ],
+  "hook": "PowerShell scripts built on MSOnline, AzureAD or heavy Graph modules break on Linux runners, containers and CI/CD. This episode shows admins and automation engineers the module-free token, headers and REST pattern for Microsoft Graph, three auth flows and three enterprise demos for Intune cleanup, onboarding and compliance remediation.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-03T02:24:38+00:00"
+}
