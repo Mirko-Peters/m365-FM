@@ -22,6 +22,8 @@
     var fs = document.querySelector(".fshare");
     if (fs) { b.classList.add("inbar"); fs.appendChild(b); } else document.body.appendChild(b);
     b.addEventListener("click", function () { if (!p) p = panel(b, fs); show(p, b, p.hidden); });
+    // T29: Panel im Leerlauf vorbauen (nicht beim Laden, nicht erst beim Klick - beides kostet eine Interaktion)
+    (window.requestIdleCallback || function (f) { return setTimeout(f, 1500); })(function () { if (!p) p = panel(b, fs); }, { timeout: 4000 });
     document.addEventListener("keydown", function (e) { if (e.key === "Escape" && p && !p.hidden) { show(p, b, false); b.focus(); } });
   }
   // T29: Fokus erst nach dem naechsten Frame setzen (vorher erzwungenes Layout direkt nach dem Einblenden, bis 37 ms je Frame)
