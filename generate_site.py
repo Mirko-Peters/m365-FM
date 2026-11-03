@@ -325,7 +325,10 @@ def share_html(lang, url, title):
             ("Telegram", f"https://t.me/share/url?url={u}&text={t}"), ("Reddit", f"https://www.reddit.com/submit?url={u}&title={t}"),
             ("E-Mail", f"mailto:?subject={t}&body={u}")]
     links = "".join(f'<a class="btn" href="{h}" target="_blank" rel="noopener nofollow">{n}</a>' for n, h in nets)
-    fl = "".join(f'<a href="{h}" target="_blank" rel="noopener nofollow" aria-label="{n}" title="{n}" style="--bc:#{BRAND_ICONS[n][1]}">{brand_icon(n)}</a>' for n, h in nets)
+    # Der Mail-Link (mailto:?subject=...) enthaelt keine Adresse. Ohne email_off schreibt Cloudflares E-Mail-Schutz ihn trotzdem um und
+    # laedt dafuer auf JEDER Seite email-decode.min.js (synchrones Skript in der kritischen Kette; ohne JS ginge der Link ins Leere).
+    _off = lambda n, a: f"<!--email_off-->{a}<!--/email_off-->" if n == "E-Mail" else a
+    fl = "".join(_off(n, f'<a href="{h}" target="_blank" rel="noopener nofollow" aria-label="{n}" title="{n}" style="--bc:#{BRAND_ICONS[n][1]}">{brand_icon(n)}</a>') for n, h in nets)
     fbar = (f'<aside class="fshare" aria-label="{esc(SHARE_L.get(lang, "Share"))}">{fl}'
             f'<button type="button" data-share data-url="{url}" data-title="{esc(strip_tags(title))}" aria-label="{esc(COPY_L.get(lang, "Copy link"))}" title="{esc(COPY_L.get(lang, "Copy link"))}" style="--bc:#6B7280">{brand_icon("Copy")}</button></aside>')
     return fbar   # Klick-Logik in assets/page.js
