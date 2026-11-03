@@ -84,11 +84,29 @@ jobs:
           YT_REFRESH_TOKEN: ${{ env.YT_REFRESH_TOKEN || secrets.YT_REFRESH_TOKEN }}
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           ADMIN_SUBS: ${{ secrets.ADMIN_SUBS }}
-      - name: D1-Sicherung aufheben (14 Tage)
+      # Das Repo ist oeffentlich: Artefakte kann jeder angemeldete GitHub-Nutzer laden. Die D1-Sicherung enthaelt personenbezogene Daten
+      # (Konten, Mail-Adressen, Nachrichten, Sponsor-Anfragen) und wird deshalb nur verschluesselt hochgeladen (Secret D1_BACKUP_KEY,
+      # AES-256 mit PBKDF2). Ohne Secret kein Artefakt; zurueckholen geht dann ueber D1 Time Travel (Workers Paid: 30 Tage).
+      # Entschluesseln: openssl enc -d -aes-256-cbc -pbkdf2 -iter 600000 -in backup-d1.sql.enc -out backup-d1.sql -pass env:D1_BACKUP_KEY
+      - name: D1-Sicherung verschluesseln (unverschluesselt nie hochladen)
         if: always() && env.skip != '1'
+        env:
+          D1_BACKUP_KEY: ${{ secrets.D1_BACKUP_KEY }}
+        run: |
+          f=worker/backup-d1.sql
+          if [ ! -f "$f" ]; then echo "Keine D1-Sicherung in diesem Lauf."; exit 0; fi
+          if [ -n "$D1_BACKUP_KEY" ]; then
+            openssl enc -aes-256-cbc -pbkdf2 -iter 600000 -salt -in "$f" -out "$f.enc" -pass env:D1_BACKUP_KEY
+            echo "d1enc=1" >> "$GITHUB_ENV"; echo "D1-Sicherung verschluesselt ($(wc -c < "$f.enc") Bytes)."
+          else
+            echo "::warning::Secret D1_BACKUP_KEY fehlt - die D1-Sicherung wird nicht als Artefakt aufgehoben (oeffentliches Repo). Zurueckholen ueber D1 Time Travel."
+          fi
+          rm -f "$f"
+      - name: D1-Sicherung aufheben (14 Tage, nur verschluesselt)
+        if: always() && env.skip != '1' && env.d1enc == '1'
         uses: actions/upload-artifact@v4
         with:
           name: d1-backup-${{ github.run_id }}
-          path: worker/backup-d1.sql
+          path: worker/backup-d1.sql.enc
           retention-days: 14
-          if-no-files-found: warn
+          if-no-files-found: error
