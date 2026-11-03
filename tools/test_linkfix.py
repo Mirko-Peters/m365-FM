@@ -84,6 +84,13 @@ class LinkfixTest(unittest.TestCase):
         self.assertEqual(resolved[0]["method"], "episode")
         self.assertEqual(unresolved[0]["text"], "Unmapped link")
 
+    def test_existing_absolute_route_is_untouched(self):
+        source = '<a href="https://www.m365.fm/show/episodes/teams-security/">Episode</a>'
+        result, resolved, unresolved = LF.rewrite_html(source, "/show/episodes/source/", self.index)
+        self.assertEqual(result, source)
+        self.assertEqual(resolved, [])
+        self.assertEqual(unresolved, [])
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -216,8 +216,9 @@ def rewrite_html(markup, page, index):
             unresolved.append({"page": page, "link": old, "text": text})
             return html.escape(text) + (full[closing:] if closing >= 0 else "")
         target, method = detail
-        if old != target:
-            resolved.append({"page": page, "old": old, "new": target, "method": method})
+        if parsed.path == urlsplit(target).path:
+            return full
+        resolved.append({"page": page, "old": old, "new": target, "method": method})
         new_attrs = _HREF.sub(lambda h: h.group(1) + h.group(2) + html.escape(target, quote=False) + h.group(2), attrs, count=1)
         return "<a" + new_attrs + ">" + body + (full[closing:] if closing >= 0 else "")
 
