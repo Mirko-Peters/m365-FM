@@ -1,0 +1,234 @@
+{
+ "episode_id": "76145255",
+ "slug": "ai-agents-architecture-the-secret-architecture-that-makes-ai-agents-actually-work",
+ "title": "AI एजेंट आर्किटेक्चर: एक्ज़िक्यूटर, वर्कफ़्लो ग्राफ़ और वैलिडेशन से भरोसेमंद एजेंट",
+ "lang": "hi",
+ "duration_s": 1605,
+ "transcript_source": "transcripts/hi/LLxvoiKP3XA.vtt",
+ "time_basis": "vtt",
+ "entities": [
+  {
+   "slug": "ai-agent",
+   "name": "AI agent",
+   "type": "concept",
+   "score": 95,
+   "mentions": 15,
+   "first_mention_s": 0,
+   "quote": "एक सत्यापन जो स्मार्ट एजेंट को बेवकूफी भरी हरकतें करने से रोकता है",
+   "url": "https://www.m365.fm/entity/ai-agent/"
+  },
+  {
+   "slug": "human-in-the-loop",
+   "name": "Human in the loop",
+   "type": "concept",
+   "score": 70,
+   "mentions": 4,
+   "first_mention_s": 69,
+   "quote": "वास्तविक workflow में शाखाएं, समानताएं, शतिपूर्थी और मानवी जाज बिंदू होते हैं।",
+   "url": "https://www.m365.fm/entity/human-in-the-loop/"
+  },
+  {
+   "slug": "prompt",
+   "name": "Prompt",
+   "type": "concept",
+   "score": 65,
+   "mentions": 3,
+   "first_mention_s": 314,
+   "quote": "प्रॉम्ट ऑपरेशन में विफल क्यों होते हैं निश्पादक नहीं",
+   "url": "https://www.m365.fm/entity/prompt/"
+  },
+  {
+   "slug": "agent-observability",
+   "name": "Agent observability",
+   "type": "concept",
+   "score": 60,
+   "mentions": 5,
+   "first_mention_s": 264,
+   "quote": "प्रदर्शन और अवलोकन, वास्टविक निशान",
+   "url": "https://www.m365.fm/entity/agent-observability/"
+  },
+  {
+   "slug": "graph",
+   "name": "Microsoft Graph",
+   "type": "product",
+   "score": 55,
+   "mentions": 6,
+   "first_mention_s": 149,
+   "quote": "Microsoft Graph, SharePoint या एक्सचेंज ऐसे सिस्टम के विरुद सत्यापित पोस्ट केंडिशन में रहते हैं।",
+   "url": "https://www.m365.fm/entity/graph/"
+  },
+  {
+   "slug": "sharepoint",
+   "name": "SharePoint",
+   "type": "product",
+   "score": 45,
+   "mentions": 4,
+   "first_mention_s": 26,
+   "quote": "एक sharepoint फाइल को संपाजित करने का प्रयास करता है",
+   "url": "https://www.m365.fm/entity/sharepoint/"
+  },
+  {
+   "slug": "azure-openai",
+   "name": "Azure OpenAI Service",
+   "type": "product",
+   "score": 45,
+   "mentions": 2,
+   "first_mention_s": 1051,
+   "quote": "सोचने के लिए आइजूर ओपन AI",
+   "url": "https://www.m365.fm/entity/azure-openai/"
+  },
+  {
+   "slug": "copilot-studio",
+   "name": "Copilot Studio",
+   "type": "product",
+   "score": 40,
+   "mentions": 2,
+   "first_mention_s": 1141,
+   "quote": "और्केस्ट्रेशन के लिए को पाइलोट स्टूडियो",
+   "url": "https://www.m365.fm/entity/copilot-studio/"
+  },
+  {
+   "slug": "mcp",
+   "name": "Model Context Protocol (MCP)",
+   "type": "concept",
+   "score": 25,
+   "mentions": 2,
+   "first_mention_s": 931,
+   "quote": "यदि आप MCP या उपने भी स्पेकायात करते हैं",
+   "url": "https://www.m365.fm/entity/mcp/"
+  },
+  {
+   "slug": "entra-id",
+   "name": "Microsoft Entra ID",
+   "type": "product",
+   "score": 25,
+   "mentions": 1,
+   "first_mention_s": 1081,
+   "quote": "जो हर चीज को इंटर आईडी स्कोप और आर्बेसी से जोड़ता है",
+   "url": "https://www.m365.fm/entity/entra-id/"
+  }
+ ],
+ "new_entities": [
+  {
+   "slug": "large-language-model",
+   "name": "Large language model (LLM)",
+   "type": "concept",
+   "mentions": 3,
+   "first_mention_s": 317,
+   "quote": "यह तो बात यह है कि LLM संग्यान को संभालते हैं",
+   "status": "review"
+  },
+  {
+   "slug": "idempotency",
+   "name": "Idempotency",
+   "type": "concept",
+   "mentions": 2,
+   "first_mention_s": 90,
+   "quote": "क्रिया टूल को आइटम पोटेंसी कुझी के साथ कॉल करें",
+   "status": "review"
+  },
+  {
+   "slug": "least-privilege",
+   "name": "Least privilege",
+   "type": "concept",
+   "mentions": 2,
+   "first_mention_s": 811,
+   "quote": "नोट को कम से कम विशेश अधिकार क्रिदेंशिल और सपष्ट अनुमती सूचियों के साथ सेग्मेंट में चलना चाहिए",
+   "status": "review"
+  }
+ ],
+ "quotes": [
+  {
+   "text": "एक सत्यापन जो स्मार्ट एजेंट को बेवकूफी भरी हरकतें करने से रोकता है एक गेट है जो चालाक को सक्षम मनाता है वो है प्री एग्जिकुशन कॉंट्राक्ट चेक",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 0,
+   "entities": [
+    "ai-agent"
+   ],
+   "why": "Pre-Execution-Contract-Check als zentrales Gate"
+  },
+  {
+   "text": "मॉडल एक योचना प्रस्तावित कर सकते हैं यह गारेंटी नहीं दे सकता कि इमेल भेजा गया था फाइल सहेजी गई थी या अनुती मौझूद थी यह संभाव नाव में बोलता है संचालन गारेंटी मांगता है",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 326,
+   "entities": [
+    "ai-agent",
+    "large-language-model"
+   ],
+   "why": "Modell plant, Executor garantiert"
+  },
+  {
+   "text": "यह विश्वास नहीं करता कि कोई कारवाई सफल हुई है यह जाज करता है यह नहीं मानता कि कोई उपकरण मौझूद है यह कोशिश करने से पहले शमता, मापदंडो और अनुमतियों को मानने करता है",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 342,
+   "entities": [
+    "ai-agent"
+   ],
+   "why": "Executor prüft statt zu vertrauen"
+  },
+  {
+   "text": "Microsoft Graph, SharePoint या एक्सचेंज ऐसे सिस्टम के विरुद सत्यापित पोस्ट केंडिशन में रहते हैं। सच्चाई के वास्त्विक स्रोथ, मॉडल की मेमरी नहीं।",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 464,
+   "entities": [
+    "graph",
+    "sharepoint"
+   ],
+   "why": "Postconditions gegen echte Quellen wie Microsoft Graph"
+  },
+  {
+   "text": "जब एजिंट के उत्तर किराइदार समगरी का हवाला देते हैं, और लिंक काम करते हैं, तो लोग उस पर भरोसा करते हैं,",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 1566,
+   "entities": [
+    "ai-agent"
+   ],
+   "why": "Belegte Antworten schaffen Vertrauen"
+  }
+ ],
+ "chapters": [
+  {
+   "start_s": 0,
+   "title": "प्री-एग्ज़िक्यूशन कॉन्ट्रैक्ट चेक: चलने से पहले तीन जाँचें"
+  },
+  {
+   "start_s": 304,
+   "title": "एक मानसिक मॉडल जिसे आप नहीं भूलेंगे"
+  },
+  {
+   "start_s": 314,
+   "title": "प्रॉम्ट ऑपरेशन में क्यों विफल होते हैं, एक्ज़िक्यूटर नहीं"
+  },
+  {
+   "start_s": 474,
+   "title": "वर्कफ़्लो ग्राफ: नोड्स, किनारे और स्थिति"
+  },
+  {
+   "start_s": 781,
+   "title": "डिज़ाइन से सुरक्षित: ग्राफ का सत्यापन"
+  },
+  {
+   "start_s": 1051,
+   "title": "परिदृश्य: Microsoft Graph, Azure OpenAI और Copilot Studio"
+  },
+  {
+   "start_s": 1351,
+   "title": "मेट्रिक्स: सटीकता, लेटेंसी, लागत और प्रशासन"
+  }
+ ],
+ "takeaways": [
+  "LLM योजना प्रस्तावित करते हैं, लेकिन एक्ज़िक्यूटर ही ऑपरेशन की गारंटी देते हैं: वे पूर्व-शर्तें जाँचते हैं, आइडेम्पोटेंसी कुंजी से टूल कॉल करते हैं और पोस्ट-कंडीशन सत्यापित करते हैं।",
+  "वर्कफ़्लो ग्राफ स्पष्ट अनुबंधों वाले नोड्स, अनुमति सूचियों और मानवीय चेकपॉइंट के साथ तय करते हैं कि क्या, कब और किन डेटा सीमाओं के भीतर चलता है।",
+  "Microsoft Graph, SharePoint और Exchange जैसे वास्तविक स्रोतों से साक्ष्य और नोड-स्तर की ट्रेसिंग से कम गलत उत्तर, कम लागत और अधिक भरोसा मिलता है।"
+ ],
+ "hook": "स्मार्ट AI एजेंट तब भी बेवकूफी भरी गलतियाँ करते हैं जब प्रॉम्ट अच्छे हों। इस एपिसोड में आप सीखते हैं कि एक्ज़िक्यूटर, वर्कफ़्लो ग्राफ और प्री-एग्ज़िक्यूशन कॉन्ट्रैक्ट चेक कैसे एजेंटों को भरोसेमंद, सुरक्षित और ऑडिट-योग्य बनाते हैं।",
+ "youtube_video_id": "LLxvoiKP3XA",
+ "source_video_id": "LLxvoiKP3XA",
+ "show_id": 7393228,
+ "generated_at": "2026-11-03T09:05:40Z"
+}
