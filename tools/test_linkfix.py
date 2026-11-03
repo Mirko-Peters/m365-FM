@@ -87,6 +87,23 @@ class LinkfixTest(unittest.TestCase):
             "/show/episodes/power-apps-testing/",
         )
 
+    def test_exact_title_cache_key_preserves_punctuation(self):
+        index = LF.build_index(
+            episodes=[
+                {"slug": "one", "title": "Alpha Beta Gamma"},
+                {"slug": "two", "title": "Alpha Beta-Gamma"},
+            ],
+            known_routes=["/show/episodes/one/", "/show/episodes/two/"],
+        )
+        self.assertEqual(
+            LF.resolve("/unknown", index, "Alpha Beta Gamma"),
+            "/show/episodes/one/",
+        )
+        self.assertEqual(
+            LF.resolve("/unknown", index, "Alpha Beta-Gamma"),
+            "/show/episodes/two/",
+        )
+
     def test_host_query_fragment_and_case(self):
         self.assertEqual(
             LF.resolve("https://WWW.M365.FM/Teams-Security?ref=notes#tips", self.index),
@@ -116,6 +133,8 @@ class LinkfixTest(unittest.TestCase):
         self.assertIn('href="/show/episodes/teams-security/"', result)
         self.assertEqual(unresolved, [("/unknown-path", 1)])
         self.assertEqual(resolved[0][2], "episode")
+        repeated, _, _ = LF.rewrite_html(result, "/show/episodes/source/", self.index)
+        self.assertEqual(repeated, result)
 
     def test_unicode_anchor_text_and_boolean_attributes(self):
         source = (

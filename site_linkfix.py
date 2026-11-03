@@ -30,6 +30,10 @@ def _tokens(text):
     return frozenset(word for word in normalized if word not in _STOP)
 
 
+def _normalized_text(text):
+    return " ".join(unicodedata.normalize("NFKC", str(text or "")).casefold().split())
+
+
 def _records(values, kind):
     if isinstance(values, dict):
         values = values.values()
@@ -142,7 +146,7 @@ def _choose_blog(records, lang, index):
 
 
 def _title_match(path, link_text, lang, index):
-    exact_text = " ".join(unicodedata.normalize("NFKC", str(link_text or "")).casefold().split())
+    exact_text = _normalized_text(link_text)
     exact_matches = set()
     if exact_text:
         exact_matches.update(index["title_exact"].get((lang, exact_text), ()))
@@ -305,7 +309,7 @@ def resolve_detail(path, index, link_text="", lang="en"):
         return None
     if parsed.netloc and host not in _HOSTS:
         return None
-    cache_key = (_key(parsed.path), parsed.query, parsed.fragment, _tokens(link_text), lang)
+    cache_key = (_key(parsed.path), parsed.query, parsed.fragment, _normalized_text(link_text), lang)
     if cache_key not in index["cache"]:
         if len(index["cache"]) >= 100000:
             index["cache"].clear()

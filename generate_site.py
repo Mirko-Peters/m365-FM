@@ -1782,12 +1782,49 @@ Mirko Peters, {BASE}/about/
         REG.build(write, BASE, TODAY, _posts)
     except Exception as _e:
         print("Register nicht geschrieben:", str(_e)[:160])
-    _updates, _written = {}, []
+    _staged_outputs, _replacements, _temp_paths = {}, [], set()
+    _link_report = {"resolved": [], "unresolved": [], "links": {}, "rolled_back": True}
     try:
-        import os as _os, time as _clock
+        import os as _os, tempfile as _tempfile, time as _clock
         import site_linkfix as LFX
         from collections import Counter as _Counter
+        from urllib.parse import urlsplit as _urlsplit
         _linkfix_started = _clock.perf_counter()
+
+        def _stage_text(_target, _text):
+            _target.parent.mkdir(parents=True, exist_ok=True)
+            _mode = _os.stat(_target).st_mode & 0o777 if _target.exists() else 0o644
+            _path = None
+            try:
+                with _tempfile.NamedTemporaryFile(
+                    "w", encoding="utf-8", dir=_target.parent,
+                    prefix=f".{_target.name}.linkfix-", suffix=".tmp", delete=False,
+                ) as _tmp:
+                    _path = Path(_tmp.name)
+                    _tmp.write(_text)
+                    _os.chmod(_path, _mode)
+                _temp_paths.add(_path)
+                return _path
+            except Exception:
+                if _path:
+                    _path.unlink(missing_ok=True)
+                raise
+
+        def _backup_path(_target):
+            with _tempfile.NamedTemporaryFile(
+                dir=_target.parent, prefix=f".{_target.name}.linkfix-backup-", delete=False,
+            ) as _tmp:
+                _path = Path(_tmp.name)
+            _path.unlink()
+            return _path
+
+        def _stage_page(_target, _text):
+            _old_stage = _staged_outputs.pop(_target, None)
+            if _old_stage:
+                _old_stage.unlink(missing_ok=True)
+                _temp_paths.discard(_old_stage)
+            _staged_outputs[_target] = _stage_text(_target, _text)
+
         _known_routes, _linkfix_files = [], set()
         for _out_root in (OUT, R2OUT):
             if not _out_root.exists():
@@ -1818,9 +1855,8 @@ Mirko Peters, {BASE}/about/
         _episodes = [e for e in PP.load("episodes") if e.get("published") not in (False, "False") and e.get("hidden") not in (True, "True")]
         _link_index = LFX.build_index(_redirects, _episodes, _posts, LRN.ENTS, PP.RENAMES, _known_routes)
 
-        # Analyse first so aliases are stable before rewriting any page.
-        _candidate_resolved, _candidate_unresolved, _candidate_files = [], [], set()
-        _link_stats = {}
+        # Rewrite in the first pass; keep changed output on disk until aliases are known.
+        _candidate_resolved, _candidate_unresolved, _file_results = [], [], {}
         for _f in sorted(_linkfix_files):
             _out_root = OUT if OUT in _f.parents else R2OUT
             _rel = _f.relative_to(_out_root).as_posix()
@@ -1828,10 +1864,13 @@ Mirko Peters, {BASE}/about/
             _original = _f.read_text("utf-8")
             if not LFX.might_have_content(_original, _page_url):
                 continue
-            _, _resolved, _unresolved = LFX.rewrite_html(
-                _original, _page_url, _link_index, rewrite=False, stats=_link_stats)
-            if _resolved or _unresolved:
-                _candidate_files.add(_f)
+            _page_stats = {}
+            _content, _resolved, _unresolved = LFX.rewrite_html(
+                _original, _page_url, _link_index, stats=_page_stats)
+            if _page_stats:
+                _file_results[_f] = (_resolved, _unresolved, _page_stats)
+                if _content != _original:
+                    _stage_page(_f, _content)
             _candidate_resolved.extend(_resolved)
             _candidate_unresolved.extend(_unresolved)
         _aliases = LFX.build_aliases(_candidate_resolved, _candidate_unresolved, _link_index)
@@ -1840,19 +1879,42 @@ Mirko Peters, {BASE}/about/
             _link_index["redirects"][_path] = (_target, _method)
         _link_index["cache"].clear()
 
+        # Only alias-bearing pages need another pass, and only if aliases were added.
+        if _aliases:
+            _alias_paths = set(_aliases)
+            _alias_files = set()
+            for _f, (_resolved, _, _) in _file_results.items():
+                if any(LFX._key(_urlsplit(_old).path) in _alias_paths for _old, _, _, _ in _resolved):
+                    _alias_files.add(_f)
+            for _f in sorted(_alias_files):
+                _out_root = OUT if OUT in _f.parents else R2OUT
+                _rel = _f.relative_to(_out_root).as_posix()
+                _page_url = "/" + _rel[:-len("index.html")].rstrip("/") + "/"
+                _original = _f.read_text("utf-8")
+                _page_stats = {}
+                _content, _resolved, _unresolved = LFX.rewrite_html(
+                    _original, _page_url, _link_index, stats=_page_stats)
+                _file_results[_f] = (_resolved, _unresolved, _page_stats)
+                if _content != _original:
+                    _stage_page(_f, _content)
+                else:
+                    _old_stage = _staged_outputs.pop(_f, None)
+                    if _old_stage:
+                        _old_stage.unlink(missing_ok=True)
+                        _temp_paths.discard(_old_stage)
+
         _resolved_counts, _unresolved_counts = _Counter(), _Counter()
-        for _f in sorted(_candidate_files):
-            _out_root = OUT if OUT in _f.parents else R2OUT
-            _rel = _f.relative_to(_out_root).as_posix()
-            _page_url = "/" + _rel[:-len("index.html")].rstrip("/") + "/"
-            _original = _f.read_text("utf-8")
-            _content, _resolved, _unresolved = LFX.rewrite_html(_original, _page_url, _link_index)
+        _link_stats = {}
+        for _resolved, _unresolved, _page_stats in _file_results.values():
             for _old, _new, _method, _count in _resolved:
                 _resolved_counts[(_old, _new, _method)] += _count
             for _path, _count in _unresolved:
                 _unresolved_counts[_path] += _count
-            if _content != _original:
-                _updates[_f] = (_original, _content)
+            for _prefix, _counts in _page_stats.items():
+                _totals = _link_stats.setdefault(
+                    _prefix, {"seen": 0, "kept": 0, "rewritten": 0, "unlinked": 0})
+                for _name, _count in _counts.items():
+                    _totals[_name] += _count
         _link_report = {
             "resolved": [{"old": old, "new": new, "method": method, "count": count}
                          for (old, new, method), count in sorted(_resolved_counts.items())],
@@ -1860,22 +1922,59 @@ Mirko Peters, {BASE}/about/
             "links": _link_stats,
         }
         _report_path = Path(_os.environ.get("LINKFIX_REPORT") or (ROOT / "reports" / "linkfix-report.json"))
-        _report_path.parent.mkdir(parents=True, exist_ok=True)
-        _report_path.write_text(json.dumps(_link_report, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
-        for _f, (_original, _content) in _updates.items():
-            _written.append(_f)
-            _f.write_text(_content, encoding="utf-8")
+        for _f, _staged in _staged_outputs.items():
+            _backup = _backup_path(_f)
+            _os.replace(_f, _backup)
+            _replacements.append((_f, _backup))
+            _os.replace(_staged, _f)
+            _temp_paths.discard(_staged)
+        _staged_outputs.clear()
         if _rd_file.exists():
-            write("show/redirects.json", json.dumps(_redirects))
+            _redirect_content = R2.rewrite(json.dumps(_redirects))
+            _redirect_stage = _stage_text(_rd_file, _redirect_content)
+            _redirect_backup = _backup_path(_rd_file)
+            _os.replace(_rd_file, _redirect_backup)
+            _replacements.append((_rd_file, _redirect_backup))
+            _os.replace(_redirect_stage, _rd_file)
+            _temp_paths.discard(_redirect_stage)
+        _report_stage = _stage_text(
+            _report_path, json.dumps(_link_report, ensure_ascii=False, separators=(",", ":")))
+        _os.replace(_report_stage, _report_path)
+        _temp_paths.discard(_report_stage)
         print(f"Linkfix: {sum(_resolved_counts.values())} umgeschrieben, {sum(_unresolved_counts.values())} entlinkt "
               f"in {_clock.perf_counter() - _linkfix_started:.1f}s; Bericht: {_report_path}")
-    except Exception as _linkfix_error:
-        for _f in reversed(_written):
+        _cleanup_errors = []
+        for _, _backup in _replacements:
             try:
-                _f.write_text(_updates[_f][0], encoding="utf-8")
-            except Exception:
-                pass
-        print("Linkfix übersprungen; Seiten bleiben unverändert:", str(_linkfix_error)[:200])
+                _backup.unlink(missing_ok=True)
+            except Exception as _cleanup_error:
+                _cleanup_errors.append(f"{_backup}: {_cleanup_error}")
+        if _cleanup_errors:
+            print("Linkfix-Backups konnten nicht entfernt werden:", "; ".join(_cleanup_errors)[:500])
+    except Exception as _linkfix_error:
+        _restore_errors = []
+        for _f, _backup in reversed(_replacements):
+            try:
+                _os.replace(_backup, _f)
+            except Exception as _restore_error:
+                _restore_errors.append(f"{_f}: {_restore_error}")
+        for _staged in _temp_paths:
+            try:
+                _staged.unlink(missing_ok=True)
+            except Exception as _cleanup_error:
+                _restore_errors.append(f"{_staged}: {_cleanup_error}")
+        _link_report["rolled_back"] = True
+        _link_report["rollback_errors"] = _restore_errors
+        try:
+            _report_path = Path(_os.environ.get("LINKFIX_REPORT") or (ROOT / "reports" / "linkfix-report.json"))
+            _report_stage = _stage_text(
+                _report_path, json.dumps(_link_report, ensure_ascii=False, separators=(",", ":")))
+            _os.replace(_report_stage, _report_path)
+        except Exception as _report_error:
+            _restore_errors.append(f"{_report_path}: {_report_error}")
+        print("Linkfix fehlgeschlagen und zurückgerollt:", str(_linkfix_error)[:200])
+        if _restore_errors:
+            print("Linkfix-Rollback unvollständig:", "; ".join(_restore_errors)[:1000])
     phase("Agenten-Dateien, 404, UI-Quellen")
     sizes()
     print(f"r2out/: {_r2n[0]} Seiten, {_r2n[1] / 1e6:.0f} MB (werden in den R2-Bucket geladen, nicht in GitHub Pages)")
