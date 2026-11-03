@@ -90,9 +90,25 @@ def fmt_usd(n):
     return "$" + f"{int(round(n)):,}"
 
 
-def _plural_en(lang, key, n, **kw):   # nur Rueckfall ohne Node: one bei 1, sonst other
-    for k in (f"{key}.{'one' if n == 1 else 'other'}", f"{key}.other"):
-        if k in I18N.get(lang, {}) or k in EN: return tx(lang, k, n=n, **kw)
+def _pcat(lang, n):   # CLDR-Pluralkategorie fuer ganze Zahlen n >= 0 (wie Intl.PluralRules in den 15 Sprachen der Seite)
+    n = int(n); m10, m100 = n % 10, n % 100
+    if lang in ("ja", "ko", "id"): return "other"
+    if lang in ("ru", "uk"):
+        return "one" if m10 == 1 and m100 != 11 else "few" if 2 <= m10 <= 4 and not 12 <= m100 <= 14 else "many"
+    if lang == "pl":
+        return "one" if n == 1 else "few" if 2 <= m10 <= 4 and not 12 <= m100 <= 14 else "many"
+    if lang == "ar":
+        return "zero" if n == 0 else "one" if n == 1 else "two" if n == 2 else "few" if 3 <= m100 <= 10 else "many" if 11 <= m100 <= 99 else "other"
+    if lang == "he": return "one" if n == 1 else "two" if n == 2 else "other"
+    if lang in ("fr", "pt"): return "one" if n in (0, 1) else "many" if n and n % 1000000 == 0 else "other"
+    if lang in ("es", "it"): return "one" if n == 1 else "many" if n and n % 1000000 == 0 else "other"
+    return "one" if n == 1 else "other"
+
+
+def _plural_en(lang, key, n, **kw):   # Rueckfall ohne Node (Laufzeit-Beschriftungen): eigene Kategorie, dann .other der Sprache, dann en
+    for lg, cat in ((lang, _pcat(lang, n)), (lang, "other"), ("en", _pcat("en", n)), ("en", "other")):
+        k = f"{key}.{cat}"
+        if k in (I18N.get(lg, {}) if lg != "en" else EN): return tx(lg, k, n=n, **kw)
     return str(n)
 
 
@@ -205,6 +221,8 @@ CSS = """<style>
 @supports (background:color-mix(in srgb,red 10%,blue)){.spn{--spn-soft:color-mix(in srgb,var(--ac) 10%,var(--card));--spn-fill:color-mix(in srgb,var(--ac) 32%,transparent)}}
 @media (prefers-color-scheme:dark){.spn{--spn-on:#ffb52e;--spn-good:#3cc9a1;--spn-red:#ff8a80}}
 :root[data-theme=dark] .spn{--spn-on:#ffb52e;--spn-good:#3cc9a1;--spn-red:#ff8a80}
+html.a11y-hc .spn{--spn-on:#ffb52e;--spn-good:#3cc9a1;--spn-red:#ff8a80}
+.spn ::placeholder{color:var(--mut);opacity:1}
 .wrap.spn-wrap{max-width:1180px}
 .spn h1{font-size:clamp(2rem,4.4vw,3.3rem);line-height:1.04;margin:.25em 0 .4em;text-wrap:balance}
 .spn h2{margin:0}.spn h3{margin:0}
@@ -217,19 +235,20 @@ CSS = """<style>
 .spn-lead{max-width:62ch;color:var(--mut);font-size:1.1rem;margin:0 0 20px}
 .spn-cards{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
 .spn-card{background:var(--card);border:1px solid var(--bd);padding:14px 16px;display:grid;gap:3px;align-content:start}
-.spn-card b{font:600 2rem/1.05 "Barlow Condensed","Barlow Condensed FB0","Barlow Condensed FB1",sans-serif;font-variant-numeric:tabular-nums;color:var(--ac)}
+.spn-card b{unicode-bidi:isolate;font:600 2rem/1.05 "Barlow Condensed","Barlow Condensed FB0","Barlow Condensed FB1",sans-serif;font-variant-numeric:tabular-nums;color:var(--ac)}
 .spn-card span{color:var(--fg);font-size:.92rem;line-height:1.35}.spn-card small{color:var(--mut);font-size:.78rem}
 .spn-src{margin:8px 0 0;font-size:.8rem;line-height:1.45;color:var(--mut)}
 .spn-chart{margin:16px 0 0;background:var(--card);border:1px solid var(--bd);padding:14px 16px;min-width:0}
 .spn-chart h2{font-size:1.05rem;letter-spacing:.06em;margin:0 0 8px}
 .spn-chart svg{display:block;width:100%;height:auto;direction:ltr}
-.spn-chart .spn-gl{stroke:var(--bd);stroke-width:1}.spn-chart text{fill:var(--mut);font-size:10px;font-family:"Barlow","Barlow FB0",sans-serif}
+.spn-chart .spn-gl{stroke:var(--bd);stroke-width:1}.spn-chart text{fill:var(--mut);font-family:"Barlow","Barlow FB0",sans-serif}
+.spn-chart .spn-cm{display:none}@media (max-width:700px){.spn-chart .spn-cd{display:none}.spn-chart .spn-cm{display:block}}
 .spn-chart .spn-area{fill:var(--ac);fill-opacity:.14}.spn-chart .spn-line{fill:none;stroke:var(--ac);stroke-width:2.5;stroke-linejoin:round}.spn-chart .spn-last{fill:var(--spn-on)}
 .spn-nojs{border:1px solid var(--ac);padding:12px 14px;margin:20px 0 0}
 .spn-grid{display:grid;grid-template-columns:minmax(0,1fr) 380px;column-gap:32px;align-items:start}
 .spn-build,.spn-req,.spn-faq{grid-column:1;min-width:0}
 .spn-console{grid-column:2;grid-row:1/span 3;margin:24px 0;background:var(--card);border:1px solid var(--bd);padding:20px;display:grid;gap:16px}
-@media (min-width:921px) and (min-height:560px){.spn-console{position:sticky;top:52px;max-height:calc(100vh - 68px);overflow:auto;overscroll-behavior:contain}}
+@media (min-width:921px) and (min-height:560px){.spn-console{position:sticky;top:52px;max-height:calc(100vh - 68px);overflow:auto}}
 @media (max-width:920px){.spn-grid{grid-template-columns:minmax(0,1fr)}.spn-console{grid-column:1;grid-row:auto}}
 .spn-step{padding:24px 0;border-bottom:1px solid var(--bd);display:grid;gap:14px;contain:layout style}
 .spn-hero,.spn-req,.spn-faq,.spn-console{contain:layout style}
@@ -308,26 +327,37 @@ CSS = """<style>
 </style>"""
 
 
+def _chart_svg(cls, labs, ticks, ymax, wk, vals, lang, day, W, H, fs, step, rtl):
+    """Ein Wochen-Diagramm in fester Geometrie; die Schrift ist in viewBox-Einheiten so gewaehlt, dass sie in der jeweiligen Breite lesbar bleibt."""
+    pr, pt, pb = 10, 10, round(fs * 2.6)
+    pl = max(36, round(8 + fs * 0.62 * max(len(x) for x in labs)))   # Platz fuer die laengste y-Beschriftung (inkl. Wort, z. B. "100 tys.")
+    x = lambda i: pl + i * (W - pl - pr) / (len(wk) - 1)
+    y = lambda v: pt + (1 - v / ymax) * (H - pt - pb)
+    f = lambda v: f"{v:.1f}".rstrip("0").rstrip(".")
+    ya = 'direction="rtl" text-anchor="start"' if rtl else 'text-anchor="end"'
+    g = "".join(f'<line class="spn-gl" x1="{pl}" x2="{W - pr}" y1="{f(y(t))}" y2="{f(y(t))}"/><text x="{pl - 6}" y="{f(y(t) + fs * 0.4)}" {ya}>{E(labs[i])}</text>' for i, t in enumerate(ticks))
+    pts = " ".join(f"{f(x(i))},{f(y(v))}" for i, v in enumerate(vals))
+    g += f'<polygon class="spn-area" points="{pl},{f(y(0))} {pts} {f(x(len(vals) - 1))},{f(y(0))}"/><polyline class="spn-line" points="{pts}"/>'
+    g += f'<circle class="spn-last" cx="{f(x(len(vals) - 1))}" cy="{f(y(vals[-1]))}" r="4.5"/>'
+    last = (len(wk) - 1) // step * step
+    anc = lambda i: "start" if i == 0 else "end" if i == last and i == len(wk) - 1 else "middle"   # Rand-Beschriftungen nicht ueber den Rand schieben
+    g += "".join(f'<text x="{f(x(i))}" y="{H - round(fs * 0.8)}" text-anchor="{anc(i)}">{E(day(d, lang))}</text>' for i, (d, _) in enumerate(wk) if i % step == 0)
+    return f'<svg class="{cls}" viewBox="0 0 {W} {H}" style="font-size:{fs}px" role="img" aria-label="{{aria}}" focusable="false">{g}</svg>'
+
+
 def _chart(lang, bing, nums, day):
     wk = bing["weekly"]
     vals = [v for _, v in wk]
     ymax = _nice_max(max(vals))
     ticks = [ymax * i / 4 for i in range(5)]
     labs = [nums.get(f"y{i}") or _num(ticks[i]) for i in range(5)]
-    W, H, pr, pt, pb = 640, 170, 10, 10, 26
-    pl = max(36, 8 + 6 * max(len(x) for x in labs))
-    x = lambda i: pl + i * (W - pl - pr) / (len(wk) - 1)
-    y = lambda v: pt + (1 - v / ymax) * (H - pt - pb)
-    f = lambda v: f"{v:.1f}".rstrip("0").rstrip(".")
-    g = "".join(f'<line class="spn-gl" x1="{pl}" x2="{W - pr}" y1="{f(y(t))}" y2="{f(y(t))}"/><text x="{pl - 6}" y="{f(y(t) + 4)}" text-anchor="end">{E(labs[i])}</text>' for i, t in enumerate(ticks))
-    pts = " ".join(f"{f(x(i))},{f(y(v))}" for i, v in enumerate(vals))
-    g += f'<polygon class="spn-area" points="{pl},{f(y(0))} {pts} {f(x(len(vals) - 1))},{f(y(0))}"/><polyline class="spn-line" points="{pts}"/>'
-    g += f'<circle class="spn-last" cx="{f(x(len(vals) - 1))}" cy="{f(y(vals[-1]))}" r="4.5"/>'
-    g += "".join(f'<text x="{f(x(i))}" y="{H - 8}" text-anchor="middle">{E(day(d, lang))}</text>' for i, (d, _) in enumerate(wk) if i % 2 == 0)
+    rtl = lang in ("ar", "he")   # Achsenwerte mit Wort (ar "25 ألف") in RTL-Reihenfolge
     p = bing["period"]
     aria = tx(lang, "chart_aria", **{"from": day(p["from"], lang), "to": day(p["to"], lang), "min": nums.get("wmin") or _num(min(vals)), "max": nums.get("wmax") or _num(max(vals))})
-    return (f'<figure class="spn-chart"><h2>{E(tx(lang, "chart_h"))}</h2>'
-            f'<svg viewBox="0 0 {W} {H}" role="img" aria-label="{E(aria)}" focusable="false">{g}</svg></figure>')
+    # Desktop/Tablet: breite Fassung; Handy (<= 600 px): schmale Fassung mit groesserer Schrift und weniger Datumsangaben (nur eine ist sichtbar)
+    desk = _chart_svg("spn-cd", labs, ticks, ymax, wk, vals, lang, day, 640, 170, 10, 2, rtl)
+    mob = _chart_svg("spn-cm", labs, ticks, ymax, wk, vals, lang, day, 340, 200, 11, 4, rtl)
+    return (f'<figure class="spn-chart"><h2>{E(tx(lang, "chart_h"))}</h2>' + (desk + mob).replace("{aria}", E(aria)) + '</figure>')
 
 
 def _item(cid, title, body, price, unit, checked=False, extra="", also="", cls="spn-item"):
@@ -371,7 +401,7 @@ def body_html(g, lang, stats, quick, ssr, n_main, n_langs, con_on):
     cards.append((nums.get("eps") or _num(n_main), t("card_episodes"), ""))
     cards.append((nums.get("langs") or _num(n_langs), t("card_langs"), ""))
     srcs.append(t("src_build", date=day(g["TODAY"], lang)))
-    proof = ('<ul class="spn-cards">' + "".join(f'<li class="spn-card"><b dir="ltr">{E(a)}</b><span>{E(b)}</span>' + (f'<small>{E(c)}</small>' if c else "") + "</li>" for a, b, c in cards) + "</ul>"
+    proof = ('<ul class="spn-cards">' + "".join(f'<li class="spn-card"><b dir="auto">{E(a)}</b><span>{E(b)}</span>' + (f'<small>{E(c)}</small>' if c else "") + "</li>" for a, b, c in cards) + "</ul>"
              + "".join(f'<p class="spn-src">{E(s)}</p>' for s in srcs) + (_chart(lang, bing, nums, day) if bing["ok"] and bing["weekly"] else ""))
     hero = (f'<header class="spn-hero"><p class="spn-eyebrow"><span class="spn-dot" aria-hidden="true"></span>{E(t("eyebrow"))}</p><h1>{E(t("h1"))}</h1>'
             f'<p class="spn-lead">{E(t("lead", episodes=eps))}</p><section aria-label="{E(t("proof_aria"))}">{proof}</section></header>')
@@ -444,13 +474,13 @@ def body_html(g, lang, stats, quick, ssr, n_main, n_langs, con_on):
     fld = lambda fid, lab, inp: f'<div class="spn-f"><label for="{fid}">{E(lab)}</label>{inp}<p class="spn-err" id="{fid}-e" hidden></p></div>'
     form = (f'<section class="spn-req" id="spn-req" aria-labelledby="spn-req-h" tabindex="-1"><h2 id="spn-req-h">{E(t("req_h"))}</h2><p>{E(t("req_intro"))}</p>'
             f'<p class="spn-sum2" id="spn-sum">{E(v.get("summary", ""))}</p>'
-            f'<form class="spn-form" id="spn-form" novalidate>'
+            f'<form class="spn-form" id="spn-form" method="post" novalidate>'
             + fld("spn-company", t("f_company"), f'<input id="spn-company" name="company" autocomplete="organization" maxlength="160" required placeholder="{E(t("f_company_ph"))}" aria-describedby="spn-company-e">')
             + fld("spn-name", t("f_name"), '<input id="spn-name" name="name" autocomplete="name" maxlength="120" required aria-describedby="spn-name-e">')
             + fld("spn-email", t("f_email"), '<input id="spn-email" name="email" type="email" autocomplete="email" maxlength="254" required aria-describedby="spn-email-e">')
             + fld("spn-msg", t("f_msg"), '<textarea id="spn-msg" name="message" maxlength="2000"></textarea>')
             + f'<div class="spn-hp" aria-hidden="true"><label for="spn-website">{E(t("f_hp"))}</label><input id="spn-website" name="website" tabindex="-1" autocomplete="off"></div>'
-            f'<p class="spn-err" id="spn-topics-e" hidden></p><div><button type="submit" class="spn-btn" id="spn-submit">{E(t("submit"))}</button></div>'
+            f'<p class="spn-err" id="spn-topics-e" hidden></p><div><button type="submit" class="spn-btn" id="spn-submit" disabled>{E(t("submit"))}</button></div>'
             f'<p class="spn-fine">{E(t("privacy", link="{link}")).replace("{link}", plink)}</p>'
             f'<div class="spn-status" id="spn-status" tabindex="-1" hidden></div></form>'
             f'<div class="spn-done" id="spn-done" tabindex="-1" hidden><h3>{E(t("done_h"))}</h3><p>{E(t("done_p"))}</p></div></section>')

@@ -76,6 +76,14 @@ class SponsorshipTests(unittest.TestCase):
                      '"x5": "sponsor.url" darf nicht auf m365.fm', 'unbekanntes Feld "price"', '"x6": id doppelt', '"entities" muss eine Liste', '"x7": "end" fehlt oder ist kein Datum', '"topics" enthaelt Doppelte'):
             self.assertIn(part, msg)
 
+    def test_sponsor_url_on_shared_platform_is_rejected(self):   # sonst bekaemen eigene LinkedIn-/YouTube-Links der Seite rel="sponsored"
+        msg = self.errors([rec(id="s1", sponsor={"name": "Acme", "url": "https://www.linkedin.com/company/acme/"}),
+                           rec(id="s2", sponsor={"name": "Acme", "url": "https://de.linkedin.com/company/acme/"}),
+                           rec(id="s3", sponsor={"name": "Acme", "url": "https://acme.github.io/"})])
+        for part in ('"s1": "sponsor.url" muss die eigene Website', '"s2": "sponsor.url" muss die eigene Website', '"s3": "sponsor.url" muss die eigene Website'):
+            self.assertIn(part, msg)
+        self.init([rec(id="ok1", sponsor={"name": "Acme", "url": "https://www.acme.example/"})])   # eigene Domain bleibt erlaubt
+
     def test_unknown_references_fail_the_build(self):
         msg = self.errors([rec(entities=["nope"], topics=["missing"], episodes=["no-such-episode", "de/no-such-dub", "x/y/z"], posts=["/blog/foo/"])])
         for part in ('Entitaet "nope" unbekannt', 'Thema "missing" ist keine Entitaet', 'Folge "no-such-episode" gibt es', 'Dub-Folge "de/no-such-dub" gibt es nicht',

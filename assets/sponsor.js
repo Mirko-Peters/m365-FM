@@ -169,14 +169,15 @@
     var lines = ["Company: " + f.company, "Name: " + f.name, "Email: " + f.email, "", "Goal: " + pkg.goal, "Topics: " + pkg.topics.join(", "), "Runtime: " + pkg.duration]
       .concat(pkg.components, pkg.extras, ["Per month: " + pkg.monthlyUsd, "One-time: " + pkg.oneOffUsd, "Total: " + pkg.totalUsd, "Effect: " + pkg.effect, "", f.message || ""]);
     return "mailto:" + C0.mail + "?subject=" + encodeURIComponent(SC.t(L, "mail_subject") + (f.company ? " – " + SC.clean(f.company) : "")) +
-      "&body=" + encodeURIComponent(lines.join("\n").slice(0, 1800));
+      "&body=" + encodeURIComponent(Array.from(lines.join("\n")).slice(0, 1800).join(""));
   }
   function showStatus(k, f, pkg) {
     var parts = SC.t(L, k).split("{mail}"), st = el.status;
     st.textContent = "";
     st.appendChild(document.createTextNode(parts[0]));
     if (parts.length > 1) {
-      var a = document.createElement("a"); a.href = mailto(f, pkg); a.textContent = C0.mail;
+      var a = document.createElement("a"); a.textContent = C0.mail;
+      try { a.href = mailto(f, pkg); } catch (e) { a.href = "mailto:" + C0.mail; }
       st.appendChild(a); st.appendChild(document.createTextNode(parts.slice(1).join(C0.mail)));
     }
     st.hidden = false; focusLater(st);
@@ -199,17 +200,18 @@
     var pkg = SC.buildPackage(s, P, L, CTX), body = SC.requestBody(f, pkg, C0.lang), label = el.submit.textContent;
     sending = true; el.submit.disabled = true; el.submit.textContent = SC.t(L, "sending");
     function done(res) {
-      sending = false; el.submit.disabled = false; el.submit.textContent = label;
+      clearTimeout(to); sending = false; el.submit.disabled = false; el.submit.textContent = label;
       var k = SC.errorKey(res.s, res.j);
       if (!k) { el.form.hidden = true; el.done.hidden = false; focusLater(el.done); return; }
       showStatus(k, f, pkg);
     }
-    fetch(C0.api + "/api/sponsor/request", { method: "POST", credentials: "omit", headers: { "content-type": "application/json", "x-requested-with": "m365" }, body: JSON.stringify(body) })
+    var ac = window.AbortController ? new AbortController() : null, to = ac ? setTimeout(function () { ac.abort(); }, 20000) : 0;   // haengt die API: nach 20 s Mail-Rueckfall
+    fetch(C0.api + "/api/sponsor/request", { method: "POST", credentials: "omit", headers: { "content-type": "application/json", "x-requested-with": "m365" }, body: JSON.stringify(body), signal: ac ? ac.signal : undefined })
       .then(function (r) { return r.json().then(function (j) { return { s: r.status, j: j }; }, function () { return { s: r.status, j: null }; }); },
             function () { return { s: 0, j: null }; })
       .then(done);
   }
-  if (el.form) el.form.addEventListener("submit", onSubmit);
+  if (el.form) { el.form.addEventListener("submit", onSubmit); if (el.submit) el.submit.disabled = false; }   // vorher gesperrt: ohne Skript kein natives Absenden
 
   /* Start: nur rendern, wenn der Browser einen anderen Zustand wiederhergestellt hat oder nichts vorab gerendert ist. Sonst in einer
      Leerlaufphase einmal vorrechnen (JIT, Intl.PluralRules) und die vorab gerenderten Texte merken: die erste Interaktion schreibt dann nur,

@@ -131,6 +131,8 @@ def check_structure(d):
                 errs.append(f'{w}: "sponsor.url" muss eine https-Adresse sein')
             elif _host(u) == "m365.fm" or _host(u).endswith(".m365.fm"):
                 errs.append(f'{w}: "sponsor.url" darf nicht auf m365.fm zeigen')
+            elif _is_sponsor_host(_host(u), SHARED_HOSTS):
+                errs.append(f'{w}: "sponsor.url" muss die eigene Website des Sponsors sein, keine Seite auf {_host(u)} (sonst bekaemen auch eigene und fremde Links dort rel="sponsored")')
         if r.get("label") not in LABELS: errs.append(f'{w}: "label" muss "sponsored" oder "advertisement" sein')
         s, e = _day(r.get("start")), _day(r.get("end"))
         if not s: errs.append(f'{w}: "start" fehlt oder ist kein Datum (JJJJ-MM-TT)')
@@ -357,6 +359,13 @@ def ld(recs):
     """Wert fuer "sponsor" am WebPage-, PodcastEpisode- oder BlogPosting-Knoten: Organization (eine) oder Liste; None ohne Sponsoring."""
     o = [{"@type": "Organization", "name": n, "url": u} for n, u in _sponsors(recs)]
     return (o[0] if len(o) == 1 else o) if o else None
+
+
+# Gemeinsam genutzte Plattformen: ein Sponsor-Profil dort ist nicht "die Website des Sponsors". mark()/link_rel() vergleichen nur den Host,
+# sonst bekaemen z. B. alle LinkedIn- oder YouTube-Links der Seite (Footer, Autor, Gaeste) rel="sponsored".
+SHARED_HOSTS = {"linkedin.com", "youtube.com", "youtu.be", "github.com", "github.io", "facebook.com", "x.com", "twitter.com", "instagram.com", "threads.net",
+                "medium.com", "tiktok.com", "substack.com", "wordpress.com", "blogspot.com", "notion.site", "linktr.ee", "spotify.com", "podcasts.apple.com",
+                "sessionize.com", "meetup.com", "eventbrite.com", "xing.com", "bsky.app", "mastodon.social", "reddit.com", "wikipedia.org", "wikidata.org"}
 
 
 def hosts(recs):
