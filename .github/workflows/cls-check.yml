@@ -1,0 +1,32 @@
+name: CLS-Check (nur lesen)
+# Misst Layout-Shifts (CLS) auf www.m365.fm wie ein Leser: Desktop 1366/1920 und Mobil-Kontrolle, Scrollen bis zum Ende.
+# AdSense wird nie geladen (keine Test-Impressionen), leere/hohe Anzeigenbloecke werden simuliert. Aendert nichts, braucht keine Secrets.
+on:
+  workflow_dispatch:
+    inputs:
+      paths:
+        description: "Pfade, durch Leerzeichen getrennt (leer = tools/cls_urls.txt)"
+        required: false
+        default: ""
+  push:
+    branches: [ticket/cls-desktop]
+    paths: [.github/workflows/cls-check.yml, tools/cls_live.mjs, tools/cls_urls.txt]
+permissions:
+  contents: read
+jobs:
+  cls:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: Playwright (ohne Browser-Download, nutzt das installierte Chrome)
+        run: npm i --no-save --no-audit --no-fund playwright-core@1.48.2
+      - name: Messen
+        env:
+          PATHS_IN: ${{ github.event.inputs.paths }}
+        run: |
+          if [ -n "$PATHS_IN" ]; then printf '%s\n' $PATHS_IN > /tmp/urls.txt; else cp tools/cls_urls.txt /tmp/urls.txt; fi
+          node tools/cls_live.mjs https://www.m365.fm < /tmp/urls.txt | tee /tmp/cls.md
+          grep -v '^<!-- JSON' /tmp/cls.md | sed '/^\[{/d;/^-->/d' >> "$GITHUB_STEP_SUMMARY"
