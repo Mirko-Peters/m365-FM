@@ -8,6 +8,7 @@ import site_members as MEM
 import site_topics as TOP
 import site_sponsorships as SPM   # T37 Sponsor: Kennzeichnung bezahlter Beitraege (data/sponsorships.json)
 import site_img_dims as IMG
+import site_linkfix as LFX   # tote interne Links in uebernommenen Beitraegen umbiegen
 from site_design import pager as PG, neighbours as NB   # Vor/Zurueck am Seitenende (rel=prev/next)
 
 
@@ -96,6 +97,7 @@ def build(g, posts, people, api):
             a = pb[p["handle"]]; au = f"{BASE}/community/u/{a['handle']}/"
             u = f"{croot}u/{p['handle']}/blog/{p['slug']}/"
             body_html, refs = (p["html"], []) if p.get("html") else wiki_render(p["body"], links_l, w)   # uebernommene fruehere Blogbeitraege: HTML bleibt vollstaendig erhalten
+            body_html = LFX.rewrite(body_html, BASE, lang, ENTS)   # tote Links auf fruehere Themenseiten (data/link_fixes.json) auf die naechste vorhandene Seite, nur das href
             if p.get("html") and lang in ("en", "de"):   # erste Nennung einer Entitaet im Text auf ihre Seite verlinken (Wissensgraph aus dem Artikel heraus)
                 body_html, _al = TOP.autolink_html(body_html, ENTS, lambda i: links_l[i][1], max_links=8)
             if not p.get("legacy"):

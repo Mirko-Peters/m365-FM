@@ -1812,6 +1812,7 @@ Mirko Peters, {BASE}/about/
     phase("Agenten-Dateien, 404, UI-Quellen")
     sizes()
     print(f"r2out/: {_r2n[0]} Seiten, {_r2n[1] / 1e6:.0f} MB (werden in den R2-Bucket geladen, nicht in GitHub Pages)")
+    import site_linkfix as _LFX; print(f"Linkkorrekturen (data/link_fixes.json): {_LFX.STATS['rewritten']} Links umgeschrieben, {_LFX.STATS['skipped']} ohne Ziel-Entitaet")
     print(f"{len(items)} Episodenseiten, {len(active)} Sprachen, {len(sitemap)} URLs → docs/")
 
 

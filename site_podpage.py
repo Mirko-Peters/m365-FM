@@ -6,6 +6,7 @@ import site_shownotes as SNS   # T26: Vollfassungen shownotes/site/<episode_id>.
 import site_extract as SX   # T27: Folgen <-> Entitaeten aus der QA-geprueften Extraktion
 import site_media as MED
 import site_img_dims as IMG
+import site_linkfix as LFX   # tote interne Links (data/link_fixes.json) auf die naechste vorhandene Seite
 from site_design import pager as PG   # Vor/Zurueck am Seitenende (rel=prev/next)
 import site_sponsorships as SPM   # T37 Sponsor: Kennzeichnung gesponserter Folgen (data/sponsorships.json)
 import gzip, json, re, unicodedata, html as _h
@@ -447,7 +448,7 @@ def build(g):
             nnotes = IMG.enhance(nnotes)
         else:
             nnotes = san(e.get("show_notes"))
-        nnotes = rename_links(nnotes)   # T12: Show Notes verlinken die Folge oft ueber die alte Podpage-Adresse
+        nnotes = LFX.rewrite(rename_links(nnotes), BASE, "en", ENTS)   # T12: Show Notes verlinken die Folge oft ueber die alte Podpage-Adresse; tote Themenseiten-Links (data/link_fixes.json) umbiegen
         prev_, next_ = (eps[k + 1] if k + 1 < len(eps) else None), (eps[k - 1] if k else None)
         aud = f'<audio controls preload="none" style="width:100%" src="{esc(r["audio"])}"></audio>' if r and r.get("audio") else ""
         elk = elinks.get(f"{nrec['id']}:en", {}) if nrec else {}
@@ -491,7 +492,7 @@ def build(g):
             if not tt or not tt[0]: continue
             lt, ls = tt[0], tt[1] or short_desc(e, nrec, 300)
             ln = NTL.get(l, {}).get(e["slug"])
-            ln_html = san(ln) if ln else ""
+            ln_html = LFX.rewrite(san(ln), BASE, l, ENTS) if ln else ""
             lu = loc_url(l, f"episodes/{e['slug']}/")
             lbody = (f'<article><p class="mut">{day(e["create_time"])}</p><h1>{esc(lt)}</h1>{SPM.note(l, _spr)}{aud}'
                      f'<div style="display:flex;gap:1rem;align-items:flex-start;margin:1em 0">{img_tag(thumb_of(e, nrec), lt, 160)}<div><strong>{esc(ls)}</strong></div></div>'
@@ -588,7 +589,7 @@ def build(g):
         if p["slug"] in SKIPP or not c or c == "None": continue
         if p["slug"] == "support": p = {**p, "slug": "support"}
         t = p.get("page_title") or p.get("nav_label") or p["slug"].replace("-", " ").title()
-        body = f"<article><h1>{esc(t)}</h1>{san(c)}</article>"
+        body = f"<article><h1>{esc(t)}</h1>{LFX.rewrite(san(c), BASE, 'en', ENTS)}</article>"
         pub(f"{p['slug']}/", p.get("meta_title") or t, p.get("meta_description") or plain(c)[:200], body, noindex=str(p.get("hide_from_search_engines")) == "True")
         plist.append((p["slug"], t))
 
