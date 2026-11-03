@@ -1,0 +1,2140 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.860
+Selamat datang di episode lain dari Microsoft Knowledge Nuggets di M365FM.
+
+00:00:04.240 --> 00:00:05.340
+Saya pemandu acara Anda, Mirko Peter.
+
+00:00:05.540 --> 00:00:07.880
+Topik hari ini adalah topik yang hampir semua orang pernah dengar,
+
+00:00:08.020 --> 00:00:09.640
+namun hanya sedikit yang benar-benar memahaminya.
+
+00:00:09.960 --> 00:00:11.040
+Azure Virtual Desktop.
+
+00:00:11.480 --> 00:00:11.980
+Apa sebenarnya itu?
+
+00:00:12.400 --> 00:00:15.040
+Apakah itu hanya PC jarak jauh di cloud atau sesuatu yang jauh lebih besar?
+
+00:00:15.340 --> 00:00:17.760
+Banyak orang mendengar namanya dan mengira itu hanya pengganti VPN
+
+00:00:17.760 --> 00:00:20.140
+atau mungkin cara untuk menyewa mesin virtual di Azure.
+
+00:00:20.480 --> 00:00:22.760
+Beberapa bahkan mengacaukannya dengan alat desktop jarak jauh
+
+00:00:22.760 --> 00:00:25.060
+yang biasa Anda gunakan untuk terhubung ke komputer kantor itu.
+
+00:00:25.320 --> 00:00:26.580
+Sebenarnya itu bukan semua hal tersebut.
+
+00:00:26.760 --> 00:00:27.520
+Jauh lebih dari itu.
+
+00:00:27.520 --> 00:00:30.700
+Ini adalah pengalaman desktop lengkap yang dikirimkan dengan aman dari cloud.
+
+00:00:31.440 --> 00:00:34.100
+Di akhir episode ini, Anda akan memahami apa sebenarnya AVD,
+
+00:00:34.240 --> 00:00:35.440
+bagaimana bagian-bagiannya menyatu,
+
+00:00:35.560 --> 00:00:36.940
+dan mengapa perusahaan beralih ke sana.
+
+00:00:37.460 --> 00:00:39.980
+Kami akan membedahnya ke dalam blok bangunan inti dengan bahasa sederhana
+
+00:00:39.980 --> 00:00:42.480
+agar Anda bisa melihat gambaran besarnya, bukan sekadar bola besarnya.
+
+00:00:43.480 --> 00:00:45.020
+Apa itu Azure Virtual Desktop?
+
+00:00:45.580 --> 00:00:46.160
+Gambaran besarnya.
+
+00:00:46.540 --> 00:00:47.340
+Ini live ini sih paling sederhana.
+
+00:00:48.240 --> 00:00:52.340
+Azure Virtual Desktop adalah aplikasi Windows yang dikirimkan dari cloud ke perangkat apapun.
+
+00:00:53.260 --> 00:00:54.540
+Anggaplah seperti layanan streaming,
+
+00:00:54.540 --> 00:00:59.340
+tetapi alih-alih streaming film dan acara TV, Anda melakukan streaming desktop kerjaan aplikasi bisnis Anda.
+
+00:01:00.000 --> 00:01:02.280
+Netflix menangani semua pekerjaan berat di server mereka.
+
+00:01:02.640 --> 00:01:04.480
+AVD menangani komputasi di server Azure.
+
+00:01:05.000 --> 00:01:05.940
+Anda tahu bagaimana cara kerja Anda?
+
+00:01:06.280 --> 00:01:10.440
+Anda membuka aplikasi di TV ponsel atau laptop dan Anda mendapatkan pengalaman yang sama di setiap perangkat.
+
+00:01:10.640 --> 00:01:14.580
+Pekerjaan berat yang sebenarnya, pemrosesan, penyimpanan, rendering, semuanya terjadi di server Netflix.
+
+00:01:14.760 --> 00:01:16.460
+Perangkat Anda hanyalah jendela menuju konten tersebut.
+
+00:01:16.840 --> 00:01:19.880
+Dan sama seperti Netflix, Anda tidak memerlukan perangkat yang kuat untuk menggunakan video.
+
+00:01:19.880 --> 00:01:22.380
+Bekerja di cloud, AVD bekerja dengan cara yang sama.
+
+00:01:22.720 --> 00:01:25.300
+Pengguna Anda mendapatkan desktop Windows lengkap dengan semua aplikasi mereka.
+
+00:01:25.460 --> 00:01:28.420
+Tetapi komputasi sebenarnya terjadi pada mesin virtual yang berjalan di Azure.
+
+00:01:28.920 --> 00:01:31.620
+Perangkat lokal hanya menampilkan apa yang terjadi di mesin jarak jauh tersebut.
+
+00:01:32.160 --> 00:01:37.820
+Itu bisa berupa laptop Windows, Mac, iPad, Chromebook, atau bahkan PC lama yang hampir tidak bisa menjalankan sistem operasinya sendiri.
+
+00:01:38.600 --> 00:01:40.340
+Selama bisa menjalankan aplikasi Windows, itu berhasil.
+
+00:01:40.600 --> 00:01:43.400
+Aplikasi Windows adalah klien ringan yang Anda install di perangkat apapun.
+
+00:01:43.400 --> 00:01:46.560
+Dan aplikasi itu terhubung ke layanan AVD untuk menampilkan desktop jarak jauh.
+
+00:01:46.680 --> 00:01:47.340
+Hanya itu yang Anda butuh.
+
+00:01:47.600 --> 00:01:48.580
+Nah, inilah perbedaan kuncinya.
+
+00:01:48.580 --> 00:01:50.680
+Anda tidak menyewa satu PC untuk setiap orang.
+
+00:01:51.020 --> 00:01:53.360
+Sebaliknya, Anda terhubung ke lingkungan terkelola bersama.
+
+00:01:53.760 --> 00:01:54.440
+Dan inilah hal penting.
+
+00:01:54.760 --> 00:01:59.300
+Sesuatu yang disebut multisesi memungkinkan beberapa pengguna berada di satu mesin Windows secara bersamaan.
+
+00:01:59.920 --> 00:02:01.760
+Windows biasa dirancang untuk satu pengguna dalam satu waktu.
+
+00:02:02.080 --> 00:02:03.000
+AVD memubah hal tersebut.
+
+00:02:03.300 --> 00:02:06.140
+Pada laptop Windows normal, hanya satu orang yang bisa masuk dalam satu waktu.
+
+00:02:06.520 --> 00:02:07.360
+Begitulah cara kerja Windows.
+
+00:02:07.780 --> 00:02:11.320
+Namun dengan AVD, Anda bisa memiliki beberapa pengguna di satu mesin Windows secara simultan.
+
+00:02:11.860 --> 00:02:15.140
+Setiap orang mendapatkan sesi terisolasi mereka sendiri, aplikasi mereka sendiri, andberkas mereka sendiri.
+
+00:02:15.740 --> 00:02:17.740
+Mereka semua berbagi mesin virtual dasar yang sama.
+
+00:02:17.740 --> 00:02:20.680
+Itu adalah hal yang tidak bisa Anda lakukan dengan laptop biasa.
+
+00:02:20.840 --> 00:02:23.720
+Dan itulah salah satu alasan utama AVD dapat menghemat banyak uang perusahaan.
+
+00:02:23.980 --> 00:02:27.220
+Di balik layar, AVD ditenagai oleh mesin virtual yang berjalan di Azure.
+
+00:02:27.580 --> 00:02:30.140
+Namun Microsoft mengelola semua bagian rumit di belakangnya.
+
+00:02:30.780 --> 00:02:34.380
+Broker yang mengarahkan pengguna ke host sesi yang tepat, gateway yang menangani koneksi,
+
+00:02:34.880 --> 00:02:37.540
+dan penyeimbangan beban yang menyebarkan pengguna ke mesin yang tersedia.
+
+00:02:38.720 --> 00:02:40.240
+Anda tidak perlu membangun semua itu sendiri.
+
+00:02:40.680 --> 00:02:44.800
+Yang perlu Anda lakukan hanyalah membuat kumpulan host mengonfigurasi aplikasi dan menetapkan pengguna Anda.
+
+00:02:44.800 --> 00:02:48.760
+Bagi tim TI, ini menyederhanakan pengelolaan dan mengurangi biaya perangkat keras.
+
+00:02:49.180 --> 00:02:50.360
+Jadi, mengapa hal ini penting bagi Anda?
+
+00:02:50.720 --> 00:02:53.660
+Ini berarti pengguna Anda mendapatkan pengalaman Windows penuh dari perangkat apapun di mana saja.
+
+00:02:54.160 --> 00:02:57.220
+Seorang desainer grafis di Mac bisa menjalankan perangkat lunak desain khusus Windows.
+
+00:02:57.980 --> 00:03:02.400
+Pekerja lapangan di tablet bisa mengakses aplikasi bisnis yang sama dengan yang mereka gunakan di meja mereka.
+
+00:03:03.060 --> 00:03:08.380
+Dan kontraktor di laptop pribadi bisa masuk dan bekerja dengan aman tanpa menginstal apapun di mesin mereka sendiri.
+
+00:03:08.380 --> 00:03:15.120
+Dan karena data tidak pernah meninggalkan pusat data Azure, ini lebih aman daripada menyimpan data di laptop yang bisa hilang atau dicuri.
+
+00:03:15.480 --> 00:03:17.060
+Ini adalah keuntungan bagi pengguna maupun tim TI.
+
+00:03:17.460 --> 00:03:21.140
+Namun, untuk memahami mengapa AVD ada sejak awal, kita perlu melihat masalah yang dipecahkannya.
+
+00:03:21.540 --> 00:03:22.840
+Kita akan membahasnya di segmen berikutnya.
+
+00:03:23.700 --> 00:03:24.880
+Cara lama dibandingkan cara baru.
+
+00:03:25.500 --> 00:03:26.300
+Cara lama itu sederhana.
+
+00:03:26.880 --> 00:03:28.840
+Anda membeli laptop yang kuat untuk setiap karyawan,
+
+00:03:29.260 --> 00:03:30.900
+menginstal setiap aplikasi yang mereka butuhkan,
+
+00:03:31.040 --> 00:03:32.540
+dan mengelola setiap perangkat satu per satu.
+
+00:03:33.280 --> 00:03:36.480
+Kemudian setiap 3 atau 4 tahun, Anda mengganti semua perangkat keras itu yang mulai dari awal.
+
+00:03:36.480 --> 00:03:39.040
+Namun masalahnya, biaya tersembunyi sangat besar.
+
+00:03:39.640 --> 00:03:43.020
+Tim menghabiskan waktu berjam-jam untuk penyebaran, patch keamanan, dan pembecahan masalah.
+
+00:03:43.520 --> 00:03:45.780
+Ketika laptop hilang atau rusak, Anda harus menggantinya,
+
+00:03:45.980 --> 00:03:48.640
+menginstal ulang semuanya, dan berharap pengguna telah mencedangkan berkas mereka.
+
+00:03:49.320 --> 00:03:52.500
+Dan jika seseorang terkena virus, Anda harus menghapus isi mesin dan mulai dari awal.
+
+00:03:52.940 --> 00:03:55.320
+Kemudian kerja jarak jauh dimulai, dan cara lama benar-benar tidak lagi beruk.
+
+00:03:56.040 --> 00:03:58.660
+VPN lambat dan kiku, komputer rumah tidak aman,
+
+00:03:58.660 --> 00:04:02.840
+dan data perusahaan berada di perangkat yang bisa hilang, dicuri, atau dikompromikan.
+
+00:04:04.400 --> 00:04:06.220
+Perusahaan tidak memiliki kendali atas titik akhir,
+
+00:04:06.220 --> 00:04:08.300
+namun mereka tetap bertanggung jawab melindungi data di dalam.
+
+00:04:09.200 --> 00:04:12.860
+Cara baru dengan Azure Virtual Desktop, atau singkatnya AVD, benar-benar berbeda.
+
+00:04:13.800 --> 00:04:16.200
+Pekerjaan berat dilakukan di Azure, bukan pada perangkat lokal.
+
+00:04:16.900 --> 00:04:20.180
+Laptop, tablet, dan ponsel Anda hanyalah jendela menuju lingkungan cloud tersebut.
+
+00:04:20.580 --> 00:04:23.600
+Pekerjaan yang sebenarnya, aplikasi, file, dan pemrosesan,
+
+00:04:23.720 --> 00:04:25.020
+semuanya tetap berada di pusat data.
+
+00:04:25.280 --> 00:04:25.920
+Itu ada perubahan besar.
+
+00:04:26.100 --> 00:04:27.600
+Hilang laptop Anda, tidak data yang hilang.
+
+00:04:27.940 --> 00:04:31.180
+Anda cukup ambil perangkat lain, masuk kembali ke AVD, dan Anda kembali ke posisi terakhiran.
+
+00:04:31.440 --> 00:04:34.760
+Fak Anda masih ada, aplikasi Anda tetap terkonfigurasi, dan pengaturan Anda utuh.
+
+00:04:34.760 --> 00:04:36.520
+Perangkat itu sendiri menjadi barang sekali, Pak.
+
+00:04:36.900 --> 00:04:38.440
+Hal ini juga mengubah cara Anda membayar sesuatu.
+
+00:04:38.680 --> 00:04:40.960
+Alih-alih pengeluaran modal besar setiap beberapa tahun untuk
+
+00:04:40.960 --> 00:04:44.260
+membeli ratusan laptop di muka, Anda beralih ke biaya operasional.
+
+00:04:44.760 --> 00:04:46.000
+Anda membayar untuk apa yang ada.
+
+00:04:46.260 --> 00:04:48.860
+Jika Anda membeli ke 50 orang yang bekerja hari ini dan 100 besok,
+
+00:04:48.940 --> 00:04:49.800
+Anda melakukan peningkatan.
+
+00:04:50.100 --> 00:04:52.040
+Jika Anda butuh lebih sedikit bulan depan, Anda menurunkan sekali.
+
+00:04:52.480 --> 00:04:54.920
+Anda tidak terjebak dengan perangkat keras yang dibayar terlalu mahal
+
+00:04:54.920 --> 00:04:56.380
+atau terburu-buru melisak dibutuhkan.
+
+00:04:56.380 --> 00:04:59.180
+Sekarang mari kita lihat bagian-bagian yang membuat ini bekerja,
+
+00:04:59.400 --> 00:05:00.600
+dimulai dengan yang paling penting.
+
+00:05:01.520 --> 00:05:03.640
+Blok penyusun pertama, kumpulan host dan host sesi.
+
+00:05:04.540 --> 00:05:06.180
+Blok penyusun pertama disebut host pool,
+
+00:05:06.540 --> 00:05:07.660
+dan itu persis seperti namanya,
+
+00:05:08.180 --> 00:05:10.940
+kumpulan mesin virtual yang menghost desktop dan aplikasi Windows.
+
+00:05:11.940 --> 00:05:14.220
+Anggaplah sebagai sekelompok komputer identik yang diatur
+
+00:05:14.220 --> 00:05:16.380
+dengan cara yang sama siap untuk dihubungkan oleh pengguna.
+
+00:05:16.720 --> 00:05:19.480
+Mesin-mesin individu di dalam kumpulan tersebut disebut host sesi.
+
+00:05:20.020 --> 00:05:22.800
+Mereka adalah mesin virtual nyatah yang menjalankan Windows 11 Enterprise,
+
+00:05:22.800 --> 00:05:23.960
+biasanya versi multisesi.
+
+00:05:24.340 --> 00:05:27.060
+Artinya beberapa orang bisa masuk ke mesin yang sama secara bersamaan
+
+00:05:27.060 --> 00:05:28.800
+masing-masing dalam sesi pribadi mereka sendiri.
+
+00:05:29.340 --> 00:05:30.500
+Nah, ada dua jenis host pool,
+
+00:05:30.660 --> 00:05:33.200
+dan perbedaannya penting untuk biaya dan fleksibilitas.
+
+00:05:34.220 --> 00:05:35.660
+Host pool gabungan pullet itu seperti hot.
+
+00:05:36.240 --> 00:05:37.280
+Beberapa tamu menginap di sana,
+
+00:05:37.400 --> 00:05:38.580
+tetapi tidak ada yang memiliki kamar perma.
+
+00:05:39.060 --> 00:05:40.920
+Saat check-in, Anda mendapat kamar yang tersedia,
+
+00:05:41.100 --> 00:05:43.500
+dan saat check-out, orang lain akan mendapatkan kamar itu nantinya.
+
+00:05:44.120 --> 00:05:45.080
+Dengan host pool gabungan,
+
+00:05:45.260 --> 00:05:46.780
+pengguna ditetapkan ke host sesi manapun
+
+00:05:46.780 --> 00:05:48.200
+yang memiliki kapasitas saat itu.
+
+00:05:49.220 --> 00:05:50.760
+Mereka mungkin berada di mesin A hari ini
+
+00:05:50.760 --> 00:05:51.760
+dan mesin B besok.
+
+00:05:51.760 --> 00:05:54.300
+Ini bekerja dengan baik bagi kebanyakan pekerja kantoran
+
+00:05:54.300 --> 00:05:56.520
+karena memungkinkan Anda menampung lebih banyak pengguna di mesin yang lalu.
+
+00:05:56.980 --> 00:05:57.660
+Kumpulan host pribadi,
+
+00:05:57.780 --> 00:05:58.680
+barat apartemen Anda sendiri.
+
+00:05:59.240 --> 00:06:00.760
+Pemilik Anda tidak ada orang lain yang menggunakan,
+
+00:06:00.860 --> 00:06:01.860
+dan barang-barang Anda ada di sana.
+
+00:06:02.160 --> 00:06:03.040
+Pengaturan Anda file Anda.
+
+00:06:03.540 --> 00:06:05.140
+Anda mendapatkan mesin yang sama setiap kali Anda masuk.
+
+00:06:05.560 --> 00:06:07.040
+Ini berguna bagi pengguna tingkat lanjut
+
+00:06:07.040 --> 00:06:08.420
+yang membutuhkan performa konsisten
+
+00:06:08.420 --> 00:06:11.240
+atau untuk skenario di mana Anda perlu menginstal perangkat lunak khusus
+
+00:06:11.240 --> 00:06:12.920
+yang tidak berfungsi baik di lingkungan bersama.
+
+00:06:13.540 --> 00:06:14.640
+Namun biayanya lebih mahal
+
+00:06:14.640 --> 00:06:16.420
+karena setiap pengguna memerlukan VM khusus.
+
+00:06:16.720 --> 00:06:17.860
+Disilah segalanya menjadi menarik.
+
+00:06:17.860 --> 00:06:21.180
+Bagaimana AVD memutuskan host sesi mana yang akan digunakan pengguna?
+
+00:06:21.740 --> 00:06:23.760
+Itu adalah penyimbangan beban, operansing, dan ada dua pengguna.
+
+00:06:24.340 --> 00:06:26.640
+Bread first berarti sistem menyebarkan pengguna secara merata
+
+00:06:26.640 --> 00:06:27.840
+di semua host sesi yang tersedia.
+
+00:06:28.400 --> 00:06:30.380
+Jadi, jika Anda memiliki 10 mesin dan 100 pengguna,
+
+00:06:30.500 --> 00:06:31.820
+setiap mesin mendapatkan sekitar 10 pengguna.
+
+00:06:32.280 --> 00:06:33.520
+Ini memberikan performa yang konsisten
+
+00:06:33.520 --> 00:06:35.200
+karena tidak ada satu host pun yang kelebihan beban
+
+00:06:35.200 --> 00:06:37.340
+dan ini adalah pengaturan default untuk sebagian besar penerapan.
+
+00:06:38.220 --> 00:06:39.280
+Depth first adalah kebalikannya.
+
+00:06:39.600 --> 00:06:42.120
+Ini mengisi satu host sesi hingga penuh sebelum beralih ke yang berikutnya.
+
+00:06:42.620 --> 00:06:44.580
+Pengguna 1-10 semuanya berada di mesin A,
+
+00:06:44.680 --> 00:06:46.640
+pengguna 11-20 ke mesin B, dan seterusnya.
+
+00:06:47.860 --> 00:06:49.640
+Karena ini memungkinkan Anda memutuskan mesin yang kos.
+
+00:06:50.000 --> 00:06:51.780
+Setelah mesin A penuh dan mesin B penuh,
+
+00:06:51.880 --> 00:06:54.240
+mesin C sampai Z dapat dimatikan untuk menghemat biaya.
+
+00:06:54.760 --> 00:06:56.680
+Depth first bekerja sangat baik dengan penskalaan otomatis
+
+00:06:56.680 --> 00:06:58.220
+dan itulah bagian selanjutnya, yaitu penskalaan.
+
+00:06:58.580 --> 00:07:00.600
+Anda dapat mengonfigurasi AVD untuk menambah
+
+00:07:00.600 --> 00:07:02.200
+atau menghapus host sesi secara otomatis
+
+00:07:02.200 --> 00:07:03.540
+berdasarkan berapa banyak orang yang masuk.
+
+00:07:03.800 --> 00:07:06.280
+Selama jam sibuk, Anda mungkin menjalankan 20 mesin.
+
+00:07:06.900 --> 00:07:08.320
+Pada malam hari, Anda mungkin hanya membutuhkan 2.
+
+00:07:09.400 --> 00:07:10.660
+Sistem menangan ini secara otomatis
+
+00:07:10.660 --> 00:07:12.160
+berdasarkan jadwal yang Anda tentukan.
+
+00:07:12.600 --> 00:07:14.240
+Di sinilah penghematan biaya yang sebenarnya terjadi.
+
+00:07:14.240 --> 00:07:16.960
+Anda tidak membayar untuk mesin yang tidak digunakan.
+
+00:07:17.540 --> 00:07:18.140
+Lebih penting bagi Anda,
+
+00:07:18.640 --> 00:07:20.120
+kumpulan host gabungan dengan penyeimbangan
+
+00:07:20.120 --> 00:07:21.380
+beban Depth first dan penskalaan otomatis
+
+00:07:21.380 --> 00:07:22.700
+dapat mengurangi biaya Anda secara tersebut.
+
+00:07:23.340 --> 00:07:24.880
+Alih-alih membeli VM untuk setiap pengguna,
+
+00:07:25.020 --> 00:07:25.960
+Anda cukup membeli yang cukup
+
+00:07:25.960 --> 00:07:27.460
+untuk menutupi penggunaan bersama puncak.
+
+00:07:27.640 --> 00:07:29.040
+Dan mesin-mesin itu pun hanya berjalan
+
+00:07:29.040 --> 00:07:30.240
+saat orang benar-benar bekerja.
+
+00:07:30.860 --> 00:07:32.720
+Jadi Anda sudah memiliki kumpulan host dengan VM Anda.
+
+00:07:33.060 --> 00:07:34.520
+Sekarang bagaimana pengguna-benar berapakasi mereka?
+
+00:07:35.240 --> 00:07:36.680
+Blok bangunan 2, grup aplikasi.
+
+00:07:36.840 --> 00:07:38.780
+Jadi grup aplikasi adalah wadah logis
+
+00:07:38.780 --> 00:07:40.740
+yang menentukan apa yang dapat diakses pengguna.
+
+00:07:44.240 --> 00:07:46.020
+desktop lengkap atau hanya aplikasi tertentu saja.
+
+00:07:46.380 --> 00:07:46.920
+Ada dua jenis.
+
+00:07:47.660 --> 00:07:48.740
+Dengan grup aplikasi desktop,
+
+00:07:49.020 --> 00:07:50.960
+pengguna mendapatkan pengalaman desktop Windows yang lengkap.
+
+00:07:51.780 --> 00:07:54.300
+Mereka masuk dan melihat menu star, file explorer, semuanya.
+
+00:07:55.480 --> 00:07:56.980
+Tampilan terasa seperti komputer Windows biasa
+
+00:07:56.980 --> 00:07:58.240
+karena pada dasarnya memang demikian.
+
+00:07:58.640 --> 00:07:59.520
+Banyak perusahaan membeda.
+
+00:07:59.700 --> 00:08:01.620
+Grup aplikasi remote app itu berbeda.
+
+00:08:02.240 --> 00:08:04.060
+Alih-alih memberikan desktop lengkap kepada pengguna.
+
+00:08:04.440 --> 00:08:05.780
+Grup ini memberikan aplikasi individual.
+
+00:08:06.300 --> 00:08:07.320
+Dan inilah bagian ajaibnya.
+
+00:08:07.600 --> 00:08:09.740
+Aplikasi tersebut tampak seolah-olah berjalan secara lokal
+
+00:08:09.740 --> 00:08:10.380
+di perangkat pengguna.
+
+00:08:10.380 --> 00:08:13.420
+Anda membuka Word dan aplikasi itu muncul di jendelanya sendiri
+
+00:08:13.420 --> 00:08:15.700
+di Mac atau tablet Anda bersama aplikasi lokal lainnya.
+
+00:08:16.120 --> 00:08:17.180
+Tanpa latar belakang desktop,
+
+00:08:17.380 --> 00:08:18.560
+tanpa antarmuka mesin virtual,
+
+00:08:18.960 --> 00:08:20.600
+hanya aplikasi yang berjalan dengan mulus.
+
+00:08:21.340 --> 00:08:23.280
+Bayangkan seorang pengguna yang hanya memerlukan
+
+00:08:23.280 --> 00:08:25.980
+tiga aplikasi, Word, Excel, dan alat bisnis custom.
+
+00:08:26.560 --> 00:08:28.620
+Dengan remote app, Anda cukup memublikasikan ketika situs tersebut.
+
+00:08:28.780 --> 00:08:29.980
+Pengguna membuka aplikasi Windows,
+
+00:08:30.100 --> 00:08:31.600
+melihat tiga ikon, mengeklik salah satu,
+
+00:08:31.800 --> 00:08:33.280
+dan aplikasi terbuka di jendelanya sendiri.
+
+00:08:33.760 --> 00:08:35.440
+Mereka tidak pernah melihat desktop dan memang tidak perlu.
+
+00:08:35.980 --> 00:08:37.920
+Ini adalah pengalaman yang jauh lebih rapi bagi pekerja tugas.
+
+00:08:37.920 --> 00:08:39.060
+Nah ini detail pentingnya.
+
+00:08:39.560 --> 00:08:41.800
+Remote hanya tersedia dengan host pool yang dikumpulkan pool.
+
+00:08:41.800 --> 00:08:43.820
+Kecuali Anda menggunakan host pool pribadi,
+
+00:08:43.940 --> 00:08:45.520
+Anda terbatas pada pengalaman desktop lengkap.
+
+00:08:45.960 --> 00:08:46.980
+Begitulah cara kerja teknologi.
+
+00:08:47.360 --> 00:08:48.420
+Namun di sini letak kekuatannya.
+
+00:08:48.780 --> 00:08:50.700
+Pengguna dapat ditetapkan ke beberapa grup aplikasi
+
+00:08:50.700 --> 00:08:51.600
+di berbagai host pool.
+
+00:08:52.220 --> 00:08:54.440
+Jadi satu pengguna bisa memiliki grup aplikasi desktop
+
+00:08:54.440 --> 00:08:55.220
+dari satu host pool,
+
+00:08:55.420 --> 00:08:56.980
+dan grup remote app dari host pool lainnya.
+
+00:08:57.320 --> 00:08:57.900
+Dari host pool lainnya.
+
+00:08:58.300 --> 00:08:59.940
+Pengguna yang sama masuk ke aplikasi Windows,
+
+00:09:00.340 --> 00:09:01.460
+dan melihat ikon desktop lengkap
+
+00:09:01.460 --> 00:09:02.780
+serta ikon aplikasi individual.
+
+00:09:03.320 --> 00:09:04.880
+Mereka bisa memilih manapun yang mereka butuhkan.
+
+00:09:04.880 --> 00:09:06.200
+Bagaimana cara kerjanya dan praktik?
+
+00:09:06.580 --> 00:09:08.900
+Saya membuat grup aplikasi menetapkannya ke pengguna
+
+00:09:08.900 --> 00:09:09.980
+atau grup di Azure AD,
+
+00:09:09.980 --> 00:09:12.100
+dan sumber daya tersebut muncul otomatis
+
+00:09:12.100 --> 00:09:14.100
+saat pengguna membuka aplikasi Windows.
+
+00:09:14.540 --> 00:09:15.380
+Tanpa pengaturan manual,
+
+00:09:15.540 --> 00:09:16.300
+tanpa file konfigurasi,
+
+00:09:16.420 --> 00:09:17.140
+tanpa mengirim tautan,
+
+00:09:17.480 --> 00:09:18.160
+semuanya langsung muncul.
+
+00:09:18.480 --> 00:09:19.560
+Namun pengguna memerlukan cara
+
+00:09:19.560 --> 00:09:20.460
+untuk menemukan sumber daya.
+
+00:09:20.800 --> 00:09:21.840
+Di sinilah workspace berperan.
+
+00:09:22.440 --> 00:09:23.580
+Log penyusun ketiga workspace.
+
+00:09:24.280 --> 00:09:26.760
+Jadi, Anda sudah memiliki host pool dan grup aplikasi,
+
+00:09:26.900 --> 00:09:28.400
+tetapi pengguna butuh cara untuk menemukan
+
+00:09:28.400 --> 00:09:29.720
+dan mengakses semua sumber daya tersebut.
+
+00:09:30.140 --> 00:09:31.080
+Di situlah peran workspace.
+
+00:09:31.520 --> 00:09:32.820
+Workspace adalah pengelompokan logis
+
+00:09:32.820 --> 00:09:33.760
+dari grup-grup aplikasi.
+
+00:09:34.160 --> 00:09:34.900
+Inilah yang dilihat pengguna
+
+00:09:34.900 --> 00:09:36.240
+saat mereka membuka aplikasi Windows.
+
+00:09:36.240 --> 00:09:38.300
+Anggap saja seperti folder di ponsel Anda
+
+00:09:38.300 --> 00:09:39.200
+yang matur aplikasi Anda.
+
+00:09:39.660 --> 00:09:40.700
+Anda tidak membuka ponsel
+
+00:09:40.700 --> 00:09:41.820
+dan melihat setiap aplikasi
+
+00:09:41.820 --> 00:09:43.000
+yang Anda miliki tersebar di layar.
+
+00:09:43.620 --> 00:09:44.860
+Aplikasi dikelompokkan ke dalam folder,
+
+00:09:45.000 --> 00:09:45.640
+game di satu folder,
+
+00:09:45.740 --> 00:09:46.820
+alat produktivitas di folder lain.
+
+00:09:47.500 --> 00:09:48.540
+Workspace melakukan hal yang sama
+
+00:09:48.540 --> 00:09:49.480
+untuk sumber daya AVD.
+
+00:09:50.040 --> 00:09:51.520
+Setiap grup aplikasi harus dikaitkan
+
+00:09:51.520 --> 00:09:52.220
+dengan sebuah workspace.
+
+00:09:52.600 --> 00:09:53.220
+Tidak ada cara lain.
+
+00:09:53.620 --> 00:09:54.900
+Jika Anda membuat grup aplikasi
+
+00:09:54.900 --> 00:09:56.260
+dan tidak menghubungkannya ke workspace,
+
+00:09:56.480 --> 00:09:57.900
+pengguna tidak akan bisa melihatnya.
+
+00:09:58.420 --> 00:09:59.580
+Grup itu memang ada di latar belakang,
+
+00:09:59.580 --> 00:10:00.660
+tetapi tidak ada yang bisa mengakses.
+
+00:10:00.860 --> 00:10:02.540
+Workspace adalah hal yang membuatnya terlihat.
+
+00:10:02.920 --> 00:10:03.600
+Gila cara kerjanya
+
+00:10:03.600 --> 00:10:04.540
+dari sudut pandang pengguna.
+
+00:10:04.940 --> 00:10:06.260
+Seseorang membuka aplikasi Windows
+
+00:10:06.260 --> 00:10:06.960
+di perangkat mereka,
+
+00:10:07.200 --> 00:10:08.280
+masuk dengan akun kerja mereka,
+
+00:10:08.540 --> 00:10:09.580
+dan di sana mereka langsung melihat
+
+00:10:09.580 --> 00:10:11.000
+semua sumber daya yang telah ditetapkan
+
+00:10:11.000 --> 00:10:12.340
+untuk mereka, desktop, aplikasi,
+
+00:10:12.500 --> 00:10:14.200
+semuanya yang diatur berdasarkan ruang kerja,
+
+00:10:15.200 --> 00:10:16.120
+tanpa pengaturan manual,
+
+00:10:16.240 --> 00:10:17.100
+tanpa file konfigurasi,
+
+00:10:17.200 --> 00:10:18.880
+tanpa tim IT yang mengirim tautan untuk diklik.
+
+00:10:19.260 --> 00:10:20.020
+Semuanya muncul begitu saja.
+
+00:10:20.360 --> 00:10:22.020
+Sekarang Anda bisa memiliki beberapa ruang kerja
+
+00:10:22.020 --> 00:10:23.200
+untuk skenario yang berbeda.
+
+00:10:23.280 --> 00:10:24.680
+Mungkin Anda membuat satu ruang kerja
+
+00:10:24.680 --> 00:10:25.700
+untuk Departemen Keuangan
+
+00:10:25.700 --> 00:10:27.280
+dengan semua aplikasi akutansi mereka,
+
+00:10:27.280 --> 00:10:28.600
+ruang kerja lain untuk tim teknik
+
+00:10:28.600 --> 00:10:29.600
+dengan perangkat desain mereka,
+
+00:10:29.600 --> 00:10:30.540
+dan ruang kerja ketiga
+
+00:10:30.540 --> 00:10:32.180
+untuk kontraktor dengan akses terbatas.
+
+00:10:32.960 --> 00:10:34.180
+Pengguna hanya melihat ruang kerja
+
+00:10:34.180 --> 00:10:35.240
+yang ditugaskan kepada mereka,
+
+00:10:35.460 --> 00:10:36.600
+jadi staff keuangan tidak akan pernah
+
+00:10:36.600 --> 00:10:37.360
+melihat alat teknik,
+
+00:10:37.500 --> 00:10:38.600
+dan kontraktor tidak akan pernah
+
+00:10:38.600 --> 00:10:39.600
+melihat aplikasi internal.
+
+00:10:40.580 --> 00:10:41.900
+Pengalaman penggunanya sangat sederhana.
+
+00:10:42.600 --> 00:10:43.540
+Buka aplikasi Windows,
+
+00:10:43.760 --> 00:10:45.100
+masuk, dan semua yang Anda butuhkan
+
+00:10:45.100 --> 00:10:45.500
+ada di sana.
+
+00:10:46.120 --> 00:10:46.760
+Klik ikon desktop
+
+00:10:46.760 --> 00:10:48.120
+dan Anda beradam sesi Windows penuh.
+
+00:10:48.800 --> 00:10:49.880
+Klik ikon aplikasi tersebut
+
+00:10:49.880 --> 00:10:51.000
+terbuka seperti program lokal.
+
+00:10:51.540 --> 00:10:52.160
+Tanpa VPN,
+
+00:10:52.160 --> 00:10:53.260
+tanpa pengaturan yang rumit,
+
+00:10:53.360 --> 00:10:54.440
+hanya daftar bersih dari apa
+
+00:10:54.440 --> 00:10:55.080
+yang bisa Anda akses.
+
+00:10:55.400 --> 00:10:56.440
+Sekarang semua bagian sudah siap.
+
+00:10:56.440 --> 00:10:58.280
+Namun bagaimana cara pengguna
+
+00:10:58.280 --> 00:10:59.400
+Anda sudah mengakses desktop mereka?
+
+00:11:00.220 --> 00:11:01.360
+Bagaimana pengguna terhubung?
+
+00:11:01.740 --> 00:11:03.000
+Lapisan identitas dan akses?
+
+00:11:03.700 --> 00:11:04.680
+Jadi semuanya dimulai
+
+00:11:04.680 --> 00:11:05.780
+dengan Microsoft Entra ID.
+
+00:11:06.440 --> 00:11:07.300
+Anda mungkin masih mengenal
+
+00:11:07.300 --> 00:11:08.200
+sebagai Azure Active Directory.
+
+00:11:08.760 --> 00:11:09.700
+Microsoft mengubah namanya
+
+00:11:09.700 --> 00:11:10.460
+beberapa waktu lalu,
+
+00:11:10.600 --> 00:11:11.600
+tetapi sistem dibaliknya tetap.
+
+00:11:12.100 --> 00:11:13.020
+Bayangkan Entra ID
+
+00:11:13.020 --> 00:11:14.040
+sebagai major resepsionis
+
+00:11:14.040 --> 00:11:14.720
+kantor digital Anda.
+
+00:11:15.500 --> 00:11:16.200
+Layanan ini mengetahui
+
+00:11:16.200 --> 00:11:17.520
+siapa Anda dan apa yang mulai Anda akses.
+
+00:11:17.840 --> 00:11:18.740
+Layanan ini menangani
+
+00:11:18.740 --> 00:11:20.260
+login Anda ke Microsoft 365,
+
+00:11:20.760 --> 00:11:21.720
+Teams, SharePoint,
+
+00:11:22.060 --> 00:11:23.040
+dan layanan ini juga
+
+00:11:23.040 --> 00:11:24.040
+mengontrol akses ke AVD.
+
+00:11:24.420 --> 00:11:25.920
+Sekarang bagaimana cara pengguna terhubung?
+
+00:11:25.920 --> 00:11:27.320
+Ijinkan saya menjelaskan alur.
+
+00:11:27.700 --> 00:11:28.880
+Mereka membuka aplikasi Windows
+
+00:11:28.880 --> 00:11:29.660
+di perangkat mereka
+
+00:11:29.660 --> 00:11:30.700
+masuk dengan email kerja
+
+00:11:30.700 --> 00:11:31.340
+dan kata Sandi.
+
+00:11:31.640 --> 00:11:33.140
+Dan jika autentikasi multifaktor diatur,
+
+00:11:33.260 --> 00:11:34.260
+mereka juga melakukan hal itu.
+
+00:11:34.800 --> 00:11:35.960
+Aplikasi Windows mengirimkan
+
+00:11:35.960 --> 00:11:37.580
+permintaan autentikasi ke Entra ID
+
+00:11:37.580 --> 00:11:39.000
+yang memverifikasi identitas mereka.
+
+00:11:39.640 --> 00:11:40.460
+Kemudian Nafide meriksa
+
+00:11:40.460 --> 00:11:41.120
+ke grup aplikasi
+
+00:11:41.120 --> 00:11:41.960
+mana mereka termasuk.
+
+00:11:42.460 --> 00:11:43.680
+Terakhir, host sisi itu sendiri
+
+00:11:43.680 --> 00:11:44.820
+mengautentikasi pengguna.
+
+00:11:45.280 --> 00:11:46.140
+Langkah terakhir itu penting.
+
+00:11:46.580 --> 00:11:47.660
+Meskipun pengguna sudah masuk
+
+00:11:47.660 --> 00:11:48.460
+ke aplikasi Windows,
+
+00:11:48.620 --> 00:11:49.720
+mereka masih memerlukan izin
+
+00:11:49.720 --> 00:11:50.560
+untuk benar-benar masuk
+
+00:11:50.560 --> 00:11:51.220
+ke mesin virtual.
+
+00:11:51.640 --> 00:11:52.660
+Hal itu dikontrol oleh
+
+00:11:52.660 --> 00:11:53.480
+peran Azure khusus
+
+00:11:53.480 --> 00:11:54.760
+yang disebut virtual machine user load.
+
+00:11:55.080 --> 00:11:55.820
+Tanpa peran ini,
+
+00:11:56.040 --> 00:11:57.240
+pengguna dapat mengautentikasi
+
+00:11:57.240 --> 00:11:58.120
+ke AVD dan melihat
+
+00:11:58.120 --> 00:11:58.800
+sumber daya mereka
+
+00:11:58.800 --> 00:11:59.580
+di aplikasi Windows
+
+00:11:59.580 --> 00:12:00.660
+tetapi saat mereka mencoba
+
+00:12:00.660 --> 00:12:01.900
+terhubung prosesnya akan gagal.
+
+00:12:02.260 --> 00:12:03.200
+Mereka tidak memiliki hak
+
+00:12:03.200 --> 00:12:04.080
+untuk masuk ke host sisi.
+
+00:12:04.580 --> 00:12:05.720
+Di sinilah perangkat terperang.
+
+00:12:06.300 --> 00:12:07.240
+Jangan pernah memberikan izin
+
+00:12:07.240 --> 00:12:08.200
+kepada pengguna secara individu.
+
+00:12:08.600 --> 00:12:09.280
+Selalu gunakan grup.
+
+00:12:09.720 --> 00:12:10.720
+Buat grup di Entra ID,
+
+00:12:10.940 --> 00:12:12.180
+beri nama seperti pengguna AVD,
+
+00:12:12.280 --> 00:12:13.380
+tambahkan semua pengguna Anda,
+
+00:12:13.520 --> 00:12:14.560
+lalu tetapkan grup tersebut
+
+00:12:14.560 --> 00:12:15.420
+ke grup aplikasi
+
+00:12:15.420 --> 00:12:16.920
+dan peran login pengguna mesin virtual.
+
+00:12:17.440 --> 00:12:18.560
+Saat ada orang baru bergabung,
+
+00:12:18.560 --> 00:12:19.660
+tambahkan mereka ke grup tersebut.
+
+00:12:20.020 --> 00:12:21.180
+Saat seseorang keluar hapus mereka,
+
+00:12:21.580 --> 00:12:22.360
+Anda tidak perlu lagi
+
+00:12:22.360 --> 00:12:23.680
+menyentuh konfigurasi AVD.
+
+00:12:24.400 --> 00:12:25.400
+Aplikasi Windows itu sendiri,
+
+00:12:25.680 --> 00:12:26.360
+yang sebelumnya disebut
+
+00:12:26.360 --> 00:12:27.220
+klien remote desktop,
+
+00:12:27.620 --> 00:12:28.360
+tersedia di Windows,
+
+00:12:28.560 --> 00:12:29.920
+Mac, iOS, Android,
+
+00:12:30.180 --> 00:12:31.280
+dan bahkan melalui browser web,
+
+00:12:31.920 --> 00:12:32.660
+pengguna tidak memerlukan
+
+00:12:32.660 --> 00:12:33.280
+perangkat khusus.
+
+00:12:33.560 --> 00:12:34.120
+Mereka bisa menggunakan
+
+00:12:34.120 --> 00:12:34.920
+apapun yang sudah mereka ambil.
+
+00:12:35.340 --> 00:12:36.340
+Dan karena semuanya dibangun
+
+00:12:36.340 --> 00:12:37.040
+di atas Entra ID,
+
+00:12:37.220 --> 00:12:38.060
+kebijakan keamanan Anda
+
+00:12:38.060 --> 00:12:39.420
+yang Anda akan berlaku secara otomatis.
+
+00:12:40.160 --> 00:12:41.100
+Autentikasi multifaktor
+
+00:12:41.100 --> 00:12:42.080
+bekerja dengan cara yang sama
+
+00:12:42.080 --> 00:12:43.520
+seperti untuk Microsoft 365.
+
+00:12:44.140 --> 00:12:45.300
+Kebijakan akses bersyarat,
+
+00:12:45.300 --> 00:12:46.940
+seperti menghapuskan perangkat yang patuh
+
+00:12:46.940 --> 00:12:47.860
+atau memblokir akses
+
+00:12:47.860 --> 00:12:49.440
+dari lokasi tertentu berlaku
+
+00:12:49.440 --> 00:12:50.880
+untuk AVD sama seperti
+
+00:12:50.880 --> 00:12:52.080
+untuk SharePoint atau Exchange,
+
+00:12:52.260 --> 00:12:52.760
+satu exchange.
+
+00:12:53.380 --> 00:12:54.420
+Satu kebijakan keamanan
+
+00:12:54.420 --> 00:12:55.180
+di semua layanan Anda.
+
+00:12:55.500 --> 00:12:56.340
+Ada juga akses masuk tunggal
+
+00:12:56.340 --> 00:12:56.720
+atau singlet.
+
+00:12:57.140 --> 00:12:58.320
+Pengguna mengautentikasi sekali
+
+00:12:58.320 --> 00:12:59.100
+di aplikasi Windows
+
+00:12:59.100 --> 00:12:59.980
+dan tidak diminta lagi
+
+00:12:59.980 --> 00:13:01.000
+saat meluncurkan desktop
+
+00:13:01.000 --> 00:13:02.080
+atau aplikasi mereka.
+
+00:13:03.280 --> 00:13:04.020
+Prosesnya mulus.
+
+00:13:04.400 --> 00:13:05.220
+Masuk sekali dan semuanya
+
+00:13:05.220 --> 00:13:05.860
+langsung berfungsi.
+
+00:13:06.500 --> 00:13:07.640
+Namun ada satu bagian lagi
+
+00:13:07.640 --> 00:13:08.700
+yang membuat AVD menjadi
+
+00:13:08.700 --> 00:13:09.880
+pengalaman yang benar-benar lancar
+
+00:13:09.880 --> 00:13:10.660
+dan ini adalah sesuatu
+
+00:13:10.660 --> 00:13:11.580
+yang diperlukan setiap pengguna.
+
+00:13:12.100 --> 00:13:13.100
+Tantangan profil pengguna.
+
+00:13:13.100 --> 00:13:14.860
+Mengapa FS Logics itu penting?
+
+00:13:15.420 --> 00:13:16.000
+Ini adalah sesuatu
+
+00:13:16.000 --> 00:13:16.860
+yang mungkin belum Anda pikirkan.
+
+00:13:17.360 --> 00:13:18.480
+Dalam kumpulan host gabungan,
+
+00:13:18.680 --> 00:13:19.580
+pengguna mungkin mendapatkan
+
+00:13:19.580 --> 00:13:20.540
+mesin virtual yang berbeda
+
+00:13:20.540 --> 00:13:21.360
+setiap kali mereka login.
+
+00:13:22.220 --> 00:13:23.060
+Hari ini mesin A,
+
+00:13:23.260 --> 00:13:23.940
+besok mesin B,
+
+00:13:24.120 --> 00:13:24.820
+lusa mesin C,
+
+00:13:24.980 --> 00:13:26.700
+tanpa manajemen profil
+
+00:13:26.700 --> 00:13:28.040
+setiap login terasa
+
+00:13:28.040 --> 00:13:29.460
+seperti menggunakan komputer baru.
+
+00:13:30.500 --> 00:13:31.120
+Tidak ada bookmark,
+
+00:13:31.220 --> 00:13:31.900
+tidak ada file desktop,
+
+00:13:32.040 --> 00:13:33.040
+tidak ada kata sandi yang disimpan,
+
+00:13:33.140 --> 00:13:34.060
+tidak ada tanda tangan outlook,
+
+00:13:34.140 --> 00:13:34.580
+tidak ada apa-apa.
+
+00:13:35.160 --> 00:13:35.900
+Ini seperti menginep
+
+00:13:35.900 --> 00:13:36.980
+di kamar hotel yang dibersihkan
+
+00:13:36.980 --> 00:13:37.960
+dan diatur ulang sepenuhnya
+
+00:13:37.960 --> 00:13:38.640
+setiap kali yang dikeluar.
+
+00:13:39.200 --> 00:13:40.060
+Pengaturan preferensi
+
+00:13:40.060 --> 00:13:41.040
+dan file Anda semuanya hilang.
+
+00:13:41.820 --> 00:13:43.040
+Solusi lama adalah profil roaming.
+
+00:13:43.580 --> 00:13:44.380
+Windows akan menyalin
+
+00:13:44.380 --> 00:13:45.140
+seluruh profil Anda
+
+00:13:45.140 --> 00:13:46.200
+dari server pusat ke mesin
+
+00:13:46.200 --> 00:13:47.040
+apapun yang Anda gunakan
+
+00:13:47.040 --> 00:13:47.480
+untuk login.
+
+00:13:48.120 --> 00:13:48.980
+Terdengar masuk akal bukan?
+
+00:13:50.000 --> 00:13:50.740
+Dalam prakteknya,
+
+00:13:50.860 --> 00:13:51.440
+proses ini lambat,
+
+00:13:51.520 --> 00:13:52.180
+tidak dapat diandalkan
+
+00:13:52.180 --> 00:13:53.060
+dan rentan terhadap kerusak.
+
+00:13:53.580 --> 00:13:54.480
+Proses login bisa memakan
+
+00:13:54.480 --> 00:13:55.160
+waktu 30 detik.
+
+00:13:55.580 --> 00:13:56.820
+Jika proses penyalinan terputus,
+
+00:13:56.900 --> 00:13:57.780
+profil Anda bisa rusak tot.
+
+00:13:58.180 --> 00:13:58.980
+Tim TI menghabiskan
+
+00:13:58.980 --> 00:13:59.620
+waktu berjam-jam
+
+00:13:59.620 --> 00:14:00.960
+untuk memperbaiki profil yang rusak,
+
+00:14:01.060 --> 00:14:02.000
+yang bukan pengalaman yang menyenang.
+
+00:14:02.140 --> 00:14:02.980
+Microsoft menyadari ini
+
+00:14:02.980 --> 00:14:03.840
+adalah masalah serius
+
+00:14:03.840 --> 00:14:04.620
+jadi mereka membeli
+
+00:14:04.620 --> 00:14:05.940
+perusahaan bernama FS Logics
+
+00:14:05.940 --> 00:14:07.180
+dan mengintegrasikan teknologinya
+
+00:14:07.180 --> 00:14:08.200
+langsung ke dalam AVD.
+
+00:14:08.920 --> 00:14:10.020
+FS Logics menyelesaikan
+
+00:14:10.020 --> 00:14:11.000
+masalah profil sepenuhnya
+
+00:14:11.000 --> 00:14:11.580
+dan melakukannya
+
+00:14:11.580 --> 00:14:12.320
+dengan cara yang elegan.
+
+00:14:12.760 --> 00:14:13.260
+Ini cara ganti.
+
+00:14:14.260 --> 00:14:15.240
+Alih-alih menyalin profil
+
+00:14:15.240 --> 00:14:15.820
+bolak-balik,
+
+00:14:16.180 --> 00:14:17.440
+FS Logics menyimpan profil
+
+00:14:17.440 --> 00:14:18.040
+setiap pengguna
+
+00:14:18.040 --> 00:14:19.820
+sebagai satu file hard disk virtual
+
+00:14:19.820 --> 00:14:20.700
+di lokasi pusat,
+
+00:14:20.840 --> 00:14:21.820
+biasanya Azure Files.
+
+00:14:23.620 --> 00:14:24.660
+Saat pengguna login ke AVD,
+
+00:14:24.720 --> 00:14:25.880
+FS Logics memasang disk tersebut
+
+00:14:25.880 --> 00:14:26.680
+langsung ke sesi mereka.
+
+00:14:27.580 --> 00:14:28.720
+Ini terpasang secara instan
+
+00:14:28.720 --> 00:14:29.840
+layaknya mencolokkan drive USB.
+
+00:14:30.420 --> 00:14:31.700
+Semua pengaturan file bookmark
+
+00:14:31.700 --> 00:14:32.980
+dan preferensi mereka mencuri ketika.
+
+00:14:33.580 --> 00:14:34.380
+Hasilnya sangat dramatis.
+
+00:14:34.380 --> 00:14:36.520
+Waktu masuk turun dari 30 detik
+
+00:14:36.520 --> 00:14:37.220
+lebih menjadi sekitar
+
+00:14:37.220 --> 00:14:38.240
+7 atau 8 detik.
+
+00:14:39.060 --> 00:14:40.180
+Dan karena profil disimpan
+
+00:14:40.180 --> 00:14:40.920
+secara terpusat,
+
+00:14:41.060 --> 00:14:42.020
+tidak masalah hosesi mana
+
+00:14:42.020 --> 00:14:42.980
+yang digunakan pengguna.
+
+00:14:43.600 --> 00:14:44.060
+Profil tersebut
+
+00:14:44.060 --> 00:14:45.100
+mengikuti mereka secara teman.
+
+00:14:46.040 --> 00:14:47.300
+FS Logics juga menyelesaikan
+
+00:14:47.300 --> 00:14:47.760
+masalah besar
+
+00:14:47.760 --> 00:14:49.100
+pada aplikasi Microsoft 365.
+
+00:14:49.560 --> 00:14:50.100
+Dalam lingkungan
+
+00:14:50.100 --> 00:14:50.900
+bersama tradisional,
+
+00:14:51.100 --> 00:14:51.760
+mode cache outlook
+
+00:14:51.760 --> 00:14:52.820
+dan sinkronisasi OneDrive
+
+00:14:52.820 --> 00:14:53.840
+hampir tidak bisa digunakan.
+
+00:14:54.500 --> 00:14:55.360
+Performanya sangat buruk.
+
+00:14:55.700 --> 00:14:56.340
+Dengan FS Logics,
+
+00:14:56.420 --> 00:14:57.400
+keduanya berfungsi dengan sempurna.
+
+00:14:57.880 --> 00:14:59.140
+Pengguna mendapatkan outlook lengkap
+
+00:14:59.140 --> 00:14:59.880
+dengan akses offline,
+
+00:14:59.960 --> 00:15:00.920
+OneDrive menyengkurunkan file
+
+00:15:00.920 --> 00:15:02.060
+dan Teams melakukan cc-nya.
+
+00:15:02.060 --> 00:15:03.120
+Semuanya berjalan lancar.
+
+00:15:03.540 --> 00:15:04.700
+Inilah sebabnya FS Logics
+
+00:15:04.700 --> 00:15:05.980
+dianggap sebagai solusi standar
+
+00:15:05.980 --> 00:15:06.380
+yang mutlak
+
+00:15:06.380 --> 00:15:07.780
+untuk profil pengguna di AVD.
+
+00:15:08.280 --> 00:15:08.840
+Jangan coba-coba
+
+00:15:08.840 --> 00:15:09.760
+mengelola profil tempat.
+
+00:15:10.380 --> 00:15:11.000
+Anda akan memahami
+
+00:15:11.000 --> 00:15:11.960
+proses masuk yang lambat,
+
+00:15:12.060 --> 00:15:12.520
+profil rusak
+
+00:15:12.520 --> 00:15:13.400
+dan pengguna yang tidak puas.
+
+00:15:13.780 --> 00:15:14.480
+Gunakan FS Logics
+
+00:15:14.480 --> 00:15:14.960
+sejak hari pertama.
+
+00:15:15.480 --> 00:15:16.660
+Jadi, sekarang Anda
+
+00:15:16.660 --> 00:15:18.020
+memahami bagian-bagiannya,
+
+00:15:18.140 --> 00:15:18.740
+mari bicara tentang
+
+00:15:18.740 --> 00:15:19.840
+alasan bisnis beralih ke sini.
+
+00:15:20.600 --> 00:15:21.860
+Mengapa bisnis memilih AVD?
+
+00:15:22.600 --> 00:15:23.780
+Keuntungan, keamanan, dan biak.
+
+00:15:24.340 --> 00:15:25.480
+Mengapa bisnis memilih AVD
+
+00:15:25.480 --> 00:15:26.760
+dibandingkan laptop tradisional?
+
+00:15:27.420 --> 00:15:27.920
+Semuanya kembali
+
+00:15:27.920 --> 00:15:28.980
+pada masalah keamanan dan biak.
+
+00:15:28.980 --> 00:15:29.940
+Ini kita bahas secara rinci.
+
+00:15:30.260 --> 00:15:31.280
+Pertama, model keamanan.
+
+00:15:31.580 --> 00:15:32.080
+Dengan AVD,
+
+00:15:32.160 --> 00:15:33.020
+data tidak pernah meninggalkan
+
+00:15:33.020 --> 00:15:33.540
+pusat data Azure.
+
+00:15:34.020 --> 00:15:34.560
+Perangkat pengguna
+
+00:15:34.560 --> 00:15:35.280
+hanya menampilkan
+
+00:15:35.280 --> 00:15:35.880
+apa yang terjadi
+
+00:15:35.880 --> 00:15:37.300
+pada mesin jarak jauh.
+
+00:15:37.380 --> 00:15:38.200
+File, aplikasi,
+
+00:15:38.340 --> 00:15:39.320
+dan informasi sensitif
+
+00:15:39.320 --> 00:15:40.320
+yang sebenarnya tetap berada
+
+00:15:40.320 --> 00:15:41.580
+di dalam pusat data Microsoft
+
+00:15:41.580 --> 00:15:42.880
+dibalik kendali keamanan mereka.
+
+00:15:43.620 --> 00:15:44.840
+Jika seseorang kehilangan laptopnya,
+
+00:15:44.980 --> 00:15:45.920
+tidak ada data yang bisa dicuri
+
+00:15:45.920 --> 00:15:46.540
+karena data memang
+
+00:15:46.540 --> 00:15:47.320
+tidak pernah ada di sana
+
+00:15:47.320 --> 00:15:47.860
+sejak awal.
+
+00:15:48.400 --> 00:15:49.320
+Anda tidak perlu khawatir
+
+00:15:49.320 --> 00:15:50.320
+mengenkripsi setitik akhir
+
+00:15:50.320 --> 00:15:51.580
+atau menghapus data perangkat yang dicuri.
+
+00:15:52.020 --> 00:15:53.460
+Microsoft juga mengintegrasikan
+
+00:15:53.460 --> 00:15:54.260
+Defender for Endpoint
+
+00:15:54.260 --> 00:15:55.420
+langsung ke host sesi AVD,
+
+00:15:55.420 --> 00:15:56.900
+sehingga mesin virtual Anda
+
+00:15:56.900 --> 00:15:58.020
+dipantau dan dilindungi
+
+00:15:58.020 --> 00:15:58.860
+seperti perangkat
+
+00:15:58.860 --> 00:16:00.020
+terkelola lainnya.
+
+00:16:01.100 --> 00:16:01.760
+Deteksi malware,
+
+00:16:02.060 --> 00:16:02.740
+pencarian ancaman,
+
+00:16:02.840 --> 00:16:03.580
+dan respon otomatis
+
+00:16:03.580 --> 00:16:04.260
+semuanya berlaku
+
+00:16:04.260 --> 00:16:05.220
+untuk lingkungan AVD Anda.
+
+00:16:05.980 --> 00:16:06.920
+Tim TI mendapatkan
+
+00:16:06.920 --> 00:16:07.860
+satu pandangan keamanan
+
+00:16:07.860 --> 00:16:08.700
+untuk perangkat fisik
+
+00:16:08.700 --> 00:16:09.660
+maupun desktop virtual.
+
+00:16:10.640 --> 00:16:11.480
+Sekarang mari kita bicara
+
+00:16:11.480 --> 00:16:12.360
+tentang manajemen terpusat.
+
+00:16:12.720 --> 00:16:13.480
+Ini adalah keuntungan besar
+
+00:16:13.480 --> 00:16:13.960
+bagi tim TI.
+
+00:16:14.640 --> 00:16:15.320
+Daripada mengelola
+
+00:16:15.320 --> 00:16:16.320
+ratusan laptop individu,
+
+00:16:16.500 --> 00:16:17.260
+menerapkan pembaruan,
+
+00:16:17.360 --> 00:16:18.000
+memecahkan masalah,
+
+00:16:18.120 --> 00:16:19.280
+dan mengganti perangkat keras yang rusak,
+
+00:16:19.380 --> 00:16:20.460
+Anda hanya mengelola satu lingkungan.
+
+00:16:21.180 --> 00:16:22.260
+Perbarui golden image sekali
+
+00:16:22.260 --> 00:16:22.940
+dan semua host sesi
+
+00:16:22.940 --> 00:16:24.020
+mendapatkan pembaruan tersebut.
+
+00:16:24.520 --> 00:16:25.860
+Terapkan perubahan kebijakan sekali
+
+00:16:25.860 --> 00:16:26.640
+dan itu berlaku
+
+00:16:26.640 --> 00:16:27.300
+untuk setiap pengguna.
+
+00:16:27.560 --> 00:16:28.700
+Beban operasional pun berkurang.
+
+00:16:29.140 --> 00:16:30.060
+Anda menghemat waktu dan tenaga.
+
+00:16:30.360 --> 00:16:31.200
+Lalu ada sisi biayanya.
+
+00:16:31.500 --> 00:16:32.360
+Autoscaling adalah cara
+
+00:16:32.360 --> 00:16:33.420
+AVD benar-benar menghemat uang.
+
+00:16:33.740 --> 00:16:34.740
+Host sesi hanya berjalan
+
+00:16:34.740 --> 00:16:35.560
+saat pengguna masuk.
+
+00:16:36.180 --> 00:16:36.820
+Selama jam sibuk,
+
+00:16:36.920 --> 00:16:37.680
+Anda mungkin menjalankan
+
+00:16:37.680 --> 00:16:38.480
+50 mesin
+
+00:16:38.480 --> 00:16:40.380
+di malam hari dan akhir pekanan
+
+00:16:40.380 --> 00:16:40.900
+mungkin hanya menyerang.
+
+00:16:41.560 --> 00:16:42.600
+Autoscaling dapat memangkas
+
+00:16:42.600 --> 00:16:43.340
+jam komputasi Anda
+
+00:16:43.340 --> 00:16:44.260
+hingga 40 sampai nanti.
+
+00:16:44.600 --> 00:16:45.280
+Anda tidak membayar
+
+00:16:45.280 --> 00:16:46.280
+untuk mesin yang hanya dia menganggung.
+
+00:16:46.680 --> 00:16:47.460
+Penyesuaian ukuran adalah
+
+00:16:47.460 --> 00:16:48.240
+faktor penghematan biaya.
+
+00:16:48.240 --> 00:16:49.200
+Dalam mode lama,
+
+00:16:49.340 --> 00:16:50.180
+Anda harus membeli laptop
+
+00:16:50.180 --> 00:16:50.840
+yang cukup kuat
+
+00:16:50.840 --> 00:16:52.000
+bagi pengguna paling menuntut
+
+00:16:52.000 --> 00:16:53.120
+meskipun kebanyakan orang
+
+00:16:53.120 --> 00:16:54.160
+hanya butuh alat dasar.
+
+00:16:54.680 --> 00:16:56.160
+Dengan AVD menyesuaikan ukuran VM
+
+00:16:56.160 --> 00:16:57.160
+dengan kebutuhan beban kerja
+
+00:16:57.160 --> 00:16:57.680
+yang sebenarnya.
+
+00:16:58.400 --> 00:16:59.380
+Berikan pengguna tingkat lanjut besar.
+
+00:16:59.980 --> 00:17:01.300
+Berikan pekerja kecil dan murah.
+
+00:17:01.940 --> 00:17:02.940
+Tidak ada lagi pembayaran berdepan
+
+00:17:02.940 --> 00:17:04.060
+untuk perangkat keras yang tidak diperlukan.
+
+00:17:04.360 --> 00:17:05.560
+Dan ada keuntungan lisensi
+
+00:17:05.560 --> 00:17:06.580
+yang mungkin sudah Anda miliki.
+
+00:17:07.360 --> 00:17:08.640
+Jika organisasi Anda menggunakan
+
+00:17:08.640 --> 00:17:10.080
+Windows 10 atau 11 Enterprise
+
+00:17:10.080 --> 00:17:11.640
+atau Microsoft 365 E3
+
+00:17:11.640 --> 00:17:12.540
+atau E5,
+
+00:17:12.960 --> 00:17:14.040
+Anda bisa menggunakan AVD
+
+00:17:14.040 --> 00:17:15.380
+tanpa biaya lisensi tambahan
+
+00:17:15.380 --> 00:17:16.420
+untuk desktop Windows.
+
+00:17:16.420 --> 00:17:18.560
+Lisensi Anda saat ini sudah mencakupnya.
+
+00:17:18.940 --> 00:17:20.040
+Hal itu menghilangkan hambatan besar.
+
+00:17:20.560 --> 00:17:21.640
+Lalu ada kecepatan penerapan.
+
+00:17:22.260 --> 00:17:22.980
+Dalam mode lama,
+
+00:17:23.120 --> 00:17:24.000
+menerima karyawan baru
+
+00:17:24.000 --> 00:17:24.980
+berarti memesan laptop,
+
+00:17:25.300 --> 00:17:26.040
+menunggu pengiriman,
+
+00:17:26.200 --> 00:17:26.780
+memasang sistem,
+
+00:17:26.980 --> 00:17:27.700
+menginstal aplikasi,
+
+00:17:27.840 --> 00:17:29.380
+dan mengonfigurasi pengaturan.
+
+00:17:30.180 --> 00:17:31.280
+Itu bisa memakan waktu berminggu-minggu.
+
+00:17:31.800 --> 00:17:32.380
+Dengan AVD,
+
+00:17:32.500 --> 00:17:33.380
+Anda dapat menyiapkan
+
+00:17:33.380 --> 00:17:34.760
+pengguna baru dalam hitungan menit
+
+00:17:34.760 --> 00:17:35.540
+membuat akun mereka
+
+00:17:35.540 --> 00:17:36.660
+menetapkannya ke grup yang tepat
+
+00:17:36.660 --> 00:17:37.460
+dan mereka siap bekerja
+
+00:17:37.460 --> 00:17:38.640
+dari perangkat apapun yang mereka miliki.
+
+00:17:38.980 --> 00:17:39.580
+Inilah poin penting
+
+00:17:39.580 --> 00:17:40.460
+yang harus Anda ambil dari semuanya.
+
+00:17:41.540 --> 00:17:42.760
+Jadi inilah Azure Virtual Desktop
+
+00:17:42.760 --> 00:17:43.360
+yang sebenarnya.
+
+00:17:43.360 --> 00:17:45.180
+Ini adalah layanan terkelola
+
+00:17:45.180 --> 00:17:46.040
+yang mengirimkan desktop
+
+00:17:46.040 --> 00:17:46.800
+dan aplikasi Windows
+
+00:17:46.800 --> 00:17:47.980
+dari Azure ke perangkat apapun.
+
+00:17:48.780 --> 00:17:49.480
+Di balik layarnya,
+
+00:17:49.800 --> 00:17:50.640
+Anda memiliki kumpulan
+
+00:17:50.640 --> 00:17:51.420
+host mesin virtual
+
+00:17:51.420 --> 00:17:52.700
+yang diatur ke dalam grup aplikasi
+
+00:17:52.700 --> 00:17:54.020
+dan ditampilkan melalui ruang kerja.
+
+00:17:54.760 --> 00:17:55.320
+Pengguna terhubung
+
+00:17:55.320 --> 00:17:56.360
+menggunakan aplikasi Windows,
+
+00:17:56.620 --> 00:17:57.760
+mengautentikasi dengan Enter ID,
+
+00:17:58.140 --> 00:17:59.180
+dan mendapatkan pengalaman Windows
+
+00:17:59.180 --> 00:17:59.760
+penuh dari Mac,
+
+00:17:59.880 --> 00:18:00.520
+Tablet, Chromebook,
+
+00:18:00.640 --> 00:18:01.180
+atau PC lama.
+
+00:18:02.000 --> 00:18:02.960
+Berikut adalah dalam satu baris.
+
+00:18:03.460 --> 00:18:04.340
+AVD memisahkan
+
+00:18:04.340 --> 00:18:05.400
+pengalaman komputasi
+
+00:18:05.400 --> 00:18:06.200
+dari perangkat fisik.
+
+00:18:06.800 --> 00:18:07.740
+Pekerjaan terjadi di cloud,
+
+00:18:08.140 --> 00:18:09.100
+perangkat hanyalah jendelanya.
+
+00:18:09.580 --> 00:18:10.980
+Jika Anda sedang mengevaluasi AVD,
+
+00:18:10.980 --> 00:18:11.660
+inilah saran saya.
+
+00:18:12.020 --> 00:18:12.940
+Mulai dengan kumpulan host pool.
+
+00:18:13.420 --> 00:18:14.360
+Disitulah Anda mendapatkan
+
+00:18:14.360 --> 00:18:15.200
+efisiensi biaya terbaik
+
+00:18:15.200 --> 00:18:16.500
+dari multisesi dan peskalan otomat.
+
+00:18:16.840 --> 00:18:17.500
+Kurutkan AVS logik
+
+00:18:17.500 --> 00:18:18.100
+sejak hari pertama.
+
+00:18:18.440 --> 00:18:19.060
+Jangan pernah berpikir
+
+00:18:19.060 --> 00:18:19.760
+untuk mengelola profil
+
+00:18:19.760 --> 00:18:20.240
+tanpa hal tersebut.
+
+00:18:20.460 --> 00:18:21.260
+Itu adalah perbedaan
+
+00:18:21.260 --> 00:18:22.440
+antara pengalaman yang lancar
+
+00:18:22.440 --> 00:18:23.240
+dan pengalaman yang balik.
+
+00:18:23.700 --> 00:18:24.880
+Dan tetapkan izin melalui grup,
+
+00:18:25.140 --> 00:18:25.900
+bukan pengguna individu.
+
+00:18:26.320 --> 00:18:27.220
+Buat grup pengguna AVD,
+
+00:18:27.340 --> 00:18:28.300
+tambahkan orang ke dalamnya
+
+00:18:28.300 --> 00:18:29.400
+dan kelala akses dari sana.
+
+00:18:29.720 --> 00:18:30.580
+Jika Anda ingin menunjukkan AVD,
+
+00:18:30.680 --> 00:18:31.380
+mulai dari sekalanya.
+
+00:18:31.820 --> 00:18:32.500
+Satu kumpulan host
+
+00:18:32.500 --> 00:18:33.180
+beberapa pengguna
+
+00:18:33.180 --> 00:18:34.060
+lihat bagaimana rasanya.
+
+00:18:34.480 --> 00:18:35.480
+Hambatan masuknya rendah
+
+00:18:35.480 --> 00:18:36.380
+dan Anda bisa belajar
+
+00:18:36.380 --> 00:18:37.020
+banyak dari proyek
+
+00:18:37.020 --> 00:18:37.780
+percontohan sekalian besar.
+
+00:18:38.280 --> 00:18:39.240
+Itulah Azure Virtual Desktop
+
+00:18:39.240 --> 00:18:40.120
+dijelaskan dengan sederhana.
+
+00:18:40.600 --> 00:18:41.520
+Berlangganan untuk penjelasan
+
+00:18:41.520 --> 00:18:42.140
+lebih lanjut mengenai
+
+00:18:42.140 --> 00:18:42.840
+teknologi Microsoft
+
+00:18:42.840 --> 00:18:43.560
+dalam masa sederhana.
+
+00:18:43.760 --> 00:18:44.360
+Dan bagikan ini dengan

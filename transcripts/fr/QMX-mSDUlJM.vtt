@@ -1,0 +1,1117 @@
+WEBVTT
+
+00:00:00.120 --> 00:00:03.880
+Bienvenue dans un nouvel épisode des pépites de connaissances Microsoft ici sur M365FM.
+
+00:00:04.200 --> 00:00:05.360
+Je suis votre haute Mirko Peters.
+
+00:00:05.680 --> 00:00:08.040
+Le sujet d'aujourd'hui est quelque chose dont presque tout le monde a entendu parler,
+
+00:00:08.260 --> 00:00:09.340
+mais que peu comprennent vraiment.
+
+00:00:09.960 --> 00:00:12.420
+Azure Virtual Desktop, qu'est-ce que c'est exactement ?
+
+00:00:12.420 --> 00:00:15.360
+Est-ce juste un PC distant dans le cloud ou est-ce quelque chose de bien plus vaste ?
+
+00:00:15.360 --> 00:00:17.620
+Beaucoup de gens entendent le nom et pensent qu'il s'agit d'un remplacement de VPN
+
+00:00:17.620 --> 00:00:20.040
+ou peut-être d'un moyen de louer une machine virtuelle dans Azure.
+
+00:00:20.540 --> 00:00:22.320
+Certains le confondent même avec l'outil de bureau à distance
+
+00:00:22.320 --> 00:00:24.960
+que vous avez utilisé pour vous connecter à un ordinateur de travail depuis chez vous.
+
+00:00:25.360 --> 00:00:26.360
+Réalité, ce n'est rien de tout cela.
+
+00:00:26.700 --> 00:00:27.440
+C'est bien plus que cela.
+
+00:00:27.440 --> 00:00:30.620
+C'est une expérience de bureau complète fournie de manière sécurisée depuis le cloud.
+
+00:00:31.240 --> 00:00:33.600
+A la fin de cet épisode, vous comprendrez ce qu'est réellement AVD,
+
+00:00:33.720 --> 00:00:36.820
+comment les pièces s'assemblent et pourquoi les entreprises se tournent vers cette solution.
+
+00:00:37.460 --> 00:00:39.600
+Nous allons le décomposer en éléments fondamentaux avec des mots simples
+
+00:00:39.600 --> 00:00:42.160
+pour que vous puissiez voir la situation dans son ensemble, au-delà du jargon marketing.
+
+00:00:43.820 --> 00:00:45.600
+Qu'est-ce qu'Azure Virtual Desktop ?
+
+00:00:45.600 --> 00:00:47.520
+La vue dans ça. Voici la définition la plus simple.
+
+00:00:47.940 --> 00:00:50.880
+Azure Virtual Desktop, c'est Windows et ses applications fournies depuis le cloud
+
+00:00:50.880 --> 00:00:52.840
+vers n'importe quel appareil, vers n'importe quel.
+
+00:00:53.400 --> 00:00:54.780
+Voyez cela comme un service de streaming.
+
+00:00:54.780 --> 00:00:57.780
+Mais au lieu de diffuser des films et des séries, vous diffusez votre bureau de travail
+
+00:00:57.780 --> 00:00:58.780
+et vos applications professionnelles.
+
+00:01:00.040 --> 00:01:01.980
+Netflix gère tout le travail lourd sur ses serveurs.
+
+00:01:02.520 --> 00:01:04.520
+AVD gère le calcul sur les serveurs Azure.
+
+00:01:05.060 --> 00:01:05.980
+Vous savez comment fonctionne Netflix.
+
+00:01:06.340 --> 00:01:08.780
+Vous ouvrez l'application sur votre téléviseur, téléphone ou ordinateur portable
+
+00:01:08.780 --> 00:01:10.300
+et vous obtenez la même expérience sur chaque appareil.
+
+00:01:10.660 --> 00:01:14.180
+Le travail lourd, le traitement, le stockage, le rendu, tout se passe sur les serveurs de Netflix.
+
+00:01:14.720 --> 00:01:16.600
+Votre appareil est juste une fenêtre ouverte sur ce contenu.
+
+00:01:16.860 --> 00:01:19.680
+Et tout comme pour Netflix, vous n'avez pas besoin d'un appareil puissant pour utiliser AVD.
+
+00:01:20.100 --> 00:01:21.080
+Le travail s'effectue dans le cloud.
+
+00:01:21.400 --> 00:01:22.360
+AVD fonctionne de la même manière.
+
+00:01:22.360 --> 00:01:25.300
+Vos utilisateurs bénéficient d'un bureau Windows complet avec toutes leurs applications.
+
+00:01:25.600 --> 00:01:28.200
+Mais le calcul réel se fait sur des machines virtuelles tournant dans Azure.
+
+00:01:28.960 --> 00:01:31.440
+L'appareil local affiche simplement ce qui se passe sur cette machine distante.
+
+00:01:32.160 --> 00:01:35.240
+Il peut s'agir d'un ordinateur portable Windows, d'un Mac, d'un iPad, d'un Chromebook
+
+00:01:35.240 --> 00:01:37.920
+ou même d'un vieux PC qui peine à faire tourner son propre système d'exploitation.
+
+00:01:38.560 --> 00:01:40.320
+Tant qu'il peut exécuter l'application Windows, cela fonctionne.
+
+00:01:40.660 --> 00:01:43.560
+L'application Windows est un client léger que vous installez sur n'importe quel appareil
+
+00:01:43.560 --> 00:01:46.260
+et il se connecte au service AVD pour afficher le bureau distant.
+
+00:01:46.580 --> 00:01:47.320
+C'est tout ce dont vous avez besoin.
+
+00:01:47.360 --> 00:01:48.640
+Voici maintenant la distinction clé.
+
+00:01:48.640 --> 00:01:50.620
+Vous ne louez pas un PC entier pour chaque personne.
+
+00:01:50.920 --> 00:01:53.340
+Au lieu de cela, vous vous connectez à un environnement partagé et géré.
+
+00:01:53.760 --> 00:01:54.440
+Voici le point essentiel.
+
+00:01:54.740 --> 00:01:57.640
+Ce qu'on appelle la multisession permet à plusieurs utilisateurs d'être sur une seule
+
+00:01:57.640 --> 00:01:59.060
+machine Windows en même temps.
+
+00:01:59.980 --> 00:02:01.580
+Windows classique est conçu pour un utilisateur à la fois.
+
+00:02:02.080 --> 00:02:02.880
+AVD change la donne.
+
+00:02:03.300 --> 00:02:06.120
+Sur un ordinateur portable Windows normal, une seule personne peut être connectée à la fois.
+
+00:02:06.460 --> 00:02:07.660
+C'est tout simplement comme ça que Windows fonctionne.
+
+00:02:07.880 --> 00:02:11.140
+Mais avec AVD, vous pouvez avoir plusieurs utilisateurs sur une seule machine Windows simultanément.
+
+00:02:11.840 --> 00:02:15.260
+Chaque personne dispose de sa propre session isolée, de ses propres applications et de ses propres fichiers.
+
+00:02:15.760 --> 00:02:17.780
+Ils partagent tous la même machine virtuelle sous-jacente.
+
+00:02:18.320 --> 00:02:21.040
+C'est quelque chose qu'on ne peut tout simplement pas faire avec un ordinateur portable classique
+
+00:02:21.040 --> 00:02:23.780
+et c'est l'une des raisons majeures pour lesquelles la AVD permet aux entreprises de réaliser d'importantes économies.
+
+00:02:24.000 --> 00:02:26.900
+En coulisses, AVD s'appuie sur des machines virtuelles exécutées dans Azure.
+
+00:02:27.440 --> 00:02:29.480
+Mais Microsoft gère toutes les complexités techniques.
+
+00:02:30.640 --> 00:02:33.640
+Le répartiteur qui dirige les utilisateurs vers l'autre de session appropriée,
+
+00:02:33.640 --> 00:02:37.880
+la passerelle qui gère la connexion et l'équilibrage de charge qui distribue les utilisateurs sur les machines disponibles.
+
+00:02:37.880 --> 00:02:40.240
+Vous n'avez pas besoin de construire tout cela vous-même.
+
+00:02:40.660 --> 00:02:44.840
+Il vous suffit de créer vos poules d'hôtes, de configurer vos applications et d'attribuer vos utilisateurs.
+
+00:02:45.640 --> 00:02:48.740
+Pour les équipes informatiques, cela simplifie la gestion et réduit les coûts matériels.
+
+00:02:49.220 --> 00:02:50.740
+Alors pourquoi est-ce important pour vous ?
+
+00:02:50.740 --> 00:02:54.000
+Cela signifie que vos utilisateurs bénéficient d'une expérience Windows complète depuis n'importe quel appareil qu'ils sont.
+
+00:02:54.200 --> 00:02:57.100
+Un graphiste sur Mac peut exécuter un logiciel de conception réservé à Windows.
+
+00:02:57.660 --> 00:03:02.600
+Un travailleur sur le terrain avec une tablette peut accéder aux mêmes applications métiers qu'à son bureau, qu'à son bureau.
+
+00:03:02.600 --> 00:03:08.540
+Et un prestataire sur son ordinateur personnel peut se connecter et travailler en toute sécurité sans rien installer sur sa propre machine.
+
+00:03:09.340 --> 00:03:15.020
+Et comme les données ne quittent jamais le centre de données Azure, c'est plus sûr que de les stocker sur un portable pouvant être perdu ou volé.
+
+00:03:15.480 --> 00:03:17.200
+C'est un avantage à la fois pour les utilisateurs et pour l'informatique.
+
+00:03:17.540 --> 00:03:20.660
+Mais pour comprendre pourquoi AVD existe, nous devons examiner le problème qu'il résout.
+
+00:03:21.480 --> 00:03:22.840
+Nous aborderons cela dans le prochain segment.
+
+00:03:23.680 --> 00:03:25.260
+L'ancienne méthode face à la nouvelle méthode.
+
+00:03:25.560 --> 00:03:26.440
+L'ancienne méthode était simple.
+
+00:03:26.440 --> 00:03:32.680
+Vous achetez un ordinateur portable puissant pour chaque employé, installiez toutes les applications nécessaires et gériez chaque appareil un par un.
+
+00:03:33.360 --> 00:03:36.280
+Puis, tous les 3 ou 4 ans, vous remplaciez tout ce matériel et recommenciez à zéro.
+
+00:03:36.940 --> 00:03:38.660
+Mais voilà, les coûts cachés étaient énormes.
+
+00:03:39.380 --> 00:03:42.860
+Les équipes informatiques passaient des heures sur le déploiement, les correctifs de sécurité et le dépannage.
+
+00:03:43.580 --> 00:03:48.660
+Lorsqu'un portable était perdu ou cassé, il fallait le remplacer, tout réinstaller et espérer que l'utilisateur avait sauvegardé ses fichiers.
+
+00:03:49.440 --> 00:03:52.400
+Et si quelqu'un attrapait un virus, il fallait effacer la machine et repartir de zéro.
+
+00:03:52.880 --> 00:03:55.400
+Puis le télétravail est arrivé et l'ancienne méthode s'est totalement effondrée.
+
+00:03:55.400 --> 00:03:59.220
+Les VPN étaient lents et peu pratiques, les ordinateurs personnels n'étaient pas sécurisés
+
+00:03:59.220 --> 00:04:03.120
+et les données de l'entreprise résidaient sur des appareils qui pouvaient être perdus, volés ou compromis.
+
+00:04:04.400 --> 00:04:05.780
+Elles n'avaient aucun contrôle sur le terminal.
+
+00:04:06.220 --> 00:04:08.340
+Mais restaient responsables de la protection des données qui s'y trouvaient.
+
+00:04:08.800 --> 00:04:12.320
+La nouvelle approche avec Azure Virtual Desktop ou AVD en abrégé est totalement différente.
+
+00:04:12.720 --> 00:04:13.460
+Est totalement différente.
+
+00:04:13.800 --> 00:04:16.260
+Le travail lourd est effectué dans Azure et non sur l'appareil local.
+
+00:04:16.820 --> 00:04:20.300
+Votre ordinateur portable, votre tablette, votre téléphone ne sont que des fenêtres sur cet environnement-là.
+
+00:04:20.300 --> 00:04:25.040
+Le travail réel, les applications, les fichiers, le traitement, tout reste dans le centre de données.
+
+00:04:25.040 --> 00:04:25.980
+C'est un changement majeur.
+
+00:04:26.280 --> 00:04:27.860
+Perdez votre ordinateur portable, aucune donnée n'est perte.
+
+00:04:28.000 --> 00:04:31.080
+Il vous suffit de prendre n'importe quel autre appareil, de vous reconnecter à AVD et vous reprenez là où vous en étiez.
+
+00:04:31.440 --> 00:04:34.740
+Vos fichiers sont toujours là, vos applications sont toujours configurées et vos paramètres sont intacts.
+
+00:04:35.220 --> 00:04:36.560
+L'appareil lui-même devient jetable.
+
+00:04:37.060 --> 00:04:38.180
+Cela change aussi votre façon de payer.
+
+00:04:38.620 --> 00:04:40.700
+Au lieu d'une grosse dépense d'investissement tous les quelques années,
+
+00:04:41.200 --> 00:04:44.360
+en achetant des centaines d'ordinateurs d'un coup, vous passez à une dépense opérationnelle.
+
+00:04:45.160 --> 00:04:46.000
+Vous payez pour ce que vous utilisez.
+
+00:04:46.000 --> 00:04:49.520
+Si vous avez 50 personnes qui travaillent aujourd'hui et 100 demain, vous augmentez votre capacité.
+
+00:04:50.140 --> 00:04:51.860
+Si vous en avez moins besoin le mois prochain, vous la réduisez.
+
+00:04:52.520 --> 00:04:56.160
+Vous n'êtes pas coincé avec du matériel surpayé ou à devoir en racheter en urgence quand vous en avez besoin.
+
+00:04:56.880 --> 00:05:00.480
+Examinons maintenant les éléments qui rendent cela possible, en commençant par le plus important.
+
+00:05:01.520 --> 00:05:02.380
+Premier bloc de construction.
+
+00:05:02.620 --> 00:05:03.720
+Les poules d'hôtes et les hôtes de session.
+
+00:05:04.500 --> 00:05:06.360
+Le premier bloc de construction s'appelle un poule d'hôtes.
+
+00:05:06.560 --> 00:05:07.920
+Et c'est exactement ce que son nom indique.
+
+00:05:08.220 --> 00:05:11.000
+Une collection de machines virtuelles qui hébergent des bureaux et applications Windows.
+
+00:05:11.000 --> 00:05:16.300
+Considérez cela comme un groupe d'ordinateurs identiques, tous configurés de la même manière, prêts à être connectés.
+
+00:05:17.020 --> 00:05:19.400
+Les machines individuelles au sein de ce poule sont appelées hôtes de session.
+
+00:05:20.000 --> 00:05:24.000
+Ce sont de véritables machines virtuelles exécutant Windows 11 entreprises, généralement en version multisession.
+
+00:05:24.480 --> 00:05:28.820
+Cela signifie que plusieurs personnes peuvent être connectées à la même machine en même temps, chacune dans sa propre session privée.
+
+00:05:29.360 --> 00:05:33.280
+Il existe deux types de poules d'hôtes et la différence est importante pour le coût et la flexibilité.
+
+00:05:34.260 --> 00:05:35.680
+Un poule d'hôtes mutualisé est comme un hôtel.
+
+00:05:36.280 --> 00:05:38.500
+Plusieurs invités y séjournent, mais personne n'a le chambre permanente.
+
+00:05:38.500 --> 00:05:43.780
+Quand vous arrivez, vous obtenez la chambre disponible et quand vous partez, quelqu'un d'autre l'occupe la fois suivante, la fois suivant.
+
+00:05:44.260 --> 00:05:48.240
+Avec les poules d'hôtes mutualisés, les utilisateurs sont affectés à l'hôte de session qui a de la capacité à ce moment-là.
+
+00:05:49.140 --> 00:05:51.800
+Ils peuvent être sur la machine A aujourd'hui et la machine B demain.
+
+00:05:52.320 --> 00:05:56.380
+Cela fonctionne très bien pour la plupart des travailleurs car cela permet de rassembler plus d'utilisateurs sur moins de machines.
+
+00:05:57.160 --> 00:05:58.840
+Un poule d'hôtes personnel, c'est comme votre propre appartement.
+
+00:05:59.240 --> 00:06:01.780
+Il est à vous, personne d'autre ne l'utilise et vos affaires y sont.
+
+00:06:02.160 --> 00:06:03.080
+Vos paramètres, vos fichiers.
+
+00:06:03.580 --> 00:06:05.080
+Vous obtenez la même machine à chaque connexion.
+
+00:06:05.080 --> 00:06:12.840
+C'est utile pour les utilisateurs avancés ayant besoin de performances constantes ou pour installer des logiciels spécialisés inadaptés aux environnements partagés.
+
+00:06:13.620 --> 00:06:16.480
+Cela coûte plus cher car chaque utilisateur a besoin de sa propre VM dédiée.
+
+00:06:16.760 --> 00:06:17.940
+C'est là que les choses deviennent intéressantes.
+
+00:06:18.320 --> 00:06:21.080
+Comment AVD décide-t-il sur quelle hôte de session l'utilisateur arrive ?
+
+00:06:21.740 --> 00:06:23.660
+C'est l'équilibrage de charge et il existe deux approches.
+
+00:06:24.240 --> 00:06:28.000
+Bread First que nous signifie que le système répartit les utilisateurs uniformément sur tous les hôtes disponibles.
+
+00:06:28.540 --> 00:06:31.620
+Ainsi, si vous avez 10 machines et 100 utilisateurs, chaque machine reçoit environ 10 utilisateurs.
+
+00:06:31.620 --> 00:06:37.060
+Cela garantit des performances constantes sans surcharge d'un hôte et c'est le réglage par défaut pour la plupart des déploiements.
+
+00:06:38.200 --> 00:06:39.200
+Depth First est gueux et l'inverse.
+
+00:06:39.620 --> 00:06:41.940
+Il remplit complètement un hôte de session avant de passer au suivant.
+
+00:06:42.840 --> 00:06:46.480
+Les utilisateurs 1 à 10 vont sur la machine A, les 11 à 20 sur la machine B et ainsi de suite.
+
+00:06:47.060 --> 00:06:49.480
+Pourquoi faire cela ? Parce que cela permet d'éteindre les machines vides.
+
+00:06:50.020 --> 00:06:54.120
+Une fois les machines A et B pleines, les machines C à Z peuvent être arrêtées pour économiser de l'argent.
+
+00:06:54.740 --> 00:06:56.740
+Le Depth First fonctionne très bien avec la mise à l'échelle automatique.
+
+00:06:56.740 --> 00:07:03.260
+Avec le prochain point, le dimensionnement, vous pouvez configurer AVD pour ajouter ou supprimer automatiquement des hôtes en fonction du nombre d'utilisateurs connectés.
+
+00:07:03.820 --> 00:07:06.220
+Pendant les heures de pointe, vous pourriez avoir 20 machines en marche.
+
+00:07:06.920 --> 00:07:08.300
+La nuit, vous n'en aurez peut-être que 2.
+
+00:07:09.400 --> 00:07:11.960
+Le système gère cela automatiquement selon les plannings que vous définissez.
+
+00:07:12.620 --> 00:07:14.300
+C'est là que les économies réelles interviennent.
+
+00:07:14.980 --> 00:07:16.860
+Vous ne payez pas pour les machines qui ne sont pas utilisées.
+
+00:07:17.400 --> 00:07:18.700
+Alors pourquoi est-ce important pour vous ?
+
+00:07:18.700 --> 00:07:22.600
+Les poules d'hôtes avec équilibrage Depth First Egg et mise à l'échelle automatique peuvent réduire considérablement vos coûts.
+
+00:07:23.560 --> 00:07:27.180
+Au lieu d'acheter une VM par utilisateur, vous en achetez juste assez pour vos pics de charge.
+
+00:07:27.540 --> 00:07:30.180
+Et elle ne fonctionne que lorsque les gens travaillent.
+
+00:07:30.900 --> 00:07:32.580
+Vous avez donc votre poule d'hôtes avec vos VM.
+
+00:07:32.960 --> 00:07:35.240
+Maintenant, comment les utilisateurs acceptent-ils à leurs applications ?
+
+00:07:35.240 --> 00:07:36.680
+Deuxième brique, les groupes d'applications.
+
+00:07:37.220 --> 00:07:40.720
+Les groupes d'applications sont des conteneurs logiques qui déterminent ce à quoi un utilisateur a accès.
+
+00:07:41.480 --> 00:07:42.940
+Considérez-les comme des ensembles d'autorisations.
+
+00:07:43.420 --> 00:07:45.940
+Vous obtenez soit le bureau complet, soit uniquement des applications spécifiques.
+
+00:07:46.340 --> 00:07:47.040
+Il en existe de type.
+
+00:07:47.040 --> 00:07:50.940
+Avec un groupe d'applications de bureaux, les utilisateurs bénéficient de l'expérience Windows complète.
+
+00:07:51.380 --> 00:07:54.660
+Ils se connectent et voient le menu démarrer, la barre des tâches, l'explorateur de fichiers, tout.
+
+00:07:55.520 --> 00:07:58.200
+Cela ressemble en tout point à un ordinateur Windows normal, car c'en est un.
+
+00:07:58.580 --> 00:07:59.680
+La plupart des entreprises commencent pas.
+
+00:08:00.000 --> 00:08:01.640
+Un groupe d'applications remote app est différent.
+
+00:08:02.280 --> 00:08:05.700
+Au lieu de donner aux utilisateurs un bureau complet, il leur donne des applications individuelles.
+
+00:08:06.260 --> 00:08:07.200
+Et voici la partie magique.
+
+00:08:07.600 --> 00:08:10.300
+Ces applications semblent s'exécuter localement sur l'appareil de l'utilisateur.
+
+00:08:10.720 --> 00:08:15.440
+Vous ouvrez Word et il apparaît dans sa propre fenêtre sur votre Mac ou votre tablette aux côtés de vos applications locales.
+
+00:08:15.440 --> 00:08:19.680
+Pas de fond d'écran, pas d'interface de machine virtuelle, juste l'application qui s'exécute de manière fluide.
+
+00:08:21.380 --> 00:08:23.520
+Imaginez un utilisateur qui n'a besoin que de trois applications.
+
+00:08:23.820 --> 00:08:25.960
+Word, Excel et un outil métier personnalisé.
+
+00:08:26.680 --> 00:08:28.480
+Avec Remote App, vous publiez uniquement ces trois applications.
+
+00:08:28.740 --> 00:08:33.240
+L'utilisateur ouvre l'application Windows, voit trois icônes, clique sur l'une d'elles et l'application s'ouvre dans sa propre fenêtre.
+
+00:08:33.780 --> 00:08:35.440
+Il ne voit jamais le bureau et n'en a jamais besoin.
+
+00:08:35.920 --> 00:08:37.860
+C'est une expérience beaucoup plus épurée pour les employés opératifs.
+
+00:08:37.860 --> 00:08:39.180
+Voici maintenant un détail important.
+
+00:08:39.600 --> 00:08:41.800
+Remote App n'est disponible qu'avec les poules d'hôtes mis en commun.
+
+00:08:42.220 --> 00:08:45.380
+A moins d'utiliser des poules d'hôtes personnels, vous êtes limité à l'expérience de bureau complet.
+
+00:08:45.840 --> 00:08:47.240
+C'est tout simplement ainsi que la technologie fonctionne.
+
+00:08:47.480 --> 00:08:48.420
+Et c'est là que cela devient puissant.
+
+00:08:48.780 --> 00:08:51.740
+Les utilisateurs peuvent être affectés à plusieurs groupes d'applications dans différents poules d'hôtes.
+
+00:08:52.400 --> 00:08:57.600
+Ainsi, un utilisateur peut avoir un groupe d'applications de bureau provenant d'un poule d'hôtes et un groupe Remote App provenant d'un autre.
+
+00:08:58.100 --> 00:09:02.600
+Ce même utilisateur se connecte à l'application Windows et voit à la fois une icône de bureau complet et des icônes d'applications individuelles.
+
+00:09:03.440 --> 00:09:04.680
+Il peut choisir ce dont il a besoin.
+
+00:09:04.680 --> 00:09:06.600
+Enfin, comment cela fonctionne-t-il en pratique ?
+
+00:09:06.600 --> 00:09:14.000
+Je crée le groupe d'applications, je l'attribue à un utilisateur ou à un groupe dans Azure AD et ces ressources apparaissent automatiquement la prochaine fois que l'utilisateur ouvre l'application Windows.
+
+00:09:14.540 --> 00:09:17.060
+Pas de configuration manuelle, pas de fichier de configuration, pas d'envoi de lien.
+
+00:09:17.440 --> 00:09:18.180
+Cela apparaît tout simplement.
+
+00:09:18.520 --> 00:09:20.340
+Mais les utilisateurs ont besoin d'un moyen de trouver ces ressources.
+
+00:09:20.760 --> 00:09:21.940
+C'est là que les espaces de travail entranges.
+
+00:09:22.400 --> 00:09:23.960
+Troisième bloc de construction, les espaces de travail.
+
+00:09:24.340 --> 00:09:29.500
+Vous avez donc vos poules d'hôtes et vos groupes d'applications, mais les utilisateurs ont besoin d'un moyen de trouver et d'accéder à toutes ces ressources.
+
+00:09:30.000 --> 00:09:31.160
+C'est là que les espaces de travail entranges.
+
+00:09:31.160 --> 00:09:33.760
+Un espace de travail est un regroupement logique de groupes d'applications.
+
+00:09:34.140 --> 00:09:36.440
+C'est ce que les utilisateurs voient lorsqu'ils ouvrent l'application Windows.
+
+00:09:36.740 --> 00:09:39.200
+Voyez cela comme un dossier sur votre téléphone qui organise vos applications.
+
+00:09:39.820 --> 00:09:42.860
+Vous n'ouvrez pas votre téléphone pour voir chaque application que vous possédez éparpillée sur l'écran.
+
+00:09:43.620 --> 00:09:46.880
+Sont regroupés dans des dossiers, les jeux dans un dossier, les outils de productivité dans un autre.
+
+00:09:47.440 --> 00:09:49.460
+Les espaces de travail font la même chose pour les ressources AVD.
+
+00:09:50.020 --> 00:09:52.180
+Chaque groupe d'applications doit être associé à un espace de travail.
+
+00:09:52.520 --> 00:09:53.200
+Il n'y a pas d'autre solution.
+
+00:09:53.640 --> 00:09:58.100
+Si vous créez un groupe d'applications sans le connecter à un espace de travail, les utilisateurs ne le verront tout simplement pas.
+
+00:09:58.100 --> 00:10:00.340
+Il existe en arrière-plan, mais personne ne peut y accéder.
+
+00:10:00.880 --> 00:10:02.400
+C'est l'espace de travail qui le rend visible.
+
+00:10:02.920 --> 00:10:04.600
+Voici comment cela fonctionne du point de vue de l'utilisateur.
+
+00:10:05.260 --> 00:10:08.840
+Quelqu'un ouvre l'application Windows sur son appareil, se connecte avec son compte professionnel,
+
+00:10:09.020 --> 00:10:14.020
+et voit immédiatement toutes les ressources qui lui ont été attribuées, bureaux, applications, tout est organisé par espace de travail.
+
+00:10:15.220 --> 00:10:18.820
+Aucune configuration manuelle, aucun fichier de configuration, aucun lien envoyé par le service informatique sur lequel cliquer.
+
+00:10:19.260 --> 00:10:19.900
+Tout apparaît simplement.
+
+00:10:20.540 --> 00:10:22.760
+Vous pouvez désormais avoir plusieurs espaces de travail pour différents scénarios.
+
+00:10:23.240 --> 00:10:26.960
+Vous pouvez par exemple créer un espace de travail pour le service financier avec toutes ses applications comptables,
+
+00:10:26.960 --> 00:10:29.320
+un autre pour l'équipe d'ingénierie avec ses outils de conception,
+
+00:10:29.560 --> 00:10:32.040
+et un troisième pour les sous-traitants avec un accès limité.
+
+00:10:32.960 --> 00:10:35.520
+Les utilisateurs ne voient que les espaces de travail auxquels ils sont affectés,
+
+00:10:35.620 --> 00:10:38.060
+ainsi un membre du service financier ne verra jamais les outils d'ingénierie,
+
+00:10:38.140 --> 00:10:40.000
+et un sous-traitant ne verra jamais les applications internes.
+
+00:10:40.500 --> 00:10:42.080
+L'expérience utilisateur est une simplicité enfantine.
+
+00:10:42.520 --> 00:10:45.560
+Ouvrez l'application Windows, connectez-vous, et tout ce dont vous avez besoin est là.
+
+00:10:46.040 --> 00:10:48.240
+Cliquez sur une icône de bureau et vous accédez à une session Windows complète.
+
+00:10:48.800 --> 00:10:51.180
+Cliquez sur l'icône d'une application et elle s'ouvre comme un programme local.
+
+00:10:51.180 --> 00:10:54.900
+Pas besoin de VPN, pas de configuration complexe, juste une liste claire de ce à quoi vous avez accès.
+
+00:10:55.400 --> 00:10:56.620
+Nous avons maintenant tous les éléments en place.
+
+00:10:57.100 --> 00:11:00.180
+Mais comment un utilisateur se connecte-t-il réellement et accède-t-il à son bureau ?
+
+00:11:00.180 --> 00:11:03.100
+Comment les utilisateurs se connectent-ils ? La couche d'identité et d'accès.
+
+00:11:03.680 --> 00:11:05.600
+Tout commence donc avec Microsoft EntraID.
+
+00:11:06.260 --> 00:11:08.280
+Vous le connaissez peut-être encore sous le nom d'Azure Active Directory.
+
+00:11:08.840 --> 00:11:11.600
+Microsoft l'a renommée il y a quelque temps, mais il s'agit du même système sous le capot.
+
+00:11:12.340 --> 00:11:14.700
+Considéré EntraID comme la réception de votre bureau numérique,
+
+00:11:15.580 --> 00:11:17.340
+il sait qui vous êtes et ce à quoi vous avez le droit d'accéder.
+
+00:11:17.340 --> 00:11:23.400
+Ils gèrent votre connexion à Microsoft 365, Teams, SharePoint et, bien sûr, ils contrôlent aussi l'accès à AVD.
+
+00:11:24.160 --> 00:11:26.360
+Maintenant, comment un utilisateur se connecte-t-il concret ?
+
+00:11:26.360 --> 00:11:27.480
+Laissez-moi vous expliquer le processus.
+
+00:11:27.780 --> 00:11:31.540
+Ils ouvrent l'application Windows sur leur appareil, se connectent avec leur adresse e-mail professionnelle et leur mot de passe.
+
+00:11:31.800 --> 00:11:34.340
+Et s'ils utilisent l'authentification multifacteur, ils procèdent également à cet état.
+
+00:11:34.900 --> 00:11:38.820
+L'application Windows envoie la demande d'authentification à EntraID qui vérifie leur identité.
+
+00:11:39.660 --> 00:11:41.880
+Ensuite, AVD vérifie à quel groupe d'applications ils appartiennent.
+
+00:11:42.520 --> 00:11:44.500
+Fin l'autre de session lui-même, authentifie l'utilisateur.
+
+00:11:45.200 --> 00:11:46.260
+Cette dernière étape est importante.
+
+00:11:46.260 --> 00:11:51.300
+Même si l'utilisateur s'est connecté à l'application Windows, il a toujours besoin d'une autorisation pour se connecter réellement à la machine virtuelle.
+
+00:11:51.700 --> 00:11:54.740
+Cela est contrôlé par un rôle Azure spécifique appelé l'action d'utilisateur de machine virtuelle.
+
+00:11:55.140 --> 00:12:01.820
+Sans ce rôle attribué, un utilisateur peut s'authentifier auprès d'AVD et voir ses ressources dans l'application Windows, mais la connexion échouera lorsqu'il tentera de s'y connecter.
+
+00:12:02.260 --> 00:12:03.920
+Il n'a pas le droit de se connecter à l'autre de session.
+
+00:12:04.640 --> 00:12:05.860
+C'est là qu'interviennent les meilleures pratiques.
+
+00:12:06.260 --> 00:12:08.200
+N'attribuie jamais d'autorisation à des utilisateurs individuels.
+
+00:12:08.540 --> 00:12:09.360
+Utilisez toujours des groupes.
+
+00:12:09.780 --> 00:12:10.880
+Créez un groupe dans EntraID.
+
+00:12:10.880 --> 00:12:13.000
+Nommez-le par exemple UK Utilisateur AVD Game.
+
+00:12:13.100 --> 00:12:17.280
+Ajoutez-y tous vos utilisateurs, puis affectez ce groupe au groupe d'application et au rôle de connexion utilisateur de machine virtuelle.
+
+00:12:17.580 --> 00:12:19.460
+Lorsqu'une nouvelle personne arrive, ajoutez-la au groupe.
+
+00:12:19.920 --> 00:12:21.120
+Lorsqu'une personne part, supprimez-la.
+
+00:12:21.600 --> 00:12:23.660
+Vous n'aurez plus jamais à toucher à la configuration d'AVD.
+
+00:12:24.340 --> 00:12:31.220
+L'application Windows, elle-même anciennement appelée client bureau à distance, est disponible sur Windows, Mac, iOS, Android et même via un navigateur web.
+
+00:12:31.900 --> 00:12:33.300
+Les utilisateurs n'ont pas besoin d'appareils spécifiques.
+
+00:12:33.560 --> 00:12:34.740
+Peuvent utiliser ce qu'ils possèdent déjà.
+
+00:12:34.740 --> 00:12:39.320
+Et comme tout repose sur EntraID, vos politiques de sécurité existantes s'appliquent automatiquement.
+
+00:12:40.160 --> 00:12:43.620
+L'authentification multifacteur fonctionne de la même manière que pour Microsoft 365.
+
+00:12:44.340 --> 00:12:49.100
+Les politiques d'accès conditionnels, comme l'exigence d'un appareil conforme ou le blocage d'accès depuis certains lieux,
+
+00:12:49.800 --> 00:12:52.380
+s'appliquent à AVD, tout comme à SharePoint ou Exchange.
+
+00:12:53.340 --> 00:12:55.060
+Une politique de sécurité unique pour tous vos services.
+
+00:12:55.500 --> 00:12:56.700
+Mais aussi l'authentification unique et ses soeurs.
+
+00:12:57.160 --> 00:12:59.480
+Les utilisateurs s'authentifient une fois dans l'application Windows
+
+00:12:59.480 --> 00:13:02.280
+et ne sont plus sollicités au lancement de leur bureau ou de leurs applications.
+
+00:13:03.380 --> 00:13:03.880
+C'est transparent.
+
+00:13:03.880 --> 00:13:05.780
+Connectez-vous une fois et tout fonctionne simplement.
+
+00:13:06.640 --> 00:13:07.960
+Mais il reste un élément qui fait d'AVD.
+
+00:13:08.140 --> 00:13:11.200
+Une expérience vraiment fluide et c'est quelque chose qui préoccupe chaque utilisateur.
+
+00:13:12.100 --> 00:13:13.100
+Le défi du profilisateur.
+
+00:13:13.600 --> 00:13:15.420
+Pourquoi FS Logique c'est important ?
+
+00:13:15.420 --> 00:13:16.940
+Voici quelque chose auquel vous n'aviez peut-être pas pensé.
+
+00:13:17.320 --> 00:13:21.480
+Dans un pool d'hôtes mutualisés, un utilisateur peut tomber sur une machine virtuelle différente à chaque connexion.
+
+00:13:22.180 --> 00:13:25.100
+Aujourd'hui la machine A, demain la machine B, après demain la machine C.
+
+00:13:25.900 --> 00:13:29.620
+Sans gestion de profil, chaque connexion donne l'impression d'utiliser un ordinateur neuf.
+
+00:13:29.620 --> 00:13:34.460
+Pas de favoris, pas de fichiers sur le bureau, pas de mot de passe enregistré, pas de signature Outlook, rien.
+
+00:13:35.200 --> 00:13:38.540
+C'est comme loger dans une chambre d'hôtel qui est entièrement vidée et réinitialisée à chaque fois que vous partez.
+
+00:13:39.200 --> 00:13:41.140
+Vos paramètres, préférences et fichiers, tout a disparu.
+
+00:13:41.760 --> 00:13:43.280
+L'ancienne solution était les profils itinérants.
+
+00:13:43.620 --> 00:13:47.440
+Windows copiait tout votre profil depuis un serveur central vers la machine sur laquelle vous vous connectiez.
+
+00:13:48.200 --> 00:13:48.980
+Cela semble raisonnable.
+
+00:13:48.980 --> 00:13:52.920
+En pratique, c'était lent, peu fiable et sujet aux corruptions de données.
+
+00:13:53.520 --> 00:13:55.060
+Les connexions pouvaient prendre 30 secondes ou plus.
+
+00:13:55.560 --> 00:13:57.920
+Si la copie était interrompue, votre profil pouvait être totalement corrompu.
+
+00:13:58.300 --> 00:14:00.840
+Les équipes informatiques passaient des heures interminables à réparer des profils corrompus.
+
+00:14:00.980 --> 00:14:01.840
+Une expérience plus satisfaisante.
+
+00:14:02.140 --> 00:14:04.100
+Microsoft a reconnu qu'il s'agissait d'un problème sérieux.
+
+00:14:04.520 --> 00:14:08.280
+Ils ont donc racheté une société nommée FS Logix et intégré leur technologie directement dans AVD.
+
+00:14:09.060 --> 00:14:11.960
+FS Logix résout complètement le problème de profil et le fait de manière élégante.
+
+00:14:12.680 --> 00:14:13.400
+Voici comment c'est la fonction.
+
+00:14:13.400 --> 00:14:19.280
+Au lieu de copier un profil sans arrêt, FS Logix stocke le profil de chaque utilisateur sous forme de fichier de disque dur virtuel unique,
+
+00:14:19.380 --> 00:14:22.680
+dans un emplacement central, généralement Azure Files, généralement Azure Files.
+
+00:14:23.700 --> 00:14:27.020
+Lorsqu'un utilisateur se connecte à AVD, FS Logix monte ce disque directement dans sa session.
+
+00:14:27.740 --> 00:14:29.720
+C'est attaché instantanément, comme si vous branchiez une clé USB.
+
+00:14:30.440 --> 00:14:33.020
+Tous leurs paramètres, fichiers favoris et préférences apparaissent immédiatement.
+
+00:14:33.520 --> 00:14:34.480
+Les résultats sont spectaculaires.
+
+00:14:35.140 --> 00:14:38.200
+Les temps de connexion passent de plus de 30 secondes à environ 7 ou 8 secondes.
+
+00:14:38.760 --> 00:14:42.980
+Et comme le profil est stocké de manière centralisée, peu importe l'autre de session sur lequel l'utilisateur arrive.
+
+00:14:43.400 --> 00:14:44.940
+Le profil le suit automatiquement.
+
+00:14:46.060 --> 00:14:49.160
+FS Logix résout également un problème majeur avec les applications Microsoft 365.
+
+00:14:49.580 --> 00:14:54.080
+Dans un environnement mutualisé traditionnel, le mode cache docuque et la synchronisation OneDrive étaient pratiquement inutilisables.
+
+00:14:54.480 --> 00:14:55.380
+Les performances étaient médiocres.
+
+00:14:55.880 --> 00:14:57.500
+Avec FS Logix, les deux fonctionnent parfaitement.
+
+00:14:57.900 --> 00:15:02.000
+Les utilisateurs bénéficient d'un outlook complet avec accès en ligne, OneDrive synchronise leurs fichiers et Teams met correctement en cache.
+
+00:15:02.220 --> 00:15:02.960
+Tout fonctionne simplement.
+
+00:15:03.520 --> 00:15:07.900
+C'est pourquoi FS Logix est considéré comme la solution standard indispensable pour les profils utilisateurs dans AVD.
+
+00:15:08.520 --> 00:15:09.820
+N'essayez pas de gérer les profils sans lui.
+
+00:15:09.820 --> 00:15:13.320
+Vous finirez avec des connexions lentes, des profils corrompus et des utilisateurs mécontents.
+
+00:15:13.840 --> 00:15:15.060
+Utiliser FS Logix, c'est le premier jour.
+
+00:15:15.580 --> 00:15:19.680
+Maintenant que vous comprenez les éléments, parlons de la raison pour laquelle les entreprises franchissent le pas.
+
+00:15:20.540 --> 00:15:22.620
+Pourquoi les entreprises choisissent-elles AVD ?
+
+00:15:22.620 --> 00:15:23.860
+Avantages en termes de sécurité et de coût.
+
+00:15:24.360 --> 00:15:27.320
+Pourquoi les entreprises choisissent-elles AVD plutôt que les ordinateurs portables de technologie ?
+
+00:15:27.320 --> 00:15:29.000
+Cela revient vraiment à la sécurité et au coût.
+
+00:15:29.320 --> 00:15:29.840
+Analysons cela.
+
+00:15:30.220 --> 00:15:31.260
+Premièrement, le modèle de sécurité.
+
+00:15:31.680 --> 00:15:33.600
+Avec AVD, les données ne quittent jamais le centre données Azure.
+
+00:15:33.600 --> 00:15:36.800
+L'appareil de l'utilisateur affiche simplement ce qui se passe sur la machine distante.
+
+00:15:37.140 --> 00:15:43.620
+Les fichiers, les applications et les informations sensibles restent tous à l'intérieur des centres de données Microsoft derrière leur contrôle de sécurité, derrière leur contrôle de sécurité.
+
+00:15:43.820 --> 00:15:47.820
+Si quelqu'un perd son ordinateur portable, il n'y a rien à voler car les données n'y ont jamais été présentes.
+
+00:15:48.540 --> 00:15:51.260
+Vous n'avez pas à vous soucier de chiffrer chaque terminal ou d'effacer les appareils volés.
+
+00:15:51.780 --> 00:15:55.540
+Microsoft intègre également Defender for Endpoint directement dans les hôtes de session AVD,
+
+00:15:55.740 --> 00:16:00.800
+de sorte que vos machines virtuelles sont surveillées et protégées comme n'importe quel autre appareil géré, comme n'importe quel autre appareil géré.
+
+00:16:00.800 --> 00:16:05.360
+La détection des logiciels malveillants, la recherche de menaces et la réponse automatisée s'appliquent toutes à votre environnement AVD.
+
+00:16:06.020 --> 00:16:09.940
+L'informatique bénéficie d'une vue de sécurité unique sur les appareils physiques et les bureaux virtuels.
+
+00:16:10.720 --> 00:16:12.220
+Parlons maintenant de la gestion centralisée.
+
+00:16:12.680 --> 00:16:14.160
+C'est une victoire majeure pour les équipes informatiques.
+
+00:16:14.620 --> 00:16:20.480
+Au lieu de gérer des centaines d'ordinateurs portables individuels, de déployer des mises à jour, de résoudre des problèmes ou de remplacer du matériel défectueux, vous gérez un seul environnement.
+
+00:16:21.340 --> 00:16:23.920
+Mettez à jour l'image de référence une fois et tous les hôtes de session reçoivent la mise à jour.
+
+00:16:24.420 --> 00:16:27.140
+Appliquez un changement de stratégie une fois et s'applique à chaque utilisateur.
+
+00:16:27.480 --> 00:16:28.980
+La charge opérationnelle diminue.
+
+00:16:28.980 --> 00:16:30.040
+Vous économisez du temps et des efforts.
+
+00:16:30.340 --> 00:16:31.280
+Ensuite, il y a l'aspect financier.
+
+00:16:31.520 --> 00:16:33.640
+Le redimensionnement automatique est là où AVD permet vraiment de faire des économies.
+
+00:16:33.820 --> 00:16:35.700
+Les hôtes de session ne fonctionnent que lorsque les utilisateurs sont connectés.
+
+00:16:36.180 --> 00:16:38.560
+Pendant les heures de pointe, vous pourriez avoir 50 machines en marche.
+
+00:16:39.340 --> 00:16:40.900
+La nuit et le week-end, vous pourriez n'en avoir que deux.
+
+00:16:41.480 --> 00:16:44.340
+Le redimensionnement automatique peut réduire vos heures de calcul de 40 à 60%.
+
+00:16:44.340 --> 00:16:46.340
+Vous ne payez pas pour des machines qui restent inutilisées.
+
+00:16:46.680 --> 00:16:48.500
+Le dimensionnement est un autre levier de réduction des coûts.
+
+00:16:48.500 --> 00:16:54.140
+Dans l'ancien modèle, vous deviez acheter des ordinateurs portables assez puissants pour vos utilisateurs les plus exigeants, même si la plupart n'avaient besoin que d'outils de base.
+
+00:16:54.600 --> 00:16:57.760
+Avec AVD, vous adaptez la taille des machines virtuelles aux besoins réels de la charge de travail.
+
+00:16:58.180 --> 00:16:59.460
+Attribuez des machines plus puissantes aux utilisateurs.
+
+00:16:59.860 --> 00:17:02.040
+Attribuez des machines plus petites et moins coûteuses aux employés opérationnels.
+
+00:17:02.260 --> 00:17:03.940
+Fini le surcoût pour du matériel dont personne n'a besoin.
+
+00:17:04.300 --> 00:17:06.700
+Il existe un avantage en matière de licence dont vous pourriez déjà bénéficier.
+
+00:17:07.400 --> 00:17:12.280
+Si votre entreprise utilise Windows 10 ou 11 entreprises ou Microsoft 365 E3 ou E5,
+
+00:17:12.280 --> 00:17:16.400
+vous pouvez utiliser AVD sans frais de licence supplémentaire pour le bureau Windows.
+
+00:17:17.140 --> 00:17:18.460
+Votre licence actuelle le couvre déjà.
+
+00:17:18.980 --> 00:17:20.140
+Cela élimine un obstacle majeur.
+
+00:17:20.560 --> 00:17:21.800
+Et puis il y a la rapidité de déploiement.
+
+00:17:21.800 --> 00:17:25.360
+Dans l'ancien modèle, intégrer un nouvel employé signifiait commander un ordinateur,
+
+00:17:25.660 --> 00:17:28.980
+attendre sa livraison, installer l'image, les applications et configurer les paramètres.
+
+00:17:30.180 --> 00:17:31.340
+Cela pouvait prendre des jours, voire des semaines.
+
+00:17:32.140 --> 00:17:34.620
+Avec AVD, vous pouvez configurer un nouvel utilisateur en quelques minutes,
+
+00:17:34.760 --> 00:17:38.040
+créer son compte, l'assigner au bon groupe et il est opérationnel sur n'importe quel appareil.
+
+00:17:38.960 --> 00:17:40.320
+Voici ce qu'il faut retenir de tout cela.
+
+00:17:41.600 --> 00:17:43.440
+Voici donc ce qu'est réellement Azure Virtual Desktop.
+
+00:17:44.140 --> 00:17:47.960
+Il s'agit d'un service géré qui fournit des bureaux et des applications Windows depuis Azure vers n'importe quel appareil.
+
+00:17:47.960 --> 00:17:53.940
+En arrière-plan, vous disposez d'un pool d'hôtes composé de machines virtuelles organisées en groupes d'applications et présentées via des espaces de travail.
+
+00:17:54.700 --> 00:18:01.440
+Les utilisateurs se connectent via l'application Windows, s'authentifient avec EntreID et bénéficient d'une expérience Windows complète sur Mac, tablette, Chromebook ou un ancien PC ou un ancien PC.
+
+00:18:01.940 --> 00:18:02.880
+Voici le résumé en une phrase.
+
+00:18:02.880 --> 00:18:05.980
+AVD dissocie l'expérience informatique de l'appareil physique.
+
+00:18:06.740 --> 00:18:07.920
+Le travail s'effectue dans le cloud.
+
+00:18:08.260 --> 00:18:09.200
+L'appareil n'est que la fenêtre.
+
+00:18:09.640 --> 00:18:11.560
+Si vous évaluez AVD, voici ce que je recommande.
+
+00:18:11.980 --> 00:18:13.120
+Commencez par un pool d'hôtes mutualisés.
+
+00:18:13.460 --> 00:18:16.640
+C'est là que vous obtenez la meilleure rentabilité grâce à la multisession et à la mise à l'échelle automatique.
+
+00:18:16.940 --> 00:18:18.200
+Utilisez FSLogix dès le premier jour.
+
+00:18:18.460 --> 00:18:20.100
+N'envisagez même pas de gérer les profils sans lui.
+
+00:18:20.460 --> 00:18:23.020
+C'est ce qui fait la différence entre une expérience fluide et une expérience frustrante.
+
+00:18:23.700 --> 00:18:26.240
+Signer les autorisations via des groupes et non à des utilisateurs individuels.
+
+00:18:26.240 --> 00:18:29.580
+Créer un groupe d'utilisateurs AVD, ajoutez-y les personnes et gérez les accès à partir de là.
+
+00:18:29.900 --> 00:18:31.480
+Si vous souhaitez tester AVD, commencez petit.
+
+00:18:31.720 --> 00:18:33.860
+Un pool d'hôtes, quelques utilisateurs pour voir comment cela se présente.
+
+00:18:34.440 --> 00:18:37.660
+La barrière à l'entrée est faible et vous pouvez beaucoup apprendre d'un projet pilote avant de passer à l'échelle.
+
+00:18:38.320 --> 00:18:40.020
+C'est Azure Virtual Desktop, expliquez simplement.
+
+00:18:40.640 --> 00:18:44.140
+Abonnez-vous pour plus d'analyses simples des technologies Microsoft et partagez ceci avec...
