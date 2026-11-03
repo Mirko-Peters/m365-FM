@@ -1773,10 +1773,15 @@ Mirko Peters, {BASE}/about/
     _known_routes = []
     for _out_root in (OUT, R2OUT):
         if _out_root.exists():
-            _known_routes.extend(
-                "/" + _f.parent.relative_to(_out_root).as_posix().strip("/") + "/"
-                for _f in _out_root.rglob("index.html")
-            )
+            for _f in _out_root.rglob("*"):
+                if not _f.is_file():
+                    continue
+                _rel = _f.relative_to(_out_root).as_posix()
+                if _f.name == "index.html":
+                    _parent = _f.parent.relative_to(_out_root).as_posix()
+                    _known_routes.append("/" if _parent == "." else "/" + _parent + "/")
+                else:
+                    _known_routes.append("/" + _rel)
     _rd_file = OUT / "show" / "redirects.json"
     _redirects = json.loads(_rd_file.read_text("utf-8")) if _rd_file.exists() else {}
     _episodes = [e for e in PP.load("episodes") if e.get("published") not in (False, "False") and e.get("hidden") not in (True, "True")]

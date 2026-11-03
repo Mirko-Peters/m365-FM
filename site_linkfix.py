@@ -56,7 +56,7 @@ def build_index(redirects=None, episodes=(), blogs=(), entities=(), renames=None
     for route in known_routes or ():
         path, _, _ = _path(route)
         if path:
-            routes[_key(path)] = path if path.endswith("/") else path + ("" if path == "/" else "/")
+            routes[_key(path)] = path
 
     return {
         "redirects": redirect_map,

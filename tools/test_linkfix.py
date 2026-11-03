@@ -23,7 +23,7 @@ class LinkfixTest(unittest.TestCase):
             blogs=[{"slug": "governance-model", "title": "Microsoft 365 Governance Operating Model"}],
             entities=[{"id": "dataverse", "name": "Microsoft Dataverse"}],
             renames={"old-episode": "teams-security"},
-            known_routes=["/show/episodes/teams-security/", "/community/u/mirko-p/blog/governance-model/"],
+            known_routes=["/show/episodes/teams-security/", "/community/u/mirko-p/blog/governance-model/", "/feed.xml"],
         )
 
     def test_redirect_first_and_slash_variants(self):
@@ -66,12 +66,14 @@ class LinkfixTest(unittest.TestCase):
         source = (
             '<p><a href="https://www.m365.fm/Teams-Security">Security</a> '
             '<a href="/unknown-path"><strong>Unmapped link</strong></a> '
+            '<a href="/feed.xml">Feed</a> '
             '<a href="https://example.com/out">External</a></p>'
         )
         result, resolved, unresolved = LF.rewrite_html(source, "/show/episodes/source/", self.index)
         self.assertIn('href="/show/episodes/teams-security/"', result)
         self.assertIn("Unmapped link", result)
         self.assertNotIn("<a href=\"/unknown-path\"", result)
+        self.assertIn('<a href="/feed.xml">Feed</a>', result)
         self.assertIn('href="https://example.com/out"', result)
         self.assertEqual(resolved[0]["method"], "episode")
         self.assertEqual(unresolved[0]["text"], "Unmapped link")
