@@ -1,0 +1,239 @@
+{
+ "episode_id": "67326842",
+ "slug": "data-pipelines-in-microsoft-fabric-managed-identities-key-vault-rbac",
+ "title": "Data Pipelines in Microsoft Fabric: How Managed Identities, Key Vault and RBAC Close the Gaps Your Defaults Leave Open",
+ "lang": "en",
+ "duration_s": 1300,
+ "transcript_source": "data/en_transcripts/23c7de00832d.txt",
+ "time_basis": "estimated",
+ "entities": [
+  {
+   "slug": "managed-identity",
+   "name": "Managed identity",
+   "type": "concept",
+   "score": 95,
+   "mentions": 13,
+   "first_mention_s": 16,
+   "quote": "the real security gaps most admins miss and how using managed identities, key Vault integration, and r back actually",
+   "url": "https://www.m365.fm/entity/managed-identity/"
+  },
+  {
+   "slug": "azure-key-vault",
+   "name": "Azure Key Vault",
+   "type": "product",
+   "score": 90,
+   "mentions": 12,
+   "first_mention_s": 17,
+   "quote": "gaps most admins miss and how using managed identities, key Vault integration, and r back actually locks them down if",
+   "url": "https://www.m365.fm/entity/azure-key-vault/"
+  },
+  {
+   "slug": "role-based-access-control",
+   "name": "Role-based access control (RBAC)",
+   "type": "concept",
+   "score": 80,
+   "mentions": 6,
+   "first_mention_s": 19,
+   "quote": "how using managed identities, key Vault integration, and r back actually locks them down if you know where to look.",
+   "url": "https://www.m365.fm/entity/role-based-access-control/"
+  },
+  {
+   "slug": "fabric-data-pipelines",
+   "name": "Fabric Data Pipelines",
+   "type": "product",
+   "score": 80,
+   "mentions": 52,
+   "first_mention_s": 2,
+   "quote": "Ever wonder why your data pipeline still feels exposed even with all those Microsoft Fabric",
+   "url": "https://www.m365.fm/entity/fabric-data-pipelines/"
+  },
+  {
+   "slug": "fabric",
+   "name": "Microsoft Fabric",
+   "type": "platform",
+   "score": 70,
+   "mentions": 24,
+   "first_mention_s": 5,
+   "quote": "pipeline still feels exposed even with all those Microsoft Fabric features.",
+   "url": "https://www.m365.fm/entity/fabric/"
+  },
+  {
+   "slug": "fabric-workspace",
+   "name": "Fabric workspace",
+   "type": "concept",
+   "score": 60,
+   "mentions": 15,
+   "first_mention_s": 44,
+   "quote": "You assign users, maybe set some workspace access, check your connectors, and move on.",
+   "url": "https://www.m365.fm/entity/fabric-workspace/"
+  },
+  {
+   "slug": "least-privilege",
+   "name": "Least privilege",
+   "type": "concept",
+   "score": 50,
+   "mentions": 1,
+   "first_mention_s": 191,
+   "quote": "for most organizations, there's a line between access and least privilege, and it's written in pencil.",
+   "url": "https://www.m365.fm/entity/least-privilege/"
+  },
+  {
+   "slug": "service-account",
+   "name": "Service account",
+   "type": "concept",
+   "score": 45,
+   "mentions": 4,
+   "first_mention_s": 200,
+   "quote": "But the idea of only giving people or service accounts the bare minimum rights needed for their job.",
+   "url": "https://www.m365.fm/entity/service-account/"
+  },
+  {
+   "slug": "compliance",
+   "name": "Compliance",
+   "type": "concept",
+   "score": 40,
+   "mentions": 5,
+   "first_mention_s": 155,
+   "quote": "The compliance officer does a sweep of production notebooks and",
+   "url": "https://www.m365.fm/entity/compliance/"
+  },
+  {
+   "slug": "entra-id",
+   "name": "Microsoft Entra ID",
+   "type": "product",
+   "score": 35,
+   "mentions": 1,
+   "first_mention_s": 458,
+   "quote": "Give each Fabric pipeline its own unique identity in Azure active directory.",
+   "url": "https://www.m365.fm/entity/entra-id/"
+  },
+  {
+   "slug": "access-reviews",
+   "name": "Access reviews",
+   "type": "concept",
+   "score": 25,
+   "mentions": 1,
+   "first_mention_s": 1132,
+   "quote": "Running a fabric access review isn't just about who should have what.",
+   "url": "https://www.m365.fm/entity/access-reviews/"
+  },
+  {
+   "slug": "service-principal",
+   "name": "Service principal",
+   "type": "concept",
+   "score": 25,
+   "mentions": 1,
+   "first_mention_s": 226,
+   "quote": "You probably have two or three unused service principles still floating around, tied to projects that ended last",
+   "url": "https://www.m365.fm/entity/service-principal/"
+  },
+  {
+   "slug": "gdpr",
+   "name": "GDPR",
+   "type": "concept",
+   "score": 20,
+   "mentions": 1,
+   "first_mention_s": 855,
+   "quote": "Regulations like GDPR, hipA or finance specific controls expect you to show not",
+   "url": "https://www.m365.fm/entity/gdpr/"
+  }
+ ],
+ "new_entities": [
+  {
+   "slug": "secrets-management",
+   "name": "Secrets management",
+   "type": "concept",
+   "mentions": 2,
+   "first_mention_s": 629,
+   "quote": "But that's where centralized secret management steps in locking down",
+   "status": "review"
+  }
+ ],
+ "quotes": [
+  {
+   "text": "The biggest vulnerability is the access you never bothered to check. Every setting you left untouched becomes a potential doorway.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 310,
+   "entities": [
+    "fabric-workspace",
+    "least-privilege"
+   ],
+   "why": "Frames unchecked default access as the main pipeline risk."
+  },
+  {
+   "text": "The idea is simple but powerful. Give each Fabric pipeline its own unique identity in Azure active directory.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 453,
+   "entities": [
+    "managed-identity",
+    "fabric-data-pipelines",
+    "entra-id"
+   ],
+   "why": "States the core managed identity recommendation for Fabric pipelines."
+  },
+  {
+   "text": "You can finally start thinking about access in terms of what a pipeline should be able to do, not which password is still working.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 603,
+   "entities": [
+    "managed-identity"
+   ],
+   "why": "Reframes pipeline security from passwords to scoped capabilities."
+  },
+  {
+   "text": "If someone audits your pipeline, they see references and access logs, but never the actual key.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 811,
+   "entities": [
+    "azure-key-vault",
+    "secrets-management"
+   ],
+   "why": "Shows the audit benefit of Key Vault references over hardcoded secrets."
+  },
+  {
+   "text": "When you actively shape who can change, view, or run each pipeline, you keep accidental data leaks to a minimum.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 1220,
+   "entities": [
+    "role-based-access-control",
+    "fabric-data-pipelines"
+   ],
+   "why": "Summarises the value of intentional RBAC."
+  }
+ ],
+ "chapters": [
+  {
+   "start_s": 0,
+   "title": "The hidden risks lurking in Fabric pipelines"
+  },
+  {
+   "start_s": 336,
+   "title": "Managed identities: killing the password problem"
+  },
+  {
+   "start_s": 631,
+   "title": "Locking down secrets with Azure Key Vault"
+  },
+  {
+   "start_s": 916,
+   "title": "RBAC: who really has access to your data?"
+  },
+  {
+   "start_s": 1245,
+   "title": "Security as a business enabler"
+  }
+ ],
+ "takeaways": [
+  "Default inherited workspace permissions and hardcoded secrets are the biggest silent risks in Microsoft Fabric pipelines.",
+  "Managed identities remove passwords from pipelines, and Azure Key Vault centralises the remaining secrets with logged, identity-scoped access.",
+  "Intentional, regularly reviewed role-based access control keeps pipeline edit and data access aligned with least privilege and makes audits provable."
+ ],
+ "hook": "Fabric admins and data engineers whose pipelines look secure until an audit starts will learn where the default settings leave gaps. The episode shows how managed identities, Azure Key Vault and deliberate RBAC close those gaps without slowing teams down.",
+ "youtube_video_id": null,
+ "generated_at": "2026-11-03T03:36:33Z"
+}
