@@ -2,7 +2,7 @@ name: Website bauen und veröffentlichen
 on:
   push:
     branches: [main]
-    paths: ["episodes/**", "data/**", "domain.txt", "sync_platforms.py", "sync_live.py", "site_live.py", "tools/build_speakers.py", "platform_match.py", "show_notes.py", "sync_show_notes.py", "generate_og.py", "site_*.py", "site_taxonomy.py", "check_links.py", "check_schema.py", "assets/**", "generate_articles.py", "scrape_spotify.py", "fetch_en_episodes.py", "fetch_en_titles.py", "fetch_reviews.py", "generate_site.py", "translate_blog.py", "generate_covers.py", "sync_spreaker.py", "spreaker_auth.py", "site_cover.py", "site_design.py", "site_money.py", "site_legal.py", "shows_seo.json", ".github/workflows/site.yml", "check_*.py", "shownotes/site/**", "shownotes/QA.txt"]
+    paths: ["episodes/**", "data/**", "domain.txt", "sync_platforms.py", "sync_live.py", "site_live.py", "tools/build_speakers.py", "tools/test_linkfix.py", "platform_match.py", "show_notes.py", "sync_show_notes.py", "generate_og.py", "site_*.py", "site_taxonomy.py", "check_links.py", "check_schema.py", "assets/**", "generate_articles.py", "scrape_spotify.py", "fetch_en_episodes.py", "fetch_en_titles.py", "fetch_reviews.py", "generate_site.py", "translate_blog.py", "generate_covers.py", "sync_spreaker.py", "spreaker_auth.py", "site_cover.py", "site_design.py", "site_money.py", "site_legal.py", "shows_seo.json", ".github/workflows/site.yml", "check_*.py", "shownotes/site/**", "shownotes/QA.txt"]
   schedule:
     - cron: "17 5 * * *"
   workflow_dispatch:
@@ -149,7 +149,19 @@ jobs:
             git add data/episode_links.json data/episode_links_report.json data/platforms.json && git commit -m "Plattform-Folgenlinks aktualisiert" -q
             (git pull --rebase --autostash -q -X theirs || git rebase --abort) && git push -q
           fi
-      - run: python generate_site.py
+      - name: Linkfix offline testen
+        run: python tools/test_linkfix.py
+      - name: Website bauen
+        env:
+          LINKFIX_REPORT: ${{ runner.temp }}/linkfix-report.json
+        run: python generate_site.py
+      - name: Linkfix-Bericht als CI-Artefakt sichern
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: linkfix-report
+          path: ${{ runner.temp }}/linkfix-report.json
+          if-no-files-found: ignore
       - name: Seiten in den R2-Bucket laden (duenne Sprachfassungen; GitHub Pages bleibt klein, nichts wird geloescht)
         continue-on-error: true
         env:
