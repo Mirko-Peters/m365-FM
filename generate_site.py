@@ -24,6 +24,7 @@ import site_ads as ADS
 import site_media as MED
 import site_sidebar as SBR
 import site_r2 as R2
+import site_sponsorships as SPM   # T37 Sponsor: Kennzeichnung bezahlter Inhalte (data/sponsorships.json)
 import glob, hashlib, html, json, os, re, shutil, sys, unicodedata
 from datetime import date
 from pathlib import Path
@@ -1056,6 +1057,8 @@ def build():
     ORIG_ALTS = {}
     _I18 = ROOT / "data" / "podpage_i18n"   # T42: Sprachen, in denen die englische Folge eine lokalisierte Fassung hat (Titel uebersetzt)
     TRL_SLUGS = {l: {k for k, v in json.load(open(_I18 / f"{l}.json", encoding="utf-8")).items() if v and v[0]} for l in LANGS if (_I18 / f"{l}.json").exists()}
+    import site_podpage as _PPs   # T37 Sponsor: data/sponsorships.json pruefen (Entitaeten, Themen, Folgen, Daten, max. 3 je Thema) - Fehler brechen den Bau ab
+    SPM.init(TODAY, LRN.ENTS, episodes={e["slug"] for e in _PPs.load("episodes")}, dubs={(it["lang"], it["slug"]): it["vid"] for it in items.values()}, orig=ORIG)
     try:   # Speaker der M365Con-Programme: zusammengefuehrte Personen (tools/build_speakers.py) -> Entitaetsseiten und /speakers.json fuer den Worker
         _sp = json.loads((ROOT / "data" / "speakers.json").read_text("utf-8")).get("speakers", [])
         ENT.SPEAKERS.update({x["id"]: x for x in _sp})
@@ -1086,6 +1089,7 @@ def build():
         notes_block = _nkp + _nnotes + _nfaq + (SNT.CSS if (_nkp or _nnotes or _nfaq) else "")
         _el = {k: u for k, u in elinks.get(f"{vid}:{l}", {}).items() if u}   # zugeordnete Plattform-Folgenlinks -> sameAs
         more = related(it, by_lang[l], tagsets[l], catsets[l])
+        _spr = SPM.episode(vid=vid)   # T37 Sponsor: Dub-Folge aus einem Sponsoring (dauerhaft)
         ld = [
             {"@context": "https://schema.org", "@type": "PodcastEpisode", "@id": canonical + "#episode", "name": e["title"], "description": strip_tags(intro),
              "url": canonical, "inLanguage": LANGS[l][1], "datePublished": it["date"],
@@ -1107,6 +1111,8 @@ def build():
             person_ld(), org_ld(),
         ]
         ld[0]["video"] = {"@id": canonical + "#video"}
+        for _n in (ld if _spr else []):   # T37 Sponsor: PodcastEpisode und VideoObject derselben Folge
+            if _n.get("@type") in ("PodcastEpisode", "VideoObject"): _n["sponsor"] = SPM.ld(_spr)
         for _n in ld:
             if _xab and _n.get("@type") == "VideoObject": _n["about"] = _xab   # T27: das Video behandelt dieselben Entitaeten wie die Folge
         pc = [c for c in ORDER if c in cat_of[vid]][0]
@@ -1166,7 +1172,7 @@ def build():
 <main class="wrap"><article>
 <nav class="crumbs" aria-label="breadcrumb"><a href="{BASE}/{l}/">{esc(ui[7])}</a> / {esc(LANGS[l][0])} / {it["date"]}</nav>
 <div class="kicker">M365.FM · {esc(LANGS[l][0])}</div>{('<p class="mut"><a href="' + BASE + '/show/episodes/' + ORIG[vid] + '/" hreflang="en">' + ("Original (English)" if l != "de" else "Original (Englisch)") + '</a></p>') if vid in ORIG else ""}
-<h1>{esc(h1_main)}</h1>{("<p class=sub>" + esc(h1_rest) + "</p>") if h1_rest else ""}
+<h1>{esc(h1_main)}</h1>{("<p class=sub>" + esc(h1_rest) + "</p>") if h1_rest else ""}{SPM.note(l, _spr)}
 {chips_html(l, it)}<p class="lede">{intro}</p>
 <figure class="cover" style="margin-inline:0">{art_svg(vid, LANGS[l][0], "M365.FM · " + ui[0], l)}</figure>
 <div class="panel"><iframe src="https://widget.spreaker.com/player?episode_id={it["eid"]}&amp;theme=light&amp;playlist=false" height="131" loading="lazy" title="{esc(e["title"])}"></iframe>
@@ -1182,6 +1188,7 @@ def build():
 <p style="margin-top:1.6em"><a class="btn" href="{BASE}/{l}/">{esc(ui[3])} →</a></p>
 <section id="c-comments"></section><section id="c-sub"></section></main>
 {footer(l)}{community_tags(l, vid)}"""
+        if _spr: body = SPM.mark(body, _spr)   # T37 Sponsor: Links zum Sponsor mit rel="sponsored"
         OG_COVER[canonical] = art_svg(vid, LANGS[l][0], lang=l)
         write(f'{l}/{it["slug"]}/index.html',
               page(l, e["title"], short(intro), canonical, body, alts, ld + _nld, xdefault=alts.get("en"), side=side_for(l, e["title"], body), extra_head=f'<meta property="article:section" content="{esc(cat_name(pc, l))}">' + "".join(f'<meta property="article:tag" content="{esc(t)}">' for t in tagraw[l][vid])))
@@ -1400,6 +1407,7 @@ def build():
     import site_legacy_blog as LBL
     _posts = BLG.fetch_posts(COMMUNITY_API); _have = {(p["slug"], p.get("lang") or "en") for p in _posts if p["handle"] == "mirko-p"}
     _posts += [p for p in LBL.items(BASE) if (p["slug"], p.get("lang") or "en") not in _have]   # plus die frueheren Podpage-Blogbeitraege als Community-Beitraege von mirko-p; T6: je Slug UND Sprache (die deutschen Fassungen blieben sonst beim D1-Import auf der Strecke)
+    SPM.check_posts(_posts)   # T37 Sponsor: Beitraege in data/sponsorships.json muessen existieren
     LBL.publish(write, BASE); MEM.BLOGLANGS = {p["lang"] for p in _posts}   # stand seit T6 versehentlich im Kommentar: blog-import/ fuer den Worker und die Blog-Sprachen der Profile
     import site_content_blog as CBL; CBL.publish(write, LRN.ENTS)   # T15: freigegebene Content-Pakete imports/blog/<sprache>/*.md -> blog-content/index.json (Worker-Cron importContentBlog)
     for _p in _posts:
