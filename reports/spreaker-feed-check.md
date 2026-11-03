@@ -1,6 +1,6 @@
-# Spreaker-Feed gegen geschriebene Shownotes (2026-11-03T06:34Z)
+# Spreaker-Feed gegen geschriebene Shownotes (2026-11-03T08:30Z)
 
-Geschrieben: 523 · im Feed: 521 · Text gleich: 521 · alle m365-Links im Feed: 521
+Geschrieben: 583 · im Feed: 581 · Text gleich: 549 · alle m365-Links im Feed: 549
 
 | Folge | im Feed | Text gleich | Links Datei | Links Feed | HTML im Feed |
 |---|---|---|---|---|---|
@@ -8,16 +8,25 @@ Geschrieben: 523 · im Feed: 521 · Text gleich: 521 · alle m365-Links im Feed:
 | 67365584 | nein | nein |  |  | nein |
 | 67377514 | ja | ja | 6 | 6 | ja |
 | 67389972 | ja | ja | 6 | 6 | ja |
+| 67391246 | ja | nein | 6 | 3 | ja |
 | 67401530 | ja | ja | 6 | 6 | ja |
 | 67411474 | ja | ja | 7 | 7 | ja |
 | 67419834 | ja | ja | 6 | 6 | ja |
+| 67464190 | ja | nein | 6 | 2 | ja |
 | 67481390 | ja | ja | 6 | 6 | ja |
+| 67485890 | ja | nein | 6 | 0 | ja |
 | 67497114 | ja | ja | 8 | 8 | ja |
 | 67509218 | ja | ja | 7 | 7 | ja |
+| 67519720 | ja | nein | 6 | 0 | ja |
+| 67597954 | ja | nein | 8 | 4 | ja |
 | 67635116 | ja | ja | 6 | 6 | ja |
+| 67692646 | ja | nein | 7 | 3 | ja |
 | 67823814 | ja | ja | 8 | 8 | ja |
+| 67828404 | ja | nein | 6 | 0 | ja |
 | 67832118 | ja | ja | 6 | 6 | ja |
 | 67873432 | ja | ja | 8 | 8 | ja |
+| 67887106 | ja | nein | 6 | 2 | ja |
+| 67911130 | ja | nein | 7 | 3 | ja |
 | 67929056 | ja | ja | 7 | 7 | ja |
 | 67947670 | ja | ja | 6 | 6 | ja |
 | 68001880 | ja | ja | 6 | 6 | ja |
@@ -35,19 +44,45 @@ Geschrieben: 523 · im Feed: 521 · Text gleich: 521 · alle m365-Links im Feed:
 | 68442208 | ja | ja | 6 | 6 | ja |
 | 68492222 | ja | ja | 7 | 7 | ja |
 | 68500794 | ja | ja | 7 | 7 | ja |
+| 68515331 | ja | ja | 6 | 6 | ja |
 | 68515934 | ja | ja | 6 | 6 | ja |
+| 68517411 | ja | nein | 8 | 5 | ja |
 | 68517496 | ja | ja | 6 | 6 | ja |
 | 68517778 | ja | ja | 6 | 6 | ja |
+| 68517897 | ja | ja | 7 | 7 | ja |
+| 68518023 | ja | ja | 7 | 7 | ja |
 | 68518288 | ja | ja | 6 | 6 | ja |
 | 68518432 | ja | ja | 6 | 6 | ja |
+| 68518551 | ja | nein | 7 | 5 | ja |
+| 68518731 | ja | ja | 8 | 8 | ja |
+| 68519015 | ja | ja | 7 | 7 | ja |
+| 68519435 | ja | ja | 7 | 7 | ja |
+| 68519611 | ja | ja | 6 | 6 | ja |
 | 68519790 | ja | ja | 7 | 7 | ja |
 | 68520628 | ja | ja | 7 | 7 | ja |
+| 68520867 | ja | ja | 7 | 7 | ja |
 | 68520944 | ja | ja | 6 | 6 | ja |
+| 68603267 | ja | ja | 7 | 7 | ja |
+| 68603397 | ja | nein | 8 | 5 | ja |
+| 68603887 | ja | nein | 7 | 5 | ja |
 | 68604156 | ja | ja | 7 | 7 | ja |
 | 68604308 | ja | ja | 6 | 6 | ja |
 | 68604476 | ja | ja | 6 | 6 | ja |
+| 68612821 | ja | nein | 7 | 5 | ja |
+| 68612907 | ja | nein | 7 | 5 | ja |
+| 68613313 | ja | ja | 8 | 8 | ja |
+| 68638335 | ja | ja | 7 | 7 | ja |
+| 68638393 | ja | nein | 7 | 3 | ja |
+| 68692481 | ja | ja | 7 | 7 | ja |
+| 68692533 | ja | ja | 7 | 7 | ja |
 | 68692696 | ja | ja | 6 | 6 | ja |
+| 68692737 | ja | ja | 7 | 7 | ja |
+| 68755705 | ja | ja | 8 | 8 | ja |
+| 68755851 | ja | ja | 8 | 8 | ja |
+| 68755969 | ja | ja | 7 | 7 | ja |
 | 68756252 | ja | ja | 6 | 6 | ja |
+| 68756837 | ja | nein | 7 | 3 | ja |
+| 68757235 | ja | ja | 7 | 7 | ja |
 | 68759162 | ja | ja | 6 | 6 | ja |
 | 68795891 | ja | ja | 7 | 7 | ja |
 | 68796299 | ja | ja | 7 | 7 | ja |
@@ -80,11 +115,14 @@ Geschrieben: 523 · im Feed: 521 · Text gleich: 521 · alle m365-Links im Feed:
 | 69081163 | ja | ja | 7 | 7 | ja |
 | 69146246 | ja | ja | 6 | 6 | ja |
 | 69146372 | ja | ja | 6 | 6 | ja |
+| 69154667 | ja | nein | 6 | 3 | ja |
 | 69155833 | ja | ja | 6 | 6 | ja |
 | 69156597 | ja | ja | 6 | 6 | ja |
 | 69158149 | ja | ja | 7 | 7 | ja |
 | 69220236 | ja | ja | 6 | 6 | ja |
+| 69220501 | ja | nein | 7 | 3 | ja |
 | 69221120 | ja | ja | 6 | 6 | ja |
+| 69237118 | ja | nein | 6 | 5 | ja |
 | 69239098 | ja | ja | 6 | 6 | ja |
 | 69239919 | ja | ja | 7 | 7 | ja |
 | 69241218 | ja | ja | 6 | 6 | ja |
@@ -116,41 +154,3 @@ Geschrieben: 523 · im Feed: 521 · Text gleich: 521 · alle m365-Links im Feed:
 | 69844766 | ja | ja | 6 | 6 | ja |
 | 69885436 | ja | ja | 6 | 6 | ja |
 | 69886261 | ja | ja | 7 | 7 | ja |
-| 69886885 | ja | ja | 7 | 7 | ja |
-| 70183502 | ja | ja | 7 | 7 | ja |
-| 70247681 | ja | ja | 7 | 7 | ja |
-| 70248487 | ja | ja | 7 | 7 | ja |
-| 70263738 | ja | ja | 6 | 6 | ja |
-| 70264640 | ja | ja | 7 | 7 | ja |
-| 70268600 | ja | ja | 6 | 6 | ja |
-| 70375834 | ja | ja | 6 | 6 | ja |
-| 70382139 | ja | ja | 7 | 7 | ja |
-| 70382707 | ja | ja | 7 | 7 | ja |
-| 70439855 | ja | ja | 8 | 8 | ja |
-| 70441948 | ja | ja | 6 | 6 | ja |
-| 70501080 | ja | ja | 6 | 6 | ja |
-| 70502183 | ja | ja | 7 | 7 | ja |
-| 70503116 | ja | ja | 6 | 6 | ja |
-| 70504797 | ja | ja | 7 | 7 | ja |
-| 70610242 | ja | ja | 6 | 6 | ja |
-| 70679929 | ja | ja | 6 | 6 | ja |
-| 70741179 | ja | ja | 6 | 6 | ja |
-| 70742334 | ja | ja | 8 | 8 | ja |
-| 70743280 | ja | ja | 6 | 6 | ja |
-| 70744896 | ja | ja | 6 | 6 | ja |
-| 70748039 | ja | ja | 6 | 6 | ja |
-| 70829666 | ja | ja | 6 | 6 | ja |
-| 70830545 | ja | ja | 6 | 6 | ja |
-| 70831770 | ja | ja | 6 | 6 | ja |
-| 70849602 | ja | ja | 6 | 6 | ja |
-| 70951901 | ja | ja | 6 | 6 | ja |
-| 70953265 | ja | ja | 6 | 6 | ja |
-| 70956243 | ja | ja | 6 | 6 | ja |
-| 70976504 | ja | ja | 6 | 6 | ja |
-| 71059631 | ja | ja | 6 | 6 | ja |
-| 71084284 | ja | ja | 6 | 6 | ja |
-| 71088043 | ja | ja | 7 | 7 | ja |
-| 71152565 | ja | ja | 6 | 6 | ja |
-| 71153021 | ja | ja | 6 | 6 | ja |
-| 71153726 | ja | ja | 6 | 6 | ja |
-| 71155888 | ja | ja | 7 | 7 | ja |
