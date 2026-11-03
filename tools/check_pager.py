@@ -8,6 +8,7 @@ ROOT = Path(__file__).resolve().parent.parent
 DIRS = [ROOT / "docs", ROOT / "r2out"]
 BASE = "https://" + (ROOT / "domain.txt").read_text().strip() if (ROOT / "domain.txt").exists() else "https://www.m365.fm"
 NAV = re.compile(r'<nav class="pnav"[^>]*>(.*?)</nav>', re.S)
+CAN = re.compile(r'<link rel="canonical" href="([^"]+)"')
 A = re.compile(r'<a class="(pv|nx)" rel="(prev|next)" href="([^"]+)">')
 TYPES = [("Hauptshow-Folge", re.compile(r"^/show/episodes/[^/]+/$")), ("Show-Sprachfassung", re.compile(r"^/[a-z]{2}/show/episodes/[^/]+/$")),
          ("Blog-Artikel", re.compile(r"^(/[a-z]{2})?/community/u/[^/]+/blog/[^/]+/$")), ("Community-Podcast", re.compile(r"^(/[a-z]{2})?/community/podcast/[^/]+/$")),
@@ -23,7 +24,7 @@ def kind(path):
 
 
 def main():
-    pages, total, withnav, links = {}, Counter(), Counter(), {}
+    pages, total, withnav, links, canon_ok, missing = {}, Counter(), Counter(), {}, set(), defaultdict(list)
     for d in DIRS:
         if not d.exists(): continue
         for f in d.rglob("index.html"):
@@ -34,7 +35,10 @@ def main():
             h = f.read_text("utf-8", errors="replace")
             if 'name="robots" content="noindex' in h and k == "Dub-Folge": continue
             total[k] += 1; pages[path] = k
+            c = CAN.search(h)
+            if not c or c.group(1).replace(BASE, "") == path: canon_ok.add(path)   # Kopien mit fremder kanonischer Adresse: nur Ziele pruefen, nicht die Gegenseitigkeit
             m = NAV.search(h)
+            if not m: missing[k].append(path)
             if m:
                 withnav[k] += 1
                 links[path] = {rel: href.replace(BASE, "") for _c, rel, href in A.findall(m.group(1))}
@@ -45,10 +49,12 @@ def main():
             if not tgt.startswith("/"): err.append(f"{p}: {rel} -> externe Adresse {tgt}"); continue
             if not exists(tgt): err.append(f"{p}: {rel} -> fehlt {tgt}"); continue
             back = links.get(tgt, {}).get("prev" if rel == "next" else "next")
-            if back is not None and back != p and pages.get(tgt) == pages.get(p):
+            if p in canon_ok and tgt in canon_ok and back is not None and back != p and pages.get(tgt) == pages.get(p):
                 err.append(f"{p}: {rel} -> {tgt}, dort zeigt {'prev' if rel == 'next' else 'next'} auf {back}")
     print("Vor/Zurueck je Seitentyp (Seiten mit Leiste / Seiten):")
     for n, _ in TYPES: print(f"  {n}: {withnav[n]} / {total[n]}")
+    for n, _ in TYPES:
+        if missing[n]: print(f"  ohne Leiste ({n}), Beispiele: {missing[n][:5]}")
     ends = Counter(pages[p] for p, l in links.items() if len(l) == 1)
     print("  davon nur eine Richtung (erste/letzte Seite einer Reihe):", dict(ends))
     for n, _ in TYPES:

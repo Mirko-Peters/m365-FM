@@ -6,7 +6,7 @@ import site_shownotes as SNS   # T26: Vollfassungen shownotes/site/<episode_id>.
 import site_extract as SX   # T27: Folgen <-> Entitaeten aus der QA-geprueften Extraktion
 import site_media as MED
 import site_img_dims as IMG
-from site_design import pager as PG, neighbours as NB   # Vor/Zurueck am Seitenende (rel=prev/next)
+from site_design import pager as PG   # Vor/Zurueck am Seitenende (rel=prev/next)
 import site_sponsorships as SPM   # T37 Sponsor: Kennzeichnung gesponserter Folgen (data/sponsorships.json)
 import gzip, json, re, unicodedata, html as _h
 from html.parser import HTMLParser
@@ -420,11 +420,17 @@ def build(g):
     loc_url = lambda l, rel: f"{BASE}/{l}/show/{rel}"
     elinks = json.loads((D / "episode_links.json").read_text("utf-8")) if (D / "episode_links.json").exists() else {}   # Plattform-Abgleich (sync_platforms.py)
     SNALL = SNS.load_all(); ENTS_ALL = ENTS
-    LSEQ = {l: [x for x in eps if TRL[l].get(x["slug"]) and TRL[l][x["slug"]][0]] for l in TRL}   # uebersetzte Folgen je Sprache, neueste zuerst (wie eps)
-    LPOS = {l: {x["slug"]: i for i, x in enumerate(seq)} for l, seq in LSEQ.items()}
-    def loc_item(l, x):   # (Adresse, Titel) einer Folge in der Sprache l: Dub-Folge, sonst die uebersetzte Show-Seite
-        d = ((g.get("orig_alts") or {}).get(x["slug"]) or {}).get(l)
-        return (d[0], d[1] or TRL[l][x["slug"]][0]) if d else (loc_url(l, f"episodes/{x['slug']}/"), TRL[l][x["slug"]][0])
+    # Vor/Zurueck der Show-Sprachfassungen: Reihe aus den eigenstaendigen (kanonischen) Fassungen je Sprache, neueste zuerst wie eps. Fassungen einer
+    # Folge mit Dub in der Sprache sind Kopien (kanonisch = Dub-Folge) und nicht Teil der Reihe; sie zeigen auf die naechsten Nachbarn der Reihe.
+    _dub = lambda l, x: bool(((g.get("orig_alts") or {}).get(x["slug"]) or {}).get(l))
+    LIDX = {l: [k2 for k2, x in enumerate(eps) if TRL[l].get(x["slug"]) and TRL[l][x["slug"]][0] and not _dub(l, x)] for l in TRL}
+    def loc_pager(l, k):   # k = Stelle in eps; frueher erschienen = groesserer Index
+        import bisect
+        ix = LIDX[l]; j = bisect.bisect_left(ix, k)
+        older = ix[j + 1] if j < len(ix) and ix[j] == k and j + 1 < len(ix) else (ix[j] if j < len(ix) and ix[j] != k else None)
+        newer = ix[j - 1] if j > 0 else None
+        it = lambda k2: (loc_url(l, f"episodes/{eps[k2]['slug']}/"), TRL[l][eps[k2]["slug"]][0]) if k2 is not None else None
+        return PG(l, it(older), it(newer))
     for k, e in enumerate(eps):
         r, tr = tr_for(e)
         nrec = SNT.get("en", title=e["name"])   # Spreaker-Show-Notes (oder im Editor bearbeitete Fassung) statt Podpage-Sicherung
@@ -499,7 +505,7 @@ def build(g):
             _lalts = None if l in oa else alts   # T3: Sprache mit Dub-Fassung: diese Kopie bleibt ohne hreflang (ein Vertreter je Sprache im Cluster)
             _lcan = oa[l][0] if l in oa else lu   # T42: Kopie in einer Sprache mit Dub-Folge -> kanonisch (auch og:url, Teilen, JSON-LD) die Dub-Folge, nicht in die Sitemap
             if l in oa: lald["url"] = _lcan
-            _lh = g["page"](l, f"{lt} – {NAME}", ls[:300], _lcan, f'{g["header"](l, "")}<main class="wrap">{lbody}{PG(l, *[loc_item(l, x) if x else None for x in NB(LSEQ[l], LPOS[l][e["slug"]])])}</main>{g["footer"](l)}', _lalts, [lald], xdefault=ep_url(e), og_type="article", og_of=ep_url(e), switch=alts, self_url=lu)
+            _lh = g["page"](l, f"{lt} – {NAME}", ls[:300], _lcan, f'{g["header"](l, "")}<main class="wrap">{lbody}{loc_pager(l, k)}</main>{g["footer"](l)}', _lalts, [lald], xdefault=ep_url(e), og_type="article", og_of=ep_url(e), switch=alts, self_url=lu)
             (g.get("write_r2") or write)(f"{l}/show/episodes/{e['slug']}/index.html", _lh)
             if l not in oa: sitemap.append((lu, day(e.get("update_time")) or TODAY, _lalts))
 
