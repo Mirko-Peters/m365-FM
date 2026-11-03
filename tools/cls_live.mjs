@@ -53,16 +53,19 @@ function sessionMax(shifts) {
 async function measure(browser, view, path, ad) {
   const ctx = await browser.newContext({ viewport: view.viewport, isMobile: view.mobile, hasTouch: view.mobile, deviceScaleFactor: view.mobile ? 2 : 1,
     userAgent: view.mobile ? "Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Mobile Safari/537.36" : undefined, locale: "en-US" });
-  await ctx.route(BLOCK, (r) => r.abort());
+  await ctx.route(ad === "real" ? /clarity\.ms/i : BLOCK, (r) => r.abort());   // real: echte Anzeigen (nur wenige Aufrufe, nie Klicks)
   const page = await ctx.newPage();
   await page.addInitScript(OBSERVE);
-  if (ad !== "none") {
+  if (ad !== "none" && ad !== "real") {
     await page.addInitScript((mode) => {
-      const go = () => document.querySelectorAll("ins.adsbygoogle").forEach((ins) => {
-        if (mode === "unfilled") ins.setAttribute("data-ad-status", "unfilled");
-        else { ins.setAttribute("data-ad-status", "filled"); ins.style.height = "600px"; }
+      const lazy = mode.startsWith("lazy"), m = mode.replace("lazy", "");
+      const apply = (ins) => { if (m === "unfilled") ins.setAttribute("data-ad-status", "unfilled"); else { ins.setAttribute("data-ad-status", "filled"); ins.style.height = "600px"; } };
+      if (!lazy) { setTimeout(() => document.querySelectorAll("ins.adsbygoogle").forEach(apply), 1800); return; }
+      // wie AdSense: Anfrage, wenn der Block sich dem Sichtbereich naehert; Antwort nach ~600 ms (dann ist der Block oft schon sichtbar)
+      addEventListener("DOMContentLoaded", () => {
+        const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { io.unobserve(e.target); setTimeout(() => apply(e.target), 600); } }), { rootMargin: "0px 0px 100% 0px" });
+        document.querySelectorAll("ins.adsbygoogle").forEach((ins) => io.observe(ins));
       });
-      setTimeout(go, 1800);
     }, ad);
   }
   const out = { view: view.name, path, ad, status: 0, cls: 0, n: 0, top: [], ads: 0, imgNoDim: 0, err: "" };
@@ -79,10 +82,12 @@ async function measure(browser, view, path, ad) {
     const data = await page.evaluate(() => ({
       ls: window.__ls,
       ads: document.querySelectorAll("ins.adsbygoogle").length,
+      adst: [...document.querySelectorAll("ins.adsbygoogle")].map((i) => (i.getAttribute("data-ad-status") || "-") + ":" + Math.round(i.getBoundingClientRect().height) + (i.closest(".ad") ? "" : ":auto")).join(" "),
+      auto: document.querySelectorAll(".google-auto-placed, ins[data-anchor-status], ins[data-side-rail-status], ins[data-vignette-loaded]").length,
       img: [...document.querySelectorAll("main img, article img")].filter((i) => !(i.getAttribute("width") && i.getAttribute("height")) && !getComputedStyle(i).aspectRatio.includes("/")).length,
     }));
     const { cls, win } = sessionMax(data.ls);
-    out.cls = +cls.toFixed(4); out.n = data.ls.length; out.ads = data.ads; out.imgNoDim = data.img;
+    out.cls = +cls.toFixed(4); out.n = data.ls.length; out.ads = data.ads; out.imgNoDim = data.img; out.adst = data.adst; out.auto = data.auto;
     out.top = win.slice().sort((a, b) => b.v - a.v).slice(0, 4).map((s) => ({ v: +s.v.toFixed(4), t: s.t, y: s.y, src: s.src.slice(0, 3) }));
   } catch (e) { out.err = String(e.message || e).slice(0, 200); }
   await ctx.close();
@@ -92,7 +97,13 @@ async function measure(browser, view, path, ad) {
 const browser = await chromium.launch(process.env.CLS_EXEC ? { executablePath: process.env.CLS_EXEC, headless: true } : { channel: "chrome", headless: true });
 const results = [];
 const jobs = [];
-for (const path of PATHS) for (const view of VIEWS) for (const ad of (view.name === "desktop-1366" ? ADS : ["none"])) jobs.push({ path, view, ad });   // Anzeigen-Faelle nur auf 1366 (Laufzeit)
+const REAL = new Set((process.env.CLS_REAL_PATHS || "").split(/\s+/).filter(Boolean));
+const VSET = new Set((process.env.CLS_VIEWS || VIEWS.map((v) => v.name).join(",")).split(","));
+for (const path of PATHS) for (const view of VIEWS) {
+  if (!VSET.has(view.name)) continue;
+  for (const ad of (view.mobile ? ["none"] : ADS.filter((a) => a !== "real"))) jobs.push({ path, view, ad });
+  if (view.name === "desktop-1366" && REAL.has(path)) jobs.push({ path, view, ad: "real" });
+}
 const PAR = +(process.env.CLS_PAR || 4);
 let next = 0;
 await Promise.all(Array.from({ length: PAR }, async () => {
@@ -110,7 +121,7 @@ const md = ["## CLS live (groesstes Sitzungsfenster, mit Scrollen bis zum Ende; 
 for (const r of results) {
   const t = r.top[0];
   const who = t ? `${t.v} @${t.t}ms y=${t.y}: ${t.src.map((s) => "`" + s.sel + "` " + JSON.stringify(s.prev) + "→" + JSON.stringify(s.cur)).join("; ")}` : (r.err || "");
-  md.push(`| ${r.path} | ${r.view} | ${r.ad} | ${r.cls >= 0.25 ? "**" + r.cls + "**" : r.cls} | ${r.n} | ${r.ads} | ${r.imgNoDim} | ${who.replace(/\|/g, "/")} |`);
+  md.push(`| ${r.path} | ${r.view} | ${r.ad} | ${r.cls >= 0.25 ? "**" + r.cls + "**" : r.cls} | ${r.n} | ${r.ads} ${r.adst || ""}${r.auto ? " auto=" + r.auto : ""} | ${r.imgNoDim} | ${who.replace(/\|/g, "/")} |`);
 }
 console.log(md.join("\n"));
 console.log("\n<!-- JSON\n" + JSON.stringify(results) + "\n-->");

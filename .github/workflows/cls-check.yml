@@ -1,22 +1,31 @@
 name: CLS-Check (nur lesen)
 # Misst Layout-Shifts (CLS) auf www.m365.fm wie ein Leser: Desktop 1366/1920 und Mobil-Kontrolle, Scrollen bis zum Ende.
-# AdSense wird nie geladen (keine Test-Impressionen), leere/hohe Anzeigenbloecke werden simuliert. Aendert nichts, braucht keine Secrets.
+# AdSense wird standardmaessig nicht geladen; leere/hohe Anzeigenbloecke werden simuliert (auch zeitlich wie AdSense: erst bei Annaeherung).
+# Modus "real" laedt echte Anzeigen nur fuer wenige ausgewaehlte Pfade (Diagnose, nie Klicks). Aendert nichts, braucht keine Secrets.
 on:
   workflow_dispatch:
     inputs:
       paths:
-        description: "Pfade, durch Leerzeichen getrennt (leer = tools/cls_urls.txt)"
+        description: "Pfade, durch Leerzeichen getrennt (leer = tools/cls_urls_ads.txt)"
+        required: false
+        default: ""
+      ads:
+        description: "Anzeigen-Faelle: none,unfilled,tall,lazyunfilled,lazytall"
+        required: false
+        default: "none,lazyunfilled,lazytall"
+      real_paths:
+        description: "Pfade fuer echte Anzeigen (wenige!), durch Leerzeichen getrennt"
         required: false
         default: ""
   push:
     branches: [ticket/cls-desktop]
-    paths: [.github/workflows/cls-check.yml, tools/cls_live.mjs, tools/cls_urls.txt]
+    paths: [.github/workflows/cls-check.yml, tools/cls_live.mjs, tools/cls_urls.txt, tools/cls_urls_ads.txt]
 permissions:
   contents: read
 jobs:
   cls:
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 50
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -26,7 +35,10 @@ jobs:
       - name: Messen
         env:
           PATHS_IN: ${{ github.event.inputs.paths }}
+          CLS_ADS: ${{ github.event.inputs.ads || 'none,lazyunfilled,lazytall' }}
+          CLS_REAL_PATHS: ${{ github.event_name == 'push' && '/show/episodes/stop-using-entity-framework-like-this/ /show/episodes/azure-bastion-simply-explained/ /de/copilot-agenten-im-griff-governance-mit-microsoft-365-admin-center/ /entity/azure-service-bus/ /show/ /de/' || github.event.inputs.real_paths }}
+          CLS_VIEWS: desktop-1366,desktop-1920,mobil-390
         run: |
-          if [ -n "$PATHS_IN" ]; then printf '%s\n' $PATHS_IN > /tmp/urls.txt; else cp tools/cls_urls.txt /tmp/urls.txt; fi
+          if [ -n "$PATHS_IN" ]; then printf '%s\n' $PATHS_IN > /tmp/urls.txt; else cp tools/cls_urls_ads.txt /tmp/urls.txt; fi
           node tools/cls_live.mjs https://www.m365.fm < /tmp/urls.txt | tee /tmp/cls.md
           grep -v '^<!-- JSON' /tmp/cls.md | sed '/^\[{/d;/^-->/d' >> "$GITHUB_STEP_SUMMARY"
