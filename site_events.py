@@ -117,14 +117,14 @@ def blocks(BASE, events, lang):
     return res
 
 
-def ics_for(ev, BASE):
-    """iCalendar (.ics) mit dem Event und seinen Sessions."""
+def ics_for(ev, BASE, lang="en"):
+    """iCalendar (.ics) mit dem Event und seinen Sessions; URL zeigt auf die Event-Seite der Sprache, UID ist sprachunabhaengig."""
     def dt(x):
         x = x.replace("-", "").replace(":", "")
         return x + "00" if "T" in x and len(x) == 13 else x
     def esc_(t):
         return str(t).replace("\\", "\\\\").replace(";", "\\;").replace(",", "\\,").replace("\n", "\\n")
-    u = eurl_(BASE, "en", ev["handle"]); now = datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
+    u = eurl_(BASE, lang, ev["handle"]); now = datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
     def vevent(uid, title, start, end, desc, url):
         allday = "T" not in start
         e = ["BEGIN:VEVENT", f"UID:{uid}@dub.m365.fm", f"DTSTAMP:{now}", f"SUMMARY:{esc_(title)}"]
@@ -207,10 +207,7 @@ def build(g, events, people, orgs):
                       + f'<p><a class="btn" href="{croot}?propose={esc(ev["handle"])}#c-events">{esc(s["propose"])}</a></p>' + css)
             ld = [{"@context": "https://schema.org", **event_ld(BASE, ev, pb, ob)}]
             write(f"{pfx2(lang)}community/events/{ev['handle']}/index.html", page(lang, f'{ev["title"]} – {s["events"]} | M365.FM', (ev.get("summary") or ev.get("about") or "")[:155], u, b, None, ld, og_type="website", extra_head=LCSS, noindex=noidx))
-            if lang == "en":
-                write(f"community/events/{ev['handle']}/event.ics", ics_for(ev, BASE))
-            else:
-                write(f"de/community/events/{ev['handle']}/event.ics", ics_for(ev, BASE))
+            write(f"{pfx2(lang)}community/events/{ev['handle']}/event.ics", ics_for(ev, BASE, lang))   # jede Sprachfassung verlinkt ihre eigene .ics (frueher nur en und de, Links in fr/es/pt/... waren tot)
             if not noidx:
                 sitemap.append((u, TODAY, None))
         # Verzeichnis
