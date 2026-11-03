@@ -1,0 +1,161 @@
+{
+  "episode_id": "67954289",
+  "slug": null,
+  "title": "Go Beyond The Demos: How To Make Copilot Actually Work For Your Business Central Environment",
+  "lang": "en",
+  "duration_s": 1263,
+  "transcript_source": "data/en_transcripts/f29ca319957b.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "dynamics-365-business-central",
+      "name": "Dynamics 365 Business Central",
+      "type": "product",
+      "score": 95,
+      "mentions": 15,
+      "first_mention_s": 0,
+      "quote": "Ever wish Business Central actually did the boring work for you, like reconciling payments or drafting product text",
+      "url": "https://www.m365.fm/entity/dynamics-365-business-central/"
+    },
+    {
+      "slug": "azure-openai",
+      "name": "Azure OpenAI Service",
+      "type": "product",
+      "score": 80,
+      "mentions": 10,
+      "first_mention_s": 598,
+      "quote": "But when you send user input to the Azure open Eye service through Business Central's AI module",
+      "url": "https://www.m365.fm/entity/azure-openai/"
+    },
+    {
+      "slug": "azure-key-vault",
+      "name": "Azure Key Vault",
+      "type": "product",
+      "score": 70,
+      "mentions": 7,
+      "first_mention_s": 801,
+      "quote": "the only responsible move is app key vault, or as your key vault.",
+      "url": "https://www.m365.fm/entity/azure-key-vault/"
+    },
+    {
+      "slug": "github",
+      "name": "GitHub",
+      "type": "org",
+      "score": 15,
+      "mentions": 1,
+      "first_mention_s": 755,
+      "quote": "If you bake an apikey into your code or shove it in GitHub for convenience",
+      "url": "https://www.m365.fm/entity/github/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "dynamics-365-copilot",
+      "name": "Copilot in Dynamics 365",
+      "type": "product"
+    },
+    {
+      "slug": "system-prompt",
+      "name": "System prompt",
+      "type": "concept"
+    },
+    {
+      "slug": "al-language",
+      "name": "AL (Application Language)",
+      "type": "product"
+    },
+    {
+      "slug": "isolated-storage",
+      "name": "Isolated storage",
+      "type": "concept"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "In plain English, a capability is the skill set you're creating for Copilot availability tells the system when and where that skill should show up for end users.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 76,
+      "entities": [
+        "dynamics-365-copilot"
+      ],
+      "why": "Clear explanation of the capability and availability model."
+    },
+    {
+      "text": "Microsoft build this distinction on purpose. Prompts are temporary requests, while meta prompts stay persistent across the whole chat context.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 565,
+      "entities": [
+        "system-prompt"
+      ],
+      "why": "Distinguishes prompts from meta prompts in one sentence."
+    },
+    {
+      "text": "Set a low temperature near zero for finance scenarios where you need deterministic, field accurate outputs. If you're building a marketing capability and want more colorful drafts, raise the temperature and let it improvise.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 618,
+      "entities": [
+        "azure-openai"
+      ],
+      "why": "Concrete, actionable guidance on temperature settings."
+    },
+    {
+      "text": "Isolated storage is not production grade. Its local scope makes it handy for iteration, but it isn't designed to be your vault.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 790,
+      "entities": [
+        "isolated-storage",
+        "azure-key-vault"
+      ],
+      "why": "Draws a clear security line between dev storage and production secrets."
+    },
+    {
+      "text": "Capability gives the skill, Availability sets the audience. Authorization wakes the brain. Meta prompt gives manners. Pilot proves it actually works.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 990,
+      "entities": [
+        "dynamics-365-copilot",
+        "system-prompt"
+      ],
+      "why": "Memorable summary of the five-step wiring sequence."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "The hidden Copilot menu"
+    },
+    {
+      "start_s": 248,
+      "title": "Registering capabilities safely"
+    },
+    {
+      "start_s": 490,
+      "title": "Meta prompts: teaching your AI manners"
+    },
+    {
+      "start_s": 727,
+      "title": "Guarding the keys"
+    },
+    {
+      "start_s": 978,
+      "title": "Wiring the workflow"
+    },
+    {
+      "start_s": 1216,
+      "title": "Wrap-up"
+    }
+  ],
+  "takeaways": [
+    "Business Central exposes Copilot extension points in the System AI namespace, so developers can register their own capabilities that admins control on the Copilot and Agent Capabilities page.",
+    "Meta prompts act as standing instructions that define tone, format and guardrails, combined with low temperatures for deterministic finance outputs.",
+    "Never hard-code Azure OpenAI keys: use isolated storage and SecretText for development and Azure Key Vault in production."
+  ],
+  "hook": "Copilot in Business Central is more than the canned demos, but extending it badly can break a tenant or leak API keys. This episode walks Business Central developers and admins through registering capabilities, writing meta prompts, securing Azure OpenAI keys and piloting features safely. You get a five-step checklist to try in a sandbox.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-03T08:22:18+00:00"
+}

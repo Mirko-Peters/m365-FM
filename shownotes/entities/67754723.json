@@ -1,0 +1,130 @@
+{
+  "episode_id": "67754723",
+  "slug": null,
+  "title": "Stop Using Entity Framework Like This: DTO Factories, Micro‑ORM Mirage & How To Model Real Domain Logic With EF Core",
+  "lang": "en",
+  "duration_s": 1104,
+  "transcript_source": "data/en_transcripts/9ee861707df5.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "dotnet",
+      "name": ".NET",
+      "type": "platform",
+      "score": 30,
+      "mentions": 1,
+      "first_mention_s": 1098,
+      "quote": "If this kind of practical EF and ANET guidance helps",
+      "url": "https://www.m365.fm/entity/dotnet/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "entity-framework-core",
+      "name": "Entity Framework Core",
+      "type": "product"
+    },
+    {
+      "slug": "data-transfer-object",
+      "name": "Data transfer object (DTO)",
+      "type": "concept"
+    },
+    {
+      "slug": "micro-orm",
+      "name": "Micro-ORM",
+      "type": "concept"
+    },
+    {
+      "slug": "technical-debt",
+      "name": "Technical debt",
+      "type": "concept"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "EF works best when you use it to persist meaningful objects instead of treating it as a table to class generator.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 18,
+      "entities": [
+        "entity-framework-core"
+      ],
+      "why": "States the episode's core thesis."
+    },
+    {
+      "text": "Pause and check whether your entities have any methods beyond property getters. If the answer is no, that's a red flag.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 89,
+      "entities": [
+        "data-transfer-object",
+        "entity-framework-core"
+      ],
+      "why": "Gives a quick self-check for anemic entities."
+    },
+    {
+      "text": "Consider a micro ORM when you have narrow read heavy endpoints and you want fine grained control of SQL. Otherwise, the maintenance costs of hand rolled mapping and relationship management usually surface down the line.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 345,
+      "entities": [
+        "micro-orm"
+      ],
+      "why": "Practical rule of thumb for choosing between a micro-ORM and EF."
+    },
+    {
+      "text": "It isn't EF misbehaving, it's EF being asked to persist structures that never carried the business meaning they needed to.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 572,
+      "entities": [
+        "entity-framework-core"
+      ],
+      "why": "Explains why EF feels unpredictable in DTO-style models."
+    },
+    {
+      "text": "Teams that skip that step often end up with technical debt that costs more to untangle than the upfront modeling would have.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 1034,
+      "entities": [
+        "technical-debt"
+      ],
+      "why": "Links poor domain modeling to long-term technical debt."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "The illusion of simplicity"
+    },
+    {
+      "start_s": 183,
+      "title": "The micro-ORM mirage"
+    },
+    {
+      "start_s": 420,
+      "title": "When EF becomes a DTO factory"
+    },
+    {
+      "start_s": 635,
+      "title": "Proper OOP with EF"
+    },
+    {
+      "start_s": 873,
+      "title": "Long-term value of doing EF right"
+    },
+    {
+      "start_s": 1071,
+      "title": "Wrap-up"
+    }
+  ],
+  "takeaways": [
+    "Scaffolding tables into hollow DTO-style entities scatters business logic across services and makes EF feel bloated.",
+    "Micro-ORMs suit narrow read-heavy endpoints, but in complex domains you end up rebuilding change tracking, relationships and concurrency that EF already provides.",
+    "Put behavior into entities and use navigation properties, owned types and the fluent API to keep persistence details out of the domain model."
+  ],
+  "hook": "Many .NET teams use Entity Framework as a table-to-class generator, then blame EF when their code turns into scattered services and duplicated rules. This episode shows developers how to spot the DTO factory pattern, when a micro-ORM really makes sense and how to model real domain logic with EF Core. The payoff is simpler tests, less duplication and clearer code.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-03T08:22:18+00:00"
+}
