@@ -81,7 +81,11 @@ class LinkfixTest(unittest.TestCase):
             "/fr/community/u/auteur/blog/gouvernance-modele/",
         )
         self.assertIsNone(LF.resolve("/modele-gouvernance-microsoft-365", self.index,
-                                    "Microsoft 365 Governance Operating Model", "de"))
+                                    "Modèle de gouvernance Microsoft 365", "de"))
+        self.assertEqual(
+            LF.resolve("/typo-in-link", self.index, "The Hidden Risks of Skipping Power Apps Testing"),
+            "/show/episodes/power-apps-testing/",
+        )
 
     def test_host_query_fragment_and_case(self):
         self.assertEqual(
@@ -112,6 +116,21 @@ class LinkfixTest(unittest.TestCase):
         self.assertIn('href="/show/episodes/teams-security/"', result)
         self.assertEqual(unresolved, [("/unknown-path", 1)])
         self.assertEqual(resolved[0][2], "episode")
+
+    def test_unicode_anchor_text_and_boolean_attributes(self):
+        source = (
+            '<head>before\u2028after\n</head>'
+            '<section class="pp-notes"><div class><a href="/unknown-path">'
+            '<strong>Straße İ</strong></a></div></section>'
+        )
+        result, _, unresolved = LF.rewrite_html(source, "/show/episodes/source/", self.index)
+        self.assertEqual(
+            result,
+            '<head>before\u2028after\n</head>'
+            '<section class="pp-notes"><div class><strong>Straße İ</strong></div></section>',
+        )
+        self.assertNotIn("</a>", result)
+        self.assertEqual(unresolved, [("/unknown-path", 1)])
 
     def test_routes_and_worker_mappability_are_preserved(self):
         source = (

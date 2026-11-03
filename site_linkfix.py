@@ -13,8 +13,7 @@ _STOP = {
     "a", "an", "and", "at", "based", "by", "de", "des", "du", "for", "from", "how", "in", "la", "le",
     "les", "of", "on", "the", "to", "with",
 }
-_ANCHOR = re.compile(r"<a\b[^>]*>.*?</a\s*>", re.I | re.S)
-_OPEN = re.compile(r"^<a\b([^>]*)>", re.I | re.S)
+_ANCHOR = re.compile(r"<a\b([^>]*)>(.*?)</a\s*>", re.I | re.S)
 _HREF = re.compile(r"(\s+href\s*=\s*)(['\"])(.*?)\2", re.I | re.S)
 _WORDS = re.compile(r"\w+", re.UNICODE)
 _VOID = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr"}
@@ -87,6 +86,7 @@ def build_index(redirects=None, episodes=(), blogs=(), entities=(), renames=None
     rename_map = {str(old).casefold(): str(new) for old, new in (renames or {}).items()}
     title_candidates = {}
     inverted = defaultdict(set)
+    title_exact = defaultdict(set)
     for record in eps + posts:
         slug, title, kind, handle, lang = record
         if kind == "blog" and not handle:
@@ -106,6 +106,8 @@ def build_index(redirects=None, episodes=(), blogs=(), entities=(), renames=None
                 continue
             candidate = (slug.casefold(), kind, language, target, token_set)
             title_candidates[candidate] = token_set
+            exact_title = " ".join(unicodedata.normalize("NFKC", title).casefold().split())
+            title_exact[(language, exact_title)].add((target, kind))
             for token in token_set:
                 inverted[(language, token)].add(candidate)
 
@@ -119,6 +121,7 @@ def build_index(redirects=None, episodes=(), blogs=(), entities=(), renames=None
         "renames": rename_map,
         "title_candidates": title_candidates,
         "inverted": dict(inverted),
+        "title_exact": dict(title_exact),
         "cache": {},
         "aliases": {},
     }
@@ -139,8 +142,15 @@ def _choose_blog(records, lang, index):
 
 
 def _title_match(path, link_text, lang, index):
+    exact_text = " ".join(unicodedata.normalize("NFKC", str(link_text or "")).casefold().split())
+    exact_matches = set()
+    if exact_text:
+        exact_matches.update(index["title_exact"].get((lang, exact_text), ()))
+        exact_matches.update(index["title_exact"].get(("en", exact_text), ()))
     slug_tokens = _tokens(path.strip("/").rsplit("/", 1)[-1].replace("-", " "))
     if len(slug_tokens) < 3:
+        if len(exact_matches) == 1:
+            return next(iter(exact_matches))[0], "title"
         return None
     query = slug_tokens
     by_token = index["inverted"]
@@ -159,10 +169,15 @@ def _title_match(path, link_text, lang, index):
                        slug, kind, target, candidate_lang, tokens))
     scored.sort(key=lambda row: row[:-1], reverse=True)
     if not scored:
+        if len(exact_matches) == 1:
+            return next(iter(exact_matches))[0], "title"
         return None
     best = scored[0]
     second = scored[1][0] if len(scored) > 1 else 0
     if best[0] < 0.88:
+        matching = {row[4] for row in scored} & {target for target, _kind in exact_matches}
+        if len(matching) == 1:
+            return next(iter(matching)), "title"
         return None
     # Der Linktext kann einen bereits durch den href-Slug passenden Gleichstand aufloesen, aber keinen Kandidaten einfuehren.
     text_tokens = _tokens(link_text)
@@ -172,7 +187,10 @@ def _title_match(path, link_text, lang, index):
         if len(tied) == 1 or len(text_tokens & tied[0][6]) > len(text_tokens & tied[1][6]):
             best = tied[0]
         else:
-            return None
+            matching = {row[4] for row in tied} & {target for target, _kind in exact_matches}
+            if len(matching) != 1:
+                return None
+            best = next(row for row in tied if row[4] in matching)
     elif best[0] - second < 0.12:
         return None
     return best[4], "title"
@@ -342,8 +360,10 @@ class _ContentRanges(HTMLParser):
         self.source = source
         self.show_page = show_page
         self.offsets = [0]
-        for line in source.splitlines(keepends=True):
-            self.offsets.append(self.offsets[-1] + len(line))
+        offset = source.find("\n")
+        while offset >= 0:
+            self.offsets.append(offset + 1)
+            offset = source.find("\n", offset + 1)
         self.stack = []
         self.ranges = []
 
@@ -355,7 +375,7 @@ class _ContentRanges(HTMLParser):
         start = self._offset()
         raw = self.get_starttag_text() or ""
         end = start + len(raw)
-        classes = set(dict(attrs).get("class", "").split())
+        classes = set((dict(attrs).get("class") or "").split())
         selected = bool(classes & {"pp-notes", "wk-body"})
         selected = selected or (self.show_page and tag == "article")
         if tag not in _VOID:
@@ -388,22 +408,30 @@ def content_ranges(markup, page):
     return sorted(parser.ranges)
 
 
+def might_have_content(markup, page):
+    source = markup or ""
+    lower = source.lower()
+    return "pp-notes" in lower or "wk-body" in lower or (
+        str(page).startswith("/show/") and not str(page).startswith("/show/episodes/")
+        and "<article" in lower
+    )
+
+
 def _anchors(markup):
     for match in _ANCHOR.finditer(markup or ""):
         full = match.group(0)
-        opening = _OPEN.match(full)
-        href = _HREF.search(opening.group(1)) if opening else None
+        href = _HREF.search(match.group(1))
         if not href:
             continue
-        closing = full.casefold().rfind("</a")
-        body = full[opening.end():closing] if closing >= 0 else full[opening.end():]
-        yield match, full, opening, href, body
+        yield match, full, match.group(1), href, match.group(2), full[match.end(2) - match.start():]
 
 
 def rewrite_html(markup, page, index, rewrite=True, stats=None):
     """Bearbeitet nur Inhaltsbereiche; liefert HTML und erkannte Linkveraenderungen."""
     source = markup or ""
     resolved, unresolved = [], []
+    if not might_have_content(source, page):
+        return source, resolved, unresolved
     lang = _page_lang(page)
     ranges = content_ranges(source, page)
     if not ranges:
@@ -415,7 +443,7 @@ def rewrite_html(markup, page, index, rewrite=True, stats=None):
             continue
         chunk = source[start:end]
         pieces, chunk_cursor = [], 0
-        for match, full, opening, href, body in _anchors(chunk):
+        for match, full, attrs, href, body, closing in _anchors(chunk):
             old = html.unescape(href.group(3))
             try:
                 parsed = urlsplit(old)
@@ -455,8 +483,8 @@ def rewrite_html(markup, page, index, rewrite=True, stats=None):
                 pieces.append(chunk[chunk_cursor:match.start()])
                 new_attrs = _HREF.sub(
                     lambda h: h.group(1) + h.group(2) + html.escape(target, quote=False) + h.group(2),
-                    opening.group(1), count=1)
-                pieces.append("<a" + new_attrs + ">" + body + (full[full.casefold().rfind("</a"):] if "</a" in full.casefold() else ""))
+                    attrs, count=1)
+                pieces.append("<a" + new_attrs + ">" + body + closing)
                 chunk_cursor = match.end()
         if rewrite:
             pieces.append(chunk[chunk_cursor:])

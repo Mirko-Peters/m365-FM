@@ -1,0 +1,19 @@
+name: Linkfix testen
+on:
+  pull_request:
+    paths:
+      - "site_linkfix.py"
+      - "tools/test_linkfix.py"
+      - "generate_site.py"
+      - ".github/workflows/linkfix-tests.yml"
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - run: python tools/test_linkfix.py

@@ -1768,82 +1768,100 @@ Mirko Peters, {BASE}/about/
         REG.build(write, BASE, TODAY, _posts)
     except Exception as _e:
         print("Register nicht geschrieben:", str(_e)[:160])
-    import os as _os, time as _clock
-    import site_linkfix as LFX
-    from collections import Counter as _Counter
-    _linkfix_started = _clock.perf_counter()
-    _known_routes, _linkfix_files = [], set()
-    for _out_root in (OUT, R2OUT):
-        if not _out_root.exists():
-            continue
-        for _base in _out_root.iterdir():
-            if not _base.is_dir():
+    _updates, _written = {}, []
+    try:
+        import os as _os, time as _clock
+        import site_linkfix as LFX
+        from collections import Counter as _Counter
+        _linkfix_started = _clock.perf_counter()
+        _known_routes, _linkfix_files = [], set()
+        for _out_root in (OUT, R2OUT):
+            if not _out_root.exists():
                 continue
-            _prefix = "" if _base.name == "show" or _base.name == "community" else (_base.name + "/" if _base.name in LANGS else None)
-            if _prefix is None:
-                continue
-            _root = _out_root / _prefix
-            if not _root.exists():
-                continue
-            for _pattern in ("show/episodes/*/index.html", "show/*/index.html",
-                             "community/u/*/blog/*/index.html"):
-                _linkfix_files.update(_root.glob(_pattern))
-        for _f in _out_root.rglob("*"):
-            if not _f.is_file():
-                continue
+            for _base in _out_root.iterdir():
+                if not _base.is_dir():
+                    continue
+                _prefix = "" if _base.name in {"show", "community"} else (_base.name + "/" if _base.name in LANGS else None)
+                if _prefix is None:
+                    continue
+                _root = _out_root / _prefix
+                if not _root.exists():
+                    continue
+                for _pattern in ("show/episodes/*/index.html", "show/*/index.html",
+                                 "community/u/*/blog/*/index.html"):
+                    _linkfix_files.update(_root.glob(_pattern))
+            for _f in _out_root.rglob("*"):
+                if not _f.is_file():
+                    continue
+                _rel = _f.relative_to(_out_root).as_posix()
+                if _f.name == "index.html":
+                    _parent = _f.parent.relative_to(_out_root).as_posix()
+                    _known_routes.append("/" if _parent == "." else "/" + _parent + "/")
+                else:
+                    _known_routes.append("/" + _rel)
+        _rd_file = OUT / "show" / "redirects.json"
+        _redirects = json.loads(_rd_file.read_text("utf-8")) if _rd_file.exists() else {}
+        _episodes = [e for e in PP.load("episodes") if e.get("published") not in (False, "False") and e.get("hidden") not in (True, "True")]
+        _link_index = LFX.build_index(_redirects, _episodes, _posts, LRN.ENTS, PP.RENAMES, _known_routes)
+
+        # Analyse first so aliases are stable before rewriting any page.
+        _candidate_resolved, _candidate_unresolved, _candidate_files = [], [], set()
+        _link_stats = {}
+        for _f in sorted(_linkfix_files):
+            _out_root = OUT if OUT in _f.parents else R2OUT
             _rel = _f.relative_to(_out_root).as_posix()
-            if _f.name == "index.html":
-                _parent = _f.parent.relative_to(_out_root).as_posix()
-                _known_routes.append("/" if _parent == "." else "/" + _parent + "/")
-            else:
-                _known_routes.append("/" + _rel)
-    _rd_file = OUT / "show" / "redirects.json"
-    _redirects = json.loads(_rd_file.read_text("utf-8")) if _rd_file.exists() else {}
-    _episodes = [e for e in PP.load("episodes") if e.get("published") not in (False, "False") and e.get("hidden") not in (True, "True")]
-    _link_index = LFX.build_index(_redirects, _episodes, _posts, LRN.ENTS, PP.RENAMES, _known_routes)
+            _page_url = "/" + _rel[:-len("index.html")].rstrip("/") + "/"
+            _original = _f.read_text("utf-8")
+            if not LFX.might_have_content(_original, _page_url):
+                continue
+            _, _resolved, _unresolved = LFX.rewrite_html(
+                _original, _page_url, _link_index, rewrite=False, stats=_link_stats)
+            if _resolved or _unresolved:
+                _candidate_files.add(_f)
+            _candidate_resolved.extend(_resolved)
+            _candidate_unresolved.extend(_unresolved)
+        _aliases = LFX.build_aliases(_candidate_resolved, _candidate_unresolved, _link_index)
+        for _path, (_target, _method) in _aliases.items():
+            _redirects[_path] = _target
+            _link_index["redirects"][_path] = (_target, _method)
+        _link_index["cache"].clear()
 
-    # Zuerst nur analysieren: Redirect-Aliase stehen fest, bevor ein Inhaltsbereich umgeschrieben wird.
-    _candidate_resolved, _candidate_unresolved = [], []
-    for _f in sorted(_linkfix_files):
-        _rel = _f.relative_to(OUT if OUT in _f.parents else R2OUT).as_posix()
-        _page_url = "/" + _rel[:-len("index.html")].rstrip("/") + "/"
-        _, _resolved, _unresolved = LFX.rewrite_html(_f.read_text("utf-8"), _page_url, _link_index, rewrite=False)
-        _candidate_resolved.extend(_resolved)
-        _candidate_unresolved.extend(_unresolved)
-    _aliases = LFX.build_aliases(_candidate_resolved, _candidate_unresolved, _link_index)
-    for _path, (_target, _method) in _aliases.items():
-        _redirects[_path] = _target
-        _link_index["redirects"][_path] = (_target, _method)
-    _link_index["cache"].clear()
-
-    _resolved_counts, _unresolved_counts = _Counter(), _Counter()
-    _link_stats = {}
-    for _f in sorted(_linkfix_files):
-        _out_root = OUT if OUT in _f.parents else R2OUT
-        _rel = _f.relative_to(_out_root).as_posix()
-        _page_url = "/" + _rel[:-len("index.html")].rstrip("/") + "/"
-        _original = _f.read_text("utf-8")
-        _content, _resolved, _unresolved = LFX.rewrite_html(
-            _original, _page_url, _link_index, stats=_link_stats)
-        for _old, _new, _method, _count in _resolved:
-            _resolved_counts[(_old, _new, _method)] += _count
-        for _path, _count in _unresolved:
-            _unresolved_counts[_path] += _count
-        if _content != _original:
+        _resolved_counts, _unresolved_counts = _Counter(), _Counter()
+        for _f in sorted(_candidate_files):
+            _out_root = OUT if OUT in _f.parents else R2OUT
+            _rel = _f.relative_to(_out_root).as_posix()
+            _page_url = "/" + _rel[:-len("index.html")].rstrip("/") + "/"
+            _original = _f.read_text("utf-8")
+            _content, _resolved, _unresolved = LFX.rewrite_html(_original, _page_url, _link_index)
+            for _old, _new, _method, _count in _resolved:
+                _resolved_counts[(_old, _new, _method)] += _count
+            for _path, _count in _unresolved:
+                _unresolved_counts[_path] += _count
+            if _content != _original:
+                _updates[_f] = (_original, _content)
+        _link_report = {
+            "resolved": [{"old": old, "new": new, "method": method, "count": count}
+                         for (old, new, method), count in sorted(_resolved_counts.items())],
+            "unresolved": [{"path": path, "count": count} for path, count in sorted(_unresolved_counts.items())],
+            "links": _link_stats,
+        }
+        _report_path = Path(_os.environ.get("LINKFIX_REPORT") or (ROOT / "reports" / "linkfix-report.json"))
+        _report_path.parent.mkdir(parents=True, exist_ok=True)
+        _report_path.write_text(json.dumps(_link_report, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+        for _f, (_original, _content) in _updates.items():
+            _written.append(_f)
             _f.write_text(_content, encoding="utf-8")
-    _link_report = {
-        "resolved": [{"old": old, "new": new, "method": method, "count": count}
-                     for (old, new, method), count in sorted(_resolved_counts.items())],
-        "unresolved": [{"path": path, "count": count} for path, count in sorted(_unresolved_counts.items())],
-        "links": _link_stats,
-    }
-    _report_path = Path(_os.environ.get("LINKFIX_REPORT") or (ROOT / "reports" / "linkfix-report.json"))
-    _report_path.parent.mkdir(parents=True, exist_ok=True)
-    _report_path.write_text(json.dumps(_link_report, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
-    if _rd_file.exists():
-        write("show/redirects.json", json.dumps(_redirects))
-    print(f"Linkfix: {sum(_resolved_counts.values())} umgeschrieben, {sum(_unresolved_counts.values())} entlinkt "
-          f"in {_clock.perf_counter() - _linkfix_started:.1f}s; Bericht: {_report_path}")
+        if _rd_file.exists():
+            write("show/redirects.json", json.dumps(_redirects))
+        print(f"Linkfix: {sum(_resolved_counts.values())} umgeschrieben, {sum(_unresolved_counts.values())} entlinkt "
+              f"in {_clock.perf_counter() - _linkfix_started:.1f}s; Bericht: {_report_path}")
+    except Exception as _linkfix_error:
+        for _f in reversed(_written):
+            try:
+                _f.write_text(_updates[_f][0], encoding="utf-8")
+            except Exception:
+                pass
+        print("Linkfix übersprungen; Seiten bleiben unverändert:", str(_linkfix_error)[:200])
     phase("Agenten-Dateien, 404, UI-Quellen")
     sizes()
     print(f"r2out/: {_r2n[0]} Seiten, {_r2n[1] / 1e6:.0f} MB (werden in den R2-Bucket geladen, nicht in GitHub Pages)")
