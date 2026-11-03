@@ -1,7 +1,7 @@
 """Nur lesen: misst die Cache-Header der Seite (www.m365.fm, img.m365.fm), liest die Cache-Einstellungen der Cloudflare-Zone
 und den Traffic der letzten 30 Tage (fuer Kostenschaetzungen wie Argo). Gibt keine Secrets und keine Zonen-ID aus.
 Aufruf: python tools/cache_check.py  (Umgebung: CLOUDFLARE_API_TOKEN, CF_ZONE_ID optional)"""
-import datetime as dt, json, os, re, time, urllib.error, urllib.parse, urllib.request
+import datetime as dt, email.utils, json, os, re, time, urllib.error, urllib.parse, urllib.request
 
 B = "https://www.m365.fm"
 URLS = [
@@ -24,7 +24,7 @@ URLS = [
     ("404", B + "/gibt-es-nicht-cache-check/"),
     ("Suchseite de", B + "/de/search/"),
 ]
-KEEP = ("cache-control", "cf-cache-status", "x-m365-cache", "age", "etag", "last-modified", "expires", "vary", "content-encoding", "content-type", "server", "x-cache", "alt-svc", "x-robots-tag")
+KEEP = ("cache-control", "cf-cache-status", "x-m365-cache", "age", "etag", "last-modified", "expires", "vary", "content-encoding", "content-type", "server", "x-cache", "alt-svc", "x-robots-tag", "x-m365-cr")
 
 
 class NoRedirect(urllib.request.HTTPRedirectHandler):
@@ -77,6 +77,22 @@ for name, url in URLS:
         else: print("- bedingter Abruf: weder ETag noch Last-Modified vorhanden")
     print()
 
+print("## Einwilligungs-Region (T32, nur lesen)\n")
+try:
+    st, hd, ttfb, total, n, body = get(B + "/", {"Accept-Encoding": "identity"})
+    m = re.search(rb'<html[^>]*\sdata-cr="([01])"', body[:4000], re.I)
+    lm = hd.get("last-modified", "")
+    print(f"- Startseite: HTTP {st}, x-m365-cr={hd.get('x-m365-cr', '-')}, data-cr im HTML={m.group(1).decode() if m else '-'}, "
+          f"cache-control={hd.get('cache-control', '-')}, etag={hd.get('etag', '-')}, last-modified={lm or '-'}")
+    if lm:
+        t = email.utils.parsedate_to_datetime(lm)
+        other = email.utils.format_datetime(t + dt.timedelta(seconds=1 if t.second == 0 else -1), usegmt=True)
+        for label, v in (("eigene Region", lm), ("fremde Region", other)):
+            st2 = get(B + "/", {"If-Modified-Since": v})[0]
+            print(f"- bedingter Abruf, {label} (If-Modified-Since {v}): HTTP {st2} (erwartet {'304' if label == 'eigene Region' else '200'})")
+except Exception as e: print(f"- Startseite: Fehler {type(e).__name__}")
+print()
+
 print("## Suche live (T40)\n")
 try:
     st, hd, ttfb, total, n, body = get(B + "/search/manifest.json", {"Accept-Encoding": "identity", "Accept": "application/json"})
@@ -124,7 +140,8 @@ print(f"- Zone: HTTP {st}, Tarif: {((d.get('result') or {}).get('plan') or {}).g
 st, d = cf(f"/zones/{zone}/settings")
 WANT = ("cache_level", "browser_cache_ttl", "always_online", "early_hints", "http3", "0rtt", "brotli", "rocket_loader", "polish", "mirage", "minify",
         "development_mode", "sort_query_string_for_cache", "crawler_hints", "speed_brain", "fonts", "h2_prioritization", "image_resizing", "webp",
-        "always_use_https", "automatic_https_rewrites", "min_tls_version", "tls_1_3", "ssl", "cache_deception_armor", "opportunistic_encryption")
+        "always_use_https", "automatic_https_rewrites", "min_tls_version", "tls_1_3", "ssl", "cache_deception_armor", "opportunistic_encryption",
+        "email_obfuscation", "server_side_exclude", "respect_strong_etags")   # T32: diese drei entscheiden, ob ein ETag an HTML die Kante uebersteht
 if st == 200:
     for s in d.get("result") or []:
         if s.get("id") in WANT: print(f"  - `{s['id']}` = `{json.dumps(s.get('value'))[:80]}`" + ("" if s.get("editable", True) else " (im Tarif nicht aenderbar)"))
