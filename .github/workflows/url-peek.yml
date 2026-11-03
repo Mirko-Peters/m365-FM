@@ -1,0 +1,20 @@
+name: Seite lesen (nur lesen)
+# Liest oeffentliche Seiten, die aus der Claude-Umgebung nicht erreichbar sind, und gibt Erwaehnungen von Mirko Peters / M365.FM aus. Aendert nichts.
+on:
+  workflow_dispatch:
+    inputs:
+      urls:
+        description: "Adressen, durch Leerzeichen getrennt"
+        required: true
+  push:
+    branches: [ticket/press-mentions]
+    paths: [.github/workflows/url-peek.yml, tools/url_peek.py]
+permissions:
+  contents: read
+jobs:
+  peek:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 tools/url_peek.py ${{ github.event.inputs.urls || 'https://techcommunity.microsoft.com/blog/integrationsonazureblog/logic-apps-aviators-newsletter---november-2026/4569378' }}
