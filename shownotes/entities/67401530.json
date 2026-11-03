@@ -1,0 +1,209 @@
+{
+ "episode_id": "67401530",
+ "slug": "fabric-dataflows-gen2-the-future-of-etl-in-microsoft-fabric-and-how-to-migrate-your-existing-dataflows",
+ "title": "Fabric Dataflows Gen2: The Future of ETL in Microsoft Fabric and How to Migrate Your Existing Dataflows",
+ "lang": "en",
+ "duration_s": 1319,
+ "transcript_source": "data/en_transcripts/427dbe6c6a71.txt",
+ "time_basis": "estimated",
+ "entities": [
+  {
+   "slug": "dataflow-gen2",
+   "name": "Dataflow Gen2",
+   "type": "product",
+   "score": 95,
+   "mentions": 30,
+   "first_mention_s": 8,
+   "quote": "Fabric data flows. Gen two isn't just a phaselift.",
+   "url": "https://www.m365.fm/entity/dataflow-gen2/"
+  },
+  {
+   "slug": "fabric",
+   "name": "Microsoft Fabric",
+   "type": "platform",
+   "score": 80,
+   "mentions": 18,
+   "first_mention_s": 8,
+   "quote": "Fabric data flows. Gen two isn't just a phaselift.",
+   "url": "https://www.m365.fm/entity/fabric/"
+  },
+  {
+   "slug": "etl",
+   "name": "Extract, transform, load (ETL)",
+   "type": "concept",
+   "score": 80,
+   "mentions": 25,
+   "first_mention_s": 2,
+   "quote": "duct taping together power query scripts and manually tweaking ETL jobs",
+   "url": "https://www.m365.fm/entity/etl/"
+  },
+  {
+   "slug": "power-bi",
+   "name": "Power BI",
+   "type": "product",
+   "score": 55,
+   "mentions": 9,
+   "first_mention_s": 61,
+   "quote": "a power query script inside powerbi pipeline in data factory running on its own schedule",
+   "url": "https://www.m365.fm/entity/power-bi/"
+  },
+  {
+   "slug": "fabric-lakehouse",
+   "name": "Fabric lakehouse",
+   "type": "product",
+   "score": 55,
+   "mentions": 8,
+   "first_mention_s": 157,
+   "quote": "The Fabric lake House emerged as a unified storage and processing foundation.",
+   "url": "https://www.m365.fm/entity/fabric-lakehouse/"
+  },
+  {
+   "slug": "power-query",
+   "name": "Power Query",
+   "type": "product",
+   "score": 50,
+   "mentions": 6,
+   "first_mention_s": 2,
+   "quote": "duct taping together power query scripts",
+   "url": "https://www.m365.fm/entity/power-query/"
+  },
+  {
+   "slug": "git",
+   "name": "Git",
+   "type": "product",
+   "score": 50,
+   "mentions": 4,
+   "first_mention_s": 1106,
+   "quote": "Others bolted on third party GIT syncs that exported MCDE from power query.",
+   "url": "https://www.m365.fm/entity/git/"
+  },
+  {
+   "slug": "fabric-warehouse",
+   "name": "Fabric Data Warehouse",
+   "type": "product",
+   "score": 45,
+   "mentions": 10,
+   "first_mention_s": 161,
+   "quote": "Warehouses provided structured, governed tables for enterprise",
+   "url": "https://www.m365.fm/entity/fabric-warehouse/"
+  },
+  {
+   "slug": "fabric-deployment-pipelines",
+   "name": "Deployment pipelines (Microsoft Fabric and Power BI)",
+   "type": "product",
+   "score": 40,
+   "mentions": 3,
+   "first_mention_s": 251,
+   "quote": "deployment pipelines aren't an afterthought. They're baked into the life cycle from the start.",
+   "url": "https://www.m365.fm/entity/fabric-deployment-pipelines/"
+  },
+  {
+   "slug": "azure-data-factory",
+   "name": "Azure Data Factory",
+   "type": "product",
+   "score": 30,
+   "mentions": 2,
+   "first_mention_s": 61,
+   "quote": "a power query script inside powerbi pipeline in data factory running on its own schedule",
+   "url": "https://www.m365.fm/entity/azure-data-factory/"
+  },
+  {
+   "slug": "governance",
+   "name": "Governance",
+   "type": "concept",
+   "score": 25,
+   "mentions": 3,
+   "first_mention_s": 247,
+   "quote": "The authoring experience has been rebuilt with shared governance in mind",
+   "url": "https://www.m365.fm/entity/governance/"
+  },
+  {
+   "slug": "semantic-model",
+   "name": "Semantic model",
+   "type": "concept",
+   "score": 20,
+   "mentions": 1,
+   "first_mention_s": 195,
+   "quote": "a core fabric resource on par with your lakehouse, warehouse, and semantic models",
+   "url": "https://www.m365.fm/entity/semantic-model/"
+  }
+ ],
+ "new_entities": [],
+ "quotes": [
+  {
+   "text": "In Gen two, it exists once, and every connected service points to that canonical definition. If an upstream column changes, there's one place to update the logic, and every dependent service sees it immediately.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 220,
+   "entities": [
+    "dataflow-gen2"
+   ],
+   "why": "Explains the single-definition benefit of Dataflows Gen2."
+  },
+  {
+   "text": "The transformation logic executes in a dedicated compute layer, which you can scale up or down based on workload size without touching the underlying storage.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 384,
+   "entities": [
+    "dataflow-gen2"
+   ],
+   "why": "Concisely describes compute separation."
+  },
+  {
+   "text": "Managed staging in Gen two is an invisible workspace where those steps happen. Temp data exists only as long as the process needs it. Then it's automatically purged.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 430,
+   "entities": [
+    "dataflow-gen2"
+   ],
+   "why": "Clarifies what managed staging does and why it saves cost."
+  },
+  {
+   "text": "Gen two changes that by baking GIT integration directly into the data flow layer. It's not an export step or an optional plug in. The data flow itself can live in a Git repo as the source of truth.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 1124,
+   "entities": [
+    "git",
+    "dataflow-gen2"
+   ],
+   "why": "Shows how version control becomes native to ETL."
+  }
+ ],
+ "chapters": [
+  {
+   "start_s": 0,
+   "title": "From ETL pain points to a unified Fabric"
+  },
+  {
+   "start_s": 283,
+   "title": "The core architecture blueprint"
+  },
+  {
+   "start_s": 538,
+   "title": "Seamless flow across Fabric"
+  },
+  {
+   "start_s": 785,
+   "title": "Resource control without the guesswork"
+  },
+  {
+   "start_s": 1035,
+   "title": "Collaborating without collisions"
+  },
+  {
+   "start_s": 1283,
+   "title": "Why Gen2 changes how data teams work"
+  }
+ ],
+ "takeaways": [
+  "Dataflows Gen2 makes transformations a first-class Fabric resource, so one definition feeds the lakehouse, warehouse and Power BI.",
+  "Compute separation and managed staging let teams scale transformation power on demand and stop paying for leftover temporary data.",
+  "Git integration with branches, reviews and commit history turns ETL into a collaborative, auditable engineering practice."
+ ],
+ "hook": "Duplicated Power Query scripts, parallel pipelines and reports that never agree are the daily cost of fragmented ETL. This episode is for data and BI teams moving to Microsoft Fabric who want to understand how Dataflows Gen2, with compute separation, managed staging and Git integration, replaces workarounds with one maintainable data flow.",
+ "youtube_video_id": null,
+ "generated_at": "2026-11-03T01:36:49Z"
+}
