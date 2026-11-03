@@ -79,10 +79,57 @@ def merge(old, new):
     return ch
 
 
+AUTO_TYPES = {"concept", "product", "certification", "cert", "organization", "org", "event", "platform", "category"}
+AUTO_MIN_EPISODES = 2
+AUTO_WAIT_S = 4 * 3600   # Frist, in der die QA (alle 2 h) einen Vorschlag noch auf "rejected" setzen kann
+
+
+def _key(s):
+    return re.sub(r"[^a-z0-9]", "", str(s or "").lower())
+
+
+def auto_approve(ents, dry=False):
+    """Automatische Freigabe (Mirko, 3.11.2026): Vorschlaege mit status "review" ausser Personen werden freigegeben, wenn
+    sie in mindestens 2 Folgen belegt sind, die Pflichtfelder stimmen und seit der ersten Sichtung 4 h vergangen sind.
+    Gleicher Name/Alias wie eine bestehende Entitaet -> Ergaenzung dieser Entitaet statt Dublette. Personen gibt nur Mirko frei."""
+    idx = {}
+    for e in ents:
+        for n in [e.get("id"), e.get("name")] + list(e.get("aliases") or []):
+            if _key(n): idx.setdefault(_key(n), e["id"])
+    now, n_app, n_wait = int(time.time()), 0, 0
+    for p in sorted(IMP.glob("*.json")):
+        try:
+            d = json.loads(p.read_text("utf-8"))
+        except Exception:
+            continue
+        if str(d.get("status") or "").lower() != "review" or str(d.get("type") or "").lower() not in AUTO_TYPES:
+            continue
+        eps = {str(x.get("episode_id")) for x in (d.get("evidence") or []) if isinstance(x, dict) and x.get("episode_id")}
+        if len(eps) < AUTO_MIN_EPISODES:
+            continue
+        _, err = convert(p)
+        if err:
+            continue
+        if not d.get("first_seen"):
+            d["first_seen"] = now; n_wait += 1
+        elif now - int(d["first_seen"]) >= AUTO_WAIT_S:
+            sid = str(d.get("slug") or p.stem).lower()
+            if sid not in {e["id"] for e in ents}:
+                for n in (sid, d.get("name")):
+                    if _key(n) in idx: d["merged_into"] = d["slug"] = idx[_key(n)]; break
+            d["status"] = "approved"; d["approved_by"] = "Auto-Freigabe (Regel Mirko 3.11.2026)"; n_app += 1
+        else:
+            continue
+        if not dry:
+            p.write_text(json.dumps(d, ensure_ascii=False, indent=1) + "\n", "utf-8")
+    print(f"Auto-Freigabe: {n_app} freigegeben, {n_wait} neu vorgemerkt (Freigabe nach 4 h)")
+
+
 def main(dry=False):
     if not IMP.exists():
         print("Kein imports/entities/ - nichts zu tun"); return 0
     ents = json.loads(ENT.read_text("utf-8")); by = {e["id"]: e for e in ents}
+    auto_approve(ents, dry)
     added, merged, skipped, bad = [], [], [], []
     for p in sorted(IMP.glob("*.json")):
         try:
