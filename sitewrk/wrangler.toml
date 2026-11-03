@@ -11,6 +11,10 @@ routes = [{ pattern = "dub.m365.fm/*", zone_name = "m365.fm" }, { pattern = "www
 [vars]
 ORIGIN = "https://www.m365.fm"
 MIGRATED = "1"
+# T32: Laender mit Einwilligungs-Banner (ISO 3166-1 alpha-2 wie request.cf.country). "*" = ueberall; leer = "*" (sicherer Standard).
+# EU-27 + EWR (IS, LI, NO) + Grossbritannien (GB, "uk" ist auf dieser Seite Ukrainisch) + Schweiz + EU-Gebiete in Uebersee/Aland.
+# Hier aendern, nicht im Dashboard (wrangler deploy ueberschreibt Dashboard-Variablen).
+CONSENT_COUNTRIES = "AT,BE,BG,HR,CY,CZ,DK,EE,FI,FR,DE,GR,HU,IE,IT,LV,LT,LU,MT,NL,PL,PT,RO,SK,SI,ES,SE,IS,LI,NO,GB,CH,AX,GF,GP,MQ,RE,YT,MF"
 
 [[r2_buckets]]
 binding = "PAGES"   # Seiten, die der Seitenbau nach R2 laedt (pages/<pfad>/index.html), statt in GitHub Pages
