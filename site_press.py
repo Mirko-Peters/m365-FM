@@ -1,5 +1,6 @@
 """Presskit-Seite (Mirko Peters / M365.FM) – /press/ (en) und /de/press/ plus Downloads in /press/files/."""
 import html, json, shutil, zipfile
+import site_mentions as MEN   # Erwaehnungen in fremden Medien (data/press_mentions.json)
 from pathlib import Path
 
 ROOT = Path(__file__).parent
@@ -11,7 +12,8 @@ TXT = {
  "en": dict(
   title="Press kit – Mirko Peters, Microsoft MVP & M365.FM", meta="Press kit for Mirko Peters, Microsoft MVP, host of the M365.FM podcast and organizer of M365Con: bio, facts, photo, logo, colors, downloads and contact.",
   h1="Press kit", tag="Mirko Peters · M365.FM · M365Con",
-  nav=["About", "Media", "Files", "Colors", "Team", "Contact", "Press"],
+  nav=["About", "Media", "Files", "Colors", "Team", "Contact", "In the media", "Press"],
+  mentions="In the media", mentions_p="Coverage and mentions of Mirko Peters, M365.FM and M365Con, with links to the original sources.",
   about="About", about_p="Mirko Peters is a Microsoft MVP, podcaster, author and conference organizer focused on Microsoft 365, Microsoft Copilot, Azure and AI agents. He hosts the podcast M365.FM and the m365 Show on YouTube, publishes the animated explainer series Sticky Man Explained, and organizes the free online conference M365Con. His content is aimed at IT admins, architects, developers and decision makers who want to understand the Microsoft cloud without marketing noise.",
   facts="Key facts", f=[("Name", "Mirko Peters"), ("Role", "Microsoft MVP, host of M365.FM, organizer of M365Con"), ("Focus", "Microsoft 365, Copilot, Azure, Power Platform, security, AI agents"),
                        ("Podcast", "M365.FM – in German plus AI-dubbed editions in {L} languages"), ("Episodes on www.m365.fm", "{N}"), ("M365Con 2027", "Free, 100% online · Jan 11–22, 2027 · 120 sessions"), ("Based in", "Stuttgart, Germany")],
@@ -27,7 +29,8 @@ TXT = {
  "de": dict(
   title="Pressekit – Mirko Peters, Microsoft MVP & M365.FM", meta="Pressekit für Mirko Peters, Microsoft MVP, Host des Podcasts M365.FM und Veranstalter der M365Con: Biografie, Fakten, Foto, Logo, Farben, Downloads und Kontakt.",
   h1="Pressekit", tag="Mirko Peters · M365.FM · M365Con",
-  nav=["Über", "Medien", "Dateien", "Farben", "Team", "Kontakt", "Presse"],
+  nav=["Über", "Medien", "Dateien", "Farben", "Team", "Kontakt", "In den Medien", "Presse"],
+  mentions="In den Medien", mentions_p="Berichte und Erwähnungen über Mirko Peters, M365.FM und M365Con – mit Link zur Originalquelle.",
   about="Über", about_p="Mirko Peters ist Microsoft MVP, Podcaster, Autor und Konferenzveranstalter mit Schwerpunkt auf Microsoft 365, Microsoft Copilot, Azure und KI-Agenten. Er hostet den Podcast M365.FM und die m365 Show auf YouTube, veröffentlicht die animierte Erklärreihe Sticky Man Explained und organisiert die kostenlose Online-Konferenz M365Con. Seine Inhalte richten sich an IT-Admins, Architekten, Entwickler und Entscheider, die die Microsoft-Cloud ohne Marketing-Rauschen verstehen wollen.",
   facts="Fakten", f=[("Name", "Mirko Peters"), ("Rolle", "Microsoft MVP, Host von M365.FM, Veranstalter der M365Con"), ("Schwerpunkt", "Microsoft 365, Copilot, Azure, Power Platform, Sicherheit, KI-Agenten"),
                     ("Podcast", "M365.FM – auf Deutsch plus KI-vertonte Ausgaben in {L} Sprachen"), ("Folgen auf www.m365.fm", "{N}"), ("M365Con 2027", "Kostenlos, 100 % online · 11.–22. Januar 2027 · 120 Sessions"), ("Sitz", "Stuttgart, Deutschland")],
@@ -85,8 +88,9 @@ def build_press(g):
         t = TXT[lang]
         url = f"{BASE}/press/" if lang == "en" else f"{BASE}/de/press/"
         about_url = f"{BASE}/entity/mirko-peters/" if lang == "en" else f"{BASE}/de/entity/mirko-peters/"
-        ids = ["about", "media", "files", "colors", "team", "contact", "press"]
-        nav = "".join(f'<a href="#{i}">{E(n)}</a>' for i, n in zip(ids, t["nav"]))
+        ids = ["about", "media", "files", "colors", "team", "contact", "mentions", "press"]
+        nav = "".join(f'<a href="#{i}">{E(n)}</a>' for i, n in zip(ids, t["nav"]) if i != "mentions" or MEN.ALL)
+        ment = (f'<section id="mentions"><h2>{E(t["mentions"])}</h2><p>{E(t["mentions_p"])}</p><ul class="kpl">{"".join(MEN.item_html(m, lang) for m in MEN.ALL)}</ul></section>') if MEN.ALL else ""
         facts = "".join(f'<dt>{E(k)}</dt><dd>{E(v.replace("{L}", str(L)).replace("{N}", str(N)))}</dd>' for k, v in t["f"])
         topics = "".join(f"<li>{E(x)}</li>" for x in t["topics_l"])
         base_files = f"{BASE}/press/files/"
@@ -105,8 +109,8 @@ def build_press(g):
                 f'<section id="colors"><h2>{E(t["colors"])}</h2><p>{E(t["colors_p"])}</p><div class="ksw">{sw}</div><p class="mut">{E(t["fonts"])}</p></section>'
                 f'<section id="team"><h2>{E(t["team"])}</h2><div class="kg"><figure class="ktile"><img src="{base_files}mirko-peters.jpg" width="120" height="120" alt="Mirko Peters" loading="lazy"><small><b>Mirko Peters</b><br>Microsoft MVP · Host M365.FM</small></figure></div><p>{E(t["team_p"])}</p></section>'
                 f'<section id="contact"><h2>{E(t["contact"])}</h2><p>{E(t["contact_p"])}</p><p><a class="kcta" href="mailto:{g["EMAIL"]}">{g["EMAIL"]}</a></p><p class="mut">{E(t["addr"])}: Julius-Hölder-Str 60, 70597 Stuttgart, Germany</p></section>'
-                f'<section id="press"><h2>{E(t["press"])}</h2><ul class="kpl">{pl}</ul><p>{E(t["machine"])} <a href="{BASE}/llms.txt">llms.txt</a> · <a href="{BASE}/episodes.json">episodes.json</a></p><p class="mut">{E(t["usage"])}</p></section></main>'
+                f'{ment}<section id="press"><h2>{E(t["press"])}</h2><ul class="kpl">{pl}</ul><p>{E(t["machine"])} <a href="{BASE}/llms.txt">llms.txt</a> · <a href="{BASE}/episodes.json">episodes.json</a></p><p class="mut">{E(t["usage"])}</p></section></main>'
                 f'{g["footer"](lang) if lang in g["LANGS"] else g["footer_en"]()}{JS}')
-        ld = [g["person_ld"](), g["org_ld"](), {"@context": "https://schema.org", "@type": "WebPage", "@id": f"{url}#page", "url": url, "name": t["title"], "inLanguage": lang, "about": {"@id": f"{BASE}/entity/mirko-peters/#entity"}, "dateModified": TODAY}]
+        ld = [g["person_ld"](), g["org_ld"](), {"@context": "https://schema.org", "@type": "WebPage", "@id": f"{url}#page", "url": url, "name": t["title"], "inLanguage": lang, "about": {"@id": f"{BASE}/entity/mirko-peters/#entity"}, "dateModified": TODAY, **({"mentions": [MEN.ld(m, BASE) for m in MEN.ALL]} if MEN.ALL else {})}]
         write("press/index.html" if lang == "en" else "de/press/index.html", page(lang, t["title"], t["meta"], url, body, None, ld, og_type="website", extra_head=CSS))
         sitemap.append((url, TODAY, None))
