@@ -1,0 +1,2317 @@
+WEBVTT
+
+00:00:00.240 --> 00:00:02.200
+Imaginez que vous gérez un service client très fréquenté,
+
+00:00:02.360 --> 00:00:04.480
+où les messages affluent, les dossiers doivent être mis à jour,
+
+00:00:04.800 --> 00:00:07.120
+et les clients attendent, tandis que les réponses dont ils ont besoin
+
+00:00:07.120 --> 00:00:09.440
+sont enfouées dans l'ancienne note que personne n'a le temps de consulter.
+
+00:00:09.940 --> 00:00:11.940
+Un copilote traite les questions directes lorsqu'on lui en pose,
+
+00:00:12.080 --> 00:00:14.280
+mais un agent autonome est différent, différent.
+
+00:00:14.740 --> 00:00:16.740
+Il a une tâche spécifique, surveille le travail à accomplir
+
+00:00:16.740 --> 00:00:19.300
+et agit de lui-même dans le respect des règles que vous lui fixez.
+
+00:00:20.780 --> 00:00:22.220
+Je suis Mirko Peters de M305.
+
+00:00:22.580 --> 00:00:25.040
+Ce condensé de connaissances vous explique le concept en toute simplicité.
+
+00:00:25.560 --> 00:00:28.440
+A la fin, vous saurez ce que font réellement les agents autonomes de Dynamics 365,
+
+00:00:28.440 --> 00:00:31.720
+où ils travaillent et pourquoi les humains gardent le contrôle sur les décisions importantes.
+
+00:00:32.580 --> 00:00:33.920
+Voyez une entreprise comme un immeuble de bureau.
+
+00:00:35.020 --> 00:00:37.480
+Le copilote travaille à l'accueil pour aider les visiteurs,
+
+00:00:37.580 --> 00:00:39.880
+tandis que les agents s'occupent des tâches en coulisses.
+
+00:00:42.140 --> 00:00:44.540
+Versum, c'est un membre d'équipe numérique avec une mission précise.
+
+00:00:45.980 --> 00:00:48.460
+Le travail répétitif prend beaucoup de temps dans la plupart des entreprises.
+
+00:00:49.160 --> 00:00:50.720
+Un commercial trie les leads entrants,
+
+00:00:51.200 --> 00:00:53.160
+un technicien remplit les mêmes champs de dossiers,
+
+00:00:53.360 --> 00:00:55.600
+un comptable rapproche des écritures avant la clôture,
+
+00:00:56.020 --> 00:00:58.900
+et un logisticien relance un fournisseur pour une date de livraison
+
+00:00:58.900 --> 00:01:02.220
+alors que le pont de commande contient déjà l'essentiel 1.
+
+00:01:03.120 --> 00:01:05.720
+Chaque tâche semble insignifiante, mais la pile grossit vite.
+
+00:01:06.200 --> 00:01:07.920
+Or, qu'est-ce qu'un agent autonome exactement ?
+
+00:01:07.920 --> 00:01:10.160
+C'est un outil d'IA spécialisé qui analyse les données métiers,
+
+00:01:10.280 --> 00:01:11.500
+choisis parmi les étapes autorisées,
+
+00:01:11.780 --> 00:01:13.620
+et exécute le travail pour atteindre un objectif défini.
+
+00:01:14.060 --> 00:01:16.240
+Il ne reçoit pas une instruction vague du type qu'a dirige l'entreprise.
+
+00:01:16.420 --> 00:01:18.340
+Il reçoit une mission ciblée avec des limites claires,
+
+00:01:18.480 --> 00:01:20.080
+et c'est là tout l'intérêt de cette focalisation.
+
+00:01:21.180 --> 00:01:22.220
+Imaginez à nouveau l'immeuble de bureau.
+
+00:01:22.720 --> 00:01:24.000
+Le copilote est assis à la réception.
+
+00:01:24.560 --> 00:01:25.680
+Vous vous présentez pour demander de l'aide,
+
+00:01:25.680 --> 00:01:29.480
+et le copilote répond à votre question, trouve des informations ou vous aide à rédiger un document.
+
+00:01:30.040 --> 00:01:31.960
+Les agents autonomes travaillent dans les bureaux derrière la réception.
+
+00:01:32.900 --> 00:01:34.600
+L'un peut gérer le courrier en triant les demandes,
+
+00:01:34.700 --> 00:01:36.960
+un autre travaille au service client pour mettre à jour les dossiers,
+
+00:01:37.200 --> 00:01:40.680
+et un troisième aide le service comptable à rapprocher les écritures financières.
+
+00:01:43.300 --> 00:01:45.300
+Beaucoup de gens entendent agent et pensent à un chatbot.
+
+00:01:46.100 --> 00:01:48.140
+Un chatbot attend que vous posez une question pour y répondre.
+
+00:01:48.740 --> 00:01:51.220
+C'est utile pour une conversation, mais cela se limite à discuter.
+
+00:01:51.820 --> 00:01:53.860
+Un agent autonome peut réagir lorsque la situation évolue.
+
+00:01:53.860 --> 00:01:58.440
+Lorsqu'un nouveau dossier arrive, qu'un client envoie un message ou qu'une commande nécessite une confirmation,
+
+00:01:59.060 --> 00:02:03.200
+l'agent analyse la situation et poursuit le processus sans qu'on ait besoin de le solliciter à chaque étape.
+
+00:02:04.000 --> 00:02:04.780
+C'est là toute la différence.
+
+00:02:05.480 --> 00:02:09.020
+L'automatisation classique gère aussi les tâches répétitives, mais elle suit un chemin fixe.
+
+00:02:09.620 --> 00:02:10.540
+Si ceci arrive, fait cela.
+
+00:02:11.220 --> 00:02:12.860
+Si un champ a cette valeur, envoyez cet email,
+
+00:02:13.420 --> 00:02:16.860
+les flux fixes fonctionnent toujours lorsque tout reste prévisible et que l'agent ajoute du contexte.
+
+00:02:17.260 --> 00:02:19.860
+Il lit les mots du message client, consulte l'enregistrement associé
+
+00:02:19.860 --> 00:02:22.120
+et choisit parmi les actions autorisées par ses règles.
+
+00:02:22.120 --> 00:02:24.960
+Il ne suit pas aveuglément une liste rigide,
+
+00:02:25.060 --> 00:02:27.440
+il travaille avec les informations qui se trouvent juste devant lui.
+
+00:02:28.140 --> 00:02:29.900
+L'IA Générative aide pour la partie linguistique.
+
+00:02:30.600 --> 00:02:32.760
+Elle peut lire un long message, identifier les besoins de la personne,
+
+00:02:32.880 --> 00:02:36.200
+rédiger un brouillon de réponse ou extraire une réponse utile de votre base de connaissances.
+
+00:02:37.160 --> 00:02:39.580
+Mais rédiger du texte ne suffit pas à accomplir une tâche professionnelle.
+
+00:02:40.540 --> 00:02:42.660
+Le comportement autonome relie cette compréhension à l'action.
+
+00:02:43.300 --> 00:02:45.860
+Par exemple, l'agent peut identifier une demande d'assistance courante,
+
+00:02:46.460 --> 00:02:48.780
+suggérer le bon article de connaissance, mettre à jour un champ de dossier
+
+00:02:48.780 --> 00:02:50.980
+ou demander à une personne de revoir un point hors de ses règles.
+
+00:02:50.980 --> 00:02:54.480
+Votre entreprise décide quelles actions il peut entreprendre de lui-même.
+
+00:02:55.380 --> 00:02:56.440
+C'est un point souvent négligé.
+
+00:02:56.800 --> 00:02:58.920
+Un agent autonome n'a pas accès librement à tout.
+
+00:02:59.640 --> 00:03:02.100
+Votre organisation définit ses instructions, ses accès aux données,
+
+00:03:02.220 --> 00:03:03.740
+ses autorisations et ses points d'approbation
+
+00:03:03.740 --> 00:03:06.360
+et l'agent travaille dans cet espace défini comme un nouveau membre de l'équipe
+
+00:03:06.360 --> 00:03:09.120
+qui peut entrer dans certaines pièces, utiliser certains fichiers
+
+00:03:09.120 --> 00:03:12.000
+et accomplir certains fichiers et accomplir certains types de travail.
+
+00:03:12.300 --> 00:03:14.740
+Ce n'est donc ni de la magie ni un robot polyvalent.
+
+00:03:14.740 --> 00:03:16.920
+C'est un travailleur IA avec une mission précise,
+
+00:03:17.300 --> 00:03:19.700
+un ensemble de règles et des données commerciales réelles sur lesquelles s'appuyer.
+
+00:03:20.500 --> 00:03:22.940
+Voyons maintenant le bureau où ses agents trouvent ces informations.
+
+00:03:23.740 --> 00:03:24.680
+C'est Dynamics 365.
+
+00:03:25.880 --> 00:03:28.900
+Là où il travaille, Dynamics 365 en tant que bureau professionnel.
+
+00:03:29.520 --> 00:03:31.760
+Alors où ses agents trouvent-ils les détails spécifiques dont ils ont besoin
+
+00:03:31.760 --> 00:03:34.640
+pour transformer une réponse générale en quelque chose d'utile pour votre entreprise ?
+
+00:03:34.640 --> 00:03:36.680
+C'est notre Dynamics 365.
+
+00:03:38.220 --> 00:03:39.440
+Considérez-le comme le bureau lui-même,
+
+00:03:39.600 --> 00:03:41.240
+avec des espaces connectés pour les dossiers clients,
+
+00:03:41.380 --> 00:03:43.000
+les pistes commerciales, les dossiers d'assistance,
+
+00:03:43.240 --> 00:03:45.980
+les commandes, la finance et la gestion des stocks.
+
+00:03:47.200 --> 00:03:49.900
+Un dossier client vous indique qui est la personne et ce qu'elle doit pour ses achats.
+
+00:03:50.980 --> 00:03:52.860
+Un dossier montre les conversations passées, les résolutions
+
+00:03:52.860 --> 00:03:54.340
+et qui est responsable de l'étape suivante.
+
+00:03:55.020 --> 00:03:57.360
+Une commande révèle ce qui a été promis, où cela doit aller
+
+00:03:57.360 --> 00:03:58.820
+et si quelqu'un doit encore confirmer.
+
+00:03:59.420 --> 00:04:01.280
+C'est ce contexte qui change la réponse.
+
+00:04:01.900 --> 00:04:03.600
+Un outil dit à générique entend la phrase
+
+00:04:03.600 --> 00:04:05.600
+qu'à livraison Oatum n'est toujours pas arrivée,
+
+00:04:06.300 --> 00:04:08.160
+mais il n'a aucune idée de la livraison concernée,
+
+00:04:08.280 --> 00:04:10.920
+si la commande a été expédiée ou s'il existe un dossier ouvert pour Oatum.
+
+00:04:12.360 --> 00:04:15.440
+Dynamics 365 centralise toutes ces informations commerciales en un seul endroit.
+
+00:04:16.240 --> 00:04:17.400
+Voici un scénario réel pour Oatum.
+
+00:04:17.960 --> 00:04:20.080
+Un client envoie un message pour demander où se trouve sa commande
+
+00:04:20.080 --> 00:04:21.880
+et ce message intègre une conversation d'assistance
+
+00:04:21.880 --> 00:04:23.380
+ou devient partie intégrante d'un dossier.
+
+00:04:24.140 --> 00:04:26.100
+Mais le message à lui seul ne raconte que la moitié de l'histoire.
+
+00:04:26.880 --> 00:04:28.780
+L'agent consulte la fiche client associée au message
+
+00:04:28.780 --> 00:04:30.660
+pour voir si cette personne a contacté le support hier,
+
+00:04:30.800 --> 00:04:31.920
+si un collègue a déjà répondu,
+
+00:04:31.920 --> 00:04:34.840
+quel produit a été commandé et quel article de la base de connaissances
+
+00:04:34.840 --> 00:04:36.320
+traite des livraisons en retard.
+
+00:04:37.620 --> 00:04:38.920
+Ensuite, il suggère l'étape suivante
+
+00:04:38.920 --> 00:04:40.680
+où effectue une action autorisée par l'organisation.
+
+00:04:41.780 --> 00:04:43.400
+Il peut orienter le conseiller vers la bonne réponse,
+
+00:04:43.540 --> 00:04:44.880
+mettre à jour le dossier avec un résumé
+
+00:04:44.880 --> 00:04:46.500
+ou préparer une réponse pour examen.
+
+00:04:47.300 --> 00:04:50.100
+Le travail exact dépend de la configuration de l'agent par l'entreprise.
+
+00:04:50.760 --> 00:04:51.760
+Mais voici le point essentiel,
+
+00:04:52.100 --> 00:04:53.300
+l'agent ne travaille pas dans le vide.
+
+00:04:54.240 --> 00:04:55.540
+Il s'appuie sur le dossier dont il dispose,
+
+00:04:55.620 --> 00:04:56.780
+les connaissances auxquelles il accède
+
+00:04:56.780 --> 00:04:58.520
+et les autorisations liées à son rôle.
+
+00:04:58.520 --> 00:04:59.980
+Lorsqu'il manque d'informations,
+
+00:05:00.080 --> 00:05:01.240
+qu'il doit prendre une décision sensible
+
+00:05:01.240 --> 00:05:02.320
+ou qu'il a besoin d'une approbation,
+
+00:05:02.400 --> 00:05:03.080
+un humain intervient.
+
+00:05:03.820 --> 00:05:05.140
+Les humains traitent toujours les cas difficiles,
+
+00:05:06.020 --> 00:05:07.200
+comme un client contestant un paiement,
+
+00:05:07.280 --> 00:05:08.700
+une expédition avec un problème grave
+
+00:05:08.700 --> 00:05:11.280
+ou une demande d'exception à la politique qui a haut.
+
+00:05:12.120 --> 00:05:13.340
+Ces situations exigent du jugement,
+
+00:05:13.560 --> 00:05:14.040
+de l'autorité
+
+00:05:14.040 --> 00:05:16.000
+et une conversation qu'aucun agent ne devrait mener seul.
+
+00:05:16.940 --> 00:05:18.520
+En coulisses, le processus est assez simple.
+
+00:05:18.820 --> 00:05:19.760
+Les informations arrivent,
+
+00:05:20.020 --> 00:05:21.580
+l'agent examine le dossier métier pertinent
+
+00:05:21.580 --> 00:05:22.940
+et les connaissances approuvées guide,
+
+00:05:23.180 --> 00:05:25.480
+suggère ou oriente l'action suivante,
+
+00:05:25.880 --> 00:05:27.480
+dont le résultat est réintégré dans le même dossier.
+
+00:05:28.460 --> 00:05:29.680
+Ainsi, l'équipe peut voir ce qui s'est passé
+
+00:05:29.680 --> 00:05:31.060
+sans avoir à chercher dans différents outils.
+
+00:05:31.640 --> 00:05:33.060
+Ce dossier est bien plus important qu'il n'y paraît.
+
+00:05:33.580 --> 00:05:35.620
+Sans lui, un conseiller pourrait lire un email client
+
+00:05:35.620 --> 00:05:36.240
+à un endroit,
+
+00:05:36.380 --> 00:05:37.640
+chercher les détails de commandes ailleurs,
+
+00:05:37.780 --> 00:05:39.120
+vérifier d'anciennes notes ailleurs encore,
+
+00:05:39.340 --> 00:05:41.420
+puis saisir la même mise à jour dans un dossier.
+
+00:05:42.580 --> 00:05:45.020
+Dynamics 365 rassemble ses espaces de travail
+
+00:05:45.020 --> 00:05:46.940
+afin que l'agent utilise le même contexte
+
+00:05:46.940 --> 00:05:47.840
+que les membres de l'équipe.
+
+00:05:48.480 --> 00:05:49.820
+Une IA générique comprend le langage,
+
+00:05:49.820 --> 00:05:51.660
+mais un agent Dynamics 365
+
+00:05:51.660 --> 00:05:52.640
+utilise le langage
+
+00:05:52.640 --> 00:05:54.580
+tout en examinant la situation commerciale réelle
+
+00:05:54.580 --> 00:05:55.140
+liée au client,
+
+00:05:55.460 --> 00:05:56.020
+à la commande,
+
+00:05:56.160 --> 00:05:57.120
+au prospect ou au dossier.
+
+00:05:57.800 --> 00:05:59.220
+Il ne se contente pas de lire la question.
+
+00:06:00.560 --> 00:06:02.180
+Il relie la question au travail déjà en cours
+
+00:06:02.180 --> 00:06:03.160
+dans le respect des accès
+
+00:06:03.160 --> 00:06:04.980
+et des règles établis par l'organisation.
+
+00:06:06.040 --> 00:06:08.040
+C'est là que ces agents deviennent plus faciles à visualiser,
+
+00:06:08.180 --> 00:06:09.340
+en particulier dans le service client,
+
+00:06:09.540 --> 00:06:10.400
+où les questions entrantes,
+
+00:06:10.500 --> 00:06:11.340
+les mises à jour de dossiers
+
+00:06:11.340 --> 00:06:12.540
+et les connaissances partagées
+
+00:06:12.540 --> 00:06:13.880
+se rejoignent.
+
+00:06:14.980 --> 00:06:15.520
+Agent de service,
+
+00:06:16.040 --> 00:06:16.940
+identification d'intention,
+
+00:06:17.220 --> 00:06:17.760
+gestion de dossiers,
+
+00:06:18.140 --> 00:06:18.840
+maintien des connaissances.
+
+00:06:20.280 --> 00:06:21.960
+Le service client actuel nous donne la vision
+
+00:06:21.960 --> 00:06:23.380
+la plus claire de ce que les agents autonomes
+
+00:06:23.380 --> 00:06:24.040
+peuvent accomplir.
+
+00:06:24.720 --> 00:06:25.880
+Les équipes de support sont confrontées
+
+00:06:25.880 --> 00:06:26.660
+au même schéma à chaque jour.
+
+00:06:27.800 --> 00:06:28.620
+De nombreuses conversations,
+
+00:06:29.020 --> 00:06:29.880
+beaucoup de petites mises à jour
+
+00:06:29.880 --> 00:06:30.960
+et des réponses utiles piégées
+
+00:06:30.960 --> 00:06:32.440
+dans un travail terminé il y a des semaines.
+
+00:06:33.460 --> 00:06:34.880
+Commençons par l'agent d'intention client.
+
+00:06:35.560 --> 00:06:36.800
+Une intention est la raison pour laquelle
+
+00:06:36.800 --> 00:06:37.680
+un client vous contacte,
+
+00:06:37.760 --> 00:06:39.380
+comme la façon d'automatiser une connexion,
+
+00:06:39.500 --> 00:06:40.540
+de localiser une commande
+
+00:06:40.540 --> 00:06:42.080
+ou de retourner un article.
+
+00:06:42.980 --> 00:06:44.780
+Les équipes de support doivent connaître ces raisons
+
+00:06:44.780 --> 00:06:46.080
+car elles déterminent les articles d'aide,
+
+00:06:46.260 --> 00:06:47.200
+les options de libre-service
+
+00:06:47.200 --> 00:06:48.400
+et la formation nécessaire
+
+00:06:48.400 --> 00:06:49.720
+à leur personnel.
+
+00:06:50.260 --> 00:06:51.320
+Mais les questions des clients
+
+00:06:51.320 --> 00:06:52.080
+ne sont pas statiques,
+
+00:06:52.240 --> 00:06:52.720
+elles évoluent.
+
+00:06:53.580 --> 00:06:54.900
+Une entreprise lance un nouveau produit,
+
+00:06:55.060 --> 00:06:56.100
+change de partenaire de livraison
+
+00:06:56.100 --> 00:06:57.240
+ou met à jour sa facturation
+
+00:06:57.240 --> 00:06:58.460
+et les clients commencent à poser
+
+00:06:58.460 --> 00:06:59.120
+de nouvelles questions
+
+00:06:59.120 --> 00:07:00.080
+avec leurs propres mots.
+
+00:07:00.080 --> 00:07:02.480
+L'ancienne liste de sujets n'est plus adaptée.
+
+00:07:03.140 --> 00:07:03.900
+L'agent d'intention client
+
+00:07:03.900 --> 00:07:05.300
+examine les dossiers passés et actuels
+
+00:07:05.300 --> 00:07:06.440
+ainsi que les conversations de clients
+
+00:07:06.440 --> 00:07:07.620
+pour identifier ces tendances.
+
+00:07:08.360 --> 00:07:09.200
+Au lieu qu'un responsable
+
+00:07:09.200 --> 00:07:10.360
+lise des centaines de chames manuellement,
+
+00:07:10.700 --> 00:07:12.160
+l'agent repère que de nombreuses personnes
+
+00:07:12.160 --> 00:07:13.000
+mentionnent le même problème
+
+00:07:13.000 --> 00:07:14.260
+et suggère une nouvelle intention.
+
+00:07:15.460 --> 00:07:16.600
+Cela évite au libre-service
+
+00:07:16.600 --> 00:07:17.320
+de devenir obsolète
+
+00:07:17.320 --> 00:07:18.560
+en recommandant l'article de connaissance
+
+00:07:18.560 --> 00:07:19.220
+le plus susceptible
+
+00:07:19.220 --> 00:07:20.500
+d'aider à résoudre le problème du client.
+
+00:07:21.600 --> 00:07:22.320
+Cette recommandation
+
+00:07:22.320 --> 00:07:23.120
+peut aider un client
+
+00:07:23.120 --> 00:07:24.440
+essayant de résoudre un problème seul
+
+00:07:24.440 --> 00:07:25.400
+ou aider un agent
+
+00:07:25.400 --> 00:07:26.200
+à trouver la bonne réponse
+
+00:07:26.200 --> 00:07:27.460
+plus rapidement lors d'une conversation.
+
+00:07:27.460 --> 00:07:29.280
+L'agent n'invente pas
+
+00:07:29.280 --> 00:07:30.280
+la politique de l'entreprise,
+
+00:07:30.440 --> 00:07:31.760
+il travaille avec les connaissances approuvées
+
+00:07:31.760 --> 00:07:32.620
+tout en aidant l'équipe
+
+00:07:32.620 --> 00:07:34.540
+à identifier les points à améliorer.
+
+00:07:35.820 --> 00:07:37.420
+Pensez maintenant au dossier lui-même,
+
+00:07:38.540 --> 00:07:40.000
+à l'enregistrement du problème client
+
+00:07:40.000 --> 00:07:41.140
+qui inclut ses messages,
+
+00:07:41.400 --> 00:07:42.540
+les notes des agents,
+
+00:07:42.700 --> 00:07:43.960
+le statut actuel
+
+00:07:43.960 --> 00:07:45.700
+et les étapes de résolution.
+
+00:07:47.760 --> 00:07:48.420
+Créer et mettre à jour
+
+00:07:48.420 --> 00:07:49.580
+ces enregistrements prend du temps,
+
+00:07:49.740 --> 00:07:50.460
+surtout lorsqu'une équipe
+
+00:07:50.460 --> 00:07:51.820
+gère un volume élevé de demandes.
+
+00:07:52.820 --> 00:07:53.880
+L'agent de gestion des dossiers
+
+00:07:53.880 --> 00:07:55.840
+dans Dynamics 365 Customer Service
+
+00:07:55.840 --> 00:07:57.500
+aide au cycle de vie des dossiers,
+
+00:07:57.660 --> 00:07:58.720
+création, mise à jour,
+
+00:07:59.240 --> 00:08:01.220
+résolution, suivi et clôture.
+
+00:08:02.580 --> 00:08:04.060
+Un agent consacre moins de temps
+
+00:08:04.060 --> 00:08:05.240
+à saisir des détails routiniers
+
+00:08:05.240 --> 00:08:06.520
+et plus de temps à analyser
+
+00:08:06.520 --> 00:08:07.820
+attentivement la situation du client.
+
+00:08:08.760 --> 00:08:09.480
+Chaque équipe de support
+
+00:08:09.480 --> 00:08:10.140
+travaille différemment.
+
+00:08:10.400 --> 00:08:11.520
+Une entreprise veut qu'un dossier
+
+00:08:11.520 --> 00:08:12.960
+ne soit fermé qu'après confirmation,
+
+00:08:13.620 --> 00:08:14.900
+une autre nécessite une revue
+
+00:08:14.900 --> 00:08:15.480
+par un manager
+
+00:08:15.480 --> 00:08:17.300
+et certaines exigent un suivi
+
+00:08:17.300 --> 00:08:18.660
+après une période donnée.
+
+00:08:19.320 --> 00:08:20.960
+Les administrateurs adaptent
+
+00:08:20.960 --> 00:08:21.900
+l'agent de gestion des dossiers
+
+00:08:21.900 --> 00:08:22.860
+à ses règles locales
+
+00:08:22.860 --> 00:08:24.080
+afin qu'ils suivent le processus
+
+00:08:24.080 --> 00:08:24.680
+de l'entreprise
+
+00:08:24.680 --> 00:08:26.400
+plutôt qu'un chemin générique.
+
+00:08:26.400 --> 00:08:28.840
+Il gère les étapes répétitives,
+
+00:08:29.040 --> 00:08:29.980
+mais l'organisation décide
+
+00:08:29.980 --> 00:08:31.380
+quand une personne doit vérifier le travail
+
+00:08:31.380 --> 00:08:32.180
+ou reprendre la main.
+
+00:08:32.820 --> 00:08:34.200
+Cela résout un autre problème de service
+
+00:08:34.200 --> 00:08:35.360
+que beaucoup d'équipes connaissent bien.
+
+00:08:36.080 --> 00:08:36.800
+Un agent qualifié
+
+00:08:36.800 --> 00:08:37.800
+résout un problème délicat,
+
+00:08:38.000 --> 00:08:38.820
+rédige des notes utiles
+
+00:08:38.820 --> 00:08:39.920
+et clôt le dossier.
+
+00:08:39.920 --> 00:08:42.020
+Plus tard, un autre client signale
+
+00:08:42.020 --> 00:08:42.540
+le même problème
+
+00:08:42.540 --> 00:08:43.640
+et la réponse reste enterrée
+
+00:08:43.640 --> 00:08:44.320
+dans d'anciennes notes,
+
+00:08:44.440 --> 00:08:45.300
+une transcription de chat
+
+00:08:45.300 --> 00:08:46.020
+ou un résumé
+
+00:08:46.020 --> 00:08:47.380
+que personne ne pense à chercher.
+
+00:08:48.160 --> 00:08:48.900
+C'est précisément là
+
+00:08:48.900 --> 00:08:50.120
+qu'intervient l'agent de gestion
+
+00:08:50.120 --> 00:08:50.880
+des connaissances clients.
+
+00:08:51.480 --> 00:08:52.240
+Il examine les détails
+
+00:08:52.240 --> 00:08:53.020
+des dossiers terminés
+
+00:08:53.020 --> 00:08:54.240
+pour extraire des connaissances utiles,
+
+00:08:54.440 --> 00:08:55.020
+combler les lacunes
+
+00:08:55.020 --> 00:08:56.560
+et maintenir les connaissances à jour
+
+00:08:56.560 --> 00:08:57.160
+tout en vérifiant
+
+00:08:57.160 --> 00:08:57.960
+les besoins de conformité
+
+00:08:57.960 --> 00:08:58.520
+de l'entreprise.
+
+00:08:59.880 --> 00:09:00.960
+Considérez les notes de dossier
+
+00:09:00.960 --> 00:09:01.940
+d'une équipe de support
+
+00:09:01.940 --> 00:09:03.280
+comme des documents éparpillés
+
+00:09:03.280 --> 00:09:04.500
+dans de nombreux tiroirs.
+
+00:09:05.880 --> 00:09:06.660
+Quelqu'un a peut-être écrit
+
+00:09:06.660 --> 00:09:07.360
+la réponse parfaite
+
+00:09:07.360 --> 00:09:07.780
+il y a six mois,
+
+00:09:07.780 --> 00:09:08.800
+mais elle n'aidera pas
+
+00:09:08.800 --> 00:09:09.440
+le prochain client
+
+00:09:09.440 --> 00:09:10.540
+si personne ne peut la trouver.
+
+00:09:11.380 --> 00:09:12.440
+L'agent de gestion des connaissances
+
+00:09:12.440 --> 00:09:13.020
+aide à transformer
+
+00:09:13.020 --> 00:09:13.900
+les réponses répétitives
+
+00:09:13.900 --> 00:09:15.100
+en contenu que l'équipe peut examiner
+
+00:09:15.100 --> 00:09:16.460
+et placer dans un dossier partagé.
+
+00:09:17.100 --> 00:09:18.280
+Les collaborateurs examinent toujours
+
+00:09:18.280 --> 00:09:19.600
+ce qui devient une directive officielle
+
+00:09:19.600 --> 00:09:20.400
+car une note peut décrire
+
+00:09:20.400 --> 00:09:21.340
+une exception ponctuelle,
+
+00:09:21.740 --> 00:09:22.580
+une solution obsolète
+
+00:09:22.580 --> 00:09:23.360
+ou un conseil propre
+
+00:09:23.360 --> 00:09:24.520
+à un seul client.
+
+00:09:25.440 --> 00:09:26.680
+L'agent aide à faire ressortir le contenu
+
+00:09:26.680 --> 00:09:27.300
+mais ce sont les humains
+
+00:09:27.300 --> 00:09:27.700
+qui décident
+
+00:09:27.700 --> 00:09:28.120
+ce qu'il doit devenir
+
+00:09:28.120 --> 00:09:28.980
+un article de référence.
+
+00:09:29.560 --> 00:09:30.820
+Voici un exemple concret.
+
+00:09:31.300 --> 00:09:31.800
+Un client écrit.
+
+00:09:32.080 --> 00:09:33.360
+Ma livraison est encore en retard.
+
+00:09:33.720 --> 00:09:34.140
+Pouvez-vous me dire
+
+00:09:34.140 --> 00:09:35.460
+ce qui se passe ?
+
+00:09:35.460 --> 00:09:36.560
+L'agent d'intention reconnaît
+
+00:09:36.560 --> 00:09:37.480
+qu'il s'agit d'un sujet
+
+00:09:37.480 --> 00:09:38.500
+lié à la livraison
+
+00:09:38.500 --> 00:09:39.600
+et oriente vers l'article
+
+00:09:39.600 --> 00:09:41.280
+de connaissances approprié d'AE.
+
+00:09:42.280 --> 00:09:43.780
+Si la demande nécessite un dossier,
+
+00:09:44.120 --> 00:09:45.100
+l'agent de gestion des dossiers
+
+00:09:45.100 --> 00:09:46.180
+aide à saisir les détails,
+
+00:09:46.440 --> 00:09:47.360
+à mettre à jour l'enregistrement
+
+00:09:47.360 --> 00:09:48.840
+et à accompagner les prochaines étapes
+
+00:09:48.840 --> 00:09:49.860
+selon les règles de l'équipe.
+
+00:09:51.440 --> 00:09:52.420
+Une fois le problème résolu,
+
+00:09:52.860 --> 00:09:54.080
+l'agent de gestion des connaissances clients
+
+00:09:54.080 --> 00:09:54.740
+examine le dossier
+
+00:09:54.740 --> 00:09:55.940
+pour trouver des informations susceptibles
+
+00:09:55.940 --> 00:09:57.040
+d'améliorer le contenu d'aide du terme.
+
+00:09:57.720 --> 00:09:58.880
+Si le retard de livraison
+
+00:09:58.880 --> 00:09:59.880
+provient d'un nouveau problème
+
+00:09:59.880 --> 00:10:01.140
+signalé par de nombreux clients,
+
+00:10:01.700 --> 00:10:02.540
+une personne enquête,
+
+00:10:02.720 --> 00:10:03.560
+approuve un nouvel article
+
+00:10:03.560 --> 00:10:04.900
+ou s'adresse directement aux clients.
+
+00:10:05.700 --> 00:10:06.320
+Les agents réduisent
+
+00:10:06.320 --> 00:10:07.820
+le travail administratif répétitif
+
+00:10:07.820 --> 00:10:08.380
+lié au dossier,
+
+00:10:08.680 --> 00:10:09.560
+tandis que l'équipe de service
+
+00:10:09.560 --> 00:10:10.460
+prend les décisions importantes.
+
+00:10:10.860 --> 00:10:11.420
+Les agents de service
+
+00:10:11.420 --> 00:10:12.240
+se concentrent sur les questions
+
+00:10:12.240 --> 00:10:13.380
+des clients et les réponses partagées.
+
+00:10:14.120 --> 00:10:15.300
+Dans d'autres secteurs de l'entreprise,
+
+00:10:15.380 --> 00:10:16.560
+les agents assument différentes tâches,
+
+00:10:16.660 --> 00:10:17.260
+du tri des prospects
+
+00:10:17.260 --> 00:10:18.840
+à la vérification des dossiers financiers
+
+00:10:18.840 --> 00:10:19.900
+et au suivi des fournisseurs.
+
+00:10:21.740 --> 00:10:23.080
+Vente, finance et chaînes logistiques.
+
+00:10:23.680 --> 00:10:24.740
+Des agents avec des rôles différents.
+
+00:10:26.120 --> 00:10:26.700
+Le service client
+
+00:10:26.700 --> 00:10:27.680
+n'est qu'une partie du tableau.
+
+00:10:28.200 --> 00:10:28.620
+En réalité,
+
+00:10:28.720 --> 00:10:29.840
+vous retrouverez le même schéma partout.
+
+00:10:30.760 --> 00:10:31.580
+Les équipes de vente,
+
+00:10:31.780 --> 00:10:32.820
+de finance, d'achat,
+
+00:10:32.820 --> 00:10:33.640
+les répartiteurs,
+
+00:10:33.920 --> 00:10:35.420
+tous effectuent un travail routinier
+
+00:10:35.420 --> 00:10:36.400
+où les détails changent
+
+00:10:36.400 --> 00:10:37.520
+d'un enregistrement à l'autre,
+
+00:10:37.760 --> 00:10:39.140
+mais la structure reste identique.
+
+00:10:40.240 --> 00:10:41.300
+Commençons donc par les ventes.
+
+00:10:41.420 --> 00:10:42.180
+Imaginez qu'un vendeur
+
+00:10:42.180 --> 00:10:42.940
+reçoive un grand nombre
+
+00:10:42.940 --> 00:10:43.580
+de prospects entrants.
+
+00:10:44.060 --> 00:10:44.900
+Certaines personnes sont prêtes
+
+00:10:44.900 --> 00:10:45.340
+à discuter,
+
+00:10:45.440 --> 00:10:46.400
+d'autres sont simplement curieuses
+
+00:10:46.400 --> 00:10:47.360
+et quelques-unes ne correspondent
+
+00:10:47.360 --> 00:10:48.180
+pas du tout à l'entreprise.
+
+00:10:48.440 --> 00:10:48.940
+Voici le problème.
+
+00:10:49.320 --> 00:10:50.040
+Quelqu'un doit toujours faire
+
+00:10:50.040 --> 00:10:50.940
+des recherches sur chacun d'eux
+
+00:10:50.940 --> 00:10:51.780
+et décider qu'il mérite
+
+00:10:51.780 --> 00:10:52.700
+une attention prioritaire.
+
+00:10:53.180 --> 00:10:53.720
+C'est là qu'intervient
+
+00:10:53.720 --> 00:10:54.820
+l'agent de qualification des ventes
+
+00:10:54.820 --> 00:10:56.540
+pour Dynamics 365 Sales.
+
+00:10:57.000 --> 00:10:57.520
+Il aide à effectuer
+
+00:10:57.520 --> 00:10:58.460
+ce travail de tri préliminaire.
+
+00:10:58.460 --> 00:10:59.720
+Cet agent peut rechercher
+
+00:10:59.720 --> 00:11:00.600
+et hiérarchiser les prospects
+
+00:11:00.600 --> 00:11:00.980
+entrants,
+
+00:11:01.060 --> 00:11:01.820
+puis développer des emails
+
+00:11:01.820 --> 00:11:02.660
+de vente personnalisés
+
+00:11:02.660 --> 00:11:03.700
+pour engager la conversation.
+
+00:11:04.440 --> 00:11:04.960
+Mais attention,
+
+00:11:05.240 --> 00:11:05.920
+cela ne conclut pas
+
+00:11:05.920 --> 00:11:06.600
+une vente tout seul
+
+00:11:06.600 --> 00:11:08.100
+et ne remplace pas le commercial
+
+00:11:08.100 --> 00:11:08.920
+qui établit une relation
+
+00:11:08.920 --> 00:11:09.900
+de confiance avec le client.
+
+00:11:10.360 --> 00:11:10.780
+Au lieu de cela,
+
+00:11:10.960 --> 00:11:11.680
+cela aide le commercial
+
+00:11:11.680 --> 00:11:12.840
+à commencer avec une liste plus claire.
+
+00:11:13.500 --> 00:11:14.100
+Imaginez une boîte
+
+00:11:14.100 --> 00:11:14.920
+de réception commerciale
+
+00:11:14.920 --> 00:11:15.700
+saturée le lundi matin
+
+00:11:15.700 --> 00:11:16.460
+où, sans aide,
+
+00:11:16.560 --> 00:11:17.540
+un représentant pourrait passer
+
+00:11:17.540 --> 00:11:18.500
+des heures à ouvrir des messages,
+
+00:11:18.720 --> 00:11:19.260
+chercher des détails
+
+00:11:19.260 --> 00:11:19.840
+sur les entreprises
+
+00:11:19.840 --> 00:11:20.740
+et rédiger des premières
+
+00:11:20.740 --> 00:11:21.360
+réponses similaires.
+
+00:11:22.240 --> 00:11:22.960
+L'agent peut préparer
+
+00:11:22.960 --> 00:11:23.600
+ce travail initial
+
+00:11:23.600 --> 00:11:24.520
+afin que le représentant
+
+00:11:24.520 --> 00:11:25.220
+puisse se concentrer
+
+00:11:25.220 --> 00:11:25.680
+sur les prospects
+
+00:11:25.680 --> 00:11:26.280
+les plus enclins
+
+00:11:26.280 --> 00:11:27.220
+à une véritable conversation.
+
+00:11:27.880 --> 00:11:28.600
+C'est toujours une personne
+
+00:11:28.600 --> 00:11:29.180
+qui décide de ce
+
+00:11:29.180 --> 00:11:29.600
+à quoi ressemble
+
+00:11:29.600 --> 00:11:30.420
+un bon contact commercial.
+
+00:11:31.240 --> 00:11:31.900
+Elle relie l'email
+
+00:11:31.900 --> 00:11:32.500
+avant son envoi,
+
+00:11:32.620 --> 00:11:33.580
+y ajoute sa propre expertise
+
+00:11:33.580 --> 00:11:34.800
+et décide si un prospect
+
+00:11:34.800 --> 00:11:35.420
+mérite un appel
+
+00:11:35.420 --> 00:11:36.260
+pendant que l'agent s'occupe
+
+00:11:36.260 --> 00:11:37.120
+des recherches répétitives
+
+00:11:37.120 --> 00:11:38.220
+et de la rédaction accessoire.
+
+00:11:39.400 --> 00:11:40.500
+Les petites et moyennes entreprises
+
+00:11:40.500 --> 00:11:41.300
+sont souvent confrontées
+
+00:11:41.300 --> 00:11:41.980
+à une tâche similaire
+
+00:11:41.980 --> 00:11:43.200
+lorsqu'un client décide d'acheter.
+
+00:11:44.360 --> 00:11:45.640
+Une commande arrive par email
+
+00:11:45.640 --> 00:11:46.360
+ou un autre canal
+
+00:11:46.360 --> 00:11:47.460
+et quelqu'un doit la saisir,
+
+00:11:47.680 --> 00:11:48.500
+vérifier les détails,
+
+00:11:48.700 --> 00:11:49.700
+enregistrer les préférences
+
+00:11:49.700 --> 00:11:50.100
+du client
+
+00:11:50.100 --> 00:11:51.680
+et envoyer une confirmation.
+
+00:11:52.680 --> 00:11:53.660
+Ce travail peut prendre du temps,
+
+00:11:53.660 --> 00:11:54.700
+surtout lorsque les commandes
+
+00:11:54.700 --> 00:11:55.640
+arrivent dans des formats différents.
+
+00:11:56.880 --> 00:11:57.720
+L'agent de commande client
+
+00:11:57.720 --> 00:11:59.800
+dans Dynamics 365 Business Central
+
+00:11:59.800 --> 00:12:01.240
+gère le processus de réception,
+
+00:12:01.500 --> 00:12:02.000
+de la saisie
+
+00:12:02.000 --> 00:12:02.940
+jusqu'à la confirmation.
+
+00:12:04.240 --> 00:12:05.220
+Tête agent peut interagir
+
+00:12:05.220 --> 00:12:05.740
+avec les clients
+
+00:12:05.740 --> 00:12:06.360
+tout en collectant
+
+00:12:06.360 --> 00:12:07.300
+les informations nécessaires,
+
+00:12:07.400 --> 00:12:08.100
+évitant ainsi à l'équipe
+
+00:12:08.100 --> 00:12:09.220
+de devoir copier chaque détail
+
+00:12:09.220 --> 00:12:09.860
+manuellement
+
+00:12:09.860 --> 00:12:11.700
+avant de traiter la commande.
+
+00:12:11.840 --> 00:12:12.460
+A présent, la finance
+
+00:12:12.460 --> 00:12:13.720
+a son propre lot de tâches répétitives.
+
+00:12:14.420 --> 00:12:14.980
+Avant la clôture
+
+00:12:14.980 --> 00:12:15.880
+d'une période financière,
+
+00:12:16.220 --> 00:12:17.140
+les équipes doivent préparer
+
+00:12:17.140 --> 00:12:18.020
+et nettoyer des jeux de données
+
+00:12:18.020 --> 00:12:19.140
+où les chiffres sont dispersés
+
+00:12:19.140 --> 00:12:19.980
+dans divers registres,
+
+00:12:20.200 --> 00:12:21.360
+le formatage demande de l'attention
+
+00:12:21.360 --> 00:12:22.440
+et les collaborateurs
+
+00:12:22.440 --> 00:12:23.060
+passent beaucoup de temps
+
+00:12:23.060 --> 00:12:23.780
+chercher des informations
+
+00:12:23.780 --> 00:12:24.580
+qui ne correspondent pas.
+
+00:12:26.240 --> 00:12:27.280
+L'agent de rapprochement financier
+
+00:12:27.280 --> 00:12:28.460
+de Microsoft 365
+
+00:12:28.460 --> 00:12:29.460
+Copilot for Finance
+
+00:12:29.460 --> 00:12:30.340
+aide à préparer
+
+00:12:30.340 --> 00:12:31.500
+et nettoyer les jeux de données
+
+00:12:31.500 --> 00:12:32.820
+pour ses clôtures de période.
+
+00:12:33.380 --> 00:12:33.760
+Voyez cela
+
+00:12:33.760 --> 00:12:34.540
+comme le tri des dossiers
+
+00:12:34.540 --> 00:12:35.180
+avant que le comptable
+
+00:12:35.180 --> 00:12:36.620
+ne commence son examen approfondi
+
+00:12:36.620 --> 00:12:37.880
+et ne décide pas
+
+00:12:37.880 --> 00:12:38.600
+si les rapports financiers
+
+00:12:38.600 --> 00:12:39.560
+d'entreprise sont corrects.
+
+00:12:41.000 --> 00:12:42.020
+Les professionnels de la finance
+
+00:12:42.020 --> 00:12:43.240
+conservent cette responsabilité.
+
+00:12:44.020 --> 00:12:44.860
+Il existe un autre agent
+
+00:12:44.860 --> 00:12:46.440
+dans Dynamics 365 Finance,
+
+00:12:46.560 --> 00:12:47.820
+l'agent de rapprochement de compte.
+
+00:12:48.540 --> 00:12:49.420
+Il aide à faire correspondre
+
+00:12:49.420 --> 00:12:50.280
+et à apurer les transactions
+
+00:12:50.280 --> 00:12:51.020
+entre les sous-journaux
+
+00:12:51.020 --> 00:12:51.600
+et le grand livre.
+
+00:12:52.100 --> 00:12:53.040
+Ces termes semblent techniques,
+
+00:12:53.040 --> 00:12:54.160
+alors restons simples.
+
+00:12:55.220 --> 00:12:56.060
+Un sous-journal contient
+
+00:12:56.060 --> 00:12:57.020
+les enregistrements détaillés
+
+00:12:57.020 --> 00:12:57.440
+d'un domaine,
+
+00:12:57.660 --> 00:12:58.340
+comme les paiements clients
+
+00:12:58.340 --> 00:12:59.380
+ou les factures fournisseurs,
+
+00:12:59.560 --> 00:13:00.240
+tandis que le grand livre
+
+00:13:00.240 --> 00:13:01.300
+contient l'enregistrement financier
+
+00:13:01.300 --> 00:13:02.080
+global de l'entreprise.
+
+00:13:03.120 --> 00:13:03.900
+Les comptables ont besoin
+
+00:13:03.900 --> 00:13:04.920
+que ces registres concordent
+
+00:13:04.920 --> 00:13:05.700
+et quand ce n'est pas le cas,
+
+00:13:06.060 --> 00:13:07.020
+quelqu'un doit trouver l'écart.
+
+00:13:07.600 --> 00:13:08.420
+L'agent aide au travail
+
+00:13:08.420 --> 00:13:09.440
+de rapprochement et d'apurement
+
+00:13:09.440 --> 00:13:10.280
+afin que les comptables
+
+00:13:10.280 --> 00:13:11.340
+puissent consacrer plus de temps
+
+00:13:11.340 --> 00:13:11.820
+à enquêter
+
+00:13:11.820 --> 00:13:12.700
+sur les enregistrements
+
+00:13:12.700 --> 00:13:13.460
+qui ne correspondent pas
+
+00:13:13.460 --> 00:13:14.100
+plutôt que de vérifier
+
+00:13:14.100 --> 00:13:15.040
+chaque rapprochement évident
+
+00:13:15.040 --> 00:13:15.460
+un par un.
+
+00:13:16.180 --> 00:13:16.800
+Les équipes de la chaîne
+
+00:13:16.800 --> 00:13:17.280
+d'approvisionnement
+
+00:13:17.280 --> 00:13:18.160
+ont un autre type de problème dessus.
+
+00:13:18.660 --> 00:13:19.380
+Une entreprise envoie
+
+00:13:19.380 --> 00:13:19.920
+un bon de commande
+
+00:13:19.920 --> 00:13:20.520
+à un fournisseur,
+
+00:13:20.800 --> 00:13:21.460
+mais l'équipe doit toujours
+
+00:13:21.460 --> 00:13:22.180
+obtenir la confirmation
+
+00:13:22.180 --> 00:13:22.840
+que le fournisseur
+
+00:13:22.840 --> 00:13:23.900
+peut livrer dans les délais prévus.
+
+00:13:24.640 --> 00:13:25.580
+Si personne ne fait de suivi,
+
+00:13:25.800 --> 00:13:26.880
+un retard peut passer inaperçu
+
+00:13:26.880 --> 00:13:27.860
+jusqu'à devenir un problème
+
+00:13:27.860 --> 00:13:28.360
+pour le client.
+
+00:13:29.380 --> 00:13:30.580
+L'agent de communication fournisseur
+
+00:13:30.580 --> 00:13:31.640
+pour Dynamics 365
+
+00:13:31.640 --> 00:13:32.580
+Supply Chain Management
+
+00:13:32.580 --> 00:13:33.380
+gère la collaboration
+
+00:13:33.380 --> 00:13:34.400
+avec les fournisseurs
+
+00:13:34.400 --> 00:13:34.880
+pour confirmer
+
+00:13:34.880 --> 00:13:35.840
+la livraison des commandes.
+
+00:13:36.800 --> 00:13:37.540
+Il peut traiter les tâches
+
+00:13:37.540 --> 00:13:38.180
+liées à la confirmation
+
+00:13:38.180 --> 00:13:38.820
+des bons de commande
+
+00:13:38.820 --> 00:13:39.400
+et aider à détecter
+
+00:13:39.400 --> 00:13:40.500
+les retards potentiels plus tôt.
+
+00:13:41.580 --> 00:13:41.900
+Ainsi,
+
+00:13:42.300 --> 00:13:43.240
+les spécialistes des achats
+
+00:13:43.240 --> 00:13:43.900
+peuvent consacrer
+
+00:13:43.900 --> 00:13:44.380
+plus de temps
+
+00:13:44.380 --> 00:13:45.400
+aux relations fournisseurs
+
+00:13:45.400 --> 00:13:46.380
+et aux problèmes de livraison
+
+00:13:46.380 --> 00:13:48.060
+nécessitant une intervention humaine.
+
+00:13:48.900 --> 00:13:49.460
+Le service sur site
+
+00:13:49.460 --> 00:13:50.060
+ajoute une dynamique
+
+00:13:50.060 --> 00:13:50.680
+différente à l'équation.
+
+00:13:50.960 --> 00:13:51.520
+Un répartiteur
+
+00:13:51.520 --> 00:13:52.420
+peut planifier soigneusement
+
+00:13:52.420 --> 00:13:53.300
+la journée d'un technicien,
+
+00:13:53.420 --> 00:13:54.060
+mais un embouteillage
+
+00:13:54.060 --> 00:13:54.860
+peut ralentir quelqu'un.
+
+00:13:55.180 --> 00:13:55.800
+Un client annule
+
+00:13:55.800 --> 00:13:56.520
+ou deux réservations
+
+00:13:56.520 --> 00:13:57.140
+entrent en conflit.
+
+00:13:57.640 --> 00:13:58.620
+Le planning qui semblait correct
+
+00:13:58.620 --> 00:13:59.120
+à 8h0
+
+00:13:59.120 --> 00:13:59.820
+peut créer des lacunes
+
+00:13:59.820 --> 00:14:00.260
+et des conflits
+
+00:14:00.260 --> 00:14:00.860
+à l'heure du déjeuner.
+
+00:14:01.360 --> 00:14:01.980
+L'agent d'opération
+
+00:14:01.980 --> 00:14:03.800
+de planification pour Dynamics 365
+
+00:14:03.800 --> 00:14:04.400
+Field Service
+
+00:14:04.400 --> 00:14:05.140
+aide les répartiteurs
+
+00:14:05.140 --> 00:14:05.960
+à ajuster les plannings
+
+00:14:05.960 --> 00:14:07.120
+à mesure que ces conditions évoluent.
+
+00:14:07.820 --> 00:14:08.580
+Il les aide à obtenir
+
+00:14:08.580 --> 00:14:09.280
+de meilleurs plannings
+
+00:14:09.280 --> 00:14:09.980
+pour les techniciens
+
+00:14:09.980 --> 00:14:10.620
+lorsque la journée
+
+00:14:10.620 --> 00:14:11.840
+ne se déroule pas comme prévu.
+
+00:14:12.980 --> 00:14:14.060
+Les répartiteurs décident toujours
+
+00:14:14.060 --> 00:14:14.640
+de ce qui est pertinent
+
+00:14:14.640 --> 00:14:15.140
+pour leurs clients
+
+00:14:15.140 --> 00:14:15.720
+et leur personnel,
+
+00:14:15.980 --> 00:14:16.660
+surtout si un changement
+
+00:14:16.660 --> 00:14:17.400
+implique une priorité
+
+00:14:17.400 --> 00:14:18.760
+ou un engagement client délicat.
+
+00:14:19.980 --> 00:14:20.720
+Ces agents travaillent donc
+
+00:14:20.720 --> 00:14:21.500
+à des postes différents,
+
+00:14:21.740 --> 00:14:22.140
+mais leurs missions
+
+00:14:22.140 --> 00:14:22.900
+suivent le même modèle.
+
+00:14:23.960 --> 00:14:24.740
+L'agent de qualification
+
+00:14:24.740 --> 00:14:25.820
+des ventes traite les prospects,
+
+00:14:26.440 --> 00:14:27.240
+l'agent de rapprochement
+
+00:14:27.240 --> 00:14:28.240
+gère les données financières,
+
+00:14:28.320 --> 00:14:29.040
+l'agent fournisseur
+
+00:14:29.040 --> 00:14:29.980
+traite les bons de commande
+
+00:14:29.980 --> 00:14:31.040
+et l'agent de planification
+
+00:14:31.040 --> 00:14:31.940
+gère les rendez-vous
+
+00:14:31.940 --> 00:14:32.540
+des techniciens.
+
+00:14:34.020 --> 00:14:34.780
+Chacun se concentre
+
+00:14:34.780 --> 00:14:35.840
+sur une tâche métier définie,
+
+00:14:36.100 --> 00:14:36.900
+utilise les données liées
+
+00:14:36.900 --> 00:14:37.500
+à cette tâche,
+
+00:14:37.500 --> 00:14:39.340
+n'effectue que les actions autorisées
+
+00:14:39.340 --> 00:14:40.540
+et laisse une trace
+
+00:14:40.540 --> 00:14:41.040
+de son travail
+
+00:14:41.040 --> 00:14:41.980
+pour ses successeurs.
+
+00:14:43.680 --> 00:14:44.420
+Plus d'automatisation
+
+00:14:44.420 --> 00:14:45.180
+peut faire gagner du temps,
+
+00:14:45.580 --> 00:14:46.240
+mais cela soulève aussi
+
+00:14:46.240 --> 00:14:47.100
+une question légitime.
+
+00:14:47.720 --> 00:14:48.560
+Qui décide de ce qu'un agent
+
+00:14:48.560 --> 00:14:50.500
+peut lire, modifier et envoyer ?
+
+00:14:51.540 --> 00:14:52.640
+Le contrôle, la confiance
+
+00:14:52.640 --> 00:14:53.600
+et l'équipe humaine.
+
+00:14:55.240 --> 00:14:55.680
+Voici un mythe
+
+00:14:55.680 --> 00:14:56.800
+que je souhaite dissiper immédiatement.
+
+00:14:57.600 --> 00:14:58.080
+Ne demandez pas
+
+00:14:58.080 --> 00:14:58.940
+si un agent est capable d'agir.
+
+00:14:59.600 --> 00:15:00.240
+Demandez qui a décidé
+
+00:15:00.240 --> 00:15:00.800
+de ce qu'il peut faire.
+
+00:15:02.380 --> 00:15:03.080
+Chaque action découle
+
+00:15:03.080 --> 00:15:04.100
+de choix fait par l'organisation
+
+00:15:04.100 --> 00:15:04.800
+avant même que l'agent
+
+00:15:04.800 --> 00:15:05.780
+ne touche à un dossier client,
+
+00:15:05.920 --> 00:15:06.380
+une commande
+
+00:15:06.380 --> 00:15:07.600
+ou une transaction financière.
+
+00:15:08.280 --> 00:15:09.280
+Les humains restent responsables.
+
+00:15:09.820 --> 00:15:10.560
+Votre entreprise choisit
+
+00:15:10.560 --> 00:15:10.960
+la mission,
+
+00:15:11.340 --> 00:15:11.900
+définit les règles
+
+00:15:11.900 --> 00:15:12.600
+et détermine les données
+
+00:15:12.600 --> 00:15:13.260
+accessibles à l'agent,
+
+00:15:13.480 --> 00:15:14.660
+les actions qu'il peut entreprendre
+
+00:15:14.660 --> 00:15:15.440
+et les moments
+
+00:15:15.440 --> 00:15:16.200
+où une approbation humaine
+
+00:15:16.200 --> 00:15:16.640
+est requise.
+
+00:15:18.220 --> 00:15:18.900
+Un agent peut gérer
+
+00:15:18.900 --> 00:15:19.760
+les processus courants,
+
+00:15:20.060 --> 00:15:20.880
+mais il n'est pas responsable
+
+00:15:20.880 --> 00:15:22.040
+d'un engagement client erroné,
+
+00:15:22.220 --> 00:15:22.880
+d'un paiement incorrect
+
+00:15:22.880 --> 00:15:24.760
+ou d'une décision sensible.
+
+00:15:26.540 --> 00:15:27.340
+Reprenons l'analogie
+
+00:15:27.340 --> 00:15:28.140
+du bureau de réception.
+
+00:15:28.660 --> 00:15:29.020
+Considérez,
+
+00:15:29.260 --> 00:15:29.700
+entre à Aedi,
+
+00:15:29.840 --> 00:15:30.980
+le service d'identité de Microsoft
+
+00:15:30.980 --> 00:15:31.800
+comme la réception
+
+00:15:31.800 --> 00:15:32.440
+de votre environnement
+
+00:15:32.440 --> 00:15:33.160
+de travail numérique.
+
+00:15:33.160 --> 00:15:35.580
+Lorsqu'un employé se connecte,
+
+00:15:35.700 --> 00:15:36.560
+Entra Aedi confirme
+
+00:15:36.560 --> 00:15:37.220
+son identité
+
+00:15:37.220 --> 00:15:37.780
+et les zones
+
+00:15:37.780 --> 00:15:39.040
+auxquelles il a accès.
+
+00:15:40.340 --> 00:15:41.160
+Le même principe
+
+00:15:41.160 --> 00:15:41.820
+s'applique à l'agent,
+
+00:15:41.940 --> 00:15:42.520
+il ne doit accéder
+
+00:15:42.520 --> 00:15:43.760
+qu'au données
+
+00:15:43.760 --> 00:15:44.600
+et outils nécessaires
+
+00:15:44.600 --> 00:15:45.080
+à sa mission
+
+00:15:45.080 --> 00:15:46.080
+sans circuler librement
+
+00:15:46.080 --> 00:15:46.840
+dans toute l'entreprise.
+
+00:15:48.220 --> 00:15:48.600
+Cela permet
+
+00:15:48.600 --> 00:15:49.160
+de limiter le périm.
+
+00:15:49.560 --> 00:15:50.640
+Avant de déployer un agent,
+
+00:15:50.880 --> 00:15:51.820
+l'organisation a besoin
+
+00:15:51.820 --> 00:15:52.460
+de garde-fous claires.
+
+00:15:53.000 --> 00:15:53.860
+Que peut-il lire ?
+
+00:15:53.860 --> 00:15:54.940
+Que peut-il mettre à jour ?
+
+00:15:54.940 --> 00:15:55.880
+Peut-il préparer un email
+
+00:15:55.880 --> 00:15:56.980
+ou peut-il en envoyer ?
+
+00:15:56.980 --> 00:15:57.600
+Peut-il suggérer
+
+00:15:57.600 --> 00:15:58.440
+la clôture d'un dossier
+
+00:15:58.440 --> 00:15:59.360
+ou un agent
+
+00:15:59.360 --> 00:16:00.040
+doit-il valider
+
+00:16:00.040 --> 00:16:01.700
+cette fermeture ?
+
+00:16:01.700 --> 00:16:02.220
+Ces décisions
+
+00:16:02.220 --> 00:16:02.860
+transforment
+
+00:16:02.860 --> 00:16:03.680
+une idée générale
+
+00:16:03.680 --> 00:16:03.900
+d'IA
+
+00:16:03.900 --> 00:16:04.700
+en un processus
+
+00:16:04.700 --> 00:16:05.420
+métier maîtrisé.
+
+00:16:06.140 --> 00:16:07.160
+Un premier projet judicieux
+
+00:16:07.160 --> 00:16:07.800
+implique généralement
+
+00:16:07.800 --> 00:16:08.560
+des tâches répétitives
+
+00:16:08.560 --> 00:16:08.980
+où une erreur
+
+00:16:08.980 --> 00:16:09.900
+est facilement corrigeable.
+
+00:16:10.880 --> 00:16:11.660
+L'agent pourrait rédiger
+
+00:16:11.660 --> 00:16:12.400
+des messages de suivi
+
+00:16:12.400 --> 00:16:12.880
+pour révision,
+
+00:16:13.020 --> 00:16:13.860
+trier demande entrante
+
+00:16:13.860 --> 00:16:14.680
+ou remplir les détails
+
+00:16:14.680 --> 00:16:15.320
+de dossiers courants.
+
+00:16:15.740 --> 00:16:16.400
+L'équipe peut vérifier
+
+00:16:16.400 --> 00:16:16.900
+les résultats,
+
+00:16:17.040 --> 00:16:17.580
+corriger les erreurs
+
+00:16:17.580 --> 00:16:18.540
+et améliorer la configuration
+
+00:16:18.540 --> 00:16:19.180
+avant d'autoriser
+
+00:16:19.180 --> 00:16:19.800
+plus d'autonomie.
+
+00:16:20.260 --> 00:16:20.760
+Commencez petit.
+
+00:16:21.240 --> 00:16:21.860
+Cela ne signifie pas
+
+00:16:21.860 --> 00:16:22.380
+ignorer les risques.
+
+00:16:23.080 --> 00:16:23.700
+Un agent peut mal
+
+00:16:23.700 --> 00:16:24.480
+interpréter une demande,
+
+00:16:24.800 --> 00:16:25.800
+utiliser de mauvaises informations
+
+00:16:25.800 --> 00:16:26.880
+ou produire une réponse
+
+00:16:26.880 --> 00:16:27.360
+inadaptée
+
+00:16:27.360 --> 00:16:28.540
+à la situation du client.
+
+00:16:29.400 --> 00:16:29.800
+S'il accède
+
+00:16:29.800 --> 00:16:30.660
+à des données confidentielles,
+
+00:16:30.740 --> 00:16:31.220
+le problème prend
+
+00:16:31.220 --> 00:16:31.860
+rapidement de l'ampleur.
+
+00:16:32.540 --> 00:16:33.100
+Certains secteurs
+
+00:16:33.100 --> 00:16:34.180
+font face à des règles strictes
+
+00:16:34.180 --> 00:16:35.020
+sur la confidentialité,
+
+00:16:35.120 --> 00:16:35.500
+l'archivage
+
+00:16:35.500 --> 00:16:36.320
+et le contrôle des décisions.
+
+00:16:36.860 --> 00:16:37.660
+Le travail se poursuit
+
+00:16:37.660 --> 00:16:38.620
+donc après la configuration.
+
+00:16:38.960 --> 00:16:39.520
+Les équipes doivent
+
+00:16:39.520 --> 00:16:40.620
+examiner les actions d'agent,
+
+00:16:40.880 --> 00:16:41.340
+lire les retours
+
+00:16:41.340 --> 00:16:42.140
+des employés clients
+
+00:16:42.140 --> 00:16:42.760
+et inspecter.
+
+00:16:43.160 --> 00:16:44.080
+Les enregistrements traités.
+
+00:16:45.000 --> 00:16:45.760
+S'il manque de contexte
+
+00:16:45.760 --> 00:16:46.420
+à plusieurs reprises,
+
+00:16:46.740 --> 00:16:47.560
+l'organisation peut ajuster
+
+00:16:47.560 --> 00:16:48.060
+ses instructions,
+
+00:16:48.320 --> 00:16:49.340
+améliorer sa base de connaissances,
+
+00:16:49.540 --> 00:16:50.260
+modifier les permissions
+
+00:16:50.260 --> 00:16:51.300
+ou ajouter une étape
+
+00:16:51.300 --> 00:16:52.340
+de validation humaine.
+
+00:16:53.220 --> 00:16:53.920
+L'agent nécessite
+
+00:16:55.800 --> 00:16:56.180
+dans les clients
+
+00:16:56.180 --> 00:16:56.780
+ou les finances.
+
+00:16:57.360 --> 00:16:57.940
+Cela transforme
+
+00:16:57.940 --> 00:16:58.500
+le travail humain
+
+00:16:58.500 --> 00:16:59.560
+mais ne le supprime pas.
+
+00:16:59.960 --> 00:17:01.000
+Au lieu de copier des détails
+
+00:17:01.000 --> 00:17:01.640
+ou de poursuivre
+
+00:17:01.640 --> 00:17:02.520
+des mises à jour routinières,
+
+00:17:02.620 --> 00:17:03.180
+les employés peuvent
+
+00:17:03.180 --> 00:17:03.680
+se concentrer
+
+00:17:03.680 --> 00:17:04.380
+sur les exceptions,
+
+00:17:04.620 --> 00:17:05.160
+les cas complexes
+
+00:17:05.160 --> 00:17:06.540
+et les décisions nécessitant
+
+00:17:06.540 --> 00:17:08.740
+expérience et responsabilité.
+
+00:17:09.500 --> 00:17:10.440
+Quelqu'un reste responsable
+
+00:17:10.440 --> 00:17:10.940
+du résultat.
+
+00:17:11.060 --> 00:17:11.620
+C'est la règle simple
+
+00:17:11.620 --> 00:17:12.080
+à retenir.
+
+00:17:12.640 --> 00:17:13.540
+Un agent peut accomplir
+
+00:17:13.540 --> 00:17:14.340
+une tâche définie
+
+00:17:14.340 --> 00:17:15.500
+mais les humains
+
+00:17:15.500 --> 00:17:16.220
+fixent les limites
+
+00:17:16.220 --> 00:17:17.120
+et restent comptables
+
+00:17:17.120 --> 00:17:18.240
+de ce qui s'y passe.
+
+00:17:19.180 --> 00:17:19.800
+Notre conclusion.
+
+00:17:20.080 --> 00:17:20.460
+Une tâche.
+
+00:17:20.740 --> 00:17:21.300
+Des règles claires.
+
+00:17:21.460 --> 00:17:22.500
+Une supervision humaine.
+
+00:17:23.360 --> 00:17:24.300
+Voici l'essentiel à retenir.
+
+00:17:24.300 --> 00:17:25.880
+Les agents autonomes
+
+00:17:25.880 --> 00:17:26.880
+de Dynamics 365
+
+00:17:26.880 --> 00:17:28.040
+gèrent une tâche précise
+
+00:17:28.040 --> 00:17:28.900
+en utilisant le contexte
+
+00:17:28.900 --> 00:17:29.500
+de votre travail
+
+00:17:29.500 --> 00:17:30.400
+mais vous fixez les règles,
+
+00:17:30.700 --> 00:17:31.280
+approuver les actions
+
+00:17:31.280 --> 00:17:32.440
+et être responsable du résultat.
+
+00:17:33.420 --> 00:17:34.040
+C'est là tout l'intérêt.
+
+00:17:34.680 --> 00:17:35.580
+Abonnez-vous sur votre plateforme
+
+00:17:35.580 --> 00:17:36.400
+de podcast préférée
+
+00:17:36.400 --> 00:17:37.140
+pour plus de connaissances
+
+00:17:37.140 --> 00:17:37.800
+en langage simple
+
+00:17:37.800 --> 00:17:38.840
+et partagez ceci
+
+00:17:38.840 --> 00:17:39.420
+avec quelqu'un qui
+
+00:17:39.420 --> 00:17:40.320
+en entendant AgentIA
+
+00:17:40.320 --> 00:17:41.380
+imagine encore un chatbot
+
+00:17:41.380 --> 00:17:42.380
+répondant à des questions.

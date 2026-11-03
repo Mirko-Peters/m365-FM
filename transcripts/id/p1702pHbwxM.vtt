@@ -1,0 +1,2191 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:05.620
+Bayangkan Anda mengelolah meja layanan pelanggan yang sibuk, tempat pesan terus masuk, kasus perlu diperbarui, dan pelanggan menunggu,
+
+00:00:05.760 --> 00:00:09.300
+sementara jawaban yang mereka butuhkan terkubur dalam catatan lama yang tak sempat dibaca siapapun.
+
+00:00:09.900 --> 00:00:14.240
+Kopilot menangani pertanyaan langsung saat seseorang datang dan bertanya, tetapi agen otonom itu berbeda.
+
+00:00:14.780 --> 00:00:20.140
+Agen otonom memiliki tugas khusus, memantau pekerjaan yang perlu dilakukan, dan mengambil tindakan sendiri sesuai aturan yang Anda berikan.
+
+00:00:20.840 --> 00:00:21.940
+Saya Mirko Peters dari MTGAN.
+
+00:00:22.480 --> 00:00:24.880
+Dalam sesi ini, kita akan membahas konsep ini dengan bahasa yang mudah dipahami.
+
+00:00:25.140 --> 00:00:29.920
+Pada akhirnya, Anda akan tahu apa yang sebenarnya dilakukan agen otonom Dynamics 365, di mana mereka bekerja.
+
+00:00:30.060 --> 00:00:32.080
+Dan mengapa manusia tetap memegang kendali atas keputusan penting.
+
+00:00:32.560 --> 00:00:34.160
+Bayangkan sebuah bisnis seperti gedung perkantoran.
+
+00:00:34.440 --> 00:00:37.440
+Kopilot bekerja di meja depan, membantu pengunjung yang datang bertanya,
+
+00:00:38.080 --> 00:00:40.460
+sementara agen menangani pekerjaan yang terjadi di balik layar.
+
+00:00:42.100 --> 00:00:45.000
+Definisi sederhananya, anggota tim digital dengan tugas yang spesifik.
+
+00:00:46.200 --> 00:00:48.600
+Pekerjaan berulang menyita banyak waktu di sebagian besar perusahaan.
+
+00:00:49.500 --> 00:00:53.840
+Staff penjualan memilah prospek, staff layanan mengisi kolom kasus yang sama,
+
+00:00:53.840 --> 00:00:59.720
+akutan mencocokkan catatan sebelum tutup, buku, dan staff rantai pasok mengejar pemasok untuk
+
+00:00:59.720 --> 00:01:01.700
+tanggal pengiriman.
+
+00:01:03.120 --> 00:01:05.780
+Setiap tugas terlihat kecil, tetapi tumpukannya tumbuh dengan cepat.
+
+00:01:06.160 --> 00:01:07.360
+Jadi apa sebenarnya agen otonom itu?
+
+00:01:07.860 --> 00:01:11.520
+Ini adalah alat AI khusus yang meninjau data bisnis, memilih langkah selanjutnya yang diizinkan,
+
+00:01:11.660 --> 00:01:13.520
+dan melakukan pekerjaan menuju tujuan yang ditetapkan.
+
+00:01:14.100 --> 00:01:16.280
+Ia tidak menerima instruksi samar seperti jalankan perusahaan.
+
+00:01:16.660 --> 00:01:20.400
+Agen otonom menerima tugas yang sempit dengan batasan yang jelas dan fokus itulah hinti utamanya.
+
+00:01:20.400 --> 00:01:22.300
+Bayangkan kembali ke Dumpri Antoran tadi.
+
+00:01:22.740 --> 00:01:23.920
+Kok pilot di meja resepsionis?
+
+00:01:24.380 --> 00:01:27.460
+Anda datang dan meminta bantuan, lalu copilot menjawab pertanyaan Anda,
+
+00:01:27.600 --> 00:01:29.620
+mencari informasi atau membantu Anda menulis sesuatu.
+
+00:01:30.000 --> 00:01:32.040
+Agen otonom bekerja di ruangan-ruangan di balik resepsionis.
+
+00:01:32.800 --> 00:01:37.700
+Satu agen mungkin menengani surat masuk, yang lain mengelola meja layanan untuk memperbarui kasus,
+
+00:01:37.900 --> 00:01:40.640
+dan yang ketiga membantu staff mencocokkan catatan keuangan.
+
+00:01:43.140 --> 00:01:45.420
+Banyak orang mendengar kata agen dan mengira itu adalah chatbot.
+
+00:01:45.920 --> 00:01:48.160
+Chatbot menunggu Anda mengetik pertanyaan lalu membalasnya.
+
+00:01:48.660 --> 00:01:51.060
+Memang berguna untuk percakapan, tetapi itu hanya sekadar mengobrol.
+
+00:01:51.060 --> 00:01:53.960
+Agen otonom bisa bereaksi saat ada sesuatu yang berubah.
+
+00:01:54.460 --> 00:01:58.360
+Saat kasus baru tiba, pelanggan mengirim pesan atau pesanan butuh konfirmasi,
+
+00:01:58.960 --> 00:02:03.400
+agen meninjau situasi dan melanjutkan proses tanpa perlu dipandu setiap langkahnya.
+
+00:02:03.900 --> 00:02:04.720
+Itu adalah perbedaan yang sebenarnya.
+
+00:02:05.460 --> 00:02:09.000
+Otomasi gaya lama juga menangani pekerjaan berulang, tetapi mengikuti alur yang kaku.
+
+00:02:09.540 --> 00:02:10.580
+Jika ini terjadi, lakukan itu.
+
+00:02:11.060 --> 00:02:12.860
+Jika sebuah kolom memiliki nilai ini kirim email tersebut,
+
+00:02:13.380 --> 00:02:16.840
+alur tetap masih berfungsi saat segala sesuatunya dapat diprediksi dan agen menambahkan konteks.
+
+00:02:17.240 --> 00:02:19.040
+Agen membaca kata-kata dalam pesan pelanggan,
+
+00:02:19.040 --> 00:02:22.120
+melihat catatan yang terhubung, dan memilih tindakan yang diizinkan aturannya.
+
+00:02:23.260 --> 00:02:25.140
+Agen tidak membabi buta mengikuti daftar kaku,
+
+00:02:25.300 --> 00:02:27.460
+ia bekerja dengan informasi yang ada tepat di depannya.
+
+00:02:28.040 --> 00:02:29.820
+AI generatif membantu dalam bagian bahasa.
+
+00:02:30.500 --> 00:02:31.660
+Ia dapat membaca pesan panjang,
+
+00:02:32.020 --> 00:02:33.360
+mengidentifikasi kebutuhan seseorang,
+
+00:02:33.680 --> 00:02:34.360
+menulis draft balasan,
+
+00:02:34.500 --> 00:02:36.600
+atau menarik jawaban berguna dari basis pengetahuan Anda.
+
+00:02:37.360 --> 00:02:39.640
+Namun, menulis teks saja tidak menyelesaikan tugas bisnis.
+
+00:02:39.640 --> 00:02:42.700
+Perilaku otonom menghubungkan pemahaman tersebut dengan tindakan.
+
+00:02:43.200 --> 00:02:45.500
+Misalnya, agen mungkin mengidentifikasi permintaan dukungan umum,
+
+00:02:45.720 --> 00:02:47.280
+menyarankan artikel pengetahuan yang tepat,
+
+00:02:47.380 --> 00:02:48.400
+memperbarui kolom kasus,
+
+00:02:48.580 --> 00:02:50.920
+atau meminta seseorang menjauh sesuatu di luar aturannya.
+
+00:02:51.760 --> 00:02:54.460
+Bisnis Anda yang memutuskan tindakan mana yang dapat diambilnya sendiri.
+
+00:02:55.300 --> 00:02:56.460
+Dan bagian ini sering terlewatkan.
+
+00:02:56.800 --> 00:02:58.800
+Agen otonom tidak memiliki akses bebas ke segalanya.
+
+00:02:59.280 --> 00:03:01.100
+Organisasi Anda menetapkan instruksi akses data,
+
+00:03:01.320 --> 00:03:02.600
+izin, dan poin persetujuannya,
+
+00:03:02.760 --> 00:03:04.460
+dan agen bekerja di dalam ruang yang ditentukan itu,
+
+00:03:04.460 --> 00:03:06.560
+seperti anggota tim baru yang dapat memasuki ruangan tertentu,
+
+00:03:06.560 --> 00:03:09.060
+menggunakan file tertentu dan menyelesaikan jenis pekerjaan tertentu,
+
+00:03:09.280 --> 00:03:10.700
+dan menyelesaikan jenis pekerjaan tertentu,
+
+00:03:10.860 --> 00:03:12.280
+dan menyelesaikan jenis pekerjaan tertentu.
+
+00:03:12.400 --> 00:03:14.260
+Jadi bukan sihir atau robot serbaguna.
+
+00:03:15.140 --> 00:03:17.860
+Ini adalah pekerja AI dengan tugas yang spesifik serangkaian aturan
+
+00:03:17.860 --> 00:03:19.460
+dan data bisnis nyata untuk dikerjakan.
+
+00:03:20.200 --> 00:03:23.500
+Selanjutnya, mari kita lihat kantor tempat para agen tersebut menemukan informasi itu.
+
+00:03:23.640 --> 00:03:24.640
+Itu adalah Dynamics 365.
+
+00:03:25.780 --> 00:03:28.900
+Tempat mereka bekerja, Dynamics 365 sebagai kantor bisnisnya.
+
+00:03:29.600 --> 00:03:32.340
+Jadi mana agen-agen ini mendapatkan detail spesifik yang mereka butuhkan
+
+00:03:32.340 --> 00:03:34.840
+untuk mengubah jawaban umum menjadi sesuatu yang berguna bagi bisnis Anda?
+
+00:03:34.840 --> 00:03:37.300
+Itu adalah Dynamics 365 kami.
+
+00:03:37.940 --> 00:03:40.000
+Anggap saja sebagai kantor bisnis itu sendiri
+
+00:03:40.000 --> 00:03:41.840
+dengan ruangan yang terhubung untuk catatan pelanggan,
+
+00:03:42.140 --> 00:03:45.880
+prospek penjualan, kasus dukungan, pesanan, keuangan, dan pekerjaan suplai.
+
+00:03:46.940 --> 00:03:48.620
+Catatan pelanggan memberitahu Anda siapa seseorang
+
+00:03:48.620 --> 00:03:50.280
+dan apa yang harus mereka bayar untuk pemilihan mereka.
+
+00:03:50.660 --> 00:03:52.320
+Sebuah kasus menunjukkan percakapan masa lalu,
+
+00:03:52.480 --> 00:03:54.660
+perbaikan, dan siapa yang bertanggung jawab atas langkah berikut.
+
+00:03:54.920 --> 00:03:56.520
+Sebuah pesan mengungkapkan apa yang dijanjikan,
+
+00:03:56.740 --> 00:03:59.120
+kemana harus dikirim, dan apakah ada yang masih permohon firmasi.
+
+00:03:59.420 --> 00:04:01.400
+Konteks itulah yang mengubah jawabannya.
+
+00:04:01.400 --> 00:04:05.020
+Alat air generik mendengar kalimat pengiriman Oatum belum juga tiba.
+
+00:04:06.560 --> 00:04:08.860
+Tetapi ia tidak tahu pengiriman mana yang Anda maksud,
+
+00:04:09.000 --> 00:04:10.000
+apakah pesanan sudah dikirim,
+
+00:04:10.120 --> 00:04:11.660
+atau apakah ada kasus terbuka terkait Oatum.
+
+00:04:12.360 --> 00:04:15.480
+Dynamics 365 menyimpan semua fakta bisnis tersebut di satu tempat.
+
+00:04:16.280 --> 00:04:17.160
+Ini adalah skenario-nya, Tom.
+
+00:04:17.900 --> 00:04:20.140
+Seorang pelanggan mengirim pesan menanyakan di mana pesanan mereka,
+
+00:04:20.380 --> 00:04:21.920
+dan pesan itu masuk ke percakapan dukungan
+
+00:04:21.920 --> 00:04:23.420
+atau menjadi bagian dari sebuah kasus.
+
+00:04:24.140 --> 00:04:26.120
+Namun pesan itu saja hanya menceritakan setengah dari kisah.
+
+00:04:26.400 --> 00:04:29.000
+Agen tersebut melihat catatan pelanggan yang terhubung ke pesan itu
+
+00:04:29.000 --> 00:04:31.140
+dan memeriksa apakah orang ini menghubungi dukungan kemarin,
+
+00:04:31.280 --> 00:04:33.520
+apakah rekan kerja sudah membalas produk apa yang mereka pesan,
+
+00:04:33.840 --> 00:04:36.560
+dan artikel pengetahuan mana membahas keterlambatan pengiriman.
+
+00:04:37.400 --> 00:04:39.140
+Kemudian, agen menyarankan langkah selanjutnya
+
+00:04:39.140 --> 00:04:41.000
+atau menjalankan tindakan yang diizinkan oleh organisasi.
+
+00:04:41.360 --> 00:04:43.940
+Mungkin agen mengarahkan perwakilan layanan kejawaban yang tepat,
+
+00:04:44.060 --> 00:04:45.380
+memperbarui kasus dengan ringkasan,
+
+00:04:45.480 --> 00:04:46.880
+atau menyiapkan balasan untuk ditinjau.
+
+00:04:47.280 --> 00:04:48.980
+Tugas yang tepat bergantung pada bagaimana perusahaan
+
+00:04:48.980 --> 00:04:50.140
+mengonfigurasi agen tersebut.
+
+00:04:50.640 --> 00:04:51.640
+Namun inilah masalahnya.
+
+00:04:51.940 --> 00:04:53.400
+Agen tersebut tidak bekerja di ruang hampat.
+
+00:04:53.400 --> 00:04:55.860
+Agen bekerja dengan catatan di depannya,
+
+00:04:55.980 --> 00:04:57.120
+pengetahuan yang dapat diakses,
+
+00:04:57.220 --> 00:04:58.400
+dan izin yang melekat pada perannya.
+
+00:04:58.960 --> 00:05:01.360
+Ketika agen kekurangan informasi mencapai keputusan sensitif
+
+00:05:01.360 --> 00:05:02.480
+atau memerlukan persetujuan,
+
+00:05:02.580 --> 00:05:03.480
+seseorang akan turun tangan.
+
+00:05:03.780 --> 00:05:05.540
+Manusia masih menangani kasus-kasus sulit,
+
+00:05:05.940 --> 00:05:07.460
+seperti pelanggan yang menyanggah tagihan,
+
+00:05:07.680 --> 00:05:09.380
+pengiriman yang melibatkan kegagalan serius,
+
+00:05:09.520 --> 00:05:11.340
+atau seseorang yang meminta pengecualian kebijakan.
+
+00:05:12.040 --> 00:05:13.460
+Situasi tersebut memerlukan penilaian,
+
+00:05:13.600 --> 00:05:16.020
+otoritas, dan percakapan yang tidak boleh diselesaikan oleh agen sendirian.
+
+00:05:16.400 --> 00:05:18.480
+Di balik layar, jalurnya cukup sederhana.
+
+00:05:18.760 --> 00:05:19.580
+Informasi masuk,
+
+00:05:19.580 --> 00:05:21.560
+agen meninjau catatan bisnis yang relevan
+
+00:05:21.560 --> 00:05:23.240
+dan pengetahuan yang disetujui mengambil,
+
+00:05:23.480 --> 00:05:24.000
+menyarankan,
+
+00:05:24.240 --> 00:05:25.600
+atau mengarahkan tindakan berikutnya,
+
+00:05:25.880 --> 00:05:27.320
+dan hasilnya kembali ke catatan yang sama.
+
+00:05:28.240 --> 00:05:28.660
+Dengan begitu,
+
+00:05:28.800 --> 00:05:31.060
+tim dapat melihat apa yang terjadi tanpa harus mencari di berbagai alat.
+
+00:05:31.420 --> 00:05:32.740
+Catatan itu jauh daripada kedengarannya.
+
+00:05:33.360 --> 00:05:34.120
+Tanpa catatan itu,
+
+00:05:34.220 --> 00:05:36.640
+perwakilan layanan mungkin membaca email pelanggan di satu tempat,
+
+00:05:36.840 --> 00:05:38.120
+mencari detail pesanan di tempat lain,
+
+00:05:38.420 --> 00:05:39.700
+meriksa catatan lama di tempat berbeda,
+
+00:05:39.780 --> 00:05:40.680
+lalu mengetik pembuat berbeda,
+
+00:05:40.760 --> 00:05:42.040
+lalu mengetik pemberbedaan sebuah kasus.
+
+00:05:42.040 --> 00:05:44.800
+Dynamics 365 menyatukan area kerja tersebut
+
+00:05:44.800 --> 00:05:47.940
+sehingga akin menggunakan konteks yang sama dengan orang-orang di dalam tim.
+
+00:05:48.400 --> 00:05:49.900
+AI generik tahu cara kerja bahasa,
+
+00:05:50.220 --> 00:05:51.340
+tetapi agen Dynamics 365
+
+00:05:51.340 --> 00:05:54.120
+menggunakan bahasa sambil melihat situasi bisnis aktual
+
+00:05:54.120 --> 00:05:55.160
+yang terhubung dengan pelanggan,
+
+00:05:55.420 --> 00:05:55.740
+pesanan,
+
+00:05:55.980 --> 00:05:56.320
+prospek,
+
+00:05:56.440 --> 00:05:57.120
+atau kasus tersebut.
+
+00:05:57.800 --> 00:05:59.240
+Agen tidak hanya membaca pertanyaannya.
+
+00:06:00.340 --> 00:06:01.600
+Agen menghubungkan pertanyaan tersebut
+
+00:06:01.600 --> 00:06:03.280
+dengan pekerjaan yang sudah berlangsung di sekitarnya
+
+00:06:03.280 --> 00:06:05.380
+dalam batasan akses dan aturan yang ditetapkan organisasi.
+
+00:06:06.040 --> 00:06:08.320
+Disitulah agen-agen ini menjadi lebih mudah dibayangkan,
+
+00:06:08.320 --> 00:06:09.760
+terutama dalam layanan pelanggan,
+
+00:06:09.900 --> 00:06:10.800
+di mana pertanyaan masuk,
+
+00:06:10.920 --> 00:06:11.560
+pembaruan kasus,
+
+00:06:11.660 --> 00:06:13.600
+dan pengetahuan bersama semuanya bertemu di satu tempat.
+
+00:06:14.800 --> 00:06:15.620
+Agen layanan
+
+00:06:15.620 --> 00:06:16.680
+Menemukan niat
+
+00:06:16.680 --> 00:06:17.600
+Mengelola kasus
+
+00:06:17.600 --> 00:06:18.680
+Menjaga pengetahuan
+
+00:06:18.680 --> 00:06:22.120
+Layanan pelanggan saat ini memberi kita gambaran
+
+00:06:22.120 --> 00:06:24.100
+paling jelas tentang apa yang dapat dilakukan agen otonom.
+
+00:06:24.680 --> 00:06:26.540
+Tim dukungan menangani pola yang sama setiap hari.
+
+00:06:27.740 --> 00:06:28.480
+Banyak percakapan,
+
+00:06:28.740 --> 00:06:29.540
+banyak pembaruan kecil,
+
+00:06:29.660 --> 00:06:31.280
+dan jawaban berguna yang terjebak dalam pekerjaan
+
+00:06:31.280 --> 00:06:32.600
+yang diselesaikan orang beberapa minggu lalu.
+
+00:06:33.500 --> 00:06:34.820
+Mari kita mulai dengan agen niat pelanggan.
+
+00:06:35.520 --> 00:06:37.500
+Intensi adalah alasan pelanggan menghubungi Anda,
+
+00:06:37.500 --> 00:06:39.600
+seperti bagaimana kami dapat mengotomatiskan masuk,
+
+00:06:39.740 --> 00:06:40.540
+di mana pesanan saya,
+
+00:06:40.780 --> 00:06:42.200
+atau cara mengembalikan barang ini.
+
+00:06:42.940 --> 00:06:44.740
+Tim dukungan perlu mengetahui alasan-alasan
+
+00:06:44.740 --> 00:06:46.560
+dan ini karena hal tersebut membentuk artikel bantuan
+
+00:06:46.560 --> 00:06:48.160
+opsi layanan mandiri dan pelatihan
+
+00:06:48.160 --> 00:06:49.680
+dan membutuhkan staff mereka.
+
+00:06:50.440 --> 00:06:52.660
+Namun pertanyaan pelanggan tidak bersifat statis.
+
+00:06:53.580 --> 00:06:55.040
+Sebuah perusahaan meluncurkan produk baru,
+
+00:06:55.200 --> 00:06:56.020
+mengganti mitra pengiriman,
+
+00:06:56.180 --> 00:06:57.380
+atau memperbarui proses penagihan,
+
+00:06:57.540 --> 00:06:58.880
+lalu pelanggan mulai menanyakan hal baru
+
+00:06:58.880 --> 00:06:59.940
+dengan kata-kata mereka sendiri.
+
+00:07:00.760 --> 00:07:01.500
+Daftar topik lama,
+
+00:07:01.820 --> 00:07:02.460
+tidak lagi relevan.
+
+00:07:03.020 --> 00:07:04.920
+Akin intensi pelanggan menelusuri kasus masa lalu
+
+00:07:04.920 --> 00:07:06.420
+dan saat ini serta percakapan pelanggan
+
+00:07:06.420 --> 00:07:07.860
+untuk menemukan pola-pola tersebut.
+
+00:07:07.860 --> 00:07:10.220
+Alih-alih, seorang manajer membaca ratusan obrolan
+
+00:07:10.220 --> 00:07:10.860
+secara manwa,
+
+00:07:10.980 --> 00:07:12.560
+agen tersebut mendeteksi bahwa banyak orang
+
+00:07:12.560 --> 00:07:13.560
+menyebutkan masalah yang sama
+
+00:07:13.560 --> 00:07:14.840
+dan menyarankan intensi baru untuk topik.
+
+00:07:15.400 --> 00:07:16.560
+Hal itu membantu menjaga
+
+00:07:16.560 --> 00:07:17.960
+agar layanan mandiri tetap segar
+
+00:07:17.960 --> 00:07:19.500
+dengan merekomendasikan artikel pengetahuan
+
+00:07:19.500 --> 00:07:20.680
+yang paling mungkin membantu masalah pelanggan.
+
+00:07:21.260 --> 00:07:23.000
+Rekomendasi tersebut dapat mendukung pelanggan
+
+00:07:23.000 --> 00:07:24.460
+yang mencoba menyelesaikan masalah sendiri
+
+00:07:24.460 --> 00:07:25.760
+atau membantu perwakilan layanan
+
+00:07:25.760 --> 00:07:27.180
+menemukan jawaban yang tepat lebih cepat
+
+00:07:27.180 --> 00:07:27.800
+saat percakapan.
+
+00:07:28.460 --> 00:07:30.640
+Agen tersebut tidak menciptakan kebijakan perusahaan,
+
+00:07:30.720 --> 00:07:31.860
+tetapi bekerja dengan pengetahuan
+
+00:07:31.860 --> 00:07:32.720
+yang disetujui perusahaan
+
+00:07:32.720 --> 00:07:33.680
+sekaligus membantu tim melihat
+
+00:07:33.680 --> 00:07:34.880
+bagaimana yang perlu ditingkatkan.
+
+00:07:35.440 --> 00:07:37.300
+Sekarang pikirkan tentang kasus itu sendiri.
+
+00:07:38.300 --> 00:07:39.880
+Catatan kerja untuk masalah pelanggan
+
+00:07:39.880 --> 00:07:41.220
+yang mencakup pesan pelanggan
+
+00:07:41.220 --> 00:07:43.000
+catatan dari perwakilan layanan,
+
+00:07:43.220 --> 00:07:43.940
+status saat ini,
+
+00:07:44.200 --> 00:07:45.920
+dan langkah-langkah untuk menyelesaikannya.
+
+00:07:47.500 --> 00:07:49.120
+Membuat dan memperbarui catatan tersebut
+
+00:07:49.120 --> 00:07:49.860
+membutuhkan waktu,
+
+00:07:50.040 --> 00:07:50.980
+terutama saat tim menangani
+
+00:07:50.980 --> 00:07:51.980
+volume permintaan yang tinggi.
+
+00:07:52.720 --> 00:07:55.640
+Agen manajemen kasus di Dynamics 365 Customer Service
+
+00:07:55.640 --> 00:07:57.080
+membantu siklus hidup kasus
+
+00:07:57.080 --> 00:07:58.040
+mulai dari pembuatan,
+
+00:07:58.240 --> 00:07:59.540
+pembaruan, penyelesaian,
+
+00:07:59.760 --> 00:08:01.240
+tindak lanjut, hingga penutupan.
+
+00:08:01.240 --> 00:08:03.360
+Perwakilan layanan
+
+00:08:03.360 --> 00:08:04.540
+menghabiskan lebih sedikit waktu
+
+00:08:04.540 --> 00:08:05.720
+untuk mengisi detail rutin
+
+00:08:05.720 --> 00:08:06.580
+dan lebih banyak waktu
+
+00:08:06.580 --> 00:08:08.000
+untuk mencermati situasi pelanggan.
+
+00:08:08.560 --> 00:08:09.460
+Setiap tim dukungan bekerja
+
+00:08:09.460 --> 00:08:10.080
+dengan cara yang berbit.
+
+00:08:10.440 --> 00:08:11.840
+Satu perusahaan ingin kasus ditutup
+
+00:08:11.840 --> 00:08:13.360
+hanya setelah pelanggan mengonfirmasi,
+
+00:08:13.700 --> 00:08:14.760
+yang lain memerlukan manajer
+
+00:08:14.760 --> 00:08:16.080
+untuk meninjau kasus tertentu,
+
+00:08:16.340 --> 00:08:17.760
+dan beberapa kasus perlu tindak lanjut
+
+00:08:17.760 --> 00:08:18.940
+setelah periode tertentu.
+
+00:08:19.880 --> 00:08:20.880
+Administrator membentuk
+
+00:08:20.880 --> 00:08:21.880
+agen manajemen kasus
+
+00:08:21.880 --> 00:08:23.340
+berdasarkan aturan lokal tersebut
+
+00:08:23.340 --> 00:08:25.040
+sehingga mengikuti proses perusahaan
+
+00:08:25.040 --> 00:08:26.360
+alih-alih jalur yang umum.
+
+00:08:27.400 --> 00:08:28.740
+Agen menangani langkah-langkah berulang,
+
+00:08:28.740 --> 00:08:30.020
+tetapi organisasi yang memutuskan
+
+00:08:30.020 --> 00:08:31.620
+kapan seseorang perlu meriksa pekerjaan
+
+00:08:31.620 --> 00:08:32.400
+atau mengambil kendali.
+
+00:08:32.780 --> 00:08:33.980
+Hal itu menyelesaikan masalah lain
+
+00:08:33.980 --> 00:08:35.520
+dalam layanan yang banyak diketahui oleh tim.
+
+00:08:35.960 --> 00:08:37.080
+Perwakilan dukungan yang terampil
+
+00:08:37.080 --> 00:08:38.200
+menyelesaikan masalah sulit,
+
+00:08:38.320 --> 00:08:39.340
+menulis catatan yang bermanfaat,
+
+00:08:39.420 --> 00:08:40.120
+dan menutup kasus sebut.
+
+00:08:40.660 --> 00:08:41.660
+Kemudian, pelanggan lain
+
+00:08:41.660 --> 00:08:42.760
+melaporkan masalah yang sama,
+
+00:08:42.980 --> 00:08:43.960
+tetapi jawabannya terkubur
+
+00:08:43.960 --> 00:08:45.000
+dalam catatan kasus lama,
+
+00:08:45.160 --> 00:08:45.900
+transkrip obrolan,
+
+00:08:46.120 --> 00:08:47.320
+atau ringkasan yang tidak terpikirkan
+
+00:08:47.320 --> 00:08:48.140
+oleh siapapun untuk dicatat.
+
+00:08:48.180 --> 00:08:49.560
+Disitulah peran agen manajemen,
+
+00:08:49.720 --> 00:08:50.580
+pengetahuan pelanggan.
+
+00:08:51.280 --> 00:08:52.380
+Ini memeriksa detail kasus
+
+00:08:52.380 --> 00:08:52.940
+yang telah selesai
+
+00:08:52.940 --> 00:08:54.420
+untuk menarik pengetahuan yang berguna,
+
+00:08:54.540 --> 00:08:55.340
+menemukan kesenjangan,
+
+00:08:55.440 --> 00:08:56.880
+dan menjaga pengetahuan tetap terkini
+
+00:08:56.880 --> 00:08:57.880
+sambil meriksa kebutuhan
+
+00:08:57.880 --> 00:08:58.720
+kepatuan perusahaan.
+
+00:08:59.300 --> 00:09:00.820
+Anggap catatan kasus lama tim
+
+00:09:00.820 --> 00:09:02.640
+dukungan sebagai kertas lepas
+
+00:09:02.640 --> 00:09:04.280
+yang tersebar di banyak laci.
+
+00:09:05.200 --> 00:09:06.560
+Seseorang mungkin telah menulis
+
+00:09:06.560 --> 00:09:07.760
+jawabannya sempurna 6 bulan lalu,
+
+00:09:07.900 --> 00:09:08.580
+tetapi itu tidak akan
+
+00:09:08.580 --> 00:09:09.580
+membantu pelanggan berikutnya
+
+00:09:09.580 --> 00:09:10.900
+jika tidak ada yang bisa menemukannya.
+
+00:09:11.380 --> 00:09:12.320
+Agen pengetahuan membantu
+
+00:09:12.320 --> 00:09:13.320
+mengubah jawaban berulang
+
+00:09:13.320 --> 00:09:14.740
+menjadi materi yang dapat ditinjau oleh tim
+
+00:09:14.740 --> 00:09:15.760
+dan ditempatkan dalam folder
+
+00:09:15.760 --> 00:09:16.440
+pengetahuan bersama.
+
+00:09:17.000 --> 00:09:17.860
+Orang tetap meninjau apa
+
+00:09:17.860 --> 00:09:18.820
+yang menjadi panduan resmi
+
+00:09:18.820 --> 00:09:19.820
+karena catatan kasus
+
+00:09:19.820 --> 00:09:20.580
+dapat menjelaskan
+
+00:09:20.580 --> 00:09:21.560
+pengecualian satu kali
+
+00:09:21.560 --> 00:09:23.100
+solusi usang atau saran
+
+00:09:23.100 --> 00:09:23.860
+yang hanya cocok
+
+00:09:23.860 --> 00:09:24.620
+untuk satu pelanggan.
+
+00:09:25.400 --> 00:09:25.800
+Agen membantu
+
+00:09:25.800 --> 00:09:26.800
+munculkan materi tersebut
+
+00:09:26.800 --> 00:09:27.920
+tetapi oranglah yang memutuskan
+
+00:09:27.920 --> 00:09:29.200
+apa yang harus menjadi artikel terpercet.
+
+00:09:29.540 --> 00:09:30.740
+Berikut adalah contoh nyata.
+
+00:09:31.340 --> 00:09:32.140
+Seorang pelanggan menulis
+
+00:09:32.140 --> 00:09:33.320
+oh pengiriman saya terlambat lagi.
+
+00:09:33.960 --> 00:09:34.620
+Bisa kandang memberitahu
+
+00:09:34.620 --> 00:09:35.320
+saya apa yang sedang terjadi?
+
+00:09:36.000 --> 00:09:36.860
+Agen maksud mengenali
+
+00:09:36.860 --> 00:09:37.740
+bahwa ini termasuk
+
+00:09:37.740 --> 00:09:39.040
+dalam topik terkait pengiriman
+
+00:09:39.040 --> 00:09:40.120
+dan menunjuk ke artikel
+
+00:09:40.120 --> 00:09:41.560
+pengetahuan yang tepat.
+
+00:09:42.580 --> 00:09:43.220
+Jika permintaan
+
+00:09:43.220 --> 00:09:43.960
+memerlukan kasus,
+
+00:09:44.120 --> 00:09:44.940
+agen manajemen kasus
+
+00:09:44.940 --> 00:09:45.960
+membantu menangkap detail,
+
+00:09:46.180 --> 00:09:47.000
+memperbarui catatan,
+
+00:09:47.180 --> 00:09:48.440
+dan mendukung langkah selanjutnya
+
+00:09:48.440 --> 00:09:49.900
+berdasarkan aturan tim.
+
+00:09:51.400 --> 00:09:52.400
+Setelah masalah ditutup,
+
+00:09:52.860 --> 00:09:53.940
+agen manajemen pengetahuan pelanggan
+
+00:09:53.940 --> 00:09:54.480
+meninjau kasus
+
+00:09:54.480 --> 00:09:55.360
+untuk mencari informasi
+
+00:09:55.360 --> 00:09:56.080
+yang dapat meningkatkan
+
+00:09:56.080 --> 00:09:56.920
+konten bantuan nantinya.
+
+00:09:57.780 --> 00:09:58.780
+Jika pengiriman terlambat
+
+00:09:58.780 --> 00:09:59.840
+berasal dari masalah baru
+
+00:09:59.840 --> 00:10:01.120
+yang dilaporkan banyak pelanggan,
+
+00:10:01.600 --> 00:10:02.440
+seseorang menyelidiki,
+
+00:10:02.660 --> 00:10:03.660
+menyetujui artikel baru,
+
+00:10:03.860 --> 00:10:04.680
+atau berbicara langsung
+
+00:10:04.680 --> 00:10:05.200
+dengan pelanggan.
+
+00:10:05.720 --> 00:10:06.740
+Agen mengurangi pekerjaan
+
+00:10:06.740 --> 00:10:08.300
+administratif berulang seputar kasus
+
+00:10:08.300 --> 00:10:09.240
+sementara tim layanan
+
+00:10:09.240 --> 00:10:10.300
+menangani keputusan penting.
+
+00:10:10.860 --> 00:10:11.680
+Agen layanan berfokus
+
+00:10:11.680 --> 00:10:12.620
+pada pertanyaan pelanggan
+
+00:10:12.620 --> 00:10:13.440
+dan jawaban bersama.
+
+00:10:13.880 --> 00:10:14.760
+Di bagian lain bisnis,
+
+00:10:14.940 --> 00:10:16.240
+agen mengambil pekerjaan berbeda,
+
+00:10:16.380 --> 00:10:16.680
+mulai dari
+
+00:10:16.680 --> 00:10:17.800
+menortir prospek penjualan
+
+00:10:17.800 --> 00:10:19.000
+hingga memiksa catatan keuangan
+
+00:10:19.000 --> 00:10:20.160
+dan menindaklanjuti pemasok.
+
+00:10:21.520 --> 00:10:22.360
+Penjualan keuangan
+
+00:10:22.360 --> 00:10:23.120
+dan antipasokan.
+
+00:10:23.660 --> 00:10:24.760
+Agen dengan meja yang berbeda.
+
+00:10:25.900 --> 00:10:26.420
+Layanan pelanggan
+
+00:10:26.420 --> 00:10:27.100
+hanyalah satu bagian
+
+00:10:27.100 --> 00:10:27.720
+dari gambaran besar.
+
+00:10:28.120 --> 00:10:29.020
+Sebenarnya Anda akan menemukan
+
+00:10:29.020 --> 00:10:29.860
+pola yang sama di mana-mana.
+
+00:10:30.320 --> 00:10:30.980
+Tim penjualan,
+
+00:10:31.180 --> 00:10:31.760
+tim keuangan,
+
+00:10:31.880 --> 00:10:32.360
+tim pembelian,
+
+00:10:32.440 --> 00:10:33.220
+petugas pengiriman,
+
+00:10:33.220 --> 00:10:34.600
+semua memiliki pekerjaan
+
+00:10:34.600 --> 00:10:35.660
+yang mengikuti rutinitas
+
+00:10:35.660 --> 00:10:36.660
+di mana detail berubah
+
+00:10:36.660 --> 00:10:37.440
+dari satu catatan
+
+00:10:37.440 --> 00:10:38.280
+kecatatan berikutnya,
+
+00:10:38.460 --> 00:10:39.640
+tetapi bentuknya tetap sama.
+
+00:10:40.080 --> 00:10:40.840
+Jadi, mari kita mulai cuman.
+
+00:10:41.320 --> 00:10:42.540
+Bayangkan seorang tenaga penjualan
+
+00:10:42.540 --> 00:10:43.740
+menerima sejumlah besar prospek masuk.
+
+00:10:44.060 --> 00:10:44.640
+Beberapa orang siap
+
+00:10:44.640 --> 00:10:45.160
+untuk berbicara,
+
+00:10:45.280 --> 00:10:46.120
+yang lain hanya melihat-lihat
+
+00:10:46.120 --> 00:10:46.720
+dan beberapa mungkin
+
+00:10:46.720 --> 00:10:47.540
+sama sekali tidak cocok
+
+00:10:47.540 --> 00:10:48.300
+dengan perusahaan.
+
+00:10:48.380 --> 00:10:48.920
+Inilah masalah ini.
+
+00:10:49.260 --> 00:10:49.980
+Seseorang masih perlu
+
+00:10:49.980 --> 00:10:50.760
+meneliti masing-masing
+
+00:10:50.760 --> 00:10:51.740
+dan memutuskan siapa yang layak
+
+00:10:51.740 --> 00:10:52.860
+mendapatkan perhatian terlebih dahulu.
+
+00:10:53.140 --> 00:10:54.600
+Disitulah agen kualifikasi penjualan
+
+00:10:54.600 --> 00:10:56.660
+untuk Dynamics 365 Sales berperan.
+
+00:10:57.000 --> 00:10:57.580
+Agen ini membantu
+
+00:10:57.580 --> 00:10:58.520
+pekerjaan penyortiran awal.
+
+00:10:58.840 --> 00:10:59.860
+Agen ini dapat meneliti
+
+00:10:59.860 --> 00:11:01.260
+dan memprioritaskan prospek masuk,
+
+00:11:01.460 --> 00:11:02.620
+lalu mengembangkan email penjualan
+
+00:11:02.620 --> 00:11:03.260
+yang dipersonalisasi
+
+00:11:03.260 --> 00:11:03.980
+untuk memulai percakap.
+
+00:11:04.320 --> 00:11:04.900
+Namun begini,
+
+00:11:05.080 --> 00:11:06.120
+teknologi ini tidak menutup
+
+00:11:06.120 --> 00:11:07.280
+transaksi dengan sendirinya
+
+00:11:07.280 --> 00:11:08.100
+dan tidak menggantikan
+
+00:11:08.100 --> 00:11:09.160
+tenaga penjual yang membangun
+
+00:11:09.160 --> 00:11:09.900
+kepercayaan dengan pelan.
+
+00:11:10.240 --> 00:11:10.660
+Sebaliknya,
+
+00:11:10.760 --> 00:11:11.560
+teknologi ini membantu
+
+00:11:11.560 --> 00:11:12.420
+tenaga penjual memulai
+
+00:11:12.420 --> 00:11:13.220
+dengan daftar yang lebih jelas.
+
+00:11:13.380 --> 00:11:14.800
+Bayangkan kotak masuk penjualan
+
+00:11:14.800 --> 00:11:15.960
+yang penuh di hari Senin pagi,
+
+00:11:16.260 --> 00:11:17.040
+di mana tanpa bantuan,
+
+00:11:17.140 --> 00:11:18.320
+seorang perwakilan bisa menghabiskan
+
+00:11:18.320 --> 00:11:19.460
+waktu berjam-jam membuka pesan,
+
+00:11:19.560 --> 00:11:20.580
+mencari detail perusahaan,
+
+00:11:20.640 --> 00:11:21.640
+dan menyusun balasan awal yang serup.
+
+00:11:22.180 --> 00:11:23.300
+Agen tersebut dapat menyiapkan
+
+00:11:23.300 --> 00:11:24.120
+pekerjaan awal itu
+
+00:11:24.120 --> 00:11:25.340
+sehingga perwakilan dapat fokus
+
+00:11:25.340 --> 00:11:26.240
+pada prospek yang terlihat
+
+00:11:26.240 --> 00:11:27.360
+paling siap untuk berjaga penyata.
+
+00:11:27.700 --> 00:11:28.200
+Tetap saja,
+
+00:11:28.360 --> 00:11:29.100
+seseoranglah yang memutuskan
+
+00:11:29.100 --> 00:11:30.200
+seperti apa kontak penjualan
+
+00:11:30.200 --> 00:11:30.580
+yang baik itu.
+
+00:11:31.100 --> 00:11:32.600
+Mereka meninjau email sebelum dikirim,
+
+00:11:32.760 --> 00:11:34.120
+menambahkan pengetahuan mereka sendiri,
+
+00:11:34.240 --> 00:11:35.620
+dan memutuskan apakah prospek layak
+
+00:11:35.620 --> 00:11:36.940
+ditelpon sementara agen menangani
+
+00:11:36.940 --> 00:11:38.460
+riset berulang dan draft di bagian luar.
+
+00:11:39.300 --> 00:11:40.220
+Usaha kecil dan menengah
+
+00:11:40.220 --> 00:11:41.460
+seringkali menghadapi tugas rupa
+
+00:11:41.460 --> 00:11:42.540
+setelah pelanggan memutuskan
+
+00:11:42.540 --> 00:11:43.320
+untuk membeli.
+
+00:11:44.260 --> 00:11:44.900
+Pesanan tiba,
+
+00:11:45.280 --> 00:11:46.620
+melalui email atau saluran lain,
+
+00:11:46.620 --> 00:11:48.240
+dan seseorang harus memasukkannya,
+
+00:11:48.500 --> 00:11:49.120
+memeriksa detail,
+
+00:11:49.440 --> 00:11:50.540
+menangkap preferensi pelanggan,
+
+00:11:50.880 --> 00:11:51.880
+dan mengirim konfirmasi.
+
+00:11:52.500 --> 00:11:53.720
+Pekerjaan itu bisa memakan waktu,
+
+00:11:53.900 --> 00:11:54.600
+terutama saat pesanan
+
+00:11:54.600 --> 00:11:55.720
+tiba dalam format yang berbeda-beda.
+
+00:11:56.820 --> 00:11:57.920
+Agen pesanan penjualan
+
+00:11:57.920 --> 00:11:59.700
+di Dynamics 3.5 Business Central
+
+00:11:59.700 --> 00:12:01.400
+menangani proses penerimaan pesanan
+
+00:12:01.400 --> 00:12:03.000
+mulai dari entry hingga konfirmasi.
+
+00:12:03.800 --> 00:12:04.860
+Agen ini dapat berinteraksi
+
+00:12:04.860 --> 00:12:05.420
+dengan pelanggan
+
+00:12:05.420 --> 00:12:06.620
+sembari mengumpulkan informasi
+
+00:12:06.620 --> 00:12:07.620
+yang diperlukan untuk pesanan,
+
+00:12:07.840 --> 00:12:08.560
+sehingga tim tidak perlu
+
+00:12:08.560 --> 00:12:09.820
+menyalin setiap detail secara manual
+
+00:12:09.820 --> 00:12:11.280
+sebelum memproses pesanan tersebut.
+
+00:12:11.840 --> 00:12:12.720
+Sekarang Departemen Keuangan
+
+00:12:12.720 --> 00:12:13.700
+memiliki tumpukan perjendit.
+
+00:12:13.700 --> 00:12:15.680
+Sebelum periode keuangan ditutup,
+
+00:12:15.880 --> 00:12:16.720
+tim perlu menyiapkan
+
+00:12:16.720 --> 00:12:17.720
+dan membersihkan set data
+
+00:12:17.720 --> 00:12:18.480
+di mana angka-angka
+
+00:12:18.480 --> 00:12:19.720
+berada di catatan yang berbeda,
+
+00:12:20.060 --> 00:12:21.180
+format memerlukan perhatian,
+
+00:12:21.720 --> 00:12:22.640
+dan orang-orang menghabiskan
+
+00:12:22.640 --> 00:12:23.020
+waktu lama
+
+00:12:23.020 --> 00:12:24.000
+untuk menemukan informasi
+
+00:12:24.000 --> 00:12:24.620
+yang tidak cocok.
+
+00:12:26.120 --> 00:12:27.360
+Agen rekonsiliasi keuangan
+
+00:12:27.360 --> 00:12:28.560
+untuk Microsoft 365
+
+00:12:28.560 --> 00:12:29.440
+ke Pilot for Finance
+
+00:12:29.440 --> 00:12:30.200
+membantu menyiapkan
+
+00:12:30.200 --> 00:12:31.220
+dan membersihkan set data
+
+00:12:31.220 --> 00:12:32.280
+untuk pekerjaan penutupan
+
+00:12:32.280 --> 00:12:32.840
+periode tersebut.
+
+00:12:33.380 --> 00:12:34.100
+Anggaplah ini sebagai
+
+00:12:34.100 --> 00:12:34.780
+merapikan dokumen
+
+00:12:34.780 --> 00:12:35.520
+sebelum akuntan
+
+00:12:35.520 --> 00:12:36.640
+memulai tinjauan serius.
+
+00:12:37.240 --> 00:12:38.000
+Hal ini tidak menentukan
+
+00:12:38.000 --> 00:12:39.040
+apakah laporan keuangan perusahaan
+
+00:12:39.040 --> 00:12:39.440
+sudah benar.
+
+00:12:40.800 --> 00:12:41.760
+Profesional keuangan
+
+00:12:41.760 --> 00:12:43.180
+tetap memegang tanggung jawab tersebut.
+
+00:12:43.760 --> 00:12:44.240
+Ada agen lain
+
+00:12:44.240 --> 00:12:45.800
+di dalam Dynamics 365 Finance,
+
+00:12:45.960 --> 00:12:47.280
+yaitu agen rekonsiliasi akun.
+
+00:12:48.080 --> 00:12:49.060
+Agen ini membantu
+
+00:12:49.060 --> 00:12:50.020
+mencocokkan dan menyelesaikan
+
+00:12:50.020 --> 00:12:50.680
+transaksi antara
+
+00:12:50.680 --> 00:12:51.360
+buku besar pembantu
+
+00:12:51.360 --> 00:12:52.100
+dan buku besar umum.
+
+00:12:52.100 --> 00:12:52.920
+Oh, istilah-istilah itu
+
+00:12:52.920 --> 00:12:53.460
+terdengar teknis,
+
+00:12:53.540 --> 00:12:54.560
+jadi mari kita sederhanakan.
+
+00:12:55.080 --> 00:12:55.940
+Buku besar pembantu
+
+00:12:55.940 --> 00:12:57.100
+menyimpan catatan terperinci
+
+00:12:57.100 --> 00:12:57.800
+untuk satu area,
+
+00:12:57.940 --> 00:12:58.880
+seperti pembayaran pelanggan
+
+00:12:58.880 --> 00:12:59.760
+atau tagian pemasok,
+
+00:12:59.840 --> 00:13:00.700
+sementara buku besar umum
+
+00:13:00.700 --> 00:13:01.520
+menyimpan catatan keuangan
+
+00:13:01.520 --> 00:13:02.460
+yang lebih besar untuk bisnis.
+
+00:13:03.020 --> 00:13:03.760
+Akuntan memerlukan
+
+00:13:03.760 --> 00:13:05.160
+catatan tersebut untuk sinkron
+
+00:13:05.160 --> 00:13:05.780
+dan jika tidak,
+
+00:13:05.780 --> 00:13:07.140
+seseorang perlu menemukan celahnya.
+
+00:13:07.480 --> 00:13:08.280
+Agen ini membantu
+
+00:13:08.280 --> 00:13:09.340
+dalam pekerjaan pencocokan
+
+00:13:09.340 --> 00:13:09.980
+dan penyelesaian
+
+00:13:09.980 --> 00:13:10.780
+sehingga akuntan dapat
+
+00:13:10.780 --> 00:13:11.880
+menghabiskan lebih banyak waktu
+
+00:13:11.880 --> 00:13:12.860
+untuk menyelidiki catatan
+
+00:13:12.860 --> 00:13:13.680
+yang tidak pas daripada
+
+00:13:13.680 --> 00:13:15.220
+meriksa setiap kecocokan
+
+00:13:15.220 --> 00:13:15.920
+yang jelas satu persatu.
+
+00:13:16.240 --> 00:13:16.900
+Tim berantai pasokan
+
+00:13:16.900 --> 00:13:17.740
+memiliki masalah tindak lanjut.
+
+00:13:18.260 --> 00:13:19.420
+Sebuah bisnis mengirimkan
+
+00:13:19.420 --> 00:13:20.500
+pesanan pembelian ke pemasok,
+
+00:13:20.780 --> 00:13:21.760
+tetapi tim masih membutuhkan
+
+00:13:21.760 --> 00:13:22.720
+konfirmasi bahwa pemasok
+
+00:13:22.720 --> 00:13:23.400
+dapat mengirimkannya
+
+00:13:23.400 --> 00:13:24.020
+sesuai jadwal.
+
+00:13:24.620 --> 00:13:25.560
+Jika tidak ada tindak lanjut,
+
+00:13:25.860 --> 00:13:26.900
+penundaan bisa terabaikan
+
+00:13:26.900 --> 00:13:27.820
+hingga menjadi masalah
+
+00:13:27.820 --> 00:13:28.420
+bagi pelanggan.
+
+00:13:28.420 --> 00:13:30.240
+Agen Komunikasi Pemasok
+
+00:13:30.240 --> 00:13:31.280
+untuk Dynamics 365,
+
+00:13:31.620 --> 00:13:32.420
+Supply Chain Management,
+
+00:13:32.640 --> 00:13:33.960
+menangani kolaborasi
+
+00:13:33.960 --> 00:13:34.500
+dengan pemasok
+
+00:13:34.500 --> 00:13:35.300
+untuk mengonfirmasi
+
+00:13:35.300 --> 00:13:36.040
+pengiriman pesanan.
+
+00:13:36.580 --> 00:13:37.300
+Agen ini dapat menangani
+
+00:13:37.300 --> 00:13:38.020
+pekerjaan terkait
+
+00:13:38.020 --> 00:13:39.100
+konfirmasi pesanan pembelian
+
+00:13:39.100 --> 00:13:40.020
+dan membantu mendeteksi
+
+00:13:40.020 --> 00:13:41.440
+kemungkinan penundaan lebih awal.
+
+00:13:41.520 --> 00:13:42.000
+Dengan begitu,
+
+00:13:42.220 --> 00:13:43.060
+spesialis pengadaan
+
+00:13:43.060 --> 00:13:43.760
+dapat meluangkan
+
+00:13:43.760 --> 00:13:44.480
+lebih banyak waktu
+
+00:13:44.480 --> 00:13:45.440
+untuk hubungan pemasok
+
+00:13:45.440 --> 00:13:46.380
+dan masalah pengiriman
+
+00:13:46.380 --> 00:13:47.120
+yang memerlukan
+
+00:13:47.120 --> 00:13:48.100
+percakapan manusia.
+
+00:13:48.960 --> 00:13:49.640
+Field Service menambah
+
+00:13:49.640 --> 00:13:50.460
+dinamika ke dalam kegiatan ini.
+
+00:13:50.860 --> 00:13:51.560
+Seorang dispatcher
+
+00:13:51.560 --> 00:13:52.820
+mungkin merencanakan hari teknisi
+
+00:13:52.820 --> 00:13:53.360
+dengan cermat,
+
+00:13:53.500 --> 00:13:54.080
+namun lalu lintas
+
+00:13:54.080 --> 00:13:54.880
+bisa menghambat seseorang,
+
+00:13:55.120 --> 00:13:55.920
+pelanggan membatalkan
+
+00:13:55.920 --> 00:13:56.760
+atau dua pemesanan
+
+00:13:56.760 --> 00:13:57.260
+bertebrak.
+
+00:13:57.660 --> 00:13:58.460
+Jadwal yang tampak baik
+
+00:13:58.460 --> 00:13:59.020
+pada jam 8
+
+00:13:59.020 --> 00:14:00.000
+mungkin menciptakan celah
+
+00:14:00.000 --> 00:14:00.880
+dan konflik saja makan.
+
+00:14:01.100 --> 00:14:02.540
+Agen Operasional Penjadwalan
+
+00:14:02.540 --> 00:14:03.540
+untuk Dynamics 365,
+
+00:14:03.740 --> 00:14:04.160
+Field Service,
+
+00:14:04.280 --> 00:14:05.000
+membantu dispatcher
+
+00:14:05.000 --> 00:14:05.740
+menyesuaikan jadwal
+
+00:14:05.740 --> 00:14:07.080
+seiring perubahan kondisi tersebut.
+
+00:14:07.680 --> 00:14:08.680
+Agen ini membantu mereka
+
+00:14:08.680 --> 00:14:09.580
+mengupayakan jadwal
+
+00:14:09.580 --> 00:14:10.160
+yang lebih baik
+
+00:14:10.160 --> 00:14:10.680
+bagi teknisi
+
+00:14:10.680 --> 00:14:11.680
+ketika hari tidak berjalan
+
+00:14:11.680 --> 00:14:12.200
+sesuai rencana.
+
+00:14:12.800 --> 00:14:14.040
+Dispatcher tetap memutuskan
+
+00:14:14.040 --> 00:14:14.680
+apa yang masuk akal
+
+00:14:14.680 --> 00:14:15.720
+bagi pelanggan dan staff mereka,
+
+00:14:15.880 --> 00:14:16.700
+terutama saat perubahan
+
+00:14:16.700 --> 00:14:17.840
+melibatkan pekerjaan prioritas
+
+00:14:17.840 --> 00:14:19.060
+atau janji pelanggan yang sulit.
+
+00:14:19.860 --> 00:14:20.540
+Jadi agen-agen ini
+
+00:14:20.540 --> 00:14:21.420
+bekerja di meja yang berbeda,
+
+00:14:21.520 --> 00:14:22.140
+namun pekerja mereka
+
+00:14:22.140 --> 00:14:22.920
+memiliki bentuk yang sama.
+
+00:14:23.600 --> 00:14:24.760
+Agen Kualifikasi Penjualan
+
+00:14:24.760 --> 00:14:25.680
+bekerja dengan Prospek,
+
+00:14:26.120 --> 00:14:26.920
+Agen Rekonsiliasi
+
+00:14:26.920 --> 00:14:28.180
+bekerja dengan Catatan Keuangan,
+
+00:14:28.620 --> 00:14:29.440
+Agen Pemasok bekerja
+
+00:14:29.440 --> 00:14:30.280
+dengan Pesanan Pembelian,
+
+00:14:30.500 --> 00:14:31.340
+dan Agen Penjadwalan
+
+00:14:31.340 --> 00:14:32.740
+bekerja dengan Janji Temu Teknisi.
+
+00:14:33.760 --> 00:14:34.600
+Masing-masing berfokus
+
+00:14:34.600 --> 00:14:35.440
+pada tugas bisnis
+
+00:14:35.440 --> 00:14:36.200
+yang ditentukan
+
+00:14:36.200 --> 00:14:37.340
+menggunakan data yang terhubung
+
+00:14:37.340 --> 00:14:38.120
+dengan tugas tersebut
+
+00:14:38.120 --> 00:14:39.660
+hanya mengambil tindakan yang diizinkan
+
+00:14:39.660 --> 00:14:41.220
+dan meninggalkan catatan pekerjaan
+
+00:14:41.220 --> 00:14:42.200
+untuk orang-orang berikutnya.
+
+00:14:42.200 --> 00:14:44.360
+Lebih banyak tindakan
+
+00:14:44.360 --> 00:14:45.260
+dapat menghemat waktu,
+
+00:14:45.520 --> 00:14:46.340
+tetapi juga menimbulkan
+
+00:14:46.340 --> 00:14:47.280
+pertanyaan yang wajar.
+
+00:14:47.660 --> 00:14:48.400
+Siapa yang memutuskan
+
+00:14:48.400 --> 00:14:49.120
+apa yang dapat dibaca
+
+00:14:49.120 --> 00:14:50.480
+diubah dan dikirim oleh agen?
+
+00:14:51.300 --> 00:14:52.500
+Kontrol Kepercayaan
+
+00:14:52.500 --> 00:14:53.500
+dan Tim Manusia
+
+00:14:53.500 --> 00:14:55.980
+Inilah mitos yang ingin
+
+00:14:55.980 --> 00:14:56.700
+saya luluskan segera.
+
+00:14:57.560 --> 00:14:58.000
+Jangan bertanya
+
+00:14:58.000 --> 00:14:58.840
+apakah agen bisa berdiri.
+
+00:14:59.520 --> 00:15:00.280
+Tanyakan siapa yang memutuskan
+
+00:15:00.280 --> 00:15:00.880
+apa yang bisa dilakukan.
+
+00:15:02.260 --> 00:15:03.180
+Setiap tindakan berasal
+
+00:15:03.180 --> 00:15:03.980
+dari pilihan yang dibuat
+
+00:15:03.980 --> 00:15:05.060
+organisasi sebelum agen
+
+00:15:05.060 --> 00:15:06.080
+menyentuh catatan pelanggan,
+
+00:15:06.200 --> 00:15:07.640
+pesanan, atau transaksi keuangan.
+
+00:15:08.180 --> 00:15:09.340
+Manusia tetap memegang tanggung jawab.
+
+00:15:09.620 --> 00:15:10.900
+Perusahaan Anda memilih tugasnya,
+
+00:15:10.900 --> 00:15:11.780
+menetapkan aturannya,
+
+00:15:11.940 --> 00:15:12.580
+dan memutuskan data
+
+00:15:12.580 --> 00:15:13.340
+yang dapat dilihat agen,
+
+00:15:13.440 --> 00:15:14.300
+tindakan yang dapat diambil,
+
+00:15:14.460 --> 00:15:15.420
+serta momen di mana manusia
+
+00:15:15.420 --> 00:15:16.780
+harus menyetujui langkah berikutnya.
+
+00:15:18.140 --> 00:15:19.640
+Agen mungkin menangani jalur rutin,
+
+00:15:19.820 --> 00:15:21.300
+tetapi tidak memikul tanggung jawab
+
+00:15:21.300 --> 00:15:22.580
+atas janji pelanggan yang buruk,
+
+00:15:22.940 --> 00:15:23.760
+pembayaran yang salah,
+
+00:15:23.940 --> 00:15:25.000
+atau keputusan sensitif.
+
+00:15:26.440 --> 00:15:27.020
+Mari kita kembali
+
+00:15:27.020 --> 00:15:28.200
+ke analogi meja resepsionis.
+
+00:15:28.560 --> 00:15:29.400
+Bayangkan EntraID
+
+00:15:29.400 --> 00:15:30.760
+layanan identitas Microsoft
+
+00:15:30.760 --> 00:15:32.080
+sebagai meja resepsionis
+
+00:15:32.080 --> 00:15:33.240
+untuk tempat kerja digital.
+
+00:15:34.060 --> 00:15:34.820
+Saat karyawan masuk,
+
+00:15:34.900 --> 00:15:35.840
+EntraID membantu
+
+00:15:35.840 --> 00:15:37.240
+mengonfirmasi siapa orang tersebut
+
+00:15:37.240 --> 00:15:37.980
+dan ruangan mana
+
+00:15:37.980 --> 00:15:39.280
+yang boleh mereka masuki.
+
+00:15:39.880 --> 00:15:40.480
+Ide yang sama
+
+00:15:40.480 --> 00:15:41.220
+mengontrol agen.
+
+00:15:41.620 --> 00:15:43.260
+Agen hanya boleh mengakses
+
+00:15:43.260 --> 00:15:44.140
+catatan dan alat
+
+00:15:44.140 --> 00:15:45.360
+yang diperlukan untuk tugasnya,
+
+00:15:45.540 --> 00:15:46.120
+tidak menjelajahi
+
+00:15:46.120 --> 00:15:47.100
+setiap bagian bisnis.
+
+00:15:48.040 --> 00:15:48.940
+Itu menjaga cekupan tukat.
+
+00:15:49.340 --> 00:15:50.660
+Sebelum menggunakan agen,
+
+00:15:50.960 --> 00:15:51.740
+organisasi memerlukan
+
+00:15:51.740 --> 00:15:52.480
+batasan yang jelas.
+
+00:15:52.960 --> 00:15:53.480
+Apa yang boleh dibaca?
+
+00:15:53.780 --> 00:15:54.500
+Apa yang boleh diperbarui?
+
+00:15:54.820 --> 00:15:55.900
+Bisa kak ia menyiapkan surat
+
+00:15:55.900 --> 00:15:56.700
+atau boleh kak ia mengerik?
+
+00:15:56.980 --> 00:15:57.940
+Bisa kak ia menyarankan
+
+00:15:57.940 --> 00:15:58.600
+penutupan kasus
+
+00:15:58.600 --> 00:15:59.540
+atau perwakilan layanan
+
+00:15:59.540 --> 00:16:00.760
+harus menyetujui penutupan itu?
+
+00:16:01.540 --> 00:16:02.340
+Keputusan itulah
+
+00:16:02.340 --> 00:16:03.500
+yang mengubah gagasan AI
+
+00:16:03.500 --> 00:16:04.760
+yang luas menjadi proses bisnis
+
+00:16:04.760 --> 00:16:05.460
+yang terkontrol.
+
+00:16:06.080 --> 00:16:07.060
+Proyek pertama yang masuk akal
+
+00:16:07.060 --> 00:16:07.900
+biasanya melibatkan
+
+00:16:07.900 --> 00:16:08.560
+pekerjaan berulang
+
+00:16:08.560 --> 00:16:09.140
+di mana kesalahan
+
+00:16:09.140 --> 00:16:10.020
+memiliki jalan-jalan yang jelas.
+
+00:16:10.740 --> 00:16:11.660
+Mungkin agen menyusun
+
+00:16:11.660 --> 00:16:12.340
+pesan tindak lanjut
+
+00:16:12.340 --> 00:16:13.000
+untuk ditinjau,
+
+00:16:13.120 --> 00:16:14.020
+menyaptir permintaan masuk,
+
+00:16:14.140 --> 00:16:15.360
+atau mengisi detail kasus rutin.
+
+00:16:15.660 --> 00:16:16.740
+Tim dapat memeriksa hasil,
+
+00:16:16.880 --> 00:16:17.740
+memperbaiki kesalahan,
+
+00:16:17.800 --> 00:16:18.780
+dan menyempurnakan pengaturan
+
+00:16:18.780 --> 00:16:19.380
+sebelum mengizinkan
+
+00:16:19.380 --> 00:16:19.920
+tindakan yang lebih.
+
+00:16:20.920 --> 00:16:21.320
+Namun,
+
+00:16:21.380 --> 00:16:22.380
+konek berarti mengambilkan risikonya.
+
+00:16:23.040 --> 00:16:23.700
+Agen bisa salah
+
+00:16:23.700 --> 00:16:24.680
+memahami permintaan,
+
+00:16:24.940 --> 00:16:26.160
+menggunakan informasi yang buruk,
+
+00:16:26.240 --> 00:16:27.100
+atau memberikan jawaban
+
+00:16:27.100 --> 00:16:27.680
+yang tidak sesuai
+
+00:16:27.680 --> 00:16:28.700
+dengan situasi pelanggan.
+
+00:16:29.360 --> 00:16:30.240
+Jika ia mengakses data
+
+00:16:30.240 --> 00:16:31.060
+yang tidak seharusnya dilihat,
+
+00:16:31.160 --> 00:16:31.860
+masalah akan berkembang.
+
+00:16:32.420 --> 00:16:33.200
+Beberapa industri juga
+
+00:16:33.200 --> 00:16:34.160
+menghadapi aturan ketat
+
+00:16:34.160 --> 00:16:35.340
+tentang privasi pencatatan
+
+00:16:35.340 --> 00:16:36.340
+dan cara keputusan diperiksa.
+
+00:16:36.720 --> 00:16:37.020
+Jadi,
+
+00:16:37.200 --> 00:16:37.960
+pekerjaan berlanjut
+
+00:16:37.960 --> 00:16:39.020
+setelah pengaturan tentim
+
+00:16:39.020 --> 00:16:40.440
+perlu meninjau apa yang dilakukan agen,
+
+00:16:40.680 --> 00:16:41.680
+membaca masukan dari karyawan
+
+00:16:41.680 --> 00:16:42.220
+dan pelanggan,
+
+00:16:42.340 --> 00:16:43.280
+serta memeriksa catatan
+
+00:16:43.280 --> 00:16:43.940
+yang disentuhnya.
+
+00:16:44.820 --> 00:16:45.680
+Jika ia berulang kali
+
+00:16:45.680 --> 00:16:46.460
+melewatkan konteks,
+
+00:16:46.560 --> 00:16:48.100
+organisasi dapat menyesuaikan instruksinya,
+
+00:16:48.500 --> 00:16:49.300
+meningkatkan pengetahuan
+
+00:16:49.300 --> 00:16:49.800
+yang disetujui,
+
+00:16:50.280 --> 00:16:50.820
+mengubah izin,
+
+00:16:51.040 --> 00:16:51.720
+atau menambahkan titik
+
+00:16:51.720 --> 00:16:52.420
+persetujuan manusia.
+
+00:16:53.120 --> 00:16:54.180
+Agen memerlukan pengawasan
+
+00:16:54.180 --> 00:16:55.420
+sama seperti proses apapun
+
+00:16:55.420 --> 00:16:56.300
+yang memakaruhi pelanggan
+
+00:16:56.300 --> 00:16:56.760
+atau uang.
+
+00:16:57.200 --> 00:16:58.320
+Ini mengubah pekerja manusia,
+
+00:16:58.500 --> 00:16:59.320
+tetapi tidak menghilangkannya.
+
+00:16:59.920 --> 00:17:00.840
+Alih-alih menyalin detail
+
+00:17:00.840 --> 00:17:01.520
+antar catatan
+
+00:17:01.520 --> 00:17:02.740
+atau mengejar pembaruan rutin,
+
+00:17:02.960 --> 00:17:04.340
+orang dapat fokus pada pengecualian,
+
+00:17:04.500 --> 00:17:05.420
+kasus yang tidak jelas,
+
+00:17:05.540 --> 00:17:06.160
+dan keputusan
+
+00:17:06.160 --> 00:17:07.680
+yang membutuhkan pengalaman
+
+00:17:07.680 --> 00:17:08.720
+dan akuntabilitas.
+
+00:17:09.260 --> 00:17:09.820
+Seseorang tetap
+
+00:17:09.820 --> 00:17:10.900
+memegang kendali atas hasil
+
+00:17:10.900 --> 00:17:11.880
+dan itulah aturan sederhana
+
+00:17:11.880 --> 00:17:12.220
+yang harus di.
+
+00:17:12.480 --> 00:17:13.540
+Agen dapat melaksanakan
+
+00:17:13.540 --> 00:17:14.360
+tugas yang ditentukan,
+
+00:17:14.540 --> 00:17:16.260
+tetapi manusia menentukan batasannya
+
+00:17:16.260 --> 00:17:17.320
+dan tetap bertanggung jawab
+
+00:17:17.320 --> 00:17:18.680
+atas apa yang terjadi di dalamnya.
+
+00:17:19.140 --> 00:17:19.740
+Kesimpulan kami,
+
+00:17:19.740 --> 00:17:20.460
+Satu Tugas
+
+00:17:20.460 --> 00:17:21.120
+Aturan Jelas
+
+00:17:21.120 --> 00:17:21.960
+Pengawasan Manusia
+
+00:17:21.960 --> 00:17:24.080
+Jadi inilah intinya.
+
+00:17:24.740 --> 00:17:26.040
+Agen Otonom Dynamics 365
+
+00:17:26.040 --> 00:17:27.400
+menangani satu tugas spesifik
+
+00:17:27.400 --> 00:17:28.140
+menggunakan konteks
+
+00:17:28.140 --> 00:17:28.660
+yang sudah ada
+
+00:17:28.660 --> 00:17:29.480
+dalam pekerjaan Anda,
+
+00:17:29.640 --> 00:17:30.880
+tetapi Anda yang menetapkan aturan,
+
+00:17:31.000 --> 00:17:31.800
+Anda yang menetapkan aturan,
+
+00:17:31.960 --> 00:17:32.900
+Anda yang mendalikan hasilnya.
+
+00:17:33.420 --> 00:17:34.060
+Itulah poin utamanya.
+
+00:17:34.460 --> 00:17:35.240
+Berlangganan di platform
+
+00:17:35.240 --> 00:17:36.180
+podcast favorit Anda
+
+00:17:36.180 --> 00:17:36.880
+untuk mendapatkan
+
+00:17:36.880 --> 00:17:37.560
+wawasan pengetahuan
+
+00:17:37.560 --> 00:17:38.440
+yang lebih mudah dipahami
+
+00:17:38.440 --> 00:17:39.200
+dan bagikan ini
+
+00:17:39.200 --> 00:17:40.100
+dengan seseorang yang mendengar
+
+00:17:40.100 --> 00:17:40.860
+istilah agen AI
+
+00:17:40.860 --> 00:17:41.720
+namun masih membayangkan
+
+00:17:41.720 --> 00:17:42.680
+chatbot yang menjawab pertanyaan.

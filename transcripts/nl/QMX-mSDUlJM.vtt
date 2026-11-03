@@ -1,0 +1,994 @@
+WEBVTT
+
+00:00:00.120 --> 00:00:04.020
+Welkom bij weer een aflevering van Microsoft Kennisweetjes hier op M365FM.
+
+00:00:04.140 --> 00:00:05.660
+Ik ben je gastheer Mirko Peters.
+
+00:00:05.900 --> 00:00:09.780
+Het onderwerp van vandaag is er een waar bijna iedereen van gehoord heeft, maar weinig een echt begrijpen.
+
+00:00:09.940 --> 00:00:11.120
+Azure Virtual Desktop.
+
+00:00:11.460 --> 00:00:12.240
+Wat is het precies?
+
+00:00:12.460 --> 00:00:15.280
+Is het slechts een externe PC in de cloud of is het iets veel groters?
+
+00:00:15.520 --> 00:00:20.400
+Veel mensen horen de naam en denken dat het gewoon een VPN-vervanger is of misschien een manier om een virtuele machine in Azure te huren.
+
+00:00:20.640 --> 00:00:25.020
+Sommigen verwarren het zelfs met de tool voor extern bureaublad die je gebruikt om thuisverbinding te maken met een werkcomputer.
+
+00:00:25.240 --> 00:00:26.520
+Eigenlijk is het geen van die dingen.
+
+00:00:26.720 --> 00:00:27.820
+Het is veel meer dan dat.
+
+00:00:27.820 --> 00:00:31.420
+Het is een complete desktop-ervaring die veilig vanuit de cloud wordt geleverd.
+
+00:00:31.500 --> 00:00:37.340
+Aan het einde van deze aflevering begrijp je wat AVD echt is, hoe de onderdelen samenhangen en waarom bedrijven er naartoe overstappen.
+
+00:00:37.500 --> 00:00:43.240
+We gaan het opsplitsen in de kernbouwstenen in begrijpelijke taal, zodat je het grote geheel ziet en niet alleen de marketingpraatjes.
+
+00:00:43.460 --> 00:00:45.120
+Wat is Azure Virtual Desktop?
+
+00:00:45.320 --> 00:00:46.320
+Het grote geheel.
+
+00:00:46.520 --> 00:00:48.100
+Hier is de simpelste definitie.
+
+00:00:48.260 --> 00:00:53.140
+Azure Virtual Desktop is Windows en Windows-applicaties geleverd vanuit de cloud naar elk apparaat.
+
+00:00:53.140 --> 00:00:59.720
+Zie het als een streamingdienst, maar in plaats van films en tv-programma's te streamen, stream je je werk desktop en bedrijfsapplicaties.
+
+00:00:59.940 --> 00:01:04.740
+Netflix regelt al het zware werk op hun servers, AVD regelt het rekenwerk op Azure servers.
+
+00:01:04.980 --> 00:01:06.240
+Je weet hoe Netflix werkt.
+
+00:01:06.400 --> 00:01:10.240
+Je opent de app op je tv, telefoon of laptop en je krijgt op elk apparaat dezelfde ervaring.
+
+00:01:10.460 --> 00:01:14.520
+Het eigenlijke zware werk, de verwerking, de opslag, de weergave, gebeurt allemaal op de servers van Netflix.
+
+00:01:14.780 --> 00:01:16.660
+Jouw apparaat is slechts een venster naar die inhoud.
+
+00:01:16.840 --> 00:01:19.920
+En net als bij Netflix heb je geen krachtig apparaat nodig om AVD te gebruiken.
+
+00:01:19.920 --> 00:01:22.980
+Het werk gebeurt in de cloud. AVD werkt op dezelfde manier.
+
+00:01:23.160 --> 00:01:28.620
+Je gebruikers krijgen een volledige Windows-desktop met al hun apps, maar het feitelijke rekenwerk gebeurt op virtuele machines in Azure.
+
+00:01:28.820 --> 00:01:32.000
+Het lokale apparaat geeft alleen weer wat er op die externe machine gebeurt.
+
+00:01:32.240 --> 00:01:38.320
+Dat kan een Windows-laptop zijn, een Mac, een iPad, een Chromebook of zelfs een oude PC die nauwelijks zijn eigen besturingssysteem kan draaien.
+
+00:01:38.520 --> 00:01:40.600
+Zolang het de Windows-app kan draaien, werkt het.
+
+00:01:40.720 --> 00:01:46.000
+De Windows-app is een lichtgewicht client die je op elk apparaat installeert en deze maakt verbinding met de AVD-service om de externe desktop weer te geven.
+
+00:01:46.180 --> 00:01:47.380
+Dat is alles wat je nodig hebt.
+
+00:01:47.380 --> 00:01:49.040
+Nu is hier het belangrijkste onderscheid.
+
+00:01:49.040 --> 00:01:50.860
+Je huurt niet voor elke persoon een hele PC.
+
+00:01:51.120 --> 00:01:53.720
+In plaats daarvan maak je verbinding met een gedeelde, beheerde omgeving.
+
+00:01:53.900 --> 00:01:54.720
+En dit is het punt.
+
+00:01:54.940 --> 00:01:59.280
+Iets genaamd multi-session maakt het mogelijk dat meerdere gebruikers tegelijkertijd op één Windows-machine werken.
+
+00:01:59.500 --> 00:02:01.840
+Reguliere Windows is ontworpen voor één gebruiker tegelijk.
+
+00:02:02.020 --> 00:02:03.340
+AVD brengt daar verandering in.
+
+00:02:03.520 --> 00:02:06.400
+Op een normale Windows-laptop kan slechts één persoon tegelijk ingelogd zijn.
+
+00:02:06.640 --> 00:02:07.900
+Zo werkt Windows nu eenmaal.
+
+00:02:08.080 --> 00:02:11.640
+Maar met AVD kunnen meerdere gebruikers tegelijkertijd op één Windows-machine werken.
+
+00:02:11.840 --> 00:02:15.520
+Iedere persoon krijgt een eigen geïsoleerde sessie, eigen applicaties en eigen bestanden.
+
+00:02:15.520 --> 00:02:18.260
+Ze delen allemaal dezelfde onderliggende virtuele machine.
+
+00:02:18.480 --> 00:02:20.520
+Dat is iets wat simpelweg niet kan met een gewone laptop.
+
+00:02:20.740 --> 00:02:23.980
+En het is een van de hoofdredenen waarom AVD-bedrijven zoveel geld kan besparen.
+
+00:02:24.160 --> 00:02:27.700
+Onder de motorkap wordt AVD aangedreven door virtuele machines in Azure.
+
+00:02:27.900 --> 00:02:30.600
+Maar Microsoft beheert alle complexe zaken op de achtergrond.
+
+00:02:30.780 --> 00:02:33.700
+De broker die gebruikers naar de juiste sessie host leidt.
+
+00:02:33.820 --> 00:02:35.300
+De gateway die de verbinding beheert.
+
+00:02:35.380 --> 00:02:38.400
+En de load balancing die gebruikers over beschikbare machines verdeelt.
+
+00:02:38.580 --> 00:02:40.420
+Je hoeft dit allemaal niet zelf op te bouwen.
+
+00:02:40.420 --> 00:02:45.300
+Het enige wat je doet is hostpoles aanmaken, applicaties configureren en je gebruikers toewijzen.
+
+00:02:45.480 --> 00:02:48.760
+Voor IT-teams vereenvoudigt dit het beheer en verlaagt het de hardwarekosten.
+
+00:02:49.000 --> 00:02:50.480
+Dus waarom is dit belangrijk voor jou?
+
+00:02:50.660 --> 00:02:54.280
+Het betekent dat je gebruikers overal vanaf elk apparaat een volledige Windows-ervaring krijgen.
+
+00:02:54.460 --> 00:02:57.880
+Een grafisch ontwerper op een Mac kan Windows-specifieke ontwerpsoftware draaien.
+
+00:02:58.040 --> 00:03:03.020
+Een buitendienstmedewerker op een tablet kan dezelfde bedrijfsapplicaties benaderen die ze aan hun bureau gebruiken.
+
+00:03:03.200 --> 00:03:08.920
+En een externe kracht op een persoonlijke laptop kan veilig inloggen en werken zonder iets op de eigen machine te installeren.
+
+00:03:08.920 --> 00:03:15.060
+En omdat de data het Azure Data Center nooit verlaat, is het veiliger dan data op een laptop die verloren kan raken of gestolen kan worden.
+
+00:03:15.240 --> 00:03:17.260
+Het is een winst voor zowel de gebruikers als de IT.
+
+00:03:17.560 --> 00:03:21.340
+Maar om te begrijpen waarom AVD überhaupt bestaat, moeten we kijken naar het probleem dat het oplost.
+
+00:03:21.560 --> 00:03:23.200
+Dat behandelen we in het volgende segment.
+
+00:03:23.540 --> 00:03:25.280
+De oude manier versus de nieuwe manier.
+
+00:03:25.500 --> 00:03:26.980
+De oude manier was eenvoudig.
+
+00:03:27.160 --> 00:03:33.000
+Je kocht een krachtige laptop voor elke werknemer, installeerde elke benodigde applicatie en beheerde elk apparaat stuk voor stuk.
+
+00:03:33.260 --> 00:03:36.720
+Vervolgens verving je elke drie of vier jaar al die hardware en begon je opnieuw.
+
+00:03:36.720 --> 00:03:39.340
+Maar hier is het punt, de verborgen kosten waren enorm.
+
+00:03:39.540 --> 00:03:43.280
+IT-teams besteden uren aan uithol, beveiligingsupdates en probleemoplossing.
+
+00:03:43.520 --> 00:03:49.140
+Wanneer een laptop verloren of kapot ging, moest je deze vervangen, alles opnieuw installeren en hopen dat de gebruiker een backup van bestanden had.
+
+00:03:49.280 --> 00:03:52.680
+En als iemand een virus opliep, moest je de machine wissen en vanaf nul beginnen.
+
+00:03:52.880 --> 00:03:55.800
+Toen kwam hybride werken en werkte de oude manier helemaal niet meer.
+
+00:03:56.200 --> 00:04:03.760
+VPN's waren traag en log, thuiscomputers waren niet veilig en bedrijfsgegevens stonden op apparaten die kwijt konden raken, gestolen konden worden of gehackt konden worden.
+
+00:04:03.760 --> 00:04:08.900
+Er was geen controle over het eindpunt, maar men was nog steeds verantwoordelijk voor de bescherming van de gegevens daarop.
+
+00:04:09.000 --> 00:04:13.400
+De nieuwe manier met Azure Virtual Desktop of kortweg AVD is compleet anders.
+
+00:04:13.640 --> 00:04:16.720
+Het zware werk gebeurt in Azure, niet op het lokale apparaat.
+
+00:04:16.860 --> 00:04:20.320
+Je laptop, je tablet, je telefoon zijn slechts vensters naar die cloudomgeving.
+
+00:04:20.520 --> 00:04:24.760
+Het eigenlijke werk, de applicaties, de bestanden, de verwerking, alles blijft in het datacenter.
+
+00:04:24.980 --> 00:04:26.060
+Dat is een grote verandering.
+
+00:04:26.280 --> 00:04:28.140
+Verlies je je laptop, dan gaan er geen gegevens verloren.
+
+00:04:28.320 --> 00:04:31.380
+Je pakt gewoon een ander apparaat, log weer in op AVD en je gaat verder waar je gebleven was.
+
+00:04:31.380 --> 00:04:34.940
+Je bestanden staan er nog, je applicaties zijn nog geconfigureerd en je instellingen zijn intact.
+
+00:04:35.100 --> 00:04:36.880
+Het apparaat zelf is inwisselbaar geworden.
+
+00:04:37.080 --> 00:04:38.760
+Het verandert ook hoe je betaalt voor zaken.
+
+00:04:38.960 --> 00:04:44.760
+In plaats van elke paar jaar een grote investering, waarbij je honderden laptops vooraf koopt, stap je over op operationele kosten.
+
+00:04:44.980 --> 00:04:46.300
+Je betaalt voor wat je gebruikt.
+
+00:04:46.520 --> 00:04:49.860
+Als je vandaag 50 mensen aan het werk hebt en morgen 100, schaal je op.
+
+00:04:49.960 --> 00:04:52.420
+Als je er volgende maand minder nodig hebt, schaal je af.
+
+00:04:52.520 --> 00:04:56.920
+Je zit niet vast aan hardware waarvoor je teveel hebt betaald of aan haastwerk om meer te kopen als je het nodig hebt.
+
+00:04:56.920 --> 00:05:01.240
+Laten we nu kijken naar de onderdelen die dit mogelijk maken, te beginnen met de belangrijkste.
+
+00:05:01.640 --> 00:05:04.120
+Bouwsteen 1, Hostpoles en Sessie Hosts
+
+00:05:04.120 --> 00:05:11.520
+De eerste bouwsteen heet een hostpool en het is precies wat het klinkt, een verzameling virtuele machines die Windows Desktops en applicaties hosten.
+
+00:05:11.720 --> 00:05:16.720
+Zie het als een groep identieke computers, allemaal op dezelfde manier ingesteld, klaar voor mensen om verbinding mee te maken.
+
+00:05:16.920 --> 00:05:19.840
+De individuele machines in die pool worden Sessie Hosts genoemd.
+
+00:05:19.960 --> 00:05:24.320
+Het zijn echte virtuele machines die Windows 11 Enterprise draaien, meestal de multisessieversie.
+
+00:05:24.320 --> 00:05:29.380
+Dat betekent dat meerdere mensen tegelijkertijd op dezelfde machine ingelogd kunnen zijn, elk in hun eigen privésessie.
+
+00:05:29.500 --> 00:05:33.900
+Er zijn nu twee soorten hostpoles en het verschil is belangrijk voor kosten en flexibiliteit.
+
+00:05:34.100 --> 00:05:35.820
+Een pooled hostpool is als een hotel.
+
+00:05:36.080 --> 00:05:38.840
+Meerdere gasten verblijven daar, maar niemand heeft een vaste kamer.
+
+00:05:39.060 --> 00:05:44.140
+Wanneer je incheckt, krijg je de kamer die beschikbaar is en wanneer je uitcheckt, krijgt iemand anders die kamer de volgende keer.
+
+00:05:44.360 --> 00:05:48.940
+Bij pooled hostpoles worden gebruikers toegewezen aan welke sessie host op dat moment capaciteit heeft.
+
+00:05:48.940 --> 00:05:56.580
+Ze kunnen vandaag op machine A zitten en morgen op machine B. Het werkt uitstekend voor de meeste kenniswerkers omdat je hiermee meer gebruikers op minder machines kunt onderbrengen.
+
+00:05:56.680 --> 00:05:58.940
+Een persoonlijke hostpool is als je eigen appartement.
+
+00:05:59.140 --> 00:06:01.900
+Het is van jou, niemand anders gebruikt het en je spullen staan er.
+
+00:06:02.080 --> 00:06:03.540
+Jouw instellingen, jouw bestanden.
+
+00:06:03.740 --> 00:06:05.740
+Je krijgt elke keer dat je inlogt dezelfde machine.
+
+00:06:06.020 --> 00:06:13.160
+Dit is nuttig voor power users die consistente prestaties nodig hebben of voor scenario's waarbij je gespecialiseerde software moet installeren die niet goed werkt in een gedeelde omgeving.
+
+00:06:13.340 --> 00:06:16.800
+Maar het kost meer omdat elke gebruiker een eigen toegewezen VM nodig heeft.
+
+00:06:16.800 --> 00:06:21.420
+Nu wordt het interessant. Hoe bepaalt AVD op welke sessie host een gebruiker terechtkomt?
+
+00:06:21.580 --> 00:06:23.980
+Dat is load balancing en er zijn twee benaderingen.
+
+00:06:24.180 --> 00:06:28.280
+Bread first betekent dat het systeem gebruikers gelijkmatig verdeelt over alle beschikbare sessie hosts.
+
+00:06:28.500 --> 00:06:32.200
+Dus als je 10 machines en 100 gebruikers hebt, krijgt elke machine ongeveer 10 gebruikers.
+
+00:06:32.400 --> 00:06:37.540
+Dit zorgt voor consistente prestaties omdat geen enkele host overbelast raakt en het is de standaardinstelling voor de meeste implementaties.
+
+00:06:37.780 --> 00:06:39.500
+Daped first is het tegenovergestelde.
+
+00:06:39.660 --> 00:06:42.580
+Hierbij wordt 1 sessie host volledig gevuld voordat de volgende wordt gebruikt.
+
+00:06:42.580 --> 00:06:46.840
+Gebruiker 1 tot en met 10 komen op machine A, gebruiker 11 tot en met 20 op machine B enzovoort.
+
+00:06:47.040 --> 00:06:50.100
+Waarom zou je dit doen? Omdat je hiermee de lege machines kunt uitschakelen.
+
+00:06:50.300 --> 00:06:54.700
+Zodra machine A vol is en machine B vol is, kunnen machine C tot en met Z worden uitgeschakeld om kosten te besparen.
+
+00:06:54.920 --> 00:06:58.500
+Daped first werkt erg goed met autoscaling en dat is het volgende onderdeel, schalen.
+
+00:06:58.660 --> 00:07:03.940
+Je kunt AVD zo configureren dat sessie hosts automatisch worden toegevoegd of verwijderd op basis van het aantal ingelogde gebruikers.
+
+00:07:04.120 --> 00:07:06.800
+Tijdens piekuren heb je misschien 20 machines draaien.
+
+00:07:06.800 --> 00:07:12.420
+S'nachts heb je er misschien maar 2. Het systeem regelt dit automatisch op basis van schema's die je zelf definieert.
+
+00:07:12.660 --> 00:07:17.040
+Dit is waar de echte kostenbesparring plaatsvindt. Je betaalt niet voor machines die niet worden gebruikt.
+
+00:07:17.220 --> 00:07:18.740
+Dus waarom is dit belangrijk voor jou?
+
+00:07:18.940 --> 00:07:23.160
+Gedeelde hostpoles met daped first load balancing en autoscaling kunnen je kosten drastisch verlagen.
+
+00:07:23.360 --> 00:07:28.140
+In plaats van een VM te kopen voor elke individuele gebruiker, koop je er net genoeg om je piekgebruik op te vangen.
+
+00:07:28.400 --> 00:07:30.800
+En zelfs die machines draaien alleen wanneer er echt wordt gewerkt.
+
+00:07:30.980 --> 00:07:33.040
+Dus je hebt je hostpol met je VM's.
+
+00:07:33.180 --> 00:07:34.840
+Hoe krijgen gebruikers nu hun apps?
+
+00:07:34.840 --> 00:07:37.020
+Bouwsteen 2 applicatiegroepen
+
+00:07:37.020 --> 00:07:41.240
+Applicatiegroepen zijn de logische containers die bepalen waar een gebruiker toegang toe heeft.
+
+00:07:41.480 --> 00:07:42.740
+Zie ze als toestemming sets.
+
+00:07:42.980 --> 00:07:46.300
+Je krijgt ofwel het volledige bureaublad ofwel alleen specifieke applicaties.
+
+00:07:46.480 --> 00:07:47.420
+Er zijn twee typen.
+
+00:07:47.620 --> 00:07:51.340
+Met een desktop applicatiegroep krijgen gebruikers de volledige Windows bureaublad ervaring.
+
+00:07:51.580 --> 00:07:54.880
+Ze loggen in en zien het startmenu, de taakbalk, de verkenner, alles.
+
+00:07:55.100 --> 00:07:58.480
+Het ziet eruit en voelt aan als een normale Windows computer, want dat is het in feite ook.
+
+00:07:58.660 --> 00:08:00.040
+De meeste bedrijven beginnen hier.
+
+00:08:00.040 --> 00:08:02.000
+Een remote app toepassingsgroep is anders.
+
+00:08:02.000 --> 00:08:06.060
+In plaats van gebruikers een volledige desktop te geven, biedt het individuele applicaties.
+
+00:08:06.260 --> 00:08:07.660
+En dit is het magische gedeelte.
+
+00:08:07.880 --> 00:08:10.940
+Die applicaties lijken lokaal op het apparaat van de gebruiker te draaien.
+
+00:08:11.100 --> 00:08:15.680
+Je opent Word en het verschijnt in zijn eigen venster op je Mac of tablet naast je lokale apps.
+
+00:08:15.920 --> 00:08:21.080
+Geen bureaublad achtergrond, geen interface van een virtuele machine, alleen de applicatie die naadloos draait.
+
+00:08:21.300 --> 00:08:26.340
+Stel je een gebruiker voor die slechts drie applicaties nodig heeft, Word, Excel en een specifieke bedrijfstool.
+
+00:08:26.340 --> 00:08:33.460
+Met Remote App publiceer je alleen die drie apps. De gebruiker opent de Windows app, ziet drie iconen, klikt op één en de applicatie opent in een eigen venster.
+
+00:08:33.660 --> 00:08:38.120
+Ze zien nooit het bureaublad en dat hoeft ook niet. Het is een veel schonere ervaring voor taakgerichte medewerkers.
+
+00:08:38.340 --> 00:08:42.080
+Nu volgt een belangrijk detail. Remote App is alleen beschikbaar met g-poll de hostpoles.
+
+00:08:42.300 --> 00:08:45.640
+Tenzij je persoonlijke hostpoles gebruikt, ben je beperkt tot de volledige desktop ervaring.
+
+00:08:45.880 --> 00:08:48.720
+Dat is gewoon hoe de technologie werkt. Maar hier wordt het krachtig.
+
+00:08:48.980 --> 00:08:52.560
+Gebruikers kunnen worden toegewezen aan meerdere toepassingsgroepen in verschillende hostpoles.
+
+00:08:52.740 --> 00:08:57.840
+Een gebruiker kan dus een desktop toepassingsgroep uit de ene hostpoles hebben en een Remote App toepassingsgroep uit een andere.
+
+00:08:58.160 --> 00:09:03.280
+Diezelfde gebruiker logt in op de Windows app en ziet zowel een icoon voor de volledige desktop als voor individuele apps.
+
+00:09:03.520 --> 00:09:06.400
+Ze kunnen kiezen wat ze nodig hebben. Hoe werkt dit in de praktijk?
+
+00:09:06.600 --> 00:09:13.860
+Ik maak de toepassingsgroep aan, wijs deze toe aan een gebruiker of groep in Azure AD en die bronnen verschijnen automatisch zodra de gebruiker de Windows app opent.
+
+00:09:14.080 --> 00:09:17.180
+Geen handmatige installatie, geen configuratiebestanden, geen links versturen.
+
+00:09:17.180 --> 00:09:20.480
+Het verschijnt gewoon, maar gebruikers hebben een manier nodig om deze bronnen te vinden.
+
+00:09:20.700 --> 00:09:22.900
+Dat is waar workspaces, werkruimte, om de hoek komen kijken.
+
+00:09:23.240 --> 00:09:24.540
+Bouwsteen 3, workspaces.
+
+00:09:24.760 --> 00:09:29.580
+Dus je hebt je hostpoles en je toepassingsgroepen, maar gebruikers moeten die bronnen wel kunnen vinden en openen.
+
+00:09:29.780 --> 00:09:31.300
+Dat is waar workspaces voor zijn.
+
+00:09:31.500 --> 00:09:34.180
+Een workspace is een logische groepering van toepassingsgroepen.
+
+00:09:34.340 --> 00:09:36.840
+Het is wat gebruikers zien wanneer ze de Windows app openen.
+
+00:09:37.060 --> 00:09:39.500
+Zie het als een map op je telefoon die je apps organiseert.
+
+00:09:39.660 --> 00:09:43.200
+Je opent je telefoon niet en ziet niet elke app die je bezit verspreidt over het scherm.
+
+00:09:43.200 --> 00:09:47.200
+Ze zijn gegroepeerd in mappen, games in de ene map, productiviteitstools in de andere.
+
+00:09:47.620 --> 00:09:49.580
+Workspaces doen hetzelfde voor AVD-bronnen.
+
+00:09:49.800 --> 00:09:52.120
+Elke toepassingsgroep moet gekoppeld zijn aan een workspace.
+
+00:09:52.480 --> 00:09:53.640
+Er is geen andere weg.
+
+00:09:53.820 --> 00:09:58.220
+Als je een toepassingsgroep maakt en deze niet koppelt aan een workspace, zullen gebruikers deze simpelweg niet zien.
+
+00:09:58.400 --> 00:10:00.780
+Het bestaat op de achtergrond, maar niemand heeft er toegang toe.
+
+00:10:00.960 --> 00:10:02.720
+De workspace is wat het zichtbaar maakt.
+
+00:10:02.900 --> 00:10:05.220
+Dit is hoe het werkt vanuit het perspectief van de gebruiker.
+
+00:10:05.220 --> 00:10:14.420
+Iemand opent de Windows app op hun apparaat, meldt zich aan met hun werkaccount en ziet daar direct alle toegewezen bronnen, desktops, applicaties, alles georganiseerd per werkruimte.
+
+00:10:14.620 --> 00:10:19.200
+Geen handmatige installatie, geen configuratiebestanden, geen IT-afdeling die links stuurt om op te klikken.
+
+00:10:19.320 --> 00:10:20.300
+Het verschijnt gewoon.
+
+00:10:20.520 --> 00:10:23.440
+Je kunt nu meerdere werkruimte hebben voor verschillende scenario's.
+
+00:10:23.620 --> 00:10:27.700
+Misschien maak je één werkruimte voor de financiële afdeling met al hun boekhoudprogramma's,
+
+00:10:27.840 --> 00:10:32.580
+een andere voor het engineering team met hun ontwerptools en een derde voor externen met beperkte toegang.
+
+00:10:32.580 --> 00:10:35.360
+Gebruikers zien alleen de werkruimte waaraan ze zijn toegewezen,
+
+00:10:35.580 --> 00:10:40.080
+dus iemand van financiën ziet nooit de engineering tools en een externe ziet nooit interne applicaties.
+
+00:10:40.260 --> 00:10:42.360
+De gebruikerservaring is doodeenvoudig.
+
+00:10:42.520 --> 00:10:45.720
+Open de Windows app, meld je aan en alles wat je nodig hebt staat daar.
+
+00:10:45.880 --> 00:10:48.620
+Klik op een desktop-icoon en je zit in een volledige Windows-sessie.
+
+00:10:48.780 --> 00:10:51.300
+Klik op een app-icoon en deze opent als een lokaal programma.
+
+00:10:51.480 --> 00:10:55.360
+Geen VPN nodig, geen ingewikkelde setup, gewoon een overzichtelijke lijst van waar je toegang toe hebt.
+
+00:10:55.540 --> 00:11:00.160
+Nu hebben we alle onderdelen op een plek, maar hoe logt een gebruiker daadwerkelijk in en komt hij op zijn desktop?
+
+00:11:00.160 --> 00:11:03.660
+Hoe gebruikers verbinding maken, de identiteits- en toegangslaag.
+
+00:11:03.740 --> 00:11:05.780
+Alles begint bij Microsoft EntraID.
+
+00:11:06.060 --> 00:11:08.280
+Je kent het misschien nog als Azure Active Directory.
+
+00:11:08.560 --> 00:11:12.400
+Microsoft heeft het een tijdje terug een nieuwe naam gegeven, maar het is onderhuids hetzelfde systeem.
+
+00:11:12.620 --> 00:11:15.400
+Zie EntraID als de receptie van je digitale kantoor.
+
+00:11:15.560 --> 00:11:17.580
+Het weet wie je bent en waar je toegang toe hebt.
+
+00:11:17.780 --> 00:11:24.160
+Het regelt je aanmelding bij Microsoft 365, Teams, SharePoint en ja, het beheert ook de toegang tot AVD.
+
+00:11:24.360 --> 00:11:26.060
+Hoe maakt een gebruiker nu echt verbinding?
+
+00:11:26.060 --> 00:11:27.740
+Laat me je door het proces leiden.
+
+00:11:27.940 --> 00:11:34.600
+Ze openen de Windows-app op hun apparaat, loggen in met hun werk-email en wachtwoord en als multifactor-authenticatie is ingesteld, doen ze dat ook.
+
+00:11:34.760 --> 00:11:39.140
+De Windows-app stuurt de authenticatie-aanvraag naar EntraID dat hun identiteit verifieert.
+
+00:11:39.340 --> 00:11:42.340
+Vervolgens controleert AVD tot welke applicatiegroepen ze behoren.
+
+00:11:42.520 --> 00:11:45.020
+Tot slot verifieert de sessie host zelf de gebruiker.
+
+00:11:45.220 --> 00:11:46.520
+Die laatste stap is belangrijk.
+
+00:11:46.760 --> 00:11:51.500
+Hoewel de gebruiker is ingelogd in de Windows-app, hebben ze nog steeds toestemming nodig om daadwerkelijk in te loggen op de virtuele machine.
+
+00:11:51.700 --> 00:11:55.160
+Dat wordt beheerd door een specifieke Azure-rol genaamd Virtual Machine User Login.
+
+00:11:55.160 --> 00:12:01.840
+Zonder deze toegewezen rol kan een gebruiker wel authenticeren bij AVD en de bronnen zien in de Windows-app, maar zodra ze verbinding proberen te maken, mislukt het.
+
+00:12:02.000 --> 00:12:04.200
+Ze hebben dan niet het recht om in te loggen op de sessie host.
+
+00:12:04.380 --> 00:12:06.180
+Hier komen best practices om de hoek kijken.
+
+00:12:06.440 --> 00:12:08.580
+Wijs nooit rechten toe aan individuele gebruikers.
+
+00:12:08.800 --> 00:12:09.840
+Gebruik altijd groepen.
+
+00:12:10.000 --> 00:12:16.980
+Maak een groep in EntraID, noem deze bijvoorbeeld AVD-gebruikers, voeg al uw gebruikers toe en wijs die groep vervolgens toe aan de toepassingsgroep en de rol voor aanmelding van virtuele machinegebruikers.
+
+00:12:17.200 --> 00:12:19.680
+Wanneer er iemand nieuw bij komt, voegt u deze persoon toe aan de groep.
+
+00:12:19.840 --> 00:12:21.740
+Wanneer iemand vertrekt, verwijdert u deze persoon.
+
+00:12:21.740 --> 00:12:24.440
+U hoeft de AVD-configuratie daarna nooit meer aan te raken.
+
+00:12:24.620 --> 00:12:31.360
+De Windows-app zelf, voorheen de extern bureaublad Client genoemd, is beschikbaar op Windows, Mac, iOS, Android en zelfs via een webbrowser.
+
+00:12:31.580 --> 00:12:33.520
+Gebruikers hebben geen speciaal apparaat nodig.
+
+00:12:33.760 --> 00:12:35.140
+Ze kunnen gebruiken wat ze al hebben.
+
+00:12:35.340 --> 00:12:39.900
+En omdat alles is gebouwd op EntraID, worden uw bestaande beveiligingsbeleidsregels automatisch toegepast.
+
+00:12:40.260 --> 00:12:43.820
+Multifactor Authenticatie werkt op dezelfde manier als voor Microsoft 365.
+
+00:12:43.820 --> 00:12:52.880
+Beleid voor voorwaardelijke toegang, zoals het vereisen van een conform apparaat of het blokkeren van toegang vanaf bepaalde locaties, is op AVD van toepassing, net als op SharePoint of Exchange.
+
+00:12:53.060 --> 00:12:54.960
+Een beveiligingsbeleid voor al uw services.
+
+00:12:55.320 --> 00:12:57.360
+Er is ook eenmalige aanmelding SSO.
+
+00:12:57.560 --> 00:13:03.080
+Gebruikers verifiëren eenmaal in de Windows-app en krijgen geen extra aanmelding meer als ze hun bureaublad of toepassingen starten.
+
+00:13:03.240 --> 00:13:04.140
+Het is naadloos.
+
+00:13:04.400 --> 00:13:06.280
+Meld u eenmaal aan en alles werkt gewoon.
+
+00:13:06.280 --> 00:13:11.480
+Maar er is nog één onderdeel dat AVD een werkelijk vloeiende ervaring maakt en het is iets waar elke gebruiker om geeft.
+
+00:13:11.660 --> 00:13:13.340
+De uitdaging met gebruikersprofielen.
+
+00:13:13.600 --> 00:13:15.300
+Waarom FSLogix belangrijk is.
+
+00:13:15.480 --> 00:13:17.340
+Hier is iets waar u misschien nog niet aan heeft gedacht.
+
+00:13:17.560 --> 00:13:22.300
+In een gpo-olde hostpool kan een gebruiker elke keer dat hij zich aanmeldt op een andere virtuele machine terechtkomen.
+
+00:13:22.520 --> 00:13:29.820
+Vandaag machine A, morgen machine B, de dag daarna machine C zonder profielbeheer voelt elke aanmelding als het gebruik van een gloednieuwe computer.
+
+00:13:30.100 --> 00:13:34.800
+Geen bladwijzers, geen bureaubladbestanden, geen opgeslagen wachtwoorden, geen Outlook-handtekening, niets.
+
+00:13:34.800 --> 00:13:38.900
+Het is alsof u incheckt in een hotelkamer die elke keer dat u vertrekt volledig wordt leeggehaald en gereset.
+
+00:13:39.020 --> 00:13:41.640
+Uw instellingen, voorkeuren, bestanden, alles is weg.
+
+00:13:41.780 --> 00:13:43.600
+De oude oplossing was zwervende profielen.
+
+00:13:43.800 --> 00:13:48.200
+Windows kopieerde uw volledige profiel vanaf een centrale server naar de machine waarop u zich aanmeldde.
+
+00:13:48.320 --> 00:13:49.560
+Klinkt redelijk, toch?
+
+00:13:49.740 --> 00:13:53.060
+In de praktijk was het traag, onbetrouwbaar en gevoelig voor beschadiging.
+
+00:13:53.280 --> 00:13:55.280
+Aanmoldingen konden 30 seconden of langer duren.
+
+00:13:55.500 --> 00:13:58.280
+Als het kopiëren werd onderbroken, kon uw profiel volledig kapot gaan.
+
+00:13:58.460 --> 00:14:02.280
+IT-teams besteden talloze uren aan het herstellen van beschadigde profielen, geen fijne ervaring.
+
+00:14:02.280 --> 00:14:08.720
+Microsoft erkende dat dit een ernstig probleem was, dus kochten ze een bedrijf genaamd FSLogix en integreerden hun technologie rechtstreeks in AVD.
+
+00:14:08.880 --> 00:14:12.580
+FSLogix lost het profielprobleem volledig op en doet dat op een elegante manier.
+
+00:14:12.760 --> 00:14:13.700
+Dit is hoe het werkt.
+
+00:14:13.860 --> 00:14:22.740
+In plaats van een profiel heen en weer te kopiëren, slaat FSLogix het profiel van elke gebruiker op als één virtueel harde schijfbestand op een centrale locatie, meestal Azure Files.
+
+00:14:22.740 --> 00:14:27.380
+Wanneer een gebruiker zich aanmeldt bij AVD, koppelt FSLogix die schijfrechtstreeks aan hun sessie.
+
+00:14:27.520 --> 00:14:30.200
+Het wordt direct gekoppeld als het insteken van een USB-stick.
+
+00:14:30.320 --> 00:14:33.420
+Al hun instellingen, bestanden, bladwijzers en voorkeuren verschijnen onmiddellijk.
+
+00:14:33.580 --> 00:14:35.020
+De resultaten zijn drastisch.
+
+00:14:35.260 --> 00:14:38.860
+Aanmeldtijden dalen van meer dan 30 seconden naar ongeveer 7 of 8 seconden.
+
+00:14:38.980 --> 00:14:43.580
+En omdat het profiel centraal wordt opgeslagen, maakt het niet uit op welke sessie host de gebruiker terechtkomt.
+
+00:14:43.720 --> 00:14:45.460
+Het profiel volgt hen automatisch.
+
+00:14:45.660 --> 00:14:49.380
+FSLogix lost ook een groot probleem op met Microsoft 365 apps.
+
+00:14:49.380 --> 00:14:54.140
+In een traditionele gedeelde omgeving waren Outlook, Catchmode en OneDrive synchronisatie praktisch onbruikbaar.
+
+00:14:54.280 --> 00:14:55.760
+De prestaties waren verschrikkelijk.
+
+00:14:55.980 --> 00:14:57.700
+Met FSLogix werken beide perfect.
+
+00:14:57.900 --> 00:15:02.220
+Gebruikers krijgen volledige Outlook met offline toegang, OneDrive synchroniseert hun bestanden en Teams cachet correct.
+
+00:15:02.400 --> 00:15:03.260
+Alles werkt gewoon.
+
+00:15:03.480 --> 00:15:08.200
+Dit is waarom FSLogix wordt beschouwd als de standaard, niet onderhandelbaar oplossing voor gebruikersprofielen in AVD.
+
+00:15:08.380 --> 00:15:10.200
+Probeer profielen niet zonder te beheren.
+
+00:15:10.340 --> 00:15:13.720
+Je eindigt met trage aanmeldingen, kapotte profielen en ontevreden gebruikers.
+
+00:15:13.920 --> 00:15:15.680
+Gebruik FSLogix vanaf dag 1.
+
+00:15:15.680 --> 00:15:20.260
+Nu je de onderdelen begrijpt, laten we praten over waarom bedrijven daadwerkelijk de overstap maken.
+
+00:15:20.480 --> 00:15:23.980
+Waarom kiezen bedrijven voor AVD, beveiligings- en kostenvoordelen?
+
+00:15:24.220 --> 00:15:26.880
+Waarom kiezen bedrijven voor AVD boven traditionele laptops?
+
+00:15:27.080 --> 00:15:28.900
+Het komt echt meer op beveiliging en kosten.
+
+00:15:29.180 --> 00:15:30.140
+Laten we het opsplitsen.
+
+00:15:30.260 --> 00:15:31.720
+Ten eerste, het beveiligingsmodel.
+
+00:15:31.920 --> 00:15:34.180
+Met AVD verlaat data nooit het Azure datacenter.
+
+00:15:34.380 --> 00:15:37.400
+Het apparaat van de gebruiker toont alleen wat er op de externe machine gebeurt.
+
+00:15:37.580 --> 00:15:43.440
+De werkelijke bestanden, applicaties en gevoelige informatie blijven binnen de datacenters van Microsoft achter hun beveiligingscontroles.
+
+00:15:43.440 --> 00:15:48.000
+Als iemand zijn laptop verliest, is er niets op te stelen omdat de data er in de eerste plaats nooit stond.
+
+00:15:48.160 --> 00:15:52.200
+Je hoeft je geen zorgen te maken over het versleutelen van elk eindpunt of het wissen van gestolen apparaten.
+
+00:15:52.440 --> 00:15:56.580
+Microsoft integreert ook Defender Forward Point Direct in AVD-sessie-hosts,
+
+00:15:56.700 --> 00:16:00.560
+dus je virtuele machines worden bewaakt en beschermd zoals elk ander beheerdapparaat.
+
+00:16:00.720 --> 00:16:05.620
+Malware detectie, threat hunting en geautomatiseerde respons zijn allemaal van toepassing op je AVD-omgeving.
+
+00:16:05.820 --> 00:16:10.300
+IT krijgt een enkel beveiligingsoverzicht over zowel fysieke apparaten als virtuele desktops.
+
+00:16:10.520 --> 00:16:12.560
+Laten we het nu hebben over gecentraliseerd beheer.
+
+00:16:12.560 --> 00:16:14.540
+Dit is een enorme winst voor IT-teams.
+
+00:16:14.740 --> 00:16:17.740
+In plaats van honderden individuele laptops te beheren, updates uit te rollen,
+
+00:16:17.860 --> 00:16:20.860
+problemen op te lossen en kapotte hardware te vervangen, beheer je één omgeving.
+
+00:16:21.060 --> 00:16:24.060
+Updaten, golden image één keer en alle sessie-hosts krijgen de update.
+
+00:16:24.260 --> 00:16:27.220
+Push een beleidswijziging één keer en het is van toepassing op elke gebruiker.
+
+00:16:27.400 --> 00:16:28.880
+De operationele overhead daalt.
+
+00:16:29.060 --> 00:16:30.160
+Je bespaart tijd en moeite.
+
+00:16:30.440 --> 00:16:31.540
+Dan is er nog de kostenkant.
+
+00:16:31.720 --> 00:16:33.660
+Auto-scaling is waar AVD echt geld bespaart.
+
+00:16:33.860 --> 00:16:36.180
+Sessie-hosts draaien alleen wanneer gebruikers zijn ingelogd.
+
+00:16:36.320 --> 00:16:38.560
+Tijdens piekuren heb je misschien 50 machines draaien.
+
+00:16:38.560 --> 00:16:41.360
+Apostrof, esnachts en in het weekend heb je er misschien twee.
+
+00:16:41.740 --> 00:16:44.400
+Auto-scaling kan je computeruren met 40 tot 60 procent verminderen.
+
+00:16:44.560 --> 00:16:46.340
+Je betaalt niet voor machines die niets staan te doen.
+
+00:16:46.520 --> 00:16:48.920
+De juiste schaalgroot te bepalen is een andere kostenbesparende factor.
+
+00:16:49.140 --> 00:16:51.820
+In het oude model moest je laptops kopen die krachtig genoeg waren voor je meest veel
+
+00:16:51.820 --> 00:16:54.520
+eisende gebruikers, ook al hadden de meesten alleen basisprogramma's nodig.
+
+00:16:54.700 --> 00:16:57.640
+Met AVD stem je VM-grooters af op de werkelijke werkbelasting.
+
+00:16:57.900 --> 00:16:59.460
+Geef power-users grotere machines.
+
+00:16:59.800 --> 00:17:02.220
+Geef medewerkers met basisdaken kleinere, goedkopere exemplaren.
+
+00:17:02.420 --> 00:17:04.700
+Nooit meer te veel betalen voor hardware die niemand nodig heeft.
+
+00:17:04.700 --> 00:17:07.060
+En er is een licentievoordeel dat je misschien al hebt.
+
+00:17:07.220 --> 00:17:13.760
+Als jouw organisatie Windows 10 of 11, Enterprise of Microsoft 365 E3 of E5 gebruikt, kun je
+
+00:17:13.760 --> 00:17:16.940
+AVD gebruiken zonder extra licentiekosten voor de Windows desktop.
+
+00:17:17.100 --> 00:17:18.580
+Je bestaande licentie dekt dit.
+
+00:17:18.780 --> 00:17:20.240
+Dat neemt een grote drempel weg.
+
+00:17:20.420 --> 00:17:21.700
+En dan is er nog de implementatiesnelheid.
+
+00:17:22.440 --> 00:17:25.660
+In het oude model betekende het anboorden van een nieuwe medewerker, een laptop bestellen,
+
+00:17:25.860 --> 00:17:30.000
+wachten tot deze aankomt, image installeren, applicaties klaarzetten en instellingen configureren.
+
+00:17:30.140 --> 00:17:31.640
+Dat kon dagen of weken duren.
+
+00:17:31.640 --> 00:17:35.800
+Met AVD kun je een nieuwe gebruiker in minuten opzetten, hun account aanmaken, toewijzen
+
+00:17:35.800 --> 00:17:38.940
+aan de juiste groep en ze kunnen direct aan de slag vanaf elk apparaat dat ze al hebben.
+
+00:17:39.140 --> 00:17:40.880
+Dit is wat je moet onthouden van dit alles.
+
+00:17:41.140 --> 00:17:43.920
+Dus, dit is wat Azure Virtual Desktop nu eigenlijk is.
+
+00:17:44.120 --> 00:17:48.200
+Het is een beheerdedienst die Windows desktops en applicaties vanuit Azure naar elk apparaat
+
+00:17:48.200 --> 00:17:48.540
+brengt.
+
+00:17:48.720 --> 00:17:52.980
+Onder de motorkap heb je een hostpool van virtuele machines, georganiseerd in applicatiegroepen
+
+00:17:52.980 --> 00:17:54.460
+en gepresenteerd via werkruimte.
+
+00:17:54.680 --> 00:17:58.340
+Gebruikers maken verbinding via de Windows app, authenticeren met Entra ID en krijgen een
+
+00:17:58.340 --> 00:18:01.460
+volledige Windows ervaring op een Mac, tablet, Chromebook of oude PC.
+
+00:18:01.700 --> 00:18:03.340
+Hier is de samenvatting in één zin.
+
+00:18:03.580 --> 00:18:06.360
+AVD scheidt de computerervaring van het fysieke apparaat.
+
+00:18:06.480 --> 00:18:09.180
+Het werk gebeurt in de cloud, het apparaat is slechts het venster.
+
+00:18:09.360 --> 00:18:11.800
+Als je AVD aan het evalueren bent, is dit wat ik aanbeveel.
+
+00:18:11.980 --> 00:18:13.480
+Begin met een g-pole de hostpool.
+
+00:18:13.700 --> 00:18:16.520
+Daar haal je de beste kostenefficiëntie uit door multisession en autoscaling.
+
+00:18:16.760 --> 00:18:18.540
+Gebruik FSLogix vanaf de eerste dag.
+
+00:18:18.720 --> 00:18:20.500
+Overweeg niet eens om profielen te beheren zonder.
+
+00:18:20.500 --> 00:18:23.280
+Het is het verschil tussen een soepele ervaring en een frustrerende.
+
+00:18:23.480 --> 00:18:26.300
+En wijs rechten toe via groepen, niet aan individuele gebruikers.
+
+00:18:26.300 --> 00:18:29.640
+Maak een AVD gebruikersgroep aan, voeg mensen toe en beheer de toegang vanaf daar.
+
+00:18:29.800 --> 00:18:31.760
+Als je AVD wilt testen, begin dan klein.
+
+00:18:31.960 --> 00:18:34.380
+Eén hostpool, een paar gebruikers, kijk hoe het voelt.
+
+00:18:34.540 --> 00:18:38.020
+De toetredingsdrempel is laag en je kunt veel leren van een pilot voordat je gaat schalen.
+
+00:18:38.240 --> 00:18:40.780
+Dat is Azure Virtual Desktop, simpel uitgelegd.
+
+00:18:40.980 --> 00:18:45.240
+Abonneer je voor meer begrijpelijke uitleg over Microsoft technologieën en deel dit met anderen.
