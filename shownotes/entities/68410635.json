@@ -1,0 +1,141 @@
+{
+  "episode_id": "68410635",
+  "slug": null,
+  "title": "Bing Maps Power BI migration: how to upgrade to Azure Maps before your dashboards break",
+  "lang": "en",
+  "duration_s": 1294,
+  "transcript_source": "data/en_transcripts/837b040a7c1f.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "power-bi",
+      "name": "Power BI",
+      "type": "product",
+      "score": 95,
+      "mentions": 22,
+      "first_mention_s": 0,
+      "quote": "You thought your power bimps were safe.",
+      "url": "https://www.m365.fm/entity/power-bi/"
+    },
+    {
+      "slug": "power-bi-service",
+      "name": "Power BI Service",
+      "type": "product",
+      "score": 50,
+      "mentions": 2,
+      "first_mention_s": 277,
+      "quote": "the administrative gate known as the power Bi Service admin Portal",
+      "url": "https://www.m365.fm/entity/power-bi-service/"
+    },
+    {
+      "slug": "azure",
+      "name": "Microsoft Azure",
+      "type": "platform",
+      "score": 25,
+      "mentions": 4,
+      "first_mention_s": 94,
+      "quote": "It removed it because it hated maintaining pre as your architecture.",
+      "url": "https://www.m365.fm/entity/azure/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "azure-maps",
+      "name": "Azure Maps",
+      "type": "product"
+    },
+    {
+      "slug": "bing-maps",
+      "name": "Bing Maps",
+      "type": "product"
+    },
+    {
+      "slug": "power-bi-shape-map",
+      "name": "Shape map visual (Power BI)",
+      "type": "product"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "Microsoft does this not because it enjoys sabotaging your workflow, but because international privacy and data residency rules require explicit consent.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 295,
+      "entities": [
+        "azure-maps",
+        "power-bi-service"
+      ],
+      "why": "Explains why Azure Maps visuals are disabled by default in the tenant."
+    },
+    {
+      "text": "So treat this automation like you'd treat autopilot on a commercial jet. A convenience, not a substitute for attentiveness. It gets you airborne, keeps you level, but the human pilot you must land the report without turbulence.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 717,
+      "entities": [
+        "azure-maps",
+        "power-bi"
+      ],
+      "why": "Gives a memorable rule for handling the one-click map upgrade."
+    },
+    {
+      "text": "Manual migration is slower, yes, but it ensures your visual integrity survives Microsoft's modernization. This is the section where professionals reclaim control from the algorithm.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 765,
+      "entities": [
+        "azure-maps",
+        "bing-maps"
+      ],
+      "why": "Makes the case for manually rebuilding map visuals."
+    },
+    {
+      "text": "Shape map operates entirely client side. It doesn't query cloud geography services, so its output persists even in air gapped or highly secure environments.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 1122,
+      "entities": [
+        "power-bi-shape-map"
+      ],
+      "why": "Highlights the compliance advantage of the shape map visual."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "Bing Maps visuals are on borrowed time"
+    },
+    {
+      "start_s": 77,
+      "title": "Why Bing Maps had to go"
+    },
+    {
+      "start_s": 262,
+      "title": "Tenant settings before migration"
+    },
+    {
+      "start_s": 496,
+      "title": "The one-click auto-upgrade mirage"
+    },
+    {
+      "start_s": 754,
+      "title": "Manual migration step by step"
+    },
+    {
+      "start_s": 1027,
+      "title": "Bonus: shape maps"
+    },
+    {
+      "start_s": 1230,
+      "title": "Modernize before it breaks"
+    }
+  ],
+  "takeaways": [
+    "Bing Maps-based visuals in Power BI are deprecated, and reports that still use them will show broken placeholders unless they are migrated to Azure Maps.",
+    "A Power BI admin must first enable the Azure Maps visual and the related data-processing settings in the admin portal, otherwise converted maps silently fail to render.",
+    "The automatic upgrade handles simple maps, but bubble sizes, zoom, colors, layers and drill-through need manual rebuilding and verification; shape maps add a client-side option for region visuals."
+  ],
+  "hook": "Power BI dashboards built on Bing Maps visuals are about to break as the service is retired in favor of Azure Maps. This episode walks Power BI admins and analysts through the tenant settings, the pitfalls of the one-click upgrade and a careful manual migration, plus the often-overlooked shape map visual.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-03T06:23:01+00:00"
+}
