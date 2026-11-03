@@ -1,0 +1,174 @@
+{
+  "episode_id": "68518551",
+  "slug": null,
+  "title": "Nvidia Blackwell architecture & Azure data fabric performance: how to fix GPU I/O bottlenecks",
+  "lang": "en",
+  "duration_s": 1405,
+  "transcript_source": "data/en_transcripts/9f1a6bcbdfb6.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "azure",
+      "name": "Microsoft Azure",
+      "type": "platform",
+      "score": 85,
+      "mentions": 41,
+      "first_mention_s": 37,
+      "quote": "Enter Nvidia Blackwell on Azure A platform designed not to make your model smarter",
+      "url": "https://www.m365.fm/entity/azure/"
+    },
+    {
+      "slug": "fabric",
+      "name": "Microsoft Fabric",
+      "type": "platform",
+      "score": 70,
+      "mentions": 14,
+      "first_mention_s": 9,
+      "quote": "we have Azure, we have fabric, we're modern",
+      "url": "https://www.m365.fm/entity/fabric/"
+    },
+    {
+      "slug": "azure-ai-foundry",
+      "name": "Azure AI Foundry",
+      "type": "platform",
+      "score": 35,
+      "mentions": 2,
+      "first_mention_s": 639,
+      "quote": "These come pre-integrated into Azure AI Foundry, Microsoft's ecosystem for building and deploying generative models",
+      "url": "https://www.m365.fm/entity/azure-ai-foundry/"
+    },
+    {
+      "slug": "power-bi",
+      "name": "Power BI",
+      "type": "product",
+      "score": 25,
+      "mentions": 2,
+      "first_mention_s": 210,
+      "quote": "Power BI, Synapse, Fabric, Copilot integrations",
+      "url": "https://www.m365.fm/entity/power-bi/"
+    },
+    {
+      "slug": "copilot",
+      "name": "Microsoft 365 Copilot",
+      "type": "product",
+      "score": 15,
+      "mentions": 2,
+      "first_mention_s": 210,
+      "quote": "Power BI, Synapse, Fabric, Copilot integrations",
+      "url": "https://www.m365.fm/entity/copilot/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "nvidia-blackwell",
+      "name": "NVIDIA Blackwell",
+      "type": "product"
+    },
+    {
+      "slug": "azure-nd-gb200-v6",
+      "name": "Azure ND GB200 v6 series",
+      "type": "product"
+    },
+    {
+      "slug": "nvlink",
+      "name": "NVLink",
+      "type": "product"
+    },
+    {
+      "slug": "gpu",
+      "name": "Graphics processing unit (GPU)",
+      "type": "concept"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "Suddenly a training run scheduled for hours takes days and your cloud bill grows accordingly Latency is not an annoyance, it's an expense",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 133,
+      "entities": [
+        "gpu"
+      ],
+      "why": "Frames I/O latency as a direct cost driver."
+    },
+    {
+      "text": "The truth, the bottleneck isn't the math, it's the movement This is the moment most enterprises realize they've been solving the wrong problem",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 184,
+      "entities": [
+        "gpu"
+      ],
+      "why": "States the central diagnosis of the episode: data movement, not models."
+    },
+    {
+      "text": "Bandwidth doesn't schedule itself, optimization is not automatic, that's why the partnership matters Microsoft's job isn't to supply racks, it's to integrate this orchestration into Azure",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 493,
+      "entities": [
+        "azure",
+        "nvidia-blackwell"
+      ],
+      "why": "Explains why hardware alone is not enough without cloud orchestration."
+    },
+    {
+      "text": "Hardware is the muscle, Azure is the nervous system that tells it what to flex, when to rest, and how to avoid setting itself on fire",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 523,
+      "entities": [
+        "azure"
+      ],
+      "why": "Memorable metaphor for the role of Azure on top of Blackwell hardware."
+    },
+    {
+      "text": "Blackwell doesn't make AI training cheaper per se it makes it shorter And that's where savings materialized",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 1038,
+      "entities": [
+        "nvidia-blackwell"
+      ],
+      "why": "A precise point about where the cost savings come from."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "Why AI pipelines stall"
+    },
+    {
+      "start_s": 71,
+      "title": "Your data fabric can't keep up"
+    },
+    {
+      "start_s": 252,
+      "title": "Anatomy of Blackwell"
+    },
+    {
+      "start_s": 520,
+      "title": "Azure integration and orchestration"
+    },
+    {
+      "start_s": 844,
+      "title": "Feeding the data layer with Microsoft Fabric"
+    },
+    {
+      "start_s": 1096,
+      "title": "Real-world payoff and cost savings"
+    },
+    {
+      "start_s": 1343,
+      "title": "The inevitable evolution"
+    }
+  ],
+  "takeaways": [
+    "GPU performance is wasted when the data fabric cannot move data fast enough between storage, CPU and GPU memory.",
+    "NVIDIA Grace Blackwell with NVLink and Azure ND GB200 v6 orchestration removes interconnect bottlenecks and scales AI training and inference.",
+    "Once hardware is fast, ingestion pipelines and governance in Microsoft Fabric become the bottleneck and must be refactored."
+  ],
+  "hook": "Your GPUs sit idle because the data fabric between storage, compute and analytics cannot keep up. This episode is for Azure architects and data leaders running AI workloads. Learn how NVIDIA Blackwell on Azure and a modernised Microsoft Fabric data layer remove I/O bottlenecks and cut training time and cost.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-03T04:28:52+00:00"
+}

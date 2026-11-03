@@ -1,0 +1,241 @@
+{
+  "episode_id": "68638393",
+  "slug": null,
+  "title": "AI Agents Architecture: The Secret Architecture That Makes AI Agents Actually Work",
+  "lang": "en",
+  "duration_s": 1607,
+  "transcript_source": "data/en_transcripts/ba5989f74029.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "ai-agent",
+      "name": "AI agent",
+      "type": "concept",
+      "score": 90,
+      "mentions": 31,
+      "first_mention_s": 0,
+      "quote": "The one validation that prevents smart agents doing dumb things.",
+      "url": "https://www.m365.fm/entity/ai-agent/"
+    },
+    {
+      "slug": "human-in-the-loop",
+      "name": "Human in the loop",
+      "type": "concept",
+      "score": 65,
+      "mentions": 6,
+      "first_mention_s": 69,
+      "quote": "If the payload dips into restricted classification without a human checkpoint",
+      "url": "https://www.m365.fm/entity/human-in-the-loop/"
+    },
+    {
+      "slug": "agent-observability",
+      "name": "Agent observability",
+      "type": "concept",
+      "score": 55,
+      "mentions": 7,
+      "first_mention_s": 263,
+      "quote": "breakdown on performance and observability, actual traces, costs and P95s",
+      "url": "https://www.m365.fm/entity/agent-observability/"
+    },
+    {
+      "slug": "prompt-injection",
+      "name": "Prompt injection",
+      "type": "concept",
+      "score": 45,
+      "mentions": 2,
+      "first_mention_s": 718,
+      "quote": "Cross-session poisoning, where one conversation's prompt injection bleeds into another",
+      "url": "https://www.m365.fm/entity/prompt-injection/"
+    },
+    {
+      "slug": "audit-logs",
+      "name": "Audit logs",
+      "type": "concept",
+      "score": 40,
+      "mentions": 2,
+      "first_mention_s": 196,
+      "quote": "stamps every decision with an audit record inputs, policy evaluations outcomes",
+      "url": "https://www.m365.fm/entity/audit-logs/"
+    },
+    {
+      "slug": "mcp",
+      "name": "Model Context Protocol (MCP)",
+      "type": "concept",
+      "score": 25,
+      "mentions": 2,
+      "first_mention_s": 948,
+      "quote": "If you import an MCP or open API spec",
+      "url": "https://www.m365.fm/entity/mcp/"
+    },
+    {
+      "slug": "graph",
+      "name": "Microsoft Graph",
+      "type": "product",
+      "score": 75,
+      "mentions": 15,
+      "first_mention_s": 150,
+      "quote": "Retrieval proposes graph queries across HR and legal sites.",
+      "url": "https://www.m365.fm/entity/graph/"
+    },
+    {
+      "slug": "azure-openai",
+      "name": "Azure OpenAI Service",
+      "type": "product",
+      "score": 60,
+      "mentions": 5,
+      "first_mention_s": 289,
+      "quote": "Microsoft 365 Graph Retrieval as your open AI reasoning and co-pilot studio agents that don't go rogue.",
+      "url": "https://www.m365.fm/entity/azure-openai/"
+    },
+    {
+      "slug": "copilot-studio",
+      "name": "Copilot Studio",
+      "type": "product",
+      "score": 60,
+      "mentions": 4,
+      "first_mention_s": 289,
+      "quote": "Microsoft 365 Graph Retrieval as your open AI reasoning and co-pilot studio agents that don't go rogue.",
+      "url": "https://www.m365.fm/entity/copilot-studio/"
+    },
+    {
+      "slug": "entra-id",
+      "name": "Microsoft Entra ID",
+      "type": "product",
+      "score": 50,
+      "mentions": 4,
+      "first_mention_s": 57,
+      "quote": "RBIAC or ABC checks tied to enter ID claims and scopes",
+      "url": "https://www.m365.fm/entity/entra-id/"
+    },
+    {
+      "slug": "sharepoint",
+      "name": "SharePoint",
+      "type": "product",
+      "score": 45,
+      "mentions": 7,
+      "first_mention_s": 27,
+      "quote": "The plan says update SharePoint list item.",
+      "url": "https://www.m365.fm/entity/sharepoint/"
+    },
+    {
+      "slug": "microsoft-365",
+      "name": "Microsoft 365",
+      "type": "platform",
+      "score": 40,
+      "mentions": 5,
+      "first_mention_s": 289,
+      "quote": "Microsoft 365 Graph Retrieval as your open AI reasoning",
+      "url": "https://www.m365.fm/entity/microsoft-365/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "idempotency",
+      "name": "Idempotency",
+      "type": "concept"
+    },
+    {
+      "slug": "role-based-access-control",
+      "name": "Role-based access control (RBAC)",
+      "type": "concept"
+    },
+    {
+      "slug": "least-privilege",
+      "name": "Least privilege",
+      "type": "concept"
+    },
+    {
+      "slug": "dead-lettering",
+      "name": "Dead-lettering",
+      "type": "concept"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "LLM's handle cognition. Executors handle operations. Mixing those is how you get chaos. The model can propose a plan. It cannot guarantee that the email was sent, the file was saved or the permission existed.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 315,
+      "entities": [
+        "ai-agent"
+      ],
+      "why": "Separates reasoning from execution, the core idea of the episode."
+    },
+    {
+      "text": "If an action can be retried, it needs a key that makes the second attempt a no-op or a consistent override. Timeouts prevent zombie calls.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 406,
+      "entities": [
+        "idempotency"
+      ],
+      "why": "A concrete rule for safe retries in agent tool calls."
+    },
+    {
+      "text": "Essentially, the graph is the constitution. The executor is law enforcement. The LLM is counsel, not judge.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 763,
+      "entities": [
+        "ai-agent"
+      ],
+      "why": "A memorable metaphor for the roles in a governed agent architecture."
+    },
+    {
+      "text": "The truth, graph validation, outperforms chaos engineering because it prevents classes of incidents rather than documenting their fallout.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 962,
+      "entities": [],
+      "why": "Clear thesis on prevention over post-incident testing."
+    },
+    {
+      "text": "If you can't open a run and see exactly which node inflated tokens or stalled latency, you don't have observability, you have vibes with timestamps.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 1584,
+      "entities": [
+        "agent-observability"
+      ],
+      "why": "Sharp definition of what real observability for agents means."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "The pre-execution contract check"
+    },
+    {
+      "start_s": 273,
+      "title": "Why prompts fail at operations"
+    },
+    {
+      "start_s": 525,
+      "title": "Graph workflows: nodes, edges and state"
+    },
+    {
+      "start_s": 783,
+      "title": "Secure by design with graph validation"
+    },
+    {
+      "start_s": 1059,
+      "title": "Microsoft Graph, Azure OpenAI and Copilot Studio"
+    },
+    {
+      "start_s": 1366,
+      "title": "Before and after metrics"
+    },
+    {
+      "start_s": 1501,
+      "title": "A measurement rig you can run"
+    }
+  ],
+  "takeaways": [
+    "Let the model propose plans, but let a policy-bound executor run tools with preconditions, idempotency keys and verified post-conditions.",
+    "Encode workflows as validated graphs with explicit contracts, allow lists, compensations and human checkpoints so agents fail safely.",
+    "A pre-execution check of capability, permission and feasibility, plus tracing tied to metrics, improves accuracy, latency, cost and auditability."
+  ],
+  "hook": "Prompt-only AI agents hallucinate tools, skip preconditions and declare victory on partial failures. This episode is for architects and builders of agents on Microsoft 365, Microsoft Graph, Azure OpenAI and Copilot Studio. Learn how executors, validated workflow graphs and a pre-execution contract check make agents reliable, secure and auditable.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-03T04:28:52+00:00"
+}
