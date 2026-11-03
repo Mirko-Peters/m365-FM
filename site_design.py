@@ -10,19 +10,22 @@ FONT_CSS = "".join(
     f'@font-face{{font-family:"{fam}";font-style:normal;font-weight:{w};font-display:swap;src:url(/assets/fonts/{fn}-{sub}-{w}-normal.woff2) format("woff2");unicode-range:{_LR[sub]}}}'
     for fam, fn, ws in (("Barlow Condensed", "barlow-condensed", (500, 600, 700)), ("Barlow", "barlow", (400, 500, 600)))
     for w in ws for sub in ("latin", "latin-ext")) + "\n"
-# Fallback-Schriften mit den Metriken von Barlow (upm 1000, Oberlaenge 1000, Unterlaenge 200, xAvg 513 / Condensed 417): waehrend die Webfont laedt,
-# nimmt der Platzhaltertext dieselbe Breite und Zeilenhoehe ein - beim Austausch verschiebt sich nichts mehr (CLS). Je System eine Variante
-# (Windows: Arial, Android: Roboto, Apple: Helvetica Neue); der Browser nimmt die erste, die vorhanden ist. Werte: size-adjust = xAvg(Barlow)/xAvg(Fallback),
-# ascent/descent-override = Barlow-Werte / size-adjust (Arial 904/1854/434 @2048, Roboto 911/1900/500 @2048, Helvetica Neue 509/952/213 @1000).
-FB = {"Arial": (904 / 2048, 1854 / 2048, 434 / 2048, 67 / 2048), "Roboto": (911 / 2048, 1900 / 2048, 500 / 2048, 0), "Helvetica Neue": (509 / 1000, 952 / 1000, 213 / 1000, 28 / 1000)}
-def _fb(name, local, xavg):
+# Fallback-Schriften mit den Metriken von Barlow: waehrend die Webfont laedt, nimmt der Platzhaltertext (fast) dieselbe Breite und Zeilenhoehe ein -
+# beim Austausch verschiebt sich nichts (CLS). Je System eine Variante (Windows: Arial, Android: Roboto, Apple: Helvetica Neue); der Browser nimmt die erste
+# vorhandene. size-adjust ist GEMESSEN (Glyphenbreiten Webfont / Fallback ueber typische Texte, fontTools + Chromium mit Liberation Sans als Arial-Metrik),
+# nicht aus xAvgCharWidth abgeleitet: das lag fuer Arial um rund 20 % (Barlow) bzw. 40 % (Barlow Condensed) daneben, Ueberschriften und Chips brachen in der
+# Fallback-Schrift auf mehr Zeilen um und sprangen beim Laden der Webfont zurueck (CLS bis 0,16 auf Dub-Seiten, Messung 3.11.2026).
+# Barlow: Fliesstext (gemischte Schreibung). Barlow Condensed: auf Grossbuchstaben abgestimmt (h1/h2/Navigation/Marke sind text-transform:uppercase).
+# Helvetica Neue hat (wie Helvetica) nahezu Arial-Breiten -> Arial-Werte. ascent/descent-override = Barlow (1000/200 bei upm 1000) / size-adjust.
+SIZE_ADJUST = {"Barlow": {"Arial": 0.975, "Roboto": 0.970, "Helvetica Neue": 0.975},
+               "Barlow Condensed": {"Arial": 0.680, "Roboto": 0.720, "Helvetica Neue": 0.680}}
+def _fb(name):
     out = ""
-    for i, (loc, (fx, fa, fd, fg)) in enumerate(FB.items()):
-        sa = xavg / fx
+    for i, (loc, sa) in enumerate(SIZE_ADJUST[name].items()):
         out += (f'@font-face{{font-family:"{name} FB{i}";src:local("{loc}");size-adjust:{sa * 100:.1f}%;ascent-override:{100 / sa:.1f}%;'
                 f'descent-override:{20 / sa:.1f}%;line-gap-override:0%}}')
     return out
-FONT_CSS += _fb("Barlow", "", 0.513) + _fb("Barlow Condensed", "", 0.417) + "\n"
+FONT_CSS += _fb("Barlow") + _fb("Barlow Condensed") + "\n"
 BF = '"Barlow","Barlow FB0","Barlow FB1","Barlow FB2"'   # Schriftstapel mit metrisch passenden Fallbacks
 CF = '"Barlow Condensed","Barlow Condensed FB0","Barlow Condensed FB1","Barlow Condensed FB2"'
 INDUSTRY = """
