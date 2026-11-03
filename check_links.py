@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Prüft die gebaute Seite (docs/): kaputte interne Links, Sprachtreue der Verlinkung in Artikeln, verwaiste Folgenseiten, Artikel ohne interne Links.
 Aufruf: python check_links.py   (Exit-Code 1 bei kaputten Links)"""
-import re, sys
+import json, os, re, sys
+from collections import Counter, defaultdict
 from pathlib import Path
 from urllib.parse import unquote, urlparse
 
@@ -80,6 +81,22 @@ print(f"Links, die nur per 301 auf eine Übersicht führen (/blog/…, /videos/�
 print(f"Folgenseiten: {len(eps)} | mit <2 eingehenden Links: {len(orph)} | Artikel: {len(art)} | Artikel ohne automatische interne Links: {len(no_ilink)}")
 for b in broken[:15]:
     print("  KAPUTT", b)
+if broken:   # Ursachen: Ziel-Muster (Sprache und Slugs ersetzt) mit Anzahl, Zahl der Quellseiten und Beispielen
+    _LG = r"(de|es|fr|it|pt|nl|pl|id|ru|uk|ar|he|ja|ko)"
+    def _pat(h):
+        q = unquote(urlparse(h).path or h)
+        q = re.sub(rf"^/{_LG}(?=/)", "/{lang}", q)
+        parts = [x for x in q.split("/") if x]
+        return "/" + "/".join(x if (i < 2 and not re.search(r"[0-9]|-.*-", x)) or x in ("{lang}",) or "." in x else "{slug}" for i, x in enumerate(parts)) + ("/" if q.endswith("/") else "")
+    grp = defaultdict(list)
+    for src, h in broken: grp[_pat(h)].append((src, h))
+    print(f"Ursachen der kaputten Links ({len(grp)} Muster):")
+    for k, v in sorted(grp.items(), key=lambda kv: -len(kv[1]))[:40]:
+        print(f"  {len(v):5d} x {k}  (Quellseiten: {len({a for a, _ in v})})  z. B. {v[0][0]} -> {v[0][1]}" + (f" | {v[1][0]} -> {v[1][1]}" if len(v) > 1 else ""))
+        tops = Counter(unquote(urlparse(h).path or h) for _, h in v).most_common(8)
+        if len(tops) > 1: print("         haeufigste Ziele: " + ", ".join(f"{t} ({n})" for t, n in tops))
+    if os.environ.get("LINKS_DUMP"):
+        Path(os.environ["LINKS_DUMP"]).write_text(json.dumps(broken, ensure_ascii=False, indent=0), "utf-8")
 for w in wrong_lang[:10]:
     print("  FALSCHE SPRACHE", w)
 sys.exit(1 if broken or wrong_lang else 0)
