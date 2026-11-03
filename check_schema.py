@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
 """Prueft das JSON-LD aller gebauten Seiten (docs/): gueltiges JSON, Pflichtfelder je Typ (Google/schema.org), absolute URLs, ISO-Daten,
-aufloesbare @id-Verweise, widerspruechliche @id-Definitionen."""
+aufloesbare @id-Verweise, widerspruechliche @id-Definitionen.
+T37 Sponsor: sichtbare Kennzeichnung (data-spm, site_sponsorships.note) und "sponsor" an WebPage/PodcastEpisode/BlogPosting/VideoObject
+gehoeren zusammen (beide Richtungen); die Kennzeichnung steht direkt unter der H1 (vor dem ersten H2); Links zum Sponsor tragen rel="sponsored".
+Aufruf: python check_schema.py [Verzeichnis]  (Standard: docs/)"""
 import glob, json, re, sys
 from collections import Counter, defaultdict
 from pathlib import Path
 
-DOCS = Path(__file__).parent / "docs"
+DOCS = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else Path(__file__).parent / "docs"
 REQ = {
     "PodcastEpisode": ["name", "url", "datePublished", "partOfSeries"],
     "PodcastSeries": ["name", "url"],
@@ -18,6 +21,7 @@ REQ = {
 }
 iso = re.compile(r"^\d{4}(-\d{2}(-\d{2}(T[\d:.+\-Z]+)?)?)?$")   # ISO 8601 inkl. reduzierter Genauigkeit (Jahr, Jahr-Monat: Erscheinungsdaten von Produkten)
 IDENT = {"@id", "@type", "@context", "name", "url"}
+SPN_TYPES = {"WebPage", "PodcastEpisode", "BlogPosting", "VideoObject"}   # T37 Sponsor: Knoten mit Kennzeichnung bezahlter Inhalte (Event.sponsor = Event-Partner, keine Kennzeichnung der Seite)
 errs, warns = Counter(), Counter()
 examples = {}
 ids = defaultdict(set)
@@ -29,9 +33,11 @@ def note(kind, msg, f):
     examples.setdefault(msg, f)
 
 
-def walk(o, f, top):
+def walk(o, f, top, sp=None):
     if isinstance(o, dict):
         t = o.get("@type")
+        if sp is not None and o.get("sponsor") and SPN_TYPES & set(t if isinstance(t, list) else [t]):
+            sp += o["sponsor"] if isinstance(o["sponsor"], list) else [o["sponsor"]]
         for tt in (t if isinstance(t, list) else [t]):
             if tt in REQ:
                 for k in REQ[tt]:
@@ -57,10 +63,34 @@ def walk(o, f, top):
             if set(o) - IDENT:   # nur Identitaet (name, url) = Verweis, keine Definition
                 defs[o["@id"]].add(json.dumps(o, sort_keys=True))
         for v in o.values():
-            walk(v, f, False)
+            walk(v, f, False, sp)
     elif isinstance(o, list):
         for v in o:
-            walk(v, f, False)
+            walk(v, f, False, sp)
+
+
+def _host(u):
+    m = re.match(r"https?://([^/:?#\"]+)", u or "", re.I)
+    return m.group(1).lower().removeprefix("www.") if m else ""
+
+
+def sponsor_check(h, f, sp):
+    """T37 Sponsor: Kennzeichnung <-> JSON-LD sponsor, Lage unter der H1, rel="sponsored" auf Links zum Sponsor."""
+    disc = h.find('data-spm="')
+    if disc >= 0 and not sp:
+        note("E", "Kennzeichnung (Sponsored/Anzeige) ohne sponsor im JSON-LD", f)
+    if sp and disc < 0:
+        note("E", "sponsor im JSON-LD ohne sichtbare Kennzeichnung (site_sponsorships.note)", f)
+    if disc < 0:
+        return
+    h1, h2 = h.find("<h1"), h.find("<h2")
+    if h1 < 0 or disc < h1 or 0 <= h2 < disc:
+        note("E", "Kennzeichnung (Sponsored/Anzeige) nicht direkt unter der H1", f)
+    hs = {_host(x.get("url")) for x in sp if isinstance(x, dict)} - {""}
+    for a in re.findall(r"<a\s[^>]*>", h):
+        m = re.search(r'href="(https?://[^"]+)"', a)
+        if m and any(_host(m.group(1)) == x or _host(m.group(1)).endswith("." + x) for x in hs) and "sponsored" not in (re.search(r'rel="([^"]*)"', a) or [None, ""])[1].split():
+            note("W", "Link zum Sponsor ohne rel=sponsored", f)
 
 
 n = 0
@@ -68,14 +98,18 @@ for p in sorted(glob.glob(str(DOCS / "**" / "*.html"), recursive=True)):
     h = open(p, encoding="utf-8", errors="ignore").read()
     blocks = re.findall(r'<script type="application/ld\+json">(.*?)</script>', h, re.S)
     if not blocks:
+        if 'data-spm="' in h:
+            note("E", "Kennzeichnung (Sponsored/Anzeige) ohne sponsor im JSON-LD", p.replace(str(DOCS), ""))
         continue
     n += 1
     f = p.replace(str(DOCS), "")
+    sp = []
     for b in blocks:
         try:
-            walk(json.loads(b), f, True)
+            walk(json.loads(b), f, True, sp)
         except Exception as ex:
             note("E", "JSON-LD nicht parsebar: " + str(ex)[:60], f)
+    sponsor_check(h, f, sp)
 # @id-Verweise (nur {"@id": x}) muessen irgendwo definiert sein
 refs = set()
 for p in glob.glob(str(DOCS / "**" / "*.html"), recursive=True)[:2000]:

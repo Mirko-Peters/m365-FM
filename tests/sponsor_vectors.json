@@ -1,0 +1,768 @@
+{
+ "_doc": "T37: Testvektoren aus Prototyp v2 (Mirko), unveraendert uebernommen aus spec_constants.json (test_vectors, exact_outputs_from_prototype_script; erzeugt durch Ausfuehren des Prototyp-Skripts). Abweichungen nach design.md D1/D2 stehen in tests/sponsor_calc.test.mjs.",
+ "test_vectors": {
+  "default (goal ai, Your brand name easy + Microsoft Teams Phone hard, 6 months, PR on)": {
+   "input": {
+    "goal": "ai",
+    "rt": 6,
+    "picked": [
+     [
+      "Your brand name",
+      1
+     ],
+     [
+      "Microsoft Teams Phone",
+      3
+     ]
+    ],
+    "pr": true
+   },
+   "output": {
+    "usdTarget": {
+     "monthlyUsd": 5400,
+     "monthlyText": "$5,400",
+     "totalUsd": 34400,
+     "totalText": "$34,400",
+     "note": "ticket: 14 languages = USD 300/month, undiscounted, added to monthly"
+    },
+    "packs": 2,
+    "prCount": 4,
+    "prRec": 4,
+    "discountRate": 0.1,
+    "discount": 600,
+    "monthlyUsd": 5400,
+    "monthlyText": "$5,400",
+    "oneOffUsd": 2000,
+    "totalUsd": 34400,
+    "totalText": "$34,400",
+    "eurLang": null,
+    "hardest": "hard",
+    "geo": [
+     1.68,
+     2.66
+    ],
+    "seo": [
+     4.76,
+     8.96
+    ],
+    "geoText": "7 weeks to 11 weeks",
+    "seoText": "4.8 months to 9 months",
+    "barPct": {
+     "geo": [
+      12.9231,
+      20.4615
+     ],
+     "seo": [
+      36.6154,
+      68.9231
+     ],
+     "run": 46.1538
+    },
+    "recRt": 12,
+    "tips": [
+     "rt<recRt",
+     "ai:noAuthHard"
+    ]
+   }
+  },
+  "1 easy topic, 1 month, nothing else": {
+   "input": {
+    "goal": "ai",
+    "rt": 1,
+    "picked": [
+     [
+      "Your brand name",
+      1
+     ]
+    ]
+   },
+   "output": {
+    "usdTarget": {
+     "monthlyUsd": 3000,
+     "monthlyText": "$3,000",
+     "totalUsd": 3000,
+     "totalText": "$3,000",
+     "note": "ticket: 14 languages = USD 300/month, undiscounted, added to monthly"
+    },
+    "packs": 1,
+    "prCount": 1,
+    "prRec": 1,
+    "discountRate": 0,
+    "discount": 0,
+    "monthlyUsd": 3000,
+    "monthlyText": "$3,000",
+    "oneOffUsd": 0,
+    "totalUsd": 3000,
+    "totalText": "$3,000",
+    "eurLang": null,
+    "hardest": "easy",
+    "geo": [
+     1.125,
+     1.875
+    ],
+    "seo": [
+     3,
+     5.25
+    ],
+    "geoText": "5 weeks to 8 weeks",
+    "seoText": "3 months to 5.3 months",
+    "barPct": {
+     "geo": [
+      8.6538,
+      14.4231
+     ],
+     "seo": [
+      23.0769,
+      40.3846
+     ],
+     "run": 7.6923
+    },
+    "recRt": 3,
+    "tips": [
+     "rt<recRt",
+     "ai:noPR"
+    ]
+   }
+  },
+  "1 medium topic, 3 months, video + PR": {
+   "input": {
+    "goal": "vis",
+    "rt": 3,
+    "picked": [
+     [
+      "Teams Rooms",
+      2
+     ]
+    ],
+    "video": true,
+    "pr": true
+   },
+   "output": {
+    "usdTarget": {
+     "monthlyUsd": 3800,
+     "monthlyText": "$3,800",
+     "totalUsd": 11900,
+     "totalText": "$11,900",
+     "note": "ticket: 14 languages = USD 300/month, undiscounted, added to monthly"
+    },
+    "packs": 1,
+    "prCount": 1,
+    "prRec": 1,
+    "discountRate": 0.05,
+    "discount": 200,
+    "monthlyUsd": 3800,
+    "monthlyText": "$3,800",
+    "oneOffUsd": 500,
+    "totalUsd": 11900,
+    "totalText": "$11,900",
+    "eurLang": null,
+    "hardest": "medium",
+    "geo": [
+     1.175,
+     1.85
+    ],
+    "seo": [
+     3.35,
+     6.35
+    ],
+    "geoText": "5 weeks to 8 weeks",
+    "seoText": "3.4 months to 6.4 months",
+    "barPct": {
+     "geo": [
+      9.0385,
+      14.2308
+     ],
+     "seo": [
+      25.7692,
+      48.8462
+     ],
+     "run": 23.0769
+    },
+    "recRt": 6,
+    "tips": [
+     "rt<recRt",
+     "vis:noLang",
+     "vis:noTopic"
+    ]
+   }
+  },
+  "1 very hard topic, 12 months, video+PR+auth+topic+lang": {
+   "input": {
+    "goal": "ai",
+    "rt": 12,
+    "picked": [
+     [
+      "Microsoft Entra ID",
+      4
+     ]
+    ],
+    "video": true,
+    "pr": true,
+    "auth": true,
+    "topic": true,
+    "lang": true
+   },
+   "output": {
+    "usdTarget": {
+     "monthlyUsd": 6200,
+     "monthlyText": "$6,200",
+     "totalUsd": 76400,
+     "totalText": "$76,400",
+     "note": "ticket: 14 languages = USD 300/month, undiscounted, added to monthly"
+    },
+    "packs": 1,
+    "prCount": 4,
+    "prRec": 4,
+    "discountRate": 0.15,
+    "discount": 600,
+    "monthlyUsd": 5900,
+    "monthlyText": "$5,900",
+    "oneOffUsd": 2000,
+    "totalUsd": 72800,
+    "totalText": "$72,800",
+    "eurLang": {
+     "perMonth": 300,
+     "runtime": 3600
+    },
+    "hardest": "very hard",
+    "geo": [
+     1.33,
+     1.83
+    ],
+    "seo": [
+     3.61,
+     7.41
+    ],
+    "geoText": "6 weeks to 8 weeks",
+    "seoText": "3.6 months to 7.4 months",
+    "barPct": {
+     "geo": [
+      10.2308,
+      14.0769
+     ],
+     "seo": [
+      27.7692,
+      57
+     ],
+     "run": 92.3077
+    },
+    "recRt": 12,
+    "tips": [
+     "fits"
+    ]
+   }
+  },
+  "goal lead, 2 topics (hard, medium), 6 months, video, expert x2, LinkedIn x2, PR": {
+   "input": {
+    "goal": "lead",
+    "rt": 6,
+    "picked": [
+     [
+      "Windows 365",
+      3
+     ],
+     [
+      "Teams Rooms",
+      2
+     ]
+    ],
+    "video": true,
+    "pr": true,
+    "expert": true,
+    "li": true,
+    "cnt": {
+     "ex": 2,
+     "li": 2
+    }
+   },
+   "output": {
+    "usdTarget": {
+     "monthlyUsd": 7400,
+     "monthlyText": "$7,400",
+     "totalUsd": 47200,
+     "totalText": "$47,200",
+     "note": "ticket: 14 languages = USD 300/month, undiscounted, added to monthly"
+    },
+    "packs": 2,
+    "prCount": 4,
+    "prRec": 4,
+    "discountRate": 0.1,
+    "discount": 800,
+    "monthlyUsd": 7400,
+    "monthlyText": "$7,400",
+    "oneOffUsd": 2800,
+    "totalUsd": 47200,
+    "totalText": "$47,200",
+    "eurLang": null,
+    "hardest": "hard",
+    "geo": [
+     1.33,
+     1.96
+    ],
+    "seo": [
+     4.06,
+     8.26
+    ],
+    "geoText": "6 weeks to 8 weeks",
+    "seoText": "4.1 months to 8.3 months",
+    "barPct": {
+     "geo": [
+      10.2308,
+      15.0769
+     ],
+     "seo": [
+      31.2308,
+      63.5385
+     ],
+     "run": 46.1538
+    },
+    "recRt": 12,
+    "tips": [
+     "rt<recRt",
+     "lead:dash"
+    ]
+   }
+  },
+  "3 topics, 12 months, PR auto (cap 12)": {
+   "input": {
+    "goal": "ai",
+    "rt": 12,
+    "picked": [
+     [
+      "Copilot Studio",
+      3
+     ],
+     [
+      "Microsoft Purview",
+      3
+     ],
+     [
+      "Defender XDR",
+      3
+     ]
+    ],
+    "pr": true
+   },
+   "output": {
+    "usdTarget": {
+     "monthlyUsd": 7650,
+     "monthlyText": "$7,650",
+     "totalUsd": 97800,
+     "totalText": "$97,800",
+     "note": "ticket: 14 languages = USD 300/month, undiscounted, added to monthly"
+    },
+    "packs": 3,
+    "prCount": 12,
+    "prRec": 12,
+    "discountRate": 0.15,
+    "discount": 1350,
+    "monthlyUsd": 7650,
+    "monthlyText": "$7,650",
+    "oneOffUsd": 6000,
+    "totalUsd": 97800,
+    "totalText": "$97,800",
+    "eurLang": null,
+    "hardest": "hard",
+    "geo": [
+     1.68,
+     2.66
+    ],
+    "seo": [
+     4.76,
+     8.96
+    ],
+    "geoText": "7 weeks to 11 weeks",
+    "seoText": "4.8 months to 9 months",
+    "barPct": {
+     "geo": [
+      12.9231,
+      20.4615
+     ],
+     "seo": [
+      36.6154,
+      68.9231
+     ],
+     "run": 92.3077
+    },
+    "recRt": 12,
+    "tips": [
+     "ai:noAuthHard",
+     "manyTopics"
+    ]
+   }
+  },
+  "4 topics, 12 months, PR auto (min(12,16)=12)": {
+   "input": {
+    "goal": "ai",
+    "rt": 12,
+    "picked": [
+     [
+      "Copilot Studio",
+      3
+     ],
+     [
+      "Microsoft Purview",
+      3
+     ],
+     [
+      "Defender XDR",
+      3
+     ],
+     [
+      "Windows 365",
+      3
+     ]
+    ],
+    "pr": true
+   },
+   "output": {
+    "usdTarget": {
+     "monthlyUsd": 10200,
+     "monthlyText": "$10,200",
+     "totalUsd": 128400,
+     "totalText": "$128,400",
+     "note": "ticket: 14 languages = USD 300/month, undiscounted, added to monthly"
+    },
+    "packs": 4,
+    "prCount": 12,
+    "prRec": 12,
+    "discountRate": 0.15,
+    "discount": 1800,
+    "monthlyUsd": 10200,
+    "monthlyText": "$10,200",
+    "oneOffUsd": 6000,
+    "totalUsd": 128400,
+    "totalText": "$128,400",
+    "eurLang": null,
+    "hardest": "hard",
+    "geo": [
+     1.68,
+     2.66
+    ],
+    "seo": [
+     4.76,
+     8.96
+    ],
+    "geoText": "7 weeks to 11 weeks",
+    "seoText": "4.8 months to 9 months",
+    "barPct": {
+     "geo": [
+      12.9231,
+      20.4615
+     ],
+     "seo": [
+      36.6154,
+      68.9231
+     ],
+     "run": 92.3077
+    },
+    "recRt": 12,
+    "tips": [
+     "ai:noAuthHard",
+     "manyTopics"
+    ]
+   }
+  },
+  "no topic picked, 6 months, PR on": {
+   "input": {
+    "goal": "ai",
+    "rt": 6,
+    "picked": [],
+    "pr": true
+   },
+   "output": {
+    "usdTarget": {
+     "monthlyUsd": 2700,
+     "monthlyText": "$2,700",
+     "totalUsd": 17200,
+     "totalText": "$17,200",
+     "note": "ticket: 14 languages = USD 300/month, undiscounted, added to monthly"
+    },
+    "packs": 1,
+    "prCount": 2,
+    "prRec": 2,
+    "discountRate": 0.1,
+    "discount": 300,
+    "monthlyUsd": 2700,
+    "monthlyText": "$2,700",
+    "oneOffUsd": 1000,
+    "totalUsd": 17200,
+    "totalText": "$17,200",
+    "eurLang": null,
+    "hardest": "medium",
+    "geo": [
+     1.35,
+     2.2
+    ],
+    "seo": [
+     3.7,
+     6.7
+    ],
+    "geoText": "6 weeks to 9 weeks",
+    "seoText": "3.7 months to 6.7 months",
+    "barPct": {
+     "geo": [
+      10.3846,
+      16.9231
+     ],
+     "seo": [
+      28.4615,
+      51.5385
+     ],
+     "run": 46.1538
+    },
+    "recRt": 6,
+    "tips": [
+     "fits"
+    ]
+   }
+  },
+  "custom topic only (medium, to be rated), 6 months": {
+   "input": {
+    "goal": "vis",
+    "rt": 6,
+    "picked": [
+     [
+      "My product",
+      2,
+      true
+     ]
+    ],
+    "video": true,
+    "lang": true,
+    "topic": true
+   },
+   "output": {
+    "usdTarget": {
+     "monthlyUsd": 5400,
+     "monthlyText": "$5,400",
+     "totalUsd": 32400,
+     "totalText": "$32,400",
+     "note": "ticket: 14 languages = USD 300/month, undiscounted, added to monthly"
+    },
+    "packs": 1,
+    "prCount": 2,
+    "prRec": 2,
+    "discountRate": 0.1,
+    "discount": 400,
+    "monthlyUsd": 5100,
+    "monthlyText": "$5,100",
+    "oneOffUsd": 0,
+    "totalUsd": 30600,
+    "totalText": "$30,600",
+    "eurLang": {
+     "perMonth": 300,
+     "runtime": 1800
+    },
+    "hardest": "medium",
+    "geo": [
+     1.25,
+     1.75
+    ],
+    "seo": [
+     3.5,
+     6
+    ],
+    "geoText": "5 weeks to 8 weeks",
+    "seoText": "3.5 months to 6 months",
+    "barPct": {
+     "geo": [
+      9.6154,
+      13.4615
+     ],
+     "seo": [
+      26.9231,
+      46.1538
+     ],
+     "run": 46.1538
+    },
+    "recRt": 6,
+    "tips": [
+     "fits"
+    ]
+   }
+  },
+  "PR touched: 1 easy topic, 12 months, PR manually set to 1": {
+   "input": {
+    "goal": "ai",
+    "rt": 12,
+    "picked": [
+     [
+      "Your brand name",
+      1
+     ]
+    ],
+    "pr": true,
+    "prTouched": true,
+    "cnt": {
+     "pr": 1
+    }
+   },
+   "output": {
+    "usdTarget": {
+     "monthlyUsd": 2550,
+     "monthlyText": "$2,550",
+     "totalUsd": 31100,
+     "totalText": "$31,100",
+     "note": "ticket: 14 languages = USD 300/month, undiscounted, added to monthly"
+    },
+    "packs": 1,
+    "prCount": 1,
+    "prRec": 4,
+    "discountRate": 0.15,
+    "discount": 450,
+    "monthlyUsd": 2550,
+    "monthlyText": "$2,550",
+    "oneOffUsd": 500,
+    "totalUsd": 31100,
+    "totalText": "$31,100",
+    "eurLang": null,
+    "hardest": "easy",
+    "geo": [
+     1.0688,
+     1.7625
+    ],
+    "seo": [
+     2.8875,
+     5.1375
+    ],
+    "geoText": "5 weeks to 8 weeks",
+    "seoText": "12 weeks to 5.1 months",
+    "barPct": {
+     "geo": [
+      8.2212,
+      13.5577
+     ],
+     "seo": [
+      22.2115,
+      39.5192
+     ],
+     "run": 92.3077
+    },
+    "recRt": 3,
+    "tips": [
+     "fits"
+    ]
+   }
+  }
+ },
+ "exact_outputs_from_prototype_script": {
+  "default_on_load": {
+   "pk-count": "× 2 topics · 62 episodes/month",
+   "pr-count": 4,
+   "pr-rec": "Recommended for 6 months and 2 topics: 4 article(s).",
+   "rt-rec": "Recommended for your topics: 12 months or more.",
+   "t-month": "$5,400",
+   "t-eur": "",
+   "t-total": "$34,400 for 6 months, incl. one-time items",
+   "rows": [
+    [
+     "Base package × 2",
+     "$6,000"
+    ],
+    [
+     "Runtime discount −10 %",
+     "−$600"
+    ],
+    [
+     "Per month",
+     "$5,400"
+    ],
+    [
+     "PR articles × 4 (one-time)",
+     "$2,000"
+    ],
+    [
+     "Total for the runtime",
+     "$34,400"
+    ]
+   ],
+   "t-text": "Hardest topic: hard. First AI citations in about 7 weeks to 11 weeks, ranking gains in about 4.8 months to 9 months. The dashed line marks the end of your runtime. Estimate, not a guarantee.",
+   "rec": [
+    "Built for being cited by AI",
+    "Your topics need about 12 months to pay off. A longer runtime lets you see the full effect and raises your discount.",
+    "For hard topics, authority building adds the outside mentions AI answers rely on."
+   ],
+   "bars_pct": {
+    "geo_left": 12.923076923076923,
+    "geo_width": 7.5384615384615365,
+    "seo_left": 36.61538461538461,
+    "seo_width": 32.30769230769231,
+    "run": 46.15384615384615
+   }
+  },
+  "lead_12m_video_lang_li1_pr": {
+   "pr-count": 8,
+   "t-month": "$6,900",
+   "t-eur": "plus €300 per month for the 14 language shows",
+   "t-total": "$87,300 for 12 months, incl. one-time items · plus €3600",
+   "rows": [
+    [
+     "Base package × 2",
+     "$6,000"
+    ],
+    [
+     "Video package × 2",
+     "$2,000"
+    ],
+    [
+     "Runtime discount −15 %",
+     "−$1,200"
+    ],
+    [
+     "LinkedIn newsletter × 1",
+     "$100"
+    ],
+    [
+     "14 language shows",
+     "€300"
+    ],
+    [
+     "Per month",
+     "$6,900"
+    ],
+    [
+     "PR articles × 8 (one-time)",
+     "$4,000"
+    ],
+    [
+     "Sponsor dashboard (one-time)",
+     "$500"
+    ],
+    [
+     "Total for the runtime",
+     "$87,300"
+    ]
+   ],
+   "t-text": "Hardest topic: hard. First AI citations in about 6 weeks to 8 weeks, ranking gains in about 4.1 months to 8.3 months. The dashed line marks the end of your runtime. Estimate, not a guarantee.",
+   "rec": [
+    "Built for leads",
+    "The sponsor dashboard is included because leads are tracked there.",
+    "An expert episode turns listeners into conversations with your team."
+   ],
+   "usd_target": {
+    "monthly": "$7,200",
+    "total": "$90,900"
+   }
+  },
+  "vis_3m_no_topics_pr_off_dash_kept": {
+   "pk-count": "× 1 topic · 31 episodes/month",
+   "pr-rec": "Recommended for 3 months and 1 topic: 1 article(s).",
+   "rt-rec": "Recommended for your topics: 6 months or more.",
+   "t-month": "$2,850",
+   "t-total": "$9,050 for 3 months, incl. one-time items",
+   "t-text": "Hardest topic: medium. First AI citations in about 6 weeks to 11 weeks, ranking gains in about 4 months to 7 months. The dashed line marks the end of your runtime. Estimate, not a guarantee.",
+   "rec": [
+    "Built for brand visibility",
+    "Your topics need about 6 months to pay off. A longer runtime lets you see the full effect and raises your discount.",
+    "Add the video package: every episode then also reaches the YouTube audience.",
+    "The 14 language shows multiply your reach beyond English.",
+    "A topic sponsorship puts your brand on a whole cluster. Only 3 slots per topic."
+   ],
+   "x-dash": {
+    "checked": true,
+    "disabled": false
+   }
+  }
+ }
+}

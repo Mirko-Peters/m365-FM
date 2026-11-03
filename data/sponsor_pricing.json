@@ -1,0 +1,42 @@
+{
+ "_doc": "T37 Sponsor-Seite /sponsor/: einzige Quelle aller Preise und Rechenregeln (USD, ganze Dollar). site_sponsor.py bettet die Datei in jede Sprachfassung ein (data-cfg) und nimmt die Preise fuer das JSON-LD; assets/sponsor-calc.js rechnet nur damit; tests/sponsor_calc.test.mjs prueft gegen die Testvektoren des Prototyps v2. Rabatt nur auf Basis- und Videopaket; alles andere pauschal je Sponsor und ohne Rabatt. effect.adjust wird in genau dieser Reihenfolge abgezogen (wie im Prototyp).",
+ "version": 1,
+ "updated": "2026-11-03",
+ "currency": "USD",
+ "prices": {"base": 3000, "video": 1000, "pr": 500, "auth": 1000, "dash": 500, "lang": 300, "topic": 1500, "expert": 150, "li": 100},
+ "units": {"base": "topic_month", "video": "topic_month", "pr": "each", "auth": "month", "dash": "once", "lang": "month", "topic": "month", "expert": "each", "li": "issue_month"},
+ "runtimes": [1, 3, 6, 12],
+ "discount": {"1": 0, "3": 0.05, "6": 0.1, "12": 0.15},
+ "pr_rec": {"1": 1, "3": 1, "6": 2, "12": 4},
+ "pr_rec_cap": 12,
+ "stepper": {"min": 1, "max": 12},
+ "episodes_per_topic": 31,
+ "max_topics": 20,
+ "topic_sponsors_max": 3,
+ "levels": {
+  "mult": {"1": 0.75, "2": 1, "3": 1.4, "4": 1.9},
+  "runtime": {"1": 3, "2": 6, "3": 12, "4": 12},
+  "hard_from": 3,
+  "custom": 2,
+  "unrated": 2,
+  "none": 2,
+  "none_runtime": 6
+ },
+ "effect": {
+  "base": {"geo": [1.5, 2.5], "seo": [4, 7]},
+  "adjust": [
+   {"if": "video", "geo": [0.25, 0.5], "seo": [0.5, 0.5]},
+   {"if": "auth", "geo": [0.25, 0.5], "seo": [1, 1.5]},
+   {"if": "pr", "per_article": 0.15, "max_articles": 4, "geo": [0.5, 1], "seo": [1, 1]},
+   {"if": "topic", "geo": [0, 0.25], "seo": [0, 0.5]},
+   {"if": "lang", "geo": [0, 0.25], "seo": [0, 0]}
+  ],
+  "min": {"geo": 0.75, "geo_span": 0.5, "seo": 2, "seo_span": 1.5},
+  "scale_months": 13,
+  "scale_ticks": [0, 3, 6, 9, 12],
+  "weeks_per_month": 4.3,
+  "weeks_below": 3
+ },
+ "defaults": {"goal": "ai", "runtime": 6, "pr": true, "cnt": {"ex": 1, "li": 1}},
+ "m365con": {"until": "2027-01-22"}
+}

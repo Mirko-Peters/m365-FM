@@ -336,8 +336,8 @@ test("sponsor: Anfragen, Honeypot, Rate-Limit und Admin-Panel (SQLite)", async (
   assert.deepEqual(outbox.map((x) => x.user_id), [1, 2], "beide Admin-Konten bekommen eine Outbox-Mail");
   assert.ok(outbox.some((x) => x.key === `sponsor:${rows[0].id}`));
   assert.match(outbox[0].html, /Contoso/);
-  assert.match(outbox[0].html, /USD 500\/Monat/);
-  assert.match(outbox[0].html, /\/admin\//);
+  assert.match(outbox[0].html, /\$500\/Monat · \$1,500 gesamt/, "aeltere Anfragen mit Zahlen: gleiches Format wie die Sponsor-Seite");
+  assert.match(outbox[0].html, /href="https:\/\/www\.m365\.fm\/admin\/#sponsor"/, "Link oeffnet den Reiter Sponsor-Anfragen");
 
   response = await post(payload({ website: "gefüllt" }));
   assert.equal(response.status, 200);
