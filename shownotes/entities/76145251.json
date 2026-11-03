@@ -1,0 +1,253 @@
+{
+ "episode_id": "76145251",
+ "slug": "ai-agents-architecture-the-secret-architecture-that-makes-ai-agents-actually-work",
+ "title": "Architecture des agents IA : exécuteurs, graphes de workflow et validation pour des agents fiables",
+ "lang": "fr",
+ "duration_s": 1604,
+ "transcript_source": "transcripts/fr/LLxvoiKP3XA.vtt",
+ "time_basis": "vtt",
+ "entities": [
+  {
+   "slug": "ai-agent",
+   "name": "AI agent",
+   "type": "concept",
+   "score": 95,
+   "mentions": 30,
+   "first_mention_s": 0,
+   "quote": "Une fois que vous séparez la cognition des opérations, vos agents cessent d'improviser et commencent à se comporter.",
+   "url": "https://www.m365.fm/fr/entity/ai-agent/"
+  },
+  {
+   "slug": "prompt",
+   "name": "Prompt",
+   "type": "concept",
+   "score": 80,
+   "mentions": 8,
+   "first_mention_s": 251,
+   "quote": "Les invites guident les pensées. Elles n'exécutent pas les opérations.",
+   "url": "https://www.m365.fm/fr/entity/prompt/"
+  },
+  {
+   "slug": "human-in-the-loop",
+   "name": "Human in the loop",
+   "type": "concept",
+   "score": 70,
+   "mentions": 8,
+   "first_mention_s": 70,
+   "quote": "Les points de contrôle humains sont natifs.",
+   "url": "https://www.m365.fm/fr/entity/human-in-the-loop/"
+  },
+  {
+   "slug": "agent-observability",
+   "name": "Agent observability",
+   "type": "concept",
+   "score": 65,
+   "mentions": 7,
+   "first_mention_s": 266,
+   "quote": "L'observabilité n'est pas consignée quelque part, elle est chirurgicale.",
+   "url": "https://www.m365.fm/fr/entity/agent-observability/"
+  },
+  {
+   "slug": "audit-logs",
+   "name": "Audit logs",
+   "type": "concept",
+   "score": 55,
+   "mentions": 5,
+   "first_mention_s": 195,
+   "quote": "Les journaux d'audit sont immuables",
+   "url": "https://www.m365.fm/fr/entity/audit-logs/"
+  },
+  {
+   "slug": "graph",
+   "name": "Microsoft Graph",
+   "type": "product",
+   "score": 75,
+   "mentions": 7,
+   "first_mention_s": 291,
+   "quote": "L'accès aux données commence par Graph, pas par des conjectures.",
+   "url": "https://www.m365.fm/fr/entity/graph/"
+  },
+  {
+   "slug": "azure-openai",
+   "name": "Azure OpenAI Service",
+   "type": "product",
+   "score": 65,
+   "mentions": 5,
+   "first_mention_s": 293,
+   "quote": "connecter Microsoft 365 Graph et Azure OpenAI n'est pas de la roulette.",
+   "url": "https://www.m365.fm/fr/entity/azure-openai/"
+  },
+  {
+   "slug": "copilot-studio",
+   "name": "Copilot Studio",
+   "type": "product",
+   "score": 60,
+   "mentions": 4,
+   "first_mention_s": 294,
+   "quote": "Entrez dans Copilot Studio pour l'orchestration.",
+   "url": "https://www.m365.fm/fr/entity/copilot-studio/"
+  },
+  {
+   "slug": "sharepoint",
+   "name": "SharePoint",
+   "type": "product",
+   "score": 50,
+   "mentions": 7,
+   "first_mention_s": 26,
+   "quote": "Le plan indique de mettre à jour l'élément de liste SharePoint.",
+   "url": "https://www.m365.fm/fr/entity/sharepoint/"
+  },
+  {
+   "slug": "entra-id",
+   "name": "Microsoft Entra ID",
+   "type": "product",
+   "score": 40,
+   "mentions": 3,
+   "first_mention_s": 839,
+   "quote": "Les jetons sont correctement définis et propagés via l'ID entra et non copier-coller entre les nœuds.",
+   "url": "https://www.m365.fm/fr/entity/entra-id/"
+  },
+  {
+   "slug": "teams",
+   "name": "Microsoft Teams",
+   "type": "product",
+   "score": 35,
+   "mentions": 3,
+   "first_mention_s": 1154,
+   "quote": "L'exécuteur publie le résultat dans Teams et envoie un email aux parties prenantes,",
+   "url": "https://www.m365.fm/fr/entity/teams/"
+  },
+  {
+   "slug": "mcp",
+   "name": "Model Context Protocol (MCP)",
+   "type": "concept",
+   "score": 30,
+   "mentions": 2,
+   "first_mention_s": 938,
+   "quote": "intégrer Planner, Viva ou des services tiers via MCP ou une API ouverte",
+   "url": "https://www.m365.fm/fr/entity/mcp/"
+  }
+ ],
+ "new_entities": [
+  {
+   "slug": "large-language-model",
+   "name": "Large language model (LLM)",
+   "type": "concept",
+   "mentions": 4,
+   "first_mention_s": 319,
+   "quote": "Les LLM gèrent la cognition, les exécuteurs gèrent les opérations.",
+   "status": "review"
+  },
+  {
+   "slug": "idempotency",
+   "name": "Idempotency",
+   "type": "concept",
+   "mentions": 4,
+   "first_mention_s": 339,
+   "quote": "opérateur lié à une stratégie qui exécute des outils avec des contrôles d'idempotence et de post-condition.",
+   "status": "review"
+  },
+  {
+   "slug": "least-privilege",
+   "name": "Least privilege",
+   "type": "concept",
+   "mentions": 3,
+   "first_mention_s": 818,
+   "quote": "bibliothécaire discipliné qui ne récupère que depuis Microsoft Graph avec le moindre privilège.",
+   "status": "review"
+  }
+ ],
+ "quotes": [
+  {
+   "text": "Les invites guident les pensées. Elles n'exécutent pas les opérations. En réalité, la fiabilité vient des exécuteurs et de la validation des graphes, la colonne vertébrale, qui empêche les agents de s'effondrer lorsque la réalité se présente.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 280,
+   "entities": [
+    "prompt",
+    "ai-agent"
+   ],
+   "why": "Kernaussage: Prompts steuern Denken, Zuverlässigkeit kommt von Executoren und Graph-Validierung"
+  },
+  {
+   "text": "Le modèle peut proposer un plan. Il ne peut pas garantir que l'email a été envoyé, que le fichier a été enregistré ou que l'autorisation existe. Il parle en termes de probabilité, les opérations exigent des garanties.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 326,
+   "entities": [],
+   "why": "Modell plant nur, Operationen brauchen Garantien"
+  },
+  {
+   "text": "Les professionnels ont besoin de preuves. Les preuves résident dans des post-conditions vérifiées par rapport à des systèmes tels que Microsoft Graph, SharePoint ou Exchange, de véritables sources de vérité, pas la mémoire du modèle.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 462,
+   "entities": [
+    "graph",
+    "sharepoint"
+   ],
+   "why": "Beweise kommen aus Postconditions gegen echte Quellsysteme"
+  },
+  {
+   "text": "Essentiellement, le graphe est la constitution, l'exécuteur est l'application de la loi. Le LLM est un conseiller, pas un juge.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 759,
+   "entities": [
+    "large-language-model",
+    "ai-agent"
+   ],
+   "why": "Merksatz zur Rollenverteilung Graph, Executor, LLM"
+  },
+  {
+   "text": "Si vous ne pouvez pas ouvrir une exécution et voir exactement quel nœud a gonflé les jetons ou a bloqué la latence, vous n'avez pas d'observabilité, vous avez des vibrations avec des horodatages.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 1583,
+   "entities": [
+    "agent-observability"
+   ],
+   "why": "Observability heißt Trace-zu-Metrik-Verknüpfung"
+  }
+ ],
+ "chapters": [
+  {
+   "start_s": 0,
+   "title": "Validation avant exécution : la porte trio"
+  },
+  {
+   "start_s": 276,
+   "title": "Pourquoi de meilleures invites ne réparent pas les agents"
+  },
+  {
+   "start_s": 315,
+   "title": "Les invites échouent aux opérations, pas les exécuteurs"
+  },
+  {
+   "start_s": 527,
+   "title": "Graphes de workflow 101 : nœuds, arêtes et état"
+  },
+  {
+   "start_s": 779,
+   "title": "Sécurisé par conception : la validation de graphe"
+  },
+  {
+   "start_s": 1053,
+   "title": "Le scénario Microsoft : Graph, Azure OpenAI et Copilot Studio"
+  },
+  {
+   "start_s": 1368,
+   "title": "Les chiffres : précision, latence, coût et charge d'administration"
+  }
+ ],
+ "takeaways": [
+  "Les invites guident la réflexion, mais la fiabilité des agents IA vient des exécuteurs : ils vérifient préconditions, autorisations et post-conditions et agissent de façon idempotente.",
+  "Les graphes de workflow avec contrats explicites, gestion des erreurs et points de contrôle humains remplacent l'improvisation par un déroulement déterministe et auditable.",
+  "Dans Microsoft 365, la répartition des rôles fonctionne : Microsoft Graph comme source de vérité, Azure OpenAI pour le raisonnement, Copilot Studio pour l'orchestration, validateurs et observabilité pour la sécurité et la preuve."
+ ],
+ "hook": "De meilleures invites ne corrigent pas des agents IA instables. Dans cet épisode, vous découvrez comment les exécuteurs, les graphes de workflow et une validation avant exécution rendent les agents basés sur Microsoft Graph, Azure OpenAI et Copilot Studio fiables, mesurables et sûrs.",
+ "youtube_video_id": "LLxvoiKP3XA",
+ "source_video_id": "LLxvoiKP3XA",
+ "show_id": 7393223,
+ "generated_at": "2026-11-03T05:03:05Z"
+}

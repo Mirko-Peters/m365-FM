@@ -1,0 +1,183 @@
+{
+ "episode_id": "76145231",
+ "slug": "gpu-inference-performance-the-compute-lie-killing-your-ai-latency",
+ "title": "הסקה איטית ב-GPU: נפילה ל-CPU, התנגשויות גרסאות CUDA/TensorRT ותקלות קונטיינרים",
+ "lang": "he",
+ "duration_s": 1347,
+ "transcript_source": "transcripts/he/7rNV_vcD-Fg.vtt",
+ "time_basis": "vtt",
+ "entities": [
+  {
+   "slug": "prompt",
+   "name": "Prompt",
+   "type": "concept",
+   "score": 40,
+   "mentions": 9,
+   "first_mention_s": 367,
+   "quote": "שלחו הודעה אחת, הגי-פי-יו נשאר במצב סרק.",
+   "url": "https://www.m365.fm/he/entity/prompt/"
+  }
+ ],
+ "new_entities": [
+  {
+   "slug": "gpu",
+   "name": "Graphics processing unit (GPU)",
+   "type": "concept",
+   "mentions": 36,
+   "first_mention_s": 2,
+   "quote": "ניצול GPU קרוב לאפס בזמן שהשהיה זינקה.",
+   "status": "review"
+  },
+  {
+   "slug": "cuda",
+   "name": "CUDA",
+   "type": "product",
+   "mentions": 32,
+   "first_mention_s": 30,
+   "quote": "אם הקונטיינר נבנה עבור CUDA 12.2, אבל בצומת יש רק 12, ההתחול נכשל.",
+   "status": "review"
+  },
+  {
+   "slug": "tensorrt",
+   "name": "NVIDIA TensorRT",
+   "type": "product",
+   "mentions": 29,
+   "first_mention_s": 30,
+   "quote": "מנועי טנסור RT בנויים מראש לכל מודל ורזולוציה.",
+   "status": "review"
+  },
+  {
+   "slug": "onnx-runtime",
+   "name": "ONNX Runtime",
+   "type": "product",
+   "mentions": 18,
+   "first_mention_s": 30,
+   "quote": "הממצא העיקרי הוא סדר ספקי הביצוע באונקס רנטיים.",
+   "status": "review"
+  },
+  {
+   "slug": "nvidia",
+   "name": "NVIDIA",
+   "type": "org",
+   "mentions": 12,
+   "first_mention_s": 82,
+   "quote": "אם ערכת הכלים של אנווידיה לקונטיינרים לא מוגדרת, חיבור ההתקן לעולם לא יופיע בתוך הקונטיינר.",
+   "status": "review"
+  },
+  {
+   "slug": "docker",
+   "name": "Docker",
+   "type": "product",
+   "mentions": 8,
+   "first_mention_s": 799,
+   "quote": "ההיסטוריה של דוקר מספרת את הסיפור בשכבות.",
+   "status": "review"
+  },
+  {
+   "slug": "kubernetes",
+   "name": "Kubernetes",
+   "type": "product",
+   "mentions": 2,
+   "first_mention_s": 818,
+   "quote": "בקאברנץ בקש משאבי NVIDIA COM GPU ווודא שהתקן התוסף תואם לענף הדרייבר שלך.",
+   "status": "review"
+  },
+  {
+   "slug": "stable-diffusion",
+   "name": "Stable Diffusion",
+   "type": "product",
+   "mentions": 3,
+   "first_mention_s": 47,
+   "quote": "סטייבל דיפיוז'ון על CPU הוא בזבוז זמן.",
+   "status": "review"
+  }
+ ],
+ "quotes": [
+  {
+   "text": "בבדיקה מעמיקה יותר, המנוע ביצע בחירה. הוא הריץ משימה המיועדת ל-GPU על ה-CPU. אף התראה לא הופעלה. הפלט חזר בסופו של דבר. זהו החבלן השקט, החלופה ל-CPU.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 223,
+   "entities": [
+    "gpu"
+   ],
+   "why": "Der stille Saboteur: unbemerkter CPU-Fallback"
+  },
+  {
+   "text": "נקודת הקצה של התקינות רק בדקה, האם השרת למעלה. אז, היא מעולם לא בדקה, האם ה-GPU באמת מבצע את העבודה.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 259,
+   "entities": [
+    "gpu"
+   ],
+   "why": "Health Checks prüfen nur, ob der Server läuft, nicht den GPU-Pfad"
+  },
+  {
+   "text": "ווודא שהדברים נשמרים באמצעות שני שערים, בריאות וביצועים. בריאות היא לא רק סטטוס 200, היא תמונת מצב מאומתת של היכולות.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 963,
+   "entities": [],
+   "why": "Zwei Gates: Gesundheit und Performance"
+  },
+  {
+   "text": "כשהם רזים, ברורים ואסרטיביים, הם שומרים על הנתיב המהיר ששילמת עבורו. בסביבה הזו, שום דבר אינו מקרי. הקונטיינר או שעוזר ל-GPU לבצע את עבודתו, או שהוא מפריע לו.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 1002,
+   "entities": [
+    "gpu"
+   ],
+   "why": "Container entscheiden über den schnellen GPU-Pfad"
+  },
+  {
+   "text": "בסוף, המספרים לא מתווכחים, הם מרשיעים. השיה מתכווצת, התפוקה גדלה, הניצול מתייצב. הפתולוגיה אינה היפותטית. היא ניתנת למדידה, ואחריה היא מותירה טביעות אצבע על כל גרף.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 1203,
+   "entities": [],
+   "why": "Messwerte statt Meinungen"
+  }
+ ],
+ "chapters": [
+  {
+   "start_s": 0,
+   "title": "פתיחה: GPU יקר, השהיה גבוהה"
+  },
+  {
+   "start_s": 38,
+   "title": "הגדרת המקרה: הסביבה ופרופיל הקורבן"
+  },
+  {
+   "start_s": 211,
+   "title": "ראיה א': חלופה שקטה ל-CPU"
+  },
+  {
+   "start_s": 463,
+   "title": "ראיה ב': אי-התאמת גרסאות בין CUDA, ONNX Runtime ו-TensorRT"
+  },
+  {
+   "start_s": 747,
+   "title": "ראיה ג': תצורת קונטיינר"
+  },
+  {
+   "start_s": 1012,
+   "title": "מעבדה פורנזית: השהיה, תפוקה וניצול"
+  },
+  {
+   "start_s": 1214,
+   "title": "פרוטוקול התיקון: רשימת הקשחה"
+  }
+ ],
+ "takeaways": [
+  "חלופה שקטה ל-CPU ב-ONNX Runtime היא הגורם הנפוץ להסקה איטית: נעלו את סדר ספקי הביצוע על TensorRT ו-CUDA וסרבו לעלות כשהם חסרים.",
+  "גרסאות דרייבר, CUDA, cuDNN, ONNX Runtime ו-TensorRT חייבות להיות מוצמדות במטריצת בנייה אחת, עם מנועי TensorRT שנבנים מראש כארטיפקטים.",
+  "קונטיינרים רזים עם חיבור GPU מפורש, NVIDIA Container Toolkit תקין ובדיקות בריאות וביצועים בהפעלה שומרים על הנתיב המהיר ששילמתם עליו."
+ ],
+ "hook": "חשבון ה-GPU עולה, אבל ניצול ה-GPU קרוב לאפס וההשהיה מזנקת. בפרק הזה אנחנו חוקרים שלוש סיבות שקטות להסקה איטית: חלופה ל-CPU, אי-התאמת גרסאות בין CUDA, ONNX Runtime ו-TensorRT, ותצורת קונטיינר שגויה, ומוכיחים את התיקון במדדים.",
+ "youtube_video_id": "7rNV_vcD-Fg",
+ "source_video_id": "7rNV_vcD-Fg",
+ "show_id": 7393227,
+ "generated_at": "2026-11-03T05:05:48Z"
+}
