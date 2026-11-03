@@ -1,0 +1,244 @@
+{
+ "episode_id": "76145250",
+ "slug": "ai-agents-architecture-the-secret-architecture-that-makes-ai-agents-actually-work",
+ "title": "Arquitectura de agentes de IA: cómo ejecutores, grafos de flujo de trabajo y validación los hacen fiables",
+ "lang": "es",
+ "duration_s": 1604,
+ "transcript_source": "transcripts/es/LLxvoiKP3XA.vtt",
+ "time_basis": "vtt",
+ "entities": [
+  {
+   "slug": "ai-agent",
+   "name": "AI agent",
+   "type": "concept",
+   "score": 95,
+   "mentions": 23,
+   "first_mention_s": 0,
+   "quote": "El agente obtiene acceso en cada llamada o no llama.",
+   "url": "https://www.m365.fm/es/entity/ai-agent/"
+  },
+  {
+   "slug": "prompt",
+   "name": "Prompt",
+   "type": "concept",
+   "score": 60,
+   "mentions": 8,
+   "first_mention_s": 251,
+   "quote": "La inyección de indicaciones no es inteligente, es predecible.",
+   "url": "https://www.m365.fm/es/entity/prompt/"
+  },
+  {
+   "slug": "human-in-the-loop",
+   "name": "Human in the loop",
+   "type": "concept",
+   "score": 60,
+   "mentions": 8,
+   "first_mention_s": 70,
+   "quote": "Los puntos de control humano son nativos.",
+   "url": "https://www.m365.fm/es/entity/human-in-the-loop/"
+  },
+  {
+   "slug": "agent-observability",
+   "name": "Agent observability",
+   "type": "concept",
+   "score": 55,
+   "mentions": 7,
+   "first_mention_s": 263,
+   "quote": "no tienes observabilidad, tienes vibraciones con marcas de tiempo.",
+   "url": "https://www.m365.fm/es/entity/agent-observability/"
+  },
+  {
+   "slug": "audit-logs",
+   "name": "Audit logs",
+   "type": "concept",
+   "score": 45,
+   "mentions": 4,
+   "first_mention_s": 194,
+   "quote": "Los registros de auditoría son inmutables.",
+   "url": "https://www.m365.fm/es/entity/audit-logs/"
+  },
+  {
+   "slug": "graph",
+   "name": "Microsoft Graph",
+   "type": "product",
+   "score": 65,
+   "mentions": 8,
+   "first_mention_s": 289,
+   "quote": "El acceso a los datos comienza con Graph, no con conjetura.",
+   "url": "https://www.m365.fm/es/entity/graph/"
+  },
+  {
+   "slug": "azure-openai",
+   "name": "Azure OpenAI Service",
+   "type": "product",
+   "score": 60,
+   "mentions": 5,
+   "first_mention_s": 289,
+   "quote": "conectar Microsoft 365 Graph y Azure OpenAI no es una ruleta.",
+   "url": "https://www.m365.fm/es/entity/azure-openai/"
+  },
+  {
+   "slug": "copilot-studio",
+   "name": "Copilot Studio",
+   "type": "product",
+   "score": 55,
+   "mentions": 4,
+   "first_mention_s": 289,
+   "quote": "Ingresa a Copilot Studio para la orquestación.",
+   "url": "https://www.m365.fm/es/entity/copilot-studio/"
+  },
+  {
+   "slug": "sharepoint",
+   "name": "SharePoint",
+   "type": "product",
+   "score": 45,
+   "mentions": 6,
+   "first_mention_s": 370,
+   "quote": "Un nodo no puede colar un token de SharePoint por un borde de resumen.",
+   "url": "https://www.m365.fm/es/entity/sharepoint/"
+  },
+  {
+   "slug": "entra-id",
+   "name": "Microsoft Entra ID",
+   "type": "product",
+   "score": 35,
+   "mentions": 2,
+   "first_mention_s": 1084,
+   "quote": "Los tokens se delimitan y propagan correctamente a través del ID de Entra,",
+   "url": "https://www.m365.fm/es/entity/entra-id/"
+  },
+  {
+   "slug": "teams",
+   "name": "Microsoft Teams",
+   "type": "product",
+   "score": 30,
+   "mentions": 3,
+   "first_mention_s": 1154,
+   "quote": "El ejecutor publica el resultado en Teams, se avisa a interesados,",
+   "url": "https://www.m365.fm/es/entity/teams/"
+  }
+ ],
+ "new_entities": [
+  {
+   "slug": "large-language-model",
+   "name": "Large language model (LLM)",
+   "type": "concept",
+   "mentions": 4,
+   "first_mention_s": 319,
+   "quote": "el ejecutor es la policía, el LM es el abogado, no el juez.",
+   "status": "review"
+  },
+  {
+   "slug": "idempotency",
+   "name": "Idempotency",
+   "type": "concept",
+   "mentions": 7,
+   "first_mention_s": 90,
+   "quote": "que usa herramientas con idempotencia y revisión de poscondición.",
+   "status": "review"
+  },
+  {
+   "slug": "least-privilege",
+   "name": "Least privilege",
+   "type": "concept",
+   "mentions": 3,
+   "first_mention_s": 814,
+   "quote": "que solo obtiene de Microsoft Graph con el mínimo privilegio.",
+   "status": "review"
+  }
+ ],
+ "quotes": [
+  {
+   "text": "Conclusión clave, las indicaciones son opiniones, los ejecutores y los gráficos validados son operaciones y la verificación de contrato previa a la ejecución es la barandilla que mantiene a ambos honestos.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 251,
+   "entities": [
+    "prompt",
+    "ai-agent"
+   ],
+   "why": "Kernaussage: Prompts sind Meinungen, Executor und validierte Graphen sind Operationen"
+  },
+  {
+   "text": "El modelo puede proponer un plan. No puede garantizarse que el correo se haya enviado, que el archivo se haya guardado o que el permiso existiera. Habla en términos de probabilidades. Las operaciones exigen garantías.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 326,
+   "entities": [
+    "ai-agent"
+   ],
+   "why": "Modell plant, Executor garantiert – Wahrscheinlichkeit vs. Garantie"
+  },
+  {
+   "text": "Los puntos de control de intervención humana no son mensajes de Slack ad hoc, congelan la ejecución, presentan la acción propuesta y la evidencia y requieren una aprobación o edición que se registre y firma.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 689,
+   "entities": [
+    "human-in-the-loop"
+   ],
+   "why": "Human-in-the-loop als echter, protokollierter Kontrollpunkt"
+  },
+  {
+   "text": "Las pruebas residen en poscondiciones verificadas con sistemas como Microsoft Graph, SharePoint o Exchange. Fuentes reales de verdad, no la memoria del modelo.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 464,
+   "entities": [
+    "graph",
+    "sharepoint"
+   ],
+   "why": "Beweis über Postconditions gegen echte Quellen wie Microsoft Graph"
+  },
+  {
+   "text": "La validación del gráfico de verdad supera la ingeniería del caos porque previene clases de incidentes en lugar de documentar sus consecuencias.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 953,
+   "entities": [
+    "ai-agent"
+   ],
+   "why": "Graph-Validierung verhindert Incidents statt sie zu dokumentieren"
+  }
+ ],
+ "chapters": [
+  {
+   "start_s": 0,
+   "title": "Validación previa: la puerta trío antes de ejecutar"
+  },
+  {
+   "start_s": 275,
+   "title": "Por qué mejores prompts no arreglan agentes inestables"
+  },
+  {
+   "start_s": 314,
+   "title": "Los prompts fallan en las operaciones, los ejecutores no"
+  },
+  {
+   "start_s": 527,
+   "title": "Flujos de trabajo de grafo 101: nodos, bordes y estado"
+  },
+  {
+   "start_s": 778,
+   "title": "Seguro por diseño: validar grafos"
+  },
+  {
+   "start_s": 1052,
+   "title": "Escenario: Microsoft Graph, Azure OpenAI y Copilot Studio"
+  },
+  {
+   "start_s": 1361,
+   "title": "Métricas: precisión, latencia, coste y gestión"
+  }
+ ],
+ "takeaways": [
+  "Los prompts guían el razonamiento, pero la fiabilidad de los agentes de IA viene de los ejecutores: comprueban condiciones previas, permisos y condiciones posteriores y actúan con idempotencia.",
+  "Los grafos de flujo de trabajo con contratos explícitos, manejo de errores y puntos de control humano sustituyen la improvisación por un recorrido determinista y auditable.",
+  "En Microsoft 365 funciona el reparto de roles: Microsoft Graph como fuente de verdad, Azure OpenAI para razonar, Copilot Studio para orquestar y validadores y observabilidad para la seguridad y la prueba."
+ ],
+ "hook": "Mejores prompts no arreglan agentes de IA inestables. En este episodio verás cómo ejecutores, grafos de flujo de trabajo y una validación previa a la ejecución hacen que los agentes con Microsoft Graph, Azure OpenAI y Copilot Studio funcionen de forma fiable, medible y segura.",
+ "youtube_video_id": "LLxvoiKP3XA",
+ "source_video_id": "LLxvoiKP3XA",
+ "show_id": 7393248,
+ "generated_at": "2026-11-03T07:03:37Z"
+}

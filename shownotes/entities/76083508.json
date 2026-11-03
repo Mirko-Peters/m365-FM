@@ -1,0 +1,220 @@
+{
+ "episode_id": "76083508",
+ "slug": "microsoft-graph-webhooks-simply-explained",
+ "title": "Microsoft Graph Webhook をやさしく解説：ポーリングをやめてリアルタイム通知へ",
+ "lang": "ja",
+ "duration_s": 1142,
+ "transcript_source": "transcripts/ja/ra62dODpiag.vtt",
+ "time_basis": "vtt",
+ "entities": [
+  {
+   "slug": "mirko-peters",
+   "name": "Mirko Peters",
+   "type": "person",
+   "score": 60,
+   "mentions": 1,
+   "first_mention_s": 70,
+   "quote": "ホストのミルコピーターズです。",
+   "url": "https://www.m365.fm/ja/entity/mirko-peters/"
+  },
+  {
+   "slug": "change-notifications",
+   "name": "Change notifications and webhooks",
+   "type": "concept",
+   "score": 95,
+   "mentions": 42,
+   "first_mention_s": 77,
+   "quote": "マイクロソフトグラフもWebhookを使用していますが、マイクロソフトはこれを変更通知と呼んでいます。",
+   "url": "https://www.m365.fm/ja/entity/change-notifications/"
+  },
+  {
+   "slug": "graph",
+   "name": "Microsoft Graph",
+   "type": "product",
+   "score": 90,
+   "mentions": 66,
+   "first_mention_s": 77,
+   "quote": "数分おきにマイクロソフトグラフを呼び出すのではなく、グラフから呼び出されるのを待つのです。",
+   "url": "https://www.m365.fm/ja/entity/graph/"
+  },
+  {
+   "slug": "entra-id",
+   "name": "Microsoft Entra ID",
+   "type": "product",
+   "score": 35,
+   "mentions": 2,
+   "first_mention_s": 1047,
+   "quote": "人事がエントラーIDでアカウントを作成してから数秒以内に行われます。",
+   "url": "https://www.m365.fm/ja/entity/entra-id/"
+  },
+  {
+   "slug": "sharepoint",
+   "name": "SharePoint",
+   "type": "product",
+   "score": 35,
+   "mentions": 5,
+   "first_mention_s": 260,
+   "quote": "シェアポイントやワンドライブのドライブアイテムであれば、最大30日間となります。",
+   "url": "https://www.m365.fm/ja/entity/sharepoint/"
+  },
+  {
+   "slug": "microsoft-365",
+   "name": "Microsoft 365",
+   "type": "platform",
+   "score": 25,
+   "mentions": 2,
+   "first_mention_s": 71,
+   "quote": "マイクロソフト365で何かが変わると、グラフは指定したURLにHTTPPOSTを送信します。",
+   "url": "https://www.m365.fm/ja/entity/microsoft-365/"
+  },
+  {
+   "slug": "azure-service-bus",
+   "name": "Azure Service Bus",
+   "type": "product",
+   "score": 25,
+   "mentions": 1,
+   "first_mention_s": 824,
+   "quote": "Azure Q、サービスバス、あるいは単純なデータベーステーブルでも構いません。",
+   "url": "https://www.m365.fm/ja/entity/azure-service-bus/"
+  },
+  {
+   "slug": "onedrive",
+   "name": "OneDrive",
+   "type": "product",
+   "score": 15,
+   "mentions": 1,
+   "first_mention_s": 512,
+   "quote": "シェアポイントやワンドライブのドライブアイテムであれば、最大30日間となります。",
+   "url": "https://www.m365.fm/ja/entity/onedrive/"
+  },
+  {
+   "slug": "m365fm",
+   "name": "M365.FM",
+   "type": "media",
+   "score": 15,
+   "mentions": 1,
+   "first_mention_s": 66,
+   "quote": "M365FMのマイクロソフトナレッジナゲット、へようこそ。",
+   "url": "https://www.m365.fm/ja/entity/m365fm/"
+  },
+  {
+   "slug": "teams",
+   "name": "Microsoft Teams",
+   "type": "product",
+   "score": 10,
+   "mentions": 1,
+   "first_mention_s": 260,
+   "quote": "チームでのメッセージ送信",
+   "url": "https://www.m365.fm/ja/entity/teams/"
+  }
+ ],
+ "new_entities": [
+  {
+   "slug": "throttling",
+   "name": "Throttling",
+   "type": "concept",
+   "mentions": 4,
+   "first_mention_s": 145,
+   "quote": "マイクロソフトは、過剰にポーリングを行うことを、スロットリングと呼びます。",
+   "status": "review"
+  }
+ ],
+ "quotes": [
+  {
+   "text": "しかも、5分おきにポーリングしても、リアルタイムの更新は得られません。最後のポーリングから1分後に変更が発生するかもしれません。その事実に気づくのは、さらに4分後になります。",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 184,
+   "entities": [
+    "change-notifications"
+   ],
+   "why": "Warum Polling nie Echtzeit ist"
+  },
+  {
+   "text": "Webhookとは、何かが起きた時に自動的に送信されるHTTPリクエストのことです。自分から要求せずとも、サーバーがプッシュしてくれます。",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 212,
+   "entities": [
+    "change-notifications"
+   ],
+   "why": "Einfache Definition von Webhooks"
+  },
+  {
+   "text": "通知が正規のものだと確認できたら、速やかに応答する必要があります。マイクロソフトグラフは、3秒以内に200番台のHTTPレスポンスを求めています。",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 755,
+   "entities": [
+    "graph",
+    "change-notifications"
+   ],
+   "why": "Schnell antworten, sonst Drosselung"
+  },
+  {
+   "text": "Webhookはスピードを、デルタクエリは信頼性をもたらします。この2つを組み合わせることで、強力な連携が可能になります。",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 1036,
+   "entities": [
+    "change-notifications"
+   ],
+   "why": "Webhooks plus Delta Query als Muster"
+  },
+  {
+   "text": "常にグラフへ更新を問い合わせるのではなく、何かが起きた時にグラフから通知を受け取るようにします。これは、統合を構築する際の本質的な転換です。",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 1119,
+   "entities": [
+    "graph",
+    "change-notifications"
+   ],
+   "why": "Fazit: von Pull zu Push"
+  }
+ ],
+ "chapters": [
+  {
+   "start_s": 65,
+   "title": "イントロ：Graph Webhookとは？"
+  },
+  {
+   "start_s": 105,
+   "title": "ポーリングの問題点とスロットリング"
+  },
+  {
+   "start_s": 208,
+   "title": "Webhookとは何か、Microsoft Graphでの仕組み"
+  },
+  {
+   "start_s": 433,
+   "title": "サブスクリプションの作成"
+  },
+  {
+   "start_s": 583,
+   "title": "検証のハンドシェイク"
+  },
+  {
+   "start_s": 699,
+   "title": "通知の処理とセキュリティ"
+  },
+  {
+   "start_s": 853,
+   "title": "サブスクリプションのライフサイクルとデルタクエリ"
+  },
+  {
+   "start_s": 1042,
+   "title": "実例：新入社員のオンボーディングと次のステップ"
+  }
+ ],
+ "takeaways": [
+  "ポーリングはリクエストを浪費し、スロットリングを招きます。Microsoft GraphのWebhook（変更通知）なら、変更が起きた時にだけHTTP POSTが届きます。",
+  "サブスクリプションには通知URL、リソース、チェンジタイプ、有効期限が必要です。検証トークンは10秒以内にプレーンテキストで返し、通知には3秒以内に応答して処理はキューで非同期に行います。",
+  "サブスクリプションには期限があるため、PATCHで更新し、ライフサイクル通知を活用します。Webhookとデルタクエリを組み合わせれば、通知を見逃しても変更を確実に取得できます。"
+ ],
+ "hook": "ポーリングで何度も「新しいことはある？」と尋ねていませんか？このエピソードでは、Microsoft GraphのWebhookがどのように変更をリアルタイムで知らせてくれるのか、サブスクリプション、検証、ライフサイクル管理まで分かりやすく解説します。",
+ "youtube_video_id": "ra62dODpiag",
+ "source_video_id": "ra62dODpiag",
+ "show_id": 7393232,
+ "generated_at": "2026-11-03T07:05:30Z"
+}

@@ -1,0 +1,179 @@
+{
+ "episode_id": "76145236",
+ "slug": "gpu-inference-performance-the-compute-lie-killing-your-ai-latency",
+ "title": "느린 GPU 추론의 진짜 원인: CPU 폴백, CUDA/TensorRT 버전 충돌, 컨테이너 설정 오류 해결",
+ "lang": "ko",
+ "duration_s": 1346,
+ "transcript_source": "transcripts/ko/7rNV_vcD-Fg.vtt",
+ "time_basis": "vtt",
+ "entities": [
+  {
+   "slug": "prompt",
+   "name": "Prompt",
+   "type": "concept",
+   "score": 35,
+   "mentions": 9,
+   "first_mention_s": 367,
+   "quote": "프롬프트 설정을 수정하고 시드를 고정하고 워밍업을 실행합니다.",
+   "url": "https://www.m365.fm/ko/entity/prompt/"
+  }
+ ],
+ "new_entities": [
+  {
+   "slug": "gpu",
+   "name": "Graphics processing unit (GPU)",
+   "type": "concept",
+   "mentions": 40,
+   "first_mention_s": 2,
+   "quote": "GPU 경로가 활성화되었는지 확인하는 시작 검증이 없습니다.",
+   "status": "review"
+  },
+  {
+   "slug": "cuda",
+   "name": "NVIDIA CUDA",
+   "type": "product",
+   "mentions": 27,
+   "first_mention_s": 27,
+   "quote": "CUDA 실행 공급자들 사용할 수 없습니다.",
+   "status": "review"
+  },
+  {
+   "slug": "tensorrt",
+   "name": "NVIDIA TensorRT",
+   "type": "product",
+   "mentions": 30,
+   "first_mention_s": 27,
+   "quote": "잘못 구성된 노드에서 간단한 추론을 실행하면 예상되는 텐서 RT 실행 공급자,",
+   "status": "review"
+  },
+  {
+   "slug": "onnx-runtime",
+   "name": "ONNX Runtime",
+   "type": "product",
+   "mentions": 14,
+   "first_mention_s": 27,
+   "quote": "핵심적인 원인은 ONNX 런타임의 실행 공급자 순서입니다.",
+   "status": "review"
+  },
+  {
+   "slug": "nvidia",
+   "name": "NVIDIA",
+   "type": "org",
+   "mentions": 12,
+   "first_mention_s": 83,
+   "quote": "엔비디아 SMI는 커널 모듈과 CUDA 호환성을 보여줍니다.",
+   "status": "review"
+  },
+  {
+   "slug": "docker",
+   "name": "Docker",
+   "type": "product",
+   "mentions": 5,
+   "first_mention_s": 813,
+   "quote": "도커에서는 모든 GPU를 선언하거나 정확한 미그 슬라이스를 지정해야 합니다.",
+   "status": "review"
+  },
+  {
+   "slug": "kubernetes",
+   "name": "Kubernetes",
+   "type": "product",
+   "mentions": 2,
+   "first_mention_s": 822,
+   "quote": "큐버넷에서는 엔비디아 컴 GPU 리소스를 요청하고",
+   "status": "review"
+  }
+ ],
+ "quotes": [
+  {
+   "text": "결국, 이는 모델에 대한 미스터리가 아니라 인프라의 정확성에 대한 문제입니다. 우리는 아티팩트, 공급자 순서, 기능 로그, 장치 마운트를 추적하고, 이를 세 가지 확실한 지표인 지연시간, 처리량 및 GPU 사용률과 연관시킬 것입니다.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 196,
+   "entities": [
+    "gpu"
+   ],
+   "why": "Kernthese: kein Modellrätsel, sondern Infrastruktur-Korrektheit"
+  },
+  {
+   "text": "GPU 실행 공급자가 없거나 성능이 저하된 경우 하드 실패를 발생시켜야 합니다. 프로덕션 환경에서는 CPU로 시작하지 않도록 해야 합니다.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 400,
+   "entities": [
+    "gpu"
+   ],
+   "why": "Hard fail statt stillem CPU-Fallback"
+  },
+  {
+   "text": "계획 파일은 매트릭스와 연결된 아티팩트로 취급하세요. 프로덕션 환경에서 노드 내 엔진 빌드에 절대 의존하지 마세요. 이는 버전 변동을 숨기고 콜드 스타트 시간을 늘립니다.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 701,
+   "entities": [
+    "tensorrt"
+   ],
+   "why": "TensorRT-Engines als versionierte Artefakte vorab bauen"
+  },
+  {
+   "text": "컨테이너는 단순히 소프트웨어를 배포하는 것이 아니라 스트레스 상황에서의 동작 방식을 인코딩한다는 증거가 있습니다. 컨테이너가 GPU에 대해 시끄럽거나 무겁거나 모호한 정보를 제공할 경우 가속을 형식적인 절차로 전락시킵니다.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 993,
+   "entities": [
+    "docker",
+    "gpu"
+   ],
+   "why": "Container-Hygiene entscheidet über echte Beschleunigung"
+  },
+  {
+   "text": "CPU 폴백, 버전 변동, 컨테이너 용량 증가는 버그가 아닙니다. 이러한 현상은 차단할 수 있는 예측 가능한 오류 패턴입니다.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 1326,
+   "entities": [
+    "gpu"
+   ],
+   "why": "Fazit: vorhersagbare, blockierbare Fehlermuster"
+  }
+ ],
+ "chapters": [
+  {
+   "start_s": 0,
+   "title": "도입: 비싼 GPU, 높은 지연 시간"
+  },
+  {
+   "start_s": 38,
+   "title": "사례 설정: 환경, 워크로드, 피해자 프로필"
+  },
+  {
+   "start_s": 211,
+   "title": "증거 A: 조용한 CPU 폴백"
+  },
+  {
+   "start_s": 463,
+   "title": "증거 B: CUDA, ONNX Runtime, TensorRT 버전 불일치"
+  },
+  {
+   "start_s": 747,
+   "title": "증거 C: 컨테이너 구성 오류"
+  },
+  {
+   "start_s": 1011,
+   "title": "포렌식 랩: 지연 시간, 처리량, 사용률"
+  },
+  {
+   "start_s": 1215,
+   "title": "해결 프로토콜: 강화 체크리스트"
+  }
+ ],
+ "takeaways": [
+  "ONNX Runtime은 CUDA나 TensorRT 실행 공급자를 로드하지 못하면 조용히 CPU로 폴백하므로, 시작 시 공급자와 장치를 검증하고 실패하면 하드 실패시켜야 합니다.",
+  "드라이버, CUDA, ONNX Runtime, TensorRT 버전을 하나의 빌드 매트릭스로 고정하고 TensorRT 엔진을 미리 빌드해 아티팩트로 다루면 버전 변동으로 인한 속도 저하를 막을 수 있습니다.",
+  "멀티 스테이지 빌드, 명시적인 GPU 요청, NVIDIA Container Toolkit 검증, 메모리 아레나 조정과 IO 바인딩이 지연 시간, 처리량, GPU 사용률을 측정 가능하게 개선합니다."
+ ],
+ "hook": "GPU 비용은 치솟는데 사용률은 거의 0이고 지연 시간은 폭증합니다. 이 에피소드는 CPU 폴백, CUDA/TensorRT 버전 불일치, 컨테이너 구성 오류라는 세 가지 원인을 포렌식처럼 추적하고, 지연 시간, 처리량, GPU 사용률로 해결 효과를 입증합니다.",
+ "youtube_video_id": "7rNV_vcD-Fg",
+ "source_video_id": "7rNV_vcD-Fg",
+ "show_id": 7393236,
+ "generated_at": "2026-11-03T07:06:33Z"
+}
