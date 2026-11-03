@@ -29,4 +29,12 @@ jobs:
         run: python tools/check_pager.py
       - name: Interne Links pruefen (wie im Seitenbau nicht blockierend, bekannte Altfaelle)
         continue-on-error: true
-        run: python check_links.py
+        run: python check_links.py --all --out reports/broken_links.tsv
+      - name: Liste der kaputten Links sichern
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: broken-links
+          path: reports/broken_links.tsv
+          if-no-files-found: ignore
+          retention-days: 14
