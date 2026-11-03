@@ -27,19 +27,25 @@ def main():
         if man.get(key) != h: todo.append((key, data, h))
     print(f"{len(files)} Seiten, {len(todo)} neu oder geaendert")
     ok = err = 0
+    def save_man():   # atomar schreiben: ein abgebrochener Lauf hinterlaesst nie eine halbe Liste
+        MAN.parent.mkdir(parents=True, exist_ok=True); tmp = MAN.with_suffix(".tmp")
+        tmp.write_text(json.dumps(man, sort_keys=True), encoding="utf-8"); tmp.replace(MAN)
     def put(item):
         key, data, h = item
         ct = "text/html; charset=utf-8" if key.endswith(".html") else "application/octet-stream"
         try: s3.put_object(Bucket=bucket, Key=key, Body=data, ContentType=ct, CacheControl="public, max-age=600"); return key, h, None
         except Exception as e: return key, h, str(e)[:120]
-    with ThreadPoolExecutor(16) as ex:
-        for key, h, e in ex.map(put, todo):
-            if e:
-                err += 1
-                if err <= 5: print("Fehler", key, e)
-            else:
-                ok += 1; man[key] = h
-    MAN.parent.mkdir(parents=True, exist_ok=True); MAN.write_text(json.dumps(man, sort_keys=True), encoding="utf-8")
+    try:
+        with ThreadPoolExecutor(16) as ex:
+            for key, h, e in ex.map(put, todo):
+                if e:
+                    err += 1
+                    if err <= 5: print("Fehler", key, e)
+                else:
+                    ok += 1; man[key] = h
+                    if ok % 2000 == 0: save_man()   # Zwischenstand: auch bei Abbruch mitten im Upload bleibt das Hochgeladene vermerkt
+    finally:
+        save_man()
     # T41: geaenderte Seiten fuer den Purge nach dem Deploy (der Site-Worker haelt R2-Seiten 4 h im Kanten-Cache)
     changed = sorted("/" + k[len("pages/"):-len("index.html")] for k, _d, _h in todo if k.endswith("/index.html") and man.get(k) == _h)
     Path(os.environ.get("R2_CHANGED_OUT", "r2-changed.json")).write_text(json.dumps(changed), encoding="utf-8")

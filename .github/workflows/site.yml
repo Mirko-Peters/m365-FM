@@ -152,6 +152,14 @@ jobs:
             (git pull --rebase --autostash -q -X theirs || git rebase --abort) && git push -q
           fi
       - run: python generate_site.py
+      # Pruefsummenliste der R2-Seiten in einem eigenen Cache: wird direkt nach dem Upload gesichert (auch wenn spaeter eine blockierende Pruefung
+      # scheitert oder der Lauf abgebrochen wird). Vorher ging sie dann verloren und der naechste Lauf lud dieselben Seiten noch einmal hoch.
+      - name: Pruefsummenliste der R2-Seiten (letzter Stand)
+        uses: actions/cache/restore@v4
+        with:
+          path: data/cache/r2_pages.json
+          key: r2pages-${{ github.run_id }}
+          restore-keys: r2pages-
       - name: Seiten in den R2-Bucket laden (duenne Sprachfassungen; GitHub Pages bleibt klein, nichts wird geloescht)
         continue-on-error: true
         env:
@@ -162,6 +170,12 @@ jobs:
         run: |
           pip install -q boto3
           python tools/r2_pages_upload.py r2out
+      - name: Pruefsummenliste der R2-Seiten sichern (immer, sofort nach dem Upload)
+        if: always() && hashFiles('data/cache/r2_pages.json') != ''
+        uses: actions/cache/save@v4
+        with:
+          path: data/cache/r2_pages.json
+          key: r2pages-${{ github.run_id }}-${{ github.run_attempt }}
       - name: Pruefung - Profilseiten vorhanden?
         run: |
           n=$(ls -d docs/community/u/*/ 2>/dev/null | wc -l)
