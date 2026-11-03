@@ -25,23 +25,32 @@ function cleanPackage(value) {
   return JSON.stringify(result).length <= 5000 ? result : null;
 }
 
+// Preise: Paket v1 (T37 Sponsor-Seite) schickt fertige Zeichenketten wie "$7,700", aeltere Anfragen Zahlen.
+// Gleiche Regel in assets/admin.js (Reiter Sponsor-Anfragen): Zahl -> "$" + en-US-Gruppierung, Zeichenkette bleibt.
+function money(x) {
+  if (typeof x === "number" && Number.isFinite(x)) return `${x < 0 ? "-" : ""}$${Math.abs(x).toLocaleString("en-US", { maximumFractionDigits: 2 })}`;
+  if (typeof x === "string") { const s = x.trim().slice(0, 80); return /^\d+(?:\.\d+)?$/.test(s) ? money(Number(s)) : s; }
+  return "";
+}
+
+// Kurzfassung fuer die Benachrichtigung. Liest Paket v1 (goal, topics, duration, components, extras, monthlyUsd, oneOffUsd, totalUsd)
+// und die Schluessel aelterer Anfragen (ziel, themen, laufzeit, months, bausteine, preisMonat, gesamtpreis ...).
 function packageDetails(pkg) {
   const value = (...keys) => keys.map((k) => pkg[k]).find((x) => x !== undefined && x !== null && x !== "");
-  const list = (v) => Array.isArray(v) ? v.join(", ") : v;
+  const items = (v) => (Array.isArray(v) ? v : [v]).map((x) => x == null ? "" : typeof x === "object" ? JSON.stringify(x) : String(x)).filter(Boolean);
+  const list = (v, sep = ", ") => v === undefined ? undefined : items(v).join(sep);
+  const duration = value("duration", "term", "laufzeit", "months");
   const summary = [
     value("goal", "target", "ziel", "destination", "audience"),
     list(value("topics", "themen")),
-    value("duration", "term", "laufzeit", "months"),
-    list(value("components", "blocks", "bausteine", "elements")),
+    typeof duration === "number" ? `${duration} Monate` : duration,
+    list(value("components", "blocks", "bausteine", "elements"), "; "),   // v1-Zeilen enthalten Betraege mit Komma ("$12,000/month")
+    list(value("extras"), "; "),
   ].filter(Boolean).join(" · ") || JSON.stringify(pkg).slice(0, 300);
-  const monthly = value("monthlyUsd", "monthly_usd", "monthlyPrice", "priceMonthly", "monthly", "preisMonat");
-  const total = value("totalUsd", "total_usd", "totalPrice", "priceTotal", "total", "gesamtpreis");
-  const money = (x) => {
-    if (typeof x === "number" && Number.isFinite(x)) return `USD ${x.toLocaleString("en-US")}`;
-    if (typeof x === "string" && x) return `USD ${x.slice(0, 80)}`;
-    return "";
-  };
-  return { summary, price: [monthly !== undefined ? `${money(monthly)}/Monat` : "", total !== undefined ? `${money(total)} gesamt` : ""].filter(Boolean).join(" · ") || "–" };
+  const monthly = money(value("monthlyUsd", "monthly_usd", "monthlyPrice", "priceMonthly", "monthly", "preisMonat"));
+  const oneOff = money(value("oneOffUsd", "one_off_usd", "oneOff", "oneTimeUsd", "oneTime", "einmalig"));
+  const total = money(value("totalUsd", "total_usd", "totalPrice", "priceTotal", "total", "gesamtpreis"));
+  return { summary, price: [monthly && `${monthly}/Monat`, oneOff && `${oneOff} einmalig`, total && `${total} gesamt`].filter(Boolean).join(" · ") || "–" };
 }
 
 export async function handleSponsor(env, request, url, path, J) {
@@ -67,8 +76,8 @@ export async function handleSponsor(env, request, url, path, J) {
     const admins = (await db.prepare("SELECT id,role,provider,sub FROM users WHERE banned=0").all()).results || [];
     const allow = new Set((env.ADMIN_SUBS || "").split(",").map((s) => s.trim()).filter(Boolean));
     const recipients = admins.filter((u) => u.role === "admin" || allow.has(`${u.provider}:${u.sub}`)).sort((a, b) => a.id - b.id);
-    const panel = `${env.SITE}/admin/`;
-    const bodyHtml = `<p>Neue Sponsor-Anfrage von <b>${esc(company)}</b>.</p><p>Name: ${esc(name)}<br>E-Mail: ${esc(email)}<br>Paket: ${esc(details.summary)}<br>Preis: ${esc(details.price)}</p>${message ? `<p>${esc(message)}</p>` : ""}<p><a href="${esc(panel)}">Im Admin-Panel ansehen</a></p>`;
+    const panel = `${env.SITE}/admin/#sponsor`;   // der Hash oeffnet direkt den Reiter Sponsor-Anfragen (assets/admin.js)
+    const bodyHtml = `<p>Neue Sponsor-Anfrage von <b>${esc(company)}</b>.</p><p>Name: ${esc(name)}<br>E-Mail: ${esc(email)}<br>Sprache: ${esc(lang)}<br>Paket: ${esc(details.summary)}<br>Preis: ${esc(details.price)}</p>${message ? `<p>${esc(message).replace(/\n/g, "<br>")}</p>` : ""}<p><a href="${esc(panel)}">Im Admin-Panel ansehen</a></p>`;
     let key = `sponsor:${id}`;
     for (const u of recipients) {
       if (await notify(env, u.id, "system", `Neue Sponsor-Anfrage: ${company}`, bodyHtml, key)) key = `${key}:${u.id}`;
@@ -77,4 +86,4 @@ export async function handleSponsor(env, request, url, path, J) {
   return J({ ok: true });
 }
 
-export { STATUSES as SPONSOR_STATUSES };
+export { STATUSES as SPONSOR_STATUSES, packageDetails as sponsorPackageDetails };

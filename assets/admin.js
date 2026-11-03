@@ -20,8 +20,8 @@
   var LOAD = {
     ov: function () { overview(function (o) { var p = panes.ov, q = o.queues; p.textContent = "";
       p.appendChild(h("h2", { text: "Wartet auf dich" }));
-      p.appendChild(h("div", { class: "adm-grid" }, [tile("Blog-Beiträge", q.blog), tile("Podcast-Folgen", q.podcast), tile("Videos", q.video), tile("Wiki-Änderungen", q.wiki), tile("Entitäten-Vorschläge", q.entity), tile("Übernahme-Anfragen", q.claims), tile("Zertifikate", q.certs), tile("Meldungen", q.reports)]));
-      p.appendChild(h("p", { class: "mut" }, ["Freigeben und ablehnen: ", h("a", { href: "#fr", text: "Reiter Freigaben", onclick: function (ev) { ev.preventDefault(); show("fr"); } }), "."]));
+      p.appendChild(h("div", { class: "adm-grid" }, [tile("Blog-Beiträge", q.blog), tile("Podcast-Folgen", q.podcast), tile("Videos", q.video), tile("Wiki-Änderungen", q.wiki), tile("Entitäten-Vorschläge", q.entity), tile("Übernahme-Anfragen", q.claims), tile("Zertifikate", q.certs), tile("Meldungen", q.reports), tile("Sponsor-Anfragen (neu)", q.sponsor)]));
+      p.appendChild(h("p", { class: "mut" }, ["Freigeben und ablehnen: ", h("a", { href: "#fr", text: "Reiter Freigaben", onclick: function (ev) { ev.preventDefault(); show("fr"); } }), ". Sponsor-Anfragen bearbeiten: ", h("a", { href: "#sponsor", text: "Reiter Sponsor-Anfragen", onclick: function (ev) { ev.preventDefault(); show("sponsor"); } }), "."]));
       p.appendChild(h("h2", { text: "Auf einen Blick" }));
       p.appendChild(h("div", { class: "adm-grid" }, [tile("Mitglieder", o.db.users), tile("Öffentliche Profile", o.db.profiles), tile("Blog-Beiträge live", o.db.blog_live), tile("Entitäten in der Datenbank", o.db.entities_db, "von " + (o.db.entities_file == null ? "?" : o.db.entities_file) + " in der Datei")]));
       var ops = h("div", {}); p.appendChild(h("h2", { text: "Betrieb" })); p.appendChild(ops); ops.appendChild(h("p", { class: "mut", text: "Lädt …" }));
@@ -86,25 +86,71 @@
     api("/api/admin/video").then(function (r) { var it = (r.j || {}).items || []; if (it.length) { var ul = section("Videos (" + it.length + ")", "Freigabe über die Abstimmung (" + ((r.j || {}).threshold || 25) + " Punkte) und die Veröffentlichung bei YouTube; hier nur ablehnen."); it.forEach(function (x) { var rm = row(ul, [h("b", { text: x.title }), " ", h("span", { class: "mut", text: (x.name || "") + " · " + x.status + " · " + (x.votes || 0) + " Stimmen · " + when(x.created) }), x.youtube ? h("p", {}, [h("a", { href: x.youtube, target: "_blank", rel: "noopener", text: "Im YouTube Studio öffnen" })]) : null, h("p", {}, [act("Ablehnen", false, function () { return api("/api/admin/video/reject", { method: "POST", body: { id: x.id, note: note() } }); }, function () { rm(); })])]); }); } done(); });
   }
 
+  // ---------- Sponsor-Anfragen (T37): Liste mit Status und Paging, je Anfrage eine Detailzeile mit Nachricht und ganzem Paket ----------
+  // Paket v1 der Sponsor-Seite (assets/sponsor-calc.js): nur Zeichenketten, englische Bezeichnungen - goal, topics, duration, components, extras,
+  // monthlyUsd "$7,700", oneOffUsd, totalUsd, discount, effect, page. Aeltere Anfragen haben andere Schluessel (ziel, themen, laufzeit, months,
+  // bausteine, preisMonat, gesamtpreis ...) und Zahlen; sie werden mit denselben Regeln angezeigt (wie packageDetails in worker/src/sponsor.js).
+  // Die Anfragen kommen aus einem oeffentlichen Formular: alles nur als Text (h -> textContent), nie als HTML.
+  var SP_STATES = [["new", "Neu"], ["contacted", "Kontaktiert"], ["won", "Gewonnen"], ["lost", "Verloren"], ["spam", "Spam"]];
+  var SP_KEYS = { goal: ["goal", "target", "ziel", "destination", "audience"], topics: ["topics", "themen"], duration: ["duration", "term", "laufzeit", "months"], components: ["components", "blocks", "bausteine", "elements"], extras: ["extras"],
+    monthly: ["monthlyUsd", "monthly_usd", "monthlyPrice", "priceMonthly", "monthly", "preisMonat"], oneOff: ["oneOffUsd", "one_off_usd", "oneOff", "oneTimeUsd", "oneTime", "einmalig"], total: ["totalUsd", "total_usd", "totalPrice", "priceTotal", "total", "gesamtpreis"] };
+  var SP_LABEL = { v: "Version", goal: "Ziel", topics: "Themen", duration: "Laufzeit", components: "Bausteine", extras: "Extras", monthlyUsd: "Pro Monat", oneOffUsd: "Einmalig", totalUsd: "Gesamt", discount: "Rabatt", effect: "Wirkung (Schätzung)", page: "Seite" };
+  function spPkg(raw) { var q = raw; if (typeof q === "string") { try { q = JSON.parse(q); } catch (e) { return null; } } return q && typeof q === "object" && !Array.isArray(q) ? q : null; }
+  function spVal(q, k) { var ks = SP_KEYS[k]; for (var i = 0; i < ks.length; i++) { var v = q[ks[i]]; if (v != null && v !== "") return v; } return null; }
+  function spList(v) { return (Array.isArray(v) ? v : v == null ? [] : [v]).map(function (x) { return x == null ? "" : typeof x === "object" ? JSON.stringify(x) : String(x); }).filter(Boolean); }
+  function spMoney(v) {   // Zahl -> "$3,900" (en-US, wie auf der Sponsor-Seite), Zeichenkette ("$7,700") bleibt
+    if (typeof v === "number" && isFinite(v)) return (v < 0 ? "-" : "") + "$" + Math.abs(v).toLocaleString("en-US", { maximumFractionDigits: 2 });
+    if (typeof v === "string") { var s = v.trim().slice(0, 80); return /^\d+(?:\.\d+)?$/.test(s) ? spMoney(Number(s)) : s; }
+    return "";
+  }
+  function spValue(v) {   // ganzes Paket: Listen als Aufzaehlung, Objekte (aeltere Anfragen, z. B. lines, estimate) als verschachtelte Liste
+    if (Array.isArray(v)) return v.length ? h("ul", { style: "margin:0;padding-inline-start:1.2em" }, v.map(function (x) { return h("li", {}, [spValue(x)]); })) : h("span", { class: "mut", text: "(leer)" });
+    if (v && typeof v === "object") return spDl(v, true);
+    if (typeof v === "boolean") return v ? "ja" : "nein";
+    return v == null || v === "" ? "–" : String(v);
+  }
+  function spDl(q, nested) {   // deutsche Bezeichnungen nur fuer die Schluessel oben im Paket, verschachtelte Schluessel bleiben wie gespeichert
+    var keys = Object.keys(q), dl = h("dl", { style: "display:grid;grid-template-columns:minmax(7em,max-content) 1fr;gap:.2em 1em;margin:.4em 0" });
+    if (!keys.length) return h("span", { class: "mut", text: "(keine Angaben)" });
+    keys.forEach(function (k) { dl.append(h("dt", { class: "mut", text: (!nested && SP_LABEL[k]) || k }), h("dd", { style: "margin:0" }, [spValue(q[k])])); });
+    return dl;
+  }
+
   function sponsorRequests() {
     var p = panes.sponsor, filter = h("select", { "aria-label": "Status filtern" }), msgEl = h("p", { class: "adm-msg" });
     var table = h("table", { class: "adm-tbl" }), head = h("thead"), body = h("tbody"), prev = h("button", { type: "button", class: "btn", text: "Zurück" }), next = h("button", { type: "button", class: "btn", text: "Weiter" }), count = h("span", { class: "mut" });
-    var limit = 50, offset = 0, total = 0;
-    p.textContent = ""; p.append(h("h2", { text: "Sponsor-Anfragen" }), filter, h("p", {}, [prev, " ", next, " ", count]), msgEl, table);
-    [["", "Alle Status"], ["new", "Neu"], ["contacted", "Kontaktiert"], ["won", "Gewonnen"], ["lost", "Verloren"], ["spam", "Spam"]].forEach(function (x) { filter.appendChild(h("option", { value: x[0], text: x[1] })); });
+    var limit = 50, offset = 0, total = 0, COLS = ["Datum", "Firma", "Name", "E-Mail", "Sprache", "Paket", "Themen", "Preis", "Status"], NB = "border-bottom:0";
+    p.textContent = ""; p.append(h("h2", { text: "Sponsor-Anfragen" }), filter, h("p", {}, [prev, " ", next, " ", count]), msgEl, h("div", { style: "overflow-x:auto" }, [table]));   // schmale Fenster: Tabelle scrollt, nicht die Seite
+    [["", "Alle Status"]].concat(SP_STATES).forEach(function (x) { filter.appendChild(h("option", { value: x[0], text: x[1] })); });
     table.append(head, body);
-    function shortPackage(x) {
-      try {
-        var q = typeof x.package === "string" ? JSON.parse(x.package) : x.package;
-        var parts = [q.goal || q.target || q.ziel, q.duration || q.term || q.laufzeit, q.components || q.blocks || q.bausteine];
-        return parts.map(function (v) { return Array.isArray(v) ? v.join(", ") : v; }).filter(Boolean).join(" · ") || JSON.stringify(q).slice(0, 100);
-      } catch (e) { return String(x.package || "").slice(0, 100); }
-    }
-    function price(x) {
-      try {
-        var q = typeof x.package === "string" ? JSON.parse(x.package) : x.package, v = [q.monthlyUsd, q.monthly_usd, q.monthlyPrice, q.priceMonthly, q.monthly, q.preisMonat].find(function (x) { return x != null && x !== ""; });
-        return v == null ? "–" : "USD " + v + "/Monat";
-      } catch (e) { return "–"; }
+    function bullets(list) { return list.length ? h("ul", { style: "margin:0;padding-inline-start:1.1em" }, list.map(function (t) { return h("li", { text: t }); })) : "–"; }
+    function rows(x) {   // Hauptzeile + Detailzeile (Nachricht, ganzes Paket zum Aufklappen)
+      var q = spPkg(x.package), lang = String(x.lang || ""), page = q && typeof q.page === "string" ? q.page : "";
+      var when = x.created ? new Date(x.created * 1000).toLocaleString("de-DE", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" }) : "–";
+      var dur = q && spVal(q, "duration"), headline = q ? [spVal(q, "goal"), typeof dur === "number" ? dur + " Monate" : dur].map(function (v) { return spList(v).join(", "); }).filter(Boolean).join(" · ") : "";
+      var items = q ? spList(spVal(q, "components")).concat(spList(spVal(q, "extras"))) : [], topics = q ? spList(spVal(q, "topics")) : [];
+      var money = q ? [[spVal(q, "monthly"), "/Monat"], [spVal(q, "oneOff"), " einmalig"], [spVal(q, "total"), " gesamt"]].map(function (m) { var s = spMoney(m[0]); return s ? h("div", { text: s + m[1] }) : null; }).filter(Boolean) : [];
+      var pkgCell = headline ? [h("b", { text: headline })] : items.length ? ["–"]   // Bausteine stehen in voller Breite in der Detailzeile
+        : [(q ? (Object.keys(q).length ? JSON.stringify(q) : "") : String(x.package == null ? "" : x.package)).slice(0, 100) || "–"];
+      var state = h("select", { "aria-label": "Status für " + x.company });
+      SP_STATES.forEach(function (v) { var opt = h("option", { value: v[0], text: v[1] }); if (x.status === v[0]) opt.selected = true; state.appendChild(opt); });
+      state.addEventListener("change", function () {
+        state.disabled = true;
+        api("/api/admin/panel/sponsor-requests/status", { method: "POST", body: { id: x.id, status: state.value } }).then(function (updated) {
+          state.disabled = false;
+          if (updated.s === 200) load(); else { msg(msgEl, "Status konnte nicht gespeichert werden", true); state.value = x.status; }
+        });
+      });
+      var main = h("tr", {}, [h("td", { style: NB, text: when }), h("td", { style: NB, text: x.company }), h("td", { style: NB, text: x.name }),
+        h("td", { style: NB }, [x.email ? h("a", { href: "mailto:" + x.email, text: x.email }) : "–"]),
+        h("td", { style: NB }, [LANGN[lang] ? LANGN[lang] + " (" + lang + ")" : lang || "–", page ? h("div", { class: "mut", text: page }) : null]),
+        h("td", { style: NB }, pkgCell), h("td", { style: NB }, [bullets(topics)]), h("td", { style: NB + ";white-space:nowrap" }, money.length ? money : ["–"]), h("td", { style: NB }, [state])]);
+      var detail = h("tr", {}, [h("td", { colspan: String(COLS.length), style: "padding-top:0" }, [
+        x.message ? h("p", { style: "white-space:pre-wrap;margin:0 0 .4em" }, [h("b", { text: "Nachricht: " }), String(x.message)]) : h("p", { class: "mut", style: "margin:0 0 .4em", text: "Keine Nachricht." }),
+        items.length ? h("p", { style: "margin:0 0 .4em" }, [h("b", { text: "Bausteine: " }), items.join(" · ")]) : null,
+        h("details", {}, [h("summary", { text: q ? "Ganzes Paket (" + Object.keys(q).length + " Angaben)" : "Paket (nicht lesbar, Rohdaten)" }), q ? spDl(q) : null,
+          h("details", {}, [h("summary", { class: "mut", text: "Rohdaten (JSON)" }), h("pre", { style: "white-space:pre-wrap;overflow-wrap:anywhere;font-size:.8rem;margin:.3em 0", text: q ? JSON.stringify(q, null, 2) : String(x.package == null ? "" : x.package) })])])])]);
+      return [main, detail];
     }
     function load() {
       msgEl.textContent = "Lädt …";
@@ -112,20 +158,9 @@
         head.textContent = ""; body.textContent = "";
         if (r.s !== 200) { msg(msgEl, "Sponsor-Anfragen nicht abrufbar", true); return; }
         total = r.j.total || 0; msgEl.textContent = "";
-        head.appendChild(h("tr", {}, ["Datum", "Firma", "Name", "E-Mail", "Paket", "Preis", "Status"].map(function (x) { return h("th", { text: x }); })));
-        (r.j.items || []).forEach(function (x) {
-          var state = h("select", { "aria-label": "Status für " + x.company });
-          [["new", "Neu"], ["contacted", "Kontaktiert"], ["won", "Gewonnen"], ["lost", "Verloren"], ["spam", "Spam"]].forEach(function (v) { var opt = h("option", { value: v[0], text: v[1] }); if (x.status === v[0]) opt.selected = true; state.appendChild(opt); });
-          state.addEventListener("change", function () {
-            state.disabled = true;
-            api("/api/admin/panel/sponsor-requests/status", { method: "POST", body: { id: x.id, status: state.value } }).then(function (updated) {
-              state.disabled = false;
-              if (updated.s === 200) load(); else { msg(msgEl, "Status konnte nicht gespeichert werden", true); state.value = x.status; }
-            });
-          });
-          body.appendChild(h("tr", {}, [h("td", { text: x.created ? new Date(x.created * 1000).toLocaleDateString("de-DE") : "–" }), h("td", { text: x.company }), h("td", { text: x.name }), h("td", { text: x.email }), h("td", { text: shortPackage(x) }), h("td", { text: price(x) }), h("td", {}, [state])]));
-        });
-        if (!total) body.appendChild(h("tr", {}, [h("td", { colspan: "7", class: "mut", text: "Keine Sponsor-Anfragen." })]));
+        head.appendChild(h("tr", {}, COLS.map(function (x) { return h("th", { text: x }); })));
+        (r.j.items || []).forEach(function (x) { rows(x).forEach(function (tr) { body.appendChild(tr); }); });
+        if (!total) body.appendChild(h("tr", {}, [h("td", { colspan: String(COLS.length), class: "mut", text: "Keine Sponsor-Anfragen." })]));
         count.textContent = total ? (offset + 1) + "–" + Math.min(offset + limit, total) + " von " + total : "0 Anfragen";
         prev.disabled = offset <= 0; next.disabled = offset + limit >= total;
       });
