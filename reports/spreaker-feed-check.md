@@ -1,20 +1,42 @@
-# Spreaker-Feed gegen geschriebene Shownotes (2026-11-02T22:26Z)
+# Spreaker-Feed gegen geschriebene Shownotes (2026-11-03T00:44Z)
 
-Geschrieben: 283 · im Feed: 283 · Text gleich: 283 · alle m365-Links im Feed: 283
+Geschrieben: 343 · im Feed: 343 · Text gleich: 343 · alle m365-Links im Feed: 343
 
 | Folge | im Feed | Text gleich | Links Datei | Links Feed | HTML im Feed |
 |---|---|---|---|---|---|
+| 68435304 | ja | ja | 8 | 8 | ja |
+| 68500794 | ja | ja | 7 | 7 | ja |
+| 68515934 | ja | ja | 6 | 6 | ja |
+| 68520628 | ja | ja | 7 | 7 | ja |
+| 68604308 | ja | ja | 6 | 6 | ja |
+| 68756252 | ja | ja | 6 | 6 | ja |
+| 68798472 | ja | ja | 6 | 6 | ja |
+| 68819640 | ja | ja | 6 | 6 | ja |
+| 68883068 | ja | ja | 6 | 6 | ja |
+| 68919824 | ja | ja | 6 | 6 | ja |
+| 68920058 | ja | ja | 6 | 6 | ja |
+| 68940294 | ja | ja | 6 | 6 | ja |
+| 69340438 | ja | ja | 6 | 6 | ja |
+| 69465882 | ja | ja | 6 | 6 | ja |
+| 69467196 | ja | ja | 6 | 6 | ja |
+| 69843028 | ja | ja | 6 | 6 | ja |
+| 69844766 | ja | ja | 6 | 6 | ja |
+| 69885436 | ja | ja | 6 | 6 | ja |
+| 70268600 | ja | ja | 6 | 6 | ja |
 | 70441948 | ja | ja | 6 | 6 | ja |
 | 70501080 | ja | ja | 6 | 6 | ja |
 | 70503116 | ja | ja | 6 | 6 | ja |
+| 70742334 | ja | ja | 8 | 8 | ja |
 | 70743280 | ja | ja | 6 | 6 | ja |
 | 70744896 | ja | ja | 6 | 6 | ja |
 | 70829666 | ja | ja | 6 | 6 | ja |
 | 70831770 | ja | ja | 6 | 6 | ja |
 | 70849602 | ja | ja | 6 | 6 | ja |
 | 71153726 | ja | ja | 6 | 6 | ja |
+| 71155888 | ja | ja | 7 | 7 | ja |
 | 71209304 | ja | ja | 6 | 6 | ja |
 | 71209930 | ja | ja | 6 | 6 | ja |
+| 71590554 | ja | ja | 6 | 6 | ja |
 | 71831582 | ja | ja | 6 | 6 | ja |
 | 71974838 | ja | ja | 7 | 7 | ja |
 | 72112262 | ja | ja | 6 | 6 | ja |
@@ -92,12 +114,15 @@ Geschrieben: 283 · im Feed: 283 · Text gleich: 283 · alle m365-Links im Feed:
 | 72788044 | ja | ja | 7 | 7 | ja |
 | 72790496 | ja | ja | 6 | 6 | ja |
 | 72790744 | ja | ja | 6 | 6 | ja |
+| 72790969 | ja | ja | 6 | 6 | ja |
 | 72828100 | ja | ja | 6 | 6 | ja |
 | 72828382 | ja | ja | 6 | 6 | ja |
+| 72926855 | ja | ja | 6 | 6 | ja |
 | 72933742 | ja | ja | 8 | 8 | ja |
 | 72933887 | ja | ja | 8 | 8 | ja |
 | 72934124 | ja | ja | 7 | 7 | ja |
 | 72934159 | ja | ja | 7 | 7 | ja |
+| 72936637 | ja | ja | 7 | 7 | ja |
 | 72936726 | ja | ja | 8 | 8 | ja |
 | 72936838 | ja | ja | 6 | 6 | ja |
 | 72936926 | ja | ja | 6 | 6 | ja |
@@ -114,43 +139,18 @@ Geschrieben: 283 · im Feed: 283 · Text gleich: 283 · alle m365-Links im Feed:
 | 72963896 | ja | ja | 7 | 7 | ja |
 | 72964816 | ja | ja | 8 | 8 | ja |
 | 72964976 | ja | ja | 8 | 8 | ja |
+| 72965592 | ja | ja | 6 | 6 | ja |
 | 72987630 | ja | ja | 9 | 9 | ja |
+| 72988430 | ja | ja | 6 | 6 | ja |
 | 72989260 | ja | ja | 8 | 8 | ja |
 | 72990818 | ja | ja | 8 | 8 | ja |
 | 72991410 | ja | ja | 8 | 8 | ja |
+| 72991478 | ja | ja | 6 | 6 | ja |
+| 72992830 | ja | ja | 6 | 6 | ja |
+| 73012152 | ja | ja | 6 | 6 | ja |
 | 73012311 | ja | ja | 8 | 8 | ja |
+| 73012777 | ja | ja | 6 | 6 | ja |
 | 73013222 | ja | ja | 9 | 9 | ja |
 | 73013597 | ja | ja | 7 | 7 | ja |
-| 73013898 | ja | ja | 8 | 8 | ja |
-| 73014208 | ja | ja | 8 | 8 | ja |
-| 73014337 | ja | ja | 7 | 7 | ja |
-| 73014403 | ja | ja | 6 | 6 | ja |
-| 73014511 | ja | ja | 8 | 8 | ja |
-| 73014760 | ja | ja | 6 | 6 | ja |
-| 73024313 | ja | ja | 6 | 6 | ja |
-| 73025384 | ja | ja | 7 | 7 | ja |
-| 73025621 | ja | ja | 10 | 10 | ja |
-| 73025692 | ja | ja | 7 | 7 | ja |
-| 73029828 | ja | ja | 6 | 6 | ja |
-| 73031212 | ja | ja | 6 | 6 | ja |
-| 73031539 | ja | ja | 7 | 7 | ja |
-| 73049092 | ja | ja | 7 | 7 | ja |
-| 73051472 | ja | ja | 6 | 6 | ja |
-| 73066788 | ja | ja | 6 | 6 | ja |
-| 73085054 | ja | ja | 8 | 8 | ja |
-| 73085148 | ja | ja | 7 | 7 | ja |
-| 73085280 | ja | ja | 8 | 8 | ja |
-| 73099114 | ja | ja | 7 | 7 | ja |
-| 73102508 | ja | ja | 8 | 8 | ja |
-| 73103039 | ja | ja | 8 | 8 | ja |
-| 73103133 | ja | ja | 6 | 6 | ja |
-| 73103460 | ja | ja | 8 | 8 | ja |
-| 73107765 | ja | ja | 8 | 8 | ja |
-| 73108187 | ja | ja | 6 | 6 | ja |
-| 73121501 | ja | ja | 7 | 7 | ja |
-| 73121606 | ja | ja | 7 | 7 | ja |
-| 73121810 | ja | ja | 7 | 7 | ja |
-| 73121843 | ja | ja | 6 | 6 | ja |
-| 73140866 | ja | ja | 7 | 7 | ja |
-| 73141097 | ja | ja | 8 | 8 | ja |
-| 73145818 | ja | ja | 7 | 7 | ja |
+| 73013721 | ja | ja | 7 | 7 | ja |
+| 73013785 | ja | ja | 7 | 7 | ja |
