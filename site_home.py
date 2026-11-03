@@ -30,10 +30,11 @@ JS = ('<script>(function(){var H=document.getElementById("hub"),b=[].slice.call(
       'if(ok&&!f){ok=n<N;n++}e.hidden=!ok});'
       'if(sel){sel.textContent="";S.ts.forEach(function(x){var s=document.createElement("button");s.type="button";s.className="hub-f";s.textContent=NM[x]+" ✕";s.title="%RM%";s.onclick=function(){S.ts=S.ts.filter(function(y){return y!==x});ap()};sel.appendChild(s)})}}'
       'b.forEach(function(x){x.addEventListener("click",function(){S.k=x.dataset.k;ap()})});'
-      'if(mb)mb.addEventListener("click",function(){more(ap)});'
+      'if(mb)mb.addEventListener("click",function(e){e.preventDefault();more(ap)});'
       'if(q)q.addEventListener("input",ap);if(sa)sa.addEventListener("change",ap);'
       'if(st)st.addEventListener("change",function(){if(st.value&&S.ts.indexOf(st.value)<0)S.ts.push(st.value);st.value="";ap()});ap()})();</script>')
-MORE = {}      # Schluessel ("root" oder Sprache) -> Karten jenseits der ersten N (schreibt generate_site als hub-more.json)
+MORE = {}      # Schluessel ("root" oder Sprache) -> Karten jenseits der ersten N (schreibt generate_site als hub-more.json und als Seiten /page/N/)
+PAGES = {}     # Schluessel -> Sprache und Pfad-Praefix der Hub-Seite
 N_FIRST = 24   # Karten im HTML (T6: Startseite unter 300 kB)
 
 
@@ -135,5 +136,7 @@ def hub(g, lang, base, api, videos, vid_html, root=False):
     _key = "root" if root else lang
     MORE[_key] = [h for _, _k, h in cards[N_FIRST:]]
     _more_url = f"{base}/{'' if root else lang + '/'}hub-more.json"
-    _mb = f'<p><button type="button" class="btn" id="hub-more">{esc(T(lang, "Load more", "Mehr laden"))} ({len(cards) - N_FIRST})</button></p>' if len(cards) > N_FIRST else ""
+    PAGES[_key] = {"lang": "en" if root else lang, "prefix": "" if root else lang + "/"}
+    _p2 = f"{base}/{PAGES[_key]['prefix']}page/2/"   # eigene Adresse je Seite: Karten jenseits der ersten N stehen auf /page/2/, /page/3/ ... (generate_site)
+    _mb = f'<p><a class="btn" id="hub-more" href="{_p2}" rel=next>{esc(T(lang, "Load more", "Mehr laden"))} ({len(cards) - N_FIRST})</a></p>' if len(cards) > N_FIRST else ""
     return (CSS + f'<div role="group" aria-label="{esc(T(lang, "Filter", "Filter"))}">{chips}</div>{ctl}<div id="hub" class="thumbs"{(" data-more=" + chr(34) + _more_url + chr(34)) if MORE[_key] else ""}>' + "".join(h for _, _k, h in cards[:N_FIRST]) + "</div>" + _mb + cta + JS.replace("%N%", str(N_FIRST)).replace("%NAMES%", __import__("json").dumps({i: ENTS[i]["name"] for i in tcount}, ensure_ascii=False)).replace("%RM%", esc(T(lang, "remove", "entfernen"))))
