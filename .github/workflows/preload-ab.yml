@@ -1,0 +1,34 @@
+name: Preload-A/B (nur lesen)
+# Vergleicht Schrift-Preload-Varianten auf der Live-Seite (nur die Preload-Zeilen der HTML-Seite werden ausgetauscht). Aendert nichts.
+on:
+  workflow_dispatch:
+    inputs:
+      paths:
+        description: "Pfade, durch Leerzeichen getrennt"
+        required: false
+        default: "/ /de/ /entity/copilot/ /show/episodes/internal-developer-platforms/"
+      reps:
+        description: "Durchgaenge je Variante"
+        required: false
+        default: "7"
+  push:
+    branches: [ticket/preload-media]
+    paths: [.github/workflows/preload-ab.yml, tools/preload_ab.mjs]
+permissions:
+  contents: read
+jobs:
+  ab:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: npm i --no-save --no-audit --no-fund playwright-core@1.48.2
+      - name: Messen
+        env:
+          AB_PATHS: ${{ github.event.inputs.paths || '/ /de/ /entity/copilot/ /show/episodes/internal-developer-platforms/' }}
+          AB_REPS: ${{ github.event.inputs.reps || '7' }}
+        run: |
+          node tools/preload_ab.mjs | tee /tmp/ab.md
+          grep -v '^<!-- JSON' /tmp/ab.md >> "$GITHUB_STEP_SUMMARY"

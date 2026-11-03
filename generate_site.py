@@ -452,14 +452,21 @@ FXCSS = _mini_css("fx.css")   # kleines CSS inline statt eigener Anfrage (Ladeze
 # Barrierefreiheits-Regeln stehen im gehashten site.css statt in einer eigenen Datei: vorher lag a11y.css als zweites renderblockierendes
 # Stylesheet am Anfang von <body> (eigene Anfrage, nur 1 h Cache). assets/a11y.css bleibt fuer noch gecachte alte Seiten liegen.
 A11Y_CSS = _mini_css("a11y.css")
-# Vorgeladen werden genau die Schnitte, die auf jeder Seite im ersten Bildschirm Text zeigen (gemessen auf Start-, Sprach-, Show- und
-# Entitaetsseiten, Desktop und Handy, alle 15 Sprachen - Navigation, Logo und Ziffern/Leerzeichen sind lateinisch): Barlow 400 (Fliesstext),
-# Condensed 500 (Menue), 600 (Ueberschriften), 700 (Logo). Barlow 500/600 stehen fast nur weiter unten und laden wie bisher ueber das CSS.
-PRELOAD_FONTS = ("barlow-latin-400", "barlow-condensed-latin-500", "barlow-condensed-latin-600", "barlow-condensed-latin-700")
+# Vorgeladen werden die Schnitte, die auf jeder Seite im ersten Bildschirm Text zeigen (gemessen auf Start-, Sprach-, Show- und Entitaetsseiten,
+# alle 15 Sprachen - Navigation, Logo und Ziffern/Leerzeichen sind lateinisch). Barlow 400 (Fliesstext) und Condensed 600 (Ueberschriften) normal;
+# Condensed 500 (Menue) und 700 (Logo) ab 701 px normal, darunter mit fetchpriority=low. Live-A/B 3.11.2026 (tools/preload_ab.mjs, 2 x 7 Laeufe):
+# Handy mit langsamem 4G: alle vier normal kosteten ~100 ms FCP/LCP (die 44 KB nehmen dem CSS Bandbreite), niedrig priorisiert gleich schnell wie
+# ohne Preload, aber ohne Schriftwechsel (CLS 0 statt 0,03); Desktop: normal gleich schnell, niedrig priorisiert ~30 ms langsamer.
+# Barlow 500/600 stehen fast nur weiter unten und laden wie bisher ueber das CSS. Je Schrift greift genau eine Zeile (media schliesst sich aus).
+PRELOAD_FONTS = (("barlow-latin-400", "", ""), ("barlow-condensed-latin-600", "", ""),
+                 ("barlow-condensed-latin-500", "(min-width: 701px)", ""), ("barlow-condensed-latin-700", "(min-width: 701px)", ""),
+                 ("barlow-condensed-latin-500", "(max-width: 700px)", "low"), ("barlow-condensed-latin-700", "(max-width: 700px)", "low"))
 
 
 def font_preloads():
-    return "".join(f'<link rel="preload" href="{BASE}/assets/fonts/{f}-normal.woff2" as="font" type="font/woff2" crossorigin>' for f in PRELOAD_FONTS)
+    q = chr(34)
+    return "".join(f'<link rel="preload" href="{BASE}/assets/fonts/{f}-normal.woff2" as="font" type="font/woff2" crossorigin'
+                   f'{f" media={q}{m}{q}" if m else ""}{f" fetchpriority={q}{p}{q}" if p else ""}>' for f, m, p in PRELOAD_FONTS)
 
 
 SW_REG = []   # T42: (lang, url, noindex, auto, alternates, switch) je Seite; finish_hreflang() verknuepft am Ende Sprachfassungen unter gleichem Pfad
