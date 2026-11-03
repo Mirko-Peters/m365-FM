@@ -37,6 +37,12 @@ class LinkfixTest(unittest.TestCase):
 
     def test_slug_rename(self):
         self.assertEqual(LF.resolve("/show/episodes/OLD-EPISODE", self.index), "/show/episodes/teams-security/")
+        index = LF.build_index(
+            episodes=[{"slug": "old-episode", "title": "Current Old Episode"},
+                      {"slug": "teams-security", "title": "Teams Security"}],
+            renames={"old-episode": "teams-security"},
+        )
+        self.assertEqual(LF.resolve("/old-episode", index), "/show/episodes/old-episode/")
 
     def test_title_match_requires_clear_unique_result(self):
         self.assertEqual(

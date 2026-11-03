@@ -137,18 +137,6 @@ def resolve_detail(path, index, link_text=""):
     episode_slugs = {item[0].casefold(): item[0] for item in index["episodes"]}
     blog_slugs = {item[0].casefold(): item[0] for item in index["blogs"]}
     entity_slugs = {item[0].casefold(): item[0] for item in index["entities"]}
-    rename_map = {str(old).casefold(): str(new) for old, new in index["renames"].items()}
-    renamed = rename_map.get(slug.casefold())
-    if renamed and renamed.casefold() in episode_slugs:
-        renamed = episode_slugs[renamed.casefold()]
-        prefix = "/".join(segments[:-1])
-        target = f"/{prefix + '/' if prefix else ''}{renamed}/"
-        if len(segments) >= 2 and lower_segments[-2] == "episodes":
-            target = f"/{'/'.join(segments[:-1])}/{renamed}/"
-        else:
-            target = f"/show/episodes/{renamed}/"
-        return target + suffix, "rename"
-
     if slug.casefold() in episode_slugs and (len(segments) == 1 or (len(segments) >= 2 and lower_segments[-2:] == ["episodes", slug.casefold()])):
         return f"/show/episodes/{episode_slugs[slug.casefold()]}/{suffix}", "episode"
     if slug.casefold() in blog_slugs and (
@@ -158,6 +146,16 @@ def resolve_detail(path, index, link_text=""):
         return f"/community/u/mirko-p/blog/{blog_slugs[slug.casefold()]}/{suffix}", "blog"
     if slug.casefold() in entity_slugs and (len(segments) == 1 or lower_segments[-2:] == ["entity", slug.casefold()]):
         return f"/entity/{entity_slugs[slug.casefold()]}/{suffix}", "entity"
+
+    rename_map = {str(old).casefold(): str(new) for old, new in index["renames"].items()}
+    renamed = rename_map.get(slug.casefold())
+    if renamed and renamed.casefold() in episode_slugs:
+        renamed = episode_slugs[renamed.casefold()]
+        if len(segments) >= 2 and lower_segments[-2] == "episodes":
+            target = f"/{'/'.join(segments[:-1])}/{renamed}/"
+        else:
+            target = f"/show/episodes/{renamed}/"
+        return target + suffix, "rename"
 
     matched = _title_match(source_path, link_text, index)
     if matched:
