@@ -38,18 +38,12 @@ def _set_attr(tag, name, value):
     return re.sub(r"\s*/?>$", lambda m: replacement + m.group(0), tag)
 
 
-def _class(tag, attrs, value):
-    old = attrs.get("class", "")
-    if value in old.split():
-        return tag
-    new = " ".join(x for x in (old, value) if x)
-    return _set_attr(tag, "class", new)
-
-
 class _Images(HTMLParser):
     def __init__(self, source):
         super().__init__(convert_charrefs=False)
         self.edits = []
+        self.has_dimensions = False
+        self.needs_responsive_css = False
         self.lines = [0]
         self.lines.extend(i + 1 for i, c in enumerate(source) if c == "\n")
 
@@ -67,6 +61,9 @@ class _Images(HTMLParser):
         width, height = values.get("width"), values.get("height")
         width_ok = isinstance(width, str) and bool(_NUM.fullmatch(width))
         height_ok = isinstance(height, str) and bool(_NUM.fullmatch(height))
+        if width_ok and height_ok:
+            self.has_dimensions = True
+            self.needs_responsive_css |= "max-width" not in values.get("style", "").lower()
         if dims:
             natural_w, natural_h = dims
             if not width_ok:
@@ -77,10 +74,8 @@ class _Images(HTMLParser):
                 height = str(round(int(width) * natural_h / natural_w)) if width_ok else str(natural_h)
                 tag = _set_attr(tag, "height", height)
                 height_ok = True
-        if values.get("decoding") != "async":
-            tag = _set_attr(tag, "decoding", "async")
-        if not (width_ok and height_ok):
-            tag = _class(tag, values, "img-no-dims")
+            self.has_dimensions = True
+            self.needs_responsive_css |= "max-width" not in values.get("style", "").lower()
         return tag
 
     def handle_starttag(self, tag, attrs):
@@ -102,3 +97,18 @@ def enhance(source):
     for start, end, replacement in reversed(parser.edits):
         source = source[:start] + replacement + source[end:]
     return source
+
+
+def has_dimensions(source):
+    parser = _Images(source)
+    parser.feed(source)
+    return parser.has_dimensions
+
+
+def needs_responsive_css(source):
+    parser = _Images(source)
+    parser.feed(source)
+    return parser.needs_responsive_css
+
+
+CSS = '<style>.pp-notes img[width][height],.wk-body img[width][height]{max-width:100%;height:auto}</style>'

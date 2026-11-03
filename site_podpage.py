@@ -335,7 +335,7 @@ def build(g):
     root = f"{BASE}/show/"; NAME = pod.get("name") or "M365.FM Podcast"
     navitems = (("", "Home"), ("episodes/", "Episodes"), *(((f"{BASE}/community/u/mirko-p/blog/", "Blog"),) if (PD / "blog_posts.json.gz").exists() else ()), *((("guests/", "Guests"),) if guests else ()), ("hosts/", "Hosts"), ("sponsors/", "Sponsors"), ("reviews/", "Reviews"), ("work-with-me/", "Work with me"), ("about/", "About"))
     nav = '<section class="sb-card sb-nav"><h2>M365.FM Show</h2><ul class="sb-navl">' + "".join(f'<li><a href="{p if p.startswith("https://") else root + p}">{t}</a></li>' for p, t in navitems) + "</ul></section>"   # frueher zweite Menueleiste ueber dem Inhalt, jetzt Karte in der Sidebar
-    shell = lambda b, side="": f'{header("en", "")}<link rel="stylesheet" href="{BASE}/assets/sbar.css"><style>.pp-notes img,.wk-body img{{max-width:100%;height:auto}}.pp-notes img.img-no-dims,.wk-body img.img-no-dims{{width:100%;aspect-ratio:16/9;object-fit:contain}}</style><main class="wrap shw"><div class="shmain">{b}</div>{side}</main>{footer_en()}'
+    shell = lambda b, side="": f'{header("en", "")}<link rel="stylesheet" href="{BASE}/assets/sbar.css"><main class="wrap shw"><div class="shmain">{b}</div>{side}</main>{footer_en()}'
 
     SBX = SBR.Index(); SHP = json.loads((D / "platforms.json").read_text("utf-8")).get("en", {}) if (D / "platforms.json").exists() else {}
 
@@ -429,8 +429,12 @@ def build(g):
         snx = SNALL.get(str(_sid)) if _sid else None   # T26: Vollfassung (Hook, Kapitel, Takeaways, Entitaeten mit Hover, FAQ) statt Podpage-Show-Notes
         if snx:
             _snh, _snld, _snfaq = SNS.render(snx, "en", ENTS_ALL, BASE)
-            nnotes, nld = _snh + f"<style>{SNS.CSS}</style>", [x for x in nld if x.get("@type") != "FAQPage"] + _snld
+            nnotes, nld = IMG.enhance(_snh) + f"<style>{SNS.CSS}</style>", [x for x in nld if x.get("@type") != "FAQPage"] + _snld
             if _snfaq: nfaq = ""   # die FAQ der Vollfassung ersetzt aeltere FAQ-Bloecke (kein doppeltes FAQPage-Schema)
+        elif nrec and nrec.get("markup"):
+            nnotes = IMG.enhance(nnotes)
+        else:
+            nnotes = san(e.get("show_notes"))
         nnotes = rename_links(nnotes)   # T12: Show Notes verlinken die Folge oft ueber die alte Podpage-Adresse
         prev_, next_ = (eps[k + 1] if k + 1 < len(eps) else None), (eps[k - 1] if k else None)
         aud = f'<audio controls preload="none" style="width:100%" src="{esc(r["audio"])}"></audio>' if r and r.get("audio") else ""
@@ -445,7 +449,7 @@ def build(g):
         _spr = SPM.episode(slug=e["slug"])   # T37 Sponsor: Folge aus einem Sponsoring (dauerhaft, auch die Sprachfassungen)
         tx = f'<h2>Transcript</h2><details open><summary>Read the full transcript</summary><p style="white-space:pre-wrap;line-height:1.6">{esc(tr)}</p></details>' if len(tr) > 200 else ""
         body = (f'<article><p class="mut">{day(e["create_time"])}{" · Season " + str(e["season"]) if e.get("season") else ""}</p><h1>{esc(e["name"])}</h1>{SPM.note("en", _spr)}{aud}'
-                f'<div style="display:flex;gap:1rem;align-items:flex-start;margin:1em 0">{img_tag(thumb_of(e, nrec), e["name"], 160)}<div><strong>{esc(short_desc(e, nrec, 300))}</strong></div></div>{nkp}<div class="pp-notes">{(nnotes if snx or (nrec and nrec.get("markup")) else rename_links(san(e.get("show_notes"))))}</div>{nfaq}{SNT.CSS if (nkp or nnotes or nfaq) else ""}'
+                f'<div style="display:flex;gap:1rem;align-items:flex-start;margin:1em 0">{img_tag(thumb_of(e, nrec), e["name"], 160)}<div><strong>{esc(short_desc(e, nrec, 300))}</strong></div></div>{nkp}<div class="pp-notes">{nnotes}{IMG.CSS if IMG.needs_responsive_css(nnotes) else ""}</div>{nfaq}{SNT.CSS if (nkp or nnotes or nfaq) else ""}'
                 + (f"<p>{ext}</p>" if ext else "") + (f'<p class="mut">Host: {hl}</p>' if hl else "") + (f"<h2>Guests</h2><ul>{gl}</ul>" if gl else "") + also
                 + (("<h2>Related articles</h2><ul>" + "".join(f'<li><a href="{bp_url(p)}">{esc(p["title"])}</a></li>' for p in related_posts(e["slug"])) + "</ul>") if related_posts(e["slug"]) else "") + tx + "</article>" + (g.get("author_box")("en") if g.get("author_box") else "")
                 + '<p style="display:flex;justify-content:space-between;gap:1em;margin-top:2em">' + (f'<a href="{ep_url(prev_)}">← {esc(prev_["name"][:60])}</a>' if prev_ else "<span></span>") + (f'<a href="{ep_url(next_)}">{esc(next_["name"][:60])} →</a>' if next_ else "") + "</p>")
@@ -475,10 +479,11 @@ def build(g):
             if not tt or not tt[0]: continue
             lt, ls = tt[0], tt[1] or short_desc(e, nrec, 300)
             ln = NTL.get(l, {}).get(e["slug"])
+            ln_html = san(ln) if ln else ""
             lu = loc_url(l, f"episodes/{e['slug']}/")
             lbody = (f'<article><p class="mut">{day(e["create_time"])}</p><h1>{esc(lt)}</h1>{SPM.note(l, _spr)}{aud}'
                      f'<div style="display:flex;gap:1rem;align-items:flex-start;margin:1em 0">{img_tag(thumb_of(e, nrec), lt, 160)}<div><strong>{esc(ls)}</strong></div></div>'
-                     + (f'<div class="pp-notes">{san(ln)}</div>' if ln else "") + (f"<p>{ext}</p>" if ext else "")
+                     + (f'<div class="pp-notes">{ln_html}{IMG.CSS if IMG.needs_responsive_css(ln_html) else ""}</div>' if ln else "") + (f"<p>{ext}</p>" if ext else "")
                      + f'<p class="mut"><a href="{ep_url(e)}" hreflang="en" lang="en">{esc(e["name"])}</a> (English)</p></article>')
             lald = {"@context": "https://schema.org", "@type": "PodcastEpisode", "name": lt, "url": lu, "datePublished": day(e["create_time"]), "description": ls[:500],
                     "inLanguage": LG[l][1], "partOfSeries": {"@type": "PodcastSeries", "name": NAME, "url": root}, "author": {"@id": f"{BASE}/entity/mirko-peters/#entity"}}
