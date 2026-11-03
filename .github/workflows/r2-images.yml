@@ -5,6 +5,9 @@ on:
       apply:
         description: "true = wirklich hochladen (sonst nur Testlauf)"
         default: "false"
+      fill_dims:
+        description: "Fehlende Masse vorhandener R2-Bilder ermitteln"
+        default: "false"
 permissions:
   contents: write
 jobs:
@@ -21,12 +24,13 @@ jobs:
           R2_BUCKET: ${{ secrets.R2_BUCKET }}
           R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-        run: python tools/r2_upload.py ${{ inputs.apply == 'true' && '--apply' || '' }}
+        run: python tools/r2_upload.py ${{ inputs.fill_dims == 'true' && '--fill-dims' || inputs.apply == 'true' && '--apply' || '' }}
       - name: Zuordnung sichern
-        if: inputs.apply == 'true'
+        if: inputs.apply == 'true' || inputs.fill_dims == 'true'
         run: |
           git config user.name "github-actions"; git config user.email "actions@github.com"
           git add data/r2_map.json
+          git add data/r2_dims.json
           if git diff --cached --quiet; then echo "nichts zu sichern"; exit 0; fi
           git commit -q -m "R2: Bildzuordnung"
           # main bewegt sich oft (Bots): vor dem Push nachziehen und wiederholen; ein endgueltiger Fehlschlag faellt auf (kein || echo)
