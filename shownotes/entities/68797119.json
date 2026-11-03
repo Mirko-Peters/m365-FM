@@ -1,0 +1,184 @@
+{
+  "episode_id": "68797119",
+  "slug": null,
+  "title": "Azure Backup Security: The Backup Operator from Hell (and How to Actually Harden Your Vaults)",
+  "lang": "en",
+  "duration_s": 1346,
+  "transcript_source": "data/en_transcripts/68a3b709843d.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "mfa",
+      "name": "Multifactor authentication (MFA)",
+      "type": "concept",
+      "score": 40,
+      "mentions": 3,
+      "first_mention_s": 309,
+      "quote": "MFA stops the stranger at the glass. It does nothing when the face belongs.",
+      "url": "https://www.m365.fm/entity/mfa/"
+    },
+    {
+      "slug": "conditional-access",
+      "name": "Conditional Access",
+      "type": "concept",
+      "score": 25,
+      "mentions": 1,
+      "first_mention_s": 436,
+      "quote": "No rotation, no conditional access, it wakes at 0 3 12",
+      "url": "https://www.m365.fm/entity/conditional-access/"
+    },
+    {
+      "slug": "azure",
+      "name": "Microsoft Azure",
+      "type": "platform",
+      "score": 75,
+      "mentions": 11,
+      "first_mention_s": 7,
+      "quote": "And here's what actually happens when Azure Backups sits on defaults.",
+      "url": "https://www.m365.fm/entity/azure/"
+    },
+    {
+      "slug": "terraform",
+      "name": "Terraform",
+      "type": "product",
+      "score": 45,
+      "mentions": 3,
+      "first_mention_s": 424,
+      "quote": "Path one, compromised automation, terraform with a slow leak, an innocuous repo",
+      "url": "https://www.m365.fm/entity/terraform/"
+    },
+    {
+      "slug": "azure-files",
+      "name": "Azure Files",
+      "type": "product",
+      "score": 35,
+      "mentions": 3,
+      "first_mention_s": 333,
+      "quote": "Azure files mixes snapshots with vault recovery, trim retention and both collapse together.",
+      "url": "https://www.m365.fm/entity/azure-files/"
+    },
+    {
+      "slug": "microsoft-entra",
+      "name": "Microsoft Entra",
+      "type": "platform",
+      "score": 30,
+      "mentions": 1,
+      "first_mention_s": 1289,
+      "quote": "entra rolls with p_m split duties clean backup admin security reader vault purge admin",
+      "url": "https://www.m365.fm/entity/microsoft-entra/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "azure-backup",
+      "name": "Azure Backup",
+      "type": "product"
+    },
+    {
+      "slug": "azure-backup-soft-delete",
+      "name": "Soft delete for Azure Backup",
+      "type": "concept"
+    },
+    {
+      "slug": "multi-user-authorization",
+      "name": "Multi-user authorization (MUA) for Azure Backup",
+      "type": "concept"
+    },
+    {
+      "slug": "privileged-identity-management",
+      "name": "Microsoft Entra Privileged Identity Management (PIM)",
+      "type": "product"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "One rule to hold in the dark, if one person can kill your backups, you don't have backups.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 27,
+      "entities": [
+        "azure-backup"
+      ],
+      "why": "States the episode's central rule for backup security in one line."
+    },
+    {
+      "text": "Most people think they have backups. But what they have is time until the wrong identity twitches.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 210,
+      "entities": [
+        "azure-backup-soft-delete",
+        "multi-user-authorization"
+      ],
+      "why": "Summarizes the three vault protections and what each one does."
+    },
+    {
+      "text": "MFA stops the stranger at the glass. It does nothing when the face belongs. Privileged intent walks straight through.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 310,
+      "entities": [
+        "mfa"
+      ],
+      "why": "Explains why MFA does not protect against insiders or compromised privileged identities."
+    },
+    {
+      "text": "If the same identities span them, you just gave one key to every door. Cross subscription trust becomes a dark corridor.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 290,
+      "entities": [
+        "azure"
+      ],
+      "why": "Debunks the idea that more subscriptions alone make backups safer."
+    },
+    {
+      "text": "Azure will not save you from yourself. It will mirror you. If your model allows a single identity to end backups, the platform will oblige",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 399,
+      "entities": [
+        "azure-backup"
+      ],
+      "why": "Puts responsibility for backup security on identity design, not platform defaults."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "The backup operator from hell"
+    },
+    {
+      "start_s": 218,
+      "title": "Why Azure Backup is not secure by default"
+    },
+    {
+      "start_s": 416,
+      "title": "Common attack paths that kill backups"
+    },
+    {
+      "start_s": 680,
+      "title": "Three-step hardening strategy"
+    },
+    {
+      "start_s": 966,
+      "title": "VM, Azure SQL and Azure Files risks"
+    },
+    {
+      "start_s": 1131,
+      "title": "Demo: soft delete, MUA and vault lock"
+    },
+    {
+      "start_s": 1177,
+      "title": "Enterprise scenarios and tooling"
+    }
+  ],
+  "takeaways": [
+    "Azure Backup is not immutable by default; soft delete, multi-user authorization and vault lock must be enabled and tested in that order.",
+    "The real threat to backups is IAM design: contributors, owners, shadow admins and automation that can both deploy and purge.",
+    "Separate duties with distinct roles, narrowly scoped managed identities, PIM elevation, policy-enforced retention floors and alerts on destructive backup operations."
+  ],
+  "hook": "Your backup jobs show green, yet one over-privileged identity can delete or quietly expire every recovery point. This episode is for Azure administrators and security teams responsible for ransomware recovery. You learn the common attack paths and a three-step hardening plan with soft delete, multi-user authorization, vault lock and identity separation.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-03T02:32:47+00:00"
+}

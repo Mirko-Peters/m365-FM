@@ -1,0 +1,197 @@
+{
+  "episode_id": "68519435",
+  "slug": null,
+  "title": "Stop Paying for Cloud VMs: Run Azure on a Mini PC",
+  "lang": "en",
+  "duration_s": 1379,
+  "transcript_source": "data/en_transcripts/9ed185687c44.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "zero-trust",
+      "name": "Zero Trust",
+      "type": "concept",
+      "score": 30,
+      "mentions": 2,
+      "first_mention_s": 573,
+      "quote": "You get modern zero-trust style authentication without the Baroque ceremony of a forest.",
+      "url": "https://www.m365.fm/entity/zero-trust/"
+    },
+    {
+      "slug": "azure-local",
+      "name": "Azure Local",
+      "type": "product",
+      "score": 92,
+      "mentions": 16,
+      "first_mention_s": 57,
+      "quote": "Then Azure Local lets that device act like a full Azure region",
+      "url": "https://www.m365.fm/entity/azure-local/"
+    },
+    {
+      "slug": "azure-key-vault",
+      "name": "Azure Key Vault",
+      "type": "product",
+      "score": 75,
+      "mentions": 12,
+      "first_mention_s": 469,
+      "quote": "Certificate-based identity through Azure Key Vault, the modern way to log into your local cloud",
+      "url": "https://www.m365.fm/entity/azure-key-vault/"
+    },
+    {
+      "slug": "active-directory",
+      "name": "Active Directory",
+      "type": "product",
+      "score": 68,
+      "mentions": 13,
+      "first_mention_s": 457,
+      "quote": "But there's a trap lurking and it has three letters, AD.",
+      "url": "https://www.m365.fm/entity/active-directory/"
+    },
+    {
+      "slug": "azure",
+      "name": "Microsoft Azure",
+      "type": "platform",
+      "score": 60,
+      "mentions": 78,
+      "first_mention_s": 45,
+      "quote": "can run in your environment just as easily as in Microsoft's. And that's where Azure Arc comes in.",
+      "url": "https://www.m365.fm/entity/azure/"
+    },
+    {
+      "slug": "defender",
+      "name": "Microsoft Defender",
+      "type": "product",
+      "score": 35,
+      "mentions": 7,
+      "first_mention_s": 104,
+      "quote": "As your resource manager, policy defender and other services keeping your imaginary data center in check.",
+      "url": "https://www.m365.fm/entity/defender/"
+    },
+    {
+      "slug": "github",
+      "name": "GitHub",
+      "type": "org",
+      "score": 30,
+      "mentions": 4,
+      "first_mention_s": 933,
+      "quote": "GitHub's integration means any application changes pushed to your repository automatically redeploy here",
+      "url": "https://www.m365.fm/entity/github/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "azure-arc",
+      "name": "Azure Arc",
+      "type": "product"
+    },
+    {
+      "slug": "kubernetes",
+      "name": "Kubernetes",
+      "type": "product"
+    },
+    {
+      "slug": "azure-portal",
+      "name": "Azure portal",
+      "type": "product"
+    },
+    {
+      "slug": "control-plane",
+      "name": "Control plane",
+      "type": "concept"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "The control plane is the brain. You pay it to allocate workloads, enforce governance, monitor health and sync policies. The hardware is just the muscle.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 88,
+      "entities": [
+        "control-plane",
+        "azure"
+      ],
+      "why": "Explains the split between management layer and hardware that underpins the whole argument."
+    },
+    {
+      "text": "Arc lets you attach non-azure servers, Kubernetes clusters or even other clouds and treat them as if they were native Azure citizens.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 115,
+      "entities": [
+        "azure-arc",
+        "kubernetes"
+      ],
+      "why": "A clear one-sentence definition of what Azure Arc does."
+    },
+    {
+      "text": "Key Vault replaces the constant AD heartbeat with an occasional secure whisper. It stores things like the cluster certificates, encryption keys, bitlocker secrets, and admin credentials in one auditable store.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 554,
+      "entities": [
+        "azure-key-vault",
+        "active-directory"
+      ],
+      "why": "Describes the certificate-based identity alternative to Active Directory for small edge clusters."
+    },
+    {
+      "text": "For stable, long-running workloads or predictable operations, the local approach wins outright. For bursty or global scale tasks, the public cloud remains useful.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 1264,
+      "entities": [
+        "azure-local"
+      ],
+      "why": "Gives a balanced rule for when local hosting beats the public cloud."
+    },
+    {
+      "text": "The philosophical twist is this, the cloud was never somewhere else. It was always a management idea, not a place.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 1342,
+      "entities": [
+        "azure-arc",
+        "azure"
+      ],
+      "why": "Summarizes the episode's central reframing of what the cloud is."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "Paying rent for cloud VMs"
+    },
+    {
+      "start_s": 78,
+      "title": "The cloud without the cloud: Arc and Azure Local"
+    },
+    {
+      "start_s": 276,
+      "title": "The mini PC revolution"
+    },
+    {
+      "start_s": 477,
+      "title": "Escaping the AD trap with Key Vault"
+    },
+    {
+      "start_s": 714,
+      "title": "Deploying your own private Azure region"
+    },
+    {
+      "start_s": 1002,
+      "title": "The economics of taking the cloud home"
+    },
+    {
+      "start_s": 1305,
+      "title": "Epilogue: the cloud as a management idea"
+    }
+  ],
+  "takeaways": [
+    "Azure Arc extends Azure's management layer to hardware you own, and Azure Local turns that hardware into a small Azure region with VMs and AKS.",
+    "For small edge deployments, local identity with Azure Key Vault certificates removes the need for Active Directory domain controllers.",
+    "Arc registration itself is free, so stable workloads on a one-time mini PC purchase can replace recurring cloud VM costs while you pay only for optional governance services."
+  ],
+  "hook": "Paying every month for cloud VMs that mostly sit idle? This episode shows IT admins and architects how Azure Arc and Azure Local turn a mini PC into a governed Azure region. You learn the hardware needs, the Key Vault identity model and the cost math behind taking compute back on site.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-03T04:22:35+00:00"
+}

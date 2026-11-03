@@ -1,0 +1,175 @@
+{
+ "episode_id": "67345082",
+ "slug": "lakehouse-performance-in-microsoft-fabric-partitioning-delta-files-caching",
+ "title": "Lakehouse Performance in Microsoft Fabric: How Partitioning, Delta Files and Caching Turn Slow Dashboards into Fast Analytics",
+ "lang": "en",
+ "duration_s": 1250,
+ "transcript_source": "data/en_transcripts/07e082e3f946.txt",
+ "time_basis": "estimated",
+ "entities": [
+  {
+   "slug": "fabric-lakehouse",
+   "name": "Fabric lakehouse",
+   "type": "product",
+   "score": 95,
+   "mentions": 24,
+   "first_mention_s": 13,
+   "quote": "and show you a real transformation before and after lake House optimization using partitioning, cashing and delta lake",
+   "url": "https://www.m365.fm/entity/fabric-lakehouse/"
+  },
+  {
+   "slug": "data-partitioning",
+   "name": "Data partitioning",
+   "type": "concept",
+   "score": 90,
+   "mentions": 30,
+   "first_mention_s": 14,
+   "quote": "before and after lake House optimization using partitioning, cashing and delta lake file management.",
+   "url": "https://www.m365.fm/entity/data-partitioning/"
+  },
+  {
+   "slug": "delta-lake",
+   "name": "Delta Lake",
+   "type": "product",
+   "score": 70,
+   "mentions": 5,
+   "first_mention_s": 16,
+   "quote": "lake House optimization using partitioning, cashing and delta lake file management.",
+   "url": "https://www.m365.fm/entity/delta-lake/"
+  },
+  {
+   "slug": "fabric",
+   "name": "Microsoft Fabric",
+   "type": "platform",
+   "score": 70,
+   "mentions": 19,
+   "first_mention_s": 4,
+   "quote": "If you've ever watched a simple query crawl in Microsoft Fabric while your cloud bill climbs, you're in the right",
+   "url": "https://www.m365.fm/entity/fabric/"
+  },
+  {
+   "slug": "power-bi",
+   "name": "Power BI",
+   "type": "product",
+   "score": 40,
+   "mentions": 3,
+   "first_mention_s": 31,
+   "quote": "If you've ever watched a simple power Bi dashboard lag for what feels like forever, even though your",
+   "url": "https://www.m365.fm/entity/power-bi/"
+  },
+  {
+   "slug": "apache-parquet",
+   "name": "Apache Parquet",
+   "type": "concept",
+   "score": 20,
+   "mentions": 1,
+   "first_mention_s": 950,
+   "quote": "At first, spreading data into multiple parquet files looks clean, but over time all those tiny slices pile",
+   "url": "https://www.m365.fm/entity/apache-parquet/"
+  }
+ ],
+ "new_entities": [
+  {
+   "slug": "caching",
+   "name": "Caching",
+   "type": "concept",
+   "mentions": 33,
+   "first_mention_s": 15,
+   "quote": "and after lake House optimization using partitioning, cashing and delta lake file management.",
+   "status": "review"
+  },
+  {
+   "slug": "delta-lake-compaction",
+   "name": "Compaction (Delta Lake)",
+   "type": "concept",
+   "mentions": 11,
+   "first_mention_s": 907,
+   "quote": "When it comes to file optimization and compaction, all",
+   "status": "review"
+  }
+ ],
+ "quotes": [
+  {
+   "text": "If there's one lesson from all this, it's that partition keys should never be on autopilot. The best choice always comes from your workload and query patterns",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 527,
+   "entities": [
+    "data-partitioning"
+   ],
+   "why": "Core recommendation to align partitioning with real query patterns."
+  },
+  {
+   "text": "A partition key that matches those filters will do more for speed, cost, and sanity than any amount of hardware upgrades.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 554,
+   "entities": [
+    "data-partitioning",
+    "fabric-lakehouse"
+   ],
+   "why": "Argues that design beats hardware for Lakehouse performance."
+  },
+  {
+   "text": "It's like storing your favorite screwdriver at the bottom of a cluttered toolbox. You always end up fishing around, moving useless stuff aside, even though you know exactly what you want. The wasted time isn't from hardware limits, it's from bad prioritization.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 669,
+   "entities": [
+    "caching"
+   ],
+   "why": "Memorable analogy for default caching that ignores hot data."
+  },
+  {
+   "text": "Compaction isn't just nice to have, it's a core requirement once your tables start to accumulate regular updates and small incremental loads.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 1057,
+   "entities": [
+    "delta-lake-compaction",
+    "delta-lake"
+   ],
+   "why": "States when Delta Lake compaction becomes essential."
+  },
+  {
+   "text": "Microsoft recommends compaction based on data conditions, not on a clock, by tracking file sizes and growth patterns instead.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 1118,
+   "entities": [
+    "delta-lake-compaction"
+   ],
+   "why": "Practical guidance on condition-based instead of scheduled compaction."
+  }
+ ],
+ "chapters": [
+  {
+   "start_s": 0,
+   "title": "Why Lakehouse dashboards crawl"
+  },
+  {
+   "start_s": 299,
+   "title": "Partitioning pitfalls: the cost of one size fits all"
+  },
+  {
+   "start_s": 599,
+   "title": "Cache or crash: why memory matters"
+  },
+  {
+   "start_s": 920,
+   "title": "Delta Lake compaction as the secret weapon"
+  },
+  {
+   "start_s": 1197,
+   "title": "Linking all three levers together"
+  }
+ ],
+ "takeaways": [
+  "Partition keys in a Fabric Lakehouse should follow real query filters, because both under- and over-partitioning multiply scan cost and query time.",
+  "Default caching treats all data equally, so reviewing query history and pinning hot tables keeps critical dashboards fast and compute costs stable.",
+  "Frequent small loads fragment Delta Lake tables into thousands of files, and condition-based compaction restores read performance without new hardware."
+ ],
+ "hook": "Data engineers and Fabric admins watching simple queries crawl while cloud costs climb will learn the three settings behind most slow Lakehouses. The episode shows how smarter partitioning, targeted caching and Delta Lake compaction turn slow dashboards into fast, predictable analytics.",
+ "youtube_video_id": null,
+ "generated_at": "2026-11-03T03:36:32Z"
+}

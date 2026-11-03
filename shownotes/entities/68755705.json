@@ -1,0 +1,241 @@
+{
+  "episode_id": "68755705",
+  "slug": null,
+  "title": "Entra ID OAuth Consent Attack: Why Your MFA Is Useless Against Illicit Grants",
+  "lang": "en",
+  "duration_s": 1749,
+  "transcript_source": "data/en_transcripts/31438bda3525.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "mfa",
+      "name": "Multifactor authentication (MFA)",
+      "type": "concept",
+      "score": 85,
+      "mentions": 16,
+      "first_mention_s": 0,
+      "quote": "Recruit, you think MFA makes you bulletproof? Wrong.",
+      "url": "https://www.m365.fm/entity/mfa/"
+    },
+    {
+      "slug": "audit-logs",
+      "name": "Audit logs",
+      "type": "concept",
+      "score": 60,
+      "mentions": 5,
+      "first_mention_s": 1044,
+      "quote": "We hunt three trails, audit logs, sign-in context, and live inventory via graph/power shell.",
+      "url": "https://www.m365.fm/entity/audit-logs/"
+    },
+    {
+      "slug": "zero-trust",
+      "name": "Zero Trust",
+      "type": "concept",
+      "score": 55,
+      "mentions": 3,
+      "first_mention_s": 730,
+      "quote": "You want zero trust? This is zero trust at the app layer.",
+      "url": "https://www.m365.fm/entity/zero-trust/"
+    },
+    {
+      "slug": "conditional-access",
+      "name": "Conditional Access",
+      "type": "concept",
+      "score": 40,
+      "mentions": 1,
+      "first_mention_s": 1471,
+      "quote": "Conditional access policy that denies the app's client ID while you clean.",
+      "url": "https://www.m365.fm/entity/conditional-access/"
+    },
+    {
+      "slug": "microsoft-entra",
+      "name": "Microsoft Entra",
+      "type": "platform",
+      "score": 85,
+      "mentions": 5,
+      "first_mention_s": 364,
+      "quote": "The non-negotiables set these three-entra controls now.",
+      "url": "https://www.m365.fm/entity/microsoft-entra/"
+    },
+    {
+      "slug": "graph",
+      "name": "Microsoft Graph",
+      "type": "product",
+      "score": 80,
+      "mentions": 16,
+      "first_mention_s": 160,
+      "quote": "Mailbox rules, file x fill, graph queries, directory changes, the works.",
+      "url": "https://www.m365.fm/entity/graph/"
+    },
+    {
+      "slug": "entra-id",
+      "name": "Microsoft Entra ID",
+      "type": "product",
+      "score": 45,
+      "mentions": 1,
+      "first_mention_s": 1384,
+      "quote": "Combined with Azure AD audit to confirm when the grant started",
+      "url": "https://www.m365.fm/entity/entra-id/"
+    },
+    {
+      "slug": "sharepoint",
+      "name": "SharePoint",
+      "type": "product",
+      "score": 40,
+      "mentions": 5,
+      "first_mention_s": 271,
+      "quote": "Read, all to one drive and share point.",
+      "url": "https://www.m365.fm/entity/sharepoint/"
+    },
+    {
+      "slug": "onedrive",
+      "name": "OneDrive",
+      "type": "product",
+      "score": 30,
+      "mentions": 2,
+      "first_mention_s": 271,
+      "quote": "Read, all to one drive and share point.",
+      "url": "https://www.m365.fm/entity/onedrive/"
+    },
+    {
+      "slug": "teams",
+      "name": "Microsoft Teams",
+      "type": "product",
+      "score": 30,
+      "mentions": 4,
+      "first_mention_s": 274,
+      "quote": "Calendar scraping contacts harvest for next wave fishing, teams, message, impersonation with chat.",
+      "url": "https://www.m365.fm/entity/teams/"
+    },
+    {
+      "slug": "defender",
+      "name": "Microsoft Defender",
+      "type": "product",
+      "score": 30,
+      "mentions": 1,
+      "first_mention_s": 1085,
+      "quote": "In Microsoft Defender or Entra Audit, filter on activity display name for those three.",
+      "url": "https://www.m365.fm/entity/defender/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "illicit-consent-grant",
+      "name": "Illicit consent grant attack",
+      "type": "concept"
+    },
+    {
+      "slug": "oauth",
+      "name": "OAuth 2.0",
+      "type": "concept"
+    },
+    {
+      "slug": "admin-consent",
+      "name": "Admin consent (Microsoft Entra ID)",
+      "type": "concept"
+    },
+    {
+      "slug": "publisher-verification",
+      "name": "Publisher verification",
+      "type": "concept"
+    },
+    {
+      "slug": "service-principal",
+      "name": "Service principal",
+      "type": "concept"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "MFA protects authentication. Consent grants create tokens after a one-time dance. Those tokens keep refreshing with refreshed tokens.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 73,
+      "entities": [
+        "mfa",
+        "illicit-consent-grant"
+      ],
+      "why": "Explains in three short sentences why MFA does not stop consent-based attacks."
+    },
+    {
+      "text": "The simple version is authentication answers, who are you? Authorization answers, what can you do? This attack hijacks authorization.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 253,
+      "entities": [
+        "oauth",
+        "illicit-consent-grant"
+      ],
+      "why": "A clear distinction between authentication and authorization that frames the attack."
+    },
+    {
+      "text": "And everything clicked when I realized resets don't revoke grants. You must revoke the OAuth consent at the service principal or grant object level.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 297,
+      "entities": [
+        "oauth",
+        "service-principal"
+      ],
+      "why": "States the one remediation step that actually cuts off a malicious app."
+    },
+    {
+      "text": "Verified publishers have gone through Microsoft's process to prove ownership. Is it perfect? No. But it raises the bar and filters out a ton of junkware and throw away phishing apps.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 481,
+      "entities": [
+        "publisher-verification"
+      ],
+      "why": "Gives a balanced take on the value of requiring verified publishers."
+    },
+    {
+      "text": "Offline access is not nice to have. It's a time machine. It lets the app come back tomorrow without you.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 986,
+      "entities": [
+        "oauth"
+      ],
+      "why": "Memorable explanation of why the offline_access scope signals persistence."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "Why MFA won't save you"
+    },
+    {
+      "start_s": 41,
+      "title": "What illicit consent grants are"
+    },
+    {
+      "start_s": 364,
+      "title": "Three Entra controls to set now"
+    },
+    {
+      "start_s": 737,
+      "title": "Case study: resets don't revoke grants"
+    },
+    {
+      "start_s": 1035,
+      "title": "Detection: logs and queries"
+    },
+    {
+      "start_s": 1421,
+      "title": "Remediation and hardening"
+    },
+    {
+      "start_s": 1715,
+      "title": "Key takeaway: consent control"
+    }
+  ],
+  "takeaways": [
+    "OAuth consent grants give apps tokens that keep refreshing, so MFA and password resets do not cut off a malicious app; only revoking the grant does.",
+    "Lock down user consent to low-risk scopes, allow it only for verified publishers and route every risky request through the admin consent workflow.",
+    "Hunt for new grants, risky scopes such as offline access with mail or files permissions, and added app credentials in audit logs and via Microsoft Graph, then revoke and verify."
+  ],
+  "hook": "An attacker can read your mail and files without ever touching a password, and MFA will not notice. This episode shows Microsoft 365 admins and security teams how illicit OAuth consent grants work, why resets do not revoke them, and which Entra controls, detections and remediation steps shut them down.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-03T04:24:10+00:00"
+}

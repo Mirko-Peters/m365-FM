@@ -1,0 +1,1276 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:01.160
+Selamat datang di Sajian Pengetahuan.
+
+00:00:01.520 --> 00:00:05.120
+Topik hari ini adalah sesuatu yang pernah dipikirkan oleh setiap orang IT setidaknya sekaligus.
+
+00:00:05.300 --> 00:00:06.800
+Bayangkan server perusahaan Anda mengalami kerusaha.
+
+00:00:07.140 --> 00:00:08.660
+VM Anda hilang. Data Anda hilang.
+
+00:00:08.900 --> 00:00:09.380
+Apa yang Anda lakukan?
+
+00:00:09.820 --> 00:00:13.180
+20 tahun lalu, jawabannya berarti mencari kaset cadangan atau drive eksternal
+
+00:00:13.180 --> 00:00:15.260
+atau menemukan server cadangan yang tersimpan di lemari.
+
+00:00:15.740 --> 00:00:18.340
+Anda harus merotasi media melalui kota dan berharap tidak ada yang salah.
+
+00:00:18.740 --> 00:00:22.100
+Dan masalahnya, Anda baru tahu cadangan Anda berhasil saat benar-benar mencoba mulihkan.
+
+00:00:22.540 --> 00:00:23.820
+Azure Backup mengubah persamaan itu.
+
+00:00:24.320 --> 00:00:26.700
+Tanpa kaset, tanpa server lokal, tanpa perlu berharap cemas.
+
+00:00:26.700 --> 00:00:30.320
+Di akhir episode ini, Anda akan paham apa itu Azure Backup,
+
+00:00:30.420 --> 00:00:32.640
+apa yang dilindunginya, dan bagaimana cara kerjanya.
+
+00:00:33.020 --> 00:00:35.780
+Dan mari mulai dengan definisi paling sederhana.
+
+00:00:36.540 --> 00:00:38.000
+Tentang apa sebenarnya Azure Backup?
+
+00:00:38.600 --> 00:00:41.180
+Azure Backup adalah layanan cadangan bawaan Microsoft untuk cloud.
+
+00:00:41.800 --> 00:00:43.680
+Jawaban sederhana itu menyembunyikan sesuatu yang lebih besar.
+
+00:00:44.240 --> 00:00:45.320
+Ini sama sekali bukan alat tunggal.
+
+00:00:45.720 --> 00:00:49.300
+Ini adalah platform terhubung yang melindungi mesin virtual basis data,
+
+00:00:49.500 --> 00:00:52.100
+berbagi berkas, bahkan mesin di kantor Anda sendiri.
+
+00:00:53.200 --> 00:00:56.060
+Alih-alih mengelola perangkat keras dan perangkat lunak cadangan sendiri,
+
+00:00:56.060 --> 00:00:58.440
+Azure menangani penyimpanan, penjatualan, dan keamanannya.
+
+00:00:58.920 --> 00:01:01.540
+Anda cukup tentukan apa yang akan dilindungi dan seberapa sering sisanya Azure.
+
+00:01:01.920 --> 00:01:03.400
+Bayangkan seperti kotak deposit di bank.
+
+00:01:03.920 --> 00:01:06.420
+Anda menaruh barang berharga dan bank menangani keamanan,
+
+00:01:06.500 --> 00:01:07.720
+perlindungan api, serta berangkasnya.
+
+00:01:08.120 --> 00:01:09.820
+Saat Anda butuh sesuatu kembali, Anda tinggal mengambil.
+
+00:01:10.120 --> 00:01:11.880
+Anda tidak perlu membangun berangkas sendiri di ruang bawa tanah.
+
+00:01:12.280 --> 00:01:13.300
+Azure Backup bekerja dengan sama.
+
+00:01:13.940 --> 00:01:16.280
+Anda tidak perlu membeli server cadangan atau mengelola rotasi kaset.
+
+00:01:16.800 --> 00:01:19.580
+Anda hanya perlu memutuskan apa yang penting dan biarkan Azure menyimpannya nama.
+
+00:01:19.920 --> 00:01:21.520
+Itulah perbedaan nyata dari cadangan tradisional.
+
+00:01:21.520 --> 00:01:26.260
+Tidak ada lagi rotasi kaset atau manajemen penyimpanan di luar lokasi atau berharap cemasan Anda membutuhkannya.
+
+00:01:26.800 --> 00:01:30.500
+Di balik layar, Azure Backup menggunakan sesuatu yang disebut agen untuk sebagian besar beban kerja.
+
+00:01:30.860 --> 00:01:32.900
+Ini adalah perangkat lunak kecil yang dipasang di mesin Anda,
+
+00:01:33.280 --> 00:01:34.760
+baik di Azure maupun di kantor Anda.
+
+00:01:35.520 --> 00:01:37.580
+Akin tersebut mengordinasikan proses cadangan,
+
+00:01:37.840 --> 00:01:41.340
+memberitahu Azure kapan harus mengambil snapshot, data apa yang berubah, dan kemana mengirim salinannya.
+
+00:01:41.960 --> 00:01:45.540
+Nah, poinnya adalah Anda tidak perlu menginstal apapun secara manual untuk mesin virtual Azure.
+
+00:01:45.540 --> 00:01:48.360
+Saat Anda mengaktifkan cadangan pada VM melalui portal,
+
+00:01:48.480 --> 00:01:50.160
+Azure mewasang ekstensi itu secara otomatis.
+
+00:01:50.800 --> 00:01:51.560
+Satu klik dan selesai.
+
+00:01:52.060 --> 00:01:53.380
+Azure Backup benar-benar merupakan layanan terkola.
+
+00:01:53.800 --> 00:01:55.960
+Anda menentukan kebijakannya, ia menangani eksekusinya.
+
+00:01:56.620 --> 00:01:58.180
+Tidak ada server cadangan untuk ditambal,
+
+00:01:58.260 --> 00:01:59.780
+tidak ada larik penyimpanan untuk diperluas,
+
+00:01:59.840 --> 00:02:01.460
+dan tidak perlu menebak apakah cadangan pernah berjalan.
+
+00:02:01.960 --> 00:02:03.240
+Namun apa saja sebenarnya yang bisa Anda cadang?
+
+00:02:03.600 --> 00:02:04.760
+Itulah yang akan kita bahas selanjutnya.
+
+00:02:05.160 --> 00:02:06.180
+Apa yang jadi mengini Azure Backup?
+
+00:02:06.520 --> 00:02:08.060
+Jadi apa saja yang sebenarnya bisa Anda cadangkan Azure?
+
+00:02:08.500 --> 00:02:09.380
+Mari kita berkecah utamanya.
+
+00:02:09.780 --> 00:02:11.960
+VM Azure adalah kasus penggunaan yang paling memusia jauh ini.
+
+00:02:11.960 --> 00:02:14.280
+Anda mengaktifkan cadangan pada mesin virtual,
+
+00:02:14.520 --> 00:02:15.980
+dan Azure mengambil salinan penuhnya,
+
+00:02:16.060 --> 00:02:18.320
+termasuk sistem operasi, aplikasi, dan disk data.
+
+00:02:18.980 --> 00:02:21.200
+Jika VM tersebut rusak atau tidak sengaja terhapus,
+
+00:02:21.260 --> 00:02:22.920
+Anda bisa memulihkan semuanya dari cadangan Anda,
+
+00:02:23.040 --> 00:02:25.220
+dan itulah jaring pengaman untuk beban kerja komputasi Anda.
+
+00:02:26.240 --> 00:02:27.180
+Namun VM hanyalah pengelak.
+
+00:02:27.620 --> 00:02:29.560
+Bagaimana dengan basis data yang berjalan di dalam VM tersebut?
+
+00:02:29.900 --> 00:02:32.360
+SQL Server dan SAP HANA bukan sekadar berkas di dalam disk.
+
+00:02:32.820 --> 00:02:34.680
+Mereka memiliki struktur kompleks, log transaksi,
+
+00:02:34.820 --> 00:02:36.080
+dan persyaratan pemulihan khusus.
+
+00:02:36.660 --> 00:02:37.940
+Dan Azure Backup memahaminya.
+
+00:02:38.160 --> 00:02:40.360
+Saat Anda mencadangkan basis data SQL Server
+
+00:02:40.360 --> 00:02:41.940
+yang berjalan di VM Azure Azure Backup,
+
+00:02:41.960 --> 00:02:45.140
+berkoordinasi dengan SQL untuk memastikan cadangan tersebut konsisten secara aplikasi.
+
+00:02:45.360 --> 00:02:47.660
+Itu berarti saat Anda memulihkan basis data kembali bersih,
+
+00:02:47.980 --> 00:02:50.540
+tanpa kerusakan, tanpa transaksi yang hilang, dan tanpa kejutan.
+
+00:02:51.020 --> 00:02:52.900
+Anda bahkan dapat mengatur target titik pemulihan
+
+00:02:52.900 --> 00:02:55.200
+hingga 15 menit untuk basis data Anda yang paling kritis.
+
+00:02:55.600 --> 00:02:57.260
+Inilah sesuatu yang tidak disadari oleh banyak orang.
+
+00:02:57.660 --> 00:02:59.840
+Azure Backup bukan hanya untuk hal-hal yang berjalan di dalam Azure.
+
+00:03:00.240 --> 00:03:02.060
+Layanan ini juga dapat mencadangkan server lokal,
+
+00:03:02.320 --> 00:03:03.800
+mesin fisik, dan mesin virtual VMware.
+
+00:03:04.540 --> 00:03:06.240
+Anda mengirimkan cadangannya langsung ke Azure
+
+00:03:06.240 --> 00:03:08.520
+menggunakan Microsoft Azure Backup Server atau EigenMars.
+
+00:03:08.520 --> 00:03:11.000
+Itu berarti Anda bisa mempensiunkan pustaka pita Anda
+
+00:03:11.000 --> 00:03:12.860
+dan menggunakan Azure sebagai penyimpanan luar lokasi
+
+00:03:12.860 --> 00:03:14.720
+tanpa perlu lagi mengirim hard disk ke berangkas di suatu tempat.
+
+00:03:14.880 --> 00:03:16.780
+Berbagi berkas file shares Azure dilakukan kerja lainnya.
+
+00:03:17.020 --> 00:03:19.060
+Anggaplah itu sebagai folder bersama berbasis cloud,
+
+00:03:19.180 --> 00:03:21.760
+jenis yang digunakan tim Anda untuk berkolaborasi dalam dokumen.
+
+00:03:22.000 --> 00:03:23.720
+Azure Backup melindungi berbagai berkas tersebut,
+
+00:03:23.860 --> 00:03:25.680
+jadi jika seseorang tidak sengaja menghapus folder
+
+00:03:25.680 --> 00:03:27.460
+atau serangan ransomware mengenkripsi berkas Anda,
+
+00:03:27.560 --> 00:03:28.780
+Anda bisa kembali ke versi yang bersih.
+
+00:03:29.460 --> 00:03:31.140
+Blob Azure mencakup data tidak terstruktur,
+
+00:03:31.800 --> 00:03:33.560
+gambar, log, dan cadangan sistem lainnya.
+
+00:03:34.020 --> 00:03:35.680
+Azure Backup juga dapat melindungi kontennya blob Anda.
+
+00:03:35.680 --> 00:03:37.140
+Lalu ada disk Azure.
+
+00:03:37.760 --> 00:03:39.720
+Terkadang Anda tidak perlu mencadangkan seluruh VM.
+
+00:03:40.440 --> 00:03:42.340
+Mungkin Anda hanya perlu melindungi disk data tertentu.
+
+00:03:42.680 --> 00:03:44.020
+Azure Backup juga mendukung hal tersebut.
+
+00:03:44.360 --> 00:03:45.360
+Berikut adalah skenario dunianya.
+
+00:03:45.780 --> 00:03:48.400
+Bayangkan sebuah perusahaan menjalankan infrastrukturnya di Azure
+
+00:03:48.400 --> 00:03:49.800
+dengan beberapa VM produksi,
+
+00:03:49.940 --> 00:03:52.180
+basis data SQL server untuk aplikasi bisnis mereka,
+
+00:03:52.720 --> 00:03:54.900
+dan server berkas lama yang masih ada di kantor mereka
+
+00:03:54.900 --> 00:03:56.080
+yang belum dimigrasikan.
+
+00:03:57.260 --> 00:03:59.240
+Dengan Azure Backup, mereka melindungi semuanya di satu vault.
+
+00:03:59.740 --> 00:04:01.500
+VM, basis data, server berkas lokal,
+
+00:04:01.660 --> 00:04:02.580
+satu strategi cadangan,
+
+00:04:02.720 --> 00:04:03.780
+satu tempat untuk mengelolahnya,
+
+00:04:03.900 --> 00:04:04.840
+satu set kebijakan.
+
+00:04:05.680 --> 00:04:07.180
+Itulah kekuatan dari platform yang terbaik.
+
+00:04:07.500 --> 00:04:08.840
+Jadi, Azure Backup mendukung banyak hal,
+
+00:04:08.960 --> 00:04:10.800
+tapi pertanyaan sebenarnya adalah bagaimana cara kerjanya.
+
+00:04:11.760 --> 00:04:13.840
+Mari kita cerita bagaimana pencadangan sebenarnya bekerja.
+
+00:04:14.440 --> 00:04:15.140
+Proses dua tahap.
+
+00:04:15.920 --> 00:04:17.680
+Saat pencadangan dipicu, dua hal terjadi.
+
+00:04:18.340 --> 00:04:20.660
+Dan memahami perbedaan ini adalah kunci untuk mengetahui
+
+00:04:20.660 --> 00:04:22.320
+mengapa Azure Backup itu cepat dan aman.
+
+00:04:24.080 --> 00:04:24.860
+Tahap pertama adalah snapshot.
+
+00:04:25.280 --> 00:04:28.220
+Azure mengambil salinan data Anda yang bersifat baca saja pada titik waktu tertentu.
+
+00:04:33.520 --> 00:04:35.140
+Ini terjadi dengan cepat karena berupa snapshot.
+
+00:04:35.780 --> 00:04:37.440
+Data belum disalin setiap bitnya.
+
+00:04:38.160 --> 00:04:39.620
+Anggaplah itu seperti mengambil sebuah foto.
+
+00:04:39.620 --> 00:04:41.320
+Snapshot disimpan secara lokal.
+
+00:04:41.640 --> 00:04:44.280
+Tepat di samping VM Anda jadi tersedia untuk pemulihan cepat.
+
+00:04:45.280 --> 00:04:46.620
+Tahap kedua adalah transfer ke vault.
+
+00:04:47.420 --> 00:04:49.780
+Data snapshot tersebut dipindahkan ke recovery services vault
+
+00:04:49.780 --> 00:04:51.900
+atau backup vault Anda untuk penyimpanan jangka panjang.
+
+00:04:52.580 --> 00:04:55.260
+Ini memakan waktu lebih lama karena data benar-benar disalin dan ditransfer
+
+00:04:55.260 --> 00:04:56.740
+tetapi memberikan keamanan di luar lokasi.
+
+00:04:56.740 --> 00:05:00.820
+Jika seluruh wilayah Azure Anda mati, data cadang Anda tetap aman di dalam vault.
+
+00:05:01.660 --> 00:05:04.040
+Pendekatan dua tahap ini membuat pemulihan instan menjadi mungkin.
+
+00:05:04.740 --> 00:05:09.840
+Karena snapshot disimpan secara lokal, Anda dapat memulihkan VM dari snapshot beberapa hari terakhir hampir seketika
+
+00:05:09.840 --> 00:05:11.900
+tanpa menunggu data kembali dari vault.
+
+00:05:12.360 --> 00:05:14.600
+Untuk titik pemulihan lama yang sudah dipindahkan ke vault,
+
+00:05:14.680 --> 00:05:17.020
+pemulihan memakan waktu lebih lama tetapi datanya tetap ada.
+
+00:05:17.400 --> 00:05:18.160
+Tapi datanya tetap ada.
+
+00:05:18.160 --> 00:05:20.680
+Setelah pencadangan pertama, segalanya menjadi lebih efisien.
+
+00:05:21.040 --> 00:05:22.700
+Azure Backup menggunakan pencadangan incremental.
+
+00:05:23.320 --> 00:05:27.340
+Setelah pencadangan penuh awal, hanya perubahan yang dikirim, bukan seluruh VM setiap kalinya.
+
+00:05:27.960 --> 00:05:31.180
+Jika Anda mengubah berapa file, hanya blok perubahan tersebut yang ditransfer
+
+00:05:31.180 --> 00:05:32.820
+yang menghemat waktu dan ruang penyimpanan.
+
+00:05:33.360 --> 00:05:34.400
+Kebijakan mengendalikan segala.
+
+00:05:34.760 --> 00:05:37.140
+Anda menentukan frekuensi seperti harian per jam atau minggu.
+
+00:05:37.680 --> 00:05:40.220
+Anda menentukan retensi seperti berapa hari, minggu, bulan, atau tahun
+
+00:05:40.220 --> 00:05:41.640
+untuk menyimpan setiap titik pemulihan.
+
+00:05:42.000 --> 00:05:44.640
+Dan Anda menentukan kapan harus mengundahkan cadangan lama ke penyimpanan yang lebih tinggi.
+
+00:05:44.640 --> 00:05:47.600
+Sebuah kebijakan mungkin mencadangkan VM sekali sehari,
+
+00:05:47.880 --> 00:05:49.500
+menyimpan 30 titik harian terakhir,
+
+00:05:49.820 --> 00:05:52.000
+dan memindahkan apapun yang lebih lama ke tingkat arsip
+
+00:05:52.000 --> 00:05:53.420
+yang biaya penyimpanannya jauh lebih murah.
+
+00:05:54.180 --> 00:05:55.040
+Berikut contoh konkretnya.
+
+00:05:55.320 --> 00:05:58.020
+Katakanlah Anda memiliki VM produksi yang menjalankan aplikasi web,
+
+00:05:58.240 --> 00:06:01.060
+dan Anda mengatur kebijakan untuk mencadangkannya setiap malam pukul 02.
+
+00:06:01.400 --> 00:06:04.520
+Anda menyimpan 30 cadangan harian dan juga 12 cadangan bulan untuk kepatuhan.
+
+00:06:05.040 --> 00:06:08.160
+Setelah pencadangan penuh pertama, setiap pencadangan berikutnya hanya mentransfer perubahan.
+
+00:06:08.280 --> 00:06:11.700
+Jika VM Anda memiliki 100 GB data, tetapi hanya berubah 2 GB per hari,
+
+00:06:11.700 --> 00:06:13.560
+setiap pencadangan malam hari besarnya sekitar 2 GB.
+
+00:06:13.960 --> 00:06:14.660
+Sangat efisien.
+
+00:06:15.300 --> 00:06:16.780
+Sekarang Anda sudah tahu mekanismenya,
+
+00:06:16.860 --> 00:06:19.380
+namun ada satu hal yang membuat Azure Backup berbeda dari yang lain,
+
+00:06:19.560 --> 00:06:20.920
+yaitu seberapa amannya layanan ini.
+
+00:06:21.960 --> 00:06:24.140
+Lapisan keamanan alasan mengapa Azure Backup sulit diserang.
+
+00:06:24.680 --> 00:06:28.280
+Mari bicara soal keamanan karena disinilah Azure Backup benar-benar melancur dibandingkan cara lama.
+
+00:06:29.100 --> 00:06:31.040
+Setiap cadangan yang Anda buat dienkripsi secara default,
+
+00:06:31.660 --> 00:06:32.720
+saat tersimpan di dalam vault,
+
+00:06:33.120 --> 00:06:35.260
+data menggunakan enkripsi AES-296.
+
+00:06:35.260 --> 00:06:36.540
+Itu adalah standar industri.
+
+00:06:37.300 --> 00:06:38.960
+Saat data berpindah dari mesin Anda ke vault,
+
+00:06:39.160 --> 00:06:42.100
+data dilindungi dengan HTTPS dan TLS 1.2 atau lebih tinggi.
+
+00:06:42.500 --> 00:06:44.200
+Bahkan jika seseorang mencegat aliran data tersebut,
+
+00:06:44.300 --> 00:06:45.140
+mereka tidak akan bisa membaca.
+
+00:06:45.420 --> 00:06:46.560
+Namun itu baru titik awalnya saja.
+
+00:06:46.980 --> 00:06:48.300
+Setiap alat cadangan melakukan enkripsi.
+
+00:06:48.640 --> 00:06:52.040
+Yang membuat Azure Backup berbeda adalah apa yang terjadi ketika seseorang mencoba menghapus cadangan.
+
+00:06:52.300 --> 00:06:53.280
+Pertama ada fitur subtilic.
+
+00:06:53.580 --> 00:06:55.460
+Jika cadangan dihapus secara tidak sengaja atau sengaja,
+
+00:06:55.460 --> 00:06:56.560
+data tersebut tidak akan hilang.
+
+00:06:56.820 --> 00:06:58.660
+Data tetap tersembunyi di dalam vault selama 14 hari.
+
+00:06:59.040 --> 00:06:59.700
+Anda dapat memulihkannya.
+
+00:07:00.060 --> 00:07:02.980
+Itu memberi Anda kesempatan untuk membatalkan kerusakan sebelum menjadi permanent.
+
+00:07:03.360 --> 00:07:05.180
+Bayangkan seperti tempat sampah dengan masa pemulihan.
+
+00:07:05.600 --> 00:07:07.020
+Anda tetap punya opsi untuk mengosongkannya,
+
+00:07:07.120 --> 00:07:09.360
+tetapi Anda harus mengonfirmasi secara eksplisit bahwa Anda ingin melakukannya.
+
+00:07:09.600 --> 00:07:11.580
+Kemudian ada fitur imutabilitas dan ini jauh lebih penting.
+
+00:07:12.100 --> 00:07:14.080
+Setelah Anda menetapkan periode retensi untuk cadangan,
+
+00:07:14.300 --> 00:07:16.040
+titik pemulihan itu tidak dapat dihapus lebih awal.
+
+00:07:16.460 --> 00:07:17.280
+Tidak oleh administrator,
+
+00:07:17.540 --> 00:07:19.140
+tidak oleh seseorang yang membobol akun admin,
+
+00:07:19.140 --> 00:07:20.560
+bahkan tidak oleh Microsoft.
+
+00:07:21.100 --> 00:07:23.420
+Data akan tetap ada sampai periode retensi berakhir.
+
+00:07:24.320 --> 00:07:27.740
+Jika kebijakan Anda menetapkan penyimpanan cadangan harian selama 30 hari,
+
+00:07:27.740 --> 00:07:29.900
+setiap titik pemulihan dari 30 hari tersebut akan terkecirang.
+
+00:07:30.160 --> 00:07:32.000
+Seorang penyarang bisa saja menghapus VM produksi Anda,
+
+00:07:32.120 --> 00:07:33.700
+tetapi mereka tidak bisa menyentuh data cadangannya.
+
+00:07:34.260 --> 00:07:35.200
+Jadi, silahal menjadi menarik.
+
+00:07:35.840 --> 00:07:39.340
+Azure Backup mendukung fitur yang disebut otorisasi multi pengguna atau MUA.
+
+00:07:39.860 --> 00:07:40.540
+Operasi penting,
+
+00:07:40.860 --> 00:07:43.820
+seperti menonaktifkan soft delete atau mematikan imutabilitas,
+
+00:07:44.100 --> 00:07:46.480
+memerlukan persetujuan dari dua orang berbeda.
+
+00:07:46.720 --> 00:07:48.720
+Satu orang tidak bisa mengompromikan cadangan,
+
+00:07:48.840 --> 00:07:49.980
+bahkan seorang admin global sekali.
+
+00:07:50.240 --> 00:07:53.540
+Anda memerlukan dua pengguna resmi untuk setuju sebelum pengaturan keamanan tersebut diubah.
+
+00:07:53.800 --> 00:07:55.640
+Itu adalah pertansi dari startup ancaman dari orang lain.
+
+00:07:55.640 --> 00:07:57.840
+Untuk organisasi dengan aturan jaringan yang ketat,
+
+00:07:57.940 --> 00:07:59.840
+Anda bisa menggunakan titik akhir privat, private endpoint.
+
+00:08:00.220 --> 00:08:01.020
+Ini merutakan semua,
+
+00:08:01.220 --> 00:08:04.100
+lalu lintas cadangan melalui jaringan virtual Azure Anda menggunakan alamat IP private.
+
+00:08:04.700 --> 00:08:06.120
+Data tidak akan pernah menyentuh net publik.
+
+00:08:06.800 --> 00:08:08.620
+Jika tim kepatuan Anda menuntut isolasi jaringan,
+
+00:08:08.720 --> 00:08:09.680
+inilah cara Anda mendapatkannya.
+
+00:08:10.480 --> 00:08:12.360
+Inilah evolusi nyata yang tidak diketahui banyak orang.
+
+00:08:12.980 --> 00:08:15.440
+Azure Backup kini terintegrasi dengan Microsoft Defender for Cloud.
+
+00:08:15.640 --> 00:08:19.120
+Artinya, titik pemulihan cadangan Anda dapat dipindah dari malware sebelum Anda memulihkan.
+
+00:08:19.440 --> 00:08:21.440
+Bayangkan serangan ransomware menimpa perusahaan Anda.
+
+00:08:22.000 --> 00:08:23.320
+Sistem produksi Anda terengkripsi.
+
+00:08:23.320 --> 00:08:25.060
+Anda berencana memulihkan dari cadangan,
+
+00:08:25.300 --> 00:08:27.280
+namun bagaimana jika cadangan itu sendiri mengandung malware?
+
+00:08:27.520 --> 00:08:28.340
+Skenario mimpi buruk.
+
+00:08:28.900 --> 00:08:29.760
+Dengan integrasi ini,
+
+00:08:30.040 --> 00:08:31.400
+Defender memindai titik pemulihan Anda
+
+00:08:31.400 --> 00:08:33.320
+dan menandai manapun yang menunjukkan tanda-tanda infeksi.
+
+00:08:33.660 --> 00:08:36.540
+Anda kemudian dapat memilih titik pemulihan yang bersih alih-alih memulihkan masalah.
+
+00:08:36.800 --> 00:08:37.940
+Dalam serangan ransomware nyata,
+
+00:08:38.100 --> 00:08:40.180
+penyerang hampir selalu mencoba menghapus cadangan terlebih dahulu.
+
+00:08:40.580 --> 00:08:41.340
+Telah buku panduan mereka.
+
+00:08:41.640 --> 00:08:42.740
+Immutability menghentikan hal ini.
+
+00:08:43.140 --> 00:08:46.120
+MOA mencegah satu akun yang disusupi untuk menanaktifkan perlindungan.
+
+00:08:46.120 --> 00:08:48.160
+Penghapusan lunak sop dilat memberi Anda jendela.
+
+00:08:48.360 --> 00:08:51.240
+Dan pemilihan Defender memastikan data yang Anda pulihkan benar-benar bersih.
+
+00:08:51.620 --> 00:08:52.500
+Jadi Azure Backup aman.
+
+00:08:53.080 --> 00:08:55.280
+Namun bagaimana perbandingannya dengan alat yang mungkin sudah Anda gunakan?
+
+00:08:56.060 --> 00:08:57.120
+Azure Backup versus Alternatifnya.
+
+00:08:58.240 --> 00:09:00.440
+Mari kita bicara tentang alternatif karena Anda punya pilihan.
+
+00:09:00.680 --> 00:09:02.180
+Dan pilihan tepat bergantung pada situasi Anda.
+
+00:09:02.620 --> 00:09:04.640
+Cadangan on-premises tradisional adalah apa yang telah dilakukan
+
+00:09:04.640 --> 00:09:06.040
+sebagai besar perusahaan selama beberapa reka.
+
+00:09:06.040 --> 00:09:08.180
+Anda membeli server cadangan, membeli penyimpanan,
+
+00:09:08.260 --> 00:09:09.860
+dan membeli lisensi perangkat lunak cadangan.
+
+00:09:10.160 --> 00:09:11.860
+Anda mengelola rotasi pita atau larik disk.
+
+00:09:12.220 --> 00:09:13.700
+Anda mendangani penyimpanan di luar lokasi sini.
+
+00:09:13.700 --> 00:09:15.240
+Biaya di muka cukup signifikan.
+
+00:09:15.880 --> 00:09:18.320
+Server penyimpanan perangkat lunak dan orang untuk menjalankan.
+
+00:09:18.740 --> 00:09:21.380
+Dan Anda harus memperbarui perangkat keras itu setiap 3 hingga 5 tahun.
+
+00:09:21.780 --> 00:09:23.220
+Biaya operasionalnya bertambah dengan cepat.
+
+00:09:23.660 --> 00:09:24.660
+Azure Backup mengubah model tersebut.
+
+00:09:25.020 --> 00:09:25.720
+Anda membayar langganan.
+
+00:09:26.020 --> 00:09:28.900
+Tanpa perangkat keras, tanpa perangkat lunak untuk diinstal di server cadangan.
+
+00:09:29.040 --> 00:09:29.380
+Tanpa pita.
+
+00:09:29.680 --> 00:09:32.160
+Biayanya dapat diprediksi dan bersalah sesuai dengan apa yang sebenarnya Anda lakukan.
+
+00:09:32.380 --> 00:09:34.140
+Lalu ada alat pihak ketiga seperti VIM.
+
+00:09:34.520 --> 00:09:35.740
+VIM sangat bagus dalam apa yang dilakukan.
+
+00:09:36.180 --> 00:09:38.700
+Ini mendukung lingkungan yang kompleks, multi-cloud, hibrida, on-prem,
+
+00:09:38.780 --> 00:09:40.500
+dan skenario pemulihan cloud tingkat lanjut.
+
+00:09:40.500 --> 00:09:44.360
+Ini menawarkan fitur seperti pemulihan VM instan dan pertahanan software yang berdalam.
+
+00:09:44.920 --> 00:09:48.660
+Jika lingkungan Anda adalah campuran Azure VMware on-prem dan bahkan AWS,
+
+00:09:48.840 --> 00:09:51.080
+VIM memberi Anda satu platform untuk mengelola semuanya.
+
+00:09:51.600 --> 00:09:52.080
+Sangat hebat.
+
+00:09:52.480 --> 00:09:53.120
+Anda butuh kanan, betul?
+
+00:09:53.500 --> 00:09:55.680
+VIM lebih mahal terutama pada skala yang lebih kecil.
+
+00:09:56.160 --> 00:10:01.080
+VM Azure kecil dengan disk 50GB memakan biaya sekitar 20W per bulan dengan Azure Backup.
+
+00:10:01.660 --> 00:10:04.380
+Perlindungan yang sama dengan alat pihak ketiga bisa dua hingga tiga kali pada itu.
+
+00:10:05.040 --> 00:10:08.920
+Dan Anda masih perlu mengelola infrastruktur cadangan, server VIM, repository, dan proxy.
+
+00:10:08.920 --> 00:10:12.380
+Jadi di mana Azure Backup unggul, kesederhanan Anda dan integrasi.
+
+00:10:12.720 --> 00:10:13.600
+Ini sudah integrasi ke dalam Azure.
+
+00:10:13.920 --> 00:10:15.120
+Anda tidak perlu menyediakan server cadangan.
+
+00:10:15.580 --> 00:10:16.880
+Anda tidak perlu mengelola penyimpanan terpisah.
+
+00:10:17.180 --> 00:10:18.700
+Anda menetapkan kebijakan dari portal Azure.
+
+00:10:19.140 --> 00:10:21.060
+Ini bekerja dengan pelan RBAC Azure Anda yang sudah ada.
+
+00:10:21.480 --> 00:10:23.680
+Ini terintegrasi dengan Azure Policy untuk tata kelompok.
+
+00:10:23.740 --> 00:10:26.940
+Untuk lingkungan Azure murni, ini adalah opsi yang paling hemat biaya dan paling sederhana.
+
+00:10:27.540 --> 00:10:28.720
+Di mana alat pihak ketiga unggul?
+
+00:10:29.180 --> 00:10:29.820
+Lingkungan yang kompleks.
+
+00:10:29.820 --> 00:10:34.200
+Jika Anda memiliki beban kerja di berbagai cloud atau jejak on-prem yang signifikan,
+
+00:10:34.580 --> 00:10:37.840
+alat seperti VIM sepadan dengan biayanya karena memberikan manajemen yang terpadu.
+
+00:10:38.360 --> 00:10:40.660
+Dan bagi organisasi dengan persyaratan ransomware yang ketat,
+
+00:10:40.900 --> 00:10:44.520
+alat pihak ketiga seringkali menawarkan imutabilitas dan arsitektur RGPT yang lebih dalam.
+
+00:10:45.520 --> 00:10:49.700
+Pendapat jujurnya adalah, ini jika buahan kerja Anda sebagian besar ada di Azure, mulailah dengan Azure Backup.
+
+00:10:50.060 --> 00:10:52.120
+Ini sederhana, hemat biaya, dan integrasi secara mendalam.
+
+00:10:52.120 --> 00:10:56.940
+Jika lingkungan Anda kompleks, multi-cloud, banyak on-prem, atau memerlukan DR tingkat lanjut,
+
+00:10:57.040 --> 00:10:58.320
+evalu silah alat pihak ketiga.
+
+00:10:58.840 --> 00:11:01.500
+Biayanya memang lebih mahal tetapi memberikan hasil lebih dalam skenario itu.
+
+00:11:01.660 --> 00:11:03.540
+Anda telah melihat apa yang dilindunginya dan bagaimana cara kerjanya.
+
+00:11:03.760 --> 00:11:05.760
+Namun, mari kita bicarakan bagian yang dibahas oleh siapapun.
+
+00:11:06.240 --> 00:11:06.780
+Berapa biayanya?
+
+00:11:08.040 --> 00:11:08.860
+Biaya Azure Backup.
+
+00:11:09.360 --> 00:11:09.860
+Mari bicara soal.
+
+00:11:10.480 --> 00:11:13.460
+Azure Backup menggunakan modal harga dua bagian dan cukup mudah dipahami.
+
+00:11:14.040 --> 00:11:16.620
+Anda membayar biaya instans untuk setiap sumber daya yang dilindungi,
+
+00:11:16.700 --> 00:11:18.260
+ditambah biaya penyimpanan untuk vault itu sendiri.
+
+00:11:18.620 --> 00:11:20.740
+Biaya instans menyesuaikan dengan ukuran apa yang Anda lindungi.
+
+00:11:20.740 --> 00:11:24.100
+VM kecil di bawah 50 GB itu sekitar lima tar per bulan.
+
+00:11:24.540 --> 00:11:27.420
+VM menengah hingga 500 GB, biayanya sekitar peras pulalas.
+
+00:11:28.120 --> 00:11:30.980
+Untuk basis data, seperti SQL Server, biaya per instans lebih tinggi,
+
+00:11:31.140 --> 00:11:33.940
+sekitar 30 per bulan untuk basis data di bawah 500 GB.
+
+00:11:34.840 --> 00:11:37.540
+Biaya penyimpanan bergantung pada seberapa redondan cadangan yang Anda ingin.
+
+00:11:38.720 --> 00:11:41.480
+Locally Redundant Storage atau LRS adalah opsi termurah.
+
+00:11:42.280 --> 00:11:45.100
+Data cadangan Anda direplikasi tiga kali di dalam satu pusat data.
+
+00:11:46.200 --> 00:11:49.800
+Geo Redundant Storage atau GRS mereplikasi data Anda ke wilayah berpasangan
+
+00:11:49.800 --> 00:11:51.360
+di lokasi geografis yang berbeda.
+
+00:11:52.100 --> 00:11:54.160
+Itu melindungi Anda jika seluruh wilayah Azure mengalami ganku.
+
+00:11:54.780 --> 00:11:56.700
+Biaya juga sekitar dua kali lipat dari LRS.
+
+00:11:57.240 --> 00:11:58.320
+Ini contoh dunia nyata.
+
+00:11:59.040 --> 00:12:01.860
+Misalkan Anda memiliki VM 200 GB dengan penyimpanan LRS.
+
+00:12:02.580 --> 00:12:05.000
+Total biaya Anda, biaya instans ditambah penyimpanan,
+
+00:12:05.160 --> 00:12:06.900
+sekitar 15 hingga 20 lah per bulan.
+
+00:12:07.620 --> 00:12:11.960
+Untuk lingkungan dengan 10 VM, Anda perlu mengeluarkan sekitar 150 hingga 250 per bulan.
+
+00:12:11.960 --> 00:12:14.540
+Bandingkan dengan membeli server cadangan khusus,
+
+00:12:14.740 --> 00:12:16.600
+area penyimpanan, dan disensi perangkat lunak,
+
+00:12:16.920 --> 00:12:19.100
+tiba-tiba opsi cloud terlihat sangat masuk akal.
+
+00:12:19.660 --> 00:12:20.860
+Namun ada cara untuk menghemat uang.
+
+00:12:21.200 --> 00:12:22.440
+Pencadangan diselektif adalah salah satu.
+
+00:12:22.800 --> 00:12:24.160
+Jika VM Anda memiliki beberapa disk,
+
+00:12:24.260 --> 00:12:27.000
+tetapi hanya dua yang menampung data penting Anda dapat mengecohikan sisanya.
+
+00:12:27.320 --> 00:12:28.520
+Semakin sedikit disk yang dicadangkan,
+
+00:12:28.580 --> 00:12:31.020
+berarti biaya instans lebih rendah dan penyimpanan yang digunakan lebih sedikit.
+
+00:12:31.260 --> 00:12:32.620
+Kebijakan yang ditingkatkan adalah faktor lain.
+
+00:12:33.000 --> 00:12:34.680
+Alih-alih melakukan pencadangan penuh setiap hari,
+
+00:12:34.680 --> 00:12:37.440
+Anda dapat menggunakan kebijakan yang melakukan pencadangan incremental lebih sering
+
+00:12:37.440 --> 00:12:38.300
+dan lebih sedikit pencadangan.
+
+00:12:38.300 --> 00:12:39.460
+Pencadangan pertama selalu pernah.
+
+00:12:40.000 --> 00:12:41.500
+Setelah itu, hanya perubahan yang ditransfer.
+
+00:12:41.900 --> 00:12:44.480
+Seiring waktu, hal itu secara drastis mengurangi konsumsi penyimpanan.
+
+00:12:45.480 --> 00:12:47.480
+Tingkat arsip adalah tempat penyimpanan jangka panjang.
+
+00:12:48.420 --> 00:12:50.520
+Jika Anda perlu menyimpan cadangan selama bertahun-tahun
+
+00:12:50.520 --> 00:12:52.380
+untuk alasan kepatuan atau regulasi
+
+00:12:52.380 --> 00:12:54.080
+memindahkan titik pemulihan lama ke tingkat arsip
+
+00:12:54.080 --> 00:12:56.080
+bisa 10 kali lebih murah daripada penyimpanan standar.
+
+00:12:57.060 --> 00:12:58.900
+Kekurangannya adalah waktu pemulihan yang lebih lambat,
+
+00:12:58.980 --> 00:13:00.520
+tetapi untuk data yang hampir tidak pernah Anda akses,
+
+00:13:00.520 --> 00:13:00.980
+itu tidak masuk.
+
+00:13:01.280 --> 00:13:02.900
+Kapasitas cadangan dan subkapasiti juga tersedia.
+
+00:13:03.280 --> 00:13:05.260
+Jika Anda berkomitmen pada volume penyimpanan cadangan
+
+00:13:05.260 --> 00:13:06.940
+yang dapat diprediksi selama 1 atau 3 tahun,
+
+00:13:07.040 --> 00:13:08.600
+Anda bisa mendapatkan diskon hingga 40%
+
+00:13:08.600 --> 00:13:10.180
+dibandingkan dengan metode bayar sesuai pemakaian.
+
+00:13:10.340 --> 00:13:11.980
+Risiko tersembunyinya adalah retensi berubah.
+
+00:13:12.040 --> 00:13:13.520
+Sangat mudah untuk menetapkan kebijakan
+
+00:13:13.520 --> 00:13:15.500
+yang menyimpan cadangan harian selama 7 tahun untuk semuanya.
+
+00:13:15.820 --> 00:13:17.460
+Tapi sebagian besar data itu tidak pernah dibutuhkan.
+
+00:13:17.620 --> 00:13:19.060
+Anda hanya memerlukan retensi jangka panjang.
+
+00:13:19.580 --> 00:13:20.500
+Semua yang lain bisa dikurangi.
+
+00:13:21.020 --> 00:13:22.260
+Tinjau kebijakan Anda secara berkala.
+
+00:13:22.760 --> 00:13:24.660
+Jika beban kerja berubah dari produksi ke pengembangan,
+
+00:13:24.780 --> 00:13:25.500
+sesuaikan retensinya.
+
+00:13:25.940 --> 00:13:27.380
+Jika sebuah VM telah dinonaktifkan,
+
+00:13:27.380 --> 00:13:28.200
+hapus item cadangan.
+
+00:13:28.660 --> 00:13:30.220
+Setiap titik pemulihan yang tidak Anda perlukan
+
+00:13:35.260 --> 00:13:39.100
+Kesalahan terbesar tidak menguji cadangan Anda.
+
+00:13:39.560 --> 00:13:40.880
+Inilah kebenaran pahit yang dipelajari
+
+00:13:40.880 --> 00:13:42.320
+oleh sebagian besar organisasi dengan cerah.
+
+00:13:42.440 --> 00:13:43.720
+Satu-satunya cadangan yang baik adalah
+
+00:13:43.720 --> 00:13:45.620
+cadangan yang telah benar-benar Anda pulihkan dan validasi.
+
+00:13:45.760 --> 00:13:47.880
+Orang menjadi sangat ahli dalam melakukan pencadangan setiap hati.
+
+00:13:48.200 --> 00:13:49.700
+Mereka mengonfigurasi kebijakan,
+
+00:13:49.940 --> 00:13:50.740
+membantau pekerjaan,
+
+00:13:50.860 --> 00:13:53.260
+merasa hebat saat daspor menunjukkan semua tanda centang hijau.
+
+00:13:53.540 --> 00:13:55.540
+Tetapi mereka hampir tidak pernah berlatih memulihkan
+
+00:13:55.540 --> 00:13:56.700
+dan disitulah bencana terjadi.
+
+00:13:57.260 --> 00:13:58.740
+Ketika insiden nyata terjadi,
+
+00:13:59.000 --> 00:14:00.340
+basis data rusak serangan ransomware,
+
+00:14:00.440 --> 00:14:01.320
+penghapus yang tidak disengaja,
+
+00:14:01.460 --> 00:14:02.660
+Anda akan menemukan kebenarannya.
+
+00:14:02.660 --> 00:14:04.480
+Mungkin cadangannya rusak,
+
+00:14:04.860 --> 00:14:05.900
+mungkin data yang salah diambil,
+
+00:14:06.060 --> 00:14:07.920
+mungkin proses pemulihan gagal di tengah jalan.
+
+00:14:08.520 --> 00:14:09.880
+Anda tidak akan tahu sampai Anda mencobanya
+
+00:14:09.880 --> 00:14:12.040
+dan saat itu terjadi produksi mati dan waktu terus berjalan.
+
+00:14:12.340 --> 00:14:13.980
+Jebakan umum ternyata cukup mudah diprediksi.
+
+00:14:14.780 --> 00:14:17.380
+Memulihkan seluruh server padahal Anda hanya butuh basis datanya.
+
+00:14:17.760 --> 00:14:21.180
+Memulihkan VM tapi lupa bahwa aplikasi perlu dikonfigurasi ulang setelahnya.
+
+00:14:21.580 --> 00:14:24.320
+Memulihkan kejaringan berbeda dan mendapati alamat IP tidak cocok.
+
+00:14:25.160 --> 00:14:28.180
+Ini adalah jenis masalah yang mengubah operasi pemulihan menjadi krisis beradab.
+
+00:14:28.780 --> 00:14:30.180
+Solusinya sederhana namun tidak nyaman.
+
+00:14:30.480 --> 00:14:32.180
+Jadwalkan latihan pemulihan secara terat.
+
+00:14:32.180 --> 00:14:33.500
+Triwulan adalah ritmu yang baik.
+
+00:14:33.820 --> 00:14:36.580
+Pilih VM uji, pulihkan dari cadangan, verifikasi bahwa data utuh,
+
+00:14:36.700 --> 00:14:38.360
+periksa apakah aplikasi berjalan dengan benar,
+
+00:14:38.440 --> 00:14:39.320
+lalu hapus VM tersebut.
+
+00:14:39.620 --> 00:14:40.840
+Pada pertama akan memakan waktu lebih lama.
+
+00:14:41.200 --> 00:14:42.020
+Kali kedua akan lebih cepat.
+
+00:14:42.580 --> 00:14:43.320
+Pada latihan ketiga,
+
+00:14:43.500 --> 00:14:45.600
+tim Anda akan memiliki proses terdokumentasi yang bisa diulang.
+
+00:14:46.080 --> 00:14:47.780
+Azure Backup membuat ini lebih mudah daripada yang terdentara.
+
+00:14:48.460 --> 00:14:52.140
+Fitur pemulihan instan memungkinkan Anda memulihkan dari snapshot lokal hampir seketika.
+
+00:14:52.680 --> 00:14:54.620
+Anda tidak perlu menunggu data kembali dari berangkas valve.
+
+00:14:54.940 --> 00:14:56.680
+Anda bisa menjalankan VM hasil pemulihan,
+
+00:14:56.680 --> 00:14:58.840
+memverifikasinya, dan menghentikannya dalam waktu kurang dari saat.
+
+00:15:02.180 --> 00:15:06.360
+Kemudian, hanyalah harapan yang mahal, Anda membayar untuk perlindungan yang belum dipastikan berfungsi.
+
+00:15:06.820 --> 00:15:08.800
+Jadwalkan simulasi pertama Anda bulan ini, bukan kuartal depan.
+
+00:15:09.280 --> 00:15:10.600
+Bulan ini, pemulai.
+
+00:15:11.240 --> 00:15:12.140
+Tiga langkah awal Anda.
+
+00:15:12.660 --> 00:15:14.540
+Anda perlu menguji cadangan Anda, tapi dari mana mulanya?
+
+00:15:15.160 --> 00:15:16.960
+Ijinkan saya memandu Anda melalui tiga langkah sederhana.
+
+00:15:17.420 --> 00:15:19.300
+Langkah pertama, tentukan apa yang tidak boleh hilang.
+
+00:15:20.040 --> 00:15:22.500
+VM penting basis data dan berbagi berkas Anda.
+
+00:15:23.220 --> 00:15:24.560
+Jangan mencoba mencadangkan semuanya sekaligus.
+
+00:15:25.100 --> 00:15:27.580
+Mulailah dengan beban kerja yang paling berdampak jika hilang.
+
+00:15:27.940 --> 00:15:28.840
+Telah prioritas utama Anda.
+
+00:15:29.220 --> 00:15:30.980
+Langkah kedua, buat recovery services valve.
+
+00:15:30.980 --> 00:15:32.880
+Anggaplah itu sebagai perangkas untuk cadangan.
+
+00:15:33.180 --> 00:15:36.100
+Pastikan Anda membuatnya di wilayah yang sama dengan sumber daya.
+
+00:15:36.400 --> 00:15:38.060
+Itu adalah kesalahan nomor satu yang sering dilakukan orang.
+
+00:15:38.260 --> 00:15:39.240
+Valve berakhir di wilayah yang salah.
+
+00:15:39.820 --> 00:15:42.700
+Jika VM Anda berjalan di Eropa Barat, valve Anda juga harus di Eropa Barat.
+
+00:15:42.960 --> 00:15:43.840
+Simpan mereka di Oka Siangsa.
+
+00:15:44.180 --> 00:15:45.660
+Langkah ketiga, atur kebijakan cadangan Anda.
+
+00:15:46.200 --> 00:15:47.260
+Seberapa sering cadangan harus berjalan?
+
+00:15:47.580 --> 00:15:48.440
+Harian adalah standar.
+
+00:15:48.700 --> 00:15:49.540
+Berapa lama Anda harus menyimpan?
+
+00:15:49.840 --> 00:15:51.240
+30 hingga 90 hari yang baik.
+
+00:15:51.580 --> 00:15:52.320
+Bagaimana dengan redundansi?
+
+00:15:52.660 --> 00:15:54.900
+LAS menyimpan salinan di satu kusat data dan menghemat biaya.
+
+00:15:55.200 --> 00:15:57.460
+GRS menyalinkan wilayah kedua untuk keamanan tambahan.
+
+00:15:57.460 --> 00:16:00.500
+Setelah kebijakan Anda siap, aktifkan cadangan pada VM pertama.
+
+00:16:00.960 --> 00:16:02.980
+Azure Backup memasang ekstensi secara otomatis.
+
+00:16:03.400 --> 00:16:05.520
+Mulai dengan satu VM, pastikan cadangan pertama selesai.
+
+00:16:05.780 --> 00:16:06.700
+Lalu kembangkan dari sana.
+
+00:16:07.600 --> 00:16:10.000
+Azure Backup Center memberi Anda dashboard untuk memantau semuanya.
+
+00:16:10.600 --> 00:16:11.420
+Jadi itulah Azure Backup.
+
+00:16:11.680 --> 00:16:12.680
+Ini bukan sekadar alat pencadangan.
+
+00:16:13.060 --> 00:16:14.780
+Ini adalah jaring penaman yang Anda atur sekali dari sini.
+
+00:16:15.120 --> 00:16:17.860
+Anda tidak butuh hit atau server dan tidak perlu bertanya-tanya apakah itu berhasil.
+
+00:16:18.040 --> 00:16:18.720
+Anda mengatur kebijakan.
+
+00:16:19.080 --> 00:16:20.100
+Anda mengaktifkan perniagaan.
+
+00:16:20.320 --> 00:16:21.160
+Anda mengunci pemulihan Anda.
+
+00:16:21.760 --> 00:16:23.580
+Mulai dengan VM Anda yang paling kritis minggu ini.
+
+00:16:23.760 --> 00:16:26.520
+Satu langkah itu sudah menempatkan Anda di depan sebagian besar organisasi.
+
+00:16:26.520 --> 00:16:27.620
+Perlangganan untuk tips lainnya.

@@ -1,0 +1,248 @@
+{
+ "episode_id": "67365584",
+ "slug": "sharepoint-online-permission-auditing-at-scale",
+ "title": "SharePoint Online Permission Auditing at Scale",
+ "lang": "en",
+ "duration_s": 956,
+ "transcript_source": "data/en_transcripts/739f2d949e3c.txt",
+ "time_basis": "estimated",
+ "entities": [
+  {
+   "slug": "sharepoint",
+   "name": "SharePoint",
+   "type": "product",
+   "score": 90,
+   "mentions": 10,
+   "first_mention_s": 1,
+   "quote": "Your SharePoint permissions are probably a mess",
+   "url": "https://www.m365.fm/entity/sharepoint/"
+  },
+  {
+   "slug": "pnp-powershell",
+   "name": "PnP PowerShell",
+   "type": "product",
+   "score": 90,
+   "mentions": 9,
+   "first_mention_s": 230,
+   "quote": "Building the foundation with PNP PowerShell",
+   "url": "https://www.m365.fm/entity/pnp-powershell/"
+  },
+  {
+   "slug": "graph",
+   "name": "Microsoft Graph",
+   "type": "product",
+   "score": 80,
+   "mentions": 12,
+   "first_mention_s": 349,
+   "quote": "integrate with Microsoft Graph to pull every site collection URL dynamically",
+   "url": "https://www.m365.fm/entity/graph/"
+  },
+  {
+   "slug": "azure-automation",
+   "name": "Azure Automation",
+   "type": "product",
+   "score": 80,
+   "mentions": 7,
+   "first_mention_s": 696,
+   "quote": "That's where orchestration kicks into automating the audit with Azure automation.",
+   "url": "https://www.m365.fm/entity/azure-automation/"
+  },
+  {
+   "slug": "permission-inheritance",
+   "name": "Permission inheritance (SharePoint)",
+   "type": "concept",
+   "score": 70,
+   "mentions": 7,
+   "first_mention_s": 108,
+   "quote": "Permissions can be inherited from the parent side, overridden at the library level",
+   "url": "https://www.m365.fm/entity/permission-inheritance/"
+  },
+  {
+   "slug": "nested-groups",
+   "name": "Nested groups",
+   "type": "concept",
+   "score": 65,
+   "mentions": 5,
+   "first_mention_s": 116,
+   "quote": "A user's access might not be obvious because they're coming in through a nested group",
+   "url": "https://www.m365.fm/entity/nested-groups/"
+  },
+  {
+   "slug": "runbook",
+   "name": "Runbook (Azure Automation)",
+   "type": "concept",
+   "score": 55,
+   "mentions": 4,
+   "first_mention_s": 393,
+   "quote": "using a PowerShell run book that pulls your certificate from keyvolt at runtime",
+   "url": "https://www.m365.fm/entity/runbook/"
+  },
+  {
+   "slug": "azure-key-vault",
+   "name": "Azure Key Vault",
+   "type": "product",
+   "score": 50,
+   "mentions": 3,
+   "first_mention_s": 332,
+   "quote": "preferably somewhere like Azure key Vault",
+   "url": "https://www.m365.fm/entity/azure-key-vault/"
+  },
+  {
+   "slug": "guest-access",
+   "name": "Guest access",
+   "type": "concept",
+   "score": 45,
+   "mentions": 6,
+   "first_mention_s": 165,
+   "quote": "a penetration test found guests with added access to confidential folders",
+   "url": "https://www.m365.fm/entity/guest-access/"
+  },
+  {
+   "slug": "throttling",
+   "name": "Throttling",
+   "type": "concept",
+   "score": 45,
+   "mentions": 6,
+   "first_mention_s": 292,
+   "quote": "you might hammer the service too quickly and hit throttling limits",
+   "url": "https://www.m365.fm/entity/throttling/"
+  },
+  {
+   "slug": "entra-id",
+   "name": "Microsoft Entra ID",
+   "type": "product",
+   "score": 45,
+   "mentions": 4,
+   "first_mention_s": 121,
+   "quote": "maybe even through a security groups SYNCD from azure ad that itself holds other groups",
+   "url": "https://www.m365.fm/entity/entra-id/"
+  },
+  {
+   "slug": "app-registration",
+   "name": "Application registration",
+   "type": "concept",
+   "score": 40,
+   "mentions": 1,
+   "first_mention_s": 314,
+   "quote": "this means creating an azure ad app registration, granting it the necessary share point and graph permissions",
+   "url": "https://www.m365.fm/entity/app-registration/"
+  },
+  {
+   "slug": "hybrid-runbook-worker",
+   "name": "Hybrid Runbook Worker",
+   "type": "product",
+   "score": 30,
+   "mentions": 1,
+   "first_mention_s": 821,
+   "quote": "hybrid run book workers let you execute those scripts on premises or in a dedicated VM",
+   "url": "https://www.m365.fm/entity/hybrid-runbook-worker/"
+  },
+  {
+   "slug": "azure-blob-storage",
+   "name": "Azure Blob Storage",
+   "type": "product",
+   "score": 25,
+   "mentions": 2,
+   "first_mention_s": 863,
+   "quote": "drop it into Azure blob storage or attach it to an automated email",
+   "url": "https://www.m365.fm/entity/azure-blob-storage/"
+  }
+ ],
+ "new_entities": [
+  {
+   "slug": "nested-groups",
+   "name": "Nested groups",
+   "type": "concept",
+   "mentions": 5,
+   "first_mention_s": 116,
+   "quote": "A user's access might not be obvious because they're coming in through a nested group",
+   "status": "review"
+  }
+ ],
+ "quotes": [
+  {
+   "text": "Permissions are living data. Treating them like a static list means you're always in the past, never in the live state of your environment.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 204,
+   "entities": [
+    "sharepoint"
+   ],
+   "why": "Reframes permission reviews as a continuous data problem."
+  },
+  {
+   "text": "The solution isn't throwing more people at the review. It's building a way to query and consolidate this data automatically, so the moment something changes, your reports reflect that.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 212,
+   "entities": [
+    "sharepoint"
+   ],
+   "why": "States the episode's core recommendation to automate auditing."
+  },
+  {
+   "text": "Where it gets messy is that inheritance is invisible if you only look at direct permissions.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 549,
+   "entities": [
+    "permission-inheritance"
+   ],
+   "why": "Highlights the most common blind spot in permission audits."
+  },
+  {
+   "text": "Keeping that history means you can prove the audit ran at a given time and see exactly what happened if it didn't finish. For compliance, that audit trail can be as valuable as the permission report itself.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 842,
+   "entities": [
+    "azure-automation"
+   ],
+   "why": "Explains why job logs matter for compliance evidence."
+  },
+  {
+   "text": "At enterprise scale, guessing at permissions isn't an option. Without a live, accurate view, you're hoping nothing slips through and hope isn't a security strategy.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 923,
+   "entities": [
+    "sharepoint"
+   ],
+   "why": "A strong closing argument for continuous permission monitoring."
+  }
+ ],
+ "chapters": [
+  {
+   "start_s": 0,
+   "title": "Who has access to what?"
+  },
+  {
+   "start_s": 31,
+   "title": "Why traditional permission reviews break at enterprise scale"
+  },
+  {
+   "start_s": 230,
+   "title": "Building the foundation with PnP PowerShell"
+  },
+  {
+   "start_s": 458,
+   "title": "Mining permission data with Microsoft Graph API"
+  },
+  {
+   "start_s": 698,
+   "title": "Automating the audit with Azure Automation"
+  },
+  {
+   "start_s": 923,
+   "title": "From firefighting to continuous monitoring"
+  }
+ ],
+ "takeaways": [
+  "Manual, spreadsheet-based SharePoint permission reviews cannot keep up with thousands of changing sites, inheritance and nested groups.",
+  "PnP PowerShell with certificate-based app-only authentication and Microsoft Graph lets you enumerate every site and resolve effective permissions down to users and guests.",
+  "Azure Automation runbooks with Key Vault secrets turn the audit into a scheduled, logged process that can alert on risky changes such as new guests."
+ ],
+ "hook": "Your SharePoint permission reviews are outdated the moment they are finished, and guests hide in nested groups no one checks. This episode is for SharePoint and Microsoft 365 admins responsible for access governance in large tenants. Learn how to combine PnP PowerShell, Microsoft Graph and Azure Automation into a tenant-wide, automated permission audit.",
+ "youtube_video_id": null,
+ "generated_at": "2026-11-03T03:36:47Z"
+}

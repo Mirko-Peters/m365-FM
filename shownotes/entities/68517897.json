@@ -1,0 +1,219 @@
+{
+  "episode_id": "68517897",
+  "slug": null,
+  "title": "Power Platform SQL integration: how to put on‑prem data into Copilot Studio safely",
+  "lang": "en",
+  "duration_s": 1261,
+  "transcript_source": "data/en_transcripts/f979afa10a3b.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "knowledge-source",
+      "name": "Knowledge source",
+      "type": "concept",
+      "score": 60,
+      "mentions": 3,
+      "first_mention_s": 423,
+      "quote": "Copilot studio will soon learn to read your SQL tables as knowledge sources",
+      "url": "https://www.m365.fm/entity/knowledge-source/"
+    },
+    {
+      "slug": "audit-logs",
+      "name": "Audit logs",
+      "type": "concept",
+      "score": 30,
+      "mentions": 1,
+      "first_mention_s": 370,
+      "quote": "For regulatory environments that live in audit logs, the gateway also generates telemetry.",
+      "url": "https://www.m365.fm/entity/audit-logs/"
+    },
+    {
+      "slug": "copilot-studio",
+      "name": "Copilot Studio",
+      "type": "product",
+      "score": 85,
+      "mentions": 14,
+      "first_mention_s": 20,
+      "quote": "But co-pilot studio sits outside that fortress smiling through the glass, pretending it understands.",
+      "url": "https://www.m365.fm/entity/copilot-studio/"
+    },
+    {
+      "slug": "power-platform",
+      "name": "Power Platform",
+      "type": "platform",
+      "score": 70,
+      "mentions": 14,
+      "first_mention_s": 31,
+      "quote": "The bridge it needs is the power platform data gateway, your secure tunnel through the firewall",
+      "url": "https://www.m365.fm/entity/power-platform/"
+    },
+    {
+      "slug": "active-directory",
+      "name": "Active Directory",
+      "type": "product",
+      "score": 40,
+      "mentions": 2,
+      "first_mention_s": 360,
+      "quote": "And authentication goes through as your active directory or the credentials you explicitly supply.",
+      "url": "https://www.m365.fm/entity/active-directory/"
+    },
+    {
+      "slug": "azure",
+      "name": "Microsoft Azure",
+      "type": "platform",
+      "score": 25,
+      "mentions": 4,
+      "first_mention_s": 272,
+      "quote": "a lightweight Windows service dedicated to maintaining secure communication with Azure.",
+      "url": "https://www.m365.fm/entity/azure/"
+    },
+    {
+      "slug": "entra-id",
+      "name": "Microsoft Entra ID",
+      "type": "product",
+      "score": 25,
+      "mentions": 1,
+      "first_mention_s": 516,
+      "quote": "Then there's the Azure hybrid approach where Azure AD acts as broker between cloud identity and local permissions.",
+      "url": "https://www.m365.fm/entity/entra-id/"
+    },
+    {
+      "slug": "power-bi",
+      "name": "Power BI",
+      "type": "product",
+      "score": 20,
+      "mentions": 1,
+      "first_mention_s": 317,
+      "quote": "also powers reports in Power BI, apps in Power Apps and flows in Power Automate.",
+      "url": "https://www.m365.fm/entity/power-bi/"
+    },
+    {
+      "slug": "power-apps",
+      "name": "Power Apps",
+      "type": "product",
+      "score": 20,
+      "mentions": 1,
+      "first_mention_s": 317,
+      "quote": "also powers reports in Power BI, apps in Power Apps and flows in Power Automate.",
+      "url": "https://www.m365.fm/entity/power-apps/"
+    },
+    {
+      "slug": "power-automate",
+      "name": "Power Automate",
+      "type": "product",
+      "score": 20,
+      "mentions": 1,
+      "first_mention_s": 317,
+      "quote": "also powers reports in Power BI, apps in Power Apps and flows in Power Automate.",
+      "url": "https://www.m365.fm/entity/power-automate/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "on-premises-data-gateway",
+      "name": "On-premises data gateway",
+      "type": "product"
+    },
+    {
+      "slug": "sql-server",
+      "name": "Microsoft SQL Server",
+      "type": "product"
+    },
+    {
+      "slug": "sql-server-management-studio",
+      "name": "SQL Server Management Studio (SSMS)",
+      "type": "product"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "Directly exposing SQL data to the cloud is corporate self-harm. Firewalls, network zones, and authentication boundaries exist precisely because someone once tried just opening a port and spent the next quarter explaining the breach.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 124,
+      "entities": [
+        "sql-server"
+      ],
+      "why": "Explains why on-prem data must stay behind the firewall."
+    },
+    {
+      "text": "The gateway maintains sovereignty by initiating every conversation outward, picture it like an employee who only makes phone calls. They never accept incoming ones.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 228,
+      "entities": [
+        "on-premises-data-gateway"
+      ],
+      "why": "A simple analogy for the gateway's outbound-only security model."
+    },
+    {
+      "text": "No, the gateway does not upload your database. It doesn't clone, mirror, or replicate anything. All it does is execute queries on your behalf and return the results",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 342,
+      "entities": [
+        "on-premises-data-gateway"
+      ],
+      "why": "Answers the most common security objection to the gateway."
+    },
+    {
+      "text": "Many organizations sensibly divide knowledge and action credentials. Reading might use a service account with select rights only while writing requires an elevated connector approved by IT.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 894,
+      "entities": [
+        "copilot-studio"
+      ],
+      "why": "A concrete separation-of-duties recommendation for AI write-backs."
+    },
+    {
+      "text": "Moving your crown jewel data to someone else's cloud isn't modernization. It's surrender. The goal is synchronization without exposure.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 1167,
+      "entities": [
+        "on-premises-data-gateway",
+        "sql-server"
+      ],
+      "why": "States the episode's hybrid philosophy in three short sentences."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "A fluent but clueless copilot"
+    },
+    {
+      "start_s": 47,
+      "title": "Why copilots fail without context"
+    },
+    {
+      "start_s": 196,
+      "title": "The data gateway as the spine of hybrid AI"
+    },
+    {
+      "start_s": 448,
+      "title": "Adding SQL as a knowledge source"
+    },
+    {
+      "start_s": 715,
+      "title": "SQL actions and write-backs"
+    },
+    {
+      "start_s": 1002,
+      "title": "Hybrid architecture and scaling"
+    },
+    {
+      "start_s": 1209,
+      "title": "The real secret: architecture"
+    }
+  ],
+  "takeaways": [
+    "The on-premises data gateway lets Copilot Studio query and update on-prem SQL Server through outbound-only, encrypted connections without copying the database to the cloud.",
+    "Expose only well-named, read-optimized views as knowledge sources and clearly labeled parameters for SQL actions, so the agent queries precisely and asks for missing inputs.",
+    "Use gateway clusters for resilience, separate read and write credentials, and export Power Platform telemetry for auditing."
+  ],
+  "hook": "Copilot Studio agents sound confident but cannot see the customer and order data that lives in on-prem SQL Server. This episode shows Power Platform makers and architects how to connect SQL through the on-premises data gateway as a knowledge source and with write-back actions, without opening the firewall or moving the data.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-03T04:28:52+00:00"
+}

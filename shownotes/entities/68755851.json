@@ -1,0 +1,226 @@
+{
+  "episode_id": "68755851",
+  "slug": null,
+  "title": "M365 Attack Chain: Why Your Microsoft 365 Breach Model Is Wrong",
+  "lang": "en",
+  "duration_s": 1605,
+  "transcript_source": "data/en_transcripts/ff68de63750d.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "conditional-access",
+      "name": "Conditional Access",
+      "type": "concept",
+      "score": 80,
+      "mentions": 9,
+      "first_mention_s": 165,
+      "quote": "You bind the token device binding and conditional access.",
+      "url": "https://www.m365.fm/entity/conditional-access/"
+    },
+    {
+      "slug": "mfa",
+      "name": "Multifactor authentication (MFA)",
+      "type": "concept",
+      "score": 72,
+      "mentions": 10,
+      "first_mention_s": 3,
+      "quote": "MFA isn't a shield on my watch.",
+      "url": "https://www.m365.fm/entity/mfa/"
+    },
+    {
+      "slug": "audit-logs",
+      "name": "Audit logs",
+      "type": "concept",
+      "score": 55,
+      "mentions": 6,
+      "first_mention_s": 135,
+      "quote": "Audit logs record consent to application, service, principle created, and app role assigned to.",
+      "url": "https://www.m365.fm/entity/audit-logs/"
+    },
+    {
+      "slug": "kql",
+      "name": "Kusto Query Language (KQL)",
+      "type": "concept",
+      "score": 50,
+      "mentions": 5,
+      "first_mention_s": 237,
+      "quote": "Custom KQL can alert on a new service principle with high value scopes.",
+      "url": "https://www.m365.fm/entity/kql/"
+    },
+    {
+      "slug": "microsoft-entra",
+      "name": "Microsoft Entra",
+      "type": "platform",
+      "score": 70,
+      "mentions": 10,
+      "first_mention_s": 33,
+      "quote": "We'll show the exact logs, the Sentinel analytics and the Entra controls.",
+      "url": "https://www.m365.fm/entity/microsoft-entra/"
+    },
+    {
+      "slug": "entra-id",
+      "name": "Microsoft Entra ID",
+      "type": "product",
+      "score": 65,
+      "mentions": 5,
+      "first_mention_s": 109,
+      "quote": "Entra ID holds identity.",
+      "url": "https://www.m365.fm/entity/entra-id/"
+    },
+    {
+      "slug": "exchange-online",
+      "name": "Exchange Online",
+      "type": "product",
+      "score": 62,
+      "mentions": 18,
+      "first_mention_s": 111,
+      "quote": "Exchange online and sharepoint house the crown.",
+      "url": "https://www.m365.fm/entity/exchange-online/"
+    },
+    {
+      "slug": "sharepoint",
+      "name": "SharePoint",
+      "type": "product",
+      "score": 60,
+      "mentions": 22,
+      "first_mention_s": 71,
+      "quote": "Take the mailbox, siphon sharepoint, persist via app consent and tokens.",
+      "url": "https://www.m365.fm/entity/sharepoint/"
+    },
+    {
+      "slug": "graph",
+      "name": "Microsoft Graph",
+      "type": "product",
+      "score": 60,
+      "mentions": 10,
+      "first_mention_s": 80,
+      "quote": "With graph, they pull data quiet and headless.",
+      "url": "https://www.m365.fm/entity/graph/"
+    },
+    {
+      "slug": "defender",
+      "name": "Microsoft Defender",
+      "type": "product",
+      "score": 55,
+      "mentions": 11,
+      "first_mention_s": 114,
+      "quote": "Defender and Sentinel exist, but they're under tuned.",
+      "url": "https://www.m365.fm/entity/defender/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "microsoft-sentinel",
+      "name": "Microsoft Sentinel",
+      "type": "product"
+    },
+    {
+      "slug": "token-protection",
+      "name": "Token protection (Conditional Access)",
+      "type": "concept"
+    },
+    {
+      "slug": "token-theft",
+      "name": "Token theft",
+      "type": "concept"
+    },
+    {
+      "slug": "illicit-consent-grant",
+      "name": "Illicit consent grant attack",
+      "type": "concept"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "You see users. They use apps. You chase login failures. They replay cookies. Different war.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 101,
+      "entities": [
+        "token-theft"
+      ],
+      "why": "Sharply contrasts how defenders and attackers think about Microsoft 365 identity."
+    },
+    {
+      "text": "That's the shield, not another password policy. Token protection for exchange and share point makes a stolen cookie useless off device.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 172,
+      "entities": [
+        "token-protection",
+        "exchange-online",
+        "sharepoint"
+      ],
+      "why": "Names the concrete control that neutralizes session token replay."
+    },
+    {
+      "text": "But remember this crew, visibility without policy is theatre. If users can grant consent, you'll lose ground.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 245,
+      "entities": [
+        "illicit-consent-grant"
+      ],
+      "why": "Argues that detection alone fails without preventive consent policy."
+    },
+    {
+      "text": "They turn access into residency. Password resets won't save you now. App consent survives them. Refresh tokens renew them.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 608,
+      "entities": [
+        "illicit-consent-grant"
+      ],
+      "why": "Explains why password resets do not evict OAuth-based persistence."
+    },
+    {
+      "text": "The first battle is consent. The second is token replay. Shut those doors. And the rest of the chain starves.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 587,
+      "entities": [
+        "illicit-consent-grant",
+        "token-theft"
+      ],
+      "why": "Condenses the attack chain into its two decisive choke points."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "Mission briefing"
+    },
+    {
+      "start_s": 44,
+      "title": "Threat intel: what modern attackers do"
+    },
+    {
+      "start_s": 281,
+      "title": "Initial access: consent phishing and token theft"
+    },
+    {
+      "start_s": 596,
+      "title": "Persistence with OAuth apps and mail rules"
+    },
+    {
+      "start_s": 914,
+      "title": "Lateral movement from mailbox to SharePoint"
+    },
+    {
+      "start_s": 1265,
+      "title": "Detection engineering, playbooks and KQL"
+    },
+    {
+      "start_s": 1564,
+      "title": "The one-step breaker and your orders"
+    }
+  ],
+  "takeaways": [
+    "Modern Microsoft 365 breaches bypass MFA by combining consent phishing with adversary-in-the-middle token theft rather than breaking passwords.",
+    "OAuth app consent and refresh tokens survive password resets, so remediation must revoke grants, remove service principals, invalidate tokens and remove malicious inbox rules.",
+    "Disabling user consent, enforcing the admin consent workflow, turning on token protection and risk-based Conditional Access, plus Sentinel playbooks on consent, forwarding and download events break the chain."
+  ],
+  "hook": "Think MFA keeps attackers out of your Microsoft 365 tenant? This episode maps a real breach chain from consent phishing and token theft to OAuth persistence and SharePoint exfiltration for security teams and admins. You get the exact logs, Sentinel detections and Entra policies that stop it.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-03T04:22:35+00:00"
+}

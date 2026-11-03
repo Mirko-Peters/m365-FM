@@ -1,0 +1,219 @@
+{
+  "episode_id": "69083565",
+  "slug": null,
+  "title": "Microsoft 365 compliance drift: why green dashboards and enabled retention policies are not enough to govern your data",
+  "lang": "en",
+  "duration_s": 4811,
+  "transcript_source": "data/en_transcripts/98c598b96b60.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "governance",
+      "name": "Governance",
+      "type": "concept",
+      "score": 88,
+      "mentions": 41,
+      "first_mention_s": 344,
+      "quote": "we don't want pre-governance deletion to mask behavior yet",
+      "url": "https://www.m365.fm/entity/governance/"
+    },
+    {
+      "slug": "ediscovery",
+      "name": "eDiscovery",
+      "type": "concept",
+      "score": 85,
+      "mentions": 104,
+      "first_mention_s": 9,
+      "quote": "eDiscovery cases open, the unified audit log recording",
+      "url": "https://www.m365.fm/entity/ediscovery/"
+    },
+    {
+      "slug": "audit-logs",
+      "name": "Audit logs",
+      "type": "concept",
+      "score": 72,
+      "mentions": 23,
+      "first_mention_s": 11,
+      "quote": "the unified audit log recording. Every dashboard green, every report reconciled.",
+      "url": "https://www.m365.fm/entity/audit-logs/"
+    },
+    {
+      "slug": "kql",
+      "name": "Kusto Query Language (KQL)",
+      "type": "concept",
+      "score": 50,
+      "mentions": 17,
+      "first_mention_s": 296,
+      "quote": "A discovery queries with stable KQL across the same custodians",
+      "url": "https://www.m365.fm/entity/kql/"
+    },
+    {
+      "slug": "purview",
+      "name": "Microsoft Purview",
+      "type": "product",
+      "score": 78,
+      "mentions": 4,
+      "first_mention_s": 60,
+      "quote": "Microsoft purview configured with data lifecycle management policies and auto-applied retention labels.",
+      "url": "https://www.m365.fm/entity/purview/"
+    },
+    {
+      "slug": "sharepoint",
+      "name": "SharePoint",
+      "type": "product",
+      "score": 72,
+      "mentions": 11,
+      "first_mention_s": 46,
+      "quote": "sharepoint online active, with standard site collections",
+      "url": "https://www.m365.fm/entity/sharepoint/"
+    },
+    {
+      "slug": "onedrive",
+      "name": "OneDrive",
+      "type": "product",
+      "score": 65,
+      "mentions": 17,
+      "first_mention_s": 53,
+      "quote": "one drive provisioned tenant-wide default quotas intact",
+      "url": "https://www.m365.fm/entity/onedrive/"
+    },
+    {
+      "slug": "teams",
+      "name": "Microsoft Teams",
+      "type": "product",
+      "score": 40,
+      "mentions": 7,
+      "first_mention_s": 56,
+      "quote": "teams in regular use for channel files and meeting artifacts",
+      "url": "https://www.m365.fm/entity/teams/"
+    },
+    {
+      "slug": "secure-score",
+      "name": "Microsoft Secure Score",
+      "type": "product",
+      "score": 35,
+      "mentions": 5,
+      "first_mention_s": 237,
+      "quote": "Secure score, history report.",
+      "url": "https://www.m365.fm/entity/secure-score/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "intelligent-versioning",
+      "name": "Intelligent versioning (SharePoint)",
+      "type": "concept"
+    },
+    {
+      "slug": "preservation-hold-library",
+      "name": "Preservation Hold library",
+      "type": "concept"
+    },
+    {
+      "slug": "retention-labels",
+      "name": "Retention labels",
+      "type": "concept"
+    },
+    {
+      "slug": "compliance-manager",
+      "name": "Microsoft Purview Compliance Manager",
+      "type": "product"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "Most people think stable outputs prove control, but stability can also hide drift. We're going to replay the exact scenario, same facts, same steps, and watch the behavior, not the color.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 23,
+      "entities": [
+        "governance"
+      ],
+      "why": "Sets up the central thesis that green dashboards can mask compliance drift."
+    },
+    {
+      "text": "Now this is important because survival happens before governance. If cleanup, manual or automated, user or operational occurs before retention applies, governance measures success on a reduced set.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 1755,
+      "entities": [
+        "governance",
+        "retention-labels"
+      ],
+      "why": "Explains why retention success can be measured on a corpus that has already shrunk."
+    },
+    {
+      "text": "The object we retain is the versioned artifact, not the lived sequence of edits. In this tenant today that artifact exists at a co-author resolution under load",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 1555,
+      "entities": [
+        "intelligent-versioning"
+      ],
+      "why": "Clarifies what retention actually preserves under co-authoring and autosave."
+    },
+    {
+      "text": "Clean up is continuous. Retention is periodic. If survival ends before governance starts, compliance success is sampling the quiet.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 2384,
+      "entities": [
+        "governance"
+      ],
+      "why": "Memorable summary of the timing gap between cleanup and governance clocks."
+    },
+    {
+      "text": "Execution proves availability, not interpretation. The system did what it's designed to do. It didn't necessarily do what we thought we asked.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 3493,
+      "entities": [
+        "governance",
+        "purview"
+      ],
+      "why": "Names the core fallacy that an executed policy equals enforced intent."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "Green dashboards, hidden drift"
+    },
+    {
+      "start_s": 41,
+      "title": "Environment baseline: what green looks like"
+    },
+    {
+      "start_s": 382,
+      "title": "Loop zero: the perfect run"
+    },
+    {
+      "start_s": 748,
+      "title": "Loop one: creation and version compression"
+    },
+    {
+      "start_s": 1571,
+      "title": "Loop two: survival and pre-governance cleanup"
+    },
+    {
+      "start_s": 2442,
+      "title": "Loop three: scope drift in eDiscovery"
+    },
+    {
+      "start_s": 3467,
+      "title": "The lie: execution equals intent"
+    },
+    {
+      "start_s": 4171,
+      "title": "Playbook: track variance, not success"
+    }
+  ],
+  "takeaways": [
+    "Intelligent versioning with co-authoring and autosave preserves fewer near-term versions than edits, so retention keeps versions, not every edit.",
+    "Short-lived content such as meeting recordings, temp exports and OneDrive spillover is often deleted before retention labels arrive, so governance succeeds on a reduced set.",
+    "Track three variance signals (creation ratio, survival hit rate, discovery coverage ratio) and treat flat dashboards in a growing tenant as incidents until explained."
+  ],
+  "hook": "Every Microsoft 365 compliance dashboard is green, yet the data you think you retain and can discover may already be gone. This episode is for records managers, eDiscovery leads and compliance owners who want to see how versioning, cleanup and discovery scope quietly drift behind enabled retention policies. You get a playbook of variance signals and alerts that show whether governance still matches reality.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-03T02:32:47+00:00"
+}

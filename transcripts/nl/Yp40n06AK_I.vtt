@@ -1,0 +1,973 @@
+WEBVTT
+
+00:00:00.200 --> 00:00:01.600
+Welkom bij weer een kennisfragment.
+
+00:00:01.760 --> 00:00:04.920
+Het onderwerp van vandaag is iets waar iedere IT er minstens één keer over heeft nagedacht.
+
+00:00:05.140 --> 00:00:09.100
+Stel je voor dat de server van je bedrijf crash, je VM is verdwenen, je data is weg.
+
+00:00:09.320 --> 00:00:09.860
+Wat doe je dan?
+
+00:00:10.020 --> 00:00:13.420
+Twintig jaar geleden betekende het antwoord backup tapes of externe schijven opduikelen
+
+00:00:13.420 --> 00:00:15.520
+of die backup server in een bezemkast ergens zien te vinden.
+
+00:00:15.720 --> 00:00:18.520
+Je wrote air the media, label de dozen en hoopte dat er niets misging.
+
+00:00:18.700 --> 00:00:22.320
+En het punt was, je wist pas of je backup werkte als je hem daadwerkelijk probeerde terug te zetten.
+
+00:00:22.520 --> 00:00:24.200
+Azure Backup verandert die vergelijking.
+
+00:00:24.440 --> 00:00:27.760
+Geen tapes, geen on-premises servers, niet meer hopen op een goede afloop.
+
+00:00:27.760 --> 00:00:31.460
+Aan het einde van deze aflevering begrijp je precies wat Azure Backup is,
+
+00:00:31.680 --> 00:00:33.780
+wat het beschermt en hoe het achter de schermen werkt.
+
+00:00:34.180 --> 00:00:38.060
+Laten we beginnen met de simpelste definitie van wat Azure Backup eigenlijk is.
+
+00:00:38.240 --> 00:00:41.660
+Azure Backup is Microsoft's ingebouwde backup service voor de cloud.
+
+00:00:41.800 --> 00:00:44.000
+Maar dat simpele antwoord verbergt iets groters.
+
+00:00:44.200 --> 00:00:45.780
+Het is helemaal geen losse tool.
+
+00:00:46.000 --> 00:00:50.540
+Het is een verbonden platform dat virtuele machines, databases, best-end shares
+
+00:00:50.540 --> 00:00:52.980
+en zelfs machines op je eigen kantoor beschermt.
+
+00:00:53.120 --> 00:00:56.040
+In plaats van zelf backup hardware en software te beheren,
+
+00:00:56.040 --> 00:00:58.720
+regelt Azure de opslag, de planning en de beveiliging.
+
+00:00:58.960 --> 00:01:01.900
+Jij geeft aan wat er beschermd moet worden en hoe vaak, en het doet de rest.
+
+00:01:02.140 --> 00:01:03.560
+Zie het als een kluisje bij een bank.
+
+00:01:03.720 --> 00:01:07.920
+Je stopt je kostbaarheden erin en de bank regelt de beveiliging, de brandwerendheid en de kluis zelf.
+
+00:01:08.140 --> 00:01:10.120
+Wanneer je iets terug nodig hebt, haal je het op.
+
+00:01:10.240 --> 00:01:11.940
+Je bouwt niet je eigen kluis in je kelder.
+
+00:01:12.140 --> 00:01:13.780
+Azure Backup werkt op dezelfde manier.
+
+00:01:14.000 --> 00:01:16.660
+Je koopt geen backup-survers en beheert geen tape-rotaties.
+
+00:01:16.840 --> 00:01:19.740
+Je bepaalt gewoon wat belangrijk is en laat Azure het veilig opslaan.
+
+00:01:19.740 --> 00:01:21.920
+Dat is het echte verschil met traditionele backup.
+
+00:01:21.920 --> 00:01:26.800
+Geen gedoe meer met tape-rotaties of beheer van externe opslag en niet meer hopen dat het werkt wanneer je het nodig hebt.
+
+00:01:27.000 --> 00:01:30.660
+Achter de schermen gebruikt Azure Backup voor de meeste workloads een zogenaamde agent.
+
+00:01:30.900 --> 00:01:35.660
+Dat is een klein stukje software dat op je machines wordt geïnstalleerd, of ze nu in Azure staan of bij jou op kantoor.
+
+00:01:35.820 --> 00:01:39.720
+Die agent coördineert het backup-proces en vertelt Azure wanneer er een snapshot gemaakt moet worden,
+
+00:01:39.940 --> 00:01:41.800
+welke data is gewijzigd en waar de kopie naartoe moet.
+
+00:01:41.940 --> 00:01:45.840
+En hier is het mooie, voor Azure virtuele machines hoef je niets handmatig te installeren.
+
+00:01:45.920 --> 00:01:50.400
+Wanneer je via de portal-backup inschakelt op een VM, installeert Azure die extensie automatisch.
+
+00:01:50.400 --> 00:01:51.720
+Eén klik en het is klaar.
+
+00:01:51.860 --> 00:01:53.680
+Azure Backup is echt een beheerde service.
+
+00:01:53.980 --> 00:01:56.580
+Jij definieert het beleid, het systeem regelt de uitvoering.
+
+00:01:56.800 --> 00:01:59.380
+Geen backup-server om te patchen, geen op Slack array om uit te breiden
+
+00:01:59.380 --> 00:02:01.800
+en niet meer afvragen of je volledige weekend-backup wel is gelopen.
+
+00:02:01.980 --> 00:02:03.380
+Maar wat kun je precies backuppen?
+
+00:02:03.560 --> 00:02:04.640
+Daar gaan we nu naar kijken.
+
+00:02:04.920 --> 00:02:06.340
+Wat Azure Backup beschermt
+
+00:02:06.340 --> 00:02:08.300
+Dus, wat kun je eigenlijk backuppen met Azure Backup?
+
+00:02:08.500 --> 00:02:10.120
+Laten we de belangrijkste workloads langslopen.
+
+00:02:10.300 --> 00:02:12.500
+Azure VM's zijn verreweg de meest voorkomende use case.
+
+00:02:12.680 --> 00:02:15.860
+Je schakelt backup in op de virtuele machine en Azure maakt een volledige kopie,
+
+00:02:16.060 --> 00:02:18.400
+inclusief het besturingssysteem, de applicaties en de gegevensschrijven.
+
+00:02:18.400 --> 00:02:22.020
+Als die VM beschadigd raakt of per ongeluk wordt verwijderd,
+
+00:02:22.160 --> 00:02:23.740
+kun je alles herstellen vanaf je backup.
+
+00:02:23.920 --> 00:02:25.700
+Dat is het funnet voor je compute workloads.
+
+00:02:25.980 --> 00:02:27.380
+VM's zijn echter pas het begin.
+
+00:02:27.580 --> 00:02:29.720
+Hoe zit het met de databases die in die VM's draaien?
+
+00:02:29.900 --> 00:02:32.880
+SQL Server en SAP HANA zijn niet zomaar bestanden op een schijf.
+
+00:02:33.000 --> 00:02:36.620
+Ze hebben complexe structuren, transactielogboeken en specifieke herstelvereisten.
+
+00:02:36.840 --> 00:02:38.360
+En Azure Backup begrijpt dat.
+
+00:02:38.560 --> 00:02:41.400
+Wanneer je een SQL Server database backupt die in een Azure VM draait,
+
+00:02:41.540 --> 00:02:45.200
+stemt Azure Backup af met SQL om ervoor te zorgen dat de backup applicatie consistent is.
+
+00:02:45.200 --> 00:02:48.820
+Dat betekent dat wanneer je herstelt, de database schoon terugkomt, zonder corruptie,
+
+00:02:48.960 --> 00:02:50.820
+zonder ontbrekende transacties en zonder verrassingen.
+
+00:02:51.020 --> 00:02:55.200
+Je kunt zelfs herstelpunttoestellingen van wel 15 minuten instellen voor je meest kritieke databases.
+
+00:02:55.480 --> 00:02:57.500
+Hier is iets wat veel mensen zich niet realiseren.
+
+00:02:57.700 --> 00:03:00.260
+Azure Backup is niet alleen voor zaken die binnen Azure draaien.
+
+00:03:00.400 --> 00:03:04.440
+Het kan ook on-premises servers, fysieke machines en VMware virtuele machines backuppen.
+
+00:03:04.600 --> 00:03:08.800
+Je stuurt hun backups rechtstreeks naar Azure met de Microsoft Azure Backup Server of de Mars agent.
+
+00:03:09.000 --> 00:03:12.740
+Dat betekent dat je je tapestation kunt uitfaseren en Azure kunt gebruiken als je externe opslag,
+
+00:03:12.740 --> 00:03:14.800
+zonder dat je harde schijven naar een kluis ergens hoeft te sturen.
+
+00:03:14.960 --> 00:03:16.900
+Azure Best & Shares zijn een andere workload.
+
+00:03:17.160 --> 00:03:21.780
+Zie ze als cloudgebaseerde gedeelde mappen, het soort dat je team gebruikt om samen aan documenten te werken.
+
+00:03:21.960 --> 00:03:27.540
+Azure Backup beschermt die Best & Shares, dus als iemand per ongeluk een map verwijdert of een ransomware-aanval je bestanden versleutelt,
+
+00:03:27.700 --> 00:03:29.080
+kun je teruggaan naar een schone versie.
+
+00:03:29.260 --> 00:03:33.680
+Azure Blobs dekken je ongestructureerde gegevens, afbeeldingen, lags en backups van andere systemen.
+
+00:03:33.820 --> 00:03:36.100
+Azure Backup kan ook je blob containers beschermen.
+
+00:03:36.240 --> 00:03:37.760
+En dan zijn er nog Azure schijven.
+
+00:03:37.760 --> 00:03:39.880
+Soms hoef je niet de hele VM te backuppen.
+
+00:03:40.080 --> 00:03:42.640
+Misschien hoef je alleen een specifieke gegevensschijf te beschermen.
+
+00:03:42.800 --> 00:03:44.300
+Azure Backup ondersteunt dat ook.
+
+00:03:44.480 --> 00:03:45.760
+Hier is een praktijkscenario.
+
+00:03:46.180 --> 00:03:50.280
+Stel je een bedrijf voor dat zijn infrastructuur in Azure draait met een paar productie-VMs,
+
+00:03:50.420 --> 00:03:56.680
+SQL Server, databases voor hun bedrijfsapplicaties en een oude bestandserver die nog op kantoor staat en die ze nog niet hebben gemigreerd.
+
+00:03:56.880 --> 00:03:59.520
+Met Azure Backup beschermen ze alles vanuit één kluis.
+
+00:03:59.700 --> 00:04:05.560
+De VM's, de databases, de on-prem bestandserver, één backup-strategie, één plek om het te beheren, één set beleidsregels.
+
+00:04:05.560 --> 00:04:07.600
+Dat is de kracht van een uniform platform.
+
+00:04:07.800 --> 00:04:11.360
+Azure Backup ondersteunt veel, maar de echte vraag is, hoe werkt het eigenlijk?
+
+00:04:11.560 --> 00:04:13.960
+Laten we ontdekken hoe Backup in de praktijk werkt.
+
+00:04:14.120 --> 00:04:15.480
+Het proces in twee fases.
+
+00:04:15.780 --> 00:04:18.360
+Wanneer een backup wordt geactiveerd, gebeuren er twee dingen.
+
+00:04:18.560 --> 00:04:23.260
+En het begrijpen van dit onderscheid is de sleutel om te weten waarom Azure Backup zowel snel als veilig is.
+
+00:04:23.600 --> 00:04:24.860
+Fase 1 is de snapshot.
+
+00:04:25.240 --> 00:04:28.660
+Azure maakt een alleen lezenkopie van je gegevens op een specifiek tijdstip.
+
+00:04:28.800 --> 00:04:33.600
+Voor een virtuele machine betekent dit dat de status van de schijven op dat exacte moment wordt vastgelegd.
+
+00:04:33.600 --> 00:04:35.620
+Dit gebeurt snel omdat het een snapshot is.
+
+00:04:35.800 --> 00:04:38.120
+Er wordt nog niet elke byte aan data gekopieerd.
+
+00:04:38.340 --> 00:04:39.920
+Zie het meer als het maken van een foto.
+
+00:04:40.180 --> 00:04:44.860
+De snapshot wordt lokaal opgeslagen naast je VM, dus deze is beschikbaar voor snelherstel.
+
+00:04:45.100 --> 00:04:47.180
+Fase 2 is de overdracht naar de kluis.
+
+00:04:47.420 --> 00:04:52.300
+Die snapshot data wordt verplaatst naar je Recovery Services kluis of Backup kluis voor lange termijnopslag.
+
+00:04:52.500 --> 00:04:57.060
+Dit duurt langer omdat de data echt gekopieerd en overgedragen wordt, maar het geeft je die offsite veiligheid.
+
+00:04:57.060 --> 00:05:01.520
+Mocht je volledige Azure regio uitvallen, dan zijn je backupgegevens veilig in de kluis.
+
+00:05:01.740 --> 00:05:04.460
+Deze 2-fasen aanpak maakt direct herstel mogelijk.
+
+00:05:04.680 --> 00:05:12.340
+Omdat de snapshot lokaal is opgeslagen, kun je een VM van de snapshots van de afgelopen dagen bijna onmiddellijk herstellen zonder te wachten op data uit de kluis.
+
+00:05:12.560 --> 00:05:18.240
+Voor oudere herstelpunten die al naar de kluis zijn verplaatst, duurt het herstel langer, maar de data is nog steeds beschikbaar.
+
+00:05:18.440 --> 00:05:20.060
+Na de eerste backup worden dingen nog efficiënter.
+
+00:05:20.880 --> 00:05:23.060
+Azure Backup gebruikt incrementele backups.
+
+00:05:23.060 --> 00:05:27.740
+Na de initiële volledige backup worden alleen de wijzigingen verstuurd, niet elke keer de hele VM.
+
+00:05:27.960 --> 00:05:33.160
+Als je een paar bestanden wijzigt, worden alleen die gewijzigde blokken overgedragen, wat tijd en opslagruimte bespaart.
+
+00:05:33.360 --> 00:05:34.480
+Beleid bepaalt alles.
+
+00:05:34.700 --> 00:05:37.560
+Je bepaalt de frequentie, zoals dagelijks, per uur of wekelijks.
+
+00:05:37.700 --> 00:05:41.880
+Je bepaalt de retentie, zoals hoeveel dagen, weken, maanden of jaren elk herstelpunt bewaard moet blijven.
+
+00:05:42.020 --> 00:05:45.440
+En je bepaalt wanneer oudere backups naar koudere, goedkopere opslag verplaatst moeten worden.
+
+00:05:45.620 --> 00:05:50.060
+Een beleid kan een VM dagelijks backuppen, de laatste 30 dagelijkse punten bewaren...
+
+00:05:50.060 --> 00:05:53.660
+...en alles wat ouder is naar de archieflaag verplaatsen, waar opslag een fractie kost.
+
+00:05:53.820 --> 00:05:55.240
+Hier is een concreet voorbeeld.
+
+00:05:55.520 --> 00:06:00.820
+Stel dat je een productie-VM hebt met een webapplicatie en je stelt een beleid in dat deze elke nacht om twee uur backupt.
+
+00:06:01.000 --> 00:06:04.740
+Je bewaart 30 dagelijkse backups en ook 12 maandelijkse backups voor compliance.
+
+00:06:05.040 --> 00:06:08.400
+Na de eerste volledige backup verstuurt elke volgende backup alleen de wijzigingen.
+
+00:06:08.580 --> 00:06:13.980
+Als je VM 100 GB aan data heeft, maar dagelijks slechts 2 GB verandert, is elke nachtelijke backup ongeveer 2 GB.
+
+00:06:13.980 --> 00:06:15.280
+Dat is efficiënt.
+
+00:06:15.480 --> 00:06:19.540
+Nu ken je de werking, maar er is één ding dat Azure Backup onderscheidt van al het andere.
+
+00:06:19.740 --> 00:06:21.040
+Hoe veilig het werkelijk is.
+
+00:06:21.260 --> 00:06:24.440
+De beveiligingslaag waarom Azure Backup zo moeilijk aan te vallen is.
+
+00:06:24.680 --> 00:06:28.860
+Laten we het over beveiliging hebben, want hier onderscheidt Azure Backup zich echt van de traditionele aanpak.
+
+00:06:29.040 --> 00:06:31.360
+Elke backup die je maakt, wordt standaard versleuteld.
+
+00:06:31.560 --> 00:06:35.620
+In rusttoestand binnen de kluis wordt AES 256-bit encryptie gebruikt.
+
+00:06:35.840 --> 00:06:37.120
+Dat is de industriestandaard.
+
+00:06:37.320 --> 00:06:42.320
+Terwijl data van je machine naar de kluis gaat, is het beschermd met HTTPS en TLS 1.2 of hoger.
+
+00:06:42.320 --> 00:06:45.420
+Zelfs als iemand de datastroom zou onderscheppen, kunnen ze er niets van lezen.
+
+00:06:45.600 --> 00:06:46.700
+Maar dat is slechts het begin.
+
+00:06:46.920 --> 00:06:48.420
+Elke backup-toll biedt encryptie.
+
+00:06:48.640 --> 00:06:52.040
+Wat Azure Backup anders maakt, is wat er gebeurt als iemand je backups probeert te verwijderen.
+
+00:06:52.180 --> 00:06:53.600
+Ten eerste is er Soft Delete.
+
+00:06:53.780 --> 00:06:56.700
+Als een backup per ongeluk of opzettelijk wordt verwijderd, verdwijnt deze niet.
+
+00:06:56.860 --> 00:06:58.920
+Het blijft 14 dagen verborgen in de kluis.
+
+00:06:59.100 --> 00:06:59.960
+Je kunt het herstellen.
+
+00:07:00.200 --> 00:07:03.300
+Dat geeft je de kans om de schade ongedaan te maken voordat het permanent wordt.
+
+00:07:03.520 --> 00:07:05.460
+Zie het als een prullenbak met een herstelperiode.
+
+00:07:05.460 --> 00:07:09.300
+Je hebt nog steeds de optie om deze te legen, maar je moet expliciet bevestigen dat je dat wilt.
+
+00:07:09.300 --> 00:07:12.120
+Dan heb je onveranderlijkheid, en dat is een nog grotere zaak.
+
+00:07:12.260 --> 00:07:16.580
+Zodra je een bewaartermijn voor een backup instelt, kan dat herstelpunt niet voortijdig worden verwijderd.
+
+00:07:16.720 --> 00:07:19.600
+Niet door een beheerder, niet door iemand die een beheerdersaccount kraakt.
+
+00:07:19.820 --> 00:07:20.860
+Zelfs niet door Microsoft.
+
+00:07:21.160 --> 00:07:23.860
+De data blijft staan tot de bewaartermijn is verstreken.
+
+00:07:24.020 --> 00:07:24.320
+Punt.
+
+00:07:24.540 --> 00:07:29.940
+Als je beleid voorschrijft om dagelijkse backups 30 dagen te bewaren, is elk van die 30 herstelpunten potdicht vergrendeld.
+
+00:07:30.100 --> 00:07:34.200
+Een aanvaller kan je productie-VM's verwijderen, maar ze kunnen niet bij de backup-gegevens.
+
+00:07:34.200 --> 00:07:35.460
+Nu wordt het interessant.
+
+00:07:35.660 --> 00:07:39.860
+Azure Backup ondersteunt iets wat Multi-User Authorization of MUA wordt genoemd.
+
+00:07:39.980 --> 00:07:46.560
+Kritieke operaties, zoals het uitschakelen van soft delete of onveranderlijkheid, vereisen goedkeuring van twee aparte personen.
+
+00:07:46.700 --> 00:07:49.940
+Een persoon kan de backup niet in gevaar brengen, zelfs een globale beheerder niet.
+
+00:07:50.100 --> 00:07:53.680
+Je hebt twee geautoriseerde gebruikers nodig die akkoord gaan voordat die beveiligingsinstellingen wijzigen.
+
+00:07:53.880 --> 00:07:56.280
+Dat is een serieuze verdediging tegen interne bedreigingen.
+
+00:07:56.480 --> 00:08:00.000
+Voor organisaties met strikte netwerkregels kun je private endpoints gebruiken.
+
+00:08:00.000 --> 00:08:04.440
+Dat leidt al het backup-verkeer via je Azure virtuele netwerk met gebruik van privé IP-adressen.
+
+00:08:04.600 --> 00:08:06.520
+De data komt nooit op het publieke internet.
+
+00:08:06.720 --> 00:08:10.020
+Als je Compliance Team netwerk isolatie vereist, is dit hoe je dat bereikt.
+
+00:08:10.220 --> 00:08:12.800
+Maar hier is de echte evolutie waar de meeste mensen niet van weten.
+
+00:08:13.020 --> 00:08:15.720
+Azure Backup integreert nu met Microsoft Defender 4 Cloud.
+
+00:08:15.920 --> 00:08:19.240
+Dat betekent dat je backup-herstelpunten op malware gescand kunnen worden voordat je ze terugzet.
+
+00:08:19.440 --> 00:08:21.900
+Stel je voor dat je bedrijf wordt getroffen door een ransomware-aanval.
+
+00:08:22.060 --> 00:08:23.820
+Je productiesystemen zijn versleuteld.
+
+00:08:23.960 --> 00:08:27.320
+U bent van plan om te herstellen vanaf een backup, maar wat als de backup zelf malware bevat?
+
+00:08:27.500 --> 00:08:28.820
+Dat is het nachtmerriescenario.
+
+00:08:28.820 --> 00:08:33.380
+Met deze integratie scant Defender uw herstelpunten en markeert deze als er tekenen van infectie zijn.
+
+00:08:33.540 --> 00:08:36.540
+U kunt dan een schoon herstelpunt kiezen in plaats van het probleem terug te zetten.
+
+00:08:36.760 --> 00:08:40.280
+Bij een echte ransomware-aanval proberen aanvallers bijna altijd eerst de backups te verwijderen.
+
+00:08:40.460 --> 00:08:41.340
+Dat is een draaiboek.
+
+00:08:41.780 --> 00:08:43.380
+Onveranderlijkheid, immutability, stopt dat.
+
+00:08:43.560 --> 00:08:46.640
+MUA voorkomt dat een enkel gecompromitteerd account de beveiliging uitschakelt.
+
+00:08:46.840 --> 00:08:47.820
+Soft-delete geeft u een herstelvenster.
+
+00:08:48.560 --> 00:08:51.820
+En Defender-scanning zorgt ervoor dat de data die u herstelt daadwerkelijk schoon is.
+
+00:08:51.980 --> 00:08:55.860
+Dus, Azure Backup is veilig, maar hoe verhoudt het zich tot de tools die u misschien al gebruikt?
+
+00:08:55.860 --> 00:08:57.980
+Azure Backup tegenover de alternatieven.
+
+00:08:58.160 --> 00:09:02.480
+Laten we het hebben over alternatieven, want u heeft opties en de juiste keuze hangt af van uw situatie.
+
+00:09:02.900 --> 00:09:06.020
+Traditionele on-premises backup is wat de meeste bedrijven al decennia doen.
+
+00:09:06.220 --> 00:09:09.880
+U koopt een backup-server, u koopt opslag, u koopt licenties voor backup-software.
+
+00:09:10.040 --> 00:09:12.060
+U beheert TA-protaties of schijverrace.
+
+00:09:12.220 --> 00:09:13.920
+U regelt zelf de opslag op locatie.
+
+00:09:14.100 --> 00:09:15.840
+De initiële kosten zijn aanzienlijk.
+
+00:09:16.040 --> 00:09:18.800
+Surfers, opslag, software en het personeel om het te beheren.
+
+00:09:18.920 --> 00:09:21.340
+En u moet die hardware elke drie tot vijf jaar vernieuwen.
+
+00:09:21.500 --> 00:09:23.400
+De operationele overhead loopt snel op.
+
+00:09:23.540 --> 00:09:24.900
+Azure Backup gooit dat model om.
+
+00:09:24.900 --> 00:09:26.160
+U betaalt een abonnement.
+
+00:09:26.360 --> 00:09:29.500
+Geen hardware, geen software om op een backup-server te installeren, geen tapes.
+
+00:09:29.700 --> 00:09:32.480
+De kosten zijn voorspelbaar en schalen mee met wat u daadwerkelijk beschermt.
+
+00:09:32.620 --> 00:09:34.480
+Dan zijn er nog tools van derde zoals VAM.
+
+00:09:34.660 --> 00:09:36.200
+VAM is uitstekend in wat het doet.
+
+00:09:36.400 --> 00:09:41.240
+Het ondersteunt complexe omgevingen, multicloud, hybride, on-prem en geavanceerde cloud-herstelsenario's.
+
+00:09:41.360 --> 00:09:45.000
+Het biedt functies zoals direct VM-herstel en diepgaande ransomware-verdediging.
+
+00:09:45.160 --> 00:09:51.300
+Als uw omgeving een mix is van Azure, on-prem, VMware en zelfs AWS, geeft VAM u één platform om alles te beheren.
+
+00:09:51.300 --> 00:09:56.000
+Dat is krachtig, maar er is een afweging. VAM is duurder, zeker op kleinere schaal.
+
+00:09:56.180 --> 00:10:01.400
+Een kleine Azure VM met 50 gigabyte schijfruimte kost ongeveer 10 dollar per maand met Azure Backup.
+
+00:10:01.520 --> 00:10:04.780
+Dezelfde bescherming met een tool van derde kan twee tot drie keer zoveel kosten.
+
+00:10:04.980 --> 00:10:09.520
+En u moet nog steeds de backup-infrastructuur beheren, de VAM-server, de repositories, de proxies.
+
+00:10:09.520 --> 00:10:13.760
+Dus, waar wint Azure Backup? Eenvoud en integratie. Het is ingebouwd in Azure.
+
+00:10:13.940 --> 00:10:19.020
+U hoeft geen backup-server in te richten. U beheert geen aparte opslag. U stelt beleid in via de Azure Portal.
+
+00:10:19.280 --> 00:10:23.800
+Het werkt met uw bestaande Azure RBAC-rollen. Het integreert met Azure Policy for Governance.
+
+00:10:24.020 --> 00:10:27.640
+Voor een pure Azure-omgeving is het de meest kosteneffectieve en eenvoudigste optie.
+
+00:10:27.860 --> 00:10:30.500
+Waar winnen tools van derde? Complexe omgevingen.
+
+00:10:30.660 --> 00:10:34.760
+Als je workloads hebt in meerdere clouds of een aanzienlijke on-premise aanwezigheid,
+
+00:10:35.060 --> 00:10:38.140
+rechtvaardigt een tool zoals VAM de kosten door uniform beheer.
+
+00:10:38.140 --> 00:10:45.060
+En voor organisaties met strenge ransomware eisen bieden externe tools vaak betere onveranderlijkheid en airgapped architecturen.
+
+00:10:45.240 --> 00:10:49.900
+De eerlijke conclusie is dit. Als je workloads voornamelijk in Azure staan, begin dan met Azure Backup.
+
+00:10:50.060 --> 00:10:52.820
+Het is eenvoudig, kosteneffectief en diep geïntegreerd.
+
+00:10:53.020 --> 00:10:58.740
+Als je omgeving complex is, multicloud, zwaar on-premise of geavanceerd herstel vereist, overweeg dan externe tools.
+
+00:10:58.980 --> 00:11:01.500
+Die kosten meer, maar leveren in die scenario's ook meer op.
+
+00:11:01.580 --> 00:11:03.560
+Je hebt gezien wat het beschermt en hoe het werkt.
+
+00:11:03.700 --> 00:11:06.400
+Maar laten we het hebben over het onderwerp waar niemand over wil praten.
+
+00:11:06.400 --> 00:11:08.920
+Wat kost het? De kosten van Azure Backup.
+
+00:11:09.140 --> 00:11:10.400
+Laten we over geld praten.
+
+00:11:10.580 --> 00:11:14.020
+Azure Backup gebruikt een prijsmodel uit twee delen en dat is vrij eenvoudig.
+
+00:11:14.160 --> 00:11:18.300
+Je betaalt een instancevergoeding voor elke beschermde resource, plus opslagkosten voor de kluis zelf.
+
+00:11:18.460 --> 00:11:21.160
+De instancevergoeding schaalt mee met de grootte van wat je beschermt.
+
+00:11:21.280 --> 00:11:24.560
+Een kleine VM onder de 50 gigabyte kost ongeveer 5 dollar per maand.
+
+00:11:24.700 --> 00:11:27.980
+Een middelgrote VM tot 500 gigabyte kost ongeveer 10 dollar.
+
+00:11:28.220 --> 00:11:34.720
+Voor databases zoals SQL Server is de vergoeding per instance hoger, ruwweg 30 dollar per maand voor een database onder de 500 gigabyte.
+
+00:11:34.720 --> 00:11:37.900
+Opslagkosten hangen af van hoe redundant je je backups wilt hebben.
+
+00:11:38.460 --> 00:11:41.840
+Locally Redundant Storage of LRS is de goedkoopste optie.
+
+00:11:42.020 --> 00:11:45.740
+Je backupgegevens worden drie keer gerepliceerd binnen één enkel datacenter.
+
+00:11:46.000 --> 00:11:51.680
+Geo Redundant Storage of GRS replaceert je gegevens naar een gekoppelde regio op een andere geografische locatie.
+
+00:11:51.920 --> 00:11:54.420
+Dat beschermt je als een volledige Azure-regio uitvalt.
+
+00:11:54.620 --> 00:11:57.160
+Het kost ook ongeveer twee keer zoveel als LRS.
+
+00:11:57.400 --> 00:11:58.720
+Hier is een praktijkvoorbeeld.
+
+00:11:58.720 --> 00:12:02.240
+Stel je hebt een 200 gigabyte VM met LRS-opslag.
+
+00:12:02.380 --> 00:12:07.500
+Je totale kosten, instance vergoeding plus opslag, bedragen ruwweg 15 dollar tot 20 dollar per maand.
+
+00:12:07.680 --> 00:12:12.500
+Voor een omgeving met 10 VM's kijk je naar ongeveer 150 dollar tot 250 dollar per maand.
+
+00:12:12.700 --> 00:12:19.060
+Vergelijk dat met het kopen van een toegewezen backup-server op Slack Array en software licenties en plotseling lijkt de cloud-optie heel redelijk.
+
+00:12:19.260 --> 00:12:21.000
+Maar er zijn manieren om geld te besparen.
+
+00:12:21.240 --> 00:12:22.960
+Selectieve schijfbackup is een belangrijke.
+
+00:12:23.120 --> 00:12:27.120
+Als je VM meerdere schijven heeft, maar slechts twee bevatte kritieke gegevens, kun je de rest uitsluiten.
+
+00:12:27.120 --> 00:12:31.020
+Minder schijven waarvan een backup wordt gemaakt, betekent lagere instancevergoedingen en minder verbruikte opslag.
+
+00:12:31.180 --> 00:12:33.140
+Verbeterd beleid is een andere knop om aan te draaien.
+
+00:12:33.280 --> 00:12:38.100
+In plaats van dagelijkse volledige backups te maken, kun je een beleid gebruiken dat vaker incrementele backups maakt en minder volledige.
+
+00:12:38.240 --> 00:12:39.900
+De eerste backup is altijd volledig.
+
+00:12:40.080 --> 00:12:42.120
+Daarna worden alleen de wijzigingen overgedragen.
+
+00:12:42.360 --> 00:12:45.160
+Na verloop van tijd vermindert dat het opslagverbruik aanzienlijk.
+
+00:12:45.340 --> 00:12:48.040
+De archieflaag is waar langdurige retentie goedkoop wordt.
+
+00:12:48.220 --> 00:12:51.460
+Als u backups jarenlang moet bewaren voor nalevings- of regelgevingsredenen,
+
+00:12:51.460 --> 00:12:56.660
+kan het verplaatsen van oudere herstelpunten naar de archieflaag tot tien keer goedkoper zijn dan opslag in de standaardlaag.
+
+00:12:56.780 --> 00:13:01.100
+Het nadeel is een langzamere hersteltijd, maar voor gegevens die u bijna nooit raadpleegt, is dat prima.
+
+00:13:01.680 --> 00:13:03.440
+Gereserveerde capaciteit is ook beschikbaar.
+
+00:13:03.640 --> 00:13:06.860
+Als u zich voor één of drie jaar committeert aan een voorspelbaar volume aan backup-up-opslag,
+
+00:13:07.040 --> 00:13:09.920
+kunt u tot 40% korting krijgen vergeleken met betalen naar verbruik.
+
+00:13:09.960 --> 00:13:12.020
+Het verborgen risico is overmatige retentie.
+
+00:13:12.180 --> 00:13:15.240
+Het is eenvoudig om een beleid in te stellen dat zeven jaar aan dagelijkse backups voor alles bewaart,
+
+00:13:15.400 --> 00:13:17.000
+maar het grootste deel van die gegevens is nooit nodig.
+
+00:13:17.000 --> 00:13:19.380
+U heeft alleen lange retentie nodig voor nalevingsgegevens.
+
+00:13:19.540 --> 00:13:20.920
+Al het andere kan worden ingekoord.
+
+00:13:21.240 --> 00:13:22.720
+Controleer uw beleid regelmatig.
+
+00:13:22.860 --> 00:13:25.780
+Als een workload is gewijzigd van productie naar ontwikkeling, past dan de retentie aan.
+
+00:13:25.920 --> 00:13:28.940
+Als een virtuele machine buitengebruik is gesteld, verwijder dan de backup-items ervan.
+
+00:13:29.140 --> 00:13:31.740
+Elk herstelpunt dat u niet nodig heeft, is weggegooid geld.
+
+00:13:31.940 --> 00:13:35.980
+Nu u weet wat het kost, gaan we het hebben over de grootste valkuil en hoe u deze kunt vermijden.
+
+00:13:36.720 --> 00:13:39.000
+De grootste fout is het niet testen van nieuwe backups.
+
+00:13:39.280 --> 00:13:42.380
+Hier is een harde waarheid die de meeste organisaties op de pijnlijke manier leren.
+
+00:13:42.380 --> 00:13:45.740
+De enige goede backup is er een die u daadwerkelijk heeft hersteld en gevalideerd.
+
+00:13:45.740 --> 00:13:48.220
+Mensen worden erg goed in het dagelijks maken van backups.
+
+00:13:48.480 --> 00:13:54.040
+Ze configureren beleid, ze monitoren taken, ze voelen zich geweldig wanneer het dashboard alleen groene vinkjes toont,
+
+00:13:54.140 --> 00:13:57.140
+maar ze oefenen bijna nooit met herstellen en dat is waar de ramp plaatsvindt.
+
+00:13:57.300 --> 00:14:03.100
+Wanneer zich een echt incident voordoet, zoals een corrupte database, een ransomware aanval of een accidentele verwijdering, ontdekt u de waarheid.
+
+00:14:03.320 --> 00:14:08.280
+Misschien was de backup corrupt, misschien waren de verkeerde gegevens vastgelegd, of misschien faalt het herstelproces halverwege.
+
+00:14:08.460 --> 00:14:12.080
+U weet het pas als u het probeert en tegen die tijd ligt de productie stil en tikt de klok door.
+
+00:14:12.300 --> 00:14:14.680
+Veel voorkomende valkuilen zijn verrassend voorspelbaar.
+
+00:14:14.680 --> 00:14:21.360
+Het herstellen van de hele server terwijl u alleen de database nodig had, het herstellen van de VM maar vergeten dat applicaties daarna opnieuw moeten worden geconfigureerd,
+
+00:14:21.540 --> 00:14:24.760
+of herstellen naar een ander netwerk en ontdekken dat de IP-adressen niet overeenkomen.
+
+00:14:24.980 --> 00:14:28.340
+Dit zijn het soort problemen die een hersteloperatie veranderen in een meerdaagse crisis.
+
+00:14:28.660 --> 00:14:30.400
+De oplossing is simpel maar ongemakkelijk.
+
+00:14:30.580 --> 00:14:32.280
+Plan regelmatig hersteloefeningen in.
+
+00:14:32.440 --> 00:14:34.040
+Eén keer per kwartaal is een goed ritme.
+
+00:14:34.220 --> 00:14:39.360
+Kies een test-VM, herstel deze vanaf een backup, verifieer of de gegevens intact zijn, controleer of de applicaties goed opstarten en verwijder de VM daarna.
+
+00:14:39.360 --> 00:14:41.000
+De eerste keer zal meer tijd kosten.
+
+00:14:41.200 --> 00:14:42.620
+De tweede keer zal het sneller gaan.
+
+00:14:42.860 --> 00:14:45.920
+Bij de derde oefening heeft uw team een gedocumenteerd en herhaalbaar proces.
+
+00:14:46.140 --> 00:14:48.320
+Azure Backup maakt dit eenvoudiger dan het klinkt.
+
+00:14:48.480 --> 00:14:52.260
+Met de functie voor direct herstel kunt u bijna onmiddellijk herstellen vanaf een lokale snapshot.
+
+00:14:52.560 --> 00:14:54.980
+U hoeft niet te wachten tot de gegevens terugkomen uit de kluis.
+
+00:14:55.140 --> 00:14:58.860
+Je kunt een herstelde VM opstarten, verifiëren en weer verwijderen in minder dan een uur.
+
+00:14:59.000 --> 00:15:00.760
+De conclusie is bot, maar noodzakelijk.
+
+00:15:00.920 --> 00:15:03.740
+Een backup-strategie zonder hersteltest is slechts een dure hoop.
+
+00:15:03.740 --> 00:15:06.620
+Je betaalt voor bescherming waarvan je niet hebt bevestigd dat deze werkt.
+
+00:15:06.740 --> 00:15:09.440
+Plan je eerste oefening deze maand, niet pas volgend kwartaal.
+
+00:15:09.640 --> 00:15:10.300
+Deze maand.
+
+00:15:10.480 --> 00:15:11.120
+Aan de slag.
+
+00:15:11.360 --> 00:15:12.500
+Je eerste drie stappen.
+
+00:15:12.680 --> 00:15:14.740
+Je moet je backup testen, maar waar begin je?
+
+00:15:14.920 --> 00:15:16.980
+Laat me je door drie eenvoudige stappen leiden.
+
+00:15:17.240 --> 00:15:17.680
+Stap 1.
+
+00:15:17.820 --> 00:15:19.860
+Bepaal wat je je niet kunt veroorloven om te verliezen.
+
+00:15:20.020 --> 00:15:22.860
+Je kritieke VM's, je databases, je best-end shares.
+
+00:15:23.120 --> 00:15:24.860
+Probeer niet alles tegelijk te backupen.
+
+00:15:25.080 --> 00:15:27.720
+Begin met de workload die het meeste pijn zou doen als deze verdween.
+
+00:15:27.920 --> 00:15:29.100
+Dat is je topprioriteit.
+
+00:15:29.380 --> 00:15:29.800
+Stap 2.
+
+00:15:29.940 --> 00:15:31.600
+Maak een Recovery Services kluis aan.
+
+00:15:31.800 --> 00:15:33.120
+Zie het als een kluis voor je backups.
+
+00:15:33.120 --> 00:15:36.000
+Zorg dat je deze in dezelfde regio aanmaakt als je resources.
+
+00:15:36.340 --> 00:15:38.020
+Dat is de grootste fout die mensen maken.
+
+00:15:38.200 --> 00:15:39.800
+De kluis belandt in de verkeerde regio.
+
+00:15:40.000 --> 00:15:42.860
+Als je VM in West-Europa draait, moet je kluis ook in West-Europa staan.
+
+00:15:43.080 --> 00:15:43.800
+Hou ze bij elkaar.
+
+00:15:44.200 --> 00:15:44.640
+Stap 3.
+
+00:15:44.800 --> 00:15:45.840
+Stel je backup-beleid in.
+
+00:15:45.980 --> 00:15:47.260
+Hoe vaak moeten backups draaien?
+
+00:15:47.480 --> 00:15:48.540
+Dagelijks is de standaard.
+
+00:15:48.700 --> 00:15:49.680
+Hoe lang moet je ze bewaren?
+
+00:15:49.820 --> 00:15:51.500
+30 tot 90 dagen is een goed startpunt.
+
+00:15:51.660 --> 00:15:52.720
+Hoe zit het met redundantie?
+
+00:15:52.880 --> 00:15:55.320
+LRS bewaart kopieën in één datacenter en bespaart kosten.
+
+00:15:55.580 --> 00:15:58.040
+GRS kopieert naar een tweede regio voor extra veiligheid.
+
+00:15:58.240 --> 00:16:00.980
+Zodra je beleid klaar is, schakel je backup in voor je eerste VM.
+
+00:16:03.120 --> 00:16:07.140
+Begin met één VM, bevestig dat de eerste backup slaagt en breed dan verder uit.
+
+00:16:07.320 --> 00:16:10.220
+Azure Backup Center geeft je één dashboard om alles te monitoren.
+
+00:16:10.400 --> 00:16:11.560
+Dus, dat is Azure Backup.
+
+00:16:11.720 --> 00:16:13.000
+Het is niet zomaar een backup-toll.
+
+00:16:13.180 --> 00:16:15.180
+Het is een vangnet dat je één keer instelt en waarop je vertrouwt.
+
+00:16:15.280 --> 00:16:17.820
+Je hebt geen tapes of servers nodig en hoeft je nooit af te vragen of het werkte.
+
+00:16:18.000 --> 00:16:18.980
+Je stelt je beleid in.
+
+00:16:19.120 --> 00:16:20.240
+Je schakelt bescherming in.
+
+00:16:20.400 --> 00:16:21.340
+Je test je herstel.
+
+00:16:21.620 --> 00:16:21.940
+Simpel.
+
+00:16:22.200 --> 00:16:24.080
+Begin deze week met je meest kritieke VM.
+
+00:16:24.320 --> 00:16:26.580
+Die ene stap zet je al voor op de meeste organisaties.
+
+00:16:26.860 --> 00:16:27.700
+Abonneer je voor meer.

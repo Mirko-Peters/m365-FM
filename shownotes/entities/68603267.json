@@ -1,0 +1,205 @@
+{
+  "episode_id": "68603267",
+  "slug": null,
+  "title": "SharePoint Cleanup Strategy: The Blob Storage Fix for Hoarding and Bad Search",
+  "lang": "en",
+  "duration_s": 1303,
+  "transcript_source": "data/en_transcripts/59ebbefbd5b1.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "governance",
+      "name": "Governance",
+      "type": "concept",
+      "score": 40,
+      "mentions": 5,
+      "first_mention_s": 34,
+      "quote": "Why SharePoint hoarding, breaks, search and governance?",
+      "url": "https://www.m365.fm/entity/governance/"
+    },
+    {
+      "slug": "ediscovery",
+      "name": "eDiscovery",
+      "type": "concept",
+      "score": 35,
+      "mentions": 3,
+      "first_mention_s": 504,
+      "quote": "If it's on a retention policy or e-discovery hold, it refuses and logs the refusal.",
+      "url": "https://www.m365.fm/entity/ediscovery/"
+    },
+    {
+      "slug": "compliance",
+      "name": "Compliance",
+      "type": "concept",
+      "score": 35,
+      "mentions": 6,
+      "first_mention_s": 508,
+      "quote": "Compliance is a tripwire, not an afterthought.",
+      "url": "https://www.m365.fm/entity/compliance/"
+    },
+    {
+      "slug": "audit-logs",
+      "name": "Audit logs",
+      "type": "concept",
+      "score": 30,
+      "mentions": 5,
+      "first_mention_s": 242,
+      "quote": "Without spelunking through audit logs like a raccoon in a filing cabinet",
+      "url": "https://www.m365.fm/entity/audit-logs/"
+    },
+    {
+      "slug": "sharepoint",
+      "name": "SharePoint",
+      "type": "product",
+      "score": 95,
+      "mentions": 17,
+      "first_mention_s": 0,
+      "quote": "Your SharePoint looks confident.",
+      "url": "https://www.m365.fm/entity/sharepoint/"
+    },
+    {
+      "slug": "azure-functions",
+      "name": "Azure Functions",
+      "type": "product",
+      "score": 70,
+      "mentions": 21,
+      "first_mention_s": 302,
+      "quote": "and azure function to do the heavy lifting",
+      "url": "https://www.m365.fm/entity/azure-functions/"
+    },
+    {
+      "slug": "copilot",
+      "name": "Microsoft 365 Copilot",
+      "type": "product",
+      "score": 60,
+      "mentions": 10,
+      "first_mention_s": 1,
+      "quote": "Copilot 2, ask a question, get an answer, deliver it with the swagger of a straight A student.",
+      "url": "https://www.m365.fm/entity/copilot/"
+    },
+    {
+      "slug": "microsoft-search",
+      "name": "Microsoft Search",
+      "type": "product",
+      "score": 55,
+      "mentions": 12,
+      "first_mention_s": 25,
+      "quote": "quarantine junk elegantly in Azure Blob and make search and copilot smarter",
+      "url": "https://www.m365.fm/entity/microsoft-search/"
+    },
+    {
+      "slug": "graph",
+      "name": "Microsoft Graph",
+      "type": "product",
+      "score": 20,
+      "mentions": 2,
+      "first_mention_s": 343,
+      "quote": "performs the copy directly from SharePoint using Microsoft Graph or Rest",
+      "url": "https://www.m365.fm/entity/graph/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "azure-blob-storage",
+      "name": "Azure Blob Storage",
+      "type": "product"
+    },
+    {
+      "slug": "sharepoint-framework",
+      "name": "SharePoint Framework (SPFx)",
+      "type": "product"
+    },
+    {
+      "slug": "on-behalf-of-flow",
+      "name": "OAuth 2.0 On-Behalf-Of flow (OBO)",
+      "type": "concept"
+    },
+    {
+      "slug": "azure-table-storage",
+      "name": "Azure Table Storage",
+      "type": "product"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "Search isn't a librarian, it's a ranking engine. When you scatter duplicates and near duplicates across libraries and sites, you dilute signals, title, body, click history, links.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 57,
+      "entities": [
+        "microsoft-search",
+        "sharepoint"
+      ],
+      "why": "Explains why duplicate files directly degrade search relevance."
+    },
+    {
+      "text": "Users aren't lazy, they're risk averse. Delete feels irreversible, so they create shadow copies, label them, final some date, and swear they'll tidy later.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 152,
+      "entities": [
+        "sharepoint"
+      ],
+      "why": "Names the human cause of SharePoint hoarding."
+    },
+    {
+      "text": "The app acts as the user, not as a god. If the user can't touch a file, neither can your function.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 450,
+      "entities": [
+        "on-behalf-of-flow",
+        "azure-functions"
+      ],
+      "why": "Captures the least-privilege benefit of delegated permissions."
+    },
+    {
+      "text": "If you can't restore cleanly, you didn't build a quarantine. You built a shredder. Try again.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 552,
+      "entities": [
+        "azure-blob-storage"
+      ],
+      "why": "A memorable test for any archiving design."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "Confident search, wrong answers"
+    },
+    {
+      "start_s": 34,
+      "title": "Why hoarding breaks search and governance"
+    },
+    {
+      "start_s": 287,
+      "title": "Architecture: SPFx, Blob, Function, Table"
+    },
+    {
+      "start_s": 583,
+      "title": "The admin-safe OBO permission model"
+    },
+    {
+      "start_s": 769,
+      "title": "Playbook: identify, offload, restore"
+    },
+    {
+      "start_s": 1021,
+      "title": "Payoff for search, Copilot and compliance"
+    },
+    {
+      "start_s": 1155,
+      "title": "Minimum viable rollout"
+    }
+  ],
+  "takeaways": [
+    "Duplicate and stale files dilute search ranking signals, so search and Copilot surface the wrong version with confidence.",
+    "Move clutter to tiered Azure Blob Storage through an SPFx command and an Azure Function, keep a ledger in Table Storage and make restore one click.",
+    "Use delegated permissions with the on-behalf-of flow and refuse items on hold so security and compliance can approve the solution."
+  ],
+  "hook": "SharePoint libraries full of final-final copies make search and Copilot pick the wrong document. This episode gives SharePoint admins and developers an architecture that quarantines clutter in Azure Blob Storage without breaking collaboration. You learn the permission model security will approve and a rollout playbook with reversible, auditable moves.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-03T04:29:27+00:00"
+}

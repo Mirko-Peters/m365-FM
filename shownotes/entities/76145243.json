@@ -1,0 +1,181 @@
+{
+ "episode_id": "76145243",
+ "slug": "gpu-inference-performance-the-compute-lie-killing-your-ai-latency",
+ "title": "Inferência em GPU lenta desmascarada: fallback para CPU, conflitos de versão CUDA/TensorRT e erros de contêiner",
+ "lang": "pt",
+ "duration_s": 1376,
+ "transcript_source": "transcripts/pt/7rNV_vcD-Fg.vtt",
+ "time_basis": "vtt",
+ "entities": [
+  {
+   "slug": "prompt",
+   "name": "Prompt",
+   "type": "concept",
+   "score": 30,
+   "mentions": 8,
+   "first_mention_s": 367,
+   "quote": "Envie um único prompt e a GPU permanece ociosa.",
+   "url": "https://www.m365.fm/pt/entity/prompt/"
+  }
+ ],
+ "new_entities": [
+  {
+   "slug": "gpu",
+   "name": "GPU",
+   "type": "concept",
+   "mentions": 37,
+   "first_mention_s": 2,
+   "quote": "Utilização de GPU próxima de zero enquanto a latência disparava.",
+   "status": "review"
+  },
+  {
+   "slug": "cuda",
+   "name": "NVIDIA CUDA",
+   "type": "product",
+   "mentions": 30,
+   "first_mention_s": 26,
+   "quote": "Provedor de execução CUDA não disponível.",
+   "status": "review"
+  },
+  {
+   "slug": "tensorrt",
+   "name": "NVIDIA TensorRT",
+   "type": "product",
+   "mentions": 29,
+   "first_mention_s": 26,
+   "quote": "Registre se os nós de atenção são atribuídos ao tensor RT com kernels fundidos ou a kernels CUDA genéricos.",
+   "status": "review"
+  },
+  {
+   "slug": "onnx-runtime",
+   "name": "ONNX Runtime",
+   "type": "product",
+   "mentions": 10,
+   "first_mention_s": 68,
+   "quote": "Para o runtime ONNX, despeje as prioridades de EP.",
+   "status": "review"
+  },
+  {
+   "slug": "docker",
+   "name": "Docker",
+   "type": "product",
+   "mentions": 8,
+   "first_mention_s": 799,
+   "quote": "O histórico do Docker conta a história em camadas.",
+   "status": "review"
+  },
+  {
+   "slug": "kubernetes",
+   "name": "Kubernetes",
+   "type": "product",
+   "mentions": 2,
+   "first_mention_s": 820,
+   "quote": "No Kubernetes, solicite recursos de GPU.",
+   "status": "review"
+  },
+  {
+   "slug": "stable-diffusion",
+   "name": "Stable Diffusion",
+   "type": "product",
+   "mentions": 3,
+   "first_mention_s": 49,
+   "quote": "Variantes de stable diffusion rodando em 512 por 512 e escalando para 1024 por 1024.",
+   "status": "review"
+  }
+ ],
+ "quotes": [
+  {
+   "text": "E, no fim das contas, isso não é um mistério sobre o modelo. Um caso sobre a veracidade da infraestrutura.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 194,
+   "entities": [
+    "gpu"
+   ],
+   "why": "Kernthese: Infrastrukturproblem, kein Modellproblem"
+  },
+  {
+   "text": "Trave a ordem do provedor, rejeite o fallback do CPU e faça o sistema provar que é rápido antes de considerá-lo ativo. Só então o verde significa acelerado.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 455,
+   "entities": [
+    "gpu"
+   ],
+   "why": "Gegenmaßnahme: CPU-Fallback in Produktion verweigern"
+  },
+  {
+   "text": "A infraestrutura de GPU precisa de declarações explícitas. No Docker, declare GPUs como All ou a fatia exata do MIG. No Kubernetes, solicite recursos de GPU.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 913,
+   "entities": [
+    "gpu",
+    "docker",
+    "kubernetes"
+   ],
+   "why": "GPU explizit in Docker und Kubernetes anfordern"
+  },
+  {
+   "text": "As evidências sugerem que containers não apenas implantam softwares que codificam o comportamento sob estresse. Quando são ruidosos, pesados ou vagos sobre a GPU, transformam a aceleração em cerimônia.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 993,
+   "entities": [
+    "gpu",
+    "docker"
+   ],
+   "why": "Container prägen das Laufzeitverhalten unter Last"
+  },
+  {
+   "text": "Fallback silencioso de CPU, desvio de versão e inchaço de container não são bugs. São padrões de falha previsíveis que você pode bloquear.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 1326,
+   "entities": [
+    "gpu"
+   ],
+   "why": "Fazit: vorhersehbare, blockierbare Fehlermuster"
+  }
+ ],
+ "chapters": [
+  {
+   "start_s": 0,
+   "title": "Introdução: GPU cara, latência alta"
+  },
+  {
+   "start_s": 39,
+   "title": "O caso: ambiente, cargas e perfil da vítima"
+  },
+  {
+   "start_s": 210,
+   "title": "Evidência A: fallback silencioso para CPU"
+  },
+  {
+   "start_s": 464,
+   "title": "Evidência B: incompatibilidade entre CUDA, ONNX Runtime e TensorRT"
+  },
+  {
+   "start_s": 747,
+   "title": "Evidência C: configuração de container"
+  },
+  {
+   "start_s": 1012,
+   "title": "Laboratório forense: latência, throughput e utilização"
+  },
+  {
+   "start_s": 1213,
+   "title": "Protocolo de correção: checklist de hardening"
+  }
+ ],
+ "takeaways": [
+  "Se o provedor de execução CUDA ou TensorRT falhar, o ONNX Runtime recorre silenciosamente à CPU: a inferência funciona, mas muito mais lenta, enquanto a GPU continua a ser paga.",
+  "Versões divergentes de driver, CUDA, cuDNN e TensorRT desativam os kernels rápidos; uma matriz de versões fixa e engines pré-compilados evitam essa deriva.",
+  "Containers enxutos, GPUs declaradas explicitamente em Docker e Kubernetes e verificações de arranque com prompts de teste garantem que a aceleração é comprovada, não presumida."
+ ],
+ "hook": "A fatura da GPU sobe, mas as respostas arrastam-se e os painéis continuam verdes. Neste episódio investigamos três culpados — fallback para CPU, conflitos de versão entre CUDA, ONNX Runtime e TensorRT, e containers mal configurados — e mostramos como os eliminar.",
+ "youtube_video_id": "7rNV_vcD-Fg",
+ "source_video_id": "7rNV_vcD-Fg",
+ "show_id": 7393243,
+ "generated_at": "2026-11-03T03:06:36Z"
+}
