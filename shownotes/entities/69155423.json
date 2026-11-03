@@ -1,0 +1,259 @@
+{
+  "episode_id": "69155423",
+  "slug": null,
+  "title": "Why Fabric Data Models Drift – And Why DAX Alone Can’t Fix Broken Analytics",
+  "lang": "en",
+  "duration_s": 4169,
+  "transcript_source": "data/en_transcripts/79d316cd81cc.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "dax",
+      "name": "DAX",
+      "type": "concept",
+      "score": 95,
+      "mentions": 41,
+      "first_mention_s": 3,
+      "quote": "Your DAX looks like analytics, but architecturally it's a distributed decision engine running without your intent.",
+      "url": "https://www.m365.fm/entity/dax/"
+    },
+    {
+      "slug": "semantic-model",
+      "name": "Semantic model",
+      "type": "concept",
+      "score": 85,
+      "mentions": 16,
+      "first_mention_s": 328,
+      "quote": "Case two, semantic model drift via calculated tables.",
+      "url": "https://www.m365.fm/entity/semantic-model/"
+    },
+    {
+      "slug": "dlp",
+      "name": "Data loss prevention (DLP)",
+      "type": "concept",
+      "score": 82,
+      "mentions": 53,
+      "first_mention_s": 255,
+      "quote": "Data loss prevention blocks exfiltration parts at the edges, exports notebooks, composite models, shared data sets.",
+      "url": "https://www.m365.fm/entity/dlp/"
+    },
+    {
+      "slug": "conditional-access",
+      "name": "Conditional Access",
+      "type": "concept",
+      "score": 65,
+      "mentions": 20,
+      "first_mention_s": 819,
+      "quote": "must encounter DLP at the boundary and conditional access at identity",
+      "url": "https://www.m365.fm/entity/conditional-access/"
+    },
+    {
+      "slug": "sensitivity-labels",
+      "name": "Sensitivity labels",
+      "type": "concept",
+      "score": 62,
+      "mentions": 5,
+      "first_mention_s": 251,
+      "quote": "Per views, sensitivity labels, veto reuse.",
+      "url": "https://www.m365.fm/entity/sensitivity-labels/"
+    },
+    {
+      "slug": "fabric-workspace",
+      "name": "Fabric workspace",
+      "type": "concept",
+      "score": 55,
+      "mentions": 65,
+      "first_mention_s": 428,
+      "quote": "The calculated one had bled into measures in visuals across five workspaces through shared data set reuse.",
+      "url": "https://www.m365.fm/entity/fabric-workspace/"
+    },
+    {
+      "slug": "data-governance",
+      "name": "Data governance",
+      "type": "concept",
+      "score": 48,
+      "mentions": 1,
+      "first_mention_s": 2932,
+      "quote": "The deterministic data governance playbook.",
+      "url": "https://www.m365.fm/entity/data-governance/"
+    },
+    {
+      "slug": "microsoft-entra",
+      "name": "Microsoft Entra",
+      "type": "platform",
+      "score": 85,
+      "mentions": 38,
+      "first_mention_s": 250,
+      "quote": "Entra handles authorization.",
+      "url": "https://www.m365.fm/entity/microsoft-entra/"
+    },
+    {
+      "slug": "purview",
+      "name": "Microsoft Purview",
+      "type": "product",
+      "score": 80,
+      "mentions": 23,
+      "first_mention_s": 386,
+      "quote": "Sensitivity labels from purview don't propagate into the calculated result the way you assume.",
+      "url": "https://www.m365.fm/entity/purview/"
+    },
+    {
+      "slug": "fabric",
+      "name": "Microsoft Fabric",
+      "type": "platform",
+      "score": 72,
+      "mentions": 10,
+      "first_mention_s": 0,
+      "quote": "most teams trust their fabric model as truth.",
+      "url": "https://www.m365.fm/entity/fabric/"
+    },
+    {
+      "slug": "power-bi",
+      "name": "Power BI",
+      "type": "product",
+      "score": 50,
+      "mentions": 4,
+      "first_mention_s": 992,
+      "quote": "The consuming workspace had a power BI app with build permission granted to a team group that included contractors.",
+      "url": "https://www.m365.fm/entity/power-bi/"
+    },
+    {
+      "slug": "fabric-notebooks",
+      "name": "Fabric notebooks",
+      "type": "product",
+      "score": 40,
+      "mentions": 28,
+      "first_mention_s": 258,
+      "quote": "exports notebooks, composite models, shared data sets",
+      "url": "https://www.m365.fm/entity/fabric-notebooks/"
+    },
+    {
+      "slug": "excel",
+      "name": "Microsoft Excel",
+      "type": "product",
+      "score": 22,
+      "mentions": 5,
+      "first_mention_s": 2288,
+      "quote": "Report exports blocked for confidential and above, paginated, CSV, Excel, PDF, no exceptions.",
+      "url": "https://www.m365.fm/entity/excel/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "row-level-security",
+      "name": "Row-level security (RLS)",
+      "type": "concept"
+    },
+    {
+      "slug": "data-lineage",
+      "name": "Data lineage",
+      "type": "concept"
+    },
+    {
+      "slug": "fabric-capacity",
+      "name": "Fabric capacity",
+      "type": "concept"
+    },
+    {
+      "slug": "service-principal",
+      "name": "Service principal",
+      "type": "concept"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "If a measure changes visibility, rows, columns, or classification, it is acting as an access control that belongs to identity, not DAX. If you remember nothing else, remember this. DAX must never decide who can see data identity must.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 173,
+      "entities": [
+        "dax",
+        "row-level-security"
+      ],
+      "why": "States the episode's core rule that authorization belongs to identity, not to DAX measures."
+    },
+    {
+      "text": "Lineage is evidence, not assurance. It's post facto storytelling. It can tell you where data moved. It cannot tell you whether your policies were enforced when it moved",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 694,
+      "entities": [
+        "data-lineage"
+      ],
+      "why": "Clearly separates lineage as documentation from enforcement as a control."
+    },
+    {
+      "text": "Cross workspace reuse is not a convenience feature. It's an access plane. When you point a report in workspace B at a model in workspace A, you didn't just reuse metrics.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 961,
+      "entities": [
+        "fabric-workspace",
+        "semantic-model"
+      ],
+      "why": "Reframes shared datasets as an authorization surface rather than a productivity feature."
+    },
+    {
+      "text": "Capacity isolation is cheaper than incident response. You trade a modest baseline cost for predictable containment, faster investigations and fewer late night bridge calls.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 2898,
+      "entities": [
+        "fabric-capacity"
+      ],
+      "why": "Gives a concrete cost argument for separating capacities by risk domain."
+    },
+    {
+      "text": "Training does not intercept that moment. Controls do. The system either evaluates identity and labels before the measure exists or it accepts whatever the author can imagine.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 3590,
+      "entities": [
+        "data-governance"
+      ],
+      "why": "Explains why enforced controls beat training for keeping models from drifting."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "Why Fabric models drift"
+    },
+    {
+      "start_s": 34,
+      "title": "Case 1: RLS bypass via measures"
+    },
+    {
+      "start_s": 328,
+      "title": "Case 2: Calculated tables fork the truth"
+    },
+    {
+      "start_s": 644,
+      "title": "Case 3: Lineage theater"
+    },
+    {
+      "start_s": 895,
+      "title": "Cases 4 and 5: Shared datasets and DAX sprawl"
+    },
+    {
+      "start_s": 1808,
+      "title": "Entra, Purview, DLP and capacity as controls"
+    },
+    {
+      "start_s": 2932,
+      "title": "The deterministic governance playbook"
+    },
+    {
+      "start_s": 3542,
+      "title": "Why training fails without architecture"
+    }
+  ],
+  "takeaways": [
+    "DAX should only express analytics; any logic that changes who can see or infer data belongs to identity in Microsoft Entra, not to measures.",
+    "Business definitions, keys and cross-boundary benchmarks must live upstream with Purview labels and DLP that can actually block exports, blends and notebook writes.",
+    "Lineage and training are evidence and explanation, while enforced vetoes, enumerated Entra groups and capacity isolation are what keep Fabric models from drifting."
+  ],
+  "hook": "Row-level security works in the demo, yet your Fabric model can still leak through measures, calculated tables and shared datasets. This episode is for Power BI and Fabric architects who need governance that holds under deadline pressure. You get five failure modes and a deterministic playbook built on Entra, Purview, DLP and capacity isolation.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-03T02:32:47+00:00"
+}

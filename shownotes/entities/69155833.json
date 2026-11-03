@@ -1,0 +1,250 @@
+{
+  "episode_id": "69155833",
+  "slug": null,
+  "title": "Entra ID Conditional Access: From Identity Debt and Chaos to a Predictable Security Loop in Microsoft 365",
+  "lang": "en",
+  "duration_s": 4481,
+  "transcript_source": "data/en_transcripts/3b15122b8bdb.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "conditional-access",
+      "name": "Conditional Access",
+      "type": "concept",
+      "score": 96,
+      "mentions": 69,
+      "first_mention_s": 9,
+      "quote": "And when conditional access fails during an MFA outage, responders discover the break glass path wasn't protected.",
+      "url": "https://www.m365.fm/entity/conditional-access/"
+    },
+    {
+      "slug": "mfa",
+      "name": "Multifactor authentication (MFA)",
+      "type": "concept",
+      "score": 75,
+      "mentions": 37,
+      "first_mention_s": 11,
+      "quote": "during an MFA outage, responders discover the break glass path wasn't protected",
+      "url": "https://www.m365.fm/entity/mfa/"
+    },
+    {
+      "slug": "governance",
+      "name": "Governance",
+      "type": "concept",
+      "score": 60,
+      "mentions": 18,
+      "first_mention_s": 244,
+      "quote": "Governance requires ownership, review and expiry.",
+      "url": "https://www.m365.fm/entity/governance/"
+    },
+    {
+      "slug": "kql",
+      "name": "Kusto Query Language (KQL)",
+      "type": "concept",
+      "score": 45,
+      "mentions": 7,
+      "first_mention_s": 264,
+      "quote": "KQL for legacy protocol usage over time",
+      "url": "https://www.m365.fm/entity/kql/"
+    },
+    {
+      "slug": "microsoft-entra",
+      "name": "Microsoft Entra",
+      "type": "platform",
+      "score": 90,
+      "mentions": 18,
+      "first_mention_s": 45,
+      "quote": "Most teams treat Microsoft and RID like a login service.",
+      "url": "https://www.m365.fm/entity/microsoft-entra/"
+    },
+    {
+      "slug": "azure",
+      "name": "Microsoft Azure",
+      "type": "platform",
+      "score": 65,
+      "mentions": 25,
+      "first_mention_s": 1,
+      "quote": "Your failures start in identity because identity is Azure's control plane.",
+      "url": "https://www.m365.fm/entity/azure/"
+    },
+    {
+      "slug": "graph",
+      "name": "Microsoft Graph",
+      "type": "product",
+      "score": 55,
+      "mentions": 22,
+      "first_mention_s": 266,
+      "quote": "graph queries for service principles with directory, and no owner",
+      "url": "https://www.m365.fm/entity/graph/"
+    },
+    {
+      "slug": "active-directory",
+      "name": "Active Directory",
+      "type": "product",
+      "score": 45,
+      "mentions": 4,
+      "first_mention_s": 112,
+      "quote": "Translation will sync AD at baseline CA on-board apps",
+      "url": "https://www.m365.fm/entity/active-directory/"
+    },
+    {
+      "slug": "secure-score",
+      "name": "Microsoft Secure Score",
+      "type": "product",
+      "score": 30,
+      "mentions": 2,
+      "first_mention_s": 3003,
+      "quote": "secure score identity deltas not as a single number but as change over time",
+      "url": "https://www.m365.fm/entity/secure-score/"
+    },
+    {
+      "slug": "azure-key-vault",
+      "name": "Azure Key Vault",
+      "type": "product",
+      "score": 25,
+      "mentions": 4,
+      "first_mention_s": 1750,
+      "quote": "holds subscription contributor, key vault secrets officer and graph write",
+      "url": "https://www.m365.fm/entity/azure-key-vault/"
+    },
+    {
+      "slug": "github-actions",
+      "name": "GitHub Actions",
+      "type": "product",
+      "score": 20,
+      "mentions": 2,
+      "first_mention_s": 1682,
+      "quote": "A federated credential lets an external system like GitHub Actions, exchange its token for yours",
+      "url": "https://www.m365.fm/entity/github-actions/"
+    },
+    {
+      "slug": "exchange-online",
+      "name": "Exchange Online",
+      "type": "product",
+      "score": 20,
+      "mentions": 1,
+      "first_mention_s": 374,
+      "quote": "but exchange online still honors IMAP or Pope for certain mailboxes",
+      "url": "https://www.m365.fm/entity/exchange-online/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "identity-debt",
+      "name": "Identity debt",
+      "type": "concept"
+    },
+    {
+      "slug": "privileged-identity-management",
+      "name": "Microsoft Entra Privileged Identity Management (PIM)",
+      "type": "product"
+    },
+    {
+      "slug": "phishing-resistant-mfa",
+      "name": "Phishing-resistant MFA",
+      "type": "concept"
+    },
+    {
+      "slug": "emergency-access-accounts",
+      "name": "Emergency access accounts (break-glass accounts)",
+      "type": "concept"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "Conditional access without lifecycle ownership is an entropy generator. Hybrid sync without translation rules is an entropy generator.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 89,
+      "entities": [
+        "conditional-access",
+        "identity-debt"
+      ],
+      "why": "Defines how unmanaged identity controls accumulate complexity over time."
+    },
+    {
+      "text": "Tokens are short-lived, but refresh is long-lived. If an identity's standing privilege is wrong, short-lived tokens just refresh the wrong decision every hour.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 195,
+      "entities": [
+        "microsoft-entra"
+      ],
+      "why": "Explains why least privilege must exist before tokens are issued."
+    },
+    {
+      "text": "Workload identities never see MFA. That's by design. They either have secrets, certificates or federated credentials. If they're overscoped, you won't get a helpful prompt.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 208,
+      "entities": [
+        "mfa",
+        "microsoft-entra"
+      ],
+      "why": "Highlights why workload identities need scope and lifecycle governance instead of sign-in controls."
+    },
+    {
+      "text": "Conditional access debt hides in the paths where policy never runs. If you don't fix those branches, your next outage will be negotiated with exceptions you can't see.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 997,
+      "entities": [
+        "conditional-access",
+        "identity-debt"
+      ],
+      "why": "Pinpoints exclusions as the hidden risk in Conditional Access sprawl."
+    },
+    {
+      "text": "monitoring sees what the compiler executed it does not see what it excluded conditional access not applied is a blind path no detection logic can infer a control that never ran",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 4218,
+      "entities": [
+        "conditional-access"
+      ],
+      "why": "Argues why prevention by reducing exclusions beats relying on monitoring."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "Why identity is Azure's control plane"
+    },
+    {
+      "start_s": 42,
+      "title": "Identity as control plane"
+    },
+    {
+      "start_s": 289,
+      "title": "Hybrid identity debt propagation"
+    },
+    {
+      "start_s": 889,
+      "title": "Conditional Access sprawl and baseline"
+    },
+    {
+      "start_s": 1544,
+      "title": "Service principals and workload identities"
+    },
+    {
+      "start_s": 2203,
+      "title": "B2B guest access and cross-tenant trust"
+    },
+    {
+      "start_s": 2829,
+      "title": "Measuring identity debt and the minimal baseline"
+    },
+    {
+      "start_s": 3693,
+      "title": "90-day remediation, objections and checklist"
+    }
+  ],
+  "takeaways": [
+    "Identity debt is standing privilege plus ungoverned exceptions plus unowned identities, and Conditional Access will faithfully enforce whatever remains.",
+    "A minimal baseline of three policies (block legacy authentication, MFA for all, phishing-resistant strength for admins) plus PIM and tested break-glass accounts reduces blast radius this week.",
+    "Workload identities and guests need owners, scoped permissions, expiring credentials or access packages and access reviews, measured weekly through sign-in logs and Graph queries."
+  ],
+  "hook": "Most Azure security failures start in identity, where Conditional Access exclusions, synced admins, overscoped service principals and forgotten guests quietly pile up as identity debt. This episode is for identity architects and security leaders who want to measure that drift in their own logs and replace it with a predictable loop. You get a minimal enforceable baseline and a 90-day remediation cadence.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-03T02:32:47+00:00"
+}

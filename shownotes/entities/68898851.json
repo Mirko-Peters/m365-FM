@@ -1,0 +1,185 @@
+{
+  "episode_id": "68898851",
+  "slug": null,
+  "title": "Power Apps Failure Patterns, With() Pattern Fixes, and Governance for Reliable Low-Code Apps",
+  "lang": "en",
+  "duration_s": 1572,
+  "transcript_source": "data/en_transcripts/bb1fa0794b50.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "power-fx",
+      "name": "Power Fx",
+      "type": "concept",
+      "score": 80,
+      "mentions": 3,
+      "first_mention_s": 237,
+      "quote": "Your patch payload keeps sending text, power effects coerces until it can't.",
+      "url": "https://www.m365.fm/entity/power-fx/"
+    },
+    {
+      "slug": "governance",
+      "name": "Governance",
+      "type": "concept",
+      "score": 65,
+      "mentions": 6,
+      "first_mention_s": 965,
+      "quote": "enhanced component properties also unlock governance",
+      "url": "https://www.m365.fm/entity/governance/"
+    },
+    {
+      "slug": "connector",
+      "name": "Connector",
+      "type": "concept",
+      "score": 60,
+      "mentions": 14,
+      "first_mention_s": 87,
+      "quote": "Shadow connectors authenticated under your account, not the app's identity.",
+      "url": "https://www.m365.fm/entity/connector/"
+    },
+    {
+      "slug": "power-apps",
+      "name": "Power Apps",
+      "type": "product",
+      "score": 95,
+      "mentions": 2,
+      "first_mention_s": 0,
+      "quote": "your power app works, until it doesn't",
+      "url": "https://www.m365.fm/entity/power-apps/"
+    },
+    {
+      "slug": "dataverse",
+      "name": "Dataverse",
+      "type": "product",
+      "score": 70,
+      "mentions": 7,
+      "first_mention_s": 91,
+      "quote": "You think you're calling dataverse. You're calling yourself.",
+      "url": "https://www.m365.fm/entity/dataverse/"
+    },
+    {
+      "slug": "sharepoint",
+      "name": "SharePoint",
+      "type": "product",
+      "score": 45,
+      "mentions": 5,
+      "first_mention_s": 138,
+      "quote": "Dataverse meets SharePoint. Look up hell. You store choices in SharePoint for speed.",
+      "url": "https://www.m365.fm/entity/sharepoint/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "power-apps-delegation",
+      "name": "Delegation (Power Apps)",
+      "type": "concept"
+    },
+    {
+      "slug": "connection-references",
+      "name": "Connection references (Power Platform)",
+      "type": "concept"
+    },
+    {
+      "slug": "power-fx-user-defined-functions",
+      "name": "User-defined functions (Power Fx)",
+      "type": "concept"
+    },
+    {
+      "slug": "enhanced-component-properties",
+      "name": "Enhanced component properties",
+      "type": "concept"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "With is how you stop the bleed. Local scope, named intent, one entry, one exit, no global, no drift.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 533,
+      "entities": [
+        "power-fx",
+        "power-apps"
+      ],
+      "why": "Sums up the With() pattern as the local guardrail against formula drift."
+    },
+    {
+      "text": "Components are contracts, inputs, outputs, no hidden state, if you need state, you pass it in, you receive it out, you never smuggle it through, set.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 825,
+      "entities": [
+        "power-apps"
+      ],
+      "why": "Clear design rule for building reusable canvas components without hidden global state."
+    },
+    {
+      "text": "These functions are testable, replaceable. You can switch their internals without touching callers. That's how you cut drift.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 925,
+      "entities": [
+        "power-fx-user-defined-functions"
+      ],
+      "why": "Explains why pure user-defined functions reduce duplicated logic."
+    },
+    {
+      "text": "Connection references, stop binding flows and connectors to your identity, create references in the solution, bind them per environment",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 1185,
+      "entities": [
+        "connection-references",
+        "connector"
+      ],
+      "why": "Concrete ALM recommendation that removes personal-account dependencies from apps."
+    },
+    {
+      "text": "Define the health model before the next incident defines it for you. For each user path, assign red, yellow, green.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 408,
+      "entities": [
+        "power-apps"
+      ],
+      "why": "Actionable advice to define health thresholds for critical user paths before failures occur."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "Why low-code apps fail silently"
+    },
+    {
+      "start_s": 33,
+      "title": "The anatomy of fragility"
+    },
+    {
+      "start_s": 288,
+      "title": "Forensics: mapping hidden dependencies"
+    },
+    {
+      "start_s": 530,
+      "title": "The With() pattern as local guardrail"
+    },
+    {
+      "start_s": 816,
+      "title": "Components, UDFs and enhanced component properties"
+    },
+    {
+      "start_s": 1100,
+      "title": "Real ALM: solutions, branches and safe releases"
+    },
+    {
+      "start_s": 1332,
+      "title": "Tests, monitoring and the governance template"
+    }
+  ],
+  "takeaways": [
+    "Power Apps fail where ambiguity is allowed: duplicated formulas, hidden globals, personal connections and unmanaged delegation create silent drift.",
+    "The With() function, pure user-defined functions and contract-based components with enhanced component properties keep logic local, named and reusable.",
+    "Solutions, connection references, environment variables, PR checks, pipelines and health thresholds turn low-code apps into governed, testable releases."
+  ],
+  "hook": "Your Power App works until it doesn't, and then it fails in silence. This episode is for makers and platform owners who want to find hidden dependencies, refactor fragile formulas with With(), components and UDFs, and ship through real ALM. You leave with a refactor plan and a governance template that make failure rare.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-03T02:32:47+00:00"
+}
