@@ -1,0 +1,210 @@
+{
+  "episode_id": "68612459",
+  "slug": null,
+  "title": "Power Apps Excel Data: The Power Apps Lie That Breaks Your Excel Data",
+  "lang": "en",
+  "duration_s": 1517,
+  "transcript_source": "data/en_transcripts/3785070de4ef.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "audit-logs",
+      "name": "Audit logs",
+      "type": "concept",
+      "score": 30,
+      "mentions": 7,
+      "first_mention_s": 864,
+      "quote": "That way your audit trail doesn't contaminate your logic.",
+      "url": "https://www.m365.fm/entity/audit-logs/"
+    },
+    {
+      "slug": "dlp",
+      "name": "Data loss prevention (DLP)",
+      "type": "concept",
+      "score": 20,
+      "mentions": 2,
+      "first_mention_s": 1464,
+      "quote": "Roads, field security for sensitive columns, DLP policies, auditing on parents and intersects",
+      "url": "https://www.m365.fm/entity/dlp/"
+    },
+    {
+      "slug": "dataverse",
+      "name": "Dataverse",
+      "type": "product",
+      "score": 95,
+      "mentions": 36,
+      "first_mention_s": 9,
+      "quote": "Dataverse enforces identity types and relationships and it will punish spreadsheet habits with integrity errors.",
+      "url": "https://www.m365.fm/entity/dataverse/"
+    },
+    {
+      "slug": "excel",
+      "name": "Microsoft Excel",
+      "type": "product",
+      "score": 85,
+      "mentions": 21,
+      "first_mention_s": 0,
+      "quote": "You clicked create app from Excel, felt clever and congratulations migrated your chaos at scale.",
+      "url": "https://www.m365.fm/entity/excel/"
+    },
+    {
+      "slug": "power-apps",
+      "name": "Power Apps",
+      "type": "product",
+      "score": 70,
+      "mentions": 2,
+      "first_mention_s": 18,
+      "quote": "I'll tear down the five failure patterns that quietly destroy your power apps",
+      "url": "https://www.m365.fm/entity/power-apps/"
+    },
+    {
+      "slug": "power-query",
+      "name": "Power Query",
+      "type": "product",
+      "score": 65,
+      "mentions": 8,
+      "first_mention_s": 142,
+      "quote": "Yes, in Excel, there are power query functions, use them.",
+      "url": "https://www.m365.fm/entity/power-query/"
+    },
+    {
+      "slug": "power-bi",
+      "name": "Power BI",
+      "type": "product",
+      "score": 25,
+      "mentions": 2,
+      "first_mention_s": 732,
+      "quote": "the app, the views and power BI all show the new label without touching product rows",
+      "url": "https://www.m365.fm/entity/power-bi/"
+    },
+    {
+      "slug": "power-automate",
+      "name": "Power Automate",
+      "type": "product",
+      "score": 18,
+      "mentions": 1,
+      "first_mention_s": 1374,
+      "quote": "Dataverse has data flows, APIs, power automate and bulk operations.",
+      "url": "https://www.m365.fm/entity/power-automate/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "dataverse-alternate-keys",
+      "name": "Dataverse alternate keys",
+      "type": "concept"
+    },
+    {
+      "slug": "surrogate-key",
+      "name": "Surrogate key",
+      "type": "concept"
+    },
+    {
+      "slug": "referential-integrity",
+      "name": "Referential integrity",
+      "type": "concept"
+    },
+    {
+      "slug": "power-platform-dataflows",
+      "name": "Power Platform dataflows",
+      "type": "product"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "Without primary keys, Dataverse can't guarantee row level integrity. It can't tell whether an incoming row should insert or update.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 58,
+      "entities": [
+        "dataverse"
+      ],
+      "why": "Explains in one breath why missing keys turn every import into a gamble."
+    },
+    {
+      "text": "Identity is not a column, it's a contract. The simple version is use surrogate keys for truth, alternate keys for convenience.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 74,
+      "entities": [
+        "surrogate-key",
+        "dataverse-alternate-keys"
+      ],
+      "why": "A memorable rule of thumb for key design in Dataverse."
+    },
+    {
+      "text": "If the list is finite and has no metadata, use a choice. If it has properties, history, rules, or compliance flags, it's a table, therefore a lookup.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 613,
+      "entities": [
+        "dataverse"
+      ],
+      "why": "Gives a clear decision rule between choice and lookup columns."
+    },
+    {
+      "text": "Referential integrity isn't optional housekeeping. It's the foundation. If a child requires a parent to make sense, make the relationship required and define cascade behavior.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 1072,
+      "entities": [
+        "referential-integrity",
+        "dataverse"
+      ],
+      "why": "States a concrete modeling recommendation against orphaned records."
+    },
+    {
+      "text": "Power apps doesn't fix spreadsheet thinking. Clear data modeling does. Keys, types and relationships turn chaos into a system.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 1484,
+      "entities": [
+        "power-apps",
+        "excel"
+      ],
+      "why": "Sums up the episode's core thesis."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "Excel is not a database"
+    },
+    {
+      "start_s": 37,
+      "title": "Failure 1: No primary keys"
+    },
+    {
+      "start_s": 287,
+      "title": "Failure 2: Mixed data types"
+    },
+    {
+      "start_s": 543,
+      "title": "Failure 3: Lookups as joins"
+    },
+    {
+      "start_s": 775,
+      "title": "Failure 4: Multipurpose columns"
+    },
+    {
+      "start_s": 1026,
+      "title": "Failure 5: Orphan rows"
+    },
+    {
+      "start_s": 1308,
+      "title": "Excel vs Dataverse benchmarks"
+    },
+    {
+      "start_s": 1395,
+      "title": "Minimal remediation path"
+    }
+  ],
+  "takeaways": [
+    "Keep the Dataverse GUID as primary key and define alternate keys on business fields so imports can resolve and upsert rows reliably.",
+    "Declare explicit data types and clean data in Power Query before import instead of trusting Excel formatting.",
+    "Replace repeated text with lookups to parent tables, load parents first and make critical relationships required to prevent orphans."
+  ],
+  "hook": "Building a Power App straight from Excel feels fast, but it carries missing keys, mixed types and fake relationships into Dataverse. This episode walks makers and Power Platform teams through five failure patterns and a step-by-step remediation path. You learn how keys, types and relationships turn a fragile spreadsheet into a reliable data model.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-03T04:29:27+00:00"
+}

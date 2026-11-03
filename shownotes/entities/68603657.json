@@ -1,0 +1,197 @@
+{
+  "episode_id": "68603657",
+  "slug": null,
+  "title": "Copilot Custom Agents: Copilot Is Broken Until You Do This",
+  "lang": "en",
+  "duration_s": 1292,
+  "transcript_source": "data/en_transcripts/cc84bac9e272.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "dlp",
+      "name": "Data loss prevention (DLP)",
+      "type": "concept",
+      "score": 70,
+      "mentions": 23,
+      "first_mention_s": 22,
+      "quote": "We'll test it against real policies, data loss prevention, regional SOPs and compliance",
+      "url": "https://www.m365.fm/entity/dlp/"
+    },
+    {
+      "slug": "mfa",
+      "name": "Multifactor authentication (MFA)",
+      "type": "concept",
+      "score": 20,
+      "mentions": 4,
+      "first_mention_s": 134,
+      "quote": "patient notices must go through the patient portal with multifactor re-auth, not bulk email",
+      "url": "https://www.m365.fm/entity/mfa/"
+    },
+    {
+      "slug": "copilot",
+      "name": "Microsoft 365 Copilot",
+      "type": "product",
+      "score": 85,
+      "mentions": 45,
+      "first_mention_s": 0,
+      "quote": "You think Copilot is smart because it speaks confidently.",
+      "url": "https://www.m365.fm/entity/copilot/"
+    },
+    {
+      "slug": "copilot-chat",
+      "name": "Microsoft 365 Copilot Chat",
+      "type": "product",
+      "score": 75,
+      "mentions": 9,
+      "first_mention_s": 13,
+      "quote": "Bring your custom engine agent into Microsoft 365 Copilot chat.",
+      "url": "https://www.m365.fm/entity/copilot-chat/"
+    },
+    {
+      "slug": "azure-ai-search",
+      "name": "Azure AI Search",
+      "type": "product",
+      "score": 55,
+      "mentions": 3,
+      "first_mention_s": 323,
+      "quote": "You connect Azure AI search to your governed content, SOPs, policy pages, legal memos",
+      "url": "https://www.m365.fm/entity/azure-ai-search/"
+    },
+    {
+      "slug": "graph",
+      "name": "Microsoft Graph",
+      "type": "product",
+      "score": 20,
+      "mentions": 2,
+      "first_mention_s": 150,
+      "quote": "It's grounded by Microsoft Graph and Public Knowledge",
+      "url": "https://www.m365.fm/entity/graph/"
+    },
+    {
+      "slug": "outlook",
+      "name": "Microsoft Outlook",
+      "type": "product",
+      "score": 15,
+      "mentions": 3,
+      "first_mention_s": 121,
+      "quote": "Are we allowed to email HIPAA related updates to patients using Outlook campaigns?",
+      "url": "https://www.m365.fm/entity/outlook/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "custom-engine-agent",
+      "name": "Custom engine agent",
+      "type": "concept"
+    },
+    {
+      "slug": "teams-app-manifest",
+      "name": "Teams app manifest",
+      "type": "concept"
+    },
+    {
+      "slug": "ai-hallucination",
+      "name": "AI hallucination",
+      "type": "concept"
+    },
+    {
+      "slug": "semantic-kernel",
+      "name": "Semantic Kernel",
+      "type": "product"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "Default Copilot doesn't know your exception list. It doesn't know your project Orion carve out. It can describe DLP in theory, it can't apply your DLP in practice. That gap is where incidents happen.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 77,
+      "entities": [
+        "copilot",
+        "dlp"
+      ],
+      "why": "Shows concretely why general knowledge is not enough for policy questions."
+    },
+    {
+      "text": "Because out of the box, Copilot is optimized for breadth, not your depth. It's grounded by Microsoft Graph and Public Knowledge, which is the right default for most people, but the wrong default for enterprise precision.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 146,
+      "entities": [
+        "copilot",
+        "graph"
+      ],
+      "why": "Explains the root cause of generic Copilot answers."
+    },
+    {
+      "text": "The thing most people miss is that authority comes from three ingredients, retrieval, actions, and guardrails. Retrieval gives the agent memory beyond vibes. Actions let it do real work.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 298,
+      "entities": [
+        "custom-engine-agent"
+      ],
+      "why": "Names the three building blocks of a reliable specialist agent."
+    },
+    {
+      "text": "The agent decomposes the query, pulls targeted chunks, and returns answers with citations. If you remember nothing else, citations are the antidote to hallucinations.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 336,
+      "entities": [
+        "ai-hallucination",
+        "azure-ai-search"
+      ],
+      "why": "A practical rule for reducing hallucinations."
+    },
+    {
+      "text": "Copilot becomes reliable only when your specialist agent brings retrieval, actions and guardrails into copilot chat.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 1275,
+      "entities": [
+        "copilot-chat",
+        "custom-engine-agent"
+      ],
+      "why": "Sums up the episode's key takeaway."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "Copilot the confident generalist"
+    },
+    {
+      "start_s": 33,
+      "title": "Where default Copilot fails"
+    },
+    {
+      "start_s": 261,
+      "title": "Custom engine agents as specialists"
+    },
+    {
+      "start_s": 484,
+      "title": "The two-minute manifest tweak"
+    },
+    {
+      "start_s": 665,
+      "title": "Build, deploy, verify"
+    },
+    {
+      "start_s": 999,
+      "title": "Before versus after: three proof cases"
+    },
+    {
+      "start_s": 1217,
+      "title": "Life cycle, governance and scale"
+    }
+  ],
+  "takeaways": [
+    "Default Copilot is grounded in Microsoft Graph and public knowledge and cannot apply company-specific DLP rules, SOPs or compliance memos on its own.",
+    "A custom engine agent adds retrieval with Azure AI Search, actions against internal APIs and guardrails such as tenant controls and data scopes.",
+    "Updating the app manifest to schema 1.22 with the right Copilot agent capabilities brings the specialist into Copilot Chat, where it answers with citations."
+  ],
+  "hook": "Copilot sounds confident but falls short when a question depends on your own DLP exceptions, regional SOPs or compliance memos. This episode shows Microsoft 365 architects and developers how to build a custom engine agent and bring it into Copilot Chat with a small manifest change. You get a build, deploy and verify plan for faster, cited and more accurate answers.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-03T04:29:27+00:00"
+}
