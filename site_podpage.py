@@ -581,7 +581,7 @@ def build(g):
     from pathlib import Path as _P
     _docs = _P(__file__).parent / "docs"   # belegt ist ein Pfad nur, wenn dort eine Seite liegt (docs/about/ hat nur about/mirko-peters/, /about wurde sonst nie umgeleitet)
     taken = {x.name for x in _docs.iterdir() if x.is_file() or (x / "index.html").exists()} if _docs.exists() else set()
-    taken |= {"show", "shows", "community", "entity", "glossary", "learn", "assets", "updates", "de", "en", "es", "fr", "it", "pt", "nl", "pl", "id", "ru", "uk", "ar", "he", "hi", "ja", "ko", "ml", "pa", "ta", "te"}
+    taken |= {"show", "shows", "community", "entity", "glossary", "learn", "assets", "updates", "sponsor", "de", "en", "es", "fr", "it", "pt", "nl", "pl", "id", "ru", "uk", "ar", "he", "hi", "ja", "ko", "ml", "pa", "ta", "te"}
     rd, clash = {}, []
     def add(old, new):
         top = old.strip("/").split("/")[0]
@@ -603,7 +603,8 @@ def build(g):
         rd.setdefault(f"/videos/{_old}", f"/show/episodes/{_new}/"); rd[f"/m365-fm-podcast/{_old}"] = f"/show/episodes/{_new}/"
     if "mirko-peters" in _ren: rd["/mirko-peters"] = "/entity/mirko-peters/"
     # T8: weitere Podpage-Seiten ohne eigenen Inhalt (SKIPP), die in alten Beitraegen verlinkt sind
-    for old, new in (("/community-events", "/community/events/"), ("/sponsor", "/show/sponsors/"), ("/follow", "/show/listen/"), ("/subscribe", "/show/listen/"), ("/contact", "/about/mirko-peters/"), ("/voicemail", "/about/mirko-peters/"),
+    # T37: ("/sponsor", "/show/sponsors/") entfernt - /sponsor/ ist jetzt die Sponsor-Seite (der Site-Worker prueft die Tabelle vor der Seite, sonst 301 auf die alte Liste)
+    for old, new in (("/community-events", "/community/events/"), ("/follow", "/show/listen/"), ("/subscribe", "/show/listen/"), ("/contact", "/about/mirko-peters/"), ("/voicemail", "/about/mirko-peters/"),
                      ("/guest_intake", "/about/mirko-peters/"), ("/join", "/community/"), ("/newsletter", "/community/"), ("/leave_review", "/show/reviews/"), ("/rate", "/show/reviews/"),
                      ("/courses", "/glossary/"), ("/store", "/show/")):
         rd.setdefault(old, new)

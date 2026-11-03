@@ -22,7 +22,7 @@
   }
   tick(); setInterval(tick, 30000);
   // Popup
-  if (/\/community\//.test(location.pathname)) return;
+  if (/\/(?:community|sponsor)\//.test(location.pathname)) return;   // kein Popup auf Community- und Sponsor-Seiten (T37)
   var until = +ls("m365_attend_until") || 0; if (until > Date.now()) return;
   var timer, shown = false, last;
   function css() { if (document.querySelector('link[href*="sbar.css"]')) return; var l = document.createElement("link"); l.rel = "stylesheet"; l.href = BASE + "/assets/sbar.css"; document.head.appendChild(l); }
