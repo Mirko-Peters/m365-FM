@@ -1768,6 +1768,49 @@ Mirko Peters, {BASE}/about/
         REG.build(write, BASE, TODAY, _posts)
     except Exception as _e:
         print("Register nicht geschrieben:", str(_e)[:160])
+    import site_linkfix as LFX
+    from urllib.parse import urlsplit
+    _known_routes = []
+    for _out_root in (OUT, R2OUT):
+        if _out_root.exists():
+            _known_routes.extend(
+                "/" + _f.parent.relative_to(_out_root).as_posix().strip("/") + "/"
+                for _f in _out_root.rglob("index.html")
+            )
+    _rd_file = OUT / "show" / "redirects.json"
+    _redirects = json.loads(_rd_file.read_text("utf-8")) if _rd_file.exists() else {}
+    _episodes = [e for e in PP.load("episodes") if e.get("published") not in (False, "False") and e.get("hidden") not in (True, "True")]
+    _link_index = LFX.build_index(_redirects, _episodes, _posts, LRN.ENTS, PP.RENAMES, _known_routes)
+    _link_report = {"resolved": [], "unresolved": []}
+    for _out_root in (OUT, R2OUT):
+        if not _out_root.exists():
+            continue
+        _html_files = set(_out_root.glob("**/show/**/index.html"))
+        _html_files.update(_out_root.glob("**/community/u/*/blog/*/index.html"))
+        for _f in sorted(_html_files):
+            _rel = _f.relative_to(_out_root).as_posix()
+            _page_url = "/" + _rel[:-len("index.html")].rstrip("/") + "/"
+            _content = _f.read_text("utf-8")
+            _content, _resolved, _unresolved = LFX.rewrite_html(_content, _page_url, _link_index)
+            if _resolved or _unresolved:
+                _f.write_text(_content, encoding="utf-8")
+                _link_report["resolved"].extend(_resolved)
+                _link_report["unresolved"].extend(_unresolved)
+    _root_aliases = {}
+    for _item in _link_report["resolved"]:
+        _path = urlsplit(_item["old"]).path
+        _target = urlsplit(_item["new"]).path
+        if re.fullmatch(r"/[^/]+/?", _path) and _target and _path.casefold() != _target.casefold():
+            _root_aliases.setdefault(_path.rstrip("/").casefold(), set()).add(_target)
+    _known_keys = {p.rstrip("/").casefold() or "/" for p in _known_routes}
+    _redirect_keys = {p.rstrip("/").casefold() or "/" for p in _redirects}
+    for _old, _targets in _root_aliases.items():
+        if len(_targets) == 1 and _old not in _redirect_keys and _old not in _known_keys:
+            _redirects[_old] = next(iter(_targets))
+    if _rd_file.exists():
+        write("show/redirects.json", json.dumps(_redirects))
+    write("show/linkfix-report.json", json.dumps(_link_report, ensure_ascii=False, indent=1))
+    print(f"Linkfix: {len(_link_report['resolved'])} aufgeloest, {len(_link_report['unresolved'])} ungeklaert")
     phase("Agenten-Dateien, 404, UI-Quellen")
     sizes()
     print(f"r2out/: {_r2n[0]} Seiten, {_r2n[1] / 1e6:.0f} MB (werden in den R2-Bucket geladen, nicht in GitHub Pages)")

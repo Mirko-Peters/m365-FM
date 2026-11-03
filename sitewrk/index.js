@@ -44,7 +44,7 @@ async function r2Page(request, env, ctx, url, p) {
   return new Response(request.method === "HEAD" ? null : hit.body, { status: 200, headers: h });
 }
 // Datenexporte des Seitenbaus: fuer Programme da, nicht fuer die Suche (Allowlist - .well-known, openapi.json, agent.json, episodes.json, llms*.txt bleiben sichtbar)
-const NOINDEX = /^\/(search\/|entities\.json|entities-src\.json|entities\.jsonld|og-manifest\.json|seo-report\.json|top\.json|show\/redirects\.json|show-notes\/|blog-import\/|blog-content\/)|\.jsonld$/i;
+const NOINDEX = /^\/(search\/|entities\.json|entities-src\.json|entities\.jsonld|og-manifest\.json|seo-report\.json|top\.json|show\/(redirects|linkfix-report)\.json|show-notes\/|blog-import\/|blog-content\/)|\.jsonld$/i;
 
 async function redirectMap() {
   const r = await fetch("https://www.m365.fm/show/redirects.json", { cf: { cacheTtl: 3600, cacheEverything: true } });

@@ -101,7 +101,7 @@ def _inline(s):
     s = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", s)
     s = re.sub(r"(?<!\*)\*(?!\*)([^*\n]+?)\*(?!\*)", r"<em>\1</em>", s)
     s = re.sub(r"`([^`]+)`", r"<code>\1</code>", s)
-    s = re.sub(r"\[([^\]]+)\]\((https?://[^\s)]+)\)", lambda m: f'<a href="{m.group(2)}">{m.group(1)}</a>', s)
+    s = re.sub(r"\[([^\]]+)\]\((https?://[^\s)]+|/(?!/)[^\s)]+)\)", lambda m: f'<a href="{m.group(2)}">{m.group(1)}</a>', s)
     return s
 
 
