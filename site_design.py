@@ -219,7 +219,7 @@ def lang_dropdown(cur, items, base):
         items = [("en", "English", EN_URL, "en")] + list(items)
     cur_i = next((x for x in items if x[0] == cur), None)
     label = (cur_i[0] if cur_i else cur).upper()
-    links = "".join(f'<a href="{_e(u)}" hreflang="{_e(h)}" lang="{_e(h)}"{" aria-current=page" if c == cur else ""}>{flag(c, base, n)}{_e(n)}</a>' for c, n, u, h in items)
+    links = "".join(f'<a href="{_e(u)}" hreflang="{_e(h)}" lang="{_e(h)}"{" aria-current=page" if c == cur else ""}>{_e(n)}</a>' for c, n, u, h in items)
     nm = f'{LANG_LBL.get(cur, "Language")}: {cur_i[1] if cur_i else cur}'   # T10: zugaenglicher Name der Sprachwahl
     return f'<details class="lsw"><summary aria-label="{_e(nm)}">{flag(cur, base, cur_i[1] if cur_i else cur)}{_e(label)}</summary><div class="pn">{links}</div></details>'
 
