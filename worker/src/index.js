@@ -58,6 +58,13 @@ const PROVIDERS = {
     auth: "https://www.linkedin.com/oauth/v2/authorization", token: "https://www.linkedin.com/oauth/v2/accessToken",
     info: "https://api.linkedin.com/v2/userinfo", scope: "openid profile", id: (e) => e.LINKEDIN_CLIENT_ID, secret: (e) => e.LINKEDIN_CLIENT_SECRET,
   },
+  github: {    // OAuth 2.0 ohne OIDC: Token als JSON anfordern, Profil von api.github.com/user, sub = stabile numerische ID (nie der Login-Name)
+    auth: "https://github.com/login/oauth/authorize", token: "https://github.com/login/oauth/access_token",
+    info: "https://api.github.com/user", scope: "read:user", id: (e) => e.GH_OAUTH_CLIENT_ID, secret: (e) => e.GH_OAUTH_CLIENT_SECRET,
+    noPrompt: true, tokenHeaders: { accept: "application/json" },
+    infoHeaders: { "user-agent": "m365fm", accept: "application/vnd.github+json", "x-github-api-version": "2022-11-28" },
+    profile: (info) => ({ sub: info && info.id != null ? String(info.id) : "", name: (info && (info.name || info.login)) || "" }),
+  },
 };
 const VID = /^[A-Za-z0-9_-]{5,24}$/;
 const okCl = (vid, lang) => isLang(lang) || (lang === "en" && /^(blog|podcast|video|lib)\d+$/.test(vid));   // Blog-Beitraege gibt es auch auf Englisch
@@ -105,7 +112,7 @@ async function upsertUser(env, provider, sub, name) {
 }
 
 async function auth(env, request, url, path) {
-  const m = /^\/auth\/(login|callback)\/(google|microsoft|linkedin)$/.exec(path);
+  const m = /^\/auth\/(login|callback)\/(google|microsoft|linkedin|github)$/.exec(path);
   if (path === "/auth/dev" && env.DEV_LOGIN === "1") {
     const u = await upsertUser(env, "dev", url.searchParams.get("name") || "dev", url.searchParams.get("name") || "Dev User");
     return new Response(null, { status: 302, headers: { location: safeReturn(env, url.searchParams.get("return") || env.SITE), "set-cookie": cookie("m365s", await makeSession(env, u.id), 5184000) } });
@@ -117,7 +124,7 @@ async function auth(env, request, url, path) {
   if (m[1] === "login") {
     const state = randomToken(16), ret = safeReturn(env, url.searchParams.get("return") || env.SITE);
     const val = `${state}|${b64u.enc(new TextEncoder().encode(ret))}`;
-    const q = new URLSearchParams({ client_id: P.id(env), redirect_uri: redirect, response_type: "code", scope: P.scope, state, ...(m[2] === "linkedin" ? {} : { prompt: "select_account" }) });
+    const q = new URLSearchParams({ client_id: P.id(env), redirect_uri: redirect, response_type: "code", scope: P.scope, state, ...(m[2] === "linkedin" || P.noPrompt ? {} : { prompt: "select_account" }) });
     return new Response(null, { status: 302, headers: { location: `${P.auth}?${q}`, "set-cookie": cookie("m365o", `${val}.${await sign(env.SESSION_SECRET, val)}`, 600) } });
   }
   // callback
@@ -127,15 +134,17 @@ async function auth(env, request, url, path) {
   const dot = c[1].lastIndexOf("."), val = c[1].slice(0, dot);
   if (!(await verify(env.SESSION_SECRET, val, c[1].slice(dot + 1))) || val.split("|")[0] !== st) return html("<p>Login failed (invalid state).</p>", 400);
   const ret = safeReturn(env, new TextDecoder().decode(b64u.dec(val.split("|")[1])));
-  const tr = await fetch(P.token, { method: "POST", headers: { "content-type": "application/x-www-form-urlencoded" },
+  const tr = await fetch(P.token, { method: "POST", headers: { "content-type": "application/x-www-form-urlencoded", ...(P.tokenHeaders || {}) },
     body: new URLSearchParams({ code, client_id: P.id(env), client_secret: P.secret(env), redirect_uri: redirect, grant_type: "authorization_code" }) });
   if (!tr.ok) return html("<p>Login failed (token).</p>", 400);
-  const tok = await tr.json();
-  const ir = await fetch(P.info, { headers: { authorization: `Bearer ${tok.access_token}` } });
+  const tok = await tr.json().catch(() => ({}));
+  if (!tok || !tok.access_token) return html("<p>Login failed (token).</p>", 400);   // GitHub meldet Fehler mit Status 200 und {error}
+  const ir = await fetch(P.info, { headers: { authorization: `Bearer ${tok.access_token}`, ...(P.infoHeaders || {}) } });
   if (!ir.ok) return html("<p>Login failed (profile).</p>", 400);
-  const info = await ir.json();
+  const raw = await ir.json().catch(() => null);
+  const info = P.profile ? P.profile(raw) : { sub: raw && raw.sub ? String(raw.sub) : "", name: raw && (raw.name || raw.given_name) };
   if (!info.sub) return html("<p>Login failed.</p>", 400);
-  const u = await upsertUser(env, m[2], String(info.sub), info.name || info.given_name || "User");
+  const u = await upsertUser(env, m[2], info.sub, info.name || "User");
   if (u.banned) return html("<p>This account is blocked.</p>", 403);
   const h = new Headers({ location: ret });
   h.append("set-cookie", cookie("m365s", await makeSession(env, u.id), 5184000));
