@@ -1,10 +1,8 @@
 import { rateLimit, sha256hex } from "./util.js";
+import { embed, queryVectors, rrf, upsertVectors } from "./vectors.js";
 
 const TYPES = new Set(["episode", "dub_episode", "entity", "person", "glossary", "blog", "event", "show", "page"]);
-const VECTOR_MODEL = "@cf/baai/bge-m3";
-const VECTOR_DIMENSIONS = 1024;
 const VECTOR_BATCH_SIZE = 100;
-const VECTOR_RRF_K = 60;
 const now = () => Math.floor(Date.now() / 1000);
 const ftsReady = new WeakMap();
 const hash = (value) => {
@@ -188,17 +186,6 @@ export async function importSearchIndex(env) {
   return { part, changed, tokenizer };
 }
 
-async function embed(env, text) {
-  const result = await env.AI.run(VECTOR_MODEL, { text });
-  const vectors = result?.data;
-  if (!Array.isArray(vectors) || vectors.length !== text.length ||
-      vectors.some((vector) => !Array.isArray(vector) || vector.length !== VECTOR_DIMENSIONS ||
-        vector.some((value) => !Number.isFinite(value)))) {
-    throw new Error("Ungueltige BGE-M3-Embeddings");
-  }
-  return vectors;
-}
-
 function documentText(doc) {
   return `${doc.title}\n${doc.summary}\n${doc.keywords}`.slice(0, 2000);
 }
@@ -233,7 +220,7 @@ export async function syncSearchVectors(env) {
   if (!docs.length) return { processed: 0 };
 
   const vectors = await embed(env, docs.map(documentText));
-  await env.VEC.upsert(vectors.map((values, i) => ({
+  await upsertVectors(env, vectors.map((values, i) => ({
     id: docs[i].id,
     values,
     metadata: { lang: docs[i].lang, type: docs[i].type, grp: docs[i].grp, url: docs[i].url },
@@ -249,7 +236,7 @@ export async function syncSearchVectors(env) {
 async function vectorCandidates(env, query, topK = 50, pref = "") {
   if (!env.AI || !env.VEC || Array.from(query).length < 3) return [];
   const [values] = await embed(env, [query]);
-  const matches = (await env.VEC.query(values, { topK, returnMetadata: "all" }))?.matches || [];
+  const matches = await queryVectors(env, values, { topK });
   if (!matches.length) return [];
   const topMatches = matches.slice(0, topK).filter(({ id, score }) => typeof id === "string" && Number.isFinite(score));
   const ids = topMatches.map(({ id }) => id);
@@ -292,16 +279,12 @@ function matchesFilters(row, filters) {
 
 function mergeHybridCandidates(ftsRows, vectorRows, query, pref, filters) {
   const fts = rankCandidates(ftsRows, query, pref);
-  const byId = new Map();
-  fts.forEach((row, index) => byId.set(row.id, { ...row, ftsRank: index + 1 }));
-  vectorRows.forEach((row) => {
-    const previous = byId.get(row.id);
-    byId.set(row.id, { ...previous, ...row, ftsRank: previous?.ftsRank || 0 });
-  });
-  const rows = [...byId.values()];
+  const rows = rrf([
+    fts.map((row) => ({ ...row })),
+    [...vectorRows].sort((a, b) => a.vectorRank - b.vectorRank),
+  ]);
   for (const row of rows) {
-    row.hybridScore = (row.ftsRank ? 1 / (VECTOR_RRF_K + row.ftsRank) : 0) +
-      (row.vectorRank ? 1 / (VECTOR_RRF_K + row.vectorRank) : 0);
+    row.hybridScore = row.rrfScore;
     row.rank = row.hybridScore;
     for (const facet of FACETS) row[`in_${facet}`] = matchesFilters(row, filtersForFacet(filters, facet)) ? 1 : 0;
   }

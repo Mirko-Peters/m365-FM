@@ -9,6 +9,7 @@ import { scoreOf, levelOf, levelName, CAPS, THRESH } from "../src/levels.js";
 import { handleSponsor } from "../src/sponsor.js";
 import { handleAdminPanel } from "../src/adminpanel.js";
 import { d1BackupExportArgs, d1BackupTables } from "../src/d1_backup.js";
+import { embed, queryVectors, rrf, upsertVectors } from "../src/vectors.js";
 import { handleContributions, refreshContributions } from "../src/contributions.js";
 
 async function searchDb(failTrigram = false) {
@@ -880,6 +881,33 @@ test("search: Vectorize-Sync ist begrenzt, inkrementell und entfernt gone-Vektor
   assert.deepEqual(await syncSearchVectors(env), { deleted: 1 });
   assert.deepEqual(deletions, [docs[1].id]);
   assert.equal(raw.prepare("SELECT gone FROM search_doc WHERE id=?").get(docs[1].id).gone, 1, "Quelldokument bleibt erhalten");
+});
+
+test("vectors: Embeddings, Upsert, gefilterte Abfrage und RRF sind wiederverwendbar", async () => {
+  const calls = [];
+  const env = {
+    AI_GATEWAY: "m365fm",
+    AI: { async run(model, payload, options) {
+      calls.push({ model, payload, options });
+      return { data: payload.text.map(() => Array(1024).fill(0.25)) };
+    } },
+    VEC: {
+      async upsert(vectors) { calls.push({ vectors }); },
+      async query(vector, options) { calls.push({ vector, options }); return { matches: [{ id: "vector:1", score: 0.9 }] }; },
+    },
+  };
+  const [vector] = await embed(env, ["cross-language query"]);
+  assert.equal(vector.length, 1024);
+  assert.deepEqual(calls[0].options, { gateway: { id: "m365fm" } });
+  await upsertVectors(env, [{ id: "vector:1", values: vector, metadata: { lang: "en", type: "blog" } }]);
+  assert.deepEqual(await queryVectors(env, vector, { filter: { lang: "en", type: "blog" }, topK: 10 }), [
+    { id: "vector:1", score: 0.9 },
+  ]);
+  assert.deepEqual(calls.at(-1).options, { topK: 10, returnMetadata: "all", filter: { lang: "en", type: "blog" } });
+  assert.deepEqual(rrf([
+    [{ id: "shared", title: "Shared" }, { id: "fts-only" }],
+    [{ id: "shared", lang: "en" }, { id: "vector-only" }],
+  ]).map(({ id }) => id), ["shared", "fts-only", "vector-only"]);
 });
 
 test("search: hybride Treffer, Sprachprioritaet, Fallback und classifyQuery (SQLite)", async () => {
