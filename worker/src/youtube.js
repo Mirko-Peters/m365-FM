@@ -5,6 +5,7 @@ import { cleanText, rateLimit, isLang } from "./util.js";
 import { baseIds } from "./entities.js";
 import { sendPush } from "./push.js";
 import { award } from "./badges.js";
+import { ensureAiSummaryCols, moderateText, queueAiReview, teaserValue } from "./workers_ai.js";
 
 const THRESHOLD = 25, MIN_AGE = 86400, EXPIRE_DAYS = 30, MAX_BYTES = 2 * 1024 * 1024 * 1024;
 const now = () => Math.floor(Date.now() / 1000);
@@ -15,7 +16,7 @@ const slugify = (t) => t.toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, "")
 export const vidSlug = (r) => `${r.id}-${slugify(r.title) || "video"}`;
 const api = (env) => env.YT_API || "https://www.googleapis.com";
 const YTID = /^[A-Za-z0-9_-]{11}$/;
-const PUB = "id,title,description,lang,topics,status,created,published,video_id,note,ai";
+const PUB = "id,title,description,summary,summary_auto,lang,topics,status,created,published,video_id,note,ai";
 
 export async function token(env) {
   if (!env.YT_CLIENT_ID || !env.YT_CLIENT_SECRET || !env.YT_REFRESH_TOKEN) return null;
@@ -78,10 +79,11 @@ export async function deleteUserVideos(db, uid) {
 
 export async function handleVideo(env, request, url, path, user, J) {
   const db = env.DB, method = request.method;
+  await ensureAiSummaryCols(db);
 
   if (path === "/api/video/list" && method === "GET") {
     const rows = (await db.prepare(
-      `SELECT v.id,v.title,v.description,v.lang,v.topics,v.status,v.created,v.published,v.video_id,p.handle,u.name,(SELECT COUNT(*) FROM yt_votes x WHERE x.vid_id=v.id) votes
+      `SELECT v.id,v.title,v.description,v.summary,v.summary_auto,v.lang,v.topics,v.status,v.created,v.published,v.video_id,p.handle,u.name,(SELECT COUNT(*) FROM yt_votes x WHERE x.vid_id=v.id) votes
        FROM yt_videos v JOIN profiles p ON p.user_id=v.user_id AND p.public=1 AND p.handle IS NOT NULL JOIN users u ON u.id=v.user_id AND u.banned=0
        WHERE v.status IN ('submitted','review','published') ORDER BY (v.status='published') DESC, v.created DESC LIMIT 300`).all()).results || [];
     const mine = user ? ((await db.prepare("SELECT vid_id FROM yt_votes WHERE user_id=?").bind(user.id).all()).results || []).map((x) => x.vid_id) : [];
@@ -89,7 +91,7 @@ export async function handleVideo(env, request, url, path, user, J) {
   }
   if (path === "/api/video/export" && method === "GET") {
     const rows = (await db.prepare(
-      `SELECT v.id,v.title,v.description,v.lang,v.topics,v.created,v.published,v.video_id,v.ai,p.handle,u.name
+      `SELECT v.id,v.title,v.description,v.summary,v.summary_auto,v.lang,v.topics,v.created,v.published,v.video_id,v.ai,p.handle,u.name
        FROM yt_videos v JOIN profiles p ON p.user_id=v.user_id AND p.public=1 AND p.handle IS NOT NULL JOIN users u ON u.id=v.user_id AND u.banned=0
        WHERE v.status='published' ORDER BY v.published DESC LIMIT 1000`).all()).results || [];
     const gs = await guestsOf(db, "video", rows.map((r) => r.id));
@@ -126,7 +128,7 @@ export async function handleVideo(env, request, url, path, user, J) {
     if (!(pr?.public && pr.handle)) return J({ error: "need_profile" }, 400);
     if (!user.admin && !(await rateLimit(db, `yt:${user.id}`, 1, 7 * 86400))) return J({ error: "rate_limit" }, 429);
     const b = await request.json().catch(() => ({}));
-    const title = txt(b.title || "", 100), desc = long(b.description || "", 4000), lang = String(b.lang || "en"), size = +b.size || 0, ctype = String(b.type || "video/mp4");
+    const title = txt(b.title || "", 100), desc = long(b.description || "", 4000), submittedSummary = txt(b.summary || "", 300), lang = String(b.lang || "en"), size = +b.size || 0, ctype = String(b.type || "video/mp4");
     if (title.length < 5) return J({ error: "title" }, 400);
     if (desc.length < 30) return J({ error: "desc" }, 400);
     if (lang !== "en" && !isLang(lang)) return J({ error: "bad_lang" }, 400);
@@ -135,13 +137,14 @@ export async function handleVideo(env, request, url, path, user, J) {
     if (size > MAX_BYTES) return J({ error: "too_big" }, 413);
     const known = await baseIds(env), tp = [];
     for (const x of (Array.isArray(b.topics) ? b.topics : []).slice(0, 10)) { if (!known.has(x)) return J({ error: "bad_topic", topic: x }, 400); if (!tp.includes(x)) tp.push(x); }
+    const teaser = await teaserValue(env, "", false, submittedSummary, `${title}\n${desc}`, lang), summary = teaser.text, summaryAuto = teaser.auto;
     const ai = b.ai ? 1 : 0;
     const credit = `\n\nCommunity video by ${user.name} – ${env.SITE}/community/u/${pr.handle}/${ai ? "\nAI use disclosed by the author." : ""}`;
     const meta = { snippet: { title, description: desc + credit, categoryId: "28", defaultLanguage: lang }, status: { privacyStatus: "private", selfDeclaredMadeForKids: false } };
     const r = await fetch(`${api(env)}/upload/youtube/v3/videos?uploadType=resumable&part=snippet,status`, { method: "POST",
       headers: { authorization: `Bearer ${at}`, "content-type": "application/json; charset=UTF-8", "x-upload-content-type": ctype, "x-upload-content-length": String(size), origin: new URL(env.SITE).origin }, body: JSON.stringify(meta) });
     const loc = r.headers.get("location"); if (!r.ok || !loc) return J({ error: "youtube", status: r.status }, 502);
-    const t = now(), ins = await db.prepare("INSERT INTO yt_videos(user_id,title,description,lang,topics,status,ai,created,updated) VALUES(?,?,?,?,?,'uploading',?,?,?)").bind(user.id, title, desc, lang, JSON.stringify(tp), ai, t, t).run();
+    const t = now(), ins = await db.prepare("INSERT INTO yt_videos(user_id,title,description,summary,summary_auto,lang,topics,status,ai,created,updated) VALUES(?,?,?,?,?,?,?,'uploading',?,?,?)").bind(user.id, title, desc, summary, summaryAuto ? 1 : 0, lang, JSON.stringify(tp), ai, t, t).run();
     return J({ ok: true, id: ins.meta.last_row_id, upload_url: loc });
   }
 
@@ -154,8 +157,18 @@ export async function handleVideo(env, request, url, path, user, J) {
     const r = await fetch(`${api(env)}/youtube/v3/videos?part=status&id=${vid}`, { headers: { authorization: `Bearer ${at}` } });   // nur Videos des eigenen Kanals sind mit diesem Token sichtbar, wenn privat
     const it = r.ok ? ((await r.json().catch(() => ({}))).items || [])[0] : null;
     if (!it || it.status?.privacyStatus !== "private") return J({ error: "verify" }, 400);
-    await db.prepare("UPDATE yt_videos SET status='submitted',video_id=?,updated=? WHERE id=?").bind(vid, now(), v.id).run();
-    return J({ ok: true, id: v.id });
+    const review = await moderateText(env, user, `${v.title}\n${v.description}`);
+    const status = review.unsafe ? "moderation" : "submitted", t = now();
+    await db.prepare("UPDATE yt_videos SET status=?,video_id=?,updated=? WHERE id=?").bind(status, vid, t, v.id).run();
+    if (review.unsafe) await queueAiReview(db, "video", v.id, user.id, review.category, `${v.title}\n${v.description}`, t);
+    return J({ ok: true, id: v.id, status });
+  }
+
+  if (path === "/api/video/summary" && method === "POST") {
+    if (!(await rateLimit(db, `ytsum:${user.id}`, 20, 3600))) return J({ error: "rate_limit" }, 429);
+    const b = await request.json().catch(() => ({})), summary = txt(b.summary || "", 300);
+    const r = await db.prepare("UPDATE yt_videos SET summary=?,summary_auto=0,updated=? WHERE id=? AND user_id=?").bind(summary, now(), +b.id, user.id).run();
+    return r.meta.changes ? J({ ok: true, summary, summary_auto: false }) : J({ error: "not_found" }, 404);
   }
 
   if (path === "/api/video/delete" && method === "POST") {

@@ -34,6 +34,12 @@
   "/api/admin/mail/test": {
    "skip": "Admin-Testmail: geschützter Browser-Endpunkt, absichtlich nicht per KI-Token auslösbar"
   },
+  "/api/admin/moderation": {
+   "skip": "Workers-AI-Prüfwarteschlange: Freigabe und Ablehnung ausschließlich im Admin-Panel"
+  },
+  "/api/admin/moderation/decide": {
+   "skip": "Workers-AI-Prüfwarteschlange: Freigabe und Ablehnung ausschließlich im Admin-Panel"
+  },
   "/api/admin/panel/flag": {
    "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Verwaltung ueber /admin/"
   },
@@ -540,6 +546,9 @@
   "/api/podcast/submit": {
    "skip": "Audio-Upload nur auf der Website (Datei)"
   },
+  "/api/podcast/summary": {
+   "skip": "Kurzfassung eigener Podcast-Beiträge wird nach dem Audio-Upload auf der Website bearbeitet"
+  },
   "/api/podcast/vote": {
    "tools": [
     "vote_podcast_pitch"
@@ -756,6 +765,9 @@
   },
   "/api/video/init": {
    "skip": "Video-Upload nur auf der Website (Datei)"
+  },
+  "/api/video/summary": {
+   "skip": "Kurzfassung eigener Video-Beiträge wird nach dem Upload auf der Website bearbeitet"
   },
   "/api/video/list": {
    "tools": [

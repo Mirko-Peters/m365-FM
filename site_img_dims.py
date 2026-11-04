@@ -8,10 +8,15 @@ from pathlib import Path
 import site_r2 as R2
 
 D = Path(__file__).parent / "data" / "r2_dims.json"
+ALT_FILE = Path(__file__).parent / "data" / "r2_alt.json"
 try:
     DIMS = json.loads(D.read_text("utf-8"))
 except (OSError, ValueError):
     DIMS = {}
+try:
+    ALT = json.loads(ALT_FILE.read_text("utf-8"))
+except (OSError, ValueError):
+    ALT = {}
 
 _NUM = re.compile(r"^\d+$")
 
@@ -30,6 +35,16 @@ def _dimensions(url):
     return None
 
 
+def _alt_text(url):
+    if not url:
+        return ""
+    r2_url = html.unescape(R2.rewrite(html.escape(url, quote=True)))
+    if not r2_url.startswith("https://img.m365.fm/"):
+        return ""
+    text = ALT.get(r2_url)
+    return text.strip()[:125] if isinstance(text, str) and text.strip() else ""
+
+
 def _set_attr(tag, name, value):
     pattern = re.compile(rf"(?i)(\s){re.escape(name)}(?:\s*=\s*(?:\"[^\"]*\"|'[^']*'|[^\s/>]+))?")
     replacement = f' {name}="{html.escape(str(value), quote=True)}"'
@@ -39,9 +54,10 @@ def _set_attr(tag, name, value):
 
 
 class _Images(HTMLParser):
-    def __init__(self, source):
+    def __init__(self, source, dimensions=True):
         super().__init__(convert_charrefs=False)
         self.edits = []
+        self.add_dimensions = dimensions
         self.has_dimensions = False
         self.needs_responsive_css = False
         self.lines = [0]
@@ -56,6 +72,12 @@ class _Images(HTMLParser):
         values = dict(attrs)
         src = values.get("src")
         if not src:
+            return tag
+        if not (values.get("alt") or "").strip():
+            alt = _alt_text(src)
+            if alt:
+                tag = _set_attr(tag, "alt", alt)
+        if not self.add_dimensions:
             return tag
         dims = _dimensions(src)
         width, height = values.get("width"), values.get("height")
@@ -93,6 +115,14 @@ class _Images(HTMLParser):
 
 def enhance(source):
     parser = _Images(source)
+    parser.feed(source)
+    for start, end, replacement in reversed(parser.edits):
+        source = source[:start] + replacement + source[end:]
+    return source
+
+
+def add_alt_text(source):
+    parser = _Images(source, dimensions=False)
     parser.feed(source)
     for start, end, replacement in reversed(parser.edits):
         source = source[:start] + replacement + source[end:]

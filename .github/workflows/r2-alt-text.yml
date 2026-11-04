@@ -1,0 +1,63 @@
+name: R2-Alt-Texte erzeugen
+on:
+  workflow_dispatch:
+    inputs:
+      apply:
+        description: "true = Alt-Texte mit Workers AI erzeugen"
+        default: "false"
+      limit:
+        description: "Maximale Bildzahl dieses Laufs"
+        default: "9"
+      accept_license:
+        description: "Workers-AI-Modelllizenz wurde in Cloudflare akzeptiert"
+        type: boolean
+        default: false
+  schedule:
+    - cron: "31 6 * * 0"
+permissions:
+  contents: write
+concurrency: { group: r2-alt-text, cancel-in-progress: false }
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Modelllizenz prüfen
+        env:
+          ACCEPTED: ${{ vars.WORKERS_AI_LICENSE_ACCEPTED }}
+          MANUAL_ACCEPTED: ${{ inputs.accept_license }}
+        run: |
+          if [ "$ACCEPTED" != "true" ] && [ "$MANUAL_ACCEPTED" != "true" ]; then
+            echo "::error::Workers-AI-Modelllizenz muss einmalig in Cloudflare akzeptiert und WORKERS_AI_LICENSE_ACCEPTED=true gesetzt werden."
+            exit 1
+          fi
+      - name: Alt-Texte erzeugen
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CF_AI_TOKEN: ${{ secrets.CF_AI_TOKEN }}
+          APPLY: ${{ github.event_name == 'schedule' && 'true' || inputs.apply }}
+          LIMIT: ${{ inputs.limit || '9' }}
+        run: |
+          if [ "$APPLY" = "true" ]; then
+            python tools/generate_r2_alt.py --apply --limit "$LIMIT"
+          else
+            python tools/generate_r2_alt.py --limit "$LIMIT"
+          fi
+      - name: Alt-Texte sichern
+        if: github.event_name == 'schedule' || inputs.apply == 'true'
+        run: |
+          git config user.name "github-actions"; git config user.email "actions@github.com"
+          git add data/r2_alt.json
+          if git diff --cached --quiet; then echo "nichts zu sichern"; exit 0; fi
+          git commit -q -m "R2: Alt-Texte ergänzt"
+          for i in 1 2 3 4 5; do
+            if git pull --rebase --autostash -q origin main; then
+              git push -q origin HEAD:main && exit 0
+            else
+              git rebase --abort 2>/dev/null || true
+            fi
+            sleep $((i*5))
+          done
+          echo "::error::Alt-Texte konnten nicht gesichert werden"; exit 1

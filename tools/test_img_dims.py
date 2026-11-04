@@ -13,6 +13,13 @@ with patch.object(site_fetch, "fetch", return_value={}):
 
 
 class ImageDimensionTests(unittest.TestCase):
+    def test_r2_alt_fills_only_missing_or_empty_alt(self):
+        url = "https://img.m365.fm/i/test.webp"
+        with patch.object(IMG, "ALT", {url: "A person using a laptop"}):
+            self.assertEqual(IMG.add_alt_text(f'<img src="{url}">'), f'<img src="{url}" alt="A person using a laptop">')
+            self.assertEqual(IMG.add_alt_text(f'<img src="{url}" alt="">'), f'<img src="{url}" alt="A person using a laptop">')
+            self.assertEqual(IMG.add_alt_text(f'<img src="{url}" alt="Existing description">'), f'<img src="{url}" alt="Existing description">')
+
     def test_known_dimensions_are_added(self):
         url = "https://img.m365.fm/i/test.webp"
         with patch.object(IMG, "DIMS", {url: [640, 360]}):

@@ -25,6 +25,7 @@ import site_ads as ADS
 import site_media as MED
 import site_sidebar as SBR
 import site_r2 as R2
+import site_img_dims as IMG
 from site_size import sizes
 import site_sponsorships as SPM   # T37 Sponsor: Kennzeichnung bezahlter Inhalte (data/sponsorships.json)
 import glob, hashlib, html, json, os, re, shutil, sys, unicodedata
@@ -992,6 +993,7 @@ def build():
     def write_r2(rel, content):
         p = R2OUT / rel; p.parent.mkdir(parents=True, exist_ok=True)
         c = R2.rewrite(content) if rel.endswith(R2_EXT) else content
+        if rel.endswith(".html"): c = IMG.add_alt_text(c)
         p.write_text(c, encoding="utf-8"); _r2n[0] += 1; _r2n[1] += len(c.encode("utf-8"))
     def write(rel, content):
         if rel == "translations-blog.json" or rel.startswith("blog-import/"):
@@ -1000,6 +1002,7 @@ def build():
         p = OUT / rel
         p.parent.mkdir(parents=True, exist_ok=True)
         c = R2.rewrite(content) if rel.endswith(R2_EXT) else content
+        if rel.endswith(".html"): c = IMG.add_alt_text(c)
         p.write_text(c, encoding="utf-8")
 
     # Taxonomie: Kategorien (video-weit) + sprachbezogene Tags
