@@ -219,6 +219,23 @@ jobs:
           pip install playwright
           playwright install chromium
           python generate_og.py
+      # Teilen-Bilder liegen nicht mehr in docs/ (GitHub Pages, 1-GB-Limit), sondern im R2-Bucket unter og/ und werden ueber
+      # https://img.m365.fm/og/... ausgeliefert (generate_site.py OG_BASE). Ersatzbild fuer jede Seite auch dann, wenn das Zeichnen scheitert;
+      # Upload VOR dem Deploy und blockierend (OG_REQUIRED=1): schlaegt er fehl, wird nicht veroeffentlicht, der naechste Lauf laedt nur den Rest.
+      # Alte Adressen www.m365.fm/og/... leitet der Site-Worker per 301 auf img.m365.fm weiter. Nichts wird geloescht.
+      - name: Teilen-Bilder - Ersatzbild fuer jede Seite ohne Bild
+        run: python generate_og.py --fallback-only
+      - name: Teilen-Bilder in den R2-Bucket laden (img.m365.fm/og/; nur main, blockierend; nichts wird geloescht)
+        if: github.ref == 'refs/heads/main'
+        env:
+          OG_REQUIRED: "1"
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: |
+          pip install -q boto3
+          python tools/r2_og_upload.py r2img
       - name: Seiten-Hashes (fuer gezieltes Purge und IndexNow)
         run: python tools/page_hashes.py docs page-hashes.json
       # R2 als Ursprung: Bau-Kennung fuer den Spiegel im Deploy-Job (tools/r2_site_sync.py). Der Site-Worker liest R2 nur, wenn pages/r2-build.txt
