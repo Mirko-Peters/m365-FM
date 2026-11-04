@@ -185,6 +185,13 @@ def _url(base, lang, path):
     return f"{base}/{lang + '/' if lang != 'en' else ''}{path}"
 
 
+def _follow(g, lang):
+    """m365.fm, M365Con, LinkedIn, YouTube (generate_site.follow_links) - seit 4.11. hier statt im Footer."""
+    links = g.get("follow") or ""
+    return (f'<section class="sec" id="follow"><h2>{_t(lang, ("More from M365.FM", "Mehr von M365.FM"))}</h2>'
+            f'<p class="follow">{links}</p></section>') if links else ""
+
+
 def _card(base, lang, title, desc, path, feature=None, features=None, enabled_desc=None):
     unavailable = feature and not features.get(feature, False)
     if feature and not unavailable and enabled_desc:
@@ -281,7 +288,7 @@ def build(g):
                 f'<section class="sec" id="audiences"><h2 class="kicker">{_t(lang, ("I am …", "Ich bin …"))}</h2><div class="cols">{audiences}</div></section>'
                 f'<section class="sec"><h2 class="kicker">{_t(lang, ("I want to …", "Ich möchte …"))}</h2><div class="cols">{goals}</div></section>'
                 f'<section class="sec"><h2>{_t(lang, ("Services at a glance", "Angebote im Überblick"))}</h2><div class="cols">{table}</div></section>'
-                f'{_stats(g, lang)}</main>{g["footer"](lang)}')
+                f'{_stats(g, lang)}{_follow(g, lang)}</main>{g["footer"](lang)}')
         ld = [{"@context": "https://schema.org", "@type": "WebPage", "@id": hub_url + "#page", "url": hub_url,
                "name": h1_text, "description": lead_text, "inLanguage": lang, "dateModified": today,
                "isPartOf": {"@id": f"{base}/#website"}}]
