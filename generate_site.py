@@ -1131,7 +1131,7 @@ def build():
             _nnotes = _snh + f"<style>{SNS.CSS}</style>"; _nld = [x for x in _nld if x.get("@type") != "FAQPage"] + _snld
             if _snfaq: _nfaq = ""
         notes_block = _nkp + _nnotes + _nfaq + (SNT.CSS if (_nkp or _nnotes or _nfaq) else "")
-        _ep_links = elinks.get(str(it["eid"])) or elinks.get(f"{vid}:{l}", {})
+        _ep_links = _PPs.platform_episode_links(elinks, it["eid"], f"{vid}:{l}")
         _el = {k: u for k, u in _ep_links.items() if u}   # zugeordnete Plattform-Folgenlinks -> sameAs
         more = related(it, by_lang[l], tagsets[l], catsets[l])
         _spr = SPM.episode(vid=vid)   # T37 Sponsor: Dub-Folge aus einem Sponsoring (dauerhaft)

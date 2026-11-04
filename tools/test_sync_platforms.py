@@ -10,6 +10,8 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 import sync_platforms as S
 import sync_show_notes as SN
+with patch("site_fetch.fetch", return_value={}):
+    import site_podpage as PP
 
 
 class PlatformSyncTests(unittest.TestCase):
@@ -47,14 +49,26 @@ class PlatformSyncTests(unittest.TestCase):
             self.assertEqual(S.apple_show_id("en", {}), "2")
 
     def test_legacy_keys_migrate_and_manual_link_wins(self):
-        links = {"123:en": {"spotify": "https://open.spotify.com/episode/old"},
+        links = {"123:en": {
+                     "spotify": "https://open.spotify.com/episode/old",
+                     "deezer": "https://www.deezer.com/episode/old",
+                     "youtube": "https://youtube.com/watch?v=old",
+                     "youtube_music": "https://music.youtube.com/podcast/old",
+                 },
                  "123": {"apple": "https://podcasts.apple.com/auto"}}
         aliases = {"123:en": "123"}
         S.migrate_links(links, aliases)
         manual = S.normalize_manual({"123:en": {"apple": "https://podcasts.apple.com/manual"}}, aliases)
         links.setdefault("123", {}).update(manual["123"])
         self.assertEqual(links["123"], {"apple": "https://podcasts.apple.com/manual"})
-        self.assertEqual(links["123:en"]["spotify"], "https://open.spotify.com/episode/old")
+        rendered = PP.platform_episode_links(links, "123", "123:en")
+        self.assertEqual(rendered, {
+            "apple": "https://podcasts.apple.com/manual",
+            "spotify": "https://open.spotify.com/episode/old",
+            "deezer": "https://www.deezer.com/episode/old",
+            "youtube": "https://youtube.com/watch?v=old",
+            "youtube_music": "https://music.youtube.com/podcast/old",
+        })
 
     def test_legacy_localized_keys_remain_unchanged(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -104,7 +118,6 @@ class PlatformSyncTests(unittest.TestCase):
 
             links = json.loads((data / "episode_links.json").read_text(encoding="utf-8"))
             report = json.loads((data / "episode_links_report.json").read_text(encoding="utf-8"))
-            self.assertEqual(links["123"]["apple"], "https://podcasts.apple.com/manual")
             self.assertEqual(links["123"]["apple"], "https://podcasts.apple.com/manual")
             self.assertEqual(links["123:en"]["deezer"], "https://www.deezer.com/episode/old")
             self.assertEqual(report["shows"]["en"]["apple"]["linked"], 1)
