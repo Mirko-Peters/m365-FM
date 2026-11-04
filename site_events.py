@@ -2,21 +2,32 @@
 from site_i18n import T
 import json
 from site_i18n import COMM_LANGS, pfx, pfx2, overlay
-from datetime import datetime
+from datetime import datetime, timezone
 from site_learn import ENTS, esc, _fetch_json, LCSS
 from site_entities import eurl, eid_of
 
 S = {"en": dict(events="Events", intro="Conferences, webinars and meetups of the Microsoft community – with their sessions and speakers.", upcoming="Upcoming", past="Past", none="No events yet.",
-                organizer="Organizer", when="When", where="Where", online="Online", onsite="On site", hybrid="Hybrid", free="Free", paid="Paid", topics="Topics", sessions="Sessions", speakers="Speakers", website="Website", tickets="Tickets / register",
-                lang="Language", level="Level", room="Room", track="Track", about="About", create="Add your event", my="Sessions at events", recording="Recording", more="Events", sponsors="Looking for sponsors", nosess="No sessions published yet.", tbc="speaker(s) to be confirmed", propose="Propose a session"),
+                organizer="Organizer", source="Source", cfs="Call for speakers closes", when="When", where="Where", online="Online", onsite="On site", hybrid="Hybrid", free="Free", paid="Paid", topics="Topics", sessions="Sessions", speakers="Speakers", website="Website", tickets="Tickets / register",
+                lang="Language", level="Level", room="Room", track="Track", about="About", create="Add your event", my="Sessions at events", recording="Recording", more="Events", sponsors="Looking for sponsors", nosess="No sessions published yet.", tbc="speaker(s) to be confirmed", propose="Propose a session", gone="Cancelled or no longer listed"),
      "de": dict(events="Events", intro="Konferenzen, Webinare und Meetups der Microsoft-Community – mit Sessions und Speakern.", upcoming="Kommende", past="Vergangene", none="Noch keine Events.",
-                organizer="Veranstalter", when="Wann", where="Wo", online="Online", onsite="Vor Ort", hybrid="Hybrid", free="Kostenlos", paid="Kostenpflichtig", topics="Themen", sessions="Sessions", speakers="Speaker", website="Webseite", tickets="Tickets / Anmeldung",
-                lang="Sprache", level="Level", room="Raum", track="Track", about="Über das Event", create="Event eintragen", my="Sessions bei Events", recording="Aufzeichnung", more="Events", sponsors="Sucht Sponsoren", nosess="Noch keine Sessions veröffentlicht.", tbc="Speaker noch zu bestätigen", propose="Session vorschlagen")}
+                organizer="Veranstalter", source="Quelle", cfs="Call for Speakers bis", when="Wann", where="Wo", online="Online", onsite="Vor Ort", hybrid="Hybrid", free="Kostenlos", paid="Kostenpflichtig", topics="Themen", sessions="Sessions", speakers="Speaker", website="Webseite", tickets="Tickets / Anmeldung",
+                lang="Sprache", level="Level", room="Raum", track="Track", about="Über das Event", create="Event eintragen", my="Sessions bei Events", recording="Aufzeichnung", more="Events", sponsors="Sucht Sponsoren", nosess="Noch keine Sessions veröffentlicht.", tbc="Speaker noch zu bestätigen", propose="Session vorschlagen", gone="Abgesagt bzw. nicht mehr gelistet")}
 MODE_URL = {"online": "OnlineEventAttendanceMode", "onsite": "OfflineEventAttendanceMode", "hybrid": "MixedEventAttendanceMode"}
+SOURCE_NAMES = {"community_days": "Community Days"}
 
 
 def fetch_events(api):
-    return (_fetch_json(f"{api}/api/events/export") or {}).get("events", [])
+    out, offset = [], 0
+    while True:
+        url = f"{api}/api/events/export" if offset == 0 else f"{api}/api/events/export?limit=300&offset={offset}"
+        page = _fetch_json(url) or {}
+        events = page.get("events", [])
+        out.extend(events)
+        if not events:
+            return out
+        if not page.get("has_more"):
+            return out
+        offset += len(events)
 
 
 def eurl_(BASE, lang, h):
@@ -39,8 +50,11 @@ def span(ev, lang):
 
 def event_ld(BASE, ev, pb, ob):
     u = eurl_(BASE, "en", ev["handle"])
-    n = {"@type": "Event", "@id": u + "#event", "name": ev["title"], "url": u, "startDate": ev["start"], "eventStatus": "https://schema.org/EventScheduled",
-         "eventAttendanceMode": "https://schema.org/" + MODE_URL.get(ev["mode"], "OnlineEventAttendanceMode"), "isAccessibleForFree": bool(ev.get("free"))}
+    n = {"@type": "Event", "@id": u + "#event", "name": ev["title"], "url": u, "startDate": ev["start"],
+         "eventStatus": "https://schema.org/EventCancelled" if ev.get("external_status") == "gone" else "https://schema.org/EventScheduled",
+         "eventAttendanceMode": "https://schema.org/" + MODE_URL.get(ev["mode"], "OnlineEventAttendanceMode")}
+    if ev.get("free") is not None:
+        n["isAccessibleForFree"] = bool(ev.get("free"))
     if ev.get("end"):
         n["endDate"] = ev["end"]
     d = ev.get("summary") or ev.get("about") or ""
@@ -55,7 +69,10 @@ def event_ld(BASE, ev, pb, ob):
         loc.append({"@type": "Place", "name": ev.get("location") or ev.get("country") or "TBA", **({"address": {"@type": "PostalAddress", "addressCountry": ev["country"]}} if ev.get("country") else {})})
     n["location"] = loc[0] if len(loc) == 1 else loc
     org = ev.get("organizer") or {}
-    if org.get("kind") == "o" and org.get("handle") in ob:
+    if ev.get("source"):
+        if ev.get("organizer_name"):
+            n["organizer"] = {"@type": "Organization", "name": ev["organizer_name"]}
+    elif org.get("kind") == "o" and org.get("handle") in ob:
         n["organizer"] = {"@id": f"{BASE}/community/c/{org['handle']}/#org"}
     elif org.get("kind") == "u" and org.get("handle") in pb:
         n["organizer"] = {"@id": f"{BASE}/community/u/{org['handle']}/#person"}
@@ -174,14 +191,24 @@ def build(g, events, people, orgs):
         s = S[lang]; noidx = lang != "en"; croot = f"{BASE}{pfx(lang)}/community/"
         for ev in events:
             u = eurl_(BASE, lang, ev["handle"]); org = ev.get("organizer") or {}
-            if org.get("kind") == "o" and org.get("handle") in ob:
+            event_noidx = lang != "en" or (ev.get("external_status") == "gone" and (ev.get("end") or ev.get("start", ""))[:10] < TODAY)
+            if ev.get("source"):
+                oh = esc(ev.get("organizer_name", ""))
+            elif org.get("kind") == "o" and org.get("handle") in ob:
                 oh = f'<a href="{BASE}{pfx(lang)}/community/c/{org["handle"]}/">{esc(org["name"])}</a>'
             elif org.get("kind") == "u" and org.get("handle") in pb:
                 oh = f'<a href="{BASE}{pfx(lang)}/community/u/{org["handle"]}/">{esc(org["name"])}</a>'
             else:
                 oh = esc(org.get("name", ""))
             facts = [(s["when"], esc(span(ev, lang))), (s["where"], esc({"online": s["online"], "onsite": s["onsite"], "hybrid": s["hybrid"]}[ev["mode"]] + (" · " + ev["location"] if ev.get("location") else "") + (" · " + ev["country"] if ev.get("country") else ""))),
-                     (s["organizer"], oh), ("", esc(s["free"] if ev.get("free") else s["paid"]))]
+                     (s["organizer"], oh)]
+            if ev.get("free") is not None:
+                facts.append(("", esc(s["free"] if ev.get("free") else s["paid"])))
+            if ev.get("source"):
+                source_names = [SOURCE_NAMES.get(x, x) for x in str(ev["source"]).split(",") if x]
+                facts.append((s["source"], esc(", ".join(source_names))))
+            if ev.get("cfs_close"):
+                facts.append((s["cfs"], esc(fdate(ev["cfs_close"], lang))))
             if ev.get("lang"):
                 facts.append((s["lang"], esc(ev["lang"])))
             ft = '<table class="mb-facts"><tbody>' + "".join(f'<tr><th scope="row">{esc(a)}</th><td>{b_}</td></tr>' for a, b_ in facts if b_) + "</tbody></table>"
@@ -195,23 +222,33 @@ def build(g, events, people, orgs):
                     pt += f'<h2>{pl[kd]}</h2><ul>' + "".join(f'<li>' + (f'<a href="{BASE}{pfx(lang)}/community/c/{x["handle"]}/">{esc(x["name"])}</a>' if x.get("handle") in ob else esc(x["name"])) + (f' <span class="mut">· {esc(x["level"])}</span>' if x.get("level") else "") + '</li>' for x in ps) + "</ul>"
             ss = []
             for se in ev.get("sessions", []):
-                spk = ", ".join((f'<a href="{BASE}{pfx(lang)}/community/u/{x["h"]}/">{esc(x["n"])}</a>' if x.get("h") in pb else f'<a href="{eurl(BASE, lang, x["e"])}">{esc(x["n"])}</a>' if x.get("e") in ENTS else esc(x["n"])) for x in se.get("speakers", []))
+                def speaker(x):
+                    if x.get("h") in pb:
+                        return f'<a href="{BASE}{pfx(lang)}/community/u/{x["h"]}/">{esc(x["n"])}</a>'
+                    if x.get("e") in ENTS:
+                        return f'<a href="{eurl(BASE, lang, x["e"])}">{esc(x["n"])}</a>'
+                    links = [link for link in x.get("links", []) if str(link).startswith("https://")]
+                    return f'<a href="{esc(links[0])}" rel="nofollow noopener" target="_blank">{esc(x["n"])}</a>' if links else esc(x["n"])
+                spk = ", ".join(speaker(x) for x in se.get("speakers", []))
                 meta = " · ".join(esc(v) for v in [fdate(se["start"], lang) if se.get("start") else "", f'{s["room"]} {se["room"]}' if se.get("room") else "", f'{s["track"]} {se["track"]}' if se.get("track") else "", f'{s["level"]} {se["level"]}' if se.get("level") else "", se.get("lang", "")] if v)
                 st = "".join(f'<a class="ev-tag" href="{eurl(BASE, lang, e)}">{esc(ENTS[e]["name"])}</a>' for e in se.get("topics", []) if e in ENTS)
                 ss.append(f'<div class="ev-s"><h3>{esc(se["title"])}</h3><p class="mut">{meta}{" · " if meta and spk else ""}{spk}{(" · " + str(se["speakers_open"]) + " " + s["tbc"]) if se.get("speakers_open") else ""}</p>' + (f'<p style="white-space:pre-line">{esc(se["abstract"])}</p>' if se.get("abstract") else "") + st
                           + (f'<p><a href="{esc(se["recording_url"])}" rel="nofollow noopener" target="_blank">{esc(s["recording"])}</a></p>' if se.get("recording_url") else "") + "</div>")
-            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{croot}events/">{esc(s["events"])}</a></nav><h1>{esc(ev["title"])}</h1><p style="font-size:1.1em">{esc(ev.get("summary", ""))}</p>{ft}<p>{btn}</p>'
+            registration = "" if ev.get("source") else (f'<h2>{T(lang, "Registration", "Anmeldung")}</h2><div id="ev-reg" data-e="{esc(ev["handle"])}"></div><script>' + REGJS.replace("%API%", api).replace("%T%", json.dumps(REGT[lang], ensure_ascii=False)).replace("%CROOT%", croot) + '</script>')
+            proposal = "" if ev.get("source") else f'<p><a class="btn" href="{croot}?propose={esc(ev["handle"])}#c-events">{esc(s["propose"])}</a></p>'
+            gone = (f'<p class="mut" role="status">{esc(s["gone"])} · {datetime.fromtimestamp(ev.get("external_status_at", 0), timezone.utc).strftime("%Y-%m-%d")}</p>'
+                    if ev.get("external_status") == "gone" else "")
+            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{croot}events/">{esc(s["events"])}</a></nav><h1>{esc(ev["title"])}</h1>{gone}<p style="font-size:1.1em">{esc(ev.get("summary", ""))}</p>{ft}<p>{btn}</p>'
                       + (f'<h2>{esc(s["about"])}</h2><p style="white-space:pre-line">{esc(ev["about"])}</p>' if ev.get("about") else "") + (f'<h2>{esc(s["topics"])}</h2><p>{tp}</p>' if tp else "")
                       + f'<p><a class="btn" href="{u}event.ics" download>{T(lang, "Add to calendar (.ics)", "Zum Kalender hinzufügen (.ics)")}</a></p>' + f'<h2>{esc(s["sessions"])}</h2>' + ("".join(ss) or f'<p class="mut">{esc(s["nosess"])}</p>')
-                      + pt + f'<h2>{T(lang, "Registration", "Anmeldung")}</h2><div id="ev-reg" data-e="{esc(ev["handle"])}"></div><script>' + REGJS.replace("%API%", api).replace("%T%", json.dumps(REGT[lang], ensure_ascii=False)).replace("%CROOT%", croot) + '</script>'
-                      + f'<p><a class="btn" href="{croot}?propose={esc(ev["handle"])}#c-events">{esc(s["propose"])}</a></p>' + css)
+                      + pt + registration + proposal + css)
             ld = [{"@context": "https://schema.org", **event_ld(BASE, ev, pb, ob)}]
-            write(f"{pfx2(lang)}community/events/{ev['handle']}/index.html", page(lang, f'{ev["title"]} – {s["events"]} | M365.FM', (ev.get("summary") or ev.get("about") or "")[:155], u, b, None, ld, og_type="website", extra_head=LCSS, noindex=noidx))
+            write(f"{pfx2(lang)}community/events/{ev['handle']}/index.html", page(lang, f'{ev["title"]} – {s["events"]} | M365.FM', (ev.get("summary") or ev.get("about") or "")[:155], u, b, None, ld, og_type="website", extra_head=LCSS, noindex=event_noidx))
             if lang == "en":
                 write(f"community/events/{ev['handle']}/event.ics", ics_for(ev, BASE))
             else:
                 write(f"de/community/events/{ev['handle']}/event.ics", ics_for(ev, BASE))
-            if not noidx:
+            if not event_noidx:
                 sitemap.append((u, TODAY, None))
         # Verzeichnis
         up = sorted([e for e in events if (e.get("end") or e["start"])[:10] >= TODAY], key=lambda e: e["start"]); pa = sorted([e for e in events if (e.get("end") or e["start"])[:10] < TODAY], key=lambda e: e["start"], reverse=True)

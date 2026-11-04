@@ -1,0 +1,36 @@
+name: Community-Events sammeln
+on:
+  schedule:
+    - cron: "29 3 * * *"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency: { group: events-scrape, cancel-in-progress: false }
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      EVENTS_POLICY_APPROVED: ${{ vars.EVENTS_POLICY_APPROVED }}
+      EVENTS_MCP_TOOLS_ALLOWLIST: ${{ vars.EVENTS_MCP_TOOLS_ALLOWLIST }}
+      R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+      R2_BUCKET: ${{ secrets.R2_BUCKET }}
+      R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      EVENTS_OUTPUT: /tmp/m365-fm-ext-events.json
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: "${{ github.ref_name }}" }
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: R2-Client installieren
+        run: python -m pip install boto3
+      - name: Scraper nur nach Richtlinienfreigabe starten und R2 aktualisieren
+        run: |
+          if [ "$EVENTS_POLICY_APPROVED" != "1" ]; then
+            echo "Keine Quellenfreigabe: Datenabruf bleibt deaktiviert. Zuerst events-discovery.yml ausführen und prüfen."
+            exit 0
+          fi
+          python tools/r2_event_upload.py download
+          python tools/scrape_events.py
+          python tools/r2_event_upload.py upload

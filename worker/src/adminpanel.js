@@ -6,6 +6,7 @@ const FLAGS = { tr_off: /^[01]$/, atr_off: /^[01]$/, atr_ent_cap: /^\d{1,4}$/, t
 const QKINDS = new Set(["blog", "podcast", "video", "entity", "lblog", "notes"]), QLANGS = new Set(["en", "de", "fr", "es", "it", "nl", "pt", "pl", "id", "ru", "uk", "ar", "he", "ja", "ko"]);
 import { audit } from "./util.js";
 import { SPONSOR_STATUSES } from "./sponsor.js";
+import { decideEventImport, eventImportCandidatesWithDuplicates, eventImportAutomatic, externalSpeakerRows, hideExternalSpeaker } from "./extevents.js";
 
 export async function handleAdminPanel(env, request, url, path, user, J) {
   if (!path.startsWith("/api/admin/panel/")) return null;
@@ -26,6 +27,7 @@ export async function handleAdminPanel(env, request, url, path, user, J) {
         certs: await n(db, "SELECT COUNT(*) n FROM cert_check WHERE status='pending'"),
         reports: await n(db, "SELECT COUNT(*) n FROM reports"),
         sponsor: await n(db, "SELECT COUNT(*) n FROM sponsor_requests WHERE status='new'"),   // T37: neue Sponsor-Anfragen (Reiter Sponsor-Anfragen)
+        event_imports: await n(db, "SELECT COUNT(*) n FROM event_import WHERE status='new'"),
       },
       db: {
         entities_db: await n(db, "SELECT COUNT(DISTINCT eid) n FROM entity_rev WHERE status='live'"), entities_file: base,
@@ -48,6 +50,33 @@ export async function handleAdminPanel(env, request, url, path, user, J) {
       await db.batch(todo.slice(i, i + 50).map((e) => { const { id, ...data } = e; return db.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES(?,?,?,0,'live',?)").bind(id, JSON.stringify(data), "Übernahme aus entities.json", t); }));
     }
     return J({ ok: true, imported: todo.length, already: have.size, total: list.length });
+  }
+
+  if (path === "/api/admin/panel/event-imports" && request.method === "GET") {
+    const speakerOffset = Math.max(0, Math.min(100000, parseInt(url.searchParams.get("speaker_offset") || "0", 10) || 0));
+    const speakerQuery = String(url.searchParams.get("speaker_q") || "").slice(0, 100);
+    const match = `%${speakerQuery.replace(/[%_]/g, "")}%`;
+    const speakerTotal = (await db.prepare("SELECT COUNT(*) n FROM events e JOIN event_sessions s ON s.event_id=e.id WHERE EXISTS (SELECT 1 FROM event_import i WHERE i.event_id=e.id) AND (e.title LIKE ? OR s.title LIKE ? OR s.speakers LIKE ?)")
+      .bind(match, match, match).first())?.n || 0;
+    return J({ items: await eventImportCandidatesWithDuplicates(db), automatic: await eventImportAutomatic(db),
+      speakers: await externalSpeakerRows(db, 100, speakerOffset, speakerQuery), speaker_offset: speakerOffset, speaker_total: speakerTotal });
+  }
+
+  if (path === "/api/admin/panel/event-imports/decide" && request.method === "POST") {
+    const b = await request.json().catch(() => ({})), fp = String(b.fp || ""), action = String(b.action || "");
+    if (!/^[a-f0-9]{32,64}$/i.test(fp) || !["approve", "reject", "merge"].includes(action)) return J({ error: "bad_request" }, 400);
+    const result = await decideEventImport(env, user, fp, action, Number(b.event_id) || 0);
+    if (result.ok) await audit(db, user.id, `event_import_${action}`, fp, result.event_id ? String(result.event_id) : "");
+    return J(result, result.error === "not_found" ? 404 : result.error ? 400 : 200);
+  }
+
+  if (path === "/api/admin/panel/event-imports/speaker" && request.method === "POST") {
+    const b = await request.json().catch(() => ({})), eventId = Number(b.event_id), sessionId = Number(b.session_id);
+    const name = String(b.name || "").slice(0, 100);
+    if (!Number.isSafeInteger(eventId) || eventId < 1 || !Number.isSafeInteger(sessionId) || sessionId < 1 || !name || typeof b.hidden !== "boolean") return J({ error: "bad_request" }, 400);
+    const result = await hideExternalSpeaker(db, eventId, sessionId, name, b.hidden, user.id);
+    if (result.ok) await audit(db, user.id, b.hidden ? "event_speaker_hide" : "event_speaker_show", String(eventId), name);
+    return J(result, result.error === "not_found" ? 404 : result.error ? 400 : 200);
   }
 
   if (path === "/api/admin/panel/flag" && request.method === "POST") {

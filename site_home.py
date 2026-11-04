@@ -71,11 +71,18 @@ def hub(g, lang, base, api, videos, vid_html, root=False):
             d = __import__("datetime").datetime.fromtimestamp(e["published"]).strftime("%Y-%m-%d")
             cards.append((d, "podcast", f'<div class="hub-card" data-k="podcast"><a href="{base}{pfx(e["lang"])}/community/podcast/{e["slug"]}/"><div class="kicker">{esc(T(lang, "Podcast", "Podcast"))}</div><h3>{esc(e["title"])}</h3></a><p class="mut">{esc(e["name"])} · {d}</p></div>'))
             tag(e["name"], e.get("topics"), e["title"])
+    external_events = []
     for ev in C["events"]:
         d = (ev.get("start") or "")[:10]
-        if d and d >= today:
-            cards.append((d, "event", f'<div class="hub-card" data-k="event"><a href="{croot}events/{ev["handle"]}/"><div class="kicker">{esc(T(lang, "Event", "Event"))}</div><h3>{esc(ev["title"])}</h3></a><p class="mut">{esc(d)}{(" · " + esc(ev["summary"][:110])) if ev.get("summary") else ""}</p></div>'))
-            tag("", ev.get("topics"), ev["title"])
+        if d and d >= today and ev.get("external_status") != "gone":
+            card = (d, "event", f'<div class="hub-card" data-k="event"><a href="{croot}events/{ev["handle"]}/"><div class="kicker">{esc(T(lang, "Event", "Event"))}</div><h3>{esc(ev["title"])}</h3></a><p class="mut">{esc(d)}{(" · " + esc(ev["summary"][:110])) if ev.get("summary") else ""}</p></div>')
+            if ev.get("source"):
+                external_events.append((ev.get("external_imported_at") or 0, card))
+            else:
+                cards.append(card)
+                tag("", ev.get("topics"), ev["title"])
+    external_events.sort(key=lambda item: (item[1][0], -item[0]))
+    cards.extend(card for _, card in external_events[:3])
     import site_library as SL
     for it in C["lib"]:
         if ok(it["lang"]):

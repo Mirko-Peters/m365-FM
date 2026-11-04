@@ -6,7 +6,7 @@
   function api(p, o) { o = o || {}; o.credentials = "include"; o.headers = Object.assign({ "x-requested-with": "m365" }, o.headers || {}); if (o.body && typeof o.body !== "string") { o.body = JSON.stringify(o.body); o.headers["content-type"] = "application/json"; } return fetch(API + p, o).then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { s: r.status, j: j }; }); }); }
   var TYPES = { product: "Produkt", platform: "Plattform", concept: "Konzept", org: "Firma", person: "Person", cert: "Zertifikat", event: "Event", media: "Medium", category: "Kategorie" };
   var ERR = { bad_name: "Name zu kurz", bad_type: "Typ fehlt", too_short: "Kurzbeschreibung fehlt (mindestens 20 Zeichen in Englisch oder Deutsch)", too_long: "Kurzbeschreibung zu lang (höchstens 300 Zeichen)", bad_url: "Eine Adresse ist ungültig (nur https, Docs nur microsoft.com, azure.com oder github.com)", bad_qid: "Wikidata-ID muss wie Q12345 aussehen", bad_relation: "Eine Beziehung zeigt auf eine unbekannte Entität", unchanged: "Nichts geändert", rate_limit: "Zu viele Änderungen in kurzer Zeit, bitte später", login: "Bitte anmelden", forbidden: "Nur für Admins" };
-  var tabs = [["ov", "Übersicht"], ["fr", "Freigaben"], ["sponsor", "Sponsor-Anfragen"], ["tr", "Übersetzungen"], ["ent", "Entitäten"], ["db", "Datenbank"], ["sw", "Schalter"]], panes = {}, bar = h("div", { class: "adm-tabs", role: "tablist" });
+  var tabs = [["ov", "Übersicht"], ["fr", "Freigaben"], ["events", "Event-Importe"], ["sponsor", "Sponsor-Anfragen"], ["tr", "Übersetzungen"], ["ent", "Entitäten"], ["db", "Datenbank"], ["sw", "Schalter"]], panes = {}, bar = h("div", { class: "adm-tabs", role: "tablist" });
   var LANGN = { de: "Deutsch", fr: "Französisch", es: "Spanisch", it: "Italienisch", nl: "Niederländisch", pt: "Portugiesisch", pl: "Polnisch", id: "Indonesisch", ru: "Russisch", uk: "Ukrainisch", ar: "Arabisch", he: "Hebräisch", ja: "Japanisch", ko: "Koreanisch", en: "Englisch" };
   var KINDN = { lblog: "Blog (früher)", blog: "Blog (Community)", podcast: "Podcast", video: "Video", notes: "Show Notes", entity: "Entität" };
   function ago(t) { if (!t) return "–"; var d = Math.round(Date.now() / 1000 - t); return d < 90 ? d + " s" : d < 5400 ? Math.round(d / 60) + " min" : d < 172800 ? Math.round(d / 3600) + " h" : Math.round(d / 86400) + " d"; }
@@ -20,7 +20,7 @@
   var LOAD = {
     ov: function () { overview(function (o) { var p = panes.ov, q = o.queues; p.textContent = "";
       p.appendChild(h("h2", { text: "Wartet auf dich" }));
-      p.appendChild(h("div", { class: "adm-grid" }, [tile("Blog-Beiträge", q.blog), tile("Podcast-Folgen", q.podcast), tile("Videos", q.video), tile("Wiki-Änderungen", q.wiki), tile("Entitäten-Vorschläge", q.entity), tile("Übernahme-Anfragen", q.claims), tile("Zertifikate", q.certs), tile("Meldungen", q.reports), tile("Sponsor-Anfragen (neu)", q.sponsor)]));
+      p.appendChild(h("div", { class: "adm-grid" }, [tile("Blog-Beiträge", q.blog), tile("Podcast-Folgen", q.podcast), tile("Videos", q.video), tile("Wiki-Änderungen", q.wiki), tile("Entitäten-Vorschläge", q.entity), tile("Übernahme-Anfragen", q.claims), tile("Zertifikate", q.certs), tile("Meldungen", q.reports), tile("Event-Importe", q.event_imports), tile("Sponsor-Anfragen (neu)", q.sponsor)]));
       p.appendChild(h("p", { class: "mut" }, ["Freigeben und ablehnen: ", h("a", { href: "#fr", text: "Reiter Freigaben", onclick: function (ev) { ev.preventDefault(); show("fr"); } }), ". Sponsor-Anfragen bearbeiten: ", h("a", { href: "#sponsor", text: "Reiter Sponsor-Anfragen", onclick: function (ev) { ev.preventDefault(); show("sponsor"); } }), "."]));
       p.appendChild(h("h2", { text: "Auf einen Blick" }));
       p.appendChild(h("div", { class: "adm-grid" }, [tile("Mitglieder", o.db.users), tile("Öffentliche Profile", o.db.profiles), tile("Blog-Beiträge live", o.db.blog_live), tile("Entitäten in der Datenbank", o.db.entities_db, "von " + (o.db.entities_file == null ? "?" : o.db.entities_file) + " in der Datei")]));
@@ -40,6 +40,7 @@
     }); },
     tr: function () { if (panes.tr.firstChild) return; translations(); },
     fr: function () { approvals(); },
+    events: function () { eventImports(); },
     sponsor: function () { sponsorRequests(); },
     db: function () { overview(function (o) { var p = panes.db, d = o.db, m = h("p", { class: "adm-msg" }); p.textContent = "";
       p.appendChild(h("h2", { text: "Umzug in die Datenbank" }));
@@ -65,6 +66,82 @@
     }); },
     ent: function () { if (panes.ent.firstChild) return; entities(); }
   };
+
+  function eventImports(speakerOffset, speakerQuery) {
+    speakerOffset = speakerOffset || 0; speakerQuery = speakerQuery || "";
+    var p = panes.events, m = h("p", { class: "adm-msg" }); p.textContent = "";
+    function act(label, main, fn, after) { return h("button", { type: "button", class: "btn" + (main ? " main" : ""), text: label, onclick: function (ev) { ev.target.disabled = true; msg(m, "Speichert …"); fn().then(function (r) { if (r.s === 200) { msg(m, "Erledigt."); after(); } else { ev.target.disabled = false; msg(m, ERR[(r.j || {}).error] || "Fehler " + r.s, true); } }); } }); }
+    p.appendChild(h("h2", { text: "Externe Event-Kandidaten" }));
+    p.appendChild(h("p", { class: "mut", text: "Nur öffentliche Fakten. Freigeben, ablehnen oder Sessions einem bestehenden Event zuordnen." }));
+    p.appendChild(m);
+    api("/api/admin/panel/event-imports?speaker_offset=" + speakerOffset + "&speaker_q=" + encodeURIComponent(speakerQuery)).then(function (r) {
+      if (r.s !== 200) { msg(m, "Event-Importe nicht abrufbar.", true); return; }
+      var items = (r.j || {}).items || [], automatic = (r.j || {}).automatic || [], speakers = (r.j || {}).speakers || [];
+      if (!items.length && !automatic.length && !speakers.length && !speakerOffset) { msg(m, "Keine offenen Event-Importe oder externen Speaker."); return; }
+      if (!items.length) msg(m, "Keine offenen Event-Kandidaten.");
+      items.forEach(function (x) {
+        var d = x.data || {}, sessions = d.sessions || [], dupes = x.duplicates || [];
+        var select = h("select", { "aria-label": "Ziel-Event für Zusammenführen" });
+        dupes.forEach(function (e) { select.appendChild(h("option", { value: String(e.id), text: e.title + " · " + e.start })); });
+        var sessionList = h("ul", {});
+        sessions.slice(0, 40).forEach(function (s) {
+          sessionList.appendChild(h("li", { text: s.title + (s.speakers && s.speakers.length ? " · " + s.speakers.map(function (sp) { return sp.n; }).join(", ") : "") }));
+        });
+        var actions = [
+          act("Freigeben", true, function () { return api("/api/admin/panel/event-imports/decide", { method: "POST", body: { fp: x.fp, action: "approve" } }); }, function () { row.remove(); }),
+          " ",
+          act("Ablehnen", false, function () { return api("/api/admin/panel/event-imports/decide", { method: "POST", body: { fp: x.fp, action: "reject" } }); }, function () { row.remove(); })
+        ];
+        if (dupes.length) actions.push(" ", select, " ", act("Zusammenführen", false, function () {
+          return api("/api/admin/panel/event-imports/decide", { method: "POST", body: { fp: x.fp, action: "merge", event_id: Number(select.value) } });
+        }, function () { row.remove(); }));
+        var row = h("section", { class: "adm-row" }, [
+          h("b", { text: d.title || x.fp }), h("p", { class: "mut", text: (d.start || "") + " · " + (d.location || "") + " · " + (d.organizer_name || "") }),
+          h("p", { class: "mut", text: (d.sources || []).map(function (s) { return s.source; }).join(", ") }),
+          sessionList,
+          h("p", {}, actions)
+        ]);
+        p.appendChild(row);
+      });
+      if (automatic.length) {
+        p.appendChild(h("h2", { text: "Automatisch importiert" }));
+        automatic.forEach(function (x) {
+          var fields = (x.changes || []).slice(-1)[0];
+          p.appendChild(h("section", { class: "adm-row" }, [
+            h("b", { text: (x.data || {}).title || x.fp }),
+            h("p", { class: "mut", text: "Automatisch freigegeben · " + ago(x.last_seen) }),
+            h("p", { class: "mut", text: fields ? "Änderung: " + (fields.fields || []).join(", ") : "Community Days" })
+          ]));
+        });
+      }
+      p.appendChild(h("h2", { text: "Veröffentlichte externe Speaker" }));
+      var search = h("input", { type: "search", maxlength: 100, placeholder: "Speaker oder Event suchen", value: speakerQuery });
+      var applySearch = h("button", { type: "button", class: "btn", text: "Suchen", onclick: function () { eventImports(0, search.value.trim()); } });
+      p.appendChild(h("p", { class: "adm-row" }, [search, " ", applySearch]));
+      if (speakers.length) {
+        speakers.forEach(function (speaker) {
+          var button = h("button", { type: "button", class: "btn", text: speaker.hidden ? "Einblenden" : "Ausblenden" });
+          button.onclick = function () {
+            button.disabled = true;
+            api("/api/admin/panel/event-imports/speaker", { method: "POST", body: { event_id: speaker.event_id, session_id: speaker.session_id, name: speaker.name, hidden: !speaker.hidden } }).then(function (result) {
+              if (result.s === 200) eventImports(speakerOffset, speakerQuery);
+              else { button.disabled = false; msg(m, "Speaker-Status konnte nicht geändert werden.", true); }
+            });
+          };
+          p.appendChild(h("p", { class: "adm-row" }, [
+            h("b", { text: speaker.name }), " · " + speaker.event_title + " — " + speaker.session_title, " ", button
+          ]));
+        });
+      }
+      if (speakerOffset > 0 || speakerOffset + 100 < (r.j.speaker_total || 0)) {
+        p.appendChild(h("p", { class: "adm-row" }, [
+          speakerOffset > 0 ? h("button", { type: "button", class: "btn", text: "Zurück", onclick: function () { eventImports(Math.max(0, speakerOffset - 100), speakerQuery); } }) : null,
+          " ",
+          speakerOffset + 100 < (r.j.speaker_total || 0) ? h("button", { type: "button", class: "btn", text: "Weitere Speaker", onclick: function () { eventImports(speakerOffset + 100, speakerQuery); } }) : null
+        ]));
+      }
+    });
+  }
 
   // ---------- Freigaben: alles, was auf eine Entscheidung wartet, mit den bestehenden Admin-Routen ----------
   function approvals() {

@@ -117,7 +117,7 @@ test("schema: Migrationen sind idempotent und enthalten jede zur Laufzeit angele
   const sql = files.map((f) => readFileSync(new URL(f, dir), "utf-8")).join("\n");
   const stmts = sql.replace(/--[^\n]*/g, "").split(";").map((s) => s.trim()).filter(Boolean);
   for (const s of stmts) {
-    if (/^ALTER TABLE search_doc ADD COLUMN (?:grp|title_norm) TEXT NOT NULL DEFAULT ''$/i.test(s)) continue;
+    if (/^ALTER TABLE (?:search_doc ADD COLUMN (?:grp|title_norm)|events ADD COLUMN (?:source|organizer_name|cfs_close)) TEXT NOT NULL DEFAULT ''$/i.test(s)) continue;
     assert.match(s, /^CREATE (TABLE|INDEX|UNIQUE INDEX) IF NOT EXISTS /i, "nur idempotente Anweisungen: " + s.slice(0, 60));
   }
   const inMig = new Set([...sql.matchAll(/CREATE (?:TABLE|UNIQUE INDEX|INDEX) IF NOT EXISTS (\w+)/gi)].map((m) => m[1]));
