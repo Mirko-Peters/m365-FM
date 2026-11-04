@@ -50,6 +50,7 @@ class PlatformSyncTests(unittest.TestCase):
 
     def test_legacy_keys_migrate_and_manual_link_wins(self):
         links = {"123:en": {
+                     "apple": "https://podcasts.apple.com/legacy",
                      "spotify": "https://open.spotify.com/episode/old",
                      "deezer": "https://www.deezer.com/episode/old",
                      "youtube": "https://youtube.com/watch?v=old",
@@ -88,6 +89,44 @@ class PlatformSyncTests(unittest.TestCase):
         state = {"first_missing": "2026-10-01", "last_search": "2026-10-31"}
         self.assertFalse(S.should_search_apple(state, "2026-11-01")[1])
         self.assertTrue(S.should_search_apple(state, "2026-11-07")[1])
+
+    def test_apple_search_stops_at_deadline(self):
+        own = {"123": {"title": "Titel"}}
+        with patch.object(S.time, "monotonic", return_value=481), \
+             patch.object(S, "get") as get:
+            self.assertEqual(S.apple_search("en", {"apple_id": "55"}, ["123"], own, deadline=480), [])
+            get.assert_not_called()
+
+    def test_main_saves_retry_state_before_apple_search(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            data = root / "data"
+            (data / "show_notes").mkdir(parents=True)
+            (root / "episodes").mkdir()
+            (data / "show_notes" / "en.json").write_text(json.dumps({
+                "episodes": {
+                    "123": {"id": "123", "title": "Already matched", "published": "2026-01-01", "guid": "guid-123"},
+                    "456": {"id": "456", "title": "Needs search", "published": "2026-01-02", "guid": "guid-456"},
+                }
+            }), encoding="utf-8")
+            (data / "platforms.json").write_text(json.dumps({"en": {"apple_id": "55", "spotify_id": ""}}), encoding="utf-8")
+            (data / "episode_links.json").write_text("{}", encoding="utf-8")
+            connectors = {
+                "apple": lambda *_: [{"title": "Changed Apple title", "date": "2026-04-01", "guid": "guid-123",
+                                      "url": "https://podcasts.apple.com/episode?i=123"}],
+                "spotify": lambda *_: [],
+            }
+            def search(*args, **kwargs):
+                links = json.loads((data / "episode_links.json").read_text(encoding="utf-8"))
+                report = json.loads((data / "episode_links_report.json").read_text(encoding="utf-8"))
+                self.assertEqual(links["123"]["apple"], "https://podcasts.apple.com/episode?i=123")
+                self.assertEqual(report["retry_state"]["456"]["last_search"], S.time.strftime("%Y-%m-%d"))
+                self.assertIn("en", report["shows"])
+                return []
+            with patch.object(S, "ROOT", root), patch.object(S, "DATA", data), \
+                 patch.object(S, "CONNECTORS", connectors), patch.object(S, "podpage_candidates", return_value={}), \
+                 patch.object(S, "spotify_token", return_value=None), patch.object(S, "apple_search", side_effect=search):
+                S.main()
 
     def test_main_migrates_keys_and_preserves_manual_override(self):
         with tempfile.TemporaryDirectory() as tmp:

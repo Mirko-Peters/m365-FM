@@ -136,6 +136,8 @@ jobs:
             git add data/live.json && git commit -m "M365 Show: Streams aktualisiert" -q
             (git pull --rebase --autostash -q -X theirs || git rebase --abort) && git push -q
           fi
+      - name: Plattform-Sync-Regressionen (offline)
+        run: python3 tools/test_sync_platforms.py
       - name: Folgenlinks zu Apple, Spotify, Deezer, YouTube zuordnen (taeglich/manuell, bei Pushes gilt der gespeicherte Stand)
         if: github.event_name != 'push'
         timeout-minutes: 15
