@@ -19,7 +19,7 @@ class LandingPageTests(unittest.TestCase):
 
     def build(self, features=None):
         if features is None:
-            features = {"contribution_tracker": False, "expert_requests": False, "adfree_membership": False}
+            features = {"contribution_tracker": False, "expert_requests": False}
         def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefault=None, **kwargs):
             self.pages.append((lang, canonical, alternates, xdefault, kwargs))
             return (f'<html lang="{lang}"><head><title>{title}</title><meta name="description" content="{desc}"></head>'
@@ -165,13 +165,13 @@ class LandingPageTests(unittest.TestCase):
         self.assertTrue(all(s[2].strip() for s in stats))
 
     def test_feature_flags_enable_current_copy_when_available(self):
-        flags = {"contribution_tracker": True, "expert_requests": True, "adfree_membership": True}
+        flags = {"contribution_tracker": True, "expert_requests": True}
         with self.tr_de():
             self.build(flags)
         self.assertIn("Collects the contributions M365.FM already records", self.files["for/experts/index.html"])
         self.assertIn("no-spam rule", self.files["for/publishers/index.html"])
         self.assertIn("contact details are shared after they accept", self.files["for/publishers/index.html"])
-        self.assertIn("The ad-free listener membership is free", self.files["for/it-teams/index.html"])
+        self.assertNotIn("ad-free", self.files["for/it-teams/index.html"].lower().replace("no paid ad-free version", ""))
         self.assertNotIn("Coming soon", self.files["services/index.html"])
 
     def test_explicit_empty_features_do_not_load_file_defaults(self):
@@ -179,7 +179,7 @@ class LandingPageTests(unittest.TestCase):
             data = Path(tmp) / "data"
             data.mkdir()
             (data / "landing_features.json").write_text(json.dumps({
-                "contribution_tracker": True, "expert_requests": True, "adfree_membership": True,
+                "contribution_tracker": True, "expert_requests": True,
             }), "utf-8")
             with patch.object(site_landing, "ROOT", Path(tmp)), self.tr_de():
                 self.build({})

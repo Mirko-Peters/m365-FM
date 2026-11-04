@@ -105,7 +105,6 @@ HUB = dict(
         (("Podcast, topic pages and learning", "Podcast, Themenseiten und Lernangebote"), ("Episodes in several languages, product updates, glossary and library.", "Folgen in mehreren Sprachen, Produktupdates, Glossar und Bibliothek."), "free", None, "for/it-teams/"),
         (("MVP Contribution Tracker", "MVP Contribution Tracker"), ("Your recorded contributions as a portfolio per reporting period.", "Deine erfassten Beiträge als Portfolio je Berichtszeitraum."), "free", "contribution_tracker", "i-want-to/prove-my-community-impact/"),
         (("Expert Connect for publishers", "Expert Connect für Redaktionen"), ("Requests to experts who opted in, with a no-spam rule.", "Anfragen an Experten, die zugestimmt haben, mit No-Spam-Regel."), "free", "expert_requests", "for/publishers/"),
-        (("Ad-free listener membership", "Werbefreie Hörermitgliedschaft"), ("Ad-free listening and site experience with an account.", "Werbefreies Hören und werbefreie Website mit einem Konto."), "free", "adfree_membership", "i-want-to/stay-current-on-microsoft-365/"),
     ],
     faq=[
         (("What is M365.FM?", "Was ist M365.FM?"),
@@ -571,9 +570,6 @@ PAGES["for/it-teams/"] = dict(
         _o(("Copilot library", "Copilot-Bibliothek"),
            ("Prompts, instructions and scripts such as KQL, DAX or PowerShell, shared by the community, each with its own page.",
             "Prompts, Anweisungen und Skripte wie KQL, DAX oder PowerShell, von der Community geteilt, jeweils mit eigener Seite."), "free"),
-        _o(("Ad-free listening", "Werbefrei hören"),
-           ("A free account unlocks an ad-free listening and site experience.", "Ein kostenloses Konto schaltet werbefreies Hören und eine werbefreie Website frei."), "free", "adfree_membership",
-           ("An ad-free option for listeners is in preparation.", "Eine werbefreie Option für Hörer ist in Vorbereitung.")),
     ]),
     steps=(("How teams use M365.FM", "So nutzen Teams M365.FM"), [
         (("Pick a language", "Sprache wählen"), ("Choose your language edition in the language selector.", "Wähle deine Sprachfassung in der Sprachauswahl.")),
@@ -607,8 +603,8 @@ PAGES["for/it-teams/"] = dict(
          ("From Microsoft's official release communications, assigned to product pages by their product tags.", "Aus den offiziellen Release-Mitteilungen von Microsoft, über ihre Produkt-Tags den Produktseiten zugeordnet.")),
         (("Is M365.FM free for IT teams?", "Ist M365.FM für IT-Teams kostenlos?"),
          ("Yes. Listening, reading and using the learning resources cost nothing.", "Ja. Hören, Lesen und die Lernangebote kosten nichts.")),
-        (("Is there an ad-free option?", "Gibt es eine werbefreie Option?"),
-         ("Yes. The ad-free listener membership is free and requires an account.", "Ja. Die werbefreie Hörermitgliedschaft ist kostenlos und benötigt ein Konto."), "adfree_membership"),
+        (("Can episodes contain advertising?", "Können Folgen Werbung enthalten?"),
+         ("Yes. The podcast hosting platform can insert ads, and sponsored mentions are always labelled as sponsored. There is no paid ad-free version.", "Ja. Die Podcast-Plattform kann Werbung einfügen, und gesponserte Nennungen sind immer als gesponsert gekennzeichnet. Eine bezahlte werbefreie Fassung gibt es nicht.")),
     ],
     links=["podcast", "entities", "library", "updates", "live"],
     related=["i-want-to/stay-current-on-microsoft-365/", "for/experts/", "i-want-to/run-a-community-event/"],
@@ -1031,9 +1027,6 @@ PAGES["i-want-to/stay-current-on-microsoft-365/"] = dict(
             "Themen-Entitäten erklären Produkte, Funktionen und Konzepte mit Kurzbeschreibungen, die auch als Tooltips in Artikeln erscheinen."), "free"),
         _o(("Daily overview", "Tägliche Übersicht"),
            ("The updates page lists new posts, episodes, videos, library items and updates per day.", "Die Update-Seite listet neue Beiträge, Folgen, Videos, Bibliothekseinträge und Updates pro Tag."), "free"),
-        _o(("Ad-free listening", "Werbefrei hören"),
-           ("A free account unlocks an ad-free listening and site experience.", "Ein kostenloses Konto schaltet werbefreies Hören und eine werbefreie Website frei."), "free", "adfree_membership",
-           ("An ad-free option for listeners is in preparation.", "Eine werbefreie Option für Hörer ist in Vorbereitung.")),
     ]),
     steps=(("A short weekly routine", "Eine kurze Wochenroutine"), [
         (("Check your products", "Produkte prüfen"), ("Open the product pages you own and scan their latest updates.", "Öffne die Produktseiten, für die du zuständig bist, und überfliege die neuesten Updates.")),
