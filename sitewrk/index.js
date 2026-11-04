@@ -29,11 +29,13 @@ async function r2Page(request, env, ctx, url, p) {
   if (!hit) {
     state = "MISS";
     const obj = await env.PAGES.get("pages" + r2Path(p) + "index.html").catch(() => null);
-    if (!obj || (obj.customMetadata && obj.customMetadata.gone === "1")) {   // fehlt oder vom Seitenbau als entfernt markiert
+    const cm = (obj && obj.customMetadata) || {};
+    if (!obj || cm.gone === "1" || cm.src === "docs") {   // fehlt, vom Seitenbau als entfernt markiert oder nur Spiegel von GitHub Pages (dort 404 = wirklich weg)
       ctx.waitUntil(cache.put(ck, new Response("", { headers: { "cache-control": `public, max-age=${R2_MISS_TTL}`, "x-r2-miss": "1" } })).catch(() => {}));
       return null;
     }
-    hit = new Response(await obj.arrayBuffer(), { headers: { "content-type": "text/html; charset=utf-8", "etag": obj.httpEtag, "last-modified": obj.uploaded.toUTCString(), "cache-control": `public, max-age=${R2_TTL}` } });
+    let buf; try { buf = await obj.arrayBuffer(); } catch { return null; }
+    hit = new Response(buf, { headers: { "content-type": "text/html; charset=utf-8", "etag": obj.httpEtag, "last-modified": obj.uploaded.toUTCString(), "cache-control": `public, max-age=${R2_TTL}` } });
     ctx.waitUntil(cache.put(ck, hit.clone()).catch(() => {}));
   }
   if (hit.headers.get("x-r2-miss")) return null;
@@ -43,20 +45,38 @@ async function r2Page(request, env, ctx, url, p) {
   if (notModified(request, h.get("etag"), h.get("last-modified"))) return new Response(null, { status: 304, headers: h });
   return new Response(request.method === "HEAD" ? null : hit.body, { status: 200, headers: h });
 }
-// R2 als Ursprung (R2_PRIMARY=1): die ganze Website liegt im Bucket (pages/<pfad>, tools/r2_pages_upload.py docs r2out), GitHub Pages nur noch Rueckfall.
+// R2 als Ursprung (R2_PRIMARY=1): der Deploy-Job spiegelt die veroeffentlichte Website nach dem GitHub-Pages-Deploy in den Bucket (pages/<pfad>,
+// tools/r2_site_sync.py) und setzt danach die Bau-Kennung pages/r2-build.txt. R2 wird nur genutzt, solange sie mit /r2-build.txt auf GitHub Pages
+// uebereinstimmt - waehrend des Spiegelns, nach einem Fehler oder ohne Zugang zum Bucket liefert automatisch GitHub Pages (nie ein veralteter Stand).
 // Nicht aus R2 zuerst: Bilder (Polish ueber den Ursprung), Suchindex (eigene Header unten), Range-Anfragen auf Dateien, Pfade ohne Endung und ohne "/" (GitHub Pages leitet auf "/" um).
 const CT = { html: "text/html; charset=utf-8", json: "application/json; charset=utf-8", jsonld: "application/ld+json; charset=utf-8", xml: "application/xml; charset=utf-8",
   txt: "text/plain; charset=utf-8", md: "text/markdown; charset=utf-8", css: "text/css; charset=utf-8", js: "text/javascript; charset=utf-8", mjs: "text/javascript; charset=utf-8",
   woff2: "font/woff2", woff: "font/woff", ttf: "font/ttf", otf: "font/otf", ics: "text/calendar; charset=utf-8", vtt: "text/vtt; charset=utf-8", webmanifest: "application/manifest+json",
   xsl: "application/xslt+xml", pdf: "application/pdf", csv: "text/csv; charset=utf-8", rss: "application/rss+xml; charset=utf-8" };
 const extOf = (p) => { const m = /\.([a-z0-9]{1,12})$/i.exec(p.slice(p.lastIndexOf("/") + 1)); return m ? m[1].toLowerCase() : ""; };
-export function r2Key(p) {   // Adresse -> Schluessel im Bucket ("" = nicht aus R2 zuerst)
+export function r2Key(p) {   // Adresse (dekodiert) -> Schluessel im Bucket ("" = nicht aus R2 zuerst)
   if (p.endsWith("/")) return "pages" + p + "index.html";
   return extOf(p) ? "pages" + p : "";
 }
+const READY_TTL = 30000;   // Bau-Kennung je Isolate 30 s merken (zwei kleine Abrufe statt zwei je Anfrage)
+let READY = { t: -1e15, v: false, p: null };
+export function __resetR2Ready() { READY = { t: -1e15, v: false, p: null }; }   // nur fuer Tests
+async function r2Ready(env, url) {
+  if (Date.now() - READY.t < READY_TTL) return READY.v;
+  if (!READY.p) READY.p = (async () => {
+    const [a, b] = await Promise.all([
+      fetch(url.origin + "/r2-build.txt?r2check=" + Math.floor(Date.now() / READY_TTL)).then((x) => (x.ok ? x.text() : "")).catch(() => ""),   // mit Query: nie aus dem Kanten-Cache (Caching-Level basic), immer der Stand von GitHub Pages
+      env.PAGES.get("pages/r2-build.txt").then((x) => (x ? x.text() : "")).catch(() => "")]);
+    const o = String(a).trim(), r = String(b).trim();
+    READY = { t: Date.now(), v: !!o && o.length <= 64 && o === r, p: null };
+    return READY.v;
+  })();
+  return READY.p;
+}
 async function r2First(request, env, ctx, url, p, key) {
-  const html = key.endsWith("/index.html"), ext = html ? "html" : extOf(p);
-  const cache = caches.default, ck = new Request(url.origin + "/__r2c" + (html ? r2Path(p) : p));   // gleicher Schluessel wie r2Page: Purge leert /__r2c<pfad>
+  const html = key.endsWith("/index.html"), ext = html ? "html" : extOf(key);
+  const cp = html ? (p.endsWith("/index.html") ? p.slice(0, -"index.html".length) : r2Path(p)) : p;   // /a/index.html und /a/ teilen den Eintrag (Purge leert /__r2c/a/)
+  const cache = caches.default, ck = new Request(url.origin + "/__r2c" + cp);
   let hit = await cache.match(ck).catch(() => null), state = "HIT";
   if (!hit) {
     state = "MISS";
@@ -65,14 +85,15 @@ async function r2First(request, env, ctx, url, p, key) {
       ctx.waitUntil(cache.put(ck, new Response("", { headers: { "cache-control": `public, max-age=${R2_MISS_TTL}`, "x-r2-miss": "1" } })).catch(() => {}));
       return null;
     }
+    let buf; try { buf = await obj.arrayBuffer(); } catch { return null; }   // Lesefehler: GitHub Pages statt Fehlerseite
     const meta = obj.httpMetadata && obj.httpMetadata.contentType;
     const ct = html ? CT.html : (meta && !/octet-stream/i.test(meta) ? meta : CT[ext] || "application/octet-stream");
     const ttl = HASHED.test(p) ? 2592000 : FONT.test(p) ? 86400 : R2_TTL;
-    hit = new Response(await obj.arrayBuffer(), { headers: { "content-type": ct, "etag": obj.httpEtag, "last-modified": obj.uploaded.toUTCString(), "cache-control": `public, max-age=${ttl}` } });
+    hit = new Response(buf, { headers: { "content-type": ct, "etag": obj.httpEtag, "last-modified": obj.uploaded.toUTCString(), "cache-control": `public, max-age=${ttl}` } });
     ctx.waitUntil(cache.put(ck, hit.clone()).catch(() => {}));
   }
   if (hit.headers.get("x-r2-miss")) return null;
-  const h = new Headers({ "content-type": hit.headers.get("content-type"), "x-m365-cache": state, "x-m365-src": "r2" });
+  const h = new Headers({ "content-type": hit.headers.get("content-type"), "x-m365-cache": state, "x-m365-src": "r2", "access-control-allow-origin": "*" });   // wie GitHub Pages (CORS fuer openapi.json, llms.txt, Feeds ...)
   for (const k of ["etag", "last-modified"]) { const v = hit.headers.get(k); if (v) h.set(k, v); }
   finishHeaders(h, p);
   if (notModified(request, h.get("etag"), h.get("last-modified"))) return new Response(null, { status: 304, headers: h });
@@ -137,9 +158,10 @@ export default {
     // T41: ohne Query zum Ursprung - GitHub Pages ist statisch, so landen ?utm_…/?fbclid=… im selben Cache-Eintrag (Zone steht auf Caching-Level "basic": mit Query sonst gar kein Cache)
     const page = !isImg && !isStatic && isHtmlPath(p);   // T32: nur HTML-Adressen bekommen Region und Regions-Validatoren
     const cr = regionOf(request, env), rq = page && (request.method === "GET" || request.method === "HEAD") ? conditional(request, cr).req : request;   // Region nie im Cache-Schluessel oder Ursprungsabruf
-    if (env.R2_PRIMARY === "1" && env.PAGES && !isImg && (request.method === "GET" || request.method === "HEAD") && !p.startsWith("/search/") && (page || !request.headers.has("range"))) {
-      const key = r2Key(p);
-      if (key) {
+    if (env.R2_PRIMARY === "1" && env.PAGES && !isImg && (request.method === "GET" || request.method === "HEAD") && !p.startsWith("/search/") && p !== "/r2-build.txt" && (page || !request.headers.has("range"))) {
+      let dp = p; try { dp = decodeURIComponent(p); } catch { /* ungueltige Kodierung: wie angefragt */ }   // Schluessel im Bucket sind UTF-8 (z. B. /ru/tag/облако/)
+      const key = r2Key(dp);
+      if (key && (await r2Ready(env, url))) {
         const r2 = await r2First(rq, env, ctx, url, p, key);
         if (r2) return page ? markHtml(r2, request, cr) : r2;
       }
