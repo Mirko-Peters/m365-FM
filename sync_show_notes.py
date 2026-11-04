@@ -48,7 +48,7 @@ def parse_feed(xml):
                    for p in it.findall("podcast:person", NS) if (p.text or "").strip()]
         ch = it.find("podcast:chapters", NS)
         tr = it.find("podcast:transcript", NS)
-        rec = {"id": key, "title": title, "key": norm(title), "published": pub, "duration": SN.hms(it.findtext("itunes:duration", namespaces=NS)),
+        rec = {"id": key, "guid": guid, "title": title, "key": norm(title), "published": pub, "duration": SN.hms(it.findtext("itunes:duration", namespaces=NS)),
                "link": (it.findtext("link") or "").strip(), "season": it.findtext("itunes:season", namespaces=NS) or "", "number": it.findtext("itunes:episode", namespaces=NS) or "",
                "image": (it.find("itunes:image", NS).get("href") if it.find("itunes:image", NS) is not None else ""),
                "markup": body, "keypoints": key_pts, "faq": faq, "persons": persons,
