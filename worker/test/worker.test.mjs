@@ -10,6 +10,7 @@ import { handleSponsor } from "../src/sponsor.js";
 import { handleAdminPanel } from "../src/adminpanel.js";
 import { d1BackupExportArgs, d1BackupTables } from "../src/d1_backup.js";
 import { handleContributions, refreshContributions } from "../src/contributions.js";
+import { refreshProfilesExport } from "../src/profiles.js";
 
 async function searchDb(failTrigram = false) {
   const { DatabaseSync } = await import("node:sqlite");
@@ -216,6 +217,44 @@ test("contributions: Quellen, Metadaten, Privatsphäre, Kategorien und Berichtse
   const { deleteUserData: wipe } = await import("../src/profiles.js");   // Kontoloeschung entfernt auch die Loeschmarken (sie enthalten URLs)
   await wipe(db, 1);
   assert.equal(raw.prepare("SELECT COUNT(*) n FROM contribution_ignored WHERE user_id=1").get().n, 0, "Kontolöschung entfernt Tombstones");
+});
+
+test("contributions: GitHub-Quellen bearbeiten und öffentliche Profilbeiträge strikt filtern", async () => {
+  const { db, raw } = await searchDb();
+  raw.exec("INSERT INTO users(id,provider,sub,name,created) VALUES(1,'g','1','Anna',1); INSERT INTO profiles(user_id,public,handle,headline,about,company,job,country,show_org,updated) VALUES(1,1,'anna','','','','','',1,1)");
+  raw.exec(`INSERT INTO contributions(user_id,title,url,published,kind,category,public,created) VALUES
+    (1,'Public talk','https://example.com/public',1767225600,'session','Speaker/Presenter',1,1),
+    (1,'Private draft','https://example.com/private',1767225600,'article','Blog',0,1)`);
+  const J = (data, status = 200) => new Response(JSON.stringify(data), { status });
+  const call = (path, method = "GET", data) => {
+    const url = new URL(`https://x${path}`);
+    return handleContributions({ DB: db },
+      new Request(url, { method, headers: { "content-type": "application/json" }, ...(data === undefined ? {} : { body: JSON.stringify(data) }) }),
+      url, url.pathname, { id: 1 }, J);
+  };
+  assert.equal((await call("/api/contributions/source", "POST", { kind: "github", url: "https://github.com/anna/project" })).status, 201);
+  assert.equal((await call("/api/contributions/source", "POST", { kind: "github", url: "https://example.com/anna" })).status, 400);
+  const sourceId = raw.prepare("SELECT id FROM contribution_sources WHERE kind='github'").get().id;
+  assert.equal((await call("/api/contributions/source/update", "POST", {
+    id: sourceId, kind: "github", url: "https://github.com/anna/updated", title: "Anna's GitHub"
+  })).status, 200);
+  const source = raw.prepare("SELECT kind,url,title FROM contribution_sources WHERE id=?").get(sourceId);
+  assert.deepEqual([source.kind, source.url, source.title], ["github", "https://github.com/anna/updated", "Anna's GitHub"]);
+
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async () => new Response(JSON.stringify({ entities: [] }));
+  try {
+    const exported = await refreshProfilesExport({ DB: db, SITE: "https://example.test" });
+    assert.deepEqual(exported.people[0].mvp_contributions.map((x) => x.title), ["Public talk"]);
+    assert.ok(!JSON.stringify(exported).includes("Private draft"), "private contributions must not enter the public profile export");
+    raw.prepare("INSERT INTO export_cache(k,v,updated) VALUES('profiles','{}',1) ON CONFLICT(k) DO UPDATE SET v=excluded.v,updated=excluded.updated").run();
+    const publicId = raw.prepare("SELECT id FROM contributions WHERE public=1").get().id;
+    assert.equal((await call("/api/contributions/update", "POST", { id: publicId, public: false })).status, 200);
+    assert.equal(raw.prepare("SELECT COUNT(*) n FROM export_cache WHERE k='profiles'").get().n, 0, "private-status changes invalidate the public website cache");
+    raw.prepare("UPDATE profiles SET public=0 WHERE user_id=1").run();
+    const privateProfile = await refreshProfilesExport({ DB: db, SITE: "https://example.test" });
+    assert.deepEqual(privateProfile.people, [], "private profiles are absent from the website export");
+  } finally { globalThis.fetch = originalFetch; }
 });
 
 test("contributions: URL ohne Feed-Endung wird direkt als Feed geprüft", async () => {
