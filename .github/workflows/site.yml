@@ -221,6 +221,35 @@ jobs:
           python generate_og.py
       - name: Seiten-Hashes (fuer gezieltes Purge und IndexNow)
         run: python tools/page_hashes.py docs page-hashes.json
+      # R2 als Ursprung: die ganze Website (docs/) liegt zusaetzlich im Bucket; der Site-Worker liest dort zuerst, sobald R2_PRIMARY=1 (sitewrk/wrangler.toml).
+      # Erst nach allen blockierenden Pruefungen und den Teilen-Bildern - eine fehlerhafte Fassung kommt so nie in den Bucket. Nichts wird geloescht:
+      # was der Bau nicht mehr erzeugt, wird nur als entfernt markiert (wie GitHub Pages nach einem Deploy), Dateien aus r2out/ nie.
+      - name: Pruefsummenliste der Website in R2 (letzter Stand)
+        uses: actions/cache/restore@v4
+        with:
+          path: data/cache/r2_docs.json
+          key: r2docs-${{ github.run_id }}
+          restore-keys: r2docs-
+      - name: Website (docs/) in den R2-Bucket laden (R2 als Ursprung, GitHub Pages bleibt Rueckfall)
+        continue-on-error: true
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_MANIFEST: data/cache/r2_docs.json
+          R2_CHANGED_OUT: r2-changed-docs.json
+          R2_TOMBSTONE: "1"
+          R2_KEEP_DIR: r2out
+        run: |
+          pip install -q boto3
+          python tools/r2_pages_upload.py docs
+      - name: Pruefsummenliste der Website in R2 sichern (immer, sofort nach dem Upload)
+        if: always() && hashFiles('data/cache/r2_docs.json') != ''
+        uses: actions/cache/save@v4
+        with:
+          path: data/cache/r2_docs.json
+          key: r2docs-${{ github.run_id }}-${{ github.run_attempt }}
       - uses: actions/upload-artifact@v4
         with:
           name: page-hashes
@@ -228,6 +257,7 @@ jobs:
           path: |
             page-hashes.json
             r2-changed.json
+            r2-changed-docs.json
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with: { path: docs }
@@ -261,5 +291,5 @@ jobs:
           BASE: https://www.m365.fm
         run: |
           mkdir -p .pagehashes
-          python3 tools/purge_changed.py .pagehashes/page-hashes.json .newhashes/page-hashes.json .newhashes/r2-changed.json
+          python3 tools/purge_changed.py .pagehashes/page-hashes.json .newhashes/page-hashes.json .newhashes/r2-changed.json .newhashes/r2-changed-docs.json
           cp .newhashes/page-hashes.json .pagehashes/page-hashes.json

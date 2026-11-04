@@ -10,11 +10,15 @@ old = json.load(open(old_f)) if os.path.exists(old_f) else {}
 new = json.load(open(new_f))
 changed = sorted(u for u, h in new.items() if old.get(u) != h)
 gone = sorted(u for u in old if u not in new)
-# T41: optional 3. Argument - Liste der neu/geaendert nach R2 geladenen Seiten (tools/r2_pages_upload.py); der Site-Worker cacht sie unter /__r2c/<pfad>/
-r2 = []
-if len(sys.argv) > 3 and os.path.exists(sys.argv[3]):
-    try: r2 = [u for u in json.load(open(sys.argv[3])) if isinstance(u, str) and u.startswith("/")]
-    except Exception as e: print("R2-Liste nicht lesbar:", type(e).__name__)
+# T41: optional ab dem 3. Argument - Listen der neu/geaendert nach R2 geladenen Adressen (tools/r2_pages_upload.py: r2out/ und docs/);
+# der Site-Worker cacht R2-Antworten unter /__r2c<adresse>. Mit R2 als Ursprung liegt jede Datei aus docs/ auch dort: geaenderte und
+# weggefallene Adressen werden deshalb immer auch unter /__r2c geleert.
+r2 = set()
+for f in sys.argv[3:]:
+    if not os.path.exists(f): continue
+    try: r2 |= {u for u in json.load(open(f)) if isinstance(u, str) and u.startswith("/")}
+    except Exception as e: print("R2-Liste nicht lesbar:", f, type(e).__name__)
+r2 = sorted(r2 | set(changed) | set(gone))
 if r2: print(f"{len(r2)} R2-Seiten neu oder geaendert")
 print(f"{len(new)} Dateien, {len(changed)} neu oder geaendert, {len(gone)} weggefallen" + ("" if old else " (kein Vorlauf: erster Vergleich)"))
 

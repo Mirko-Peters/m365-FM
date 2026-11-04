@@ -29,7 +29,7 @@ async function r2Page(request, env, ctx, url, p) {
   if (!hit) {
     state = "MISS";
     const obj = await env.PAGES.get("pages" + r2Path(p) + "index.html").catch(() => null);
-    if (!obj) {
+    if (!obj || (obj.customMetadata && obj.customMetadata.gone === "1")) {   // fehlt oder vom Seitenbau als entfernt markiert
       ctx.waitUntil(cache.put(ck, new Response("", { headers: { "cache-control": `public, max-age=${R2_MISS_TTL}`, "x-r2-miss": "1" } })).catch(() => {}));
       return null;
     }
@@ -40,6 +40,41 @@ async function r2Page(request, env, ctx, url, p) {
   const h = new Headers({ "content-type": "text/html; charset=utf-8", "cache-control": HTML_CC, "x-m365-cache": state });
   for (const k of ["etag", "last-modified"]) { const v = hit.headers.get(k); if (v) h.set(k, v); }
   for (const [k, v] of Object.entries(SEC)) h.set(k, v);
+  if (notModified(request, h.get("etag"), h.get("last-modified"))) return new Response(null, { status: 304, headers: h });
+  return new Response(request.method === "HEAD" ? null : hit.body, { status: 200, headers: h });
+}
+// R2 als Ursprung (R2_PRIMARY=1): die ganze Website liegt im Bucket (pages/<pfad>, tools/r2_pages_upload.py docs r2out), GitHub Pages nur noch Rueckfall.
+// Nicht aus R2 zuerst: Bilder (Polish ueber den Ursprung), Suchindex (eigene Header unten), Range-Anfragen auf Dateien, Pfade ohne Endung und ohne "/" (GitHub Pages leitet auf "/" um).
+const CT = { html: "text/html; charset=utf-8", json: "application/json; charset=utf-8", jsonld: "application/ld+json; charset=utf-8", xml: "application/xml; charset=utf-8",
+  txt: "text/plain; charset=utf-8", md: "text/markdown; charset=utf-8", css: "text/css; charset=utf-8", js: "text/javascript; charset=utf-8", mjs: "text/javascript; charset=utf-8",
+  woff2: "font/woff2", woff: "font/woff", ttf: "font/ttf", otf: "font/otf", ics: "text/calendar; charset=utf-8", vtt: "text/vtt; charset=utf-8", webmanifest: "application/manifest+json",
+  xsl: "application/xslt+xml", pdf: "application/pdf", csv: "text/csv; charset=utf-8", rss: "application/rss+xml; charset=utf-8" };
+const extOf = (p) => { const m = /\.([a-z0-9]{1,12})$/i.exec(p.slice(p.lastIndexOf("/") + 1)); return m ? m[1].toLowerCase() : ""; };
+export function r2Key(p) {   // Adresse -> Schluessel im Bucket ("" = nicht aus R2 zuerst)
+  if (p.endsWith("/")) return "pages" + p + "index.html";
+  return extOf(p) ? "pages" + p : "";
+}
+async function r2First(request, env, ctx, url, p, key) {
+  const html = key.endsWith("/index.html"), ext = html ? "html" : extOf(p);
+  const cache = caches.default, ck = new Request(url.origin + "/__r2c" + (html ? r2Path(p) : p));   // gleicher Schluessel wie r2Page: Purge leert /__r2c<pfad>
+  let hit = await cache.match(ck).catch(() => null), state = "HIT";
+  if (!hit) {
+    state = "MISS";
+    const obj = await env.PAGES.get(key).catch(() => null);
+    if (!obj || (obj.customMetadata && obj.customMetadata.gone === "1")) {   // fehlt oder vom Seitenbau als entfernt markiert (Datei bleibt im Bucket, wird aber nicht mehr ausgeliefert)
+      ctx.waitUntil(cache.put(ck, new Response("", { headers: { "cache-control": `public, max-age=${R2_MISS_TTL}`, "x-r2-miss": "1" } })).catch(() => {}));
+      return null;
+    }
+    const meta = obj.httpMetadata && obj.httpMetadata.contentType;
+    const ct = html ? CT.html : (meta && !/octet-stream/i.test(meta) ? meta : CT[ext] || "application/octet-stream");
+    const ttl = HASHED.test(p) ? 2592000 : FONT.test(p) ? 86400 : R2_TTL;
+    hit = new Response(await obj.arrayBuffer(), { headers: { "content-type": ct, "etag": obj.httpEtag, "last-modified": obj.uploaded.toUTCString(), "cache-control": `public, max-age=${ttl}` } });
+    ctx.waitUntil(cache.put(ck, hit.clone()).catch(() => {}));
+  }
+  if (hit.headers.get("x-r2-miss")) return null;
+  const h = new Headers({ "content-type": hit.headers.get("content-type"), "x-m365-cache": state, "x-m365-src": "r2" });
+  for (const k of ["etag", "last-modified"]) { const v = hit.headers.get(k); if (v) h.set(k, v); }
+  finishHeaders(h, p);
   if (notModified(request, h.get("etag"), h.get("last-modified"))) return new Response(null, { status: 304, headers: h });
   return new Response(request.method === "HEAD" ? null : hit.body, { status: 200, headers: h });
 }
@@ -63,6 +98,19 @@ async function legacyTarget(p0) {
   if (m) return "/show/episodes/" + m[1] + "/";
   if (/^\/categories(\/|$)/.test(p0)) return "/show/episodes/";   // T8: Podpage-Kategorien -> Folgenliste
   return /^\/(blog|videos|p)\//.test(p0) ? "/show/" : "";
+}
+
+// Header fuer Antworten von GitHub Pages und aus R2 (gleiche Regeln, egal woher die Datei kommt)
+function finishHeaders(h, p) {
+  const isImg = IMG.test(p), isStatic = STATIC.test(p) || FONT.test(p);
+  for (const [k, v] of Object.entries(SEC)) h.set(k, v);
+  // T41: Schriften aendern sich unter gleichem Namen nicht (1 Jahr), Bilder 1 Tag, Skripte/Stile 1 h und danach im Hintergrund pruefen
+  h.set("cache-control", HASHED.test(p) || FONT.test(p) ? "public, max-age=31536000, immutable" : isImg ? "public, max-age=86400, stale-while-revalidate=604800"
+    : isStatic ? "public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400" : HTML_CC);
+  if (NOINDEX.test(p)) h.set("x-robots-tag", "noindex");
+  if (isImg) h.set("vary", "accept");
+  if (p === "/") h.set("link", '</.well-known/api-catalog>; rel="api-catalog", </openapi.json>; rel="service-desc"; type="application/vnd.oai.openapi+json", </llms.txt>; rel="service-doc"; type="text/plain", </.well-known/agent.json>; rel="describedby"; type="application/json"');   // RFC 8288 / 9727: Startseite verweist auf maschinenlesbare Ressourcen
+  if (p === "/.well-known/api-catalog") { h.set("content-type", 'application/linkset+json; profile="https://www.rfc-editor.org/info/rfc9727"'); h.set("access-control-allow-origin", "*"); }
 }
 
 export default {
@@ -89,6 +137,13 @@ export default {
     // T41: ohne Query zum Ursprung - GitHub Pages ist statisch, so landen ?utm_…/?fbclid=… im selben Cache-Eintrag (Zone steht auf Caching-Level "basic": mit Query sonst gar kein Cache)
     const page = !isImg && !isStatic && isHtmlPath(p);   // T32: nur HTML-Adressen bekommen Region und Regions-Validatoren
     const cr = regionOf(request, env), rq = page && (request.method === "GET" || request.method === "HEAD") ? conditional(request, cr).req : request;   // Region nie im Cache-Schluessel oder Ursprungsabruf
+    if (env.R2_PRIMARY === "1" && env.PAGES && !isImg && (request.method === "GET" || request.method === "HEAD") && !p.startsWith("/search/") && (page || !request.headers.has("range"))) {
+      const key = r2Key(p);
+      if (key) {
+        const r2 = await r2First(rq, env, ctx, url, p, key);
+        if (r2) return page ? markHtml(r2, request, cr) : r2;
+      }
+    }
     const res = await fetch(url.search ? new Request(url.origin + p, rq) : rq, { cf });
     // Seiten aus dem R2-Bucket (Paket 20): uebersetzte Seiten (Blog-Sprachfassungen, Sprachfassungen der Folgen) liegen unter pages/<pfad>/index.html im Bucket statt in GitHub Pages - gleiche Adressen, indexierbar
     if (res.status === 404 && env.MIGRATED === "1" && /^(\/[a-z]{2})?\/show\/episodes\/[a-z0-9-]+\/?$/.test(p)) {   // T12: umbenannte Folge (show/redirects.json), vor dem R2-Rueckfall mit der alten Seite
@@ -115,14 +170,7 @@ export default {
       if (m) return Response.redirect(url.origin + "/show/episodes/" + m[2] + "/", 301);
     }
     const h = new Headers(res.headers);
-    for (const [k, v] of Object.entries(SEC)) h.set(k, v);
-    // T41: Schriften aendern sich unter gleichem Namen nicht (1 Jahr), Bilder 1 Tag, Skripte/Stile 1 h und danach im Hintergrund pruefen
-    h.set("cache-control", HASHED.test(p) || FONT.test(p) ? "public, max-age=31536000, immutable" : isImg ? "public, max-age=86400, stale-while-revalidate=604800"
-      : isStatic ? "public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400" : HTML_CC);
-    if (NOINDEX.test(p)) h.set("x-robots-tag", "noindex");
-    if (isImg) h.set("vary", "accept");
-    if (p === "/") h.set("link", '</.well-known/api-catalog>; rel="api-catalog", </openapi.json>; rel="service-desc"; type="application/vnd.oai.openapi+json", </llms.txt>; rel="service-doc"; type="text/plain", </.well-known/agent.json>; rel="describedby"; type="application/json"');   // RFC 8288 / 9727: Startseite verweist auf maschinenlesbare Ressourcen
-    if (p === "/.well-known/api-catalog") { h.set("content-type", 'application/linkset+json; profile="https://www.rfc-editor.org/info/rfc9727"'); h.set("access-control-allow-origin", "*"); }
+    finishHeaders(h, p);
     const out = new Response(res.body, { status: res.status, statusText: res.statusText, headers: h });
     return page ? markHtml(out, request, cr) : out;   // Assets, Bilder und Dateien bleiben unberuehrt (auch bei falschem Content-Type)
   },
