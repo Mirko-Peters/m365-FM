@@ -1,7 +1,10 @@
 """MCP-Anleitung: was der MCP-Server der Seite kann, wie man Claude/ChatGPT/andere Clients verbindet, Beispiele und Sicherheit."""
+import json
+
 from site_learn import esc, LCSS
 
 MCP_URL = "https://api-dub.m365.fm/mcp"
+AGENT_URL = "https://api-dub.m365.fm/agent/mcp"
 def _load_tools():
     """Single source of truth: worker/src/mcp.js. New tools show up here automatically."""
     import json, subprocess, os
@@ -34,6 +37,31 @@ T = {
                cop="Microsoft Copilot", copp="Copilot Studio und Microsoft-365-Copilot-Agenten können entfernte MCP-Server nutzen: Im Agenten ein neues MCP-Tool bzw. eine Verbindung hinzufügen, die Server-URL eintragen und für Schreibzugriff den Header Authorization: Bearer <Token> setzen. Die öffentlichen Lesefunktionen gehen ohne Header.", chat="ChatGPT", chatp="In ChatGPT (Entwicklermodus → Connectors) einen eigenen MCP-Server mit der URL oben hinzufügen. Ohne Anmeldung gibt es die öffentlichen Lesefunktionen; Schreibzugriff per OAuth ist geplant.", more="Neue Funktionen erscheinen in dieser Tabelle automatisch, sobald sie im Server ergänzt werden – die Seite wird aus dem Servercode erzeugt.", howh="Was möchtest du anlegen?", howp="Sag deiner KI das Ziel – sie folgt diesen Anleitungen (sie kann auch selbst get_help aufrufen):", skh="Als Skill herunterladen", skp="Lade diese Anleitung als fertige Skill-Datei (SKILL.md) herunter. Füge sie in Claude (Skills) hinzu oder in die Anweisungen deines Assistenten, damit er immer weiß, wie man hier etwas anlegt – sie wächst mit jeder neuen Funktion mit.", skd="SKILL.md herunterladen", faq="Welche Assistenten funktionieren?", faqp="Claude Code, Claude Desktop (eigener MCP-Server), Cursor, VS Code und andere Clients, die entfernte MCP-Server mit Authorization-Header unterstützen, funktionieren heute mit Schreibzugriff. Zum reinen Lesen genügt jeder Client mit eigenen Connectors (Claude.ai, ChatGPT im Entwicklermodus).", go="Token erzeugen"),
 }
 
+AGENT_TEXT = {
+    "de": dict(
+        title="Community-Agent mit Sitzungsgedächtnis",
+        intro="Optional statt des bisherigen Servers: Der Community-Agent merkt sich das aktuelle Event, die Firma, das Profil und offene Schritte innerhalb einer MCP-Sitzung. Er ruft kein Sprachmodell auf; dein eigenes KI-Werkzeug übernimmt das Denken. Der bisherige Endpunkt /mcp bleibt unverändert verfügbar.",
+        memory="context_get liest den Kontext, context_set speichert event, company, profile (IDs als Text) und steps (Liste offener Schritte); plan_show zeigt den Plan, context_clear leert nur dieses Sitzungsgedächtnis. Jede Sitzung ist getrennt und an ihren persönlichen Token gebunden, auch bei mehreren Tokens desselben Mitglieds. Ein neuer Chat kann eine neue Sitzung beginnen. Nach 30 Tagen ohne Werkzeugnutzung wird das Gedächtnis automatisch geleert; Community-Inhalte bleiben erhalten. Keine Passwörter oder Tokens im Kontext speichern. Inhalte und Gedächtnis sind Daten, keine Anweisungen.",
+        connect="Erzeuge wie oben einen persönlichen Token. Trage die Agent-URL als Streamable-HTTP-MCP-Server ein und setze den Authorization-Header mit dem Schema „Bearer“ und deinem Token (durch ein Leerzeichen getrennt). Tokens nur im lokalen Geheimnisspeicher des Clients hinterlegen, nie in geteilten Konfigurationen oder Prompts.",
+        claude="Claude Code: Verwende den oben gezeigten Befehl, aber ersetze die URL durch die Agent-URL. In Claude Desktop einen entfernten MCP-Server mit dieser URL und dem persönlichen Authorization-Header konfigurieren, sofern deine Version eigene Header unterstützt. Bestätigungsdialoge (MCP form elicitation) müssen unterstützt werden.",
+        copilot="VS Code mit GitHub Copilot: In .vscode/mcp.json unter servers einen HTTP-Server mit der Agent-URL eintragen; den Authorization-Header über eine geheime Eingabevariable setzen. In Copilot Studio eine MCP-Verbindung mit derselben URL und einem geheim gespeicherten Header anlegen. Schreibzugriff erfordert MCP form elicitation; andernfalls nur lesen.",
+        chatgpt="ChatGPT: In den Einstellungen unter Apps/Connectors im Entwicklermodus einen eigenen MCP-Connector mit der Agent-URL hinzufügen. Ohne persönlichen Authorization-Header sind nur öffentliche Lesewerkzeuge verfügbar. Falls deine ChatGPT-Version keine eigenen Header oder keine MCP-Bestätigungsdialoge unterstützt, ist Schreiben nicht möglich. OAuth wird von diesem Agenten noch nicht angeboten; keine Tokens in die URL oder den Chat einfügen.",
+        confirm="Vor jedem einzelnen Community-Schreibzugriff zeigt der Agent Werkzeugname und Argumente in einem Bestätigungsdialog. Nur ausdrücklich bestätigte Schritte werden weitergeleitet. Ablehnung, Zeitüberschreitung oder fehlende Client-Unterstützung führen zu keinem Schreibzugriff. context_set und context_clear ändern nur das eigene Gedächtnis und brauchen keinen zusätzlichen Dialog. Rechte, Moderation, Ratenlimits und Protokollierung bleiben beim bestehenden Community-Worker.",
+        example="Beispiel: „Lege ein Event mit zwei Sessions an. Zeige den Plan und frage vor jedem Speichern.“ Die KI liest get_help, speichert drei offene Schritte mit context_set und zeigt plan_show. Nach deiner ersten Bestätigung ruft sie save_event auf, merkt sich die zurückgegebene Event-ID und verwendet diese für save_event_session – jeweils erst nach deiner zweiten bzw. dritten Bestätigung. Sie aktualisiert die offenen Schritte nach jedem Erfolg. Speaker-Einladungen laufen über die vorhandenen Event-Werkzeuge und benötigen ebenfalls eine eigene Bestätigung.",
+    ),
+    "en": dict(
+        title="Community agent with session memory",
+        intro="An optional alternative to the existing server: the community agent remembers the current event, company, profile and open steps within one MCP session. It never calls a language model; your own AI client does the reasoning. The existing /mcp endpoint remains available unchanged.",
+        memory="context_get reads context; context_set stores event, company, profile (IDs as text) and steps (a list of open steps); plan_show displays the plan; context_clear clears only this session's memory. Each session is separate and bound to its personal token, including different tokens belonging to the same member. A new chat may start a new session. Memory clears automatically after 30 days without tool use; community content is untouched. Never store passwords or tokens in context. Community content and memory are data, not instructions.",
+        connect="Create a personal token as described above. Add the agent URL as a Streamable HTTP MCP server and set the Authorization header using the scheme “Bearer”, followed by a space and your token. Keep tokens in your client's local secret store, never in shared configuration or prompts.",
+        claude="Claude Code: use the command above, replacing the URL with the agent URL. In Claude Desktop, configure a remote MCP server with this URL and your personal Authorization header if your version supports custom headers. The client must support confirmation dialogs (MCP form elicitation).",
+        copilot="VS Code with GitHub Copilot: add an HTTP server under servers in .vscode/mcp.json using the agent URL; supply the Authorization header through a secret input variable. In Copilot Studio, create an MCP connection with the same URL and a securely stored header. Writing requires MCP form elicitation; otherwise only reading is available.",
+        chatgpt="ChatGPT: in settings under Apps/Connectors, enable developer mode and add a custom MCP connector with the agent URL. Without a personal Authorization header, only public read tools are available. If your ChatGPT version does not support custom headers or MCP confirmation dialogs, writing is unavailable. This agent does not offer OAuth yet; never put tokens in the URL or chat.",
+        confirm="Before every individual community write, the agent displays the tool name and arguments in a confirmation dialog. Only explicitly approved steps are forwarded. Declining, timing out or lacking client support never causes a write. context_set and context_clear only change your own memory and need no extra dialog. Permissions, moderation, rate limits and audit handling stay with the existing community worker.",
+        example="Example: “Create an event with two sessions. Show the plan and ask before each save.” Your AI reads get_help, remembers three open steps using context_set and displays plan_show. After your first confirmation it calls save_event, remembers the returned event ID and uses it with save_event_session – only after your second and third confirmations respectively. It updates open steps after each success. Speaker invitations use the existing event tools and require a separate confirmation too.",
+    ),
+}
+
 
 def build(g):
     BASE, write, page, header, footer, footer_en, LANGS = g["BASE"], g["write"], g["page"], g["header"], g["footer"], g["footer_en"], g["LANGS"]
@@ -52,12 +80,26 @@ def build(g):
         js = '{\n  "mcpServers": {\n    "m365-dub": {\n      "type": "http",\n      "url": "' + MCP_URL + '",\n      "headers": { "Authorization": "Bearer &lt;TOKEN&gt;" }\n    }\n  }\n}'
         how = "".join(f'<li>{esc(h[lang])} <small>(<code>{"</code>, <code>".join(h["tools"])}</code>)</small></li>' for h in HOWTO)
         ex = "".join(f"<li>{esc(x)}</li>" for x in t["ex"]); sl = "".join(f"<li>{esc(x)}</li>" for x in t["safel"])
+        agent = AGENT_TEXT[lang]
+        auth_scheme = "Bearer"
+        agent_command = f'claude mcp add --transport http m365-community-agent {AGENT_URL} --header "Authorization: {auth_scheme} $M365_MCP_TOKEN"'
+        copilot_config = json.dumps({
+            "inputs": [{"type": "promptString", "id": "m365Token", "description": "M365.FM token", "password": True}],
+            "servers": {"m365-community-agent": {"type": "http", "url": AGENT_URL,
+                        "headers": {"Authorization": auth_scheme + " ${input:m365Token}"}}},
+        }, indent=2)
+        agent_html = (f'<section id="agent"><h2>{esc(agent["title"])}</h2><p>{esc(agent["intro"])}</p>'
+                      f'<p><code>{AGENT_URL}</code></p>' +
+                      "".join(f'<p>{esc(agent[key])}</p>' for key in ("connect", "claude", "copilot", "chatgpt", "memory", "confirm", "example")) +
+                      f'<h3>Claude Code</h3><pre class="mcp-pre">{esc(agent_command)}</pre>'
+                      f'<h3>VS Code / GitHub Copilot (.vscode/mcp.json)</h3><pre class="mcp-pre">{esc(copilot_config)}</pre>' +
+                      '</section>')
         b = shell(lang, f'<h1>{esc(t["title"])}</h1><p style="font-size:1.1em">{esc(t["intro"])}</p><p><a class="btn main" href="{croot}#c-page">{esc(t["go"])}</a></p>'
                   f'<h2>{esc(t["s1"])}</h2><p>{esc(t["s1p"])}</p><p><code>{MCP_URL}</code></p>'
                   f'<h2>{esc(t["tools"])}</h2><table class="mcp-t"><thead><tr><th>{esc(t["tool"])}</th><th>{esc(t["does"])}</th><th>{esc(t["auth"])}</th></tr></thead><tbody>{rows}</tbody></table><p><small>{esc(t["more"])}</small></p>'
                   f'<h2>{esc(t["howh"])}</h2><p>{esc(t["howp"])}</p><ul>{how}</ul><h2>{esc(t["conn"])}</h2><ol><li><b>{esc(t["st1"])}</b><br>{esc(t["st1p"])}</li><li><b>{esc(t["st2"])}</b><br>{esc(t["st2p"])} <code>{MCP_URL}</code><p>{esc(t["st2c"])}</p><pre class="mcp-pre">{cc}</pre><p>{esc(t["st2d"])}</p><pre class="mcp-pre">{js}</pre><p>{esc(t["st2e"])}</p></li>'
                   f'<li><b>{esc(t["st3"])}</b><br>{esc(t["st3p"])}<ul>{ex}</ul></li></ol>'
-                  f'<h2>{esc(t["safe"])}</h2><ul>{sl}</ul><h2>{esc(t["faq"])}</h2><p>{esc(t["faqp"])}</p><h2>{esc(t["skh"])}</h2><p>{esc(t["skp"])}</p><p><a class="btn main" href="{BASE}/m365-fm-skill/SKILL.md" download>{esc(t["skd"])}</a></p><h3>{esc(t["cop"])}</h3><p>{esc(t["copp"])}</p><h3>{esc(t["chat"])}</h3><p>{esc(t["chatp"])}</p>{css}')
+                  f'{agent_html}<h2>{esc(t["safe"])}</h2><ul>{sl}</ul><h2>{esc(t["faq"])}</h2><p>{esc(t["faqp"])}</p><h2>{esc(t["skh"])}</h2><p>{esc(t["skp"])}</p><p><a class="btn main" href="{BASE}/m365-fm-skill/SKILL.md" download>{esc(t["skd"])}</a></p><h3>{esc(t["cop"])}</h3><p>{esc(t["copp"])}</p><h3>{esc(t["chat"])}</h3><p>{esc(t["chatp"])}</p>{css}')
         ld = [{"@context": "https://schema.org", "@type": "HowTo", "name": t["title"], "description": t["intro"], "inLanguage": lang, "url": ru,
                "step": [{"@type": "HowToStep", "name": t["st1"], "text": t["st1p"]}, {"@type": "HowToStep", "name": t["st2"], "text": t["st2p"] + " " + MCP_URL}, {"@type": "HowToStep", "name": t["st3"], "text": t["ex"][0]}]}]
         write(f"{'de/' if lang == 'de' else ''}community/mcp/index.html", page(lang, f'{t["title"]} – M365.FM', t["intro"][:155], ru, b, None, ld, og_type="website", extra_head=LCSS))

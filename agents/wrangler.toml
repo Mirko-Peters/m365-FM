@@ -1,0 +1,23 @@
+name = "m365-community-agent"
+main = "src/index.js"
+compatibility_date = "2026-11-04"
+compatibility_flags = ["nodejs_compat"]
+workers_dev = false
+
+# Engere Route vor der bestehenden API; /mcp bleibt beim Community-Worker.
+routes = [{ pattern = "api-dub.m365.fm/agent/mcp", zone_name = "m365.fm" }]
+
+[[services]]
+binding = "COMMUNITY"
+service = "m365-dub-community"
+
+[[durable_objects.bindings]]
+name = "MCP_OBJECT"
+class_name = "CommunityAgent"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["CommunityAgent"]
+
+[observability]
+enabled = false
