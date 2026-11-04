@@ -15,15 +15,19 @@ class EventScraperTests(unittest.TestCase):
              "sessions": [{"title": "Copilot", "speakers": [{"n": "Alex", "links": ["https://example.org/alex"]}]}],
              "speakers": [], "topics": ["copilot"]},
             {"sources": [{"source": "community_days", "ext_id": "b", "url": "https://example.org/another"}],
-             "title": "M365 Community Day", "start": "2027-03-11", "url": "https://example.org/another",
+             "title": "M365 Community Day", "start": "2027-03-12", "url": "https://example.org/another",
              "sessions": [{"title": "Azure", "speakers": []}], "speakers": [], "topics": ["azure"]},
+            {"sources": [{"source": "sessionize", "ext_id": "a", "url": "https://example.org/event"}],
+             "title": "M365 Community Day", "start": "2027-03-10", "url": "https://example.org/event",
+             "sessions": [], "speakers": [], "topics": []},
         ]
         merged = scraper.merge_duplicates(events)
-        self.assertEqual(len(merged), 1)
-        self.assertEqual({source["source"] for source in merged[0]["sources"]}, {"community_days"})
-        self.assertEqual({topic for topic in merged[0]["topics"]}, {"azure", "copilot"})
-        self.assertEqual(len(merged[0]["fp"]), 32)
-        self.assertEqual(len(merged[0]["hash"]), 64)
+        self.assertEqual(len(merged), 2)
+        cross_source = next(item for item in merged if len(item["sources"]) == 2)
+        self.assertEqual({source["source"] for source in cross_source["sources"]}, {"community_days", "sessionize"})
+        self.assertEqual(cross_source["topics"], ["copilot"])
+        self.assertEqual(len(cross_source["fp"]), 32)
+        self.assertEqual(len(cross_source["hash"]), 64)
 
     def test_relevance_requires_minimum_share_of_sessions(self):
         event = {"title": "Community event", "sessions": [
@@ -70,7 +74,8 @@ class EventScraperTests(unittest.TestCase):
         self.assertEqual(item["url"], "")
         self.assertEqual(item["sources"][0]["url"], "")
         self.assertEqual(item["organizer_name"], "")
-        self.assertEqual(scraper._date("20271104T134107"), "2027-11-04T13:41Z")
+        self.assertEqual(scraper._date("20271104T134107"), "2027-11-04T13:41")
+        self.assertEqual(scraper._date("2027-11-04T15:41:07+02:00"), "2027-11-04T13:41")
         self.assertEqual(scraper._date("20271104"), "2027-11-04")
 
     def test_missing_and_cancelled_events_are_retained_as_gone(self):
@@ -119,10 +124,19 @@ class EventScraperTests(unittest.TestCase):
             {"result": {"structuredContent": {"events": [events[1]], "total": 2}}},
         ]
         with patch.object(scraper, "community_tools", return_value=(tools, "session")), \
+             patch.dict(os.environ, {"EVENTS_MCP_TOOLS_ALLOWLIST": "list_events"}), \
              patch.object(scraper, "mcp_request", side_effect=[(r, "session") for r in responses]) as request:
             result = scraper.community_events()
         self.assertEqual(len(result), 2)
         self.assertEqual(request.call_count, 2)
+
+    def test_mcp_event_tools_require_allowlist_and_never_select_session_tools(self):
+        tools = [{"name": "list_events", "inputSchema": {"properties": {}}},
+                 {"name": "list_sessions", "inputSchema": {"properties": {}}}]
+        with patch.object(scraper, "community_tools", return_value=(tools, "session")), \
+             patch.dict(os.environ, {"EVENTS_MCP_TOOLS_ALLOWLIST": ""}):
+            with self.assertRaisesRegex(ValueError, "Allowlist"):
+                scraper.community_events()
 
     def test_main_writes_output_with_mocked_scrape(self):
         event = {"sources": [{"source": "community_days", "ext_id": "main"}],
@@ -139,6 +153,14 @@ class EventScraperTests(unittest.TestCase):
                  patch.dict(os.environ, {"EVENTS_POLICY_APPROVED": "1"}):
                 self.assertEqual(scraper.main(), 0)
             self.assertEqual(json.loads(output.read_text("utf-8"))["updated"], saved["updated"])
+
+    def test_distinct_source_ids_keep_separate_fingerprints(self):
+        old = [{"fp": "a" * 32, "title": "Same title", "start": "2027-03-10",
+                "sources": [{"source": "community_days", "ext_id": "one"}]},
+               {"fp": "b" * 32, "title": "Same title", "start": "2027-03-10",
+                "sources": [{"source": "community_days", "ext_id": "two"}]}]
+        retained = scraper.retain_previous(old, old)
+        self.assertEqual(len({event["fp"] for event in retained}), 2)
 
 
 if __name__ == "__main__":

@@ -149,8 +149,11 @@ def community_events():
     tools, session = community_tools()
     names = [str(x.get("name", "")) for x in tools]
     print("Community Days MCP tools/list: " + ", ".join(names), file=sys.stderr)
-    selected = [x for x in tools if re.search(r"event|session", (x.get("name", "") + " " + x.get("description", "")), re.I)
-                and not re.search(r"create|update|delete|submit|write|admin|register", x.get("name", ""), re.I)]
+    allowed = {name.strip() for name in os.environ.get("EVENTS_MCP_TOOLS_ALLOWLIST", "").split(",") if name.strip()}
+    if not allowed:
+        raise ValueError("Community Days MCP-Abruf gesperrt: EVENTS_MCP_TOOLS_ALLOWLIST ist leer")
+    selected = [x for x in tools if x.get("name") in allowed and re.search(r"event", x.get("name", ""), re.I)
+                and not re.search(r"session|create|update|delete|submit|write|admin|register", x.get("name", ""), re.I)]
     if not selected:
         raise ValueError("Community Days MCP meldet kein geeignetes Read-only-Event-Tool")
     out = []
@@ -165,7 +168,8 @@ def community_events():
         for page_index in range(100):
             args = _safe_args(tool)
             if args is None:
-                raise ValueError(f"MCP-Tool {tool['name']} hat nicht unterstuetzte Pflichtargumente")
+                print(f"MCP-Tool {tool['name']} wegen nicht unterstuetzter Pflichtargumente uebersprungen", file=sys.stderr)
+                break
             if page_key:
                 args[page_key] = page
             if offset_key:
@@ -242,10 +246,15 @@ def _date(value):
     text = str(value).strip().replace("Z", "+00:00")
     if re.fullmatch(r"\d{8}", text):
         return f"{text[:4]}-{text[4:6]}-{text[6:]}"
+    if re.fullmatch(r"\d{4}-\d{2}-\d{2}", text):
+        return text
     if re.fullmatch(r"\d{8}T\d{6}", text):
-        return f"{text[:4]}-{text[4:6]}-{text[6:8]}T{text[9:11]}:{text[11:13]}Z"
+        text = f"{text[:4]}-{text[4:6]}-{text[6:8]}T{text[9:11]}:{text[11:13]}:{text[13:15]}"
     try:
-        return datetime.fromisoformat(text).isoformat(timespec="minutes").replace("+00:00", "Z")
+        parsed = datetime.fromisoformat(text)
+        if parsed.tzinfo is None:
+            parsed = parsed.replace(tzinfo=timezone.utc)
+        return parsed.astimezone(timezone.utc).isoformat(timespec="minutes").removesuffix("+00:00")
     except ValueError:
         return text[:10] if re.match(r"\d{4}-\d{2}-\d{2}", text) else ""
 
@@ -295,28 +304,29 @@ def _normalize(raw, source, source_id):
     location = _first(raw, "location", "venue", "city")
     if isinstance(location, dict):
         location = location.get("name", "")
+    path_id = urlparse(event_url).path.strip("/")
+    fallback_id = f"{source_id}:{path_id}" if path_id else f"{source_id}:{_first(raw, 'title', 'name', 'eventName')}:{_first(raw, 'start', 'startDate', 'start_date', 'date')}"
+    source_id = str(_first(raw, "id", "eventId", "event_id", "slug") or fallback_id)
+    if "@" in source_id:
+        source_id = f"{source}:{_first(raw, 'title', 'name', 'eventName')}:{_first(raw, 'start', 'startDate', 'start_date', 'date')}"
     sessions = []
-    for item in _first(raw, "sessions", "eventSessions", "event_sessions", "talks") or []:
+    for session_index, item in enumerate(_first(raw, "sessions", "eventSessions", "event_sessions", "talks") or []):
         if not isinstance(item, dict):
             continue
         title = _first(item, "title", "name", "sessionTitle", "session_title")
         if title:
-            sessions.append({"title": str(title)[:180], "start": _date(_first(item, "start", "startDate", "start_date", "startTime", "start_time")),
+            session_id = _first(item, "id", "sessionId", "session_id", "slug", "uid") or str(session_index)
+            sessions.append({"ext_key": f"{source}:{source_id}:{session_id}"[:240], "title": str(title)[:180], "start": _date(_first(item, "start", "startDate", "start_date", "startTime", "start_time")),
                              "end": _date(_first(item, "end", "endDate", "end_date", "endTime", "end_time")),
                              "room": str(_first(item, "room", "venue", "location"))[:100],
                                                "speakers": _speakers(item.get("speakers") or item.get("presenters"))})
     title = EMAIL.sub("", str(_first(raw, "title", "name", "eventName", "event_title", "sessionTitle", "session_title", "subject", "summary"))).strip()
     if not sessions and _first(raw, "sessionTitle", "session_title"):
-        sessions = [{"title": title[:180], "start": _date(_first(raw, "start", "startDate", "start_date", "startTime", "start_time")),
+        sessions = [{"ext_key": f"{source}:{source_id}:0"[:240], "title": title[:180], "start": _date(_first(raw, "start", "startDate", "start_date", "startTime", "start_time")),
                      "end": _date(_first(raw, "end", "endDate", "end_date", "endTime", "end_time")), "room": "", "speakers": _speakers(raw.get("speakers"))}]
     speakers = _speakers(raw.get("speakers") or raw.get("presenters"))
     if not sessions and title:
         sessions = []
-    path_id = urlparse(event_url).path.strip("/")
-    fallback_id = f"{source_id}:{path_id}" if path_id else f"{source_id}:{title}:{_first(raw, 'start', 'startDate', 'start_date', 'date')}"
-    source_id = str(_first(raw, "id", "eventId", "event_id", "slug") or fallback_id)
-    if "@" in source_id:
-        source_id = f"{source}:{title}:{_first(raw, 'start', 'startDate', 'start_date', 'date')}"
     mode = _first(raw, "mode", "online", "eventAttendanceMode")
     mode = "online" if mode is True or str(mode).lower() in ("online", "virtual", "onlineeventattendancemode") else "hybrid" if str(mode).lower() == "hybrid" else "onsite"
     status = str(_first(raw, "status", "eventStatus")).lower()
@@ -391,7 +401,9 @@ def merge_duplicates(items):
             days = abs((datetime.fromisoformat(_date_day(a)) - datetime.fromisoformat(_date_day(b))).days) if _date_day(a) and _date_day(b) else 99
             ids_a = {(x.get("source"), x.get("ext_id")) for x in a.get("sources", [])}
             ids_b = {(x.get("source"), x.get("ext_id")) for x in b.get("sources", [])}
-            if ids_a & ids_b or (_norm_name(a.get("title")) == _norm_name(b.get("title")) and days <= 1 and _host(a) == _host(b)):
+            source_conflict = any(source_a == source_b and id_a != id_b
+                                  for source_a, id_a in ids_a for source_b, id_b in ids_b)
+            if not source_conflict and (ids_a & ids_b or (_norm_name(a.get("title")) == _norm_name(b.get("title")) and days <= 1 and _host(a) == _host(b))):
                 parents[root(i)] = root(j)
     groups = {}
     for i, item in enumerate(items):
@@ -414,7 +426,8 @@ def merge_duplicates(items):
             first["topics"] = sorted(set(first.get("topics", []) + item.get("topics", [])))
         first["sources"] = sorted(first["sources"], key=lambda x: (x["source"], x["ext_id"]))
         host = _host(first)
-        fp_text = "|".join((_norm_name(first["title"]), min(_date_day(x) for x in group if _date_day(x)) if any(_date_day(x) for x in group) else "", host))
+        source_text = "|".join(f"{source.get('source')}:{source.get('ext_id')}" for source in first["sources"])
+        fp_text = "|".join((_norm_name(first["title"]), min(_date_day(x) for x in group if _date_day(x)) if any(_date_day(x) for x in group) else "", host, source_text))
         first["fp"] = hashlib.sha256(fp_text.encode()).hexdigest()[:32]
         first["hash"] = hashlib.sha256(json.dumps(first, ensure_ascii=False, sort_keys=True).encode()).hexdigest()
         merged.append(first)
@@ -437,6 +450,13 @@ def retain_previous(previous, current, now=None):
             item["gone_at"] = old.get("gone_at") if old and old.get("gone_at") else (now or datetime.now(timezone.utc)).isoformat(timespec="seconds")
         else:
             item.pop("gone_at", None)
+        occupied = by_fp.get(item["fp"])
+        if occupied:
+            current_ids = sorted((x.get("source"), x.get("ext_id")) for x in item.get("sources", []))
+            occupied_ids = sorted((x.get("source"), x.get("ext_id")) for x in occupied.get("sources", []))
+            if current_ids != occupied_ids:
+                fp_text = item["fp"] + "|" + json.dumps(current_ids, ensure_ascii=False)
+                item["fp"] = hashlib.sha256(fp_text.encode()).hexdigest()[:32]
         digest = dict(item)
         digest.pop("hash", None)
         item["hash"] = hashlib.sha256(json.dumps(digest, ensure_ascii=False, sort_keys=True).encode()).hexdigest()

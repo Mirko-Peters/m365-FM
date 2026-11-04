@@ -115,10 +115,14 @@ function fakeDom() {
   return { root, document: { createElement: (t) => new El(t), createTextNode: (t) => new Text(t), getElementById: (id) => (id === "adm" ? root : null), head: new El("head") } };
 }
 
-async function bootAdmin(env, hash) {
+async function bootAdmin(env, hash, overrideFetch) {
   const { root, document } = fakeDom(), calls = [], location = { hash };
   const fetch = async (url, o = {}) => {   // admin.js -> echte Handler
     const u = new URL(url); calls.push({ path: u.pathname + u.search, method: o.method || "GET", body: o.body, headers: o.headers || {}, credentials: o.credentials });
+    if (overrideFetch) {
+      const overridden = await overrideFetch(u, o);
+      if (overridden) return overridden;
+    }
     const res = await handleAdminPanel(env, new Request(u, { method: o.method || "GET", headers: o.headers, body: o.body }), u, u.pathname, { id: 1, admin: true }, J);
     return res || J({ error: "not_found" }, 404);
   };
@@ -145,6 +149,24 @@ async function withoutNet(fn) {   // overview laedt entities.json von der Seite:
 test("sponsor admin: admin.js setzt Inhalte nur als Text (kein innerHTML)", () => {
   assert.doesNotMatch(ADMIN_JS, /\binnerHTML\b|insertAdjacentHTML|outerHTML|document\.write/);
 });
+
+test("Event-Importe: Kandidat bietet Freigabe und Ablehnung ohne ReferenceError", () => withoutNet(async () => {
+  const { env } = await setup(), called = [];
+  const fetch = async (url, options) => {
+    if (url.pathname === "/api/admin/panel/event-imports" && !options.method) return J({ items: [{
+      fp: "a".repeat(32), data: { title: "Community Day", start: "2027-05-01", sessions: [], sources: [{ source: "community_days" }] }, duplicates: [],
+    }] });
+    if (url.pathname === "/api/admin/panel/event-imports/decide") { called.push(JSON.parse(options.body).action); return J({ ok: true }); }
+    return null;
+  };
+  const { root } = await bootAdmin(env, "#events", fetch);
+  await until(() => root.all("button").some((button) => button.textContent === "Freigeben"), "Event-Aktionen");
+  const actions = root.all("button");
+  actions.find((button) => button.textContent === "Freigeben").fire("click");
+  await until(() => called.length === 1, "Freigabeaufruf");
+  assert.deepEqual(called, ["approve"]);
+  assert.ok(actions.some((button) => button.textContent === "Ablehnen"));
+}));
 
 test("sponsor admin: Paket v1 der Sponsor-Seite - Nachricht, Sprache, Themen, Preise, ganzes Paket aufklappbar (SQLite + Schein-DOM)", () => withoutNet(async () => {
   const { raw, env } = await setup();

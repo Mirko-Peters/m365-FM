@@ -1452,8 +1452,9 @@ def build():
     _events = EVT.fetch_events(COMMUNITY_API)
     for _ev in _events:
         ENT.EVENTS[_ev["handle"]] = _ev
-        for _t in _ev.get("topics", []):
-            ENT.EVENTS.setdefault(_t, _ev)
+        if not _ev.get("source"):
+            for _t in _ev.get("topics", []):
+                ENT.EVENTS.setdefault(_t, _ev)
     for _x in (LRN._fetch_json(f"{COMMUNITY_API}/api/qa/export") or {}).get("items", []):
         ENT.FAQ.setdefault(_x["eid"], []).append(_x)
     ENT.CLAIMS.update({c["eid"]: c["handle"] for c in _cl}); MEM.CLAIMED.update({c["handle"]: c["eid"] for c in _cl})

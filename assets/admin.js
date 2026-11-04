@@ -70,6 +70,7 @@
   function eventImports(speakerOffset, speakerQuery) {
     speakerOffset = speakerOffset || 0; speakerQuery = speakerQuery || "";
     var p = panes.events, m = h("p", { class: "adm-msg" }); p.textContent = "";
+    function act(label, main, fn, after) { return h("button", { type: "button", class: "btn" + (main ? " main" : ""), text: label, onclick: function (ev) { ev.target.disabled = true; msg(m, "Speichert …"); fn().then(function (r) { if (r.s === 200) { msg(m, "Erledigt."); after(); } else { ev.target.disabled = false; msg(m, ERR[(r.j || {}).error] || "Fehler " + r.s, true); } }); } }); }
     p.appendChild(h("h2", { text: "Externe Event-Kandidaten" }));
     p.appendChild(h("p", { class: "mut", text: "Nur öffentliche Fakten. Freigeben, ablehnen oder Sessions einem bestehenden Event zuordnen." }));
     p.appendChild(m);

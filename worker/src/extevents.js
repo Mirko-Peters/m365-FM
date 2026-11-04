@@ -24,7 +24,7 @@ function publicData(item) {
       return [{ n: name, s: "confirmed", o: 1, ...(links.length ? { links } : {}) }];
     });
     if (!title) return [];
-    return [{ title, start: clean(session.start, 32), end: clean(session.end, 32), room: clean(session.room, 100), speakers }];
+    return [{ ext_key: clean(session.ext_key, 240), title, start: clean(session.start, 32), end: clean(session.end, 32), room: clean(session.room, 100), speakers }];
   });
   const sources = (Array.isArray(item.sources) ? item.sources : []).slice(0, 20).flatMap((source) => {
     const name = clean(source.source, 60), extId = clean(source.ext_id, 200);
@@ -70,18 +70,22 @@ const sourceSpeakers = (speakers) => (speakers || []).filter((speaker) => !speak
 
 async function syncSessions(db, eventId, oldData, data, locked, t) {
   const oldSessions = oldData.sessions || [], nextSessions = data.sessions || [], changes = [];
-  const rows = (await db.prepare("SELECT id,title,start,end,room,speakers,status FROM event_sessions WHERE event_id=?").bind(eventId).all()).results || [];
+  const rows = (await db.prepare("SELECT id,ext_key,title,start,end,room,speakers,status FROM event_sessions WHERE event_id=?").bind(eventId).all()).results || [];
   const byKey = new Map(rows.map((row) => [`${row.title}\n${row.start}`, row]));
+  const byExtKey = new Map(rows.filter((row) => row.ext_key).map((row) => [row.ext_key, row]));
+  const rowFor = (session) => (session.ext_key && byExtKey.get(session.ext_key)) || byKey.get(`${session.title}\n${session.start || ""}`);
   const oldRows = new Map();
   for (const old of oldSessions) {
-    const row = byKey.get(`${old.title}\n${old.start || ""}`);
+    const row = rowFor(old);
     if (row) oldRows.set(normalized(old), row);
   }
+  const blockedRows = (await db.prepare("SELECT name_norm FROM event_speaker_block WHERE event_fp='' OR event_fp=(SELECT fp FROM event_import WHERE event_id=? ORDER BY last_seen DESC LIMIT 1)").bind(eventId).all()).results || [];
+  const blockedNames = new Set(blockedRows.map((row) => row.name_norm));
   for (const [key, row] of oldRows) {
     const old = oldSessions.find((session) => normalized(session) === key);
     const currentSpeakers = parse(row.speakers, []);
     const hiddenNames = new Set(currentSpeakers.filter((speaker) => speaker.hidden || speaker.gone).map((speaker) => speaker.n));
-    const oldSpeakers = (old.speakers || []).filter((speaker) => !hiddenNames.has(speaker.n))
+    const oldSpeakers = (old.speakers || []).filter((speaker) => !speaker.hidden && !speaker.gone && !hiddenNames.has(speaker.n) && !blockedNames.has(speakerKey(speaker.n)))
       .map((speaker) => ({ n: speaker.n, s: "confirmed", o: 1, ...(speaker.links?.length ? { links: speaker.links } : {}) }));
     for (const [field, current, previous] of [
       ["title", row.title, old.title], ["start", row.start, old.start || ""], ["end", row.end, old.end || ""],
@@ -91,21 +95,25 @@ async function syncSessions(db, eventId, oldData, data, locked, t) {
     }
   }
   for (const old of oldSessions) {
-    const row = byKey.get(`${old.title}\n${old.start || ""}`);
+    const row = rowFor(old);
     if (!row) continue;
-    const stillPresent = nextSessions.some((session) => session.title === old.title && (session.start || "") === (old.start || ""));
+    const stillPresent = nextSessions.some((session) => (old.ext_key && session.ext_key === old.ext_key) ||
+      (!old.ext_key && session.title === old.title && (session.start || "") === (old.start || "")));
     if (!stillPresent) {
+      if (old.ext_key && locked.has(`session_deleted:${old.ext_key}`)) continue;
       await db.prepare("UPDATE event_sessions SET status='gone' WHERE id=? AND status<>'gone'").bind(row.id).run();
       changes.push(`session:${row.id}:gone`);
     }
   }
   for (const session of nextSessions) {
-    let row = byKey.get(`${session.title}\n${session.start || ""}`);
+    if (session.ext_key && locked.has(`session_deleted:${session.ext_key}`)) continue;
+    let row = rowFor(session);
     if (!row) {
-      const inserted = await db.prepare("INSERT INTO event_sessions(event_id,title,abstract,start,end,room,track,level,lang,topics,speakers,recording_url,status,proposer_id,created) VALUES(?,?,'',?,?,?,'','','','[]',?,'','live',0,?)")
-        .bind(eventId, session.title, session.start || "", session.end || "", session.room || "", JSON.stringify(session.speakers || []), t).run();
-      row = { id: inserted.meta.last_row_id };
+      const inserted = await db.prepare("INSERT INTO event_sessions(event_id,ext_key,title,abstract,start,end,room,track,level,lang,topics,speakers,recording_url,status,proposer_id,created) VALUES(?,?,?,'',?,?,?,'','','','[]',?,'','live',0,?)")
+        .bind(eventId, session.ext_key || "", session.title, session.start || "", session.end || "", session.room || "", JSON.stringify(session.speakers || []), t).run();
+      row = { id: inserted.meta.last_row_id, ext_key: session.ext_key || "" };
       byKey.set(`${session.title}\n${session.start || ""}`, row);
+      if (session.ext_key) byExtKey.set(session.ext_key, row);
       changes.push(`session:${row.id}:created`);
       continue;
     }
@@ -151,14 +159,14 @@ async function applySpeakerBlocks(db, item, fp) {
 async function applyApprovedUpdate(env, existing, data, hash, t) {
   const db = env.DB, oldData = parse(existing.data, {});
   const event = await db.prepare("SELECT * FROM events WHERE id=?").bind(existing.event_id).first();
-  if (!event) return;
+  if (!event) return false;
   const locked = new Set(parse(existing.locked_fields, [])), known = new Set(await baseIds(env));
   const fields = {
     title: data.title, start: data.start, end: data.end, mode: data.mode, location: data.location, country: data.country,
     url: data.url, organizer_name: data.organizer_name, cfs_close: data.cfs_close,
     topics: JSON.stringify([...new Set(data.topics.filter((topic) => known.has(topic)))]),
   };
-  const previous = { ...oldData, topics: JSON.stringify([...new Set((oldData.topics || []).filter((topic) => known.has(topic)))]) };
+  const previous = { ...oldData, topics: JSON.stringify([...new Set((oldData.applied_topics || oldData.topics || []).filter((topic) => known.has(topic)))]) };
   const current = { ...event, topics: normalized(parse(event.topics, [])) };
   const updates = [], changed = [];
   for (const field of eventFields) {
@@ -177,17 +185,20 @@ async function applyApprovedUpdate(env, existing, data, hash, t) {
     await db.prepare("UPDATE events SET updated=? WHERE id=?").bind(t, event.id).run();
   }
   const log = changed.concat(sessions.changes, existing.status === "gone" ? ["status"] : [], sessions.locked.length ? ["locked_fields"] : []);
+  const storedData = { ...data, applied_topics: JSON.parse(fields.topics) };
   await db.prepare("UPDATE event_import SET data=?,hash=?,locked_fields=?,changes=?,status='approved',prev_status='',gone_at=0,last_seen=? WHERE fp=?")
-    .bind(JSON.stringify(data), hash, JSON.stringify(sessions.locked), changeLog(existing.changes, t, log), t, existing.fp).run();
+    .bind(JSON.stringify(storedData), hash, JSON.stringify(sessions.locked), changeLog(existing.changes, t, log), t, existing.fp).run();
+  return true;
 }
 
 async function markExternalGone(env, existing, data, hash, t) {
   const db = env.DB;
   if (existing.status === "approved" && existing.event_id) {
     await db.prepare("UPDATE events SET updated=? WHERE id=?").bind(t, existing.event_id).run();
-    const oldData = parse(existing.data, {}), rows = (await db.prepare("SELECT id,title,start FROM event_sessions WHERE event_id=?").bind(existing.event_id).all()).results || [];
+    const oldData = parse(existing.data, {}), rows = (await db.prepare("SELECT id,ext_key,title,start FROM event_sessions WHERE event_id=?").bind(existing.event_id).all()).results || [];
     for (const session of oldData.sessions || []) {
-      const row = rows.find((item) => item.title === session.title && item.start === (session.start || ""));
+      const row = rows.find((item) => (session.ext_key && item.ext_key === session.ext_key) ||
+        (!session.ext_key && item.title === session.title && item.start === (session.start || "")));
       if (row) await db.prepare("UPDATE event_sessions SET status='gone' WHERE id=?").bind(row.id).run();
     }
   }
@@ -258,15 +269,18 @@ export async function importExternalEvents(env) {
       await db.prepare("UPDATE event_import SET last_seen=? WHERE fp=?").bind(t, fp).run();
       continue;
     }
+    const current = existing?.status === "approved" || (existing?.status === "gone" && existing.prev_status === "approved");
+    if (current && existing.event_id && isAutoSource(env, item)) {
+      if (!(await applyApprovedUpdate(env, existing, item, hash, t))) throw new Error(`Community-Days-Event ${fp} konnte nicht aktualisiert werden`);
+      imported++;
+      continue;
+    }
     const restoredStatus = existing?.prev_status === "approved" && existing.event_id ? "approved" :
       ["new", "rejected", "merged"].includes(existing?.prev_status) ? existing.prev_status : "new";
     const nextStatus = existing?.status === "gone" ? restoredStatus : (existing?.status || "new");
     await db.prepare("INSERT INTO event_import(fp,data,hash,status,first_seen,last_seen) VALUES(?,?,?,'new',?,?) ON CONFLICT(fp) DO UPDATE SET data=excluded.data,hash=excluded.hash,last_seen=excluded.last_seen,status=?,gone_at=0,prev_status=''")
       .bind(fp, JSON.stringify(item), hash, t, t, nextStatus).run();
-    const current = existing?.status === "approved" || (existing?.status === "gone" && existing.prev_status === "approved");
-    if (current && existing.event_id && isAutoSource(env, item)) {
-      await applyApprovedUpdate(env, existing, item, hash, t);
-    } else if (!existing && isAutoSource(env, item) && !(await possibleDuplicates(db, item)).length) {
+    if (!existing && isAutoSource(env, item) && !(await possibleDuplicates(db, item)).length) {
       await decideEventImport(env, { id: 0 }, fp, "approve", 0, true);
     }
     imported++;
@@ -320,13 +334,13 @@ export async function hideExternalSpeaker(db, eventId, sessionId, name, hidden, 
 
 function sessionStatements(db, eventId, data, proposerId, timestamp) {
   return (data.sessions || []).slice(0, 300).map((session) => db.prepare(
-    "INSERT INTO event_sessions(event_id,title,abstract,start,end,room,track,level,lang,topics,speakers,recording_url,status,proposer_id,created) SELECT ?,?, '',?,?,?,'','','','[]',?,'','live',?,? WHERE NOT EXISTS (SELECT 1 FROM event_sessions WHERE event_id=? AND title=? AND start=?)")
-    .bind(eventId, clean(session.title, 140), clean(session.start, 32), clean(session.end, 32), clean(session.room, 100),
+    "INSERT INTO event_sessions(event_id,ext_key,title,abstract,start,end,room,track,level,lang,topics,speakers,recording_url,status,proposer_id,created) SELECT ?,?,?, '',?,?,?,'','','','[]',?,'','live',?,? WHERE NOT EXISTS (SELECT 1 FROM event_sessions WHERE event_id=? AND ((?<>'' AND ext_key=?) OR (ext_key='' AND title=? AND start=?)))")
+    .bind(eventId, clean(session.ext_key, 240), clean(session.title, 140), clean(session.start, 32), clean(session.end, 32), clean(session.room, 100),
       JSON.stringify((session.speakers || []).slice(0, 20).map((speaker) => ({
         n: clean(speaker.n || speaker.name, 100), s: "confirmed", o: 1,
         ...(speaker.hidden ? { hidden: true } : {}),
         ...(Array.isArray(speaker.links) && speaker.links.length ? { links: speaker.links.map(safeUrl).filter(Boolean) } : {}),
-      }))), proposerId, timestamp, eventId, clean(session.title, 140), clean(session.start, 32)));
+      }))), proposerId, timestamp, eventId, clean(session.ext_key, 240), clean(session.ext_key, 240), clean(session.title, 140), clean(session.start, 32)));
 }
 
 export async function decideEventImport(env, user, fp, action, eventId = 0, automatic = false) {
@@ -358,8 +372,9 @@ export async function decideEventImport(env, user, fp, action, eventId = 0, auto
     await db.prepare("INSERT OR IGNORE INTO entity_rev(eid,data,summary,user_id,status,created) VALUES(?,?,?,0,'live',?)")
       .bind(handle, JSON.stringify(entity), "Externer Event-Import", t).run();
     const changes = automatic ? changeLog(row.changes, t, ["title", "start", "end", "mode", "location", "sessions"], "create") : row.changes;
-    await db.prepare("UPDATE event_import SET status='approved',event_id=?,reviewed_by=?,locked_fields='[]',changes=?,last_seen=? WHERE fp=?")
-      .bind(id, automatic ? 0 : user.id, changes, t, fp).run();
+    data.applied_topics = knownTopics;
+    await db.prepare("UPDATE event_import SET data=?,status='approved',event_id=?,reviewed_by=?,locked_fields='[]',changes=?,last_seen=? WHERE fp=?")
+      .bind(JSON.stringify(data), id, automatic ? 0 : user.id, changes, t, fp).run();
     return { ok: true, status: "approved", event_id: id, handle };
   }
   if (action === "merge" && Number.isSafeInteger(eventId) && eventId > 0) {

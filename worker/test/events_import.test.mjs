@@ -40,7 +40,7 @@ const item = {
   title: "M365 Community Day", start: "2027-03-10", end: "2027-03-10",
   mode: "online", location: "Online", country: "", url: "https://communitydays.org/events/m365",
   organizer_name: "Community Group events@example.com", topics: ["microsoft-365"], cfs_close: "2027-02-01",
-  sessions: [{ title: "Copilot in Teams", start: "2027-03-10T10:00Z", end: "2027-03-10T10:45Z", room: "Main",
+  sessions: [{ ext_key: "community_days:event-42:session-1", title: "Copilot in Teams", start: "2027-03-10T10:00", end: "2027-03-10T10:45", room: "Main",
     speakers: [{ n: "Public Speaker", links: ["https://example.org/profile"] },
       { n: "hidden@example.com", links: ["https://example.org/?email=hidden%40example.com"] }] }],
 };
@@ -78,9 +78,10 @@ test("external events: wiederholter Import, redaktionelle Freigabe und Quellen-V
     const speakerSession = raw.prepare("SELECT id FROM event_sessions WHERE event_id=?").get(event.id);
     const edit = new Request(`https://api.example/api/event/ext-${item.fp}/session`, { method: "POST",
       headers: { "content-type": "application/json" }, body: JSON.stringify({ id: speakerSession.id, title: "Copilot in Teams",
-        speakers: [{ n: "Public Speaker" }], topics: [] }) });
+        start: "2027-03-10T10:30", speakers: [{ n: "Public Speaker" }], topics: [] }) });
     const edited = await handleEvents(env, edit, new URL(edit.url), `/api/event/ext-${item.fp}/session`, { id: 1, admin: true }, json);
     assert.equal(edited.status, 200);
+    assert.equal(raw.prepare("SELECT start FROM event_sessions WHERE id=?").get(speakerSession.id).start, "2027-03-10T10:30");
     const preserved = JSON.parse(raw.prepare("SELECT speakers FROM event_sessions WHERE id=?").get(speakerSession.id).speakers)[0];
     assert.deepEqual(preserved.links, ["https://example.org/profile"]);
     assert.equal(preserved.hidden, true);
@@ -90,6 +91,9 @@ test("external events: wiederholter Import, redaktionelle Freigabe und Quellen-V
     assert.equal(eventView.sessions[0].speakers.length, 0);
     assert.deepEqual(eventView.organizer, { kind: "o", handle: "", name: "Community Group" });
     assert.equal(eventView.source, "community_days");
+    const localExport = await handleEvents(env, new Request("https://api.example/api/events/export?local=1"),
+      new URL("https://api.example/api/events/export?local=1"), "/api/events/export", null, json);
+    assert.deepEqual((await localExport.json()).events, []);
     const registration = await handleEvents(env, new Request(`https://api.example/api/event/${eventView.handle}/attendees`),
       new URL(`https://api.example/api/event/${eventView.handle}/attendees`), `/api/event/${eventView.handle}/attendees`, null, json);
     assert.equal(registration.status, 404);
@@ -216,7 +220,7 @@ test("Community-Days-Updates protokollieren Änderungen, bewahren manuelle Felde
     assert.equal(JSON.parse(updatedSession.speakers)[0].hidden, true);
     raw.prepare("UPDATE events SET location='Redaktioneller Ort' WHERE id=?").run(event.id);
     const updated = { ...speakerUpdate, start: "2027-03-11", end: "2027-03-11", hash: "1234567890abcdef1234567890abcdef",
-      sessions: [{ ...speakerUpdate.sessions[0], start: "2027-03-11T10:00Z" }] };
+      sessions: [{ ...speakerUpdate.sessions[0], start: "2027-03-11T10:00" }] };
     items = [updated];
     await importExternalEvents(env);
     const saved = raw.prepare("SELECT start,location FROM events WHERE id=?").get(event.id);
@@ -224,7 +228,8 @@ test("Community-Days-Updates protokollieren Änderungen, bewahren manuelle Felde
     const imported = raw.prepare("SELECT locked_fields,changes FROM event_import WHERE fp=?").get(item.fp);
     assert.ok(JSON.parse(imported.locked_fields).includes("location"));
     assert.ok(JSON.parse(imported.changes).some((entry) => entry.fields.includes("start")));
-    assert.equal(raw.prepare("SELECT status FROM event_sessions WHERE id=?").get(session.id).status, "gone");
+    const updatedSession = raw.prepare("SELECT id,start,status FROM event_sessions WHERE event_id=?").get(event.id);
+    assert.deepEqual([updatedSession.id, updatedSession.start, updatedSession.status], [session.id, "2027-03-11T10:00", "live"]);
 
     items = [{ ...updated, gone: true, hash: "abcdef0123456789abcdef0123456789" }];
     await importExternalEvents(env);
