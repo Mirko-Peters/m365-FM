@@ -1362,9 +1362,6 @@ def build():
     for _pf in ("m365con_program_2026.json", "m365con_program_dach.json"):
         if (ROOT / "data" / _pf).exists():
             shutil.copy(ROOT / "data" / _pf, OUT / _pf)
-    if (ROOT / "data" / "ext_events.json").exists():
-        shutil.copy(ROOT / "data" / "ext_events.json", OUT / "ext_events.json")
-
     # Entity-Seite
     A_EN = json.loads((ROOT / "data" / "about_en.json").read_text("utf-8"))
     A_ALL = json.loads((ROOT / "data" / "about_i18n.json").read_text("utf-8")) if (ROOT / "data" / "about_i18n.json").exists() else {}

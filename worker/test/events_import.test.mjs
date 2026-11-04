@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
-import { decideEventImport, eventImportAutomatic, eventImportCandidatesWithDuplicates, importExternalEvents, sessionContributionDraft } from "../src/extevents.js";
+import { decideEventImport, eventImportAutomatic, eventImportCandidatesWithDuplicates, externalSpeakerRows, importExternalEvents, sessionContributionDraft } from "../src/extevents.js";
 import { handleEvents } from "../src/events.js";
 
 function sqliteDb(raw) {
@@ -26,7 +26,11 @@ async function setup() {
   const dir = new URL("../migrations/", import.meta.url);
   for (const file of readdirSync(dir).filter((name) => name.endsWith(".sql")).sort()) raw.exec(readFileSync(new URL(file, dir), "utf-8"));
   raw.exec("INSERT INTO users(id,provider,sub,name,role,banned,created) VALUES(1,'google','admin','Admin Name','admin',0,1); INSERT INTO meta(k,v) VALUES('entity_source','db'); INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES('microsoft-365','{\"type\":\"product\",\"name\":\"Microsoft 365\"}','',0,'live',1)");
-  return { raw, env: { DB: sqliteDb(raw), SITE: "https://site.example", EVENTS_AUTO_SOURCES: "" } };
+  const env = { DB: sqliteDb(raw), SITE: "https://site.example", EVENTS_AUTO_SOURCES: "", eventEtag: "" };
+  env.PAGES = { get: async (key) => key === "meta/ext_events.json" ? {
+    etag: env.eventEtag, json: async () => (await globalThis.fetch(`${env.SITE}/ext_events.json`)).json(),
+  } : null };
+  return { raw, env };
 }
 
 const item = {
@@ -40,7 +44,7 @@ const item = {
     speakers: [{ n: "Public Speaker", links: ["https://example.org/profile"] },
       { n: "hidden@example.com", links: ["https://example.org/?email=hidden%40example.com"] }] }],
 };
-const json = (data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "content-type": "application/json" } });
+const json = (data, status = 200) => new Response(JSON.stringify({ snapshot_complete: true, ...data }), { status, headers: { "content-type": "application/json" } });
 
 test("external events: wiederholter Import, redaktionelle Freigabe und Quellen-Veranstalter (SQLite)", async () => {
   const { raw, env } = await setup(), originalFetch = globalThis.fetch;
@@ -71,6 +75,16 @@ test("external events: wiederholter Import, redaktionelle Freigabe und Quellen-V
     const hidden = await admin.handleAdminPanel(env, hideRequest, new URL(hideRequest.url), "/api/admin/panel/event-imports/speaker", { id: 1, admin: true }, json);
     assert.equal(hidden.status, 200);
     assert.equal(JSON.parse(raw.prepare("SELECT speakers FROM event_sessions WHERE event_id=?").get(event.id).speakers)[0].hidden, true);
+    const speakerSession = raw.prepare("SELECT id FROM event_sessions WHERE event_id=?").get(event.id);
+    const edit = new Request(`https://api.example/api/event/ext-${item.fp}/session`, { method: "POST",
+      headers: { "content-type": "application/json" }, body: JSON.stringify({ id: speakerSession.id, title: "Copilot in Teams",
+        speakers: [{ n: "Public Speaker" }], topics: [] }) });
+    const edited = await handleEvents(env, edit, new URL(edit.url), `/api/event/ext-${item.fp}/session`, { id: 1, admin: true }, json);
+    assert.equal(edited.status, 200);
+    const preserved = JSON.parse(raw.prepare("SELECT speakers FROM event_sessions WHERE id=?").get(speakerSession.id).speakers)[0];
+    assert.deepEqual(preserved.links, ["https://example.org/profile"]);
+    assert.equal(preserved.hidden, true);
+    assert.equal(raw.prepare("SELECT COUNT(*) n FROM event_speaker_block WHERE name_norm='public speaker'").get().n, 1);
     const exported = await handleEvents(env, new Request("https://api.example/api/events/export"), new URL("https://api.example/api/events/export"), "/api/events/export", null, json);
     const eventView = (await exported.json()).events.find((entry) => entry.handle === `ext-${item.fp}`);
     assert.equal(eventView.sessions[0].speakers.length, 0);
@@ -81,6 +95,16 @@ test("external events: wiederholter Import, redaktionelle Freigabe und Quellen-V
     assert.equal(registration.status, 404);
     assert.equal((await importExternalEvents(env)).imported, 0);
     assert.equal(raw.prepare("SELECT COUNT(*) n FROM event_sessions WHERE event_id=?").get(event.id).n, 1);
+    env.EVENTS_AUTO_SOURCES = "communitydays";
+    globalThis.fetch = async (url) => String(url).endsWith("/ext_events.json") ?
+      json({ items: [{ ...item, hash: "11111111111111111111111111111111" }] }) : json({ entities: [] });
+    await importExternalEvents(env);
+    const optedOut = JSON.parse(raw.prepare("SELECT speakers FROM event_sessions WHERE id=?").get(speakerSession.id).speakers)[0];
+    assert.equal(optedOut.hidden, true);
+    assert.equal(optedOut.gone, undefined);
+    const speakerList = await externalSpeakerRows(env.DB);
+    assert.equal(speakerList[0].hidden, true);
+    assert.equal(speakerList[0].gone, false);
   } finally {
     globalThis.fetch = originalFetch;
   }
@@ -98,6 +122,7 @@ test("external events: Dublette zusammenführen und Kandidat ablehnen", async ()
   const { raw, env } = await setup(), originalFetch = globalThis.fetch;
   const duplicate = raw.prepare("INSERT INTO events(handle,owner_id,title,start,created,updated) VALUES('manual-event',1,?,?,1,1)").run(item.title, item.start);
   const reject = { ...item, fp: "fedcba9876543210fedcba9876543210", hash: "1234567890abcdef1234567890abcdef",
+    sources: [{ ...item.sources[0], ext_id: "event-reject" }],
     title: "Microsoft Copilot User Group", topics: ["copilot"] };
   let items = [item];
   globalThis.fetch = async () => json({ items });
@@ -108,8 +133,8 @@ test("external events: Dublette zusammenführen und Kandidat ablehnen", async ()
     const merged = await decideEventImport(env, { id: 1 }, item.fp, "merge", Number(duplicate.lastInsertRowid));
     assert.equal(merged.status, "merged");
     const stored = raw.prepare("SELECT source,organizer_name,topics FROM events WHERE id=?").get(Number(duplicate.lastInsertRowid));
-    assert.equal(stored.source, "community_days");
-    assert.equal(stored.organizer_name, "Community Group");
+    assert.equal(stored.source, "");
+    assert.equal(stored.organizer_name, "");
     assert.deepEqual(JSON.parse(stored.topics), ["microsoft-365"]);
     items = [item, reject];
     assert.deepEqual(await importExternalEvents(env), { imported: 1 });
@@ -117,6 +142,21 @@ test("external events: Dublette zusammenführen und Kandidat ablehnen", async ()
     assert.equal(rejected.status, "rejected");
     assert.equal(raw.prepare("SELECT COUNT(*) n FROM events WHERE handle LIKE 'ext-%'").get().n, 0);
     assert.equal(raw.prepare("SELECT status FROM event_import WHERE fp=?").get(reject.fp).status, "rejected");
+    items = [{ ...reject, gone: true, hash: "abcdef0123456789abcdef0123456789" }];
+    await importExternalEvents(env);
+    const rejectedGone = raw.prepare("SELECT status,gone_at FROM event_import WHERE fp=?").get(reject.fp);
+    assert.equal(rejectedGone.status, "rejected");
+    assert.ok(rejectedGone.gone_at > 0);
+    items = [{ ...item, gone: true, hash: "abcdef0123456789abcdef0123456789" }];
+    await importExternalEvents(env);
+    const mergedGone = raw.prepare("SELECT status,gone_at FROM event_import WHERE fp=?").get(item.fp);
+    assert.equal(mergedGone.status, "merged");
+    assert.ok(mergedGone.gone_at > 0);
+    items = [{ ...item, hash: "11111111111111111111111111111111" }];
+    await importExternalEvents(env);
+    const mergedBack = raw.prepare("SELECT status,gone_at FROM event_import WHERE fp=?").get(item.fp);
+    assert.deepEqual([mergedBack.status, mergedBack.gone_at], ["merged", 0]);
+    assert.equal(raw.prepare("SELECT source FROM events WHERE id=?").get(Number(duplicate.lastInsertRowid)).source, "");
   } finally {
     globalThis.fetch = originalFetch;
   }
@@ -137,7 +177,8 @@ test("Community Days wird ohne Dublette automatisch freigegeben; andere Quellen 
     const duplicate = "0123456789abcdef0123456789abcde0";
     raw.prepare("INSERT INTO events(handle,owner_id,title,start,created,updated) VALUES('manual-event',1,?,?,1,1)")
       .run("Copilot Community Day", item.start);
-    const dupeItem = { ...item, fp: duplicate, hash: "1234567890abcdef1234567890abcdef", title: "Copilot Community Day" };
+    const dupeItem = { ...item, fp: duplicate, hash: "1234567890abcdef1234567890abcdef", title: "Copilot Community Day",
+      sources: [{ ...item.sources[0], ext_id: "event-duplicate" }] };
     items = [dupeItem];
     await importExternalEvents(env);
     assert.equal(raw.prepare("SELECT status FROM event_import WHERE fp=?").get(duplicate).status, "new");
@@ -196,6 +237,70 @@ test("Community-Days-Updates protokollieren Änderungen, bewahren manuelle Felde
       new URL("https://api.example/api/events/export"), "/api/events/export", null, json);
     const eventView = (await exported.json()).events.find((entry) => entry.handle === `ext-${item.fp}`);
     assert.equal(eventView.external_status, "gone");
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
+test("Community-Days-Quell-ID aktualisiert geänderten Fingerprint und kleine Snapshots lösen keinen Wegfall aus", async () => {
+  const { raw, env } = await setup(), originalFetch = globalThis.fetch;
+  env.EVENTS_AUTO_SOURCES = "communitydays";
+  let items = [item];
+  globalThis.fetch = async () => json({ items });
+  try {
+    await importExternalEvents(env);
+    const old = raw.prepare("SELECT id FROM events WHERE handle=?").get(`ext-${item.fp}`);
+    const updated = { ...item, fp: "abcdefabcdefabcdefabcdefabcdefab", hash: "99999999999999999999999999999999",
+      title: "M365 Copilot Day", start: "2027-03-11", end: "2027-03-11",
+      sources: [{ ...item.sources[0], ext_id: "event-42" }] };
+    items = [updated];
+    assert.equal((await importExternalEvents(env)).imported, 1);
+    assert.equal(raw.prepare("SELECT COUNT(*) n FROM event_import").get().n, 1);
+    assert.equal(raw.prepare("SELECT COUNT(*) n FROM events WHERE id=?").get(old.id).n, 1);
+    const saved = raw.prepare("SELECT title,start FROM events WHERE id=?").get(old.id);
+    assert.equal(saved.title, "M365 Copilot Day");
+    assert.equal(saved.start, "2027-03-11");
+
+    items = [];
+    assert.deepEqual(await importExternalEvents(env), { imported: 0, skipped: true, reason: "small_snapshot" });
+    assert.equal(raw.prepare("SELECT status FROM event_import WHERE fp=?").get(item.fp).status, "approved");
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
+test("unveränderter R2-Snapshot wird vor dem D1-Abgleich übersprungen", async () => {
+  const { raw, env } = await setup(), originalFetch = globalThis.fetch;
+  env.EVENTS_AUTO_SOURCES = "communitydays";
+  env.eventEtag = "same-r2-version";
+  let items = [item];
+  globalThis.fetch = async () => json({ items });
+  try {
+    await importExternalEvents(env);
+    items = [{ ...item, title: "Not imported", hash: "99999999999999999999999999999999" }];
+    assert.deepEqual(await importExternalEvents(env), { imported: 0, unchanged: true });
+    assert.equal(JSON.parse(raw.prepare("SELECT data FROM event_import WHERE fp=?").get(item.fp).data).title, item.title);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
+test("aus der Quelle entfernte Speaker werden als gone statt hidden markiert", async () => {
+  const { raw, env } = await setup(), originalFetch = globalThis.fetch;
+  env.EVENTS_AUTO_SOURCES = "communitydays";
+  let items = [item];
+  globalThis.fetch = async () => json({ items });
+  try {
+    await importExternalEvents(env);
+    const event = raw.prepare("SELECT id FROM events WHERE handle=?").get(`ext-${item.fp}`);
+    const session = raw.prepare("SELECT id FROM event_sessions WHERE event_id=?").get(event.id);
+    items = [{ ...item, hash: "88888888888888888888888888888888",
+      sessions: [{ ...item.sessions[0], speakers: [] }] }];
+    await importExternalEvents(env);
+    const speaker = JSON.parse(raw.prepare("SELECT speakers FROM event_sessions WHERE id=?").get(session.id).speakers)[0];
+    assert.equal(speaker.gone, true);
+    assert.equal(speaker.hidden, undefined);
+    assert.equal(raw.prepare("SELECT locked_fields FROM event_import WHERE fp=?").get(item.fp).locked_fields, "[]");
   } finally {
     globalThis.fetch = originalFetch;
   }

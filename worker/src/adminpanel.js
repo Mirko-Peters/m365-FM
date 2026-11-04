@@ -53,7 +53,13 @@ export async function handleAdminPanel(env, request, url, path, user, J) {
   }
 
   if (path === "/api/admin/panel/event-imports" && request.method === "GET") {
-    return J({ items: await eventImportCandidatesWithDuplicates(db), automatic: await eventImportAutomatic(db), speakers: await externalSpeakerRows(db) });
+    const speakerOffset = Math.max(0, Math.min(100000, parseInt(url.searchParams.get("speaker_offset") || "0", 10) || 0));
+    const speakerQuery = String(url.searchParams.get("speaker_q") || "").slice(0, 100);
+    const match = `%${speakerQuery.replace(/[%_]/g, "")}%`;
+    const speakerTotal = (await db.prepare("SELECT COUNT(*) n FROM events e JOIN event_sessions s ON s.event_id=e.id WHERE EXISTS (SELECT 1 FROM event_import i WHERE i.event_id=e.id) AND (e.title LIKE ? OR s.title LIKE ? OR s.speakers LIKE ?)")
+      .bind(match, match, match).first())?.n || 0;
+    return J({ items: await eventImportCandidatesWithDuplicates(db), automatic: await eventImportAutomatic(db),
+      speakers: await externalSpeakerRows(db, 100, speakerOffset, speakerQuery), speaker_offset: speakerOffset, speaker_total: speakerTotal });
   }
 
   if (path === "/api/admin/panel/event-imports/decide" && request.method === "POST") {
@@ -68,7 +74,7 @@ export async function handleAdminPanel(env, request, url, path, user, J) {
     const b = await request.json().catch(() => ({})), eventId = Number(b.event_id), sessionId = Number(b.session_id);
     const name = String(b.name || "").slice(0, 100);
     if (!Number.isSafeInteger(eventId) || eventId < 1 || !Number.isSafeInteger(sessionId) || sessionId < 1 || !name || typeof b.hidden !== "boolean") return J({ error: "bad_request" }, 400);
-    const result = await hideExternalSpeaker(db, eventId, sessionId, name, b.hidden);
+    const result = await hideExternalSpeaker(db, eventId, sessionId, name, b.hidden, user.id);
     if (result.ok) await audit(db, user.id, b.hidden ? "event_speaker_hide" : "event_speaker_show", String(eventId), name);
     return J(result, result.error === "not_found" ? 404 : result.error ? 400 : 200);
   }

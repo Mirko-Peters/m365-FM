@@ -43,9 +43,14 @@ class SiteEventsTest(unittest.TestCase):
         self.assertEqual(schema["organizer"], {"@type": "Organization", "name": "Community Organizers"})
         ev["external_status"] = "gone"
         ev["external_status_at"] = 1793779200
+        cancelled = site_events.event_ld(g["BASE"], ev, {}, {})
+        self.assertEqual(cancelled["eventStatus"], "https://schema.org/EventCancelled")
+        ev["free"] = None
+        self.assertNotIn("isAccessibleForFree", site_events.event_ld(g["BASE"], ev, {}, {}))
         g["TODAY"] = "2028-01-01"
         site_events.build(g, [ev], [], [])
         self.assertIn("Cancelled or no longer listed", writes["community/events/ext-event-1/index.html"])
+        self.assertNotIn("Paid", writes["community/events/ext-event-1/index.html"])
         self.assertTrue(page_options["https://www.m365.fm/community/events/ext-event-1/"]["noindex"])
 
     def test_event_export_is_paged(self):

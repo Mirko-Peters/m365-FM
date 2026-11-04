@@ -50,8 +50,11 @@ def span(ev, lang):
 
 def event_ld(BASE, ev, pb, ob):
     u = eurl_(BASE, "en", ev["handle"])
-    n = {"@type": "Event", "@id": u + "#event", "name": ev["title"], "url": u, "startDate": ev["start"], "eventStatus": "https://schema.org/EventScheduled",
-         "eventAttendanceMode": "https://schema.org/" + MODE_URL.get(ev["mode"], "OnlineEventAttendanceMode"), "isAccessibleForFree": bool(ev.get("free"))}
+    n = {"@type": "Event", "@id": u + "#event", "name": ev["title"], "url": u, "startDate": ev["start"],
+         "eventStatus": "https://schema.org/EventCancelled" if ev.get("external_status") == "gone" else "https://schema.org/EventScheduled",
+         "eventAttendanceMode": "https://schema.org/" + MODE_URL.get(ev["mode"], "OnlineEventAttendanceMode")}
+    if ev.get("free") is not None:
+        n["isAccessibleForFree"] = bool(ev.get("free"))
     if ev.get("end"):
         n["endDate"] = ev["end"]
     d = ev.get("summary") or ev.get("about") or ""
@@ -198,7 +201,9 @@ def build(g, events, people, orgs):
             else:
                 oh = esc(org.get("name", ""))
             facts = [(s["when"], esc(span(ev, lang))), (s["where"], esc({"online": s["online"], "onsite": s["onsite"], "hybrid": s["hybrid"]}[ev["mode"]] + (" · " + ev["location"] if ev.get("location") else "") + (" · " + ev["country"] if ev.get("country") else ""))),
-                     (s["organizer"], oh), ("", esc(s["free"] if ev.get("free") else s["paid"]))]
+                     (s["organizer"], oh)]
+            if ev.get("free") is not None:
+                facts.append(("", esc(s["free"] if ev.get("free") else s["paid"])))
             if ev.get("source"):
                 source_names = [SOURCE_NAMES.get(x, x) for x in str(ev["source"]).split(",") if x]
                 facts.append((s["source"], esc(", ".join(source_names))))

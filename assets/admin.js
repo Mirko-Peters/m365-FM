@@ -67,15 +67,16 @@
     ent: function () { if (panes.ent.firstChild) return; entities(); }
   };
 
-  function eventImports() {
+  function eventImports(speakerOffset, speakerQuery) {
+    speakerOffset = speakerOffset || 0; speakerQuery = speakerQuery || "";
     var p = panes.events, m = h("p", { class: "adm-msg" }); p.textContent = "";
     p.appendChild(h("h2", { text: "Externe Event-Kandidaten" }));
     p.appendChild(h("p", { class: "mut", text: "Nur öffentliche Fakten. Freigeben, ablehnen oder Sessions einem bestehenden Event zuordnen." }));
     p.appendChild(m);
-    api("/api/admin/panel/event-imports").then(function (r) {
+    api("/api/admin/panel/event-imports?speaker_offset=" + speakerOffset + "&speaker_q=" + encodeURIComponent(speakerQuery)).then(function (r) {
       if (r.s !== 200) { msg(m, "Event-Importe nicht abrufbar.", true); return; }
       var items = (r.j || {}).items || [], automatic = (r.j || {}).automatic || [], speakers = (r.j || {}).speakers || [];
-      if (!items.length && !automatic.length && !speakers.length) { msg(m, "Keine offenen Event-Importe oder externen Speaker."); return; }
+      if (!items.length && !automatic.length && !speakers.length && !speakerOffset) { msg(m, "Keine offenen Event-Importe oder externen Speaker."); return; }
       if (!items.length) msg(m, "Keine offenen Event-Kandidaten.");
       items.forEach(function (x) {
         var d = x.data || {}, sessions = d.sessions || [], dupes = x.duplicates || [];
@@ -112,14 +113,17 @@
           ]));
         });
       }
+      p.appendChild(h("h2", { text: "Veröffentlichte externe Speaker" }));
+      var search = h("input", { type: "search", maxlength: 100, placeholder: "Speaker oder Event suchen", value: speakerQuery });
+      var applySearch = h("button", { type: "button", class: "btn", text: "Suchen", onclick: function () { eventImports(0, search.value.trim()); } });
+      p.appendChild(h("p", { class: "adm-row" }, [search, " ", applySearch]));
       if (speakers.length) {
-        p.appendChild(h("h2", { text: "Veröffentlichte externe Speaker" }));
         speakers.forEach(function (speaker) {
           var button = h("button", { type: "button", class: "btn", text: speaker.hidden ? "Einblenden" : "Ausblenden" });
           button.onclick = function () {
             button.disabled = true;
             api("/api/admin/panel/event-imports/speaker", { method: "POST", body: { event_id: speaker.event_id, session_id: speaker.session_id, name: speaker.name, hidden: !speaker.hidden } }).then(function (result) {
-              if (result.s === 200) eventImports();
+              if (result.s === 200) eventImports(speakerOffset, speakerQuery);
               else { button.disabled = false; msg(m, "Speaker-Status konnte nicht geändert werden.", true); }
             });
           };
@@ -127,6 +131,13 @@
             h("b", { text: speaker.name }), " · " + speaker.event_title + " — " + speaker.session_title, " ", button
           ]));
         });
+      }
+      if (speakerOffset > 0 || speakerOffset + 100 < (r.j.speaker_total || 0)) {
+        p.appendChild(h("p", { class: "adm-row" }, [
+          speakerOffset > 0 ? h("button", { type: "button", class: "btn", text: "Zurück", onclick: function () { eventImports(Math.max(0, speakerOffset - 100), speakerQuery); } }) : null,
+          " ",
+          speakerOffset + 100 < (r.j.speaker_total || 0) ? h("button", { type: "button", class: "btn", text: "Weitere Speaker", onclick: function () { eventImports(speakerOffset + 100, speakerQuery); } }) : null
+        ]));
       }
     });
   }

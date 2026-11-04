@@ -1,6 +1,7 @@
 """Sammelt öffentliche Fakten zu Microsoft-Community-Events."""
 import hashlib
 import json
+import os
 import re
 import sys
 import urllib.request
@@ -9,8 +10,8 @@ from pathlib import Path
 from urllib.parse import parse_qsl, urlparse
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / "data" / "ext_events.json"
-STATE = ROOT / "data" / "ext_events_state.json"
+OUT = Path(os.environ.get("EVENTS_OUTPUT", "/tmp/m365-fm-ext-events.json"))
+STATE = Path(os.environ.get("EVENTS_STATE", "/tmp/m365-fm-ext-events-state.json"))
 UA = "M365FM-event-scraper/1.0 (+https://www.m365.fm/contact/)"
 MCP_URL = "https://mcp.communitydays.org"
 MS_TERMS = {
@@ -67,14 +68,18 @@ def community_tools():
     except Exception:
         pass
     tools, cursor = [], None
-    for index in range(20):
+    for index in range(100):
         params = {"cursor": cursor} if cursor else {}
         result, _ = mcp_request("tools/list", params, session=session, request_id=index + 2)
+        if result.get("error") or result.get("result", {}).get("isError"):
+            raise ValueError("MCP tools/list meldete einen Fehler")
         data = result.get("result", {})
         tools.extend(data.get("tools", []))
         cursor = data.get("nextCursor")
         if not cursor:
             break
+    else:
+        raise ValueError("MCP tools/list ueberschritt das Seitenlimit")
     return tools, session
 
 
@@ -105,7 +110,11 @@ def _safe_args(tool, query="Microsoft"):
 
 
 def _mcp_result_value(result):
+    if result.get("error"):
+        raise ValueError("MCP tools/call meldete einen Fehler")
     result = result.get("result", {})
+    if result.get("isError"):
+        raise ValueError("MCP tools/call meldete isError")
     if isinstance(result.get("structuredContent"), (dict, list)):
         return result["structuredContent"]
     values = []
@@ -118,6 +127,24 @@ def _mcp_result_value(result):
     return values[0] if len(values) == 1 else values
 
 
+def _pagination_info(value):
+    if isinstance(value, dict):
+        cursor = value.get("nextCursor")
+        total = value.get("total")
+        if cursor is not None or total is not None:
+            return cursor, total
+        for child in value.values():
+            cursor, total = _pagination_info(child)
+            if cursor is not None or total is not None:
+                return cursor, total
+    elif isinstance(value, list):
+        for child in value:
+            cursor, total = _pagination_info(child)
+            if cursor is not None or total is not None:
+                return cursor, total
+    return None, None
+
+
 def community_events():
     tools, session = community_tools()
     names = [str(x.get("name", "")) for x in tools]
@@ -127,28 +154,58 @@ def community_events():
     if not selected:
         raise ValueError("Community Days MCP meldet kein geeignetes Read-only-Event-Tool")
     out = []
-    for index, tool in enumerate(selected[:10], 3):
+    for index, tool in enumerate(selected, 3):
         schema = tool.get("inputSchema") or {}
         props = schema.get("properties") or {}
         page_key = next((key for key in props if re.search(r"^page$", key, re.I)), None)
         offset_key = next((key for key in props if re.search(r"^offset$", key, re.I)), None)
+        cursor_key = next((key for key in props if re.search(r"^cursor$", key, re.I)), None)
         limit_key = next((key for key in props if re.search(r"limit|page.?size|per.?page", key, re.I)), None)
-        pages = 20 if page_key or offset_key else 1
-        for page in range(pages):
+        cursor, page, offset, loaded, total = None, 1, 0, 0, None
+        for page_index in range(100):
             args = _safe_args(tool)
             if args is None:
-                break
+                raise ValueError(f"MCP-Tool {tool['name']} hat nicht unterstuetzte Pflichtargumente")
             if page_key:
-                args[page_key] = page + 1
+                args[page_key] = page
             if offset_key:
-                args[offset_key] = page * 100
-            result, _ = mcp_request("tools/call", {"name": tool["name"], "arguments": args}, session, index + page * 10)
+                args[offset_key] = offset
+            if cursor_key and cursor:
+                args[cursor_key] = cursor
+            result, _ = mcp_request("tools/call", {"name": tool["name"], "arguments": args}, session, index * 100 + page_index)
             value = _mcp_result_value(result)
             found = _event_objects(value, "community_days", tool["name"])
             out.extend(found)
+            loaded += len(found)
             batch_size = args.get(limit_key, 100) if limit_key else 100
-            if not (page_key or offset_key) or (limit_key and len(found) < batch_size) or not found:
+            response = result.get("result", {})
+            next_cursor, total_value = _pagination_info(response)
+            if next_cursor is None and total_value is None:
+                next_cursor, total_value = _pagination_info(value)
+            if total_value is not None:
+                total = int(total_value)
+            if not found:
+                if total is not None and loaded < total:
+                    raise ValueError(f"MCP-Tool {tool['name']} lieferte weniger Events als total angibt")
                 break
+            if total is not None and loaded >= total:
+                break
+            if cursor_key:
+                if not next_cursor:
+                    if total is not None and loaded < total:
+                        raise ValueError(f"MCP-Tool {tool['name']} hat vor total keinen nextCursor geliefert")
+                    break
+                cursor = next_cursor
+            elif page_key:
+                page += 1
+            elif offset_key:
+                offset += batch_size
+            else:
+                if total is not None and loaded < total:
+                    raise ValueError(f"MCP-Tool {tool['name']} ist paginiert, bietet aber keinen Seitenparameter")
+                break
+        else:
+            raise ValueError(f"MCP-Tool {tool['name']} ueberschritt das Seitenlimit")
     if not out:
         raise ValueError("Community Days MCP lieferte keinen vollständigen Event-Snapshot")
     return out
@@ -255,7 +312,9 @@ def _normalize(raw, source, source_id):
     speakers = _speakers(raw.get("speakers") or raw.get("presenters"))
     if not sessions and title:
         sessions = []
-    source_id = str(_first(raw, "id", "eventId", "event_id", "slug") or f"{source_id}:{urlparse(event_url).path}:{title}:{_first(raw, 'start', 'startDate', 'start_date', 'date')}")
+    path_id = urlparse(event_url).path.strip("/")
+    fallback_id = f"{source_id}:{path_id}" if path_id else f"{source_id}:{title}:{_first(raw, 'start', 'startDate', 'start_date', 'date')}"
+    source_id = str(_first(raw, "id", "eventId", "event_id", "slug") or fallback_id)
     if "@" in source_id:
         source_id = f"{source}:{title}:{_first(raw, 'start', 'startDate', 'start_date', 'date')}"
     mode = _first(raw, "mode", "online", "eventAttendanceMode")
@@ -310,6 +369,14 @@ def _host(item):
 def _date_day(item):
     return (item.get("start") or "")[:10]
 
+def _event_order(item, today):
+    day = _date_day(item)
+    if item.get("gone"):
+        return (2, day)
+    if day >= today:
+        return (0, day)
+    return (1, -int(day.replace("-", "")) if re.fullmatch(r"\d{4}-\d{2}-\d{2}", day) else 0)
+
 
 def merge_duplicates(items):
     parents = list(range(len(items)))
@@ -322,7 +389,9 @@ def merge_duplicates(items):
         for j in range(i):
             b = items[j]
             days = abs((datetime.fromisoformat(_date_day(a)) - datetime.fromisoformat(_date_day(b))).days) if _date_day(a) and _date_day(b) else 99
-            if _norm_name(a.get("title")) == _norm_name(b.get("title")) and days <= 1 and _host(a) == _host(b):
+            ids_a = {(x.get("source"), x.get("ext_id")) for x in a.get("sources", [])}
+            ids_b = {(x.get("source"), x.get("ext_id")) for x in b.get("sources", [])}
+            if ids_a & ids_b or (_norm_name(a.get("title")) == _norm_name(b.get("title")) and days <= 1 and _host(a) == _host(b)):
                 parents[root(i)] = root(j)
     groups = {}
     for i, item in enumerate(items):
@@ -352,14 +421,48 @@ def merge_duplicates(items):
     return sorted(merged, key=lambda x: (x.get("start", ""), x.get("title", "").lower()))
 
 
-def retain_previous(previous, current):
-    by_fp = {item["fp"]: dict(item) for item in current}
+def retain_previous(previous, current, now=None):
+    today = (now or datetime.now(timezone.utc)).date().isoformat()
+    old_by_source = {(source.get("source"), source.get("ext_id")): old for old in previous
+                     for source in old.get("sources", []) if source.get("source") and source.get("ext_id")}
+    by_fp = {}
+    for original in current:
+        item = dict(original)
+        old = next((old_by_source[(source.get("source"), source.get("ext_id"))]
+                    for source in item.get("sources", [])
+                    if (source.get("source"), source.get("ext_id")) in old_by_source), None)
+        if old:
+            item["fp"] = old.get("fp", item["fp"])
+        if item.get("gone"):
+            item["gone_at"] = old.get("gone_at") if old and old.get("gone_at") else (now or datetime.now(timezone.utc)).isoformat(timespec="seconds")
+        else:
+            item.pop("gone_at", None)
+        digest = dict(item)
+        digest.pop("hash", None)
+        item["hash"] = hashlib.sha256(json.dumps(digest, ensure_ascii=False, sort_keys=True).encode()).hexdigest()
+        by_fp[item["fp"]] = item
+    previous_active = [item for item in previous if not item.get("gone") and _date_day(item) >= today]
+    current_active = sum(1 for item in by_fp.values() if not item.get("gone") and _date_day(item) >= today)
+    allow_gone = not previous_active or current_active >= len(previous_active) * 0.8
     for old in previous:
         fp = old.get("fp")
         if not fp:
             continue
+        if old.get("gone") and old.get("gone_at"):
+            try:
+                if (now or datetime.now(timezone.utc)).timestamp() - datetime.fromisoformat(old["gone_at"]).timestamp() > 30 * 86400:
+                    continue
+            except (TypeError, ValueError):
+                pass
+        elif old.get("gone"):
+            old = {**old, "gone_at": (now or datetime.now(timezone.utc)).isoformat(timespec="seconds")}
         if fp not in by_fp:
-            item = {**old, "gone": True}
+            if old.get("gone"):
+                item = dict(old)
+            elif _date_day(old) < today or not allow_gone:
+                item = {**old, "gone": False}
+            else:
+                item = {**old, "gone": True, "gone_at": (now or datetime.now(timezone.utc)).isoformat(timespec="seconds")}
             item.pop("hash", None)
             item["hash"] = hashlib.sha256(json.dumps(item, ensure_ascii=False, sort_keys=True).encode()).hexdigest()
             by_fp[fp] = item
@@ -371,7 +474,17 @@ def retain_previous(previous, current):
         digest = dict(item)
         digest.pop("hash", None)
         item["hash"] = hashlib.sha256(json.dumps(digest, ensure_ascii=False, sort_keys=True).encode()).hexdigest()
-    return sorted(by_fp.values(), key=lambda x: (x.get("start", ""), x.get("title", "").lower()))
+    cutoff = (now or datetime.now(timezone.utc)).timestamp() - 30 * 86400
+    kept = []
+    for item in by_fp.values():
+        if item.get("gone_at"):
+            try:
+                if datetime.fromisoformat(item["gone_at"]).timestamp() < cutoff:
+                    continue
+            except (TypeError, ValueError):
+                pass
+        kept.append(item)
+    return sorted(kept, key=lambda item: (_event_order(item, today), item.get("title", "").lower()))
 
 
 def scrape(policy_approved=False):
@@ -389,7 +502,13 @@ def main():
         print(f"Event-Scraper: {type(exc).__name__}: {exc}", file=sys.stderr)
         return 1
     OUT.parent.mkdir(parents=True, exist_ok=True)
-    data = {"updated": datetime.now(timezone.utc).isoformat(timespec="seconds"), "items": items}
+    previous_updated = ""
+    try:
+        previous_updated = json.loads(OUT.read_text("utf-8")).get("updated", "")
+    except (OSError, ValueError):
+        pass
+    updated = previous_updated if items == previous else datetime.now(timezone.utc).isoformat(timespec="seconds")
+    data = {"updated": updated, "snapshot_complete": True, "items": items}
     OUT.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", "utf-8")
     print(f"{len(items)} Microsoft-relevante Events gespeichert.")
     return 0

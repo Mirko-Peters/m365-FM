@@ -1,4 +1,7 @@
 import unittest
+import json
+import os
+import tempfile
 from unittest.mock import patch
 
 from tools import scrape_events as scraper
@@ -74,13 +77,68 @@ class EventScraperTests(unittest.TestCase):
         item = scraper._normalize({"title": "M365 Day", "start": "2027-03-10", "id": "event-1"}, "community_days", "events")
         item["fp"] = "a" * 32
         item["hash"] = "b" * 64
-        missing = scraper.retain_previous([item], [])
-        self.assertTrue(missing[0]["gone"])
+        previous = [item] + [{**item, "fp": str(i) * 32, "title": f"M365 Day {i}",
+                              "sources": [{"source": "community_days", "ext_id": f"event-{i}", "url": ""}]}
+                             for i in range(2, 6)]
+        missing = scraper.retain_previous(previous, previous[1:])
+        missing_item = next(value for value in missing if value["fp"] == item["fp"])
+        self.assertTrue(missing_item["gone"])
         cancelled = scraper._normalize({"title": "M365 Day", "start": "2027-03-10", "status": "cancelled"},
                                        "community_days", "events")
         self.assertTrue(cancelled["gone"])
         restored = scraper.retain_previous(missing, [{**item, "gone": False}])
-        self.assertFalse(restored[0]["gone"])
+        self.assertFalse(next(value for value in restored if value["fp"] == item["fp"])["gone"])
+
+    def test_retain_previous_matches_stable_source_id_and_protects_small_snapshots(self):
+        old = {"fp": "a" * 32, "title": "M365 Day", "start": "2027-03-10",
+               "sources": [{"source": "community_days", "ext_id": "stable-id"}], "sessions": []}
+        changed = {**old, "fp": "b" * 32, "title": "M365 Copilot Day", "start": "2027-03-11"}
+        self.assertEqual(scraper.retain_previous([old], [changed])[0]["fp"], old["fp"])
+        source_a = scraper._normalize({"title": "M365 Day", "start": "2027-03-10",
+                                       "url": "https://communitydays.org/events/stable"}, "community_days", "events")
+        source_b = scraper._normalize({"title": "Copilot Day", "start": "2027-03-11",
+                                       "url": "https://communitydays.org/events/stable"}, "community_days", "events")
+        self.assertEqual(source_a["sources"][0]["ext_id"], source_b["sources"][0]["ext_id"])
+        previous = [{**old, "fp": str(i) * 32, "sources": [{"source": "community_days", "ext_id": f"id-{i}"}]}
+                    for i in range(5)]
+        current = [dict(event) for event in previous[:3]]
+        result = scraper.retain_previous(previous, current)
+        self.assertEqual(sum(not item.get("gone") for item in result), 5)
+
+    def test_mcp_call_errors_abort_and_cursor_pages_are_consumed(self):
+        with self.assertRaises(ValueError):
+            scraper._mcp_result_value({"result": {"isError": True}})
+        tools = [{"name": "list_events", "inputSchema": {"properties": {"cursor": {"type": "string"},
+                  "limit": {"type": "integer"}}}}]
+        events = [
+            {"title": "M365 Day", "start": "2027-03-10", "id": "one"},
+            {"title": "Azure Day", "start": "2027-03-11", "id": "two"},
+        ]
+        responses = [
+            {"result": {"structuredContent": {"events": [events[0]], "nextCursor": "next", "total": 2}}},
+            {"result": {"structuredContent": {"events": [events[1]], "total": 2}}},
+        ]
+        with patch.object(scraper, "community_tools", return_value=(tools, "session")), \
+             patch.object(scraper, "mcp_request", side_effect=[(r, "session") for r in responses]) as request:
+            result = scraper.community_events()
+        self.assertEqual(len(result), 2)
+        self.assertEqual(request.call_count, 2)
+
+    def test_main_writes_output_with_mocked_scrape(self):
+        event = {"sources": [{"source": "community_days", "ext_id": "main"}],
+                 "title": "M365 Day", "start": "2027-03-10", "url": "https://example.org/event"}
+        with tempfile.TemporaryDirectory() as directory:
+            output = scraper.Path(directory) / "ext_events.json"
+            with patch.object(scraper, "OUT", output), patch.object(scraper, "scrape", return_value=[event]), \
+                 patch.dict(os.environ, {"EVENTS_POLICY_APPROVED": "1"}):
+                self.assertEqual(scraper.main(), 0)
+            saved = json.loads(output.read_text("utf-8"))
+            self.assertTrue(saved["snapshot_complete"])
+            self.assertEqual(saved["items"][0]["sources"][0]["ext_id"], "main")
+            with patch.object(scraper, "OUT", output), patch.object(scraper, "scrape", return_value=[event]), \
+                 patch.dict(os.environ, {"EVENTS_POLICY_APPROVED": "1"}):
+                self.assertEqual(scraper.main(), 0)
+            self.assertEqual(json.loads(output.read_text("utf-8"))["updated"], saved["updated"])
 
 
 if __name__ == "__main__":

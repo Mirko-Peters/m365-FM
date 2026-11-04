@@ -4,7 +4,7 @@ on:
     - cron: "29 3 * * *"
   workflow_dispatch:
 permissions:
-  contents: write
+  contents: read
 concurrency: { group: events-scrape, cancel-in-progress: false }
 jobs:
   scrape:
@@ -12,29 +12,24 @@ jobs:
     timeout-minutes: 20
     env:
       EVENTS_POLICY_APPROVED: ${{ vars.EVENTS_POLICY_APPROVED }}
+      R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+      R2_BUCKET: ${{ secrets.R2_BUCKET }}
+      R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      EVENTS_OUTPUT: /tmp/m365-fm-ext-events.json
     steps:
       - uses: actions/checkout@v4
         with: { ref: "${{ github.ref_name }}" }
       - uses: actions/setup-python@v5
         with: { python-version: "3.12" }
-      - name: Scraper erst nach Richtlinienfreigabe starten
+      - name: R2-Client installieren
+        run: python -m pip install boto3
+      - name: Scraper nur nach Richtlinienfreigabe starten und R2 aktualisieren
         run: |
           if [ "$EVENTS_POLICY_APPROVED" != "1" ]; then
             echo "Keine Quellenfreigabe: Datenabruf bleibt deaktiviert. Zuerst events-discovery.yml ausführen und prüfen."
             exit 0
           fi
+          python tools/r2_event_upload.py download
           python tools/scrape_events.py
-      - name: Ergebnisse festhalten
-        run: |
-          [ -f data/ext_events.json ] || exit 0
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/ext_events.json
-          if [ -f data/ext_events_state.json ]; then git add data/ext_events_state.json; fi
-          git diff --cached --quiet && exit 0
-          git commit -m "Community-Events aktualisiert"
-          for i in 1 2 3; do
-            git pull --rebase --autostash -q origin "${GITHUB_REF_NAME}" && git push -q origin "HEAD:${GITHUB_REF_NAME}" && exit 0
-            sleep $((i*5))
-          done
-          exit 1
+          python tools/r2_event_upload.py upload

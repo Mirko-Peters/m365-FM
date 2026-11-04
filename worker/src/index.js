@@ -408,7 +408,7 @@ export default {
     T("pollUpdates", () => pollUpdates(env));
     T("refreshFollowers", () => refreshFollowers(env));
     T("ensurePastEvents", () => ensurePastEvents(env).then(() => linkSpeakers(env)).then(() => linkSpeakerEntities(env)));
-    T("importExternalEvents", () => importExternalEvents(env));
+    if (event.cron === "0 6 * * *") T("importExternalEvents", () => importExternalEvents(env));
     T("ensureM365Con", () => ensureM365Con(env).then(() => linkSpeakers(env)).then(() => linkSpeakerEntities(env)));
     T("seedRoadmap", () => seedRoadmap(env));
     T("purgeMessages", () => purgeMessages(env.DB));

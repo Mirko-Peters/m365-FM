@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS event_import (
   locked_fields TEXT NOT NULL DEFAULT '[]',
   changes TEXT NOT NULL DEFAULT '[]',
   gone_at INTEGER NOT NULL DEFAULT 0,
+  prev_status TEXT NOT NULL DEFAULT '',
   first_seen INTEGER NOT NULL,
   last_seen INTEGER NOT NULL
 );
@@ -23,3 +24,10 @@ CREATE TABLE IF NOT EXISTS event_source (
   PRIMARY KEY (source, ext_id)
 );
 CREATE INDEX IF NOT EXISTS idx_event_source_fp ON event_source(fp);
+CREATE TABLE IF NOT EXISTS event_speaker_block (
+  name_norm TEXT NOT NULL,
+  event_fp TEXT NOT NULL DEFAULT '',
+  created INTEGER NOT NULL,
+  created_by INTEGER NOT NULL DEFAULT 0,
+  PRIMARY KEY (name_norm, event_fp)
+);
