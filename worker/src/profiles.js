@@ -32,7 +32,7 @@ export async function ownedEntity(env, user, o) {
       if (v.err) return "";
       await db.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES(?,?,?,?,'live',?)").bind(o.eid, JSON.stringify(v.data), "Selbst verwaltet", user.id, now()).run(); created = true;
     }
-    if (created || user.admin) await db.prepare("INSERT INTO entity_claims(eid,user_id,status,via,created) VALUES(?,?,'verified','owner',?) ON CONFLICT(eid) DO NOTHING").bind(o.eid, user.id, now()).run();
+    if (created || user.admin) await db.prepare("INSERT INTO entity_claims(eid,user_id,status,via,created) VALUES(?,?,'verified','owner',?) ON CONFLICT(eid) DO UPDATE SET user_id=excluded.user_id,status='verified',via='owner',created=excluded.created WHERE entity_claims.status='rejected'").bind(o.eid, user.id, now()).run();
     return o.eid;
   } catch (e) { return ""; }
 }
@@ -503,7 +503,7 @@ export async function handleProfiles(env, request, url, path, user, J) {
           if (!v.err) await db.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES(?,?,?,?,?,?)").bind(eid, JSON.stringify(v.data), "Firma angelegt", user.id, (await trustedUser(db, user)) ? "live" : "pending", now()).run();
         }
         await db.prepare("INSERT OR REPLACE INTO org_entity(org_id,eid) VALUES(?,?)").bind(o.id, eid).run();
-        if (!known.has(eid) && !ex) await db.prepare("INSERT INTO entity_claims(eid,user_id,status,via,created) VALUES(?,?,'verified','owner',?) ON CONFLICT(eid) DO NOTHING").bind(eid, user.id, now()).run();
+        if (!known.has(eid) && !ex) await db.prepare("INSERT INTO entity_claims(eid,user_id,status,via,created) VALUES(?,?,'verified','owner',?) ON CONFLICT(eid) DO UPDATE SET user_id=excluded.user_id,status='verified',via='owner',created=excluded.created WHERE entity_claims.status='rejected'").bind(eid, user.id, now()).run();
       } catch (e) { /* Entitaet ist optional, Firmenkonto bleibt gueltig */ }
     } else {
       const mem = await db.prepare("SELECT role FROM org_members WHERE org_id=? AND user_id=? AND status='active'").bind(o.id, user.id).first();

@@ -17,7 +17,7 @@ import { importEpisodes, importTranslations, handleRegister } from "./register.j
 import { importSearchIndex, handleSearch } from "./search.js";
 import { entityMap } from "./entities.js";
 import { handleProfiles, deleteUserData, refreshProfilesExport } from "./profiles.js";
-import { handleEvents, deleteUserEvents, ensureM365Con, claimLinkedinEntity } from "./events.js";
+import { handleEvents, deleteUserEvents, ensureM365Con, claimLinkedinEntity, purgeEntityClaimReview } from "./events.js";
 import { handleVotes } from "./votes.js";
 import { handleQa, deleteUserQa } from "./qa.js";
 import { handleBlog, deleteUserBlog } from "./blog.js";
@@ -160,7 +160,7 @@ async function auth(env, request, url, path) {
     const target = new URL(ret), claim = target.searchParams.get("claim");
     const match = claim === "linkedin" && /^\/(?:[a-z]{2}\/)?entity\/([a-z0-9][a-z0-9-]{1,78})\/?$/i.exec(target.pathname);
     if (match) {
-      const result = await claimLinkedinEntity(env, u, info, match[1]);
+      const result = await claimLinkedinEntity(env, u, raw, match[1]);
       if (result.error === "claimed") {
         const response = html("<p>Dieses Profil wurde bereits beansprucht.</p>", 409);
         response.headers.append("set-cookie", cookie("m365s", await makeSession(env, u.id), 5184000));
@@ -222,6 +222,8 @@ async function api(env, request, url, path, asUser) {
     if (method === "DELETE") {   // Konto + alle eigenen Daten loeschen (DSGVO)
       const id = user.id;
       await db.batch([
+        db.prepare("DELETE FROM entity_claim_review WHERE eid IN (SELECT eid FROM entity_claims WHERE user_id=?)").bind(id),
+        db.prepare("DELETE FROM entity_claims WHERE user_id=? AND status<>'verified'").bind(id),
         db.prepare("DELETE FROM likes WHERE user_id=? OR comment_id IN (SELECT id FROM comments WHERE user_id=?)").bind(id, id),
         db.prepare("DELETE FROM reports WHERE user_id=? OR comment_id IN (SELECT id FROM comments WHERE user_id=?)").bind(id, id),
         db.prepare("DELETE FROM comments WHERE user_id=?").bind(id), db.prepare("DELETE FROM user_badges WHERE user_id=?").bind(id),
@@ -444,6 +446,7 @@ export default {
     T("ensureM365Con", () => ensureM365Con(env).then(() => linkSpeakers(env)).then(() => linkSpeakerEntities(env)));
     T("seedRoadmap", () => seedRoadmap(env));
     T("purgeMessages", () => purgeMessages(env.DB));
+    T("purgeEntityClaimReview", () => purgeEntityClaimReview(env.DB));
     T("autoTranslate", () => autoTranslate(env));
     T("autoTranslateItems", () => autoTranslateItems(env));
     T("autoTranslateEntities", () => autoTranslateEntities(env, entityMap));

@@ -87,8 +87,8 @@ async function speakersCheck(db, list, prev, selfHandle) {
       if (!PH.test(h)) return null;
       const p = await db.prepare("SELECT u.name FROM profiles p JOIN users u ON u.id=p.user_id WHERE p.handle=? AND p.public=1").bind(h).first();
       if (!p) return null;
-      out.push({ h, n: keep?.n || n || p.name, ...(e ? { e } : keep?.e ? { e: keep.e } : {}), ...(keep?.email ? { email: keep.email } : {}), s: keep?.s === "confirmed" || h === selfHandle ? "confirmed" : keep?.s === "declined" ? "declined" : "invited" });
-    } else if (n.length >= 2) out.push({ n, ...(e ? { e } : keep?.e ? { e: keep.e } : {}), ...(keep?.email ? { email: keep.email } : {}), s: keep?.s === "confirmed" ? "confirmed" : "invited", ...(keep?.o ? { o: 1 } : {}), ...(keep?.t ? { t: keep.t } : { t: rndToken() }) });
+      out.push({ h, n: keep?.n || n || p.name, ...(e ? { e } : keep?.e ? { e: keep.e } : {}), s: keep?.s === "confirmed" || h === selfHandle ? "confirmed" : keep?.s === "declined" ? "declined" : "invited" });
+    } else if (n.length >= 2) out.push({ n, ...(e ? { e } : keep?.e ? { e: keep.e } : {}), s: keep?.s === "confirmed" ? "confirmed" : "invited", ...(keep?.o ? { o: 1 } : {}), ...(keep?.t ? { t: keep.t } : { t: rndToken() }) });
   }
   return out;
 }
@@ -118,15 +118,8 @@ function linkedinProfile(url) {
 async function knownEntityEmails(db, eid) {
   const out = new Set();
   const add = (value) => { const email = cleanEmail(value); if (email) out.add(email); };
-  for (const r of (await db.prepare("SELECT email FROM entity_invites WHERE eid=?").bind(eid).all()).results || []) add(r.email);
+  for (const r of (await db.prepare("SELECT i.email FROM entity_invites i JOIN users u ON u.id=i.by_user WHERE i.eid=? AND i.status IN ('sent','claimed') AND u.role IN ('admin','editor')").bind(eid).all()).results || []) add(r.email);
   add((await db.prepare("SELECT email FROM entity_contacts WHERE eid=?").bind(eid).first())?.email);
-  const handles = new Set();
-  const rows = (await db.prepare("SELECT json_extract(speaker.value,'$.email') email,json_extract(speaker.value,'$.h') handle FROM event_sessions s,json_each(CASE WHEN json_valid(s.speakers) THEN s.speakers ELSE '[]' END) speaker WHERE json_extract(speaker.value,'$.e')=?").bind(eid).all()).results || [];
-  for (const r of rows) { add(r.email); if (r.handle) handles.add(r.handle); }
-  for (const handle of handles) {
-    const guest = await db.prepare("SELECT pp.email FROM profiles p JOIN guest_listings g ON g.user_id=p.user_id AND g.active=1 JOIN profile_private pp ON pp.user_id=p.user_id WHERE p.handle=? AND pp.email<>'' LIMIT 1").bind(handle).first();
-    add(guest?.email);
-  }
   return out;
 }
 // LinkedIn-OIDC liefert keine öffentliche Profil-URL; automatisch abgeglichen wird nur die verifizierte E-Mail.
@@ -134,6 +127,7 @@ export async function claimLinkedinEntity(env, user, info, eid) {
   if (user?.provider !== "linkedin" || !/^[a-z0-9][a-z0-9-]{1,78}$/.test(eid || "")) return { error: "not_claimable" };
   const entity = (await entityMap(env)).get(eid);
   if (!entity || entity.type !== "person" || !(Array.isArray(entity.same_as) ? entity.same_as : []).some(linkedinProfile)) return { error: "not_claimable" };
+  if (!(await rateLimit(env.DB, `claim:${user.id}`, 5, 86400))) return { error: "rate_limit" };
   const current = await env.DB.prepare("SELECT status FROM entity_claims WHERE eid=?").bind(eid).first();
   if (current && current.status !== "rejected") return { error: "claimed" };
   const email = info?.email_verified === true ? cleanEmail(info.email) : "";
@@ -557,7 +551,7 @@ export async function handleEvents(env, request, url, path, user, J) {
     const me = await db.prepare("SELECT p.handle,u.name FROM profiles p JOIN users u ON u.id=p.user_id WHERE p.user_id=? AND p.public=1").bind(user.id).first();
     const orgs = (await db.prepare("SELECT o.handle,o.name,(SELECT eid FROM org_entity WHERE org_id=o.id) eid FROM org_members m JOIN orgs o ON o.id=m.org_id WHERE m.user_id=? AND m.status='active' AND m.role IN ('owner','admin')").bind(user.id).all()).results || [];
     if (!me && !orgs.length) return J({ suggestions: [] });
-    const claimed = new Set(((await db.prepare("SELECT eid FROM entity_claims").all()).results || []).map((r) => r.eid));
+    const claimed = new Set(((await db.prepare("SELECT eid FROM entity_claims WHERE status<>'rejected'").all()).results || []).map((r) => r.eid));
     const out = [], seen = new Set(), map = await entityMap(env);
     const sameOrg = (a, b) => { const x = norm(a).join(""), y = norm(b).join(""); return x.length >= 4 && y.length >= 4 && (x === y || lev(x, y) <= (x.length >= 8 ? 2 : 1) || x.startsWith(y) || y.startsWith(x)); };
     for (const [eid, e] of map) {
@@ -603,15 +597,12 @@ export async function handleEvents(env, request, url, path, user, J) {
     const claim = await db.prepare("SELECT user_id,via FROM entity_claims WHERE eid=? AND status='pending'").bind(eid).first();
     if (!claim) return J({ error: "not_found" }, 404);
     const linkedIn = claim.via === "linkedin";
-    let notification = null, name = "";
+    let to = "", name = "";
     if (linkedIn) {
       const review = await db.prepare("SELECT email FROM entity_claim_review WHERE eid=?").bind(eid).first();
       const accountEmail = await db.prepare("SELECT email FROM mail_addr WHERE user_id=? AND verified=1").bind(claim.user_id).first();
-      const to = cleanEmail(review?.email) || cleanEmail(accountEmail?.email);
-      if (!to) return J({ error: "email_required" }, 409);
-      if (!mailReady(env)) return J({ error: "mail_off" }, 503);
+      to = cleanEmail(review?.email) || cleanEmail(accountEmail?.email);
       name = (await db.prepare("SELECT COALESCE(p.real_name,u.name) name FROM users u LEFT JOIN user_prefs p ON p.user_id=u.id WHERE u.id=?").bind(claim.user_id).first())?.name || "Hallo";
-      notification = { to, name };
     }
     const status = b.ok ? "verified" : "rejected";
     const updated = linkedIn
@@ -624,9 +615,15 @@ export async function handleEvents(env, request, url, path, user, J) {
       const entity = (await entityMap(env)).get(eid), page = `${env.SITE}/entity/${eid}/`;
       const outcome = b.ok ? "bestätigt" : "abgelehnt", subject = `Dein M365.FM-Profil wurde ${outcome}`;
       const text = `Hallo ${name},\n\nDeine Anfrage, das Profil „${entity?.name || eid}“ auf M365.FM zu beanspruchen, wurde ${outcome}.\n\n${page}`;
-      const sent = await sendMail(env, { to: notification.to, subject, text, html: `<p>Hallo ${esc(name)},</p><p>Deine Anfrage, das Profil <a href="${esc(page)}">${esc(entity?.name || eid)}</a> auf M365.FM zu beanspruchen, wurde ${outcome}.</p>`, headers: {} });
+      let mailSent = false;
+      if (to && mailReady(env)) {
+        try {
+          const sent = await sendMail(env, { to, subject, text, html: `<p>Hallo ${esc(name)},</p><p>Deine Anfrage, das Profil <a href="${esc(page)}">${esc(entity?.name || eid)}</a> auf M365.FM zu beanspruchen, wurde ${outcome}.</p>`, headers: {} });
+          mailSent = sent.ok;
+        } catch { /* Die Adminentscheidung bleibt auch bei Mailfehlern gespeichert. */ }
+      }
       await db.prepare("UPDATE entity_claim_review SET email='',picture='' WHERE eid=?").bind(eid).run();
-      return J({ ok: true, mailSent: sent.ok });
+      return J({ ok: true, mailSent });
     }
     return J({ ok: true });
   }
@@ -672,6 +669,12 @@ export async function handleEvents(env, request, url, path, user, J) {
     return J({ free_asks: FREE_ASKS, ask_cost: ASK_COST, sponsors: rows.map((r) => ({ handle: r.handle, name: r.name, website: r.website, criteria: parse(r.criteria, {}) })) });
   }
   return null;
+}
+
+export async function purgeEntityClaimReview(db) {
+  const cutoff = now() - 30 * 86400;
+  const result = await db.prepare("UPDATE entity_claim_review SET email='',picture='' WHERE created<? AND (email<>'' OR picture<>'')").bind(cutoff).run();
+  return { cleared: Number(result.meta?.changes || 0) };
 }
 
 export async function deleteUserEvents(db, uid) {

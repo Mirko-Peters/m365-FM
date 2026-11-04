@@ -11,7 +11,6 @@ const EVENTS = [
 ];
 const addMin = (st, m) => { const d = new Date(st + ":00Z"); d.setUTCMinutes(d.getUTCMinutes() + (m || 45)); return d.toISOString().slice(0, 16); };
 const rndToken = () => [...crypto.getRandomValues(new Uint8Array(18))].map((b) => b.toString(16).padStart(2, "0")).join("");
-const emailOf = (s) => typeof s === "string" && /^[^\s@<>]{1,64}@[^\s@<>]{1,190}\.[a-z]{2,}$/i.test(s.trim()) ? s.trim().toLowerCase() : "";
 
 export async function ensurePastEvents(env) {
   const db = env.DB, subs = (env.ADMIN_SUBS || "").split(",").map((x) => x.trim()).filter(Boolean);
@@ -36,7 +35,7 @@ export async function ensurePastEvents(env) {
         .bind(ev.id, String(x.title).slice(0, 140), String(x.abstract || "").slice(0, 1500), x.start, addMin(x.start, x.duration),
           String(x.track || (x.category === "keynote" ? "Keynote" : x.category === "closing" ? "Closing" : x.category === "workshop" ? "Workshop" : "Expert Session")).slice(0, 60), cfg.lang,
           JSON.stringify((x.topics || []).filter((i) => known.has(i)).slice(0, 8)),
-          JSON.stringify((x.speaker_ids || []).map((i) => sp[i]).filter(Boolean).map((p) => ({ ...(pm.has(String(p.name).toLowerCase()) ? { h: pm.get(String(p.name).toLowerCase()), n: String(p.name).slice(0, 80), s: "invited" } : { n: String(p.name).slice(0, 80), s: "confirmed", o: 1 }), ...(emailOf(p.email) ? { email: emailOf(p.email) } : {}) }))),
+          JSON.stringify((x.speaker_ids || []).map((i) => sp[i]).filter(Boolean).map((p) => (pm.has(String(p.name).toLowerCase()) ? { h: pm.get(String(p.name).toLowerCase()), n: String(p.name).slice(0, 80), s: "invited" } : { n: String(p.name).slice(0, 80), s: "confirmed", o: 1 }))),
           /^https:\/\//.test(x.recording_url || "") ? String(x.recording_url).slice(0, 300) : "", owner.id, t));
       for (let i = 0; i < ops.length; i += 40) await db.batch(ops.slice(i, i + 40));
       // Speaker ohne Profil bekommen einen Verknuepfungs-Link (wie bei M365Con 2027)

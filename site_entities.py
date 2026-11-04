@@ -313,14 +313,18 @@ def claim_html(eid, lang, entity, api):
             href = f'{api}/auth/login/linkedin?return={quote(target, safe="")}'
             text = T(lang, "Claim this profile with LinkedIn", "Profil mit LinkedIn beanspruchen")
             messages = json.dumps({
-                "verified": T(lang, "Profil beansprucht und automatisch bestätigt.", "Profile claimed and automatically verified."),
-                "pending": T(lang, "Anfrage gesendet. Die Redaktion prüft sie.", "Request sent. The editors will review it."),
-                "claimed": T(lang, "Dieses Profil ist bereits beansprucht.", "This profile has already been claimed."),
-                "not_claimable": T(lang, "Dieses Profil kann nicht beansprucht werden.", "This profile cannot be claimed."),
+                "verified": T(lang, "Profile claimed and automatically verified.", "Profil beansprucht und automatisch bestätigt."),
+                "pending": T(lang, "Request sent. The editors will review it.", "Anfrage gesendet. Die Redaktion prüft sie."),
+                "claimed": T(lang, "This profile has already been claimed.", "Dieses Profil ist bereits beansprucht."),
+                "not_claimable": T(lang, "This profile cannot be claimed.", "Dieses Profil kann nicht beansprucht werden."),
+                "rate_limit": T(lang, "Too many claim attempts. Please try again later.", "Zu viele Versuche. Bitte später erneut versuchen."),
             }, ensure_ascii=False)
-            return (f'<p><a class="btn main" rel="nofollow" href="{esc(href)}">{esc(text)}</a></p>'
-                    f'<p id="en-claim-msg" role="status" aria-live="polite"></p><script>(function(){{var p=new URLSearchParams(location.search),r=p.get("claim_result"),m={messages},e=document.getElementById("en-claim-msg");'
-                    f'if(e&&m[r]){{e.textContent=m[r];p.delete("claim_result");var u=new URL(location.href);u.searchParams.delete("claim_result");history.replaceState(null,"",u)}}}})();</script>')
+            community = f"{BASE_}{pfx(lang)}/community/#c-expert"
+            login_text = T(lang, "Claim this profile through your community profile", "Profil über dein Community-Profil beanspruchen")
+            return (f'<p><a id="en-claim-link" class="btn main" rel="nofollow" hidden href="{esc(href)}">{esc(text)}</a></p>'
+                    f'<p id="en-claim-msg" role="status" aria-live="polite"></p><script>(function(){{var p=new URLSearchParams(location.search),r=p.get("claim_result"),m={messages},e=document.getElementById("en-claim-msg"),a=document.getElementById("en-claim-link");'
+                    f'if(e&&m[r]){{e.textContent=m[r];var u=new URL(location.href);u.searchParams.delete("claim_result");history.replaceState(null,"",u)}}'
+                    f'if(a)fetch("{esc(api)}/api/me",{{credentials:"include"}}).then(function(x){{return x.json()}}).then(function(x){{if(x.user&&x.user.provider!=="linkedin"){{a.href="{esc(community)}";a.textContent="{esc(login_text)}"}}a.hidden=false}}).catch(function(){{a.href="{esc(community)}";a.textContent="{esc(login_text)}";a.hidden=false}})}})();</script>')
         return ""
     return f'<p><a href="{BASE_}{pfx(lang)}/community/u/{h}/">{T(lang, "Profile on M365.FM (maintained by the person)", "Profil auf M365.FM (gepflegt von der Person)")}</a></p>'
 
