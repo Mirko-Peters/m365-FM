@@ -1,9 +1,9 @@
 """Google AdSense-Vorbereitung. Alles ist abgeschaltet, bis data/adsense.json eine Publisher-ID enthaelt und die Seite
 unter der eingetragenen Domain (www.m365.fm) ausgeliefert wird. Dann:
-- ads.txt im Wurzelverzeichnis, <meta name="google-adsense-account">, adsbygoogle.js im <head>
+- ads.txt im Wurzelverzeichnis, <meta name="google-adsense-account">, adsbygoogle.js nach Zustimmung
 - feste Anzeigenbloecke (mit reserviertem Platz, Kennzeichnung "Anzeige") nur auf ausreichend langen Inhaltsseiten,
   nie auf Community-, Rechts-, Login- oder noindex-Seiten, nie ueber dem ersten Textabschnitt
-- Einwilligung fuer EWR/UK/CH: laeuft ueber die in AdSense eingerichtete Google-Nachricht (zertifizierte CMP, "Datenschutz und Mitteilungen")."""
+- Einwilligung fuer EWR/UK/CH: wird durch das Cookie-Banner dieser Website gesteuert; Anzeigen sind dort nicht personalisiert."""
 import json, re
 from html import escape
 from pathlib import Path
@@ -61,15 +61,13 @@ def eligible(base, body, canonical, noindex=False):
 
 
 def head(base, body="", canonical="", noindex=False):
-    """Meta-Tag (immer, fuer die AdSense-Pruefung). Das Skript laedt standardmaessig nur auf Seiten, auf denen wir selbst einen Anzeigenblock gesetzt haben (feste Bloecke:
-    keine Auto-Anzeigen wie das Popup 'Discover more' ueber dem Header). Mit "auto_ads": true in data/adsense.json laedt es wie frueher auf allen geeigneten Seiten."""
+    """Meta-Tag fuer die AdSense-Pruefung; das Skript wird nach der Einwilligungspruefung in assets/page.js geladen."""
     if not active(base):
         return ""
     pub = cfg()["publisher"]
     out = f'<meta name="google-adsense-account" content="ca-{pub}">'
-    load = eligible(base, body, canonical, noindex) if cfg().get("auto_ads") else 'class="adsbygoogle"' in body
-    if load:
-        out += f'<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-{pub}" crossorigin="anonymous"></script>'
+    if cfg().get("auto_ads") and eligible(base, body, canonical, noindex):
+        out += '<meta name="m365-auto-ads" content="1">'
     return out
 
 
@@ -82,8 +80,8 @@ def _house(base, lang):
 
 def _block(lang, slot, pub, base=""):
     return (f'<aside class="ad" aria-label="{escape(LABEL.get(lang, LABEL["en"]))}"><small>{escape(LABEL.get(lang, LABEL["en"]))}</small>'
-            f'<ins class="adsbygoogle" data-ad-client="ca-{pub}" data-ad-slot="{escape(slot)}" data-ad-format="auto" data-full-width-responsive="true"></ins>'
-            + _house(base, lang) + '<script>(adsbygoogle=window.adsbygoogle||[]).push({});</script></aside>')
+            f'<ins class="adsbygoogle" data-ad-status="unfilled" data-ad-client="ca-{pub}" data-ad-slot="{escape(slot)}" data-ad-format="auto" data-full-width-responsive="true"></ins>'
+            + _house(base, lang) + '</aside>')
 
 
 def inject(base, body, lang, canonical, noindex=False):

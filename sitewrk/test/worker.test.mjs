@@ -1,6 +1,6 @@
 // Site-Worker: Region (T32), Cache (T41), Validatoren - mit nachgebauter Cache API, R2 und fetch (ohne HTMLRewriter)
 import { test } from "node:test"; import assert from "node:assert/strict";
-import { regionOf, tagFor, lmFor, conditional, countries, isHtmlPath } from "../consent.js";
+import { regionOf, tagFor, lmFor, conditional, countries, isHtmlPath, markHtml } from "../consent.js";
 import { execFileSync } from "node:child_process";
 const LM = "Sun, 01 Nov 2026 10:00:37 GMT", LM0 = "Sun, 01 Nov 2026 10:00:00 GMT", LM1 = "Sun, 01 Nov 2026 10:00:01 GMT";
 const store = new Map(); let r2gets = 0, lastOrigin = null;
@@ -34,9 +34,36 @@ test("Laenderliste: ohne Variable, leer, * oder fehlerhaft -> ueberall Banner (f
 });
 test("Region aus cf.country, Liste aus der Konfiguration, sicherer Rueckfall", () => {
   assert.equal(regionOf(req("/", "DE"), env), "1"); assert.equal(regionOf(req("/", "US"), env), "0");
+  assert.equal(regionOf(req("/", "GB"), env), "1"); assert.equal(regionOf(req("/", "CH"), env), "1");
   assert.equal(regionOf(req("/", "XX"), env), "1"); assert.equal(regionOf(req("/", "T1"), env), "1"); assert.equal(regionOf(req("/"), env), "1");
   assert.equal(regionOf(req("/", undefined, { "cf-ipcountry": "us" }), env), "0");
   assert.equal(regionOf(req("/", "US"), {}), "1"); assert.equal(regionOf(req("/", "US"), { CONSENT_COUNTRIES: "*" }), "1");
+});
+test("HTMLRewriter setzt data-cr fuer Consent- und Nicht-Consent-Laender", async () => {
+  const previous = globalThis.HTMLRewriter;
+  globalThis.HTMLRewriter = class {
+    on(selector, handler) { this.selector = selector; this.handler = handler; return this; }
+    transform(response) {
+      return response.text().then((text) => {
+        const attrs = {};
+        this.handler.element({ setAttribute: (name, value) => { attrs[name] = value; } });
+        return new Response(text.replace(/<html\b([^>]*)>/i, `<html$1 data-cr="${attrs["data-cr"]}">`), {
+          status: response.status, headers: response.headers,
+        });
+      });
+    }
+  };
+  try {
+    for (const [country, cr] of [["DE", "1"], ["GB", "1"], ["CH", "1"], ["US", "0"]]) {
+      const response = await markHtml(new Response("<html><body>x</body></html>", {
+        headers: { "content-type": "text/html" },
+      }), req("/", country), cr);
+      assert.match(await response.text(), new RegExp(`<html data-cr="${cr}">`));
+    }
+  } finally {
+    if (previous === undefined) delete globalThis.HTMLRewriter;
+    else globalThis.HTMLRewriter = previous;
+  }
 });
 test("Validatoren mit Region: ETag-Endung, Last-Modified-Sekunde (Region 1 immer spaeter)", () => {
   assert.equal(tagFor('"abc"', "1"), 'W/"abc.r1"'); assert.equal(tagFor('W/"abc"', "0"), 'W/"abc.r0"'); assert.equal(tagFor(null, "0"), null);
@@ -79,6 +106,15 @@ test("R2-Seite: Region, Cache, 304 mit Regions-Validatoren", async () => {
   const n = r2gets; const r2 = await run(req("/pl/x/", "PL", { "if-none-match": 'W/"r2e.r1"' })); assert.equal(r2.status, 304); assert.equal(r2gets, n, "aus dem Kanten-Cache");
   const r2b = await run(req("/pl/x/", "PL", { "if-modified-since": "Sun, 01 Nov 2026 20:00:01 GMT" })); assert.equal(r2b.status, 304);
   const r3 = await run(req("/pl/x/", "US", { "if-none-match": 'W/"r2e.r1"', "if-modified-since": "Sun, 01 Nov 2026 20:00:01 GMT" })); assert.equal(r3.status, 200); assert.equal(r3.headers.get("x-m365-cr"), "0");
+});
+test("R2-Cache-Schluessel bleibt unabhaengig von der Consent-Region", async () => {
+  const key = "https://www.m365.fm/__r2c/pl/x/";
+  store.delete(key);
+  const n = r2gets;
+  assert.equal((await run(req("/pl/x/", "DE"))).headers.get("x-m365-cr"), "1");
+  assert.equal((await run(req("/pl/x/", "US"))).headers.get("x-m365-cr"), "0");
+  assert.equal(r2gets, n + 1);
+  assert.deepEqual([...store.keys()].filter((k) => k === key), [key]);
 });
 test("Range auf HTML: ganze Seite statt 206; Dateien (JSON) und Assets unveraendert", async () => {
   const g = await run(req("/rng/", "DE", { range: "bytes=0-8" })); assert.equal(g.status, 200); assert.equal(await g.text(), "<html><body>full</body></html>");
