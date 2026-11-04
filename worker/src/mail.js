@@ -1,5 +1,5 @@
-// Mail-System: bestaetigte Adresse je Konto, Einstellungen je Art, Warteschlange (Outbox) mit Versand per Resend, Abmeldelink in jeder Mail.
-import { sendMail } from "./digest.js";
+// Mail-System: bestaetigte Adresse je Konto, Einstellungen je Art, Warteschlange (Outbox) mit Versand, Abmeldelink in jeder Mail.
+import { mailReady, sendMail } from "./mailer.js";
 import { esc, sign, verify, randomToken, rateLimit } from "./util.js";
 
 const now = () => Math.floor(Date.now() / 1000);
@@ -36,13 +36,13 @@ export async function notify(env, uid, kind, subject, bodyHtml, key = "") {
   } catch { return false; }
 }
 export async function flushOutbox(env, limit = 40) {
-  const db = env.DB; await ensure(db); if (!env.RESEND_API_KEY) return { skipped: "no_key" };
+  const db = env.DB; await ensure(db); if (!mailReady(env)) return { skipped: "no_key" };
   const rows = (await db.prepare("SELECT o.*,a.email FROM mail_outbox o JOIN mail_addr a ON a.user_id=o.user_id AND a.verified=1 WHERE o.sent=0 AND o.tries<3 ORDER BY o.id LIMIT ?").bind(limit).all()).results || [];
   let ok = 0;
   for (const m of rows) {
     const un = await unsubUrl(env, m.user_id, m.kind);
     const html = wrap(env, m.html, `Du erhältst diese E-Mail, weil du Benachrichtigungen aktiviert hast. / You get this e-mail because you enabled notifications. <a href="${un}">Abmelden / Unsubscribe</a> · <a href="${env.SITE}/community/">Einstellungen / Settings</a>`);
-    const r = await sendMail(env, m.email, m.subject, html, un);
+    const r = await sendMail(env, { to: m.email, subject: m.subject, html, headers: { "List-Unsubscribe": `<${un}>`, "List-Unsubscribe-Post": "List-Unsubscribe=One-Click" } });
     await db.prepare("UPDATE mail_outbox SET tries=tries+1,sent=?,err=? WHERE id=?").bind(r.ok ? 1 : 0, r.ok ? "" : "http_" + r.status, m.id).run();
     if (r.ok) ok++;
   }
@@ -68,24 +68,24 @@ export async function handleMail(env, request, url, path, user, J) {
   if (path === "/api/mail/me" && method === "GET") {
     const a = await db.prepare("SELECT email,verified FROM mail_addr WHERE user_id=?").bind(user.id).first();
     const pr = Object.fromEntries(((await db.prepare("SELECT kind,on_ FROM mail_prefs WHERE user_id=?").bind(user.id).all()).results || []).map((r) => [r.kind, !!r.on_]));
-    return J({ configured: !!env.RESEND_API_KEY, email: a?.email || "", verified: !!a?.verified, prefs: Object.fromEntries(Object.keys(LABEL).map((k) => [k, k in pr ? pr[k] : !!KINDS[k]])) }, 200, { "cache-control": "no-store" });
+    return J({ configured: mailReady(env), email: a?.email || "", verified: !!a?.verified, prefs: Object.fromEntries(Object.keys(LABEL).map((k) => [k, k in pr ? pr[k] : !!KINDS[k]])) }, 200, { "cache-control": "no-store" });
   }
   if (path === "/api/admin/mail" && method === "GET") {
     if (!user.admin) return J({ error: "forbidden" }, 403);
     const s = await db.prepare("SELECT COUNT(*) total,SUM(sent=1) sent,SUM(sent=0 AND tries<3) waiting,SUM(sent=0 AND tries>=3) failed FROM mail_outbox").first();
-    return J({ configured: !!env.RESEND_API_KEY, ...s, addresses: (await db.prepare("SELECT COUNT(*) c FROM mail_addr WHERE verified=1").first()).c });
+    return J({ configured: mailReady(env), ...s, addresses: (await db.prepare("SELECT COUNT(*) c FROM mail_addr WHERE verified=1").first()).c });
   }
   if (method !== "POST") return J({ error: "bad_request" }, 400);
   const b = await request.json().catch(() => ({}));
   if (path === "/api/mail/set") {   // Adresse eintragen -> Bestaetigungsmail
     const email = String(b.email || "").trim().toLowerCase();
     if (!/^[^\s@<>]{1,64}@[^\s@<>]{1,190}\.[a-z]{2,}$/.test(email)) return J({ error: "email" }, 400);
-    if (!env.RESEND_API_KEY) return J({ error: "mail_off" }, 503);
+    if (!mailReady(env)) return J({ error: "mail_off" }, 503);
     if (!(await rateLimit(db, `mset:${user.id}`, 4, 3600))) return J({ error: "rate_limit" }, 429);
     const token = randomToken(20);
     await db.prepare("INSERT OR REPLACE INTO mail_addr(user_id,email,verified,token,created) VALUES(?,?,0,?,?)").bind(user.id, email, token, now()).run();
     const link = `${env.API}/api/mail/confirm?t=${encodeURIComponent(token)}`;
-    const r = await sendMail(env, email, "M365.FM – E-Mail bestätigen / confirm e-mail", wrap(env, `<p>Bitte bestätige deine E-Mail-Adresse für Benachrichtigungen:</p><p><a href="${link}">${link}</a></p><p>Please confirm your e-mail address for notifications. If this wasn’t you, ignore this message.</p>`, "M365.FM"));
+    const r = await sendMail(env, { to: email, subject: "M365.FM – E-Mail bestätigen / confirm e-mail", html: wrap(env, `<p>Bitte bestätige deine E-Mail-Adresse für Benachrichtigungen:</p><p><a href="${link}">${link}</a></p><p>Please confirm your e-mail address for notifications. If this wasn’t you, ignore this message.</p>`, "M365.FM") });
     return J({ ok: r.ok });
   }
   if (path === "/api/mail/prefs") {

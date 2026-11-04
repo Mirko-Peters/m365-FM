@@ -1,0 +1,49 @@
+function senderAddress(from) {
+  const match = String(from || "").match(/^\s*(.*?)\s*<([^<>]+)>\s*$/);
+  if (!match) return String(from || "");
+  return match[1] ? { email: match[2], name: match[1] } : match[2];
+}
+
+export function mailReady(env) {
+  return !!(env?.EMAIL || env?.RESEND_API_KEY);
+}
+
+export async function sendMail(env, { to, subject, html, text, headers = {} }) {
+  if (env?.EMAIL) {
+    try {
+      const response = await env.EMAIL.send({
+        to,
+        from: senderAddress(env.MAIL_FROM),
+        subject,
+        ...(html !== undefined ? { html } : {}),
+        ...(text !== undefined ? { text } : {}),
+        ...(Object.keys(headers).length ? { headers } : {}),
+      });
+      const messageId = response?.messageId || "";
+      console.log("mail_send", JSON.stringify({ provider: "cloudflare", status: 200, messageId }));
+      return { ok: true, status: 200, messageId };
+    } catch (error) {
+      const status = Number(error?.status) || 0;
+      console.error("mail_send", JSON.stringify({ provider: "cloudflare", status, code: String(error?.code || "send_failed").slice(0, 80) }));
+      return { ok: false, status };
+    }
+  }
+
+  const resendKey = env?.RESEND_API_KEY;
+  if (!resendKey) return { ok: false, status: 0 };
+  try {
+    const response = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { authorization: "Bearer " + resendKey, "content-type": "application/json" },
+      body: JSON.stringify({ from: env.MAIL_FROM, to, subject, html, ...(text !== undefined ? { text } : {}), headers }),
+    });
+    const data = await response.json().catch(() => ({}));
+    const messageId = typeof data?.id === "string" ? data.id : "";
+    console.log("mail_send", JSON.stringify({ provider: "resend", status: response.status, messageId }));
+    return { ok: response.ok, status: response.status, messageId };
+  } catch (error) {
+    const status = Number(error?.status) || 0;
+    console.error("mail_send", JSON.stringify({ provider: "resend", status, code: String(error?.code || "send_failed").slice(0, 80) }));
+    return { ok: false, status };
+  }
+}

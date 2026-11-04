@@ -1,7 +1,8 @@
 // Community-API (Cloudflare Worker + D1): Login (Google/Microsoft), Kommentare, Abzeichen, Kurator, Push, E-Mail
 import { json, cors, cookie, makeSession, readSession, cleanText, cleanName, randomToken, rateLimit, isLang, esc, b64u, sign, verify, audit } from "./util.js";
 import { evalBadges, stats, topUsers, badgesFor, award } from "./badges.js";
-import { runDigest, sendMail } from "./digest.js";
+import { runDigest } from "./digest.js";
+import { sendMail } from "./mailer.js";
 import { handleEntity, importEntitiesFromSite } from "./entities.js";
 import { importLegacyBlog } from "./legacyblog.js";
 import { importContentBlog } from "./contentblog.js";
@@ -335,8 +336,8 @@ async function api(env, request, url, path, asUser) {
     const token = ex?.token || randomToken(18);
     if (!ex) await db.prepare("INSERT INTO email_subs(email,lang,token,confirmed,created) VALUES(?,?,?,0,?)").bind(email, b.lang, token, now()).run();
     const link = `${env.API}/api/email/confirm?token=${encodeURIComponent(token)}&lang=${b.lang}`;
-    await sendMail(env, email, "M365.FM – please confirm / bitte bestätigen",
-      `<p>Please confirm your subscription to new M365.FM episodes (${esc(b.lang)}):</p><p><a href="${link}">${link}</a></p><p>Bitte bestätige dein Abo neuer M365.FM-Folgen. Wenn du das nicht warst, ignoriere diese E-Mail.</p>`);
+    await sendMail(env, { to: email, subject: "M365.FM – please confirm / bitte bestätigen",
+      html: `<p>Please confirm your subscription to new M365.FM episodes (${esc(b.lang)}):</p><p><a href="${link}">${link}</a></p><p>Bitte bestätige dein Abo neuer M365.FM-Folgen. Wenn du das nicht warst, ignoriere diese E-Mail.</p>` });
     return J({ ok: true });
   }
   if (path === "/api/email/confirm" && method === "GET") {

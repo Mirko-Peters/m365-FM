@@ -23,9 +23,10 @@ Stand: 2026-10-29. Reihenfolge nach Absprache mit Mirko; alles mit Schema.org-Ve
 - Geplant: Umzug über die Spreaker-API (Show im M365.FM-Konto anlegen, Folgen hochladen, neuen Feed ausgeben) als GitHub-Action-Job; klären: Tarif/Speicher, neue Folgen nachziehen.
 - Offen: Nutzungsbedingungen rechtlich formulieren, Werbe-/Sponsoring-Platz auf Show-Seiten, eigener M365.FM-Feed je Show (`itunes:new-feed-url`).
 
-## Mail-System (gebaut, Versand braucht RESEND_API_KEY)
+## Mail-System (Cloudflare Email Service, Resend als Rückfall)
 - Bestätigte Adresse je Konto, Arten einzeln schaltbar (Antworten auf Kommentare, Wunsch-Status, Show-Freigabe, Einladungen), Warteschlange mit Wiederholung, Abmeldelink und List-Unsubscribe in jeder Mail, Cron-Versand alle 30 Minuten.
-- Offen: Absender-Domain bei Resend verifizieren (SPF/DKIM für m365.fm), weitere Auslöser (neue Microsoft-Updates je Produkt, Gäste-/Speaker-Anfragen, Digest wöchentlich).
+- Offen: Workers-Paid-Plan und Absender-Domain `m365.fm` im Email Service einrichten (SPF/DKIM durch Cloudflare); danach Testmail an bestätigte Adresse. Resend bleibt optionaler Rückfall über `RESEND_API_KEY`.
+- Weitere Auslöser: neue Microsoft-Updates je Produkt, Gäste-/Speaker-Anfragen, Digest wöchentlich.
 
 ## Backlog (später, wenn die Plattform genutzt wird)
 - **LinkedIn Events Management API** (Standard Tier, Self-Service): Events von Veranstaltern automatisch mit LinkedIn synchronisieren (anlegen/ändern, Anmeldungen, Leads). Vorher klären: Rechte/Endpunkte in der technischen Doku, ob ein Eintrag auf der Firmenseite „M365 Show“ möglich ist. Bis dahin: „Auf LinkedIn teilen“ + Anfrage „Auf M365 Show vorstellen“ mit Prüfung durch das Team.
@@ -33,7 +34,7 @@ Stand: 2026-10-29. Reihenfolge nach Absprache mit Mirko; alles mit Schema.org-Ve
 - **Automatisches Posten auf LinkedIn** (`w_member_social`, für Firmenseiten Community Management API / `w_organization_social`, Freigabe nötig).
 
 ## Offen (Betrieb)
-- Microsoft-Login (MS_CLIENT_ID/MS_CLIENT_SECRET), Resend (RESEND_API_KEY), ADMIN_SUBS
+- Microsoft-Login (MS_CLIENT_ID/MS_CLIENT_SECRET), E-Mail-Domain einrichten, ADMIN_SUBS
 - Glossar-Definitionen in 17 weitere Sprachen übersetzen, Muttersprachler-Prüfung ml/pa/ta/te/he/ar
 - Tags schrittweise durch Glossar/Entitäten ersetzen (sichtbare Tags und Tag-Seiten entfernen, wenn die Entitäten die häufigen Tags abdecken)
 - Monatsbudget für Artikel, Popularitäts-Reihenfolge, Original-Porträt fürs Presskit
