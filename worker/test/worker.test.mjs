@@ -213,6 +213,9 @@ test("contributions: Quellen, Metadaten, Privatsphäre, Kategorien und Berichtse
   assert.equal((await call("/api/contributions/source/delete", "POST", { id: sourceId, delete_contributions: true })).status, 200);
   assert.equal(raw.prepare("SELECT COUNT(*) n FROM contributions WHERE id=?").get(imported.id).n, 0, "Quellen-Löschen kann ihre Importe entfernen");
   assert.equal(raw.prepare("SELECT COUNT(*) n FROM contribution_sources WHERE id=?").get(sourceId).n, 0);
+  const { deleteUserData: wipe } = await import("../src/profiles.js");   // Kontoloeschung entfernt auch die Loeschmarken (sie enthalten URLs)
+  await wipe(db, 1);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM contribution_ignored WHERE user_id=1").get().n, 0, "Kontolöschung entfernt Tombstones");
 });
 
 test("contributions: URL ohne Feed-Endung wird direkt als Feed geprüft", async () => {
