@@ -15,6 +15,7 @@ export async function handleAdminPanel(env, request, url, path, user, J) {
   if (path === "/api/admin/panel/overview" && request.method === "GET") {
     let base = null; try { base = ((await (await fetch(env.SITE + "/entities.json", { cf: { cacheTtl: 300 } })).json()).entities || []).length; } catch { /* Seite nicht erreichbar */ }
     const exp = await db.prepare("SELECT updated FROM export_cache WHERE k='profiles'").first().catch(() => null);
+    const mailMonth = new Date().toISOString().slice(0, 7), mailSent = await n(db, "SELECT sent n FROM mail_monthly_usage WHERE month=?", mailMonth) ?? 0;
     return J({
       queues: {
         blog: await n(db, "SELECT COUNT(*) n FROM blog_posts WHERE status='pending'"),
@@ -35,6 +36,7 @@ export async function handleAdminPanel(env, request, url, path, user, J) {
         profiles_export_age: exp ? now() - exp.updated : null,
         item_tr: await n(db, "SELECT COUNT(*) n FROM item_tr"), ent_tr: await n(db, "SELECT COUNT(*) n FROM ent_tr"),
       },
+      mail: { month: mailMonth, sent: mailSent, warning: mailSent >= 2500 },
       flags: { tr_off: await meta(db, "tr_off"), atr_off: await meta(db, "atr_off"), atr_ent_cap: await meta(db, "atr_ent_cap"), entity_source: (await meta(db, "entity_source")) || "json",
         atr_today: +(await meta(db, "atr_count:" + day)) || 0, atr_ent_today: +(await meta(db, "atr_ent:" + day)) || 0, key: !!env.ANTHROPIC_API_KEY },
     });

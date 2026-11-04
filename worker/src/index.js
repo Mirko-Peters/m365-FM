@@ -1,7 +1,7 @@
 // Community-API (Cloudflare Worker + D1): Login (Google/Microsoft), Kommentare, Abzeichen, Kurator, Push, E-Mail
 import { json, cors, cookie, makeSession, readSession, cleanText, cleanName, randomToken, rateLimit, isLang, esc, b64u, sign, verify, audit } from "./util.js";
 import { evalBadges, stats, topUsers, badgesFor, award } from "./badges.js";
-import { runDigest } from "./digest.js";
+import { runDigest, runPushDigest } from "./digest.js";
 import { sendMail } from "./mailer.js";
 import { handleEntity, importEntitiesFromSite } from "./entities.js";
 import { importLegacyBlog } from "./legacyblog.js";
@@ -347,7 +347,16 @@ async function api(env, request, url, path, asUser) {
   }
   if (path === "/api/email/unsub" && (method === "GET" || method === "POST")) {
     const t = url.searchParams.get("token") || "";
-    await db.prepare("DELETE FROM email_subs WHERE token=?").bind(t).run();
+    const weekly = await db.prepare("SELECT email FROM mail_weekly_unsub WHERE token=?").bind(t).first().catch(() => null);
+    if (weekly && url.searchParams.get("lang") === "all") {
+      await db.batch([
+        db.prepare("UPDATE email_subs SET confirmed=0 WHERE email=?").bind(weekly.email),
+        db.prepare("INSERT OR REPLACE INTO mail_prefs(user_id,kind,on_) SELECT user_id,'weekly',0 FROM mail_addr WHERE lower(email)=lower(?)").bind(weekly.email),
+        db.prepare("UPDATE mail_weekly_unsub SET updated=? WHERE email=?").bind(now(), weekly.email),
+      ]);
+    } else {
+      await db.prepare("UPDATE email_subs SET confirmed=0 WHERE token=?").bind(t).run();
+    }
     return method === "POST" ? new Response("ok") : html("<h2>✓ Unsubscribed</h2><p>You will not receive further e-mails.</p>");
   }
 
@@ -360,7 +369,7 @@ async function api(env, request, url, path, asUser) {
   }
   if (path.startsWith("/api/admin/")) {
     const keyOk = env.CRON_KEY && (request.headers.get("x-cron-key") === env.CRON_KEY || url.searchParams.get("key") === env.CRON_KEY);   // Header bevorzugt (Query landet in Logs)
-    if (path === "/api/admin/run-daily" && keyOk) return J(await runDigest(env, { dry: url.searchParams.get("dry") === "1" }));
+    if ((path === "/api/admin/run-weekly" || path === "/api/admin/run-daily") && keyOk) return J(await runDigest(env, { dry: url.searchParams.get("dry") === "1" }));
     if (!user?.admin) return J({ error: "forbidden" }, 403);
     if (path === "/api/admin/expertise-sync" && method === "POST") { const r = await syncExpertise(env, entityMap); await audit(db, user.id, "expertise-sync", "", JSON.stringify(r)); return J(r); }   // Stufen sofort neu berechnen
     if (path === "/api/admin/reports" && method === "GET") {
@@ -402,7 +411,8 @@ export default {
   async scheduled(event, env, ctx) {
     // Jede Aufgabe mit Protokoll (cron_runs: Start, Ende, ok, Fehlertext) statt verschluckter Fehler; Digest nur um 06:00 UTC
     const T = (name, fn) => ctx.waitUntil(track(env, name, fn));
-    if (event.cron === "0 6 * * *") T("runDigest", () => runDigest(env));
+    if (event.cron === "0 6 * * *") T("runPushDigest", () => runPushDigest(env));
+    if (event.cron === "0 6 * * 1") T("runDigest", () => runDigest(env));
     T("refreshFeeds", () => refreshFeeds(env));
     T("pollUpdates", () => pollUpdates(env));
     T("refreshFollowers", () => refreshFollowers(env));
@@ -429,7 +439,7 @@ export default {
     T("importEpisodes", () => importEpisodes(env));
     T("importTranslations", () => importTranslations(env));
     T("importSearchIndex", () => importSearchIndex(env));
-    if (event.cron !== "0 6 * * *") T("syncExpertise", () => syncExpertise(env, entityMap));   // nicht doppelt um 06:00 (beide Zeitplaene feuern)
+    if (event.cron !== "0 6 * * *" && event.cron !== "0 6 * * 1") T("syncExpertise", () => syncExpertise(env, entityMap));   // nicht doppelt um 06:00 (beide Zeitplaene feuern)
     ctx.waitUntil(env.DB.prepare("DELETE FROM cron_runs WHERE started<?").bind(Math.floor(Date.now() / 1000) - 7 * 86400).run().catch(() => 0));
   },
 };

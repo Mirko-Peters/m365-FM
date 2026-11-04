@@ -82,6 +82,9 @@
   "/api/admin/run-daily": {
    "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
   },
+  "/api/admin/run-weekly": {
+   "skip": "Cron-Ausführungspunkt: ausschließlich mit CRON_KEY, nicht als Nutzerfunktion"
+  },
   "/api/admin/show": {
    "skip": "Admin-Funktionen: bewusst nicht per KI-Token (Freigabe von Shows durch die Redaktion)"
   },
@@ -418,6 +421,11 @@
   },
   "/api/mail/confirm": {
    "skip": "Link aus der E-Mail (Token), wird im Browser geöffnet, nicht per KI"
+  },
+  "/api/mail/follows": {
+   "tools": [
+    "set_mail_topics"
+   ]
   },
   "/api/mail/me": {
    "tools": [

@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { mailReady, sendMail } from "../src/mailer.js";
+import { conBanner, mailReady, sendMail } from "../src/mailer.js";
 
 const message = {
   to: "member@example.com",
@@ -9,6 +9,8 @@ const message = {
   text: "Hello",
   headers: { "List-Unsubscribe": "<https://www.m365.fm/unsubscribe>", "List-Unsubscribe-Post": "List-Unsubscribe=One-Click" },
 };
+const bannerAt = "2026-11-04T06:00:00Z";
+const banner = conBanner("en", bannerAt);
 
 test("mailer uses Cloudflare binding and logs no recipient address", async () => {
   const oldFetch = globalThis.fetch, oldLog = console.log;
@@ -19,9 +21,9 @@ test("mailer uses Cloudflare binding and logs no recipient address", async () =>
   try {
     const env = { MAIL_FROM: "M365.FM <system@m365.fm>", EMAIL: { send: async (value) => { payload = value; return { messageId: "cf-message-1" }; } }, RESEND_API_KEY: "fallback-key" };
     assert.equal(mailReady(env), true);
-    const result = await sendMail(env, message);
+    const result = await sendMail(env, { ...message, bannerAt });
     assert.deepEqual(result, { ok: true, status: 200, messageId: "cf-message-1" });
-    assert.deepEqual(payload, { ...message, from: { email: "system@m365.fm", name: "M365.FM" } });
+    assert.deepEqual(payload, { ...message, html: message.html + banner, text: `${message.text}\n\nM365Con · Learn more: https://m365con.net`, from: { email: "system@m365.fm", name: "M365.FM" } });
     assert.equal(fetched, false, "Cloudflare binding has priority over Resend");
     assert.ok(logs.some((line) => line.includes("cf-message-1")));
     assert.ok(logs.every((line) => !line.includes(message.to)));
@@ -43,10 +45,10 @@ test("mailer falls back to Resend when the binding is absent", async () => {
   try {
     const env = { MAIL_FROM: "M365.FM <system@m365.fm>", RESEND_API_KEY: "fallback-key" };
     assert.equal(mailReady(env), true);
-    const result = await sendMail(env, message);
+    const result = await sendMail(env, { ...message, bannerAt });
     assert.deepEqual(result, { ok: true, status: 202, messageId: "resend-message-1" });
     assert.equal(request.url, "https://api.resend.com/emails");
-    assert.deepEqual(JSON.parse(request.options.body), { ...message, from: env.MAIL_FROM });
+    assert.deepEqual(JSON.parse(request.options.body), { ...message, html: message.html + banner, text: `${message.text}\n\nM365Con · Learn more: https://m365con.net`, from: env.MAIL_FROM });
     assert.ok(logs.some((line) => line.includes("resend-message-1")));
     assert.ok(logs.every((line) => !line.includes(message.to)));
   } finally {
