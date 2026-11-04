@@ -18,24 +18,24 @@ jobs:
       cancel-in-progress: false   # der laufende Bau wird fertig und veroeffentlicht; von mehreren wartenden Laeufen behaelt GitHub nur den neuesten.
                                   # Vorher (true) brach jeder Push den laufenden Bau ab: am 1.11. zwischen 07:34 und 08:12 sechs Abbrueche in Folge, nichts veroeffentlicht.
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with: { python-version: "3.12" }
       - name: Sponsor-Rechner gegen die Testvektoren des Prototyps pruefen (T37, blockierend; Node ist auf dem Runner vorhanden)
         run: node --test tests/sponsor_calc.test.mjs
       - name: Cache fuer den Browser (fester Schluessel, einmal gefuellt)
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ~/.cache/ms-playwright
           key: playwright-chromium-v1
       - name: Cache fuer Teilen-Bilder (rollierend)
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: .ogcache
           key: ogcache-${{ github.run_id }}
           restore-keys: ogcache-
       - name: Cache fuer die Community-Exporte (letzte erreichbare Fassung je Endpunkt, siehe site_fetch.py)
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: data/cache
           key: exports-${{ github.run_id }}
@@ -155,7 +155,7 @@ jobs:
       # Pruefsummenliste der R2-Seiten in einem eigenen Cache: wird direkt nach dem Upload gesichert (auch wenn spaeter eine blockierende Pruefung
       # scheitert oder der Lauf abgebrochen wird). Vorher ging sie dann verloren und der naechste Lauf lud dieselben Seiten noch einmal hoch.
       - name: Pruefsummenliste der R2-Seiten (letzter Stand)
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v6
         with:
           path: data/cache/r2_pages.json
           key: r2pages-${{ github.run_id }}
@@ -172,7 +172,7 @@ jobs:
           python tools/r2_pages_upload.py r2out
       - name: Pruefsummenliste der R2-Seiten sichern (immer, sofort nach dem Upload)
         if: always() && hashFiles('data/cache/r2_pages.json') != ''
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v6
         with:
           path: data/cache/r2_pages.json
           key: r2pages-${{ github.run_id }}-${{ github.run_attempt }}
@@ -221,16 +221,18 @@ jobs:
           python generate_og.py
       - name: Seiten-Hashes (fuer gezieltes Purge und IndexNow)
         run: python tools/page_hashes.py docs page-hashes.json
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: page-hashes
           retention-days: 3
           path: |
             page-hashes.json
             r2-changed.json
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
-        with: { path: docs }
+      - uses: actions/configure-pages@v6
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: docs
+          include-hidden-files: true
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -242,16 +244,19 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - id: deployment
-        uses: actions/deploy-pages@v4
-      - uses: actions/checkout@v4
+        uses: actions/deploy-pages@v5
+      - uses: actions/checkout@v7
       - name: Letzter Seiten-Stand (Hashes des vorigen Deploys)
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: .pagehashes
           key: page-hashes-${{ github.run_id }}
           restore-keys: page-hashes-
-      - uses: actions/download-artifact@v4
-        with: { name: page-hashes, path: .newhashes }
+      - uses: actions/download-artifact@v8
+        with:
+          name: page-hashes
+          path: .newhashes
+          digest-mismatch: warn
       - name: "Cloudflare-Cache nur fuer geaenderte Adressen leeren, IndexNow nur fuer Aenderungen (Bing, Yandex, Seznam, Naver)"
         continue-on-error: true
         env:

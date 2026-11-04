@@ -13,10 +13,12 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with: { node-version: 22 }
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          package-manager-cache: false
+      - uses: actions/setup-python@v7
         with: { python-version: "3.12" }
       - name: Spreaker-Token per OAuth erneuern
         continue-on-error: true
@@ -104,7 +106,7 @@ jobs:
           rm -f "$f"
       - name: D1-Sicherung aufheben (14 Tage, nur verschluesselt)
         if: always() && env.skip != '1' && env.d1enc == '1'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: d1-backup-${{ github.run_id }}
           path: worker/backup-d1.sql.enc

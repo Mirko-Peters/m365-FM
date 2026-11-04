@@ -29,13 +29,13 @@ jobs:
   apply:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with: { fetch-depth: 0 }   # T25: volle Historie, damit apply_shownotes Datei- und QA-Zeitpunkt vergleichen kann
       - name: Gibt es Shownotes?
         id: has
         run: |
           if ls shownotes/spreaker/*.html >/dev/null 2>&1; then echo "yes=1" >> "$GITHUB_OUTPUT"; else echo "yes=0" >> "$GITHUB_OUTPUT"; echo "Keine Dateien unter shownotes/spreaker/ - nichts zu tun"; fi
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         if: steps.has.outputs.yes == '1'
         with: { python-version: "3.12" }
       - run: pip install -q requests cryptography
