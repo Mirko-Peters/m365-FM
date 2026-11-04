@@ -4,14 +4,19 @@ import { discoverFeed, parseFeed } from "./feeds.js";
 import { token as youtubeToken } from "./youtube.js";
 
 const now = () => Math.floor(Date.now() / 1000);
-const SOURCE_KINDS = ["podcast", "youtube", "blog"];
+const SOURCE_KINDS = ["podcast", "youtube", "blog", "github"];
 const ENTRY_KINDS = ["podcast", "video", "blog", "session", "github", "article", "other"];
 const YOUTUBE_HOSTS = new Set(["youtube.com", "www.youtube.com", "m.youtube.com"]);
+const GITHUB_HOSTS = new Set(["github.com", "www.github.com"]);
 const MVP_CATEGORIES = ["Video/Webcast/Podcast", "Blog", "Speaker/Presenter"];
 const IMPORT_LIMIT = 5000;
 const DEFAULT_CATEGORIES = { video: "Video/Webcast/Podcast", podcast: "Video/Webcast/Podcast", blog: "Blog", session: "Speaker/Presenter" };
 const TOPIC_ID = /^[a-z0-9][a-z0-9-]{1,47}$/;
 const SPREAKER_EPISODE = /^https:\/\/(?:www\.)?spreaker\.com\/episode\/(?:[a-z0-9-]+--)?(\d+)(?:[\/?#]|$)/i;
+
+async function invalidateProfileExport(db) {
+  await db.prepare("DELETE FROM export_cache WHERE k='profiles'").run().catch(() => {});
+}
 
 async function ensureContributionColumns(db) {
   try { await db.prepare("SELECT topics_edited FROM contributions LIMIT 1").first(); }
@@ -106,7 +111,9 @@ export async function handleContributions(env, request, url, path, user, J) {
   if (path === "/api/contributions/source" && method === "POST") {
     if (!(await rateLimit(db, `contrib-source:${user.id}`, 10, 86400))) return J({ error: "rate_limit" }, 429);
     const b = await request.json().catch(() => ({})), kind = String(b.kind || ""), sourceUrl = safeUrl(b.url);
-    if (!SOURCE_KINDS.includes(kind) || !sourceUrl || (kind === "youtube" && !YOUTUBE_HOSTS.has(new URL(sourceUrl).hostname.toLowerCase()))) return J({ error: "bad_source" }, 400);
+    if (!SOURCE_KINDS.includes(kind) || !sourceUrl ||
+      (kind === "youtube" && !YOUTUBE_HOSTS.has(new URL(sourceUrl).hostname.toLowerCase())) ||
+      (kind === "github" && !GITHUB_HOSTS.has(new URL(sourceUrl).hostname.toLowerCase()))) return J({ error: "bad_source" }, 400);
     if ((await db.prepare("SELECT COUNT(*) n FROM contribution_sources WHERE user_id=?").bind(user.id).first()).n >= 20) return J({ error: "source_limit" }, 400);
     const title = cleanText(b.title || "", 100).replace(/[<>]/g, "").trim();
     const feed = /\.(?:rss|xml|atom)(?:$|[?#])/i.test(sourceUrl) ? sourceUrl : "";
@@ -122,17 +129,37 @@ export async function handleContributions(env, request, url, path, user, J) {
   if (path === "/api/contributions/source/update" && method === "POST") {
     const b = await request.json().catch(() => ({})), id = Math.floor(+b.id);
     if (!(await rateLimit(db, `contrib-source-update:${user.id}`, 30, 86400))) return J({ error: "rate_limit" }, 429);
-    const source = await db.prepare("SELECT id FROM contribution_sources WHERE id=? AND user_id=?").bind(id, user.id).first();
+    const source = await db.prepare("SELECT id,kind,url FROM contribution_sources WHERE id=? AND user_id=?").bind(id, user.id).first();
     if (!source) return J({ error: "not_found" }, 404);
     const updates = [], values = [];
+    const kind = b.kind === undefined ? source.kind : String(b.kind);
+    const sourceUrl = b.url === undefined ? source.url : safeUrl(b.url);
+    if (!SOURCE_KINDS.includes(kind) || !sourceUrl ||
+      (kind === "youtube" && !YOUTUBE_HOSTS.has(new URL(sourceUrl).hostname.toLowerCase())) ||
+      (kind === "github" && !GITHUB_HOSTS.has(new URL(sourceUrl).hostname.toLowerCase()))) return J({ error: "bad_source" }, 400);
+    if (b.kind !== undefined) { updates.push("kind=?"); values.push(kind); }
+    if (b.url !== undefined) { updates.push("url=?"); values.push(sourceUrl); }
+    if (b.url !== undefined || b.kind !== undefined) {
+      updates.push("feed=?", "fetched=0", "fails=0");
+      values.push(/\.(?:rss|xml|atom)(?:$|[?#])/i.test(sourceUrl) ? sourceUrl : "");
+    }
+    if (b.title !== undefined) { updates.push("title=?"); values.push(cleanText(b.title, 100).replace(/[<>]/g, "").trim()); }
     if (b.public !== undefined) { updates.push("public=?"); values.push(b.public ? 1 : 0); }
     if (b.active !== undefined) {
       updates.push("active=?"); values.push(b.active ? 1 : 0);
       if (b.active) { updates.push("fails=0", "fetched=MIN(fetched,?)"); values.push(now() - 1801); }
     }
     if (!updates.length) return J({ error: "bad_request" }, 400);
-    await db.prepare(`UPDATE contribution_sources SET ${updates.join(",")} WHERE id=? AND user_id=?`).bind(...values, id, user.id).run();
-    if (b.public !== undefined) await db.prepare("UPDATE contributions SET public=? WHERE source_id=? AND user_id=? AND manual=0").bind(b.public ? 1 : 0, id, user.id).run();
+    try {
+      await db.prepare(`UPDATE contribution_sources SET ${updates.join(",")} WHERE id=? AND user_id=?`).bind(...values, id, user.id).run();
+    } catch (e) {
+      if (/UNIQUE/i.test(String(e))) return J({ error: "source_exists" }, 409);
+      throw e;
+    }
+    if (b.public !== undefined) {
+      await db.prepare("UPDATE contributions SET public=? WHERE source_id=? AND user_id=? AND manual=0").bind(b.public ? 1 : 0, id, user.id).run();
+      await invalidateProfileExport(db);
+    }
     return J({ ok: true });
   }
   if (path === "/api/contributions/source/delete" && method === "POST") {
@@ -142,6 +169,7 @@ export async function handleContributions(env, request, url, path, user, J) {
     if (b.delete_contributions) await db.prepare("DELETE FROM contributions WHERE source_id=? AND user_id=?").bind(id, user.id).run();
     else await db.prepare("UPDATE contributions SET source_id=NULL WHERE source_id=? AND user_id=?").bind(id, user.id).run();
     await db.prepare("DELETE FROM contribution_sources WHERE id=? AND user_id=?").bind(id, user.id).run();
+    await invalidateProfileExport(db);
     return J({ ok: true, deleted_contributions: !!b.delete_contributions });
   }
   if (path === "/api/contributions/manual" && method === "POST") {
@@ -163,6 +191,7 @@ export async function handleContributions(env, request, url, path, user, J) {
       if (/UNIQUE/i.test(String(e))) return J({ error: "contribution_exists" }, 409);
       throw e;
     }
+    if (b.public) await invalidateProfileExport(db);
     return J({ ok: true, id: r.meta.last_row_id }, 201);
   }
   if (path === "/api/contributions/mine" && method === "GET") {
@@ -176,7 +205,7 @@ export async function handleContributions(env, request, url, path, user, J) {
   }
   if (path === "/api/contributions/update" && method === "POST") {
     const b = await request.json().catch(() => ({})), id = Math.floor(+b.id);
-    const entry = await db.prepare("SELECT id FROM contributions WHERE id=? AND user_id=?").bind(id, user.id).first();
+    const entry = await db.prepare("SELECT id,public FROM contributions WHERE id=? AND user_id=?").bind(id, user.id).first();
     if (!entry) return J({ error: "not_found" }, 404);
     const updates = [], values = [];
     if (b.category !== undefined) {
@@ -188,12 +217,14 @@ export async function handleContributions(env, request, url, path, user, J) {
     if (b.public !== undefined) { updates.push("public=?"); values.push(b.public ? 1 : 0); }
     if (!updates.length) return J({ error: "bad_request" }, 400);
     await db.prepare(`UPDATE contributions SET ${updates.join(",")} WHERE id=? AND user_id=?`).bind(...values, id, user.id).run();
+    if (b.public !== undefined || entry.public) await invalidateProfileExport(db);
     return J({ ok: true });
   }
   if (path === "/api/contributions/delete" && method === "POST") {
     const b = await request.json().catch(() => ({})), id = Math.floor(+b.id);
     const entry = await db.prepare("SELECT id,url,manual FROM contributions WHERE id=? AND user_id=?").bind(id, user.id).first();
     if (!entry) return J({ error: "not_found" }, 404);
+    await invalidateProfileExport(db);
     const remove = db.prepare("DELETE FROM contributions WHERE id=? AND user_id=?").bind(id, user.id);
     if (!entry.manual && entry.url) {
       await db.batch([
@@ -251,6 +282,7 @@ export async function refreshContributions(env, max = 5) {
             category, JSON.stringify(topicsOf(item.topics)), source.public, t, source.user_id, item.url));
       }
       if (values.length) await db.batch(values);
+      if (source.public && values.length) await invalidateProfileExport(db);
       await db.prepare("UPDATE contribution_sources SET feed=?,fetched=?,fails=0 WHERE id=?").bind(feed, t, source.id).run();
       collected += items.length;
     } catch {
