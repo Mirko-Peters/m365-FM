@@ -153,7 +153,6 @@
         week.website = Number(source.website) || 0;
       }
     });
-    highlights.sort(function (a, b) { return Number(b.metric.value) - Number(a.metric.value); });
     var hasValues = (org.weekly || []).length > 0;
     if (!hasValues) return node("div", { class: "sdb-chart", role: "img", "aria-label": text("weekly_no_data") },
       [node("p", { class: "mut", text: text("weekly_no_data") })]);
@@ -322,7 +321,13 @@
       placements.appendChild(rows);
       section.appendChild(placements);
       root.appendChild(section);
-      var items = allPlacements(org);
+      var period = currentPeriod || (function () {
+        var range = rangeFor(selected, org);
+        return { from: range[0], to: range[1] };
+      })();
+      var items = allPlacements(org).filter(function (item) {
+        return (!item.start || item.start <= period.to) && (!item.end || item.end >= period.from);
+      });
       if (!items.length) rows.appendChild(node("p", { class: "mut", text: text("no_placements") }));
       items.forEach(function (item) { rows.appendChild(placementRow(org, item)); });
     });
@@ -450,7 +455,8 @@
           }
         }
         if (channels[active][0] === "podcast_tab") {
-        var episodes = Object.create(null);
+          content.appendChild(metricCard({ value: null, source: text("source_no_data"), kind: "measured", as_of: null }, text("top_countries")));
+          var episodes = Object.create(null);
         records.filter(function (record) { return record.metric === "podcast_plays" && /^episode:/.test(record.dim || ""); }).forEach(function (record) {
           var episode = record.dim.slice(8), item = episodes[episode] || (episodes[episode] = { plays: 0, day: record.day });
           item.plays += Number(record.value) || 0;

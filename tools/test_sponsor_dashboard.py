@@ -74,6 +74,14 @@ class SponsorDashboardTests(unittest.TestCase):
         self.assertNotIn("publicPlacements", frontend)
         self.assertNotIn("org.website", frontend)
 
+    def test_detail_labels_unavailable_breakdowns_without_sample_values(self):
+        frontend = (ROOT / "assets" / "sponsor-dashboard.js").read_text("utf-8")
+        for key in ("top_countries", "languages_viewed", "source_no_data"):
+            self.assertIn(f'"{key}"', frontend)
+            self.assertIn(key, SPN.dashboard_copy("en"))
+            self.assertIn(key, SPN.dashboard_copy("de"))
+        self.assertIn(".sdb-lang-bars", SPN.DASHBOARD_CSS)
+
 
 if __name__ == "__main__":
     unittest.main()

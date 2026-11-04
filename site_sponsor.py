@@ -158,6 +158,8 @@ def dashboard_copy(lang):
         "link_clicks": ("Clicks to your website", "Klicks zu deiner Website"),
         "project_requests": ("Project requests", "Projektanfragen"),
         "ai_citations": ("AI citations", "KI-Zitate"),
+        "languages_viewed": ("Languages with views", "Sprachen mit Aufrufen"),
+        "top_countries": ("Top countries", "Top-Länder"),
         "search_impressions": ("Search impressions", "Such-Impressionen"),
         "detail_intro": ("Placement performance and source data", "Leistung und Quelldaten der Platzierung"),
         "podcast_tab": ("Podcast", "Podcast"),
@@ -270,6 +272,7 @@ DASHBOARD_CSS = """:root{--sdb-measured:#2f6b3a;--sdb-estimated:var(--ac);--sdb-
 .sdb-chart{min-height:8em;display:grid;gap:.6em}.sdb-bars{height:12em;display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:.5em;align-items:end;border-bottom:1px solid var(--bd)}
 .sdb-bar-group{height:100%;display:flex;flex-direction:column;justify-content:end;align-items:center;gap:1px;min-width:0}.sdb-bar-group small{font-size:.65em;color:var(--mut);overflow:hidden}
 .sdb-bar{display:block;width:70%;height:var(--bar-height);min-height:2px}.sdb-bar-podcast{background:var(--ac)}.sdb-bar-video{background:var(--sdb-measured)}.sdb-bar-website{background:var(--sdb-manual)}
+.sdb-lang-bars{display:grid;gap:.5em;grid-column:1/-1}.sdb-lang-row{display:grid;grid-template-columns:3em 1fr auto;gap:.75em;align-items:center}.sdb-lang-track{height:.65em;background:var(--bd)}.sdb-lang-bar{display:block;width:var(--bar-width);height:100%;background:var(--ac)}
 .sdb-legend{color:var(--mut);font-size:.9em}.sdb-company{display:flex;gap:.5em;align-items:center}
 .sdb-report{max-width:794px;margin:auto}.sdb-report-head{border-bottom:2px solid var(--bd);padding-bottom:1em}.sdb-report .cols{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
 @media(max-width:700px){.sdb-placement-link{grid-template-columns:1fr}.sdb-report .cols{grid-template-columns:repeat(2,minmax(0,1fr))}}

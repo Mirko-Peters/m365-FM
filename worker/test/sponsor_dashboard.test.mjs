@@ -14,6 +14,7 @@ class Element {
   set textContent(value) { this._text = String(value); this.children = []; }
   get textContent() { return this._text || this.children.map((child) => child.textContent).join(""); }
   setAttribute(key, value) { this.attributes[key] = String(value); }
+  removeAttribute(key) { delete this.attributes[key]; }
   appendChild(child) { this.children.push(child); return child; }
   insertBefore(child, before) {
     const index = this.children.indexOf(before);
