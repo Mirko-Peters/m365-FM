@@ -19,9 +19,13 @@ export function parseFeed(xml, max = 12) {
     try { const u = new URL(link.trim()); if (u.protocol !== "https:" || !goodHost(u.hostname) || u.username) continue; link = u.href; } catch { continue; }
     const raw = tag(b, "media:description") || tag(b, "summary") || tag(b, "description") || tag(b, "content:encoded") || tag(b, "content");
     const desc = cleanText(dec(raw).replace(/<[^>]+>/g, " ").replace(/https?:\/\/\S+/gi, "").replace(/\s+/g, " ").trim(), 600);
+    const topics = [...new Set([...b.matchAll(/<category\b([^>]*?)(?:\/>|>([\s\S]*?)<\/category>)/gi)].map((m) => {
+      const term = /\bterm=["']([^"']+)["']/i.exec(m[1]);
+      return cleanText(dec(term ? term[1] : m[2] || "").replace(/<[^>]+>/g, ""), 80).replace(/\s+/g, " ").trim();
+    }).filter(Boolean))].slice(0, 10);
     let thumb = ""; const tm = /<media:thumbnail[^>]*url=["']([^"']+)["']/i.exec(b) || /<enclosure[^>]*type=["']image[^"']*["'][^>]*url=["']([^"']+)["']/i.exec(b) || /<img[^>]*src=["']([^"']+)["']/i.exec(dec(raw));
     if (tm) { try { const tu = new URL(dec(tm[1])); if (tu.protocol === "https:" && goodHost(tu.hostname) && tu.href.length < 400) thumb = tu.href; } catch {} }
-    if (title.length >= 3 && link.length <= 400) out.push({ desc, thumb, title, url: link, t: Math.min(t, Math.floor(Date.now() / 1000)) });
+    if (title.length >= 3 && link.length <= 400) out.push({ desc, thumb, title, topics, url: link, t: Math.min(t, Math.floor(Date.now() / 1000)) });
   }
   return out;
 }

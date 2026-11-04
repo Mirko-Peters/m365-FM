@@ -9,6 +9,7 @@ import { scoreOf, levelOf, levelName, CAPS, THRESH } from "../src/levels.js";
 import { handleSponsor } from "../src/sponsor.js";
 import { handleAdminPanel } from "../src/adminpanel.js";
 import { d1BackupExportArgs, d1BackupTables } from "../src/d1_backup.js";
+import { handleContributions, refreshContributions } from "../src/contributions.js";
 
 async function searchDb(failTrigram = false) {
   const { DatabaseSync } = await import("node:sqlite");
@@ -97,17 +98,62 @@ test("wiki: sanitize entfernt Skripte, laesst Markup und viz nur mit Option", ()
 
 test("feeds: parseFeed nimmt nur https-Links und liest Titel, Datum, Beschreibung", () => {
   const rss = `<rss><channel>
-    <item><title>T1 &amp; mehr</title><link>https://example.com/1</link><pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate><description>&lt;p&gt;Hallo https://example.com/x Welt&lt;/p&gt;</description></item>
+    <item><title>T1 &amp; mehr</title><link>https://example.com/1</link><pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate><category>Power Automate</category><description>&lt;p&gt;Hallo https://example.com/x Welt&lt;/p&gt;</description></item>
     <item><title>Unsicher</title><link>http://example.com/2</link></item>
-    <entry><title>Atom</title><link rel="alternate" href="https://example.com/3"/><updated>2024-02-01T00:00:00Z</updated></entry>
+    <entry><title>Atom</title><link rel="alternate" href="https://example.com/3"/><updated>2024-02-01T00:00:00Z</updated><category term="Microsoft Teams"/></entry>
   </channel></rss>`;
   const out = parseFeed(rss);
   assert.equal(out.length, 2);
   assert.equal(out[0].title, "T1 & mehr");
   assert.equal(out[0].url, "https://example.com/1");
   assert.equal(out[0].t, Date.parse("Mon, 01 Jan 2024 00:00:00 GMT") / 1000);
+  assert.deepEqual(out[0].topics, ["Power Automate"]);
   assert.equal(out[0].desc, "Hallo Welt");
   assert.equal(out[1].url, "https://example.com/3");
+  assert.deepEqual(out[1].topics, ["Microsoft Teams"]);
+});
+
+test("contributions: private Quellen und manuelle Beiträge exportieren nur eigene Metadaten", async () => {
+  const { db, raw } = await searchDb();
+  raw.exec("INSERT INTO users(id,provider,sub,name,created) VALUES(1,'g','1','Anna',1),(2,'g','2','Ben',1); INSERT INTO profiles(user_id,public,handle,headline,about,company,job,country,show_org,updated) VALUES(1,0,'anna','','','','','',1,1)");
+  const user = { id: 1 }, J = (data, status = 200) => new Response(JSON.stringify(data), { status });
+  const call = (path, method = "GET", data, actor = user) => {
+    const url = new URL(`https://x${path}`);
+    return handleContributions({ DB: db },
+      new Request(url, { method, headers: { "content-type": "application/json" }, ...(data === undefined ? {} : { body: JSON.stringify(data) }) }),
+      url, url.pathname, actor, J);
+  };
+
+  const source = await call("/api/contributions/source", "POST", { kind: "blog", url: "https://example.com/feed.xml", title: "My blog" });
+  assert.equal(source.status, 201);
+  assert.equal((await source.json()).source.public, false, "Quellen sind standardmäßig privat");
+  assert.equal((await (await call("/api/contributions/source", "POST", { kind: "blog", url: "https://example.com/feed.xml" })).json()).error, "source_exists");
+  assert.equal((await call("/api/contributions/source", "POST", { kind: "youtube", url: "https://example.com/channel" })).status, 400);
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async () => new Response(`<rss><channel><item><title>Feed article</title><link>https://example.com/post</link><pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate><category>Power Automate</category><description>Never persist the full text</description></item></channel></rss>`);
+  try { await refreshContributions({ DB: db }, 1); } finally { globalThis.fetch = originalFetch; }
+  const imported = raw.prepare("SELECT title,topics FROM contributions WHERE source_id IS NOT NULL").get();
+  assert.equal(imported.title, "Feed article");
+  assert.deepEqual(JSON.parse(imported.topics), ["power-automate"]);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM pragma_table_info('contributions') WHERE name IN ('summary','description','body')").get().n, 0, "nur Metadaten ohne Volltext werden gespeichert");
+
+  const created = await call("/api/contributions/manual", "POST", {
+    title: "Power Automate talk", kind: "session", published: "2026-01-01", category: "=SUM(1,1)", topics: ["Power Automate", "fabric"],
+  });
+  assert.equal(created.status, 201);
+  const id = raw.prepare("SELECT id FROM contributions").get().id;
+  assert.equal((await (await call("/api/contributions/mine")).json()).contributions.length, 2);
+  assert.equal((await (await call("/api/contributions/mine", "GET", undefined, { id: 2 })).json()).contributions.length, 0, "Mitglieder sehen nur eigene Einträge");
+  assert.equal((await (await call("/api/contributions/public/anna")).json()).error, "not_found", "öffentliches Profil ist standardmäßig aus");
+  await raw.prepare("UPDATE profiles SET public=1 WHERE user_id=1").run();
+  await call("/api/contributions/update", "POST", { id, public: true });
+  assert.equal((await (await call("/api/contributions/public/anna")).json()).contributions.length, 1);
+
+  const exported = await (await call("/api/contributions/export?from=2026-01-01&to=2026-01-01")).json();
+  assert.equal(exported.total, 1, "Datumsgrenzen sind inklusiv");
+  assert.ok(exported.csv.includes("'=SUM(1,1)"), "CSV-Formeln werden entschärft");
+  assert.ok(exported.copy.includes("Kategorie: =SUM(1,1)"));
+  assert.equal((await (await call("/api/contributions/export?from=2026-02-30")).json()).error, "bad_period");
 });
 
 test("schema: Migrationen sind idempotent und enthalten jede zur Laufzeit angelegte Tabelle", () => {
