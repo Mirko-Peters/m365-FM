@@ -39,7 +39,7 @@
 #c-events label{display:block;margin:14px 0 4px;font-weight:600}#c-events label:has(>input[type=checkbox]){display:flex;align-items:center;font-weight:500}#c-events input[type=checkbox]{width:20px;height:20px;margin:0 10px 0 0;accent-color:var(--ac)}
 #c-events .ev-s{padding:10px 0;border-top:1px solid var(--bd)}#c-events .btns{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}
 
-.ctabs{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 18px;border-bottom:1px solid var(--bd,#8884)}.ctab{font:inherit;padding:8px 14px;border:1px solid var(--bd,#8884);border-bottom:0;border-radius:8px 8px 0 0;background:transparent;color:inherit;cursor:pointer}.ctab[aria-selected=true]{background:var(--accent,#0a66c2);color:#fff;border-color:transparent}.ctab:focus-visible{outline:2px solid currentColor;outline-offset:2px}[hidden]{display:none!important}
+.ctabs{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 18px;border-bottom:1px solid var(--bd,#8884)}.ctab{font:inherit;padding:8px 14px;border:1px solid var(--bd,#8884);border-bottom:0;border-radius:8px 8px 0 0;background:transparent;color:inherit;cursor:pointer}.ctab[aria-selected=true]{background:var(--accent,#0a66c2);color:#fff;border-color:transparent}.ctab:focus-visible{outline:2px solid currentColor;outline-offset:2px}:where(body:has([id^="c-"])) [hidden]{display:none!important}
 /* Editor (Blog, Bibliothek) */
 .ed-form>div,.ed-form>p{margin:0 0 16px}.ed-form label{display:block;margin:0 0 6px;font-weight:600}
 .ed-form input[type=text],.ed-form input:not([type]),.ed-form select,.ed-form textarea{width:100%;box-sizing:border-box;padding:10px 12px;font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--bd);border-radius:8px;margin:0}
@@ -70,4 +70,4 @@
 
 .vz-ed-rows{display:flex;flex-direction:column;gap:6px;width:100%}.vz-ed-row,.vz-ed-hdr{display:flex;gap:6px;width:100%}.vz-ed-row input,.vz-ed-hdr input{flex:1;min-width:0}.vz-ed-pv{width:100%;max-height:340px;overflow:auto}.ed-panel select{max-width:14em}
 
-main#main{min-height:60vh}   /* Platz fuer den per Skript geladenen Community-Inhalt: die Fusszeile springt beim Laden nicht mehr (CLS); Bereiche darin werden vom Skript ein- und ausgeblendet */
+:where(body:has([id^="c-"])) main#main{min-height:60vh}   /* Platz fuer den per Skript geladenen Community-Inhalt: die Fusszeile springt beim Laden nicht mehr (CLS); Bereiche darin werden vom Skript ein- und ausgeblendet */

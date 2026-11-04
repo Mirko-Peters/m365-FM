@@ -336,7 +336,7 @@ def build(g):
     root = f"{BASE}/show/"; NAME = pod.get("name") or "M365.FM Podcast"
     navitems = (("", "Home"), ("episodes/", "Episodes"), *(((f"{BASE}/community/u/mirko-p/blog/", "Blog"),) if (PD / "blog_posts.json.gz").exists() else ()), *((("guests/", "Guests"),) if guests else ()), ("hosts/", "Hosts"), ("sponsors/", "Sponsors"), ("reviews/", "Reviews"), ("work-with-me/", "Work with me"), ("about/", "About"))
     nav = '<section class="sb-card sb-nav"><h2>M365.FM Show</h2><ul class="sb-navl">' + "".join(f'<li><a href="{p if p.startswith("https://") else root + p}">{t}</a></li>' for p, t in navitems) + "</ul></section>"   # frueher zweite Menueleiste ueber dem Inhalt, jetzt Karte in der Sidebar
-    shell = lambda b, side="": f'{header("en", "")}<link rel="stylesheet" href="{BASE}/assets/sbar.css"><main class="wrap shw"><div class="shmain">{b}</div>{side}</main>{footer_en()}'
+    shell = lambda b, side="": f'{header("en", "")}<main class="wrap shw"><div class="shmain">{b}</div>{side}</main>{footer_en()}'
 
     SBX = SBR.Index(); SHP = json.loads((D / "platforms.json").read_text("utf-8")).get("en", {}) if (D / "platforms.json").exists() else {}
 

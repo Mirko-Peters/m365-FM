@@ -453,6 +453,10 @@ FXCSS = _mini_css("fx.css")   # kleines CSS inline statt eigener Anfrage (Ladeze
 # Barrierefreiheits-Regeln stehen im gehashten site.css statt in einer eigenen Datei: vorher lag a11y.css als zweites renderblockierendes
 # Stylesheet am Anfang von <body> (eigene Anfrage, nur 1 h Cache). assets/a11y.css bleibt fuer noch gecachte alte Seiten liegen.
 A11Y_CSS = _mini_css("a11y.css")
+# sbar.css stand bisher vor site.css im <head>, community.css nach site.css im Body.
+# Die Reihenfolge bleibt im Hash-Bundle erhalten; die Einzeldateien bleiben fuer gecachte Seiten bestehen.
+SBAR_CSS = _mini_css("sbar.css")
+COMMUNITY_CSS = _mini_css("community.css")
 # Vorgeladen werden die Schnitte, die auf jeder Seite im ersten Bildschirm Text zeigen (gemessen auf Start-, Sprach-, Show- und Entitaetsseiten,
 # alle 15 Sprachen - Navigation, Logo und Ziffern/Leerzeichen sind lateinisch). Barlow 400 (Fliesstext) und Condensed 600 (Ueberschriften) normal;
 # Condensed 500 (Menue) und 700 (Logo) ab 701 px normal, darunter mit fetchpriority=low. Live-A/B 3.11.2026 (tools/preload_ab.mjs, 2 x 7 Laeufe):
@@ -526,7 +530,6 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
         if share: body = body.replace("<footer>", share_html(lang, canonical, title) + "<footer>", 1)   # T37: share=False (Sponsor-Seite, keine Fremdmarken)
     if side:   # Sidebar neben dem Hauptinhalt (wie auf den Show-Seiten): erstes <main> in zwei Spalten
         body = re.sub(r'<main class="wrap"([^>]*)>(.*?)</main>', lambda m: f'<main class="wrap shw"{m.group(1)}><div class="shmain">{m.group(2)}</div>{side}</main>', body, count=1, flags=re.S)
-        extra_head += f'<link rel="stylesheet" href="{BASE}/assets/sbar.css">'
     body = single_main(body)
     body = ADS.inject(BASE, body, lang, canonical, noindex)
     if 'id="main"' in body:
@@ -567,7 +570,7 @@ def css_link():
     """Das gesamte Stylesheet liegt einmal als Datei mit Inhalts-Hash unter /assets/ (statt ~33 KB inline in jeder Seite): kleinere Seiten, Browser- und CDN-Cache."""
     if not _CSSF:
         import hashlib
-        css = CSS + (ADS.CSS if ADS.active(BASE) else "") + "\n" + A11Y_CSS + "\n"
+        css = SBAR_CSS + "\n" + CSS + (ADS.CSS if ADS.active(BASE) else "") + "\n" + A11Y_CSS + "\n" + COMMUNITY_CSS + "\n"
         name = "site." + hashlib.sha1(css.encode("utf-8")).hexdigest()[:10] + ".css"
         (OUT / "assets").mkdir(parents=True, exist_ok=True); (OUT / "assets" / name).write_text(css, encoding="utf-8")
         _CSSF["u"] = f"{BASE}/assets/{name}"
@@ -737,7 +740,7 @@ def community_tags(lang, vid=None, mode=""):
     priv = f"{BASE}/{'datenschutz' if lang == 'de' else 'privacy'}/"
     cfg = {"api": COMMUNITY_API, "lang": lang, "vid": vid, "privacy": priv, "communityUrl": f"{BASE}/{lang}/community/"}
     # Die Oberflaechentexte (ca. 6 KB je Sprache, auf jeder Seite gleich) liegen in assets/cm-<sprache>.js (gecacht), nicht mehr in jeder Seite.
-    return (f'<link rel="stylesheet" href="{BASE}/assets/community.css"><script defer src="{BASE}/assets/cm-{lang if lang in _CI else "en"}.js"></script>'
+    return (f'<script defer src="{BASE}/assets/cm-{lang if lang in _CI else "en"}.js"></script>'
             f'<script>window.M365C={json.dumps(cfg, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")}</script><script defer src="{BASE}/assets/community.js"></script>')
 
 

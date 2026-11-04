@@ -25,7 +25,6 @@
   if (/\/(?:community|sponsor)\//.test(location.pathname)) return;   // kein Popup auf Community- und Sponsor-Seiten (T37)
   var until = +ls("m365_attend_until") || 0; if (until > Date.now()) return;
   var timer, shown = false, last;
-  function css() { if (document.querySelector('link[href*="sbar.css"]')) return; var l = document.createElement("link"); l.rel = "stylesheet"; l.href = BASE + "/assets/sbar.css"; document.head.appendChild(l); }
   function close(days) { var o = document.getElementById("att-ov"); if (o) o.remove(); ls("m365_attend_until", String(Date.now() + days * 864e5)); if (last && last.focus) try { last.focus(); } catch (e) {} document.removeEventListener("keydown", esc); }
   function esc(e) {
     if (e.key === "Escape") { close(7); return; }
@@ -36,7 +35,7 @@
   }
   function show() {
     if (shown || document.hidden) { arm(); return; }
-    shown = true; css(); last = document.activeElement;
+    shown = true; last = document.activeElement;
     var o = document.createElement("div"); o.id = "att-ov"; o.className = "att-ov";
     o.innerHTML = '<div class="att-box" role="dialog" aria-modal="true" aria-labelledby="att-h"><button class="att-x" type="button" aria-label="' + L.x + '">×</button>' +
       '<a href="' + URL_ + '" rel="noopener"><img src="' + BASE + '/assets/attending-m365con.webp" alt="I\'m attending M365Con International 2027" width="675" height="563"></a>' +
