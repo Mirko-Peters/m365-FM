@@ -1,0 +1,45 @@
+name: Community-Events sammeln
+on:
+  schedule:
+    - cron: "29 3 * * *"
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency: { group: events-scrape, cancel-in-progress: false }
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      EVENTS_POLICY_APPROVED: ${{ vars.EVENTS_POLICY_APPROVED }}
+      EVENTS_COMMUNITYDAYS: ${{ vars.EVENTS_COMMUNITYDAYS }}
+      EVENTS_PNP: ${{ vars.EVENTS_PNP }}
+      EVENTS_DEVELOPERS_EVENTS: ${{ vars.EVENTS_DEVELOPERS_EVENTS }}
+      EVENTS_SESSIONIZE: ${{ vars.EVENTS_SESSIONIZE }}
+      EVENTS_GLOBALAI: ${{ vars.EVENTS_GLOBALAI }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: "${{ github.ref_name }}" }
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Scraper erst nach Richtlinienfreigabe starten
+        run: |
+          if [ "$EVENTS_POLICY_APPROVED" != "1" ]; then
+            echo "Keine Quellenfreigabe: Datenabruf bleibt deaktiviert. Zuerst events-discovery.yml ausführen und prüfen."
+            exit 0
+          fi
+          python tools/scrape_events.py
+      - name: Ergebnisse festhalten
+        run: |
+          [ -f data/ext_events.json ] || exit 0
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/ext_events.json
+          if [ -f data/ext_events_state.json ]; then git add data/ext_events_state.json; fi
+          git diff --cached --quiet && exit 0
+          git commit -m "Community-Events aktualisiert"
+          for i in 1 2 3; do
+            git pull --rebase --autostash -q origin "${GITHUB_REF_NAME}" && git push -q origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((i*5))
+          done
+          exit 1

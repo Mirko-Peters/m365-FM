@@ -1,0 +1,28 @@
+name: Event-Quellen erkunden
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency: { group: events-discovery, cancel-in-progress: false }
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: "${{ github.ref_name }}" }
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Quellenregeln und MCP-Metadaten prüfen
+        run: python tools/discover_events_sources.py
+      - name: Bericht festhalten
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add reports/events-discovery.md reports/events-discovery.json
+          git diff --cached --quiet && exit 0
+          git commit -m "Event-Quellen erkundet"
+          for i in 1 2 3; do
+            git pull --rebase --autostash -q origin "${GITHUB_REF_NAME}" && git push -q origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((i*5))
+          done
+          exit 1

@@ -103,16 +103,21 @@ export async function claimEntity(db, eid, uid, via) {
   await db.prepare("INSERT INTO entity_claims(eid,user_id,status,via,created) VALUES(?,?,?,?,?) ON CONFLICT(eid) DO UPDATE SET status=CASE WHEN excluded.status='verified' THEN 'verified' ELSE entity_claims.status END").bind(eid, uid, via === "invite" ? "verified" : "pending", via, now()).run();
   return true;
 }
-const sessView = (r, mgr) => ({ id: r.id, title: r.title, abstract: r.abstract, start: r.start, end: r.end, room: r.room, track: r.track, level: r.level, lang: r.lang, topics: parse(r.topics, []), speakers: mgr ? parse(r.speakers, []) : parse(r.speakers, []).filter((x) => x.s === "confirmed").map((x) => ({ h: x.h, n: x.n, e: x.e })), speakers_open: parse(r.speakers, []).filter((x) => x.s !== "confirmed").length, recording_url: r.recording_url, status: r.status });
+const sessView = (r, mgr) => {
+  const speakers = parse(r.speakers, []);
+  return { id: r.id, title: r.title, abstract: r.abstract, start: r.start, end: r.end, room: r.room, track: r.track, level: r.level, lang: r.lang, topics: parse(r.topics, []),
+    speakers: mgr ? speakers : speakers.filter((x) => x.s === "confirmed" && !x.hidden).map((x) => ({ h: x.h, n: x.n, e: x.e, links: x.links })),
+    speakers_open: speakers.filter((x) => !x.hidden && x.s !== "confirmed").length, recording_url: r.recording_url, status: r.status };
+};
 async function evView(db, ev, withPending) {
   const org = ev.org_id ? await db.prepare("SELECT handle,name,public FROM orgs WHERE id=?").bind(ev.org_id).first() : null;
   const ow = await db.prepare("SELECT u.name,p.handle FROM users u LEFT JOIN profiles p ON p.user_id=u.id AND p.public=1 WHERE u.id=?").bind(ev.owner_id).first();
   const rows = (await db.prepare("SELECT * FROM event_sessions WHERE event_id=? " + (withPending ? "" : "AND status='live' ") + "ORDER BY start,id").bind(ev.id).all()).results || [];
-  return { handle: ev.handle, title: ev.title, summary: ev.summary, about: ev.about, start: ev.start, end: ev.end, mode: ev.mode, location: ev.location, country: ev.country, url: ev.url, tickets_url: ev.tickets_url,
+  return { handle: ev.handle, title: ev.title, summary: ev.summary, about: ev.about, start: ev.start, end: ev.end, cfs_close: ev.cfs_close || "", mode: ev.mode, location: ev.location, country: ev.country, url: ev.url, tickets_url: ev.tickets_url, source: ev.source || "", organizer_name: ev.organizer_name || "",
     free: !!ev.free, lang: ev.lang, topics: parse(ev.topics, []), seeking_sponsor: !!ev.seeking_sponsor, public: !!ev.public,
     partners: ((await db.prepare("SELECT p.kind,p.level,o.handle,o.name,o.public FROM event_partners p JOIN orgs o ON o.id=p.org_id WHERE p.event_id=? AND p.status='confirmed' ORDER BY p.created").bind(ev.id).all()).results || []).map((x) => ({ kind: x.kind, level: x.level, name: x.name, handle: x.public ? x.handle : "" })),
     asked: withPending ? ((await db.prepare("SELECT o.handle FROM sponsor_asks a JOIN orgs o ON o.id=a.org_id WHERE a.event_id=?").bind(ev.id).all()).results || []).map((x) => x.handle) : undefined,
-    organizer: org ? { kind: "o", handle: org.public ? org.handle : "", name: org.name } : { kind: "u", handle: ow?.handle || "", name: ow?.name || "" }, sessions: rows.map((r) => sessView(r, withPending)) };
+    organizer: ev.source ? { kind: "o", handle: "", name: ev.organizer_name || "" } : org ? { kind: "o", handle: org.public ? org.handle : "", name: org.name } : { kind: "u", handle: ow?.handle || "", name: ow?.name || "" }, sessions: rows.map((r) => sessView(r, withPending)) };
 }
 
 export async function ensureM365Con(env) {   // M365Con 2027 ist ein Event und gehoert dem Admin als Veranstalter
@@ -245,9 +250,12 @@ export async function handleEvents(env, request, url, path, user, J) {
     return J({ ok: true, handle: "m365con-2027", public: false });
   }
   if (path === "/api/events/export" && method === "GET") {
-    const evs = (await db.prepare("SELECT * FROM events WHERE public=1 ORDER BY start DESC LIMIT 300").all()).results || [];
+    const limit = Math.max(1, Math.min(300, parseInt(url.searchParams.get("limit") || "300", 10) || 300));
+    const offset = Math.max(0, Math.min(1000000, parseInt(url.searchParams.get("offset") || "0", 10) || 0));
+    const total = (await db.prepare("SELECT COUNT(*) n FROM events WHERE public=1").first()).n;
+    const evs = (await db.prepare("SELECT * FROM events WHERE public=1 ORDER BY start DESC LIMIT ? OFFSET ?").bind(limit, offset).all()).results || [];
     const out = []; for (const e of evs) out.push(await evView(db, e, false));
-    return J({ events: out }, 200, { "cache-control": "public, max-age=300" });
+    return J({ events: out, total, limit, offset, has_more: offset + out.length < total }, 200, { "cache-control": "public, max-age=300" });
   }
   if (path === "/api/events/mine" && method === "GET") {
     if (need()) return need();
@@ -291,7 +299,7 @@ export async function handleEvents(env, request, url, path, user, J) {
   if ((m = path.match(/^\/api\/event\/([a-z0-9-]{3,40})\/session$/)) && method === "POST") {
     if (need()) return need();
     if (!(await rateLimit(db, `sess:${user.id}`, 40, 3600))) return J({ error: "rate_limit" }, 429);
-    const ev = await db.prepare("SELECT * FROM events WHERE handle=?").bind(m[1]).first(); if (!ev) return J({ error: "not_found" }, 404);
+    const ev = await db.prepare("SELECT * FROM events WHERE handle=?").bind(m[1]).first(); if (!ev || ev.source) return J({ error: "not_found" }, 404);
     const mgr = await canManage(db, user, ev, "sessions"), b = await body();
     const title = txt(b.title, 140); if (title.length < 3) return J({ error: "bad_title" }, 400);
     const st = String(b.start || ""), en = String(b.end || "");
@@ -337,7 +345,7 @@ export async function handleEvents(env, request, url, path, user, J) {
   }
   // ---- Teilnehmer: anmelden (Warteliste bei vollem Event), Sichtbarkeit selbst bestimmen, abmelden ----
   if ((m = path.match(/^\/api\/event\/([a-z0-9-]{3,40})\/(attendees|register|capacity|invite-mail)$/))) {
-    const ev = await db.prepare("SELECT * FROM events WHERE handle=?").bind(m[1]).first(); if (!ev || (!ev.public && !(await canManage(db, user, ev, "edit")))) return J({ error: "not_found" }, 404);
+    const ev = await db.prepare("SELECT * FROM events WHERE handle=?").bind(m[1]).first(); if (!ev || ev.source || (!ev.public && !(await canManage(db, user, ev, "edit")))) return J({ error: "not_found" }, 404);
     const cap = (await db.prepare("SELECT capacity FROM event_settings WHERE event_id=?").bind(ev.id).first())?.capacity || 0;
     if (m[2] === "attendees" && method === "GET") {
       const going = (await db.prepare("SELECT COUNT(*) n FROM event_attendees WHERE event_id=? AND status='going'").bind(ev.id).first()).n;
