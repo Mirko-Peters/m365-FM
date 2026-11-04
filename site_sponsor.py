@@ -130,6 +130,9 @@ def dashboard_copy(lang):
         "period_30": ("Last 30 days", "Letzte 30 Tage"),
         "period_campaign": ("This campaign", "Diese Kampagne"),
         "period_year": ("This year", "Dieses Jahr"),
+        "active": ("Active", "Aktiv"),
+        "upcoming": ("Upcoming", "Demnächst"),
+        "planned": ("Planned", "Geplant"),
         "key_figures": ("Key figures", "Kennzahlen"),
         "reach_week": ("Reach per week", "Reichweite pro Woche"),
         "weekly_no_data": ("No weekly reach data is available.", "Keine wöchentlichen Reichweitendaten verfügbar."),
@@ -162,12 +165,17 @@ def dashboard_copy(lang):
         "website_tab": ("Website", "Website"),
         "search_ai_tab": ("Search & AI", "Suche & KI"),
         "report_title": ("Monthly sponsorship report", "Monatsbericht Sponsoring"),
+        "report_sentence": ("Your month in one sentence", "Dein Monat in einem Satz"),
         "month": ("Month", "Monat"),
         "highlights": ("Highlights", "Höhepunkte"),
         "next_month": ("Next month", "Nächster Monat"),
         "print_report": ("Print / save as PDF", "Drucken / als PDF speichern"),
         "sponsored_label": ("Sponsored content is labelled. No individual listener data is shared.",
                             "Gesponserte Inhalte sind gekennzeichnet. Es werden keine Daten einzelner Hörer geteilt."),
+        "privacy_note": ("No individual listener data is shared. Leads are shown only with consent.",
+                         "Es werden keine Daten einzelner Hörer geteilt. Leads zeigen wir nur mit Einwilligung."),
+        "source_note": ("Source and measurement type are shown with every value; missing values are not estimated.",
+                        "Quelle und Messart stehen bei jedem Wert; fehlende Werte werden nicht geschätzt."),
         "admin_only": ("This view is only available to administrators.", "Diese Ansicht ist nur für Administratoren verfügbar."),
         "source_status": ("Source status", "Status der Datenquellen"),
         "figures": ("Figures", "Kennzahlen"),
@@ -189,7 +197,7 @@ def dashboard_copy(lang):
         "link": ("Public report link", "Link zum öffentlichen Bericht"),
         "proof": ("R2 evidence key", "R2-Belegschlüssel"),
         "save": ("Save value", "Wert speichern"),
-        "saved": ("Saved", "Gespeichert"),
+        "saved": ("Saved · visible to the sponsor", "Gespeichert · für den Sponsor sichtbar"),
         "invalid": ("Please check the fields and try again.", "Bitte prüfe die Eingaben und versuche es erneut."),
         "source_bing": ("Bing AI Performance", "Bing AI Performance"),
         "source_no_data": ("No data", "Keine Daten"),
@@ -209,9 +217,9 @@ def dashboard_copy(lang):
         "source_desc_cloudflare": ("Page views by URL; no cookies or client-side tracking.", "Seitenaufrufe je URL; keine Cookies und kein Client-Tracking."),
         "source_desc_counter": ("Cookie-free daily totals by link and page surface.", "Cookiefreie Tagessummen je Link und Fläche."),
         "source_desc_gsc": ("Impressions and clicks for sponsored URLs.", "Impressions und Klicks für gesponserte URLs."),
-        "source_desc_bing_webmaster": ("Page and search-query statistics; connection not configured here.", "Seiten- und Suchanfragenstatistik; hier noch nicht angebunden."),
+        "source_desc_bing_webmaster": ("Page statistics for sponsored URLs.", "Seitenstatistik für gesponserte URLs."),
         "source_desc_bing": ("Monthly export entered by an administrator.", "Monatlicher Export, von einem Administrator eingetragen."),
-        "source_desc_press": ("Distribution and AI visibility reports; dashboard import not connected.", "Verteilungs- und KI-Sichtbarkeitsberichte; noch nicht ins Dashboard übernommen."),
+        "source_desc_press": ("Placement-specific distribution and AI visibility reports.", "Platzierungsbezogene Verteilungs- und KI-Sichtbarkeitsberichte."),
         "source_desc_events": ("Registered attendees from event records.", "Registrierte Teilnehmer aus Event-Datensätzen."),
         "source_desc_directory": ("Consent-based requests; source is not connected yet.", "Anfragen mit Einwilligung; Quelle noch nicht angebunden."),
         "source_desc_app": ("App events are planned for a later version.", "App-Ereignisse sind für eine spätere Version geplant."),
@@ -224,28 +232,49 @@ def dashboard_copy(lang):
         "not_connected": ("Not connected", "Noch nicht verbunden"),
         "no_orgs": ("No sponsored company accounts are linked to your profile.",
                     "Deinem Profil sind keine gesponserten Firmenkonten zugeordnet."),
+        "company_total": ("Company total", "Firma gesamt"),
+        "breadcrumbs": ("Breadcrumb", "Brotkrumen"),
+        "video_watch_minutes": ("Watch time (minutes)", "Wiedergabezeit (Minuten)"),
+        "video_retention": ("Retention at the mention", "Wiedergabe bis zur Erwähnung"),
+        "ai_visibility": ("Brand visibility in AI answers", "Markensichtbarkeit in KI-Antworten"),
+        "views": ("Views", "Aufrufe"),
+        "refs": ("References (JSON)", "Referenzen (JSON)"),
+        "placement_id": ("Placement ID", "Platzierungs-ID"),
+        "assign_placement": ("Assign a company placement", "Platzierung einer Firma zuordnen"),
+        "placement_help": ("Map a placement to one company; refs may contain video_ids, mention_sec, press_release and page_paths.",
+                           "Ordne eine Platzierung genau einer Firma zu; refs können video_ids, mention_sec, press_release und page_paths enthalten."),
+        "start": ("Start", "Beginn"),
+        "end": ("End", "Ende"),
+        "ai_citations": ("AI citations", "KI-Zitate"),
     }
     return {**{k: T(lang, en, de) for k, (en, de) in texts.items()}, "title": tx(lang, "dash_h")}
 
 
-DASHBOARD_CSS = """.sdb-main{display:grid;gap:1.5em}
+DASHBOARD_CSS = """:root{--sdb-measured:#2f6b3a;--sdb-estimated:var(--ac);--sdb-manual:#9a4f0f}
+@media(prefers-color-scheme:dark){:root{--sdb-measured:#91d59a;--sdb-manual:#ffc078}}
+:root[data-theme=dark]{--sdb-measured:#91d59a;--sdb-manual:#ffc078}
+.sdb-main{display:grid;gap:1.5em}.sdb-org>.cols{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr))}
 .sdb-nav,.sdb-actions,.sdb-periods,.sdb-tabs{display:flex;flex-wrap:wrap;gap:.6em;margin:1em 0}
 .sdb-card,.sdb-org,.sdb-placement,.sdb-panel{border:1px solid var(--bd);background:var(--card);padding:1em;margin:.5em 0}
 .sdb-card{display:grid;gap:.4em}.sdb-card strong{font:600 1.8rem/1.1 \"Barlow Condensed\",sans-serif}
 .sdb-card h3,.sdb-org h2,.sdb-placement h3{margin:.1em 0 .4em}
 .sdb-meta,.sdb-source{display:flex;flex-wrap:wrap;gap:.5em 1.5em;color:var(--mut)}
 .sdb-badge{display:inline-block;border:1px solid var(--bd);padding:.05em .5em;font:600 .8rem \"Barlow Condensed\",sans-serif;text-transform:uppercase}
+.sdb-kind-measured{color:var(--sdb-measured)}.sdb-kind-estimated{color:var(--sdb-estimated)}.sdb-kind-manual{color:var(--sdb-manual)}
 .sdb-table{overflow-x:auto}.sdb-table table{min-width:800px;width:100%;border-collapse:collapse}.sdb-table th,.sdb-table td{text-align:start;padding:.65em;border-bottom:1px solid var(--bd)}
-.sdb-placement-link{display:grid;grid-template-columns:2fr 1.2fr 1.2fr 1fr 1.2fr;gap:12px;align-items:center;color:var(--fg);text-decoration:none}
+.sdb-placement-link{display:grid;grid-template-columns:2fr 1.1fr .6fr 1.2fr 1fr 1.2fr;gap:12px;align-items:center;color:var(--fg);text-decoration:none}
 .sdb-placement-link:hover{color:var(--ac)}
 .sdb-form{display:grid;gap:.8em;border-top:1px solid var(--bd);margin-top:1.5em;padding-top:1em}
 .sdb-form label{display:grid;gap:.25em}.sdb-form input,.sdb-form select{max-width:40em;font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--bd);padding:.6em}
 .sdb-status{border:1px solid var(--bd);padding:.05em .5em}
-.sdb-chart{min-height:8em;display:grid;place-items:center}
-.sdb-report{max-width:794px;margin:auto}.sdb-report-head{border-bottom:2px solid var(--bd);padding-bottom:1em}
-@media(max-width:700px){.sdb-placement-link{grid-template-columns:1fr}}
-@page{size:A4;margin:16mm}
-@media print{.sdb-main>:not(#sdb),#sdb>:not(.sdb-report){display:none!important}.sdb-main{display:block}.sdb-report{display:block!important;max-width:none;width:100%;margin:0}.sdb-card,.sdb-report-head,.sdb-panel{break-inside:avoid}.sdb-report-page{break-after:page}.sdb-report-page:last-child{break-after:auto}}"""
+.sdb-chart{min-height:8em;display:grid;gap:.6em}.sdb-bars{height:12em;display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:.5em;align-items:end;border-bottom:1px solid var(--bd)}
+.sdb-bar-group{height:100%;display:flex;flex-direction:column;justify-content:end;align-items:center;gap:1px;min-width:0}.sdb-bar-group small{font-size:.65em;color:var(--mut);overflow:hidden}
+.sdb-bar{display:block;width:70%;height:var(--bar-height);min-height:2px}.sdb-bar-podcast{background:var(--ac)}.sdb-bar-video{background:var(--sdb-measured)}.sdb-bar-website{background:var(--sdb-manual)}
+.sdb-legend{color:var(--mut);font-size:.9em}.sdb-company{display:flex;gap:.5em;align-items:center}
+.sdb-report{max-width:794px;margin:auto}.sdb-report-head{border-bottom:2px solid var(--bd);padding-bottom:1em}.sdb-report .cols{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+@media(max-width:700px){.sdb-placement-link{grid-template-columns:1fr}.sdb-report .cols{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@page{size:A4;margin:0}
+@media print{.sdb-main>:not(#sdb),#sdb>:not(.sdb-report){display:none!important}.sdb-main{display:block}.sdb-report{display:block!important;max-width:none;width:210mm;margin:0}.sdb-report-page{min-height:297mm;padding:14mm;box-sizing:border-box;break-after:auto}.sdb-card,.sdb-report-head,.sdb-panel{break-inside:avoid}.sdb-report-page:last-child{break-after:auto}}"""
 
 
 def label(lang):

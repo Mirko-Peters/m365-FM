@@ -433,6 +433,12 @@
   "/api/health": {
    "skip": "Seiten-Infrastruktur (kein Nutzerfunktion)"
   },
+  "/api/internal/sponsor-metrics": {
+   "skip": "Ausschließlich durch den täglichen Cron-Workflow mit CRON_KEY aufrufbar"
+  },
+  "/api/internal/sponsor-placements": {
+   "skip": "Ausschließlich durch den täglichen Cron-Workflow mit CRON_KEY aufrufbar"
+  },
   "/api/library/delete": {
    "tools": [
     "delete_library_item"
@@ -772,14 +778,25 @@
     "suggest_my_speaker_entries"
    ]
   },
-  "/api/sponsor/contact": {
-   "skip": "Direkte Kontaktanfrage an die Plattform wird bewusst nur interaktiv im Firmen-Dashboard ausgelöst, nicht über KI-Token"
+  "/api/admin/sponsor-links": {
+   "skip": "Admin-only Sponsorlinks werden ausschließlich im geschützten Admin-Bereich verwaltet"
   },
   "/api/sponsor/dashboard": {
    "skip": "Browser-Dashboard mit CSV-/PDF-Export; Event-Partnerschaften sind über list_my_event_partners abrufbar"
   },
+  "/api/sponsor/go-codes": {
+   "skip": "Öffentliche Liste aktiver Sponsorlink-Codes ausschließlich für den Seitenbau; enthält keine Ziele"
+  },
+  "/api/sponsor/link-stats": {
+   "tools": [
+    "list_sponsor_link_stats"
+   ]
+  },
   "/api/sponsor/manual-metric": {
    "skip": "Admin-Eingabe mit Belegprüfung ist ausschließlich im rollenbeschränkten Dashboard verfügbar"
+  },
+  "/api/sponsor/placement": {
+   "skip": "Platzierungsdetails und -zuordnung gehören in das rollenbeschränkte Browser-Dashboard"
   },
   "/api/sponsor/request": {
    "skip": "Öffentliches Formular für Sponsor-Anfragen; Bearbeitung ausschließlich im Admin-Panel"

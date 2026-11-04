@@ -61,7 +61,7 @@ class SponsorDashboardTests(unittest.TestCase):
         self.assertIn("var(--bg)", rendered[en]["kwargs"]["extra_head"])
         self.assertIn('rel="alternate" hreflang="de"', rendered[en]["kwargs"]["extra_head"])
         self.assertTrue(rendered[en]["kwargs"]["noindex"])
-        self.assertEqual(ctx["sitemap"], [])
+        self.assertFalse(any("/sponsor/dashboard/" in url for url, *_ in ctx["sitemap"]))
         for path in written.values():
             self.assertNotRegex(path, r"\b(?:21400|4820|12300|9150|38600|1840)\b")
         for key in ("measured", "estimated", "manual", "measured_desc", "estimated_desc", "manual_desc",

@@ -43,7 +43,7 @@ def number(value):
 
 def row(placement, day, metric, value, dim, source, kind="measured"):
     value = number(value)
-    if not value or not text_day(day):
+    if value is None or not text_day(day):
         return None
     return {"placement_id": placement, "day": text_day(day), "metric": metric, "value": value,
             "dim": str(dim or "")[:200], "source": source, "kind": kind}
@@ -72,32 +72,42 @@ def page_paths(record, placement):
     for kind in ("entities", "topics"):
         paths.update(f"/entity/{key}/" for key in record.get(kind, []) if re.fullmatch(r"[a-z0-9-]{1,100}", str(key)))
     for value in record.get("posts", []):
-        path = str(value).strip().split("?", 1)[0].split("#", 1)[0]
-        if path.startswith("/"):
+        path = urllib.parse.urlsplit(str(value).strip()).path
+        if path.startswith("/") and not path.startswith("//") and not re.search(r"(^|/)\.\.?(/|$)|[\\\x00-\x1f]", path):
             paths.add(path)
     for value in record.get("episodes", []):
-        path = str(value).strip()
-        if path.startswith("https://www.m365.fm/"):
-            path = "/" + path.split("https://www.m365.fm/", 1)[1]
-        elif not path.startswith("/"):
-            path = f"/show/episodes/{path}/" if "/" not in path else f"/{path.strip('/')}/"
+        value = re.sub(r"^https?://(?:www\.)?m365\.fm", "", str(value).strip()).strip("/")
+        parts = value.split("/")
+        if len(parts) == 1 and re.fullmatch(r"[a-z0-9-]{1,120}", parts[0]):
+            path = f"/show/episodes/{parts[0]}/"
+        elif len(parts) == 4 and parts[0] in LANGS and parts[1:3] == ["show", "episodes"]:
+            path = f"/{parts[0]}/show/episodes/{parts[3]}/"
+        elif len(parts) == 3 and parts[:2] == ["show", "episodes"]:
+            path = f"/show/episodes/{parts[2]}/"
+        elif len(parts) == 2 and parts[0] in LANGS and parts[0] != "en":
+            path = f"/{parts[0]}/show/episodes/{parts[1]}/"
+        else:
+            path = ""
         if path.startswith("/") and not path.startswith("//"):
             paths.add(path)
     try:
         refs = json.loads(placement.get("refs") or "{}")
     except (ValueError, TypeError):
         refs = {}
-    for value in refs.get("page_paths", []) if isinstance(refs, dict) else []:
+    extra_paths = refs.get("page_paths", []) if isinstance(refs, dict) else []
+    if not isinstance(extra_paths, list):
+        extra_paths = []
+    for value in extra_paths:
         path = str(value)
-        if path.startswith("/") and not path.startswith("//") and not re.search(r"[?#]", path):
+        if path.startswith("/") and not path.startswith("//") and not re.search(r"[?#]|(^|/)\.\.?(/|$)|[\\\x00-\x1f]", path):
             paths.add(path)
     langs = [x.strip() for x in str(placement.get("langs") or "").split(",") if x.strip() in LANGS]
     if not langs:
-        langs = list(LANGS)
+        langs = ["en"]
     expanded = set(paths)
     for path in paths:
         for lang in langs:
-            expanded.add(path if lang == "en" else f"/{lang}{path}")
+            expanded.add(path if lang == "en" or path.startswith(f"/{lang}/") else f"/{lang}{path}")
     return sorted(expanded)
 
 
@@ -112,9 +122,26 @@ def video_ids(placement):
     return sorted({str(value).strip() for value in values if re.fullmatch(r"[A-Za-z0-9_-]{5,24}", str(value).strip())})
 
 
+def duration_seconds(value):
+    match = re.fullmatch(r"PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+(?:\.\d+)?)S)?", str(value or ""))
+    if not match:
+        return None
+    hours, minutes, seconds = match.groups()
+    return int(hours or 0) * 3600 + int(minutes or 0) * 60 + float(seconds or 0)
+
+
 def episode_ids(placement):
     refs = slug_rows(placement["id"])
-    wanted = set(map(str, refs.get("episodes", [])))
+    wanted = set()
+    for value in refs.get("episodes", []):
+        clean = re.sub(r"^https?://(?:www\.)?m365\.fm", "", str(value).strip()).strip("/")
+        parts = clean.split("/")
+        if len(parts) == 1:
+            wanted.add(parts[0])
+        elif len(parts) == 3 and parts[:2] == ["show", "episodes"]:
+            wanted.add(parts[2])
+        elif len(parts) == 4 and parts[0] in LANGS and parts[1:3] == ["show", "episodes"]:
+            wanted.add(parts[3])
     if not wanted:
         return []
     try:
@@ -126,27 +153,59 @@ def episode_ids(placement):
 
 def spreaker(placements, day, out, statuses):
     token = os.environ.get("SPREAKER_TOKEN", "").strip()
-    ids = {p["id"]: episode_ids(p) for p in placements}
     if not token:
         statuses["Spreaker"] = "Secret fehlt; keine Werte geschrieben"
         return
-    headers = {"Authorization": f"******"}
-    attempted = False
-    for placement, episode_list in ((p, ids[p["id"]]) for p in placements):
-        for episode_id in episode_list:
+    headers = {"Authorization": "Bearer " + token}
+    try:
+        show_map = json.loads((ROOT / "config.json").read_text("utf-8")).get("show_map") or {}
+    except (OSError, ValueError):
+        show_map = {}
+    wanted = {p["id"]: set(episode_ids(p)) for p in placements}
+    by_show = {}
+    for placement in placements:
+        try:
+            langs = [lang.strip() for lang in placement.get("langs", "").split(",") if lang.strip()]
+        except AttributeError:
+            langs = []
+        if not langs:
+            langs = list(show_map)
+        for lang in langs:
+            show_id = show_map.get(lang)
+            if show_id and wanted[placement["id"]]:
+                by_show.setdefault(str(show_id), set()).update(wanted[placement["id"]])
+    attempted, failed, source_rows = False, False, []
+    for show_id, wanted_ids in by_show.items():
+        query = urllib.parse.urlencode({"from": day, "to": day, "limit": 100})
+        url = f"https://api.spreaker.com/v2/shows/{show_id}/episodes/statistics/plays/totals?{query}"
+        for _ in range(20):
             attempted = True
-            query = urllib.parse.urlencode({"from": day, "to": day, "limit": 100})
-            status, data, _ = json_request(f"https://api.spreaker.com/v2/episodes/{episode_id}/statistics/plays/totals?{query}", headers=headers)
+            status, data, _ = json_request(url, headers=headers)
             if status != 200:
-                continue
-            payload = data.get("response") or {}
-            items = payload.get("items") or [payload]
-            plays = sum(number(value) or 0 for item in items if isinstance(item, dict)
-                        for key, value in item.items() if "play" in key.lower() and key != "episode_id")
-            metric = row(placement["id"], day, "podcast_plays", plays, f"episode:{episode_id}", "spreaker")
-            if metric:
-                out.append(metric)
-    statuses["Spreaker"] = "Abruf abgeschlossen" if attempted else "Keine verknüpften Episoden"
+                failed = True
+                break
+            response = data.get("response") or {}
+            for item in response.get("items") or []:
+                episode_id = str(item.get("episode_id") or (item.get("episode") or {}).get("episode_id") or "")
+                if episode_id not in wanted_ids:
+                    continue
+                plays = sum(number(value) or 0 for key, value in item.items()
+                            if "play" in key.lower() and key != "episode_id")
+                for placement in placements:
+                    if episode_id in wanted[placement["id"]]:
+                        metric = row(placement["id"], day, "podcast_plays", plays,
+                                     f"episode:{episode_id}", "spreaker")
+                        if metric:
+                            source_rows.append(metric)
+            next_url = response.get("next_url")
+            if not isinstance(next_url, str) or not next_url.startswith("https://api.spreaker.com/v2/"):
+                break
+            url = next_url
+    if failed:
+        statuses["Spreaker"] = "Abruf fehlgeschlagen; keine Werte geschrieben"
+    else:
+        out.extend(source_rows)
+        statuses["Spreaker"] = "Abruf abgeschlossen" if attempted else "Keine verknüpften Episoden"
 
 
 def youtube(placements, day, out, statuses):
@@ -162,28 +221,72 @@ def youtube(placements, day, out, statuses):
     if not access:
         statuses["YouTube Analytics"] = f"Tokenabruf fehlgeschlagen (HTTP {status}); keine Werte geschrieben"
         return
-    headers = {"Authorization": f"******"}
+    headers = {"Authorization": "Bearer " + access}
+    source_rows, failed = [], False
     for placement in placements:
         ids = videos[placement["id"]]
         if not ids:
             continue
+        details_status, details, _ = json_request(
+            "https://www.googleapis.com/youtube/v3/videos?" + urllib.parse.urlencode({"part": "contentDetails", "id": ",".join(ids)}),
+            headers=headers)
+        if details_status != 200:
+            failed = True
+            continue
+        durations = {item.get("id"): duration_seconds((item.get("contentDetails") or {}).get("duration"))
+                     for item in details.get("items") or []}
         query = urllib.parse.urlencode({
             "ids": "channel==MINE", "startDate": day, "endDate": day, "dimensions": "day,video",
             "filters": "video==" + ",".join(ids),
-            "metrics": "views,estimatedMinutesWatched,averageViewPercentage",
+            "metrics": "views,estimatedMinutesWatched",
         })
         status, data, _ = json_request("https://youtubeanalytics.googleapis.com/v2/reports?" + query, headers=headers)
         if status != 200:
+            failed = True
             continue
         for result in data.get("rows") or []:
-            if len(result) < 5:
+            if len(result) < 4:
                 continue
-            metric_day, video_id, views, minutes, retention = result[:5]
-            for name, value in (("video_views", views), ("video_watch_minutes", minutes), ("video_retention", retention)):
+            metric_day, video_id, views, minutes = result[:4]
+            for name, value in (("video_views", views), ("video_watch_minutes", minutes)):
                 metric = row(placement["id"], metric_day, name, value, f"video:{video_id}", "youtube")
                 if metric:
-                    out.append(metric)
-    statuses["YouTube Analytics"] = "Abruf abgeschlossen"
+                    source_rows.append(metric)
+        try:
+            refs = json.loads(placement.get("refs") or "{}")
+            mention = number(refs.get("mention_sec")) if isinstance(refs, dict) else None
+        except (ValueError, TypeError):
+            mention = None
+        if mention is None:
+            continue
+        for video_id in ids:
+            duration = durations.get(video_id)
+            if not duration or mention > duration:
+                continue
+            retention_query = urllib.parse.urlencode({
+                "ids": "channel==MINE", "startDate": day, "endDate": day, "dimensions": "elapsedVideoTimeRatio",
+                "filters": f"video=={video_id}", "metrics": "audienceWatchRatio",
+            })
+            status, data, _ = json_request("https://youtubeanalytics.googleapis.com/v2/reports?" + retention_query, headers=headers)
+            if status != 200:
+                failed = True
+                continue
+            points = []
+            for result in data.get("rows") or []:
+                if len(result) >= 2:
+                    ratio, audience = number(result[0]), number(result[1])
+                    if ratio is not None and audience is not None:
+                        points.append((abs(ratio - mention / duration), audience))
+            if points:
+                retention = min(points, key=lambda point: point[0])[1] * 100
+                metric = row(placement["id"], day, "video_retention", retention, f"video:{video_id}", "youtube")
+                if metric:
+                    source_rows.append(metric)
+    if failed:
+        statuses["YouTube Analytics"] = "Abruf fehlgeschlagen; keine Werte geschrieben"
+    else:
+        out.extend(source_rows)
+        statuses["YouTube Analytics"] = "Abruf abgeschlossen"
 
 
 def cloudflare(placements, day, out, statuses):
@@ -192,7 +295,7 @@ def cloudflare(placements, day, out, statuses):
     if not token:
         statuses["Cloudflare"] = "Secret fehlt; keine Werte geschrieben"
         return
-    headers = {"Authorization": f"******", "Content-Type": "application/json"}
+    headers = {"Authorization": "Bearer " + token, "Content-Type": "application/json"}
     if not zone:
         status, data, _ = json_request("https://api.cloudflare.com/client/v4/zones?name=m365.fm", headers=headers)
         zone = ((data.get("result") or [{}])[0] or {}).get("id", "") if status == 200 else ""
@@ -200,11 +303,13 @@ def cloudflare(placements, day, out, statuses):
         statuses["Cloudflare"] = "Zone nicht verfügbar; keine Werte geschrieben"
         return
     query = """query($z:String!,$d:Date!,$p:String!){viewer{zones(filter:{zoneTag:$z}){httpRequestsAdaptiveGroups(limit:100,filter:{date_geq:$d,date_leq:$d,clientRequestPath:$p}){dimensions{date clientRequestPath}count}}}}"""
+    source_rows, failed = [], False
     for placement in placements:
         for path in page_paths(slug_rows(placement["id"]), placement):
             payload = json.dumps({"query": query, "variables": {"z": zone, "d": day, "p": path}}).encode()
             status, data, _ = json_request("https://api.cloudflare.com/client/v4/graphql", payload, headers)
             if status != 200 or data.get("errors"):
+                failed = True
                 continue
             zones = (((data.get("data") or {}).get("viewer") or {}).get("zones") or [])
             groups = zones[0].get("httpRequestsAdaptiveGroups") or [] if zones else []
@@ -212,8 +317,12 @@ def cloudflare(placements, day, out, statuses):
                 dims = group.get("dimensions") or {}
                 metric = row(placement["id"], dims.get("date") or day, "page_views", group.get("count"), path, "cloudflare")
                 if metric:
-                    out.append(metric)
-    statuses["Cloudflare"] = "Abruf abgeschlossen"
+                    source_rows.append(metric)
+    if failed:
+        statuses["Cloudflare"] = "Abruf fehlgeschlagen; keine Werte geschrieben"
+    else:
+        out.extend(source_rows)
+        statuses["Cloudflare"] = "Abruf abgeschlossen"
 
 
 def gsc(placements, day, out, statuses):
@@ -233,6 +342,7 @@ def gsc(placements, day, out, statuses):
         site = os.environ.get("GSC_SITE", "sc-domain:m365.fm")
         url = helper.GSC_API.format(site=urllib.parse.quote(site, safe=""))
         headers = {"Authorization": "Bearer " + token}
+        source_rows = []
         for placement in placements:
             record = slug_rows(placement["id"])
             urls = ["https://www.m365.fm" + path for path in page_paths(record, placement)]
@@ -241,10 +351,13 @@ def gsc(placements, day, out, statuses):
                          "dimensionFilterGroups": [{"filters": [{"dimension": "page", "operator": "equals", "expression": page}]}]}
                 for result in helper.http_json(url, body=query, headers=headers).get("rows") or []:
                     date_value = (result.get("keys") or [day])[0]
+                    if text_day(date_value) != day:
+                        continue
                     for metric_name, value in (("gsc_impressions", result.get("impressions")), ("gsc_clicks", result.get("clicks"))):
                         metric = row(placement["id"], date_value, metric_name, value, page, "gsc")
                         if metric:
-                            out.append(metric)
+                            source_rows.append(metric)
+        out.extend(source_rows)
     except Exception as error:
         statuses["Google Search Console"] = f"Abruf fehlgeschlagen ({type(error).__name__}); keine Werte geschrieben"
         return
@@ -256,13 +369,14 @@ def bing(placements, day, out, statuses):
     if not key:
         statuses["Bing Webmaster API"] = "Secret fehlt; keine Werte geschrieben"
         return
-    attempted = False
+    attempted, failed, source_rows = False, False, []
     for placement in placements:
         for path in page_paths(slug_rows(placement["id"]), placement):
             page = urllib.parse.urljoin("https://www.m365.fm", path)
             query = urllib.parse.urlencode({"siteUrl": "https://www.m365.fm/", "pageUrl": page, "apikey": key})
             status, data, _ = json_request("https://ssl.bing.com/webmaster/api.svc/json/GetPageStats?" + query)
             if status != 200:
+                failed = True
                 continue
             attempted = True
             for item in (data.get("d") or []):
@@ -272,11 +386,17 @@ def bing(placements, day, out, statuses):
                     date_value = dt.datetime.fromtimestamp(int(match.group()) / 1000, dt.timezone.utc).date().isoformat() if match else text_day(raw_date)
                 except (ValueError, OSError):
                     continue
+                if date_value != day:
+                    continue
                 for metric_name, value in (("bing_impressions", item.get("Impressions")), ("bing_clicks", item.get("Clicks"))):
                     metric = row(placement["id"], date_value, metric_name, value, page, "bing_webmaster")
                     if metric:
-                        out.append(metric)
-    statuses["Bing Webmaster API"] = "Abruf abgeschlossen" if attempted else "Abruf ohne Ergebnis"
+                        source_rows.append(metric)
+    if failed:
+        statuses["Bing Webmaster API"] = "Abruf fehlgeschlagen; keine Werte geschrieben"
+    else:
+        out.extend(source_rows)
+        statuses["Bing Webmaster API"] = "Abruf abgeschlossen" if attempted else "Abruf ohne Ergebnis"
 
 
 def press_ranger(placements, day, out, statuses):
@@ -285,7 +405,7 @@ def press_ranger(placements, day, out, statuses):
         statuses["Press Ranger"] = "Secret fehlt; keine Werte geschrieben"
         return
     endpoint = "https://pressranger.com/mcp"
-    headers = {"Authorization": f"******", "Content-Type": "application/json", "Accept": "application/json, text/event-stream"}
+    headers = {"Authorization": "Bearer " + token, "Content-Type": "application/json", "Accept": "application/json, text/event-stream"}
     session = ""
 
     def call(payload):
@@ -310,6 +430,8 @@ def press_ranger(placements, day, out, statuses):
     # Tool names, schemas and result fields are discovered at run time; unknown schemas are never guessed.
     candidates = [tool for tool in tools if any(word in (tool.get("name", "") + " " + tool.get("description", "")).lower()
                  for word in ("press release", "distribution report", "ai visibility"))]
+    week_start = dt.date.fromisoformat(day) - dt.timedelta(days=6)
+    source_rows, failed = [], False
     for placement in placements:
         refs = placement.get("refs") or {}
         if isinstance(refs, str):
@@ -319,11 +441,17 @@ def press_ranger(placements, day, out, statuses):
         if not isinstance(release, str) or not release.startswith("https://"):
             continue
         for tool in candidates:
+            description = (tool.get("name", "") + " " + tool.get("description", "")).lower()
+            is_ai_visibility = "ai visibility" in description
+            if is_ai_visibility and dt.date.fromisoformat(day).weekday() != 0:
+                continue
             schema = tool.get("inputSchema") or {}
             properties = schema.get("properties") or {}
             values = {"url": release, "link": release, "press_release": release, "pressRelease": release,
-                      "release_url": release, "startDate": day, "endDate": day, "start_date": day,
-                      "end_date": day, "date": day, "period": day}
+                      "release_url": release, "company": placement.get("org_name", ""),
+                      "startDate": week_start.isoformat() if is_ai_visibility else day,
+                      "endDate": day, "start_date": week_start.isoformat() if is_ai_visibility else day,
+                      "end_date": day, "date": day, "period": "week" if is_ai_visibility else day}
             arguments = {key: values[key] for key in properties if key in values}
             if set(schema.get("required", [])) - arguments.keys():
                 continue
@@ -335,13 +463,20 @@ def press_ranger(placements, day, out, statuses):
                 try: metrics = json.loads(payload)
                 except ValueError: continue
             except Exception:
+                failed = True
                 continue
-            for key, metric_name in (("views", "press_views"), ("ai_visibility", "ai_visibility")):
+            if not isinstance(metrics, dict):
+                continue
+            for key, metric_name in (("ai_visibility", "ai_visibility"),) if is_ai_visibility else (("views", "press_views"),):
                 metric = row(placement["id"], day, metric_name, metrics.get(key), release, "press_ranger",
                              "estimated" if metric_name == "ai_visibility" else "measured")
                 if metric:
-                    out.append(metric)
-    statuses["Press Ranger"] = "Abruf abgeschlossen; nur erkannte Messwerte übernommen"
+                    source_rows.append(metric)
+    if failed:
+        statuses["Press Ranger"] = "Abruf fehlgeschlagen; keine Werte geschrieben"
+    else:
+        out.extend(source_rows)
+        statuses["Press Ranger"] = "Abruf abgeschlossen; nur erkannte Messwerte übernommen"
 
 
 def main():
@@ -358,21 +493,27 @@ def main():
     day = (dt.datetime.now(dt.timezone.utc).date() - dt.timedelta(days=1)).isoformat()
     metrics, statuses = [], {}
     for source in (spreaker, youtube, cloudflare, gsc, bing, press_ranger):
+        source_metrics = []
         try:
-            source(placements, day, metrics, statuses)
+            source(placements, day, source_metrics, statuses)
         except Exception as error:
             statuses[source.__name__] = f"Abruf fehlgeschlagen ({type(error).__name__}); keine Werte geschrieben"
+            continue
+        metrics.extend(source_metrics)
     # The internal API validates every placement, source, metric, value and date before UPSERT.
     count = 0
-    for offset in range(0, len(metrics), 500):
-        batch = metrics[offset:offset + 500]
+    if len(metrics) > 5000:
+        statuses["D1"] = "Mehr als 5.000 Werte; nichts geschrieben"
+        report(statuses)
+        return 1
+    if metrics:
         status, _, _ = json_request(f"{API}/api/internal/sponsor-metrics",
-            json.dumps({"metrics": batch}).encode(), headers)
+            json.dumps({"metrics": metrics}).encode(), headers)
         if status != 200:
-            print(f"Metrik-Batch abgewiesen (HTTP {status}); Lauf wird als fehlgeschlagen markiert")
+            print(f"Metriken wurden abgewiesen (HTTP {status}); nichts wurde gespeichert")
             report(statuses)
             return 1
-        count += len(batch)
+        count = len(metrics)
     statuses["D1"] = f"{count} Tageswerte gespeichert" if count else "keine neuen Messwerte"
     report(statuses)
     return 0

@@ -175,13 +175,22 @@ export async function handleSponsor(env, request, url, path, J, user) {
     const orgFilter = url.searchParams.get("org") || "";
     const orgs = (await db.prepare(`SELECT DISTINCT o.id,o.handle,o.name
       FROM orgs o
-      WHERE (EXISTS (SELECT 1 FROM sponsor_placements sp WHERE sp.org_id=o.id)
+      WHERE (?=1 OR ((EXISTS (SELECT 1 FROM sponsor_placements sp WHERE sp.org_id=o.id)
         OR EXISTS (SELECT 1 FROM event_partners ep WHERE ep.org_id=o.id))
-        AND (?=1 OR EXISTS (SELECT 1 FROM org_members m WHERE m.org_id=o.id AND m.user_id=?
-          AND m.status='active' AND m.role IN ('owner','admin','events')))
+        AND EXISTS (SELECT 1 FROM org_members m WHERE m.org_id=o.id AND m.user_id=?
+          AND m.status='active' AND m.role IN ('owner','admin','events'))))
         AND (?='' OR o.handle=?)
       ORDER BY o.name,o.id`).bind(user.admin ? 1 : 0, user.id, user.admin ? orgFilter : "", user.admin ? orgFilter : "").all()).results || [];
+    const companies = user.admin ? ((await db.prepare("SELECT id,handle,name FROM orgs ORDER BY name,id").all()).results || []) : [];
     const items = [];
+    const nextMonthStart = new Date(`${period.to.slice(0, 7)}-01T00:00:00Z`);
+    nextMonthStart.setUTCMonth(nextMonthStart.getUTCMonth() + 1);
+    const nextMonth = nextMonthStart.toISOString().slice(0, 7);
+    const nextMonthEnd = new Date(Date.UTC(Number(nextMonth.slice(0, 4)), Number(nextMonth.slice(5, 7)), 0)).toISOString().slice(0, 10);
+    const weekEnd = new Date(`${period.to}T00:00:00Z`);
+    weekEnd.setUTCDate(weekEnd.getUTCDate() - ((weekEnd.getUTCDay() + 6) % 7));
+    const weekStart = new Date(weekEnd);
+    weekStart.setUTCDate(weekStart.getUTCDate() - 49);
     for (const org of orgs) {
       const placements = (await db.prepare(`SELECT id,title,channel,langs,start,end,refs,created,
         CASE WHEN start>? THEN 'upcoming' WHEN end IS NOT NULL AND end<? THEN 'ended' ELSE 'active' END status
@@ -194,6 +203,16 @@ export async function handleSponsor(env, request, url, path, J, user) {
       const aggregate = (await db.prepare(`SELECT metric,SUM(value) value,MAX(fetched_at) fetched_at
         FROM sponsor_metrics_daily WHERE placement_id IN (SELECT id FROM sponsor_placements WHERE org_id=?)
         AND day>=? AND day<=? GROUP BY metric`).bind(org.id, period.from, period.to).all()).results || [];
+      const weekly = (await db.prepare(`SELECT date(day,'-'||((CAST(strftime('%w',day) AS INTEGER)+6)%7)||' days') week,
+        SUM(CASE WHEN metric='podcast_plays' THEN value ELSE 0 END) podcast,
+        SUM(CASE WHEN metric='video_views' THEN value ELSE 0 END) video,
+        SUM(CASE WHEN metric='page_views' THEN value ELSE 0 END) website
+        FROM sponsor_metrics_daily WHERE placement_id IN (SELECT id FROM sponsor_placements WHERE org_id=?)
+        AND day>=? AND day<=? GROUP BY week ORDER BY week`)
+        .bind(org.id, weekStart.toISOString().slice(0, 10), period.to).all()).results || [];
+        const nextPlacements = (await db.prepare(`SELECT id,title,channel,langs,start,end,refs
+        FROM sponsor_placements WHERE org_id=? AND start>=? AND start<=? ORDER BY start,id`)
+        .bind(org.id, `${nextMonth}-01`, nextMonthEnd).all()).results || [];
       const sums = Object.fromEntries(aggregate.map((row) => [row.metric, row]));
       const linkClicks = (await db.prepare(`SELECT COALESCE(SUM(c.clicks),0) value,MAX(c.day) last_day
         FROM sponsor_clicks_daily c JOIN sponsor_links l ON l.code=c.code
@@ -226,13 +245,13 @@ export async function handleSponsor(env, request, url, path, J, user) {
           .bind(placement.id, period.from, period.to).all()).results || [];
         placementRows.push({ ...placement, refs, metrics: records, clicks: clickBreakdown });
       }
-      items.push({ id: org.id, handle: org.handle, name: org.name, metrics,
+      items.push({ id: org.id, handle: org.handle, name: org.name, metrics, weekly, next_placements: nextPlacements,
         manual: manual.map((metric) => ({ ...metric, kind: "manual", as_of: new Date(metric.updated * 1000).toISOString().slice(0, 10) })),
         placements: placementRows.map((placement) => ({ ...placement, type: placement.channel })),
         event_partners: eventPartners.map((event) => ({ ...event, type: "event_partner", metric: null })),
       });
     }
-    return J({ orgs: items, admin: !!user.admin, period }, 200, { "cache-control": "no-store" });
+    return J({ orgs: items, companies, admin: !!user.admin, period }, 200, { "cache-control": "no-store" });
   }
   if (path === "/api/sponsor/placement" && request.method === "GET") {
     if (!user) return J({ error: "login" }, 401, { "cache-control": "no-store" });
@@ -260,12 +279,11 @@ export async function handleSponsor(env, request, url, path, J, user) {
   if (path === "/api/sponsor/sources" && request.method === "GET") {
     if (!user) return J({ error: "login" }, 401);
     if (!user.admin) return J({ error: "forbidden" }, 403);
-    const orgs = (await db.prepare(`SELECT DISTINCT o.id,o.handle,o.name FROM orgs o
-      WHERE EXISTS (SELECT 1 FROM sponsor_placements p WHERE p.org_id=o.id)
-        OR EXISTS (SELECT 1 FROM event_partners p WHERE p.org_id=o.id) ORDER BY o.name,o.id`).all()).results || [];
+    const orgs = (await db.prepare("SELECT id,handle,name FROM orgs ORDER BY name,id").all()).results || [];
     const placements = (await db.prepare("SELECT id,org_id,title,channel,langs,start,end,refs FROM sponsor_placements ORDER BY title").all()).results || [];
     const sources = (await db.prepare(`SELECT source,MAX(fetched_at) fetched_at FROM sponsor_metrics_daily GROUP BY source
-      UNION ALL SELECT source,MAX(updated) fetched_at FROM sponsor_manual_metrics GROUP BY source`).all()).results || [];
+      UNION ALL SELECT source,MAX(updated) fetched_at FROM sponsor_manual_metrics GROUP BY source
+      UNION ALL SELECT 'sponsor_links' source,MAX(strftime('%s',day)) fetched_at FROM sponsor_clicks_daily`).all()).results || [];
     return J({ orgs, placements, sources }, 200, { "cache-control": "no-store" });
   }
   if (path === "/api/sponsor/manual-metric" && request.method === "POST") {
@@ -342,8 +360,8 @@ export async function handleSponsor(env, request, url, path, J, user) {
   }
   if (path === "/api/internal/sponsor-placements" && request.method === "GET") {
     if (!env.CRON_KEY || request.headers.get("x-cron-key") !== env.CRON_KEY) return J({ error: "forbidden" }, 403, { "cache-control": "no-store" });
-    const placements = (await db.prepare(`SELECT id,org_id,title,channel,langs,start,end,refs
-      FROM sponsor_placements ORDER BY id`).all()).results || [];
+    const placements = (await db.prepare(`SELECT p.id,p.org_id,o.name org_name,p.title,p.channel,p.langs,p.start,p.end,p.refs
+      FROM sponsor_placements p JOIN orgs o ON o.id=p.org_id ORDER BY p.id`).all()).results || [];
     return J({ placements }, 200, { "cache-control": "no-store" });
   }
   if (path === "/api/internal/sponsor-metrics" && request.method === "POST") {

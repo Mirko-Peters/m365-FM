@@ -1,0 +1,47 @@
+name: Sponsor-Metriken aktualisieren
+
+on:
+  schedule:
+    - cron: "17 4 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sponsor-metrics
+  cancel-in-progress: false
+
+jobs:
+  metrics:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Google-Dienstkonto-Unterstützung
+        run: pip install -q cryptography
+      - name: YouTube-Token bereitstellen
+        env:
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET || secrets.GOOGLE_CLIENT_SECRET }}
+        run: |
+          if [ -f data/yt_auth.enc ] && [ -n "$YT_CLIENT_SECRET" ]; then
+            python yt_auth.py env || echo "YouTube-Token konnte nicht bereitgestellt werden; Quelle wird übersprungen."
+          else
+            echo "YouTube-Zugang nicht verfügbar; Quelle wird übersprungen."
+          fi
+      - name: Platzierungsbezogene Tageswerte abrufen
+        env:
+          CRON_KEY: ${{ secrets.CRON_KEY }}
+          SPREAKER_TOKEN: ${{ secrets.SPREAKER_TOKEN }}
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID || secrets.GOOGLE_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET || secrets.GOOGLE_CLIENT_SECRET }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CF_ZONE_ID: ${{ secrets.CF_ZONE_ID }}
+          GSC_SERVICE_ACCOUNT_JSON: ${{ secrets.GSC_SERVICE_ACCOUNT_JSON }}
+          GSC_SITE: ${{ vars.GSC_SITE }}
+          BING_WEBMASTER_API_KEY: ${{ secrets.BING_WEBMASTER_API_KEY }}
+          PRESSRANGER_MCP_TOKEN: ${{ secrets.PRESSRANGER_MCP_TOKEN }}
+        run: python tools/sponsor_metrics.py

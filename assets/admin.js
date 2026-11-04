@@ -6,7 +6,7 @@
   function api(p, o) { o = o || {}; o.credentials = "include"; o.headers = Object.assign({ "x-requested-with": "m365" }, o.headers || {}); if (o.body && typeof o.body !== "string") { o.body = JSON.stringify(o.body); o.headers["content-type"] = "application/json"; } return fetch(API + p, o).then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { s: r.status, j: j }; }); }); }
   var TYPES = { product: "Produkt", platform: "Plattform", concept: "Konzept", org: "Firma", person: "Person", cert: "Zertifikat", event: "Event", media: "Medium", category: "Kategorie" };
   var ERR = { bad_name: "Name zu kurz", bad_type: "Typ fehlt", too_short: "Kurzbeschreibung fehlt (mindestens 20 Zeichen in Englisch oder Deutsch)", too_long: "Kurzbeschreibung zu lang (höchstens 300 Zeichen)", bad_url: "Eine Adresse ist ungültig (nur https, Docs nur microsoft.com, azure.com oder github.com)", bad_qid: "Wikidata-ID muss wie Q12345 aussehen", bad_relation: "Eine Beziehung zeigt auf eine unbekannte Entität", unchanged: "Nichts geändert", rate_limit: "Zu viele Änderungen in kurzer Zeit, bitte später", login: "Bitte anmelden", forbidden: "Nur für Admins" };
-  var tabs = [["ov", "Übersicht"], ["fr", "Freigaben"], ["sponsor", "Sponsor-Anfragen"], ["tr", "Übersetzungen"], ["ent", "Entitäten"], ["db", "Datenbank"], ["sw", "Schalter"]], panes = {}, bar = h("div", { class: "adm-tabs", role: "tablist" });
+  var tabs = [["ov", "Übersicht"], ["fr", "Freigaben"], ["sponsor", "Sponsor-Anfragen"], ["slinks", "Sponsorlinks"], ["tr", "Übersetzungen"], ["ent", "Entitäten"], ["db", "Datenbank"], ["sw", "Schalter"]], panes = {}, bar = h("div", { class: "adm-tabs", role: "tablist" });
   var LANGN = { de: "Deutsch", fr: "Französisch", es: "Spanisch", it: "Italienisch", nl: "Niederländisch", pt: "Portugiesisch", pl: "Polnisch", id: "Indonesisch", ru: "Russisch", uk: "Ukrainisch", ar: "Arabisch", he: "Hebräisch", ja: "Japanisch", ko: "Koreanisch", en: "Englisch" };
   var KINDN = { lblog: "Blog (früher)", blog: "Blog (Community)", podcast: "Podcast", video: "Video", notes: "Show Notes", entity: "Entität" };
   function ago(t) { if (!t) return "–"; var d = Math.round(Date.now() / 1000 - t); return d < 90 ? d + " s" : d < 5400 ? Math.round(d / 60) + " min" : d < 172800 ? Math.round(d / 3600) + " h" : Math.round(d / 86400) + " d"; }
@@ -41,6 +41,7 @@
     tr: function () { if (panes.tr.firstChild) return; translations(); },
     fr: function () { approvals(); },
     sponsor: function () { sponsorRequests(); },
+    slinks: function () { sponsorLinks(); },
     db: function () { overview(function (o) { var p = panes.db, d = o.db, m = h("p", { class: "adm-msg" }); p.textContent = "";
       p.appendChild(h("h2", { text: "Umzug in die Datenbank" }));
       var miss = d.entities_file == null ? null : Math.max(0, d.entities_file - (d.entities_db || 0));
@@ -168,6 +169,84 @@
     prev.onclick = function () { offset = Math.max(0, offset - limit); load(); };
     next.onclick = function () { offset += limit; load(); };
     filter.addEventListener("change", function () { offset = 0; load(); });
+    load();
+  }
+
+  function sponsorLinks() {
+    var p = panes.slinks, message = h("p", { class: "adm-msg" }), orgs = [], placements = [];
+    p.textContent = "";
+    p.append(h("h2", { text: "Sponsorlinks" }), h("p", { class: "mut", text: "Links werden nicht gelöscht; zum Beenden auf inaktiv setzen. Ziele sind nur HTTPS-Adressen ohne Zugangsdaten." }), message);
+    api("/api/sponsor/sources").then(function (sources) {
+      if (sources.s !== 200) { msg(message, "Firmen und Platzierungen nicht abrufbar", true); return; }
+      orgs = sources.j.orgs || [];
+      placements = sources.j.placements || [];
+      var form = h("form", { class: "adm-form" });
+      var org = h("select", { required: "" }), placement = h("select", { required: "" });
+      orgs.forEach(function (item) { org.appendChild(h("option", { value: String(item.id), text: item.name })); });
+      function updatePlacements() {
+        placement.textContent = "";
+        placements.filter(function (item) { return String(item.org_id) === org.value; }).forEach(function (item) {
+          placement.appendChild(h("option", { value: item.id, text: item.title + " · " + item.id }));
+        });
+      }
+      org.addEventListener("change", updatePlacements);
+      updatePlacements();
+      var code = h("input", { required: "", minlength: "3", maxlength: "40", pattern: "[a-z0-9-]{3,40}", placeholder: "beispiel-2026" });
+      var target = h("input", { required: "", type: "url", pattern: "https://.*", placeholder: "https://firma.example/" });
+      var utm = h("input", { maxlength: "500", placeholder: "utm_source=m365.fm&utm_medium=referral" });
+      var status = h("p", { role: "status", class: "adm-msg" });
+      form.append(h("label", {}, ["Firma", org]), h("label", {}, ["Platzierung", placement]),
+        h("label", {}, ["Link-Code", code]), h("label", {}, ["Ziel (HTTPS)", target]),
+        h("label", {}, ["UTM-Parameter", utm]), h("button", { class: "btn main", type: "submit", text: "Sponsorlink anlegen" }), status);
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        var parsed;
+        try {
+          parsed = new URL(target.value);
+          if (parsed.protocol !== "https:" || parsed.username || parsed.password || !placement.value) throw new Error("invalid");
+        } catch (_) { msg(status, "Bitte HTTPS-Ziel ohne Zugangsdaten und eine Platzierung wählen.", true); return; }
+        var submit = form.querySelector("button[type=submit]");
+        submit.disabled = true;
+        api("/api/admin/sponsor-links", { method: "POST", body: { code: code.value, org_id: Number(org.value),
+          placement_id: placement.value, target_url: parsed.href, utm: utm.value } }).then(function (result) {
+          msg(status, result.s === 200 ? "Sponsorlink gespeichert." : "Sponsorlink konnte nicht gespeichert werden.", result.s !== 200);
+          if (result.s === 200) { form.reset(); updatePlacements(); load(); }
+        }).catch(function () { msg(status, "Sponsorlink konnte nicht gespeichert werden.", true); })
+          .finally(function () { submit.disabled = false; });
+      });
+      p.appendChild(form);
+    });
+    var table = h("table", { class: "adm-tbl" }), head = h("thead"), body = h("tbody");
+    head.appendChild(h("tr", {}, ["Code", "Firma", "Platzierung", "Ziel", "UTM", "Status", "Aktion"].map(function (value) {
+      return h("th", { text: value });
+    })));
+    table.append(head, body);
+    p.appendChild(h("div", { style: "overflow-x:auto" }, [table]));
+    function load() {
+      api("/api/admin/sponsor-links").then(function (result) {
+        body.textContent = "";
+        if (result.s !== 200) { msg(message, "Sponsorlinks nicht abrufbar", true); return; }
+        (result.j.links || []).forEach(function (link) {
+          var org = orgs.find(function (item) { return item.id === link.org_id; });
+          var item = placements.find(function (placementItem) { return placementItem.id === link.placement_id; });
+          var button = h("button", { type: "button", class: "btn", text: link.active ? "Deaktivieren" : "Aktivieren" });
+          button.addEventListener("click", function () {
+            button.disabled = true;
+            api("/api/admin/sponsor-links/" + encodeURIComponent(link.code), { method: "POST", body: { active: !link.active } })
+              .then(function (updated) {
+                if (updated.s === 200) load();
+                else { button.disabled = false; msg(message, "Status konnte nicht geändert werden.", true); }
+              }).catch(function () { button.disabled = false; msg(message, "Status konnte nicht geändert werden.", true); });
+          });
+          body.appendChild(h("tr", {}, [link.code, org ? org.name : String(link.org_id), item ? item.title : link.placement_id,
+            h("a", { href: link.target_url, target: "_blank", rel: "noopener", text: link.target_url }),
+            link.utm, link.active ? "Aktiv" : "Inaktiv", button].map(function (value) {
+              return value && value.nodeType ? h("td", {}, [value]) : h("td", { text: value });
+            })));
+        });
+        if (!(result.j.links || []).length) body.appendChild(h("tr", {}, [h("td", { colspan: "7", class: "mut", text: "Noch keine Sponsorlinks." })]));
+      });
+    }
     load();
   }
 
