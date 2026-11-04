@@ -133,12 +133,12 @@
         if (p !== "granted") { st.textContent = tt("push_denied"); return; }
         return navigator.serviceWorker.register("/sw.js").then(function () { return navigator.serviceWorker.ready; }).then(function (reg) {
           return api("/api/push/key").then(function (k) { return reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64(k.j.key) }); });
-        }).then(function (sub) { var j = sub.toJSON(); return api("/api/push/subscribe", { method: "POST", body: { endpoint: j.endpoint, keys: j.keys, lang: LANG } }); }).then(setPush);
+        }).then(function (sub) { var j = sub.toJSON();         return api("/api/push/subscribe", { method: "POST", body: { endpoint: j.endpoint, keys: j.keys, lang: LANG, source: location.pathname } }); }).then(setPush);
       }).catch(function () { st.textContent = tt("error"); });
     }
     var em = h("input", { type: "email", required: "required", placeholder: tt("email_ph"), "aria-label": tt("email_ph"), autocomplete: "email" });
     mail.appendChild(em); mail.appendChild(h("button", { type: "submit", class: "btn", text: "✉ " + tt("email_btn") }));
-    mail.addEventListener("submit", function (e) { e.preventDefault(); api("/api/email/subscribe", { method: "POST", body: { email: em.value, lang: LANG } }).then(function (r) { st.textContent = r.s === 200 ? tt("email_sent") : r.s === 429 ? tt("rate_limit") : tt("error"); if (r.s === 200) em.value = ""; }); });
+    mail.addEventListener("submit", function (e) { e.preventDefault(); api("/api/email/subscribe", { method: "POST", body: { email: em.value, lang: LANG, source: location.pathname } }).then(function (r) { st.textContent = r.s === 200 ? tt("email_sent") : r.s === 429 ? tt("rate_limit") : tt("error"); if (r.s === 200) em.value = ""; }); });
     root.appendChild(h("h2", { text: tt("sub_title") })); root.appendChild(h("p", { class: "cmut", text: tt("sub_text") }));
     root.appendChild(push); root.appendChild(mail); root.appendChild(st); setPush();
     api("/api/push/key").catch(function () { root.hidden = true; });

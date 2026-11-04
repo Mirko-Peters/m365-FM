@@ -7,6 +7,7 @@ import { readFileSync, readdirSync } from "node:fs";
 import vm from "node:vm";
 import { handleSponsor, sponsorPackageDetails } from "../src/sponsor.js";
 import { handleAdminPanel } from "../src/adminpanel.js";
+import worker from "../src/index.js";
 
 const ADMIN_JS = readFileSync(new URL("../../assets/admin.js", import.meta.url), "utf8");
 const J = (data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "content-type": "application/json" } });
@@ -303,4 +304,48 @@ test("sponsor mail: Kurzfassung fuer aeltere Pakete (packageDetails)", () => {
   assert.equal(d({ monthlyUsd: "USD 500" }).price, "USD 500/Monat", "andere Zeichenkette bleibt");
   assert.equal(d({ monthlyUsd: -400, totalUsd: 1234.5 }).price, "-$400/Monat · $1,234.5 gesamt");
   assert.equal(d({ monthlyUsd: true }).price, "–", "kein Betrag -> kein leeres /Monat");
+});
+
+test("PWA admin: Abos und Installationen nach Sprache und Quelle", async () => {
+  const { raw, env } = await setup();
+  raw.exec("INSERT INTO push_subs(endpoint,p256dh,auth,lang,user_id,created) VALUES('https://push.example/1','p','a','de',NULL,1)");
+  raw.exec("INSERT INTO pwa_sub_sources(kind,identifier,lang,source,created) VALUES('push','https://push.example/1','de','/de/folge/',1)");
+  raw.exec("INSERT INTO email_subs(email,lang,token,confirmed,created) VALUES('listener@example.com','en','email-token',1,1)");
+  raw.exec("INSERT INTO pwa_sub_sources(kind,identifier,lang,source,created) VALUES('email','email-token','en','/show/',1)");
+  raw.exec("INSERT INTO pwa_events(event,lang,source,created) VALUES('appinstalled','de','/de/',1),('pwa_launch','de','/de/',2)");
+  const url = new URL("https://api.test/api/admin/panel/pwa");
+  const response = await handleAdminPanel(env, new Request(url), url, url.pathname, { id: 1, admin: true }, J);
+  const data = await response.json();
+  assert.deepEqual(data.subscriptions.push, [{ lang: "de", source: "/de/folge/", n: 1 }]);
+  assert.deepEqual(data.subscriptions.email, [{ lang: "en", source: "/show/", n: 1 }]);
+  assert.deepEqual(data.events, [
+    { event: "appinstalled", lang: "de", source: "/de/", n: 1 },
+    { event: "pwa_launch", lang: "de", source: "/de/", n: 1 },
+  ]);
+  const denied = await handleAdminPanel(env, new Request(url), url, url.pathname, { id: 2, admin: false }, J);
+  assert.equal(denied.status, 403);
+  raw.close();
+});
+
+test("PWA: Ereignisse und Push-Abos speichern nur validierte Quellen", async () => {
+  const { raw, env } = await setup();
+  const event = (body) => worker.fetch(new Request("https://api.test/api/pwa/event", {
+    method: "POST",
+    headers: { "content-type": "application/json", "x-requested-with": "m365", "cf-connecting-ip": "203.0.113.8" },
+    body: JSON.stringify(body),
+  }), env);
+  assert.equal((await event({ event: "appinstalled", lang: "fr", source: "/fr/" })).status, 200);
+  assert.equal((await event({ event: "appinstalled", lang: "fr", source: "https://evil.example/" })).status, 400);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM pwa_events").get().n, 1);
+  const sub = (path, body) => worker.fetch(new Request("https://api.test" + path, {
+    method: "POST",
+    headers: { "content-type": "application/json", "x-requested-with": "m365", "cf-connecting-ip": "203.0.113.8" },
+    body: JSON.stringify(body),
+  }), env);
+  const subscription = { endpoint: "https://push.example/endpoint", keys: { p256dh: "p", auth: "a" }, lang: "fr", source: "/fr/episode/" };
+  assert.equal((await sub("/api/push/subscribe", subscription)).status, 200);
+  assert.deepEqual({ ...raw.prepare("SELECT kind,lang,source FROM pwa_sub_sources").get() }, { kind: "push", lang: "fr", source: "/fr/episode/" });
+  assert.equal((await sub("/api/push/unsubscribe", { endpoint: subscription.endpoint })).status, 200);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM pwa_sub_sources").get().n, 0);
+  raw.close();
 });

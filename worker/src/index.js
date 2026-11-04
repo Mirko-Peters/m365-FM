@@ -311,30 +311,48 @@ async function api(env, request, url, path, asUser) {
   }
 
   if (path === "/api/push/key" && method === "GET") return J({ key: env.VAPID_PUBLIC || "" });
+  if (path === "/api/pwa/event" && method === "POST") {
+    const b = await request.json().catch(() => ({}));
+    const event = b.event, lang = b.lang, source = String(b.source || "/").slice(0, 200);
+    if (!["appinstalled", "pwa_launch"].includes(event) || !isLang(lang) || !/^\/[a-zA-Z0-9._~!$&'()*+,;=:@%\/-]*$/.test(source)) return J({ error: "bad_request" }, 400);
+    if (!(await rateLimit(db, `pwa:${ip(request)}`, 30, 3600))) return J({ error: "rate" }, 429);
+    await db.prepare("INSERT INTO pwa_events(event,lang,source,created) VALUES(?,?,?,?)").bind(event, lang, source, now()).run();
+    return J({ ok: true });
+  }
   if (path === "/api/push/subscribe" && method === "POST") {
     const b = await request.json().catch(() => ({}));
     const e = b.endpoint, k = b.keys || {};
-    if (!/^https:\/\//.test(e || "") || e.length > 600 || !k.p256dh || !k.auth || !isLang(b.lang)) return J({ error: "bad_request" }, 400);
+    const source = String(b.source || "/community/").slice(0, 200);
+    if (!/^https:\/\//.test(e || "") || e.length > 600 || !k.p256dh || !k.auth || !isLang(b.lang) || !/^\/[a-zA-Z0-9._~!$&'()*+,;=:@%\/-]*$/.test(source)) return J({ error: "bad_request" }, 400);
     if (!(await rateLimit(db, `ps:${ip(request)}`, 20, 3600))) return J({ error: "rate" }, 429);
     await db.prepare("INSERT OR REPLACE INTO push_subs(endpoint,p256dh,auth,lang,user_id,created) VALUES(?,?,?,?,?,?)").bind(e, String(k.p256dh), String(k.auth), b.lang, user?.id ?? null, now()).run();
+    await db.prepare("INSERT INTO pwa_sub_sources(kind,identifier,lang,source,created) VALUES('push',?,?,?,?) ON CONFLICT(kind,identifier) DO UPDATE SET lang=excluded.lang,source=excluded.source,created=excluded.created").bind(e, b.lang, source, now()).run();
     if (user) await award(db, user.id, "notified");
     return J({ ok: true });
   }
   if (path === "/api/push/unsubscribe" && method === "POST") {
     const b = await request.json().catch(() => ({}));
-    if (b.endpoint) await db.prepare("DELETE FROM push_subs WHERE endpoint=?").bind(String(b.endpoint)).run();
+    if (b.endpoint) {
+      await db.prepare("DELETE FROM push_subs WHERE endpoint=?").bind(String(b.endpoint)).run();
+      await db.prepare("DELETE FROM pwa_sub_sources WHERE kind='push' AND identifier=?").bind(String(b.endpoint)).run();
+    }
     return J({ ok: true });
   }
 
   if (path === "/api/email/subscribe" && method === "POST") {
     const b = await request.json().catch(() => ({}));
     const email = String(b.email || "").trim().toLowerCase();
-    if (!/^[^\s@<>]{1,64}@[^\s@<>]{1,190}\.[a-z]{2,}$/.test(email) || !isLang(b.lang)) return J({ error: "bad_request" }, 400);
+    const source = String(b.source || "/community/").slice(0, 200);
+    if (!/^[^\s@<>]{1,64}@[^\s@<>]{1,190}\.[a-z]{2,}$/.test(email) || !isLang(b.lang) || !/^\/[a-zA-Z0-9._~!$&'()*+,;=:@%\/-]*$/.test(source)) return J({ error: "bad_request" }, 400);
     if (!(await rateLimit(db, `em:${ip(request)}`, 5, 3600)) || !(await rateLimit(db, `em:${email}`, 3, 86400))) return J({ error: "rate" }, 429);
     const ex = await db.prepare("SELECT token,confirmed FROM email_subs WHERE email=? AND lang=?").bind(email, b.lang).first();
-    if (ex?.confirmed) return J({ ok: true });
     const token = ex?.token || randomToken(18);
+    if (ex?.confirmed) {
+      await db.prepare("INSERT INTO pwa_sub_sources(kind,identifier,lang,source,created) VALUES('email',?,?,?,?) ON CONFLICT(kind,identifier) DO UPDATE SET lang=excluded.lang,source=excluded.source,created=excluded.created").bind(token, b.lang, source, now()).run();
+      return J({ ok: true });
+    }
     if (!ex) await db.prepare("INSERT INTO email_subs(email,lang,token,confirmed,created) VALUES(?,?,?,0,?)").bind(email, b.lang, token, now()).run();
+    await db.prepare("INSERT INTO pwa_sub_sources(kind,identifier,lang,source,created) VALUES('email',?,?,?,?) ON CONFLICT(kind,identifier) DO UPDATE SET lang=excluded.lang,source=excluded.source,created=excluded.created").bind(token, b.lang, source, now()).run();
     const link = `${env.API}/api/email/confirm?token=${encodeURIComponent(token)}&lang=${b.lang}`;
     await sendMail(env, { to: email, subject: "M365.FM – please confirm / bitte bestätigen",
       html: `<p>Please confirm your subscription to new M365.FM episodes (${esc(b.lang)}):</p><p><a href="${link}">${link}</a></p><p>Bitte bestätige dein Abo neuer M365.FM-Folgen. Wenn du das nicht warst, ignoriere diese E-Mail.</p>` });
@@ -348,6 +366,7 @@ async function api(env, request, url, path, asUser) {
   if (path === "/api/email/unsub" && (method === "GET" || method === "POST")) {
     const t = url.searchParams.get("token") || "";
     await db.prepare("DELETE FROM email_subs WHERE token=?").bind(t).run();
+    await db.prepare("DELETE FROM pwa_sub_sources WHERE kind='email' AND identifier=?").bind(t).run();
     return method === "POST" ? new Response("ok") : html("<h2>✓ Unsubscribed</h2><p>You will not receive further e-mails.</p>");
   }
 
