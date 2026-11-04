@@ -112,6 +112,24 @@
     "a": 3,
     "why": "Ein Chatbot bearbeitet die Datenbank nie direkt, sondern löst einen kontrollierten Flow aus, der als Türsteher fungiert."
    }
+  ],
+  "faq": [
+   {
+    "q": "Was bedeutet Entropie in Microsoft 365 und warum ist sie gefährlich?",
+    "a": "Entropie meint den schleichenden Zerfall in die Unordnung. SharePoint, Power Apps, Power Automate und KI werden dabei leise instabil, ohne dass etwas ausfällt. Weil die Server grün bleiben, fällt der Verfall oft erst auf, wenn er teuer wird."
+   },
+   {
+    "q": "Warum sollte man SharePoint nicht wie eine Datenbank nutzen?",
+    "a": "SharePoint ist ein Kollaborationssubstrat für Dokumente und Listen, keine relationale Datenbank. Mehrstufige Nachschlagefelder und komplexe Joins führen zu Schwellenwerten, fehlschlagender Delegation und leeren App-Bildschirmen. Für transaktionale Integrität und komplexe Beziehungen sind Dataverse oder SQL die bessere Wahl."
+   },
+   {
+    "q": "Wie vermeide ich, dass Power-Automate-Flows still fehlschlagen?",
+    "a": "Setzen Sie Triggerbedingungen, damit Flows nur bei relevanten Änderungen starten. Das senkt die Auslastung laut Quellenlage um bis zu 90 %. Begrenzen Sie die Parallelität und bauen Sie ein Try-Catch-Muster mit Scope-Blöcken, dessen Catch die Verantwortlichen alarmiert."
+   },
+   {
+    "q": "Wie setze ich Copilot und KI in Microsoft 365 sicher ein?",
+    "a": "Die KI soll wie ein Bibliothekar nur auf zugelassene Wissensquellen zugreifen und Zitate liefern. Bei niedriger Konfidenz prüft ein Mensch. Chatbots ändern Daten nie direkt, sondern lösen kontrollierte Power-Automate-Flows aus, in denen die Governance-Logik liegt."
+   }
   ]
  }
 }
