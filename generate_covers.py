@@ -31,7 +31,7 @@ Titel: {title}
 Beschreibung: {desc[:1500]}"""
     if not check_budget("generate_covers", MODEL, estimated_eur(len(prompt) // 3, 400)):
         return None
-    body = json.dumps({"model": MODEL, "max_tokens": 400, "messages": [{"role": "user", "content": prompt}]}).encode()
+    body = json.dumps({"model": MODEL, "max_tokens": 400, **({"thinking": {"type": "disabled"}} if "haiku" in MODEL else {}), "messages": [{"role": "user", "content": prompt}]}).encode()
     req = anthropic_request("/v1/messages", body, job="generate_covers", lang=lang, model=MODEL, api_key=os.environ["ANTHROPIC_API_KEY"])
     for attempt in range(5):
         try:
@@ -44,7 +44,7 @@ Beschreibung: {desc[:1500]}"""
             raise
     usage = r.get("usage", {})
     report_usage("generate_covers", MODEL, usage.get("input_tokens", 0), usage.get("output_tokens", 0), lang)
-    raw = "".join(b.get("text", "") for b in r["content"])
+    raw = "".join(b.get("text", "") for b in r["content"] if b.get("type") == "text")
     d = json.loads(re.search(r"\{.*\}", raw, re.S).group(0))
     h = str(d.get("headline", "")).strip().strip('"“”')
     kws = [str(k).strip() for k in (d.get("keywords") or []) if str(k).strip()][:3]

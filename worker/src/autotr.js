@@ -1,9 +1,10 @@
 // Automatische Uebersetzung neuer Community-Inhalte (Blog, Podcast, Video) mit Claude Haiku: ohne Denkphase, Aufwand "low".
+import { AI_BUDGET_ERROR, haikuJson } from "./util.js";
+export { haikuJson } from "./util.js";
 // Regel: 24 Stunden nach dem Erscheinen eines Inhalts wird nachgeschaut; fehlt eine Sprachfassung (hat sie niemand uebersetzt), uebersetzt Haiku sie.
 // Sicherheitsnetz: nur mit Secret ANTHROPIC_API_KEY, Tageslimit, nur Inhalte der letzten 30 Tage, Notaus ueber meta atr_off=1.
 // Ergebnis in item_tr; Blogfassungen erscheinen ueber /api/blog/export als Beitraege der Zielsprache (mit KI-Hinweis).
-import { AI_BUDGET_ERROR, anthropicFetch } from "./util.js";
-const MODEL = "claude-haiku-5-5", WAIT = 24 * 3600, WINDOW = 30 * 24 * 3600, DAILY_CAP = 150, PER_RUN = 4;
+const WAIT = 24 * 3600, WINDOW = 30 * 24 * 3600, DAILY_CAP = 150, PER_RUN = 4;
 const LANGS = { en: "English", de: "German", fr: "French", es: "Spanish", it: "Italian", nl: "Dutch", pt: "Portuguese (European)", pl: "Polish", id: "Indonesian", ru: "Russian", uk: "Ukrainian", ar: "Arabic", he: "Hebrew", ja: "Japanese", ko: "Korean" };
 const KINDS = {
   blog: { table: "blog_posts", sel: "id,lang,title,summary,body", where: "status='live' AND html='' AND published>0", t: "published", f: ["title", "summary", "body"] },
@@ -22,15 +23,7 @@ export async function ensureItemTr(db) {
 }
 const count = (s, re) => (String(s).match(re) || []).length;
 
-async function call(env, from, to, obj) {
-  const body = { model: MODEL, max_tokens: 8000, temperature: 0, system: SYS + ` Target language: ${LANGS[to]}.`, messages: [{ role: "user", content: JSON.stringify(obj) }] };
-  let r = await anthropicFetch(env, { ...body, output_config: { effort: "low" } }, { job: "worker_autotr_items", lang: to, cacheTtl: 604800 });   // kein "thinking": keine Denkphase
-  if (r.status === 400) r = await anthropicFetch(env, body, { job: "worker_autotr_items", lang: to, cacheTtl: 604800 });                          // falls der Parameter fuer das Modell nicht akzeptiert wird
-  if (!r.ok) throw new Error("api " + r.status);
-  let txt = ((await r.json()).content?.[0]?.text || "").trim();
-  if (txt.startsWith("```")) txt = txt.replace(/^```[a-z]*\n?/, "").replace(/```$/, "");
-  return JSON.parse(txt);
-}
+const call = (env, from, to, obj) => haikuJson(env, SYS + ` Target language: ${LANGS[to]}.`, obj, { job: "worker_autotr_items", lang: to });
 
 export async function autoTranslateItems(env) {
   const db = env.DB;
@@ -116,11 +109,7 @@ export async function autoTranslateEntities(env, entityMap) {
   let done = 0, failed = 0, blocked = 0;
   await Promise.all(jobs.slice(0, room).map(async (j) => {
     try {
-      const body = { model: MODEL, max_tokens: 8000, temperature: 0, system: ESYS + ` Target language: ${LANGS[j.to]}.`, messages: [{ role: "user", content: JSON.stringify(j.inp) }] };
-      let r = await anthropicFetch(env, { ...body, output_config: { effort: "low" } }, { job: "worker_autotr_entities", lang: j.to, cacheTtl: 604800 }); if (r.status === 400) r = await anthropicFetch(env, body, { job: "worker_autotr_entities", lang: j.to, cacheTtl: 604800 });
-      if (!r.ok) throw new Error("api " + r.status);
-      let txt = ((await r.json()).content?.[0]?.text || "").trim(); if (txt.startsWith("```")) txt = txt.replace(/^```[a-z]*\n?/, "").replace(/```$/, "");
-      const out = JSON.parse(txt);
+      const out = await haikuJson(env, ESYS + ` Target language: ${LANGS[j.to]}.`, j.inp, { job: "worker_autotr_entities", lang: j.to });
       for (const f of Object.keys(j.inp)) {
         const o = String(out[f] || "").replace(/<script/gi, "").trim(), ratio = o.length / Math.max(1, j.inp[f].length);
         if (!o || ratio < 0.2 || ratio > 3 || (f === "desc" && o.length > 400)) { failed++; continue; }
@@ -166,11 +155,7 @@ export async function runTrQueue(env, entityMap) {
         const inp = {}; let from = "en";
         for (const f of ["desc", "long"]) { const v = e[f] || {}; const txt = (v.en || "").trim() || (v.de || "").trim(); if (txt) { inp[f] = txt.slice(0, 8000); from = (v.en || "").trim() ? "en" : "de"; } }
         if (!Object.keys(inp).length || q.lang === from) { await mark(q, "failed", "kein Quelltext"); failed++; return; }
-        const body = { model: MODEL, max_tokens: 8000, temperature: 0, system: ESYS + ` Target language: ${LANGS[q.lang] || "English"}.`, messages: [{ role: "user", content: JSON.stringify(inp) }] };
-        let r = await anthropicFetch(env, { ...body, output_config: { effort: "low" } }, { job: "worker_translation_queue", lang: q.lang, cacheTtl: 604800 }); if (r.status === 400) r = await anthropicFetch(env, body, { job: "worker_translation_queue", lang: q.lang, cacheTtl: 604800 });
-        if (!r.ok) throw new Error("api " + r.status);
-        let txt = ((await r.json()).content?.[0]?.text || "").trim(); if (txt.startsWith("```")) txt = txt.replace(/^```[a-z]*\n?/, "").replace(/```$/, "");
-        const out = JSON.parse(txt); let n = 0;
+        const out = await haikuJson(env, ESYS + ` Target language: ${LANGS[q.lang] || "English"}.`, inp, { job: "worker_translation_queue", lang: q.lang }); let n = 0;
         for (const f of Object.keys(inp)) { const o = String(out[f] || "").replace(/<script/gi, "").trim(), ratio = o.length / Math.max(1, inp[f].length); if (!o || ratio < 0.2 || ratio > 3 || (f === "desc" && o.length > 400)) continue;
           await db.prepare("INSERT OR REPLACE INTO ent_tr(eid,field,lang,text,created) VALUES(?,?,?,?,?)").bind(q.item_id, f, q.lang, o, t).run(); n++; }
         if (!n) { await mark(q, "failed", "Antwort unbrauchbar"); failed++; return; }

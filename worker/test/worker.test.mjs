@@ -89,12 +89,19 @@ test("util: HMAC-Signatur ist pruefbar und faelschungssicher", async () => {
 
 test("AI Gateway: Fallback, Metadaten, Haiku-Budget und Usage", async () => {
   assert.equal(anthropicUrl({}, "/v1/messages"), "https://api.anthropic.com/v1/messages");
-  assert.equal(anthropicUrl({ CLOUDFLARE_ACCOUNT_ID: "account", AI_GATEWAY_ID: "m365fm" }), "https://gateway.ai.cloudflare.com/v1/account/m365fm/anthropic/v1/messages");
+  assert.equal(anthropicUrl({ CLOUDFLARE_ACCOUNT_ID: "account", AI_GATEWAY_ID: "m365fm", CF_AIG_TOKEN: "unit-test-token" }), "https://gateway.ai.cloudflare.com/v1/account/m365fm/anthropic/v1/messages");
   const headers = anthropicHeaders({ ANTHROPIC_API_KEY: "unit-test-key", CLOUDFLARE_ACCOUNT_ID: "account", CF_AIG_TOKEN: "unit-test-token" }, { job: "test_job", lang: "de", model: "claude-haiku-5-5", cacheTtl: 604800 });
   assert.deepEqual(JSON.parse(headers["cf-aig-metadata"]), { job: "test_job", lang: "de", model: "claude-haiku-5-5" });
   assert.equal(headers["cf-aig-authorization"], "unit-test-token");
   assert.equal(headers["cf-aig-cache-ttl"], "604800");
   assert.equal(anthropicHeaders({ CF_AIG_TOKEN: "unit-test-token" }, { job: "direct", model: "claude-haiku-5-5" })["cf-aig-authorization"], undefined);
+  const oldWarn = console.warn; console.warn = () => {};
+  try {
+    const direct = { CLOUDFLARE_ACCOUNT_ID: "account", AI_GATEWAY_ID: "m365fm" };
+    assert.equal(anthropicUrl(direct), "https://api.anthropic.com/v1/messages");
+    assert.equal(anthropicHeaders(direct, { job: "direct" })["cf-aig-authorization"], undefined);
+    assert.equal(anthropicHeaders(direct, { job: "direct" })["cf-aig-metadata"], undefined);
+  } finally { console.warn = oldWarn; }
 
   const { db, raw } = await searchDb();
   const today = new Date().toISOString().slice(0, 10), yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
@@ -112,7 +119,7 @@ test("AI Gateway: Fallback, Metadaten, Haiku-Budget und Usage", async () => {
       (error) => error.code === AI_BUDGET_ERROR);
     assert.equal(calls, 0, "bei erreichtem Tagesbudget erfolgt kein Claude-Aufruf");
     raw.prepare("UPDATE ai_spend SET day=? WHERE id='full'").run(yesterday);
-    const response = await anthropicFetch({ DB: db, ANTHROPIC_API_KEY: "unit-test-key", CLOUDFLARE_ACCOUNT_ID: "account" }, { model: "claude-haiku-5-5", max_tokens: 4000 }, { job: "worker_translation_queue", lang: "de" });
+    const response = await anthropicFetch({ DB: db, ANTHROPIC_API_KEY: "unit-test-key", CLOUDFLARE_ACCOUNT_ID: "account", CF_AIG_TOKEN: "unit-test-token" }, { model: "claude-haiku-5-5", max_tokens: 4000 }, { job: "worker_translation_queue", lang: "de" });
     assert.equal(response.status, 200, "am neuen UTC-Tag ist das Budget wieder frei");
     assert.equal(calls, 1);
     const spend = raw.prepare("SELECT in_tok,out_tok,usd,reserved_usd FROM ai_spend WHERE day=? AND id<>'full'").get(today);

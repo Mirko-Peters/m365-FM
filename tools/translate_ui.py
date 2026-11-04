@@ -22,13 +22,13 @@ SYS = ("You translate short user-interface texts (buttons, labels, hints, messag
 
 
 def call(key, model, lang, items):
-    body = {"model": model, "max_tokens": 6000, "system": SYS.format(lang=lang), "messages": [{"role": "user", "content": json.dumps(items, ensure_ascii=False)}]}
+    body = {"model": model, "max_tokens": 6000, **({"thinking": {"type": "disabled"}} if "haiku" in model else {}), "system": SYS.format(lang=lang), "messages": [{"role": "user", "content": json.dumps(items, ensure_ascii=False)}]}
     req = anthropic_request("/v1/messages", body, job="translate_ui", lang=lang, model=model, cache_ttl=604800, api_key=key)
     with urlopen(req, timeout=180) as r:
         response = json.load(r)
     usage = response.get("usage", {})
     report_usage("translate_ui", model, usage.get("input_tokens", 0), usage.get("output_tokens", 0), lang)
-    txt = response["content"][0]["text"].strip()
+    txt = "".join(c.get("text", "") for c in response.get("content", []) if c.get("type") == "text").strip()
     if txt.startswith("```"):
         txt = txt.strip("`").split("\n", 1)[1].rsplit("```", 1)[0]
     return json.loads(txt)

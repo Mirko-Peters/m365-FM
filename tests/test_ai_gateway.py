@@ -1,4 +1,6 @@
 import json
+import contextlib
+import io
 import unittest
 from unittest.mock import patch
 
@@ -27,7 +29,15 @@ class AiGatewayTests(unittest.TestCase):
             self.assertIsNone(req.get_header("Cf-aig-metadata"))
             self.assertIsNone(req.get_header("Cf-aig-authorization"))
         with patch.dict("os.environ", {"CLOUDFLARE_ACCOUNT_ID": "account", "AI_GATEWAY_ID": "m365fm"}, clear=True):
-            self.assertEqual(ai_gateway.gateway_base_url(), "https://gateway.ai.cloudflare.com/v1/account/m365fm/anthropic")
+            output = io.StringIO()
+            with contextlib.redirect_stdout(output):
+                req = ai_gateway.anthropic_request(
+                    "/v1/messages", {"model": "claude-haiku-5-5"}, job="fallback",
+                    model="claude-haiku-5-5",
+                )
+            self.assertEqual(req.full_url, "https://api.anthropic.com/v1/messages")
+            self.assertIsNone(req.get_header("Cf-aig-metadata"))
+            self.assertIn("CF_AIG_TOKEN fehlt", output.getvalue())
 
     def test_request_has_gateway_headers(self):
         with patch.dict("os.environ", {

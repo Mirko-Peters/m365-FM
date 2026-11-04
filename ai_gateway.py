@@ -8,12 +8,19 @@ import uuid
 
 
 ANTHROPIC_API = "https://api.anthropic.com"
+_warned_missing_gateway_token = False
 
 
 def gateway_base_url():
+    global _warned_missing_gateway_token
     account = os.environ.get("CLOUDFLARE_ACCOUNT_ID", "").strip()
     gateway = os.environ.get("AI_GATEWAY_ID", "m365fm").strip()
     if not account or not gateway:
+        return ANTHROPIC_API
+    if not os.environ.get("CF_AIG_TOKEN", "").strip():
+        if not _warned_missing_gateway_token:
+            print("AI Gateway ist konfiguriert, aber CF_AIG_TOKEN fehlt; direkter Anthropic-Aufruf.")
+            _warned_missing_gateway_token = True
         return ANTHROPIC_API
     return f"https://gateway.ai.cloudflare.com/v1/{urllib.parse.quote(account, safe='')}/{urllib.parse.quote(gateway, safe='')}/anthropic"
 
@@ -33,7 +40,7 @@ def anthropic_request(path, data=None, headers=None, *, job, lang="", model="", 
     if api_key:
         h["x-api-key"] = api_key
     token = os.environ.get("CF_AIG_TOKEN", "").strip()
-    if gateway_enabled and token:
+    if gateway_enabled:
         h["cf-aig-authorization"] = token
     if gateway_enabled and cache_ttl:
         h["cf-aig-cache-ttl"] = str(int(cache_ttl))

@@ -103,10 +103,24 @@ export async function rateLimit(db, key, max, windowSec) {
 const numeric = (value, fallback) => Number.isFinite(Number(value)) && Number(value) >= 0 ? Number(value) : fallback;
 const isHaiku = (model) => /^claude-haiku/i.test(String(model || ""));
 export const AI_BUDGET_ERROR = "AI_DAILY_BUDGET";
+let warnedMissingGatewayToken = false;
+
+function gatewayEnabled(env) {
+  const account = String(env.CLOUDFLARE_ACCOUNT_ID || "").trim(), gateway = env.AI_GATEWAY_ID === undefined ? "m365fm" : String(env.AI_GATEWAY_ID).trim();
+  if (!account || !gateway) return false;
+  if (!String(env.CF_AIG_TOKEN || "").trim()) {
+    if (!warnedMissingGatewayToken) {
+      console.warn("AI Gateway ist konfiguriert, aber CF_AIG_TOKEN fehlt; direkter Anthropic-Aufruf.");
+      warnedMissingGatewayToken = true;
+    }
+    return false;
+  }
+  return true;
+}
 
 export function anthropicUrl(env, path = "/v1/messages") {
   const account = String(env.CLOUDFLARE_ACCOUNT_ID || "").trim(), gateway = env.AI_GATEWAY_ID === undefined ? "m365fm" : String(env.AI_GATEWAY_ID).trim();
-  const base = account && gateway ? `https://gateway.ai.cloudflare.com/v1/${encodeURIComponent(account)}/${encodeURIComponent(gateway)}/anthropic` : "https://api.anthropic.com";
+  const base = gatewayEnabled(env) ? `https://gateway.ai.cloudflare.com/v1/${encodeURIComponent(account)}/${encodeURIComponent(gateway)}/anthropic` : "https://api.anthropic.com";
   return base + (path.startsWith("/") ? path : `/${path}`);
 }
 
@@ -116,9 +130,9 @@ export function anthropicHeaders(env, { job, lang = "", model, cacheTtl } = {}) 
     "x-api-key": env.ANTHROPIC_API_KEY,
     "anthropic-version": "2023-06-01",
   };
-  if (env.CLOUDFLARE_ACCOUNT_ID && (env.AI_GATEWAY_ID === undefined || String(env.AI_GATEWAY_ID).trim())) {
+  if (gatewayEnabled(env)) {
     headers["cf-aig-metadata"] = JSON.stringify({ job, lang, model });
-    if (env.CF_AIG_TOKEN) headers["cf-aig-authorization"] = env.CF_AIG_TOKEN;
+    headers["cf-aig-authorization"] = env.CF_AIG_TOKEN;
     if (cacheTtl) headers["cf-aig-cache-ttl"] = String(cacheTtl);
   }
   return headers;
@@ -223,4 +237,19 @@ export const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", 
 
 export async function audit(db, userId, action, target = "", detail = "") {   // Audit-Protokoll der Verwaltung (wer, wann, was) - Diff/Kurzfassung, keine Volltexte
   try { await db.prepare("INSERT INTO audit(user_id,action,target,detail,created) VALUES(?,?,?,?,?)").bind(userId || 0, action, String(target).slice(0, 200), String(detail).slice(0, 2000), Math.floor(Date.now() / 1000)).run(); } catch { /* Tabelle fehlt bis zur Migration */ }
+}
+
+// Antworttext von Claude: nur Bloecke vom Typ "text" (Claude Haiku 5.5 denkt standardmaessig mit, eine Antwort kann mit thinking-Bloecken beginnen -
+// content[0].text waere dann leer). Gleiches Muster wie translate_blog.py.
+export const claudeText = (j) => (Array.isArray(j?.content) ? j.content : []).filter((b) => b && b.type === "text").map((b) => b.text || "").join("").trim();
+
+export async function haikuJson(env, system, obj, { job, lang = "", maxTokens = 8000, model = "claude-haiku-5-5", cacheTtl = 604800 } = {}) {
+  const body = { model, max_tokens: maxTokens, system, messages: [{ role: "user", content: JSON.stringify(obj) }] };
+  const options = { job, lang, cacheTtl };
+  let response = await anthropicFetch(env, { ...body, thinking: { type: "disabled" }, output_config: { effort: "low" } }, options);
+  if (response.status === 400) response = await anthropicFetch(env, body, options);
+  if (!response.ok) throw new Error("api " + response.status);
+  let text = claudeText(await response.json());
+  if (text.startsWith("```")) text = text.replace(/^```[a-z]*\n?/, "").replace(/```$/, "");
+  return JSON.parse(text);
 }
