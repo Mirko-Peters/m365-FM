@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS contributions (
   metrics_updated INTEGER NOT NULL DEFAULT 0,
   public INTEGER NOT NULL DEFAULT 0,
   manual INTEGER NOT NULL DEFAULT 0,
+  topics_edited INTEGER NOT NULL DEFAULT 0,
   created INTEGER NOT NULL
 );
 CREATE UNIQUE INDEX IF NOT EXISTS idx_contributions_user_url ON contributions(user_id, url) WHERE url<>'';

@@ -11,6 +11,12 @@ const MVP_CATEGORIES = ["Video/Webcast/Podcast", "Blog", "Speaker/Presenter"];
 const IMPORT_LIMIT = 5000;
 const DEFAULT_CATEGORIES = { video: "Video/Webcast/Podcast", podcast: "Video/Webcast/Podcast", blog: "Blog", session: "Speaker/Presenter" };
 const TOPIC_ID = /^[a-z0-9][a-z0-9-]{1,47}$/;
+const SPREAKER_EPISODE = /^https:\/\/(?:www\.)?spreaker\.com\/episode\/(?:[a-z0-9-]+--)?(\d+)(?:[\/?#]|$)/i;
+
+async function ensureContributionColumns(db) {
+  try { await db.prepare("SELECT topics_edited FROM contributions LIMIT 1").first(); }
+  catch { try { await db.prepare("ALTER TABLE contributions ADD COLUMN topics_edited INTEGER NOT NULL DEFAULT 0").run(); } catch {} }
+}
 
 function safeUrl(value) {
   try {
@@ -89,6 +95,7 @@ export async function handleContributions(env, request, url, path, user, J) {
   const db = env.DB, method = request.method;
   if (!path.startsWith("/api/contributions/")) return null;
   if (!user) return J({ error: "login" }, 401);
+  await ensureContributionColumns(db);
 
   if (path === "/api/contributions/sources" && method === "GET") {
     const rows = (await db.prepare("SELECT id,kind,url,feed,title,public,active,created,fetched,fails FROM contribution_sources WHERE user_id=? ORDER BY created DESC").bind(user.id).all()).results || [];
@@ -116,7 +123,10 @@ export async function handleContributions(env, request, url, path, user, J) {
     if (!source) return J({ error: "not_found" }, 404);
     const updates = [], values = [];
     if (b.public !== undefined) { updates.push("public=?"); values.push(b.public ? 1 : 0); }
-    if (b.active !== undefined) { updates.push("active=?"); values.push(b.active ? 1 : 0); }
+    if (b.active !== undefined) {
+      updates.push("active=?"); values.push(b.active ? 1 : 0);
+      if (b.active) { updates.push("fails=0", "fetched=0"); }
+    }
     if (!updates.length) return J({ error: "bad_request" }, 400);
     await db.prepare(`UPDATE contribution_sources SET ${updates.join(",")} WHERE id=? AND user_id=?`).bind(...values, id, user.id).run();
     if (b.public !== undefined) await db.prepare("UPDATE contributions SET public=? WHERE source_id=? AND user_id=? AND manual=0").bind(b.public ? 1 : 0, id, user.id).run();
@@ -169,7 +179,7 @@ export async function handleContributions(env, request, url, path, user, J) {
       if (category && !MVP_CATEGORIES.includes(category)) return J({ error: "bad_category" }, 400);
       updates.push("category=?"); values.push(category);
     }
-    if (b.topics !== undefined) { updates.push("topics=?"); values.push(JSON.stringify(topicsOf(b.topics))); }
+    if (b.topics !== undefined) { updates.push("topics=?", "topics_edited=1"); values.push(JSON.stringify(topicsOf(b.topics))); }
     if (b.public !== undefined) { updates.push("public=?"); values.push(b.public ? 1 : 0); }
     if (!updates.length) return J({ error: "bad_request" }, 400);
     await db.prepare(`UPDATE contributions SET ${updates.join(",")} WHERE id=? AND user_id=?`).bind(...values, id, user.id).run();
@@ -189,6 +199,7 @@ export async function handleContributions(env, request, url, path, user, J) {
 
 export async function refreshContributions(env, max = 5) {
   const db = env.DB, t = now();
+  await ensureContributionColumns(db);
   const sources = (await db.prepare("SELECT * FROM contribution_sources WHERE active=1 AND fails<5 AND fetched<? ORDER BY fetched ASC LIMIT ?").bind(t - 1800, max).all()).results || [];
   let collected = 0;
   for (const source of sources) {
@@ -216,7 +227,7 @@ export async function refreshContributions(env, max = 5) {
         values.push(db.prepare(`INSERT INTO contributions(user_id,source_id,title,url,published,kind,category,topics,public,created)
           VALUES(?,?,?,?,?,?,?,?,?,?) ON CONFLICT(user_id,url) WHERE url<>'' DO UPDATE SET
           title=CASE WHEN contributions.manual=0 THEN excluded.title ELSE contributions.title END,
-          topics=CASE WHEN contributions.manual=0 AND contributions.topics='[]' THEN excluded.topics ELSE contributions.topics END`)
+          topics=CASE WHEN contributions.manual=0 AND contributions.topics_edited=0 AND contributions.topics='[]' THEN excluded.topics ELSE contributions.topics END`)
           .bind(source.user_id, source.id, item.title, item.url, item.t, source.kind === "youtube" ? "video" : source.kind,
             category, JSON.stringify(topicsOf(item.topics)), source.public, t));
       }
@@ -236,13 +247,30 @@ async function refreshContributionMetrics(env) {
   const youtubeRows = (await db.prepare(`SELECT c.id,c.user_id,c.url,c.kind FROM contributions c WHERE c.metrics_updated<? AND (
       c.url LIKE 'https://youtu.be/%' OR c.url LIKE 'https://youtube.com/%' OR c.url LIKE 'https://www.youtube.com/%' OR c.url LIKE 'https://m.youtube.com/%'
     ) ORDER BY c.metrics_updated LIMIT 50`).bind(t - 86400).all()).results || [];
-  const spreakerRows = (await db.prepare(`SELECT c.id,c.user_id,c.url,c.kind FROM contributions c WHERE c.metrics_updated<? AND
-      (c.url LIKE 'https://spreaker.com/episode/%' OR c.url LIKE 'https://www.spreaker.com/episode/%') AND (
-        EXISTS(SELECT 1 FROM pod_episodes e WHERE e.user_id=c.user_id AND e.status='published' AND e.spreaker_id=CAST(substr(c.url,instr(c.url,'/episode/')+9) AS INTEGER))
-        OR EXISTS(SELECT 1 FROM item_guests g JOIN pod_episodes e ON e.id=g.item_id AND e.status='published' WHERE g.kind='podcast' AND g.status='confirmed' AND g.user_id=c.user_id AND e.spreaker_id=CAST(substr(c.url,instr(c.url,'/episode/')+9) AS INTEGER))
-      ) ORDER BY c.metrics_updated LIMIT 10`).bind(t - 86400).all()).results || [];
+  const spreakerCandidates = (await db.prepare(`SELECT c.id,c.user_id,c.url,c.kind FROM contributions c WHERE c.metrics_updated<? AND
+      (c.url LIKE 'https://spreaker.com/episode/%' OR c.url LIKE 'https://www.spreaker.com/episode/%')
+      ORDER BY c.metrics_updated LIMIT 50`).bind(t - 86400).all()).results || [];
+  for (const row of youtubeRows) await db.prepare("UPDATE contributions SET metrics_updated=? WHERE id=? AND user_id=?").bind(t, row.id, row.user_id).run();
+  const spreakerRows = [];
+  for (const row of spreakerCandidates) {
+    const episodeId = SPREAKER_EPISODE.exec(row.url)?.[1];
+    if (!episodeId) {
+      await db.prepare("UPDATE contributions SET metrics_updated=? WHERE id=? AND user_id=?").bind(t, row.id, row.user_id).run();
+      continue;
+    }
+    const owned = await db.prepare(`SELECT
+      EXISTS(SELECT 1 FROM pod_episodes e WHERE e.user_id=? AND e.status='published' AND e.spreaker_id=?)
+      OR EXISTS(SELECT 1 FROM item_guests g JOIN pod_episodes e ON e.id=g.item_id AND e.status='published'
+        WHERE g.kind='podcast' AND g.status='confirmed' AND g.user_id=? AND e.spreaker_id=?) allowed`).bind(row.user_id, episodeId, row.user_id, episodeId).first();
+    if (!owned?.allowed) {
+      await db.prepare("UPDATE contributions SET metrics_updated=? WHERE id=? AND user_id=?").bind(t, row.id, row.user_id).run();
+      continue;
+    }
+    if (spreakerRows.length >= 10) break;
+    spreakerRows.push({ ...row, episodeId });
+    await db.prepare("UPDATE contributions SET metrics_updated=? WHERE id=? AND user_id=?").bind(t, row.id, row.user_id).run();
+  }
   const rows = [...youtubeRows, ...spreakerRows];
-  for (const row of rows) await db.prepare("UPDATE contributions SET metrics_updated=? WHERE id=? AND user_id=?").bind(t, row.id, row.user_id).run();
   const videos = rows.map((r) => {
     try {
       const u = new URL(r.url);
@@ -266,11 +294,9 @@ async function refreshContributionMetrics(env) {
     }
   }
   const spreakerToken = env.SPREAKER_TOKEN;
-  if (spreakerToken) for (const row of spreakerRows.filter((x) => /^https:\/\/(?:www\.)?spreaker\.com\/episode\/\d+(?:[/?#]|$)/i.test(x.url))) {
-    const id = /^https:\/\/(?:www\.)?spreaker\.com\/episode\/(\d+)(?:[/?#]|$)/i.exec(row.url)?.[1];
-    if (!id) continue;
+  if (spreakerToken) for (const row of spreakerRows) {
     try {
-      const r = await fetch(`https://api.spreaker.com/v2/episodes/${id}`, { headers: { authorization: "Bearer " + spreakerToken } });
+      const r = await fetch(`https://api.spreaker.com/v2/episodes/${row.episodeId}`, { headers: { authorization: "Bearer " + spreakerToken } });
       if (!r.ok) continue;
       const episode = (await r.json()).response?.episode;
       const allowedShows = String(env.SPREAKER_SHOW_IDS || "").split(",").map((x) => x.trim()).filter(Boolean);

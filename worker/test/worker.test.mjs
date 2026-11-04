@@ -115,6 +115,7 @@ test("feeds: parseFeed nimmt nur https-Links und liest Titel, Datum, Beschreibun
 
 test("contributions: Quellen, Metadaten, Privatsphäre, Kategorien und Berichtsexport", async () => {
   const { db, raw } = await searchDb();
+  raw.exec("ALTER TABLE contributions DROP COLUMN topics_edited");
   raw.exec("INSERT INTO users(id,provider,sub,name,created) VALUES(1,'g','1','Anna',1),(2,'g','2','Ben',1); INSERT INTO profiles(user_id,public,handle,headline,about,company,job,country,show_org,updated) VALUES(1,0,'anna','','','','','',1,1)");
   const user = { id: 1 }, J = (data, status = 200) => new Response(JSON.stringify(data), { status });
   const call = (path, method = "GET", data, actor = user) => {
@@ -144,14 +145,14 @@ test("contributions: Quellen, Metadaten, Privatsphäre, Kategorien und Berichtse
   const originalFetch = globalThis.fetch;
   globalThis.fetch = async () => new Response(`<rss><channel>
     <item><title>Feed article</title><link>https://example.com/post</link><pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate><category>Power Automate</category><description>Never persist the full text</description></item>
-    <item><title>Imported article</title><link>https://example.com/post-auto</link><pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate></item>
+    <item><title>Imported article</title><link>https://example.com/post-auto</link><pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate><category>Power BI</category></item>
   </channel></rss>`);
   try { await refreshContributions({ DB: db }, 1); } finally { globalThis.fetch = originalFetch; }
   const manual = raw.prepare("SELECT title,kind,published,public,manual,source_id FROM contributions WHERE id=?").get(manualId);
   assert.deepEqual([manual.title, manual.kind, manual.published, manual.public, manual.manual, manual.source_id], ["=SUM(1,1)", "article", 1767225600, 0, 1, null], "Feed-Upsert bewahrt manuelle Felder");
   const imported = raw.prepare("SELECT id,title,topics,public,category,published FROM contributions WHERE url='https://example.com/post-auto'").get();
   assert.equal(imported.title, "Imported article");
-  assert.deepEqual(JSON.parse(imported.topics), []);
+  assert.deepEqual(JSON.parse(imported.topics), ["power-bi"]);
   assert.equal(imported.category, "Blog");
   assert.equal(imported.public, 1, "Quellen-Sichtbarkeit gilt beim Import");
   const sourceId = raw.prepare("SELECT id FROM contribution_sources WHERE user_id=1").get().id;
@@ -159,12 +160,18 @@ test("contributions: Quellen, Metadaten, Privatsphäre, Kategorien und Berichtse
   assert.equal(raw.prepare("SELECT public FROM contributions WHERE id=?").get(imported.id).public, 0, "Quellensichtbarkeit wird auf importierte Einträge übertragen");
   assert.equal(raw.prepare("SELECT active FROM contribution_sources WHERE id=?").get(sourceId).active, 0);
   assert.equal((await call("/api/contributions/source/update", "POST", { id: sourceId, public: true, active: true })).status, 200);
-  await call("/api/contributions/update", "POST", { id: imported.id, public: false });
-  raw.prepare("UPDATE contribution_sources SET fetched=0 WHERE id=?").run(sourceId);
-  globalThis.fetch = async () => new Response(`<rss><channel><item><title>New title</title><link>https://example.com/post-auto</link><pubDate>Tue, 02 Jan 2024 00:00:00 GMT</pubDate></item></channel></rss>`);
+  raw.prepare("UPDATE contribution_sources SET fails=5,fetched=9999999999 WHERE id=?").run(sourceId);
+  assert.equal((await call("/api/contributions/source/update", "POST", { id: sourceId, active: true })).status, 200);
+  const resetSource = raw.prepare("SELECT fails,fetched FROM contribution_sources WHERE id=?").get(sourceId);
+  assert.equal(resetSource.fails, 0, "Reaktivierung hebt die Fehlersperre auf");
+  assert.equal(resetSource.fetched, 0, "Reaktivierung plant den sofortigen Abruf");
+  await call("/api/contributions/update", "POST", { id: imported.id, public: false, topics: [] });
+  globalThis.fetch = async () => new Response(`<rss><channel><item><title>New title</title><link>https://example.com/post-auto</link><pubDate>Tue, 02 Jan 2024 00:00:00 GMT</pubDate><category>Fabric</category></item></channel></rss>`);
   try { await refreshContributions({ DB: db }, 1); } finally { globalThis.fetch = originalFetch; }
   const kept = raw.prepare("SELECT title,published,public,kind FROM contributions WHERE id=?").get(imported.id);
   assert.deepEqual([kept.title, kept.published, kept.public, kept.kind], ["New title", imported.published, 0, "blog"], "Cron überschreibt weder Privatstatus noch Typ/Datum");
+  assert.deepEqual(JSON.parse(raw.prepare("SELECT topics FROM contributions WHERE id=?").get(imported.id).topics), [], "Cron befüllt manuell geleerte Themen nicht erneut");
+  assert.ok(raw.prepare("SELECT fetched FROM contribution_sources WHERE id=?").get(sourceId).fetched > 0, "reaktivierte Quelle wird wieder abgerufen");
   assert.equal(raw.prepare("SELECT COUNT(*) n FROM pragma_table_info('contributions') WHERE name IN ('summary','description','body')").get().n, 0, "nur Metadaten ohne Volltext werden gespeichert");
 
   const session = await call("/api/contributions/manual", "POST", { title: "Power Automate talk", kind: "session", published: "2026-01-01" });
@@ -213,12 +220,12 @@ test("contributions: URL ohne Feed-Endung wird direkt als Feed geprüft", async 
 test("contributions: Metriken filtern Hosts, autorisieren Spreaker und lassen Fehlschläge nicht blockieren", async () => {
   const { db, raw } = await searchDb();
   raw.exec("INSERT INTO users(id,provider,sub,name,created) VALUES(1,'g','1','Anna',1),(2,'g','2','Ben',1)");
-  raw.exec("INSERT INTO pod_episodes(id,user_id,title,status,spreaker_id,created,updated) VALUES(1,1,'Own','published',101,1,1),(2,2,'Guest','published',202,1,1),(3,2,'Foreign','published',303,1,1)");
+  raw.exec("INSERT INTO pod_episodes(id,user_id,title,status,spreaker_id,created,updated) VALUES(1,1,'Own','published',101,1,1),(2,2,'Guest','published',202,1,1),(3,2,'Foreign','published',303,1,1),(4,1,'Slug','published',112,1,1)");
   raw.exec("INSERT INTO item_guests(kind,item_id,user_id,status,created) VALUES('podcast',2,1,'confirmed',1)");
   for (let i = 102; i <= 111; i++) raw.prepare("INSERT INTO pod_episodes(id,user_id,title,status,spreaker_id,created,updated) VALUES(?,1,'Own','published',?,1,1)").run(i, i);
   for (let i = 1; i <= 51; i++) raw.prepare("INSERT INTO contributions(user_id,title,url,published,kind,created) VALUES(1,?,?,1,'video',1)").run(`missing ${i}`, `https://www.youtube.com/watch?v=missin${String(i).padStart(5, "0")}`);
   raw.prepare("INSERT INTO contributions(user_id,title,url,published,kind,created) VALUES(1,'Real','https://www.youtube.com/watch?v=abcdefghijk',1,'video',1)").run();
-  raw.prepare("INSERT INTO contributions(user_id,title,url,published,kind,created) VALUES(1,'Own episode','https://www.spreaker.com/episode/101',1,'podcast',1),(1,'Guest episode','https://spreaker.com/episode/202',1,'podcast',1),(1,'Foreign episode','https://spreaker.com/episode/303',1,'podcast',1),(1,'Fake host','https://evilspreaker.com/episode/404',1,'podcast',1)").run();
+  raw.prepare("INSERT INTO contributions(user_id,title,url,published,kind,created) VALUES(1,'Own episode','https://www.spreaker.com/episode/101',1,'podcast',1),(1,'Guest episode','https://spreaker.com/episode/202',1,'podcast',1),(1,'Foreign episode','https://spreaker.com/episode/303',1,'podcast',1),(1,'Fake host','https://evilspreaker.com/episode/404',1,'podcast',1),(1,'Slug episode','https://www.spreaker.com/episode/a-title--112',1,'podcast',1)").run();
   for (let i = 102; i <= 111; i++) raw.prepare("INSERT INTO contributions(user_id,title,url,published,kind,created) VALUES(1,?,?,1,'podcast',1)").run(`Own episode ${i}`, `https://spreaker.com/episode/${i}`);
 
   const originalFetch = globalThis.fetch, requested = [];
@@ -238,14 +245,15 @@ test("contributions: Metriken filtern Hosts, autorisieren Spreaker und lassen Fe
   const env = { DB: db, YT_CLIENT_ID: "id", YT_CLIENT_SECRET: "secret", YT_REFRESH_TOKEN: "refresh", SPREAKER_TOKEN: "test", SPREAKER_SHOW_IDS: "6704921" };
   try {
     await refreshContributions(env);
-    assert.equal(raw.prepare("SELECT COUNT(*) n FROM contributions WHERE (title LIKE 'Own episode%' OR title='Guest episode') AND metrics_updated=0").get().n, 2, "Spreaker-Zeilen außerhalb des Lauf-Limits bleiben für den nächsten Lauf offen");
+    assert.equal(raw.prepare("SELECT COUNT(*) n FROM contributions WHERE (title LIKE 'Own episode%' OR title IN ('Guest episode','Slug episode')) AND metrics_updated=0").get().n, 3, "Spreaker-Zeilen außerhalb des Lauf-Limits bleiben für den nächsten Lauf offen");
     await refreshContributions(env);
   } finally { globalThis.fetch = originalFetch; }
   assert.equal(raw.prepare("SELECT views FROM contributions WHERE title='Real'").get().views, 123);
   assert.ok(raw.prepare("SELECT COUNT(*) n FROM contributions WHERE title LIKE 'missing %' AND metrics_updated>0").get().n >= 50, "fehlende Videos werden nicht dauerhaft erneut selektiert");
-  assert.equal(requested.filter((x) => x.includes("api.spreaker.com/v2/episodes/")).length, 12, "alle autorisierten Folgen werden über mehrere Läufe abgefragt");
+  assert.equal(requested.filter((x) => x.includes("api.spreaker.com/v2/episodes/")).length, 13, "alle autorisierten Folgen werden über mehrere Läufe abgefragt");
   assert.equal(raw.prepare("SELECT downloads FROM contributions WHERE title='Own episode'").get().downloads, 10);
   assert.equal(raw.prepare("SELECT downloads FROM contributions WHERE title='Guest episode'").get().downloads, 20);
+  assert.equal(raw.prepare("SELECT downloads FROM contributions WHERE title='Slug episode'").get().downloads, 20, "Slug-URL wird per gebundener Episoden-ID autorisiert");
   assert.equal(raw.prepare("SELECT downloads FROM contributions WHERE title='Foreign episode'").get().downloads, 0);
   assert.equal(raw.prepare("SELECT metrics_updated FROM contributions WHERE title='Fake host'").get().metrics_updated, 0);
 });
