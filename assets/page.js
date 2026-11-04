@@ -35,7 +35,22 @@ var txt=T.share_text.replace("{s}",score).replace("{n}",n).replace("{t}",C.title
 row.appendChild(btn(T.share,function(){var u=C.url+"#quiz";if(navigator.share){navigator.share({title:C.title,text:txt,url:u}).catch(function(){})}else if(navigator.clipboard){navigator.clipboard.writeText(txt+" "+u).then(function(){fb.className="qfb ok";fb.textContent=T.copied})}},1));
 var a=el("a","btn","LinkedIn");a.href="https://www.linkedin.com/sharing/share-offsite/?url="+encodeURIComponent(C.url+"#quiz");a.target="_blank";a.rel="noopener nofollow";row.appendChild(a);row.appendChild(btn(T.retry,function(){i=0;score=0;qs.forEach(function(q){q.disabled=false;[].forEach.call(q.querySelectorAll("input"),function(x){x.checked=false});[].forEach.call(q.querySelectorAll(".qo"),function(l){l.classList.remove("ok","no")})});Q.removeChild(r);show(0)}));r.appendChild(row);Q.insertBefore(r,ctl)}
 show(0)}catch(e){}})();
-(function(){try{document.querySelectorAll('.yt').forEach(function(b){b.addEventListener('click',function(){var i=document.createElement('iframe');i.src='https://www.youtube-nocookie.com/embed/'+b.dataset.id+'?autoplay=1&rel=0';i.allow='accelerometer;autoplay;encrypted-media;picture-in-picture';i.allowFullscreen=true;i.title='YouTube';b.innerHTML='';b.appendChild(i)},{once:true})});}catch(e){}})();
+(function(){
+  document.querySelectorAll("button[data-player-src]").forEach(function(b){
+    var box=b.parentNode,link=box.querySelector(".media-fallback");
+    b.hidden=false;if(link)link.hidden=true;
+    b.addEventListener("click",function(){
+      var u=new URL(b.dataset.playerSrc);
+      if(u.protocol!=="https:"||!["www.youtube-nocookie.com","widget.spreaker.com"].includes(u.hostname))return;
+      u.searchParams.set("autoplay","1");
+      if(b.dataset.playerProvider==="spreaker")u.searchParams.set("auto_play","true");
+      var i=document.createElement("iframe");
+      i.src=u.href;i.title=b.getAttribute("aria-label");i.allow="autoplay; encrypted-media; picture-in-picture; fullscreen";
+      i.allowFullscreen=true;i.referrerPolicy="strict-origin-when-cross-origin";i.tabIndex=0;
+      box.replaceChildren(i);i.focus({preventScroll:true});
+    },{once:true});
+  });
+})();
 ;(function(){   // T10: Menues (Sprachwahl, Menuegruppen, Burger) schliessen mit Escape, Klick daneben oder wenn der Fokus sie verlaesst
   var SEL = "details.lsw[open],details.mg[open],details.mm[open]", MENU = "details.lsw,details.mg,details.mm";
   // T29: offene Menues ueber das toggle-Ereignis merken statt bei jedem Klick und Fokuswechsel den ganzen DOM zu durchsuchen (6-15 ms auf grossen Seiten)
