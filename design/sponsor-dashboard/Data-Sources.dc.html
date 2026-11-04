@@ -55,18 +55,23 @@ button,input,select{font:inherit;color:inherit}
         <span style="font-size: 14px; color: #5d6470">For sources without an interface. Shown to sponsors with the label “Manual”.</span>
         <div style="display: flex; flex-wrap: wrap; gap: 14px">
           <label style="flex: 1 1 180px; display: grid; gap: 6px"><span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #5d6470">Source</span>
-            <select style="height: 46px; box-sizing: border-box; padding: 0 10px; border: 1px solid rgba(23,25,28,.35); border-radius: 0; background: #ffffff"><option>Bing AI Performance</option><option>LinkedIn newsletter</option><option>Other</option></select>
+            <select style="height: 46px; box-sizing: border-box; padding: 0 10px; border: 1px solid rgba(23,25,28,.35); border-radius: 0; background: #ffffff"><option>LinkedIn newsletter</option><option>Press portal</option><option>Bing AI Performance</option><option>Other</option></select>
           </label>
           <label style="flex: 1 1 140px; display: grid; gap: 6px"><span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #5d6470">Month</span>
             <input type="month" value="2026-10" style="height: 46px; box-sizing: border-box; padding: 0 10px; border: 1px solid #17191c; border-radius: 0">
           </label>
           <label style="flex: 1 1 200px; display: grid; gap: 6px"><span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #5d6470">Sponsored page or issue</span>
-            <select style="height: 46px; box-sizing: border-box; padding: 0 10px; border: 1px solid rgba(23,25,28,.35); border-radius: 0; background: #ffffff"><option>Topic page · Copilot</option><option>Newsletter · [ISSUE]</option></select>
+            <select style="height: 46px; box-sizing: border-box; padding: 0 10px; border: 1px solid rgba(23,25,28,.35); border-radius: 0; background: #ffffff"><option>Newsletter · [ISSUE]</option><option>Press release · [TITLE]</option><option>Topic page · Copilot</option></select>
           </label>
         </div>
         <div style="display: flex; flex-wrap: wrap; gap: 14px">
-          <label style="flex: 1 1 160px; display: grid; gap: 6px"><span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #5d6470">Value</span><input type="number" value="1840" style="height: 46px; box-sizing: border-box; padding: 0 12px; border: 1px solid #17191c; border-radius: 0"></label>
-          <label style="flex: 2 1 260px; display: grid; gap: 6px"><span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #5d6470">Proof (export file)</span><input type="text" value="bing-ai-export-2026-10.csv" style="height: 46px; box-sizing: border-box; padding: 0 12px; border: 1px solid #17191c; border-radius: 0"></label>
+          <label style="flex: 1 1 120px; display: grid; gap: 6px"><span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #5d6470">Sent</span><input type="number" value="[N]" style="height: 46px; box-sizing: border-box; padding: 0 12px; border: 1px solid #17191c; border-radius: 0"></label>
+          <label style="flex: 1 1 120px; display: grid; gap: 6px"><span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #5d6470">Opens / views</span><input type="number" value="[N]" style="height: 46px; box-sizing: border-box; padding: 0 12px; border: 1px solid #17191c; border-radius: 0"></label>
+          <label style="flex: 1 1 120px; display: grid; gap: 6px"><span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #5d6470">Clicks</span><input type="number" value="[N]" style="height: 46px; box-sizing: border-box; padding: 0 12px; border: 1px solid #17191c; border-radius: 0"></label>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 14px">
+          <label style="flex: 2 1 320px; display: grid; gap: 6px"><span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #5d6470">Link (shown to the sponsor)</span><input type="url" value="https://www.linkedin.com/newsletters/[issue]" style="height: 46px; box-sizing: border-box; padding: 0 12px; border: 1px solid #17191c; border-radius: 0"></label>
+          <label style="flex: 1 1 220px; display: grid; gap: 6px"><span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #5d6470">Proof (screenshot or export)</span><input type="text" value="newsletter-stats-[issue].png" style="height: 46px; box-sizing: border-box; padding: 0 12px; border: 1px solid #17191c; border-radius: 0"></label>
         </div>
         <div style="display: flex; gap: 12px; align-items: center">
           <button type="button" onClick="{{save}}" style="min-height: 46px; padding: 0 22px; background: #3b6391; color: #ffffff; border: 1px solid #3b6391; border-radius: 0; cursor: pointer; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 16px; letter-spacing: .1em; text-transform: uppercase">Save value</button>
@@ -104,7 +109,8 @@ class Component extends DCLogic {
       ['Google Search Console', 'Impressions, clicks per sponsored page', 'Service account already in use', 'Daily', 'ready'],
       ['Bing AI Performance', 'AI citations of sponsored pages', 'No API: monthly export, entered below', 'Monthly', 'manual'],
       ['AI answer check', 'Brand named in AI answers', '20 fixed questions per topic, monthly', 'Monthly', 'build'],
-      ['LinkedIn newsletter', 'Opens, impressions per issue', 'No API: entered below', 'Monthly', 'manual'],
+      ['LinkedIn newsletter', 'Sends, opens, impressions per issue + link to the issue', 'No API: entered below', 'Per issue', 'manual'],
+      ['Press portal', 'Views of each press release + link to the release', 'Portal statistics, entered below (API if the portal has one)', 'Per release', 'manual'],
       ['HeySummit / events', 'Registrations, attendance per session', 'HeySummit API + event table', 'Daily', 'setup'],
       ['Directory leads', 'Project requests from the sponsor profile', 'D1 (#232)', 'Live', 'build'],
       ['News app', 'Jingle listens, push opens, taps', 'App events to the Worker', 'Live', 'later']
