@@ -33,7 +33,8 @@ let db = dbs.find((d) => d.name === "m365-dub");
 if (!db) { const c = run(["d1", "create", "m365-dub"]); console.log(c.stdout.split("\n").slice(0, 3).join("\n")); dbs = JSON.parse(run(["d1", "list", "--json"]).stdout); db = dbs.find((d) => d.name === "m365-dub"); }
 if (!db) { fail("D1 konnte nicht angelegt werden"); }
 const id = db.uuid || db.id;
-let toml = readFileSync("wrangler.toml", "utf8").replace(/database_id = "[^"]*"/, `database_id = "${id}"`);
+let toml = readFileSync("wrangler.toml", "utf8").replace(/database_id = "[^"]*"/, `database_id = "${id}"`)
+  .replace(/^TEAMS_BOT_APP_ID = .*[\r\n]*/m, "");
 if (process.env.TEAMS_BOT_APP_ID) toml = toml.replace("[vars]\n", `[vars]\nTEAMS_BOT_APP_ID = ${JSON.stringify(process.env.TEAMS_BOT_APP_ID)}\n`);
 writeFileSync("wrangler.toml", toml);
 console.log("D1:", db.name);

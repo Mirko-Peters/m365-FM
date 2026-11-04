@@ -45,6 +45,7 @@ jobs:
           gh workflow run worker.yml --repo "$GITHUB_REPOSITORY" --ref main
 
   package:
+    if: vars.TEAMS_BOT_APP_ID != ''
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

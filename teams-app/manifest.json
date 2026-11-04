@@ -1,6 +1,6 @@
 {
-  "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.17/MicrosoftTeams.schema.json",
-  "manifestVersion": "1.17",
+  "$schema": "https://developer.microsoft.com/json-schemas/teams/v1.30/MicrosoftTeams.schema.json",
+  "manifestVersion": "1.30",
   "version": "1.0.0",
   "id": "{{TEAMS_BOT_APP_ID}}",
   "packageName": "fm.m365.teams",
@@ -8,7 +8,7 @@
     "name": "M365.FM",
     "websiteUrl": "https://www.m365.fm/",
     "privacyUrl": "https://www.m365.fm/privacy/",
-    "termsOfUseUrl": "https://www.m365.fm/terms/"
+    "termsOfUseUrl": "https://www.m365.fm/legal/"
   },
   "name": {
     "short": "M365.FM",
@@ -26,12 +26,12 @@
   "bots": [
     {
       "botId": "{{TEAMS_BOT_APP_ID}}",
-      "scopes": ["personal", "team", "groupchat"],
+      "scopes": ["personal", "team", "groupChat"],
       "supportsFiles": false,
       "isNotificationOnly": false,
       "commandLists": [
         {
-          "scopes": ["personal", "team", "groupchat"],
+          "scopes": ["personal", "team", "groupChat"],
           "commands": [
             { "title": "follow", "description": "M365.FM-Thema suchen und abonnieren" },
             { "title": "my subscriptions", "description": "Meine Abos anzeigen" },
