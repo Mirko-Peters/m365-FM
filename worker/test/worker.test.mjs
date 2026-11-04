@@ -412,12 +412,40 @@ test("sponsor dashboard: Firmenzugriff, Event-Kennzahlen und Nachricht an die Pl
   assert.equal(result.orgs.length, 1, "nur verwaltete Firmen werden angezeigt");
   assert.equal(result.orgs[0].handle, "acme");
   assert.equal(result.orgs[0].website, "https://acme.example/");
+  assert.equal(result.admin, false);
+  assert.equal(result.orgs[0].metrics.length, 8);
+  assert.ok(result.orgs[0].metrics.every((m) => m.source && ["measured", "estimated", "manual"].includes(m.kind)),
+    "jede Kennzahl hat Quelle und Messart");
+  assert.ok(result.orgs[0].metrics.every((m) => m.value === null || m.as_of), "Werte haben immer einen Datenstand");
   assert.deepEqual(result.orgs[0].placements.map((p) => p.status), ["pending", "confirmed"]);
   const confirmed = result.orgs[0].placements.find((p) => p.status === "confirmed");
   assert.equal(confirmed.attendees, 1, "nur going-Teilnehmer werden gezählt");
   assert.equal(confirmed.impressions, null);
   assert.equal(confirmed.clicks, null);
   assert.equal(confirmed.downloads, null);
+  response = await call("/api/sponsor/dashboard", "GET", { id: 3 });
+  result = await response.json();
+  assert.equal(result.orgs.some((o) => o.handle === "acme"), false, "fremde Firmen werden nicht angezeigt");
+  assert.equal((await call("/api/sponsor/sources", "GET", { id: 1 })).status, 403, "Datenquellen sind Admin-only");
+  assert.equal((await call("/api/sponsor/manual-metric", "POST", { id: 1 }, {
+    org_id: 1, source: "bing_ai", metric: "ai_citations", placement: "Copilot topic page",
+    period: "2026-10", value: 12, proof_key: "sponsors/acme/bing-2026-10.csv"
+  })).status, 403, "manuelle Werte sind Admin-only");
+  assert.equal((await call("/api/sponsor/sources", "GET", { id: 2, admin: true })).status, 200);
+  assert.equal((await call("/api/sponsor/manual-metric", "POST", { id: 2, admin: true }, {
+    org_id: 1, source: "bing_ai", metric: "ai_citations", placement: "Copilot topic page",
+    period: "2026-10", value: 12, proof_key: "sponsors/acme/bing-2026-10.csv"
+  })).status, 200);
+  result = await (await call("/api/sponsor/dashboard", "GET", { id: 1 })).json();
+  assert.equal(result.orgs[0].metrics.find((m) => m.key === "ai_citations").value, null,
+    "Monatswerte werden nicht ohne passenden Zeitraum in die Gesamtkennzahl gerechnet");
+  assert.equal(result.orgs[0].manual[0].value, 12);
+  assert.equal(result.orgs[0].manual[0].kind, "manual");
+  assert.equal(result.orgs[0].manual[0].period, "2026-10");
+  assert.equal((await call("/api/sponsor/manual-metric", "POST", { id: 2, admin: true }, {
+    org_id: 1, source: "bing_ai", metric: "clicks", placement: "Copilot topic page",
+    period: "2026-10", value: 12, proof_key: "sponsors/acme/bing-2026-10.csv"
+  })).status, 400, "nicht erlaubte Quellenkennzahlen werden abgewiesen");
   assert.equal((await call("/api/sponsor/contact", "POST", { id: 3 }, { org: "acme", message: "Interested" })).status, 403);
 
   response = await call("/api/sponsor/contact", "POST", { id: 1 }, { org: "acme", message: "<b>Interested</b> https://example.com" });

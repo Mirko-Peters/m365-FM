@@ -4,6 +4,16 @@ import { notify } from "./mail.js";
 const now = () => Math.floor(Date.now() / 1000);
 const STATUSES = new Set(["new", "contacted", "won", "lost", "spam"]);
 const EMAIL = /^[^\s@<>]{1,64}@[^\s@<>]{1,190}\.[a-z]{2,}$/i;
+const SPONSOR_METRICS = [
+  ["people_reached", "estimated", "Cross-channel estimate"],
+  ["podcast_plays", "measured", "Spreaker API"],
+  ["video_views", "measured", "YouTube Analytics API"],
+  ["page_views", "measured", "Cloudflare analytics"],
+  ["link_clicks", "measured", "M365.FM link counter"],
+  ["project_requests", "measured", "Sponsor profile requests"],
+  ["ai_citations", "manual", "Bing AI Performance export"],
+  ["search_impressions", "measured", "Google Search Console"],
+];
 
 function cleanPackage(value) {
   if (typeof value === "string") {
@@ -58,23 +68,83 @@ export async function handleSponsor(env, request, url, path, J, user) {
   if (path === "/api/sponsor/dashboard" && request.method === "GET") {
     if (!user) return J({ error: "login" }, 401);
     const orgs = (await db.prepare(`SELECT o.id,o.handle,o.name,o.website,COALESCE(s.open,0) open
-      FROM orgs o JOIN org_members m ON m.org_id=o.id
-      LEFT JOIN org_sponsor s ON s.org_id=o.id
-      WHERE m.user_id=? AND m.status='active' AND m.role IN ('owner','admin','events')
-      ORDER BY o.name,o.id`).bind(user.id).all()).results || [];
+      FROM orgs o LEFT JOIN org_sponsor s ON s.org_id=o.id
+      WHERE ((?=1 AND (EXISTS (SELECT 1 FROM org_sponsor x WHERE x.org_id=o.id)
+        OR EXISTS (SELECT 1 FROM event_partners x WHERE x.org_id=o.id)
+        OR EXISTS (SELECT 1 FROM sponsor_manual_metrics x WHERE x.org_id=o.id)))
+        OR EXISTS (SELECT 1 FROM org_members m WHERE m.org_id=o.id AND m.user_id=?
+          AND m.status='active' AND m.role IN ('owner','admin','events')
+          AND (EXISTS (SELECT 1 FROM org_sponsor x WHERE x.org_id=o.id)
+            OR EXISTS (SELECT 1 FROM event_partners x WHERE x.org_id=o.id))))
+      ORDER BY o.name,o.id`).bind(user.admin ? 1 : 0, user.id).all()).results || [];
     const items = [];
     for (const org of orgs) {
       const placements = (await db.prepare(`SELECT e.handle,e.title,e.start,e.end,p.kind,p.level,p.status,p.created,
         (SELECT COUNT(*) FROM event_attendees a WHERE a.event_id=e.id AND a.status='going') attendees
         FROM event_partners p JOIN events e ON e.id=p.event_id
         WHERE p.org_id=? ORDER BY e.start DESC,e.id DESC`).bind(org.id).all()).results || [];
-      items.push({ handle: org.handle, name: org.name, website: org.website, open: !!org.open, placements: placements.map((p) => ({
+      const manual = (await db.prepare(`SELECT placement,source,metric,period,value,link,updated
+        FROM sponsor_manual_metrics WHERE org_id=? ORDER BY period DESC,placement,metric`).bind(org.id).all()).results || [];
+      const metrics = SPONSOR_METRICS.map(([key, kind, source]) => ({
+        key, value: null, source, kind, as_of: null,
+      }));
+      items.push({ handle: org.handle, name: org.name, website: org.website, open: !!org.open, metrics,
+        manual: manual.map((m) => ({ placement: m.placement, source: m.source, metric: m.metric, period: m.period,
+          value: m.value, link: m.link, kind: "manual", as_of: new Date(m.updated * 1000).toISOString().slice(0, 10) })),
+        placements: placements.map((p) => ({
         type: "event_partner", title: p.title, event: p.handle, start: p.start, end: p.end, status: p.status,
         kind: p.kind, level: p.level, created: p.created, attendees: p.attendees,
         impressions: null, clicks: null, downloads: null,
+        metric_sources: {
+          attendees: { source: "Event registration records", kind: "measured", as_of: new Date().toISOString().slice(0, 10) },
+          impressions: { source: "Cloudflare analytics", kind: "measured", as_of: null },
+          clicks: { source: "M365.FM link counter", kind: "measured", as_of: null },
+          downloads: { source: "Spreaker API", kind: "measured", as_of: null },
+        },
       })) });
     }
-    return J({ orgs: items }, 200, { "cache-control": "no-store" });
+    return J({ orgs: items, admin: !!user.admin }, 200, { "cache-control": "no-store" });
+  }
+  if (path === "/api/sponsor/sources" && request.method === "GET") {
+    if (!user) return J({ error: "login" }, 401);
+    if (!user.admin) return J({ error: "forbidden" }, 403);
+    const orgs = (await db.prepare(`SELECT DISTINCT o.id,o.handle,o.name FROM orgs o
+      WHERE EXISTS (SELECT 1 FROM org_sponsor s WHERE s.org_id=o.id)
+        OR EXISTS (SELECT 1 FROM event_partners p WHERE p.org_id=o.id)
+      ORDER BY o.name,o.id`).all()).results || [];
+    return J({ orgs }, 200, { "cache-control": "no-store" });
+  }
+  if (path === "/api/sponsor/manual-metric" && request.method === "POST") {
+    if (!user) return J({ error: "login" }, 401);
+    if (!user.admin) return J({ error: "forbidden" }, 403);
+    const body = (await request.json().catch(() => ({}))) || {};
+    const source = String(body.source || ""), metric = String(body.metric || "");
+    const allowed = source === "bing_ai" ? ["ai_citations"] : source === "linkedin_newsletter" ? ["impressions", "clicks"] : [];
+    const orgId = Number(body.org_id), value = Number(body.value);
+    const period = String(body.period || ""), placement = cleanText(body.placement, 180).replace(/[<>]/g, "").trim();
+    const link = String(body.link || "").trim(), proof = String(body.proof_key || "").trim();
+    const proofValid = /^[A-Za-z0-9][A-Za-z0-9/_\-.]{0,199}$/.test(proof) && !proof.split("/").includes("..");
+    let linkValid = !link;
+    if (link) {
+      try {
+        const parsed = new URL(link);
+        linkValid = parsed.protocol === "https:" && !!parsed.hostname && !parsed.username && !parsed.password;
+      } catch { linkValid = false; }
+    }
+    if (!Number.isSafeInteger(orgId) || !placement || !allowed.includes(metric) ||
+        !/^\d{4}-(0[1-9]|1[0-2])$/.test(period) || body.value == null || String(body.value).trim() === "" ||
+        !Number.isSafeInteger(value) || value < 0 ||
+        value > 1_000_000_000 || !proofValid || !linkValid) return J({ error: "bad_request" }, 400);
+    const org = await db.prepare(`SELECT o.id FROM orgs o WHERE o.id=? AND
+      (EXISTS (SELECT 1 FROM org_sponsor s WHERE s.org_id=o.id)
+       OR EXISTS (SELECT 1 FROM event_partners p WHERE p.org_id=o.id))`).bind(orgId).first();
+    if (!org) return J({ error: "not_found" }, 404);
+    const updated = now();
+    await db.prepare(`INSERT INTO sponsor_manual_metrics(org_id,placement,source,metric,period,value,link,proof_key,entered_by,updated)
+      VALUES(?,?,?,?,?,?,?,?,?,?) ON CONFLICT(org_id,placement,source,metric,period) DO UPDATE SET
+      value=excluded.value,link=excluded.link,proof_key=excluded.proof_key,entered_by=excluded.entered_by,updated=excluded.updated`)
+      .bind(orgId, placement, source, metric, period, value, link, proof, user.id, updated).run();
+    return J({ ok: true, as_of: new Date(updated * 1000).toISOString().slice(0, 10) });
   }
   if (path === "/api/sponsor/contact" && request.method === "POST") {
     if (!user) return J({ error: "login" }, 401);
