@@ -169,7 +169,7 @@ jobs:
           R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
         run: |
           pip install -q boto3
-          python tools/r2_pages_upload.py r2out
+          R2_KEYS_OUT=r2-keys.json python tools/r2_pages_upload.py r2out
       - name: Pruefsummenliste der R2-Seiten sichern (immer, sofort nach dem Upload)
         if: always() && hashFiles('data/cache/r2_pages.json') != ''
         uses: actions/cache/save@v4
@@ -221,6 +221,10 @@ jobs:
           python generate_og.py
       - name: Seiten-Hashes (fuer gezieltes Purge und IndexNow)
         run: python tools/page_hashes.py docs page-hashes.json
+      # R2 als Ursprung: Bau-Kennung fuer den Spiegel im Deploy-Job (tools/r2_site_sync.py). Der Site-Worker liest R2 nur, wenn pages/r2-build.txt
+      # im Bucket mit /r2-build.txt auf GitHub Pages uebereinstimmt - also erst, wenn dieser Bau vollstaendig und fehlerfrei gespiegelt ist.
+      - name: Bau-Kennung fuer den R2-Spiegel
+        run: echo "${{ github.run_id }}.${{ github.run_attempt }}" > docs/r2-build.txt
       - uses: actions/upload-artifact@v4
         with:
           name: page-hashes
@@ -228,6 +232,7 @@ jobs:
           path: |
             page-hashes.json
             r2-changed.json
+            r2-keys.json
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with: { path: docs }
@@ -261,5 +266,62 @@ jobs:
           BASE: https://www.m365.fm
         run: |
           mkdir -p .pagehashes
+          cp .pagehashes/page-hashes.json .newhashes/page-hashes.prev.json 2>/dev/null || true
           python3 tools/purge_changed.py .pagehashes/page-hashes.json .newhashes/page-hashes.json .newhashes/r2-changed.json
           cp .newhashes/page-hashes.json .pagehashes/page-hashes.json
+      # R2 als Ursprung: die eben veroeffentlichte Website (dasselbe Artefakt wie GitHub Pages) in den Bucket spiegeln - nur hier im Deploy-Job
+      # (nur main, Umgebung github-pages), also nie neuer als GitHub Pages und nie von einem anderen Branch. Nichts wird geloescht.
+      - name: Veroeffentlichte Website holen (GitHub-Pages-Artefakt)
+        uses: actions/download-artifact@v4
+        with: { name: github-pages, path: .site }
+      - name: Pruefsummenliste des R2-Spiegels (letzter Stand)
+        uses: actions/cache/restore@v4
+        with:
+          path: .r2/r2_docs.json
+          key: r2docs-${{ github.run_id }}
+          restore-keys: r2docs-
+      - name: Website in den R2-Bucket spiegeln (R2 als Ursprung; bei Fehlern bleibt GitHub Pages zustaendig)
+        id: r2sync
+        if: github.ref == 'refs/heads/main'
+        continue-on-error: true
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_MANIFEST: .r2/r2_docs.json
+          R2_KEEP_KEYS: .newhashes/r2-keys.json
+          R2_CHANGED_OUT: .newhashes/r2-changed-docs.json
+        run: |
+          mkdir -p .site/docs .r2 && tar -xf .site/artifact.tar -C .site/docs
+          pip install -q boto3
+          python tools/r2_site_sync.py .site/docs
+      - name: Pruefsummenliste des R2-Spiegels sichern
+        if: always() && steps.r2sync.outcome != 'skipped' && hashFiles('.r2/r2_docs.json') != ''
+        uses: actions/cache/save@v4
+        with:
+          path: .r2/r2_docs.json
+          key: r2docs-${{ github.run_id }}-${{ github.run_attempt }}
+      - name: R2-Kanten-Cache fuer geaenderte Adressen leeren (nach dem Spiegel, vor der Bau-Kennung)
+        if: steps.r2sync.outcome == 'success'
+        continue-on-error: true
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CF_ZONE_ID: ${{ secrets.CF_ZONE_ID }}
+          BASE: https://www.m365.fm
+          PURGE_R2C_ONLY: "1"
+        run: python3 tools/purge_changed.py .newhashes/page-hashes.prev.json .newhashes/page-hashes.json .newhashes/r2-changed-docs.json
+      # Erst nach dem Purge: ab jetzt liefert der Site-Worker (R2_PRIMARY=1) diesen Bau aus R2 - vorher, und bei jedem Fehler, aus GitHub Pages
+      - name: Bau-Kennung im Bucket setzen (R2-Spiegel vollstaendig)
+        if: steps.r2sync.outcome == 'success'
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: python tools/r2_site_sync.py --marker .site/docs
+      - name: R2-Spiegel fehlgeschlagen? (Website laeuft weiter ueber GitHub Pages)
+        if: steps.r2sync.outcome == 'failure'
+        run: |
+          echo "::error::R2-Spiegel fehlgeschlagen (Log des Schritts 'Website in den R2-Bucket spiegeln'). GitHub Pages ist aktuell und liefert; R2 wird erst wieder genutzt, wenn ein Spiegel fehlerfrei durchlaeuft."
+          exit 1

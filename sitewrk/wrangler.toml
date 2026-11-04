@@ -14,6 +14,10 @@ MIGRATED = "1"
 # T32: Laender mit Einwilligungs-Banner (ISO 3166-1 alpha-2 wie request.cf.country). "*" = ueberall; leer = "*" (sicherer Standard).
 # EU-27 + EWR (IS, LI, NO) + Grossbritannien (GB, "uk" ist auf dieser Seite Ukrainisch) + Schweiz + EU-Gebiete in Uebersee/Aland.
 # Hier aendern, nicht im Dashboard (wrangler deploy ueberschreibt Dashboard-Variablen).
+# R2 als Ursprung: "1" = Seiten und Dateien zuerst aus dem Bucket (pages/<pfad>, Spiegel der Website aus dem Deploy-Job, tools/r2_site_sync.py),
+# aber nur solange pages/r2-build.txt mit /r2-build.txt auf GitHub Pages uebereinstimmt - sonst automatisch GitHub Pages.
+# "0" = wie bisher (GitHub Pages zuerst, R2 nur fuer Seiten, die es nur dort gibt). Notschalter: hier auf "0" setzen und mergen.
+R2_PRIMARY = "0"
 CONSENT_COUNTRIES = "AT,BE,BG,HR,CY,CZ,DK,EE,FI,FR,DE,GR,HU,IE,IT,LV,LT,LU,MT,NL,PL,PT,RO,SK,SI,ES,SE,IS,LI,NO,GB,CH,AX,GF,GP,MQ,RE,YT,MF"
 
 [[r2_buckets]]

@@ -8,6 +8,7 @@ globalThis.caches = { default: { match: async (r) => { const x = store.get(r.url
 globalThis.fetch = async (req) => {
   const r = typeof req === "string" ? new Request(req) : req, u = new URL(r.url); lastOrigin = r;
   if (u.pathname === "/show/redirects.json") return new Response("{}", { headers: { "content-type": "application/json" } });
+  if (u.pathname === "/r2-build.txt") return globalThis.ORIGIN_BUILD ? new Response(globalThis.ORIGIN_BUILD + "\n", { headers: { "content-type": "text/plain" } }) : new Response("404", { status: 404 });
   const inm = r.headers.get("if-none-match"), ims = r.headers.get("if-modified-since");
   if (u.pathname === "/") { if (inm === 'W/"abc"' || (!inm && ims && Date.parse(ims) >= Date.parse(LM))) return new Response(null, { status: 304, headers: { etag: '"abc"', "last-modified": LM } }); return new Response("<html><body>gh</body></html>", { headers: { "content-type": "text/html; charset=utf-8", etag: '"abc"', "last-modified": LM } }); }
   if (u.pathname === "/nolm/") { if (ims && Date.parse(ims) >= Date.parse(LM)) return new Response(null, { status: 304 }); return new Response("<html>x</html>", { headers: { "content-type": "text/html; charset=utf-8", "last-modified": LM } }); }
@@ -16,7 +17,7 @@ globalThis.fetch = async (req) => {
   if (u.pathname === "/assets/a.css") return new Response("a{}", { headers: { "content-type": "text/css", etag: 'W/"css1"' } });
   return new Response("404", { status: 404, headers: { "content-type": "text/html" } });
 };
-const { default: W } = await import("../index.js");
+const { default: W, r2Key, __resetR2Ready } = await import("../index.js");
 const PAGES = { get: async (k) => { r2gets++; if (k === "pages/pl/x/index.html") return { httpEtag: '"r2e"', uploaded: new Date("2026-11-01T20:00:00Z"), arrayBuffer: async () => new TextEncoder().encode("<html>pl</html>").buffer }; if (k === "pages/blog-import/index.json") return { body: new Response('{"total":7}').body }; if (k === "pages/translations-blog.json") return { body: new Response('{"count":3}').body }; return null; } };
 const env = { PAGES, MIGRATED: "1", CONSENT_COUNTRIES: "DE,AT,GB,CH,NO,PL" };
 const req = (path, c, h = {}, method = "GET") => { const r = new Request("https://www.m365.fm" + path, { headers: h, method }); if (c) Object.defineProperty(r, "cf", { value: { country: c } }); return r; };
@@ -101,4 +102,97 @@ test("HEAD ohne Body; Assets und 404 unveraendert", async () => {
   const h = await run(req("/", "US", {}, "HEAD")); assert.equal(h.status, 200); assert.equal(h.body, null); assert.equal(h.headers.get("x-m365-cr"), "0");
   const a = await run(req("/assets/a.css", "DE")); assert.equal(a.headers.get("etag"), 'W/"css1"'); assert.equal(a.headers.get("x-m365-cr"), null); assert.match(a.headers.get("cache-control"), /max-age=3600/);
   const n = await run(req("/gibt-es-nicht/", "DE")); assert.equal(n.status, 404);
+});
+
+// R2 als Ursprung (R2_PRIMARY=1): eigene Umgebung, eigener Bucket-Nachbau mit Metadaten
+const enc = (t) => new TextEncoder().encode(t).buffer;
+const obj2 = (body, ct, extra = {}) => ({ httpEtag: '"r2x"', uploaded: new Date("2026-11-04T09:00:00Z"), httpMetadata: ct ? { contentType: ct } : {}, customMetadata: { src: "docs", ...extra }, arrayBuffer: async () => enc(body), text: async () => body, body: new Response(body).body });
+const B2 = {
+  "pages/de/r2only/index.html": obj2("<html><body>r2 de</body></html>", "text/html; charset=utf-8"),
+  "pages/index.html": obj2("<html><body>r2 start</body></html>", "text/html; charset=utf-8"),
+  "pages/assets/site.0123456789ab.css": obj2("b{}", "text/css; charset=utf-8"),
+  "pages/feed.json": obj2('{"r2":1}', "application/json; charset=utf-8"),
+  "pages/alt/index.html": obj2("<html>alt</html>", "text/html; charset=utf-8", { gone: "1" }),
+  "pages/old.json": obj2("{}", "application/octet-stream"),
+  "pages/blog-import/index.json": obj2('{"total":9}', "application/json; charset=utf-8"),
+  "pages/search/manifest.json": obj2('{"parts":1}', "application/json; charset=utf-8"),
+  "pages/r2-build.txt": obj2("b1\n", "text/plain; charset=utf-8"),
+  "pages/ru/tag/облако/index.html": obj2("<html>ru tag</html>", "text/html; charset=utf-8"),
+  "pages/broken.json": { ...obj2("{}", "application/json"), arrayBuffer: async () => { throw new Error("reset"); } },
+};
+let r2gets2 = 0, origins2 = 0;
+const env2 = { ...env, R2_PRIMARY: "1", PAGES: { get: async (k) => { r2gets2++; return B2[k] || null; } } };
+globalThis.ORIGIN_BUILD = "b1";
+const run2 = async (r) => { const w = []; const before = lastOrigin; const res = await W.fetch(r, env2, { waitUntil: (p) => w.push(p) }); await Promise.all(w); if (lastOrigin !== before && !["/show/redirects.json", "/r2-build.txt"].includes(new URL(lastOrigin.url).pathname)) origins2++; return res; };
+
+test("R2 zuerst: Seite aus dem Bucket ohne Abruf bei GitHub Pages, gleiche Header, Region", async () => {
+  store.clear(); origins2 = 0; __resetR2Ready(); globalThis.ORIGIN_BUILD = "b1";
+  const a = await run2(req("/de/r2only/", "DE"));
+  assert.equal(a.status, 200); assert.equal(await a.text(), "<html><body>r2 de</body></html>");
+  assert.equal(a.headers.get("x-m365-src"), "r2"); assert.equal(a.headers.get("x-m365-cache"), "MISS");
+  assert.equal(a.headers.get("content-type"), "text/html; charset=utf-8");
+  assert.equal(a.headers.get("strict-transport-security"), "max-age=31536000; includeSubDomains");
+  assert.equal(origins2, 0, "kein Abruf bei GitHub Pages");
+  const b = await run2(req("/de/r2only/", "US")); assert.equal(b.headers.get("x-m365-cache"), "HIT");
+  assert.notEqual(a.headers.get("etag"), b.headers.get("etag"), "Validatoren je Region");
+  const s = await run2(req("/", "US")); assert.equal(await s.text(), "<html><body>r2 start</body></html>"); assert.match(s.headers.get("link") || "", /api-catalog/);
+});
+test("R2 zuerst: Dateien mit Content-Type aus den Metadaten, gehashtes CSS ein Jahr, Exporte noindex", async () => {
+  store.clear();
+  const c = await run2(req("/assets/site.0123456789ab.css", "DE"));
+  assert.equal(c.status, 200); assert.equal(c.headers.get("content-type"), "text/css; charset=utf-8"); assert.equal(c.headers.get("cache-control"), "public, max-age=31536000, immutable");
+  const j = await run2(req("/feed.json", "DE")); assert.equal(await j.text(), '{"r2":1}'); assert.equal(j.headers.get("content-type"), "application/json; charset=utf-8");
+  const o = await run2(req("/old.json", "DE")); assert.equal(o.headers.get("content-type"), "application/json; charset=utf-8", "octet-stream -> nach Endung");
+  const bi = await run2(req("/blog-import/index.json", "DE")); assert.equal(bi.headers.get("x-robots-tag"), "noindex");
+});
+test("R2 zuerst: 304 per ETag, HEAD ohne Body", async () => {
+  store.clear();
+  const f = await run2(req("/feed.json", "DE", { "if-none-match": '"r2x"' })); assert.equal(f.status, 304);
+  const h = await run2(req("/feed.json", "DE", {}, "HEAD")); assert.equal(h.status, 200); assert.equal(await h.text(), "");
+});
+test("R2 zuerst: fehlt oder als entfernt markiert -> GitHub Pages wie bisher; Fehlen wird gemerkt", async () => {
+  store.clear(); origins2 = 0; r2gets2 = 0;
+  const g = await run2(req("/", "US", {}, "GET")); assert.equal(g.headers.get("x-m365-src"), "r2");
+  const x = await run2(req("/nolm/", "US")); assert.equal(await x.text(), "<html>x</html>"); assert.equal(x.headers.get("x-m365-src"), null); assert.equal(origins2, 1);
+  const n = r2gets2; await run2(req("/nolm/", "US")); assert.equal(r2gets2, n, "Fehlen im Kanten-Cache gemerkt, kein zweiter R2-Abruf");
+  const gone = await run2(req("/alt/", "US")); assert.equal(gone.status, 404, "entfernte Seite wird nicht mehr ausgeliefert");
+  const rr = await W.fetch(req("/alt/", "US"), env, { waitUntil: () => {} }); assert.equal(rr.status, 404, "auch nicht ueber den alten R2-Rueckfall");
+});
+test("R2 zuerst: Bilder, Suchindex, Range auf Dateien und Pfade ohne Endung gehen an GitHub Pages", async () => {
+  store.clear(); r2gets2 = 0;
+  await run2(req("/assets/a.css", "DE", { range: "bytes=0-1" })); assert.equal(r2gets2, 0);
+  await run2(req("/covers/x.png", "DE")); assert.equal(r2gets2, 0);
+  assert.equal(r2Key("/de"), ""); assert.equal(r2Key("/de/"), "pages/de/index.html"); assert.equal(r2Key("/feed.json"), "pages/feed.json");
+  const si = await run2(req("/search/manifest.json", "DE")); assert.equal(si.headers.get("access-control-allow-origin"), "*", "Suchindex ueber den bisherigen Weg (eigene Header)"); assert.equal(si.headers.get("x-m365-src"), null);
+});
+test("R2_PRIMARY aus: Seiten weiter zuerst von GitHub Pages", async () => {
+  store.clear(); r2gets2 = 0;
+  const e3 = { ...env2, R2_PRIMARY: "0" };
+  const r = await W.fetch(req("/", "US"), e3, { waitUntil: () => {} }); assert.equal(await r.text(), "<html><body>gh</body></html>"); assert.equal(r2gets2, 0);
+});
+
+test("R2 zuerst nur bei gleicher Bau-Kennung: abweichend, fehlend oder ohne Bucket-Kennung -> GitHub Pages", async () => {
+  for (const ob of ["b2", ""]) {
+    store.clear(); __resetR2Ready(); globalThis.ORIGIN_BUILD = ob;
+    const r = await run2(req("/", "US")); assert.equal(await r.text(), "<html><body>gh</body></html>", "Kennung " + JSON.stringify(ob)); assert.equal(r.headers.get("x-m365-src"), null);
+  }
+  store.clear(); __resetR2Ready(); globalThis.ORIGIN_BUILD = "b1";
+  const e4 = { ...env2, PAGES: { get: async (k) => (k === "pages/r2-build.txt" ? null : B2[k] || null) } };
+  const r = await W.fetch(req("/", "US"), e4, { waitUntil: () => {} }); assert.equal(await r.text(), "<html><body>gh</body></html>");
+  store.clear(); __resetR2Ready();
+  const ok = await run2(req("/", "US")); assert.equal(ok.headers.get("x-m365-src"), "r2");
+});
+test("R2 zuerst: CORS wie GitHub Pages, /a/index.html teilt den Cache-Eintrag mit /a/, Unicode-Pfade, Lesefehler -> GitHub Pages", async () => {
+  store.clear(); __resetR2Ready(); globalThis.ORIGIN_BUILD = "b1";
+  const j = await run2(req("/feed.json", "DE")); assert.equal(j.headers.get("access-control-allow-origin"), "*");
+  await run2(req("/de/r2only/index.html", "DE")); assert.ok(store.has("https://www.m365.fm/__r2c/de/r2only/"), "Schluessel ohne index.html");
+  assert.ok(![...store.keys()].some((k) => k.endsWith("index.html/")));
+  const ru = await run2(req("/ru/tag/" + encodeURIComponent("облако") + "/", "US")); assert.equal(await ru.text(), "<html>ru tag</html>");
+  const br = await run2(req("/broken.json", "US")); assert.equal(br.status, 404, "Lesefehler: weiter zu GitHub Pages (hier 404), keine Ausnahme");
+});
+test("Alter R2-Rueckfall (nach 404) liefert keine Spiegel-Objekte von GitHub Pages aus", async () => {
+  store.clear();
+  const e5 = { ...env, PAGES: { get: async (k) => (k === "pages/gonepage/index.html" ? obj2("<html>stale</html>", "text/html") : k === "pages/thin/index.html" ? { ...obj2("<html>thin</html>", "text/html"), customMetadata: {} } : null) } };
+  const a = await W.fetch(req("/gonepage/", "US"), e5, { waitUntil: () => {} }); assert.equal(a.status, 404);
+  const b = await W.fetch(req("/thin/", "US"), e5, { waitUntil: () => {} }); assert.equal(b.status, 200); assert.equal(await b.text(), "<html>thin</html>");
 });
