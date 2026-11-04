@@ -23,9 +23,10 @@ def kind(path):
     return None
 
 
-def main():
+def main(dirs=None):
+    dirs = DIRS if dirs is None else dirs
     pages, total, withnav, links, canon_ok, missing = {}, Counter(), Counter(), {}, set(), defaultdict(list)
-    for d in DIRS:
+    for d in dirs:
         if not d.exists(): continue
         for f in d.rglob("index.html"):
             path = "/" + f.parent.relative_to(d).as_posix().strip(".") + "/"
@@ -43,13 +44,13 @@ def main():
                 withnav[k] += 1
                 links[path] = {rel: href.replace(BASE, "") for _c, rel, href in A.findall(m.group(1))}
     err = []
-    exists = lambda p: any((d / p.lstrip("/") / "index.html").exists() for d in DIRS)
+    exists = lambda p: any((d / p.lstrip("/") / "index.html").exists() for d in dirs)
     for p, l in links.items():
         for rel, tgt in l.items():
             if not tgt.startswith("/"): err.append(f"{p}: {rel} -> externe Adresse {tgt}"); continue
             if not exists(tgt): err.append(f"{p}: {rel} -> fehlt {tgt}"); continue
             back = links.get(tgt, {}).get("prev" if rel == "next" else "next")
-            if p in canon_ok and tgt in canon_ok and back is not None and back != p and pages.get(tgt) == pages.get(p):
+            if p in canon_ok and tgt in canon_ok and back != p and pages.get(tgt) == pages.get(p):
                 err.append(f"{p}: {rel} -> {tgt}, dort zeigt {'prev' if rel == 'next' else 'next'} auf {back}")
     print("Vor/Zurueck je Seitentyp (Seiten mit Leiste / Seiten):")
     for n, _ in TYPES: print(f"  {n}: {withnav[n]} / {total[n]}")
@@ -62,7 +63,7 @@ def main():
         if ex: print(f"  Beispiel {n}: {ex} -> {links[ex]}")
     # Hub-Seiten mit eigener Adresse (/page/N/, /xx/page/N/): kanonisch auf sich selbst, Kopf rel=prev/next, Leiste, Karten; Startseite verlinkt Seite 2
     hubs = defaultdict(dict)
-    for d in DIRS:
+    for d in dirs:
         for f in d.glob("**/page/*/index.html"):
             rel = f.parent.relative_to(d).as_posix()
             m = re.fullmatch(r"(?:([a-z]{2})/)?page/(\d+)", rel)
@@ -83,7 +84,7 @@ def main():
             if n == last and 'rel="next"' in head: err.append(f"Hub {u}: letzte Seite mit rel=next")
             if not NAV.search(h): err.append(f"Hub {u}: keine Leiste")
             if h.count('class="hub-card') + h.count('class="thumb') == 0: err.append(f"Hub {u}: keine Karten")
-        home = next(((d / (lg + "/" if lg else "") / "index.html") for d in DIRS if (d / (lg + "/" if lg else "") / "index.html").exists()), None)
+        home = next(((d / (lg + "/" if lg else "") / "index.html") for d in dirs if (d / (lg + "/" if lg else "") / "index.html").exists()), None)
         hh = home.read_text("utf-8", errors="replace") if home else ""
         if f'href="{BASE}{pre}page/2/" rel=next' not in hh: err.append(f"Hub {pre}: 'Mehr laden' verlinkt Seite 2 nicht")
         if f'<link rel="next" href="{BASE}{pre}page/2/">' not in hh.split("</head>", 1)[0]: err.append(f"Hub {pre}: Kopf der Startseite ohne rel=next")
