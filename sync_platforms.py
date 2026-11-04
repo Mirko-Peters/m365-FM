@@ -119,7 +119,7 @@ def apple_candidates(lang, ids, ctx):
             for x in r.get("results", []) if x.get("trackViewUrl") and x.get("wrapperType") == "podcastEpisode"]
 
 
-def apple_search(lang, ids, openkeys, own, budget=SEARCH_CAP, deadline=None):
+def apple_search(lang, ids, openkeys, own, budget=SEARCH_CAP, deadline=None, searched=None):
     """Aeltere Folgen stehen nicht in der 200er-Liste: gezielt per Titel suchen (Antworten gefiltert auf die eigene Show)."""
     out = []
     for k in openkeys[:budget]:
@@ -127,6 +127,8 @@ def apple_search(lang, ids, openkeys, own, budget=SEARCH_CAP, deadline=None):
         if remaining is not None and remaining <= 0:
             print(f"Apple {lang}: Zeitlimit fuer Nachsuche erreicht")
             break
+        if searched is not None:
+            searched.append(k)
         q = urllib.parse.quote(PM.normalize(own[k]["title"])[:80])
         try:
             r = get(f"https://itunes.apple.com/search?term={q}&media=podcast&entity=podcastEpisode&limit=8&country={COUNTRY.get(lang, 'us')}",
@@ -337,12 +339,18 @@ def spotify_token():
     return json.load(urllib.request.urlopen(req, timeout=60))["access_token"]
 
 
+def _write_atomic(path, text):   # bei Abbruch (timeout) bleibt immer eine vollstaendige Datei stehen
+    tmp = path.with_name(path.name + ".tmp")
+    tmp.write_text(text, encoding="utf-8")
+    os.replace(tmp, path)
+
+
 def save_sync_outputs(plat, out, report, retry_state, today):
-    (DATA / "platforms.json").write_text(json.dumps(plat, indent=1), encoding="utf-8")
-    (DATA / "episode_links.json").write_text(json.dumps(out, indent=1, sort_keys=True), encoding="utf-8")
-    (DATA / "episode_links_report.json").write_text(
-        json.dumps({"generated": today, "shows": report, "retry_state": retry_state},
-                   ensure_ascii=False, indent=1), encoding="utf-8")
+    _write_atomic(DATA / "platforms.json", json.dumps(plat, indent=1))
+    _write_atomic(DATA / "episode_links.json", json.dumps(out, indent=1, sort_keys=True))
+    _write_atomic(DATA / "episode_links_report.json",
+                  json.dumps({"generated": today, "shows": report, "retry_state": retry_state},
+                             ensure_ascii=False, indent=1))
 
 
 def main():
@@ -423,6 +431,7 @@ def main():
                     first, is_due = should_search_apple(previous_retry.get(episode_id) or {}, today)
                     if is_due:
                         due.append(episode_id)
+                due.sort(key=lambda e: (previous_retry.get(e) or {}).get("last_search") or "")   # nie/laengst nicht gesuchte zuerst
                 selected = due[:search_budget]
                 deadline = time.monotonic() + APPLE_SEARCH_SECONDS
                 for episode_id in selected:
@@ -439,7 +448,14 @@ def main():
                 save_sync_outputs(plat, out, report, retry_state, today)
                 if selected:
                     print(f"Apple {lang}: {len(selected)} gezielte Suchen, Zeitlimit {APPLE_SEARCH_SECONDS // 60} Minuten")
-                extra = apple_search(lang, ids, selected, own, budget=len(selected), deadline=deadline)
+                searched = []
+                extra = apple_search(lang, ids, selected, own, budget=len(selected), deadline=deadline, searched=searched)
+                for episode_id in selected[len(searched):]:   # wegen Zeitlimit nicht gesucht: alten Stand behalten
+                    prev = (previous_retry.get(episode_id) or {}).get("last_search")
+                    if prev:
+                        retry_state[episode_id]["last_search"] = prev
+                    else:
+                        retry_state[episode_id].pop("last_search", None)
                 if extra:
                     lst.extend(extra)
                     hit, open_, amb = matcher(match_own, lst)
