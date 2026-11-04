@@ -4,7 +4,7 @@ async function n(db, sql, ...b) { try { return (await db.prepare(sql).bind(...b)
 async function meta(db, k) { try { return (await db.prepare("SELECT v FROM meta WHERE k=?").bind(k).first())?.v ?? ""; } catch { return ""; } }
 const FLAGS = { tr_off: /^[01]$/, atr_off: /^[01]$/, atr_ent_cap: /^\d{1,4}$/, tr_queue_on: /^[01]$/, entity_source: /^(json|db)$/ };
 const QKINDS = new Set(["blog", "podcast", "video", "entity", "lblog", "notes"]), QLANGS = new Set(["en", "de", "fr", "es", "it", "nl", "pt", "pl", "id", "ru", "uk", "ar", "he", "ja", "ko"]);
-import { audit } from "./util.js";
+import { audit, aiBudgetStatus } from "./util.js";
 import { SPONSOR_STATUSES } from "./sponsor.js";
 
 export async function handleAdminPanel(env, request, url, path, user, J) {
@@ -15,6 +15,10 @@ export async function handleAdminPanel(env, request, url, path, user, J) {
   if (path === "/api/admin/panel/overview" && request.method === "GET") {
     let base = null; try { base = ((await (await fetch(env.SITE + "/entities.json", { cf: { cacheTtl: 300 } })).json()).entities || []).length; } catch { /* Seite nicht erreichbar */ }
     const exp = await db.prepare("SELECT updated FROM export_cache WHERE k='profiles'").first().catch(() => null);
+    const aiBudget = await aiBudgetStatus(env).catch(() => ({ spent_eur: 0, remaining_eur: 5, budget_eur: 5 }));
+    const cutoff = new Date(Date.now() - 29 * 86400000).toISOString().slice(0, 10);
+    const spendRows = (await db.prepare("SELECT day,SUM(usd) usd FROM ai_spend WHERE day>=? AND model LIKE 'claude-haiku%' GROUP BY day ORDER BY day DESC LIMIT 30").bind(cutoff).all().catch(() => ({ results: [] }))).results || [];
+    const spent30d = spendRows.reduce((sum, row) => sum + Number(row.usd || 0), 0);
     return J({
       queues: {
         blog: await n(db, "SELECT COUNT(*) n FROM blog_posts WHERE status='pending'"),
@@ -35,6 +39,8 @@ export async function handleAdminPanel(env, request, url, path, user, J) {
         profiles_export_age: exp ? now() - exp.updated : null,
         item_tr: await n(db, "SELECT COUNT(*) n FROM item_tr"), ent_tr: await n(db, "SELECT COUNT(*) n FROM ent_tr"),
       },
+      ai_spend: { today_eur: aiBudget.spent_eur, spent_30d_eur: spent30d / (Number(env.USD_PER_EUR) || 1.08), remaining_eur: aiBudget.remaining_eur, budget_eur: aiBudget.budget_eur,
+        days: spendRows.map((r) => ({ day: r.day, eur: Number(r.usd || 0) / (Number(env.USD_PER_EUR) || 1.08) })) },
       flags: { tr_off: await meta(db, "tr_off"), atr_off: await meta(db, "atr_off"), atr_ent_cap: await meta(db, "atr_ent_cap"), entity_source: (await meta(db, "entity_source")) || "json",
         atr_today: +(await meta(db, "atr_count:" + day)) || 0, atr_ent_today: +(await meta(db, "atr_ent:" + day)) || 0, key: !!env.ANTHROPIC_API_KEY },
     });

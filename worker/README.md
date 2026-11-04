@@ -17,6 +17,15 @@ Läuft unter `https://api-dub.m365.fm`. Schlüssel (Session, VAPID, Cron) erzeug
 6. Optional `ADMIN_SUBS` = `google:<sub>`, `microsoft:<sub>` oder `linkedin:<sub>` (Moderator; die ID siehst du in D1 in der Tabelle users).
 7. Workflow **„Community-API … einrichten“** starten (Actions → Run workflow). Er legt die D1-Datenbank `m365-dub` an, sichert sie (`backup-d1.sql`, als Artefakt 14 Tage nur verschlüsselt mit dem Secret `D1_BACKUP_KEY`, ohne Secret kein Artefakt; das Repo ist öffentlich), wendet die Migrationen aus `migrations/` an (`wrangler d1 migrations apply`, Stand in Tabelle `d1_migrations`), setzt Secrets, veröffentlicht den Worker.
 
+## Claude und AI Gateway
+
+- [ ] In Cloudflare unter **AI → AI Gateway** das Gateway `m365fm` anlegen. `AI_GATEWAY_ID` ist eine GitHub-Variable (Standard `m365fm`) und wird beim Worker-Deploy übernommen; ohne Gateway-Konfiguration bleibt der direkte Anthropic-Aufruf als Rückfall aktiv.
+- [ ] `CRON_KEY` als GitHub-Secret setzen und den Worker-Deploy erneut ausführen, damit derselbe Wert im Worker und in Actions liegt. Actions verwenden ihn für Budgetabfrage und Verbrauchsmeldung; ohne ihn werden Haiku-Läufe in Actions sicherheitshalber übersprungen.
+- [ ] Optional im Gateway **Authenticated Gateway** aktivieren und den Gateway-Token als GitHub-Secret `CF_AIG_TOKEN` hinterlegen. Der Worker-Deploy übernimmt das Secret.
+- [ ] Falls Cloudflare AI Gateway Ausgabenlimits anbietet, dort zusätzlich ein Limit als zweite Schutzschicht setzen.
+
+Das Haiku-Budget beträgt standardmäßig 5 € je UTC-Tag. Preise und Wechselkurs stehen als Worker-Variablen `HAIKU_USD_PER_MTOK_IN`, `HAIKU_USD_PER_MTOK_OUT`, `AI_DAILY_EUR_HAIKU` und `USD_PER_EUR` in `wrangler.toml`; für Actions können die entsprechenden Haiku-Preis- und Kurswerte als GitHub-Variablen gesetzt werden. Der Verbrauch erscheint im Admin-Bereich unter **Schalter**.
+
 Ohne Zugangsdaten tut der Workflow nichts; die Website blendet die Community-Bereiche automatisch aus, solange die API nicht erreichbar ist.
 
 ## Betrieb

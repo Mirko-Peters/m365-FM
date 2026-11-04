@@ -7,6 +7,7 @@ from pathlib import Path
 import requests
 import site_podpage as P
 from translate_show import call, NAMES, OUT, MODEL, cost, guard
+from ai_gateway import anthropic_request, check_budget, estimated_eur, report_usage, urlopen
 
 TOP = int(os.environ.get("NOTES_TOP", "150")); MAXC = 8000
 S = requests.Session(); API = "https://api.spreaker.com/v2"
@@ -72,12 +73,14 @@ def main():
     if not reqs: print("Nichts zu tun"); return
     print(len(reqs), "Anfragen fuer", len(top), "Folgen")
     guard(len(reqs), 3500, 9000, "Show Notes")
-    b = call("POST", "/v1/messages/batches", {"requests": reqs}); bid = b["id"]; print("Batch", bid)
+    if not check_budget("translate_notes", MODEL, estimated_eur(len(json.dumps(reqs)) // 3, len(reqs) * 9000)):
+        return
+    b = call("POST", "/v1/messages/batches", {"requests": reqs}, job="translate_notes"); bid = b["id"]; print("Batch", bid)
     while b["processing_status"] != "ended":
-        time.sleep(120); b = call("GET", f"/v1/messages/batches/{bid}"); print(b["processing_status"], b["request_counts"], flush=True)
+        time.sleep(120); b = call("GET", f"/v1/messages/batches/{bid}", job="translate_notes"); print(b["processing_status"], b["request_counts"], flush=True)
     tin = tout = ok = bad = 0; why = {}
-    rq = urllib.request.Request(b["results_url"], headers={"x-api-key": os.environ["ANTHROPIC_API_KEY"], "anthropic-version": "2023-06-01"})
-    for line in urllib.request.urlopen(rq, timeout=900).read().decode().splitlines():
+    rq = anthropic_request(b["results_url"], headers={"x-api-key": os.environ["ANTHROPIC_API_KEY"]}, job="translate_notes", lang="batch", model=MODEL)
+    for line in urlopen(rq, timeout=900).read().decode().splitlines():
         r = json.loads(line); res = r["result"]; l = r["custom_id"].split("__")[0]
         if res["type"] != "succeeded": bad += 1; why[res["type"]] = why.get(res["type"], 0) + 1; continue
         u = res["message"]["usage"]; tin += u["input_tokens"]; tout += u["output_tokens"]
@@ -87,6 +90,7 @@ def main():
     for l in langs: (OUT / f"notes_{l}.json").write_text(json.dumps(have[l], ensure_ascii=False), encoding="utf-8")
     uf = OUT / "usage.json"; old = json.loads(uf.read_text()) if uf.exists() else {"input_tokens": 0, "output_tokens": 0, "runs": []}
     old["input_tokens"] += tin; old["output_tokens"] += tout; old["runs"].append({"kind": "notes", "batch": bid, "model": MODEL, "ok": ok, "failed": bad, "input_tokens": tin, "output_tokens": tout}); uf.write_text(json.dumps(old, indent=1))
+    report_usage("translate_notes", MODEL, tin, tout, "batch")
     rep = {"stage": "notes", "requests": len(reqs), "ok": ok, "failed": bad, "why": why, "input_tokens": tin, "output_tokens": tout, "cost_usd": round(cost(tin, tout), 3), "success_rate": round(ok / max(1, ok + bad), 4)}
     (OUT / "report_notes.json").write_text(json.dumps(rep, indent=1))
     print(f"fertig: {ok} ok, {bad} fehlgeschlagen {why}, Tokens ein/aus: {tin}/{tout}, Kosten {cost(tin, tout):.3f} $")

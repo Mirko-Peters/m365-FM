@@ -2,7 +2,9 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
-import { cleanText, cleanName, esc, isLang, LANGS, b64u, sign, verify } from "../src/util.js";
+import { cleanText, cleanName, esc, isLang, LANGS, b64u, sign, verify, anthropicUrl, anthropicHeaders, anthropicFetch, AI_BUDGET_ERROR } from "../src/util.js";
+import { runTrQueue } from "../src/autotr.js";
+import worker from "../src/index.js";
 import { sanitize } from "../src/wiki.js";
 import { parseFeed } from "../src/feeds.js";
 import { scoreOf, levelOf, levelName, CAPS, THRESH } from "../src/levels.js";
@@ -83,6 +85,88 @@ test("util: HMAC-Signatur ist pruefbar und faelschungssicher", async () => {
   assert.equal(await verify("geheim", "42", s), true);
   assert.equal(await verify("geheim", "43", s), false);
   assert.equal(await verify("anders", "42", s), false);
+});
+
+test("AI Gateway: Fallback, Metadaten, Haiku-Budget und Usage", async () => {
+  assert.equal(anthropicUrl({}, "/v1/messages"), "https://api.anthropic.com/v1/messages");
+  assert.equal(anthropicUrl({ CLOUDFLARE_ACCOUNT_ID: "account", AI_GATEWAY_ID: "m365fm" }), "https://gateway.ai.cloudflare.com/v1/account/m365fm/anthropic/v1/messages");
+  const headers = anthropicHeaders({ ANTHROPIC_API_KEY: "unit-test-key", CLOUDFLARE_ACCOUNT_ID: "account", CF_AIG_TOKEN: "unit-test-token" }, { job: "test_job", lang: "de", model: "claude-haiku-5-5", cacheTtl: 604800 });
+  assert.deepEqual(JSON.parse(headers["cf-aig-metadata"]), { job: "test_job", lang: "de", model: "claude-haiku-5-5" });
+  assert.equal(headers["cf-aig-authorization"], "unit-test-token");
+  assert.equal(headers["cf-aig-cache-ttl"], "604800");
+  assert.equal(anthropicHeaders({ CF_AIG_TOKEN: "unit-test-token" }, { job: "direct", model: "claude-haiku-5-5" })["cf-aig-authorization"], undefined);
+
+  const { db, raw } = await searchDb();
+  const today = new Date().toISOString().slice(0, 10), yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+  raw.prepare("INSERT INTO ai_spend(id,day,model,job,lang,usd,reserved_usd,created) VALUES(?,?,?,?,?,?,0,?)")
+    .run("full", today, "claude-haiku-5-5", "test_job", "de", 5.4, Math.floor(Date.now() / 1000));
+  const oldFetch = globalThis.fetch; let calls = 0;
+  globalThis.fetch = async (url, init) => {
+    calls++;
+    assert.equal(url, "https://gateway.ai.cloudflare.com/v1/account/m365fm/anthropic/v1/messages");
+    assert.deepEqual(JSON.parse(init.headers["cf-aig-metadata"]), { job: "worker_translation_queue", lang: "de", model: "claude-haiku-5-5" });
+    return new Response(JSON.stringify({ usage: { input_tokens: 1000, output_tokens: 2000 }, content: [{ type: "text", text: "ok" }] }), { status: 200 });
+  };
+  try {
+    await assert.rejects(anthropicFetch({ DB: db, ANTHROPIC_API_KEY: "unit-test-key" }, { model: "claude-haiku-5-5", max_tokens: 4000 }, { job: "worker_translation_queue", lang: "de" }),
+      (error) => error.code === AI_BUDGET_ERROR);
+    assert.equal(calls, 0, "bei erreichtem Tagesbudget erfolgt kein Claude-Aufruf");
+    raw.prepare("UPDATE ai_spend SET day=? WHERE id='full'").run(yesterday);
+    const response = await anthropicFetch({ DB: db, ANTHROPIC_API_KEY: "unit-test-key", CLOUDFLARE_ACCOUNT_ID: "account" }, { model: "claude-haiku-5-5", max_tokens: 4000 }, { job: "worker_translation_queue", lang: "de" });
+    assert.equal(response.status, 200, "am neuen UTC-Tag ist das Budget wieder frei");
+    assert.equal(calls, 1);
+    const spend = raw.prepare("SELECT in_tok,out_tok,usd,reserved_usd FROM ai_spend WHERE day=? AND id<>'full'").get(today);
+    assert.equal(spend.in_tok, 1000);
+    assert.equal(spend.out_tok, 2000);
+    assert.ok(Math.abs(spend.usd - 0.0011) < 1e-10, "Kosten werden aus der usage-Antwort berechnet");
+    assert.equal(spend.reserved_usd, 0);
+  } finally {
+    globalThis.fetch = oldFetch;
+    raw.close();
+  }
+});
+
+test("AI-Budget: gesperrte Vormerkung bleibt offen", async () => {
+  const { db, raw } = await searchDb();
+  const day = new Date().toISOString().slice(0, 10), t = Math.floor(Date.now() / 1000);
+  raw.exec(`INSERT INTO meta(k,v) VALUES('tr_queue_on','1');
+    INSERT INTO blog_posts(user_id,slug,title,summary,body,lang,status,created,updated,published)
+    VALUES(1,'budget-test','Titel','Zusammenfassung','Text','en','live',${t},${t},${t});
+    INSERT INTO tr_queue(kind,item_id,lang,title,created,status) VALUES('blog','1','de','Titel',${t},'open');`);
+  raw.prepare("INSERT INTO ai_spend(id,day,model,job,lang,usd,created) VALUES(?,?,?,?,?,?,?)")
+    .run("full", day, "claude-haiku-5-5", "test_job", "de", 5.4, t);
+  const oldFetch = globalThis.fetch; let calls = 0;
+  globalThis.fetch = async () => { calls++; return new Response("{}"); };
+  try {
+    const result = await runTrQueue({ DB: db, ANTHROPIC_API_KEY: "unit-test-key" }, async () => new Map());
+    assert.equal(calls, 0);
+    assert.equal(result.capped, true);
+    assert.equal(raw.prepare("SELECT status FROM tr_queue WHERE kind='blog' AND item_id='1' AND lang='de'").get().status, "open");
+  } finally {
+    globalThis.fetch = oldFetch;
+    raw.close();
+  }
+});
+
+test("AI-Budget-API: Cron-Key schützt Abfrage und idempotente Verbrauchsmeldung", async () => {
+  const { db, raw } = await searchDb();
+  const env = { DB: db, CRON_KEY: "unit-test-cron", AI_DAILY_EUR_HAIKU: "5", USD_PER_EUR: "1.08" };
+  const url = "https://api.example/api/internal/ai-spend";
+  try {
+    let response = await worker.fetch(new Request(url, { method: "POST", body: JSON.stringify({ action: "check", model: "claude-haiku-5-5" }) }), env);
+    assert.equal(response.status, 403);
+    response = await worker.fetch(new Request(url, { method: "POST", headers: { "x-cron-key": env.CRON_KEY, "content-type": "application/json" }, body: JSON.stringify({ action: "check", model: "claude-haiku-5-5", estimate_eur: 1 }) }), env);
+    assert.equal((await response.json()).allowed, true);
+    const report = { action: "report", id: "workflow-run-1", job: "translate_show", lang: "batch", model: "claude-haiku-5-5", input_tokens: 1000, output_tokens: 2000 };
+    for (let i = 0; i < 2; i++) {
+      response = await worker.fetch(new Request(url, { method: "POST", headers: { "x-cron-key": env.CRON_KEY, "content-type": "application/json" }, body: JSON.stringify(report) }), env);
+      assert.equal(response.status, 200);
+    }
+    assert.equal(raw.prepare("SELECT COUNT(*) n FROM ai_spend WHERE id='workflow-run-1'").get().n, 1);
+    assert.ok(Math.abs(raw.prepare("SELECT usd FROM ai_spend WHERE id='workflow-run-1'").get().usd - 0.0011) < 1e-10);
+  } finally {
+    raw.close();
+  }
 });
 
 test("wiki: sanitize entfernt Skripte, laesst Markup und viz nur mit Option", () => {

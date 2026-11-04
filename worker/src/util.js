@@ -100,6 +100,123 @@ export async function rateLimit(db, key, max, windowSec) {
   return true;
 }
 
+const numeric = (value, fallback) => Number.isFinite(Number(value)) && Number(value) >= 0 ? Number(value) : fallback;
+const isHaiku = (model) => /^claude-haiku/i.test(String(model || ""));
+export const AI_BUDGET_ERROR = "AI_DAILY_BUDGET";
+
+export function anthropicUrl(env, path = "/v1/messages") {
+  const account = String(env.CLOUDFLARE_ACCOUNT_ID || "").trim(), gateway = env.AI_GATEWAY_ID === undefined ? "m365fm" : String(env.AI_GATEWAY_ID).trim();
+  const base = account && gateway ? `https://gateway.ai.cloudflare.com/v1/${encodeURIComponent(account)}/${encodeURIComponent(gateway)}/anthropic` : "https://api.anthropic.com";
+  return base + (path.startsWith("/") ? path : `/${path}`);
+}
+
+export function anthropicHeaders(env, { job, lang = "", model, cacheTtl } = {}) {
+  const headers = {
+    "content-type": "application/json",
+    "x-api-key": env.ANTHROPIC_API_KEY,
+    "anthropic-version": "2023-06-01",
+  };
+  if (env.CLOUDFLARE_ACCOUNT_ID && (env.AI_GATEWAY_ID === undefined || String(env.AI_GATEWAY_ID).trim())) {
+    headers["cf-aig-metadata"] = JSON.stringify({ job, lang, model });
+    if (env.CF_AIG_TOKEN) headers["cf-aig-authorization"] = env.CF_AIG_TOKEN;
+    if (cacheTtl) headers["cf-aig-cache-ttl"] = String(cacheTtl);
+  }
+  return headers;
+}
+
+function aiPrices(env) {
+  return {
+    input: numeric(env.HAIKU_USD_PER_MTOK_IN, 0.10),
+    output: numeric(env.HAIKU_USD_PER_MTOK_OUT, 0.50),
+    eur: numeric(env.AI_DAILY_EUR_HAIKU, 5),
+    rate: Math.max(0.000001, numeric(env.USD_PER_EUR, 1.08)),
+  };
+}
+
+export async function aiBudgetStatus(env) {
+  const day = new Date().toISOString().slice(0, 10), prices = aiPrices(env);
+  const row = await env.DB.prepare("SELECT COALESCE(SUM(usd),0) usd,COALESCE(SUM(reserved_usd),0) reserved_usd FROM ai_spend WHERE day=? AND model LIKE 'claude-haiku%'").bind(day).first();
+  const spentUsd = Number(row?.usd || 0), reservedUsd = Number(row?.reserved_usd || 0);
+  const budgetUsd = prices.eur * prices.rate;
+  return { day, spent_usd: spentUsd, spent_eur: spentUsd / prices.rate, reserved_eur: reservedUsd / prices.rate, budget_eur: prices.eur,
+    remaining_eur: Math.max(0, prices.eur - (spentUsd + reservedUsd) / prices.rate), allowed: spentUsd + reservedUsd < budgetUsd };
+}
+
+async function warnAiBudget(env, status, job) {
+  if (status.spent_eur + status.reserved_eur < status.budget_eur * 0.8) return;
+  const result = await env.DB.prepare("INSERT OR IGNORE INTO meta(k,v) VALUES(?,?)").bind(`ai_budget_warn:${status.day}`, "1").run();
+  if (result?.meta?.changes) console.warn("ai_budget_warning", { day: status.day, job, used_eur: status.spent_eur + status.reserved_eur, budget_eur: status.budget_eur });
+}
+
+async function reserveHaiku(env, body, job, lang, model) {
+  const prices = aiPrices(env), day = new Date().toISOString().slice(0, 10);
+  const text = JSON.stringify(body), inputTokens = new TextEncoder().encode(text).length + 32;
+  const outputTokens = Math.max(0, Number(body.max_tokens) || 0);
+  const reserveUsd = inputTokens * prices.input / 1e6 + outputTokens * prices.output / 1e6;
+  const id = crypto.randomUUID();
+  const result = await env.DB.prepare(
+    "INSERT INTO ai_spend(id,day,model,job,lang,in_tok,out_tok,usd,reserved_usd,created) " +
+    "SELECT ?,?,?,?,?,0,0,0,?,? WHERE COALESCE((SELECT SUM(usd+reserved_usd) FROM ai_spend WHERE day=? AND model LIKE 'claude-haiku%'),0)+?<=?",
+  ).bind(id, day, model, job, lang, reserveUsd, Math.floor(Date.now() / 1000), day, reserveUsd, prices.eur * prices.rate).run();
+  return result?.meta?.changes ? { id, day, reserveUsd } : null;
+}
+
+async function finishHaiku(env, reservation, usage, job, lang, model) {
+  const prices = aiPrices(env);
+  const input = Number(usage.input_tokens || 0) + Number(usage.cache_creation_input_tokens || 0) + Number(usage.cache_read_input_tokens || 0);
+  const output = Number(usage.output_tokens || 0);
+  const usd = input * prices.input / 1e6 + output * prices.output / 1e6;
+  if (reservation) {
+    await env.DB.prepare("UPDATE ai_spend SET in_tok=?,out_tok=?,usd=?,reserved_usd=0 WHERE id=?")
+      .bind(input, output, usd, reservation.id).run();
+  } else {
+    await env.DB.prepare("INSERT INTO ai_spend(id,day,model,job,lang,in_tok,out_tok,usd,reserved_usd,created) VALUES(?,?,?,?,?,?,?,?,0,?)")
+      .bind(crypto.randomUUID(), new Date().toISOString().slice(0, 10), model, job, lang, input, output, usd, Math.floor(Date.now() / 1000)).run();
+  }
+  const status = await aiBudgetStatus(env);
+  await warnAiBudget(env, status, job);
+  return status;
+}
+
+export async function reportExternalAiUsage(env, { id, job, lang = "", model, input_tokens, output_tokens }) {
+  if (!isHaiku(model)) throw new Error("unsupported model");
+  const prices = aiPrices(env), input = Number(input_tokens || 0), output = Number(output_tokens || 0);
+  const usd = input * prices.input / 1e6 + output * prices.output / 1e6;
+  await env.DB.prepare("INSERT OR IGNORE INTO ai_spend(id,day,model,job,lang,in_tok,out_tok,usd,reserved_usd,created) VALUES(?,?,?,?,?,?,?,?,0,?)")
+    .bind(id, new Date().toISOString().slice(0, 10), model, job, lang, input, output, usd, Math.floor(Date.now() / 1000)).run();
+  const status = await aiBudgetStatus(env);
+  await warnAiBudget(env, status, job);
+  return status;
+}
+
+export async function anthropicFetch(env, body, { job, lang = "", cacheTtl } = {}) {
+  const model = String(body?.model || "");
+  let reservation = null;
+  if (isHaiku(model)) {
+    reservation = await reserveHaiku(env, body, job, lang, model);
+    if (!reservation) {
+      const error = new Error(AI_BUDGET_ERROR);
+      error.code = AI_BUDGET_ERROR;
+      throw error;
+    }
+  }
+  let response;
+  try {
+    response = await fetch(anthropicUrl(env), { method: "POST", headers: anthropicHeaders(env, { job, lang, model, cacheTtl }), body: JSON.stringify(body) });
+  } catch {
+    throw new Error("Claude API request failed");
+  }
+  if (reservation) {
+    if (!response.ok) {
+      await env.DB.prepare("UPDATE ai_spend SET reserved_usd=0 WHERE id=?").bind(reservation.id).run();
+    } else {
+      const data = await response.clone().json().catch(() => null);
+      if (data?.usage) await finishHaiku(env, reservation, data.usage, job, lang, model);
+    }
+  }
+  return response;
+}
+
 export const LANGS = ["de", "es", "fr", "it", "pt", "nl", "pl", "id", "ru", "uk", "ar", "he", "ja", "ko"];
 export const isLang = (l) => LANGS.includes(l);
 export const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));

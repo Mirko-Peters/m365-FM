@@ -16,6 +16,7 @@ import gzip, hashlib, json, os, random, re, sys, time, urllib.request, urllib.er
 from site_text import bad as bad_text
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
+from ai_gateway import anthropic_request, check_budget, estimated_eur, report_usage, urlopen
 
 ROOT = Path(__file__).parent
 OUT = ROOT / "data" / "blog_i18n"
@@ -329,11 +330,10 @@ def select(a, ps):
 
 # ---------- API ----------
 def api(method, path, body=None, raw=False):
-    req = urllib.request.Request(path if path.startswith("http") else "https://api.anthropic.com" + path,
-                                 json.dumps(body).encode() if body is not None else None,
-                                 {"x-api-key": os.environ["ANTHROPIC_API_KEY"], "anthropic-version": "2023-06-01", "content-type": "application/json"}, method=method)
+    req = anthropic_request(path, body, job="translate_blog", lang="batch", model=MODEL, api_key=os.environ["ANTHROPIC_API_KEY"])
+    req.method = method
     try:
-        r = urllib.request.urlopen(req, timeout=900).read()
+        r = urlopen(req, timeout=900).read()
         return r if raw else json.loads(r)
     except urllib.error.HTTPError as e:
         msg = f"API-Fehler {e.code} {method} {path}: {e.read()[:600]!r}"; print(msg)
@@ -390,6 +390,8 @@ def submit(a):
         if a["redo"]: save_lang(lang, have)
     if not reqs:
         print("Nichts abzusenden."); return 0
+    if not check_budget("translate_blog", MODEL, money * 2 / max(0.000001, float(os.environ.get("USD_PER_EUR", "1.08")))):
+        return 0
     bl = jload("batches.json", [])
     for i in range(0, len(reqs), PER_BATCH):
         part = reqs[i:i + PER_BATCH]
@@ -449,6 +451,7 @@ def collect():
             f = OUT / "qa" / f"{lang}.json"; old = json.loads(f.read_text("utf-8")) if f.exists() else []
             f.write_text(json.dumps((old + lg)[-500:], ensure_ascii=False, indent=1), encoding="utf-8")
         usage["input_tokens"] += tin; usage["output_tokens"] += tout
+        report_usage("translate_blog", b["model"], tin, tout, "batch")
         usage["runs"].append({"batch": b["id"], "model": b["model"], "segments_ok": ok, "segments_failed": bad, "why": why, "input_tokens": tin, "output_tokens": tout, "cost_usd": round(cost(tin, tout), 3)})
         jsave("usage.json", usage); print(f"{b['id']}: {ok} Segmente ok, {bad} fehlgeschlagen {why}, Kosten {cost(tin, tout):.3f} $")
     jsave("batches.json", left)
