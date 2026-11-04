@@ -24,8 +24,9 @@ def hub_url(base, lang):
     return _url(base, lang, HUB["path"])
 
 
-def _page(path, h1, lead, cta, cta_url, cards, faq, related=()):
-    return dict(path=path, h1=h1, lead=lead, cta=cta, cta_url=cta_url, cards=cards, faq=faq, related=related)
+def _page(path, h1, lead, cta, cta_url, cards, faq, related=(), lead_feature=None, lead_enabled=None):
+    return dict(path=path, h1=h1, lead=lead, cta=cta, cta_url=cta_url, cards=cards, faq=faq,
+                related=related, lead_feature=lead_feature, lead_enabled=lead_enabled)
 
 
 HUB = {
@@ -35,9 +36,11 @@ HUB = {
              "Alle Angebote von M365.FM an einem Ort. Starte mit deiner Zielgruppe oder mit dem, was du erreichen willst."),
     "audiences": [
         (("Sponsors and vendors", "Sponsoren und Anbieter"), ("Reach Microsoft 365 professionals through the podcast and sponsor offer.", "Erreiche Microsoft-365-Fachleute über den Podcast und das Sponsoring-Angebot."), "for/sponsors/"),
-        (("Experts", "Experten"), ("Explore your M365.FM profile and upcoming contribution tools.", "Entdecke dein M365.FM-Profil und kommende Funktionen für Beitragsnachweise."), "for/experts/", "contribution_tracker"),
+        (("Experts", "Experten"), ("Explore your M365.FM profile and upcoming contribution tools.", "Entdecke dein M365.FM-Profil und kommende Funktionen für Beitragsnachweise."), "for/experts/", "contribution_tracker",
+         ("Explore your M365.FM profile and contribution tracker.", "Entdecke dein M365.FM-Profil und den Contribution Tracker.")),
         (("Podcasters", "Podcaster"), ("Bring your show to M365.FM's own website and find guests by topic.", "Bringe deinen Podcast auf die M365.FM-Website und finde Gäste nach Themen."), "for/podcasters/"),
-        (("Publishers", "Redaktionen"), ("Discover Microsoft 365 experts and upcoming request tools.", "Entdecke Microsoft-365-Experten und kommende Anfragefunktionen."), "for/publishers/", "expert_requests"),
+        (("Publishers", "Redaktionen"), ("Discover Microsoft 365 experts and upcoming request tools.", "Entdecke Microsoft-365-Experten und kommende Anfragefunktionen."), "for/publishers/", "expert_requests",
+         ("Discover Microsoft 365 experts and publisher request tools.", "Entdecke Microsoft-365-Experten und Anfragefunktionen für Redaktionen.")),
         (("Event organizers", "Veranstalter"), ("Publish an event, invite speakers and connect sessions with profiles.", "Veröffentliche Events, lade Speaker ein und verknüpfe Sessions mit Profilen."), "for/organizers/"),
         (("IT teams and listeners", "IT-Teams und Hörer"), ("Follow Microsoft 365 in your language and explore listener options.", "Verfolge Microsoft 365 in deiner Sprache und entdecke die Möglichkeiten für Hörer."), "for/it-teams/", "adfree_membership"),
     ],
@@ -92,7 +95,9 @@ PAGES = [
            (("Relevant requests only", "Nur passende Anfragen"), ("The publisher offer is free and has a no-spam rule. Spam-like requests can be blocked and repeat abuse can lose access.", "Das Angebot ist kostenlos und hat eine No-Spam-Regel. Spamverdächtige Anfragen können blockiert und wiederholter Missbrauch gesperrt werden."), "expert_requests")],
           [(("Does Expert Connect cost anything?", "Kostet Expert Connect etwas?"), ("No. Expert Connect is free for publishers and experts.", "Nein. Expert Connect ist für Redaktionen und Experten kostenlos."), "expert_requests"),
            (("Can I contact every expert?", "Kann ich jeden Experten kontaktieren?"), ("Requests go only to opted-in experts; contact details are shared after they accept.", "Anfragen gehen nur an Experten, die zugestimmt haben. Kontaktdaten werden nach ihrer Zusage geteilt."), "expert_requests")],
-          (("Find an expert", "Einen Experten finden", "i-want-to/find-an-expert/"),)),
+          (("Find an expert", "Einen Experten finden", "i-want-to/find-an-expert/"),),
+          "expert_requests", ("Explore Microsoft 365 expert profiles and publisher request tools.",
+                              "Entdecke Profile von Microsoft-365-Experten und Anfragefunktionen für Redaktionen.")),
     _page("for/organizers/", ("For event organizers", "Für Event-Veranstalter"),
           ("Publish your community event, invite speakers and connect each confirmed session to its speaker profile.",
            "Veröffentliche dein Community-Event, lade Speaker ein und verknüpfe bestätigte Sessions mit den Profilen der Vortragenden."),
@@ -180,10 +185,10 @@ def _url(base, lang, path):
     return f"{base}/{lang + '/' if lang != 'en' else ''}{path}"
 
 
-def _card(base, lang, title, desc, path, feature=None, features=None):
+def _card(base, lang, title, desc, path, feature=None, features=None, enabled_desc=None):
     unavailable = feature and not features.get(feature, False)
-    if unavailable:
-        desc = ("This feature is in preparation.", "Diese Funktion ist in Vorbereitung.")
+    if feature and not unavailable and enabled_desc:
+        desc = enabled_desc
     return (f'<div><h3><a href="{html.escape(_url(base, lang, path), quote=True)}">{_t(lang, title)}</a></h3>'
             f'{"<p><strong class=\"kicker\">" + _t(lang, ("Coming soon", "Bald verfügbar")) + "</strong></p>" if unavailable else ""}'
             f'<p>{_t(lang, desc)}</p></div>')
@@ -243,7 +248,7 @@ def build(g):
     langs = ["en"] + [lang for lang in LANGS_ALL[1:] if lang in g["LANGS"]]
     feature_file = ROOT / "data" / "landing_features.json"
     try:
-        features = g.get("features") or json.loads(feature_file.read_text("utf-8"))
+        features = g["features"] if "features" in g else json.loads(feature_file.read_text("utf-8"))
     except (OSError, ValueError):
         features = {}
     alts_for = lambda path: {lang: _url(base, lang, path) for lang in langs}
@@ -256,7 +261,8 @@ def build(g):
         lead_text = _text(lang, HUB["lead"])
         h1 = html.escape(h1_text, quote=True)
         lead = html.escape(lead_text, quote=True)
-        audiences = "".join(_card(base, lang, *audience[:3], feature=audience[3] if len(audience) > 3 else None, features=features)
+        audiences = "".join(_card(base, lang, *audience[:3], feature=audience[3] if len(audience) > 3 else None,
+                                  features=features, enabled_desc=audience[4] if len(audience) > 4 else None)
                             for audience in HUB["audiences"])
         goals = "".join(_card(base, lang, *goal[:3], feature=goal[3] if len(goal) > 3 else None, features=features)
                         for goal in HUB["goals"])
@@ -288,7 +294,8 @@ def build(g):
             url = alts_for(spec["path"])[lang]
             alt = alts_for(spec["path"])
             title_text = _text(lang, spec["h1"])
-            lead_text = _text(lang, spec["lead"])
+            lead = spec["lead_enabled"] if spec["lead_feature"] and features.get(spec["lead_feature"], False) else spec["lead"]
+            lead_text = _text(lang, lead)
             title = html.escape(title_text, quote=True)
             lead = html.escape(lead_text, quote=True)
             cards = "".join(

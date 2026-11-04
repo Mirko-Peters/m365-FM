@@ -57,14 +57,35 @@ def episode_stats(items):
     return rows, total if found_downloads else None
 
 
+def _show_stats(items):
+    rows, downloads = episode_stats(items)
+    return rows, 0 if not items else downloads
+
+
 def _save_top(root, required, top, downloads, start, end):
-    if not required or not required.issubset(top) or not required.issubset(downloads):
+    if not top:
         return False
+    complete = bool(required) and required.issubset(top) and required.issubset(downloads)
+    path = Path(root) / "data" / "top.json"
+    try:
+        previous = json.loads(path.read_text("utf-8")).get("spreaker")
+    except (OSError, ValueError, TypeError):
+        previous = None
+    spreaker = ({"from": str(start), "to": str(end),
+                 "downloads": {lang: downloads[lang] for lang in required}, "complete": True}
+                if complete else previous)
     data = {"from": str(start), "week_end": str(end), "updated": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-            "spreaker": {"from": str(start), "to": str(end), "downloads": downloads, "complete": True}, "langs": top}
-    with open(Path(root) / "data" / "top.json", "w", encoding="utf-8") as f:
+            "langs": top}
+    if spreaker:
+        data["spreaker"] = spreaker
+    with open(path, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=1)
-    return True
+    return complete
+
+
+def _show_maps(show_map):
+    shows = {lang: sid for lang, sid in (show_map or {}).items() if sid}
+    return shows, set(shows) & set(SITE_LANGS)
 
 
 def main():
@@ -90,13 +111,13 @@ def main():
         print("Kein Spreaker-Zugang (SPREAKER_TOKEN bzw. 'Spreaker verbinden') – uebersprungen"); return
     S.headers["Authorization"] = f"Bearer {tok}"
     cfg = json.load(open(ROOT / "config.json", encoding="utf-8"))
-    shows = {l: s for l, s in (cfg.get("show_map") or {}).items() if s and l in SITE_LANGS}
+    shows, required = _show_maps(cfg.get("show_map"))
     end = date.today(); start = end - timedelta(days=7)
     top, titles, downloads = {}, {}, {}
     for lang, sid in shows.items():
         try:
             tot = paged(f"/shows/{sid}/episodes/statistics/plays/totals?from={start}&to={end}&limit=20")
-            rows, total_downloads = episode_stats(tot)
+            rows, total_downloads = _show_stats(tot)
             if total_downloads is not None:
                 downloads[lang] = total_downloads
             top[lang] = rows[:30]
@@ -106,7 +127,6 @@ def main():
             titles[lang] = {norm_title(e.get("title")): e for e in paged(f"/shows/{sid}/episodes?limit=100") if e.get("published_at")}
         except Exception as e:
             print("Episodenliste", lang, str(e)[:150])
-    required = set(shows)
     if _save_top(ROOT, required, top, downloads, start, end):
         print("top.json:", {l: len(r) for l, r in top.items()})
     else:

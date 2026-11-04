@@ -7,7 +7,7 @@ from unittest.mock import patch
 import site_i18n
 import site_landing
 import site_sitemaps
-from sync_spreaker import _save_top, episode_stats
+from sync_spreaker import _save_top, _show_maps, _show_stats, episode_stats
 
 
 class LandingPageTests(unittest.TestCase):
@@ -18,6 +18,8 @@ class LandingPageTests(unittest.TestCase):
         self.sitemap = []
 
     def build(self, features=None):
+        if features is None:
+            features = {"contribution_tracker": False, "expert_requests": False, "adfree_membership": False}
         def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefault=None, **kwargs):
             self.pages.append((lang, canonical, alternates, xdefault, kwargs))
             return (f'<html lang="{lang}"><head><title>{title}</title><meta name="description" content="{desc}"></head>'
@@ -32,7 +34,7 @@ class LandingPageTests(unittest.TestCase):
             "n_main": 42, "n_langs": 14, "spreaker_downloads": 1234, "spreaker_period": "2026-10-28–2026-11-04",
             "stats": {"bing": {"ok": True, "citations": 1100000, "period": {"from": "2026-08-01", "to": "2026-10-30"}},
                       "gsc": {"ok": False}},
-            **({"features": features} if features is not None else {}),
+            "features": features,
         })
 
     def test_all_pages_have_localized_routes_and_hreflang_clusters(self):
@@ -61,6 +63,11 @@ class LandingPageTests(unittest.TestCase):
         self.assertIn("in preparation", publishers)
         self.assertNotIn("Free for publishers and experts", publishers)
         self.assertNotIn("no-spam rule", publishers)
+        hub = self.files["services/index.html"]
+        self.assertIn("Explore your M365.FM profile and upcoming contribution tools.", hub)
+        self.assertIn("Discover Microsoft 365 experts and upcoming request tools.", hub)
+        self.assertIn("Coming soon", hub)
+        self.assertNotIn("This feature is in preparation.", hub)
         podcast = self.files["i-want-to/grow-my-podcast/index.html"]
         self.assertIn("No price is stated for the current offer", podcast)
         self.assertIn("funded by advertising", podcast)
@@ -77,8 +84,25 @@ class LandingPageTests(unittest.TestCase):
         self.assertIn("Collect contributions by date and type", self.files["for/experts/index.html"])
         self.assertIn("no-spam rule", self.files["for/publishers/index.html"])
         self.assertIn("offer is free", self.files["for/publishers/index.html"])
+        self.assertIn("publisher request tools", self.files["services/index.html"])
+        self.assertNotIn("upcoming request tools", self.files["services/index.html"])
+        self.assertIn("publisher request tools", self.files["for/publishers/index.html"])
+        self.assertNotIn("upcoming request tools", self.files["for/publishers/index.html"])
         self.assertIn("The listener membership is free", self.files["for/it-teams/index.html"])
         self.assertNotIn("Coming soon", self.files["services/index.html"])
+
+    def test_explicit_empty_features_do_not_load_file_defaults(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            data = Path(tmp) / "data"
+            data.mkdir()
+            (data / "landing_features.json").write_text(json.dumps({
+                "contribution_tracker": True, "expert_requests": True, "adfree_membership": True,
+            }), "utf-8")
+            with patch.object(site_landing, "ROOT", Path(tmp)), \
+                 patch.object(site_i18n, "T", side_effect=lambda lang, en, de: en):
+                self.build({})
+        self.assertIn("Coming soon", self.files["services/index.html"])
+        self.assertIn("in preparation", self.files["for/experts/index.html"])
 
     def test_landing_routes_and_anchor_ctas(self):
         with patch.object(site_i18n, "T", side_effect=lambda lang, en, de: de if lang == "de" else en):
@@ -113,6 +137,7 @@ class LandingPageTests(unittest.TestCase):
         self.assertEqual(total, 10)
         self.assertEqual([row["episode_id"] for row in rows], [1, 3, 2])
         self.assertIsNone(episode_stats([{"episode_id": 1, "plays": 12}])[1])
+        self.assertEqual(_show_stats([]), ([], 0))
 
     def test_download_display_uses_only_site_languages(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -137,17 +162,27 @@ class LandingPageTests(unittest.TestCase):
                 rendered = site_landing._stats({"stats": {"bing": {}, "gsc": {}}}, "en")
         self.assertNotIn("Spreaker downloads", rendered)
 
-    def test_spreaker_saves_only_complete_language_sets(self):
+    def test_spreaker_updates_language_lists_and_keeps_previous_complete_totals(self):
         with tempfile.TemporaryDirectory() as tmp:
             data = Path(tmp) / "data" / "top.json"
             data.parent.mkdir()
-            data.write_text('{"previous":"complete"}', "utf-8")
-            required = {"en", "de"}
-            self.assertFalse(_save_top(Path(tmp), required, {"en": []}, {"en": 2}, "start", "end"))
-            self.assertEqual(data.read_text("utf-8"), '{"previous":"complete"}')
-            self.assertTrue(_save_top(Path(tmp), required, {"en": [], "de": []},
-                                      {"en": 2, "de": 3}, "start", "end"))
-            self.assertTrue(json.loads(data.read_text("utf-8"))["spreaker"]["complete"])
+            previous = {"from": "old-start", "to": "old-end", "downloads": {"en": 22, "de": 11}, "complete": True}
+            data.write_text(json.dumps({"spreaker": previous, "langs": {"en": [1]}}), "utf-8")
+            required = {"en", "de", "ru", "ja"}
+            self.assertFalse(_save_top(Path(tmp), required, {"en": [], "de": [2], "ru": []},
+                                       {"en": 2, "de": 3, "ru": 0}, "start", "end"))
+            updated = json.loads(data.read_text("utf-8"))
+            self.assertEqual(updated["langs"], {"en": [], "de": [2], "ru": []})
+            self.assertEqual(updated["spreaker"], previous)
+            self.assertTrue(_save_top(Path(tmp), required, {"en": [], "de": [2], "ru": [], "ja": []},
+                                      {"en": 2, "de": 3, "ru": 0, "ja": 0}, "start", "end"))
+            updated = json.loads(data.read_text("utf-8"))
+            self.assertEqual(updated["spreaker"]["downloads"]["ru"], 0)
+
+    def test_non_site_shows_remain_in_sync(self):
+        shows, required = _show_maps({"en": 1, "hi": 2, "ml": 3})
+        self.assertEqual(set(shows), {"en", "hi", "ml"})
+        self.assertEqual(required, {"en"})
 
 
 if __name__ == "__main__":
