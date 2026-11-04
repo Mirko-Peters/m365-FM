@@ -19,6 +19,8 @@ CREATE TABLE IF NOT EXISTS email_topics (
   PRIMARY KEY (user_id, kind, topic_id)
 );
 CREATE INDEX IF NOT EXISTS idx_email_topics_topic ON email_topics(kind, topic_id);
+ALTER TABLE push_subs ADD COLUMN digest INTEGER NOT NULL DEFAULT 1;
+ALTER TABLE events ADD COLUMN tz TEXT NOT NULL DEFAULT 'Europe/Berlin';
 CREATE INDEX IF NOT EXISTS idx_event_sessions_start ON event_sessions(status, start);
 CREATE TABLE IF NOT EXISTS topic_queue (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -33,6 +35,7 @@ CREATE TABLE IF NOT EXISTS topic_queue (
   body TEXT NOT NULL DEFAULT '',
   url TEXT NOT NULL,
   created INTEGER NOT NULL,
+  expires INTEGER NOT NULL,
   sent INTEGER NOT NULL DEFAULT 0,
   UNIQUE (channel, recipient, kind, topic_id, item_key)
 );

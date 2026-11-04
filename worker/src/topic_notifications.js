@@ -59,6 +59,28 @@ export function quietHours(timezone, date = new Date()) {
   return hour >= 22 || hour < 7;
 }
 
+function localDateTimeToEpoch(value, timezone) {
+  if (/Z|[+-]\d\d:\d\d$/.test(value)) return Date.parse(value) / 1000;
+  const m = /^(\d{4})-(\d{2})-(\d{2})(?:T(\d{2}):(\d{2}))?$/.exec(value || "");
+  if (!m) return NaN;
+  const target = Date.UTC(+m[1], +m[2] - 1, +m[3], +(m[4] || 0), +(m[5] || 0));
+  let guess = target, formatter;
+  try {
+    formatter = new Intl.DateTimeFormat("en-CA", {
+      timeZone: TIMEZONE(timezone || "Europe/Berlin"), year: "numeric", month: "2-digit", day: "2-digit",
+      hour: "2-digit", minute: "2-digit", hourCycle: "h23",
+    });
+  } catch { return NaN; }
+  for (let i = 0; i < 3; i++) {
+    const parts = Object.fromEntries(formatter.formatToParts(new Date(guess)).map((x) => [x.type, x.value]));
+    const observed = Date.UTC(+parts.year, +parts.month - 1, +parts.day, +parts.hour, +parts.minute);
+    const correction = target - observed;
+    guess += correction;
+    if (!correction) break;
+  }
+  return guess / 1000;
+}
+
 async function topicExists(env, kind, topicId) {
   const db = env.DB;
   if (kind === "entity") {
@@ -76,76 +98,138 @@ async function topicExists(env, kind, topicId) {
   return false;
 }
 
-export async function queueTopicNotification(env, { kind, topicId, key, title, body = "", url }) {
-  if (!validTopic(kind, String(topicId)) || !key || !title || !url) return 0;
-  const db = env.DB, id = String(topicId), created = now(), recipients = [];
-  const pushRows = (await db.prepare(
-    "SELECT pt.endpoint,pt.lang,pt.timezone FROM push_topics pt JOIN push_subs ps ON ps.endpoint=pt.endpoint WHERE pt.kind=? AND pt.topic_id=?",
-  ).bind(kind, id).all()).results || [];
-  recipients.push(...pushRows.map((r) => ({ channel: "push", recipient: r.endpoint, lang: r.lang, timezone: r.timezone })));
-  if (kind === "creator") {
-    const legacy = (await db.prepare(
-      "SELECT DISTINCT ps.endpoint,ps.lang FROM blog_follows f JOIN profiles p ON p.handle=f.handle JOIN push_subs ps ON ps.user_id=f.user_id WHERE f.handle=?",
-    ).bind(id).all()).results || [];
-    recipients.push(...legacy.map((r) => ({ channel: "push", recipient: r.endpoint, lang: r.lang, timezone: "UTC" })));
+async function labeledSubscriptions(env, rows) {
+  const labels = new Map(), grouped = new Map();
+  for (const row of rows) {
+    if (!grouped.has(row.kind)) grouped.set(row.kind, new Set());
+    grouped.get(row.kind).add(String(row.topic_id));
   }
-  const emailRows = (await db.prepare(
-    "SELECT et.user_id,et.lang,et.timezone FROM email_topics et JOIN mail_addr a ON a.user_id=et.user_id AND a.verified=1 WHERE et.kind=? AND et.topic_id=?",
-  ).bind(kind, id).all()).results || [];
-  recipients.push(...emailRows.map((r) => ({ channel: "email", recipient: String(r.user_id), lang: r.lang, timezone: r.timezone })));
-  const unique = new Map(recipients.map((r) => [`${r.channel}|${r.recipient}|${r.lang}`, r]));
-  const rows = [...unique.values()];
-  for (let i = 0; i < rows.length; i += 100) {
-    await db.batch(rows.slice(i, i + 100).map((r) => db.prepare(
-      "INSERT INTO topic_queue(channel,recipient,lang,timezone,kind,topic_id,item_key,title,body,url,created) VALUES(?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(channel,recipient,kind,topic_id,item_key) DO NOTHING",
-    ).bind(r.channel, r.recipient, topicLang(r.lang) ? r.lang : "en", TIMEZONE(r.timezone), kind, id, String(key).slice(0, 300),
-      String(typeof title === "object" ? title[r.lang] || title.en || title.de : title).slice(0, 200), String(body).slice(0, 300), String(url).slice(0, 500), created)));
+  const lookups = {
+    creator: "SELECT p.handle topic_id,u.name label FROM profiles p JOIN users u ON u.id=p.user_id WHERE p.handle IN (%s) UNION ALL SELECT handle topic_id,name label FROM orgs WHERE handle IN (%s)",
+    show: "SELECT slug topic_id,title label FROM shows WHERE slug IN (%s)",
+    event: "SELECT handle topic_id,title label FROM events WHERE handle IN (%s)",
+    session: "SELECT CAST(id AS TEXT) topic_id,title label FROM event_sessions WHERE id IN (%s)",
+  };
+  const queries = [];
+  for (const [kind, idsSet] of grouped) {
+    const ids = [...idsSet];
+    if (kind === "entity") {
+      try {
+        const r = await fetch(`${env.SITE}/entities.json`, { cf: { cacheTtl: 600 } });
+        if (r.ok) for (const e of (await r.json()).entities || []) if (idsSet.has(e.id)) labels.set(`entity|${e.id}`, e.name);
+      } catch {}
+      continue;
+    }
+    if (!lookups[kind]) continue;
+    for (let i = 0; i < ids.length; i += 100) {
+      const part = ids.slice(i, i + 100), placeholders = part.map(() => "?").join(",");
+      const sql = lookups[kind].includes("%s")
+        ? lookups[kind].replace("%s", placeholders).replace("%s", placeholders)
+        : lookups[kind];
+      queries.push({ kind, stmt: env.DB.prepare(sql).bind(...(lookups[kind].includes("UNION ALL") ? [...part, ...part] : part)) });
+    }
   }
-  return rows.length;
+  const result = await Promise.all(queries.map((q) => q.stmt.all()));
+  for (let i = 0; i < result.length; i++) for (const row of result[i]?.results || [])
+    labels.set(`${queries[i].kind}|${row.topic_id}`, row.label);
+  return rows.map((row) => ({ ...row, label: labels.get(`${row.kind}|${row.topic_id}`) || row.topic_id }));
+}
+
+async function queueTopicNotifications(env, notifications) {
+  const valid = notifications.filter((n) => validTopic(n.kind, String(n.topicId)) && n.key && n.title && n.url);
+  if (!valid.length) return 0;
+  const db = env.DB, topics = new Map();
+  for (const n of valid) {
+    const key = `${n.kind}|${n.topicId}`;
+    if (!topics.has(key)) topics.set(key, { kind: n.kind, id: String(n.topicId), recipients: new Map() });
+  }
+  const byKind = new Map();
+  for (const topic of topics.values()) {
+    if (!byKind.has(topic.kind)) byKind.set(topic.kind, []);
+    byKind.get(topic.kind).push(topic);
+  }
+  for (const [kind, kindTopics] of byKind) {
+    for (let i = 0; i < kindTopics.length; i += 100) {
+      const part = kindTopics.slice(i, i + 100), ids = part.map((t) => t.id);
+      const placeholders = ids.map(() => "?").join(",");
+      const [pushRows, emailRows] = await Promise.all([
+        db.prepare(`SELECT pt.topic_id,pt.endpoint recipient,pt.lang,pt.timezone,'push' channel FROM push_topics pt JOIN push_subs ps ON ps.endpoint=pt.endpoint WHERE pt.kind=? AND pt.topic_id IN (${placeholders})`)
+          .bind(kind, ...ids).all(),
+        db.prepare(`SELECT et.topic_id,CAST(et.user_id AS TEXT) recipient,et.lang,et.timezone,'email' channel FROM email_topics et JOIN mail_addr a ON a.user_id=et.user_id AND a.verified=1 WHERE et.kind=? AND et.topic_id IN (${placeholders})`)
+          .bind(kind, ...ids).all(),
+      ]);
+      for (const row of [...(pushRows.results || []), ...(emailRows.results || [])]) {
+        const topic = topics.get(`${kind}|${row.topic_id}`);
+        topic?.recipients.set(`${row.channel}|${row.recipient}|${row.lang}`, row);
+      }
+    }
+  }
+  const created = now(), statements = [];
+  for (const n of valid) {
+    const topic = topics.get(`${n.kind}|${n.topicId}`);
+    for (const r of topic.recipients.values()) statements.push(db.prepare(
+      "INSERT INTO topic_queue(channel,recipient,lang,timezone,kind,topic_id,item_key,title,body,url,created,expires) VALUES(?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(channel,recipient,kind,topic_id,item_key) DO NOTHING",
+    ).bind(r.channel, r.recipient, topicLang(r.lang) ? r.lang : "en", TIMEZONE(r.timezone), n.kind, String(n.topicId), String(n.key).slice(0, 300),
+      String(typeof n.title === "object" ? n.title[r.lang] || n.title.en || n.title.de : n.title).slice(0, 200),
+      String(n.body || "").slice(0, 300), String(n.url).slice(0, 500), created, n.expires || created + 7 * 86400));
+  }
+  for (let i = 0; i < statements.length; i += 100) await db.batch(statements.slice(i, i + 100));
+  return statements.length;
+}
+
+export async function queueTopicNotification(env, notification) {
+  return queueTopicNotifications(env, [notification]);
 }
 
 export async function queueTopicArticles(env) {
-  let articles;
+  let articles, allArticles;
   try {
     const r = await fetch(`${env.SITE}/articles.json`, { cf: { cacheTtl: 0 } });
     if (!r.ok) return { seen: 0, queued: 0 };
-    articles = (await r.json()).articles || [];
+    allArticles = (await r.json()).articles || [];
   } catch { return { seen: 0, queued: 0 }; }
   const db = env.DB, init = await db.prepare("SELECT v FROM meta WHERE k='topic_articles_init'").first();
   if (!init) {
-    for (let i = 0; i < articles.length; i += 100) await db.batch(articles.slice(i, i + 100).map((a) => db.prepare(
+    for (let i = 0; i < allArticles.length; i += 100) await db.batch(allArticles.slice(i, i + 100).map((a) => db.prepare(
       "INSERT OR IGNORE INTO topic_seen(source_key,created) VALUES(?,?)",
     ).bind(`article:${a.url}`, now())));
     await db.prepare("INSERT OR REPLACE INTO meta(k,v) VALUES('topic_articles_init','1')").run();
-    return { seen: articles.length, queued: 0, init: true };
+    return { seen: allArticles.length, queued: 0, init: true };
   }
-  let queued = 0;
-  for (const article of articles) {
-    if (!article?.url || typeof article.url !== "string") continue;
-    const inserted = await db.prepare("INSERT OR IGNORE INTO topic_seen(source_key,created) VALUES(?,?)").bind(`article:${article.url}`, now()).run();
-    if (!inserted.meta?.changes) continue;
+  articles = allArticles.slice(0, 50).filter((a) => a?.url && typeof a.url === "string");
+  if (!articles.length) return { seen: 0, queued: 0 };
+  const keys = articles.map((a) => `article:${a.url}`);
+  const known = (await db.prepare(`SELECT source_key FROM topic_seen WHERE source_key IN (${keys.map(() => "?").join(",")})`).bind(...keys).all()).results || [];
+  const seen = new Set(known.map((r) => r.source_key));
+  const fresh = articles.filter((a) => !seen.has(`article:${a.url}`));
+  const notifications = [];
+  for (const article of fresh) {
     const ids = Array.isArray(article.topics) ? [...new Set(article.topics.filter((x) => ID.test(x)))].slice(0, 12) : [];
-    for (const eid of ids) queued += await queueTopicNotification(env, { kind: "entity", topicId: eid, key: `article:${article.url}`, title: article.title || "New article", body: article.summary || "", url: article.url });
+    for (const eid of ids) notifications.push({ kind: "entity", topicId: eid, key: `article:${article.url}`, title: article.title || "New article", body: article.summary || "", url: article.url });
     const match = /\/community\/u\/([a-z0-9-]{3,30})\//.exec(article.url);
-    if (match) queued += await queueTopicNotification(env, { kind: "creator", topicId: match[1], key: `article:${article.url}`, title: article.title || "New article", body: article.summary || "", url: article.url });
+    if (match) notifications.push({ kind: "creator", topicId: match[1], key: `article:${article.url}`, title: article.title || "New article", body: article.summary || "", url: article.url });
   }
+  const queued = await queueTopicNotifications(env, notifications);
+  for (let i = 0; i < fresh.length; i += 100) await db.batch(fresh.slice(i, i + 100).map((a) => db.prepare(
+    "INSERT OR IGNORE INTO topic_seen(source_key,created) VALUES(?,?)",
+  ).bind(`article:${a.url}`, now())));
   return { seen: articles.length, queued };
 }
 
 export async function queueSessionReminders(env, at = now()) {
   const db = env.DB;
   const range = (delta) => {
-    const start = new Date((at + delta - 600) * 1000).toISOString().slice(0, 16);
-    const end = new Date((at + delta + 600) * 1000).toISOString().slice(0, 16);
+    const start = new Date((at + delta - 14 * 3600 - 600) * 1000).toISOString().slice(0, 16);
+    const end = new Date((at + delta + 14 * 3600 + 600) * 1000).toISOString().slice(0, 16);
     return [start, end];
   };
   const [dayLo, dayHi] = range(86400), [soonLo, soonHi] = range(900);
   const rows = (await db.prepare(
-    "SELECT s.id,s.title,s.start,e.handle,e.title event_title FROM event_sessions s JOIN events e ON e.id=s.event_id WHERE s.status='live' AND e.public=1 AND ((s.start BETWEEN ? AND ?) OR (s.start BETWEEN ? AND ?))",
+    "SELECT s.id,s.title,s.start,e.handle,e.title event_title,e.tz FROM event_sessions s JOIN events e ON e.id=s.event_id WHERE s.status='live' AND e.public=1 AND ((s.start BETWEEN ? AND ?) OR (s.start BETWEEN ? AND ?))",
   ).bind(dayLo, dayHi, soonLo, soonHi).all()).results || [];
   let queued = 0;
   for (const s of rows) {
-    const start = Date.parse(/Z|[+-]\d\d:\d\d$/.test(s.start) ? s.start : `${s.start}Z`) / 1000;
+    const start = localDateTimeToEpoch(s.start, s.tz);
     if (!Number.isFinite(start)) continue;
     const when = Math.abs(start - at - 86400) <= 600 ? "24h" : Math.abs(start - at - 900) <= 600 ? "15m" : "";
     if (!when) continue;
@@ -153,8 +237,8 @@ export async function queueSessionReminders(env, at = now()) {
     const title = Object.fromEntries(Object.entries(REMINDER_TEXT).map(([lang, labels]) => [lang, `${labels[when === "24h" ? 0 : 1]}: ${s.title}`]));
     const body = s.event_title;
     const url = `${env.SITE}/community/events/${s.handle}/`;
-    queued += await queueTopicNotification(env, { kind: "session", topicId: String(s.id), key, title, body, url });
-    queued += await queueTopicNotification(env, { kind: "event", topicId: s.handle, key, title, body, url });
+    queued += await queueTopicNotification(env, { kind: "session", topicId: String(s.id), key, title, body, url, expires: start });
+    queued += await queueTopicNotification(env, { kind: "event", topicId: s.handle, key, title, body, url, expires: start });
   }
   return queued;
 }
@@ -170,38 +254,61 @@ async function emailUnsubscribeUrl(env, uid) {
   return `${env.API}/api/topics/email-unsub?t=${uid}.${sig}`;
 }
 
-export async function dispatchTopicNotifications(env, { at = new Date(), limit = 5000 } = {}) {
-  const db = env.DB, nowTs = Math.floor(at.getTime() / 1000);
-  await db.prepare("DELETE FROM topic_deliveries WHERE created<?").bind(nowTs - 14 * 86400).run();
-  const rows = (await db.prepare("SELECT * FROM topic_queue WHERE sent=0 ORDER BY created,id LIMIT ?").bind(limit).all()).results || [];
-  const groups = new Map();
-  for (const r of rows) {
-    const key = `${r.channel}|${r.recipient}`;
-    if (!groups.has(key)) groups.set(key, []);
-    groups.get(key).push(r);
-  }
-  const result = { sent: 0, quiet: 0, limited: 0, gone: 0 };
-  for (const pending of groups.values()) {
-    const first = pending[0], clock = localClock(first.timezone, at);
+export async function dispatchTopicNotifications(env, { at = new Date(), limit = 120 } = {}) {
+  const db = env.DB, nowTs = Math.floor(at.getTime() / 1000), maxRecipients = Math.max(1, Math.min(120, limit));
+  await db.batch([
+    db.prepare("DELETE FROM topic_queue WHERE expires<=? OR (sent=1 AND created<?)").bind(nowTs, nowTs - 14 * 86400),
+    db.prepare("DELETE FROM topic_deliveries WHERE created<?").bind(nowTs - 14 * 86400),
+  ]);
+  const recipients = (await db.prepare(
+    "SELECT channel,recipient,MIN(created) first_created FROM topic_queue WHERE sent=0 AND expires>? GROUP BY channel,recipient ORDER BY first_created,channel,recipient LIMIT ?",
+  ).bind(nowTs, maxRecipients).all()).results || [];
+  if (!recipients.length) return { sent: 0, quiet: 0, limited: 0, gone: 0, recipients: 0 };
+  const pairFilter = recipients.map(() => "(?,?)").join(",");
+  const pairBinds = recipients.flatMap((r) => [r.channel, r.recipient]);
+  const rows = (await db.prepare(
+    `SELECT * FROM topic_queue WHERE sent=0 AND expires>? AND (channel,recipient) IN (${pairFilter}) ORDER BY created,id`,
+  ).bind(nowTs, ...pairBinds).all()).results || [];
+  const groups = new Map(recipients.map((r) => [`${r.channel}|${r.recipient}`, []]));
+  for (const row of rows) groups.get(`${row.channel}|${row.recipient}`)?.push(row);
+  const active = [...groups.entries()].filter(([, pending]) => pending.length);
+  const clocks = new Map(active.map(([key, pending]) => [key, localClock(pending[0].timezone, at)]));
+  const deliveredResults = await db.batch(active.map(([key, pending]) => {
+    const [channel, recipient] = key.split("|");
+    return db.prepare("SELECT kind,topic_id FROM topic_deliveries WHERE channel=? AND recipient=? AND local_day=?")
+      .bind(channel, recipient, clocks.get(key).day);
+  }));
+  const sentByRecipient = new Map(active.map(([key], i) => [
+    key, new Set((deliveredResults[i]?.results || []).map((r) => `${r.kind}|${r.topic_id}`)),
+  ]));
+  const mailRecipients = active.filter(([key]) => key.startsWith("email|"));
+  const addressResults = mailRecipients.length ? await db.batch(mailRecipients.map(([key]) => {
+    return db.prepare("SELECT email FROM mail_addr WHERE user_id=? AND verified=1").bind(+key.split("|")[1]);
+  })) : [];
+  const addresses = new Map(mailRecipients.map(([key], i) => [key, addressResults[i]?.results?.[0] || null]));
+  const result = { sent: 0, quiet: 0, limited: 0, gone: 0, recipients: active.length };
+  for (const [groupKey, pending] of active) {
+    const first = pending[0], clock = clocks.get(groupKey);
     if (clock.hour >= 22 || clock.hour < 7) { result.quiet++; continue; }
-    const delivered = (await db.prepare(
-      "SELECT kind,topic_id FROM topic_deliveries WHERE channel=? AND recipient=? AND local_day=?",
-    ).bind(first.channel, first.recipient, clock.day).all()).results || [];
-    const sentTopics = new Set(delivered.map((r) => `${r.kind}|${r.topic_id}`));
-    const byTopic = new Map();
-    for (const r of pending) {
-      const k = `${r.kind}|${r.topic_id}`;
-      if (!sentTopics.has(k)) { if (!byTopic.has(k)) byTopic.set(k, []); byTopic.get(k).push(r); }
+    if (first.channel === "email" && !addresses.get(groupKey)) continue;
+    const sentTopics = sentByRecipient.get(groupKey), byTopic = new Map();
+    for (const row of pending) {
+      const key = `${row.kind}|${row.topic_id}`;
+      if (!sentTopics.has(key)) { if (!byTopic.has(key)) byTopic.set(key, []); byTopic.get(key).push(row); }
     }
-    const candidates = [...byTopic.values()].slice(0, Math.max(0, 3 - delivered.length));
+    const candidates = [...byTopic.values()].slice(0, Math.max(0, 3 - sentTopics.size));
     if (!candidates.length) { result.limited++; continue; }
     if (byTopic.size > candidates.length) result.limited++;
-    const claims = await db.batch(candidates.map((pick) => {
+    const claimOps = [];
+    for (const pick of candidates) {
       const sample = pick[0];
-      return db.prepare("INSERT OR IGNORE INTO topic_deliveries(channel,recipient,local_day,kind,topic_id,created) VALUES(?,?,?,?,?,?)")
-        .bind(first.channel, first.recipient, clock.day, sample.kind, sample.topic_id, nowTs);
-    }));
-    const picks = candidates.filter((_, i) => claims[i]?.meta?.changes);
+      claimOps.push(db.prepare("INSERT OR IGNORE INTO topic_deliveries(channel,recipient,local_day,kind,topic_id,created) VALUES(?,?,?,?,?,?)")
+        .bind(first.channel, first.recipient, clock.day, sample.kind, sample.topic_id, nowTs));
+      claimOps.push(db.prepare("UPDATE topic_queue SET sent=1 WHERE sent=0 AND expires>? AND channel=? AND recipient=? AND kind=? AND topic_id=?")
+        .bind(nowTs, first.channel, first.recipient, sample.kind, sample.topic_id));
+    }
+    const claims = await db.batch(claimOps);
+    const picks = candidates.filter((_, i) => claims[i * 2]?.meta?.changes && claims[i * 2 + 1]?.meta?.changes);
     if (!picks.length) continue;
     const visiblePicks = picks.map((pick) => first.channel === "push" ? pick.slice(0, 1) : pick.slice(0, 3));
     const visibleItems = visiblePicks.flat(), text = queueText(first.lang, visibleItems), url = visibleItems[0].url;
@@ -213,6 +320,7 @@ export async function dispatchTopicNotifications(env, { at = new Date(), limit =
           db.prepare("DELETE FROM push_topics WHERE endpoint=?").bind(first.recipient),
           db.prepare("DELETE FROM topic_queue WHERE channel='push' AND recipient=?").bind(first.recipient),
           db.prepare("DELETE FROM topic_deliveries WHERE channel='push' AND recipient=?").bind(first.recipient),
+          db.prepare("DELETE FROM push_subs WHERE endpoint=?").bind(first.recipient),
         ]);
         continue;
       }
@@ -222,19 +330,13 @@ export async function dispatchTopicNotifications(env, { at = new Date(), limit =
           db.prepare("DELETE FROM push_topics WHERE endpoint=?").bind(first.recipient),
           db.prepare("DELETE FROM push_subs WHERE endpoint=?").bind(first.recipient),
           db.prepare("DELETE FROM topic_queue WHERE channel='push' AND recipient=?").bind(first.recipient),
+          db.prepare("DELETE FROM topic_deliveries WHERE channel='push' AND recipient=?").bind(first.recipient),
         ]);
         result.gone++; continue;
       }
       ok = sent.ok;
     } else {
-      const address = await db.prepare("SELECT email FROM mail_addr WHERE user_id=? AND verified=1").bind(+first.recipient).first();
-      if (!address) {
-        await db.prepare("DELETE FROM email_topics WHERE user_id=?").bind(+first.recipient).run();
-        await db.prepare("DELETE FROM topic_queue WHERE channel='email' AND recipient=?").bind(first.recipient).run();
-        await db.prepare("DELETE FROM topic_deliveries WHERE channel='email' AND recipient=? AND local_day=?").bind(first.recipient, clock.day).run();
-        continue;
-      }
-      const unsubscribe = await emailUnsubscribeUrl(env, first.recipient);
+      const address = addresses.get(groupKey), unsubscribe = await emailUnsubscribeUrl(env, first.recipient);
       const list = visibleItems.map((r) => `<li><a href="${esc(r.url)}">${esc(r.title)}</a>${r.body ? `<br>${esc(r.body)}` : ""}</li>`).join("");
       const sent = await sendMail(env, {
         to: address.email, subject: text.title,
@@ -244,20 +346,17 @@ export async function dispatchTopicNotifications(env, { at = new Date(), limit =
       ok = sent.ok;
     }
     if (!ok) {
-      await db.batch(picks.map((pick) => {
+      const rollback = picks.flatMap((pick) => {
         const sample = pick[0];
-        return db.prepare("DELETE FROM topic_deliveries WHERE channel=? AND recipient=? AND local_day=? AND kind=? AND topic_id=?")
-          .bind(first.channel, first.recipient, clock.day, sample.kind, sample.topic_id);
-      }));
+        return [
+          db.prepare("DELETE FROM topic_deliveries WHERE channel=? AND recipient=? AND local_day=? AND kind=? AND topic_id=?")
+            .bind(first.channel, first.recipient, clock.day, sample.kind, sample.topic_id),
+          db.prepare("UPDATE topic_queue SET sent=0 WHERE id IN (" + pick.map(() => "?").join(",") + ")").bind(...pick.map((r) => r.id)),
+        ];
+      });
+      await db.batch(rollback);
       continue;
     }
-    const ops = [];
-    for (const pick of visiblePicks) {
-      for (let i = 0; i < pick.length; i += 100) {
-        ops.push(...pick.slice(i, i + 100).map((r) => db.prepare("UPDATE topic_queue SET sent=1 WHERE id=?").bind(r.id)));
-      }
-    }
-    await db.batch(ops);
     result.sent++;
   }
   return result;
@@ -297,7 +396,7 @@ export async function handleTopicSubscriptions(env, request, url, path, user, J)
       const owned = await db.prepare("SELECT user_id FROM push_subs WHERE endpoint=?").bind(endpoint).first();
       if (owned && (!user || !owned.user_id || owned.user_id === user.id)) rows.push(...((await db.prepare("SELECT kind,topic_id,'push' channel FROM push_topics WHERE endpoint=?").bind(endpoint).all()).results || []));
     }
-    const unique = [...new Map(rows.map((r) => [`${r.kind}|${r.topic_id}|${r.channel}`, r])).values()];
+    const unique = await labeledSubscriptions(env, [...new Map(rows.map((r) => [`${r.kind}|${r.topic_id}|${r.channel}`, r])).values()]);
     return J({ subscriptions: unique }, 200, { "cache-control": "no-store" });
   }
   if (method !== "POST") return J({ error: "not_found" }, 404);
@@ -351,8 +450,14 @@ export async function handleTopicSubscriptions(env, request, url, path, user, J)
       ops.push(db.prepare("DELETE FROM email_topics WHERE user_id=? AND kind=? AND topic_id=?").bind(user.id, kind, topicId));
       if (kind === "creator") ops.push(db.prepare("DELETE FROM blog_follows WHERE user_id=? AND handle=?").bind(user.id, topicId));
       ops.push(db.prepare("DELETE FROM topic_queue WHERE channel='email' AND recipient=? AND kind=? AND topic_id=?").bind(String(user.id), kind, topicId));
+      ops.push(db.prepare("DELETE FROM topic_deliveries WHERE channel='push' AND recipient IN (SELECT endpoint FROM push_subs WHERE user_id=? AND digest=0 AND NOT EXISTS (SELECT 1 FROM push_topics WHERE endpoint=push_subs.endpoint))").bind(user.id));
+      ops.push(db.prepare("DELETE FROM push_subs WHERE user_id=? AND digest=0 AND NOT EXISTS (SELECT 1 FROM push_topics WHERE endpoint=push_subs.endpoint)").bind(user.id));
     }
     if (endpoint) ops.push(db.prepare("DELETE FROM topic_queue WHERE channel='push' AND recipient=? AND kind=? AND topic_id=?").bind(endpoint, kind, topicId));
+    if (endpoint) {
+      ops.push(db.prepare("DELETE FROM topic_deliveries WHERE channel='push' AND recipient=? AND EXISTS (SELECT 1 FROM push_subs WHERE endpoint=? AND digest=0) AND NOT EXISTS (SELECT 1 FROM push_topics WHERE endpoint=?)").bind(endpoint, endpoint, endpoint));
+      ops.push(db.prepare("DELETE FROM push_subs WHERE endpoint=? AND digest=0 AND NOT EXISTS (SELECT 1 FROM push_topics WHERE endpoint=push_subs.endpoint)").bind(endpoint));
+    }
     await db.batch(ops);
     return J({ ok: true, following: false });
   }
@@ -360,12 +465,12 @@ export async function handleTopicSubscriptions(env, request, url, path, user, J)
     if (!user && !endpoint) return J({ error: "login" }, 401);
     const ops = [];
     if (user) {
-      ops.push(db.prepare("DELETE FROM email_topics WHERE user_id=?").bind(user.id), db.prepare("DELETE FROM push_topics WHERE user_id=?").bind(user.id), db.prepare("DELETE FROM blog_follows WHERE user_id=?").bind(user.id), db.prepare("DELETE FROM topic_queue WHERE channel='email' AND recipient=?").bind(String(user.id)), db.prepare("DELETE FROM topic_queue WHERE channel='push' AND recipient IN (SELECT endpoint FROM push_subs WHERE user_id=?)").bind(user.id));
+      ops.push(db.prepare("DELETE FROM email_topics WHERE user_id=?").bind(user.id), db.prepare("DELETE FROM push_topics WHERE user_id=?").bind(user.id), db.prepare("DELETE FROM blog_follows WHERE user_id=?").bind(user.id), db.prepare("DELETE FROM topic_queue WHERE channel='email' AND recipient=?").bind(String(user.id)), db.prepare("DELETE FROM topic_queue WHERE channel='push' AND recipient IN (SELECT endpoint FROM push_subs WHERE user_id=?)").bind(user.id), db.prepare("DELETE FROM topic_deliveries WHERE channel='push' AND recipient IN (SELECT endpoint FROM push_subs WHERE user_id=? AND digest=0)").bind(user.id), db.prepare("DELETE FROM push_subs WHERE user_id=? AND digest=0").bind(user.id));
     }
     if (endpoint) {
       const sub = await db.prepare("SELECT user_id FROM push_subs WHERE endpoint=?").bind(endpoint).first();
       if (!sub || (sub.user_id && sub.user_id !== user?.id)) return J({ error: "bad_subscription" }, 400);
-      ops.push(db.prepare("DELETE FROM push_topics WHERE endpoint=?").bind(endpoint), db.prepare("DELETE FROM topic_queue WHERE channel='push' AND recipient=?").bind(endpoint));
+      ops.push(db.prepare("DELETE FROM push_topics WHERE endpoint=?").bind(endpoint), db.prepare("DELETE FROM topic_queue WHERE channel='push' AND recipient=?").bind(endpoint), db.prepare("DELETE FROM topic_deliveries WHERE channel='push' AND recipient=? AND EXISTS (SELECT 1 FROM push_subs WHERE endpoint=? AND digest=0)").bind(endpoint, endpoint), db.prepare("DELETE FROM push_subs WHERE endpoint=? AND digest=0").bind(endpoint));
     }
     await db.batch(ops);
     return J({ ok: true });

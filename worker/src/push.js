@@ -2,6 +2,11 @@
 import { b64u } from "./util.js";
 const te = new TextEncoder();
 
+export async function savePushSubscription(db, { endpoint, p256dh, auth, lang, userId = null, digest = 1, created }) {
+  return db.prepare("INSERT INTO push_subs(endpoint,p256dh,auth,lang,user_id,created,digest) VALUES(?,?,?,?,?,?,?) ON CONFLICT(endpoint) DO UPDATE SET p256dh=excluded.p256dh,auth=excluded.auth,lang=excluded.lang,user_id=COALESCE(excluded.user_id,push_subs.user_id),created=excluded.created")
+    .bind(endpoint, p256dh, auth, lang, userId, created, digest).run();
+}
+
 async function hkdf(salt, ikm, info, len) {
   const key = await crypto.subtle.importKey("raw", ikm, "HKDF", false, ["deriveBits"]);
   return new Uint8Array(await crypto.subtle.deriveBits({ name: "HKDF", hash: "SHA-256", salt, info }, key, len * 8));

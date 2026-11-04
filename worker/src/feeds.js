@@ -79,8 +79,8 @@ export async function refreshFeeds(env, max = 8) {
           url: item.url,
         });
       }
-      if (fresh.length && env.VAPID_PRIVATE_JWK) {   // Creator fragen: hier optimieren oder per MCP?
-        const subs = (await db.prepare("SELECT endpoint,p256dh,auth FROM push_subs WHERE user_id=?").bind(c.owner_id).all()).results || [];
+      if (fresh.length && c.owner_type === "u" && env.VAPID_PRIVATE_JWK) {   // Creator fragen: hier optimieren oder per MCP?
+        const subs = (await db.prepare("SELECT endpoint,p256dh,auth FROM push_subs WHERE user_id=? AND digest=1").bind(c.owner_id).all()).results || [];
         for (const sb of subs) { try { await sendPush(env, sb, { title: fresh.length > 1 ? `${fresh.length} neue Inhalte gezogen` : "Neuer Inhalt gezogen", body: `${fresh[0].title.slice(0, 80)} – jetzt hier optimieren oder per MCP.`, url: `${env.SITE}/community/#c-feed` }); } catch {} }
       }
     } catch { await db.prepare("UPDATE channels SET fetched=?, fails=fails+1 WHERE id=?").bind(now, c.id).run(); }

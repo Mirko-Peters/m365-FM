@@ -20,7 +20,7 @@ def build(g, shows):
 
     def pub(rel, title, desc, body, ld=None, og="website", last=None):
         u = f"{root}{rel}"
-        scripts = f'<script>window.M365T={{api:{json.dumps(g.get("api", "https://api-dub.m365.fm"))},lang:"en"}}</script><script defer src="{BASE}/assets/topic-follow.js"></script>'
+        scripts = f'<script>window.M365TopicConfig={{api:{json.dumps(g.get("api", "https://api-dub.m365.fm"))},lang:"en"}}</script><script defer src="{BASE}/assets/topic-follow.js"></script>'
         write(f"shows/{rel}index.html", page("en", f"{title} – M365.FM", desc[:300], u, shell(body) + scripts, None, ld, og_type=og))
         sitemap.append((u, last or datetime.now(timezone.utc).strftime("%Y-%m-%d"), None))
 
@@ -33,7 +33,7 @@ def build(g, shows):
             tr = e.get("transcript") or ""
             tx = f'<h2>Transcript</h2><details open><summary>Read the full transcript</summary><p style="white-space:pre-wrap;line-height:1.6">{esc(tr)}</p></details>' if len(tr) > 200 else ""
             nav = '<p style="display:flex;justify-content:space-between;gap:1em;margin-top:2em">' + (f'<a href="{su}{eps[k + 1]["slug"]}/">← {esc(eps[k + 1]["title"][:60])}</a>' if k + 1 < len(eps) else "<span></span>") + (f'<a href="{su}{eps[k - 1]["slug"]}/">{esc(eps[k - 1]["title"][:60])} →</a>' if k else "") + "</p>"
-            body = (f'<article><p class="mut"><a href="{su}">{esc(s["title"])}</a> · {d(e["pub"])}{" · S" + str(e["season"]) if e.get("season") else ""}</p><h1>{esc(e["title"])}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="show" data-topic-id="{esc(s["slug"])}">🔔 Follow this show</button>{aud}'
+            body = (f'<article><p class="mut"><a href="{su}">{esc(s["title"])}</a> · {d(e["pub"])}{" · S" + str(e["season"]) if e.get("season") else ""}</p><h1>{esc(e["title"])}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="show" data-topic-id="{esc(s["slug"])}" data-topic-label="Follow this show">🔔 Follow this show</button>{aud}'
                     f'<div>{san(e.get("descr"))}</div><p class="mut">Host: {who}</p>{tx}</article>{nav}')
             ld = {"@context": "https://schema.org", "@type": "PodcastEpisode", "name": e["title"], "url": eu, "datePublished": d(e["pub"]), "description": plain(e.get("descr"))[:500],
                   "partOfSeries": {"@type": "PodcastSeries", "name": s["title"], "url": su}, "inLanguage": s.get("lang") or "en", "author": {"@type": "Person", "name": s["name"], "url": f"{BASE}/community/u/{s['handle']}/"}}
@@ -42,7 +42,7 @@ def build(g, shows):
             pub(f"{s['slug']}/{e['slug']}/", e["title"], plain(e.get("descr")) or e["title"], body, ld, "article", d(e["pub"]))
         lst = "".join(f'<li style="margin:.8em 0"><a href="{su}{e["slug"]}/"><strong>{esc(e["title"])}</strong></a><br><span class="mut">{d(e["pub"])}</span></li>' for e in eps[:300])
         img = f'<img src="{esc(s["image"])}" alt="" width="160" height="160" style="float:right;margin:0 0 1em 1em;border-radius:8px" loading="lazy">' if s.get("image") else ""
-        body = f'{img}<h1>{esc(s["title"])}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="show" data-topic-id="{esc(s["slug"])}">🔔 Follow this show</button><button type="button" class="btn" data-topic-follow data-topic-kind="creator" data-topic-id="{esc(s["handle"])}">🔔 Follow host</button><p class="mut">Host: {who} · {len(eps)} episodes</p><p>{esc(plain(s.get("descr")))}</p><ul style="list-style:none;padding:0">{lst}</ul>'
+        body = f'{img}<h1>{esc(s["title"])}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="show" data-topic-id="{esc(s["slug"])}" data-topic-label="Follow this show">🔔 Follow this show</button><button type="button" class="btn" data-topic-follow data-topic-kind="creator" data-topic-id="{esc(s["handle"])}" data-topic-label="Follow host">🔔 Follow host</button><p class="mut">Host: {who} · {len(eps)} episodes</p><p>{esc(plain(s.get("descr")))}</p><ul style="list-style:none;padding:0">{lst}</ul>'
         ld = {"@context": "https://schema.org", "@type": "PodcastSeries", "name": s["title"], "url": su, "description": plain(s.get("descr"))[:500], "inLanguage": s.get("lang") or "en", "author": {"@type": "Person", "name": s["name"], "url": f"{BASE}/community/u/{s['handle']}/"}}
         pub(f"{s['slug']}/", s["title"], plain(s.get("descr")) or s["title"], body, ld)
     LN = {"en": "English", "de": "Deutsch", "es": "Español", "fr": "Français", "it": "Italiano", "pt": "Português", "nl": "Nederlands", "pl": "Polski", "id": "Bahasa Indonesia", "ru": "Русский", "uk": "Українська", "ar": "العربية", "he": "עברית", "ja": "日本語", "ko": "한국어", }

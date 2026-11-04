@@ -10,6 +10,7 @@ const FREE_ASKS = 2, ASK_COST = 1000;
 const HANDLE = /^[a-z0-9][a-z0-9-]{2,39}$/, PH = /^[a-z0-9][a-z0-9-]{2,29}$/;
 const DATE = /^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2})?$/, MODES = ["online", "onsite", "hybrid"], LEVELS = ["", "100", "200", "300", "400"];
 const now = () => Math.floor(Date.now() / 1000);
+const timezone = (value) => { try { return new Intl.DateTimeFormat("en", { timeZone: value }).resolvedOptions().timeZone; } catch { return ""; } };
 const txt = (s, n) => cleanText(s, n).replace(/[<>]/g, "").replace(/https?:\/\/\S+/gi, "").replace(/\s+/g, " ").trim();
 const long = (s, n) => cleanText(s, n).replace(/[<>]/g, "").replace(/https?:\/\/\S+/gi, "").trim();
 const okDate = (s) => DATE.test(s) && !isNaN(Date.parse(s.length === 10 ? s + "T00:00:00Z" : s + ":00Z"));
@@ -274,9 +275,10 @@ export async function handleEvents(env, request, url, path, user, J) {
     }
     const ex = await db.prepare("SELECT * FROM events WHERE handle=?").bind(handle).first();
     if (ex && !(await canManage(db, user, ex))) return J({ error: "handle_taken" }, 409);
-    const vals = [title, txt(b.summary, 200), long(b.about, 3000), b.start, end, mode, txt(b.location, 120), txt(b.country, 60), eu, tu, b.free === false ? 0 : 1, txt(b.lang, 10), JSON.stringify(tp), b.seeking_sponsor ? 1 : 0, b.public === false ? 0 : 1, now()];
-    if (ex) await db.prepare("UPDATE events SET title=?,summary=?,about=?,start=?,end=?,mode=?,location=?,country=?,url=?,tickets_url=?,free=?,lang=?,topics=?,seeking_sponsor=?,public=?,updated=?,org_id=? WHERE id=?").bind(...vals, b.org === undefined ? ex.org_id : orgId, ex.id).run();
-    else await db.prepare("INSERT INTO events(title,summary,about,start,end,mode,location,country,url,tickets_url,free,lang,topics,seeking_sponsor,public,updated,handle,owner_id,org_id,created) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)").bind(...vals, handle, user.id, orgId, now()).run();
+    const tz = timezone(String(b.tz || ex?.tz || "Europe/Berlin")); if (!tz) return J({ error: "bad_timezone" }, 400);
+    const vals = [title, txt(b.summary, 200), long(b.about, 3000), b.start, end, tz, mode, txt(b.location, 120), txt(b.country, 60), eu, tu, b.free === false ? 0 : 1, txt(b.lang, 10), JSON.stringify(tp), b.seeking_sponsor ? 1 : 0, b.public === false ? 0 : 1, now()];
+    if (ex) await db.prepare("UPDATE events SET title=?,summary=?,about=?,start=?,end=?,tz=?,mode=?,location=?,country=?,url=?,tickets_url=?,free=?,lang=?,topics=?,seeking_sponsor=?,public=?,updated=?,org_id=? WHERE id=?").bind(...vals, b.org === undefined ? ex.org_id : orgId, ex.id).run();
+    else await db.prepare("INSERT INTO events(title,summary,about,start,end,tz,mode,location,country,url,tickets_url,free,lang,topics,seeking_sponsor,public,updated,handle,owner_id,org_id,created) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)").bind(...vals, handle, user.id, orgId, now()).run();
     if (b.public !== false) await ownedEntity(env, user, { eid: handle, type: "event", name: title, en: `${title} is an event in the Microsoft community, starting ${b.start}.`, de: `${title} ist eine Veranstaltung der Microsoft-Community, Beginn ${b.start}.`, web: String(b.url || "").startsWith("https://") ? b.url : "" });
     return J({ ok: true });
   }

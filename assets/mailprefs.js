@@ -50,7 +50,7 @@
           api("/api/topics/unfollow", { method: "POST", body: { kind: x.kind, id: x.topic_id, endpoint: endpoint } }).then(loadTopics);
         } });
         ul.appendChild(h("li", { style: "margin:.5em 0" }, [
-          h("span", { text: (labels[x.kind] || x.kind) + ": " + x.topic_id + " " }),
+          h("span", { text: (labels[x.kind] || x.kind) + ": " + (x.label || x.topic_id) + " " }),
           btn,
         ]));
       });

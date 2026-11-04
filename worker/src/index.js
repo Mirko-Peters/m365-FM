@@ -45,6 +45,7 @@ import { autoTranslate, translateStatus, uiI18nExport } from "./translate.js";
 import { handleWiki } from "./wiki.js";
 import { syncExpertise } from "./levels.js";
 import { handleTopicSubscriptions, dispatchTopicNotifications, queueTopicArticles, queueSessionReminders } from "./topic_notifications.js";
+import { savePushSubscription } from "./push.js";
 
 const PROVIDERS = {
   google: {
@@ -323,7 +324,10 @@ async function api(env, request, url, path, asUser) {
     const e = b.endpoint, k = b.keys || {};
     if (!/^https:\/\//.test(e || "") || e.length > 600 || !k.p256dh || !k.auth || !(b.lang === "en" || isLang(b.lang))) return J({ error: "bad_request" }, 400);
     if (!(await rateLimit(db, `ps:${ip(request)}`, 20, 3600))) return J({ error: "rate" }, 429);
-    await db.prepare("INSERT OR REPLACE INTO push_subs(endpoint,p256dh,auth,lang,user_id,created) VALUES(?,?,?,?,?,?)").bind(e, String(k.p256dh), String(k.auth), b.lang, user?.id ?? null, now()).run();
+    await savePushSubscription(db, {
+      endpoint: e, p256dh: String(k.p256dh), auth: String(k.auth), lang: b.lang,
+      userId: user?.id ?? null, created: now(), digest: b.digest === 0 ? 0 : 1,
+    });
     if (user) await award(db, user.id, "notified");
     return J({ ok: true });
   }
@@ -410,8 +414,11 @@ export default {
     // Jede Aufgabe mit Protokoll (cron_runs: Start, Ende, ok, Fehlertext) statt verschluckter Fehler; Digest nur um 06:00 UTC
     const T = (name, fn) => ctx.waitUntil(track(env, name, fn));
     if (event.cron === "*/15 * * * *") {
-      T("queueSessionReminders", () => queueSessionReminders(env));
-      T("dispatchTopicNotifications", () => dispatchTopicNotifications(env));
+      T("topicSessionReminders", async () => {
+        const queued = await queueSessionReminders(env);
+        const dispatched = await dispatchTopicNotifications(env);
+        return { queued, dispatched };
+      });
       return;
     }
     if (event.cron === "0 6 * * *") T("runDigest", () => runDigest(env));

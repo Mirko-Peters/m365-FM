@@ -13,6 +13,10 @@ async function pool(items, n, fn) {
   await Promise.all(Array.from({ length: Math.min(n, items.length) }, async () => { while (i < items.length) { const it = items[i++]; try { await fn(it); } catch (e) { console.log("fehler", String(e).slice(0, 120)); } } }));
 }
 
+export async function digestPushSubscriptions(db, lang) {
+  return (await db.prepare("SELECT endpoint,p256dh,auth FROM push_subs WHERE lang=? AND digest=1").bind(lang).all()).results || [];
+}
+
 export async function runDigest(env, { dry = false } = {}) {
   const db = env.DB;
   const j = await (await fetch(`${env.SITE}/episodes.json`, { cf: { cacheTtl: 0 } })).json();
@@ -42,14 +46,13 @@ export async function runDigest(env, { dry = false } = {}) {
     for (const eid of Array.isArray(e.entities) ? [...new Set(e.entities)].filter((x) => /^[a-z0-9][a-z0-9-]{1,79}$/.test(x)).slice(0, 12) : []) {
       await queueTopicNotification(env, { kind: "entity", topicId: eid, key: itemKey, title, body: e.summary || "", url });
     }
-    await queueTopicNotification(env, { kind: "show", topicId: String(e.id), key: itemKey, title, body: e.summary || "", url });
   }
   for (const [lang, list] of Object.entries(byLang)) {
     list.sort((a, b) => (a.date < b.date ? 1 : -1));
     const first = list[0];
     const payload = { title: `M365.FM · ${LANG_NAME[lang] || lang}`, body: clean(first.title) + (list.length > 1 ? ` (+${list.length - 1})` : ""),
       url: list.length > 1 ? `${env.SITE}/${lang}/` : first.url, tag: `digest-${lang}` };
-    const subs = (await db.prepare("SELECT endpoint,p256dh,auth FROM push_subs WHERE lang=?").bind(lang).all()).results || [];
+    const subs = await digestPushSubscriptions(db, lang);
     await pool(subs, 8, async (s) => {
       const r = await sendPush(env, s, payload);
       if (r.ok) res.push++;

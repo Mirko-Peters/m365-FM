@@ -1,29 +1,29 @@
 (function () {
-  var C = window.M365T;
+  var C = window.M365TopicConfig;
   if (!C || !C.api) return;
-  var TEXT = {
-    en: ["🔔 Follow", "🔔 Following · Unfollow", "Also by e-mail"],
-    de: ["🔔 Folgen", "🔔 Gefolgt · Abwählen", "Auch per E-Mail"],
-    es: ["🔔 Seguir", "🔔 Siguiendo · Dejar de seguir", "También por correo"],
-    fr: ["🔔 Suivre", "🔔 Suivi · Ne plus suivre", "Aussi par e-mail"],
-    it: ["🔔 Segui", "🔔 Seguito · Non seguire più", "Anche via e-mail"],
-    pt: ["🔔 Seguir", "🔔 Seguindo · Deixar de seguir", "Também por e-mail"],
-    nl: ["🔔 Volgen", "🔔 Gevolgd · Ontvolgen", "Ook per e-mail"],
-    pl: ["🔔 Obserwuj", "🔔 Obserwujesz · Przestań obserwować", "Także e-mailem"],
-    id: ["🔔 Ikuti", "🔔 Diikuti · Berhenti mengikuti", "Juga melalui e-mail"],
-    ru: ["🔔 Подписаться", "🔔 Вы подписаны · Отписаться", "Также по эл. почте"],
-    uk: ["🔔 Стежити", "🔔 Ви стежите · Відписатися", "Також електронною поштою"],
-    ar: ["🔔 متابعة", "🔔 تتم المتابعة · إلغاء", "أيضًا عبر البريد"],
-    he: ["🔔 לעקוב", "🔔 במעקב · להפסיק", "גם בדוא״ל"],
-    ja: ["🔔 フォロー", "🔔 フォロー中 · 解除", "メールでも受け取る"],
-    ko: ["🔔 팔로우", "🔔 팔로잉 · 취소", "이메일로도 받기"],
+  var DE = {
+    following: "{label} · Abwählen",
+    email: "Auch per E-Mail",
+    need: "Push aktivieren oder E-Mail-Benachrichtigungen auswählen.",
+    denied: "Push wurde im Browser blockiert.",
+    error: "Benachrichtigungseinstellung fehlgeschlagen.",
+    login: "Für E-Mail-Benachrichtigungen bitte anmelden."
   };
-  var labels = TEXT[C.lang] || TEXT.en, de = C.lang === "de";
-  var msg = { follow: labels[0], unfollow: labels[1], email: labels[2],
-    need: de ? "Push aktivieren oder E-Mail-Benachrichtigungen auswählen." : "Enable push or select e-mail notifications.",
-    denied: de ? "Push wurde im Browser blockiert." : "Push is blocked by your browser.",
-    error: de ? "Benachrichtigungseinstellung fehlgeschlagen." : "Could not update notification settings.",
-    login: de ? "Für E-Mail-Benachrichtigungen bitte anmelden." : "Sign in to enable e-mail notifications." };
+  var EN = {
+    following: "{label} · Unfollow",
+    email: "Also by e-mail",
+    need: "Enable push or select e-mail notifications.",
+    denied: "Push is blocked by your browser.",
+    error: "Could not update notification settings.",
+    login: "Sign in to enable e-mail notifications."
+  };
+  var de = C.lang === "de";
+  var msg = typeof window.M365L === "function" ? window.M365L(de, "topic-follow", DE, EN) : (de ? DE : EN);
+  var topicLabels = typeof window.M365L === "function" ? window.M365L(de, "topic-follow-labels", {
+    "Follow this show": "Diesem Podcast folgen", "Follow host": "Host folgen"
+  }, {
+    "Follow this show": "Follow this show", "Follow host": "Follow host"
+  }) : {};
   function api(path, options) {
     options = options || {}; options.credentials = "include";
     options.headers = Object.assign({ "x-requested-with": "m365" }, options.headers || {});
@@ -39,43 +39,59 @@
     return out;
   }
   var me = api("/api/me").then(function (r) { return r.j.user || null; }).catch(function () { return null; });
+  var mailMe = me.then(function (user) {
+    return user ? api("/api/mail/me").then(function (r) { return r.j || {}; }) : {};
+  }).catch(function () { return {}; });
   function getEndpoint() {
     if (!("serviceWorker" in navigator)) return Promise.resolve("");
     return navigator.serviceWorker.getRegistration("/").then(function (r) { return r ? r.pushManager.getSubscription() : null; })
       .then(function (s) { return s ? s.endpoint : ""; }).catch(function () { return ""; });
   }
+  var pageState = Promise.all([getEndpoint(), me]).then(function (data) {
+    var endpoint = data[0], user = data[1];
+    if (!endpoint && !user) return { endpoint: "", user: null, subscriptions: [] };
+    var q = endpoint ? "?endpoint=" + encodeURIComponent(endpoint) : "";
+    return api("/api/topics/mine" + q).then(function (r) {
+      return { endpoint: endpoint, user: user, subscriptions: r.j && r.j.subscriptions || [] };
+    });
+  }).catch(function () { return { endpoint: "", user: null, subscriptions: [] }; });
   function init(button) {
     var kind = button.getAttribute("data-topic-kind"), id = button.getAttribute("data-topic-id");
     if (!kind || !id) return;
+    var rawLabel = button.getAttribute("data-topic-label") || button.textContent.replace(/^🔔\s*/, "").trim();
+    var label = topicLabels[rawLabel] || rawLabel;
     button.disabled = true;
     var status = document.createElement("span"), emailLabel = document.createElement("label"), email = document.createElement("input"), emailReady = false;
     status.setAttribute("role", "status"); status.setAttribute("aria-live", "polite");
     email.type = "checkbox"; emailLabel.hidden = true; emailLabel.style.marginInlineStart = ".7em";
     emailLabel.appendChild(email); emailLabel.appendChild(document.createTextNode(" " + msg.email));
     button.insertAdjacentElement("afterend", emailLabel); emailLabel.insertAdjacentElement("afterend", status);
-    var endpoint = "";
-    Promise.all([getEndpoint(), me]).then(function (data) {
-      endpoint = data[0];
-      if (data[1]) return api("/api/mail/me").then(function (r) { emailReady = !!(r.j && r.j.verified); emailLabel.hidden = !emailReady; });
-    }).then(function () {
-      var q = new URLSearchParams({ kind: kind, id: id }); if (endpoint) q.set("endpoint", endpoint);
-      return api("/api/topics/status?" + q.toString());
-    }).then(function (r) {
-      button._followed = !!(r.j && r.j.following); button._email = !!(r.j && r.j.email); email.checked = button._email;
-      button.textContent = button._followed ? msg.unfollow : msg.follow;
+    function render() {
+      button.textContent = "🔔 " + (button._followed ? msg.following.replace("{label}", label) : label);
+    }
+    Promise.all([pageState, mailMe]).then(function (data) {
+      var state = data[0], account = data[1];
+      emailReady = !!account.verified;
+      emailLabel.hidden = !emailReady;
+      var matches = state.subscriptions.filter(function (x) { return x.kind === kind && String(x.topic_id) === id; });
+      button._followed = matches.length > 0;
+      button._email = matches.some(function (x) { return x.channel === "email"; });
+      email.checked = button._email;
+      render();
       button.disabled = false;
     }).catch(function () { status.textContent = msg.error; button.disabled = false; });
     button.addEventListener("click", function () {
       button.disabled = true; status.textContent = "";
       Promise.all([getEndpoint(), me]).then(function (data) {
-        endpoint = data[0]; var user = data[1];
-        if (button._followed && !(email.checked && !button._email)) return api("/api/topics/unfollow", { method: "POST", body: { kind: kind, id: id, endpoint: endpoint } });
+        var endpoint = data[0], user = data[1];
+        if (button._followed && !(email.checked && !button._email))
+          return api("/api/topics/unfollow", { method: "POST", body: { kind: kind, id: id, endpoint: endpoint } });
         if (email.checked && !user) { status.textContent = msg.login; return null; }
-        var ensureSubscription = Promise.resolve(endpoint);
+        var subscription = Promise.resolve(endpoint);
         if (!endpoint && !email.checked) {
           if (!("serviceWorker" in navigator) || !("PushManager" in window) || !("Notification" in window)) { status.textContent = msg.need; return null; }
           if (Notification.permission === "denied") { status.textContent = msg.denied; return null; }
-          ensureSubscription = Notification.requestPermission().then(function (permission) {
+          subscription = Notification.requestPermission().then(function (permission) {
             if (permission !== "granted") { status.textContent = msg.denied; return ""; }
             return navigator.serviceWorker.register("/sw.js").then(function () { return navigator.serviceWorker.ready; }).then(function (r) {
               return api("/api/push/key").then(function (k) {
@@ -83,12 +99,12 @@
                 return r.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64(k.j.key) });
               }).then(function (s) {
                 endpoint = s.endpoint; var j = s.toJSON();
-                return api("/api/push/subscribe", { method: "POST", body: { endpoint: endpoint, keys: j.keys, lang: C.lang } }).then(function () { return endpoint; });
+                return api("/api/push/subscribe", { method: "POST", body: { endpoint: endpoint, keys: j.keys, lang: C.lang, digest: 0 } }).then(function () { return endpoint; });
               });
             });
           });
         }
-        return ensureSubscription.then(function (ep) {
+        return subscription.then(function (ep) {
           if (!ep && !email.checked) return null;
           return api("/api/topics/follow", { method: "POST", body: {
             kind: kind, id: id, endpoint: ep || "", lang: C.lang,
@@ -98,7 +114,7 @@
       }).then(function (r) {
         if (r && r.s === 200) {
           button._followed = !!r.j.following; button._email = !!email.checked;
-          button.textContent = button._followed ? msg.unfollow : msg.follow;
+          render();
         }
         else if (r && r.j && r.j.error === "email_unverified") status.textContent = msg.login;
         else if (r && r.j && r.j.error !== "own") status.textContent = msg.error;
