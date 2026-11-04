@@ -1,10 +1,11 @@
 // Folgen-Register (episode, episode_text, episode_guest) und Uebersetzungen (translation) aus den Registerdateien des Seitenbaus uebernehmen,
 // schrittweise (je Lauf begrenzt), nur geaenderte Zeilen (Hash). Exporte fuer Seitenbau und Agenten.
+import { siteFetch } from "./util.js";
 const now = () => Math.floor(Date.now() / 1000);
 const hash = (x) => { let h = 5381; const s = String(x); for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0; return (h >>> 0).toString(16); };
 const PER_RUN_EP = 400, PER_RUN_TR = 2500;
 
-async function getJson(env, path) { try { const r = await fetch(env.SITE + path, { cf: { cacheTtl: 600 } }); return r.ok ? await r.json() : null; } catch { return null; } }
+async function getJson(env, path) { try { const r = await siteFetch(env, path, { cf: { cacheTtl: 600 } }); return r.ok ? await r.json() : null; } catch { return null; } }
 
 export async function importEpisodes(env) {
   const db = env.DB, j = await getJson(env, "/episodes-register.json");

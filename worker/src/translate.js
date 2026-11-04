@@ -1,8 +1,9 @@
 // Automatische Uebersetzung fehlender EN/DE-Texte von Entitaeten mit Claude Haiku.
 // Sicherheitsnetz: nur mit gesetztem Secret ANTHROPIC_API_KEY, Tageslimit, 24 h Wartezeit fuer die Community, Notaus ueber meta tr_off=1.
 import { entityMap } from "./entities.js";
+import { claudeText } from "./util.js";
 
-const UI_LANGS = { fr: "French", es: "Spanish", it: "Italian", nl: "Dutch", pt: "Portuguese (European)", pl: "Polish", id: "Indonesian", ru: "Russian", uk: "Ukrainian", ar: "Arabic", he: "Hebrew", hi: "Hindi", ja: "Japanese", ko: "Korean", ml: "Malayalam", pa: "Punjabi (Gurmukhi)", ta: "Tamil", te: "Telugu" }, UI_CHUNK = 40, UI_CHUNKS_PER_RUN = 3;
+const UI_LANGS = { fr: "French", es: "Spanish", it: "Italian", nl: "Dutch", pt: "Portuguese (European)", pl: "Polish", id: "Indonesian", ru: "Russian", uk: "Ukrainian", ar: "Arabic", he: "Hebrew", hi: "Hindi", ja: "Japanese", ko: "Korean", ml: "Malayalam", pa: "Punjabi (Gurmukhi)", ta: "Tamil", te: "Telugu" }, UI_CHUNK = 40, UI_CHUNK_CHARS = 9000, UI_CHUNKS_PER_RUN = 3;
 const MODEL = "claude-haiku-5-5", DAILY_CAP = 100, PER_RUN = 10, WAIT = 24 * 3600, SKIP_TYPES = ["person", "event", "org"];
 const now = () => Math.floor(Date.now() / 1000);
 const SYS = "You translate short encyclopedia texts about Microsoft products and IT concepts between English and German. " +
@@ -50,9 +51,9 @@ export async function autoTranslate(env) {
   let res;
   try {
     const r = await fetch("https://api.anthropic.com/v1/messages", { method: "POST", headers: { "content-type": "application/json", "x-api-key": env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01" },
-      body: JSON.stringify({ model: MODEL, max_tokens: 4000, system: SYS, messages: [{ role: "user", content: JSON.stringify(items) }] }) });
+      body: JSON.stringify({ model: MODEL, max_tokens: 4000, thinking: { type: "disabled" }, system: SYS, messages: [{ role: "user", content: JSON.stringify(items) }] }) });
     if (!r.ok) { await setMeta(db, "tr_err", `${r.status} ${t}`); return { error: r.status }; }
-    let txt = ((await r.json()).content?.[0]?.text || "").trim();
+    let txt = claudeText(await r.json());
     if (txt.startsWith("```")) txt = txt.replace(/^```[a-z]*\n?/, "").replace(/```$/, "");
     res = JSON.parse(txt);
   } catch (e) { await setMeta(db, "tr_err", `parse ${t}`); return { error: "parse" }; }
@@ -76,6 +77,16 @@ export async function autoTranslate(env) {
 }
 
 // Oberflaechen-Texte der Skripte (Quelle: env.SITE/ui_js_en.json) in fr, es, it, nl, pt, pl uebersetzen: je Lauf wenige Blöcke, Endpunkt /api/ui-i18n liefert sie dem Seitenbau
+export function uiChunk(todo, i, max = UI_CHUNK, chars = UI_CHUNK_CHARS) {   // naechster Block ab i: hoechstens max Texte und chars Zeichen (mindestens ein Text)
+  const out = []; let n = 0;
+  for (let k = i; k < todo.length && out.length < max; k++) {
+    const len = String(todo[k][1]).length;
+    if (out.length && n + len > chars) break;
+    out.push(todo[k]); n += len;
+  }
+  return out;
+}
+
 export async function autoTranslateUi(env) {
   const db = env.DB, t = now();
   let src; try { src = await (await fetch(`${env.SITE}/ui_js_en.json`, { cf: { cacheTtl: 0 } })).json(); } catch { return { src: false }; }
@@ -84,14 +95,16 @@ export async function autoTranslateUi(env) {
   let runs = 0, saved = 0;
   for (const lang of Object.keys(UI_LANGS)) {
     const todo = all.filter(([k]) => !have.has(lang + "\u0000" + k));
-    for (let i = 0; i < todo.length && runs < UI_CHUNKS_PER_RUN; i += UI_CHUNK, runs++) {
-      const chunk = todo.slice(i, i + UI_CHUNK);
-      const sys = `You translate short user-interface texts (buttons, labels, hints, messages) of a Microsoft community website from English into ${UI_LANGS[lang]}. Keep placeholders such as {n}, {s}, {e}, {f}, {c}, {u}, {t}, HTML entities and symbols exactly. Never translate names: product, feature, event, session, person and company names, abbreviations and codes (Copilot, Power Platform, M365Con, MVP, MCT, Schema.org, LinkedIn) stay unchanged. Use the informal address usual for community sites. Keep each text about as long as the English one. Answer only with a JSON object that maps every given key to its translation.`;
+    for (let i = 0, chunk; i < todo.length && runs < UI_CHUNKS_PER_RUN; i += chunk.length, runs++) {
+      // Block nach Anzahl UND Textmenge begrenzen: seit den Service-Landingpages (site_landing_copy.py) kommen ganze Absaetze; 40 davon
+      // sprengen max_tokens, die Antwort waere abgeschnitten (parse) und derselbe Block wuerde bei jedem Lauf erneut scheitern.
+      chunk = uiChunk(todo, i);
+      const sys = `You translate short user-interface texts (buttons, labels, hints, messages) and short page paragraphs of a Microsoft community website from English into ${UI_LANGS[lang]}. Keep placeholders such as {n}, {s}, {e}, {f}, {c}, {u}, {t}, HTML entities and symbols exactly. Never translate names: product, feature, event, session, person and company names, abbreviations and codes (Copilot, Power Platform, M365Con, MVP, MCT, Schema.org, LinkedIn) stay unchanged. Use the informal address usual for community sites. Keep each text about as long as the English one. Answer only with a JSON object that maps every given key to its translation.`;
       try {
         const r = await fetch("https://api.anthropic.com/v1/messages", { method: "POST", headers: { "content-type": "application/json", "x-api-key": env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01" },
-          body: JSON.stringify({ model: MODEL, max_tokens: 6000, system: sys, messages: [{ role: "user", content: JSON.stringify(Object.fromEntries(chunk)) }] }) });
+          body: JSON.stringify({ model: MODEL, max_tokens: 12000, thinking: { type: "disabled" }, system: sys, messages: [{ role: "user", content: JSON.stringify(Object.fromEntries(chunk)) }] }) });
         if (!r.ok) { await setMeta(db, "tr_ui_err", `${r.status} ${t}`); return { error: r.status }; }
-        let txt = ((await r.json()).content?.[0]?.text || "").trim(); if (txt.startsWith("```")) txt = txt.replace(/^```[a-z]*\n?/, "").replace(/```$/, "");
+        let txt = claudeText(await r.json()); if (txt.startsWith("```")) txt = txt.replace(/^```[a-z]*\n?/, "").replace(/```$/, "");
         const res = JSON.parse(txt), ops = [];
         for (const [k, v] of chunk) {
           const o = String(res[k] || "").trim(); if (!o || o.length > v.length * 3 + 40) continue;

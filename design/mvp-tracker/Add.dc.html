@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Add a contribution</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap">
+<style>
+body{margin:0;background:#f3f3f2}
+a{color:#3b6391}a:hover{color:#2c4b70}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid #3b6391;outline-offset:2px}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; display: flex; flex-direction: column; background: #f3f3f2; color: #17191c; font-family: Barlow, 'Segoe UI', sans-serif; font-size: 16px; line-height: 1.45">
+
+  <header style="flex: 0 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 10px 12px 10px 20px; border-bottom: 1px solid rgba(23,25,28,.14); background: #ffffff">
+    <b style="font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 22px">Add contribution</b>
+    <a href="Main.dc.html" aria-label="Close" style="width: 44px; height: 44px; display: grid; place-items: center; color: #17191c"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4l10 10M14 4L4 14"></path></svg></a>
+  </header>
+
+  <div style="flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: 18px 20px; display: flex; flex-direction: column; gap: 14px">
+    <sc-if value="{{notSaved}}" hint-placeholder-val="{{ true }}">
+      <div role="group" aria-label="Source" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid #17191c">
+        <sc-for list="{{modes}}" as="m" hint-placeholder-count="3">
+          <button type="button" onClick="{{m.pick}}" aria-pressed="{{m.on}}" style="{{m.style}}">{{m.label}}</button>
+        </sc-for>
+      </div>
+
+      <sc-if value="{{isPhoto}}" hint-placeholder-val="{{ false }}">
+        <div style="position: relative; height: 230px; background: #1a1d21; display: grid; place-items: center; overflow: hidden">
+          <span aria-hidden="true" style="position: absolute; inset: 22px; border: 2px dashed rgba(130,167,212,.8)"></span>
+          <div style="position: relative; width: 170px; padding: 14px; background: #f4f3ef; color: #17191c; display: grid; gap: 4px; transform: rotate(-3deg); box-shadow: 0 6px 18px rgba(0,0,0,.4)">
+            <span style="font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase">[Event name]</span>
+            <b style="font-family: 'Barlow Condensed', sans-serif; font-size: 20px; line-height: 1">SPEAKER</b>
+            <span style="font-size: 12px">Mirko Peters</span>
+            <span style="font-size: 10px; color: #5d6470">[CITY] · [DATE]</span>
+          </div>
+          <span style="position: absolute; left: 12px; bottom: 10px; font-size: 12px; color: #c5cad2">Speaker badge, agenda slide, flyer or certificate</span>
+        </div>
+        <div style="display: grid; gap: 4px; padding: 10px 12px; background: #e6edf5; font-size: 14px">
+          <b style="font-weight: 600; color: #2f6b3a">Recognized: Talk at [Event name], [CITY], [DATE]</b>
+          <span>Text recognition runs on your phone. The photo stays on the phone unless you attach it as proof.</span>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{isLink}}" hint-placeholder-val="{{ true }}">
+      <div style="display: flex; gap: 10px; align-items: center; padding: 10px 12px; background: #e6edf5; font-size: 14px">
+        <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true" fill="none" stroke="#3b6391" stroke-width="1.6"><path d="M9 2v10M5 6l4-4 4 4M3 10v6h12v-6"></path></svg>
+        <span>Shared from LinkedIn via “Share → MVP Tracker”</span>
+      </div>
+
+      <label style="display: grid; gap: 6px">
+        <span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #5d6470">Link</span>
+        <input type="url" value="https://www.linkedin.com/posts/[post]" style="height: 46px; box-sizing: border-box; padding: 0 12px; border: 1px solid #17191c; border-radius: 0; background: #ffffff">
+      </label>
+      </sc-if>
+
+      <div style="display: grid; gap: 0; background: #ffffff; border: 1px solid rgba(23,25,28,.14)">
+        <span style="padding: 10px 14px; border-bottom: 1px solid rgba(23,25,28,.14); font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #2f6b3a">{{recognizedLabel}} · check and correct</span>
+        <label style="display: grid; gap: 2px; padding: 8px 14px; border-bottom: 1px solid rgba(23,25,28,.08)"><span style="font-size: 12px; color: #5d6470">Title</span><input type="text" value="Azure Virtual Desktop in practice" style="border: 0; padding: 4px 0; background: transparent; font-size: 16px"></label>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr))">
+          <label style="display: grid; gap: 2px; padding: 8px 14px; border-right: 1px solid rgba(23,25,28,.08)"><span style="font-size: 12px; color: #5d6470">Type</span>
+            <select style="border: 0; padding: 4px 0; background: transparent; font-size: 16px"><option>Talk</option><option>Podcast</option><option>Blog post</option><option>Video</option><option>Code</option><option>Training</option></select>
+          </label>
+          <label style="display: grid; gap: 2px; padding: 8px 14px"><span style="font-size: 12px; color: #5d6470">Date</span><input type="text" value="[DATE]" style="border: 0; padding: 4px 0; background: transparent; font-size: 16px"></label>
+        </div>
+        <label style="display: grid; gap: 2px; padding: 8px 14px; border-top: 1px solid rgba(23,25,28,.08)"><span style="font-size: 12px; color: #5d6470">Reach</span><input type="text" value="[N] attendees" style="border: 0; padding: 4px 0; background: transparent; font-size: 16px"></label>
+      </div>
+
+      <div style="display: grid; gap: 8px">
+        <span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #5d6470">Counts for</span>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px">
+          <sc-for list="{{progs}}" as="p" hint-placeholder-count="4">
+            <button type="button" onClick="{{p.toggle}}" aria-pressed="{{p.on}}" style="{{p.style}}">{{p.n}}</button>
+          </sc-for>
+        </div>
+        <span style="font-size: 13px; color: #5d6470">Suggested from the topic: Azure Virtual Desktop also counts for Nerdio NVP.</span>
+      </div>
+
+      <button type="button" onClick="{{save}}" style="min-height: 50px; background: #3b6391; color: #ffffff; border: 1px solid #3b6391; border-radius: 0; cursor: pointer; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 18px; letter-spacing: .1em; text-transform: uppercase">Save contribution</button>
+      <a href="#" style="text-align: center; min-height: 44px; display: grid; place-items: center">Add by hand instead</a>
+    </sc-if>
+
+    <sc-if value="{{saved}}" hint-placeholder-val="{{ false }}">
+      <div role="status" style="display: grid; gap: 12px; padding: 22px; background: #ffffff; border: 1px solid rgba(23,25,28,.14)">
+        <span style="display: flex; gap: 10px; align-items: center; color: #2f6b3a; font-weight: 600"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 11l4 4 8-8"></path></svg>Saved</span>
+        <b style="font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 24px; line-height: 1.1">Azure Virtual Desktop in practice</b>
+        <span style="font-size: 14px; color: #5d6470">Counts for {{progText}} · now 4 of 4 for this month</span>
+        <a href="Contribution-Detail.dc.html" style="display: grid; place-items: center; min-height: 48px; background: #17191c; color: #ffffff; text-decoration: none; font-weight: 600">Copy it to the MVP portal now</a>
+        <a href="Contributions.dc.html" style="text-align: center; min-height: 44px; display: grid; place-items: center">Later</a>
+      </div>
+    </sc-if>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const on = s.progs || { MVP: true, NVP: true };
+    const progs = ['MVP', 'MCT', 'NVP', 'SAP'].map((n) => ({
+      n, on: !!on[n],
+      toggle: () => this.setState({ progs: Object.assign({}, on, { [n]: !on[n] }) }),
+      style: 'min-height: 44px; padding: 0 16px; border-radius: 0; cursor: pointer; font-family: Barlow Condensed, sans-serif; font-weight: 600; font-size: 15px; letter-spacing: .08em; ' + (on[n] ? 'background: #3b6391; color: #ffffff; border: 1px solid #3b6391;' : 'background: #ffffff; color: #17191c; border: 1px solid rgba(23,25,28,.3);')
+    }));
+    const sel = ['MVP', 'MCT', 'NVP', 'SAP'].filter((n) => on[n]);
+    const mode = s.mode || 'photo';
+    const modes = [['photo', 'Photo'], ['link', 'Link'], ['hand', 'By hand']].map(([k, label]) => ({
+      label, on: mode === k,
+      pick: () => this.setState({ mode: k }),
+      style: 'min-height: 44px; border: 0; border-radius: 0; cursor: pointer; font-family: Barlow Condensed, sans-serif; font-weight: 600; font-size: 15px; letter-spacing: .08em; text-transform: uppercase; ' + (mode === k ? 'background: #17191c; color: #ffffff;' : 'background: #ffffff; color: #17191c;')
+    }));
+    return {
+      progs, modes,
+      isPhoto: mode === 'photo', isLink: mode === 'link',
+      recognizedLabel: mode === 'photo' ? 'Read from the photo' : mode === 'link' ? 'Recognized from the post' : 'Your entry',
+      saved: !!s.saved, notSaved: !s.saved,
+      progText: sel.length ? sel.join(', ') : 'no program yet',
+      save: () => this.setState({ saved: true })
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -28,7 +28,7 @@ Nichts erfinden, nur was Titel und Beschreibung hergeben.
 
 Titel: {title}
 Beschreibung: {desc[:1500]}"""
-    body = json.dumps({"model": MODEL, "max_tokens": 400, "messages": [{"role": "user", "content": prompt}]}).encode()
+    body = json.dumps({"model": MODEL, "max_tokens": 400, **({"thinking": {"type": "disabled"}} if "haiku" in MODEL else {}), "messages": [{"role": "user", "content": prompt}]}).encode()
     req = urllib.request.Request("https://api.anthropic.com/v1/messages", body, {
         "x-api-key": os.environ["ANTHROPIC_API_KEY"], "anthropic-version": "2023-06-01", "content-type": "application/json"})
     for attempt in range(5):

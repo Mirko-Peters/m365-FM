@@ -231,7 +231,8 @@ async function reserveWeekly(db, recipient, period, time) {
 }
 
 export async function runDigest(env, { dry = false, at = Date.now() } = {}) {
-  const db = env.DB, time = Math.floor(new Date(at).getTime() / 1000), since = time - 7 * 86400, period = weekStart(at);
+  const db = env.DB, time = Math.floor(new Date(at).getTime() / 1000), period = weekStart(new Date(at).getTime() - 6 * 3600_000);   // Woche beginnt montags 06:00 UTC
+  const until = Date.parse(`${period}T06:00:00Z`) / 1000, since = until - 7 * 86400;   // festes Fenster: Vorwoche bis Montag 06:00, gleich fuer alle Nachlaeufe
   const j = await (await fetch(`${env.SITE}/episodes.json`, { cf: { cacheTtl: 0 } })).json();
   const episodes = (j.episodes || []).filter((e) => e.id && e.language && e.url);
   const subscribers = (await db.prepare("SELECT email,lang FROM email_subs WHERE confirmed=1").all()).results || [];
@@ -253,6 +254,7 @@ export async function runDigest(env, { dry = false, at = Date.now() } = {}) {
   const result = { recipients: recipients.size, sent: 0, skipped: 0, empty: 0, episodes: 0, personal: 0, period };
   if (dry) return result;
   if (!mailReady(env)) return { ...result, mailOff: true };
+  await db.prepare("DELETE FROM mail_weekly_delivery WHERE week_start<?").bind(period).run();   // Adress-Hashes nur fuer die laufende Woche halten
   const hashes = await Promise.all([...recipients.values()].map(async (recipient) => ({ recipient, hash: await addressHash(recipient.email) })));
   const sentRows = (await db.prepare("SELECT address_hash,week_start,status FROM mail_weekly_delivery").all()).results || [];
   const sentByHash = new Map(sentRows.map((row) => [row.address_hash, row]));
@@ -267,9 +269,9 @@ export async function runDigest(env, { dry = false, at = Date.now() } = {}) {
   const batch = ordered.slice(0, 20);
   if (!batch.length) return result;
   const newsletterLangs = new Set(batch.flatMap(({ recipient }) => [...recipient.langs]));
-  const byLang = await currentItems(db, episodes, newsletterLangs, since, time, env.SITE);
+  const byLang = await currentItems(db, episodes, newsletterLangs, since, until, env.SITE);
   const users = [...new Map(batch.flatMap(({ recipient }) => [...recipient.users.values()]).map((user) => [user.id, user])).values()];
-  const personalByUser = await loadPersonal(db, users, since, time, env.SITE);
+  const personalByUser = await loadPersonal(db, users, since, until, env.SITE);
   const ready = [];
   for (const { recipient, hash } of batch) {
     const itemsByLang = Object.fromEntries([...recipient.langs].map((lang) => [lang, byLang[lang] || []]));

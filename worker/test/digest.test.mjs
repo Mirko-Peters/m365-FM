@@ -61,7 +61,7 @@ test("Wochenmail reserviert kein Wochenlimit, wenn der Mailversand nicht konfigu
 
 test("Wochenmail bündelt Sprachen und Antworten, versendet persönliche Kontohinweise ohne Newsletter-Inhalte", async () => {
   const { db, raw } = await database();
-  const t = Date.UTC(2026, 10, 8, 6), recent = new Date(t - 86400_000).toISOString();
+  const t = Date.UTC(2026, 10, 9, 6), recent = new Date(t - 86400_000).toISOString();
   raw.exec("INSERT INTO users(id,provider,sub,name,lang,created) VALUES(1,'test','one','User','de',1),(2,'test','two','No subscription','en',1); INSERT INTO mail_addr(user_id,email,verified,created) VALUES(1,'member',1,1),(2,'account-only',1,1);");
   raw.exec("INSERT INTO email_subs(email,lang,token,confirmed,created) VALUES('member','de','de-token',1,1),('member','en','en-token',1,1),('pending','de','pending-token',0,1);");
   const oldFetch = globalThis.fetch, sent = [];
@@ -119,7 +119,7 @@ test("Wochenmail bündelt Sprachen und Antworten, versendet persönliche Kontohi
 
 test("Wochenlimit folgt dem Wochenstart und Sendefehler dürfen im selben Wochenlauf erneut versucht werden", async () => {
   const { db, raw } = await database();
-  const t = Date.UTC(2026, 10, 2, 6);
+  const t = Date.UTC(2026, 10, 2, 6, 0, 2);
   raw.exec("INSERT INTO email_subs(email,lang,token,confirmed,created) VALUES('member','en','token',1,1);");
   const oldFetch = globalThis.fetch;
   let feedAt = t;
@@ -159,6 +159,14 @@ test("Mail-Abmeldung und Kontolöschung bereinigen Topic-Follows und unbenötigt
   assert.equal(raw.prepare("SELECT COUNT(*) n FROM mail_topic_follows WHERE user_id=2").get().n, 0);
   assert.equal(raw.prepare("SELECT COUNT(*) n FROM mail_addr WHERE user_id=2").get().n, 0);
   assert.equal(raw.prepare("SELECT COUNT(*) n FROM mail_weekly_unsub WHERE email='subscribed'").get().n, 1, "bestätigtes Newsletter-Abo hält den Abmeldetoken");
+});
+
+test("One-Click-Abmeldung (List-Unsubscribe-Post) funktioniert ohne x-requested-with", async () => {
+  const { db, raw } = await database();
+  raw.exec("INSERT INTO email_subs(email,lang,token,confirmed,created) VALUES('member','de','de-token',1,1); INSERT INTO mail_weekly_unsub(email,token,updated) VALUES('member','wtok',1);");
+  const response = await worker.fetch(new Request("https://api-dub.m365.fm/api/email/unsub?token=wtok&lang=all", { method: "POST", body: "List-Unsubscribe=One-Click" }), { DB: db, SITE: "https://www.m365.fm" }, { waitUntil() {} });
+  assert.equal(response.status, 200);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM email_subs").get().n, 0);
 });
 
 test("Admin-Monatszähler meldet Warnung ab 2.500 E-Mails", async () => {

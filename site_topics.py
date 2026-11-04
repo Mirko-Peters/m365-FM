@@ -27,9 +27,20 @@ def save():
         pass
 
 
-def score_topics(ix, title, text, k=8, key=None):
+_FP = {}
+
+
+def _fp(ix):
+    """Kurzer Fingerabdruck des Entitaeten-Index (IDs und Namen), damit der Themen-Cache nach neuen Entitaeten nicht veraltet."""
+    k = id(ix)
+    if k not in _FP:
+        _FP[k] = hashlib.sha1("|".join(sorted(ix.names)).encode("utf-8")).hexdigest()[:10]
+    return _FP[k]
+
+
+def score_topics(ix, title, text, k=10, key=None):
     """-> [eid, ...] nach Gewicht; key: Cache-Schluessel (z. B. Slug)."""
-    h = hashlib.sha1((title + "\n" + text[:3000]).encode("utf-8")).hexdigest()[:12]
+    h = hashlib.sha1((title + "\n" + text[:12000] + "\n" + _fp(ix)).encode("utf-8")).hexdigest()[:12]   # Fingerabdruck der Entitaeten: neue Entitaeten werten den Cache neu aus
     if key:
         c = _load().get(key)
         if c and c.get("h") == h: return list(c["t"])
@@ -40,7 +51,7 @@ def score_topics(ix, title, text, k=8, key=None):
         for m in ix.rx.finditer(s):
             i = ix.names.get(m.group(1).lower())
             if i: sc[i] = sc.get(i, 0) + w
-    add(title, 4); add(text[:600], 2); add(text[600:3000], 1)
+    add(title, 4); add(text[:600], 2); add(text[600:3000], 1); add(text[3000:12000], 0.5)   # ganzer Artikel: spaeter Genanntes zaehlt ab zwei Nennungen
     in_title = {ix.names.get(m.group(1).lower()) for m in ix.rx.finditer(title)}
     for i in list(sc):
         if i in GENERIC and i not in in_title: sc[i] *= 0.35   # allgemeine Begriffe nur mit Titeltreffer voll werten

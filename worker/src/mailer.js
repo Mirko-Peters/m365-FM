@@ -28,7 +28,8 @@ async function countMail(env) {
   } catch { /* Mailversand nicht von der Statistik abhängig machen. */ }
 }
 
-export async function sendMail(env, { to, subject, html, text, headers = {}, lang = "en", bannerAt = Date.now() }) {
+export async function sendMail(env, { to, subject, html, text, headers = {}, replyTo = "", attachments = [], lang = "en", bannerAt = Date.now() }) {
+  // attachments: [{ filename, content (Base64), type, disposition }] - Cloudflare Email Service und Resend
   const banner = conBanner(lang, bannerAt);
   if (banner && typeof html === "string") html += banner;
   if (banner && typeof text === "string") text += lang === "de"
@@ -43,6 +44,8 @@ export async function sendMail(env, { to, subject, html, text, headers = {}, lan
         ...(html !== undefined ? { html } : {}),
         ...(text !== undefined ? { text } : {}),
         ...(Object.keys(headers).length ? { headers } : {}),
+        ...(replyTo ? { replyTo } : {}),
+        ...(attachments.length ? { attachments } : {}),
       });
       const messageId = response?.messageId || "";
       await countMail(env);
@@ -61,7 +64,9 @@ export async function sendMail(env, { to, subject, html, text, headers = {}, lan
     const response = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: { authorization: "Bearer " + resendKey, "content-type": "application/json" },
-      body: JSON.stringify({ from: env.MAIL_FROM, to, subject, html, ...(text !== undefined ? { text } : {}), headers }),
+      body: JSON.stringify({ from: env.MAIL_FROM, to, subject, html, ...(text !== undefined ? { text } : {}), headers,
+        ...(replyTo ? { reply_to: replyTo } : {}),
+        ...(attachments.length ? { attachments: attachments.map((a) => ({ filename: a.filename, content: a.content, content_type: a.type })) } : {}) }),
     });
     const data = await response.json().catch(() => ({}));
     const messageId = typeof data?.id === "string" ? data.id : "";

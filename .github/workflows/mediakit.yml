@@ -1,0 +1,64 @@
+name: Mediadaten erzeugen (PDF, täglich)
+# Baut die Mediadaten (EN/DE) aus Live-Daten und legt sie in R2 ab (mediakit/...). Der Worker (/api/mediakit) haengt sie an die E-Mail.
+on:
+  schedule:
+    - cron: "41 6 * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ["tools/mediakit.py", ".github/workflows/mediakit.yml"]
+permissions:
+  contents: read
+concurrency: { group: mediakit, cancel-in-progress: false }
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -q reportlab requests cryptography boto3
+      - name: Schriften (Barlow, cache)
+        uses: actions/cache@v4
+        with: { path: .cache/fonts, key: mediakit-fonts-v1 }
+      - name: YouTube-Token bereitstellen
+        env:
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET || secrets.GOOGLE_CLIENT_SECRET }}
+        run: python yt_auth.py env || echo "YouTube nicht verbunden - ohne YouTube-Zahlen"
+      - name: Mediadaten erzeugen
+        env:
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID || secrets.GOOGLE_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET || secrets.GOOGLE_CLIENT_SECRET }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CF_ZONE_ID: ${{ secrets.CF_ZONE_ID }}
+          BING_WEBMASTER_API_KEY: ${{ secrets.BING_WEBMASTER_API_KEY }}
+        run: python tools/mediakit.py --out out/mediakit --fonts .cache/fonts
+      - name: In R2 hochladen (mediakit/…)
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: |
+          python - <<'PY'
+          import boto3, datetime, os
+          s3 = boto3.client("s3", endpoint_url=f"https://{os.environ['R2_ACCOUNT_ID']}.r2.cloudflarestorage.com",
+                            aws_access_key_id=os.environ["R2_ACCESS_KEY_ID"], aws_secret_access_key=os.environ["R2_SECRET_ACCESS_KEY"], region_name="auto")
+          b = os.environ["R2_BUCKET"]; month = datetime.date.today().strftime("%Y-%m")
+          for lang in ("en", "de"):
+              f = f"out/mediakit/m365fm-media-kit-{lang}.pdf"
+              for key in (f"mediakit/m365fm-media-kit-{lang}.pdf", f"mediakit/archive/m365fm-media-kit-{lang}-{month}.pdf"):
+                  s3.upload_file(f, b, key, ExtraArgs={"ContentType": "application/pdf", "CacheControl": "public, max-age=3600",
+                                                      "ContentDisposition": f'inline; filename="M365.FM-Media-Kit-{lang.upper()}.pdf"'})
+                  print("hochgeladen:", key)
+          s3.upload_file("out/mediakit/latest.json", b, "mediakit/latest.json", ExtraArgs={"ContentType": "application/json", "CacheControl": "public, max-age=3600"})
+          PY
+      - name: Zusammenfassung
+        run: |
+          python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json; d = json.load(open("out/mediakit/latest.json"))
+          print("### Mediadaten", d["generated"])
+          for k in ("youtube", "cloudflare", "bing", "local"): print(f"- {k}: {d.get(k)}")
+          PY
+      - uses: actions/upload-artifact@v4
+        with: { name: mediakit, path: out/mediakit, retention-days: 14 }
