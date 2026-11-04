@@ -22,6 +22,7 @@ class SpreakerPlayerTests(unittest.TestCase):
         markup = P.facade("12345", "Episode", "https://images.example/cover.jpg")
         self.assertNotIn("images.example", markup)
         self.assertNotIn("<img", markup)
+        self.assertNotIn("<img", P.facade("12345", "Episode", "https://img.m365.fm:invalid/cover.jpg"))
 
     def test_invalid_episode_id_has_no_facade(self):
         self.assertEqual(P.facade("../123", "Episode"), "")

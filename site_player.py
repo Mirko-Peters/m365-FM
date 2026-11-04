@@ -9,8 +9,13 @@ def _cover_url(value):
     if not value:
         return ""
     url = html.unescape(R2.rewrite(html.escape(str(value), quote=True)))
-    parsed = urlsplit(url)
-    if parsed.scheme != "https" or parsed.hostname != "img.m365.fm" or parsed.username or parsed.password:
+    try:
+        parsed = urlsplit(url)
+        port = parsed.port
+    except ValueError:
+        return ""
+    if (parsed.scheme != "https" or parsed.hostname != "img.m365.fm" or parsed.username or parsed.password
+            or port not in (None, 443)):
         return ""
     return url
 
@@ -25,7 +30,7 @@ def _duration_label(value):
             seconds += hours * 3600 + minutes * 60
         else:
             return str(value or "")
-    if seconds < 0:
+    if seconds <= 0:
         return ""
     hours, seconds = divmod(seconds, 3600)
     minutes, seconds = divmod(seconds, 60)
@@ -34,7 +39,7 @@ def _duration_label(value):
 
 def facade(episode_id, title, image="", duration=""):
     episode_id = str(episode_id or "")
-    if not episode_id.isdigit():
+    if not re.fullmatch(r"[0-9]+", episode_id):
         return ""
     title = str(title or "")
     image = _cover_url(image)
