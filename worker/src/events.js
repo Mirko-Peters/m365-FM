@@ -1,5 +1,5 @@
 // Events (Veranstalter), Sessions mit Speakern, Sponsoren-Suche fuer Veranstalter
-import { sendMail } from "./digest.js";
+import { mailReady, sendMail } from "./mailer.js";
 import { ownedEntity } from "./profiles.js";
 import { cleanText, rateLimit } from "./util.js";
 import { baseIds, entityMap } from "./entities.js";
@@ -378,9 +378,9 @@ export async function handleEvents(env, request, url, path, user, J) {
       if (!(await rateLimit(db, `evmail:${user.id}`, 30, 3600))) return J({ error: "rate_limit" }, 429);
       const email = String((await body()).email || "").trim().toLowerCase();
       if (!/^[^\s@<>]{1,64}@[^\s@<>]{1,120}\.[a-z]{2,}$/i.test(email)) return J({ error: "bad_email" }, 400);
-      if (!env.RESEND_API_KEY) return J({ error: "mail_off" }, 503);
+      if (!mailReady(env)) return J({ error: "mail_off" }, 503);
       const esc = (x) => String(x).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])), u = `${env.SITE}/community/events/${ev.handle}/`;
-      const r = await sendMail(env, email, `Invitation: ${ev.title}`, `<p>Hello,</p><p>${esc(user.name)} invites you to <b>${esc(ev.title)}</b> (${esc(ev.start)}).</p><p><a href="${u}">View the event and register</a> (sign-in required, free).</p><p>M365.FM</p>`);
+      const r = await sendMail(env, { to: email, subject: `Invitation: ${ev.title}`, html: `<p>Hello,</p><p>${esc(user.name)} invites you to <b>${esc(ev.title)}</b> (${esc(ev.start)}).</p><p><a href="${u}">View the event and register</a> (sign-in required, free).</p><p>M365.FM</p>` });
       return r.ok ? J({ ok: true }) : J({ error: "send_failed" }, 502);
     }
   }
@@ -444,9 +444,9 @@ export async function handleEvents(env, request, url, path, user, J) {
     if (!/^[^\s@<>]{1,64}@[^\s@<>]{1,120}\.[a-z]{2,}$/i.test(email)) return J({ error: "bad_email" }, 400);
     const i = await db.prepare("SELECT i.token,i.name,s.title st,e.* FROM speaker_invites i JOIN event_sessions s ON s.id=i.session_id JOIN events e ON e.id=i.event_id WHERE i.token=?").bind(String(b.token || "")).first();
     if (!i || !(await canManage(db, user, i, "sessions"))) return J({ error: "forbidden" }, 403);
-    if (!env.RESEND_API_KEY) return J({ error: "mail_off" }, 503);
+    if (!mailReady(env)) return J({ error: "mail_off" }, 503);
     const esc = (x) => String(x).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])), url = `${env.SITE}/community/?invite=${i.token}#c-events`;
-    const r = await sendMail(env, email, `Speaker invitation: ${i.title}`, `<p>Hello ${esc(i.name)},</p><p>${esc(user.name)} invites you to speak at <b>${esc(i.title)}</b> (${esc(i.start)}) with the session <b>${esc(i.st)}</b>.</p><p><a href="${url}">Confirm your participation</a> (sign-in required, free).</p><p>M365.FM</p>`);
+    const r = await sendMail(env, { to: email, subject: `Speaker invitation: ${i.title}`, html: `<p>Hello ${esc(i.name)},</p><p>${esc(user.name)} invites you to speak at <b>${esc(i.title)}</b> (${esc(i.start)}) with the session <b>${esc(i.st)}</b>.</p><p><a href="${url}">Confirm your participation</a> (sign-in required, free).</p><p>M365.FM</p>` });
     return r.ok ? J({ ok: true }) : J({ error: "send_failed" }, 502);
   }
   if (path === "/api/speaker/suggest" && method === "GET") {   // "Bist du das?": ungebundene Speaker mit aehnlichem Namen wie das eigene Profil
