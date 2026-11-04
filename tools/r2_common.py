@@ -1,6 +1,6 @@
 """Gemeinsames fuer tools/r2_pages_upload.py (r2out/, Bau-Job) und tools/r2_site_sync.py (Spiegel der Website, Deploy-Job).
 Schluessel im Bucket: pages/<pfad> wie die Adresse (pages/a/index.html -> /a/). Zugang nur ueber GitHub-Secrets (R2_ACCOUNT_ID, R2_BUCKET, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY)."""
-import json, mimetypes, os, re
+import json, mimetypes, os, re, time
 from concurrent.futures import ThreadPoolExecutor
 
 CT = {".html": "text/html; charset=utf-8", ".json": "application/json; charset=utf-8", ".jsonld": "application/ld+json; charset=utf-8", ".xml": "application/xml; charset=utf-8",
@@ -42,9 +42,10 @@ def read_gone(s3, bucket):
         raise
 
 
-def upload(s3, bucket, todo, meta=None, retries=1, on_ok=None):
+def upload(s3, bucket, todo, meta=None, retries=1, on_ok=None, strict=False):
     """todo: [(key, path, hash)] -> (ok_keys, failed_keys). Erst Dateien, dann Seiten (eine neue Seite zeigt nie auf ein noch fehlendes Stylesheet);
-    Fehlschlaege werden `retries`-mal wiederholt. Phase 2 entfaellt, wenn in Phase 1 etwas endgueltig fehlschlug."""
+    Fehlschlaege werden `retries`-mal wiederholt (mit kurzer Pause). strict=True (Spiegel): Phase 2 entfaellt, wenn in Phase 1 etwas endgueltig
+    fehlschlug - im r2out-Upload nicht, dort soll eine fehlende Export-Datei nicht alle Sprachseiten aufhalten."""
     def put(item):
         key, f, h = item
         try:
@@ -54,9 +55,10 @@ def upload(s3, bucket, todo, meta=None, retries=1, on_ok=None):
     ok, failed, shown = [], [], [0]
     with ThreadPoolExecutor(16) as ex:
         for phase in ([t for t in todo if not t[0].endswith(".html")], [t for t in todo if t[0].endswith(".html")]):
-            if failed: break   # Seiten erst, wenn alle Dateien da sind
+            if failed and strict: break   # Seiten erst, wenn alle Dateien da sind
             rest = phase
-            for _ in range(retries + 1):
+            for attempt in range(retries + 1):
+                if attempt: time.sleep(2 * attempt)
                 bad = []
                 for item, e in ex.map(put, rest):
                     if e:

@@ -250,7 +250,7 @@ jobs:
         uses: actions/deploy-pages@v4
       - uses: actions/checkout@v4
       - name: Letzter Seiten-Stand (Hashes des vorigen Deploys)
-        uses: actions/cache@v4
+        uses: actions/cache/restore@v4
         with:
           path: .pagehashes
           key: page-hashes-${{ github.run_id }}
@@ -266,9 +266,15 @@ jobs:
           BASE: https://www.m365.fm
         run: |
           mkdir -p .pagehashes
-          cp .pagehashes/page-hashes.json .newhashes/page-hashes.prev.json 2>/dev/null || true
           python3 tools/purge_changed.py .pagehashes/page-hashes.json .newhashes/page-hashes.json .newhashes/r2-changed.json
           cp .newhashes/page-hashes.json .pagehashes/page-hashes.json
+      # ausdruecklich sichern (nicht erst am Jobende): auch wenn der R2-Spiegel danach scheitert, bleibt der Stand fuer Purge und IndexNow aktuell
+      - name: Seiten-Stand dieses Deploys sichern
+        if: always() && hashFiles('.pagehashes/page-hashes.json') != ''
+        uses: actions/cache/save@v4
+        with:
+          path: .pagehashes
+          key: page-hashes-${{ github.run_id }}-${{ github.run_attempt }}
       # R2 als Ursprung: die eben veroeffentlichte Website (dasselbe Artefakt wie GitHub Pages) in den Bucket spiegeln - nur hier im Deploy-Job
       # (nur main, Umgebung github-pages), also nie neuer als GitHub Pages und nie von einem anderen Branch. Nichts wird geloescht.
       - name: Veroeffentlichte Website holen (GitHub-Pages-Artefakt)
@@ -302,16 +308,8 @@ jobs:
         with:
           path: .r2/r2_docs.json
           key: r2docs-${{ github.run_id }}-${{ github.run_attempt }}
-      - name: R2-Kanten-Cache fuer geaenderte Adressen leeren (nach dem Spiegel, vor der Bau-Kennung)
-        if: steps.r2sync.outcome == 'success'
-        continue-on-error: true
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CF_ZONE_ID: ${{ secrets.CF_ZONE_ID }}
-          BASE: https://www.m365.fm
-          PURGE_R2C_ONLY: "1"
-        run: python3 tools/purge_changed.py .newhashes/page-hashes.prev.json .newhashes/page-hashes.json .newhashes/r2-changed-docs.json
-      # Erst nach dem Purge: ab jetzt liefert der Site-Worker (R2_PRIMARY=1) diesen Bau aus R2 - vorher, und bei jedem Fehler, aus GitHub Pages
+      # Ab jetzt liefert der Site-Worker (R2_PRIMARY=1) diesen Bau aus R2 - vorher, und bei jedem Fehler, aus GitHub Pages.
+      # Die Bau-Kennung steht im Cache-Schluessel des Workers: Eintraege frueherer Baue treffen nie, ein Purge fuer R2 ist nicht noetig.
       - name: Bau-Kennung im Bucket setzen (R2-Spiegel vollstaendig)
         if: steps.r2sync.outcome == 'success'
         env:

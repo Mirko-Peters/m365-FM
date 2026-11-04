@@ -59,6 +59,7 @@ def main(src):
     try: man = json.loads(MAN.read_text("utf-8")) if MAN.exists() else {}
     except Exception: man = {}
     files = {"pages/" + f.relative_to(src).as_posix(): f for f in src.rglob("*") if f.is_file() and f.relative_to(src).as_posix() != MARKER}
+    man = {k: v for k, v in man.items() if k in files}   # nur aktuelle Schluessel (wandert eine Datei zwischen docs/ und r2out/, wird sie neu geladen)
     in_bucket = list_keys(s3, bucket)
     gone = read_gone(s3, bucket)
     todo = []
@@ -74,7 +75,7 @@ def main(src):
         man[item[0]] = item[2]; n[0] += 1
         if n[0] % 5000 == 0: save_man()
     try:
-        ok, failed = upload(s3, bucket, todo, meta=META, retries=2, on_ok=on_ok)
+        ok, failed = upload(s3, bucket, todo, meta=META, retries=2, on_ok=on_ok, strict=True)
     finally:
         save_man()
     loaded = {k for k, _f, _h in ok}

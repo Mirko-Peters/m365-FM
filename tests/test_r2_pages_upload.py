@@ -161,5 +161,28 @@ class R2outTest(Base):
             elif mpath.exists(): mpath.unlink()
 
 
+class R2outOrderTest(Base):
+    def _with_clean_manifest(self, fn):
+        mpath = ROOT / "data" / "cache" / "r2_pages.json"; backup = mpath.read_bytes() if mpath.exists() else None
+        try:
+            if mpath.exists(): mpath.unlink()
+            fn()
+        finally:
+            if backup is not None: mpath.write_bytes(backup)
+            elif mpath.exists(): mpath.unlink()
+
+    def test_failed_export_does_not_block_pages_and_returning_key_is_reloaded(self):
+        def body():
+            tree(self.r2out, {"pl/x/index.html": "pl", "search/part-1.json": "{}", "fr/y/index.html": "fr"})
+            self.s3.fail_put.add("pages/search/part-1.json")
+            self.assertEqual(self.r2out_run(), 0)
+            self.assertIn("pages/pl/x/index.html", self.s3.obj, "Seiten trotz fehlgeschlagener Export-Datei geladen")
+            self.s3.fail_put.clear()
+            (self.r2out / "fr" / "y" / "index.html").unlink(); self.assertEqual(self.r2out_run(), 0)   # faellt einmal weg
+            tree(self.r2out, {"fr/y/index.html": "fr"}); self.s3.log.clear(); self.assertEqual(self.r2out_run(), 0)
+            self.assertIn(("put", "pages/fr/y/index.html"), self.s3.log, "zurueckgekehrter Schluessel wird neu geladen (Manifest gekuerzt)")
+        self._with_clean_manifest(body)
+
+
 if __name__ == "__main__":
     unittest.main()

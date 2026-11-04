@@ -123,10 +123,12 @@ const B2 = {
 let r2gets2 = 0, origins2 = 0;
 const env2 = { ...env, R2_PRIMARY: "1", PAGES: { get: async (k) => { r2gets2++; return B2[k] || null; } } };
 globalThis.ORIGIN_BUILD = "b1";
+const warm = async () => { __resetR2Ready(); await W.fetch(req("/nolm/", "US"), env2, { waitUntil: (p) => p }).then(() => new Promise((r) => setTimeout(r, 5))); for (let i = 0; i < 20 && !(await readyNow()); i++) await new Promise((r) => setTimeout(r, 5)); };
+const readyNow = async () => { const w = []; await W.fetch(req("/__probe/", "US"), env2, { waitUntil: (p) => w.push(p) }); await Promise.all(w); return true; };
 const run2 = async (r) => { const w = []; const before = lastOrigin; const res = await W.fetch(r, env2, { waitUntil: (p) => w.push(p) }); await Promise.all(w); if (lastOrigin !== before && !["/show/redirects.json", "/r2-build.txt"].includes(new URL(lastOrigin.url).pathname)) origins2++; return res; };
 
 test("R2 zuerst: Seite aus dem Bucket ohne Abruf bei GitHub Pages, gleiche Header, Region", async () => {
-  store.clear(); origins2 = 0; __resetR2Ready(); globalThis.ORIGIN_BUILD = "b1";
+  store.clear(); globalThis.ORIGIN_BUILD = "b1"; await warm(); origins2 = 0;
   const a = await run2(req("/de/r2only/", "DE"));
   assert.equal(a.status, 200); assert.equal(await a.text(), "<html><body>r2 de</body></html>");
   assert.equal(a.headers.get("x-m365-src"), "r2"); assert.equal(a.headers.get("x-m365-cache"), "MISS");
@@ -171,21 +173,24 @@ test("R2_PRIMARY aus: Seiten weiter zuerst von GitHub Pages", async () => {
   const r = await W.fetch(req("/", "US"), e3, { waitUntil: () => {} }); assert.equal(await r.text(), "<html><body>gh</body></html>"); assert.equal(r2gets2, 0);
 });
 
-test("R2 zuerst nur bei gleicher Bau-Kennung: abweichend, fehlend oder ohne Bucket-Kennung -> GitHub Pages", async () => {
+test("R2 zuerst nur bei gleicher Bau-Kennung: abweichend, fehlend oder ohne Bucket-Kennung -> GitHub Pages; erste Anfrage wartet nie", async () => {
+  store.clear(); globalThis.ORIGIN_BUILD = "b1"; __resetR2Ready();
+  const first = await run2(req("/", "US")); assert.equal(first.headers.get("x-m365-src"), null, "erste Anfrage nach Start: GitHub Pages, Pruefung im Hintergrund");
+  const second = await run2(req("/", "US")); assert.equal(second.headers.get("x-m365-src"), "r2", "danach aus R2");
   for (const ob of ["b2", ""]) {
-    store.clear(); __resetR2Ready(); globalThis.ORIGIN_BUILD = ob;
+    store.clear(); globalThis.ORIGIN_BUILD = ob; await warm();
     const r = await run2(req("/", "US")); assert.equal(await r.text(), "<html><body>gh</body></html>", "Kennung " + JSON.stringify(ob)); assert.equal(r.headers.get("x-m365-src"), null);
   }
-  store.clear(); __resetR2Ready(); globalThis.ORIGIN_BUILD = "b1";
+  store.clear(); globalThis.ORIGIN_BUILD = "b1"; __resetR2Ready();
   const e4 = { ...env2, PAGES: { get: async (k) => (k === "pages/r2-build.txt" ? null : B2[k] || null) } };
-  const r = await W.fetch(req("/", "US"), e4, { waitUntil: () => {} }); assert.equal(await r.text(), "<html><body>gh</body></html>");
-  store.clear(); __resetR2Ready();
+  for (let i = 0; i < 2; i++) { const w = []; const r = await W.fetch(req("/", "US"), e4, { waitUntil: (p) => w.push(p) }); await Promise.all(w); assert.equal(await r.text(), "<html><body>gh</body></html>"); }
+  store.clear(); await warm();
   const ok = await run2(req("/", "US")); assert.equal(ok.headers.get("x-m365-src"), "r2");
 });
 test("R2 zuerst: CORS wie GitHub Pages, /a/index.html teilt den Cache-Eintrag mit /a/, Unicode-Pfade, Lesefehler -> GitHub Pages", async () => {
-  store.clear(); __resetR2Ready(); globalThis.ORIGIN_BUILD = "b1";
+  store.clear(); globalThis.ORIGIN_BUILD = "b1"; await warm();
   const j = await run2(req("/feed.json", "DE")); assert.equal(j.headers.get("access-control-allow-origin"), "*");
-  await run2(req("/de/r2only/index.html", "DE")); assert.ok(store.has("https://www.m365.fm/__r2c/de/r2only/"), "Schluessel ohne index.html");
+  await run2(req("/de/r2only/index.html", "DE")); assert.ok(store.has("https://www.m365.fm/__r2c/@b1/de/r2only/"), "Schluessel mit Bau-Kennung, ohne index.html");
   assert.ok(![...store.keys()].some((k) => k.endsWith("index.html/")));
   const ru = await run2(req("/ru/tag/" + encodeURIComponent("облако") + "/", "US")); assert.equal(await ru.text(), "<html>ru tag</html>");
   const br = await run2(req("/broken.json", "US")); assert.equal(br.status, 404, "Lesefehler: weiter zu GitHub Pages (hier 404), keine Ausnahme");
@@ -195,4 +200,16 @@ test("Alter R2-Rueckfall (nach 404) liefert keine Spiegel-Objekte von GitHub Pag
   const e5 = { ...env, PAGES: { get: async (k) => (k === "pages/gonepage/index.html" ? obj2("<html>stale</html>", "text/html") : k === "pages/thin/index.html" ? { ...obj2("<html>thin</html>", "text/html"), customMetadata: {} } : null) } };
   const a = await W.fetch(req("/gonepage/", "US"), e5, { waitUntil: () => {} }); assert.equal(a.status, 404);
   const b = await W.fetch(req("/thin/", "US"), e5, { waitUntil: () => {} }); assert.equal(b.status, 200); assert.equal(await b.text(), "<html>thin</html>");
+});
+test("R2 zuerst: haengende Pruefung der Bau-Kennung blockiert keine Anfrage", async () => {
+  store.clear(); __resetR2Ready(); globalThis.ORIGIN_BUILD = "b1";
+  const e6 = { ...env2, PAGES: { get: (k) => (k === "pages/r2-build.txt" ? new Promise(() => {}) : Promise.resolve(B2[k] || null)) } };
+  const t0 = Date.now();
+  for (let i = 0; i < 3; i++) { const r = await W.fetch(req("/", "US"), e6, { waitUntil: () => {} }); assert.equal(await r.text(), "<html><body>gh</body></html>"); }
+  assert.ok(Date.now() - t0 < 1000, "keine Anfrage wartet auf die Pruefung");
+});
+test("R2 zuerst: Cache-Eintrag eines frueheren Baus wird nie ausgeliefert", async () => {
+  store.clear(); globalThis.ORIGIN_BUILD = "b1"; await warm();
+  store.set("https://www.m365.fm/__r2c/@b0/de/r2only/", new Response("<html>alt</html>", { headers: { "content-type": "text/html; charset=utf-8" } }));
+  const r = await run2(req("/de/r2only/", "US")); assert.equal(await r.text(), "<html><body>r2 de</body></html>"); assert.equal(r.headers.get("x-m365-cache"), "MISS");
 });

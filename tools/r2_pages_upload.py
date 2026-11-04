@@ -27,6 +27,7 @@ def main():
         print("R2-Upload uebersprungen (Seiten bleiben nur erreichbar, wenn sie schon im Bucket liegen)"); return 0
     try: man = json.loads(MAN.read_text("utf-8")) if MAN.exists() else {}
     except Exception: man = {}
+    man = {k: v for k, v in man.items() if k in keys}   # nur aktuelle Schluessel: kommt ein Schluessel spaeter zurueck (z. B. aus docs/), wird er neu geladen
     try: gone = read_gone(s3, bucket)
     except Exception as e: print("Entfernt-Liste nicht lesbar:", type(e).__name__); gone = set()
     todo = []

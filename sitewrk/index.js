@@ -58,25 +58,33 @@ export function r2Key(p) {   // Adresse (dekodiert) -> Schluessel im Bucket ("" 
   if (p.endsWith("/")) return "pages" + p + "index.html";
   return extOf(p) ? "pages" + p : "";
 }
-const READY_TTL = 30000;   // Bau-Kennung je Isolate 30 s merken (zwei kleine Abrufe statt zwei je Anfrage)
-let READY = { t: -1e15, v: false, p: null };
-export function __resetR2Ready() { READY = { t: -1e15, v: false, p: null }; }   // nur fuer Tests
-async function r2Ready(env, url) {
-  if (Date.now() - READY.t < READY_TTL) return READY.v;
-  if (!READY.p) READY.p = (async () => {
-    const [a, b] = await Promise.all([
-      fetch(url.origin + "/r2-build.txt?r2check=" + Math.floor(Date.now() / READY_TTL)).then((x) => (x.ok ? x.text() : "")).catch(() => ""),   // mit Query: nie aus dem Kanten-Cache (Caching-Level basic), immer der Stand von GitHub Pages
-      env.PAGES.get("pages/r2-build.txt").then((x) => (x ? x.text() : "")).catch(() => "")]);
-    const o = String(a).trim(), r = String(b).trim();
-    READY = { t: Date.now(), v: !!o && o.length <= 64 && o === r, p: null };
-    return READY.v;
-  })();
-  return READY.p;
+const READY_TTL = 30000;   // Bau-Kennung je Isolate 30 s merken; aufgefrischt wird im Hintergrund, keine Anfrage wartet darauf
+let READY = { t: -1e15, v: "", busy: 0 };
+export function __resetR2Ready() { READY = { t: -1e15, v: "", busy: 0 }; }   // nur fuer Tests
+const withTimeout = (p, ms) => Promise.race([p, new Promise((r) => setTimeout(() => r(null), ms))]);
+async function checkBuild(env, url) {
+  const [a, b] = await Promise.all([
+    fetch(url.origin + "/r2-build.txt?r2check=" + Math.floor(Date.now() / READY_TTL), { signal: AbortSignal.timeout(3000) }).then((x) => (x.ok ? x.text() : "")).catch(() => ""),   // mit Query: nie aus dem Kanten-Cache
+    withTimeout(env.PAGES.get("pages/r2-build.txt").then((x) => (x ? x.text() : "")), 3000).then((x) => x || "").catch(() => "")]);
+  const o = String(a).trim(), r = String(b).trim();
+  return o === r && /^[A-Za-z0-9._-]{1,64}$/.test(o) ? o : "";
 }
-async function r2First(request, env, ctx, url, p, key) {
+// Liefert die Bau-Kennung, wenn R2 genau den Bau von GitHub Pages enthaelt, sonst "". Nie auf eine Pruefung warten, die eine andere Anfrage
+// gestartet hat (bricht sie ab, haengen sonst alle): die Pruefung laeuft ueber ctx.waitUntil dieser Anfrage, bis dahin gilt der letzte Stand
+// (nach dem Start eines Isolates: "" = GitHub Pages).
+function r2Ready(env, url, ctx) {
+  const now = Date.now();
+  if (now - READY.t >= READY_TTL && now - READY.busy > 10000) {
+    READY.busy = now;
+    ctx.waitUntil(checkBuild(env, url).then((v) => { READY = { t: Date.now(), v, busy: 0 }; }).catch(() => { READY = { t: Date.now(), v: "", busy: 0 }; }));
+  }
+  return READY.v;
+}
+async function r2First(request, env, ctx, url, p, key, build) {
   const html = key.endsWith("/index.html"), ext = html ? "html" : extOf(key);
-  const cp = html ? (p.endsWith("/index.html") ? p.slice(0, -"index.html".length) : r2Path(p)) : p;   // /a/index.html und /a/ teilen den Eintrag (Purge leert /__r2c/a/)
-  const cache = caches.default, ck = new Request(url.origin + "/__r2c" + cp);
+  const cp = html ? (p.endsWith("/index.html") ? p.slice(0, -"index.html".length) : r2Path(p)) : p;   // /a/index.html und /a/ teilen den Eintrag
+  // Bau-Kennung im Schluessel: Eintraege eines frueheren Baus treffen nie (kein Purge noetig), getrennt vom alten R2-Rueckfall (/__r2c<pfad>)
+  const cache = caches.default, ck = new Request(url.origin + "/__r2c/@" + build + cp);
   let hit = await cache.match(ck).catch(() => null), state = "HIT";
   if (!hit) {
     state = "MISS";
@@ -161,8 +169,9 @@ export default {
     if (env.R2_PRIMARY === "1" && env.PAGES && !isImg && (request.method === "GET" || request.method === "HEAD") && !p.startsWith("/search/") && p !== "/r2-build.txt" && (page || !request.headers.has("range"))) {
       let dp = p; try { dp = decodeURIComponent(p); } catch { /* ungueltige Kodierung: wie angefragt */ }   // Schluessel im Bucket sind UTF-8 (z. B. /ru/tag/облако/)
       const key = r2Key(dp);
-      if (key && (await r2Ready(env, url))) {
-        const r2 = await r2First(rq, env, ctx, url, p, key);
+      const build = key ? r2Ready(env, url, ctx) : "";
+      if (build) {
+        const r2 = await r2First(rq, env, ctx, url, p, key, build);
         if (r2) return page ? markHtml(r2, request, cr) : r2;
       }
     }
