@@ -14,6 +14,7 @@ let process, url, directory;
 const clients = [];
 const text = result => JSON.parse(result.content[0].text);
 const authorization = token => ["Bearer", token].join(" ");
+const signingSecret = crypto.randomUUID() + crypto.randomUUID();
 
 before(async () => {
   const listener = createServer();
@@ -27,14 +28,15 @@ before(async () => {
     "--config", "wrangler.toml", "--config", "test/community.wrangler.toml",
     "--ip", "127.0.0.1", "--port", String(port), "--inspector-port", "0",
     "--persist-to", directory, "--log-level", "error",
+    "--var", `SESSION_SIGNING_SECRET:${signingSecret}`,
   ], {
     cwd: fileURLToPath(new URL("../", import.meta.url)),
     env: { ...globalThis.process.env, WRANGLER_SEND_METRICS: "false" },
     stdio: ["ignore", "pipe", "pipe"],
   });
   let output = "";
-  process.stdout.on("data", data => { output += data; });
-  process.stderr.on("data", data => { output += data; });
+  process.stdout.on("data", data => { output += String(data).replaceAll(signingSecret, "[Testschlüssel]"); });
+  process.stderr.on("data", data => { output += String(data).replaceAll(signingSecret, "[Testschlüssel]"); });
   for (let attempt = 0; attempt < 120; attempt++) {
     try {
       if ((await fetch(url, { method: "OPTIONS" })).status === 204) return;
@@ -68,13 +70,18 @@ async function connect(token = "", approval) {
   return { client, transport };
 }
 
-test("Sitzungsausweise sind tokengebunden und nicht manipulierbar", async () => {
+test("Sitzungsausweise brauchen Worker-Secret und passenden Token, auch anonym", async () => {
   const id = "a".repeat(64);
-  const signed = await sealSession(id, "member-a");
-  assert.equal(await openSession(signed, "member-a"), id);
-  assert.equal(await openSession(signed, "member-b"), null);
-  assert.equal(await openSession(signed, ""), null);
-  assert.equal(await openSession(`${signed.slice(0, -1)}x`, "member-a"), null);
+  const signed = await sealSession(id, "member-a", signingSecret);
+  assert.equal(await openSession(signed, "member-a", signingSecret), id);
+  assert.equal(await openSession(signed, "member-b", signingSecret), null);
+  assert.equal(await openSession(signed, "", signingSecret), null);
+  assert.equal(await openSession(signed, "member-a", crypto.randomUUID()), null);
+  assert.equal(await openSession(`${signed.slice(0, -1)}x`, "member-a", signingSecret), null);
+  const anonymous = await sealSession(id, "", signingSecret);
+  assert.equal(await openSession(anonymous, "", signingSecret), id);
+  assert.equal(await openSession(anonymous, "", "anonymous".repeat(4)), null);
+  await assert.rejects(sealSession(id, "member-a"));
   assert.equal(MEMORY_TTL, 30 * 24 * 60 * 60 * 1000);
 });
 
@@ -89,10 +96,26 @@ test("Öffentliche Werkzeuge, keine Schreibwerkzeuge ohne Token", async () => {
   assert.equal((await client.callTool({ name: "context_set", arguments: { event: "42" } })).isError, true);
 });
 
+test("Fantasie-Token und falsche Großschreibung ermöglichen weder Werkzeugliste noch Kontextschreiben", async () => {
+  for (const header of [authorization("foo"), ["bearer", "m365_test-member-a"].join(" ")]) {
+    for (const body of [
+      { jsonrpc: "2.0", id: 1, method: "tools/list" },
+      { jsonrpc: "2.0", id: 2, method: "tools/call", params: { name: "context_set", arguments: { event: "42" } } },
+    ]) {
+      const response = await fetch(url, {
+        method: "POST", headers: { authorization: header, "content-type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      assert.equal(response.status, 401);
+      assert.equal(response.headers.get("Access-Control-Allow-Origin"), "*");
+    }
+  }
+});
+
 test("Gedächtnis über Requests erhalten, je Sitzung und Mitglied getrennt, selbst leerbar", async () => {
-  const a = await connect("test-member-a");
-  const sameMember = await connect("test-member-a");
-  const b = await connect("test-member-b");
+  const a = await connect("m365_test-member-a");
+  const sameMember = await connect("m365_test-member-a");
+  const b = await connect("m365_test-member-b");
   await a.client.callTool({ name: "context_set", arguments: { event: "42", company: "7", profile: "me", steps: ["Session anlegen"] } });
   assert.deepEqual(text(await a.client.callTool({ name: "context_get" })), { event: "42", company: "7", profile: "me" });
   assert.deepEqual(text(await sameMember.client.callTool({ name: "context_get" })), {});
@@ -100,17 +123,17 @@ test("Gedächtnis über Requests erhalten, je Sitzung und Mitglied getrennt, sel
   assert.deepEqual(text(await a.client.callTool({ name: "plan_show" })).steps, ["Session anlegen"]);
   const stolen = await fetch(url, {
     method: "POST",
-    headers: { Authorization: authorization("test-member-b"), "mcp-session-id": a.transport.sessionId, "content-type": "application/json" },
+    headers: { Authorization: authorization("m365_test-member-b"), "mcp-session-id": a.transport.sessionId, "content-type": "application/json" },
     body: JSON.stringify({ jsonrpc: "2.0", id: 2, method: "tools/call", params: { name: "context_get" } }),
   });
   assert.equal(stolen.status, 404);
-  const rawId = await openSession(a.transport.sessionId, authorization("test-member-a"));
-  const forged = await sealSession(rawId, authorization("test-member-b"));
+  const rawId = await openSession(a.transport.sessionId, authorization("m365_test-member-a"), signingSecret);
+  const forged = await sealSession(rawId, authorization("m365_test-member-b"), signingSecret);
   for (const method of ["POST", "GET", "DELETE"]) {
     const response = await fetch(url, {
       method,
       headers: {
-        Authorization: authorization("test-member-b"), "mcp-session-id": forged,
+        Authorization: authorization("m365_test-member-b"), "mcp-session-id": forged,
         "content-type": "application/json", Accept: "application/json, text/event-stream",
       },
       ...(method === "POST" ? { body: JSON.stringify({ jsonrpc: "2.0", id: 3, method: "tools/call", params: { name: "context_get" } }) } : {}),
@@ -118,7 +141,7 @@ test("Gedächtnis über Requests erhalten, je Sitzung und Mitglied getrennt, sel
     assert.equal(response.status, 404);
   }
   assert.equal(text(await a.client.callTool({ name: "context_get" })).event, "42");
-  const revoked = await fetch(url, { headers: { Authorization: authorization("revoked"), "mcp-session-id": a.transport.sessionId } });
+  const revoked = await fetch(url, { headers: { Authorization: authorization("m365_revoked"), "mcp-session-id": a.transport.sessionId } });
   assert.equal(revoked.status, 401);
   await a.client.callTool({ name: "context_clear" });
   assert.deepEqual(text(await a.client.callTool({ name: "context_get" })), {});
@@ -126,7 +149,7 @@ test("Gedächtnis über Requests erhalten, je Sitzung und Mitglied getrennt, sel
 });
 
 test("Gleichzeitige erste Kontextzugriffe überschreiben keine anderen Felder", async () => {
-  const { client } = await connect("test-member-a");
+  const { client } = await connect("m365_test-member-a");
   await Promise.all([
     client.callTool({ name: "context_set", arguments: { event: "42" } }),
     client.callTool({ name: "context_set", arguments: { company: "7" } }),
@@ -136,7 +159,7 @@ test("Gleichzeitige erste Kontextzugriffe überschreiben keine anderen Felder", 
 
 test("Event und zwei Sessions: jeder Schreibschritt fragt, Token und Argumente kommen an", async () => {
   const prompts = [];
-  const { client } = await connect("test-member-a", async request => {
+  const { client } = await connect("m365_test-member-a", async request => {
     prompts.push(request.params);
     return { action: "accept", content: { confirm: true } };
   });
@@ -160,7 +183,7 @@ test("Ablehnung, fehlende Bestätigung und fehlende Client-Unterstützung verhin
     async () => ({ action: "accept", content: { confirm: false } }),
     undefined,
   ]) {
-    const { client } = await connect("test-member-a", approval);
+    const { client } = await connect("m365_test-member-a", approval);
     const before = text(await client.callTool({ name: "list_events" })).calls.length;
     assert.equal((await client.callTool({ name: "save_event", arguments: { title: "Nicht speichern" } })).isError, true);
     assert.equal(text(await client.callTool({ name: "list_events" })).calls.length, before);
@@ -168,7 +191,7 @@ test("Ablehnung, fehlende Bestätigung und fehlende Client-Unterstützung verhin
 });
 
 test("Ungültiges Gedächtnis und andere Routen werden abgewiesen", async () => {
-  const { client } = await connect("test-member-a");
+  const { client } = await connect("m365_test-member-a");
   for (const args of [{ unexpected: "x" }, { event: 42 }, { steps: [false] }, { event: "x".repeat(501) }]) {
     assert.equal((await client.callTool({ name: "context_set", arguments: args })).isError, true);
   }

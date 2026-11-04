@@ -4,6 +4,10 @@ compatibility_date = "2026-11-04"
 compatibility_flags = ["nodejs_compat"]
 workers_dev = false
 
+# Vor dem ersten Deploy: GitHub-Secret AGENT_SESSION_SIGNING_SECRET mit mindestens
+# 32 zufälligen Zeichen hinterlegen. Der Workflow setzt daraus SESSION_SIGNING_SECRET
+# als Worker-Secret. Nach Schlüsselwechsel müssen Clients eine neue Sitzung öffnen.
+
 # Engere Route vor der bestehenden API; /mcp bleibt beim Community-Worker.
 routes = [{ pattern = "api-dub.m365.fm/agent/mcp", zone_name = "m365.fm" }]
 

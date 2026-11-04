@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { MEMORY_TTL, emptyMemory, memoryOnUse, memoryOnExpiry, confirmedCall } from "../src/session.js";
+import { MEMORY_TTL, ANONYMOUS_TTL, emptyMemory, memoryOnUse, memoryOnExpiry, expireSession, confirmedCall } from "../src/session.js";
 
 test("Gedächtnis läuft nach genau 30 Tagen ab, Nutzung verschiebt den Ablauf", () => {
   const initial = memoryOnUse(emptyMemory(), 1000);
@@ -16,6 +16,36 @@ test("Gedächtnis läuft nach genau 30 Tagen ab, Nutzung verschiebt den Ablauf",
   const stale = memoryOnUse(memory, 1000 + MEMORY_TTL);
   assert.deepEqual(stale.memory.context, {});
   assert.deepEqual(stale.memory.steps, []);
+});
+
+test("Anonyme Sitzungen laufen spätestens nach einem Tag ab, auch bei Nutzung", () => {
+  assert.equal(ANONYMOUS_TTL, 24 * 60 * 60 * 1000);
+  const initial = memoryOnUse(emptyMemory(), 1000, false);
+  assert.equal(initial.schedule, true);
+  assert.equal(initial.memory.expiresAt, 1000 + ANONYMOUS_TTL);
+  const active = memoryOnUse(initial.memory, 1000 + ANONYMOUS_TTL - 1, false);
+  assert.equal(active.memory.expiresAt, initial.memory.expiresAt);
+  assert.equal(active.schedule, false);
+  assert.equal(memoryOnExpiry(active.memory, 1000 + ANONYMOUS_TTL).delay, 0);
+});
+
+test("Abgelaufene Sitzungen zerstören das DO; verlängerte Sitzungen planen erneut", async () => {
+  for (const authenticated of [false, true]) {
+    const state = memoryOnUse(emptyMemory(), 1000, authenticated).memory;
+    let destroyed = 0;
+    const scheduled = [];
+    const agent = {
+      state,
+      destroy: async () => { destroyed++; },
+      schedule: async (...args) => { scheduled.push(args); },
+    };
+    await expireSession(agent, state.expiresAt - 1000);
+    assert.deepEqual(scheduled, [[1, "expireMemory"]]);
+    assert.equal(destroyed, 0);
+    await expireSession(agent, state.expiresAt);
+    assert.equal(destroyed, 1);
+    assert.equal(agent.state, state);
+  }
 });
 
 test("Ohne Bestätigung kein Service-Aufruf, auch bei Fehler oder fehlendem Token", async () => {
