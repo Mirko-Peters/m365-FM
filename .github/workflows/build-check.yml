@@ -3,7 +3,7 @@ name: Bau-Probe (ohne Veroeffentlichung)
 on:
   workflow_dispatch:
   push:
-    branches: [ticket/prev-next, ticket/pagination-urls]
+    branches: [ticket/prev-next, ticket/pagination-urls, copilot/p2-adsense-banner-above-the-fold]
 permissions:
   contents: read
 concurrency:
@@ -25,6 +25,10 @@ jobs:
           restore-keys: exports-
       - run: pip install -q requests cryptography
       - run: python generate_site.py
+      - name: Schema pruefen
+        run: python check_schema.py
+      - name: Seitentitel pruefen
+        run: python check_titles.py
       - name: Vor/Zurueck pruefen
         run: python tools/check_pager.py
       - name: Interne Links pruefen (wie im Seitenbau nicht blockierend, bekannte Altfaelle)

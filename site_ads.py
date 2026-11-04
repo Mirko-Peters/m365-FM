@@ -17,7 +17,11 @@ CSS = (".ad{margin:2rem auto;max-width:50rem;padding:.8rem 1rem 1rem;border:1px 
        # Stattdessen behaelt der Block seine Hoehe und zeigt den eigenen Hinweis auf die Sponsor-Seite.
        ".ad .ad-house{display:none}.ad:has(ins[data-ad-status=unfilled]) ins{display:none}"
        ".ad:has(ins[data-ad-status=unfilled]) .ad-house{display:flex;min-height:250px;flex-direction:column;align-items:center;justify-content:center;gap:.4rem;text-decoration:none;color:var(--fg,#17191c)}"
-       ".ad-house b{font-size:1.15rem}.ad-house span{color:var(--mut,#6b645c);font-size:.95rem}")
+       ".ad-house b{font-size:1.15rem}.ad-house span{color:var(--mut,#6b645c);font-size:.95rem}"
+       ".ad.ad-top{box-sizing:border-box;height:8.25rem;min-height:8.25rem;padding:.4rem .5rem;overflow:hidden}"
+       ".ad-top small{margin-bottom:.25rem}"
+       ".ad-top ins{box-sizing:border-box;height:100px;min-height:100px;max-height:100px;overflow:hidden}"
+       ".ad.ad-top:has(ins[data-ad-status=unfilled]) .ad-house{box-sizing:border-box;height:100px;min-height:100px}")
 
 
 def cfg():
@@ -86,15 +90,60 @@ def _block(lang, slot, pub, base=""):
             + _house(base, lang) + '<script>(adsbygoogle=window.adsbygoogle||[]).push({});</script></aside>')
 
 
+def _top_path(path):
+    return bool(re.fullmatch(
+        r"/(?:[a-z]{2}/)?(?:show/episodes/[^/]+|entity/[^/]+|community/u/[^/]+/blog/[^/]+|blog/[^/]+)/?",
+        path,
+    ))
+
+
+def _top_eligible(base, body, canonical, noindex=False):
+    """Top-Block nur auf Einzelfolgen, Blogartikeln und Entitaeten platzieren."""
+    if not active(base) or noindex:
+        return False
+    c = cfg()
+    path = canonical.replace(base, "") or "/"
+    if not _top_path(path):
+        return False
+    if eligible(base, body, canonical, noindex):
+        return True
+    # Einzelne Blogartikel sind Inhaltsseiten, obwohl /community/ fuer Anzeigenlisten gesperrt bleibt.
+    blog = re.fullmatch(r"/(?:[a-z]{2}/)?community/u/[^/]+/blog/[^/]+/?", path)
+    if not blog or any(s in path for s in c.get("skip_paths", []) if s != "/community/"):
+        return False
+    return len(re.sub(r"<[^>]+>", "", body)) >= int(c.get("min_chars", 2500))
+
+
+def _top_block(lang, slot, pub, base=""):
+    label = escape(LABEL.get(lang, LABEL["en"]))
+    return (f'<aside class="ad ad-top" aria-label="{label}"><small>{label}</small>'
+            f'<ins class="adsbygoogle" data-ad-client="ca-{pub}" data-ad-slot="{escape(slot)}" data-ad-format="horizontal" data-full-width-responsive="true"></ins>'
+            + _house(base, lang) + '<script>(adsbygoogle=window.adsbygoogle||[]).push({});</script></aside>')
+
+
 def inject(base, body, lang, canonical, noindex=False):
-    """Fuegt hoechstens zwei Bloecke ein: einen nach dem 2. Abschnitt (<h2>), einen vor dem Footer."""
+    """Fuegt einen Top-Block sowie die bestehenden Bloecke nach dem 2. Abschnitt und vor dem Footer ein."""
     if not active(base) or noindex:
         return body
     c = cfg()
     path = canonical.replace(base, "") or "/"
-    if path in ("/", "") or not eligible(base, body, canonical, noindex):
-        return body
     pub, slots = c["publisher"], c.get("slots", {})
+    page_eligible = eligible(base, body, canonical, noindex)
+    if _top_eligible(base, body, canonical, noindex) and 'class="ad ad-top"' not in body:
+        slot = slots.get("top") or slots.get("mid")
+        if slot:
+            a = body.find('class="shmain"'); a = body.find("<main") if a < 0 else a
+            z = body.find('<aside class="sbar"', a) if a >= 0 else -1
+            z = body.find("</main>", a) if z < 0 and a >= 0 else z
+            if a >= 0 and z > a:
+                region = body[a:z]
+                h1 = re.search(r"<h1\b[^>]*>.*?</h1>", region, re.I | re.S)
+                intro = re.search(r"<p\b[^>]*>.*?</p>", region[h1.end():], re.I | re.S) if h1 else None
+                if intro:
+                    pos = a + h1.end() + intro.end()
+                    body = body[:pos] + _top_block(lang, slot, pub, base) + body[pos:]
+    if path in ("/", "") or not page_eligible:
+        return body
     if slots.get("mid"):
         # nur im Textbereich: bei Seiten mit Sidebar bis zum Beginn der Sidebar, sonst im <main>; so landet der Block nie in der Sidebar oder im Header
         a = body.find('class="shmain"'); a = body.find("<main") if a < 0 else a
