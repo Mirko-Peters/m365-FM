@@ -19,11 +19,11 @@ SYS = ("You translate short user-interface texts (buttons, labels, hints, messag
 
 
 def call(key, model, lang, items):
-    body = {"model": model, "max_tokens": 6000, "system": SYS.format(lang=lang), "messages": [{"role": "user", "content": json.dumps(items, ensure_ascii=False)}]}
+    body = {"model": model, "max_tokens": 6000, **({"thinking": {"type": "disabled"}} if "haiku" in model else {}), "system": SYS.format(lang=lang), "messages": [{"role": "user", "content": json.dumps(items, ensure_ascii=False)}]}
     req = urllib.request.Request("https://api.anthropic.com/v1/messages", json.dumps(body).encode(),
                                  {"content-type": "application/json", "x-api-key": key, "anthropic-version": "2023-06-01"})
     with urllib.request.urlopen(req, timeout=180) as r:
-        txt = json.load(r)["content"][0]["text"].strip()
+        txt = "".join(c.get("text", "") for c in json.load(r)["content"] if c.get("type") == "text").strip()   # Haiku 5.5: Antwort kann mit thinking-Bloecken beginnen
     if txt.startswith("```"):
         txt = txt.strip("`").split("\n", 1)[1].rsplit("```", 1)[0]
     return json.loads(txt)

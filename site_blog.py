@@ -96,7 +96,7 @@ def build(g, posts, people, api):
             a = pb[p["handle"]]; au = f"{BASE}/community/u/{a['handle']}/"
             u = f"{croot}u/{p['handle']}/blog/{p['slug']}/"
             body_html, refs = (p["html"], []) if p.get("html") else wiki_render(p["body"], links_l, w)   # uebernommene fruehere Blogbeitraege: HTML bleibt vollstaendig erhalten
-            if p.get("html") and lang in ("en", "de"):   # erste Nennung einer Entitaet im Text auf ihre Seite verlinken (Wissensgraph aus dem Artikel heraus)
+            if p.get("html"):   # erste Nennung einer Entitaet im Text auf ihre Seite verlinken (Wissensgraph aus dem Artikel heraus), in allen Sprachen
                 body_html, _al = TOP.autolink_html(body_html, ENTS, lambda i: links_l[i][1], max_links=8)
             if not p.get("legacy"):
                 body_html = IMG.enhance(body_html)
@@ -105,7 +105,7 @@ def build(g, posts, people, api):
                 f'<li><a href="{croot}u/{r["handle"]}/blog/{r["slug"]}/"><b>{esc(r["title"])}</b></a> <span class="mut">· {iso(r["published"])}</span></li>' for r in _rel) + "</ul></section>") if _rel else ""
             if p.get("html") and not p.get("images"): p["images"] = re.findall(r'<img[^>]+src="(https://[^"]+)"', p["html"])
             topics = [t for t in p.get("topics", []) if t in ENTS]
-            tl = "".join(f'<a class="mb-tag" href="{links_l[t][1]}">{esc(ENTS[t]["name"])}</a> ' for t in topics)
+            tl = (f'<section class="bl-ents"><h2>{esc(T(lang, "Entities in this article", "Entitäten in diesem Artikel"))}</h2><p>' + "".join(f'<a class="mb-tag" href="{links_l[t][1]}">{esc(ENTS[t]["name"])}</a> ' for t in topics) + '</p></section>') if topics else ""
             vote = "" if p.get("legacy") else f'<p><button type="button" class="bl-vote" data-s="{esc(p["slug"])}" aria-pressed="false" aria-label="Upvote">▲ <span class="n">{p.get("votes", 0)}</span></button></p>'
             _kp, _fq, _fld = SNT.sections(p.get("keypoints"), p.get("faq"), lang)   # Kernpunkte und FAQ aus eigenen Feldern
             if p.get("html"): _fq = ""   # FAQ steht schon im Text des Beitrags; nur das Schema (FAQPage) bleibt
@@ -115,7 +115,7 @@ def build(g, posts, people, api):
             upd_html = f' · {esc(T(lang, "Updated", "Aktualisiert"))} <time datetime="{iso(p["updated"])}">{iso(p["updated"])}</time>' if p.get("updated") and iso(p["updated"]) != iso(p["published"]) else ""
             b = shell(lang, f'{WCSS}{CSS}<p class="mut"><a href="{croot}blog/">{esc(title_blog)}</a> · <a href="{croot}u/{p["handle"]}/blog/">{esc(a["name"])}</a></p><article class="wk-body"><h1>{esc(p["title"])}</h1>{SPM.note(lang, _spr)}'
                             f'<p class="mut">{esc(T(lang, "By", "Von"))} <a href="{croot}u/{p["handle"]}/" rel="author">{esc(a["name"])}</a>{co_html}{esc(" · ")}<time datetime="{iso(p["published"])}">{iso(p["published"])}</time>{upd_html}</p>'
-                            f'{("<p>" + esc(p["summary"]) + "</p>") if p.get("summary") else ""}{_aitr(p, lang, BASE)}{_kp}{body_html}{IMG.CSS if IMG.needs_responsive_css(body_html) else ""}{_fq}{SNT.CSS if (_kp or _fq) else ""}</article><p>{tl}</p>{relbox}{vote}'
+                            f'{("<p>" + esc(p["summary"]) + "</p>") if p.get("summary") else ""}{_aitr(p, lang, BASE)}{_kp}{body_html}{IMG.CSS if IMG.needs_responsive_css(body_html) else ""}{_fq}{SNT.CSS if (_kp or _fq) else ""}</article>{tl}{relbox}{vote}'
                             f'<p>{("" if p.get("legacy") else "<button type=" + chr(34) + "button" + chr(34) + " class=" + chr(34) + "bl-vote bl-follow" + chr(34) + " data-h=" + chr(34) + esc(p["handle"]) + chr(34) + " aria-pressed=" + chr(34) + "false" + chr(34) + "><span class=" + chr(34) + "t" + chr(34) + ">" + esc(T(lang, "Follow this blog", "Blog abonnieren")) + "</span></button> ")}<a href="{croot}u/{p["handle"]}/blog/feed.xml">RSS</a></p>'
                             + ((g.get("author_box")(lang) if g.get("author_box") and p["handle"] == "mirko-p" and lang in ("en", "de") else ""))
                             + PG(lang, *[(f'{croot}u/{x["handle"]}/blog/{x["slug"]}/', x["title"]) if x else None for x in NB(_seq[p["handle"]], _pos[(p["handle"], p["slug"])])], kind="article")

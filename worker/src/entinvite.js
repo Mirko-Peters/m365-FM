@@ -1,6 +1,6 @@
 // Einladungsmails fuer Personen-Entitaeten: "Zu dir gibt es eine Seite auf M365.FM – uebernehmen, ergaenzen oder entfernen lassen."
 // Token im Link belegt die Adresse; Annahme verknuepft die Entitaet mit dem Konto (entity_claims, via invite). Ablehnen sperrt weitere Einladungen.
-import { sendMail } from "./digest.js";
+import { mailReady, sendMail } from "./mailer.js";
 import { esc, randomToken, rateLimit, cleanText } from "./util.js";
 import { claimEntity } from "./events.js";
 
@@ -33,10 +33,11 @@ function mailBody(env, inv, byName, reminder) {
 <p style="font-size:12px;color:#6b7785">Diese Nachricht informiert dich über gespeicherte Angaben zu deiner Person (Name, öffentliche Angaben). Es ist keine Werbung; wir schreiben dir nur einmal und erinnern höchstens einmal. Verantwortlich: M365.FM, Julius-Hölder-Str 60, 70597 Stuttgart, mirko.peters@m365.fm.</p></div>`;
 }
 async function send(env, inv, byName, reminder) {
-  return sendMail(env, inv.email, reminder ? `Erinnerung: Deine Seite auf M365.FM, ${inv.name}` : `Deine Seite auf M365.FM – übernehmen oder entfernen lassen / claim or remove`, mailBody(env, inv, byName, reminder), `${env.API}/api/entityinvite/decline?t=${encodeURIComponent(inv.token)}`);
+  const unsub = `${env.API}/api/entityinvite/decline?t=${encodeURIComponent(inv.token)}`;
+  return sendMail(env, { to: inv.email, subject: reminder ? `Erinnerung: Deine Seite auf M365.FM, ${inv.name}` : `Deine Seite auf M365.FM – übernehmen oder entfernen lassen / claim or remove`, html: mailBody(env, inv, byName, reminder), headers: { "List-Unsubscribe": `<${unsub}>`, "List-Unsubscribe-Post": "List-Unsubscribe=One-Click" } });
 }
 export async function remindInvites(env) {   // Cron: nach 7 Tagen einmal erinnern
-  const db = env.DB; await ensure(db); if (!env.RESEND_API_KEY) return 0;
+  const db = env.DB; await ensure(db); if (!mailReady(env)) return 0;
   const rows = (await db.prepare("SELECT i.*,COALESCE(u.name,'') byn FROM entity_invites i LEFT JOIN users u ON u.id=i.by_user WHERE i.status='sent' AND i.reminded=0 AND i.created<? LIMIT 20").bind(now() - 7 * 86400).all()).results || [];
   for (const r of rows) { const x = await send(env, r, r.byn, true); await db.prepare("UPDATE entity_invites SET reminded=? WHERE token=?").bind(x.ok ? 1 : 2, r.token).run(); }
   return rows.length;
@@ -67,7 +68,7 @@ export async function handleEntityInvite(env, request, url, path, user, J) {
   }
   if (path === "/api/entityinvite/mine" && method === "GET") {
     const rows = (await db.prepare(`SELECT eid,name,status,created,reminded,${user.admin || user.editor ? "email" : "'' email"} FROM entity_invites WHERE ${user.admin || user.editor ? "1=1" : "by_user=?"} ORDER BY created DESC LIMIT 300`).bind(...(user.admin || user.editor ? [] : [user.id])).all()).results || [];
-    return J({ items: rows, mail: !!env.RESEND_API_KEY, staff: !!(user.admin || user.editor) }, 200, { "cache-control": "no-store" });
+    return J({ items: rows, mail: mailReady(env), staff: !!(user.admin || user.editor) }, 200, { "cache-control": "no-store" });
   }
   if (path === "/api/entityinvite/contacts" && (user.admin || user.editor)) {   // Kontaktadressen (nur DB, nie im Repo)
     if (method === "GET") { const c = await db.prepare("SELECT COUNT(*) n FROM entity_contacts").first(); const o = await db.prepare("SELECT COUNT(*) n FROM entity_contacts c WHERE NOT EXISTS (SELECT 1 FROM entity_invites i WHERE i.eid=c.eid)").first(); return J({ contacts: c.n, not_invited: o.n }); }
@@ -84,7 +85,7 @@ export async function handleEntityInvite(env, request, url, path, user, J) {
   if (path === "/api/entityinvite/send" && method === "POST") {
     const b = await body(), staff = !!(user.admin || user.editor);
     const list = (Array.isArray(b.items) ? b.items : [b]).slice(0, staff ? 50 : 3);
-    if (!env.RESEND_API_KEY) return J({ error: "mail_off" }, 503);
+    if (!mailReady(env)) return J({ error: "mail_off" }, 503);
     if (!(await rateLimit(db, `einv:${user.id}`, staff ? 200 : 5, 86400))) return J({ error: "rate_limit" }, 429);
     const out = [];
     for (const x of list) {

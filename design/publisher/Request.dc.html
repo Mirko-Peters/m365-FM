@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Expert Connect – post a request</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap">
+<style>
+body{margin:0;background:#f3f3f2}
+a{color:#3b6391}a:hover{color:#2c4b70}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid #3b6391;outline-offset:2px}
+.kicker{display:flex;align-items:center;gap:14px;font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#3b6391;font-size:15px}
+.kicker:after{content:"";flex:1;height:1px;background:rgba(23,25,28,.14)}
+.x{position:relative}
+.x:before,.x:after{content:"+";position:absolute;top:-10px;font:300 19px/1 Barlow,sans-serif;color:#5d6470;background:#f3f3f2}
+.x:before{left:-6px}.x:after{right:-6px}
+.card{background:#fff;border:1px solid rgba(23,25,28,.14);padding:20px;display:grid;gap:12px;align-content:start}
+.h1{margin:0;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:52px;line-height:1}
+.h2{margin:0;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:26px;line-height:1.1}
+.h3{margin:0;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:20px;line-height:1.15}
+.mut{color:#5d6470}
+.sm{font-size:13px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 18px;border:1px solid #17191c;background:#fff;color:#17191c;font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:.1em;text-transform:uppercase;font-size:15px;text-decoration:none;cursor:pointer;white-space:nowrap}
+.btn.main{background:#17191c;color:#fff}
+.btn.ac{background:#3b6391;border-color:#3b6391;color:#fff}
+.btn.sm2{padding:6px 12px;font-size:13px}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:2px 10px;border:1px solid rgba(23,25,28,.2);font-size:13px;background:#fff;white-space:nowrap}
+.chip.on{background:#17191c;color:#fff;border-color:#17191c}
+.tag{display:inline-block;padding:0 7px;font:600 11px/1.8 'Barlow Condensed',sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:#3b6391;white-space:nowrap}
+.tag.g{background:#2f6b3a}.tag.o{background:#9a4f0f}.tag.k{background:#17191c}.tag.l{background:#e4e6e8;color:#17191c}
+.field{display:grid;gap:6px}
+.field label{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#5d6470}
+.in{border:1px solid rgba(23,25,28,.3);background:#fff;padding:10px 12px;min-height:22px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.av{width:48px;height:48px;flex:none;display:flex;align-items:center;justify-content:center;background:#e4e6e8;font:600 18px/1 'Barlow Condensed',sans-serif;color:#17191c}
+.note{border-left:3px solid #3b6391;background:#eef2f7;padding:10px 14px;font-size:14px}
+.warn{border-left:3px solid #9a4f0f;background:#f7efe7;padding:10px 14px;font-size:14px}
+table{border-collapse:collapse;width:100%}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid rgba(23,25,28,.14);font-size:14px;vertical-align:top}
+th{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#5d6470;font-weight:600}
+</style>
+</helmet>
+<div style="min-height: 1140px; background: #f3f3f2; color: #17191c; font-family: Barlow, 'Segoe UI', sans-serif; font-size: 16px; line-height: 1.5">
+  <header style="border-bottom: 1px solid rgba(23,25,28,.14); background:#f3f3f2">
+    <div style="max-width: 1240px; margin: 0 auto; padding: 16px 32px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+      <a href="Main.dc.html" style="font-size: 20px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: #17191c; text-decoration: none">M365<span style="color: #3b6391">.FM</span> <span style="font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:16px;letter-spacing:.12em;color:#5d6470">Expert Connect</span></a>
+      <nav aria-label="Demo screens" style="display:flex;flex-wrap:wrap;gap:18px;align-items:center"><a href="Main.dc.html" style="text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:.1em;text-transform:uppercase;font-size:14px;color:#5d6470">For publishers</a><a href="Search.dc.html" style="text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:.1em;text-transform:uppercase;font-size:14px;color:#5d6470">Find experts</a><a href="Request.dc.html" style="text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:.1em;text-transform:uppercase;font-size:14px;color:#17191c;border-bottom:2px solid #3b6391">Post a request</a><a href="Publisher-Inbox.dc.html" style="text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:.1em;text-transform:uppercase;font-size:14px;color:#5d6470">My requests</a><a href="Calls.dc.html" style="text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:.1em;text-transform:uppercase;font-size:14px;color:#5d6470">Open calls</a><a href="Expert-Inbox.dc.html" style="text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:.1em;text-transform:uppercase;font-size:14px;color:#5d6470">Expert view</a><a href="Moderation.dc.html" style="text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:.1em;text-transform:uppercase;font-size:14px;color:#5d6470">Admin</a></nav>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center">
+        <span style="padding: 1px 10px; border: 1px dashed #9a4f0f; color: #9a4f0f; font: 600 13px/1.8 'Barlow Condensed', sans-serif; letter-spacing: .1em; text-transform: uppercase">Demo · sample data</span>
+        <span class="sm mut" style="font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:.1em;text-transform:uppercase">Contoso Media · Publisher</span>
+      </div>
+    </div>
+  </header>
+  <main style="max-width: 1240px; margin: 0 auto; padding: 36px 32px 80px; display: grid; gap: 28px">
+
+    <section style="display:grid;gap:10px"><div class="kicker">Post a request</div><h1 class="h1">What are you looking for?</h1></section>
+    <section style="display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:24px;align-items:start">
+      <form class="card" style="gap:18px" onsubmit="return false">
+        <div class="field"><label>Format</label><div class="row"><span class="chip">Quote</span><span class="chip on">Interview</span><span class="chip">Guest article</span><span class="chip">Podcast guest</span><span class="chip">Talk</span></div></div>
+        <div class="field"><label>Headline of the request</label><div class="in">Interview: Copilot rollouts in regulated industries</div></div>
+        <div class="field"><label>Brief (what, angle, length)</label><div class="in" style="min-height:96px">We are preparing a feature on how banks and insurers roll out Microsoft 365 Copilot: governance, data protection, first results. 20–30 minute video call, quotes approved before publication.</div></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+          <div class="field"><label>Topics</label><div class="in">Copilot · Governance · Compliance</div></div>
+          <div class="field"><label>Language</label><div class="in">English</div></div>
+          <div class="field"><label>Deadline</label><div class="in">20 Nov 2026</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div class="field"><label>Outlet / medium</label><div class="in">Contoso Media · Tech &amp; Business</div></div>
+          <div class="field"><label>Reach (optional)</label><div class="in">Print + online, ~120,000 readers</div></div>
+        </div>
+        <div class="field"><label>Who should receive it</label><div class="row"><span class="chip on">MVP</span><span class="chip on">MCT</span><span class="chip">Level 4+</span><span class="chip">Any matching expert</span></div></div>
+        <label class="row"><span class="chip on">✓</span> Hide my outlet until an expert accepts</label>
+        <label class="row"><span class="chip on">✓</span> I confirm this is an editorial request, not advertising or sales</label>
+        <div class="row" style="justify-content:space-between"><span class="sm mut">2 of 5 requests used this week</span><div class="row"><a class="btn" href="#">Save draft</a><a class="btn main" href="Publisher-Inbox.dc.html">Send to 23 experts</a></div></div>
+      </form>
+      <aside style="display:grid;gap:24px">
+        <div class="card x"><span class="sm mut" style="font-weight:600;letter-spacing:.1em;text-transform:uppercase">Matching preview</span>
+          <div style="display:flex;align-items:baseline;gap:10px"><b style="font:600 56px/1 'Barlow Condensed',sans-serif;color:#3b6391">23</b><span>experts will receive this</span></div>
+          <table><tr><th>Group</th><th>Experts</th></tr><tr><td>Microsoft MVP</td><td>9</td></tr><tr><td>MCT</td><td>5</td></tr><tr><td>Level 4–5</td><td>9</td></tr><tr><td>Replies within 1 day</td><td>14</td></tr></table>
+          <span class="sm mut">Matched on topics (entities), language, format and programme. Experts who paused requests are excluded.</span>
+        </div>
+        <div class="warn">Requests that look like sales or link building are held for review. Repeated reports block posting.</div>
+        <div class="card"><b class="h3">Tips for good answers</b><ul style="margin:0;padding-left:20px" class="mut"><li>Name the angle and the audience</li><li>Give a realistic deadline (3+ days)</li><li>Say if quotes are approved before publication</li></ul></div>
+      </aside>
+    </section>
+
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1140}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

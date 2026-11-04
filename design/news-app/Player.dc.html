@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Audio briefing player</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap">
+<style>
+body{margin:0;background:#1a1d21}
+a{color:#9fc0ea}a:hover{color:#c3d8f2}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid #82a7d4;outline-offset:2px}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; display: flex; flex-direction: column; background: #1a1d21; color: #eef0f3; font-family: Barlow, 'Segoe UI', sans-serif; font-size: 16px; line-height: 1.45">
+
+  <div style="flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: 22px 20px 16px; display: flex; flex-direction: column; gap: 18px">
+    <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid #82a7d4">
+      <span style="display: grid"><b style="color: #9fc0ea">Preview · coming soon</b><span style="font-size: 13px; color: #c5cad2">Free with sponsor · later: Personal edition $4.99 / month</span></span>
+      <a href="Feed.dc.html" style="flex: 0 0 auto; min-height: 44px; display: grid; place-items: center; padding: 0 12px; background: #82a7d4; color: #101214; text-decoration: none; font-weight: 600">Notify me</a>
+    </div>
+    <div style="display: flex; justify-content: space-between; align-items: center">
+      <span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #9fc0ea">Your briefing · Wed [DATE]</span>
+      <span style="padding: 1px 8px; border: 1px solid rgba(238,240,243,.45); font: 600 12px/1.7 'Barlow Condensed', sans-serif; letter-spacing: .08em; text-transform: uppercase">Deutsch</span>
+    </div>
+
+    <div style="height: 210px; background: #24282e; display: grid; place-items: center; position: relative; overflow: hidden">
+      <div aria-hidden="true" style="display: flex; gap: 5px; align-items: center; height: 90px">
+        <span style="width: 6px; height: 30px; background: #82a7d4"></span><span style="width: 6px; height: 62px; background: #82a7d4"></span><span style="width: 6px; height: 44px; background: #82a7d4"></span><span style="width: 6px; height: 86px; background: #82a7d4"></span><span style="width: 6px; height: 52px; background: #82a7d4"></span><span style="width: 6px; height: 70px; background: #5f7896"></span><span style="width: 6px; height: 36px; background: #5f7896"></span><span style="width: 6px; height: 58px; background: #5f7896"></span><span style="width: 6px; height: 24px; background: #5f7896"></span><span style="width: 6px; height: 48px; background: #5f7896"></span>
+      </div>
+      <span style="position: absolute; left: 14px; bottom: 10px; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 18px; letter-spacing: .04em; text-transform: uppercase">M365<span style="color: #82a7d4">.FM</span> today</span>
+    </div>
+
+    <div style="display: grid; gap: 4px">
+      <h1 style="margin: 0; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 30px; line-height: 1.05">{{current.title}}</h1>
+      <span style="font-size: 14px; color: #c5cad2">Chapter {{current.n}} of 7 · {{current.topic}}</span>
+    </div>
+
+    <div style="display: grid; gap: 6px">
+      <div aria-hidden="true" style="height: 4px; background: #3a4048"><div style="{{progressStyle}}"></div></div>
+      <div style="display: flex; justify-content: space-between; font-size: 13px; color: #c5cad2"><span>{{current.at}}</span><span>4:12</span></div>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: center">
+      <button type="button" onClick="{{cycleSpeed}}" aria-label="Playback speed" style="min-width: 56px; min-height: 44px; border: 1px solid rgba(238,240,243,.45); background: transparent; border-radius: 0; cursor: pointer; font-weight: 600">{{speed}}</button>
+      <button type="button" onClick="{{prev}}" aria-label="Previous chapter" style="width: 52px; height: 52px; border: 0; background: transparent; cursor: pointer; display: grid; place-items: center"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" fill="#eef0f3"><path d="M6 5h2v14H6zM19 5v14L9 12z"></path></svg></button>
+      <button type="button" onClick="{{togglePlay}}" aria-label="{{playLabel}}" style="width: 76px; height: 76px; border-radius: 50%; border: 0; background: #82a7d4; cursor: pointer; display: grid; place-items: center">
+        <sc-if value="{{playing}}" hint-placeholder-val="{{ false }}"><svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true" fill="#101214"><path d="M7 5h5v18H7zM16 5h5v18h-5z"></path></svg></sc-if>
+        <sc-if value="{{paused}}" hint-placeholder-val="{{ true }}"><svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true" fill="#101214"><path d="M8 4l16 10L8 24z"></path></svg></sc-if>
+      </button>
+      <button type="button" onClick="{{next}}" aria-label="Next chapter" style="width: 52px; height: 52px; border: 0; background: transparent; cursor: pointer; display: grid; place-items: center"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" fill="#eef0f3"><path d="M16 5h2v14h-2zM5 5v14l10-7z"></path></svg></button>
+      <button type="button" onClick="{{toggleOffline}}" aria-pressed="{{offline}}" aria-label="Download for offline" style="{{offlineStyle}}"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 3v10M6 9l4 4 4-4M4 17h12"></path></svg></button>
+    </div>
+    <span style="font-size: 13px; color: #c5cad2; text-align: center">{{offlineText}} · Also in CarPlay and Android Auto</span>
+
+    <div style="display: grid; border-top: 1px solid rgba(238,240,243,.18)">
+      <sc-for list="{{chapters}}" as="c" hint-placeholder-count="6">
+        <button type="button" onClick="{{c.pick}}" aria-current="{{c.active}}" style="{{c.style}}">
+          <span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 15px; width: 36px; flex: 0 0 auto">{{c.at}}</span>
+          <span style="display: grid; text-align: left"><b style="font-weight: 600">{{c.title}}</b><span style="font-size: 13px; opacity: .75">{{c.topic}}</span></span>
+        </button>
+      </sc-for>
+    </div>
+  </div>
+
+  <nav aria-label="App" style="flex: 0 0 auto; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border-top: 1px solid rgba(238,240,243,.18); background: #15181b; padding-bottom: 10px">
+    <a href="Feed.dc.html" style="display: grid; justify-items: center; gap: 2px; padding: 8px 0; min-height: 52px; font-size: 12px; color: #c5cad2; text-decoration: none"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="16" height="15"></rect><path d="M3 9h16M8 2v4M14 2v4"></path></svg>Today</a>
+    <a href="Player.dc.html" aria-current="page" style="display: grid; justify-items: center; gap: 2px; padding: 8px 0; min-height: 52px; font-size: 12px; font-weight: 600; color: #9fc0ea; text-decoration: none"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 14v-3a7 7 0 0 1 14 0v3"></path><rect x="3" y="13" width="4" height="6"></rect><rect x="15" y="13" width="4" height="6"></rect></svg>Listen</a>
+    <a href="Ask.dc.html" style="display: grid; justify-items: center; gap: 2px; padding: 8px 0; min-height: 52px; font-size: 12px; color: #c5cad2; text-decoration: none"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 4h16v11H9l-4 4v-4H3z"></path></svg>Ask</a>
+    <a href="Saved.dc.html" style="display: grid; justify-items: center; gap: 2px; padding: 8px 0; min-height: 52px; font-size: 12px; color: #c5cad2; text-decoration: none"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M5 3h12v16l-6-4-6 4z"></path></svg>Saved</a>
+    <a href="Notifications.dc.html" style="display: grid; justify-items: center; gap: 2px; padding: 8px 0; min-height: 52px; font-size: 12px; color: #c5cad2; text-decoration: none"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M5 16V10a6 6 0 0 1 12 0v6l2 2H3z"></path><path d="M9 20h4"></path></svg>Alerts</a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const C = [
+      { title: 'Two deadlines this month', topic: 'Overview', at: '0:00', pct: 4 },
+      { title: 'Sharing Copilot agents', topic: 'Copilot · action needed', at: '0:28', pct: 18 },
+      { title: 'Meeting policy defaults', topic: 'Teams · action needed', at: '1:10', pct: 34 },
+      { title: 'New governance episode', topic: 'Copilot Studio · podcast', at: '1:58', pct: 52 },
+      { title: 'Site gallery templates', topic: 'SharePoint · info', at: '2:46', pct: 70 },
+      { title: 'DLP reports', topic: 'Purview · info', at: '3:30', pct: 88 },
+      { title: 'Presented by [SPONSOR]', topic: 'Sponsor · “your partner for cloud security” · 5 s', at: '4:07', pct: 99 }
+    ];
+    const i = s.i ?? 1;
+    const speeds = ['1×', '1.25×', '1.5×', '2×'];
+    const sp = s.sp ?? 0;
+    const playing = !!s.playing;
+    const offline = !!s.offline;
+    const chapters = C.map((c, k) => ({
+      ...c, active: k === i,
+      pick: () => this.setState({ i: k, playing: true }),
+      style: 'display: flex; gap: 12px; align-items: center; width: 100%; min-height: 54px; padding: 8px 4px; border: 0; border-bottom: 1px solid rgba(238,240,243,.12); border-radius: 0; cursor: pointer; ' + (k === i ? 'background: #24282e; color: #9fc0ea;' : 'background: transparent; color: #eef0f3;')
+    }));
+    return {
+      chapters,
+      current: Object.assign({ n: i + 1 }, C[i]),
+      progressStyle: 'height: 4px; width: ' + C[i].pct + '%; background: #82a7d4',
+      playing, paused: !playing, playLabel: playing ? 'Pause' : 'Play',
+      togglePlay: () => this.setState({ playing: !playing }),
+      prev: () => this.setState({ i: Math.max(0, i - 1) }),
+      next: () => this.setState({ i: Math.min(C.length - 1, i + 1) }),
+      speed: speeds[sp],
+      cycleSpeed: () => this.setState({ sp: (sp + 1) % speeds.length }),
+      offline,
+      offlineText: offline ? 'Downloaded for offline' : 'Streams on demand',
+      offlineStyle: 'width: 56px; height: 44px; border-radius: 0; cursor: pointer; display: grid; place-items: center; ' + (offline ? 'background: #82a7d4; color: #101214; border: 1px solid #82a7d4;' : 'background: transparent; color: #eef0f3; border: 1px solid rgba(238,240,243,.45);'),
+      toggleOffline: () => this.setState({ offline: !offline })
+    };
+  }
+}
+</script>
+</body>
+</html>

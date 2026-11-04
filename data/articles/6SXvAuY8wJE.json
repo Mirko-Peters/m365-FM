@@ -85,6 +85,52 @@
      "Ne pas compter sur la mémoire des employés plutôt que sur des règles de plateforme."
     ]
    }
+  ],
+  "quiz": [
+   {
+    "q": "Que prévoient les conditions de produits Microsoft concernant les contenus générés par Copilot, comme une présentation ?",
+    "opts": [
+     "Ils appartiennent à Microsoft, qui les réutilise pour entraîner ses modèles de base",
+     "Ils appartiennent par défaut au client, le système d'IA renonçant à toute revendication",
+     "Ils sont partagés à parts égales entre Microsoft et le client",
+     "Leur propriété doit être négociée séparément pour chaque document généré"
+    ],
+    "a": 1,
+    "why": "Les contenus générés appartiennent par défaut au client : le système d'IA renonce à toute revendication sur la propriété intellectuelle."
+   },
+   {
+    "q": "Pourquoi un stagiaire disposant d'une licence Copilot peut-il faire remonter des documents sensibles ?",
+    "opts": [
+     "Parce que la licence lui accorde automatiquement des droits d'administrateur global",
+     "Parce que Copilot ignore les autorisations lorsque l'utilisateur pose une question précise",
+     "Parce que Copilot reflète ses permissions existantes, et des documents sensibles peuvent être ouverts par erreur",
+     "Parce que les licences Copilot s'étendent aux comptes invités interlocataires"
+    ],
+    "a": 2,
+    "why": "Copilot ne contourne pas les autorisations, il les reflète : un accès hérité trop large suffit à exposer des documents sensibles."
+   },
+   {
+    "q": "Que se passe-t-il pour les recherches web effectuées via Bing par Copilot, pour les clients européens ?",
+    "opts": [
+     "Elles sont couvertes par les garanties de la zone de données UE",
+     "Elles sont bloquées automatiquement par les étiquettes de sensibilité",
+     "Elles sont stockées uniquement dans Purview avec une rétention illimitée",
+     "Elles ne sont pas couvertes par ces garanties et suivent une politique de gestion distincte"
+    ],
+    "a": 3,
+    "why": "Les recherches Bing ne bénéficient pas des garanties de la zone de données UE et suivent une politique de gestion des données distincte."
+   },
+   {
+    "q": "Quel est le rôle de Microsoft Defender for Endpoint dans la gouvernance de Copilot ?",
+    "opts": [
+     "Il classifie et étiquette les contenus transitant par Microsoft Graph",
+     "Il assure l'application à l'exécution et bloque des actions risquées, comme coller des données sensibles dans des IA tierces",
+     "Il gère l'attribution des licences et l'activation des plugins au niveau du tenant",
+     "Il rédige le DPA et définit le rôle de sous-traitant de Microsoft"
+    ],
+    "a": 1,
+    "why": "Defender est le bras armé de l'application : alertes, DLP sur les terminaux, blocage d'actions risquées et interruption du contenu Copilot."
+   }
   ]
  },
  "it": {
@@ -182,6 +228,52 @@
       "text": "Senza etichette Purview i contenuti non sono classificati; senza Defender le regole non vengono fatte rispettare."
      }
     ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Che cosa fa una licenza Microsoft 365 Copilot per quanto riguarda i permessi di accesso ai dati?",
+    "opts": [
+     "Abilita le funzionalità di Copilot, ma non amplia i permessi esistenti dell'utente",
+     "Concede automaticamente l'accesso a tutte le cartelle riservate dell'azienda",
+     "Trasforma l'utente in amministratore globale del tenant",
+     "Sostituisce il controllo degli accessi basato sui ruoli nel tenant"
+    ],
+    "a": 0,
+    "why": "Copilot mostra solo i dati che l'utente può già vedere tramite Microsoft Graph; la licenza abilita funzioni, non diritti di accesso."
+   },
+   {
+    "q": "Che cosa prevedono i termini del prodotto e il DPA riguardo ai dati usati da Copilot?",
+    "opts": [
+     "I prompt vengono usati per addestrare i modelli di base di Microsoft",
+     "Solo i dati di Microsoft Graph vengono reinseriti nei modelli di base",
+     "Prompt, risposte e dati di Microsoft Graph non vengono reinseriti nei modelli di base",
+     "I dati vengono usati per l'addestramento solo fuori dall'UE"
+    ],
+    "a": 2,
+    "why": "Per contratto, prompt, risposte e dati di Microsoft Graph usati da Copilot non vengono reinseriti nei modelli di base di Microsoft."
+   },
+   {
+    "q": "Quale affermazione sulla ricerca web su Bing è corretta secondo l'articolo?",
+    "opts": [
+     "È coperta da tutte le garanzie del confine dei dati UE",
+     "Le query su Bing non rientrano nel confine dei dati UE e seguono una politica separata",
+     "Viene bloccata automaticamente per tutti i clienti europei",
+     "Segue le stesse regole di conservazione dei prompt in Purview"
+    ],
+    "a": 1,
+    "why": "Le query di ricerca web su Bing non rientrano nelle garanzie del confine dei dati UE e hanno una politica di gestione separata."
+   },
+   {
+    "q": "Perché un criterio DLP di Purview è più efficace di una direttiva scritta sull'uso di Copilot?",
+    "opts": [
+     "Perché sostituisce completamente la formazione degli utenti",
+     "Perché elimina tutti i file sensibili dal tenant",
+     "Perché rende superflue le etichette di riservatezza",
+     "Perché è un rifiuto inserito nel sistema: Copilot non può elaborare i file altamente riservati"
+    ],
+    "a": 3,
+    "why": "Un criterio DLP applica la regola automaticamente: davanti a un file altamente riservato Copilot non può riassumerlo né elaborarlo, a differenza di un semplice invito."
    }
   ]
  },
@@ -283,6 +375,52 @@
      }
     ]
    }
+  ],
+  "quiz": [
+   {
+    "q": "Segundo o artigo, o que acontece com prompts, respostas e dados do Microsoft Graph usados pelo Copilot?",
+    "opts": [
+     "São usados para treinar os modelos de base da Microsoft",
+     "Não são devolvidos aos modelos de base da Microsoft",
+     "São compartilhados com outros clientes para melhorar os resultados",
+     "São treinados apenas com a autorização manual do administrador"
+    ],
+    "a": 1,
+    "why": "Os termos do produto e o DPA formalizam que prompts, respostas e dados do Graph não retornam aos modelos de base."
+   },
+   {
+    "q": "Qual é o papel da licença do Copilot em relação às permissões de acesso aos dados?",
+    "opts": [
+     "Amplia automaticamente o acesso do usuário a todo o Microsoft Graph",
+     "Concede acesso aos espaços privados do CFO para usuários licenciados",
+     "Habilita a funcionalidade, mas não amplia as permissões do usuário",
+     "Substitui o RBAC na definição de quem acessa cada arquivo"
+    ],
+    "a": 2,
+    "why": "A licença apenas habilita recursos; o Copilot só mostra dados que o usuário já pode acessar, conforme identidade e RBAC."
+   },
+   {
+    "q": "O que ocorre quando o Copilot gera uma apresentação a partir de um arquivo com rótulo de confidencialidade?",
+    "opts": [
+     "O rótulo e as proteções passam automaticamente para o novo conteúdo",
+     "O rótulo é removido para que o novo arquivo possa ser compartilhado",
+     "O usuário precisa rotular manualmente cada documento derivado",
+     "O Copilot bloqueia sempre a criação de qualquer apresentação"
+    ],
+    "a": 0,
+    "why": "Os rótulos são herdados: o conteúdo derivado recebe rótulo e proteções automaticamente, sem depender de os usuários lembrarem."
+   },
+   {
+    "q": "Por que a política de DLP no Purview é mais eficaz que a instrução \"não compartilhe arquivos sensíveis com o Copilot\"?",
+    "opts": [
+     "Porque substitui a necessidade de licenças adicionais do Defender",
+     "Porque impede o Copilot de resumir ou processar arquivos altamente confidenciais",
+     "Porque dispensa totalmente a classificação e a rotulagem dos arquivos",
+     "Porque permite que os usuários decidam caso a caso o que compartilhar"
+    ],
+    "a": 1,
+    "why": "A DLP aplica a regra no sistema: diante de arquivo altamente confidencial, o Copilot não o resume nem processa, independentemente do prompt."
+   }
   ]
  },
  "nl": {
@@ -359,6 +497,52 @@
       "text": "Handhavingsarm: runtime-handhaving, waarschuwingen en endpoint-DLP tegen het plakken van gevoelige gegevens."
      }
     ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Wat gebeurt er met prompts, reacties en Microsoft Graph-gegevens die Copilot gebruikt, volgens de contractvoorwaarden?",
+    "opts": [
+     "Ze worden niet teruggekoppeld naar de basismodellen van Microsoft",
+     "Ze worden anoniem gebruikt om de basismodellen verder te trainen",
+     "Ze worden alleen gebruikt voor training bij klanten buiten de EU",
+     "Ze worden na dertig dagen automatisch aan Microsoft overgedragen"
+    ],
+    "a": 0,
+    "why": "Volgens de productvoorwaarden en de DPA worden deze gegevens niet gebruikt om de basismodellen van Microsoft te trainen."
+   },
+   {
+    "q": "Wat doet een Copilot-licentie volgens het artikel?",
+    "opts": [
+     "Ze geeft de gebruiker automatisch leesrechten op alle bedrijfsdata",
+     "Ze geeft alleen functionaliteit, maar breidt de machtigingen niet uit",
+     "Ze maakt de gebruiker tijdelijk globale beheerder in de tenant",
+     "Ze geeft ook toegang tot gastaccounts in andere tenants"
+    ],
+    "a": 1,
+    "why": "Een licentie ontgrendelt alleen de Copilot-functies; de bestaande rechten in de tenant bepalen nog steeds waartoe iemand toegang heeft."
+   },
+   {
+    "q": "Wat gebeurt er als een gevoeligheidslabel versleuteling of extractierechten vereist en de gebruiker die rechten mist?",
+    "opts": [
+     "Copilot verwerkt de inhoud, maar verwijdert het label uit het resultaat",
+     "Copilot vraagt een beheerder om toestemming en gaat dan door",
+     "Copilot verwerkt de inhoud alleen met leesrechten in een samenvatting",
+     "Copilot wordt geblokkeerd en verwerkt de inhoud niet"
+    ],
+    "a": 3,
+    "why": "Copilot verwerkt de inhoud alleen als de gebruiker zowel lees- als extractierechten heeft; anders wordt Copilot geblokkeerd."
+   },
+   {
+    "q": "Welke rol heeft Purview binnen de drie technische onderdelen Beheercentrum, Purview en Defender?",
+    "opts": [
+     "Het beheert licentietoewijzingen en tenantinstellingen van Copilot",
+     "Het zorgt voor runtime-handhaving op apparaten en endpoint-DLP",
+     "Het classificeert en labelt data, handhaaft retentie en legt acties vast",
+     "Het schakelt plug-ins in en blokkeert het plakken in externe AI-tools"
+    ],
+    "a": 2,
+    "why": "Purview is de douanecontrole: het classificeert, labelt, inspecteert, handhaaft retentie, past DLP toe en legt acties vast in auditlogboeken."
    }
   ]
  },
@@ -462,6 +646,52 @@
      }
     ]
    }
+  ],
+  "quiz": [
+   {
+    "q": "Co według artykułu dzieje się z zapytaniami i odpowiedziami Copilota w kontekście modeli bazowych Microsoftu?",
+    "opts": [
+     "Nie służą do zasilania modeli bazowych Microsoftu",
+     "Są używane do trenowania modeli bazowych po anonimizacji",
+     "Trafiają do szkolenia modeli tylko w regionach poza UE",
+     "Służą do trenowania modeli, jeśli administrator wyrazi zgodę"
+    ],
+    "a": 0,
+    "why": "Warunki produktów i DPA stanowią, że zapytania, odpowiedzi i dane z Microsoft Graph nie zasilają modeli bazowych Microsoftu."
+   },
+   {
+    "q": "Co zmienia przypisanie licencji Copilot użytkownikowi w kwestii dostępu do danych?",
+    "opts": [
+     "Daje dostęp do prywatnych folderów kadry zarządzającej",
+     "Rozszerza uprawnienia użytkownika na całą zawartość tenanta",
+     "Aktywuje funkcję, ale nie rozszerza uprawnień do danych",
+     "Pozwala też gościom z innych tenantów korzystać z Copilota"
+    ],
+    "a": 2,
+    "why": "Licencja aktywuje Copilota, ale dane są widoczne tylko w zakresie istniejących uprawnień egzekwowanych przez tożsamość i RBAC."
+   },
+   {
+    "q": "Które zapytania nie są objęte gwarancjami granicy danych UE dla klientów z UE?",
+    "opts": [
+     "Prompty zapisane w dziennikach aktywności Copilota",
+     "Zapytania wyszukiwania w sieci Bing",
+     "Zapytania do dokumentów w SharePoint",
+     "Odpowiedzi generowane na podstawie e-maili w Outlooku"
+    ],
+    "a": 1,
+    "why": "Zapytania wyszukiwania w sieci Bing nie podlegają gwarancjom granicy danych UE i mają odrębną politykę przetwarzania."
+   },
+   {
+    "q": "Jaką rolę w opisanym systemie zgodności pełni Microsoft Defender for Endpoint?",
+    "opts": [
+     "Klasyfikuje i etykietuje treści przepływające przez Microsoft Graph",
+     "Przypisuje licencje i włącza wtyczki na poziomie tenanta",
+     "Rejestruje działania w dziennikach kontroli i wymusza retencję",
+     "Jest ramieniem wykonawczym wymuszającym reguły w czasie rzeczywistym"
+    ],
+    "a": 3,
+    "why": "Defender zapewnia wymuszanie w czasie rzeczywistym, alerty i DLP punktów końcowych, blokując ryzykowne działania i wstrzymując treści Copilota."
+   }
   ]
  },
  "id": {
@@ -550,6 +780,52 @@
      "Tegakkan aturan lewat sistem, bukan hanya memo dan kampanye kesadaran",
      "Jangan langsung menyalahkan Copilot saat keluaran terpotong; cek kebijakan keamanan"
     ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Menurut ketentuan produk dan DPA, apa yang terjadi pada perintah, respons, dan data Microsoft Graph yang dipakai Copilot?",
+    "opts": [
+     "Disimpan lalu dipakai secara berkala untuk melatih model dasar Microsoft",
+     "Tidak dimasukkan kembali ke model dasar Microsoft",
+     "Dibagikan kepada pelanggan lain untuk meningkatkan kualitas jawaban",
+     "Dipakai melatih model hanya jika pelanggan berada di luar UE"
+    ],
+    "a": 1,
+    "why": "Ketentuan produk dan DPA menyatakan prompt, respons, dan data Graph tidak dimasukkan kembali ke model dasar, sehingga email tidak menjadi bahan latihan AI."
+   },
+   {
+    "q": "Apa yang terjadi ketika seseorang memiliki lisensi Copilot tetapi tidak punya akses ke folder pribadi CFO?",
+    "opts": [
+     "Copilot tetap dapat menampilkan isi folder itu dalam ringkasan",
+     "Lisensi otomatis memberinya akses baca sementara ke folder tersebut",
+     "Ia tidak bisa membukanya, karena lisensi tidak memperluas izin akses",
+     "Copilot meminta persetujuan CFO sebelum menampilkan isi folder"
+    ],
+    "a": 2,
+    "why": "Lisensi hanya mengaktifkan fitur. Copilot hanya menampilkan data yang sudah boleh dilihat pengguna melalui Microsoft Graph."
+   },
+   {
+    "q": "Bagaimana status kueri penelusuran web Copilot ke Bing terhadap jaminan batas data UE?",
+    "opts": [
+     "Seluruhnya dijamin tetap berada di dalam batas data UE",
+     "Dijamin hanya jika label sensitivitas diterapkan pada kueri",
+     "Dijamin karena Purview mengenkripsi semua kueri web secara otomatis",
+     "Tidak termasuk jaminan dan mengikuti kebijakan penanganan data yang terpisah"
+    ],
+    "a": 3,
+    "why": "Kueri penelusuran web ke Bing tidak termasuk dalam jaminan batas data UE dan mengikuti kebijakan penanganan data tersendiri."
+   },
+   {
+    "q": "Mengapa kebijakan DLP di Purview lebih efektif daripada instruksi \"jangan bagikan file sensitif dengan Copilot\"?",
+    "opts": [
+     "Sistem mencegah tindakan terlarang sehingga tidak bergantung pada kepatuhan karyawan",
+     "Kebijakan DLP menggantikan kebutuhan akan label sensitivitas dan retensi",
+     "Kebijakan DLP hanya berlaku bagi pengguna yang tidak memiliki lisensi Copilot",
+     "Instruksi tertulis dilarang oleh ketentuan produk Microsoft dan DPA"
+    ],
+    "a": 0,
+    "why": "DLP yang menargetkan Copilot membuatnya tidak bisa memproses file sangat rahasia siapa pun penggunanya, sedangkan instruksi tanpa penegakan tidak punya daya cegah."
    }
   ]
  },
@@ -650,6 +926,52 @@
      ]
     }
    }
+  ],
+  "quiz": [
+   {
+    "q": "Что происходит с запросами, ответами и данными Microsoft Graph, которые использует Copilot, согласно условиям использования и DPA?",
+    "opts": [
+     "Они используются для дообучения базовых моделей Microsoft",
+     "Они не передаются обратно для обучения базовых моделей Microsoft",
+     "Они передаются партнёрам Microsoft для анализа качества",
+     "Они используются для обучения моделей только при согласии администратора"
+    ],
+    "a": 1,
+    "why": "Условия использования и DPA прямо закрепляют, что запросы, ответы и данные Graph не используются для обучения базовых моделей."
+   },
+   {
+    "q": "Что произойдёт, если выдать лицензии Copilot всем сотрудникам, не проверяя роли и права доступа?",
+    "opts": [
+     "Все пользователи автоматически получат права глобального администратора",
+     "Copilot заблокирует поиск по всем документам организации",
+     "Пользователи смогут находить всё, к чему у них уже есть доступ, включая случайно открытые файлы",
+     "Лицензии не сработают без предварительной проверки ролей"
+    ],
+    "a": 2,
+    "why": "Лицензия не расширяет права, но Copilot покажет всё доступное пользователю, в том числе случайно открытые конфиденциальные документы."
+   },
+   {
+    "q": "Какую роль в связке инструментов Copilot играет Microsoft Purview?",
+    "opts": [
+     "Назначает лицензии и включает плагины на уровне арендатора",
+     "Блокирует вставку данных в сторонние ИИ-инструменты на устройствах",
+     "Управляет только многофакторной аутентификацией и условным доступом",
+     "Работает как таможня: классифицирует, помечает, проверяет, применяет хранение и DLP"
+    ],
+    "a": 3,
+    "why": "Purview классифицирует и помечает данные, применяет политики хранения и DLP, выявляет риски через DSPM для ИИ и ведёт аудит."
+   },
+   {
+    "q": "Почему одной бумажной директивы «Используйте Copilot ответственно» недостаточно для защиты данных?",
+    "opts": [
+     "Такие директивы юридически запрещены в странах ЕС",
+     "Управление должно быть прописано в системах, а не зависеть от памяти сотрудников",
+     "Copilot игнорирует любые письменные директивы руководства компании",
+     "Директивы работают только при наличии лицензий Defender"
+    ],
+    "a": 1,
+    "why": "Бумажные политики хрупки; работает управление, закреплённое в инструментах вроде Purview DLP, независимо от поведения пользователей."
+   }
   ]
  },
  "uk": {
@@ -747,6 +1069,52 @@
       "text": "Мітка конфіденційності й захист автоматично переносяться на документи, створені Copilot."
      }
     ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Що, згідно зі статтею, відбувається з запитами й відповідями Copilot та даними Microsoft Graph щодо базових моделей?",
+    "opts": [
+     "Вони не повертаються в базові моделі, що закріплено в умовах продукту та DPA",
+     "Вони використовуються для донавчання базових моделей, якщо клієнт не вимкнув цю опцію",
+     "Вони передаються в базові моделі лише для клієнтів поза межами ЄС",
+     "Вони потрапляють у навчання моделей після 90 днів зберігання"
+    ],
+    "a": 0,
+    "why": "Контракт (умови продукту та DPA) прямо визначає, що запити, відповіді й дані Graph не повертаються в базові моделі."
+   },
+   {
+    "q": "Що відбувається, якщо роздати ліцензії Copilot усім без перевірки RBAC?",
+    "opts": [
+     "Copilot автоматично обмежує доступ до всіх чутливих документів",
+     "Користувачі отримують права глобального адміністратора в тенанті",
+     "Користувачі можуть знаходити все, до чого вже мають доступ, зокрема випадково відкриті чутливі документи",
+     "Гостьові облікові записи між орендарями отримують доступ до Copilot"
+    ],
+    "a": 2,
+    "why": "Ліцензія не розширює права, але Copilot робить видимим усе, що вже доступне, тож надмірні права спричиняють витік."
+   },
+   {
+    "q": "Яку роль виконує Microsoft Purview у зв'язці трьох інструментів керування Copilot?",
+    "opts": [
+     "Призначає ліцензії та вмикає плагіни на рівні тенанта",
+     "Працює як митниця: класифікує, позначає, перевіряє, застосовує DLP і веде аудит",
+     "Блокує вставку конфіденційних даних у сторонні інструменти на кінцевих точках",
+     "Задає канали оновлень і базові умови для орендаря"
+    ],
+    "a": 1,
+    "why": "Purview класифікує й позначає дані, застосовує зберігання та DLP, виявляє ризики через DSPM і веде аудиторські журнали."
+   },
+   {
+    "q": "Чому, за статтею, політика DLP у Purview надійніша за інструкцію «Не надавайте Copilot доступ до конфіденційних файлів»?",
+    "opts": [
+     "Вона замінює потребу в міжфункціональній раді з ШІ",
+     "Вона навчає працівників правильно позначати кожен документ",
+     "Вона дозволяє Copilot обробляти файли, якщо користувач ввічливо попросить",
+     "Вона вбудована в систему, тому Copilot не зможе обробити суворо конфіденційний файл"
+    ],
+    "a": 3,
+    "why": "Правило в системі працює як відмова, зашита в інструменти, а не як рекомендація, що залежить від дисципліни працівників."
    }
   ]
  },
@@ -846,6 +1214,52 @@
      }
     ]
    }
+  ],
+  "quiz": [
+   {
+    "q": "ما الذي يحدث لبيانات الشركة مثل المطالبات والاستجابات وبيانات Microsoft Graph بحسب شروط المنتج وملحق حماية البيانات؟",
+    "opts": [
+     "تُستخدم لتدريب النماذج الأساسية لمايكروسوفت بعد إخفاء هوية أصحابها",
+     "لا تُغذّى في النماذج الأساسية لمايكروسوفت ولا تُستخدم لتدريبها",
+     "تُستخدم للتدريب فقط إذا وافق المسؤول على ذلك في مركز الإدارة",
+     "تُستخدم لتدريب النماذج فقط عندما تكون الشركة خارج الاتحاد الأوروبي"
+    ],
+    "a": 1,
+    "why": "المطالبات والاستجابات وبيانات Microsoft Graph لا تُغذّى في النماذج الأساسية، وهذا منصوص عليه في شروط المنتج وDPA."
+   },
+   {
+    "q": "ماذا يحدث عند منح ترخيص Copilot لمستخدم لديه صلاحيات مفرطة في الوصول؟",
+    "opts": [
+     "يعرض Copilot كل مستندات المستأجر بغض النظر عن أذونات المستخدم",
+     "يمنح الترخيص المستخدم صلاحيات مسؤول عام تلقائياً داخل المستأجر",
+     "يعرض Copilot ما يملك المستخدم إذن الوصول إليه، بما فيه المحتوى المكشوف خطأً",
+     "يتجاهل Copilot المحتوى المشترك مع مجموعة «الجميع» دائماً"
+    ],
+    "a": 2,
+    "why": "الترخيص يفعّل الميزات فقط، وCopilot يعكس الأذونات القائمة، فيكشف المحتوى المتاح للمستخدم خطأً."
+   },
+   {
+    "q": "أي مما يلي صحيح بشأن استعلامات البحث في الويب عبر Bing؟",
+    "opts": [
+     "تتبع سياسة معالجة منفصلة وغير مشمولة بضمانات حدود بيانات الاتحاد الأوروبي",
+     "تُخزَّن داخل نطاق Microsoft 365 ويديرها Purview مثل المطالبات",
+     "تخضع لضمانات حدود بيانات الاتحاد الأوروبي نفسها كبقية استعلامات Copilot",
+     "تُحظر تلقائياً على جميع عملاء الاتحاد الأوروبي دون أي إعداد"
+    ],
+    "a": 0,
+    "why": "استعلامات Bing للبحث في الويب غير مشمولة بضمانات حدود بيانات الاتحاد الأوروبي وتتبع سياسة معالجة منفصلة."
+   },
+   {
+    "q": "ما أفضل طريقة لمنع Copilot من تلخيص ملف سري للغاية بحسب الحوكمة الفعالة؟",
+    "opts": [
+     "إرسال تعليمات مكتوبة للموظفين تطلب منهم عدم مشاركة الملفات الحساسة",
+     "الاعتماد على حملات توعية دورية تذكّر الموظفين بالقواعد",
+     "إعطاء التراخيص للجميع بالتساوي حتى يتحقق مبدأ العدالة",
+     "تهيئة سياسة DLP في Purview تستهدف موقع تجربة Microsoft Copilot"
+    ],
+    "a": 3,
+    "why": "سياسة DLP في Purview تفرض المنع تقنياً مهما كانت صياغة الموظف، بخلاف السياسات الورقية التي تفشل غالباً."
+   }
   ]
  },
  "he": {
@@ -940,6 +1354,52 @@
      }
     ]
    }
+  ],
+  "quiz": [
+   {
+    "q": "מה קובע החוזה בנוגע לשימוש של מיקרוסופט בהנחיות, בתשובות ובנתוני Microsoft Graph של הארגון?",
+    "opts": [
+     "הם משמשים לאימון מודלי הבסיס של מיקרוסופט, אלא אם הארגון ביטל זאת",
+     "הם לא מוזנים בחזרה למודלי הבסיס של מיקרוסופט",
+     "הם משמשים לאימון מודלים רק עבור לקוחות מחוץ לאיחוד האירופי",
+     "הם מוזנים למודלים רק לאחר הסרת פרטים מזהים מהם"
+    ],
+    "a": 1,
+    "why": "תנאי המוצר ונספח ה-DPA קובעים במפורש שהנתונים, ההנחיות והתשובות אינם משמשים לאימון מודלי הבסיס."
+   },
+   {
+    "q": "מה ההבחנה המרכזית בין רישיון Copilot להרשאות המשתמש?",
+    "opts": [
+     "הרישיון מעניק למשתמש גישה לכל התיקיות בארגון, כולל תיקיות הנהלה",
+     "הרישיון מחליף את הצורך בהגדרות RBAC ובזהות ה-tenant",
+     "הרישיון מאפשר תכונות, ו-Copilot מציג רק נתונים שהמשתמש כבר מורשה לראות",
+     "הרישיון מרחיב אוטומטית הרשאות לחשבונות אורח חוצי דיירים"
+    ],
+    "a": 2,
+    "why": "הרישיון נותן פונקציונליות בלבד. ההרשאות נקבעות על ידי זהות ה-tenant והגדרות RBAC, ו-Copilot משקף אותן."
+   },
+   {
+    "q": "מה קורה כש-Copilot יוצר מצגת חדשה על בסיס קובץ שמסומן בתווית רגישות?",
+    "opts": [
+     "התווית וההגנות עוברות בירושה אוטומטית למצגת החדשה",
+     "המצגת החדשה נשארת ללא תווית עד שהמשתמש יתייג אותה ידנית",
+     "Copilot חוסם יצירת מצגות מכל קובץ שמסומן בתווית",
+     "ההגנות עוברות רק אם מנהל המערכת אישר זאת מראש"
+    ],
+    "a": 0,
+    "why": "תוויות רגישות עוברות בירושה, כך שאין צורך להסתמך על כך שהמשתמשים יזכרו לתייג מסמכים נגזרים."
+   },
+   {
+    "q": "מה נכון לגבי שאילתות חיפוש באינטרנט דרך Bing עבור לקוחות באיחוד האירופי?",
+    "opts": [
+     "הן מוגנות על ידי גבול הנתונים האירופי כמו שאר עיבוד הנתונים של Copilot",
+     "הן חסומות כברירת מחדל בכל ארגון באיחוד האירופי",
+     "הן מעובדות רק בתוך ה-tenant ונמחקות מיד לאחר התשובה",
+     "הן אינן כלולות בערבויות הגבול האירופי ופועלות לפי מדיניות נפרדת לטיפול בנתונים"
+    ],
+    "a": 3,
+    "why": "חיפוש באינטרנט דרך Bing אינו חלק מערבויות גבול הנתונים האירופי, ולכן לא כל הנתונים מוגנים במידה שווה."
+   }
   ]
  },
  "ja": {
@@ -1033,6 +1493,52 @@
       "6ヶ月後も情報漏洩は起きなかった"
      ]
     }
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Microsoft 365 Copilotがユーザーに提示するデータの範囲について、正しい説明はどれですか?",
+    "opts": [
+     "ライセンスを割り当てると、テナント内のすべてのデータが閲覧可能になる",
+     "Microsoft Graph経由で、ユーザーがすでに閲覧権限を持つデータだけを提示する",
+     "管理者権限を持つ場合に限り、他部門の非公開フォルダーも表示する",
+     "AIが関連性を判断し、権限に関係なく重要な資料を優先して表示する"
+    ],
+    "a": 1,
+    "why": "Copilotは権限を無視せずそのまま反映します。ライセンスは機能を有効にするだけで、アクセス権は広がりません。"
+   },
+   {
+    "q": "Copilotで使われるプロンプト、応答、Microsoft Graphのデータの学習利用について、契約上の扱いはどれですか?",
+    "opts": [
+     "匿名化したうえで、Microsoftの基盤モデルの学習に利用される",
+     "利用者が同意した場合に限り、モデル学習へフィードバックされる",
+     "EU域外の顧客のデータだけが、モデル学習に利用される",
+     "Microsoftの基盤モデルの学習にはフィードバックされない"
+    ],
+    "a": 3,
+    "why": "製品条項とDPAの両方で、これらのデータは基盤モデルの学習に使われないと正式に定められています。"
+   },
+   {
+    "q": "機密データをサードパーティ製AIツールに貼り付ける操作をブロックする、実行時の強制を担うのはどれですか?",
+    "opts": [
+     "Microsoft Defender for Endpointが提供するエンドポイントDLP",
+     "Microsoft 365管理センターのライセンス割り当て機能",
+     "Purviewのコンテンツ検索と電子情報開示の機能",
+     "Entraのグループ単位ライセンス割り当ての機能"
+    ],
+    "a": 0,
+    "why": "DefenderのエンドポイントDLPが貼り付け操作をブロックし、ルールに該当するCopilotの出力も止めます。"
+   },
+   {
+    "q": "機密ラベル付きファイルをもとにCopilotが新しいスライドを作成した場合、ラベルはどうなりますか?",
+    "opts": [
+     "作成者が手動で付け直さない限り、ラベルは付かない",
+     "ラベルは外れるが、保持ポリシーだけが引き継がれる",
+     "ラベルと保護設定が自動的に引き継がれる",
+     "管理者が承認した後にだけ、ラベルが適用される"
+    ],
+    "a": 2,
+    "why": "秘密度ラベルは継承されるため、派生文書にもラベルと保護設定が自動で引き継がれ、人の記憶力に頼る必要がありません。"
    }
   ]
  },
@@ -1132,6 +1638,52 @@
      }
     ]
    }
+  ],
+  "quiz": [
+   {
+    "q": "Copilot이 사용하는 프롬프트, 응답, Microsoft Graph 데이터는 계약상 어떻게 취급됩니까?",
+    "opts": [
+     "Microsoft의 파운데이션 모델 학습에 다시 쓰이지 않는다",
+     "익명화한 뒤 파운데이션 모델 학습에 제한적으로 사용된다",
+     "고객이 동의하면 모델 학습에 쓰이고 미동의 시 삭제된다",
+     "EU 밖의 데이터만 모델 학습에 재사용될 수 있다"
+    ],
+    "a": 0,
+    "why": "제품 약관과 DPA 모두 프롬프트, 응답, Graph 데이터를 Microsoft 파운데이션 모델 학습에 재사용하지 않는다고 명시합니다."
+   },
+   {
+    "q": "Copilot 라이선스를 조직 전체에 배포했을 때 사용자가 볼 수 있는 범위는 어디까지입니까?",
+    "opts": [
+     "라이선스를 받으면 모든 부서의 비공개 폴더까지 열람할 수 있다",
+     "관리자 승인을 받은 폴더만 Copilot이 열람할 수 있다",
+     "사용자가 Microsoft Graph로 이미 접근 권한을 가진 데이터만 볼 수 있다",
+     "글로벌 관리자 역할이 자동으로 부여되어 모든 데이터를 볼 수 있다"
+    ],
+    "a": 2,
+    "why": "라이선스는 기능만 활성화하며 접근 권한을 넓히지 않습니다. Copilot은 사용자가 이미 접근 가능한 데이터만 보여줍니다."
+   },
+   {
+    "q": "민감도 레이블이 암호화를 강제하거나 데이터 추출 권한을 요구할 때 Copilot은 어떻게 동작합니까?",
+    "opts": [
+     "레이블이 있는 콘텐츠는 보기 권한만 있어도 항상 처리한다",
+     "사용자가 보기와 추출 권한을 모두 가진 경우에만 콘텐츠를 처리한다",
+     "레이블은 새로 만든 슬라이드 덱에는 상속되지 않는다",
+     "관리자가 수동으로 레이블을 붙인 파일만 보호 대상이 된다"
+    ],
+    "a": 1,
+    "why": "보기와 추출 권한이 모두 있어야 처리하며, 레이블은 Copilot이 만든 파생 문서에도 자동으로 상속됩니다."
+   },
+   {
+    "q": "Purview에서 Microsoft Copilot 환경의 위치를 대상으로 하는 DLP 정책을 구성하면 어떤 결과가 나옵니까?",
+    "opts": [
+     "사용자에게 경고 메시지만 표시되고 처리는 계속된다",
+     "Copilot의 모든 프롬프트가 자동으로 삭제된다",
+     "Copilot 라이선스가 모든 사용자에게서 회수된다",
+     "Copilot이 기밀 파일을 요약하거나 처리하지 못한다"
+    ],
+    "a": 3,
+    "why": "DLP 정책은 지침이 아닌 기술적 강제로 작동하여 Copilot이 기밀 파일을 요약하거나 처리하지 못하게 합니다."
+   }
   ]
  },
  "de": {
@@ -1225,6 +1777,52 @@
       "text": "Ohne Purview-Labels fließen Inhalte unklassifiziert, ohne Defender schlüpfen Verstöße durch."
      }
     ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Was bewirkt eine Microsoft-Copilot-Lizenz in Bezug auf Zugriffsrechte?",
+    "opts": [
+     "Sie gewährt Zugriff auf alle Daten im gesamten Tenant",
+     "Sie aktiviert die Funktionen, erweitert aber keine bestehenden Berechtigungen",
+     "Sie ersetzt die rollenbasierte Zugriffskontrolle (RBAC) vollständig",
+     "Sie gibt automatisch alle SharePoint-Bibliotheken für Copilot frei"
+    ],
+    "a": 1,
+    "why": "Die Lizenz erlaubt die Nutzung von Copilot. Worauf jemand zugreifen kann, bestimmen weiterhin Berechtigungen und RBAC."
+   },
+   {
+    "q": "Was gilt laut Artikel für Prompts, Antworten und genutzte Graph-Daten?",
+    "opts": [
+     "Sie werden zum Training der Basismodelle von Microsoft verwendet",
+     "Sie fließen nur bei Nutzern außerhalb der EU ins Training ein",
+     "Sie fließen nicht in die Basismodelle von Microsoft zurück",
+     "Sie werden nach Zustimmung im Admin-Center für das Training freigegeben"
+    ],
+    "a": 2,
+    "why": "Produktbedingungen und DPA schreiben fest, dass Prompts, Antworten und Microsoft-Graph-Daten nicht in die Basismodelle zurückfließen."
+   },
+   {
+    "q": "Welche Anfragen sind von den EU-Datengarantien ausgenommen?",
+    "opts": [
+     "Prompts, die Vertraulichkeitsbezeichnungen enthalten",
+     "Aktivitätsprotokolle von Copilot",
+     "Antworten auf Basis von SharePoint-Dokumenten",
+     "Web-Suchanfragen an Bing"
+    ],
+    "a": 3,
+    "why": "Der Artikel nennt ausdrücklich, dass Bing-Websuchen nicht unter die EU-Datengarantien fallen."
+   },
+   {
+    "q": "Welche Rolle hat Purview im Zusammenspiel der technischen Kontrollen?",
+    "opts": [
+     "Es klassifiziert, kennzeichnet und prüft Inhalte und erzwingt Aufbewahrung sowie DLP",
+     "Es verwaltet ausschließlich Lizenzzuweisungen auf Mandantenebene",
+     "Es bietet Laufzeitüberwachung und Endpoint-DLP auf allen Geräten",
+     "Es ersetzt Multifaktor-Authentifizierung und bedingten Zugriff auf Identitätsebene"
+    ],
+    "a": 0,
+    "why": "Purview gilt als Zollkontrolle: Klassifizierung, Kennzeichnung, Aufbewahrung, DLP, DSPM für KI und Audit-Protokolle."
    }
   ]
  },
@@ -1324,6 +1922,52 @@
      }
     ]
    }
+  ],
+  "quiz": [
+   {
+    "q": "¿Qué ocurre con las indicaciones, respuestas y datos de Microsoft Graph que usa Copilot, según los términos del producto y el DPA?",
+    "opts": [
+     "Se incorporan a los modelos fundacionales de Microsoft tras anonimizarse",
+     "No se incorporan a los modelos fundacionales de Microsoft",
+     "Se incorporan solo si el administrador activa esa opción",
+     "Se comparten con terceros para mejorar los resultados de búsqueda"
+    ],
+    "a": 1,
+    "why": "El contrato ya resuelve el temor habitual: esos datos no se usan para entrenar los modelos fundacionales de Microsoft."
+   },
+   {
+    "q": "¿Qué sucede cuando una etiqueta de confidencialidad aplica cifrado o exige derechos de uso de extracción?",
+    "opts": [
+     "Copilot procesa el contenido si el usuario tiene licencia de Copilot",
+     "Copilot procesa el contenido siempre, pero sin mostrar citas",
+     "Copilot solo lo procesa si el usuario tiene permisos de visualización y extracción",
+     "Copilot lo procesa únicamente si el usuario es administrador del inquilino"
+    ],
+    "a": 2,
+    "why": "Sin permisos de visualización y extracción, Copilot bloquea el contenido protegido por la etiqueta de confidencialidad."
+   },
+   {
+    "q": "¿Qué función cumple Microsoft Defender para Endpoint dentro del conjunto de controles técnicos?",
+    "opts": [
+     "Gestiona las asignaciones de licencias y la habilitación de plugins",
+     "Clasifica y etiqueta el contenido que fluye por Microsoft Graph",
+     "Genera los registros de auditoría unificados y las directivas de retención",
+     "Aporta cumplimiento en tiempo de ejecución, alertas y DLP de punto final"
+    ],
+    "a": 3,
+    "why": "Defender aporta cumplimiento en tiempo de ejecución, alertas y DLP de punto final, bloqueando acciones de riesgo como pegar datos en IA de terceros."
+   },
+   {
+    "q": "¿Qué advertencia hace el artículo sobre las búsquedas web realizadas a través de Bing?",
+    "opts": [
+     "No están cubiertas por las garantías de la UE y siguen otra política de datos",
+     "Quedan restringidas siempre al límite de datos europeo para clientes de la UE",
+     "Se almacenan únicamente en el índice semántico del inquilino",
+     "Solo pueden realizarse con licencias adicionales de Purview"
+    ],
+    "a": 0,
+    "why": "Las búsquedas web vía Bing quedan fuera de las garantías de la UE y tienen una política de manejo de datos distinta."
+   }
   ]
  },
  "hi": {
@@ -1422,6 +2066,52 @@
       "text": "समूह आधारित लाइसेंस कुशल है, पर सदस्यताओं का ऑडिट ज़रूरी है।"
      }
     ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Microsoft Copilot के अनुबंध के अनुसार Microsoft Graph के prompts और responses का क्या होता है?",
+    "opts": [
+     "वे Copilot के foundation model को ट्रेन करने में इस्तेमाल होते हैं",
+     "वे Copilot के foundation model को ट्रेन नहीं करते",
+     "वे केवल EU के बाहर के ग्राहकों के मॉडल को ट्रेन करते हैं",
+     "वे ग्राहक की सहमति मिलने पर ही मॉडल को ट्रेन करते हैं"
+    ],
+    "a": 1,
+    "why": "Product terms और DPA दोनों में दर्ज है कि Graph के prompts और responses Copilot का foundation model ट्रेन नहीं करते।"
+   },
+   {
+    "q": "EU data boundary और Copilot के संदर्भ में Bing पर होने वाली वेब खोज क्वेरी के बारे में क्या सही है?",
+    "opts": [
+     "वे EU data guarantee में शामिल हैं और उसी तरह रूट होती हैं",
+     "उन्हें Purview अपने आप EU के भीतर रोक कर रखता है",
+     "वे EU data guarantee में शामिल नहीं हैं और अलग नीति का पालन करती हैं",
+     "वे केवल DPA के उप-प्रक्रियाकर्ताओं द्वारा संभाली जाती हैं"
+    ],
+    "a": 2,
+    "why": "Bing की वेब खोज क्वेरी EU data guarantee से बाहर हैं और पूरी तरह अलग data handling नीति पर चलती हैं।"
+   },
+   {
+    "q": "Copilot लाइसेंस और RBAC के संबंध के बारे में लेख क्या कहता है?",
+    "opts": [
+     "लाइसेंस मिलते ही उपयोगकर्ता को पूरे tenant का डेटा दिखने लगता है",
+     "Copilot लाइसेंस cross-tenant guest account को भी आसानी से दिए जा सकते हैं",
+     "RBAC की जगह लाइसेंस ही तय करता है कि कौन-सी फ़ाइलें खुलेंगी",
+     "लाइसेंस सुविधाएँ सक्षम करता है, पर Copilot वही दिखाता है जिसकी अनुमति उपयोगकर्ता के पास है"
+    ],
+    "a": 3,
+    "why": "लाइसेंस केवल क्षमता देता है; पहुँच की सीमा tenant की पहचान और RBAC सेटिंग्स से तय होती है।"
+   },
+   {
+    "q": "संवेदनशील फ़ाइलों को Copilot से दूर रखने का लेख में सुझाया गया सबसे प्रभावी तरीका कौन-सा है?",
+    "opts": [
+     "Purview में Copilot को लक्षित करने वाली DLP नीति configure करना",
+     "कर्मचारियों को निर्देश भेजना कि संवेदनशील फ़ाइलें साझा न करें",
+     "टाउन हॉल करके governance नीति सबको समझाना",
+     "जागरूकता अभियान चलाकर कर्मचारियों से सहमति लेना"
+    ],
+    "a": 0,
+    "why": "DLP नीति अवांछित काम को तकनीकी रूप से असंभव बनाती है, जबकि केवल निर्देश या अभियान कमज़ोर रोक हैं।"
    }
   ]
  }

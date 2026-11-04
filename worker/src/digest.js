@@ -2,6 +2,7 @@
 import { sendPush } from "./push.js";
 import { esc } from "./util.js";
 import { closeMonth } from "./badges.js";
+import { sendMail } from "./mailer.js";
 
 const LANG_NAME = { de: "Deutsch", es: "Español", fr: "Français", it: "Italiano", pt: "Português", nl: "Nederlands", pl: "Polski", id: "Bahasa Indonesia", ru: "Русский", uk: "Українська", ar: "العربية", he: "עברית", hi: "हिन्दी", ja: "日本語", ko: "한국어", ml: "മലയാളം", pa: "ਪੰਜਾਬੀ", ta: "தமிழ்", te: "తెలుగు" };
 const clean = (t) => String(t).replace(/\s*\((KI|AI)[^)]*\)\s*$/i, "").replace(/\s*[（(][^()（）]*[)）]\s*$/, "").trim();
@@ -9,16 +10,6 @@ const clean = (t) => String(t).replace(/\s*\((KI|AI)[^)]*\)\s*$/i, "").replace(/
 async function pool(items, n, fn) {
   let i = 0;
   await Promise.all(Array.from({ length: Math.min(n, items.length) }, async () => { while (i < items.length) { const it = items[i++]; try { await fn(it); } catch (e) { console.log("fehler", String(e).slice(0, 120)); } } }));
-}
-
-export async function sendMail(env, to, subject, html, unsubUrl) {
-  if (!env.RESEND_API_KEY) return { ok: false, status: 0 };
-  const r = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: { authorization: `Bearer ${env.RESEND_API_KEY}`, "content-type": "application/json" },
-    body: JSON.stringify({ from: env.MAIL_FROM, to, subject, html, headers: unsubUrl ? { "List-Unsubscribe": `<${unsubUrl}>`, "List-Unsubscribe-Post": "List-Unsubscribe=One-Click" } : {} }),
-  });
-  return { ok: r.ok, status: r.status };
 }
 
 export async function runDigest(env, { dry = false } = {}) {
@@ -58,7 +49,7 @@ export async function runDigest(env, { dry = false } = {}) {
     await pool(mails, 4, async (m) => {
       const un = `${env.API}/api/email/unsub?token=${encodeURIComponent(m.token)}&lang=${lang}`;
       const html = `<div style="font-family:Arial,sans-serif;max-width:560px;margin:auto;color:#17191c"><h2 style="margin:0 0 4px">M365.FM · ${esc(LANG_NAME[lang] || lang)}</h2><p style="color:#5d6470;margin:0 0 18px">${list.length} ${list.length === 1 ? "new episode" : "new episodes"}</p><ul style="padding-left:18px">${items}</ul><p><a href="${env.SITE}/${lang}/" style="color:#3b6391">${env.SITE.replace("https://", "")}/${lang}/</a></p><hr style="border:0;border-top:1px solid #ddd"><p style="font-size:12px;color:#777">Mirko Peters · M365.FM, Julius-Hölder-Str 60, 70597 Stuttgart · <a href="${un}" style="color:#777">Unsubscribe</a></p></div>`;
-      const r = await sendMail(env, m.email, `${clean(first.title)}${list.length > 1 ? ` (+${list.length - 1})` : ""}`, html, un);
+      const r = await sendMail(env, { to: m.email, subject: `${clean(first.title)}${list.length > 1 ? ` (+${list.length - 1})` : ""}`, html, headers: { "List-Unsubscribe": `<${un}>`, "List-Unsubscribe-Post": "List-Unsubscribe=One-Click" } });
       if (r.ok) res.mail++;
     });
   }
