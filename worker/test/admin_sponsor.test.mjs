@@ -296,9 +296,15 @@ test("admin: Publisher-Anfragen-Meldungen zeigen Publisher und Antwort, Schliess
   const item = root.all("li").find((x) => x.textContent.includes("Publisher Name"));
   assert.match(item.textContent, /Publisher Name \(#2\)/);
   assert.match(item.textContent, /Gemeldete Antwort \(.+\): Gemeldete Antwort/);
-  root.all("button").find((x) => x.textContent === "Anfrage schließen").fire("click");
+  assert.match(item.textContent, /#1\)/, "Admin sieht die ID der gemeldeten Person");
+  root.all("button").find((x) => x.textContent === "Antwort entfernen").fire("click");
+  await until(() => !raw.prepare("SELECT 1 x FROM expert_request_replies WHERE id=?").get(replyId), "Antwort entfernt");
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM expert_request_reports WHERE reply_id=?").get(replyId).n, 0);
+  assert.equal(raw.prepare("SELECT status FROM expert_requests WHERE id=?").get(requestId).status, "open", "Anfrage des Meldenden bleibt offen");
+  raw.prepare("INSERT INTO expert_request_reports(request_id,user_id,reply_id,reason,created) VALUES(?,1,0,'Spam',?)").run(requestId, t);
+  await bootAdmin(env, "#fr").then(async ({ root: r2 }) => { await until(() => r2.all("button").some((x) => x.textContent === "Anfrage schließen"), "Schliessen-Knopf"); r2.all("button").find((x) => x.textContent === "Anfrage schließen").fire("click"); });
   await until(() => raw.prepare("SELECT status FROM expert_requests WHERE id=?").get(requestId).status === "closed", "Anfrage geschlossen");
-  assert.equal(raw.prepare("SELECT action FROM audit WHERE target=?").get(String(requestId)).action, "expert_request_close");
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM audit WHERE target=? AND action='expert_request_close'").get(String(requestId)).n, 1);
   raw.close();
 }));
 

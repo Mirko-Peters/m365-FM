@@ -78,7 +78,7 @@ async function notifyExperts(env, request) {
 
 export async function deleteUserExpertRequests(db, userId) {
   await db.batch([
-    db.prepare("DELETE FROM expert_request_reports WHERE user_id=? OR request_id IN (SELECT id FROM expert_requests WHERE user_id=?)").bind(userId, userId),
+    db.prepare("DELETE FROM expert_request_reports WHERE user_id=? OR request_id IN (SELECT id FROM expert_requests WHERE user_id=?) OR reply_id IN (SELECT id FROM expert_request_replies WHERE user_id=?)").bind(userId, userId, userId),
     db.prepare("DELETE FROM expert_request_replies WHERE user_id=? OR request_id IN (SELECT id FROM expert_requests WHERE user_id=?)").bind(userId, userId),
     db.prepare("DELETE FROM expert_requests WHERE user_id=?").bind(userId),
   ]);
@@ -103,6 +103,16 @@ export async function handleExpertRequests(env, request, path, user, J) {
     const result = await db.prepare("UPDATE expert_requests SET status='closed' WHERE id=? AND status='open'").bind(id).run();
     if (!result.meta.changes) return J({ error: "not_found" }, 404);
     await audit(db, user.id, "expert_request_close", String(id));
+    return J({ ok: true });
+  }
+  if (path === "/api/admin/expert-requests/reply-delete" && method === "POST") {
+    if (!user?.admin) return J({ error: user ? "forbidden" : "login" }, user ? 403 : 401);
+    const b = await body(), id = Number(b.reply_id);
+    if (!Number.isSafeInteger(id) || id < 1) return J({ error: "not_found" }, 404);
+    await db.prepare("DELETE FROM expert_request_reports WHERE reply_id=?").bind(id).run();
+    const result = await db.prepare("DELETE FROM expert_request_replies WHERE id=?").bind(id).run();
+    if (!result.meta.changes) return J({ ok: true, gone: true });
+    await audit(db, user.id, "expert_reply_delete", String(id));
     return J({ ok: true });
   }
   if (!user) return J({ error: "login" }, 401);
@@ -175,7 +185,7 @@ export async function handleExpertRequests(env, request, path, user, J) {
     let item, reportReplyId = 0;
     if (Number.isSafeInteger(replyId) && replyId > 0) {
       item = await db.prepare(`SELECT r.* FROM expert_request_replies x JOIN expert_requests r ON r.id=x.request_id
-        WHERE x.id=? AND r.user_id=?`).bind(replyId, user.id).first();
+        WHERE x.id=? AND r.user_id=? AND r.status='open'`).bind(replyId, user.id).first();
       if (!item) return J({ error: "not_found" }, 404);
       reportReplyId = replyId;
     } else {
