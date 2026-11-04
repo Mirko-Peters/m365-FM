@@ -12,7 +12,7 @@ const b64u = (b) => Buffer.from(b).toString("base64url");
 // 0) Vorab-Prüfung: Zone m365.fm sichtbar? workers.dev-Subdomain vorhanden (sonst anlegen)?
 {
   const H = { Authorization: "Bearer " + process.env.CLOUDFLARE_API_TOKEN, "content-type": "application/json" }, A = process.env.CLOUDFLARE_ACCOUNT_ID;
-  const cf = async (p, o) => { try { const r = await fetch("https://api.cloudflare.com/client/v4" + p, { headers: H, ...o }); return await r.json(); } catch (e) { return { success: false, errors: [{ message: String(e) }] }; } };
+  const cf = async (p, o) => { try { const r = await fetch("https://api.cloudflare.com/client/v4" + p, { headers: H, ...o }); return { ...(await r.json()), status: r.status }; } catch (e) { return { success: false, status: 0, errors: [{ message: String(e) }] }; } };
   const z = await cf("/zones?name=m365.fm");
   console.log("Zone m365.fm:", z.success && z.result?.length ? "gefunden (" + z.result[0].id + ")" : "NICHT sichtbar " + JSON.stringify(z.errors || []));
   if (!(z.success && z.result?.length)) fail("Zone m365.fm nicht sichtbar: dem Token fehlt 'Zone > Zone > Read' fuer m365.fm (oder die Domain liegt in einem anderen Konto).");
@@ -24,6 +24,32 @@ const b64u = (b) => Buffer.from(b).toString("base64url");
     const put = await cf(`/accounts/${A}/workers/subdomain`, { method: "PUT", body: JSON.stringify({ subdomain: "m365fm-" + A.slice(0, 6) }) });
     console.log("workers.dev-Subdomain anlegen:", put.success ? "ok" : JSON.stringify(put.errors || []));
   } else console.log("workers.dev-Subdomain:", sd.result.subdomain);
+
+  const vectorize = `/accounts/${A}/vectorize/v2/indexes`;
+  let index = await cf(`${vectorize}/m365-search`);
+  if (!index.success && index.status === 404) {
+    index = await cf(vectorize, { method: "POST", body: JSON.stringify({ name: "m365-search", config: { dimensions: 1024, metric: "cosine" } }) });
+    if (!index.success) fail(`Vectorize-Index m365-search konnte nicht angelegt werden: ${JSON.stringify(index.errors || [])}. Dem Cloudflare-Token fehlt vermutlich „Vectorize Write“.`);
+    console.log("Vectorize-Index m365-search: angelegt");
+  } else if (!index.success) {
+    fail(`Vectorize-Index m365-search nicht lesbar: ${JSON.stringify(index.errors || [])}. Das Cloudflare-Token braucht „Vectorize Read“ und zum Anlegen „Vectorize Write“.`);
+  } else if (index.result?.config?.dimensions !== 1024 || index.result?.config?.metric !== "cosine") {
+    fail("Vectorize-Index m365-search hat eine abweichende Konfiguration; erwartet werden 1024 Dimensionen und cosine.");
+  } else console.log("Vectorize-Index m365-search: vorhanden");
+
+  const metadataPath = `${vectorize}/m365-search/metadata_index`;
+  const metadata = await cf(`${metadataPath}/list`);
+  if (!metadata.success) fail(`Vectorize-Metadatenindizes nicht lesbar: ${JSON.stringify(metadata.errors || [])}. Das Cloudflare-Token braucht „Vectorize Read“ und „Vectorize Write“.`);
+  const indexed = new Set((metadata.result?.metadataIndexes || []).map(({ propertyName }) => propertyName));
+  for (const propertyName of ["lang", "type"]) {
+    if (indexed.has(propertyName)) continue;
+    const created = await cf(`${metadataPath}/create`, {
+      method: "POST",
+      body: JSON.stringify({ propertyName, indexType: "string" }),
+    });
+    if (!created.success) fail(`Vectorize-Metadatenindex ${propertyName} konnte nicht angelegt werden: ${JSON.stringify(created.errors || [])}. Dem Cloudflare-Token fehlt vermutlich „Vectorize Write“.`);
+    console.log(`Vectorize-Metadatenindex ${propertyName}: angelegt`);
+  }
 }
 
 // 1) D1-Datenbank finden oder anlegen, ID in wrangler.toml eintragen

@@ -1,0 +1,4 @@
+CREATE TABLE IF NOT EXISTS search_vector (
+  id TEXT PRIMARY KEY,
+  h TEXT NOT NULL
+);

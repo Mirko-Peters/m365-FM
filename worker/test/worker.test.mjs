@@ -678,6 +678,82 @@ test("search: Tippfehler-Ranking, Sprach-Deduplizierung und Titelprioritaet (SQL
   assert.equal(avd.results[0].title, "Azure Virtual Desktop – Product");
 });
 
+test("search: Vectorize-Sync ist begrenzt, inkrementell und entfernt gone-Vektoren (SQLite)", async () => {
+  const { db, raw } = await searchDb();
+  const docs = Array.from({ length: 102 }, (_, i) => ({
+    id: `en:vector-${String(i).padStart(3, "0")}`, url: `https://www.m365.fm/vector/${i}/`,
+    lang: "en", type: "page", title: `Vector document ${i}`,
+  }));
+  seedSearchDocs(raw, docs);
+  const upserts = [], deletions = [];
+  const env = {
+    DB: db,
+    AI: { async run(model, { text }) {
+      assert.equal(model, "@cf/baai/bge-m3");
+      assert.ok(text.every((value) => /Vector document/.test(value)));
+      return { data: text.map(() => Array(1024).fill(0.1)) };
+    } },
+    VEC: {
+      async upsert(vectors) { upserts.push(...vectors); },
+      async deleteByIds(ids) { deletions.push(...ids); },
+    },
+  };
+  const { syncSearchVectors } = await import("../src/search.js");
+  assert.equal((await syncSearchVectors(env)).processed, 100, "Erstbefuellung ist je Lauf auf 100 Dokumente begrenzt");
+  assert.equal((await syncSearchVectors(env)).processed, 2);
+  assert.equal((await syncSearchVectors(env)).processed, 0, "unveraenderte Hashes werden nicht erneut eingebettet");
+  assert.equal(upserts.length, 102);
+
+  raw.prepare("UPDATE search_doc SET h='changed' WHERE id=?").run(docs[0].id);
+  assert.equal((await syncSearchVectors(env)).processed, 1, "geanderte Hashes werden erneut eingebettet");
+  assert.equal(upserts.length, 103);
+  raw.prepare("UPDATE search_doc SET gone=1 WHERE id=?").run(docs[1].id);
+  assert.deepEqual(await syncSearchVectors(env), { deleted: 1 });
+  assert.deepEqual(deletions, [docs[1].id]);
+  assert.equal(raw.prepare("SELECT gone FROM search_doc WHERE id=?").get(docs[1].id).gone, 1, "Quelldokument bleibt erhalten");
+});
+
+test("search: hybride Treffer, Sprachprioritaet, Fallback und classifyQuery (SQLite)", async () => {
+  const { db, raw } = await searchDb();
+  const docs = [
+    { id: "de:own", url: "https://www.m365.fm/de/own/", group: "https://www.m365.fm/own/", lang: "de", type: "page", title: "Purview Bericht Rollengruppen" },
+    { id: "en:foreign", url: "https://www.m365.fm/foreign/", group: "https://www.m365.fm/own/", lang: "en", type: "blog", title: "Data security governance" },
+    { id: "en:other", url: "https://www.m365.fm/other/", lang: "en", type: "blog", title: "Other relevant document" },
+  ];
+  seedSearchDocs(raw, docs);
+  let matches = [{ id: "en:foreign", score: 0.9, metadata: { grp: "https://www.m365.fm/own/" } }];
+  const env = {
+    DB: db, SITE: "https://www.m365.fm", SEARCH_GAP_THRESHOLD: "0.5",
+    AI: { async run(_model, { text }) { return { data: text.map(() => Array(1024).fill(0.1)) }; } },
+    VEC: { async query() { return { matches }; } },
+  };
+  const { classifyQuery, handleSearch } = await import("../src/search.js");
+  const request = new Request("https://api.m365.fm/api/search?q=Rollengruppen+Purview+Bericht&pref=de", {
+    headers: { "cf-connecting-ip": "hybrid-search-test" },
+  });
+  const result = await handleSearch(env, request, new URL(request.url), (data) => data);
+  assert.equal(result.results[0].title, "Purview Bericht Rollengruppen", "Treffer in der Seitensprache stehen zuerst");
+  matches = [{ id: "en:other", score: 0.9 }];
+  const foreignResult = await handleSearch(env, request, new URL(request.url), (data) => data);
+  assert.equal(foreignResult.results.find((row) => row.title === "Other relevant document").other_lang, true);
+
+  matches = [{ id: "en:foreign", score: 0.9, metadata: { grp: "https://www.m365.fm/own/" } }];
+  assert.equal((await classifyQuery(env, "purview", "de")).type, "own");
+  matches = [{ id: "en:other", score: 0.9 }];
+  const gap = await classifyQuery(env, "purview", "de");
+  assert.equal(gap.type, "translation_gap");
+  assert.deepEqual(gap.documents.map(({ id }) => id), ["en:other"]);
+  matches = [{ id: "en:other", score: 0.2 }];
+  assert.equal((await classifyQuery(env, "unknown", "de")).type, "content_gap", "Relevanzschwelle ist konfigurierbar");
+
+  const fallback = new Request("https://api.m365.fm/api/search?q=Purview&pref=de", {
+    headers: { "cf-connecting-ip": "fts-fallback-test" },
+  });
+  const onlyFts = await handleSearch({ DB: db, SITE: "https://www.m365.fm" }, fallback, new URL(fallback.url), (data) => data);
+  assert.equal(onlyFts.results[0].title, "Purview Bericht Rollengruppen", "ohne Bindungen bleibt FTS aktiv");
+  assert.equal((await classifyQuery({}, "anything", "de")).type, "content_gap");
+});
+
 test("search: 80.000 Dokumente mit einer Kandidatenabfrage unter 300 ms (SQLite)", async () => {
   const { db, raw, searchQueries, lastSearchQuery } = await searchDb();
   const docs = Array.from({ length: 80000 }, (_, i) => ({

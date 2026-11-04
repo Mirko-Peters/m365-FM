@@ -1,6 +1,10 @@
 import { rateLimit, sha256hex } from "./util.js";
 
 const TYPES = new Set(["episode", "dub_episode", "entity", "person", "glossary", "blog", "event", "show", "page"]);
+const VECTOR_MODEL = "@cf/baai/bge-m3";
+const VECTOR_DIMENSIONS = 1024;
+const VECTOR_BATCH_SIZE = 100;
+const VECTOR_RRF_K = 60;
 const now = () => Math.floor(Date.now() / 1000);
 const ftsReady = new WeakMap();
 const hash = (value) => {
@@ -182,6 +186,143 @@ export async function importSearchIndex(env) {
     return { part, changed, gone: missing.length, tokenizer };
   }
   return { part, changed, tokenizer };
+}
+
+async function embed(env, text) {
+  const result = await env.AI.run(VECTOR_MODEL, { text });
+  const vectors = result?.data;
+  if (!Array.isArray(vectors) || vectors.length !== text.length ||
+      vectors.some((vector) => !Array.isArray(vector) || vector.length !== VECTOR_DIMENSIONS ||
+        vector.some((value) => !Number.isFinite(value)))) {
+    throw new Error("Ungueltige BGE-M3-Embeddings");
+  }
+  return vectors;
+}
+
+function documentText(doc) {
+  return `${doc.title}\n${doc.summary}\n${doc.keywords}`.slice(0, 2000);
+}
+
+export async function syncSearchVectors(env) {
+  if (!env.AI || !env.VEC) return { skipped: "Workers-AI- oder Vectorize-Binding fehlt" };
+
+  const gone = (await env.DB.prepare(
+    "SELECT v.id FROM search_vector v INNER JOIN search_doc d ON d.id=v.id WHERE d.gone=1 LIMIT ?",
+  ).bind(VECTOR_BATCH_SIZE).all()).results || [];
+  if (gone.length) {
+    const ids = gone.map(({ id }) => id);
+    await env.VEC.deleteByIds(ids);
+    const statements = ids.map((id) => env.DB.prepare("DELETE FROM search_vector WHERE id=?").bind(id));
+    for (let i = 0; i < statements.length; i += 99) await env.DB.batch(statements.slice(i, i + 99));
+    return { deleted: ids.length };
+  }
+
+  let cursor = (await meta(env.DB, "search_vector_cursor"))?.v || "";
+  let docs = (await env.DB.prepare(
+    "SELECT d.id,d.h,d.lang,d.type,d.grp,d.url,d.title,d.summary,d.keywords FROM search_doc d " +
+    "LEFT JOIN search_vector v ON v.id=d.id WHERE d.gone=0 AND (v.h IS NULL OR v.h<>d.h) AND d.id>? ORDER BY d.id LIMIT ?",
+  ).bind(cursor, VECTOR_BATCH_SIZE).all()).results || [];
+  if (!docs.length && cursor) {
+    cursor = "";
+    await setMeta(env.DB, "search_vector_cursor", "");
+    docs = (await env.DB.prepare(
+      "SELECT d.id,d.h,d.lang,d.type,d.grp,d.url,d.title,d.summary,d.keywords FROM search_doc d " +
+      "LEFT JOIN search_vector v ON v.id=d.id WHERE d.gone=0 AND (v.h IS NULL OR v.h<>d.h) ORDER BY d.id LIMIT ?",
+    ).bind(VECTOR_BATCH_SIZE).all()).results || [];
+  }
+  if (!docs.length) return { processed: 0 };
+
+  const vectors = await embed(env, docs.map(documentText));
+  await env.VEC.upsert(vectors.map((values, i) => ({
+    id: docs[i].id,
+    values,
+    metadata: { lang: docs[i].lang, type: docs[i].type, grp: docs[i].grp, url: docs[i].url },
+  })));
+  const updates = docs.map((doc) => env.DB.prepare(
+    "INSERT INTO search_vector(id,h) VALUES(?,?) ON CONFLICT(id) DO UPDATE SET h=excluded.h WHERE search_vector.h<>excluded.h",
+  ).bind(doc.id, doc.h));
+  for (let i = 0; i < updates.length; i += 99) await env.DB.batch(updates.slice(i, i + 99));
+  await setMeta(env.DB, "search_vector_cursor", docs.at(-1).id);
+  return { processed: docs.length, cursor: docs.at(-1).id };
+}
+
+async function vectorCandidates(env, query, topK = 50, pref = "") {
+  if (!env.AI || !env.VEC || Array.from(query).length < 3) return [];
+  const [values] = await embed(env, [query]);
+  const matches = (await env.VEC.query(values, { topK, returnMetadata: "all" }))?.matches || [];
+  if (!matches.length) return [];
+  const topMatches = matches.slice(0, topK).filter(({ id, score }) => typeof id === "string" && Number.isFinite(score));
+  const ids = topMatches.map(({ id }) => id);
+  if (!ids.length) return [];
+  const groups = new Map();
+  for (const [index, match] of topMatches.entries()) {
+    const group = match.metadata?.grp;
+    if (pref && typeof group === "string" && group &&
+        (!groups.has(group) || index + 1 < groups.get(group).vectorRank)) {
+      groups.set(group, { vectorScore: match.score, vectorRank: index + 1 });
+    }
+  }
+  const rows = (await env.DB.prepare(
+    "SELECT id,url,lang,type,title,summary,date,image,entities,grp FROM search_doc " +
+    "WHERE gone=0 AND (id IN (SELECT value FROM json_each(?)) OR " +
+    "(?<>'' AND lang=? AND grp IN (SELECT value FROM json_each(?))))",
+  ).bind(JSON.stringify(ids), pref, pref, JSON.stringify([...groups.keys()])).all()).results || [];
+  const byId = new Map(rows.map((row) => [row.id, row]));
+  const candidates = topMatches.flatMap((match, index) => {
+    const row = byId.get(match.id);
+    if (!row) return [];
+    return [{ ...row, vectorScore: match.score, vectorRank: index + 1 }];
+  });
+  const vectorIds = new Set(ids);
+  for (const row of rows) {
+    const source = groups.get(row.grp);
+    if (!vectorIds.has(row.id) && source && row.lang === pref) {
+      candidates.push({ ...row, vectorScore: source.vectorScore, vectorRank: source.vectorRank });
+    }
+  }
+  return candidates;
+}
+
+function matchesFilters(row, filters) {
+  return (!filters.lang || row.lang === filters.lang) &&
+    (!filters.type || row.type === filters.type) &&
+    (!filters.entity || (row.entities || "").split(",").includes(filters.entity)) &&
+    (!filters.year || row.date?.slice(0, 4) === filters.year);
+}
+
+function mergeHybridCandidates(ftsRows, vectorRows, query, pref, filters) {
+  const fts = rankCandidates(ftsRows, query, pref);
+  const byId = new Map();
+  fts.forEach((row, index) => byId.set(row.id, { ...row, ftsRank: index + 1 }));
+  vectorRows.forEach((row) => {
+    const previous = byId.get(row.id);
+    byId.set(row.id, { ...previous, ...row, ftsRank: previous?.ftsRank || 0 });
+  });
+  const rows = [...byId.values()];
+  for (const row of rows) {
+    row.hybridScore = (row.ftsRank ? 1 / (VECTOR_RRF_K + row.ftsRank) : 0) +
+      (row.vectorRank ? 1 / (VECTOR_RRF_K + row.vectorRank) : 0);
+    row.rank = row.hybridScore;
+    for (const facet of FACETS) row[`in_${facet}`] = matchesFilters(row, filtersForFacet(filters, facet)) ? 1 : 0;
+  }
+  return rows.sort((a, b) =>
+    Number(b.lang === pref && !!pref) - Number(a.lang === pref && !!pref) ||
+    b.hybridScore - a.hybridScore || a.title.localeCompare(b.title));
+}
+
+export async function classifyQuery(env, q, lang) {
+  const threshold = Number(env.SEARCH_GAP_THRESHOLD);
+  const minimum = Number.isFinite(threshold) && threshold >= 0 && threshold <= 1 ? threshold : 0.35;
+  let matches = [];
+  try { matches = await vectorCandidates(env, q, 50, lang); } catch { return { type: "content_gap", documents: [] }; }
+  const relevant = matches.filter((row) => row.vectorScore >= minimum);
+  const documents = (rows) => rows.map(({ id, url, title, lang: originalLang, type, vectorScore }) =>
+    ({ id, url, title, lang: originalLang, type, score: vectorScore }));
+  const own = relevant.filter((row) => row.lang === lang);
+  if (own.length) return { type: "own", documents: documents(own) };
+  const other = relevant.filter((row) => row.lang !== lang);
+  if (other.length) return { type: "translation_gap", documents: documents(other) };
+  return { type: "content_gap", documents: [] };
 }
 
 function trigramQuery(query) {
@@ -375,7 +516,10 @@ function dedupeLanguages(rows, pref) {
     if (!previous || priority(row) > priority(previous) ||
         (priority(row) === priority(previous) && row.rank > previous.rank)) byPath.set(path, row);
   }
-  return [...byPath.values()].sort((a, b) => b.rank - a.rank || a.title.localeCompare(b.title));
+  return [...byPath.values()].sort((a, b) =>
+    (a.hybridScore === undefined && b.hybridScore === undefined ? 0 :
+      Number(b.lang === pref && !!pref) - Number(a.lang === pref && !!pref)) ||
+    b.rank - a.rank || a.title.localeCompare(b.title));
 }
 
 function countFacet(rows, scope, field) {
@@ -424,14 +568,20 @@ export async function handleSearch(env, request, url, J) {
 
   const tokenizer = await ensureSearchFts(env.DB);
   const candidates = candidateQuery(tokenizer, q, normalizedQuery, filters, pref);
-  const rawRows = (await env.DB.prepare(candidates.sql).bind(...candidates.params).all()).results || [];
-  const ranked = rankCandidates(rawRows, q, pref);
+  const [rawRows, vectorRows] = await Promise.all([
+    env.DB.prepare(candidates.sql).bind(...candidates.params).all().then((result) => result.results || []),
+    vectorCandidates(env, q, 50, pref).catch(() => []),
+  ]);
+  const ranked = vectorRows.length
+    ? mergeHybridCandidates(rawRows, vectorRows, q, pref, filters)
+    : rankCandidates(rawRows, q, pref);
   const rowsFor = (scope) => {
     const rows = ranked.filter((row) => row[`in_${scope}`]);
     return filters.lang && scope !== "lang" ? rows : dedupeLanguages(rows, pref);
   };
   const resultRows = rowsFor("main");
-  const results = resultRows.slice((page - 1) * size, page * size).map(({ url, title, summary, type, lang, date, image }) => ({ url, title, summary, type, lang, date, image }));
+  const results = resultRows.slice((page - 1) * size, page * size)
+    .map(({ url, title, summary, type, lang, date, image }) => ({ url, title, summary, type, lang, date, image, ...(pref && lang !== pref ? { other_lang: true } : {}) }));
   return J({
     q, total: resultRows.length, page,
     results,

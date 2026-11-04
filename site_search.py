@@ -165,6 +165,12 @@ UI = {   # Oberflaeche der Suchseite (15 Sprachen); Typ-Namen in derselben Reihe
     "ko": ("검색", "에피소드, 주제, 인물, 용어집 검색 …", "검색", "결과 {n}개", "결과가 없습니다. 다른 철자나 더 적은 단어로 시도해 보세요.", "유형", "언어", "주제", "연도", "모든 언어", "더 보기", "지금은 검색을 사용할 수 없습니다.", "필터 지우기",
            ("에피소드", "더빙 에피소드", "엔티티", "인물", "용어집", "블로그", "이벤트", "쇼", "페이지")),
 }
+OTHER_LANG = {
+    "en": "in {lang}", "de": "auf {lang}", "fr": "en {lang}", "es": "en {lang}", "it": "in {lang}",
+    "nl": "in het {lang}", "pt": "em {lang}", "pl": "w języku {lang}", "id": "dalam bahasa {lang}",
+    "ru": "на языке {lang}", "uk": "мовою {lang}", "ar": "باللغة {lang}", "he": "ב{lang}",
+    "ja": "{lang}語", "ko": "{lang}로",
+}
 CSS = (".srch-f{display:flex;gap:8px;margin:12px 0 18px}.srch-f input{flex:1;min-width:0;font:inherit;padding:10px 12px;border:1px solid var(--line,#ccd);border-radius:6px;background:var(--bg,#fff);color:inherit}"
        ".srch{display:grid;grid-template-columns:220px minmax(0,1fr);gap:24px}@media(max-width:760px){.srch{grid-template-columns:1fr}}"
        ".srch-fa h2{font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;margin:14px 0 6px;color:var(--mut,#667)}"
@@ -181,7 +187,8 @@ def ui(lang):
 def page_body(lang, api, base, lang_names):
     t = ui(lang)
     data = {"api": api, "lang": lang, "count": t[3], "none": t[4], "err": t[11], "more": t[10], "clear": t[12], "all": t[9],
-            "h": {"type": t[5], "lang": t[6], "entity": t[7], "year": t[8]}, "types": dict(zip(TYPES, t[13])), "langs": lang_names}
+            "h": {"type": t[5], "lang": t[6], "entity": t[7], "year": t[8]}, "types": dict(zip(TYPES, t[13])), "langs": lang_names,
+            "other": OTHER_LANG.get(lang, OTHER_LANG["en"])}
     return (f'<style>{CSS}</style><h1>{_h.escape(t[0])}</h1>'
             f'<form class="srch-f" role="search" method="get"><label class="sr-only" for="srch-q">{_h.escape(t[0])}</label>'
             f'<input id="srch-q" type="search" name="q" placeholder="{_h.escape(t[1])}" autocomplete="off" maxlength="100" autofocus>'
