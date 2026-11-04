@@ -38,7 +38,7 @@ async function send(env, inv, byName, reminder) {
 }
 export async function remindInvites(env) {   // Cron: nach 7 Tagen einmal erinnern
   const db = env.DB; await ensure(db); if (!mailReady(env)) return 0;
-  const rows = (await db.prepare("SELECT i.*,COALESCE(u.name,'') byn FROM entity_invites i LEFT JOIN users u ON u.id=i.by_user WHERE i.status='sent' AND i.reminded=0 AND i.created<? LIMIT 20").bind(now() - 7 * 86400).all()).results || [];
+  const rows = (await db.prepare("SELECT i.*,COALESCE(u.name,'') byn FROM entity_invites i LEFT JOIN users u ON u.id=i.by_user WHERE i.status='sent' AND i.reminded=0 AND i.created<? AND NOT EXISTS (SELECT 1 FROM claim_campaign_invites c WHERE c.token=i.token) LIMIT 20").bind(now() - 7 * 86400).all()).results || [];
   for (const r of rows) { const x = await send(env, r, r.byn, true); await db.prepare("UPDATE entity_invites SET reminded=? WHERE token=?").bind(x.ok ? 1 : 2, r.token).run(); }
   return rows.length;
 }
@@ -46,7 +46,7 @@ export async function remindInvites(env) {   // Cron: nach 7 Tagen einmal erinne
 export async function handleEntityInvite(env, request, url, path, user, J) {
   if (!path.startsWith("/api/entityinvite/")) return null;
   const db = env.DB, method = request.method; await ensure(db);
-  if (path === "/api/entityinvite/decline" && method === "GET") {
+  if (path === "/api/entityinvite/decline" && (method === "GET" || method === "POST")) {
     const t = url.searchParams.get("t") || "", i = t ? await db.prepare("SELECT eid,email FROM entity_invites WHERE token=?").bind(t).first() : null;
     if (!i) return page("Link ungültig / invalid", "", 404);
     await db.batch([db.prepare("UPDATE entity_invites SET status='declined' WHERE token=?").bind(t), db.prepare("INSERT OR IGNORE INTO invite_block(email,created) VALUES(?,?)").bind(i.email, now())]);
@@ -77,7 +77,9 @@ export async function handleEntityInvite(env, request, url, path, user, J) {
       for (const x of items) {
         const eid = String(x.eid || "").toLowerCase(), email = String(x.email || "").trim().toLowerCase(), name = cleanText(x.name, 80).replace(/[<>]/g, "");
         if (!EID.test(eid) || !name || !/^[^\s@<>]{1,64}@[^\s@<>]{1,190}\.[a-z]{2,}$/.test(email)) continue;
-        await db.prepare("INSERT INTO entity_contacts(eid,email,name,created) VALUES(?,?,?,?) ON CONFLICT(eid) DO UPDATE SET email=excluded.email,name=excluded.name").bind(eid, email, name, now()).run(); n++;
+        await db.prepare("INSERT INTO entity_contacts(eid,email,name,created) VALUES(?,?,?,?) ON CONFLICT(eid) DO UPDATE SET email=excluded.email,name=excluded.name").bind(eid, email, name, now()).run();
+        if (x.lang === "de" || x.lang === "en") await db.prepare("INSERT INTO entity_contact_lang(eid,lang) VALUES(?,?) ON CONFLICT(eid) DO UPDATE SET lang=excluded.lang").bind(eid, x.lang).run();
+        n++;
       }
       return J({ ok: true, saved: n });
     }
