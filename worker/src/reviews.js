@@ -1,5 +1,6 @@
 // Hoerer-Bewertungen fuer den Podcast (Show "en" = M365.FM): 1–5 Sterne + Text, eine Bewertung je Mitglied, "hilfreich"-Stimmen, Moderation durch Admin/Editor.
 import { cleanText, rateLimit } from "./util.js";
+import { moderateText, queueAiReview } from "./workers_ai.js";
 const now = () => Math.floor(Date.now() / 1000);
 const SHOW = /^[a-z]{2,3}$/;
 let ready = false;
@@ -39,8 +40,11 @@ export async function handleReviews(env, request, url, path, user, J) {
     if (!(await rateLimit(db, `rev:${user.id}`, 10, 86400))) return J({ error: "rate_limit" }, 429);
     const old = await db.prepare("SELECT id,status FROM show_reviews WHERE show=? AND user_id=?").bind(show, user.id).first();
     if (old && old.status === "hidden") return J({ error: "hidden" }, 403);
-    await db.prepare("INSERT INTO show_reviews(show,user_id,rating,title,body,status,created,updated) VALUES(?,?,?,?,?, 'published',?,?) ON CONFLICT(show,user_id) DO UPDATE SET rating=excluded.rating,title=excluded.title,body=excluded.body,updated=excluded.updated").bind(show, user.id, rating, title, text, now(), now()).run();
-    return J({ ok: true });
+    const review = await moderateText(env, user, `${title}\n${text}`);
+    const status = review.unsafe || old?.status === "pending" ? "pending" : "published", t = now();
+    const saved = await db.prepare("INSERT INTO show_reviews(show,user_id,rating,title,body,status,created,updated) VALUES(?,?,?,?,?,?,?,?) ON CONFLICT(show,user_id) DO UPDATE SET rating=excluded.rating,title=excluded.title,body=excluded.body,status=excluded.status,updated=excluded.updated").bind(show, user.id, rating, title, text, status, t, t).run();
+    if (review.unsafe) await queueAiReview(db, "review", old?.id || saved.meta?.last_row_id, user.id, review.category, `${title}\n${text}`, t);
+    return J({ ok: true, status });
   }
   if (path === "/api/reviews/helpful" && method === "POST") {
     const b = await body(), id = +b.id, r = await db.prepare("SELECT user_id FROM show_reviews WHERE id=? AND status='published'").bind(id).first();

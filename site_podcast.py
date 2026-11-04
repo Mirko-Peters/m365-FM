@@ -39,6 +39,7 @@ def build(g, eps, people, api):
         _seq = sorted(mine, key=lambda x: -x["published"]); _pos = {x["slug"]: i for i, x in enumerate(_seq)}   # neueste zuerst wie die Liste
         for e in mine:
             u = f"{croot}podcast/{e['slug']}/"; au = f"{BASE}/community/u/{e['handle']}/"
+            teaser = e.get("summary") or e.get("description") or ""
             topics = [t for t in e.get("topics", []) if t in ENTS]
             tl = "".join(f'<a class="mb-tag" href="{BASE}/entity/{t}/">{esc(ENTS[t]["name"])}</a> ' for t in topics)
             player = "" if not e["spreaker_id"] else f'<iframe title="{esc(e["title"])}" src="https://widget.spreaker.com/player?episode_id={e["spreaker_id"]}&theme=light" width="100%" height="200" loading="lazy" style="border:0"></iframe>'
@@ -50,14 +51,14 @@ def build(g, eps, people, api):
                             f'{"<p class=mut>" + esc(T(lang, "The author disclosed the use of AI.", "Die Autorin bzw. der Autor hat den KI-Einsatz offengelegt.")) + "</p>" if e.get("ai") else ""}</article><p>{tl}</p>'
                             f'<p><a class="btn" href="{esc(e["ep_url"])}" rel="noopener">{esc(T(lang, "Listen on Spreaker", "Bei Spreaker anhören"))}</a> <a href="{croot}podcast/feed.xml">RSS</a></p>' + PG(lang, *[(f"{croot}podcast/{x['slug']}/", x["title"]) if x else None for x in NB(_seq, _pos[e['slug']])], kind="episode") + '<section id="c-comments"></section>'
                             + (ctags(lang, "podcast%d" % e["id"]) if ctags else ""))
-            ld = [{"@context": "https://schema.org", "@type": "PodcastEpisode", "@id": u + "#episode", "url": u, "name": e["title"], "description": (e.get("description") or "")[:500], "inLanguage": lang,
+            ld = [{"@context": "https://schema.org", "@type": "PodcastEpisode", "@id": u + "#episode", "url": u, "name": e["title"], "description": teaser[:500], "inLanguage": lang,
                    "datePublished": iso(e["published"]), "author": {"@type": "Person", "@id": au + "#person", "name": e["name"], "url": au}, **({"actor": [{"@type": "Person", "@id": f"{BASE}/community/u/{g['handle']}/#person", "name": g["name"], "url": f"{BASE}/community/u/{g['handle']}/"} for g in gs]} if gs else {}),
                    "partOfSeries": {"@type": "PodcastSeries", "name": "M365.FM", "url": f"{BASE}/"}, "about": [{"@id": f"{BASE}/entity/{t}/#entity"} for t in topics],
                    "associatedMedia": {"@type": "AudioObject", "contentUrl": e["ep_url"]}}]
-            write(f"{pfx2(lang)}community/podcast/{e['slug']}/index.html", page(lang, f'{e["title"]} – {ttl} | M365.FM', (e.get("description") or "")[:155], u, b, None, ld, og_type="article", extra_head=LCSS, noindex=e["title"].startswith("[Test]")))
+            write(f"{pfx2(lang)}community/podcast/{e['slug']}/index.html", page(lang, f'{e["title"]} – {ttl} | M365.FM', teaser[:155], u, b, None, ld, og_type="article", extra_head=LCSS, noindex=e["title"].startswith("[Test]")))
             if not e["title"].startswith("[Test]"): sitemap.append((u, iso(e["published"]), None))
         it = sorted(mine, key=lambda x: -x["published"]); ru = f"{croot}podcast/"
-        lst = '<ul class="bl-list" style="padding:0;list-style:none">' + "".join(f'<li style="padding:.7em 0;border-bottom:1px solid var(--bd)"><a href="{croot}podcast/{e["slug"]}/"><b>{esc(e["title"])}</b></a> <span class="mut">· {esc(e["name"])} · {iso(e["published"])}</span></li>' for e in it) + "</ul>"
+        lst = '<ul class="bl-list" style="padding:0;list-style:none">' + "".join(f'<li style="padding:.7em 0;border-bottom:1px solid var(--bd)"><a href="{croot}podcast/{e["slug"]}/"><b>{esc(e["title"])}</b></a> <span class="mut">· {esc(e["name"])} · {iso(e["published"])}</span>{("<p>" + esc(e.get("summary") or "") + "</p>") if e.get("summary") else ""}</li>' for e in it) + "</ul>"
         b = shell(lang, f'<h1>{esc(ttl)}</h1><p class="mut">{esc(T(lang, "Podcast episodes from members of the Microsoft community, reviewed by the editors.", "Podcastfolgen von Mitgliedern der Microsoft-Community, von der Redaktion geprüft."))}</p>{lst}')
         write(f"{pfx2(lang)}community/podcast/index.html", page(lang, f'{ttl} – M365.FM', ttl, ru, b, None, [{"@context": "https://schema.org", "@type": "CollectionPage", "name": ttl, "url": ru}], og_type="website", extra_head=LCSS))
         write(f"{pfx2(lang)}community/podcast/feed.xml", rss("M365.FM " + ttl, ru, it, croot, lang))

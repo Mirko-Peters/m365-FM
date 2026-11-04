@@ -1,6 +1,7 @@
 // Fragen & Antworten zu Entitaeten: Mitglieder fragen, antworten und stimmen ab; die beste Antwort landet in der FAQ-Box der Entitaetsseite
 import { cleanText, rateLimit } from "./util.js";
 import { knownIds } from "./entities.js";
+import { moderateText, queueAiReview } from "./workers_ai.js";
 
 const ID = /^[a-z0-9-]{2,48}$/;
 const now = () => Math.floor(Date.now() / 1000);
@@ -12,15 +13,19 @@ export async function askQuestion(env, user, eid, q, lang) {
   q = txt(q, 200); if (q.length < 10) return { error: "too_short" };
   if (!/[?？]$/.test(q)) q += "?";
   if (!(await rateLimit(env.DB, `qa:q:${user.id}`, 5, 86400))) return { error: "rate_limit" };
-  const r = await env.DB.prepare("INSERT INTO entity_q(eid,user_id,q,lang,created) VALUES(?,?,?,?,?)").bind(eid, user.id, q, lang === "de" ? "de" : "en", now()).run();
-  return { ok: true, id: r.meta?.last_row_id };
+  const review = await moderateText(env, user, q), hidden = review.unsafe ? 2 : 0;
+  const r = await env.DB.prepare("INSERT INTO entity_q(eid,user_id,q,lang,hidden,created) VALUES(?,?,?,?,?,?)").bind(eid, user.id, q, lang === "de" ? "de" : "en", hidden, now()).run();
+  if (review.unsafe) await queueAiReview(env.DB, "question", r.meta.last_row_id, user.id, review.category, q);
+  return { ok: true, id: r.meta?.last_row_id, status: review.unsafe ? "pending" : "live" };
 }
 export async function answerQuestion(env, user, qid, a) {
   const q = await env.DB.prepare("SELECT id FROM entity_q WHERE id=? AND hidden=0").bind(+qid).first(); if (!q) return { error: "not_found" };
   a = txt(a, 600); if (a.length < 20) return { error: "too_short" };
   if (!(await rateLimit(env.DB, `qa:a:${user.id}`, 10, 86400))) return { error: "rate_limit" };
-  const r = await env.DB.prepare("INSERT INTO entity_a(q_id,user_id,a,created) VALUES(?,?,?,?)").bind(q.id, user.id, a, now()).run();
-  return { ok: true, id: r.meta?.last_row_id };
+  const review = await moderateText(env, user, a), hidden = review.unsafe ? 2 : 0;
+  const r = await env.DB.prepare("INSERT INTO entity_a(q_id,user_id,a,hidden,created) VALUES(?,?,?,?,?)").bind(q.id, user.id, a, hidden, now()).run();
+  if (review.unsafe) await queueAiReview(env.DB, "answer", r.meta.last_row_id, user.id, review.category, a);
+  return { ok: true, id: r.meta?.last_row_id, status: review.unsafe ? "pending" : "live" };
 }
 const canAccept = async (db, user, eid) => !!(user && (user.admin || user.editor || user.pro || (await db.prepare("SELECT 1 x FROM entity_claims WHERE eid=? AND user_id=? AND status='verified'").bind(eid, user.id).first())));
 

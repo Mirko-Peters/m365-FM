@@ -18,6 +18,7 @@ export async function handleAdminPanel(env, request, url, path, user, J) {
     return J({
       queues: {
         blog: await n(db, "SELECT COUNT(*) n FROM blog_posts WHERE status='pending'"),
+        moderation: await n(db, "SELECT COUNT(*) n FROM ai_review_queue WHERE status='pending'"),
         podcast: await n(db, "SELECT COUNT(*) n FROM pod_episodes WHERE status IN ('submitted','review')"),
         video: await n(db, "SELECT COUNT(*) n FROM yt_videos WHERE status IN ('submitted','review')"),
         wiki: await n(db, "SELECT COUNT(*) n FROM wiki_rev WHERE status='pending'"),

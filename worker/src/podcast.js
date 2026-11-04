@@ -5,6 +5,7 @@ import { cleanText, rateLimit, isLang } from "./util.js";
 import { baseIds } from "./entities.js";
 import { sendPush } from "./push.js";
 import { award } from "./badges.js";
+import { ensureAiSummaryCols, moderateText, queueAiReview, teaserValue } from "./workers_ai.js";
 
 const SHOWS = { en: 6704921, de: 7393187, es: 7393248, fr: 7393223, it: 7393231, pt: 7393243, nl: 7393222, pl: 7393242, id: 7393230, ru: 7393247, uk: 7393254, ar: 7393221, he: 7393227, hi: 7393228, ja: 7393232, ko: 7393236, ml: 7393238, pa: 7393244, ta: 7393250, te: 7393253 };
 const THRESHOLD = 25, MAX_BYTES = 50 * 1024 * 1024, MIN_AGE = 86400, EXPIRE_DAYS = 30, API = "https://api.spreaker.com/v2";
@@ -15,7 +16,7 @@ const parse = (s, d) => { try { return JSON.parse(s); } catch { return d; } };
 const slugify = (t) => t.toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, "").replace(/ß/g, "ss").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 50);
 export const podSlug = (r) => `${r.id}-${slugify(r.title) || "episode"}`;
 const sp = (env, path, init = {}) => fetch((env.SPREAKER_API || API) + path, { ...init, headers: { authorization: `Bearer ${env.SPREAKER_TOKEN}`, ...(init.headers || {}) } });
-const PUB = "id,title,description,lang,topics,status,created,published,ep_url,note,ai";
+const PUB = "id,title,description,summary,summary_auto,lang,topics,status,created,published,ep_url,note,ai";
 
 async function notifyAdmins(env, ep) {
   const db = env.DB, adm = (env.ADMIN_SUBS || "").split(",").map((s) => s.trim());
@@ -62,10 +63,11 @@ export async function deleteUserPodcast(db, uid) {
 
 export async function handlePodcast(env, request, url, path, user, J) {
   const db = env.DB, method = request.method;
+  await ensureAiSummaryCols(db);
 
   if (path === "/api/podcast/list" && method === "GET") {   // oeffentlich: Pitches zum Abstimmen + veroeffentlichte Episoden
     const rows = (await db.prepare(
-      `SELECT e.id,e.title,e.description,e.lang,e.topics,e.status,e.created,e.published,e.ep_url,p.handle,u.name,(SELECT COUNT(*) FROM pod_votes v WHERE v.ep_id=e.id) votes
+      `SELECT e.id,e.title,e.description,e.summary,e.summary_auto,e.lang,e.topics,e.status,e.created,e.published,e.ep_url,p.handle,u.name,(SELECT COUNT(*) FROM pod_votes v WHERE v.ep_id=e.id) votes
        FROM pod_episodes e JOIN profiles p ON p.user_id=e.user_id AND p.public=1 AND p.handle IS NOT NULL JOIN users u ON u.id=e.user_id AND u.banned=0
        WHERE e.status IN ('submitted','review','published') ORDER BY (e.status='published') DESC, e.created DESC LIMIT 300`).all()).results || [];
     const mine = user ? ((await db.prepare("SELECT ep_id FROM pod_votes WHERE user_id=?").bind(user.id).all()).results || []).map((x) => x.ep_id) : [];
@@ -73,7 +75,7 @@ export async function handlePodcast(env, request, url, path, user, J) {
   }
   if (path === "/api/podcast/export" && method === "GET") {   // fuer den Seitenbau: nur veroeffentlichte
     const rows = (await db.prepare(
-      `SELECT e.id,e.title,e.description,e.lang,e.topics,e.created,e.published,e.ep_url,e.spreaker_id,e.ai,p.handle,u.name
+      `SELECT e.id,e.title,e.description,e.summary,e.summary_auto,e.lang,e.topics,e.created,e.published,e.ep_url,e.spreaker_id,e.ai,p.handle,u.name
        FROM pod_episodes e JOIN profiles p ON p.user_id=e.user_id AND p.public=1 AND p.handle IS NOT NULL JOIN users u ON u.id=e.user_id AND u.banned=0
        WHERE e.status='published' ORDER BY e.published DESC LIMIT 1000`).all()).results || [];
     const gs = await guestsOf(db, "podcast", rows.map((r) => r.id));
@@ -110,7 +112,7 @@ export async function handlePodcast(env, request, url, path, user, J) {
     if (!(pr?.public && pr.handle)) return J({ error: "need_profile" }, 400);
     if (!user.admin && !(await rateLimit(db, `pod:${user.id}`, 1, 7 * 86400))) return J({ error: "rate_limit" }, 429);
     let fd; try { fd = await request.formData(); } catch { return J({ error: "bad_request" }, 400); }
-    const title = txt(fd.get("title") || "", 140), desc = long(fd.get("description") || "", 2000), lang = String(fd.get("lang") || "en"), file = fd.get("file");
+    const title = txt(fd.get("title") || "", 140), desc = long(fd.get("description") || "", 2000), submittedSummary = txt(fd.get("summary") || "", 300), lang = String(fd.get("lang") || "en"), file = fd.get("file");
     if (title.length < 5) return J({ error: "title" }, 400);
     if (desc.length < 30) return J({ error: "desc" }, 400);
     if (lang !== "en" && !isLang(lang)) return J({ error: "bad_lang" }, 400);
@@ -122,6 +124,8 @@ export async function handlePodcast(env, request, url, path, user, J) {
     let topics = []; try { topics = JSON.parse(String(fd.get("topics") || "[]")); } catch {}
     const known = await baseIds(env), tp = [];
     for (const x of (Array.isArray(topics) ? topics : []).slice(0, 10)) { if (!known.has(x)) return J({ error: "bad_topic", topic: x }, 400); if (!tp.includes(x)) tp.push(x); }
+    const teaser = await teaserValue(env, "", false, submittedSummary, `${title}\n${desc}`, lang), summary = teaser.text, summaryAuto = teaser.auto;
+    const review = await moderateText(env, user, `${title}\n${desc}`);
     const show = SHOWS[lang], ai = fd.get("ai") === "1" ? 1 : 0;
     const credit = `\n\nCommunity episode by ${user.name} – ${env.SITE}/community/u/${pr.handle}/${ai ? "\nAI use disclosed by the author." : ""}`;
     const f1 = new FormData(); f1.set("title", title); f1.set("show_id", String(show)); f1.set("description", desc + credit);
@@ -130,8 +134,17 @@ export async function handlePodcast(env, request, url, path, user, J) {
     const f2 = new FormData(); f2.set("media_file", file, "episode.mp3");
     const r2 = await sp(env, `/episodes/${sid}`, { method: "POST", body: f2 });
     if (!r2.ok) { await sp(env, `/episodes/${sid}`, { method: "DELETE" }).catch(() => 0); return J({ error: "spreaker_upload", status: r2.status }, 502); }
-    const t = now(), r = await db.prepare("INSERT INTO pod_episodes(user_id,title,description,lang,topics,status,spreaker_id,show_id,ai,created,updated) VALUES(?,?,?,?,?,'submitted',?,?,?,?,?)").bind(user.id, title, desc, lang, JSON.stringify(tp), sid, show, ai, t, t).run();
-    return J({ ok: true, id: r.meta.last_row_id });
+    const status = review.unsafe ? "moderation" : "submitted", t = now();
+    const r = await db.prepare("INSERT INTO pod_episodes(user_id,title,description,summary,summary_auto,lang,topics,status,spreaker_id,show_id,ai,created,updated) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)").bind(user.id, title, desc, summary, summaryAuto ? 1 : 0, lang, JSON.stringify(tp), status, sid, show, ai, t, t).run();
+    if (review.unsafe) await queueAiReview(db, "podcast", r.meta.last_row_id, user.id, review.category, `${title}\n${desc}`, t);
+    return J({ ok: true, id: r.meta.last_row_id, status, summary, summary_auto: summaryAuto });
+  }
+
+  if (path === "/api/podcast/summary" && method === "POST") {
+    if (!(await rateLimit(db, `podsum:${user.id}`, 20, 3600))) return J({ error: "rate_limit" }, 429);
+    const b = await request.json().catch(() => ({})), summary = txt(b.summary || "", 300);
+    const r = await db.prepare("UPDATE pod_episodes SET summary=?,summary_auto=0,updated=? WHERE id=? AND user_id=?").bind(summary, now(), +b.id, user.id).run();
+    return r.meta.changes ? J({ ok: true, summary, summary_auto: false }) : J({ error: "not_found" }, 404);
   }
 
   if (path === "/api/podcast/delete" && method === "POST") {

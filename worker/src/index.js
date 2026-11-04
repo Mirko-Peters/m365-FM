@@ -45,6 +45,7 @@ import { refreshFeeds, refreshFollowers } from "./feeds.js";
 import { autoTranslate, translateStatus, uiI18nExport } from "./translate.js";
 import { handleWiki } from "./wiki.js";
 import { syncExpertise } from "./levels.js";
+import { handleAiBudget, handleModerationAdmin, moderateText, queueAiReview } from "./workers_ai.js";
 import { handleContributions, refreshContributions } from "./contributions.js";
 
 const PROVIDERS = {
@@ -175,7 +176,7 @@ function pubComment(c, mine, liked, badges, admin) {
     hidden: c.status === "hidden", created: c.created, likes: c.likes, liked: liked.has(c.id), mine: mine === c.user_id, canDelete: mine === c.user_id || admin };
 }
 
-async function api(env, request, url, path, asUser) {
+export async function api(env, request, url, path, asUser) {
   const method = request.method, J = (d, s = 200, x) => json(d, s, env, request, x);
   if (method === "OPTIONS") return new Response(null, { status: 204, headers: cors(env, request) });
   if (asUser === undefined && method !== "GET" && request.headers.get("x-requested-with") !== "m365") return J({ error: "bad_request" }, 400);
@@ -184,6 +185,8 @@ async function api(env, request, url, path, asUser) {
   const need = () => (user ? null : J({ error: "login" }, 401));
   const db = env.DB;
 
+  const aiBudget = await handleAiBudget(env, request, path, J); if (aiBudget) return aiBudget;
+  const moderation = await handleModerationAdmin(env, request, path, user, J); if (moderation) return moderation;
   const sponsor = await handleSponsor(env, request, url, path, J);
   if (sponsor) return sponsor;
 
@@ -232,7 +235,7 @@ async function api(env, request, url, path, asUser) {
        FROM comments c JOIN users u ON u.id=c.user_id WHERE c.vid=? AND c.lang=? AND u.banned=0 ORDER BY c.created ASC LIMIT 300`).bind(vid, lang).all()).results || [];
     const badges = await badgesFor(db, [...new Set(rows.map((r) => r.user_id))]);
     const liked = new Set(user ? ((await db.prepare("SELECT comment_id FROM likes WHERE user_id=?").bind(user.id).all()).results || []).map((r) => r.comment_id) : []);
-    return J({ comments: rows.filter((r) => r.status === "ok" || rows.some((x) => x.parent_id === r.id)).map((r) => pubComment(r, user?.id, liked, badges, user?.admin)) }, 200, { "cache-control": "no-store" });
+    return J({ comments: rows.filter((r) => r.status === "ok" || (r.status === "hidden" && rows.some((x) => x.parent_id === r.id && x.status === "ok"))).map((r) => pubComment(r, user?.id, liked, badges, user?.admin)) }, 200, { "cache-control": "no-store" });
   }
   if (path === "/api/comments" && method === "POST") {
     if (need()) return need();
@@ -243,17 +246,20 @@ async function api(env, request, url, path, asUser) {
     if (!(await rateLimit(db, `c20:${user.id}`, 1, 20)) || !(await rateLimit(db, `c24:${user.id}`, 30, 86400))) return J({ error: "rate" }, 429);
     let parent = null;
     if (b.parent) {
-      const p = await db.prepare("SELECT id,vid,lang,parent_id FROM comments WHERE id=?").bind(+b.parent).first();
-      if (!p || p.vid !== vid || p.lang !== lang) return J({ error: "bad_request" }, 400);
+      const p = await db.prepare("SELECT id,vid,lang,parent_id,status FROM comments WHERE id=?").bind(+b.parent).first();
+      if (!p || p.status !== "ok" || p.vid !== vid || p.lang !== lang) return J({ error: "bad_request" }, 400);
       parent = p.parent_id || p.id;   // nur eine Ebene
     }
-    const r = await db.prepare("INSERT INTO comments(vid,lang,user_id,parent_id,body,created) VALUES(?,?,?,?,?,?)").bind(vid, lang, user.id, parent, body, now()).run();
-    if (parent) {   // Benachrichtigung an den Autor des Kommentars, auf den geantwortet wurde
+    const review = await moderateText(env, user, body);
+    const status = review.unsafe ? "pending" : "ok";
+    const r = await db.prepare("INSERT INTO comments(vid,lang,user_id,parent_id,body,status,created) VALUES(?,?,?,?,?,?,?)").bind(vid, lang, user.id, parent, body, status, now()).run();
+    if (review.unsafe) await queueAiReview(db, "comment", r.meta.last_row_id, user.id, review.category, body);
+    if (parent && !review.unsafe) {   // Benachrichtigung an den Autor des Kommentars, auf den geantwortet wurde
       const pa = await db.prepare("SELECT user_id FROM comments WHERE id=?").bind(parent).first();
       if (pa && pa.user_id !== user.id) await notify(env, pa.user_id, "reply", `${user.name} hat auf deinen Kommentar geantwortet`, `<p><b>${esc(user.name)}</b> hat auf deinen Kommentar geantwortet:</p><blockquote style="border-left:3px solid #3E8BC0;margin:0;padding:.2em 1em">${esc(body.slice(0, 400))}</blockquote><p><a href="${env.SITE}/community/">Zur Diskussion / View discussion</a></p>`, `reply:${r.meta.last_row_id}`);
     }
-    const earned = await evalBadges(env, user.id);
-    return J({ ok: true, id: r.meta.last_row_id, earned });
+    const earned = status === "ok" ? await evalBadges(env, user.id) : [];
+    return J({ ok: true, id: r.meta.last_row_id, status, earned });
   }
   let m;
   if ((m = /^\/api\/comments\/(\d+)\/(like|report)$/.exec(path)) && method === "POST") {

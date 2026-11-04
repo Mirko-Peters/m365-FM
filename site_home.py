@@ -69,7 +69,7 @@ def hub(g, lang, base, api, videos, vid_html, root=False):
     for e in C["eps"]:
         if ok(e["lang"]):
             d = __import__("datetime").datetime.fromtimestamp(e["published"]).strftime("%Y-%m-%d")
-            cards.append((d, "podcast", f'<div class="hub-card" data-k="podcast"><a href="{base}{pfx(e["lang"])}/community/podcast/{e["slug"]}/"><div class="kicker">{esc(T(lang, "Podcast", "Podcast"))}</div><h3>{esc(e["title"])}</h3></a><p class="mut">{esc(e["name"])} · {d}</p></div>'))
+            cards.append((d, "podcast", f'<div class="hub-card" data-k="podcast"><a href="{base}{pfx(e["lang"])}/community/podcast/{e["slug"]}/"><div class="kicker">{esc(T(lang, "Podcast", "Podcast"))}</div><h3>{esc(e["title"])}</h3></a><p>{esc(e.get("summary") or "")}</p><p class="mut">{esc(e["name"])} · {d}</p></div>'))
             tag(e["name"], e.get("topics"), e["title"])
     for ev in C["events"]:
         d = (ev.get("start") or "")[:10]
@@ -102,7 +102,7 @@ def hub(g, lang, base, api, videos, vid_html, root=False):
     for e in C["cv"]:
         if ok(e["lang"]):
             d = __import__("datetime").datetime.fromtimestamp(e["published"]).strftime("%Y-%m-%d")
-            cards.append((d, "creatorvideo", f'<div class="thumb" data-k="creatorvideo"><a href="{base}{pfx(e["lang"])}/community/video/{e["slug"]}/"><figure class="cover" style="margin-inline:0"><img src="https://i.ytimg.com/vi/{e["video_id"]}/hqdefault.jpg" alt="" loading="lazy" width="480" height="360"></figure><h3>{esc(e["title"])}</h3></a><p>{esc(e["name"])} · {d}</p></div>'))
+            cards.append((d, "creatorvideo", f'<div class="thumb" data-k="creatorvideo"><a href="{base}{pfx(e["lang"])}/community/video/{e["slug"]}/"><figure class="cover" style="margin-inline:0"><img src="https://i.ytimg.com/vi/{e["video_id"]}/hqdefault.jpg" alt="" loading="lazy" width="480" height="360"></figure><h3>{esc(e["title"])}</h3></a><p>{esc(e.get("summary") or "")}</p><p>{esc(e["name"])} · {d}</p></div>'))
             tag(e["name"], e.get("topics"), e["title"])
     for v in videos[:24]:
         cards.append((str(v["date"])[:10], "video", vid_html(v).replace('<div class="thumb">', '<div class="thumb" data-k="video">', 1)))

@@ -39,6 +39,7 @@ def build(g, vids, people, api):
         _seq = sorted(mine, key=lambda x: -x["published"]); _pos = {x["slug"]: i for i, x in enumerate(_seq)}   # neueste zuerst wie die Liste
         for v in mine:
             u = f"{croot}video/{v['slug']}/"; au = f"{BASE}/community/u/{v['handle']}/"
+            teaser = v.get("summary") or v.get("description") or ""
             topics = [t for t in v.get("topics", []) if t in ENTS]
             tl = "".join(f'<a class="mb-tag" href="{BASE}/entity/{t}/">{esc(ENTS[t]["name"])}</a> ' for t in topics)
             player = f'<div style="position:relative;padding-top:56.25%"><iframe title="{esc(v["title"])}" src="https://www.youtube-nocookie.com/embed/{v["video_id"]}" loading="lazy" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:0"></iframe></div>'
@@ -50,14 +51,14 @@ def build(g, vids, people, api):
                             f'{"<p class=mut>" + esc(T(lang, "The author disclosed the use of AI.", "Die Autorin bzw. der Autor hat den KI-Einsatz offengelegt.")) + "</p>" if v.get("ai") else ""}</article><p>{tl}</p>'
                             f'<p><a class="btn" href="https://youtu.be/{v["video_id"]}" rel="noopener">{esc(T(lang, "Watch on YouTube", "Auf YouTube ansehen"))}</a> <a href="{croot}video/feed.xml">RSS</a></p>' + PG(lang, *[(f"{croot}video/{x['slug']}/", x["title"]) if x else None for x in NB(_seq, _pos[v['slug']])], kind="video") + '<section id="c-comments"></section>'
                             + (ctags(lang, "video%d" % v["id"]) if ctags else ""))
-            ld = [{"@context": "https://schema.org", "@type": "VideoObject", "@id": u + "#video", "url": u, "name": v["title"], "description": (v.get("description") or "")[:500], "inLanguage": lang,
+            ld = [{"@context": "https://schema.org", "@type": "VideoObject", "@id": u + "#video", "url": u, "name": v["title"], "description": teaser[:500], "inLanguage": lang,
                    "uploadDate": iso(v["published"]), "thumbnailUrl": f"https://i.ytimg.com/vi/{v['video_id']}/hqdefault.jpg", "embedUrl": f"https://www.youtube.com/embed/{v['video_id']}",
                    "contentUrl": f"https://youtu.be/{v['video_id']}", "author": {"@type": "Person", "@id": au + "#person", "name": v["name"], "url": au}, **({"actor": [{"@type": "Person", "@id": f"{BASE}/community/u/{g['handle']}/#person", "name": g["name"], "url": f"{BASE}/community/u/{g['handle']}/"} for g in gs]} if gs else {}),
                    "publisher": {"@id": f"{BASE}/#org"}, "about": [{"@id": f"{BASE}/entity/{t}/#entity"} for t in topics]}]
-            write(f"{pfx2(lang)}community/video/{v['slug']}/index.html", page(lang, f'{v["title"]} – {ttl} | M365.FM', (v.get("description") or "")[:155], u, b, None, ld, og_type="video.other", extra_head=LCSS, noindex=v["title"].startswith("[Test]")))
+            write(f"{pfx2(lang)}community/video/{v['slug']}/index.html", page(lang, f'{v["title"]} – {ttl} | M365.FM', teaser[:155], u, b, None, ld, og_type="video.other", extra_head=LCSS, noindex=v["title"].startswith("[Test]")))
             if not v["title"].startswith("[Test]"): sitemap.append((u, iso(v["published"]), None))
         it = sorted(mine, key=lambda x: -x["published"]); ru = f"{croot}video/"
-        lst = '<ul class="bl-list" style="padding:0;list-style:none">' + "".join(f'<li style="padding:.7em 0;border-bottom:1px solid var(--bd)"><a href="{croot}video/{v["slug"]}/"><b>{esc(v["title"])}</b></a> <span class="mut">· {esc(v["name"])} · {iso(v["published"])}</span></li>' for v in it) + "</ul>"
+        lst = '<ul class="bl-list" style="padding:0;list-style:none">' + "".join(f'<li style="padding:.7em 0;border-bottom:1px solid var(--bd)"><a href="{croot}video/{v["slug"]}/"><b>{esc(v["title"])}</b></a> <span class="mut">· {esc(v["name"])} · {iso(v["published"])}</span>{("<p>" + esc(v.get("summary") or "") + "</p>") if v.get("summary") else ""}</li>' for v in it) + "</ul>"
         b = shell(lang, f'<h1>{esc(ttl)}</h1><p class="mut">{esc(T(lang, "Videos from members of the Microsoft community on the m365 Show YouTube channel, reviewed by the editors.", "Videos von Mitgliedern der Microsoft-Community auf dem YouTube-Kanal m365 Show, von der Redaktion geprüft."))}</p>{lst}')
         write(f"{pfx2(lang)}community/video/index.html", page(lang, f'{ttl} – M365.FM', ttl, ru, b, None, [{"@context": "https://schema.org", "@type": "CollectionPage", "name": ttl, "url": ru}], og_type="website", extra_head=LCSS))
         write(f"{pfx2(lang)}community/video/feed.xml", rss("M365.FM " + ttl, ru, it, croot, lang))

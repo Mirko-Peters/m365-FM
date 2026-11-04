@@ -22,6 +22,8 @@ Ohne Zugangsdaten tut der Workflow nichts; die Website blendet die Community-Ber
 
 ## Betrieb
 - Täglicher Digest: Cron `0 6 * * *` (UTC). Der erste Lauf markiert vorhandene Folgen nur als bekannt (kein Massenversand).
+- Workers AI prüft neue Community-Inhalte und erstellt fehlende Teaser. Der gemeinsame UTC-Tageszähler reserviert standardmäßig höchstens `WORKERS_AI_DAILY_NEURONS=9000` geschätzte Neuronen; Fehler bei der Moderation veröffentlichen wie bisher.
+- Für den Workflow `R2-Alt-Texte erzeugen` `CF_AI_TOKEN` (Workers AI, GitHub-Secret) und `CLOUDFLARE_ACCOUNT_ID` einrichten. Die Modelllizenz zuerst in Cloudflare akzeptieren und anschließend die Repository-Variable `WORKERS_AI_LICENSE_ACCEPTED=true` setzen. Der Workflow läuft wöchentlich und zusätzlich manuell.
 - Manuell testen: `https://api-dub.m365.fm/api/admin/run-daily?key=<CRON_KEY>&dry=1` (CRON_KEY in Cloudflare → Worker → Settings → Variables; `dry=1` sendet nichts).
 - D1-Sicherung zurückholen: Artefakt `d1-backup-<Lauf>` laden, dann `openssl enc -d -aes-256-cbc -pbkdf2 -iter 600000 -in backup-d1.sql.enc -out backup-d1.sql -pass env:D1_BACKUP_KEY` (Schlüssel aus dem Passwort-Manager). Ohne Artefakt: Cloudflare → D1 → m365-dub → Time Travel (30 Tage).
 - Tarif: Workers Paid ($5/Monat) seit 10/2026: 1.000 Subrequests und 30 s CPU je Aufruf; D1 im Paid-Plan (Profil-Export und Import-Batches brauchen das).

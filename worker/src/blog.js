@@ -5,6 +5,7 @@ import { stats } from "./badges.js";
 import { baseIds } from "./entities.js";
 import { sanitize } from "./wiki.js";
 import { cleanKeypoints, cleanFaq, jsonList, ensureSectionCols } from "./sections.js";
+import { ensureAiSummaryCols, moderateText, queueAiReview, teaserValue } from "./workers_ai.js";
 
 const TRUST_POINTS = 25, MAX_POSTS_DAY = 5;
 const now = () => Math.floor(Date.now() / 1000);
@@ -12,7 +13,7 @@ const txt = (s, n) => cleanText(s, n).replace(/[<>]/g, "").replace(/https?:\/\/\
 const okLang = (l) => l === "en" || isLang(l);
 const slugify = (t) => t.toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, "").replace(/ß/g, "ss").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 60);
 const parse = (s, d) => { try { return JSON.parse(s); } catch { return d; } };
-const FIELDS = "id,slug,title,summary,body,lang,status,topics,keypoints,faq,note,created,updated,published";
+const FIELDS = "id,slug,title,summary,summary_auto,body,lang,status,topics,keypoints,faq,note,created,updated,published";
 
 const view = (r) => ({ ...r, topics: parse(r.topics, []), keypoints: jsonList(r.keypoints), faq: jsonList(r.faq) });
 
@@ -54,6 +55,7 @@ const invites = async (db, uid) => (await db.prepare("SELECT b.id post_id,b.titl
 export async function handleBlog(env, request, url, path, user, J) {
   const db = env.DB, method = request.method;
   if (path.startsWith("/api/blog") || path.startsWith("/api/admin/blog")) await ensureSectionCols(db);
+  if (path.startsWith("/api/blog") || path.startsWith("/api/admin/blog")) await ensureAiSummaryCols(db);
 
   if (path === "/api/blog/export" && method === "GET") {   // oeffentlich: freigegebene Beitraege oeffentlicher Profile
     const rows = (await db.prepare(
@@ -85,7 +87,7 @@ export async function handleBlog(env, request, url, path, user, J) {
   if (path.startsWith("/api/admin/blog")) {
     if (!user || !(user.admin || user.editor)) return J({ error: "forbidden" }, 403);
     if (path === "/api/admin/blog" && method === "GET") {
-      const rows = (await db.prepare("SELECT b.id,b.title,b.summary,b.body,b.lang,b.created,u.name FROM blog_posts b JOIN users u ON u.id=b.user_id WHERE b.status='pending' ORDER BY b.created").all()).results || [];
+      const rows = (await db.prepare("SELECT b.id,b.title,b.summary,b.body,b.lang,b.created,u.name,q.category FROM blog_posts b JOIN users u ON u.id=b.user_id LEFT JOIN ai_review_queue q ON q.kind='blog' AND q.item_id=b.id AND q.status='pending' WHERE b.status='pending' ORDER BY b.created").all()).results || [];
       return J({ items: rows });
     }
     if (path === "/api/admin/blog/decide" && method === "POST") {
@@ -93,6 +95,7 @@ export async function handleBlog(env, request, url, path, user, J) {
       const p = await db.prepare("SELECT id FROM blog_posts WHERE id=? AND status='pending'").bind(id).first(); if (!p) return J({ error: "not_found" }, 404);
       if (b.ok) await db.prepare("UPDATE blog_posts SET status='live',published=COALESCE(NULLIF(published,0),?),note='',updated=? WHERE id=?").bind(now(), now(), id).run();
       else await db.prepare("UPDATE blog_posts SET status='rejected',note=?,updated=? WHERE id=?").bind(txt(b.note || "", 300), now(), id).run();
+      await db.prepare("UPDATE ai_review_queue SET status=? WHERE kind='blog' AND item_id=? AND status='pending'").bind(b.ok ? "approved" : "rejected", id).run();
       return J({ ok: true });
     }
     return null;
@@ -111,7 +114,7 @@ export async function handleBlog(env, request, url, path, user, J) {
   if (path === "/api/blog/save" && method === "POST") {
     if (!(await rateLimit(db, `blog:${user.id}`, 30, 3600))) return J({ error: "rate_limit" }, 429);
     const b = await request.json().catch(() => ({}));
-    const title = txt(b.title || "", 140), summary = txt(b.summary || "", 300), lang = String(b.lang || "en");
+    const title = txt(b.title || "", 140), submittedSummary = txt(b.summary || "", 300), lang = String(b.lang || "en");
     if (title.length < 5) return J({ error: "title" }, 400);
     if (!okLang(lang)) return J({ error: "bad_lang" }, 400);
     const sb = sanitize(String(b.body || ""), { viz: true }); if (sb.err) return J({ error: sb.err }, 400);
@@ -126,23 +129,29 @@ export async function handleBlog(env, request, url, path, user, J) {
     const t = now();
     let cur = b.id ? await db.prepare(`SELECT ${FIELDS} FROM blog_posts WHERE id=? AND user_id=?`).bind(+b.id, user.id).first() : null;
     if (b.id && !cur) return J({ error: "not_found" }, 404);
-    const status = !b.submit ? (cur && cur.status === "live" ? "live" : "draft") : "live";
+    const teaser = await teaserValue(env, cur?.summary, cur?.summary_auto, submittedSummary, `${title}\n${sb.body}`, lang);
+    const summary = teaser.text, summaryAuto = teaser.auto ? 1 : 0;
+    const intendedStatus = !b.submit ? (cur && cur.status === "live" ? "live" : "draft") : "live";
+    const review = intendedStatus === "live" ? await moderateText(env, user, `${title}\n${summary}\n${sb.body}`) : { unsafe: false };
+    const status = review.unsafe ? "pending" : intendedStatus;
     if (cur) {
-      await db.prepare("UPDATE blog_posts SET title=?,summary=?,body=?,html=CASE WHEN length(?)>0 THEN '' ELSE html END,lang=?,topics=?,keypoints=COALESCE(?,keypoints),faq=COALESCE(?,faq),status=?,updated=?,published=CASE WHEN ?='live' AND published=0 THEN ? ELSE published END,note='' WHERE id=?")   // neuer Wiki-Text ersetzt den uebernommenen HTML-Inhalt
-        .bind(title, summary, sb.body, sb.body, lang, JSON.stringify(topics), kp ? JSON.stringify(kp.list) : null, fq ? JSON.stringify(fq.list) : null, status, t, status, t, cur.id).run();
+      await db.prepare("UPDATE blog_posts SET title=?,summary=?,summary_auto=?,body=?,html=CASE WHEN length(?)>0 THEN '' ELSE html END,lang=?,topics=?,keypoints=COALESCE(?,keypoints),faq=COALESCE(?,faq),status=?,updated=?,published=CASE WHEN ?='live' AND published=0 THEN ? ELSE published END,note='' WHERE id=?")   // neuer Wiki-Text ersetzt den uebernommenen HTML-Inhalt
+        .bind(title, summary, summaryAuto, sb.body, sb.body, lang, JSON.stringify(topics), kp ? JSON.stringify(kp.list) : null, fq ? JSON.stringify(fq.list) : null, status, t, status, t, cur.id).run();
+      if (review.unsafe) await queueAiReview(db, "blog", cur.id, user.id, review.category, `${title}\n${summary}\n${sb.body}`, t);
       await syncFeed(env, db, user.id, { lang, slug: cur.slug, title, published: cur.published || t }, pr?.handle, status === "live" && !!pr?.handle);
       if (cos.list) await saveCoauthors(db, cur.id, cos.list);
-      return J({ ok: true, id: cur.id, slug: cur.slug, status });
+      return J({ ok: true, id: cur.id, slug: cur.slug, status, summary, summary_auto: !!summaryAuto });
     }
     const day = (await db.prepare("SELECT COUNT(*) n FROM blog_posts WHERE user_id=? AND created>?").bind(user.id, t - 86400).first())?.n || 0;
     if (day >= MAX_POSTS_DAY) return J({ error: "rate_limit" }, 429);
     let slug = slugify(title) || "post", n = 1;
     while (await db.prepare("SELECT 1 x FROM blog_posts WHERE user_id=? AND slug=?").bind(user.id, slug).first()) slug = `${slugify(title).slice(0, 52) || "post"}-${++n}`;
-    const r = await db.prepare("INSERT INTO blog_posts(user_id,slug,title,summary,body,lang,topics,keypoints,faq,status,note,created,updated,published) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
-      .bind(user.id, slug, title, summary, sb.body, lang, JSON.stringify(topics), JSON.stringify(kp?.list || []), JSON.stringify(fq?.list || []), status, "", t, t, status === "live" ? t : 0).run();
+    const r = await db.prepare("INSERT INTO blog_posts(user_id,slug,title,summary,summary_auto,body,lang,topics,keypoints,faq,status,note,created,updated,published) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
+      .bind(user.id, slug, title, summary, summaryAuto, sb.body, lang, JSON.stringify(topics), JSON.stringify(kp?.list || []), JSON.stringify(fq?.list || []), status, "", t, t, status === "live" ? t : 0).run();
+    if (review.unsafe) await queueAiReview(db, "blog", r.meta.last_row_id, user.id, review.category, `${title}\n${summary}\n${sb.body}`, t);
     await syncFeed(env, db, user.id, { lang, slug, title, published: t }, pr?.handle, status === "live" && !!pr?.handle);
     if (cos.list) await saveCoauthors(db, r.meta.last_row_id, cos.list);
-    return J({ ok: true, id: r.meta.last_row_id, slug, status });
+    return J({ ok: true, id: r.meta.last_row_id, slug, status, summary, summary_auto: !!summaryAuto });
   }
 
   if (path === "/api/blog/coauthor/mine" && method === "GET") {   // Einladungen als Co-Autor und bereits bestaetigte Beitraege
