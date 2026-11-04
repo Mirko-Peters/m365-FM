@@ -937,6 +937,24 @@
     "a": 3,
     "why": "Rujukan body/body memberikan byte file yang sebenarnya, bukan pembungkus metadata; tanpanya AI bisa salah menyetujui tanda terima."
    }
+  ],
+  "faq": [
+   {
+    "q": "Apa itu agent flows di Microsoft Copilot Studio dan bagaimana cara kerjanya untuk persetujuan?",
+    "a": "Agent flows di Microsoft Copilot Studio menjadikan AI sebagai pemberi persetujuan pertama, sedangkan manusia hanya dilibatkan saat keputusan memerlukan pertimbangan. AI mengevaluasi aturan tetap seperti batas jumlah, kategori, dan rentang tanggal, dan semua aktivitas tercatat melalui Dataverse."
+   },
+   {
+    "q": "Bagaimana cara merutekan persetujuan ke manajer secara otomatis tanpa hardcode?",
+    "a": "Gunakan konektor Office 365 Users. Ambil data pengaju klaim dengan tindakan dapatkan baris berdasarkan ID pada tabel pengguna Dataverse, lalu gunakan tindakan dapatkan manajer, dan teruskan hasilnya sebagai variabel ke tahap manual. Jika manajer berganti, hierarki memperbarui dirinya sendiri."
+   },
+   {
+    "q": "Mengapa alur validasi tanda terima gagal atau kontennya kosong dan bagaimana solusinya?",
+    "a": "Tabel Dataverse biasanya menyimpan lampiran setelah catatan pertama kali disimpan, sehingga alur yang dipicu saat pembuatan berjalan sebelum file ada. Solusinya, ubah pemicu menjadi saat item dimodifikasi dan batasi pada perubahan kolom tanda terima. Saat memetakan konten file, rujuk juga body/body."
+   },
+   {
+    "q": "Bagaimana cara menulis prompt instruksi AI agar keputusan persetujuan konsisten?",
+    "a": "Tulis logika dalam bahasa sederhana namun tegas, hindari frasa ambigu seperti \"biaya wajar\" atau \"pembelian baru-baru ini\", dan gunakan definisi terukur. Uji berulang hingga input yang sama selalu menghasilkan output yang sama. Jika respons berfluktuasi, masalahnya ada pada kejelasan prompt, bukan model AI."
+   }
   ]
  },
  "it": {
@@ -1435,6 +1453,43 @@
     ],
     "a": 3,
     "why": "Bij een trigger bij aanmaak kan de flow starten voordat het bestand bestaat, met een foutmelding of lege bon als gevolg."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Traditionele goedkeuring versus agent flows",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Traditionele goedkeuringsketens",
+     "punkte": [
+      "E-mails gaan heen en weer en niemand kent de definitieve versie",
+      "Geneste voorwaarden worden na een halfjaar nauwelijks te debuggen",
+      "Mensen vormen de knelpunten door steeds nieuwe asynchrone rondes",
+      "Eén kapotte connector kan het systeem geruisloos laten falen"
+     ]
+    },
+    "rechts": {
+     "titel": "Agent flows in Copilot Studio",
+     "punkte": [
+      "AI handelt het merendeel direct af op basis van vaste regels",
+      "Alleen uitzonderingen escaleren naar menselijk toezicht",
+      "Dataverse legt alles vast in verifieerbare logboeken",
+      "De manager wordt dynamisch opgehaald, dus niets is hard gecodeerd"
+     ]
+    }
+   },
+   {
+    "titel": "Veelgemaakte fouten bij goedkeuringsflows",
+    "typ": "checkliste",
+    "punkte": [
+     "Gebruik meetbare definities in de prompt in plaats van vage termen",
+     "Kies het juiste invoertype, zoals getal in plaats van tekst",
+     "Voeg content toe aan de body-verwijzing bij bonnen",
+     "Start de trigger bij wijziging van de bonkolom, niet bij aanmaak",
+     "Beperk machtigingen via rolgebaseerd toegangsbeheer in Dataverse",
+     "Haal goedkeurders dynamisch op in plaats van ze hard te coderen",
+     "Vereenvoudig de logica als een flow faalt door te complexe regels"
+    ]
    }
   ]
  },

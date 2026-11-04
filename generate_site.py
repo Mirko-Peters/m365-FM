@@ -818,7 +818,7 @@ def footer(lang):
     return (f'<footer><div class="wrap">{_top}{_nw}'   # m365.fm, M365Con, LinkedIn, YouTube seit 4.11. nicht mehr im Footer (Wunsch Mirko); dafuer der Service-Hub /services/
             f'<a href="{ast_url(lang)}">{esc(ast_label(lang))}</a><a href="{BASE}/{"de/" if lang == "de" else ""}press/">{"Pressekit" if lang == "de" else "Press kit"}</a>'
             f'<a href="{SPN.url(BASE, _tl)}">{esc(SPN.label(_tl))}</a><a href="{LND.hub_url(BASE, _tl)}">{LND.footer_label(_tl)}</a><a href="{BASE}/impressum/" rel="nofollow">Impressum</a><a href="{BASE}/legal/" rel="nofollow">Legal notice</a>'
-            f'<a href="{BASE}/datenschutz/" rel="nofollow">Datenschutz</a><a href="{BASE}/privacy/" rel="nofollow">Privacy</a>'
+            f'<a href="{BASE}/datenschutz/" rel="nofollow">Datenschutz</a><a href="{BASE}/privacy/" rel="nofollow">Privacy</a><a href="{BASE}/{"sicherheit" if lang == "de" else "security"}/" rel="nofollow">{"Sicherheit" if lang == "de" else "Security"}</a>'
             f'<div style="margin-top:10px">© {date.today().year} Mirko Peters · M365.FM</div></div></footer>')
 
 
@@ -1341,8 +1341,9 @@ def build():
     # Rechtliche Seiten (noindex)
     import site_legal as SL
     for path, fn, lg, ttl in (("impressum", SL.impressum_de, "de", "Impressum"), ("legal", SL.impressum_en, "en", "Legal notice"),
-                              ("datenschutz", SL.privacy_de, "de", "Datenschutz"), ("privacy", SL.privacy_en, "en", "Privacy policy")):
-        _pair = {"impressum": "legal", "legal": "impressum", "datenschutz": "privacy", "privacy": "datenschutz"}[path]   # T42: Umschalter auf das Gegenstueck
+                              ("datenschutz", SL.privacy_de, "de", "Datenschutz"), ("privacy", SL.privacy_en, "en", "Privacy policy"),
+                              ("security", SL.security_en, "en", "Security"), ("sicherheit", SL.security_de, "de", "Sicherheit")):
+        _pair = {"impressum": "legal", "legal": "impressum", "datenschutz": "privacy", "privacy": "datenschutz", "security": "sicherheit", "sicherheit": "security"}[path]   # T42: Umschalter auf das Gegenstueck
         _lsw = {lg: f"{BASE}/{path}/", ("en" if lg == "de" else "de"): f"{BASE}/{_pair}/"}
         write(f"{path}/index.html", page(lg, f"{ttl} – M365.FM", ttl, f"{BASE}/{path}/", f"{header(lg, '')}<main class=\"wrap\" style=\"max-width:46em\">{fn()}</main>{footer(lg)}", og_type="website", noindex=True, switch=_lsw))
 
