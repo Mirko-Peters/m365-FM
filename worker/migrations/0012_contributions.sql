@@ -36,3 +36,9 @@ CREATE TABLE IF NOT EXISTS contributions (
 CREATE UNIQUE INDEX IF NOT EXISTS idx_contributions_user_url ON contributions(user_id, url) WHERE url<>'';
 CREATE INDEX IF NOT EXISTS idx_contributions_user_date ON contributions(user_id, published DESC);
 CREATE INDEX IF NOT EXISTS idx_contributions_metrics ON contributions(metrics_updated, kind);
+CREATE TABLE IF NOT EXISTS contribution_ignored (
+  user_id INTEGER NOT NULL,
+  url TEXT NOT NULL,
+  created INTEGER NOT NULL,
+  PRIMARY KEY(user_id, url)
+);

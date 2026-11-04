@@ -16,6 +16,7 @@ const SPREAKER_EPISODE = /^https:\/\/(?:www\.)?spreaker\.com\/episode\/(?:[a-z0-
 async function ensureContributionColumns(db) {
   try { await db.prepare("SELECT topics_edited FROM contributions LIMIT 1").first(); }
   catch { try { await db.prepare("ALTER TABLE contributions ADD COLUMN topics_edited INTEGER NOT NULL DEFAULT 0").run(); } catch {} }
+  await db.prepare("CREATE TABLE IF NOT EXISTS contribution_ignored (user_id INTEGER NOT NULL, url TEXT NOT NULL, created INTEGER NOT NULL, PRIMARY KEY(user_id,url))").run();
 }
 
 function safeUrl(value) {
@@ -68,7 +69,8 @@ async function exportData(db, uid, from, to) {
   };
   const start = date(from), end = date(to, true);
   if (Number.isNaN(start) || Number.isNaN(end) || (start !== null && end !== null && start > end)) return { error: "bad_period" };
-  const where = `c.user_id=? ${start === null ? "" : "AND c.published>=?"} ${end === null ? "" : "AND c.published<=?"}`;
+  const where = `c.user_id=? AND NOT EXISTS (SELECT 1 FROM contribution_ignored i WHERE i.user_id=c.user_id AND i.url=c.url)
+    ${start === null ? "" : "AND c.published>=?"} ${end === null ? "" : "AND c.published<=?"}`;
   const binds = [uid, ...(start === null ? [] : [start]), ...(end === null ? [] : [end])];
   const total = (await db.prepare(`SELECT COUNT(*) n FROM contributions c WHERE ${where}`).bind(...binds).first()).n;
   const rows = (await db.prepare(`SELECT c.id,c.title,c.url,c.published,c.kind,c.category,c.topics,c.views,c.downloads,c.public,c.manual,
@@ -119,13 +121,14 @@ export async function handleContributions(env, request, url, path, user, J) {
   }
   if (path === "/api/contributions/source/update" && method === "POST") {
     const b = await request.json().catch(() => ({})), id = Math.floor(+b.id);
+    if (!(await rateLimit(db, `contrib-source-update:${user.id}`, 30, 86400))) return J({ error: "rate_limit" }, 429);
     const source = await db.prepare("SELECT id FROM contribution_sources WHERE id=? AND user_id=?").bind(id, user.id).first();
     if (!source) return J({ error: "not_found" }, 404);
     const updates = [], values = [];
     if (b.public !== undefined) { updates.push("public=?"); values.push(b.public ? 1 : 0); }
     if (b.active !== undefined) {
       updates.push("active=?"); values.push(b.active ? 1 : 0);
-      if (b.active) { updates.push("fails=0", "fetched=0"); }
+      if (b.active) { updates.push("fails=0", "fetched=MIN(fetched,?)"); values.push(now() - 1801); }
     }
     if (!updates.length) return J({ error: "bad_request" }, 400);
     await db.prepare(`UPDATE contribution_sources SET ${updates.join(",")} WHERE id=? AND user_id=?`).bind(...values, id, user.id).run();
@@ -163,11 +166,13 @@ export async function handleContributions(env, request, url, path, user, J) {
     return J({ ok: true, id: r.meta.last_row_id }, 201);
   }
   if (path === "/api/contributions/mine" && method === "GET") {
-    const sources = (await db.prepare("SELECT id,kind,url,title,public,active FROM contribution_sources WHERE user_id=? ORDER BY created DESC").bind(user.id).all()).results || [];
+    const sources = (await db.prepare("SELECT id,kind,url,title,public,active,fails,fetched FROM contribution_sources WHERE user_id=? ORDER BY created DESC").bind(user.id).all()).results || [];
     const rows = (await db.prepare(`SELECT c.id,c.title,c.url,c.published,c.kind,c.category,c.topics,c.views,c.downloads,c.public,c.manual,
         COALESCE(s.title,'') source FROM contributions c LEFT JOIN contribution_sources s ON s.id=c.source_id
-        WHERE c.user_id=? ORDER BY c.published DESC,c.id DESC LIMIT 500`).bind(user.id).all()).results || [];
-    return J({ sources: sources.map((s) => ({ ...s, public: !!s.public, active: !!s.active })), contributions: rows.map(contributionOutput) }, 200, { "cache-control": "no-store" });
+        WHERE c.user_id=? AND NOT EXISTS (SELECT 1 FROM contribution_ignored i WHERE i.user_id=c.user_id AND i.url=c.url)
+        ORDER BY c.published DESC,c.id DESC LIMIT 500`).bind(user.id).all()).results || [];
+    return J({ sources: sources.map((s) => ({ ...s, public: !!s.public, active: !!s.active,
+      status: s.fails >= 5 ? "paused_after_errors" : s.active ? "active" : "paused" })), contributions: rows.map(contributionOutput) }, 200, { "cache-control": "no-store" });
   }
   if (path === "/api/contributions/update" && method === "POST") {
     const b = await request.json().catch(() => ({})), id = Math.floor(+b.id);
@@ -187,7 +192,17 @@ export async function handleContributions(env, request, url, path, user, J) {
   }
   if (path === "/api/contributions/delete" && method === "POST") {
     const b = await request.json().catch(() => ({})), id = Math.floor(+b.id);
-    const result = await db.prepare("DELETE FROM contributions WHERE id=? AND user_id=?").bind(id, user.id).run();
+    const entry = await db.prepare("SELECT id,url,manual FROM contributions WHERE id=? AND user_id=?").bind(id, user.id).first();
+    if (!entry) return J({ error: "not_found" }, 404);
+    const remove = db.prepare("DELETE FROM contributions WHERE id=? AND user_id=?").bind(id, user.id);
+    if (!entry.manual && entry.url) {
+      await db.batch([
+        db.prepare("INSERT OR IGNORE INTO contribution_ignored(user_id,url,created) VALUES(?,?,?)").bind(user.id, entry.url, now()),
+        remove,
+      ]);
+      return J({ ok: true });
+    }
+    const result = await remove.run();
     return result.meta.changes ? J({ ok: true }) : J({ error: "not_found" }, 404);
   }
   if (path === "/api/contributions/export" && method === "GET") {
@@ -217,19 +232,23 @@ export async function refreshContributions(env, max = 5) {
       if (!feed && items.length) feed = source.url;
       if (!feed || !items.length) throw new Error("feed_unavailable");
       const existing = new Set(((await db.prepare("SELECT url FROM contributions WHERE user_id=?").bind(source.user_id).all()).results || []).map((r) => r.url));
-      let imports = (await db.prepare("SELECT COUNT(*) n FROM contributions WHERE user_id=? AND manual=0").bind(source.user_id).first()).n;
+      const ignored = new Set(((await db.prepare("SELECT url FROM contribution_ignored WHERE user_id=?").bind(source.user_id).all()).results || []).map((r) => r.url));
+      let imports = (await db.prepare(`SELECT COUNT(*) n FROM contributions c WHERE c.user_id=? AND c.manual=0
+        AND NOT EXISTS (SELECT 1 FROM contribution_ignored i WHERE i.user_id=c.user_id AND i.url=c.url)`).bind(source.user_id).first()).n;
       const categories = { podcast: DEFAULT_CATEGORIES.podcast, youtube: DEFAULT_CATEGORIES.video, blog: DEFAULT_CATEGORIES.blog };
       const values = [];
       for (const item of items) {
+        if (ignored.has(item.url)) continue;
         if (!existing.has(item.url) && imports >= IMPORT_LIMIT) continue;
         if (!existing.has(item.url)) { existing.add(item.url); imports++; }
         const category = categories[source.kind] || "";
         values.push(db.prepare(`INSERT INTO contributions(user_id,source_id,title,url,published,kind,category,topics,public,created)
-          VALUES(?,?,?,?,?,?,?,?,?,?) ON CONFLICT(user_id,url) WHERE url<>'' DO UPDATE SET
+          SELECT ?,?,?,?,?,?,?,?,?,? WHERE NOT EXISTS (SELECT 1 FROM contribution_ignored WHERE user_id=? AND url=?)
+          ON CONFLICT(user_id,url) WHERE url<>'' DO UPDATE SET
           title=CASE WHEN contributions.manual=0 THEN excluded.title ELSE contributions.title END,
           topics=CASE WHEN contributions.manual=0 AND contributions.topics_edited=0 AND contributions.topics='[]' THEN excluded.topics ELSE contributions.topics END`)
           .bind(source.user_id, source.id, item.title, item.url, item.t, source.kind === "youtube" ? "video" : source.kind,
-            category, JSON.stringify(topicsOf(item.topics)), source.public, t));
+            category, JSON.stringify(topicsOf(item.topics)), source.public, t, source.user_id, item.url));
       }
       if (values.length) await db.batch(values);
       await db.prepare("UPDATE contribution_sources SET feed=?,fetched=?,fails=0 WHERE id=?").bind(feed, t, source.id).run();

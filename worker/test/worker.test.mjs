@@ -150,21 +150,27 @@ test("contributions: Quellen, Metadaten, Privatsphäre, Kategorien und Berichtse
   try { await refreshContributions({ DB: db }, 1); } finally { globalThis.fetch = originalFetch; }
   const manual = raw.prepare("SELECT title,kind,published,public,manual,source_id FROM contributions WHERE id=?").get(manualId);
   assert.deepEqual([manual.title, manual.kind, manual.published, manual.public, manual.manual, manual.source_id], ["=SUM(1,1)", "article", 1767225600, 0, 1, null], "Feed-Upsert bewahrt manuelle Felder");
-  const imported = raw.prepare("SELECT id,title,topics,public,category,published FROM contributions WHERE url='https://example.com/post-auto'").get();
+  const imported = raw.prepare("SELECT id,title,url,topics,public,category,published FROM contributions WHERE url='https://example.com/post-auto'").get();
   assert.equal(imported.title, "Imported article");
   assert.deepEqual(JSON.parse(imported.topics), ["power-bi"]);
   assert.equal(imported.category, "Blog");
   assert.equal(imported.public, 1, "Quellen-Sichtbarkeit gilt beim Import");
   const sourceId = raw.prepare("SELECT id FROM contribution_sources WHERE user_id=1").get().id;
+  assert.equal((await (await call("/api/contributions/mine")).json()).sources[0].status, "active");
   assert.equal((await call("/api/contributions/source/update", "POST", { id: sourceId, public: false, active: false })).status, 200);
   assert.equal(raw.prepare("SELECT public FROM contributions WHERE id=?").get(imported.id).public, 0, "Quellensichtbarkeit wird auf importierte Einträge übertragen");
   assert.equal(raw.prepare("SELECT active FROM contribution_sources WHERE id=?").get(sourceId).active, 0);
   assert.equal((await call("/api/contributions/source/update", "POST", { id: sourceId, public: true, active: true })).status, 200);
   raw.prepare("UPDATE contribution_sources SET fails=5,fetched=9999999999 WHERE id=?").run(sourceId);
+  assert.equal((await (await call("/api/contributions/mine")).json()).sources[0].status, "paused_after_errors");
   assert.equal((await call("/api/contributions/source/update", "POST", { id: sourceId, active: true })).status, 200);
   const resetSource = raw.prepare("SELECT fails,fetched FROM contribution_sources WHERE id=?").get(sourceId);
   assert.equal(resetSource.fails, 0, "Reaktivierung hebt die Fehlersperre auf");
-  assert.equal(resetSource.fetched, 0, "Reaktivierung plant den sofortigen Abruf");
+  assert.ok(resetSource.fetched <= Math.floor(Date.now() / 1000) - 1801, "Reaktivierung plant den Abruf vor, ohne ihn auf null zu setzen");
+  const firstReactivationTime = resetSource.fetched;
+  for (let i = 0; i < 27; i++) assert.equal((await call("/api/contributions/source/update", "POST", { id: sourceId, active: true })).status, 200);
+  assert.equal((await call("/api/contributions/source/update", "POST", { id: sourceId, active: true })).status, 429, "Reaktivierungen sind rate-limitiert");
+  assert.equal(raw.prepare("SELECT fetched FROM contribution_sources WHERE id=?").get(sourceId).fetched, firstReactivationTime, "wiederholte Reaktivierung bevorzugt die Quelle nicht weiter");
   await call("/api/contributions/update", "POST", { id: imported.id, public: false, topics: [] });
   globalThis.fetch = async () => new Response(`<rss><channel><item><title>New title</title><link>https://example.com/post-auto</link><pubDate>Tue, 02 Jan 2024 00:00:00 GMT</pubDate><category>Fabric</category></item></channel></rss>`);
   try { await refreshContributions({ DB: db }, 1); } finally { globalThis.fetch = originalFetch; }
@@ -192,6 +198,15 @@ test("contributions: Quellen, Metadaten, Privatsphäre, Kategorien und Berichtse
   assert.equal(truncated.total, 1003);
   assert.equal(truncated.items.length, 1000);
   assert.equal(truncated.truncated, true, "gekürzte Exporte weisen die Gesamttrefferzahl aus");
+  assert.equal((await call("/api/contributions/delete", "POST", { id: imported.id })).status, 200);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM contribution_ignored WHERE user_id=1 AND url=?").get(imported.url).n, 1, "Import-Löschung legt einen Tombstone an");
+  assert.ok(!(await (await call("/api/contributions/mine")).json()).contributions.some((x) => x.url === imported.url), "Tombstones erscheinen nicht in /mine");
+  assert.ok(!(await (await call("/api/contributions/export")).json()).items.some((x) => x.url === imported.url), "Tombstones erscheinen nicht im Export");
+  globalThis.fetch = async () => new Response(`<rss><channel><item><title>Reappeared</title><link>https://example.com/post-auto</link><pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate></item></channel></rss>`);
+  raw.prepare("UPDATE contribution_sources SET fetched=0 WHERE id=?").run(sourceId);
+  try { await refreshContributions({ DB: db }, 1); } finally { globalThis.fetch = originalFetch; }
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM contributions WHERE user_id=1 AND url=?").get(imported.url).n, 0, "Tombstone verhindert den erneuten Import");
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM contribution_ignored WHERE user_id=1 AND url=?").get(imported.url).n, 1);
   assert.equal((await call("/api/contributions/delete", "POST", { id: manualId }, { id: 2 })).status, 404, "Beiträge anderer werden nicht gelöscht");
   assert.equal((await call("/api/contributions/delete", "POST", { id: manualId })).status, 200);
   assert.equal((await call("/api/contributions/source/delete", "POST", { id: sourceId }, { id: 2 })).status, 404, "Quellen anderer werden nicht gelöscht");
