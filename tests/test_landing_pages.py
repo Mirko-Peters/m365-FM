@@ -34,15 +34,13 @@ class LandingPageTests(unittest.TestCase):
             "n_main": 42, "n_langs": 14, "spreaker_downloads": 1234, "spreaker_period": "2026-10-28–2026-11-04",
             "stats": {"bing": {"ok": True, "citations": 1100000, "period": {"from": "2026-08-01", "to": "2026-10-30"}},
                       "gsc": {"ok": False}},
-            "features": features, "follow": '<a class="soc" href="https://www.m365.fm">m365.fm</a><a class="soc" href="https://m365con.net">M365Con</a>',
+            "features": features,
         })
 
-    def test_hub_shows_follow_links_footer_does_not(self):
+    def test_no_follow_section_on_hub(self):
         self.build()
-        hub, de_hub, sponsors = self.files["services/index.html"], self.files["de/services/index.html"], self.files["for/sponsors/index.html"]
-        self.assertIn('id="follow"', hub); self.assertIn("More from M365.FM", hub); self.assertIn("https://m365con.net", hub)
-        self.assertIn("Mehr von M365.FM", de_hub)
-        self.assertNotIn('id="follow"', sponsors)   # nur auf dem Hub
+        for path in ("services/index.html", "de/services/index.html"):
+            self.assertNotIn('id="follow"', self.files[path]); self.assertNotIn("m365con.net", self.files[path])
 
     def test_all_pages_have_localized_routes_and_hreflang_clusters(self):
         with patch.object(site_i18n, "T", side_effect=lambda lang, en, de: de if lang == "de" else en):
