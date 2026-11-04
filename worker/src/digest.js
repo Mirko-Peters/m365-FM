@@ -2,7 +2,7 @@
 import { sendPush } from "./push.js";
 import { esc } from "./util.js";
 import { closeMonth } from "./badges.js";
-import { sendMail } from "./mailer.js";
+import { mailReady, sendMail } from "./mailer.js";
 import { wants, weeklyUnsubscribe } from "./mail.js";
 
 const LANG_NAME = { de: "Deutsch", en: "English", es: "Español", fr: "Français", it: "Italiano", pt: "Português", nl: "Nederlands", pl: "Polski", id: "Bahasa Indonesia", ru: "Русский", uk: "Українська", ar: "العربية", he: "עברית", ja: "日本語", ko: "한국어", ml: "മലയാളം", pa: "ਪੰਜਾਬੀ", ta: "தமிழ்", te: "తెలుగు" };
@@ -188,6 +188,7 @@ export async function runDigest(env, { dry = false, at = Date.now() } = {}) {
 
   const result = { recipients: recipients.size, sent: 0, skipped: 0, empty: 0, episodes: 0, personal: 0, period };
   if (dry) return result;
+  if (!mailReady(env)) return { ...result, mailOff: true };
   for (const recipient of recipients.values()) {
     const itemsByLang = await currentItems(db, episodes, recipient.langs, since, time, env.SITE);
     const personal = [], outboxIds = [];

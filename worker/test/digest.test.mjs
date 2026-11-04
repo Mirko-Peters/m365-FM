@@ -45,6 +45,19 @@ test("Wochenmail-Vorschau de/en mit und ohne persönliche Hinweise", () => {
   assert.doesNotMatch(noPersonal, /Personal updates/);
 });
 
+test("Wochenmail reserviert kein Wochenlimit, wenn der Mailversand nicht konfiguriert ist", async () => {
+  const { db, raw } = await database();
+  const t = Date.UTC(2026, 10, 8, 6);
+  raw.exec("INSERT INTO email_subs(email,lang,token,confirmed,created) VALUES('member','en','token',1,1)");
+  const oldFetch = globalThis.fetch;
+  globalThis.fetch = async () => ({ json: async () => ({ episodes: [{ id: "new", language: "en", date: new Date(t - 3600_000).toISOString(), url: "https://www.m365.fm/en/new", title: "New" }] }) });
+  try {
+    const result = await runDigest({ DB: db, SITE: "https://www.m365.fm" }, { at: t });
+    assert.equal(result.mailOff, true);
+    assert.equal(raw.prepare("SELECT COUNT(*) n FROM mail_weekly_delivery").get().n, 0);
+  } finally { globalThis.fetch = oldFetch; }
+});
+
 test("Wochenmail bündelt Sprachen und Antworten, überspringt leere Wochen und begrenzt je Adresse", async () => {
   const { db, raw } = await database();
   const t = Date.UTC(2026, 10, 8, 6), recent = new Date(t - 86400_000).toISOString();
