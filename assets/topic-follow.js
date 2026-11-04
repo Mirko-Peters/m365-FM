@@ -87,7 +87,7 @@
         if (button._followed && !(email.checked && !button._email))
           return api("/api/topics/unfollow", { method: "POST", body: { kind: kind, id: id, endpoint: endpoint } });
         if (email.checked && !user) { status.textContent = msg.login; return null; }
-        var subscription = Promise.resolve(existing);
+        var subscription = Promise.resolve(existing), pushKeys = null;
         if (!endpoint && !email.checked) {
           if (!("serviceWorker" in navigator) || !("PushManager" in window) || !("Notification" in window)) { status.textContent = msg.need; return null; }
           if (Notification.permission === "denied") { status.textContent = msg.denied; return null; }
@@ -104,17 +104,14 @@
         return subscription.then(function (sub) {
           if (sub) {
             endpoint = sub.endpoint;
-            var subscriptionJson = sub.toJSON();
-            return api("/api/push/subscribe", { method: "POST", body: {
-              endpoint: endpoint, keys: subscriptionJson.keys, lang: C.lang, digest: 0,
-            } }).then(function (r) { return r.s === 200 ? sub : Promise.reject(new Error("push_subscribe")); });
+            pushKeys = sub.toJSON().keys;
           }
           return null;
         }).then(function (sub) {
           if (!sub && !email.checked) return null;
           return api("/api/topics/follow", { method: "POST", body: {
             kind: kind, id: id, endpoint: sub ? endpoint : "", lang: C.lang,
-            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC", email: emailReady && email.checked,
+            keys: pushKeys, timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC", email: emailReady && email.checked,
           } });
         });
       }).then(function (r) {

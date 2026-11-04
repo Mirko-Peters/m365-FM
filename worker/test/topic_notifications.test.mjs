@@ -3,10 +3,12 @@ import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { dispatchTopicNotifications, handleTopicSubscriptions, queueTopicArticles, queueSessionReminders, queueTopicNotification, quietHours } from "../src/topic_notifications.js";
 import { refreshFeeds } from "../src/feeds.js";
-import { sign } from "../src/util.js";
-import { savePushSubscription } from "../src/push.js";
+import { b64u, makeSession, sign } from "../src/util.js";
+import { savePushSubscription, sendPush } from "../src/push.js";
 import { digestPushSubscriptions } from "../src/digest.js";
 import worker from "../src/index.js";
+import { handleEvents } from "../src/events.js";
+import { handleMail } from "../src/mail.js";
 
 async function database() {
   const { DatabaseSync } = await import("node:sqlite");
@@ -159,6 +161,45 @@ test("push digest can be disabled without removing a topic subscription", async 
   assert.equal(raw.prepare("SELECT digest FROM push_subs WHERE endpoint='https://push.example/topic-digest'").get().digest, 0);
 });
 
+test("signed-out endpoint holders can inspect and disable an account push digest", async () => {
+  const { db, raw } = await database();
+  raw.exec("INSERT INTO push_subs(endpoint,p256dh,auth,lang,user_id,created,digest) VALUES('https://push.example/account-digest','p','a','de',7,1,1)");
+  const env = { DB: db, SITE: "https://www.m365.fm", API: "https://api-dub.m365.fm" };
+  const request = (path, method = "GET", body) => new Request(`https://api-dub.m365.fm${path}`, {
+    method, headers: { origin: "https://www.m365.fm", "x-requested-with": "m365", ...(body ? { "content-type": "application/json" } : {}) },
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  const status = await worker.fetch(request("/api/push/status?endpoint=https%3A%2F%2Fpush.example%2Faccount-digest"), env);
+  assert.equal(status.status, 200);
+  assert.deepEqual(await status.json(), { registered: true, digest: true, topics: false });
+  const off = await worker.fetch(request("/api/push/digest", "POST", { endpoint: "https://push.example/account-digest", on: false }), env);
+  assert.equal(off.status, 200);
+  assert.equal(raw.prepare("SELECT digest FROM push_subs WHERE endpoint='https://push.example/account-digest'").get().digest, 0);
+  const on = await worker.fetch(request("/api/push/digest", "POST", { endpoint: "https://push.example/account-digest", on: true }), env);
+  assert.equal(on.status, 400);
+});
+
+test("push endpoint removal clears recipient scheduling state", async () => {
+  const { db, raw } = await database();
+  const endpoint = "https://push.example/expired";
+  raw.exec(`INSERT INTO topic_recipient_state(channel,recipient,not_before,updated) VALUES('push','${endpoint}',2000000000,1)`);
+  const receiver = await crypto.subtle.generateKey({ name: "ECDH", namedCurve: "P-256" }, true, ["deriveBits"]);
+  const p256dh = b64u.enc(new Uint8Array(await crypto.subtle.exportKey("raw", receiver.publicKey)));
+  const auth = b64u.enc(crypto.getRandomValues(new Uint8Array(16)));
+  const vapid = await crypto.subtle.generateKey({ name: "ECDSA", namedCurve: "P-256" }, true, ["sign", "verify"]);
+  const env = {
+    DB: db, VAPID_PRIVATE_JWK: JSON.stringify(await crypto.subtle.exportKey("jwk", vapid.privateKey)),
+    VAPID_PUBLIC: b64u.enc(new Uint8Array(await crypto.subtle.exportKey("raw", vapid.publicKey))), VAPID_SUBJECT: "mailto:test@example.invalid",
+  };
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async () => new Response(null, { status: 410 });
+  try {
+    const result = await sendPush(env, { endpoint, p256dh, auth }, { title: "Test" });
+    assert.equal(result.gone, true);
+    assert.equal(raw.prepare("SELECT COUNT(*) n FROM topic_recipient_state WHERE channel='push' AND recipient=?").get(endpoint).n, 0);
+  } finally { globalThis.fetch = originalFetch; }
+});
+
 test("blog follows are not topic notifications and survive clearing them", async () => {
   const { db, raw } = await database();
   raw.prepare("INSERT INTO blog_follows(user_id,handle,created) VALUES(7,'mirko-p',1)").run();
@@ -170,6 +211,108 @@ test("blog follows are not topic notifications and survive clearing them", async
   const cleared = await handleTopicSubscriptions(env, new Request(clearUrl, { method: "POST", headers: { "content-type": "application/json" }, body: "{}" }), clearUrl, "/api/topics/clear", user, json);
   assert.equal(cleared.status, 200);
   assert.equal(raw.prepare("SELECT COUNT(*) n FROM blog_follows WHERE user_id=7 AND handle='mirko-p'").get().n, 1);
+});
+
+test("topic follow registers missing endpoints without consuming the push subscribe rate limit", async () => {
+  const { db, raw } = await database();
+  raw.exec(`
+    INSERT INTO events(id,handle,owner_id,title,start,public,created,updated) VALUES(1,'follow-topic',7,'Follow topic','2027-01-11',1,1,1);
+    INSERT INTO push_subs(endpoint,p256dh,auth,lang,user_id,created,digest) VALUES('https://push.example/existing','old-p','old-a','de',7,1,1);
+  `);
+  const env = { DB: db, SITE: "https://www.m365.fm" };
+  const run = async (endpoint, lang = "en") => {
+    const request = new Request("https://api-dub.m365.fm/api/topics/follow", {
+      method: "POST",
+      headers: { "content-type": "application/json", "cf-connecting-ip": "198.51.100.40" },
+      body: JSON.stringify({ kind: "event", id: "follow-topic", endpoint, keys: { p256dh: "p", auth: "a" }, lang }),
+    });
+    return handleTopicSubscriptions(env, request, new URL(request.url), "/api/topics/follow", { id: 7 }, (data, status = 200) => ({ data, status }));
+  };
+  for (let i = 0; i < 21; i++) {
+    const result = await run("https://push.example/new");
+    assert.equal(result.status, 200);
+  }
+  const newSub = raw.prepare("SELECT lang,digest FROM push_subs WHERE endpoint='https://push.example/new'").get();
+  assert.deepEqual([newSub.lang, newSub.digest], ["en", 0]);
+  const existing = await run("https://push.example/existing");
+  assert.equal(existing.status, 200);
+  const digest = raw.prepare("SELECT lang,digest FROM push_subs WHERE endpoint='https://push.example/existing'").get();
+  assert.deepEqual([digest.lang, digest.digest], ["de", 1]);
+});
+
+test("unfollow and clear ignore a missing browser endpoint for a signed-in account", async () => {
+  const { db, raw } = await database();
+  raw.exec(`
+    INSERT INTO email_topics(user_id,kind,topic_id,lang,timezone,created) VALUES(7,'event','remaining-event','de','UTC',1);
+    INSERT INTO push_subs(endpoint,p256dh,auth,lang,user_id,created,digest) VALUES('https://push.example/account-clear','p','a','en',7,1,0);
+    INSERT INTO topic_recipient_state(channel,recipient,not_before,updated) VALUES('push','https://push.example/account-clear',2000000000,1);
+  `);
+  const env = { DB: db }, user = { id: 7 };
+  const run = async (path, body) => {
+    const request = new Request(`https://api-dub.m365.fm/api/topics/${path}`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
+    return handleTopicSubscriptions(env, request, new URL(request.url), `/api/topics/${path}`, user, (data, status = 200) => ({ data, status }));
+  };
+  const unfollow = await run("unfollow", { kind: "event", id: "missing-push-topic", endpoint: "https://push.example/removed" });
+  assert.equal(unfollow.status, 200);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM email_topics WHERE user_id=7 AND topic_id='remaining-event'").get().n, 1);
+  const anonymous = await handleTopicSubscriptions(env, new Request("https://api-dub.m365.fm/api/topics/unfollow", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ kind: "event", id: "remaining-event", endpoint: "https://push.example/unknown" }) }), new URL("https://api-dub.m365.fm/api/topics/unfollow"), "/api/topics/unfollow", null, (data, status = 200) => ({ data, status }));
+  assert.equal(anonymous.status, 400);
+  raw.prepare("INSERT INTO topic_recipient_state(channel,recipient,not_before,updated) VALUES('email','7',2000000000,1)").run();
+  const cleared = await run("clear", { endpoint: "https://push.example/removed" });
+  assert.equal(cleared.status, 200);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM email_topics WHERE user_id=7").get().n, 0);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM topic_recipient_state WHERE channel='email' AND recipient='7'").get().n, 0);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM topic_recipient_state WHERE channel='push' AND recipient='https://push.example/account-clear'").get().n, 0);
+});
+
+test("event exports preserve the event time zone", async () => {
+  const { db, raw } = await database();
+  raw.exec(`
+    INSERT INTO users(id,provider,sub,name,created) VALUES(7,'test','7','Organizer',1);
+    INSERT INTO events(id,handle,owner_id,title,start,tz,public,created,updated) VALUES(1,'new-york-event',7,'New York event','2027-01-11','America/New_York',1,1,1);
+  `);
+  const url = new URL("https://api-dub.m365.fm/api/events/export");
+  const result = await handleEvents({ DB: db }, new Request(url), url, "/api/events/export", null, (data, status = 200) => ({ data, status }));
+  assert.equal(result.data.events[0].tz, "America/New_York");
+});
+
+test("mail removal and topic e-mail unsubscribe clear recipient scheduling state", async () => {
+  const { db, raw } = await database();
+  raw.exec(`
+    INSERT INTO email_topics(user_id,kind,topic_id,lang,timezone,created) VALUES(7,'entity','power-bi','en','UTC',1);
+    INSERT INTO topic_recipient_state(channel,recipient,not_before,updated) VALUES('email','7',2000000000,1);
+    INSERT INTO mail_addr(user_id,email,verified,token,created) VALUES(7,'test@example.invalid',1,'',1);
+  `);
+  const env = { DB: db, SESSION_SECRET: "test-secret", API: "https://api-dub.m365.fm", SITE: "https://www.m365.fm" };
+  const user = { id: 7 };
+  const json = (data, status = 200) => ({ data, status });
+  const mailUrl = new URL("https://api-dub.m365.fm/api/mail/remove");
+  const removed = await handleMail(env, new Request(mailUrl, { method: "POST" }), mailUrl, "/api/mail/remove", user, json);
+  assert.equal(removed.status, 200);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM topic_recipient_state WHERE channel='email' AND recipient='7'").get().n, 0);
+
+  raw.exec("INSERT INTO email_topics(user_id,kind,topic_id,lang,timezone,created) VALUES(7,'entity','power-bi','en','UTC',1); INSERT INTO topic_recipient_state(channel,recipient,not_before,updated) VALUES('email','7',2000000000,1)");
+  const sig = await sign(env.SESSION_SECRET, "topic-email:7");
+  const url = new URL(`https://api-dub.m365.fm/api/topics/email-unsub?t=7.${sig}`);
+  const unsub = await handleTopicSubscriptions(env, new Request(url), url, "/api/topics/email-unsub", null, json);
+  assert.equal(unsub.status, 200);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM topic_recipient_state WHERE channel='email' AND recipient='7'").get().n, 0);
+});
+
+test("account deletion clears push and e-mail recipient scheduling state", async () => {
+  const { db, raw } = await database();
+  raw.exec(`
+    INSERT INTO users(id,provider,sub,name,created) VALUES(7,'test','7','Test',1);
+    INSERT INTO push_subs(endpoint,p256dh,auth,lang,user_id,created,digest) VALUES('https://push.example/delete-account','p','a','en',7,1,0);
+    INSERT INTO topic_recipient_state(channel,recipient,not_before,updated) VALUES('push','https://push.example/delete-account',2000000000,1),('email','7',2000000000,1);
+  `);
+  const env = { DB: db, SESSION_SECRET: "test-secret", SITE: "https://www.m365.fm", API: "https://api-dub.m365.fm" };
+  const token = await makeSession(env, 7);
+  const response = await worker.fetch(new Request("https://api-dub.m365.fm/api/me", {
+    method: "DELETE", headers: { cookie: `m365s=${token}`, origin: "https://www.m365.fm", "x-requested-with": "m365" },
+  }), env);
+  assert.equal(response.status, 200);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM topic_recipient_state").get().n, 0);
 });
 
 test("topic article polling processes only the newest 50 and queues them in batches", async () => {
@@ -245,9 +388,9 @@ test("topic subscriptions: require a registered push endpoint or a verified, exp
   const unfollow = await run("unfollow", { kind: "session", id: "42", endpoint: "https://push.example/42" });
   assert.deepEqual(unfollow.data, { ok: true, following: false });
   assert.equal(raw.prepare("SELECT COUNT(*) n FROM push_subs WHERE endpoint='https://push.example/42'").get().n, 0);
-  await savePushSubscription(db, { endpoint: "https://push.example/42", p256dh: "p", auth: "a", lang: "en", digest: 0, created: 2 });
-  const followAgain = await run("follow", { kind: "session", id: "43", endpoint: "https://push.example/42", lang: "en" });
+  const followAgain = await run("follow", { kind: "session", id: "43", endpoint: "https://push.example/42", keys: { p256dh: "p", auth: "a" }, lang: "en" });
   assert.deepEqual(followAgain.data, { ok: true, following: true });
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM push_subs WHERE endpoint='https://push.example/42'").get().n, 1);
 
   raw.exec(`
     INSERT INTO push_subs(endpoint,p256dh,auth,lang,user_id,created) VALUES('https://push.example/account','p','a','en',7,1);
@@ -273,7 +416,9 @@ test("topic subscriptions: require a registered push endpoint or a verified, exp
   await dispatchTopicNotifications({ DB: db, SESSION_SECRET: "test-secret", API: "https://api-dub.m365.fm" }, { at: new Date("2026-11-04T12:00:00Z") });
   assert.equal(raw.prepare("SELECT COUNT(*) n FROM email_topics WHERE user_id=7").get().n, 1, "an unverified address does not delete topic subscriptions");
   const sig = await sign(env.SESSION_SECRET, "topic-email:7");
+  raw.prepare("INSERT OR REPLACE INTO topic_recipient_state(channel,recipient,not_before,updated) VALUES('email','7',2000000000,1)").run();
   const unsub = await run("email-unsub", {}, null, "GET", `?t=7.${sig}`);
   assert.equal(unsub.status, 200);
   assert.equal(raw.prepare("SELECT COUNT(*) n FROM email_topics WHERE user_id=7").get().n, 0);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM topic_recipient_state WHERE channel='email' AND recipient='7'").get().n, 0);
 });

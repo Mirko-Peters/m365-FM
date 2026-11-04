@@ -56,6 +56,7 @@ export async function sendPush(env, sub, payloadObj) {
     env.DB.prepare("DELETE FROM push_topics WHERE endpoint=?").bind(sub.endpoint),
     env.DB.prepare("DELETE FROM topic_queue WHERE channel='push' AND recipient=?").bind(sub.endpoint),
     env.DB.prepare("DELETE FROM topic_deliveries WHERE channel='push' AND recipient=?").bind(sub.endpoint),
+    env.DB.prepare("DELETE FROM topic_recipient_state WHERE channel='push' AND recipient=?").bind(sub.endpoint),
     env.DB.prepare("DELETE FROM push_subs WHERE endpoint=?").bind(sub.endpoint),
   ]).catch(() => {});
   return { ok: r.status >= 200 && r.status < 300, gone, status: r.status };

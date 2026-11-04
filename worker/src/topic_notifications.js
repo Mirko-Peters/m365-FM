@@ -340,6 +340,7 @@ export async function dispatchTopicNotifications(env, { at = new Date(), limit =
           db.prepare("DELETE FROM push_topics WHERE endpoint=?").bind(first.recipient),
           db.prepare("DELETE FROM topic_queue WHERE channel='push' AND recipient=?").bind(first.recipient),
           db.prepare("DELETE FROM topic_deliveries WHERE channel='push' AND recipient=?").bind(first.recipient),
+          db.prepare("DELETE FROM topic_recipient_state WHERE channel='push' AND recipient=?").bind(first.recipient),
           db.prepare("DELETE FROM push_subs WHERE endpoint=?").bind(first.recipient),
         ]);
         continue;
@@ -351,6 +352,7 @@ export async function dispatchTopicNotifications(env, { at = new Date(), limit =
           db.prepare("DELETE FROM push_subs WHERE endpoint=?").bind(first.recipient),
           db.prepare("DELETE FROM topic_queue WHERE channel='push' AND recipient=?").bind(first.recipient),
           db.prepare("DELETE FROM topic_deliveries WHERE channel='push' AND recipient=?").bind(first.recipient),
+          db.prepare("DELETE FROM topic_recipient_state WHERE channel='push' AND recipient=?").bind(first.recipient),
         ]);
         result.gone++; continue;
       }
@@ -392,6 +394,8 @@ export async function handleTopicSubscriptions(env, request, url, path, user, J)
     await db.batch([
       db.prepare("DELETE FROM email_topics WHERE user_id=?").bind(+uid),
       db.prepare("DELETE FROM topic_queue WHERE channel='email' AND recipient=?").bind(uid),
+      db.prepare("DELETE FROM topic_deliveries WHERE channel='email' AND recipient=?").bind(uid),
+      db.prepare("DELETE FROM topic_recipient_state WHERE channel='email' AND recipient=?").bind(uid),
     ]);
     return method === "POST" ? new Response("ok") : new Response("<!doctype html><meta charset=utf-8><p>Topic e-mails unsubscribed / Themen-E-Mails abbestellt.</p>", { headers: { "content-type": "text/html; charset=utf-8" } });
   }
@@ -426,6 +430,7 @@ export async function handleTopicSubscriptions(env, request, url, path, user, J)
   if (path === "/api/topics/follow") {
     if (!validTopic(kind, topicId) || !topicLang(b.lang) || !(await topicExists(env, kind, topicId))) return J({ error: "bad_request" }, 400);
     if (!endpoint && !(user && b.email === true)) return J({ error: "consent_required" }, 400);
+    if (endpoint && !/^https:\/\//.test(endpoint)) return J({ error: "bad_request" }, 400);
     if (b.email === true && !user) return J({ error: "login" }, 401);
     if (b.email === true && !(await db.prepare("SELECT 1 x FROM mail_addr WHERE user_id=? AND verified=1").bind(user.id).first())) return J({ error: "email_unverified" }, 409);
     if (kind === "creator" && user) {
@@ -434,7 +439,15 @@ export async function handleTopicSubscriptions(env, request, url, path, user, J)
     }
     const timezone = TIMEZONE(String(b.timezone || "UTC").slice(0, 80)), created = now();
     if (endpoint) {
-      const sub = await db.prepare("SELECT user_id FROM push_subs WHERE endpoint=?").bind(endpoint).first();
+      let sub = await db.prepare("SELECT user_id FROM push_subs WHERE endpoint=?").bind(endpoint).first();
+      if (!sub) {
+        const keys = b.keys || {};
+        if (typeof keys.p256dh !== "string" || !keys.p256dh || keys.p256dh.length > 200
+          || typeof keys.auth !== "string" || !keys.auth || keys.auth.length > 100) return J({ error: "bad_subscription" }, 400);
+        await db.prepare("INSERT INTO push_subs(endpoint,p256dh,auth,lang,user_id,created,digest) VALUES(?,?,?,?,?,?,0) ON CONFLICT(endpoint) DO NOTHING")
+          .bind(endpoint, keys.p256dh, keys.auth, b.lang, user?.id ?? null, created).run();
+        sub = await db.prepare("SELECT user_id FROM push_subs WHERE endpoint=?").bind(endpoint).first();
+      }
       if (!sub || (sub.user_id && sub.user_id !== user?.id)) return J({ error: "bad_subscription" }, 400);
       if (user && !sub.user_id) await db.prepare("UPDATE push_subs SET user_id=? WHERE endpoint=? AND user_id IS NULL").bind(user.id, endpoint).run();
       await db.prepare("UPDATE push_topics SET lang=?,timezone=? WHERE endpoint=?").bind(b.lang, timezone, endpoint).run();
@@ -453,23 +466,28 @@ export async function handleTopicSubscriptions(env, request, url, path, user, J)
   if (path === "/api/topics/unfollow") {
     if (!validTopic(kind, topicId)) return J({ error: "bad_request" }, 400);
     if (!user && !endpoint) return J({ error: "login" }, 401);
+    let endpointRegistered = false;
     if (endpoint) {
       const sub = await db.prepare("SELECT user_id FROM push_subs WHERE endpoint=?").bind(endpoint).first();
-      if (!sub || (sub.user_id && sub.user_id !== user?.id)) return J({ error: "bad_subscription" }, 400);
+      if (!sub && !user) return J({ error: "bad_subscription" }, 400);
+      if (sub?.user_id && sub.user_id !== user?.id) return J({ error: "bad_subscription" }, 400);
+      endpointRegistered = !!sub;
     }
     const ops = [];
-    if (endpoint) ops.push(db.prepare("DELETE FROM push_topics WHERE endpoint=? AND kind=? AND topic_id=?").bind(endpoint, kind, topicId));
+    if (endpointRegistered) ops.push(db.prepare("DELETE FROM push_topics WHERE endpoint=? AND kind=? AND topic_id=?").bind(endpoint, kind, topicId));
     if (user) {
       ops.push(db.prepare("DELETE FROM push_topics WHERE user_id=? AND kind=? AND topic_id=?").bind(user.id, kind, topicId));
       ops.push(db.prepare("DELETE FROM topic_queue WHERE channel='push' AND recipient IN (SELECT endpoint FROM push_subs WHERE user_id=?) AND kind=? AND topic_id=?").bind(user.id, kind, topicId));
       ops.push(db.prepare("DELETE FROM email_topics WHERE user_id=? AND kind=? AND topic_id=?").bind(user.id, kind, topicId));
       ops.push(db.prepare("DELETE FROM topic_queue WHERE channel='email' AND recipient=? AND kind=? AND topic_id=?").bind(String(user.id), kind, topicId));
       ops.push(db.prepare("DELETE FROM topic_deliveries WHERE channel='push' AND recipient IN (SELECT endpoint FROM push_subs WHERE user_id=? AND digest=0 AND NOT EXISTS (SELECT 1 FROM push_topics WHERE endpoint=push_subs.endpoint))").bind(user.id));
+      ops.push(db.prepare("DELETE FROM topic_recipient_state WHERE channel='push' AND recipient IN (SELECT endpoint FROM push_subs WHERE user_id=? AND digest=0 AND NOT EXISTS (SELECT 1 FROM push_topics WHERE endpoint=push_subs.endpoint))").bind(user.id));
       ops.push(db.prepare("DELETE FROM push_subs WHERE user_id=? AND digest=0 AND NOT EXISTS (SELECT 1 FROM push_topics WHERE endpoint=push_subs.endpoint)").bind(user.id));
     }
-    if (endpoint) ops.push(db.prepare("DELETE FROM topic_queue WHERE channel='push' AND recipient=? AND kind=? AND topic_id=?").bind(endpoint, kind, topicId));
-    if (endpoint) {
+    if (endpointRegistered) ops.push(db.prepare("DELETE FROM topic_queue WHERE channel='push' AND recipient=? AND kind=? AND topic_id=?").bind(endpoint, kind, topicId));
+    if (endpointRegistered) {
       ops.push(db.prepare("DELETE FROM topic_deliveries WHERE channel='push' AND recipient=? AND EXISTS (SELECT 1 FROM push_subs WHERE endpoint=? AND digest=0) AND NOT EXISTS (SELECT 1 FROM push_topics WHERE endpoint=?)").bind(endpoint, endpoint, endpoint));
+      ops.push(db.prepare("DELETE FROM topic_recipient_state WHERE channel='push' AND recipient=? AND EXISTS (SELECT 1 FROM push_subs WHERE endpoint=? AND digest=0) AND NOT EXISTS (SELECT 1 FROM push_topics WHERE endpoint=?)").bind(endpoint, endpoint, endpoint));
       ops.push(db.prepare("DELETE FROM push_subs WHERE endpoint=? AND digest=0 AND NOT EXISTS (SELECT 1 FROM push_topics WHERE endpoint=push_subs.endpoint)").bind(endpoint));
     }
     await db.batch(ops);
@@ -479,12 +497,13 @@ export async function handleTopicSubscriptions(env, request, url, path, user, J)
     if (!user && !endpoint) return J({ error: "login" }, 401);
     const ops = [];
     if (user) {
-      ops.push(db.prepare("DELETE FROM email_topics WHERE user_id=?").bind(user.id), db.prepare("DELETE FROM push_topics WHERE user_id=?").bind(user.id), db.prepare("DELETE FROM topic_queue WHERE channel='email' AND recipient=?").bind(String(user.id)), db.prepare("DELETE FROM topic_queue WHERE channel='push' AND recipient IN (SELECT endpoint FROM push_subs WHERE user_id=?)").bind(user.id), db.prepare("DELETE FROM topic_deliveries WHERE channel='push' AND recipient IN (SELECT endpoint FROM push_subs WHERE user_id=? AND digest=0)").bind(user.id), db.prepare("DELETE FROM push_subs WHERE user_id=? AND digest=0").bind(user.id));
+      ops.push(db.prepare("DELETE FROM email_topics WHERE user_id=?").bind(user.id), db.prepare("DELETE FROM push_topics WHERE user_id=?").bind(user.id), db.prepare("DELETE FROM topic_queue WHERE channel='email' AND recipient=?").bind(String(user.id)), db.prepare("DELETE FROM topic_queue WHERE channel='push' AND recipient IN (SELECT endpoint FROM push_subs WHERE user_id=?)").bind(user.id), db.prepare("DELETE FROM topic_deliveries WHERE channel='push' AND recipient IN (SELECT endpoint FROM push_subs WHERE user_id=?)").bind(user.id), db.prepare("DELETE FROM topic_recipient_state WHERE channel='push' AND recipient IN (SELECT endpoint FROM push_subs WHERE user_id=?)").bind(user.id), db.prepare("DELETE FROM topic_recipient_state WHERE channel='email' AND recipient=?").bind(String(user.id)), db.prepare("DELETE FROM push_subs WHERE user_id=? AND digest=0").bind(user.id));
     }
     if (endpoint) {
       const sub = await db.prepare("SELECT user_id FROM push_subs WHERE endpoint=?").bind(endpoint).first();
-      if (!sub || (sub.user_id && sub.user_id !== user?.id)) return J({ error: "bad_subscription" }, 400);
-      ops.push(db.prepare("DELETE FROM push_topics WHERE endpoint=?").bind(endpoint), db.prepare("DELETE FROM topic_queue WHERE channel='push' AND recipient=?").bind(endpoint), db.prepare("DELETE FROM topic_deliveries WHERE channel='push' AND recipient=? AND EXISTS (SELECT 1 FROM push_subs WHERE endpoint=? AND digest=0)").bind(endpoint, endpoint), db.prepare("DELETE FROM push_subs WHERE endpoint=? AND digest=0").bind(endpoint));
+      if (!sub && !user) return J({ error: "bad_subscription" }, 400);
+      if (sub?.user_id && sub.user_id !== user?.id) return J({ error: "bad_subscription" }, 400);
+      if (sub) ops.push(db.prepare("DELETE FROM push_topics WHERE endpoint=?").bind(endpoint), db.prepare("DELETE FROM topic_queue WHERE channel='push' AND recipient=?").bind(endpoint), db.prepare("DELETE FROM topic_deliveries WHERE channel='push' AND recipient=? AND EXISTS (SELECT 1 FROM push_subs WHERE endpoint=? AND digest=0)").bind(endpoint, endpoint), db.prepare("DELETE FROM topic_recipient_state WHERE channel='push' AND recipient=?").bind(endpoint), db.prepare("DELETE FROM push_subs WHERE endpoint=? AND digest=0").bind(endpoint));
     }
     await db.batch(ops);
     return J({ ok: true });
