@@ -499,7 +499,7 @@ def switch_from(body, alts):
     return re.sub(r'<details class="lsw">.*?</details>', lambda b: re.sub(r'<a href="([^"]*)" hreflang="([^"]+)"', lambda a: f'<a href="{m.get(a.group(2), a.group(1))}" hreflang="{a.group(2)}"', b.group(0)), body, count=1, flags=re.S)
 
 
-def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefault=None, og_type="article", extra_head="", noindex=False, side="", og_of=None, switch=None, self_url=None, share=True):
+def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefault=None, og_type="article", extra_head="", noindex=False, side="", og_of=None, switch=None, self_url=None, share=True, og_image=None):
     if lang in COMM_LANGS[2:] and any(k in canonical for k in ("/community/", "/entity/", "/glossary/")):
         extra_head += f'<script defer src="{BASE}/assets/ui-{lang}.js"></script>'
     hl = LANGS[lang][1] if lang in LANGS else "en"
@@ -518,8 +518,11 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
     body = switch_from(body, {**(switch or alternates or {}), (lang if lang in LANGS else "en"): _self})   # T42: eigene Sprache = diese Seite
     ld = "".join(f'<script type="application/ld+json">{json.dumps(j, ensure_ascii=False)}</script>\n' for j in complete_ld(jsonld))
     desc = meta_desc(desc)   # T7: Beschreibung einheitlich begrenzt
+    ogw, ogh = 1200, 630
     if canonical.endswith("404.html") or noindex:
         ogimg = f"{BASE}/assets/og-default.png"
+    elif og_image:   # eigenes Bild der Seite (z. B. Service-Landingpages: og-<variante>.png in img.m365.fm/services/, site_landing.py): (url, breite, hoehe)
+        ogimg, ogw, ogh = og_image
     elif og_of:   # lokalisierte Show-Seiten teilen das Teilen-Bild der englischen Seite (spart Zehntausende Bilder)
         ogimg = f"{OG_BASE}/{og_of.replace(BASE, '').strip('/') or 'index'}.png"
         if share: body = body.replace("<footer>", share_html(lang, canonical, title) + "<footer>", 1)
@@ -546,7 +549,7 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
 <link rel="icon" href="{BASE}/assets/favicon.svg" type="image/svg+xml"><link rel="icon" href="{BASE}/assets/favicon-32.png" sizes="32x32" type="image/png"><link rel="shortcut icon" href="{BASE}/assets/favicon.ico"><link rel="apple-touch-icon" href="{BASE}/assets/apple-touch-icon.png"><meta name="theme-color" content="#1d2126">
 {alt}<meta property="og:type" content="{og_type}"><meta property="og:title" content="{esc(bare_title(title))}"><meta property="og:description" content="{esc(desc)}">
 <meta property="og:url" content="{canonical}"><meta property="og:locale" content="{loc}"><meta property="og:site_name" content="M365.FM">
-<meta property="og:image" content="{ogimg}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="{esc(bare_title(title))}">
+<meta property="og:image" content="{ogimg}"><meta property="og:image:width" content="{ogw}"><meta property="og:image:height" content="{ogh}"><meta property="og:image:alt" content="{esc(bare_title(title))}">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{esc(bare_title(title))}"><meta name="twitter:description" content="{esc(desc)}"><meta name="twitter:image" content="{ogimg}">
 {font_preloads()}
 {extra_head}{ADS.head(BASE, body, canonical, noindex)}{css_link()}<style>{FXCSS}</style>{A11Y_EARLY}
@@ -815,7 +818,7 @@ def footer(lang):
     return (f'<footer><div class="wrap">{_top}{_nw}'   # m365.fm, M365Con, LinkedIn, YouTube seit 4.11. nicht mehr im Footer (Wunsch Mirko); dafuer der Service-Hub /services/
             f'<a href="{ast_url(lang)}">{esc(ast_label(lang))}</a><a href="{BASE}/{"de/" if lang == "de" else ""}press/">{"Pressekit" if lang == "de" else "Press kit"}</a>'
             f'<a href="{SPN.url(BASE, _tl)}">{esc(SPN.label(_tl))}</a><a href="{LND.hub_url(BASE, _tl)}">{LND.footer_label(_tl)}</a><a href="{BASE}/impressum/" rel="nofollow">Impressum</a><a href="{BASE}/legal/" rel="nofollow">Legal notice</a>'
-            f'<a href="{BASE}/datenschutz/" rel="nofollow">Datenschutz</a><a href="{BASE}/privacy/" rel="nofollow">Privacy</a>'
+            f'<a href="{BASE}/datenschutz/" rel="nofollow">Datenschutz</a><a href="{BASE}/privacy/" rel="nofollow">Privacy</a><a href="{BASE}/{"sicherheit" if lang == "de" else "security"}/" rel="nofollow">{"Sicherheit" if lang == "de" else "Security"}</a>'
             f'<div style="margin-top:10px">© {date.today().year} Mirko Peters · M365.FM</div></div></footer>')
 
 
@@ -1338,8 +1341,9 @@ def build():
     # Rechtliche Seiten (noindex)
     import site_legal as SL
     for path, fn, lg, ttl in (("impressum", SL.impressum_de, "de", "Impressum"), ("legal", SL.impressum_en, "en", "Legal notice"),
-                              ("datenschutz", SL.privacy_de, "de", "Datenschutz"), ("privacy", SL.privacy_en, "en", "Privacy policy")):
-        _pair = {"impressum": "legal", "legal": "impressum", "datenschutz": "privacy", "privacy": "datenschutz"}[path]   # T42: Umschalter auf das Gegenstueck
+                              ("datenschutz", SL.privacy_de, "de", "Datenschutz"), ("privacy", SL.privacy_en, "en", "Privacy policy"),
+                              ("security", SL.security_en, "en", "Security"), ("sicherheit", SL.security_de, "de", "Sicherheit")):
+        _pair = {"impressum": "legal", "legal": "impressum", "datenschutz": "privacy", "privacy": "datenschutz", "security": "sicherheit", "sicherheit": "security"}[path]   # T42: Umschalter auf das Gegenstueck
         _lsw = {lg: f"{BASE}/{path}/", ("en" if lg == "de" else "de"): f"{BASE}/{_pair}/"}
         write(f"{path}/index.html", page(lg, f"{ttl} – M365.FM", ttl, f"{BASE}/{path}/", f"{header(lg, '')}<main class=\"wrap\" style=\"max-width:46em\">{fn()}</main>{footer(lg)}", og_type="website", noindex=True, switch=_lsw))
 

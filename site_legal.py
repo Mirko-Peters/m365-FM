@@ -60,3 +60,50 @@ def privacy_en():
 <h2>External links and sharing</h2><p>Links to Spreaker, Spotify, Apple Podcasts, Amazon Music, Deezer, LinkedIn, X, Facebook, WhatsApp, Telegram, Reddit and others are plain links. Data is only sent to the respective provider once you click; their privacy policies apply.</p>
 <h2>Your rights</h2><p>You have the right of access, rectification, erasure, restriction, data portability and objection (Arts. 15–21 GDPR), and to withdraw consent at any time with effect for the future. You may also lodge a complaint with a supervisory authority, e.g. {AUTH_DE}.</p>
 {_mail(False)}"""
+
+
+SECURITY_SCOPE = ("www.m365.fm", "m365.fm", "dub.m365.fm", "api-dub.m365.fm", "img.m365.fm")
+
+
+def security_en():
+    scope = "".join(f"<li>{h}</li>" for h in SECURITY_SCOPE)
+    return f"""<h1>Security: reporting vulnerabilities</h1>
+<p>If you believe you have found a security vulnerability in M365.FM, please tell me. I appreciate every responsible report and will work with you to fix it quickly.</p>
+<h2>How to report</h2>{_mail(False)}
+<p>Please use the subject line <b>Security</b> and include:</p>
+<ul><li>the affected address (URL) or API endpoint,</li><li>a description of the issue and its possible impact,</li><li>the steps to reproduce it (screenshots or a short proof of concept help),</li><li>whether and how you would like to be credited.</li></ul>
+<p>Please do not share the details publicly until the issue is fixed. Machine-readable contact details: <a href="https://www.m365.fm/.well-known/security.txt">/.well-known/security.txt</a>.</p>
+<h2>What happens next</h2>
+<ul><li>You get a confirmation within 5 working days.</li><li>I assess the report, keep you informed about the status and tell you when the issue is fixed.</li><li>For the disclosure I ask for up to 90 days, or less if the fix is live earlier. We agree on the timing together.</li><li>If you like, you will be named with thanks once the fix is live.</li></ul>
+<p>There is no paid bug bounty programme.</p>
+<h2>Scope</h2><ul>{scope}</ul>
+<p>Services of other providers that M365.FM uses (for example Spreaker, YouTube, Cloudflare, GitHub, Google and Microsoft sign-in) are out of scope; please report issues there directly to the respective provider.</p>
+<h2>Rules for testing</h2>
+<ul><li>Only access, change or delete data to the extent needed to show the issue, and only your own accounts and data. Stop and report as soon as you see other people's data.</li>
+<li>No denial-of-service tests, no load or mass scans, no spam, no social engineering and no physical attacks.</li>
+<li>Do not use a vulnerability beyond what is needed to prove it, and delete any data you obtained after reporting.</li></ul>
+<p>Research that follows these rules is considered to be in good faith; I will not pursue it.</p>
+<h2>Usually not accepted</h2>
+<ul><li>Reports from automated scanners without a demonstrated impact</li><li>Missing security headers or cookie flags without a concrete attack</li><li>SPF, DKIM or DMARC recommendations without a demonstrated spoofing problem</li><li>Clickjacking on pages without sensitive actions, self-XSS, and rate limits on non-sensitive functions</li><li>Issues that require a compromised device or browser</li></ul>"""
+
+
+def security_de():
+    scope = "".join(f"<li>{h}</li>" for h in SECURITY_SCOPE)
+    return f"""<h1>Sicherheit: Schwachstellen melden</h1>
+<p>Wenn du glaubst, eine Sicherheitslücke bei M365.FM gefunden zu haben, sag mir bitte Bescheid. Ich freue mich über jede verantwortungsvolle Meldung und behebe das Problem gemeinsam mit dir so schnell wie möglich.</p>
+<h2>So meldest du eine Schwachstelle</h2>{_mail()}
+<p>Bitte nutze den Betreff <b>Security</b> und gib an:</p>
+<ul><li>die betroffene Adresse (URL) oder den API-Endpunkt,</li><li>eine Beschreibung des Problems und der möglichen Auswirkungen,</li><li>die Schritte zum Nachvollziehen (Screenshots oder ein kurzer Nachweis helfen),</li><li>ob und wie du genannt werden möchtest.</li></ul>
+<p>Bitte veröffentliche die Details erst, wenn das Problem behoben ist. Maschinenlesbare Kontaktdaten: <a href="https://www.m365.fm/.well-known/security.txt">/.well-known/security.txt</a>.</p>
+<h2>Wie es weitergeht</h2>
+<ul><li>Du bekommst innerhalb von 5 Werktagen eine Bestätigung.</li><li>Ich prüfe die Meldung, halte dich über den Stand auf dem Laufenden und sage dir, wenn das Problem behoben ist.</li><li>Für die Veröffentlichung bitte ich um bis zu 90 Tage, oder weniger, wenn die Behebung früher live ist. Den Zeitpunkt stimmen wir gemeinsam ab.</li><li>Wenn du möchtest, wirst du nach der Behebung mit Dank genannt.</li></ul>
+<p>Ein bezahltes Bug-Bounty-Programm gibt es nicht.</p>
+<h2>Geltungsbereich</h2><ul>{scope}</ul>
+<p>Dienste anderer Anbieter, die M365.FM nutzt (zum Beispiel Spreaker, YouTube, Cloudflare, GitHub sowie die Anmeldung über Google und Microsoft), gehören nicht dazu; Probleme dort bitte direkt dem jeweiligen Anbieter melden.</p>
+<h2>Regeln für Tests</h2>
+<ul><li>Greife nur so weit auf Daten zu, ändere oder lösche sie nur so weit, wie es zum Nachweis nötig ist, und nur bei eigenen Konten und Daten. Sobald du Daten anderer Personen siehst: aufhören und melden.</li>
+<li>Keine Denial-of-Service-Tests, keine Last- oder Massenscans, kein Spam, kein Social Engineering und keine physischen Angriffe.</li>
+<li>Nutze eine Schwachstelle nicht über den Nachweis hinaus und lösche erlangte Daten nach der Meldung.</li></ul>
+<p>Forschung, die sich an diese Regeln hält, gilt als in gutem Glauben; ich gehe dagegen nicht vor.</p>
+<h2>In der Regel nicht berücksichtigt</h2>
+<ul><li>Meldungen automatischer Scanner ohne nachgewiesene Auswirkung</li><li>Fehlende Sicherheits-Header oder Cookie-Flags ohne konkreten Angriff</li><li>Empfehlungen zu SPF, DKIM oder DMARC ohne nachgewiesenes Spoofing-Problem</li><li>Clickjacking auf Seiten ohne sensible Aktionen, Self-XSS sowie Ratenbegrenzung bei nicht sensiblen Funktionen</li><li>Probleme, die ein kompromittiertes Gerät oder einen kompromittierten Browser voraussetzen</li></ul>"""
