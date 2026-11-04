@@ -32,7 +32,7 @@ def main():
         tmp.write_text(json.dumps(man, sort_keys=True), encoding="utf-8"); tmp.replace(MAN)
     def put(item):
         key, data, h = item
-        ct = "text/html; charset=utf-8" if key.endswith(".html") else "application/octet-stream"
+        ct = "text/html; charset=utf-8" if key.endswith(".html") else "application/json; charset=utf-8" if key.endswith(".json") else "application/octet-stream"
         try: s3.put_object(Bucket=bucket, Key=key, Body=data, ContentType=ct, CacheControl="public, max-age=600"); return key, h, None
         except Exception as e: return key, h, str(e)[:120]
     try:
