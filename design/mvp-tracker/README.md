@@ -9,7 +9,7 @@ Je Datei ein Screen (390 × 844), Stil wie die Seite.
 | Program-Detail.dc.html | Programm: Verlängerung, Checkliste, Erinnerungen, was zählt |
 | Contributions.dc.html | Beiträge, automatisch gesammelt (M365.FM, YouTube, Blog, GitHub; Contribution Collector #172) |
 | Contribution-Detail.dc.html | Felder fertig fürs MVP-Portal zum Kopieren, „Im Portal eingetragen“, zählt für Programme |
-| Add.dc.html | Teilen → MVP-Tracker: Link erkennen, Programme wählen |
+| Add.dc.html | Beitrag erfassen per Foto (Badge, Agenda, Flyer, Zertifikat; Texterkennung auf dem Handy), Link (Teilen → MVP-Tracker) oder von Hand |
 | Impact.dc.html | Wirkung pro Jahr, Beiträge pro Monat und Typ, Jahresbericht als PDF |
 | Chances.dc.html | CFPs, Gastanfragen, Matching-Anfragen (#174), Erinnerungen |
 
