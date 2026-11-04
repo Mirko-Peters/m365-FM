@@ -75,6 +75,15 @@ export async function handleMail(env, request, url, path, user, J) {
     const s = await db.prepare("SELECT COUNT(*) total,SUM(sent=1) sent,SUM(sent=0 AND tries<3) waiting,SUM(sent=0 AND tries>=3) failed FROM mail_outbox").first();
     return J({ configured: mailReady(env), ...s, addresses: (await db.prepare("SELECT COUNT(*) c FROM mail_addr WHERE verified=1").first()).c });
   }
+  if (path === "/api/admin/mail/test" && method === "POST") {
+    if (!user.admin) return J({ error: "forbidden" }, 403);
+    if (!mailReady(env)) return J({ error: "mail_off" }, 503);
+    const address = await db.prepare("SELECT email FROM mail_addr WHERE user_id=? AND verified=1").bind(user.id).first();
+    if (!address) return J({ error: "email_unverified" }, 409);
+    if (!(await rateLimit(db, `mailtest:${user.id}`, 3, 3600))) return J({ error: "rate_limit" }, 429);
+    const r = await sendMail(env, { to: address.email, subject: "M365.FM – Admin-Testmail", text: "Der E-Mail-Versand über Cloudflare Email Service funktioniert.", html: "<p>Der E-Mail-Versand über Cloudflare Email Service funktioniert.</p>" });
+    return J({ ok: r.ok, status: r.status }, r.ok ? 200 : 502);
+  }
   if (method !== "POST") return J({ error: "bad_request" }, 400);
   const b = await request.json().catch(() => ({}));
   if (path === "/api/mail/set") {   // Adresse eintragen -> Bestaetigungsmail

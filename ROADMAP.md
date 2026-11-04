@@ -23,9 +23,10 @@ Stand: 2026-10-29. Reihenfolge nach Absprache mit Mirko; alles mit Schema.org-Ve
 - Geplant: Umzug über die Spreaker-API (Show im M365.FM-Konto anlegen, Folgen hochladen, neuen Feed ausgeben) als GitHub-Action-Job; klären: Tarif/Speicher, neue Folgen nachziehen.
 - Offen: Nutzungsbedingungen rechtlich formulieren, Werbe-/Sponsoring-Platz auf Show-Seiten, eigener M365.FM-Feed je Show (`itunes:new-feed-url`).
 
-## Mail-System (Cloudflare Email Service, Resend als Rückfall)
+## Mail-System (Cloudflare Email Service eingerichtet, Resend als Rückfall)
 - Bestätigte Adresse je Konto, Arten einzeln schaltbar (Antworten auf Kommentare, Wunsch-Status, Show-Freigabe, Einladungen), Warteschlange mit Wiederholung, Abmeldelink und List-Unsubscribe in jeder Mail, Cron-Versand alle 30 Minuten.
-- Offen: Workers-Paid-Plan und Absender-Domain `m365.fm` im Email Service einrichten (SPF/DKIM durch Cloudflare); danach Testmail an bestätigte Adresse. Resend bleibt optionaler Rückfall über `RESEND_API_KEY`.
+- Erledigt: Workers-Paid-Plan aktiv, Absender-Domain `m365.fm` eingerichtet (SPF/DKIM durch Cloudflare), `EMAIL`-Binding im Worker. Resend bleibt optionaler Rückfall über `RESEND_API_KEY`.
+- Noch prüfen: Admin-Testmail nach Deploy über `POST /api/admin/mail/test` an die bestätigte Benachrichtigungsadresse senden.
 - Weitere Auslöser: neue Microsoft-Updates je Produkt, Gäste-/Speaker-Anfragen, Digest wöchentlich.
 
 ## Backlog (später, wenn die Plattform genutzt wird)

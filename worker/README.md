@@ -8,10 +8,10 @@ Läuft unter `https://api-dub.m365.fm`. Schlüssel (Session, VAPID, Cron) erzeug
 2. **Google-Login**: console.cloud.google.com → APIs & Dienste → Anmeldedaten → OAuth-Client-ID (Webanwendung). Autorisierte Weiterleitungs-URI: `https://api-dub.m365.fm/auth/callback/google`. Secrets: `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`.
 3. **Microsoft-Login**: entra.microsoft.com → App-Registrierungen → Neu; Kontotypen „Konten in allen Organisationsverzeichnissen und persönliche Microsoft-Konten“; Web-Redirect-URI `https://api-dub.m365.fm/auth/callback/microsoft`; unter Zertifikate & Geheimnisse ein Client-Geheimnis (Wert!). Secrets: `MS_CLIENT_ID` (Anwendungs-ID), `MS_CLIENT_SECRET`.
 4. **E-Mail (Cloudflare Email Service)**:
-   - [ ] Workers-Paid-Plan prüfen. Email Sending ist Beta und im Paid-Plan verfügbar; monatlich sind 3.000 E-Mails inklusive, danach 0,35 $ je 1.000.
-   - [ ] Unter **Email Service → Email Sending** `m365.fm` als Absender-Domain einrichten. Cloudflare setzt SPF/DKIM-DNS-Einträge selbst. Bis zur Verifizierung kann nur an bestätigte Empfänger gesendet werden.
-   - [ ] Der Worker nutzt das `EMAIL`-Binding; dafür ist kein API-Token nötig. `MAIL_FROM` steht in `wrangler.toml`. `RESEND_API_KEY` kann optional als Resend-Rückfall in GitHub-Secrets hinterlegt werden.
-   - [ ] Nach der Einrichtung eine Testmail an eine bestätigte Adresse senden.
+   - [x] Workers-Paid-Plan ist aktiv. Email Sending ist Beta; monatlich sind 3.000 E-Mails inklusive, danach 0,35 $ je 1.000.
+   - [x] `m365.fm` ist unter **Email Service → Email Sending** als Absender-Domain eingerichtet. Cloudflare setzt SPF/DKIM-DNS-Einträge selbst.
+   - [x] Der Worker nutzt das `EMAIL`-Binding; dafür ist kein API-Token nötig. `MAIL_FROM` steht in `wrangler.toml`. `RESEND_API_KEY` kann optional als Resend-Rückfall in GitHub-Secrets hinterlegt werden.
+   - [ ] Nach dem Deploy als Admin `POST https://api-dub.m365.fm/api/admin/mail/test` mit der Admin-Session und `X-Requested-With: m365` aufrufen. Die Testmail geht an die bestätigte Benachrichtigungsadresse des angemeldeten Admins (max. 3 pro Stunde).
    - Nur falls später aus GitHub Actions per REST versendet wird, einen Token mit *Email Sending: Edit* als GitHub-Secret hinterlegen, nie im Code oder Chat.
 5. **LinkedIn-Login**: developer.linkedin.com → Create app (LinkedIn-Seite des Unternehmens verknüpfen) → Reiter Products → „Sign In with LinkedIn using OpenID Connect“ anfordern → Reiter Auth: Authorized redirect URL `https://api-dub.m365.fm/auth/callback/linkedin`. Secrets: `LINKEDIN_CLIENT_ID`, `LINKEDIN_CLIENT_SECRET` (Client ID und Primary Client Secret).
 6. Optional `ADMIN_SUBS` = `google:<sub>`, `microsoft:<sub>` oder `linkedin:<sub>` (Moderator; die ID siehst du in D1 in der Tabelle users).
