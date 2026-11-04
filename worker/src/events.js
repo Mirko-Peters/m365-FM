@@ -5,6 +5,7 @@ import { cleanText, rateLimit } from "./util.js";
 import { baseIds, entityMap } from "./entities.js";
 import { cleanUrl } from "./profiles.js";
 import { stats } from "./badges.js";
+import { ensureDirectoryCols, geocodeAddress } from "./directory.js";
 
 const FREE_ASKS = 2, ASK_COST = 1000;
 const HANDLE = /^[a-z0-9][a-z0-9-]{2,39}$/, PH = /^[a-z0-9][a-z0-9-]{2,29}$/;
@@ -231,7 +232,7 @@ async function speakerMatches(db, me) {
   return [...by.values()].map((o) => ({ name: o.name, sessions: o.sessions, events: [...o.events].slice(0, 4) }));
 }
 export async function handleEvents(env, request, url, path, user, J) {
-  const db = env.DB, method = request.method; let m;
+  const db = env.DB, method = request.method; let m; await ensureDirectoryCols(db);
   const need = () => (user ? null : J({ error: "login" }, 401));
   const body = async () => await request.json().catch(() => ({}));
 
@@ -275,8 +276,14 @@ export async function handleEvents(env, request, url, path, user, J) {
     const ex = await db.prepare("SELECT * FROM events WHERE handle=?").bind(handle).first();
     if (ex && !(await canManage(db, user, ex))) return J({ error: "handle_taken" }, 409);
     const vals = [title, txt(b.summary, 200), long(b.about, 3000), b.start, end, mode, txt(b.location, 120), txt(b.country, 60), eu, tu, b.free === false ? 0 : 1, txt(b.lang, 10), JSON.stringify(tp), b.seeking_sponsor ? 1 : 0, b.public === false ? 0 : 1, now()];
+    let eventId = ex?.id;
     if (ex) await db.prepare("UPDATE events SET title=?,summary=?,about=?,start=?,end=?,mode=?,location=?,country=?,url=?,tickets_url=?,free=?,lang=?,topics=?,seeking_sponsor=?,public=?,updated=?,org_id=? WHERE id=?").bind(...vals, b.org === undefined ? ex.org_id : orgId, ex.id).run();
-    else await db.prepare("INSERT INTO events(title,summary,about,start,end,mode,location,country,url,tickets_url,free,lang,topics,seeking_sponsor,public,updated,handle,owner_id,org_id,created) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)").bind(...vals, handle, user.id, orgId, now()).run();
+    else eventId = (await db.prepare("INSERT INTO events(title,summary,about,start,end,mode,location,country,url,tickets_url,free,lang,topics,seeking_sponsor,public,updated,handle,owner_id,org_id,created) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)").bind(...vals, handle, user.id, orgId, now()).run()).meta.last_row_id;
+    const address = mode === "online" || b.public === false ? "" : [txt(b.location, 120), txt(b.country, 60)].filter(Boolean).join(", ");
+    const geo = address ? await geocodeAddress(env, address, ex || {}, "address") : { lat: null, lng: null, geo_precision: "", geo_address: "", geo_at: 0 };
+    const city = geo.city || (address && address === ex?.geo_address ? ex.city || "" : "");
+    await db.prepare("UPDATE events SET lat=?,lng=?,geo_precision=?,geo_address=?,geo_at=?,city=? WHERE id=?")
+      .bind(geo.lat, geo.lng, geo.geo_precision, geo.geo_address, geo.geo_at, city, eventId).run();
     if (b.public !== false) await ownedEntity(env, user, { eid: handle, type: "event", name: title, en: `${title} is an event in the Microsoft community, starting ${b.start}.`, de: `${title} ist eine Veranstaltung der Microsoft-Community, Beginn ${b.start}.`, web: String(b.url || "").startsWith("https://") ? b.url : "" });
     return J({ ok: true });
   }

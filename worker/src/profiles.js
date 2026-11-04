@@ -5,6 +5,7 @@ import { cleanText, rateLimit } from "./util.js";
 import { baseIds, knownIds, validate, trustedUser, entityMap } from "./entities.js";
 import { findExperts } from "./experts.js";
 import { computeLevels } from "./levels.js";
+import { ensureDirectoryCols, geocodeAddress } from "./directory.js";
 
 export const PROGRAMS = ["mvp", "mct", "rd", "msa", "ms_employee", "partner"];
 export const RELATIONS = ["colleague", "manager", "report", "client", "trainer", "student", "cospeaker", "podcast", "community", "mentor", "other"];
@@ -143,7 +144,7 @@ async function personView(db, uid, viewer) {
   const pce = (await db.prepare("SELECT eid FROM profile_company WHERE user_id=?").bind(uid).first())?.eid || "";
   const pv = await db.prepare("SELECT * FROM profile_private WHERE user_id=?").bind(uid).first(), CF = ["city", "zip", "street", "email", "phone"];
   const contact = {}; let priv = null;
-  if (pv) { for (const k of CF) if (pv["vis_" + k] === "all" && pv[k]) contact[k] = pv[k]; if (+viewer === uid) priv = Object.fromEntries([...CF.map((k) => [k, pv[k]]), ...CF.map((k) => ["vis_" + k, pv["vis_" + k]])]); }
+  if (pv) { for (const k of CF) if (pv["vis_" + k] === "all" && pv[k]) contact[k] = pv[k]; if (+viewer === uid) priv = { ...Object.fromEntries([...CF.map((k) => [k, pv[k]]), ...CF.map((k) => ["vis_" + k, pv["vis_" + k]])]), map_public: !!pv.map_public }; }
   return { type: "u", i18n: await readI18n(db, uid), contact, ...(priv ? { private: priv } : {}), img: im?.updated || 0, company_eid: pce, id: uid, handle: p.handle, name: p.name, bio: p.bio, headline: p.headline, about: p.about, company: p.company, job: p.job, country: p.country, public: !!p.public, show_org: !!p.show_org,
     expertise: exp.map((e) => ({ ...e, verified: !!e.verified, me: !!e.me, ev: evs[e.e] || {} })), programs: programs.map((x) => ({ ...x, verified: !!x.verified })), certs, channels, org, contrib, counts, badges, recs,
     items: await itemsOf(db, "i.owner_type='u' AND i.owner_id=?", [uid], viewer, 8) };
@@ -161,18 +162,45 @@ async function ensureCols(db) {
   await ensureFeedCols(db);
   colsOk = true;
 }
-async function orgView(db, oid, viewer) {
+async function orgView(db, oid, viewer, showPrivate = false) {
   const o = await db.prepare("SELECT * FROM orgs WHERE id=?").bind(oid).first(); if (!o) return null;
   const q = async (sql, ...b) => (await db.prepare(sql).bind(...b).all()).results || [];
   const im = await db.prepare("SELECT updated FROM images WHERE kind='o' AND owner_id=?").bind(oid).first();
   const oe = (await db.prepare("SELECT eid FROM org_entity WHERE org_id=?").bind(oid).first())?.eid || "";
-  return { type: "o", eid: oe, img: im?.updated || 0, id: o.id, handle: o.handle, name: o.name, tagline: o.tagline, about: o.about, website: o.website, country: o.country, size: o.size, public: !!o.public,
+  const locations = await q(`SELECT id,label,address,city,country,public,lat,lng,geo_precision FROM org_locations WHERE org_id=? ${showPrivate ? "" : "AND public=1"} ORDER BY id`, oid);
+  return { type: "o", eid: oe, img: im?.updated || 0, id: o.id, handle: o.handle, name: o.name, tagline: o.tagline, about: o.about, website: o.website, country: o.country, size: o.size, public: !!o.public, locations,
     expertise: (await q("SELECT eid e,level,verified FROM expertise WHERE owner_type='o' AND owner_id=?", oid)).map((e) => ({ ...e, verified: !!e.verified })),
     programs: (await q("SELECT program p,year,url,verified FROM programs WHERE owner_type='o' AND owner_id=?", oid)).map((x) => ({ ...x, verified: !!x.verified })),
     channels: await q("SELECT kind,url,feed,followers FROM channels WHERE owner_type='o' AND owner_id=?", oid),
     ms: await q("SELECT area,level,since FROM org_ms WHERE org_id=? ORDER BY area", oid),
     members: await q("SELECT p.handle,u.name,m.role,p.headline FROM org_members m JOIN users u ON u.id=m.user_id AND u.banned=0 JOIN profiles p ON p.user_id=m.user_id AND p.public=1 AND p.show_org=1 WHERE m.org_id=? AND m.status='active' ORDER BY m.role='owner' DESC, u.name", oid),
     items: await itemsOf(db, "i.owner_type='o' AND i.owner_id=?", [oid], viewer, 8) };
+}
+function cleanOrgLocations(raw) {
+  if (!Array.isArray(raw)) return [];
+  return raw.slice(0, 10).map((x) => ({
+    id: Number.isSafeInteger(+x?.id) && +x.id > 0 ? +x.id : 0,
+    label: txt(x?.label, 80), address: txt(x?.address, 160), city: txt(x?.city, 80), country: txt(x?.country, 60), public: x?.public ? 1 : 0,
+  })).filter((x) => x.address || x.city || x.country || x.label);
+}
+export async function saveOrgLocations(env, orgId, locations) {
+  const db = env.DB, retainedIds = [];
+  for (const location of locations) {
+    let id = location.id;
+    const previous = id ? await db.prepare("SELECT * FROM org_locations WHERE id=? AND org_id=?").bind(id, orgId).first() : null;
+    if (!previous) id = (await db.prepare("INSERT INTO org_locations(org_id,label,address,city,country,public,updated) VALUES(?,?,?,?,?,?,?)")
+      .bind(orgId, location.label, location.address, location.city, location.country, location.public, now()).run()).meta.last_row_id;
+    else await db.prepare("UPDATE org_locations SET label=?,address=?,city=?,country=?,public=?,updated=? WHERE id=? AND org_id=?")
+      .bind(location.label, location.address, location.city, location.country, location.public, now(), id, orgId).run();
+    retainedIds.push(id);
+    const address = location.public ? [location.address || location.city, location.country].filter(Boolean).join(", ") : "";
+    const geo = address ? await geocodeAddress(env, address, previous || {}, location.address ? "address" : "city") : { lat: null, lng: null, geo_precision: "", geo_address: "", geo_at: 0 };
+    await db.prepare("UPDATE org_locations SET lat=?,lng=?,geo_precision=?,geo_address=?,geo_at=? WHERE id=? AND org_id=?")
+      .bind(geo.lat, geo.lng, geo.geo_precision, geo.geo_address, geo.geo_at, id, orgId).run();
+  }
+  const ids = retainedIds;
+  if (ids.length) await db.prepare(`UPDATE org_locations SET public=0,lat=NULL,lng=NULL,geo_precision='',geo_address='',geo_at=0 WHERE org_id=? AND id NOT IN (${ids.map(() => "?").join(",")})`).bind(orgId, ...ids).run();
+  else await db.prepare("UPDATE org_locations SET public=0,lat=NULL,lng=NULL,geo_precision='',geo_address='',geo_at=0 WHERE org_id=?").bind(orgId).run();
 }
 
 async function replaceLists(db, t, id, { exp, prog, chan, certs }) {
@@ -211,7 +239,7 @@ export async function refreshProfilesExport(env) {
 }
 
 export async function handleProfiles(env, request, url, path, user, J) {
-  const db = env.DB, method = request.method; let m; await ensureCols(db);
+  const db = env.DB, method = request.method; let m; await ensureCols(db); await ensureDirectoryCols(db);
   const need = () => (user ? null : J({ error: "login" }, 401));
   const body = async () => await request.json().catch(() => ({}));
 
@@ -317,6 +345,7 @@ export async function handleProfiles(env, request, url, path, user, J) {
     if (need()) return need();
     if (!(await rateLimit(db, `prof:${user.id}`, 20, 3600))) return J({ error: "rate_limit" }, 429);
     const b = await body();
+    const previousLocation = await db.prepare("SELECT p.country,pp.* FROM profiles p LEFT JOIN profile_private pp ON pp.user_id=p.user_id WHERE p.user_id=?").bind(user.id).first();
     let handle = String(b.handle || "").toLowerCase().trim(); const isPublic = b.public ? 1 : 0;
     if (handle && !HANDLE.test(handle)) return J({ error: "bad_handle" }, 400);
     if (isPublic && !handle) return J({ error: "bad_handle" }, 400);
@@ -342,9 +371,13 @@ export async function handleProfiles(env, request, url, path, user, J) {
       const city = txt(pr.city, 80), zip = String(pr.zip || "").replace(/[^A-Za-z0-9 -]/g, "").slice(0, 10).trim(), street = txt(pr.street, 120);
       const email = String(pr.email || "").trim().slice(0, 120), phone = String(pr.phone || "").replace(/[^0-9+()\- ]/g, "").slice(0, 30).trim();
       if (email && !/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]{2,}$/.test(email)) return J({ error: "bad_email" }, 400);
-      await db.prepare(`INSERT INTO profile_private(user_id,city,zip,street,email,phone,vis_city,vis_zip,vis_street,vis_email,vis_phone,updated) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)
-        ON CONFLICT(user_id) DO UPDATE SET city=excluded.city,zip=excluded.zip,street=excluded.street,email=excluded.email,phone=excluded.phone,vis_city=excluded.vis_city,vis_zip=excluded.vis_zip,vis_street=excluded.vis_street,vis_email=excluded.vis_email,vis_phone=excluded.vis_phone,updated=excluded.updated`)
-        .bind(user.id, city, zip, street, email, phone, V(vis.city), V(vis.zip), V(vis.street), V(vis.email), V(vis.phone), now()).run();
+      await db.prepare(`INSERT INTO profile_private(user_id,city,zip,street,email,phone,vis_city,vis_zip,vis_street,vis_email,vis_phone,map_public,updated) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)
+        ON CONFLICT(user_id) DO UPDATE SET city=excluded.city,zip=excluded.zip,street=excluded.street,email=excluded.email,phone=excluded.phone,vis_city=excluded.vis_city,vis_zip=excluded.vis_zip,vis_street=excluded.vis_street,vis_email=excluded.vis_email,vis_phone=excluded.vis_phone,map_public=excluded.map_public,updated=excluded.updated`)
+        .bind(user.id, city, zip, street, email, phone, V(vis.city), V(vis.zip), V(vis.street), V(vis.email), V(vis.phone), pr.map_public ? 1 : 0, now()).run();
+      const location = pr.map_public && city && b.country ? `${city}, ${txt(b.country, 60)}` : "";
+      const geo = location ? await geocodeAddress(env, location, previousLocation || {}, "city") : { lat: null, lng: null, geo_precision: "", geo_address: "", geo_at: 0 };
+      await db.prepare("UPDATE profile_private SET lat=?,lng=?,geo_precision=?,geo_address=?,geo_at=?,geo_city=? WHERE user_id=?")
+        .bind(geo.lat, geo.lng, geo.geo_precision, geo.geo_address, geo.geo_at, geo.city || "", user.id).run();
     }
     const oldC = Object.fromEntries(((await db.prepare("SELECT eid,url FROM certs WHERE user_id=?").bind(user.id).all()).results || []).map((x) => [x.eid, x.url]));
     await replaceLists(db, "u", user.id, { exp: null, prog: pr.list, chan: ch.list, certs });
@@ -470,7 +503,7 @@ export async function handleProfiles(env, request, url, path, user, J) {
     const rows = (await db.prepare("SELECT o.id,o.handle,o.name,m.role,m.status FROM org_members m JOIN orgs o ON o.id=m.org_id WHERE m.user_id=?").bind(user.id).all()).results || [];
     const out = [];
     for (const r of rows) {
-      const v = r.status === "active" ? await orgView(db, r.id, user.id) : null;
+      const v = r.status === "active" ? await orgView(db, r.id, user.id, true) : null;
       const pend = r.status === "active" && ["owner", "admin"].includes(r.role) ? (await db.prepare("SELECT m.user_id,u.name FROM org_members m JOIN users u ON u.id=m.user_id WHERE m.org_id=? AND m.status='pending'").bind(r.id).all()).results || [] : [];
       const team = r.status === "active" && ["owner", "admin"].includes(r.role) ? (await db.prepare("SELECT m.user_id,u.name,m.role FROM org_members m JOIN users u ON u.id=m.user_id WHERE m.org_id=? AND m.status='active'").bind(r.id).all()).results || [] : [];
       out.push({ handle: r.handle, name: r.name, role: r.role, status: r.status, org: v, pending: pend, team });
@@ -486,6 +519,7 @@ export async function handleProfiles(env, request, url, path, user, J) {
     const ch = await checkChannels(b.channels); if (ch.err) return J({ error: ch.err }, 400);
     const ex = await checkExpertise(env, b.expertise); if (ex.err) return J({ error: ex.err }, 400);
     const pr = checkPrograms(b.programs, true); if (pr.err) return J({ error: pr.err }, 400);
+    const locations = cleanOrgLocations(b.locations);
     const size = SIZES.includes(b.size) ? b.size : "";
     let o = await db.prepare("SELECT id FROM orgs WHERE handle=?").bind(handle).first();
     if (!o) {
@@ -510,6 +544,7 @@ export async function handleProfiles(env, request, url, path, user, J) {
       if (!mem || !["owner", "admin", "editor"].includes(mem.role)) return J({ error: "forbidden" }, 403);
       await db.prepare("UPDATE orgs SET name=?,tagline=?,about=?,website=?,country=?,size=?,public=? WHERE id=?").bind(name, txt(b.tagline, 120), long(b.about, 1500), website, txt(b.country, 60), size, b.public ? 1 : 0, o.id).run();
     }
+    if (Array.isArray(b.locations)) await saveOrgLocations(env, o.id, locations);
     await replaceLists(db, "o", o.id, { exp: ex.list, prog: pr.list, chan: ch.list, certs: null });
     return J({ ok: true });
   }

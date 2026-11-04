@@ -43,6 +43,7 @@ import { refreshFeeds, refreshFollowers } from "./feeds.js";
 import { autoTranslate, translateStatus, uiI18nExport } from "./translate.js";
 import { handleWiki } from "./wiki.js";
 import { syncExpertise } from "./levels.js";
+import { backfillDirectoryGeocodes, ensureDirectoryCols, handleDirectory } from "./directory.js";
 
 const PROVIDERS = {
   google: {
@@ -167,6 +168,10 @@ async function api(env, request, url, path, asUser) {
   if (sponsor) return sponsor;
 
   if (path === "/api/health") return J({ ok: true }, 200);
+  if (path === "/api/directory" || path === "/api/directory/key") {
+    await ensureDirectoryCols(db);
+    return handleDirectory(env, request, url, J);
+  }
   if (path === "/api/search") return handleSearch(env, request, url, J);
   if (path === "/api/providers") return J({ providers: Object.keys(PROVIDERS).filter((k) => PROVIDERS[k].id(env) && PROVIDERS[k].secret(env)) }, 200, { "cache-control": "public, max-age=300" });
   if (path === "/api/me/li-follow" && method === "POST") {
@@ -419,6 +424,7 @@ export default {
     T("importLegacyBlog", () => importLegacyBlog(env));
     T("importContentBlog", () => importContentBlog(env));   // T15: Content-Pakete aus imports/blog/
     T("refreshProfilesExport", () => refreshProfilesExport(env));
+    T("backfillDirectoryGeocodes", () => backfillDirectoryGeocodes(env));
     T("remindInvites", () => remindInvites(env));
     T("runTrQueue", () => runTrQueue(env, entityMap));
     T("syncLiveEvents", () => syncLiveEvents(env, entityMap));

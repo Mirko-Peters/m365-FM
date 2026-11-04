@@ -13,6 +13,7 @@ import site_entities as ENT
 from site_i18n import COMM_LANGS, pfx
 import site_members as MEM
 import site_events as EVT
+import site_directory as DIR
 import site_mcp as MCPS
 import site_seo as SEOR
 import site_live as LIVE
@@ -763,11 +764,12 @@ def header(lang, switch):
         menu.insert(0, (LRN.T(lang)["learn"], f"{BASE}/{lang}/learn/"))
         menu.append(("Podcast", f"{BASE}/{lang}/podcast/"))   # der gedubbte Podcast der Sprache (Spreaker-Show); die Live-Show gibt es nur auf Englisch
         menu.insert(0, (_CI.get(lang, _CI.get("en", {})).get("profile", "Profile"), f"{BASE}/{lang}/community/"))
+        menu.insert(0, (DIR.S[lang]["title"], f"{BASE}/{lang}/directory/"))
         _cl = {"de": ("Community", "Podcast", "Blog", "Videos", "Bibliothek", "Gäste")}.get(lang, ("Community", "Podcast", "Blog", "Videos", "Library", "Guests"))
         menu.insert(0, (_CI.get(lang, _CI.get("en", {})).get("community", _cl[0]), [(ui[3], home)] + [(_cl[i + 1], f"{BASE}/{lang}/community/{p}/") for i, p in enumerate(("podcast", "blog", "video", "library", "guests"))]))
     else:
         home = f"{BASE}/"
-        menu = [("Languages", f"{BASE}/#languages"), ("Community", [("Podcast", f"{BASE}/community/podcast/"), ("Blog", f"{BASE}/community/blog/"), ("Videos", f"{BASE}/community/video/"), ("Library", f"{BASE}/community/library/"), ("Guests", f"{BASE}/community/guests/")]), ("Show", [("About the show", f"{BASE}/show/"), ("All episodes", f"{BASE}/show/episodes/")] + ([("M365 Show Live", f"{BASE}/live/")] if (ROOT / "data" / "live.json").exists() else []) + [("Guests", f"{BASE}/show/guests/"), ("Hosts", f"{BASE}/show/hosts/")]), ("Profile", f"{BASE}/community/")]
+        menu = [("Languages", f"{BASE}/#languages"), (DIR.S["en"]["title"], f"{BASE}/directory/"), ("Community", [("Podcast", f"{BASE}/community/podcast/"), ("Blog", f"{BASE}/community/blog/"), ("Videos", f"{BASE}/community/video/"), ("Library", f"{BASE}/community/library/"), ("Guests", f"{BASE}/community/guests/")]), ("Show", [("About the show", f"{BASE}/show/"), ("All episodes", f"{BASE}/show/episodes/")] + ([("M365 Show Live", f"{BASE}/live/")] if (ROOT / "data" / "live.json").exists() else []) + [("Guests", f"{BASE}/show/guests/"), ("Hosts", f"{BASE}/show/hosts/")]), ("Profile", f"{BASE}/community/")]
     if not switch:
         items = [(x, LANGS[x][0], f"{BASE}/{x}/", LANGS[x][1]) for x in LANGS if (ROOT / "episodes").exists()]
         switch = lang_dropdown(lang if lang in LANGS else "en", items, "")
@@ -1486,6 +1488,7 @@ def build():
     ENT.build(_ctx, lambda lang: LRN.gloss_links(lang, BASE), MEM.experts_index(_people, _orgs), _ep_find)
     phase("Entitaetsseiten")
     MEM.build(_ctx, _people, _orgs, extra={l: EVT.blocks(BASE, _events, l) for l in COMM_LANGS})
+    DIR.build(_ctx)
     EVT.build(_ctx, _events, _people, _orgs)
     BLG.build(_ctx, _posts, _people, COMMUNITY_API)
     import site_library as LIB

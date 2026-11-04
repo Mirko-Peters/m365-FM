@@ -12,6 +12,11 @@ Läuft unter `https://api-dub.m365.fm`. Schlüssel (Session, VAPID, Cron) erzeug
 5. Optional `ADMIN_SUBS` = `google:<sub>`, `microsoft:<sub>` oder `linkedin:<sub>` (Moderator; die ID siehst du in D1 in der Tabelle users).
 6. Workflow **„Community-API … einrichten“** starten (Actions → Run workflow). Er legt die D1-Datenbank `m365-dub` an, sichert sie (`backup-d1.sql`, als Artefakt 14 Tage nur verschlüsselt mit dem Secret `D1_BACKUP_KEY`, ohne Secret kein Artefakt; das Repo ist öffentlich), wendet die Migrationen aus `migrations/` an (`wrangler d1 migrations apply`, Stand in Tabelle `d1_migrations`), setzt Secrets, veröffentlicht den Worker.
 
+## Verzeichnis-Karte (optional)
+- Google Cloud: Maps JavaScript API und Geocoding API aktivieren. Den Browser-Schlüssel per HTTP-Referrer auf `https://m365.fm/*` und `https://*.m365.fm/*` beschränken und ein Tageskontingent setzen. Als Worker-Variable `GOOGLE_MAPS_API_KEY` hinterlegen; sie wird erst nach Klick auf „Karte laden“ ausgeliefert.
+- Den serverseitigen Geocoding-Schlüssel als Worker-Secret `GOOGLE_GEOCODING_KEY` hinterlegen. Er wird nur beim Speichern oder beim auf 50 Einträge pro Lauf begrenzten Geocode-Backfill verwendet und nie an den Browser ausgegeben.
+- Ohne Browser-Schlüssel bleibt die Verzeichnisliste vollständig nutzbar. Ohne Geocoding-Schlüssel werden keine neuen Standorte geocodiert.
+
 Ohne Zugangsdaten tut der Workflow nichts; die Website blendet die Community-Bereiche automatisch aus, solange die API nicht erreichbar ist.
 
 ## Betrieb
