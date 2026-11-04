@@ -3,7 +3,7 @@ name: Bau-Probe (ohne Veroeffentlichung)
 on:
   workflow_dispatch:
   push:
-    branches: [ticket/prev-next, ticket/pagination-urls]
+    branches: [ticket/prev-next, ticket/pagination-urls, copilot/t29b-reduzierung-reaktionszeit]
 permissions:
   contents: read
 concurrency:
@@ -24,6 +24,11 @@ jobs:
           key: exports-${{ github.run_id }}
           restore-keys: exports-
       - run: pip install -q requests cryptography
+      - name: Player und Sprachmenü prüfen
+        run: |
+          python tools/test_player.py
+          python tools/test_design.py
+          node --check assets/page.js
       - run: python generate_site.py
       - name: Vor/Zurueck pruefen
         run: python tools/check_pager.py
