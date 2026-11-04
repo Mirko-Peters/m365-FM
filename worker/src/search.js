@@ -1,8 +1,8 @@
 import { rateLimit, sha256hex } from "./util.js";
-import { embed, queryVectors, rrf, upsertVectors } from "./vectors.js";
+import { embed, queryVectors, rrf, upsertVectors, vectorId } from "./vectors.js";
 
 const TYPES = new Set(["episode", "dub_episode", "entity", "person", "glossary", "blog", "event", "show", "page"]);
-const VECTOR_BATCH_SIZE = 100;
+const VECTOR_BATCH_SIZE = 200;
 const now = () => Math.floor(Date.now() / 1000);
 const ftsReady = new WeakMap();
 const hash = (value) => {
@@ -194,11 +194,11 @@ export async function syncSearchVectors(env) {
   if (!env.AI || !env.VEC) return { skipped: "Workers-AI- oder Vectorize-Binding fehlt" };
 
   const gone = (await env.DB.prepare(
-    "SELECT v.id FROM search_vector v INNER JOIN search_doc d ON d.id=v.id WHERE d.gone=1 LIMIT ?",
+    "SELECT v.id,v.vid FROM search_vector v INNER JOIN search_doc d ON d.id=v.id WHERE d.gone=1 LIMIT ?",
   ).bind(VECTOR_BATCH_SIZE).all()).results || [];
   if (gone.length) {
     const ids = gone.map(({ id }) => id);
-    await env.VEC.deleteByIds(ids);
+    await env.VEC.deleteByIds(gone.map(({ vid }) => vid));
     const statements = ids.map((id) => env.DB.prepare("DELETE FROM search_vector WHERE id=?").bind(id));
     for (let i = 0; i < statements.length; i += 99) await env.DB.batch(statements.slice(i, i + 99));
     return { deleted: ids.length };
@@ -220,25 +220,30 @@ export async function syncSearchVectors(env) {
   if (!docs.length) return { processed: 0 };
 
   const vectors = await embed(env, docs.map(documentText));
+  const vectorIds = await Promise.all(docs.map(({ id }) => vectorId(id)));
   await upsertVectors(env, vectors.map((values, i) => ({
-    id: docs[i].id,
+    id: vectorIds[i],
     values,
-    metadata: { lang: docs[i].lang, type: docs[i].type, grp: docs[i].grp, url: docs[i].url },
+    metadata: { doc: docs[i].id, lang: docs[i].lang, type: docs[i].type, grp: docs[i].grp, url: docs[i].url },
   })));
-  const updates = docs.map((doc) => env.DB.prepare(
-    "INSERT INTO search_vector(id,h) VALUES(?,?) ON CONFLICT(id) DO UPDATE SET h=excluded.h WHERE search_vector.h<>excluded.h",
-  ).bind(doc.id, doc.h));
+  const updates = docs.map((doc, index) => env.DB.prepare(
+    "INSERT INTO search_vector(id,vid,h) VALUES(?,?,?) ON CONFLICT(id) DO UPDATE SET vid=excluded.vid,h=excluded.h WHERE search_vector.h<>excluded.h",
+  ).bind(doc.id, vectorIds[index], doc.h));
   for (let i = 0; i < updates.length; i += 99) await env.DB.batch(updates.slice(i, i + 99));
   await setMeta(env.DB, "search_vector_cursor", docs.at(-1).id);
   return { processed: docs.length, cursor: docs.at(-1).id };
 }
 
-async function vectorCandidates(env, query, topK = 50, pref = "") {
+async function vectorCandidates(env, query, topK = 50, pref = "", minimumScore) {
   if (!env.AI || !env.VEC || Array.from(query).length < 3) return [];
-  const [values] = await embed(env, [query]);
-  const matches = await queryVectors(env, values, { topK });
+  const [values] = await embed(env, [query], { collectLog: false, cacheTtl: 3600, requestTimeoutMs: 1000 });
+  const matches = await queryVectors(env, values, { topK, filter: { type: { $in: [...TYPES] } } });
   if (!matches.length) return [];
-  const topMatches = matches.slice(0, topK).filter(({ id, score }) => typeof id === "string" && Number.isFinite(score));
+  const configuredMinimum = Number(minimumScore ?? env.SEARCH_VECTOR_MIN_SCORE);
+  const minimum = Number.isFinite(configuredMinimum) && configuredMinimum >= 0 && configuredMinimum <= 1
+    ? configuredMinimum : 0.4;
+  const topMatches = matches.slice(0, topK).filter(({ id, score }) =>
+    typeof id === "string" && Number.isFinite(score) && score >= minimum);
   const ids = topMatches.map(({ id }) => id);
   if (!ids.length) return [];
   const groups = new Map();
@@ -250,24 +255,20 @@ async function vectorCandidates(env, query, topK = 50, pref = "") {
     }
   }
   const rows = (await env.DB.prepare(
-    "SELECT id,url,lang,type,title,summary,date,image,entities,grp FROM search_doc " +
-    "WHERE gone=0 AND (id IN (SELECT value FROM json_each(?)) OR " +
-    "(?<>'' AND lang=? AND grp IN (SELECT value FROM json_each(?))))",
+    "SELECT d.id,d.url,d.lang,d.type,d.title,d.summary,d.date,d.image,d.entities,d.grp,sv.vid " +
+    "FROM json_each(?) j CROSS JOIN search_vector sv ON sv.vid=j.value CROSS JOIN search_doc d ON d.id=sv.id WHERE d.gone=0 " +
+    "UNION SELECT d.id,d.url,d.lang,d.type,d.title,d.summary,d.date,d.image,d.entities,d.grp,NULL AS vid FROM search_doc d " +
+    "WHERE d.gone=0 AND ?<>'' AND d.lang=? AND d.grp IN (SELECT value FROM json_each(?))",
   ).bind(JSON.stringify(ids), pref, pref, JSON.stringify([...groups.keys()])).all()).results || [];
-  const byId = new Map(rows.map((row) => [row.id, row]));
-  const candidates = topMatches.flatMap((match, index) => {
-    const row = byId.get(match.id);
-    if (!row) return [];
-    return [{ ...row, vectorScore: match.score, vectorRank: index + 1 }];
-  });
-  const vectorIds = new Set(ids);
+  const byVectorId = new Map(topMatches.map((match, index) =>
+    [match.id, { vectorScore: match.score, vectorRank: index + 1 }]));
+  const candidates = new Map();
   for (const row of rows) {
-    const source = groups.get(row.grp);
-    if (!vectorIds.has(row.id) && source && row.lang === pref) {
-      candidates.push({ ...row, vectorScore: source.vectorScore, vectorRank: source.vectorRank });
-    }
+    const match = row.vid ? byVectorId.get(row.vid) : groups.get(row.grp);
+    const previous = candidates.get(row.id);
+    if (match && (!previous || match.vectorRank < previous.vectorRank)) candidates.set(row.id, { ...row, ...match });
   }
-  return candidates;
+  return [...candidates.values()];
 }
 
 function matchesFilters(row, filters) {
@@ -284,20 +285,23 @@ function mergeHybridCandidates(ftsRows, vectorRows, query, pref, filters) {
     [...vectorRows].sort((a, b) => a.vectorRank - b.vectorRank),
   ]);
   for (const row of rows) {
-    row.hybridScore = row.rrfScore;
+    row.hybridScore = row.rrfScore * 1000 + (pref && row.lang === pref ? 12 : 0);
     row.rank = row.hybridScore;
     for (const facet of FACETS) row[`in_${facet}`] = matchesFilters(row, filtersForFacet(filters, facet)) ? 1 : 0;
   }
-  return rows.sort((a, b) =>
-    Number(b.lang === pref && !!pref) - Number(a.lang === pref && !!pref) ||
-    b.hybridScore - a.hybridScore || a.title.localeCompare(b.title));
+  return rows.sort((a, b) => b.hybridScore - a.hybridScore || a.title.localeCompare(b.title));
 }
 
 export async function classifyQuery(env, q, lang) {
+  if (!env.AI || !env.VEC) return { type: "unavailable", documents: [] };
   const threshold = Number(env.SEARCH_GAP_THRESHOLD);
   const minimum = Number.isFinite(threshold) && threshold >= 0 && threshold <= 1 ? threshold : 0.35;
   let matches = [];
-  try { matches = await vectorCandidates(env, q, 50, lang); } catch { return { type: "content_gap", documents: [] }; }
+  try { matches = await vectorCandidates(env, q, 50, lang, minimum); }
+  catch (error) {
+    console.warn("Semantische Abfrage zur Klassifizierung fehlgeschlagen:", String(error?.message || error));
+    return { type: "unavailable", documents: [] };
+  }
   const relevant = matches.filter((row) => row.vectorScore >= minimum);
   const documents = (rows) => rows.map(({ id, url, title, lang: originalLang, type, vectorScore }) =>
     ({ id, url, title, lang: originalLang, type, score: vectorScore }));
@@ -500,8 +504,8 @@ function dedupeLanguages(rows, pref) {
         (priority(row) === priority(previous) && row.rank > previous.rank)) byPath.set(path, row);
   }
   return [...byPath.values()].sort((a, b) =>
-    (a.hybridScore === undefined && b.hybridScore === undefined ? 0 :
-      Number(b.lang === pref && !!pref) - Number(a.lang === pref && !!pref)) ||
+    (a.hybridScore === undefined && b.hybridScore === undefined
+      ? Number(b.lang === pref && !!pref) - Number(a.lang === pref && !!pref) : 0) ||
     b.rank - a.rank || a.title.localeCompare(b.title));
 }
 
@@ -553,7 +557,10 @@ export async function handleSearch(env, request, url, J) {
   const candidates = candidateQuery(tokenizer, q, normalizedQuery, filters, pref);
   const [rawRows, vectorRows] = await Promise.all([
     env.DB.prepare(candidates.sql).bind(...candidates.params).all().then((result) => result.results || []),
-    vectorCandidates(env, q, 50, pref).catch(() => []),
+    vectorCandidates(env, q, 50, pref).catch((error) => {
+      console.warn("Semantische Suche fehlgeschlagen:", String(error?.message || error));
+      return [];
+    }),
   ]);
   const ranked = vectorRows.length
     ? mergeHybridCandidates(rawRows, vectorRows, q, pref, filters)

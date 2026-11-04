@@ -2,14 +2,14 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
-import { cleanText, cleanName, esc, isLang, LANGS, b64u, sign, verify } from "../src/util.js";
+import { cleanText, cleanName, esc, isLang, LANGS, b64u, sign, verify, sha256hex } from "../src/util.js";
 import { sanitize } from "../src/wiki.js";
 import { parseFeed } from "../src/feeds.js";
 import { scoreOf, levelOf, levelName, CAPS, THRESH } from "../src/levels.js";
 import { handleSponsor } from "../src/sponsor.js";
 import { handleAdminPanel } from "../src/adminpanel.js";
 import { d1BackupExportArgs, d1BackupTables } from "../src/d1_backup.js";
-import { embed, queryVectors, rrf, upsertVectors } from "../src/vectors.js";
+import { embed, queryVectors, rrf, upsertVectors, vectorId } from "../src/vectors.js";
 import { handleContributions, refreshContributions } from "../src/contributions.js";
 
 async function searchDb(failTrigram = false) {
@@ -17,19 +17,21 @@ async function searchDb(failTrigram = false) {
   const raw = new DatabaseSync(":memory:");
   const dir = new URL("../migrations/", import.meta.url);
   for (const f of readdirSync(dir).filter((f) => f.endsWith(".sql")).sort()) raw.exec(readFileSync(new URL(f, dir), "utf-8"));
-  let trigramFailed = false, indexWrites = 0, searchQueries = 0, maxBatch = 0, lastSearchQuery;
+  let trigramFailed = false, indexWrites = 0, searchQueries = 0, maxBatch = 0, lastSearchQuery, lastVectorQuery;
   const db = {
     prepare(sql) {
       if (sql.includes("eligible AS (")) {
         searchQueries++;
         lastSearchQuery = { sql, params: [] };
       }
+      if (sql.includes("FROM json_each(?) j CROSS JOIN search_vector")) lastVectorQuery = { sql, params: [] };
       const st = raw.prepare(sql); let args = [];
       const o = {
         bind(...a) {
           if (a.length > 100) throw new Error("D1_ERROR: too many SQL variables");
           args = a;
           if (lastSearchQuery?.sql === sql) lastSearchQuery.params = [...a];
+          if (lastVectorQuery?.sql === sql) lastVectorQuery.params = [...a];
           return o;
         },
         all: async () => ({ results: st.all(...args) }),
@@ -48,7 +50,7 @@ async function searchDb(failTrigram = false) {
     },
     async batch(stmts) { maxBatch = Math.max(maxBatch, stmts.length); for (const st of stmts) await st.run(); },
   };
-  return { db, raw, indexWrites: () => indexWrites, searchQueries: () => searchQueries, maxBatch: () => maxBatch, lastSearchQuery: () => lastSearchQuery };
+  return { db, raw, indexWrites: () => indexWrites, searchQueries: () => searchQueries, maxBatch: () => maxBatch, lastSearchQuery: () => lastSearchQuery, lastVectorQuery: () => lastVectorQuery };
 }
 
 function seedSearchDocs(raw, docs) {
@@ -68,6 +70,17 @@ function seedSearchDocs(raw, docs) {
     raw.exec("ROLLBACK");
     throw error;
   }
+}
+
+async function seedSearchVectors(raw, docs) {
+  const insert = raw.prepare("INSERT INTO search_vector(id,vid,h) VALUES(?,?,?)");
+  const ids = new Map();
+  for (const doc of docs) {
+    const vid = await vectorId(doc.id);
+    insert.run(doc.id, vid, doc.id);
+    ids.set(doc.id, vid);
+  }
+  return ids;
 }
 
 test("util: Texte bereinigen und escapen", () => {
@@ -850,12 +863,15 @@ test("search: Tippfehler-Ranking, Sprach-Deduplizierung und Titelprioritaet (SQL
 
 test("search: Vectorize-Sync ist begrenzt, inkrementell und entfernt gone-Vektoren (SQLite)", async () => {
   const { db, raw } = await searchDb();
-  const docs = Array.from({ length: 102 }, (_, i) => ({
-    id: `en:vector-${String(i).padStart(3, "0")}`, url: `https://www.m365.fm/vector/${i}/`,
+  const docs = Array.from({ length: 502 }, (_, i) => ({
+    id: i === 0 ? `de:/de/show/episodes/${"sehr-langer-pfad-".repeat(7)}` : `en:vector-${String(i).padStart(3, "0")}`,
+    url: `https://www.m365.fm/vector/${i}/`,
     lang: "en", type: "page", title: `Vector document ${i}`,
   }));
+  docs[0].lang = "de";
   seedSearchDocs(raw, docs);
   const upserts = [], deletions = [];
+  let longIdRejected = false;
   const env = {
     DB: db,
     AI: { async run(model, { text }) {
@@ -864,29 +880,40 @@ test("search: Vectorize-Sync ist begrenzt, inkrementell und entfernt gone-Vektor
       return { data: text.map(() => Array(1024).fill(0.1)) };
     } },
     VEC: {
-      async upsert(vectors) { upserts.push(...vectors); },
+      async upsert(vectors) {
+        if (vectors.some(({ id }) => new TextEncoder().encode(id).length > 64)) {
+          longIdRejected = true;
+          throw new Error("Vectorize-ID exceeds 64 bytes");
+        }
+        upserts.push(...vectors);
+      },
       async deleteByIds(ids) { deletions.push(...ids); },
     },
   };
   const { syncSearchVectors } = await import("../src/search.js");
-  assert.equal((await syncSearchVectors(env)).processed, 100, "Erstbefuellung ist je Lauf auf 100 Dokumente begrenzt");
-  assert.equal((await syncSearchVectors(env)).processed, 2);
+  assert.equal((await syncSearchVectors(env)).processed, 200, "Erstbefuellung nutzt einen groesseren, begrenzten Batch");
+  assert.equal((await syncSearchVectors(env)).processed, 200);
+  assert.equal((await syncSearchVectors(env)).processed, 102);
   assert.equal((await syncSearchVectors(env)).processed, 0, "unveraenderte Hashes werden nicht erneut eingebettet");
-  assert.equal(upserts.length, 102);
+  assert.equal(longIdRejected, false);
+  assert.equal(upserts.length, 502);
+  assert.ok(upserts.every(({ id }) => new TextEncoder().encode(id).length <= 64));
+  assert.equal(upserts[0].metadata.doc, docs[0].id);
+  assert.equal(raw.prepare("SELECT vid FROM search_vector WHERE id=?").get(docs[0].id).vid, upserts[0].id);
 
   raw.prepare("UPDATE search_doc SET h='changed' WHERE id=?").run(docs[0].id);
   assert.equal((await syncSearchVectors(env)).processed, 1, "geanderte Hashes werden erneut eingebettet");
-  assert.equal(upserts.length, 103);
+  assert.equal(upserts.length, 503);
   raw.prepare("UPDATE search_doc SET gone=1 WHERE id=?").run(docs[1].id);
   assert.deepEqual(await syncSearchVectors(env), { deleted: 1 });
-  assert.deepEqual(deletions, [docs[1].id]);
+  assert.deepEqual(deletions, [await vectorId(docs[1].id)]);
   assert.equal(raw.prepare("SELECT gone FROM search_doc WHERE id=?").get(docs[1].id).gone, 1, "Quelldokument bleibt erhalten");
 });
 
 test("vectors: Embeddings, Upsert, gefilterte Abfrage und RRF sind wiederverwendbar", async () => {
   const calls = [];
   const env = {
-    AI_GATEWAY: "m365fm",
+    AI_GATEWAY_ID: "m365fm",
     AI: { async run(model, payload, options) {
       calls.push({ model, payload, options });
       return { data: payload.text.map(() => Array(1024).fill(0.25)) };
@@ -896,14 +923,32 @@ test("vectors: Embeddings, Upsert, gefilterte Abfrage und RRF sind wiederverwend
       async query(vector, options) { calls.push({ vector, options }); return { matches: [{ id: "vector:1", score: 0.9 }] }; },
     },
   };
-  const [vector] = await embed(env, ["cross-language query"]);
+  const [vector] = await embed(env, ["cross-language query"], {
+    collectLog: false, cacheTtl: 3600, requestTimeoutMs: 1000,
+  });
   assert.equal(vector.length, 1024);
-  assert.deepEqual(calls[0].options, { gateway: { id: "m365fm" } });
+  assert.deepEqual(calls[0].options, { gateway: { id: "m365fm", collectLog: false, cacheTtl: 3600 } });
   await upsertVectors(env, [{ id: "vector:1", values: vector, metadata: { lang: "en", type: "blog" } }]);
   assert.deepEqual(await queryVectors(env, vector, { filter: { lang: "en", type: "blog" }, topK: 10 }), [
     { id: "vector:1", score: 0.9 },
   ]);
   assert.deepEqual(calls.at(-1).options, { topK: 10, returnMetadata: "all", filter: { lang: "en", type: "blog" } });
+  await queryVectors(env, vector, { returnMetadata: "none" });
+  assert.equal(calls.at(-1).options.returnMetadata, "none");
+  const longDocId = `de:${"/de/show/episodes/" + "x".repeat(90)}`;
+  assert.equal(await vectorId(longDocId), (await sha256hex(longDocId)).slice(0, 32));
+  const batches = [];
+  const batchEnv = {
+    AI: { async run(_model, { text }) { batches.push(text.length); return { data: text.map(() => Array(1024).fill(0.1)) }; } },
+    VEC: { async upsert(items) { batches.push(items.length); } },
+  };
+  await embed(batchEnv, Array.from({ length: 101 }, () => "text"));
+  await upsertVectors(batchEnv, Array.from({ length: 1001 }, (_, i) => ({ id: String(i) })));
+  assert.deepEqual(batches, [100, 1, 1000, 1], "Embeddings und Upserts werden in Cloudflare-kompatible Batches geteilt");
+  await assert.rejects(
+    embed({ AI: { run: () => new Promise(() => {}) } }, ["slow"], { requestTimeoutMs: 5 }),
+    /Workers-AI-Timeout/,
+  );
   assert.deepEqual(rrf([
     [{ id: "shared", title: "Shared" }, { id: "fts-only" }],
     [{ id: "shared", lang: "en" }, { id: "vector-only" }],
@@ -916,13 +961,21 @@ test("search: hybride Treffer, Sprachprioritaet, Fallback und classifyQuery (SQL
     { id: "de:own", url: "https://www.m365.fm/de/own/", group: "https://www.m365.fm/own/", lang: "de", type: "page", title: "Purview Bericht Rollengruppen" },
     { id: "en:foreign", url: "https://www.m365.fm/foreign/", group: "https://www.m365.fm/own/", lang: "en", type: "blog", title: "Data security governance" },
     { id: "en:other", url: "https://www.m365.fm/other/", lang: "en", type: "blog", title: "Other relevant document" },
+    { id: "en:aaron", url: "https://www.m365.fm/aaron-siller/", lang: "en", type: "person", title: "Aaron Siller" },
+    ...Array.from({ length: 40 }, (_, i) => ({
+      id: `de:weak-${i}`, url: `https://www.m365.fm/de/weak/${i}/`, lang: "de", type: "page", title: `Unrelated German result ${i}`,
+    })),
   ];
   seedSearchDocs(raw, docs);
-  let matches = [{ id: "en:foreign", score: 0.9, metadata: { grp: "https://www.m365.fm/own/" } }];
+  const vids = await seedSearchVectors(raw, docs);
+  let matches = [{ id: vids.get("en:foreign"), score: 0.9, metadata: { grp: "https://www.m365.fm/own/" } }];
   const env = {
-    DB: db, SITE: "https://www.m365.fm", SEARCH_GAP_THRESHOLD: "0.5",
+    DB: db, SITE: "https://www.m365.fm", SEARCH_GAP_THRESHOLD: "0.5", SEARCH_VECTOR_MIN_SCORE: "0.4",
     AI: { async run(_model, { text }) { return { data: text.map(() => Array(1024).fill(0.1)) }; } },
-    VEC: { async query() { return { matches }; } },
+    VEC: { async query(_vector, options) {
+      assert.deepEqual(options.filter, { type: { $in: ["episode", "dub_episode", "entity", "person", "glossary", "blog", "event", "show", "page"] } });
+      return { matches };
+    } },
   };
   const { classifyQuery, handleSearch } = await import("../src/search.js");
   const request = new Request("https://api.m365.fm/api/search?q=Rollengruppen+Purview+Bericht&pref=de", {
@@ -930,51 +983,98 @@ test("search: hybride Treffer, Sprachprioritaet, Fallback und classifyQuery (SQL
   });
   const result = await handleSearch(env, request, new URL(request.url), (data) => data);
   assert.equal(result.results[0].title, "Purview Bericht Rollengruppen", "Treffer in der Seitensprache stehen zuerst");
-  matches = [{ id: "en:other", score: 0.9 }];
+  matches = [{ id: vids.get("en:other"), score: 0.9 }];
   const foreignResult = await handleSearch(env, request, new URL(request.url), (data) => data);
   assert.equal(foreignResult.results.find((row) => row.title === "Other relevant document").other_lang, true);
 
-  matches = [{ id: "en:foreign", score: 0.9, metadata: { grp: "https://www.m365.fm/own/" } }];
+  matches = [{ id: vids.get("en:foreign"), score: 0.9, metadata: { grp: "https://www.m365.fm/own/" } }];
   assert.equal((await classifyQuery(env, "purview", "de")).type, "own");
-  matches = [{ id: "en:other", score: 0.9 }];
+  matches = [{ id: vids.get("en:other"), score: 0.9 }];
   const gap = await classifyQuery(env, "purview", "de");
   assert.equal(gap.type, "translation_gap");
   assert.deepEqual(gap.documents.map(({ id }) => id), ["en:other"]);
-  matches = [{ id: "en:other", score: 0.2 }];
+  matches = [{ id: vids.get("en:other"), score: 0.2 }];
   assert.equal((await classifyQuery(env, "unknown", "de")).type, "content_gap", "Relevanzschwelle ist konfigurierbar");
+  matches = [
+    { id: vids.get("en:aaron"), score: 0.95 },
+    ...docs.slice(4).map((doc) => ({ id: vids.get(doc.id), score: 0.41 })),
+  ];
+  const aronRequest = new Request("https://api.m365.fm/api/search?q=Aron+Soller&pref=de", {
+    headers: { "cf-connecting-ip": "aron-soller-hybrid-test" },
+  });
+  const aron = await handleSearch(env, aronRequest, new URL(aronRequest.url), (data) => data);
+  assert.equal(aron.results[0].title, "Aaron Siller", "Aron Soller findet Aaron Siller trotz der Sprachpräferenz");
+  matches = [{ id: vids.get("en:other"), score: 0.2 }];
+  const irrelevant = new Request("https://api.m365.fm/api/search?q=xqzvbnmk&pref=de", {
+    headers: { "cf-connecting-ip": "irrelevant-vector-test" },
+  });
+  assert.equal((await handleSearch(env, irrelevant, new URL(irrelevant.url), (data) => data)).total, 0,
+    "Vektortreffer unter der Mindestschwelle erhöhen total nicht");
 
   const fallback = new Request("https://api.m365.fm/api/search?q=Purview&pref=de", {
     headers: { "cf-connecting-ip": "fts-fallback-test" },
   });
   const onlyFts = await handleSearch({ DB: db, SITE: "https://www.m365.fm" }, fallback, new URL(fallback.url), (data) => data);
   assert.equal(onlyFts.results[0].title, "Purview Bericht Rollengruppen", "ohne Bindungen bleibt FTS aktiv");
-  assert.equal((await classifyQuery({}, "anything", "de")).type, "content_gap");
+  const warning = console.warn;
+  const warnings = [];
+  console.warn = (...args) => warnings.push(args);
+  try {
+    const brokenRequest = new Request("https://api.m365.fm/api/search?q=Purview&pref=de", {
+      headers: { "cf-connecting-ip": "vector-fallback-error-test" },
+    });
+    const result = await handleSearch({ ...env, VEC: { async query() { throw new Error("Vectorize unavailable"); } } },
+      brokenRequest, new URL(brokenRequest.url), (data) => data);
+    assert.equal(result.results[0].title, "Purview Bericht Rollengruppen", "Vectorize-Fehler laesst FTS-Treffer bestehen");
+  } finally { console.warn = warning; }
+  assert.equal(warnings.length, 1, "Vectorize-Fehler wird protokolliert");
+  assert.deepEqual(await classifyQuery({}, "anything", "de"), { type: "unavailable", documents: [] });
+  const broken = { ...env, VEC: { async query() { throw new Error("Vectorize unavailable"); } } };
+  assert.deepEqual(await classifyQuery(broken, "anything", "de"), { type: "unavailable", documents: [] });
 });
 
-test("search: 80.000 Dokumente mit einer Kandidatenabfrage unter 300 ms (SQLite)", async () => {
-  const { db, raw, searchQueries, lastSearchQuery } = await searchDb();
+test("search: 80.000 Dokumente ohne SQL-Vollscan und mit höchstens 150 ms Hybrid-Aufschlag (SQLite)", async (t) => {
+  const { db, raw, searchQueries, lastSearchQuery, lastVectorQuery } = await searchDb();
   const docs = Array.from({ length: 80000 }, (_, i) => ({
     id: `en:synthetic-${i}`, url: `https://www.m365.fm/page/${i}/`, lang: "en", type: i % 8 ? "page" : "entity",
     title: `Common search document ${i}`, summary: "Common content for performance testing", keywords: "Common search",
   }));
   seedSearchDocs(raw, docs);
+  const vector = await vectorId(docs[0].id);
+  raw.prepare("INSERT INTO search_vector(id,vid,h) VALUES(?,?,?)").run(docs[0].id, vector, docs[0].id);
   const { handleSearch } = await import("../src/search.js");
-  const env = { DB: db, SITE: "https://www.m365.fm" };
-  const request = new Request("https://api.m365.fm/api/search?q=common", { headers: { "cf-connecting-ip": "load-test-ip" } });
-  const times = [];
+  const env = {
+    DB: db, SITE: "https://www.m365.fm",
+    AI: { async run(_model, { text }) { return { data: text.map(() => Array(1024).fill(0.1)) }; } },
+    VEC: { async query() { return { matches: [{ id: vector, score: 0.9 }] }; } },
+  };
+  const request = new Request("https://api.m365.fm/api/search?q=common&pref=de", { headers: { "cf-connecting-ip": "load-test-ip" } });
+  const ftsRequest = new Request(request.url, { headers: { "cf-connecting-ip": "load-test-fts-ip" } });
+  const measure = async (targetEnv, targetRequest) => {
+    const times = [];
+    for (let i = 0; i < 6; i++) {
+      const started = performance.now();
+      await handleSearch(targetEnv, targetRequest, new URL(targetRequest.url), (data) => data);
+      if (i) times.push(performance.now() - started);
+    }
+    return times.sort((a, b) => a - b)[Math.floor(times.length / 2)];
+  };
   const before = searchQueries();
-  let result;
-  for (let i = 0; i < 6; i++) {
-    const started = performance.now();
-    result = await handleSearch(env, request, new URL(request.url), (data) => data);
-    if (i) times.push(performance.now() - started);
-  }
-  times.sort((a, b) => a - b);
-  const median = times[Math.floor(times.length / 2)];
-  assert.ok(median < 300, `Suchmedian lag bei ${median.toFixed(1)} ms`);
+  const baselineMedian = await measure({ DB: db, SITE: "https://www.m365.fm" }, ftsRequest);
+  const hybridMedian = await measure(env, request);
+  t.diagnostic(`80k-SQLite-Median: FTS ${baselineMedian.toFixed(1)} ms, hybrid ${hybridMedian.toFixed(1)} ms, Differenz ${(hybridMedian - baselineMedian).toFixed(1)} ms (AI/Vectorize gemockt)`);
+  assert.ok(hybridMedian < 300, `Hybrid-Suchmedian lag bei ${hybridMedian.toFixed(1)} ms`);
+  assert.ok(hybridMedian - baselineMedian <= 150,
+    `Hybrid-Aufschlag lag bei ${(hybridMedian - baselineMedian).toFixed(1)} ms`);
+  let result = await handleSearch(env, request, new URL(request.url), (data) => data);
   assert.equal(result.results.length, 20);
   assert.ok(result.total <= 1000, "Kandidatenpool ist begrenzt");
-  assert.equal(searchQueries() - before, 6, "pro Suchanfrage wird eine Kandidatenabfrage ausgefuehrt");
+  assert.equal(searchQueries() - before, 13, "pro Suchanfrage wird eine Kandidatenabfrage ausgefuehrt");
+  const vectorQuery = lastVectorQuery();
+  assert.match(vectorQuery.sql, /FROM json_each\(\?\) j CROSS JOIN search_vector sv ON sv\.vid=j\.value/);
+  const vectorPlan = raw.prepare(`EXPLAIN QUERY PLAN ${vectorQuery.sql}`).all(...vectorQuery.params);
+  assert.ok(vectorPlan.some(({ detail }) => /SEARCH sv USING INDEX.*vid/.test(detail)), "Vektor-IDs werden ueber den vid-Index aufgeloest");
+  assert.ok(!vectorPlan.some(({ detail }) => /SCAN d\b/.test(detail)), "Vektorkandidaten vermeiden den Vollscan");
 
   const shortRequest = new Request("https://api.m365.fm/api/search?q=qq", { headers: { "cf-connecting-ip": "short-load-test-ip" } });
   const shortTimes = [];

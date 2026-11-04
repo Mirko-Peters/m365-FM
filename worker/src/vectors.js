@@ -1,30 +1,65 @@
+import { sha256hex } from "./util.js";
+
 const VECTOR_MODEL = "@cf/baai/bge-m3";
 const VECTOR_DIMENSIONS = 1024;
+const EMBED_BATCH_SIZE = 100;
+const UPSERT_BATCH_SIZE = 1000;
 const RRF_K = 60;
 
-export async function embed(env, texts) {
+export async function vectorId(key) {
+  return (await sha256hex(String(key))).slice(0, 32);
+}
+
+function withTimeout(promise, timeoutMs) {
+  if (!Number.isFinite(timeoutMs) || timeoutMs <= 0) return promise;
+  let timer;
+  return Promise.race([
+    promise,
+    new Promise((_, reject) => {
+      timer = setTimeout(() => reject(new Error("Workers-AI-Timeout")), timeoutMs);
+    }),
+  ]).finally(() => clearTimeout(timer));
+}
+
+export async function embed(env, texts, gatewayOptions = {}) {
   if (!env.AI || !Array.isArray(texts) || texts.some((text) => typeof text !== "string")) {
     throw new Error("Workers-AI-Binding oder Embedding-Eingabe fehlt");
   }
-  const options = env.AI_GATEWAY ? { gateway: { id: env.AI_GATEWAY } } : undefined;
-  const result = await env.AI.run(VECTOR_MODEL, { text: texts }, options);
-  const vectors = result?.data;
-  if (!Array.isArray(vectors) || vectors.length !== texts.length ||
-      vectors.some((vector) => !Array.isArray(vector) || vector.length !== VECTOR_DIMENSIONS ||
-        vector.some((value) => !Number.isFinite(value)))) {
-    throw new Error("Ungueltige BGE-M3-Embeddings");
+  const { requestTimeoutMs, ...gatewayOptionsWithoutTimeout } = gatewayOptions;
+  const gateway = env.AI_GATEWAY_ID
+    ? { id: env.AI_GATEWAY_ID, ...gatewayOptionsWithoutTimeout }
+    : null;
+  const vectors = [];
+  for (let i = 0; i < texts.length; i += EMBED_BATCH_SIZE) {
+    const batch = texts.slice(i, i + EMBED_BATCH_SIZE);
+    const options = gateway ? { gateway } : undefined;
+    const result = await withTimeout(
+      env.AI.run(VECTOR_MODEL, { text: batch }, options),
+      requestTimeoutMs,
+    );
+    const embeddings = result?.data;
+    if (!Array.isArray(embeddings) || embeddings.length !== batch.length ||
+        embeddings.some((vector) => !Array.isArray(vector) || vector.length !== VECTOR_DIMENSIONS ||
+          vector.some((value) => !Number.isFinite(value)))) {
+      throw new Error("Ungueltige BGE-M3-Embeddings");
+    }
+    vectors.push(...embeddings);
   }
   return vectors;
 }
 
 export async function upsertVectors(env, vectors) {
   if (!env.VEC) throw new Error("Vectorize-Binding fehlt");
-  return env.VEC.upsert(vectors);
+  const results = [];
+  for (let i = 0; i < vectors.length; i += UPSERT_BATCH_SIZE) {
+    results.push(await env.VEC.upsert(vectors.slice(i, i + UPSERT_BATCH_SIZE)));
+  }
+  return results;
 }
 
-export async function queryVectors(env, vec, { filter, topK = 50 } = {}) {
+export async function queryVectors(env, vec, { filter, topK = 50, returnMetadata = "all" } = {}) {
   if (!env.VEC) throw new Error("Vectorize-Binding fehlt");
-  const options = { topK, returnMetadata: "all" };
+  const options = { topK, returnMetadata };
   if (filter && Object.keys(filter).length) options.filter = filter;
   return (await env.VEC.query(vec, options))?.matches || [];
 }

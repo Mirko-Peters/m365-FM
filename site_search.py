@@ -166,10 +166,7 @@ UI = {   # Oberflaeche der Suchseite (15 Sprachen); Typ-Namen in derselben Reihe
            ("에피소드", "더빙 에피소드", "엔티티", "인물", "용어집", "블로그", "이벤트", "쇼", "페이지")),
 }
 OTHER_LANG = {
-    "en": "in {lang}", "de": "auf {lang}", "fr": "en {lang}", "es": "en {lang}", "it": "in {lang}",
-    "nl": "in het {lang}", "pt": "em {lang}", "pl": "w języku {lang}", "id": "dalam bahasa {lang}",
-    "ru": "на языке {lang}", "uk": "мовою {lang}", "ar": "باللغة {lang}", "he": "ב{lang}",
-    "ja": "{lang}語", "ko": "{lang}로",
+    lang: "{lang}" for lang in ("en", "de", "fr", "es", "it", "nl", "pt", "pl", "id", "ru", "uk", "ar", "he", "ja", "ko")
 }
 CSS = (".srch-f{display:flex;gap:8px;margin:12px 0 18px}.srch-f input{flex:1;min-width:0;font:inherit;padding:10px 12px;border:1px solid var(--line,#ccd);border-radius:6px;background:var(--bg,#fff);color:inherit}"
        ".srch{display:grid;grid-template-columns:220px minmax(0,1fr);gap:24px}@media(max-width:760px){.srch{grid-template-columns:1fr}}"
