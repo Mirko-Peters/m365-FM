@@ -3,7 +3,7 @@ import { sendPush } from "./push.js";
 import { esc } from "./util.js";
 import { closeMonth } from "./badges.js";
 import { mailReady, sendMail } from "./mailer.js";
-import { wants, weeklyUnsubscribe } from "./mail.js";
+import { KINDS, weeklyUnsubscribeMany } from "./mail.js";
 
 const LANG_NAME = { de: "Deutsch", en: "English", es: "Español", fr: "Français", it: "Italiano", pt: "Português", nl: "Nederlands", pl: "Polski", id: "Bahasa Indonesia", ru: "Русский", uk: "Українська", ar: "العربية", he: "עברית", ja: "日本語", ko: "한국어", ml: "മലയാളം", pa: "ਪੰਜਾਬੀ", ta: "தமிழ்", te: "తెలుగు" };
 const clean = (t) => String(t || "").replace(/\s*\((KI|AI)[^)]*\)\s*$/i, "").replace(/\s*[（(][^()（）]*[)）]\s*$/, "").trim();
@@ -85,83 +85,148 @@ async function currentItems(db, episodes, languages, since, until, site) {
   return byLang;
 }
 
-async function topicItems(db, uid, since, until, site) {
-  const topics = (await db.prepare("SELECT DISTINCT ct.kind,ct.item_id FROM content_topic ct JOIN mail_topic_follows f ON f.eid=ct.eid AND f.user_id=? AND f.active=1 WHERE ct.created>=? ORDER BY ct.kind,ct.item_id LIMIT 40").bind(uid, since).all().catch(() => ({ results: [] }))).results || [];
-  const out = [];
-  for (const x of topics) {
-    let row = null, title = "", summary = "", url = `${site}/community/`;
-    try {
-      if (x.kind === "blog") {
-        row = await db.prepare("SELECT slug,title,summary,lang,published FROM blog_posts WHERE id=? AND status='live'").bind(+x.item_id).first();
-        if (row) url = `${site}/blog/${encodeURIComponent(row.slug)}/`;
-      } else if (x.kind === "podcast") {
-        row = await db.prepare("SELECT title,description,lang,published,ep_url FROM pod_episodes WHERE id=? AND status='published'").bind(+x.item_id).first();
-        if (row) url = safeHref(row.ep_url || `${site}/community/`, site);
-      } else if (x.kind === "video") {
-        row = await db.prepare("SELECT title,description,lang,published,video_id FROM yt_videos WHERE id=? AND status='published'").bind(+x.item_id).first();
-        if (row && row.video_id) url = `https://www.youtube.com/watch?v=${encodeURIComponent(row.video_id)}`;
-      } else if (x.kind === "library") {
-        row = await db.prepare("SELECT title,summary,lang,published,link FROM lib_items WHERE id=? AND status='live'").bind(+x.item_id).first();
-        if (row) url = safeHref(row.link || `${site}/community/`, site);
-      } else if (x.kind === "session") {
-        row = await db.prepare("SELECT s.title,s.abstract,s.lang,s.start,e.handle FROM event_sessions s JOIN events e ON e.id=s.event_id WHERE s.id=? AND s.status='live'").bind(+x.item_id).first();
-        if (row) url = `${site}/events/${encodeURIComponent(row.handle)}/`;
-      }
-    } catch { /* Nicht jede Inhaltsart ist in jeder Datenbank aktiv. */ }
-    if (!row || itemTime(row) < since || itemTime(row) > until) continue;
-    title = row.title || "";
-    summary = row.summary || row.description || row.abstract || "";
-    out.push({ title, summary, url, lang: row.lang || "en" });
-    if (out.length >= 6) break;
+const enabled = (prefs, uid, kind) => {
+  const value = prefs.get(uid)?.get(kind);
+  return value === undefined ? !!KINDS[kind] : !!value;
+};
+const uidParams = (ids) => ids.map(() => "?").join(",");
+
+async function topicItems(db, ids, since, until, site) {
+  if (!ids.length) return new Map();
+  const sql = `WITH recipients(user_id) AS (VALUES ${ids.map(() => "(?)").join(",")}), matches AS (
+    SELECT DISTINCT r.user_id,'blog' kind,b.title,b.summary,b.lang,b.published published,b.slug ref,'' link
+    FROM recipients r JOIN mail_topic_follows f ON f.user_id=r.user_id AND f.active=1
+    JOIN content_topic ct ON ct.eid=f.eid AND ct.kind='blog'
+    JOIN blog_posts b ON CAST(b.id AS TEXT)=ct.item_id AND b.status='live'
+    WHERE b.published>=? AND b.published<=?
+    UNION ALL
+    SELECT DISTINCT r.user_id,'podcast',p.title,p.description,p.lang,p.published,p.ep_url,''
+    FROM recipients r JOIN mail_topic_follows f ON f.user_id=r.user_id AND f.active=1
+    JOIN content_topic ct ON ct.eid=f.eid AND ct.kind='podcast'
+    JOIN pod_episodes p ON CAST(p.id AS TEXT)=ct.item_id AND p.status='published'
+    WHERE p.published>=? AND p.published<=?
+    UNION ALL
+    SELECT DISTINCT r.user_id,'video',v.title,v.description,v.lang,v.published,v.video_id,''
+    FROM recipients r JOIN mail_topic_follows f ON f.user_id=r.user_id AND f.active=1
+    JOIN content_topic ct ON ct.eid=f.eid AND ct.kind='video'
+    JOIN yt_videos v ON CAST(v.id AS TEXT)=ct.item_id AND v.status='published'
+    WHERE v.published>=? AND v.published<=?
+    UNION ALL
+    SELECT DISTINCT r.user_id,'library',l.title,l.summary,l.lang,l.published,l.link,''
+    FROM recipients r JOIN mail_topic_follows f ON f.user_id=r.user_id AND f.active=1
+    JOIN content_topic ct ON ct.eid=f.eid AND ct.kind='library'
+    JOIN lib_items l ON CAST(l.id AS TEXT)=ct.item_id AND l.status='live'
+    WHERE l.published>=? AND l.published<=?
+    UNION ALL
+    SELECT DISTINCT r.user_id,'session',s.title,s.abstract,s.lang,s.created,e.handle,''
+    FROM recipients r JOIN mail_topic_follows f ON f.user_id=r.user_id AND f.active=1
+    JOIN content_topic ct ON ct.eid=f.eid AND ct.kind='session'
+    JOIN event_sessions s ON CAST(s.id AS TEXT)=ct.item_id AND s.status='live'
+    JOIN events e ON e.id=s.event_id
+    WHERE s.created>=? AND s.created<=?
+  ), ranked AS (
+    SELECT *,ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY published DESC,title) rn FROM matches
+  )
+  SELECT user_id,kind,title,summary,lang,published,ref,link FROM ranked WHERE rn<=6`;
+  const rows = (await db.prepare(sql).bind(...ids, since, until, since, until, since, until, since, until, since, until).all().catch(() => ({ results: [] }))).results || [];
+  const out = new Map();
+  for (const row of rows) {
+    let url = `${site}/community/`;
+    if (row.kind === "blog") url = `${site}/blog/${encodeURIComponent(row.ref)}/`;
+    else if (row.kind === "podcast") url = safeHref(row.ref || url, site);
+    else if (row.kind === "video" && row.ref) url = `https://www.youtube.com/watch?v=${encodeURIComponent(row.ref)}`;
+    else if (row.kind === "library") url = safeHref(row.ref || url, site);
+    else if (row.kind === "session") url = `${site}/events/${encodeURIComponent(row.ref)}/`;
+    const items = out.get(row.user_id) || [];
+    items.push({ title: row.title, summary: row.summary, url });
+    out.set(row.user_id, items);
   }
   return out;
 }
 
-async function personalUpdates(db, uid, since, until, site, lang) {
-  const out = [], included = [];
-  const de = lang === "de";
-  const addKind = async (kind) => {
-    if (!(await wants(db, uid, kind))) return;
-    const rows = (await db.prepare("SELECT id,subject,html FROM mail_outbox WHERE user_id=? AND kind=? AND sent=0 AND tries<3 ORDER BY id LIMIT 20").bind(uid, kind).all().catch(() => ({ results: [] }))).results || [];
-    const title = kind === "reply" ? (de ? "Neue Antwort auf deinen Kommentar" : "New reply to your comment")
-      : kind === "wish" ? (de ? "Neuer Status zu deinem Wunsch" : "Your wish has a status update")
+async function loadPersonal(db, users, since, until, site) {
+  const result = new Map(), ids = users.map((u) => u.id);
+  for (const uid of ids) result.set(uid, { items: [], outboxIds: [] });
+  if (!ids.length) return result;
+  if (ids.length > 30) {
+    for (let i = 0; i < users.length; i += 30) {
+      const batch = await loadPersonal(db, users.slice(i, i + 30), since, until, site);
+      for (const [uid, value] of batch) result.set(uid, value);
+    }
+    return result;
+  }
+  const slots = uidParams(ids), prefRows = (await db.prepare(`SELECT user_id,kind,on_ FROM mail_prefs WHERE user_id IN (${slots})`).bind(...ids).all()).results || [];
+  const prefs = new Map();
+  for (const row of prefRows) { const map = prefs.get(row.user_id) || new Map(); map.set(row.kind, !!row.on_); prefs.set(row.user_id, map); }
+  const eligible = ids.filter((uid) => enabled(prefs, uid, "weekly"));
+  if (!eligible.length) return result;
+  const eligibleSql = uidParams(eligible), eligibleRows = (await db.prepare(`SELECT user_id,id,kind,html FROM mail_outbox WHERE user_id IN (${eligibleSql}) AND kind IN ('reply','wish','show') AND sent=0 AND tries<3 AND created>=? AND created<=? ORDER BY id`).bind(...eligible, since, until).all()).results || [];
+  for (const row of eligibleRows) {
+    if (!enabled(prefs, row.user_id, row.kind)) continue;
+    const de = users.find((u) => u.id === row.user_id)?.lang === "de";
+    const title = row.kind === "reply" ? (de ? "Neue Antwort auf deinen Kommentar" : "New reply to your comment")
+      : row.kind === "wish" ? (de ? "Neuer Status zu deinem Wunsch" : "Your wish has a status update")
         : (de ? "Aktualisierung deiner Podcast-Show" : "Podcast show update");
-    for (const row of rows) { out.push({ title, html: row.html }); included.push(row.id); }
-  };
-  await addKind("reply");
-  await addKind("wish");
-  await addKind("show");
+    const item = result.get(row.user_id); item.items.push({ title, html: row.html }); item.outboxIds.push(row.id);
+  }
 
-  const guestRows = (await db.prepare("SELECT p.title,p.ep_url,p.created FROM item_guests g JOIN pod_episodes p ON p.id=g.item_id AND g.kind='podcast' AND p.status='published' WHERE g.user_id=? AND g.status='confirmed' AND g.created>=? AND g.created<=? UNION ALL SELECT v.title,'',v.created FROM item_guests g JOIN yt_videos v ON v.id=g.item_id AND g.kind='video' AND v.status='published' WHERE g.user_id=? AND g.status='confirmed' AND g.created>=? AND g.created<=? LIMIT 10").bind(uid, since, until, uid, since, until).all().catch(() => ({ results: [] }))).results || [];
-  for (const r of guestRows) out.push({ title: de ? "Du wurdest als Gast hinzugefügt" : "You were added as a guest", html: `<a href="${esc(safeHref(r.ep_url || `${site}/community/`, site))}">${esc(r.title)}</a>` });
-
-  const coauthors = (await db.prepare("SELECT b.title,b.slug FROM blog_coauthors c JOIN blog_posts b ON b.id=c.post_id AND b.status='live' WHERE c.user_id=? AND c.status='confirmed' AND c.created>=? AND c.created<=? LIMIT 10").bind(uid, since, until).all().catch(() => ({ results: [] }))).results || [];
-  for (const r of coauthors) out.push({ title: de ? "Du wurdest als Autor hinzugefügt" : "You were added as an author", html: `<a href="${esc(`${site}/blog/${encodeURIComponent(r.slug)}/`)}">${esc(r.title)}</a>` });
-
-  const profile = await db.prepare("SELECT handle FROM profiles WHERE user_id=? AND public=1").bind(uid).first().catch(() => null);
-  if (profile?.handle) {
-    const sessions = (await db.prepare("SELECT s.title,s.speakers,e.handle FROM event_sessions s JOIN events e ON e.id=s.event_id WHERE s.status='live' AND s.created>=? AND s.created<=? LIMIT 200").bind(since, until).all().catch(() => ({ results: [] }))).results || [];
+  const eventIds = eligible.filter((uid) => enabled(prefs, uid, "event"));
+  if (eventIds.length) {
+    const eventSql = uidParams(eventIds);
+    const guests = (await db.prepare(`SELECT g.user_id,p.title,p.ep_url FROM item_guests g JOIN pod_episodes p ON p.id=g.item_id AND g.kind='podcast' AND p.status='published' WHERE g.user_id IN (${eventSql}) AND g.status='confirmed' AND g.created>=? AND g.created<=? UNION ALL SELECT g.user_id,v.title,' ' FROM item_guests g JOIN yt_videos v ON v.id=g.item_id AND g.kind='video' AND v.status='published' WHERE g.user_id IN (${eventSql}) AND g.status='confirmed' AND g.created>=? AND g.created<=?`).bind(...eventIds, since, until, ...eventIds, since, until).all().catch(() => ({ results: [] }))).results || [];
+    for (const row of guests) {
+      const de = users.find((u) => u.id === row.user_id)?.lang === "de";
+      result.get(row.user_id).items.push({ title: de ? "Du wurdest als Gast hinzugefügt" : "You were added as a guest", html: `<a href="${esc(safeHref(row.ep_url || `${site}/community/`, site))}">${esc(row.title)}</a>` });
+    }
+    const profiles = (await db.prepare(`SELECT user_id,handle FROM profiles WHERE user_id IN (${eventSql}) AND public=1 AND handle IS NOT NULL`).bind(...eventIds).all()).results || [];
+    const handleByUser = new Map(profiles.map((x) => [x.user_id, x.handle]));
+    const sessions = (await db.prepare("SELECT s.title,s.speakers,e.handle FROM event_sessions s JOIN events e ON e.id=s.event_id WHERE s.status='live' AND s.created>=? AND s.created<=? LIMIT 500").bind(since, until).all()).results || [];
     for (const session of sessions) {
       let speakers = [];
       try { speakers = JSON.parse(session.speakers || "[]"); } catch { /* Ungueltige Sprecherliste ueberspringen. */ }
-      if (speakers.some((speaker) => speaker.h === profile.handle)) out.push({ title: de ? "Du wurdest als Speaker hinzugefügt" : "You were added as a speaker", html: `<a href="${esc(`${site}/events/${encodeURIComponent(session.handle)}/`)}">${esc(session.title)}</a>` });
+      for (const [uid, handle] of handleByUser) if (speakers.some((speaker) => speaker.h === handle)) {
+        const de = users.find((u) => u.id === uid)?.lang === "de";
+        result.get(uid).items.push({ title: de ? "Du wurdest als Speaker hinzugefügt" : "You were added as a speaker", html: `<a href="${esc(`${site}/events/${encodeURIComponent(session.handle)}/`)}">${esc(session.title)}</a>` });
+      }
     }
   }
-  if (profile?.handle) {
-    const count = (await db.prepare("SELECT COUNT(*) n FROM blog_follows WHERE handle=? AND created>=? AND created<=?").bind(profile.handle, since, until).first().catch(() => null))?.n || 0;
-    if (count) out.push({ title: de ? `${count} neue Blog-Abonnenten` : `${count} new blog subscribers`, html: "" });
+
+  const showIds = eligible.filter((uid) => enabled(prefs, uid, "show"));
+  if (showIds.length) {
+    const showSql = uidParams(showIds);
+    const coauthors = (await db.prepare(`SELECT c.user_id,b.title,b.slug FROM blog_coauthors c JOIN blog_posts b ON b.id=c.post_id AND b.status='live' WHERE c.user_id IN (${showSql}) AND c.status='confirmed' AND c.created>=? AND c.created<=?`).bind(...showIds, since, until).all().catch(() => ({ results: [] }))).results || [];
+    for (const row of coauthors) {
+      const de = users.find((u) => u.id === row.user_id)?.lang === "de";
+      result.get(row.user_id).items.push({ title: de ? "Du wurdest als Autor hinzugefügt" : "You were added as an author", html: `<a href="${esc(`${site}/blog/${encodeURIComponent(row.slug)}/`)}">${esc(row.title)}</a>` });
+    }
   }
 
-  if (await wants(db, uid, "weekly")) {
-    const topics = await topicItems(db, uid, since, until, site);
-    if (topics.length) out.push({ title: de ? "Neu bei deinen Themen" : "New in your topics", html: topics.map((x) => `<p><a href="${esc(safeHref(x.url, site))}">${esc(x.title)}</a>${x.summary ? ` — ${esc(clean(x.summary).slice(0, 160))}` : ""}</p>`).join("") });
+  const weeklyIds = eligible.filter((uid) => enabled(prefs, uid, "weekly"));
+  if (weeklyIds.length) {
+    const follows = await topicItems(db, weeklyIds, since, until, site);
+    for (const uid of weeklyIds) {
+      const topics = follows.get(uid) || [], de = users.find((u) => u.id === uid)?.lang === "de";
+      if (topics.length) result.get(uid).items.push({ title: de ? "Neu bei deinen Themen" : "New in your topics", html: topics.map((x) => `<p><a href="${esc(safeHref(x.url, site))}">${esc(x.title)}</a>${x.summary ? ` — ${esc(clean(x.summary).slice(0, 160))}` : ""}</p>`).join("") });
+    }
+    const profiles = (await db.prepare(`SELECT user_id,handle FROM profiles WHERE user_id IN (${uidParams(weeklyIds)}) AND public=1 AND handle IS NOT NULL`).bind(...weeklyIds).all()).results || [];
+    const handles = profiles.map((x) => x.handle);
+    if (handles.length) {
+      const followerRows = (await db.prepare(`SELECT handle,COUNT(*) n FROM blog_follows WHERE handle IN (${uidParams(handles)}) AND created>=? AND created<=? GROUP BY handle`).bind(...handles, since, until).all()).results || [];
+      const followsByHandle = new Map(followerRows.map((x) => [x.handle, x.n]));
+      for (const profile of profiles) {
+        const count = followsByHandle.get(profile.handle) || 0;
+        if (count) {
+          const de = users.find((u) => u.id === profile.user_id)?.lang === "de";
+          result.get(profile.user_id).items.push({ title: de ? `${count} neue Blog-Abonnenten` : `${count} new blog subscribers`, html: "" });
+        }
+      }
+    }
   }
-  return { items: out, outboxIds: included };
+  return result;
 }
 
-async function reserveWeekly(db, email, period, time) {
-  const hash = await addressHash(email);
-  const result = await db.prepare("INSERT INTO mail_weekly_delivery(address_hash,week_start,status,reserved_at) VALUES(?,?,0,?) ON CONFLICT(address_hash) DO UPDATE SET week_start=excluded.week_start,status=0,reserved_at=excluded.reserved_at,sent_at=0 WHERE mail_weekly_delivery.reserved_at<=excluded.reserved_at-604800").bind(hash, period, time).run();
+async function reserveWeekly(db, recipient, period, time) {
+  const result = await db.prepare("INSERT INTO mail_weekly_delivery(address_hash,week_start,status,reserved_at) VALUES(?,?,0,?) ON CONFLICT(address_hash) DO UPDATE SET week_start=excluded.week_start,status=0,reserved_at=excluded.reserved_at,sent_at=0 WHERE mail_weekly_delivery.week_start<excluded.week_start OR mail_weekly_delivery.status=2").bind(recipient.hash, period, time).run();
   return !!result.meta.changes;
 }
 
@@ -183,37 +248,68 @@ export async function runDigest(env, { dry = false, at = Date.now() } = {}) {
     const recipient = getRecipient(row.email);
     const user = { id: row.user_id, lang: row.lang || "en" };
     recipient.users.set(user.id, user);
-    if (await wants(db, user.id, "weekly")) recipient.langs.add(user.lang);
   }
 
   const result = { recipients: recipients.size, sent: 0, skipped: 0, empty: 0, episodes: 0, personal: 0, period };
   if (dry) return result;
   if (!mailReady(env)) return { ...result, mailOff: true };
-  for (const recipient of recipients.values()) {
-    const itemsByLang = await currentItems(db, episodes, recipient.langs, since, time, env.SITE);
+  const hashes = await Promise.all([...recipients.values()].map(async (recipient) => ({ recipient, hash: await addressHash(recipient.email) })));
+  const sentRows = (await db.prepare("SELECT address_hash,week_start,status FROM mail_weekly_delivery").all()).results || [];
+  const sentByHash = new Map(sentRows.map((row) => [row.address_hash, row]));
+  const candidates = hashes.filter(({ hash }) => {
+    const row = sentByHash.get(hash);
+    return !row || row.week_start < period || row.status === 2;
+  }).sort((a, b) => a.hash.localeCompare(b.hash));
+  const cursorRow = await db.prepare("SELECT v FROM meta WHERE k='weekly_cursor'").first();
+  const cursor = cursorRow?.v || "";
+  const pivot = candidates.findIndex((x) => x.hash > cursor);
+  const ordered = pivot > 0 ? [...candidates.slice(pivot), ...candidates.slice(0, pivot)] : candidates;
+  const batch = ordered.slice(0, 20);
+  if (!batch.length) return result;
+  const newsletterLangs = new Set(batch.flatMap(({ recipient }) => [...recipient.langs]));
+  const byLang = await currentItems(db, episodes, newsletterLangs, since, time, env.SITE);
+  const users = [...new Map(batch.flatMap(({ recipient }) => [...recipient.users.values()]).map((user) => [user.id, user])).values()];
+  const personalByUser = await loadPersonal(db, users, since, time, env.SITE);
+  const ready = [];
+  for (const { recipient, hash } of batch) {
+    const itemsByLang = Object.fromEntries([...recipient.langs].map((lang) => [lang, byLang[lang] || []]));
     const personal = [], outboxIds = [];
     for (const user of recipient.users.values()) {
-      if (!(await wants(db, user.id, "weekly"))) continue;
-      const update = await personalUpdates(db, user.id, since, time, env.SITE, user.lang);
+      const update = personalByUser.get(user.id);
+      if (!update) continue;
       personal.push(...update.items); outboxIds.push(...update.outboxIds);
     }
     if (!Object.values(itemsByLang).some((items) => items.length) && !personal.length) { result.empty++; continue; }
-    const registeredLang = [...recipient.users.values()].find((u) => u.lang)?.lang;
-    const lang = registeredLang === "de" || recipient.langs.has("de") ? "de" : "en";
-    if (!(await reserveWeekly(db, recipient.email, period, time))) { result.skipped++; continue; }
-    const unsubscribe = await weeklyUnsubscribe(env, recipient.email);
-    const html = renderWeeklyMail({ lang, itemsByLang, personal, site: env.SITE, unsubscribe });
-    const r = await sendMail(env, { to: recipient.email, subject: lang === "de" ? "M365.FM – Deine Wochenübersicht" : "M365.FM – Your weekly overview", html, lang, bannerAt: at, headers: { "List-Unsubscribe": `<${unsubscribe}>`, "List-Unsubscribe-Post": "List-Unsubscribe=One-Click" } });
+    const lang = recipient.langs.has("de") || [...recipient.users.values()].some((user) => user.lang === "de") ? "de" : "en";
+    ready.push({ recipient, hash, itemsByLang, personal, outboxIds, lang });
+  }
+  if (!ready.length) {
+    await db.prepare("INSERT INTO meta(k,v) VALUES('weekly_cursor',?) ON CONFLICT(k) DO UPDATE SET v=excluded.v").bind(batch.at(-1).hash).run();
+    return result;
+  }
+  const reservations = await db.batch(ready.map(({ hash }) => db.prepare("INSERT INTO mail_weekly_delivery(address_hash,week_start,status,reserved_at) VALUES(?,?,0,?) ON CONFLICT(address_hash) DO UPDATE SET week_start=excluded.week_start,status=0,reserved_at=excluded.reserved_at,sent_at=0 WHERE mail_weekly_delivery.week_start<excluded.week_start OR mail_weekly_delivery.status=2").bind(hash, period, time)));
+  const deliver = ready.filter((_, i) => reservations[i]?.meta?.changes);
+  result.skipped += ready.length - deliver.length;
+  if (!deliver.length) return result;
+  const unsubs = await weeklyUnsubscribeMany(env, deliver.map(({ recipient }) => recipient.email));
+  const deliveryOps = [], outboxSent = new Set();
+  for (const entry of deliver) {
+    const { recipient, hash, itemsByLang, personal, outboxIds, lang } = entry;
+    const html = renderWeeklyMail({ lang, itemsByLang, personal, site: env.SITE, unsubscribe: unsubs.get(recipient.email) });
+    const r = await sendMail(env, { to: recipient.email, subject: lang === "de" ? "M365.FM – Deine Wochenübersicht" : "M365.FM – Your weekly overview", html, lang, bannerAt: at, headers: { "List-Unsubscribe": `<${unsubs.get(recipient.email)}>`, "List-Unsubscribe-Post": "List-Unsubscribe=One-Click" } });
     if (r.ok) {
       result.sent++;
       result.episodes += Object.values(itemsByLang).reduce((n, items) => n + items.length, 0);
       result.personal += personal.length;
-      for (let i = 0; i < outboxIds.length; i += 100) await db.batch(outboxIds.slice(i, i + 100).map((id) => db.prepare("UPDATE mail_outbox SET sent=1,err='' WHERE id=?").bind(id)));
-      await db.prepare("UPDATE mail_weekly_delivery SET status=1,sent_at=? WHERE address_hash=?").bind(time, await addressHash(recipient.email)).run();
+      for (const id of outboxIds) outboxSent.add(id);
+      deliveryOps.push(db.prepare("UPDATE mail_weekly_delivery SET status=1,sent_at=? WHERE address_hash=?").bind(time, hash));
     } else {
-      await db.prepare("UPDATE mail_weekly_delivery SET status=2 WHERE address_hash=?").bind(await addressHash(recipient.email)).run();
+      deliveryOps.push(db.prepare("UPDATE mail_weekly_delivery SET status=2 WHERE address_hash=?").bind(hash));
     }
   }
+  if (outboxSent.size) for (const id of outboxSent) deliveryOps.push(db.prepare("UPDATE mail_outbox SET sent=1,err='' WHERE id=?").bind(id));
+  if (deliveryOps.length) await db.batch(deliveryOps);
+  await db.prepare("INSERT INTO meta(k,v) VALUES('weekly_cursor',?) ON CONFLICT(k) DO UPDATE SET v=excluded.v").bind(batch.at(-1).hash).run();
   return result;
 }
 

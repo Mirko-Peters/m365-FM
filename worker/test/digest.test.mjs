@@ -5,6 +5,7 @@ import { conBanner } from "../src/mailer.js";
 import { renderWeeklyMail, runDigest } from "../src/digest.js";
 import worker from "../src/index.js";
 import { handleMail } from "../src/mail.js";
+import { deleteUserData } from "../src/profiles.js";
 
 async function database() {
   const { DatabaseSync } = await import("node:sqlite");
@@ -22,7 +23,7 @@ async function database() {
       };
       return out;
     },
-    async batch(stmts) { for (const stmt of stmts) await stmt.run(); },
+    async batch(stmts) { const results = []; for (const stmt of stmts) results.push(await stmt.run()); return results; },
   };
   return { db, raw };
 }
@@ -58,10 +59,10 @@ test("Wochenmail reserviert kein Wochenlimit, wenn der Mailversand nicht konfigu
   } finally { globalThis.fetch = oldFetch; }
 });
 
-test("Wochenmail bündelt Sprachen und Antworten, überspringt leere Wochen und begrenzt je Adresse", async () => {
+test("Wochenmail bündelt Sprachen und Antworten, versendet persönliche Kontohinweise ohne Newsletter-Inhalte", async () => {
   const { db, raw } = await database();
   const t = Date.UTC(2026, 10, 8, 6), recent = new Date(t - 86400_000).toISOString();
-  raw.exec("INSERT INTO users(id,provider,sub,name,lang,created) VALUES(1,'test','one','User','de',1); INSERT INTO mail_addr(user_id,email,verified,created) VALUES(1,'member',1,1);");
+  raw.exec("INSERT INTO users(id,provider,sub,name,lang,created) VALUES(1,'test','one','User','de',1),(2,'test','two','No subscription','en',1); INSERT INTO mail_addr(user_id,email,verified,created) VALUES(1,'member',1,1),(2,'account-only',1,1);");
   raw.exec("INSERT INTO email_subs(email,lang,token,confirmed,created) VALUES('member','de','de-token',1,1),('member','en','en-token',1,1),('pending','de','pending-token',0,1);");
   const oldFetch = globalThis.fetch, sent = [];
   let episodes = [{ id: "old", language: "de", date: new Date(t - 10 * 86400_000).toISOString(), url: "https://www.m365.fm/de/alt", title: "Alt" }];
@@ -69,34 +70,44 @@ test("Wochenmail bündelt Sprachen und Antworten, überspringt leere Wochen und 
   const env = { DB: db, SITE: "https://www.m365.fm", API: "https://api-dub.m365.fm", MAIL_FROM: "M365.FM", EMAIL: { send: async (message) => { sent.push(message); return { messageId: `mail-${sent.length}` }; } } };
   try {
     const empty = await runDigest(env, { at: t });
-    assert.equal(empty.empty, 1);
+    assert.equal(empty.empty, 2);
     assert.equal(sent.length, 0, "leere Woche sendet nichts");
 
+    raw.prepare("INSERT INTO mail_outbox(user_id,kind,subject,html,created) VALUES(2,'reply','Antwort','<p>Persönliche Antwort</p>',?)").run(Math.floor(t / 1000));
     const followsRequest = new Request("https://api-dub.m365.fm/api/mail/follows", { method: "POST", body: JSON.stringify({ eids: ["power-bi"] }) });
     const followsResponse = await handleMail(env, followsRequest, new URL(followsRequest.url), "/api/mail/follows", { id: 1 }, (data) => new Response(JSON.stringify(data)));
     assert.deepEqual(await followsResponse.json(), { ok: true, follows: ["power-bi"] });
     raw.prepare("INSERT INTO blog_posts(user_id,slug,title,lang,status,created,updated,published) VALUES(1,'topic-article','Power BI article','de','live',?,?,?)").run(Math.floor(t / 1000), Math.floor(t / 1000), Math.floor(t / 1000));
     raw.prepare("INSERT INTO content_topic(kind,item_id,eid,weight,src,created) VALUES('blog','1','power-bi',1,'admin',?)").run(Math.floor(t / 1000));
-    raw.exec("INSERT INTO mail_outbox(user_id,kind,subject,html,created) VALUES(1,'reply','Antwort','<p>Neue Antwort</p>',1);");
+    for (let i = 0; i < 45; i++) raw.prepare("INSERT INTO content_topic(kind,item_id,eid,weight,src,created) VALUES('lblog',?,'power-bi',1,'admin',?)").run(String(i), Math.floor(t / 1000));
+    raw.exec("INSERT INTO events(id,handle,owner_id,title,start,created,updated) VALUES(1,'topic-event',1,'Topic event','2026-11-08',1,1);");
+    raw.prepare("INSERT INTO event_sessions(id,event_id,title,lang,topics,speakers,status,proposer_id,created) VALUES(1,1,'Power BI session','en','[]','[]','live',1,?)").run(Math.floor(t / 1000));
+    raw.prepare("INSERT INTO content_topic(kind,item_id,eid,weight,src,created) VALUES('session','1','power-bi',1,'admin',?)").run(Math.floor(t / 1000));
+    raw.prepare("INSERT INTO mail_outbox(user_id,kind,subject,html,created) VALUES(1,'reply','Antwort','<p>Neue Antwort</p>',?)").run(Math.floor(t / 1000));
     episodes = [
       { id: "de-new", language: "de", date: recent, url: "https://www.m365.fm/de/neu", title: "Neu auf Deutsch", summary: "Ein Satz" },
       { id: "en-new", language: "en", date: recent, url: "https://www.m365.fm/en/new", title: "New in English", summary: "One sentence" },
     ];
     const sentResult = await runDigest(env, { at: t });
-    assert.equal(sentResult.sent, 1, "zwei Sprach-Abos an derselben Adresse ergeben eine Mail");
-    assert.equal(sent.length, 1);
-    assert.match(sent[0].html, /Neu auf Deutsch/);
-    assert.match(sent[0].html, /New in English/);
-    assert.match(sent[0].html, /Persönliche Hinweise/);
-    assert.match(sent[0].html, /Neue Antwort auf deinen Kommentar/);
-    assert.match(sent[0].html, /Neu bei deinen Themen/);
-    assert.match(sent[0].html, /Power BI article/);
+    assert.equal(sentResult.sent, 2, "zwei Sprach-Abos an derselben Adresse ergeben eine Mail; Konto-Hinweise bleiben getrennt");
+    assert.equal(sent.length, 2);
+    const newsletterMail = sent.find((message) => message.to === "member");
+    assert.match(newsletterMail.html, /Neu auf Deutsch/);
+    assert.match(newsletterMail.html, /New in English/);
+    const accountMail = sent.find((message) => message.to === "account-only");
+    assert.ok(accountMail);
+    assert.match(accountMail.html, /Personal updates/);
+    assert.match(accountMail.html, /New reply to your comment/);
+    assert.doesNotMatch(accountMail.html, /Neu in deiner Sprache|New in your language|Power BI/);
+    assert.match(newsletterMail.html, /Neu bei deinen Themen/);
+    assert.match(newsletterMail.html, /Power BI article/);
+    assert.match(newsletterMail.html, /Power BI session/);
     assert.equal(raw.prepare("SELECT sent FROM mail_outbox WHERE user_id=1").get().sent, 1);
-    assert.equal(raw.prepare("SELECT sent FROM mail_monthly_usage").get().sent, 1);
+    assert.equal(raw.prepare("SELECT sent FROM mail_monthly_usage").get().sent, 2);
 
-    const second = await runDigest(env, { at: t + 86400_000 });
-    assert.equal(second.skipped, 1);
-    assert.equal(sent.length, 1, "gleiche Adresse erhält höchstens eine Wochenmail");
+    const second = await runDigest(env, { at: t + 12 * 3600_000 });
+    assert.equal(second.sent, 0);
+    assert.equal(sent.length, 2, "gleiche Adresse erhält höchstens eine Wochenmail");
 
     const token = raw.prepare("SELECT token FROM mail_weekly_unsub WHERE email='member'").get().token;
     const response = await worker.fetch(new Request(`https://api-dub.m365.fm/api/email/unsub?token=${token}&lang=all`), env);
@@ -104,6 +115,50 @@ test("Wochenmail bündelt Sprachen und Antworten, überspringt leere Wochen und 
     assert.equal(raw.prepare("SELECT COUNT(*) n FROM email_subs WHERE email='member' AND confirmed=1").get().n, 0);
     assert.equal(raw.prepare("SELECT on_ FROM mail_prefs WHERE user_id=1 AND kind='weekly'").get().on_, 0);
   } finally { globalThis.fetch = oldFetch; }
+});
+
+test("Wochenlimit folgt dem Wochenstart und Sendefehler dürfen im selben Wochenlauf erneut versucht werden", async () => {
+  const { db, raw } = await database();
+  const t = Date.UTC(2026, 10, 2, 6);
+  raw.exec("INSERT INTO email_subs(email,lang,token,confirmed,created) VALUES('member','en','token',1,1);");
+  const oldFetch = globalThis.fetch;
+  let feedAt = t;
+  globalThis.fetch = async () => ({ json: async () => ({ episodes: [{ id: "new", language: "en", date: new Date(feedAt - 3600_000).toISOString(), url: "https://www.m365.fm/en/new", title: "New" }] }) });
+  let shouldFail = false, calls = 0;
+  const env = { DB: db, SITE: "https://www.m365.fm", MAIL_FROM: "M365.FM", EMAIL: { send: async () => { calls++; if (shouldFail) throw new Error("send_failed"); return { messageId: "ok" }; } } };
+  try {
+    feedAt = t;
+    const first = await runDigest(env, { at: t });
+    assert.equal(first.sent, 1);
+    feedAt = t + 7 * 86400_000 - 2000;
+    const nextWeekEarly = await runDigest(env, { at: feedAt });
+    assert.equal(nextWeekEarly.sent, 1, "Montagslauf zwei Sekunden vor der Vorwoche muss zugestellt werden");
+    assert.equal(calls, 2);
+
+    shouldFail = true;
+    feedAt = t + 14 * 86400_000;
+    const failed = await runDigest(env, { at: feedAt });
+    assert.equal(failed.sent, 0);
+    assert.equal(raw.prepare("SELECT status FROM mail_weekly_delivery").get().status, 2);
+    shouldFail = false;
+    feedAt += 1800_000;
+    const retry = await runDigest(env, { at: feedAt });
+    assert.equal(retry.sent, 1, "status=2 muss einen erneuten Versuch erlauben");
+  } finally { globalThis.fetch = oldFetch; }
+});
+
+test("Mail-Abmeldung und Kontolöschung bereinigen Topic-Follows und unbenötigte Wochen-Abmeldetokens", async () => {
+  const { db, raw } = await database();
+  raw.exec("INSERT INTO users(id,provider,sub,name,lang,created) VALUES(1,'test','one','User','de',1),(2,'test','two','Other','en',1); INSERT INTO mail_addr(user_id,email,verified,created) VALUES(1,'member',1,1),(2,'subscribed',1,1); INSERT INTO mail_topic_follows(user_id,eid,created) VALUES(1,'power-bi',1),(2,'fabric',1); INSERT INTO mail_weekly_unsub(email,token,updated) VALUES('member','token',1),('subscribed','token2',1); INSERT INTO email_subs(email,lang,token,confirmed,created) VALUES('subscribed','en','confirmed',1,1);");
+  const request = new Request("https://api-dub.m365.fm/api/mail/remove", { method: "POST", body: "{}" });
+  const response = await handleMail({ DB: db }, request, new URL(request.url), "/api/mail/remove", { id: 1 }, (data) => new Response(JSON.stringify(data)));
+  assert.equal(response.status, 200);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM mail_topic_follows WHERE user_id=1").get().n, 0);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM mail_weekly_unsub WHERE email='member'").get().n, 0);
+  await deleteUserData(db, 2);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM mail_topic_follows WHERE user_id=2").get().n, 0);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM mail_addr WHERE user_id=2").get().n, 0);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM mail_weekly_unsub WHERE email='subscribed'").get().n, 1, "bestätigtes Newsletter-Abo hält den Abmeldetoken");
 });
 
 test("Admin-Monatszähler meldet Warnung ab 2.500 E-Mails", async () => {

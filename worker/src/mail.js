@@ -37,6 +37,14 @@ export async function weeklyUnsubscribe(env, email) {
   }
   return `${env.API}/api/email/unsub?token=${encodeURIComponent(row.token)}&lang=all`;
 }
+export async function weeklyUnsubscribeMany(env, emails) {
+  const db = env.DB; await ensure(db);
+  const unique = [...new Set(emails.map((email) => String(email).trim().toLowerCase()))];
+  if (!unique.length) return new Map();
+  await db.batch(unique.map((email) => db.prepare("INSERT OR IGNORE INTO mail_weekly_unsub(email,token,updated) VALUES(?,?,?)").bind(email, randomToken(20), now())));
+  const rows = (await db.prepare(`SELECT email,token FROM mail_weekly_unsub WHERE lower(email) IN (${unique.map(() => "?").join(",")})`).bind(...unique).all()).results || [];
+  return new Map(rows.map((row) => [row.email.toLowerCase(), `${env.API}/api/email/unsub?token=${encodeURIComponent(row.token)}&lang=all`]));
+}
 // Persönliche Hinweise vormerken, transaktionale Arten sofort versuchen. key = Duplikatschutz.
 export async function notify(env, uid, kind, subject, bodyHtml, key = "") {
   try {
@@ -124,7 +132,18 @@ export async function handleMail(env, request, url, path, user, J) {
     await db.batch(ops);
     return J({ ok: true, follows: eids });
   }
-  if (path === "/api/mail/remove") { await db.batch([db.prepare("DELETE FROM mail_addr WHERE user_id=?").bind(user.id), db.prepare("DELETE FROM mail_outbox WHERE user_id=? AND sent=0").bind(user.id)]); return J({ ok: true }); }
+  if (path === "/api/mail/remove") {
+    const address = await db.prepare("SELECT email FROM mail_addr WHERE user_id=?").bind(user.id).first();
+    const ops = [
+      db.prepare("DELETE FROM mail_addr WHERE user_id=?").bind(user.id),
+      db.prepare("DELETE FROM mail_prefs WHERE user_id=?").bind(user.id),
+      db.prepare("DELETE FROM mail_outbox WHERE user_id=?").bind(user.id),
+      db.prepare("DELETE FROM mail_topic_follows WHERE user_id=?").bind(user.id),
+    ];
+    if (address?.email) ops.push(db.prepare("DELETE FROM mail_weekly_unsub WHERE lower(email)=lower(?) AND NOT EXISTS (SELECT 1 FROM email_subs WHERE lower(email)=lower(?) AND confirmed=1) AND NOT EXISTS (SELECT 1 FROM mail_addr WHERE lower(email)=lower(?) AND verified=1)").bind(address.email, address.email, address.email));
+    await db.batch(ops);
+    return J({ ok: true });
+  }
   if (path === "/api/mail/test") {
     if (!(await rateLimit(db, `mtest:${user.id}`, 3, 3600))) return J({ error: "rate_limit" }, 429);
     const ok = await notify(env, user.id, "system", "M365.FM – Testnachricht / test message", "<p>Das ist eine Testnachricht. / This is a test message.</p>", `test:${user.id}:${now()}`);
