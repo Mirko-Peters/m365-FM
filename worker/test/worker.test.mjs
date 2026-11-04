@@ -442,6 +442,9 @@ test("sponsor dashboard: Firmenzugriff, Event-Kennzahlen und Nachricht an die Pl
   assert.equal(result.orgs[0].manual[0].value, 12);
   assert.equal(result.orgs[0].manual[0].kind, "manual");
   assert.equal(result.orgs[0].manual[0].period, "2026-10");
+  assert.equal(Object.hasOwn(result.orgs[0].manual[0], "proof_key"), false, "interner Belegschlüssel wird nicht offengelegt");
+  assert.equal(raw.prepare("PRAGMA foreign_key_list(sponsor_manual_metrics)").all().length, 0,
+    "manuelle Historie blockiert keine Konto- oder Firmenlöschung");
   assert.equal((await call("/api/sponsor/manual-metric", "POST", { id: 2, admin: true }, {
     org_id: 1, source: "bing_ai", metric: "clicks", placement: "Copilot topic page",
     period: "2026-10", value: 12, proof_key: "sponsors/acme/bing-2026-10.csv"

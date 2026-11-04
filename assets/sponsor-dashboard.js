@@ -12,6 +12,7 @@
     ["source_bing_webmaster", "search_impressions", "source_desc_bing_webmaster", "daily", "setup"],
     ["source_bing", "ai_citations", "source_desc_bing", "monthly", "source_manual"],
     ["source_linkedin", "linkedInImpressions", "source_desc_linkedin", "monthly", "source_manual"],
+    ["source_linkedin", "linkedInClicks", "source_desc_linkedin", "monthly", "source_manual"],
     ["source_press", "page_views", "source_desc_press", "daily", "setup"],
     ["source_events", "attendees", "source_desc_events", "daily", "ready"],
     ["source_directory", "project_requests", "source_desc_directory", "live", "build"],
@@ -101,7 +102,7 @@
     return url.pathname + url.search;
   }
   function nav(admin) {
-    var links = [["dashboard", "dashboard"], ["placement", "placement_view"], ["report", "report_view"]];
+    var links = [["overview", "dashboard"], ["placement", "placement_view"], ["report", "report_view"]];
     if (admin) links.push(["sources", "sources_view"]);
     return node("nav", { class: "sdb-nav", "aria-label": text("dashboard") }, links.map(function (entry) {
       return node("a", { class: "btn", href: C.urls[entry[0]], text: text(entry[1]) });
@@ -191,7 +192,8 @@
   }
   function inPeriod(placement, period) {
     if (period === "campaign") return true;
-    var start = placement.start || placement.period + "-01", end = placement.end || placement.period + "-31";
+    var start = placement.start || (placement.period ? placement.period + "-01" : "");
+    var end = placement.end || (placement.period ? placement.period + "-31" : "");
     var today = C.today || new Date().toISOString().slice(0, 10), year = today.slice(0, 4);
     if (period === "year") return (!start || start <= year + "-12-31") && (!end || end >= year + "-01-01");
     var cutoffDate = new Date(today + "T00:00:00Z");
@@ -274,9 +276,9 @@
     root.insertBefore(actions, root.children[1] || null);
     root.appendChild(node("section", { class: "sdb-panel" }, [
       node("h2", { text: text("how_count") }),
-      node("p", { text: text("measured") + " = " + text("source_events") }),
-      node("p", { text: text("estimated") + " = " + text("source_reach") }),
-      node("p", { text: text("manual") + " = " + text("source_bing") })
+      node("p", { text: text("measured") + " = " + text("measured_desc") }),
+      node("p", { text: text("estimated") + " = " + text("estimated_desc") }),
+      node("p", { text: text("manual") + " = " + text("manual_desc") })
     ]));
   }
   function renderDetail(orgs, admin) {
@@ -286,7 +288,7 @@
     var items = allPlacements(org), placement = items.find(function (item) { return item.event === params.get("placement") || item.ref === params.get("placement"); }) || items[0];
     if (!placement) { root.appendChild(node("p", { class: "mut", text: text("no_placements") })); return; }
     root.appendChild(node("p", { class: "sdb-meta" }, [
-      node("a", { href: C.urls.dashboard, text: text("dashboard") }), " / ", placement.title
+      node("a", { href: C.urls.overview, text: text("dashboard") }), " / ", placement.title
     ]));
     root.appendChild(node("p", { class: "kicker", text: text(placement.status === "confirmed" ? "confirmed" : "pending") +
       " · " + formatDate(placement.start) + " – " + formatDate(placement.end) }));
@@ -380,7 +382,9 @@
     }
     report.appendChild(node("section", { class: "sdb-panel" }, [
       node("h2", { text: text("how_count") }),
-      node("p", { text: text("measured") + ", " + text("estimated") + ", " + text("manual") })
+      node("p", { text: text("measured") + " = " + text("measured_desc") }),
+      node("p", { text: text("estimated") + " = " + text("estimated_desc") }),
+      node("p", { text: text("manual") + " = " + text("manual_desc") })
     ]));
     root.appendChild(node("button", { class: "btn main sdb-actions", type: "button", text: text("print_report") }));
     root.children[root.children.length - 1].addEventListener("click", function () { window.print(); });

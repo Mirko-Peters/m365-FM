@@ -63,7 +63,8 @@ class SponsorDashboardTests(unittest.TestCase):
         self.assertTrue(any(url == en for url, _, _ in ctx["sitemap"]))
         for path in written.values():
             self.assertNotRegex(path, r"\b(?:21400|4820|12300|9150|38600|1840)\b")
-        for key in ("measured", "estimated", "manual", "as_of", "source", "ai_citations", "search_impressions"):
+        for key in ("measured", "estimated", "manual", "measured_desc", "estimated_desc", "manual_desc",
+                    "as_of", "source", "ai_citations", "search_impressions"):
             self.assertTrue(SPN.dashboard_copy("en")[key])
             self.assertTrue(SPN.dashboard_copy("de")[key])
 

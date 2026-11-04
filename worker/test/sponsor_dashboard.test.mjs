@@ -90,7 +90,10 @@ test("sponsor dashboard: CSV enthält Quelle, Messart, Datenstand und entschärf
     location: { origin: "https://www.m365.fm", search: "" },
     fetch: async () => ({ status: 200, json: async () => ({ orgs: [{
       handle: "acme", name: "=1+1", website: "", metrics,
-      placements: [{ type: "event_partner", title: "Future partner event", status: "pending", start: "2027-01-01", end: "2027-01-02" }]
+      placements: [
+        { type: "event_partner", title: "Future partner event", status: "pending", start: "2027-01-01", end: "2027-01-02" },
+        { type: "event_partner", title: "Undated placement", status: "pending", start: null, end: null, attendees: null }
+      ]
     }] }) }),
   };
   vm.runInNewContext(readFileSync(new URL("../../assets/sponsor-dashboard.js", import.meta.url), "utf8"), context);
@@ -103,6 +106,7 @@ test("sponsor dashboard: CSV enthält Quelle, Messart, Datenstand und entschärf
   const button = findButton(root);
   assert.ok(button, "Export-Schaltfläche wird gerendert: " + root.textContent);
   assert.doesNotMatch(root.textContent, /Future partner event/, "zukünftige Platzierungen erscheinen nicht in den letzten 30 Tagen");
+  assert.match(root.textContent, /Undated placement/, "Platzierungen ohne Datum bleiben sichtbar und werden nicht als zukünftige gewertet");
   button.click();
   assert.equal(blobs.length, 1);
   const csv = await blobs[0].text();
