@@ -32,6 +32,14 @@ button{font:inherit;color:inherit}
     </div>
     <span style="font-size: 13px; color: #5d6470; margin-top: -8px">Example of a push message</span>
 
+    <div style="padding: 12px 14px; border-radius: 16px; background: #ffffff; border: 1px solid rgba(23,25,28,.14); box-shadow: 0 4px 14px rgba(23,25,28,.08); display: grid; gap: 2px">
+      <span style="display: flex; justify-content: space-between; font-size: 12px; color: #5d6470"><b style="letter-spacing: .08em; text-transform: uppercase">M365.FM News</b><span>07:00</span></span>
+      <b>Your briefing: 2 deadlines, 1 new episode</b>
+      <span style="font-size: 14px">Copilot agent sharing, Teams meeting policy, governance episode. Tap to listen.</span>
+      <span style="font-size: 12px; color: #5d6470">Presented by [SPONSOR] · Ad</span>
+    </div>
+    <span style="font-size: 13px; color: #5d6470; margin-top: -8px">Daily summary with sponsor note, only if switched on below</span>
+
     <div style="display: grid; gap: 8px">
       <span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #5d6470">Push per topic</span>
       <div style="background: #ffffff; border: 1px solid rgba(23,25,28,.14)">
@@ -86,7 +94,7 @@ class Component extends DCLogic {
     const calm = [
       ['quiet', 'Quiet hours', '20:00–07:00 and weekends'],
       ['weekly', 'Weekly summary', 'Monday morning, everything else'],
-      ['brief', 'Daily briefing ready', '07:00 · 4 min audio']
+      ['brief', 'Daily briefing summary', '07:00 · includes a short sponsor note']
     ].map(([k, label, sub]) => Object.assign({ label, sub, on: !!on[k], toggle: flip(k) }, sw(!!on[k])));
     return { topics, calm };
   }
