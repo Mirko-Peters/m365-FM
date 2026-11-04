@@ -27,6 +27,7 @@ import { handleLibrary, deleteUserLibrary } from "./library.js";
 import { handleOrgOffers } from "./orgoffers.js";
 import { handleWish, seedRoadmap } from "./wish.js";
 import { handleShows, syncShows } from "./shows.js";
+import { handleMediakit } from "./mediakit.js";
 import { handleMail, flushOutbox, notify } from "./mail.js";
 import { handleReviews } from "./reviews.js";
 import { handleEntityInvite, remindInvites } from "./entinvite.js";
@@ -44,6 +45,7 @@ import { refreshFeeds, refreshFollowers } from "./feeds.js";
 import { autoTranslate, translateStatus, uiI18nExport } from "./translate.js";
 import { handleWiki } from "./wiki.js";
 import { syncExpertise } from "./levels.js";
+import { handleContributions, refreshContributions } from "./contributions.js";
 
 const PROVIDERS = {
   google: {
@@ -201,6 +203,9 @@ async function api(env, request, url, path, asUser) {
   const sponsor = await handleSponsor(env, request, url, path, J);
   if (sponsor) return sponsor;
 
+  const contributions = await handleContributions(env, request, url, path, user, J);
+  if (contributions) return contributions;
+
   if (path === "/api/health") return J({ ok: true }, 200);
   if (path === "/api/search") return handleSearch(env, request, url, J);
   if (path === "/api/providers") return J({ providers: Object.keys(PROVIDERS).filter((k) => PROVIDERS[k].id(env) && PROVIDERS[k].secret(env)) }, 200, { "cache-control": "public, max-age=300" });
@@ -314,6 +319,7 @@ async function api(env, request, url, path, asUser) {
   if (path === "/api/updates/export" || path === "/api/admin/updates/poll") { const q = await handleUpdates(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/reviews")) { const q = await handleReviews(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/entityinvite/")) { const q = await handleEntityInvite(env, request, url, path, user, J); if (q) return q; }
+  if (path === "/api/mediakit" || path === "/api/admin/mediakit") { const q = await handleMediakit(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/mail/") || path.startsWith("/api/admin/mail")) { const q = await handleMail(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/show/") || path.startsWith("/api/admin/show")) { const q = await handleShows(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/wish/")) { const q = await handleWish(env, request, url, path, user, J); if (q) return q; }
@@ -440,6 +446,7 @@ export default {
     const T = (name, fn) => ctx.waitUntil(track(env, name, fn));
     if (event.cron === "0 6 * * *") T("runDigest", () => runDigest(env));
     T("refreshFeeds", () => refreshFeeds(env));
+    T("refreshContributions", () => refreshContributions(env));
     T("pollUpdates", () => pollUpdates(env));
     T("refreshFollowers", () => refreshFollowers(env));
     T("ensurePastEvents", () => ensurePastEvents(env).then(() => linkSpeakers(env)).then(() => linkSpeakerEntities(env)));

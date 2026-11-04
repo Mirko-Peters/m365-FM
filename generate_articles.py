@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Schreibt pro Folge und Sprache einen Blogartikel aus dem Transkript (Claude API) → data/articles/<VIDEO>.json.
 Braucht ANTHROPIC_API_KEY. ARTICLE_LIMIT (Standard 30) begrenzt die neuen Artikel pro Lauf (Kosten). Vorhandene Artikel bleiben."""
-import glob, json, os, re, sys, urllib.request
+import glob, json, os, re, sys, time, urllib.request
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 

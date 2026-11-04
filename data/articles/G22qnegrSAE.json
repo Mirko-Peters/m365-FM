@@ -1,0 +1,138 @@
+{
+ "de": {
+  "html": "<p>Power Automate wirkt wie das ideale Werkzeug für jede Automatisierung: Kästchen ziehen, Trigger verbinden, fertig. Solange es um Erinnerungen oder kleine Benachrichtigungen geht, stimmt das auch. Wird aus dem Prototyp aber ein geschäftskritischer Prozess, stoßen Unternehmen schnell auf Drosselung, Lizenzkosten und mangelnde Transparenz.</p>\n<p>Dieser Artikel zeigt, wo Power Automate an seine Grenzen kommt und warum das so ist. Außerdem erfahren Sie, wann sich der Wechsel zu Azure Logic Apps lohnt und wie eine hybride Architektur beide Welten verbindet.</p>\n\n<h2>Power Automate und der Citizen-Developer: Wofür das Tool gedacht ist</h2>\n<p>Power Automate wurde für sogenannte Citizen-Developer entwickelt, also technisch nicht spezialisierte Anwender, die wiederkehrende Aufgaben automatisieren, ohne die IT einzubeziehen. Ideal ist es für den Mitarbeiter, der eine Teams-Nachricht erhalten möchte, wenn eine Liste aktualisiert wird. Als Rückgrat der Unternehmensautomatisierung war es nie gedacht, etwa für die Synchronisation tausender Rechnungen zwischen SAP und Dataverse.</p>\n<p>Das Problem liegt in der Benutzerfreundlichkeit. Die Oberfläche versteckt technische Einschränkungen hinter freundlichen Icons. Der Prototyp läuft im Test einwandfrei, und dann soll er unternehmensweit ausgerollt werden. Connectoren sind jedoch keine unendlichen Leitungen, sondern gedrosselt und zeitlich begrenzt. Dazu kommen Parallelitätsgrenzen und Limits für die Schrittanzahl.</p>\n<h3>Ein typisches Szenario: das HR-Onboarding</h3>\n<p>Ein Onboarding-Flow ist für zehn Mitarbeiter pro Monat ausgelegt und funktioniert im Test. Dann wächst das Unternehmen auf tausend Neueinstellungen. Dokumente werden massenhaft hochgeladen, IDs generiert und Konten bereitgestellt, alles auf einmal. Der Flow bleibt auf halbem Weg stehen, weil das Limit von 5000 Aktionen pro Tag überschritten wurde. Aus der Automatisierung wird ein manueller Wiederherstellungsplan.</p>\n<p>Schuld ist weniger die Plattform als ein Missverständnis der Ziele. Power Automate soll Automatisierung demokratisieren, nicht Integrationsingenieure ersetzen. Führungskräfte gehen aber oft davon aus, dass ein funktionierender Prototyp auch produktionsreif ist. Also kommen immer mehr Schritte, Genehmigungen, E-Mails, Datenbank-Updates und Verzweigungen hinzu, bis die Plattform irgendwann nicht mehr mitmacht. Einfachheit ist nicht dasselbe wie Skalierbarkeit, und Drag-and-Drop-Logik ersetzt kein Durchsatz-Engineering.</p>\n\n<h2>Drosselung und Lizenzierung: Die zwei unsichtbaren Fehlerquellen</h2>\n<p>Hinter vielen rätselhaften Abstürzen stecken zwei Ursachen: Drosselung (Throttling) und Lizenzierung. Beide werden oft fälschlich dem Anbieter angelastet, obwohl sie sich in der Dokumentation nachlesen lassen.</p>\n<h3>Drosselung: Der Flow wird nicht langsamer, er stoppt</h3>\n<p>Jeder Connector, ob SharePoint, Outlook oder Dataverse, hat feste Grenzen. Dazu gehören Anfragen pro Minute, Aufrufe pro Tag und Grenzen für parallele Ausführung. Wird ein Schwellenwert überschritten, verlangsamt sich der Flow nicht elegant. Er versucht es noch ein paarmal erneut und scheitert dann still in der Ausführungshistorie, wo oft bis Montag niemand nachsieht.</p>\n<p>Eine naheliegende, aber falsche Reaktion ist, die Triggerfrequenz zu erhöhen. Das verschärft das Problem nur. Betroffen ist auch der nächtliche Rechnungs-Batchjob, der vor Sonnenaufgang in der Buchhaltung sein muss. Er scheitert lautlos und mit spürbaren Folgen.</p>\n<h3>Lizenzierung: Die finanzielle Seite der Drosselung</h3>\n<p>Power Automate kennt mehrere Lizenzmodelle: pro Benutzer, pro Flow und die Kategorie der Premium-Connectoren. Im kleinen Maßstab bleibt das überschaubar. Wird ein Prototyp auf ganze Abteilungen ausgeweitet, ziehen Flow-Instanzen, Connector-Nutzung und Umgebungsgrenzen Kosten nach sich. Läuft derselbe Flow unter verschiedenen Benutzern, braucht jeder eine Lizenzabdeckung. Die vermeintlich kostenlose Abteilungsautomatisierung kann so im Monat mehr kosten als ein ganzes Azure-Abonnement.</p>\n<p>Man kann es sich so vorstellen: Die Drosselung begrenzt die Luftzufuhr, die Lizenzierung verkauft teure Sauerstofftanks. Viele Unternehmen merken erst im Break-Even-Moment, dass Logic Apps oder Azure Functions günstiger, schneller und zuverlässiger gewesen wären.</p>\n<h3>Ein Beispiel aus der Praxis</h3>\n<p>Ein mittelständisches Unternehmen baute einen Flow für das HR-Onboarding mit Dokumenten-Uploads, SharePoint-Ordnern, E-Mail-Bereitstellung und Teams-Einladungen. Im ersten Monat lief alles gut. Dann stiegen die Neueinstellungen, und täglich fielen hunderte Ausführungen an. Die Drosselung griff, Genehmigungen stockten, und Zugänge wurden nicht erstellt. Die Personalabteilung musste zwei Tage lang Konten manuell anlegen, und die Prüfer werteten das als Versagen der Prozesskontrolle.</p>\n\n<h2>Azure Logic Apps: Die professionelle Alternative</h2>\n<p>Logic Apps ist gewissermaßen die erwachsene Version von Power Automate. Beide Dienste basieren auf der Azure Workflow-Engine. Der Unterschied liegt in der Verpackung. Power Automate läuft in einer verwalteten Umgebung mit begrenzten Einstellmöglichkeiten und festen Drosselungslimits. Logic Apps legt die Laufzeitumgebung offen. Trigger, Parameter, Wiederholungen, Fehlerbehandlung und Überwachung lassen sich präzise definieren.</p>\n<h3>Observability und Parallelität</h3>\n<p>In Power Automate bleibt vieles undurchsichtig. Man sieht im Wesentlichen den Ausführungsverlauf, und der bietet wenig analytische Tiefe. Logic Apps bietet dagegen Application Insights mit abfragbaren Logs, Leistungskennzahlen und Alarmregeln.</p>\n<p>Auch bei der Parallelität gibt es Unterschiede. In Logic Apps lassen sich Zweige auffächern, Durchläufe unabhängig skalieren und komplexe Orchestrierungsmuster aufbauen, ohne an willkürliche Flow-Limits zu stoßen. Die bekannten Connectoren stehen weiterhin zur Verfügung, darunter SharePoint, Outlook, Dataverse und benutzerdefinierte APIs. Schlägt eine Aktion fehl, kann man den Fehler weiterleiten, behandeln oder auswerten, statt in unklaren Wiederholungen festzustecken.</p>\n<h3>Vertraute Oberfläche, mehr Kontrolle</h3>\n<p>Der Logic Apps Designer öffnet sich direkt im Azure Portal und sieht dem Power-Automate-Designer sehr ähnlich: gleiche Formen, gleiche Verbindungslinien. Der Unterschied ist, dass jede Eigenschaft, Ausführungsoption und Einstellung einsehbar ist. Außerdem lassen sich Versionen mit Quellcode-Verwaltung verwalten und über Pipelines bereitstellen.</p>\n<h3>Kosten und Governance</h3>\n<p>Power Automate rechnet pro Benutzer oder Flow ab, man mietet also Bequemlichkeit pro Monat. Logic Apps arbeitet verbrauchsbasiert: Bezahlt wird nur, wenn der Flow läuft, und nur für die genutzten Komponenten. Startet niemand den Prozess, entstehen keine Kosten. Das macht die Automatisierungskosten vorhersehbar.</p>\n<p>Der größte Vorteil ist laut den Profis aber die Governance. Compliance-Teams wollen wissen, wer was bereitgestellt hat, wohin Daten fließen und wie Fehler gemeldet werden. Logic Apps passt zu Unternehmensstandards für Architektur und bietet:</p>\n<ul>\n<li>Ressourcengruppen</li>\n<li>verwaltete Identitäten</li>\n<li>Netzwerkisolation</li>\n<li>rollenbasierte Zugriffskontrolle</li>\n</ul>\n<p>Die IT kann damit überwachen, ohne zu raten.</p>\n\n<h2>Wann sich die Migration lohnt: Checkliste und Praxisbeispiel</h2>\n<p>Als Faustregel gilt: Ein Flow ist der Hobbyphase entwachsen, wenn mindestens eines der folgenden Kriterien zutrifft.</p>\n<ul>\n<li>Er umfasst mehr als 20 Bedingungen.</li>\n<li>Er nutzt Trigger aus mehreren Quellen.</li>\n<li>Er verwaltet externe Dienstaufrufe.</li>\n<li>Er speichert sensible Daten.</li>\n</ul>\n<p>Dann sollte man migrieren. Die Definition wird aus Power Automate exportiert und in Logic Apps importiert, und Azure übernimmt die Skalierung. Mit Application Insights für das Monitoring entsteht aus dem unberechenbaren Experiment ein prüfbares, wartbares System.</p>\n<p>Wie das aussehen kann, zeigt ein Finanzdienstleister. Er verlagerte seine nächtliche Transaktionsstapelverarbeitung, die in Power Automate instabil lief, zu Logic Apps. Die Logik blieb gleich, wurde aber über parallele Pipelines mit Wiederholungsrichtlinien orchestriert. Die Verarbeitungszeit sank von 90 Minuten auf unter 10, die Kosten um 30 Prozent.</p>\n\n<h2>Das Hybrid-Modell: Power Automate vorne, Logic Apps dahinter</h2>\n<p>Nicht jeder Workflow muss komplett nach Azure wandern. Nutzer klicken auf Buttons in Teams und genehmigen Anfragen auf dem Handy, und diese Gewohnheiten lassen sich nicht über Nacht abschaffen. Der pragmatische Weg ist eine hybride Architektur mit klarer Arbeitsteilung: Power Automate für die Interaktion mit Menschen, Logic Apps für die Schwerstarbeit.</p>\n<h3>So funktioniert die Zwei-Stufen-Architektur</h3>\n<p>Power Automate erfasst den Trigger, etwa einen Klick, eine Formularübermittlung oder ein Update. Statt die Daten durch ein Labyrinth von Connectoren zu schleppen, übergibt es sie per HTTP-Aufruf an Logic Apps. Dort läuft die eigentliche Verarbeitung, und anschließend kommt eine Rückmeldung.</p>\n<p>Ein konkretes Beispiel: Ein Flow startet, wenn ein neues SharePoint-Element zur Genehmigung hinzugefügt wird. Er sendet Metadaten wie IDs und Details an einen über Azure Active Directory gesicherten Logic-App-Endpunkt. Dieser startet parallele Zweige, verarbeitet hunderte Genehmigungen, aktualisiert Dataverse und schickt eine Zusammenfassung zurück. Der Nutzer sieht nur eine saubere Bestätigung.</p>\n<h3>Vorteile bei Kosten, Monitoring und Sicherheit</h3>\n<ul>\n<li><strong>Kosten:</strong> Durch die Verlagerung greifen die verbrauchsbasierten Azure-Preise. Aus der unvorhersehbaren Lizenzgleichung werden messbare Kosten pro Ausführung.</li>\n<li><strong>Monitoring:</strong> Logic Apps lässt sich für Telemetriedaten mit Application Insights verbinden. So lassen sich Latenzen, Wiederholungsversuche und Fehlerraten über ganze Umgebungen hinweg verfolgen.</li>\n<li><strong>Sicherheit:</strong> Power Automate nutzt persönliche oder dienstbasierte Connectoren, was für einfache Aufgaben reicht, bei systemweiten Vorgängen aber riskant ist. Logic Apps authentifiziert sich mit verwalteten Identitäten bei Azure-Diensten, ohne gespeicherte Geheimnisse und ohne Überraschungen durch ablaufende Passwörter.</li>\n</ul>\n\n<h2>Häufige Fehler und Stolpersteine</h2>\n<p>Auch das Hybrid-Modell funktioniert nur mit Disziplin. Typische Fehler sind:</p>\n<ul>\n<li><strong>Unkontrolliertes Verbinden:</strong> Wer Logic Apps einfach in beliebige Flows einbindet, endet bei rund 50 halbdokumentierten HTTP-Aufrufen, die wie Kabelsalat durch den Mandanten laufen. Nötig sind standardisierte Vorlagen, Namenskonventionen, Umgebungsvariablen und eine Architekturdokumentation, die auch Nachfolger lesen können.</li>\n<li><strong>Verschachtelte Bedingungen:</strong> Wer in Power Automate Bedingungsblöcke wie Matroschka-Puppen stapelt, hat die Grenze überschritten. Die Logik gehört dann sauber in Logic Apps.</li>\n<li><strong>Triggerfrequenz erhöhen:</strong> Das ist die falsche Antwort auf Drosselung und verschärft das Problem.</li>\n<li><strong>Prototyp gleich Produktion:</strong> Nur weil ein Flow einmal funktioniert, ist er nicht produktionsreif.</li>\n<li><strong>Limits ignorieren:</strong> Die Grenzen stehen in der Dokumentation, und viele Anwender gehen irrtümlich davon aus, die Cloud arbeite ohne Kontingente.</li>\n<li><strong>Der monolithische Flow:</strong> Ein riesiger Automatisierungs-Flow wirkt aufgeräumt, ist aber schwer wartbar und skaliert nicht.</li>\n</ul>\n\n<h2>Praktische Takeaways</h2>\n<ul>\n<li>Setzen Sie Power Automate für persönliche Produktivität und Interaktionspunkte mit Nutzern ein, etwa in Teams oder SharePoint.</li>\n<li>Planen Sie Durchsatz, Drosselungslimits und Lizenzkosten ein, bevor ein Prototyp ausgerollt wird.</li>\n<li>Prüfen Sie Ihre Flows an der Checkliste: mehr als 20 Bedingungen, mehrere Trigger-Quellen, externe Dienstaufrufe oder sensible Daten sprechen für eine Migration.</li>\n<li>Exportieren Sie die Flow-Definition aus Power Automate, importieren Sie sie in Logic Apps und ergänzen Sie Application Insights für das Monitoring.</li>\n<li>Nutzen Sie das Hybrid-Modell: Power Automate erfasst den Trigger und ruft per HTTP einen gesicherten Logic-App-Endpunkt auf.</li>\n<li>Setzen Sie bei Logic Apps auf verwaltete Identitäten statt gespeicherter Geheimnisse.</li>\n<li>Etablieren Sie Vorlagen, Namenskonventionen, Umgebungsvariablen und Dokumentation, damit die Integration wartbar bleibt.</li>\n<li>Lagern Sie tief verschachtelte Logik aus, statt sie in Power Automate weiter zu stapeln.</li>\n</ul>\n\n<h2>Fazit</h2>\n<p>Power Automate und Azure Logic Apps sind keine Konkurrenten, sondern Werkzeuge für unterschiedliche Aufgaben. Power Automate bleibt unschlagbar, wenn es um schnelle, nutzernahe Automatisierung geht. Sobald Volumen, Zuverlässigkeit, Kostenkontrolle und Governance zählen, stoßen Drosselung, Lizenzmodelle und eingeschränkte Transparenz an Grenzen. Logic Apps bietet dann Parallelität, Observability, verbrauchsbasierte Abrechnung und Unternehmensstandards. Am besten fährt, wer beides kombiniert: Power Automate als vertraute Oberfläche für Menschen und Logic Apps als belastbare Maschine im Hintergrund. So bleiben Komfort und Skalierbarkeit gleichermaßen erhalten.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Von Power Automate zu Logic Apps",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Grenzen erkennen",
+     "text": "Drosselung und Lizenzkosten bremsen Flows aus, sobald Volumen und Nutzerzahlen wachsen."
+    },
+    {
+     "kopf": "Flow prüfen",
+     "text": "Über 20 Bedingungen, mehrere Trigger, externe Aufrufe oder sensible Daten sprechen für den Umstieg."
+    },
+    {
+     "kopf": "Exportieren und importieren",
+     "text": "Definition aus Power Automate exportieren, in Logic Apps importieren, Azure übernimmt die Skalierung."
+    },
+    {
+     "kopf": "Monitoring ergänzen",
+     "text": "Application Insights liefert Logs, Kennzahlen und Alarmregeln für ein prüfbares System."
+    },
+    {
+     "kopf": "Hybrid aufbauen",
+     "text": "Power Automate erfasst den Trigger und übergibt per HTTP an Logic Apps."
+    },
+    {
+     "kopf": "Ordnung halten",
+     "text": "Vorlagen, Namenskonventionen, Umgebungsvariablen und Dokumentation verhindern Kabelsalat."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Wo stößt Power Automate bei geschäftskritischen Prozessen an seine Grenzen?",
+    "a": "Power Automate wurde für einfache Aufgaben von Citizen-Developern gebaut. Bei hohem Volumen greifen Drosselung, Parallelitätsgrenzen und Limits für Schritte oder Aktionen pro Tag. Hinzu kommen steigende Lizenzkosten und wenig Transparenz. Flows scheitern dann oft still in der Ausführungshistorie."
+   },
+   {
+    "q": "Was ist Drosselung (Throttling) in Power Automate und was sollte man dagegen tun?",
+    "a": "Jeder Connector hat feste Grenzen, etwa Anfragen pro Minute, Aufrufe pro Tag und parallele Ausführungen. Wird eine Grenze überschritten, versucht der Flow es einige Male erneut und scheitert dann still. Die Triggerfrequenz zu erhöhen verschärft das Problem nur."
+   },
+   {
+    "q": "Wann lohnt sich der Wechsel von Power Automate zu Azure Logic Apps?",
+    "a": "Ein Flow sollte migriert werden, wenn mindestens ein Kriterium zutrifft: mehr als 20 Bedingungen, Trigger aus mehreren Quellen, externe Dienstaufrufe oder sensible Daten. Die Flow-Definition wird exportiert und in Logic Apps importiert. Application Insights übernimmt anschließend das Monitoring."
+   },
+   {
+    "q": "Wie funktioniert eine hybride Architektur aus Power Automate und Logic Apps?",
+    "a": "Power Automate erfasst den Trigger, etwa einen Klick oder ein SharePoint-Update, und übergibt die Daten per HTTP an einen gesicherten Logic-App-Endpunkt. Dort läuft die Verarbeitung, danach folgt eine Rückmeldung. Das bringt verbrauchsbasierte Kosten, besseres Monitoring und mehr Sicherheit durch verwaltete Identitäten."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Power Automate vs. Azure Logic Apps",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Power Automate",
+     "punkte": [
+      "Läuft in verwalteter Umgebung mit festen Drosselungslimits",
+      "Abrechnung pro Benutzer oder Flow",
+      "Ausführungsverlauf bietet wenig analytische Tiefe",
+      "Ideal für schnelle, nutzernahe Automatisierung",
+      "Persönliche oder dienstbasierte Connectoren"
+     ]
+    },
+    "rechts": {
+     "titel": "Azure Logic Apps",
+     "punkte": [
+      "Laufzeitumgebung offen, Einstellungen präzise definierbar",
+      "Verbrauchsbasierte Abrechnung, nur bei Ausführung",
+      "Application Insights mit Logs, Kennzahlen und Alarmregeln",
+      "Parallelität ohne willkürliche Flow-Limits",
+      "Verwaltete Identitäten statt gespeicherter Geheimnisse"
+     ]
+    }
+   },
+   {
+    "titel": "Wann ein Flow der Hobbyphase entwachsen ist",
+    "typ": "checkliste",
+    "punkte": [
+     "Der Flow umfasst mehr als 20 Bedingungen.",
+     "Er nutzt Trigger aus mehreren Quellen.",
+     "Er verwaltet externe Dienstaufrufe.",
+     "Er speichert sensible Daten.",
+     "Bedingungsblöcke sind wie Matroschka-Puppen verschachtelt.",
+     "Ein Prototyp soll ohne Prüfung der Limits in Produktion gehen."
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Was passiert laut Artikel, wenn ein Flow die Drosselungsgrenze eines Connectors überschreitet?",
+    "opts": [
+     "Er wird automatisch auf eine höhere Lizenzstufe umgestellt",
+     "Er läuft nur langsamer weiter, bis die Last sinkt",
+     "Er versucht es einige Male erneut und scheitert dann still",
+     "Er meldet den Fehler sofort per E-Mail an die IT"
+    ],
+    "a": 2,
+    "why": "Der Flow verlangsamt sich nicht elegant, sondern wiederholt kurz und scheitert dann still in der Ausführungshistorie."
+   },
+   {
+    "q": "Wie rechnet Azure Logic Apps im Vergleich zu Power Automate ab?",
+    "opts": [
+     "Pro Benutzer und Monat mit festem Pauschalpreis",
+     "Verbrauchsbasiert: Bezahlt wird nur, wenn der Flow läuft",
+     "Pro Flow mit zusätzlichem Aufschlag für Premium-Connectoren",
+     "Über eine jährliche Umgebungsgebühr unabhängig von der Nutzung"
+    ],
+    "a": 1,
+    "why": "Logic Apps arbeitet verbrauchsbasiert; ohne Prozessstart entstehen keine Kosten, was die Kosten vorhersehbar macht."
+   },
+   {
+    "q": "Welches Kriterium nennt der Artikel als Hinweis, dass ein Flow migriert werden sollte?",
+    "opts": [
+     "Er wird von mehr als fünf Benutzern gleichzeitig verwendet",
+     "Er läuft ausschließlich nachts als Batchjob",
+     "Er sendet Benachrichtigungen an Microsoft Teams",
+     "Er speichert sensible Daten"
+    ],
+    "a": 3,
+    "why": "Zur Checkliste zählen über 20 Bedingungen, mehrere Trigger-Quellen, externe Dienstaufrufe oder das Speichern sensibler Daten."
+   },
+   {
+    "q": "Wie sieht die Arbeitsteilung im empfohlenen Hybrid-Modell aus?",
+    "opts": [
+     "Power Automate erfasst den Trigger, Logic Apps übernimmt die Schwerstarbeit",
+     "Logic Apps erfasst Klicks in Teams, Power Automate verarbeitet große Datenmengen",
+     "Beide Dienste verarbeiten dieselben Daten parallel zur Absicherung",
+     "Power Automate übernimmt Monitoring, Logic Apps die Benutzeroberfläche"
+    ],
+    "a": 0,
+    "why": "Power Automate dient der Interaktion mit Menschen und übergibt per HTTP-Aufruf an Logic Apps, wo die Verarbeitung läuft."
+   }
+  ]
+ }
+}

@@ -1,0 +1,142 @@
+{
+ "de": {
+  "html": "<p>Eine Dataverse-App wird träge, und schnell fällt der Verdacht auf die Datenmenge, auf Tenant-Drosselung oder auf das Netzwerk. Häufig liegt die Ursache aber woanders: im Schema-Design, in der Art der Beziehungen und in fehlenden Indizes. Diese Entscheidungen wirken lange bevor Plattform-Limits eine Rolle spielen.</p>\n<p>Dieser Artikel zeigt, warum eine Tabelle mit wenigen tausend Zeilen langsamer sein kann als eine mit einer Million, wie Sie Dataverse-Performance von Anfang an einplanen und welche Stellschrauben bei Skalierung den größten Unterschied machen.</p>\n\n<h2>Schlankes Schema: Warum Tabellen-Design die Dataverse-Performance bestimmt</h2>\n<p>Ein Schema, das in der Erstellungsphase perfekt aussieht, kann jede Abfrage ausbremsen. Typische Folgen sind langsame Formulare, verzögerte Lookups und Power-Automate-Flows mit Timeouts. Wenn sich Nutzer pauschal über ein „langsames Dataverse“ beschweren, liegt die Ursache sehr wahrscheinlich im Tabellen-Layout.</p>\n<p>Man kann es sich wie einen Aktenschrank vorstellen: Sind alle Schubladen vollgestopft und nichts ist beschriftet, kostet selbst die Suche nach 50 Dokumenten Zeit. Das Tückische daran: Das Chaos ist weder für Ersteller noch für Anwender sofort sichtbar. Das einzige Symptom ist ein schleichender Leistungsverlust.</p>\n\n<h3>Feldballast: Alles für alle Fälle</h3>\n<p>Viele Schemata entstehen als Sammlung aller Anforderungen aller Beteiligten. Ein Notizfeld in drei Formaten, ein Dutzend Varianten desselben Lookups, „falls es später jemand braucht“: Das alles wird mit der Zeit zu Ballast. Solche Felder werden unnötig indiziert, verlangsamen Einfügungen und Aktualisierungen und machen die Formular-UI schwerfälliger.</p>\n<p>Ein Beispiel aus der Praxis ist eine Kundentabelle mit über 250 Feldern, die meist nur „für den Fall der Fälle“ existierten. Das Formular brauchte selbst bei einer Hochgeschwindigkeitsverbindung über zwölf Sekunden zum Laden, noch bevor irgendeine Automatisierung ausgeführt wurde.</p>\n\n<h3>Normalisierung mit Augenmaß</h3>\n<p>Laut Lehrbuch schützt die Aufteilung von Daten in viele kleine, verknüpfte Tabellen vor Redundanz. Auch die Dokumentation von Microsoft beschreibt die Kompromisse der Normalisierung: Übernormalisierung kann die Leistung beeinträchtigen, wenn alltägliche Vorgänge viele Joins über mehrere Tabellen benötigen. Jeder Join bedeutet zusätzliche Arbeit für die Abfrage-Engine. Spalten, die sich kaum ändern, in separaten Tabellen zu halten, kostet also Rechenaufwand ohne echten Nutzen.</p>\n<p>Das Ziel ist nicht, gute Designprinzipien über Bord zu werfen, sondern ein Gleichgewicht zwischen Theorie und dem Verhalten der App unter Last zu finden. Skalierbare Leistung entsteht nicht dadurch, dass Dataverse mehr Ressourcen bekommt, sondern durch ein zweckmäßig entworfenes Schema. Schlanke Tabellen führen Befehle schneller aus, Formulare laden berechenbarer und Automatisierungen starten pünktlich, auch wenn die Umgebung wächst.</p>\n<p>Bewährt hat sich diese Vorgehensweise:</p>\n<ul>\n<li>Attribute identifizieren, die nicht für Berichte genutzt werden, sich selten ändern oder Informationen anderswo duplizieren.</li>\n<li>Nur das behalten, was heute einen tatsächlichen Prozess unterstützt, nicht das, was eines Tages gebraucht werden könnte.</li>\n<li>Prüfen, wo zusammengehörige, aber selten genutzte Daten kombiniert werden können, um Joins zu reduzieren.</li>\n</ul>\n\n<h2>Beziehungsdesign in Dataverse: Wenn Joins zum Engpass werden</h2>\n<p>Beziehungen gleichen einer Kreuzung im Berufsverkehr: Stört sich alles an einer Stelle, kommt der gesamte Ablauf zum Stillstand. Auf dem Papier wirkt die Datenstruktur sauber, doch ein überlasteter Verknüpfungspunkt kann eine ganze modellgesteuerte App in die Knie zwingen. Das Problem sind dann weder schlechte Daten noch riesige Volumina, sondern die Art, wie die Beziehungen unter der Haube verknüpft sind.</p>\n<p>Dabei fällt das Problem oft erst spät auf. In kleinen Testumgebungen laufen ineffiziente Joins problemlos. In einer Unternehmensumgebung mit tausenden aktiven Nutzern und vernetzten Prozessen laden Formulare plötzlich langsam, Subgrids laufen in Timeouts und alles rund um die verknüpften Tabellen wirkt träge. Das sind keine mysteriösen Cloud-Verlangsamungen, sondern das Ergebnis von Beziehungen, die auf Klarheit statt auf die tatsächliche Abfrageausführung ausgelegt wurden.</p>\n\n<h3>Beispiel: Die M-zu-N-Beziehung</h3>\n<p>In einem Projekt wurden Kontakte über eine M-zu-N-Beziehung mit mehreren Serviceplänen verknüpft. Mit ein paar hundert Testdatensätzen lief alles reibungslos. Als der Live-Bestand auf hunderttausende Datensätze anwuchs und die Nutzer die Verknüpfungen täglich abfragten, wurde die M-zu-N-Tabelle zum langsamsten Teil des Systems. Jeder Formularaufruf löste komplexe Joins über drei Tabellen aus.</p>\n<p>Die Lösung war, die Beziehung durch ein einfaches Lookup mit einem unterstützenden Auswahlfeld zu ersetzen und die Geschäftslogik leicht anzupassen. Mehrere verknüpfte Datensätze mussten nicht mehr dynamisch aufgelöst werden, und die Ladezeit sank sofort um 80 %. Weder schrumpfte der Datenbestand, noch wurde die Hardware besser. Dataverse bekam lediglich einen direkteren Weg zu den benötigten Informationen.</p>\n\n<h3>Kaskadierendes Verhalten und Hintergrundverarbeitung</h3>\n<p>Die versteckten Kosten liegen nicht nur in den Joins. Lookup-Felder können kaskadierende Verhaltensweisen wie automatische Neuzuweisungen, Löschungen oder Updates enthalten, die bei jeder Änderung am verknüpften Datensatz ausgeführt werden. Für die Datensynchronität ist das hilfreich, bedeutet aber bei jedem Update mehr Hintergrundverarbeitung, auch für Felder, die mit dem eigentlichen Vorgang nichts zu tun haben. In Tabellen mit hoher Aktivität summieren sich diese Kaskaden, senken den Durchsatz und verlangsamen Interaktionen ohne offensichtlichen Auslöser.</p>\n<p>Microsofts Richtlinien raten aus gutem Grund dazu, unnötig komplexe Joins zu vermeiden. Jeder zusätzliche Join zwingt die Engine, mehr Daten zu verarbeiten und mehr Informationen im Arbeitsspeicher zu halten. Kombiniert man mehrere M-zu-N-Beziehungen und Kaskaden im selben Prozess, steigt die Ausführungszeit schneller als erwartet.</p>\n\n<h3>Einfachere Alternativen</h3>\n<ul>\n<li><strong>Auswahlfeld statt eigener Tabelle:</strong> Ein wartungsarmes, selten geändertes Datenelement kann direkt im Hauptdatensatz als Auswahlfeld liegen. Das spart einen Join beim Abruf.</li>\n<li><strong>Berechnete oder Roll-up-Felder statt Verknüpfungstabelle:</strong> Dient eine Verknüpfungstabelle vor allem der Anzeige zusammengefasster Informationen, kann sie dadurch ersetzt werden. Die Darstellungsebene bleibt schnell, und aufwendige Abfragen im Hintergrund entfallen.</li>\n</ul>\n<p>Beim Beziehungsdesign geht es also nicht nur um logische Klarheit und Normalisierungsstandards, sondern auch um die Ausführungskosten. Jeder Beziehungstyp ändert, wie Dataverse Daten abrufen, verknüpfen und verarbeiten muss.</p>\n\n<h2>Indizierung in Dataverse: Der stille Performance-Beschleuniger</h2>\n<p>Abfragen sind nur so schnell wie die Pfade, die ihnen zur Verfügung stehen, und die Indizierung bestimmt diese Pfade. Ohne Index gleicht die Suche dem Ablaufen eines Lagerhauses Gang für Gang, Regal für Regal. Bei einem kleinen Lager funktioniert das, bei Millionen von Artikeln wird es absurd. Ein Index ist dagegen die präzise Karte mit dem direkten Weg zum richtigen Regal. Je weniger Arbeit Dataverse beim Finden eines Datensatzes hat, desto schneller laufen Ansichten, Filter und Automatisierungen.</p>\n\n<h3>Automatische Indizes und ihre Grenzen</h3>\n<p>Dataverse legt bestimmte Indizes automatisch an, vor allem für Primärschlüssel, Suchfelder und einige Systemspalten. Deshalb laufen neue Umgebungen oft auch ohne manuelle Indizierung gut. Komplexe Abfragen mit mehreren Bedingungen, besonders auf benutzerdefinierten Spalten, können aber dazu führen, dass große Teile der Tabelle durchsucht werden. Die Folgen sind langsame Dashboards, verzögerte Berichte und Listenansichten, die nicht flüssig laden.</p>\n\n<h3>Überindizierung vermeiden</h3>\n<p>Das andere Extrem ist ebenso schädlich: Bei jedem Einfügen, Aktualisieren oder Löschen muss Dataverse alle relevanten Indizes pflegen. Zu viele benutzerdefinierte Indizes erhöhen die Schreibzeiten und verlangsamen Massenaktualisierungen. Indizes lohnen sich vor allem für Felder, die häufig in Filtern, Sortierungen oder Verknüpfungen vorkommen, nicht für Felder, die nur gelegentlich in Formularansichten eine Rolle spielen.</p>\n\n<h3>Praxisbeispiel: Von 6 Sekunden auf unter 200 Millisekunden</h3>\n<p>In einer stark genutzten Serviceanforderungstabelle dauerte es bis zu 6 Sekunden, eine gefilterte Liste für Manager bereitzustellen. Der Filter lief auf einer benutzerdefinierten Spalte „Anforderungstyp“ ohne eigenen Index. Ein nicht gruppierter Index auf dieser Spalte senkte die Abfragezeit sofort auf unter 200 Millisekunden. Datenmodell und UI-Logik blieben unverändert. Es gab nur einen intelligenteren Abrufpfad.</p>\n\n<h2>Proaktive Architektur statt Brandbekämpfung</h2>\n<p>Die meisten Performance-Anpassungen in Dataverse fühlen sich wie Brandbekämpfung an: Ein Nutzer meldet langsame Formulare, man prüft, ändert punktuell und hofft auf Besserung. Die schnellsten und stabilsten Apps sind dagegen nicht nur gut abgestimmt, sie wurden vom ersten Tag an mit Blick auf Skalierbarkeit entwickelt. Frühzeitige Planung ist der günstigste Leistungsschub, den man umsetzen kann.</p>\n<p>Der Grund: In der Entwicklungsphase sind Änderungen billig. Ist die App live, erfordert dieselbe Änderung die Überarbeitung von Dutzenden Flows, Dashboards und Formularen. Ein Team führte Leistungstests erst kurz vor dem Go-Live durch. Das Schema wirkte sauber, im Abnahmetest lief alles einwandfrei. Dann luden Analyseberichte minutenlang, Power-Automate-Flows liefen in Timeouts, und manche Formulare öffneten sich nur sporadisch. Eine zentrale Planungs-App musste komplett zerlegt und neu aufgebaut werden, weil wichtige Abfragen auf nicht indizierten Feldern in N-zu-M-Beziehungen beruhten. Der Go-Live verschob sich um drei Monate, zudem gingen wochenlang Entwickler- und Testzeit verloren.</p>\n<p>Leistung gehört deshalb zu den Designanforderungen, nicht an das Ende der Checkliste. Das heißt konkret:</p>\n<ul>\n<li>Die Indizierung bereits beim Tabellendesign planen und die Filterfelder kennen.</li>\n<li>Beim Prototyping nicht vorsichtshalber dutzende Felder ergänzen, denn jedes belastet Formulare und Transaktionen.</li>\n<li>Beziehungen für die Leistung bei Skalierung modellieren, nicht nur für eine saubere Darstellung im Workshop.</li>\n</ul>\n<p>So lassen sich Engpässe erkennen, solange ein Richtungswechsel noch einfach ist. Verlangsamt ein Beziehungsmodell Verknüpfungen in großen Datensätzen, suchen Sie eine alternative Struktur, bevor das System live geht. Kann ein Index eine stark genutzte Ansicht beschleunigen, legen Sie ihn an, bevor die Ansicht geschäftskritisch wird.</p>\n\n<h3>Werkzeuge für die Entwicklungsphase</h3>\n<p>Im Microsoft-Ökosystem unterstützen zwei Werkzeuge diese Denkweise. Der Solution Checker scannt die Umgebung und weist auf Muster hin, die Leistungseinbußen verursachen könnten. Die Leistungseinblicke im Power Platform Admin Center helfen, langsame Abfragen zu finden, Ladezeiten zu verfolgen und Verzögerungen beim Abruf oder Rendering zu identifizieren. Setzt man sie während der Entwicklung und vor Releases ein, müssen Live-Anwender nicht zu Testern werden.</p>\n\n<h2>Häufige Fehler und Stolpersteine bei Dataverse-Datenmodellen</h2>\n<ul>\n<li><strong>Felder auf Vorrat:</strong> Felder, die nur „für den Fall der Fälle“ existieren, werden unnötig indiziert und verlangsamen Schreibvorgänge und Formulare.</li>\n<li><strong>Übernormalisierung:</strong> Zu viele kleine, verknüpfte Tabellen erzeugen bei alltäglichen Vorgängen zusätzliche Joins.</li>\n<li><strong>M-zu-N-Beziehungen ohne Blick auf die Last:</strong> Was mit wenigen hundert Datensätzen funktioniert, kann bei hunderttausenden zum langsamsten Teil des Systems werden.</li>\n<li><strong>Unbeachtete Kaskaden:</strong> Automatische Neuzuweisungen, Löschungen oder Updates erzeugen bei jeder Änderung Hintergrundverarbeitung.</li>\n<li><strong>Fehlende Indizes auf Filterspalten:</strong> Benutzerdefinierte Spalten, nach denen häufig gefiltert wird, brauchen oft einen gezielten Index.</li>\n<li><strong>Überindizierung:</strong> Zu viele benutzerdefinierte Indizes erhöhen die Schreibzeiten und bremsen Massenaktualisierungen.</li>\n<li><strong>Nachträgliche Indizes im Live-System:</strong> Sie bergen Risiken. Schreibauswirkungen müssen getestet, Änderungen in nutzungsschwache Zeiten gelegt und bei sehr großen Tabellen mitunter Migrationsaufwand bewältigt werden.</li>\n<li><strong>Leistungstests erst kurz vor dem Go-Live:</strong> Dann sind Korrekturen teuer und können Releases um Monate verschieben.</li>\n</ul>\n\n<h2>Praktische Takeaways für skalierbare Dataverse-Apps</h2>\n<ul>\n<li>Suchen Sie die Ursache für Langsamkeit zuerst im Schema, nicht bei Datenmenge, Netzwerk oder Tenant.</li>\n<li>Entfernen Sie Felder, die keinen aktuellen Prozess unterstützen, nicht für Berichte genutzt werden oder Daten duplizieren.</li>\n<li>Reduzieren Sie Joins, indem Sie selten genutzte, zusammengehörige Daten kombinieren.</li>\n<li>Prüfen Sie M-zu-N-Beziehungen kritisch. Ein Lookup mit Auswahlfeld kann deutlich schneller sein.</li>\n<li>Speichern Sie wartungsarme Datenelemente als Auswahlfeld im Hauptdatensatz, statt eine eigene Tabelle anzulegen.</li>\n<li>Ersetzen Sie reine Anzeige-Verknüpfungstabellen durch berechnete oder Roll-up-Felder, wo es passt.</li>\n<li>Kartieren Sie die zugriffsstärksten Abfragen und indizieren Sie Filter-, Sortier- und Join-Spalten von Anfang an.</li>\n<li>Prüfen Sie regelmäßig die Index-Nutzungsstatistiken und entfernen Sie selten genutzte Indizes.</li>\n<li>Nutzen Sie Solution Checker und die Leistungseinblicke im Power Platform Admin Center schon während der Entwicklung und vor Releases.</li>\n</ul>\n\n<h2>Fazit</h2>\n<p>Dataverse-Performance entscheidet sich nicht erst bei hohen Datenmengen, sondern bereits am Reißbrett. Ein schlankes Schema, Beziehungen mit Blick auf die Ausführungskosten und eine durchdachte Indexstrategie machen aus einer Fehlersuche im Nachhinein eine planbare Architektur. Wer Leistung als Designanforderung versteht, spart sich teure Notfallkorrekturen und schafft Spielraum: Wächst das Datenvolumen oder kommen neue Funktionen hinzu, bleibt die App schnell und stabil.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Dataverse-Performance von Anfang an planen",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Schema verschlanken",
+     "text": "Felder auf Vorrat entfernen und Normalisierung mit Augenmaß einsetzen, um Joins zu reduzieren."
+    },
+    {
+     "kopf": "Beziehungen prüfen",
+     "text": "M-zu-N-Beziehungen und Kaskaden hinterfragen; Lookup mit Auswahlfeld kann die Ladezeit deutlich senken."
+    },
+    {
+     "kopf": "Gezielt indizieren",
+     "text": "Filter-, Sortier- und Join-Spalten indizieren, aber Überindizierung vermeiden."
+    },
+    {
+     "kopf": "Leistung als Anforderung",
+     "text": "Indizes und Beziehungsmodell schon im Design planen, nicht erst nach dem Go-Live."
+    },
+    {
+     "kopf": "Tools nutzen",
+     "text": "Solution Checker und Leistungseinblicke im Power Platform Admin Center während der Entwicklung einsetzen."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Warum ist meine Dataverse-App langsam, obwohl die Tabellen nur wenige Daten enthalten?",
+    "a": "Die Ursache liegt häufig nicht bei Datenmenge, Tenant-Drosselung oder Netzwerk, sondern im Schema-Design, in der Art der Beziehungen und in fehlenden Indizes. Überflüssige Felder und unnötige Joins bremsen Formulare, Lookups und Flows schon bei kleinen Tabellen."
+   },
+   {
+    "q": "Warum sind M-zu-N-Beziehungen in Dataverse ein Performance-Problem?",
+    "a": "M-zu-N-Beziehungen lösen bei jedem Formularaufruf komplexe Joins über drei Tabellen aus. Mit wenigen Testdaten fällt das nicht auf, bei hunderttausenden Datensätzen wird die Verknüpfungstabelle zum langsamsten Systemteil. Ein Lookup mit Auswahlfeld senkte die Ladezeit in einem Projekt um 80 %."
+   },
+   {
+    "q": "Wann lohnt sich ein Index in Dataverse, und wann schadet er?",
+    "a": "Ein Index lohnt sich für Felder, die häufig in Filtern, Sortierungen oder Verknüpfungen vorkommen. Zu viele benutzerdefinierte Indizes erhöhen dagegen die Schreibzeiten und verlangsamen Massenaktualisierungen, weil Dataverse bei jedem Einfügen, Aktualisieren oder Löschen alle Indizes pflegen muss."
+   },
+   {
+    "q": "Wann sollte ich die Performance einer Dataverse-App planen und testen?",
+    "a": "Von Anfang an, schon beim Tabellendesign. In der Entwicklungsphase sind Änderungen billig, nach dem Go-Live erfordern sie die Überarbeitung vieler Flows, Dashboards und Formulare. Hilfreich sind dabei der Solution Checker und die Leistungseinblicke im Power Platform Admin Center."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Praxisbeispiele: Was kleine Änderungen bewirken",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "über 12 Sekunden",
+      "text": "Ladezeit eines Formulars einer Kundentabelle mit über 250 Feldern"
+     },
+     {
+      "wert": "-80 %",
+      "text": "Ladezeit nach Ersatz der M-zu-N-Beziehung durch Lookup mit Auswahlfeld"
+     },
+     {
+      "wert": "6 Sek. → unter 200 ms",
+      "text": "Abfragezeit nach einem Index auf der Spalte „Anforderungstyp“"
+     },
+     {
+      "wert": "3 Monate",
+      "text": "Verzögerung des Go-Lives wegen Leistungstests erst kurz vor dem Release"
+     }
+    ]
+   },
+   {
+    "titel": "Index richtig einsetzen: Zu wenig oder zu viel",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Fehlende Indizes",
+     "punkte": [
+      "Komplexe Abfragen auf benutzerdefinierten Spalten durchsuchen große Teile der Tabelle.",
+      "Dashboards und Berichte laden langsam und verzögert.",
+      "Listenansichten laden nicht flüssig.",
+      "Filterspalten mit häufiger Nutzung brauchen oft einen gezielten Index."
+     ]
+    },
+    "rechts": {
+     "titel": "Überindizierung",
+     "punkte": [
+      "Bei jedem Einfügen, Aktualisieren oder Löschen müssen alle Indizes gepflegt werden.",
+      "Die Schreibzeiten steigen.",
+      "Massenaktualisierungen werden langsamer.",
+      "Indizes lohnen sich nur für Felder in Filtern, Sortierungen oder Verknüpfungen."
+     ]
+    }
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Wo liegt laut Artikel die häufigste Ursache für eine träge Dataverse-App?",
+    "opts": [
+     "Im Schema-Design, in den Beziehungen und in fehlenden Indizes",
+     "In der reinen Datenmenge der größten Tabellen",
+     "In der Drosselung auf Tenant-Ebene durch die Plattform",
+     "In einer zu langsamen Netzwerkverbindung der Anwender"
+    ],
+    "a": 0,
+    "why": "Der Artikel nennt Schema-Design, Beziehungsart und fehlende Indizes als häufige Ursache, nicht Datenmenge, Tenant-Drosselung oder Netzwerk."
+   },
+   {
+    "q": "Was brachte im Beispiel mit Kontakten und Serviceplänen die Ladezeit-Verbesserung um 80 %?",
+    "opts": [
+     "Der Wechsel auf leistungsstärkere Hardware in der Umgebung",
+     "Das Löschen eines großen Teils der alten Datensätze",
+     "Das Ersetzen der M-zu-N-Beziehung durch Lookup und Auswahlfeld",
+     "Das Hinzufügen weiterer Indizes auf allen Spalten der Tabelle"
+    ],
+    "a": 2,
+    "why": "Die M-zu-N-Beziehung wurde durch ein einfaches Lookup mit Auswahlfeld ersetzt; Datenbestand und Hardware blieben unverändert."
+   },
+   {
+    "q": "Welche Folge haben zu viele benutzerdefinierte Indizes laut Artikel?",
+    "opts": [
+     "Abfragen werden langsamer, weil Lesezugriffe blockiert werden",
+     "Schreibzeiten steigen und Massenaktualisierungen werden langsamer",
+     "Dataverse löscht automatisch die selten genutzten Indizes wieder",
+     "Die Primärschlüssel verlieren ihre automatische Indizierung vollständig"
+    ],
+    "a": 1,
+    "why": "Bei jedem Einfügen, Aktualisieren oder Löschen müssen alle Indizes gepflegt werden, was Schreibzeiten erhöht und Massenupdates bremst."
+   },
+   {
+    "q": "Was war im Beispiel zu den Leistungstests kurz vor dem Go-Live die Folge?",
+    "opts": [
+     "Das Team konnte die Probleme innerhalb weniger Tage beheben",
+     "Nur einzelne Formulare mussten geringfügig angepasst werden",
+     "Der Solution Checker meldete im Vorfeld keinerlei Auffälligkeiten",
+     "Eine zentrale App wurde neu aufgebaut, der Go-Live verschob sich um drei Monate"
+    ],
+    "a": 3,
+    "why": "Abfragen auf nicht indizierten Feldern in N-zu-M-Beziehungen erzwangen den Neuaufbau der Planungs-App und verzögerten den Go-Live um drei Monate."
+   }
+  ]
+ }
+}
