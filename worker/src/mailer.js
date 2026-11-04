@@ -1,7 +1,11 @@
 function senderAddress(from) {
-  const match = String(from || "").match(/^\s*(.*?)\s*<([^<>]+)>\s*$/);
-  if (!match) return String(from || "");
-  return match[1] ? { email: match[2], name: match[1] } : match[2];
+  const value = String(from || "");
+  const open = value.lastIndexOf("<"), close = value.lastIndexOf(">");
+  if (open < 0 || close !== value.length - 1 || close <= open + 1) return value;
+  const email = value.slice(open + 1, close).trim();
+  if (!email || email.includes("<") || email.includes(">")) return value;
+  const name = value.slice(0, open).trim();
+  return name ? { email, name } : email;
 }
 
 export function mailReady(env) {
