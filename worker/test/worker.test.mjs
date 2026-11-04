@@ -6,7 +6,7 @@ import { cleanText, cleanName, esc, isLang, LANGS, b64u, sign, verify } from "..
 import { sanitize } from "../src/wiki.js";
 import { parseFeed } from "../src/feeds.js";
 import { scoreOf, levelOf, levelName, CAPS, THRESH } from "../src/levels.js";
-import { handleSponsor } from "../src/sponsor.js";
+import { handleSponsor, handleSponsorLink } from "../src/sponsor.js";
 import { handleAdminPanel } from "../src/adminpanel.js";
 import { d1BackupExportArgs, d1BackupTables } from "../src/d1_backup.js";
 import { handleContributions, refreshContributions } from "../src/contributions.js";
@@ -531,7 +531,7 @@ test("sponsor: Anfragen, Honeypot, Rate-Limit und Admin-Panel (SQLite)", async (
   raw.close();
 });
 
-test("sponsor dashboard: Firmenzugriff, Event-Kennzahlen und Nachricht an die Plattform (SQLite)", async () => {
+test("sponsor dashboard: Platzierungen, Firmenzugriff, Quellen und manuelle Werte (SQLite)", async () => {
   const { DatabaseSync } = await import("node:sqlite");
   const raw = new DatabaseSync(":memory:");
   const dir = new URL("../migrations/", import.meta.url);
@@ -552,10 +552,14 @@ test("sponsor dashboard: Firmenzugriff, Event-Kennzahlen und Nachricht an die Pl
   raw.exec(`
     INSERT INTO users(id,provider,sub,name,role,banned,created) VALUES
       (1,'google','sponsor','Sponsor User','user',0,1),(2,'google','admin','Platform Admin','admin',0,1),(3,'google','other','Other User','user',0,1);
-    INSERT INTO orgs(id,handle,name,website,created) VALUES (1,'acme','Acme GmbH','https://acme.example/',1),(2,'other-co','Other Company','https://other.example/',1);
+    INSERT INTO orgs(id,handle,name,website,created) VALUES (1,'acme','Acme GmbH','https://shared.example/',1),(2,'other-co','Other Company','https://shared.example/',1);
     INSERT INTO org_members(org_id,user_id,role,status,created) VALUES
       (1,1,'owner','active',1),(2,3,'owner','active',1),(1,3,'member','pending',1);
-    INSERT INTO org_sponsor(org_id,open,updated) VALUES (1,1,1);
+    INSERT INTO sponsor_placements(id,org_id,title,channel,langs,start,end,refs,created) VALUES
+      ('acme-pod',1,'Podcast placement','podcast_video','de,en','2026-11-01','2026-12-01','{}',1),
+      ('other-web',2,'Other placement','website','en','2026-11-01','2026-12-01','{}',1);
+    INSERT INTO sponsor_metrics_daily(placement_id,day,metric,dim,value,source,kind,fetched_at) VALUES
+      ('acme-pod','2026-11-03','podcast_plays','','12','spreaker','measured',1793664000);
     INSERT INTO events(id,handle,owner_id,title,start,end,created,updated) VALUES
       (1,'event-one',2,'Partner Event','2026-11-01','2026-11-02',1,1),
       (2,'event-two',2,'Pending Event','2026-12-01','2026-12-03',1,1),
@@ -572,64 +576,106 @@ test("sponsor dashboard: Firmenzugriff, Event-Kennzahlen und Nachricht an die Pl
       method, headers: { "content-type": "application/json", "x-requested-with": "m365" },
       ...(body === undefined ? {} : { body: JSON.stringify(body) }),
     });
-    return handleSponsor(env, request, new URL(request.url), path, J, user);
+    return handleSponsor(env, request, new URL(request.url), new URL(request.url).pathname, J, user);
   };
 
   assert.equal((await call("/api/sponsor/dashboard", "GET", null)).status, 401);
-  let response = await call("/api/sponsor/dashboard", "GET", { id: 1 });
+  let response = await call("/api/sponsor/dashboard?from=2026-11-01&to=2026-11-30", "GET", { id: 1 });
   let result = await response.json();
   assert.equal(result.orgs.length, 1, "nur verwaltete Firmen werden angezeigt");
   assert.equal(result.orgs[0].handle, "acme");
-  assert.equal(result.orgs[0].website, "https://acme.example/");
   assert.equal(result.admin, false);
   assert.equal(result.orgs[0].metrics.length, 8);
   assert.ok(result.orgs[0].metrics.every((m) => m.source && ["measured", "estimated", "manual"].includes(m.kind)),
     "jede Kennzahl hat Quelle und Messart");
   assert.ok(result.orgs[0].metrics.every((m) => m.value === null || m.as_of), "Werte haben immer einen Datenstand");
-  assert.deepEqual(result.orgs[0].placements.map((p) => p.status), ["pending", "confirmed"]);
-  const confirmed = result.orgs[0].placements.find((p) => p.status === "confirmed");
-  assert.equal(confirmed.attendees, 1, "nur going-Teilnehmer werden gezählt");
-  assert.equal(confirmed.impressions, null);
-  assert.equal(confirmed.clicks, null);
-  assert.equal(confirmed.downloads, null);
-  response = await call("/api/sponsor/dashboard", "GET", { id: 3 });
+  assert.equal(result.orgs[0].metrics.find((m) => m.key === "podcast_plays").value, 12);
+  assert.equal(result.orgs[0].metrics.find((m) => m.key === "podcast_plays").source, "Spreaker API");
+  assert.equal(result.orgs[0].placements[0].id, "acme-pod");
+  response = await call("/api/sponsor/dashboard?org=acme&from=2026-11-01&to=2026-11-30", "GET", { id: 3 });
   result = await response.json();
   assert.equal(result.orgs.some((o) => o.handle === "acme"), false, "fremde Firmen werden nicht angezeigt");
+  assert.equal(result.orgs[0].handle, "other-co", "gleiche orgs.website gewährt keinen Zugriff");
+  assert.equal((await call("/api/sponsor/placement?id=acme-pod", "GET", { id: 3 })).status, 404,
+    "fremde Platzierungsdetails liefern 404");
   assert.equal((await call("/api/sponsor/sources", "GET", { id: 1 })).status, 403, "Datenquellen sind Admin-only");
   assert.equal((await call("/api/sponsor/manual-metric", "POST", { id: 1 }, {
-    org_id: 1, source: "bing_ai", metric: "ai_citations", placement: "Copilot topic page",
-    period: "2026-10", value: 12, proof_key: "sponsors/acme/bing-2026-10.csv"
+    placement_id: "acme-pod", source: "bing_ai", metric: "ai_citations",
+    period: "2026-11", value: 12, link: "https://example.com/report", proof_key: "sponsors/acme/bing-2026-11.csv"
   })).status, 403, "manuelle Werte sind Admin-only");
   assert.equal((await call("/api/sponsor/sources", "GET", { id: 2, admin: true })).status, 200);
   assert.equal((await call("/api/sponsor/manual-metric", "POST", { id: 2, admin: true }, {
-    org_id: 1, source: "bing_ai", metric: "ai_citations", placement: "Copilot topic page",
-    period: "2026-10", value: 12, proof_key: "sponsors/acme/bing-2026-10.csv"
+    placement_id: "acme-pod", source: "bing_ai", values: [{ metric: "ai_citations", value: 12 }],
+    period: "2026-11", link: "https://example.com/report", proof_key: "sponsors/acme/bing-2026-11.csv"
   })).status, 200);
-  result = await (await call("/api/sponsor/dashboard", "GET", { id: 1 })).json();
-  assert.equal(result.orgs[0].metrics.find((m) => m.key === "ai_citations").value, null,
-    "Monatswerte werden nicht ohne passenden Zeitraum in die Gesamtkennzahl gerechnet");
+  result = await (await call("/api/sponsor/dashboard?from=2026-11-01&to=2026-11-30", "GET", { id: 1 })).json();
+  assert.equal(result.orgs[0].metrics.find((m) => m.key === "ai_citations").value, 12);
   assert.equal(result.orgs[0].manual[0].value, 12);
   assert.equal(result.orgs[0].manual[0].kind, "manual");
-  assert.equal(result.orgs[0].manual[0].period, "2026-10");
+  assert.equal(result.orgs[0].manual[0].period, "2026-11");
   assert.equal(Object.hasOwn(result.orgs[0].manual[0], "proof_key"), false, "interner Belegschlüssel wird nicht offengelegt");
   assert.equal(raw.prepare("PRAGMA foreign_key_list(sponsor_manual_metrics)").all().length, 0,
     "manuelle Historie blockiert keine Konto- oder Firmenlöschung");
   assert.equal((await call("/api/sponsor/manual-metric", "POST", { id: 2, admin: true }, {
-    org_id: 1, source: "bing_ai", metric: "clicks", placement: "Copilot topic page",
-    period: "2026-10", value: 12, proof_key: "sponsors/acme/bing-2026-10.csv"
+    placement_id: "acme-pod", source: "bing_ai", metric: "clicks", period: "2026-11",
+    value: 12, link: "https://example.com/report", proof_key: "sponsors/acme/bing-2026-11.csv"
   })).status, 400, "nicht erlaubte Quellenkennzahlen werden abgewiesen");
-  assert.equal((await call("/api/sponsor/contact", "POST", { id: 3 }, { org: "acme", message: "Interested" })).status, 403);
-
-  response = await call("/api/sponsor/contact", "POST", { id: 1 }, { org: "acme", message: "<b>Interested</b> https://example.com" });
-  assert.equal(response.status, 200);
-  const msg = raw.prepare("SELECT m.body,t.b_id,t.b_read,t.last FROM msg_messages m JOIN msg_threads t ON t.id=m.thread_id").get();
-  assert.match(msg.body, /Sponsoring · Acme GmbH/);
-  assert.match(msg.body, /Interested/);
-  assert.match(msg.body, /\[Link entfernt\]/);
-  assert.doesNotMatch(msg.body, /<b>|https:\/\/example\.com/);
-  assert.equal(msg.b_id, 2);
-  assert.ok(msg.last > msg.b_read, "Admin-Nachricht bleibt im Plattform-Postfach ungelesen");
   raw.close();
+});
+
+test("sponsor links: redirects, daily deduplication, bots and no cookies (SQLite)", async () => {
+  const { DatabaseSync } = await import("node:sqlite");
+  const raw = new DatabaseSync(":memory:");
+  const dir = new URL("../migrations/", import.meta.url);
+  for (const f of readdirSync(dir).filter((f) => f.endsWith(".sql")).sort()) raw.exec(readFileSync(new URL(f, dir), "utf-8"));
+  raw.exec(`INSERT INTO orgs(id,handle,name,created) VALUES(1,'acme','Acme',1);
+    INSERT INTO sponsor_placements(id,org_id,title,channel,created) VALUES('p1',1,'Placement','website',1);
+    INSERT INTO sponsor_links(code,org_id,placement_id,target_url,utm,created_at)
+    VALUES('acme-home',1,'p1','https://acme.example/path?x=1','{"utm_source":"m365.fm"}',1);`);
+  const db = { prepare(sql) { const st = raw.prepare(sql); let args = []; const o = {
+    bind(...a) { args = a; return o; }, first: async () => st.get(...args) ?? null,
+    run: async () => ({ meta: { changes: Number(st.run(...args).changes) } }),
+  }; return o; } };
+  const originalCaches = globalThis.caches;
+  const stored = new Map();
+  Object.defineProperty(globalThis, "caches", { configurable: true, value: { default: {
+    match: async (key) => stored.get(key.url) || null,
+    put: async (key, value) => { stored.set(key.url, value); },
+  } } });
+  const call = async (method = "GET", ua = "Mozilla/5.0", query = "?s=episode", extra = {}, cf = { country: "DE" }) => {
+    const request = new Request(`https://api.example/go/acme-home${query}`, { method, headers: { "user-agent": ua, "cf-connecting-ip": "203.0.113.1", ...extra } });
+    Object.defineProperty(request, "cf", { value: cf });
+    const waits = [], response = await handleSponsorLink({ DB: db, SESSION_SECRET: "test-key" }, request,
+      new URL(request.url), new URL(request.url).pathname, { waitUntil: (promise) => waits.push(promise) });
+    await Promise.all(waits);
+    return response;
+  };
+  try {
+    let response = await call();
+    assert.equal(response.status, 302);
+    assert.equal(response.headers.get("location"), "https://acme.example/path?x=1&utm_source=m365.fm");
+    assert.equal(response.headers.get("set-cookie"), null);
+    assert.match(response.headers.get("x-robots-tag"), /noindex/);
+    await call();
+    assert.equal(raw.prepare("SELECT SUM(clicks) n FROM sponsor_clicks_daily").get().n, 1);
+    await call("GET", "Different browser");
+    assert.equal(raw.prepare("SELECT SUM(clicks) n FROM sponsor_clicks_daily").get().n, 2);
+    await call("GET", "bot/1.0");
+    await call("HEAD", "Mozilla/5.0");
+    await call("GET", "Mozilla/5.0", "?s=episode", { "sec-purpose": "prefetch" });
+    response = await call("GET", "Another browser", "?s=invalid-surface");
+    assert.equal(response.status, 302);
+    assert.equal(raw.prepare("SELECT clicks FROM sponsor_clicks_daily WHERE surface='other'").get().clicks, 1);
+    const missing = await handleSponsorLink({ DB: db }, new Request("https://api.example/go/unknown"),
+      new URL("https://api.example/go/unknown"), "/go/unknown", { waitUntil() {} });
+    assert.equal(missing.status, 404);
+    assert.equal(missing.headers.get("location"), null);
+    assert.equal(raw.prepare("SELECT SUM(clicks) n FROM sponsor_clicks_daily").get().n, 3);
+  } finally {
+    if (originalCaches === undefined) delete globalThis.caches;
+    else Object.defineProperty(globalThis, "caches", { configurable: true, value: originalCaches });
+    raw.close();
+  }
 });
 
 test("entities: Abgleich ueberschreibt keine Menschen (freigegebener Vorschlag mit aelterer id, geloeschtes Konto, absichtlich geleertes Feld, selbst verwaltet) (SQLite)", async () => {

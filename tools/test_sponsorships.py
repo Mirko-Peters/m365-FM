@@ -167,6 +167,20 @@ class SponsorshipTests(unittest.TestCase):
         self.assertEqual(SPM.link_rel(rs, "https://www.acme.example/p"), "sponsored noopener")
         self.assertEqual(SPM.link_rel([], "https://acme.example/", own=True), "noopener")
 
+    def test_active_go_code_rewrites_sponsor_links_only(self):
+        self.init([rec(go="acme-2026", entities=["acme-backup"])])
+        rs = SPM.entity("acme-backup")
+        SPM.set_go_codes(["acme-2026"])
+        self.assertIn('href="https://api-dub.m365.fm/go/acme-2026?s=entity"', SPM.note("en", rs, "entity"))
+        html = SPM.mark('<a href="https://www.acme.example/">Acme</a>', rs, "episode")
+        self.assertIn('href="https://api-dub.m365.fm/go/acme-2026?s=episode"', html)
+        self.assertIn('rel="sponsored noopener"', html)
+        SPM.set_go_codes([], offline=False)
+        self.assertIn('href="https://www.acme.example/"', SPM.note("en", rs))
+        SPM.set_go_codes(["acme-2026"], offline=True)
+        self.assertIn('href="https://www.acme.example/"', SPM.note("en", rs))
+        self.assertIn('"go" muss ein aktiver Linkcode', self.errors([rec(go="BAD")]))
+
 
 class CheckSchemaRuleTests(unittest.TestCase):
     """check_schema.py: Kennzeichnung <-> JSON-LD sponsor (beide Richtungen), Lage unter der H1, rel=sponsored."""

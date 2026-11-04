@@ -31,9 +31,7 @@ class SponsorDashboardTests(unittest.TestCase):
             "day": lambda value, lang: str(value),
         }
 
-        campaigns = [{"website": "https://acme.example/", "start": "2026-11-01", "end": "2027-01-31",
-                      "episodes": ["episode"], "pages": ["topic"], "posts": []}]
-        with patch.object(SPN, "_ssr", return_value={}), patch.object(SPN, "dashboard_campaigns", return_value=campaigns), \
+        with patch.object(SPN, "_ssr", return_value={}), \
              patch.object(SPN, "T", side_effect=lambda lang, en, de: de if lang == "de" else en):
             SPN.build(ctx)
 
@@ -58,9 +56,12 @@ class SponsorDashboardTests(unittest.TestCase):
         self.assertIn("Quellenbasierte Übersicht", written["de/sponsor/dashboard/index.html"])
         self.assertIn("window.M365SP=", written["sponsor/dashboard/index.html"])
         self.assertIn("sponsor-dashboard.js", written["de/sponsor/dashboard/index.html"])
-        self.assertIn('"campaigns":[{"website":"https://acme.example/"', written["sponsor/dashboard/index.html"])
+        self.assertNotIn('"campaigns"', written["sponsor/dashboard/index.html"])
+        self.assertIn("What your sponsorship achieved", written["sponsor/dashboard/index.html"])
         self.assertIn("var(--bg)", rendered[en]["kwargs"]["extra_head"])
-        self.assertTrue(any(url == en for url, _, _ in ctx["sitemap"]))
+        self.assertIn('rel="alternate" hreflang="de"', rendered[en]["kwargs"]["extra_head"])
+        self.assertTrue(rendered[en]["kwargs"]["noindex"])
+        self.assertEqual(ctx["sitemap"], [])
         for path in written.values():
             self.assertNotRegex(path, r"\b(?:21400|4820|12300|9150|38600|1840)\b")
         for key in ("measured", "estimated", "manual", "measured_desc", "estimated_desc", "manual_desc",
@@ -68,17 +69,10 @@ class SponsorDashboardTests(unittest.TestCase):
             self.assertTrue(SPN.dashboard_copy("en")[key])
             self.assertTrue(SPN.dashboard_copy("de")[key])
 
-    def test_only_public_sponsorship_fields_are_passed_to_dashboard(self):
-        source = {"sponsorships": [{
-            "sponsor": {"name": "Acme", "url": "https://acme.example/"},
-            "start": "2026-11-01", "end": "2027-01-31",
-            "episodes": ["episode"], "entities": ["product"], "topics": ["topic"], "posts": ["article"],
-        }]}
-        with patch.object(SPN, "_json", return_value=source):
-            self.assertEqual(SPN.dashboard_campaigns(), [{
-                "website": "https://acme.example/", "start": "2026-11-01", "end": "2027-01-31",
-                "episodes": ["episode"], "pages": ["product", "topic"], "posts": ["article"],
-            }])
+    def test_dashboard_does_not_assign_companies_by_website(self):
+        frontend = (ROOT / "assets" / "sponsor-dashboard.js").read_text("utf-8")
+        self.assertNotIn("publicPlacements", frontend)
+        self.assertNotIn("org.website", frontend)
 
 
 if __name__ == "__main__":

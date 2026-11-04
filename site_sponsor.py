@@ -95,6 +95,8 @@ def dashboard_copy(lang):
     texts = {
         "intro": ("A source-backed view of your sponsorship placements and results.",
                   "Quellenbasierte Übersicht deiner Sponsorings und Ergebnisse."),
+        "dash_kicker": ("Sponsor dashboard", "Sponsor-Dashboard"),
+        "achievement_title": ("What your sponsorship achieved", "Was dein Sponsoring erreicht hat"),
         "login": ("Sign in with a community account linked to a company to view its sponsorships.",
                   "Melde dich mit einem Community-Konto an, das einer Firma zugeordnet ist, um deren Sponsorings zu sehen."),
         "signin": ("Sign in", "Anmelden"),
@@ -107,10 +109,6 @@ def dashboard_copy(lang):
         "unavailable": ("No data", "Keine Daten"),
         "csv": ("Export CSV", "CSV exportieren"),
         "pdf": ("Print / save PDF", "Drucken / als PDF speichern"),
-        "contact": ("Request a placement", "Platzierung anfragen"),
-        "message": ("Describe the placement you are interested in", "Beschreibe die gewünschte Platzierung"),
-        "send": ("Send message", "Nachricht senden"),
-        "sent": ("Message sent in platform inbox.", "Nachricht im Plattform-Postfach gesendet."),
         "error": ("Could not send the request. Please try again.", "Anfrage konnte nicht gesendet werden. Bitte versuche es erneut."),
         "pending": ("Pending", "Offen"),
         "confirmed": ("Confirmed", "Bestätigt"),
@@ -193,10 +191,7 @@ def dashboard_copy(lang):
         "save": ("Save value", "Wert speichern"),
         "saved": ("Saved", "Gespeichert"),
         "invalid": ("Please check the fields and try again.", "Bitte prüfe die Eingaben und versuche es erneut."),
-        "linkedInImpressions": ("Newsletter impressions", "Newsletter-Impressionen"),
-        "linkedInClicks": ("Newsletter clicks", "Newsletter-Klicks"),
         "source_bing": ("Bing AI Performance", "Bing AI Performance"),
-        "source_linkedin": ("LinkedIn newsletter", "LinkedIn-Newsletter"),
         "source_no_data": ("No data", "Keine Daten"),
         "source_press": ("Press Ranger", "Press Ranger"),
         "source_spreaker": ("Spreaker", "Spreaker"),
@@ -212,11 +207,10 @@ def dashboard_copy(lang):
         "source_desc_spreaker": ("Plays per sponsored episode; no per-listener data.", "Aufrufe gesponserter Folgen; keine Daten einzelner Hörer."),
         "source_desc_youtube": ("Views and watch time, after Analytics access is enabled.", "Aufrufe und Wiedergabezeit nach Freigabe des Analytics-Zugriffs."),
         "source_desc_cloudflare": ("Page views by URL; no cookies or client-side tracking.", "Seitenaufrufe je URL; keine Cookies und kein Client-Tracking."),
-        "source_desc_counter": ("Cookie-free aggregate redirect counter; not available yet.", "Cookiefreier aggregierter Weiterleitungszähler; noch nicht verfügbar."),
+        "source_desc_counter": ("Cookie-free daily totals by link and page surface.", "Cookiefreie Tagessummen je Link und Fläche."),
         "source_desc_gsc": ("Impressions and clicks for sponsored URLs.", "Impressions und Klicks für gesponserte URLs."),
         "source_desc_bing_webmaster": ("Page and search-query statistics; connection not configured here.", "Seiten- und Suchanfragenstatistik; hier noch nicht angebunden."),
         "source_desc_bing": ("Monthly export entered by an administrator.", "Monatlicher Export, von einem Administrator eingetragen."),
-        "source_desc_linkedin": ("Newsletter figures are entered manually; email opens are not reported.", "Newsletter-Werte werden manuell eingetragen; E-Mail-Öffnungen werden nicht ausgewiesen."),
         "source_desc_press": ("Distribution and AI visibility reports; dashboard import not connected.", "Verteilungs- und KI-Sichtbarkeitsberichte; noch nicht ins Dashboard übernommen."),
         "source_desc_events": ("Registered attendees from event records.", "Registrierte Teilnehmer aus Event-Datensätzen."),
         "source_desc_directory": ("Consent-based requests; source is not connected yet.", "Anfragen mit Einwilligung; Quelle noch nicht angebunden."),
@@ -232,19 +226,6 @@ def dashboard_copy(lang):
                     "Deinem Profil sind keine gesponserten Firmenkonten zugeordnet."),
     }
     return {**{k: T(lang, en, de) for k, (en, de) in texts.items()}, "title": tx(lang, "dash_h")}
-
-
-def dashboard_campaigns():
-    data = _json(D / "sponsorships.json", {})
-    out = []
-    for rec in data.get("sponsorships", []) if isinstance(data, dict) else []:
-        sponsor = rec.get("sponsor") or {}
-        if not isinstance(sponsor, dict) or not sponsor.get("url"):
-            continue
-        out.append({"website": sponsor["url"], "start": rec.get("start", ""), "end": rec.get("end", ""),
-                    "episodes": rec.get("episodes") or [], "pages": (rec.get("entities") or []) + (rec.get("topics") or []),
-                    "posts": rec.get("posts") or []})
-    return out
 
 
 DASHBOARD_CSS = """.sdb-main{display:grid;gap:1.5em}
@@ -264,7 +245,7 @@ DASHBOARD_CSS = """.sdb-main{display:grid;gap:1.5em}
 .sdb-report{max-width:794px;margin:auto}.sdb-report-head{border-bottom:2px solid var(--bd);padding-bottom:1em}
 @media(max-width:700px){.sdb-placement-link{grid-template-columns:1fr}}
 @page{size:A4;margin:16mm}
-@media print{.top,footer,.sdb-nav,.sdb-actions,.sdb-form,.sdb-periods,.sdb-tabs{display:none!important}.sdb-main{display:block}.sdb-card,.sdb-org,.sdb-placement,.sdb-panel{break-inside:avoid}.sdb-report{max-width:none}.sdb-report-page{break-after:page}.sdb-report-page:last-child{break-after:auto}}"""
+@media print{.sdb-main>:not(#sdb),#sdb>:not(.sdb-report){display:none!important}.sdb-main{display:block}.sdb-report{display:block!important;max-width:none;width:100%;margin:0}.sdb-card,.sdb-report-head,.sdb-panel{break-inside:avoid}.sdb-report-page{break-after:page}.sdb-report-page:last-child{break-after:auto}}"""
 
 
 def label(lang):
@@ -768,29 +749,28 @@ def build(g):
         views = (("overview", "dashboard"), ("placement", "placement_view"),
                  ("report", "report_view"), ("sources", "sources_view"))
         urls = {view: dashboard_view_url(B, lang, view) for view, _ in views}
-        config = json.dumps({"api": g["api"], "base": B, "lang": lang, "today": TODAY, "copy": q,
-                             "campaigns": dashboard_campaigns(), "urls": urls},
+        config = json.dumps({"api": g["api"], "base": B, "lang": lang, "today": TODAY, "copy": q, "urls": urls},
                             ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
         for view, title_key in views:
             canonical = urls[view]
             view_alts = {l: dashboard_view_url(B, l, view) for l in ["en"] + [x for x in LANGS_ALL if x in LG]}
             dashboard_body = (f'{g["header"](lang, "")}<main class="wrap sdb-main">'
-                              f'<div><div class="kicker">M365.FM · {E(q["event_partner"])}</div>'
-                              f'<h1>{E(q[title_key])}</h1><p class="lede">{E(q["intro"])}</p></div>'
+                              f'<div><div class="kicker">{E(q["dash_kicker"])}</div>'
+                              f'<h1>{E(q["achievement_title"] if view == "overview" else q[title_key])}</h1><p class="lede">{E(q["intro"])}</p></div>'
                               f'<p class="mut" id="sdb-scope">{E(q["scope"])}</p>'
                               f'<div id="sdb" aria-live="polite"><p class="mut">{E(q["login"])}</p></div>'
                               f'<script>window.M365SP=Object.assign({config},{{view:"{view}"}})</script>'
                               f'<script defer src="{asset_url(B, "sponsor-dashboard.js")}"></script></main>{g["footer"](lang)}')
-            title = q[title_key] + " – M365.FM"
+            title = (q["achievement_title"] if view == "overview" else q[title_key]) + " – M365.FM"
             output_path = ("sponsor/dashboard/" if view == "overview" else f"sponsor/dashboard/{view}/") if lang == "en" else \
                           (f"{lang}/sponsor/dashboard/" if view == "overview" else f"{lang}/sponsor/dashboard/{view}/")
+            hreflang = "".join(f'<link rel="alternate" hreflang="{E(g["LANGS"][l][1] if l in LG else "en")}" href="{E(href)}">' for l, href in view_alts.items())
             g["write"](output_path + "index.html",
                        g["page"](lang, title, q["intro"], canonical, dashboard_body,
                                  view_alts if len(view_alts) > 1 else None,
                                  [{"@context": "https://schema.org", "@type": "WebPage", "name": q[title_key],
                                    "url": canonical, "inLanguage": g["LANGS"][lang][1] if lang in LG else "en"}],
                                  xdefault=view_alts["en"],
-                                 og_type="website", extra_head=DASHBOARD_CSS, share=False))
-            g["sitemap"].append((canonical, TODAY, view_alts if len(view_alts) > 1 else None))
+                                 og_type="website", extra_head=DASHBOARD_CSS + hreflang, share=False, noindex=True))
     print(f"Sponsor-Seite: {len(langs)} Sprachen ({'vorab gerendert' if ssr else 'ohne Vorab-Rendern'}), {len(per_lang[langs[0]][1]) if langs else 0} Themen in der Suche")
     return langs
