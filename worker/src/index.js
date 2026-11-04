@@ -44,6 +44,7 @@ import { refreshFeeds, refreshFollowers } from "./feeds.js";
 import { autoTranslate, translateStatus, uiI18nExport } from "./translate.js";
 import { handleWiki } from "./wiki.js";
 import { syncExpertise } from "./levels.js";
+import { handleContributions, refreshContributions } from "./contributions.js";
 
 const PROVIDERS = {
   google: {
@@ -184,6 +185,9 @@ async function api(env, request, url, path, asUser) {
 
   const sponsor = await handleSponsor(env, request, url, path, J);
   if (sponsor) return sponsor;
+
+  const contributions = await handleContributions(env, request, url, path, user, J);
+  if (contributions) return contributions;
 
   if (path === "/api/health") return J({ ok: true }, 200);
   if (path === "/api/search") return handleSearch(env, request, url, J);
@@ -422,6 +426,7 @@ export default {
     const T = (name, fn) => ctx.waitUntil(track(env, name, fn));
     if (event.cron === "0 6 * * *") T("runDigest", () => runDigest(env));
     T("refreshFeeds", () => refreshFeeds(env));
+    T("refreshContributions", () => refreshContributions(env));
     T("pollUpdates", () => pollUpdates(env));
     T("refreshFollowers", () => refreshFollowers(env));
     T("ensurePastEvents", () => ensurePastEvents(env).then(() => linkSpeakers(env)).then(() => linkSpeakerEntities(env)));

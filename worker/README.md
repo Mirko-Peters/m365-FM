@@ -33,3 +33,8 @@ Ohne Zugangsdaten tut der Workflow nichts; die Website blendet die Community-Ber
 - Neue Mitglieder: Beitrag wartet auf Pruefung. Sofort live: Admin, Editoren und Mitglieder ab 25 Punkten. 3 Meldungen blenden eine Fassung aus (die vorherige kommt zurueck).
 - Editor ernennen: auf der Community-Seite (als Admin angemeldet) im Bereich **Team** nach dem Namen suchen und „Zum Editor machen“. Editoren pruefen Beitraege direkt unter dem jeweiligen Begriff; sie erhalten das Abzeichen ✏️ Editor. Wer einen veroeffentlichten Beitrag hat, bekommt 📖 Wiki-Autor.
 - Freigegebene Texte exportiert `GET /api/wiki/export?lang=de`; der Seitenbau uebernimmt sie statisch (indexierbar).
+
+## Contribution Collector
+- Quellen und Beiträge verwaltest du mit `add_contribution_source`, `update_contribution_source`, `delete_contribution_source`, `add_contribution`, `update_contribution`, `delete_contribution`, `list_my_contributions` und `export_contributions` über MCP (persönlicher KI-Token). Quellen sind standardmäßig privat; RSS/Atom-Feeds werden alle 30 Minuten geprüft und es werden nur Metadaten wie Titel, Link, Datum und Themen übernommen.
+- Der Export liefert CSV und eine Kopiervorlage; `from` und `to` filtern inklusive Datumsgrenzen. Die öffentliche Profilansicht folgt in einem separaten Ticket.
+- YouTube-Aufrufe benötigen die bereits konfigurierte YouTube-Verbindung (`YT_REFRESH_TOKEN`). Spreaker-Downloads werden bei eigenen veröffentlichten Folgen und bestätigten Gastauftritten erfasst, wenn `SPREAKER_TOKEN` gesetzt ist.
