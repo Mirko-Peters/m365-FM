@@ -45,6 +45,7 @@ async function r2Page(request, env, ctx, url, p) {
 }
 // Datenexporte des Seitenbaus: fuer Programme da, nicht fuer die Suche (Allowlist - .well-known, openapi.json, agent.json, episodes.json, llms*.txt bleiben sichtbar)
 const NOINDEX = /^\/(search\/|entities\.json|entities-src\.json|entities\.jsonld|og-manifest\.json|seo-report\.json|top\.json|show\/redirects\.json|show-notes\/|blog-import\/|blog-content\/)|\.jsonld$/i;
+const R2_EXPORT = /^\/(?:blog-import\/[^/]+\.json|translations-blog\.json)$/i;
 
 async function redirectMap() {
   const r = await fetch("https://www.m365.fm/show/redirects.json", { cf: { cacheTtl: 3600, cacheEverything: true } });
@@ -97,6 +98,15 @@ export default {
     if (res.status === 404 && env.PAGES && /^\/search\/(manifest|part-\d{1,4})\.json$/.test(p)) {   // T37: Suchindex liegt im R2-Bucket (pages/search/...)
       const obj = await env.PAGES.get("pages" + p).catch(() => null);
       if (obj) return new Response(obj.body, { headers: { "content-type": "application/json; charset=utf-8", "cache-control": "public, max-age=300, s-maxage=600", "x-robots-tag": "noindex", "access-control-allow-origin": "*" } });
+    }
+    if (res.status === 404 && env.PAGES && R2_EXPORT.test(p) && (request.method === "GET" || request.method === "HEAD")) {
+      const obj = await env.PAGES.get("pages" + p).catch(() => null);
+      if (obj) {
+        const h = new Headers({ "content-type": "application/json; charset=utf-8", "cache-control": HTML_CC });
+        for (const [k, v] of Object.entries(SEC)) h.set(k, v);
+        if (NOINDEX.test(p)) h.set("x-robots-tag", "noindex");
+        return new Response(request.method === "HEAD" ? null : obj.body, { headers: h });
+      }
     }
     if (res.status === 404 && env.PAGES && !IMG.test(p) && (request.method === "GET" || request.method === "HEAD")) {
       const r2 = await r2Page(rq, env, ctx, url, p);

@@ -17,7 +17,7 @@ globalThis.fetch = async (req) => {
   return new Response("404", { status: 404, headers: { "content-type": "text/html" } });
 };
 const { default: W } = await import("../index.js");
-const PAGES = { get: async (k) => { r2gets++; return k === "pages/pl/x/index.html" ? { httpEtag: '"r2e"', uploaded: new Date("2026-11-01T20:00:00Z"), arrayBuffer: async () => new TextEncoder().encode("<html>pl</html>").buffer } : null; } };
+const PAGES = { get: async (k) => { r2gets++; if (k === "pages/pl/x/index.html") return { httpEtag: '"r2e"', uploaded: new Date("2026-11-01T20:00:00Z"), arrayBuffer: async () => new TextEncoder().encode("<html>pl</html>").buffer }; if (k === "pages/blog-import/index.json") return { body: new Response('{"total":7}').body }; if (k === "pages/translations-blog.json") return { body: new Response('{"count":3}').body }; return null; } };
 const env = { PAGES, MIGRATED: "1", CONSENT_COUNTRIES: "DE,AT,GB,CH,NO,PL" };
 const req = (path, c, h = {}, method = "GET") => { const r = new Request("https://www.m365.fm" + path, { headers: h, method }); if (c) Object.defineProperty(r, "cf", { value: { country: c } }); return r; };
 const run = async (r) => { const w = []; const res = await W.fetch(r, env, { waitUntil: (p) => w.push(p) }); await Promise.all(w); return res; };
@@ -79,6 +79,18 @@ test("R2-Seite: Region, Cache, 304 mit Regions-Validatoren", async () => {
   const n = r2gets; const r2 = await run(req("/pl/x/", "PL", { "if-none-match": 'W/"r2e.r1"' })); assert.equal(r2.status, 304); assert.equal(r2gets, n, "aus dem Kanten-Cache");
   const r2b = await run(req("/pl/x/", "PL", { "if-modified-since": "Sun, 01 Nov 2026 20:00:01 GMT" })); assert.equal(r2b.status, 304);
   const r3 = await run(req("/pl/x/", "US", { "if-none-match": 'W/"r2e.r1"', "if-modified-since": "Sun, 01 Nov 2026 20:00:01 GMT" })); assert.equal(r3.status, 200); assert.equal(r3.headers.get("x-m365-cr"), "0");
+});
+test("R2-Datenexporte: gleiche Pfade, JSON- und Cache-Header, Blog-Import bleibt noindex", async () => {
+  const blog = await run(req("/blog-import/index.json", "US"));
+  assert.equal(blog.status, 200); assert.equal(await blog.text(), '{"total":7}');
+  assert.equal(blog.headers.get("content-type"), "application/json; charset=utf-8");
+  assert.equal(blog.headers.get("cache-control"), "public, max-age=0, s-maxage=600, stale-while-revalidate=86400");
+  assert.equal(blog.headers.get("x-robots-tag"), "noindex");
+  const translations = await run(req("/translations-blog.json", "US"));
+  assert.equal(translations.status, 200); assert.equal(await translations.text(), '{"count":3}');
+  assert.equal(translations.headers.get("content-type"), "application/json; charset=utf-8");
+  assert.equal(translations.headers.get("cache-control"), "public, max-age=0, s-maxage=600, stale-while-revalidate=86400");
+  assert.equal(translations.headers.get("x-robots-tag"), null);
 });
 test("Range auf HTML: ganze Seite statt 206; Dateien (JSON) und Assets unveraendert", async () => {
   const g = await run(req("/rng/", "DE", { range: "bytes=0-8" })); assert.equal(g.status, 200); assert.equal(await g.text(), "<html><body>full</body></html>");

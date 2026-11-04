@@ -25,6 +25,7 @@ import site_ads as ADS
 import site_media as MED
 import site_sidebar as SBR
 import site_r2 as R2
+from site_size import sizes
 import site_sponsorships as SPM   # T37 Sponsor: Kennzeichnung bezahlter Inhalte (data/sponsorships.json)
 import glob, hashlib, html, json, os, re, shutil, sys, unicodedata
 from datetime import date
@@ -924,15 +925,6 @@ def phase(name):
     t = time.perf_counter(); print(f"[{t - _T0[0]:6.0f} s] {name}", flush=True); _T0[0] = t
 
 
-def sizes():
-    """Groesse von docs/ je oberstem Verzeichnis (GitHub Pages: 1 GB Richtwert)."""
-    tot, rows = 0, []
-    for d in sorted(OUT.iterdir()):
-        n = sum(f.stat().st_size for f in d.rglob("*") if f.is_file()) if d.is_dir() else d.stat().st_size
-        tot += n; rows.append((n, d.name))
-    print("docs/ gesamt: %.0f MB" % (tot / 1e6) + " - " + ", ".join(f"{n}: {b / 1e6:.0f} MB" for b, n in sorted(rows, reverse=True)[:12]))
-
-
 def build():
     import shutil as _sh
     if (ROOT / "r2out").exists(): _sh.rmtree(ROOT / "r2out")
@@ -1002,6 +994,9 @@ def build():
         c = R2.rewrite(content) if rel.endswith(R2_EXT) else content
         p.write_text(c, encoding="utf-8"); _r2n[0] += 1; _r2n[1] += len(c.encode("utf-8"))
     def write(rel, content):
+        if rel == "translations-blog.json" or rel.startswith("blog-import/"):
+            write_r2(rel, content)
+            return
         p = OUT / rel
         p.parent.mkdir(parents=True, exist_ok=True)
         c = R2.rewrite(content) if rel.endswith(R2_EXT) else content
