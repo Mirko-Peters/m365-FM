@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Today – your feed</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap">
+<style>
+body{margin:0;background:#f3f3f2}
+a{color:#3b6391}a:hover{color:#2c4b70}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid #3b6391;outline-offset:2px}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; display: flex; flex-direction: column; background: #f3f3f2; color: #17191c; font-family: Barlow, 'Segoe UI', sans-serif; font-size: 16px; line-height: 1.45">
+
+  <header style="flex: 0 0 auto; padding: 18px 20px 10px; display: flex; justify-content: space-between; align-items: end">
+    <div style="display: grid">
+      <span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #5d6470">Wed · [DATE]</span>
+      <h1 style="margin: 0; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 36px; line-height: 1">Today</h1>
+    </div>
+    <a href="Main.dc.html" aria-label="Edit topics" style="width: 44px; height: 44px; display: grid; place-items: center; border: 1px solid rgba(23,25,28,.25); color: #17191c">
+      <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 6h14M3 14h14"></path><circle cx="7" cy="6" r="2" fill="#f3f3f2"></circle><circle cx="13" cy="14" r="2" fill="#f3f3f2"></circle></svg>
+    </a>
+  </header>
+
+  <div style="flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: 0 20px 16px; display: flex; flex-direction: column; gap: 14px">
+
+    <a href="Player.dc.html" style="display: flex; gap: 14px; align-items: center; padding: 16px; background: #1a1d21; color: #eef0f3; text-decoration: none">
+      <span aria-hidden="true" style="flex: 0 0 auto; width: 52px; height: 52px; border-radius: 50%; background: #82a7d4; display: grid; place-items: center">
+        <svg width="20" height="20" viewBox="0 0 20 20"><path d="M6 4l11 6-11 6z" fill="#101214"></path></svg>
+      </span>
+      <span style="display: grid; gap: 2px">
+        <b style="font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 22px; line-height: 1.1">M365 today · 4 min</b>
+        <span style="font-size: 14px; color: #c5cad2">Your 6 topics as audio briefing · Deutsch</span>
+      </span>
+    </a>
+
+    <div role="group" aria-label="Filter" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid #17191c">
+      <sc-for list="{{filters}}" as="f" hint-placeholder-count="3">
+        <button type="button" onClick="{{f.pick}}" aria-pressed="{{f.on}}" style="{{f.style}}">{{f.label}}</button>
+      </sc-for>
+    </div>
+
+    <sc-for list="{{items}}" as="it" hint-placeholder-count="5">
+      <article style="background: #ffffff; border: 1px solid rgba(23,25,28,.14); display: grid">
+        <a href="{{it.href}}" style="display: grid; gap: 6px; padding: 14px 16px 6px; color: #17191c; text-decoration: none">
+          <span style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center">
+            <span style="{{it.badgeStyle}}">{{it.badge}}</span>
+            <span style="font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #3b6391">{{it.topic}}</span>
+          </span>
+          <b style="font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 22px; line-height: 1.12">{{it.title}}</b>
+          <span style="font-size: 14px; color: #5d6470">{{it.sub}}</span>
+        </a>
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 6px 4px 16px">
+          <span style="font-size: 13px; color: #5d6470">{{it.meta}}</span>
+          <button type="button" onClick="{{it.toggleSave}}" aria-pressed="{{it.saved}}" aria-label="Save" style="width: 44px; height: 44px; border: 0; background: transparent; cursor: pointer; display: grid; place-items: center">
+            <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M4 2h10v14l-5-3.5L4 16z" fill="{{it.saveFill}}" stroke="#17191c" stroke-width="1.5"></path></svg>
+          </button>
+        </div>
+      </article>
+    </sc-for>
+  </div>
+
+  <nav aria-label="App" style="flex: 0 0 auto; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border-top: 1px solid rgba(23,25,28,.14); background: #ffffff; padding-bottom: 10px">
+    <a href="Feed.dc.html" aria-current="page" style="display: grid; justify-items: center; gap: 2px; padding: 8px 0; min-height: 52px; font-size: 12px; font-weight: 600; color: #3b6391; text-decoration: none"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="16" height="15"></rect><path d="M3 9h16M8 2v4M14 2v4"></path></svg>Today</a>
+    <a href="Player.dc.html" style="display: grid; justify-items: center; gap: 2px; padding: 8px 0; min-height: 52px; font-size: 12px; color: #5d6470; text-decoration: none"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 14v-3a7 7 0 0 1 14 0v3"></path><rect x="3" y="13" width="4" height="6"></rect><rect x="15" y="13" width="4" height="6"></rect></svg>Listen</a>
+    <a href="Ask.dc.html" style="display: grid; justify-items: center; gap: 2px; padding: 8px 0; min-height: 52px; font-size: 12px; color: #5d6470; text-decoration: none"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 4h16v11H9l-4 4v-4H3z"></path></svg>Ask</a>
+    <a href="Saved.dc.html" style="display: grid; justify-items: center; gap: 2px; padding: 8px 0; min-height: 52px; font-size: 12px; color: #5d6470; text-decoration: none"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M5 3h12v16l-6-4-6 4z"></path></svg>Saved</a>
+    <a href="Notifications.dc.html" style="display: grid; justify-items: center; gap: 2px; padding: 8px 0; min-height: 52px; font-size: 12px; color: #5d6470; text-decoration: none"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M5 16V10a6 6 0 0 1 12 0v6l2 2H3z"></path><path d="M9 20h4"></path></svg>Alerts</a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const f = s.f || 'all';
+    const saved = s.saved || { u3: true };
+    const BADGE = {
+      action: 'padding: 1px 8px; background: #9a4f0f; color: #ffffff; font: 600 12px/1.7 Barlow Condensed, sans-serif; letter-spacing: .08em; text-transform: uppercase;',
+      info: 'padding: 1px 8px; border: 1px solid rgba(23,25,28,.35); color: #17191c; font: 600 12px/1.7 Barlow Condensed, sans-serif; letter-spacing: .08em; text-transform: uppercase;',
+      episode: 'padding: 1px 8px; background: #3b6391; color: #ffffff; font: 600 12px/1.7 Barlow Condensed, sans-serif; letter-spacing: .08em; text-transform: uppercase;'
+    };
+    const ALL = [
+      { id: 'u1', kind: 'action', badge: 'Action by [DATE]', topic: 'Copilot', title: 'New admin setting for sharing Copilot agents', sub: 'Default changes for all tenants. Check who may share agents before the date.', meta: 'Message Center · 2 h ago', href: 'Update-Detail.dc.html' },
+      { id: 'u2', kind: 'action', badge: 'Action by [DATE]', topic: 'Teams', title: 'Meeting policy default changes', sub: 'Recording and transcription defaults move. Affects all meeting organizers.', meta: 'Message Center · yesterday', href: 'Update-Detail.dc.html' },
+      { id: 'u3', kind: 'episode', badge: 'New episode · 34 min', topic: 'Copilot Studio', title: 'Governance for Copilot Studio agents', sub: 'M365.FM with a guest from the community.', meta: 'Podcast · today', href: 'Player.dc.html' },
+      { id: 'u4', kind: 'info', badge: 'Info', topic: 'SharePoint', title: 'New templates in the site gallery', sub: 'Optional. Nothing to do unless you build intranet sites.', meta: 'Roadmap · 3 days ago', href: 'Update-Detail.dc.html' },
+      { id: 'u5', kind: 'info', badge: 'Info', topic: 'Purview', title: 'Updated reports for data loss prevention', sub: 'More detail in the activity explorer.', meta: 'Message Center · 4 days ago', href: 'Update-Detail.dc.html' }
+    ];
+    const items = ALL.filter((i) => f === 'all' || (f === 'action' ? i.kind === 'action' : i.kind !== 'action')).map((i) => Object.assign({}, i, {
+      badgeStyle: BADGE[i.kind],
+      saved: !!saved[i.id],
+      saveFill: saved[i.id] ? '#17191c' : 'none',
+      toggleSave: () => this.setState({ saved: Object.assign({}, saved, { [i.id]: !saved[i.id] }) })
+    }));
+    const filters = [['all', 'All'], ['action', 'Action · 2'], ['info', 'Info']].map(([k, label]) => ({
+      label, on: f === k,
+      pick: () => this.setState({ f: k }),
+      style: 'min-height: 44px; border: 0; border-radius: 0; cursor: pointer; font-family: Barlow Condensed, sans-serif; font-weight: 600; font-size: 15px; letter-spacing: .08em; text-transform: uppercase; ' + (f === k ? 'background: #17191c; color: #ffffff;' : 'background: #ffffff; color: #17191c;')
+    }));
+    return { items, filters };
+  }
+}
+</script>
+</body>
+</html>

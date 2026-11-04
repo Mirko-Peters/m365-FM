@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Directory – M365.FM</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap">
+<style>
+body{margin:0;background:#f3f3f2}
+a{color:#3b6391}a:hover{color:#2c4b70}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid #3b6391;outline-offset:2px}
+.x{position:relative}
+.x:before,.x:after{content:"+";position:absolute;top:-10px;font:300 19px/1 Barlow,sans-serif;color:#5d6470;background:#f3f3f2}
+.x:before{left:-6px}.x:after{right:-6px}
+.kicker:after{content:"";flex:1;height:1px;background:rgba(23,25,28,.14)}
+.rowbtn:hover{background:#ecedea}
+.pin:hover{transform:translate(-50%,-50%) scale(1.15)}
+</style>
+</helmet>
+<div style="min-height: 1640px; background: #f3f3f2; color: #17191c; font-family: Barlow, 'Segoe UI', sans-serif; font-size: 16px; line-height: 1.5">
+
+  <header style="border-bottom: 1px solid rgba(23,25,28,.14); background: #f3f3f2">
+    <div style="max-width: 1240px; margin: 0 auto; padding: 16px 32px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+      <a href="Main.dc.html" style="font-size: 20px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: #17191c; text-decoration: none">M365<span style="color: #3b6391">.FM</span></a>
+      <nav aria-label="Main" style="display: flex; flex-wrap: wrap; gap: 22px; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 15px; letter-spacing: .12em; text-transform: uppercase">
+        <a href="#" style="color: #5d6470; text-decoration: none">Podcast</a>
+        <a href="#" style="color: #5d6470; text-decoration: none">Wiki</a>
+        <a href="#" style="color: #5d6470; text-decoration: none">Community</a>
+        <a href="Main.dc.html" aria-current="page" style="color: #17191c; text-decoration: none; border-bottom: 2px solid #3b6391; padding-bottom: 3px">Directory</a>
+        <a href="#" style="color: #5d6470; text-decoration: none">Services</a>
+      </nav>
+      <nav aria-label="Language" style="display: flex; gap: 12px; font-family: 'Barlow Condensed', sans-serif; font-weight: 500; letter-spacing: .12em; font-size: 14px">
+        <a href="#" aria-current="true" style="color: #17191c; text-decoration: none; border-bottom: 2px solid #3b6391">EN</a>
+        <a href="#" style="color: #5d6470; text-decoration: none">DE</a>
+        <a href="#" style="color: #5d6470; text-decoration: none">+17</a>
+      </nav>
+    </div>
+  </header>
+
+  <main style="max-width: 1240px; margin: 0 auto; padding: 0 32px 80px">
+
+    <section style="padding: 52px 0 28px; display: grid; gap: 14px">
+      <div class="kicker" style="display: flex; align-items: center; gap: 14px; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: #3b6391; font-size: 15px">Directory</div>
+      <h1 style="margin: 0; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 64px; line-height: .98; letter-spacing: -.01em">Find Microsoft 365 experts,<span style="display: block; color: #3b6391">partners and events near you.</span></h1>
+      <p style="margin: 0; max-width: 40em; color: #5d6470; font-size: 18px">Every entry links to a full profile with podcast appearances, sessions and articles. Experts are shown at city level only.</p>
+    </section>
+
+    <section aria-label="Search and filters" class="x" style="border: 1px solid rgba(23,25,28,.14); background: #ffffff; padding: 20px; display: grid; gap: 16px">
+      <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: end">
+        <label style="flex: 999 1 320px; min-width: 0; display: grid; gap: 6px">
+          <span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #5d6470">Search</span>
+          <input type="search" value="{{qRaw}}" onChange="{{onQ}}" placeholder="Name, topic or city, e.g. Copilot Studio" style="height: 46px; box-sizing: border-box; padding: 0 14px; border: 1px solid #17191c; border-radius: 0; background: #ffffff; font-size: 16px">
+        </label>
+        <label style="flex: 1 1 180px; min-width: 0; display: grid; gap: 6px">
+          <span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #5d6470">Topic</span>
+          <select value="{{topic}}" onChange="{{onTopic}}" style="height: 46px; box-sizing: border-box; padding: 0 10px; border: 1px solid rgba(23,25,28,.35); border-radius: 0; background: #ffffff">
+            <option value="">All topics</option>
+            <sc-for list="{{topicOptions}}" as="o" hint-placeholder-count="6">
+              <option value="{{o.v}}">{{o.v}}</option>
+            </sc-for>
+          </select>
+        </label>
+        <label style="flex: 1 1 160px; min-width: 0; display: grid; gap: 6px">
+          <span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #5d6470">Program</span>
+          <select value="{{program}}" onChange="{{onProgram}}" style="height: 46px; box-sizing: border-box; padding: 0 10px; border: 1px solid rgba(23,25,28,.35); border-radius: 0; background: #ffffff">
+            <option value="">All programs</option>
+            <option value="MVP">MVP</option>
+            <option value="MCT">MCT</option>
+            <option value="RD">Regional Director</option>
+            <option value="Partner">Microsoft Partner</option>
+          </select>
+        </label>
+        <label style="flex: 1 1 160px; min-width: 0; display: grid; gap: 6px">
+          <span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #5d6470">Country</span>
+          <select style="height: 46px; box-sizing: border-box; padding: 0 10px; border: 1px solid rgba(23,25,28,.35); border-radius: 0; background: #ffffff">
+            <option>Germany</option>
+            <option>Austria</option>
+            <option>Switzerland</option>
+            <option>All countries</option>
+          </select>
+        </label>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between">
+        <div role="group" aria-label="Type" style="display: flex; flex-wrap: wrap; gap: 0">
+          <sc-for list="{{tabs}}" as="t" hint-placeholder-count="4">
+            <button type="button" onClick="{{t.pick}}" aria-pressed="{{t.pressed}}" style="{{t.style}}">{{t.label}} <span style="opacity: .75">{{t.n}}</span></button>
+          </sc-for>
+        </div>
+        <label style="display: flex; gap: 10px; align-items: center; min-height: 44px; font-size: 15px">
+          <input type="checkbox" checked="{{online}}" onChange="{{toggleOnline}}" style="width: 20px; height: 20px; accent-color: #3b6391">
+          Include online events
+        </label>
+      </div>
+    </section>
+
+    <section aria-label="Results" style="margin-top: 28px; display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+
+      <div style="flex: 1 1 420px; min-width: 0; display: grid; gap: 0; border: 1px solid rgba(23,25,28,.14); background: #ffffff">
+        <div style="display: flex; justify-content: space-between; padding: 12px 18px; border-bottom: 1px solid rgba(23,25,28,.14); font-size: 13px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: #5d6470">
+          <span>{{count}} results</span>
+          <span>Sorted: nearest</span>
+        </div>
+        <sc-if value="{{empty}}" hint-placeholder-val="{{ false }}">
+          <p style="margin: 0; padding: 28px 18px; color: #5d6470">No entries match. Remove a filter or try another city.</p>
+        </sc-if>
+        <sc-for list="{{items}}" as="it" hint-placeholder-count="6">
+          <div style="{{it.rowStyle}}">
+            <button type="button" class="rowbtn" onClick="{{it.pick}}" aria-pressed="{{it.selected}}" style="flex: 1 1 auto; min-width: 0; text-align: left; background: transparent; border: 0; padding: 16px 18px; cursor: pointer; display: grid; gap: 6px; color: inherit">
+              <span style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center; font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase">
+                <span style="{{it.kStyle}}">{{it.kicker}}</span>
+                <span style="opacity: .7">{{it.where}}</span>
+                <sc-if value="{{it.online}}" hint-placeholder-val="{{ false }}"><span style="border: 1px solid currentColor; padding: 0 6px">Online</span></sc-if>
+              </span>
+              <span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 24px; line-height: 1.1">{{it.name}}</span>
+              <span style="font-size: 15px; opacity: .8">{{it.role}}</span>
+              <span style="display: flex; flex-wrap: wrap; gap: 6px">
+                <sc-if value="{{it.hasProgram}}" hint-placeholder-val="{{ true }}"><span style="padding: 1px 8px; border: 1px solid #3b6391; color: inherit; font: 600 12px/1.7 'Barlow Condensed', sans-serif; letter-spacing: .09em; text-transform: uppercase">{{it.program}}</span></sc-if>
+                <sc-for list="{{it.tl}}" as="tp" hint-placeholder-count="2">
+                  <span style="padding: 1px 8px; border: 1px solid rgba(127,127,127,.45); font: 600 12px/1.7 'Barlow Condensed', sans-serif; letter-spacing: .09em; text-transform: uppercase">{{tp.t}}</span>
+                </sc-for>
+              </span>
+            </button>
+            <a href="{{it.href}}" style="{{it.linkStyle}}">Profile →</a>
+          </div>
+        </sc-for>
+        <sc-if value="{{hasOnlineHidden}}" hint-placeholder-val="{{ false }}">
+          <p style="margin: 0; padding: 12px 18px; font-size: 14px; color: #5d6470; border-top: 1px solid rgba(23,25,28,.14)">Online events are listed, but have no pin on the map.</p>
+        </sc-if>
+      </div>
+
+      <div style="flex: 1.25 1 520px; min-width: 0; display: grid; gap: 10px">
+        <div style="position: relative; height: 640px; border: 1px solid rgba(23,25,28,.14); overflow: hidden; background: #e7e8e4">
+
+          <sc-if value="{{noConsent}}" hint-placeholder-val="{{ true }}">
+            <div style="position: absolute; inset: 0; display: grid; place-items: center; padding: 32px; background: repeating-linear-gradient(135deg, #ecedea 0 14px, #e4e5e1 14px 28px)">
+              <div style="max-width: 400px; background: #ffffff; border: 1px solid rgba(23,25,28,.14); padding: 26px; display: grid; gap: 14px">
+                <span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 26px; line-height: 1.1">Show the map?</span>
+                <p style="margin: 0; color: #5d6470; font-size: 15px">The map is loaded from Google Maps. When you load it, your IP address and usage data are sent to Google. The list on the left works without it.</p>
+                <button type="button" onClick="{{loadMap}}" style="min-height: 46px; background: #3b6391; color: #ffffff; border: 1px solid #3b6391; border-radius: 0; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 16px; letter-spacing: .1em; text-transform: uppercase; cursor: pointer">Load map</button>
+                <a href="#" style="font-size: 14px">Privacy policy</a>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{consent}}" hint-placeholder-val="{{ false }}">
+            <div style="position: absolute; inset: 0">
+              <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" style="position: absolute; inset: 0; width: 100%; height: 100%">
+                <rect x="0" y="0" width="100" height="100" fill="#dfe4ea"></rect>
+                <polygon points="40,4 52,6 58,12 70,10 78,20 80,36 76,48 82,60 74,70 80,86 66,94 52,92 40,96 30,90 32,78 24,70 16,60 18,44 14,34 22,26 30,22 34,12" fill="#f4f3ef" stroke="#c9ccc6" stroke-width=".4"></polygon>
+                <path d="M20 50 C 30 46, 40 52, 52 48 S 70 40, 76 46" fill="none" stroke="#d3d6d0" stroke-width=".5"></path>
+                <path d="M34 60 C 40 66, 38 72, 40 80 S 52 86, 60 86" fill="none" stroke="#d3d6d0" stroke-width=".5"></path>
+                <path d="M44 20 C 52 24, 62 28, 72 32" fill="none" stroke="#d3d6d0" stroke-width=".5"></path>
+                <path d="M26 30 C 28 40, 22 46, 20 50" fill="none" stroke="#b9cfe0" stroke-width=".7"></path>
+              </svg>
+              <span style="position: absolute; left: 44%; top: 20%; transform: translate(-50%, 14px); font-size: 12px; color: #5d6470">Hamburg</span>
+              <span style="position: absolute; left: 72%; top: 32%; transform: translate(-50%, 14px); font-size: 12px; color: #5d6470">Berlin</span>
+              <span style="position: absolute; left: 20%; top: 50%; transform: translate(-50%, 14px); font-size: 12px; color: #5d6470">Köln</span>
+              <span style="position: absolute; left: 34%; top: 60%; transform: translate(-50%, 14px); font-size: 12px; color: #5d6470">Frankfurt</span>
+              <span style="position: absolute; left: 38%; top: 78%; transform: translate(-50%, 16px); font-size: 12px; color: #5d6470">Stuttgart</span>
+              <span style="position: absolute; left: 60%; top: 86%; transform: translate(-50%, 14px); font-size: 12px; color: #5d6470">München</span>
+
+              <sc-for list="{{pins}}" as="p" hint-placeholder-count="6">
+                <button type="button" class="pin" onClick="{{p.pick}}" aria-label="{{p.aria}}" aria-pressed="{{p.selected}}" style="{{p.pinStyle}}">{{p.letter}}</button>
+              </sc-for>
+
+              <sc-if value="{{hasSel}}" hint-placeholder-val="{{ false }}">
+                <div style="position: absolute; right: 16px; top: 16px; width: 300px; max-width: calc(100% - 32px); box-sizing: border-box; background: #ffffff; border: 1px solid rgba(23,25,28,.14); padding: 18px; display: grid; gap: 8px; box-shadow: 0 8px 24px rgba(23,25,28,.12)">
+                  <div style="display: flex; justify-content: space-between; align-items: start; gap: 10px">
+                    <span style="font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: #3b6391">{{sel.kicker}} · {{sel.where}}</span>
+                    <button type="button" onClick="{{clearSel}}" aria-label="Close" style="width: 32px; height: 32px; margin: -8px -8px 0 0; border: 0; background: transparent; cursor: pointer; font-size: 20px; line-height: 1">×</button>
+                  </div>
+                  <span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 24px; line-height: 1.1">{{sel.name}}</span>
+                  <span style="font-size: 15px; color: #5d6470">{{sel.role}}</span>
+                  <span style="font-size: 14px">{{sel.topicText}}</span>
+                  <a href="{{sel.href}}" style="justify-self: start; margin-top: 4px; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; font-size: 15px">Open profile →</a>
+                </div>
+              </sc-if>
+
+              <div style="position: absolute; left: 12px; bottom: 12px; display: flex; flex-wrap: wrap; gap: 14px; background: rgba(255,255,255,.92); padding: 8px 12px; font-size: 13px">
+                <span style="display: flex; gap: 6px; align-items: center"><span aria-hidden="true" style="width: 14px; height: 14px; border-radius: 50%; background: #3b6391"></span>Expert</span>
+                <span style="display: flex; gap: 6px; align-items: center"><span aria-hidden="true" style="width: 14px; height: 14px; background: #17191c"></span>Company</span>
+                <span style="display: flex; gap: 6px; align-items: center"><span aria-hidden="true" style="width: 12px; height: 12px; background: #9a4f0f; transform: rotate(45deg)"></span>Event</span>
+              </div>
+              <span style="position: absolute; right: 8px; bottom: 6px; font-size: 11px; color: #5d6470">Map data © Google (mock)</span>
+            </div>
+          </sc-if>
+        </div>
+        <p style="margin: 0; font-size: 14px; color: #5d6470">Experts appear at city level only, rounded to about 2 km. Companies and events show their public address.</p>
+      </div>
+    </section>
+
+    <section aria-label="Browse by location" style="margin-top: 64px; display: grid; gap: 20px">
+      <div class="kicker" style="display: flex; align-items: center; gap: 14px; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: #3b6391; font-size: 15px">Browse by location</div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 24px">
+        <div class="x" style="border: 1px solid rgba(23,25,28,.14); padding: 20px; display: grid; gap: 8px; align-content: start">
+          <a href="#" style="font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 26px; color: #17191c; text-decoration: none">Germany</a>
+          <a href="City.dc.html">Stuttgart</a>
+          <a href="#">Berlin</a>
+          <a href="#">München</a>
+          <a href="#">Frankfurt</a>
+        </div>
+        <div class="x" style="border: 1px solid rgba(23,25,28,.14); padding: 20px; display: grid; gap: 8px; align-content: start">
+          <a href="#" style="font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 26px; color: #17191c; text-decoration: none">Austria</a>
+          <a href="#">Wien</a>
+          <a href="#">Graz</a>
+        </div>
+        <div class="x" style="border: 1px solid rgba(23,25,28,.14); padding: 20px; display: grid; gap: 8px; align-content: start">
+          <a href="#" style="font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 26px; color: #17191c; text-decoration: none">Switzerland</a>
+          <a href="#">Zürich</a>
+          <a href="#">Basel</a>
+        </div>
+        <div class="x" style="border: 1px solid rgba(23,25,28,.14); padding: 20px; display: grid; gap: 8px; align-content: start">
+          <span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 26px">Online</span>
+          <a href="#">Online events</a>
+          <a href="#">Experts available remotely</a>
+        </div>
+      </div>
+    </section>
+
+    <section aria-label="Get listed" style="margin-top: 64px; background: #1a1d21; color: #eef0f3; padding: 38px 40px; display: flex; flex-wrap: wrap; gap: 20px; align-items: center; justify-content: space-between">
+      <div style="display: grid; gap: 6px; max-width: 36em">
+        <span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 32px; line-height: 1.1">Not on the map yet?</span>
+        <span style="color: #c5cad2">Turn on “Show me on the map” in your profile. Only your city is shown, never your address.</span>
+      </div>
+      <a href="Location-Settings.dc.html" style="display: inline-flex; align-items: center; min-height: 46px; padding: 0 22px; background: #82a7d4; color: #101214; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; text-decoration: none">Add my location</a>
+    </section>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1640}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const E = [
+      { id: 'e1', type: 'expert', name: 'Mirko Peters', role: 'Host, M365.FM podcast', program: '', topics: ['Copilot', 'Power Platform'], city: 'Stuttgart', x: 37, y: 77, href: '#' },
+      { id: 'e2', type: 'expert', name: 'Megan Bowen', role: 'Microsoft 365 architect', program: 'MVP', topics: ['Teams', 'SharePoint'], city: 'Berlin', x: 72, y: 32, href: '#' },
+      { id: 'e3', type: 'expert', name: 'Adele Vance', role: 'Copilot Studio trainer', program: 'MCT', topics: ['Copilot Studio'], city: 'München', x: 60, y: 86, href: '#' },
+      { id: 'e4', type: 'expert', name: 'Alex Wilber', role: 'Security consultant', program: 'MVP', topics: ['Entra ID', 'Purview'], city: 'Hamburg', x: 44, y: 20, href: '#' },
+      { id: 'c1', type: 'company', name: 'Contoso GmbH', role: 'Microsoft Solutions Partner, Modern Work', program: 'Partner', topics: ['Copilot', 'Teams'], city: 'Frankfurt', x: 34, y: 60, href: '#' },
+      { id: 'c2', type: 'company', name: 'Fabrikam AG', role: 'Power Platform consultancy', program: 'Partner', topics: ['Power Platform', 'Dataverse'], city: 'Köln', x: 20, y: 50, href: '#' },
+      { id: 'v1', type: 'event', name: 'Power Platform Meetup Stuttgart', role: 'Community meetup · [DATE]', program: '', topics: ['Power Platform'], city: 'Stuttgart', x: 41, y: 74, href: '#' },
+      { id: 'v2', type: 'event', name: 'M365Con 2027', role: 'Online convention · [DATE]', program: '', topics: ['Copilot', 'Teams'], city: 'Online', online: true, href: '#' }
+    ];
+    const KIND = { expert: 'Expert', company: 'Company', event: 'Event' };
+    const COLOR = { expert: '#3b6391', company: '#17191c', event: '#9a4f0f' };
+    const type = s.type || 'all';
+    const qRaw = s.q || '';
+    const q = qRaw.trim().toLowerCase();
+    const topic = s.topic || '';
+    const program = s.program || '';
+    const online = s.online !== false;
+    const consent = !!s.consent;
+    const base = E.filter((e) =>
+      (!q || (e.name + ' ' + e.role + ' ' + e.topics.join(' ') + ' ' + e.city).toLowerCase().includes(q)) &&
+      (!topic || e.topics.includes(topic)) &&
+      (!program || e.program === program) &&
+      (online || !e.online));
+    const filtered = base.filter((e) => type === 'all' || e.type === type);
+    const selId = filtered.some((e) => e.id === s.sel) ? s.sel : null;
+    const items = filtered.map((e) => {
+      const selected = e.id === selId;
+      return Object.assign({}, e, {
+        kicker: KIND[e.type],
+        where: e.online ? 'Online' : e.city + ', DE',
+        online: !!e.online,
+        hasProgram: !!e.program,
+        tl: e.topics.map((t) => ({ t })),
+        topicText: e.topics.join(' · '),
+        selected,
+        pick: () => this.setState({ sel: e.id }),
+        rowStyle: 'display: flex; align-items: stretch; border-bottom: 1px solid rgba(23,25,28,.14);' + (selected ? ' background: #1a1d21; color: #eef0f3;' : ''),
+        kStyle: 'color: ' + (selected ? '#9fc0ea' : COLOR[e.type]),
+        linkStyle: 'flex: 0 0 auto; align-self: center; padding: 12px 18px; min-height: 44px; box-sizing: border-box; display: inline-flex; align-items: center; font-family: Barlow Condensed, sans-serif; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; font-size: 14px; text-decoration: none; color: ' + (selected ? '#9fc0ea' : '#3b6391'),
+        letter: e.type === 'expert' ? 'E' : e.type === 'company' ? 'C' : 'V',
+        aria: KIND[e.type] + ': ' + e.name + ', ' + e.city
+      });
+    });
+    const pins = items.filter((e) => !e.online).map((e) => {
+      const shape = e.type === 'expert' ? 'border-radius: 50%;' : e.type === 'company' ? 'border-radius: 0;' : 'border-radius: 2px; clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);';
+      const size = e.selected ? 44 : 34;
+      return Object.assign({}, e, {
+        pinStyle: 'position: absolute; left: ' + e.x + '%; top: ' + e.y + '%; transform: translate(-50%, -50%); width: ' + size + 'px; height: ' + size + 'px; ' + shape + ' background: ' + COLOR[e.type] + '; color: #ffffff; border: ' + (e.selected ? '3px solid #ffffff' : '2px solid #ffffff') + '; box-shadow: 0 2px 8px rgba(23,25,28,.35); font: 700 14px/1 Barlow, sans-serif; cursor: pointer; padding: 0; z-index: ' + (e.selected ? 3 : 2) + '; transition: transform .12s'
+      });
+    });
+    const sel = items.find((i) => i.selected) || null;
+    const count = (k) => base.filter((e) => k === 'all' || e.type === k).length;
+    const tabs = [['all', 'All'], ['expert', 'Experts'], ['company', 'Companies'], ['event', 'Events']].map(([k, label]) => ({
+      k, label, n: count(k), pressed: type === k,
+      pick: () => this.setState({ type: k, sel: null }),
+      style: 'min-height: 44px; padding: 0 18px; margin-right: -1px; border: 1px solid #17191c; border-radius: 0; cursor: pointer; font-family: Barlow Condensed, sans-serif; font-weight: 600; font-size: 15px; letter-spacing: .1em; text-transform: uppercase; ' + (type === k ? 'background: #3b6391; border-color: #3b6391; color: #ffffff; position: relative; z-index: 1;' : 'background: #ffffff; color: #17191c;')
+    }));
+    const topicOptions = Array.from(new Set(E.flatMap((e) => e.topics))).sort().map((v) => ({ v }));
+    return {
+      qRaw, topic, program, online, consent, noConsent: !consent,
+      tabs, items, pins, topicOptions,
+      count: items.length, empty: items.length === 0,
+      hasOnlineHidden: consent && items.some((i) => i.online),
+      hasSel: !!sel, sel: sel || { kicker: '', where: '', name: '', role: '', topicText: '', href: '#' },
+      onQ: (ev) => this.setState({ q: ev.target.value }),
+      onTopic: (ev) => this.setState({ topic: ev.target.value }),
+      onProgram: (ev) => this.setState({ program: ev.target.value }),
+      toggleOnline: () => this.setState({ online: !online }),
+      loadMap: () => this.setState({ consent: true }),
+      clearSel: () => this.setState({ sel: null })
+    };
+  }
+}
+</script>
+</body>
+</html>
