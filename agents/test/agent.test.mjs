@@ -104,11 +104,34 @@ test("Gedächtnis über Requests erhalten, je Sitzung und Mitglied getrennt, sel
     body: JSON.stringify({ jsonrpc: "2.0", id: 2, method: "tools/call", params: { name: "context_get" } }),
   });
   assert.equal(stolen.status, 404);
+  const rawId = await openSession(a.transport.sessionId, authorization("test-member-a"));
+  const forged = await sealSession(rawId, authorization("test-member-b"));
+  for (const method of ["POST", "GET", "DELETE"]) {
+    const response = await fetch(url, {
+      method,
+      headers: {
+        Authorization: authorization("test-member-b"), "mcp-session-id": forged,
+        "content-type": "application/json", Accept: "application/json, text/event-stream",
+      },
+      ...(method === "POST" ? { body: JSON.stringify({ jsonrpc: "2.0", id: 3, method: "tools/call", params: { name: "context_get" } }) } : {}),
+    });
+    assert.equal(response.status, 404);
+  }
+  assert.equal(text(await a.client.callTool({ name: "context_get" })).event, "42");
   const revoked = await fetch(url, { headers: { Authorization: authorization("revoked"), "mcp-session-id": a.transport.sessionId } });
   assert.equal(revoked.status, 401);
   await a.client.callTool({ name: "context_clear" });
   assert.deepEqual(text(await a.client.callTool({ name: "context_get" })), {});
   assert.deepEqual(text(await a.client.callTool({ name: "plan_show" })).steps, []);
+});
+
+test("Gleichzeitige erste Kontextzugriffe überschreiben keine anderen Felder", async () => {
+  const { client } = await connect("test-member-a");
+  await Promise.all([
+    client.callTool({ name: "context_set", arguments: { event: "42" } }),
+    client.callTool({ name: "context_set", arguments: { company: "7" } }),
+  ]);
+  assert.deepEqual(text(await client.callTool({ name: "context_get" })), { event: "42", company: "7" });
 });
 
 test("Event und zwei Sessions: jeder Schreibschritt fragt, Token und Argumente kommen an", async () => {

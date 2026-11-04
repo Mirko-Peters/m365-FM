@@ -29,8 +29,13 @@ export async function upstream(binding, authorization, method, params) {
   return message.result;
 }
 
-// Der Sitzungsausweis ist an den Token gebunden; weder Token noch dessen Hash
-// werden in Props, Gedächtnis oder Logs gespeichert.
+export async function sessionOwner(authorization) {
+  const hash = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(authorization || "anonymous"));
+  return Array.from(new Uint8Array(hash), x => x.toString(16).padStart(2, "0")).join("");
+}
+
+// Zusätzlich zur Signatur prüft der Worker den unveränderlichen Eigentümer im DO.
+// Der Token selbst wird weder in Props noch im Gedächtnis oder in Logs gespeichert.
 async function signature(id, authorization) {
   const key = await crypto.subtle.importKey("raw",
     new TextEncoder().encode(authorization || "anonymous"), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);

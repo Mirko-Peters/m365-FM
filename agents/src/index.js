@@ -1,8 +1,9 @@
 import { McpAgent } from "agents/mcp";
+import { getAgentByName } from "agents";
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { CallToolRequestSchema, ListToolsRequestSchema } from "@modelcontextprotocol/sdk/types.js";
 import { CfWorkerJsonSchemaValidator } from "@modelcontextprotocol/sdk/validation/cfworker";
-import { MEMORY_TTL, emptyMemory, memoryOnUse, memoryOnExpiry, result, upstream, sealSession, openSession, visibleTools, confirmedCall } from "./session.js";
+import { MEMORY_TTL, emptyMemory, memoryOnUse, memoryOnExpiry, result, upstream, sealSession, openSession, sessionOwner, visibleTools, confirmedCall } from "./session.js";
 
 const PATH = "/agent/mcp";
 const LOCAL = [
@@ -24,10 +25,23 @@ export class CommunityAgent extends McpAgent {
   // Keine dauerhaften Kopien von Werkzeugantworten für Stream-Replays.
   getEventStore() { return undefined; }
 
+  async bindSession(owner) {
+    return this.ctx.blockConcurrencyWhile(async () => {
+      const current = await this.ctx.storage.get("session-owner");
+      if (current) return current === owner;
+      await this.ctx.storage.put("session-owner", owner);
+      return true;
+    });
+  }
+
+  async ownsSession(owner) {
+    return (await this.ctx.storage.get("session-owner")) === owner;
+  }
+
   async touchMemory() {
     const next = memoryOnUse(this.state);
-    if (next.schedule) await this.schedule(MEMORY_TTL / 1000, "expireMemory");
     this.setState(next.memory);
+    if (next.schedule) await this.schedule(MEMORY_TTL / 1000, "expireMemory", undefined, { idempotent: true });
   }
 
   async expireMemory() {
@@ -114,10 +128,13 @@ export default {
       return new Response("Unauthorized", { status: 401, headers: cors });
     }
     const headers = new Headers(request.headers);
+    const owner = await sessionOwner(auth);
     const session = headers.get("mcp-session-id");
     if (session) {
       const id = await openSession(session, auth);
       if (!id) return new Response("Unknown session", { status: 404, headers: cors });
+      const agent = await getAgentByName(env.MCP_OBJECT, `streamable-http:${id}`);
+      if (!await agent.ownsSession(owner)) return new Response("Unknown session", { status: 404, headers: cors });
       headers.set("mcp-session-id", id);
     }
     try {
@@ -125,7 +142,11 @@ export default {
       const output = new Headers(response.headers);
       for (const [key, value] of Object.entries(cors)) output.set(key, value);
       const id = output.get("mcp-session-id");
-      if (id) output.set("mcp-session-id", await sealSession(id, auth));
+      if (id) {
+        const agent = await getAgentByName(env.MCP_OBJECT, `streamable-http:${id}`);
+        if (!await agent.bindSession(owner)) return new Response("Unknown session", { status: 404, headers: cors });
+        output.set("mcp-session-id", await sealSession(id, auth));
+      }
       return new Response(response.body, { status: response.status, headers: output });
     } catch {
       return new Response("Agent unavailable", { status: 503, headers: cors });

@@ -2,10 +2,10 @@ name: Community-Agent prüfen und veröffentlichen
 on:
   workflow_dispatch:
   pull_request:
-    paths: ["agents/**", "worker/src/**", ".github/workflows/agents.yml"]
+    paths: ["agents/**", "worker/src/**", "site_mcp.py", "tests/test_site_mcp.py", ".github/workflows/agents.yml"]
   push:
     branches: [main]
-    paths: ["agents/**", ".github/workflows/agents.yml"]
+    paths: ["agents/**", "site_mcp.py", "tests/test_site_mcp.py", ".github/workflows/agents.yml"]
 concurrency: { group: "agents-${{ github.ref }}", cancel-in-progress: false }
 permissions:
   contents: read
@@ -23,6 +23,9 @@ jobs:
           cache: npm
           cache-dependency-path: agents/package-lock.json
       - run: npm ci
+      - name: Deutsche und englische Anleitung prüfen
+        working-directory: ${{ github.workspace }}
+        run: python3 -m py_compile site_mcp.py tests/test_site_mcp.py && python3 -m unittest discover -s tests -p test_site_mcp.py
       - name: Syntax, Tests und Deploy-Build prüfen
         env:
           WRANGLER_SEND_METRICS: "false"
