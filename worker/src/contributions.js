@@ -7,6 +7,9 @@ const now = () => Math.floor(Date.now() / 1000);
 const SOURCE_KINDS = ["podcast", "youtube", "blog"];
 const ENTRY_KINDS = ["podcast", "video", "blog", "session", "github", "article", "other"];
 const YOUTUBE_HOSTS = new Set(["youtube.com", "www.youtube.com", "m.youtube.com"]);
+const MVP_CATEGORIES = ["Video/Webcast/Podcast", "Blog", "Speaker/Presenter"];
+const IMPORT_LIMIT = 5000;
+const DEFAULT_CATEGORIES = { video: "Video/Webcast/Podcast", podcast: "Video/Webcast/Podcast", blog: "Blog", session: "Speaker/Presenter" };
 const TOPIC_ID = /^[a-z0-9][a-z0-9-]{1,47}$/;
 
 function safeUrl(value) {
@@ -25,9 +28,15 @@ function topicsOf(value) {
 }
 
 function dateValue(value) {
-  if (typeof value === "number" && Number.isFinite(value)) return Math.max(0, Math.min(now(), Math.floor(value)));
-  const parsed = Date.parse(String(value || ""));
-  return Number.isFinite(parsed) ? Math.min(now(), Math.floor(parsed / 1000)) : now();
+  if (value === undefined || value === null || value === "") return null;
+  if (typeof value === "number" || (typeof value === "string" && /^\d+$/.test(value))) {
+    const seconds = Number(value), date = new Date(seconds * 1000);
+    return Number.isSafeInteger(seconds) && Number.isFinite(date.getTime()) ? seconds : null;
+  }
+  const day = String(value);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(day)) return null;
+  const time = Date.parse(`${day}T00:00:00Z`);
+  return Number.isFinite(time) && new Date(time).toISOString().slice(0, 10) === day ? Math.floor(time / 1000) : null;
 }
 
 function csvCell(value) {
@@ -53,10 +62,12 @@ async function exportData(db, uid, from, to) {
   };
   const start = date(from), end = date(to, true);
   if (Number.isNaN(start) || Number.isNaN(end) || (start !== null && end !== null && start > end)) return { error: "bad_period" };
+  const where = `c.user_id=? ${start === null ? "" : "AND c.published>=?"} ${end === null ? "" : "AND c.published<=?"}`;
+  const binds = [uid, ...(start === null ? [] : [start]), ...(end === null ? [] : [end])];
+  const total = (await db.prepare(`SELECT COUNT(*) n FROM contributions c WHERE ${where}`).bind(...binds).first()).n;
   const rows = (await db.prepare(`SELECT c.id,c.title,c.url,c.published,c.kind,c.category,c.topics,c.views,c.downloads,c.public,c.manual,
       COALESCE(s.title,'') source FROM contributions c LEFT JOIN contribution_sources s ON s.id=c.source_id
-      WHERE c.user_id=? ${start === null ? "" : "AND c.published>=?"} ${end === null ? "" : "AND c.published<=?"}
-      ORDER BY c.published DESC,c.id DESC LIMIT 1000`).bind(...[uid, ...(start === null ? [] : [start]), ...(end === null ? [] : [end])]).all()).results || [];
+      WHERE ${where} ORDER BY c.published DESC,c.id DESC LIMIT 1000`).bind(...binds).all()).results || [];
   const items = rows.map(contributionOutput);
   const columns = ["title", "url", "published", "kind", "category", "topics", "views", "downloads"];
   const csv = [columns.map(csvCell).join(","), ...items.map((x) => [
@@ -71,18 +82,11 @@ async function exportData(db, uid, from, to) {
     `Entitäten/Themen: ${x.topics.join(", ") || "—"}`,
     `Kennzahlen: ${x.views ? `${x.views} YouTube-Aufrufe` : ""}${x.views && x.downloads ? ", " : ""}${x.downloads ? `${x.downloads} Spreaker-Downloads` : ""}`.trim(),
   ].join("\n")).join("\n\n");
-  return { period: { from: from || "", to: to || "" }, total: items.length, items, csv, copy };
+  return { period: { from: from || "", to: to || "" }, total, items, ...(total > items.length ? { truncated: true } : {}), csv, copy };
 }
 
 export async function handleContributions(env, request, url, path, user, J) {
   const db = env.DB, method = request.method;
-  if (/^\/api\/contributions\/public\/[a-z0-9-]{3,30}$/.test(path) && method === "GET") {
-    const handle = path.split("/").pop();
-    const profile = await db.prepare("SELECT p.user_id FROM profiles p JOIN users u ON u.id=p.user_id AND u.banned=0 WHERE p.handle=? AND p.public=1").bind(handle).first();
-    if (!profile) return J({ error: "not_found" }, 404);
-    const rows = (await db.prepare("SELECT c.id,c.title,c.url,c.published,c.kind,c.category,c.topics,c.views,c.downloads,c.public,c.manual,'' source FROM contributions c WHERE c.user_id=? AND c.public=1 ORDER BY c.published DESC LIMIT 100").bind(profile.user_id).all()).results || [];
-    return J({ contributions: rows.map(contributionOutput) }, 200, { "cache-control": "public, max-age=300" });
-  }
   if (!path.startsWith("/api/contributions/")) return null;
   if (!user) return J({ error: "login" }, 401);
 
@@ -106,18 +110,42 @@ export async function handleContributions(env, request, url, path, user, J) {
     }
     return J({ ok: true, source: { kind, url: sourceUrl, title, public: !!b.public, feed_status: feed ? "ready" : "discovery_pending" } }, 201);
   }
+  if (path === "/api/contributions/source/update" && method === "POST") {
+    const b = await request.json().catch(() => ({})), id = Math.floor(+b.id);
+    const source = await db.prepare("SELECT id FROM contribution_sources WHERE id=? AND user_id=?").bind(id, user.id).first();
+    if (!source) return J({ error: "not_found" }, 404);
+    const updates = [], values = [];
+    if (b.public !== undefined) { updates.push("public=?"); values.push(b.public ? 1 : 0); }
+    if (b.active !== undefined) { updates.push("active=?"); values.push(b.active ? 1 : 0); }
+    if (!updates.length) return J({ error: "bad_request" }, 400);
+    await db.prepare(`UPDATE contribution_sources SET ${updates.join(",")} WHERE id=? AND user_id=?`).bind(...values, id, user.id).run();
+    if (b.public !== undefined) await db.prepare("UPDATE contributions SET public=? WHERE source_id=? AND user_id=? AND manual=0").bind(b.public ? 1 : 0, id, user.id).run();
+    return J({ ok: true });
+  }
+  if (path === "/api/contributions/source/delete" && method === "POST") {
+    const b = await request.json().catch(() => ({})), id = Math.floor(+b.id);
+    const source = await db.prepare("SELECT id FROM contribution_sources WHERE id=? AND user_id=?").bind(id, user.id).first();
+    if (!source) return J({ error: "not_found" }, 404);
+    if (b.delete_contributions) await db.prepare("DELETE FROM contributions WHERE source_id=? AND user_id=?").bind(id, user.id).run();
+    else await db.prepare("UPDATE contributions SET source_id=NULL WHERE source_id=? AND user_id=?").bind(id, user.id).run();
+    await db.prepare("DELETE FROM contribution_sources WHERE id=? AND user_id=?").bind(id, user.id).run();
+    return J({ ok: true, deleted_contributions: !!b.delete_contributions });
+  }
   if (path === "/api/contributions/manual" && method === "POST") {
     if (!(await rateLimit(db, `contrib-manual:${user.id}`, 30, 86400))) return J({ error: "rate_limit" }, 429);
     const b = await request.json().catch(() => ({})), title = cleanText(b.title, 200).replace(/[<>]/g, "").trim();
     const kind = String(b.kind || ""), link = b.url ? safeUrl(b.url) : "";
     if (title.length < 3 || !ENTRY_KINDS.includes(kind) || (b.url && !link)) return J({ error: "bad_contribution" }, 400);
-    if ((await db.prepare("SELECT COUNT(*) n FROM contributions WHERE user_id=?").bind(user.id).first()).n >= 2000) return J({ error: "contribution_limit" }, 400);
-    const category = cleanText(b.category || "", 100).replace(/[<>]/g, "").trim();
+    if ((await db.prepare("SELECT COUNT(*) n FROM contributions WHERE user_id=? AND manual=1").bind(user.id).first()).n >= 2000) return J({ error: "contribution_limit" }, 400);
+    const published = dateValue(b.published);
+    if (published === null) return J({ error: "bad_date" }, 400);
+    const category = b.category === undefined || b.category === "" ? (DEFAULT_CATEGORIES[kind] || "") : cleanText(b.category, 100).replace(/[<>]/g, "").trim();
+    if (category && !MVP_CATEGORIES.includes(category)) return J({ error: "bad_category" }, 400);
     const topics = topicsOf(b.topics);
     let r;
     try {
       r = await db.prepare("INSERT INTO contributions(user_id,title,url,published,kind,category,topics,public,manual,created) VALUES(?,?,?,?,?,?,?,?,1,?)")
-        .bind(user.id, title, link, dateValue(b.published), kind, category, JSON.stringify(topics), b.public ? 1 : 0, now()).run();
+        .bind(user.id, title, link, published, kind, category, JSON.stringify(topics), b.public ? 1 : 0, now()).run();
     } catch (e) {
       if (/UNIQUE/i.test(String(e))) return J({ error: "contribution_exists" }, 409);
       throw e;
@@ -136,12 +164,21 @@ export async function handleContributions(env, request, url, path, user, J) {
     const entry = await db.prepare("SELECT id FROM contributions WHERE id=? AND user_id=?").bind(id, user.id).first();
     if (!entry) return J({ error: "not_found" }, 404);
     const updates = [], values = [];
-    if (b.category !== undefined) { updates.push("category=?"); values.push(cleanText(b.category, 100).replace(/[<>]/g, "").trim()); }
+    if (b.category !== undefined) {
+      const category = cleanText(b.category, 100).replace(/[<>]/g, "").trim();
+      if (category && !MVP_CATEGORIES.includes(category)) return J({ error: "bad_category" }, 400);
+      updates.push("category=?"); values.push(category);
+    }
     if (b.topics !== undefined) { updates.push("topics=?"); values.push(JSON.stringify(topicsOf(b.topics))); }
     if (b.public !== undefined) { updates.push("public=?"); values.push(b.public ? 1 : 0); }
     if (!updates.length) return J({ error: "bad_request" }, 400);
     await db.prepare(`UPDATE contributions SET ${updates.join(",")} WHERE id=? AND user_id=?`).bind(...values, id, user.id).run();
     return J({ ok: true });
+  }
+  if (path === "/api/contributions/delete" && method === "POST") {
+    const b = await request.json().catch(() => ({})), id = Math.floor(+b.id);
+    const result = await db.prepare("DELETE FROM contributions WHERE id=? AND user_id=?").bind(id, user.id).run();
+    return result.meta.changes ? J({ ok: true }) : J({ error: "not_found" }, 404);
   }
   if (path === "/api/contributions/export" && method === "GET") {
     const data = await exportData(db, user.id, url.searchParams.get("from") || "", url.searchParams.get("to") || "");
@@ -156,17 +193,33 @@ export async function refreshContributions(env, max = 5) {
   let collected = 0;
   for (const source of sources) {
     try {
-      const feed = source.feed || await discoverFeed(source.kind, source.url);
-      if (!feed || !safeUrl(feed)) throw new Error("feed_not_found");
-      const ctl = new AbortController(), timeout = setTimeout(() => ctl.abort(), 6000);
-      let response;
-      try { response = await fetch(feed, { signal: ctl.signal, redirect: "follow", headers: { "user-agent": "M365FM-contributions/1.0 (+https://www.m365.fm)", accept: "application/rss+xml, application/atom+xml, text/xml, */*" } }); }
-      finally { clearTimeout(timeout); }
-      if (!response.ok || !safeUrl(response.url || feed)) throw new Error("feed_unavailable");
-      const items = parseFeed((await response.text()).slice(0, 600000), 20);
-      const values = items.map((item) => db.prepare(`INSERT INTO contributions(user_id,source_id,title,url,published,kind,topics,public,created)
-          VALUES(?,?,?,?,?,?,?,?,?) ON CONFLICT(user_id,url) WHERE url<>'' DO UPDATE SET source_id=excluded.source_id,title=excluded.title,published=excluded.published,kind=excluded.kind,public=excluded.public`)
-        .bind(source.user_id, source.id, item.title, item.url, item.t, source.kind === "youtube" ? "video" : source.kind, JSON.stringify(topicsOf(item.topics)), source.public, t));
+      const readFeed = async (feedUrl) => {
+        const ctl = new AbortController(), timeout = setTimeout(() => ctl.abort(), 6000);
+        try {
+          const response = await fetch(feedUrl, { signal: ctl.signal, redirect: "follow", headers: { "user-agent": "M365FM-contributions/1.0 (+https://www.m365.fm)", accept: "application/rss+xml, application/atom+xml, text/xml, */*" } });
+          if (!response.ok || !safeUrl(response.url || feedUrl)) return [];
+          return parseFeed((await response.text()).slice(0, 600000), 20);
+        } finally { clearTimeout(timeout); }
+      };
+      let feed = source.feed, items = feed ? await readFeed(feed) : await readFeed(source.url);
+      if (!items.length && !feed) { feed = await discoverFeed(source.kind, source.url); if (feed) items = await readFeed(feed); }
+      if (!feed && items.length) feed = source.url;
+      if (!feed || !items.length) throw new Error("feed_unavailable");
+      const existing = new Set(((await db.prepare("SELECT url FROM contributions WHERE user_id=?").bind(source.user_id).all()).results || []).map((r) => r.url));
+      let imports = (await db.prepare("SELECT COUNT(*) n FROM contributions WHERE user_id=? AND manual=0").bind(source.user_id).first()).n;
+      const categories = { podcast: DEFAULT_CATEGORIES.podcast, youtube: DEFAULT_CATEGORIES.video, blog: DEFAULT_CATEGORIES.blog };
+      const values = [];
+      for (const item of items) {
+        if (!existing.has(item.url) && imports >= IMPORT_LIMIT) continue;
+        if (!existing.has(item.url)) { existing.add(item.url); imports++; }
+        const category = categories[source.kind] || "";
+        values.push(db.prepare(`INSERT INTO contributions(user_id,source_id,title,url,published,kind,category,topics,public,created)
+          VALUES(?,?,?,?,?,?,?,?,?,?) ON CONFLICT(user_id,url) WHERE url<>'' DO UPDATE SET
+          title=CASE WHEN contributions.manual=0 THEN excluded.title ELSE contributions.title END,
+          topics=CASE WHEN contributions.manual=0 AND contributions.topics='[]' THEN excluded.topics ELSE contributions.topics END`)
+          .bind(source.user_id, source.id, item.title, item.url, item.t, source.kind === "youtube" ? "video" : source.kind,
+            category, JSON.stringify(topicsOf(item.topics)), source.public, t));
+      }
       if (values.length) await db.batch(values);
       await db.prepare("UPDATE contribution_sources SET feed=?,fetched=?,fails=0 WHERE id=?").bind(feed, t, source.id).run();
       collected += items.length;
@@ -180,7 +233,16 @@ export async function refreshContributions(env, max = 5) {
 
 async function refreshContributionMetrics(env) {
   const db = env.DB, t = now();
-  const rows = (await db.prepare("SELECT id,url,kind FROM contributions WHERE metrics_updated<? AND (kind='video' OR url LIKE '%spreaker.com/episode/%') ORDER BY metrics_updated LIMIT 50").bind(t - 86400).all()).results || [];
+  const youtubeRows = (await db.prepare(`SELECT c.id,c.user_id,c.url,c.kind FROM contributions c WHERE c.metrics_updated<? AND (
+      c.url LIKE 'https://youtu.be/%' OR c.url LIKE 'https://youtube.com/%' OR c.url LIKE 'https://www.youtube.com/%' OR c.url LIKE 'https://m.youtube.com/%'
+    ) ORDER BY c.metrics_updated LIMIT 50`).bind(t - 86400).all()).results || [];
+  const spreakerRows = (await db.prepare(`SELECT c.id,c.user_id,c.url,c.kind FROM contributions c WHERE c.metrics_updated<? AND
+      (c.url LIKE 'https://spreaker.com/episode/%' OR c.url LIKE 'https://www.spreaker.com/episode/%') AND (
+        EXISTS(SELECT 1 FROM pod_episodes e WHERE e.user_id=c.user_id AND e.status='published' AND e.spreaker_id=CAST(substr(c.url,instr(c.url,'/episode/')+9) AS INTEGER))
+        OR EXISTS(SELECT 1 FROM item_guests g JOIN pod_episodes e ON e.id=g.item_id AND e.status='published' WHERE g.kind='podcast' AND g.status='confirmed' AND g.user_id=c.user_id AND e.spreaker_id=CAST(substr(c.url,instr(c.url,'/episode/')+9) AS INTEGER))
+      ) ORDER BY c.metrics_updated LIMIT 10`).bind(t - 86400).all()).results || [];
+  const rows = [...youtubeRows, ...spreakerRows];
+  for (const row of rows) await db.prepare("UPDATE contributions SET metrics_updated=? WHERE id=? AND user_id=?").bind(t, row.id, row.user_id).run();
   const videos = rows.map((r) => {
     try {
       const u = new URL(r.url);
@@ -198,14 +260,14 @@ async function refreshContributionMetrics(env) {
           const r = await fetch(`${env.YT_API || "https://www.googleapis.com"}/youtube/v3/videos?part=statistics&id=${ids}`, { headers: { authorization: "Bearer " + access } });
           if (!r.ok) continue;
           const counts = new Map(((await r.json()).items || []).map((x) => [x.id, Math.max(0, parseInt(x.statistics?.viewCount, 10) || 0)]));
-          for (const [id, video] of batch) if (counts.has(video)) await db.prepare("UPDATE contributions SET views=?,metrics_updated=? WHERE id=?").bind(counts.get(video), t, id).run();
+          for (const [id, video] of batch) if (counts.has(video)) await db.prepare("UPDATE contributions SET views=? WHERE id=?").bind(counts.get(video), id).run();
         } catch {}
       }
     }
   }
   const spreakerToken = env.SPREAKER_TOKEN;
-  if (spreakerToken) for (const row of rows.filter((x) => /spreaker\.com\/episode\//i.test(x.url)).slice(0, 10)) {
-    const id = /\/episode\/(\d+)/i.exec(row.url)?.[1];
+  if (spreakerToken) for (const row of spreakerRows.filter((x) => /^https:\/\/(?:www\.)?spreaker\.com\/episode\/\d+(?:[/?#]|$)/i.test(x.url))) {
+    const id = /^https:\/\/(?:www\.)?spreaker\.com\/episode\/(\d+)(?:[/?#]|$)/i.exec(row.url)?.[1];
     if (!id) continue;
     try {
       const r = await fetch(`https://api.spreaker.com/v2/episodes/${id}`, { headers: { authorization: "Bearer " + spreakerToken } });
@@ -213,7 +275,7 @@ async function refreshContributionMetrics(env) {
       const episode = (await r.json()).response?.episode;
       const allowedShows = String(env.SPREAKER_SHOW_IDS || "").split(",").map((x) => x.trim()).filter(Boolean);
       const downloads = Math.max(0, parseInt(episode?.downloads_count, 10) || 0);
-      if (allowedShows.includes(String(episode?.show_id)) && downloads) await db.prepare("UPDATE contributions SET downloads=?,metrics_updated=? WHERE id=?").bind(downloads, t, row.id).run();
+      if (allowedShows.includes(String(episode?.show_id)) && downloads) await db.prepare("UPDATE contributions SET downloads=? WHERE id=?").bind(downloads, row.id).run();
     } catch {}
   }
   return videos.length;

@@ -113,7 +113,7 @@ test("feeds: parseFeed nimmt nur https-Links und liest Titel, Datum, Beschreibun
   assert.deepEqual(out[1].topics, ["Microsoft Teams"]);
 });
 
-test("contributions: private Quellen und manuelle Beiträge exportieren nur eigene Metadaten", async () => {
+test("contributions: Quellen, Metadaten, Privatsphäre, Kategorien und Berichtsexport", async () => {
   const { db, raw } = await searchDb();
   raw.exec("INSERT INTO users(id,provider,sub,name,created) VALUES(1,'g','1','Anna',1),(2,'g','2','Ben',1); INSERT INTO profiles(user_id,public,handle,headline,about,company,job,country,show_org,updated) VALUES(1,0,'anna','','','','','',1,1)");
   const user = { id: 1 }, J = (data, status = 200) => new Response(JSON.stringify(data), { status });
@@ -124,43 +124,139 @@ test("contributions: private Quellen und manuelle Beiträge exportieren nur eige
       url, url.pathname, actor, J);
   };
 
-  const source = await call("/api/contributions/source", "POST", { kind: "blog", url: "https://example.com/feed.xml", title: "My blog" });
+  const source = await call("/api/contributions/source", "POST", { kind: "blog", url: "https://example.com/feed.xml", title: "My blog", public: true });
   assert.equal(source.status, 201);
-  assert.equal((await source.json()).source.public, false, "Quellen sind standardmäßig privat");
+  assert.equal((await source.json()).source.public, true);
   assert.equal((await (await call("/api/contributions/source", "POST", { kind: "blog", url: "https://example.com/feed.xml" })).json()).error, "source_exists");
   assert.equal((await call("/api/contributions/source", "POST", { kind: "youtube", url: "https://example.com/channel" })).status, 400);
   assert.equal((await call("/api/contributions/source", "POST", { kind: "youtube", url: "https://evil.youtube.com/@handle" })).status, 400);
-  const originalFetch = globalThis.fetch;
-  globalThis.fetch = async () => new Response(`<rss><channel><item><title>Feed article</title><link>https://example.com/post</link><pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate><category>Power Automate</category><description>Never persist the full text</description></item></channel></rss>`);
-  try { await refreshContributions({ DB: db }, 1); } finally { globalThis.fetch = originalFetch; }
-  const imported = raw.prepare("SELECT title,topics FROM contributions WHERE source_id IS NOT NULL").get();
-  assert.equal(imported.title, "Feed article");
-  assert.deepEqual(JSON.parse(imported.topics), ["power-automate"]);
-  assert.equal(raw.prepare("SELECT COUNT(*) n FROM pragma_table_info('contributions') WHERE name IN ('summary','description','body')").get().n, 0, "nur Metadaten ohne Volltext werden gespeichert");
-
   const created = await call("/api/contributions/manual", "POST", {
-    title: "Power Automate talk", kind: "session", published: "2026-01-01", category: "=SUM(1,1)", topics: ["Power Automate", "fabric"],
+    title: "=SUM(1,1)", url: "https://example.com/post", kind: "article", published: "1767225600", category: "Blog",
   });
   assert.equal(created.status, 201);
-  const id = raw.prepare("SELECT id FROM contributions").get().id;
-  assert.equal((await (await call("/api/contributions/mine")).json()).contributions.length, 2);
+  assert.equal((await call("/api/contributions/manual", "POST", { title: "Bad day", kind: "blog", published: "2026-02-30" })).status, 400);
+  assert.equal((await (await call("/api/contributions/manual", "POST", { title: "Bad day", kind: "blog", published: "not-a-date" })).json()).error, "bad_date");
+  assert.equal((await (await call("/api/contributions/manual", "POST", { title: "No date", kind: "blog" })).json()).error, "bad_date");
+  assert.equal((await call("/api/contributions/manual", "POST", { title: "Bad category", kind: "blog", category: "Other" })).status, 400);
+  const manualId = raw.prepare("SELECT id FROM contributions WHERE manual=1").get().id;
+  assert.equal(raw.prepare("SELECT published FROM contributions WHERE id=?").get(manualId).published, 1767225600, "numerische Zeichenkette bleibt Unix-Zeit in Sekunden");
+
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async () => new Response(`<rss><channel>
+    <item><title>Feed article</title><link>https://example.com/post</link><pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate><category>Power Automate</category><description>Never persist the full text</description></item>
+    <item><title>Imported article</title><link>https://example.com/post-auto</link><pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate></item>
+  </channel></rss>`);
+  try { await refreshContributions({ DB: db }, 1); } finally { globalThis.fetch = originalFetch; }
+  const manual = raw.prepare("SELECT title,kind,published,public,manual,source_id FROM contributions WHERE id=?").get(manualId);
+  assert.deepEqual([manual.title, manual.kind, manual.published, manual.public, manual.manual, manual.source_id], ["=SUM(1,1)", "article", 1767225600, 0, 1, null], "Feed-Upsert bewahrt manuelle Felder");
+  const imported = raw.prepare("SELECT id,title,topics,public,category,published FROM contributions WHERE url='https://example.com/post-auto'").get();
+  assert.equal(imported.title, "Imported article");
+  assert.deepEqual(JSON.parse(imported.topics), []);
+  assert.equal(imported.category, "Blog");
+  assert.equal(imported.public, 1, "Quellen-Sichtbarkeit gilt beim Import");
+  const sourceId = raw.prepare("SELECT id FROM contribution_sources WHERE user_id=1").get().id;
+  assert.equal((await call("/api/contributions/source/update", "POST", { id: sourceId, public: false, active: false })).status, 200);
+  assert.equal(raw.prepare("SELECT public FROM contributions WHERE id=?").get(imported.id).public, 0, "Quellensichtbarkeit wird auf importierte Einträge übertragen");
+  assert.equal(raw.prepare("SELECT active FROM contribution_sources WHERE id=?").get(sourceId).active, 0);
+  assert.equal((await call("/api/contributions/source/update", "POST", { id: sourceId, public: true, active: true })).status, 200);
+  await call("/api/contributions/update", "POST", { id: imported.id, public: false });
+  raw.prepare("UPDATE contribution_sources SET fetched=0 WHERE id=?").run(sourceId);
+  globalThis.fetch = async () => new Response(`<rss><channel><item><title>New title</title><link>https://example.com/post-auto</link><pubDate>Tue, 02 Jan 2024 00:00:00 GMT</pubDate></item></channel></rss>`);
+  try { await refreshContributions({ DB: db }, 1); } finally { globalThis.fetch = originalFetch; }
+  const kept = raw.prepare("SELECT title,published,public,kind FROM contributions WHERE id=?").get(imported.id);
+  assert.deepEqual([kept.title, kept.published, kept.public, kept.kind], ["New title", imported.published, 0, "blog"], "Cron überschreibt weder Privatstatus noch Typ/Datum");
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM pragma_table_info('contributions') WHERE name IN ('summary','description','body')").get().n, 0, "nur Metadaten ohne Volltext werden gespeichert");
+
+  const session = await call("/api/contributions/manual", "POST", { title: "Power Automate talk", kind: "session", published: "2026-01-01" });
+  assert.equal(session.status, 201);
+  const sessionId = raw.prepare("SELECT id FROM contributions WHERE kind='session'").get().id;
+  assert.equal(raw.prepare("SELECT category FROM contributions WHERE id=?").get(sessionId).category, "Speaker/Presenter");
+  assert.equal((await call("/api/contributions/manual", "POST", { title: "Video presentation", kind: "video", published: "2026-01-02" })).status, 201);
+  assert.equal(raw.prepare("SELECT category FROM contributions WHERE kind='video'").get().category, "Video/Webcast/Podcast");
+  assert.equal((await (await call("/api/contributions/mine")).json()).contributions.length, 4);
   assert.equal((await (await call("/api/contributions/mine", "GET", undefined, { id: 2 })).json()).contributions.length, 0, "Mitglieder sehen nur eigene Einträge");
-  assert.equal((await (await call("/api/contributions/public/anna")).json()).error, "not_found", "öffentliches Profil ist standardmäßig aus");
-  await raw.prepare("UPDATE profiles SET public=1 WHERE user_id=1").run();
-  await call("/api/contributions/update", "POST", { id, public: true });
-  assert.equal((await (await call("/api/contributions/public/anna")).json()).contributions.length, 1);
 
   const exported = await (await call("/api/contributions/export?from=2026-01-01&to=2026-01-01")).json();
-  assert.equal(exported.total, 1, "Datumsgrenzen sind inklusiv");
+  assert.equal(exported.total, 2, "Datumsgrenzen sind inklusiv");
   assert.ok(exported.csv.includes("'=SUM(1,1)"), "CSV-Formeln werden entschärft");
-  assert.ok(exported.copy.includes("Kategorie: =SUM(1,1)"));
   assert.equal((await (await call("/api/contributions/export?from=2026-02-30")).json()).error, "bad_period");
+  for (let i = 0; i < 1001; i++) raw.prepare("INSERT INTO contributions(user_id,title,url,published,kind,created) VALUES(1,?,?,1767225600,'blog',1)").run(`Imported ${i}`, `https://example.com/import-${i}`);
+  const truncated = await (await call("/api/contributions/export?from=2026-01-01&to=2026-01-01")).json();
+  assert.equal(truncated.total, 1003);
+  assert.equal(truncated.items.length, 1000);
+  assert.equal(truncated.truncated, true, "gekürzte Exporte weisen die Gesamttrefferzahl aus");
+  assert.equal((await call("/api/contributions/delete", "POST", { id: manualId }, { id: 2 })).status, 404, "Beiträge anderer werden nicht gelöscht");
+  assert.equal((await call("/api/contributions/delete", "POST", { id: manualId })).status, 200);
+  assert.equal((await call("/api/contributions/source/delete", "POST", { id: sourceId }, { id: 2 })).status, 404, "Quellen anderer werden nicht gelöscht");
+  assert.equal((await call("/api/contributions/source/delete", "POST", { id: sourceId, delete_contributions: true })).status, 200);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM contributions WHERE id=?").get(imported.id).n, 0, "Quellen-Löschen kann ihre Importe entfernen");
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM contribution_sources WHERE id=?").get(sourceId).n, 0);
+});
+
+test("contributions: URL ohne Feed-Endung wird direkt als Feed geprüft", async () => {
+  const { db, raw } = await searchDb();
+  raw.exec("INSERT INTO users(id,provider,sub,name,created) VALUES(1,'g','1','Anna',1)");
+  const user = { id: 1 }, J = (data, status = 200) => new Response(JSON.stringify(data), { status });
+  const sourceUrl = "https://api.spreaker.com/v2/shows/42/episodes/feed", url = new URL("https://x/api/contributions/source");
+  const sourceResponse = await handleContributions({ DB: db },
+    new Request(url, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ kind: "podcast", url: sourceUrl }) }),
+    url, url.pathname, user, J);
+  assert.equal(sourceResponse.status, 201);
+  const originalFetch = globalThis.fetch;
+  let fetched = "";
+  globalThis.fetch = async (input) => { fetched = String(input); return new Response(`<rss><channel><item><title>Spreaker episode</title><link>https://www.spreaker.com/episode/42</link></item></channel></rss>`); };
+  try { await refreshContributions({ DB: db }, 1); } finally { globalThis.fetch = originalFetch; }
+  assert.equal(fetched, sourceUrl);
+  assert.equal(raw.prepare("SELECT category FROM contributions").get().category, "Video/Webcast/Podcast");
+});
+
+test("contributions: Metriken filtern Hosts, autorisieren Spreaker und lassen Fehlschläge nicht blockieren", async () => {
+  const { db, raw } = await searchDb();
+  raw.exec("INSERT INTO users(id,provider,sub,name,created) VALUES(1,'g','1','Anna',1),(2,'g','2','Ben',1)");
+  raw.exec("INSERT INTO pod_episodes(id,user_id,title,status,spreaker_id,created,updated) VALUES(1,1,'Own','published',101,1,1),(2,2,'Guest','published',202,1,1),(3,2,'Foreign','published',303,1,1)");
+  raw.exec("INSERT INTO item_guests(kind,item_id,user_id,status,created) VALUES('podcast',2,1,'confirmed',1)");
+  for (let i = 102; i <= 111; i++) raw.prepare("INSERT INTO pod_episodes(id,user_id,title,status,spreaker_id,created,updated) VALUES(?,1,'Own','published',?,1,1)").run(i, i);
+  for (let i = 1; i <= 51; i++) raw.prepare("INSERT INTO contributions(user_id,title,url,published,kind,created) VALUES(1,?,?,1,'video',1)").run(`missing ${i}`, `https://www.youtube.com/watch?v=missin${String(i).padStart(5, "0")}`);
+  raw.prepare("INSERT INTO contributions(user_id,title,url,published,kind,created) VALUES(1,'Real','https://www.youtube.com/watch?v=abcdefghijk',1,'video',1)").run();
+  raw.prepare("INSERT INTO contributions(user_id,title,url,published,kind,created) VALUES(1,'Own episode','https://www.spreaker.com/episode/101',1,'podcast',1),(1,'Guest episode','https://spreaker.com/episode/202',1,'podcast',1),(1,'Foreign episode','https://spreaker.com/episode/303',1,'podcast',1),(1,'Fake host','https://evilspreaker.com/episode/404',1,'podcast',1)").run();
+  for (let i = 102; i <= 111; i++) raw.prepare("INSERT INTO contributions(user_id,title,url,published,kind,created) VALUES(1,?,?,1,'podcast',1)").run(`Own episode ${i}`, `https://spreaker.com/episode/${i}`);
+
+  const originalFetch = globalThis.fetch, requested = [];
+  globalThis.fetch = async (input) => {
+    const target = String(input); requested.push(target);
+    if (target.includes("oauth2.googleapis.com/token")) return new Response(JSON.stringify({ access_token: "test" }));
+    if (target.includes("/youtube/v3/videos?")) {
+      const ids = new URL(target).searchParams.get("id").split(",");
+      return new Response(JSON.stringify({ items: ids.includes("abcdefghijk") ? [{ id: "abcdefghijk", statistics: { viewCount: "123" } }] : [] }));
+    }
+    if (target.includes("api.spreaker.com/v2/episodes/")) {
+      const id = target.split("/").pop();
+      return new Response(JSON.stringify({ response: { episode: { show_id: "6704921", downloads_count: id === "101" ? "10" : "20" } } }));
+    }
+    throw new Error("unexpected request " + target);
+  };
+  const env = { DB: db, YT_CLIENT_ID: "id", YT_CLIENT_SECRET: "secret", YT_REFRESH_TOKEN: "refresh", SPREAKER_TOKEN: "test", SPREAKER_SHOW_IDS: "6704921" };
+  try {
+    await refreshContributions(env);
+    assert.equal(raw.prepare("SELECT COUNT(*) n FROM contributions WHERE (title LIKE 'Own episode%' OR title='Guest episode') AND metrics_updated=0").get().n, 2, "Spreaker-Zeilen außerhalb des Lauf-Limits bleiben für den nächsten Lauf offen");
+    await refreshContributions(env);
+  } finally { globalThis.fetch = originalFetch; }
+  assert.equal(raw.prepare("SELECT views FROM contributions WHERE title='Real'").get().views, 123);
+  assert.ok(raw.prepare("SELECT COUNT(*) n FROM contributions WHERE title LIKE 'missing %' AND metrics_updated>0").get().n >= 50, "fehlende Videos werden nicht dauerhaft erneut selektiert");
+  assert.equal(requested.filter((x) => x.includes("api.spreaker.com/v2/episodes/")).length, 12, "alle autorisierten Folgen werden über mehrere Läufe abgefragt");
+  assert.equal(raw.prepare("SELECT downloads FROM contributions WHERE title='Own episode'").get().downloads, 10);
+  assert.equal(raw.prepare("SELECT downloads FROM contributions WHERE title='Guest episode'").get().downloads, 20);
+  assert.equal(raw.prepare("SELECT downloads FROM contributions WHERE title='Foreign episode'").get().downloads, 0);
+  assert.equal(raw.prepare("SELECT metrics_updated FROM contributions WHERE title='Fake host'").get().metrics_updated, 0);
 });
 
 test("schema: Migrationen sind idempotent und enthalten jede zur Laufzeit angelegte Tabelle", () => {
   const dir = new URL("../migrations/", import.meta.url);
   const files = readdirSync(dir).filter((f) => f.endsWith(".sql")).sort();
   assert.ok(files.length >= 1 && files[0] === "0001_baseline.sql");
+  const prefixes = files.map((f) => /^\d+/.exec(f)?.[0]);
+  assert.ok(prefixes.every(Boolean), "jede Migration braucht ein numerisches Präfix");
+  assert.equal(new Set(prefixes).size, prefixes.length, "Migrationsnummern müssen eindeutig sein");
   const sql = files.map((f) => readFileSync(new URL(f, dir), "utf-8")).join("\n");
   const stmts = sql.replace(/--[^\n]*/g, "").split(";").map((s) => s.trim()).filter(Boolean);
   for (const s of stmts) {
