@@ -2,6 +2,7 @@
 // Quelle: statische Dateien der eigenen Seite (SITE/blog-import/index.json + part-N.json, vom Seitenbau erzeugt, HTML bereits bereinigt).
 // Je Cron-Lauf hoechstens BATCH Beitraege; der Fortschritt steht in blog_import. Wiederholbar: bei vorhandenem Beitrag (UNIQUE user_id, slug) wird nur das HTML erneuert, und nur wenn der Beitrag nie bearbeitet wurde.
 import { ensureSectionCols } from "./sections.js";
+import { siteFetch } from "./util.js";
 
 const BATCH = 60, OWNER = "mirko-p", VER = 2;   // VER erhoehen = Uebernahme einmal von vorn (bereits uebernommene, nie bearbeitete Beitraege bekommen den neuen HTML-Stand)
 const clean = (s, n) => String(s || "").replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/g, "").slice(0, n);
@@ -14,12 +15,12 @@ export async function importLegacyBlog(env) {
     offset = 0;
     await db.batch([db.prepare("INSERT INTO blog_import(k,v) VALUES('offset',0) ON CONFLICT(k) DO UPDATE SET v=0"), db.prepare("INSERT INTO blog_import(k,v) VALUES('ver',?) ON CONFLICT(k) DO UPDATE SET v=excluded.v").bind(VER)]);
   }
-  const man = await fetch(env.SITE + "/blog-import/index.json", { cf: { cacheTtl: 60 } }).then((r) => (r.ok ? r.json() : null)).catch(() => null);
+  const man = await siteFetch(env, "/blog-import/index.json", { cf: { cacheTtl: 60 } }).then((r) => (r.ok ? r.json() : null)).catch(() => null);
   if (!man || !man.total || !man.per || offset >= man.total) return 0;
   const owner = await db.prepare("SELECT p.user_id uid FROM profiles p JOIN users u ON u.id=p.user_id AND u.banned=0 WHERE p.handle=?").bind(OWNER).first();
   if (!owner) return 0;
   const part = Math.floor(offset / man.per), from = offset - part * man.per;
-  const data = await fetch(`${env.SITE}/blog-import/part-${part + 1}.json`).then((r) => (r.ok ? r.json() : null)).catch(() => null);
+  const data = await siteFetch(env, `/blog-import/part-${part + 1}.json`).then((r) => (r.ok ? r.json() : null)).catch(() => null);
   if (!Array.isArray(data)) return 0;
   const slice = data.slice(from, from + BATCH), st = [];
   for (const p of slice) {

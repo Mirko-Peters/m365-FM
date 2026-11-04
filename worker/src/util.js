@@ -15,6 +15,19 @@ export const b64u = {
   },
 };
 
+// Dateien des Seitenbaus abrufen: erst ueber die Website, sonst direkt aus dem R2-Bucket (Schluessel pages/<pfad>, tools/r2_pages_upload.py).
+// Abrufe auf die eigene Zone (www.m365.fm) gehen ohne das Flag global_fetch_strictly_public am Site-Worker vorbei direkt zum Ursprung
+// (GitHub Pages). Dateien, die nur im Bucket liegen (blog-import/, translations-blog.json, duenne Sprachfassungen), kaemen dort als 404 zurueck.
+export async function siteFetch(env, path, init) {
+  const r = await fetch(env.SITE + path, init).catch(() => null);
+  if (r && r.ok) return r;
+  if (env.PAGES && (!r || r.status === 404)) {
+    const obj = await env.PAGES.get("pages" + path).catch(() => null);
+    if (obj) return new Response(obj.body, { status: 200, headers: { "content-type": /\.json$/i.test(path) ? "application/json; charset=utf-8" : "application/octet-stream", "x-m365-src": "r2" } });
+  }
+  return r || new Response("", { status: 502 });
+}
+
 async function hmacKey(secret) {
   return crypto.subtle.importKey("raw", enc.encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign", "verify"]);
 }
