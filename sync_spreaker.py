@@ -10,6 +10,7 @@ ROOT = Path(__file__).parent
 API = "https://api.spreaker.com/v2"
 S = requests.Session()
 BASE_LANG = {"de-de": "de", "es-us": "es", "es-es": "es", "fr-fr": "fr", "pt-br": "pt", "nl-nl": "nl"}
+SITE_LANGS = ("en", "de", "es", "fr", "it", "pt", "nl", "pl", "id", "ru", "uk", "ar", "he", "ja", "ko")
 
 
 def get(url, **kw):
@@ -37,6 +38,56 @@ def norm_title(t):
     return re.sub(r"\W+", " ", (t or "").lower()).strip()
 
 
+def episode_stats(items):
+    """-> (Folgenwerte, Gesamt-Downloads); fehlende Downloadfelder bleiben None."""
+    rows, total, found_downloads = [], 0, False
+    for it in items:
+        eid = it.get("episode_id") or (it.get("episode") or {}).get("episode_id")
+        if not eid:
+            continue
+        nums = {k: v for k, v in it.items() if isinstance(v, (int, float)) and not isinstance(v, bool) and k not in ("episode_id", "show_id")}
+        plays = sum(v for k, v in nums.items() if "play" in k.lower())
+        dl = [v for k, v in nums.items() if "download" in k.lower()]
+        found_downloads = found_downloads or bool(dl)
+        downloads = sum(dl)
+        total += downloads
+        score = max(plays, downloads) if (plays or downloads) else max(nums.values(), default=0)
+        rows.append({"episode_id": int(eid), "score": int(score), "plays": int(plays), "downloads": int(downloads)})
+    rows.sort(key=lambda row: -row["score"])
+    return rows, total if found_downloads else None
+
+
+def _show_stats(items):
+    rows, downloads = episode_stats(items)
+    return rows, 0 if not items else downloads
+
+
+def _save_top(root, required, top, downloads, start, end):
+    if not top:
+        return False
+    complete = bool(required) and required.issubset(top) and required.issubset(downloads)
+    path = Path(root) / "data" / "top.json"
+    try:
+        previous = json.loads(path.read_text("utf-8")).get("spreaker")
+    except (OSError, ValueError, TypeError):
+        previous = None
+    spreaker = ({"from": str(start), "to": str(end),
+                 "downloads": {lang: downloads[lang] for lang in required}, "complete": True}
+                if complete else previous)
+    data = {"from": str(start), "week_end": str(end), "updated": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+            "langs": top}
+    if spreaker:
+        data["spreaker"] = spreaker
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=1)
+    return complete
+
+
+def _show_maps(show_map):
+    shows = {lang: sid for lang, sid in (show_map or {}).items() if sid}
+    return shows, set(shows) & set(SITE_LANGS)
+
+
 def main():
     tok = os.environ.get("SPREAKER_TOKEN", "").strip()
     if tok:   # altes/ungueltiges Secret nicht blind nutzen: erst pruefen
@@ -60,22 +111,15 @@ def main():
         print("Kein Spreaker-Zugang (SPREAKER_TOKEN bzw. 'Spreaker verbinden') – uebersprungen"); return
     S.headers["Authorization"] = f"Bearer {tok}"
     cfg = json.load(open(ROOT / "config.json", encoding="utf-8"))
-    shows = {l: s for l, s in (cfg.get("show_map") or {}).items() if s}
+    shows, required = _show_maps(cfg.get("show_map"))
     end = date.today(); start = end - timedelta(days=7)
-    top, titles = {}, {}
+    top, titles, downloads = {}, {}, {}
     for lang, sid in shows.items():
         try:
             tot = paged(f"/shows/{sid}/episodes/statistics/plays/totals?from={start}&to={end}&limit=20")
-            rows = []
-            for it in tot:
-                eid = it.get("episode_id") or (it.get("episode") or {}).get("episode_id")
-                if not eid:
-                    continue
-                nums = {k: v for k, v in it.items() if isinstance(v, (int, float)) and not isinstance(v, bool) and k not in ("episode_id", "show_id")}
-                plays = sum(v for k, v in nums.items() if "play" in k.lower()); dls = sum(v for k, v in nums.items() if "download" in k.lower())
-                score = max(plays, dls) if (plays or dls) else max(nums.values(), default=0)
-                rows.append({"episode_id": int(eid), "score": int(score), "plays": int(plays), "downloads": int(dls)})
-            rows.sort(key=lambda r: -r["score"])
+            rows, total_downloads = _show_stats(tot)
+            if total_downloads is not None:
+                downloads[lang] = total_downloads
             top[lang] = rows[:30]
         except Exception as e:
             print("Statistik", lang, str(e)[:150])
@@ -83,10 +127,10 @@ def main():
             titles[lang] = {norm_title(e.get("title")): e for e in paged(f"/shows/{sid}/episodes?limit=100") if e.get("published_at")}
         except Exception as e:
             print("Episodenliste", lang, str(e)[:150])
-    if top:
-        json.dump({"from": str(start), "week_end": str(end), "updated": datetime.now(timezone.utc).isoformat(timespec="seconds"), "langs": top},
-                  open(ROOT / "data" / "top.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    if _save_top(ROOT, required, top, downloads, start, end):
         print("top.json:", {l: len(r) for l, r in top.items()})
+    else:
+        print("top.json: unvollständiger Sprachabruf – letzter vollständiger Stand bleibt erhalten")
     pp = ROOT / "data" / "published.json"
     pub = json.load(open(pp, encoding="utf-8")) if pp.exists() else {}
     added = 0
