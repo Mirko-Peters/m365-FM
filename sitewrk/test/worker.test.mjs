@@ -15,6 +15,7 @@ globalThis.fetch = async (req) => {
   if (u.pathname === "/feed.json") { if (ims) return new Response(null, { status: 304, headers: { "last-modified": LM } }); return new Response("{}", { headers: { "content-type": "application/json", etag: '"j1"', "last-modified": LM } }); }
   if (u.pathname === "/rng/") { if (r.headers.get("range")) return new Response("<html><b", { status: 206, headers: { "content-type": "text/html", "content-range": "bytes 0-8/30" } }); return new Response("<html><body>full</body></html>", { headers: { "content-type": "text/html" } }); }
   if (u.pathname === "/assets/a.css") return new Response("a{}", { headers: { "content-type": "text/css", etag: 'W/"css1"' } });
+  if (u.pathname === "/og/alt.png") return new Response("PNG", { headers: { "content-type": "image/png" } });
   return new Response("404", { status: 404, headers: { "content-type": "text/html" } });
 };
 const { default: W, r2Key, __resetR2Ready } = await import("../index.js");
@@ -212,4 +213,21 @@ test("R2 zuerst: Cache-Eintrag eines frueheren Baus wird nie ausgeliefert", asyn
   store.clear(); globalThis.ORIGIN_BUILD = "b1"; await warm();
   store.set("https://www.m365.fm/__r2c/@b0/de/r2only/", new Response("<html>alt</html>", { headers: { "content-type": "text/html; charset=utf-8" } }));
   const r = await run2(req("/de/r2only/", "US")); assert.equal(await r.text(), "<html><body>r2 de</body></html>"); assert.equal(r.headers.get("x-m365-cache"), "MISS");
+});
+
+test("Teilen-Bilder: nach dem Umzug nach R2 leitet /og/... per 301 auf img.m365.fm, solange GitHub Pages das Bild noch hat, kommt es von dort", async () => {
+  const r = await run(req("/og/entity/teams.png"));
+  assert.equal(r.status, 301); assert.equal(r.headers.get("location"), "https://img.m365.fm/og/entity/teams.png");
+  const h = await run(req("/og/show/episodes/x.png", undefined, {}, "HEAD")); assert.equal(h.status, 301);
+  const old = await run(req("/og/alt.png")); assert.equal(old.status, 200); assert.equal(await old.text(), "PNG");
+  const other = await run(req("/assets/fehlt.png")); assert.equal(other.status, 404);   // nur /og/ wird umgeleitet
+});
+
+test("img.m365.fm: Bucket-Interna (pages/, meta/) sind dort nicht oeffentlich - 404 ohne Abruf beim Ursprung", async () => {
+  const before = lastOrigin;
+  for (const p of ["/pages/index.html", "/pages/de/show/x/index.html", "/meta/gone.json"]) {
+    const r = await W.fetch(new Request("https://img.m365.fm" + p), env, { waitUntil() {} });
+    assert.equal(r.status, 404); assert.equal(r.headers.get("x-robots-tag"), "noindex");
+  }
+  assert.equal(lastOrigin, before, "kein Abruf bei GitHub Pages oder R2");
 });

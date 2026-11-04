@@ -43,6 +43,16 @@ def _request(url, data=None, headers=None, timeout=30, max_bytes=None, allowed_h
         return response.status, response.read(max_bytes + 1 if max_bytes else -1)
 
 
+def _is_managed_image(url):
+    parsed = urllib.parse.urlparse(url)
+    return (
+        parsed.scheme == "https"
+        and parsed.hostname == "img.m365.fm"
+        and parsed.port in (None, 443)
+        and parsed.path.startswith("/i/")
+    )
+
+
 def _caption(image_url, account, token):
     status, image = _request(image_url, headers={"User-Agent": "m365-r2-alt/1.0"}, max_bytes=8_000_000, allowed_host="img.m365.fm")
     if status != 200 or len(image) > 8_000_000:
@@ -70,7 +80,7 @@ def main():
         raise SystemExit("--limit muss zwischen 1 und 100 liegen")
     images = json.loads(MAP_FILE.read_text(encoding="utf-8"))
     alts = json.loads(ALT_FILE.read_text(encoding="utf-8")) if ALT_FILE.exists() else {}
-    urls = sorted({url for url in images.values() if isinstance(url, str) and url.startswith("https://img.m365.fm/")})
+    urls = sorted({url for url in images.values() if isinstance(url, str) and _is_managed_image(url)})
     todo = [url for url in urls if not str(alts.get(url) or "").strip()]
     print(f"{len(urls)} R2-Bilder, {len(todo)} ohne Alt-Text; Lauf-Limit {args.limit}.")
     if not args.apply:

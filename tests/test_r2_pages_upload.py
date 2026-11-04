@@ -113,6 +113,16 @@ class SyncTest(Base):
         self.man.unlink(); (self.docs / "p5" / "index.html").unlink()   # Cache verloren
         self.assertEqual(self.sync(), 0); self.assertTrue(self.s3.gone("pages/p5/index.html"))
 
+    def test_guard_ignores_og_move_to_img_bucket(self):
+        # 4.11.2026: Teilen-Bilder ziehen aus docs/og/ nach R2 og/ (img.m365.fm) - viele Markierungen auf einmal, kein Abbruch
+        tree(self.docs, {**{f"p{i}/index.html": str(i) for i in range(3)}, **{f"og/e{i}.png": "p" for i in range(9)}})
+        self.keys.write_text(json.dumps(["pages/pl/x/index.html"]))
+        self.assertEqual(self.sync(), 0)
+        import shutil; shutil.rmtree(self.docs / "og")
+        self.assertEqual(self.sync(), 0)
+        self.assertTrue(self.s3.gone("pages/og/e0.png")); self.assertEqual(self.s3.obj["pages/og/e0.png"]["body"], b"p", "Inhalt bleibt")
+        # die Sicherung fuer alle anderen Dateien prueft test_guard_wrong_dir_and_force weiter
+
     def test_guard_wrong_dir_and_force(self):
         tree(self.docs, {f"p{i}/index.html": str(i) for i in range(10)})
         self.keys.write_text(json.dumps(["pages/pl/x/index.html"]))

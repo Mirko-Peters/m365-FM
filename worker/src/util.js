@@ -107,3 +107,7 @@ export const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", 
 export async function audit(db, userId, action, target = "", detail = "") {   // Audit-Protokoll der Verwaltung (wer, wann, was) - Diff/Kurzfassung, keine Volltexte
   try { await db.prepare("INSERT INTO audit(user_id,action,target,detail,created) VALUES(?,?,?,?,?)").bind(userId || 0, action, String(target).slice(0, 200), String(detail).slice(0, 2000), Math.floor(Date.now() / 1000)).run(); } catch { /* Tabelle fehlt bis zur Migration */ }
 }
+
+// Antworttext von Claude: nur Bloecke vom Typ "text" (Claude Haiku 5.5 denkt standardmaessig mit, eine Antwort kann mit thinking-Bloecken beginnen -
+// content[0].text waere dann leer). Gleiches Muster wie translate_blog.py.
+export const claudeText = (j) => (Array.isArray(j?.content) ? j.content : []).filter((b) => b && b.type === "text").map((b) => b.text || "").join("").trim();
