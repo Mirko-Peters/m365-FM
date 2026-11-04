@@ -6,7 +6,7 @@ from datetime import date
 from pathlib import Path
 import requests
 import site_podpage as P
-from translate_show import call, NAMES, OUT, MODEL, cost, guard
+from translate_show import call, NAMES, OUT, MODEL, cost, guard, text_of
 
 TOP = int(os.environ.get("NOTES_TOP", "150")); MAXC = 8000
 S = requests.Session(); API = "https://api.spreaker.com/v2"
@@ -82,8 +82,8 @@ def main():
         if res["type"] != "succeeded": bad += 1; why[res["type"]] = why.get(res["type"], 0) + 1; continue
         u = res["message"]["usage"]; tin += u["input_tokens"]; tout += u["output_tokens"]
         if res["message"].get("stop_reason") == "max_tokens": bad += 1; why["max_tokens"] = why.get("max_tokens", 0) + 1; continue
-        if bad_text(res["message"]["content"][0]["text"]): bad += 1; why["encoding"] = why.get("encoding", 0) + 1; continue   # T5
-        have[l][key[r["custom_id"]]] = P.san(res["message"]["content"][0]["text"]); ok += 1
+        if bad_text(text_of(res["message"])): bad += 1; why["encoding"] = why.get("encoding", 0) + 1; continue   # T5
+        have[l][key[r["custom_id"]]] = P.san(text_of(res["message"])); ok += 1
     for l in langs: (OUT / f"notes_{l}.json").write_text(json.dumps(have[l], ensure_ascii=False), encoding="utf-8")
     uf = OUT / "usage.json"; old = json.loads(uf.read_text()) if uf.exists() else {"input_tokens": 0, "output_tokens": 0, "runs": []}
     old["input_tokens"] += tin; old["output_tokens"] += tout; old["runs"].append({"kind": "notes", "batch": bid, "model": MODEL, "ok": ok, "failed": bad, "input_tokens": tin, "output_tokens": tout}); uf.write_text(json.dumps(old, indent=1))

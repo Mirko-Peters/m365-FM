@@ -42,7 +42,7 @@ def read_gone(s3, bucket):
         raise
 
 
-def upload(s3, bucket, todo, meta=None, retries=1, on_ok=None, strict=False):
+def upload(s3, bucket, todo, meta=None, retries=1, on_ok=None, strict=False, cache_control="public, max-age=600"):
     """todo: [(key, path, hash)] -> (ok_keys, failed_keys). Erst Dateien, dann Seiten (eine neue Seite zeigt nie auf ein noch fehlendes Stylesheet);
     Fehlschlaege werden `retries`-mal wiederholt (mit kurzer Pause). strict=True (Spiegel): Phase 2 entfaellt, wenn in Phase 1 etwas endgueltig
     fehlschlug - im r2out-Upload nicht, dort soll eine fehlende Export-Datei nicht alle Sprachseiten aufhalten."""
@@ -50,7 +50,7 @@ def upload(s3, bucket, todo, meta=None, retries=1, on_ok=None, strict=False):
         key, f, h = item
         try:
             kw = {"Metadata": meta} if meta else {}
-            s3.put_object(Bucket=bucket, Key=key, Body=f.read_bytes(), ContentType=ctype(key), CacheControl="public, max-age=600", **kw); return item, None
+            s3.put_object(Bucket=bucket, Key=key, Body=f.read_bytes(), ContentType=ctype(key), CacheControl=cache_control, **kw); return item, None
         except Exception as e: return item, str(e)[:120]
     ok, failed, shown = [], [], [0]
     with ThreadPoolExecutor(16) as ex:

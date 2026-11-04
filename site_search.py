@@ -91,7 +91,7 @@ def extract(url, html, lang_default, typ, allow_noindex=False):
     _xd = re.search(r'<link rel="alternate" hreflang="x-default" href="([^"]+)"', html[:20000])   # Cluster der Sprachfassungen (auch Dub-Folgen mit eigenen Slugs)
     return {"id": f"{g('lang') or lang_default}:{path}", "url": url, "lang": g("lang") or lang_default, "type": _type(path, typ, types),
             "title": title, "summary": _txt(g("desc"), 300), "keywords": kw[:500], "entities": ents,
-            "date": date, "image": img if img.startswith("https://img.m365.fm/") else "", "group": _xd.group(1) if _xd else ""}
+            "date": date, "image": img if img.startswith("https://img.m365.fm/") and not img.startswith("https://img.m365.fm/og/") else "", "group": _xd.group(1) if _xd else ""}
 
 
 def build_index(sitemap, roots, write_r2, base, langs):

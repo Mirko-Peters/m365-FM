@@ -12,7 +12,8 @@ export function mailReady(env) {
   return !!(env?.EMAIL || env?.RESEND_API_KEY);
 }
 
-export async function sendMail(env, { to, subject, html, text, headers = {} }) {
+export async function sendMail(env, { to, subject, html, text, headers = {}, replyTo = "", attachments = [] }) {
+  // attachments: [{ filename, content (Base64), type, disposition }] - Cloudflare Email Service und Resend
   if (env?.EMAIL) {
     try {
       const response = await env.EMAIL.send({
@@ -22,6 +23,8 @@ export async function sendMail(env, { to, subject, html, text, headers = {} }) {
         ...(html !== undefined ? { html } : {}),
         ...(text !== undefined ? { text } : {}),
         ...(Object.keys(headers).length ? { headers } : {}),
+        ...(replyTo ? { replyTo } : {}),
+        ...(attachments.length ? { attachments } : {}),
       });
       const messageId = response?.messageId || "";
       console.log("mail_send", JSON.stringify({ provider: "cloudflare", status: 200, messageId }));
@@ -39,7 +42,9 @@ export async function sendMail(env, { to, subject, html, text, headers = {} }) {
     const response = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: { authorization: "Bearer " + resendKey, "content-type": "application/json" },
-      body: JSON.stringify({ from: env.MAIL_FROM, to, subject, html, ...(text !== undefined ? { text } : {}), headers }),
+      body: JSON.stringify({ from: env.MAIL_FROM, to, subject, html, ...(text !== undefined ? { text } : {}), headers,
+        ...(replyTo ? { reply_to: replyTo } : {}),
+        ...(attachments.length ? { attachments: attachments.map((a) => ({ filename: a.filename, content: a.content, content_type: a.type })) } : {}) }),
     });
     const data = await response.json().catch(() => ({}));
     const messageId = typeof data?.id === "string" ? data.id : "";

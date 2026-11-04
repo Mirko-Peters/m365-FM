@@ -592,6 +592,7 @@ export async function deleteUserData(db, id) {
   }
   ops.push(
     db.prepare("DELETE FROM org_members WHERE user_id=?").bind(id),
+    db.prepare("DELETE FROM contributions WHERE user_id=?").bind(id), db.prepare("DELETE FROM contribution_sources WHERE user_id=?").bind(id), db.prepare("DELETE FROM contribution_ignored WHERE user_id=?").bind(id),   // Loeschmarken enthalten URLs geloeschter Beitraege (DSGVO)
     db.prepare("DELETE FROM item_votes WHERE user_id=? OR item_id IN (SELECT id FROM feed_items WHERE owner_type='u' AND owner_id=?)").bind(id, id),
     db.prepare("DELETE FROM feed_items WHERE owner_type='u' AND owner_id=?").bind(id), db.prepare("DELETE FROM channels WHERE owner_type='u' AND owner_id=?").bind(id),
     db.prepare("DELETE FROM expertise WHERE owner_type='u' AND owner_id=?").bind(id), db.prepare("DELETE FROM expertise_evidence WHERE owner_id=?").bind(id), db.prepare("DELETE FROM expertise_score WHERE owner_id=?").bind(id), db.prepare("DELETE FROM programs WHERE owner_type='u' AND owner_id=?").bind(id),

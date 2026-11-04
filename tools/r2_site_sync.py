@@ -102,8 +102,11 @@ def main(src):
             elif md.get("src") == "docs": own.append(k)
             else: foreign += 1
     if bad: return fail(f"{len(bad)} Schluessel nicht pruefbar (z. B. {bad[0]})")
-    if len(own) > len(files) and os.environ.get("R2_TOMBSTONE_FORCE") != "1":
-        return fail(f"{len(own)} Dateien waeren als entfernt zu markieren, mehr als der Bau enthaelt ({len(files)}) - vermutlich falsches Verzeichnis. "
+    # Teilen-Bilder (pages/og/) zaehlen nicht mit: sie sind am 4.11.2026 bewusst aus docs/ in den Bucket unter og/ umgezogen (img.m365.fm/og/,
+    # tools/r2_og_upload.py) - ihr einmaliges Markieren ist kein Zeichen fuer ein falsches Verzeichnis
+    n_guard = sum(1 for k in own if not k.startswith("pages/og/"))
+    if n_guard > len(files) and os.environ.get("R2_TOMBSTONE_FORCE") != "1":
+        return fail(f"{n_guard} Dateien waeren als entfernt zu markieren, mehr als der Bau enthaelt ({len(files)}) - vermutlich falsches Verzeichnis. "
                     "Bei Absicht einmal mit R2_TOMBSTONE_FORCE=1 laufen lassen")
     marked = []
     with ThreadPoolExecutor(16) as ex:
