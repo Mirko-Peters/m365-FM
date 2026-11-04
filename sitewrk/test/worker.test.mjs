@@ -222,3 +222,12 @@ test("Teilen-Bilder: nach dem Umzug nach R2 leitet /og/... per 301 auf img.m365.
   const old = await run(req("/og/alt.png")); assert.equal(old.status, 200); assert.equal(await old.text(), "PNG");
   const other = await run(req("/assets/fehlt.png")); assert.equal(other.status, 404);   // nur /og/ wird umgeleitet
 });
+
+test("img.m365.fm: Bucket-Interna (pages/, meta/) sind dort nicht oeffentlich - 404 ohne Abruf beim Ursprung", async () => {
+  const before = lastOrigin;
+  for (const p of ["/pages/index.html", "/pages/de/show/x/index.html", "/meta/gone.json"]) {
+    const r = await W.fetch(new Request("https://img.m365.fm" + p), env, { waitUntil() {} });
+    assert.equal(r.status, 404); assert.equal(r.headers.get("x-robots-tag"), "noindex");
+  }
+  assert.equal(lastOrigin, before, "kein Abruf bei GitHub Pages oder R2");
+});

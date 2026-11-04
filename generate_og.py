@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Erzeugt pro Seite ein Teilen-Bild (Open Graph, 1200x630 PNG) aus docs/og-manifest.json mit Chromium (Playwright).
 Schlägt etwas fehl, wird das Standardbild kopiert, damit og:image nie ins Leere zeigt.
-Ablage: r2img/og/<pfad>.png (OG_OUT), nicht in docs/ - tools/r2_og_upload.py lädt sie in den R2-Bucket, ausgeliefert über
-https://img.m365.fm/og/<pfad>.png (generate_site.py OG_BASE). So bleibt GitHub Pages unter dem 1-GB-Limit (CLAUDE.md: Bilder nur über img.m365.fm)."""
+Ablage: r2img/og/<pfad>.png (OG_OUT), nicht in docs/ - tools/r2_og_upload.py lädt sie vor dem Deploy in den R2-Bucket (auf main
+blockierend), ausgeliefert über https://img.m365.fm/og/<pfad>.png (generate_site.py OG_BASE). So bleibt GitHub Pages unter dem
+1-GB-Limit (CLAUDE.md: Bilder nur über img.m365.fm). --fallback-only: ohne Browser nur fehlende Bilder durch das Standardbild ersetzen."""
 import hashlib, html, json, os, shutil
 from pathlib import Path
 
@@ -57,12 +58,14 @@ body:before{{content:"";position:absolute;inset:0;background-image:linear-gradie
 CARD_VERSION = 1   # bei Aenderungen am Kartenlayout erhoehen, dann werden alle Bilder neu gezeichnet
 
 
-def main():
+def main(fallback_only=False):
     mf = DOCS / "og-manifest.json"
     if not mf.exists():
         return
     items = json.load(open(mf, encoding="utf-8"))
     default = DOCS / "assets" / "og-default.png"
+    if fallback_only:   # eigener Schritt im Bau: auch wenn das Zeichnen (Playwright) scheitert, hat jede Seite ein Bild fuer den Upload
+        fallback(items, default); return
     ok = reused = 0
     cache = Path(__file__).parent / ".ogcache"   # Bilder aus frueheren Laeufen (Workflow-Cache), Schluessel = Hash der Karteninhalte
     cache.mkdir(exist_ok=True)
@@ -101,13 +104,20 @@ def main():
         pass
     except Exception as e:
         print("Playwright nicht verfügbar:", str(e)[:120])
-    for it in items:  # Fallback
-        out = OUT / it["path"]
-        if not out.exists() and default.exists():
-            out.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy(default, out)
+    fallback(items, default)
     print(ok + reused, "von", len(items), "Teilen-Bildern bereit")
 
 
+def fallback(items, default):
+    n = 0
+    for it in items:
+        out = OUT / it["path"]
+        if not out.exists() and default.exists():
+            out.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy(default, out); n += 1
+    if n: print(n, "Teilen-Bilder durch das Standardbild ersetzt")
+
+
 if __name__ == "__main__":
-    main()
+    import sys
+    main(fallback_only="--fallback-only" in sys.argv[1:])
