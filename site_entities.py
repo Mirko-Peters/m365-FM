@@ -413,7 +413,8 @@ def build(g, wiki_links, experts_by_ent, ep_find):
         js = ('<script>(function(){var b=[].slice.call(document.querySelectorAll(".en-f")),l=[].slice.call(document.querySelectorAll(".en-i")),o=document.getElementById("en-old"),cur=b[0];function ap(){l.forEach(function(i){i.hidden=(!!cur.dataset.f&&i.dataset.t!==cur.dataset.f)||(!!i.dataset.old&&!(o&&o.checked))})}b.forEach(function(x){x.addEventListener("click",function(){b.forEach(function(y){y.setAttribute("aria-pressed",y===x?"true":"false")});cur=x;ap()})});if(o)o.addEventListener("change",ap)})()</script>')
         css = '<style>' + MED.CSS + '.en-ep{margin:1em 0}.en-ep h3{margin:.2em 0}.en-ep p{margin:.2em 0}.en-faq details,.wk-q{border:1px solid var(--bd);border-radius:.4em;padding:.5em .8em;margin:.4em 0;background:var(--card)}.en-faq summary{cursor:pointer;font-weight:600}.wk-a{margin:.4em 0 .4em 1em}.en-old{border:1px solid var(--bd);border-left:4px solid #b45309;background:var(--card);padding:.6em .9em;border-radius:.4em}.en-f{font:inherit;cursor:pointer;border:1px solid var(--bd);border-radius:2em;padding:.35em .9em;margin:.2em .3em .2em 0;background:var(--card);color:var(--fg);min-height:2.5rem}.en-f[aria-pressed=true]{background:var(--ac);color:var(--onac);border-color:var(--ac)}.en-list{list-style:none;padding:0}.en-list li{padding:.55em 0;border-bottom:1px solid var(--bd)}.en-list li[hidden]{display:none}.en-facts{border-collapse:collapse;width:100%}.en-facts th{text-align:start;padding:.4em .8em .4em 0;vertical-align:top;white-space:nowrap}.en-facts td{padding:.4em 0}.en-rel h3{margin:.9em 0 .2em;font-size:1rem}.en-rel ul{margin:.2em 0;padding-inline-start:1.3em}.en-artl{list-style:none;padding:0}.en-artl li{padding:.5em 0;border-bottom:1px solid var(--bd)}.en-arts details{margin:.6em 0}.en-arts summary{cursor:pointer}.en-upd{font-size:.9em}.en-kp{border:1px solid var(--bd);border-inline-start:4px solid var(--ac,#0a5);border-radius:.4em;padding:.4em 1em;margin:1em 0}.en-kp h2{margin:.3em 0;font-size:1.1rem}.en-kp ul{margin:.3em 0;padding-inline-start:1.2em}.en-src ul{padding-inline-start:1.2em}.en-src li{margin:.2em 0;overflow-wrap:anywhere}</style>'
         newbtn = f'<div id="en-new" data-lang="{lang}"></div>'
-        body = shell(lang, f'<h1>{esc(s["entities"])}</h1><p class="mut">{esc(s["intro"])}</p><p>{esc(s["count"].format(n=len(recs)))} · <a href="{BASE}/entities.json">{esc(s["export"])} (JSON)</a> · <a href="{BASE}/entities.jsonld">JSON-LD</a></p>{newbtn}<p><label><input type="checkbox" id="en-old"> {esc(OLD[lang][1])}</label></p><div role="group" aria-label="{esc(s["type"])}">{filt}</div><ul class="en-list">{"".join(card(e) for e in sorted(recs, key=lambda x: x["name"].lower()))}</ul>{js}'
+        _feed_index_lang = lang if lang in ("en", "de") else "en"
+        body = shell(lang, f'<h1>{esc(s["entities"])}</h1><p class="mut">{esc(s["intro"])}</p><p>{esc(s["count"].format(n=len(recs)))} · <a href="{BASE}/entities.json">{esc(s["export"])} (JSON)</a> · <a href="{BASE}/entities.jsonld">JSON-LD</a> · <a href="{BASE}{pfx(_feed_index_lang)}/entity/feeds/">{esc(T(lang, "RSS feeds / OPML", "RSS-Feeds / OPML"))}</a></p>{newbtn}<p><label><input type="checkbox" id="en-old"> {esc(OLD[lang][1])}</label></p><div role="group" aria-label="{esc(s["type"])}">{filt}</div><ul class="en-list">{"".join(card(e) for e in sorted(recs, key=lambda x: x["name"].lower()))}</ul>{js}'
                       f'<script>window.M365E={{api:"{api}",lang:"{lang}",base:"{BASE}",s:{json.dumps({k: s[k] for k in ("new",)}, ensure_ascii=False)}}}</script><script defer src="{BASE}/assets/entity.js"></script>')
         _terms = [e for e in recs if e["type"] in ("concept", "category")]
         ld = [{"@context": "https://schema.org", "@type": "DefinedTermSet", "@id": f"{BASE}/entity/#set", "name": "M365.FM Entities", "url": root, "inLanguage": lang, "description": s["intro"],
@@ -569,16 +570,19 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             _mod = max([MOD.get(e["id"], TODAY), str(e.get("edited") or "")[:10], *[_iso(p.get("published")) for p in _arts[:1]], *[max((str(x.get("date", ""))[:10] for x in eps), default="")],
                         *[_iso(x.get("created")) for x in _fq[:1]]] + [""])
             _mod = _mod if len(_mod) == 10 and _mod <= TODAY else TODAY
+            _feedlang = lang if lang in ("en", "de") else "en"
+            _feedu = (g.get("entity_feed_urls") or {}).get(e["id"], {}).get(_feedlang) or f'{BASE}{pfx(_feedlang)}/entity/{e["id"]}/feed.xml'
+            feedbox = (f'<p class="mut"><a class="btn" href="{esc(_feedu)}">RSS</a> '
+                       f'{esc(T(lang, "Subscribe in Teams/Outlook · Teams: Workflows → “Post RSS feed in a channel”", "In Teams/Outlook abonnieren · Teams: Workflows → „RSS-Feed in Kanal posten“"))}</p>')
             _src = [(T(lang, "Official website", "Offizielle Website"), e.get("web")), (T(lang, "Documentation", "Dokumentation"), e.get("docs")), ("Wikipedia", e.get("wikipedia")),
                     ("Wikidata", f"https://www.wikidata.org/wiki/{e['wikidata']}" if e.get("wikidata") else "")] + [(T(lang, "Profile", "Profil"), u_) for u_ in (e.get("same_as") or [])[:4]]
             _src = [(n_, u_) for n_, u_ in _src if u_ and str(u_).startswith("http")]
             srcbox = (f'<section class="en-src"><h2>{esc(T(lang, "Sources", "Quellen"))}</h2><ul>' + "".join(f'<li>{esc(n_)}: <a href="{esc(u_)}" rel="{SPM.link_rel(_spr, u_, own=_spown and u_ == e.get("web"))}">{esc(u_.replace("https://", "").rstrip("/"))}</a></li>' for n_, u_ in _src)
-                      + (f'<li>{esc(T(lang, "Feed for this topic (RSS)", "Feed zu diesem Thema (RSS)"))}: <a href="{BASE}/entity/{e["id"]}/feed.xml">entity/{e["id"]}/feed.xml</a></li>' if (eps or _arts) else "")
                       + (f'<li>{esc(T(lang, "M365.FM episodes on this topic", "M365.FM-Folgen zum Thema"))}: {len(eps)}</li>' if eps else "") + (f'<li>{esc(T(lang, "Articles on this topic", "Artikel zum Thema"))}: {len(_arts)}</li>' if _arts else "") + MEN.src_li(lang, e["id"]) + "</ul></section>") if (_src or eps or _arts or MEN.for_entity(e["id"])) else ""
             _au = ENTS.get(AUTHOR_EID)
             updline = (f'<p class="mut en-upd">' + (f'{esc(T(lang, "Maintained by", "Gepflegt von"))} <a href="{root}{AUTHOR_EID}/">{esc(_au["name"])}</a> (Microsoft MVP) · ' if _au and e["id"] != AUTHOR_EID else "")
                        + f'{esc(T(lang, "Last updated", "Zuletzt aktualisiert"))}: <time datetime="{_mod}">{_mod}</time></p>')
-            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{root}">{esc(s["entities"])}</a></nav><h1>{esc(e["name"])}</h1>{SPM.note(lang, _spr)}<p class="mut">{esc(TL[e["type"]][li])}</p><p class="en-def" style="font-size:1.1em">{esc(d)}</p>{oldbanner}{claim_html(e["id"], lang)}{hero}{longbox}{ft}{evl}{kpbox}{eb}{tline}{artbox}'
+            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{root}">{esc(s["entities"])}</a></nav><h1>{esc(e["name"])}</h1>{feedbox}{SPM.note(lang, _spr)}<p class="mut">{esc(TL[e["type"]][li])}</p><p class="en-def" style="font-size:1.1em">{esc(d)}</p>{oldbanner}{claim_html(e["id"], lang)}{hero}{longbox}{ft}{evl}{kpbox}{eb}{tline}{artbox}'
                           f'{qbox}{faqbox}{relmap}{relx}<div class="en-rel">{rb}</div>{gloss}{SU.block(lang, e["id"])}{wb}{("<h2>" + esc(s["experts"]) + "</h2>" + ehtml) if ehtml else ""}{srcbox}{updline}{edit}'
                           f'<script>window.M365E={{api:"{api}",lang:"{lang}",base:"{BASE}",s:{json.dumps({k: s[k] for k in ("edit_e",)}, ensure_ascii=False)}}};'
                           f'(function(){{var d=0,u="{BASE}/assets/entity.js";function go(){{if(d)return;d=1;var s=document.createElement("script");s.src=u;document.body.appendChild(s)}}'
@@ -623,19 +627,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                 _thin = not _real and _app < 2 and not SQ.BY_PERSON.get(e["id"])   # eigene Zitate sind echter Inhalt
             _alts = {"en": eurl(BASE, "en", e["id"]), "de": eurl(BASE, "de", e["id"])} if _has_de and not _thin else None
             _noidx = lang not in ("en", "de") or (lang == "de" and not _has_de) or _thin
-            _feedu = f"{BASE}/entity/{e['id']}/feed.xml"
-            if lang == "en" and (_arts or eps):   # Themen-Feed: neueste Artikel und Folgen zu dieser Entitaet (fuer Leser und Agenten)
-                from xml.sax.saxutils import escape as _x
-                from email.utils import formatdate as _fd
-                _items = [("article", p["title"], f"{BASE}/community/u/{p['handle']}/blog/{p['slug']}/", p.get("published") or 0, p.get("summary") or "") for p in _arts[:30] if p.get("lang") == "en"]
-                for x in eps[:20]:
-                    try: _ts = int(__import__("datetime").datetime.strptime(str(x.get("date", ""))[:10], "%Y-%m-%d").replace(tzinfo=__import__("datetime").timezone.utc).timestamp())
-                    except Exception: _ts = 0
-                    _items.append(("episode", x["e"]["title"], _epu(x), _ts, x.get("sum") or ""))
-                _items.sort(key=lambda t: -t[3])
-                write(f"entity/{e['id']}/feed.xml", '<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel>' + f"<title>{_x(e['name'])} – M365.FM</title><link>{u}</link><description>{_x(d[:300])}</description><language>en</language>"
-                      + "".join(f"<item><title>{_x(t)}</title><link>{lnk}</link><guid>{lnk}</guid><pubDate>{_fd(ts)}</pubDate><category>{k}</category><description>{_x(sm[:400])}</description></item>" for k, t, lnk, ts, sm in _items[:40]) + "</channel></rss>")
-            _fhead = f'<link rel="alternate" type="application/rss+xml" title="{esc(e["name"])} – M365.FM" href="{_feedu}">' if (_arts or eps) else ""
+            _fhead = f'<link rel="alternate" type="application/rss+xml" title="{esc(e["name"])} – M365.FM" href="{esc(_feedu)}">'
             _w = write if lang in ("en", "de") else (g.get("write_r2") or write)   # Entitaetsseiten der 13 weiteren Sprachen (noindex, bis ihre Uebersetzungen angezeigt werden) liegen im R2-Bucket, nicht in GitHub Pages (~620 MB)
             ld = ld + _qld   # Quotation-Knoten der Person
             _w(f"{rel}/{e['id']}/index.html", page(lang, f'{e["name"]} – {TL[e["type"]][li]} | M365.FM', d[:155], u, b, _alts if lang in ("en", "de") else None, ld, xdefault=eurl(BASE, "en", e["id"]), og_type="website", extra_head=LCSS + css + _fhead, noindex=_noidx))
