@@ -45,55 +45,33 @@ def strip(t):
     return re.sub(r"<[^>]+>", "", t or "").strip()
 
 
-def duration_seconds(value):
-    if isinstance(value, str) and ":" in value:
-        try:
-            parts = [int(float(x)) for x in value.split(":")]
-            return sum(part * 60 ** i for i, part in enumerate(reversed(parts)))
-        except ValueError:
-            return None
-    try:
-        return int(value) if value else None
-    except (TypeError, ValueError):
-        return None
-
-
 # ---------- eigene Folgen je Show ----------
 def own_episodes(lang):
-    """{Spreaker-ID: Folge}, plus Zuordnung der bisherigen video_id:lang-Schluessel."""
+    """Folgen der Hauptshow nach Spreaker-ID, weitere Shows mit bisherigen Schluesseln."""
     out = {}
     aliases = {}
-    notes = jload(DATA / "show_notes" / f"{lang}.json", {}).get("episodes") or {}
-    for sid, e in notes.items():
-        sid = str(e.get("id") or sid)
-        out[sid] = {"title": strip(e.get("title")), "date": e.get("published", ""),
-                    "guid": e.get("guid", ""), "duration": e.get("duration")}
-        aliases[f"{sid}:{lang}"] = sid
     if lang == "en":
+        notes = jload(DATA / "show_notes" / "en.json", {}).get("episodes") or {}
+        for sid, e in notes.items():
+            sid = str(e.get("id") or sid)
+            out[sid] = {"title": strip(e.get("title")), "date": e.get("published", ""),
+                        "guid": e.get("guid", "")}
+            aliases[f"{sid}:en"] = sid
         for ep_id, e in jload(DATA / "en_episodes.json", {}).items():
             sid = str(e.get("spreaker_id") or ep_id)
             if sid in out:
-                out[sid].update({"guid": e.get("guid") or out[sid].get("guid"),
-                                 "duration": duration_seconds(e.get("duration")) or out[sid].get("duration")})
+                out[sid]["guid"] = e.get("guid") or out[sid].get("guid")
             else:
                 out[sid] = {"title": strip(e.get("title")), "date": (e.get("pub") or "")[:10],
-                            "guid": e.get("guid", ""), "duration": duration_seconds(e.get("duration"))}
+                            "guid": e.get("guid", "")}
             aliases[f"{sid}:en"] = sid
         return out, aliases
     pub = jload(DATA / "published.json", {})
     for p in (ROOT / "episodes").glob("*.json"):
         for l, e in jload(p, {}).items():
             if BASE_LANG.get(l, l) == lang:
-                old_key = f"{p.stem}:{l}"
-                published = pub.get(old_key) or pub.get(f"{p.stem}:{lang}") or {}
-                sid = str(published.get("episode_id") or e.get("spreaker_id") or "")
-                if not sid:
-                    continue
-                aliases[old_key] = sid
-                aliases[f"{p.stem}:{lang}"] = sid
-                if sid not in out:
-                    out[sid] = {"title": strip(e.get("title")), "date": (published.get("at") or "")[:10],
-                                "guid": "", "duration": None}
+                out[f"{p.stem}:{lang}"] = {"title": strip(e.get("title")),
+                                            "date": ((pub.get(f"{p.stem}:{lang}") or {}).get("at") or "")[:10]}
     return out, aliases
 
 
@@ -105,6 +83,8 @@ def show_feed_url(lang):
 
 def apple_show_id(lang, ids):
     """Findet eine Apple-Show nur bei exakter Uebereinstimmung des Spreaker-Feeds."""
+    if lang != "en":
+        return ""
     feed_url = show_feed_url(lang)
     if not feed_url:
         return ""
@@ -126,6 +106,8 @@ def apple_show_id(lang, ids):
 
 def apple_candidates(lang, ids, ctx):
     if not ids.get("apple_id"):
+        if lang != "en":
+            return []
         ids["apple_id"] = apple_show_id(lang, ids)
         if not ids["apple_id"]:
             print(f"Apple {lang}: keine Show mit passender Spreaker-Feed-URL gefunden")
@@ -172,9 +154,7 @@ def spotify_candidates(lang, ids, ctx):
     out, url = [], f"https://api.spotify.com/v1/shows/{ids['spotify_id']}/episodes?limit=50&market=US"
     while url:
         r = get(url, {"Authorization": f"Bearer {tok}"})
-        out += [{"title": x.get("name"), "url": (x.get("external_urls") or {}).get("spotify"),
-                 "date": x.get("release_date", ""), "duration": (x.get("duration_ms") or 0) / 1000}
-                for x in r.get("items", []) if x and (x.get("external_urls") or {}).get("spotify")]
+        out += [{"title": x.get("name"), "url": x["external_urls"]["spotify"], "date": x.get("release_date", "")} for x in r.get("items", []) if x]
         url = r.get("next")
     return out
 
@@ -301,24 +281,29 @@ def match_apple(own, cands):
 
 
 def migrate_links(out, aliases):
-    """Kopiert alte video_id:lang-Eintraege auf die kanonische Spreaker-ID."""
+    """Migriert nur Apple-Links der Hauptshow; andere Plattformen behalten ihren bisherigen Schluessel."""
     for old_key, episode_id in aliases.items():
         if old_key in out and isinstance(out[old_key], dict):
-            migrated = dict(out[old_key])
-            migrated.update(out.get(episode_id) or {})
-            out[episode_id] = migrated
+            apple = out[old_key].get("apple")
+            if apple:
+                out.setdefault(episode_id, {}).setdefault("apple", apple)
 
 
 def normalize_manual(manual, aliases):
-    return {aliases.get(key, key): {p: u for p, u in links.items() if u}
-            for key, links in manual.items() if isinstance(links, dict)}
-
-
-def retry_for(state, episode_id, platform):
-    entry = state.get(episode_id) or {}
-    if "apple" in entry or "spotify" in entry:
-        return entry.get(platform) or {}
-    return entry if platform == "apple" else {}
+    out = {}
+    for key, links in manual.items():
+        if not isinstance(links, dict):
+            continue
+        episode_id = aliases.get(key, key)
+        if episode_id != key:
+            if links.get("apple"):
+                out.setdefault(episode_id, {})["apple"] = links["apple"]
+            links = {p: u for p, u in links.items() if p != "apple" and u}
+            if links:
+                out.setdefault(key, {}).update(links)
+        else:
+            out.setdefault(key, {}).update({p: u for p, u in links.items() if u})
+    return out
 
 
 def should_search_apple(state, today):
@@ -342,9 +327,14 @@ def spotify_token():
 
 def main():
     plat = jload(DATA / "platforms.json", {})
+    # Englische Show: Apple-ID aus der Podpage-Sicherung uebernehmen, wenn noch nicht eingetragen
+    pc = jload(DATA / "podpage" / "podcast.json", {})
+    if "en" not in plat:
+        plat["en"] = {}
+    if pc.get("apple_player_id") and not plat["en"].get("apple_id"):
+        plat["en"]["apple_id"] = str(pc["apple_player_id"])
     out = jload(DATA / "episode_links.json", {})
     previous = jload(DATA / "episode_links_report.json", {})
-    previous_shows = previous.get("shows") or {}
     previous_retry = previous.get("retry_state") or {}
     all_own, aliases = {}, {}
     for lang in plat:
@@ -353,29 +343,17 @@ def main():
             all_own[lang] = own
             aliases.update(old_keys)
     migrate_links(out, aliases)
-    for key, url in jload(DATA / "spotify_links.json", {}).items():
-        episode_id = aliases.get(key, key)
-        out.setdefault(episode_id, {}).setdefault("spotify", url)
-
-    manual = normalize_manual(jload(DATA / "episode_links_manual.json", {}), aliases)
-    for lang, own in all_own.items():
-        for episode_id in own:
-            out.setdefault(episode_id, {})
-
+    for k, u in jload(DATA / "spotify_links.json", {}).items():   # per scrape_spotify.py gesammelt (ohne API)
+        out.setdefault(k, {}).setdefault("spotify", u)
     ctx = {}
     try:
         ctx["spotify_token"] = spotify_token()
     except Exception as e:
         print("Spotify-Token:", e)
-    if not ctx.get("spotify_token"):
-        print("Spotify-API nicht verfuegbar (Secrets fehlen oder Token-Fehler); verwende vorhandene Scraper-Links.")
-
-    prior_open = sum(len((show.get("apple") or {}).get("open_episodes") or
-                         (show.get("apple") or {}).get("open") or [])
-                     for show in previous_shows.values() if isinstance(show, dict))
+    en_own = all_own.get("en", {})
+    prior_open = sum(1 for episode_id in en_own if "apple" not in out.get(episode_id, {}))
     search_budget = SEARCH_BACKLOG_CAP if prior_open > SEARCH_CAP else SEARCH_CAP
     today = time.strftime("%Y-%m-%d")
-    remaining_budget = search_budget
     search_attempted = set()
     report = {}
     for lang, ids in plat.items():
@@ -389,97 +367,65 @@ def main():
         ctx["ytm_seeds"] = [c["url"].rstrip("/").split("/")[-1] for c in pp.get("youtube_music", [])][::-1]   # juengste zuerst
         for name, fn in CONNECTORS.items():
             t0 = time.time()
-            if name == "spotify":
-                due = [episode_id for episode_id in own
-                       if "spotify" not in out.get(episode_id, {})
-                       and "spotify" not in manual.get(episode_id, {})
-                       and should_search_apple(retry_for(previous_retry, episode_id, "spotify"), today)[1]]
-                if not ctx.get("spotify_token") or not ids.get("spotify_id") or not due:
-                    cands[name] = []
-                    if ctx.get("spotify_token") and ids.get("spotify_id") and not due:
-                        print(f"Spotify {lang}: keine offene Folge mit faelliger Suche")
-                    continue
             try:
                 cands[name] = fn(lang, ids, ctx)
-                if name == "spotify":
-                    search_attempted.update((episode_id, name) for episode_id in due)
             except Exception as e:
                 print(name, lang, str(e)[:120])
             print(f"{lang} {name}: {time.time() - t0:.0f} s, {len(cands.get(name, []))} Kandidaten")
         for name, lst in pp.items():
             cands.setdefault(name, []).extend(lst)
         for name, lst in cands.items():
-            matcher = match_apple if name == "apple" else PM.match
-            hit, open_, amb = matcher(own, lst)
-            if name == "apple" and ids.get("apple_id") and remaining_budget:
-                due = []
-                for episode_id in own:
-                    if name in out.get(episode_id, {}) or episode_id in hit or name in manual.get(episode_id, {}):
-                        continue
-                    prior = retry_for(previous_retry, episode_id, name)
-                    first, is_due = should_search_apple(prior, today)
-                    if is_due:
-                        due.append(episode_id)
-                selected = due[:remaining_budget]
+            match_own = own
+            if lang == "en" and name != "apple":
+                match_own = {f"{episode_id}:en": episode for episode_id, episode in own.items()}
+            matcher = match_apple if name == "apple" and lang == "en" else PM.match
+            hit, open_, amb = matcher(match_own, lst)
+            if name == "apple" and ids.get("apple_id") and open_:
+                if lang == "en":
+                    due = []
+                    for episode_id in open_:
+                        if name in out.get(episode_id, {}):
+                            continue
+                        first, is_due = should_search_apple(previous_retry.get(episode_id) or {}, today)
+                        if is_due:
+                            due.append(episode_id)
+                    selected = due[:search_budget]
+                else:
+                    selected = [k for k in open_ if name not in out.get(k, {})]
                 extra = apple_search(lang, ids, selected, own, budget=len(selected))
-                remaining_budget -= len(selected)
-                search_attempted.update((episode_id, name) for episode_id in selected)
+                if lang == "en":
+                    search_attempted.update(selected)
                 if selected:
-                    print(f"Apple {lang}: {len(selected)} gezielte Suchen (Budget uebrig: {remaining_budget})")
+                    print(f"Apple {lang}: {len(selected)} gezielte Suchen")
                 if extra:
                     lst.extend(extra)
-                    hit, open_, amb = matcher(own, lst)
+                    hit, open_, amb = matcher(match_own, lst)
             for k, u in hit.items():
-                if name not in manual.get(k, {}):
-                    out.setdefault(k, {})[name] = u
-            connector_report[name] = {"candidates": len(lst), "matched_now": len(hit),
-                                      "ambiguous": [own[k]["title"] for k in amb[:20]]}
-            rep[name] = connector_report[name]
+                out.setdefault(k, {})[name] = u
+            missing = [k for k in open_ if name not in out.get(k, {})]
+            rep[name] = {"candidates": len(lst), "matched_now": len(hit),
+                         "linked": sum(1 for k in match_own if name in out.get(k, {})),
+                         "of": len(match_own), "open": [match_own[k]["title"] for k in missing][:40],
+                         "ambiguous": [match_own[k]["title"] for k in amb][:20]}
+            if name == "apple" and lang == "en":
+                rep[name]["open_episodes"] = [{"id": k, "title": match_own[k]["title"]} for k in missing]
+            print(f"{lang} {name}: {len(lst)} Kandidaten, {len(hit)} neu zugeordnet, {rep[name]['linked']}/{len(match_own)} verlinkt")
 
-    for episode_id, links in manual.items():
-        out.setdefault(episode_id, {}).update(links)
-
+    manual = normalize_manual(jload(DATA / "episode_links_manual.json", {}), aliases)
+    for k, v in manual.items():   # eigene Korrekturen gehen vor
+        out.setdefault(k, {}).update(v)
     retry_state = {}
-    for lang, own in all_own.items():
-        rep = report.setdefault(lang, {})
-        for name in CONNECTORS:
-            previous_platform = previous_shows.get(lang, {}).get(name, {})
-            linked = sum(1 for episode_id in own if name in out.get(episode_id, {}))
-            missing = [episode_id for episode_id in own if name not in out.get(episode_id, {})]
-            ambiguous = rep.get(name, {}).get("ambiguous", [])
-            current = rep.get(name) or {}
-            candidates = current.get("candidates", 0)
-            matched_now = current.get("matched_now", 0)
-            ambiguous = current.get("ambiguous", [])
-            connector = report.get(lang, {}).get(name)
-            if connector:
-                candidates = connector["candidates"]
-                matched_now = connector["matched_now"]
-                ambiguous = connector["ambiguous"]
-            rep[name] = {"candidates": candidates, "matched_now": matched_now,
-                         "linked": linked, "of": len(own),
-                         "open": [own[k]["title"] for k in missing[:40]],
-                         "open_episodes": [{"id": k, "title": own[k]["title"]} for k in missing],
-                         "ambiguous": ambiguous}
-            old_linked = previous_platform.get("linked")
-            if old_linked is not None and old_linked != linked:
-                print(f"Plattformabdeckung geaendert: {lang} {name} {old_linked}/{previous_platform.get('of', '?')} -> {linked}/{len(own)}")
-            print(f"{lang} {name}: {candidates} Kandidaten, {matched_now} neu, {linked}/{len(own)} verlinkt")
-        for episode_id in own:
-            state = {}
-            for name in ("apple", "spotify"):
-                if name in out.get(episode_id, {}):
-                    continue
-                prior = retry_for(previous_retry, episode_id, name)
-                first, _ = should_search_apple(prior, today)
-                platform_state = {"first_missing": first}
-                if prior.get("last_search"):
-                    platform_state["last_search"] = prior["last_search"]
-                if (episode_id, name) in search_attempted:
-                    platform_state["last_search"] = today
-                state[name] = platform_state
-            if state:
-                retry_state[episode_id] = state
+    for episode_id in all_own.get("en", {}):
+        if "apple" in out.get(episode_id, {}):
+            continue
+        prior = previous_retry.get(episode_id) or {}
+        first, _ = should_search_apple(prior, today)
+        state = {"first_missing": first}
+        if prior.get("last_search"):
+            state["last_search"] = prior["last_search"]
+        if episode_id in search_attempted:
+            state["last_search"] = today
+        retry_state[episode_id] = state
 
     # Show-Links ergaenzen
     for l, ids in plat.items():

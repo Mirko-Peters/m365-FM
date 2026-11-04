@@ -28,14 +28,6 @@ def _day(s):
         return None
 
 
-def _seconds(value):
-    try:
-        value = float(value)
-    except (TypeError, ValueError):
-        return None
-    return value if value > 0 else None
-
-
 def score(a, b):
     """Aehnlichkeit zweier Titel 0..1: exakt normalisiert = 1, sonst Mischung aus Zeichen- und Wortuebereinstimmung."""
     na, nb = normalize(a), normalize(b)
@@ -65,30 +57,6 @@ def match(own, cands, min_score=0.9, date_window=3, date_min=0.82, margin=0.03):
             ok = s >= min_score or (s >= date_min and near)
             if ok:
                 pairs.append((s + (0.05 if near else 0.0), k, ci))
-    for k in own:
-        options = [p for p in pairs if p[1] == k]
-        if len(options) < 2:
-            continue
-        top = max(p[0] for p in options)
-        tied = [p for p in options if p[0] >= top - margin]
-        duration = _seconds(own[k].get("duration"))
-        exact = [p for p in tied if duration is not None and
-                 _seconds(cands[p[2]].get("duration")) is not None and
-                 abs(duration - _seconds(cands[p[2]].get("duration"))) <= 5]
-        if len(exact) == 1:
-            pairs = [p for p in pairs if p[1] != k or p == exact[0]]
-    for ci in range(len(cands)):
-        options = [p for p in pairs if p[2] == ci]
-        if len(options) < 2:
-            continue
-        top = max(p[0] for p in options)
-        tied = [p for p in options if p[0] >= top - margin]
-        duration = _seconds(cands[ci].get("duration"))
-        exact = [p for p in tied if duration is not None and
-                 _seconds(own[p[1]].get("duration")) is not None and
-                 abs(duration - _seconds(own[p[1]].get("duration"))) <= 5]
-        if len(exact) == 1:
-            pairs = [p for p in pairs if p[2] != ci or p == exact[0]]
     pairs.sort(reverse=True)
     best, used_c, amb = {}, set(), set()
     by_k, by_c = {}, {}
