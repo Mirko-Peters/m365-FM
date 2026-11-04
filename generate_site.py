@@ -10,6 +10,7 @@ import time
 import site_press as PRS
 import site_sponsor as SPN   # T37 Sponsor-Seite /sponsor/ (Seite, Fusszeilen-Link)
 import site_landing as LND
+import site_mediakit as MKT
 import site_entities as ENT
 from site_i18n import COMM_LANGS, pfx
 import site_members as MEM
@@ -1518,6 +1519,7 @@ def build():
                    n_main=_main_archive_episodes, n_langs=len(active), ents=LRN.ENTS, day=_SU.day))
     LND.build(dict(write=write, page=page, header=header, footer=footer, BASE=BASE, LANGS=LANGS,
                    write_r2=write_r2, sitemap=sitemap, TODAY=TODAY, n_main=_main_archive_episodes, n_langs=len(active), stats=SPN.load_stats()))
+    MKT.build(dict(write=write, page=page, header=header, footer=footer, BASE=BASE, LANGS=LANGS, sitemap=sitemap, TODAY=TODAY, api=COMMUNITY_API))   # Mediadaten /media-kit/
 
     # Kategorie-Seiten (indexierbar, in Sitemap) und Tag-Seiten (noindex,follow – nur für die interne Verlinkung)
     def rows_html(lst):

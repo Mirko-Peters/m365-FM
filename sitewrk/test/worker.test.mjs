@@ -15,6 +15,7 @@ globalThis.fetch = async (req) => {
   if (u.pathname === "/feed.json") { if (ims) return new Response(null, { status: 304, headers: { "last-modified": LM } }); return new Response("{}", { headers: { "content-type": "application/json", etag: '"j1"', "last-modified": LM } }); }
   if (u.pathname === "/rng/") { if (r.headers.get("range")) return new Response("<html><b", { status: 206, headers: { "content-type": "text/html", "content-range": "bytes 0-8/30" } }); return new Response("<html><body>full</body></html>", { headers: { "content-type": "text/html" } }); }
   if (u.pathname === "/assets/a.css") return new Response("a{}", { headers: { "content-type": "text/css", etag: 'W/"css1"' } });
+  if (u.pathname === "/callback") return new Response(null, { status: 301, headers: { location: "https://www.m365.fm/callback/" } });
   if (u.pathname === "/og/alt.png") return new Response("PNG", { headers: { "content-type": "image/png" } });
   return new Response("404", { status: 404, headers: { "content-type": "text/html" } });
 };
@@ -230,4 +231,11 @@ test("img.m365.fm: Bucket-Interna (pages/, meta/) sind dort nicht oeffentlich - 
     assert.equal(r.status, 404); assert.equal(r.headers.get("x-robots-tag"), "noindex");
   }
   assert.equal(lastOrigin, before, "kein Abruf bei GitHub Pages oder R2");
+});
+
+test("Weiterleitung des Ursprungs behaelt die Query (OAuth-Code auf /callback)", async () => {
+  const r = await run(req("/callback?code=4%2F0Ab&scope=x", "DE"));
+  assert.equal(r.status, 301); assert.equal(r.headers.get("location"), "https://www.m365.fm/callback/?code=4%2F0Ab&scope=x");
+  const r2 = await run(req("/callback", "DE"));
+  assert.equal(r2.headers.get("location"), "https://www.m365.fm/callback/");
 });
