@@ -8,7 +8,7 @@ Je Datei ein Screen (390 × 844), Beschreibung in `canvas.json` (`title`). Stil 
 | Main.dc.html | Start: Themen (Entitäten), Rolle und Sprache wählen |
 | Feed.dc.html | Heute: persönlicher Feed nach Wichtigkeit (Action / Info / Folge), Merken |
 | Update-Detail.dc.html | Meldung mit Frist, Checkliste, „Frist in meinen Kalender“, Quellen |
-| Player.dc.html | Audio-Briefing (Vorschau): zuerst „Coming soon“, später Premium 1,99 USD/Monat |
+| Player.dc.html | Audio-Briefing (Vorschau): zuerst „Coming soon“, kostenlos mit Sponsor, später Personal 4,99 USD/Monat |
 | Ask.dc.html | Fragen statt suchen: Antworten nur aus Wiki, Folgen und Artikeln, mit Quellen |
 | Saved.dc.html | Gemerkt und offline, Widget für den Startbildschirm |
 | Notifications.dc.html | Push pro Thema, Ruhezeiten, Wochenzusammenfassung |
