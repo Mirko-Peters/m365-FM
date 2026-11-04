@@ -23,5 +23,10 @@ VAPID_SUBJECT = "mailto:system@m365.fm"
 [[send_email]]
 name = "EMAIL"
 
+# Seiten und Exporte des Seitenbaus (nur lesen): Rueckfall fuer Dateien, die nicht in GitHub Pages liegen (siteFetch in src/util.js)
+[[r2_buckets]]
+binding = "PAGES"
+bucket_name = "m365-fm"
+
 [observability]
 enabled = true   # Workers Logs (Fehler je Request und Cron im Dashboard sichtbar)

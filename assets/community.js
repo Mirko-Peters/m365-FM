@@ -33,7 +33,8 @@
       h("div", { class: "btns" }, [
         h("a", { class: "btn main", href: API + "/auth/login/google?return=" + ret, rel: "nofollow", text: tt("signin_google") }),
         h("a", { class: "btn", href: API + "/auth/login/microsoft?return=" + ret, rel: "nofollow", text: tt("signin_ms") }),
-        h("a", { class: "btn", href: API + "/auth/login/linkedin?return=" + ret, rel: "nofollow", text: tt("signin_li") })]),
+        h("a", { class: "btn", href: API + "/auth/login/linkedin?return=" + ret, rel: "nofollow", text: tt("signin_li") }),
+        h("a", { class: "btn", href: API + "/auth/login/github?return=" + ret, rel: "nofollow", text: tt("signin_gh") })]),
       h("small", {}, [tt("signin_note") + " ", h("a", { href: C.privacy, text: tt("privacy") })])]);
     pruneLogin(lb); return lb;
   }

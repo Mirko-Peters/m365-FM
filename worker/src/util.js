@@ -15,6 +15,19 @@ export const b64u = {
   },
 };
 
+// Dateien des Seitenbaus abrufen: erst ueber die Website, sonst direkt aus dem R2-Bucket (Schluessel pages/<pfad>, tools/r2_pages_upload.py).
+// Abrufe auf die eigene Zone (www.m365.fm) gehen ohne das Flag global_fetch_strictly_public am Site-Worker vorbei direkt zum Ursprung
+// (GitHub Pages). Dateien, die nur im Bucket liegen (blog-import/, translations-blog.json, duenne Sprachfassungen), kaemen dort als 404 zurueck.
+export async function siteFetch(env, path, init) {
+  const r = await fetch(env.SITE + path, init).catch(() => null);
+  if (r && r.ok) return r;
+  if (env.PAGES && (!r || r.status === 404)) {
+    const obj = await env.PAGES.get("pages" + path).catch(() => null);
+    if (obj) return new Response(obj.body, { status: 200, headers: { "content-type": /\.json$/i.test(path) ? "application/json; charset=utf-8" : "application/octet-stream", "x-m365-src": "r2" } });
+  }
+  return r || new Response("", { status: 502 });
+}
+
 async function hmacKey(secret) {
   return crypto.subtle.importKey("raw", enc.encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign", "verify"]);
 }
@@ -94,3 +107,7 @@ export const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", 
 export async function audit(db, userId, action, target = "", detail = "") {   // Audit-Protokoll der Verwaltung (wer, wann, was) - Diff/Kurzfassung, keine Volltexte
   try { await db.prepare("INSERT INTO audit(user_id,action,target,detail,created) VALUES(?,?,?,?,?)").bind(userId || 0, action, String(target).slice(0, 200), String(detail).slice(0, 2000), Math.floor(Date.now() / 1000)).run(); } catch { /* Tabelle fehlt bis zur Migration */ }
 }
+
+// Antworttext von Claude: nur Bloecke vom Typ "text" (Claude Haiku 5.5 denkt standardmaessig mit, eine Antwort kann mit thinking-Bloecken beginnen -
+// content[0].text waere dann leer). Gleiches Muster wie translate_blog.py.
+export const claudeText = (j) => (Array.isArray(j?.content) ? j.content : []).filter((b) => b && b.type === "text").map((b) => b.text || "").join("").trim();

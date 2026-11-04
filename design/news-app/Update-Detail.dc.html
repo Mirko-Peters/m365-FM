@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Update detail with deadline</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap">
+<style>
+body{margin:0;background:#f3f3f2}
+a{color:#3b6391}a:hover{color:#2c4b70}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid #3b6391;outline-offset:2px}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; display: flex; flex-direction: column; background: #f3f3f2; color: #17191c; font-family: Barlow, 'Segoe UI', sans-serif; font-size: 16px; line-height: 1.5">
+
+  <header style="flex: 0 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; border-bottom: 1px solid rgba(23,25,28,.14); background: #ffffff">
+    <a href="Feed.dc.html" style="display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 8px; color: #17191c; text-decoration: none; font-weight: 600">
+      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M11 3L5 9l6 6"></path></svg>Today
+    </a>
+    <div style="display: flex">
+      <button type="button" onClick="{{toggleSave}}" aria-pressed="{{saved}}" aria-label="Save" style="width: 44px; height: 44px; border: 0; background: transparent; cursor: pointer; display: grid; place-items: center"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M4 2h10v14l-5-3.5L4 16z" fill="{{saveFill}}" stroke="#17191c" stroke-width="1.5"></path></svg></button>
+      <button type="button" aria-label="Share" style="width: 44px; height: 44px; border: 0; background: transparent; cursor: pointer; display: grid; place-items: center"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true" fill="none" stroke="#17191c" stroke-width="1.6"><path d="M9 2v10M5 6l4-4 4 4M3 10v6h12v-6"></path></svg></button>
+    </div>
+  </header>
+
+  <div style="flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 18px">
+    <div style="display: grid; gap: 10px">
+      <span style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center">
+        <span style="padding: 1px 8px; background: #9a4f0f; color: #ffffff; font: 600 13px/1.7 'Barlow Condensed', sans-serif; letter-spacing: .08em; text-transform: uppercase">Action needed by [DATE]</span>
+        <span style="font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #3b6391">Copilot</span>
+      </span>
+      <h1 style="margin: 0; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 32px; line-height: 1.05">New admin setting for sharing Copilot agents</h1>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border: 1px solid rgba(23,25,28,.14); background: #ffffff">
+        <span style="padding: 10px 12px; border-right: 1px solid rgba(23,25,28,.14); display: grid"><span style="font-size: 12px; color: #5d6470">Importance</span><b>High</b></span>
+        <span style="padding: 10px 12px; display: grid"><span style="font-size: 12px; color: #5d6470">Affects</span><b>Admins, makers</b></span>
+      </div>
+    </div>
+
+    <section style="display: grid; gap: 6px">
+      <h2 style="margin: 0; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 22px">What changes</h2>
+      <p style="margin: 0">[Short summary of the change in the reader’s language, 2–3 sentences, written from the Message Center post and the roadmap entry.]</p>
+    </section>
+
+    <section style="display: grid; gap: 8px">
+      <h2 style="margin: 0; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 22px">What to do</h2>
+      <sc-for list="{{steps}}" as="st" hint-placeholder-count="3">
+        <label style="display: flex; gap: 12px; align-items: flex-start; min-height: 44px; cursor: pointer">
+          <input type="checkbox" checked="{{st.done}}" onChange="{{st.toggle}}" style="width: 22px; height: 22px; margin: 1px 0 0; accent-color: #3b6391; flex: 0 0 auto">
+          <span>{{st.label}}</span>
+        </label>
+      </sc-for>
+    </section>
+
+    <div style="display: grid; gap: 8px; padding: 16px; background: #ffffff; border: 1px solid rgba(23,25,28,.14)">
+      <sc-if value="{{notAdded}}" hint-placeholder-val="{{ true }}">
+        <button type="button" onClick="{{addCal}}" style="min-height: 48px; background: #3b6391; color: #ffffff; border: 1px solid #3b6391; border-radius: 0; cursor: pointer; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 17px; letter-spacing: .08em; text-transform: uppercase">Add deadline to my calendar</button>
+        <span style="font-size: 13px; color: #5d6470">Reminder 14 days and 2 days before. Outlook, Google or Apple calendar.</span>
+      </sc-if>
+      <sc-if value="{{added}}" hint-placeholder-val="{{ false }}">
+        <span role="status" style="display: flex; gap: 10px; align-items: center; font-weight: 600; color: #2f6b3a"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10l4 4 8-8"></path></svg>In your calendar · reminders set</span>
+        <button type="button" onClick="{{removeCal}}" style="justify-self: start; min-height: 44px; padding: 0; border: 0; background: transparent; color: #3b6391; cursor: pointer; text-decoration: underline">Undo</button>
+      </sc-if>
+    </div>
+
+    <section style="display: grid; gap: 8px">
+      <h2 style="margin: 0; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 22px">Sources</h2>
+      <a href="#" style="padding: 12px 14px; background: #ffffff; border: 1px solid rgba(23,25,28,.14); text-decoration: none; display: grid"><b style="color: #17191c">Microsoft 365 Message Center</b><span style="font-size: 13px; color: #5d6470">[MC-ID] · opens Microsoft</span></a>
+      <a href="Player.dc.html" style="padding: 12px 14px; background: #1a1d21; color: #eef0f3; text-decoration: none; display: grid"><b>Related episode · 34 min</b><span style="font-size: 13px; color: #c5cad2">Governance for Copilot Studio agents</span></a>
+      <a href="Ask.dc.html" style="min-height: 44px; display: flex; align-items: center; font-weight: 600">Ask a question about this →</a>
+    </section>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const done = s.done || {};
+    const steps = ['Check who may share agents today', 'Decide the new default for your tenant', 'Tell makers before the date'].map((label, i) => ({
+      label, done: !!done[i],
+      toggle: () => this.setState({ done: Object.assign({}, done, { [i]: !done[i] }) })
+    }));
+    return {
+      steps,
+      added: !!s.added, notAdded: !s.added,
+      addCal: () => this.setState({ added: true }),
+      removeCal: () => this.setState({ added: false }),
+      saved: !!s.saved, saveFill: s.saved ? '#17191c' : 'none',
+      toggleSave: () => this.setState({ saved: !s.saved })
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -249,12 +249,14 @@ def ent_ld(BASE, e, lang, glossary_set=None, person_aka=None):
             n["about"] = [ref(x) for x in rel["covers"]]
             n["competencyRequired"] = [ENTS[x]["name"] for x in rel["covers"]]
     elif t == "event":
-        n["eventAttendanceMode"] = "https://schema.org/OnlineEventAttendanceMode"; n["eventStatus"] = "https://schema.org/EventScheduled"
-        n["location"] = {"@type": "VirtualLocation", "url": e.get("web") or eurl(BASE, "en", i)}
-        if e.get("start"):
+        if e.get("start"):   # Termin bekannt (z. B. M365Con): Online-Event mit Beginn
+            n["eventAttendanceMode"] = "https://schema.org/OnlineEventAttendanceMode"; n["eventStatus"] = "https://schema.org/EventScheduled"
+            n["location"] = {"@type": "VirtualLocation", "url": e.get("web") or eurl(BASE, "en", i)}
             n["startDate"] = e["start"]
-        if e.get("end"):
-            n["endDate"] = e["end"]
+            if e.get("end"):
+                n["endDate"] = e["end"]
+        else:   # wiederkehrende Konferenz ohne Termin (z. B. Microsoft Ignite, Comms vNext): EventSeries, kein erfundener Ort, Status oder Beginn
+            n["@type"] = "EventSeries"
         if rel.get("organized_by"):
             n["organizer"] = [ref(x) for x in rel["organized_by"]]
     elif t == "media":
@@ -279,10 +281,14 @@ def ent_ld(BASE, e, lang, glossary_set=None, person_aka=None):
             n["performerIn"] = []
             for x in SPEAKERS[e["id"]]["events"]:
                 _st = sorted(s_["start"] for s_ in _ses if s_.get("event") == x["handle"] and s_.get("start"))
+                if not _st:   # ohne Beginn waere das Event-Schema ungueltig (blockierende Schema-Pruefung stoppt die Veroeffentlichung); Auftritt steht weiter sichtbar auf der Seite
+                    continue
                 _ev = {"@type": "Event", "name": x["title"], "url": f"{BASE}/community/events/{x['handle']}/", "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
                        "location": {"@type": "VirtualLocation", "url": f"{BASE}/community/events/{x['handle']}/"}}
-                if _st: _ev["startDate"] = _st[0]
+                _ev["startDate"] = _st[0]
                 n["performerIn"].append(_ev)
+            if not n["performerIn"]:
+                n.pop("performerIn")
     return n
 
 
