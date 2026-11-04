@@ -6,6 +6,7 @@ import site_shownotes as SNS   # T26: Vollfassungen shownotes/site/<episode_id>.
 import site_extract as SX   # T27: Folgen <-> Entitaeten aus der QA-geprueften Extraktion
 import site_media as MED
 import site_img_dims as IMG
+import site_player as PLAYER
 from site_design import pager as PG   # Vor/Zurueck am Seitenende (rel=prev/next)
 import site_sponsorships as SPM   # T37 Sponsor: Kennzeichnung gesponserter Folgen (data/sponsorships.json)
 import gzip, json, re, unicodedata, html as _h
@@ -449,7 +450,9 @@ def build(g):
             nnotes = san(e.get("show_notes"))
         nnotes = rename_links(nnotes)   # T12: Show Notes verlinken die Folge oft ueber die alte Podpage-Adresse
         prev_, next_ = (eps[k + 1] if k + 1 < len(eps) else None), (eps[k - 1] if k else None)
-        aud = f'<audio controls preload="none" style="width:100%" src="{esc(r["audio"])}"></audio>' if r and r.get("audio") else ""
+        audio = f'<audio controls preload="none" style="width:100%" src="{esc(r["audio"])}"></audio>' if r and r.get("audio") else ""
+        _player_item = IDX["by_slug"].get(e["slug"]) or {}
+        aud = PLAYER.facade(_sid, e["name"], thumb_of(e, nrec), _player_item.get("duration") or (nrec or {}).get("duration")) or audio
         elk = elinks.get(f"{nrec['id']}:en", {}) if nrec else {}
         plat_links = [(n, (elk.get(pk) or e.get(fld) or "")) for n, pk, fld in (("Apple Podcasts", "apple", "episode_apple_url_path"), ("Spotify", "spotify", "episode_spotify_url_path"), ("YouTube", "youtube", "video_link"), ("YouTube Music", "youtube_music", "episode_youtube_music_url_path"), ("Deezer", "deezer", None))]
         plat_links = [(n, u) for n, u in plat_links if u.startswith("http")]   # frisch zugeordnete Links gehen vor der Podpage-Sicherung
@@ -493,7 +496,8 @@ def build(g):
             ln = NTL.get(l, {}).get(e["slug"])
             ln_html = san(ln) if ln else ""
             lu = loc_url(l, f"episodes/{e['slug']}/")
-            lbody = (f'<article><p class="mut">{day(e["create_time"])}</p><h1>{esc(lt)}</h1>{SPM.note(l, _spr)}{aud}'
+            _laud = PLAYER.facade(_sid, lt, thumb_of(e, nrec), _player_item.get("duration") or (nrec or {}).get("duration")) or audio
+            lbody = (f'<article><p class="mut">{day(e["create_time"])}</p><h1>{esc(lt)}</h1>{SPM.note(l, _spr)}{_laud}'
                      f'<div style="display:flex;gap:1rem;align-items:flex-start;margin:1em 0">{img_tag(thumb_of(e, nrec), lt, 160)}<div><strong>{esc(ls)}</strong></div></div>'
                      + (f'<div class="pp-notes">{ln_html}{IMG.CSS if IMG.needs_responsive_css(ln_html) else ""}</div>' if ln else "") + (f"<p>{ext}</p>" if ext else "")
                      + f'<p class="mut"><a href="{ep_url(e)}" hreflang="en" lang="en">{esc(e["name"])}</a> (English)</p></article>')
