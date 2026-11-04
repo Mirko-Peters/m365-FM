@@ -146,6 +146,9 @@ export async function remindClaimCampaign(env) {
     WHERE c.status='sent' AND c.reminded=0 AND c.sent_at<=? AND i.status='sent'
     LIMIT 100`).bind(timestamp - 14 * 86400).all()).results || [];
   for (const row of rows) {
+    const marked = await env.DB.prepare("UPDATE claim_campaign_invites SET reminded=1 WHERE token=? AND reminded=0").bind(row.token).run();
+    if (!marked.meta?.changes) continue;
+    await env.DB.prepare("UPDATE entity_invites SET reminded=1 WHERE token=?").bind(row.token).run();
     const target = { ...row, lang: "en" };
     const lang = (await env.DB.prepare("SELECT lang FROM entity_contact_lang WHERE eid=?").bind(row.eid).first())?.lang;
     const mail = campaignMail(env, target, lang === "de" ? "de" : "en");
@@ -154,9 +157,7 @@ export async function remindClaimCampaign(env) {
       subject: lang === "de" ? "Erinnerung: Ihr Profil auf M365.FM" : "Reminder: your M365.FM profile",
       html: mail.html.replace(/<p>(Hallo|Hello) /, `<p>${lang === "de" ? "Kurze Erinnerung: Hallo " : "A quick reminder: Hello "}`),
     };
-    await sendMail(env, { to: row.email, ...reminder });
-    await env.DB.prepare("UPDATE claim_campaign_invites SET reminded=1 WHERE token=? AND reminded=0").bind(row.token).run();
-    await env.DB.prepare("UPDATE entity_invites SET reminded=1 WHERE token=?").bind(row.token).run();
+    await sendMail(env, { to: row.email, ...reminder }).catch(() => {});
   }
   return rows.length;
 }

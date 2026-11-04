@@ -30,6 +30,7 @@ import { handleShows, syncShows } from "./shows.js";
 import { handleMail, flushOutbox, notify } from "./mail.js";
 import { handleReviews } from "./reviews.js";
 import { handleEntityInvite, remindInvites } from "./entinvite.js";
+import { runClaimCampaign, remindClaimCampaign } from "./claimcampaign.js";
 import { handleDemo } from "./demo.js";
 import { handleGuests, deleteUserGuests } from "./guests.js";
 import { handlePodcast, deleteUserPodcast, pollPodcast } from "./podcast.js";
@@ -421,6 +422,8 @@ export default {
     T("importContentBlog", () => importContentBlog(env));   // T15: Content-Pakete aus imports/blog/
     T("refreshProfilesExport", () => refreshProfilesExport(env));
     T("remindInvites", () => remindInvites(env));
+    T("runClaimCampaign", () => runClaimCampaign(env));
+    T("remindClaimCampaign", () => remindClaimCampaign(env));
     T("runTrQueue", () => runTrQueue(env, entityMap));
     T("syncLiveEvents", () => syncLiveEvents(env, entityMap));
     T("syncContentTopics", () => syncContentTopics(env));
