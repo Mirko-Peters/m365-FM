@@ -121,8 +121,8 @@ async function labeledSubscriptions(env, rows) {
       continue;
     }
     if (!lookups[kind]) continue;
-    for (let i = 0; i < ids.length; i += 100) {
-      const part = ids.slice(i, i + 100), placeholders = part.map(() => "?").join(",");
+    for (let i = 0; i < ids.length; i += 45) {
+      const part = ids.slice(i, i + 45), placeholders = part.map(() => "?").join(",");
       const sql = lookups[kind].includes("%s")
         ? lookups[kind].replace("%s", placeholders).replace("%s", placeholders)
         : lookups[kind];
@@ -149,8 +149,8 @@ async function queueTopicNotifications(env, notifications) {
     byKind.get(topic.kind).push(topic);
   }
   for (const [kind, kindTopics] of byKind) {
-    for (let i = 0; i < kindTopics.length; i += 100) {
-      const part = kindTopics.slice(i, i + 100), ids = part.map((t) => t.id);
+    for (let i = 0; i < kindTopics.length; i += 90) {
+      const part = kindTopics.slice(i, i + 90), ids = part.map((t) => t.id);
       const placeholders = ids.map(() => "?").join(",");
       const [pushRows, emailRows] = await Promise.all([
         db.prepare(`SELECT pt.topic_id,pt.endpoint recipient,pt.lang,pt.timezone,'push' channel FROM push_topics pt JOIN push_subs ps ON ps.endpoint=pt.endpoint WHERE pt.kind=? AND pt.topic_id IN (${placeholders})`)
@@ -259,16 +259,15 @@ export async function dispatchTopicNotifications(env, { at = new Date(), limit =
   await db.batch([
     db.prepare("DELETE FROM topic_queue WHERE expires<=? OR (sent=1 AND created<?)").bind(nowTs, nowTs - 14 * 86400),
     db.prepare("DELETE FROM topic_deliveries WHERE created<?").bind(nowTs - 14 * 86400),
+    db.prepare("DELETE FROM topic_recipient_state WHERE updated<?").bind(nowTs - 14 * 86400),
   ]);
   const recipients = (await db.prepare(
-    "SELECT channel,recipient,MIN(created) first_created FROM topic_queue WHERE sent=0 AND expires>? GROUP BY channel,recipient ORDER BY first_created,channel,recipient LIMIT ?",
-  ).bind(nowTs, maxRecipients).all()).results || [];
+    "SELECT q.channel,q.recipient,MIN(q.created) first_created FROM topic_queue q LEFT JOIN topic_recipient_state s ON s.channel=q.channel AND s.recipient=q.recipient WHERE q.sent=0 AND q.expires>? AND COALESCE(s.not_before,0)<=? GROUP BY q.channel,q.recipient ORDER BY first_created,q.channel,q.recipient LIMIT ?",
+  ).bind(nowTs, nowTs, maxRecipients).all()).results || [];
   if (!recipients.length) return { sent: 0, quiet: 0, limited: 0, gone: 0, recipients: 0 };
-  const pairFilter = recipients.map(() => "(?,?)").join(",");
-  const pairBinds = recipients.flatMap((r) => [r.channel, r.recipient]);
   const rows = (await db.prepare(
-    `SELECT * FROM topic_queue WHERE sent=0 AND expires>? AND (channel,recipient) IN (${pairFilter}) ORDER BY created,id`,
-  ).bind(nowTs, ...pairBinds).all()).results || [];
+    "SELECT * FROM topic_queue WHERE sent=0 AND expires>? AND (channel,recipient) IN (SELECT q.channel,q.recipient FROM topic_queue q LEFT JOIN topic_recipient_state s ON s.channel=q.channel AND s.recipient=q.recipient WHERE q.sent=0 AND q.expires>? AND COALESCE(s.not_before,0)<=? GROUP BY q.channel,q.recipient ORDER BY MIN(q.created),q.channel,q.recipient LIMIT ?) ORDER BY created,id",
+  ).bind(nowTs, nowTs, nowTs, maxRecipients).all()).results || [];
   const groups = new Map(recipients.map((r) => [`${r.channel}|${r.recipient}`, []]));
   for (const row of rows) groups.get(`${row.channel}|${row.recipient}`)?.push(row);
   const active = [...groups.entries()].filter(([, pending]) => pending.length);
@@ -287,18 +286,39 @@ export async function dispatchTopicNotifications(env, { at = new Date(), limit =
   })) : [];
   const addresses = new Map(mailRecipients.map(([key], i) => [key, addressResults[i]?.results?.[0] || null]));
   const result = { sent: 0, quiet: 0, limited: 0, gone: 0, recipients: active.length };
+  const deferred = [];
+  const defer = (channel, recipient, time) => deferred.push(db.prepare(
+    "INSERT INTO topic_recipient_state(channel,recipient,not_before,updated) VALUES(?,?,?,?) ON CONFLICT(channel,recipient) DO UPDATE SET not_before=MAX(topic_recipient_state.not_before,excluded.not_before),updated=excluded.updated",
+  ).bind(channel, recipient, time, nowTs));
+  const localStart = (timezone, date, days) => {
+    const [year, month, day] = date.split("-").map(Number);
+    const next = new Date(Date.UTC(year, month - 1, day + days)).toISOString().slice(0, 10);
+    return localDateTimeToEpoch(`${next}T07:00`, timezone);
+  };
   for (const [groupKey, pending] of active) {
     const first = pending[0], clock = clocks.get(groupKey);
-    if (clock.hour >= 22 || clock.hour < 7) { result.quiet++; continue; }
-    if (first.channel === "email" && !addresses.get(groupKey)) continue;
+    if (clock.hour >= 22 || clock.hour < 7) {
+      await defer(first.channel, first.recipient, localStart(first.timezone, clock.day, clock.hour >= 22 ? 1 : 0));
+      result.quiet++; continue;
+    }
+    if (first.channel === "email" && !addresses.get(groupKey)) {
+      await defer(first.channel, first.recipient, localStart(first.timezone, clock.day, 1));
+      continue;
+    }
     const sentTopics = sentByRecipient.get(groupKey), byTopic = new Map();
     for (const row of pending) {
       const key = `${row.kind}|${row.topic_id}`;
       if (!sentTopics.has(key)) { if (!byTopic.has(key)) byTopic.set(key, []); byTopic.get(key).push(row); }
     }
     const candidates = [...byTopic.values()].slice(0, Math.max(0, 3 - sentTopics.size));
-    if (!candidates.length) { result.limited++; continue; }
-    if (byTopic.size > candidates.length) result.limited++;
+    if (!candidates.length) {
+      await defer(first.channel, first.recipient, localStart(first.timezone, clock.day, 1));
+      result.limited++; continue;
+    }
+    if (byTopic.size > candidates.length) {
+      await defer(first.channel, first.recipient, localStart(first.timezone, clock.day, 1));
+      result.limited++;
+    }
     const claimOps = [];
     for (const pick of candidates) {
       const sample = pick[0];
@@ -359,6 +379,7 @@ export async function dispatchTopicNotifications(env, { at = new Date(), limit =
     }
     result.sent++;
   }
+  if (deferred.length) await db.batch(deferred);
   return result;
 }
 
@@ -380,8 +401,7 @@ export async function handleTopicSubscriptions(env, request, url, path, user, J)
     const push = (endpoint && !!(await db.prepare("SELECT 1 x FROM push_topics pt JOIN push_subs ps ON ps.endpoint=pt.endpoint WHERE pt.endpoint=? AND pt.kind=? AND pt.topic_id=? AND (ps.user_id IS NULL OR ps.user_id=?)").bind(endpoint, kind, topicId, user?.id ?? -1).first()))
       || (user && !!(await db.prepare("SELECT 1 x FROM push_topics WHERE user_id=? AND kind=? AND topic_id=?").bind(user.id, kind, topicId).first()));
     const email = user && !!(await db.prepare("SELECT 1 x FROM email_topics WHERE user_id=? AND kind=? AND topic_id=?").bind(user.id, kind, topicId).first());
-    const blog = user && kind === "creator" && !!(await db.prepare("SELECT 1 x FROM blog_follows WHERE user_id=? AND handle=?").bind(user.id, topicId).first());
-    return J({ following: !!(push || email || blog), email: !!email }, 200, { "cache-control": "no-store" });
+    return J({ following: !!(push || email), email: !!email }, 200, { "cache-control": "no-store" });
   }
   if (path === "/api/topics/mine" && method === "GET") {
     const endpoint = String(url.searchParams.get("endpoint") || "").slice(0, 600);
@@ -390,7 +410,6 @@ export async function handleTopicSubscriptions(env, request, url, path, user, J)
     if (user) {
       rows.push(...((await db.prepare("SELECT kind,topic_id,'push' channel FROM push_topics WHERE user_id=?").bind(user.id).all()).results || []));
       rows.push(...((await db.prepare("SELECT kind,topic_id,'email' channel FROM email_topics WHERE user_id=?").bind(user.id).all()).results || []));
-      rows.push(...((await db.prepare("SELECT handle topic_id,'creator' kind,'blog' channel FROM blog_follows WHERE user_id=?").bind(user.id).all()).results || []));
     }
     if (endpoint) {
       const owned = await db.prepare("SELECT user_id FROM push_subs WHERE endpoint=?").bind(endpoint).first();
@@ -429,10 +448,6 @@ export async function handleTopicSubscriptions(env, request, url, path, user, J)
       await db.prepare("INSERT INTO email_topics(user_id,kind,topic_id,lang,timezone,created) VALUES(?,?,?,?,?,?) ON CONFLICT(user_id,kind,topic_id) DO UPDATE SET lang=excluded.lang,timezone=excluded.timezone")
         .bind(user.id, kind, topicId, b.lang, timezone, created).run();
     }
-    if (kind === "creator" && user) {
-      const target = await db.prepare("SELECT user_id FROM profiles WHERE handle=? AND public=1").bind(topicId).first();
-      if (target) await db.prepare("INSERT OR IGNORE INTO blog_follows(user_id,handle,created) VALUES(?,?,?)").bind(user.id, topicId, created).run();
-    }
     return J({ ok: true, following: true });
   }
   if (path === "/api/topics/unfollow") {
@@ -448,7 +463,6 @@ export async function handleTopicSubscriptions(env, request, url, path, user, J)
       ops.push(db.prepare("DELETE FROM push_topics WHERE user_id=? AND kind=? AND topic_id=?").bind(user.id, kind, topicId));
       ops.push(db.prepare("DELETE FROM topic_queue WHERE channel='push' AND recipient IN (SELECT endpoint FROM push_subs WHERE user_id=?) AND kind=? AND topic_id=?").bind(user.id, kind, topicId));
       ops.push(db.prepare("DELETE FROM email_topics WHERE user_id=? AND kind=? AND topic_id=?").bind(user.id, kind, topicId));
-      if (kind === "creator") ops.push(db.prepare("DELETE FROM blog_follows WHERE user_id=? AND handle=?").bind(user.id, topicId));
       ops.push(db.prepare("DELETE FROM topic_queue WHERE channel='email' AND recipient=? AND kind=? AND topic_id=?").bind(String(user.id), kind, topicId));
       ops.push(db.prepare("DELETE FROM topic_deliveries WHERE channel='push' AND recipient IN (SELECT endpoint FROM push_subs WHERE user_id=? AND digest=0 AND NOT EXISTS (SELECT 1 FROM push_topics WHERE endpoint=push_subs.endpoint))").bind(user.id));
       ops.push(db.prepare("DELETE FROM push_subs WHERE user_id=? AND digest=0 AND NOT EXISTS (SELECT 1 FROM push_topics WHERE endpoint=push_subs.endpoint)").bind(user.id));
@@ -465,7 +479,7 @@ export async function handleTopicSubscriptions(env, request, url, path, user, J)
     if (!user && !endpoint) return J({ error: "login" }, 401);
     const ops = [];
     if (user) {
-      ops.push(db.prepare("DELETE FROM email_topics WHERE user_id=?").bind(user.id), db.prepare("DELETE FROM push_topics WHERE user_id=?").bind(user.id), db.prepare("DELETE FROM blog_follows WHERE user_id=?").bind(user.id), db.prepare("DELETE FROM topic_queue WHERE channel='email' AND recipient=?").bind(String(user.id)), db.prepare("DELETE FROM topic_queue WHERE channel='push' AND recipient IN (SELECT endpoint FROM push_subs WHERE user_id=?)").bind(user.id), db.prepare("DELETE FROM topic_deliveries WHERE channel='push' AND recipient IN (SELECT endpoint FROM push_subs WHERE user_id=? AND digest=0)").bind(user.id), db.prepare("DELETE FROM push_subs WHERE user_id=? AND digest=0").bind(user.id));
+      ops.push(db.prepare("DELETE FROM email_topics WHERE user_id=?").bind(user.id), db.prepare("DELETE FROM push_topics WHERE user_id=?").bind(user.id), db.prepare("DELETE FROM topic_queue WHERE channel='email' AND recipient=?").bind(String(user.id)), db.prepare("DELETE FROM topic_queue WHERE channel='push' AND recipient IN (SELECT endpoint FROM push_subs WHERE user_id=?)").bind(user.id), db.prepare("DELETE FROM topic_deliveries WHERE channel='push' AND recipient IN (SELECT endpoint FROM push_subs WHERE user_id=? AND digest=0)").bind(user.id), db.prepare("DELETE FROM push_subs WHERE user_id=? AND digest=0").bind(user.id));
     }
     if (endpoint) {
       const sub = await db.prepare("SELECT user_id FROM push_subs WHERE endpoint=?").bind(endpoint).first();

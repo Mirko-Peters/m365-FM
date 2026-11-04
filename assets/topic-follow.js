@@ -42,13 +42,13 @@
   var mailMe = me.then(function (user) {
     return user ? api("/api/mail/me").then(function (r) { return r.j || {}; }) : {};
   }).catch(function () { return {}; });
-  function getEndpoint() {
-    if (!("serviceWorker" in navigator)) return Promise.resolve("");
+  function getSubscription() {
+    if (!("serviceWorker" in navigator)) return Promise.resolve(null);
     return navigator.serviceWorker.getRegistration("/").then(function (r) { return r ? r.pushManager.getSubscription() : null; })
-      .then(function (s) { return s ? s.endpoint : ""; }).catch(function () { return ""; });
+      .catch(function () { return null; });
   }
-  var pageState = Promise.all([getEndpoint(), me]).then(function (data) {
-    var endpoint = data[0], user = data[1];
+  var pageState = Promise.all([getSubscription(), me]).then(function (data) {
+    var endpoint = data[0] ? data[0].endpoint : "", user = data[1];
     if (!endpoint && !user) return { endpoint: "", user: null, subscriptions: [] };
     var q = endpoint ? "?endpoint=" + encodeURIComponent(endpoint) : "";
     return api("/api/topics/mine" + q).then(function (r) {
@@ -82,12 +82,12 @@
     }).catch(function () { status.textContent = msg.error; button.disabled = false; });
     button.addEventListener("click", function () {
       button.disabled = true; status.textContent = "";
-      Promise.all([getEndpoint(), me]).then(function (data) {
-        var endpoint = data[0], user = data[1];
+      Promise.all([getSubscription(), me]).then(function (data) {
+        var existing = data[0], endpoint = existing ? existing.endpoint : "", user = data[1];
         if (button._followed && !(email.checked && !button._email))
           return api("/api/topics/unfollow", { method: "POST", body: { kind: kind, id: id, endpoint: endpoint } });
         if (email.checked && !user) { status.textContent = msg.login; return null; }
-        var subscription = Promise.resolve(endpoint);
+        var subscription = Promise.resolve(existing);
         if (!endpoint && !email.checked) {
           if (!("serviceWorker" in navigator) || !("PushManager" in window) || !("Notification" in window)) { status.textContent = msg.need; return null; }
           if (Notification.permission === "denied") { status.textContent = msg.denied; return null; }
@@ -97,17 +97,23 @@
               return api("/api/push/key").then(function (k) {
                 if (!k.j.key) throw new Error("push_off");
                 return r.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64(k.j.key) });
-              }).then(function (s) {
-                endpoint = s.endpoint; var j = s.toJSON();
-                return api("/api/push/subscribe", { method: "POST", body: { endpoint: endpoint, keys: j.keys, lang: C.lang, digest: 0 } }).then(function () { return endpoint; });
               });
             });
           });
         }
-        return subscription.then(function (ep) {
-          if (!ep && !email.checked) return null;
+        return subscription.then(function (sub) {
+          if (sub) {
+            endpoint = sub.endpoint;
+            var subscriptionJson = sub.toJSON();
+            return api("/api/push/subscribe", { method: "POST", body: {
+              endpoint: endpoint, keys: subscriptionJson.keys, lang: C.lang, digest: 0,
+            } }).then(function (r) { return r.s === 200 ? sub : Promise.reject(new Error("push_subscribe")); });
+          }
+          return null;
+        }).then(function (sub) {
+          if (!sub && !email.checked) return null;
           return api("/api/topics/follow", { method: "POST", body: {
-            kind: kind, id: id, endpoint: ep || "", lang: C.lang,
+            kind: kind, id: id, endpoint: sub ? endpoint : "", lang: C.lang,
             timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC", email: emailReady && email.checked,
           } });
         });

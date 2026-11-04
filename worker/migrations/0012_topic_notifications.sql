@@ -53,3 +53,10 @@ CREATE TABLE IF NOT EXISTS topic_seen (
   source_key TEXT PRIMARY KEY,
   created INTEGER NOT NULL
 );
+CREATE TABLE IF NOT EXISTS topic_recipient_state (
+  channel TEXT NOT NULL,
+  recipient TEXT NOT NULL,
+  not_before INTEGER NOT NULL DEFAULT 0,
+  updated INTEGER NOT NULL,
+  PRIMARY KEY (channel, recipient)
+);

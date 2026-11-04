@@ -180,7 +180,7 @@ function pubComment(c, mine, liked, badges, admin) {
 async function api(env, request, url, path, asUser) {
   const method = request.method, J = (d, s = 200, x) => json(d, s, env, request, x);
   if (method === "OPTIONS") return new Response(null, { status: 204, headers: cors(env, request) });
-  if (asUser === undefined && method !== "GET" && request.headers.get("x-requested-with") !== "m365" && path !== "/api/topics/email-unsub") return J({ error: "bad_request" }, 400);
+  if (asUser === undefined && method !== "GET" && request.headers.get("x-requested-with") !== "m365" && path !== "/api/topics/email-unsub" && path !== "/api/internal/ai-spend") return J({ error: "bad_request" }, 400);
   // asUser: vom MCP-Server (Token bereits geprueft) - dann keine Cookie-Sitzung noetig
   const uid = asUser === undefined ? await readSession(env, request) : null, user = asUser === undefined ? (uid ? await me(env, uid) : null) : asUser;
   const need = () => (user ? null : J({ error: "login" }, 401));
@@ -343,6 +343,14 @@ async function api(env, request, url, path, asUser) {
   if (topicResponse) return topicResponse;
 
   if (path === "/api/push/key" && method === "GET") return J({ key: env.VAPID_PUBLIC || "" });
+  if (path === "/api/push/status" && method === "GET") {
+    const endpoint = String(url.searchParams.get("endpoint") || "").slice(0, 600);
+    if (!/^https:\/\//.test(endpoint)) return J({ error: "bad_request" }, 400);
+    const sub = await db.prepare("SELECT user_id,digest FROM push_subs WHERE endpoint=?").bind(endpoint).first();
+    if (sub?.user_id && sub.user_id !== user?.id) return J({ error: "bad_subscription" }, 400);
+    const topics = sub ? (await db.prepare("SELECT 1 x FROM push_topics WHERE endpoint=? LIMIT 1").bind(endpoint).first()) : null;
+    return J({ registered: !!sub, digest: !!sub?.digest, topics: !!topics }, 200, { "cache-control": "no-store" });
+  }
   if (path === "/api/push/subscribe" && method === "POST") {
     const b = await request.json().catch(() => ({}));
     const e = b.endpoint, k = b.keys || {};
@@ -354,6 +362,14 @@ async function api(env, request, url, path, asUser) {
     });
     if (user) await award(db, user.id, "notified");
     return J({ ok: true });
+  }
+  if (path === "/api/push/digest" && method === "POST") {
+    const b = await request.json().catch(() => ({})), endpoint = String(b.endpoint || "").slice(0, 600);
+    if (!/^https:\/\//.test(endpoint) || typeof b.on !== "boolean") return J({ error: "bad_request" }, 400);
+    const sub = await db.prepare("SELECT user_id FROM push_subs WHERE endpoint=?").bind(endpoint).first();
+    if (!sub || (sub.user_id && sub.user_id !== user?.id)) return J({ error: "bad_subscription" }, 400);
+    await db.prepare("UPDATE push_subs SET digest=? WHERE endpoint=?").bind(b.on ? 1 : 0, endpoint).run();
+    return J({ ok: true, digest: b.on });
   }
   if (path === "/api/push/unsubscribe" && method === "POST") {
     const b = await request.json().catch(() => ({}));

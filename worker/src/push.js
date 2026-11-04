@@ -3,7 +3,7 @@ import { b64u } from "./util.js";
 const te = new TextEncoder();
 
 export async function savePushSubscription(db, { endpoint, p256dh, auth, lang, userId = null, digest = 1, created }) {
-  return db.prepare("INSERT INTO push_subs(endpoint,p256dh,auth,lang,user_id,created,digest) VALUES(?,?,?,?,?,?,?) ON CONFLICT(endpoint) DO UPDATE SET p256dh=excluded.p256dh,auth=excluded.auth,lang=excluded.lang,user_id=COALESCE(excluded.user_id,push_subs.user_id),created=excluded.created")
+  return db.prepare("INSERT INTO push_subs(endpoint,p256dh,auth,lang,user_id,created,digest) VALUES(?,?,?,?,?,?,?) ON CONFLICT(endpoint) DO UPDATE SET p256dh=excluded.p256dh,auth=excluded.auth,lang=excluded.lang,user_id=COALESCE(excluded.user_id,push_subs.user_id),created=excluded.created,digest=MAX(push_subs.digest,excluded.digest)")
     .bind(endpoint, p256dh, auth, lang, userId, created, digest).run();
 }
 
