@@ -7,7 +7,8 @@ Quellen (jeweils nur, wenn verfuegbar; fehlende Werte werden weggelassen, nie ge
   - Cloudflare GraphQL (Zone m365.fm): Seitenaufrufe 30 Tage (Rand-Statistik, ungefiltert), Verlauf, Laender
   - Bing Webmaster API: Klicks/Impressionen der Bing-Suche (28 Tage, Verlauf), Top-Suchanfragen
   - data/top.json: Spreaker-Downloads je Sprachfassung (7 Tage)
-  - data/stats/ai_performance.json: KI-Zitate (Bing AI Performance, Export)
+  - data/stats/ai_performance.json: KI-Zitate (Bing AI Performance, Export), Impressionen in Google AI Overviews und AI Mode
+    (Search Console, Bericht Generative AI, Export; nur bei status "ok"), Google-Suche (Search Console API)
   - data/sponsor_pricing.json + data/sponsor_i18n.json: Sponsoring-Pakete und Listenpreise wie auf /sponsor/
 Aufruf: python tools/mediakit.py --out out/mediakit   (Umgebung: YT_CLIENT_ID, YT_CLIENT_SECRET, YT_REFRESH_TOKEN,
         CLOUDFLARE_API_TOKEN, CF_ZONE_ID optional, BING_WEBMASTER_API_KEY)
@@ -158,6 +159,13 @@ def local():
             out["ai_citations"] = int(a["citations"]); out["ai_period"] = f'{(a.get("period") or {}).get("from", "")}–{(a.get("period") or {}).get("to", "")}'
             if isinstance(a.get("cited_pages_per_day"), (int, float)): out["ai_pages_day"] = int(a["cited_pages_per_day"])
     except Exception: pass
+    try:   # Google Search Console, Generative AI (AI Overviews und AI Mode): nur bei status "ok", nie geschaetzt
+        ga = json.loads((ROOT / "data" / "stats" / "ai_performance.json").read_text("utf-8")).get("google_ai") or {}
+        per = ga.get("period") or {}
+        if ga.get("status") == "ok" and isinstance(ga.get("impressions"), int) and per.get("from") and per.get("to"):
+            out["gai_impressions"] = int(ga["impressions"]); out["gai_period"] = f'{per["from"]}–{per["to"]}'
+            if isinstance(ga.get("pages"), int): out["gai_pages"] = int(ga["pages"])
+    except Exception: pass
     try:
         g = json.loads((ROOT / "data" / "stats" / "ai_performance.json").read_text("utf-8")).get("gsc") or {}
         if g.get("status") == "ok" and isinstance(g.get("clicks"), (int, float)):
@@ -209,8 +217,9 @@ TXT = {
         k=dict(yt_views="YouTube views", yt_minutes="YouTube watch time (minutes)", yt_subs_new="New YouTube subscribers", yt_subs="YouTube subscribers",
                pv="Website page views", sp="Podcast downloads (all language editions)", ai="AI citations (Copilot and partners)",
                b_clicks="Bing search clicks", b_imp="Bing search impressions", langs="Site languages", videos="Published videos",
-               g_clicks="Google search clicks", g_imp="Google search impressions"),
-        s=dict(yt="YouTube Analytics", cf="Cloudflare (edge statistics, before bot filtering)", sp="Spreaker", ai="Bing Webmaster Tools, AI Performance", bing="Bing Webmaster Tools", site="M365.FM", gsc="Google Search Console"),
+               g_clicks="Google search clicks", g_imp="Google search impressions", gai="Google AI impressions"),
+        s=dict(yt="YouTube Analytics", cf="Cloudflare (edge statistics, before bot filtering)", sp="Spreaker", ai="Bing Webmaster Tools, AI Performance", bing="Bing Webmaster Tools", site="M365.FM", gsc="Google Search Console",
+               gai="Google Search Console, Generative AI"),
         d28="last 28 days", d30="last 30 days", d7="7 days", total="total",
         yt_h="YouTube: m365 Show", yt_lead="Animated explainer videos, Shorts and certification courses on Microsoft 365, Copilot, Azure and security.",
         yt_month="Views per month", yt_top="Most watched videos (last 28 days)", yt_cty="Viewers by country (share of views, 28 days)", yt_age="Age groups (share of viewers)",
@@ -219,6 +228,8 @@ TXT = {
         web_h="Website and search: www.m365.fm", web_lead="Episode pages, articles, topic pages, wiki and expert directory – indexed by Google and Bing and cited by AI assistants.",
         web_daily="Page views per day (30 days)", web_cty="Requests by country (share, 30 days, unfiltered)", b_week="Bing search per week (12 weeks)", b_q="What people search for on Bing to find M365.FM",
         q="Query", clicks="Clicks", imps="Impressions", ai_h="AI assistants", ai_t="Microsoft Copilot and partner AI services cited M365.FM pages {n} times between {p} – on average {d} different pages per day.",
+        gai_t="Google showed M365.FM pages {n} times in AI Overviews and AI Mode between {p}.", gai_pages=" {g} different pages had AI impressions.",
+        gai_src="Source: Google Search Console, Generative AI performance.",
         pod_h="Podcast: M365.FM", pod_lead="Weekly episodes, daily “Simply Explained” episodes and language editions of the show on Spreaker, Apple Podcasts, Spotify and YouTube.",
         pod_lang="Downloads per language edition ({p})", pod_note="Spreaker downloads of the M365.FM shows per language, same period.",
         audience="Audience", audience_t="People who plan, run, secure and adopt Microsoft 365: IT administrators, solution architects, consultants at Microsoft partners, IT and digital-workplace decision makers, trainers and the Microsoft community (MVPs, MCTs, user groups).",
@@ -248,8 +259,9 @@ TXT = {
         k=dict(yt_views="YouTube-Aufrufe", yt_minutes="YouTube-Wiedergabezeit (Minuten)", yt_subs_new="Neue YouTube-Abonnenten", yt_subs="YouTube-Abonnenten",
                pv="Website-Seitenaufrufe", sp="Podcast-Downloads (alle Sprachfassungen)", ai="KI-Zitate (Copilot und Partner)",
                b_clicks="Bing-Suchklicks", b_imp="Bing-Suchimpressionen", langs="Sprachen der Website", videos="Veröffentlichte Videos",
-               g_clicks="Google-Suchklicks", g_imp="Google-Suchimpressionen"),
-        s=dict(yt="YouTube Analytics", cf="Cloudflare (Rand-Statistik, vor Bot-Filterung)", sp="Spreaker", ai="Bing Webmaster Tools, AI Performance", bing="Bing Webmaster Tools", site="M365.FM", gsc="Google Search Console"),
+               g_clicks="Google-Suchklicks", g_imp="Google-Suchimpressionen", gai="Google-KI-Impressionen"),
+        s=dict(yt="YouTube Analytics", cf="Cloudflare (Rand-Statistik, vor Bot-Filterung)", sp="Spreaker", ai="Bing Webmaster Tools, AI Performance", bing="Bing Webmaster Tools", site="M365.FM", gsc="Google Search Console",
+               gai="Google Search Console, Generative AI"),
         d28="letzte 28 Tage", d30="letzte 30 Tage", d7="7 Tage", total="gesamt",
         yt_h="YouTube: m365 Show", yt_lead="Animierte Erklärvideos, Shorts und Zertifizierungskurse zu Microsoft 365, Copilot, Azure und Security.",
         yt_month="Aufrufe pro Monat", yt_top="Meistgesehene Videos (letzte 28 Tage)", yt_cty="Zuschauer nach Land (Anteil der Aufrufe, 28 Tage)", yt_age="Altersgruppen (Anteil der Zuschauer)",
@@ -258,6 +270,8 @@ TXT = {
         web_h="Website und Suche: www.m365.fm", web_lead="Folgenseiten, Artikel, Themenseiten, Wiki und Expertenverzeichnis – von Google und Bing indexiert und von KI-Assistenten zitiert.",
         web_daily="Seitenaufrufe pro Tag (30 Tage)", web_cty="Anfragen nach Land (Anteil, 30 Tage, ungefiltert)", b_week="Bing-Suche pro Woche (12 Wochen)", b_q="Wonach Menschen bei Bing suchen, um M365.FM zu finden",
         q="Suchanfrage", clicks="Klicks", imps="Impressionen", ai_h="KI-Assistenten", ai_t="Microsoft Copilot und KI-Dienste von Partnern haben M365.FM-Seiten zwischen {p} {n}-mal zitiert – im Schnitt {d} verschiedene Seiten pro Tag.",
+        gai_t="Google hat M365.FM-Seiten zwischen {p} {n}-mal in AI Overviews und im KI-Modus angezeigt.", gai_pages=" {g} verschiedene Seiten hatten KI-Impressionen.",
+        gai_src="Quelle: Google Search Console, Bericht „Generative AI“.",
         pod_h="Podcast: M365.FM", pod_lead="Wochenfolgen, tägliche „Simply Explained“-Folgen und Sprachfassungen der Show auf Spreaker, Apple Podcasts, Spotify und YouTube.",
         pod_lang="Downloads je Sprachfassung ({p})", pod_note="Spreaker-Downloads der M365.FM-Shows je Sprache, gleicher Zeitraum.",
         audience="Zielgruppe", audience_t="Menschen, die Microsoft 365 planen, betreiben, absichern und einführen: IT-Administratoren, Lösungsarchitekten, Berater bei Microsoft-Partnern, Entscheider für IT und Digital Workplace, Trainer sowie die Microsoft-Community (MVPs, MCTs, User Groups).",
@@ -305,6 +319,7 @@ def rows_for(lang, D):
         R.append((k["pv"], fmt(lang, c["pageviews30"]), s["cf"], t["d30"]))
     if "spreaker7" in l: R.append((k["sp"], fmt(lang, l["spreaker7"]), s["sp"], l.get("spreaker_period") or t["d7"]))
     if "ai_citations" in l: R.append((k["ai"], fmt(lang, l["ai_citations"]), s["ai"], l.get("ai_period", "")))
+    if "gai_impressions" in l: R.append((k["gai"], fmt(lang, l["gai_impressions"]), s["gai"], l.get("gai_period", "")))
     if l.get("gsc"):
         R += [(k["g_imp"], fmt(lang, l["gsc"]["impressions"]), s["gsc"], l.get("gsc_period", "")), (k["g_clicks"], fmt(lang, l["gsc"]["clicks"]), s["gsc"], l.get("gsc_period", ""))]
     if b.get("impressions28"):
@@ -492,7 +507,7 @@ def build_pdf(path, lang, D, F):
             y -= 60
 
     # --- Seite: Website, Suche, KI ---
-    if c_ or b_ or l_.get("ai_citations"):
+    if c_ or b_ or l_.get("ai_citations") or l_.get("gai_impressions"):
         y = new_page(); y = h2(y, t["web_h"], t["web_lead"])
         if c_.get("daily"):
             y = kicker(y, t["web_daily"])
@@ -507,10 +522,18 @@ def build_pdf(path, lang, D, F):
         half = (CW - 24) / 2; ys = y; yl = yr = ys
         if c_.get("countries"):
             yl = kicker(ys, t["web_cty"], M, half); yl = hbars(yl, [(k, v) for k, v in c_["countries"][:8]], M, half, pct, label_w=90)
-        if l_.get("ai_citations"):
+        if l_.get("ai_citations") or l_.get("gai_impressions"):
             yr = kicker(ys, t["ai_h"], M + half + 24, half)
+        if l_.get("ai_citations"):
             cv.setFillColor(AC); cv.setFont(F["BarlowCondensed-SemiBold"], 30); cv.drawString(M + half + 24, yr - 24, fmt(lang, l_["ai_citations"])); yr -= 36
             yr = para(M + half + 24, yr, t["ai_t"].format(n=fmt(lang, l_["ai_citations"]), p=l_.get("ai_period", ""), d=fmt(lang, l_.get("ai_pages_day", 0))), F["Barlow"], 9.5, INK, half, 13)
+        if l_.get("gai_impressions"):   # Google AI Overviews und AI Mode (Search Console, Generative AI), unter den Bing-Zitaten
+            if l_.get("ai_citations"): yr -= 10
+            cv.setFillColor(AC); cv.setFont(F["BarlowCondensed-SemiBold"], 30); cv.drawString(M + half + 24, yr - 24, fmt(lang, l_["gai_impressions"])); yr -= 36
+            txt = t["gai_t"].format(n=fmt(lang, l_["gai_impressions"]), p=l_.get("gai_period", ""))
+            if isinstance(l_.get("gai_pages"), int): txt += t["gai_pages"].format(g=fmt(lang, l_["gai_pages"]))
+            yr = para(M + half + 24, yr, txt, F["Barlow"], 9.5, INK, half, 13)
+            yr = para(M + half + 24, yr - 2, t["gai_src"], F["Barlow"], 8, MUT, half, 11)
         y = min(yl, yr)
 
     # --- Seite: Podcast + Zielgruppe + Kanaele ---
