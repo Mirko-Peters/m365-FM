@@ -140,7 +140,8 @@ footer{border-top:1px solid var(--fg);margin-top:64px;padding:26px 0 48px;font-s
 .band{background:var(--ink);color:var(--onink);margin:46px 0;padding:34px 0}.band .wrap{display:grid;gap:10px}.band h2{margin:0}.band .btn:hover{background:var(--onink);color:var(--ink)}
 .faq details{border-bottom:1px solid var(--bd);padding:14px 0}.faq summary{cursor:pointer;font:700 1.15rem/1.35 Didot,"Bodoni 72",Georgia,"Noto Serif",serif}.faq p{margin:.6em 0 0;color:var(--mut)}
 .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:22px;margin:16px 0}.cols h3{margin:.1em 0 .3em;font:700 1.15rem Didot,"Bodoni 72",Georgia,serif}.cols p{margin:0;color:var(--mut);font-size:.96rem}
-@media (max-width:560px){body{font-size:16px}.panel{padding:14px}.btn{padding:10px 16px}}"""
+@media (max-width:560px){body{font-size:16px}.panel{padding:14px}.btn{padding:10px 16px}}
+.pwa-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:14px 0}.pwa-install{position:fixed;z-index:45;inset:auto 12px 12px;max-width:760px;margin:auto;padding:12px 16px;background:var(--ink);color:var(--onink);box-shadow:0 6px 28px #0006;display:flex;flex-wrap:wrap;gap:10px;align-items:center}.pwa-install[hidden],#pwa-subscribe[hidden]{display:none}.pwa-install span{flex:1 1 260px}.pwa-install button{font:inherit;color:inherit;background:transparent;border:1px solid currentColor;padding:6px 12px;cursor:pointer}.pwa-sub-cta{margin:12px 0}"""
 from site_design import lang_dropdown, site_header, FONT_CSS, INDUSTRY, EN_NAMES, section, spec_box, lang_tile, spec_table, cta_box, hero_h1
 from site_design import pager as PAGER, neighbours as NEIGH   # Vor/Zurueck am Seitenende (rel=prev/next)
 CSS = FONT_CSS + CSS + INDUSTRY
@@ -527,6 +528,15 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
     if side:   # Sidebar neben dem Hauptinhalt (wie auf den Show-Seiten): erstes <main> in zwei Spalten
         body = re.sub(r'<main class="wrap"([^>]*)>(.*?)</main>', lambda m: f'<main class="wrap shw"{m.group(1)}><div class="shmain">{m.group(2)}</div>{side}</main>', body, count=1, flags=re.S)
         extra_head += f'<link rel="stylesheet" href="{BASE}/assets/sbar.css">'
+    route = canonical.removeprefix(BASE).split("?", 1)[0].strip("/")
+    if route == lang:
+        route = ""
+    elif route.startswith(lang + "/"):
+        route = route[len(lang) + 1:]
+    if route == "" or route in ("show", "podcast", "live") or route.startswith(("entity/", "show/", "podcast/", "live/")):
+        label = _CI.get(lang, _CI.get("en", {})).get("sub_title", "Subscribe")
+        link = f'<p class="pwa-sub-cta"><a class="btn" data-pwa-subscribe href="#pwa-subscribe">{esc(label)}</a></p>'
+        body = re.sub(r"</h1>", "</h1>" + link, body, count=1)
     body = single_main(body)
     body = ADS.inject(BASE, body, lang, canonical, noindex)
     if 'id="main"' in body:
@@ -539,7 +549,8 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
 <meta name="description" content="{esc(desc)}">
 <meta name="author" content="Mirko Peters"><meta name="robots" content="{'noindex,follow' if noindex else 'index,follow,max-image-preview:large,max-snippet:-1'}">
 <link rel="canonical" href="{canonical}">{pn_head(body, extra_head)}
-<link rel="icon" href="{BASE}/assets/favicon.svg" type="image/svg+xml"><link rel="icon" href="{BASE}/assets/favicon-32.png" sizes="32x32" type="image/png"><link rel="shortcut icon" href="{BASE}/assets/favicon.ico"><link rel="apple-touch-icon" href="{BASE}/assets/apple-touch-icon.png"><meta name="theme-color" content="#1d2126">
+<link rel="manifest" href="{BASE}/{"manifest.webmanifest" if lang == "en" else f"manifest-{lang}.webmanifest"}">
+<link rel="icon" href="{BASE}/assets/favicon.svg" type="image/svg+xml"><link rel="icon" href="{BASE}/assets/favicon-32.png" sizes="32x32" type="image/png"><link rel="shortcut icon" href="{BASE}/assets/favicon.ico"><link rel="apple-touch-icon" href="{BASE}/assets/apple-touch-icon.png"><meta name="theme-color" content="#f6f1ea"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="M365.FM">
 {alt}<meta property="og:type" content="{og_type}"><meta property="og:title" content="{esc(bare_title(title))}"><meta property="og:description" content="{esc(desc)}">
 <meta property="og:url" content="{canonical}"><meta property="og:locale" content="{loc}"><meta property="og:site_name" content="M365.FM">
 <meta property="og:image" content="{ogimg}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="{esc(bare_title(title))}">
@@ -556,6 +567,7 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
 <script>(function(){{if(!matchMedia("(pointer:fine)").matches||matchMedia("(prefers-reduced-motion: reduce)").matches)return;var d=0,ev=["wheel","keydown","pointerdown","touchstart"];function go(){{if(d)return;d=1;ev.forEach(function(e){{removeEventListener(e,go)}});var s=document.createElement("script");s.src="{BASE}/assets/smooth.js";document.body.appendChild(s)}}ev.forEach(function(e){{addEventListener(e,go,{{passive:true,once:true}})}})}})();</script>
 <script defer src="{BASE}/assets/fx.js"></script>
 {('<script defer src="' + BASE + '/assets/viz.js"></script>') if 'class="viz"' in body else ""}
+<script>window.M365PWA={{api:{json.dumps(COMMUNITY_API)},base:{json.dumps(BASE)},lang:{json.dumps(lang)}}};window.__m365InstallPrompt=null;addEventListener("beforeinstallprompt",function(e){{e.preventDefault();window.__m365InstallPrompt=e;if(window.__m365UpdateInstall)window.__m365UpdateInstall()}});addEventListener("load",function(){{var s=document.createElement("script");s.src={json.dumps(BASE + "/assets/pwa.js")};document.body.appendChild(s)}},{{once:true}});</script>
 </body></html>
 """
 
@@ -741,6 +753,36 @@ def community_tags(lang, vid=None, mode=""):
             f'<script>window.M365C={json.dumps(cfg, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")}</script><script defer src="{BASE}/assets/community.js"></script>')
 
 
+def pwa_files(out):
+    for lang in ("en", *LANGS):
+        prefix = "" if lang == "en" else lang + "/"
+        manifest = {
+            "id": f"{BASE}/{prefix}",
+            "name": "M365.FM",
+            "short_name": "M365.FM",
+            "lang": lang,
+            "dir": LANGS.get(lang, ("", "", "ltr"))[2],
+            "start_url": f"{BASE}/{prefix}?source=pwa",
+            "scope": f"{BASE}/",
+            "display": "standalone",
+            "theme_color": "#f6f1ea",
+            "background_color": "#f6f1ea",
+            "icons": [
+               {"src": f"{BASE}/assets/favicon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+               {"src": f"{BASE}/assets/favicon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+               {"src": f"{BASE}/assets/favicon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"},
+            ],
+        }
+        name = "manifest.webmanifest" if lang == "en" else f"manifest-{lang}.webmanifest"
+        (out / name).write_text(json.dumps(manifest, ensure_ascii=False, separators=(",", ":")), "utf-8")
+    (out / "offline.html").write_text(
+        '<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
+        '<meta name="robots" content="noindex"><meta name="theme-color" content="#f6f1ea"><title>Offline – M365.FM</title>'
+        '<body style="font:1rem/1.6 system-ui,sans-serif;max-width:40rem;margin:10vh auto;padding:1rem;background:#f6f1ea;color:#141210">'
+        '<h1>You are offline</h1><p>This page is not available without an internet connection.</p>'
+        '<p><a href="./">Try M365.FM again</a></p></body></html>', "utf-8")
+
+
 def write_cm_js(out):
     """assets/cm-<sprache>.js: Texte der Community-Skripte je Sprache (Englisch als Rueckfall), einmal gecacht statt in jeder Seite."""
     for lg in _CI:
@@ -805,6 +847,7 @@ def footer(lang):
     ui = UI.get(lang)
     about = ui[5] if ui else "About Mirko Peters"
     _tl = lang if lang in LANGS else "en"
+    _pwa = _CI.get(_tl, _CI.get("en", {}))
     # Top-/Empfehlungsseiten gibt es nur je Dub-Sprache; englische Seiten verlinken die Folgenliste der Hauptshow (vorher /en/top/ = 404 auf jeder englischen Seite)
     _top = f'<a href="{BASE}/{_tl}/top/">{esc((TOP_L if _tl in TOP_REAL else REC_L).get(_tl, "Top"))}</a>' if _tl in LANGS else f'<a href="{BASE}/show/episodes/">Recommended episodes</a>'
     _nw = f'<a href="{BASE}/{"de/" if lang == "de" else ""}updates/">{"Updates & Roadmap" if lang == "de" else "Updates & roadmap"}</a>'
@@ -813,6 +856,9 @@ def footer(lang):
             f'<a href="{ast_url(lang)}">{esc(ast_label(lang))}</a><a href="{BASE}/{"de/" if lang == "de" else ""}press/">{"Pressekit" if lang == "de" else "Press kit"}</a>'
             f'<a href="{SPN.url(BASE, _tl)}">{esc(SPN.label(_tl))}</a><a href="{BASE}/impressum/" rel="nofollow">Impressum</a><a href="{BASE}/legal/" rel="nofollow">Legal notice</a>'
             f'<a href="{BASE}/datenschutz/" rel="nofollow">Datenschutz</a><a href="{BASE}/privacy/" rel="nofollow">Privacy</a>'
+            f'<div class="pwa-actions"><a class="btn" data-pwa-subscribe href="#pwa-subscribe">{esc(_pwa.get("sub_title", "Subscribe"))}</a></div>'
+            '<section id="pwa-subscribe" class="ccard" hidden></section>'
+            f'<aside id="pwa-install" class="pwa-install" hidden role="status"><span id="pwa-install-text"></span><button id="pwa-install-action" type="button"></button><button id="pwa-install-dismiss" type="button">×</button></aside>'
             f'<div style="margin-top:10px">© {date.today().year} Mirko Peters · M365.FM</div></div></footer>')
 
 
@@ -956,6 +1002,7 @@ def build():
     if (ROOT / "assets").exists():
         shutil.copytree(ROOT / "assets", OUT / "assets")
         write_cm_js(OUT)
+        pwa_files(OUT)
         from site_i18n import write_ui_js
         write_ui_js(OUT)
 
@@ -1221,6 +1268,7 @@ def build():
 <figure class="cover" style="margin-inline:0">{art_svg(vid, LANGS[l][0], "M365.FM · " + ui[0], l)}</figure>
 <div class="panel"><iframe src="https://widget.spreaker.com/player?episode_id={it["eid"]}&amp;theme=light&amp;playlist=false" height="131" loading="lazy" title="{esc(e["title"])}"></iframe>
 <div class="btns">{btns}</div>{"<p class=showrow>M365.FM ▸ " + showrow + "</p>" if showrow else ""}</div>
+<p class="pwa-sub-cta"><a class="btn" data-pwa-subscribe href="#pwa-subscribe">{esc(_CI.get(l, _CI.get("en", {})).get("sub_title", "Subscribe"))}</a></p>
 <div class="yt"><iframe src="https://www.youtube-nocookie.com/embed/{vid}?rel=0" title="{esc(e["title"])}" loading="lazy" allow="accelerometer; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
 <p class="mut">▶ {esc(e["title"])}</p>
 <h2>{esc(hdr)}</h2><ol class="points">{lis}</ol>
@@ -1231,7 +1279,7 @@ def build():
 {PAGER(l, *[(url_of(x), x['e']['title']) if x else None for x in NEIGH(by_lang[l], DPOS[l][vid])])}
 {('<h2>' + esc(ui[4]) + '</h2><div class="list">' + rel + '</div>') if rel else ''}
 <p style="margin-top:1.6em"><a class="btn" href="{BASE}/{l}/">{esc(ui[3])} →</a></p>
-<section id="c-comments"></section><section id="c-sub"></section></main>
+<section id="c-comments"></section></main>
 {footer(l)}{community_tags(l, vid)}"""
         if _spr: body = SPM.mark(body, _spr)   # T37 Sponsor: Links zum Sponsor mit rel="sponsored"
         OG_COVER[canonical] = art_svg(vid, LANGS[l][0], lang=l)

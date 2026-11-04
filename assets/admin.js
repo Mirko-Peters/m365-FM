@@ -25,6 +25,19 @@
       p.appendChild(h("h2", { text: "Auf einen Blick" }));
       p.appendChild(h("div", { class: "adm-grid" }, [tile("Mitglieder", o.db.users), tile("Öffentliche Profile", o.db.profiles), tile("Blog-Beiträge live", o.db.blog_live), tile("Entitäten in der Datenbank", o.db.entities_db, "von " + (o.db.entities_file == null ? "?" : o.db.entities_file) + " in der Datei")]));
       var ops = h("div", {}); p.appendChild(h("h2", { text: "Betrieb" })); p.appendChild(ops); ops.appendChild(h("p", { class: "mut", text: "Lädt …" }));
+      var pwa = h("div", {}); p.appendChild(h("h2", { text: "PWA und Abos" })); p.appendChild(pwa); pwa.appendChild(h("p", { class: "mut", text: "Lädt …" }));
+      api("/api/admin/panel/pwa").then(function (r) {
+        pwa.textContent = "";
+        if (r.s !== 200) { pwa.appendChild(h("p", { class: "mut", text: "PWA-Daten nicht abrufbar" })); return; }
+        var rows = [];
+        ["push", "email"].forEach(function (kind) { (r.j.subscriptions[kind] || []).forEach(function (x) { rows.push([kind, x.lang, x.source, x.n]); }); });
+        (r.j.events || []).forEach(function (x) { rows.push([x.event, x.lang, x.source, x.n]); });
+        var table = h("table", { class: "adm-tbl" }, [h("thead", {}, [h("tr", {}, ["Art", "Sprache", "Quelle", "Anzahl"].map(function (x) { return h("th", { text: x }); }))])]);
+        var body = h("tbody");
+        rows.forEach(function (x) { body.appendChild(h("tr", {}, x.map(function (v) { return h("td", { text: String(v) }); }))); });
+        if (!rows.length) body.appendChild(h("tr", {}, [h("td", { colspan: "4", class: "mut", text: "Noch keine Messdaten." })]));
+        table.appendChild(body); pwa.appendChild(table);
+      });
       var lvBtn = h("button", { type: "button", class: "btn", text: "Expertise-Stufen jetzt neu berechnen" }), lvMsg = h("span", { class: "mut", style: "margin-left:.6em" });
       lvBtn.onclick = function () { lvBtn.disabled = true; lvMsg.textContent = "…"; api("/api/admin/expertise-sync", { method: "POST" }).then(function (r) { lvBtn.disabled = false; lvMsg.textContent = r.s === 200 ? ("✓ " + (r.j.evidence || 0) + " Belege, " + (r.j.pairs || 0) + " Themen-Paare, " + (r.j.changed || 0) + " geändert") : "Fehler " + r.s; }); };
       p.appendChild(h("p", {}, [lvBtn, lvMsg]));

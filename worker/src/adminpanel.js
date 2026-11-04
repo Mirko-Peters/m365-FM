@@ -12,6 +12,13 @@ export async function handleAdminPanel(env, request, url, path, user, J) {
   if (!user?.admin) return J({ error: "forbidden" }, 403);
   const db = env.DB, day = new Date().toISOString().slice(0, 10);
 
+  if (path === "/api/admin/panel/pwa" && request.method === "GET") {
+    const push = (await db.prepare("SELECT p.lang,COALESCE(s.source,'unknown') source,COUNT(*) n FROM push_subs p LEFT JOIN pwa_sub_sources s ON s.kind='push' AND s.identifier=p.endpoint GROUP BY p.lang,source ORDER BY p.lang,source").all()).results || [];
+    const email = (await db.prepare("SELECT e.lang,COALESCE(s.source,'unknown') source,COUNT(*) n FROM email_subs e LEFT JOIN pwa_sub_sources s ON s.kind='email' AND s.identifier=e.token WHERE e.confirmed=1 GROUP BY e.lang,source ORDER BY e.lang,source").all()).results || [];
+    const events = (await db.prepare("SELECT event,lang,source,COUNT(*) n FROM pwa_events GROUP BY event,lang,source ORDER BY event,lang,source").all()).results || [];
+    return J({ subscriptions: { push, email }, events });
+  }
+
   if (path === "/api/admin/panel/overview" && request.method === "GET") {
     let base = null; try { base = ((await (await fetch(env.SITE + "/entities.json", { cf: { cacheTtl: 300 } })).json()).entities || []).length; } catch { /* Seite nicht erreichbar */ }
     const exp = await db.prepare("SELECT updated FROM export_cache WHERE k='profiles'").first().catch(() => null);
