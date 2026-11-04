@@ -1500,6 +1500,90 @@
     "q": "Como evitar a proliferação descontrolada de agentes do Copilot na empresa?",
     "a": "Com governança: defina quem cria e quem publica agentes, onde eles rodam (ambientes isolados) e como os créditos são alocados. Use o Copilot control system, o Power Platform Admin Center, o Purview e os logs de diagnóstico, aplicando privilégio mínimo aos administradores."
    }
+  ],
+  "infos": [
+   {
+    "titel": "Copilot Studio ou Teams Toolkit",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Copilot Studio",
+     "punkte": [
+      "Construtor visual de código baixo, com arrastar e soltar",
+      "Usuários avançados criam agentes sem programar",
+      "Opera dentro das proteções definidas pela Microsoft",
+      "Cobrança por créditos, em pacotes ou pagamento conforme o uso"
+     ]
+    },
+    "rechts": {
+     "titel": "Teams Toolkit (Agents Toolkit)",
+     "punkte": [
+      "Funciona no VS Code, voltado a desenvolvedores full stack",
+      "Permite orquestração personalizada e modelos de IA externos",
+      "Publica no Copilot, Teams, web e canais externos",
+      "Você assume a responsabilidade por cada detalhe das proteções",
+      "Custos surgem em APIs, conectores e licenças de integração"
+     ]
+    }
+   },
+   {
+    "titel": "Checklist para levar o agente à produção",
+    "typ": "checkliste",
+    "punkte": [
+     "Verificar o licenciamento do Microsoft 365 Copilot ou a medição do Copilot Studio",
+     "Conectar as fontes certas de dados ao grounding do agente",
+     "Aplicar rótulos de sensibilidade e classificação do Purview antes de conectar os dados",
+     "Habilitar os logs de diagnóstico do Copilot para auditoria",
+     "Definir quem cria e quem publica agentes, e onde eles rodam",
+     "Definir como os créditos são alocados e acompanhar o consumo",
+     "Documentar dono dos conectores, auditoria do grounding e monitoramento"
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Qual é a principal diferença entre o Copilot Studio e o Teams Toolkit quanto às proteções?",
+    "opts": [
+     "No Studio é possível reescrever as proteções; no Toolkit elas são fixas",
+     "No Studio você estende o Copilot dentro das proteções da Microsoft; no Toolkit pode reescrevê-las",
+     "Ambos impedem qualquer alteração nas proteções definidas pela Microsoft",
+     "O Toolkit usa as proteções da Microsoft e o Studio exige que você crie todas"
+    ],
+    "a": 1,
+    "why": "O Studio mantém conectores seguros e governança leve da Microsoft; o Toolkit permite reescrever proteções, mas transfere a responsabilidade por cada detalhe."
+   },
+   {
+    "q": "O que o artigo diz sobre a camada de grounding na arquitetura do agente?",
+    "opts": [
+     "Define quais funções são chamadas e em que ordem",
+     "É o motor de linguagem bruto do agente",
+     "Vincula o agente ao conteúdo corporativo para que as respostas não sejam inventadas",
+     "Executa tarefas reais por meio de plugins personalizados"
+    ],
+    "a": 2,
+    "why": "Grounding é o vínculo com o conteúdo corporativo; orquestrador, modelo de base e habilidades têm outras funções."
+   },
+   {
+    "q": "Como funciona a cobrança de créditos do Copilot Studio, segundo o artigo?",
+    "opts": [
+     "Cada agente tem seu próprio pool de créditos, isolado dos demais",
+     "Há um sandbox gratuito para prompts de teste, separado da produção",
+     "Os créditos são do tenant, e todos os agentes consomem do mesmo pool",
+     "Respostas generativas custam menos que ações padrão não generativas"
+    ],
+    "a": 2,
+    "why": "Os créditos pertencem ao tenant e todos os agentes usam o mesmo pool, então testes intensos num departamento podem esgotar recursos de outro."
+   },
+   {
+    "q": "Qual abordagem é a mais segura para proteger dados sensíveis ao conectar fontes ao agente?",
+    "opts": [
+     "Aplicar rótulos de sensibilidade e classificação do Purview já no plano de grounding",
+     "Liberar o acesso total e restringir apenas depois da implantação",
+     "Usar somente o Toolkit, que dispensa classificação de dados",
+     "Conectar os dados primeiro e adiar a governança para depois"
+    ],
+    "a": 0,
+    "why": "Aplicar rótulos de sensibilidade e classificação do Purview no grounding faz o agente recuperar só o conteúdo permitido pelas regras de acesso."
+   }
   ]
  },
  "id": {
@@ -1600,6 +1684,52 @@
      }
     ]
    }
+  ],
+  "quiz": [
+   {
+    "q": "Apa fungsi lapisan orkestrator dalam arsitektur Copilot?",
+    "opts": [
+     "Mengaitkan jawaban ke konten perusahaan agar tidak direkayasa",
+     "Mengatur fungsi mana yang dipanggil dan kapan, serta disediakan default oleh Microsoft 365 Copilot",
+     "Menyediakan plugin atau konektor kustom untuk menjalankan tugas nyata",
+     "Berperan sebagai mesin mentah yang menghasilkan teks dasar"
+    ],
+    "a": 1,
+    "why": "Orkestrator mengatur fungsi yang dipanggil dan waktunya, dan Microsoft 365 Copilot menyediakannya secara default."
+   },
+   {
+    "q": "Mana pernyataan yang benar tentang perbedaan Copilot Studio dan Teams Toolkit?",
+    "opts": [
+     "Pengguna akhir melihat antarmuka berbeda tergantung alat yang dipakai membangun agen",
+     "Copilot Studio mewajibkan pengembang full stack menulis orkestrasi dari nol",
+     "Toolkit hanya dapat menerbitkan agen ke Copilot, tidak ke Teams atau web",
+     "Pengalaman pengguna sama; perbedaannya ada pada grounding, skalabilitas, dan kontrol admin"
+    ],
+    "a": 3,
+    "why": "Pengguna akhir melihat kotak perintah dan kartu jawaban yang sama; perbedaan ada di balik layar, sehingga keputusannya operasional."
+   },
+   {
+    "q": "Apa akibatnya jika kumpulan kredit Copilot Studio tenant habis?",
+    "opts": [
+     "Agen dijeda sampai kredit diisi kembali",
+     "Agen otomatis beralih ke lisensi Microsoft 365 Copilot pengguna",
+     "Hanya agen pengujian yang berhenti, agen produksi tetap berjalan",
+     "Agen terus berjalan dengan tarif bertingkat yang lebih murah"
+    ],
+    "a": 0,
+    "why": "Kredit bersifat menyeluruh per tenant; jika kumpulan habis, agen dijeda sampai kredit diisi kembali."
+   },
+   {
+    "q": "Mengapa label sensitivitas dan klasifikasi Purview sebaiknya dimasukkan ke rencana grounding sejak awal?",
+    "opts": [
+     "Agar agen menjawab lebih cepat tanpa memerlukan konektor tambahan",
+     "Agar biaya kredit per prompt otomatis turun",
+     "Agar agen hanya mengambil konten sesuai aturan izinnya dan tidak membocorkan data sensitif",
+     "Agar lisensi Microsoft 365 Copilot tidak diperlukan lagi"
+    ],
+    "a": 2,
+    "why": "Setiap koneksi adalah titik risiko; label dan klasifikasi memastikan agen hanya mengambil konten yang diizinkan."
+   }
   ]
  },
  "hi": {
@@ -1684,6 +1814,52 @@
      "डिज़ाइन के दौरान लाइसेंस और connector की सूची बनाएँ",
      "Audit logs, backup और health check को रोज़मर्रा के संचालन में रखें"
     ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Copilot Studio और Teams Toolkit के बीच मुख्य फ़र्क़ लेख के अनुसार कहाँ दिखता है?",
+    "opts": [
+     "अंतिम उपयोगकर्ता को दिखने वाले प्रॉम्प्ट बॉक्स और UI में",
+     "grounding विकल्प, scalability और प्रशासनिक नियंत्रण में, पर्दे के पीछे",
+     "उत्तरों की भाषा और टोन में",
+     "केवल एजेंट के नाम और आइकन में"
+    ],
+    "a": 1,
+    "why": "उपयोगकर्ता को दोनों में एक-सा UI मिलता है। असली फ़र्क़ grounding, scalability और admin नियंत्रण में है, इसलिए यह आर्किटेक्चर का फ़ैसला है।"
+   },
+   {
+    "q": "Grounding में Sensitivity Labels और permission-आधारित वर्गीकरण शामिल करने से क्या होता है?",
+    "opts": [
+     "एजेंट सभी कर्मचारियों को हर डेटा दिखा सकता है",
+     "एजेंट बाहरी LLMs को अपने आप कॉल करने लगता है",
+     "एजेंट सिर्फ़ वही सामग्री पाता है जो उपयोगकर्ता की अनुमति से मेल खाती है",
+     "Copilot credits की खपत पूरी तरह बंद हो जाती है"
+    ],
+    "a": 2,
+    "why": "लेख के अनुसार इससे एजेंट केवल अनुमति-योग्य सामग्री तक पहुँचता है, यानी डेटा वर्गीकरण का सम्मान होता है और उसे ओवरराइट नहीं किया जाता।"
+   },
+   {
+    "q": "Copilot Studio की लागत के बारे में कौन-सा कथन सही है?",
+    "opts": [
+     "टेस्ट प्रॉम्प्ट के लिए अलग मुफ़्त sandbox मिलता है",
+     "Production और टेस्टिंग का खर्च अलग-अलग पूल से होता है",
+     "सभी क्रियाओं की credit दर एक समान होती है",
+     "टेस्ट और Production रिस्पॉन्स एक ही credit पूल से खर्च होते हैं"
+    ],
+    "a": 3,
+    "why": "कोई मुफ़्त sandbox नहीं है। भारी टेस्टिंग दूसरी टीम के Production रन के credits ख़त्म कर सकती है, और पूल खाली होने पर एजेंट रुक जाते हैं।"
+   },
+   {
+    "q": "Toolkit में Custom Engine Agent बनाकर बाहरी सेवाओं से जुड़ने पर लागत कैसे बढ़ती है?",
+    "opts": [
+     "APIs के अपने मीटर और Enterprise Connectors के लाइसेंस से लागत बढ़ती है",
+     "हर प्रॉम्प्ट पर Copilot credit अपने आप कटने लगता है",
+     "VS Code के लिए अलग मासिक शुल्क देना पड़ता है",
+     "Sensitivity Labels के उपयोग पर अतिरिक्त शुल्क लगता है"
+    ],
+    "a": 0,
+    "why": "Toolkit में प्रति-प्रॉम्प्ट credit नहीं दिखता, पर बाहरी APIs के मीटर, connectors के लाइसेंस और admin सहमति वाले टियर लागत बढ़ाते हैं।"
    }
   ]
  },
@@ -1785,6 +1961,52 @@
      }
     ]
    }
+  ],
+  "quiz": [
+   {
+    "q": "Copilot Studio와 Teams Toolkit의 가장 큰 차이로 기사가 설명하는 것은 무엇인가?",
+    "opts": [
+     "최종 사용자가 보는 프롬프트 창과 답변 카드의 디자인",
+     "두 도구는 서로 다른 Copilot 모델을 사용한다는 점",
+     "그라운딩 옵션, 확장성, 관리 제어 방식 같은 보이지 않는 뒷단",
+     "게시할 수 있는 언어와 지원 국가의 범위"
+    ],
+    "a": 2,
+    "why": "최종 사용자는 어느 도구든 같은 화면을 보며, 차이는 그라운딩, 확장성, 관리 제어 같은 뒷단에서 나타납니다."
+   },
+   {
+    "q": "기사에 따르면 그라운딩이 없는 에이전트가 인사 정책 질문을 받으면 어떻게 되는가?",
+    "opts": [
+     "SharePoint에서 정책을 찾아 인용 링크를 자동으로 제공한다",
+     "일반 모델 지식으로 그럴듯한 답을 만들지만 출처와 증거가 없다",
+     "질문을 거부하고 관리자에게 티켓을 자동 발행한다",
+     "Purview 분류 체계로 답변을 스스로 검증한다"
+    ],
+    "a": 1,
+    "why": "그라운딩이 없으면 일반 모델 지식으로 그럴듯한 답을 조립하지만 출처도 증거도 없습니다."
+   },
+   {
+    "q": "Copilot Studio의 크레딧 모델에 관한 설명으로 기사 내용과 일치하는 것은?",
+    "opts": [
+     "테스트 프롬프트는 별도의 무료 샌드박스에서 차감된다",
+     "크레딧은 부서별로 분리되어 다른 팀에 영향을 주지 않는다",
+     "풀이 비면 속도를 제한하고 경고한 뒤 계속 운영된다",
+     "테스트 프롬프트와 운영 응답은 같은 크레딧 풀에서 차감된다"
+    ],
+    "a": 3,
+    "why": "숨겨진 무료 샌드박스는 없으며 테스트와 운영 응답이 같은 풀에서 차감되고, 풀이 비면 에이전트가 일시 중지됩니다."
+   },
+   {
+    "q": "기사에서 Teams Toolkit으로 만든 에이전트의 비용 특성으로 설명한 것은?",
+    "opts": [
+     "모든 경우에 Copilot Studio보다 항상 더 저렴하다",
+     "프롬프트당 크레딧이 보이지 않지만 API와 커넥터 등 통합 비용이 생길 수 있다",
+     "Microsoft 365 Copilot 라이선스 없이도 모든 기능이 작동한다",
+     "비용이 전혀 발생하지 않고 관리자 동의도 필요 없다"
+    ],
+    "a": 1,
+    "why": "Toolkit 에이전트는 크레딧이 보이지 않지만, API 측정기와 별도 커넥터 라이선스 등 통합·서비스 계층에 비용이 숨어 있습니다."
+   }
   ]
  },
  "te": {
@@ -1869,6 +2091,70 @@
       "text": "ఫైర్‌వాల్ బ్లాక్‌లు, విఫల ప్రయత్నాలు, ఓవర్‌లోడ్ సోర్సులు సమాధానాలను నెమ్మది చేస్తాయి."
      }
     ]
+   }
+  ],
+  "faq": [
+   {
+    "q": "Copilot Studio మరియు Teams Toolkit మధ్య తేడా ఏమిటి?",
+    "a": "Copilot Studio సిద్ధంగా ఉన్న సౌకర్యాలు, Microsoft 365 డేటా కోసం కనెక్టర్లు ఇస్తుంది, కోడ్ రాయకుండానే ఏజెంట్‌ను తయారు చేయవచ్చు. Teams Toolkit పూర్తి స్వేచ్ఛ ఇస్తుంది, కానీ ప్రతి విషయానికీ మీరే బాధ్యత వహించాలి. నియంత్రణ, బాధ్యత ఎంత కావాలో చూసి ఎంచుకోవాలి."
+   },
+   {
+    "q": "Copilot ఏజెంట్లకు డేటా గ్రౌండింగ్ ఎందుకు అవసరం?",
+    "a": "గ్రౌండింగ్ లేకపోతే ఏజెంట్ సాధారణ మోడల్ పరిజ్ఞానం నుంచి ఆధారం, లింక్ లేని సమాధానాన్ని తయారు చేసి నమ్మకంగా తప్పులు చెబుతుంది. సరిగ్గా చేసిన గ్రౌండింగ్ ధృవీకరించదగిన లాగ్‌లతో సమాధానాలు ఇస్తుంది. తప్పుగా చేస్తే రహస్య సమాచారం బయటపడవచ్చు."
+   },
+   {
+    "q": "Copilot ఏజెంట్ల గవర్నెన్స్‌కు ఏ సాధనాలు, పాలసీలు ఉపయోగపడతాయి?",
+    "a": "Microsoft 365 admin centerలో Copilot Control System, Power Platform admin center, లైఫ్‌సైకిల్ మేనేజ్‌మెంట్ కేంద్రం, Copilot డయాగ్నస్టిక్ లాగ్‌లు ఉపయోగపడతాయి. వీటితో పాటు Purview లేబుల్స్, DLP, రిటెన్షన్ పాలసీలు సెట్ చేస్తే ప్రతి ఏజెంట్ ఆ నిబంధనలను స్వయంచాలకంగా అనుసరిస్తుంది."
+   },
+   {
+    "q": "Copilot ఏజెంట్ల డయాగ్నస్టిక్ లాగ్‌లను ఎందుకు ఎనేబుల్ చేయాలి?",
+    "a": "డయాగ్నస్టిక్ లాగ్‌లు ప్రాంప్ట్‌లు, సమాధానాలు, కంటెంట్ రిఫరెన్స్‌లు, సిస్టమ్ లాగ్‌లను రికార్డులుగా భద్రపరుస్తాయి. ఏజెంట్ తప్పుగా ఎందుకు సూచించిందో చరిత్రను మళ్లీ చూడవచ్చు. సమస్య పరిష్కారం ప్రోయాక్టివ్ అవుతుంది, ఆడిటర్లు వచ్చినప్పుడు ఇబ్బంది రాదు."
+   }
+  ],
+  "quiz": [
+   {
+    "q": "కోడ్ రాయకుండానే సిద్ధంగా ఉన్న కనెక్టర్లతో ఏజెంట్‌ను తయారు చేయడానికి ఏ సాధనం సరిపోతుందని వ్యాసం చెబుతుంది?",
+    "opts": [
+     "Teams Toolkit",
+     "Copilot Studio",
+     "Purview లేబుల్స్",
+     "Power Platform admin center"
+    ],
+    "a": 1,
+    "why": "Copilot Studio సిద్ధంగా ఉన్న సౌకర్యాలు, అనేక Microsoft 365 కనెక్టర్లు ఇస్తుంది. Teams Toolkit పూర్తి స్వేచ్ఛతో పాటు పూర్తి బాధ్యత ఇస్తుంది."
+   },
+   {
+    "q": "గ్రౌండింగ్ లేని ఏజెంట్‌ను \"పేరెంటల్ లీవ్ పాలసీ ఏమిటి?\" అని అడిగితే ఏమవుతుంది?",
+    "opts": [
+     "అది సమాధానం ఇవ్వడానికి పూర్తిగా నిరాకరిస్తుంది",
+     "సాధారణ మోడల్ పరిజ్ఞానం నుంచి ఆధారం, లింక్ లేని సమాధానం తయారు చేస్తుంది",
+     "ఎల్లప్పుడూ HR పాలసీ పత్రం లింక్‌తో సమాధానం ఇస్తుంది",
+     "అడ్మిన్ ఆమోదం వచ్చే వరకు సమాధానాన్ని ఆపివేస్తుంది"
+    ],
+    "a": 1,
+    "why": "గ్రౌండింగ్ లేకపోతే ఏజెంట్ సాధారణ మోడల్ పరిజ్ఞానం నుంచి సమాధానం తయారు చేస్తుంది; దానికి ఆధారం లేదా లింక్ ఉండదు."
+   },
+   {
+    "q": "ఏజెంట్ తప్పుగా ఎందుకు సూచించిందని మేనేజర్ అడిగినప్పుడు ఏది సహాయపడుతుంది?",
+    "opts": [
+     "DLP పాలసీలను పూర్తిగా నిలిపివేయడం",
+     "ఏజెంట్‌ను కొత్తగా మళ్లీ తయారు చేయడం",
+     "డయాగ్నస్టిక్ లాగ్‌లు ఎనేబుల్ చేసి ఆ చరిత్రను మళ్లీ చూడటం",
+     "వినియోగదారుల ఫీడ్‌బ్యాక్ కోసం మాత్రమే ఎదురుచూడటం"
+    ],
+    "a": 2,
+    "why": "డయాగ్నస్టిక్ లాగ్‌లు ప్రాంప్ట్‌లు, సమాధానాలు, రిఫరెన్స్‌లను రికార్డు చేస్తాయి. అందువల్ల ఊహలు లేకుండా చరిత్రను సమీక్షించవచ్చు."
+   },
+   {
+    "q": "సమాధానాల్లో రహస్య సమాచారం బయటపడకుండా అడ్డుకోవడానికి వ్యాసం ఏ సాధనాన్ని సూచిస్తుంది?",
+    "opts": [
+     "రిటెన్షన్ పాలసీలు",
+     "Teams Toolkit",
+     "Power Automate రిపోర్టులు",
+     "DLP పాలసీలు"
+    ],
+    "a": 3,
+    "why": "రహస్య సమాచారం సమాధానాల్లో బయటపడకుండా DLP పాలసీలు అడ్డుకుంటాయి. రిటెన్షన్ పాలసీలు పాత కంటెంట్ నిలిచిపోకుండా చూస్తాయి."
    }
   ]
  }
