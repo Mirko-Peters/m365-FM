@@ -17,11 +17,14 @@ CSS = """
 """
 
 
-def player(provider, media_id, title, lang="en", height=131):
+def player(provider, media_id, title, lang="en", height=131, live=False):
     mid = quote(str(media_id), safe="")
     if provider == "youtube":
         src = f"https://www.youtube-nocookie.com/embed/{mid}?rel=0"
         link = f"https://www.youtube.com/watch?v={mid}"
+        if live:
+            src = f"https://www.youtube-nocookie.com/embed/live_stream?channel={mid}&rel=0"
+            link = f"https://www.youtube.com/channel/{mid}/live"
         label = T(lang, "Play video", "Video abspielen") + " (YouTube)"
         size = 'class="media-player media-player-video"'
     elif provider == "spreaker":

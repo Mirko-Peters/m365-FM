@@ -1,8 +1,10 @@
 """Offline-Regression: python3 tools/test_player.py."""
 import sys
 import unittest
+import json
 from html.parser import HTMLParser
 from pathlib import Path
+from tempfile import TemporaryDirectory
 from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -47,6 +49,38 @@ class PlayerTests(unittest.TestCase):
     def test_unknown_provider_is_rejected(self):
         with self.assertRaises(ValueError):
             player("other", "123", "Titel")
+
+    def test_live_channel_link_and_embed(self):
+        tags = Tags(player("youtube", "channel-id", "Live", live=True)).tags
+        button = next(a for t, a in tags if t == "button")
+        self.assertIn("/embed/live_stream?channel=channel-id&rel=0", button["data-player-src"])
+        self.assertTrue(any(t == "a" and a["href"] == "https://www.youtube.com/channel/channel-id/live" for t, a in tags))
+
+    def test_live_show_players_and_structured_data(self):
+        import site_fetch
+        with patch.object(site_fetch, "fetch", return_value=None):
+            import site_live
+        pages, schemas = {}, {}
+
+        def page(lang, title, desc, url, body, alts=None, ld=None, **kwargs):
+            schemas[url] = ld
+            return body
+
+        g = dict(BASE="https://www.m365.fm", write=lambda path, body: pages.update({path: body}),
+                 page=page, header=lambda *a: "", footer=lambda *a: "", footer_en=lambda: "",
+                 LANGS={"en": ()}, sitemap=[], TODAY="2026-11-04")
+        data = {"channel": "channel-id", "streams": [{"id": "test", "title": "Live-Test", "published": "2026-11-04"}]}
+        with TemporaryDirectory() as tmp:
+            (Path(tmp) / "live.json").write_text(json.dumps(data), encoding="utf-8")
+            with patch.object(site_live, "D", Path(tmp)):
+                site_live.build(g)
+        episode = next(body for path, body in pages.items() if path.startswith("live/test-"))
+        self.assertNotIn("<iframe", episode)
+        self.assertIn('data-player-provider="youtube"', episode)
+        self.assertNotIn("background-image", pages["live/index.html"])
+        ld = next(ld for url, ld in schemas.items() if "/live/test-" in url)[0]
+        self.assertEqual(ld["embedUrl"], "https://www.youtube-nocookie.com/embed/test")
+        self.assertEqual(ld["@type"], "VideoObject")
 
     def test_community_players_and_structured_data(self):
         import site_fetch
