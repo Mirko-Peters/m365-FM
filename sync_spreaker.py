@@ -10,6 +10,7 @@ ROOT = Path(__file__).parent
 API = "https://api.spreaker.com/v2"
 S = requests.Session()
 BASE_LANG = {"de-de": "de", "es-us": "es", "es-es": "es", "fr-fr": "fr", "pt-br": "pt", "nl-nl": "nl"}
+SITE_LANGS = ("en", "de", "es", "fr", "it", "pt", "nl", "pl", "id", "ru", "uk", "ar", "he", "ja", "ko")
 
 
 def get(url, **kw):
@@ -56,6 +57,16 @@ def episode_stats(items):
     return rows, total if found_downloads else None
 
 
+def _save_top(root, required, top, downloads, start, end):
+    if not required or not required.issubset(top) or not required.issubset(downloads):
+        return False
+    data = {"from": str(start), "week_end": str(end), "updated": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+            "spreaker": {"from": str(start), "to": str(end), "downloads": downloads, "complete": True}, "langs": top}
+    with open(Path(root) / "data" / "top.json", "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=1)
+    return True
+
+
 def main():
     tok = os.environ.get("SPREAKER_TOKEN", "").strip()
     if tok:   # altes/ungueltiges Secret nicht blind nutzen: erst pruefen
@@ -79,7 +90,7 @@ def main():
         print("Kein Spreaker-Zugang (SPREAKER_TOKEN bzw. 'Spreaker verbinden') – uebersprungen"); return
     S.headers["Authorization"] = f"Bearer {tok}"
     cfg = json.load(open(ROOT / "config.json", encoding="utf-8"))
-    shows = {l: s for l, s in (cfg.get("show_map") or {}).items() if s}
+    shows = {l: s for l, s in (cfg.get("show_map") or {}).items() if s and l in SITE_LANGS}
     end = date.today(); start = end - timedelta(days=7)
     top, titles, downloads = {}, {}, {}
     for lang, sid in shows.items():
@@ -95,11 +106,11 @@ def main():
             titles[lang] = {norm_title(e.get("title")): e for e in paged(f"/shows/{sid}/episodes?limit=100") if e.get("published_at")}
         except Exception as e:
             print("Episodenliste", lang, str(e)[:150])
-    if top:
-        json.dump({"from": str(start), "week_end": str(end), "updated": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-                   "spreaker": {"from": str(start), "to": str(end), "downloads": downloads}, "langs": top},
-                  open(ROOT / "data" / "top.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    required = set(shows)
+    if _save_top(ROOT, required, top, downloads, start, end):
         print("top.json:", {l: len(r) for l, r in top.items()})
+    else:
+        print("top.json: unvollständiger Sprachabruf – letzter vollständiger Stand bleibt erhalten")
     pp = ROOT / "data" / "published.json"
     pub = json.load(open(pp, encoding="utf-8")) if pp.exists() else {}
     added = 0

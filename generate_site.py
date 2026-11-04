@@ -1515,11 +1515,11 @@ def build():
     PRS.build_press(dict(write=write, page=page, header=header, footer=footer, footer_en=footer_en, BASE=BASE, LANGS=LANGS, sitemap=sitemap, TODAY=TODAY, n_eps=len(items), n_langs=len(active),
                          EMAIL=SL.CONTACT_EMAIL, MVP=MVP, LINKEDIN=LINKEDIN, YT=YT_CHANNEL, person_ld=person_ld, org_ld=org_ld))
     # T37 Sponsor-Seite: /sponsor/ + /<lang>/sponsor/ (alle Sprachen, ein hreflang-Cluster, Sitemap, Suchindex); vor finish_hreflang/Sitemaps/Suche
-    _spreaker_eps = len(PP.episode_index(BASE)["items"])
+    _main_archive_episodes = len(PP.episode_index(BASE)["items"])
     SPN.build(dict(write=write, page=page, header=header, footer=footer, BASE=BASE, LANGS=LANGS, sitemap=sitemap, TODAY=TODAY, api=COMMUNITY_API,
-                   n_main=_spreaker_eps, n_langs=len(active), ents=LRN.ENTS, day=_SU.day))
+                   n_main=_main_archive_episodes, n_langs=len(active), ents=LRN.ENTS, day=_SU.day))
     LND.build(dict(write=write, page=page, header=header, footer=footer, BASE=BASE, LANGS=LANGS,
-                   sitemap=sitemap, TODAY=TODAY, n_main=_spreaker_eps, n_langs=len(active), stats=SPN.load_stats()))
+                   write_r2=write_r2, sitemap=sitemap, TODAY=TODAY, n_main=_main_archive_episodes, n_langs=len(active), stats=SPN.load_stats()))
 
     # Kategorie-Seiten (indexierbar, in Sitemap) und Tag-Seiten (noindex,follow – nur für die interne Verlinkung)
     def rows_html(lst):
