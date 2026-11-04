@@ -44,6 +44,7 @@ import { refreshFeeds, refreshFollowers } from "./feeds.js";
 import { autoTranslate, translateStatus, uiI18nExport } from "./translate.js";
 import { handleWiki } from "./wiki.js";
 import { syncExpertise } from "./levels.js";
+import { handleTeams, dispatchTeamsNews } from "./teams.js";
 
 const PROVIDERS = {
   google: {
@@ -389,6 +390,7 @@ export default {
     const url = new URL(request.url), path = url.pathname.replace(/\/+$/, "") || "/";
     try {
       if (path.startsWith("/auth/")) return (await auth(env, request, url, path)) || new Response("not found", { status: 404 });
+      if (path === "/api/teams/messages") return await handleTeams(env, request);
       if (path === "/mcp") return await handleMcp(env, request, (uid) => me(env, uid), (req, user) => api(env, req, new URL(req.url), new URL(req.url).pathname, user));
       if (path === "/a2a") return await handleA2a(env, request);
       if (path.startsWith("/api/")) return await api(env, request, url, path);
@@ -404,6 +406,7 @@ export default {
     const T = (name, fn) => ctx.waitUntil(track(env, name, fn));
     if (event.cron === "0 6 * * *") T("runDigest", () => runDigest(env));
     T("refreshFeeds", () => refreshFeeds(env));
+    T("dispatchTeamsNews", () => dispatchTeamsNews(env));
     T("pollUpdates", () => pollUpdates(env));
     T("refreshFollowers", () => refreshFollowers(env));
     T("ensurePastEvents", () => ensurePastEvents(env).then(() => linkSpeakers(env)).then(() => linkSpeakerEntities(env)));

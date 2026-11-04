@@ -1,0 +1,78 @@
+name: Teams-Bot-Infrastruktur und App-Paket
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "infra/teams-bot.bicep"
+      - "teams-app/**"
+      - ".github/workflows/teams-bot-infra.yml"
+
+permissions:
+  contents: read
+  id-token: write
+  actions: write
+
+jobs:
+  azure:
+    if: github.event_name == 'workflow_dispatch' || vars.TEAMS_BOT_APP_ID != ''
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+      - name: Bot-Ressource und Teams-Kanal bereitstellen
+        env:
+          AZURE_RESOURCE_GROUP: ${{ vars.AZURE_RESOURCE_GROUP }}
+          TEAMS_BOT_APP_ID: ${{ vars.TEAMS_BOT_APP_ID }}
+        run: |
+          test -n "$AZURE_RESOURCE_GROUP" || { echo "::error::Repo-Variable AZURE_RESOURCE_GROUP fehlt."; exit 1; }
+          [[ "$TEAMS_BOT_APP_ID" =~ ^[0-9a-fA-F-]{36}$ ]] || { echo "::error::Repo-Variable TEAMS_BOT_APP_ID fehlt oder ist keine UUID."; exit 1; }
+          az deployment group create \
+            --resource-group "$AZURE_RESOURCE_GROUP" \
+            --template-file infra/teams-bot.bicep \
+            --parameters botAppId="$TEAMS_BOT_APP_ID"
+      - name: Worker-Variable aktualisieren und Worker-Deploy anstoßen
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TEAMS_BOT_APP_ID: ${{ vars.TEAMS_BOT_APP_ID }}
+        run: |
+          gh variable set TEAMS_BOT_APP_ID --repo "$GITHUB_REPOSITORY" --body "$TEAMS_BOT_APP_ID"
+          gh workflow run worker.yml --repo "$GITHUB_REPOSITORY" --ref main
+
+  package:
+    if: vars.TEAMS_BOT_APP_ID != ''
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Teams-App-Paket bauen
+        env:
+          TEAMS_BOT_APP_ID: ${{ vars.TEAMS_BOT_APP_ID }}
+        run: |
+          [[ "$TEAMS_BOT_APP_ID" =~ ^[0-9a-fA-F-]{36}$ ]] || { echo "::error::Repo-Variable TEAMS_BOT_APP_ID fehlt oder ist keine UUID."; exit 1; }
+          python3 - <<'PY'
+          import json, os, pathlib, shutil, zipfile
+          root = pathlib.Path(".")
+          out = pathlib.Path("teams-app-package")
+          out.mkdir()
+          manifest = json.loads((root / "teams-app/manifest.json").read_text(encoding="utf-8"))
+          app_id = os.environ["TEAMS_BOT_APP_ID"]
+          manifest["id"] = app_id
+          manifest["bots"][0]["botId"] = app_id
+          manifest["composeExtensions"][0]["botId"] = app_id
+          (out / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
+          shutil.copyfile(root / "assets/favicon-192.png", out / "color.png")
+          shutil.copyfile(root / "assets/favicon-32.png", out / "outline.png")
+          with zipfile.ZipFile("m365-fm-teams.zip", "w", zipfile.ZIP_DEFLATED) as package:
+              for file in out.iterdir():
+                  package.write(file, file.name)
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: m365-fm-teams-app
+          path: m365-fm-teams.zip
+          if-no-files-found: error

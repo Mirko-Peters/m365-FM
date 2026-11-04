@@ -33,7 +33,9 @@ let db = dbs.find((d) => d.name === "m365-dub");
 if (!db) { const c = run(["d1", "create", "m365-dub"]); console.log(c.stdout.split("\n").slice(0, 3).join("\n")); dbs = JSON.parse(run(["d1", "list", "--json"]).stdout); db = dbs.find((d) => d.name === "m365-dub"); }
 if (!db) { fail("D1 konnte nicht angelegt werden"); }
 const id = db.uuid || db.id;
-let toml = readFileSync("wrangler.toml", "utf8").replace(/database_id = "[^"]*"/, `database_id = "${id}"`);
+let toml = readFileSync("wrangler.toml", "utf8").replace(/database_id = "[^"]*"/, `database_id = "${id}"`)
+  .replace(/^TEAMS_BOT_APP_ID = .*[\r\n]*/m, "");
+if (process.env.TEAMS_BOT_APP_ID) toml = toml.replace("[vars]\n", `[vars]\nTEAMS_BOT_APP_ID = ${JSON.stringify(process.env.TEAMS_BOT_APP_ID)}\n`);
 writeFileSync("wrangler.toml", toml);
 console.log("D1:", db.name);
 
@@ -75,7 +77,7 @@ if (!have.includes("VAPID_PRIVATE_JWK") || !have.includes("VAPID_PUBLIC")) {
   put("VAPID_PRIVATE_JWK", JSON.stringify(jwk)); put("VAPID_PUBLIC", pub);
 }
 // Vom Betreiber gelieferte Secrets (GitHub-Secrets -> Umgebung); nur setzen, wenn vorhanden
-for (const k of ["GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "MS_CLIENT_ID", "MS_CLIENT_SECRET", "LINKEDIN_CLIENT_ID", "LINKEDIN_CLIENT_SECRET", "RESEND_API_KEY", "SPREAKER_TOKEN", "YT_CLIENT_ID", "YT_CLIENT_SECRET", "YT_REFRESH_TOKEN", "ADMIN_SUBS"]) if (process.env[k]) put(k, process.env[k]);
+for (const k of ["GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "MS_CLIENT_ID", "MS_CLIENT_SECRET", "LINKEDIN_CLIENT_ID", "LINKEDIN_CLIENT_SECRET", "RESEND_API_KEY", "SPREAKER_TOKEN", "YT_CLIENT_ID", "YT_CLIENT_SECRET", "YT_REFRESH_TOKEN", "ADMIN_SUBS", "TEAMS_BOT_SECRET"]) if (process.env[k]) put(k, process.env[k]);
 console.log("Fertig. Worker: https://api-dub.m365.fm");
 // Nachpruefung: Custom Domain und DNS-Eintrag
 {

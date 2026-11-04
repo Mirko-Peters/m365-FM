@@ -9,6 +9,7 @@ import { scoreOf, levelOf, levelName, CAPS, THRESH } from "../src/levels.js";
 import { handleSponsor } from "../src/sponsor.js";
 import { handleAdminPanel } from "../src/adminpanel.js";
 import { d1BackupExportArgs, d1BackupTables } from "../src/d1_backup.js";
+import { verifyBotToken, validServiceUrl, readLimitedBody, renderNewsCard, renderDigestCard, topicReference, deliveryTime, localBucket, dispatchTeamsNews } from "../src/teams.js";
 
 async function searchDb(failTrigram = false) {
   const { DatabaseSync } = await import("node:sqlite");
@@ -83,6 +84,114 @@ test("util: HMAC-Signatur ist pruefbar und faelschungssicher", async () => {
   assert.equal(await verify("geheim", "42", s), true);
   assert.equal(await verify("geheim", "43", s), false);
   assert.equal(await verify("anders", "42", s), false);
+});
+
+test("teams: Bot-Framework-Tokens erfordern Signatur, Issuer, Audience und Ablaufzeit", async () => {
+  const { webcrypto } = await import("node:crypto");
+  const pair = await webcrypto.subtle.generateKey({ name: "RSASSA-PKCS1-v1_5", modulusLength: 2048, publicExponent: new Uint8Array([1, 0, 1]), hash: "SHA-256" }, true, ["sign", "verify"]);
+  const jwk = await webcrypto.subtle.exportKey("jwk", pair.publicKey);
+  const encode = (value) => Buffer.from(JSON.stringify(value)).toString("base64url");
+  const claims = { iss: "https://api.botframework.com", aud: "bot-app-id", exp: 1900000000, nbf: 1800000000, serviceurl: "https://smba.trafficmanager.net/amer/" };
+  const head = encode({ alg: "RS256", typ: "JWT", kid: "teams-test-key" });
+  const body = encode(claims);
+  const signature = Buffer.from(await webcrypto.subtle.sign("RSASSA-PKCS1-v1_5", pair.privateKey, new TextEncoder().encode(`${head}.${body}`))).toString("base64url");
+  const token = `${head}.${body}.${signature}`;
+  const fetcher = async (url) => new Response(JSON.stringify(url.includes("openidconfiguration")
+    ? { issuer: "https://api.botframework.com", jwks_uri: "https://login.botframework.com/v1/.well-known/keys" }
+    : { keys: [{ ...jwk, kid: "teams-test-key", use: "sig" }] }), { status: 200 });
+
+  assert.equal(await verifyBotToken(token, "bot-app-id", fetcher, 1850000000, "https://smba.trafficmanager.net/amer/"), true);
+  assert.equal(await verifyBotToken(token, "bot-app-id", fetcher, 1850000000, "https://smba.trafficmanager.net/emea/"), false);
+  assert.equal(await verifyBotToken(token, "different-app", fetcher, 1850000000), false);
+  assert.equal(await verifyBotToken(token, "bot-app-id", fetcher, 1900000000), false);
+});
+
+test("teams: Service-URLs sind auf HTTPS-Bot-Framework-Hosts begrenzt und Karten escapen nur per Textmodell", () => {
+  assert.equal(validServiceUrl("https://smba.trafficmanager.net/emea/"), "https://smba.trafficmanager.net/emea");
+  assert.equal(validServiceUrl("http://smba.trafficmanager.net/"), "");
+  assert.equal(validServiceUrl("https://attacker.example/"), "");
+  assert.equal(validServiceUrl("https://smba.trafficmanager.net/?next=attacker.example"), "");
+  assert.deepEqual(topicReference({ type: "entity", url: "https://www.m365.fm/de/entity/copilot-studio/" }), { id: "copilot-studio", kind: "entity" });
+  assert.deepEqual(topicReference({ type: "person", url: "https://www.m365.fm/community/u/mirko-peters/" }), { id: "mirko-peters", kind: "creator" });
+  assert.deepEqual(topicReference({ type: "event", url: "https://www.m365.fm/community/events/m365con/" }), { id: "m365con", kind: "event" });
+  const card = renderNewsCard({ title: "Titel", summary: "<script>", type: "episode", url: "https://www.m365.fm/de/episode/" }, "de");
+  assert.equal(card.actions[0].title, "Abspielen");
+  assert.equal(card.actions[0].url, "https://www.m365.fm/de/episode/");
+  assert.equal(card.body[1].text, "<script>", "Adaptive Cards übertragen Klartext, kein HTML");
+  assert.equal(renderNewsCard({ title: "Unsicher", url: "https://attacker.example/" }).actions, undefined);
+  const digest = renderDigestCard([
+    { title: "Folge 1", type: "episode", url: "https://www.m365.fm/episode/1/" },
+    { title: "Beitrag", type: "blog", url: "https://www.m365.fm/blog/1/" },
+  ], "de");
+  assert.equal(digest.body.length, 2);
+  assert.equal(digest.body[0].items.at(-1).actions[0].title, "Abspielen");
+});
+
+test("teams: Aktivitäts-Payloads werden beim Lesen auf 64 KiB begrenzt", async () => {
+  const small = new Request("https://worker.test/api/teams/messages", { method: "POST", body: '{"type":"message"}' });
+  assert.equal(await readLimitedBody(small), '{"type":"message"}');
+  const large = new Request("https://worker.test/api/teams/messages", { method: "POST", body: "x".repeat(65537) });
+  assert.equal(await readLimitedBody(large), null);
+});
+
+test("teams: Ruhezeit und Digest-Zeitfenster folgen der Abbo-Zeitzone", () => {
+  const utc = (value) => Date.parse(value) / 1000;
+  assert.equal(deliveryTime("immediate", "UTC", utc("2026-11-02T06:59:00Z")), false);
+  assert.equal(deliveryTime("immediate", "UTC", utc("2026-11-02T07:00:00Z")), true);
+  assert.equal(deliveryTime("daily", "UTC", utc("2026-11-02T08:00:00Z")), false);
+  assert.equal(deliveryTime("daily", "UTC", utc("2026-11-02T07:00:00Z")), true);
+  assert.equal(deliveryTime("weekly", "UTC", utc("2026-11-02T07:00:00Z")), true);
+  assert.equal(deliveryTime("weekly", "UTC", utc("2026-11-03T07:00:00Z")), false);
+  assert.equal(localBucket("daily", "Europe/Berlin", utc("2026-11-02T06:00:00Z")), "d:2026-11-02");
+});
+
+test("teams: Entity-Events werden sofort oder gebündelt zugestellt und nicht doppelt gesendet", async () => {
+  const { DatabaseSync } = await import("node:sqlite");
+  const raw = new DatabaseSync(":memory:");
+  const dir = new URL("../migrations/", import.meta.url);
+  for (const f of readdirSync(dir).filter((f) => f.endsWith(".sql")).sort()) raw.exec(readFileSync(new URL(f, dir), "utf-8"));
+  raw.exec(`CREATE TABLE entity_events(id INTEGER PRIMARY KEY,eid TEXT,type TEXT,title TEXT,summary TEXT,url TEXT,image TEXT,created INTEGER);
+    INSERT INTO entity_events VALUES(1,'copilot-studio','episode','Folge','Neue Folge','https://www.m365.fm/episode/1/','',1793574000);
+    INSERT INTO entity_events VALUES(2,'fabric','blog','Beitrag','Neuer Beitrag','https://www.m365.fm/blog/1/','',1793574000);
+    INSERT INTO teams_convs(conversation_id,service_url,lang,updated) VALUES('immediate','https://smba.trafficmanager.net/amer','de',1),('daily','https://smba.trafficmanager.net/amer','de',1);
+    INSERT INTO teams_subscriptions(conversation_id,kind,topic_id,label,frequency,lang,timezone,created)
+      VALUES('immediate','entity','copilot-studio','Copilot Studio','immediate','de','UTC',1),
+            ('daily','entity','copilot-studio','Copilot Studio','daily','de','UTC',1),
+            ('daily','entity','fabric','Fabric','daily','de','UTC',1);`);
+  const db = {
+    prepare(sql) {
+      const statement = raw.prepare(sql); let args = [];
+      const adapter = {
+        bind(...values) { args = values; return adapter; },
+        all: async () => ({ results: statement.all(...args) }),
+        first: async () => statement.get(...args) ?? null,
+        run: async () => {
+          const result = statement.run(...args);
+          return { meta: { changes: Number(result.changes) } };
+        },
+      };
+      return adapter;
+    },
+  };
+  const outgoing = [], oldFetch = globalThis.fetch;
+  globalThis.fetch = async (url, init = {}) => {
+    if (String(url).includes("oauth2/v2.0/token")) return new Response(JSON.stringify({ access_token: "mock", expires_in: 3600 }), { status: 200 });
+    outgoing.push(JSON.parse(init.body));
+    return new Response("{}", { status: 200 });
+  };
+  try {
+    const env = { DB: db, SITE: "https://www.m365.fm", API: "https://api-dub.m365.fm", TEAMS_BOT_APP_ID: "bot-id", TEAMS_BOT_SECRET: "test-only" };
+    const at = new Date("2026-11-02T07:00:00Z");
+    assert.deepEqual(await dispatchTeamsNews(env, at), { events: 2, sent: 2 });
+    assert.equal(outgoing.length, 2, "ein Sofort-Post und ein Digest für zwei tägliche Themen");
+    const digest = outgoing.find((activity) => activity.attachments[0].content.body.length === 2);
+    assert.ok(digest, "Tagesabo enthält beide Ereignisse in einer Karte");
+    assert.deepEqual(await dispatchTeamsNews(env, at), { events: 2, sent: 0 });
+    assert.equal(outgoing.length, 2, "wiederholter Cron-Lauf sendet keine Duplikate");
+  } finally {
+    globalThis.fetch = oldFetch;
+    raw.close();
+  }
 });
 
 test("wiki: sanitize entfernt Skripte, laesst Markup und viz nur mit Option", () => {

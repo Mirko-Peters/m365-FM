@@ -84,6 +84,8 @@ jobs:
           YT_REFRESH_TOKEN: ${{ env.YT_REFRESH_TOKEN || secrets.YT_REFRESH_TOKEN }}
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           ADMIN_SUBS: ${{ secrets.ADMIN_SUBS }}
+          TEAMS_BOT_APP_ID: ${{ vars.TEAMS_BOT_APP_ID }}
+          TEAMS_BOT_SECRET: ${{ secrets.TEAMS_BOT_SECRET }}
       # Das Repo ist oeffentlich: Artefakte kann jeder angemeldete GitHub-Nutzer laden. Die D1-Sicherung enthaelt personenbezogene Daten
       # (Konten, Mail-Adressen, Nachrichten, Sponsor-Anfragen) und wird deshalb nur verschluesselt hochgeladen (Secret D1_BACKUP_KEY,
       # AES-256 mit PBKDF2). Ohne Secret kein Artefakt; zurueckholen geht dann ueber D1 Time Travel (Workers Paid: 30 Tage).
