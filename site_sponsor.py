@@ -11,6 +11,7 @@ indexierbar und in der Sitemap (wie die Barrierefreiheitserklaerung).
 import hashlib, html, json, math, re, subprocess
 from pathlib import Path
 from urllib.parse import urlsplit
+from site_i18n import T
 
 ROOT = Path(__file__).parent
 D = ROOT / "data"
@@ -74,11 +75,60 @@ def url(base, lang):
     return f"{base}/sponsor/" if lang == "en" or lang not in LANGS_ALL else f"{base}/{lang}/sponsor/"
 
 
+def dashboard_url(base, lang):
+    return f"{base}/sponsor/dashboard/" if lang == "en" else f"{base}/{lang}/sponsor/dashboard/"
+
+
 def tx(lang, key, **kw):
     """Text der Sprache, sonst Englisch (je Schluessel); {platzhalter} aus kw."""
     s = I18N.get(lang, {}).get(key)
     if s is None: s = EN.get(key, key)
     return re.sub(r"\{([a-z_]+)\}", lambda m: str(kw[m.group(1)]) if m.group(1) in kw else m.group(0), s)
+
+
+def dashboard_copy(lang):
+    texts = {
+        "intro": ("View your company's confirmed and pending event partnerships, date ranges and attendee counts.",
+                  "Sieh bestätigte und offene Event-Partnerschaften deiner Firma, Zeiträume und Teilnehmerzahlen."),
+        "login": ("Sign in with a community account linked to a company to view its sponsorships.",
+                  "Melde dich mit einem Community-Konto an, das einer Firma zugeordnet ist, um deren Sponsorings zu sehen."),
+        "signin": ("Sign in", "Anmelden"),
+        "no_orgs": ("No company accounts you can manage are linked to your profile.",
+                    "Deinem Profil sind keine Firmenkonten zugeordnet, die du verwalten kannst."),
+        "no_placements": ("No event partnerships yet.", "Noch keine Event-Partnerschaften."),
+        "scope": ("Only event-partner records and event registrations are currently connected. Podcast/banner bookings, impressions, clicks and Spreaker downloads are not tracked here yet.",
+                  "Aktuell sind nur Event-Partnerschaften und Event-Anmeldungen angebunden. Podcast-/Banner-Buchungen, Impressions, Klicks und Spreaker-Downloads werden hier noch nicht erfasst."),
+        "status": ("Status", "Status"),
+        "period": ("Period", "Zeitraum"),
+        "attendees": ("Event participants", "Event-Teilnehmer"),
+        "unavailable": ("Not tracked", "Nicht erfasst"),
+        "csv": ("Export CSV", "CSV exportieren"),
+        "pdf": ("Print / save PDF", "Drucken / als PDF speichern"),
+        "contact": ("Request a placement", "Platzierung anfragen"),
+        "message": ("Describe the placement you are interested in", "Beschreibe die gewünschte Platzierung"),
+        "send": ("Send message", "Nachricht senden"),
+        "sent": ("Message sent in platform inbox.", "Nachricht im Plattform-Postfach gesendet."),
+        "error": ("Could not send the request. Please try again.", "Anfrage konnte nicht gesendet werden. Bitte versuche es erneut."),
+        "pending": ("Pending", "Offen"),
+        "confirmed": ("Confirmed", "Bestätigt"),
+        "event_partner": ("Event partner", "Event-Partner"),
+        "company": ("Company", "Firma"),
+        "impressions": ("Impressions", "Impressions"),
+        "clicks": ("Clicks", "Klicks"),
+        "downloads": ("Episode downloads", "Folgen-Downloads"),
+    }
+    return {**{k: T(lang, en, de) for k, (en, de) in texts.items()}, "title": tx(lang, "dash_h")}
+
+
+DASHBOARD_CSS = """.sdb-actions{display:flex;flex-wrap:wrap;gap:8px;margin:1.2em 0}
+.sdb-org,.sdb-placement{border:1px solid var(--bd);background:var(--card);padding:1em;margin:1em 0}
+.sdb-org h2,.sdb-placement h3{margin:.1em 0 .4em}
+.sdb-meta{display:flex;flex-wrap:wrap;gap:.5em 1.5em;color:var(--mut)}
+.sdb-form{border-top:1px solid var(--bd);margin-top:1.5em;padding-top:1em}
+.sdb-form label{display:block;margin:.5em 0}
+.sdb-form textarea,.sdb-form select{display:block;width:100%;max-width:40em;font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--bd);padding:.6em}
+.sdb-status{border:1px solid var(--bd);padding:.05em .5em}
+@media print{.top,footer,.sdb-actions,.sdb-form{display:none!important}.sdb-org,.sdb-placement{break-inside:avoid}}"""
 
 
 def label(lang):
@@ -541,6 +591,7 @@ def build(g):
     lastmod = max(_dates) if _dates else TODAY   # Inhaltsdatum (Preise, Belegzahlen, Schwierigkeit), nicht das Baudatum
     P = PRICING
     per_lang, payload = {}, []
+    dashboard_alts = {l: dashboard_url(B, l) for l in ["en"] + [x for x in LANGS_ALL if x in LG]}
     for lang in langs:
         quick, search, ebase = topics_for(g, lang, stats)
         page = urlsplit(alts[lang]).path
@@ -567,7 +618,9 @@ def build(g):
                "con": con_on, "quick": [[q["id"], q["name"], q["en"], q["lvl"], q["rated"], q["example"], q["url"], q["default"], q["al"]] for q in quick],
                "ents": search, "entBase": ebase, "key": S.get("key", ""), "dec": S.get("dec")}
         body = body_html(g, lang, stats, quick, S, n_main, n_langs, con_on)
-        body = (f'{g["header"](lang, "")}<main class="wrap spn-wrap"><div class="spn" id="spn" data-ssr="{1 if S else 0}" data-cfg="{E(json.dumps(cfg, ensure_ascii=False, separators=(",", ":")))}">'
+        dash = dashboard_url(B, lang)
+        body = (f'{g["header"](lang, "")}<main class="wrap spn-wrap"><p><a class="btn" href="{E(dash)}">{E(tx(lang, "dash_h"))}</a></p>'
+                f'<div class="spn" id="spn" data-ssr="{1 if S else 0}" data-cfg="{E(json.dumps(cfg, ensure_ascii=False, separators=(",", ":")))}">'
                 f'{body}</div></main>{g["footer"](lang)}{js}')
         faqs = faq_items(lang, stats, S.get("nums") or {}, _day(g))
         meta = tx(lang, "meta", episodes=P["episodes_per_topic"])
@@ -576,5 +629,19 @@ def build(g):
                    g["page"](lang, tx(lang, "title") + " – M365.FM", meta, u, body, alts if len(alts) > 1 else None, jsonld(B, lang, u, hl, lastmod, faqs, n_langs),
                              xdefault=alts["en"], og_type="website", extra_head=CSS, share=False))
         g["sitemap"].append((u, lastmod, alts if len(alts) > 1 else None))
+        q = dashboard_copy(lang)
+        dashboard = dashboard_url(B, lang)
+        config = json.dumps({"api": g["api"], "base": B, "lang": lang, "copy": q}, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
+        dashboard_body = (f'{g["header"](lang, "")}<main class="wrap"><div class="kicker">M365.FM · {E(q["event_partner"])}</div>'
+                          f'<h1>{E(q["title"])}</h1><p class="lede">{E(q["intro"])}</p>'
+                          f'<p class="mut" id="sdb-scope">{E(q["scope"])}</p><div id="sdb" aria-live="polite"><p class="mut">{E(q["login"])}</p></div>'
+                          f'<script>window.M365SP={config}</script><script defer src="{asset_url(B, "sponsor-dashboard.js")}"></script></main>{g["footer"](lang)}')
+        title = tx(lang, "dash_h") + " – M365.FM"
+        g["write"](("sponsor/dashboard" if lang == "en" else f"{lang}/sponsor/dashboard") + "/index.html",
+                   g["page"](lang, title, q["intro"], dashboard, dashboard_body, dashboard_alts if len(dashboard_alts) > 1 else None,
+                             [{"@context": "https://schema.org", "@type": "WebPage", "name": tx(lang, "dash_h"), "url": dashboard,
+                               "inLanguage": g["LANGS"][lang][1] if lang in LG else "en"}],
+                             xdefault=dashboard_alts.get("en"), og_type="website", extra_head=DASHBOARD_CSS, share=False))
+        g["sitemap"].append((dashboard, TODAY, dashboard_alts if len(dashboard_alts) > 1 else None))
     print(f"Sponsor-Seite: {len(langs)} Sprachen ({'vorab gerendert' if ssr else 'ohne Vorab-Rendern'}), {len(per_lang[langs[0]][1]) if langs else 0} Themen in der Suche")
     return langs

@@ -53,9 +53,57 @@ function packageDetails(pkg) {
   return { summary, price: [monthly && `${monthly}/Monat`, oneOff && `${oneOff} einmalig`, total && `${total} gesamt`].filter(Boolean).join(" · ") || "–" };
 }
 
-export async function handleSponsor(env, request, url, path, J) {
+export async function handleSponsor(env, request, url, path, J, user) {
+  const db = env.DB;
+  if (path === "/api/sponsor/dashboard" && request.method === "GET") {
+    if (!user) return J({ error: "login" }, 401);
+    const orgs = (await db.prepare(`SELECT o.id,o.handle,o.name,COALESCE(s.open,0) open
+      FROM orgs o JOIN org_members m ON m.org_id=o.id
+      LEFT JOIN org_sponsor s ON s.org_id=o.id
+      WHERE m.user_id=? AND m.status='active' AND m.role IN ('owner','admin','events')
+      ORDER BY o.name,o.id`).bind(user.id).all()).results || [];
+    const items = [];
+    for (const org of orgs) {
+      const placements = (await db.prepare(`SELECT e.handle,e.title,e.start,e.end,p.kind,p.level,p.status,p.created,
+        (SELECT COUNT(*) FROM event_attendees a WHERE a.event_id=e.id AND a.status='going') attendees
+        FROM event_partners p JOIN events e ON e.id=p.event_id
+        WHERE p.org_id=? ORDER BY e.start DESC,e.id DESC`).bind(org.id).all()).results || [];
+      items.push({ handle: org.handle, name: org.name, open: !!org.open, placements: placements.map((p) => ({
+        type: "event_partner", title: p.title, event: p.handle, start: p.start, end: p.end, status: p.status,
+        kind: p.kind, level: p.level, created: p.created, attendees: p.attendees,
+        impressions: null, clicks: null, downloads: null,
+      })) });
+    }
+    return J({ orgs: items }, 200, { "cache-control": "no-store" });
+  }
+  if (path === "/api/sponsor/contact" && request.method === "POST") {
+    if (!user) return J({ error: "login" }, 401);
+    const body = (await request.json().catch(() => ({}))) || {};
+    const org = await db.prepare(`SELECT o.id,o.handle,o.name FROM orgs o JOIN org_members m ON m.org_id=o.id
+      WHERE o.handle=? AND m.user_id=? AND m.status='active' AND m.role IN ('owner','admin','events')`).bind(String(body.org || ""), user.id).first();
+    if (!org) return J({ error: "forbidden" }, 403);
+    const message = cleanText(body.message, 1000).replace(/[<>]/g, "").replace(/https?:\/\/\S+/gi, "[Link entfernt]").trim();
+    if (message.length < 5) return J({ error: "too_short" }, 400);
+    if (!(await rateLimit(db, `sponsor-contact:${user.id}`, 5, 86400))) return J({ error: "rate_limit" }, 429);
+    const admins = (await db.prepare("SELECT id,role,provider,sub FROM users WHERE banned=0").all()).results || [];
+    const allow = new Set((env.ADMIN_SUBS || "").split(",").map((s) => s.trim()).filter(Boolean));
+    const recipient = admins.filter((u) => (u.role === "admin" || allow.has(`${u.provider}:${u.sub}`)) && u.id !== user.id).sort((a, b) => a.id - b.id)[0];
+    if (!recipient) return J({ error: "no_recipient" }, 503);
+    let thread = await db.prepare("SELECT * FROM msg_threads WHERE (a_id=?1 AND b_id=?2) OR (a_id=?2 AND b_id=?1)").bind(user.id, recipient.id).first();
+    const created = now(), ops = [];
+    if (!thread) {
+      const result = await db.prepare("INSERT INTO msg_threads(a_id,b_id,ctx,created,last,a_read) VALUES(?,?,?,?,?,?)")
+        .bind(user.id, recipient.id, `sponsor:${org.handle}`, created, created, created).run();
+      thread = { id: result.meta.last_row_id, a_id: user.id };
+    }
+    const readColumn = thread.a_id === user.id ? "a_read" : "b_read";
+    ops.push(db.prepare("INSERT INTO msg_messages(thread_id,from_id,body,created) VALUES(?,?,?,?)").bind(thread.id, user.id, `Sponsoring · ${org.name}\n${message}`, created));
+    ops.push(db.prepare(`UPDATE msg_threads SET last=?,${readColumn}=? WHERE id=?`).bind(created, created, thread.id));
+    await db.batch(ops);
+    return J({ ok: true, thread: thread.id });
+  }
   if (!(path === "/api/sponsor/request" && request.method === "POST")) return null;
-  const db = env.DB, body = (await request.json().catch(() => ({}))) || {};
+  const body = (await request.json().catch(() => ({}))) || {};
   const company = cleanText(body.company, 160), name = cleanText(body.name, 120);
   const email = cleanText(body.email, 254).toLowerCase();
   const message = cleanText(body.message, 2000);

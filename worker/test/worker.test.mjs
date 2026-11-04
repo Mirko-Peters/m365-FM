@@ -362,6 +362,75 @@ test("sponsor: Anfragen, Honeypot, Rate-Limit und Admin-Panel (SQLite)", async (
   raw.close();
 });
 
+test("sponsor dashboard: Firmenzugriff, Event-Kennzahlen und Nachricht an die Plattform (SQLite)", async () => {
+  const { DatabaseSync } = await import("node:sqlite");
+  const raw = new DatabaseSync(":memory:");
+  const dir = new URL("../migrations/", import.meta.url);
+  for (const f of readdirSync(dir).filter((f) => f.endsWith(".sql")).sort()) raw.exec(readFileSync(new URL(f, dir), "utf-8"));
+  const db = {
+    prepare(sql) {
+      const st = raw.prepare(sql); let args = [];
+      const o = {
+        bind(...a) { args = a; return o; },
+        all: async () => ({ results: st.all(...args) }),
+        first: async () => st.get(...args) ?? null,
+        run: async () => { const r = st.run(...args); return { meta: { changes: Number(r.changes), last_row_id: Number(r.lastInsertRowid) } }; },
+      };
+      return o;
+    },
+    async batch(stmts) { for (const st of stmts) await st.run(); },
+  };
+  raw.exec(`
+    INSERT INTO users(id,provider,sub,name,role,banned,created) VALUES
+      (1,'google','sponsor','Sponsor User','user',0,1),(2,'google','admin','Platform Admin','admin',0,1),(3,'google','other','Other User','user',0,1);
+    INSERT INTO orgs(id,handle,name,created) VALUES (1,'acme','Acme GmbH',1),(2,'other-co','Other Company',1);
+    INSERT INTO org_members(org_id,user_id,role,status,created) VALUES
+      (1,1,'owner','active',1),(2,3,'owner','active',1),(1,3,'member','pending',1);
+    INSERT INTO org_sponsor(org_id,open,updated) VALUES (1,1,1);
+    INSERT INTO events(id,handle,owner_id,title,start,end,created,updated) VALUES
+      (1,'event-one',2,'Partner Event','2026-11-01','2026-11-02',1,1),
+      (2,'event-two',2,'Pending Event','2026-12-01','2026-12-03',1,1),
+      (3,'other-event',3,'Private Event','2026-11-01','2026-11-02',1,1);
+    INSERT INTO event_partners(event_id,org_id,kind,level,status,created) VALUES
+      (1,1,'sponsor','Gold','confirmed',1),(2,1,'media','Community','pending',1),(3,2,'sponsor','Gold','confirmed',1);
+    INSERT INTO event_attendees(event_id,user_id,status,visible,created) VALUES
+      (1,3,'going',0,1),(1,2,'waitlist',0,1),(3,1,'going',0,1);
+  `);
+  const env = { DB: db, ADMIN_SUBS: "", SITE: "https://www.m365.fm" };
+  const J = (data, status = 200, headers = {}) => new Response(JSON.stringify(data), { status, headers });
+  const call = (path, method, user, body) => {
+    const request = new Request(`https://api.example${path}`, {
+      method, headers: { "content-type": "application/json", "x-requested-with": "m365" },
+      ...(body === undefined ? {} : { body: JSON.stringify(body) }),
+    });
+    return handleSponsor(env, request, new URL(request.url), path, J, user);
+  };
+
+  assert.equal((await call("/api/sponsor/dashboard", "GET", null)).status, 401);
+  let response = await call("/api/sponsor/dashboard", "GET", { id: 1 });
+  let result = await response.json();
+  assert.equal(result.orgs.length, 1, "nur verwaltete Firmen werden angezeigt");
+  assert.equal(result.orgs[0].handle, "acme");
+  assert.deepEqual(result.orgs[0].placements.map((p) => p.status), ["pending", "confirmed"]);
+  const confirmed = result.orgs[0].placements.find((p) => p.status === "confirmed");
+  assert.equal(confirmed.attendees, 1, "nur going-Teilnehmer werden gezählt");
+  assert.equal(confirmed.impressions, null);
+  assert.equal(confirmed.clicks, null);
+  assert.equal(confirmed.downloads, null);
+  assert.equal((await call("/api/sponsor/contact", "POST", { id: 3 }, { org: "acme", message: "Interested" })).status, 403);
+
+  response = await call("/api/sponsor/contact", "POST", { id: 1 }, { org: "acme", message: "<b>Interested</b> https://example.com" });
+  assert.equal(response.status, 200);
+  const msg = raw.prepare("SELECT m.body,t.b_id,t.b_read,t.last FROM msg_messages m JOIN msg_threads t ON t.id=m.thread_id").get();
+  assert.match(msg.body, /Sponsoring · Acme GmbH/);
+  assert.match(msg.body, /Interested/);
+  assert.match(msg.body, /\[Link entfernt\]/);
+  assert.doesNotMatch(msg.body, /<b>|https:\/\/example\.com/);
+  assert.equal(msg.b_id, 2);
+  assert.ok(msg.last > msg.b_read, "Admin-Nachricht bleibt im Plattform-Postfach ungelesen");
+  raw.close();
+});
+
 test("entities: Abgleich ueberschreibt keine Menschen (freigegebener Vorschlag mit aelterer id, geloeschtes Konto, absichtlich geleertes Feld, selbst verwaltet) (SQLite)", async () => {
   const { DatabaseSync } = await import("node:sqlite");
   const raw = new DatabaseSync(":memory:");

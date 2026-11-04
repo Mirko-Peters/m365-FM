@@ -163,7 +163,7 @@ async function api(env, request, url, path, asUser) {
   const need = () => (user ? null : J({ error: "login" }, 401));
   const db = env.DB;
 
-  const sponsor = await handleSponsor(env, request, url, path, J);
+  const sponsor = await handleSponsor(env, request, url, path, J, user);
   if (sponsor) return sponsor;
 
   if (path === "/api/health") return J({ ok: true }, 200);
