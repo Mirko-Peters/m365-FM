@@ -265,6 +265,8 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          timeout: 1800000   # 30 min statt 10: GitHub Pages hing am 4.11. laenger als 10 min in "updating_pages" (Lauf 529), der Deploy brach ab
       - uses: actions/checkout@v4
       - name: Letzter Seiten-Stand (Hashes des vorigen Deploys)
         uses: actions/cache/restore@v4

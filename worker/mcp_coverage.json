@@ -34,6 +34,9 @@
   "/api/admin/mail/test": {
    "skip": "Admin-Testmail: geschützter Browser-Endpunkt, absichtlich nicht per KI-Token auslösbar"
   },
+  "/api/admin/mediakit": {
+   "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
+  },
   "/api/admin/panel/flag": {
    "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Verwaltung ueber /admin/"
   },
@@ -43,14 +46,14 @@
   "/api/admin/panel/ops": {
    "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Verwaltung unter /admin/"
   },
+  "/api/admin/panel/overview": {
+   "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Verwaltung ueber /admin/"
+  },
   "/api/admin/panel/sponsor-requests": {
    "skip": "Admin-Funktionen: Sponsor-Anfragen werden nur im Admin-Panel verwaltet"
   },
   "/api/admin/panel/sponsor-requests/status": {
    "skip": "Admin-Funktionen: Sponsor-Anfragen werden nur im Admin-Panel verwaltet"
-  },
-  "/api/admin/panel/overview": {
-   "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Verwaltung ueber /admin/"
   },
   "/api/admin/panel/topic": {
    "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Verwaltung unter /admin/"
@@ -176,6 +179,51 @@
   },
   "/api/comments": {
    "skip": "Seiten-Infrastruktur (kein Nutzerfunktion)"
+  },
+  "/api/contributions/export": {
+   "tools": [
+    "export_contributions"
+   ]
+  },
+  "/api/contributions/manual": {
+   "tools": [
+    "add_contribution"
+   ]
+  },
+  "/api/contributions/mine": {
+   "tools": [
+    "list_my_contributions"
+   ]
+  },
+  "/api/contributions/source": {
+   "tools": [
+    "add_contribution_source"
+   ]
+  },
+  "/api/contributions/source/delete": {
+   "tools": [
+    "delete_contribution_source"
+   ]
+  },
+  "/api/contributions/source/update": {
+   "tools": [
+    "update_contribution_source"
+   ]
+  },
+  "/api/contributions/sources": {
+   "tools": [
+    "list_my_contributions"
+   ]
+  },
+  "/api/contributions/update": {
+   "tools": [
+    "update_contribution"
+   ]
+  },
+  "/api/contributions/delete": {
+   "tools": [
+    "delete_contribution"
+   ]
   },
   "/api/credit/mine": {
    "tools": [
@@ -456,6 +504,9 @@
   "/api/me/li-follow": {
    "skip": "Seiten-Infrastruktur (kein Nutzerfunktion)"
   },
+  "/api/mediakit": {
+   "skip": "Öffentliches Formular für Gäste ohne Konto (Name, Firma, E-Mail) – Versand an die eingegebene Adresse; per KI-Token nicht sinnvoll und Missbrauchsrisiko"
+  },
   "/api/msg/prefs": {
    "skip": "Benachrichtigungs-Einstellungen gehören in den Browser"
   },
@@ -619,9 +670,6 @@
     "vote_answer"
    ]
   },
-  "/api/search": {
-   "skip": "Oeffentliche Seitensuche fuer Browser und nicht fuer KI-Agenten"
-  },
   "/api/quotes/export": {
    "skip": "Datenexport der Quotes je Personen-Entitaet fuer Seitenbau und Agenten (Lesen ohne Token)"
   },
@@ -650,6 +698,9 @@
    "tools": [
     "mark_review_helpful"
    ]
+  },
+  "/api/search": {
+   "skip": "Oeffentliche Seitensuche fuer Browser und nicht fuer KI-Agenten"
   },
   "/api/seo/check": {
    "tools": [
