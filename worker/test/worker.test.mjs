@@ -9,6 +9,7 @@ import { scoreOf, levelOf, levelName, CAPS, THRESH } from "../src/levels.js";
 import { handleSponsor } from "../src/sponsor.js";
 import { handleAdminPanel } from "../src/adminpanel.js";
 import { d1BackupExportArgs, d1BackupTables } from "../src/d1_backup.js";
+import { verifyBotToken, validServiceUrl, renderNewsCard } from "../src/teams.js";
 
 async function searchDb(failTrigram = false) {
   const { DatabaseSync } = await import("node:sqlite");
@@ -83,6 +84,36 @@ test("util: HMAC-Signatur ist pruefbar und faelschungssicher", async () => {
   assert.equal(await verify("geheim", "42", s), true);
   assert.equal(await verify("geheim", "43", s), false);
   assert.equal(await verify("anders", "42", s), false);
+});
+
+test("teams: Bot-Framework-Tokens erfordern Signatur, Issuer, Audience und Ablaufzeit", async () => {
+  const { webcrypto } = await import("node:crypto");
+  const pair = await webcrypto.subtle.generateKey({ name: "RSASSA-PKCS1-v1_5", modulusLength: 2048, publicExponent: new Uint8Array([1, 0, 1]), hash: "SHA-256" }, true, ["sign", "verify"]);
+  const jwk = await webcrypto.subtle.exportKey("jwk", pair.publicKey);
+  const encode = (value) => Buffer.from(JSON.stringify(value)).toString("base64url");
+  const claims = { iss: "https://api.botframework.com", aud: "bot-app-id", exp: 1900000000, nbf: 1800000000 };
+  const head = encode({ alg: "RS256", typ: "JWT", kid: "teams-test-key" });
+  const body = encode(claims);
+  const signature = Buffer.from(await webcrypto.subtle.sign("RSASSA-PKCS1-v1_5", pair.privateKey, new TextEncoder().encode(`${head}.${body}`))).toString("base64url");
+  const token = `${head}.${body}.${signature}`;
+  const fetcher = async (url) => new Response(JSON.stringify(url.includes("openidconfiguration")
+    ? { issuer: "https://api.botframework.com", jwks_uri: "https://login.botframework.com/v1/.well-known/keys" }
+    : { keys: [{ ...jwk, kid: "teams-test-key", use: "sig" }] }), { status: 200 });
+
+  assert.equal(await verifyBotToken(token, "bot-app-id", fetcher, 1850000000), true);
+  assert.equal(await verifyBotToken(token, "different-app", fetcher, 1850000000), false);
+  assert.equal(await verifyBotToken(token, "bot-app-id", fetcher, 1900000000), false);
+});
+
+test("teams: Service-URLs sind auf HTTPS-Bot-Framework-Hosts begrenzt und Karten escapen nur per Textmodell", () => {
+  assert.equal(validServiceUrl("https://smba.trafficmanager.net/emea/"), "https://smba.trafficmanager.net/emea");
+  assert.equal(validServiceUrl("http://smba.trafficmanager.net/"), "");
+  assert.equal(validServiceUrl("https://attacker.example/"), "");
+  const card = renderNewsCard({ title: "Titel", summary: "<script>", type: "episode", url: "https://www.m365.fm/de/episode/" }, "de");
+  assert.equal(card.actions[0].title, "Play");
+  assert.equal(card.actions[0].url, "https://www.m365.fm/de/episode/");
+  assert.equal(card.body[1].text, "<script>", "Adaptive Cards übertragen Klartext, kein HTML");
+  assert.equal(renderNewsCard({ title: "Unsicher", url: "https://attacker.example/" }).actions, undefined);
 });
 
 test("wiki: sanitize entfernt Skripte, laesst Markup und viz nur mit Option", () => {
