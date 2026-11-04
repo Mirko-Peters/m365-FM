@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Sponsor dashboard – overview</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap">
+<style>
+body{margin:0;background:#f3f3f2}
+a{color:#3b6391}a:hover{color:#2c4b70}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid #3b6391;outline-offset:2px}
+.kicker:after{content:"";flex:1;height:1px;background:rgba(23,25,28,.14)}
+.x{position:relative}
+.x:before,.x:after{content:"+";position:absolute;top:-10px;font:300 19px/1 Barlow,sans-serif;color:#5d6470;background:#f3f3f2}
+.x:before{left:-6px}.x:after{right:-6px}
+</style>
+</helmet>
+<div style="min-height: 1760px; background: #f3f3f2; color: #17191c; font-family: Barlow, 'Segoe UI', sans-serif; font-size: 16px; line-height: 1.5">
+
+  <header style="border-bottom: 1px solid rgba(23,25,28,.14)">
+    <div style="max-width: 1240px; margin: 0 auto; padding: 16px 32px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+      <a href="Main.dc.html" style="font-size: 20px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: #17191c; text-decoration: none">M365<span style="color: #3b6391">.FM</span></a>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center">
+        <span style="padding: 1px 10px; border: 1px dashed #9a4f0f; color: #9a4f0f; font: 600 13px/1.8 'Barlow Condensed', sans-serif; letter-spacing: .1em; text-transform: uppercase">Demo · sample data</span>
+        <span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; font-size: 15px; color: #5d6470">Contoso GmbH · Sponsor</span>
+      </div>
+    </div>
+  </header>
+
+  <main style="max-width: 1240px; margin: 0 auto; padding: 36px 32px 80px; display: grid; gap: 28px">
+
+    <section style="display: flex; flex-wrap: wrap; gap: 20px; align-items: end; justify-content: space-between">
+      <div style="display: grid; gap: 10px">
+        <div class="kicker" style="display: flex; align-items: center; gap: 14px; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: #3b6391; font-size: 15px; min-width: 320px">Sponsor dashboard</div>
+        <h1 style="margin: 0; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 52px; line-height: 1">What your sponsorship achieved</h1>
+      </div>
+      <div role="group" aria-label="Period" style="display: flex; border: 1px solid #17191c">
+        <sc-for list="{{periods}}" as="p" hint-placeholder-count="3">
+          <button type="button" onClick="{{p.pick}}" aria-pressed="{{p.on}}" style="{{p.style}}">{{p.label}}</button>
+        </sc-for>
+      </div>
+    </section>
+
+    <section aria-label="Key figures" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 24px">
+      <sc-for list="{{kpis}}" as="k" hint-placeholder-count="8">
+        <div class="x" style="background: #ffffff; border: 1px solid rgba(23,25,28,.14); padding: 18px 20px; display: grid; gap: 6px">
+          <span style="display: flex; justify-content: space-between; gap: 8px; align-items: center">
+            <span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #5d6470">{{k.label}}</span>
+            <span style="{{k.badgeStyle}}">{{k.badge}}</span>
+          </span>
+          <b style="font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 40px; line-height: 1; color: #17191c">{{k.value}}</b>
+          <span style="font-size: 13px; color: #5d6470">{{k.source}}</span>
+        </div>
+      </sc-for>
+    </section>
+
+    <section style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+      <div style="flex: 999 1 640px; min-width: 0; background: #ffffff; border: 1px solid rgba(23,25,28,.14); padding: 20px; display: grid; gap: 12px">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; align-items: baseline">
+          <h2 style="margin: 0; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 26px">Reach per week</h2>
+          <span style="display: flex; gap: 16px; font-size: 13px">
+            <span style="display: flex; gap: 6px; align-items: center"><span aria-hidden="true" style="width: 12px; height: 12px; background: #3b6391"></span>Podcast</span>
+            <span style="display: flex; gap: 6px; align-items: center"><span aria-hidden="true" style="width: 12px; height: 12px; background: #9fc0ea"></span>Video</span>
+            <span style="display: flex; gap: 6px; align-items: center"><span aria-hidden="true" style="width: 12px; height: 12px; background: #17191c"></span>Website</span>
+          </span>
+        </div>
+        <div role="img" aria-label="Weekly reach for the last 8 weeks, split into podcast, video and website" style="display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 10px; align-items: end; height: 220px; border-bottom: 1px solid rgba(23,25,28,.3)">
+          <sc-for list="{{weeks}}" as="w" hint-placeholder-count="8">
+            <span style="display: flex; flex-direction: column; justify-content: flex-end; height: 100%">
+              <span style="{{w.web}}"></span><span style="{{w.vid}}"></span><span style="{{w.pod}}"></span>
+            </span>
+          </sc-for>
+        </div>
+        <div aria-hidden="true" style="display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 10px; font-size: 12px; color: #5d6470; text-align: center">
+          <span>W1</span><span>W2</span><span>W3</span><span>W4</span><span>W5</span><span>W6</span><span>W7</span><span>W8</span>
+        </div>
+      </div>
+
+      <aside style="flex: 1 1 300px; min-width: 0; display: grid; gap: 14px">
+        <a href="Report.dc.html" style="display: grid; place-items: center; min-height: 50px; background: #3b6391; color: #ffffff; text-decoration: none; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 17px; letter-spacing: .1em; text-transform: uppercase">Monthly report (PDF)</a>
+        <button type="button" onClick="{{exportCsv}}" style="min-height: 48px; background: #ffffff; border: 1px solid #17191c; border-radius: 0; cursor: pointer; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 16px; letter-spacing: .1em; text-transform: uppercase">{{csvLabel}}</button>
+        <div style="background: #1a1d21; color: #eef0f3; padding: 18px; display: grid; gap: 8px">
+          <b style="font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 22px">Highlight</b>
+          <span>Your episode on Copilot governance is the most played Copilot episode this month.</span>
+          <a href="Placement.dc.html" style="color: #9fc0ea; font-weight: 600">See details →</a>
+        </div>
+        <div style="border: 1px solid rgba(23,25,28,.14); padding: 16px; display: grid; gap: 6px; font-size: 14px">
+          <b style="font-weight: 600">How we count</b>
+          <span><b style="color: #2f6b3a">Measured</b> = counted by the platform</span>
+          <span><b style="color: #3b6391">Estimated</b> = calculated, method in the report</span>
+          <span><b style="color: #9a4f0f">Manual</b> = entered from an export</span>
+          <span style="color: #5d6470">No data about individual listeners. Leads only with their consent.</span>
+        </div>
+      </aside>
+    </section>
+
+    <section style="display: grid; gap: 12px">
+      <h2 style="margin: 0; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 30px">Your placements</h2>
+      <div style="overflow-x: auto; background: #ffffff; border: 1px solid rgba(23,25,28,.14)">
+        <div style="min-width: 900px">
+          <div style="display: grid; grid-template-columns: 2.2fr 1.2fr 1fr 1.2fr 1fr 1.2fr; gap: 14px; padding: 12px 20px; border-bottom: 1px solid rgba(23,25,28,.14); font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: #5d6470">
+            <span>Placement</span><span>Channel</span><span>Languages</span><span>Period</span><span>Status</span><span>Key figure</span>
+          </div>
+          <sc-for list="{{placements}}" as="r" hint-placeholder-count="5">
+            <a href="{{r.href}}" style="display: grid; grid-template-columns: 2.2fr 1.2fr 1fr 1.2fr 1fr 1.2fr; gap: 14px; padding: 14px 20px; border-bottom: 1px solid rgba(23,25,28,.1); align-items: center; text-decoration: none; color: #17191c">
+              <b style="font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 20px">{{r.name}}</b>
+              <span style="font-size: 14px">{{r.channel}}</span>
+              <span style="font-size: 14px">{{r.langs}}</span>
+              <span style="font-size: 14px">{{r.period}}</span>
+              <span style="{{r.stStyle}}">{{r.status}}</span>
+              <span style="font-size: 14px; font-weight: 600">{{r.key}}</span>
+            </a>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1760}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const per = s.per || 'm';
+    const f = { m: 1, c: 2.6, y: 7.9 }[per];
+    const fmt = (n) => Math.round(n).toLocaleString('en-US');
+    const B = {
+      measured: 'padding: 0 6px; background: #2f6b3a; color: #ffffff; font: 600 11px/1.7 Barlow Condensed, sans-serif; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap;',
+      estimated: 'padding: 0 6px; background: #3b6391; color: #ffffff; font: 600 11px/1.7 Barlow Condensed, sans-serif; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap;',
+      manual: 'padding: 0 6px; background: #9a4f0f; color: #ffffff; font: 600 11px/1.7 Barlow Condensed, sans-serif; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap;'
+    };
+    const K = [
+      ['People reached', 21400, 'estimated', 'All channels, without double counting'],
+      ['Podcast plays', 4820, 'measured', 'Spreaker · sponsored episodes'],
+      ['Video views', 12300, 'measured', 'YouTube Analytics · sponsored videos'],
+      ['Page views with your logo', 9150, 'measured', 'Cloudflare · sponsored topic pages'],
+      ['Clicks to your website', 312, 'measured', 'M365.FM link counter · /go/ links'],
+      ['Project requests', 3, 'measured', 'Directory leads from your profile'],
+      ['AI citations', 1840, 'manual', 'Bing AI Performance · sponsored pages'],
+      ['Search impressions', 38600, 'measured', 'Google Search Console · sponsored pages']
+    ];
+    const kpis = K.map(([label, v, kind, source]) => ({ label, value: fmt(v * f), badge: kind, badgeStyle: B[kind], source }));
+    const W = [[22, 30, 18], [26, 34, 20], [24, 40, 22], [30, 36, 24], [28, 44, 26], [34, 48, 28], [32, 52, 30], [38, 56, 32]];
+    const mx = Math.max.apply(null, W.map((w) => w[0] + w[1] + w[2]));
+    const weeks = W.map(([p, v, w]) => ({
+      pod: 'display: block; height: ' + (p / mx * 100) + '%; background: #3b6391',
+      vid: 'display: block; height: ' + (v / mx * 100) + '%; background: #9fc0ea',
+      web: 'display: block; height: ' + (w / mx * 100) + '%; background: #17191c'
+    }));
+    const ST = {
+      Active: 'justify-self: start; padding: 0 8px; background: #2f6b3a; color: #ffffff; font: 600 12px/1.8 Barlow Condensed, sans-serif; letter-spacing: .08em; text-transform: uppercase;',
+      Upcoming: 'justify-self: start; padding: 0 8px; border: 1px solid #3b6391; color: #3b6391; font: 600 12px/1.8 Barlow Condensed, sans-serif; letter-spacing: .08em; text-transform: uppercase;',
+      Done: 'justify-self: start; padding: 0 8px; background: #e1e2de; color: #17191c; font: 600 12px/1.8 Barlow Condensed, sans-serif; letter-spacing: .08em; text-transform: uppercase;',
+      Planned: 'justify-self: start; padding: 0 8px; border: 1px dashed #9a4f0f; color: #9a4f0f; font: 600 12px/1.8 Barlow Condensed, sans-serif; letter-spacing: .08em; text-transform: uppercase;'
+    };
+    const placements = [
+      { name: 'Topic sponsorship · Copilot', channel: 'Podcast + video', langs: 'EN, DE', period: '[DATE] – [DATE]', status: 'Active', key: fmt(4820 * f) + ' plays', href: 'Placement.dc.html' },
+      { name: 'Sponsored topic page · Copilot', channel: 'Website', langs: '19 languages', period: '[DATE] – [DATE]', status: 'Active', key: fmt(9150 * f) + ' views', href: 'Placement.dc.html' },
+      { name: 'LinkedIn newsletter · 1 issue', channel: 'Newsletter', langs: 'EN', period: '[DATE]', status: 'Done', key: '[N] opens (manual)', href: 'Placement.dc.html' },
+      { name: 'M365Con 2027 · session partner', channel: 'Event', langs: 'EN', period: '[DATE]', status: 'Upcoming', key: '[N] registered', href: 'Placement.dc.html' },
+      { name: 'News app briefing · jingle', channel: 'App (V2)', langs: 'DE', period: 'later', status: 'Planned', key: 'listens, push opens, taps', href: 'Placement.dc.html' }
+    ].map((r) => Object.assign({}, r, { stStyle: ST[r.status] }));
+    const periods = [['m', 'Last 30 days'], ['c', 'This campaign'], ['y', 'This year']].map(([k, label]) => ({
+      label, on: per === k,
+      pick: () => this.setState({ per: k }),
+      style: 'min-height: 44px; padding: 0 16px; border: 0; border-radius: 0; cursor: pointer; font-family: Barlow Condensed, sans-serif; font-weight: 600; font-size: 15px; letter-spacing: .08em; text-transform: uppercase; ' + (per === k ? 'background: #17191c; color: #ffffff;' : 'background: #ffffff; color: #17191c;')
+    }));
+    return {
+      kpis, weeks, placements, periods,
+      csvLabel: s.csv ? 'CSV downloaded' : 'Export CSV',
+      exportCsv: () => this.setState({ csv: true })
+    };
+  }
+}
+</script>
+</body>
+</html>

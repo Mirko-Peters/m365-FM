@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Placement detail – Copilot topic sponsorship</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap">
+<style>
+body{margin:0;background:#f3f3f2}
+a{color:#3b6391}a:hover{color:#2c4b70}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid #3b6391;outline-offset:2px}
+.kicker:after{content:"";flex:1;height:1px;background:rgba(23,25,28,.14)}
+</style>
+</helmet>
+<div style="min-height: 1640px; background: #f3f3f2; color: #17191c; font-family: Barlow, 'Segoe UI', sans-serif; font-size: 16px; line-height: 1.5">
+
+  <header style="border-bottom: 1px solid rgba(23,25,28,.14)">
+    <div style="max-width: 1240px; margin: 0 auto; padding: 16px 32px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+      <a href="Main.dc.html" style="font-size: 20px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: #17191c; text-decoration: none">M365<span style="color: #3b6391">.FM</span></a>
+      <span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; font-size: 15px; color: #5d6470">Contoso GmbH · Sponsor</span>
+    </div>
+  </header>
+
+  <main style="max-width: 1240px; margin: 0 auto; padding: 28px 32px 80px; display: grid; gap: 24px">
+    <nav aria-label="Breadcrumb" style="font-size: 14px; color: #5d6470; display: flex; gap: 8px"><a href="Main.dc.html">Dashboard</a><span aria-hidden="true">/</span><span aria-current="page" style="color: #17191c">Topic sponsorship · Copilot</span></nav>
+
+    <section style="display: grid; gap: 10px">
+      <div class="kicker" style="display: flex; align-items: center; gap: 14px; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: #3b6391; font-size: 15px">Active · [DATE] – [DATE] · EN, DE</div>
+      <h1 style="margin: 0; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 48px; line-height: 1">Topic sponsorship · Copilot</h1>
+      <p style="margin: 0; color: #5d6470; max-width: 46em">Your mention in every Copilot episode and video, your logo on the Copilot topic page in 19 languages, and a link to your website.</p>
+    </section>
+
+    <div role="tablist" aria-label="Channel" style="display: flex; flex-wrap: wrap; border-bottom: 2px solid #17191c">
+      <sc-for list="{{tabs}}" as="t" hint-placeholder-count="4">
+        <button type="button" role="tab" aria-selected="{{t.on}}" onClick="{{t.pick}}" style="{{t.style}}">{{t.label}}</button>
+      </sc-for>
+    </div>
+
+    <sc-if value="{{isPod}}" hint-placeholder-val="{{ true }}">
+      <section style="display: grid; gap: 16px">
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px">
+          <div style="background: #ffffff; border: 1px solid rgba(23,25,28,.14); padding: 16px; display: grid"><span style="font-size: 13px; color: #5d6470">Plays of sponsored episodes</span><b style="font-family: 'Barlow Condensed', sans-serif; font-size: 34px">4,820</b></div>
+          <div style="background: #ffffff; border: 1px solid rgba(23,25,28,.14); padding: 16px; display: grid"><span style="font-size: 13px; color: #5d6470">Episodes with your mention</span><b style="font-family: 'Barlow Condensed', sans-serif; font-size: 34px">9</b></div>
+          <div style="background: #ffffff; border: 1px solid rgba(23,25,28,.14); padding: 16px; display: grid"><span style="font-size: 13px; color: #5d6470">Clicks from show notes</span><b style="font-family: 'Barlow Condensed', sans-serif; font-size: 34px">128</b></div>
+          <div style="background: #ffffff; border: 1px solid rgba(23,25,28,.14); padding: 16px; display: grid"><span style="font-size: 13px; color: #5d6470">Top countries</span><b style="font-family: 'Barlow Condensed', sans-serif; font-size: 22px; line-height: 1.6">DE · US · UK · NL</b></div>
+        </div>
+        <div style="overflow-x: auto; background: #ffffff; border: 1px solid rgba(23,25,28,.14)">
+          <div style="min-width: 760px">
+            <div style="display: grid; grid-template-columns: 3fr 1fr 1fr 1fr 1fr; gap: 12px; padding: 10px 18px; border-bottom: 1px solid rgba(23,25,28,.14); font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: #5d6470"><span>Episode</span><span>Date</span><span>Language</span><span>Plays</span><span>Clicks</span></div>
+            <sc-for list="{{episodes}}" as="e" hint-placeholder-count="5">
+              <div style="display: grid; grid-template-columns: 3fr 1fr 1fr 1fr 1fr; gap: 12px; padding: 12px 18px; border-bottom: 1px solid rgba(23,25,28,.08)">
+                <span>{{e.t}}</span><span>[DATE]</span><span>{{e.l}}</span><b>{{e.p}}</b><span>{{e.c}}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <span style="font-size: 13px; color: #5d6470">Source: Spreaker statistics (plays per episode, countries), updated daily. Clicks: M365.FM link counter on the show-notes link.</span>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{isVid}}" hint-placeholder-val="{{ false }}">
+      <section style="display: grid; gap: 16px">
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px">
+          <div style="background: #ffffff; border: 1px solid rgba(23,25,28,.14); padding: 16px; display: grid"><span style="font-size: 13px; color: #5d6470">Views</span><b style="font-family: 'Barlow Condensed', sans-serif; font-size: 34px">12,300</b></div>
+          <div style="background: #ffffff; border: 1px solid rgba(23,25,28,.14); padding: 16px; display: grid"><span style="font-size: 13px; color: #5d6470">Watch time</span><b style="font-family: 'Barlow Condensed', sans-serif; font-size: 34px">[N] h</b></div>
+          <div style="background: #ffffff; border: 1px solid rgba(23,25,28,.14); padding: 16px; display: grid"><span style="font-size: 13px; color: #5d6470">Viewers who reached your mention</span><b style="font-family: 'Barlow Condensed', sans-serif; font-size: 34px">[N] %</b></div>
+          <div style="background: #ffffff; border: 1px solid rgba(23,25,28,.14); padding: 16px; display: grid"><span style="font-size: 13px; color: #5d6470">Clicks from descriptions</span><b style="font-family: 'Barlow Condensed', sans-serif; font-size: 34px">96</b></div>
+        </div>
+        <span style="font-size: 13px; color: #5d6470">Source: YouTube Analytics API (views, watch time, audience retention at the mention second), updated daily. Clicks: M365.FM link counter.</span>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{isWeb}}" hint-placeholder-val="{{ false }}">
+      <section style="display: grid; gap: 16px">
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px">
+          <div style="background: #ffffff; border: 1px solid rgba(23,25,28,.14); padding: 16px; display: grid"><span style="font-size: 13px; color: #5d6470">Page views with your logo</span><b style="font-family: 'Barlow Condensed', sans-serif; font-size: 34px">9,150</b></div>
+          <div style="background: #ffffff; border: 1px solid rgba(23,25,28,.14); padding: 16px; display: grid"><span style="font-size: 13px; color: #5d6470">Clicks on your logo</span><b style="font-family: 'Barlow Condensed', sans-serif; font-size: 34px">88</b></div>
+          <div style="background: #ffffff; border: 1px solid rgba(23,25,28,.14); padding: 16px; display: grid"><span style="font-size: 13px; color: #5d6470">Languages viewed</span><b style="font-family: 'Barlow Condensed', sans-serif; font-size: 34px">17 of 19</b></div>
+        </div>
+        <div style="background: #ffffff; border: 1px solid rgba(23,25,28,.14); padding: 16px; display: grid; gap: 8px">
+          <b style="font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 20px">Views by language</b>
+          <sc-for list="{{langs}}" as="l" hint-placeholder-count="5">
+            <div style="display: grid; grid-template-columns: 60px 1fr 70px; gap: 10px; align-items: center"><span>{{l.n}}</span><span aria-hidden="true" style="height: 10px; background: #e4e6e8; display: block"><span style="{{l.bar}}"></span></span><b style="text-align: right">{{l.v}}</b></div>
+          </sc-for>
+        </div>
+        <span style="font-size: 13px; color: #5d6470">Source: Cloudflare analytics per page (no cookies, no personal data). Clicks: M365.FM link counter.</span>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{isAi}}" hint-placeholder-val="{{ false }}">
+      <section style="display: grid; gap: 16px">
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px">
+          <div style="background: #ffffff; border: 1px solid rgba(23,25,28,.14); padding: 16px; display: grid"><span style="font-size: 13px; color: #5d6470">Google impressions</span><b style="font-family: 'Barlow Condensed', sans-serif; font-size: 34px">38,600</b></div>
+          <div style="background: #ffffff; border: 1px solid rgba(23,25,28,.14); padding: 16px; display: grid"><span style="font-size: 13px; color: #5d6470">Google clicks</span><b style="font-family: 'Barlow Condensed', sans-serif; font-size: 34px">1,240</b></div>
+          <div style="background: #ffffff; border: 1px solid rgba(23,25,28,.14); padding: 16px; display: grid"><span style="font-size: 13px; color: #5d6470">AI citations (Copilot &amp; partners)</span><b style="font-family: 'Barlow Condensed', sans-serif; font-size: 34px">1,840</b></div>
+          <div style="background: #ffffff; border: 1px solid rgba(23,25,28,.14); padding: 16px; display: grid"><span style="font-size: 13px; color: #5d6470">Your brand named in AI answers</span><b style="font-family: 'Barlow Condensed', sans-serif; font-size: 34px">[N] of 20</b></div>
+        </div>
+        <span style="font-size: 13px; color: #5d6470">Sources: Google Search Console (per sponsored page, daily). Bing Webmaster Tools AI Performance (monthly export, entered by M365.FM). AI answers: 20 fixed questions per topic, asked monthly in several AI assistants. Estimated, method in the report.</span>
+      </section>
+    </sc-if>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1640}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const tab = s.tab || 'pod';
+    const tabs = [['pod', 'Podcast'], ['vid', 'Video'], ['web', 'Website'], ['ai', 'Search & AI']].map(([k, label]) => ({
+      label, on: tab === k,
+      pick: () => this.setState({ tab: k }),
+      style: 'min-height: 48px; padding: 0 22px; border: 0; border-radius: 0; cursor: pointer; font-family: Barlow Condensed, sans-serif; font-weight: 600; font-size: 17px; letter-spacing: .08em; text-transform: uppercase; ' + (tab === k ? 'background: #17191c; color: #ffffff;' : 'background: transparent; color: #17191c;')
+    }));
+    const episodes = [
+      { t: 'Copilot Studio governance – guest episode', l: 'EN', p: '1,240', c: '34' },
+      { t: 'Copilot in Teams meetings, explained', l: 'EN', p: '980', c: '28' },
+      { t: 'Copilot Lizenzen richtig planen', l: 'DE', p: '760', c: '22' },
+      { t: 'Copilot agents and sharing settings', l: 'EN', p: '1,010', c: '25' },
+      { t: 'Copilot im Vertrieb', l: 'DE', p: '830', c: '19' }
+    ];
+    const L = [['EN', 4100], ['DE', 2600], ['ES', 720], ['FR', 610], ['NL', 380]];
+    const mx = L[0][1];
+    const langs = L.map(([n, v]) => ({ n, v: v.toLocaleString('en-US'), bar: 'display: block; height: 10px; width: ' + (v / mx * 100) + '%; background: #3b6391' }));
+    return { tabs, episodes, langs, isPod: tab === 'pod', isVid: tab === 'vid', isWeb: tab === 'web', isAi: tab === 'ai' };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Admin – data sources for sponsor figures</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap">
+<style>
+body{margin:0;background:#f3f3f2}
+a{color:#3b6391}a:hover{color:#2c4b70}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid #3b6391;outline-offset:2px}
+.kicker:after{content:"";flex:1;height:1px;background:rgba(23,25,28,.14)}
+</style>
+</helmet>
+<div style="min-height: 1240px; background: #f3f3f2; color: #17191c; font-family: Barlow, 'Segoe UI', sans-serif; font-size: 16px; line-height: 1.5">
+
+  <header style="border-bottom: 1px solid rgba(23,25,28,.14); background: #1a1d21; color: #eef0f3">
+    <div style="max-width: 1240px; margin: 0 auto; padding: 16px 32px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+      <span style="font-size: 20px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase">M365<span style="color: #82a7d4">.FM</span> Admin</span>
+      <span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; font-size: 15px; color: #c5cad2">Sponsor figures · data sources</span>
+    </div>
+  </header>
+
+  <main style="max-width: 1240px; margin: 0 auto; padding: 32px 32px 80px; display: grid; gap: 26px">
+    <div style="display: grid; gap: 8px">
+      <div class="kicker" style="display: flex; align-items: center; gap: 14px; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: #3b6391; font-size: 15px">Where the numbers come from</div>
+      <h1 style="margin: 0; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 44px; line-height: 1">Data sources</h1>
+    </div>
+
+    <div style="overflow-x: auto; background: #ffffff; border: 1px solid rgba(23,25,28,.14)">
+      <div style="min-width: 1000px">
+        <div style="display: grid; grid-template-columns: 1.5fr 2fr 1.8fr 1fr 1.2fr; gap: 14px; padding: 12px 20px; border-bottom: 1px solid rgba(23,25,28,.14); font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: #5d6470">
+          <span>Source</span><span>Figures</span><span>How</span><span>How often</span><span>Status</span>
+        </div>
+        <sc-for list="{{sources}}" as="r" hint-placeholder-count="11">
+          <div style="display: grid; grid-template-columns: 1.5fr 2fr 1.8fr 1fr 1.2fr; gap: 14px; padding: 12px 20px; border-bottom: 1px solid rgba(23,25,28,.08); align-items: center">
+            <b style="font-weight: 600">{{r.src}}</b>
+            <span style="font-size: 14px">{{r.what}}</span>
+            <span style="font-size: 14px; color: #3d434c">{{r.how}}</span>
+            <span style="font-size: 14px">{{r.freq}}</span>
+            <span style="{{r.stStyle}}">{{r.st}}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <section style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+      <form style="flex: 999 1 520px; min-width: 0; background: #ffffff; border: 1px solid rgba(23,25,28,.14); padding: 22px; display: grid; gap: 14px">
+        <h2 style="margin: 0; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 26px">Enter monthly figures by hand</h2>
+        <span style="font-size: 14px; color: #5d6470">For sources without an interface. Shown to sponsors with the label “Manual”.</span>
+        <div style="display: flex; flex-wrap: wrap; gap: 14px">
+          <label style="flex: 1 1 180px; display: grid; gap: 6px"><span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #5d6470">Source</span>
+            <select style="height: 46px; box-sizing: border-box; padding: 0 10px; border: 1px solid rgba(23,25,28,.35); border-radius: 0; background: #ffffff"><option>Bing AI Performance</option><option>LinkedIn newsletter</option><option>Other</option></select>
+          </label>
+          <label style="flex: 1 1 140px; display: grid; gap: 6px"><span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #5d6470">Month</span>
+            <input type="month" value="2026-10" style="height: 46px; box-sizing: border-box; padding: 0 10px; border: 1px solid #17191c; border-radius: 0">
+          </label>
+          <label style="flex: 1 1 200px; display: grid; gap: 6px"><span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #5d6470">Sponsored page or issue</span>
+            <select style="height: 46px; box-sizing: border-box; padding: 0 10px; border: 1px solid rgba(23,25,28,.35); border-radius: 0; background: #ffffff"><option>Topic page · Copilot</option><option>Newsletter · [ISSUE]</option></select>
+          </label>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 14px">
+          <label style="flex: 1 1 160px; display: grid; gap: 6px"><span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #5d6470">Value</span><input type="number" value="1840" style="height: 46px; box-sizing: border-box; padding: 0 12px; border: 1px solid #17191c; border-radius: 0"></label>
+          <label style="flex: 2 1 260px; display: grid; gap: 6px"><span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #5d6470">Proof (export file)</span><input type="text" value="bing-ai-export-2026-10.csv" style="height: 46px; box-sizing: border-box; padding: 0 12px; border: 1px solid #17191c; border-radius: 0"></label>
+        </div>
+        <div style="display: flex; gap: 12px; align-items: center">
+          <button type="button" onClick="{{save}}" style="min-height: 46px; padding: 0 22px; background: #3b6391; color: #ffffff; border: 1px solid #3b6391; border-radius: 0; cursor: pointer; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 16px; letter-spacing: .1em; text-transform: uppercase">Save value</button>
+          <sc-if value="{{saved}}" hint-placeholder-val="{{ false }}"><span role="status" style="color: #2f6b3a; font-weight: 600">Saved · visible to the sponsor tomorrow</span></sc-if>
+        </div>
+      </form>
+
+      <aside style="flex: 1 1 320px; min-width: 0; display: grid; gap: 12px; padding: 20px; background: #1a1d21; color: #eef0f3">
+        <b style="font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 22px">Rules</b>
+        <span>Only counts, never data about single listeners or visitors.</span>
+        <span>Clicks are counted without cookies. Repeated clicks from the same device on the same day count once.</span>
+        <span>Leads reach a sponsor only when the person agreed.</span>
+        <span>Every figure shows its source and when it was last updated.</span>
+      </aside>
+    </section>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1240}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const ST = {
+      ready: ['Ready', 'justify-self: start; padding: 0 8px; background: #2f6b3a; color: #ffffff; font: 600 12px/1.8 Barlow Condensed, sans-serif; letter-spacing: .08em; text-transform: uppercase;'],
+      setup: ['Setup needed', 'justify-self: start; padding: 0 8px; background: #9a4f0f; color: #ffffff; font: 600 12px/1.8 Barlow Condensed, sans-serif; letter-spacing: .08em; text-transform: uppercase;'],
+      build: ['To build', 'justify-self: start; padding: 0 8px; border: 1px solid #3b6391; color: #3b6391; font: 600 12px/1.8 Barlow Condensed, sans-serif; letter-spacing: .08em; text-transform: uppercase;'],
+      manual: ['Manual', 'justify-self: start; padding: 0 8px; border: 1px dashed #9a4f0f; color: #9a4f0f; font: 600 12px/1.8 Barlow Condensed, sans-serif; letter-spacing: .08em; text-transform: uppercase;'],
+      later: ['Later (app V2)', 'justify-self: start; padding: 0 8px; background: #e1e2de; color: #17191c; font: 600 12px/1.8 Barlow Condensed, sans-serif; letter-spacing: .08em; text-transform: uppercase;']
+    };
+    const R = [
+      ['Spreaker', 'Plays per episode, countries', 'Spreaker API, sync already exists', 'Daily', 'ready'],
+      ['YouTube Analytics', 'Views, watch time, retention at the mention', 'YouTube Analytics API, needs one more permission', 'Daily', 'setup'],
+      ['Cloudflare analytics', 'Page views per sponsored page and language', 'GraphQL analytics API, read-only token', 'Daily', 'setup'],
+      ['Link counter /go/', 'Clicks on sponsor links and logos', 'Worker redirect + D1, no cookies', 'Live', 'build'],
+      ['Google Search Console', 'Impressions, clicks per sponsored page', 'Service account already in use', 'Daily', 'ready'],
+      ['Bing AI Performance', 'AI citations of sponsored pages', 'No API: monthly export, entered below', 'Monthly', 'manual'],
+      ['AI answer check', 'Brand named in AI answers', '20 fixed questions per topic, monthly', 'Monthly', 'build'],
+      ['LinkedIn newsletter', 'Opens, impressions per issue', 'No API: entered below', 'Monthly', 'manual'],
+      ['HeySummit / events', 'Registrations, attendance per session', 'HeySummit API + event table', 'Daily', 'setup'],
+      ['Directory leads', 'Project requests from the sponsor profile', 'D1 (#232)', 'Live', 'build'],
+      ['News app', 'Jingle listens, push opens, taps', 'App events to the Worker', 'Live', 'later']
+    ];
+    const sources = R.map(([src, what, how, freq, k]) => ({ src, what, how, freq, st: ST[k][0], stStyle: ST[k][1] }));
+    return { sources, saved: !!s.saved, save: () => this.setState({ saved: true }) };
+  }
+}
+</script>
+</body>
+</html>
