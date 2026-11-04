@@ -90,11 +90,13 @@ def _block(lang, slot, pub, base=""):
             + _house(base, lang) + '<script>(adsbygoogle=window.adsbygoogle||[]).push({});</script></aside>')
 
 
-def _top_path(path):
-    return bool(re.fullmatch(
+def _top_path(path, body):
+    detail = re.fullmatch(
         r"/(?:[a-z]{2}/)?(?:show/episodes/[^/]+|entity/[^/]+|community/u/[^/]+/blog/[^/]+|blog/[^/]+)/?",
         path,
-    ))
+    )
+    dub = re.fullmatch(r"/[a-z]{2}/[^/]+/?", path) and "widget.spreaker.com/player?episode_id=" in body
+    return bool(detail or dub)
 
 
 def _top_eligible(base, body, canonical, noindex=False):
@@ -103,7 +105,7 @@ def _top_eligible(base, body, canonical, noindex=False):
         return False
     c = cfg()
     path = canonical.replace(base, "") or "/"
-    if not _top_path(path):
+    if not _top_path(path, body):
         return False
     if eligible(base, body, canonical, noindex):
         return True
