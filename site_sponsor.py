@@ -96,8 +96,8 @@ def dashboard_copy(lang):
         "no_orgs": ("No company accounts you can manage are linked to your profile.",
                     "Deinem Profil sind keine Firmenkonten zugeordnet, die du verwalten kannst."),
         "no_placements": ("No event partnerships yet.", "Noch keine Event-Partnerschaften."),
-        "scope": ("Only event-partner records and event registrations are currently connected. Podcast/banner bookings, impressions, clicks and Spreaker downloads are not tracked here yet.",
-                  "Aktuell sind nur Event-Partnerschaften und Event-Anmeldungen angebunden. Podcast-/Banner-Buchungen, Impressions, Klicks und Spreaker-Downloads werden hier noch nicht erfasst."),
+        "scope": ("Public podcast mentions and page sponsorships appear when linked to your company website. Event participants are registered attendees. Impressions, clicks and Spreaker downloads are not tracked here yet.",
+                  "Öffentliche Podcast-Erwähnungen und Seitensponsorings erscheinen bei einer Zuordnung zu deiner Firmenwebsite. Event-Teilnehmer sind registrierte Anmeldungen. Impressions, Klicks und Spreaker-Downloads werden hier noch nicht erfasst."),
         "status": ("Status", "Status"),
         "period": ("Period", "Zeitraum"),
         "attendees": ("Event participants", "Event-Teilnehmer"),
@@ -113,11 +113,30 @@ def dashboard_copy(lang):
         "confirmed": ("Confirmed", "Bestätigt"),
         "event_partner": ("Event partner", "Event-Partner"),
         "company": ("Company", "Firma"),
+        "type": ("Type", "Art"),
+        "placement": ("Placement", "Platzierung"),
+        "podcast": ("Podcast mention", "Podcast-Erwähnung"),
+        "page_banner": ("Page sponsorship", "Seitensponsoring"),
+        "article": ("Sponsored article", "Gesponserter Artikel"),
         "impressions": ("Impressions", "Impressions"),
         "clicks": ("Clicks", "Klicks"),
         "downloads": ("Episode downloads", "Folgen-Downloads"),
+        "ended": ("Ended", "Beendet"),
     }
     return {**{k: T(lang, en, de) for k, (en, de) in texts.items()}, "title": tx(lang, "dash_h")}
+
+
+def dashboard_campaigns():
+    data = _json(D / "sponsorships.json", {})
+    out = []
+    for rec in data.get("sponsorships", []) if isinstance(data, dict) else []:
+        sponsor = rec.get("sponsor") or {}
+        if not isinstance(sponsor, dict) or not sponsor.get("url"):
+            continue
+        out.append({"website": sponsor["url"], "start": rec.get("start", ""), "end": rec.get("end", ""),
+                    "episodes": rec.get("episodes") or [], "pages": (rec.get("entities") or []) + (rec.get("topics") or []),
+                    "posts": rec.get("posts") or []})
+    return out
 
 
 DASHBOARD_CSS = """.sdb-actions{display:flex;flex-wrap:wrap;gap:8px;margin:1.2em 0}
@@ -631,7 +650,8 @@ def build(g):
         g["sitemap"].append((u, lastmod, alts if len(alts) > 1 else None))
         q = dashboard_copy(lang)
         dashboard = dashboard_url(B, lang)
-        config = json.dumps({"api": g["api"], "base": B, "lang": lang, "copy": q}, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
+        config = json.dumps({"api": g["api"], "base": B, "lang": lang, "today": TODAY, "copy": q, "campaigns": dashboard_campaigns()},
+                            ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
         dashboard_body = (f'{g["header"](lang, "")}<main class="wrap"><div class="kicker">M365.FM · {E(q["event_partner"])}</div>'
                           f'<h1>{E(q["title"])}</h1><p class="lede">{E(q["intro"])}</p>'
                           f'<p class="mut" id="sdb-scope">{E(q["scope"])}</p><div id="sdb" aria-live="polite"><p class="mut">{E(q["login"])}</p></div>'

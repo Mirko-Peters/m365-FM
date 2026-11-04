@@ -57,7 +57,7 @@ export async function handleSponsor(env, request, url, path, J, user) {
   const db = env.DB;
   if (path === "/api/sponsor/dashboard" && request.method === "GET") {
     if (!user) return J({ error: "login" }, 401);
-    const orgs = (await db.prepare(`SELECT o.id,o.handle,o.name,COALESCE(s.open,0) open
+    const orgs = (await db.prepare(`SELECT o.id,o.handle,o.name,o.website,COALESCE(s.open,0) open
       FROM orgs o JOIN org_members m ON m.org_id=o.id
       LEFT JOIN org_sponsor s ON s.org_id=o.id
       WHERE m.user_id=? AND m.status='active' AND m.role IN ('owner','admin','events')
@@ -68,7 +68,7 @@ export async function handleSponsor(env, request, url, path, J, user) {
         (SELECT COUNT(*) FROM event_attendees a WHERE a.event_id=e.id AND a.status='going') attendees
         FROM event_partners p JOIN events e ON e.id=p.event_id
         WHERE p.org_id=? ORDER BY e.start DESC,e.id DESC`).bind(org.id).all()).results || [];
-      items.push({ handle: org.handle, name: org.name, open: !!org.open, placements: placements.map((p) => ({
+      items.push({ handle: org.handle, name: org.name, website: org.website, open: !!org.open, placements: placements.map((p) => ({
         type: "event_partner", title: p.title, event: p.handle, start: p.start, end: p.end, status: p.status,
         kind: p.kind, level: p.level, created: p.created, attendees: p.attendees,
         impressions: null, clicks: null, downloads: null,

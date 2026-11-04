@@ -22,30 +22,53 @@ class SponsorDashboardTests(unittest.TestCase):
             "header": lambda lang, switch: "",
             "footer": lambda lang: "",
             "BASE": "https://www.m365.fm",
-            "LANGS": {"de": ("Deutsch", "de", "de", "show", "de_DE")},
+            "LANGS": {lang: (lang, lang, "rtl" if lang in ("ar", "he") else "ltr", "show", "en_US")
+                      for lang in SPN.LANGS_ALL if lang != "en"},
             "sitemap": [],
             "TODAY": "2026-11-04",
             "api": "https://api-dub.m365.fm",
-            "langs": ["en", "de"],
+            "langs": list(SPN.LANGS_ALL),
             "day": lambda value, lang: str(value),
         }
 
-        with patch.object(SPN, "_ssr", return_value={}):
+        campaigns = [{"website": "https://acme.example/", "start": "2026-11-01", "end": "2027-01-31",
+                      "episodes": ["episode"], "pages": ["topic"], "posts": []}]
+        with patch.object(SPN, "_ssr", return_value={}), patch.object(SPN, "dashboard_campaigns", return_value=campaigns), \
+             patch.object(SPN, "T", side_effect=lambda lang, en, de: de if lang == "de" else en):
             SPN.build(ctx)
 
         en = "https://www.m365.fm/sponsor/dashboard/"
         de = "https://www.m365.fm/de/sponsor/dashboard/"
+        ar = "https://www.m365.fm/ar/sponsor/dashboard/"
+        he = "https://www.m365.fm/he/sponsor/dashboard/"
         self.assertIn("sponsor/dashboard/index.html", written)
         self.assertIn("de/sponsor/dashboard/index.html", written)
-        self.assertEqual(rendered[en]["alternates"], {"en": "https://www.m365.fm/sponsor/dashboard/", "de": de})
-        self.assertEqual(rendered[de]["alternates"], {"en": en, "de": de})
+        self.assertIn("ar/sponsor/dashboard/index.html", written)
+        self.assertIn("he/sponsor/dashboard/index.html", written)
+        self.assertEqual(len(rendered[en]["alternates"]), len(SPN.LANGS_ALL))
+        self.assertEqual(rendered[en]["alternates"]["ar"], ar)
+        self.assertEqual(rendered[en]["alternates"]["he"], he)
+        self.assertEqual(rendered[de]["alternates"]["en"], en)
         self.assertIn(f'href="{en}"', written["sponsor/index.html"])
-        self.assertIn("Podcast/banner bookings", written["sponsor/dashboard/index.html"])
-        self.assertIn("Podcast-/Banner-Buchungen", written["de/sponsor/dashboard/index.html"])
+        self.assertIn("Public podcast mentions", written["sponsor/dashboard/index.html"])
+        self.assertIn("Öffentliche Podcast-Erwähnungen", written["de/sponsor/dashboard/index.html"])
         self.assertIn("window.M365SP=", written["sponsor/dashboard/index.html"])
         self.assertIn("sponsor-dashboard.js", written["de/sponsor/dashboard/index.html"])
+        self.assertIn('"campaigns":[{"website":"https://acme.example/"', written["sponsor/dashboard/index.html"])
         self.assertIn("var(--bg)", rendered[en]["kwargs"]["extra_head"])
         self.assertTrue(any(url == en for url, _, _ in ctx["sitemap"]))
+
+    def test_only_public_sponsorship_fields_are_passed_to_dashboard(self):
+        source = {"sponsorships": [{
+            "sponsor": {"name": "Acme", "url": "https://acme.example/"},
+            "start": "2026-11-01", "end": "2027-01-31",
+            "episodes": ["episode"], "entities": ["product"], "topics": ["topic"], "posts": ["article"],
+        }]}
+        with patch.object(SPN, "_json", return_value=source):
+            self.assertEqual(SPN.dashboard_campaigns(), [{
+                "website": "https://acme.example/", "start": "2026-11-01", "end": "2027-01-31",
+                "episodes": ["episode"], "pages": ["product", "topic"], "posts": ["article"],
+            }])
 
 
 if __name__ == "__main__":

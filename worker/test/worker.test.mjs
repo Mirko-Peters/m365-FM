@@ -383,7 +383,7 @@ test("sponsor dashboard: Firmenzugriff, Event-Kennzahlen und Nachricht an die Pl
   raw.exec(`
     INSERT INTO users(id,provider,sub,name,role,banned,created) VALUES
       (1,'google','sponsor','Sponsor User','user',0,1),(2,'google','admin','Platform Admin','admin',0,1),(3,'google','other','Other User','user',0,1);
-    INSERT INTO orgs(id,handle,name,created) VALUES (1,'acme','Acme GmbH',1),(2,'other-co','Other Company',1);
+    INSERT INTO orgs(id,handle,name,website,created) VALUES (1,'acme','Acme GmbH','https://acme.example/',1),(2,'other-co','Other Company','https://other.example/',1);
     INSERT INTO org_members(org_id,user_id,role,status,created) VALUES
       (1,1,'owner','active',1),(2,3,'owner','active',1),(1,3,'member','pending',1);
     INSERT INTO org_sponsor(org_id,open,updated) VALUES (1,1,1);
@@ -411,6 +411,7 @@ test("sponsor dashboard: Firmenzugriff, Event-Kennzahlen und Nachricht an die Pl
   let result = await response.json();
   assert.equal(result.orgs.length, 1, "nur verwaltete Firmen werden angezeigt");
   assert.equal(result.orgs[0].handle, "acme");
+  assert.equal(result.orgs[0].website, "https://acme.example/");
   assert.deepEqual(result.orgs[0].placements.map((p) => p.status), ["pending", "confirmed"]);
   const confirmed = result.orgs[0].placements.find((p) => p.status === "confirmed");
   assert.equal(confirmed.attendees, 1, "nur going-Teilnehmer werden gezählt");

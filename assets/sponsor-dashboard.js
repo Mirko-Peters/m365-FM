@@ -35,12 +35,33 @@
     if (/^[\s]*[=+\-@]/.test(text)) text = "'" + text;
     return '"' + text.replace(/"/g, '""').replace(/[\r\n]+/g, " ") + '"';
   }
+  function host(value) {
+    try { return new URL(value).hostname.toLowerCase().replace(/^www\./, ""); } catch (e) { return ""; }
+  }
+  function publicPlacements(org) {
+    var companyHost = host(org.website), rows = [];
+    if (!companyHost) return rows;
+    (C.campaigns || []).forEach(function (campaign) {
+      var sponsorHost = host(campaign.website);
+      if (!sponsorHost || (sponsorHost !== companyHost && !sponsorHost.endsWith("." + companyHost))) return;
+      var status = C.today < campaign.start ? "pending" : C.today <= campaign.end ? "confirmed" : "ended";
+      function add(type, label) {
+        rows.push({ type: type, title: label, start: campaign.start, end: campaign.end, status: status,
+          attendees: null, impressions: null, clicks: null, downloads: null });
+      }
+      if (campaign.episodes.length) add("podcast", Q.podcast);
+      if (campaign.pages.length) add("page_banner", Q.page_banner);
+      if (campaign.posts.length) add("article", Q.article);
+    });
+    return rows;
+  }
   function exportCsv(orgs) {
-    var headers = [Q.company, Q.event_partner, Q.status, Q.period, Q.attendees, Q.impressions, Q.clicks, Q.downloads];
+    var headers = [Q.company, Q.type, Q.placement, Q.status, Q.period, Q.attendees, Q.impressions, Q.clicks, Q.downloads];
     var rows = [headers];
     orgs.forEach(function (org) {
-      (org.placements || []).forEach(function (p) {
-        rows.push([org.name, p.title, p.status === "confirmed" ? Q.confirmed : Q.pending,
+      (org.placements || []).concat(publicPlacements(org)).forEach(function (p) {
+        var type = p.type === "event_partner" ? Q.event_partner : p.type === "podcast" ? Q.podcast : p.type === "page_banner" ? Q.page_banner : Q.article;
+        rows.push([org.name, type, p.title, p.status === "confirmed" ? Q.confirmed : p.status === "pending" ? Q.pending : Q.ended,
           [formatDate(p.start), formatDate(p.end)].join(" – "), p.attendees, p.impressions, p.clicks, p.downloads]);
       });
     });
@@ -54,9 +75,10 @@
     return node("div", {}, [node("b", { text: shown }), node("span", { text: label })]);
   }
   function placement(org, p) {
-    var status = p.status === "confirmed" ? Q.confirmed : Q.pending;
+    var status = p.status === "confirmed" ? Q.confirmed : p.status === "pending" ? Q.pending : Q.ended;
+    var type = p.type === "event_partner" ? Q.event_partner : p.type === "podcast" ? Q.podcast : p.type === "page_banner" ? Q.page_banner : Q.article;
     var card = node("article", { class: "sdb-placement" }, [
-      node("p", { class: "kicker", text: Q.event_partner }),
+      node("p", { class: "kicker", text: type }),
       node("h3", { text: p.title }),
       node("p", { class: "sdb-meta" }, [
         node("span", {}, [Q.status + ": ", node("b", { class: "sdb-status", text: status })]),
@@ -94,7 +116,7 @@
       return;
     }
     orgs.forEach(function (org) {
-      var items = org.placements || [];
+      var items = (org.placements || []).concat(publicPlacements(org));
       var section = node("section", { class: "sdb-org" }, [node("h2", { text: org.name })]);
       if (!items.length) section.appendChild(node("p", { class: "mut", text: Q.no_placements }));
       items.forEach(function (p) { section.appendChild(placement(org, p)); });
