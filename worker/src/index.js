@@ -117,6 +117,15 @@ async function auth(env, request, url, path) {
     const u = await upsertUser(env, "dev", url.searchParams.get("name") || "dev", url.searchParams.get("name") || "Dev User");
     return new Response(null, { status: 302, headers: { location: safeReturn(env, url.searchParams.get("return") || env.SITE), "set-cookie": cookie("m365s", await makeSession(env, u.id), 5184000) } });
   }
+  if (path === "/auth/youtube/connect") {
+    // Einmalige Kanal-Freigabe (m365 Show): Upload/Löschen + YouTube Analytics (Sponsor-Dashboard #173).
+    // Google zeigt danach auf www.m365.fm/callback einen Code; den trägt Mirko im Workflow „YouTube verbinden (einmalig)“ ein.
+    if (!env.YT_CLIENT_ID) return html("<p>YouTube not configured.</p>", 503);
+    const q = new URLSearchParams({ client_id: env.YT_CLIENT_ID, redirect_uri: "https://www.m365.fm/callback", response_type: "code",
+      scope: "https://www.googleapis.com/auth/youtube https://www.googleapis.com/auth/yt-analytics.readonly",
+      access_type: "offline", prompt: "consent", include_granted_scopes: "true" });
+    return new Response(null, { status: 302, headers: { location: `https://accounts.google.com/o/oauth2/v2/auth?${q}`, "cache-control": "no-store" } });
+  }
   if (!m) return null;
   const P = PROVIDERS[m[2]];
   if (!P.id(env) || !P.secret(env)) return html("<p>Login not configured.</p>", 503);
