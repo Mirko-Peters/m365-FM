@@ -80,6 +80,9 @@ test("Zielliste schließt beanspruchte, eingeladene und abgemeldete Personen aus
     ["guest", "guest", "de"],
     ["speaker", "speaker", "en"],
   ]);
+  const summary = await claimCampaignStatus({ DB: db, SITE: "https://www.m365.fm" });
+  assert.deepEqual(summary.counts, { total: 3, speaker: 1, guest: 1, both: 1 });
+  assert.doesNotMatch(JSON.stringify(summary), /example\.invalid/);
 });
 
 test("Kampagnenstart bleibt ohne Collector-Freigaben gesperrt und Vorschau zeigt keine Kontaktdaten", async () => {
