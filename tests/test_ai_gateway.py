@@ -49,7 +49,7 @@ class AiGatewayTests(unittest.TestCase):
             )
         self.assertEqual(req.full_url, "https://gateway.ai.cloudflare.com/v1/account/m365fm/anthropic/v1/messages")
         self.assertEqual(req.get_header("Cf-aig-metadata"), '{"job":"translate_ui","lang":"fr","model":"claude-haiku-5-5"}')
-        self.assertEqual(req.get_header("Cf-aig-authorization"), "test-token")
+        self.assertEqual(req.get_header("Cf-aig-authorization"), "Bearer test-token")
         self.assertEqual(req.get_header("Cf-aig-cache-ttl"), "604800")
         self.assertEqual(req.get_header("X-api-key"), "test-key")
 
@@ -73,6 +73,42 @@ class AiGatewayTests(unittest.TestCase):
             "action": "report", "id": json.loads(calls[1][0].data)["id"], "job": "translate_ui",
             "lang": "fr", "model": "claude-haiku-5-5", "input_tokens": 12, "output_tokens": 4,
         })
+
+    def test_missing_or_wrong_cron_key_warns_and_report_never_raises(self):
+        out = io.StringIO()
+        with patch.dict("os.environ", {"COMMUNITY_API": "https://api.example"}, clear=True), contextlib.redirect_stdout(out):
+            self.assertFalse(ai_gateway.check_budget("translate_ui", "claude-haiku-5-5", 0.1))
+            ai_gateway.report_usage("translate_ui", "claude-haiku-5-5", 12, 4, "fr")   # darf nicht werfen
+        self.assertIn("::warning::", out.getvalue())
+        self.assertIn("CRON_KEY fehlt", out.getvalue())
+
+        def forbidden(req, timeout):
+            raise ai_gateway.urllib.error.HTTPError(req.full_url, 403, "Forbidden", {}, None)
+
+        out = io.StringIO()
+        with patch.dict("os.environ", {"COMMUNITY_API": "https://api.example", "CRON_KEY": "x"}, clear=True), \
+                patch.object(ai_gateway, "urlopen", forbidden), contextlib.redirect_stdout(out):
+            self.assertFalse(ai_gateway.check_budget("translate_ui", "claude-haiku-5-5"))
+            ai_gateway.report_usage("translate_ui", "claude-haiku-5-5", 12, 4, "fr")
+        self.assertIn("verschieden", out.getvalue())
+        self.assertNotIn("RuntimeError", out.getvalue())
+
+    def test_budget_exhausted_and_batch(self):
+        sent = []
+
+        def fake_open(req, timeout):
+            sent.append(json.loads(req.data))
+            return Reply({"allowed": False, "remaining_eur": 0.2} if sent[-1]["action"] == "check" else {"ok": True})
+
+        out = io.StringIO()
+        with patch.dict("os.environ", {"COMMUNITY_API": "https://api.example", "CRON_KEY": "x"}, clear=True), \
+                patch.object(ai_gateway, "urlopen", fake_open), contextlib.redirect_stdout(out):
+            self.assertFalse(ai_gateway.check_budget("translate_show", "claude-haiku-5-5", 1.0))
+            ai_gateway.report_usage("translate_show", "claude-haiku-5-5", 10, 20, "batch", batch=True)
+        self.assertIn("::warning::Haiku-Tagesbudget", out.getvalue())
+        self.assertTrue(sent[-1]["batch"])
+        self.assertAlmostEqual(ai_gateway.estimated_eur(1_000_000, 0, batch=True) * 2, ai_gateway.estimated_eur(1_000_000, 0))
+        self.assertTrue(ai_gateway.check_budget("generate_articles", "claude-sonnet-5-5"))   # nur Haiku hat ein Tagesbudget
 
 
 if __name__ == "__main__":

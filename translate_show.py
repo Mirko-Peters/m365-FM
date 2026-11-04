@@ -86,7 +86,7 @@ def main():
                          "messages": [{"role": "user", "content": src}]}})
     if not reqs:
         print("Nichts zu uebersetzen"); return
-    if not check_budget("translate_show", MODEL, estimated_eur(len(json.dumps(reqs)) // 3, len(reqs) * 1500)):
+    if not check_budget("translate_show", MODEL, estimated_eur(len(json.dumps(reqs)) // 3, len(reqs) * 1500, batch=True)):
         return
     idmap = {r["custom_id"]: r["custom_id"] for r in reqs}
     slug_by_id = {str(e["id"]): e["slug"] for e in eps}
@@ -118,7 +118,7 @@ def main():
     for l in langs: (OUT / f"{l}.json").write_text(json.dumps(have[l], ensure_ascii=False), encoding="utf-8")
     uf = OUT / "usage.json"; old = json.loads(uf.read_text()) if uf.exists() else {"input_tokens": 0, "output_tokens": 0, "runs": []}
     old["input_tokens"] += tin; old["output_tokens"] += tout; old["runs"].append({"batch": bid, "model": MODEL, "ok": ok, "failed": bad, "why": why, "input_tokens": tin, "output_tokens": tout})
-    report_usage("translate_show", MODEL, tin, tout, "batch")
+    report_usage("translate_show", MODEL, tin, tout, "batch", batch=True)
     uf.write_text(json.dumps(old, indent=1))
     if samples: (OUT / "fail_samples.json").write_text(json.dumps(samples, ensure_ascii=False, indent=1))
     rep = {"stage": "titles", "requests": len(reqs), "ok": ok, "failed": bad, "why": why, "input_tokens": tin, "output_tokens": tout, "cost_usd": round(cost(tin, tout), 3), "success_rate": round(ok / max(1, ok + bad), 4)}

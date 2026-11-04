@@ -390,7 +390,7 @@ def submit(a):
         if a["redo"]: save_lang(lang, have)
     if not reqs:
         print("Nichts abzusenden."); return 0
-    if not check_budget("translate_blog", MODEL, money * 2 / max(0.000001, float(os.environ.get("USD_PER_EUR", "1.08")))):
+    if not check_budget("translate_blog", MODEL, money / max(0.000001, float(os.environ.get("USD_PER_EUR", "1.08")))):   # money = Batch-Preis (PRICE_IN/OUT)
         return 0
     bl = jload("batches.json", [])
     for i in range(0, len(reqs), PER_BATCH):
@@ -451,7 +451,7 @@ def collect():
             f = OUT / "qa" / f"{lang}.json"; old = json.loads(f.read_text("utf-8")) if f.exists() else []
             f.write_text(json.dumps((old + lg)[-500:], ensure_ascii=False, indent=1), encoding="utf-8")
         usage["input_tokens"] += tin; usage["output_tokens"] += tout
-        report_usage("translate_blog", b["model"], tin, tout, "batch")
+        report_usage("translate_blog", b["model"], tin, tout, "batch", batch=True)
         usage["runs"].append({"batch": b["id"], "model": b["model"], "segments_ok": ok, "segments_failed": bad, "why": why, "input_tokens": tin, "output_tokens": tout, "cost_usd": round(cost(tin, tout), 3)})
         jsave("usage.json", usage); print(f"{b['id']}: {ok} Segmente ok, {bad} fehlgeschlagen {why}, Kosten {cost(tin, tout):.3f} $")
     jsave("batches.json", left)

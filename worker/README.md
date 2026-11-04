@@ -31,7 +31,7 @@ Ohne Zugangsdaten tut der Workflow nichts; die Website blendet die Community-Ber
 
 ## Betrieb
 - Täglicher Digest: Cron `0 6 * * *` (UTC). Der erste Lauf markiert vorhandene Folgen nur als bekannt (kein Massenversand).
-- Manuell testen: `https://api-dub.m365.fm/api/admin/run-daily?key=<CRON_KEY>&dry=1` (CRON_KEY in Cloudflare → Worker → Settings → Variables; `dry=1` sendet nichts).
+- Manuell testen: `curl -H "x-cron-key: <CRON_KEY>" "https://api-dub.m365.fm/api/admin/run-daily?dry=1"` (`dry=1` sendet nichts). Den Schlüssel nicht als `?key=` in die Adresse schreiben, Adressen landen in den Worker-Logs. CRON_KEY wird nur in GitHub gepflegt; der Worker-Deploy überträgt ihn in den Worker (ein nur in Cloudflare geänderter Wert wird beim nächsten Deploy überschrieben). Ob beide gleich sind, zeigt der Workflow „Secrets prüfen“.
 - D1-Sicherung zurückholen: Artefakt `d1-backup-<Lauf>` laden, dann `openssl enc -d -aes-256-cbc -pbkdf2 -iter 600000 -in backup-d1.sql.enc -out backup-d1.sql -pass env:D1_BACKUP_KEY` (Schlüssel aus dem Passwort-Manager). Ohne Artefakt: Cloudflare → D1 → m365-dub → Time Travel (30 Tage).
 - Tarif: Workers Paid ($5/Monat) seit 10/2026: 1.000 Subrequests und 30 s CPU je Aufruf; D1 im Paid-Plan (Profil-Export und Import-Batches brauchen das).
 - Schema: `migrations/0001_baseline.sql` ist der Ausgangsstand; jede Aenderung ist eine neue Datei `migrations/000N_name.sql` (nur idempotente Anweisungen; neue Spalten in bestehenden Tabellen weiterhin per ensure*-Funktion, SQLite kennt kein ADD COLUMN IF NOT EXISTS). Vor jedem Deploy laufen `node --check`, `npm test` und die MCP-Abdeckung; rot heisst kein Deploy.

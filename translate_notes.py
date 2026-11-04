@@ -73,7 +73,7 @@ def main():
     if not reqs: print("Nichts zu tun"); return
     print(len(reqs), "Anfragen fuer", len(top), "Folgen")
     guard(len(reqs), 3500, 9000, "Show Notes")
-    if not check_budget("translate_notes", MODEL, estimated_eur(len(json.dumps(reqs)) // 3, len(reqs) * 9000)):
+    if not check_budget("translate_notes", MODEL, estimated_eur(len(json.dumps(reqs)) // 3, len(reqs) * 9000, batch=True)):
         return
     b = call("POST", "/v1/messages/batches", {"requests": reqs}, job="translate_notes"); bid = b["id"]; print("Batch", bid)
     while b["processing_status"] != "ended":
@@ -90,7 +90,7 @@ def main():
     for l in langs: (OUT / f"notes_{l}.json").write_text(json.dumps(have[l], ensure_ascii=False), encoding="utf-8")
     uf = OUT / "usage.json"; old = json.loads(uf.read_text()) if uf.exists() else {"input_tokens": 0, "output_tokens": 0, "runs": []}
     old["input_tokens"] += tin; old["output_tokens"] += tout; old["runs"].append({"kind": "notes", "batch": bid, "model": MODEL, "ok": ok, "failed": bad, "input_tokens": tin, "output_tokens": tout}); uf.write_text(json.dumps(old, indent=1))
-    report_usage("translate_notes", MODEL, tin, tout, "batch")
+    report_usage("translate_notes", MODEL, tin, tout, "batch", batch=True)
     rep = {"stage": "notes", "requests": len(reqs), "ok": ok, "failed": bad, "why": why, "input_tokens": tin, "output_tokens": tout, "cost_usd": round(cost(tin, tout), 3), "success_rate": round(ok / max(1, ok + bad), 4)}
     (OUT / "report_notes.json").write_text(json.dumps(rep, indent=1))
     print(f"fertig: {ok} ok, {bad} fehlgeschlagen {why}, Tokens ein/aus: {tin}/{tout}, Kosten {cost(tin, tout):.3f} $")

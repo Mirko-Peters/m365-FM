@@ -2,7 +2,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
-import { cleanText, cleanName, esc, isLang, LANGS, b64u, sign, verify, anthropicUrl, anthropicHeaders, anthropicFetch, AI_BUDGET_ERROR } from "../src/util.js";
+import { cleanText, cleanName, esc, isLang, LANGS, b64u, sign, verify, anthropicUrl, anthropicHeaders, anthropicFetch, haikuJson, AI_BUDGET_ERROR } from "../src/util.js";
 import { runTrQueue } from "../src/autotr.js";
 import worker from "../src/index.js";
 import { sanitize } from "../src/wiki.js";
@@ -93,7 +93,7 @@ test("AI Gateway: Fallback, Metadaten, Haiku-Budget und Usage", async () => {
   assert.equal(anthropicUrl({ CLOUDFLARE_ACCOUNT_ID: "account", AI_GATEWAY_ID: "m365fm", CF_AIG_TOKEN: "unit-test-token" }), "https://gateway.ai.cloudflare.com/v1/account/m365fm/anthropic/v1/messages");
   const headers = anthropicHeaders({ ANTHROPIC_API_KEY: "unit-test-key", CLOUDFLARE_ACCOUNT_ID: "account", CF_AIG_TOKEN: "unit-test-token" }, { job: "test_job", lang: "de", model: "claude-haiku-5-5", cacheTtl: 604800 });
   assert.deepEqual(JSON.parse(headers["cf-aig-metadata"]), { job: "test_job", lang: "de", model: "claude-haiku-5-5" });
-  assert.equal(headers["cf-aig-authorization"], "unit-test-token");
+  assert.equal(headers["cf-aig-authorization"], "Bearer unit-test-token");
   assert.equal(headers["cf-aig-cache-ttl"], "604800");
   assert.equal(anthropicHeaders({ CF_AIG_TOKEN: "unit-test-token" }, { job: "direct", model: "claude-haiku-5-5" })["cf-aig-authorization"], undefined);
   const oldWarn = console.warn; console.warn = () => {};
@@ -128,6 +128,33 @@ test("AI Gateway: Fallback, Metadaten, Haiku-Budget und Usage", async () => {
     assert.equal(spend.out_tok, 2000);
     assert.ok(Math.abs(spend.usd - 0.0011) < 1e-10, "Kosten werden aus der usage-Antwort berechnet");
     assert.equal(spend.reserved_usd, 0);
+  } finally {
+    globalThis.fetch = oldFetch;
+    raw.close();
+  }
+});
+
+test("AI Gateway: Cache-Treffer wird nicht gebucht, unbrauchbarer Cache-Treffer einmal am Cache vorbei, Netzfehler gibt Vormerkung frei", async () => {
+  const { db, raw } = await searchDb();
+  const env = { DB: db, ANTHROPIC_API_KEY: "unit-test-key", CLOUDFLARE_ACCOUNT_ID: "account", CF_AIG_TOKEN: "unit-test-token" };
+  const oldFetch = globalThis.fetch, seen = [];
+  const res = (text, hit) => new Response(JSON.stringify({ usage: { input_tokens: 1000, output_tokens: 2000 }, content: [{ type: "text", text }] }),
+    { status: 200, headers: hit ? { "cf-aig-cache-status": "HIT" } : {} });
+  try {
+    globalThis.fetch = async (url, init) => { seen.push(init.headers); return seen.length === 1 ? res("{\"a\":", true) : res("{\"a\":1}", false); };
+    assert.deepEqual(await haikuJson(env, "sys", { a: "x" }, { job: "cache_test", lang: "de" }), { a: 1 });
+    assert.equal(seen.length, 2);
+    assert.equal(seen[0]["cf-aig-cache-ttl"], "604800");
+    assert.equal(seen[1]["cf-aig-skip-cache"], "true");
+    assert.equal(seen[1]["cf-aig-cache-ttl"], undefined);
+    const rows = raw.prepare("SELECT usd,reserved_usd FROM ai_spend WHERE job='cache_test' ORDER BY rowid").all();
+    assert.equal(rows.length, 2);
+    assert.equal(rows[0].usd, 0, "Cache-Treffer kostet nichts");
+    assert.equal(rows[0].reserved_usd, 0, "Vormerkung des Cache-Treffers ist freigegeben");
+    assert.ok(Math.abs(rows[1].usd - 0.0011) < 1e-10);
+    globalThis.fetch = async () => { throw new TypeError("network"); };
+    await assert.rejects(anthropicFetch(env, { model: "claude-haiku-5-5", max_tokens: 4000 }, { job: "net_test" }), /request failed/);
+    assert.equal(raw.prepare("SELECT reserved_usd FROM ai_spend WHERE job='net_test'").get().reserved_usd, 0);
   } finally {
     globalThis.fetch = oldFetch;
     raw.close();
@@ -172,6 +199,9 @@ test("AI-Budget-API: Cron-Key schützt Abfrage und idempotente Verbrauchsmeldung
     }
     assert.equal(raw.prepare("SELECT COUNT(*) n FROM ai_spend WHERE id='workflow-run-1'").get().n, 1);
     assert.ok(Math.abs(raw.prepare("SELECT usd FROM ai_spend WHERE id='workflow-run-1'").get().usd - 0.0011) < 1e-10);
+    response = await worker.fetch(new Request(url, { method: "POST", headers: { "x-cron-key": env.CRON_KEY, "content-type": "application/json" }, body: JSON.stringify({ ...report, id: "workflow-batch-1", batch: true }) }), env);
+    assert.equal(response.status, 200);
+    assert.ok(Math.abs(raw.prepare("SELECT usd FROM ai_spend WHERE id='workflow-batch-1'").get().usd - 0.00055) < 1e-10, "Batch API: halber Preis");
   } finally {
     raw.close();
   }

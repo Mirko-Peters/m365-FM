@@ -124,7 +124,7 @@ export function anthropicUrl(env, path = "/v1/messages") {
   return base + (path.startsWith("/") ? path : `/${path}`);
 }
 
-export function anthropicHeaders(env, { job, lang = "", model, cacheTtl } = {}) {
+export function anthropicHeaders(env, { job, lang = "", model, cacheTtl, skipCache = false } = {}) {
   const headers = {
     "content-type": "application/json",
     "x-api-key": env.ANTHROPIC_API_KEY,
@@ -132,8 +132,9 @@ export function anthropicHeaders(env, { job, lang = "", model, cacheTtl } = {}) 
   };
   if (gatewayEnabled(env)) {
     headers["cf-aig-metadata"] = JSON.stringify({ job, lang, model });
-    headers["cf-aig-authorization"] = env.CF_AIG_TOKEN;
-    if (cacheTtl) headers["cf-aig-cache-ttl"] = String(cacheTtl);
+    headers["cf-aig-authorization"] = "Bearer " + String(env.CF_AIG_TOKEN).trim();   // Format laut Cloudflare-Doku und secrets-check.yml
+    if (skipCache) headers["cf-aig-skip-cache"] = "true";
+    else if (cacheTtl) headers["cf-aig-cache-ttl"] = String(cacheTtl);
   }
   return headers;
 }
@@ -192,10 +193,10 @@ async function finishHaiku(env, reservation, usage, job, lang, model) {
   return status;
 }
 
-export async function reportExternalAiUsage(env, { id, job, lang = "", model, input_tokens, output_tokens }) {
+export async function reportExternalAiUsage(env, { id, job, lang = "", model, input_tokens, output_tokens, batch = false }) {
   if (!isHaiku(model)) throw new Error("unsupported model");
   const prices = aiPrices(env), input = Number(input_tokens || 0), output = Number(output_tokens || 0);
-  const usd = input * prices.input / 1e6 + output * prices.output / 1e6;
+  const usd = (input * prices.input / 1e6 + output * prices.output / 1e6) * (batch ? 0.5 : 1);   // Batch API: halber Preis
   await env.DB.prepare("INSERT OR IGNORE INTO ai_spend(id,day,model,job,lang,in_tok,out_tok,usd,reserved_usd,created) VALUES(?,?,?,?,?,?,?,?,0,?)")
     .bind(id, new Date().toISOString().slice(0, 10), model, job, lang, input, output, usd, Math.floor(Date.now() / 1000)).run();
   const status = await aiBudgetStatus(env);
@@ -203,7 +204,7 @@ export async function reportExternalAiUsage(env, { id, job, lang = "", model, in
   return status;
 }
 
-export async function anthropicFetch(env, body, { job, lang = "", cacheTtl } = {}) {
+export async function anthropicFetch(env, body, { job, lang = "", cacheTtl, skipCache = false } = {}) {
   const model = String(body?.model || "");
   let reservation = null;
   if (isHaiku(model)) {
@@ -214,19 +215,19 @@ export async function anthropicFetch(env, body, { job, lang = "", cacheTtl } = {
       throw error;
     }
   }
+  const release = () => env.DB.prepare("UPDATE ai_spend SET reserved_usd=0 WHERE id=?").bind(reservation.id).run();
   let response;
   try {
-    response = await fetch(anthropicUrl(env), { method: "POST", headers: anthropicHeaders(env, { job, lang, model, cacheTtl }), body: JSON.stringify(body) });
+    response = await fetch(anthropicUrl(env), { method: "POST", headers: anthropicHeaders(env, { job, lang, model, cacheTtl, skipCache }), body: JSON.stringify(body) });
   } catch {
+    if (reservation) await release();
     throw new Error("Claude API request failed");
   }
   if (reservation) {
-    if (!response.ok) {
-      await env.DB.prepare("UPDATE ai_spend SET reserved_usd=0 WHERE id=?").bind(reservation.id).run();
-    } else {
-      const data = await response.clone().json().catch(() => null);
-      if (data?.usage) await finishHaiku(env, reservation, data.usage, job, lang, model);
-    }
+    const cached = String(response.headers?.get?.("cf-aig-cache-status") || "").toUpperCase() === "HIT";   // Gateway-Cache: Anthropic berechnet nichts
+    const data = response.ok && !cached ? await response.clone().json().catch(() => null) : null;
+    if (data?.usage) await finishHaiku(env, reservation, data.usage, job, lang, model);
+    else await release();
   }
   return response;
 }
@@ -246,10 +247,22 @@ export const claudeText = (j) => (Array.isArray(j?.content) ? j.content : []).fi
 export async function haikuJson(env, system, obj, { job, lang = "", maxTokens = 8000, model = "claude-haiku-5-5", cacheTtl = 604800 } = {}) {
   const body = { model, max_tokens: maxTokens, system, messages: [{ role: "user", content: JSON.stringify(obj) }] };
   const options = { job, lang, cacheTtl };
-  let response = await anthropicFetch(env, { ...body, thinking: { type: "disabled" }, output_config: { effort: "low" } }, options);
-  if (response.status === 400) response = await anthropicFetch(env, body, options);
+  let used = { ...body, thinking: { type: "disabled" }, output_config: { effort: "low" } };
+  let response = await anthropicFetch(env, used, options);
+  if (response.status === 400) response = await anthropicFetch(env, (used = body), options);
   if (!response.ok) throw new Error("api " + response.status);
-  let text = claudeText(await response.json());
-  if (text.startsWith("```")) text = text.replace(/^```[a-z]*\n?/, "").replace(/```$/, "");
-  return JSON.parse(text);
+  const parse = async (r) => {
+    let text = claudeText(await r.json());
+    if (text.startsWith("```")) text = text.replace(/^```[a-z]*\n?/, "").replace(/```$/, "");
+    return JSON.parse(text);
+  };
+  try {
+    return await parse(response.clone());
+  } catch (e) {
+    // Unbrauchbare Antwort aus dem Gateway-Cache (7 Tage): einmal am Cache vorbei neu fragen, sonst haengt derselbe Auftrag eine Woche fest
+    if (String(response.headers?.get?.("cf-aig-cache-status") || "").toUpperCase() !== "HIT") throw e;
+    const fresh = await anthropicFetch(env, used, { ...options, skipCache: true });
+    if (!fresh.ok) throw new Error("api " + fresh.status);
+    return parse(fresh);
+  }
 }

@@ -200,7 +200,7 @@ async function api(env, request, url, path, asUser) {
         !Number.isSafeInteger(input) || input < 0 || !Number.isSafeInteger(output) || output < 0 ||
         String(b.lang || "").length > 20) return J({ error: "bad_request" }, 400);
     const status = await reportExternalAiUsage(env, {
-      id: b.id, job: b.job, lang: String(b.lang || ""), model: b.model, input_tokens: input, output_tokens: output,
+      id: b.id, job: b.job, lang: String(b.lang || ""), model: b.model, input_tokens: input, output_tokens: output, batch: b.batch === true,
     });
     return J({ ok: true, ...status });
   }

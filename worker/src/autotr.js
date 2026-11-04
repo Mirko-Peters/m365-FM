@@ -117,7 +117,7 @@ export async function autoTranslateEntities(env, entityMap) {
       }
     } catch (e) { if (e?.code === AI_BUDGET_ERROR) blocked++; else failed++; }
   }));
-  await setMeta(db, "atr_ent:" + day, used + Math.min(room, jobs.length - blocked));
+  await setMeta(db, "atr_ent:" + day, used + Math.min(room, jobs.length) - blocked);
   return { done, failed, open: Math.max(0, jobs.length - room) + blocked };
 }
 

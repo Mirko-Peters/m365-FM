@@ -25,7 +25,7 @@ test("haikuJson: keine Sampling-Parameter, Denkphase aus, Aufwand low", () => wi
   assert.deepEqual(out, { title: "Hello" });
 }, async (url, init) => {
   assert.equal(url, "https://gateway.ai.cloudflare.com/v1/account/m365fm/anthropic/v1/messages");
-  assert.equal(init.headers["cf-aig-authorization"], "gateway-token");
+  assert.equal(init.headers["cf-aig-authorization"], "Bearer gateway-token");
   assert.deepEqual(JSON.parse(init.headers["cf-aig-metadata"]), { job: "test_haiku", lang: "de", model: "claude-haiku-5-5" });
   const b = JSON.parse(init.body);
   assert.equal(b.model, "claude-haiku-5-5");
