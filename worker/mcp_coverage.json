@@ -724,8 +724,26 @@
   "/api/sponsor/request": {
    "skip": "Öffentliches Formular für Sponsor-Anfragen; Bearbeitung ausschließlich im Admin-Panel"
   },
+  "/api/topics/clear": {
+   "skip": "Persönliche Benachrichtigungs-Abos werden nur in der Website-Verwaltung gelöscht, nicht per KI-Token"
+  },
+  "/api/topics/email-unsub": {
+   "skip": "Signierter Abmeldelink aus einer Themen-E-Mail; wird im Browser geöffnet, nicht per KI"
+  },
   "/api/topics/export": {
    "skip": "Datenexport fuer Seitenbau und Agenten (Inhalt <-> Entitaet mit Gewicht); Lesetools nutzen die Entitaetsseiten/articles.json"
+  },
+  "/api/topics/follow": {
+   "skip": "Themen-Abos erfordern ausdrückliche Einwilligung und werden nur über die Website verwaltet"
+  },
+  "/api/topics/mine": {
+   "skip": "Persönliche Benachrichtigungs-Abos werden nur in der Website-Verwaltung angezeigt"
+  },
+  "/api/topics/status": {
+   "skip": "Private Abo-Prüfung für die Follow-Schaltfläche; Browser-Infrastruktur"
+  },
+  "/api/topics/unfollow": {
+   "skip": "Themen-Abos erfordern ausdrückliche Einwilligung und werden nur über die Website verwaltet"
   },
   "/api/tr-queue": {
    "skip": "Schnittstelle fuer die Uebersetzungs-Pipelines (translate_blog.py --queue): nur Schluessel, kein Inhalt"

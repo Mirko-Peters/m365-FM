@@ -12,7 +12,7 @@ database_id = "REPLACE_WITH_D1_ID"   # wird vom Workflow (worker.yml) automatisc
 migrations_dir = "migrations"   # versioniertes Schema: wrangler d1 migrations apply
 
 [triggers]
-crons = ["0 6 * * *", "*/30 * * * *"]   # Digest 06:00 UTC; Feeds der Creator alle 30 Minuten
+crons = ["0 6 * * *", "*/30 * * * *", "*/15 * * * *"]   # Digest, Feeds der Creator und Sessions-Erinnerungen
 
 [vars]
 SITE = "https://www.m365.fm"

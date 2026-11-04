@@ -2,6 +2,7 @@
 import { cleanText } from "./util.js";
 import { sendPush } from "./push.js";
 import { goodHost, ensureFeedCols } from "./profiles.js";
+import { queueTopicNotification } from "./topic_notifications.js";
 
 const dec = (s) => s.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, "$1").replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(Math.min(+n, 0x10ffff))).replace(/&#x([0-9a-f]+);/gi, (_, n) => String.fromCodePoint(Math.min(parseInt(n, 16), 0x10ffff)))
   .replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&amp;/g, "&");
@@ -65,10 +66,19 @@ export async function refreshFeeds(env, max = 8) {
       const items = parseFeed(xml); if (!items.length) throw new Error("empty");
       await ensureFeedCols(db);
       let fresh = [];
-      if (c.owner_type === "u") { const ex = new Set(((await db.prepare("SELECT url FROM feed_items WHERE channel_id=?").bind(c.id).all()).results || []).map((r) => r.url)); fresh = items.filter((i) => !ex.has(i.url)); if (ex.size === 0) fresh = []; }
+      if (c.owner_type === "u" || c.owner_type === "o") { const ex = new Set(((await db.prepare("SELECT url FROM feed_items WHERE channel_id=?").bind(c.id).all()).results || []).map((r) => r.url)); fresh = items.filter((i) => !ex.has(i.url)); if (ex.size === 0) fresh = []; }
       await db.batch([...items.map((i) => db.prepare("INSERT INTO feed_items(channel_id,owner_type,owner_id,url,title,published,summary,thumb) VALUES(?,?,?,?,?,?,?,?) ON CONFLICT(url) DO UPDATE SET summary=CASE WHEN feed_items.summary='' THEN excluded.summary ELSE feed_items.summary END, thumb=CASE WHEN feed_items.thumb='' THEN excluded.thumb ELSE feed_items.thumb END").bind(c.id, c.owner_type, c.owner_id, i.url, i.title, i.t, i.desc || "", i.thumb || "")),
         db.prepare("UPDATE channels SET fetched=?, fails=0 WHERE id=?").bind(now, c.id)]);
       n += items.length;
+      if (fresh.length) {
+        const owner = c.owner_type === "u"
+          ? await db.prepare("SELECT handle FROM profiles WHERE user_id=? AND public=1 AND handle IS NOT NULL").bind(c.owner_id).first()
+          : await db.prepare("SELECT handle FROM orgs WHERE id=? AND public=1").bind(c.owner_id).first();
+        if (owner?.handle) for (const item of fresh) await queueTopicNotification(env, {
+          kind: "creator", topicId: owner.handle, key: `feed:${item.url}`, title: item.title, body: item.desc || "",
+          url: item.url,
+        });
+      }
       if (fresh.length && env.VAPID_PRIVATE_JWK) {   // Creator fragen: hier optimieren oder per MCP?
         const subs = (await db.prepare("SELECT endpoint,p256dh,auth FROM push_subs WHERE user_id=?").bind(c.owner_id).all()).results || [];
         for (const sb of subs) { try { await sendPush(env, sb, { title: fresh.length > 1 ? `${fresh.length} neue Inhalte gezogen` : "Neuer Inhalt gezogen", body: `${fresh[0].title.slice(0, 80)} – jetzt hier optimieren oder per MCP.`, url: `${env.SITE}/community/#c-feed` }); } catch {} }

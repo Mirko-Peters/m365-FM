@@ -101,7 +101,7 @@ export async function handleMail(env, request, url, path, user, J) {
     if (!(b.kind in LABEL)) return J({ error: "bad_kind" }, 400);
     await db.prepare("INSERT OR REPLACE INTO mail_prefs(user_id,kind,on_) VALUES(?,?,?)").bind(user.id, b.kind, b.on ? 1 : 0).run(); return J({ ok: true });
   }
-  if (path === "/api/mail/remove") { await db.batch([db.prepare("DELETE FROM mail_addr WHERE user_id=?").bind(user.id), db.prepare("DELETE FROM mail_outbox WHERE user_id=? AND sent=0").bind(user.id)]); return J({ ok: true }); }
+  if (path === "/api/mail/remove") { await db.batch([db.prepare("DELETE FROM email_topics WHERE user_id=?").bind(user.id), db.prepare("DELETE FROM topic_queue WHERE channel='email' AND recipient=?").bind(String(user.id)), db.prepare("DELETE FROM topic_deliveries WHERE channel='email' AND recipient=?").bind(String(user.id)), db.prepare("DELETE FROM mail_addr WHERE user_id=?").bind(user.id), db.prepare("DELETE FROM mail_outbox WHERE user_id=? AND sent=0").bind(user.id)]); return J({ ok: true }); }
   if (path === "/api/mail/test") {
     if (!(await rateLimit(db, `mtest:${user.id}`, 3, 3600))) return J({ error: "rate_limit" }, 429);
     const ok = await notify(env, user.id, "system", "M365.FM – Testnachricht / test message", "<p>Das ist eine Testnachricht. / This is a test message.</p>", `test:${user.id}:${now()}`);

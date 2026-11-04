@@ -46,5 +46,12 @@ export async function sendPush(env, sub, payloadObj) {
       authorization: `vapid t=${jwt}, k=${env.VAPID_PUBLIC}` },
     body,
   });
-  return { ok: r.status >= 200 && r.status < 300, gone: r.status === 404 || r.status === 410, status: r.status };
+  const gone = r.status === 404 || r.status === 410;
+  if (gone && env.DB) await env.DB.batch([
+    env.DB.prepare("DELETE FROM push_topics WHERE endpoint=?").bind(sub.endpoint),
+    env.DB.prepare("DELETE FROM topic_queue WHERE channel='push' AND recipient=?").bind(sub.endpoint),
+    env.DB.prepare("DELETE FROM topic_deliveries WHERE channel='push' AND recipient=?").bind(sub.endpoint),
+    env.DB.prepare("DELETE FROM push_subs WHERE endpoint=?").bind(sub.endpoint),
+  ]).catch(() => {});
+  return { ok: r.status >= 200 && r.status < 300, gone, status: r.status };
 }

@@ -28,4 +28,41 @@
   }
   function load() { api("/api/mail/me").then(function (r) { box.textContent = ""; if (r.j && "configured" in r.j) draw(r.j); else box.appendChild(h("p", { text: Q.login })); }); }
   root.appendChild(h("h2", { text: Q.h })); root.appendChild(h("p", { class: "mut", text: Q.intro })); root.appendChild(msg); root.appendChild(box); load();
+  var topics = h("div"), topicMsg = h("p", { class: "mut", role: "status" });
+  var labels = de ? { entity: "Entität", creator: "Creator", show: "Show", event: "Event", session: "Session" }
+    : { entity: "Entity", creator: "Creator", show: "Show", event: "Event", session: "Session" };
+  function loadTopics() {
+    var endpoint = "";
+    var sub = "serviceWorker" in navigator ? navigator.serviceWorker.getRegistration("/").then(function (reg) { return reg ? reg.pushManager.getSubscription() : null; }) : Promise.resolve(null);
+    sub.catch(function () { return null; }).then(function (s) {
+      endpoint = s ? s.endpoint : "";
+      return api("/api/topics/mine" + (endpoint ? "?endpoint=" + encodeURIComponent(endpoint) : ""));
+    }).then(function (r) {
+      topics.textContent = "";
+      if (!r.j || !Array.isArray(r.j.subscriptions)) { topicMsg.textContent = de ? "Bitte melde dich an oder öffne diese Seite in dem Browser mit deinem Push-Abo." : "Sign in or open this page in the browser with your push subscription."; return; }
+      topicMsg.textContent = "";
+      var items = new Map();
+      r.j.subscriptions.forEach(function (x) { items.set(x.kind + "|" + x.topic_id, x); });
+      if (!items.size) { topics.appendChild(h("p", { class: "mut", text: de ? "Du folgst noch keinen Themen." : "You are not following any topics yet." })); return; }
+      var ul = h("ul", { style: "list-style:none;padding:0" });
+      items.forEach(function (x) {
+        var btn = h("button", { type: "button", class: "btn", text: de ? "Abwählen" : "Unfollow", onclick: function () {
+          api("/api/topics/unfollow", { method: "POST", body: { kind: x.kind, id: x.topic_id, endpoint: endpoint } }).then(loadTopics);
+        } });
+        ul.appendChild(h("li", { style: "margin:.5em 0" }, [
+          h("span", { text: (labels[x.kind] || x.kind) + ": " + x.topic_id + " " }),
+          btn,
+        ]));
+      });
+      topics.appendChild(ul);
+    }).catch(function () { topicMsg.textContent = de ? "Themen konnten nicht geladen werden." : "Could not load followed topics."; });
+  }
+  root.appendChild(h("h2", { text: de ? "Meine Benachrichtigungen" : "My notifications" }));
+  root.appendChild(h("p", { class: "mut", text: de ? "Folge-Themen ansehen und einzelne Abos oder alle Themen abbestellen." : "Review followed topics and unsubscribe from one or all topics." }));
+  root.appendChild(topicMsg); root.appendChild(topics);
+  root.appendChild(h("p", {}, [h("button", { type: "button", class: "btn", text: de ? "Alle Themen abbestellen" : "Unfollow all topics", onclick: function () {
+    var sub = "serviceWorker" in navigator ? navigator.serviceWorker.getRegistration("/").then(function (reg) { return reg ? reg.pushManager.getSubscription() : null; }) : Promise.resolve(null);
+    sub.catch(function () { return null; }).then(function (s) { return api("/api/topics/clear", { method: "POST", body: { endpoint: s ? s.endpoint : "" } }); }).then(loadTopics);
+  } })]));
+  loadTopics();
 })();

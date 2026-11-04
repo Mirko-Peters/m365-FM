@@ -3,6 +3,7 @@ import { sendPush } from "./push.js";
 import { esc } from "./util.js";
 import { closeMonth } from "./badges.js";
 import { sendMail } from "./mailer.js";
+import { queueTopicNotification } from "./topic_notifications.js";
 
 const LANG_NAME = { de: "Deutsch", es: "Español", fr: "Français", it: "Italiano", pt: "Português", nl: "Nederlands", pl: "Polski", id: "Bahasa Indonesia", ru: "Русский", uk: "Українська", ar: "العربية", he: "עברית", hi: "हिन्दी", ja: "日本語", ko: "한국어", ml: "മലയാളം", pa: "ਪੰਜਾਬੀ", ta: "தமிழ்", te: "తెలుగు" };
 const clean = (t) => String(t).replace(/\s*\((KI|AI)[^)]*\)\s*$/i, "").replace(/\s*[（(][^()（）]*[)）]\s*$/, "").trim();
@@ -33,6 +34,16 @@ export async function runDigest(env, { dry = false } = {}) {
   for (const e of fresh) (byLang[e.language] ||= []).push(e);
   const res = { new: fresh.length, push: 0, mail: 0, gone: 0, langs: Object.keys(byLang) };
   if (dry) return res;
+  for (const e of fresh) {
+    if (e.kind !== "show") continue;
+    const url = typeof e.url === "string" && e.url.startsWith(`${env.SITE}/`) ? e.url : `${env.SITE}/show/episodes/`;
+    const title = clean(e.title || "New episode");
+    const itemKey = `episode:${e.id}`;
+    for (const eid of Array.isArray(e.entities) ? [...new Set(e.entities)].filter((x) => /^[a-z0-9][a-z0-9-]{1,79}$/.test(x)).slice(0, 12) : []) {
+      await queueTopicNotification(env, { kind: "entity", topicId: eid, key: itemKey, title, body: e.summary || "", url });
+    }
+    await queueTopicNotification(env, { kind: "show", topicId: String(e.id), key: itemKey, title, body: e.summary || "", url });
+  }
   for (const [lang, list] of Object.entries(byLang)) {
     list.sort((a, b) => (a.date < b.date ? 1 : -1));
     const first = list[0];
@@ -42,7 +53,7 @@ export async function runDigest(env, { dry = false } = {}) {
     await pool(subs, 8, async (s) => {
       const r = await sendPush(env, s, payload);
       if (r.ok) res.push++;
-      else if (r.gone) { await db.prepare("DELETE FROM push_subs WHERE endpoint=?").bind(s.endpoint).run(); res.gone++; }
+      else if (r.gone) { await db.batch([db.prepare("DELETE FROM push_topics WHERE endpoint=?").bind(s.endpoint), db.prepare("DELETE FROM topic_queue WHERE channel='push' AND recipient=?").bind(s.endpoint), db.prepare("DELETE FROM topic_deliveries WHERE channel='push' AND recipient=?").bind(s.endpoint), db.prepare("DELETE FROM push_subs WHERE endpoint=?").bind(s.endpoint)]); res.gone++; }
     });
     const mails = (await db.prepare("SELECT email,token FROM email_subs WHERE lang=? AND confirmed=1").bind(lang).all()).results || [];
     const items = list.slice(0, 10).map((e) => `<li style="margin:0 0 12px"><a href="${esc(e.url)}" style="color:#3b6391;font-weight:600;text-decoration:none">${esc(clean(e.title))}</a><br><span style="color:#5d6470;font-size:14px">${esc((e.summary || "").slice(0, 160))}</span></li>`).join("");

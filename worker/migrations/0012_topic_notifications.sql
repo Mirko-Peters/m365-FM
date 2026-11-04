@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS email_topics (
   PRIMARY KEY (user_id, kind, topic_id)
 );
 CREATE INDEX IF NOT EXISTS idx_email_topics_topic ON email_topics(kind, topic_id);
+CREATE INDEX IF NOT EXISTS idx_event_sessions_start ON event_sessions(status, start);
 CREATE TABLE IF NOT EXISTS topic_queue (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   channel TEXT NOT NULL,
