@@ -27,6 +27,7 @@ import { handleLibrary, deleteUserLibrary } from "./library.js";
 import { handleOrgOffers } from "./orgoffers.js";
 import { handleWish, seedRoadmap } from "./wish.js";
 import { handleShows, syncShows } from "./shows.js";
+import { handleMediakit } from "./mediakit.js";
 import { handleMail, flushOutbox, notify } from "./mail.js";
 import { handleReviews } from "./reviews.js";
 import { handleEntityInvite, remindInvites } from "./entinvite.js";
@@ -46,6 +47,7 @@ import { handleWiki } from "./wiki.js";
 import { syncExpertise } from "./levels.js";
 import { handleTopicSubscriptions, dispatchTopicNotifications, queueTopicArticles, queueSessionReminders } from "./topic_notifications.js";
 import { savePushSubscription } from "./push.js";
+import { handleContributions, refreshContributions } from "./contributions.js";
 
 const PROVIDERS = {
   google: {
@@ -59,6 +61,13 @@ const PROVIDERS = {
   linkedin: {   // "Sign In with LinkedIn using OpenID Connect"
     auth: "https://www.linkedin.com/oauth/v2/authorization", token: "https://www.linkedin.com/oauth/v2/accessToken",
     info: "https://api.linkedin.com/v2/userinfo", scope: "openid profile", id: (e) => e.LINKEDIN_CLIENT_ID, secret: (e) => e.LINKEDIN_CLIENT_SECRET,
+  },
+  github: {    // OAuth 2.0 ohne OIDC: Token als JSON anfordern, Profil von api.github.com/user, sub = stabile numerische ID (nie der Login-Name)
+    auth: "https://github.com/login/oauth/authorize", token: "https://github.com/login/oauth/access_token",
+    info: "https://api.github.com/user", scope: "read:user", id: (e) => e.GH_OAUTH_CLIENT_ID, secret: (e) => e.GH_OAUTH_CLIENT_SECRET,
+    noPrompt: true, tokenHeaders: { accept: "application/json" },
+    infoHeaders: { "user-agent": "m365fm", accept: "application/vnd.github+json", "x-github-api-version": "2022-11-28" },
+    profile: (info) => ({ sub: info && info.id != null ? String(info.id) : "", name: (info && (info.name || info.login)) || "" }),
   },
 };
 const VID = /^[A-Za-z0-9_-]{5,24}$/;
@@ -107,10 +116,19 @@ async function upsertUser(env, provider, sub, name) {
 }
 
 async function auth(env, request, url, path) {
-  const m = /^\/auth\/(login|callback)\/(google|microsoft|linkedin)$/.exec(path);
+  const m = /^\/auth\/(login|callback)\/(google|microsoft|linkedin|github)$/.exec(path);
   if (path === "/auth/dev" && env.DEV_LOGIN === "1") {
     const u = await upsertUser(env, "dev", url.searchParams.get("name") || "dev", url.searchParams.get("name") || "Dev User");
     return new Response(null, { status: 302, headers: { location: safeReturn(env, url.searchParams.get("return") || env.SITE), "set-cookie": cookie("m365s", await makeSession(env, u.id), 5184000) } });
+  }
+  if (path === "/auth/youtube/connect") {
+    // Einmalige Kanal-Freigabe (m365 Show): Upload/Löschen + YouTube Analytics (Sponsor-Dashboard #173).
+    // Google zeigt danach auf www.m365.fm/callback einen Code; den trägt Mirko im Workflow „YouTube verbinden (einmalig)“ ein.
+    if (!env.YT_CLIENT_ID) return html("<p>YouTube not configured.</p>", 503);
+    const q = new URLSearchParams({ client_id: env.YT_CLIENT_ID, redirect_uri: "https://www.m365.fm/callback", response_type: "code",
+      scope: "https://www.googleapis.com/auth/youtube https://www.googleapis.com/auth/yt-analytics.readonly",
+      access_type: "offline", prompt: "consent", include_granted_scopes: "true" });
+    return new Response(null, { status: 302, headers: { location: `https://accounts.google.com/o/oauth2/v2/auth?${q}`, "cache-control": "no-store" } });
   }
   if (!m) return null;
   const P = PROVIDERS[m[2]];
@@ -119,7 +137,7 @@ async function auth(env, request, url, path) {
   if (m[1] === "login") {
     const state = randomToken(16), ret = safeReturn(env, url.searchParams.get("return") || env.SITE);
     const val = `${state}|${b64u.enc(new TextEncoder().encode(ret))}`;
-    const q = new URLSearchParams({ client_id: P.id(env), redirect_uri: redirect, response_type: "code", scope: P.scope, state, ...(m[2] === "linkedin" ? {} : { prompt: "select_account" }) });
+    const q = new URLSearchParams({ client_id: P.id(env), redirect_uri: redirect, response_type: "code", scope: P.scope, state, ...(m[2] === "linkedin" || P.noPrompt ? {} : { prompt: "select_account" }) });
     return new Response(null, { status: 302, headers: { location: `${P.auth}?${q}`, "set-cookie": cookie("m365o", `${val}.${await sign(env.SESSION_SECRET, val)}`, 600) } });
   }
   // callback
@@ -129,15 +147,17 @@ async function auth(env, request, url, path) {
   const dot = c[1].lastIndexOf("."), val = c[1].slice(0, dot);
   if (!(await verify(env.SESSION_SECRET, val, c[1].slice(dot + 1))) || val.split("|")[0] !== st) return html("<p>Login failed (invalid state).</p>", 400);
   const ret = safeReturn(env, new TextDecoder().decode(b64u.dec(val.split("|")[1])));
-  const tr = await fetch(P.token, { method: "POST", headers: { "content-type": "application/x-www-form-urlencoded" },
+  const tr = await fetch(P.token, { method: "POST", headers: { "content-type": "application/x-www-form-urlencoded", ...(P.tokenHeaders || {}) },
     body: new URLSearchParams({ code, client_id: P.id(env), client_secret: P.secret(env), redirect_uri: redirect, grant_type: "authorization_code" }) });
   if (!tr.ok) return html("<p>Login failed (token).</p>", 400);
-  const tok = await tr.json();
-  const ir = await fetch(P.info, { headers: { authorization: `Bearer ${tok.access_token}` } });
+  const tok = await tr.json().catch(() => ({}));
+  if (!tok || !tok.access_token) return html("<p>Login failed (token).</p>", 400);   // GitHub meldet Fehler mit Status 200 und {error}
+  const ir = await fetch(P.info, { headers: { authorization: `Bearer ${tok.access_token}`, ...(P.infoHeaders || {}) } });
   if (!ir.ok) return html("<p>Login failed (profile).</p>", 400);
-  const info = await ir.json();
+  const raw = await ir.json().catch(() => null);
+  const info = P.profile ? P.profile(raw) : { sub: raw && raw.sub ? String(raw.sub) : "", name: raw && (raw.name || raw.given_name) };
   if (!info.sub) return html("<p>Login failed.</p>", 400);
-  const u = await upsertUser(env, m[2], String(info.sub), info.name || info.given_name || "User");
+  const u = await upsertUser(env, m[2], info.sub, info.name || "User");
   if (u.banned) return html("<p>This account is blocked.</p>", 403);
   const h = new Headers({ location: ret });
   h.append("set-cookie", cookie("m365s", await makeSession(env, u.id), 5184000));
@@ -168,6 +188,9 @@ async function api(env, request, url, path, asUser) {
 
   const sponsor = await handleSponsor(env, request, url, path, J);
   if (sponsor) return sponsor;
+
+  const contributions = await handleContributions(env, request, url, path, user, J);
+  if (contributions) return contributions;
 
   if (path === "/api/health") return J({ ok: true }, 200);
   if (path === "/api/search") return handleSearch(env, request, url, J);
@@ -283,6 +306,7 @@ async function api(env, request, url, path, asUser) {
   if (path === "/api/updates/export" || path === "/api/admin/updates/poll") { const q = await handleUpdates(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/reviews")) { const q = await handleReviews(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/entityinvite/")) { const q = await handleEntityInvite(env, request, url, path, user, J); if (q) return q; }
+  if (path === "/api/mediakit" || path === "/api/admin/mediakit") { const q = await handleMediakit(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/mail/") || path.startsWith("/api/admin/mail")) { const q = await handleMail(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/show/") || path.startsWith("/api/admin/show")) { const q = await handleShows(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/wish/")) { const q = await handleWish(env, request, url, path, user, J); if (q) return q; }
@@ -423,6 +447,7 @@ export default {
     }
     if (event.cron === "0 6 * * *") T("runDigest", () => runDigest(env));
     T("refreshFeeds", () => refreshFeeds(env));
+    T("refreshContributions", () => refreshContributions(env));
     T("pollUpdates", () => pollUpdates(env));
     T("queueTopicArticles", () => queueTopicArticles(env));
     T("dispatchTopicNotifications", () => dispatchTopicNotifications(env));

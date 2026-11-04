@@ -16,7 +16,7 @@ URLS = [
     ("CSS a11y", B + "/assets/a11y.css"),
     ("JS page", B + "/assets/page.js"),
     ("Schrift", B + "/assets/fonts/barlow-latin-400-normal.woff2"),
-    ("OG-Bild", B + "/og/index.png"),
+    ("OG-Bild", "https://img.m365.fm/og/index.png"),   # Teilen-Bilder liegen im R2-Bucket (generate_og.py, tools/r2_og_upload.py)
     ("Icon", B + "/assets/apple-touch-icon.png"),
     ("Sitemap", B + "/sitemap.xml"),
     ("llms.txt", B + "/llms.txt"),

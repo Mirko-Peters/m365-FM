@@ -9,6 +9,7 @@ import { scoreOf, levelOf, levelName, CAPS, THRESH } from "../src/levels.js";
 import { handleSponsor } from "../src/sponsor.js";
 import { handleAdminPanel } from "../src/adminpanel.js";
 import { d1BackupExportArgs, d1BackupTables } from "../src/d1_backup.js";
+import { handleContributions, refreshContributions } from "../src/contributions.js";
 
 async function searchDb(failTrigram = false) {
   const { DatabaseSync } = await import("node:sqlite");
@@ -97,23 +98,191 @@ test("wiki: sanitize entfernt Skripte, laesst Markup und viz nur mit Option", ()
 
 test("feeds: parseFeed nimmt nur https-Links und liest Titel, Datum, Beschreibung", () => {
   const rss = `<rss><channel>
-    <item><title>T1 &amp; mehr</title><link>https://example.com/1</link><pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate><description>&lt;p&gt;Hallo https://example.com/x Welt&lt;/p&gt;</description></item>
+    <item><title>T1 &amp; mehr</title><link>https://example.com/1</link><pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate><category>Power Automate</category><category>&lt;script</category><description>&lt;p&gt;Hallo https://example.com/x Welt&lt;/p&gt;</description></item>
     <item><title>Unsicher</title><link>http://example.com/2</link></item>
-    <entry><title>Atom</title><link rel="alternate" href="https://example.com/3"/><updated>2024-02-01T00:00:00Z</updated></entry>
+    <entry><title>Atom</title><link rel="alternate" href="https://example.com/3"/><updated>2024-02-01T00:00:00Z</updated><category term="Microsoft Teams"/></entry>
   </channel></rss>`;
   const out = parseFeed(rss);
   assert.equal(out.length, 2);
   assert.equal(out[0].title, "T1 & mehr");
   assert.equal(out[0].url, "https://example.com/1");
   assert.equal(out[0].t, Date.parse("Mon, 01 Jan 2024 00:00:00 GMT") / 1000);
+  assert.deepEqual(out[0].topics, ["Power Automate", "script"]);
   assert.equal(out[0].desc, "Hallo Welt");
   assert.equal(out[1].url, "https://example.com/3");
+  assert.deepEqual(out[1].topics, ["Microsoft Teams"]);
+});
+
+test("contributions: Quellen, Metadaten, Privatsphäre, Kategorien und Berichtsexport", async () => {
+  const { db, raw } = await searchDb();
+  raw.exec("ALTER TABLE contributions DROP COLUMN topics_edited");
+  raw.exec("INSERT INTO users(id,provider,sub,name,created) VALUES(1,'g','1','Anna',1),(2,'g','2','Ben',1); INSERT INTO profiles(user_id,public,handle,headline,about,company,job,country,show_org,updated) VALUES(1,0,'anna','','','','','',1,1)");
+  const user = { id: 1 }, J = (data, status = 200) => new Response(JSON.stringify(data), { status });
+  const call = (path, method = "GET", data, actor = user) => {
+    const url = new URL(`https://x${path}`);
+    return handleContributions({ DB: db },
+      new Request(url, { method, headers: { "content-type": "application/json" }, ...(data === undefined ? {} : { body: JSON.stringify(data) }) }),
+      url, url.pathname, actor, J);
+  };
+
+  const source = await call("/api/contributions/source", "POST", { kind: "blog", url: "https://example.com/feed.xml", title: "My blog", public: true });
+  assert.equal(source.status, 201);
+  assert.equal((await source.json()).source.public, true);
+  assert.equal((await (await call("/api/contributions/source", "POST", { kind: "blog", url: "https://example.com/feed.xml" })).json()).error, "source_exists");
+  assert.equal((await call("/api/contributions/source", "POST", { kind: "youtube", url: "https://example.com/channel" })).status, 400);
+  assert.equal((await call("/api/contributions/source", "POST", { kind: "youtube", url: "https://evil.youtube.com/@handle" })).status, 400);
+  const created = await call("/api/contributions/manual", "POST", {
+    title: "=SUM(1,1)", url: "https://example.com/post", kind: "article", published: "1767225600", category: "Blog",
+  });
+  assert.equal(created.status, 201);
+  assert.equal((await call("/api/contributions/manual", "POST", { title: "Bad day", kind: "blog", published: "2026-02-30" })).status, 400);
+  assert.equal((await (await call("/api/contributions/manual", "POST", { title: "Bad day", kind: "blog", published: "not-a-date" })).json()).error, "bad_date");
+  assert.equal((await (await call("/api/contributions/manual", "POST", { title: "No date", kind: "blog" })).json()).error, "bad_date");
+  assert.equal((await call("/api/contributions/manual", "POST", { title: "Bad category", kind: "blog", category: "Other" })).status, 400);
+  const manualId = raw.prepare("SELECT id FROM contributions WHERE manual=1").get().id;
+  assert.equal(raw.prepare("SELECT published FROM contributions WHERE id=?").get(manualId).published, 1767225600, "numerische Zeichenkette bleibt Unix-Zeit in Sekunden");
+
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async () => new Response(`<rss><channel>
+    <item><title>Feed article</title><link>https://example.com/post</link><pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate><category>Power Automate</category><description>Never persist the full text</description></item>
+    <item><title>Imported article</title><link>https://example.com/post-auto</link><pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate><category>Power BI</category></item>
+  </channel></rss>`);
+  try { await refreshContributions({ DB: db }, 1); } finally { globalThis.fetch = originalFetch; }
+  const manual = raw.prepare("SELECT title,kind,published,public,manual,source_id FROM contributions WHERE id=?").get(manualId);
+  assert.deepEqual([manual.title, manual.kind, manual.published, manual.public, manual.manual, manual.source_id], ["=SUM(1,1)", "article", 1767225600, 0, 1, null], "Feed-Upsert bewahrt manuelle Felder");
+  const imported = raw.prepare("SELECT id,title,url,topics,public,category,published FROM contributions WHERE url='https://example.com/post-auto'").get();
+  assert.equal(imported.title, "Imported article");
+  assert.deepEqual(JSON.parse(imported.topics), ["power-bi"]);
+  assert.equal(imported.category, "Blog");
+  assert.equal(imported.public, 1, "Quellen-Sichtbarkeit gilt beim Import");
+  const sourceId = raw.prepare("SELECT id FROM contribution_sources WHERE user_id=1").get().id;
+  assert.equal((await (await call("/api/contributions/mine")).json()).sources[0].status, "active");
+  assert.equal((await call("/api/contributions/source/update", "POST", { id: sourceId, public: false, active: false })).status, 200);
+  assert.equal(raw.prepare("SELECT public FROM contributions WHERE id=?").get(imported.id).public, 0, "Quellensichtbarkeit wird auf importierte Einträge übertragen");
+  assert.equal(raw.prepare("SELECT active FROM contribution_sources WHERE id=?").get(sourceId).active, 0);
+  assert.equal((await call("/api/contributions/source/update", "POST", { id: sourceId, public: true, active: true })).status, 200);
+  raw.prepare("UPDATE contribution_sources SET fails=5,fetched=9999999999 WHERE id=?").run(sourceId);
+  assert.equal((await (await call("/api/contributions/mine")).json()).sources[0].status, "paused_after_errors");
+  assert.equal((await call("/api/contributions/source/update", "POST", { id: sourceId, active: true })).status, 200);
+  const resetSource = raw.prepare("SELECT fails,fetched FROM contribution_sources WHERE id=?").get(sourceId);
+  assert.equal(resetSource.fails, 0, "Reaktivierung hebt die Fehlersperre auf");
+  assert.ok(resetSource.fetched <= Math.floor(Date.now() / 1000) - 1801, "Reaktivierung plant den Abruf vor, ohne ihn auf null zu setzen");
+  const firstReactivationTime = resetSource.fetched;
+  for (let i = 0; i < 27; i++) assert.equal((await call("/api/contributions/source/update", "POST", { id: sourceId, active: true })).status, 200);
+  assert.equal((await call("/api/contributions/source/update", "POST", { id: sourceId, active: true })).status, 429, "Reaktivierungen sind rate-limitiert");
+  assert.equal(raw.prepare("SELECT fetched FROM contribution_sources WHERE id=?").get(sourceId).fetched, firstReactivationTime, "wiederholte Reaktivierung bevorzugt die Quelle nicht weiter");
+  await call("/api/contributions/update", "POST", { id: imported.id, public: false, topics: [] });
+  globalThis.fetch = async () => new Response(`<rss><channel><item><title>New title</title><link>https://example.com/post-auto</link><pubDate>Tue, 02 Jan 2024 00:00:00 GMT</pubDate><category>Fabric</category></item></channel></rss>`);
+  try { await refreshContributions({ DB: db }, 1); } finally { globalThis.fetch = originalFetch; }
+  const kept = raw.prepare("SELECT title,published,public,kind FROM contributions WHERE id=?").get(imported.id);
+  assert.deepEqual([kept.title, kept.published, kept.public, kept.kind], ["New title", imported.published, 0, "blog"], "Cron überschreibt weder Privatstatus noch Typ/Datum");
+  assert.deepEqual(JSON.parse(raw.prepare("SELECT topics FROM contributions WHERE id=?").get(imported.id).topics), [], "Cron befüllt manuell geleerte Themen nicht erneut");
+  assert.ok(raw.prepare("SELECT fetched FROM contribution_sources WHERE id=?").get(sourceId).fetched > 0, "reaktivierte Quelle wird wieder abgerufen");
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM pragma_table_info('contributions') WHERE name IN ('summary','description','body')").get().n, 0, "nur Metadaten ohne Volltext werden gespeichert");
+
+  const session = await call("/api/contributions/manual", "POST", { title: "Power Automate talk", kind: "session", published: "2026-01-01" });
+  assert.equal(session.status, 201);
+  const sessionId = raw.prepare("SELECT id FROM contributions WHERE kind='session'").get().id;
+  assert.equal(raw.prepare("SELECT category FROM contributions WHERE id=?").get(sessionId).category, "Speaker/Presenter");
+  assert.equal((await call("/api/contributions/manual", "POST", { title: "Video presentation", kind: "video", published: "2026-01-02" })).status, 201);
+  assert.equal(raw.prepare("SELECT category FROM contributions WHERE kind='video'").get().category, "Video/Webcast/Podcast");
+  assert.equal((await (await call("/api/contributions/mine")).json()).contributions.length, 4);
+  assert.equal((await (await call("/api/contributions/mine", "GET", undefined, { id: 2 })).json()).contributions.length, 0, "Mitglieder sehen nur eigene Einträge");
+
+  const exported = await (await call("/api/contributions/export?from=2026-01-01&to=2026-01-01")).json();
+  assert.equal(exported.total, 2, "Datumsgrenzen sind inklusiv");
+  assert.ok(exported.csv.includes("'=SUM(1,1)"), "CSV-Formeln werden entschärft");
+  assert.equal((await (await call("/api/contributions/export?from=2026-02-30")).json()).error, "bad_period");
+  for (let i = 0; i < 1001; i++) raw.prepare("INSERT INTO contributions(user_id,title,url,published,kind,created) VALUES(1,?,?,1767225600,'blog',1)").run(`Imported ${i}`, `https://example.com/import-${i}`);
+  const truncated = await (await call("/api/contributions/export?from=2026-01-01&to=2026-01-01")).json();
+  assert.equal(truncated.total, 1003);
+  assert.equal(truncated.items.length, 1000);
+  assert.equal(truncated.truncated, true, "gekürzte Exporte weisen die Gesamttrefferzahl aus");
+  assert.equal((await call("/api/contributions/delete", "POST", { id: imported.id })).status, 200);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM contribution_ignored WHERE user_id=1 AND url=?").get(imported.url).n, 1, "Import-Löschung legt einen Tombstone an");
+  assert.ok(!(await (await call("/api/contributions/mine")).json()).contributions.some((x) => x.url === imported.url), "Tombstones erscheinen nicht in /mine");
+  assert.ok(!(await (await call("/api/contributions/export")).json()).items.some((x) => x.url === imported.url), "Tombstones erscheinen nicht im Export");
+  globalThis.fetch = async () => new Response(`<rss><channel><item><title>Reappeared</title><link>https://example.com/post-auto</link><pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate></item></channel></rss>`);
+  raw.prepare("UPDATE contribution_sources SET fetched=0 WHERE id=?").run(sourceId);
+  try { await refreshContributions({ DB: db }, 1); } finally { globalThis.fetch = originalFetch; }
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM contributions WHERE user_id=1 AND url=?").get(imported.url).n, 0, "Tombstone verhindert den erneuten Import");
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM contribution_ignored WHERE user_id=1 AND url=?").get(imported.url).n, 1);
+  assert.equal((await call("/api/contributions/delete", "POST", { id: manualId }, { id: 2 })).status, 404, "Beiträge anderer werden nicht gelöscht");
+  assert.equal((await call("/api/contributions/delete", "POST", { id: manualId })).status, 200);
+  assert.equal((await call("/api/contributions/source/delete", "POST", { id: sourceId }, { id: 2 })).status, 404, "Quellen anderer werden nicht gelöscht");
+  assert.equal((await call("/api/contributions/source/delete", "POST", { id: sourceId, delete_contributions: true })).status, 200);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM contributions WHERE id=?").get(imported.id).n, 0, "Quellen-Löschen kann ihre Importe entfernen");
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM contribution_sources WHERE id=?").get(sourceId).n, 0);
+  const { deleteUserData: wipe } = await import("../src/profiles.js");   // Kontoloeschung entfernt auch die Loeschmarken (sie enthalten URLs)
+  await wipe(db, 1);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM contribution_ignored WHERE user_id=1").get().n, 0, "Kontolöschung entfernt Tombstones");
+});
+
+test("contributions: URL ohne Feed-Endung wird direkt als Feed geprüft", async () => {
+  const { db, raw } = await searchDb();
+  raw.exec("INSERT INTO users(id,provider,sub,name,created) VALUES(1,'g','1','Anna',1)");
+  const user = { id: 1 }, J = (data, status = 200) => new Response(JSON.stringify(data), { status });
+  const sourceUrl = "https://api.spreaker.com/v2/shows/42/episodes/feed", url = new URL("https://x/api/contributions/source");
+  const sourceResponse = await handleContributions({ DB: db },
+    new Request(url, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ kind: "podcast", url: sourceUrl }) }),
+    url, url.pathname, user, J);
+  assert.equal(sourceResponse.status, 201);
+  const originalFetch = globalThis.fetch;
+  let fetched = "";
+  globalThis.fetch = async (input) => { fetched = String(input); return new Response(`<rss><channel><item><title>Spreaker episode</title><link>https://www.spreaker.com/episode/42</link></item></channel></rss>`); };
+  try { await refreshContributions({ DB: db }, 1); } finally { globalThis.fetch = originalFetch; }
+  assert.equal(fetched, sourceUrl);
+  assert.equal(raw.prepare("SELECT category FROM contributions").get().category, "Video/Webcast/Podcast");
+});
+
+test("contributions: Metriken filtern Hosts, autorisieren Spreaker und lassen Fehlschläge nicht blockieren", async () => {
+  const { db, raw } = await searchDb();
+  raw.exec("INSERT INTO users(id,provider,sub,name,created) VALUES(1,'g','1','Anna',1),(2,'g','2','Ben',1)");
+  raw.exec("INSERT INTO pod_episodes(id,user_id,title,status,spreaker_id,created,updated) VALUES(1,1,'Own','published',101,1,1),(2,2,'Guest','published',202,1,1),(3,2,'Foreign','published',303,1,1),(4,1,'Slug','published',112,1,1)");
+  raw.exec("INSERT INTO item_guests(kind,item_id,user_id,status,created) VALUES('podcast',2,1,'confirmed',1)");
+  for (let i = 102; i <= 111; i++) raw.prepare("INSERT INTO pod_episodes(id,user_id,title,status,spreaker_id,created,updated) VALUES(?,1,'Own','published',?,1,1)").run(i, i);
+  for (let i = 1; i <= 51; i++) raw.prepare("INSERT INTO contributions(user_id,title,url,published,kind,created) VALUES(1,?,?,1,'video',1)").run(`missing ${i}`, `https://www.youtube.com/watch?v=missin${String(i).padStart(5, "0")}`);
+  raw.prepare("INSERT INTO contributions(user_id,title,url,published,kind,created) VALUES(1,'Real','https://www.youtube.com/watch?v=abcdefghijk',1,'video',1)").run();
+  raw.prepare("INSERT INTO contributions(user_id,title,url,published,kind,created) VALUES(1,'Own episode','https://www.spreaker.com/episode/101',1,'podcast',1),(1,'Guest episode','https://spreaker.com/episode/202',1,'podcast',1),(1,'Foreign episode','https://spreaker.com/episode/303',1,'podcast',1),(1,'Fake host','https://evilspreaker.com/episode/404',1,'podcast',1),(1,'Slug episode','https://www.spreaker.com/episode/a-title--112',1,'podcast',1)").run();
+  for (let i = 102; i <= 111; i++) raw.prepare("INSERT INTO contributions(user_id,title,url,published,kind,created) VALUES(1,?,?,1,'podcast',1)").run(`Own episode ${i}`, `https://spreaker.com/episode/${i}`);
+
+  const originalFetch = globalThis.fetch, requested = [];
+  globalThis.fetch = async (input) => {
+    const target = String(input); requested.push(target);
+    if (target.includes("oauth2.googleapis.com/token")) return new Response(JSON.stringify({ access_token: "test" }));
+    if (target.includes("/youtube/v3/videos?")) {
+      const ids = new URL(target).searchParams.get("id").split(",");
+      return new Response(JSON.stringify({ items: ids.includes("abcdefghijk") ? [{ id: "abcdefghijk", statistics: { viewCount: "123" } }] : [] }));
+    }
+    if (target.includes("api.spreaker.com/v2/episodes/")) {
+      const id = target.split("/").pop();
+      return new Response(JSON.stringify({ response: { episode: { show_id: "6704921", downloads_count: id === "101" ? "10" : "20" } } }));
+    }
+    throw new Error("unexpected request " + target);
+  };
+  const env = { DB: db, YT_CLIENT_ID: "id", YT_CLIENT_SECRET: "secret", YT_REFRESH_TOKEN: "refresh", SPREAKER_TOKEN: "test", SPREAKER_SHOW_IDS: "6704921" };
+  try {
+    await refreshContributions(env);
+    assert.equal(raw.prepare("SELECT COUNT(*) n FROM contributions WHERE (title LIKE 'Own episode%' OR title IN ('Guest episode','Slug episode')) AND metrics_updated=0").get().n, 3, "Spreaker-Zeilen außerhalb des Lauf-Limits bleiben für den nächsten Lauf offen");
+    await refreshContributions(env);
+  } finally { globalThis.fetch = originalFetch; }
+  assert.equal(raw.prepare("SELECT views FROM contributions WHERE title='Real'").get().views, 123);
+  assert.ok(raw.prepare("SELECT COUNT(*) n FROM contributions WHERE title LIKE 'missing %' AND metrics_updated>0").get().n >= 50, "fehlende Videos werden nicht dauerhaft erneut selektiert");
+  assert.equal(requested.filter((x) => x.includes("api.spreaker.com/v2/episodes/")).length, 13, "alle autorisierten Folgen werden über mehrere Läufe abgefragt");
+  assert.equal(raw.prepare("SELECT downloads FROM contributions WHERE title='Own episode'").get().downloads, 10);
+  assert.equal(raw.prepare("SELECT downloads FROM contributions WHERE title='Guest episode'").get().downloads, 20);
+  assert.equal(raw.prepare("SELECT downloads FROM contributions WHERE title='Slug episode'").get().downloads, 20, "Slug-URL wird per gebundener Episoden-ID autorisiert");
+  assert.equal(raw.prepare("SELECT downloads FROM contributions WHERE title='Foreign episode'").get().downloads, 0);
+  assert.equal(raw.prepare("SELECT metrics_updated FROM contributions WHERE title='Fake host'").get().metrics_updated, 0);
 });
 
 test("schema: Migrationen sind idempotent und enthalten jede zur Laufzeit angelegte Tabelle", () => {
   const dir = new URL("../migrations/", import.meta.url);
   const files = readdirSync(dir).filter((f) => f.endsWith(".sql")).sort();
   assert.ok(files.length >= 1 && files[0] === "0001_baseline.sql");
+  const prefixes = files.map((f) => /^\d+/.exec(f)?.[0]);
+  assert.ok(prefixes.every(Boolean), "jede Migration braucht ein numerisches Präfix");
+  assert.equal(new Set(prefixes).size, prefixes.length, "Migrationsnummern müssen eindeutig sein");
   const sql = files.map((f) => readFileSync(new URL(f, dir), "utf-8")).join("\n");
   const stmts = sql.replace(/--[^\n]*/g, "").split(";").map((s) => s.trim()).filter(Boolean);
   for (const s of stmts) {

@@ -18,13 +18,13 @@ jobs:
         with: { python-version: "3.12" }
       - name: Artikel schreiben (wenige pro Lauf)
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY_SHOW || secrets.ANTHROPIC_API_KEY }}
           ARTICLE_LIMIT: "20"
           ARTICLE_WORKERS: "5"
         run: python generate_articles.py
       - name: Cover-Texte entwerfen
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY_SHOW || secrets.ANTHROPIC_API_KEY }}
           COVER_LIMIT: "100"
         run: python generate_covers.py
       - name: Speichern (der Push auf data/ loest den Seitenbau aus; kein zusaetzlicher Start von site.yml)

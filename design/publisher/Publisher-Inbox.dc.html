@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Expert Connect – my requests</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap">
+<style>
+body{margin:0;background:#f3f3f2}
+a{color:#3b6391}a:hover{color:#2c4b70}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid #3b6391;outline-offset:2px}
+.kicker{display:flex;align-items:center;gap:14px;font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#3b6391;font-size:15px}
+.kicker:after{content:"";flex:1;height:1px;background:rgba(23,25,28,.14)}
+.x{position:relative}
+.x:before,.x:after{content:"+";position:absolute;top:-10px;font:300 19px/1 Barlow,sans-serif;color:#5d6470;background:#f3f3f2}
+.x:before{left:-6px}.x:after{right:-6px}
+.card{background:#fff;border:1px solid rgba(23,25,28,.14);padding:20px;display:grid;gap:12px;align-content:start}
+.h1{margin:0;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:52px;line-height:1}
+.h2{margin:0;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:26px;line-height:1.1}
+.h3{margin:0;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:20px;line-height:1.15}
+.mut{color:#5d6470}
+.sm{font-size:13px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 18px;border:1px solid #17191c;background:#fff;color:#17191c;font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:.1em;text-transform:uppercase;font-size:15px;text-decoration:none;cursor:pointer;white-space:nowrap}
+.btn.main{background:#17191c;color:#fff}
+.btn.ac{background:#3b6391;border-color:#3b6391;color:#fff}
+.btn.sm2{padding:6px 12px;font-size:13px}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:2px 10px;border:1px solid rgba(23,25,28,.2);font-size:13px;background:#fff;white-space:nowrap}
+.chip.on{background:#17191c;color:#fff;border-color:#17191c}
+.tag{display:inline-block;padding:0 7px;font:600 11px/1.8 'Barlow Condensed',sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:#3b6391;white-space:nowrap}
+.tag.g{background:#2f6b3a}.tag.o{background:#9a4f0f}.tag.k{background:#17191c}.tag.l{background:#e4e6e8;color:#17191c}
+.field{display:grid;gap:6px}
+.field label{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#5d6470}
+.in{border:1px solid rgba(23,25,28,.3);background:#fff;padding:10px 12px;min-height:22px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.av{width:48px;height:48px;flex:none;display:flex;align-items:center;justify-content:center;background:#e4e6e8;font:600 18px/1 'Barlow Condensed',sans-serif;color:#17191c}
+.note{border-left:3px solid #3b6391;background:#eef2f7;padding:10px 14px;font-size:14px}
+.warn{border-left:3px solid #9a4f0f;background:#f7efe7;padding:10px 14px;font-size:14px}
+table{border-collapse:collapse;width:100%}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid rgba(23,25,28,.14);font-size:14px;vertical-align:top}
+th{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#5d6470;font-weight:600}
+</style>
+</helmet>
+<div style="min-height: 1220px; background: #f3f3f2; color: #17191c; font-family: Barlow, 'Segoe UI', sans-serif; font-size: 16px; line-height: 1.5">
+  <header style="border-bottom: 1px solid rgba(23,25,28,.14); background:#f3f3f2">
+    <div style="max-width: 1240px; margin: 0 auto; padding: 16px 32px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+      <a href="Main.dc.html" style="font-size: 20px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: #17191c; text-decoration: none">M365<span style="color: #3b6391">.FM</span> <span style="font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:16px;letter-spacing:.12em;color:#5d6470">Expert Connect</span></a>
+      <nav aria-label="Demo screens" style="display:flex;flex-wrap:wrap;gap:18px;align-items:center"><a href="Main.dc.html" style="text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:.1em;text-transform:uppercase;font-size:14px;color:#5d6470">For publishers</a><a href="Search.dc.html" style="text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:.1em;text-transform:uppercase;font-size:14px;color:#5d6470">Find experts</a><a href="Request.dc.html" style="text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:.1em;text-transform:uppercase;font-size:14px;color:#5d6470">Post a request</a><a href="Publisher-Inbox.dc.html" style="text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:.1em;text-transform:uppercase;font-size:14px;color:#17191c;border-bottom:2px solid #3b6391">My requests</a><a href="Calls.dc.html" style="text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:.1em;text-transform:uppercase;font-size:14px;color:#5d6470">Open calls</a><a href="Expert-Inbox.dc.html" style="text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:.1em;text-transform:uppercase;font-size:14px;color:#5d6470">Expert view</a><a href="Moderation.dc.html" style="text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:.1em;text-transform:uppercase;font-size:14px;color:#5d6470">Admin</a></nav>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center">
+        <span style="padding: 1px 10px; border: 1px dashed #9a4f0f; color: #9a4f0f; font: 600 13px/1.8 'Barlow Condensed', sans-serif; letter-spacing: .1em; text-transform: uppercase">Demo · sample data</span>
+        <span class="sm mut" style="font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:.1em;text-transform:uppercase">Contoso Media · Publisher</span>
+      </div>
+    </div>
+  </header>
+  <main style="max-width: 1240px; margin: 0 auto; padding: 36px 32px 80px; display: grid; gap: 28px">
+
+    <section style="display:flex;flex-wrap:wrap;gap:20px;align-items:end;justify-content:space-between">
+      <div style="display:grid;gap:10px"><div class="kicker" style="min-width:320px">My requests</div><h1 class="h1">Answers from experts</h1></div>
+      <a class="btn main" href="Request.dc.html">New request</a>
+    </section>
+    <section style="display:grid;grid-template-columns:360px minmax(0,1fr);gap:24px;align-items:start">
+      <div class="card" style="padding:0;gap:0"><a href="#" style="display:grid;gap:4px;padding:14px 16px;text-decoration:none;color:#17191c;border-bottom:1px solid rgba(23,25,28,.14);background:#eef2f7;border-left:3px solid #3b6391"><b>Interview: Copilot rollouts in regulated industries</b><span class="sm mut">Interview · EN · due 20 Nov</span><span class="row"><span class="tag">Open</span><span class="sm mut">6 answers</span></span></a><a href="#" style="display:grid;gap:4px;padding:14px 16px;text-decoration:none;color:#17191c;border-bottom:1px solid rgba(23,25,28,.14);"><b>Quote: Is Teams Premium worth it for SMBs?</b><span class="sm mut">Quote · DE · due 12 Nov</span><span class="row"><span class="tag g">Accepted</span><span class="sm mut">1 accepted</span></span></a><a href="#" style="display:grid;gap:4px;padding:14px 16px;text-decoration:none;color:#17191c;border-bottom:1px solid rgba(23,25,28,.14);"><b>Podcast guest: Zero Trust in practice</b><span class="sm mut">Podcast · EN · due 2 Dec</span><span class="row"><span class="tag">Open</span><span class="sm mut">2 answers</span></span></a><a href="#" style="display:grid;gap:4px;padding:14px 16px;text-decoration:none;color:#17191c;border-bottom:1px solid rgba(23,25,28,.14);"><b>Guest article: Power Platform governance</b><span class="sm mut">Guest article · EN · closed 28 Oct</span><span class="row"><span class="tag l">Closed</span><span class="sm mut">—</span></span></a></div>
+      <div style="display:grid;gap:18px">
+        <div class="card" style="gap:8px">
+          <div class="row" style="justify-content:space-between"><b class="h2">Interview: Copilot rollouts in regulated industries</b><span class="tag">Open · 16 days left</span></div>
+          <span class="mut">Sent to 23 experts · seen by 17 · 6 answers · outlet hidden until acceptance</span>
+          <div class="row"><a class="btn sm2" href="#">Edit</a><a class="btn sm2" href="#">Close request</a><a class="btn sm2" href="#">Extend deadline</a></div>
+        </div>
+        <div class="card x" style="gap:10px">
+            <div style="display:flex;gap:12px;align-items:center"><div class="av">AK</div><div style="display:grid;flex:1"><b class="h3">Anna Keller</b><span class="sm mut">Microsoft 365 Architect · Fabrikam AG</span></div>
+            <div class="row"><span class="tag g">MVP M365</span><span class="tag l">Level 5</span></div></div>
+            <p style="margin:0">I led the Copilot rollout at a Swiss private bank (2,800 seats) incl. DPIA and works council. Happy to talk about the governance model and what we measured after 90 days.</p>
+            <div class="row" style="justify-content:space-between"><span class="sm mut">Answered 2 h ago · Replies within 1 day</span>
+            <div class="row"><span class="tag g">Accepted · contact shared</span><span class="chip">anna.keller@fabrikam.example</span><span class="chip">LinkedIn</span><a class="btn sm2" href="#" title="Report">Report</a></div></div>
+          </div><div class="card x" style="gap:10px">
+            <div style="display:flex;gap:12px;align-items:center"><div class="av">PN</div><div style="display:grid;flex:1"><b class="h3">Priya Nair</b><span class="sm mut">Power Platform Consultant</span></div>
+            <div class="row"><span class="tag g">MVP Business Apps</span></div></div>
+            <p style="margin:0">I can cover the Copilot Studio side: agents on regulated data, DLP and approval flows. Two insurance projects this year, both live.</p>
+            <div class="row" style="justify-content:space-between"><span class="sm mut">Answered 5 h ago · Replies within 1 day</span>
+            <div class="row"><a class="btn sm2" href="#">Decline</a><a class="btn sm2 main" href="#">Accept</a><a class="btn sm2" href="#" title="Report">Report</a></div></div>
+          </div><div class="card x" style="gap:10px">
+            <div style="display:flex;gap:12px;align-items:center"><div class="av">DO</div><div style="display:grid;flex:1"><b class="h3">Daniel Ortiz</b><span class="sm mut">Security Lead · Northwind Traders</span></div>
+            <div class="row"><span class="tag g">MVP Security</span><span class="tag k">MCT</span></div></div>
+            <p style="margin:0">Security angle: Entra conditional access and Purview labels as the prerequisite for Copilot. Available Tue–Thu, EN or ES.</p>
+            <div class="row" style="justify-content:space-between"><span class="sm mut">Answered yesterday · Replies within 2 days</span>
+            <div class="row"><a class="btn sm2" href="#">Decline</a><a class="btn sm2 main" href="#">Accept</a><a class="btn sm2" href="#" title="Report">Report</a></div></div>
+          </div>
+        <div class="note">When you accept, the expert gets a push notification and you both see each other's preferred contact. Messages stay on the platform until then.</div>
+      </div>
+    </section>
+
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1220}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>
