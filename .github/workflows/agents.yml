@@ -5,7 +5,7 @@ on:
     paths: ["agents/**", "worker/src/**", "site_mcp.py", "tests/test_site_mcp.py", ".github/workflows/agents.yml"]
   push:
     branches: [main]
-    paths: ["agents/**", "site_mcp.py", "tests/test_site_mcp.py", ".github/workflows/agents.yml"]
+    paths: ["agents/src/**", "agents/package.json", "agents/package-lock.json", "agents/wrangler.toml", ".github/workflows/agents.yml"]
 concurrency: { group: "agents-${{ github.ref }}", cancel-in-progress: false }
 permissions:
   contents: read
@@ -48,13 +48,21 @@ jobs:
           SESSION_SIGNING_SECRET: ${{ secrets.AGENT_SESSION_SIGNING_SECRET }}
           WRANGLER_SEND_METRICS: "false"
         run: |
+          # Signier-Secret: Ein GitHub-Secret AGENT_SESSION_SIGNING_SECRET hat Vorrang. Ohne GitHub-Secret behaelt der Worker
+          # seinen Wert; beim ersten Deploy wird einmalig ein Zufallswert erzeugt (wie SESSION_SECRET im Community-Worker).
+          # Der Wert wird nie ausgegeben.
           SECRET_FILE="$(mktemp)"
           export SECRET_FILE
           trap 'rm -f "$SECRET_FILE"' EXIT
+          HAVE=$(npx wrangler secret list --format json 2>/dev/null | node -e 'let s="";process.stdin.on("data",(d)=>s+=d).on("end",()=>{try{console.log(JSON.parse(s).some((x)=>x.name==="SESSION_SIGNING_SECRET")?1:0)}catch{console.log(0)}})')
+          export HAVE
           node --input-type=module -e '
             import { writeFileSync } from "node:fs";
-            const secret = process.env.SESSION_SIGNING_SECRET;
-            if (!secret || secret.length < 32) throw new Error("GitHub-Secret AGENT_SESSION_SIGNING_SECRET fehlt oder ist zu kurz");
+            import { randomBytes } from "node:crypto";
+            let secret = process.env.SESSION_SIGNING_SECRET || "";
+            if (secret && secret.length < 32) throw new Error("GitHub-Secret AGENT_SESSION_SIGNING_SECRET ist zu kurz (mindestens 32 Zeichen)");
+            if (!secret && process.env.HAVE === "1") { console.log("SESSION_SIGNING_SECRET: vorhandener Wert bleibt"); process.exit(0); }
+            if (!secret) { secret = randomBytes(32).toString("base64url"); console.log("SESSION_SIGNING_SECRET: einmalig erzeugt"); }
             writeFileSync(process.env.SECRET_FILE, JSON.stringify({ SESSION_SIGNING_SECRET: secret }), { mode: 0o600 });
           '
-          npx wrangler deploy --secrets-file "$SECRET_FILE"
+          if [ -s "$SECRET_FILE" ]; then npx wrangler deploy --secrets-file "$SECRET_FILE"; else npx wrangler deploy; fi
