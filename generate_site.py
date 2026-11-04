@@ -1422,19 +1422,20 @@ def build():
 
     import site_podpage as PP
     _epc = {}
-    def _ep_find(e, lang="de"):
+    def _ep_find(e, lang="de", n=12):
         """Folgen zu einer Entitaet: englisch aus der Hauptshow (Titel 3 Punkte, Kernpunkte/FAQ 1 Punkt), Dub-Sprachen per Titel-/Tag-Treffer."""
         k = (e["id"], lang)
         if k not in _epc:
             if lang == "en":
-                _epc[k] = PP.find_episodes(BASE, e, LRN.ent_names(e))
+                _epc[k] = PP.find_episodes(BASE, e, LRN.ent_names(e), n=1000)
             else:
                 rx = [re.compile(r"(?<![\w-])" + re.escape(n) + r"(?![\w-])", re.I) for n in LRN.ent_names(e)]
                 _bye = {str(it["eid"]): it for it in by_lang.get(lang, [])}
                 _ext = [_bye[sid] for sid in SX.episodes_for(e["id"]) if sid in _bye]   # T27: QA-gepruefte Extraktion der Dub-Folge nennt die Entitaet
                 _hit = [it for it in by_lang.get(lang, []) if any(r.search(it["e"]["title"] + " " + (it["e"].get("tags") or "")) for r in rx)] if rx else []
-                _epc[k] = list({it["slug"]: it for it in _ext + _hit}.values())[:12]
-        return _epc[k]
+                _found = list({it["slug"]: it for it in _ext + _hit}.values())
+                _epc[k] = _found if lang == "de" else _found[:12]
+        return _epc[k][:n] if lang in ("en", "de") else _epc[k][:12]
     _yt_by_slug = {v: k for k, v in ORIG.items()}   # Hauptshow-Folge -> YouTube-Video (gleiches Video wie die Dub-Fassungen)
     def _yt_of(x):
         if x.get("lang") != "en": return x.get("vid") or ""   # Dub-Folge: ihr YouTube-Video
@@ -1475,12 +1476,16 @@ def build():
         MEM.BLOGS.setdefault(_p["handle"], set()).add(_p["lang"])
         if _p["handle"] == "mirko-p" and _p.get("html") and _p["slug"] in LBL.TOPICS: _p["topics"] = LBL.TOPICS[_p["slug"]]   # Datenbank-Fassung: Themen beim Import eingefroren, hier die aktuelle Zuordnung
     _pname = {x["handle"]: x["name"] for x in _people}
-    _pbt = {}   # Entitaet -> Blogbeitraege (neueste zuerst): jede Entitaetsseite zeigt und verlinkt ihre Artikel
-    for _p in sorted(_posts, key=lambda x: x.get("published") or 0, reverse=True):
+    for _p in _posts:
         _p.setdefault("name", _pname.get(_p["handle"], _p["handle"]))
-        for _t in _p.get("topics", []):
-            _pbt.setdefault(_t, []).append(_p)
+    import site_entity_feeds as EFEED
+    _pbt = EFEED.index_posts(_posts)
     _ctx["posts_by_topic"] = _pbt; _ctx["author_box"] = author_box
+    import site_video as VIDS
+    _videos = VIDS.fetch_videos(COMMUNITY_API)
+    _ctx["entity_feed_urls"] = EFEED.build(
+        _ctx, lambda e, l: _ep_find(e, l, 1000), _pbt, _videos, _SU.ALL, _events, EFEED.episode_audio()
+    )
     phase("Blog geladen, Folgen der Hauptshow zugeordnet")
     ENT.PERSON_LD = person_ld   # T4: eine Definition der Person Mirko Peters (Entitaetsseite nutzt denselben Knoten)
     ENT.build(_ctx, lambda lang: LRN.gloss_links(lang, BASE), MEM.experts_index(_people, _orgs), _ep_find)
@@ -1494,8 +1499,7 @@ def build():
     GST.build(_ctx, GST.fetch_listings(COMMUNITY_API), _people)
     import site_podcast as PODS
     PODS.build(_ctx, PODS.fetch_eps(COMMUNITY_API), _people, COMMUNITY_API)
-    import site_video as VIDS
-    VIDS.build(_ctx, VIDS.fetch_videos(COMMUNITY_API), _people, COMMUNITY_API)
+    VIDS.build(_ctx, _videos, _people, COMMUNITY_API)
     import site_feed as FEED
     FEED.build(_ctx, (LRN._fetch_json(f"{COMMUNITY_API}/api/feed/export") or {}).get("items", []), COMMUNITY_API)
     import site_shows as SHW

@@ -23,6 +23,8 @@ jobs:
         with: { python-version: "3.12" }
       - name: Sponsor-Rechner gegen die Testvektoren des Prototyps pruefen (T37, blockierend; Node ist auf dem Runner vorhanden)
         run: node --test tests/sponsor_calc.test.mjs
+      - name: RSS-Feeds der Entitäten prüfen
+        run: python3 -m unittest tests.test_entity_feeds
       - name: Cache fuer den Browser (fester Schluessel, einmal gefuellt)
         uses: actions/cache@v4
         with:

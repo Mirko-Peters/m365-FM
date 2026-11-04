@@ -13,6 +13,7 @@ const HASHED = /^\/assets\/(site\.[0-9a-f]{8,}\.css|(page|a11y)\.[0-9a-f]{8,}\.j
 // Sprachseiten aus R2 ebenfalls 4 h im Kanten-Cache (Cache API, Schluessel /__r2c/<pfad>/, Purge nach dem Upload), Browser fragt bei HTML immer nach (304 per ETag/Last-Modified)
 const EDGE_HTML = 14400, R2_TTL = 14400, R2_MISS_TTL = 600;
 const HTML_CC = "public, max-age=0, s-maxage=600, stale-while-revalidate=86400";
+const FEED_CC = "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400";
 const r2Path = (p) => (p.endsWith("/") ? p : p + "/");
 
 function notModified(request, etag, lastMod) {
@@ -80,7 +81,7 @@ export default {
     }
     { const mp = /^(\/[a-z]{2})?\/community\/u\/mirko-peters(\/.*)?$/.exec(url.pathname); if (mp) return Response.redirect(url.origin + (mp[1] || "") + "/community/u/mirko-p" + (mp[2] || "/") + url.search, 301); }   // alter Name des Blog-Profils
     if (/^\/(pa|hi|ml|ta|te)(\/|$)/.test(url.pathname)) return Response.redirect(url.origin + "/", 301);   // diese Sprachen gibt es nicht mehr (Punjabi, Hindi, Malayalam, Tamil, Telugu)
-    const p = url.pathname, isImg = IMG.test(p), isStatic = STATIC.test(p) || FONT.test(p);
+    const p = url.pathname, isImg = IMG.test(p), isStatic = STATIC.test(p) || FONT.test(p), isFeed = /\/feed\.xml$/i.test(p), isOpml = /\.opml$/i.test(p);
     if (p.startsWith("/__r2c/")) return new Response("Not found", { status: 404 });   // interner Cache-Schluessel, keine oeffentliche Adresse
     const cf = isImg ? { cacheEverything: true, cacheTtl: 604800, polish: "lossy", mirage: true }
       : isStatic ? { cacheEverything: true, cacheTtl: 86400 }
@@ -108,7 +109,9 @@ export default {
     for (const [k, v] of Object.entries(SEC)) h.set(k, v);
     // T41: Schriften aendern sich unter gleichem Namen nicht (1 Jahr), Bilder 1 Tag, Skripte/Stile 1 h und danach im Hintergrund pruefen
     h.set("cache-control", HASHED.test(p) || FONT.test(p) ? "public, max-age=31536000, immutable" : isImg ? "public, max-age=86400, stale-while-revalidate=604800"
-      : isStatic ? "public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400" : HTML_CC);
+      : isStatic ? "public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400" : isFeed || isOpml ? FEED_CC : HTML_CC);
+    if (isFeed) h.set("content-type", "application/rss+xml; charset=utf-8");
+    if (isOpml) h.set("content-type", "text/x-opml; charset=utf-8");
     if (NOINDEX.test(p)) h.set("x-robots-tag", "noindex");
     if (isImg) h.set("vary", "accept");
     if (p === "/") h.set("link", '</.well-known/api-catalog>; rel="api-catalog", </openapi.json>; rel="service-desc"; type="application/vnd.oai.openapi+json", </llms.txt>; rel="service-doc"; type="text/plain", </.well-known/agent.json>; rel="describedby"; type="application/json"');   // RFC 8288 / 9727: Startseite verweist auf maschinenlesbare Ressourcen

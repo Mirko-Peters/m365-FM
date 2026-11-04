@@ -12,6 +12,8 @@ globalThis.fetch = async (req) => {
   if (u.pathname === "/") { if (inm === 'W/"abc"' || (!inm && ims && Date.parse(ims) >= Date.parse(LM))) return new Response(null, { status: 304, headers: { etag: '"abc"', "last-modified": LM } }); return new Response("<html><body>gh</body></html>", { headers: { "content-type": "text/html; charset=utf-8", etag: '"abc"', "last-modified": LM } }); }
   if (u.pathname === "/nolm/") { if (ims && Date.parse(ims) >= Date.parse(LM)) return new Response(null, { status: 304 }); return new Response("<html>x</html>", { headers: { "content-type": "text/html; charset=utf-8", "last-modified": LM } }); }
   if (u.pathname === "/feed.json") { if (ims) return new Response(null, { status: 304, headers: { "last-modified": LM } }); return new Response("{}", { headers: { "content-type": "application/json", etag: '"j1"', "last-modified": LM } }); }
+  if (u.pathname === "/entity/a/feed.xml") return new Response("<rss/>", { headers: { "content-type": "application/xml" } });
+  if (u.pathname === "/entity/feeds.opml") return new Response("<opml/>", { headers: { "content-type": "application/xml" } });
   if (u.pathname === "/rng/") { if (r.headers.get("range")) return new Response("<html><b", { status: 206, headers: { "content-type": "text/html", "content-range": "bytes 0-8/30" } }); return new Response("<html><body>full</body></html>", { headers: { "content-type": "text/html" } }); }
   if (u.pathname === "/assets/a.css") return new Response("a{}", { headers: { "content-type": "text/css", etag: 'W/"css1"' } });
   return new Response("404", { status: 404, headers: { "content-type": "text/html" } });
@@ -84,6 +86,12 @@ test("Range auf HTML: ganze Seite statt 206; Dateien (JSON) und Assets unveraend
   const g = await run(req("/rng/", "DE", { range: "bytes=0-8" })); assert.equal(g.status, 200); assert.equal(await g.text(), "<html><body>full</body></html>");
   const j = await run(req("/feed.json", "DE")); assert.equal(j.headers.get("etag"), '"j1"'); assert.equal(j.headers.get("last-modified"), LM); assert.equal(j.headers.get("x-m365-cr"), null);
   const j2 = await run(req("/feed.json", "DE", { "if-modified-since": LM })); assert.equal(j2.status, 304); assert.equal(lastOrigin.headers.get("if-modified-since"), LM);
+});
+test("RSS und OPML bekommen Feed-MIME-Typen und Cache-Header", async () => {
+  const rss = await run(req("/entity/a/feed.xml", "US")); assert.equal(rss.headers.get("content-type"), "application/rss+xml; charset=utf-8");
+  assert.equal(rss.headers.get("cache-control"), "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400");
+  const opml = await run(req("/entity/feeds.opml", "US")); assert.equal(opml.headers.get("content-type"), "text/x-opml; charset=utf-8");
+  assert.equal(opml.headers.get("cache-control"), "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400");
 });
 test("HEAD ohne Body; Assets und 404 unveraendert", async () => {
   const h = await run(req("/", "US", {}, "HEAD")); assert.equal(h.status, 200); assert.equal(h.body, null); assert.equal(h.headers.get("x-m365-cr"), "0");
