@@ -25,8 +25,9 @@ CREATE INDEX IF NOT EXISTS idx_expert_request_reply_user ON expert_request_repli
 CREATE TABLE IF NOT EXISTS expert_request_reports (
   request_id INTEGER NOT NULL,
   user_id INTEGER NOT NULL,
+  reply_id INTEGER NOT NULL DEFAULT 0,
   reason TEXT NOT NULL DEFAULT '',
   created INTEGER NOT NULL,
-  PRIMARY KEY (request_id, user_id)
+  PRIMARY KEY (request_id, user_id, reply_id)
 );
 CREATE INDEX IF NOT EXISTS idx_expert_request_report_request ON expert_request_reports(request_id, created);

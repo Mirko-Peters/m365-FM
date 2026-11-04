@@ -62,13 +62,20 @@ test("expert requests: private matching, age/week limits, replies, reports, and 
 
   assert.equal((await call("/api/expert-requests/respond", { id: 2 }, "POST", { id: created.data.id, body: "I can discuss Azure identity governance." })).data.ok, true);
   assert.equal((await call("/api/expert-requests/respond", { id: 2 }, "POST", { id: created.data.id, body: "A second response." })).status, 409);
+  const firstReplyId = raw.prepare("SELECT id FROM expert_request_replies WHERE request_id=? AND user_id=2").get(created.data.id).id;
+  assert.equal((await call("/api/expert-requests/report", { id: 1 }, "POST", { reply_id: firstReplyId, reason: "unpassend" })).data.ok, true, "Publisher darf Antworten auf die eigene Anfrage melden");
+  assert.equal((await call("/api/expert-requests/report", { id: 2 }, "POST", { reply_id: firstReplyId })).status, 404, "Antworten dürfen nur von Eigentümern der Anfrage gemeldet werden");
   const extra = raw.prepare("INSERT INTO expert_requests(user_id,title,description,topics,format,lang,deadline,created) VALUES(5,?,?,?,?,?,?,?)");
   const extraIds = [];
   for (let i = 0; i < 10; i++) extraIds.push(Number(extra.run(`Request ${i}`, data.description, '["azure"]', data.format, data.lang, data.deadline, t).lastInsertRowid));
   for (const id of extraIds.slice(0, 9)) assert.equal((await call("/api/expert-requests/respond", { id: 2 }, "POST", { id, body: "I can help with Azure identity governance." })).status, 200);
   assert.equal((await call("/api/expert-requests/respond", { id: 2 }, "POST", { id: extraIds[9], body: "I can help with Azure identity governance." })).data.error, "daily_limit");
   assert.equal((await call("/api/expert-requests/report", { id: 2 }, "POST", { id: created.data.id, reason: "irrelevant" })).data.ok, true);
-  assert.equal((await call("/api/admin/expert-requests/reports", { id: 9, admin: true })).data.reports.length, 1);
+  const reports = await call("/api/admin/expert-requests/reports", { id: 9, admin: true });
+  assert.equal(reports.data.reports.length, 2);
+  assert.equal(reports.data.reports.find((r) => r.reply_id === firstReplyId).publisher_id, 1);
+  assert.equal(reports.data.reports.find((r) => r.reply_id === firstReplyId).publisher_name, "Publisher");
+  assert.equal(reports.data.reports.find((r) => r.reply_id === firstReplyId).reply_body, "I can discuss Azure identity governance.");
   const replyId = raw.prepare("SELECT id FROM expert_request_replies WHERE request_id=? AND user_id=2").get(created.data.id).id;
   assert.equal((await call("/api/expert-requests/block", { id: 1 }, "POST", { reply_id: replyId })).data.ok, true);
   assert.equal((await call("/api/expert-requests/block", { id: 1 }, "DELETE", { reply_id: replyId })).data.ok, true);
@@ -79,5 +86,8 @@ test("expert requests: private matching, age/week limits, replies, reports, and 
   const mine = await call("/api/expert-requests/matches", { id: 1 });
   assert.equal(mine.data.requests.length, 5);
   assert.equal(mine.data.requests.reduce((n, r) => n + r.replies.length, 0), 1);
+  assert.equal((await call("/api/admin/expert-requests/close", { id: 9, admin: true }, "POST", { id: created.data.id })).data.ok, true);
+  assert.equal(raw.prepare("SELECT status FROM expert_requests WHERE id=?").get(created.data.id).status, "closed");
+  assert.equal(raw.prepare("SELECT action FROM audit WHERE target=?").get(String(created.data.id)).action, "expert_request_close");
   raw.close();
 });

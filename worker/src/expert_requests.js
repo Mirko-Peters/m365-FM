@@ -1,4 +1,4 @@
-import { cleanText, isLang, rateLimit } from "./util.js";
+import { audit, cleanText, isLang, rateLimit } from "./util.js";
 import { baseIds } from "./entities.js";
 import { sendPush } from "./push.js";
 
@@ -88,9 +88,22 @@ export async function handleExpertRequests(env, request, path, user, J) {
   const db = env.DB, method = request.method, body = async () => request.json().catch(() => ({}));
   if (path === "/api/admin/expert-requests/reports" && method === "GET") {
     if (!user?.admin) return J({ error: user ? "forbidden" : "login" }, user ? 403 : 401);
-    const reports = (await db.prepare(`SELECT r.request_id,r.user_id,r.reason,r.created,e.title,e.description,e.status
-      FROM expert_request_reports r JOIN expert_requests e ON e.id=r.request_id ORDER BY r.created DESC LIMIT 100`).all()).results || [];
+    const reports = (await db.prepare(`SELECT r.request_id,r.user_id reporter_id,r.reply_id,r.reason,r.created,e.title,e.description,e.status,
+      e.user_id publisher_id,p.name publisher_name,x.body reply_body,x.user_id expert_id,ex.name expert_name
+      FROM expert_request_reports r JOIN expert_requests e ON e.id=r.request_id JOIN users p ON p.id=e.user_id
+      LEFT JOIN expert_request_replies x ON x.id=r.reply_id AND x.request_id=r.request_id
+      LEFT JOIN users ex ON ex.id=x.user_id
+      WHERE e.status='open' ORDER BY r.created DESC LIMIT 100`).all()).results || [];
     return J({ reports });
+  }
+  if (path === "/api/admin/expert-requests/close" && method === "POST") {
+    if (!user?.admin) return J({ error: user ? "forbidden" : "login" }, user ? 403 : 401);
+    const b = await body(), id = Number(b.id);
+    if (!Number.isSafeInteger(id) || id < 1) return J({ error: "not_found" }, 404);
+    const result = await db.prepare("UPDATE expert_requests SET status='closed' WHERE id=? AND status='open'").bind(id).run();
+    if (!result.meta.changes) return J({ error: "not_found" }, 404);
+    await audit(db, user.id, "expert_request_close", String(id));
+    return J({ ok: true });
   }
   if (!user) return J({ error: "login" }, 401);
   if (path === "/api/expert-requests/list" && method === "GET") {
@@ -158,10 +171,20 @@ export async function handleExpertRequests(env, request, path, user, J) {
     return J({ ok: true });
   }
   if (path === "/api/expert-requests/report" && method === "POST") {
-    const b = await body(), id = Number(b.id), item = Number.isSafeInteger(id) && id > 0 ? await db.prepare("SELECT * FROM expert_requests WHERE id=? AND status='open'").bind(id).first() : null;
-    if (!item || !requestMatches(await profileRows(db, user.id), item) || await blocked(db, user.id, item.user_id)) return J({ error: "not_found" }, 404);
+    const b = await body(), id = Number(b.id), replyId = Number(b.reply_id);
+    let item, reportReplyId = 0;
+    if (Number.isSafeInteger(replyId) && replyId > 0) {
+      item = await db.prepare(`SELECT r.* FROM expert_request_replies x JOIN expert_requests r ON r.id=x.request_id
+        WHERE x.id=? AND r.user_id=?`).bind(replyId, user.id).first();
+      if (!item) return J({ error: "not_found" }, 404);
+      reportReplyId = replyId;
+    } else {
+      item = Number.isSafeInteger(id) && id > 0 ? await db.prepare("SELECT * FROM expert_requests WHERE id=? AND status='open'").bind(id).first() : null;
+      if (!item || !requestMatches(await profileRows(db, user.id), item) || await blocked(db, user.id, item.user_id)) return J({ error: "not_found" }, 404);
+    }
     if (!(await rateLimit(db, `expert_report:${user.id}`, 5, 86400))) return J({ error: "rate_limit" }, 429);
-    await db.prepare("INSERT OR IGNORE INTO expert_request_reports(request_id,user_id,reason,created) VALUES(?,?,?,?)").bind(id, user.id, text(b.reason, 300), now()).run();
+    await db.prepare("INSERT OR IGNORE INTO expert_request_reports(request_id,user_id,reply_id,reason,created) VALUES(?,?,?,?,?)")
+      .bind(item.id, user.id, reportReplyId, text(b.reason, 300), now()).run();
     return J({ ok: true });
   }
   if (path === "/api/expert-requests/block" && (method === "POST" || method === "DELETE")) {

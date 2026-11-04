@@ -297,7 +297,7 @@ async function api(env, request, url, path, asUser) {
   if (path.startsWith("/api/ai-token")) { const k = await handleTokens(env, request, url, path, user, J); if (k) return k; }
   if (path === "/api/admin/demo") { const q = await handleDemo(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/guests/")) { const q = await handleGuests(env, request, url, path, user, J); if (q) return q; }
-  if (path.startsWith("/api/expert-requests/") || path === "/api/admin/expert-requests/reports") {
+  if (path.startsWith("/api/expert-requests/") || path.startsWith("/api/admin/expert-requests/")) {
     const q = await handleExpertRequests(env, request, path, user, J); if (q) return q;
   }
   if (path.startsWith("/api/video/") || path.startsWith("/api/admin/video")) { const q = await handleVideo(env, request, url, path, user, J); if (q) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return q; } }

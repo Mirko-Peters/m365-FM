@@ -7,6 +7,7 @@ import { readFileSync, readdirSync } from "node:fs";
 import vm from "node:vm";
 import { handleSponsor, sponsorPackageDetails } from "../src/sponsor.js";
 import { handleAdminPanel } from "../src/adminpanel.js";
+import { handleExpertRequests } from "../src/expert_requests.js";
 
 const ADMIN_JS = readFileSync(new URL("../../assets/admin.js", import.meta.url), "utf8");
 const J = (data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "content-type": "application/json" } });
@@ -119,7 +120,10 @@ async function bootAdmin(env, hash) {
   const { root, document } = fakeDom(), calls = [], location = { hash };
   const fetch = async (url, o = {}) => {   // admin.js -> echte Handler
     const u = new URL(url); calls.push({ path: u.pathname + u.search, method: o.method || "GET", body: o.body, headers: o.headers || {}, credentials: o.credentials });
-    const res = await handleAdminPanel(env, new Request(u, { method: o.method || "GET", headers: o.headers, body: o.body }), u, u.pathname, { id: 1, admin: true }, J);
+    const req = new Request(u, { method: o.method || "GET", headers: o.headers, body: o.body });
+    const res = u.pathname.startsWith("/api/admin/expert-requests/")
+      ? await handleExpertRequests(env, req, u.pathname, { id: 1, admin: true }, J)
+      : await handleAdminPanel(env, req, u, u.pathname, { id: 1, admin: true }, J);
     return res || J({ error: "not_found" }, 404);
   };
   const ctx = vm.createContext({ window: { M365ADM: { api: "https://api.test", base: "" }, confirm: () => true, prompt: () => "" }, document, location, fetch, setTimeout });
@@ -275,6 +279,26 @@ test("sponsor admin: Uebersicht zaehlt neue Sponsor-Anfragen und fuehrt zum Reit
   root.all("a").find((a) => a.getAttribute("href") === "#sponsor").fire("click");
   await until(() => pane(root)?.querySelector("tbody tr"), "Reiter Sponsor-Anfragen");
   assert.equal(location.hash, "sponsor"); assert.equal(pane(root).hidden, false);
+  raw.close();
+}));
+
+test("admin: Publisher-Anfragen-Meldungen zeigen Publisher und Antwort, Schliessen wird protokolliert", () => withoutNet(async () => {
+  const { raw, env } = await setup(), t = Math.floor(Date.now() / 1000);
+  raw.prepare("INSERT INTO users(id,provider,sub,name,created) VALUES(2,'dev','publisher','Publisher Name',?)").run(t - 86400);
+  const requestId = Number(raw.prepare("INSERT INTO expert_requests(user_id,title,description,topics,format,lang,deadline,created) VALUES(2,'Anfrage zum Thema','Beschreibung mit genügend Zeichen für einen Test.','[\"azure\"]','interview','de','2099-01-01',?)").run(t).lastInsertRowid);
+  const replyId = Number(raw.prepare("INSERT INTO expert_request_replies(request_id,user_id,body,created) VALUES(?,1,'Gemeldete Antwort',?)").run(requestId, t).lastInsertRowid);
+  raw.prepare("INSERT INTO expert_request_reports(request_id,user_id,reply_id,reason,created) VALUES(?,1,?,'Bitte prüfen',?)").run(requestId, replyId, t);
+
+  const overview = await handleAdminPanel(env, new Request("https://api.test/api/admin/panel/overview"), new URL("https://api.test/api/admin/panel/overview"), "/api/admin/panel/overview", { id: 1, admin: true }, J);
+  assert.equal((await overview.json()).queues.expert_request_reports, 1);
+  const { root } = await bootAdmin(env, "#fr");
+  await until(() => root.all("h3").some((x) => x.textContent === "Gemeldete Publisher-Anfragen (1)"), "Publisher-Meldungen");
+  const item = root.all("li").find((x) => x.textContent.includes("Publisher Name"));
+  assert.match(item.textContent, /Publisher Name \(#2\)/);
+  assert.match(item.textContent, /Gemeldete Antwort \(.+\): Gemeldete Antwort/);
+  root.all("button").find((x) => x.textContent === "Anfrage schließen").fire("click");
+  await until(() => raw.prepare("SELECT status FROM expert_requests WHERE id=?").get(requestId).status === "closed", "Anfrage geschlossen");
+  assert.equal(raw.prepare("SELECT action FROM audit WHERE target=?").get(String(requestId)).action, "expert_request_close");
   raw.close();
 }));
 
