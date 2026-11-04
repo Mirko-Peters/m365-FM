@@ -176,6 +176,7 @@ export default {
       }
     }
     const res = await fetch(url.search ? new Request(url.origin + p, rq) : rq, { cf });
+    if (res.status === 404 && /^\/og\/.+\.png$/i.test(p)) return Response.redirect("https://img.m365.fm" + p, 301);   // Teilen-Bilder liegen im R2-Bucket (img.m365.fm/og/...): frueher geteilte Adressen bleiben gueltig; solange GitHub Pages das Bild noch hat, kommt es von dort
     // Seiten aus dem R2-Bucket (Paket 20): uebersetzte Seiten (Blog-Sprachfassungen, Sprachfassungen der Folgen) liegen unter pages/<pfad>/index.html im Bucket statt in GitHub Pages - gleiche Adressen, indexierbar
     if (res.status === 404 && env.MIGRATED === "1" && /^(\/[a-z]{2})?\/show\/episodes\/[a-z0-9-]+\/?$/.test(p)) {   // T12: umbenannte Folge (show/redirects.json), vor dem R2-Rueckfall mit der alten Seite
       const to = (await redirectMap())[p.replace(/\/+$/, "")];

@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
 """Erzeugt pro Seite ein Teilen-Bild (Open Graph, 1200x630 PNG) aus docs/og-manifest.json mit Chromium (Playwright).
-Schlägt etwas fehl, wird das Standardbild kopiert, damit og:image nie ins Leere zeigt."""
-import hashlib, html, json, shutil
+Schlägt etwas fehl, wird das Standardbild kopiert, damit og:image nie ins Leere zeigt.
+Ablage: r2img/og/<pfad>.png (OG_OUT), nicht in docs/ - tools/r2_og_upload.py lädt sie in den R2-Bucket, ausgeliefert über
+https://img.m365.fm/og/<pfad>.png (generate_site.py OG_BASE). So bleibt GitHub Pages unter dem 1-GB-Limit (CLAUDE.md: Bilder nur über img.m365.fm)."""
+import hashlib, html, json, os, shutil
 from pathlib import Path
 
 ROOT = Path(__file__).parent
 DOCS = ROOT / "docs"
+OUT = ROOT / os.environ.get("OG_OUT", "r2img")   # Zielordner der Bilder (Schluessel im Bucket = Pfad darunter, z. B. og/entity/teams.png)
 NAMES = {"de": "Deutsch", "es": "Español", "fr": "Français", "it": "Italiano", "pt": "Português", "nl": "Nederlands", "pl": "Polski", "id": "Bahasa Indonesia",
          "ru": "Русский", "uk": "Українська", "ar": "العربية", "he": "עברית", "ja": "日本語", "ko": "한국어", "en": "International"}
 RTL = {"ar", "he"}
@@ -66,7 +69,7 @@ def main():
     key = lambda it: hashlib.sha1(json.dumps([it, CARD_VERSION], sort_keys=True, ensure_ascii=False).encode()).hexdigest()
     todo = []
     for it in items:
-        out = DOCS / it["path"]; hit = cache / (key(it) + ".png")
+        out = OUT / it["path"]; hit = cache / (key(it) + ".png")
         out.parent.mkdir(parents=True, exist_ok=True)
         if hit.exists():
             shutil.copy(hit, out); reused += 1
@@ -85,7 +88,7 @@ def main():
             br = pw.chromium.launch()
             pg = br.new_page(viewport={"width": 1200, "height": 630})
             for it in todo:
-                out = DOCS / it["path"]
+                out = OUT / it["path"]
                 try:
                     pg.set_content(card(it))
                     pg.screenshot(path=str(out))
@@ -99,7 +102,7 @@ def main():
     except Exception as e:
         print("Playwright nicht verfügbar:", str(e)[:120])
     for it in items:  # Fallback
-        out = DOCS / it["path"]
+        out = OUT / it["path"]
         if not out.exists() and default.exists():
             out.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy(default, out)
