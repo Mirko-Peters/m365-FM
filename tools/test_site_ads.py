@@ -23,6 +23,9 @@ BODY = ('<header><nav>Navigation</nav></header><main class="wrap"><article>'
         '<h2>Abschnitt eins</h2><p>Text</p><h2>Abschnitt zwei</h2><p>Text</p>'
         '<h2>Abschnitt drei</h2><p>Text</p></article></main><footer>Footer</footer>')
 DUB_BODY = BODY.replace(
+    '<h1>Folgentitel</h1>',
+    '<h1>Folgentitel</h1><p class="sub">Untertitel</p>',
+).replace(
     '<h2>Abschnitt eins</h2>',
     '<div class="panel"><iframe src="https://widget.spreaker.com/player?episode_id=123"></iframe></div><h2>Abschnitt eins</h2>',
 )
@@ -45,7 +48,8 @@ class AdsTests(unittest.TestCase):
         self.assertEqual(result.count('class="ad ad-top"'), 1)
 
     def test_dub_episode_url_is_recognized_without_matching_other_pages(self):
-        self.assertIn('class="ad ad-top"', self.inject("/de/dubfolge/", DUB_BODY))
+        result = self.inject("/de/dubfolge/", DUB_BODY)
+        self.assertGreater(result.index('class="ad ad-top"'), result.index("</p>", result.index('class="lede"')))
         self.assertNotIn('class="ad ad-top"', self.inject("/de/article-slug/"))
 
     def test_custom_top_slot_and_sidebar_boundary(self):

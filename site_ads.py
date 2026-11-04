@@ -140,7 +140,9 @@ def inject(base, body, lang, canonical, noindex=False):
             if a >= 0 and z > a:
                 region = body[a:z]
                 h1 = re.search(r"<h1\b[^>]*>.*?</h1>", region, re.I | re.S)
-                intro = re.search(r"<p\b[^>]*>.*?</p>", region[h1.end():], re.I | re.S) if h1 else None
+                tail = region[h1.end():] if h1 else ""
+                intro = re.search(r"<p\b(?=[^>]*\bclass=[\"'][^\"']*\bled[e]\b[^\"']*[\"'])[^>]*>.*?</p>", tail, re.I | re.S)
+                intro = intro or re.search(r"<p\b[^>]*>.*?</p>", tail, re.I | re.S)
                 if intro:
                     pos = a + h1.end() + intro.end()
                     body = body[:pos] + _top_block(lang, slot, pub, base) + body[pos:]
