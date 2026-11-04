@@ -85,6 +85,14 @@ test("Range auf HTML: ganze Seite statt 206; Dateien (JSON) und Assets unveraend
   const j = await run(req("/feed.json", "DE")); assert.equal(j.headers.get("etag"), '"j1"'); assert.equal(j.headers.get("last-modified"), LM); assert.equal(j.headers.get("x-m365-cr"), null);
   const j2 = await run(req("/feed.json", "DE", { "if-modified-since": LM })); assert.equal(j2.status, 304); assert.equal(lastOrigin.headers.get("if-modified-since"), LM);
 });
+test("Maschinelle JSON-Exporte erhalten noindex; oeffentliche JSON-Dateien, Feeds und HTML bleiben ausgenommen", async () => {
+  for (const p of ["/articles.json", "/topics.json", "/translation-status.json", "/hub-more.json", "/search/manifest.json"]) {
+    const r = await run(req(p, "US")); assert.equal(r.headers.get("x-robots-tag"), "noindex", p);
+  }
+  for (const p of ["/agent.json", "/episodes.json", "/openapi.json", "/.well-known/agent.json", "/llms.txt", "/feed.xml", "/de/entity/example/"]) {
+    const r = await run(req(p, "US")); assert.equal(r.headers.get("x-robots-tag"), null, p);
+  }
+});
 test("HEAD ohne Body; Assets und 404 unveraendert", async () => {
   const h = await run(req("/", "US", {}, "HEAD")); assert.equal(h.status, 200); assert.equal(h.body, null); assert.equal(h.headers.get("x-m365-cr"), "0");
   const a = await run(req("/assets/a.css", "DE")); assert.equal(a.headers.get("etag"), 'W/"css1"'); assert.equal(a.headers.get("x-m365-cr"), null); assert.match(a.headers.get("cache-control"), /max-age=3600/);
