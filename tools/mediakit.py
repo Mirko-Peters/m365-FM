@@ -195,7 +195,8 @@ def rows_for(lang, D):
               (k["yt_subs_new"], fmt(lang, y["subs_gained28"]), s["yt"], t["d28"])]
     if "subscribers" in y: R.append((k["yt_subs"], fmt(lang, y["subscribers"]), s["yt"], t["total"]))
     if "visitors_day" in c:
-        R += [(k["visitors"], fmt(lang, c["visitors_day"]), s["cf"], t["d30"]), (k["pv"], fmt(lang, c["pageviews30"]), s["cf"], t["d30"])]
+        # Besucher (unique IPs) der Rand-Statistik schwanken stark durch Bots - nur Seitenaufrufe, klar als ungefiltert gekennzeichnet
+        R += [(k["pv"], fmt(lang, c["pageviews30"]), s["cf"], t["d30"])]
     if "spreaker7" in l: R.append((k["sp"], fmt(lang, l["spreaker7"]), s["sp"], l.get("spreaker_period") or t["d7"]))
     if "ai_citations" in l: R.append((k["ai"], fmt(lang, l["ai_citations"]), s["ai"], l.get("ai_period", "")))
     if b.get("impressions28"):
