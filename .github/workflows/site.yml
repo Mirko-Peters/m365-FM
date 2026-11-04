@@ -2,7 +2,7 @@ name: Website bauen und veröffentlichen
 on:
   push:
     branches: [main]
-    paths: ["episodes/**", "data/**", "domain.txt", "sync_platforms.py", "sync_live.py", "site_live.py", "tools/build_speakers.py", "platform_match.py", "show_notes.py", "sync_show_notes.py", "generate_og.py", "site_*.py", "site_taxonomy.py", "check_links.py", "check_schema.py", "assets/**", "generate_articles.py", "scrape_spotify.py", "fetch_en_episodes.py", "fetch_en_titles.py", "fetch_reviews.py", "generate_site.py", "translate_blog.py", "generate_covers.py", "sync_spreaker.py", "spreaker_auth.py", "site_cover.py", "site_design.py", "site_money.py", "site_legal.py", "shows_seo.json", ".github/workflows/site.yml", "check_*.py", "shownotes/site/**", "shownotes/QA.txt", "tests/sponsor_*", "tools/sponsor_ssr.mjs"]
+    paths: ["episodes/**", "data/**", "domain.txt", "sync_platforms.py", "sync_live.py", "site_live.py", "tools/build_speakers.py", "platform_match.py", "show_notes.py", "sync_show_notes.py", "generate_og.py", "generate_service_images.py", "site_*.py", "site_taxonomy.py", "check_links.py", "check_schema.py", "assets/**", "generate_articles.py", "scrape_spotify.py", "fetch_en_episodes.py", "fetch_en_titles.py", "fetch_reviews.py", "generate_site.py", "translate_blog.py", "generate_covers.py", "sync_spreaker.py", "spreaker_auth.py", "site_cover.py", "site_design.py", "site_money.py", "site_legal.py", "shows_seo.json", ".github/workflows/site.yml", "check_*.py", "shownotes/site/**", "shownotes/QA.txt", "tests/sponsor_*", "tools/sponsor_ssr.mjs"]
   schedule:
     - cron: "17 5 * * *"
   workflow_dispatch:
@@ -225,7 +225,13 @@ jobs:
       # Alte Adressen www.m365.fm/og/... leitet der Site-Worker per 301 auf img.m365.fm weiter. Nichts wird geloescht.
       - name: Teilen-Bilder - Ersatzbild fuer jede Seite ohne Bild
         run: python generate_og.py --fallback-only
-      - name: Teilen-Bilder in den R2-Bucket laden (img.m365.fm/og/; nur main, blockierend; nichts wird geloescht)
+      # Illustrationen der Service-Landingpages (site_landing.py): Pillow, deterministisch, wenige Sekunden. Blockierend, weil die Seiten
+      # https://img.m365.fm/services/... verlinken: ohne Bilder kein Upload und kein Deploy (wie bei den Teilen-Bildern).
+      - name: Service-Bilder erzeugen (r2img/services/, WebP + PNG)
+        run: |
+          pip install -q pillow
+          python generate_service_images.py r2img
+      - name: Teilen- und Service-Bilder in den R2-Bucket laden (img.m365.fm/og/ und /services/; nur main, blockierend; nichts wird geloescht)
         if: github.ref == 'refs/heads/main'
         env:
           OG_REQUIRED: "1"
