@@ -82,6 +82,7 @@ test("external events: wiederholter Import, redaktionelle Freigabe und Quellen-V
     const edited = await handleEvents(env, edit, new URL(edit.url), `/api/event/ext-${item.fp}/session`, { id: 1, admin: true }, json);
     assert.equal(edited.status, 200);
     assert.equal(raw.prepare("SELECT start FROM event_sessions WHERE id=?").get(speakerSession.id).start, "2027-03-10T10:30");
+    assert.equal(raw.prepare("SELECT ext_key FROM event_sessions WHERE id=?").get(speakerSession.id).ext_key, item.sessions[0].ext_key);
     const preserved = JSON.parse(raw.prepare("SELECT speakers FROM event_sessions WHERE id=?").get(speakerSession.id).speakers)[0];
     assert.deepEqual(preserved.links, ["https://example.org/profile"]);
     assert.equal(preserved.hidden, true);
@@ -228,8 +229,16 @@ test("Community-Days-Updates protokollieren Änderungen, bewahren manuelle Felde
     const imported = raw.prepare("SELECT locked_fields,changes FROM event_import WHERE fp=?").get(item.fp);
     assert.ok(JSON.parse(imported.locked_fields).includes("location"));
     assert.ok(JSON.parse(imported.changes).some((entry) => entry.fields.includes("start")));
-    const updatedSession = raw.prepare("SELECT id,start,status FROM event_sessions WHERE event_id=?").get(event.id);
-    assert.deepEqual([updatedSession.id, updatedSession.start, updatedSession.status], [session.id, "2027-03-11T10:00", "live"]);
+    const matchedSession = raw.prepare("SELECT id,start,status FROM event_sessions WHERE event_id=?").get(event.id);
+    assert.deepEqual([matchedSession.id, matchedSession.start, matchedSession.status], [session.id, "2027-03-11T10:00", "live"]);
+
+    const removeSession = new Request(`https://api.example/api/event/ext-${item.fp}/session/${session.id}`, { method: "DELETE" });
+    const removed = await handleEvents(env, removeSession, new URL(removeSession.url), `/api/event/ext-${item.fp}/session/${session.id}`, { id: 1, admin: true }, json);
+    assert.equal(removed.status, 200);
+    items = [{ ...updated, hash: "22222222222222222222222222222222" }];
+    await importExternalEvents(env);
+    assert.equal(raw.prepare("SELECT COUNT(*) n FROM event_sessions WHERE event_id=?").get(event.id).n, 1);
+    assert.equal(raw.prepare("SELECT status FROM event_sessions WHERE id=?").get(session.id).status, "gone");
 
     items = [{ ...updated, gone: true, hash: "abcdef0123456789abcdef0123456789" }];
     await importExternalEvents(env);
@@ -237,7 +246,7 @@ test("Community-Days-Updates protokollieren Änderungen, bewahren manuelle Felde
     assert.deepEqual(gone.status, "gone");
     assert.ok(gone.gone_at > 0);
     assert.equal(raw.prepare("SELECT COUNT(*) n FROM events WHERE id=?").get(event.id).n, 1);
-    assert.equal(raw.prepare("SELECT COUNT(*) n FROM event_sessions WHERE event_id=? AND status='gone'").get(event.id).n, 2);
+    assert.equal(raw.prepare("SELECT COUNT(*) n FROM event_sessions WHERE event_id=? AND status='gone'").get(event.id).n, 1);
     const exported = await handleEvents(env, new Request("https://api.example/api/events/export"),
       new URL("https://api.example/api/events/export"), "/api/events/export", null, json);
     const eventView = (await exported.json()).events.find((entry) => entry.handle === `ext-${item.fp}`);

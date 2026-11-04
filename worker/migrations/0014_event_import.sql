@@ -25,7 +25,6 @@ CREATE TABLE IF NOT EXISTS event_source (
 );
 CREATE INDEX IF NOT EXISTS idx_event_source_fp ON event_source(fp);
 CREATE INDEX IF NOT EXISTS idx_event_import_event ON event_import(event_id, last_seen);
-ALTER TABLE event_sessions ADD COLUMN ext_key TEXT NOT NULL DEFAULT '';
 CREATE TABLE IF NOT EXISTS event_speaker_block (
   name_norm TEXT NOT NULL,
   event_fp TEXT NOT NULL DEFAULT '',

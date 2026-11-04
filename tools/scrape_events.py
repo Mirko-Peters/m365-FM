@@ -468,6 +468,14 @@ def retain_previous(previous, current, now=None):
         fp = old.get("fp")
         if not fp:
             continue
+        old_ids = {(source.get("source"), source.get("ext_id")) for source in old.get("sources", [])
+                   if source.get("source") and source.get("ext_id")}
+        item = next((candidate for candidate in by_fp.values()
+                     if old_ids & {(source.get("source"), source.get("ext_id")) for source in candidate.get("sources", [])}), None)
+        if item is None and fp in by_fp and old_ids:
+            occupied_ids = {(source.get("source"), source.get("ext_id")) for source in by_fp[fp].get("sources", [])}
+            if not old_ids & occupied_ids:
+                fp = hashlib.sha256((fp + "|previous|" + json.dumps(sorted(old_ids), ensure_ascii=False)).encode()).hexdigest()[:32]
         if old.get("gone") and old.get("gone_at"):
             try:
                 if (now or datetime.now(timezone.utc)).timestamp() - datetime.fromisoformat(old["gone_at"]).timestamp() > 30 * 86400:
@@ -476,7 +484,7 @@ def retain_previous(previous, current, now=None):
                 pass
         elif old.get("gone"):
             old = {**old, "gone_at": (now or datetime.now(timezone.utc)).isoformat(timespec="seconds")}
-        if fp not in by_fp:
+        if item is None and fp not in by_fp:
             if old.get("gone"):
                 item = dict(old)
             elif _date_day(old) < today or not allow_gone:
@@ -487,7 +495,8 @@ def retain_previous(previous, current, now=None):
             item["hash"] = hashlib.sha256(json.dumps(item, ensure_ascii=False, sort_keys=True).encode()).hexdigest()
             by_fp[fp] = item
             continue
-        item = by_fp[fp]
+        if item is None:
+            item = by_fp[fp]
         for field in ("end", "location", "country", "url", "organizer_name", "cfs_close"):
             if not item.get(field):
                 item[field] = old.get(field, "")

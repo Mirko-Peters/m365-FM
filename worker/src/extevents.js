@@ -13,6 +13,8 @@ export async function ensureExternalEventSchema(db) {
   if (!columns.has("source")) await db.prepare("ALTER TABLE events ADD COLUMN source TEXT NOT NULL DEFAULT ''").run();
   if (!columns.has("organizer_name")) await db.prepare("ALTER TABLE events ADD COLUMN organizer_name TEXT NOT NULL DEFAULT ''").run();
   if (!columns.has("cfs_close")) await db.prepare("ALTER TABLE events ADD COLUMN cfs_close TEXT NOT NULL DEFAULT ''").run();
+  const sessionColumns = new Set((await db.prepare("PRAGMA table_info(event_sessions)").all()).results.map((x) => x.name));
+  if (!sessionColumns.has("ext_key")) await db.prepare("ALTER TABLE event_sessions ADD COLUMN ext_key TEXT NOT NULL DEFAULT ''").run();
 }
 
 function publicData(item) {
@@ -118,6 +120,7 @@ async function syncSessions(db, eventId, oldData, data, locked, t) {
       continue;
     }
     const values = {
+      ext_key: session.ext_key || row.ext_key || "",
       title: session.title, start: session.start || "", end: session.end || "", room: session.room || "",
       speakers: JSON.stringify((() => {
         const previousSpeakers = parse(row.speakers, []);
