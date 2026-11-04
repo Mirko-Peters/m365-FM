@@ -17,6 +17,10 @@ PRICE_IN, PRICE_OUT = float(os.environ.get("PRICE_IN", "0.05")), float(os.enviro
 BUDGET = float(os.environ.get("BUDGET_USD", "70"))
 
 
+def text_of(msg):   # nur Bloecke vom Typ "text" (eine Antwort von Claude kann mit thinking-Bloecken beginnen)
+    return "".join(c.get("text", "") for c in msg.get("content") or [] if c.get("type") == "text")
+
+
 def cost(tin, tout):
     return tin * PRICE_IN / 1e6 + tout * PRICE_OUT / 1e6
 
@@ -104,10 +108,10 @@ def main():
             bad += 1; why["max_tokens"] = why.get("max_tokens", 0) + 1; continue
         if any(bad_text(c.get("text", "")) for c in res["message"]["content"]): bad += 1; why["encoding"] = why.get("encoding", 0) + 1; continue   # T5
         try:
-            t, sm = parse_json(res["message"]["content"][0]["text"]); have[l][key] = [t.strip(), sm.strip()]; ok += 1
+            t, sm = parse_json(text_of(res["message"])); have[l][key] = [t.strip(), sm.strip()]; ok += 1
         except Exception:
             bad += 1; why["parse"] = why.get("parse", 0) + 1
-            if len(samples) < 8: samples.append({"id": cid, "text": res["message"]["content"][0]["text"][:400]})
+            if len(samples) < 8: samples.append({"id": cid, "text": text_of(res["message"])[:400]})
     for l in langs: (OUT / f"{l}.json").write_text(json.dumps(have[l], ensure_ascii=False), encoding="utf-8")
     uf = OUT / "usage.json"; old = json.loads(uf.read_text()) if uf.exists() else {"input_tokens": 0, "output_tokens": 0, "runs": []}
     old["input_tokens"] += tin; old["output_tokens"] += tout; old["runs"].append({"batch": bid, "model": MODEL, "ok": ok, "failed": bad, "why": why, "input_tokens": tin, "output_tokens": tout})
