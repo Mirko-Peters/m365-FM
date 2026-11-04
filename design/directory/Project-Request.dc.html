@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Request a project – M365.FM Directory</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap">
+<style>
+body{margin:0;background:#f3f3f2}
+a{color:#3b6391}a:hover{color:#2c4b70}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid #3b6391;outline-offset:2px}
+.kicker:after{content:"";flex:1;height:1px;background:rgba(23,25,28,.14)}
+</style>
+</helmet>
+<div style="min-height: 1320px; background: #f3f3f2; color: #17191c; font-family: Barlow, 'Segoe UI', sans-serif; font-size: 16px; line-height: 1.5">
+
+  <header style="border-bottom: 1px solid rgba(23,25,28,.14)">
+    <div style="max-width: 1240px; margin: 0 auto; padding: 16px 32px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+      <a href="Main.dc.html" style="font-size: 20px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: #17191c; text-decoration: none">M365<span style="color: #3b6391">.FM</span></a>
+      <nav aria-label="Main" style="display: flex; flex-wrap: wrap; gap: 22px; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 15px; letter-spacing: .12em; text-transform: uppercase">
+        <a href="#" style="color: #5d6470; text-decoration: none">Podcast</a>
+        <a href="#" style="color: #5d6470; text-decoration: none">Wiki</a>
+        <a href="Main.dc.html" style="color: #17191c; text-decoration: none; border-bottom: 2px solid #3b6391; padding-bottom: 3px">Directory</a>
+        <a href="#" style="color: #5d6470; text-decoration: none">Services</a>
+      </nav>
+    </div>
+  </header>
+
+  <main style="max-width: 1240px; margin: 0 auto; padding: 44px 32px 80px; display: flex; flex-wrap: wrap; gap: 40px; align-items: flex-start">
+
+    <div style="flex: 999 1 640px; min-width: 0; display: grid; gap: 24px">
+      <div style="display: grid; gap: 12px">
+        <div class="kicker" style="display: flex; align-items: center; gap: 14px; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: #3b6391; font-size: 15px">Request a project · free</div>
+        <h1 style="margin: 0; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 56px; line-height: .98">Find the right Microsoft 365 partner for your project.</h1>
+        <p style="margin: 0; max-width: 38em; color: #5d6470; font-size: 18px">Describe what you need. Matching partners see an anonymous summary first. Only up to 3 partners get your contact details, and no one else.</p>
+      </div>
+
+      <sc-if value="{{notSent}}" hint-placeholder-val="{{ true }}">
+        <form style="display: grid; gap: 20px; background: #ffffff; border: 1px solid rgba(23,25,28,.14); padding: 28px">
+          <div style="font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 22px; letter-spacing: .04em">1 · The project</div>
+          <div style="display: flex; flex-wrap: wrap; gap: 16px">
+            <label style="flex: 1 1 240px; min-width: 0; display: grid; gap: 6px">
+              <span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #5d6470">Topic</span>
+              <select style="height: 46px; box-sizing: border-box; padding: 0 10px; border: 1px solid rgba(23,25,28,.35); border-radius: 0; background: #ffffff">
+                <option>Copilot rollout</option>
+                <option>Copilot Studio agents</option>
+                <option>Teams &amp; telephony</option>
+                <option>SharePoint intranet</option>
+                <option>Power Platform</option>
+                <option>Security &amp; compliance</option>
+              </select>
+            </label>
+            <label style="flex: 1 1 160px; min-width: 0; display: grid; gap: 6px">
+              <span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #5d6470">Users</span>
+              <select style="height: 46px; box-sizing: border-box; padding: 0 10px; border: 1px solid rgba(23,25,28,.35); border-radius: 0; background: #ffffff">
+                <option>1–50</option>
+                <option selected>51–250</option>
+                <option>251–1,000</option>
+                <option>1,000+</option>
+              </select>
+            </label>
+            <label style="flex: 1 1 160px; min-width: 0; display: grid; gap: 6px">
+              <span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #5d6470">Start</span>
+              <select style="height: 46px; box-sizing: border-box; padding: 0 10px; border: 1px solid rgba(23,25,28,.35); border-radius: 0; background: #ffffff">
+                <option>As soon as possible</option>
+                <option selected>Within 3 months</option>
+                <option>Later this year</option>
+              </select>
+            </label>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: 16px">
+            <label style="flex: 1 1 240px; min-width: 0; display: grid; gap: 6px">
+              <span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #5d6470">Region</span>
+              <input type="text" value="Stuttgart area" style="height: 46px; box-sizing: border-box; padding: 0 14px; border: 1px solid #17191c; border-radius: 0; background: #ffffff">
+            </label>
+            <label style="flex: 1 1 240px; min-width: 0; display: grid; gap: 6px">
+              <span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #5d6470">Budget (optional)</span>
+              <select style="height: 46px; box-sizing: border-box; padding: 0 10px; border: 1px solid rgba(23,25,28,.35); border-radius: 0; background: #ffffff">
+                <option>Not sure yet</option>
+                <option>[RANGE 1]</option>
+                <option>[RANGE 2]</option>
+                <option>[RANGE 3]</option>
+              </select>
+            </label>
+            <label style="flex: 1 1 160px; min-width: 0; display: grid; gap: 6px">
+              <span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #5d6470">On site or remote</span>
+              <select style="height: 46px; box-sizing: border-box; padding: 0 10px; border: 1px solid rgba(23,25,28,.35); border-radius: 0; background: #ffffff">
+                <option>Both</option>
+                <option>On site</option>
+                <option>Remote</option>
+              </select>
+            </label>
+          </div>
+          <label style="display: grid; gap: 6px">
+            <span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #5d6470">What do you need?</span>
+            <textarea rows="5" style="box-sizing: border-box; padding: 12px 14px; border: 1px solid #17191c; border-radius: 0; background: #ffffff; resize: vertical">We want to roll out Microsoft 365 Copilot to our sales and service teams, including training and a governance concept.</textarea>
+            <span style="font-size: 13px; color: #5d6470">Partners see a shortened, anonymous version of this text before they unlock your request.</span>
+          </label>
+
+          <div style="height: 1px; background: rgba(23,25,28,.14)"></div>
+          <div style="font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 22px; letter-spacing: .04em">2 · Your contact <span style="font-family: Barlow, sans-serif; font-weight: 500; font-size: 14px; letter-spacing: 0; color: #5d6470">– only for partners who unlock</span></div>
+          <div style="display: flex; flex-wrap: wrap; gap: 16px">
+            <label style="flex: 1 1 240px; min-width: 0; display: grid; gap: 6px">
+              <span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #5d6470">Company</span>
+              <input type="text" value="[COMPANY]" style="height: 46px; box-sizing: border-box; padding: 0 14px; border: 1px solid #17191c; border-radius: 0; background: #ffffff">
+            </label>
+            <label style="flex: 1 1 240px; min-width: 0; display: grid; gap: 6px">
+              <span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #5d6470">Contact person</span>
+              <input type="text" value="[NAME]" style="height: 46px; box-sizing: border-box; padding: 0 14px; border: 1px solid #17191c; border-radius: 0; background: #ffffff">
+            </label>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: 16px">
+            <label style="flex: 1 1 240px; min-width: 0; display: grid; gap: 6px">
+              <span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #5d6470">Work email</span>
+              <input type="email" value="[EMAIL]" style="height: 46px; box-sizing: border-box; padding: 0 14px; border: 1px solid #17191c; border-radius: 0; background: #ffffff">
+            </label>
+            <label style="flex: 1 1 240px; min-width: 0; display: grid; gap: 6px">
+              <span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #5d6470">Phone (optional)</span>
+              <input type="tel" value="" style="height: 46px; box-sizing: border-box; padding: 0 14px; border: 1px solid #17191c; border-radius: 0; background: #ffffff">
+            </label>
+          </div>
+          <label style="display: flex; gap: 12px; align-items: flex-start; cursor: pointer; font-size: 14px">
+            <input type="checkbox" checked="{{consent}}" onChange="{{toggleConsent}}" style="width: 22px; height: 22px; margin-top: 1px; accent-color: #3b6391; flex: 0 0 auto">
+            <span>I agree that M365.FM shares my contact details with up to 3 matching partners who unlock this request. I can withdraw this at any time. <a href="#">Privacy policy</a></span>
+          </label>
+          <div style="display: flex; flex-wrap: wrap; gap: 14px; align-items: center">
+            <button type="button" onClick="{{send}}" disabled="{{cannotSend}}" style="{{sendStyle}}">Send request</button>
+            <span style="font-size: 14px; color: #5d6470">Free. You confirm by email before anything is shared.</span>
+          </div>
+        </form>
+      </sc-if>
+
+      <sc-if value="{{sent}}" hint-placeholder-val="{{ false }}">
+        <div role="status" style="background: #ffffff; border: 1px solid rgba(23,25,28,.14); padding: 32px; display: grid; gap: 14px">
+          <span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 34px; line-height: 1.05">Please confirm your email.</span>
+          <p style="margin: 0; color: #5d6470; max-width: 36em">We sent you a link. After you confirm, your anonymous summary goes to matching partners. You get an email each time a partner unlocks your request, up to 3.</p>
+          <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid rgba(23,25,28,.14); max-width: 560px">
+            <div style="padding: 14px; border-right: 1px solid rgba(23,25,28,.14)"><b style="display: block; font-family: 'Barlow Condensed', sans-serif; font-size: 28px; color: #3b6391">1</b><span style="font-size: 13px">Confirm email</span></div>
+            <div style="padding: 14px; border-right: 1px solid rgba(23,25,28,.14)"><b style="display: block; font-family: 'Barlow Condensed', sans-serif; font-size: 28px; color: #3b6391">2</b><span style="font-size: 13px">Partners see summary</span></div>
+            <div style="padding: 14px"><b style="display: block; font-family: 'Barlow Condensed', sans-serif; font-size: 28px; color: #3b6391">3</b><span style="font-size: 13px">Up to 3 get in touch</span></div>
+          </div>
+          <a href="Lead-Inbox.dc.html" style="justify-self: start; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; letter-spacing: .1em; text-transform: uppercase">See what a partner sees →</a>
+        </div>
+      </sc-if>
+    </div>
+
+    <aside style="flex: 1 1 300px; min-width: 0; display: grid; gap: 16px">
+      <div style="background: #1a1d21; color: #eef0f3; padding: 24px; display: grid; gap: 12px">
+        <span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 24px">How it works</span>
+        <span>Free for you, no account needed.</span>
+        <span>Partners only see topic, size, region and timing until they unlock.</span>
+        <span>Your name and contact go to at most 3 partners.</span>
+        <span>M365.FM takes no commission on your project.</span>
+      </div>
+      <div style="border: 1px solid rgba(23,25,28,.14); padding: 20px; display: grid; gap: 6px">
+        <span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #5d6470">Right now</span>
+        <span><b style="font-family: 'Barlow Condensed', sans-serif; font-size: 28px; color: #3b6391">[N]</b> partners work on Copilot in the Stuttgart area.</span>
+      </div>
+    </aside>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1320}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const consent = !!s.consent;
+    const sent = !!s.sent;
+    return {
+      consent, sent, notSent: !sent, cannotSend: !consent,
+      sendStyle: 'min-height: 48px; padding: 0 26px; border-radius: 0; font-family: Barlow Condensed, sans-serif; font-weight: 600; font-size: 17px; letter-spacing: .1em; text-transform: uppercase; ' + (consent ? 'background: #3b6391; color: #ffffff; border: 1px solid #3b6391; cursor: pointer;' : 'background: #d9dbd7; color: #5d6470; border: 1px solid #d9dbd7; cursor: not-allowed;'),
+      toggleConsent: () => this.setState({ consent: !consent }),
+      send: () => { if (consent) this.setState({ sent: true }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -119,7 +119,7 @@
       if (!j.invite) return; var i = j.invite, box = h("div", { class: "ccard" }, [h("h3", { text: Q.invt }), h("p", { text: Q.invtxt.replace("{s}", i.title).replace("{e}", i.ev) })]), m2 = h("p", { class: "wk-msg", role: "status", "aria-live": "polite" });
       if (!me) { var ret = encodeURIComponent(location.href.split("#")[0]), lg = h("div", { class: "btns" }); box.appendChild(h("p", { text: Q.needlogin })); box.appendChild(lg);
         fetch(X.api + "/api/providers").then(function (r) { return r.json(); }).catch(function () { return {}; }).then(function (pj) { var pv = (pj && pj.providers) || ["linkedin", "microsoft", "google"]; if (!Array.isArray(pv)) pv = Object.keys(pv);
-          [["linkedin", "LinkedIn"], ["microsoft", "Microsoft"], ["google", "Google"]].forEach(function (x) { if (pv.indexOf(x[0]) >= 0) lg.appendChild(h("a", { class: "btn" + (x[0] === "linkedin" ? " main" : ""), href: X.api + "/auth/login/" + x[0] + "?return=" + ret, rel: "nofollow", text: Q.signin + " " + x[1] })); }); }); }
+          [["linkedin", "LinkedIn"], ["microsoft", "Microsoft"], ["google", "Google"], ["github", "GitHub"]].forEach(function (x) { if (pv.indexOf(x[0]) >= 0) lg.appendChild(h("a", { class: "btn" + (x[0] === "linkedin" ? " main" : ""), href: X.api + "/auth/login/" + x[0] + "?return=" + ret, rel: "nofollow", text: Q.signin + " " + x[1] })); }); }); }
       else box.appendChild(h("div", { class: "btns" }, [
         h("button", { type: "button", class: "btn main", text: Q.linkgo, onclick: function (ev2) { var b = ev2.target; b.disabled = true; m2.textContent = Q.linkbusy;
           function confirmIt() { return api("/api/speaker/confirm", { method: "POST", body: { token: tok } }); }

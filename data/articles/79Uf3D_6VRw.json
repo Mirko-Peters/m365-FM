@@ -84,6 +84,52 @@
      "Logik schlank halten, um Over-Engineering zu vermeiden"
     ]
    }
+  ],
+  "quiz": [
+   {
+    "q": "Was passiert, wenn die KI-Stufe einen Antrag ablehnt?",
+    "opts": [
+     "Der Antrag geht zur Prüfung an den Manager weiter.",
+     "Der Prozess endet sofort, ohne den Manager zu fragen.",
+     "Der Antrag wird automatisch an den Compliance-Administrator geleitet.",
+     "Der Antragsteller muss den Antrag per E-Mail neu einreichen."
+    ],
+    "a": 1,
+    "why": "Lehnt die KI ab, endet der Prozess sofort, da die Richtlinie den Antrag bereits ausgeschlossen hat."
+   },
+   {
+    "q": "Wie wird der zuständige Manager im Beispiel dynamisch ermittelt?",
+    "opts": [
+     "Über eine fest hinterlegte E-Mail-Adresse im Flow",
+     "Über eine manuell gepflegte Excel-Tabelle der Hierarchien",
+     "Über den Office 365 Users Connector mit der Aktion „Manager abrufen“",
+     "Über eine Auswahl des Antragstellers im Formular"
+    ],
+    "a": 2,
+    "why": "Der Office 365 Users Connector ermittelt den Vorgesetzten dynamisch, ohne Hardcodierung und ohne veraltete Hierarchien."
+   },
+   {
+    "q": "Ab welchem Antragsbetrag wird im Beispiel zusätzlich eine Admin-Genehmigung eingefügt?",
+    "opts": [
+     "Ab 500",
+     "Ab 100",
+     "Ab 300",
+     "Ab 150"
+    ],
+    "a": 3,
+    "why": "Ist der Betrag größer oder gleich 150, folgt im Wahr-Zweig die zusätzliche Stufe „Admin-Genehmigung“."
+   },
+   {
+    "q": "Warum sollte der Trigger bei Anhängen auf „bei Elementänderung“ umgestellt werden?",
+    "opts": [
+     "Dataverse speichert Anhänge oft erst nach dem ersten Speichern des Datensatzes.",
+     "Die KI kann Dateien nur bei geänderten Datensätzen lesen.",
+     "Trigger bei Erstellung sind in Copilot Studio nicht verfügbar.",
+     "Änderungstrigger sind günstiger als Erstellungstrigger im Betrieb."
+    ],
+    "a": 0,
+    "why": "Bei Erstellung existiert die Datei noch nicht, daher schlägt der Flow fehl oder der Beleginhalt ist leer."
+   }
   ]
  },
  "es": {
@@ -175,6 +221,52 @@
      "Aplica prefijos de nombres como STR, NUM y DOC",
      "Restringe permisos con control de acceso basado en roles"
     ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "¿Qué ocurre en el flujo cuando la etapa de IA rechaza una reclamación?",
+    "opts": [
+     "La reclamación pasa igualmente a la aprobación del gerente",
+     "El proceso termina ahí y no se pide confirmación humana",
+     "La reclamación se envía directamente al administrador de cumplimiento",
+     "El flujo se pausa hasta que alguien revise el correo electrónico"
+    ],
+    "a": 1,
+    "why": "Solo si la IA aprueba pasa la reclamación a la etapa humana; si rechaza, el proceso termina, porque la política ya la descartó."
+   },
+   {
+    "q": "¿Qué se debe hacer al asignar el archivo del recibo a la entrada de documento?",
+    "opts": [
+     "Subir el recibo manualmente cada vez que se ejecute el flujo",
+     "Convertir el archivo a texto plano antes de pasarlo a la IA",
+     "Hacer referencia al cuerpo del contenido en el editor de expresiones",
+     "Usar solo el nombre del archivo como valor de la entrada"
+    ],
+    "a": 2,
+    "why": "Referenciar el cuerpo del contenido entrega a la IA los bytes reales del archivo, no el contenedor de metadatos; si no, aprobaría recibos en blanco."
+   },
+   {
+    "q": "¿Qué condición activa la segunda etapa manual de aprobación del administrador en el ejemplo?",
+    "opts": [
+     "Que el importe sea mayor o igual que 150",
+     "Que el importe sea inferior a 500",
+     "Que la fecha de compra supere los 30 días",
+     "Que el gerente rechace la reclamación inicialmente"
+    ],
+    "a": 0,
+    "why": "Una condición de umbral añade la aprobación del administrador de cumplimiento cuando el importe es mayor o igual que 150."
+   },
+   {
+    "q": "¿Cómo se evitan los problemas de sincronización con los archivos adjuntos en Dataverse?",
+    "opts": [
+     "Añadiendo una espera fija de varios minutos tras crear el registro",
+     "Desactivando la validación de recibos durante las pruebas del flujo",
+     "Pidiendo al gerente que suba el recibo después de aprobar",
+     "Cambiando el desencadenador a modificación de fila y limitándolo a la columna del recibo"
+    ],
+    "a": 3,
+    "why": "Al activarse con la modificación de la columna del recibo, la validación se dispara justo cuando se carga o reemplaza el archivo."
    }
   ]
  },
