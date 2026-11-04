@@ -6,7 +6,7 @@
   function api(p, o) { o = o || {}; o.credentials = "include"; o.headers = Object.assign({ "x-requested-with": "m365" }, o.headers || {}); if (o.body && typeof o.body !== "string") { o.body = JSON.stringify(o.body); o.headers["content-type"] = "application/json"; } return fetch(API + p, o).then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { s: r.status, j: j }; }); }); }
   var TYPES = { product: "Produkt", platform: "Plattform", concept: "Konzept", org: "Firma", person: "Person", cert: "Zertifikat", event: "Event", media: "Medium", category: "Kategorie" };
   var ERR = { bad_name: "Name zu kurz", bad_type: "Typ fehlt", too_short: "Kurzbeschreibung fehlt (mindestens 20 Zeichen in Englisch oder Deutsch)", too_long: "Kurzbeschreibung zu lang (höchstens 300 Zeichen)", bad_url: "Eine Adresse ist ungültig (nur https, Docs nur microsoft.com, azure.com oder github.com)", bad_qid: "Wikidata-ID muss wie Q12345 aussehen", bad_relation: "Eine Beziehung zeigt auf eine unbekannte Entität", unchanged: "Nichts geändert", rate_limit: "Zu viele Änderungen in kurzer Zeit, bitte später", login: "Bitte anmelden", forbidden: "Nur für Admins" };
-  var tabs = [["ov", "Übersicht"], ["fr", "Freigaben"], ["sponsor", "Sponsor-Anfragen"], ["tr", "Übersetzungen"], ["ent", "Entitäten"], ["db", "Datenbank"], ["sw", "Schalter"]], panes = {}, bar = h("div", { class: "adm-tabs", role: "tablist" });
+  var tabs = [["ov", "Übersicht"], ["fr", "Freigaben"], ["sponsor", "Sponsor-Anfragen"], ["claim", "Claim-Kampagne"], ["tr", "Übersetzungen"], ["ent", "Entitäten"], ["db", "Datenbank"], ["sw", "Schalter"]], panes = {}, bar = h("div", { class: "adm-tabs", role: "tablist" });
   var LANGN = { de: "Deutsch", fr: "Französisch", es: "Spanisch", it: "Italienisch", nl: "Niederländisch", pt: "Portugiesisch", pl: "Polnisch", id: "Indonesisch", ru: "Russisch", uk: "Ukrainisch", ar: "Arabisch", he: "Hebräisch", ja: "Japanisch", ko: "Koreanisch", en: "Englisch" };
   var KINDN = { lblog: "Blog (früher)", blog: "Blog (Community)", podcast: "Podcast", video: "Video", notes: "Show Notes", entity: "Entität" };
   function ago(t) { if (!t) return "–"; var d = Math.round(Date.now() / 1000 - t); return d < 90 ? d + " s" : d < 5400 ? Math.round(d / 60) + " min" : d < 172800 ? Math.round(d / 3600) + " h" : Math.round(d / 86400) + " d"; }
@@ -39,6 +39,7 @@
         if (!(r.j.audit || []).length) al.appendChild(h("li", { class: "mut", text: "Noch keine Einträge." })); ops.appendChild(al); });
     }); },
     tr: function () { if (panes.tr.firstChild) return; translations(); },
+    claim: function () { claimCampaign(); },
     fr: function () { approvals(); },
     sponsor: function () { sponsorRequests(); },
     db: function () { overview(function (o) { var p = panes.db, d = o.db, m = h("p", { class: "adm-msg" }); p.textContent = "";
@@ -65,6 +66,35 @@
     }); },
     ent: function () { if (panes.ent.firstChild) return; entities(); }
   };
+
+  function claimCampaign() {
+    var p = panes.claim, m = h("p", { class: "adm-msg" }); p.textContent = "";
+    p.appendChild(h("h2", { text: "Claim your profile" })); p.appendChild(m);
+    api("/api/admin/panel/claim-campaign").then(function (r) {
+      if (r.s !== 200) { msg(m, "Kampagnenübersicht nicht abrufbar.", true); return; }
+      var d = r.j, c = d.counts || {};
+      p.appendChild(h("p", { class: "mut", text: d.source_error ? "Personenquellen gerade nicht verfügbar; Versand bleibt gesperrt." : "Die Vorschau versendet keine Nachrichten. Adressen bleiben in D1 und werden hier nicht angezeigt." }));
+      p.appendChild(h("div", { class: "adm-grid" }, [tile("Geeignete Personen", c.total), tile("Speaker", c.speaker), tile("Podcast-Gäste", c.guest), tile("Beides", c.both), tile("Tageslimit genutzt", d.sent_today + " / 100")]));
+      p.appendChild(h("p", { class: "mut", text: "Status: " + d.status + " · MVP Contribution Collector: " + (d.live ? "live" : "nicht live") + " · Freigabe: " + (d.approved ? "erteilt" : "fehlt") }));
+      var previews = h("div", { class: "adm-grid" });
+      [["Englische Vorschau", d.previews.en], ["Deutsche Vorschau", d.previews.de]].forEach(function (x) {
+        previews.appendChild(h("section", {}, [h("h3", { text: x[0] }), h("iframe", { title: x[0], sandbox: "", srcdoc: x[1], style: "width:100%;height:520px;border:1px solid #ccd3db;background:#fff" })]));
+      });
+      p.appendChild(previews);
+      var start = h("button", { type: "button", class: "btn main", text: "Kampagne starten" });
+      start.disabled = !d.can_start || d.status === "running";
+      start.onclick = function () {
+        if (!window.confirm("Die Kampagne startet den Versand in Wellen mit höchstens 100 Einladungen pro UTC-Tag. Fortfahren?")) return;
+        start.disabled = true; msg(m, "Kampagne wird gestartet …");
+        api("/api/admin/panel/claim-campaign/start", { method: "POST", body: {} }).then(function (x) {
+          if (x.s === 200) { msg(m, "Freigegeben. Der Worker versendet frühestens im nächsten Cron-Lauf."); setTimeout(claimCampaign, 1000); }
+          else { msg(m, x.j.error === "campaign_locked" ? "Gesperrt: Collector muss live und die Freigabe gesetzt sein." : "Start nicht möglich.", true); start.disabled = !d.can_start; }
+        });
+      };
+      p.appendChild(start);
+      p.appendChild(h("p", { class: "mut", text: "Start setzt MVP_COLLECTOR_LIVE=1 und CLAIM_CAMPAIGN_APPROVED=1 voraus. Jede Einladung enthält eine Abmeldung; nach 14 Tagen folgt höchstens eine Erinnerung." }));
+    });
+  }
 
   // ---------- Freigaben: alles, was auf eine Entscheidung wartet, mit den bestehenden Admin-Routen ----------
   function approvals() {

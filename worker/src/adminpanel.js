@@ -6,11 +6,23 @@ const FLAGS = { tr_off: /^[01]$/, atr_off: /^[01]$/, atr_ent_cap: /^\d{1,4}$/, t
 const QKINDS = new Set(["blog", "podcast", "video", "entity", "lblog", "notes"]), QLANGS = new Set(["en", "de", "fr", "es", "it", "nl", "pt", "pl", "id", "ru", "uk", "ar", "he", "ja", "ko"]);
 import { audit } from "./util.js";
 import { SPONSOR_STATUSES } from "./sponsor.js";
+import { claimCampaignStatus, startClaimCampaign } from "./claimcampaign.js";
 
 export async function handleAdminPanel(env, request, url, path, user, J) {
   if (!path.startsWith("/api/admin/panel/")) return null;
   if (!user?.admin) return J({ error: "forbidden" }, 403);
   const db = env.DB, day = new Date().toISOString().slice(0, 10);
+
+  if (path === "/api/admin/panel/claim-campaign" && request.method === "GET") {
+    return J(await claimCampaignStatus(env), 200, { "cache-control": "no-store" });
+  }
+
+  if (path === "/api/admin/panel/claim-campaign/start" && request.method === "POST") {
+    const result = await startClaimCampaign(env, db);
+    if (result.error) return J(result, result.error === "mail_off" ? 503 : result.error === "campaign_source_unavailable" ? 502 : 409);
+    await audit(db, user.id, "claim_campaign_start", "person-entities");
+    return J(result);
+  }
 
   if (path === "/api/admin/panel/overview" && request.method === "GET") {
     let base = null; try { base = ((await (await fetch(env.SITE + "/entities.json", { cf: { cacheTtl: 300 } })).json()).entities || []).length; } catch { /* Seite nicht erreichbar */ }
