@@ -9,7 +9,7 @@ import json
 import site_mentions as MEN   # Erwaehnungen in fremden Medien als Quellen (data/press_mentions.json)
 import re
 from datetime import date
-from urllib.parse import urlsplit
+from urllib.parse import quote, urlsplit
 from site_i18n import COMM_LANGS, pfx, pfx2, overlay
 from pathlib import Path
 from site_learn import (ENTS, esc, ent_names, fetch_wiki, wiki_block, WCSS, LCSS, WT, GLOSS, GLOSS_JS, write_wk_js)
@@ -286,12 +286,35 @@ def ent_ld(BASE, e, lang, glossary_set=None, person_aka=None):
     return n
 
 
-def claim_html(eid, lang):
+def linkedin_profile(url):
+    try:
+        p = urlsplit(url)
+        return p.scheme == "https" and not p.username and not p.password and p.hostname in ("linkedin.com", "www.linkedin.com") and bool(re.fullmatch(r"/in/[^/]+/?", p.path))
+    except ValueError:
+        return False
+
+
+def claim_html(eid, lang, entity, api):
     oh = ORGPAGES.get(eid)
     if oh and not CLAIMS.get(eid):
         return f'<p><a href="{BASE_}{pfx(lang)}/community/c/{oh}/">{T(lang, "Company profile on M365.FM", "Firmenprofil auf M365.FM")}</a></p>'
     h = CLAIMS.get(eid)
     if not h:
+        links = entity.get("same_as") if isinstance(entity.get("same_as"), list) else []
+        linkedin = next((u for u in links if isinstance(u, str) and linkedin_profile(u)), "")
+        if entity.get("type") == "person" and linkedin:
+            target = f"{BASE_}{pfx(lang)}/entity/{eid}/?claim=linkedin"
+            href = f'{api}/auth/login/linkedin?return={quote(target, safe="")}'
+            text = T(lang, "Claim this profile with LinkedIn", "Profil mit LinkedIn beanspruchen")
+            messages = json.dumps({
+                "verified": T(lang, "Profil beansprucht und automatisch bestätigt.", "Profile claimed and automatically verified."),
+                "pending": T(lang, "Anfrage gesendet. Die Redaktion prüft sie.", "Request sent. The editors will review it."),
+                "claimed": T(lang, "Dieses Profil ist bereits beansprucht.", "This profile has already been claimed."),
+                "not_claimable": T(lang, "Dieses Profil kann nicht beansprucht werden.", "This profile cannot be claimed."),
+            }, ensure_ascii=False)
+            return (f'<p><a class="btn main" rel="nofollow" href="{esc(href)}">{esc(text)}</a></p>'
+                    f'<p id="en-claim-msg" role="status" aria-live="polite"></p><script>(function(){{var p=new URLSearchParams(location.search),r=p.get("claim_result"),m={messages},e=document.getElementById("en-claim-msg");'
+                    f'if(e&&m[r]){{e.textContent=m[r];p.delete("claim_result");var u=new URL(location.href);u.searchParams.delete("claim_result");history.replaceState(null,"",u)}}}})();</script>')
         return ""
     return f'<p><a href="{BASE_}{pfx(lang)}/community/u/{h}/">{T(lang, "Profile on M365.FM (maintained by the person)", "Profil auf M365.FM (gepflegt von der Person)")}</a></p>'
 
@@ -578,7 +601,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             _au = ENTS.get(AUTHOR_EID)
             updline = (f'<p class="mut en-upd">' + (f'{esc(T(lang, "Maintained by", "Gepflegt von"))} <a href="{root}{AUTHOR_EID}/">{esc(_au["name"])}</a> (Microsoft MVP) · ' if _au and e["id"] != AUTHOR_EID else "")
                        + f'{esc(T(lang, "Last updated", "Zuletzt aktualisiert"))}: <time datetime="{_mod}">{_mod}</time></p>')
-            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{root}">{esc(s["entities"])}</a></nav><h1>{esc(e["name"])}</h1>{SPM.note(lang, _spr)}<p class="mut">{esc(TL[e["type"]][li])}</p><p class="en-def" style="font-size:1.1em">{esc(d)}</p>{oldbanner}{claim_html(e["id"], lang)}{hero}{longbox}{ft}{evl}{kpbox}{eb}{tline}{artbox}'
+            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{root}">{esc(s["entities"])}</a></nav><h1>{esc(e["name"])}</h1>{SPM.note(lang, _spr)}<p class="mut">{esc(TL[e["type"]][li])}</p><p class="en-def" style="font-size:1.1em">{esc(d)}</p>{oldbanner}{claim_html(e["id"], lang, e, api)}{hero}{longbox}{ft}{evl}{kpbox}{eb}{tline}{artbox}'
                           f'{qbox}{faqbox}{relmap}{relx}<div class="en-rel">{rb}</div>{gloss}{SU.block(lang, e["id"])}{wb}{("<h2>" + esc(s["experts"]) + "</h2>" + ehtml) if ehtml else ""}{srcbox}{updline}{edit}'
                           f'<script>window.M365E={{api:"{api}",lang:"{lang}",base:"{BASE}",s:{json.dumps({k: s[k] for k in ("edit_e",)}, ensure_ascii=False)}}};'
                           f'(function(){{var d=0,u="{BASE}/assets/entity.js";function go(){{if(d)return;d=1;var s=document.createElement("script");s.src=u;document.body.appendChild(s)}}'

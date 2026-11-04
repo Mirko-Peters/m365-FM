@@ -17,7 +17,7 @@ import { importEpisodes, importTranslations, handleRegister } from "./register.j
 import { importSearchIndex, handleSearch } from "./search.js";
 import { entityMap } from "./entities.js";
 import { handleProfiles, deleteUserData, refreshProfilesExport } from "./profiles.js";
-import { handleEvents, deleteUserEvents, ensureM365Con } from "./events.js";
+import { handleEvents, deleteUserEvents, ensureM365Con, claimLinkedinEntity } from "./events.js";
 import { handleVotes } from "./votes.js";
 import { handleQa, deleteUserQa } from "./qa.js";
 import { handleBlog, deleteUserBlog } from "./blog.js";
@@ -56,7 +56,7 @@ const PROVIDERS = {
   },
   linkedin: {   // "Sign In with LinkedIn using OpenID Connect"
     auth: "https://www.linkedin.com/oauth/v2/authorization", token: "https://www.linkedin.com/oauth/v2/accessToken",
-    info: "https://api.linkedin.com/v2/userinfo", scope: "openid profile", id: (e) => e.LINKEDIN_CLIENT_ID, secret: (e) => e.LINKEDIN_CLIENT_SECRET,
+    info: "https://api.linkedin.com/v2/userinfo", scope: "openid profile email", id: (e) => e.LINKEDIN_CLIENT_ID, secret: (e) => e.LINKEDIN_CLIENT_SECRET,
   },
 };
 const VID = /^[A-Za-z0-9_-]{5,24}$/;
@@ -138,6 +138,22 @@ async function auth(env, request, url, path) {
   const u = await upsertUser(env, m[2], String(info.sub), info.name || info.given_name || "User");
   if (u.banned) return html("<p>This account is blocked.</p>", 403);
   const h = new Headers({ location: ret });
+  if (m[2] === "linkedin") {
+    const target = new URL(ret), claim = target.searchParams.get("claim");
+    const match = claim === "linkedin" && /^\/(?:[a-z]{2}\/)?entity\/([a-z0-9][a-z0-9-]{1,78})\/?$/i.exec(target.pathname);
+    if (match) {
+      const result = await claimLinkedinEntity(env, u, info, match[1]);
+      if (result.error === "claimed") {
+        const response = html("<p>Dieses Profil wurde bereits beansprucht.</p>", 409);
+        response.headers.append("set-cookie", cookie("m365s", await makeSession(env, u.id), 5184000));
+        response.headers.append("set-cookie", cookie("m365o", "", 0));
+        return response;
+      }
+      target.searchParams.delete("claim");
+      target.searchParams.set("claim_result", result.status || result.error || "pending");
+      h.set("location", target.href);
+    }
+  }
   h.append("set-cookie", cookie("m365s", await makeSession(env, u.id), 5184000));
   h.append("set-cookie", cookie("m365o", "", 0));
   return new Response(null, { status: 302, headers: h });
