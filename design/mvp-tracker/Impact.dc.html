@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Impact and yearly report</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap">
+<style>
+body{margin:0;background:#f3f3f2}
+a{color:#3b6391}a:hover{color:#2c4b70}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid #3b6391;outline-offset:2px}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; display: flex; flex-direction: column; background: #f3f3f2; color: #17191c; font-family: Barlow, 'Segoe UI', sans-serif; font-size: 16px; line-height: 1.45">
+
+  <header style="flex: 0 0 auto; padding: 18px 20px 10px; display: flex; justify-content: space-between; align-items: end">
+    <h1 style="margin: 0; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 34px; line-height: 1">Impact</h1>
+    <div role="group" aria-label="Year" style="display: flex; border: 1px solid #17191c">
+      <sc-for list="{{years}}" as="y" hint-placeholder-count="2">
+        <button type="button" onClick="{{y.pick}}" aria-pressed="{{y.on}}" style="{{y.style}}">{{y.label}}</button>
+      </sc-for>
+    </div>
+  </header>
+
+  <div style="flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: 4px 20px 16px; display: flex; flex-direction: column; gap: 14px">
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; background: #ffffff; border: 1px solid rgba(23,25,28,.14)">
+      <span style="padding: 12px 14px; border-right: 1px solid rgba(23,25,28,.14); border-bottom: 1px solid rgba(23,25,28,.14); display: grid"><b style="font-family: 'Barlow Condensed', sans-serif; font-size: 30px; color: #3b6391">{{total}}</b><span style="font-size: 13px; color: #5d6470">contributions</span></span>
+      <span style="padding: 12px 14px; border-bottom: 1px solid rgba(23,25,28,.14); display: grid"><b style="font-family: 'Barlow Condensed', sans-serif; font-size: 30px; color: #3b6391">[N]</b><span style="font-size: 13px; color: #5d6470">people reached</span></span>
+      <span style="padding: 12px 14px; border-right: 1px solid rgba(23,25,28,.14); display: grid"><b style="font-family: 'Barlow Condensed', sans-serif; font-size: 30px; color: #3b6391">[N]</b><span style="font-size: 13px; color: #5d6470">countries</span></span>
+      <span style="padding: 12px 14px; display: grid"><b style="font-family: 'Barlow Condensed', sans-serif; font-size: 30px; color: #3b6391">[N]</b><span style="font-size: 13px; color: #5d6470">hours of content</span></span>
+    </div>
+
+    <section style="display: grid; gap: 8px; padding: 14px; background: #ffffff; border: 1px solid rgba(23,25,28,.14)">
+      <b style="font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 20px">Contributions per month</b>
+      <div role="img" aria-label="{{chartLabel}}" style="display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 4px; align-items: end; height: 110px; border-bottom: 1px solid rgba(23,25,28,.3)">
+        <sc-for list="{{bars}}" as="b" hint-placeholder-count="12"><span style="{{b.style}}"></span></sc-for>
+      </div>
+      <div aria-hidden="true" style="display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 4px; font-size: 11px; color: #5d6470; text-align: center">
+        <span>J</span><span>F</span><span>M</span><span>A</span><span>M</span><span>J</span><span>J</span><span>A</span><span>S</span><span>O</span><span>N</span><span>D</span>
+      </div>
+    </section>
+
+    <section style="display: grid; gap: 0; background: #ffffff; border: 1px solid rgba(23,25,28,.14)">
+      <b style="padding: 12px 14px 6px; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 20px">By type</b>
+      <sc-for list="{{types}}" as="t" hint-placeholder-count="5">
+        <div style="display: grid; grid-template-columns: 90px 1fr 28px; gap: 10px; align-items: center; padding: 6px 14px">
+          <span style="font-size: 14px">{{t.n}}</span>
+          <span aria-hidden="true" style="height: 8px; background: #e4e6e8; display: block"><span style="{{t.bar}}"></span></span>
+          <b style="text-align: right">{{t.c}}</b>
+        </div>
+      </sc-for>
+      <span style="padding: 6px 14px 12px; font-size: 13px; color: #5d6470">Reach comes from M365.FM, YouTube and your own entries.</span>
+    </section>
+
+    <div style="display: grid; gap: 8px; padding: 16px; background: #1a1d21; color: #eef0f3">
+      <b style="font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 22px">Yearly report</b>
+      <span style="font-size: 14px; color: #c5cad2">One PDF for nomination, employer or customers: all contributions, reach and highlights.</span>
+      <sc-if value="{{idle}}" hint-placeholder-val="{{ true }}">
+        <button type="button" onClick="{{make}}" style="min-height: 48px; background: #82a7d4; color: #101214; border: 0; border-radius: 0; cursor: pointer; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 17px; letter-spacing: .08em; text-transform: uppercase">Create report {{year}}</button>
+      </sc-if>
+      <sc-if value="{{busy}}" hint-placeholder-val="{{ false }}">
+        <span role="status" style="min-height: 48px; display: grid; place-items: center; border: 1px solid rgba(238,240,243,.45)">Building the PDF …</span>
+      </sc-if>
+      <sc-if value="{{ready}}" hint-placeholder-val="{{ false }}">
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+          <a href="#" style="min-height: 48px; display: grid; place-items: center; background: #82a7d4; color: #101214; text-decoration: none; font-weight: 600">Download PDF</a>
+          <a href="#" style="min-height: 48px; display: grid; place-items: center; border: 1px solid rgba(238,240,243,.45); color: #eef0f3; text-decoration: none; font-weight: 600">Share link</a>
+        </div>
+      </sc-if>
+    </div>
+  </div>
+
+  <nav aria-label="App" style="flex: 0 0 auto; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); align-items: end; border-top: 1px solid rgba(23,25,28,.14); background: #ffffff; padding-bottom: 10px">
+    <a href="Main.dc.html" style="display: grid; justify-items: center; gap: 2px; padding: 8px 0; min-height: 52px; font-size: 12px; color: #5d6470; text-decoration: none"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 10l8-6 8 6v9H3z"></path></svg>Home</a>
+    <a href="Contributions.dc.html" style="display: grid; justify-items: center; gap: 2px; padding: 8px 0; min-height: 52px; font-size: 12px; color: #5d6470; text-decoration: none"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M5 5h12M5 11h12M5 17h8"></path></svg>Log</a>
+    <a href="Add.dc.html" aria-label="Add contribution" style="justify-self: center; width: 52px; height: 52px; margin-bottom: 6px; border-radius: 50%; background: #3b6391; color: #ffffff; display: grid; place-items: center; text-decoration: none"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M11 4v14M4 11h14"></path></svg></a>
+    <a href="Impact.dc.html" aria-current="page" style="display: grid; justify-items: center; gap: 2px; padding: 8px 0; min-height: 52px; font-size: 12px; font-weight: 600; color: #3b6391; text-decoration: none"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 18V11M9 18V6M14 18v-9M19 18V3"></path></svg>Impact</a>
+    <a href="Chances.dc.html" style="display: grid; justify-items: center; gap: 2px; padding: 8px 0; min-height: 52px; font-size: 12px; color: #5d6470; text-decoration: none"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="11" cy="11" r="7"></circle><circle cx="11" cy="11" r="3"></circle></svg>Chances</a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  componentWillUnmount() { clearTimeout(this.t); }
+  renderVals() {
+    const s = this.state || {};
+    const year = s.year || '2026';
+    const DATA = {
+      '2026': { m: [1, 2, 1, 3, 2, 2, 1, 0, 2, 3, 1, 0], t: [['Podcasts', 6], ['Talks', 3], ['Videos', 4], ['Blog posts', 3], ['Code', 2]] },
+      '2025': { m: [1, 1, 2, 1, 0, 2, 1, 1, 1, 2, 2, 1], t: [['Podcasts', 5], ['Talks', 4], ['Videos', 2], ['Blog posts', 3], ['Code', 1]] }
+    };
+    const d = DATA[year];
+    const max = Math.max.apply(null, d.m.concat([1]));
+    const bars = d.m.map((v) => ({ style: 'display: block; height: ' + Math.max(3, Math.round(v / max * 100)) + '%; background: ' + (v ? '#3b6391' : '#c9ccd1') }));
+    const tmax = Math.max.apply(null, d.t.map((x) => x[1]));
+    const types = d.t.map(([n, c]) => ({ n, c, bar: 'display: block; height: 8px; width: ' + Math.round(c / tmax * 100) + '%; background: #3b6391' }));
+    const total = d.m.reduce((a, b) => a + b, 0);
+    const phase = s.phase || 'idle';
+    const years = ['2025', '2026'].map((y) => ({
+      label: y, on: y === year,
+      pick: () => this.setState({ year: y, phase: 'idle' }),
+      style: 'min-height: 40px; padding: 0 12px; border: 0; border-radius: 0; cursor: pointer; font-weight: 600; ' + (y === year ? 'background: #17191c; color: #ffffff;' : 'background: #ffffff; color: #17191c;')
+    }));
+    return {
+      year, years, bars, types, total,
+      chartLabel: 'Contributions per month in ' + year + ': ' + d.m.join(', '),
+      idle: phase === 'idle', busy: phase === 'busy', ready: phase === 'ready',
+      make: () => { this.setState({ phase: 'busy' }); clearTimeout(this.t); this.t = setTimeout(() => this.setState({ phase: 'ready' }), 1100); }
+    };
+  }
+}
+</script>
+</body>
+</html>

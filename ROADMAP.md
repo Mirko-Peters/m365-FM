@@ -188,6 +188,41 @@ Podpage kostet 65 $/Monat (ca. 780 $/Jahr). Ziel: m365.fm komplett auf dub.m365.
 - Vorher klären: Auszahlungsschwelle, Gebühren, Rechtsform (Plattform als Vermittler), Transparenz-Seite, was mit Beiträgen von Nutzern ohne Auszahlungsdaten passiert.
 - Passt zu Blog, später Podcast; Voraussetzung ist ein stabiler Blog mit Abonnenten (Follow).
 
+## Idee (4.11., Mirko): „KI-Topf“ – Unterstützung für die KI-Kosten, mit Stripe
+- **Entscheidung Mirko:** Zahlungsanbieter **Stripe**. Vorerst nur Idee, nicht gebaut.
+- **Ziel:** Besucher unterstützen freiwillig die KI-Kosten der Seite (Übersetzungen, KI-Antworten, Zusammenfassungen); das hilft der Seite zu wachsen.
+- **Geld kann nicht direkt auf das Claude-Konto fließen:**
+  - Anthropic hat keine Funktion, mit der Dritte auf ein fremdes API-Konto einzahlen. Credits kauft nur ein Admin oder Billing-Nutzer der eigenen Organisation, mit Karte, abgerechnet in USD.
+  - Credits sind nicht übertragbar, nicht erstattbar und verfallen nach einem Jahr (anthropic.com/legal/credit-terms, support.claude.com Artikel 8977456, Stand 4.11.2026).
+  - Weg: Stripe → Firmenkonto → Claude Console mit **Auto-Reload in kleinen Beträgen**, weil Credits verfallen.
+  - Ein Verbot, API-Kosten aus freiwilligen Zahlungen zu decken, gibt es in den Commercial Terms nicht. Verboten ist, Claude-Zugang weiterzuverkaufen. Unterstützer bekommen deshalb **kein Token-Kontingent und keinen Zugang**.
+- **Stripe:**
+  - **Payment Link** mit „Kunde wählt Betrag“ für Einmalzahlungen (Vorschlag 5 €, **Mindestbetrag etwa 3 €** gegen Karten-Tests mit gestohlenen Karten). Dazu 2–3 Links mit festen Monatsbeträgen; „Kunde wählt Betrag“ kann keine wiederkehrenden Zahlungen.
+  - Auf m365.fm steht **nur ein Link** zu buy.stripe.com, kein Skript: kein Cookie-Hinweis nötig.
+  - Gebühren laut Suchauszügen (vor dem Bau im Stripe-Dashboard prüfen): EWR-Standardkarte 1,5 % + 0,25 €, SEPA 0,35 €; ein Kartenstreit kostet 20 €.
+  - Bei Stripe als „Trinkgeld für Inhalte“ einordnen, nicht als Spende; Stripe erlaubt Spenden nur für gemeinnützige Zwecke.
+- **Recht und Steuer, vor dem Bau mit dem Steuerberater klären:**
+  - **Nicht „Spende“ nennen**, auch nicht „Token-Spende“: Eine Spendenquittung können nur steuerbegünstigte Körperschaften ausstellen, sonst droht Irreführung (§ 5 UWG). Besser „Unterstütze m365.fm“ / „Support m365.fm“, mit dem Hinweis „gewerbliches Angebot, keine Spendenquittung“.
+  - Die Zahlungen sind Betriebseinnahmen (FG Berlin-Brandenburg 14 K 14067/24, Revision BFH VIII R 18/25).
+  - **Umsatzsteuer ohne Gegenleistung ist umstritten:** FG Berlin-Brandenburg 2 K 2085/21 hält sie für nicht steuerbar, FG Düsseldorf und die Finanzverwaltung für steuerpflichtig mit 19 %. Der BFH entscheidet unter V R 10/25.
+  - **Keine Gegenleistung versprechen** (kein Abzeichen, keine Namensliste, keine zusätzlichen KI-Antworten): Mit Gegenleistung liegt sehr wahrscheinlich ein steuerpflichtiger Leistungsaustausch vor, dazu Verbraucherpflichten (Widerrufsbelehrung, Bestellbutton, bei Abos Kündigungsbutton).
+  - Weiter zu klären: Kleinunternehmer oder Regelbesteuerung. Auf Anthropic- und Cloudflare-Rechnungen schuldet Mirko die Umsatzsteuer selbst (Reverse Charge, § 13b UStG).
+  - Vorher festlegen, was mit einem Überschuss über die KI-Kosten passiert.
+  - Datenschutzerklärung DE/EN: Abschnitt „Stripe Payments Europe“ ergänzen (`site_legal.py`).
+- **Technik-Skizze (Worker):**
+  - `POST /api/support/webhook` für Stripe `checkout.session.completed`, Signatur über den Rohtext mit `constructEventAsync`/SubtleCrypto. In `worker/src/index.js` vor die `x-requested-with`-Prüfung setzen.
+  - Neue D1-Tabelle nur mit Betrag, Währung und Zeit, ohne Namen oder Mail; Migration ab Nummer 0013, weil #220 und #221 die 0012 belegen.
+  - Admin-Ansicht nach dem Muster von `sponsor.js` (Handler, Rate-Limit, Liste, `notify()`).
+  - Einfachste Vorstufe ohne Webhook: Monatssumme von Hand im Admin-Bereich eintragen.
+- **Transparenz-Seite „KI-Topf“** (de/en): „Diesen Monat X € KI-Kosten, Y € Unterstützung“ mit Balken.
+  - Die KI-Kosten kommen aus dem Haiku-Budget von #216 (`ai_spend`) bzw. dem AI Gateway; Anthropic rechnet in USD ab.
+  - **Budget-Formel:** Tagesbudget = 5 € + Unterstützung des Monats (netto nach Gebühren) / Tage des Monats.
+- **Voraussetzungen:**
+  - #216 (AI Gateway und Euro-Budget) gemergt;
+  - ein Stripe-Konto für die Firma (Mirko);
+  - die Klärung mit dem Steuerberater;
+  - Webhook-Secret `STRIPE_WEBHOOK_SECRET` nur als Secret.
+
 ## Blog Ergänzungen (gebaut, 30.10.)
 - Blog-Link auf der Profilseite, Badge „Blog-Autor“ (`author`), Punkte (5 je veröffentlichtem Beitrag bis 20, 1 je Upvote bis 200), Beiträge erscheinen im Creator-Feed (Kanal „blog“), Kommentare unter Beiträgen (vorhandenes Kommentar-System, `vid=blog<id>`, auch Englisch), Blog abonnieren (Follow, `blog_follows`) und RSS je Autor und gesamt (`feed.xml`).
 - Offen: E-Mail-Benachrichtigung an Abonnenten (mit dem Mailsystem/Resend), Newsletter-Kanal des Creators beim Abonnieren zeigen, Übersetzung der Badge-Texte (bisher Englisch/Deutsch).
