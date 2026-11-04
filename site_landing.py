@@ -1,10 +1,31 @@
-"""Mehrsprachige Service-Landingpages aus den freigegebenen Canvas-Entwürfen."""
+"""Mehrsprachige Service-Landingpages: Hub /services/, 6 x /for/<zielgruppe>/, 6 x /i-want-to/<ziel>/ in allen 15 Sprachpfaden.
+
+Texte: site_landing_copy.py (en, de). Weitere Sprachen ueber site_i18n.T (Worker uebersetzt die englischen Texte aus ui_js_en.json).
+Solange eine Sprache die Texte noch nicht uebersetzt hat (_ready), wird ihre Fassung noindex geschrieben, nicht in die Sitemap und nicht
+in die hreflang-Gruppe aufgenommen - keine englischen Doppelinhalte unter /fr/, /ja/ usw. Sobald die Uebersetzungen da sind, wechselt
+die Sprache beim naechsten Bau automatisch auf index.
+
+Bilder: generate_service_images.py zeichnet je Seite ein WebP (Hero 1600x900 + 800x450 je Variante en/de/x, Vorschau 480x270 + 960x540)
+nach r2img/services/<IMG_VER>/...; tools/r2_og_upload.py laedt sie im Bau-Job VOR dem Deploy in den R2-Bucket (nur main, blockierend),
+ausgeliefert ueber https://img.m365.fm/services/... (CLAUDE.md: Bilder nur ueber img.m365.fm)."""
 import html
 import json
+import os
+import re
 from pathlib import Path
+
+import site_landing_copy as C
 
 ROOT = Path(__file__).parent
 LANGS_ALL = ("en", "de", "es", "fr", "it", "pt", "nl", "pl", "id", "ru", "uk", "ar", "he", "ja", "ko")
+IMG_BASE = os.environ.get("SERVICES_IMG_BASE", "https://img.m365.fm/services")
+IMG_VER = "v1"   # bei Aenderungen an generate_service_images.py erhoehen: neue Adressen statt veralteter Bilder im Cache
+HERO, HERO_S, THUMB, THUMB_2X = (1600, 900), (800, 450), (480, 270), (960, 540)
+READY_MIN = 0.9   # Anteil uebersetzter Saetze, ab dem eine weitere Sprache indexiert wird
+
+HUB = {"path": "services/"}
+PAGES = [dict(path=p, **C.PAGES[p]) for p in C.ORDER_AUDIENCES + C.ORDER_GOALS]
+BY_PATH = {p["path"]: p for p in PAGES}
 
 
 def _text(lang, text):
@@ -16,190 +37,159 @@ def _t(lang, text):
     return html.escape(_text(lang, text), quote=True)
 
 
+def _u(lang, key):
+    return _t(lang, C.UI[key])
+
+
 def footer_label(lang):
     return _t(lang, ("Services", "Services"))
-
-
-def hub_url(base, lang):
-    return _url(base, lang, HUB["path"])
-
-
-def _page(path, h1, lead, cta, cta_url, cards, faq, related=(), lead_feature=None, lead_enabled=None):
-    return dict(path=path, h1=h1, lead=lead, cta=cta, cta_url=cta_url, cards=cards, faq=faq,
-                related=related, lead_feature=lead_feature, lead_enabled=lead_enabled)
-
-
-HUB = {
-    "path": "services/",
-    "h1": ("M365.FM services", "M365.FM Services"),
-    "lead": ("One place for everything M365.FM offers. Start with who you are, or what you want to do.",
-             "Alle Angebote von M365.FM an einem Ort. Starte mit deiner Zielgruppe oder mit dem, was du erreichen willst."),
-    "audiences": [
-        (("Sponsors and vendors", "Sponsoren und Anbieter"), ("Reach Microsoft 365 professionals through the podcast and sponsor offer.", "Erreiche Microsoft-365-Fachleute über den Podcast und das Sponsoring-Angebot."), "for/sponsors/"),
-        (("Experts", "Experten"), ("Explore your M365.FM profile and upcoming contribution tools.", "Entdecke dein M365.FM-Profil und kommende Funktionen für Beitragsnachweise."), "for/experts/", "contribution_tracker",
-         ("Explore your M365.FM profile and contribution tracker.", "Entdecke dein M365.FM-Profil und den Contribution Tracker.")),
-        (("Podcasters", "Podcaster"), ("Bring your show to M365.FM's own website and find guests by topic.", "Bringe deinen Podcast auf die M365.FM-Website und finde Gäste nach Themen."), "for/podcasters/"),
-        (("Publishers", "Redaktionen"), ("Discover Microsoft 365 experts and upcoming request tools.", "Entdecke Microsoft-365-Experten und kommende Anfragefunktionen."), "for/publishers/", "expert_requests",
-         ("Discover Microsoft 365 experts and publisher request tools.", "Entdecke Microsoft-365-Experten und Anfragefunktionen für Redaktionen.")),
-        (("Event organizers", "Veranstalter"), ("Publish an event, invite speakers and connect sessions with profiles.", "Veröffentliche Events, lade Speaker ein und verknüpfe Sessions mit Profilen."), "for/organizers/"),
-        (("IT teams and listeners", "IT-Teams und Hörer"), ("Follow Microsoft 365 in your language and explore listener options.", "Verfolge Microsoft 365 in deiner Sprache und entdecke die Möglichkeiten für Hörer."), "for/it-teams/", "adfree_membership"),
-    ],
-    "goals": [
-        (("Reach Microsoft 365 buyers", "Microsoft-365-Käufer erreichen"), ("Sponsorship and measurable visibility.", "Sponsoring und messbare Sichtbarkeit."), "i-want-to/reach-microsoft-365-buyers/"),
-        (("Prove my community impact", "Mein Community-Engagement belegen"), ("Explore options for documenting your M365.FM community work.", "Entdecke Möglichkeiten, dein Community-Engagement bei M365.FM zu dokumentieren."), "i-want-to/prove-my-community-impact/", "contribution_tracker"),
-        (("Find an expert", "Einen Experten finden"), ("Explore ways to connect with Microsoft 365 experts, podcast guests and event speakers.", "Entdecke Möglichkeiten, Microsoft-365-Experten, Podcast-Gäste und Event-Speaker zu finden."), "i-want-to/find-an-expert/", "expert_requests"),
-        (("Grow my podcast", "Meinen Podcast weiterentwickeln"), ("Create pages on M365.FM and find relevant guests.", "Seiten auf M365.FM veröffentlichen und passende Gäste finden."), "i-want-to/grow-my-podcast/"),
-        (("Run a community event", "Ein Community-Event veranstalten"), ("Manage event pages, speakers and sessions.", "Eventseiten, Speaker und Sessions verwalten."), "i-want-to/run-a-community-event/"),
-        (("Stay current on Microsoft 365", "Bei Microsoft 365 auf dem Laufenden bleiben"), ("Listen, look up product updates and learn in your language.", "In deiner Sprache hören, Produktupdates nachschlagen und dazulernen."), "i-want-to/stay-current-on-microsoft-365/"),
-    ],
-}
-
-
-PAGES = [
-    _page("for/sponsors/", ("For sponsors and vendors", "Für Sponsoren und Anbieter"),
-          ("Reach Microsoft 365 professionals through M365.FM's podcast and topic pages. The sponsor configurator explains the available options and current pricing.",
-           "Erreiche Microsoft-365-Fachleute über den M365.FM-Podcast und Themenseiten. Der Sponsoring-Konfigurator erklärt die Möglichkeiten und aktuellen Preise."),
-          ("View the sponsor offer", "Sponsoring-Angebot ansehen"), "/sponsor/",
-          [(("Podcast sponsorship", "Podcast-Sponsoring"), ("Explore placements across the podcast and its language editions in the configurator.", "Prüfe im Konfigurator Platzierungen im Podcast und seinen Sprachfassungen.")),
-           (("Topic sponsorship", "Themen-Sponsoring"), ("See whether a topic package fits your goals and budget.", "Prüfe, ob ein Themenpaket zu deinen Zielen und deinem Budget passt.")),
-           (("Measure results", "Ergebnisse messen"), ("The offer page uses Spreaker for podcast figures and the available Search Console and Bing Webmaster Tools data for search and AI citations.", "Die Angebotsseite nutzt Spreaker für Podcast-Kennzahlen sowie verfügbare Daten der Search Console und Bing Webmaster Tools für Suche und KI-Zitate."))],
-          [(("Where do the figures come from?", "Woher stammen die Kennzahlen?"), ("Podcast figures come from Spreaker. Search and AI-citation figures are shown only when the corresponding source data is available.", "Podcast-Kennzahlen stammen von Spreaker. Such- und KI-Zitate werden nur angezeigt, wenn Daten aus der jeweiligen Quelle vorliegen.")),
-           (("Where can I see current pricing?", "Wo finde ich aktuelle Preise?"), ("The sponsor page is the source for current packages and prices.", "Die Sponsoring-Seite ist die Quelle für aktuelle Pakete und Preise."))],
-          (("Find an expert", "Einen Experten finden", "i-want-to/find-an-expert/"),)),
-    _page("for/experts/", ("For experts", "Für Experten"),
-          ("Explore your M365.FM profile and options for documenting your community work.",
-           "Entdecke dein M365.FM-Profil und Möglichkeiten, dein Community-Engagement zu dokumentieren."),
-          ("Open your profile", "Profil öffnen"), "/community/",
-          [(("MVP Contribution Tracker", "MVP Contribution Tracker"), ("Collect contributions by date and type, then review your portfolio for a reporting period. Free.", "Sammle Beiträge nach Datum und Typ und prüfe dein Portfolio für einen Berichtszeitraum. Kostenlos."), "contribution_tracker"),
-           (("Expert requests", "Anfragen an Experten"), ("Opt in to relevant media requests. Your contact details are shared only after you accept.", "Erhalte auf Wunsch passende Medienanfragen. Deine Kontaktdaten werden erst nach deiner Zusage geteilt."), "expert_requests"),
-           (("Verified profile", "Verifiziertes Profil"), ("Claim your profile and manage which information is visible.", "Beanspruche dein Profil und verwalte, welche Informationen sichtbar sind."))],
-          [(("Does the tracker guarantee an MVP award?", "Garantiert der Tracker eine MVP-Auszeichnung?"), ("No. It helps collect evidence; Microsoft decides about awards.", "Nein. Er hilft beim Sammeln von Nachweisen; über Auszeichnungen entscheidet Microsoft."), "contribution_tracker"),
-           (("Does it cost anything?", "Kostet das etwas?"), ("The profile and MVP Contribution Tracker are free.", "Profil und MVP Contribution Tracker sind kostenlos."), "contribution_tracker")],
-          (("Prove my community impact", "Mein Community-Engagement belegen", "i-want-to/prove-my-community-impact/"),)),
-    _page("for/podcasters/", ("For podcasters and creators", "Für Podcaster und Creator"),
-          ("Bring your Microsoft-focused podcast to M365.FM's own website, connect episodes with topics and guests, and find new guest opportunities.",
-           "Bringe deinen Microsoft-Podcast auf die M365.FM-Website, verknüpfe Folgen mit Themen und Gästen und entdecke neue Möglichkeiten für Gäste."),
-          ("Ask about a podcast import", "Podcast-Import anfragen"), "/community/",
-          [(("Pages on M365.FM", "Seiten auf M365.FM"), ("An import creates pages on M365.FM. Your existing hosting and RSS feed stay where they are; no paid move or hosting transfer is offered.", "Ein Import erstellt Seiten auf M365.FM. Dein bisheriges Hosting und dein RSS-Feed bleiben unverändert; ein kostenpflichtiger Umzug oder Hosting-Transfer wird nicht angeboten.")),
-           (("Guest exchange", "Gästebörse"), ("Find guests and hosts through shared topics. Matching is free.", "Finde Gäste und Hosts über gemeinsame Themen. Das Matching ist kostenlos.")),
-           (("Advertising funds the pages", "Werbung finanziert die Seiten"), ("The imported pages on M365.FM carry advertising, which helps keep the service free.", "Die importierten Seiten auf M365.FM enthalten Werbung. Sie trägt dazu bei, den Service kostenlos anzubieten."))],
-          [(("Do I lose my listeners or hosting?", "Verliere ich Hörer oder mein Hosting?"), ("No. The import creates pages on M365.FM; your podcast hosting and feed remain yours.", "Nein. Der Import erstellt Seiten auf M365.FM; dein Podcast-Hosting und Feed bleiben bei dir.")),
-           (("What does the import cost?", "Was kostet der Import?"), ("There is no price for the current import offer. It supports pages on M365.FM only.", "Für das aktuelle Import-Angebot wird kein Preis genannt. Unterstützt werden ausschließlich Seiten auf M365.FM."))],
-          (("Grow my podcast", "Meinen Podcast weiterentwickeln", "i-want-to/grow-my-podcast/"),)),
-    _page("for/publishers/", ("For journalists, editors and PR", "Für Journalisten, Redaktionen und PR"),
-          ("Explore Microsoft 365 expert profiles and upcoming request tools for publishers.",
-           "Entdecke Profile von Microsoft-365-Experten und kommende Anfragefunktionen für Redaktionen."),
-          ("Find an expert", "Experten finden"), "/community/",
-          [(("Search by expertise", "Nach Fachwissen suchen"), ("Review profiles and their public contributions to find a relevant source.", "Prüfe Profile und öffentliche Beiträge, um passende Ansprechpartner zu finden.")),
-           (("Post a request", "Anfrage veröffentlichen"), ("Share the topic, format, language and deadline. Only experts who opted in can receive requests.", "Nenne Thema, Format, Sprache und Frist. Anfragen erhalten nur Experten, die zugestimmt haben."), "expert_requests"),
-           (("Relevant requests only", "Nur passende Anfragen"), ("The publisher offer is free and has a no-spam rule. Spam-like requests can be blocked and repeat abuse can lose access.", "Das Angebot ist kostenlos und hat eine No-Spam-Regel. Spamverdächtige Anfragen können blockiert und wiederholter Missbrauch gesperrt werden."), "expert_requests")],
-          [(("Does Expert Connect cost anything?", "Kostet Expert Connect etwas?"), ("No. Expert Connect is free for publishers and experts.", "Nein. Expert Connect ist für Redaktionen und Experten kostenlos."), "expert_requests"),
-           (("Can I contact every expert?", "Kann ich jeden Experten kontaktieren?"), ("Requests go only to opted-in experts; contact details are shared after they accept.", "Anfragen gehen nur an Experten, die zugestimmt haben. Kontaktdaten werden nach ihrer Zusage geteilt."), "expert_requests")],
-          (("Find an expert", "Einen Experten finden", "i-want-to/find-an-expert/"),),
-          "expert_requests", ("Explore Microsoft 365 expert profiles and publisher request tools.",
-                              "Entdecke Profile von Microsoft-365-Experten und Anfragefunktionen für Redaktionen.")),
-    _page("for/organizers/", ("For event organizers", "Für Event-Veranstalter"),
-          ("Publish your community event, invite speakers and connect each confirmed session to its speaker profile.",
-           "Veröffentliche dein Community-Event, lade Speaker ein und verknüpfe bestätigte Sessions mit den Profilen der Vortragenden."),
-          ("Open the community", "Community öffnen"), "/community/",
-          [(("Event pages and sessions", "Eventseiten und Sessions"), ("Give your agenda, speakers and topics a place people can find.", "Gib deiner Agenda, den Speakern und Themen einen auffindbaren Platz.")),
-           (("Speaker invitations", "Speaker-Einladungen"), ("Invite people by email or LinkedIn; speakers can confirm their sessions through their profile.", "Lade Personen per E-Mail oder LinkedIn ein. Speaker können Sessions über ihr Profil bestätigen.")),
-           (("Team and participants", "Team und Teilnehmende"), ("Coordinate event roles and let participants choose whether their profile is public.", "Koordiniere Event-Rollen und lass Teilnehmende selbst entscheiden, ob ihr Profil öffentlich ist."))],
-          [(("Can I import an existing event?", "Kann ich ein bestehendes Event importieren?"), ("Ask the M365.FM team about importing an event and its sessions.", "Wende dich wegen des Imports eines Events und seiner Sessions an das M365.FM-Team.")),
-           (("How do I get started?", "Wie fange ich an?"), ("Open the community and sign in to see the available event tools.", "Öffne die Community und melde dich an, um die verfügbaren Event-Funktionen zu sehen."))],
-          (("Run a community event", "Ein Community-Event veranstalten", "i-want-to/run-a-community-event/"),)),
-    _page("for/it-teams/", ("For IT teams and Microsoft 365 listeners", "Für IT-Teams und Microsoft-365-Hörer"),
-          ("Help your team keep up with Microsoft 365: listen in your language, look up product updates and get explanations of unfamiliar terms.",
-           "Hilf deinem Team, bei Microsoft 365 auf dem Laufenden zu bleiben: in der eigenen Sprache hören, Produktupdates nachschlagen und Begriffe erklärt bekommen."),
-          ("Choose a language", "Sprache auswählen"), "/#languages",
-          [(("Podcast in your language", "Podcast in deiner Sprache"), ("The M365.FM podcast is available across the site's language editions.", "Der M365.FM-Podcast ist in den Sprachfassungen der Website verfügbar.")),
-           (("Product updates and explanations", "Produktupdates und Erklärungen"), ("Browse product pages, the community wiki and explanations linked from articles.", "Nutze Produktseiten, das Community-Wiki und Erklärungen aus Artikeln.")),
-           (("Free ad-free membership", "Kostenlose werbefreie Mitgliedschaft"), ("A free account can unlock an ad-free listening and site experience.", "Ein kostenloses Konto kann werbefreies Hören und eine werbefreie Website freischalten."), "adfree_membership")],
-          [(("Where can we listen?", "Wo können wir hören?"), ("Listen on Spreaker, Apple Podcasts, Spotify, YouTube and other podcast apps that support RSS.", "Höre auf Spreaker, Apple Podcasts, Spotify, YouTube und in weiteren Podcast-Apps mit RSS-Unterstützung.")),
-           (("Is the ad-free membership free?", "Ist die werbefreie Mitgliedschaft kostenlos?"), ("Yes. The listener membership is free and requires an account.", "Ja. Die Hörermitgliedschaft ist kostenlos und benötigt ein Konto."), "adfree_membership")],
-          (("Stay current on Microsoft 365", "Bei Microsoft 365 auf dem Laufenden bleiben", "i-want-to/stay-current-on-microsoft-365/"),)),
-    _page("i-want-to/reach-microsoft-365-buyers/", ("Reach Microsoft 365 buyers", "Microsoft-365-Käufer erreichen"),
-          ("Reach the people who listen to Microsoft 365 podcasts, search for answers and use AI assistants. See the sponsor offer and its measurement sources.",
-           "Erreiche Menschen, die Microsoft-365-Podcasts hören, nach Antworten suchen und KI-Assistenten nutzen. Sieh dir das Sponsoring-Angebot und seine Messquellen an."),
-          ("View sponsorship options", "Sponsoring-Möglichkeiten ansehen"), "/sponsor/",
-          [(("Podcast and topic sponsorship", "Podcast- und Themen-Sponsoring"), ("Choose a goal and review current options and prices on the sponsor page.", "Wähle ein Ziel und prüfe aktuelle Möglichkeiten und Preise auf der Sponsoring-Seite.")),
-           (("Search and AI citations", "Such- und KI-Zitate"), ("Search Console and Bing Webmaster Tools figures are shown only when source data is available and are refreshed through the existing monthly process.", "Zahlen aus Search Console und Bing Webmaster Tools erscheinen nur, wenn Quelldaten verfügbar sind, und werden über den bestehenden monatlichen Ablauf aktualisiert.")),
-           (("Podcast figures", "Podcast-Kennzahlen"), ("Spreaker is the source for podcast figures and downloads. The latest available period is shown below.", "Spreaker ist die Quelle für Podcast-Kennzahlen und Downloads. Der zuletzt verfügbare Zeitraum steht unten."))],
-          [(("Where can I see prices?", "Wo sehe ich die Preise?"), ("The sponsor page contains the current packages and prices.", "Die Sponsoring-Seite enthält die aktuellen Pakete und Preise.")),
-           (("Are all search metrics always available?", "Sind alle Suchkennzahlen immer verfügbar?"), ("No. The page labels metrics by source and does not invent a value when a source has no data.", "Nein. Die Seite kennzeichnet Kennzahlen nach Quelle und erfindet keine Werte, wenn Quelldaten fehlen."))],
-          (("For sponsors", "Für Sponsoren", "for/sponsors/"),)),
-    _page("i-want-to/prove-my-community-impact/", ("Prove my community impact", "Mein Community-Engagement belegen"),
-          ("Explore options for documenting your M365.FM community work.",
-           "Entdecke Möglichkeiten, dein Community-Engagement bei M365.FM zu dokumentieren."),
-          ("Open your profile", "Profil öffnen"), "/community/",
-          [(("MVP Contribution Tracker", "MVP Contribution Tracker"), ("Review podcast appearances, event sessions, quotes, mentions and articles in one portfolio. Free.", "Prüfe Podcast-Auftritte, Event-Sessions, Zitate, Erwähnungen und Artikel in einem Portfolio. Kostenlos."), "contribution_tracker"),
-           (("Export by period", "Nach Zeitraum exportieren"), ("Collect contributions and prepare a report for the period you need.", "Sammle Beiträge und bereite einen Bericht für den gewünschten Zeitraum vor."), "contribution_tracker"),
-           (("Your work, your profile", "Deine Arbeit, dein Profil"), ("Claim your profile to manage its public information and contributions.", "Beanspruche dein Profil, um öffentliche Informationen und Beiträge zu verwalten."))],
-          [(("Does a score guarantee an award?", "Garantiert eine Punktzahl eine Auszeichnung?"), ("No. The tracker organizes evidence; Microsoft decides about MVP awards.", "Nein. Der Tracker ordnet Nachweise. Über MVP-Auszeichnungen entscheidet Microsoft."), "contribution_tracker"),
-           (("Is the tracker free?", "Ist der Tracker kostenlos?"), ("Yes. The MVP Contribution Tracker is free.", "Ja. Der MVP Contribution Tracker ist kostenlos."), "contribution_tracker")],
-          (("For experts", "Für Experten", "for/experts/"),)),
-    _page("i-want-to/find-an-expert/", ("Find an expert or a podcast guest", "Einen Experten oder Podcast-Gast finden"),
-          ("Explore ways to connect with Microsoft 365 experts, podcast guests and event speakers.",
-           "Entdecke Möglichkeiten, Microsoft-365-Experten, Podcast-Gäste und Event-Speaker zu finden."),
-          ("Open the community", "Community öffnen"), "/community/",
-          [(("Expert Connect", "Expert Connect"), ("Publishers can search or post a request for an opted-in expert. Free for both sides, with a no-spam rule.", "Redaktionen können suchen oder eine Anfrage an Experten veröffentlichen, die zugestimmt haben. Kostenlos für beide Seiten, mit No-Spam-Regel."), "expert_requests"),
-           (("Guest exchange", "Gästebörse"), ("Podcasters and prospective guests can find each other through shared topics. Free.", "Podcaster und potenzielle Gäste finden einander über gemeinsame Themen. Kostenlos.")),
-           (("Event speakers", "Speaker für Events"), ("Organizers can invite speakers and connect confirmed sessions to profiles.", "Veranstalter können Speaker einladen und bestätigte Sessions mit Profilen verknüpfen."))],
-          [(("Do I need an account?", "Brauche ich ein Konto?"), ("Sign in to contact people or manage a request.", "Melde dich an, um Personen zu kontaktieren oder eine Anfrage zu verwalten."), "expert_requests"),
-           (("When are contact details shared?", "Wann werden Kontaktdaten geteilt?"), ("Only after an expert accepts a request.", "Erst nachdem ein Experte eine Anfrage angenommen hat."), "expert_requests")],
-          (("For publishers", "Für Redaktionen", "for/publishers/"),)),
-    _page("i-want-to/grow-my-podcast/", ("Grow my podcast", "Meinen Podcast weiterentwickeln"),
-          ("Create discoverable pages for your show on M365.FM, connect episodes with topics and guests, and explore the free guest exchange.",
-           "Veröffentliche auffindbare Seiten für deinen Podcast auf M365.FM, verknüpfe Folgen mit Themen und Gästen und nutze die kostenlose Gästebörse."),
-          ("Ask about a podcast import", "Podcast-Import anfragen"), "/community/",
-          [(("Import your RSS feed", "RSS-Feed importieren"), ("The current offer creates pages on M365.FM only. Your host and feed stay where they are; pages are funded by advertising.", "Das aktuelle Angebot erstellt ausschließlich Seiten auf M365.FM. Hosting und Feed bleiben unverändert; Werbung finanziert die Seiten.")),
-           (("Find relevant guests", "Passende Gäste finden"), ("Match with experts and other podcasters through shared topics. Free.", "Finde über gemeinsame Themen Experten und andere Podcaster. Kostenlos.")),
-           (("Keep control", "Die Kontrolle behalten"), ("Your existing podcast feed and hosting remain yours; this is not a hosting migration.", "Dein bestehender Podcast-Feed und dein Hosting bleiben bei dir; es handelt sich nicht um einen Hosting-Umzug."))],
-          [(("Do I lose my subscribers?", "Verliere ich meine Abonnenten?"), ("No. Your existing feed and hosting remain unchanged.", "Nein. Dein bestehender Feed und dein Hosting bleiben unverändert.")),
-           (("What does the move cost?", "Was kostet der Umzug?"), ("No price is stated for the current offer, which supports your own pages on M365.FM only.", "Für das aktuelle Angebot wird kein Preis genannt. Es unterstützt ausschließlich eigene Seiten auf M365.FM."))],
-          (("For podcasters", "Für Podcaster", "for/podcasters/"),)),
-    _page("i-want-to/run-a-community-event/", ("Run a community event", "Ein Community-Event veranstalten"),
-          ("Build an event page, invite speakers and link sessions with the people who present them.",
-           "Erstelle eine Eventseite, lade Speaker ein und verknüpfe Sessions mit den Personen, die sie halten."),
-          ("Open the community", "Community öffnen"), "/community/",
-          [(("Create an event page", "Eventseite erstellen"), ("Publish event details, topics and sessions in one place.", "Veröffentliche Event-Details, Themen und Sessions an einem Ort.")),
-           (("Invite and confirm speakers", "Speaker einladen und bestätigen"), ("Send invitations and let speakers confirm sessions through their profiles.", "Versende Einladungen und lass Speaker Sessions über ihre Profile bestätigen.")),
-           (("Coordinate participants", "Teilnehmende koordinieren"), ("Manage event roles and participant visibility in the existing community tools.", "Verwalte Event-Rollen und die Sichtbarkeit von Teilnehmenden mit den vorhandenen Community-Funktionen."))],
-          [(("Can I import an existing event?", "Kann ich ein bestehendes Event importieren?"), ("Ask the M365.FM team about importing your agenda and sessions.", "Wende dich wegen des Imports deiner Agenda und Sessions an das M365.FM-Team.")),
-           (("Where do I manage an event?", "Wo verwalte ich ein Event?"), ("Sign in to the community to see the event tools available to your account.", "Melde dich in der Community an, um die für dein Konto verfügbaren Event-Funktionen zu sehen."))],
-          (("For event organizers", "Für Event-Veranstalter", "for/organizers/"),)),
-    _page("i-want-to/stay-current-on-microsoft-365/", ("Stay current on Microsoft 365", "Bei Microsoft 365 auf dem Laufenden bleiben"),
-          ("Follow product changes without reading every update: listen to the podcast, look up product pages and learn in your language.",
-           "Verfolge Produktänderungen, ohne jedes Update lesen zu müssen: höre den Podcast, schlage Produktseiten nach und lerne in deiner Sprache."),
-          ("Listen to the podcast", "Podcast anhören"), "/show/",
-          [(("Listen", "Hören"), ("Daily podcast episodes and language editions help you follow Microsoft 365.", "Tägliche Podcast-Folgen und Sprachfassungen helfen dir, Microsoft 365 zu verfolgen.")),
-           (("Look up", "Nachschlagen"), ("Product pages, the community wiki and linked explanations add context to new terms.", "Produktseiten, das Community-Wiki und verknüpfte Erklärungen ordnen neue Begriffe ein.")),
-           (("Choose an ad-free experience", "Werbefreies Angebot wählen"), ("The ad-free listener membership is free with an account.", "Die werbefreie Hörermitgliedschaft ist mit einem Konto kostenlos."), "adfree_membership")],
-          [(("Is the ad-free membership free?", "Ist die werbefreie Mitgliedschaft kostenlos?"), ("Yes. The listener membership is free and requires an account.", "Ja. Die Hörermitgliedschaft ist kostenlos und benötigt ein Konto."), "adfree_membership"),
-           (("Can I listen in my language?", "Kann ich in meiner Sprache hören?"), ("Use the language selector to find the available M365.FM edition.", "Nutze die Sprachauswahl, um die verfügbare M365.FM-Ausgabe zu finden."))],
-          (("For IT teams and listeners", "Für IT-Teams und Hörer", "for/it-teams/"),)),
-]
 
 
 def _url(base, lang, path):
     return f"{base}/{lang + '/' if lang != 'en' else ''}{path}"
 
 
-def _card(base, lang, title, desc, path, feature=None, features=None, enabled_desc=None):
-    unavailable = feature and not features.get(feature, False)
-    if feature and not unavailable and enabled_desc:
-        desc = enabled_desc
-    return (f'<div><h3><a href="{html.escape(_url(base, lang, path), quote=True)}">{_t(lang, title)}</a></h3>'
-            f'{"<p><strong class=\"kicker\">" + _t(lang, ("Coming soon", "Bald verfügbar")) + "</strong></p>" if unavailable else ""}'
-            f'<p>{_t(lang, desc)}</p></div>')
+def hub_url(base, lang):
+    return _url(base, lang, HUB["path"])
 
+
+def slug(path):
+    return path.strip("/").replace("/", "-") or "services"
+
+
+def variant(lang):
+    """Bildvariante: en/de mit Titel im Bild, alle anderen Sprachen ohne Text (x)."""
+    return lang if lang in ("en", "de") else "x"
+
+
+def hero_src(path, lang, size=HERO):
+    return f"{IMG_BASE}/{IMG_VER}/{slug(path)}/hero-{variant(lang)}-{size[0]}.webp"
+
+
+def og_src(path, lang):
+    """Teilen-Bild 1200x630 als PNG (og:image; nicht jede Plattform liest WebP)."""
+    return f"{IMG_BASE}/{IMG_VER}/{slug(path)}/og-{variant(lang)}.png"
+
+
+def thumb_src(path, size=THUMB):
+    return f"{IMG_BASE}/{IMG_VER}/{slug(path)}/thumb-{size[0]}.webp"
+
+
+def image_jobs():
+    """Alle Bilder fuer generate_service_images.py: (slug, motif, (en, de) Kurzname)."""
+    return [(slug(HUB["path"]), C.HUB["motif"], C.HUB["short"])] + [(slug(p["path"]), p["motif"], p["short"]) for p in PAGES]
+
+
+_ENT = {"mvp": "microsoft-mvp", "m365con": "m365con", "copilot": "copilot", "m365": "microsoft-365", "mirko": "mirko-peters"}
+
+
+def _link(base, lang, key):
+    """Adresse eines Link-Schluessels (site_landing_copy.LINKS) in der Sprache; Seiten, die es nur auf en/de gibt, fallen auf Englisch zurueck."""
+    p = "" if lang == "en" else f"/{lang}"
+    ed = "/de" if lang == "de" else ""
+    if key in BY_PATH or key == HUB["path"]:
+        return _url(base, lang, key)
+    if key == "sponsor":
+        return f"{base}{p}/sponsor/"
+    if key == "community":
+        return f"{base}{p}/community/"
+    sub = {"members": "members", "companies": "companies", "events": "events", "guests": "guests", "cpodcast": "podcast",
+           "blog": "blog", "videos": "video", "library": "library"}
+    if key in sub:
+        return f"{base}{p}/community/{sub[key]}/"
+    if key == "entities":
+        return f"{base}{p}/entity/"
+    if key in _ENT:
+        return f"{base}{p}/entity/{_ENT[key]}/"
+    if key == "podcast":
+        return f"{base}/show/" if lang == "en" else f"{base}/{lang}/podcast/"
+    if key == "episodes":
+        return f"{base}/show/episodes/" if lang == "en" else f"{base}/{lang}/podcast/"
+    if key == "updates":
+        return f"{base}{ed}/updates/"
+    if key == "press":
+        return f"{base}{ed}/press/"
+    if key == "mcp":
+        return f"{base}{ed}/community/mcp/"
+    if key == "live":
+        return f"{base}{ed}/live/"
+    if key == "languages":
+        return f"{base}/#languages"
+    raise KeyError(key)
+
+
+def _a(base, lang, key):
+    return html.escape(_link(base, lang, key), quote=True)
+
+
+# ---------------------------------------------------------------- Uebersetzungsstand
+
+def _strings(o, out):
+    """Alle (en, de)-Paare der Texte einsammeln (fuer den Uebersetzungsstand)."""
+    if isinstance(o, tuple) and len(o) == 2 and all(isinstance(x, str) for x in o):
+        out.append(o)
+    elif isinstance(o, dict):
+        for k, v in o.items():
+            if k not in ("motif", "related", "links", "status", "feature", "stats"):
+                _strings(v, out)
+    elif isinstance(o, (list, tuple)):
+        for v in o:
+            _strings(v, out)
+    return out
+
+
+def _ready(lang):
+    """True, wenn die Sprache genug Saetze der Landingpages uebersetzt hat (en/de immer)."""
+    if lang in ("en", "de"):
+        return True
+    pairs = [p for p in _strings([C.HUB, C.PAGES, C.UI, C.STATUS, C.LINKS], []) if len(p[0]) >= 40]
+    if not pairs:
+        return True
+    done = sum(1 for en, de in pairs if _text(lang, (en, de)) != en)
+    return done / len(pairs) >= READY_MIN
+
+
+# ---------------------------------------------------------------- Bausteine
 
 def _number(lang, value):
-    separator = "." if lang in ("de", "es", "it", "pt", "nl", "id") else "\u202f" if lang in ("fr", "pl", "ru", "uk") else ","
+    separator = "." if lang in ("de", "es", "it", "pt", "nl", "id") else " " if lang in ("fr", "pl", "ru", "uk") else ","
     return f"{value:,}".replace(",", separator)
 
 
+def _status(lang, status, feature, features):
+    """(css-Klasse, Beschriftung) des Status; Funktionen hinter einem ausgeschalteten Schalter sind 'bald verfuegbar'."""
+    if feature and not features.get(feature, False):
+        status = "soon"
+    return status, _t(lang, C.STATUS[status])
+
+
+def _img(src, srcset, sizes, size, alt, hero=False):
+    w, h = size
+    load = 'fetchpriority="high" decoding="async"' if hero else 'loading="lazy" decoding="async"'
+    return (f'<img src="{html.escape(src, quote=True)}" srcset="{html.escape(srcset, quote=True)}" sizes="{sizes}" '
+            f'width="{w}" height="{h}" alt="{alt}" {load}>')
+
+
+def _hero_img(path, lang, alt):
+    srcset = f"{hero_src(path, lang, HERO_S)} {HERO_S[0]}w, {hero_src(path, lang)} {HERO[0]}w"
+    return (f'<figure class="lp-hero-i">{_img(hero_src(path, lang), srcset, "(min-width: 900px) 500px, calc(100vw - 32px)", HERO, alt, hero=True)}</figure>')
+
+
+def _card(base, lang, spec, features):
+    """Service-Karte fuer Hub und 'Verwandte Angebote': Bild, was es ist, fuer wen, drei Vorteile, Link."""
+    what, who, bens = spec["card"]
+    href = html.escape(_url(base, lang, spec["path"]), quote=True)
+    srcset = f"{thumb_src(spec['path'])} {THUMB[0]}w, {thumb_src(spec['path'], THUMB_2X)} {THUMB_2X[0]}w"
+    img = _img(thumb_src(spec["path"]), srcset, "(min-width: 1040px) 320px, (min-width: 600px) 45vw, calc(100vw - 32px)", THUMB, _t(lang, spec["alt"]))
+    ben = "".join(f"<li>{_t(lang, b)}</li>" for b in bens)
+    return (f'<article class="lp-card"><div class="lp-card-i">{img}</div><div class="lp-card-b">'
+            f'<h3><a href="{href}">{_t(lang, spec["h1"])}</a></h3><p>{_t(lang, what)}</p>'
+            f'<p class="lp-for"><b>{_u(lang, "for")}:</b> {_t(lang, who)}</p><ul class="lp-ben">{ben}</ul>'
+            f'<span class="lp-go" aria-hidden="true">{_u(lang, "more")} →</span></div></article>')
+
+
 def _stats(g, lang):
+    """Kennzahlen mit Quelle: Wert, Bezeichnung und Quelle je eigene Zeile. Nur Werte mit Datenquelle, nichts geschaetzt."""
     from site_sponsor import load_stats
     stats = g.get("stats")
     if stats is None:
@@ -216,34 +206,238 @@ def _stats(g, lang):
             download_available = sp.get("complete") is True and all(
                 isinstance(values.get(l), (int, float)) and not isinstance(values.get(l), bool) for l in LANGS_ALL)
             downloads = sum(values[l] for l in LANGS_ALL) if download_available else None
-            period = f'{sp.get("from", "")}–{sp.get("to", "")}'.strip("–")
+            period = f'{sp.get("from", "")} – {sp.get("to", "")}'.strip(" –")
         except (OSError, ValueError, TypeError):
             downloads, period = None, ""
     else:
         period = g.get("spreaker_period", "")
+
+    def row(value, label, source):
+        return f'<div class="lp-stat"><b>{value}</b><span>{_t(lang, label)}</span><small>{source}</small></div>'
+
     if download_available and downloads >= 0:
-        rows.append(f'<div><b>{_number(lang, downloads)}</b><span>{_t(lang, ("Spreaker downloads", "Spreaker-Downloads"))}</span>'
-                    f'<small>{_t(lang, ("Site language editions · ", "Sprachfassungen der Website · "))}{html.escape(period, quote=True)}</small></div>')
+        rows.append(row(_number(lang, downloads), ("Spreaker downloads", "Spreaker-Downloads"),
+                        _t(lang, ("Source: Spreaker, site language editions", "Quelle: Spreaker, Sprachfassungen der Website")) + (" · " + html.escape(period, quote=True) if period else "")))
     episodes = g.get("n_main")
     if isinstance(episodes, int) and episodes > 0:
-        rows.append(f'<div><b>{_number(lang, episodes)}</b><span>{_t(lang, ("Published episodes", "Veröffentlichte Folgen"))}</span>'
-                    f'<small>{_t(lang, ("Source: M365.FM episode archive", "Quelle: M365.FM-Folgenarchiv"))}</small></div>')
+        rows.append(row(_number(lang, episodes), ("Published episodes", "Veröffentlichte Folgen"), _t(lang, ("Source: M365.FM episode archive", "Quelle: M365.FM-Folgenarchiv"))))
     languages = g.get("n_langs")
     if isinstance(languages, int) and languages > 0:
-        rows.append(f'<div><b>{languages}</b><span>{_t(lang, ("Dubbed language editions", "Dub-Ausgaben"))}</span></div>')
+        rows.append(row(str(languages), ("Dubbed language editions", "Dub-Ausgaben"), _t(lang, ("Source: M365.FM episode archive", "Quelle: M365.FM-Folgenarchiv"))))
     bing = stats.get("bing") or {}
     if bing.get("ok"):
-        rows.append(f'<div><b>{_number(lang, bing["citations"])}</b><span>{_t(lang, ("AI citations", "KI-Zitate"))}</span>'
-                    f'<small>{_t(lang, ("Source: Bing Webmaster Tools", "Quelle: Bing Webmaster Tools"))} · {html.escape((bing.get("period") or {}).get("from", ""), quote=True)} – {html.escape((bing.get("period") or {}).get("to", ""), quote=True)}</small></div>')
+        per = bing.get("period") or {}
+        rows.append(row(_number(lang, bing["citations"]), ("AI citations", "KI-Zitate"),
+                        _t(lang, ("Source: Bing Webmaster Tools", "Quelle: Bing Webmaster Tools")) + f' · {html.escape(per.get("from", ""), quote=True)} – {html.escape(per.get("to", ""), quote=True)}'))
     gsc = stats.get("gsc") or {}
     if gsc.get("ok"):
-        rows.append(f'<div><b>{_number(lang, gsc["clicks"])}</b><span>{_t(lang, ("Google Search clicks", "Google-Suchklicks"))}</span>'
-                    f'<small>{_t(lang, ("Source: Google Search Console", "Quelle: Google Search Console"))}</small></div>')
-    return f'<div class="stats" aria-label="{_t(lang, ("Figures and sources", "Kennzahlen und Quellen"))}">{"".join(rows)}</div>' if rows else ""
+        rows.append(row(_number(lang, gsc["clicks"]), ("Google Search clicks", "Google-Suchklicks"), _t(lang, ("Source: Google Search Console", "Quelle: Google Search Console"))))
+    if not rows:
+        return ""
+    return (f'<div class="lp-stats" style="--n:{min(len(rows), 5)}" data-n="{len(rows)}" aria-label="{_u(lang, "figures_aria")}">{"".join(rows)}</div>'
+            f'<p class="lp-note">{_u(lang, "figures_note")}</p>')
+
+
+def _faq(lang, items, features):
+    out = []
+    for item in items:
+        q, a = item[0], item[1]
+        if len(item) > 2 and item[2] and not features.get(item[2], False):
+            a = item[3] if len(item) > 3 else C.UI["soon_text"]
+        out.append((q, a))
+    return out
+
+
+def _crumbs_ld(url, items):
+    return {"@context": "https://schema.org", "@type": "BreadcrumbList", "@id": url + "#breadcrumb",
+            "itemListElement": [{"@type": "ListItem", "position": i + 1, "name": n, "item": u} for i, (n, u) in enumerate(items)]}
+
+
+def _image_ld(url, src, lang, alt):
+    return {"@context": "https://schema.org", "@type": "ImageObject", "@id": url + "#image", "url": src, "contentUrl": src,
+            "width": HERO[0], "height": HERO[1], "caption": alt, "inLanguage": lang}
+
+
+CF = '"Barlow Condensed","Barlow Condensed FB0","Barlow Condensed FB1","Barlow Condensed FB2","Arial Narrow",sans-serif'
+CSS = ("""
+.lp .crumbs{margin:22px 0 0}.lp .crumbs a+a:before{content:"/";margin:0 .6em;color:var(--mut)}
+.lp-hero{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:44px;align-items:center;padding:34px 0 6px}.lp .crumbs+.lp-hero{padding-top:14px}
+.lp-hero h1{font-size:clamp(2.1rem,4.4vw,3.3rem);line-height:1.02;margin:.25em 0 .35em}
+.lp-hero .lede{color:var(--mut);font-size:1.14rem;line-height:1.55;max-width:34em;margin:0 0 1.1em}
+.lp-hero .kicker{font-size:.8rem;margin:0 0 4px}
+.lp-hero-i{position:relative;margin:0;border:1px solid var(--bd);background:#17191c;aspect-ratio:16/9}
+.lp-hero-i:before,.lp-hero-i:after{content:"+";position:absolute;top:-11px;font:300 19px/1 Barlow,sans-serif;color:var(--mut);background:var(--bg);padding:0 1px}
+.lp-hero-i:before{left:-7px}.lp-hero-i:after{right:-7px}
+.lp-hero-i img,.lp-card-i img{display:block;width:100%;height:auto;aspect-ratio:16/9}
+.lp-toc{display:flex;flex-wrap:wrap;gap:6px 22px;margin:40px 0 0;padding:13px 0;border-top:1px solid var(--bd);border-bottom:1px solid var(--bd);font:600 .82rem/1.4 CF_;letter-spacing:.12em;text-transform:uppercase}
+.lp-toc b{color:var(--fg);font-weight:600}.lp-toc a{color:var(--mut);text-decoration:none}.lp-toc a:hover{color:var(--ac)}
+.lp .sec{margin:68px 0 0;scroll-margin-top:70px}.lp h2{margin:0 0 .55em}.lp .sec>.kicker{font-size:.8rem;margin:0 0 6px}
+.lp-prose{max-width:46em}.lp-prose p{margin:0 0 1em;font-size:1.06rem;line-height:1.7}
+.lp-offers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.lp-offer{display:flex;flex-direction:column;gap:9px;padding:22px 22px 22px;border:1px solid var(--bd);background:var(--card)}
+.lp-offer.soon{border-style:dashed;background:transparent}
+.lp-offer h3,.lp-ex h3,.lp-steps h3{margin:0;font:600 1.35rem/1.15 CF_}
+.lp-offer p{margin:0;color:var(--mut);font-size:.98rem;line-height:1.6}
+.lp-badge{align-self:flex-start;display:inline-block;padding:4px 8px;border:1px solid var(--ac);color:var(--ac);font:600 .74rem/1.2 CF_;letter-spacing:.12em;text-transform:uppercase}
+.lp-badge.free,.lp-badge.adfunded{background:var(--ac);color:var(--onac)}.lp-badge.soon{border-style:dashed;border-color:var(--mut);color:var(--mut)}
+.lp-steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));counter-reset:s;border-top:2px solid var(--fg)}
+.lp-steps li{counter-increment:s;padding:20px 20px 6px;border-inline-end:1px solid var(--bd)}.lp-steps li:first-child{padding-inline-start:0}.lp-steps li:last-child{border:0}
+.lp-steps li:before{content:counter(s,decimal-leading-zero);display:block;margin-bottom:12px;font:600 2.3rem/1 CF_;color:var(--ac)}
+.lp-steps h3{font-size:1.2rem;margin-bottom:.4em}.lp-steps p{margin:0;color:var(--mut);font-size:.95rem;line-height:1.55}
+.lp-who{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:36px;align-items:start}.lp-who p{margin:0;font-size:1.06rem;color:var(--mut)}
+.lp-checks{list-style:none;margin:0;padding:0;border-top:1px solid var(--bd)}
+.lp-checks li{position:relative;padding:12px 0;padding-inline-start:34px;border-bottom:1px solid var(--bd)}
+.lp-checks li:before{content:"\\2713";position:absolute;inset-inline-start:0;top:14px;width:21px;height:21px;line-height:21px;text-align:center;background:var(--ac);color:var(--onac);font-weight:700;font-size:.78rem}
+.lp-ex{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
+.lp-ex>div{padding:4px 0;padding-inline-start:20px;border-inline-start:3px solid var(--ac)}.lp-ex h3{font-size:1.25rem;margin-bottom:.35em}.lp-ex p{margin:0;color:var(--mut);line-height:1.6}
+.lp-note{margin:14px 0 0;color:var(--mut);font-size:.84rem}
+.lp-links{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));column-gap:28px;border-top:1px solid var(--bd)}
+.lp-links a{display:flex;justify-content:space-between;gap:10px;padding:13px 0;border-bottom:1px solid var(--bd);text-decoration:none;font:600 1.08rem/1.3 CF_}
+.lp-links a:after{content:"\\2192";color:var(--ac)}.lp-links a:hover{color:var(--ac)}
+[dir=rtl] .lp-links a:after,[dir=rtl] .lp-go{transform:scaleX(-1)}
+.lp-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.lp-card{position:relative;display:flex;flex-direction:column;border:1px solid var(--bd);background:var(--card);transition:border-color .2s}
+.lp-card-i{background:#17191c;border-bottom:1px solid var(--bd)}
+.lp-card-b{flex:1;display:flex;flex-direction:column;gap:10px;padding:18px 20px 20px}
+.lp-card h3{margin:0;font:600 1.3rem/1.15 CF_}.lp-card h3 a{color:inherit;text-decoration:none}.lp-card h3 a:after{content:"";position:absolute;inset:0}
+.lp-card p{margin:0;color:var(--mut);font-size:.95rem;line-height:1.55}.lp-card .lp-for{font-size:.88rem}
+.lp-for b{color:var(--fg);font:600 .78rem CF_;letter-spacing:.12em;text-transform:uppercase}
+.lp-ben{list-style:none;margin:0;padding:0;display:grid;gap:5px;font-size:.92rem}
+.lp-ben li{position:relative;padding-inline-start:18px}.lp-ben li:before{content:"";position:absolute;inset-inline-start:0;top:.62em;width:8px;height:8px;background:var(--ac)}
+.lp-go{margin-top:auto;padding-top:8px;font:600 .82rem CF_;letter-spacing:.12em;text-transform:uppercase;color:var(--ac)}
+.lp-card:hover,.lp-card:focus-within{border-color:var(--ac)}.lp-card:hover h3,.lp-card:focus-within h3{color:var(--ac)}.lp-card:focus-within{outline:3px solid var(--ac);outline-offset:2px}
+.lp-card h3 a:focus-visible{outline:0}
+.lp-table{width:100%;border-collapse:collapse;border-top:2px solid var(--fg)}
+.lp-table th,.lp-table td{text-align:start;vertical-align:top;padding:15px 14px;border-bottom:1px solid var(--bd)}
+.lp-table th:first-child,.lp-table td:first-child{padding-inline-start:0}
+.lp-table thead th{font:600 .74rem CF_;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);padding-top:12px;padding-bottom:12px}
+.lp-table tbody th{width:30%;font-weight:400;line-height:1.25}.lp-table tbody th a{font:600 1.18rem/1.2 CF_;text-decoration:none}.lp-table tbody th a:hover{color:var(--ac)}
+.lp-table td{color:var(--mut);font-size:.96rem;line-height:1.5}.lp-table td:last-child{width:24%}
+.lp-stats{display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));border-top:2px solid var(--fg);border-bottom:1px solid var(--bd)}
+.lp-stat{display:flex;flex-direction:column;gap:7px;padding:22px 20px 20px;border-inline-end:1px solid var(--bd)}.lp-stat:first-child{padding-inline-start:0}.lp-stat:last-child{border-inline-end:0}
+.lp-stat b{font:600 clamp(2rem,3.6vw,2.8rem)/1 CF_;color:var(--ac)}
+.lp-stat span{font:600 .82rem/1.3 CF_;letter-spacing:.13em;text-transform:uppercase;color:var(--fg)}
+.lp-stat small{font-size:.8rem;line-height:1.45;color:var(--mut)}
+.lp-intro{max-width:48em}.lp-intro p{margin:0 0 1em;font-size:1.06rem;line-height:1.7}
+.lp .faq details{scroll-margin-top:70px}
+@media(max-width:900px){.lp-cards{grid-template-columns:repeat(2,minmax(0,1fr))}.lp-steps{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .lp-steps li{padding-inline-start:0;border-inline-end:0;border-bottom:1px solid var(--bd);padding-bottom:18px}.lp-steps li:nth-child(odd){padding-inline-end:22px}
+ .lp-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.lp-stat{padding-inline-start:0;border-inline-end:0;border-bottom:1px solid var(--bd)}.lp-stat:last-child{border-bottom:0}
+ .lp-stats[data-n="3"] .lp-stat:last-child,.lp-stats[data-n="5"] .lp-stat:last-child,.lp-stats[data-n="1"] .lp-stat{grid-column:1/-1}}
+@media(max-width:860px){.lp-hero{grid-template-columns:1fr;gap:26px;padding-top:22px}.lp-who{grid-template-columns:1fr;gap:18px}}
+@media(max-width:640px){.lp-offers,.lp-ex,.lp-cards,.lp-steps{grid-template-columns:1fr}.lp-steps li:nth-child(odd){padding-inline-end:0}
+ .lp .sec{margin-top:52px}.lp-toc{gap:4px 16px}
+ .lp-table thead{display:none}.lp-table,.lp-table tbody{display:block}
+ .lp-table tr{display:grid;grid-template-columns:1fr auto;gap:6px 12px;padding:14px 0;border-bottom:1px solid var(--bd)}
+ .lp-table th,.lp-table td{display:block;width:auto!important;padding:0!important;border:0}.lp-table td:nth-child(2){grid-column:1/-1;grid-row:2}
+ .lp-table td:last-child{grid-column:2;grid-row:1}}
+""").replace("CF_", CF)
+CSS_TAG = "<style>" + re.sub(r"\s*\n\s*", "", CSS) + "</style>"
+
+
+# ---------------------------------------------------------------- Seiten
+
+def _hub(g, lang, features):
+    base, today = g["BASE"], g["TODAY"]
+    H = C.HUB
+    url = hub_url(base, lang)
+    h1_text, lead_text, alt_text = _text(lang, H["h1"]), _text(lang, H["lead"]), _text(lang, H["alt"])
+    intro_h, intro_ps = H["intro"]
+    audiences = "".join(_card(base, lang, BY_PATH[p], features) for p in C.ORDER_AUDIENCES)
+    goals = "".join(_card(base, lang, BY_PATH[p], features) for p in C.ORDER_GOALS)
+    rows = ""
+    for name, what, status, feature, key in H["glance"]:
+        cls, label = _status(lang, status, feature, features)
+        rows += (f'<tr><th scope="row"><a href="{_a(base, lang, key)}">{_t(lang, name)}</a></th><td>{_t(lang, what)}</td>'
+                 f'<td><span class="lp-badge {cls}">{label}</span></td></tr>')
+    faq_items = _faq(lang, H["faq"], features)
+    faq = "".join(f"<details><summary>{_t(lang, q)}</summary><p>{_t(lang, a)}</p></details>" for q, a in faq_items)
+    stats = _stats(g, lang)
+    body = (f'{g["header"](lang, "")}<main class="wrap lp">'
+            f'<div class="lp-hero"><div><div class="kicker">{_u(lang, "kicker")}</div><h1>{html.escape(h1_text, quote=True)}</h1>'
+            f'<p class="lede">{html.escape(lead_text, quote=True)}</p>'
+            f'<div class="btns"><a class="btn" href="#audiences">{_u(lang, "by_audience")}</a><a class="btn" href="#goals">{_u(lang, "by_goal")}</a></div></div>'
+            f'{_hero_img(HUB["path"], lang, html.escape(alt_text, quote=True))}</div>'
+            f'<section class="sec" id="about"><h2>{_t(lang, intro_h)}</h2><div class="lp-intro">{"".join(f"<p>{_t(lang, p)}</p>" for p in intro_ps)}</div></section>'
+            f'<section class="sec" id="audiences"><div class="kicker">{_u(lang, "by_audience_k")}</div><h2>{_u(lang, "by_audience")}</h2><div class="lp-cards">{audiences}</div></section>'
+            f'<section class="sec" id="goals"><div class="kicker">{_u(lang, "by_goal_k")}</div><h2>{_u(lang, "by_goal")}</h2><div class="lp-cards">{goals}</div></section>'
+            f'<section class="sec" id="overview"><div class="kicker">{_u(lang, "glance_k")}</div><h2>{_u(lang, "glance")}</h2>'
+            f'<table class="lp-table"><thead><tr><th scope="col">{_u(lang, "col_service")}</th><th scope="col">{_u(lang, "col_what")}</th><th scope="col">{_u(lang, "col_status")}</th></tr></thead><tbody>{rows}</tbody></table></section>'
+            + (f'<section class="sec" id="figures"><h2>{_u(lang, "figures")}</h2>{stats}</section>' if stats else "")
+            + f'<section class="sec faq" id="faq"><h2>{_u(lang, "faq")}</h2>{faq}</section></main>{g["footer"](lang)}')
+    home = f"{base}/" if lang == "en" else f"{base}/{lang}/"
+    hero = hero_src(HUB["path"], lang)
+    ld = [{"@context": "https://schema.org", "@type": "CollectionPage", "@id": url + "#page", "url": url, "name": h1_text,
+           "description": _text(lang, H["meta"]), "inLanguage": lang, "dateModified": today, "isPartOf": {"@id": f"{base}/#website"},
+           "publisher": {"@id": f"{base}/#org"}, "primaryImageOfPage": {"@id": url + "#image"}, "breadcrumb": {"@id": url + "#breadcrumb"},
+           "mainEntity": {"@type": "ItemList", "numberOfItems": len(PAGES), "itemListElement": [
+               {"@type": "ListItem", "position": i + 1, "name": _text(lang, p["h1"]), "url": _url(base, lang, p["path"])} for i, p in enumerate(PAGES)]}},
+          _image_ld(url, hero, lang, alt_text),
+          _crumbs_ld(url, [(_text(lang, C.UI["crumb_home"]), home), (h1_text, url)]),
+          {"@context": "https://schema.org", "@type": "FAQPage", "@id": url + "#faq", "inLanguage": lang,
+           "mainEntity": [{"@type": "Question", "name": _text(lang, q), "acceptedAnswer": {"@type": "Answer", "text": _text(lang, a)}} for q, a in faq_items]}]
+    return body, ld, _text(lang, H["seo"]), _text(lang, H["meta"]), hero
+
+
+def _sub(g, lang, spec, features):
+    base, today = g["BASE"], g["TODAY"]
+    path = spec["path"]
+    url = _url(base, lang, path)
+    hub = hub_url(base, lang)
+    h1_text, lead_text, alt_text = _text(lang, spec["h1"]), _text(lang, spec["lead"]), _text(lang, spec["alt"])
+    cta_text, cta_key = spec["cta"]
+    cta, cta_url = _t(lang, cta_text), _a(base, lang, cta_key)
+    need_h, need_ps = spec["need"]
+    offers_h, offers = spec["offers"]
+    steps_h, steps = spec["steps"]
+    who_h, who_p, who_items = spec["who"]
+    ex_h, examples = spec["examples"]
+    stats = _stats(g, lang) if spec.get("stats") else ""
+    faq_items = _faq(lang, spec["faq"], features)
+
+    offer_html = ""
+    for o in offers:
+        cls, label = _status(lang, o["status"], o.get("feature"), features)
+        text = o["p"] if cls != "soon" else (o.get("off") or C.UI["soon_text"])
+        offer_html += f'<article class="lp-offer{" soon" if cls == "soon" else ""}"><span class="lp-badge {cls}">{label}</span><h3>{_t(lang, o["h"])}</h3><p>{_t(lang, text)}</p></article>'
+    toc = [("need", need_h), ("offer", offers_h), ("how", steps_h), ("who", who_h), ("examples", ex_h)] + ([("figures", C.UI["figures"])] if stats else []) + [("faq", C.UI["faq"])]
+    body = (f'{g["header"](lang, "")}<main class="wrap lp">'
+            f'<nav class="crumbs" aria-label="{_t(lang, ("Breadcrumb", "Brotkrumennavigation"))}"><a href="{html.escape(f"{base}/" if lang == "en" else f"{base}/{lang}/", quote=True)}">{_u(lang, "crumb_home")}</a><a href="{html.escape(hub, quote=True)}">{_u(lang, "crumb")}</a></nav>'
+            f'<div class="lp-hero"><div><div class="kicker">{_u(lang, "kicker")}</div><h1>{html.escape(h1_text, quote=True)}</h1><p class="lede">{html.escape(lead_text, quote=True)}</p>'
+            f'<div class="btns"><a class="btn main" href="{cta_url}">{cta}</a><a class="btn" href="{html.escape(hub, quote=True)}">{_u(lang, "all")}</a></div></div>'
+            f'{_hero_img(path, lang, html.escape(alt_text, quote=True))}</div>'
+            f'<nav class="lp-toc" aria-label="{_u(lang, "toc")}"><b>{_u(lang, "toc")}:</b>{"".join(f"<a href=\"#{i}\">{_t(lang, h)}</a>" for i, h in toc)}</nav>'
+            f'<section class="sec" id="need"><h2>{_t(lang, need_h)}</h2><div class="lp-prose">{"".join(f"<p>{_t(lang, p)}</p>" for p in need_ps)}</div></section>'
+            f'<section class="sec" id="offer"><h2>{_t(lang, offers_h)}</h2><div class="lp-offers">{offer_html}</div></section>'
+            f'<section class="sec" id="how"><h2>{_t(lang, steps_h)}</h2><ol class="lp-steps">{"".join(f"<li><h3>{_t(lang, h)}</h3><p>{_t(lang, p)}</p></li>" for h, p in steps)}</ol></section>'
+            f'<section class="sec" id="who"><h2>{_t(lang, who_h)}</h2><div class="lp-who"><p>{_t(lang, who_p)}</p><ul class="lp-checks">{"".join(f"<li>{_t(lang, i)}</li>" for i in who_items)}</ul></div></section>'
+            f'<section class="sec" id="examples"><h2>{_t(lang, ex_h)}</h2><div class="lp-ex">{"".join(f"<div><h3>{_t(lang, h)}</h3><p>{_t(lang, p)}</p></div>" for h, p in examples)}</div>'
+            f'<p class="lp-note">{_u(lang, "examples_note")}</p></section>'
+            + (f'<section class="sec" id="figures"><h2>{_u(lang, "figures")}</h2>{stats}</section>' if stats else "")
+            + f'<section class="sec faq" id="faq"><h2>{_u(lang, "faq")}</h2>{"".join(f"<details><summary>{_t(lang, q)}</summary><p>{_t(lang, a)}</p></details>" for q, a in faq_items)}</section>'
+            f'<section class="sec" id="links"><h2>{_u(lang, "links")}</h2><ul class="lp-links">{"".join(f"<li><a href=\"{_a(base, lang, k)}\">{_t(lang, C.LINKS[k])}</a></li>" for k in spec["links"])}</ul></section>'
+            f'<section class="sec" id="related"><h2>{_u(lang, "related")}</h2><div class="lp-cards">{"".join(_card(base, lang, BY_PATH[p], features) for p in spec["related"])}</div></section></main>'
+            f'<section class="band"><div class="wrap"><h2>{_u(lang, "cta_band")}</h2><p>{html.escape(lead_text, quote=True)}</p><div class="btns"><a class="btn main" href="{cta_url}">{cta}</a></div></div></section>'
+            f'{g["footer"](lang)}')
+    home = f"{base}/" if lang == "en" else f"{base}/{lang}/"
+    hero = hero_src(path, lang)
+    meta = _text(lang, spec["meta"])
+    who_label = "; ".join(_text(lang, i) for i in who_items)
+    ld = [{"@context": "https://schema.org", "@type": "WebPage", "@id": url + "#page", "url": url, "name": h1_text, "description": meta,
+           "inLanguage": lang, "dateModified": today, "isPartOf": {"@id": f"{base}/#website"}, "publisher": {"@id": f"{base}/#org"},
+           "primaryImageOfPage": {"@id": url + "#image"}, "breadcrumb": {"@id": url + "#breadcrumb"}, "about": {"@id": url + "#service"}},
+          {"@context": "https://schema.org", "@type": "Service", "@id": url + "#service", "name": h1_text, "description": lead_text, "url": url,
+           "serviceType": _text(lang, spec["short"]), "provider": {"@id": f"{base}/#org"}, "areaServed": "Worldwide", "image": hero,
+           "audience": {"@type": "Audience", "audienceType": who_label}, "inLanguage": lang},
+          _image_ld(url, hero, lang, alt_text),
+          _crumbs_ld(url, [(_text(lang, C.UI["crumb_home"]), home), (_text(lang, C.HUB["h1"]), hub), (h1_text, url)]),
+          {"@context": "https://schema.org", "@type": "FAQPage", "@id": url + "#faq", "inLanguage": lang,
+           "mainEntity": [{"@type": "Question", "name": _text(lang, q), "acceptedAnswer": {"@type": "Answer", "text": _text(lang, a)}} for q, a in faq_items]}]
+    return body, ld, _text(lang, spec["seo"]), meta, hero
 
 
 def build(g):
-    """Schreibt Hub und Zielseiten in allen 15 Sprachpfaden und meldet sie für hreflang und Sitemap an."""
+    """Schreibt Hub und Zielseiten in allen 15 Sprachpfaden und meldet sie (soweit indexierbar) fuer hreflang und Sitemap an."""
     base, today = g["BASE"], g["TODAY"]
     langs = ["en"] + [lang for lang in LANGS_ALL[1:] if lang in g["LANGS"]]
     feature_file = ROOT / "data" / "landing_features.json"
@@ -251,88 +445,21 @@ def build(g):
         features = g["features"] if "features" in g else json.loads(feature_file.read_text("utf-8"))
     except (OSError, ValueError):
         features = {}
-    alts_for = lambda path: {lang: _url(base, lang, path) for lang in langs}
+    ready = {lang: _ready(lang) for lang in langs}
+    idx = [lang for lang in langs if ready[lang]]
     for lang in langs:
         prefix = "" if lang == "en" else f"{lang}/"
         writer = g["write"] if lang in ("en", "de") else g["write_r2"]
-        alt_hub = alts_for(HUB["path"])
-        hub_url = alt_hub[lang]
-        h1_text = _text(lang, HUB["h1"])
-        lead_text = _text(lang, HUB["lead"])
-        h1 = html.escape(h1_text, quote=True)
-        lead = html.escape(lead_text, quote=True)
-        audiences = "".join(_card(base, lang, *audience[:3], feature=audience[3] if len(audience) > 3 else None,
-                                  features=features, enabled_desc=audience[4] if len(audience) > 4 else None)
-                            for audience in HUB["audiences"])
-        goals = "".join(_card(base, lang, *goal[:3], feature=goal[3] if len(goal) > 3 else None, features=features)
-                        for goal in HUB["goals"])
-        matrix = [
-            (("Ad-free listener membership", "Werbefreie Hörermitgliedschaft"), ("Free", "Kostenlos"), "adfree_membership"),
-            (("MVP Contribution Tracker", "MVP Contribution Tracker"), ("Free", "Kostenlos"), "contribution_tracker"),
-            (("Publisher and expert matching", "Matching für Redaktionen und Experten"), ("Free · no spam", "Kostenlos · kein Spam"), "expert_requests"),
-            (("Podcast pages on M365.FM", "Podcastseiten auf M365.FM"), ("No price stated · advertising-funded", "Ohne Preisangabe · werbefinanziert"), None),
-            (("Event tools", "Event-Funktionen"), ("Ask about availability", "Verfügbarkeit anfragen"), None),
-            (("Sponsor offer", "Sponsoring-Angebot"), ("See current offer", "Aktuelles Angebot ansehen"), None),
-        ]
-        table = "".join(f'<div><h3>{_t(lang, name)}</h3><p>{_t(lang, ("Coming soon", "Bald verfügbar") if feature and not features.get(feature, False) else price)}</p></div>'
-                        for name, price, feature in matrix)
-        body = (f'{g["header"](lang, "")}<main class="wrap"><div class="hero"><div class="kicker">{_t(lang, ("M365.FM · Services", "M365.FM · Services"))}</div>'
-                f'<h1>{h1}</h1><p class="lede">{lead}</p></div>'
-                f'<section class="sec" id="audiences"><h2 class="kicker">{_t(lang, ("I am …", "Ich bin …"))}</h2><div class="cols">{audiences}</div></section>'
-                f'<section class="sec"><h2 class="kicker">{_t(lang, ("I want to …", "Ich möchte …"))}</h2><div class="cols">{goals}</div></section>'
-                f'<section class="sec"><h2>{_t(lang, ("Services at a glance", "Angebote im Überblick"))}</h2><div class="cols">{table}</div></section>'
-                f'{_stats(g, lang)}</main>{g["footer"](lang)}')
-        ld = [{"@context": "https://schema.org", "@type": "WebPage", "@id": hub_url + "#page", "url": hub_url,
-               "name": h1_text, "description": lead_text, "inLanguage": lang, "dateModified": today,
-               "isPartOf": {"@id": f"{base}/#website"}}]
-        writer(prefix + HUB["path"] + "index.html", g["page"](lang, h1_text + " – M365.FM", lead_text, hub_url, body,
-                  alt_hub, ld, xdefault=alt_hub["en"], og_type="website", share=False,
-                  **({"og_of": alt_hub["en"]} if lang not in ("en", "de") else {})))
-        g["sitemap"].append((hub_url, today, alt_hub))
-
-        for spec in PAGES:
-            url = alts_for(spec["path"])[lang]
-            alt = alts_for(spec["path"])
-            title_text = _text(lang, spec["h1"])
-            lead = spec["lead_enabled"] if spec["lead_feature"] and features.get(spec["lead_feature"], False) else spec["lead"]
-            lead_text = _text(lang, lead)
-            title = html.escape(title_text, quote=True)
-            lead = html.escape(lead_text, quote=True)
-            cards = "".join(
-                f'<div><h3>{_t(lang, card[0])}</h3>'
-                f'{"<p><strong class=\"kicker\">" + _t(lang, ("Coming soon", "Bald verfügbar")) + "</strong></p>" if len(card) > 2 and not features.get(card[2], False) else ""}'
-                f'<p>{_t(lang, ("This feature is in preparation.", "Diese Funktion ist in Vorbereitung.") if len(card) > 2 and not features.get(card[2], False) else card[1])}</p></div>'
-                for card in spec["cards"])
-            visible_faq = [(item[0], ("This feature is in preparation.", "Diese Funktion ist in Vorbereitung.")
-                            if len(item) > 2 and not features.get(item[2], False) else item[1])
-                           for item in spec["faq"]]
-            faq = "".join(f'<details><summary>{_t(lang, q)}</summary><p>{_t(lang, a)}</p></details>'
-                          for q, a in visible_faq)
-            related = "".join(f'<a class="btn" href="{html.escape(_url(base, lang, path), quote=True)}">{_t(lang, (label, de_label))}</a>'
-                              for label, de_label, path in spec["related"])
-            cta = _t(lang, spec["cta"])
-            cta_path = spec["cta_url"].lstrip("/")
-            if cta_path == "show/" and lang != "en":
-                cta_path = "podcast/"
-            cta_url = (html.escape(base + spec["cta_url"], quote=True) if spec["cta_url"].startswith("/#")
-                       else html.escape(_url(base, lang, cta_path), quote=True) if spec["cta_url"].startswith("/")
-                       else html.escape(spec["cta_url"], quote=True))
-            all_services = html.escape(_url(base, lang, HUB["path"]), quote=True)
-            body = (f'{g["header"](lang, "")}<main class="wrap"><nav class="crumbs" aria-label="{_t(lang, ("Breadcrumb", "Brotkrumennavigation"))}"><a href="{html.escape(hub_url, quote=True)}">{_t(lang, ("Services", "Services"))}</a></nav>'
-                    f'<div class="hero"><div class="kicker">{_t(lang, ("M365.FM · Services", "M365.FM · Services"))}</div><h1>{title}</h1><p class="lede">{lead}</p>'
-                    f'<div class="btns"><a class="btn main" href="{cta_url}">{cta}</a><a class="btn" href="{all_services}">{_t(lang, ("All services", "Alle Angebote"))}</a></div></div>'
-                    f'<section class="sec"><h2>{_t(lang, ("What you get", "Deine Möglichkeiten"))}</h2><div class="cols">{cards}</div></section>'
-                    f'{"<section class=\"sec\"><h2>" + _t(lang, ("Figures and sources", "Kennzahlen und Quellen")) + "</h2>" + _stats(g, lang) + "</section>" if spec["path"] == "i-want-to/reach-microsoft-365-buyers/" else ""}'
-                    f'<section class="sec faq"><h2>{_t(lang, ("Questions and answers", "Häufige Fragen"))}</h2>{faq}</section>'
-                    f'{"<section class=\"sec\"><h2>" + _t(lang, ("Also useful", "Auch hilfreich")) + "</h2><div class=\"btns\">" + related + "</div></section>" if related else ""}</main>'
-                    f'<section class="band"><div class="wrap"><h2>{cta}</h2><div class="btns"><a class="btn main" href="{cta_url}">{cta}</a></div></div></section>{g["footer"](lang)}')
-            ld = [{"@context": "https://schema.org", "@type": "WebPage", "@id": url + "#page", "url": url,
-                   "name": title_text, "description": lead_text, "inLanguage": lang, "dateModified": today,
-                   "isPartOf": {"@id": f"{base}/#website"}},
-                  {"@context": "https://schema.org", "@type": "FAQPage", "@id": url + "#faq", "inLanguage": lang,
-                   "mainEntity": [{"@type": "Question", "name": _text(lang, q), "acceptedAnswer": {"@type": "Answer", "text": _text(lang, a)}} for q, a in visible_faq]}]
-            writer(prefix + spec["path"] + "index.html",
-                       g["page"](lang, title_text + " – M365.FM", lead_text, url, body, alt, ld,
-                                 xdefault=alt["en"], og_type="website", share=False,
-                                 **({"og_of": alt["en"]} if lang not in ("en", "de") else {})))
-            g["sitemap"].append((url, today, alt))
+        for path in [HUB["path"]] + [p["path"] for p in PAGES]:
+            alt = {l: _url(base, l, path) for l in idx}
+            url = _url(base, lang, path)
+            if path == HUB["path"]:
+                body, ld, title, desc, hero = _hub(g, lang, features)
+            else:
+                body, ld, title, desc, hero = _sub(g, lang, BY_PATH[path], features)
+            kw = dict(xdefault=alt.get("en"), og_type="website", share=False, extra_head=CSS_TAG, og_image=(og_src(path, lang), 1200, 630))
+            if not ready[lang]:
+                kw["noindex"] = True
+            writer(prefix + path + "index.html", g["page"](lang, title, desc, url, body, alt if ready[lang] else None, ld, **kw))
+            if ready[lang]:
+                g["sitemap"].append((url, today, alt))

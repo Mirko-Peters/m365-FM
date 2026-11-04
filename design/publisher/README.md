@@ -10,6 +10,7 @@ Je Datei ein Screen (Seite, 1440 breit), Stil wie die Seite (Barlow / Barlow Con
 | Request.dc.html | Anfrage stellen: Format, Titel, Briefing, Themen, Sprache, Frist, Medium, Reichweite, Zielgruppe, Medium verbergen, Bestätigung „redaktionell“, Matching-Vorschau, Limit 5/Woche |
 | Publisher-Inbox.dc.html | Meine Anfragen: Liste mit Status, Antworten der Experten (Pitch), Annehmen/Ablehnen/Melden; nach Annahme Kontakt sichtbar |
 | Expert-Inbox.dc.html | Experten-Sicht: passende Anfragen mit Begründung, Kurz-Pitch (max. 600 Zeichen, 10 Antworten/Tag), Einstellungen (Opt-in, Formate, Sprachen, Benachrichtigung, Pause), Verknüpfung MVP-Tracker |
+| Calls.dc.html | Offene Aufrufe („Themenbörse“): Publisher stellt Thema ein, Experten bewerben sich; Sortierung „passt zu mir“ per Vektor-Match, Wochenmail |
 | Moderation.dc.html | Admin: Kennzahlen, zurückgehaltene Anfragen (Link-Building, Umfrage/Vertrieb), Limits, Audit-Log |
 
 Namen, Firmen und Zahlen sind Beispieldaten bzw. Platzhalter (`[N]`). Ticket: siehe Issue „Expert Connect: Publisher-Tool nach Klickdummy umsetzen“. Grundlage: #174, PR #178.

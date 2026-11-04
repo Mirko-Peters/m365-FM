@@ -1,0 +1,117 @@
+{
+ "de": {
+  "html": "<p>Es ist 03:47 UTC, das IT-Team schläft, und in den Cloud-Logs entsteht ein Muster. Drei SharePoint-Listen namens „Test-Test-Day“ werden innerhalb von vier Minuten angelegt. Dann steigen die Berechtigungsänderungen ohne Ticket sprunghaft an. Schließlich schlagen mehrere Power-Automate-Flows gleichzeitig fehl. Das Telefon des CIO klingelt trotzdem nicht, denn technisch ist nichts ausgefallen, und die Serverlichter bleiben grün.</p>\n<p>Genau das macht den stillen Verfall in Microsoft 365 so gefährlich. Dieser Artikel zeigt, wie SharePoint, Power Apps, Power Automate und KI leise instabil werden und mit welchen Governance-Regeln sich das verhindern lässt.</p>\n\n<h2>Entropie in Microsoft 365: Wenn Systeme leise scheitern</h2>\n<p>Viele Organisationen richten ihre Aufmerksamkeit auf laute Bedrohungen wie Ransomware oder DoS-Attacken. Der schleichende Zerfall in die Unordnung, die Entropie, bleibt dagegen unbemerkt. Plattformen scheitern leise, lange bevor sie laut ausfallen.</p>\n<p>In vielen Unternehmen hält ein einzelner „Held“ die Plattform am Laufen: der eine Power-Platform-Spezialist, der nachts den abgestürzten Flow repariert. Das ist keine Strategie, sondern ein Risiko. Der Verfall verstärkt sich selbst, und er beginnt schon beim Fundament, bei SharePoint. Gegensteuern lässt sich nur mit Disziplin statt mit Heldenaktionen.</p>\n\n<h2>SharePoint-Governance: Schemadisziplin statt Datenbank-Missbrauch</h2>\n<p>SharePoint ist ein Kollaborationssubstrat. Es wurde für Dokumente und Datenlisten entwickelt, die Menschen lesen. Trotzdem wird es oft wie ein SQL Server behandelt: Aus einem einfachen Tracking-Tool wird eine Liste mit 50 Spalten, fünf verschiedenen Nachschlageketten und einer kaum noch durchschaubaren Berechtigungsstruktur. Dort beginnt der Verfall.</p>\n\n<h3>Saubere Namen für Listen und Spalten</h3>\n<p>Namen wie „Test-Tracker“ oder „Projekt X temporär“ sind in einer Sandbox in Ordnung, in der Produktion aber nicht. Eine Liste sollte nach dem fachlichen Gegenstand heißen, also etwa „Vorfälle“ und nicht „Test-Tracker“.</p>\n<p>Auch bei Spalten sammeln sich technische Schulden an. Wer eine Spalte „Status“ nennt, später nur den Anzeigenamen ändert, sie dann löscht und „Status 2“, „Status endgültig“ oder „Status echt“ anlegt, macht jeder darauf aufbauenden App das Leben schwer. Denn die API sieht weiterhin den ursprünglichen internen Namen. Die Regel lautet deshalb:</p>\n<ul>\n<li>Interne Namen ändern sich nie.</li>\n<li>Bezeichnungen sind für die Benutzeroberfläche gedacht, nicht für die API.</li>\n</ul>\n<p>Wer das nicht durchsetzt, baut einen Wolkenkratzer auf einem Sumpf.</p>\n\n<h3>Nachschlagefelder und die Grenzen von SharePoint</h3>\n<p>Nachschlagefelder fühlen sich wie relationale Joins an, SharePoint ist aber keine relationale Datenbank. Die Richtlinie ist streng: ein Nachschlagefeld pro kritischer Ansicht, mit etwas Glück zwei. Mehrstufige Beziehungen, etwa das Filtern einer Liste anhand eines Nachschlagefelds, das wiederum in einer anderen Liste nachschlägt, sollte man gar nicht erst abbilden.</p>\n<p>Wer transaktionale Integrität und komplexe Joins braucht, führt ein Gespräch über Dataverse oder SQL. Wer SharePoint dafür missbraucht, wird irgendwann bestraft: Eine Abfrage erreicht den Schwellenwert, die Delegation schlägt fehl, und die App zeigt leere Bildschirme.</p>\n\n<h3>Die Falle der Berechtigungen auf Elementebene</h3>\n<p>Die klassische Anfrage lautet: „Nur der Ersteller soll seine eigenen Elemente sehen.“ Das klingt vernünftig, ist technisch aber ein Fass ohne Boden. Wird die Vererbung für jedes Element einer Liste mit 50.000 Einträgen aufgehoben, muss der Server bei jeder Abfrage die Zugriffssteuerungsliste jeder einzelnen Zeile prüfen. Das zerstört die Performance.</p>\n<ul>\n<li>Vererbung wenn überhaupt auf Website-Ebene aufheben, nicht auf Elementebene.</li>\n<li>Müssen Zeilen unterschiedlich abgesichert werden, braucht es verschiedene Listen oder eine andere Datenquelle.</li>\n<li>Berechtigungen immer über Gruppen vergeben, nie an einzelne Personen. Menschen gehen, Gruppen bleiben.</li>\n</ul>\n\n<h2>Power Apps: Deterministisch statt Chaos mit Speichern-Button</h2>\n<p>Eine Canvas-App ist wie eine leere Leinwand, man kann malen, was man will. Genau das ist die Gefahr. Eine Power App ist entweder deterministisch oder Chaos mit einem Speichern-Button.</p>\n<p>Deterministisch heißt: Der Entwickler kontrolliert den Zustand. Er weiß genau, welche Daten geladen werden, wann sie übermittelt werden und was bei einem Fehler passiert. Chaos entsteht durch implizites Verhalten, zum Beispiel wenn man komplexe Logik in die OnSelect-Eigenschaft eines Buttons packt, die drei Datenquellen aktualisiert, eine E-Mail sendet und zu einem neuen Bildschirm navigiert, alles ohne Fehlerbehandlung. Fällt zwischendurch kurz das Internet aus, sind die Daten inkonsistent.</p>\n\n<h3>So wird eine App deterministisch</h3>\n<ul>\n<li><strong>Lese- und Schreibvorgänge zentralisieren:</strong> Steuerelemente sollten die Datenquelle nicht direkt abfragen, sondern wo sinnvoll auf lokale Sammlungen oder Variablen zugreifen.</li>\n<li><strong>Das Übermitteln eines Formulars als atomaren Vorgang behandeln.</strong></li>\n<li><strong>Nebenläufigkeit steuern:</strong> Wer Patch verwendet, muss damit umgehen, dass zwei Personen denselben Datensatz gleichzeitig bearbeiten. Ohne explizite Steuerung überschreibt die zuletzt speichernde Person die Arbeit der anderen, ohne dass es jemand merkt.</li>\n<li><strong>Protokollieren, was die App tatsächlich getan hat,</strong> nicht nur, was sie tun sollte.</li>\n</ul>\n<p>Das ist der Unterschied zwischen Spielzeug und Werkzeug. Eine professionelle App erzeugt Telemetriedaten: welcher Benutzer zu welchem Bildschirm navigierte oder bei der Übermittlung eines Formulars mit welchem Fehlercode scheiterte. Ohne diese Protokolle wird mit Vermutungen debuggt.</p>\n\n<h2>Power Automate: Zeitbomben mit Protokollen entschärfen</h2>\n<p>Flows laufen im Hintergrund, deshalb ist ihr Scheitern so tückisch. Man sieht es nur, wenn man danach sucht. Sie scheitern wie brennende Gebäude: erst leise, dann auf einmal alles.</p>\n\n<h3>Defensives Design bei Triggern</h3>\n<p>Die Hauptursache ist mangelndes defensives Design. Ein Flow, der bei jeder Änderung eines Elements startet und keine Triggerbedingungen hat, läuft jedes Mal, wenn jemand das Element anfasst, selbst bei einer simplen Tippfehlerkorrektur. Die Folge sind tausende unnötige Ausführungen, die API-Limits verstopfen. Mit einer Bedingung wie „nur ausführen, wenn der Status auf genehmigt wechselt“ lässt sich die Auslastung laut Quellenlage um bis zu 90 % senken.</p>\n\n<h3>Nebenläufigkeit begrenzen</h3>\n<p>Standardmäßig versucht Power Automate, möglichst viel parallel auszuführen. Wer dabei dasselbe Listenelement aktualisiert oder einen Zähler erhöht, erzeugt Race Conditions. Deshalb müssen Parallelitätslimits gesetzt werden. Manchmal ist sequentielle Ausführung nötig, eins nach dem anderen, um die Datenintegrität zu sichern.</p>\n\n<h3>Fehlerbehandlung mit Try-Catch</h3>\n<p>Das Try-Catch-Muster ist im visuellen Designer nicht so nativ vorhanden wie im Code, man baut es selbst:</p>\n<ol>\n<li>Die Hauptaktion kommt in einen Scope-Block, das ist der Try.</li>\n<li>Ein paralleler Block, der nur ausgeführt wird, wenn der erste fehlschlägt, bildet den Catch.</li>\n<li>Der Catch alarmiert die Verantwortlichen.</li>\n</ol>\n<p>Fehlt ein solcher Block, kann ein Flow wochenlang fehlschlagen, bis ein Benutzer fragt, wo seine Genehmigung bleibt. Das Ziel aller Protokolle und Alarme ist es, stille Fehler in laute, eingegrenzte Fehler zu verwandeln. Das System soll sofort Alarm schlagen, statt über sechs Monate unbemerkt die Datenbank zu korrumpieren.</p>\n\n<h2>KI und Copilot absichern: Bibliothekar, nicht Orakel</h2>\n<p>Jeder will Copilot und KI einschalten. KI ist aber der ultimative Beschleuniger: Ist die Governance schlecht, wird sie dadurch nur schneller schlechter. Die typischen Gefahren sind Halluzinationen und Überzugriffe.</p>\n<p>Das Leitbild lautet: Bibliothekar, kein Orakel. Ein Orakel erfindet die Wahrheit, ein Bibliothekar findet die Wahrheit, die bereits existiert. Unternehmens-KI sollte nur auf Basis zugelassener Wissensquellen antworten. Findet sie das Dokument nicht, sollte sie „Ich weiß es nicht“ sagen, statt eine Richtlinie zu erfinden.</p>\n\n<h3>Technische Leitplanken für KI</h3>\n<ul>\n<li><strong>Mensch im Prozess:</strong> Bei der KI-gestützten Dokumentverarbeitung muss bei niedrigen Konfidenzwerten ein Mensch prüfen. Ist die KI sich etwa bei einer Rechnung nicht zu 90 % sicher, entscheidet nicht sie. Sie schreibt nicht einfach ins ERP-System.</li>\n<li><strong>Zitate sind Pflicht:</strong> Eine Chatbot-Antwort muss auf das Quelldokument verweisen. Kein Zitat, keine Ausgabe.</li>\n<li><strong>Keine direkte Datenänderung:</strong> Ein Chatbot bearbeitet nie direkt die SQL-Datenbank. Er löst stattdessen einen streng kontrollierten Power-Automate-Flow aus, der als Türsteher fungiert.</li>\n</ul>\n<p>Die KI ist damit nur die Schnittstelle. Die Governance-Logik bleibt in den starren, deterministischen Schichten. Die KI ist das weiche, flexible Frontend, das Backend bleibt kalt, hart und logisch.</p>\n\n<h2>Das Governance-Rückgrat und typische Stolpersteine</h2>\n<p>Nichts davon funktioniert ohne Kontrollen, die nicht nachgeben. Das ist der unspektakuläre Teil, der aber das Fundament bildet.</p>\n<ul>\n<li><strong>DLP-Richtlinien</strong> zur Vermeidung von Datenverlust.</li>\n<li><strong>Umgebungsstrategie:</strong> Die Standardumgebung ist der Wilde Westen, dort stirbt die Governance. Produktions-Apps haben dort nichts zu suchen. Nötig ist eine Trennung von Entwicklung, Test und Produktion.</li>\n<li><strong>Verwaltete Lösungen:</strong> Wer rohe ZIP-Dateien nicht verwalteter Lösungen in die Produktion verschiebt, sucht Ärger.</li>\n<li><strong>Dienstprinzipale:</strong> Unternehmensflows gehören nicht unter das Konto einer einzelnen Person. Kündigt sie, steht im schlimmsten Fall ein ganzer Prozess wie die Kreditorenbuchhaltung still. Eine nichtmenschliche Identität sorgt dafür, dass das System auf Architektur beruht und nicht auf der Mitarbeiterliste.</li>\n</ul>\n\n<h3>Die häufigsten Stolpersteine im Überblick</h3>\n<ul>\n<li>Sprechende Testnamen und nachträglich umbenannte oder doppelt angelegte Spalten in produktiven Listen</li>\n<li>Mehrstufige Nachschlagefelder und SharePoint als Ersatz für eine relationale Datenbank</li>\n<li>Berechtigungen auf Elementebene und Rechte für einzelne Personen statt für Gruppen</li>\n<li>Apps mit Logik in einem einzigen Button, ohne Fehlerbehandlung und Protokollierung</li>\n<li>Flows ohne Triggerbedingungen, ohne Parallelitätslimits und ohne Catch-Block</li>\n<li>KI ohne Quellenbindung, Zitatpflicht und menschliche Prüfung</li>\n<li>Produktive Lösungen in der Standardumgebung und Flows unter persönlichen Konten</li>\n</ul>\n\n<h2>Praktische Takeaways</h2>\n<ul>\n<li>Benennen Sie Listen nach dem fachlichen Gegenstand und ändern Sie interne Spaltennamen nie.</li>\n<li>Begrenzen Sie Nachschlagefelder auf eins pro kritischer Ansicht und wechseln Sie bei komplexen Beziehungen zu Dataverse oder SQL.</li>\n<li>Heben Sie Vererbung nur auf Website-Ebene auf und vergeben Sie Rechte ausschließlich über Gruppen.</li>\n<li>Bauen Sie Power Apps deterministisch: zentrale Lese- und Schreibvorgänge, atomare Übermittlung, gesteuerte Nebenläufigkeit, Telemetrie.</li>\n<li>Setzen Sie in Power Automate Triggerbedingungen, Parallelitätslimits und einen Try-Catch-Aufbau mit Alarmierung.</li>\n<li>Lassen Sie KI nur auf zugelassene Wissensquellen zugreifen, verlangen Sie Zitate und holen Sie bei niedriger Konfidenz einen Menschen dazu.</li>\n<li>Lassen Sie Chatbots Änderungen nur über kontrollierte Flows auslösen.</li>\n<li>Trennen Sie Entwicklung, Test und Produktion, nutzen Sie verwaltete Lösungen, DLP und Dienstprinzipale.</li>\n</ul>\n\n<h2>Fazit</h2>\n<p>Am Ende steht eine einfache Wahl: Ausrichtung oder Entropie. Einen Mittelweg gibt es nicht. Entweder man erzwingt Strukturen früh, was sich restriktiv anfühlt und anfangs ausbremst, oder man zahlt später für den Umbau, und der ist deutlich teurer, nämlich etwa zehnmal so teuer. Hinter indizierten Spalten, Nebenläufigkeitslimits und Triggerbedingungen steht eine Haltung zum Umgang mit Technologie. SharePoint, die Power Platform und KI sind mächtige Werkzeuge, und wer sie respektiert, schützt sie mit klaren Regeln vor dem stillen Verfall.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Stiller Verfall in Microsoft 365 stoppen",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "SharePoint-Schema sichern",
+     "text": "Fachliche Listennamen, unveränderliche interne Spaltennamen, wenige Nachschlagefelder; Vererbung nur auf Website-Ebene, Rechte über Gruppen."
+    },
+    {
+     "kopf": "Power Apps deterministisch",
+     "text": "Zentrale Lese- und Schreibvorgänge, atomare Übermittlung, gesteuerte Nebenläufigkeit und Telemetrie statt Chaos."
+    },
+    {
+     "kopf": "Flows defensiv bauen",
+     "text": "Triggerbedingungen, Parallelitätslimits und Try-Catch mit Alarm machen stille Fehler laut."
+    },
+    {
+     "kopf": "KI als Bibliothekar",
+     "text": "Zugelassene Quellen, Zitatpflicht, Mensch bei niedriger Konfidenz, Änderungen nur über kontrollierte Flows."
+    },
+    {
+     "kopf": "Governance-Rückgrat",
+     "text": "DLP, getrennte Umgebungen, verwaltete Lösungen und Dienstprinzipale statt persönlicher Konten."
+    }
+   ]
+  },
+  "infos": [
+   {
+    "titel": "KI im Unternehmen: Bibliothekar statt Orakel",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Orakel (zu vermeiden)",
+     "punkte": [
+      "Erfindet die Wahrheit, etwa eine nicht existierende Richtlinie",
+      "Antwortet ohne Bindung an zugelassene Wissensquellen",
+      "Schreibt bei Unsicherheit einfach ins ERP-System",
+      "Bearbeitet Datenbanken direkt",
+      "Liefert Antworten ohne Zitat"
+     ]
+    },
+    "rechts": {
+     "titel": "Bibliothekar (Leitbild)",
+     "punkte": [
+      "Findet die Wahrheit, die bereits existiert",
+      "Antwortet nur auf Basis zugelassener Wissensquellen",
+      "Sagt „Ich weiß es nicht“, wenn kein Dokument gefunden wird",
+      "Holt bei niedriger Konfidenz einen Menschen dazu",
+      "Löst Änderungen nur über kontrollierte Power-Automate-Flows aus"
+     ]
+    }
+   },
+   {
+    "titel": "Governance-Rückgrat für Microsoft 365",
+    "typ": "checkliste",
+    "punkte": [
+     "Listen nach fachlichem Gegenstand benennen, interne Spaltennamen nie ändern",
+     "Nachschlagefelder auf eins pro kritischer Ansicht begrenzen",
+     "Vererbung nur auf Website-Ebene aufheben, Rechte nur über Gruppen vergeben",
+     "Power Apps deterministisch bauen: atomare Übermittlung, Telemetrie, gesteuerte Nebenläufigkeit",
+     "Flows mit Triggerbedingungen, Parallelitätslimits und Try-Catch-Aufbau absichern",
+     "Entwicklung, Test und Produktion trennen; verwaltete Lösungen und DLP nutzen",
+     "Unternehmensflows über Dienstprinzipale statt persönliche Konten betreiben"
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Warum sollte man bei SharePoint-Spalten interne Namen nie ändern?",
+    "opts": [
+     "Die API sieht weiterhin den ursprünglichen internen Namen der Spalte",
+     "Interne Namen werden von SharePoint automatisch alle 30 Tage zurückgesetzt",
+     "Geänderte interne Namen verursachen zusätzliche Lizenzkosten für jede Liste",
+     "Die Benutzeroberfläche zeigt nach einer Änderung keine Spalten mehr an"
+    ],
+    "a": 0,
+    "why": "Bezeichnungen gelten für die Oberfläche, die API nutzt dauerhaft den ursprünglichen internen Namen; Umbenennungen erschweren darauf aufbauenden Apps das Leben."
+   },
+   {
+    "q": "Warum sind Berechtigungen auf Elementebene bei großen Listen problematisch?",
+    "opts": [
+     "Sie lassen sich nur über Einzelpersonen statt über Gruppen vergeben",
+     "Der Server muss bei jeder Abfrage die Zugriffssteuerungsliste jeder Zeile prüfen",
+     "Sie verhindern grundsätzlich jede Nutzung von Nachschlagefeldern in der Liste",
+     "Sie werden von Power Automate nicht unterstützt und ignoriert"
+    ],
+    "a": 1,
+    "why": "Bei aufgehobener Vererbung prüft der Server pro Abfrage jede Zeile einzeln, was die Performance zerstört."
+   },
+   {
+    "q": "Wie lässt sich das Try-Catch-Muster in Power Automate umsetzen?",
+    "opts": [
+     "Durch ein Parallelitätslimit von eins, das Fehler automatisch abfängt",
+     "Durch eine Triggerbedingung, die fehlerhafte Elemente vor dem Start herausfiltert",
+     "Hauptaktion im Scope-Block, paralleler Block bei Fehlschlag alarmiert die Verantwortlichen",
+     "Durch einen Dienstprinzipal, der fehlgeschlagene Flows nachts selbstständig neu startet"
+    ],
+    "a": 2,
+    "why": "Die Hauptaktion liegt im Scope (Try); ein paralleler Block läuft nur bei Fehlschlag (Catch) und alarmiert die Verantwortlichen."
+   },
+   {
+    "q": "Wie sollte ein Chatbot Änderungen an einer SQL-Datenbank vornehmen?",
+    "opts": [
+     "Direkt, sofern die Konfidenz der KI über 90 % liegt",
+     "Über einen Dienstprinzipal, der ihm uneingeschränkten Schreibzugriff gewährt",
+     "Nur in der Standardumgebung, weil dort weniger Regeln gelten",
+     "Indem er einen streng kontrollierten Power-Automate-Flow als Türsteher auslöst"
+    ],
+    "a": 3,
+    "why": "Ein Chatbot bearbeitet die Datenbank nie direkt, sondern löst einen kontrollierten Flow aus, der als Türsteher fungiert."
+   }
+  ]
+ }
+}

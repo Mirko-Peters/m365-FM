@@ -1,0 +1,153 @@
+{
+ "de": {
+  "html": "<p>Viele Teams bauen Cloudflows noch genauso wie vor Jahren: Power Automate öffnen, automatisierten Cloudflow wählen, Trigger festlegen, Konnektoren verketten, speichern. Das funktioniert zuverlässig, kann aber teuer werden. Denn die Kosten stecken weniger im Flow selbst als in der Lizenz, die daran hängt.</p>\n<p>Mit Agent Flows in Copilot Studio gibt es ein Modell, das nach Verbrauch abrechnet statt nach Benutzer. Dieser Artikel zeigt, wo Cloudflows Geld verbrennen, wie Agent Flows funktionieren, was sie in der Praxis kosten und wann welcher Flow-Typ sinnvoll ist.</p>\n\n<h2>Cloudflows und Power Automate: Woher die Lizenzkosten kommen</h2>\n<p>Cloudflows basieren auf der Power-Automate-Lizenzmatrix. Die Grundidee ist einfach: Sie zahlen pro Benutzer oder pro Flow. Beide Pläne sind an Ausführungslimits und an die Klassifizierung der Konnektoren gebunden.</p>\n\n<h3>Der Premium-Konnektor als Kostentreiber</h3>\n<p>Mit einer Lizenz wie Microsoft 365 E3 oder E5 nutzen Sie Standard-Konnektoren wie Outlook, Teams oder SharePoint. Sobald ein Flow Premium-Konnektoren wie Dataverse, SQL Server, Salesforce oder ServiceNow einbindet, ändert sich die Lage. Jeder, der den Flow ausführt, besitzt oder auch nur ansieht, braucht dann eine höherwertige Lizenz.</p>\n<p>Ein Beispiel: Eine HR-Assistentin baut einen Flow, der sich mit Dataverse verbindet, um Onboarding-Daten zusammenzustellen. 20 Manager nutzen ihn. Aus einem einzigen Workflow werden so 20 Premium-Lizenzen zu je 15 bis 40 Dollar pro Monat. Multipliziert mit der Zahl der Abteilungen wird die Automatisierung einer Abteilung zur Budgetfrage einer anderen.</p>\n\n<h3>API-Drosselung und doppelte Credits</h3>\n<p>Jede Lizenz gewährt nur eine feste Zahl täglicher API-Aufrufe. Ist das Kontingent erschöpft, werden Flows langsamer oder brechen ab. Hinzu kommt der AI Builder: Wer Daten aus einer Rechnung extrahiert oder Text in Dokumenten erkennt, verbraucht AI-Builder-Credits, die separat abgerechnet werden, selbst wenn bereits Power Automate Premium bezahlt wird. Unternehmen unterhalten damit zwei parallele Abrechnungssysteme, eines für Automatisierung und eines für Intelligenz.</p>\n<p>Die Folge ist Lizenzwildwuchs: Jedes neue Szenario bringt womöglich einen weiteren Lizenztyp, weitere API-Zähler und eine weitere Excel-Liste zur Compliance-Überwachung mit sich. Am Ende verwalten Unternehmen ihr Lizenzinventar genauer als die Prozesse, die sie automatisieren wollten.</p>\n\n<h2>Agent Flows in Copilot Studio: Abrechnung nach Nachrichten statt nach Benutzer</h2>\n<p>Agent Flows sind in Copilot Studio zu Hause und folgen einer anderen Logik. Sie sind nicht an eine Nutzerlizenz gebunden, sondern werden nach Nachrichtenverbrauch abgerechnet. Jede Aktion und jeder API-Aufruf verbraucht kleine, messbare Einheiten. Bezahlt wird nicht, wer den Flow gebaut oder gestartet hat, sondern was er tatsächlich leistet.</p>\n<ul>\n  <li><strong>Preisanker:</strong> 100 API-Aufrufe kosten etwa 13 Cent, 1.000 Aktionen etwa 1,30 Dollar.</li>\n  <li><strong>Premium inklusive:</strong> Dataverse, SQL, Drittanbieter-APIs oder benutzerdefinierte Konnektoren zählen schlicht als Nachricht. Eine Hierarchie der Konnektorklassen gibt es nicht.</li>\n  <li><strong>AI Builder integriert:</strong> Funktionen wie Texterkennung, Vorhersage und Dokumentenextraktion laufen im selben Verbrauchsmodell. Separate KI-Credits entfallen.</li>\n  <li><strong>Lineare Skalierung:</strong> Mehr Arbeitslast bedeutet proportional mehr Kosten, ohne Stufensprünge oder erzwungene Tarif-Upgrades.</li>\n</ul>\n<p>Das lässt sich mit einem Taxi-Vergleich fassen: Cloudflows gleichen einem eigenen Taxi für jeden Mitarbeiter, dessen Leasinggebühr auch dann anfällt, wenn das Auto parkt. Agent Flows entsprechen einer Mitfahrgelegenheit, bei der nur die tatsächliche Fahrt zählt.</p>\n\n<h2>Architektur und Einsatzgebiete: Wann Agent Flows, wann Cloudflows?</h2>\n<p>Beide Flow-Typen unterscheiden sich nicht nur beim Preis, sondern auch in der Architektur. Cloudflows laufen in der Workflow-Engine von Power Automate auf Tenant-Ebene. Sie sind für Persistenz, Freigabe und menschliche Auslöser konzipiert. Agent Flows laufen in der KI-Laufzeitumgebung von Copilot Studio. Ihre Trigger sind Konversationen, KI-Ereignisse oder Backend-Signale von Diensten.</p>\n\n<h3>Wann Agent Flows die bessere Wahl sind</h3>\n<p>Agent Flows passen, wenn Auslöser, Logik oder Ausführung von Konversationen, Interpretation oder KI abhängen. Alles, was mit einem Copilot-Prompt, einem Chat oder einem Serviceereignis beginnt, ist ihr Terrain. Ein Beispiel: Jemand fragt Copilot nach den fünf offenen Salesforce-Deals, deren Abschlussdatum in der vergangenen Woche überschritten wurde. Der Agent Flow interpretiert die Anfrage, formatiert sie und liefert das Ergebnis, abgerechnet pro Nachricht statt pro Benutzer. Dasselbe gilt, wenn Copilot mitten im Dialog einen benutzerdefinierten Konnektor aufruft oder ein Muster in Daten erkennt.</p>\n<p>Der inhaltliche Unterschied lässt sich so beschreiben: Ein Cloudflow verschiebt vielleicht Dateien von SharePoint nach OneDrive. Ein Agent Flow entscheidet, welche Dateien wichtig sind, fasst sie mit AI Builder zusammen und postet die relevanten Teile in Teams. Je mehr Intelligenz eingebettet ist, desto höher der Ertrag pro verbrauchter Nachricht.</p>\n\n<h3>Wann Cloudflows unverzichtbar bleiben</h3>\n<p>Cloudflows bleiben das Rückgrat für Koordination: Prozesse über mehrere Konten, freigegebene Ordner oder abteilungsübergreifende Genehmigungen. Wenn zehn Manager denselben Workflow für Dateien in SharePoint oder Genehmigungen in Teams brauchen, ist der Cloudflow weiterhin überlegen. Seine Architektur unterstützt gemeinsame Eigentümer, geplante Ausführungen und komplexe Auslöser, die nicht von einer Konversation abhängen.</p>\n<p>Die Trennlinie lautet also: Agent Flows, wenn Konversation, Interpretation oder KI im Spiel sind. Cloudflows, wenn Koordination, Wiederholung und benutzerübergreifende Transparenz wichtiger sind als Intelligenz. Es geht nicht um Überlegenheit, sondern um den Zweck.</p>\n\n<h2>Die Kostenrechnung: Was Agent Flows tatsächlich kosten</h2>\n<p>Ein Premium-Plan für Cloudflows kostet 15 bis 40 Dollar pro Nutzer und Monat, unabhängig davon, wie oft automatisiert wird. Das ist wie ein All-you-can-eat-Buffet mit Preis pro Gast: gut, wenn jeder Platz besetzt ist, teuer, wenn die Hälfte der Stühle leer bleibt. Wer selten automatisiert, wird mitfinanziert, während Vielnutzer an Drosselungsgrenzen stoßen.</p>\n\n<h3>Ein durchgerechnetes Beispiel</h3>\n<p>Agent Flows funktionieren dagegen à la carte. Ein Prozess durchläuft 100 Datensätze und führt pro Datensatz drei Aktionen aus. Das ergibt 300 API-Aufrufe, also drei Nachrichteneinheiten oder rund 39 Cent pro Ausführung. Läuft der Prozess einen Monat lang täglich, sind es etwa 12 Dollar. Wird er nur einmal pro Quartal ausgeführt, fallen die Kosten kaum ins Gewicht. Verdoppeln sich die Datensätze, verdoppeln sich auch die Kosten, ohne versteckte Stufen.</p>\n\n<h3>Transparenz und Obergrenzen</h3>\n<p>Copilot Studio protokolliert jede Nachricht und zeigt den Verbrauch nach Stunde, Trigger und Konnektor-Typ. Kostenspitzen lassen sich so einzelnen Automatisierungen zuordnen, statt die Rechnung des nächsten Quartals zu erraten. Zudem werden Quoten pro Stunde, Tag und Monat durchgesetzt. Bei etwa 125 Prozent der gekauften Kapazität werden neue Ausführungen gestoppt. Zusätzliche Copilot Credits lassen sich jederzeit in messbaren Paketen nachkaufen. Die Nachrichten sollen künftig in Copilot Credits überführt werden. Das System bleibt dasselbe, die Abrechnung wird einheitlicher, und AI-Builder-Prompts und Agent Flows laufen über ein gemeinsames Konto.</p>\n<p>Das verändert auch das Entwickeln: Eine unsaubere Schleife mit fünf redundanten API-Aufrufen kostet echtes Geld. Wer Aktionen effizient kombiniert, senkt die Ausgaben spürbar. Optimierung wird damit zur finanziellen Hygiene.</p>\n\n<h2>Migration von Cloudflows zu Agent Flows</h2>\n<p>Der Umstieg ist weniger kompliziert, als er klingt. Zuerst wird der Cloudflow lösungsbewusst gemacht, also aus dem persönlichen Arbeitsbereich in eine verwaltete Lösung in Dataverse verschoben. Dort erscheint ein Dropdown-Menü für den Plan: Power Automate oder Copilot Studio. Wird auf Copilot Studio umgestellt, migriert der Flow in diese Umgebung. Die Lizenzierung wechselt sofort von pro Benutzer auf verbrauchsbasiert, abgerechnet wird nach Nachrichten statt pauschal pro Monat.</p>\n\n<h2>Häufige Fehler und Stolpersteine</h2>\n<ul>\n  <li><strong>Die Umwandlung ist unumkehrbar:</strong> Ein Flow, der einmal zum Agent Flow geworden ist, bleibt einer. Ein Zurück gibt es nur, indem man ihn von Grund auf neu erstellt. Prüfen Sie deshalb vorher, ob der Flow wirklich konversations- oder KI-getrieben ist.</li>\n  <li><strong>Der alte Reflex „kritische Abläufe bleiben in Power Automate“:</strong> Viele Administratoren zögern aus Gewohnheit. Dabei bringt Copilot Studio inzwischen Governance-Funktionen mit, darunter Entwurfsspeicherung, Versionsverlauf, Audit-Logs, kontrollierte Veröffentlichung, rollenbasierte Berechtigungen und planbare Kontingente.</li>\n  <li><strong>Doppelte Bezahlung:</strong> Viele Organisationen kaufen Power Automate Premium für Cloudflows und zahlen zugleich für Copilot-Studio-Kapazität, die dieselben leichtgewichtigen Automatisierungen nachrichtenbasiert ausführen könnte.</li>\n  <li><strong>Ineffiziente Flows:</strong> Im Verbrauchsmodell schlagen redundante API-Aufrufe direkt auf die Rechnung durch.</li>\n  <li><strong>Reflexhaftes „Bau einfach einen Flow“:</strong> Klären Sie zuerst, welche Art von Flow nötig ist. Der eine kostet durch Existenz, der andere durch Leistung.</li>\n</ul>\n\n<h2>Der strategische Wandel: Automatisierung wird KI-nativ</h2>\n<p>Hinter dem Lizenzthema steckt eine Richtungsentscheidung. Cloudflows entstanden, als Automatisierung im Kern ein Makro-Rekorder war: Menschen lösten aus, Systeme führten aus. Agent Flows verbinden Automatisierung mit Kognition. Sie interpretieren Kontext, können sich selbst auslösen, werten Daten aus und passen Aktionen über Sprachmodelle an.</p>\n<p>Da Copilot in Produkte wie Word, Outlook, Dynamics und Teams integriert ist, dienen Agent Flows als verbindende Schicht. Statt Dutzende Cloudflows zwischen Apps zu verknüpfen, koordiniert eine KI-native Basis in Copilot Studio die Aufgaben der Copilots im Tenant. Das ist zugleich eine Lizenzstrategie: Klassische Automatisierung bleibt in Power Automate mit seinen nutzerbasierten Plänen, KI-native Automatisierung folgt dem Nachrichten- bzw. Kreditmodell von Copilot.</p>\n<p>Für Unternehmen hat das praktische Folgen. Kleine Automatisierungen wie Erinnerungen, einfache Genehmigungen und Suchanfragen lassen sich in Agent Flows verlagern. Das reduziert redundante Benutzerlizenzen und schafft Platz in Power Automate für die schweren, industriellen Workflows. Erwartbar ist, dass Agent Flows weitere Cloudflow-Funktionen wie Zeitplan-Trigger, Stapelverarbeitung und Multi-User-Sichtbarkeit übernehmen. Cloudflows bleiben dann als Backend-Infrastruktur bestehen, weniger als das Gesicht der Unternehmensautomatisierung.</p>\n\n<h2>Praktische Takeaways</h2>\n<ul>\n  <li>Prüfen Sie, welche Cloudflows Premium-Konnektoren nutzen und wie viele Personen sie ausführen, besitzen oder ansehen. Hier entstehen die versteckten Lizenzkosten.</li>\n  <li>Setzen Sie Agent Flows für Abläufe ein, die durch Chats, Copilot-Prompts, KI-Ereignisse oder Service-Signale starten.</li>\n  <li>Behalten Sie Cloudflows für Koordination, geplante Ausführungen, gemeinsame Eigentümer und abteilungsübergreifende Genehmigungen.</li>\n  <li>Rechnen Sie mit der Faustformel: 100 Aktionen bzw. API-Aufrufe entsprechen etwa 13 Cent.</li>\n  <li>Planen Sie die Migration bewusst: Sie ist unumkehrbar.</li>\n  <li>Vermeiden Sie Doppelzahlungen, indem Sie Power-Automate-Premium-Pläne und Copilot-Studio-Kapazität gemeinsam betrachten.</li>\n  <li>Optimieren Sie Schleifen und Aktionen, denn jeder redundante API-Aufruf kostet.</li>\n  <li>Nutzen Sie die Verbrauchsübersicht nach Stunde, Trigger und Konnektor-Typ sowie die Kontingente zur Budgetsteuerung.</li>\n</ul>\n\n<h2>Fazit</h2>\n<p>Cloudflows sind technisch bewährt, werden aber durch Benutzerlizenzen, Premium-Konnektoren, API-Drosselung und separate AI-Builder-Credits schnell teuer und unübersichtlich. Agent Flows in Copilot Studio rechnen nach Nachrichten ab, schließen Premium-Konnektoren und AI Builder ein und skalieren linear mit der Arbeitslast. Das heißt nicht, Power Automate aufzugeben: Cloudflows bleiben für Koordination und Orchestrierung im großen Maßstab wichtig. Wer jedoch konversations- oder KI-getriebene Prozesse neu baut oder leichte Automatisierungen umzieht, zahlt künftig für tatsächliche Leistung statt für bloße Lizenzen.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Cloudflows vs. Agent Flows",
+   "typ": "vergleich",
+   "links": {
+    "titel": "Cloudflows (Power Automate)",
+    "punkte": [
+     "Abrechnung pro Benutzer oder Flow",
+     "Ein Premium-Konnektor hebt alle Beteiligten in Premium-Lizenzen",
+     "Premium-Pläne: 15 bis 40 Dollar pro Nutzer und Monat",
+     "AI-Builder-Credits separat abgerechnet",
+     "Stark bei Koordination und geplanten Abläufen"
+    ]
+   },
+   "rechts": {
+    "titel": "Agent Flows (Copilot Studio)",
+    "punkte": [
+     "Abrechnung nach Nachrichten statt nach Benutzer",
+     "Premium-Konnektoren inklusive",
+     "100 API-Aufrufe kosten etwa 13 Cent",
+     "AI Builder im selben Verbrauchsmodell",
+     "Stark bei Konversationen und KI-Auslösern"
+    ]
+   }
+  },
+  "faq": [
+   {
+    "q": "Was sind Agent Flows in Copilot Studio und wie werden sie abgerechnet?",
+    "a": "Agent Flows laufen in Copilot Studio und sind nicht an eine Nutzerlizenz gebunden. Abgerechnet wird nach Nachrichtenverbrauch: Jede Aktion und jeder API-Aufruf verbraucht kleine Einheiten. Premium-Konnektoren und AI-Builder-Funktionen sind eingeschlossen. Als Richtwert kosten 100 API-Aufrufe etwa 13 Cent."
+   },
+   {
+    "q": "Warum sind Cloudflows in Power Automate oft so teuer?",
+    "a": "Die Kosten entstehen vor allem durch Lizenzen. Sobald ein Flow Premium-Konnektoren wie Dataverse, SQL Server oder Salesforce nutzt, braucht jeder, der ihn ausführt, besitzt oder ansieht, eine höherwertige Lizenz (15 bis 40 Dollar pro Monat). Dazu kommen API-Limits und separat abgerechnete AI-Builder-Credits."
+   },
+   {
+    "q": "Wann sollte ich Agent Flows und wann Cloudflows verwenden?",
+    "a": "Agent Flows eignen sich, wenn Konversation, Interpretation oder KI im Spiel sind, etwa bei Copilot-Prompts, Chats oder Serviceereignissen. Cloudflows bleiben besser für Koordination, geplante Ausführungen, gemeinsame Eigentümer und abteilungsübergreifende Genehmigungen, bei denen Wiederholung und Transparenz wichtiger sind als Intelligenz."
+   },
+   {
+    "q": "Wie migriere ich einen Cloudflow zu einem Agent Flow und kann ich das rückgängig machen?",
+    "a": "Der Cloudflow wird zuerst in eine verwaltete Lösung in Dataverse verschoben. Dort stellt man im Plan-Dropdown von Power Automate auf Copilot Studio um; die Lizenzierung wechselt sofort auf verbrauchsbasiert. Die Umwandlung ist unumkehrbar: Ein Zurück gibt es nur durch kompletten Neuaufbau des Flows."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Agent Flows in Zahlen",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "13 Cent",
+      "text": "kosten etwa 100 API-Aufrufe im Verbrauchsmodell."
+     },
+     {
+      "wert": "1,30 Dollar",
+      "text": "kosten etwa 1.000 Aktionen."
+     },
+     {
+      "wert": "39 Cent",
+      "text": "kostet eine Ausführung mit 100 Datensätzen und je drei Aktionen."
+     },
+     {
+      "wert": "12 Dollar",
+      "text": "fallen etwa an, wenn dieser Prozess einen Monat lang täglich läuft."
+     },
+     {
+      "wert": "125 Prozent",
+      "text": "der gekauften Kapazität: Dann werden neue Ausführungen gestoppt."
+     }
+    ]
+   },
+   {
+    "titel": "Migration von Cloudflow zu Agent Flow",
+    "typ": "prozess",
+    "punkte": [
+     {
+      "kopf": "Flow prüfen",
+      "text": "Ist der Flow wirklich konversations- oder KI-getrieben? Die Umwandlung ist unumkehrbar.",
+      "art": "start"
+     },
+     {
+      "kopf": "Lösungsbewusst machen",
+      "text": "Flow aus dem persönlichen Arbeitsbereich in eine verwaltete Lösung in Dataverse verschieben.",
+      "art": "schritt"
+     },
+     {
+      "kopf": "Plan wählen",
+      "text": "Im Dropdown-Menü statt Power Automate den Plan Copilot Studio auswählen.",
+      "art": "schritt"
+     },
+     {
+      "kopf": "Flow migriert",
+      "text": "Der Flow wechselt in die Umgebung von Copilot Studio.",
+      "art": "schritt"
+     },
+     {
+      "kopf": "Verbrauch abrechnen",
+      "text": "Lizenzierung wechselt sofort auf verbrauchsbasiert, nach Nachrichten statt pauschal pro Monat.",
+      "art": "ende"
+     }
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Wodurch entstehen bei Cloudflows laut Artikel typischerweise die höchsten versteckten Lizenzkosten?",
+    "opts": [
+     "Durch Premium-Konnektoren, die für jede beteiligte Person eine höherwertige Lizenz erfordern",
+     "Durch die Speicherung von Flows in verwalteten Lösungen",
+     "Durch die Nutzung von Standard-Konnektoren wie Outlook und Teams",
+     "Durch die Anzahl der gespeicherten Flow-Versionen im Versionsverlauf"
+    ],
+    "a": 0,
+    "why": "Sobald ein Flow Premium-Konnektoren wie Dataverse nutzt, braucht jeder, der ihn ausführt, besitzt oder ansieht, eine höherwertige Lizenz."
+   },
+   {
+    "q": "Wie werden Agent Flows in Copilot Studio abgerechnet?",
+    "opts": [
+     "Pauschal pro Benutzer und Monat, abhängig von der Konnektorklasse",
+     "Nach Nachrichtenverbrauch, unabhängig davon, wer den Flow gebaut oder gestartet hat",
+     "Nach Anzahl der Flows, die ein Unternehmen im Tenant besitzt",
+     "Nur nach der Zahl der eingesetzten AI-Builder-Credits"
+    ],
+    "a": 1,
+    "why": "Agent Flows sind nicht an Nutzerlizenzen gebunden, sondern werden nach Nachrichtenverbrauch abgerechnet; bezahlt wird die tatsächliche Leistung."
+   },
+   {
+    "q": "Was gilt für die Migration eines Cloudflows zu einem Agent Flow?",
+    "opts": [
+     "Sie lässt sich jederzeit per Dropdown-Menü wieder rückgängig machen",
+     "Sie ist nur für Flows ohne Premium-Konnektoren möglich",
+     "Sie ist unumkehrbar; ein Zurück gibt es nur durch Neuerstellung",
+     "Sie erfordert zuvor den Kauf zusätzlicher Power-Automate-Premium-Lizenzen"
+    ],
+    "a": 2,
+    "why": "Ein einmal umgewandelter Agent Flow bleibt einer; zurück geht es nur, indem man den Flow von Grund auf neu erstellt."
+   },
+   {
+    "q": "Wann bleiben Cloudflows laut Artikel die bessere Wahl gegenüber Agent Flows?",
+    "opts": [
+     "Wenn ein Copilot-Prompt oder Chat den Ablauf startet",
+     "Wenn Dokumente mit AI Builder zusammengefasst werden sollen",
+     "Wenn Copilot mitten im Dialog einen benutzerdefinierten Konnektor aufruft",
+     "Wenn Koordination, geplante Ausführungen und abteilungsübergreifende Genehmigungen im Vordergrund stehen"
+    ],
+    "a": 3,
+    "why": "Cloudflows eignen sich für Koordination, Wiederholung und benutzerübergreifende Transparenz, etwa gemeinsame Eigentümer, geplante Ausführungen und Genehmigungen."
+   }
+  ]
+ }
+}
