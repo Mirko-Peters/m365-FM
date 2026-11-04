@@ -12,11 +12,6 @@ jobs:
     timeout-minutes: 20
     env:
       EVENTS_POLICY_APPROVED: ${{ vars.EVENTS_POLICY_APPROVED }}
-      EVENTS_COMMUNITYDAYS: ${{ vars.EVENTS_COMMUNITYDAYS }}
-      EVENTS_PNP: ${{ vars.EVENTS_PNP }}
-      EVENTS_DEVELOPERS_EVENTS: ${{ vars.EVENTS_DEVELOPERS_EVENTS }}
-      EVENTS_SESSIONIZE: ${{ vars.EVENTS_SESSIONIZE }}
-      EVENTS_GLOBALAI: ${{ vars.EVENTS_GLOBALAI }}
     steps:
       - uses: actions/checkout@v4
         with: { ref: "${{ github.ref_name }}" }

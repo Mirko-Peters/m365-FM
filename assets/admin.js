@@ -74,8 +74,8 @@
     p.appendChild(m);
     api("/api/admin/panel/event-imports").then(function (r) {
       if (r.s !== 200) { msg(m, "Event-Importe nicht abrufbar.", true); return; }
-      var items = (r.j || {}).items || [], speakers = (r.j || {}).speakers || [];
-      if (!items.length && !speakers.length) { msg(m, "Keine offenen Event-Importe oder externen Speaker."); return; }
+      var items = (r.j || {}).items || [], automatic = (r.j || {}).automatic || [], speakers = (r.j || {}).speakers || [];
+      if (!items.length && !automatic.length && !speakers.length) { msg(m, "Keine offenen Event-Importe oder externen Speaker."); return; }
       if (!items.length) msg(m, "Keine offenen Event-Kandidaten.");
       items.forEach(function (x) {
         var d = x.data || {}, sessions = d.sessions || [], dupes = x.duplicates || [];
@@ -101,6 +101,17 @@
         ]);
         p.appendChild(row);
       });
+      if (automatic.length) {
+        p.appendChild(h("h2", { text: "Automatisch importiert" }));
+        automatic.forEach(function (x) {
+          var fields = (x.changes || []).slice(-1)[0];
+          p.appendChild(h("section", { class: "adm-row" }, [
+            h("b", { text: (x.data || {}).title || x.fp }),
+            h("p", { class: "mut", text: "Automatisch freigegeben · " + ago(x.last_seen) }),
+            h("p", { class: "mut", text: fields ? "Änderung: " + (fields.fields || []).join(", ") : "Community Days" })
+          ]));
+        });
+      }
       if (speakers.length) {
         p.appendChild(h("h2", { text: "Veröffentlichte externe Speaker" }));
         speakers.forEach(function (speaker) {

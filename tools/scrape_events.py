@@ -1,12 +1,10 @@
 """Sammelt öffentliche Fakten zu Microsoft-Community-Events."""
 import hashlib
 import json
-import os
 import re
 import sys
 import urllib.request
 from datetime import datetime, timezone
-from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import parse_qsl, urlparse
 
@@ -15,9 +13,6 @@ OUT = ROOT / "data" / "ext_events.json"
 STATE = ROOT / "data" / "ext_events_state.json"
 UA = "M365FM-event-scraper/1.0 (+https://www.m365.fm/contact/)"
 MCP_URL = "https://mcp.communitydays.org"
-PNP_URL = "https://pnp.github.io/ical/calendar.json"
-DEVELOPERS_URLS = ("https://developers.events/all-events.json", "https://developers.events/all-cfps.json")
-GLOBALAI_URL = "https://globalai.community/events/"
 MS_TERMS = {
     "m365": "microsoft-365", "microsoft 365": "microsoft-365", "sharepoint": "sharepoint",
     "teams": "teams", "viva": "viva", "power platform": "power-platform", "power bi": "power-bi",
@@ -28,7 +23,6 @@ MS_TERMS = {
 }
 NEGATIVE_TERMS = ("microsoft wordle", "ai music", "artificial insemination", "copilot car")
 MIN_SESSION_SHARE = 0.5
-FETCH_INTERVAL = 6 * 60 * 60
 EMAIL = re.compile(r"[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}", re.I)
 
 
@@ -130,6 +124,8 @@ def community_events():
     print("Community Days MCP tools/list: " + ", ".join(names), file=sys.stderr)
     selected = [x for x in tools if re.search(r"event|session", (x.get("name", "") + " " + x.get("description", "")), re.I)
                 and not re.search(r"create|update|delete|submit|write|admin|register", x.get("name", ""), re.I)]
+    if not selected:
+        raise ValueError("Community Days MCP meldet kein geeignetes Read-only-Event-Tool")
     out = []
     for index, tool in enumerate(selected[:10], 3):
         schema = tool.get("inputSchema") or {}
@@ -153,6 +149,8 @@ def community_events():
             batch_size = args.get(limit_key, 100) if limit_key else 100
             if not (page_key or offset_key) or (limit_key and len(found) < batch_size) or not found:
                 break
+    if not out:
+        raise ValueError("Community Days MCP lieferte keinen vollständigen Event-Snapshot")
     return out
 
 
@@ -229,23 +227,6 @@ def _speakers(value):
     return out
 
 
-def _published_sessionize_urls(value):
-    found = set()
-    if isinstance(value, dict):
-        for child in value.values():
-            found.update(_published_sessionize_urls(child))
-    elif isinstance(value, list):
-        for child in value:
-            found.update(_published_sessionize_urls(child))
-    elif isinstance(value, str):
-        for match in re.findall(r"https://(?:www\.)?sessionize\.com/api/v2/[A-Za-z0-9]+/view/All/?", value):
-            found.add(match.replace("www.sessionize.com", "sessionize.com").rstrip("/"))
-        for slug in re.findall(r"https://(?:www\.)?sessionize\.com/([A-Za-z0-9-]+)/?", value):
-            if slug.lower() != "api":
-                found.add(f"https://sessionize.com/{slug}/")
-    return sorted(found)
-
-
 def _normalize(raw, source, source_id):
     url = _first(raw, "url", "website", "eventUrl", "link", "joinUrl")
     if isinstance(url, dict):
@@ -279,12 +260,10 @@ def _normalize(raw, source, source_id):
         source_id = f"{source}:{title}:{_first(raw, 'start', 'startDate', 'start_date', 'date')}"
     mode = _first(raw, "mode", "online", "eventAttendanceMode")
     mode = "online" if mode is True or str(mode).lower() in ("online", "virtual", "onlineeventattendancemode") else "hybrid" if str(mode).lower() == "hybrid" else "onsite"
+    status = str(_first(raw, "status", "eventStatus")).lower()
+    gone = bool(raw.get("cancelled") or raw.get("isCancelled") or raw.get("canceled") or
+                any(term in status for term in ("cancel", "withdraw", "removed", "deleted", "gone")))
     sources = [{"source": source, "ext_id": source_id[:200], "url": event_url}]
-    if source in ("community_days", "developers_events"):
-        for endpoint in _published_sessionize_urls(raw):
-            path = urlparse(endpoint).path.strip("/").split("/")
-            source_id_part = path[2] if path[:2] == ["api", "v2"] else path[0]
-            sources.append({"source": "sessionize", "ext_id": source_id_part, "url": endpoint})
     return {"sources": sources,
             "title": title[:180], "start": _date(_first(raw, "start", "startDate", "start_date", "date", "startTime", "start_time", "beginsAt")),
             "end": _date(_first(raw, "end", "endDate", "end_date", "endTime", "end_time", "endsAt")), "mode": mode,
@@ -293,6 +272,7 @@ def _normalize(raw, source, source_id):
             "url": event_url,
             "organizer_name": EMAIL.sub("", str(organizer))[:120],
             "topics": microsoft_topics(raw), "cfs_close": _date(_first(raw, "cfs_close", "cfpDeadline", "cfp_deadline", "submissionDeadline", "submission_deadline")),
+            "gone": gone,
             "sessions": sessions, "speakers": speakers}
 
 
@@ -316,181 +296,6 @@ def _relevance(item, prefiltered=False):
         return True
     topics = sorted(set(item.get("topics", []) + microsoft_topics(item)))
     return bool(topics)
-
-
-def _pnp():
-    data = json.loads(get(PNP_URL))
-    retrieved = _date(data.get("lastRetrieved", ""))
-    try:
-        age = (datetime.now(timezone.utc).date() - datetime.fromisoformat(retrieved).date()).days
-    except ValueError:
-        return []
-    if age > 30:
-        print(f"PnP-Kalender ist {age} Tage alt; keine veralteten Termine importiert.", file=sys.stderr)
-        return []
-    out = []
-    for event in data.get("events", []):
-        title = str(event.get("summary", "")).strip()
-        if not re.search(r"\bcall\b", title, re.I):
-            continue
-        occurrences = [x for x in event.get("nextOccurrences", []) if x.get("date")]
-        if not occurrences:
-            occurrences = [{"date": event.get("startTime", ""), "status": "scheduled"}]
-        for occurrence in occurrences:
-            start = occurrence.get("date", "")
-            if not start:
-                continue
-            item = _normalize({**event, "title": title, "start": start, "url": event.get("joinUrl", ""),
-                               "id": f'{event.get("uid", "pnp")}:{start}'}, "pnp", "calendar")
-            item["mode"] = "online"
-            item["location"] = "Online"
-            out.append(item)
-    return out
-
-
-def _developers_events():
-    out = []
-    for url in DEVELOPERS_URLS:
-        data = json.loads(get(url))
-        out.extend(_event_objects(data, "developers_events", url.rsplit("/", 1)[-1]))
-    return out
-
-
-def _sessionize_urls(items):
-    urls = set()
-    for item in items:
-        for source in item.get("sources", []):
-            if source.get("source") in ("community_days", "developers_events", "sessionize"):
-                for url in (source.get("url", ""), item.get("url", "")):
-                    if re.fullmatch(r"https://sessionize\.com/api/v2/[A-Za-z0-9]+/view/All/?", url):
-                        urls.add(url.rstrip("/"))
-                    elif urlparse(url).hostname in ("sessionize.com", "www.sessionize.com") and re.fullmatch(r"/[A-Za-z0-9-]+/?", urlparse(url).path):
-                        urls.add("https://sessionize.com" + urlparse(url).path.rstrip("/") + "/")
-    return sorted(urls)
-
-
-class SessionizeFacts(HTMLParser):
-    def __init__(self):
-        super().__init__()
-        self.data = {"sessions": []}
-    def handle_starttag(self, tag, attrs):
-        attrs = dict(attrs)
-        if tag == "meta":
-            key = (attrs.get("property") or attrs.get("name") or "").lower()
-            value = attrs.get("content", "")
-            fields = {
-                "og:title": "title", "event:start_time": "start", "event:end_time": "end",
-                "event:location": "location", "event:cfp_deadline": "cfs_close", "cfpdeadline": "cfs_close",
-            }
-            if key in fields and value:
-                self.data[fields[key]] = value
-        if tag == "time" and attrs.get("datetime") and not self.data.get("start"):
-            self.data["start"] = attrs["datetime"]
-
-
-def _session_objects(value):
-    found = []
-    if isinstance(value, list):
-        for item in value:
-            found.extend(_session_objects(item))
-    elif isinstance(value, dict):
-        title = _first(value, "title", "name", "sessionTitle", "session_title")
-        has_session_fields = any(key.lower() in ("startsat", "start", "startdate", "starttime", "speakers", "presenters")
-                                 for key in value)
-        has_nested_sessions = any(key.lower() in ("sessions", "talks", "eventsessions") for key in value)
-        if title and has_session_fields and not has_nested_sessions:
-            found.append({"title": str(title)[:180],
-                          "start": _date(_first(value, "start", "startDate", "startTime", "startsAt")),
-                          "end": _date(_first(value, "end", "endDate", "endTime", "endsAt")),
-                          "room": str(_first(value, "room", "venue", "location"))[:100],
-                          "speakers": _speakers(value.get("speakers") or value.get("presenters"))})
-        else:
-            for child in value.values():
-                if isinstance(child, (dict, list)):
-                    found.extend(_session_objects(child))
-    return found
-
-
-def _sessionize(urls):
-    out = {}
-    for url in urls:
-        state = json.loads(STATE.read_text("utf-8")) if STATE.exists() else {}
-        key = hashlib.sha256(url.encode()).hexdigest()
-        fetched = state.get("sessionize_fetched", {}).get(key, "")
-        now = datetime.now(timezone.utc)
-        try:
-            if fetched and (now - datetime.fromisoformat(fetched.replace("Z", "+00:00"))).total_seconds() < FETCH_INTERVAL:
-                continue
-        except ValueError:
-            pass
-        if "/api/v2/" in url:
-            out[url] = {"sessions": _session_objects(json.loads(get(url)))}
-        else:
-            path = urlparse(url).path.strip("/")
-            parser = SessionizeFacts()
-            parser.feed(get(url, "text/html").decode("utf-8", "replace"))
-            out[url] = parser.data
-        state.setdefault("sessionize_fetched", {})[key] = now.isoformat(timespec="seconds")
-        STATE.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n", "utf-8")
-    return out
-
-
-def _attach_sessionize(items, facts):
-    for item in items:
-        for source in item.get("sources", []):
-            extra = facts.get(source.get("url", "")) if source.get("source") == "sessionize" else None
-            if not extra:
-                continue
-            sessions = {json.dumps(session, sort_keys=True): session for session in item.get("sessions", [])}
-            sessions.update({json.dumps(session, sort_keys=True): session for session in extra.get("sessions", [])})
-            item["sessions"] = list(sessions.values())
-            for field in ("start", "end", "location", "cfs_close"):
-                if not item.get(field):
-                    item[field] = extra.get(field, "")
-    return items
-
-
-class EventLinks(HTMLParser):
-    def __init__(self):
-        super().__init__()
-        self.urls = []
-    def handle_starttag(self, tag, attrs):
-        attrs = dict(attrs)
-        link = attrs.get("href", "")
-        if tag == "a" and link.lower().endswith(".ics") and link.startswith("https://"):
-            self.urls.append(link)
-
-
-def _ics_events(page_url):
-    parser = EventLinks()
-    parser.feed(get(page_url, "text/html").decode("utf-8", "replace"))
-    out = []
-    for url in dict.fromkeys(parser.urls):
-        raw = get(url, "text/calendar").decode("utf-8", "replace")
-        for block in raw.replace("\r\n ", "").split("BEGIN:VEVENT")[1:]:
-            fields = dict(re.findall(r"^(SUMMARY|DTSTART[^:]*|DTEND[^:]*|URL):([^\r\n]+)", block, re.M))
-            if fields.get("SUMMARY") and fields.get("DTSTART"):
-                out.append(_normalize({"title": fields["SUMMARY"], "start": fields["DTSTART"][:10],
-                                       "end": fields.get("DTEND", "")[:10], "url": fields.get("URL", url)}, "global_ai", url))
-    return out
-
-
-def _globalai():
-    if os.environ.get("EVENTS_GLOBALAI") != "1":
-        return []
-    state = json.loads(STATE.read_text("utf-8")) if STATE.exists() else {}
-    previous = state.get("globalai_fetched", "")
-    if previous:
-        try:
-            when = datetime.fromisoformat(previous.replace("Z", "+00:00"))
-            if (datetime.now(timezone.utc) - when).total_seconds() < 86400:
-                return []
-        except ValueError:
-            pass
-    items = _ics_events(GLOBALAI_URL)
-    state["globalai_fetched"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
-    STATE.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n", "utf-8")
-    return items
 
 
 def _norm_name(value):
@@ -554,22 +359,12 @@ def retain_previous(previous, current):
         if not fp:
             continue
         if fp not in by_fp:
-            by_fp[fp] = old
+            item = {**old, "gone": True}
+            item.pop("hash", None)
+            item["hash"] = hashlib.sha256(json.dumps(item, ensure_ascii=False, sort_keys=True).encode()).hexdigest()
+            by_fp[fp] = item
             continue
         item = by_fp[fp]
-        for field in ("sources", "speakers"):
-            item[field] = list({json.dumps(x, sort_keys=True): x for x in old.get(field, []) + item.get(field, [])}.values())
-        sessions = {}
-        for session in old.get("sessions", []) + item.get("sessions", []):
-            key = (session.get("title", ""), session.get("start", ""), session.get("room", ""))
-            if key not in sessions:
-                sessions[key] = dict(session)
-                sessions[key]["speakers"] = list(session.get("speakers", []))
-            else:
-                speakers = sessions[key]["speakers"] + session.get("speakers", [])
-                sessions[key]["speakers"] = list({json.dumps(x, sort_keys=True): x for x in speakers}.values())
-        item["sessions"] = list(sessions.values())
-        item["topics"] = sorted(set(old.get("topics", []) + item.get("topics", [])))
         for field in ("end", "location", "country", "url", "organizer_name", "cfs_close"):
             if not item.get(field):
                 item[field] = old.get(field, "")
@@ -582,20 +377,7 @@ def retain_previous(previous, current):
 def scrape(policy_approved=False):
     if not policy_approved:
         raise RuntimeError("Erst nach Erkundung und Freigabe EVENTS_POLICY_APPROVED=1 setzen")
-    candidates = []
-    if os.environ.get("EVENTS_COMMUNITYDAYS") == "1":
-        candidates.extend(community_events())
-    if os.environ.get("EVENTS_PNP") == "1":
-        candidates.extend(_pnp())
-    if os.environ.get("EVENTS_DEVELOPERS_EVENTS") == "1":
-        candidates.extend(_developers_events())
-    if os.environ.get("EVENTS_SESSIONIZE") == "1":
-        _attach_sessionize(candidates, _sessionize(_sessionize_urls(candidates)))
-    candidates.extend(_globalai())
-    for item in candidates:
-        prefiltered = any(x["source"] == "community_days" for x in item.get("sources", []))
-        if _relevance(item, prefiltered):
-            yield item
+    yield from community_events()
 
 
 def main():

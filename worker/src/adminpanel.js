@@ -6,7 +6,7 @@ const FLAGS = { tr_off: /^[01]$/, atr_off: /^[01]$/, atr_ent_cap: /^\d{1,4}$/, t
 const QKINDS = new Set(["blog", "podcast", "video", "entity", "lblog", "notes"]), QLANGS = new Set(["en", "de", "fr", "es", "it", "nl", "pt", "pl", "id", "ru", "uk", "ar", "he", "ja", "ko"]);
 import { audit } from "./util.js";
 import { SPONSOR_STATUSES } from "./sponsor.js";
-import { decideEventImport, eventImportCandidates, externalSpeakerRows, hideExternalSpeaker } from "./extevents.js";
+import { decideEventImport, eventImportCandidatesWithDuplicates, eventImportAutomatic, externalSpeakerRows, hideExternalSpeaker } from "./extevents.js";
 
 export async function handleAdminPanel(env, request, url, path, user, J) {
   if (!path.startsWith("/api/admin/panel/")) return null;
@@ -53,7 +53,7 @@ export async function handleAdminPanel(env, request, url, path, user, J) {
   }
 
   if (path === "/api/admin/panel/event-imports" && request.method === "GET") {
-    return J({ items: await eventImportCandidates(db), speakers: await externalSpeakerRows(db) });
+    return J({ items: await eventImportCandidatesWithDuplicates(db), automatic: await eventImportAutomatic(db), speakers: await externalSpeakerRows(db) });
   }
 
   if (path === "/api/admin/panel/event-imports/decide" && request.method === "POST") {

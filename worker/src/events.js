@@ -113,7 +113,7 @@ async function evView(db, ev, withPending) {
   const org = ev.org_id ? await db.prepare("SELECT handle,name,public FROM orgs WHERE id=?").bind(ev.org_id).first() : null;
   const ow = await db.prepare("SELECT u.name,p.handle FROM users u LEFT JOIN profiles p ON p.user_id=u.id AND p.public=1 WHERE u.id=?").bind(ev.owner_id).first();
   const rows = (await db.prepare("SELECT * FROM event_sessions WHERE event_id=? " + (withPending ? "" : "AND status='live' ") + "ORDER BY start,id").bind(ev.id).all()).results || [];
-  return { handle: ev.handle, title: ev.title, summary: ev.summary, about: ev.about, start: ev.start, end: ev.end, cfs_close: ev.cfs_close || "", mode: ev.mode, location: ev.location, country: ev.country, url: ev.url, tickets_url: ev.tickets_url, source: ev.source || "", organizer_name: ev.organizer_name || "",
+  return { handle: ev.handle, title: ev.title, summary: ev.summary, about: ev.about, start: ev.start, end: ev.end, cfs_close: ev.cfs_close || "", mode: ev.mode, location: ev.location, country: ev.country, url: ev.url, tickets_url: ev.tickets_url, source: ev.source || "", organizer_name: ev.organizer_name || "", external_status: ev.import_status || "", external_status_at: ev.import_gone_at || 0,
     free: !!ev.free, lang: ev.lang, topics: parse(ev.topics, []), seeking_sponsor: !!ev.seeking_sponsor, public: !!ev.public,
     partners: ((await db.prepare("SELECT p.kind,p.level,o.handle,o.name,o.public FROM event_partners p JOIN orgs o ON o.id=p.org_id WHERE p.event_id=? AND p.status='confirmed' ORDER BY p.created").bind(ev.id).all()).results || []).map((x) => ({ kind: x.kind, level: x.level, name: x.name, handle: x.public ? x.handle : "" })),
     asked: withPending ? ((await db.prepare("SELECT o.handle FROM sponsor_asks a JOIN orgs o ON o.id=a.org_id WHERE a.event_id=?").bind(ev.id).all()).results || []).map((x) => x.handle) : undefined,
@@ -253,7 +253,7 @@ export async function handleEvents(env, request, url, path, user, J) {
     const limit = Math.max(1, Math.min(300, parseInt(url.searchParams.get("limit") || "300", 10) || 300));
     const offset = Math.max(0, Math.min(1000000, parseInt(url.searchParams.get("offset") || "0", 10) || 0));
     const total = (await db.prepare("SELECT COUNT(*) n FROM events WHERE public=1").first()).n;
-    const evs = (await db.prepare("SELECT * FROM events WHERE public=1 ORDER BY start DESC LIMIT ? OFFSET ?").bind(limit, offset).all()).results || [];
+    const evs = (await db.prepare("SELECT e.*,(SELECT i.status FROM event_import i WHERE i.event_id=e.id ORDER BY i.last_seen DESC LIMIT 1) import_status,(SELECT i.gone_at FROM event_import i WHERE i.event_id=e.id ORDER BY i.last_seen DESC LIMIT 1) import_gone_at FROM events e WHERE e.public=1 ORDER BY e.start DESC LIMIT ? OFFSET ?").bind(limit, offset).all()).results || [];
     const out = []; for (const e of evs) out.push(await evView(db, e, false));
     return J({ events: out, total, limit, offset, has_more: offset + out.length < total }, 200, { "cache-control": "public, max-age=300" });
   }

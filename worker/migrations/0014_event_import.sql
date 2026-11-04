@@ -8,6 +8,9 @@ CREATE TABLE IF NOT EXISTS event_import (
   status TEXT NOT NULL DEFAULT 'new' CHECK(status IN ('new','approved','rejected','merged','gone')),
   event_id INTEGER,
   reviewed_by INTEGER,
+  locked_fields TEXT NOT NULL DEFAULT '[]',
+  changes TEXT NOT NULL DEFAULT '[]',
+  gone_at INTEGER NOT NULL DEFAULT 0,
   first_seen INTEGER NOT NULL,
   last_seen INTEGER NOT NULL
 );
