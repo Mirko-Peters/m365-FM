@@ -98,7 +98,7 @@ test("wiki: sanitize entfernt Skripte, laesst Markup und viz nur mit Option", ()
 
 test("feeds: parseFeed nimmt nur https-Links und liest Titel, Datum, Beschreibung", () => {
   const rss = `<rss><channel>
-    <item><title>T1 &amp; mehr</title><link>https://example.com/1</link><pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate><category>Power Automate</category><description>&lt;p&gt;Hallo https://example.com/x Welt&lt;/p&gt;</description></item>
+    <item><title>T1 &amp; mehr</title><link>https://example.com/1</link><pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate><category>Power Automate</category><category>&lt;script</category><description>&lt;p&gt;Hallo https://example.com/x Welt&lt;/p&gt;</description></item>
     <item><title>Unsicher</title><link>http://example.com/2</link></item>
     <entry><title>Atom</title><link rel="alternate" href="https://example.com/3"/><updated>2024-02-01T00:00:00Z</updated><category term="Microsoft Teams"/></entry>
   </channel></rss>`;
@@ -107,7 +107,7 @@ test("feeds: parseFeed nimmt nur https-Links und liest Titel, Datum, Beschreibun
   assert.equal(out[0].title, "T1 & mehr");
   assert.equal(out[0].url, "https://example.com/1");
   assert.equal(out[0].t, Date.parse("Mon, 01 Jan 2024 00:00:00 GMT") / 1000);
-  assert.deepEqual(out[0].topics, ["Power Automate"]);
+  assert.deepEqual(out[0].topics, ["Power Automate", "script"]);
   assert.equal(out[0].desc, "Hallo Welt");
   assert.equal(out[1].url, "https://example.com/3");
   assert.deepEqual(out[1].topics, ["Microsoft Teams"]);
@@ -129,6 +129,7 @@ test("contributions: private Quellen und manuelle Beiträge exportieren nur eige
   assert.equal((await source.json()).source.public, false, "Quellen sind standardmäßig privat");
   assert.equal((await (await call("/api/contributions/source", "POST", { kind: "blog", url: "https://example.com/feed.xml" })).json()).error, "source_exists");
   assert.equal((await call("/api/contributions/source", "POST", { kind: "youtube", url: "https://example.com/channel" })).status, 400);
+  assert.equal((await call("/api/contributions/source", "POST", { kind: "youtube", url: "https://evil.youtube.com/@handle" })).status, 400);
   const originalFetch = globalThis.fetch;
   globalThis.fetch = async () => new Response(`<rss><channel><item><title>Feed article</title><link>https://example.com/post</link><pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate><category>Power Automate</category><description>Never persist the full text</description></item></channel></rss>`);
   try { await refreshContributions({ DB: db }, 1); } finally { globalThis.fetch = originalFetch; }

@@ -21,7 +21,7 @@ export function parseFeed(xml, max = 12) {
     const desc = cleanText(dec(raw).replace(/<[^>]+>/g, " ").replace(/https?:\/\/\S+/gi, "").replace(/\s+/g, " ").trim(), 600);
     const topics = [...new Set([...b.matchAll(/<category\b([^>]*?)(?:\/>|>([\s\S]*?)<\/category>)/gi)].map((m) => {
       const term = /\bterm=["']([^"']+)["']/i.exec(m[1]);
-      return cleanText(dec(term ? term[1] : m[2] || "").replace(/<[^>]+>/g, ""), 80).replace(/\s+/g, " ").trim();
+      return cleanText(dec(term ? term[1] : m[2] || "").replace(/[<>]/g, ""), 80).replace(/\s+/g, " ").trim();
     }).filter(Boolean))].slice(0, 10);
     let thumb = ""; const tm = /<media:thumbnail[^>]*url=["']([^"']+)["']/i.exec(b) || /<enclosure[^>]*type=["']image[^"']*["'][^>]*url=["']([^"']+)["']/i.exec(b) || /<img[^>]*src=["']([^"']+)["']/i.exec(dec(raw));
     if (tm) { try { const tu = new URL(dec(tm[1])); if (tu.protocol === "https:" && goodHost(tu.hostname) && tu.href.length < 400) thumb = tu.href; } catch {} }

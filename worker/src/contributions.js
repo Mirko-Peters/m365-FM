@@ -6,6 +6,7 @@ import { token as youtubeToken } from "./youtube.js";
 const now = () => Math.floor(Date.now() / 1000);
 const SOURCE_KINDS = ["podcast", "youtube", "blog"];
 const ENTRY_KINDS = ["podcast", "video", "blog", "session", "github", "article", "other"];
+const YOUTUBE_HOSTS = new Set(["youtube.com", "www.youtube.com", "m.youtube.com"]);
 const TOPIC_ID = /^[a-z0-9][a-z0-9-]{1,47}$/;
 
 function safeUrl(value) {
@@ -92,7 +93,7 @@ export async function handleContributions(env, request, url, path, user, J) {
   if (path === "/api/contributions/source" && method === "POST") {
     if (!(await rateLimit(db, `contrib-source:${user.id}`, 10, 86400))) return J({ error: "rate_limit" }, 429);
     const b = await request.json().catch(() => ({})), kind = String(b.kind || ""), sourceUrl = safeUrl(b.url);
-    if (!SOURCE_KINDS.includes(kind) || !sourceUrl || (kind === "youtube" && !/(^|\.)youtube\.com$/i.test(new URL(sourceUrl).hostname))) return J({ error: "bad_source" }, 400);
+    if (!SOURCE_KINDS.includes(kind) || !sourceUrl || (kind === "youtube" && !YOUTUBE_HOSTS.has(new URL(sourceUrl).hostname.toLowerCase()))) return J({ error: "bad_source" }, 400);
     if ((await db.prepare("SELECT COUNT(*) n FROM contribution_sources WHERE user_id=?").bind(user.id).first()).n >= 20) return J({ error: "source_limit" }, 400);
     const title = cleanText(b.title || "", 100).replace(/[<>]/g, "").trim();
     const feed = /\.(?:rss|xml|atom)(?:$|[?#])/i.test(sourceUrl) ? sourceUrl : "";
@@ -183,8 +184,8 @@ async function refreshContributionMetrics(env) {
   const videos = rows.map((r) => {
     try {
       const u = new URL(r.url);
-      if (u.hostname.endsWith("youtu.be")) return [r.id, u.pathname.slice(1)];
-      if (u.hostname.endsWith("youtube.com")) return [r.id, u.searchParams.get("v") || (/\/(?:shorts|embed)\/([^/?]+)/.exec(u.pathname) || [])[1]];
+      if (u.hostname === "youtu.be") return [r.id, u.pathname.slice(1)];
+      if (YOUTUBE_HOSTS.has(u.hostname)) return [r.id, u.searchParams.get("v") || (/\/(?:shorts|embed)\/([^/?]+)/.exec(u.pathname) || [])[1]];
     } catch {}
     return null;
   }).filter((x) => x?.[1] && /^[A-Za-z0-9_-]{11}$/.test(x[1]));
