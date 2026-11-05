@@ -40,7 +40,7 @@ jobs:
         with: { python-version: "3.12" }
       - name: Uebersetzer-Team arbeiten lassen
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY_BLOG || secrets.ANTHROPIC_API_KEY_SHOW }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY_SHOW }}
           BLOG_BUDGET_USD: ${{ inputs.budget || vars.BLOG_BUDGET_USD || '10' }}
           MODE_IN: ${{ inputs.mode || 'scheduled' }}
           AUTO: ${{ vars.BLOG_AUTO }}
@@ -64,7 +64,7 @@ jobs:
           if [ "$MODE" = "pilot" ]; then MODE=run; ARGS="$ARGS --limit 3"
           elif [ -n "$LIMIT_IN" ]; then ARGS="$ARGS --limit $LIMIT_IN"; fi
           if [ -z "$ANTHROPIC_API_KEY" ] && [ "$MODE" != "plan" ] && [ "$MODE" != "sample" ]; then
-            echo "Kein API-Schluessel (Secret ANTHROPIC_API_KEY_BLOG oder ANTHROPIC_API_KEY_SHOW) - nur Status."; MODE=plan
+            echo "Kein API-Schluessel (Secret ANTHROPIC_API_KEY_SHOW) - nur Status."; MODE=plan
           fi
           if [ "$MODE" = "collect" ] && [ ! -s data/blog_i18n/batches.json -o "$(cat data/blog_i18n/batches.json 2>/dev/null)" = "[]" ]; then
             echo "Keine offenen Batches."; exit 0

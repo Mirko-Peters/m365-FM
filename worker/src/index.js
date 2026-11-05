@@ -8,7 +8,7 @@ import { importLegacyBlog } from "./legacyblog.js";
 import { importContentBlog } from "./contentblog.js";
 import { handleA2a } from "./a2a.js";
 import { handleAdminPanel } from "./adminpanel.js";
-import { handleSponsor } from "./sponsor.js";
+import { handleSponsor, handleSponsorLink } from "./sponsor.js";
 import { autoTranslateItems, autoTranslateEntities, runTrQueue } from "./autotr.js";
 import { syncLiveEvents } from "./liveevents.js";
 import { syncContentTopics, handleTopics } from "./topics.js";
@@ -47,6 +47,8 @@ import { autoTranslate, translateStatus, uiI18nExport } from "./translate.js";
 import { handleWiki } from "./wiki.js";
 import { syncExpertise } from "./levels.js";
 import { backfillDirectoryGeocodes, ensureDirectoryCols, handleDirectory } from "./directory.js";
+import { handleTopicSubscriptions, dispatchTopicNotifications, queueTopicArticles, queueSessionReminders } from "./topic_notifications.js";
+import { savePushSubscription } from "./push.js";
 import { handleContributions, refreshContributions } from "./contributions.js";
 
 const PROVIDERS = {
@@ -196,7 +198,7 @@ function pubComment(c, mine, liked, badges, admin) {
 async function api(env, request, url, path, asUser) {
   const method = request.method, J = (d, s = 200, x) => json(d, s, env, request, x);
   if (method === "OPTIONS") return new Response(null, { status: 204, headers: cors(env, request) });
-  if (asUser === undefined && method !== "GET" && !["/api/internal/ai-spend", "/api/email/unsub", "/api/mail/unsub"].includes(path) && request.headers.get("x-requested-with") !== "m365") return J({ error: "bad_request" }, 400);   // interne Route per CRON_KEY; One-Click-Abmeldung (RFC 8058) sendet keinen Zusatz-Header, beide Routen sind per Token geschuetzt
+  if (asUser === undefined && method !== "GET" && !["/api/internal/ai-spend", "/api/internal/sponsor-metrics", "/api/email/unsub", "/api/mail/unsub", "/api/topics/email-unsub"].includes(path) && request.headers.get("x-requested-with") !== "m365") return J({ error: "bad_request" }, 400);   // interne Routen per CRON_KEY; Abmeldelinks (RFC 8058) senden keinen Zusatz-Header, alle per Token geschuetzt
   // asUser: vom MCP-Server (Token bereits geprueft) - dann keine Cookie-Sitzung noetig
   const uid = asUser === undefined ? await readSession(env, request) : null, user = asUser === undefined ? (uid ? await me(env, uid) : null) : asUser;
   const need = () => (user ? null : J({ error: "login" }, 401));
@@ -223,7 +225,7 @@ async function api(env, request, url, path, asUser) {
     return J({ ok: true, ...status });
   }
 
-  const sponsor = await handleSponsor(env, request, url, path, J);
+  const sponsor = await handleSponsor(env, request, url, path, J, user);
   if (sponsor) return sponsor;
 
   const contributions = await handleContributions(env, request, url, path, user, J);
@@ -259,6 +261,10 @@ async function api(env, request, url, path, asUser) {
         db.prepare("DELETE FROM likes WHERE user_id=? OR comment_id IN (SELECT id FROM comments WHERE user_id=?)").bind(id, id),
         db.prepare("DELETE FROM reports WHERE user_id=? OR comment_id IN (SELECT id FROM comments WHERE user_id=?)").bind(id, id),
         db.prepare("DELETE FROM comments WHERE user_id=?").bind(id), db.prepare("DELETE FROM user_badges WHERE user_id=?").bind(id),
+        db.prepare("DELETE FROM push_topics WHERE user_id=? OR endpoint IN (SELECT endpoint FROM push_subs WHERE user_id=?)").bind(id, id), db.prepare("DELETE FROM email_topics WHERE user_id=?").bind(id),
+        db.prepare("DELETE FROM topic_queue WHERE recipient=? OR recipient IN (SELECT endpoint FROM push_subs WHERE user_id=?)").bind(String(id), id),
+        db.prepare("DELETE FROM topic_deliveries WHERE recipient=? OR recipient IN (SELECT endpoint FROM push_subs WHERE user_id=?)").bind(String(id), id),
+        db.prepare("DELETE FROM topic_recipient_state WHERE recipient=? OR recipient IN (SELECT endpoint FROM push_subs WHERE user_id=?)").bind(String(id), id),
         db.prepare("DELETE FROM push_subs WHERE user_id=?").bind(id), db.prepare("DELETE FROM wiki_reports WHERE user_id=?").bind(id), db.prepare("DELETE FROM wiki_rev WHERE user_id=? AND status IN ('pending','rejected')").bind(id), db.prepare("UPDATE wiki_rev SET user_id=0 WHERE user_id=?").bind(id), db.prepare("DELETE FROM curators WHERE user_id=?").bind(id), db.prepare("DELETE FROM users WHERE id=?").bind(id),
       ]);
       await deleteUserEvents(db, id);
@@ -382,19 +388,40 @@ async function api(env, request, url, path, asUser) {
     return J({ user: u, ...(await stats(db, u.id)), recent: rc, curator: cur }, 200, { "cache-control": "public, max-age=120" });
   }
 
+  const topicResponse = await handleTopicSubscriptions(env, request, url, path, user, J);
+  if (topicResponse) return topicResponse;
+
   if (path === "/api/push/key" && method === "GET") return J({ key: env.VAPID_PUBLIC || "" });
+  if (path === "/api/push/status" && method === "GET") {
+    const endpoint = String(url.searchParams.get("endpoint") || "").slice(0, 600);
+    if (!/^https:\/\//.test(endpoint)) return J({ error: "bad_request" }, 400);
+    const sub = await db.prepare("SELECT user_id,digest FROM push_subs WHERE endpoint=?").bind(endpoint).first();
+    const topics = sub ? (await db.prepare("SELECT 1 x FROM push_topics WHERE endpoint=? LIMIT 1").bind(endpoint).first()) : null;
+    return J({ registered: !!sub, digest: !!sub?.digest, topics: !!topics }, 200, { "cache-control": "no-store" });
+  }
   if (path === "/api/push/subscribe" && method === "POST") {
     const b = await request.json().catch(() => ({}));
     const e = b.endpoint, k = b.keys || {};
-    if (!/^https:\/\//.test(e || "") || e.length > 600 || !k.p256dh || !k.auth || !isLang(b.lang)) return J({ error: "bad_request" }, 400);
+    if (!/^https:\/\//.test(e || "") || e.length > 600 || !k.p256dh || !k.auth || !(b.lang === "en" || isLang(b.lang))) return J({ error: "bad_request" }, 400);
     if (!(await rateLimit(db, `ps:${ip(request)}`, 20, 3600))) return J({ error: "rate" }, 429);
-    await db.prepare("INSERT OR REPLACE INTO push_subs(endpoint,p256dh,auth,lang,user_id,created) VALUES(?,?,?,?,?,?)").bind(e, String(k.p256dh), String(k.auth), b.lang, user?.id ?? null, now()).run();
+    await savePushSubscription(db, {
+      endpoint: e, p256dh: String(k.p256dh), auth: String(k.auth), lang: b.lang,
+      userId: user?.id ?? null, created: now(), digest: b.digest === 0 ? 0 : 1,
+    });
     if (user) await award(db, user.id, "notified");
     return J({ ok: true });
   }
+  if (path === "/api/push/digest" && method === "POST") {
+    const b = await request.json().catch(() => ({})), endpoint = String(b.endpoint || "").slice(0, 600);
+    if (!/^https:\/\//.test(endpoint) || typeof b.on !== "boolean") return J({ error: "bad_request" }, 400);
+    const sub = await db.prepare("SELECT user_id FROM push_subs WHERE endpoint=?").bind(endpoint).first();
+    if (!sub || (b.on && sub.user_id && sub.user_id !== user?.id)) return J({ error: "bad_subscription" }, 400);
+    await db.prepare("UPDATE push_subs SET digest=? WHERE endpoint=?").bind(b.on ? 1 : 0, endpoint).run();
+    return J({ ok: true, digest: b.on });
+  }
   if (path === "/api/push/unsubscribe" && method === "POST") {
     const b = await request.json().catch(() => ({}));
-    if (b.endpoint) await db.prepare("DELETE FROM push_subs WHERE endpoint=?").bind(String(b.endpoint)).run();
+    if (b.endpoint) await db.batch([db.prepare("DELETE FROM push_topics WHERE endpoint=?").bind(String(b.endpoint)), db.prepare("DELETE FROM topic_queue WHERE channel='push' AND recipient=?").bind(String(b.endpoint)), db.prepare("DELETE FROM topic_deliveries WHERE channel='push' AND recipient=?").bind(String(b.endpoint)), db.prepare("DELETE FROM topic_recipient_state WHERE channel='push' AND recipient=?").bind(String(b.endpoint)), db.prepare("DELETE FROM push_subs WHERE endpoint=?").bind(String(b.endpoint))]);
     return J({ ok: true });
   }
 
@@ -466,9 +493,13 @@ async function api(env, request, url, path, asUser) {
 }
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const url = new URL(request.url), path = url.pathname.replace(/\/+$/, "") || "/";
     try {
+      if (path === "/robots.txt") return new Response("User-agent: *\nDisallow: /go/\n", {
+        headers: { "content-type": "text/plain; charset=utf-8", "cache-control": "public, max-age=3600" },
+      });
+      if (path.startsWith("/go/")) return await handleSponsorLink(env, request, url, path, ctx);
       if (path.startsWith("/auth/")) return (await auth(env, request, url, path)) || new Response("not found", { status: 404 });
       if (path === "/mcp") return await handleMcp(env, request, (uid) => me(env, uid), (req, user) => api(env, req, new URL(req.url), new URL(req.url).pathname, user));
       if (path === "/a2a") return await handleA2a(env, request);
@@ -486,6 +517,14 @@ export default {
     const tick = new Date(scheduledAt);
     if (event.cron === "*/30 * * * *" && tick.getUTCHours() === 6 && tick.getUTCMinutes() === 0) return;
     const T = (name, fn) => ctx.waitUntil(track(env, name, fn));
+    if (event.cron === "*/15 * * * *") {
+      T("topicSessionReminders", async () => {
+        const queued = await queueSessionReminders(env);
+        const dispatched = await dispatchTopicNotifications(env);
+        return { queued, dispatched };
+      });
+      return;
+    }
     if (event.cron === "0 6 * * *") {
       T("runPushDigest", () => runPushDigest(env));
       T("runDigest", () => runDigest(env, { at: scheduledAt }));
@@ -494,6 +533,8 @@ export default {
     T("refreshFeeds", () => refreshFeeds(env));
     T("refreshContributions", () => refreshContributions(env));
     T("pollUpdates", () => pollUpdates(env));
+    T("queueTopicArticles", () => queueTopicArticles(env));
+    T("dispatchTopicNotifications", () => dispatchTopicNotifications(env));
     T("refreshFollowers", () => refreshFollowers(env));
     T("ensurePastEvents", () => ensurePastEvents(env).then(() => linkSpeakers(env)).then(() => linkSpeakerEntities(env)));
     T("ensureM365Con", () => ensureM365Con(env).then(() => linkSpeakers(env)).then(() => linkSpeakerEntities(env)));

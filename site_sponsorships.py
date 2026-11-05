@@ -26,8 +26,9 @@ unbekannte Felder sind deshalb ein Fehler):
         "episodes": ["<slug>", "de/<slug>"],       optional: Folgen. "<slug>" = englische Show (/show/episodes/<slug>/), "<sprache>/<slug>" = Dub-Folge (/de/<slug>/);
                                                    auch volle Pfade wie "/show/episodes/<slug>/". Gilt fuer alle Sprachfassungen der Folge (englische Seite,
                                                    lokalisierte Show-Seiten, Dub-Folgen desselben Videos) und DAUERHAFT, auch nach dem Ende der Laufzeit
-        "posts": ["/community/u/mirko-p/blog/<slug>/"]
-                                                   optional: Blogbeitraege (Pfad, mit oder ohne Sprachpraefix); gilt fuer alle Sprachfassungen, dauerhaft
+        "posts": ["/community/u/mirko-p/blog/<slug>/"], optional: Blogbeitraege (Pfad, mit oder ohne Sprachpraefix);
+                                                   gilt fuer alle Sprachfassungen, dauerhaft
+        "go": "acme-2026-12"                        optionaler aktiver Linkcode aus dem Sponsor-Dashboard
       }
     ]
   }
@@ -41,6 +42,7 @@ import json, os, re
 from datetime import date
 from html import escape
 from pathlib import Path
+from urllib.parse import urlsplit
 from site_i18n import COMM_LANGS, T
 
 FILE = Path(__file__).parent / "data" / "sponsorships.json"
@@ -49,7 +51,7 @@ ENV = "M365_SPONSORSHIPS"
 LABELS = ("sponsored", "advertisement")
 TOPIC_MAX = 3   # "max. 3 sponsors per topic" (Sponsor-Seite); der Bau prueft es hier
 TOPIC_TYPES = ("product", "platform", "concept", "category", "cert")
-REC_KEYS = ("id", "sponsor", "label", "start", "end", "entities", "topics", "episodes", "posts")
+REC_KEYS = ("id", "sponsor", "label", "start", "end", "entities", "topics", "episodes", "posts", "go")
 REF_KEYS = ("entities", "topics", "episodes", "posts")
 # Kennzeichnung je Art: (Badge en, Badge de, Zusatz en, Zusatz de). Die 13 weiteren Sprachen sind von Hand in data/py_i18n.json gepflegt
 # (Schluessel = englischer Text); T() zieht sie dort den maschinellen Uebersetzungen vor. Deutsch immer "Anzeige".
@@ -72,6 +74,9 @@ def _empty():
 
 
 _S = None   # Zustand nach init(); ohne init() wird die Datei beim ersten Zugriff nur mit Aufbau-Pruefung geladen
+_GO_CODES = set()
+_GO_OFFLINE = False
+_GO_WARNED = set()
 
 
 def read(path=None):
@@ -134,6 +139,8 @@ def check_structure(d):
             elif _is_sponsor_host(_host(u), SHARED_HOSTS):
                 errs.append(f'{w}: "sponsor.url" muss die eigene Website des Sponsors sein, keine Seite auf {_host(u)} (sonst bekaemen auch eigene und fremde Links dort rel="sponsored")')
         if r.get("label") not in LABELS: errs.append(f'{w}: "label" muss "sponsored" oder "advertisement" sein')
+        if "go" in r and (not isinstance(r["go"], str) or not re.fullmatch(r"[a-z0-9-]{3,40}", r["go"])):
+            errs.append(f'{w}: "go" muss ein aktiver Linkcode aus a-z, 0-9 und Bindestrich sein')
         s, e = _day(r.get("start")), _day(r.get("end"))
         if not s: errs.append(f'{w}: "start" fehlt oder ist kein Datum (JJJJ-MM-TT)')
         if not e: errs.append(f'{w}: "end" fehlt oder ist kein Datum (JJJJ-MM-TT)')
@@ -295,8 +302,19 @@ def _state():
 
 def reset():
     """Nur fuer Tests: Zustand verwerfen."""
-    global _S
+    global _S, _GO_CODES, _GO_OFFLINE, _GO_WARNED
     _S = None
+    _GO_CODES = set()
+    _GO_OFFLINE = False
+    _GO_WARNED = set()
+
+
+def set_go_codes(codes, offline=False):
+    """Aktive Redirect-Codes fuer den Seitenbau setzen; offline bleiben alle Links direkt."""
+    global _GO_CODES, _GO_OFFLINE, _GO_WARNED
+    _GO_CODES = {x for x in codes if isinstance(x, str) and re.fullmatch(r"[a-z0-9-]{3,40}", x)}
+    _GO_OFFLINE = bool(offline)
+    _GO_WARNED = set()
 
 
 # --- Abfragen fuer die Seiten (leere Liste = keine Kennzeichnung, die Seite bleibt Byte fuer Byte wie ohne Sponsorings) ---
@@ -343,14 +361,34 @@ def _sponsors(recs):
     return out
 
 
-def note(lang, recs):
+def link_url(recs, url, surface="sponsor-page"):
+    """Sponsor-Website bei aktivem Linkcode ueber den datensparsamen Zaehler leiten."""
+    for rec in recs or []:
+        sponsor_url = urlsplit(str(rec.get("sponsor", {}).get("url") or "").strip())
+        linked_url = urlsplit(str(url or "").strip())
+        sponsor_site = (sponsor_url.scheme.lower(), sponsor_url.netloc.lower(), sponsor_url.path or "/")
+        linked_site = (linked_url.scheme.lower(), linked_url.netloc.lower(), linked_url.path or "/")
+        if sponsor_site != linked_site:
+            continue
+        code = rec.get("go")
+        if not code or _GO_OFFLINE:
+            return url
+        if code in _GO_CODES:
+            return f"https://api-dub.m365.fm/go/{code}?s={surface}"
+        if code not in _GO_WARNED:
+            print(f"WARNUNG: Sponsor-Linkcode {code} ist nicht aktiv; Direktlink bleibt bestehen")
+            _GO_WARNED.add(code)
+    return url
+
+
+def note(lang, recs, surface="sponsor-page"):
     """Sichtbare Kennzeichnung direkt unter der H1 (role=note, data-spm fuer check_schema.py); '' ohne Sponsoring.
     Der Name des Sponsors verlinkt seine Website mit rel="sponsored noopener"."""
     if not recs: return ""
     lines = []
     for l in _labels(recs):
         b_en, b_de, x_en, x_de = TEXT[l]
-        names = ", ".join(f'<a href="{escape(u)}" rel="sponsored noopener"><bdi>{escape(n)}</bdi></a>' for n, u in _sponsors([r for r in recs if r["label"] == l]))
+        names = ", ".join(f'<a href="{escape(link_url(recs, u, surface))}" rel="sponsored noopener"><bdi>{escape(n)}</bdi></a>' for n, u in _sponsors([r for r in recs if r["label"] == l]))
         lines.append(f'<strong>{escape(T(lang, b_en, b_de))}</strong> · ' + escape(T(lang, x_en, x_de)).replace("{sponsor}", names))
     return f'<p class="spm-note" role="note" data-spm="{" ".join(_labels(recs))}" style="{NOTE_STYLE}">' + "<br>".join(lines) + "</p>"
 
@@ -383,7 +421,7 @@ def link_rel(recs, url, own=False):
     return "noopener"
 
 
-def mark(html_, recs):
+def mark(html_, recs, surface="sponsor-page"):
     """Ergaenzt rel="sponsored" an allen Links auf die Website des Sponsors (Google: bezahlte Links kennzeichnen); ohne Sponsoring unveraendert."""
     hs = hosts(recs)
     if not hs or not html_: return html_
@@ -392,6 +430,9 @@ def mark(html_, recs):
         mh = re.search(r'href="([^"]+)"', tag)
         if not mh or not _is_sponsor_host(_host(mh.group(1).replace("&amp;", "&")), hs): return tag
         mr = re.search(r'rel="([^"]*)"', tag)
+        rewritten = link_url(recs, mh.group(1).replace("&amp;", "&"), surface)
+        if rewritten != mh.group(1).replace("&amp;", "&"):
+            tag = tag.replace(mh.group(0), f'href="{escape(rewritten, quote=True)}"', 1)
         if mr:
             if "sponsored" in mr.group(1).split(): return tag
             return tag.replace(mr.group(0), f'rel="{(mr.group(1) + " sponsored").strip()}"', 1)

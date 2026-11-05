@@ -89,8 +89,7 @@ export async function handleMail(env, request, url, path, user, J) {
   if (path === "/api/mail/me" && method === "GET") {
     const a = await db.prepare("SELECT email,verified FROM mail_addr WHERE user_id=?").bind(user.id).first();
     const pr = Object.fromEntries(((await db.prepare("SELECT kind,on_ FROM mail_prefs WHERE user_id=?").bind(user.id).all()).results || []).map((r) => [r.kind, !!r.on_]));
-    const follows = (await db.prepare("SELECT eid FROM mail_topic_follows WHERE user_id=? AND active=1 ORDER BY eid").bind(user.id).all()).results || [];
-    return J({ configured: mailReady(env), email: a?.email || "", verified: !!a?.verified, prefs: Object.fromEntries(Object.keys(LABEL).map((k) => [k, k in pr ? pr[k] : !!KINDS[k]])), follows: follows.map((r) => r.eid) }, 200, { "cache-control": "no-store" });
+    return J({ configured: mailReady(env), email: a?.email || "", verified: !!a?.verified, prefs: Object.fromEntries(Object.keys(LABEL).map((k) => [k, k in pr ? pr[k] : !!KINDS[k]])) }, 200, { "cache-control": "no-store" });
   }
   if (path === "/api/admin/mail" && method === "GET") {
     if (!user.admin) return J({ error: "forbidden" }, 403);
@@ -126,12 +125,6 @@ export async function handleMail(env, request, url, path, user, J) {
     if (!(b.kind in LABEL)) return J({ error: "bad_kind" }, 400);
     await db.prepare("INSERT OR REPLACE INTO mail_prefs(user_id,kind,on_) VALUES(?,?,?)").bind(user.id, b.kind, b.on ? 1 : 0).run(); return J({ ok: true });
   }
-  if (path === "/api/mail/follows") {
-    const eids = [...new Set((Array.isArray(b.eids) ? b.eids : []).map((eid) => String(eid).toLowerCase()).filter((eid) => /^[a-z0-9][a-z0-9-]{1,79}$/.test(eid)))].slice(0, 30);
-    const ops = [db.prepare("UPDATE mail_topic_follows SET active=0 WHERE user_id=?").bind(user.id), ...eids.map((eid) => db.prepare("INSERT INTO mail_topic_follows(user_id,eid,created,active) VALUES(?,?,?,1) ON CONFLICT(user_id,eid) DO UPDATE SET active=1").bind(user.id, eid, now()))];
-    await db.batch(ops);
-    return J({ ok: true, follows: eids });
-  }
   if (path === "/api/mail/remove") {
     const address = await db.prepare("SELECT email FROM mail_addr WHERE user_id=?").bind(user.id).first();
     const ops = [
@@ -139,6 +132,10 @@ export async function handleMail(env, request, url, path, user, J) {
       db.prepare("DELETE FROM mail_prefs WHERE user_id=?").bind(user.id),
       db.prepare("DELETE FROM mail_outbox WHERE user_id=?").bind(user.id),
       db.prepare("DELETE FROM mail_topic_follows WHERE user_id=?").bind(user.id),
+      db.prepare("DELETE FROM email_topics WHERE user_id=?").bind(user.id),
+      db.prepare("DELETE FROM topic_queue WHERE channel='email' AND recipient=?").bind(String(user.id)),
+      db.prepare("DELETE FROM topic_deliveries WHERE channel='email' AND recipient=?").bind(String(user.id)),
+      db.prepare("DELETE FROM topic_recipient_state WHERE channel='email' AND recipient=?").bind(String(user.id)),
     ];
     if (address?.email) ops.push(db.prepare("DELETE FROM mail_weekly_unsub WHERE lower(email)=lower(?) AND NOT EXISTS (SELECT 1 FROM email_subs WHERE lower(email)=lower(?) AND confirmed=1) AND NOT EXISTS (SELECT 1 FROM mail_addr WHERE lower(email)=lower(?) AND verified=1)").bind(address.email, address.email, address.email));
     await db.batch(ops);

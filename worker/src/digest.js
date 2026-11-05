@@ -4,6 +4,7 @@ import { esc } from "./util.js";
 import { closeMonth } from "./badges.js";
 import { mailReady, sendMail } from "./mailer.js";
 import { KINDS, weeklyUnsubscribeMany } from "./mail.js";
+import { queueTopicNotification } from "./topic_notifications.js";
 
 const LANG_NAME = { de: "Deutsch", en: "English", es: "Español", fr: "Français", it: "Italiano", pt: "Português", nl: "Nederlands", pl: "Polski", id: "Bahasa Indonesia", ru: "Русский", uk: "Українська", ar: "العربية", he: "עברית", ja: "日本語", ko: "한국어", ml: "മലയാളം", pa: "ਪੰਜਾਬੀ", ta: "தமிழ்", te: "తెలుగు" };
 const clean = (t) => String(t || "").replace(/\s*\((KI|AI)[^)]*\)\s*$/i, "").replace(/\s*[（(][^()（）]*[)）]\s*$/, "").trim();
@@ -91,36 +92,47 @@ const enabled = (prefs, uid, kind) => {
 };
 const uidParams = (ids) => ids.map(() => "?").join(",");
 
+async function adoptLegacyTopicFollows(db) {   // eine Themenliste: aktive Wochenmail-Themen (#194, mail_topic_follows) einmalig in email_topics uebernehmen
+  try {
+    await db.batch([
+      db.prepare("INSERT OR IGNORE INTO email_topics(user_id,kind,topic_id,lang,timezone,created) SELECT f.user_id,'entity',f.eid,COALESCE(NULLIF(u.lang,''),'en'),'UTC',f.created FROM mail_topic_follows f JOIN users u ON u.id=f.user_id WHERE f.active=1"),
+      db.prepare("UPDATE mail_topic_follows SET active=0 WHERE active=1"),
+    ]);
+  } catch { /* Tabelle fehlt: nichts zu uebernehmen */ }
+}
+
 async function topicItems(db, ids, since, until, site) {
   if (!ids.length) return new Map();
   const sql = `WITH recipients(user_id) AS (VALUES ${ids.map(() => "(?)").join(",")}), matches AS (
     SELECT DISTINCT r.user_id,'blog' kind,b.title,b.summary,b.lang,b.published published,b.slug ref,'' link
-    FROM recipients r JOIN mail_topic_follows f ON f.user_id=r.user_id AND f.active=1
-    JOIN content_topic ct ON ct.eid=f.eid AND ct.kind='blog'
+    FROM recipients r JOIN email_topics f ON f.user_id=r.user_id AND f.kind='entity'
+    JOIN content_topic ct ON ct.eid=f.topic_id AND ct.kind='blog'
     JOIN blog_posts b ON CAST(b.id AS TEXT)=ct.item_id AND b.status='live'
     WHERE b.published>=? AND b.published<=?
+      AND NOT EXISTS (SELECT 1 FROM topic_queue q WHERE q.channel='email' AND q.recipient=CAST(CAST(r.user_id AS INTEGER) AS TEXT)
+        AND q.url LIKE '%/blog/' || b.slug || '/%')   -- schon als Themen-Mail verschickt (URL /community/u/<handle>/blog/<slug>/)
     UNION ALL
     SELECT DISTINCT r.user_id,'podcast',p.title,p.description,p.lang,p.published,p.ep_url,''
-    FROM recipients r JOIN mail_topic_follows f ON f.user_id=r.user_id AND f.active=1
-    JOIN content_topic ct ON ct.eid=f.eid AND ct.kind='podcast'
+    FROM recipients r JOIN email_topics f ON f.user_id=r.user_id AND f.kind='entity'
+    JOIN content_topic ct ON ct.eid=f.topic_id AND ct.kind='podcast'
     JOIN pod_episodes p ON CAST(p.id AS TEXT)=ct.item_id AND p.status='published'
     WHERE p.published>=? AND p.published<=?
     UNION ALL
     SELECT DISTINCT r.user_id,'video',v.title,v.description,v.lang,v.published,v.video_id,''
-    FROM recipients r JOIN mail_topic_follows f ON f.user_id=r.user_id AND f.active=1
-    JOIN content_topic ct ON ct.eid=f.eid AND ct.kind='video'
+    FROM recipients r JOIN email_topics f ON f.user_id=r.user_id AND f.kind='entity'
+    JOIN content_topic ct ON ct.eid=f.topic_id AND ct.kind='video'
     JOIN yt_videos v ON CAST(v.id AS TEXT)=ct.item_id AND v.status='published'
     WHERE v.published>=? AND v.published<=?
     UNION ALL
     SELECT DISTINCT r.user_id,'library',l.title,l.summary,l.lang,l.published,l.link,''
-    FROM recipients r JOIN mail_topic_follows f ON f.user_id=r.user_id AND f.active=1
-    JOIN content_topic ct ON ct.eid=f.eid AND ct.kind='library'
+    FROM recipients r JOIN email_topics f ON f.user_id=r.user_id AND f.kind='entity'
+    JOIN content_topic ct ON ct.eid=f.topic_id AND ct.kind='library'
     JOIN lib_items l ON CAST(l.id AS TEXT)=ct.item_id AND l.status='live'
     WHERE l.published>=? AND l.published<=?
     UNION ALL
     SELECT DISTINCT r.user_id,'session',s.title,s.abstract,s.lang,s.created,e.handle,''
-    FROM recipients r JOIN mail_topic_follows f ON f.user_id=r.user_id AND f.active=1
-    JOIN content_topic ct ON ct.eid=f.eid AND ct.kind='session'
+    FROM recipients r JOIN email_topics f ON f.user_id=r.user_id AND f.kind='entity'
+    JOIN content_topic ct ON ct.eid=f.topic_id AND ct.kind='session'
     JOIN event_sessions s ON CAST(s.id AS TEXT)=ct.item_id AND s.status='live'
     JOIN events e ON e.id=s.event_id
     WHERE s.created>=? AND s.created<=?
@@ -259,6 +271,7 @@ export async function runDigest(env, { dry = false, at = Date.now() } = {}) {
   const start = (await db.prepare("SELECT v FROM meta WHERE k='weekly_start'").first())?.v;
   if (!start) { await db.prepare("INSERT OR IGNORE INTO meta(k,v) VALUES('weekly_start',?)").bind(period).run(); return { ...result, waiting: true }; }
   if (period <= start) return { ...result, waiting: true };
+  await adoptLegacyTopicFollows(db);
   await db.prepare("DELETE FROM mail_weekly_delivery WHERE week_start<?").bind(period).run();   // Adress-Hashes nur fuer die laufende Woche halten
   const hashes = await Promise.all([...recipients.values()].map(async (recipient) => ({ recipient, hash: await addressHash(recipient.email) })));
   const sentRows = (await db.prepare("SELECT address_hash,week_start,status FROM mail_weekly_delivery").all()).results || [];
@@ -320,6 +333,10 @@ export async function runDigest(env, { dry = false, at = Date.now() } = {}) {
   return result;
 }
 
+export async function digestPushSubscriptions(db, lang) {   // nur Browser-Abos mit Tages-Push; reine Themen-Abos (digest=0) bekommen keinen Digest
+  return (await db.prepare("SELECT endpoint,p256dh,auth FROM push_subs WHERE lang=? AND digest=1").bind(lang).all()).results || [];
+}
+
 export async function runPushDigest(env, { dry = false } = {}) {
   const db = env.DB;
   const j = await (await fetch(`${env.SITE}/episodes.json`, { cf: { cacheTtl: 0 } })).json();
@@ -341,16 +358,25 @@ export async function runPushDigest(env, { dry = false } = {}) {
   for (const e of fresh) (byLang[e.language] ||= []).push(e);
   const res = { new: fresh.length, push: 0, gone: 0, langs: Object.keys(byLang) };
   if (dry) return res;
+  for (const e of fresh) {
+    if (e.kind !== "show") continue;
+    const url = typeof e.url === "string" && e.url.startsWith(`${env.SITE}/`) ? e.url : `${env.SITE}/show/episodes/`;
+    const title = clean(e.title || "New episode");
+    const itemKey = `episode:${e.id}`;
+    for (const eid of Array.isArray(e.entities) ? [...new Set(e.entities)].filter((x) => /^[a-z0-9][a-z0-9-]{1,79}$/.test(x)).slice(0, 12) : []) {
+      await queueTopicNotification(env, { kind: "entity", topicId: eid, key: itemKey, title, body: e.summary || "", url });
+    }
+  }
   for (const [lang, list] of Object.entries(byLang)) {
     list.sort((a, b) => (a.date < b.date ? 1 : -1));
     const first = list[0];
     const payload = { title: `M365.FM · ${LANG_NAME[lang] || lang}`, body: clean(first.title) + (list.length > 1 ? ` (+${list.length - 1})` : ""),
       url: list.length > 1 ? `${env.SITE}/${lang}/` : first.url, tag: `digest-${lang}` };
-    const subs = (await db.prepare("SELECT endpoint,p256dh,auth FROM push_subs WHERE lang=?").bind(lang).all()).results || [];
+    const subs = await digestPushSubscriptions(db, lang);
     await pool(subs, 8, async (s) => {
       const r = await sendPush(env, s, payload);
       if (r.ok) res.push++;
-      else if (r.gone) { await db.prepare("DELETE FROM push_subs WHERE endpoint=?").bind(s.endpoint).run(); res.gone++; }
+      else if (r.gone) { await db.batch([db.prepare("DELETE FROM push_topics WHERE endpoint=?").bind(s.endpoint), db.prepare("DELETE FROM topic_queue WHERE channel='push' AND recipient=?").bind(s.endpoint), db.prepare("DELETE FROM topic_deliveries WHERE channel='push' AND recipient=?").bind(s.endpoint), db.prepare("DELETE FROM topic_recipient_state WHERE channel='push' AND recipient=?").bind(s.endpoint), db.prepare("DELETE FROM push_subs WHERE endpoint=?").bind(s.endpoint)]); res.gone++; }
     });
   }
   for (const e of fresh) sent.add(key(e));
