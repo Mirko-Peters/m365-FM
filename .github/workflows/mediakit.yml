@@ -1,8 +1,8 @@
-name: Mediadaten erzeugen (PDF, täglich)
+name: Mediadaten erzeugen (PDF, monatlich)
 # Baut die Mediadaten (EN/DE) aus Live-Daten und legt sie in R2 ab (mediakit/...). Der Worker (/api/mediakit) haengt sie an die E-Mail.
 on:
   schedule:
-    - cron: "41 6 * * *"
+    - cron: "41 6 1 * *"   # am 1. jedes Monats; Zahlen gelten fuer den abgeschlossenen Vormonat
   workflow_dispatch:
   push:
     branches: [main]
