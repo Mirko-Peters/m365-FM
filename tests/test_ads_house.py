@@ -11,7 +11,8 @@ class HouseAd(unittest.TestCase):
         self.assertIn("Kostenlos anmelden", h)
 
     def test_fallback_language(self):
-        self.assertIn("Register free", A._house("https://www.m365.fm", "ja", "2026-11-05"))
+        self.assertIn("Register free", A._house("https://www.m365.fm", "xx", "2026-11-05"))
+        self.assertIn("無料で登録", A._house("https://www.m365.fm", "ja", "2026-11-05"))   # alle 15 Sprachen
 
     def test_after_con_sponsor(self):
         h = A._house("https://www.m365.fm", "en", "2027-01-23")
@@ -23,7 +24,7 @@ class HouseAd(unittest.TestCase):
 
 
 BASE = "https://www.m365.fm"
-PAGE = ('<html><head></head><body><main><p>Intro ' + "x" * 3000 + '</p><h2>A</h2><p>a</p><h2>B</h2><p>b</p><h2>C</h2><p>c</p></main>'
+PAGE = ('<html><head></head><body><main><p>Intro ' + "x" * 3000 + '</p><h2>A</h2><p><a href="/entity/copilot/">Copilot</a></p><h2>B</h2><p>b</p><h2>C</h2><p>c</p></main>'
         '<footer>f</footer></body></html>')
 
 
@@ -36,10 +37,10 @@ class NoAdSense(unittest.TestCase):
 
     def test_con_and_services_until_22_jan(self):
         out = A.inject(BASE, PAGE, "de", BASE + "/show/x/", today="2027-01-22")
-        self.assertEqual(out.count('class="ad ad-own ad-slot'), 3)   # #281: oben, Mitte, unten
+        self.assertEqual(out.count('class="ad ad-own ad-slot'), 3)   # #281: oben, frueh im Text, unten
         self.assertEqual(out.count("ad-con"), 1)
-        self.assertIn("m365con.net", out)
-        self.assertIn('href="https://www.m365.fm/de/services/"', out)
+        self.assertIn("go/h-m365con?", out)   # gezaehlter Go-Link, UTM setzt der Worker (m365con.net)
+        self.assertIn("go/h-services?", out)
         self.assertIn("Services ansehen", out)
         self.assertLess(out.index("ad-con"), out.index("ad-svc"))
         self.assertNotIn("adsbygoogle", out)
@@ -47,10 +48,10 @@ class NoAdSense(unittest.TestCase):
 
     def test_only_services_after_con(self):
         out = A.inject(BASE, PAGE, "en", BASE + "/show/x/", today="2027-01-23")
-        self.assertNotIn("m365con.net", out)
-        self.assertIn('href="https://www.m365.fm/services/"', out)
+        self.assertNotIn("h-m365con", out)
+        self.assertIn("go/h-services?s=bottom&amp;pt=other&amp;l=en", out)
         self.assertIn("View services", out)
-        self.assertIn('href="https://www.m365.fm/sponsor/"', out)   # Mitte: wieder der Hinweis auf die Sponsor-Seite
+        self.assertIn("go/h-sponsor?s=mid", out)   # frueher Platz: Sponsoring (Buchung noch aus)
 
     def test_rules_still_apply(self):
         self.assertEqual(A.inject(BASE, PAGE, "de", BASE + "/impressum/", today="2026-12-01"), PAGE)

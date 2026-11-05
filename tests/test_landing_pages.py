@@ -12,6 +12,10 @@ from sync_spreaker import _save_top, _show_maps, _show_stats, episode_stats
 
 class LandingPageTests(unittest.TestCase):
     def setUp(self):
+        # #281: Standard der Tests = Buchung der Werbeplaetze an; der Aus-Zustand hat einen eigenen Test
+        self._ads = patch.object(site_landing, "_ads_on", return_value=True)
+        self._ads.start()
+        self.addCleanup(self._ads.stop)
         self.files = {}
         self.r2_files = {}
         self.pages = []
@@ -185,6 +189,31 @@ class LandingPageTests(unittest.TestCase):
         self.assertEqual(ja["t"]["submit"], "支払い義務のある予約をする")   # Oberflaeche in allen 15 Sprachen
         for hub in ("services/index.html", "de/services/index.html"):
             self.assertIn("for/advertisers/", self.files[hub])
+
+    def test_ad_placements_booking_off_noindex_unlinked_coming_soon(self):
+        """Mirko, 5.11.2026: bis PayPal getestet ist nur eigene Werbung - Seite noindex, nicht verlinkt, Hinweis "bald verfuegbar"."""
+        self._ads.stop()
+        with patch.object(site_landing, "_ads_on", return_value=False), self.tr_de():
+            self.build()
+        self._ads.start()
+        de = self.files["de/for/advertisers/index.html"]
+        self.assertIn("Bald verfügbar", de)
+        self.assertIn("Online-Buchung und Bezahlung der Werbeplätze starten in Kürze", de)
+        self.assertIn("40,00\u00a0€", de)                       # Preise bleiben sichtbar
+        self.assertNotIn("ads-book.js", de)
+        self.assertNotIn('id="adbook"', de)
+        self.assertIn('href="https://example.test/de/sponsor/#spn-req"', de)
+        self.assertNotIn("for/advertisers/#book", de)
+        pages = {canonical: (alternates, kwargs) for _, canonical, alternates, _, kwargs in self.pages}
+        alts, kw = pages["https://example.test/de/for/advertisers/"]
+        self.assertTrue(kw.get("noindex")); self.assertIsNone(alts)
+        self.assertNotIn("https://example.test/for/advertisers/", [u for u, _, _ in self.sitemap])
+        self.assertEqual(len(self.sitemap), 28)
+        for hub in ("services/index.html", "de/services/index.html"):
+            self.assertNotIn("for/advertisers/", self.files[hub])
+        for path, html_ in self.files.items():
+            if "advertisers" not in path:
+                self.assertNotIn("for/advertisers/", html_, path)
 
     def test_stats_put_value_label_and_source_on_separate_elements(self):
         with self.tr_de():

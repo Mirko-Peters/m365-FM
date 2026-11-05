@@ -27,7 +27,7 @@
   }
   function house(box, x) {
     if (!safe(x.url)) return;
-    box.replaceChildren(h("a", { class: "ad-house ad-adv", href: x.url, rel: "noopener" }, [h("b", { text: x.title }), x.body ? h("span", { text: x.body }) : null, x.cta ? h("em", { text: x.cta }) : null]));
+    box.replaceChildren(h("a", { class: "ad-house ad-adv", href: x.url, rel: "nofollow noopener" }, [h("b", { text: x.title }), x.body ? h("span", { text: x.body }) : null, x.cta ? h("em", { text: x.cta }) : null]));
   }
 
   var tsLoaded = null;
@@ -74,13 +74,15 @@
     slotEl.setAttribute("data-loaded", "1");
     var name = slotEl.getAttribute("data-ad-slot");
     var q = "?slot=" + encodeURIComponent(name) + "&pt=" + encodeURIComponent(slotEl.getAttribute("data-pt") || "other") +
-      "&lang=" + encodeURIComponent(C.lang || "en") + "&topics=" + encodeURIComponent(slotEl.getAttribute("data-topics") || "");
+      "&lang=" + encodeURIComponent(C.lang || "en") + "&topics=" + encodeURIComponent(slotEl.getAttribute("data-topics") || "") +
+      "&house=" + encodeURIComponent(slotEl.getAttribute("data-house") || "") + "&p=" + encodeURIComponent(slotEl.getAttribute("data-slug") || "") +
+      (slotEl.hasAttribute("data-ad-house") ? "&house_only=1" : "");   // die Hausanzeige im Platz wird ebenfalls gezaehlt (cookiefrei)
     fetch(C.api + "/api/ads/serve" + q, { credentials: "omit" }).then(function (r) { return r.ok ? r.json() : {}; }).then(function (j) {
       if (j && j.ad) { if (j.ad.type === "banner") banner(box, j.ad, name === "top"); else card(box, j.ad, slotEl); }
       else if (j && j.house) house(box, j.house);
     }).catch(function () {});
   }
-  var slots = Array.prototype.slice.call(document.querySelectorAll("[data-ad-slot]"));
+  var slots = Array.prototype.slice.call(document.querySelectorAll("[data-ad-slot]"));   // data-ad-house: nur Hausanzeige (wird nur gezaehlt)
   if (!("IntersectionObserver" in window)) { slots.forEach(load); return; }
   var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { io.unobserve(e.target); load(e.target); } }); }, { rootMargin: "300px 0px" });
   slots.forEach(function (s) { io.observe(s); });

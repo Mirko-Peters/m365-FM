@@ -40,7 +40,7 @@ beforeEach(async () => {
     INSERT INTO org_members(org_id,user_id,role,status,created) VALUES(1,2,'owner','active',1),(2,3,'owner','active',1);
     INSERT INTO mail_addr(user_id,email,verified,created) VALUES(1,'admin@example.com',1,1);`);
   env = { DB: sqliteDb(raw), SESSION_SECRET: "s", SITE: "https://www.m365.fm", API: "https://api-dub.m365.fm", ADMIN_SUBS: "",
-    PAYPAL_CLIENT_ID: "cid", PAYPAL_CLIENT_SECRET: "cs", PAYPAL_WEBHOOK_ID: "WH-1" };
+    PAYPAL_CLIENT_ID: "cid", PAYPAL_CLIENT_SECRET: "cs", PAYPAL_WEBHOOK_ID: "WH-1", ADS_BOOKING: "1" };
   resetPaypalToken();
   calls = []; realFetch = globalThis.fetch;
   globalThis.fetch = async (url, init = {}) => {
@@ -174,4 +174,11 @@ test("Stornierte Rechnung: Bestellung storniert", async () => {
     "paypal-auth-algo": "a", "paypal-cert-url": "c", "paypal-transmission-id": "t", "paypal-transmission-sig": "s", "paypal-transmission-time": "n" } });
   assert.equal((await (await handlePaypalWebhook(env, req)).json()).result, "sponsor_cancelled");
   assert.equal(raw.prepare("SELECT pay_status FROM sponsor_orders").get().pay_status, "cancelled");
+});
+
+test("Schalter ADS_BOOKING aus: Bestellung per Rechnung nicht verfügbar (503), kein PayPal-Aufruf", async () => {
+  delete env.ADS_BOOKING;
+  const r = await call("/api/sponsor/order", { method: "POST", user: OWNER, body: { org_id: 1, package: SC.orderPackage(state()), billing: BILLING } });
+  assert.equal(r.status, 503); assert.equal(r.json.error, "not_available_yet");
+  assert.equal(calls.length, 0);
 });

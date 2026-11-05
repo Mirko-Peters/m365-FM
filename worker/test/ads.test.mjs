@@ -40,7 +40,7 @@ beforeEach(async () => {
     INSERT INTO org_offers(org_id,eid,created) VALUES(1,'teams-phone',1);`);
   const objects = new Map();
   env = { DB: sqliteDb(raw), SESSION_SECRET: "test-secret", SITE: "https://www.m365.fm", API: "https://api-dub.m365.fm", ADMIN_SUBS: "",
-    PAYPAL_CLIENT_ID: "cid", PAYPAL_CLIENT_SECRET: "csecret", PAYPAL_WEBHOOK_ID: "WH-1",
+    PAYPAL_CLIENT_ID: "cid", PAYPAL_CLIENT_SECRET: "csecret", PAYPAL_WEBHOOK_ID: "WH-1", ADS_BOOKING: "1",
     PAGES: { put: async (k, v, o) => objects.set(k, { v, o }), objects } };
   resetPaypalToken();
   calls = []; ppResponses = {};
@@ -114,7 +114,8 @@ test("quote: TKP, Mindestbuchung, Themen +25 %, exklusiv +50 %, Laufzeit −10/�
   // teuerster gewaehlter Seitentyp; inaktive Seitentypen (Blog) nicht buchbar
   raw.exec("UPDATE ad_prices SET price_cents=5000 WHERE product='banner_top' AND page_type='entity'");
   assert.equal(quote(await loadPricing(env.DB), { product: "banner_top", page_types: ["episode", "entity"], quantity: 10000 }).net_cents, 50000);
-  assert.equal(quote(p, { product: "banner_top", page_types: ["blog"], quantity: 10000 }).error, "bad_page_type");
+  assert.equal(quote(p, { product: "banner_top", page_types: ["blog"], quantity: 10000 }).net_cents, 40000, "Blog ist buchbar (gleicher Preis)");
+  assert.equal(quote(p, { product: "banner_top", page_types: ["other"], quantity: 10000 }).error, "bad_page_type");
 });
 
 test("quote: Firmenkarte pro Klick, Leads je Profilstufe (Premium nach enthaltenen Leads), Reverse Charge nur wenn eingeschaltet", async () => {
@@ -401,4 +402,95 @@ test("Sponsor-Dashboard-API: Firmen mit Werbebuchung erscheinen mit ihren Zahlen
   assert.equal(own.orgs[0].ads[0].impressions, 50);
   assert.equal(own.orgs[0].ads[0].ctr, 4);
   assert.equal((await get(OTHER)).orgs.length, 0);
+});
+
+test("Schalter ADS_BOOKING aus (Standard): nur Hausanzeigen, Buchung/Zahlung/Leads 503 ohne PayPal-Aufruf; Admin bleibt nutzbar", async () => {
+  delete env.ADS_BOOKING;
+  activeBooking({});
+  await call("/api/admin/ads/house", { method: "POST", user: ADMIN, body: { slot: "mid", title: "M365Con 2027", url: "https://m365con.net/" } });
+  const s = await call("/api/ads/serve", { query: "?slot=mid&pt=episode&lang=de" });
+  assert.equal(s.json.ad, null);
+  assert.equal(s.json.house.title, "M365Con 2027");
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM ad_stats_daily").get().n, 0);
+  for (const [path, body] of [["/api/ads/bookings", {}], ["/api/ads/pay", { id: 1 }], ["/api/ads/lead", { code: "ad-testcode01", consent: true }]]) {
+    const r = await call(path, { method: "POST", user: OWNER, body });
+    assert.equal(r.status, 503, path); assert.equal(r.json.error, "not_available_yet");
+  }
+  assert.equal((await call("/api/ads/paypal-return", { query: "?code=ad-testcode01" })).status, 503);
+  assert.equal(calls.length, 0, "kein PayPal- oder Turnstile-Aufruf");
+  assert.equal((await call("/api/ads/pricing")).status, 200, "Preise bleiben sichtbar");
+  assert.equal((await call("/api/admin/ads/bookings", { user: ADMIN })).status, 200);
+  const wr = readFileSync(new URL("../wrangler.toml", import.meta.url), "utf8");
+  assert.match(wr, /^ADS_BOOKING = "0"$/m, "Standard im Deploy: aus");
+});
+
+test("Hausanzeigen: Einblendungen und Klicks cookiefrei je Platz/Seitentyp/Sprache/Land, auch bei ADS_BOOKING aus; UTM mit Entität und Slug", async () => {
+  delete env.ADS_BOOKING;
+  const de = { "cf-ipcountry": "DE" };
+  let r = await call("/api/ads/serve", { query: "?slot=mid&pt=blog&lang=de&topics=teams-phone&house=m365con&p=mein-beitrag", headers: de });
+  assert.equal(r.json.ad, null);
+  await call("/api/ads/serve", { query: "?slot=mid&pt=blog&lang=de&house=m365con", headers: { "cf-ipcountry": "AT" } });
+  await call("/api/ads/serve", { query: "?slot=mid&pt=blog&lang=de&house=m365con", headers: { "user-agent": "Googlebot/2.1", ...de } });
+  await call("/api/ads/serve", { query: "?slot=mid2&pt=entity&lang=fr&house=services&house_only=1", headers: de });
+  await call("/api/ads/serve", { query: "?slot=mid&pt=blog&lang=de&house=evil" });
+  const rows = raw.prepare("SELECT house,slot,page_type,lang,country,impressions FROM ad_house_stats ORDER BY house,country").all().map((x) => ({ ...x }));
+  assert.deepEqual(rows, [
+    { house: "m365con", slot: "mid", page_type: "blog", lang: "de", country: "AT", impressions: 1 },
+    { house: "m365con", slot: "mid", page_type: "blog", lang: "de", country: "DE", impressions: 1 },
+    { house: "services", slot: "mid2", page_type: "entity", lang: "fr", country: "DE", impressions: 1 },
+  ]);
+  const go = async (code, q, ua = "Mozilla/5.0 Chrome/130", extra = {}) => {
+    const url = new URL(`https://api-dub.m365.fm/go/${code}${q}`);
+    return handleSponsorLink(env, new Request(url, { headers: { "user-agent": ua, ...extra } }), url, `/go/${code}`, undefined);
+  };
+  r = await go("h-m365con", "?s=mid&pt=blog&l=de&e=teams-phone&p=mein-beitrag", undefined, de);
+  assert.equal(r.status, 302);
+  const u = new URL(r.headers.get("location"));
+  assert.equal(u.origin, "https://m365con.net");
+  assert.deepEqual(Object.fromEntries(u.searchParams), { utm_source: "m365.fm", utm_medium: "house_ad", utm_campaign: "m365con2027", utm_term: "teams-phone", utm_content: "mein-beitrag" });
+  assert.equal(raw.prepare("SELECT clicks FROM ad_house_stats WHERE house='m365con' AND country='DE'").get().clicks, 1);
+  await go("h-m365con", "?s=mid&pt=blog&l=de", "curl/8");   // Bot: kein Klick
+  // keine personenbezogenen oder ungueltigen Werte in der UTM; Ziel nur aus der festen Liste
+  const bad = new URL((await go("h-m365con", "?s=mid&pt=blog&l=de&e=Max%20Mustermann&p=max@example.com")).headers.get("location"));
+  assert.equal(bad.searchParams.get("utm_term"), null); assert.equal(bad.searchParams.get("utm_content"), null);
+  const svc = new URL((await go("h-services", "?s=bottom&pt=entity&l=fr&e=copilot&p=copilot")).headers.get("location"));
+  assert.equal(svc.origin + svc.pathname, "https://www.m365.fm/fr/services/");
+  assert.equal(svc.searchParams.get("utm_campaign"), "m365fm_services");
+  assert.equal((await go("h-evil", "?s=mid")).status, 404);
+  assert.equal((await go("h-x999", "?s=mid")).status, 404);
+  // Admin-Zahlen: CTR, je Land und Sprache, CSV mit Land; nur fuer Admins
+  assert.equal((await call("/api/admin/ads/house-stats", { user: OWNER })).status, 403);
+  const st = await call("/api/admin/ads/house-stats", { user: ADMIN, query: "?days=7&house=m365con" });
+  assert.deepEqual(st.json.by_house.map((x) => [x.key, x.impressions, x.clicks, x.ctr]), [["m365con", 2, 2, 100]]);   // 2. Klick ohne Land (XX)
+  assert.deepEqual(st.json.by_country.map((x) => x.key).sort(), ["m365con · AT", "m365con · DE", "m365con · XX"]);
+  assert.deepEqual(st.json.by_lang.map((x) => x.key), ["m365con · de"]);
+  assert.equal((await call("/api/admin/ads/house-stats", { user: ADMIN, query: "?days=30" })).json.by_house.length, 2);
+  const csv = await call("/api/admin/ads/house-stats", { user: ADMIN, query: "?days=30&format=csv" });
+  assert.match(csv.text, /"house","slot","page_type","lang","country","impressions","clicks","ctr_pct"/);
+  assert.match(csv.text, /"m365con","mid","blog","de","DE","1","1","100.00"/);
+  // dieselbe M365Con-Adresse wie auf der Seite (site_ads.CON_URL)
+  const py = readFileSync(new URL("../../site_ads.py", import.meta.url), "utf8");
+  assert.ok(py.includes(`CON_URL = "${"https://m365con.net/?utm_source=m365.fm&utm_medium=house_ad&utm_campaign=m365con2027"}"`));
+});
+
+test("Hausanzeige aus dem Admin: Go-Link mit Seitenkontext, Kampagnen-Zahlen mit Land in der CSV", async () => {
+  env.ADS_BOOKING = "1";
+  await call("/api/admin/ads/house", { method: "POST", user: ADMIN, body: { slot: "top", title: "Webinar", url: "https://example.com/webinar" } });
+  const r = await call("/api/ads/serve", { query: "?slot=top&pt=episode&lang=en&topics=copilot&house=sponsor&p=folge-7", headers: { "cf-ipcountry": "US" } });
+  const id = raw.prepare("SELECT id FROM ad_house").get().id;
+  assert.equal(r.json.house.url, `https://api-dub.m365.fm/go/h-x${id}?s=top&pt=episode&l=en&e=copilot&p=folge-7`);
+  assert.equal(raw.prepare("SELECT house,country FROM ad_house_stats").get().house, `x${id}`);
+  const url = new URL(r.json.house.url);
+  const go = await handleSponsorLink(env, new Request(url, { headers: { "user-agent": "Mozilla/5.0" } }), url, url.pathname, undefined);
+  const t = new URL(go.headers.get("location"));
+  assert.equal(t.origin + t.pathname, "https://example.com/webinar");
+  assert.equal(t.searchParams.get("utm_campaign"), `house_x${id}`);
+  assert.equal(t.searchParams.get("utm_content"), "folge-7");
+  // bezahlte Kampagne: Land in Zaehler und CSV
+  const bid = activeBooking({});
+  await call("/api/ads/serve", { query: "?slot=mid&pt=episode", headers: { "cf-ipcountry": "CH" } });
+  assert.equal(raw.prepare("SELECT country FROM ad_stats_daily WHERE booking_id=?").get(bid).country, "CH");
+  const csv = await call("/api/admin/ads/stats", { user: ADMIN, query: "?format=csv" });
+  assert.match(csv.text, /"slot","page_type","country","impressions"/);
+  assert.match(csv.text, /"mid","episode","CH","1","0"/);
 });

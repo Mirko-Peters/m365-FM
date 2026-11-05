@@ -29,6 +29,19 @@ BY_PATH = {p["path"]: p for p in PAGES}
 MEDIAKIT_PAGES = {"for/sponsors/", "for/advertisers/", "i-want-to/reach-microsoft-365-buyers/"}   # Seiten fuer Sponsoren: Knopf "Mediadaten anfordern"
 
 
+ADS_PATH = "for/advertisers/"
+
+
+def _ads_on():
+    """#281: Buchung der Werbeplaetze an (data/ad_slots.json "booking"). Aus: Seite noindex, nicht verlinkt, Hinweis "bald verfuegbar"."""
+    import site_ads
+    return site_ads.booking_on()
+
+
+def _listed(path):
+    return path != ADS_PATH or _ads_on()
+
+
 def _text(lang, text):
     from site_i18n import T
     return T(lang, text[0], text[1])
@@ -397,13 +410,17 @@ def _ads_sections(g, lang):
     js = ROOT / "assets" / "ads-book.js"
     import hashlib
     ver = hashlib.sha1(js.read_bytes()).hexdigest()[:10] if js.exists() else "0"
+    if not _ads_on():
+        book = (f'<section class="sec" id="book"><div class="kicker">{_t(lang, C.STATUS["soon"])}</div><h2>{_t(lang, C.ADS["book"])}</h2>'
+                f'<p class="lp-note">{_t(lang, C.ADS["soon"])}</p><p><a class="btn main" href="{_a(base, lang, "sponsor")}#spn-req">{_t(lang, C.ADS["contact"])}</a></p></section>')
+    else:
+        book = (f'<section class="sec" id="book"><div class="kicker">{_t(lang, C.ADS["book_k"])}</div><h2>{_t(lang, C.ADS["book"])}</h2>'
+                f'<div id="adbook" class="adb" data-cfg="{cfg_json}" aria-live="polite"><noscript><p>{_t(lang, C.ADS["noscript"])}</p></noscript></div>'
+                f'<script defer src="{base}/assets/ads-book.js?v={ver}"></script></section>')
     return (f'<section class="sec" id="prices"><div class="kicker">{_t(lang, C.ADS["prices_k"])}</div><h2>{_t(lang, C.ADS["prices"])}</h2>'
             f'<table class="lp-table ad-prices"><thead><tr><th scope="col">{_t(lang, C.ADS["col_place"])}</th><th scope="col">{_t(lang, C.ADS["col_size"])}</th>'
             f'<th scope="col">{_t(lang, C.ADS["col_billing"])}</th><th scope="col">{_t(lang, C.ADS["col_price"])}</th></tr></thead><tbody>{rows}</tbody></table>'
-            f'<p class="lp-note" id="ad-note">{html.escape(note, quote=True)}</p><p class="lp-note">{_t(lang, C.ADS["tax"])}</p></section>'
-            f'<section class="sec" id="book"><div class="kicker">{_t(lang, C.ADS["book_k"])}</div><h2>{_t(lang, C.ADS["book"])}</h2>'
-            f'<div id="adbook" class="adb" data-cfg="{cfg_json}" aria-live="polite"><noscript><p>{_t(lang, C.ADS["noscript"])}</p></noscript></div>'
-            f'<script defer src="{base}/assets/ads-book.js?v={ver}"></script></section>')
+            f'<p class="lp-note" id="ad-note">{html.escape(note, quote=True)}</p><p class="lp-note">{_t(lang, C.ADS["tax"])}</p></section>' + book)
 
 
 # ---------------------------------------------------------------- Seiten
@@ -414,7 +431,7 @@ def _hub(g, lang, features):
     url = hub_url(base, lang)
     h1_text, lead_text, alt_text = _text(lang, H["h1"]), _text(lang, H["lead"]), _text(lang, H["alt"])
     intro_h, intro_ps = H["intro"]
-    audiences = "".join(_card(base, lang, BY_PATH[p], features) for p in C.ORDER_AUDIENCES)
+    audiences = "".join(_card(base, lang, BY_PATH[p], features) for p in C.ORDER_AUDIENCES if _listed(p))
     goals = "".join(_card(base, lang, BY_PATH[p], features) for p in C.ORDER_GOALS)
     dh, dw, dfor, dbens = H["directory_card"]
     directory_card = (f'<article class="lp-card"><div class="lp-card-b"><h3><a href="{_a(base, lang, "directory")}">{_t(lang, dh)}</a></h3>'
@@ -423,6 +440,8 @@ def _hub(g, lang, features):
                       f'<span class="lp-go">{_t(lang, C.STATUS["free"])}</span></div></article>')
     rows = ""
     for name, what, status, feature, key in H["glance"]:
+        if not _listed(key):
+            continue
         cls, label = _status(lang, status, feature, features)
         rows += (f'<tr><th scope="row"><a href="{_a(base, lang, key)}">{_t(lang, name)}</a></th><td>{_t(lang, what)}</td>'
                  f'<td><span class="lp-badge {cls}">{label}</span></td></tr>')
@@ -447,8 +466,8 @@ def _hub(g, lang, features):
     ld = [{"@context": "https://schema.org", "@type": "CollectionPage", "@id": url + "#page", "url": url, "name": h1_text,
            "description": _text(lang, H["meta"]), "inLanguage": lang, "dateModified": today, "isPartOf": {"@id": f"{base}/#website"},
            "publisher": {"@id": f"{base}/#org"}, "primaryImageOfPage": {"@id": url + "#image"}, "breadcrumb": {"@id": url + "#breadcrumb"},
-           "mainEntity": {"@type": "ItemList", "numberOfItems": len(PAGES), "itemListElement": [
-               {"@type": "ListItem", "position": i + 1, "name": _text(lang, p["h1"]), "url": _url(base, lang, p["path"])} for i, p in enumerate(PAGES)]}},
+           "mainEntity": {"@type": "ItemList", "numberOfItems": len([p for p in PAGES if _listed(p["path"])]), "itemListElement": [
+               {"@type": "ListItem", "position": i + 1, "name": _text(lang, p["h1"]), "url": _url(base, lang, p["path"])} for i, p in enumerate([p for p in PAGES if _listed(p["path"])])]}},
           _image_ld(url, hero, lang, alt_text),
           _crumbs_ld(url, [(_text(lang, C.UI["crumb_home"]), home), (h1_text, url)]),
           {"@context": "https://schema.org", "@type": "FAQPage", "@id": url + "#faq", "inLanguage": lang,
@@ -463,6 +482,9 @@ def _sub(g, lang, spec, features):
     hub = hub_url(base, lang)
     h1_text, lead_text, alt_text = _text(lang, spec["h1"]), _text(lang, spec["lead"]), _text(lang, spec["alt"])
     cta_text, cta_key = (spec["cta_on"] if spec.get("cta_on") and features.get(spec["cta_on"][2]) else spec["cta"])[:2]
+    soon = spec.get("ads") and not _ads_on()
+    if soon:   # Buchung noch aus: Kontakt ueber die Sponsoring-Seite
+        cta_text, cta_key = C.ADS["contact"], "sponsor"
     cta, cta_url = _t(lang, cta_text), _a(base, lang, cta_key)
     # Mirko, 5.11.2026: auf den Seiten fuer Sponsoren immer die Mediadaten verlinken (Seite nur EN/DE, andere Sprachen auf EN)
     mk_btn = (f'<a class="btn" href="{base}/{"de/" if lang == "de" else ""}media-kit/">{_t(lang, ("Request the media kit", "Mediadaten anfordern"))}</a>'
@@ -488,6 +510,7 @@ def _sub(g, lang, spec, features):
     body = (f'{g["header"](lang, "")}<main class="wrap lp">'
             f'<nav class="crumbs" aria-label="{_t(lang, ("Breadcrumb", "Brotkrumennavigation"))}"><a href="{html.escape(f"{base}/" if lang == "en" else f"{base}/{lang}/", quote=True)}">{_u(lang, "crumb_home")}</a><a href="{html.escape(hub, quote=True)}">{_u(lang, "crumb")}</a></nav>'
             f'<div class="lp-hero"><div><div class="kicker">{_u(lang, "kicker")}</div><h1>{html.escape(h1_text, quote=True)}</h1><p class="lede">{html.escape(lead_text, quote=True)}</p>{directory_note}'
+            + (f'<p class="dir-note ad-soon"><span class="lp-badge soon">{_t(lang, C.STATUS["soon"])}</span> {_t(lang, C.ADS["soon"])}</p>' if soon else "") +
             f'<div class="btns"><a class="btn main" href="{cta_url}">{cta}</a>{mk_btn}<a class="btn" href="{html.escape(hub, quote=True)}">{_u(lang, "all")}</a></div></div>'
             f'{_hero_img(path, lang, html.escape(alt_text, quote=True))}</div>'
             f'<nav class="lp-toc" aria-label="{_u(lang, "toc")}"><b>{_u(lang, "toc")}:</b>{"".join(f"<a href=\"#{i}\">{_t(lang, h)}</a>" for i, h in toc)}</nav>'
@@ -535,15 +558,16 @@ def build(g):
         prefix = "" if lang == "en" else f"{lang}/"
         writer = g["write"] if lang in ("en", "de") else g["write_r2"]
         for path in [HUB["path"]] + [p["path"] for p in PAGES]:
-            alt = {l: _url(base, l, path) for l in idx}
+            listed = _listed(path)   # #281: Werbeplaetze ohne Buchung: noindex, nicht in Sitemap und hreflang
+            alt = {l: _url(base, l, path) for l in idx} if listed else {}
             url = _url(base, lang, path)
             if path == HUB["path"]:
                 body, ld, title, desc, hero = _hub(g, lang, features)
             else:
                 body, ld, title, desc, hero = _sub(g, lang, BY_PATH[path], features)
             kw = dict(xdefault=alt.get("en"), og_type="website", share=False, extra_head=CSS_TAG, og_image=(og_src(path, lang), 1200, 630))
-            if not ready[lang]:
+            if not ready[lang] or not listed:
                 kw["noindex"] = True
-            writer(prefix + path + "index.html", g["page"](lang, title, desc, url, body, alt if ready[lang] else None, ld, **kw))
-            if ready[lang]:
+            writer(prefix + path + "index.html", g["page"](lang, title, desc, url, body, alt if ready[lang] and listed else None, ld, **kw))
+            if ready[lang] and listed:
                 g["sitemap"].append((url, today, alt))

@@ -32,13 +32,13 @@ INSERT OR IGNORE INTO ad_products(id,kind,slot,width,height,mobile_width,mobile_
   ('company_card','cpc','mid',0,0,0,0,4),
   ('lead_form','cpl','mid',0,0,0,0,5);
 -- Einfuehrungspreise (Mirko, 5.11.2026): oben 40 €, Mitte 25 €, unten 15 € TKP; Firmenkarte 0,80 € je Klick; Lead 20 € (freies Profil).
--- Seitentypen zum Start: Show-Folgen, Sprachseiten, Entitaeten; Blog spaeter (inaktiv angelegt).
+-- Seitentypen: Show-Folgen, Sprachseiten, Entitaeten und Blogbeitraege (Mirko, 5.11.2026: alle Inhaltsseiten inkl. Blog).
 INSERT OR IGNORE INTO ad_prices(product,page_type,price_cents,active) VALUES
-  ('banner_top','episode',4000,1),('banner_top','lang',4000,1),('banner_top','entity',4000,1),('banner_top','blog',4000,0),
-  ('banner_mid','episode',2500,1),('banner_mid','lang',2500,1),('banner_mid','entity',2500,1),('banner_mid','blog',2500,0),
-  ('banner_bottom','episode',1500,1),('banner_bottom','lang',1500,1),('banner_bottom','entity',1500,1),('banner_bottom','blog',1500,0),
-  ('company_card','episode',80,1),('company_card','lang',80,1),('company_card','entity',80,1),('company_card','blog',80,0),
-  ('lead_form','episode',2000,1),('lead_form','lang',2000,1),('lead_form','entity',2000,1),('lead_form','blog',2000,0);
+  ('banner_top','episode',4000,1),('banner_top','lang',4000,1),('banner_top','entity',4000,1),('banner_top','blog',4000,1),
+  ('banner_mid','episode',2500,1),('banner_mid','lang',2500,1),('banner_mid','entity',2500,1),('banner_mid','blog',2500,1),
+  ('banner_bottom','episode',1500,1),('banner_bottom','lang',1500,1),('banner_bottom','entity',1500,1),('banner_bottom','blog',1500,1),
+  ('company_card','episode',80,1),('company_card','lang',80,1),('company_card','entity',80,1),('company_card','blog',80,1),
+  ('lead_form','episode',2000,1),('lead_form','lang',2000,1),('lead_form','entity',2000,1),('lead_form','blog',2000,1);
 INSERT OR IGNORE INTO ad_settings(k,v) VALUES
   ('min_impressions','10000'),('min_clicks','1'),('min_leads','1'),
   ('topic_pct','25'),('exclusive_pct','50'),('runtime3_pct','10'),('runtime6_pct','20'),
@@ -103,17 +103,31 @@ CREATE INDEX IF NOT EXISTS idx_ad_bookings_org ON ad_bookings(org_id, created);
 CREATE INDEX IF NOT EXISTS idx_ad_bookings_order ON ad_bookings(paypal_order_id);
 CREATE INDEX IF NOT EXISTS idx_ad_bookings_invoice ON ad_bookings(paypal_invoice_id);
 
--- Zaehler ohne Cookies und ohne Personenbezug: je Kampagne, Platz, Seitentyp und Tag
+-- Zaehler ohne Cookies und ohne Personenbezug: je Kampagne, Platz, Seitentyp, Land (Cloudflare cf.country, nur der Laendercode) und Tag
 CREATE TABLE IF NOT EXISTS ad_stats_daily (
   day TEXT NOT NULL,
   booking_id INTEGER NOT NULL,
   slot TEXT NOT NULL,
   page_type TEXT NOT NULL,
+  country TEXT NOT NULL DEFAULT 'XX',
   impressions INTEGER NOT NULL DEFAULT 0,
   clicks INTEGER NOT NULL DEFAULT 0,
   leads INTEGER NOT NULL DEFAULT 0,
-  PRIMARY KEY(day, booking_id, slot, page_type)
+  PRIMARY KEY(day, booking_id, slot, page_type, country)
 );
+-- Hausanzeigen (M365Con, Services, Werben/Sponsoring, Hausanzeigen aus dem Admin): dieselben cookiefreien Zaehler, dazu Sprache der Seite
+CREATE TABLE IF NOT EXISTS ad_house_stats (
+  day TEXT NOT NULL,
+  house TEXT NOT NULL,                       -- m365con | services | advertise | sponsor | x<id> (ad_house)
+  slot TEXT NOT NULL,                        -- top | mid | mid2 | bottom
+  page_type TEXT NOT NULL,
+  lang TEXT NOT NULL,
+  country TEXT NOT NULL DEFAULT 'XX',
+  impressions INTEGER NOT NULL DEFAULT 0,
+  clicks INTEGER NOT NULL DEFAULT 0,
+  PRIMARY KEY(day, house, slot, page_type, lang, country)
+);
+CREATE INDEX IF NOT EXISTS idx_ad_house_stats_house ON ad_house_stats(house, day);
 CREATE INDEX IF NOT EXISTS idx_ad_stats_booking ON ad_stats_daily(booking_id, day);
 
 -- Leads (Kontakt zu Firma X): Einwilligung Pflicht; ungueltige/doppelte Leads werden gutgeschrieben (nicht verbraucht)

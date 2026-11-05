@@ -25,8 +25,9 @@
   // ---------- Rechner
   var S = (C.pricing && C.pricing.settings) || {};
   var product = h("select", {}, Object.keys(KIND).map(function (k) { return h("option", { value: k, text: N[k] || k }); }));
-  var pts = ["episode", "lang", "entity"].map(function (p) { return h("input", { type: "checkbox", value: p, checked: true }); });
-  var ptBox = h("fieldset", { class: "adb-pt" }, [h("legend", { text: T.page_types })].concat(pts.map(function (c, i) { return h("label", {}, [c, " " + T["pt_" + ["episode", "lang", "entity"][i]]]); })));
+  var PT = ["episode", "lang", "entity", "blog"];
+  var pts = PT.map(function (p) { return h("input", { type: "checkbox", value: p, checked: true }); });
+  var ptBox = h("fieldset", { class: "adb-pt" }, [h("legend", { text: T.page_types })].concat(pts.map(function (c, i) { return h("label", {}, [c, " " + T["pt_" + PT[i]]]); })));
   var topics = h("input", { type: "text", maxlength: "400", placeholder: "teams-phone, copilot", autocomplete: "off" });
   var excl = h("input", { type: "checkbox" }), exclRow = h("p", { class: "adb-f" }, [h("label", {}, [excl, " " + T.exclusive])]);
   var months = h("select", {}, [1, 2, 3, 4, 5, 6, 9, 12].map(function (m) { return h("option", { value: String(m), text: String(m) }); }));

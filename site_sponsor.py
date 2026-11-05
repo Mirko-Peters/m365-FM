@@ -717,13 +717,29 @@ def body_html(g, lang, stats, quick, ssr, n_main, n_langs, con_on):
             f'<p class="spn-fine">{E(t("privacy", link="{link}")).replace("{link}", plink)}</p>'
             f'<div class="spn-status" id="spn-status" tabindex="-1" hidden></div></form>'
             f'<div class="spn-done" id="spn-done" tabindex="-1" hidden><h3>{E(t("done_h"))}</h3><p>{E(t("done_p"))}</p></div>'
-            # #281: direkt bestellen per PayPal-Rechnung, nur ohne M365Con (assets/sponsor.js blendet um; Preis rechnet der Server neu)
-            f'<details class="spn-inv" id="spn-inv" hidden><summary>{E(t("inv_h"))}</summary><p>{E(t("inv_intro"))}</p>'
-            f'<div id="spn-inv-body" aria-live="polite"></div></details>'
-            f'<p class="spn-fine" id="spn-inv-con" hidden>{E(t("inv_con"))}</p></section>')
+            + invoice_html(t) + '</section>')
     faq = "".join(f'<details><summary>{E(q)}</summary><p>{E(a)}</p></details>' for q, a in faq_items(lang, stats, nums, day))
     faq = f'<section class="faq spn-faq" aria-labelledby="spn-faq-h"><h2 id="spn-faq-h">{E(t("faq_h"))}</h2>{faq}</section>'
     return hero + nojs + f'<div class="spn-grid"><div class="spn-build">{s1}{s2}{s3}{s4}{s5}</div>{console}{form}{faq}</div>'
+
+
+def advertise_button(B, lang):
+    """#281: Verweis auf die direkt buchbaren Werbeplaetze - nur, wenn die Buchung an ist (data/ad_slots.json "booking")."""
+    import site_ads as ADS
+    if not ADS.booking_on():
+        return ""
+    return f'<a class="btn" href="{E(ADS.advertise_url(B, lang))}">{E(ADS.texts(lang, "slot")["adv_cta"])}</a>'
+
+
+def invoice_html(t):
+    """#281: direkt bestellen per PayPal-Rechnung, nur ohne M365Con (assets/sponsor.js blendet um; Preis rechnet der Server neu).
+    Solange die Buchung aus ist (data/ad_slots.json "booking"), gibt es nur das Anfrageformular."""
+    import site_ads as ADS
+    if not ADS.booking_on():
+        return ""
+    return (f'<details class="spn-inv" id="spn-inv" hidden><summary>{E(t("inv_h"))}</summary><p>{E(t("inv_intro"))}</p>'
+            f'<div id="spn-inv-body" aria-live="polite"></div></details>'
+            f'<p class="spn-fine" id="spn-inv-con" hidden>{E(t("inv_con"))}</p>')
 
 
 def faq_items(lang, stats, nums, day):
@@ -808,8 +824,7 @@ def build(g):
                "community": f"{B}/{'' if lang == 'en' else lang + '/'}community/"}
         body = body_html(g, lang, stats, quick, S, n_main, n_langs, con_on)
         dash = dashboard_url(B, lang)
-        import site_ads as ADS   # #281: Verweis auf die direkt buchbaren Werbeplaetze
-        adv = f'<a class="btn" href="{E(ADS.advertise_url(B, lang))}">{E(ADS.texts(lang, "slot")["adv_cta"])}</a>'
+        adv = advertise_button(B, lang)
         body = (f'{g["header"](lang, "")}<main class="wrap spn-wrap"><p><a class="btn" href="{E(dash)}">{E(tx(lang, "dash_h"))}</a> {adv}</p>'
                 f'<div class="spn" id="spn" data-ssr="{1 if S else 0}" data-cfg="{E(json.dumps(cfg, ensure_ascii=False, separators=(",", ":")))}">'
                 f'{body}</div></main>{g["footer"](lang)}{js}')

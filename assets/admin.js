@@ -366,6 +366,27 @@
     }
     loadHouse();
 
+    // Hausanzeigen (M365Con, Services, Werben/Sponsoring, eigene): Einblendungen, Klicks, CTR je Platz, Land, Sprache - laeuft auch bei ADS_BOOKING aus
+    var hsSec = h("section"), hsDays = h("select", { "aria-label": "Zeitraum" }, [["7", "Letzte 7 Tage"], ["30", "Letzte 30 Tage"], ["90", "Letzte 90 Tage"]].map(function (o) { return h("option", { value: o[0], text: o[1] }); }));
+    var POS = { top: "oben unter dem Header", mid: "früh im Text", mid2: "Mitte (lange Seiten)", bottom: "unten" };
+    p.append(hsSec);
+    function loadHouseStats() {
+      api("/api/admin/ads/house-stats?days=" + hsDays.value).then(function (r) {
+        hsSec.textContent = "";
+        hsSec.append(h("h3", { text: "Hausanzeigen: Zahlen" }), h("p", {}, ["Zeitraum ", hsDays, " ", h("button", { type: "button", class: "btn", text: "CSV herunterladen", onclick: function () {
+          fetch(API + "/api/admin/ads/house-stats?days=" + hsDays.value + "&format=csv", { credentials: "include", headers: { "x-requested-with": "m365" } }).then(function (x) { return x.blob(); }).then(function (blob) {
+            var a = h("a", { href: URL.createObjectURL(blob), download: "m365fm-hausanzeigen.csv" }); document.body.appendChild(a); a.click(); a.remove(); });
+        } })]), h("p", { class: "mut", text: "Cookiefrei gezählt (ohne Bots), Land aus Cloudflare (nur Ländercode). Klicks über den Go-Link; die Ziel-URL trägt utm_source=m365.fm, utm_medium=house_ad, utm_campaign, utm_term (Haupt-Entität der Seite) und utm_content (Slug der Seite)." }));
+        if (r.s !== 200) return;
+        var row = function (x) { return [x.key.replace(/ · (top|mid2|mid|bottom)$/, function (m0, k) { return " · " + (POS[k] || k); }), x.impressions, x.clicks, x.ctr == null ? "–" : x.ctr + " %"]; };
+        hsSec.append(h("h4", { text: "Je Hausanzeige" }), tbl(["Hausanzeige", "Einblendungen", "Klicks", "CTR"], (r.j.by_house || []).map(row), "Noch keine Zahlen."),
+          h("h4", { text: "Je Platz" }), tbl(["Hausanzeige · Platz", "Einblendungen", "Klicks", "CTR"], (r.j.by_slot || []).map(row), "–"),
+          h("h4", { text: "Je Land" }), tbl(["Hausanzeige · Land", "Einblendungen", "Klicks", "CTR"], (r.j.by_country || []).slice(0, 60).map(row), "–"),
+          h("h4", { text: "Je Sprache" }), tbl(["Hausanzeige · Sprache", "Einblendungen", "Klicks", "CTR"], (r.j.by_lang || []).map(row), "–"));
+      });
+    }
+    hsDays.onchange = loadHouseStats; loadHouseStats();
+
     // Zahlen + CSV
     var sSec = h("section"), from = h("input", { type: "date" }), to = h("input", { type: "date" }); p.append(sSec);
     function loadStats() {
@@ -378,7 +399,7 @@
           } })]));
         if (r.s !== 200) return; var t = r.j.totals;
         sSec.appendChild(h("div", { class: "adm-grid" }, [tile("Einblendungen", t.impressions), tile("Klicks", t.clicks), tile("Klickrate", t.ctr == null ? "–" : t.ctr + " %"), tile("Leads", t.leads), tile("Umsatz netto (bezahlt)", eur(t.revenue_net_cents), t.paid_bookings + " Buchungen")]));
-        sSec.appendChild(tbl(["Tag", "Kampagne", "Firma", "Platz", "Seitentyp", "Einbl.", "Klicks", "Leads"], (r.j.rows || []).slice(0, 200).map(function (x) { return [x.day, x.code, x.org, x.slot, x.page_type, x.impressions, x.clicks, x.leads]; }), "Noch keine Zahlen."));
+        sSec.appendChild(tbl(["Tag", "Kampagne", "Firma", "Platz", "Seitentyp", "Land", "Einbl.", "Klicks", "Leads"], (r.j.rows || []).slice(0, 200).map(function (x) { return [x.day, x.code, x.org, x.slot, x.page_type, x.country, x.impressions, x.clicks, x.leads]; }), "Noch keine Zahlen."));
       });
     }
     loadStats();

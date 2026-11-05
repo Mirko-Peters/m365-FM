@@ -1,5 +1,37 @@
 {
- "_doc": "#281 Buchbare Werbeplaetze (site_ads.inject_slots): enabled false = nur die bisherigen eigenen Banner (M365Con Mitte, Services unten). slots: einzelne Plaetze an/aus. Preise und Seitentypen stehen nicht hier, sondern in D1 (Admin > Werbung); data/ad_pricing.json sind nur die Startwerte fuer die Preistabelle der Landingpage, bis der Worker antwortet.",
+ "_doc": "#281 Werbeplaetze (site_ads.inject_slots). enabled false = nur die bisherigen eigenen Banner (M365Con Mitte, Services unten). slots: einzelne Plaetze an/aus - mid = frueh im Text nach der Einleitung (alle Seiten), bottom = vor dem Footer (alle Seiten), top = unter dem Header und mid2 = nach dem ersten Drittel nur auf langen Seiten (min_chars); mid2 nur mit min_gap_chars Abstand und mindestens zwei Abschnitten zum fruehen Platz (aus, solange es nur drei Hausanzeigen gibt: sonst doppelt). booking: false = nur eigene Werbung (Hausanzeigen), keine Buchung; /for/advertisers/ ist dann noindex und nicht verlinkt, auf /sponsor/ gibt es nur das Anfrageformular. Einschalten zusammen mit ADS_BOOKING=\"1\" in worker/wrangler.toml, erst nach dem PayPal-Sandbox-Test. Werbeplaetze erscheinen nur auf Seiten mit mindestens einer verlinkten Entitaet (Entitaetsseiten immer); min_chars entscheidet nur ueber die Zahl der Plaetze; nie auf Seiten aus skip_paths (Teilstring des Pfads), ausser der Pfad passt auf allow_patterns. Preise stehen in D1 (Admin > Werbung); data/ad_pricing.json sind nur Startwerte fuer die Preistabelle der Landingpage.",
  "enabled": true,
- "slots": {"top": true, "mid": true, "bottom": true}
+ "booking": false,
+ "slots": {
+  "top": true,
+  "mid": true,
+  "mid2": false,
+  "bottom": true
+ },
+ "min_chars": 2500,
+ "skip_paths": [
+  "/community/",
+  "/seo/",
+  "/callback/",
+  "/login/",
+  "/account/",
+  "/admin/",
+  "/impressum/",
+  "/datenschutz/",
+  "/privacy/",
+  "/legal/",
+  "/accessibility/",
+  "/live/",
+  "/404.html",
+  "/sponsor/",
+  "/services/",
+  "/for/",
+  "/i-want-to/",
+  "/media-kit/",
+  "/m365con/sponsor/"
+ ],
+ "allow_patterns": [
+  "^/(?:[a-z]{2}/)?community/u/[^/]+/blog/[^/]+/$"
+ ],
+ "min_gap_chars": 1200
 }

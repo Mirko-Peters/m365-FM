@@ -59,6 +59,8 @@ def build(g):
         url = alts[lang]
         items = "".join(f"<li>{e(i)}</li>" for i in t["items"])
         cfg = json.dumps({"api": api, "lang": lang, "ok": t["ok"], "err": t["err"], "sending": t["sending"], "send": t["send"]}, ensure_ascii=False).replace("</", "<\\/")
+        import site_ads as ADS   # #281: Werbeplaetze nur verlinken, wenn die Buchung an ist
+        ads_link = f'<a href="{base}{pre}/for/advertisers/">{e(t["ads"])}</a> · ' if ADS.booking_on() else ""
         body = (f'{g["header"](lang, "")}<main class="wrap">{CSS}<div class="hero"><div class="kicker">{e(t["kicker"])}</div>'
                 f'<h1>{e(t["h1"])}</h1><p class="lede">{e(t["lede"])}</p></div>'
                 f'<div class="mk-grid">'
@@ -71,7 +73,7 @@ def build(g):
                 f'<button class="btn main" type="submit">{e(t["send"])}</button><p class="mk-msg" role="status" aria-live="polite"></p></form>'
                 f'<div class="mk-card"><h2 style="margin:0">{e(t["inside"])}</h2><ul class="mk-list">{items}</ul>'
                 f'<h3 style="margin:8px 0 0">{e(t["privacy"])}</h3><p style="margin:0">{e(t["privacy_t"])}<a href="{base}/{"datenschutz" if lang == "de" else "privacy"}/">{e(t["privacy_l"])}</a></p>'
-                f'<h3 style="margin:8px 0 0">{e(t["also"])}</h3><p style="margin:0"><a href="{base}{pre}/sponsor/">{e(t["sponsor"])}</a> · <a href="{base}{pre}/for/advertisers/">{e(t["ads"])}</a> · '
+                f'<h3 style="margin:8px 0 0">{e(t["also"])}</h3><p style="margin:0"><a href="{base}{pre}/sponsor/">{e(t["sponsor"])}</a> · {ads_link}'
                 f'<a href="{base}{pre}/for/publishers/">{e(t["publishers"])}</a> · <a href="{base}{pre}/services/">{e(t["services"])}</a></p></div>'
                 f'</div></main><script>window.M365MK={cfg}</script><script defer src="{base}/assets/mediakit.js"></script>{g["footer"](lang)}')
         ld = [{"@context": "https://schema.org", "@type": "WebPage", "@id": url + "#page", "url": url, "name": t["h1"], "description": t["desc"],

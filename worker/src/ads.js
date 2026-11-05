@@ -49,6 +49,11 @@ function randomCode() {
   return "ad-" + Array.from(a, (b) => abc[b % abc.length]).join("");
 }
 
+// Schalter (Mirko, 5.11.2026): bis der PayPal-Sandbox-Test gelaufen ist, nur eigene Werbung. ADS_BOOKING="1" schaltet bezahlte Kampagnen,
+// Buchung, Zahlung, Leads und Sponsoring-Bestellungen ein; sonst antworten diese Routen mit 503 not_available_yet (kein PayPal-Aufruf).
+export const bookingOn = (env) => env?.ADS_BOOKING === "1";
+const OFF_ROUTES = new Set(["/api/ads/bookings", "/api/ads/banner", "/api/ads/pay", "/api/ads/paypal-return", "/api/ads/lead"]);
+
 // ---------------------------------------------------------------- Preise
 
 export async function loadPricing(db) {
@@ -410,9 +415,71 @@ export function isBot(request) {
     /(bot|crawl|spider|slurp|preview|facebookexternalhit|linkedinbot|slackbot|discordbot|whatsapp|telegrambot|curl|wget|python|headless|lighthouse|pingdom|monitor|http-client|axios|node-fetch|go-http)/i.test(ua);
 }
 
-async function countStat(db, bookingId, slot, pageType, field) {
-  await db.prepare(`INSERT INTO ad_stats_daily(day,booking_id,slot,page_type,${field}) VALUES(?,?,?,?,1)
-    ON CONFLICT(day,booking_id,slot,page_type) DO UPDATE SET ${field}=${field}+1`).bind(today(), bookingId, slot, pageType).run();
+// Land nur als Laendercode aus Cloudflare (cf.country bzw. cf-ipcountry), keine IP, kein Cookie
+export function countryOf(request) {
+  const c = String(request.cf?.country || request.headers.get("cf-ipcountry") || "").toUpperCase();
+  return /^[A-Z]{2}$/.test(c) && c !== "T1" ? c : "XX";
+}
+async function countStat(db, bookingId, slot, pageType, field, country = "XX") {
+  await db.prepare(`INSERT INTO ad_stats_daily(day,booking_id,slot,page_type,country,${field}) VALUES(?,?,?,?,?,1)
+    ON CONFLICT(day,booking_id,slot,page_type,country) DO UPDATE SET ${field}=${field}+1`).bind(today(), bookingId, slot, pageType, country).run();
+}
+
+// ---------------------------------------------------------------- Hausanzeigen: Zaehlung und Go-Link (laeuft auch bei ADS_BOOKING aus)
+export const HOUSE_SLOTS = ["top", "mid", "mid2", "bottom"];
+const HOUSE_KEYS = new Set(["m365con", "services", "advertise", "sponsor"]);
+const SITE_LANGS = new Set(["en", "de", "es", "fr", "it", "pt", "nl", "pl", "id", "ru", "uk", "ar", "he", "ja", "ko"]);
+export const M365CON_URL = "https://m365con.net/?utm_source=m365.fm&utm_medium=house_ad&utm_campaign=m365con2027";   // wie site_ads.CON_URL
+export const HOUSE_CAMPAIGN = { m365con: "m365con2027", services: "m365fm_services", advertise: "m365fm_advertise", sponsor: "m365fm_sponsor" };
+const SLUG = /^[a-z0-9][a-z0-9-]{0,79}$/;
+
+async function countHouse(db, house, slot, pageType, lang, country, field) {
+  await db.prepare(`INSERT INTO ad_house_stats(day,house,slot,page_type,lang,country,${field}) VALUES(?,?,?,?,?,?,1)
+    ON CONFLICT(day,house,slot,page_type,lang,country) DO UPDATE SET ${field}=${field}+1`).bind(today(), house, slot, pageType, lang, country).run();
+}
+
+// Ziel einer Hausanzeige; nur feste Ziele bzw. Hausanzeigen aus dem Admin (kein offener Redirect).
+// UTM (Mirko, 5.11.2026): source m365.fm, medium house_ad, campaign je Hausanzeige, term = Haupt-Entitaet der Seite, content = Slug der Seite.
+// Der Platz steht nicht in der UTM, sondern in den eigenen Zaehlern (ad_house_stats). Keine personenbezogenen Daten.
+export async function houseTarget(env, key, lang, { term = "", content = "" } = {}) {
+  const pre = lang === "en" ? "" : `/${lang}`;
+  let u;
+  if (key === "m365con") u = new URL(M365CON_URL);
+  else if (key === "services") u = new URL(`${env.SITE}${pre}/services/`);
+  else if (key === "advertise") u = new URL(`${env.SITE}${pre}/for/advertisers/`);
+  else if (key === "sponsor") u = new URL(`${env.SITE}${pre}/sponsor/`);
+  else {
+    const m = /^x(\d{1,9})$/.exec(key);
+    const h = m ? await env.DB.prepare("SELECT url FROM ad_house WHERE id=? AND active=1").bind(+m[1]).first() : null;
+    u = h ? httpsUrl(h.url) : null;
+    if (!u) return null;
+  }
+  const set = (k, v) => { if (v && !u.searchParams.has(k)) u.searchParams.set(k, v); };
+  set("utm_source", "m365.fm"); set("utm_medium", "house_ad"); set("utm_campaign", HOUSE_CAMPAIGN[key] || `house_${key}`);
+  u.searchParams.delete("utm_content"); u.searchParams.delete("utm_term");
+  if (TOPIC.test(term)) u.searchParams.set("utm_term", term);
+  if (SLUG.test(content)) u.searchParams.set("utm_content", content);
+  return u;
+}
+
+export async function handleHouseGo(env, request, url, code, ctx) {
+  const headers = { "x-robots-tag": "noindex, nofollow", ...NS };
+  const key = code.slice(2);
+  if (!["GET", "HEAD"].includes(request.method) || !(HOUSE_KEYS.has(key) || /^x\d{1,9}$/.test(key))) return new Response(null, { status: 404, headers });
+  const slot = HOUSE_SLOTS.includes(url.searchParams.get("s")) ? url.searchParams.get("s") : "mid";
+  const pageType = PAGE_TYPES.includes(url.searchParams.get("pt")) ? url.searchParams.get("pt") : "other";
+  const lang = SITE_LANGS.has(url.searchParams.get("l")) ? url.searchParams.get("l") : "en";
+  const target = await houseTarget(env, key, lang, { term: String(url.searchParams.get("e") || ""), content: String(url.searchParams.get("p") || "") });
+  if (!target) return new Response(null, { status: 404, headers });
+  if (request.method === "GET" && !isBot(request)) {
+    const work = (async () => {
+      if (await dedupe(env, request, `${code}:${slot}`)) return;
+      await countHouse(env.DB, key, slot, pageType, lang, countryOf(request), "clicks");
+    })().catch(() => {});
+    if (ctx?.waitUntil) ctx.waitUntil(work); else await work;
+  }
+  headers.location = target.href;
+  return new Response(null, { status: 302, headers });
 }
 // Verbrauch einer bezahlten Einheit; bei Erreichen des Volumens endet die Kampagne
 async function consume(db, id) {
@@ -459,12 +526,14 @@ async function serve(env, request, url, J) {
   const db = env.DB;
   const slot = url.searchParams.get("slot"), pageType = url.searchParams.get("pt") || "other", lang = /^[a-z]{2}$/.test(url.searchParams.get("lang") || "") ? url.searchParams.get("lang") : "en";
   const topics = list(url.searchParams.get("topics"), 20).filter((t) => TOPIC.test(t));
-  if (!SLOTS.includes(slot) || !PAGE_TYPES.includes(pageType)) return J({ error: "bad_request" }, 400, NS);
-  const bot = isBot(request);
-  const b = await pickCampaign(db, { slot, pageType, topics });
+  if (!HOUSE_SLOTS.includes(slot) || !PAGE_TYPES.includes(pageType)) return J({ error: "bad_request" }, 400, NS);
+  const bot = isBot(request), country = countryOf(request);
+  const houseKey = HOUSE_KEYS.has(url.searchParams.get("house")) ? url.searchParams.get("house") : "";
+  const paid = bookingOn(env) && SLOTS.includes(slot) && url.searchParams.get("house_only") !== "1";   // Schalter aus oder reiner Hausplatz: nur Hausanzeigen
+  const b = paid ? await pickCampaign(db, { slot, pageType, topics }) : null;
   if (b) {
     if (!bot) {   // cookiefrei: kein Bezeichner, nur Tageszaehler
-      await countStat(db, b.id, slot, pageType, "impressions");
+      await countStat(db, b.id, slot, pageType, "impressions", country);
       if (b.kind === "cpm") await consume(db, b.id);
     }
     const org = await db.prepare("SELECT id,handle,name,tagline FROM orgs WHERE id=?").bind(b.org_id).first() || {};
@@ -476,9 +545,14 @@ async function serve(env, request, url, J) {
     return J({ ad }, 200, NS);
   }
   const d = today();
-  const houses = (await db.prepare("SELECT title,body,cta,url,langs FROM ad_house WHERE active=1 AND slot=? AND (start IS NULL OR start<=?) AND (end IS NULL OR end>=?) ORDER BY id DESC LIMIT 20").bind(slot, d, d).all()).results || [];
+  const houses = (await db.prepare("SELECT id,title,body,cta,url,langs FROM ad_house WHERE active=1 AND slot=? AND (start IS NULL OR start<=?) AND (end IS NULL OR end>=?) ORDER BY id DESC LIMIT 20").bind(slot === "mid2" ? "mid" : slot, d, d).all()).results || [];
   const h = houses.find((x) => !x.langs || x.langs.split(",").includes(lang));
-  return J({ ad: null, house: h ? { title: h.title, body: h.body, cta: h.cta, url: h.url } : null }, 200, NS);
+  const counted = h ? `x${h.id}` : houseKey;   // Einblendung der angezeigten Hausanzeige (Admin-Hausanzeige oder die eingebaute der Seite)
+  if (counted && !bot) await countHouse(db, counted, slot, pageType, SITE_LANGS.has(lang) ? lang : "en", country, "impressions");
+  const ctxq = new URLSearchParams({ s: slot, pt: pageType, l: SITE_LANGS.has(lang) ? lang : "en" });
+  if (topics[0]) ctxq.set("e", topics[0]);
+  if (SLUG.test(url.searchParams.get("p") || "")) ctxq.set("p", url.searchParams.get("p"));
+  return J({ ad: null, house: h ? { title: h.title, body: h.body, cta: h.cta, url: `${env.API}/go/h-x${h.id}?${ctxq}` } : null }, 200, NS);
 }
 
 async function dedupe(env, request, code) {
@@ -511,7 +585,7 @@ export async function handleAdGo(env, request, url, code, ctx) {
     const pageType = PAGE_TYPES.includes(url.searchParams.get("pt")) ? url.searchParams.get("pt") : "other";
     const work = (async () => {
       if (await dedupe(env, request, code)) return;
-      await countStat(db, b.id, slot, pageType, "clicks");
+      await countStat(db, b.id, slot, pageType, "clicks", countryOf(request));
       if (b.kind === "cpc") await consume(db, b.id);
     })().catch(() => {});
     if (ctx?.waitUntil) ctx.waitUntil(work); else await work;
@@ -564,7 +638,7 @@ async function submitLead(env, request, J) {
     VALUES(?,?,?,?,?,?,?,?,?,?,?,?)`).bind(booking.id, booking.org_id, name, email, message, consentText, page, lang, emailHash, dup ? "duplicate" : "new", charged, now()).run();
   const id = r.meta.last_row_id;
   const pt = PAGE_TYPES.includes(b.pt) ? b.pt : "other";
-  if (charged) await countStat(db, booking.id, "mid", pt, "leads");
+  if (charged) await countStat(db, booking.id, "mid", pt, "leads", countryOf(request));
   const members = (await db.prepare("SELECT user_id FROM org_members WHERE org_id=? AND status='active' AND role IN ('owner','admin')").bind(booking.org_id).all()).results || [];
   let mailed = 0;
   const html = `<p>Neuer Kontakt über M365.FM für <b>${esc(booking.org_name)}</b> / New lead:</p><p>Name: ${esc(name)}<br>E-Mail: <a href="mailto:${esc(email)}">${esc(email)}</a></p>${message ? `<blockquote style="border-left:3px solid #3E8BC0;margin:0;padding:.2em 1em">${esc(message).replace(/\n/g, "<br>")}</blockquote>` : ""}<p style="font-size:12px">Einwilligung / consent: ${esc(consentText)}</p>${dup ? "<p>Hinweis: dieselbe Adresse hat in den letzten 30 Tagen schon angefragt – nicht berechnet.</p>" : ""}<p><a href="${env.SITE}/for/advertisers/#book">Alle Leads im Dashboard</a></p>`;
@@ -735,9 +809,9 @@ export async function adStatsForOrg(db, orgId, from, to) {
 }
 
 async function adminStats(db, from, to) {
-  const rows = (await db.prepare(`SELECT s.day,b.code,o.name org,b.product,s.slot,s.page_type,s.impressions,s.clicks,s.leads
+  const rows = (await db.prepare(`SELECT s.day,b.code,o.name org,b.product,s.slot,s.page_type,s.country,s.impressions,s.clicks,s.leads
     FROM ad_stats_daily s JOIN ad_bookings b ON b.id=s.booking_id LEFT JOIN orgs o ON o.id=b.org_id
-    WHERE s.day>=? AND s.day<=? ORDER BY s.day,b.code,s.slot,s.page_type`).bind(from, to).all()).results || [];
+    WHERE s.day>=? AND s.day<=? ORDER BY s.day,b.code,s.slot,s.page_type,s.country`).bind(from, to).all()).results || [];
   const revenue = await db.prepare(`SELECT COALESCE(SUM(net_cents),0) net,COALESCE(SUM(total_cents),0) total,COUNT(*) n FROM ad_bookings
     WHERE pay_status='paid' AND paid_at>=? AND paid_at<?`).bind(Date.parse(`${from}T00:00:00Z`) / 1000, Date.parse(`${to}T00:00:00Z`) / 1000 + 86400).first();
   const tot = rows.reduce((a, r) => ({ impressions: a.impressions + r.impressions, clicks: a.clicks + r.clicks, leads: a.leads + r.leads }), { impressions: 0, clicks: 0, leads: 0 });
@@ -769,6 +843,7 @@ export async function handleAds(env, request, url, path, user, J, ctx) {
     return q.error ? E(q.error, { min: q.min }) : J({ quote: q }, 200, NS);
   }
   if (path === "/api/ads/serve" && method === "GET") return serve(env, request, url, J);
+  if (OFF_ROUTES.has(path) && !bookingOn(env)) return J({ error: "not_available_yet", message: "Ad booking is not available yet. Please use the request form on https://www.m365.fm/sponsor/." }, 503, NS);
   if (path === "/api/ads/lead" && method === "POST") return submitLead(env, request, J);
   if (path === "/api/ads/paypal-return" && method === "GET") return paypalReturn(env, url);
 
@@ -906,11 +981,32 @@ export async function handleAds(env, request, url, path, user, J, ctx) {
     if (!p) return E("bad_period");
     const s = await adminStats(db, p.from, p.to);
     if (url.searchParams.get("format") === "csv") {
-      const head = ["day", "campaign", "company", "product", "slot", "page_type", "impressions", "clicks", "ctr_pct", "leads"];
-      const lines = [head, ...s.rows.map((r) => [r.day, r.code, r.org, r.product, r.slot, r.page_type, r.impressions, r.clicks, r.impressions ? (r.clicks / r.impressions * 100).toFixed(2) : "", r.leads])];
+      const head = ["day", "campaign", "company", "product", "slot", "page_type", "country", "impressions", "clicks", "ctr_pct", "leads"];
+      const lines = [head, ...s.rows.map((r) => [r.day, r.code, r.org, r.product, r.slot, r.page_type, r.country, r.impressions, r.clicks, r.impressions ? (r.clicks / r.impressions * 100).toFixed(2) : "", r.leads])];
       return new Response("﻿" + lines.map((l) => l.map(csvCell).join(",")).join("\r\n"), { status: 200, headers: { "content-type": "text/csv; charset=utf-8", "content-disposition": `attachment; filename="m365fm-ads-${p.from}-${p.to}.csv"`, ...NS, ...cors(env, request) } });
     }
     return J({ ...s, period: p }, 200, NS);
+  }
+  if (path === "/api/admin/ads/house-stats" && method === "GET") {   // Hausanzeigen: Einblendungen, Klicks, CTR je Platz, Seitentyp, Sprache, Land
+    const days = Number(url.searchParams.get("days"));
+    const p = [7, 30, 90].includes(days) ? { from: new Date(Date.now() - (days - 1) * 86400000).toISOString().slice(0, 10), to: today() } : period(url);
+    if (!p) return E("bad_period");
+    const house = String(url.searchParams.get("house") || "");
+    const rows = (await db.prepare(`SELECT house,slot,page_type,lang,country,SUM(impressions) impressions,SUM(clicks) clicks FROM ad_house_stats
+      WHERE day>=? AND day<=? AND (?='' OR house=?) GROUP BY house,slot,page_type,lang,country ORDER BY house,impressions DESC`).bind(p.from, p.to, house, house).all()).results || [];
+    const ctr = (c, i) => (i ? Math.round(c / i * 10000) / 100 : null);
+    const agg = (keyFn) => {
+      const m = new Map();
+      for (const r of rows) { const k = keyFn(r); const x = m.get(k) || { impressions: 0, clicks: 0 }; x.impressions += r.impressions; x.clicks += r.clicks; m.set(k, x); }
+      return [...m].map(([k, x]) => ({ key: k, ...x, ctr: ctr(x.clicks, x.impressions) })).sort((a, b) => b.impressions - a.impressions);
+    };
+    if (url.searchParams.get("format") === "csv") {
+      const head = ["house", "slot", "page_type", "lang", "country", "impressions", "clicks", "ctr_pct"];
+      const lines = [head, ...rows.map((r) => [r.house, r.slot, r.page_type, r.lang, r.country, r.impressions, r.clicks, r.impressions ? (r.clicks / r.impressions * 100).toFixed(2) : ""])];
+      return new Response("\ufeff" + lines.map((l) => l.map(csvCell).join(",")).join("\r\n"), { status: 200, headers: { "content-type": "text/csv; charset=utf-8", "content-disposition": `attachment; filename="m365fm-hausanzeigen-${p.from}-${p.to}.csv"`, ...NS, ...cors(env, request) } });
+    }
+    return J({ period: p, rows: rows.map((r) => ({ ...r, ctr: ctr(r.clicks, r.impressions) })), by_house: agg((r) => r.house),
+      by_slot: agg((r) => `${r.house} · ${r.slot}`), by_country: agg((r) => `${r.house} · ${r.country}`), by_lang: agg((r) => `${r.house} · ${r.lang}`) }, 200, NS);
   }
   if (path === "/api/admin/ads/leads" && method === "GET") {
     const leads = (await db.prepare(`SELECT l.id,b.code,o.name org,l.name,l.email,l.message,l.page,l.lang,l.status,l.charged,l.dispute_reason,l.mailed,l.created

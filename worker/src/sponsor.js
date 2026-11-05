@@ -1,6 +1,6 @@
 import { cleanText, esc, rateLimit, sha256hex } from "./util.js";
 import { notify } from "./mail.js";
-import { handleAdGo, adStatsForOrg } from "./ads.js";
+import { handleAdGo, handleHouseGo, adStatsForOrg } from "./ads.js";
 
 const now = () => Math.floor(Date.now() / 1000);
 const STATUSES = new Set(["new", "contacted", "won", "lost", "spam"]);
@@ -129,6 +129,7 @@ export async function handleSponsorLink(env, request, url, path, ctx) {
   }
   const link = await env.DB.prepare("SELECT code,target_url,utm FROM sponsor_links WHERE code=? AND active=1").bind(code).first();
   if (!link && code.startsWith("ad-")) return handleAdGo(env, request, url, code, ctx);   // #281: gebuchte Werbeplaetze
+  if (!link && code.startsWith("h-")) return handleHouseGo(env, request, url, code, ctx);   // #281: Hausanzeigen (M365Con, Services ...)
   const target = safeTarget(link?.target_url);
   if (!link || !target) return miss();
   for (const [key, value] of Object.entries(cleanUtm(link.utm))) target.searchParams.set(key, value);

@@ -6,7 +6,7 @@
 import PRICING from "../../data/sponsor_pricing.json" with { type: "json" };
 import { cleanText, esc, rateLimit, audit } from "./util.js";
 import { notify } from "./mail.js";
-import { sendPaypalInvoice, notifyAdmins, addMonths, cleanBilling, num, paypalConfig } from "./ads.js";
+import { sendPaypalInvoice, notifyAdmins, addMonths, cleanBilling, num, paypalConfig, bookingOn } from "./ads.js";
 
 const now = () => Math.floor(Date.now() / 1000);
 const today = () => new Date().toISOString().slice(0, 10);
@@ -134,6 +134,7 @@ export async function sponsorOrderInvoiceEvent(env, ev) {
 export async function handleSponsorOrders(env, request, url, path, user, J) {
   const db = env.DB, method = request.method;
   if (path === "/api/sponsor/order" && method === "POST") {
+    if (!bookingOn(env)) return J({ error: "not_available_yet", message: "Ordering is not available yet. Please use the request form." }, 503, NS);   // Schalter ADS_BOOKING
     if (!user) return J({ error: "login" }, 401, NS);
     const body = await request.json().catch(() => ({})) || {};
     const orgId = Number(body.org_id);
