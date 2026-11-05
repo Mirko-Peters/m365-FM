@@ -8,6 +8,9 @@ in fr, es, it, nl, pt, pl und speichert sie in data/ui_js_i18n.json. Nur Lücken
   python3 tools/translate_ui.py --lang fr          # nur eine Sprache
 """
 import argparse, json, os, sys, urllib.request
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from ai_gateway import anthropic_request, check_budget, estimated_eur, report_usage, urlopen
 
 SRC, DST = "data/ui_js_en.json", "data/ui_js_i18n.json"
 LANGS = {"fr": "French", "es": "Spanish", "it": "Italian", "nl": "Dutch", "pt": "Portuguese (European)", "pl": "Polish"}
@@ -20,10 +23,12 @@ SYS = ("You translate short user-interface texts (buttons, labels, hints, messag
 
 def call(key, model, lang, items):
     body = {"model": model, "max_tokens": 6000, **({"thinking": {"type": "disabled"}} if "haiku" in model else {}), "system": SYS.format(lang=lang), "messages": [{"role": "user", "content": json.dumps(items, ensure_ascii=False)}]}
-    req = urllib.request.Request("https://api.anthropic.com/v1/messages", json.dumps(body).encode(),
-                                 {"content-type": "application/json", "x-api-key": key, "anthropic-version": "2023-06-01"})
-    with urllib.request.urlopen(req, timeout=180) as r:
-        txt = "".join(c.get("text", "") for c in json.load(r)["content"] if c.get("type") == "text").strip()   # Haiku 5.5: Antwort kann mit thinking-Bloecken beginnen
+    req = anthropic_request("/v1/messages", body, job="translate_ui", lang=lang, model=model, cache_ttl=604800, api_key=key)
+    with urlopen(req, timeout=180) as r:
+        response = json.load(r)
+    usage = response.get("usage", {})
+    report_usage("translate_ui", model, usage.get("input_tokens", 0), usage.get("output_tokens", 0), lang)
+    txt = "".join(c.get("text", "") for c in response.get("content", []) if c.get("type") == "text").strip()
     if txt.startswith("```"):
         txt = txt.strip("`").split("\n", 1)[1].rsplit("```", 1)[0]
     return json.loads(txt)
@@ -41,6 +46,9 @@ def main():
     chars = sum(len(v) for lg in langs for _, _, v in todo[lg])
     print({lg: len(todo[lg]) for lg in langs}, f"{chars} Zeichen Quelltext (ca. {chars // 3} Token ein, {chars // 3} aus; Haiku: wenige Cent)")
     if a.dry_run:
+        return
+    estimate = estimated_eur(chars // 3, chars // 3)
+    if not check_budget("translate_ui", a.model, estimate):
         return
     key = os.environ.get("ANTHROPIC_API_KEY")
     if not key:

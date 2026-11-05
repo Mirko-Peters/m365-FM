@@ -1,0 +1,137 @@
+{
+ "de": {
+  "html": "<p>Informationsanfragen (RFIs) landen oft als Excel-Tabelle im Postfach. Dann wird der Anhang geöffnet, jede Zeile gelesen und Antwort für Antwort in die Zellen kopiert. Das ist wiederholend, fehleranfällig und kostet viel Zeit. Ein einziger Tippfehler oder ein falsches Einfügen genügt, und jemand sucht den halben Tag nach dem Fehler.</p>\n<p>Mit einem autonomen Agenten in Microsoft Copilot Studio und Power Automate lässt sich dieser Zyklus vollständig automatisieren. Der Agent liest die Excel-Datei, interpretiert die Fragen, erzeugt Antworten mit generativer KI, schreibt sie in dieselbe Datei zurück und schickt sie per E-Mail an den Anfragenden. Dieser Artikel zeigt Architektur, Aufbau und Grenzen eines solchen Workflows.</p>\n\n<h2>Was ist ein autonomer Agent in Copilot Studio?</h2>\n<p>Ein autonomer Agent ist kein Chatbot, der auf Eingaben wartet. Er besteht aus drei Kernkomponenten:</p>\n<ul>\n<li><strong>Trigger:</strong> Er startet den Prozess, etwa wenn eine neue E-Mail eintrifft oder eine Datei in SharePoint hochgeladen wird.</li>\n<li><strong>Logik:</strong> Sie definiert, was bei diesem Ereignis geschehen soll.</li>\n<li><strong>Orchestrierung:</strong> Sie steuert, welche externen Tools oder Flows in welcher Reihenfolge aufgerufen werden.</li>\n</ul>\n<p>Der Unterschied zum üblichen Copilot liegt in der Aufsicht. Ein normaler Copilot wartet darauf, dass man mit ihm spricht. Ein autonomer Studio-Agent löst sich anhand definierter Bedingungen selbst aus. Er gleicht eher einem Mitarbeiter, der eine Abteilung führt, als einem Praktikanten, der Anweisungen abwartet.</p>\n<p>RFIs eignen sich als Einstieg, weil sie klar strukturiert sind. Jede Zeile enthält eine Frage und erwartet eine Antwort. Das Muster bleibt gleich, nur der Inhalt wechselt. Das ist strukturiert genug für Automatisierung und vielfältig genug für generative KI.</p>\n\n<h2>Die Architektur: Vom Postfach bis zur Antwort-E-Mail</h2>\n<p>Der Datenfluss besteht aus fünf Stationen: E-Mail, SharePoint, Copilot Studio, Power Automate, E-Mail-Antwort.</p>\n<ol>\n<li>Eine E-Mail mit Excel-Anhang landet in einem freigegebenen Postfach.</li>\n<li>Power Automate erkennt die Datei, prüft das Format und kopiert sie in einen SharePoint-Ordner, der als Staging-Bereich dient.</li>\n<li>Der Agent in Copilot Studio erhält die Mitteilung, welche Datei zu verarbeiten ist.</li>\n<li>Er durchläuft die Fragen, erzeugt Antworten auf Basis seiner Wissensquellen und schreibt sie in die ursprüngliche Tabelle.</li>\n<li>Power Automate sendet die fertige Datei an den Anfragenden zurück.</li>\n</ol>\n<p>Autonomie bedeutet dabei nicht Allwissenheit. Ein Agent kann nicht außerhalb seiner Grenzen improvisieren. Sie müssen seine Rechte festlegen und ihm Kontext geben: wo die Datei liegt, was er liest, wo er schreibt und wann er Hilfe holt. Fehlen diese Angaben, wartet der Agent auf einen Menschen, der nie kommt.</p>\n\n<h2>Eingabefluss mit Power Automate: Trigger, Filter, Validierung</h2>\n<h3>Trigger und Dateifilter</h3>\n<p>Der Flow startet mit dem Trigger „Wenn eine neue E-Mail im freigegebenen Postfach eintrifft“. Er verlässt sich nicht auf Beobachtung, sondern auf Bedingungen. Das beseitigt das alte Problem „Ich habe die E-Mail nicht gesehen“.</p>\n<p>Die erste Aktion ist ein Filter. Anhänge, die nicht im XLSX-Format vorliegen, werden verworfen, also PDFs, Screenshots und Bilder. Die Bedingung lautet sinngemäß: Wenn der Name des Anhangs auf XLSX endet, fortfahren. Ohne diese Regel würde der Agent versuchen, etwa eine Bilddatei zu interpretieren, und scheitern.</p>\n<h3>Strukturprüfung: Die benannte Tabelle</h3>\n<p>Eine gültige Datei muss eine definierte Tabelle enthalten. Im beschriebenen Aufbau heißt sie fest „Tabelle 1“. Ohne Tabelle ist Excel nur ein Whiteboard voller zusammengeführter Zellen und ausgeblendeter Spalten. Eine definierte Tabelle liefert dem Agenten dagegen ein vorhersehbares Schema mit Spalten für Fragen, Antworten und weitere Kontextdaten. Zeilen sind Datensätze, Spalten sind Variablen, und zusammengeführte Zellen stören die Logik.</p>\n<h3>Kopie in SharePoint und Metadaten</h3>\n<p>Power Automate bearbeitet die Datei nicht direkt im Postfach, sondern legt eine kontrollierte Kopie in SharePoint ab. SharePoint bietet Versionierung, einheitliche URLs und sichere Zugriffsmechanismen, damit Copilot Studio zuverlässig mit den Daten arbeiten kann.</p>\n<p>Anschließend extrahiert der Flow zwei Bezugspunkte:</p>\n<ul>\n<li>die <strong>Datei-ID</strong>, mit der der Agent das genaue Exemplar wiederfindet,</li>\n<li>die <strong>Nachrichten-ID</strong> der ursprünglichen E-Mail, damit die Antwort später im selben Thread landet.</li>\n</ul>\n<p>Vorhersehbare Dateinamen helfen ebenfalls. Maschinen schätzen Einheitlichkeit, und ein Namenswirrwarr erhöht das Risiko, dass der Agent stolpert.</p>\n\n<h2>Strukturierte Eingabeaufforderung: Klare Aufträge an den Agenten</h2>\n<p>Ist die Datei validiert und gespeichert, sendet der Flow eine präzise Aufforderung an den Copilot-Studio-Agenten, sinngemäß: „Führe eine Informationsanfrage für Datei-ID X durch und antworte auf Nachrichten-ID Y.“ Mehrdeutigkeit ist der größte Feind der Automatisierung.</p>\n<p>Eine strukturierte Eingabeaufforderung enthält drei Elemente:</p>\n<ul>\n<li>den Kontext und den Dateiumfang,</li>\n<li>die erwartete Aktion,</li>\n<li>das Ziel der Antwort.</li>\n</ul>\n<p>Fehlen sie, könnte der Agent etwas Plausibles, aber Falsches tun, etwa höfliche E-Mail-Texte verfassen, statt Zellen zu füllen. Nach dieser Phase hat der Flow drei Meilensteine erreicht: Erkennung, Validierung und Vorbereitung.</p>\n\n<h2>Die generative Antwortschleife im RFI-Thema</h2>\n<p>Das Herzstück liegt in Copilot Studio. Ein Thema ist dort eine Abfolge von Schritten, die der Agent ausführt, wenn er ausgelöst wird. Das RFI-Thema läuft ohne Chatfenster im Hintergrund und bearbeitet jeweils eine Frage in deterministischer Reihenfolge.</p>\n<h3>So läuft die Schleife ab</h3>\n<ol>\n<li>Das Thema erhält die Datei-ID als Eingabeparameter.</li>\n<li>Die Aktion „Zeilen in einer Tabelle auflisten“ ruft die Tabelle als strukturierte Daten ab und legt sie in einer Datensatzvariablen ab.</li>\n<li>Das darin enthaltene Array aller Zeilen wird als Elementliste festgelegt.</li>\n<li>Eine For-Each-Schleife geht jede Zeile der Reihe nach durch und extrahiert das Fragenfeld.</li>\n<li>Der Knoten „Generative Antworten erstellen“ findet oder synthetisiert die beste Antwort auf Basis der Wissensquellen des Agenten.</li>\n<li>Die Antwort wird in einer Variablen gespeichert, die oft einen Namen wie „KI-Antwort“ trägt.</li>\n<li>Die Aktion „Zeile aktualisieren“ schreibt die Antwort mit derselben Datei-ID und demselben Tabellennamen an die richtige Stelle. Die Zielzeile wird über die Kennung der aktuellen Frage bestimmt.</li>\n</ol>\n<h3>Warum jeweils nur eine Frage?</h3>\n<p>Die Isolierung ist eine bewusste Entwurfsentscheidung. Werden mehrere Prompts gleichzeitig an ein großes Sprachmodell gegeben, kann der Kontext einer Frage die nächste Antwort verunreinigen. Wer alle Fragen auf einmal sendet, riskiert inkonsistente Formatierung und unsinnige Bezüge. Die Schleife macht jede Frage zu einer in sich geschlossenen Arbeitseinheit. Der Agent „vergisst“ nach jeder Zeile, und sein Speicher wird nach der letzten Zeile gelöscht.</p>\n<h3>Nachricht senden deaktivieren</h3>\n<p>Im Knoten für generative Antworten sollten Sie in den erweiterten Einstellungen die Eigenschaft „Nachricht senden“ deaktivieren. Der Agent soll nicht chatten, sondern rechnen. Die Antworten landen ausschließlich in der Variablen und anschließend in der Tabelle.</p>\n\n<h2>Wissensgrundlage: Web oder eigene Quellen?</h2>\n<p>Die Qualität der Antworten hängt von der Wissensbasis ab. In Copilot Studio gibt es zwei Hauptoptionen:</p>\n<ul>\n<li><strong>Web-Informationen</strong> über die Bing-Suche: Der Agent kann Live-Daten abrufen. Das ist breit, aber unbeständig. Es eignet sich für allgemeine Recherchen, nicht für proprietäre Themen. Es besteht außerdem das Risiko, dass ein veralteter Blogbeitrag als verlässliche Quelle zusammengefasst wird.</li>\n<li><strong>Eigene Wissensdatenbank</strong> mit SharePoint- oder Dataverse-Quellen: Sie begrenzt den Umfang, erhöht aber Präzision und Compliance.</li>\n</ul>\n<p>Wenn Vertraulichkeit wichtig ist, deaktivieren Sie die Web-Option und speisen Sie ausschließlich eigene Quellen ein. In regulierten Umgebungen zählt Zuverlässigkeit mehr als Kreativität.</p>\n<p>Zur Kontrolle lässt sich der Ausführungsverlauf in Copilot Studio prüfen. Dort ist für jede Iteration zu sehen, wie der Prompt gesendet wird, der generative Knoten antwortet und die Zeile geschrieben wird.</p>\n\n<h2>Antwort-Mechanismus: Datei zurück per E-Mail</h2>\n<p>Danach übernimmt wieder Power Automate. Die Aufgabe: die aktuelle Excel-Datei einsammeln, anhängen und versenden, als hätte ein Mensch geantwortet.</p>\n<h3>Timing und bewusste Verzögerung</h3>\n<p>Copilot Studio erwartet, dass Power Automate innerhalb von 100 Sekunden antwortet, sonst gilt der Prozess als fehlgeschlagen. Der Antwortfluss sollte daher schlank bleiben: Eingaben empfangen, nur so lange wie nötig warten, antworten und schließen. Zugleich aktualisiert Excel Cloud-Dateien nicht augenblicklich. Viele Umsetzungen planen deshalb eine Pause von etwa zwei Minuten ein, damit alle Zeilen in SharePoint registriert sind, bevor die Datei abgerufen wird. Das dient der Synchronisierung, nicht der Bequemlichkeit.</p>\n<h3>Abruf, Metadaten und Versand</h3>\n<ul>\n<li><strong>Get file content</strong> holt die fertige Datei aus SharePoint. Der Anhang entspricht so genau dem, was der Agent zuletzt geschrieben hat.</li>\n<li><strong>Get email (V3)</strong> liefert Absender, Betreff und Nachrichten-ID der ursprünglichen Anfrage.</li>\n<li>Der Versand erfolgt als E-Mail mit Anhang, die sich auf die gespeicherte Nachrichten-ID bezieht. Dadurch bleibt der Thread intakt.</li>\n</ul>\n<p>Der Anfragende erhält seine ursprüngliche Datei, nun mit beantworteten Fragen, ohne dass jemand getippt oder Excel geöffnet hat.</p>\n\n<h2>Stolpersteine: Fehlertoleranz, Performance, Governance</h2>\n<h3>Fehlerbehandlung</h3>\n<p>Nicht jede Datei verhält sich wie erwartet. Vielleicht heißt die Tabelle nicht „Tabelle 1“, oder die Kopfzeilen wurden zusammengeführt. Fügen Sie dann eine bedingte Prüfung ein: Wird die Tabelle nicht gefunden, geht eine verständliche Meldung wie „RFI-Verarbeitung fehlgeschlagen, ungültige Struktur“ hinaus. So scheitert der Prozess kontrolliert, statt kommentarlos stehen zu bleiben.</p>\n<h3>Performance und Skalierung</h3>\n<p>Hunderte Zeilen einzeln zu aktualisieren, kann den Flow ausbremsen. Abhilfe schaffen Batching, also das gesammelte Aktualisieren von Zeilen, oder der gezielte Einsatz paralleler Zweige. Endlose Schleifen führen zu Latenzen. Überschreitet das RFI-Volumen einige hundert Zeilen oder arbeiten mehrere Nutzer gleichzeitig, sollten Sie das Datenmodell auf Dataverse oder SharePoint-Listen umstellen. Die Power-Automate-Logik bleibt gleich, aber das Backend gerät bei gleichzeitigen Bearbeitungen nicht mehr ins Stocken.</p>\n<h3>Grenzen der Plattform</h3>\n<p>Copilot-Studio-Agenten arbeiten innerhalb von Verbrauchsquoten, API-Drosselungen und weiteren Plattformgrenzen. Der Agent handelt nur im Rahmen expliziter Anweisungen. Er improvisiert keine Prozesse und korrigiert keine Fehler eigenständig. Diese Einschränkung verhindert Chaos und sorgt für Nachvollziehbarkeit.</p>\n<h3>Governance und Genauigkeit</h3>\n<p>Für die Governance werden Microsoft Purview zur Datenklassifizierung und die Entra Agent ID zur Identitätskontrolle genannt. Jeder Agent sollte erkennbar machen, wem er gehört, was er berühren darf und wann er zuletzt aktiv war. Ohne Prüfpfade droht Schatten-IT.</p>\n<p>Generative KI formuliert überzeugend, ist aber nicht automatisch korrekt. Der Mensch bleibt deshalb im Loop: Prüfen Sie regelmäßig Stichproben, gleichen Sie sie mit den Quellen ab und dokumentieren Sie diese Prüfungen in regulierten Bereichen als Compliance-Nachweis. Die Kombination aus automatisierten Benchmarks und manueller Überprüfung senkt das Risiko von Halluzinationen deutlich. Auch ein Workflow braucht Wartung: Flow-Verläufe prüfen, auf Drosselung achten, Protokolle archivieren und Schemata weiterentwickeln.</p>\n\n<h2>Praktische Takeaways</h2>\n<ul>\n<li>Setzen Sie auf einen Trigger für das freigegebene Postfach statt auf manuelles Nachsehen.</li>\n<li>Filtern Sie Anhänge strikt auf XLSX und verlangen Sie eine benannte Tabelle, hier „Tabelle 1“.</li>\n<li>Arbeiten Sie nie im Postfach, sondern mit einer SharePoint-Kopie, und führen Sie Datei-ID und Nachrichten-ID mit.</li>\n<li>Formulieren Sie Prompts strukturiert: Kontext und Dateiumfang, erwartete Aktion, Ziel der Antwort.</li>\n<li>Verarbeiten Sie Fragen einzeln in einer For-Each-Schleife, um Kontextverlust und Vermischung zu vermeiden.</li>\n<li>Deaktivieren Sie „Nachricht senden“ im Knoten für generative Antworten.</li>\n<li>Nutzen Sie bei vertraulichen Inhalten eigene Wissensquellen und schalten Sie die Web-Option aus.</li>\n<li>Planen Sie eine Verzögerung vor dem Dateiabruf ein und achten Sie auf das 100-Sekunden-Limit.</li>\n<li>Bauen Sie eine Fehlerprüfung für ungültige Strukturen ein.</li>\n<li>Wechseln Sie bei wachsendem Volumen zu Dataverse oder SharePoint-Listen.</li>\n<li>Sichern Sie Governance und menschliche Stichprobenkontrollen von Anfang an ab.</li>\n</ul>\n\n<h2>Fazit</h2>\n<p>Ein autonomer Agent in Copilot Studio, kombiniert mit Power Automate, macht aus einer lästigen Excel-RFI einen weitgehend selbstlaufenden Prozess: E-Mail empfangen, Datei prüfen, Fragen einzeln beantworten, Antworten zurückschreiben und die fertige Tabelle versenden. Entscheidend sind saubere Strukturen, klare Aufträge, die richtige Wissensbasis und eine robuste Fehlerbehandlung. Die Automatisierung nimmt Ihnen Arbeit ab, nicht aber die Verantwortung. Governance, Nachvollziehbarkeit und menschliche Kontrolle der Inhalte bleiben Ihre Aufgabe.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Excel-RFIs automatisch beantworten",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "E-Mail erkennen",
+     "text": "Power Automate reagiert auf neue Mails im freigegebenen Postfach und filtert nur XLSX-Anhänge heraus."
+    },
+    {
+     "kopf": "Datei validieren",
+     "text": "Prüfung auf benannte Tabelle, Kopie in SharePoint, Datei-ID und Nachrichten-ID werden gesichert."
+    },
+    {
+     "kopf": "Agent beauftragen",
+     "text": "Strukturierte Aufforderung mit Kontext, Dateiumfang, erwarteter Aktion und Ziel der Antwort."
+    },
+    {
+     "kopf": "Fragen einzeln beantworten",
+     "text": "Schleife liest jede Zeile, generiert die Antwort aus Wissensquellen und aktualisiert die Tabellenzeile."
+    },
+    {
+     "kopf": "Antwort versenden",
+     "text": "Nach kurzer Pause holt Power Automate die Datei und sendet sie im ursprünglichen Mail-Thread."
+    },
+    {
+     "kopf": "Kontrolle behalten",
+     "text": "Fehlerprüfung, Governance und Stichproben sichern Qualität; bei wachsendem Volumen zu Dataverse wechseln."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Wie kann ich Excel-RFIs mit Copilot Studio und Power Automate automatisch beantworten?",
+    "a": "Ein autonomer Agent in Copilot Studio liest die Excel-Datei, interpretiert die Fragen, erzeugt Antworten mit generativer KI und schreibt sie in dieselbe Datei zurück. Power Automate übernimmt Eingang und Versand und schickt die fertige Datei per E-Mail an den Anfragenden."
+   },
+   {
+    "q": "Worin unterscheidet sich ein autonomer Agent in Copilot Studio von einem normalen Copilot oder Chatbot?",
+    "a": "Ein normaler Copilot wartet auf Eingaben. Ein autonomer Agent löst sich anhand definierter Bedingungen selbst aus, etwa durch eine neue E-Mail oder einen Datei-Upload. Er besteht aus Trigger, Logik und Orchestrierung und arbeitet eher wie ein Mitarbeiter, der eine Abteilung führt."
+   },
+   {
+    "q": "Warum verarbeitet der Agent die Fragen einer RFI einzeln statt alle auf einmal?",
+    "a": "Wenn mehrere Prompts gleichzeitig an ein Sprachmodell gehen, kann der Kontext einer Frage die nächste Antwort verunreinigen. Das führt zu inkonsistenter Formatierung und unsinnigen Bezügen. Eine For-Each-Schleife macht jede Frage zu einer in sich geschlossenen Arbeitseinheit."
+   },
+   {
+    "q": "Welche Wissensquellen sollte der Agent bei vertraulichen RFIs nutzen?",
+    "a": "Bei vertraulichen Inhalten sollten Sie die Web-Option über die Bing-Suche deaktivieren und ausschließlich eigene Quellen wie SharePoint oder Dataverse einspeisen. Das begrenzt den Umfang, erhöht aber Präzision und Compliance. Zudem bleibt ein Mensch durch regelmäßige Stichproben im Loop."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Web-Wissen oder eigene Wissensquellen",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Web-Informationen (Bing)",
+     "punkte": [
+      "Der Agent kann Live-Daten abrufen.",
+      "Breit, aber unbeständig in der Qualität.",
+      "Geeignet für allgemeine Recherchen, nicht für proprietäre Themen.",
+      "Risiko: Ein veralteter Blogbeitrag wird als verlässlich zusammengefasst."
+     ]
+    },
+    "rechts": {
+     "titel": "Eigene Wissensdatenbank",
+     "punkte": [
+      "Quellen aus SharePoint oder Dataverse.",
+      "Begrenzt den Umfang der Antworten.",
+      "Erhöht Präzision und Compliance.",
+      "Richtige Wahl bei Vertraulichkeit und in regulierten Umgebungen."
+     ]
+    }
+   },
+   {
+    "titel": "Stolpersteine und Gegenmaßnahmen im Überblick",
+    "typ": "checkliste",
+    "punkte": [
+     "Fehlerprüfung einbauen: Bei ungültiger Struktur geht eine verständliche Meldung hinaus.",
+     "Bei Hunderten Zeilen Batching oder parallele Zweige nutzen.",
+     "Bei wachsendem Volumen auf Dataverse oder SharePoint-Listen umstellen.",
+     "Verbrauchsquoten, API-Drosselungen und Plattformgrenzen im Blick behalten.",
+     "Besitzer, Rechte und letzte Aktivität jedes Agenten erkennbar machen.",
+     "Regelmäßig Stichproben prüfen und mit den Quellen abgleichen.",
+     "Flow-Verläufe prüfen, Protokolle archivieren und Schemata weiterentwickeln."
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Wodurch unterscheidet sich ein autonomer Studio-Agent von einem normalen Copilot?",
+    "opts": [
+     "Er löst sich anhand definierter Bedingungen selbst aus, statt auf Eingaben zu warten.",
+     "Er besitzt ein Chatfenster, in dem Nutzer ihm laufend Anweisungen geben.",
+     "Er benötigt keine Wissensquellen, weil er alles selbstständig improvisiert.",
+     "Er arbeitet ausschließlich mit Web-Informationen aus der Bing-Suche."
+    ],
+    "a": 0,
+    "why": "Der autonome Agent startet durch Trigger und Bedingungen selbst, während ein normaler Copilot wartet, bis man mit ihm spricht."
+   },
+   {
+    "q": "Warum wird im RFI-Thema jede Frage einzeln in einer For-Each-Schleife bearbeitet?",
+    "opts": [
+     "Weil Excel pro Durchlauf nur eine Zeile lesen kann.",
+     "Damit der Kontext einer Frage die nächste Antwort nicht verunreinigt.",
+     "Weil Power Automate sonst das 100-Sekunden-Limit verlängert.",
+     "Damit der Agent Antworten dauerhaft für spätere Anfragen speichert."
+    ],
+    "a": 1,
+    "why": "Die Isolierung verhindert, dass sich Kontexte vermischen, und vermeidet inkonsistente Formatierung sowie unsinnige Bezüge zwischen den Antworten."
+   },
+   {
+    "q": "Was sollten Sie tun, wenn Vertraulichkeit bei den RFI-Inhalten wichtig ist?",
+    "opts": [
+     "Die Bing-Websuche aktiv lassen, um stets aktuelle Daten zu erhalten.",
+     "Die Nachricht-senden-Option im generativen Knoten unbedingt aktivieren.",
+     "Die Web-Option deaktivieren und ausschließlich eigene Wissensquellen einspeisen.",
+     "Die Datei direkt im Postfach statt in SharePoint bearbeiten lassen."
+    ],
+    "a": 2,
+    "why": "Eigene Quellen aus SharePoint oder Dataverse erhöhen Präzision und Compliance; die Web-Option wird bei Vertraulichkeit ausgeschaltet."
+   },
+   {
+    "q": "Warum plant man vor dem Abruf der fertigen Datei eine Pause von etwa zwei Minuten ein?",
+    "opts": [
+     "Damit der Anfragende genügend Zeit zum Lesen der E-Mail hat.",
+     "Weil Copilot Studio Antworten grundsätzlich erst nach 100 Sekunden akzeptiert.",
+     "Um die Verbrauchsquoten der Plattform bewusst zu schonen.",
+     "Damit alle Zeilen in SharePoint registriert sind, bevor die Datei abgerufen wird."
+    ],
+    "a": 3,
+    "why": "Excel aktualisiert Cloud-Dateien nicht sofort; die Pause dient der Synchronisierung, damit die abgerufene Datei alle geschriebenen Antworten enthält."
+   }
+  ]
+ }
+}

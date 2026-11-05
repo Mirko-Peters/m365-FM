@@ -1,7 +1,7 @@
 // Events (Veranstalter), Sessions mit Speakern, Sponsoren-Suche fuer Veranstalter
 import { mailReady, sendMail } from "./mailer.js";
 import { ownedEntity } from "./profiles.js";
-import { cleanText, rateLimit } from "./util.js";
+import { cleanText, esc, rateLimit } from "./util.js";
 import { baseIds, entityMap } from "./entities.js";
 import { cleanUrl } from "./profiles.js";
 import { stats } from "./badges.js";
@@ -99,12 +99,56 @@ async function saveInvites(db, evId, sid, sp) {
   await db.batch(ops);
 }
 export async function claimEntity(db, eid, uid, via) {
-  const c = await db.prepare("SELECT user_id FROM entity_claims WHERE eid=?").bind(eid).first();
-  if (c && c.user_id !== uid) return false;
-  await db.prepare("INSERT INTO entity_claims(eid,user_id,status,via,created) VALUES(?,?,?,?,?) ON CONFLICT(eid) DO UPDATE SET status=CASE WHEN excluded.status='verified' THEN 'verified' ELSE entity_claims.status END").bind(eid, uid, via === "invite" ? "verified" : "pending", via, now()).run();
-  return true;
+  const c = await db.prepare("SELECT user_id,status FROM entity_claims WHERE eid=?").bind(eid).first();
+  if (c && c.status !== "rejected") {
+    if (c.user_id !== uid) return false;
+    if (via === "invite") await db.prepare("UPDATE entity_claims SET status='verified' WHERE eid=?").bind(eid).run();
+    return true;
+  }
+  const result = await db.prepare("INSERT INTO entity_claims(eid,user_id,status,via,created) VALUES(?,?,?,?,?) ON CONFLICT(eid) DO UPDATE SET user_id=excluded.user_id,status=excluded.status,via=excluded.via,created=excluded.created WHERE entity_claims.status='rejected'").bind(eid, uid, via === "invite" ? "verified" : "pending", via, now()).run();
+  return Number(result.meta?.changes || 0) === 1;
 }
-const sessView = (r, mgr) => ({ id: r.id, title: r.title, abstract: r.abstract, start: r.start, end: r.end, room: r.room, track: r.track, level: r.level, lang: r.lang, topics: parse(r.topics, []), speakers: mgr ? parse(r.speakers, []) : parse(r.speakers, []).filter((x) => x.s === "confirmed").map((x) => ({ h: x.h, n: x.n, e: x.e })), speakers_open: parse(r.speakers, []).filter((x) => x.s !== "confirmed").length, recording_url: r.recording_url, status: r.status });
+const CLAIM_EMAIL = /^[^\s@<>]{1,64}@[^\s@<>]{1,190}\.[a-z]{2,}$/i;
+const cleanEmail = (s) => typeof s === "string" && CLAIM_EMAIL.test(s.trim()) ? s.trim().toLowerCase() : "";
+function linkedinProfile(url) {
+  try {
+    const u = new URL(String(url || ""));
+    return u.protocol === "https:" && !u.username && !u.password && ["linkedin.com", "www.linkedin.com"].includes(u.hostname.toLowerCase()) && /^\/in\/[^/]+\/?$/.test(u.pathname);
+  } catch { return false; }
+}
+async function knownEntityEmails(db, eid) {
+  const out = new Set();
+  const add = (value) => { const email = cleanEmail(value); if (email) out.add(email); };
+  for (const r of (await db.prepare("SELECT i.email FROM entity_invites i JOIN users u ON u.id=i.by_user WHERE i.eid=? AND i.status IN ('sent','claimed') AND u.role IN ('admin','editor')").bind(eid).all()).results || []) add(r.email);
+  add((await db.prepare("SELECT email FROM entity_contacts WHERE eid=?").bind(eid).first())?.email);
+  return out;
+}
+// LinkedIn-OIDC liefert keine öffentliche Profil-URL; automatisch abgeglichen wird nur die verifizierte E-Mail.
+export async function claimLinkedinEntity(env, user, info, eid) {
+  if (user?.provider !== "linkedin" || !/^[a-z0-9][a-z0-9-]{1,78}$/.test(eid || "")) return { error: "not_claimable" };
+  const entity = (await entityMap(env)).get(eid);
+  if (!entity || entity.type !== "person" || !(Array.isArray(entity.same_as) ? entity.same_as : []).some(linkedinProfile)) return { error: "not_claimable" };
+  if (!(await rateLimit(env.DB, `claim:${user.id}`, 5, 86400))) return { error: "rate_limit" };
+  const current = await env.DB.prepare("SELECT status FROM entity_claims WHERE eid=?").bind(eid).first();
+  if (current && current.status !== "rejected") return { error: "claimed" };
+  const email = info?.email_verified === true ? cleanEmail(info.email) : "";
+  const verified = !!email && (await knownEntityEmails(env.DB, eid)).has(email);
+  const status = verified ? "verified" : "pending";
+  const result = await env.DB.prepare("INSERT INTO entity_claims(eid,user_id,status,via,created) VALUES(?,?,?,'linkedin',?) ON CONFLICT(eid) DO UPDATE SET user_id=excluded.user_id,status=excluded.status,via=excluded.via,created=excluded.created WHERE entity_claims.status='rejected'")
+    .bind(eid, user.id, status, now()).run();
+  if (Number(result.meta?.changes || 0) !== 1) return { error: "claimed" };
+  if (verified) {
+    await env.DB.prepare("UPDATE entity_claim_review SET email='',picture='' WHERE eid=?").bind(eid).run();
+  } else {
+    const savedEmail = email || cleanEmail((await env.DB.prepare("SELECT email FROM mail_addr WHERE user_id=? AND verified=1").bind(user.id).first())?.email);
+    let picture = "";
+    try { const u = new URL(String(info?.picture || "")); if (u.protocol === "https:" && !u.username && !u.password && u.hostname === "media.licdn.com") picture = u.href; } catch {}
+    await env.DB.prepare("INSERT INTO entity_claim_review(eid,email,picture,created) VALUES(?,?,?,?) ON CONFLICT(eid) DO UPDATE SET email=excluded.email,picture=excluded.picture,created=excluded.created")
+      .bind(eid, savedEmail, picture, now()).run();
+  }
+  return { status };
+}
+const sessView = (r, mgr) => ({ id: r.id, title: r.title, abstract: r.abstract, start: r.start, end: r.end, room: r.room, track: r.track, level: r.level, lang: r.lang, topics: parse(r.topics, []), speakers: mgr ? parse(r.speakers, []).map(({ email, ...x }) => x) : parse(r.speakers, []).filter((x) => x.s === "confirmed").map((x) => ({ h: x.h, n: x.n, e: x.e })), speakers_open: parse(r.speakers, []).filter((x) => x.s !== "confirmed").length, recording_url: r.recording_url, status: r.status });
 async function evView(db, ev, withPending) {
   const org = ev.org_id ? await db.prepare("SELECT handle,name,public FROM orgs WHERE id=?").bind(ev.org_id).first() : null;
   const ow = await db.prepare("SELECT u.name,p.handle FROM users u LEFT JOIN profiles p ON p.user_id=u.id AND p.public=1 WHERE u.id=?").bind(ev.owner_id).first();
@@ -509,7 +553,7 @@ export async function handleEvents(env, request, url, path, user, J) {
     const me = await db.prepare("SELECT p.handle,u.name FROM profiles p JOIN users u ON u.id=p.user_id WHERE p.user_id=? AND p.public=1").bind(user.id).first();
     const orgs = (await db.prepare("SELECT o.handle,o.name,(SELECT eid FROM org_entity WHERE org_id=o.id) eid FROM org_members m JOIN orgs o ON o.id=m.org_id WHERE m.user_id=? AND m.status='active' AND m.role IN ('owner','admin')").bind(user.id).all()).results || [];
     if (!me && !orgs.length) return J({ suggestions: [] });
-    const claimed = new Set(((await db.prepare("SELECT eid FROM entity_claims").all()).results || []).map((r) => r.eid));
+    const claimed = new Set(((await db.prepare("SELECT eid FROM entity_claims WHERE status<>'rejected'").all()).results || []).map((r) => r.eid));
     const out = [], seen = new Set(), map = await entityMap(env);
     const sameOrg = (a, b) => { const x = norm(a).join(""), y = norm(b).join(""); return x.length >= 4 && y.length >= 4 && (x === y || lev(x, y) <= (x.length >= 8 ? 2 : 1) || x.startsWith(y) || y.startsWith(x)); };
     for (const [eid, e] of map) {
@@ -538,11 +582,51 @@ export async function handleEvents(env, request, url, path, user, J) {
   }
   if (path === "/api/admin/entity/claims" && method === "GET") {
     if (!(user?.admin || user?.editor)) return J({ error: "forbidden" }, 403);
-    return J({ claims: (await db.prepare("SELECT c.eid,c.user_id,u.name,p.handle FROM entity_claims c JOIN users u ON u.id=c.user_id LEFT JOIN profiles p ON p.user_id=c.user_id WHERE c.status='pending'").all()).results || [] });
+    const rows = (await db.prepare("SELECT c.eid,c.user_id,c.via,u.name,u.provider,p.handle,up.real_name,cr.picture FROM entity_claims c JOIN users u ON u.id=c.user_id LEFT JOIN profiles p ON p.user_id=c.user_id LEFT JOIN user_prefs up ON up.user_id=c.user_id LEFT JOIN entity_claim_review cr ON cr.eid=c.eid WHERE c.status='pending'").all()).results || [];
+    const entities = await entityMap(env);
+    return J({ claims: rows.map((r) => {
+      const entity = entities.get(r.eid) || {}, name = r.real_name || r.name, entityName = entity.name || r.eid;
+      const linkedin = r.via === "linkedin" && r.provider === "linkedin";
+      const link = linkedin ? (Array.isArray(entity.same_as) ? entity.same_as : []).find(linkedinProfile) || "" : "";
+      const name_match = norm(name).join(" ") === norm(entityName).join(" ") ? "equal" : similarName(name, entityName) ? "similar" : "different";
+      return { eid: r.eid, user_id: r.user_id, name, handle: r.handle, via: r.via, entity_name: entityName, linkedin_url: link, name_match: linkedin ? name_match : "", picture: linkedin ? r.picture : "" };
+    }) });
   }
   if (path === "/api/admin/entity/claim" && method === "POST") {
     if (!(user?.admin || user?.editor)) return J({ error: "forbidden" }, 403);
-    const b = await body(); if (b.ok) await db.prepare("UPDATE entity_claims SET status='verified' WHERE eid=?").bind(String(b.eid)).run(); else await db.prepare("DELETE FROM entity_claims WHERE eid=?").bind(String(b.eid)).run();
+    const b = await body(), eid = String(b.eid || "").toLowerCase();
+    if (!EID.test(eid) || typeof b.ok !== "boolean") return J({ error: "bad_request" }, 400);
+    const claim = await db.prepare("SELECT user_id,via FROM entity_claims WHERE eid=? AND status='pending'").bind(eid).first();
+    if (!claim) return J({ error: "not_found" }, 404);
+    const linkedIn = claim.via === "linkedin";
+    let to = "", name = "";
+    if (linkedIn) {
+      const review = await db.prepare("SELECT email FROM entity_claim_review WHERE eid=?").bind(eid).first();
+      const accountEmail = await db.prepare("SELECT email FROM mail_addr WHERE user_id=? AND verified=1").bind(claim.user_id).first();
+      to = cleanEmail(review?.email) || cleanEmail(accountEmail?.email);
+      name = (await db.prepare("SELECT COALESCE(p.real_name,u.name) name FROM users u LEFT JOIN user_prefs p ON p.user_id=u.id WHERE u.id=?").bind(claim.user_id).first())?.name || "Hallo";
+    }
+    const status = b.ok ? "verified" : "rejected";
+    const updated = linkedIn
+      ? await db.prepare("UPDATE entity_claims SET status=? WHERE eid=? AND status='pending'").bind(status, eid).run()
+      : b.ok
+        ? await db.prepare("UPDATE entity_claims SET status='verified' WHERE eid=? AND status='pending'").bind(eid).run()
+        : await db.prepare("UPDATE entity_claims SET status='rejected' WHERE eid=? AND status='pending'").bind(eid).run();
+    if (!Number(updated.meta?.changes || 0)) return J({ error: "not_found" }, 404);
+    if (linkedIn) {
+      const entity = (await entityMap(env)).get(eid), page = `${env.SITE}/entity/${eid}/`;
+      const outcome = b.ok ? "bestätigt" : "abgelehnt", subject = `Dein M365.FM-Profil wurde ${outcome}`;
+      const text = `Hallo ${name},\n\nDeine Anfrage, das Profil „${entity?.name || eid}“ auf M365.FM zu beanspruchen, wurde ${outcome}.\n\n${page}`;
+      let mailSent = false;
+      if (to && mailReady(env)) {
+        try {
+          const sent = await sendMail(env, { to, subject, text, html: `<p>Hallo ${esc(name)},</p><p>Deine Anfrage, das Profil <a href="${esc(page)}">${esc(entity?.name || eid)}</a> auf M365.FM zu beanspruchen, wurde ${outcome}.</p>`, headers: {} });
+          mailSent = sent.ok;
+        } catch { /* Die Adminentscheidung bleibt auch bei Mailfehlern gespeichert. */ }
+      }
+      await db.prepare("UPDATE entity_claim_review SET email='',picture='' WHERE eid=?").bind(eid).run();
+      return J({ ok: true, mailSent });
+    }
     return J({ ok: true });
   }
 
@@ -587,6 +671,12 @@ export async function handleEvents(env, request, url, path, user, J) {
     return J({ free_asks: FREE_ASKS, ask_cost: ASK_COST, sponsors: rows.map((r) => ({ handle: r.handle, name: r.name, website: r.website, criteria: parse(r.criteria, {}) })) });
   }
   return null;
+}
+
+export async function purgeEntityClaimReview(db) {
+  const cutoff = now() - 30 * 86400;
+  const result = await db.prepare("UPDATE entity_claim_review SET email='',picture='' WHERE created<? AND (email<>'' OR picture<>'')").bind(cutoff).run();
+  return { cleared: Number(result.meta?.changes || 0) };
 }
 
 export async function deleteUserEvents(db, uid) {

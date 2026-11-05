@@ -3,8 +3,8 @@ import { mailReady, sendMail } from "./mailer.js";
 import { esc, sign, verify, randomToken, rateLimit } from "./util.js";
 
 const now = () => Math.floor(Date.now() / 1000);
-export const KINDS = { reply: 1, wish: 1, show: 1, event: 1, system: 1 };   // 1 = standardmaessig an; "system" = Test/Bestaetigung
-const LABEL = { reply: ["Antworten auf meine Kommentare", "Replies to my comments"], wish: ["Status meiner Wünsche (Roadmap)", "Status of my wishes (roadmap)"], show: ["Freigabe meiner Podcast-Shows", "Approval of my podcast shows"], event: ["Einladungen zu Events und Sessions", "Invitations to events and sessions"] };
+export const KINDS = { weekly: 1, reply: 1, reply_now: 0, wish: 1, show: 1, event: 1, system: 1 };   // 1 = standardmaessig an; "system" = Test/Bestaetigung
+const LABEL = { weekly: ["Wochenübersicht und persönliche Hinweise", "Weekly overview and personal updates"], reply: ["Antworten auf meine Kommentare", "Replies to my comments"], reply_now: ["Antworten sofort statt in der Wochenmail", "Send replies immediately instead of in the weekly mail"], wish: ["Status meiner Wünsche (Roadmap)", "Status of my wishes (roadmap)"], show: ["Freigabe meiner Podcast-Shows", "Approval of my podcast shows"], event: ["Einladungen zu Events und Sessions", "Invitations to events and sessions"] };
 let ready = false;
 async function ensure(db) {
   if (ready) return;
@@ -13,6 +13,8 @@ async function ensure(db) {
     db.prepare("CREATE TABLE IF NOT EXISTS mail_prefs (user_id INTEGER NOT NULL, kind TEXT NOT NULL, on_ INTEGER NOT NULL, PRIMARY KEY (user_id, kind))"),
     db.prepare("CREATE TABLE IF NOT EXISTS mail_outbox (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, kind TEXT NOT NULL, subject TEXT NOT NULL, html TEXT NOT NULL, key TEXT NOT NULL DEFAULT '', created INTEGER NOT NULL, sent INTEGER NOT NULL DEFAULT 0, tries INTEGER NOT NULL DEFAULT 0, err TEXT NOT NULL DEFAULT '')"),
     db.prepare("CREATE UNIQUE INDEX IF NOT EXISTS idx_outbox_key ON mail_outbox(key) WHERE key!=''"),
+    db.prepare("CREATE TABLE IF NOT EXISTS mail_weekly_unsub (email TEXT PRIMARY KEY, token TEXT NOT NULL UNIQUE, updated INTEGER NOT NULL)"),
+    db.prepare("CREATE TABLE IF NOT EXISTS mail_topic_follows (user_id INTEGER NOT NULL,eid TEXT NOT NULL,created INTEGER NOT NULL,active INTEGER NOT NULL DEFAULT 1,PRIMARY KEY (user_id,eid))"),
   ]);
   ready = true;
 }
@@ -26,23 +28,42 @@ export async function wants(db, uid, kind) {
   const p = await db.prepare("SELECT on_ FROM mail_prefs WHERE user_id=? AND kind=?").bind(uid, kind).first();
   return p ? !!p.on_ : !!KINDS[kind];
 }
-// Benachrichtigung vormerken (und sofort versuchen). key = Duplikatschutz, z. B. "wish:12:planned".
+export async function weeklyUnsubscribe(env, email) {
+  const db = env.DB; await ensure(db);
+  let row = await db.prepare("SELECT token FROM mail_weekly_unsub WHERE email=?").bind(email).first();
+  if (!row) {
+    await db.prepare("INSERT OR IGNORE INTO mail_weekly_unsub(email,token,updated) VALUES(?,?,?)").bind(email, randomToken(20), now()).run();
+    row = await db.prepare("SELECT token FROM mail_weekly_unsub WHERE email=?").bind(email).first();
+  }
+  return `${env.API}/api/email/unsub?token=${encodeURIComponent(row.token)}&lang=all`;
+}
+export async function weeklyUnsubscribeMany(env, emails) {
+  const db = env.DB; await ensure(db);
+  const unique = [...new Set(emails.map((email) => String(email).trim().toLowerCase()))];
+  if (!unique.length) return new Map();
+  await db.batch(unique.map((email) => db.prepare("INSERT OR IGNORE INTO mail_weekly_unsub(email,token,updated) VALUES(?,?,?)").bind(email, randomToken(20), now())));
+  const rows = (await db.prepare(`SELECT email,token FROM mail_weekly_unsub WHERE lower(email) IN (${unique.map(() => "?").join(",")})`).bind(...unique).all()).results || [];
+  return new Map(rows.map((row) => [row.email.toLowerCase(), `${env.API}/api/email/unsub?token=${encodeURIComponent(row.token)}&lang=all`]));
+}
+// Persönliche Hinweise vormerken, transaktionale Arten sofort versuchen. key = Duplikatschutz.
 export async function notify(env, uid, kind, subject, bodyHtml, key = "") {
   try {
     const db = env.DB; if (!uid || !(await wants(db, uid, kind))) return false;
     const r = await db.prepare("INSERT OR IGNORE INTO mail_outbox(user_id,kind,subject,html,key,created) VALUES(?,?,?,?,?,?)").bind(uid, kind, String(subject).slice(0, 160), bodyHtml, key, now()).run();
     if (!r.meta.changes) return false;
-    await flushOutbox(env, 5); return true;
+    const immediate = kind === "event" || kind === "system" || (kind === "reply" && await wants(db, uid, "reply_now"));
+    if (immediate) await flushOutbox(env, 5);
+    return true;
   } catch { return false; }
 }
 export async function flushOutbox(env, limit = 40) {
   const db = env.DB; await ensure(db); if (!mailReady(env)) return { skipped: "no_key" };
-  const rows = (await db.prepare("SELECT o.*,a.email FROM mail_outbox o JOIN mail_addr a ON a.user_id=o.user_id AND a.verified=1 WHERE o.sent=0 AND o.tries<3 ORDER BY o.id LIMIT ?").bind(limit).all()).results || [];
+  const rows = (await db.prepare("SELECT o.*,a.email,u.lang FROM mail_outbox o JOIN mail_addr a ON a.user_id=o.user_id AND a.verified=1 JOIN users u ON u.id=o.user_id WHERE o.sent=0 AND o.tries<3 AND (o.kind='system' OR (o.kind='event' AND COALESCE((SELECT on_ FROM mail_prefs p WHERE p.user_id=o.user_id AND p.kind='event'),1)=1) OR (o.kind='reply' AND COALESCE((SELECT on_ FROM mail_prefs p WHERE p.user_id=o.user_id AND p.kind='reply'),1)=1 AND EXISTS (SELECT 1 FROM mail_prefs p WHERE p.user_id=o.user_id AND p.kind='reply_now' AND p.on_=1))) ORDER BY o.id LIMIT ?").bind(limit).all()).results || [];
   let ok = 0;
   for (const m of rows) {
     const un = await unsubUrl(env, m.user_id, m.kind);
     const html = wrap(env, m.html, `Du erhältst diese E-Mail, weil du Benachrichtigungen aktiviert hast. / You get this e-mail because you enabled notifications. <a href="${un}">Abmelden / Unsubscribe</a> · <a href="${env.SITE}/community/">Einstellungen / Settings</a>`);
-    const r = await sendMail(env, { to: m.email, subject: m.subject, html, headers: { "List-Unsubscribe": `<${un}>`, "List-Unsubscribe-Post": "List-Unsubscribe=One-Click" } });
+    const r = await sendMail(env, { to: m.email, subject: m.subject, html, lang: m.lang || "de", headers: { "List-Unsubscribe": `<${un}>`, "List-Unsubscribe-Post": "List-Unsubscribe=One-Click" } });
     await db.prepare("UPDATE mail_outbox SET tries=tries+1,sent=?,err=? WHERE id=?").bind(r.ok ? 1 : 0, r.ok ? "" : "http_" + r.status, m.id).run();
     if (r.ok) ok++;
   }
@@ -73,7 +94,10 @@ export async function handleMail(env, request, url, path, user, J) {
   if (path === "/api/admin/mail" && method === "GET") {
     if (!user.admin) return J({ error: "forbidden" }, 403);
     const s = await db.prepare("SELECT COUNT(*) total,SUM(sent=1) sent,SUM(sent=0 AND tries<3) waiting,SUM(sent=0 AND tries>=3) failed FROM mail_outbox").first();
-    return J({ configured: mailReady(env), ...s, addresses: (await db.prepare("SELECT COUNT(*) c FROM mail_addr WHERE verified=1").first()).c });
+    const month = new Date().toISOString().slice(0, 7);
+    const monthly = await db.prepare("SELECT sent FROM mail_monthly_usage WHERE month=?").bind(month).first().catch(() => null);
+    const sentMonth = monthly?.sent || 0;
+    return J({ configured: mailReady(env), ...s, addresses: (await db.prepare("SELECT COUNT(*) c FROM mail_addr WHERE verified=1").first()).c, month, sentMonth, warning: sentMonth >= 2500 });
   }
   if (path === "/api/admin/mail/test" && method === "POST") {
     if (!user.admin) return J({ error: "forbidden" }, 403);
@@ -81,7 +105,7 @@ export async function handleMail(env, request, url, path, user, J) {
     const address = await db.prepare("SELECT email FROM mail_addr WHERE user_id=? AND verified=1").bind(user.id).first();
     if (!address) return J({ error: "email_unverified" }, 409);
     if (!(await rateLimit(db, `mailtest:${user.id}`, 3, 3600))) return J({ error: "rate_limit" }, 429);
-    const r = await sendMail(env, { to: address.email, subject: "M365.FM – Admin-Testmail", text: "Der E-Mail-Versand über Cloudflare Email Service funktioniert.", html: "<p>Der E-Mail-Versand über Cloudflare Email Service funktioniert.</p>" });
+    const r = await sendMail(env, { to: address.email, subject: "M365.FM – Admin-Testmail", text: "Der E-Mail-Versand über Cloudflare Email Service funktioniert.", html: "<p>Der E-Mail-Versand über Cloudflare Email Service funktioniert.</p>", lang: "de" });
     return J({ ok: r.ok, status: r.status }, r.ok ? 200 : 502);
   }
   if (method !== "POST") return J({ error: "bad_request" }, 400);
@@ -94,14 +118,29 @@ export async function handleMail(env, request, url, path, user, J) {
     const token = randomToken(20);
     await db.prepare("INSERT OR REPLACE INTO mail_addr(user_id,email,verified,token,created) VALUES(?,?,0,?,?)").bind(user.id, email, token, now()).run();
     const link = `${env.API}/api/mail/confirm?t=${encodeURIComponent(token)}`;
-    const r = await sendMail(env, { to: email, subject: "M365.FM – E-Mail bestätigen / confirm e-mail", html: wrap(env, `<p>Bitte bestätige deine E-Mail-Adresse für Benachrichtigungen:</p><p><a href="${link}">${link}</a></p><p>Please confirm your e-mail address for notifications. If this wasn’t you, ignore this message.</p>`, "M365.FM") });
+    const r = await sendMail(env, { to: email, subject: "M365.FM – E-Mail bestätigen / confirm e-mail", html: wrap(env, `<p>Bitte bestätige deine E-Mail-Adresse für Benachrichtigungen:</p><p><a href="${link}">${link}</a></p><p>Please confirm your e-mail address for notifications. If this wasn’t you, ignore this message.</p>`, "M365.FM"), lang: "de" });
     return J({ ok: r.ok });
   }
   if (path === "/api/mail/prefs") {
     if (!(b.kind in LABEL)) return J({ error: "bad_kind" }, 400);
     await db.prepare("INSERT OR REPLACE INTO mail_prefs(user_id,kind,on_) VALUES(?,?,?)").bind(user.id, b.kind, b.on ? 1 : 0).run(); return J({ ok: true });
   }
-  if (path === "/api/mail/remove") { await db.batch([db.prepare("DELETE FROM email_topics WHERE user_id=?").bind(user.id), db.prepare("DELETE FROM topic_queue WHERE channel='email' AND recipient=?").bind(String(user.id)), db.prepare("DELETE FROM topic_deliveries WHERE channel='email' AND recipient=?").bind(String(user.id)), db.prepare("DELETE FROM topic_recipient_state WHERE channel='email' AND recipient=?").bind(String(user.id)), db.prepare("DELETE FROM mail_addr WHERE user_id=?").bind(user.id), db.prepare("DELETE FROM mail_outbox WHERE user_id=? AND sent=0").bind(user.id)]); return J({ ok: true }); }
+  if (path === "/api/mail/remove") {
+    const address = await db.prepare("SELECT email FROM mail_addr WHERE user_id=?").bind(user.id).first();
+    const ops = [
+      db.prepare("DELETE FROM mail_addr WHERE user_id=?").bind(user.id),
+      db.prepare("DELETE FROM mail_prefs WHERE user_id=?").bind(user.id),
+      db.prepare("DELETE FROM mail_outbox WHERE user_id=?").bind(user.id),
+      db.prepare("DELETE FROM mail_topic_follows WHERE user_id=?").bind(user.id),
+      db.prepare("DELETE FROM email_topics WHERE user_id=?").bind(user.id),
+      db.prepare("DELETE FROM topic_queue WHERE channel='email' AND recipient=?").bind(String(user.id)),
+      db.prepare("DELETE FROM topic_deliveries WHERE channel='email' AND recipient=?").bind(String(user.id)),
+      db.prepare("DELETE FROM topic_recipient_state WHERE channel='email' AND recipient=?").bind(String(user.id)),
+    ];
+    if (address?.email) ops.push(db.prepare("DELETE FROM mail_weekly_unsub WHERE lower(email)=lower(?) AND NOT EXISTS (SELECT 1 FROM email_subs WHERE lower(email)=lower(?) AND confirmed=1) AND NOT EXISTS (SELECT 1 FROM mail_addr WHERE lower(email)=lower(?) AND verified=1)").bind(address.email, address.email, address.email));
+    await db.batch(ops);
+    return J({ ok: true });
+  }
   if (path === "/api/mail/test") {
     if (!(await rateLimit(db, `mtest:${user.id}`, 3, 3600))) return J({ error: "rate_limit" }, 429);
     const ok = await notify(env, user.id, "system", "M365.FM – Testnachricht / test message", "<p>Das ist eine Testnachricht. / This is a test message.</p>", `test:${user.id}:${now()}`);
