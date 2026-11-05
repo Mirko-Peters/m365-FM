@@ -35,16 +35,7 @@ jobs:
           BING_WEBMASTER_API_KEY: ${{ secrets.BING_WEBMASTER_API_KEY }}
           GSC_SERVICE_ACCOUNT_JSON: ${{ secrets.GSC_SERVICE_ACCOUNT_JSON }}   # Google-Suche fuer den YouTube-Kanal (Creator-Property), nur bei status ok
         run: python tools/mediakit.py --out out/mediakit --fonts .cache/fonts
-      - name: M365Con-Sponsordeck erzeugen (EN/DE, ohne Preise)
-        if: always()
-        env:
-          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID || secrets.GOOGLE_CLIENT_ID }}
-          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET || secrets.GOOGLE_CLIENT_SECRET }}
-          BING_WEBMASTER_API_KEY: ${{ secrets.BING_WEBMASTER_API_KEY }}
-          GSC_SERVICE_ACCOUNT_JSON: ${{ secrets.GSC_SERVICE_ACCOUNT_JSON }}
-          HEYSUMMIT_API_KEY: ${{ secrets.HEYSUMMIT_API_KEY }}
-        run: python tools/mediakit.py --brand m365con --out out/mediakit-con --fonts .cache/fonts
-      - name: In R2 hochladen (mediakit/…)
+      - name: In R2 hochladen (mediakit/…)   # direkt nach dem eigenen Bau: ein Fehler im Con-Deck darf den M365.FM-Upload nicht verhindern
         env:
           R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
           R2_BUCKET: ${{ secrets.R2_BUCKET }}
@@ -64,6 +55,15 @@ jobs:
                   print("hochgeladen:", key)
           s3.upload_file("out/mediakit/latest.json", b, "mediakit/latest.json", ExtraArgs={"ContentType": "application/json", "CacheControl": "public, max-age=3600"})
           PY
+      - name: M365Con-Sponsordeck erzeugen (EN/DE, ohne Preise)
+        if: always()
+        env:
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID || secrets.GOOGLE_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET || secrets.GOOGLE_CLIENT_SECRET }}
+          BING_WEBMASTER_API_KEY: ${{ secrets.BING_WEBMASTER_API_KEY }}
+          GSC_SERVICE_ACCOUNT_JSON: ${{ secrets.GSC_SERVICE_ACCOUNT_JSON }}
+          HEYSUMMIT_API_KEY: ${{ secrets.HEYSUMMIT_API_KEY }}
+        run: python tools/mediakit.py --brand m365con --out out/mediakit-con --fonts .cache/fonts
       - name: M365Con-Deck in R2 hochladen (mediakit/m365con/…)
         if: always() && hashFiles('out/mediakit-con/latest.json') != ''
         env:
