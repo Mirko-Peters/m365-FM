@@ -33,6 +33,7 @@ import { handleReviews } from "./reviews.js";
 import { handleEntityInvite, remindInvites } from "./entinvite.js";
 import { handleDemo } from "./demo.js";
 import { handleGuests, deleteUserGuests } from "./guests.js";
+import { handleExpertRequests, deleteUserExpertRequests } from "./expert_requests.js";
 import { handlePodcast, deleteUserPodcast, pollPodcast } from "./podcast.js";
 import { handleVideo, deleteUserVideos, pollVideos } from "./youtube.js";
 import { handleMcp, handleTokens, deleteUserTokens } from "./mcp.js";
@@ -239,7 +240,7 @@ async function api(env, request, url, path, asUser) {
       ]);
       await deleteUserEvents(db, id);
       await deleteUserMessages(db, id); await deleteUserTokens(db, id); await deleteUserQa(db, id); await deleteUserBlog(db, id); await deleteUserLibrary(db, id); await deleteUserPodcast(db, id); await deleteUserVideos(db, id); await deleteUserGuests(db, id); await deleteUserGuestCredits(db, id);
-      await deleteUserData(db, id);
+      await deleteUserData(db, id); await deleteUserExpertRequests(db, id);
       return J({ ok: true }, 200, { "set-cookie": cookie("m365s", "", 0) });
     }
   }
@@ -317,6 +318,9 @@ async function api(env, request, url, path, asUser) {
   if (path.startsWith("/api/ai-token")) { const k = await handleTokens(env, request, url, path, user, J); if (k) return k; }
   if (path === "/api/admin/demo") { const q = await handleDemo(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/guests/")) { const q = await handleGuests(env, request, url, path, user, J); if (q) return q; }
+  if (path.startsWith("/api/expert-requests/") || path.startsWith("/api/admin/expert-requests/")) {
+    const q = await handleExpertRequests(env, request, path, user, J); if (q) return q;
+  }
   if (path.startsWith("/api/video/") || path.startsWith("/api/admin/video")) { const q = await handleVideo(env, request, url, path, user, J); if (q) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return q; } }
   if (path.startsWith("/api/podcast/") || path.startsWith("/api/admin/podcast")) { const q = await handlePodcast(env, request, url, path, user, J); if (q) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return q; } }
   if (path === "/api/updates/export" || path === "/api/admin/updates/poll") { const q = await handleUpdates(env, request, url, path, user, J); if (q) return q; }
