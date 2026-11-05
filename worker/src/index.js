@@ -14,7 +14,7 @@ import { syncLiveEvents } from "./liveevents.js";
 import { syncContentTopics, handleTopics } from "./topics.js";
 import { importQuotesFromSite, handleQuotes } from "./quotes.js";
 import { importEpisodes, importTranslations, handleRegister } from "./register.js";
-import { importSearchIndex, handleSearch } from "./search.js";
+import { importSearchIndex, syncSearchVectors, handleSearch } from "./search.js";
 import { entityMap } from "./entities.js";
 import { handleProfiles, deleteUserData, refreshProfilesExport } from "./profiles.js";
 import { handleEvents, deleteUserEvents, ensureM365Con } from "./events.js";
@@ -475,6 +475,7 @@ export default {
     T("importEpisodes", () => importEpisodes(env));
     T("importTranslations", () => importTranslations(env));
     T("importSearchIndex", () => importSearchIndex(env));
+    T("syncSearchVectors", () => syncSearchVectors(env));
     if (event.cron !== "0 6 * * *") T("syncExpertise", () => syncExpertise(env, entityMap));   // nicht doppelt um 06:00 (beide Zeitplaene feuern)
     ctx.waitUntil(env.DB.prepare("DELETE FROM cron_runs WHERE started<?").bind(Math.floor(Date.now() / 1000) - 7 * 86400).run().catch(() => 0));
   },

@@ -5,18 +5,24 @@ import { webcrypto as crypto } from "node:crypto";
 import { d1BackupExportArgs, d1BackupTables } from "./src/d1_backup.js";
 
 const run = (args, input) => { const r = spawnSync("npx", ["wrangler", ...args], { input, encoding: "utf8" }); return r; };
-const fail = (m) => { console.error("::error::" + String(m).replace(/\r?\n/g, " | ").slice(0, 900)); process.exit(1); };
-const b64u = (b) => Buffer.from(b).toString("base64url");
-const maskAccount = (value) => {
-  const account = process.env.CLOUDFLARE_ACCOUNT_ID || "";
-  return account ? String(value).replaceAll(account, "[maskiert]").replaceAll(account.slice(0, 6), "[maskiert]") : String(value);
+const maskAccount = (value, ...extraAccounts) => {
+  let message = String(value);
+  const accounts = new Set([
+    process.env.CLOUDFLARE_ACCOUNT_ID || "",
+    ...extraAccounts,
+    ...[...message.matchAll(/\b[a-f0-9]{32}\b/gi)].map(([account]) => account),
+  ].filter(Boolean));
+  for (const account of accounts) message = message.replaceAll(account, "[Konto-ID]").replaceAll(account.slice(0, 6), "[Konto-ID]");
+  return message;
 };
+const fail = (m) => { console.error("::error::" + maskAccount(String(m).replace(/\r?\n/g, " | ").slice(0, 900))); process.exit(1); };
+const b64u = (b) => Buffer.from(b).toString("base64url");
 
 
 // 0) Vorab-Prüfung: Zone m365.fm sichtbar? workers.dev-Subdomain vorhanden (sonst anlegen)?
 {
   const H = { Authorization: "Bearer " + process.env.CLOUDFLARE_API_TOKEN, "content-type": "application/json" }, A = process.env.CLOUDFLARE_ACCOUNT_ID;
-  const cf = async (p, o) => { try { const r = await fetch("https://api.cloudflare.com/client/v4" + p, { headers: H, ...o }); return await r.json(); } catch (e) { return { success: false, errors: [{ message: String(e) }] }; } };
+  const cf = async (p, o) => { try { const r = await fetch("https://api.cloudflare.com/client/v4" + p, { headers: H, ...o }); return { ...(await r.json()), status: r.status }; } catch (e) { return { success: false, status: 0, errors: [{ message: String(e) }] }; } };
   const z = await cf("/zones?name=m365.fm");
   console.log("Zone m365.fm:", z.success && z.result?.length ? "gefunden" : "NICHT sichtbar " + maskAccount(JSON.stringify(z.errors || [])));
   if (!(z.success && z.result?.length)) fail("Zone m365.fm nicht sichtbar: dem Token fehlt 'Zone > Zone > Read' fuer m365.fm (oder die Domain liegt in einem anderen Konto).");
@@ -27,13 +33,39 @@ const maskAccount = (value) => {
     const put = await cf(`/accounts/${A}/workers/subdomain`, { method: "PUT", body: JSON.stringify({ subdomain: "m365fm-" + A.slice(0, 6) }) });
     console.log("workers.dev-Subdomain anlegen:", put.success ? "ok" : maskAccount(JSON.stringify(put.errors || [])));
   } else console.log("workers.dev-Subdomain: vorhanden");
+
+  const vectorize = `/accounts/${A}/vectorize/v2/indexes`;
+  let index = await cf(`${vectorize}/m365-search`);
+  if (!index.success && index.status === 404) {
+    index = await cf(vectorize, { method: "POST", body: JSON.stringify({ name: "m365-search", config: { dimensions: 1024, metric: "cosine" } }) });
+    if (!index.success) fail(`Vectorize-Index m365-search konnte nicht angelegt werden: ${maskAccount(JSON.stringify(index.errors || []))}. Dem Cloudflare-Token fehlt vermutlich „Vectorize Write“.`);
+    console.log("Vectorize-Index m365-search: angelegt");
+  } else if (!index.success) {
+    fail(`Vectorize-Index m365-search nicht lesbar: ${maskAccount(JSON.stringify(index.errors || []))}. Das Cloudflare-Token braucht „Vectorize Read“ und zum Anlegen „Vectorize Write“.`);
+  } else if (index.result?.config?.dimensions !== 1024 || index.result?.config?.metric !== "cosine") {
+    fail("Vectorize-Index m365-search hat eine abweichende Konfiguration; erwartet werden 1024 Dimensionen und cosine.");
+  } else console.log("Vectorize-Index m365-search: vorhanden");
+
+  const metadataPath = `${vectorize}/m365-search/metadata_index`;
+  const metadata = await cf(`${metadataPath}/list`);
+  if (!metadata.success) fail(`Vectorize-Metadatenindizes nicht lesbar: ${maskAccount(JSON.stringify(metadata.errors || []))}. Das Cloudflare-Token braucht „Vectorize Read“ und „Vectorize Write“.`);
+  const indexed = new Set((metadata.result?.metadataIndexes || []).map(({ propertyName }) => propertyName));
+  for (const propertyName of ["lang", "type"]) {
+    if (indexed.has(propertyName)) continue;
+    const created = await cf(`${metadataPath}/create`, {
+      method: "POST",
+      body: JSON.stringify({ propertyName, indexType: "string" }),
+    });
+    if (!created.success) fail(`Vectorize-Metadatenindex ${propertyName} konnte nicht angelegt werden: ${maskAccount(JSON.stringify(created.errors || []))}. Dem Cloudflare-Token fehlt vermutlich „Vectorize Write“.`);
+    console.log(`Vectorize-Metadatenindex ${propertyName}: angelegt`);
+  }
 }
 
 // 1) D1-Datenbank finden oder anlegen, ID in wrangler.toml eintragen
 let list = run(["d1", "list", "--json"]);
 let dbs = []; try { dbs = JSON.parse(list.stdout); } catch { fail("d1 list: " + (list.stderr || list.stdout)); }
 let db = dbs.find((d) => d.name === "m365-dub");
-if (!db) { const c = run(["d1", "create", "m365-dub"]); console.log(c.stdout.split("\n").slice(0, 3).join("\n")); dbs = JSON.parse(run(["d1", "list", "--json"]).stdout); db = dbs.find((d) => d.name === "m365-dub"); }
+if (!db) { const c = run(["d1", "create", "m365-dub"]); console.log(maskAccount(c.stdout.split("\n").slice(0, 3).join("\n"))); dbs = JSON.parse(run(["d1", "list", "--json"]).stdout); db = dbs.find((d) => d.name === "m365-dub"); }
 if (!db) { fail("D1 konnte nicht angelegt werden"); }
 const id = db.uuid || db.id;
 const gateway = process.env.AI_GATEWAY_ID || "m365fm";
@@ -53,7 +85,7 @@ try {
 } catch { fail("D1-Tabellenliste nicht lesbar"); }
 // FTS5-Virtual- und Schattentabellen kann wrangler d1 export nicht sichern.
 const bak = run(d1BackupExportArgs(tables));
-console.log("D1-Sicherung:", bak.status === 0 ? "backup-d1.sql" : "FEHLER " + (bak.stderr || bak.stdout).slice(0, 300));
+console.log("D1-Sicherung:", bak.status === 0 ? "backup-d1.sql" : "FEHLER " + maskAccount((bak.stderr || bak.stdout).slice(0, 300)));
 if (bak.status !== 0) fail("Ohne Sicherung keine Migration");
 const sch = run(["d1", "migrations", "apply", "m365-dub", "--remote"]);
 if (sch.status !== 0) fail("Schema: " + sch.stderr);
@@ -61,11 +93,11 @@ console.log("Schema ok");
 
 // 3) Erstmal deployen (damit Secrets einen Worker haben), dann Secrets
 const dep = run(["deploy"]);
-console.log(dep.stdout.split("\n").slice(-6).join("\n")); if (dep.status !== 0) fail("Deploy: " + dep.stderr);
+console.log(maskAccount(dep.stdout.split("\n").slice(-6).join("\n"))); if (dep.status !== 0) fail("Deploy: " + dep.stderr);
 
 let have = [];
 try { have = JSON.parse(run(["secret", "list", "--format", "json"]).stdout).map((s) => s.name); } catch {}
-const put = (k, v) => { const r = run(["secret", "put", k], v); console.log(k, r.status === 0 ? "gesetzt" : "FEHLER " + r.stderr.slice(0, 200)); };
+const put = (k, v) => { const r = run(["secret", "put", k], v); console.log(k, r.status === 0 ? "gesetzt" : "FEHLER " + maskAccount(r.stderr.slice(0, 200))); };
 
 const gen = {
   SESSION_SECRET: () => b64u(crypto.getRandomValues(new Uint8Array(32))),
@@ -91,5 +123,5 @@ console.log("Fertig. Worker: https://api-dub.m365.fm");
   const z = await g("/zones?name=m365.fm"); const zid = z.result?.[0]?.id;
   const r = await g(`/zones/${zid}/dns_records?per_page=100`);
   console.log("::notice::DNS (dub/api):", maskAccount(JSON.stringify((r.result || []).filter((x) => /dub|api/.test(x.name)).map((x) => `${x.type} ${x.name} -> ${String(x.content).slice(0, 40)}`))), r.success ? "" : maskAccount(JSON.stringify(r.errors)));
-  try { const t = await fetch("https://api-dub.m365.fm/api/health"); console.log("::notice::Test api-dub.m365.fm:", t.status, (await t.text()).slice(0, 80)); } catch (e) { console.log("Test api-dub.m365.fm: nicht erreichbar", String(e.cause?.code || e)); }
+  try { const t = await fetch("https://api-dub.m365.fm/api/health"); console.log("::notice::Test api-dub.m365.fm:", t.status, maskAccount((await t.text()).slice(0, 80))); } catch (e) { console.log("Test api-dub.m365.fm: nicht erreichbar", maskAccount(String(e.cause?.code || e))); }
 }
