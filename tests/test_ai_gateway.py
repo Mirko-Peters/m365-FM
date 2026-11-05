@@ -83,7 +83,8 @@ class AiGatewayTests(unittest.TestCase):
         self.assertIn("CRON_KEY fehlt", out.getvalue())
 
         def forbidden(req, timeout):
-            raise ai_gateway.urllib.error.HTTPError(req.full_url, 403, "Forbidden", {}, None)
+            self.assertEqual(req.get_header("User-agent"), ai_gateway.USER_AGENT)
+            raise ai_gateway.urllib.error.HTTPError(req.full_url, 403, "Forbidden", {}, io.BytesIO(b'{"error":"forbidden"}'))
 
         out = io.StringIO()
         with patch.dict("os.environ", {"COMMUNITY_API": "https://api.example", "CRON_KEY": "x"}, clear=True), \
@@ -92,6 +93,16 @@ class AiGatewayTests(unittest.TestCase):
             ai_gateway.report_usage("translate_ui", "claude-haiku-5-5", 12, 4, "fr")
         self.assertIn("verschieden", out.getvalue())
         self.assertNotIn("RuntimeError", out.getvalue())
+
+        def blocked(req, timeout):   # Cloudflare-Sperre (HTML, kein Worker-JSON) ist kein Schluesselfehler
+            raise ai_gateway.urllib.error.HTTPError(req.full_url, 403, "Forbidden", {}, io.BytesIO(b"<html>error code: 1010</html>"))
+
+        out = io.StringIO()
+        with patch.dict("os.environ", {"COMMUNITY_API": "https://api.example", "CRON_KEY": "x"}, clear=True), \
+                patch.object(ai_gateway, "urlopen", blocked), contextlib.redirect_stdout(out):
+            self.assertFalse(ai_gateway.check_budget("translate_ui", "claude-haiku-5-5"))
+        self.assertIn("Cloudflare", out.getvalue())
+        self.assertNotIn("verschieden", out.getvalue())
 
     def test_budget_exhausted_and_batch(self):
         sent = []
