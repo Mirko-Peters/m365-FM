@@ -22,6 +22,7 @@ CSS = (".ad{margin:2rem auto;max-width:50rem;padding:.8rem 1rem 1rem;border:1px 
 CSS += (".ad-con{background:linear-gradient(135deg,#0b2a3c,#0e4a5e);color:#fff!important;border-radius:10px;padding:1.2rem}"
         ".ad-con b{color:#fff}.ad-con span{color:#d7f1f7!important}.ad-con em{font-style:normal;font-weight:700;background:#f5b041;color:#0b2a3c;"
         "border-radius:999px;padding:.35rem .9rem;margin-top:.3rem}"
+        ".ad-svc em{font-style:normal;font-weight:700;background:var(--ac,#b4233c);color:#fff;border-radius:999px;padding:.35rem .9rem;margin-top:.3rem}"
         ".ad.ad-own{min-height:0}.ad-own .ad-house{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.4rem;text-decoration:none}")
 
 
@@ -120,30 +121,48 @@ def con_running(today=None):
 
 
 def css_needed(base, today=None):
-    return active(base) or con_running(today)
+    return True   # ohne AdSense stehen immer eigene Banner (Services, bis 22.01.2027 auch die M365Con)
+
+
+# Mirko, 5.11.2026: an den freien Plaetzen auch die eigenen Services bewerben (Hub /services/: Sponsoring, Live-Session, Profile ...).
+SVC_CTA = {"en": "View services", "de": "Services ansehen", "es": "Ver servicios", "fr": "Voir les services", "it": "Scopri i servizi",
+           "pt": "Ver serviços", "nl": "Bekijk de services", "pl": "Zobacz usługi"}
+
+
+def _svc(base, lang):
+    """Banner fuer den Service-Hub; Titel und Text kommen aus site_landing_copy (dieselben Uebersetzungen wie die Hub-Seite)."""
+    import site_landing as L
+    lg = lang if lang in L.LANGS_ALL else "en"
+    h = L._text(lg, L.C.HUB["h1"])
+    lead = L._text(lg, L.C.HUB["lead"]).split(". ")[0].rstrip(".") + "."
+    return (f'<a class="ad-house ad-svc" href="{escape(L.hub_url(base, lg))}"><b>{escape(h)}</b><span>{escape(lead)}</span>'
+            f'<em>{escape(SVC_CTA.get(lang, SVC_CTA["en"]))}</em></a>')
+
+
+def _own_block(inner, lang):
+    """Eigenes Banner ohne Google-Skript und ohne reservierte Anzeigenhoehe."""
+    return (f'<aside class="ad ad-own" aria-label="{escape(LABEL.get(lang, LABEL["en"]))}"><small>{escape(LABEL.get(lang, LABEL["en"]))}</small>'
+            + inner + '</aside>')
 
 
 def _con_block(lang, base="", today=None):
-    """Ohne AdSense: nur das eigene M365Con-Banner, ohne Google-Skript und ohne reservierte Anzeigenhoehe."""
-    return (f'<aside class="ad ad-own" aria-label="{escape(LABEL.get(lang, LABEL["en"]))}"><small>{escape(LABEL.get(lang, LABEL["en"]))}</small>'
-            + _house(base, lang, today) + '</aside>')
+    return _own_block(_house(base, lang, today), lang)
 
 
 def inject(base, body, lang, canonical, noindex=False, today=None):
     """Fuegt hoechstens zwei Bloecke ein: einen nach dem 2. Abschnitt (<h2>), einen vor dem Footer.
-    AdSense aus (Mirko, 5.11.2026): bis CON_UNTIL an denselben Stellen nur das M365Con-Banner, danach gar nichts."""
+    AdSense aus (Mirko, 5.11.2026): nur eigene Banner - in der Mitte bis CON_UNTIL die M365Con, vor dem Footer die Services."""
     if noindex:
         return body
     ads = active(base)
-    if not ads and not con_running(today):
-        return body
     c = cfg()
     path = canonical.replace(base, "") or "/"
     if path in ("/", "") or not eligible(base, body, canonical, noindex, need_ads=ads):
         return body
-    slots = c.get("slots", {}) if ads else {"mid": "own", "end": "own"}
+    slots = c.get("slots", {}) if ads else {"mid": "con" if con_running(today) else "", "end": "svc"}
     pub = c.get("publisher", "")
-    mk = (lambda slot: _block(lang, slot, pub, base)) if ads else (lambda slot: _con_block(lang, base, today))
+    own = {"con": lambda: _con_block(lang, base, today), "svc": lambda: _own_block(_svc(base, lang), lang)}
+    mk = (lambda slot: _block(lang, slot, pub, base)) if ads else (lambda slot: own[slot]())
     if slots.get("mid"):
         # nur im Textbereich: bei Seiten mit Sidebar bis zum Beginn der Sidebar, sonst im <main>; so landet der Block nie in der Sidebar oder im Header
         a = body.find('class="shmain"'); a = body.find("<main") if a < 0 else a
