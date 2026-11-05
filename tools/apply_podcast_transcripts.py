@@ -106,6 +106,8 @@ def main():
     from apply_shownotes import Spreaker  # noqa: E402  (gleicher Zugang, gleiche Wiederholungslogik)
     import requests
     web = requests.Session()
+    # www.m365.fm liegt hinter Cloudflare: ohne eigene Kennung antwortet es Python-Clients mit 403 (dann bliebe alles auf der raw-URL)
+    web.headers["User-Agent"] = "m365fm-actions/1.0 (+https://www.m365.fm)"
     idx = load_index(web.get)
     print(f"Transkript-Index: {len(idx)} Folgen mit Spreaker-ID")
     sp = Spreaker()
@@ -123,8 +125,8 @@ def main():
             print(f"::warning::{eid}: Episode nicht lesbar ({e})")
             continue
         cur = ep.get("transcript_url") or ""
-        if f is None and cur and not cur.startswith(RAW_REPO):
-            continue   # --all: fremde Transkripte (z. B. von Spreaker selbst) bleiben unberuehrt
+        if f is None and cur and not (cur.startswith(RAW_REPO) or cur.startswith(SITE + "/")):
+            continue   # --all: fremde Transkripte (z. B. von Spreaker selbst) bleiben unberuehrt; eigene m365.fm-Adressen werden nachgezogen (z. B. nach Slug-Aenderung)
         live = bool(new_url) and cur != new_url and is_live(web.head, new_url)
         act, val = decide(cur, new_url, live, (RAW + f.name) if f else None)
         if act == "skip":
