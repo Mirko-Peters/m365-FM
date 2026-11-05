@@ -12,7 +12,7 @@ Quellen (jeweils nur, wenn verfuegbar; fehlende Werte werden weggelassen, nie ge
     (Search Console, Bericht Generative AI, Export; nur bei status "ok"), Google-Suche (Search Console API)
   - data/sponsor_pricing.json + data/sponsor_i18n.json: Sponsoring-Pakete und Listenpreise wie auf /sponsor/
 Aufruf: python tools/mediakit.py --out out/mediakit [--brand m365con]   (Umgebung: YT_CLIENT_ID, YT_CLIENT_SECRET, YT_REFRESH_TOKEN,
-        CLOUDFLARE_API_TOKEN, CF_ACCOUNT_ID oder R2_ACCOUNT_ID, CF_RUM_SITE_TAG optional, CF_ZONE_ID optional, BING_WEBMASTER_API_KEY)
+        CF_ANALYTICS_TOKEN oder CLOUDFLARE_API_TOKEN, CF_ACCOUNT_ID oder R2_ACCOUNT_ID, CF_RUM_SITE_TAG optional, CF_ZONE_ID optional, BING_WEBMASTER_API_KEY)
 Ergebnis: m365fm-media-kit-en.pdf, m365fm-media-kit-de.pdf, latest.json
 Zweite Marke (#260): --brand m365con baut das Sponsor-/Mediadaten-Deck der M365Con (tools/mediakit_con.py, eigenes Theme, keine Preise).
 """
@@ -96,7 +96,8 @@ def youtube():
 def cloudflare():
     """Website-Zahlen fuer Sponsoren: zuerst Cloudflare Web Analytics (echte Seitenaufrufe im Browser, Bots weitgehend ausgeschlossen).
     Nur wenn das scheitert (Recht/siteTag fehlt), die ungefilterte Zonen-Statistik - als "zone" markiert und so beschriftet. Nie geschaetzt."""
-    if not os.environ.get("CLOUDFLARE_API_TOKEN", "").strip(): return {}
+    from tools import cf_rum
+    if not cf_rum.token(): return {}   # CF_ANALYTICS_TOKEN (nur Lesen) oder CLOUDFLARE_API_TOKEN
     out = cloudflare_rum()
     if out: return out
     return cloudflare_zone()
@@ -124,7 +125,8 @@ def cloudflare_rum():
 
 def cloudflare_zone():
     """Fallback: Zonen-Statistik (httpRequests1dGroups) - zaehlt jede HTML-Antwort am Rand, auch Bots. Nur als 'ungefiltert' zeigen."""
-    tok = os.environ.get("CLOUDFLARE_API_TOKEN", "").strip()
+    from tools import cf_rum
+    tok = cf_rum.token()
     if not tok: return {}
     H = {"authorization": "Bearer " + tok, "content-type": "application/json"}
     zone = os.environ.get("CF_ZONE_ID", "").strip()

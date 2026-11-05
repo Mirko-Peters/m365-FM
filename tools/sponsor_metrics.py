@@ -351,7 +351,7 @@ def cloudflare(placements, day, out, statuses):
     ausgeschlossen). Nur wenn RUM nicht verfuegbar ist oder der Tag vor dem Start von Web Analytics liegt: Zonen-Anfragen (Quelle
     'cloudflare', ungefiltert inkl. Bots). Der Worker zeigt fuer Tag+URL den RUM-Wert, sobald es einen gibt."""
     from tools import cf_rum
-    token = os.environ.get("CLOUDFLARE_API_TOKEN", "").strip()
+    token = cf_rum.token()   # CF_ANALYTICS_TOKEN (nur Lesen) oder CLOUDFLARE_API_TOKEN
     if not token:
         statuses["Cloudflare"] = "Secret fehlt; keine Werte geschrieben"
         return
@@ -386,7 +386,8 @@ def cloudflare(placements, day, out, statuses):
 
 def cloudflare_zone(placements, day, out, statuses):
     """Fallback: Anfragen je Pfad aus der Zonen-Statistik (ungefiltert, auch Bots)."""
-    token = os.environ.get("CLOUDFLARE_API_TOKEN", "").strip()
+    from tools import cf_rum
+    token = cf_rum.token()
     zone = os.environ.get("CF_ZONE_ID", "").strip()
     if not token:
         statuses["Cloudflare"] = "Secret fehlt; keine Werte geschrieben"

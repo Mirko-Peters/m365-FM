@@ -6,7 +6,9 @@ GraphQL auf Kontoebene: viewer.accounts(filter:{accountTag}).rumPageloadEventsAd
 count = Seitenaufrufe, sum.visits = Besuche (Seitenaufruf mit fremdem/leerem Referer).
 
 Umgebung (nie ausgegeben):
-  CLOUDFLARE_API_TOKEN   Token mit "Account Analytics: Read" (GraphQL) und fuer die Site-Suche "Account Settings: Read"
+  CF_ANALYTICS_TOKEN     bevorzugt: eigener Lese-Token (Vorlage "Read analytics and logs": Account Analytics Read, Zone Analytics Read,
+                         Logs Read); sonst CLOUDFLARE_API_TOKEN. Die Site-Suche braucht zusaetzlich "Account Settings: Read" -
+                         fehlt das (wie in der Vorlage), muss CF_RUM_SITE_TAG gesetzt sein.
   CF_ACCOUNT_ID          optional; sonst CLOUDFLARE_ACCOUNT_ID oder R2_ACCOUNT_ID (gleiches Cloudflare-Konto)
   CF_RUM_SITE_TAG        optional; sonst Suche ueber GET /accounts/{id}/rum/site_info/list nach www.m365.fm bzw. m365.fm
 
@@ -21,6 +23,11 @@ import urllib.request
 API = "https://api.cloudflare.com/client/v4"
 RUM_START = dt.date(2026, 10, 29)   # Web Analytics fuer m365.fm aktiv seit (Angabe des Inhabers)
 HOSTS = ("www.m365.fm", "m365.fm")
+
+
+def token():
+    """Analytics-Token: CF_ANALYTICS_TOKEN (nur Lesen) vor CLOUDFLARE_API_TOKEN (Deploy-Token). Wird nie ausgegeben."""
+    return next((v for v in (os.environ.get(k, "").strip() for k in ("CF_ANALYTICS_TOKEN", "CLOUDFLARE_API_TOKEN")) if v), "")
 
 
 class RumError(RuntimeError):
@@ -76,12 +83,12 @@ class Rum:
 
     @classmethod
     def connect(cls):
-        token = os.environ.get("CLOUDFLARE_API_TOKEN", "").strip()
+        tok = token()
         account = next((v for v in (os.environ.get(k, "").strip() for k in ("CF_ACCOUNT_ID", "CLOUDFLARE_ACCOUNT_ID", "R2_ACCOUNT_ID")) if v), "")
-        if not token: raise RumError("Secret CLOUDFLARE_API_TOKEN fehlt")
+        if not tok: raise RumError("Secret CF_ANALYTICS_TOKEN (oder CLOUDFLARE_API_TOKEN) fehlt")
         if not account: raise RumError("Konto-ID fehlt (Secret CF_ACCOUNT_ID, CLOUDFLARE_ACCOUNT_ID oder R2_ACCOUNT_ID)")
         tag = os.environ.get("CF_RUM_SITE_TAG", "").strip()
-        rum = cls(token, account, tag)
+        rum = cls(tok, account, tag)
         if not tag: rum.site_tag = rum.discover_site_tag()
         return rum
 
@@ -92,7 +99,7 @@ class Rum:
             st, d = _http(f"{API}/accounts/{self.account}/rum/site_info/list?per_page=50&page={page}", headers=self._h)
             if st != 200 or not d.get("success", True):
                 raise RumError(f"Site-Liste nicht abrufbar (HTTP {st}{': ' + _errors(d) if _errors(d) else ''}) - "
-                               "Token-Recht 'Account Settings: Read' ergaenzen oder Variable CF_RUM_SITE_TAG setzen")
+                               "Variable CF_RUM_SITE_TAG setzen (der Analytics-Token hat meist kein 'Account Settings: Read')")
             sites = d.get("result") or []
             for s in sites:
                 hosts = {str(s.get("zone_name") or "").lower(), str((s.get("ruleset") or {}).get("zone_name") or "").lower(),

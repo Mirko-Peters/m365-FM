@@ -18,7 +18,7 @@ from tools import cf_rum  # noqa: E402
 import tools.sponsor_metrics as SM  # noqa: E402
 import mediakit as MK  # noqa: E402
 
-ENV = {"CLOUDFLARE_API_TOKEN": "test-token-not-real", "R2_ACCOUNT_ID": "acc123", "CF_ZONE_ID": "zone1"}
+ENV = {"CF_ANALYTICS_TOKEN": "", "CLOUDFLARE_API_TOKEN": "test-token-not-real", "R2_ACCOUNT_ID": "acc123", "CF_ZONE_ID": "zone1"}
 SITES = {"success": True, "result_info": {"page": 1, "total_pages": 1}, "result": [
     {"site_tag": "other-tag", "ruleset": {"zone_name": "example.com"}, "rules": [{"host": "example.com"}]},
     {"site_tag": "tag-apex", "ruleset": {"zone_name": "m365.fm"}, "rules": []},
@@ -38,13 +38,14 @@ DENIED = {"data": None, "errors": [{"message": "not authorized for that account"
 
 class FakeCF:
     """Antwortet wie die Cloudflare-API; merkt sich Aufrufe (ohne Header-Ausgabe)."""
-    def __init__(self, rum=RUM_DATA, sites=SITES, sites_status=200, path_counts=None):
+    def __init__(self, rum=RUM_DATA, sites=SITES, sites_status=200, path_counts=None, token="test-token-not-real"):
         self.rum, self.sites, self.sites_status, self.path_counts, self.calls = rum, sites, sites_status, path_counts or {}, []
+        self.token = token
 
     def __call__(self, url, data=None, headers=None, timeout=60):
         body = json.loads(data.decode()) if data else None
         self.calls.append((url, body))
-        assert headers["authorization"] == "Bearer test-token-not-real"
+        assert headers["authorization"] == "Bearer " + self.token, "falscher Token benutzt"
         if url.startswith(cf_rum.API + "/accounts/acc123/rum/site_info/list"): return self.sites_status, self.sites
         if url == cf_rum.API + "/graphql" and "rumPageloadEventsAdaptiveGroups" in body["query"]:
             if self.rum is DENIED: return 200, DENIED
@@ -56,8 +57,12 @@ class FakeCF:
         return 404, {}
 
 
+ZONE_TOKENS = []
+
+
 def zone_http(url, data=None, headers=None, timeout=60):
     """mediakit.http fuer den Zonen-Fallback."""
+    ZONE_TOKENS.append((headers or {}).get("authorization", ""))
     if "/graphql" in url and b"httpRequests1dGroups" in (data or b""): return 200, ZONE_DATA
     return 404, {}
 
@@ -85,6 +90,33 @@ class RumTests(unittest.TestCase):
             os.environ.pop("CF_RUM_SITE_TAG", None)
             with self.assertRaises(cf_rum.RumError) as e: cf_rum.Rum.connect()
             self.assertIn("CF_RUM_SITE_TAG", str(e.exception)); self.assertNotIn("test-token", str(e.exception))
+
+    def test_analytics_token_is_preferred_and_deploy_token_is_fallback(self):
+        with patch.dict(os.environ, {**ENV, "CF_ANALYTICS_TOKEN": "analytics-ro"}):
+            os.environ.pop("CF_RUM_SITE_TAG", None)
+            self.assertEqual(cf_rum.token(), "analytics-ro")
+            with patch.object(cf_rum, "_http", FakeCF(token="analytics-ro")):
+                self.assertEqual(cf_rum.Rum.connect().site_tag, "tag-www")
+        with patch.dict(os.environ, ENV):
+            os.environ.pop("CF_ANALYTICS_TOKEN", None)
+            self.assertEqual(cf_rum.token(), "test-token-not-real")
+        with patch.dict(os.environ, {"CF_ANALYTICS_TOKEN": "", "CLOUDFLARE_API_TOKEN": "", "R2_ACCOUNT_ID": "acc123"}):
+            with self.assertRaises(cf_rum.RumError) as e: cf_rum.Rum.connect()
+            self.assertIn("CF_ANALYTICS_TOKEN", str(e.exception))
+
+    def test_mediakit_only_analytics_token_rum_and_zone_fallback(self):
+        env = {**ENV, "CF_ANALYTICS_TOKEN": "analytics-ro"}
+        with patch.dict(os.environ, env), patch.object(cf_rum, "_http", FakeCF(token="analytics-ro")), patch.object(MK, "TODAY", dt.date(2026, 11, 5)):
+            os.environ.pop("CLOUDFLARE_API_TOKEN"); os.environ.pop("CF_RUM_SITE_TAG", None)
+            c, log = run_quiet(MK.cloudflare)
+            self.assertEqual(c["source"], "rum"); self.assertNotIn("analytics-ro", log)
+        ZONE_TOKENS.clear()
+        with patch.dict(os.environ, env), patch.object(cf_rum, "_http", FakeCF(rum=DENIED, token="analytics-ro")), \
+             patch.object(MK, "http", zone_http), patch.object(MK, "TODAY", dt.date(2026, 11, 5)):
+            os.environ.pop("CF_RUM_SITE_TAG", None)
+            c, _ = run_quiet(MK.cloudflare)
+        self.assertEqual(c["source"], "zone")
+        self.assertEqual(set(ZONE_TOKENS), {"Bearer analytics-ro"}, "auch der Zonen-Fallback nutzt den Analytics-Token")
 
     def test_clamp_and_labels(self):
         self.assertEqual(cf_rum.clamp(dt.date(2026, 10, 6), dt.date(2026, 11, 4)), (dt.date(2026, 10, 29), dt.date(2026, 11, 4), True))
@@ -153,12 +185,17 @@ class RumTests(unittest.TestCase):
                     self.assertGreater(p.stat().st_size, 1000)
 
     # ---------- Sponsor-Metriken ----------
-    def sponsor_rows(self, day, fake):
+    def sponsor_rows(self, day, fake, extra_env=None):
         placements = [{"id": "p1", "langs": "en", "refs": '{"page_paths":["/entity/a/","/entity/b/"]}'}]
         out, st = [], {}
         zone = {"data": {"viewer": {"zones": [{"httpRequestsAdaptiveGroups": [{"dimensions": {"date": day}, "count": 77}]}]}}}
-        with patch.dict(os.environ, ENV), patch.object(cf_rum, "_http", fake), patch.object(SM, "slug_rows", return_value={}), \
-             patch.object(SM, "json_request", return_value=(200, zone, {})):
+        self.zone_calls = []
+
+        def json_request(url, data=None, headers=None, timeout=40):
+            self.zone_calls.append(headers.get("Authorization"))
+            return 200, zone, {}
+        with patch.dict(os.environ, {**ENV, **(extra_env or {})}), patch.object(cf_rum, "_http", fake), patch.object(SM, "slug_rows", return_value={}), \
+             patch.object(SM, "json_request", json_request):
             os.environ.pop("CF_RUM_SITE_TAG", None)
             _, log = run_quiet(SM.cloudflare, placements, day, out, st)
         return out, st, log
@@ -172,6 +209,14 @@ class RumTests(unittest.TestCase):
         out, st, log = self.sponsor_rows("2026-11-03", FakeCF(rum=DENIED))
         self.assertEqual({r["source"] for r in out}, {"cloudflare"}); self.assertEqual({r["value"] for r in out}, {77})
         self.assertIn("ungefiltert", st["Cloudflare"]); self.assertIn("Fallback", log); self.assertNotIn("test-token", log)
+
+    def test_sponsor_metrics_use_analytics_token_for_rum_and_zone(self):
+        out, _, _ = self.sponsor_rows("2026-11-03", FakeCF(path_counts={"/entity/a/": 3}, token="analytics-ro"), {"CF_ANALYTICS_TOKEN": "analytics-ro"})
+        self.assertEqual({r["source"] for r in out}, {"cloudflare_rum"})
+        SM.rum_connection.cache_clear()
+        out, _, _ = self.sponsor_rows("2026-11-03", FakeCF(rum=DENIED, token="analytics-ro"), {"CF_ANALYTICS_TOKEN": "analytics-ro"})
+        self.assertEqual({r["source"] for r in out}, {"cloudflare"})
+        self.assertEqual(set(self.zone_calls), {"Bearer analytics-ro"})
 
     def test_sponsor_metrics_days_before_start_use_zone(self):
         fake = FakeCF(path_counts={"/entity/a/": 5})

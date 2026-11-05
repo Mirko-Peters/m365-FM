@@ -30,7 +30,8 @@ jobs:
         env:
           YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID || secrets.GOOGLE_CLIENT_ID }}
           YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET || secrets.GOOGLE_CLIENT_SECRET }}
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CF_ANALYTICS_TOKEN: ${{ secrets.CF_ANALYTICS_TOKEN }}   # bevorzugt: Lese-Token "Read analytics and logs"
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}   # Fallback, falls CF_ANALYTICS_TOKEN fehlt
           CF_ZONE_ID: ${{ secrets.CF_ZONE_ID }}   # nur Fallback (Zonen-Statistik, ungefiltert)
           # Cloudflare Web Analytics (RUM, tools/cf_rum.py): Konto-ID aus vorhandenen Secrets, siteTag optional (sonst automatisch gesucht)
           CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID || secrets.CLOUDFLARE_ACCOUNT_ID || secrets.R2_ACCOUNT_ID }}
