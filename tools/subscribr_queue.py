@@ -48,7 +48,20 @@ def credits(token):
 
 
 def main():
-    ap = argparse.ArgumentParser(); ap.add_argument("--dry-run", action="store_true"); a = ap.parse_args()
+    ap = argparse.ArgumentParser(); ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--check", action="store_true", help="nur Zugang prüfen (Credits lesen, Skriptliste lesen), nichts anlegen")
+    a = ap.parse_args()
+    if a.check:
+        token = os.environ.get("SUBSCRIBR_API_TOKEN", "").strip()
+        if not token:
+            print("::error::Secret SUBSCRIBR_API_TOKEN fehlt"); return 1
+        st, j = call("GET", "/team/credits", token)
+        print("Credits-Abfrage:", st, "Stand:", (j.get("credits") or {}).get("credits_remaining"))
+        st2, _ = call("GET", "/channels/63800/scripts?per_page=1", token)
+        print("Skripte lesen (scripts:read):", st2)
+        ok = st == 200 and st2 == 200
+        print("Zugang OK" if ok else "::error::Zugang fehlerhaft (401 = Token ungültig, 403 = Recht fehlt)")
+        return 0 if ok else 1
     q = json.loads(QUEUE.read_text("utf-8"))
     floor = int(q.get("floor", 700)); d = q.get("defaults", {})
     plan = {}

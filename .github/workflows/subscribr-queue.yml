@@ -4,6 +4,9 @@ name: Subscribr-Skripte nachlegen (alle 3 Tage)
 on:
   schedule:
     - cron: "17 5 */3 * *"
+  push:
+    branches: [claude/subscribr-queue]   # nur zum Test des Zugangs auf dem Branch (Schritt "Zugang prüfen"); nach dem Merge entfernen
+    paths: [".github/workflows/subscribr-queue.yml", "tools/subscribr_queue.py"]
   workflow_dispatch:
     inputs:
       dry_run:
@@ -21,12 +24,18 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: "3.12" }
+      - name: Zugang prüfen (nur auf dem Test-Branch)
+        if: ${{ github.event_name == 'push' }}
+        env:
+          SUBSCRIBR_API_TOKEN: ${{ secrets.SUBSCRIBR_API_TOKEN }}
+        run: python tools/subscribr_queue.py --check
       - name: Skripte anlegen
+        if: ${{ github.event_name != 'push' }}
         env:
           SUBSCRIBR_API_TOKEN: ${{ secrets.SUBSCRIBR_API_TOKEN }}
         run: python tools/subscribr_queue.py ${{ inputs.dry_run && '--dry-run' || '' }}
       - name: Stand speichern
-        if: ${{ !inputs.dry_run }}
+        if: ${{ github.event_name != 'push' && !inputs.dry_run }}
         run: |
           git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
           git add data/subscribr_queue.json
