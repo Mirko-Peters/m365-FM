@@ -134,5 +134,279 @@
     "why": "LDAP-Schreibzugriff und Schemaänderungen sind feste Grenzen des verwalteten Dienstes. Dann ist ein selbst betriebenes Active Directory die bessere Wahl."
    }
   ]
+ },
+ "es": {
+  "html": "<p>Imagina que trasladas una aplicación empresarial antigua de un servidor de tu oficina a una máquina virtual de Azure. La aplicación ya está en la nube, pero sigue pidiendo un dominio de Windows: quiere unirse a él, buscar personas mediante LDAP, iniciar sesión con Kerberos y aplicar directivas de grupo.</p>\n<p>Muchos asumen que Microsoft Entra ID sustituye todas las funciones de Active Directory, pero no es así. Este artículo explica dónde encajan Entra ID, Active Directory y Microsoft Entra Domain Services, cuándo conviene usar este último y qué límites tiene.</p>\n\n<h2>Qué hace bien Microsoft Entra ID (y qué no cubre)</h2>\n<p>Entra ID es la recepción de tus servicios en la nube. Sabe quién eres, verifica tu inicio de sesión y decide si puedes entrar a Microsoft 365, Teams, SharePoint o una aplicación empresarial en la nube. Inicias sesión una vez y te mueves entre servicios sin escribir la contraseña una y otra vez. También puede pedir una segunda verificación mediante autenticación multifactor y tener en cuenta el dispositivo, el lugar de conexión y las reglas de acceso de la empresa.</p>\n<p>Para una aplicación moderna este patrón funciona muy bien. Abres el navegador, la aplicación te envía a Entra ID, inicias sesión (quizá apruebas un aviso en el teléfono) y Entra ID entrega a la aplicación un mensaje de inicio de sesión seguro. La aplicación lo lee y te deja entrar. No hace falta unir ningún dominio, ni un Windows Server antiguo, ni que la aplicación consulte un directorio corporativo clásico.</p>\n<h3>Por qué las aplicaciones antiguas son distintas</h3>\n<p>Las aplicaciones heredadas crecieron en otro mundo. Piensa en una aplicación financiera que lleva años en un Windows Server, con usuarios que inician sesión desde PC unidos a un dominio. Esa aplicación:</p>\n<ul>\n<li>busca datos de empleados mediante LDAP, la forma habitual en que el software antiguo consulta un directorio corporativo;</li>\n<li>puede usar Kerberos, un método de inicio de sesión de Windows que permite que los sistemas confíen entre sí;</li>\n<li>puede depender de la directiva de grupo, el conjunto de reglas que controla la configuración de los equipos Windows.</li>\n</ul>\n<p>Esa aplicación no sabe leer un mensaje moderno de inicio de sesión. Espera encontrar un dominio de Windows tradicional en la red y, si no lo encuentra, puede fallar al iniciar sesión a los usuarios o directamente dejar de funcionar. Es como un enchufe nuevo que no sirve para una máquina antigua: hay electricidad, pero la conexión no encaja.</p>\n\n<h2>El problema de las aplicaciones heredadas al migrar a Azure</h2>\n<p>Supón que una empresa traslada la aplicación financiera y su base de datos a máquinas virtuales de Azure. Los servidores se han movido, pero la necesidad antigua sigue ahí. Hay dos caminos clásicos.</p>\n<h3>Opción 1: mantener Active Directory en la oficina y conectar Azure por VPN</h3>\n<p>La aplicación en Azure envía sus solicitudes por un túnel de red privado cada vez que necesita el dominio. Puede funcionar, pero la aplicación pasa a depender de que el enlace de red y el controlador de dominio local sigan disponibles. Si la conexión falla, la aplicación en la nube también tiene un problema.</p>\n<h3>Opción 2: crear tus propios controladores de dominio en Azure</h3>\n<p>Un controlador de dominio es el servidor que ejecuta el dominio de Active Directory tradicional y gestiona el directorio, los inicios de sesión y otras tareas. Esta opción también funciona, pero tu equipo se hace cargo de más servidores: actualizarlos, supervisarlos, hacer copias de seguridad, preparar planes de recuperación, mantener los controladores sincronizados y proteger las cuentas de administrador que controlan el dominio. Para algunas empresas ese control tiene sentido; para otras es trabajo adicional solo para mantener contenta a una aplicación antigua.</p>\n<p>La brecha es estrecha pero real: una aplicación vive en Azure y todavía habla el idioma antiguo de Active Directory.</p>\n\n<h2>Qué es Microsoft Entra Domain Services</h2>\n<p>Microsoft Entra Domain Services es un dominio de Windows administrado que se ejecuta dentro de tu red de Azure. Los controladores de dominio funcionan en segundo plano y los gestiona por completo Microsoft, mientras que tus máquinas virtuales y tus aplicaciones antiguas usan los servicios de dominio que conocen.</p>\n<p>Si piensas en tu entorno en la nube como un edificio, Entra ID es la recepción principal, donde se verifica quién eres y se aplican las reglas de la empresa. Domain Services sería la oficina trasera, donde los sistemas antiguos encuentran un directorio de estilo clásico que entiende su lenguaje. Tú no creas los controladores, no inicias sesión en ellos por escritorio remoto, no decides cuántos ejecutar, no aplicas parches de Windows ni gestionas la conexión entre ellos. Tu trabajo consiste en conectar al dominio administrado las máquinas virtuales y aplicaciones adecuadas.</p>\n<h3>Servicios que ofrece</h3>\n<ul>\n<li><strong>Unión al dominio:</strong> una máquina virtual Windows puede unirse al dominio.</li>\n<li><strong>LDAP:</strong> la aplicación puede buscar personas, grupos y detalles del directorio.</li>\n<li><strong>Kerberos y NTLM:</strong> métodos de inicio de sesión de Windows que algunas aplicaciones empresariales antiguas todavía necesitan.</li>\n<li><strong>DNS:</strong> ayuda a los sistemas a encontrar el servidor correcto por nombre y no por una cadena de números.</li>\n<li><strong>Directiva de grupo:</strong> permite aplicar ciertas configuraciones de Windows a equipos y usuarios del dominio administrado.</li>\n</ul>\n<p>Puedes imaginarlo como un mostrador de traducción: la aplicación pregunta en el viejo lenguaje de Windows quién es un usuario, si un servidor puede confiar en otro, dónde está la base de datos o qué configuración debe usar un equipo, y Domain Services responde como la aplicación espera.</p>\n<h3>La identidad fluye en una sola dirección</h3>\n<p>Domain Services no crea una segunda lista principal de empleados. El registro de identidad principal permanece en Entra ID, y los usuarios y grupos se copian al dominio administrado para que la aplicación antigua pueda verlos en un formato que entiende. Si la empresa tiene además Active Directory local, las identidades pueden llegar a Entra ID desde allí antes de copiarse a Domain Services.</p>\n<p>La dirección importa: los datos fluyen hacia Domain Services y no de vuelta. Si un usuario procede de Entra ID, se gestiona en Entra ID; si procede del Active Directory local, se gestiona allí. Así el dominio administrado no se convierte en un segundo archivador con versiones distintas de la misma persona.</p>\n<h3>Contraseñas y red</h3>\n<p>Aquí tropiezan muchos durante la configuración. El inicio de sesión moderno en la nube y el inicio de sesión antiguo de Windows no usan las contraseñas igual por detrás. Para que Kerberos y NTLM funcionen, Domain Services necesita una forma protegida de los datos de contraseña compatible con esos métodos (Microsoft nunca guarda la contraseña como texto sin protección). Para los usuarios exclusivos de la nube, esto suele significar que deben cambiar su contraseña tras habilitar el servicio. Hasta entonces, el usuario puede entrar a Microsoft 365 sin problemas y fallar al usar el dominio de estilo antiguo. Lo que falta no es la cuenta, sino esa forma de contraseña.</p>\n<p>Además, el servicio funciona dentro de una red virtual de Azure. Las máquinas virtuales necesitan acceso de red a esa red virtual y deben usar la configuración DNS del dominio administrado para poder encontrarlo. No es un directorio público accesible desde cualquier dispositivo de Internet, sino un servicio de dominio privado para cargas de trabajo conectadas a la red de Azure adecuada.</p>\n\n<h2>Entra ID, Active Directory y Domain Services: tres trabajos distintos</h2>\n<p>Los nombres suenan parecido y es fácil tomarlos por versiones del mismo producto, pero cada uno cubre una parte diferente de la identidad.</p>\n<ul>\n<li><strong>Entra ID</strong> gestiona la identidad en la nube: verifica el inicio de sesión en Microsoft 365, Teams, SharePoint o aplicaciones modernas, admite autenticación multifactor y reglas de acceso (por ejemplo, una verificación más estricta desde un dispositivo desconocido). Las aplicaciones modernas no necesitan estar en su misma red, porque usan métodos de inicio de sesión basados en la web.</li>\n<li><strong>Active Directory Domain Services</strong> es el dominio tradicional de Windows que muchas empresas ejecutan en oficinas, centros de datos o salas de servidores. La empresa posee los controladores, decide cómo configurarlos y gestiona el dominio de principio a fin. Ese control conlleva responsabilidad.</li>\n<li><strong>Microsoft Entra Domain Services</strong> se sitúa entre ambos mundos: ofrece a las cargas de trabajo de Azure un dominio de Windows administrado cuando necesitan el comportamiento antiguo, y Microsoft se ocupa de los controladores.</li>\n</ul>\n<p>Otra comparación útil es la del archivador: Entra ID guarda el registro principal de los empleados; Domain Services entrega a las aplicaciones antiguas de Azure una copia compatible con el formato que comprenden, de modo que no hay que reconstruir la aplicación solo por haberla movido a Azure.</p>\n<h3>Empresa solo en la nube</h3>\n<p>Una empresa que nunca ha ejecutado controladores de dominio locales, donde todos inician sesión en Microsoft 365 con Entra ID, no necesita crear un Active Directory local solo para una aplicación de Windows antigua. Puede usar Domain Services para las máquinas virtuales que necesitan comportamiento de dominio, mientras el resto sigue con Entra ID.</p>\n<h3>Empresa híbrida</h3>\n<p>Si la empresa ya ejecuta Active Directory en su oficina con usuarios y grupos sincronizados con Entra ID, esas personas pueden aparecer en Domain Services para las cargas de trabajo de Azure. Domain Services no sustituye al dominio local: la oficina puede seguir necesitándolo para PC locales, servidores locales, sistemas de fábrica o aplicaciones que permanecen en las instalaciones. Tampoco convierte a Entra ID en un Active Directory completo: sigue siendo un servicio de identidad en la nube.</p>\n\n<h2>Cuándo encaja Domain Services y cuándo no</h2>\n<p>Empieza por la aplicación, no por el nombre del producto.</p>\n<h3>Escenarios en los que encaja</h3>\n<ul>\n<li>Una aplicación antigua que usa LDAP y se traslada a Azure: sigue usando lo que ya entiende, sin una reescritura costosa del código de inicio de sesión.</li>\n<li>Un grupo de máquinas virtuales que deben actuar como equipos de dominio normales: inicio de sesión del personal con su cuenta de trabajo, cuentas de servicio para conectarse a otros sistemas como una base de datos, directiva de grupo.</li>\n<li>Servicios de escritorio remoto con escritorios o aplicaciones de Windows compartidos en Azure, que suelen depender de un dominio para el inicio de sesión y la gestión de equipos.</li>\n<li>Aplicaciones de varias capas (servidor web, servidor de aplicaciones y base de datos) en las que el servidor de aplicaciones debe demostrar su identidad antes de que la base de datos acepte la conexión mediante cuentas de servicio de Windows.</li>\n</ul>\n<h3>Escenarios en los que no es la opción</h3>\n<p>No elijas Domain Services solo porque usas Azure. Una aplicación nueva debe iniciar sesión directamente con Entra ID si admite métodos modernos, porque así aprovecha las reglas de acceso en la nube y la autenticación multifactor. Domain Services ayuda a las aplicaciones que hablan el lenguaje antiguo; no es motivo para enseñar ese lenguaje a las nuevas.</p>\n<p>Hay además límites que conviene comprobar de antemano:</p>\n<ul>\n<li>aplicaciones que necesitan acceso de escritura LDAP, es decir, que crean o modifican entradas del directorio;</li>\n<li>aplicaciones que necesitan cambiar el esquema de Active Directory (el conjunto de campos que define lo que el directorio puede almacenar);</li>\n<li>equipos que necesitan control total: acceso directo a los controladores, derechos de administrador de dominio o un diseño de directorio complejo propio.</li>\n</ul>\n<p>En esos casos lo indicado es ejecutar Active Directory por tu cuenta, ya sea en las instalaciones o en máquinas virtuales en Azure.</p>\n\n<h2>Las contrapartidas de un servicio administrado</h2>\n<p>Microsoft ejecuta los controladores de dominio, los mantiene sincronizados, aplica parches y se encarga de la disponibilidad. No tienes que planificar dónde se ubica cada controlador ni cómo recuperarlo tras un fallo. A cambio, renuncias a parte del control: no puedes acceder por escritorio remoto a los controladores y no obtienes derechos de administrador de dominio ni de empresa.</p>\n<p>Microsoft proporciona el grupo Entra Domain Services Administrators. Las personas que deban administrar el dominio se añaden a ese grupo y trabajan desde una máquina virtual de administración unida al dominio, con las herramientas conocidas de Active Directory. Desde allí puedes:</p>\n<ul>\n<li>crear tus propias unidades organizativas, algo así como carpetas para objetos como equipos o cuentas de servicio;</li>\n<li>administrar registros DNS;</li>\n<li>crear y aplicar directivas de grupo para la configuración compatible;</li>\n<li>gestionar los equipos que se unen al dominio, que suele ser la razón principal de existir del servicio.</li>\n</ul>\n<p>No puedes añadir más controladores de dominio, cambiar el esquema ni tratar el dominio administrado como un lugar donde los cambios regresan a Entra ID. Son barandillas de protección: eliminan trabajo, pero te impiden tocar lo que gestiona Microsoft.</p>\n\n<h2>Errores frecuentes y Stolpersteine</h2>\n<ul>\n<li><strong>Editar usuarios en el dominio administrado.</strong> Alguien ve un usuario allí y lo cambia pensando que será permanente; ese cambio no llega al registro de la empresa en Entra ID ni al Active Directory local. Gestiona usuarios y grupos en su origen: Entra ID en una empresa solo en la nube, el Active Directory local sincronizado en una híbrida.</li>\n<li><strong>Olvidar el cambio de contraseña.</strong> Los usuarios solo en la nube suelen tener que cambiarla tras habilitar el servicio; sin ello fallan en el dominio antiguo aunque entren a Microsoft 365.</li>\n<li><strong>Ignorar la red.</strong> Las máquinas virtuales necesitan acceso a la red virtual y deben usar el DNS del dominio administrado.</li>\n<li><strong>Usarlo como directorio general.</strong> Debe dar servicio solo a las cargas de trabajo que lo necesitan, dentro de la red de Azure, con acceso de red limitado, la máquina de administración protegida y permisos de administrador solo para quien los necesite.</li>\n<li><strong>No comprobar los límites.</strong> Escritura LDAP, cambios de esquema o necesidad de control total descartan este servicio.</li>\n</ul>\n\n<h2>Un caso de migración: aplicación financiera a Azure</h2>\n<p>Una empresa financiera ejecuta en su oficina una aplicación antigua que busca empleados mediante LDAP, usa Kerberos para iniciar sesión y autentica su servidor con una cuenta de servicio para acceder a datos financieros. Quiere mover aplicación y base de datos a máquinas virtuales de Azure. Si mantiene la conexión con el dominio de la oficina por VPN, depende a diario de esa red y de los controladores locales. Si despliega nuevos controladores en Azure, mantiene más tráfico dentro de Azure, pero añade servidores Windows que hay que parchear, supervisar, respaldar y recuperar. Si sus usuarios y grupos ya se sincronizan con Entra ID, una tercera vía es habilitar Microsoft Entra Domain Services y conectar la red virtual de Azure al dominio administrado.</p>\n\n<h2>Takeaways prácticos</h2>\n<ul>\n<li>Empieza siempre por la aplicación: ¿necesita el lenguaje antiguo de Active Directory o puede usar el inicio de sesión moderno con Entra ID? Si puede, empieza por Entra ID.</li>\n<li>Domain Services encaja con aplicaciones que usan LDAP, Kerberos, NTLM, DNS o directiva de grupo y que se trasladan a Azure sin reescribirse.</li>\n<li>Los datos de identidad fluyen solo hacia Domain Services; administra usuarios y grupos en Entra ID o en el Active Directory local de origen.</li>\n<li>Los usuarios solo en la nube suelen tener que cambiar su contraseña tras habilitar el servicio.</li>\n<li>El dominio es privado: las máquinas virtuales necesitan acceso a la red virtual de Azure y deben usar su configuración DNS.</li>\n<li>Descártalo si necesitas escritura LDAP, cambios de esquema, acceso a los controladores o derechos de administrador de dominio.</li>\n<li>Administra el dominio con el grupo Entra Domain Services Administrators desde una máquina virtual de administración unida al dominio, y protege esa máquina.</li>\n</ul>\n\n<h2>Conclusión</h2>\n<p>Entra ID, Active Directory y Microsoft Entra Domain Services no son versiones del mismo producto, sino tres piezas con trabajos distintos: Entra ID gestiona los inicios de sesión modernos, Active Directory es el dominio que la empresa ejecuta por sí misma y Domain Services ofrece un dominio de Windows administrado para cargas de trabajo heredadas en Azure. Si una aplicación antigua necesita el comportamiento de dominio clásico pero no quieres encargarte de los controladores, es una opción muy sólida, siempre que aceptes sus límites. Si necesitas control total sobre el dominio, tu camino es ejecutar Active Directory por tu cuenta.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Apps heredadas en Azure con Entra Domain Services",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Analiza la aplicación",
+     "text": "Comprueba si usa LDAP, Kerberos, NTLM o directiva de grupo, o si admite inicio de sesión moderno."
+    },
+    {
+     "kopf": "Prioriza Entra ID",
+     "text": "Si la aplicación puede usar el inicio de sesión moderno, empieza por Entra ID."
+    },
+    {
+     "kopf": "Verifica los límites",
+     "text": "Escritura LDAP, cambios de esquema o control total del dominio descartan Domain Services."
+    },
+    {
+     "kopf": "Habilita y conecta",
+     "text": "Activa Domain Services y conecta las máquinas virtuales a la red virtual con su DNS."
+    },
+    {
+     "kopf": "Cambia contraseñas",
+     "text": "Los usuarios solo en la nube suelen cambiar su contraseña para generar la forma protegida necesaria."
+    },
+    {
+     "kopf": "Gestiona en el origen",
+     "text": "La identidad fluye hacia Domain Services; edita usuarios y grupos en Entra ID o en el AD local."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "¿Microsoft Entra ID sustituye a Active Directory?",
+    "a": "No. Entra ID es un servicio de identidad en la nube que verifica inicios de sesión en Microsoft 365 y aplicaciones modernas, con autenticación multifactor y reglas de acceso. No es un Active Directory completo. Las aplicaciones antiguas que esperan un dominio de Windows, LDAP, Kerberos o directiva de grupo necesitan otra solución."
+   },
+   {
+    "q": "¿Qué es Microsoft Entra Domain Services y para qué sirve?",
+    "a": "Es un dominio de Windows administrado que se ejecuta dentro de tu red de Azure. Microsoft gestiona los controladores de dominio, y tus máquinas virtuales y aplicaciones antiguas usan unión al dominio, LDAP, Kerberos, NTLM, DNS y directiva de grupo sin que tengas que mantener servidores."
+   },
+   {
+    "q": "¿Cuándo no conviene usar Microsoft Entra Domain Services?",
+    "a": "No conviene para aplicaciones nuevas que admiten inicio de sesión moderno con Entra ID, ni cuando se necesita escritura LDAP, cambios de esquema o control total, como derechos de administrador de dominio. En esos casos, ejecuta tu propio Active Directory en las instalaciones o en máquinas virtuales de Azure."
+   },
+   {
+    "q": "¿Por qué un usuario entra a Microsoft 365 pero falla en el dominio administrado de Azure?",
+    "a": "Kerberos y NTLM necesitan una forma protegida de la contraseña compatible con ellos. Los usuarios solo en la nube suelen tener que cambiar su contraseña tras habilitar el servicio. Hasta entonces entran a Microsoft 365, pero fallan en el dominio; lo que falta no es la cuenta."
+   }
+  ],
+  "infos": [
+   {
+    "titulo": "",
+    "titel": "Entra ID frente a Domain Services",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Microsoft Entra ID",
+     "punkte": [
+      "Gestiona la identidad en la nube y es el registro principal",
+      "Verifica el inicio de sesión en Microsoft 365, Teams y SharePoint",
+      "Admite autenticación multifactor y reglas de acceso",
+      "Usa métodos de inicio de sesión basados en la web",
+      "Sigue siendo un servicio de identidad, no un Active Directory completo"
+     ]
+    },
+    "rechts": {
+     "titel": "Microsoft Entra Domain Services",
+     "punkte": [
+      "Es un dominio de Windows administrado dentro de la red de Azure",
+      "Ofrece unión al dominio, LDAP, Kerberos, NTLM, DNS y directiva de grupo",
+      "Microsoft gestiona controladores, parches y disponibilidad",
+      "Recibe una copia de usuarios y grupos desde Entra ID",
+      "No permite escritura LDAP, cambios de esquema ni administrador de dominio"
+     ]
+    }
+   },
+   {
+    "titel": "Antes de elegir Domain Services",
+    "typ": "checkliste",
+    "punkte": [
+     "Empieza por la aplicación, no por el nombre del producto",
+     "Comprueba si la aplicación nueva admite inicio de sesión moderno con Entra ID",
+     "Verifica si la aplicación necesita acceso de escritura LDAP",
+     "Confirma que no tengas que cambiar el esquema de Active Directory",
+     "Asegura que no necesitas derechos de administrador de dominio ni acceso a controladores",
+     "Pide a los usuarios solo en la nube que cambien su contraseña",
+     "Conecta las máquinas virtuales a la red virtual y usa el DNS del dominio administrado"
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "¿Qué ofrece Microsoft Entra Domain Services a una aplicación antigua trasladada a Azure?",
+    "opts": [
+     "Un dominio de Windows administrado con LDAP, Kerberos, NTLM, DNS y directiva de grupo",
+     "Un sustituto completo de Active Directory con derechos de administrador de empresa",
+     "Un directorio público accesible desde cualquier dispositivo conectado a Internet",
+     "Un método de inicio de sesión web exclusivo para aplicaciones modernas"
+    ],
+    "a": 0,
+    "why": "Domain Services es un dominio administrado dentro de la red de Azure, con los servicios clásicos que las aplicaciones heredadas necesitan."
+   },
+   {
+    "q": "¿Cómo fluye la identidad entre Entra ID y Domain Services?",
+    "opts": [
+     "En ambos sentidos, de modo que los cambios en el dominio vuelven a Entra ID",
+     "Los datos van de Entra ID a Domain Services y no al revés",
+     "Domain Services guarda el registro principal y Entra ID mantiene una copia",
+     "No fluye nada: cada servicio crea su propia lista de empleados independiente"
+    ],
+    "a": 1,
+    "why": "Usuarios y grupos se copian hacia el dominio administrado; los cambios hechos allí no regresan, por eso se gestionan en su origen."
+   },
+   {
+    "q": "¿Por qué un usuario solo en la nube puede entrar a Microsoft 365 pero fallar en el dominio administrado?",
+    "opts": [
+     "Porque su cuenta de usuario no se ha copiado al dominio administrado",
+     "Porque Microsoft guarda las contraseñas como texto sin protección en Domain Services",
+     "Porque Domain Services bloquea a todos los usuarios que no son administradores",
+     "Porque falta la forma de contraseña compatible con Kerberos y NTLM; debe cambiarla"
+    ],
+    "a": 3,
+    "why": "La cuenta existe; lo que falta es la forma protegida de la contraseña compatible con Kerberos y NTLM, que se genera al cambiarla."
+   },
+   {
+    "q": "¿En qué caso NO es adecuado elegir Domain Services?",
+    "opts": [
+     "Cuando varias máquinas virtuales deben unirse al dominio y recibir directivas de grupo",
+     "Cuando una aplicación antigua solo necesita consultas LDAP de lectura",
+     "Cuando una aplicación necesita acceso de escritura LDAP o cambiar el esquema",
+     "Cuando se usan servicios de escritorio remoto que dependen de un dominio"
+    ],
+    "a": 2,
+    "why": "Escritura LDAP, cambios de esquema o control total exigen ejecutar tu propio Active Directory, en local o en máquinas virtuales de Azure."
+   }
+  ]
+ },
+ "fr": {
+  "html": "<p>Vous déplacez une ancienne application métier d'un serveur de bureau vers une machine virtuelle Azure. Elle est désormais dans le cloud, mais elle réclame toujours un domaine Windows : elle veut le rejoindre, interroger les utilisateurs via LDAP, les authentifier avec Kerberos et appliquer des stratégies de groupe.</p>\n<p>On suppose souvent qu'Entra ID remplace toutes les fonctions d'Active Directory. Ce n'est pas le cas. Cet article explique où se situent Entra ID, Active Directory et Microsoft Entra Domain Services, quand ce service géré est pertinent et quel détail change la façon de l'administrer : les informations d'identité ne circulent que dans un seul sens.</p>\n\n<h2>Pourquoi Entra ID seul ne suffit pas pour les applications héritées</h2>\n<p>Entra ID est la réception de vos services cloud. Il sait qui vous êtes, vérifie votre connexion et décide si vous pouvez accéder à Microsoft 365, Teams, SharePoint ou à une application métier dans le cloud. Grâce à l'authentification unique, vous passez d'un service à l'autre sans retaper votre mot de passe. Entra ID peut aussi exiger une seconde vérification (authentification multifacteur) et tenir compte de l'appareil, du lieu de connexion et des règles d'accès de l'entreprise.</p>\n<p>Pour une application moderne, le fonctionnement est simple : elle vous redirige vers Entra ID, vous vous connectez, puis Entra ID lui transmet en coulisses un message de connexion sécurisé. L'application le lit et vous laisse entrer. Aucune jonction à un domaine, aucun ancien Windows Server, aucun annuaire d'entreprise classique n'est nécessaire.</p>\n<p>Les applications plus anciennes sont nées dans un autre monde. Prenons une application financière qui tourne depuis des années sur Windows Server, avec des utilisateurs sur des PC joints au domaine. Elle recherche les données des employés via LDAP, peut utiliser Kerberos pour l'authentification et s'appuyer sur la stratégie de groupe. Elle ne sait pas lire un message de connexion cloud moderne : elle s'attend à trouver un domaine Windows traditionnel sur le réseau. Sans lui, elle peut échouer à connecter les utilisateurs, ne pas trouver son compte de service ou refuser de démarrer. C'est une prise électrique moderne face à une vieille fiche : le courant est là, mais la connexion ne s'adapte pas.</p>\n<h3>Les deux solutions classiques et leurs limites</h3>\n<ul>\n<li><strong>Garder Active Directory au bureau et relier Azure par VPN.</strong> Cela fonctionne, mais l'application dépend de la liaison réseau et de la disponibilité du contrôleur de domaine sur site. Si la connexion a un problème, l'application cloud en a aussi.</li>\n<li><strong>Créer ses propres machines virtuelles de contrôleurs de domaine dans Azure.</strong> Cela fonctionne également, mais il faut les mettre à jour, les surveiller, les sauvegarder, prévoir des plans de récupération et la synchronisation entre contrôleurs, et protéger les comptes administrateurs puissants.</li>\n</ul>\n<p>Pour certaines entreprises, ce contrôle est justifié. Pour d'autres, c'est un surcroît de travail uniquement pour satisfaire une application ancienne.</p>\n\n<h2>Microsoft Entra Domain Services : un domaine Windows géré dans Azure</h2>\n<p>Microsoft Entra Domain Services est un domaine Windows géré qui s'exécute au sein de votre réseau Azure. Les contrôleurs de domaine tournent en arrière-plan et sont entièrement gérés par Microsoft. Vos machines virtuelles Azure et vos applications anciennes y retrouvent les services de domaine qu'elles connaissent.</p>\n<p>Pour reprendre l'image de l'immeuble de bureaux : Entra ID est la réception, tandis que Domain Services est un bureau verrouillé à l'arrière. Les anciens systèmes n'ont pas à passer par la réception. Ils ont besoin d'un annuaire à l'ancienne, à proximité, qui comprenne leur langage.</p>\n<h3>Ce que vous n'avez plus à faire, et ce que vous obtenez</h3>\n<p>Vous ne créez pas les contrôleurs de domaine, ne vous y connectez pas en bureau à distance, ne décidez pas combien en exécuter, ne les mettez pas à jour et ne gérez pas la connexion entre eux. Votre rôle consiste à connecter au domaine géré les machines virtuelles et les applications concernées. Elles peuvent alors utiliser :</p>\n<ul>\n<li>la jonction au domaine pour les machines virtuelles Windows ;</li>\n<li>LDAP pour rechercher des utilisateurs et des détails d'annuaire ;</li>\n<li>Kerberos, que les anciennes applications métiers attendent souvent quand un serveur doit en approuver un autre ;</li>\n<li>NTLM, une autre ancienne méthode de connexion Windows dont certaines applications ont encore besoin ;</li>\n<li>le DNS, pour trouver un serveur par son nom ;</li>\n<li>les stratégies de groupe, pour appliquer certains paramètres Windows aux ordinateurs et aux utilisateurs du domaine géré.</li>\n</ul>\n<p>Voyez-le comme un bureau de traduction : l'application pose ses questions dans l'ancien langage Windows (qui est cet utilisateur, ce serveur peut-il faire confiance à cet autre, où est la base de données, quel paramètre appliquer) et reçoit le type de réponse attendu.</p>\n<h3>Une copie compatible, pas un second annuaire</h3>\n<p>Domain Services ne crée pas une seconde liste principale d'employés. L'enregistrement d'identité principal reste dans Entra ID. Les utilisateurs et groupes y sont copiés pour que l'ancienne application puisse les voir sous une forme qu'elle comprend. Si votre entreprise possède aussi un Active Directory sur site, les identités peuvent d'abord y être synchronisées vers Entra ID, puis copiées dans Domain Services.</p>\n<p>Le service fonctionne au sein d'un réseau virtuel Azure (VNet). Les machines virtuelles doivent y avoir accès et utiliser les paramètres DNS du domaine géré pour le localiser. Ce n'est pas un annuaire public joignable depuis Internet, mais un service de domaine privé pour les charges de travail connectées au bon réseau.</p>\n\n<h2>Entra ID, Active Directory et Domain Services : trois rôles distincts</h2>\n<p>Les noms se ressemblent, mais il ne s'agit pas de versions différentes du même produit.</p>\n<ul>\n<li><strong>Entra ID</strong> gère l'identité cloud : connexions à Microsoft 365, Teams, SharePoint et aux applications modernes, authentification multifacteur, règles d'accès. Il s'appuie sur des méthodes de connexion basées sur le web, sans exiger d'être sur le même réseau.</li>\n<li><strong>Active Directory Domain Services</strong> est le domaine Windows traditionnel que l'entreprise exploite dans son bureau, son centre de données ou sa salle serveur. Elle possède les contrôleurs de domaine, choisit leur configuration et gère tout, avec les responsabilités que cela implique.</li>\n<li><strong>Entra Domain Services</strong> se situe entre les deux : un domaine Windows géré pour les charges de travail Azure qui ont besoin des fonctions d'Active Directory, Microsoft se chargeant de la partie contrôleurs de domaine.</li>\n</ul>\n<h3>Entreprise 100 % cloud</h3>\n<p>Une entreprise qui n'a jamais eu de contrôleur de domaine local et qui souhaite exécuter une application Windows ancienne sur des machines virtuelles Azure n'a pas besoin de créer un Active Directory sur site pour cela. Elle utilise Domain Services pour ces machines, tandis que le reste de l'organisation continue de s'appuyer sur Entra ID.</p>\n<h3>Entreprise hybride</h3>\n<p>Une entreprise hybride dispose déjà d'un Active Directory interne dont les utilisateurs et groupes sont synchronisés vers Entra ID. Entra ID fournit ensuite la copie compatible à Domain Services pour les charges de travail Azure. Domain Services ne remplace pas le domaine d'origine : le bureau peut toujours en avoir besoin pour les PC locaux, les serveurs locaux, les systèmes d'usine ou les applications restées sur site. Et Entra ID ne devient pas pour autant un Active Directory complet : il reste un service d'identité cloud.</p>\n\n<h2>Quand choisir Entra Domain Services (et quand l'éviter)</h2>\n<p>Partez de l'application, pas du nom du produit.</p>\n<h3>Les cas où le service est adapté</h3>\n<ul>\n<li><strong>Application ancienne reposant sur LDAP</strong> que vous voulez migrer vers Azure : elle continue d'utiliser ce qu'elle connaît, sans réécriture. C'est précieux quand elle fonctionne encore, que l'entreprise en a besoin et que réécrire le code de connexion coûterait trop de temps ou d'argent.</li>\n<li><strong>Machines virtuelles devant se comporter comme des ordinateurs de domaine</strong> : connexion à Windows avec le compte professionnel, comptes de service pour accéder à une base de données, stratégies de groupe.</li>\n<li><strong>Services Bureau à distance</strong> : bureaux Windows partagés ou applications dans Azure qui dépendent d'un domaine pour la connexion et la gestion des ordinateurs.</li>\n<li><strong>Applications à plusieurs niveaux</strong> (serveur web, serveur d'application, base de données) : quand la confiance entre le serveur d'application et la base repose sur des comptes de service Windows, Domain Services maintient ces connexions après la migration.</li>\n</ul>\n<h3>Les cas où il ne l'est pas</h3>\n<p>Ne choisissez pas Domain Services simplement parce que vous utilisez Azure. Une nouvelle application qui prend en charge les méthodes de connexion modernes doit s'authentifier directement via Entra ID : elle bénéficie des règles d'accès cloud et de l'authentification multifacteur. Inutile d'apprendre l'ancien langage à un logiciel neuf.</p>\n<p>Vérifiez aussi les limites strictes :</p>\n<ul>\n<li>l'application a besoin d'un <strong>accès en écriture LDAP</strong> pour créer ou modifier des entrées d'annuaire ;</li>\n<li>elle doit <strong>modifier le schéma</strong> Active Directory, c'est-à-dire l'ensemble des champs que l'annuaire peut stocker ;</li>\n<li>votre équipe exige un <strong>contrôle total</strong> : accès direct au contrôleur de domaine, droits d'administrateur de domaine ou conception d'annuaire complexe sur mesure. Il faut alors gérer soi-même Active Directory, sur site ou sur des machines virtuelles Azure.</li>\n</ul>\n<h3>Un exemple de migration</h3>\n<p>Une société financière exploite dans ses bureaux une application qui s'appuie sur LDAP pour trouver les employés, utilise Kerberos pour la connexion et authentifie son serveur auprès de la base financière avec un compte de service. Elle veut déplacer l'application et sa base vers des machines virtuelles Azure. Le VPN vers le domaine du bureau rend l'application dépendante du réseau et des contrôleurs locaux. De nouveaux contrôleurs de domaine dans Azure gardent plus de trafic dans Azure, mais ajoutent des serveurs à patcher, surveiller, sauvegarder et restaurer. L'équipe choisit une autre voie : ses utilisateurs et groupes étant déjà synchronisés dans Entra ID, elle active Entra Domain Services et connecte le réseau virtuel Azure.</p>\n\n<h2>Les compromis d'un service géré</h2>\n<p>L'approche gérée économise du travail, mais change ce que votre équipe contrôle. Microsoft administre les contrôleurs de domaine, les maintient synchronisés, applique les correctifs et assure la disponibilité en arrière-plan. Vous n'avez pas à planifier leur emplacement ni à en reconstruire un après une panne.</p>\n<p>En contrepartie, pas de bureau à distance sur ces contrôleurs, pas de droits d'administrateur de domaine ou d'entreprise. Microsoft fournit un groupe, Entra Domain Services Administrators : ajoutez-y les personnes chargées de gérer le domaine, puis utilisez une machine virtuelle de gestion jointe au domaine géré avec les outils Active Directory habituels. Vous pouvez ainsi :</p>\n<ul>\n<li>créer vos propres unités d'organisation (OU), des sortes de dossiers pour les ordinateurs ou les comptes de service ;</li>\n<li>gérer les enregistrements DNS ;</li>\n<li>créer et appliquer des stratégies de groupe pour les paramètres pris en charge ;</li>\n<li>gérer les ordinateurs qui rejoignent le domaine.</li>\n</ul>\n<p>Ces limites sont volontaires : vous ne pouvez pas ajouter de contrôleur de domaine ni modifier le schéma. Ce sont des garde-fous qui protègent votre charge de travail tout en vous empêchant de toucher aux composants appartenant à Microsoft.</p>\n\n<h2>Erreurs fréquentes et pièges à éviter</h2>\n<h3>Les mots de passe</h3>\n<p>Ce point piège beaucoup de monde. La connexion cloud moderne et l'ancienne connexion Windows n'utilisent pas les mots de passe de la même manière en arrière-plan. Pour que Kerberos et NTLM fonctionnent, Domain Services a besoin d'une forme protégée de mots de passe compatible avec ces méthodes, et Microsoft ne conserve jamais votre mot de passe en clair. Pour les utilisateurs exclusivement cloud, cela signifie souvent un changement de mot de passe après l'activation du service, ce qui crée cette forme protégée. Tant qu'il n'est pas fait, l'utilisateur se connecte à Microsoft 365 sans problème, mais échoue avec le domaine géré. Le compte n'est pas en cause : c'est la forme de mot de passe qui manque.</p>\n<h3>Modifier les utilisateurs au mauvais endroit</h3>\n<p>Quelqu'un voit un utilisateur dans le domaine géré et le modifie sur place, pensant que le changement sera permanent. Or les modifications ne remontent pas vers Entra ID ni vers l'Active Directory local. Gérez les utilisateurs et groupes dans l'annuaire source : Entra ID pour une entreprise 100 % cloud, l'Active Directory local synchronisé avec Entra ID pour une entreprise hybride. Sinon, le domaine géré devient un second classeur contenant des versions différentes de la même personne.</p>\n<h3>Faire du domaine géré un annuaire général</h3>\n<p>Le domaine géré reste privé au sein du réseau Azure et ne doit servir que les charges de travail qui en ont besoin. Limitez l'accès réseau, protégez la machine de gestion et n'accordez les droits d'administration qu'aux personnes qui en ont réellement besoin.</p>\n<h3>Oublier le réseau</h3>\n<p>Les machines virtuelles doivent avoir accès au VNet et utiliser les paramètres DNS du domaine géré. Sans cela, elles ne le trouveront pas.</p>\n\n<h2>Les points essentiels à retenir</h2>\n<ul>\n<li>Entra ID ne remplace pas toutes les fonctions d'Active Directory : les anciennes applications attendent LDAP, Kerberos, NTLM, DNS et stratégies de groupe.</li>\n<li>Entra Domain Services fournit un domaine Windows géré dans Azure, sans contrôleurs de domaine à administrer vous-même.</li>\n<li>Les identités circulent dans un seul sens : de la source (Entra ID ou Active Directory local) vers Domain Services. Gérez-les à la source.</li>\n<li>Pour les utilisateurs exclusivement cloud, un changement de mot de passe est souvent nécessaire après l'activation.</li>\n<li>Les nouvelles applications compatibles avec les connexions modernes doivent utiliser Entra ID directement.</li>\n<li>Domain Services ne convient pas si l'application exige l'écriture LDAP, une modification du schéma ou un contrôle total du domaine.</li>\n<li>Administrez le domaine via le groupe Entra Domain Services Administrators et une machine virtuelle de gestion jointe au domaine.</li>\n<li>Gardez le domaine privé, limitez l'accès réseau et réservez-le aux charges de travail qui en ont besoin.</li>\n</ul>\n\n<h2>Conclusion</h2>\n<p>Migrer une application héritée vers Azure ne signifie pas devoir reconstruire un domaine Active Directory ni réécrire son code de connexion. Entra ID reste le choix naturel pour les applications cloud modernes, Active Directory demeure la solution quand vous voulez un contrôle complet, et Entra Domain Services comble l'espace entre les deux avec un domaine Windows géré par Microsoft. La question à se poser est simple : la charge de travail a-t-elle besoin de l'ancien langage Active Directory ou peut-elle utiliser Entra ID ? Si elle a besoin du premier sans exiger la maîtrise de chaque composant du domaine, Domain Services est souvent le bon compromis, à condition d'accepter de renoncer à une partie du contrôle.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Entra Domain Services : bien choisir pour vos applications héritées",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Partir de l'application",
+     "text": "Identifiez ce dont elle a besoin : LDAP, Kerberos, NTLM, jonction au domaine ou stratégies de groupe."
+    },
+    {
+     "kopf": "Entra ID d'abord",
+     "text": "Si l'application prend en charge les connexions modernes, utilisez directement Entra ID."
+    },
+    {
+     "kopf": "Vérifier les limites",
+     "text": "Écriture LDAP, modification du schéma ou contrôle total du domaine : Domain Services ne convient pas."
+    },
+    {
+     "kopf": "Activer le domaine géré",
+     "text": "Microsoft gère les contrôleurs de domaine ; vous connectez le réseau virtuel Azure et les machines."
+    },
+    {
+     "kopf": "Gérer à la source",
+     "text": "Les identités circulent dans un seul sens : modifiez-les dans Entra ID ou l'Active Directory local."
+    },
+    {
+     "kopf": "Penser aux mots de passe",
+     "text": "Les utilisateurs exclusivement cloud doivent souvent changer leur mot de passe après l'activation."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Pourquoi Entra ID ne suffit-il pas pour une application Windows ancienne ?",
+    "a": "Parce que les applications anciennes attendent un domaine Windows traditionnel : elles utilisent LDAP, Kerberos, NTLM, DNS et les stratégies de groupe. Elles ne savent pas lire les messages de connexion cloud modernes d'Entra ID, qui reste un service d'identité cloud et non un Active Directory complet."
+   },
+   {
+    "q": "Qu'est-ce que Microsoft Entra Domain Services et que gère Microsoft ?",
+    "a": "C'est un domaine Windows géré qui s'exécute dans votre réseau virtuel Azure. Microsoft administre les contrôleurs de domaine en arrière-plan : mises à jour, synchronisation, disponibilité. Vos machines virtuelles peuvent rejoindre le domaine et utiliser LDAP, Kerberos, NTLM, DNS et stratégies de groupe sans que vous déployiez de contrôleurs."
+   },
+   {
+    "q": "Peut-on modifier les utilisateurs directement dans Entra Domain Services ?",
+    "a": "Non, pas durablement. Les identités circulent dans un seul sens : de la source vers Domain Services. Les modifications faites dans le domaine géré ne remontent ni vers Entra ID ni vers l'Active Directory local. Gérez utilisateurs et groupes à la source, sinon vous obtenez des versions différentes de la même personne."
+   },
+   {
+    "q": "Pourquoi un utilisateur se connecte à Microsoft 365 mais pas au domaine géré Entra Domain Services ?",
+    "a": "Kerberos et NTLM nécessitent une forme protégée du mot de passe, compatible avec ces méthodes, qui peut manquer au départ. Pour les utilisateurs exclusivement cloud, un changement de mot de passe après l'activation du service la crée. Le compte n'est pas en cause : c'est cette forme de mot de passe qui manque."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Trois rôles distincts : Entra ID, AD DS et Domain Services",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Entra ID",
+     "punkte": [
+      "Gère l'identité cloud : Microsoft 365, Teams, SharePoint, applications modernes",
+      "Authentification multifacteur et règles d'accès",
+      "Méthodes de connexion web, sans être sur le même réseau",
+      "Reste un service d'identité cloud, pas un Active Directory complet"
+     ]
+    },
+    "rechts": {
+     "titel": "Entra Domain Services",
+     "punkte": [
+      "Domaine Windows géré pour les charges de travail Azure",
+      "Microsoft administre les contrôleurs de domaine en arrière-plan",
+      "Fournit LDAP, Kerberos, NTLM, DNS et stratégies de groupe",
+      "Pas d'administrateur de domaine ni de modification du schéma",
+      "Service privé au sein du réseau virtuel Azure"
+     ]
+    }
+   },
+   {
+    "titel": "Avant de choisir Entra Domain Services",
+    "typ": "checkliste",
+    "punkte": [
+     "L'application ancienne a besoin de LDAP, Kerberos, NTLM ou de stratégies de groupe",
+     "Les machines virtuelles doivent se comporter comme des ordinateurs de domaine",
+     "Aucun accès en écriture LDAP n'est requis par l'application",
+     "Aucune modification du schéma Active Directory n'est nécessaire",
+     "Aucun contrôle total du contrôleur de domaine n'est exigé",
+     "Les machines virtuelles ont accès au VNet et utilisent le DNS du domaine géré",
+     "Les utilisateurs exclusivement cloud changent leur mot de passe après l'activation"
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Dans quel sens les informations d'identité circulent-elles avec Entra Domain Services ?",
+    "opts": [
+     "Dans les deux sens, avec une synchronisation automatique permanente",
+     "De Domain Services vers Entra ID uniquement",
+     "De la source (Entra ID ou AD local) vers Domain Services uniquement",
+     "Uniquement entre Domain Services et l'Active Directory local"
+    ],
+    "a": 2,
+    "why": "Les identités vont de la source vers Domain Services. Les modifications faites dans le domaine géré ne remontent pas, donc on gère à la source."
+   },
+   {
+    "q": "Pourquoi un utilisateur exclusivement cloud peut-il échouer à se connecter au domaine géré ?",
+    "opts": [
+     "Son compte Microsoft 365 a été supprimé après l'activation",
+     "La forme protégée du mot de passe pour Kerberos et NTLM manque",
+     "Il doit d'abord obtenir les droits d'administrateur de domaine",
+     "Le service exige que son mot de passe soit stocké en clair"
+    ],
+    "a": 1,
+    "why": "Kerberos et NTLM nécessitent une forme protégée du mot de passe, créée souvent par un changement de mot de passe après l'activation."
+   },
+   {
+    "q": "Dans quel cas Entra Domain Services n'est-il pas adapté ?",
+    "opts": [
+     "L'application a besoin d'un accès en écriture LDAP à l'annuaire",
+     "L'application utilise Kerberos entre un serveur d'application et sa base",
+     "Des machines virtuelles Windows doivent rejoindre un domaine",
+     "Un déploiement Bureau à distance dépend d'un domaine pour la connexion"
+    ],
+    "a": 0,
+    "why": "L'accès en écriture LDAP et la modification du schéma sont des limites strictes ; il faut alors gérer soi-même Active Directory."
+   },
+   {
+    "q": "Que doivent faire les machines virtuelles pour localiser le domaine géré ?",
+    "opts": [
+     "Être exposées sur Internet avec une adresse IP publique dédiée",
+     "Passer obligatoirement par un VPN vers le contrôleur de domaine du bureau",
+     "Se connecter en bureau à distance aux contrôleurs de domaine Microsoft",
+     "Avoir accès au VNet et utiliser les paramètres DNS du domaine géré"
+    ],
+    "a": 3,
+    "why": "Le domaine géré est privé et fonctionne dans un VNet Azure ; les machines doivent y accéder et utiliser son DNS."
+   }
+  ]
  }
 }
