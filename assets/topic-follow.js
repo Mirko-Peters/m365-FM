@@ -106,7 +106,7 @@
             endpoint = sub.endpoint;
             pushKeys = sub.toJSON().keys;
           }
-          return null;
+          return sub || null;
         }).then(function (sub) {
           if (!sub && !email.checked) return null;
           return api("/api/topics/follow", { method: "POST", body: {
