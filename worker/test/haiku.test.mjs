@@ -9,7 +9,10 @@ function withFetch(fn, impl) {
   return fn().finally(() => { globalThis.fetch = old; });
 }
 const reply = (content, status = 200) => new Response(JSON.stringify({ content }), { status, headers: { "content-type": "application/json" } });
-const ENV = { ANTHROPIC_API_KEY: "test-key" };
+const ENV = {
+  ANTHROPIC_API_KEY: "test-key",
+  DB: { prepare() { return { bind() { return this; }, async run() { return { meta: { changes: 1 } }; }, async first() { return { usd: 0, reserved_usd: 0 }; } }; } },
+};
 
 test("claudeText: liest nur Text-Bloecke, auch hinter thinking-Bloecken", () => {
   assert.equal(claudeText({ content: [{ type: "thinking", thinking: "", signature: "s" }, { type: "text", text: " {\"a\":1} " }] }), "{\"a\":1}");
@@ -18,9 +21,12 @@ test("claudeText: liest nur Text-Bloecke, auch hinter thinking-Bloecken", () => 
 });
 
 test("haikuJson: keine Sampling-Parameter, Denkphase aus, Aufwand low", () => withFetch(async () => {
-  const out = await haikuJson(ENV, "sys", { title: "Hallo" });
+  const out = await haikuJson({ ...ENV, CLOUDFLARE_ACCOUNT_ID: "account", CF_AIG_TOKEN: "gateway-token" }, "sys", { title: "Hallo" }, { job: "test_haiku", lang: "de" });
   assert.deepEqual(out, { title: "Hello" });
 }, async (url, init) => {
+  assert.equal(url, "https://gateway.ai.cloudflare.com/v1/account/m365fm/anthropic/v1/messages");
+  assert.equal(init.headers["cf-aig-authorization"], "Bearer gateway-token");
+  assert.deepEqual(JSON.parse(init.headers["cf-aig-metadata"]), { job: "test_haiku", lang: "de", model: "claude-haiku-5-5" });
   const b = JSON.parse(init.body);
   assert.equal(b.model, "claude-haiku-5-5");
   for (const k of ["temperature", "top_p", "top_k"]) assert.ok(!(k in b), `${k} darf nicht gesendet werden`);

@@ -1,10 +1,10 @@
 // Automatische Uebersetzung fehlender EN/DE-Texte von Entitaeten mit Claude Haiku.
 // Sicherheitsnetz: nur mit gesetztem Secret ANTHROPIC_API_KEY, Tageslimit, 24 h Wartezeit fuer die Community, Notaus ueber meta tr_off=1.
 import { entityMap } from "./entities.js";
-import { claudeText } from "./util.js";
+import { AI_BUDGET_ERROR, haikuJson } from "./util.js";
 
 const UI_LANGS = { fr: "French", es: "Spanish", it: "Italian", nl: "Dutch", pt: "Portuguese (European)", pl: "Polish", id: "Indonesian", ru: "Russian", uk: "Ukrainian", ar: "Arabic", he: "Hebrew", hi: "Hindi", ja: "Japanese", ko: "Korean", ml: "Malayalam", pa: "Punjabi (Gurmukhi)", ta: "Tamil", te: "Telugu" }, UI_CHUNK = 40, UI_CHUNK_CHARS = 9000, UI_CHUNKS_PER_RUN = 3;
-const MODEL = "claude-haiku-5-5", DAILY_CAP = 100, PER_RUN = 10, WAIT = 24 * 3600, SKIP_TYPES = ["person", "event", "org"];
+const DAILY_CAP = 100, PER_RUN = 10, WAIT = 24 * 3600, SKIP_TYPES = ["person", "event", "org"];
 const now = () => Math.floor(Date.now() / 1000);
 const SYS = "You translate short encyclopedia texts about Microsoft products and IT concepts between English and German. " +
   "Never translate names: product and feature names, session and event titles, person and company names, abbreviations and codes (e.g. Copilot Studio, Power Fx, D365FO, MS-900, M365Con) stay exactly as written. " +
@@ -24,7 +24,8 @@ export async function translateStatus(env) {
 export async function autoTranslate(env) {
   const db = env.DB;
   if (!env.ANTHROPIC_API_KEY || (await meta(db, "tr_off")) === "1") return { skipped: true };
-  await autoTranslateUi(env).catch(() => 0);
+  const uiResult = await autoTranslateUi(env).catch(() => 0);
+  if (uiResult?.capped) return uiResult;
   const map = await entityMap(env), t = now(), day = new Date().toISOString().slice(0, 10);
   const claimed = new Set(((await db.prepare("SELECT eid FROM entity_claims WHERE status='verified'").all()).results || []).map((r) => r.eid));
   // Luecken ermitteln: Text nur in einer der beiden Sprachen vorhanden
@@ -50,13 +51,13 @@ export async function autoTranslate(env) {
   const items = Object.fromEntries(due.map((g) => [key(g) + ">" + g.to, `[${g.from}->${g.to}] ${g.text}`]));
   let res;
   try {
-    const r = await fetch("https://api.anthropic.com/v1/messages", { method: "POST", headers: { "content-type": "application/json", "x-api-key": env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01" },
-      body: JSON.stringify({ model: MODEL, max_tokens: 4000, thinking: { type: "disabled" }, system: SYS, messages: [{ role: "user", content: JSON.stringify(items) }] }) });
-    if (!r.ok) { await setMeta(db, "tr_err", `${r.status} ${t}`); return { error: r.status }; }
-    let txt = claudeText(await r.json());
-    if (txt.startsWith("```")) txt = txt.replace(/^```[a-z]*\n?/, "").replace(/```$/, "");
-    res = JSON.parse(txt);
-  } catch (e) { await setMeta(db, "tr_err", `parse ${t}`); return { error: "parse" }; }
+    res = await haikuJson(env, SYS, items, { job: "worker_entity_gap_translation", lang: "en-de", maxTokens: 4000 });
+  } catch (e) {
+    if (e?.code === AI_BUDGET_ERROR) return { capped: true, open: due.length };
+    const status = /^api (\d+)$/.exec(e?.message || "");
+    if (status) { await setMeta(db, "tr_err", `${status[1]} ${t}`); return { error: Number(status[1]) }; }
+    await setMeta(db, "tr_err", `parse ${t}`); return { error: "parse" };
+  }
   const byE = new Map();
   for (const g of due) {
     const out = String(res[key(g) + ">" + g.to] || "").replace(`[${g.from}->${g.to}] `, "").replace(/[<>]/g, "").replace(/https?:\/\/\S+/gi, "").trim();
@@ -101,18 +102,19 @@ export async function autoTranslateUi(env) {
       chunk = uiChunk(todo, i);
       const sys = `You translate short user-interface texts (buttons, labels, hints, messages) and short page paragraphs of a Microsoft community website from English into ${UI_LANGS[lang]}. Keep placeholders such as {n}, {s}, {e}, {f}, {c}, {u}, {t}, HTML entities and symbols exactly. Never translate names: product, feature, event, session, person and company names, abbreviations and codes (Copilot, Power Platform, M365Con, MVP, MCT, Schema.org, LinkedIn) stay unchanged. Use the informal address usual for community sites. Keep each text about as long as the English one. Answer only with a JSON object that maps every given key to its translation.`;
       try {
-        const r = await fetch("https://api.anthropic.com/v1/messages", { method: "POST", headers: { "content-type": "application/json", "x-api-key": env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01" },
-          body: JSON.stringify({ model: MODEL, max_tokens: 12000, thinking: { type: "disabled" }, system: sys, messages: [{ role: "user", content: JSON.stringify(Object.fromEntries(chunk)) }] }) });
-        if (!r.ok) { await setMeta(db, "tr_ui_err", `${r.status} ${t}`); return { error: r.status }; }
-        let txt = claudeText(await r.json()); if (txt.startsWith("```")) txt = txt.replace(/^```[a-z]*\n?/, "").replace(/```$/, "");
-        const res = JSON.parse(txt), ops = [];
+        const res = await haikuJson(env, sys, Object.fromEntries(chunk), { job: "worker_ui_translation", lang, maxTokens: 12000 }), ops = [];
         for (const [k, v] of chunk) {
           const o = String(res[k] || "").trim(); if (!o || o.length > v.length * 3 + 40) continue;
           if (["{n}", "{s}", "{e}", "{f}", "{c}", "{u}", "{t}"].some((p) => v.includes(p) && !o.includes(p))) continue;
           ops.push(db.prepare("INSERT OR REPLACE INTO ui_i18n(lang,k,v,created) VALUES(?,?,?,?)").bind(lang, k, o, t));
         }
         if (ops.length) await db.batch(ops); saved += ops.length; await setMeta(db, "tr_ui_err", "");
-      } catch (e) { await setMeta(db, "tr_ui_err", `parse ${t}`); return { error: "parse" }; }
+      } catch (e) {
+        if (e?.code === AI_BUDGET_ERROR) return { capped: true, open: todo.length - i };
+        const status = /^api (\d+)$/.exec(e?.message || "");
+        if (status) { await setMeta(db, "tr_ui_err", `${status[1]} ${t}`); return { error: Number(status[1]) }; }
+        await setMeta(db, "tr_ui_err", `parse ${t}`); return { error: "parse" };
+      }
     }
     if (runs >= UI_CHUNKS_PER_RUN) break;
   }

@@ -5,6 +5,7 @@ import glob, json, os, re, time, urllib.request, urllib.error
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from site_cover import MOTIFS
+from ai_gateway import anthropic_request, check_budget, estimated_eur, report_usage, urlopen
 
 ROOT = Path(__file__).parent
 MODEL = os.environ.get("COVER_MODEL", "claude-haiku-5-5")
@@ -28,18 +29,22 @@ Nichts erfinden, nur was Titel und Beschreibung hergeben.
 
 Titel: {title}
 Beschreibung: {desc[:1500]}"""
+    if not check_budget("generate_covers", MODEL, estimated_eur(len(prompt) // 3, 400)):
+        return None
     body = json.dumps({"model": MODEL, "max_tokens": 400, **({"thinking": {"type": "disabled"}} if "haiku" in MODEL else {}), "messages": [{"role": "user", "content": prompt}]}).encode()
-    req = urllib.request.Request("https://api.anthropic.com/v1/messages", body, {
-        "x-api-key": os.environ["ANTHROPIC_API_KEY"], "anthropic-version": "2023-06-01", "content-type": "application/json"})
+    req = anthropic_request("/v1/messages", body, job="generate_covers", lang=lang, model=MODEL, api_key=os.environ["ANTHROPIC_API_KEY"])
     for attempt in range(5):
         try:
-            r = json.load(urllib.request.urlopen(req, timeout=90))
+            with urlopen(req, timeout=90) as response:
+                r = json.load(response)
             break
         except urllib.error.HTTPError as ex:
             if ex.code in (429, 500, 502, 503, 529) and attempt < 4:
                 time.sleep(10 * (attempt + 1)); continue
             raise
-    raw = "".join(b.get("text", "") for b in r["content"])
+    usage = r.get("usage", {})
+    report_usage("generate_covers", MODEL, usage.get("input_tokens", 0), usage.get("output_tokens", 0), lang)
+    raw = "".join(b.get("text", "") for b in r["content"] if b.get("type") == "text")
     d = json.loads(re.search(r"\{.*\}", raw, re.S).group(0))
     h = str(d.get("headline", "")).strip().strip('"“”')
     kws = [str(k).strip() for k in (d.get("keywords") or []) if str(k).strip()][:3]

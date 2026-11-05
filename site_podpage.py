@@ -56,6 +56,12 @@ def san(s):
     p = _San(); p.feed(s or ""); return IMG.enhance("".join(p.o))
 
 
+def platform_episode_links(links, episode_id, legacy_key):
+    merged = dict(links.get(legacy_key) or {})
+    merged.update(links.get(str(episode_id)) or {})
+    return merged
+
+
 def plain(s):
     return re.sub(r"\s+", " ", _h.unescape(re.sub(r"<[^>]+>", " ", s or ""))).strip()
 
@@ -450,7 +456,7 @@ def build(g):
         nnotes = rename_links(nnotes)   # T12: Show Notes verlinken die Folge oft ueber die alte Podpage-Adresse
         prev_, next_ = (eps[k + 1] if k + 1 < len(eps) else None), (eps[k - 1] if k else None)
         aud = f'<audio controls preload="none" style="width:100%" src="{esc(r["audio"])}"></audio>' if r and r.get("audio") else ""
-        elk = elinks.get(f"{nrec['id']}:en", {}) if nrec else {}
+        elk = platform_episode_links(elinks, nrec["id"], f"{nrec['id']}:en") if nrec else {}
         plat_links = [(n, (elk.get(pk) or e.get(fld) or "")) for n, pk, fld in (("Apple Podcasts", "apple", "episode_apple_url_path"), ("Spotify", "spotify", "episode_spotify_url_path"), ("YouTube", "youtube", "video_link"), ("YouTube Music", "youtube_music", "episode_youtube_music_url_path"), ("Deezer", "deezer", None))]
         plat_links = [(n, u) for n, u in plat_links if u.startswith("http")]   # frisch zugeordnete Links gehen vor der Podpage-Sicherung
         ext = " · ".join(f'<a href="{esc(u)}" rel="noopener">{n}</a>' for n, u in plat_links)

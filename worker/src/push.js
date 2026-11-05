@@ -2,6 +2,11 @@
 import { b64u } from "./util.js";
 const te = new TextEncoder();
 
+export async function savePushSubscription(db, { endpoint, p256dh, auth, lang, userId = null, digest = 1, created }) {
+  return db.prepare("INSERT INTO push_subs(endpoint,p256dh,auth,lang,user_id,created,digest) VALUES(?,?,?,?,?,?,?) ON CONFLICT(endpoint) DO UPDATE SET p256dh=excluded.p256dh,auth=excluded.auth,lang=excluded.lang,user_id=COALESCE(excluded.user_id,push_subs.user_id),created=excluded.created,digest=MAX(push_subs.digest,excluded.digest)")
+    .bind(endpoint, p256dh, auth, lang, userId, created, digest).run();
+}
+
 async function hkdf(salt, ikm, info, len) {
   const key = await crypto.subtle.importKey("raw", ikm, "HKDF", false, ["deriveBits"]);
   return new Uint8Array(await crypto.subtle.deriveBits({ name: "HKDF", hash: "SHA-256", salt, info }, key, len * 8));
@@ -46,5 +51,13 @@ export async function sendPush(env, sub, payloadObj) {
       authorization: `vapid t=${jwt}, k=${env.VAPID_PUBLIC}` },
     body,
   });
-  return { ok: r.status >= 200 && r.status < 300, gone: r.status === 404 || r.status === 410, status: r.status };
+  const gone = r.status === 404 || r.status === 410;
+  if (gone && env.DB) await env.DB.batch([
+    env.DB.prepare("DELETE FROM push_topics WHERE endpoint=?").bind(sub.endpoint),
+    env.DB.prepare("DELETE FROM topic_queue WHERE channel='push' AND recipient=?").bind(sub.endpoint),
+    env.DB.prepare("DELETE FROM topic_deliveries WHERE channel='push' AND recipient=?").bind(sub.endpoint),
+    env.DB.prepare("DELETE FROM topic_recipient_state WHERE channel='push' AND recipient=?").bind(sub.endpoint),
+    env.DB.prepare("DELETE FROM push_subs WHERE endpoint=?").bind(sub.endpoint),
+  ]).catch(() => {});
+  return { ok: r.status >= 200 && r.status < 300, gone, status: r.status };
 }

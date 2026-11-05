@@ -34,7 +34,7 @@ function mailBody(env, inv, byName, reminder) {
 }
 async function send(env, inv, byName, reminder) {
   const unsub = `${env.API}/api/entityinvite/decline?t=${encodeURIComponent(inv.token)}`;
-  return sendMail(env, { to: inv.email, subject: reminder ? `Erinnerung: Deine Seite auf M365.FM, ${inv.name}` : `Deine Seite auf M365.FM – übernehmen oder entfernen lassen / claim or remove`, html: mailBody(env, inv, byName, reminder), headers: { "List-Unsubscribe": `<${unsub}>`, "List-Unsubscribe-Post": "List-Unsubscribe=One-Click" } });
+  return sendMail(env, { to: inv.email, subject: reminder ? `Erinnerung: Deine Seite auf M365.FM, ${inv.name}` : `Deine Seite auf M365.FM – übernehmen oder entfernen lassen / claim or remove`, html: mailBody(env, inv, byName, reminder), lang: "de", headers: { "List-Unsubscribe": `<${unsub}>`, "List-Unsubscribe-Post": "List-Unsubscribe=One-Click" } });
 }
 export async function remindInvites(env) {   // Cron: nach 7 Tagen einmal erinnern
   const db = env.DB; await ensure(db); if (!mailReady(env)) return 0;
