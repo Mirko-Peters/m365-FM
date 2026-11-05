@@ -1,4 +1,12 @@
-# AdSense: feste Anzeigenblöcke
+# AdSense: abgeschaltet (5.11.2026)
+
+Mirko, 5.11.2026: keine Google-Anzeigen mehr – eine schnelle Seite ist wichtiger als die rund 50 Cent am Tag. `data/adsense.json` hat `"enabled": false`: kein Meta-Tag, keine `ads.txt`, kein Google-Skript, keine Anzeigenblöcke, kein AdSense-Abschnitt in der Datenschutzerklärung. Bis 22.01.2027 stehen an den beiden Plätzen nur eigene M365Con-Banner (reines HTML), danach nichts.
+
+Wieder einschalten: `"enabled": true` und den AdSense-Abschnitt in `site_legal.py` zurückholen (Git-Verlauf).
+
+---
+
+## Früherer Aufbau: feste Anzeigenblöcke
 
 Die Seite nutzt **feste Anzeigenblöcke** statt Auto-Anzeigen. Das Skript lädt nur auf Seiten, auf denen wir einen Block gesetzt haben; Googles Auto-Formate (z. B. das Popup „Discover more“ über dem Header) erscheinen dadurch nicht. Das Meta-Tag `google-adsense-account` und `ads.txt` bleiben für die Prüfung.
 
