@@ -130,5 +130,901 @@
     "why": "Administratoren können dort Funktionen sofort deaktivieren, Verfügbarkeit festlegen und die registrierten Funktionen prüfen."
    }
   ]
+ },
+ "es": {
+  "html": "<p>¿Te imaginas que Business Central se encargara del trabajo tedioso, como conciliar pagos o redactar textos de producto, en lugar de dejarte con clics de más y noches de Excel? Esa es la promesa de Copilot. Está integrado en Business Central Online, pero no funciona en instalaciones locales on-prem. Además, la mayoría de los administradores no pasa de las demostraciones predefinidas.</p>\n<p>Este artículo explica cómo registrar tus propias funciones de Copilot con AL, cómo darles personalidad con un metaprompt y cómo proteger las claves de Azure OpenAI. Al final encontrarás una lista de verificación para probar en un entorno sandbox.</p>\n\n<h2>El menú oculto de Copilot: capacidades y disponibilidad</h2>\n<p>El verdadero potencial de Copilot no está en los botones visibles de una tarjeta de cliente, sino en los puntos de extensión que Microsoft deja debajo. Se encuentran en el espacio de nombres de IA del sistema: busca la codeunit de capacidad de Copilot y los enums relacionados. Ahí viven los ganchos para desarrolladores. Sirven para definir y registrar tus propias funciones con IA, en lugar de esperar a la próxima demo de Microsoft.</p>\n<p>Hay dos conceptos clave:</p>\n<ul>\n<li><strong>Capacidad de Copilot:</strong> el conjunto de habilidades que creas para Copilot.</li>\n<li><strong>Disponibilidad de Copilot:</strong> indica al sistema cuándo y dónde debe aparecer esa habilidad para los usuarios finales.</li>\n</ul>\n<p>Juntos forman un marco para hacer que Copilot sea específico de tu empresa, no solo un menú de widgets de IA prefabricados.</p>\n\n<h3>Qué puedes construir con el módulo de IA</h3>\n<p>El módulo de IA de Business Central ofrece autocompletado de texto, funciones de chat para flujos de trabajo e incrustaciones (embeddings) para búsqueda semántica. Con ello puedes crear, por ejemplo, una capacidad que redacte órdenes de compra según los patrones de tu empresa, o asistentes que hablen con la voz de tu organización.</p>\n<p>Una aclaración importante: el chat preliminar de Copilot que quizás hayas visto en Business Central no es extensible mediante este módulo. Lo que sí puedes extender es el modelo de capacidades descrito aquí.</p>\n\n<h3>El puente entre desarrolladores y administradores</h3>\n<p>Los desarrolladores definen las capacidades en AL y los administradores las gestionan en la página de capacidades de Copilot y agentes de Business Central. Cada capacidad registrada aparece allí, y los administradores pueden desactivarlas una por una si algo falla. Esa página es también un interruptor de emergencia si tu desarrollo personalizado empieza a comportarse mal.</p>\n\n<h2>Cómo registrar una capacidad de Copilot en AL sin romper tu tenant</h2>\n<p>Registrar una capacidad no tiene nada de magia. En términos de AL, consiste en crear una extensión del enum de capacidad de Copilot y usar una codeunit de instalación o actualización que llame a la función de registro de capacidad (Register Capability). Es el apretón de manos con el que le dices a Business Central que existe una nueva función de IA y que debe tratarla como parte del sistema. Sin esa llamada, tu extensión puede compilar, pero Copilot no sabrá que la función existe.</p>\n\n<h3>Nombres, valores de numeración y versiones</h3>\n<p>Las capacidades conviven en un ecosistema que Microsoft actualiza constantemente. Si reutilizas un nombre genérico o eliges un valor de numeración muy común, te expones a un conflicto. Imagina una capacidad llamada «ayudante de ventas» con un valor habitual: si Microsoft lanza después una capacidad integrada en el mismo espacio, el sistema puede no saber cuál mostrar y tu código chocar en tiempo de ejecución.</p>\n<p>La mitigación es poco glamurosa, pero esencial:</p>\n<ul>\n<li>Elige nombres únicos.</li>\n<li>Asigna tus propios valores de numeración, sin solaparte con rangos comunes.</li>\n<li>Versiona la extensión de forma deliberada, para saber si el sandbox está en 1.2 mientras producción sigue en 1.0.</li>\n<li>Usa codeunits de actualización para trasladar la capacidad de forma segura cuando cambie la plataforma.</li>\n</ul>\n\n<h3>Primero sandbox, después producción</h3>\n<p>Lanzar la extensión directamente a producción «porque solo es una capacidad» llena la mesa de ayuda. El camino correcto es probar primero en el sandbox, romper, refactorizar, volver a probar y mover a producción solo cuando se comporte bien.</p>\n\n<h3>Gobernanza e información para el administrador</h3>\n<p>La página de capacidades de Copilot y agentes funciona además como verificación de integridad: si tu capacidad no aparece tras registrarla, no se registró correctamente. Valídala ahí antes de pasarla a revisión del administrador.</p>\n<p>Recuerda que activar o desactivar capacidades, y configurar el movimiento de datos, solo pueden hacerlo administradores con super permisos o un rol de administración de Business Central. Planifica ese paso con antelación.</p>\n<p>Al registrar, usa el parámetro opcional de URL «para saber más». Aparece en la página de administración y funciona como documentación integrada: los administradores ven qué hace la capacidad y cómo usarla sin buscar en una wiki ni escribirte por Teams.</p>\n\n<h2>Metaprompt: la descripción del puesto de tu Copilot</h2>\n<p>Una capacidad registrada funciona, pero responde sin carácter. Aquí entra el metaprompt: el mensaje principal del sistema que define el perfil, el formato de salida y los límites del modelo. Es, en esencia, la descripción del puesto de trabajo. Un prompt de usuario es una solicitud puntual; el metaprompt contiene las instrucciones permanentes que acompañan a cada respuesta. Sin él, Copilot no sabe si debe sonar como un contable o como un redactor publicitario.</p>\n\n<h3>Prompt y metaprompt no son lo mismo</h3>\n<p>Si le pides a Copilot «dame las entradas del libro mayor» sin contexto, inventará su propio estilo: párrafos largos o campos que no existen. Si envuelves esa petición en un metaprompt como «Eres un asistente financiero. Muestra siempre las entradas del libro mayor como listas con viñetas usando los nombres de campo de Business Central», las respuestas salen limpias, estructuradas y fáciles de revisar. Las reglas se fijan antes de que se ejecute la solicitud.</p>\n\n<h3>Cómo se define y se guarda</h3>\n<p>Los desarrolladores lo establecen mediante la codeunit de mensajes de chat de Azure OpenAI (AOAI Chat Messages), llamando a Set Primary System Message. Conviene guardar el texto en almacenamiento aislado (Isolated Storage Set y Isolated Storage Get) en lugar de codificarlo en el archivo AL. Así la extensión puede recuperarlo y actualizarlo de forma segura, protegido tras el límite de seguridad de la extensión.</p>\n\n<h3>Tokens, temperatura y personalidad</h3>\n<ul>\n<li><strong>Presupuesto de tokens:</strong> el metaprompt y el prompt del usuario cuentan para el límite de tokens del modelo. Sé preciso y evita mensajes de sistema interminables.</li>\n<li><strong>Temperatura:</strong> usa un valor cercano a cero en escenarios financieros, donde necesitas resultados deterministas y exactos por campo. Súbela para tareas creativas, como borradores de marketing.</li>\n<li><strong>Reglas explícitas:</strong> incluye reglas de formato, estructuras de respuesta y restricciones sobre comentarios irrelevantes. A los auditores les importa que los números coincidan, no la creatividad.</li>\n</ul>\n<p>La misma IA puede comportarse de formas muy distintas. Un Marketing Copilot puede recibir la instrucción de usar lenguaje persuasivo y generar eslóganes. Un Finance Copilot, la de generar entradas de diario estructuradas sin adjetivos. Define la personalidad de antemano y obtendrás automatización práctica en lugar de resultados llamativos que nadie puede usar.</p>\n<p>Todo esto depende de que la conexión a Azure esté bien configurada: la IA no procesa nada localmente en Business Central, sino a través del backend de Azure OpenAI.</p>\n\n<h2>Claves de Azure OpenAI: cómo almacenarlas con seguridad</h2>\n<p>Cada llamada de Copilot a Azure OpenAI necesita tres elementos: el punto de conexión del recurso (la URL de tu recurso de Azure OpenAI), el nombre del despliegue y la clave API. Juntos demuestran que tu entorno tiene permiso para hablar con el modelo.</p>\n\n<h3>Nunca en el código</h3>\n<p>Bajo ninguna circunstancia incluyas esos valores directamente en el código AL ni los subas a un repositorio como GitHub «solo para pruebas». Los repositorios se rastrean constantemente en busca de secretos expuestos, y un parche posterior no arregla una clave filtrada.</p>\n\n<h3>Almacenamiento aislado en desarrollo, Azure Key Vault en producción</h3>\n<p>Para desarrollo y pruebas, el almacenamiento aislado de AL funciona como una caja fuerte dentro de tu extensión: ninguna otra extensión puede ver las claves. Es ligero y sencillo, pero no es un nivel de producción. Su alcance local sirve para iterar, no como bóveda cuando hay usuarios y datos reales.</p>\n<p>En producción, la opción responsable es Azure Key Vault. Ofrece un contenedor seguro con control de acceso, registros y políticas de rotación. La extensión solicita la clave durante la ejecución y nunca la expone en bruto en el código. Es el modelo que valoran los auditores, porque los secretos nunca circulan en texto plano.</p>\n\n<h3>Texto secreto en AL</h3>\n<p>En AL puedes almacenar la clave API como texto secreto (SecretText). Aunque recorras el código en depuración, la clave no aparece en texto plano, lo que elimina un vector de fuga tan tonto como frecuente: la exposición accidental en el depurador.</p>\n\n<h3>Los permisos de usuario no protegen las claves</h3>\n<p>Copilot hereda el control de acceso a los datos de negocio, pero las claves autentican todo el servicio. Si una se filtra, alguien externo puede suplantar la integración completa. Los permisos de Business Central no te salvan en ese caso.</p>\n<p>Para validar la configuración, usa la secuencia de autorización de la codeunit de Azure OpenAI, donde introduces la URL del recurso, el despliegue y la clave API. Si lo haces mal, Copilot ni siquiera cargará; si lo haces a medias, aparecerán errores silenciosos que los usuarios encontrarán antes que tú. Lo ideal son tres entornos (desarrollo, preproducción y producción) con tres conjuntos de claves.</p>\n\n<h2>Del plano a la realidad: el flujo de cinco pasos</h2>\n<p>Tener capacidad, metaprompt y clave segura sirve de poco si no se conectan en el orden correcto. La secuencia es esta:</p>\n<ol>\n<li><strong>Capacidad:</strong> extiende el enum de capacidad de Copilot y regístrala en una codeunit de instalación o actualización. Sin ello, Business Central no sabe que tu función debe existir.</li>\n<li><strong>Disponibilidad:</strong> decide dónde aparece la función mediante la página de administración de capacidades de Copilot y agentes, marcándola como vista previa o generalmente disponible. Si te saltas este paso, arriesgas exponer funciones a medio terminar a todos los usuarios.</li>\n<li><strong>Autorización:</strong> conecta el backend de Azure OpenAI con el punto de conexión, el nombre del despliegue y la clave API mediante Set Authorization.</li>\n<li><strong>Metaprompt:</strong> inyecta las instrucciones permanentes con Set Primary System Message, usando el texto guardado en almacenamiento aislado o referenciado desde Key Vault en producción.</li>\n<li><strong>Piloto:</strong> despliega primero a un grupo pequeño, recoge comentarios y observa la telemetría. El módulo de IA registra el uso, así que puedes ver si genera resultados limpios o basura.</li>\n</ol>\n<p>Antes de expandirte, ten un plan de reversión. La página de capacidades permite desactivar funciones individuales al instante y muestra también la configuración del movimiento de datos entre geografías. Si aparece esa opción, conviene avisar a alguien de cumplimiento.</p>\n\n<h3>Un ejemplo: sugerencias para pedidos de ventas</h3>\n<p>Un equipo creó un copilot de sugerencias para pedidos de ventas. Extendió el enum para la capacidad y la vinculó a una codeunit de instalación. La marcó como vista previa para que solo la vieran usuarios de prueba y configuró la autorización con punto de conexión, despliegue y clave. Después guardó el metaprompt en almacenamiento aislado y estableció el mensaje principal: «Eres un asistente de cotización. Sugiere paquetes y formatéalos como líneas de artículo, sin charla innecesaria». Tras probar con grupos pequeños hasta que los resultados fueron predecibles, marcó la disponibilidad como GA para todos los usuarios de ventas.</p>\n\n<h2>Errores frecuentes y stolpersteine</h2>\n<ul>\n<li><strong>Confundir prompt y metaprompt:</strong> sin instrucciones permanentes, Copilot inventa formato, tono y hasta campos.</li>\n<li><strong>Nombres y numeraciones genéricos:</strong> pueden chocar con capacidades futuras de Microsoft.</li>\n<li><strong>Saltarse el sandbox:</strong> lanzar directamente a producción llena la mesa de ayuda.</li>\n<li><strong>No registrar la capacidad:</strong> la extensión compila, pero Copilot no la conoce.</li>\n<li><strong>Claves en el código o en repositorios:</strong> es la vía directa a una filtración.</li>\n<li><strong>Usar almacenamiento aislado en producción:</strong> es un archivador, no una bóveda.</li>\n<li><strong>Metaprompts demasiado largos:</strong> consumen el presupuesto de tokens.</li>\n<li><strong>Conectar toda la cadena de golpe:</strong> valida cada pieza por separado (registro, disponibilidad, autorización y reflejo del metaprompt en las respuestas) antes de dar acceso a los usuarios finales.</li>\n</ul>\n\n<h2>Takeaways prácticos</h2>\n<ul>\n<li>Busca los puntos de extensión en el espacio de nombres de IA del sistema y registra tus propias capacidades.</li>\n<li>Prueba todo primero en sandbox y verifica que la capacidad aparezca en la página de capacidades de Copilot y agentes.</li>\n<li>Usa nombres únicos, valores de numeración propios y versiones controladas, con codeunits de actualización.</li>\n<li>Añade la URL «para saber más» para que los administradores entiendan cada función.</li>\n<li>Define un metaprompt con rol, formato y límites claros, y guárdalo en almacenamiento aislado.</li>\n<li>Ajusta la temperatura a la tarea: baja para finanzas, más alta para contenido creativo.</li>\n<li>Almacenamiento aislado en desarrollo, Azure Key Vault en producción, clave API como texto secreto y nunca valores en el código.</li>\n<li>Completa la cadena de autorización antes de dar el trabajo por terminado.</li>\n<li>Sigue el orden: capacidad, disponibilidad, autorización, metaprompt y piloto.</li>\n<li>Ten presente que Copilot hereda los permisos del usuario y nunca lee lo que este no puede acceder. Además, Microsoft no entrena modelos con los datos de tu tenant salvo que lo permitas explícitamente.</li>\n</ul>\n\n<h2>Fazit</h2>\n<p>Copilot en Business Central es mucho más que un juguete de demostración: debajo del menú visible existe un marco para adaptarlo a tu negocio. Para aprovecharlo, registra capacidades con cuidado, dales carácter con un metaprompt bien definido y protege las claves de Azure OpenAI con almacenamiento aislado en desarrollo y Azure Key Vault en producción. Con lanzamientos por etapas, alcance limitado y el control de los administradores desde la página de capacidades, tendrás un asistente fiable. El siguiente paso es sencillo: prueba una capacidad en tu entorno sandbox esta semana y sigue la lista de verificación.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Copilot propio en Business Central: 5 pasos",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Capacidad",
+     "text": "Extiende el enum de capacidad de Copilot y regístrala en una codeunit de instalación o actualización."
+    },
+    {
+     "kopf": "Disponibilidad",
+     "text": "Define dónde aparece la función: vista previa o generalmente disponible, desde la página de administración."
+    },
+    {
+     "kopf": "Autorización",
+     "text": "Conecta Azure OpenAI con punto de conexión, despliegue y clave API guardada de forma segura."
+    },
+    {
+     "kopf": "Metaprompt",
+     "text": "Fija rol, formato y límites con Set Primary System Message, guardado en almacenamiento aislado."
+    },
+    {
+     "kopf": "Piloto",
+     "text": "Prueba con un grupo pequeño, observa la telemetría y ten un plan de reversión."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "¿Cómo se registra una capacidad de Copilot propia en Business Central con AL?",
+    "a": "Se crea una extensión del enum de capacidad de Copilot y se usa una codeunit de instalación o actualización que llame a Register Capability. Sin esa llamada la extensión compila, pero Copilot no conoce la función. Después se comprueba que aparezca en la página de capacidades de Copilot y agentes."
+   },
+   {
+    "q": "¿Qué es un metaprompt y en qué se diferencia de un prompt normal?",
+    "a": "El metaprompt es el mensaje principal del sistema: define el perfil, el formato de salida y los límites del modelo, y acompaña cada respuesta. Un prompt de usuario es una solicitud puntual. Se establece con Set Primary System Message y conviene guardarlo en almacenamiento aislado."
+   },
+   {
+    "q": "¿Cómo almacenar de forma segura las claves de Azure OpenAI en Business Central?",
+    "a": "Nunca en el código AL ni en repositorios. En desarrollo se usa el almacenamiento aislado; en producción, Azure Key Vault. La clave API se maneja como SecretText para que no aparezca en texto plano al depurar. Los permisos de usuario de Business Central no protegen estas claves."
+   },
+   {
+    "q": "¿Cuál es el orden correcto para implementar una función propia de Copilot?",
+    "a": "Son cinco pasos: registrar la capacidad, definir su disponibilidad (vista previa o GA), configurar la autorización con punto de conexión, despliegue y clave API, inyectar el metaprompt y lanzar un piloto con un grupo pequeño. Antes de ampliar el acceso, conviene tener un plan de reversión."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Almacenamiento de claves: desarrollo frente a producción",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Almacenamiento aislado (desarrollo)",
+     "punkte": [
+      "Funciona como caja fuerte dentro de la extensión",
+      "Ninguna otra extensión puede ver las claves",
+      "Es ligero y sencillo para iterar y probar",
+      "No es un nivel de producción: es un archivador, no una bóveda"
+     ]
+    },
+    "rechts": {
+     "titel": "Azure Key Vault (producción)",
+     "punkte": [
+      "Contenedor seguro con control de acceso y registros",
+      "Incluye políticas de rotación de claves",
+      "La extensión solicita la clave durante la ejecución",
+      "Los secretos nunca circulan en texto plano",
+      "Es el modelo que valoran los auditores"
+     ]
+    }
+   },
+   {
+    "titel": "Lista de verificación antes de dar acceso a los usuarios",
+    "typ": "checkliste",
+    "punkte": [
+     "Probar todo primero en el sandbox, no directamente en producción",
+     "Verificar que la capacidad aparezca en la página de capacidades de Copilot",
+     "Usar nombres únicos y valores de numeración propios",
+     "Añadir la URL «para saber más» para los administradores",
+     "Guardar la clave API como texto secreto, nunca en el código",
+     "Comprobar que el metaprompt se refleje en las respuestas",
+     "Tener un plan de reversión para desactivar la capacidad al instante"
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "¿Qué ocurre si creas la extensión del enum de capacidad pero no llamas a Register Capability?",
+    "opts": [
+     "La extensión no compila y el despliegue se detiene con un error",
+     "La extensión compila, pero Copilot no sabrá que la función existe",
+     "Copilot registra la capacidad automáticamente al iniciar sesión el primer usuario",
+     "La capacidad aparece en la página de administración, pero desactivada por defecto"
+    ],
+    "a": 1,
+    "why": "Sin la llamada de registro, la extensión puede compilar, pero Business Central y Copilot no reconocen la nueva función de IA."
+   },
+   {
+    "q": "¿Qué función cumple el metaprompt en una capacidad de Copilot?",
+    "opts": [
+     "Es una solicitud puntual que el usuario escribe cada vez que consulta",
+     "Almacena la clave API y el punto de conexión de Azure OpenAI",
+     "Contiene instrucciones permanentes sobre perfil, formato de salida y límites del modelo",
+     "Define en qué entornos y geografías aparece la capacidad para los usuarios"
+    ],
+    "a": 2,
+    "why": "El metaprompt es el mensaje principal del sistema: la descripción del puesto, con instrucciones permanentes que acompañan cada respuesta."
+   },
+   {
+    "q": "¿Cuál es la forma recomendada de gestionar la clave API en producción?",
+    "opts": [
+     "Guardarla en almacenamiento aislado, porque ninguna otra extensión puede verla",
+     "Incluirla en el código AL y subirla a un repositorio privado",
+     "Confiar en los permisos de usuario de Business Central para protegerla",
+     "Usar Azure Key Vault y tratar la clave como texto secreto (SecretText)"
+    ],
+    "a": 3,
+    "why": "Azure Key Vault ofrece control de acceso, registros y rotación; SecretText evita mostrar la clave en el depurador. El almacenamiento aislado no es nivel producción."
+   },
+   {
+    "q": "¿Qué temperatura conviene usar en escenarios financieros con resultados exactos por campo?",
+    "opts": [
+     "Un valor cercano a cero, para obtener resultados deterministas",
+     "Un valor alto, para que el modelo sea más flexible con los campos",
+     "Un valor medio, equilibrando creatividad y exactitud en cada respuesta",
+     "No importa, porque el metaprompt anula siempre la temperatura"
+    ],
+    "a": 0,
+    "why": "En finanzas se necesitan resultados deterministas y exactos; la temperatura alta se reserva para tareas creativas como borradores de marketing."
+   }
+  ]
+ },
+ "fr": {
+  "html": "<p>Et si Business Central prenait en charge les tâches fastidieuses, comme le rapprochement des paiements ou la rédaction de descriptions de produits, plutôt que de vous laisser enchaîner les clics et les soirées sur Excel ? Telle est la promesse de Copilot, inclus dans Business Central Online sans coûts supplémentaires. En revanche, il ne fonctionne pas sur une installation sur site.</p>\n<p>Pourtant, la plupart des administrateurs ne dépassent jamais le stade des démonstrations préétablies. Cet article montre comment enregistrer vos propres fonctionnalités Copilot en AL, leur donner un comportement fiable grâce à un métaprompt et sécuriser la connexion à Azure OpenAI. Vous trouverez aussi une liste de contrôle à tester dans un environnement sandbox.</p>\n\n<h2>Les points d'extension cachés de Copilot dans Business Central</h2>\n<p>La vraie puissance de Copilot ne se trouve pas dans les boutons visibles sur une fiche client. Saisir des données de factures, obtenir un résumé ou rédiger une description de produit sont avant tout des scénarios de démonstration. Les points d'ancrage destinés aux développeurs se trouvent plus bas, dans l'espace de noms System.AI, avec l'unité de code Copilot Capability et les énumérations associées.</p>\n<p>Deux notions sont à retenir :</p>\n<ul>\n<li><strong>Copilot Capability</strong> : l'ensemble de compétences que vous créez pour Copilot.</li>\n<li><strong>Copilot Availability</strong> : l'indication de quand et où cette compétence apparaît pour les utilisateurs finaux.</li>\n</ul>\n<p>Ensemble, ces objets forment une plateforme pour rendre Copilot spécifique à votre entreprise. Le module d'IA de Business Central propose des complétions de texte, des fonctions de chat pour les workflows et des embeddings pour la recherche sémantique. Vous pouvez ainsi créer une fonctionnalité qui rédige des bons de commande selon vos habitudes, ou un assistant qui parle avec la voix de votre entreprise.</p>\n<p>Une précision s'impose : la fonctionnalité de chat en préversion que l'on voit dans Business Central n'est pas extensible via ce module. Elle suit son propre chemin. Ce que vous pouvez étendre passe par le modèle de capacité décrit ici.</p>\n\n<h3>Le pont entre développeurs et administrateurs</h3>\n<p>Les développeurs définissent leurs capacités en AL, et les administrateurs les gèrent dans l'interface. Chaque capacité enregistrée apparaît sur la page « Capacité de Copilot et des agents ». Les administrateurs peuvent les désactiver une par une si quelque chose ne se passe pas comme prévu. Cette page offre donc de la visibilité, mais aussi un coupe-circuit rapide si votre Copilot personnalisé se comporte mal.</p>\n<p>Ces outils sont tranchants. Une capacité mal enregistrée peut créer des conflits, surtout lors des mises à jour de Microsoft, casser un sandbox ou, pire, bloquer des utilisateurs en production.</p>\n\n<h2>Enregistrer une capacité Copilot sans détruire son tenant</h2>\n<p>En termes AL simples, enregistrer une capacité revient à créer une extension de l'énumération Copilot Capability. Il faut ensuite appeler l'enregistrement de la capacité depuis une unité de code d'installation ou de mise à niveau. Cet appel est la poignée de main qui dit à Business Central : « voici une nouvelle fonctionnalité d'IA ». Sans lui, l'extension peut compiler, mais Copilot ignorera l'existence de la fonctionnalité.</p>\n\n<h3>Nommage, portée et versions</h3>\n<p>Votre fonctionnalité vit dans le même écosystème que celui que Microsoft met constamment à jour. Si vous réutilisez un nom générique ou réservez un identifiant imprécis, vous risquez un conflit : une future fonctionnalité intégrée pourrait occuper le même espace, et le système ne saurait plus laquelle afficher. La solution est simple :</p>\n<ul>\n<li>choisissez des noms uniques ;</li>\n<li>attribuez vos propres valeurs d'énumération, en dehors des plages courantes ;</li>\n<li>versionnez votre extension délibérément, pour savoir par exemple si le sandbox est en 1.2 alors que la production est encore en 1.0 ;</li>\n<li>utilisez des unités de code de mise à niveau pour faire évoluer la fonctionnalité en toute sécurité.</li>\n</ul>\n\n<h3>Un paramètre utile : l'URL « Learn More »</h3>\n<p>Lors de l'enregistrement, vous pouvez renseigner le paramètre optionnel d'URL « Learn More ». Il s'affiche directement sur la page d'administration des capacités. C'est de la documentation intégrée : les administrateurs n'ont plus à chercher un lien wiki ou à vous solliciter sur Teams.</p>\n\n<h3>Des vérifications à ne pas sauter</h3>\n<p>Si votre fonctionnalité n'apparaît pas sur la page des capacités après l'enregistrement, c'est qu'elle n'a pas été enregistrée correctement : cette page reflète la réalité du système. Notez aussi que l'activation ou la désactivation des fonctionnalités Copilot, ainsi que la configuration du transfert de données, sont réservées aux administrateurs disposant de droits étendus ou du rôle d'administrateur Business Central. Anticipez cette étape de gouvernance.</p>\n\n<h2>Le métaprompt : la fiche de poste de votre Copilot</h2>\n<p>Une fois la capacité enregistrée, elle fonctionne, mais de façon générique. Le métaprompt est le message système qui définit le profil, le format de sortie et les garde-fous du modèle. C'est la fiche de poste de l'IA. Un prompt utilisateur est une requête ponctuelle, alors que le métaprompt contient les instructions qui s'appliquent à chaque réponse. Sans lui, Copilot ne sait pas s'il doit adopter le ton d'un comptable ou celui d'un rédacteur, et il improvise.</p>\n<p>Prenons une demande comme « donne-moi des écritures comptables », sans contexte. Copilot inventera son style, avec de longs paragraphes ou des champs qui n'existent pas. Avec un métaprompt du type « vous êtes un assistant financier ; présentez toujours les écritures sous forme de listes à puces avec les noms de champs de Business Central », les réponses deviennent propres et structurées. Ce n'est qu'un exemple, mais il illustre le principe : le garde-fou est posé avant l'exécution de la requête.</p>\n\n<h3>Définir et stocker le métaprompt</h3>\n<p>Les développeurs le définissent via l'unité de code des messages de chat, en appelant « set primary system message ». Plutôt que de coder le texte en dur dans le fichier AL, stockez-le dans un espace isolé (Isolated Storage). Votre extension pourra ainsi le récupérer et le mettre à jour en toute sécurité, derrière la limite de sécurité de l'extension. C'est le modèle approprié pour la production.</p>\n\n<h3>Jetons et température</h3>\n<p>Lorsque vous envoyez des entrées au service Azure OpenAI via le module d'IA, vous gérez des budgets de jetons et des paramètres de température. Votre métaprompt et le prompt de l'utilisateur comptent tous deux dans la limite de jetons du modèle : évitez donc un message système interminable et soyez précis. La température contrôle le caractère plus ou moins créatif des réponses :</p>\n<ul>\n<li><strong>Température basse, proche de zéro</strong> : pour les scénarios financiers, où il faut des résultats déterministes et précis.</li>\n<li><strong>Température plus élevée</strong> : pour une fonctionnalité marketing qui doit laisser place à la créativité.</li>\n</ul>\n<p>Pour la conformité, ce sont les chiffres qui comptent. Votre métaprompt doit donc inclure des règles de formatage explicites, des structures de réponse et des restrictions sur les commentaires hors sujet. Il joue à la fois le rôle de documentation et de contrôle des risques.</p>\n<p>Enfin, il permet de différencier les personnalités. Un Copilot marketing peut recevoir l'instruction d'utiliser un langage persuasif et de trouver des slogans. Un Copilot financier peut avoir pour consigne de générer des écritures structurées, sans adjectifs. Le modèle sous-jacent est le même, mais les résultats diffèrent parce que la personnalité est définie à l'avance.</p>\n\n<h2>Protéger les clés Azure OpenAI : la sécurité avant tout</h2>\n<p>L'IA ne traite rien localement dans Business Central : tout transite par le backend Azure OpenAI. Si cette connexion est mal configurée, la qualité de vos métaprompts n'a plus aucune importance. Pour chaque appel, Copilot a besoin de trois éléments :</p>\n<ol>\n<li>le point de terminaison de la ressource, c'est-à-dire l'URL de votre ressource Azure OpenAI ;</li>\n<li>le nom du déploiement ;</li>\n<li>la clé API.</li>\n</ol>\n<p>Ces trois éléments forment la poignée de main qui prouve que votre tenant est autorisé à parler au modèle.</p>\n\n<h3>Ne jamais coder les valeurs en dur</h3>\n<p>N'intégrez jamais ces valeurs en dur dans le code AL, quelles que soient les circonstances. Une clé API placée dans le code ou sur GitHub par facilité expose votre dépôt, car ceux-ci sont constamment scrutés à la recherche de secrets exposés.</p>\n\n<h3>Développement et production : deux outils différents</h3>\n<ul>\n<li><strong>Stockage isolé (Isolated Storage)</strong> : comme un casier à l'intérieur de votre extension, auquel aucune autre extension n'a accès. C'est léger et pratique pour les tests et le développement, mais ce n'est pas un coffre-fort pour la production.</li>\n<li><strong>Azure Key Vault</strong> : la seule approche responsable en production. Les clés y résident dans un conteneur sécurisé, avec des politiques de journalisation et de rotation. Votre extension les appelle à l'exécution sans jamais exposer la clé brute dans le code. Les auditeurs apprécient ce modèle, car les secrets ne circulent jamais en clair.</li>\n</ul>\n\n<h3>Le texte secret en AL</h3>\n<p>En AL, vous pouvez stocker la clé API en tant que texte secret (SecretText). Même en mode débogage, la valeur n'apparaît pas en clair et ne peut pas être capturée par une capture d'écran. Cela élimine l'un des vecteurs de fuite les plus bêtes : l'exposition accidentelle par un développeur dans le débogueur.</p>\n\n<h3>Les permissions ne protègent pas les clés</h3>\n<p>Copilot hérite du contrôle d'accès aux données métier, mais les clés authentifient l'ensemble du service. Si l'une d'elles fuite, des tiers peuvent usurper toute l'intégration. Pour valider votre configuration, utilisez la séquence d'autorisation de l'unité de code Azure OpenAI : vous y saisissez l'URL de la ressource, le déploiement et la clé API pour vérifier que tout concorde. Testez en développement, puis en pré-production, puis en production, avec trois environnements et trois jeux de clés.</p>\n\n<h2>Mettre en place le workflow Copilot en cinq étapes</h2>\n<p>Une capacité, un métaprompt et une clé sécurisée ne servent à rien s'ils restent isolés. Voici la séquence complète :</p>\n<ol>\n<li><strong>La capacité</strong> : étendre l'énumération de capacité Copilot et l'enregistrer dans une unité de code d'installation ou de mise à niveau.</li>\n<li><strong>La disponibilité</strong> : déterminer où la fonctionnalité apparaît, via la page d'administration des capacités. Vous choisissez entre version préliminaire, usage interne uniquement ou disponibilité pour tous. C'est l'interrupteur de déploiement des administrateurs.</li>\n<li><strong>L'autorisation</strong> : connecter le backend Azure OpenAI avec l'URL de la ressource, le nom du déploiement et la clé API. Sans cela, la fonctionnalité reste bloquée à la porte.</li>\n<li><strong>Le métaprompt</strong> : injecter les instructions permanentes (ton, structure, formatage) via « set primary system message », en le récupérant depuis le stockage isolé ou depuis le coffre de clés en production.</li>\n<li><strong>Le pilotage</strong> : déployer d'abord auprès d'un petit groupe, recueillir les retours et surveiller la télémétrie. Le module d'IA enregistre l'utilisation, ce qui permet de voir si les résultats sont corrects.</li>\n</ol>\n\n<h3>Un exemple concret</h3>\n<p>Une équipe a créé un Copilot de suggestions de commandes commerciales. Elle a étendu l'énumération et l'a liée à une unité de code d'installation, puis l'a marqué en version préliminaire pour que seuls les testeurs la voient. Ensuite, elle a configuré l'autorisation avec le point de terminaison, le déploiement et la clé. Elle a enfin rédigé un métaprompt stocké dans un stockage isolé : suggérer des offres groupées, les formater en lignes d'articles et s'abstenir de tout commentaire inutile. Après des tests en petits groupes jusqu'à des résultats prévisibles, la disponibilité est passée à « générale ». Le Copilot recommandait alors des offres au lieu de produire du texte superflu.</p>\n\n<h2>Erreurs fréquentes et pièges à éviter</h2>\n<ul>\n<li><strong>Déployer directement en production</strong> sous prétexte qu'il ne s'agit que d'une petite fonctionnalité : le support est vite submergé.</li>\n<li><strong>Utiliser des noms ou des identifiants génériques</strong>, qui entrent en conflit avec les futures fonctionnalités de Microsoft.</li>\n<li><strong>Négliger les unités de mise à niveau</strong>, ce qui rend l'évolution de la fonctionnalité risquée.</li>\n<li><strong>Confondre prompt et métaprompt</strong> : sans cadre permanent, Copilot invente son propre style.</li>\n<li><strong>Coder en dur la clé API</strong> ou la copier dans un dépôt.</li>\n<li><strong>Transposer le stockage isolé en production</strong> : ce n'est pas un coffre-fort.</li>\n<li><strong>Croire que les permissions utilisateurs protègent les clés</strong>.</li>\n<li><strong>Connecter toute la chaîne d'un coup</strong> en croisant les doigts, au lieu de tester chaque pièce isolément : enregistrement, disponibilité, autorisation, puis respect du métaprompt dans les réponses.</li>\n<li><strong>Exposer une fonctionnalité non finalisée</strong> à tous en ignorant l'étape de disponibilité.</li>\n</ul>\n\n<h2>Les points clés à retenir</h2>\n<ul>\n<li>Testez toute nouvelle capacité dans un sandbox avant la production.</li>\n<li>Choisissez des noms et des valeurs d'énumération uniques, et versionnez votre extension.</li>\n<li>Utilisez des unités de code de mise à niveau pour un suivi propre.</li>\n<li>Renseignez l'URL « Learn More » pour documenter la fonctionnalité directement pour les administrateurs.</li>\n<li>Rédigez un métaprompt précis, avec règles de formatage et restrictions, et stockez-le dans un espace isolé.</li>\n<li>Réglez la température selon la tâche et surveillez le budget de jetons.</li>\n<li>Stockage isolé en développement, Azure Key Vault en production, clé API en texte secret, aucune valeur dans le code.</li>\n<li>Exécutez la séquence d'autorisation de bout en bout avant toute validation.</li>\n<li>Pilotez la fonctionnalité depuis la page des capacités de Copilot et des agents, qui sert aussi de coupe-circuit.</li>\n<li>Rappel de gouvernance : Copilot hérite des autorisations de l'utilisateur et ne lit donc jamais ce à quoi celui-ci n'a pas accès. Microsoft n'entraîne pas ses modèles sur les données de votre tenant, sauf autorisation explicite.</li>\n</ul>\n\n<h2>Conclusion</h2>\n<p>Copilot n'est pas une boîte noire verrouillée : sous les démonstrations se cache une plateforme d'extension déjà présente dans chaque tenant Business Central Online. En enregistrant vos propres capacités, en cadrant leur comportement par un métaprompt et en protégeant vos clés Azure OpenAI, vous transformez un jouet de démonstration en assistant adapté à votre entreprise. Traitez l'enregistrement comme du code de production, déployez par étapes et gardez la page d'administration comme filet de sécurité. Le plus simple est de commencer dès cette semaine, en testant une capacité dans votre sandbox avec la liste de contrôle ci-dessus.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Créer sa fonctionnalité Copilot dans Business Central en 5 étapes",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Capacité",
+     "text": "Étendre l'énumération Copilot Capability et l'enregistrer dans une unité de code d'installation ou de mise à niveau."
+    },
+    {
+     "kopf": "Disponibilité",
+     "text": "Choisir préversion, usage interne ou disponibilité générale depuis la page d'administration des capacités."
+    },
+    {
+     "kopf": "Autorisation",
+     "text": "Connecter Azure OpenAI avec l'URL de la ressource, le nom du déploiement et la clé API."
+    },
+    {
+     "kopf": "Métaprompt",
+     "text": "Définir le message système principal : ton, structure et format de sortie, stockés dans un espace isolé."
+    },
+    {
+     "kopf": "Pilotage",
+     "text": "Déployer auprès d'un petit groupe, suivre la télémétrie et garder la désactivation possible par les administrateurs."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Comment enregistrer une capacité Copilot personnalisée dans Business Central avec AL ?",
+    "a": "Il faut étendre l'énumération Copilot Capability, puis appeler l'enregistrement de la capacité depuis une unité de code d'installation ou de mise à niveau. Sans cet appel, l'extension peut compiler, mais Copilot ignorera la fonctionnalité. Elle doit ensuite apparaître sur la page « Capacité de Copilot et des agents »."
+   },
+   {
+    "q": "Qu'est-ce qu'un métaprompt dans Copilot pour Business Central et à quoi sert-il ?",
+    "a": "Le métaprompt est le message système qui définit le profil, le format de sortie et les garde-fous du modèle, comme une fiche de poste. Contrairement à un prompt utilisateur ponctuel, il s'applique à chaque réponse. Sans lui, Copilot improvise son style. On le définit avec « set primary system message »."
+   },
+   {
+    "q": "Comment sécuriser la clé API Azure OpenAI dans une extension Business Central ?",
+    "a": "Ne codez jamais la clé en dur dans l'AL ni dans un dépôt GitHub. Utilisez le stockage isolé en développement et Azure Key Vault en production, avec une clé stockée en SecretText. Le stockage isolé n'est pas un coffre-fort adapté à la production."
+   },
+   {
+    "q": "Quels paramètres faut-il régler pour Azure OpenAI dans Copilot, comme la température et les jetons ?",
+    "a": "La température contrôle la créativité : proche de zéro pour la finance, où il faut des résultats précis et déterministes, plus élevée pour le marketing. Le métaprompt et le prompt utilisateur comptent dans la limite de jetons du modèle, donc le message système doit rester précis et court."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Stockage isolé ou Azure Key Vault",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Stockage isolé (développement)",
+     "punkte": [
+      "Casier interne à l'extension, inaccessible aux autres extensions",
+      "Léger et pratique pour les tests et le développement",
+      "Pas un coffre-fort pour la production",
+      "Peut stocker le métaprompt de façon sécurisée"
+     ]
+    },
+    "rechts": {
+     "titel": "Azure Key Vault (production)",
+     "punkte": [
+      "Seule approche responsable en production",
+      "Conteneur sécurisé avec journalisation et rotation des clés",
+      "Appelé à l'exécution sans exposer la clé brute",
+      "Apprécié des auditeurs : aucun secret en clair"
+     ]
+    }
+   },
+   {
+    "titel": "Liste de contrôle avant la mise en production",
+    "typ": "checkliste",
+    "punkte": [
+     "Tester la nouvelle capacité dans un sandbox avant la production",
+     "Choisir des noms et valeurs d'énumération uniques, versionner l'extension",
+     "Renseigner l'URL « Learn More » pour les administrateurs",
+     "Rédiger un métaprompt précis avec règles de formatage et restrictions",
+     "Régler la température selon la tâche et surveiller le budget de jetons",
+     "Ne coder aucune clé en dur : SecretText et Azure Key Vault",
+     "Exécuter la séquence d'autorisation de bout en bout",
+     "Piloter depuis la page des capacités, qui sert de coupe-circuit"
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Que faut-il faire pour que Copilot reconnaisse une nouvelle capacité personnalisée ?",
+    "opts": [
+     "Étendre l'énumération Copilot Capability et l'enregistrer dans une unité de code d'installation ou de mise à niveau",
+     "Créer uniquement une page AL qui affiche un bouton Copilot sur la fiche client",
+     "Demander à Microsoft d'ajouter manuellement la capacité dans le tenant",
+     "Saisir la capacité directement dans la page d'administration, sans écrire de code AL"
+    ],
+    "a": 0,
+    "why": "Sans l'appel d'enregistrement, l'extension peut compiler, mais Copilot ignore l'existence de la fonctionnalité."
+   },
+   {
+    "q": "Quel est le rôle du métaprompt dans une fonctionnalité Copilot ?",
+    "opts": [
+     "Il remplace la clé API pour authentifier le tenant auprès d'Azure OpenAI",
+     "Il définit les instructions permanentes : profil, format de sortie et garde-fous du modèle",
+     "Il sert de requête ponctuelle saisie par l'utilisateur à chaque fois",
+     "Il augmente automatiquement la limite de jetons du modèle"
+    ],
+    "a": 1,
+    "why": "Le métaprompt est le message système, la fiche de poste de l'IA, qui s'applique à chaque réponse."
+   },
+   {
+    "q": "Comment gérer la clé API Azure OpenAI dans un environnement de production ?",
+    "opts": [
+     "La coder en dur dans l'AL, car le code de l'extension est protégé",
+     "La stocker dans le stockage isolé, qui est un coffre-fort suffisant",
+     "La stocker dans Azure Key Vault et la manipuler en texte secret (SecretText)",
+     "S'appuyer sur les permissions des utilisateurs pour protéger la clé"
+    ],
+    "a": 2,
+    "why": "Azure Key Vault est l'approche responsable en production. Le stockage isolé convient au développement, et les permissions ne protègent pas les clés."
+   },
+   {
+    "q": "Quelle température convient le mieux à un scénario financier ?",
+    "opts": [
+     "Une température élevée, pour varier les écritures comptables",
+     "Une température moyenne, pour imiter le ton d'un rédacteur marketing",
+     "La température n'a aucun effet sur les résultats du modèle",
+     "Une température basse, proche de zéro, pour des résultats déterministes et précis"
+    ],
+    "a": 3,
+    "why": "Les scénarios financiers exigent des résultats précis et déterministes. Une température plus élevée convient plutôt à la créativité marketing."
+   }
+  ]
+ },
+ "it": {
+  "html": "<p>Riconciliare pagamenti, scrivere descrizioni di prodotto, preparare bozze di ordini: sono attività ripetitive che Copilot in Business Central promette di alleggerire. La funzione è inclusa in Business Central online senza costi aggiuntivi, ma non va data per scontata in un'installazione on-premise. La maggior parte degli amministratori, però, si ferma agli scenari dimostrativi già pronti.</p>\n<p>Sotto la superficie esiste invece un framework pensato per gli sviluppatori. Permette di registrare funzionalità Copilot personalizzate in AL, di definirne il comportamento con un metaprompt e di collegarle in modo sicuro ad Azure OpenAI. Questo articolo mostra come procedere, dove si nascondono i rischi e quale ordine seguire per non compromettere il tenant.</p>\n\n<h2>Copilot in Business Central: i punti di estensione sotto la superficie</h2>\n<p>Il vero potenziale di Copilot non sta nei pulsanti che si vedono sulla scheda cliente. I punti di estensione si trovano nello spazio dei nomi <strong>System AI</strong>: lì vanno cercati la code unit <strong>Copilot Capability</strong> e i relativi enum. Sono stati creati per permetterti di definire e registrare funzioni basate sull'IA, senza aspettare che Microsoft rilasci una nuova demo.</p>\n<p>Due concetti sono centrali:</p>\n<ul>\n<li><strong>Capability</strong>: l'insieme di abilità che crei per Copilot.</li>\n<li><strong>Availability</strong>: stabilisce quando e dove quell'abilità compare per gli utenti finali.</li>\n</ul>\n<p>Insieme formano un framework per rendere Copilot specifico per la tua azienda, non un semplice menu di widget preconfezionati.</p>\n\n<h3>Cosa puoi costruire con il modulo AI</h3>\n<p>Il modulo AI di Business Central offre completamento di testo, funzionalità in stile chat per i flussi di lavoro ed embedding per la ricerca semantica. In pratica puoi creare una funzionalità che redige ordini di acquisto in base ai modelli della tua azienda, oppure assistenti che parlano con la voce della tua organizzazione.</p>\n<p>Un chiarimento importante: l'anteprima della chat con Copilot che potresti aver visto in Business Central non è estendibile tramite questo modulo. Ciò che puoi estendere passa dal modello di capacità descritto qui.</p>\n\n<h3>La pagina «Funzionalità Copilot e agenti»</h3>\n<p>Il lavoro dello sviluppatore in AL trova il suo corrispettivo nell'interfaccia per gli amministratori. Ogni funzionalità registrata compare nella pagina delle funzionalità Copilot e degli agenti, e gli amministratori possono disattivarle una per una se qualcosa non funziona. Questa pagina è anche un interruttore di arresto rapido se la funzionalità personalizzata inizia a comportarsi male.</p>\n\n<h2>Come registrare una funzionalità Copilot in AL</h2>\n<p>La registrazione non ha nulla di magico. In AL significa creare un'estensione dell'enum delle funzionalità Copilot e poi usare una code unit di installazione e aggiornamento che richiama la procedura di registrazione della funzionalità (Register Capability). È il passaggio con cui dichiari a Business Central che esiste una nuova funzione IA da trattare come parte del sistema. Senza quella chiamata l'estensione può compilarsi, ma Copilot non saprà che la funzione esiste.</p>\n\n<h3>Nomi, ID e versioni</h3>\n<p>Ogni funzionalità vive nello stesso ecosistema che Microsoft aggiorna di continuo. Un nome generico o un valore enum scelto a caso invita al conflitto: se un aggiornamento futuro introduce una funzionalità integrata nello stesso spazio, il sistema potrebbe non sapere quale mostrare. Le contromisure sono poco appariscenti ma essenziali:</p>\n<ul>\n<li>scegli nomi univoci;</li>\n<li>assegna valori enum che non si sovrappongano a quelli comuni;</li>\n<li>versiona l'estensione in modo deliberato, per sapere se il sandbox è alla 1.2 mentre la produzione è ancora alla 1.0;</li>\n<li>usa le code unit di aggiornamento per portare avanti la funzionalità in sicurezza quando la piattaforma cambia.</li>\n</ul>\n\n<h3>Il parametro LearnMoreURL</h3>\n<p>Durante la registrazione puoi indicare il parametro opzionale per l'URL di approfondimento. Apparirà direttamente nella pagina di amministrazione delle funzionalità Copilot e degli agenti. È documentazione integrata: gli amministratori non devono cercare un link su una wiki, ma trovano subito cosa fa la funzionalità e come usarla.</p>\n\n<h2>Errori comuni e rischi da evitare</h2>\n<p>Registrare funzionalità in modo approssimativo può creare conflitti, soprattutto quando Microsoft rilascia aggiornamenti. Se sbagli, il sandbox può rompersi oppure, peggio, puoi bloccare gli utenti in produzione. Gli errori più frequenti sono questi:</p>\n<ul>\n<li><strong>Pubblicare direttamente in produzione</strong> perché l'estensione contiene una sola funzionalità. Il percorso corretto è: prima il sandbox, poi test e correzioni, e solo a risultato stabile la produzione.</li>\n<li><strong>Riciclare nomi generici</strong> o usare intervalli di enum comuni.</li>\n<li><strong>Ignorare le code unit di aggiornamento</strong>, con il rischio di ritrovarsi a ripristinare database.</li>\n<li><strong>Non verificare la registrazione</strong>: se la funzionalità non compare nella pagina delle funzionalità Copilot e degli agenti, non è registrata correttamente.</li>\n<li><strong>Dimenticare la governance</strong>: attivare o disattivare le funzionalità e configurare il movimento dei dati può farlo solo chi ha il ruolo di amministratore di Business Central con permessi elevati. Conviene pianificare per tempo questo passaggio.</li>\n</ul>\n<p>Quattro regole riducono il rischio: lavorare in sandbox prima della produzione, scegliere valori enum univoci, usare sempre le unità di installazione e aggiornamento e collegare l'URL di approfondimento. In sintesi, la registrazione va trattata come codice di produzione, perché lo è.</p>\n\n<h2>Il metaprompt: dare personalità e regole al tuo Copilot</h2>\n<p>Una funzionalità registrata è operativa, ma ancora generica: risponde, ma senza carattere. Il passo successivo è insegnarle come comportarsi. Il <strong>metaprompt</strong> è il messaggio di sistema principale che definisce il profilo del modello, il formato dell'output e le linee guida. È l'equivalente della descrizione del ruolo per una nuova persona in azienda.</p>\n\n<h3>Prompt e metaprompt a confronto</h3>\n<p>Il prompt dell'utente è una richiesta specifica e temporanea. Il metaprompt contiene istruzioni permanenti che accompagnano ogni risposta per tutto il contesto della chat. Molti amministratori li confondono e si frustrano: se chiedi semplicemente le voci di registro senza contesto, Copilot inventa un proprio stile, magari con paragrafi lunghi o campi che non esistono. Se invece il metaprompt stabilisce che l'assistente finanziario fornisce sempre le voci di registro come elenchi puntati, usando i nomi dei campi di Business Central, le risposte diventano pulite e strutturate. Il guardrail è impostato prima ancora che la richiesta venga eseguita.</p>\n\n<h3>Come impostarlo tecnicamente</h3>\n<p>Gli sviluppatori lo impostano tramite la code unit dei messaggi di chat AOAI, chiamando <em>Set Primary System Message</em>. Conviene conservare il testo in un'archiviazione isolata (Isolated Storage) invece di scriverlo direttamente nel file AL: così l'estensione può recuperarlo e aggiornarlo in sicurezza, protetto dal perimetro dell'estensione.</p>\n\n<h3>Token e temperatura</h3>\n<p>Quando l'input arriva al servizio Azure OpenAI tramite il modulo AI, due parametri contano:</p>\n<ul>\n<li><strong>Budget di token</strong>: metaprompt e prompt dell'utente rientrano insieme nel limite del modello, quindi i messaggi di sistema devono essere precisi e non interminabili.</li>\n<li><strong>Temperatura</strong>: vicina allo zero per scenari finanziari, dove servono output deterministici e precisi nei campi; più alta per funzionalità creative come il marketing.</li>\n</ul>\n<p>Per la conformità, il metaprompt dovrebbe includere regole di formattazione esplicite, strutture di risposta e restrizioni sui commenti. Così gli output reggono ai sistemi a valle e ai controlli: è metà documentazione e metà controllo del rischio.</p>\n<p>Anche la personalità si definisce in anticipo. Un copilot di marketing può usare un linguaggio persuasivo e inventare slogan; uno finanziario produce registrazioni contabili strutturate senza aggettivi. L'IA di base è la stessa, i risultati no.</p>\n\n<h2>Proteggere le chiavi di Azure OpenAI</h2>\n<p>Il miglior metaprompt non serve se le credenziali sono esposte. L'IA non elabora nulla localmente in Business Central: tutto passa dal back-end di Azure OpenAI. Per ogni chiamata servono tre elementi: l'<strong>endpoint della risorsa</strong> (l'URL di Azure OpenAI), il <strong>nome della distribuzione</strong> e la <strong>chiave API</strong>.</p>\n\n<h3>Cosa non fare mai</h3>\n<p>Non inserire questi valori direttamente nel codice AL e non finiranno in un repository: i repository vengono scansionati di continuo alla ricerca di segreti. Anche le autorizzazioni utente in Business Central non proteggono le chiavi. Copilot rispetta il controllo di accesso ai dati aziendali, ma la chiave autentica l'intero servizio: se viene sottratta, qualcun altro può impersonare l'integrazione.</p>\n\n<h3>Sviluppo e produzione: due strumenti diversi</h3>\n<ul>\n<li><strong>Isolated Storage</strong> per sviluppo e test: un armadietto privato dell'estensione, che nessun'altra estensione può leggere. Ideale per sandbox e build di sviluppo, ma non pensato per la produzione.</li>\n<li><strong>Azure Key Vault</strong> per la produzione: un contenitore protetto con policy di logging e rotazione adeguate. L'estensione richiama la chiave a runtime senza esporla mai nel codice. Dimostra agli auditor che i segreti non sono mai stati in chiaro.</li>\n</ul>\n<p>In AL puoi inoltre memorizzare la chiave API come <strong>testo segreto</strong> (SecretText): anche durante il debug il valore non appare in chiaro e non finisce negli screenshot. Elimina una delle fughe più banali, l'esposizione accidentale nel debugger.</p>\n\n<h3>Verificare la configurazione</h3>\n<p>La procedura ufficiale passa dalla code unit Azure OpenAI, con la chiamata di impostazione dell'autorizzazione (Set Authorization), a cui si passano URL della risorsa, deployment e chiave API. Se sbagli, Copilot non si carica; se lo fai a metà, gli utenti troveranno gli errori silenziosi prima di te. Procedi in ordine: sviluppo, preproduzione, produzione, con tre ambienti e tre set di chiavi.</p>\n\n<h2>Dal progetto alla realtà: i cinque passaggi del flusso di lavoro</h2>\n<p>Una funzionalità, un metaprompt e una chiave sicura servono a poco se restano isolati. La sequenza completa si riassume in cinque passaggi:</p>\n<ol>\n<li><strong>Funzionalità (Capability)</strong>: estendi l'enum e registra la funzionalità in una code unit di installazione o aggiornamento. È l'annuncio ufficiale della nuova abilità.</li>\n<li><strong>Disponibilità (Availability)</strong>: definisci il pubblico. Dalla pagina di amministrazione una funzionalità può essere contrassegnata come anteprima o come generalmente disponibile (GA). Saltare questo passaggio rischia di esporre funzioni incomplete a tutti gli utenti.</li>\n<li><strong>Autorizzazione</strong>: collega il back-end di Azure OpenAI con endpoint, nome della distribuzione e chiave API. È il badge che fa entrare l'assistente nell'edificio.</li>\n<li><strong>Metaprompt</strong>: imposta il messaggio di sistema principale, recuperandolo dall'archiviazione sicura (Isolated Storage o, in produzione, un riferimento a Key Vault).</li>\n<li><strong>Pilotaggio</strong>: distribuisci a un piccolo gruppo, raccogli feedback e monitora la telemetria, che registra l'utilizzo e mostra se i risultati sono puliti o inutili.</li>\n</ol>\n\n<h3>Un esempio concreto</h3>\n<p>Un team ha creato un copilot per i suggerimenti sugli ordini di vendita. Ha esteso l'enum, collegato la funzionalità a una code unit di installazione e l'ha contrassegnata come anteprima, visibile solo agli utenti di test. Poi ha impostato l'autorizzazione Azure OpenAI e scritto un metaprompt in archivio isolato: un assistente che suggerisce pacchetti e li formatta come righe di articolo, senza chiacchiere superflue. Dopo i test in piccoli gruppi, ha portato la disponibilità a GA per tutti gli utenti delle vendite.</p>\n\n<h3>Test e piano di rollback</h3>\n<p>Prima di espanderti serve un piano di rollback. La pagina delle funzionalità Copilot e degli agenti lo offre: gli amministratori possono disattivare subito le singole funzionalità. La stessa pagina mostra l'interruttore per il movimento consentito dei dati tra le aree geografiche, un dettaglio a cui chi si occupa di conformità farà attenzione. Collauda ogni parte in isolamento: registrazione, disponibilità, autorizzazione e infine l'efficacia del metaprompt nelle risposte. Solo allora l'intera catena va messa in mano agli utenti.</p>\n\n<h2>Takeaway pratici</h2>\n<ul>\n<li>Cerca i punti di estensione nello spazio dei nomi System AI: Copilot Capability e i relativi enum.</li>\n<li>Registra ogni funzionalità con un'estensione enum e una code unit di installazione e aggiornamento.</li>\n<li>Usa nomi e valori enum univoci e versiona l'estensione.</li>\n<li>Indica l'URL di approfondimento per aiutare gli amministratori.</li>\n<li>Lavora sempre prima in sandbox, poi in produzione.</li>\n<li>Scrivi un metaprompt preciso, con tono, struttura e regole di formattazione, e abbinalo alla temperatura giusta.</li>\n<li>Non inserire mai endpoint, deployment o chiavi nel codice AL né nei repository.</li>\n<li>Usa Isolated Storage in sviluppo e Azure Key Vault in produzione, con la chiave come testo segreto.</li>\n<li>Segui la sequenza: funzionalità, disponibilità, autorizzazione, metaprompt, pilotaggio.</li>\n<li>Controlla le funzionalità dalla pagina Copilot e agenti: Copilot eredita le autorizzazioni dell'utente e non legge ciò a cui l'utente non ha accesso. Inoltre Microsoft non addestra modelli sui dati del tuo tenant se non lo consenti esplicitamente.</li>\n</ul>\n\n<h2>Conclusione</h2>\n<p>Copilot in Business Central è più di una vetrina di demo: gli strumenti per adattarlo alla tua azienda sono già nel tenant. Il successo dipende dal metodo: registrazione pulita, metaprompt mirato, chiavi custodite correttamente e rilascio graduale con la possibilità di spegnere tutto dalla pagina di amministrazione. Un buon punto di partenza è provare una funzionalità nel sandbox e verificarne ogni passaggio prima di portarla agli utenti.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Copilot personalizzato in Business Central: i 5 passaggi",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Funzionalità",
+     "text": "Estendi l'enum e registra la capability in una code unit di installazione o aggiornamento."
+    },
+    {
+     "kopf": "Disponibilità",
+     "text": "Definisci il pubblico: anteprima o GA, gestibile dalla pagina Copilot e agenti."
+    },
+    {
+     "kopf": "Autorizzazione",
+     "text": "Collega Azure OpenAI con endpoint, nome della distribuzione e chiave API."
+    },
+    {
+     "kopf": "Metaprompt",
+     "text": "Imposta il messaggio di sistema con tono, struttura e formato; conservalo in modo sicuro."
+    },
+    {
+     "kopf": "Pilotaggio",
+     "text": "Prova con un piccolo gruppo, monitora la telemetria e prepara un piano di rollback."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Come si registra una funzionalità Copilot personalizzata in Business Central con AL?",
+    "a": "Si crea un'estensione dell'enum delle funzionalità Copilot e si usa una code unit di installazione e aggiornamento che richiama la procedura Register Capability. Senza questa chiamata l'estensione può compilarsi, ma Copilot non sa che la funzione esiste e non la mostra."
+   },
+   {
+    "q": "Che cos'è il metaprompt in Copilot e in cosa si differenzia dal prompt dell'utente?",
+    "a": "Il metaprompt è il messaggio di sistema principale che definisce profilo del modello, formato dell'output e linee guida, con istruzioni permanenti per tutta la chat. Il prompt dell'utente, invece, è una richiesta specifica e temporanea. Si imposta con Set Primary System Message."
+   },
+   {
+    "q": "Dove vanno conservate le chiavi API di Azure OpenAI in Business Central?",
+    "a": "Mai nel codice AL né nei repository. In sviluppo e test si usa Isolated Storage, riservato all'estensione; in produzione Azure Key Vault, con policy di logging e rotazione. La chiave API si può inoltre memorizzare come SecretText, così non appare in chiaro nemmeno nel debugger."
+   },
+   {
+    "q": "Come si può disattivare rapidamente una funzionalità Copilot che si comporta male?",
+    "a": "Dalla pagina «Funzionalità Copilot e agenti» un amministratore di Business Central con permessi elevati può disattivare le singole funzionalità registrate. La pagina funge da interruttore di arresto rapido e mostra anche l'opzione per il movimento dei dati tra le aree geografiche."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Isolated Storage o Azure Key Vault: dove custodire le chiavi",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Isolated Storage (sviluppo e test)",
+     "punkte": [
+      "Armadietto privato dell'estensione, che nessun'altra estensione può leggere",
+      "Ideale per sandbox e build di sviluppo",
+      "Non pensato per la produzione",
+      "Può conservare anche il testo del metaprompt"
+     ]
+    },
+    "rechts": {
+     "titel": "Azure Key Vault (produzione)",
+     "punkte": [
+      "Contenitore protetto con policy di logging e rotazione adeguate",
+      "L'estensione richiama la chiave a runtime senza esporla nel codice",
+      "Dimostra agli auditor che i segreti non sono mai stati in chiaro",
+      "Usato anche per il riferimento al metaprompt in produzione"
+     ]
+    }
+   },
+   {
+    "titel": "Errori comuni e rischi da evitare",
+    "typ": "checkliste",
+    "punkte": [
+     "Non pubblicare direttamente in produzione: prima sandbox, test e correzioni",
+     "Evita nomi generici e intervalli di enum comuni",
+     "Non ignorare le code unit di aggiornamento: rischi di ripristinare database",
+     "Verifica che la funzionalità compaia nella pagina Copilot e agenti",
+     "Pianifica per tempo la governance: servono permessi di amministratore elevati",
+     "Non inserire endpoint, deployment o chiavi nel codice AL né nei repository"
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Quale operazione dichiara a Business Central che esiste una nuova funzione IA personalizzata?",
+    "opts": [
+     "Pubblicare l'estensione direttamente nell'ambiente di produzione",
+     "Chiamare la procedura Register Capability in una code unit di installazione e aggiornamento",
+     "Scrivere il metaprompt nel file AL dell'estensione",
+     "Attivare l'interruttore del movimento dei dati tra aree geografiche"
+    ],
+    "a": 1,
+    "why": "Senza la chiamata di registrazione l'estensione può compilarsi, ma Copilot non sa che la funzione esiste."
+   },
+   {
+    "q": "Qual è la differenza principale tra metaprompt e prompt dell'utente?",
+    "opts": [
+     "Il metaprompt contiene istruzioni permanenti che accompagnano ogni risposta nel contesto della chat",
+     "Il metaprompt è una richiesta temporanea, il prompt dell'utente è permanente",
+     "Il metaprompt non conta nel budget di token del modello",
+     "Il prompt dell'utente definisce la personalità e il formato dell'output"
+    ],
+    "a": 0,
+    "why": "Il metaprompt è il messaggio di sistema principale con profilo, formato e linee guida; il prompt è una richiesta specifica e temporanea."
+   },
+   {
+    "q": "Dove conviene conservare la chiave API di Azure OpenAI in produzione?",
+    "opts": [
+     "Direttamente nel codice AL, protetta dalle autorizzazioni utente",
+     "In Isolated Storage, ideale soprattutto per la produzione",
+     "In un repository privato con scansione dei segreti",
+     "In Azure Key Vault, richiamata a runtime senza esporla nel codice"
+    ],
+    "a": 3,
+    "why": "Key Vault offre logging e rotazione e dimostra agli auditor che i segreti non sono mai in chiaro; Isolated Storage serve per sviluppo e test."
+   },
+   {
+    "q": "Quale temperatura è consigliata per scenari finanziari che richiedono output deterministici?",
+    "opts": [
+     "Molto alta, per ottenere formulazioni creative",
+     "Intermedia, per bilanciare stile e precisione dei campi",
+     "Vicina allo zero",
+     "Variabile in base alla lunghezza del metaprompt"
+    ],
+    "a": 2,
+    "why": "Per output precisi e deterministici nei campi serve una temperatura vicina allo zero; temperature più alte si addicono a funzioni creative come il marketing."
+   }
+  ]
+ },
+ "pt": {
+  "html": "<p>Muitos administradores gostariam que o Business Central assumisse as tarefas repetitivas, como conciliar pagamentos ou redigir textos de produtos, sem cliques extras e sem noites perdidas no Excel. É essa a promessa do Copilot. Ele já vem integrado ao Business Central Online sem custo adicional, mas não roda em instalações on-premise.</p>\n<p>A maioria das equipes, porém, nunca vai além das demonstrações padrão. Este artigo mostra como registrar recursos próprios do Copilot em AL, como definir o comportamento com um metaprompt, como proteger as chaves do Azure OpenAI e como juntar tudo em um fluxo que funciona. No fim, você terá uma lista de verificação para testar em um ambiente sandbox.</p>\n\n<h2>Pontos de extensão do Copilot no Business Central: o que existe por baixo do menu</h2>\n<p>Os botões que aparecem na interface são só a superfície: digitar dados de fatura, obter um resumo, redigir uma descrição de produto. Os ganchos reais para desenvolvedores ficam no namespace do sistema de IA (System AI), em especial na codeunit de capacidade do Copilot (Copilot Capability) e em objetos relacionados. Eles foram criados para que você defina e registre seus próprios recursos baseados em IA, sem esperar uma nova demonstração da Microsoft a cada trimestre.</p>\n<h3>Capacidade e disponibilidade</h3>\n<ul>\n<li><strong>Capacidade:</strong> o conjunto de habilidades que você cria para o Copilot.</li>\n<li><strong>Disponibilidade:</strong> define quando e onde essa habilidade aparece para os usuários finais.</li>\n</ul>\n<p>Juntas, as duas formam uma estrutura para tornar o Copilot específico para a sua empresa.</p>\n<h3>O que o módulo de IA oferece</h3>\n<p>O módulo de IA do Business Central oferece conclusões de texto, conclusões em estilo de chat para fluxos de trabalho e embeddings para busca semântica. Com isso, é possível criar, por exemplo, um recurso que rascunha pedidos de compra com base nos padrões da sua empresa, e não em suposições genéricas. Também dá para criar assistentes que falam com a voz da organização.</p>\n<p>Um aviso importante: o chat do Copilot que você talvez já tenha visto no Business Central não é extensível por esse módulo. O que você pode estender passa pelo modelo de capacidades.</p>\n<h3>Onde o administrador enxerga o resultado</h3>\n<p>Cada capacidade registrada aparece na página de capacidades do Copilot e agentes dentro do Business Central. Os administradores podem desativá-las uma a uma se algo se comportar mal. Essa ponte, em que desenvolvedores definem em AL e administradores gerenciam na interface, é o que torna o modelo prático. Ela também funciona como um botão de emergência caso uma capacidade personalizada comece a falhar.</p>\n\n<h2>Como registrar uma capacidade do Copilot em AL</h2>\n<p>Em termos de AL, o registro tem dois passos: criar uma extensão do enum de capacidades do Copilot e usar uma codeunit de instalação ou de atualização que chame o método de registro da capacidade (Register Capability). Essa chamada avisa ao Business Central que existe um novo recurso e que ele deve ser tratado como parte do sistema.</p>\n<p>Sem essa chamada, a extensão pode até compilar, mas o Copilot não saberá que o recurso existe. Se a capacidade não aparecer na página de capacidades do Copilot e agentes após o registro, ela não foi registrada corretamente. Essa página serve como verificação de sanidade.</p>\n<h3>Learn more URL: documentação embutida</h3>\n<p>Ao registrar, use o parâmetro opcional de URL \"Saiba mais\". Ele aparece diretamente na página administrativa e funciona como documentação integrada. Os administradores veem o que a capacidade faz e como usá-la, sem procurar um link de wiki ou perguntar a você no Teams.</p>\n<h3>Quem pode ativar e desativar</h3>\n<p>Ativar ou desativar capacidades, assim como configurar a movimentação de dados, só é possível para administradores com super permissões ou com uma função de administrador do Business Central. Planeje essa etapa de governança com antecedência.</p>\n\n<h2>Erros comuns no registro: nomes, IDs, versões e produção</h2>\n<p>Todas as capacidades vivem no mesmo ecossistema que a Microsoft atualiza constantemente. Se você reaproveita um nome genérico ou reserva um ID de forma descuidada, está pedindo por um conflito. Imagine uma capacidade chamada \"auxiliar de vendas\" com o valor 1. Se uma atualização futura da Microsoft trouxer uma capacidade integrada no mesmo espaço, o sistema não saberá qual exibir e o código entrará em conflito com a plataforma.</p>\n<h3>Como evitar conflitos</h3>\n<ul>\n<li>Use nomes únicos e atribua seus próprios valores de enum, fora das faixas comuns.</li>\n<li>Versione a extensão de forma deliberada, para saber, por exemplo, se o sandbox está na 1.2 enquanto a produção ainda está na 1.0.</li>\n<li>Use codeunits de atualização para levar a capacidade adiante com segurança quando a plataforma mudar.</li>\n</ul>\n<h3>Nunca direto em produção</h3>\n<p>Lançar a extensão direto em produção \"porque é só uma capacidade\" sobrecarrega o suporte técnico. O caminho certo é passar primeiro pelo sandbox: quebrar, refatorar e testar de novo. Só depois que tudo se comportar bem a extensão segue para a produção e para a revisão do administrador. Em resumo, trate o registro como código de produção, porque é isso que ele é.</p>\n\n<h2>Metaprompt no Business Central: dando personalidade e regras ao Copilot</h2>\n<p>Uma capacidade recém-registrada costuma ser prática, mas genérica: responde, porém sem personalidade. O próximo passo é ensinar o Copilot a agir. Segundo a documentação da Microsoft para desenvolvedores, o metaprompt é a mensagem de sistema principal, que define o perfil do modelo, o formato de saída e as diretrizes de segurança. É a descrição de cargo da IA.</p>\n<h3>Prompt e metaprompt não são a mesma coisa</h3>\n<p>Um prompt de usuário é uma solicitação isolada e temporária. O metaprompt reúne instruções permanentes, que valem para todo o contexto do chat. Sem ele, o Copilot não sabe se deve soar como um contador ou como um redator, e inventa o próprio estilo: parágrafos longos ou até campos que não existem.</p>\n<p>Compare as duas situações. Se você apenas pede \"me dê as entradas do razão\", o resultado é imprevisível. Se o metaprompt diz que o modelo é um assistente financeiro e que sempre deve exibir lançamentos contábeis como listas, com nomes de campos do Business Central, as respostas ficam limpas e estruturadas. A diretriz vale antes mesmo de a solicitação ser executada.</p>\n<h3>Personalidades diferentes com a mesma IA</h3>\n<p>Um Copilot de marketing pode ser instruído a usar linguagem persuasiva e criar slogans de produtos. Um Copilot financeiro pode exibir lançamentos de diário estruturados, sem adjetivos. A IA subjacente é a mesma, mas os resultados são completamente diferentes, porque a personalidade foi definida com antecedência.</p>\n<h3>Aspectos técnicos</h3>\n<ul>\n<li><strong>Definição:</strong> os desenvolvedores definem o metaprompt pela codeunit de mensagens de chat de IA (AI Chat Messages), chamando a mensagem de sistema principal.</li>\n<li><strong>Armazenamento:</strong> guarde o texto em armazenamento isolado (isolated storage), em vez de fixá-lo no arquivo AL. Assim a extensão pode recuperá-lo e atualizá-lo com segurança.</li>\n<li><strong>Tokens:</strong> o metaprompt somado ao prompt do usuário conta para o limite de tokens do modelo. Mantenha a mensagem de sistema precisa, sem exageros.</li>\n<li><strong>Temperatura:</strong> controla a aleatoriedade. Use valores próximos de zero em cenários financeiros, que exigem resultados determinísticos. Aumente em tarefas criativas, como rascunhos de marketing.</li>\n<li><strong>Formato:</strong> inclua regras de formatação explícitas, estruturas de resposta e restrições a comentários irrelevantes, para que os resultados sobrevivam a sistemas de processamento e auditorias.</li>\n</ul>\n<p>Trate o metaprompt como parte da documentação e do controle de risco.</p>\n\n<h2>Proteger as chaves do Azure OpenAI: armazenamento isolado, Key Vault e SecretText</h2>\n<p>O processamento da IA não acontece localmente no Business Central: tudo passa pelo back-end do Azure OpenAI. Se esse pipeline falhar, nenhuma regra bem escrita resolve. Para cada chamada, o Copilot precisa de três itens:</p>\n<ol>\n<li>o endpoint do recurso, ou seja, a URL do recurso Azure OpenAI;</li>\n<li>o nome da implantação;</li>\n<li>a chave da API.</li>\n</ol>\n<p>Juntos, eles provam que o tenant tem permissão para falar com o modelo.</p>\n<h3>O que nunca fazer</h3>\n<p>Nunca grave esses valores diretamente no código AL. Uma chave de API no código, ou enviada ao GitHub por conveniência, convida scanners de credenciais, porque repositórios são vasculhados constantemente em busca de segredos expostos. Isso não se corrige com uma simples atualização de texto.</p>\n<h3>Um padrão por ambiente</h3>\n<ul>\n<li><strong>Desenvolvimento e testes:</strong> armazenamento isolado no AL. Funciona como um armário dentro da extensão, que outras extensões não conseguem espiar. É leve e adequado para sandboxes, mas não tem nível de produção e não deve ser o seu cofre quando há usuários e dados reais.</li>\n<li><strong>Produção:</strong> Azure Key Vault. Ele mantém as chaves em um contêiner seguro, com controle de acesso, log e políticas de rotação. A extensão chama o que precisa em tempo de execução e nunca expõe a chave bruta no código. Esse é o padrão que os auditores esperam.</li>\n</ul>\n<h3>SecretText e permissões</h3>\n<p>Em AL, armazene a chave de API como SecretText. Assim, mesmo ao depurar passo a passo, a chave não aparece em texto simples para quem quiser tirar um print. Isso fecha um vetor de vazamento simples: a exposição acidental no depurador.</p>\n<p>Lembre também que as permissões de usuário do Business Central controlam o acesso aos dados de negócio, mas não protegem as chaves. Elas autenticam o serviço inteiro, e, se uma vazar, terceiros podem se passar por toda a integração.</p>\n<h3>Validar a configuração</h3>\n<p>O caminho oficial é a sequência de autorização da codeunit do Azure OpenAI, na qual você informa a URL do recurso, a implantação e a chave. Se feita de forma errada, o Copilot nem carrega. Se feita pela metade, surgem erros silenciosos que os usuários encontram antes de você. Siga a cadeia em ordem, teste no desenvolvimento e passe pela pré-produção. O ideal são três ambientes, com três conjuntos de chaves.</p>\n\n<h2>Do projeto à prática: o fluxo do Copilot em cinco passos</h2>\n<p>Capacidade, escopo, chaves e metaprompt só funcionam se estiverem alinhados na ordem certa. Caso contrário, o resultado é um botão que apresenta erro ou, em silêncio, não faz nada.</p>\n<ol>\n<li><strong>Capacidade:</strong> estenda o enum de capacidades do Copilot e registre a capacidade em uma codeunit de instalação ou atualização.</li>\n<li><strong>Disponibilidade:</strong> defina onde o recurso aparece na página de capacidades do Copilot e agentes. Ele pode ser marcado como preview ou como disponível para todos (GA). Pular essa etapa arrisca expor recursos inacabados a todos os usuários.</li>\n<li><strong>Autorização:</strong> conecte o back-end do Azure OpenAI pela codeunit correspondente, com endpoint, implantação e chave de API.</li>\n<li><strong>Metaprompt:</strong> defina a mensagem de sistema principal, buscando o texto guardado com segurança. É aqui que você determina se o assistente é, por exemplo, um assistente de cotações ou um ajudante financeiro, e como a saída deve ser.</li>\n<li><strong>Piloto:</strong> libere para um pequeno grupo, colete feedback e monitore a telemetria. O módulo de IA registra o uso, e isso mostra se os resultados estão limpos.</li>\n</ol>\n<h3>Um exemplo prático</h3>\n<p>Uma equipe criou um Copilot para sugestão de pedidos de venda. Ela estendeu o enum, vinculou-o a uma codeunit de instalação e marcou o recurso como preview, visível só para usuários de teste. Depois definiu a autorização com endpoint, implantação e chave. Por fim, gravou o metaprompt no armazenamento isolado e o definiu como mensagem principal do sistema: assistente de cotações que sugere pacotes e os formata como linhas de item, sem conversa fiada. Pequenos grupos testaram até os resultados ficarem previsíveis. Só então a disponibilidade passou para GA, para todos os usuários de vendas.</p>\n<h3>Governança e plano de reversão</h3>\n<p>Antes de expandir, tenha um plano de reversão. A página de capacidades do Copilot e agentes permite desativar recursos individualmente. Se a configuração do Azure for multirregional, ela também mostra a opção de movimentação de dados entre regiões, algo que a área de conformidade vai observar. Teste cada peça isoladamente: valide o registro, confira a disponibilidade, confirme a autorização e verifique se o metaprompt é aplicado às respostas. Só então libere para os usuários finais.</p>\n<p>Para a governança, vale lembrar dois pontos. O Copilot herda as permissões do usuário e, por isso, nunca lê o que o usuário não pode acessar. Além disso, a Microsoft não treina modelos com os dados do seu tenant, a menos que você permita explicitamente.</p>\n\n<h2>Checklist: takeaways práticos para o seu sandbox</h2>\n<ul>\n<li>Execute tudo em sandbox antes da produção.</li>\n<li>Escolha nomes e valores de enum exclusivos, fora das faixas comuns.</li>\n<li>Versione a extensão e use codeunits de instalação e atualização para caminhos de evolução limpos.</li>\n<li>Preencha a URL \"Saiba mais\" para que os administradores entendam cada capacidade.</li>\n<li>Escreva um metaprompt preciso, com formato, tom e restrições, e guarde-o em armazenamento isolado.</li>\n<li>Controle o orçamento de tokens e ajuste a temperatura à tarefa.</li>\n<li>Nunca grave endpoint, implantação ou chave de API no código AL nem em repositórios.</li>\n<li>Use armazenamento isolado em desenvolvimento, Key Vault em produção e SecretText para a chave.</li>\n<li>Execute a cadeia de autorização de ponta a ponta antes de dar o trabalho por encerrado.</li>\n<li>Faça pilotos com grupos pequenos e mantenha a página de capacidades do Copilot e agentes como botão de emergência.</li>\n</ul>\n\n<h2>Conclusão</h2>\n<p>O Copilot do Business Central é mais do que um conjunto de demonstrações: com capacidades registradas em AL, metaprompts bem definidos e chaves do Azure OpenAI protegidas, ele pode ser adaptado ao seu negócio. O caminho seguro é registrar com cuidado, testar em sandbox, guardar segredos no lugar certo e liberar aos poucos, com os administradores sempre no controle. Experimente uma capacidade no seu sandbox esta semana e compare o resultado com a lista acima.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Copilot próprio no Business Central em 5 passos",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Capacidade",
+     "text": "Estender o enum de capacidades do Copilot e registrá-la em uma codeunit de instalação ou atualização."
+    },
+    {
+     "kopf": "Disponibilidade",
+     "text": "Definir onde o recurso aparece: preview para testes ou GA para todos os usuários."
+    },
+    {
+     "kopf": "Autorização",
+     "text": "Conectar o Azure OpenAI com endpoint, implantação e chave, guardada em armazenamento isolado ou Key Vault."
+    },
+    {
+     "kopf": "Metaprompt",
+     "text": "Definir a mensagem de sistema principal com papel, formato, tom e restrições do assistente."
+    },
+    {
+     "kopf": "Piloto e governança",
+     "text": "Liberar para um grupo pequeno, monitorar a telemetria e desativar o recurso na página de capacidades se necessário."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Como registrar uma capacidade própria do Copilot no Business Central com AL?",
+    "a": "Em AL, o registro tem dois passos: criar uma extensão do enum de capacidades do Copilot e usar uma codeunit de instalação ou de atualização que chame o método Register Capability. Sem essa chamada, o Copilot não conhece o recurso. Se ele não aparecer na página de capacidades do Copilot e agentes, o registro falhou."
+   },
+   {
+    "q": "O que é um metaprompt e qual a diferença para um prompt comum?",
+    "a": "O metaprompt é a mensagem de sistema principal. Ele define o perfil do modelo, o formato de saída e as diretrizes de segurança, com instruções permanentes para todo o contexto do chat. O prompt do usuário, ao contrário, é uma solicitação isolada e temporária. O texto do metaprompt deve ficar em armazenamento isolado."
+   },
+   {
+    "q": "Como proteger as chaves do Azure OpenAI no Business Central?",
+    "a": "Nunca grave endpoint, implantação ou chave de API no código AL nem em repositórios. Use armazenamento isolado em desenvolvimento e testes e Azure Key Vault em produção, com controle de acesso, log e rotação. Guarde a chave como SecretText, para que ela não apareça em texto simples no depurador."
+   },
+   {
+    "q": "Posso lançar uma capacidade do Copilot direto em produção? Como liberar com segurança?",
+    "a": "Não. Passe primeiro pelo sandbox e teste cada peça: registro, disponibilidade, autorização e aplicação do metaprompt. Depois libere como preview para um grupo pequeno, colete feedback e monitore a telemetria. Só então passe para GA. A página de capacidades permite desativar o recurso se algo falhar."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Armazenamento de chaves: desenvolvimento x produção",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Desenvolvimento e testes: armazenamento isolado",
+     "punkte": [
+      "Funciona como um armário dentro da extensão, fechado a outras extensões",
+      "É leve e adequado para sandboxes",
+      "Não tem nível de produção",
+      "Não deve ser o cofre quando há usuários e dados reais"
+     ]
+    },
+    "rechts": {
+     "titel": "Produção: Azure Key Vault",
+     "punkte": [
+      "Mantém as chaves em um contêiner seguro",
+      "Oferece controle de acesso, log e políticas de rotação",
+      "A extensão chama o segredo em tempo de execução",
+      "A chave bruta nunca fica exposta no código",
+      "É o padrão que os auditores esperam"
+     ]
+    }
+   },
+   {
+    "titel": "Metaprompt: aspectos técnicos essenciais",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "Definição",
+      "text": "Mensagem de sistema principal, definida pela codeunit AI Chat Messages."
+     },
+     {
+      "wert": "Armazenamento",
+      "text": "Guardar o texto em armazenamento isolado, não fixo no arquivo AL."
+     },
+     {
+      "wert": "Tokens",
+      "text": "Metaprompt mais prompt do usuário contam para o limite de tokens do modelo."
+     },
+     {
+      "wert": "Temperatura",
+      "text": "Próxima de zero em cenários financeiros; mais alta em tarefas criativas."
+     },
+     {
+      "wert": "Formato",
+      "text": "Regras explícitas de formatação e restrições a comentários irrelevantes."
+     }
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Onde o administrador vê e pode desativar individualmente cada capacidade personalizada registrada do Copilot?",
+    "opts": [
+     "Na página de capacidades do Copilot e agentes dentro do Business Central",
+     "No portal do Azure OpenAI, na seção de implantações do recurso",
+     "No arquivo app.json da extensão, editando manualmente as capacidades",
+     "Na página de usuários, ajustando o conjunto de permissões de cada pessoa"
+    ],
+    "a": 0,
+    "why": "Cada capacidade registrada aparece nessa página, onde administradores podem desativá-la uma a uma, funcionando como botão de emergência."
+   },
+   {
+    "q": "Por que não se deve reutilizar um nome genérico nem reservar um valor de enum de forma descuidada?",
+    "opts": [
+     "Porque o compilador AL recusa qualquer nome de capacidade que já tenha sido usado",
+     "Porque uma capacidade integrada futura da Microsoft pode entrar em conflito com a sua",
+     "Porque a URL Saiba mais deixa de funcionar com nomes genéricos",
+     "Porque o Azure OpenAI cobra mais por capacidades com nomes comuns"
+    ],
+    "a": 1,
+    "why": "O ecossistema é atualizado pela Microsoft; um nome ou ID coincidente com uma capacidade nova gera conflito e o sistema não sabe qual exibir."
+   },
+   {
+    "q": "Qual é o papel do metaprompt no Copilot do Business Central?",
+    "opts": [
+     "Substituir a chave de API na autenticação com o Azure OpenAI",
+     "Registrar a capacidade na página de administração do Copilot",
+     "Definir como mensagem de sistema o perfil, o formato de saída e as diretrizes",
+     "Ser uma solicitação isolada e temporária enviada por cada usuário"
+    ],
+    "a": 2,
+    "why": "O metaprompt é a mensagem de sistema principal, com instruções permanentes sobre perfil, formato e segurança, como a descrição de cargo da IA."
+   },
+   {
+    "q": "Qual combinação de armazenamento de chaves o artigo recomenda por ambiente?",
+    "opts": [
+     "Key Vault em desenvolvimento e armazenamento isolado em produção, com chave em texto simples",
+     "Armazenamento isolado em ambos os ambientes, pois outras extensões não o acessam",
+     "Chave gravada no código AL em sandbox e Key Vault apenas na produção",
+     "Armazenamento isolado em desenvolvimento, Key Vault em produção e SecretText para a chave"
+    ],
+    "a": 3,
+    "why": "O armazenamento isolado é leve para sandboxes; em produção usa-se Key Vault, e a chave em AL deve ser SecretText para não aparecer no depurador."
+   }
+  ]
+ },
+ "nl": {
+  "html": "<p>Stel je voor dat Business Central het saaie werk overneemt, zoals betalingen afletteren of productteksten opstellen, zodat jij niet meer 's avonds laat in Excel hoeft te zoeken. Dat is de belofte van Copilot. In Business Central Online zit Copilot zonder extra kosten ingebouwd. Op een on-premise installatie werkt het niet.</p>\n<p>De meeste beheerders blijven bij de standaarddemo's. Wie verder kijkt, kan Copilot met eigen functies laten aansluiten op de processen van het eigen bedrijf. Dit artikel laat zien hoe je een eigen Copilot-functie registreert, hoe je er met een metaprompt gedrag aan geeft, hoe je je Azure OpenAI-sleutels beschermt en in welke volgorde je alles aan elkaar koppelt.</p>\n\n<h2>Copilot uitbreiden in Business Central: de System AI-namespace</h2>\n<p>De echte kracht van Copilot zit niet in de opvallende knoppen op een klantenkaart, maar in de extensiepunten eronder. Je vindt ze in de System AI-namespace. Zoek daar naar de Copilot Capability-codeunit en de bijbehorende enums. Deze objecten zijn bedoeld om je eigen AI-functies te definiëren en te registreren, in plaats van te wachten op de volgende functie van Microsoft.</p>\n<h3>Capability en Availability</h3>\n<p>Twee begrippen staan centraal:</p>\n<ul>\n<li><strong>Copilot Capability:</strong> de vaardigheid die je voor Copilot creëert.</li>\n<li><strong>Copilot Availability:</strong> bepaalt wanneer en waar die vaardigheid voor eindgebruikers verschijnt.</li>\n</ul>\n<p>Samen vormen ze een raamwerk om Copilot specifiek te maken voor jouw bedrijf. Veel beheerders denken dat Copilot een afgesloten zwarte doos is. Op ontwikkelaarsniveau heb je echter wel degelijk toegang tot de knoppen.</p>\n<h3>Wat de AI-module kan</h3>\n<p>De AI-module biedt tekstaanvullingen, chatachtige voltooiingen voor workflowscenario's en embeddings voor semantisch zoeken. Daarmee kun je bijvoorbeeld functionaliteit bouwen die inkooporders opstelt op basis van de patronen van jouw bedrijf, in plaats van op de aannames van Microsoft. Ook assistenten die in de stem van je eigen organisatie spreken zijn mogelijk.</p>\n<p>Eén kanttekening: de preview-chat met Copilot die je in Business Central kunt tegenkomen, is niet uitbreidbaar via deze module. Die chat volgt een eigen route. Uitbreiden doe je via het capability-model.</p>\n<h3>Ontwikkelaars definiëren, beheerders beheren</h3>\n<p>Ontwikkelaars definiëren functies in AL. Beheerders zien het resultaat in de gebruikersinterface, op de pagina Copilot en agentfuncties. Elke vaardigheid die je registreert, verschijnt daar, en beheerders kunnen functies één voor één uitschakelen als er iets misgaat. Die pagina is dus ook een noodstop.</p>\n\n<h2>Een Copilot-functie veilig registreren</h2>\n<p>Registreren is geen tovertruc. Je maakt een enum-extensie voor de Copilot Capability-enum en gebruikt een install- of upgrade-codeunit die Copilot Capability aanroept om de functie te registreren. Zo vertel je Business Central dat er een nieuwe AI-functie bestaat. Zonder die aanroep compileert je extensie misschien wel, maar Copilot weet niet dat de functie bestaat.</p>\n<h3>Unieke namen, eigen enum-waarden, versies</h3>\n<p>Elke capability komt terecht in een ecosysteem dat Microsoft voortdurend bijwerkt. Een generieke naam als \"Sales Helper\" met een algemene enum-waarde vraagt om een conflict, bijvoorbeeld wanneer Microsoft later een ingebouwde capability in dezelfde ruimte uitbrengt. Het systeem weet dan niet meer welke het moet tonen. De remedie is saai, maar essentieel:</p>\n<ul>\n<li>kies unieke namen;</li>\n<li>wijs eigen enum-waarden toe die niet overlappen met gangbare bereiken;</li>\n<li>versioneer je extensie, zodat je ziet of de sandbox op 1.2 draait terwijl productie nog op 1.0 staat;</li>\n<li>gebruik upgrade-codeunits om de capability veilig mee te verhuizen als het platform verandert.</li>\n</ul>\n<h3>Eerst de sandbox, dan productie</h3>\n<p>Zet een capability niet direct in productie omdat het \"maar een capability\" is. Begin in de sandbox, laat het gerust crashen, pas de code aan, test opnieuw en ga pas naar productie als het werkt. Een gecontroleerde uitrol vermindert verrassingen.</p>\n<p>De pagina Copilot en agentfuncties is je controlepunt. Verschijnt je capability daar na registratie niet, dan is de registratie niet correct verlopen. Valideer het dus eerst op die pagina en draag het daarna over voor een review door beheerders. Het in- of uitschakelen van capabilities en het configureren van data-overdracht kan alleen door beheerders met superrechten of een Business Central-beheerdersrol. Plan die governancestap dus mee.</p>\n<p>Een handige extra is de optionele Learn More-URL bij het registreren. Die verschijnt direct op de beheerpagina en werkt als ingebouwde documentatie. Beheerders hoeven dan niet te zoeken naar een wiki of jou te storen, maar klikken door naar uitleg over de functie.</p>\n\n<h2>Metaprompt: leer je Copilot hoe hij zich gedraagt</h2>\n<p>Een geregistreerde functie werkt, maar klinkt algemeen. Volgens de documentatie voor ontwikkelaars is een metaprompt het primaire systeembericht dat het profiel, de uitvoerindeling en de vangrails van het model vastlegt. Het is in feite de functieomschrijving van de AI. Een gewone gebruikersprompt is een los verzoek, terwijl de metaprompt vaste instructies bevat die in elk antwoord meewegen. Zonder metaprompt weet Copilot niet of hij als boekhouder of als copywriter moet klinken.</p>\n<h3>Prompt versus metaprompt</h3>\n<p>Vraag je zonder context om grootboekboekingen, dan verzint het model zelf een stijl: lange alinea's, misschien zelfs velden die niet bestaan. Geef je via de metaprompt de rol van financieel assistent mee, met de opdracht grootboekmutaties altijd als opsommingstekens met Business Central-veldnamen weer te geven, dan zijn de antwoorden helder en gestructureerd. Prompts zijn tijdelijke verzoeken. Metaprompts blijven gelden voor de hele chatcontext.</p>\n<h3>Technische uitwerking</h3>\n<p>Ontwikkelaars stellen de metaprompt in via de AOAI Chat Messages-codeunit met de instelling voor het primaire systeembericht. Bewaar de tekst in isolated storage en haal hem op in je extensie, in plaats van hem hard te coderen in het AL-bestand. Zo blijft de metaprompt beschikbaar en toch afgeschermd binnen de beveiligingsgrens van de extensie.</p>\n<ul>\n<li><strong>Tokenbudget:</strong> metaprompt en gebruikersprompt tellen samen mee voor de tokenlimiet van het model. Houd het systeembericht dus beknopt.</li>\n<li><strong>Temperatuur:</strong> stel voor financiële scenario's met deterministische, veldaccurate output een lage temperatuur in, dicht bij nul. Voor een marketingfunctie die kleurrijkere concepten mag opleveren, verhoog je de temperatuur.</li>\n<li><strong>Compliance:</strong> neem expliciete opmaakregels, responsstructuren en beperkingen voor irrelevante opmerkingen op. Zo overleeft de output ook downstreamsystemen en audits.</li>\n</ul>\n<p>Met verschillende metaprompts krijg je verschillende persoonlijkheden op dezelfde AI. Een Marketing Copilot gebruikt overtuigende taal en bedenkt slogans, een Finance Copilot levert gestructureerde journaalposten zonder bijvoeglijke naamwoorden. Metaprompts werken alleen als de verbinding met Azure goed is opgezet, want de verwerking gebeurt niet lokaal in Business Central maar via de Azure OpenAI-service.</p>\n\n<h2>Azure OpenAI-sleutels beveiligen</h2>\n<p>Bij elke aanroep van Azure OpenAI heeft Copilot drie gegevens nodig: het resource endpoint (de URL van je Azure OpenAI-resource), de implementatienaam en de API-sleutel. Samen bewijzen ze dat jouw tenant met het model mag praten.</p>\n<h3>Nooit hardcoden</h3>\n<p>Zet geen waarden in AL-code en plaats ze niet in een repository. Repo's worden voortdurend gescand op blootgestelde geheimen, en een uitgelekte sleutel kan op de verkeerde plek terechtkomen.</p>\n<h3>Ontwikkeling: isolated storage, productie: Azure Key Vault</h3>\n<p>Voor ontwikkel- en testwerk is isolated storage in AL de juiste keuze. Het is een kluisje binnen je extensie waar andere extensies niet in kunnen kijken, handig voor sandboxes en dev-builds. Voor productie is het echter niet geschikt. Daar hoort Azure Key Vault thuis, met een afgeschermde, toegangsgecontroleerde opslag, logboekbeheer en rotatiebeleid. Je extensie haalt de sleutel tijdens runtime op, zonder dat de ruwe waarde ooit in de code staat. Dat patroon stelt auditors tevreden, omdat de geheimen nooit als platte tekst rondgaan.</p>\n<h3>Secret text</h3>\n<p>In AL kun je de API-sleutel opslaan als secret text. De sleutel verschijnt dan niet in klare tekst wanneer je door de debugger stapt. Daarmee sluit je een van de meest voor de hand liggende lekkanalen af: onbedoelde blootstelling door ontwikkelaars.</p>\n<h3>Rechten beschermen je sleutels niet</h3>\n<p>Copilot erft de toegangsrechten voor bedrijfsgegevens, maar API-sleutels gaan over authenticatie van de hele service. Lekt er een, dan kunnen buitenstaanders de volledige integratie nabootsen. Gebruikersrechten in Business Central lossen dat niet op.</p>\n<p>Valideer de configuratie met de autorisatiestap in de Azure OpenAI-codeunit, waarin je resource-URL, deployment en API-sleutel opgeeft. Test in de ontwikkelomgeving, ga daarna naar preproductie en vervolgens naar productie: drie omgevingen, drie sets sleutels.</p>\n\n<h2>Van blauwdruk naar werkende flow: vijf stappen</h2>\n<p>Losse onderdelen leveren pas iets op als ze in de juiste volgorde samenwerken. De volgorde is:</p>\n<ol>\n<li><strong>Capability:</strong> breid de Copilot Capability-enum uit en registreer de functie in een install- of upgrade-codeunit.</li>\n<li><strong>Beschikbaarheid:</strong> bepaal via de beheerpagina of de functie als preview of algemeen beschikbaar verschijnt. Sla je dit over, dan riskeer je dat onvoltooide functies bij elke gebruiker zichtbaar worden.</li>\n<li><strong>Autorisatie:</strong> verbind Azure OpenAI met URL, implementatienaam en API-sleutel.</li>\n<li><strong>Metaprompt:</strong> stel via AOAI Chat Messages het primaire systeembericht in, opgehaald uit isolated storage of in productie uit Key Vault.</li>\n<li><strong>Pilot:</strong> rol eerst uit naar een kleine groep, verzamel feedback en bekijk de telemetrie. De AI-module logt het gebruik, zodat je ziet of de resultaten nuttig zijn.</li>\n</ol>\n<h3>Voorbeeld uit de praktijk</h3>\n<p>Een team bouwde een Copilot voor suggesties bij verkooporders. Ze maakten een enum-extensie voor de capability en koppelden die aan een install-codeunit. Op de beheerpagina markeerden ze de functie als preview, zodat alleen testgebruikers hem zagen. Daarna stelden ze de autorisatie in met endpoint, implementatie en sleutel. De metaprompt, bewaard in isolated storage, zei ongeveer: je bent een offerteassistent, stel bundels voor en formatteer ze als artikelregels, zonder extra gepraat. Pas toen de pilot voorspelbare resultaten gaf, markeerden ze de functie als algemeen beschikbaar voor alle verkoopgebruikers. Het resultaat was een Copilot die bundels aanbeval.</p>\n<h3>Terugvalplan en regio's</h3>\n<p>Houd vóór het opschalen een terugroepplan klaar. De pagina Copilot en agentfuncties dient als noodstop, want beheerders kunnen er individuele functies direct deactiveren. Diezelfde pagina toont de schakelaar voor toegestane gegevensverplaatsing tussen regio's wanneer je Azure-configuratie regio-overschrijdend is. Let daar goed op, want Compliance zal dat zeker doen. Test elk onderdeel afzonderlijk: registratie, beschikbaarheid, autorisatie en naleving van de metaprompt in de antwoorden.</p>\n\n<h2>Veelgemaakte fouten en stolpersteine</h2>\n<ul>\n<li><strong>Direct naar productie:</strong> een capability zonder sandboxtest uitrollen kan gebruikers blokkeren.</li>\n<li><strong>Generieke namen en enum-waarden:</strong> ze leiden tot conflicten wanneer Microsoft updates doorvoert.</li>\n<li><strong>Geen upgrade-codeunits:</strong> zonder die units verhuis je de capability niet veilig bij platformwijzigingen.</li>\n<li><strong>Prompt en metaprompt door elkaar halen:</strong> zonder vaste instructies bedenkt het model zelf stijl en velden.</li>\n<li><strong>Een te lang systeembericht:</strong> het eet je tokenbudget op.</li>\n<li><strong>Sleutels in code of repository:</strong> dit is een direct lekrisico.</li>\n<li><strong>Isolated storage in productie:</strong> het is bedoeld voor ontwikkeling en testen, niet als kluis voor productie.</li>\n<li><strong>Vertrouwen op rechtenbeheer:</strong> gebruikersrechten beschermen je API-sleutels niet.</li>\n<li><strong>De beschikbaarheidsstap overslaan:</strong> dan zien gebruikers functies die nog niet stabiel zijn.</li>\n</ul>\n\n<h2>Praktische takeaways</h2>\n<ul>\n<li>Registreer eigen functies via de System AI-namespace met een enum-extensie en een install- of upgrade-codeunit.</li>\n<li>Draai alles eerst in een sandbox en controleer de registratie op de pagina Copilot en agentfuncties.</li>\n<li>Kies unieke namen en enum-waarden, versioneer je extensie en gebruik upgrade-codeunits.</li>\n<li>Voeg de Learn More-URL toe, zodat beheerders de functie begrijpen zonder te gokken.</li>\n<li>Definieer rol, toon en opmaak in de metaprompt, houd hem kort en stem de temperatuur af op de taak.</li>\n<li>Gebruik isolated storage in ontwikkeling en Azure Key Vault in productie, en sla de API-sleutel op als secret text.</li>\n<li>Valideer de autorisatie in de Azure OpenAI-codeunit voordat je het werk als klaar beschouwt.</li>\n<li>Rol uit met een pilotgroep, bekijk de telemetrie en houd de noodstop op de beheerpagina bij de hand.</li>\n<li>Denk aan governance: Copilot neemt de gebruikersmachtigingen over en leest dus nooit wat de gebruiker niet mag inzien. Microsoft traint geen modellen op de gegevens van je tenant, tenzij je dat expliciet toestaat.</li>\n</ul>\n\n<h2>Fazit</h2>\n<p>Copilot in Business Central is meer dan een demo, zolang je weet waar je moet kijken. Met een correct geregistreerde capability, een doordachte metaprompt en goed beveiligde Azure OpenAI-sleutels bouw je assistenten die bij jouw bedrijf passen, zonder je omgeving in gevaar te brengen. Behandel registratie als productiecode, test in een sandbox en rol gefaseerd uit. Probeer als eerste stap één functie uit in je sandbox en loop de checklist erbij langs.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Eigen Copilot-functie in Business Central: de vijf stappen",
+   "typ": "schritte",
+   "punten": [],
+   "punkte": [
+    {
+     "kopf": "Capability",
+     "text": "Breid de Copilot Capability-enum uit en registreer de functie in een install- of upgrade-codeunit."
+    },
+    {
+     "kopf": "Beschikbaarheid",
+     "text": "Bepaal op de beheerpagina of de functie als preview of algemeen beschikbaar verschijnt."
+    },
+    {
+     "kopf": "Autorisatie",
+     "text": "Koppel Azure OpenAI met URL, implementatienaam en API-sleutel; sleutels in Key Vault in productie."
+    },
+    {
+     "kopf": "Metaprompt",
+     "text": "Leg rol, toon en opmaak vast via het primaire systeembericht, veilig bewaard in isolated storage."
+    },
+    {
+     "kopf": "Pilot",
+     "text": "Rol uit naar een kleine groep, bekijk de telemetrie en houd de noodstop gereed."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Hoe registreer ik een eigen Copilot-functie in Business Central?",
+    "a": "Maak een enum-extensie voor de Copilot Capability-enum en roep Copilot Capability aan in een install- of upgrade-codeunit. Zonder die aanroep compileert je extensie misschien wel, maar Copilot weet niet dat de functie bestaat. Controleer daarna de pagina Copilot en agentfuncties."
+   },
+   {
+    "q": "Wat is een metaprompt en waarin verschilt die van een gewone prompt?",
+    "a": "Een metaprompt is het primaire systeembericht dat profiel, uitvoerindeling en vangrails van het model vastlegt. Een gewone prompt is een los, tijdelijk verzoek. De metaprompt bevat vaste instructies die in de hele chatcontext meewegen, bijvoorbeeld de rol van financieel assistent."
+   },
+   {
+    "q": "Hoe sla ik Azure OpenAI-sleutels veilig op voor Copilot in Business Central?",
+    "a": "Zet sleutels nooit hardcoded in AL-code of een repository. Gebruik isolated storage voor ontwikkeling en test, en Azure Key Vault voor productie. Sla de API-sleutel op als secret text, zodat hij niet leesbaar is in de debugger. Gebruik per omgeving een eigen set sleutels."
+   },
+   {
+    "q": "In welke volgorde zet ik een eigen Copilot-functie in Business Central op?",
+    "a": "Vijf stappen: eerst de capability registreren, dan de beschikbaarheid bepalen (preview of algemeen beschikbaar), vervolgens Azure OpenAI autoriseren met URL, implementatienaam en API-sleutel, daarna de metaprompt instellen via AOAI Chat Messages, en ten slotte een pilot met telemetrie draaien."
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Waar kunnen beheerders in de gebruikersinterface een geregistreerde Copilot-functie uitschakelen als er iets misgaat?",
+    "opts": [
+     "Op de pagina Copilot en agentfuncties",
+     "In de Azure Key Vault van de extensie",
+     "In de install-codeunit van de ontwikkelaar",
+     "Op de klantenkaart in Business Central"
+    ],
+    "a": 0,
+    "why": "Elke geregistreerde vaardigheid verschijnt op de pagina Copilot en agentfuncties, die ook als noodstop dient om functies individueel uit te schakelen."
+   },
+   {
+    "q": "Wat legt een metaprompt vast volgens de documentatie voor ontwikkelaars?",
+    "opts": [
+     "Alleen de API-sleutel en het resource endpoint van Azure",
+     "Het profiel, de uitvoerindeling en de vangrails van het model",
+     "De regio's waarin gegevens verplaatst mogen worden",
+     "Het versienummer van de extensie in de sandbox"
+    ],
+    "a": 1,
+    "why": "De metaprompt is het primaire systeembericht dat profiel, uitvoerindeling en vangrails van het model bepaalt en in elk antwoord meeweegt."
+   },
+   {
+    "q": "Welke opslag is geschikt voor Azure OpenAI-sleutels in productie?",
+    "opts": [
+     "Isolated storage binnen de extensie",
+     "Hardcoded in het AL-bestand",
+     "Azure Key Vault met toegangscontrole en rotatiebeleid",
+     "Een repository met beperkte toegang"
+    ],
+    "a": 2,
+    "why": "Isolated storage is voor ontwikkeling en test; in productie hoort Azure Key Vault met afgeschermde opslag, logging en rotatiebeleid."
+   },
+   {
+    "q": "Waarom moet je de beschikbaarheidsstap niet overslaan bij het uitrollen van een capability?",
+    "opts": [
+     "Anders compileert de extensie niet meer",
+     "Anders raakt het tokenbudget van het model sneller op",
+     "Anders werkt de Azure OpenAI-autorisatie niet",
+     "Anders worden onvoltooide functies voor alle gebruikers zichtbaar"
+    ],
+    "a": 3,
+    "why": "Via de beschikbaarheid bepaal je preview of algemeen; overslaan riskeert dat onstabiele functies bij elke gebruiker verschijnen."
+   }
+  ]
+ },
+ "pl": {
+  "html": "<p>Business Central, które samo uzgadnia płatności albo przygotowuje opisy produktów, zamiast zasypywać użytkownika kolejnymi kliknięciami i nocną pracą w Excelu, to obietnica Copilota. Jest on wbudowany w Business Central Online bez dodatkowych kosztów, ale nie zadziała w instalacji on-premise. Większość administratorów nie wychodzi poza gotowe scenariusze demonstracyjne.</p>\n<p>Pod powierzchnią znajdziesz jednak narzędzia, dzięki którym zbudujesz własne funkcje Copilota. W tym artykule pokazujemy, jak zarejestrować je w AL, jak nadać im charakter za pomocą metapromptu i jak bezpiecznie przechowywać klucze do Azure OpenAI. Na końcu znajdziesz listę kontrolną do przetestowania w środowisku Sandbox.</p>\n\n<h2>Ukryte punkty rozszerzeń Copilota w Business Central</h2>\n<p>Prawdziwa moc Copilota nie tkwi w przyciskach na karcie klienta. Punkty rozszerzeń dla programistów leżą w przestrzeni nazw System.AI. Szukaj tam codeunitu Copilot Capability oraz powiązanych enumów. Zbudowano je po to, żebyś mógł definiować i rejestrować własne funkcje oparte na AI, zamiast czekać, aż Microsoft dorzuci kolejne demo.</p>\n<h3>Capability i Availability</h3>\n<p>Dwa pojęcia są tu kluczowe:</p>\n<ul>\n<li><strong>Copilot Capability</strong> to zestaw umiejętności, które tworzysz dla Copilota.</li>\n<li><strong>Copilot Availability</strong> mówi systemowi, kiedy i gdzie dana umiejętność ma się pojawić u użytkownika końcowego.</li>\n</ul>\n<p>Razem tworzą platformę do dostosowania Copilota do potrzeb firmy, a nie tylko zestaw gotowych widgetów.</p>\n<h3>Co możesz zbudować</h3>\n<p>Moduł AI w Business Central oferuje uzupełnianie tekstu, czatowe uzupełnianie scenariuszy workflow oraz embeddingi dla wyszukiwania semantycznego. Możesz więc stworzyć funkcję, która przygotowuje szkice zamówień zakupu według wzorców Twojej firmy, a nie założeń Microsoftu. Możesz też zbudować asystenta, który mówi głosem Twojej organizacji. Nietypowe pole własne, skomplikowany obieg zatwierdzeń czy finansowa specyfika firmy – wszystko to da się zaadresować własną funkcją.</p>\n<p>Jedno zastrzeżenie: funkcja podglądu czatu z Copilotem nie jest rozszerzalna przez ten moduł. Czat podąża własną ścieżką, a rozszerzasz wyłącznie model możliwości opisany w tym artykule.</p>\n<h3>Strona dla administratorów</h3>\n<p>Efekty pracy programistów administrator zobaczy na stronie Copilot and Agent Capabilities w Business Central. Każda zarejestrowana funkcja pojawia się tam na liście i można ją wyłączyć osobno. Programiści definiują funkcje w AL, a administratorzy zarządzają nimi w interfejsie. Dzięki temu masz szybki wyłącznik, gdy niestandardowe rozwiązanie zacznie szwankować.</p>\n\n<h2>Rejestracja funkcji Copilota w AL bez ryzyka dla środowiska</h2>\n<p>Rejestracja nie jest skomplikowana. Tworzysz rozszerzenie enuma dla Copilot Capability i używasz codeunitu instalacyjnego lub aktualizacyjnego, który wywołuje funkcję rejestrującą możliwość. To sposób, by powiedzieć Business Central: oto nowa funkcja AI, traktuj ją jako część systemu. Bez tego wywołania rozszerzenie może się skompilować, ale Copilot nie będzie wiedział o jego istnieniu.</p>\n<h3>Unikalne nazwy i wersjonowanie</h3>\n<p>Każda funkcja działa w ekosystemie, który Microsoft stale aktualizuje. Ogólna nazwa, na przykład „pomocnik sprzedaży”, w połączeniu z popularną wartością enuma to prosta droga do konfliktu. Wystarczy, że Microsoft wyda aktualizację z wbudowaną funkcją w tym samym obszarze. Rozwiązanie jest nudne, ale skuteczne:</p>\n<ul>\n<li>wybieraj unikalne nazwy,</li>\n<li>przypisuj własne wartości enuma, niepokrywające się z typowymi zakresami,</li>\n<li>wersjonuj rozszerzenie, żeby wiedzieć, czy Sandbox ma wersję 1.2, a produkcja nadal 1.0.</li>\n</ul>\n<p>Codeunity aktualizacyjne pozwalają bezpiecznie przenosić funkcje dalej, gdy zmieni się platforma.</p>\n<h3>Najpierw Sandbox, potem produkcja</h3>\n<p>Wrzucenie rozszerzenia od razu na produkcję „bo to tylko funkcja” kończy się kłopotami. Właściwa ścieżka: najpierw Sandbox, tam zepsuj, popraw i przetestuj ponownie, a dopiero potem przenieś całość na produkcję. Strona Copilot and Agent Capabilities służy przy tym także jako weryfikacja. Jeśli po rejestracji Twojej funkcji tam nie ma, została zarejestrowana nieprawidłowo.</p>\n<h3>Learn More URL i uprawnienia</h3>\n<p>Przy rejestracji użyj opcjonalnego parametru Learn More URL. Pojawi się on na stronie administratora, więc stanowi wbudowaną dokumentację. Administrator nie musi szukać linku do wiki ani pytać Cię na Teamsach. Pamiętaj też, że włączanie i wyłączanie funkcji oraz konfiguracja przepływu danych to zadania dla administratorów z uprawnieniami SUPER lub rolą administratora Business Central. Zaplanuj ten krok z wyprzedzeniem.</p>\n\n<h2>Metaprompt: jak nauczyć Copilota zachowania</h2>\n<p>Zarejestrowana funkcja działa, ale bywa generyczna: odpowiada, lecz bez charakteru. Metaprompt to główny komunikat systemowy, który definiuje profil modelu, format wyjściowy i ograniczenia. Można go potraktować jak opis stanowiska pracy dla AI. Jednorazowy prompt użytkownika jest prośbą o wykonanie zadania, a metaprompt to stałe instrukcje towarzyszące każdej odpowiedzi.</p>\n<h3>Prompt kontra metaprompt</h3>\n<p>Jeśli rzucisz do Copilota samo „podaj mi wpisy do księgi”, model sam wymyśli styl. Może wygenerować długie akapity albo pola, które nie istnieją. Ta sama prośba z metapromptem, na przykład „jesteś asystentem finansowym, zawsze prezentuj wpisy do księgi jako listy punktowane, używając nazw pól Business Central”, daje odpowiedzi przejrzyste i uporządkowane. Prompty są tymczasowymi żądaniami, a metaprompty pozostają aktywne w całym kontekście czatu.</p>\n<h3>Tokeny i temperatura</h3>\n<p>Przy wysyłaniu danych do Azure OpenAI przez moduł AI musisz liczyć się z budżetem tokenów i temperaturą:</p>\n<ul>\n<li><strong>Tokeny:</strong> metaprompt i prompt użytkownika sumują się w limicie modelu, więc nie pisz wiadomości systemowej o długości powieści.</li>\n<li><strong>Temperatura:</strong> w scenariuszach finansowych ustaw ją blisko zera, by wyniki były deterministyczne. W funkcji marketingowej możesz ją podnieść, by model improwizował.</li>\n</ul>\n<h3>Osobowości i zgodność z przepisami</h3>\n<p>Metaprompt marketingowego Copilota może nakazywać perswazyjny język i burzę mózgów nad hasłami produktowymi. Finansowy Copilot dostaje polecenie generowania ustrukturyzowanych wpisów do dziennika bez przymiotników. To ta sama sztuczna inteligencja, ale zupełnie inne wyniki, bo osobowość definiujesz z góry. Audytorów interesuje, czy liczby się zgadzają, dlatego metaprompt powinien zawierać jasne zasady formatowania, strukturę odpowiedzi i ograniczenia dotyczące zbędnych komentarzy. Traktuj go jak element dokumentacji i kontroli ryzyka.</p>\n<h3>Gdzie przechowywać metaprompt</h3>\n<p>Metaprompt ustawia się przez codeunit AOAI Chat Messages, wywołując metodę ustawiania głównej wiadomości systemowej. Zamiast wpisywać tekst na sztywno w pliku AL, zapisz go w Isolated Storage (polecenia Set i Get). Rozszerzenie może wtedy bezpiecznie go pobierać i aktualizować. Pamiętaj, że całe przetwarzanie odbywa się w backendzie Azure OpenAI, więc nawet najlepszy metaprompt nie pomoże przy źle skonfigurowanym połączeniu.</p>\n\n<h2>Klucze Azure OpenAI: gdzie je przechowywać, a gdzie nie</h2>\n<p>Każde wywołanie Azure OpenAI wymaga trzech elementów: punktu końcowego zasobu (adresu URL zasobu Azure OpenAI), nazwy wdrożenia i klucza API. Razem potwierdzają one, że Twój tenant może komunikować się z modelem.</p>\n<h3>Czego nie robić</h3>\n<p>Nigdy nie koduj tych wartości na sztywno w AL i nie wrzucaj klucza do repozytorium dla wygody. Repozytoria są stale przeszukiwane pod kątem ujawnionych sekretów, a wyciek klucza to realne zagrożenie, którego nie naprawi zwykła aktualizacja.</p>\n<h3>Isolated Storage w pracach deweloperskich</h3>\n<p>W fazie deweloperskiej i testowej najlepszym wyborem jest Isolated Storage. To skrytka wewnątrz rozszerzenia, do której nie zajrzy żadne inne rozszerzenie. Sprawdza się w Sandboxie, ale nie jest rozwiązaniem klasy produkcyjnej. To raczej zwykła szafka na dokumenty niż skarbiec.</p>\n<h3>Azure Key Vault na produkcji</h3>\n<p>Na produkcji jedynym odpowiedzialnym wyborem jest Azure Key Vault. Przechowuje klucze w kontrolowanym kontenerze z zasadami dostępu i rotacji. Rozszerzenie pobiera klucz w czasie wykonywania i nigdy nie ujawnia go w kodzie. Audytorzy to doceniają, bo sekrety nigdy nie krążą jako zwykły tekst.</p>\n<h3>SecretText</h3>\n<p>W AL klucz API można przechowywać jako SecretText (tekst poufny). Dzięki temu nawet podczas debugowania nie pojawi się w czytelnej postaci, którą ktoś mógłby uwiecznić na zrzucie ekranu. To zamyka jeden z najprostszych wektorów wycieku.</p>\n<h3>Uprawnienia użytkowników nie chronią kluczy</h3>\n<p>Copilot dziedziczy kontrolę dostępu do danych biznesowych, ale klucze uwierzytelniają całą usługę. Jeśli jeden wycieknie, osoby z zewnątrz mogą wykorzystać całą integrację. Zakres uprawnień użytkowników Cię przed tym nie uratuje.</p>\n\n<h2>Pięć kroków od planu do działającego Copilota</h2>\n<p>Same elementy, takie jak funkcja, metaprompt i bezpieczny klucz, niewiele dadzą, jeśli ustawisz je w złej kolejności. Skutkiem będzie przycisk, który zgłasza błąd albo po cichu nic nie robi. Oto sekwencja:</p>\n<ol>\n<li><strong>Funkcja.</strong> Rozszerz enum Copilot Capability i zarejestruj go w codeunicie instalacyjnym lub aktualizacyjnym.</li>\n<li><strong>Dostępność.</strong> Na stronie administracyjnej funkcji Copilota i agentów określ, czy funkcja jest w podglądzie, tylko do użytku wewnętrznego, czy ogólnie dostępna. Dla administratora to przełącznik wdrażania. Bez tego kroku niedopracowana funkcja może trafić do wszystkich użytkowników.</li>\n<li><strong>Autoryzacja.</strong> Połącz się z backendem przez codeunit Azure OpenAI i ustaw autoryzację, podając punkt końcowy, nazwę wdrożenia i klucz API. Bez tego funkcja zatrzyma się „przed szklanymi drzwiami”.</li>\n<li><strong>Metaprompt.</strong> Przez AOAI Chat Messages ustaw główną wiadomość systemową, pobierając metaprompt z Isolated Storage lub, na produkcji, z Key Vault.</li>\n<li><strong>Pilotaż.</strong> Udostępnij funkcję małej grupie, zbieraj opinie i obserwuj telemetrię. Moduł AI rejestruje użycie, więc widać, czy wyniki są czyste, czy to „śmieci”.</li>\n</ol>\n<h3>Przykład z praktyki</h3>\n<p>Pewien zespół zbudował Copilota do sugerowania zamówień sprzedaży. Najpierw rozszerzył enum i zarejestrował funkcję w codeunicie instalacyjnym. Oznaczył ją jako podgląd, więc widzieli ją tylko testerzy. Potem skonfigurował autoryzację przez punkt końcowy, wdrożenie i klucz. Metaprompt zapisał w Isolated Storage i ustawił jako wiadomość systemową. Brzmiał mniej więcej tak: jesteś asystentem do spraw ofert, sugeruj pakiety i formatuj je jako linie pozycji, bez zbędnego gadania. Po fazie pilotażowej, gdy wyniki stały się przewidywalne, zespół oznaczył dostępność jako GA i udostępnił funkcję wszystkim użytkownikom sprzedaży. Copilot rekomendował pakiety zamiast pisać lanie wody.</p>\n<h3>Wyłącznik bezpieczeństwa i regiony</h3>\n<p>Przed rozszerzeniem zakresu przygotuj plan wycofania zmian. Strona możliwości Copilota i agentów działa jak bezpiecznik: administratorzy mogą natychmiast wyłączyć pojedynczą funkcję. Strona pokazuje też przełącznik dozwolonego przesyłu danych między regionami, jeśli konfiguracja Azure wykracza poza jeden region. Warto zwrócić na to uwagę, bo dział zgodności na pewno to zrobi.</p>\n\n<h2>Najczęstsze błędy i stolpersteiny</h2>\n<ul>\n<li><strong>Brak wywołania rejestracji.</strong> Rozszerzenie się kompiluje, ale Copilot nie zna funkcji.</li>\n<li><strong>Ogólne nazwy i popularne wartości enuma.</strong> Grożą konfliktem z aktualizacją Microsoftu.</li>\n<li><strong>Wdrażanie od razu na produkcję.</strong> Może zablokować użytkowników zamiast tylko zepsuć Sandbox.</li>\n<li><strong>Pominięcie ustawienia dostępności.</strong> Niedopracowane funkcje trafiają do wszystkich.</li>\n<li><strong>Brak metapromptu.</strong> Model zgaduje styl i format, a użytkownicy dostają niespójne odpowiedzi.</li>\n<li><strong>Przeładowana wiadomość systemowa.</strong> Zjada budżet tokenów.</li>\n<li><strong>Klucz API w kodzie AL lub w repozytorium.</strong> To najgroźniejszy z błędów.</li>\n<li><strong>Isolated Storage na produkcji.</strong> To rozwiązanie na etap deweloperski, nie na produkcję.</li>\n<li><strong>Testowanie całego łańcucha naraz.</strong> Weryfikuj po kolei: rejestrację, dostępność, autoryzację i działanie metapromptu.</li>\n</ul>\n\n<h2>Praktyczne wskazówki do wdrożenia</h2>\n<ul>\n<li>Uruchamiaj wszystko w Sandboxie, zanim trafi na produkcję.</li>\n<li>Wybieraj unikalne wartości enuma i unikaj typowych zakresów.</li>\n<li>Zawsze używaj codeunitów instalacyjnych i aktualizacyjnych oraz wersjonuj rozszerzenie.</li>\n<li>Dodaj Learn More URL, żeby administratorzy nie musieli zgadywać.</li>\n<li>Traktuj metaprompt jak dokumentację i kontrolę ryzyka: jasny format, struktura odpowiedzi, brak zbędnych komentarzy.</li>\n<li>Dobierz temperaturę do zadania: niską dla finansów, wyższą dla marketingu.</li>\n<li>W fazie deweloperskiej używaj Isolated Storage, na produkcji Azure Key Vault, a klucz API trzymaj jako SecretText.</li>\n<li>Przejdź cały łańcuch ustawiania autoryzacji od początku do końca, zanim uznasz zadanie za wykonane.</li>\n<li>Wdrażaj etapami: najpierw pilotaż, potem szersze udostępnienie.</li>\n<li>Pamiętaj, że Copilot dziedziczy uprawnienia użytkownika i nie odczyta danych, do których ten nie ma dostępu. Microsoft nie trenuje swoich modeli na danych Twojego tenanta bez Twojej wyraźnej zgody.</li>\n</ul>\n\n<h2>Fazit</h2>\n<p>Copilot w Business Central to nie zamknięte czarne pudełko. Pod gotowymi demami kryje się model możliwości, który pozwala dopasować asystenta do własnej firmy. Bezpieczne podejście składa się z trzech elementów: rejestracji funkcji w AL z unikalnymi nazwami i wersjonowaniem, metapromptu nadającego asystentowi rolę oraz kluczy chronionych w Isolated Storage na etapie testów i w Key Vault na produkcji. Całość warto uzupełnić stroną Copilot and Agent Capabilities jako wyłącznikiem bezpieczeństwa. Zacznij od jednej funkcji w środowisku testowym i sprawdź ją według powyższej listy kontrolnej.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Własna funkcja Copilota w Business Central: 5 kroków",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Funkcja",
+     "text": "Rozszerz enum Copilot Capability i zarejestruj go w codeunicie instalacyjnym lub aktualizacyjnym."
+    },
+    {
+     "kopf": "Dostępność",
+     "text": "Na stronie administracyjnej ustaw status: podgląd, użytek wewnętrzny lub ogólna dostępność."
+    },
+    {
+     "kopf": "Autoryzacja",
+     "text": "Podaj punkt końcowy, nazwę wdrożenia i klucz API; klucze trzymaj w Isolated Storage lub Key Vault."
+    },
+    {
+     "kopf": "Metaprompt",
+     "text": "Ustaw główną wiadomość systemową: rola, format i ograniczenia odpowiedzi Copilota."
+    },
+    {
+     "kopf": "Pilotaż",
+     "text": "Testuj z małą grupą, obserwuj telemetrię i miej pod ręką wyłącznik funkcji."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Czy Copilot w Business Central działa w instalacji on-premise i czy trzeba za niego dopłacać?",
+    "a": "Copilot jest wbudowany w Business Central Online bez dodatkowych kosztów, ale nie zadziała w instalacji on-premise. Większość administratorów korzysta tylko z gotowych scenariuszy demonstracyjnych, choć dostępne są też narzędzia do budowy własnych funkcji opartych na AI."
+   },
+   {
+    "q": "Jak zarejestrować własną funkcję Copilota w AL?",
+    "a": "Rozszerz enum Copilot Capability i użyj codeunitu instalacyjnego lub aktualizacyjnego, który wywoła funkcję rejestrującą możliwość. Bez tego wywołania rozszerzenie się skompiluje, ale Copilot nie będzie znał funkcji. Wybierz unikalne nazwy i wartości enuma, wersjonuj rozszerzenie i dodaj Learn More URL."
+   },
+   {
+    "q": "Czym jest metaprompt w Copilocie i gdzie go przechowywać?",
+    "a": "Metaprompt to główny komunikat systemowy, który określa profil modelu, format odpowiedzi i ograniczenia. Działa jak stałe instrukcje towarzyszące każdej odpowiedzi. Ustawia się go przez codeunit AOAI Chat Messages. Przechowuj go w Isolated Storage, a na produkcji w Key Vault, nie na sztywno w kodzie AL."
+   },
+   {
+    "q": "Gdzie bezpiecznie przechowywać klucz API do Azure OpenAI?",
+    "a": "Nigdy w kodzie AL ani w repozytorium. W fazie deweloperskiej użyj Isolated Storage, a na produkcji Azure Key Vault. W AL trzymaj klucz jako SecretText. Uprawnienia użytkowników go nie chronią, bo klucz uwierzytelnia całą usługę, więc wyciek naraża całą integrację."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Isolated Storage a Azure Key Vault",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Isolated Storage (deweloperka)",
+     "punkte": [
+      "Skrytka wewnątrz rozszerzenia, niedostępna dla innych rozszerzeń",
+      "Sprawdza się w Sandboxie i podczas testów",
+      "Nie jest rozwiązaniem klasy produkcyjnej",
+      "To raczej zwykła szafka na dokumenty niż skarbiec"
+     ]
+    },
+    "rechts": {
+     "titel": "Azure Key Vault (produkcja)",
+     "punkte": [
+      "Jedyny odpowiedzialny wybór na produkcji",
+      "Kontrolowany kontener z zasadami dostępu i rotacji",
+      "Rozszerzenie pobiera klucz w czasie wykonywania",
+      "Sekrety nigdy nie krążą jako zwykły tekst"
+     ]
+    }
+   },
+   {
+    "titel": "Metaprompt w pigułce",
+    "typ": "checkliste",
+    "punkte": [
+     "Definiuje profil modelu, format wyjściowy i ograniczenia",
+     "Ustaw go przez codeunit AOAI Chat Messages jako główną wiadomość systemową",
+     "Nie wpisuj tekstu na sztywno w AL, zapisz go w Isolated Storage",
+     "Nie pisz wiadomości systemowej o długości powieści, bo zjada budżet tokenów",
+     "W finansach ustaw temperaturę blisko zera dla deterministycznych wyników",
+     "Zawrzyj zasady formatowania, strukturę odpowiedzi i zakaz zbędnych komentarzy",
+     "Traktuj metaprompt jak dokumentację i kontrolę ryzyka"
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Co się stanie, jeśli rozszerzenie się skompiluje, ale nie wywoła funkcji rejestrującej możliwość Copilota?",
+    "opts": [
+     "Copilot automatycznie wykryje funkcję przy najbliższej aktualizacji Microsoftu",
+     "Funkcja pojawi się na liście, ale będzie domyślnie wyłączona",
+     "Copilot nie będzie wiedział o istnieniu funkcji",
+     "Business Central odrzuci rozszerzenie podczas publikacji w Sandboxie"
+    ],
+    "a": 2,
+    "why": "Bez wywołania rejestracji rozszerzenie może się skompilować, ale Copilot nie zna funkcji i nie pokaże jej na stronie administratora."
+   },
+   {
+    "q": "Czym jest metaprompt w kontekście Copilota w Business Central?",
+    "opts": [
+     "Jednorazowym pytaniem użytkownika, które znika po wygenerowaniu odpowiedzi",
+     "Głównym komunikatem systemowym definiującym profil modelu, format wyjścia i ograniczenia",
+     "Kluczem API potwierdzającym, że tenant może komunikować się z modelem",
+     "Listą uprawnień określającą, do jakich danych Copilot ma dostęp"
+    ],
+    "a": 1,
+    "why": "Metaprompt to stałe instrukcje systemowe towarzyszące każdej odpowiedzi, w przeciwieństwie do jednorazowego promptu użytkownika."
+   },
+   {
+    "q": "Gdzie według artykułu przechowywać klucze Azure OpenAI w środowisku produkcyjnym?",
+    "opts": [
+     "W Isolated Storage, bo żadne inne rozszerzenie nie ma do niego dostępu",
+     "Bezpośrednio w kodzie AL, aby uniknąć opóźnień w działaniu",
+     "W prywatnym repozytorium razem z kodem rozszerzenia",
+     "W Azure Key Vault, a w AL jako SecretText"
+    ],
+    "a": 3,
+    "why": "Na produkcji jedynym odpowiedzialnym wyborem jest Azure Key Vault. Isolated Storage nadaje się tylko do prac deweloperskich."
+   },
+   {
+    "q": "Jaką temperaturę modelu zaleca artykuł w scenariuszach finansowych?",
+    "opts": [
+     "Wysoką, aby model improwizował przy księgowaniu",
+     "Średnią, dopasowywaną losowo do każdego zapytania",
+     "Dowolną, ponieważ temperatura nie wpływa na wyniki",
+     "Bliską zera, aby wyniki były deterministyczne"
+    ],
+    "a": 3,
+    "why": "W finansach temperaturę ustawia się blisko zera dla deterministycznych wyników, a w marketingu można ją podnieść."
+   }
+  ]
+ },
+ "id": {
+  "html": "<p>Banyak admin berharap Business Central bisa mengerjakan tugas yang membosankan, misalnya rekonsiliasi pembayaran atau penyusunan teks produk. Copilot memang menjanjikan hal itu. Fiturnya sudah tersedia di Business Central online tanpa biaya tambahan, tetapi tidak berjalan di instalasi on-premises.</p>\n<p>Sebagian besar pengguna hanya mengenal tombol Copilot di permukaan, padahal di baliknya ada kerangka kerja yang memungkinkan Anda membuat kapabilitas Copilot sendiri. Artikel ini membahas cara mendaftarkannya, menyusun metaprompt, mengamankan kunci Azure OpenAI, dan merangkai semuanya menjadi alur kerja yang stabil.</p>\n\n<h2>Kapabilitas Copilot Kustom di Business Central: Apa Itu dan Di Mana Menemukannya</h2>\n<p>Kekuatan Copilot tidak terletak pada tombol yang tampil di kartu pelanggan. Titik ekstensinya ada di namespace <strong>System.AI</strong>. Cari codeunit <em>Copilot Capability</em> beserta enum terkait. Di sanalah pengembang bisa mendefinisikan dan mendaftarkan fitur bertenaga AI sendiri, tanpa menunggu Microsoft merilis demo baru.</p>\n<p>Ada dua konsep penting:</p>\n<ul>\n<li><strong>Kapabilitas (Copilot Capability)</strong>: keahlian yang Anda buat untuk Copilot.</li>\n<li><strong>Ketersediaan (Copilot Availability)</strong>: penentu kapan dan di mana keahlian itu muncul bagi pengguna akhir.</li>\n</ul>\n<p>Keduanya membentuk kerangka kerja untuk Copilot yang disesuaikan dengan perusahaan, bukan sekadar menu widget AI bawaan. Banyak admin mengira Copilot adalah kotak hitam yang terkunci. Di tingkat pengembang, kenyataannya jauh lebih terbuka.</p>\n\n<h3>Apa yang Bisa Dibangun dengan Modul AI</h3>\n<p>Modul AI di Business Central menyediakan tiga hal:</p>\n<ul>\n<li>penyelesaian teks (text completion),</li>\n<li>penyelesaian bergaya obrolan (chat completion) untuk alur kerja,</li>\n<li>embedding untuk pencarian semantik.</li>\n</ul>\n<p>Dengan ini Anda bisa membuat kemampuan yang menyusun pesanan pembelian berdasarkan pola perusahaan Anda, bukan asumsi Microsoft. Anda juga bisa membuat asisten yang berbicara dengan gaya bahasa perusahaan. Satu catatan: fitur obrolan dengan Copilot yang mungkin Anda lihat di Business Central tidak dapat diperluas melalui modul ini. Perluasan dilakukan lewat model kapabilitas.</p>\n\n<h3>Halaman Kapabilitas Copilot dan Agen untuk Admin</h3>\n<p>Setiap kapabilitas yang didaftarkan pengembang di AL akan muncul di halaman <strong>Copilot &amp; agent capabilities</strong> di Business Central. Admin dapat melihat hasilnya di sana dan mematikan kapabilitas satu per satu jika ada yang bermasalah. Halaman ini menjadi jembatan antara pengembang yang mendefinisikan di AL dan admin yang mengelola lewat antarmuka.</p>\n<p>Kekuatan ini perlu dipakai dengan hati-hati. Pendaftaran yang keliru bisa menimbulkan konflik saat Microsoft merilis pembaruan, merusak sandbox, atau bahkan memblokir penggunaan di lingkungan produksi. Karena itu tombol pemutus di halaman tersebut sangat penting.</p>\n\n<h2>Cara Mendaftarkan Kapabilitas Copilot dengan AL</h2>\n<p>Secara teknis, pendaftaran tidak rumit. Anda membuat <strong>enum extension</strong> untuk enum Copilot Capability, lalu memakai codeunit instalasi atau peningkatan (install atau upgrade) yang memanggil <em>RegisterCapability</em> pada codeunit Copilot Capability. Panggilan itu memberi tahu Business Central bahwa ada fitur AI baru. Tanpanya, ekstensi mungkin bisa dikompilasi, tetapi Copilot tidak tahu fitur tersebut ada.</p>\n\n<h3>Penamaan, Nilai Enum, dan Versi</h3>\n<p>Kapabilitas Anda hidup dalam ekosistem yang terus diperbarui Microsoft. Nama generik seperti \"Sales Helper\" atau nilai enum yang umum mengundang konflik. Jika Microsoft kelak merilis kapabilitas bawaan di ruang yang sama, sistem bisa bingung mana yang harus ditampilkan. Karena itu:</p>\n<ul>\n<li>pilih nama yang unik,</li>\n<li>tetapkan nilai enum sendiri yang tidak tumpang tindih dengan rentang umum,</li>\n<li>beri versi pada ekstensi secara sengaja, supaya Anda tahu apakah sandbox dan produksi berada di versi yang sama,</li>\n<li>gunakan codeunit peningkatan untuk memindahkan kapabilitas dengan aman saat platform berubah.</li>\n</ul>\n\n<h3>Tambahkan URL \"Pelajari Lebih Lanjut\"</h3>\n<p>Saat mendaftar, Anda dapat mengisi parameter teks URL \"pelajari lebih lanjut\" yang bersifat opsional. URL ini tampil langsung di halaman kapabilitas Copilot dan agen. Admin jadi bisa membaca fungsi dan cara pakai kapabilitas tanpa mencari wiki atau menghubungi pengembang lewat Teams. Ini dokumentasi yang terintegrasi.</p>\n\n<h3>Siapa yang Boleh Mengelola</h3>\n<p>Mengaktifkan atau menonaktifkan kapabilitas Copilot serta mengatur perpindahan data hanya bisa dilakukan admin dengan izin SUPER atau peran admin Business Central. Rencanakan langkah tata kelola ini sejak awal.</p>\n\n<h2>Metaprompt: Memberi Kepribadian dan Aturan pada Copilot</h2>\n<p>Setelah kapabilitas terdaftar, Copilot akan menjawab, tetapi masih generik. Di sinilah metaprompt berperan. Menurut dokumentasi pengembang Microsoft, metaprompt adalah pesan sistem utama yang menentukan profil model, format output, dan batasan keamanan. Singkatnya, ini deskripsi pekerjaan bagi AI.</p>\n<p>Prompt adalah permintaan sementara. Metaprompt adalah instruksi tetap yang persisten di seluruh konteks obrolan. Tanpa metaprompt, Copilot tidak tahu apakah harus terdengar seperti akuntan atau penulis iklan.</p>\n\n<h3>Perbedaan Prompt dan Metaprompt dalam Praktik</h3>\n<p>Jika Anda hanya meminta \"berikan saya entri buku besar\", Copilot akan menciptakan gayanya sendiri, misalnya paragraf panjang atau kolom yang tidak ada. Jika permintaan yang sama dibungkus metaprompt seperti \"Anda adalah asisten keuangan; selalu tampilkan entri buku besar sebagai daftar poin dengan nama kolom Business Central\", hasilnya menjadi bersih dan terstruktur.</p>\n\n<h3>Cara Mengaturnya di AL</h3>\n<p>Pengembang mengaturnya lewat codeunit <em>AOAI Chat Messages</em> dengan memanggil <em>SetPrimarySystemMessage</em>. Simpan metaprompt di isolated storage, bukan ditulis hardcode di file AL. Dengan begitu ekstensi dapat mengambil dan memperbaruinya dengan aman. Dokumentasi memberi contoh dengan isolated storage Set dan Get.</p>\n\n<h3>Anggaran Token dan Temperatur</h3>\n<ul>\n<li><strong>Anggaran token:</strong> metaprompt ditambah prompt pengguna dihitung terhadap batas token model, jadi buat pesan sistem yang ringkas, bukan sepanjang novel.</li>\n<li><strong>Temperatur:</strong> parameter ini mengontrol keacakan. Untuk skenario keuangan, atur rendah mendekati nol agar output deterministik dan akurat. Untuk pemasaran, naikkan temperatur agar draf lebih berwarna.</li>\n</ul>\n<p>Sertakan aturan pemformatan yang eksplisit, struktur respons, dan batasan pada komentar yang tidak relevan. Dengan begitu output bertahan di sistem hilir dan saat audit. Basis AI-nya sama, tetapi Copilot pemasaran dan Copilot keuangan bisa berperilaku sangat berbeda karena kepribadiannya ditentukan lebih dulu.</p>\n\n<h2>Mengamankan Kunci Azure OpenAI: Isolated Storage, Key Vault, dan SecretText</h2>\n<p>Metaprompt sebaik apa pun tidak berguna jika kredensial terbuka lebar. AI tidak diproses secara lokal di Business Central, tetapi melalui back-end Azure OpenAI. Setiap panggilan membutuhkan tiga hal:</p>\n<ol>\n<li>endpoint sumber daya (URL resource Azure OpenAI),</li>\n<li>nama deployment,</li>\n<li>kunci API.</li>\n</ol>\n\n<h3>Jangan Pernah Hardcode Kunci</h3>\n<p>Jangan menanamkan nilai ini dalam kode AL atau menaruhnya di repositori, meski hanya untuk pengujian. Repositori terus dirayapi pemindai kredensial, dan kunci yang bocor tidak bisa diperbaiki dengan patch susulan.</p>\n\n<h3>Pengembangan dan Pengujian: Isolated Storage</h3>\n<p>Untuk pekerjaan pengembangan dan pengujian, Microsoft menjabarkan penggunaan <strong>isolated storage</strong> di AL. Anggap saja ini locker di dalam ekstensi: ekstensi lain tidak bisa mengintipnya. Cocok untuk sandbox dan build pengembang, tetapi bukan standar produksi.</p>\n\n<h3>Produksi: Azure Key Vault</h3>\n<p>Di produksi, langkah yang bertanggung jawab adalah memakai <strong>Azure Key Vault</strong>. Key Vault menyimpan kunci API dengan kontrol akses, pencatatan, dan kebijakan rotasi. Ekstensi mengambil kunci saat runtime tanpa pernah mengungkapnya dalam kode. Pola ini disukai auditor karena rahasia tidak pernah tersebar dalam teks biasa.</p>\n\n<h3>Gunakan SecretText</h3>\n<p>Di AL, kunci API dapat disimpan sebagai <strong>SecretText</strong>. Meski Anda menelusuri kode lewat debugger, nilainya tidak tampil sebagai teks jelas. Ini menutup salah satu celah kebocoran yang paling konyol.</p>\n\n<h3>Izin Pengguna Tidak Melindungi Kunci</h3>\n<p>Copilot memang mewarisi kontrol akses atas data bisnis. Namun kunci API mengautentikasi seluruh layanan. Jika satu kunci bocor, orang luar bisa menyamar sebagai seluruh integrasi tersebut, dan cakupan izin pengguna tidak akan menolong.</p>\n\n<h3>Validasi dengan SetAuthorization</h3>\n<p>Untuk memastikan pengaturan benar, gunakan <em>SetAuthorization</em> pada codeunit Azure OpenAI. Di situ Anda memasukkan URL resource, deployment, dan kunci API. Jika salah, Copilot bahkan tidak akan memuat, atau Anda mendapat error senyap yang ditemukan pengguna lebih dulu. Ikuti urutan dev, praproduksi, lalu produksi: tiga lingkungan dengan tiga set kunci.</p>\n\n<h2>Lima Langkah Menyambungkan Alur Kerja Copilot</h2>\n<p>Kapabilitas, metaprompt, dan kunci aman baru berguna jika disusun dalam urutan yang benar. Ingat lima langkah ini:</p>\n<ol>\n<li><strong>Kapabilitas:</strong> perluas enum Copilot Capability dengan enum extension, lalu daftarkan di codeunit instalasi atau peningkatan dengan <em>RegisterCapability</em>.</li>\n<li><strong>Ketersediaan:</strong> tentukan di mana fitur muncul lewat halaman kapabilitas Copilot dan agen. Bagi admin, ini tombol peluncuran. Jika dilewati, fitur yang belum matang bisa terekspos ke semua pengguna.</li>\n<li><strong>Otorisasi:</strong> hubungkan Azure OpenAI lewat codeunit Azure OpenAI dengan endpoint, nama deployment, dan kunci API.</li>\n<li><strong>Metaprompt:</strong> tetapkan pesan sistem utama melalui AOAI Chat Messages, dengan teks yang diambil dari isolated storage atau, di produksi, dari Key Vault.</li>\n<li><strong>Pilot:</strong> luncurkan ke grup kecil, kumpulkan umpan balik, dan pantau telemetri. Penggunaan AI dicatat sehingga Anda bisa menilai apakah hasilnya bersih atau hanya sampah.</li>\n</ol>\n<p>Singkatnya: kapabilitas memberi keahlian, ketersediaan menentukan audiens, otorisasi membuka pintu, metaprompt memberi tata krama, dan pilot membuktikan semuanya berfungsi.</p>\n\n<h3>Contoh Alur: Copilot Penawaran Penjualan</h3>\n<p>Sebuah tim membuat Copilot yang merekomendasikan bundel produk. Mereka mulai dengan enum extension dan mendaftarkan kapabilitas di codeunit instalasi. Fitur dibatasi hanya untuk pengguna uji. Lalu mereka memanggil Azure OpenAI untuk menetapkan otorisasi dengan endpoint, deployment, dan kunci. Metaprompt disimpan di isolated storage dan dipasang sebagai pesan sistem utama, yang meminta saran bundel dalam format baris item tanpa komentar tambahan. Setelah kelompok kecil menguji hingga output dapat diprediksi, barulah ketersediaan ditandai GA untuk semua pengguna penjualan.</p>\n\n<h2>Kesalahan Umum dan Stolperstein yang Perlu Dihindari</h2>\n<ul>\n<li><strong>Langsung ke produksi.</strong> Banyak pengembang menganggap kapabilitas hanya fitur kecil. Gunakan sandbox, uji sampai rusak, perbaiki, uji lagi, dan pindah ke produksi hanya setelah stabil.</li>\n<li><strong>Nama dan nilai enum yang generik.</strong> Ini memicu konflik dengan pembaruan Microsoft.</li>\n<li><strong>Mengabaikan halaman kapabilitas Copilot dan agen.</strong> Jika kapabilitas tidak muncul di sana setelah pendaftaran, berarti pendaftaran belum benar. Halaman ini berfungsi sebagai pemeriksaan kewarasan.</li>\n<li><strong>Metaprompt terlalu panjang atau tidak ada.</strong> Anggaran token terbuang, atau Copilot menciptakan gaya jawabannya sendiri.</li>\n<li><strong>Kunci API di dalam kode atau repositori.</strong> Ini risiko kebocoran terbesar.</li>\n<li><strong>Memakai isolated storage di produksi.</strong> Itu bukan brankas untuk data nyata.</li>\n<li><strong>Menguji seluruh rantai sekaligus.</strong> Validasi satu per satu: pendaftaran kapabilitas, ketersediaan, otorisasi dengan SetAuthorization, lalu penerapan metaprompt dalam respons.</li>\n</ul>\n\n<h2>Takeaways Praktis untuk Tim Pengembang dan Admin</h2>\n<ul>\n<li>Jalankan semuanya di sandbox sebelum produksi.</li>\n<li>Pilih nilai enum yang unik dan hindari rentang umum.</li>\n<li>Gunakan codeunit instalasi dan peningkatan untuk jalur pengembangan yang bersih, serta beri versi pada ekstensi.</li>\n<li>Lampirkan URL \"pelajari lebih lanjut\" agar admin tidak perlu menebak.</li>\n<li>Simpan metaprompt di isolated storage, bukan hardcode.</li>\n<li>Atur temperatur rendah untuk tugas keuangan dan lebih tinggi untuk tugas kreatif.</li>\n<li>Gunakan isolated storage untuk dev dan Key Vault untuk produksi.</li>\n<li>Bungkus kunci API dalam SecretText dan jangan pernah menyematkannya dalam kode.</li>\n<li>Jalankan alur SetAuthorization dari awal hingga akhir sebelum menyatakan pekerjaan selesai.</li>\n<li>Luncurkan bertahap dengan cakupan terbatas dan pantau telemetri.</li>\n<li>Ingat bahwa Copilot mewarisi izin pengguna sehingga tidak membaca apa yang tidak dapat diakses pengguna. Microsoft juga tidak melatih model dengan data tenant Anda kecuali Anda mengizinkannya secara eksplisit.</li>\n</ul>\n\n<h2>Fazit</h2>\n<p>Copilot di Business Central lebih dari sekadar tombol demo. Dengan mendaftarkan kapabilitas lewat namespace System.AI, menyusun metaprompt yang jelas, dan mengamankan koneksi Azure OpenAI dengan isolated storage, Key Vault, dan SecretText, Anda bisa membentuk asisten yang sesuai dengan bisnis Anda. Perlakukan pendaftaran seperti kode produksi, ikuti urutan lima langkah dari kapabilitas hingga pilot, dan andalkan halaman kapabilitas Copilot dan agen agar admin selalu memegang kendali. Langkah awal yang realistis: coba satu kapabilitas di sandbox dan pastikan ia berfungsi sesuai urutan tersebut.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Lima Langkah Membangun Copilot Kustom di Business Central",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Kapabilitas",
+     "text": "Perluas enum Copilot Capability dan daftarkan lewat codeunit instalasi atau peningkatan dengan RegisterCapability."
+    },
+    {
+     "kopf": "Ketersediaan",
+     "text": "Tentukan di mana fitur muncul lewat halaman kapabilitas Copilot dan agen, mulai dari pengguna uji."
+    },
+    {
+     "kopf": "Otorisasi",
+     "text": "Hubungkan Azure OpenAI dengan endpoint, nama deployment, dan kunci API lewat SetAuthorization."
+    },
+    {
+     "kopf": "Metaprompt",
+     "text": "Tetapkan pesan sistem utama yang tersimpan aman untuk mengatur nada, struktur, dan format output."
+    },
+    {
+     "kopf": "Pilot",
+     "text": "Luncurkan ke grup kecil, pantau telemetri, lalu perluas. Admin bisa mematikan fitur kapan saja."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Apakah Copilot di Business Central bisa dipakai di instalasi on-premises?",
+    "a": "Fitur Copilot tersedia di Business Central online tanpa biaya tambahan, tetapi tidak berjalan di instalasi on-premises. Pengembang dapat membuat kapabilitas sendiri lewat namespace System.AI, dan hasilnya muncul di halaman Copilot & agent capabilities."
+   },
+   {
+    "q": "Bagaimana cara mendaftarkan kapabilitas Copilot kustom dengan AL?",
+    "a": "Buat enum extension untuk enum Copilot Capability, lalu panggil RegisterCapability pada codeunit Copilot Capability dari codeunit instalasi atau peningkatan. Tanpa panggilan itu, ekstensi mungkin terkompilasi, tetapi Copilot tidak tahu fitur tersebut ada. Pilih nama dan nilai enum yang unik agar tidak konflik dengan pembaruan Microsoft."
+   },
+   {
+    "q": "Apa itu metaprompt di Copilot Business Central dan mengapa penting?",
+    "a": "Metaprompt adalah pesan sistem utama yang menentukan profil model, format output, dan batasan keamanan. Berbeda dengan prompt yang sementara, metaprompt persisten di seluruh konteks obrolan. Atur lewat SetPrimarySystemMessage pada AOAI Chat Messages, simpan di isolated storage, dan buat ringkas karena dihitung terhadap batas token."
+   },
+   {
+    "q": "Bagaimana cara mengamankan kunci API Azure OpenAI di Business Central?",
+    "a": "Jangan hardcode kunci di kode AL atau repositori. Pakai isolated storage untuk pengembangan dan pengujian, dan Azure Key Vault untuk produksi. Simpan kunci sebagai SecretText agar tidak tampil sebagai teks jelas di debugger, lalu validasi pengaturan dengan SetAuthorization memakai URL resource, nama deployment, dan kunci API."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Isolated Storage vs Azure Key Vault",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Isolated Storage (Dev dan Uji)",
+     "punkte": [
+      "Ibarat locker di dalam ekstensi yang tidak bisa diintip ekstensi lain",
+      "Cocok untuk sandbox dan build pengembang",
+      "Bukan standar produksi dan bukan brankas untuk data nyata",
+      "Dipakai juga untuk menyimpan metaprompt"
+     ]
+    },
+    "rechts": {
+     "titel": "Azure Key Vault (Produksi)",
+     "punkte": [
+      "Menyimpan kunci API dengan kontrol akses dan pencatatan",
+      "Dilengkapi kebijakan rotasi kunci",
+      "Ekstensi mengambil kunci saat runtime tanpa mengungkapnya di kode",
+      "Disukai auditor karena rahasia tidak tersebar dalam teks biasa"
+     ]
+    }
+   },
+   {
+    "titel": "Checklist Sebelum Rilis Copilot Kustom",
+    "typ": "checkliste",
+    "punkte": [
+     "Uji semuanya di sandbox sebelum masuk produksi",
+     "Pilih nama dan nilai enum unik, hindari rentang umum",
+     "Pastikan kapabilitas muncul di halaman kapabilitas Copilot dan agen",
+     "Simpan metaprompt di isolated storage, bukan hardcode",
+     "Bungkus kunci API dalam SecretText, jangan tanam di kode",
+     "Jalankan SetAuthorization dari awal hingga akhir",
+     "Luncurkan bertahap dan pantau telemetri"
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Apa fungsi utama metaprompt dalam kapabilitas Copilot kustom di Business Central?",
+    "opts": [
+     "Menyimpan kunci API Azure OpenAI agar tidak terlihat di debugger",
+     "Menjadi pesan sistem tetap yang menentukan profil, format output, dan batasan keamanan",
+     "Mendaftarkan kapabilitas baru ke halaman kapabilitas Copilot dan agen",
+     "Mengganti permintaan sementara pengguna dengan teks yang dibuat otomatis"
+    ],
+    "a": 1,
+    "why": "Metaprompt adalah instruksi sistem persisten yang menentukan profil model, format output, dan batasan keamanan, berbeda dari prompt sementara."
+   },
+   {
+    "q": "Apa yang terjadi jika kapabilitas tidak dipanggil lewat RegisterCapability di codeunit instalasi atau peningkatan?",
+    "opts": [
+     "Ekstensi tidak bisa dikompilasi sama sekali oleh compiler AL",
+     "Kapabilitas otomatis aktif untuk semua pengguna penjualan",
+     "Copilot tidak mengetahui fitur tersebut, meskipun ekstensi mungkin berhasil dikompilasi",
+     "Kunci API otomatis dipindahkan ke Azure Key Vault"
+    ],
+    "a": 2,
+    "why": "Tanpa RegisterCapability, ekstensi mungkin tetap terkompilasi, tetapi Copilot tidak tahu bahwa fitur AI tersebut ada."
+   },
+   {
+    "q": "Bagaimana cara menyimpan kunci API Azure OpenAI yang bertanggung jawab di lingkungan produksi?",
+    "opts": [
+     "Menaruhnya di isolated storage ekstensi karena tidak bisa diintip ekstensi lain",
+     "Menuliskannya langsung di kode AL dengan komentar peringatan",
+     "Menyimpannya di repositori privat untuk memudahkan rotasi",
+     "Memakai Azure Key Vault dan mengambilnya saat runtime, dibungkus SecretText"
+    ],
+    "a": 3,
+    "why": "Produksi memakai Azure Key Vault dengan kontrol akses, pencatatan, dan rotasi; isolated storage hanya untuk dev dan pengujian."
+   },
+   {
+    "q": "Bagaimana pengaturan temperatur yang tepat untuk skenario keuangan menurut artikel?",
+    "opts": [
+     "Rendah mendekati nol agar output deterministik dan akurat",
+     "Tinggi agar jawaban lebih bervariasi dan berwarna",
+     "Sedang agar seimbang antara kreativitas dan konsistensi",
+     "Tidak perlu diatur karena metaprompt sudah menentukannya"
+    ],
+    "a": 0,
+    "why": "Temperatur mengontrol keacakan; untuk keuangan diatur rendah agar hasil akurat, sedangkan pemasaran memakai temperatur lebih tinggi."
+   }
+  ]
  }
 }
