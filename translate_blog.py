@@ -9,8 +9,9 @@ B) Claude-Agenten hier in Claude (Cowork, ohne API) - fuer Nacharbeit, Reviews, 
    prepare  -> work/blog-i18n/<lang>/BRIEF.md + <key>.in.txt;  Agent schreibt <key>.out.txt;  apply -> pruefen, speichern
 sample: Stichprobe fuer die Review-Agenten (data/blog_i18n/review/<lang>.json)
 Optionen: --langs de,fr  --limit N (Artikel je Sprache, Batch)  --per-agent N  --order newest|oldest  --slugs a,b  --redo
-Profile: agents/blog-team/uebersetzer/<lang>.md (Systemprompt je Sprache). Quelle: data/podpage/blog_posts.json.gz (dieselben Beitraege liegen inzwischen in D1).
-Zwischenablage: data/blog_i18n/<lang>/<bucket>.json.gz {slug: {h, n, seg{id: text}, ok, m, ts}}; Ziel D1 (blog_posts je Sprache) folgt.
+Profile: agents/blog-team/uebersetzer/<lang>.md (Systemprompt je Sprache). Quellen: data/podpage/blog_posts.json.gz (dieselben Beitraege liegen inzwischen in D1)
+und die freigegebenen englischen Content-Pakete imports/blog/en/*.md (status: approved, site_content_blog.tr_sources; Schluessel content/<slug>, --slugs nimmt auch den nackten Slug).
+Zwischenablage: data/blog_i18n/<lang>/<bucket>.json.gz {slug: {h, n, seg{id: text}, ok, m, ts}}; Seiten baut site_legacy_blog bzw. site_content_blog.translations.
 """
 import gzip, hashlib, json, os, random, re, sys, time, urllib.request, urllib.error
 from site_text import bad as bad_text
@@ -51,10 +52,16 @@ BLOCK = {"p", "li", "h2", "h3", "h4", "blockquote", "td", "th", "ul", "ol", "tab
 
 # ---------- Quelle und Segmente ----------
 def posts():
-    if not SRC.exists(): return []
-    ps = [p for p in json.loads(gzip.open(SRC, "rt", encoding="utf-8").read()) if p.get("title") and p.get("html")]
+    ps = [p for p in json.loads(gzip.open(SRC, "rt", encoding="utf-8").read()) if p.get("title") and p.get("html")] if SRC.exists() else []
+    ps += content_posts()
     ps.sort(key=lambda p: p.get("iso") or "", reverse=True)
     return ps
+
+
+def content_posts():
+    """Freigegebene englische Content-Pakete (imports/blog/en/*.md) im Format der frueheren Beitraege; Schluessel content/<slug> (kollidiert nie mit einem Slug)."""
+    import site_content_blog as CBL
+    return CBL.tr_sources()
 
 
 def segment(html_clean):
@@ -222,7 +229,7 @@ def pick(a, lang, have, ps, busy):
     for p in ps:
         if len(out) >= n: break
         if p["slug"] in busy: continue
-        if QUEUE and p["slug"] not in QUEUE.get(lang, ()): continue   # Vormerkliste: nur die fuer diese Sprache markierten Beitraege
+        if QUEUE and p["slug"] not in QUEUE.get(lang, ()) and p.get("cp_slug") not in QUEUE.get(lang, ()): continue   # Vormerkliste: nur die fuer diese Sprache markierten Beitraege
         tpl, units, h = source_of(p); rec = have.get(p["slug"])
         if a["redo"] or not rec or rec.get("h") != h: rec = {"h": h, "n": len(units), "seg": {}, "ok": False}
         if rec.get("ok"): continue
@@ -320,7 +327,7 @@ def select(a, ps):
         QUEUE.clear(); QUEUE.update(queue_items()); langs = [l for l in langs if QUEUE.get(l)]
         sl = sl | set().union(*QUEUE.values()) if QUEUE else {"-"}
         print("Vormerkliste:", {l: len(v) for l, v in QUEUE.items()} or "leer")
-    if sl: ps = [p for p in ps if p["slug"] in sl]
+    if sl: ps = [p for p in ps if p["slug"] in sl or p.get("cp_slug") in sl]   # Content-Pakete auch ueber den nackten Slug
     if a["mode"] == "auto":
         lim = (datetime.now(timezone.utc) - timedelta(days=NEW_DAYS)).isoformat()
         ps = [p for p in ps if (p.get("iso") or "") >= lim]
@@ -353,6 +360,11 @@ def est(lang, units):
     sys_tok = len(system_prompt(lang)) / 3.5
     n_req = max(1, -(-sum(len(t) for _, t in units) // CHUNK))
     return n_req * sys_tok + src_tok * 1.1, src_tok * measured_factor(lang)
+
+
+def post_cost(units, langs=LANGS):
+    """Geschaetzte Batch-Kosten (USD), einen Beitrag komplett in alle langs zu uebersetzen (gleiche Rechnung wie submit/plan)."""
+    return round(sum(cost(*est(lang, units)) for lang in langs), 4)
 
 
 def pending_cost(): return sum(b.get("est_usd", 0) for b in jload("batches.json", []))
@@ -462,10 +474,12 @@ def status():
     ps = posts(); per_round = len(LANGS) * PER_AGENT
     st = {"updated": datetime.now(timezone.utc).isoformat()[:19], "posts": len(ps), "engine": f"{MODEL} (Batch) + Claude-Agenten", "per_agent": PER_AGENT,
           "budget_usd": BUDGET, "spent_usd": round(spent(), 3), "pending_batches": len(jload("batches.json", [])), "pending_est_usd": round(pending_cost(), 3), "langs": {}}
-    srcs0 = {p["slug"]: source_of(p) for p in ps}; srcs = {k: v[2] for k, v in srcs0.items()}; left = 0; all_ti = all_to = 0
+    srcs0 = {p["slug"]: source_of(p) for p in ps}; srcs = {k: v[2] for k, v in srcs0.items()}; left = 0; all_ti = all_to = 0; cdone = {}
     for lang in LANGS:
         have = load_lang(lang)
         done = sum(1 for p in ps if (have.get(p["slug"]) or {}).get("ok") and have[p["slug"]].get("h") == srcs[p["slug"]])
+        for p in ps:
+            if p.get("cp_slug") and (have.get(p["slug"]) or {}).get("ok") and have[p["slug"]].get("h") == srcs[p["slug"]]: cdone[p["slug"]] = cdone.get(p["slug"], 0) + 1
         ti = to = 0
         for p in ps:
             rec = have.get(p["slug"]) or {}
@@ -478,7 +492,10 @@ def status():
                              "qa_errors_logged": sum(1 for x in ql if x.get("fehler")), "jobs_waiting": len(list((WORK / lang).glob("*.in.txt"))) if (WORK / lang).exists() else 0}
         left += len(ps) - done
     st["open_translations"] = left; st["rounds_left"] = -(-left // per_round); st["rest_est_usd_all"] = round(cost(all_ti, all_to), 2)
+    st["content"] = [{"slug": p["cp_slug"], "est_usd_all_langs": post_cost(srcs0[p["slug"]][1]), "done_langs": cdone.get(p["slug"], 0)}   # Content-Pakete: Kosten je Beitrag x 14 Sprachen (Batch-Preis)
+                     for p in ps if p.get("cp_slug")]
     jsave("status.json", st)
+    for c in st["content"]: print(f"  Content-Paket {c['slug']}: ~{c['est_usd_all_langs']} $ fuer {len(LANGS)} Sprachen, fertig {c['done_langs']}/{len(LANGS)}")
     print(f"{st['posts']} Artikel x 19 Sprachen | offen {left} Uebersetzungen | Haiku-Batch ~{st['rest_est_usd_all']} $ (ausgegeben {st['spent_usd']} von {BUDGET} $) | Agenten ~{st['rounds_left']} Runden")
     for l, v in st["langs"].items(): print(f"  {l:3} {v['done']:5}/{st['posts']} fertig ({v['pct']} %), Rest ~{v['rest_est_usd']} $")
     return st
@@ -493,7 +510,7 @@ def sample(a):
         res = []
         for p in pick:
             t, d, h, _ = assemble(p, have[p["slug"]]); tpl, units, _h = source_of(p)
-            res.append({"slug": p["slug"], "url": f"https://www.m365.fm/{lang}/show/blog/{p['slug']}/", "pairs": [{"id": i, "en": s, lang: have[p["slug"]]["seg"].get(i, "")} for i, s in units][:60]})
+            res.append({"slug": p["slug"], "url": f"https://www.m365.fm/{lang}/community/u/{p.get('author') or 'mirko-p'}/blog/{p.get('cp_slug') or p['slug']}/", "pairs": [{"id": i, "en": s, lang: have[p["slug"]]["seg"].get(i, "")} for i, s in units][:60]})
         (OUT / "review").mkdir(parents=True, exist_ok=True)
         (OUT / "review" / f"{lang}.json").write_text(json.dumps(res, ensure_ascii=False, indent=1), encoding="utf-8")
         print(lang, len(res), "Beitraege ->", OUT / "review" / f"{lang}.json")

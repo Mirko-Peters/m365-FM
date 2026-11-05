@@ -1480,6 +1480,7 @@ def build():
     import site_blog as BLG
     import site_legacy_blog as LBL
     _posts = BLG.fetch_posts(COMMUNITY_API); _have = {(p["slug"], p.get("lang") or "en") for p in _posts if p["handle"] == "mirko-p"}
+    import site_content_blog as CBL; _posts += [p for p in CBL.translations(BASE, _posts, LRN.ENTS) if (p["slug"], p["lang"]) not in _have]   # Sprachfassungen der englischen Content-Pakete (Uebersetzer-Team, data/blog_i18n), nur zu live stehenden Originalen
     _posts += [p for p in LBL.items(BASE) if (p["slug"], p.get("lang") or "en") not in _have]   # plus die frueheren Podpage-Blogbeitraege als Community-Beitraege von mirko-p; T6: je Slug UND Sprache (die deutschen Fassungen blieben sonst beim D1-Import auf der Strecke)
     SPM.check_posts(_posts)   # T37 Sponsor: Beitraege in data/sponsorships.json muessen existieren
     LBL.publish(write, BASE); MEM.BLOGLANGS = {p["lang"] for p in _posts}   # stand seit T6 versehentlich im Kommentar: blog-import/ fuer den Worker und die Blog-Sprachen der Profile
