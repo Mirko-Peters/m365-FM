@@ -2,6 +2,8 @@ import unittest
 import json
 import os
 import tempfile
+from io import BytesIO
+from datetime import date
 from unittest.mock import patch
 
 from tools import scrape_events as scraper
@@ -110,25 +112,66 @@ class EventScraperTests(unittest.TestCase):
         result = scraper.retain_previous(previous, current)
         self.assertEqual(sum(not item.get("gone") for item in result), 5)
 
-    def test_mcp_call_errors_abort_and_cursor_pages_are_consumed(self):
+    def test_mcp_call_errors_abort_and_list_events_uses_date_windows(self):
         with self.assertRaises(ValueError):
             scraper._mcp_result_value({"result": {"isError": True}})
-        tools = [{"name": "list_events", "inputSchema": {"properties": {"cursor": {"type": "string"},
-                  "limit": {"type": "integer"}}}}]
+        tools = [{"name": "list_events", "inputSchema": {"properties": {"when": {"type": "string"},
+                  "from": {"type": "string"}, "to": {"type": "string"}, "source": {"type": "string"},
+                  "limit": {"type": "string"}}}}]
         events = [
             {"title": "M365 Day", "start": "2027-03-10", "id": "one"},
             {"title": "Azure Day", "start": "2027-03-11", "id": "two"},
         ]
-        responses = [
-            {"result": {"structuredContent": {"events": [events[0]], "nextCursor": "next", "total": 2}}},
-            {"result": {"structuredContent": {"events": [events[1]], "total": 2}}},
-        ]
+        responses = [{"result": {"structuredContent": {"events": [event]}}} for event in events]
         with patch.object(scraper, "community_tools", return_value=(tools, "session")), \
              patch.dict(os.environ, {"EVENTS_MCP_TOOLS_ALLOWLIST": "list_events"}), \
+             patch.object(scraper, "_event_windows", return_value=[(date(2027, 3, 1), date(2027, 3, 10)),
+                                                                    (date(2027, 3, 11), date(2027, 3, 31))]), \
              patch.object(scraper, "mcp_request", side_effect=[(r, "session") for r in responses]) as request:
             result = scraper.community_events()
         self.assertEqual(len(result), 2)
         self.assertEqual(request.call_count, 2)
+        self.assertEqual(request.call_args_list[0].args[1]["arguments"], {
+            "when": "range", "from": "2027-03-01", "to": "2027-03-10", "source": "community_days", "limit": "100"})
+
+    def test_mcp_uses_stateless_streamable_http_endpoint(self):
+        class Response(BytesIO):
+            headers = {"content-type": "text/event-stream"}
+            def __enter__(self):
+                return self
+            def __exit__(self, *_):
+                self.close()
+
+        with patch.object(scraper.urllib.request, "urlopen", return_value=Response(b'data: {"jsonrpc":"2.0","id":1,"result":{}}\n\n')) as open_url:
+            response, session = scraper.mcp_request("tools/list")
+        request = open_url.call_args.args[0]
+        self.assertEqual(scraper.MCP_URL, "https://mcp.communitydays.org/runtime/webhooks/mcp")
+        self.assertEqual(request.full_url, scraper.MCP_URL)
+        self.assertIsNone(request.get_header("Mcp-session-id"))
+        self.assertIsNone(request.get_header("Authorization"))
+        self.assertEqual(request.get_header("Mcp-protocol-version"), "2025-03-26")
+        self.assertEqual(response["result"], {})
+        self.assertIsNone(session)
+
+    def test_list_events_splits_full_month_responses_by_day(self):
+        tool = {"name": "list_events", "inputSchema": {"properties": {
+            "when": {"type": "string"}, "from": {"type": "string"}, "to": {"type": "string"},
+            "source": {"type": "string"}, "limit": {"type": "string"}}}}
+        crowded = [{"slug": f"event-{index}", "title": f"M365 Day {index}", "start_date": "2027-03-10"}
+                   for index in range(100)]
+        replies = [
+            {"result": {"structuredContent": crowded}},
+            {"result": {"structuredContent": [crowded[0]]}},
+        ]
+        with patch.object(scraper, "community_tools", return_value=([tool], None)), \
+             patch.dict(os.environ, {"EVENTS_MCP_TOOLS_ALLOWLIST": "list_events"}), \
+             patch.object(scraper, "_event_windows", return_value=[(date(2027, 3, 10), date(2027, 3, 10))]), \
+             patch.object(scraper, "mcp_request", side_effect=[(reply, None) for reply in replies]) as request:
+            result = scraper.community_events()
+        self.assertEqual(request.call_count, 2)
+        self.assertEqual(request.call_args_list[1].args[1]["arguments"]["from"], "2027-03-10")
+        self.assertEqual(request.call_args_list[1].args[1]["arguments"]["to"], "2027-03-10")
+        self.assertEqual(len(result), 1)
 
     def test_mcp_event_tools_require_allowlist_and_never_select_session_tools(self):
         tools = [{"name": "list_events", "inputSchema": {"properties": {}}},
@@ -137,7 +180,8 @@ class EventScraperTests(unittest.TestCase):
         with patch.object(scraper, "community_tools", return_value=(tools, "session")), \
              patch.dict(os.environ, {"EVENTS_MCP_TOOLS_ALLOWLIST": "list_events,list_sessions,event_detail"}):
             with patch.object(scraper, "mcp_request", return_value=({"result": {"structuredContent": [
-                {"title": "M365 Day", "start": "2027-03-10", "id": "event-1"}]}}, "session")) as request:
+                {"title": "M365 Day", "start": "2027-03-10", "id": "event-1"}]}}, "session")) as request, \
+                 patch.object(scraper, "_event_windows", return_value=[(date(2027, 3, 1), date(2027, 3, 31))]):
                 self.assertEqual(len(scraper.community_events()), 1)
             self.assertEqual(request.call_count, 1)
             self.assertEqual(request.call_args.args[1]["name"], "list_events")
@@ -145,6 +189,59 @@ class EventScraperTests(unittest.TestCase):
              patch.dict(os.environ, {"EVENTS_MCP_TOOLS_ALLOWLIST": ""}):
             with self.assertRaisesRegex(ValueError, "allowlist|ALLOWLIST"):
                 scraper.community_events()
+
+    def test_community_days_month_windows_enrich_sessions_speakers_and_metadata(self):
+        names = [
+            {"name": "list_events", "inputSchema": {"properties": {
+                "when": {"type": "string"}, "from": {"type": "string"}, "to": {"type": "string"},
+                "source": {"type": "string"}, "limit": {"type": "string"}}}},
+            {"name": "get_event", "inputSchema": {"properties": {"slug": {"type": "string"}}, "required": ["slug"]}},
+            {"name": "get_event_sessions", "inputSchema": {"properties": {"slug": {"type": "string"}}, "required": ["slug"]}},
+            {"name": "get_speaker", "inputSchema": {"properties": {"speakerId": {"type": "string"}}, "required": ["speakerId"]}},
+            {"name": "get_speaker_sessions", "inputSchema": {"properties": {"speakerId": {"type": "string"}}, "required": ["speakerId"]}},
+        ]
+        replies = [
+            {"result": {"structuredContent": [{"id": "mcp-id", "slug": "m365-day", "title": "M365 Community Day",
+                "start_date": "2027-03-10", "end_date": "2027-03-10", "event_type": "Microsoft 365",
+                "city": "Berlin", "country": "Germany", "website": "https://communitydays.org/events/m365-day",
+                "registration_url": "https://communitydays.org/events/m365-day/register",
+                "speaker_call_end_date": "2027-02-01", "call_for_speakers_link": "https://example.org/cfs",
+                "sponsor_call_end_date": "2027-02-10", "call_for_sponsors_link": "https://example.org/sponsor",
+                "latitude": 52.52, "longitude": 13.405, "cost_tiers": [{"name": "Standard", "amount": 25}]}]}},
+            {"result": {"structuredContent": {"slug": "m365-day", "title": "M365 Community Day"}}},
+            {"result": {"structuredContent": {"sessions": [
+                {"id": "session-9", "title": "Copilot in Teams", "start": "2027-03-10T10:00:00Z",
+                 "speakerName": "Alex Example", "speakerId": "speaker-3"},
+                {"id": "session-10", "title": "Azure and Copilot", "speakerName": "Alex Example", "speakerId": "speaker-3"},
+            ]}}},
+            {"result": {"structuredContent": {"name": "Alex Example", "profileUrl": "https://example.org/alex"}}},
+        ]
+        with patch.object(scraper, "community_tools", return_value=(names, None)), \
+             patch.dict(os.environ, {"EVENTS_MCP_TOOLS_ALLOWLIST": "list_events,get_event,get_event_sessions,get_speaker"}), \
+             patch.object(scraper, "_event_windows", return_value=[(date(2027, 3, 1), date(2027, 3, 31))]), \
+             patch.object(scraper, "mcp_request", side_effect=[(reply, None) for reply in replies]) as request, \
+             patch.object(scraper.time, "sleep"):
+            result = scraper.community_events()
+        self.assertEqual(len(result), 1)
+        event = result[0]
+        self.assertEqual(event["sources"][0]["ext_id"], "m365-day")
+        self.assertEqual(event["location"], "Berlin")
+        self.assertEqual(event["tickets_url"], "https://communitydays.org/events/m365-day/register")
+        self.assertEqual(event["cfs_close"], "2027-02-01")
+        self.assertEqual(event["cfs_url"], "https://example.org/cfs")
+        self.assertEqual(event["sponsor_call_close"], "2027-02-10")
+        self.assertTrue(event["seeking_sponsor"])
+        self.assertEqual((event["latitude"], event["longitude"]), (52.52, 13.405))
+        self.assertFalse(event["free"])
+        self.assertEqual(event["sessions"][0]["start"], "2027-03-10T10:00")
+        self.assertEqual(event["sessions"][0]["speakers"], [{"n": "Alex Example", "links": ["https://example.org/alex"]}])
+        self.assertEqual(len(event["sessions"]), 2)
+        self.assertEqual(request.call_count, 4)
+        list_args = request.call_args_list[0].args[1]["arguments"]
+        self.assertEqual(list_args, {"when": "range", "from": "2027-03-01", "to": "2027-03-31",
+                                     "source": "community_days", "limit": "100"})
+        self.assertTrue(all(isinstance(value, str) for value in list_args.values()))
+        self.assertEqual(request.call_args_list[3].args[1]["arguments"], {"speakerId": "speaker-3"})
 
     def test_main_writes_output_with_mocked_scrape(self):
         event = {"sources": [{"source": "community_days", "ext_id": "main"}],

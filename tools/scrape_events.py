@@ -4,8 +4,9 @@ import json
 import os
 import re
 import sys
+import time
 import urllib.request
-from datetime import datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from urllib.parse import parse_qsl, urlparse
 
@@ -13,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 OUT = Path(os.environ.get("EVENTS_OUTPUT", "/tmp/m365-fm-ext-events.json"))
 STATE = Path(os.environ.get("EVENTS_STATE", "/tmp/m365-fm-ext-events-state.json"))
 UA = "M365FM-event-scraper/1.0 (+https://www.m365.fm/contact/)"
-MCP_URL = "https://mcp.communitydays.org"
+MCP_URL = "https://mcp.communitydays.org/runtime/webhooks/mcp"
 MS_TERMS = {
     "m365": "microsoft-365", "microsoft 365": "microsoft-365", "sharepoint": "sharepoint",
     "teams": "teams", "viva": "viva", "power platform": "power-platform", "power bi": "power-bi",
@@ -36,7 +37,7 @@ def get(url, accept="application/json"):
 def mcp_payload(response):
     raw = response.read().decode("utf-8")
     if "text/event-stream" in response.headers.get("content-type", ""):
-        rows = [line[6:] for line in raw.splitlines() if line.startswith("data: ")]
+        rows = [line[5:].strip() for line in raw.splitlines() if line.startswith("data:")]
         if not rows:
             raise ValueError("MCP-Antwort enthaelt keine Daten")
         return json.loads(rows[-1])
@@ -46,23 +47,22 @@ def mcp_payload(response):
 def mcp_request(method, params=None, session=None, request_id=1):
     body = json.dumps({"jsonrpc": "2.0", "id": request_id, "method": method, "params": params or {}}).encode()
     headers = {"content-type": "application/json", "accept": "application/json, text/event-stream", "user-agent": UA}
-    if session:
-        headers["Mcp-Session-Id"] = session
+    if method != "initialize":
         headers["MCP-Protocol-Version"] = "2025-03-26"
     request = urllib.request.Request(MCP_URL, data=body, headers=headers)
     with urllib.request.urlopen(request, timeout=45) as response:
-        return mcp_payload(response), response.headers.get("Mcp-Session-Id", session)
+        return mcp_payload(response), None
 
 
 def community_tools():
-    initialized, session = mcp_request("initialize", {
+    initialized, _ = mcp_request("initialize", {
         "protocolVersion": "2025-03-26", "capabilities": {}, "clientInfo": {"name": "m365fm-events", "version": "1.0"},
     })
     if initialized.get("error"):
         raise ValueError("MCP initialize fehlgeschlagen")
     notification = urllib.request.Request(MCP_URL, data=b'{"jsonrpc":"2.0","method":"notifications/initialized"}',
         headers={"content-type": "application/json", "accept": "application/json, text/event-stream", "user-agent": UA,
-                 "Mcp-Session-Id": session or ""})
+                 "MCP-Protocol-Version": "2025-03-26"})
     try:
         urllib.request.urlopen(notification, timeout=30).close()
     except Exception:
@@ -70,7 +70,7 @@ def community_tools():
     tools, cursor = [], None
     for index in range(100):
         params = {"cursor": cursor} if cursor else {}
-        result, _ = mcp_request("tools/list", params, session=session, request_id=index + 2)
+        result, _ = mcp_request("tools/list", params, request_id=index + 2)
         if result.get("error") or result.get("result", {}).get("isError"):
             raise ValueError("MCP tools/list meldete einen Fehler")
         data = result.get("result", {})
@@ -80,33 +80,7 @@ def community_tools():
             break
     else:
         raise ValueError("MCP tools/list ueberschritt das Seitenlimit")
-    return tools, session
-
-
-def _safe_args(tool, query="Microsoft"):
-    schema = tool.get("inputSchema") or {}
-    props, required = schema.get("properties") or {}, set(schema.get("required") or [])
-    args = {}
-    for key, prop in props.items():
-        if key not in required:
-            continue
-        kind = prop.get("type")
-        if prop.get("enum"):
-            args[key] = prop["enum"][0]
-        elif kind == "string" and re.search(r"query|search|term|topic", key, re.I):
-            args[key] = query
-        elif kind == "integer" and re.search(r"limit|page|offset|size", key, re.I):
-            args[key] = 100 if re.search(r"limit|size", key, re.I) else 1 if "page" in key.lower() else 0
-        elif kind == "boolean":
-            args[key] = False
-        else:
-            return None
-    for key, prop in props.items():
-        if key in args or key in required:
-            continue
-        if prop.get("type") == "integer" and re.search(r"limit|size|page|offset", key, re.I):
-            args[key] = 100 if re.search(r"limit|size", key, re.I) else 1 if "page" in key.lower() else 0
-    return args
+    return tools, None
 
 
 def _mcp_result_value(result):
@@ -127,109 +101,175 @@ def _mcp_result_value(result):
     return values[0] if len(values) == 1 else values
 
 
-def _pagination_info(value):
-    if isinstance(value, dict):
-        cursor = value.get("nextCursor")
-        total = value.get("total")
-        if cursor is not None or total is not None:
-            return cursor, total
-        for child in value.values():
-            cursor, total = _pagination_info(child)
-            if cursor is not None or total is not None:
-                return cursor, total
-    elif isinstance(value, list):
-        for child in value:
-            cursor, total = _pagination_info(child)
-            if cursor is not None or total is not None:
-                return cursor, total
-    return None, None
+def _tool_args(tool, values, required_overrides=None):
+    schema = tool.get("inputSchema") or {}
+    props, required = schema.get("properties") or {}, set(schema.get("required") or [])
+    args = {}
+    for key, prop in props.items():
+        normalized = re.sub(r"[^a-z]", "", key.lower())
+        value = next((v for pattern, v in values.items() if re.fullmatch(pattern, normalized)), None)
+        if value is not None:
+            if prop.get("type") != "string":
+                return None
+            args[key] = str(value)
+        elif key in required:
+            defaults = {
+                "callforspeakers": "false", "callforsponsors": "false",
+                "registrationopen": "false", "q": "", "country": "",
+                "eventtype": "", "cost": "all",
+            }
+            default = (required_overrides or {}).get(key, defaults.get(normalized))
+            if default is not None and prop.get("type") == "string" and (not prop.get("enum") or str(default) in prop["enum"]):
+                args[key] = str(default)
+            else:
+                return None
+    return args
+
+
+def _event_windows():
+    today = date.today()
+    current = date(today.year - 5, 1, 1)
+    last = date(today.year + 5, 12, 31)
+    while current <= last:
+        next_month = date(current.year + (current.month == 12), current.month % 12 + 1, 1)
+        yield current, min(next_month - timedelta(days=1), last)
+        current = next_month
+
+
+def _records(value, collection_names=()):
+    if isinstance(value, list):
+        return [item for item in value if isinstance(item, dict)]
+    if not isinstance(value, dict):
+        return []
+    for key, child in value.items():
+        if key.lower() in collection_names and isinstance(child, list):
+            return [item for item in child if isinstance(item, dict)]
+    if _first(value, "title", "name", "sessionTitle", "session_title"):
+        return [value]
+    for child in value.values():
+        if isinstance(child, (dict, list)):
+            found = _records(child, collection_names)
+            if found:
+                return found
+    return []
+
+
+def _detail_value(tool, values, cache, cache_key, last_call):
+    if cache_key in cache:
+        return cache[cache_key]
+    args = _tool_args(tool, values)
+    if args is None:
+        print(f"MCP-Tool {tool['name']} wegen nicht unterstuetzter Pflichtargumente uebersprungen", file=sys.stderr)
+        return None
+    elapsed = time.monotonic() - last_call[0]
+    if last_call[0] and elapsed < 1:
+        time.sleep(1 - elapsed)
+    result, _ = mcp_request("tools/call", {"name": tool["name"], "arguments": args}, request_id=8000 + len(cache))
+    last_call[0] = time.monotonic()
+    cache[cache_key] = _mcp_result_value(result)
+    return cache[cache_key]
+
+
+def _speaker_id(speaker):
+    return str(_first(speaker, "speakerId", "speaker_id", "id"))
+
+
+def _merge_speaker_detail(speaker, detail):
+    records = _records(detail, ("speaker", "speakers"))
+    profile = records[0] if records else detail if isinstance(detail, dict) else {}
+    name = _first(speaker, "name", "displayName", "speakerName", "speaker_name") or _first(profile, "name", "displayName", "speakerName")
+    links = _links([
+        _first(speaker, "links", "profileUrl", "profile_url", "url", "website", "linkedinUrl"),
+        _first(profile, "links", "profileUrl", "profile_url", "url", "website", "linkedinUrl", "linkedin"),
+    ])
+    return {"name": name, "links": links}
+
+
+def _enrich_event(raw, tools, cache, last_call):
+    slug = str(_first(raw, "slug"))
+    event_detail_tool = tools.get("get_event")
+    if slug and event_detail_tool:
+        detail = _detail_value(event_detail_tool, {r"slug|eventslug|eventid|id": slug}, cache, ("event", slug), last_call)
+        records = _records(detail, ("event", "events"))
+        if records:
+            raw = {**raw, **records[0]}
+    session_tool = tools.get("get_event_sessions")
+    if not slug or not session_tool:
+        return _normalize(raw, "community_days", "list_events")
+    session_value = _detail_value(session_tool, {r"slug|eventslug|eventid|id": slug}, cache, ("sessions", slug), last_call)
+    if session_value is None:
+        return _normalize(raw, "community_days", "list_events")
+    sessions = _records(session_value, ("sessions", "event_sessions", "items"))
+    speaker_tool = tools.get("get_speaker")
+    enriched_sessions = []
+    for session_index, session in enumerate(sessions):
+        speakers = _first(session, "speakers", "presenters")
+        if not speakers and _first(session, "speakerName", "speaker_name", "speakerId", "speaker_id"):
+            speakers = [{"name": _first(session, "speakerName", "speaker_name", "name"),
+                         "speakerId": _first(session, "speakerId", "speaker_id")}]
+        speakers = speakers if isinstance(speakers, list) else [speakers] if speakers else []
+        enriched_speakers = []
+        for speaker in speakers:
+            if isinstance(speaker, str):
+                speaker = {"name": speaker}
+            if not isinstance(speaker, dict):
+                continue
+            speaker_id = _speaker_id(speaker)
+            if speaker_id and speaker_tool:
+                detail = _detail_value(speaker_tool, {r"speakerid|id": speaker_id}, cache, ("speaker", speaker_id), last_call)
+                if detail is not None:
+                    speaker = {**speaker, **_merge_speaker_detail(speaker, detail)}
+            enriched_speakers.append(speaker)
+        enriched_sessions.append({**session, "speakers": enriched_speakers,
+                                  "id": _first(session, "id", "sessionId", "session_id", "slug") or str(session_index)})
+    raw = {**raw, "sessions": enriched_sessions}
+    return _normalize(raw, "community_days", "list_events")
 
 
 def community_events():
-    tools, session = community_tools()
+    tools, _ = community_tools()
     names = [str(x.get("name", "")) for x in tools]
     print("Community Days MCP tools/list: " + ", ".join(names), file=sys.stderr)
     allowed = {name.strip() for name in os.environ.get("EVENTS_MCP_TOOLS_ALLOWLIST", "").split(",") if name.strip()}
     if not allowed:
         raise ValueError("Community Days MCP-Abruf gesperrt: EVENTS_MCP_TOOLS_ALLOWLIST ist leer")
-    selected = [x for x in tools if x.get("name") in allowed and re.search(r"event", x.get("name", ""), re.I)
-                and not re.search(r"session|create|update|delete|submit|write|admin|register", x.get("name", ""), re.I)]
-    if not selected:
-        raise ValueError("Community Days MCP meldet kein geeignetes Read-only-Event-Tool")
-    out = []
-    for index, tool in enumerate(selected, 3):
-        schema = tool.get("inputSchema") or {}
-        props = schema.get("properties") or {}
-        page_key = next((key for key in props if re.search(r"^page$", key, re.I)), None)
-        offset_key = next((key for key in props if re.search(r"^offset$", key, re.I)), None)
-        cursor_key = next((key for key in props if re.search(r"^cursor$", key, re.I)), None)
-        limit_key = next((key for key in props if re.search(r"limit|page.?size|per.?page", key, re.I)), None)
-        cursor, page, offset, loaded, total = None, 1, 0, 0, None
-        for page_index in range(100):
-            args = _safe_args(tool)
-            if args is None:
-                print(f"MCP-Tool {tool['name']} wegen nicht unterstuetzter Pflichtargumente uebersprungen", file=sys.stderr)
-                break
-            if page_key:
-                args[page_key] = page
-            if offset_key:
-                args[offset_key] = offset
-            if cursor_key and cursor:
-                args[cursor_key] = cursor
-            result, _ = mcp_request("tools/call", {"name": tool["name"], "arguments": args}, session, index * 100 + page_index)
-            value = _mcp_result_value(result)
-            found = _event_objects(value, "community_days", tool["name"])
-            out.extend(found)
-            loaded += len(found)
-            batch_size = args.get(limit_key, 100) if limit_key else 100
-            response = result.get("result", {})
-            next_cursor, total_value = _pagination_info(response)
-            if next_cursor is None and total_value is None:
-                next_cursor, total_value = _pagination_info(value)
-            if total_value is not None:
-                total = int(total_value)
-            if not found:
-                if total is not None and loaded < total:
-                    raise ValueError(f"MCP-Tool {tool['name']} lieferte weniger Events als total angibt")
-                break
-            if total is not None and loaded >= total:
-                break
-            if cursor_key:
-                if not next_cursor:
-                    if total is not None and loaded < total:
-                        raise ValueError(f"MCP-Tool {tool['name']} hat vor total keinen nextCursor geliefert")
-                    break
-                cursor = next_cursor
-            elif page_key:
-                page += 1
-            elif offset_key:
-                offset += batch_size
-            else:
-                if total is not None and loaded < total:
-                    raise ValueError(f"MCP-Tool {tool['name']} ist paginiert, bietet aber keinen Seitenparameter")
-                break
+    available = {x.get("name"): x for x in tools if x.get("name") in allowed}
+    list_tool = available.get("list_events")
+    if not list_tool:
+        raise ValueError("Community Days MCP-Allowlist enthält list_events nicht")
+    enrichment = {name: available.get(name) for name in ("get_event", "get_event_sessions", "get_speaker")}
+    cache, last_call, raw_events = {}, [0.0], []
+    props = (list_tool.get("inputSchema") or {}).get("properties") or {}
+    for start, end in _event_windows():
+        args = _tool_args(list_tool, {
+            r"when": "range", r"from": start.isoformat(), r"to": end.isoformat(),
+            r"source": "community_days", r"limit": "100",
+        })
+        if args is None:
+            raise ValueError("list_events hat nicht unterstützte Pflichtargumente")
+        result, _ = mcp_request("tools/call", {"name": "list_events", "arguments": args}, request_id=3000 + start.toordinal())
+        value = _mcp_result_value(result)
+        records = _records(value, ("events", "items"))
+        if len(records) >= 100:
+            current = start
+            while current <= end:
+                daily_args = _tool_args(list_tool, {
+                    r"when": "range", r"from": current.isoformat(), r"to": current.isoformat(),
+                    r"source": "community_days", r"limit": "100",
+                })
+                daily_result, _ = mcp_request("tools/call", {"name": "list_events", "arguments": daily_args},
+                                              request_id=4000 + current.toordinal())
+                daily = _records(_mcp_result_value(daily_result), ("events", "items"))
+                if len(daily) >= 100:
+                    raise ValueError(f"list_events lieferte am {current.isoformat()} mehr als 100 Events")
+                raw_events.extend(daily)
+                current += timedelta(days=1)
         else:
-            raise ValueError(f"MCP-Tool {tool['name']} ueberschritt das Seitenlimit")
+            raw_events.extend(records)
+    out = [_enrich_event(raw, enrichment, cache, last_call) for raw in raw_events]
     if not out:
         raise ValueError("Community Days MCP lieferte keinen vollständigen Event-Snapshot")
     return out
-
-
-def _event_objects(value, source, namespace):
-    found = []
-    if isinstance(value, list):
-        for item in value:
-            found.extend(_event_objects(item, source, namespace))
-    elif isinstance(value, dict):
-        title = _first(value, "title", "name", "eventName", "event_title", "sessionTitle", "session_title", "subject")
-        start = _first(value, "start", "startDate", "start_date", "date", "startTime", "start_time", "beginsAt")
-        if title and start:
-            found.append(_normalize(value, source, namespace))
-        else:
-            for child in value.values():
-                if isinstance(child, (dict, list)):
-                    found.extend(_event_objects(child, source, namespace))
-    return found
 
 
 def _first(data, *keys):
@@ -260,7 +300,9 @@ def _date(value):
 
 
 def _links(value):
-    candidates = value if isinstance(value, list) else [value]
+    candidates = []
+    for candidate in value if isinstance(value, list) else [value]:
+        candidates.extend(candidate if isinstance(candidate, list) else [candidate])
     out = []
     for link in candidates:
         if isinstance(link, dict):
@@ -298,15 +340,18 @@ def _normalize(raw, source, source_id):
     if isinstance(url, dict):
         url = url.get("url") or url.get("href") or ""
     event_url = (_links(url) or [""])[0]
+    registration_url = (_links(_first(raw, "registration_url", "registrationUrl")) or [""])[0]
     organizer = _first(raw, "organizer", "organizerName", "host")
     if isinstance(organizer, dict):
         organizer = organizer.get("name", "")
     location = _first(raw, "location", "venue", "city")
     if isinstance(location, dict):
         location = location.get("name", "")
+    if not location:
+        location = ", ".join(str(_first(raw, key)).strip() for key in ("city", "state_province") if _first(raw, key))
     path_id = urlparse(event_url).path.strip("/")
     fallback_id = f"{source_id}:{path_id}" if path_id else f"{source_id}:{_first(raw, 'title', 'name', 'eventName')}:{_first(raw, 'start', 'startDate', 'start_date', 'date')}"
-    source_id = str(_first(raw, "id", "eventId", "event_id", "slug") or fallback_id)
+    source_id = str(_first(raw, "slug", "id", "eventId", "event_id") or fallback_id)
     if "@" in source_id:
         source_id = f"{source}:{_first(raw, 'title', 'name', 'eventName')}:{_first(raw, 'start', 'startDate', 'start_date', 'date')}"
     sessions = []
@@ -333,20 +378,34 @@ def _normalize(raw, source, source_id):
     gone = bool(raw.get("cancelled") or raw.get("isCancelled") or raw.get("canceled") or
                 any(term in status for term in ("cancel", "withdraw", "removed", "deleted", "gone")))
     sources = [{"source": source, "ext_id": source_id[:200], "url": event_url}]
+    cfs_link = (_links(_first(raw, "call_for_speakers_link", "cfs_url")) or [""])[0]
+    sponsor_link = (_links(_first(raw, "call_for_sponsors_link", "sponsor_call_url")) or [""])[0]
+    cost_tiers = raw.get("cost_tiers")
+    cost_text = json.dumps(cost_tiers, ensure_ascii=False).lower() if cost_tiers is not None else ""
+    free = True if re.search(r'("amount"\s*:\s*0|free)', cost_text) else False if cost_text else None
+    def coordinate(key, low, high):
+        try:
+            value = float(raw.get(key))
+            return value if low <= value <= high else None
+        except (TypeError, ValueError):
+            return None
     return {"sources": sources,
             "title": title[:180], "start": _date(_first(raw, "start", "startDate", "start_date", "date", "startTime", "start_time", "beginsAt")),
             "end": _date(_first(raw, "end", "endDate", "end_date", "endTime", "end_time", "endsAt")), "mode": mode,
             "location": str(location)[:160],
             "country": str(_first(raw, "country", "countryCode"))[:80],
-            "url": event_url,
+            "url": event_url, "tickets_url": registration_url,
             "organizer_name": EMAIL.sub("", str(organizer))[:120],
-            "topics": microsoft_topics(raw), "cfs_close": _date(_first(raw, "cfs_close", "cfpDeadline", "cfp_deadline", "submissionDeadline", "submission_deadline")),
+            "topics": microsoft_topics(raw), "cfs_close": _date(_first(raw, "speaker_call_end_date", "cfs_close", "cfpDeadline", "cfp_deadline", "submissionDeadline", "submission_deadline")),
+            "cfs_url": cfs_link, "sponsor_call_close": _date(_first(raw, "sponsor_call_end_date")),
+            "sponsor_call_url": sponsor_link, "seeking_sponsor": bool(sponsor_link or _first(raw, "sponsor_call_end_date")),
+            "free": free, "latitude": coordinate("latitude", -90, 90), "longitude": coordinate("longitude", -180, 180),
             "gone": gone,
             "sessions": sessions, "speakers": speakers}
 
 
 def microsoft_topics(item):
-    text = " ".join(str(item.get(k, "")) for k in ("title", "slug", "categories", "description", "summary", "organizer_name")).lower()
+    text = " ".join(str(item.get(k, "")) for k in ("title", "slug", "categories", "event_type", "tagline", "description", "summary", "organizer_name")).lower()
     if any(term in text for term in NEGATIVE_TERMS):
         return []
     candidates = {entity for term, entity in MS_TERMS.items() if re.search(r"(?<!\w)" + re.escape(term) + r"(?!\w)", text)}

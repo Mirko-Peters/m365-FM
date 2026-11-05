@@ -119,10 +119,11 @@ async function evView(db, ev, withPending) {
   const org = ev.org_id ? await db.prepare("SELECT handle,name,public FROM orgs WHERE id=?").bind(ev.org_id).first() : null;
   const ow = await db.prepare("SELECT u.name,p.handle FROM users u LEFT JOIN profiles p ON p.user_id=u.id AND p.public=1 WHERE u.id=?").bind(ev.owner_id).first();
   const rows = (await db.prepare("SELECT * FROM event_sessions WHERE event_id=? " + (withPending ? "" : "AND status='live' ") + "ORDER BY start,id").bind(ev.id).all()).results || [];
-  const importRow = await db.prepare("SELECT fp,last_seen FROM event_import WHERE event_id=? ORDER BY last_seen DESC LIMIT 1").bind(ev.id).first();
+  const importRow = await db.prepare("SELECT fp,last_seen,data FROM event_import WHERE event_id=? ORDER BY last_seen DESC LIMIT 1").bind(ev.id).first();
+  const importedData = importRow ? parse(importRow.data, {}) : {};
   const blockedRows = importRow ? (await db.prepare("SELECT name_norm FROM event_speaker_block WHERE event_fp='' OR event_fp=?").bind(importRow.fp).all()).results || [] : [];
   const blocked = new Set(blockedRows.map((row) => row.name_norm));
-  return { handle: ev.handle, title: ev.title, summary: ev.summary, about: ev.about, start: ev.start, end: ev.end, cfs_close: ev.cfs_close || "", mode: ev.mode, location: ev.location, country: ev.country, url: ev.url, tickets_url: ev.tickets_url, source: ev.source || "", organizer_name: ev.organizer_name || "", external_status: ev.source ? (ev.import_status || "") : "", external_status_at: ev.source ? (ev.import_gone_at || 0) : 0, external_imported_at: ev.source ? (importRow?.last_seen || 0) : 0,
+  return { handle: ev.handle, title: ev.title, summary: ev.summary, about: ev.about, start: ev.start, end: ev.end, cfs_close: ev.cfs_close || "", cfs_url: ev.source ? importedData.cfs_url || "" : "", sponsor_call_close: ev.source ? importedData.sponsor_call_close || "" : "", sponsor_call_url: ev.source ? importedData.sponsor_call_url || "" : "", latitude: ev.source ? importedData.latitude ?? null : null, longitude: ev.source ? importedData.longitude ?? null : null, mode: ev.mode, location: ev.location, country: ev.country, url: ev.url, tickets_url: ev.tickets_url, source: ev.source || "", organizer_name: ev.organizer_name || "", external_status: ev.source ? (ev.import_status || "") : "", external_status_at: ev.source ? (ev.import_gone_at || 0) : 0, external_imported_at: ev.source ? (importRow?.last_seen || 0) : 0,
     free: ev.free === -1 ? null : !!ev.free, lang: ev.lang || "", topics: parse(ev.topics, []), seeking_sponsor: !!ev.seeking_sponsor, public: !!ev.public,
     partners: ((await db.prepare("SELECT p.kind,p.level,o.handle,o.name,o.public FROM event_partners p JOIN orgs o ON o.id=p.org_id WHERE p.event_id=? AND p.status='confirmed' ORDER BY p.created").bind(ev.id).all()).results || []).map((x) => ({ kind: x.kind, level: x.level, name: x.name, handle: x.public ? x.handle : "" })),
     asked: withPending ? ((await db.prepare("SELECT o.handle FROM sponsor_asks a JOIN orgs o ON o.id=a.org_id WHERE a.event_id=?").bind(ev.id).all()).results || []).map((x) => x.handle) : undefined,
@@ -581,7 +582,7 @@ export async function handleEvents(env, request, url, path, user, J) {
     if (!o.length) return J({ error: "forbidden" }, 403);
     const crits = o.map((r) => parse(r.criteria, {}));
     const today = new Date().toISOString().slice(0, 10);
-    const evs = (await db.prepare("SELECT * FROM events WHERE seeking_sponsor=1 AND public=1 AND (CASE WHEN end<>'' THEN end ELSE start END)>=? ORDER BY start LIMIT 100").bind(today).all()).results || [];
+    const evs = (await db.prepare("SELECT * FROM events WHERE seeking_sponsor=1 AND public=1 AND (CASE WHEN end<>'' THEN end ELSE start END)>=? AND NOT EXISTS (SELECT 1 FROM event_import i WHERE i.event_id=events.id AND i.status='gone') ORDER BY start LIMIT 100").bind(today).all()).results || [];
     const out = []; for (const e of evs) { const v = await evView(db, e, false); delete v.sessions; v.match = crits.some((c) => !c.format || c.format === e.mode); out.push(v); }
     return J({ events: out });
   }

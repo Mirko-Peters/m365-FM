@@ -39,7 +39,11 @@ const item = {
   sources: [{ source: "community_days", ext_id: "event-42", url: "https://communitydays.org/events/m365" }],
   title: "M365 Community Day", start: "2027-03-10", end: "2027-03-10",
   mode: "online", location: "Online", country: "", url: "https://communitydays.org/events/m365",
+  tickets_url: "https://communitydays.org/events/m365/register",
   organizer_name: "Community Group events@example.com", topics: ["microsoft-365"], cfs_close: "2027-02-01",
+  cfs_url: "https://communitydays.org/events/m365/cfs", sponsor_call_close: "2027-02-05",
+  sponsor_call_url: "https://communitydays.org/events/m365/sponsors", seeking_sponsor: true,
+  free: false, latitude: 52.52, longitude: 13.405,
   sessions: [{ ext_key: "community_days:event-42:session-1", title: "Copilot in Teams", start: "2027-03-10T10:00", end: "2027-03-10T10:45", room: "Main",
     speakers: [{ n: "Public Speaker", links: ["https://example.org/profile"] },
       { n: "hidden@example.com", links: ["https://example.org/?email=hidden%40example.com"] }] }],
@@ -59,8 +63,9 @@ test("external events: wiederholter Import, redaktionelle Freigabe und Quellen-V
     });
     const response = await (await import("../src/adminpanel.js")).handleAdminPanel(env, request, new URL(request.url), "/api/admin/panel/event-imports/decide", { id: 1, admin: true }, json);
     assert.equal(response.status, 200);
-    const event = raw.prepare("SELECT id,owner_id,source,organizer_name,cfs_close FROM events WHERE handle=?").get(`ext-${item.fp}`);
-    assert.deepEqual([event.owner_id, event.source, event.organizer_name, event.cfs_close], [0, "community_days", "Community Group", "2027-02-01"]);
+    const event = raw.prepare("SELECT id,owner_id,source,organizer_name,cfs_close,seeking_sponsor,free,tickets_url FROM events WHERE handle=?").get(`ext-${item.fp}`);
+    assert.deepEqual([event.owner_id, event.source, event.organizer_name, event.cfs_close, event.seeking_sponsor, event.free, event.tickets_url],
+      [0, "community_days", "Community Group", "2027-02-01", 1, 0, "https://communitydays.org/events/m365/register"]);
     assert.equal(raw.prepare("SELECT COUNT(*) n FROM event_sessions WHERE event_id=?").get(event.id).n, 1);
     const speaker = JSON.parse(raw.prepare("SELECT speakers FROM event_sessions WHERE event_id=?").get(event.id).speakers)[0];
     assert.deepEqual(speaker.links, ["https://example.org/profile"]);
@@ -92,6 +97,8 @@ test("external events: wiederholter Import, redaktionelle Freigabe und Quellen-V
     assert.equal(eventView.sessions[0].speakers.length, 0);
     assert.deepEqual(eventView.organizer, { kind: "o", handle: "", name: "Community Group" });
     assert.equal(eventView.source, "community_days");
+    assert.deepEqual([eventView.cfs_url, eventView.sponsor_call_close, eventView.sponsor_call_url, eventView.latitude, eventView.longitude],
+      ["https://communitydays.org/events/m365/cfs", "2027-02-05", "https://communitydays.org/events/m365/sponsors", 52.52, 13.405]);
     const localExport = await handleEvents(env, new Request("https://api.example/api/events/export?local=1"),
       new URL("https://api.example/api/events/export?local=1"), "/api/events/export", null, json);
     assert.deepEqual((await localExport.json()).events, []);

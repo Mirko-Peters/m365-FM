@@ -36,9 +36,15 @@ function publicData(item) {
   return {
     sources, title: clean(item.title, 180), start: clean(item.start, 32), end: clean(item.end, 32),
     mode: ["online", "onsite", "hybrid"].includes(item.mode) ? item.mode : "online",
-    location: clean(item.location, 160), country: clean(item.country, 80), url: safeUrl(item.url),
+    location: clean(item.location, 160), country: clean(item.country, 80), url: safeUrl(item.url), tickets_url: safeUrl(item.tickets_url),
     organizer_name: clean(item.organizer_name, 120), topics: Array.isArray(item.topics) ? item.topics.slice(0, 12).map((x) => clean(x, 80)) : [],
-    cfs_close: clean(item.cfs_close, 32), sessions, gone: !!item.gone,
+    cfs_close: clean(item.cfs_close, 32), cfs_url: safeUrl(item.cfs_url),
+    sponsor_call_close: clean(item.sponsor_call_close, 32), sponsor_call_url: safeUrl(item.sponsor_call_url),
+    seeking_sponsor: item.seeking_sponsor ? 1 : 0,
+    free: item.free === true || item.free === 1 ? 1 : item.free === false || item.free === 0 ? 0 : -1,
+    latitude: Number.isFinite(item.latitude) && Math.abs(item.latitude) <= 90 ? item.latitude : null,
+    longitude: Number.isFinite(item.longitude) && Math.abs(item.longitude) <= 180 ? item.longitude : null,
+    sessions, gone: !!item.gone,
   };
 }
 
@@ -66,7 +72,7 @@ function changeLog(value, t, fields, action = "update") {
   return JSON.stringify(log.slice(-20));
 }
 
-const eventFields = ["title", "start", "end", "mode", "location", "country", "url", "organizer_name", "cfs_close", "topics"];
+const eventFields = ["title", "start", "end", "mode", "location", "country", "url", "tickets_url", "organizer_name", "cfs_close", "free", "seeking_sponsor", "topics"];
 const normalized = (value) => JSON.stringify(value);
 const sourceSpeakers = (speakers) => (speakers || []).filter((speaker) => !speaker.hidden && !speaker.gone).map(({ n, links }) => ({ n, ...(links?.length ? { links } : {}) }));
 
@@ -166,7 +172,7 @@ async function applyApprovedUpdate(env, existing, data, hash, t) {
   const locked = new Set(parse(existing.locked_fields, [])), known = new Set(await baseIds(env));
   const fields = {
     title: data.title, start: data.start, end: data.end, mode: data.mode, location: data.location, country: data.country,
-    url: data.url, organizer_name: data.organizer_name, cfs_close: data.cfs_close,
+    url: data.url, tickets_url: data.tickets_url, organizer_name: data.organizer_name, cfs_close: data.cfs_close, free: data.free, seeking_sponsor: data.seeking_sponsor ? 1 : 0,
     topics: JSON.stringify([...new Set(data.topics.filter((topic) => known.has(topic)))]),
   };
   const previous = { ...oldData, topics: JSON.stringify([...new Set((oldData.applied_topics || oldData.topics || []).filter((topic) => known.has(topic)))]) };
@@ -365,8 +371,9 @@ export async function decideEventImport(env, user, fp, action, eventId = 0, auto
     let id = old?.id;
     if (!id) {
       const sources = [...new Set(data.sources.map((x) => x.source))].join(",");
-      const inserted = await db.prepare("INSERT INTO events(handle,owner_id,title,summary,about,start,end,mode,location,country,url,tickets_url,free,lang,topics,seeking_sponsor,public,created,updated,source,organizer_name,cfs_close) VALUES(?,0,?,'','',?,?,?,?,?,?,'',-1,'',?,0,1,?,?,?,?,?)")
-        .bind(handle, data.title, data.start, data.end, data.mode, data.location, data.country, data.url, JSON.stringify(knownTopics), t, t, sources, data.organizer_name, data.cfs_close).run();
+      const inserted = await db.prepare("INSERT INTO events(handle,owner_id,title,summary,about,start,end,mode,location,country,url,tickets_url,free,lang,topics,seeking_sponsor,public,created,updated,source,organizer_name,cfs_close) VALUES(?,0,?,'','',?,?,?,?,?,?,?,?,'',?,?,1,?,?,?,?,?)")
+        .bind(handle, data.title, data.start, data.end, data.mode, data.location, data.country, data.url, data.tickets_url, data.free,
+          JSON.stringify(knownTopics), data.seeking_sponsor ? 1 : 0, t, t, sources, data.organizer_name, data.cfs_close).run();
       id = inserted.meta.last_row_id;
     }
     const ops = sessionStatements(db, id, data, 0, t);
