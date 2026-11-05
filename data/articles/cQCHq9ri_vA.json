@@ -86,6 +86,52 @@
      "Nach dem Livegang Nutzungsdaten und Fehlerraten überwachen."
     ]
    }
+  ],
+  "quiz": [
+   {
+    "q": "Was zeigt der Drei-Variationen-Test im Testbereich von Copilot Studio?",
+    "opts": [
+     "Ob der Agent Antworten ausschließlich aus dem Internet bezieht",
+     "Ob der Agent dieselbe Frage in formaler, lockerer und fehlerhafter Form erkennt",
+     "Wie schnell der Agent auf drei gleichzeitige Nutzer reagiert",
+     "Ob der Agent in drei verschiedenen Sprachen antworten kann"
+    ],
+    "a": 1,
+    "why": "Dieselbe Frage wird formal, umgangssprachlich und mit Tippfehler gestellt, um zu sehen, ob alle Varianten erkannt werden."
+   },
+   {
+    "q": "Warum ist Conversation Boosting kein Ersatz für eine Wissensquelle?",
+    "opts": [
+     "Es verstärkt nur Textmuster und schafft kein Richtlinienverständnis",
+     "Es funktioniert ausschließlich in Microsoft Teams",
+     "Es ist nur für öffentliche Websites als Quelle gedacht",
+     "Es löscht den Index der hochgeladenen Dateien nach zehn Minuten"
+    ],
+    "a": 0,
+    "why": "Conversation Boosting verstärkt Textmuster, schafft aber kein Richtlinienverständnis und kann auf vages Modellwissen zurückgreifen."
+   },
+   {
+    "q": "Welche Begrenzung gilt für das Namensfeld der Persona in Copilot Studio?",
+    "opts": [
+     "Höchstens 8000 Zeichen",
+     "Höchstens 1000 Zeichen",
+     "Höchstens 100 Zeichen",
+     "Höchstens 30 Zeichen"
+    ],
+    "a": 3,
+    "why": "Der Name ist auf 30 Zeichen begrenzt und sollte kurz und prägnant sein, etwa „Experte für Spesenrichtlinien“."
+   },
+   {
+    "q": "Wie sollte der Agent vor der unternehmensweiten Nutzung veröffentlicht werden?",
+    "opts": [
+     "Direkt für den gesamten Mandanten, weil das Studio-Test genügt",
+     "Nur auf einer Demo-Webseite, ohne weitere Kanäle zu prüfen",
+     "Erst nach Abschaltung aller Analysen und Protokolle",
+     "Zunächst als geschlossener Pilot für eine kleine Gruppe mit Tests je Kanal"
+    ],
+    "a": 3,
+    "why": "Der Agent wird zuerst einer kleinen Pilotgruppe freigegeben und jeder Zielkanal separat getestet, bevor er breit ausgerollt wird."
+   }
   ]
  },
  "es": {
@@ -174,6 +220,52 @@
      "Realiza una prueba piloto cerrada antes de abrir el bot a todo el inquilino.",
      "Vigila la telemetría del centro de administración de Power Platform tras publicar."
     ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "¿Qué indica la pequeña cita que aparece junto a la respuesta tras repetir la prueba?",
+    "opts": [
+     "Que el grounding funciona y la respuesta procede del documento",
+     "Que el bot ha recurrido al conocimiento general del modelo",
+     "Que la conversación se ha reiniciado correctamente en el panel",
+     "Que el canal de publicación ya está configurado"
+    ],
+    "a": 0,
+    "why": "La cita es la señal de que el grounding funciona: la respuesta procede del documento de políticas añadido."
+   },
+   {
+    "q": "¿Cuál es la causa técnica de que el bot falle con formulaciones informales o con erratas?",
+    "opts": [
+     "Una cobertura de intenciones insuficiente por ejemplos demasiado parecidos",
+     "Un icono demasiado pesado en el agente",
+     "Un nombre de agente que supera los 30 caracteres",
+     "Una autenticación mal configurada en el canal web"
+    ],
+    "a": 0,
+    "why": "Si todos los ejemplos se parecen, el modelo se vuelve frágil y un simple sinónimo puede desorientarlo."
+   },
+   {
+    "q": "En la rutina de depuración, ¿qué indica que se activó el tema de refuerzo conversacional del sistema?",
+    "opts": [
+     "Que el bot ya está indexado y listo para publicarse",
+     "Que el bot dependió del modelo y no de tu conocimiento",
+     "Que el tema de inicio de conversación ha sido eliminado",
+     "Que el icono del agente no cumple los requisitos"
+    ],
+    "a": 1,
+    "why": "Si no se activó un tema propio sino el de refuerzo conversacional, el bot se apoyó en el modelo, no en tu conocimiento."
+   },
+   {
+    "q": "¿Qué se recomienda hacer antes de difundir el bot a todo el inquilino?",
+    "opts": [
+     "Eliminar los iniciadores de conversación para simplificar la interfaz",
+     "Publicar directamente y esperar los comentarios de los usuarios",
+     "Realizar una prueba piloto cerrada con un grupo pequeño",
+     "Probar solo en Studio, que es el entorno más fiable"
+    ],
+    "a": 2,
+    "why": "Un grupo pequeño con instrucciones claras revela puntos débiles antes del lanzamiento total; no se debe difundir a todo el inquilino todavía."
    }
   ]
  },
@@ -272,6 +364,52 @@
       "text": "Amorces de conversation à préremplir depuis la page de présentation."
      }
     ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Que prouve la petite citation renvoyant au document dans la réponse de l'agent ?",
+    "opts": [
+     "Que l'ancrage dans la source fonctionne correctement",
+     "Que l'agent a été publié sur tous les canaux",
+     "Que l'amélioration conversationnelle est désactivée pour l'agent",
+     "Que l'icône de l'agent respecte les dimensions autorisées"
+    ],
+    "a": 0,
+    "why": "Un agent correctement ancré donne la réponse réelle avec une citation vers le document ; cette citation prouve que l'ancrage fonctionne."
+   },
+   {
+    "q": "Quelle limite de caractères s'applique au nom de l'agent dans Copilot Studio ?",
+    "opts": [
+     "10 caractères",
+     "30 caractères",
+     "100 caractères",
+     "8 000 caractères"
+    ],
+    "a": 1,
+    "why": "Le nom est limité à 30 caractères et doit être bref tout en indiquant la fonction. Les 8 000 caractères concernent les instructions."
+   },
+   {
+    "q": "Lors du débogage, que signifie le déclenchement de la rubrique de renforcement conversationnel du système ?",
+    "opts": [
+     "Le fichier de connaissances a été indexé avec succès",
+     "L'agent a utilisé correctement toutes vos phrases déclencheurs",
+     "L'agent s'est appuyé sur le modèle, pas sur vos connaissances",
+     "Le canal Teams a modifié l'espacement du texte"
+    ],
+    "a": 2,
+    "why": "Si la rubrique système se déclenche plutôt que l'une des vôtres, l'agent s'est appuyé sur le modèle et non sur vos connaissances."
+   },
+   {
+    "q": "Pourquoi privilégier un pilote restreint plutôt qu'un déploiement sur tout le tenant ?",
+    "opts": [
+     "Pour éviter d'avoir à configurer l'authentification",
+     "Pour ne pas devoir tester chaque canal séparément",
+     "Pour supprimer la nécessité de surveiller les données d'usage",
+     "Les erreurs naturelles des testeurs révèlent les points faibles avant la diffusion complète"
+    ],
+    "a": 3,
+    "why": "Un petit groupe écrivant naturellement, avec fautes de frappe, fait émerger les faiblesses ; cela vaut mieux qu'une diffusion complète immédiate."
    }
   ]
  },
@@ -375,6 +513,52 @@
      ]
     }
    }
+  ],
+  "quiz": [
+   {
+    "q": "Quale test consente di scoprire subito la lacuna di copertura nel riquadro di test?",
+    "opts": [
+     "Inviare tre versioni della stessa domanda: pulita, informale e con errore di battitura",
+     "Caricare tre file diversi in Knowledge contemporaneamente",
+     "Pubblicare l'agente su tre canali diversi nello stesso momento",
+     "Ripetere tre volte la stessa identica domanda formale"
+    ],
+    "a": 0,
+    "why": "Il test delle tre varianti mostra se il bot riconosce solo la formulazione pulita o anche quelle informali e con errori."
+   },
+   {
+    "q": "Che cosa indica la piccola citazione accanto alla risposta da 200 dollari?",
+    "opts": [
+     "Che l'indicizzazione del file è ancora in corso",
+     "Che la risposta è fondata sul documento caricato",
+     "Che è stato attivato il conversational boosting generico",
+     "Che la risposta proviene dalla conoscenza generale del modello"
+    ],
+    "a": 1,
+    "why": "La citazione che indica il documento caricato conferma che il grounding funziona e la risposta è fondata."
+   },
+   {
+    "q": "Qual è il limite di caratteri per le istruzioni dell'agente nella configurazione della persona?",
+    "opts": [
+     "30 caratteri",
+     "1000 caratteri",
+     "4000 caratteri",
+     "8000 caratteri"
+    ],
+    "a": 3,
+    "why": "Il nome arriva a 30 caratteri, la descrizione a circa 1000, mentre le istruzioni fino a 8000 caratteri."
+   },
+   {
+    "q": "Perché nel debug conviene aprire gli argomenti dopo aver riprodotto la query non riuscita?",
+    "opts": [
+     "Per cancellare gli argomenti di sistema non utilizzati dal bot",
+     "Per cambiare automaticamente il canale di pubblicazione dell'agente",
+     "Per vedere se è comparso il conversational boosting invece di un tuo argomento",
+     "Per aumentare il numero di avviatori di conversazione disponibili"
+    ],
+    "a": 2,
+    "why": "Se compare l'argomento di sistema del boosting, il bot si è basato sul modello e non sulle conoscenze caricate."
+   }
   ]
  },
  "pt": {
@@ -476,6 +660,52 @@
       "text": "Iniciadores de conversa sugeridos na página de visão geral."
      }
     ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Qual é a principal razão pela qual um agente que vai bem no painel de teste pode falhar com usuários reais?",
+    "opts": [
+     "O painel de teste usa um modelo de linguagem mais avançado que a produção",
+     "Usuários reais escrevem de formas variadas, e a cobertura de intenção e as frases de gatilho são limitadas",
+     "O agente só funciona corretamente quando os usuários têm autenticação ativada",
+     "O painel de teste bloqueia automaticamente o impulsionamento conversacional"
+    ],
+    "a": 1,
+    "why": "No teste as perguntas são limpas e previsíveis; em produção as pessoas usam gírias e erros de digitação, expondo frases de gatilho pouco abrangentes."
+   },
+   {
+    "q": "O que indica que a fundamentação (grounding) em um documento funcionou corretamente?",
+    "opts": [
+     "A resposta aparece acompanhada de uma pequena citação indicando que veio do documento enviado",
+     "A resposta é dada em menos de um segundo",
+     "O agente passa a usar sempre um tom mais formal",
+     "O banner verde aparece no painel de teste durante a conversa"
+    ],
+    "a": 0,
+    "why": "O artigo afirma que a citação junto à resposta é a prova de que a fundamentação deu certo."
+   },
+   {
+    "q": "Na depuração, se o tópico acionado foi o de impulsionamento conversacional do sistema, o que isso significa?",
+    "opts": [
+     "O arquivo de conhecimento está indexado e funcionando perfeitamente",
+     "A persona do agente foi configurada com instruções em excesso",
+     "O agente dependeu do modelo, e não do conhecimento adicionado",
+     "O canal de publicação escolhido não é compatível com o agente"
+    ],
+    "a": 2,
+    "why": "Se foi acionado o tópico do sistema e não um dos seus, o agente dependeu do modelo, não da sua base de conhecimento."
+   },
+   {
+    "q": "Qual afirmação sobre os limites dos campos de persona do agente está correta?",
+    "opts": [
+     "Nome até 100 caracteres, descrição até 500 e instruções até 2 mil",
+     "Nome até 30 caracteres, descrição cerca de mil e instruções até 8 mil",
+     "Nome até 30 caracteres, descrição até 8 mil e instruções cerca de mil",
+     "Nome sem limite, descrição até mil e instruções até 30 mil"
+    ],
+    "a": 1,
+    "why": "O artigo define: nome até 30 caracteres, descrição cerca de mil caracteres e instruções até 8 mil caracteres."
    }
   ]
  },
@@ -655,6 +885,52 @@
      }
     ]
    }
+  ],
+  "quiz": [
+   {
+    "q": "Jak w panelu testowym najłatwiej wykryć lukę w pokryciu intencji przez bota?",
+    "opts": [
+     "Zadać to samo pytanie w wersji czystej, potocznej i z literówką",
+     "Zadać to samo pytanie kilkanaście razy z rzędu bez zmian",
+     "Usunąć wszystkie frazy wyzwalające i sprawdzić odpowiedź",
+     "Zadać pytanie wyłącznie w języku formalnym z dokumentacji"
+    ],
+    "a": 0,
+    "why": "Test trzech wariantów (czystego, potocznego, z literówką) pokazuje, czy bot rozumie intencję, a nie tylko znany przykład."
+   },
+   {
+    "q": "Co oznacza niewielki odnośnik widoczny przy odpowiedzi bota po poprawnym groundingu?",
+    "opts": [
+     "Że bot skorzystał z ogólnej wiedzy modelu",
+     "Że odpowiedź pochodzi z przesłanego dokumentu",
+     "Że temat wspomagania konwersacji został wyłączony",
+     "Że agent został już opublikowany w Teams"
+    ],
+    "a": 1,
+    "why": "Odnośnik pokazuje, że odpowiedź pochodzi z przesłanego dokumentu, i jest dowodem, że grounding działa."
+   },
+   {
+    "q": "Jakie limity ma ikona agenta obsługiwana przez system?",
+    "opts": [
+     "JPG do 512×512 pikseli i poniżej 100 kB",
+     "SVG dowolnego rozmiaru i poniżej 1 MB",
+     "PNG do 96×96 pikseli i poniżej 10 kB",
+     "PNG do 192×192 pikseli i poniżej 30 kB"
+    ],
+    "a": 3,
+    "why": "System obsługuje pliki PNG do 192×192 pikseli i wadze poniżej 30 kB."
+   },
+   {
+    "q": "Dlaczego zaleca się zamknięty pilotaż zamiast udostępniania bota całemu środowisku naraz?",
+    "opts": [
+     "Bo bot nie działa poprawnie w więcej niż jednym kanale",
+     "Bo pilotaż pozwala pominąć indeksowanie plików wiedzy",
+     "Bo mała grupa ujawnia słabe punkty, zanim bot trafi do całej firmy",
+     "Bo pilotażyści muszą pisać wyłącznie formalnym językiem"
+    ],
+    "a": 2,
+    "why": "Mała grupa testowa swobodnym językiem i literówkami ujawnia słabe punkty oraz dostarcza raportów przed szerokim wdrożeniem."
+   }
   ]
  },
  "id": {
@@ -738,6 +1014,52 @@
       "text": "Jumlah pembuka percakapan di halaman ikhtisar agar pengguna tidak bingung."
      }
     ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Apa yang menjadi penyebab teknis agen gagal menjawab versi pertanyaan yang santai atau salah ketik?",
+    "opts": [
+     "Cakupan niat sempit karena frasa pemicu hanya meniru bahasa dokumen kebijakan",
+     "Panel uji menolak pertanyaan yang mengandung kesalahan ketik",
+     "Nama agen melebihi batas 30 karakter sehingga respons terpotong",
+     "Ikon agen tidak sesuai ukuran PNG 192 × 192 piksel"
+    ],
+    "a": 0,
+    "why": "Bot mengandalkan frasa pemicu dan definisi topik. Jika semua contoh berbahasa dokumen kebijakan, model rapuh dan satu sinonim bisa membuatnya gagal."
+   },
+   {
+    "q": "Setelah mengunggah expensespolicy.docx lewat Knowledge, apa yang sebaiknya dilakukan sebelum menyimpulkan bahwa grounding gagal?",
+    "opts": [
+     "Segera mengganti file dengan situs web publik",
+     "Menunggu pengindeksan selesai, yang bisa memakan 10 menit atau lebih",
+     "Menghapus seluruh frasa pemicu yang sudah dibuat",
+     "Mengaktifkan conversational boosting untuk semua topik"
+    ],
+    "a": 1,
+    "why": "Pengindeksan bisa memakan waktu 10 menit atau lebih, sehingga kueri pertama mungkin belum mengambil dari dokumen. Tidak perlu panik."
+   },
+   {
+    "q": "Saat debugging, apa arti topik conversational boosting milik sistem yang aktif, bukan topik buatan Anda?",
+    "opts": [
+     "Agen sudah mengutip dokumen kebijakan dengan benar",
+     "Pilot tertutup sudah selesai dijalankan",
+     "Autentikasi agen belum diatur dengan benar",
+     "Bot sedang mengandalkan model, bukan knowledge Anda"
+    ],
+    "a": 3,
+    "why": "Jika topik boosting sistem yang terpicu, bot bergantung pada model. Karena itu perlu diperiksa apakah file relevan sudah diunggah dan diindeks."
+   },
+   {
+    "q": "Bagaimana cara yang dianjurkan untuk merilis agen setelah semua perbaikan selesai?",
+    "opts": [
+     "Menyiarkan langsung ke seluruh tenant agar umpan balik cepat terkumpul",
+     "Mengujinya hanya di studio karena sudah mewakili semua saluran",
+     "Menjalankan pilot tertutup, menguji ulang di tiap saluran, lalu memantau analitik",
+     "Merilis ke semua departemen sekaligus tanpa memantau telemetri"
+    ],
+    "a": 2,
+    "why": "Artikel menyarankan pilot tertutup, pengujian ulang di setiap saluran target, dan pemantauan setelah rilis, karena publikasi adalah awal kampanye lapangan."
    }
   ]
  },
@@ -841,6 +1163,52 @@
      }
     ]
    }
+  ],
+  "quiz": [
+   {
+    "q": "Что в статье названо первой и самой дорогой ошибкой при запуске агента в Copilot Studio?",
+    "opts": [
+     "Запуск агента без опоры на источники знаний",
+     "Слишком длинное имя агента",
+     "Отсутствие иконки у агента",
+     "Публикация бота в слишком большом числе каналов"
+    ],
+    "a": 0,
+    "why": "Без источников бот опирается на языковые закономерности, а не на факты, то есть блефует и галлюцинирует."
+   },
+   {
+    "q": "Какое ограничение действует для поля «Имя» агента в Copilot Studio?",
+    "opts": [
+     "До 100 символов",
+     "До 8000 символов",
+     "До 30 символов",
+     "До 1000 символов"
+    ],
+    "a": 2,
+    "why": "Имя ограничено 30 символами, описание — около 1000, инструкции — до 8000."
+   },
+   {
+    "q": "Что, согласно статье, означает ссылка на источник в ответе бота?",
+    "opts": [
+     "Бот полностью переключился на встроенные знания модели",
+     "Файл ещё не прошёл индексацию",
+     "Сработала системная тема расширения диалога",
+     "Grounding сработал, бот опирается на загруженный документ"
+    ],
+    "a": 3,
+    "why": "Ссылка на загруженный документ в ответе — признак того, что grounding работает."
+   },
+   {
+    "q": "Что рекомендуется сделать перед открытием доступа всему тенанту после публикации?",
+    "opts": [
+     "Отключить аналитику и логи",
+     "Провести закрытый пилот с небольшой тестовой группой",
+     "Удалить все триггерные фразы",
+     "Опубликовать бота только в тестовой панели"
+    ],
+    "a": 1,
+    "why": "Закрытый пилот выявляет слабые места до выхода на всю компанию."
+   }
   ]
  },
  "uk": {
@@ -938,6 +1306,52 @@
       "text": "Вимоги до іконки агента: формат PNG."
      }
     ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Що радить стаття зробити, коли бот на запитання про готель відповідає «Зверніться до відділу кадрів»?",
+    "opts": [
+     "Одразу видалити агента й створити нового з нуля",
+     "Перевірити вкладку знань і додати «Витрати на готель» як тригер",
+     "Збільшити довжину опису агента до кількох тисяч символів",
+     "Вимкнути індексацію та завантажити файл повторно через місяць"
+    ],
+    "a": 1,
+    "why": "Така відповідь — це зворотний зв'язок: можливо, документ не проіндексовано або у тригерах бракує слова «готель»."
+   },
+   {
+    "q": "Чому, за статтею, Conversational Boosting не замінює завантажене джерело знань?",
+    "opts": [
+     "Воно працює лише в каналі Teams і більше ніде",
+     "Воно підсилює текстові шаблони, але не створює знань про вашу політику",
+     "Воно автоматично індексує файли довше ніж десять хвилин",
+     "Воно дозволяє відповідати лише на запитання з чіткими формулюваннями"
+    ],
+    "a": 1,
+    "why": "Conversational Boosting лише підсилює текстові шаблони й без джерела генерує загальні фрази, а не знання про політику."
+   },
+   {
+    "q": "Яким вимогам має відповідати іконка агента, згідно зі статтею?",
+    "opts": [
+     "JPEG до 512×512 пікселів і до 100 кілобайтів",
+     "SVG будь-якого розміру вагою до одного мегабайта",
+     "PNG до 192×192 пікселі та до 30 кілобайтів",
+     "PNG до 30×30 пікселів і до 192 кілобайтів"
+    ],
+    "a": 2,
+    "why": "Підтримується PNG розміром до 192×192 пікселі та вагою до 30 кілобайтів."
+   },
+   {
+    "q": "Який підхід до першої публікації агента рекомендує стаття?",
+    "opts": [
+     "Одразу відкрити доступ усьому орендарю, щоб швидше зібрати відгуки",
+     "Опублікувати лише в Studio й не перевіряти інші канали",
+     "Запустити закритий пілот із невеликою групою тестувальників",
+     "Публікувати без моніторингу, бо логи з'являються автоматично й непотрібні"
+    ],
+    "a": 2,
+    "why": "Невелика група з чіткими інструкціями — розумніший вибір, ніж повний реліз; її помилки виявляють слабкі місця до запуску."
    }
   ]
  },
@@ -1041,6 +1455,52 @@
      }
     ]
    }
+  ],
+  "quiz": [
+   {
+    "q": "מהי הסיבה הטכנית לכך שסוכן עונה היטב על ניסוח רשמי אך נכשל בניסוח יומיומי או עם שגיאת הקלדה?",
+    "opts": [
+     "כיסוי כוונה חלש, כי ביטויי הטריגר אינם מגוונים מספיק",
+     "חלונית הבדיקה חוסמת שאלות שנכתבו עם שגיאות הקלדה",
+     "הסוכן מוגבל לעד 30 תווים בכל שאלה שהוא מקבל",
+     "מקור הידע נמחק אוטומטית אחרי כל שיחה חדשה"
+    ],
+    "a": 0,
+    "why": "סוכנים מסתמכים על ביטויי טריגר והגדרות נושא. כשהדוגמאות דומות מדי, המודל שביר, ומילה נרדפת אחת יכולה לגרום לפספוס."
+   },
+   {
+    "q": "מה צפוי לקרות אם משיקים סוכן בלי לעגן אותו במקור ידע אמיתי?",
+    "opts": [
+     "הסוכן יסרב לענות על כל שאלה שקשורה למדיניות החברה",
+     "הסוכן עלול להפיק הזיות, כמו מספר מפוברק שנאמר בביטחון",
+     "הסוכן יעתיק אוטומטית את מסמכי המדיניות מ-SharePoint",
+     "הסוכן יענה רק בשפה רשמית ולא ישתמש בניסוחים יומיומיים"
+    ],
+    "a": 1,
+    "why": "בלי עיגון המערכת משחזרת דפוסי טקסט ולא עובדות, ולכן עלולה להמציא תשובה שנשמעת נכונה, למשל 100 דולר במקום 200."
+   },
+   {
+    "q": "איזה מגבלת תווים חלה על שדה ההוראות של הסוכן ב-Copilot Studio?",
+    "opts": [
+     "עד 30 תווים",
+     "כאלף תווים",
+     "עד 192 תווים",
+     "עד 8,000 תווים"
+    ],
+    "a": 3,
+    "why": "שדה ההוראות מאפשר עד 8,000 תווים. השם מוגבל ל-30 תווים והתיאור לכאלף תווים."
+   },
+   {
+    "q": "מדוע מומלץ להפעיל פיילוט סגור לפני פרסום לכל הארגון?",
+    "opts": [
+     "כי פרסום לכל הארגון אינו נתמך בערוץ Teams",
+     "כי פיילוט מבטל את הצורך באינדוקס של קבצי הידע",
+     "כי טעויות הקבוצה הקטנה חושפות נקודות תורפה לפני שחרור רחב",
+     "כי פיילוט סגור מחליף את הצורך בניטור אחרי הפרסום"
+    ],
+    "a": 2,
+    "why": "קבוצה קטנה שיודעת שהיא צד הבדיקה חושפת נקודות תורפה ומייצרת דוחות לתיקון לפני שחרור רחב, ולכן עדיפה על השקה מלאה."
+   }
   ]
  },
  "hi": {
@@ -1129,6 +1589,52 @@
      "पूरे टेनेंट पर प्रसारित करने से पहले क्लोज़्ड पाइलट चलाएँ।",
      "पब्लिश के बाद एनालिटिक्स और लॉग्स से उपयोग की निगरानी करते रहें।"
     ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "लेख के अनुसार Copilot Studio में नॉलेज फ़ाइल अपलोड करने के बाद इंडेक्सिंग में कितना समय लग सकता है?",
+    "opts": [
+     "लगभग 10 सेकंड या उससे कम",
+     "10 मिनट या उससे अधिक",
+     "ठीक 24 घंटे",
+     "इंडेक्सिंग तुरंत पूरी हो जाती है"
+    ],
+    "a": 1,
+    "why": "लेख बताता है कि सामग्री तैयार होने से पहले इंडेक्सिंग में 10 मिनट या उससे अधिक लग सकते हैं।"
+   },
+   {
+    "q": "Conversational boosting के बारे में लेख क्या कहता है?",
+    "opts": [
+     "यह नीति दस्तावेज़ों को अपने आप पढ़कर समझ लेती है",
+     "यह नॉलेज सोर्स की जगह पूरी तरह ले सकती है",
+     "यह नीति की समझ नहीं देती, केवल टेक्स्ट पैटर्न बढ़ाती है",
+     "यह हर उत्तर में अपने आप उद्धरण जोड़ देती है"
+    ],
+    "a": 2,
+    "why": "लेख के अनुसार boosting नीति की समझ पैदा नहीं करती; ज्ञान-स्रोत के बिना वह सामान्य बातें ही करती है।"
+   },
+   {
+    "q": "एजेंट आइकन के लिए लेख में कौन-सी सीमा बताई गई है?",
+    "opts": [
+     "JPEG, 1 MB से कम, 512×512 पिक्सल तक",
+     "SVG, 100KB से कम, किसी भी आकार का",
+     "GIF, 50KB से कम, 256×256 पिक्सल तक",
+     "PNG, 30KB से कम, 192×192 पिक्सल तक"
+    ],
+    "a": 3,
+    "why": "सिस्टम 30KB से कम के और 192 गुणा 192 पिक्सल तक के PNG का समर्थन करता है।"
+   },
+   {
+    "q": "पब्लिश करने के बाद पूरे संगठन में रोलआउट से पहले लेख क्या करने की सलाह देता है?",
+    "opts": [
+     "तुरंत पूरे टेनेंट पर प्रसारित करना",
+     "केवल Teams पर एक बार परीक्षण करना",
+     "क्लोज़्ड पाइलट चलाना, जिसमें अलग-अलग भूमिकाओं वाला छोटा समूह हो",
+     "सभी टॉपिक और ट्रिगर वाक्यांश हटा देना"
+    ],
+    "a": 2,
+    "why": "लेख अलग-अलग भूमिकाओं वाले छोटे समूह के साथ क्लोज़्ड पाइलट चलाने को पूरे रिलीज़ से बेहतर बताता है।"
    }
   ]
  },
@@ -1228,6 +1734,52 @@
      }
     ]
    }
+  ],
+  "quiz": [
+   {
+    "q": "Copilot Studioのテストペインで完璧に動いたボットが、本番で自信のない回答をする主な理由はどれですか?",
+    "opts": [
+     "本番ではユーザーが多様な言い回しや誤字で入力し、テストはきれいな質問だけだったため",
+     "本番環境ではボットの回答速度が極端に遅くなり、応答が途中で打ち切られるため",
+     "テストペインでは常にインデックスが完了しているが、本番では完了しないため",
+     "本番ではユーザーが必ず英語で質問するため、日本語の回答精度が下がるため"
+    ],
+    "a": 0,
+    "why": "スタジオは整理された入力環境で、本番のユーザーは言い換えや誤字を含め人間らしく入力するため、ギャップが生じます。"
+   },
+   {
+    "q": "ナレッジに「Expenses Policy.docx」を追加する際の注意点として、記事の内容に合うものはどれですか?",
+    "opts": [
+     "ファイルを追加すれば即座に反映されるので、インデックスを待つ必要はない",
+     "インデックス作成に10分以上かかることがあるため、最初のテストで反映されなくても慌てない",
+     "会話ブースティングを有効にすれば、文書がなくても正確な上限額を答えられる",
+     "ナレッジには公開ウェブサイトだけが追加でき、ファイルのアップロードは不可能である"
+    ],
+    "a": 1,
+    "why": "インデックス作成には10分以上かかる場合があり、最初のテストで反映されなくても不具合とは限りません。"
+   },
+   {
+    "q": "エージェントのペルソナ設定のフィールドと文字数の上限の組み合わせとして、正しいものはどれですか?",
+    "opts": [
+     "名前は100文字、説明は500文字、指示は2000文字まで",
+     "名前は30文字、説明は8000文字、指示は約1000文字まで",
+     "名前は30文字、説明は約1000文字、指示は最大8000文字まで",
+     "名前は制限なし、説明は30文字、指示は約1000文字まで"
+    ],
+    "a": 2,
+    "why": "名前は30文字以内、説明は約1000文字まで、指示は最大8000文字までと記事に示されています。"
+   },
+   {
+    "q": "公開前の準備として、記事が推奨している進め方はどれですか?",
+    "opts": [
+     "スタジオで一度成功したら、すぐにテナント全体へ一斉に配信する",
+     "Teamsでだけテストすれば、他のチャンネルは同じ挙動なので省略できる",
+     "公開後はログを見る必要がないので、テレメトリの監視は行わない",
+     "小規模なクローズドパイロットを実施し、全チャンネルで主要クエリを再実行する"
+    ],
+    "a": 3,
+    "why": "テナント全体に配信する前にクローズドパイロットを行い、各チャンネルでシナリオを再実行して弱点を修正することが推奨されています。"
+   }
   ]
  },
  "ko": {
@@ -1325,6 +1877,52 @@
       "text": "개요 페이지에 추천 질문을 미리 채워 두면 사용자가 망설이지 않습니다."
      }
     ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Copilot Studio 에이전트에 지식 소스를 연결하지 않고 호텔 규정을 물었을 때 생길 수 있는 가장 큰 위험은 무엇입니까?",
+    "opts": [
+     "환각으로 그럴듯하지만 근거 없는 숫자를 자신 있게 답한다",
+     "에이전트가 아무 응답도 하지 않고 즉시 대화를 종료한다",
+     "항상 인사팀 연락처만 안내하고 다른 답변은 거부한다",
+     "문서를 인용하되 인용 표시의 글꼴이 깨져서 보인다"
+    ],
+    "a": 0,
+    "why": "근거가 없으면 시스템이 사실 대신 패턴을 끌어다 써서 환각이 생기고, 예를 들어 잘못된 숙박비 한도를 말할 수 있습니다."
+   },
+   {
+    "q": "테스트 창에서는 잘 답하던 에이전트가 실제 사용자 질문에서 실패하는 문제의 해결책으로 가장 적절한 것은 무엇입니까?",
+    "opts": [
+     "테스트 창에서 깔끔한 질문만 반복해 테스트 횟수를 늘린다",
+     "트리거 구문에 정책의 공식 문구만 정확히 넣어 일관성을 높인다",
+     "일상적이고 축약된 표현까지 트리거 구문에 추가하고 다시 테스트한다",
+     "대화형 부스팅을 켜서 부족한 정책 이해를 새로 만들게 한다"
+    ],
+    "a": 2,
+    "why": "공식 문구만 쓰면 유의어에 취약해지므로, 사람들이 실제 쓰는 표현을 트리거 구문에 넣고 재테스트해야 합니다."
+   },
+   {
+    "q": "페르소나 설정 필드에 대한 설명으로 옳은 것은 무엇입니까?",
+    "opts": [
+     "이름은 최대 8,000자, 지침은 최대 30자까지 쓸 수 있다",
+     "이름은 최대 30자, 지침은 최대 8,000자까지 쓸 수 있다",
+     "설명은 최대 30자이며 지침은 입력하지 않아도 같은 효과가 난다",
+     "이름과 설명과 지침 모두 글자 수 제한 없이 입력할 수 있다"
+    ],
+    "a": 1,
+    "why": "이름은 최대 30자, 설명은 약 1,000자, 지침은 최대 8,000자까지 입력할 수 있습니다."
+   },
+   {
+    "q": "에이전트를 전체 테넌트에 공개하기 전에 권장되는 방법은 무엇입니까?",
+    "opts": [
+     "스튜디오 테스트 창에서 한 번 성공하면 전 부서에 바로 배포한다",
+     "Teams에서만 테스트하고 SharePoint와 웹 데모는 생략한다",
+     "게시 후 사용자 불만이 접수될 때까지 로그는 확인하지 않는다",
+     "소규모 그룹과 클로즈드 파일럿을 먼저 진행하고 채널별로 재테스트한다"
+    ],
+    "a": 3,
+    "why": "게시도 테스트 단계로 다뤄야 하며, 소규모 클로즈드 파일럿과 채널별 재테스트 후에 확장하는 것이 권장됩니다."
    }
   ]
  }

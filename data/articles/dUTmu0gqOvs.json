@@ -1,0 +1,139 @@
+{
+ "de": {
+  "html": "<p>Wer einen benutzerdefinierten KI-Agenten für Microsoft Teams oder Microsoft 365 selbst zusammenbaut, erlebt meist dasselbe Muster. Der Prototyp läuft auf dem Laptop, aber sobald echte Nutzer, mehrere Server und die Sicherheitsprüfung ins Spiel kommen, bricht er auseinander. Das Microsoft 365 Agents SDK soll genau diese Lücke schließen: Es liefert die unspektakuläre Infrastruktur, damit Sie sich auf die Intelligenz Ihres Agenten konzentrieren können.</p>\n<p>Dieser Artikel erklärt, warum Eigenbau-Lösungen scheitern, was das SDK von Haus aus mitbringt, wie Sie einen Multichannel-Agenten Schritt für Schritt aufbauen und welche Sicherheits- und Governance-Vorteile Sie dabei erben.</p>\n\n<h2>Warum selbstgebaute KI-Agenten im Microsoft-365-Ökosystem scheitern</h2>\n<p>Das Grundproblem: Im Microsoft-365-Umfeld hängt jeder Zugriff an einer Identität, ob Dateien, Chats, Kalender oder E-Mails. Wer diese Realität ignoriert, baut Probleme von Anfang an ein.</p>\n\n<h3>Identität als Häkchen statt als Fundament</h3>\n<p>Nutzt Ihr Agent einen pauschalen Dienstprinzipal, handelt er als App, obwohl die Aktion im Namen des Benutzers erfolgen müsste. Er ist dann entweder überprivilegiert oder wird blockiert. Die Berechtigungstreue geht verloren, und die Audit-Trails werden unbrauchbar. Fragt ein Auditor, wer auf eine bestimmte SharePoint-Datei zugegriffen hat und warum, bleibt nur Raten.</p>\n\n<h3>Fehlender gemeinsamer Zustand</h3>\n<p>Auf einem Laptop funktioniert Multi-Turn-Logik noch. Sobald Sie auf mehrere Knoten skalieren, fehlt der geteilte Konversations- und Turn-Status. Klärungen verschwinden, Tool-Ausgaben driften ab, und der Agent wiederholt sich wie ein Goldfisch mit Amnesie. Unter Last werden aus zustandslosen Notlösungen sichtbare Fehler: fehlender Kontext und widersprüchliche Antworten.</p>\n\n<h3>Kanäle, Governance und Orchestrierung</h3>\n<p>Teams, Webchat, Slack und Outlook sprechen jeweils einen eigenen Dialekt. Typing-Indikatoren, Anhänge, Karten und Streaming sind nicht einheitlich. Eigene Adapter funktionieren meistens, bis Teams Semantiken des Aktivitätsprotokolls erwartet, die der Adapter nicht kennt. Die Folge sind defekte Nachrichten, fehlendes Streaming und unprofessionelles Verhalten.</p>\n<p>Hinzu kommt die Governance: Selbstgebaute Bots ignorieren oft Purview-Signale, umgehen DLP-Richtlinien und erzeugen Antworten, die niemand durchsuchen kann. Wer Vertraulichkeitsbezeichnungen, Aufbewahrungsfristen und rechtliche Aufbewahrungspflichten nicht respektiert, bekommt keine Produktionsfreigabe. Governance ist kein Feature, das man später ergänzt, sondern der Boden, auf dem alles steht.</p>\n<p>Auch beim Orchestrator entsteht schnell Wildwuchs. Ein bisschen LangChain hier, etwas Semantic Kernel dort und dazu per HTTP zusammengeflickte Tools ergeben keinen einheitlichen Ausführungsplan und keine einheitliche Wiederholungslogik. Die Beobachtbarkeit leidet, und wer ein Modell oder einen Planer austauscht, muss den Agenten neu schreiben. Schließlich sorgen fehlende Entwicklertunnel und End-to-End-Traces dafür, dass jeder Fehler wie ein Geist wirkt.</p>\n\n<h2>Was das Microsoft 365 Agents SDK von Haus aus bietet</h2>\n<p>Das SDK versteht sich als standardisierte Infrastrukturschicht und ist modellagnostisch. Es verwaltet Identitäten korrekt, speichert Zustände über Knoten hinweg, spricht das Aktivitätsprotokoll über echte Adapter und respektiert Governance standardmäßig.</p>\n\n<h3>Authentifizierung und Autorisierung</h3>\n<p>Das SDK integriert Identität in den Aktivitätsfluss. Der Agent kann als Benutzer handeln, wenn es nötig ist, oder auf Dienstanmeldeinformationen zurückgreifen, wenn es sinnvoll ist. Anmeldehandler übernehmen den Zustimmungsprozess, tauschen Codes gegen Token und verknüpfen den Turn mit benutzerbezogenem Zugriff auf Graph, SharePoint und Outlook. Das bringt Berechtigungstreue, echte Auditprotokolle und standardmäßig das Prinzip der geringsten Privilegien.</p>\n\n<h3>Konversationszustand als Ressource erster Klasse</h3>\n<p>Sitzungs- und Threadzustände bleiben über geclusterte Knoten hinweg bestehen. Turn-Status, gemeinsame Speichermuster und konsistente Korrelations-IDs sorgen dafür, dass Multi-Turn-Interaktionen auch dann funktionieren, wenn ein Load Balancer die Konversation auf eine andere Instanz schiebt. Eigene Sticky-Session-Konstruktionen sind nicht nötig.</p>\n\n<h3>Aktivitätsprotokoll und Kanal-Adapter</h3>\n<p>Das Aktivitätsprotokoll ist die gemeinsame Sprache: Es kennt Typen für Nachrichten, Ereignisse, Eingaben, Anhänge und Adaptive Cards. Adapter für Teams, Webchat, Slack und Copilot Studio übersetzen die jeweiligen Dialekte in dieses Modell und zurück. Ihre Logik bleibt dadurch unabhängig von den Eigenheiten einzelner Kanäle.</p>\n\n<h3>Orchestrator-Neutralität und Streaming</h3>\n<p>Semantic Kernel, Azure AI Foundry, OpenAI oder ein eigener Stack lassen sich hinter einer sauberen Schnittstelle einbinden. Prompts und Tools leben in modularen Einheiten. Das SDK wählt keinen Gewinner, sondern definiert Schnittstellen. Die Leitidee lautet: Kognition und Kommunikation trennen, damit Upgrades keine Neuschreibungen mehr auslösen.</p>\n<p>Außerdem erkennt das SDK Kanalfähigkeiten automatisch. Unterstützt der Client Token-Streaming, streamen Sie Feedback, Teillogik und das Ergebnis als Adaptive Card. Andernfalls fällt der Agent auf Tippindikatoren und stückweise Nachrichten zurück, ohne dass Sie pro Kanal verzweigen müssen.</p>\n\n<h3>Tooling und Kosten</h3>\n<p>Visual Studio und VS Code liefern Projektvorlagen, die einen funktionierenden Echo-Agenten starten. Dev-Tunnels ermöglichen echte Kanaltests. Die Diagnose zeigt End-to-End-Traces, Anforderungsheader, vorhandene oder fehlende Token sowie ein- und ausgehende Aktivitäten. Der Playground simuliert mehrere Kanäle, und Telemetrie-Hooks senden Korrelations-IDs und Zeitstempel, um Latenzen bei Tools, Modellaufrufen oder Kanälen zu finden. Das SDK ist Open Source. Kosten entstehen über die nachgelagerten Dienste, die Sie wählen, etwa Modelle, Suche und Speicher.</p>\n\n<h2>Implementierungsplan: Vom Echo-Agenten zum Multichannel-Agenten</h2>\n<ol>\n<li><strong>Basis prüfen:</strong> Erstellen Sie ein neues Microsoft-365-Agenten-Projekt mit der Echo-Vorlage, starten Sie es lokal und senden Sie Nachrichten in der Testumgebung. Bleibt die Antwort aus, korrigieren Sie zuerst Umgebungsvariablen, Ports und Anmeldedaten, bevor Sie Intelligenz hinzufügen.</li>\n<li><strong>Handler anlegen:</strong> Ergänzen Sie einen Handler für neue Teilnehmer und einen Nachrichtenhandler. Filtern Sie zuerst nach Aktivitätstyp, etwa Nachricht, Konversations-Update oder Invoke, und erst danach nach Inhalt. Halten Sie die Filter deklarativ und eng gefasst.</li>\n<li><strong>Anmeldehandler einbinden:</strong> Das SDK zeigt die Einwilligung an, tauscht Codes gegen Token und liefert ein benutzerspezifisches Zugriffstoken. So rufen Sie Microsoft Graph als Benutzer auf, ohne einen überprivilegierten Dienstprinzipal zu verwenden.</li>\n<li><strong>Orchestrator registrieren:</strong> Binden Sie Semantic Kernel, Azure AI Foundry oder OpenAI über die Service Collection des SDK ein. Prompts liegen in Dateien, Tools sind Funktionen mit expliziten Ein- und Ausgaben. Beides lässt sich ohne Kanäle per Unit-Test prüfen. Kapseln Sie Modellaufrufe hinter einem Interface.</li>\n<li><strong>Zustand verwalten:</strong> Speichern Sie Chatverlauf, Tool-Ausgaben und Kurzzeitgedächtnis im Turn-Status sowie Korrelations-IDs, um eine Benutzerreise über Knoten hinweg zu verfolgen.</li>\n<li><strong>Kanäle registrieren:</strong> Registrieren Sie den Agenten beim Azure Bot Service als dauerhaften Broker. Er terminiert Kanalprotokolle und leitet Aktivitäten an einen einzigen Endpunkt weiter. Teams, Webchat und Copilot Studio zeigen auf diesen Endpunkt.</li>\n<li><strong>Streaming aktivieren:</strong> Schalten Sie Streaming-Antworten im SDK ein. Den Rest übernimmt der Adapter, und Sie können mit einer Adaptive Card abschließen.</li>\n<li><strong>Diagnose und Telemetrie:</strong> Simulieren Sie Kanäle im Playground, prüfen Sie Header und Token, und senden Sie Korrelations-IDs vom Nachrichteneingang über den Modellaufruf bis zur Antwort. So lässt sich belegen, ob Verzögerungen am Modell, am Tool oder am Netzwerk liegen.</li>\n</ol>\n\n<h3>Eine Funktion von Anfang bis Ende</h3>\n<p>Der Nachrichtenhandler erkennt die Absicht nur grob. Der Orchestrator wird mit einem System-Prompt aufgerufen, der Einschränkungen festlegt, und mit einer Benutzernachricht samt vorigem Status. Will das Modell ein Tool aufrufen, läuft es mit benutzerbezogenen Token, wenn die Aktion an Graph gebunden ist, oder mit Dienstanmeldeinformationen, wenn sie extern und sicher ist. Das Ergebnis landet im Turn-Status, Teiltext wird gestreamt, und am Ende steht eine Adaptive Card mit strukturierter Ausgabe.</p>\n<p>Wichtig sind Leitplanken: Ein Planer darf Aufrufe vorschlagen, der Agent autorisiert sie. Er prüft vorher Zielgruppe, Labels und Aktionslimits. Soll ein Tool E-Mails senden, ist eine ausdrückliche Benutzerbestätigung nötig. Ruft ein Tool SharePoint-Daten ab, werden Sensibilitätslabels und DLP beachtet. Verpacken Sie zum Schluss alles wiederholbar: Skripte für die ABS-Ressource, Kanalregistrierung, App-IDs und Umgebungsvariablen sowie Prompt-Dateien, Status-Schemata und Tool-Schnittstellen im Repository.</p>\n\n<h2>Sicherheit, Compliance und Governance mit dem SDK</h2>\n<p>Unternehmens-Sicherheitsprüfungen besteht man mit Identität, Auditierbarkeit und durchsetzbaren Richtlinien. Das SDK verankert diese im Agenten, sodass Sie Kontrollen erben, statt sie auszuhandeln.</p>\n<ul>\n<li><strong>Identität:</strong> Der Agent erhält ein einheitliches Identitätsmodell mit eigener Identität. Mit expliziter Zustimmung handelt er als Benutzer und hinterlässt einen Prüfpfad, der jede Aktion einem Prinzipal zuordnet. Mail, Kalender, SharePoint und Teams stehen ihm nur so weit offen wie dem jeweiligen Menschen. Token werden bei jedem Schritt eingegrenzt.</li>\n<li><strong>Purview:</strong> Prompts und Antworten sind Inhalte und unterliegen Labels, Aufbewahrungsfristen und gesetzlichen Pflichten. Klassifizierung und DLP bewerten KI-Eingaben und -Ausgaben, blockieren Datenlecks und berücksichtigen Vertraulichkeitslabels. Mit eDiscovery lassen sich Konversationen des Agenten finden, rechtlich sichern und exportieren, wie bei E-Mails und Dokumenten. Eigene Regex-Filter sind dafür nicht nötig.</li>\n<li><strong>Defender for Cloud:</strong> Jailbreaks, Prompt-Injections und Datenabflüsse sind Alltag. Defender liefert Sicherheitsempfehlungen und Laufzeitwarnungen für agentische Systeme, etwa zu verdächtigen Tool-Aufrufmustern, anormalen Ausgabespitzen und Token-Missbrauch.</li>\n<li><strong>Zero Trust:</strong> Identitätsgebundene, auf Tools begrenzte Aktionen und die Prüfung der Aufgabeneinhaltung in Azure AI Foundry schränken das Verhalten ein. Tools arbeiten mit passenden Berechtigungen, riskante Vorgänge brauchen Bestätigung, und Mandanten- oder Labelgrenzen sind hart gesperrt.</li>\n<li><strong>Compliance-Automatisierung:</strong> Aufbewahrungsrichtlinien gelten für Konversationen, Audit-Protokolle erfassen, wer was wann über welchen Kanal getan hat, und rechtliche Aufbewahrung friert relevante Interaktionen ein. Ein paralleles Archiv entfällt.</li>\n</ul>\n<p>Im größeren Maßstab bietet die zentrale Verwaltung der IT einen Ort, um Agents zu sehen, Identitäten zu verwalten, Geheimnisse zu rotieren und Richtlinien anzuwenden. Dank Richtlinienvererbung passt sich der Agent an verschärfte DLP-Regeln oder geänderte Aufbewahrung an, ohne neu entwickelt zu werden. Die SDK-Telemetrie korreliert Kanalereignisse, Agentenschritte und Modellaufrufe zentral und bereinigt sensible Daten, bevor Protokolle das System verlassen.</p>\n\n<h2>Häufige Fehler und Stolpersteine</h2>\n<ul>\n<li><strong>Eigene Kanaladapter:</strong> Das Aktivitätsprotokoll definiert Nachrichten, Ereignisse, Eingabestatus, Anhänge und Karten bereits. Die SDK-Adapter liefern konsistente Semantik, Dateizustimmungsabläufe und Fähigkeitserkennung.</li>\n<li><strong>Zustandslose Agenten:</strong> Ohne gemeinsamen Zustand gehen Klärungen, Tool-Ergebnisse und Korrelations-IDs bei Failover und Lastverteilung verloren.</li>\n<li><strong>Logik im Handler:</strong> Wer Prompts und Tools fest im Handler kodiert, koppelt Kognition an den Transport. Hinter Schnittstellen lassen sich Semantic Kernel und Azure AI Foundry austauschen, Anbieter vergleichen und System-Prompts A/B-testen.</li>\n<li><strong>Service-Principal statt Benutzeridentität:</strong> Das ebnet Berechtigungen ein und zerstört die Revisionsfähigkeit. Nutzen Sie Anmeldehandler für Graph-gebundene Assets und App-Token nur für Nicht-Benutzer-Operationen.</li>\n<li><strong>Streaming vortäuschen oder ignorieren:</strong> Nutzer merken es, und das Vertrauen sinkt. Aktivieren Sie echtes Streaming und lassen Sie das SDK auf Tippindikatoren oder Blockversand zurückfallen.</li>\n<li><strong>Azure Bot Service umgehen:</strong> Direkte Sockets pro Kanal vervielfachen die Fehlerquellen. ABS ist der Broker, der Protokolle terminiert, Aktivitäten normalisiert und viele Kanäle auf einen Endpunkt leitet.</li>\n<li><strong>Keine Governance-Strategie:</strong> Das führt zu Schattenagenten. Registrieren Sie Identitäten, wenden Sie Purview- und DLP-Richtlinien an und aktivieren Sie Audit-Logs ab dem ersten Tag.</li>\n</ul>\n\n<h2>Fortgeschrittene Muster für Skalierung und Unternehmenseinsatz</h2>\n<h3>Toolkataloge und Skill-Komposition</h3>\n<p>Definieren Sie Tools mit Bereichen, Rollen und Stufen der Datensensibilität in einer Registrierung. Der Planer schlägt vor, Ihre Richtlinie genehmigt anhand von Zielgruppe, Label und Aktion. Kalender lesen dürfen die meisten Benutzer, Mails senden nur der Eigentümer mit ausdrücklicher Bestätigung, Datensätze exportieren nur Administratoren. Für mehrstufige Abläufe eignen sich vom Planer geführte Flows mit Wiederholungsversuchen und Circuit-Breakern am Orchestrator-Rand. Externe Tools fallen aus, daher helfen idempotentes Design und exponentielles Backoff. Nach außen gehört eine zusammengefasste Begründung, keine rohe Gedankenkette.</p>\n\n<h3>Mandantenübergreifende Szenarien und Observability</h3>\n<p>Für nicht authentifizierte oder B2B-Szenarien gehören überwachte Sitzungen mit Ratenbegrenzung, Inhaltsklassifizierung und Purview-Kontrolle für Ein- und Ausgaben dazu. Anonyme Sitzungen lesen öffentliche Dokumente, aber keine privaten E-Mails. Jeder externe Aufruf erzeugt prüfbare Ereignisse. Korrelieren Sie Kanalereignisse, Agentenschritte, Modellaufrufe und Tool-Aufrufe mit einer einzigen Trace-ID und schwärzen Sie sensible Fragmente am Rand. Dashboards sollten sofort zeigen, wo Zeit verloren ging, wo Fehler entstanden und wer wozu autorisiert war.</p>\n\n<h3>Migration, Kosten und Resilienz</h3>\n<p>Bei der Migration schalten Sie den bestehenden Bot zunächst vor ABS, ersetzen eigene Adapter schrittweise durch SDK-Adapter, verschieben den Status in SDK-Turn-State-Muster und isolieren die Logik hinter Interfaces. Mit SDK-Templates bauen Sie parallele Routen auf und stellen den Verkehr schrittweise um.</p>\n<p>Kosten steuern Sie, indem Sie Embeddings cachen, Retrieval deduplizieren, Kurzzeitkontext über Turns wiederverwenden, Tool-Aufrufe drosseln und Token-Budgets pro Intent setzen. Anfragen werden früh klassifiziert, FAQ-Prompts gehen an günstigere Modelle. Für Resilienz gilt: Gehen Sie davon aus, dass der Knoten mitten im Turn wechselt, und halten Sie den Status außerhalb des Prozesses. Tools werden mit Request-IDs idempotent gemacht, damit Wiederholungen nichts doppelt auslösen. Concurrency-Guards verhindern, dass zwei Turns gleichzeitig dieselbe Ressource verändern. Tests sollten Lastspitzen, Teilausfälle und langsame Abhängigkeiten simulieren.</p>\n\n<h2>Praktische Takeaways</h2>\n<ul>\n<li>Beginnen Sie mit einem Echo-Agenten und beheben Sie Konfigurationsprobleme, bevor Sie Intelligenz hinzufügen.</li>\n<li>Binden Sie Anmeldehandler ein, damit der Agent als Benutzer handelt und das Prinzip der geringsten Rechte gilt.</li>\n<li>Speichern Sie Konversations- und Turn-Status knotenübergreifend und führen Sie Korrelations-IDs mit.</li>\n<li>Nutzen Sie die SDK-Adapter für Teams, Webchat, Slack und Copilot Studio statt eigener Adapter.</li>\n<li>Registrieren Sie den Agenten über den Azure Bot Service: ein Endpunkt, viele Kanäle.</li>\n<li>Trennen Sie Prompts und Tools von den Handlern und kapseln Sie Modellaufrufe hinter Schnittstellen.</li>\n<li>Aktivieren Sie Streaming und lassen Sie das SDK Kanalfähigkeiten erkennen.</li>\n<li>Schalten Sie Purview, DLP und Audit-Logs von Tag 1 an.</li>\n<li>Nehmen Sie Tests im Playground, Header- und Token-Prüfungen sowie Protokollkontrollen in Ihre Definition von „Fertig“ auf.</li>\n<li>Planen Sie Idempotenz, Backoff, Trace-IDs und Kostenhebel von Beginn an ein.</li>\n</ul>\n\n<h3>Fazit</h3>\n<p>Sicherheit, Identitätstreue und Multichannel-Verhalten sind in Microsoft 365 keine Zusatzfunktionen, sondern Grundvoraussetzungen für jeden produktiven Agenten. Das Microsoft 365 Agents SDK standardisiert Identität, Status, Protokoll und Kanalsemantik und lässt Sie Governance-Kontrollen erben, statt sie neu zu erfinden. Ihr eigener Code kann sich so auf Logik und Tools konzentrieren, und aus der Demo wird ein Agent, der Lastspitzen, Audits und echten Nutzern standhält.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Vom Echo-Agenten zum sicheren Multichannel-Agenten",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Echo-Agent testen",
+     "text": "Projekt mit Echo-Vorlage lokal starten und Konfiguration korrigieren, bevor Intelligenz hinzukommt."
+    },
+    {
+     "kopf": "Handler und Login",
+     "text": "Nachrichtenhandler anlegen und Anmeldehandler einbinden, damit der Agent als Benutzer handelt."
+    },
+    {
+     "kopf": "Orchestrator und Zustand",
+     "text": "Prompts und Tools entkoppeln, Modellaufrufe kapseln, Turn-Status knotenübergreifend speichern."
+    },
+    {
+     "kopf": "Kanäle über ABS",
+     "text": "Agent beim Azure Bot Service registrieren: ein Endpunkt für Teams, Webchat und Copilot Studio."
+    },
+    {
+     "kopf": "Streaming und Diagnose",
+     "text": "Streaming aktivieren, Kanäle im Playground simulieren, Header, Token und Korrelations-IDs prüfen."
+    },
+    {
+     "kopf": "Governance von Tag 1",
+     "text": "Purview, DLP und Audit-Logs aktivieren; Leitplanken und Bestätigungen für riskante Tools setzen."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Was ist das Microsoft 365 Agents SDK und wofür wird es eingesetzt?",
+    "a": "Das Microsoft 365 Agents SDK ist eine standardisierte, modellagnostische Infrastrukturschicht für benutzerdefinierte KI-Agenten in Teams und Microsoft 365. Es verwaltet Identitäten, speichert Zustände über Knoten hinweg, spricht das Aktivitätsprotokoll über Adapter und respektiert Governance standardmäßig. Das SDK ist Open Source."
+   },
+   {
+    "q": "Warum scheitern selbstgebaute KI-Agenten in Microsoft 365 oft?",
+    "a": "Häufige Ursachen sind ein pauschaler Dienstprinzipal statt Benutzeridentität, fehlender gemeinsamer Zustand beim Skalieren auf mehrere Knoten, eigene Kanaladapter, die Teams-Semantik nicht kennen, ignorierte Purview- und DLP-Vorgaben sowie unübersichtliche Orchestrierung ohne einheitliche Wiederholungslogik und Beobachtbarkeit."
+   },
+   {
+    "q": "Wie baue ich mit dem Microsoft 365 Agents SDK einen Multichannel-Agenten auf?",
+    "a": "Starten Sie mit der Echo-Vorlage und prüfen Sie sie lokal. Ergänzen Sie dann Handler, Anmeldehandler und einen Orchestrator wie Semantic Kernel oder OpenAI. Verwalten Sie den Zustand im Turn-Status, registrieren Sie Kanäle über den Azure Bot Service, aktivieren Sie Streaming und richten Sie Telemetrie ein."
+   },
+   {
+    "q": "Welche Sicherheits- und Compliance-Vorteile bietet das Microsoft 365 Agents SDK?",
+    "a": "Der Agent handelt mit expliziter Zustimmung als Benutzer und hinterlässt einen Prüfpfad. Purview wendet Labels, DLP, Aufbewahrung und eDiscovery auf Prompts und Antworten an. Defender for Cloud warnt vor Jailbreaks und Token-Missbrauch. Zero-Trust-Prinzipien und Audit-Protokolle erfordern kein paralleles Archiv."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Eigenbau-Agent vs. Microsoft 365 Agents SDK",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Selbstgebauter Agent",
+     "punkte": [
+      "Pauschaler Dienstprinzipal: überprivilegiert oder blockiert, Audit-Trails unbrauchbar",
+      "Kein gemeinsamer Zustand: Klärungen gehen beim Skalieren auf mehrere Knoten verloren",
+      "Eigene Kanaladapter: defekte Nachrichten und fehlendes Streaming in Teams",
+      "Governance ignoriert: Purview-Signale und DLP-Richtlinien werden umgangen",
+      "Orchestrator-Wildwuchs: Modellwechsel erzwingt Neuschreiben des Agenten"
+     ]
+    },
+    "rechts": {
+     "titel": "Mit dem SDK",
+     "punkte": [
+      "Anmeldehandler: Agent handelt als Benutzer, mit geringsten Privilegien und Auditprotokollen",
+      "Sitzungszustand bleibt über geclusterte Knoten hinweg bestehen",
+      "Adapter übersetzen Kanaldialekte in das gemeinsame Aktivitätsprotokoll",
+      "Governance wird standardmäßig respektiert, Kontrollen werden geerbt",
+      "Orchestrator-neutral: Kognition und Kommunikation sind sauber getrennt"
+     ]
+    }
+   },
+   {
+    "titel": "Governance-Checkliste für produktive Agenten",
+    "typ": "checkliste",
+    "punkte": [
+     "Identitäten des Agenten registrieren und Audit-Logs ab dem ersten Tag aktivieren",
+     "Anmeldehandler für Graph-gebundene Assets nutzen, App-Token nur für Nicht-Benutzer-Operationen",
+     "Purview-Labels, Aufbewahrungsfristen und DLP-Richtlinien auf Prompts und Antworten anwenden",
+     "Riskante Aktionen wie E-Mail-Versand nur mit ausdrücklicher Benutzerbestätigung erlauben",
+     "Tools mit Bereichen, Rollen und Sensibilitätsstufen in einer Registrierung definieren",
+     "Korrelations-IDs durchgängig senden und sensible Fragmente in Protokollen schwärzen",
+     "Azure Bot Service als Broker nutzen, statt direkte Sockets pro Kanal zu bauen"
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Warum verliert ein Agent mit pauschalem Dienstprinzipal die Berechtigungstreue und Nachvollziehbarkeit?",
+    "opts": [
+     "Er handelt als App statt im Namen des Benutzers, Audit-Trails werden unbrauchbar",
+     "Er kann keine Adaptive Cards an Teams senden",
+     "Er unterstützt keine Konversationen über mehrere Kanäle gleichzeitig",
+     "Er benötigt zwingend einen eigenen Load Balancer für Token"
+    ],
+    "a": 0,
+    "why": "Ein pauschaler Dienstprinzipal handelt als App, wodurch er überprivilegiert oder blockiert ist und Audit-Trails ihren Wert verlieren."
+   },
+   {
+    "q": "Wie löst das SDK das Problem, wenn ein Load Balancer eine Konversation auf eine andere Instanz verschiebt?",
+    "opts": [
+     "Durch Sticky-Sessions, die jeden Nutzer fest an einen Server binden",
+     "Durch Sitzungs- und Threadzustände, die über geclusterte Knoten hinweg bestehen bleiben",
+     "Durch einen Neustart der Konversation mit zusammengefasstem Kontext",
+     "Durch lokale Zwischenspeicherung des Verlaufs im Browser des Nutzers"
+    ],
+    "a": 1,
+    "why": "Turn-Status, gemeinsame Speichermuster und Korrelations-IDs bleiben knotenübergreifend erhalten; eigene Sticky-Session-Konstruktionen sind nicht nötig."
+   },
+   {
+    "q": "Welche Rolle hat der Azure Bot Service laut Implementierungsplan bei der Kanalregistrierung?",
+    "opts": [
+     "Er ersetzt den Orchestrator und wählt das passende Sprachmodell aus",
+     "Er speichert den Chatverlauf dauerhaft anstelle des Turn-Status",
+     "Er dient als Broker, terminiert Kanalprotokolle und leitet alles an einen Endpunkt",
+     "Er erstellt pro Kanal einen eigenen Socket für direkte Verbindungen"
+    ],
+    "a": 2,
+    "why": "ABS ist der dauerhafte Broker, der Protokolle terminiert, Aktivitäten normalisiert und viele Kanäle auf einen einzigen Endpunkt leitet."
+   },
+   {
+    "q": "Was gilt laut Artikel für ein Tool, das im Agenten E-Mails senden soll?",
+    "opts": [
+     "Es läuft immer automatisch mit Dienstanmeldeinformationen ohne Rückfrage",
+     "Es darf nur von Administratoren ausgeführt werden",
+     "Es benötigt keine Prüfung, da der Planer es bereits autorisiert hat",
+     "Es erfordert eine ausdrückliche Benutzerbestätigung, der Agent autorisiert den Aufruf"
+    ],
+    "a": 3,
+    "why": "Ein Planer darf Aufrufe nur vorschlagen; der Agent autorisiert sie, und das Senden von E-Mails verlangt ausdrückliche Benutzerbestätigung."
+   }
+  ]
+ }
+}
