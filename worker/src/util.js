@@ -157,6 +157,16 @@ export async function aiBudgetStatus(env) {
     remaining_eur: Math.max(0, prices.eur - (spentUsd + reservedUsd) / prices.rate), allowed: spentUsd + reservedUsd < budgetUsd };
 }
 
+// Kosten einer Claude-Antwort aus ihrer usage (Haiku 5.5, Preise laut Prompt-Caching-Doku): input_tokens = nicht gecachte Eingabe (1x),
+// cache_read_input_tokens = aus dem Prompt-Cache gelesen (0,1x), cache_creation_input_tokens = in den Cache geschrieben (5 min: 1,25x, 1 h: 2x).
+export function usageUsd(prices, usage = {}, batch = false) {
+  const n = (v) => Math.max(0, Number(v) || 0);
+  const read = n(usage.cache_read_input_tokens), write = n(usage.cache_creation_input_tokens);
+  const write1h = Math.min(write, n(usage.cache_creation?.ephemeral_1h_input_tokens));
+  const inputUnits = n(usage.input_tokens) + read * 0.1 + (write - write1h) * 1.25 + write1h * 2;
+  return (inputUnits * prices.input / 1e6 + n(usage.output_tokens) * prices.output / 1e6) * (batch ? 0.5 : 1);   // Batch API: halber Preis
+}
+
 async function warnAiBudget(env, status, job) {
   if (status.spent_eur + status.reserved_eur < status.budget_eur * 0.8) return;
   const result = await env.DB.prepare("INSERT OR IGNORE INTO meta(k,v) VALUES(?,?)").bind(`ai_budget_warn:${status.day}`, "1").run();
@@ -180,7 +190,7 @@ async function finishHaiku(env, reservation, usage, job, lang, model) {
   const prices = aiPrices(env);
   const input = Number(usage.input_tokens || 0) + Number(usage.cache_creation_input_tokens || 0) + Number(usage.cache_read_input_tokens || 0);
   const output = Number(usage.output_tokens || 0);
-  const usd = input * prices.input / 1e6 + output * prices.output / 1e6;
+  const usd = usageUsd(prices, usage);
   if (reservation) {
     await env.DB.prepare("UPDATE ai_spend SET in_tok=?,out_tok=?,usd=?,reserved_usd=0 WHERE id=?")
       .bind(input, output, usd, reservation.id).run();
@@ -193,10 +203,12 @@ async function finishHaiku(env, reservation, usage, job, lang, model) {
   return status;
 }
 
-export async function reportExternalAiUsage(env, { id, job, lang = "", model, input_tokens, output_tokens, batch = false }) {
+// input_tokens = Eingabe gesamt (wie die Workflows sie zaehlen); cache_read/cache_creation_input_tokens = Anteile daraus aus bzw. fuer den Prompt-Cache
+export async function reportExternalAiUsage(env, { id, job, lang = "", model, input_tokens, output_tokens, batch = false, cache_read_input_tokens = 0, cache_creation_input_tokens = 0 }) {
   if (!isHaiku(model)) throw new Error("unsupported model");
   const prices = aiPrices(env), input = Number(input_tokens || 0), output = Number(output_tokens || 0);
-  const usd = (input * prices.input / 1e6 + output * prices.output / 1e6) * (batch ? 0.5 : 1);   // Batch API: halber Preis
+  const read = Math.min(input, Number(cache_read_input_tokens || 0)), write = Math.min(input - read, Number(cache_creation_input_tokens || 0));
+  const usd = usageUsd(prices, { input_tokens: input - read - write, cache_read_input_tokens: read, cache_creation_input_tokens: write, output_tokens: output }, batch);
   await env.DB.prepare("INSERT OR IGNORE INTO ai_spend(id,day,model,job,lang,in_tok,out_tok,usd,reserved_usd,created) VALUES(?,?,?,?,?,?,?,?,0,?)")
     .bind(id, new Date().toISOString().slice(0, 10), model, job, lang, input, output, usd, Math.floor(Date.now() / 1000)).run();
   const status = await aiBudgetStatus(env);
