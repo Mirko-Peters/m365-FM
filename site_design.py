@@ -88,7 +88,7 @@ nav.langs{font-family:"Barlow Condensed","Barlow Condensed FB0","Barlow Condense
 .faq summary{list-style:none;display:flex;justify-content:space-between;gap:14px;text-transform:uppercase;font-size:1.15rem}.faq summary::-webkit-details-marker{display:none}.faq summary:after{content:"×";color:var(--ac);font-weight:400}.faq details[open] summary:after{content:"−"}
 .faq p{max-width:40em}
 footer{margin-top:80px}
-.cc .btn{background:transparent;color:var(--onink);border-color:var(--onink)}.cc .btn.main{background:var(--ac);color:var(--onac);border-color:var(--ac)}
+
 
 /* ---- Kopfbereich: M365Con-Leiste, Menue, Sprachwahl mit Flaggen ---- */
 :focus-visible{outline:3px solid var(--ac);outline-offset:2px}summary:focus-visible{outline-offset:0}

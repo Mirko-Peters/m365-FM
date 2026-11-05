@@ -167,5 +167,34 @@ class LoadRules(unittest.TestCase):
         self.assertEqual(IMG.eager_first(far), far)   # weit unten bleibt lazy
 
 
+class NoClarity(unittest.TestCase):
+    """Microsoft Clarity ist entfernt (5.11.2026): kein Skript, kein Cookie-Hinweis (#cc), keine Datenschutz-Passage."""
+    @classmethod
+    def setUpClass(cls):
+        import site_fetch
+        with patch.object(site_fetch, "fetch", return_value=None):
+            import generate_site
+        cls.G = generate_site
+
+    def test_page_has_no_banner_and_no_clarity(self):
+        G = self.G
+        with patch.object(G, "css_link", return_value=""), patch.object(G, "SW_REG", []), patch.object(G, "OGLIST", []):
+            for lang in ("en", "de", "ja"):
+                h = G.page(lang, "Titel", "Beschreibung", BASE + "/x/", "<main><h1>T</h1></main><footer></footer>")
+                self.assertNotIn("clarity", h.lower())
+                self.assertNotIn('id="cc"', h)
+        self.assertFalse(hasattr(G, "consent_html") or hasattr(G, "CLARITY_ID"))
+
+    def test_assets_and_legal_without_clarity(self):
+        for f in ("assets/page.js", "site_legal.py", "sitewrk/index.js"):
+            src = (ROOT / f).read_text("utf-8").lower()
+            self.assertNotIn("clarity.ms", src, f)
+            self.assertNotIn("getelementbyid('cc')", src, f)
+        legal = (ROOT / "site_legal.py").read_text("utf-8")
+        self.assertNotIn("<h2>Microsoft Clarity", legal)
+        self.assertFalse((ROOT / "sitewrk" / "consent.js").exists())
+        self.assertNotIn("CONSENT_COUNTRIES", (ROOT / "sitewrk" / "wrangler.toml").read_text("utf-8"))
+
+
 if __name__ == "__main__":
     unittest.main()
