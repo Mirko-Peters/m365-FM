@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
-import { closeExpiredExpertRequests, handleExpertRequests } from "../src/expert_requests.js";
+import { closeExpiredExpertRequests, deleteUserExpertRequests, handleExpertRequests, syncExpertVectors } from "../src/expert_requests.js";
 
 async function expertDb() {
   const { DatabaseSync } = await import("node:sqlite");
@@ -46,9 +46,10 @@ test("expert requests: private matching, age/week limits, replies, reports, and 
   raw.prepare("INSERT INTO expert_settings(user_id,opt_in,formats,langs,contact_pref,contact_value,updated) VALUES(2,1,'[\"interview\"]','[\"en\"]','email','expert@example.com',?),(4,1,'[\"interview\"]','[\"en\"]','platform','',?),(6,1,'[\"interview\"]','[\"en\"]','platform','',?),(7,1,'[\"interview\"]','[\"en\"]','platform','',?)").run(t, t, t, t);
   raw.prepare("INSERT INTO expert_settings(user_id,contact_pref,contact_value,updated) VALUES(1,'email','publisher@example.com',?)").run(t);
   const env = { DB: db, SITE: "https://www.m365.fm" };
-  const call = async (path, user, method = "GET", data = {}) => {
-    const req = new Request("https://api.example" + path, { method, headers: method === "GET" ? {} : { "content-type": "application/json" }, body: method === "GET" ? undefined : JSON.stringify(data) });
-    const res = await handleExpertRequests(env, req, path, user, (body, status = 200) => new Response(JSON.stringify(body), { status }));
+  const call = async (path, user, method = "GET", data = {}, targetEnv = env, ctx) => {
+    const url = new URL("https://api.example" + path);
+    const req = new Request(url, { method, headers: method === "GET" ? {} : { "content-type": "application/json" }, body: method === "GET" ? undefined : JSON.stringify(data) });
+    const res = await handleExpertRequests(targetEnv, req, url.pathname, user, (body, status = 200) => new Response(JSON.stringify(body), { status }), ctx);
     return { status: res.status, data: await res.json() };
   };
   const data = { title: "Need an Azure expert", description: "Looking for an expert to discuss identity governance.", topics: ["azure"], format: "interview", lang: "en", deadline };
@@ -74,6 +75,8 @@ test("expert requests: private matching, age/week limits, replies, reports, and 
   assert.equal(callOne.data.status, "open");
   assert.equal(callTwo.data.status, "open");
   assert.equal((await call("/api/expert-requests/create", { id: 6 }, "POST", { ...data, mode: "open" })).data.error, "open_call_limit");
+  const thirdDraft = await call("/api/expert-requests/create", { id: 6 }, "POST", { ...data, draft: true });
+  assert.equal((await call("/api/expert-requests/update", { id: 6 }, "POST", { id: thirdDraft.data.id, ...data, mode: "open" })).data.error, "open_call_limit");
   assert.equal((await call("/api/expert-calls", { id: 7 })).data.items.length, 2);
   assert.equal((await call("/api/expert-requests/apply", { id: 3 }, "POST", { id: callOne.data.id, body: "I can help with Azure governance." })).data.error, "account_too_new");
   assert.equal((await call("/api/expert-requests/apply", { id: 7 }, "POST", { id: callOne.data.id, body: "I can help with Azure governance." })).data.kind, "application");
@@ -120,5 +123,43 @@ test("expert requests: private matching, age/week limits, replies, reports, and 
   const expired = Number(extra.run("Expired request", data.description, '["azure"]', data.format, data.lang, "2000-01-01", t).lastInsertRowid);
   assert.equal((await closeExpiredExpertRequests(env)).closed, 1);
   assert.equal(raw.prepare("SELECT status FROM expert_requests WHERE id=?").get(expired).status, "closed");
+  raw.prepare("UPDATE users SET lang='de' WHERE id=7").run();
+  raw.prepare("UPDATE guest_listings SET topics='[\"copilot\"]' WHERE user_id=7").run();
+  const upserted = [], deleted = [];
+  const vectorEnv = {
+    ...env,
+    AI: { async run(model, { text: texts }) { return { data: texts.map(() => Array(1024).fill(0.25)) }; } },
+    VEC: {
+      async upsert(vectors) { upserted.push(...vectors); return { mutationId: "test" }; },
+      async query() { return { matches: [{ id: "expert-7", score: 0.9, metadata: { type: "expert", user_id: 7 } }] }; },
+      async deleteByIds(ids) { deleted.push(...ids); },
+    },
+  };
+  assert.equal((await syncExpertVectors(vectorEnv)).processed, 4);
+  assert.equal(upserted.filter((vector) => vector.metadata.type === "expert").length, 4);
+  assert.equal(JSON.stringify(upserted).includes("expert@example.com"), false, "contact data is absent from vector values and metadata");
+  const vectorPreview = await call("/api/expert-requests/preview", { id: 1 }, "POST", data, vectorEnv);
+  assert.equal(vectorPreview.data.count, 3, `vector results can match without shared entity topics: ${JSON.stringify(vectorPreview.data)}`);
+  const fallbackEnv = { ...vectorEnv, VEC: { async query() { throw new Error("offline"); } } };
+  const fallbackPreview = await call("/api/expert-requests/preview", { id: 1 }, "POST", data, fallbackEnv);
+  assert.equal(fallbackPreview.data.count, 2, "rule matching remains available without Vectorize");
+  const search = await call("/api/experts/search?q=cloud+governance", { id: 1 }, "GET", {}, vectorEnv);
+  assert.equal(search.data.items.find((item) => item.handle === "applicant").profile_lang, "de", "cross-language vector results show the profile language");
+  assert.equal(JSON.stringify(search.data).includes("expert@example.com"), false);
+  const pending = [], ctx = { waitUntil(task) { pending.push(task); } };
+  await call("/api/expert-settings", { id: 7 }, "POST", { opt_in: false }, vectorEnv, ctx);
+  await Promise.all(pending);
+  assert.equal(raw.prepare("SELECT 1 FROM expert_vectors WHERE user_id=7").get(), undefined, "opt-out removes the expert vector immediately");
+  assert.ok(deleted.length >= 1);
+  const pauseTasks = [], pauseCtx = { waitUntil(task) { pauseTasks.push(task); } };
+  await call("/api/expert-settings", { id: 7 }, "POST", { opt_in: true, pause_weeks: true, formats: ["interview"], langs: ["en"] }, vectorEnv, pauseCtx);
+  await Promise.all(pauseTasks);
+  assert.ok(raw.prepare("SELECT paused_until FROM expert_settings WHERE user_id=7").get().paused_until > t);
+  assert.equal(raw.prepare("SELECT 1 FROM expert_vectors WHERE user_id=7").get(), undefined, "pause removes the expert vector immediately");
+  raw.prepare("UPDATE expert_settings SET opt_in=1,paused_until=0 WHERE user_id=7").run();
+  await syncExpertVectors(vectorEnv);
+  const beforeDelete = deleted.length;
+  await deleteUserExpertRequests(vectorEnv, 7);
+  assert.ok(deleted.length > beforeDelete, "account deletion removes its expert vector");
   raw.close();
 });

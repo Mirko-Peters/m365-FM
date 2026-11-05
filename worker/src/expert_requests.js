@@ -8,7 +8,7 @@ const FORMATS = ["quote", "interview", "article", "podcast", "talk"];
 const MAX_REQUESTS_PER_WEEK = 5, MAX_REPLIES_PER_DAY = 10, MIN_ACCOUNT_AGE = 86400;
 const MAX_DEADLINE_DAYS = 60, MAX_OPEN_CALLS = 2, MAX_PITCH = 600, VECTOR_BATCH = 20;
 const now = () => Math.floor(Date.now() / 1000);
-const parse = (s) => { try { const x = JSON.parse(s || "[]"); return Array.isArray(x) ? x : []; } catch { return []; } };
+const parse = (s) => { if (Array.isArray(s)) return s; try { const x = JSON.parse(s || "[]"); return Array.isArray(x) ? x : []; } catch { return []; } };
 const text = (s, n) => cleanText(s, n).replace(/[<>]/g, "").replace(/https?:\/\/\S+/gi, "").replace(/\s+/g, " ").trim();
 const validLang = (lang) => lang === "en" || isLang(lang);
 const contactPattern = /(?:\b[\w.+-]+@[\w.-]+\.[a-z]{2,}\b|(?:https?:\/\/|www\.)\S+|\b(?:\+?\d[\d\s()./-]{6,}\d)\b)/i;
@@ -35,16 +35,6 @@ const EXPERT_SQL = `SELECT DISTINCT g.user_id,g.topics,g.langs listing_langs,g.f
     JOIN expert_settings es ON es.user_id=g.user_id AND es.opt_in=1 AND es.paused_until<=?
     WHERE g.kind='speaker' AND g.active=1`;
 const profileRows = async (db, userId) => (await db.prepare(`${EXPERT_SQL} AND g.user_id=?`).bind(now(), userId).all()).results || [];
-const requestMatches = (rows, request) => {
-  const topics = new Set(parse(request.topics));
-  return rows.some((row) => {
-    const listed = parse(row.topics);
-    const langs = [...parse(row.listing_langs), ...parse(row.setting_langs)];
-    const formats = [...parse(row.listing_formats), ...parse(row.setting_formats)];
-    return langs.includes(request.lang) && formats.includes(request.format) &&
-      audienceFits(request, row) && topics.has(row.eid) && listed.includes(row.eid);
-  });
-};
 
 async function matchingExperts(env, request) {
   const db = env.DB;
@@ -115,8 +105,13 @@ async function notifyExperts(env, request) {
   const db = env.DB, users = await matchingExperts(env, request);
   const blocks = await blockedUsers(db, request.user_id);
   for (const expert of users.slice(0, 100)) {
-    if (!blocks.has(expert.id)) await notify(env, expert.id, { title: "M365.FM · Publisher-Anfrage", body: request.title, url: `${env.SITE}/community/#c-guests`, tag: `expert-request-${request.id}` });
+    if (!blocks.has(expert.id)) await notifyExpert(env, expert.id, { title: "M365.FM · Publisher-Anfrage", body: request.title, url: `${env.SITE}/community/#c-guests`, tag: `expert-request-${request.id}` });
   }
+}
+
+async function notifyExpert(env, userId, payload) {
+  const settings = await env.DB.prepare("SELECT notify,opt_in,paused_until FROM expert_settings WHERE user_id=?").bind(userId).first();
+  if (settings?.opt_in && settings.paused_until <= now() && ["push", "both"].includes(settings.notify)) await notify(env, userId, payload);
 }
 
 function defer(ctx, task) {
@@ -139,6 +134,27 @@ export async function deleteUserExpertRequests(env, userId) {
     db.prepare("DELETE FROM expert_request_replies WHERE user_id=? OR request_id IN (SELECT id FROM expert_requests WHERE user_id=?)").bind(userId, userId),
     db.prepare("DELETE FROM expert_requests WHERE user_id=?").bind(userId),
   ]);
+}
+
+async function ensureExpertConnectColumns(db) {
+  for (const [table, column, definition] of [
+    ["expert_requests", "hide_outlet", "INTEGER NOT NULL DEFAULT 0"],
+    ["expert_requests", "reach", "TEXT NOT NULL DEFAULT ''"],
+    ["expert_requests", "audience", "TEXT NOT NULL DEFAULT 'all'"],
+    ["expert_requests", "mode", "TEXT NOT NULL DEFAULT 'match'"],
+    ["expert_requests", "held_reason", "TEXT NOT NULL DEFAULT ''"],
+    ["expert_request_replies", "kind", "TEXT NOT NULL DEFAULT 'match'"],
+    ["expert_request_replies", "status", "TEXT NOT NULL DEFAULT 'pending'"],
+    ["contributions", "expert_request_id", "INTEGER"],
+  ]) {
+    const columns = await db.prepare(`PRAGMA table_info(${table})`).all();
+    if ((columns.results || []).some((item) => item.name === column)) continue;
+    try { await db.prepare(`ALTER TABLE ${table} ADD COLUMN ${column} ${definition}`).run(); }
+    catch (error) {
+      const current = await db.prepare(`PRAGMA table_info(${table})`).all();
+      if (!(current.results || []).some((item) => item.name === column)) throw error;
+    }
+  }
 }
 
 function requestVectorText(request) {
@@ -212,9 +228,9 @@ export async function syncExpertVectors(env, max = VECTOR_BATCH) {
 
 export async function closeExpiredExpertRequests(env) {
   const today = new Date().toISOString().slice(0, 10);
-  const ids = (await env.DB.prepare("SELECT id FROM expert_requests WHERE status='open' AND deadline<? LIMIT 200").bind(today).all()).results || [];
+  const ids = (await env.DB.prepare("SELECT id FROM expert_requests WHERE status IN ('open','held') AND deadline<? LIMIT 200").bind(today).all()).results || [];
   if (ids.length) {
-    await env.DB.batch(ids.map(({ id }) => env.DB.prepare("UPDATE expert_requests SET status='closed' WHERE id=? AND status='open'").bind(id)));
+    await env.DB.batch(ids.map(({ id }) => env.DB.prepare("UPDATE expert_requests SET status='closed' WHERE id=? AND status IN ('open','held')").bind(id)));
   }
   const oldVectors = (await env.DB.prepare(`SELECT v.vid,v.request_id FROM expert_request_vectors v
     LEFT JOIN expert_requests r ON r.id=v.request_id WHERE r.id IS NULL OR r.status<>'open' LIMIT 200`).all()).results || [];
@@ -296,6 +312,7 @@ async function expertSearch(env, query, filters = {}) {
 
 export async function handleExpertRequests(env, request, path, user, J, ctx) {
   const db = env.DB, method = request.method, body = async () => request.json().catch(() => ({}));
+  await ensureExpertConnectColumns(db);
   if (path === "/api/experts/search" && method === "GET") {
     const items = await expertSearch(env, new URL(request.url).searchParams.get("q"), {
       lang: new URL(request.url).searchParams.get("lang") || "",
@@ -433,7 +450,7 @@ export async function handleExpertRequests(env, request, path, user, J, ctx) {
       const ranked = [];
       for (const call of calls) {
         const users = await matchingExperts(env, call), match = users.find((x) => x.id === user.id);
-        if (match) ranked.push({ ...publicRequest(call), match_score: match.score, shared_topics: match.shared });
+        ranked.push({ ...publicRequest(call), match_score: match?.score || 0, shared_topics: match?.shared || [] });
       }
       calls = ranked.sort((a, b) => b.match_score - a.match_score);
     } else calls = calls.map(publicRequest);
@@ -444,19 +461,23 @@ export async function handleExpertRequests(env, request, path, user, J, ctx) {
     if (!account || t - account.created < MIN_ACCOUNT_AGE) return J({ error: "account_too_new" }, 403);
     const item = await normalizeRequest(env, b);
     if (item.error) return J({ error: item.error, ...(item.topic ? { topic: item.topic } : {}) }, 400);
+    if (b.mode !== undefined && !["match", "open"].includes(b.mode)) return J({ error: "bad_mode" }, 400);
+    if (contact(b.reach)) return J({ error: "contact_details" }, 400);
     const mode = b.mode === "open" ? "open" : "match", draft = b.draft === true;
-    if (mode === "open") {
-      const open = await db.prepare("SELECT COUNT(*) n FROM expert_requests WHERE user_id=? AND mode='open' AND status IN ('open','held','draft')").bind(user.id).first();
-      if (open.n >= MAX_OPEN_CALLS) return J({ error: "open_call_limit" }, 429);
-    }
     const heldReason = !draft ? moderationReason(item.title, item.description) : "";
     const status = draft ? "draft" : heldReason ? "held" : "open";
+    if (mode === "open" && status !== "draft") {
+      const open = await db.prepare("SELECT COUNT(*) n FROM expert_requests WHERE user_id=? AND mode='open' AND status IN ('open','held')").bind(user.id).first();
+      if (open.n >= MAX_OPEN_CALLS) return J({ error: "open_call_limit" }, 429);
+    }
     const result = await db.prepare(`INSERT INTO expert_requests(user_id,title,description,topics,format,lang,deadline,created,status,hide_outlet,reach,audience,mode,held_reason)
       SELECT ?,?,?,?,?,?,?,?,?,?,?,?,?,? WHERE (SELECT COUNT(*) FROM expert_requests WHERE user_id=? AND created>?)<?`)
       .bind(user.id, item.title, item.description, JSON.stringify(item.topics), item.format, item.lang, item.deadline, t, status,
         b.hide_outlet ? 1 : 0, text(b.reach, 100), item.audience, mode, heldReason, user.id, t - 7 * 86400, MAX_REQUESTS_PER_WEEK).run();
     if (!result.meta.changes) return J({ error: "weekly_limit" }, 429);
     const saved = { id: result.meta.last_row_id, user_id: user.id, ...item, status, mode };
+    if (status === "held") await db.prepare("INSERT INTO moderation_log(actor_id,action,target_type,target_id,reason,created) VALUES(?,'auto_hold','request',?,?,?)")
+      .bind(user.id, saved.id, heldReason, t).run();
     if (status === "open") {
       defer(ctx, syncRequestVector(env, saved));
       defer(ctx, notifyExperts(env, saved));
@@ -469,14 +490,23 @@ export async function handleExpertRequests(env, request, path, user, J, ctx) {
     if (!old) return J({ error: "not_found" }, 404);
     const item = await normalizeRequest(env, { ...old, ...b, topics: b.topics ?? parse(old.topics) });
     if (item.error) return J({ error: item.error, ...(item.topic ? { topic: item.topic } : {}) }, 400);
+    if (b.mode !== undefined && !["match", "open"].includes(b.mode)) return J({ error: "bad_mode" }, 400);
+    if (b.reach !== undefined && contact(b.reach)) return J({ error: "contact_details" }, 400);
     const deadline = b.deadline === undefined ? old.deadline : item.deadline;
     const heldReason = moderationReason(item.title, item.description), status = b.draft ? "draft" : heldReason ? "held" : "open";
+    const mode = b.mode === undefined ? old.mode : b.mode;
+    if (mode === "open" && status !== "draft" && (old.mode !== "open" || old.status === "draft")) {
+      const open = await db.prepare("SELECT COUNT(*) n FROM expert_requests WHERE user_id=? AND id<>? AND mode='open' AND status IN ('open','held')").bind(user.id, id).first();
+      if (open.n >= MAX_OPEN_CALLS) return J({ error: "open_call_limit" }, 429);
+    }
     await db.prepare(`UPDATE expert_requests SET title=?,description=?,topics=?,format=?,lang=?,deadline=?,status=?,held_reason=?,
       hide_outlet=?,reach=?,audience=?,mode=? WHERE id=? AND user_id=?`)
       .bind(item.title, item.description, JSON.stringify(item.topics), item.format, item.lang, deadline, status, heldReason,
         b.hide_outlet === undefined ? old.hide_outlet : b.hide_outlet ? 1 : 0, b.reach === undefined ? old.reach : text(b.reach, 100),
-        item.audience, b.mode === "open" ? "open" : old.mode, id, user.id).run();
+        item.audience, mode, id, user.id).run();
     const saved = { ...old, ...item, id, user_id: user.id, deadline, status };
+    if (status === "held" && old.status !== "held") await db.prepare("INSERT INTO moderation_log(actor_id,action,target_type,target_id,reason,created) VALUES(?,'auto_hold','request',?,?,?)")
+      .bind(user.id, id, heldReason, now()).run();
     if (status === "open") {
       defer(ctx, syncRequestVector(env, saved));
       if (old.status !== "open") defer(ctx, notifyExperts(env, saved));
@@ -502,7 +532,7 @@ export async function handleExpertRequests(env, request, path, user, J, ctx) {
     const b = await body(), id = Number(b.id);
     const item = Number.isSafeInteger(id) && id > 0 ? await db.prepare("SELECT * FROM expert_requests WHERE id=? AND mode='open' AND status='open' AND deadline>=?")
       .bind(id, new Date().toISOString().slice(0, 10)).first() : null;
-    if (!item) return J({ error: "not_found" }, 404);
+    if (!item || item.user_id === user.id) return J({ error: "not_found" }, 404);
     const account = await db.prepare("SELECT created FROM users WHERE id=? AND banned=0").bind(user.id).first();
     const settings = await db.prepare("SELECT * FROM expert_settings WHERE user_id=? AND opt_in=1 AND paused_until<=?").bind(user.id, now()).first();
     const profile = await profileRows(db, user.id);
@@ -525,7 +555,7 @@ export async function handleExpertRequests(env, request, path, user, J, ctx) {
         db.prepare("UPDATE expert_requests SET status='accepted' WHERE id=? AND status='open'").bind(reply.request_id),
       ]);
       await recordExpertContribution(db, reply.user_id, { ...reply, id: reply.request_id });
-      defer(ctx, notify(env, reply.user_id, { title: "M365.FM · Anfrage angenommen", body: reply.title, url: `${env.SITE}/community/#c-guests`, tag: `expert-accepted-${reply.request_id}` }));
+      defer(ctx, notifyExpert(env, reply.user_id, { title: "M365.FM · Anfrage angenommen", body: reply.title, url: `${env.SITE}/community/#c-guests`, tag: `expert-accepted-${reply.request_id}` }));
       return J({ ok: true, status: "accepted", contacts: await acceptedContacts(db, user.id, reply.user_id) });
     }
     await db.prepare("UPDATE expert_request_replies SET status='declined' WHERE id=? AND status='pending'").bind(replyId).run();
@@ -541,7 +571,7 @@ export async function handleExpertRequests(env, request, path, user, J, ctx) {
       reportReplyId = replyId;
     } else {
       item = Number.isSafeInteger(id) && id > 0 ? await db.prepare("SELECT * FROM expert_requests WHERE id=? AND status='open'").bind(id).first() : null;
-      if (!item || !requestMatches(await profileRows(db, user.id), item) || await blocked(db, user.id, item.user_id)) return J({ error: "not_found" }, 404);
+      if (!item || !(await matchingExperts(env, item)).some((match) => match.id === user.id) || await blocked(db, user.id, item.user_id)) return J({ error: "not_found" }, 404);
     }
     if (!(await rateLimit(db, `expert_report:${user.id}`, 5, 86400))) return J({ error: "rate_limit" }, 429);
     await db.prepare("INSERT OR IGNORE INTO expert_request_reports(request_id,user_id,reply_id,reason,created) VALUES(?,?,?,?,?)")
@@ -559,7 +589,7 @@ export async function handleExpertRequests(env, request, path, user, J, ctx) {
       target = (await db.prepare("SELECT x.user_id FROM expert_request_replies x JOIN expert_requests r ON r.id=x.request_id WHERE x.id=? AND r.user_id=?").bind(replyId, user.id).first())?.user_id || 0;
     } else {
       const item = Number.isSafeInteger(id) && id > 0 ? await db.prepare("SELECT * FROM expert_requests WHERE id=? AND status='open'").bind(id).first() : null;
-      if (item && item.user_id !== user.id && requestMatches(await profileRows(db, user.id), item)) target = item.user_id;
+      if (item && item.user_id !== user.id && (await matchingExperts(env, item)).some((match) => match.id === user.id)) target = item.user_id;
     }
     if (!target || target === user.id) return J({ error: "not_found" }, 404);
     if (method === "POST") await db.prepare("INSERT OR IGNORE INTO msg_blocks(user_id,blocked_id) VALUES(?,?)").bind(user.id, target).run();
@@ -585,7 +615,8 @@ function validDeadline(value) {
 
 async function normalizeRequest(env, b) {
   const title = text(b.title, 120), description = text(b.description, 1000), format = FORMATS.includes(b.format) ? b.format : "";
-  const lang = String(b.lang || ""), deadline = validDeadline(b.deadline), audience = ["all", "mvp", "mct", "level"].includes(b.audience) ? b.audience : "all";
+  const lang = String(b.lang || ""), deadline = validDeadline(b.deadline), audience = b.audience === undefined ? "all" : b.audience;
+  if (!["all", "mvp", "mct", "level"].includes(audience)) return { error: "audience" };
   if (contact(b.title) || contact(b.description)) return { error: "contact_details" };
   if (title.length < 3 || description.length < 20) return { error: "text" };
   if (!format) return { error: "format" };
