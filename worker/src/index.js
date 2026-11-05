@@ -33,7 +33,7 @@ import { handleReviews } from "./reviews.js";
 import { handleEntityInvite, remindInvites } from "./entinvite.js";
 import { handleDemo } from "./demo.js";
 import { handleGuests, deleteUserGuests } from "./guests.js";
-import { handleExpertRequests, deleteUserExpertRequests } from "./expert_requests.js";
+import { handleExpertRequests, deleteUserExpertRequests, syncExpertVectors, closeExpiredExpertRequests } from "./expert_requests.js";
 import { handlePodcast, deleteUserPodcast, pollPodcast } from "./podcast.js";
 import { handleVideo, deleteUserVideos, pollVideos } from "./youtube.js";
 import { handleMcp, handleTokens, deleteUserTokens } from "./mcp.js";
@@ -176,7 +176,7 @@ function pubComment(c, mine, liked, badges, admin) {
     hidden: c.status === "hidden", created: c.created, likes: c.likes, liked: liked.has(c.id), mine: mine === c.user_id, canDelete: mine === c.user_id || admin };
 }
 
-async function api(env, request, url, path, asUser) {
+async function api(env, request, url, path, asUser, ctx) {
   const method = request.method, J = (d, s = 200, x) => json(d, s, env, request, x);
   if (method === "OPTIONS") return new Response(null, { status: 204, headers: cors(env, request) });
   if (asUser === undefined && method !== "GET" && path !== "/api/internal/ai-spend" && request.headers.get("x-requested-with") !== "m365") return J({ error: "bad_request" }, 400);
@@ -240,7 +240,7 @@ async function api(env, request, url, path, asUser) {
       ]);
       await deleteUserEvents(db, id);
       await deleteUserMessages(db, id); await deleteUserTokens(db, id); await deleteUserQa(db, id); await deleteUserBlog(db, id); await deleteUserLibrary(db, id); await deleteUserPodcast(db, id); await deleteUserVideos(db, id); await deleteUserGuests(db, id); await deleteUserGuestCredits(db, id);
-      await deleteUserData(db, id); await deleteUserExpertRequests(db, id);
+      await deleteUserData(db, id); await deleteUserExpertRequests(env, id);
       return J({ ok: true }, 200, { "set-cookie": cookie("m365s", "", 0) });
     }
   }
@@ -318,8 +318,9 @@ async function api(env, request, url, path, asUser) {
   if (path.startsWith("/api/ai-token")) { const k = await handleTokens(env, request, url, path, user, J); if (k) return k; }
   if (path === "/api/admin/demo") { const q = await handleDemo(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/guests/")) { const q = await handleGuests(env, request, url, path, user, J); if (q) return q; }
-  if (path.startsWith("/api/expert-requests/") || path.startsWith("/api/admin/expert-requests/")) {
-    const q = await handleExpertRequests(env, request, path, user, J); if (q) return q;
+  if (path.startsWith("/api/expert-requests/") || path.startsWith("/api/admin/expert-requests/") ||
+      path.startsWith("/api/expert-calls") || path.startsWith("/api/expert-settings") || path === "/api/experts/search") {
+    const q = await handleExpertRequests(env, request, path, user, J, ctx); if (q) return q;
   }
   if (path.startsWith("/api/video/") || path.startsWith("/api/admin/video")) { const q = await handleVideo(env, request, url, path, user, J); if (q) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return q; } }
   if (path.startsWith("/api/podcast/") || path.startsWith("/api/admin/podcast")) { const q = await handlePodcast(env, request, url, path, user, J); if (q) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return q; } }
@@ -434,13 +435,13 @@ async function api(env, request, url, path, asUser) {
 }
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const url = new URL(request.url), path = url.pathname.replace(/\/+$/, "") || "/";
     try {
       if (path.startsWith("/auth/")) return (await auth(env, request, url, path)) || new Response("not found", { status: 404 });
-      if (path === "/mcp") return await handleMcp(env, request, (uid) => me(env, uid), (req, user) => api(env, req, new URL(req.url), new URL(req.url).pathname, user));
+      if (path === "/mcp") return await handleMcp(env, request, (uid) => me(env, uid), (req, user) => api(env, req, new URL(req.url), new URL(req.url).pathname, user, ctx));
       if (path === "/a2a") return await handleA2a(env, request);
-      if (path.startsWith("/api/")) return await api(env, request, url, path);
+      if (path.startsWith("/api/")) return await api(env, request, url, path, undefined, ctx);
       return new Response("M365.FM community API", { status: 200, headers: { "content-type": "text/plain" } });
     } catch (e) {
       const rid = crypto.randomUUID().slice(0, 8);   // Request-ID: steht in der Antwort und im Log (Workers Logs), damit ein gemeldeter Fehler auffindbar ist
@@ -480,6 +481,8 @@ export default {
     T("importTranslations", () => importTranslations(env));
     T("importSearchIndex", () => importSearchIndex(env));
     T("syncSearchVectors", () => syncSearchVectors(env));
+    T("syncExpertVectors", () => syncExpertVectors(env));
+    T("closeExpiredExpertRequests", () => closeExpiredExpertRequests(env));
     if (event.cron !== "0 6 * * *") T("syncExpertise", () => syncExpertise(env, entityMap));   // nicht doppelt um 06:00 (beide Zeitplaene feuern)
     ctx.waitUntil(env.DB.prepare("DELETE FROM cron_runs WHERE started<?").bind(Math.floor(Date.now() / 1000) - 7 * 86400).run().catch(() => 0));
   },
