@@ -451,6 +451,7 @@ html.a11y-hc .spn{--spn-on:#ffb52e;--spn-good:#3cc9a1;--spn-red:#ff8a80}
 @keyframes spn-pulse{50%{transform:scale(1.35);opacity:.08}}
 .spn-lead{max-width:62ch;color:var(--mut);font-size:1.1rem;margin:0 0 20px}.spn-mk{margin:-6px 0 22px}
 .spn-cards{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+@media(min-width:720px){.spn-cards{grid-template-columns:repeat(3,1fr)}.spn-cards[data-n="4"]{grid-template-columns:repeat(2,1fr)}}   /* Mirko, 5.11.2026: 3 x 2 statt 6 nebeneinander */
 .spn-card{background:var(--card);border:1px solid var(--bd);padding:14px 16px;display:grid;gap:3px;align-content:start}
 .spn-card b{unicode-bidi:isolate;font:600 2rem/1.05 "Barlow Condensed","Barlow Condensed FB0","Barlow Condensed FB1",sans-serif;font-variant-numeric:tabular-nums;color:var(--ac)}
 .spn-card span{color:var(--fg);font-size:.92rem;line-height:1.35}.spn-card small{color:var(--mut);font-size:.78rem}
@@ -623,7 +624,7 @@ def body_html(g, lang, stats, quick, ssr, n_main, n_langs, con_on):
     cards.append((nums.get("eps") or _num(n_main), t("card_episodes"), ""))
     cards.append((nums.get("langs") or _num(n_langs), t("card_langs"), ""))
     srcs.append(t("src_build", date=day(g["TODAY"], lang)))
-    proof = ('<ul class="spn-cards">' + "".join(f'<li class="spn-card"><b dir="auto">{E(a)}</b><span>{E(b)}</span>' + (f'<small>{E(c)}</small>' if c else "") + "</li>" for a, b, c in cards) + "</ul>"
+    proof = (f'<ul class="spn-cards" data-n="{len(cards)}">' + "".join(f'<li class="spn-card"><b dir="auto">{E(a)}</b><span>{E(b)}</span>' + (f'<small>{E(c)}</small>' if c else "") + "</li>" for a, b, c in cards) + "</ul>"
              + "".join(f'<p class="spn-src">{E(s)}</p>' for s in srcs) + (_chart(lang, bing, nums, day) if bing["ok"] and bing["weekly"] else ""))
     hero = (f'<header class="spn-hero"><p class="spn-eyebrow"><span class="spn-dot" aria-hidden="true"></span>{E(t("eyebrow"))}</p><h1>{E(t("h1"))}</h1>'
             f'<p class="spn-lead">{E(t("lead", episodes=eps))}</p>'
