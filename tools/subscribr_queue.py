@@ -33,8 +33,9 @@ def call(method, path, token, body=None, tries=4):
         except urllib.error.HTTPError as e:
             if e.code == 429 and i < tries - 1:
                 time.sleep(60 * (i + 1)); continue
-            try: return e.code, json.loads(e.read().decode() or "{}")
-            except Exception: return e.code, {}
+            raw = e.read().decode(errors="replace")
+            try: return e.code, json.loads(raw or "{}")
+            except Exception: return e.code, {"_raw": raw[:160], "_ctype": e.headers.get("content-type", ""), "_server": e.headers.get("server", "")}
         except Exception as e:   # noqa: BLE001
             if i < tries - 1: time.sleep(15); continue
             print("Abruf fehlgeschlagen:", path.split("?")[0], type(e).__name__); return 0, {}
@@ -57,6 +58,8 @@ def main():
             print("::error::Secret SUBSCRIBR_API_TOKEN fehlt"); return 1
         st, j = call("GET", "/team/credits", token)
         print("Credits-Abfrage:", st, "Stand:", (j.get("credits") or {}).get("credits_remaining"))
+        if st != 200:
+            print("Antwort:", {k: v for k, v in j.items() if k in ("message", "error", "_ctype", "_server")}, (j.get("_raw") or "")[:120].replace("\n", " "))
         st2, _ = call("GET", "/channels/63800/scripts?per_page=1", token)
         print("Skripte lesen (scripts:read):", st2)
         ok = st == 200 and st2 == 200
