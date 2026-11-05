@@ -1,10 +1,13 @@
 name: Team-Analytics (GSC, YouTube, Bing per API)
 
 # Arbeitsdaten fuer die Routinen des KI-Teams (SEO-Audit, Content-Planung, Abendbericht): statt Exporte per Chrome
-# holen sie sich das Artefakt "team-analytics" des letzten Laufs:
+# holen sie sich das Artefakt "team-analytics" des letzten Laufs und entschluesseln es:
 #   gh run download -R Mirko-Peters/m365-dub-downloader -n team-analytics -D analytics \
 #     $(gh run list -R Mirko-Peters/m365-dub-downloader -w team-analytics.yml -s success -L 1 --json databaseId -q '.[0].databaseId')
-# Inhalt: gsc.json, youtube.json, bing.json, summary.md (tools/team_analytics.py). Nicht im Repo (das Repo ist oeffentlich).
+#   openssl enc -d -aes-256-cbc -pbkdf2 -iter 600000 -in analytics/team-analytics.tar.gz.enc -pass env:TEAM_ANALYTICS_KEY | tar xz -C analytics
+# Inhalt: gsc.json, youtube.json, bing.json, summary.md, ai_performance.json (tools/team_analytics.py). Nicht im Repo (das Repo ist oeffentlich).
+# Auch Artefakte eines oeffentlichen Repos kann jedes angemeldete GitHub-Konto laden. Suchanfragen, Seiten und Kanalzahlen werden deshalb
+# nur verschluesselt hochgeladen (Secret TEAM_ANALYTICS_KEY, AES-256 mit PBKDF2 wie die D1-Sicherung). Ohne Secret laeuft der Abruf nicht.
 on:
   schedule:
     - cron: "43 5 * * *"
@@ -23,12 +26,24 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
+      - name: Schluessel vorhanden? (ohne Verschluesselung kein Abruf)
+        env:
+          TEAM_ANALYTICS_KEY: ${{ secrets.TEAM_ANALYTICS_KEY }}
+        run: |
+          if [ -z "$TEAM_ANALYTICS_KEY" ]; then
+            echo "::warning::Secret TEAM_ANALYTICS_KEY fehlt - Team-Analytics wird nicht abgerufen (das Artefakt waere fuer jedes angemeldete GitHub-Konto lesbar)."
+            echo "skip=1" >> "$GITHUB_ENV"
+          fi
       - uses: actions/checkout@v4
+        if: env.skip != '1'
       - uses: actions/setup-python@v5
+        if: env.skip != '1'
         with:
           python-version: "3.12"
       - run: pip install -q requests cryptography
+        if: env.skip != '1'
       - name: YouTube-Token bereitstellen
+        if: env.skip != '1'
         env:
           YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET || secrets.GOOGLE_CLIENT_SECRET }}
         run: |
@@ -36,6 +51,7 @@ jobs:
             python yt_auth.py env || echo "YouTube-Token nicht verfuegbar; Quelle wird uebersprungen."
           fi
       - name: Daten abrufen
+        if: env.skip != '1'
         env:
           GSC_SERVICE_ACCOUNT_JSON: ${{ secrets.GSC_SERVICE_ACCOUNT_JSON }}
           GSC_SITE: ${{ vars.GSC_SITE }}
@@ -47,8 +63,20 @@ jobs:
           cp data/stats/ai_performance.json out/ai_performance.json
           # Keine Suchanfragen oder Video-Titel in die Lauf-Zusammenfassung: Sie ist bei einem oeffentlichen Repo fuer jeden sichtbar.
           python3 -c "import json;[print(n, json.load(open(f'out/{n}.json')).get('status')) for n in ('gsc','youtube','bing')]" >> "$GITHUB_STEP_SUMMARY"
+      - name: Verschluesseln (unverschluesselt nie hochladen)
+        if: env.skip != '1'
+        env:
+          TEAM_ANALYTICS_KEY: ${{ secrets.TEAM_ANALYTICS_KEY }}
+        run: |
+          set -o pipefail
+          mkdir -p enc
+          tar czf - -C out . | openssl enc -aes-256-cbc -pbkdf2 -iter 600000 -salt -out enc/team-analytics.tar.gz.enc -pass env:TEAM_ANALYTICS_KEY
+          rm -rf out
+          echo "Verschluesselt: $(wc -c < enc/team-analytics.tar.gz.enc) Bytes"
       - uses: actions/upload-artifact@v4
+        if: env.skip != '1'
         with:
           name: team-analytics
-          path: out/
+          path: enc/team-analytics.tar.gz.enc
           retention-days: 14
+          if-no-files-found: error
