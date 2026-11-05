@@ -197,6 +197,12 @@
     if (st) { try { history.replaceState(null, "", ret); } catch (e) {} if (["ok", "already", "banned"].indexOf(st) > -1) msg.textContent = (st === "ok" ? "✓ " : "") + tt("ids_" + st); }
     [h("h2", { text: tt("ids_t") }), h("p", { class: "cmut", text: tt("ids_d") }), list, add, msg, mg].forEach(function (x) { box.appendChild(x); });
     var pn = function (p) { return PNAME[p] || p; };
+    function needFresh(r) {   // Verknuepfen/Entfernen nur mit frischer Anmeldung (Schutz bei einer alten oder entwendeten Sitzung)
+      if (!(r.j && r.j.error === "fresh")) return false;
+      msg.textContent = tt("ids_fresh_one") + " ";
+      if (r.j.relogin) msg.appendChild(h("a", { class: "btn", rel: "nofollow", href: API + "/auth/login/" + encodeURIComponent(r.j.relogin) + "?return=" + encodeURIComponent(ret), text: tt("ids_relogin").replace("{p}", pn(r.j.relogin)) }));
+      return true;
+    }
     function load() {
       var P = window.__m365p = window.__m365p || fetch(API + "/api/providers").then(function (r) { return r.json(); }).catch(function () { return null; });
       Promise.all([api("/api/me/identities"), P]).then(function (x) {
@@ -205,7 +211,7 @@
         ids.forEach(function (i) {
           var rm = h("button", { type: "button", class: "btn", text: tt("ids_remove"), "aria-label": tt("ids_remove") + " – " + pn(i.provider), onclick: function () {
             if (!confirm(tt("ids_remove_q").replace("{p}", pn(i.provider)))) return;
-            api("/api/me/identities/" + i.id, { method: "DELETE" }).then(function (r) { msg.textContent = r.s === 200 ? "✓ " + tt("saved") : r.s === 429 ? tt("ids_rate") : r.j && r.j.error === "last" ? tt("ids_last") : tt("error"); load(); });
+            api("/api/me/identities/" + i.id, { method: "DELETE" }).then(function (r) { if (needFresh(r)) return; msg.textContent = r.s === 200 ? "✓ " + tt("saved") : r.s === 429 ? tt("ids_rate") : r.j && r.j.error === "last" ? tt("ids_last") : tt("error"); load(); });
           } });
           if (ids.length < 2) rm.disabled = true;
           list.appendChild(h("li", {}, [h("b", { text: pn(i.provider) }), h("span", { class: "cmut", text: tt("ids_since").replace("{d}", date(i.created)) }), rm]));
@@ -215,7 +221,7 @@
           add.appendChild(h("button", { type: "button", class: "btn", text: tt("ids_link").replace("{p}", pn(p)), onclick: function (e) {
             var b = e.currentTarget; b.disabled = true;
             api("/api/me/identities/link", { method: "POST", body: { provider: p, return: ret } }).then(function (r) {
-              if (r.s === 200 && r.j.url) location.href = r.j.url; else { b.disabled = false; msg.textContent = r.s === 429 ? tt("ids_rate") : tt("error"); }
+              if (r.s === 200 && r.j.url) location.href = r.j.url; else { b.disabled = false; if (!needFresh(r)) msg.textContent = r.s === 429 ? tt("ids_rate") : tt("error"); }
             }).catch(function () { b.disabled = false; msg.textContent = tt("error"); });
           } }));
         });
@@ -225,6 +231,7 @@
       api("/api/me/merge").then(function (r) {
         var j = r.j || {}; mg.textContent = "";
         if (j.error === "banned") { msg.textContent = tt("ids_banned"); return; }
+        if (j.error === "admin_source") { msg.textContent = tt("ids_admin_source"); return; }
         if (!j.pending) { if (st === "merge") msg.textContent = tt("ids_expired"); return; }
         var c = j.counts || {}, ul = h("ul");
         ["comments", "likes", "badges", "posts", "contributions", "library", "media", "events", "orgs", "edits", "signins"].forEach(function (k) { if (c[k]) ul.appendChild(h("li", { text: tt("mc_" + k) + ": " + c[k] })); });

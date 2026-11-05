@@ -228,7 +228,8 @@ test("Zusammenfuehren: Vorschau mit Zaehlern, alle Tabellen auf das Ziel, UNIQUE
   assert.deepEqual(all("SELECT provider FROM user_identities WHERE user_id=? ORDER BY id", T).map((r) => r.provider), ["github", "linkedin"]);
   // Inhalte
   assert.equal(one("SELECT COUNT(*) n FROM comments WHERE user_id=?", T).n, 3);
-  assert.deepEqual(all("SELECT slug FROM blog_posts WHERE user_id=? ORDER BY slug", T).map((r) => r.slug), ["hello", `hello-${S}`, "other"]);
+  const bs = all("SELECT slug FROM blog_posts WHERE user_id=? ORDER BY slug", T).map((r) => r.slug);
+  assert.equal(bs.length, 3); assert.equal(bs[0], "hello"); assert.match(bs[1], new RegExp(`^hello-${S}-\\d+$`)); assert.equal(bs[2], "other");
   assert.equal(one("SELECT owner_id FROM events WHERE id=5").owner_id, T);
   assert.equal(one("SELECT proposer_id FROM event_sessions").proposer_id, T);
   assert.match(one("SELECT speakers FROM event_sessions").speakers, /"h":"anna"/);
@@ -275,10 +276,11 @@ test("Zusammenfuehren: Vorschau mit Zaehlern, alle Tabellen auf das Ziel, UNIQUE
 
 test("Zusammenfuehren: ohne frische Anmeldung beider Konten abgelehnt", async () => {
   const { db, raw } = await d1(), env = { ...ENV, DB: db };
-  const { T, S } = await twoAccounts(env);
+  const { tSess, T, S } = await twoAccounts(env);
   raw.prepare("INSERT INTO comments(vid,lang,user_id,body,created) VALUES('vid01','de',?,'S',1)").run(S);
   const stale = await staleSession(env, T);
-  const l = await link(env, stale, "li-anna");
+  assert.equal((await call(env, "POST", "/api/me/identities/link", `m365s=${stale}`, { provider: "linkedin", return: RET })).j.error, "fresh");   // Verknuepfen braucht schon eine frische Anmeldung
+  const l = await link(env, tSess, "li-anna");   // Nachweis mit frischer Sitzung, Zusammenfuehren dann mit der alten
   assert.equal(l.status, "merge");
   const ck = `m365s=${stale}; m365m=${l.proof}`;
   const pre = await call(env, "GET", "/api/me/merge", ck);
@@ -344,6 +346,97 @@ test("Hauptanmeldung: eine ADMIN_SUBS-Kennung wird beim Entfernen nie Hauptanmel
   const r = await call(env, "DELETE", `/api/me/identities/${gh}`, `m365s=${sess}`);
   assert.equal(r.j.error, "primary");
   assert.equal(raw.prepare("SELECT provider FROM users WHERE id=?").get(uid).provider, "github");
+});
+
+test("Zusammenfuehren: ein ADMIN_SUBS-Konto nie in ein Konto ohne Admin-Rechte, richtig herum geht es", async () => {
+  const { db, raw } = await d1(), env = { ...ENV, DB: db, ADMIN_SUBS: "linkedin:l-anna" };
+  const sSess = await signIn(env, "li-anna"), S = uidOf(sSess);   // Admin nur ueber ADMIN_SUBS, Rolle "user"
+  const tSess = await signIn(env, "gh-anna"), T = uidOf(tSess);
+  let m = await link(env, tSess, "li-anna");
+  assert.equal(m.status, "merge");
+  const pre = await call(env, "GET", "/api/me/merge", `m365s=${tSess}; m365m=${m.proof}`);
+  assert.deepEqual([pre.j.pending, pre.j.error], [false, "admin_source"]);
+  const post = await call(env, "POST", "/api/me/merge", `m365s=${tSess}; m365m=${m.proof}`, { confirm: true });
+  assert.deepEqual([post.s, post.j.error], [403, "admin_source"]);
+  assert.equal(raw.prepare("SELECT user_id FROM user_identities WHERE provider='linkedin'").get().user_id, S, "Admin-Anmeldung bleibt beim Admin-Konto");
+  assert.equal((await call(env, "GET", "/api/me", `m365s=${await signIn(env, "li-anna")}`)).j.user.admin, true);
+  // richtig herum: als Admin anmelden und das andere Konto hineinziehen
+  m = await link(env, sSess, "gh-anna");
+  assert.equal(m.status, "merge");
+  assert.equal((await call(env, "POST", "/api/me/merge", `m365s=${sSess}; m365m=${m.proof}`, { confirm: true })).s, 200);
+  assert.equal(raw.prepare("SELECT merged_into FROM users WHERE id=?").get(T).merged_into, S);
+  assert.equal((await call(env, "GET", "/api/me", `m365s=${await signIn(env, "gh-anna")}`)).j.user.admin, true);
+});
+
+test("Verwaiste Anmeldung (Konto vom alten Worker geloescht) wird beim naechsten Login uebernommen, nie eine lebende", async () => {
+  const { db, raw } = await d1(), env = { ...ENV, DB: db };
+  const first = uidOf(await signIn(env, "go-anna"));
+  raw.prepare("DELETE FROM users WHERE id=?").run(first);   // alter Worker: loescht users, kennt user_identities nicht
+  const sess = await signIn(env, "go-anna"), uid = uidOf(sess);
+  assert.notEqual(uid, first);
+  assert.equal(raw.prepare("SELECT user_id FROM user_identities WHERE provider='google' AND sub='g-anna'").get().user_id, uid);
+  assert.deepEqual((await call(env, "GET", "/api/me/identities", `m365s=${sess}`)).j.identities.map((i) => i.provider), ["google"]);
+  // eine Anmeldung mit lebendem Besitzer wird nie umgehaengt
+  const other = uidOf(await signIn(env, "gh-anna"));
+  await db.prepare("INSERT INTO user_identities(user_id,provider,sub,created) VALUES(?,?,?,?) ON CONFLICT(provider,sub) DO UPDATE SET user_id=excluded.user_id WHERE NOT EXISTS (SELECT 1 FROM users WHERE id=user_identities.user_id)").bind(other, "google", "g-anna", 1).run();
+  assert.equal(raw.prepare("SELECT user_id FROM user_identities WHERE provider='google' AND sub='g-anna'").get().user_id, uid);
+});
+
+test("Verknuepfen und Entfernen nur mit frischer Anmeldung (alte oder entwendete Sitzung: keine dauerhafte Uebernahme)", async () => {
+  const { db, raw } = await d1(), env = { ...ENV, DB: db };
+  const sess = await signIn(env, "gh-anna"), uid = uidOf(sess);
+  await link(env, sess, "go-anna");
+  const old = await staleSession(env, uid);
+  const l = await call(env, "POST", "/api/me/identities/link", `m365s=${old}`, { provider: "linkedin", return: RET });
+  assert.deepEqual([l.s, l.j.error, l.j.relogin], [403, "fresh", "github"]);
+  const gh = raw.prepare("SELECT id FROM user_identities WHERE provider='github'").get().id;
+  const d = await call(env, "DELETE", `/api/me/identities/${gh}`, `m365s=${old}`);
+  assert.deepEqual([d.s, d.j.error], [403, "fresh"]);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM user_identities WHERE user_id=?").get(uid).n, 2, "nichts veraendert");
+  // nach erneuter Anmeldung geht es
+  const fresh = await signIn(env, "gh-anna");
+  assert.equal((await call(env, "DELETE", `/api/me/identities/${gh}`, `m365s=${fresh}`)).s, 200);
+});
+
+test("Kontoloeschung erfasst auch Ketten R -> S -> T (keine Personendaten bleiben zurueck)", async () => {
+  const { db, raw } = await d1(), env = { ...ENV, DB: db };
+  const rSess = await signIn(env, "ms-anna"), R = uidOf(rSess);
+  const sSess = await signIn(env, "go-anna"), S = uidOf(sSess);
+  let m = await link(env, sSess, "ms-anna");
+  assert.equal((await call(env, "POST", "/api/me/merge", `m365s=${sSess}; m365m=${m.proof}`, { confirm: true })).s, 200);   // R -> S
+  const tSess = await signIn(env, "gh-anna"), T = uidOf(tSess);
+  m = await link(env, tSess, "go-anna");
+  assert.equal((await call(env, "POST", "/api/me/merge", `m365s=${tSess}; m365m=${m.proof}`, { confirm: true })).s, 200);   // S -> T
+  assert.deepEqual(raw.prepare("SELECT id,merged_into FROM users ORDER BY id").all().map((u) => [u.id, u.merged_into]), [[R, T], [S, T], [T, null]], "Kette abgeflacht");
+  // Altbestand: Kette ohne Abflachung wird trotzdem ganz geloescht
+  raw.prepare("UPDATE users SET merged_into=? WHERE id=?").run(S, R);
+  assert.equal((await call(env, "DELETE", "/api/me", `m365s=${tSess}`)).s, 200);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM users").get().n, 0);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM user_identities").get().n, 0);
+});
+
+test("Zusammenfuehren: Slug-Umbenennung kollidiert nie, staerkere Event-Rolle von S gilt", async () => {
+  const { db, raw } = await d1(), env = { ...ENV, DB: db };
+  const { tSess, T, S } = await twoAccounts(env);
+  // Zeile mit allen Pflichtspalten (NOT NULL ohne Vorgabe) anlegen
+  const put = (t, vals) => {
+    const need = raw.prepare(`PRAGMA table_info(${t})`).all().filter((c) => c.notnull && c.dflt_value === null && !c.pk).map((c) => c.name);
+    const cols = [...new Set([...Object.keys(vals), ...need])];
+    raw.prepare(`INSERT INTO ${t}(${cols.join(",")}) VALUES(${cols.map(() => "?").join(",")})`).run(...cols.map((c) => c in vals ? vals[c] : /^(created|updated|published|start|end|at|ts)$|_at$/.test(c) ? 1 : `${c}-${Math.random().toString(36).slice(2, 8)}`));
+  };
+  for (const t of ["blog_posts", "lib_items"]) {
+    for (const [uid, slug] of [[T, "hello"], [T, `hello-${S}`], [S, "hello"], [S, `hello-${S}`]]) put(t, { user_id: uid, slug });   // beide Faelle aus dem Review
+  }
+  put("events", { id: 5, owner_id: T });
+  raw.prepare("INSERT INTO event_roles(event_id,user_id,role,created) VALUES(5,?,'helfer',1),(5,?,'organisator',1)").run(T, S);
+  const m = await link(env, tSess, "li-anna");
+  const r = await call(env, "POST", "/api/me/merge", `m365s=${tSess}; m365m=${m.proof}`, { confirm: true });
+  assert.equal(r.s, 200, JSON.stringify(r.j));
+  for (const t of ["blog_posts", "lib_items"]) {
+    const slugs = raw.prepare(`SELECT slug FROM ${t} WHERE user_id=? ORDER BY slug`).all(T).map((x) => x.slug);
+    assert.equal(slugs.length, 4); assert.equal(new Set(slugs).size, 4);
+  }
+  assert.equal(raw.prepare("SELECT role FROM event_roles WHERE event_id=5 AND user_id=?").get(T).role, "organisator");
 });
 
 test("KI-Token (MCP) duerfen Anmeldungen weder lesen noch aendern", async () => {

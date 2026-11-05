@@ -7,7 +7,20 @@ import { evalBadges } from "./badges.js";
 
 export const MERGE_WINDOW = 600;   // Sekunden: frische Anmeldung mit beiden Konten
 const now = () => Math.floor(Date.now() / 1000);
+// Neue Identitaet anlegen; eine verwaiste Zeile (Konto inzwischen geloescht, z. B. vom alten Worker vor dem Deploy) wird uebernommen,
+// eine Zeile mit lebendem Besitzer nie (kein Uebernahmeweg). Ohne das blieb die Anmeldung am geloeschten Konto haengen.
+const IDENTITY_UPSERT = "INSERT INTO user_identities(user_id,provider,sub,created) VALUES(?,?,?,?) ON CONFLICT(provider,sub) DO UPDATE SET user_id=excluded.user_id WHERE NOT EXISTS (SELECT 1 FROM users WHERE id=user_identities.user_id)";
 const adminSub = (env, provider, sub) => (env.ADMIN_SUBS || "").split(",").map((s) => s.trim()).includes(`${provider}:${sub}`);
+
+// Frische Anmeldung der aktuellen Sitzung (< MERGE_WINDOW): noetig fuer Verknuepfen, Entfernen und Zusammenfuehren. Sonst koennte eine
+// alte oder entwendete Sitzung eine fremde Anmeldung anhaengen und die des Inhabers entfernen (dauerhafte Uebernahme).
+export async function freshSession(env, request, user) {
+  const sess = await readSessionInfo(env, request);
+  return !!sess && sess.uid === user.id && now() - sess.iat <= MERGE_WINDOW;
+}
+export async function reloginFor(db, user) {
+  return (await db.prepare("SELECT provider FROM user_identities WHERE user_id=? ORDER BY created,id LIMIT 1").bind(user.id).first())?.provider || user.provider;
+}
 
 let ensured = false;
 // Sicherheitsnetz, falls Migration 0025 noch nicht angewendet ist (wie die uebrigen ensure*-Funktionen)
@@ -33,7 +46,7 @@ export async function findUserByIdentity(db, provider, sub) {
   if (u) return u;
   const legacy = await db.prepare("SELECT * FROM users WHERE provider=? AND sub=?").bind(provider, sub).first();
   if (!legacy) return null;
-  await db.prepare("INSERT OR IGNORE INTO user_identities(user_id,provider,sub,created) VALUES(?,?,?,?)").bind(legacy.id, provider, sub, legacy.created || now()).run();
+  await db.prepare(IDENTITY_UPSERT).bind(legacy.id, provider, sub, legacy.created || now()).run();
   return legacy;
 }
 
@@ -41,7 +54,7 @@ export async function createUserWithIdentity(db, provider, sub, name) {
   await ensureIdentities(db);
   const t = now(), r = await db.prepare("INSERT INTO users(provider,sub,name,created) VALUES(?,?,?,?)").bind(provider, sub, name, t).run();
   const id = r.meta.last_row_id;
-  await db.prepare("INSERT OR IGNORE INTO user_identities(user_id,provider,sub,created) VALUES(?,?,?,?)").bind(id, provider, sub, t).run();
+  await db.prepare(IDENTITY_UPSERT).bind(id, provider, sub, t).run();
   return db.prepare("SELECT * FROM users WHERE id=?").bind(id).first();
 }
 
@@ -49,7 +62,7 @@ export async function createUserWithIdentity(db, provider, sub, name) {
 export async function linkIdentity(env, user, provider, sub) {
   const db = env.DB, owner = await findUserByIdentity(db, provider, sub);
   if (!owner) {
-    await db.prepare("INSERT INTO user_identities(user_id,provider,sub,created) VALUES(?,?,?,?)").bind(user.id, provider, sub, now()).run();
+    await db.prepare(IDENTITY_UPSERT).bind(user.id, provider, sub, now()).run();
     await audit(db, user.id, "identity-link", provider);
     return { status: "ok" };
   }
@@ -112,7 +125,8 @@ export async function mergeStatements(db, S, T) {
   simple("msg_messages", "from_id"); simple("sponsor_manual_metrics", "entered_by"); simple("tr_queue", "requested_by");
   // Blog und Bibliothek: UNIQUE(user_id, slug) -> Slug von S bei Kollision umbenennen
   for (const t of ["blog_posts", "lib_items"]) {
-    st.push(q(`UPDATE ${t} SET slug=slug||'-'||? WHERE user_id=? AND slug IN (SELECT slug FROM ${t} WHERE user_id=?)`, String(S), S, T));
+    // Zusatz -<S>-<id>: die id ist eindeutig, so kollidiert der neue Slug weder bei S noch bei T (ein schlichtes -<S> konnte es, dann scheiterte der ganze Batch)
+    st.push(q(`UPDATE ${t} SET slug=slug||'-'||?||'-'||id WHERE user_id=? AND slug IN (SELECT slug FROM ${t} WHERE user_id=?)`, String(S), S, T));
     simple(t);
   }
   // Stimmen, Meldungen, Abos, Mitgliedschaften: doppelte Eintraege entfallen
@@ -127,6 +141,10 @@ export async function mergeStatements(db, S, T) {
   st.push(q(`UPDATE org_members SET role=(SELECT s.role FROM org_members s WHERE s.org_id=org_members.org_id AND s.user_id=?)
     WHERE user_id=? AND EXISTS (SELECT 1 FROM org_members s WHERE s.org_id=org_members.org_id AND s.user_id=? AND ${rank("s.role")}>${rank("org_members.role")})`, S, T, S));
   st.push(q("UPDATE org_members SET status='active' WHERE user_id=? AND status<>'active' AND org_id IN (SELECT org_id FROM org_members WHERE user_id=? AND status='active')", T, S));
+  // Event-Rollen ebenso: die staerkere Rolle von S gilt (gleich starke, aber andere Rollen: die von T bleibt)
+  const erank = (a) => `(CASE ${a} WHEN 'organisator' THEN 4 WHEN 'co-organisator' THEN 3 WHEN 'helfer' THEN 1 ELSE 2 END)`;
+  st.push(q(`UPDATE event_roles SET role=(SELECT s.role FROM event_roles s WHERE s.event_id=event_roles.event_id AND s.user_id=?)
+    WHERE user_id=? AND EXISTS (SELECT 1 FROM event_roles s WHERE s.event_id=event_roles.event_id AND s.user_id=? AND ${erank("s.role")}>${erank("event_roles.role")})`, S, T, S));
   set("org_members"); set("event_roles");
   // Programme und Expertise: bestaetigte Angaben von S uebernehmen
   for (const t of ["programs", "expertise"]) {
@@ -180,6 +198,7 @@ export async function mergeStatements(db, S, T) {
   keepT("images", "owner_id", " AND kind='u'");
   keepT("mail_addr"); st.push(q("DELETE FROM mail_addr WHERE user_id=?", S));   // stillgelegtes Konto bekommt keine E-Mails
   // Quellkonto stilllegen (nicht loeschen): banned=2, keine Rolle, Kennung frei fuer UNIQUE(provider, sub)
+  st.push(q("UPDATE users SET merged_into=? WHERE merged_into=?", T, S));   // frueher in S zusammengefuehrte Konten zeigen jetzt auf T (Loeschung erfasst sie)
   st.push(q("UPDATE users SET banned=2,role='user',merged_into=?,merged_at=?,provider='merged',sub=? WHERE id=?", T, now(), `${S}>${T}`, S));
   return st;
 }
@@ -211,6 +230,7 @@ export async function handleIdentities(env, request, url, path, user, J, viaToke
   }
   let m;
   if ((m = /^\/api\/me\/identities\/(\d+)$/.exec(path)) && method === "DELETE") {
+    if (!(await freshSession(env, request, user))) return J({ error: "fresh", relogin: await reloginFor(db, user) }, 403);
     if (!(await rateLimit(db, `idu:${user.id}`, 10, 3600))) return J({ error: "rate" }, 429);
     const rows = (await db.prepare("SELECT id,provider,sub FROM user_identities WHERE user_id=? ORDER BY created,id").bind(user.id).all()).results || [];
     const row = rows.find((r) => r.id === +m[1]);
@@ -228,12 +248,18 @@ export async function handleIdentities(env, request, url, path, user, J, viaToke
   }
   if (path === "/api/me/merge") {
     const sess = await readSessionInfo(env, request), proof = await readMergeProof(env, request, user.id);
-    const src = proof ? await db.prepare("SELECT id,name,role,banned,merged_into,created FROM users WHERE id=?").bind(proof.source).first() : null;
+    const src = proof ? await db.prepare("SELECT id,name,role,banned,merged_into,created,provider,sub FROM users WHERE id=?").bind(proof.source).first() : null;
     if (method === "DELETE") return J({ ok: true }, 200, clearProof());
     if (!proof || !src || src.id === user.id) return method === "GET" ? J({ pending: false }) : J({ error: "no_proof" }, 403, clearProof());
     if (src.banned || src.merged_into) return J(method === "GET" ? { pending: false, error: "banned" } : { error: "banned" }, method === "GET" ? 200 : 403, clearProof());
+    // Ein Admin ueber ADMIN_SUBS (Worker-Secret) nie in ein Konto ohne Admin-Rechte zusammenfuehren: die Anmeldung wanderte mit, die
+    // Hauptanmeldung des Ziels bliebe, und der Inhaber saesse ohne Admin-Zugang da (nur per Secret-Aenderung zu beheben). Richtig herum
+    // geht es: mit dem Admin-Konto anmelden und das andere hineinziehen. (Eine Admin-Rolle in users.role entfaellt mit Hinweis, s. role_dropped.)
+    const srcIds = (await db.prepare("SELECT provider,sub FROM user_identities WHERE user_id=?").bind(src.id).all()).results || [];
+    if (!user.admin && (adminSub(env, src.provider, src.sub) || srcIds.some((r) => adminSub(env, r.provider, r.sub))))
+      return J(method === "GET" ? { pending: false, error: "admin_source" } : { error: "admin_source" }, method === "GET" ? 200 : 403, clearProof());
     const fresh = !!sess && sess.uid === user.id && now() - sess.iat <= MERGE_WINDOW && now() - proof.at <= MERGE_WINDOW;
-    const relogin = (await db.prepare("SELECT provider FROM user_identities WHERE user_id=? ORDER BY created,id LIMIT 1").bind(user.id).first())?.provider || user.provider;
+    const relogin = await reloginFor(db, user);
     if (method === "GET") {
       return J({ pending: true, fresh, relogin, source: { name: src.name, created: src.created, role_dropped: src.role !== "user" && src.role !== user.role }, counts: await mergeCounts(db, src.id) }, 200, { "cache-control": "no-store" });
     }

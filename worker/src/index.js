@@ -50,7 +50,7 @@ import { backfillDirectoryGeocodes, ensureDirectoryCols, handleDirectory } from 
 import { handleTopicSubscriptions, dispatchTopicNotifications, queueTopicArticles, queueSessionReminders } from "./topic_notifications.js";
 import { savePushSubscription } from "./push.js";
 import { handleContributions, refreshContributions } from "./contributions.js";
-import { findUserByIdentity, createUserWithIdentity, linkIdentity, mergeProof, handleIdentities, MERGE_WINDOW } from "./identities.js";
+import { findUserByIdentity, createUserWithIdentity, linkIdentity, mergeProof, handleIdentities, MERGE_WINDOW, freshSession, reloginFor } from "./identities.js";
 
 const PROVIDERS = {
   google: {
@@ -289,6 +289,7 @@ async function api(env, request, url, path, asUser, ctx) {
     if (need()) return need();
     const b = await request.json().catch(() => ({})), P = Object.hasOwn(PROVIDERS, b.provider) ? PROVIDERS[b.provider] : null;
     if (!P || !P.id(env) || !P.secret(env)) return J({ error: "bad_request" }, 400);
+    if (!(await freshSession(env, request, user))) return J({ error: "fresh", relogin: await reloginFor(db, user) }, 403);   // wie beim Zusammenfuehren
     if (!(await rateLimit(db, `idl:${user.id}`, 10, 3600))) return J({ error: "rate" }, 429);
     const sess = await readSessionInfo(env, request);
     const o = await oauthStart(env, b.provider, safeReturn(env, b.return || env.SITE), `L${user.id}.${now()}.${(await sha256hex(sess.raw)).slice(0, 32)}`);
@@ -307,7 +308,8 @@ async function api(env, request, url, path, asUser, ctx) {
       return J({ ok: true });
     }
     if (method === "DELETE") {   // Konto + alle eigenen Daten loeschen (DSGVO), auch frueher zusammengefuehrte (stillgelegte) Konten
-      const merged = (await db.prepare("SELECT id FROM users WHERE merged_into=?").bind(user.id).all().catch(() => ({ results: [] }))).results || [];
+      // rekursiv: auch Ketten R -> S -> T aus der Zeit vor dem Abflachen in mergeStatements
+      const merged = (await db.prepare("WITH RECURSIVE m(id) AS (SELECT id FROM users WHERE merged_into=? UNION SELECT u.id FROM users u JOIN m ON u.merged_into=m.id) SELECT id FROM m").bind(user.id).all().catch(() => ({ results: [] }))).results || [];
       for (const x of merged) await deleteAccount(env, x.id);
       await deleteAccount(env, user.id);
       return J({ ok: true }, 200, { "set-cookie": cookie("m365s", "", 0) });
