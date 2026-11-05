@@ -1,4 +1,4 @@
-/* Expert Connect (Publisher-Tool): Experten finden, Anfrage stellen, Meine Anfragen, Fuer Experten, Offene Aufrufe, Moderation.
+/* Expert Connect (Publisher-Tool): Experten finden oder Anfrage ausschreiben, Meine Anfragen, passende Anfragen, Offene Aufrufe, Moderation.
    Konfiguration: window.M365EC (site_expert_connect.py). API: worker/src/expert_requests.js. Keine nativen confirm()/prompt()-Dialoge. */
 (function () {
   "use strict";
@@ -98,6 +98,15 @@
     });
   }
   function needLogin(r) { if (r.s === 401) { login(); return true; } return false; }
+  function readRequestDraft() {
+    try { return JSON.parse(sessionStorage.getItem("ec_draft") || "null"); } catch (e) { return null; }
+  }
+  function saveRequestDraft(data, editorial) {
+    try { sessionStorage.setItem("ec_draft", JSON.stringify(Object.assign({}, data, { editorial: !!editorial }))); } catch (e) { /* optional */ }
+  }
+  function clearRequestDraft() {
+    try { sessionStorage.removeItem("ec_draft"); } catch (e) { /* optional */ }
+  }
 
   /* Themenauswahl mit Vorschlagsliste (Entitaeten) */
   function topicPicker(initial) {
@@ -131,7 +140,9 @@
   /* 1 Experten finden (oeffentlich) */
   function viewSearch() {
     clear();
-    var q = el("input", { type: "text", placeholder: T.q, value: sessionStorage.getItem("ec_q") || "" }), f = select(fmtOpts(), "", true), l = select(C.langs, "", true);
+    var searchQuery = "";
+    try { searchQuery = sessionStorage.getItem("ec_q") || ""; } catch (e) { /* optional */ }
+    var q = el("input", { type: "text", placeholder: T.q, value: searchQuery }), f = select(fmtOpts(), "", true), l = select(C.langs, "", true);
     var p = select([["mvp", "MVP"], ["mct", "MCT"]], "", true), lv = select([["3", "3"], ["4", "4"], ["5", "5"]], "", true);
     var out = el("div", { class: "ec-grid" }), m = msg();
     function run(ev) {
@@ -167,8 +178,7 @@
   function viewRequest(edit) {
     clear();
     loadMe().then(function (u) {
-      if (!u) { login(); return; }
-      edit = edit || {};
+      edit = edit || readRequestDraft() || {};
       var dl = new Date(Date.now() + 14 * 864e5).toISOString().slice(0, 10), max = new Date(Date.now() + 60 * 864e5).toISOString().slice(0, 10);
       var ti = el("input", { type: "text", maxlength: "120", required: true, value: edit.title || "" });
       var de = el("textarea", { rows: "6", maxlength: "1000", required: true }); de.value = edit.description || "";
@@ -177,20 +187,27 @@
       var mo = select([["match", T.mode_match], ["open", T.mode_open]], edit.mode || (location.hash === "#request-open" ? "open" : "match"));
       var au = select([["all", T.aud_all], ["mvp", T.aud_mvp], ["mct", T.aud_mct]], edit.audience || "all");
       var re = el("input", { type: "text", maxlength: "100", value: edit.reach || "" }), hi = el("input", { type: "checkbox", checked: !!edit.hide_outlet });
-      var ed = el("input", { type: "checkbox" }), m = msg(), pv = el("p", { class: "ec-meta" });
+      var ed = el("input", { type: "checkbox", checked: !!edit.editorial }), m = msg(), pv = el("p", { class: "ec-meta" });
       function data(draft) {
         return { id: edit.id, title: ti.value, description: de.value, topics: tp.get(), format: fo.value, lang: la.value, deadline: dd.value,
                  mode: mo.value, audience: au.value, reach: re.value, hide_outlet: hi.checked, draft: !!draft };
       }
+      function saveAndLogin(draft) {
+        saveRequestDraft(data(draft), ed.checked);
+        login();
+      }
       function send(draft) {
+        if (!u) { saveAndLogin(draft); return; }
         if (!draft && !ed.checked) { say(m, T.e_editorial); return; }
         api(edit.id ? "/api/expert-requests/update" : "/api/expert-requests/create", { method: "POST", body: data(draft) }).then(function (r) {
-          if (needLogin(r)) return;
+          if (r.s === 401) { saveAndLogin(draft); return; }
           if (!r.j.ok) { say(m, errText(r.j)); return; }
+          clearRequestDraft();
           say(m, r.j.status === "draft" ? T.drafted : r.j.status === "held" ? T.held : T.published, true);
           setTimeout(function () { location.hash = "#requests"; }, 1200);
         });
       }
+      if (!u) root.appendChild(el("p", { class: "ec-meta", text: T.request_guest }));
       root.appendChild(el("form", { class: "ec-form", onsubmit: function (ev) { ev.preventDefault(); send(false); } }, [
         el("label", {}, [T.r_title, ti]), el("label", {}, [T.r_desc, de]), tp.node,
         el("div", { class: "ec-row" }, [el("label", {}, [T.format, fo]), el("label", {}, [T.lang, la]), el("label", {}, [T.r_deadline, dd])]),
@@ -199,9 +216,10 @@
         el("label", { class: "ec-ck" }, [ed, el("span", { text: T.r_editorial })]),
         el("div", { class: "ec-btns" }, [
           el("button", { type: "button", class: "btn", text: T.preview, onclick: function () {
+            if (!u) { saveAndLogin(false); return; }
             pv.textContent = T.loading;
             api("/api/expert-requests/preview", { method: "POST", body: data(false) }).then(function (r) {
-              if (needLogin(r)) return;
+              if (r.s === 401) { saveAndLogin(false); return; }
               if (r.j.error) { pv.textContent = errText(r.j); return; }
               pv.textContent = r.j.count ? t("preview_n", { n: r.j.count, mvp: (r.j.split || {}).mvp || 0, mct: (r.j.split || {}).mct || 0 }) : T.preview_0;
             });

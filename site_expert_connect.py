@@ -1,6 +1,6 @@
 """Expert Connect (Publisher-Tool) /community/expert-connect/ (EN) und /de/community/expert-connect/ (DE).
-Eine Seite mit Bereichen (Anker): Experten finden, Anfrage stellen, Meine Anfragen, Für Experten, Offene Aufrufe, Moderation (nur Admins).
-Die Seite ist eine Anwendung fuer angemeldete Konten (noindex); Daten kommen aus dem Worker (worker/src/expert_requests.js).
+Eine Seite mit nach Rollen gruppierten Bereichen: Experten finden, Anfrage ausschreiben, Meine Anfragen, passende Anfragen, Offene Aufrufe, Moderation (nur Admins).
+Die Seite ist noindex; Anfragen lassen sich ohne Anmeldung ausfüllen, Veröffentlichungen laufen über den Worker (worker/src/expert_requests.js).
 Themen fuer die Auswahl: community/expert-connect/topics.json (Entitaeten ohne Personen, Firmen und Events), wird nur bei Bedarf geladen.
 Entwurf: design/publisher/ (Klickdummy)."""
 import hashlib
@@ -13,11 +13,14 @@ TOPIC_TYPES = {"concept", "product", "cert", "platform", "category"}
 
 T = {
     "en": {
-        "title": "Expert Connect – find Microsoft 365 experts", "kicker": "Expert Connect",
-        "h1": "Expert Connect: find Microsoft 365 experts",
+        "title": "Expert Connect: find experts or post a request", "kicker": "Expert Connect",
+        "h1": "Expert Connect: find experts or post a request",
         "lede": "Find verified experts for quotes, interviews, guest articles, podcasts and talks – or post a topic and let experts apply. Free, opt-in only, contact details after acceptance.",
-        "desc": "Expert Connect by M365.FM: search verified Microsoft 365 experts, post requests and open calls, answer as an expert. Free and opt-in only.",
-        "tab_search": "Find experts", "tab_request": "New request", "tab_requests": "My requests", "tab_expert": "For experts", "tab_calls": "Open calls", "tab_mod": "Moderation",
+        "desc": "Expert Connect: find experts or post a request",
+        "hero_search": "Find experts", "hero_request": "Post a request", "hero_calls": "Are you an expert? See open calls",
+        "group_seek": "I need an expert", "group_expert": "I am an expert",
+        "tab_search": "Find experts", "tab_request": "Post a request", "tab_requests": "My requests", "tab_expert": "Matching requests & settings", "tab_calls": "Open calls", "tab_mod": "Moderation",
+        "request_guest": "To publish, sign in with your community account – your text is kept.",
         "loading": "Loading …", "login": "Sign in with your community account to use this area.", "signin": "Sign in", "error": "Something went wrong. Please try again.",
         "q": "Topic or keyword", "search": "Search", "any": "Any", "format": "Format", "lang": "Language", "program": "Program", "level": "Level", "level_min": "Level ≥",
         "no_hits": "No matching experts yet. Try a broader topic or post a request – matching experts are notified.",
@@ -58,11 +61,14 @@ T = {
         "also": "Also useful", "mediakit": "Media kit", "landing": "How Expert Connect works", "members": "Member directory",
     },
     "de": {
-        "title": "Expert Connect – Microsoft-365-Experten finden", "kicker": "Expert Connect",
-        "h1": "Expert Connect: Microsoft-365-Experten finden",
+        "title": "Expert Connect: Experten finden oder Anfrage ausschreiben", "kicker": "Expert Connect",
+        "h1": "Expert Connect: Experten finden oder Anfrage ausschreiben",
         "lede": "Finde verifizierte Experten für Zitate, Interviews, Gastbeiträge, Podcasts und Vorträge – oder stelle ein Thema ein und lass Experten sich bewerben. Kostenlos, nur mit Zustimmung, Kontakt erst nach Annahme.",
-        "desc": "Expert Connect von M365.FM: verifizierte Microsoft-365-Experten finden, Anfragen und offene Aufrufe stellen, als Experte antworten. Kostenlos und nur mit Zustimmung.",
-        "tab_search": "Experten finden", "tab_request": "Neue Anfrage", "tab_requests": "Meine Anfragen", "tab_expert": "Für Experten", "tab_calls": "Offene Aufrufe", "tab_mod": "Moderation",
+        "desc": "Expert Connect: Experten finden oder Anfrage ausschreiben",
+        "hero_search": "Experten finden", "hero_request": "Anfrage ausschreiben", "hero_calls": "Du bist Experte? Offene Aufrufe ansehen",
+        "group_seek": "Ich suche Experten", "group_expert": "Ich bin Experte",
+        "tab_search": "Experten finden", "tab_request": "Anfrage ausschreiben", "tab_requests": "Meine Anfragen", "tab_expert": "Passende Anfragen & Einstellungen", "tab_calls": "Offene Aufrufe", "tab_mod": "Moderation",
+        "request_guest": "Zum Veröffentlichen meldest du dich mit deinem Community-Konto an – dein Text bleibt erhalten.",
         "loading": "Wird geladen …", "login": "Melde dich mit deinem Community-Konto an, um diesen Bereich zu nutzen.", "signin": "Anmelden", "error": "Da ist etwas schiefgegangen. Bitte erneut versuchen.",
         "q": "Thema oder Stichwort", "search": "Suchen", "any": "Alle", "format": "Format", "lang": "Sprache", "program": "Programm", "level": "Level", "level_min": "Level ≥",
         "no_hits": "Noch keine passenden Experten. Versuche ein breiteres Thema oder stelle eine Anfrage – passende Experten werden benachrichtigt.",
@@ -106,9 +112,15 @@ T = {
 
 CSS = """<style>
 .ec-tabs{display:flex;flex-wrap:wrap;gap:0;border-bottom:1px solid var(--bd);margin:24px 0 20px}
+.ec-group{display:flex;flex:1 1 320px;flex-wrap:wrap;align-content:flex-start;min-width:0}
+.ec-group-h{width:100%;padding:10px 16px 4px;color:var(--mut);font-size:.8rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
 .ec-tabs a{padding:10px 16px;text-decoration:none;color:var(--mut);font:600 .95rem "Barlow Condensed",sans-serif;letter-spacing:.06em;text-transform:uppercase;border-bottom:3px solid transparent;margin-bottom:-1px}
 .ec-tabs a[aria-current=page]{color:var(--fg);border-bottom-color:var(--ac)}
 .ec-tabs a[hidden]{display:none}
+.ec-hero-actions{display:flex;gap:10px;margin-top:18px}
+.ec-hero-actions .btn{flex:1 1 0;min-width:0;text-align:center}
+.ec-hero-expert{margin:8px 0 0;font-size:.9rem}
+@media(max-width:600px){.ec-tabs{display:grid;grid-template-columns:1fr}.ec-group{width:100%}}
 .ec-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
 .ec-card{background:var(--card);border:1px solid var(--bd);padding:16px;display:grid;gap:8px;align-content:start}
 .ec-card h3{margin:0;font-size:1.1rem}.ec-card p{margin:0}
@@ -153,13 +165,20 @@ def build(g, ents, langs_all):
     for lang in ("en", "de"):
         t, e = T[lang], (lambda s: html.escape(s, quote=True))
         pre = "" if lang == "en" else "/de"
-        tabs = "".join(f'<a href="#{k}" data-tab="{k}"{" hidden" if k == "mod" else ""}>{e(t["tab_" + k])}</a>'
-                       for k in ("search", "request", "requests", "expert", "calls", "mod"))
+        def tab(k):
+            return f'<a href="#{k}" data-tab="{k}"{" hidden" if k == "mod" else ""}>{e(t["tab_" + k])}</a>'
+        tabs = (f'<div class="ec-group"><span class="ec-group-h">{e(t["group_seek"])}</span>'
+                + "".join(tab(k) for k in ("search", "request", "requests"))
+                + f'</div><div class="ec-group"><span class="ec-group-h">{e(t["group_expert"])}</span>'
+                + "".join(tab(k) for k in ("calls", "expert")) + f'</div>{tab("mod")}')
         cfg = json.dumps({"api": api, "base": base, "lang": lang, "t": t, "topics": f"{base}/community/expert-connect/topics.json",
                           "langs": langs_all, "formats": ["quote", "interview", "article", "podcast", "talk"]},
                          ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
         body = (f'{g["header"](lang, "")}<main class="wrap">{CSS}<div class="hero"><div class="kicker">{e(t["kicker"])}</div>'
-                f'<h1>{e(t["h1"])}</h1><p class="lede">{e(t["lede"])}</p></div>'
+                f'<h1>{e(t["h1"])}</h1><p class="lede">{e(t["lede"])}</p>'
+                f'<div class="ec-hero-actions"><a class="btn" href="#search">{e(t["hero_search"])}</a>'
+                f'<a class="btn main" href="#request">{e(t["hero_request"])}</a></div>'
+                f'<p class="ec-hero-expert"><a href="#calls">{e(t["hero_calls"])}</a></p></div>'
                 f'<nav class="ec-tabs" aria-label="Expert Connect">{tabs}</nav>'
                 f'<div id="ec" aria-live="polite"><p class="mut">{e(t["loading"])}</p></div>'
                 f'<p class="mut" style="margin-top:32px">{e(t["also"])}: <a href="{base}{pre}/for/publishers/">{e(t["landing"])}</a> · '
