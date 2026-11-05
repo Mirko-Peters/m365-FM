@@ -1,6 +1,14 @@
 {
  "_doc": "Jede API-Route unter worker/src muss hier einem MCP-Tool zugeordnet (tools) oder mit Begründung ausgenommen (skip) sein. tools/check_mcp_coverage.mjs prüft das täglich.",
  "routes": {
+ "/api/directory": {
+  "tools": [
+   "search_directory"
+  ]
+ },
+ "/api/directory/key": {
+  "skip": "Öffentlicher Maps-Schlüssel wird ausschließlich vom zustimmungsgebundenen Karten-Frontend abgerufen"
+ },
   "/api/admin/blog": {
    "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
   },

@@ -155,15 +155,17 @@
   }
   function privateUI(pv) {
     pv = pv || {};
-    var L = M365L(de, "profile.L", { h: "Kontakt und Adresse (privat)", hint: "Diese Angaben sind standardmäßig nur für dich sichtbar und werden später für die Umkreissuche genutzt. Pro Feld bestimmst du, wer es sehen darf. „Kontakte“ wirkt, sobald es Kontakte gibt – bis dahin sieht es niemand außer dir.", city: "Stadt", zip: "Postleitzahl", street: "Straße und Hausnummer", email: "Kontakt-E-Mail", phone: "Mobilnummer", all: "Alle", contacts: "Nur Kontakte", none: "Niemand (nur ich)", vis: "Sichtbar für" }, { h: "Contact and address (private)", hint: "These details are visible only to you by default and will later be used for radius search. For each field you choose who may see it. “Contacts” takes effect once contacts exist – until then only you can see it.", city: "City", zip: "Postal code", street: "Street and number", email: "Contact email", phone: "Mobile number", all: "Everyone", contacts: "Contacts only", none: "Nobody (only me)", vis: "Visible to" });
+    var L = M365L(de, "profile.L", { h: "Kontakt und Adresse (privat)", hint: "Diese Angaben sind standardmäßig nur für dich sichtbar und werden später für die Umkreissuche genutzt. Pro Feld bestimmst du, wer es sehen darf. „Kontakte“ wirkt, sobald es Kontakte gibt – bis dahin sieht es niemand außer dir.", city: "Stadt", zip: "Postleitzahl", street: "Straße und Hausnummer", email: "Kontakt-E-Mail", phone: "Mobilnummer", all: "Alle", contacts: "Nur Kontakte", none: "Niemand (nur ich)", vis: "Sichtbar für", map: "Auf der Karte zeigen (nur Stadt und Land; Standort auf ca. 2 km gerundet)" }, { h: "Contact and address (private)", hint: "These details are visible only to you by default and will later be used for radius search. For each field you choose who may see it. “Contacts” takes effect once contacts exist – until then only you can see it.", city: "City", zip: "Postal code", street: "Street and number", email: "Contact email", phone: "Mobile number", all: "Everyone", contacts: "Contacts only", none: "Nobody (only me)", vis: "Visible to", map: "Show me on the map (city and country only; location rounded to about 2 km)" });
     var F = ["city", "zip", "street", "email", "phone"], rows = {}, wrap = h("div", {}, [h("h3", { text: L.h }), h("p", { class: "cmut", text: L.hint })]);
+    var map = chk(L.map, pv.map_public);
     F.forEach(function (k) {
       var inp = h("input", { type: k === "email" ? "email" : "text", maxlength: k === "street" ? 120 : k === "email" ? 120 : k === "city" ? 80 : k === "zip" ? 10 : 30, autocomplete: "off" }), sel = h("select", { "aria-label": L.vis + ": " + L[k] });
       ["none", "contacts", "all"].forEach(function (v) { sel.appendChild(h("option", { value: v, text: L[v] })); });
       inp.value = pv[k] || ""; sel.value = pv["vis_" + k] || "none"; rows[k] = [inp, sel];
       wrap.appendChild(h("div", {}, [lab(L[k], inp), h("label", { class: "cmut", style: "display:block;margin:.2em 0 .6em" }, [document.createTextNode(L.vis + ": "), sel])]));
     });
-    wrap.get = function () { var o = { vis: {} }; F.forEach(function (k) { o[k] = rows[k][0].value.trim(); o.vis[k] = rows[k][1].value; }); return o; };
+    wrap.appendChild(map.w);
+    wrap.get = function () { var o = { vis: {}, map_public: map.c.checked }; F.forEach(function (k) { o[k] = rows[k][0].value.trim(); o.vis[k] = rows[k][1].value; }); return o; };
     return wrap;
   }
   function channelsUI(initial) {
@@ -214,13 +216,29 @@
     var handle = inp(30, o.handle), name = inp(80, o.name), tag = inp(120, o.tagline), about = h("textarea", { rows: 4, maxlength: 1500 }), site = inp(250, o.website), country = inp(60, o.country), size = h("select");
     about.value = o.about || ""; ["", "1", "2-10", "11-50", "51-200", "201-1000", "1000+"].forEach(function (s) { size.appendChild(h("option", { value: s, text: s || "–" })); }); size.value = o.size || "";
     if (org) handle.disabled = true;
+    var locations = h("div");
+    function addLocation(location) {
+      location = location || {};
+      var label = inp(80, location.label), address = inp(160, location.address), city = inp(80, location.city), country0 = inp(60, location.country), visible = chk(de ? "Adresse öffentlich anzeigen" : "Show this address publicly", location.public);
+      var row = h("div", { style: "border:1px solid var(--bd);border-radius:.6em;padding:.6em;margin:.5em 0" });
+      [[de ? "Standortname" : "Location name", label], [de ? "Adresse" : "Address", address], [de ? "Stadt" : "City", city], [de ? "Land" : "Country", country0]].forEach(function (x) { row.appendChild(lab(x[0], x[1])); });
+      row.appendChild(visible.w);
+      row.appendChild(h("button", { type: "button", class: "btn", text: de ? "Standort entfernen" : "Remove location", onclick: function () { row.remove(); } }));
+      row._get = function () { return { id: location.id || 0, label: label.value, address: address.value, city: city.value, country: country0.value, public: visible.c.checked }; };
+      locations.appendChild(row);
+    }
+    (o.locations || []).forEach(addLocation);
+    locations.get = function () { return [].slice.call(locations.children).map(function (row) { return row._get(); }); };
     var pub = chk(Q.pub, o.public), prog = programsUI(o.programs, true), ex = pickerRows(all, function (x) { return ["product", "platform", "concept", "category"].indexOf(x.type) > -1; }, (o.expertise || []).map(function (x) { return { e: x.e, level: x.level }; }), false, Q.addexp), ch = channelsUI(o.channels);
     var pic = imgUI("o", o.handle, o.img); pic.handle = function () { return o.handle || ""; }; pic.ensure = function () { if (!handle.value.trim() || !name.value.trim()) return Promise.resolve(false); mainSave.click(); return new Promise(function (res) { var n = 0, t = setInterval(function () { if (++n > 6) { clearInterval(t); res(true); } }, 500); }); };
-    [pub.w, pic, lab(Q.handle, handle), lab(Q.orgname, name), lab(Q.tagline, tag), lab(de ? "Über uns (ohne Links)" : "About us (no links)", about), lab(Q.site, site), lab(Q.country, country), lab(Q.size, size), h("h4", { text: Q.prog }), prog, h("h4", { text: Q.exp }), ex, h("h4", { text: Q.chan }), ch, sponsorUI(function () { return o.handle || ""; })].forEach(function (x) { f.appendChild(x); });
+    [pub.w, pic, lab(Q.handle, handle), lab(Q.orgname, name), lab(Q.tagline, tag), lab(de ? "Über uns (ohne Links)" : "About us (no links)", about), lab(Q.site, site), lab(Q.country, country), lab(Q.size, size),
+      h("h4", { text: de ? "Standort und Kartenanzeige" : "Location and map display" }), h("p", { class: "cmut", text: de ? "Nur ausdrücklich veröffentlichte Firmenstandorte erscheinen im Verzeichnis." : "Only locations explicitly made public appear in the directory." }), locations,
+      h("button", { type: "button", class: "btn", text: de ? "+ Standort" : "+ Location", onclick: function () { addLocation(); } }),
+      h("h4", { text: Q.prog }), prog, h("h4", { text: Q.exp }), ex, h("h4", { text: Q.chan }), ch, sponsorUI(function () { return o.handle || ""; })].forEach(function (x) { f.appendChild(x); });
     var mainSave = saveBtn(Q.save, function () {
       var e = ex.get(); if (e === null) { msg.textContent = Q.bad_expertise; return Promise.resolve(null); }
       o.handle = handle.value.trim().toLowerCase();
-      return api("/api/org", { method: "POST", body: { handle: handle.value.trim().toLowerCase(), name: name.value, tagline: tag.value, about: about.value, website: site.value.trim(), country: country.value, size: size.value, public: pub.c.checked, programs: prog.get(), expertise: e, channels: ch.get() } }).then(function (r) { if (r.s === 200 && onDone) onDone(); return r; });
+      return api("/api/org", { method: "POST", body: { handle: handle.value.trim().toLowerCase(), name: name.value, tagline: tag.value, about: about.value, website: site.value.trim(), country: country.value, size: size.value, public: pub.c.checked, programs: prog.get(), expertise: e, channels: ch.get(), locations: locations.get() } }).then(function (r) { if (r.s === 200 && onDone) onDone(); return r; });
     }, msg); f.appendChild(h("div", { class: "btns" }, [mainSave])); f.appendChild(msg); return f;
   }
 

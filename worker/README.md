@@ -28,6 +28,11 @@ Läuft unter `https://api-dub.m365.fm`. Schlüssel (Session, VAPID, Cron) erzeug
 
 Das Haiku-Budget beträgt standardmäßig 5 € je UTC-Tag. Preise und Wechselkurs stehen als Worker-Variablen `HAIKU_USD_PER_MTOK_IN`, `HAIKU_USD_PER_MTOK_OUT`, `AI_DAILY_EUR_HAIKU` und `USD_PER_EUR` in `wrangler.toml`; für Actions können die entsprechenden Haiku-Preis- und Kurswerte als GitHub-Variablen gesetzt werden. Der Verbrauch erscheint im Admin-Bereich unter **Schalter**.
 
+## Verzeichnis-Karte (optional)
+- Google Cloud: Maps JavaScript API und Geocoding API aktivieren. Den Browser-Schlüssel per HTTP-Referrer auf `https://m365.fm/*` und `https://*.m365.fm/*` beschränken und ein Tageskontingent setzen. Als Worker-Variable `GOOGLE_MAPS_API_KEY` hinterlegen; sie wird erst nach Klick auf „Karte laden“ ausgeliefert.
+- Den serverseitigen Geocoding-Schlüssel als Worker-Secret `GOOGLE_GEOCODING_KEY` hinterlegen. Er wird nur beim Speichern oder beim auf 50 Einträge pro Lauf begrenzten Geocode-Backfill verwendet und nie an den Browser ausgegeben.
+- Ohne Browser-Schlüssel bleibt die Verzeichnisliste vollständig nutzbar. Ohne Geocoding-Schlüssel werden keine neuen Standorte geocodiert.
+
 Ohne Zugangsdaten tut der Workflow nichts; die Website blendet die Community-Bereiche automatisch aus, solange die API nicht erreichbar ist.
 
 ## Betrieb

@@ -19,7 +19,7 @@ class LandingPageTests(unittest.TestCase):
 
     def build(self, features=None):
         if features is None:
-            features = {"contribution_tracker": False, "expert_requests": False}
+            features = {"contribution_tracker": False, "expert_requests": False, "directory": True, "directory_paid": False}
         def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefault=None, **kwargs):
             self.pages.append((lang, canonical, alternates, xdefault, kwargs))
             return (f'<html lang="{lang}"><head><title>{title}</title><meta name="description" content="{desc}"></head>'
@@ -53,9 +53,9 @@ class LandingPageTests(unittest.TestCase):
     def test_all_pages_have_localized_routes_and_hreflang_clusters(self):
         with self.tr_all():
             self.build()
-        self.assertEqual(len(site_landing.PAGES), 12)
-        self.assertEqual(len(self.files), 26)
-        self.assertEqual(len(self.r2_files), 13 * (len(site_landing.LANGS_ALL) - 2))
+        self.assertEqual(len(site_landing.PAGES), 13)
+        self.assertEqual(len(self.files), 28)
+        self.assertEqual(len(self.r2_files), 14 * (len(site_landing.LANGS_ALL) - 2))
         self.assertEqual(len(self.sitemap), len(self.files) + len(self.r2_files))
         self.assertEqual(len(self.pages), len(self.sitemap))
         for path in ("services/index.html", "de/services/index.html", "for/sponsors/index.html"):
@@ -72,7 +72,7 @@ class LandingPageTests(unittest.TestCase):
     def test_untranslated_languages_are_noindex_and_outside_the_cluster(self):
         with self.tr_de():
             self.build()
-        self.assertEqual(len(self.sitemap), 26)
+        self.assertEqual(len(self.sitemap), 28)
         for lang, canonical, alternates, xdefault, kwargs in self.pages:
             if lang in ("en", "de"):
                 self.assertEqual(set(alternates), {"en", "de"})
@@ -103,7 +103,7 @@ class LandingPageTests(unittest.TestCase):
         import re
         hub = self.files["services/index.html"]
         thumbs = re.findall(r'<img [^>]*loading="lazy"[^>]*>', hub)
-        self.assertEqual(len(thumbs), 12)
+        self.assertEqual(len(thumbs), 13)
         for tag in thumbs:
             self.assertIn('width="480" height="270"', tag)
             self.assertRegex(tag, r'alt="[^"]{20,}"')
@@ -165,7 +165,7 @@ class LandingPageTests(unittest.TestCase):
         self.assertTrue(all(s[2].strip() for s in stats))
 
     def test_feature_flags_enable_current_copy_when_available(self):
-        flags = {"contribution_tracker": True, "expert_requests": True}
+        flags = {"contribution_tracker": True, "expert_requests": True, "directory": True, "directory_paid": False}
         with self.tr_de():
             self.build(flags)
         self.assertIn("Collects the contributions M365.FM already records", self.files["for/experts/index.html"])
@@ -202,6 +202,22 @@ class LandingPageTests(unittest.TestCase):
         self.assertNotIn('class="btn main"', hub)
         self.assertNotIn('id="main"', hub)
         self.assertNotIn('id="main"', self.files["for/experts/index.html"])
+
+    def test_directory_service_and_company_page_are_free_and_linked(self):
+        with self.tr_de():
+            self.build()
+        hub = self.files["services/index.html"]
+        self.assertIn('href="https://example.test/directory/"', hub)
+        self.assertIn("Microsoft 365 directory", hub)
+        self.assertIn("Free", hub)
+        company = self.files["for/companies/index.html"]
+        self.assertIn("Optional locations", company)
+        self.assertNotIn("Coming soon", company)
+        self.assertNotIn("pricing", company.lower())
+        self.assertNotIn("paid", company.lower())
+        for path in ("for/experts/", "for/organizers/", "for/it-teams/",
+                     "i-want-to/find-an-expert/", "i-want-to/run-a-community-event/"):
+            self.assertIn('href="https://example.test/directory/"', self.files[path + "index.html"])
 
     def test_copy_limits_titles_and_descriptions(self):
         from site_landing_copy import HUB, PAGES
