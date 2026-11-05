@@ -92,6 +92,7 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY_SHOW }}   # ein Schlüssel für alles (Mirko 5.11.)
           AI_GATEWAY_ID: ${{ vars.AI_GATEWAY_ID || 'm365fm' }}
           CF_AIG_TOKEN: ${{ secrets.CF_AIG_TOKEN }}
+          QUICKCREATOR_TOKEN: ${{ secrets.QUICKCREATOR_TOKEN }}   # QuickCreator HTTP Exporter -> /api/blog/quickcreator
       # Das Repo ist oeffentlich: Artefakte kann jeder angemeldete GitHub-Nutzer laden. Die D1-Sicherung enthaelt personenbezogene Daten
       # (Konten, Mail-Adressen, Nachrichten, Sponsor-Anfragen) und wird deshalb nur verschluesselt hochgeladen (Secret D1_BACKUP_KEY,
       # AES-256 mit PBKDF2). Ohne Secret kein Artefakt; zurueckholen geht dann ueber D1 Time Travel (Workers Paid: 30 Tage).

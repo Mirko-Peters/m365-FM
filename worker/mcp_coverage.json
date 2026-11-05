@@ -1,6 +1,9 @@
 {
  "_doc": "Jede API-Route unter worker/src muss hier einem MCP-Tool zugeordnet (tools) oder mit Begründung ausgenommen (skip) sein. tools/check_mcp_coverage.mjs prüft das täglich.",
  "routes": {
+ "/api/blog/quickcreator": {
+  "skip": "Eingang für den QuickCreator-Export (Server-zu-Server mit eigenem Token), kein Mitglieder- oder KI-Werkzeug"
+ },
  "/api/directory": {
   "tools": [
    "search_directory"

@@ -6,6 +6,7 @@ import { sendMail } from "./mailer.js";
 import { handleEntity, importEntitiesFromSite } from "./entities.js";
 import { importLegacyBlog } from "./legacyblog.js";
 import { importContentBlog } from "./contentblog.js";
+import { handleQuickCreator } from "./quickcreator.js";
 import { handleA2a } from "./a2a.js";
 import { handleAdminPanel } from "./adminpanel.js";
 import { handleSponsor, handleSponsorLink } from "./sponsor.js";
@@ -362,6 +363,7 @@ async function api(env, request, url, path, asUser, ctx) {
   if (path.startsWith("/api/wish/")) { const q = await handleWish(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/orgoffer/")) { const q = await handleOrgOffers(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/library/")) { const q = await handleLibrary(env, request, url, path, user, J); if (q) return q; }
+  if (path === "/api/blog/quickcreator") return await handleQuickCreator(env, request, url, path, J);   // QuickCreator-Export (Token, ohne Login)
   if (path === "/api/blog" || path.startsWith("/api/blog/") || path.startsWith("/api/admin/blog")) { const q = await handleBlog(env, request, url, path, user, J); if (q) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return q; } }
   if (path === "/api/qa" || path.startsWith("/api/qa/")) { const q = await handleQa(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/notes/")) { const q = await handleNotes(env, request, url, path, user, J); if (q) return q; }
