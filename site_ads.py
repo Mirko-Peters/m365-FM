@@ -18,6 +18,9 @@ CSS = (".ad{margin:2rem auto;max-width:50rem;padding:.8rem 1rem 1rem;border:1px 
        ".ad .ad-house{display:none}.ad:has(ins[data-ad-status=unfilled]) ins{display:none}"
        ".ad:has(ins[data-ad-status=unfilled]) .ad-house{display:flex;min-height:250px;flex-direction:column;align-items:center;justify-content:center;gap:.4rem;text-decoration:none;color:var(--fg,#17191c)}"
        ".ad-house b{font-size:1.15rem}.ad-house span{color:var(--mut,#6b645c);font-size:.95rem}")
+CSS += (".ad-con{background:linear-gradient(135deg,#0b2a3c,#0e4a5e);color:#fff!important;border-radius:10px;padding:1.2rem}"
+        ".ad-con b{color:#fff}.ad-con span{color:#d7f1f7!important}.ad-con em{font-style:normal;font-weight:700;background:#f5b041;color:#0b2a3c;"
+        "border-radius:999px;padding:.35rem .9rem;margin-top:.3rem}")
 
 
 def cfg():
@@ -73,8 +76,31 @@ def head(base, body="", canonical="", noindex=False):
     return out
 
 
-def _house(base, lang):
-    """Eigener Hinweis fuer einen leer gebliebenen Block (nur sichtbar bei data-ad-status=unfilled): fuehrt zur Sponsor-Seite."""
+# Mirko, 5.11.2026: freie (von AdSense nicht gefuellte) Werbeplaetze bewerben bis einschliesslich 22.01.2027 die M365Con 2027.
+# Reines HTML/CSS-Banner ohne Bild (kein fremder Bildhost, kein Layoutsprung); danach wieder der Hinweis auf die Sponsor-Seite.
+CON_UNTIL = "2027-01-22"
+CON_URL = "https://m365con.net/?utm_source=m365.fm&utm_medium=house_ad&utm_campaign=m365con2027"
+CON_TXT = {
+    "en": ("M365Con 2027 – free online Microsoft conference", "Jan 11–22, 2027 · 120+ sessions from the Microsoft community · Register free"),
+    "de": ("M365Con 2027 – kostenlose Online-Konferenz rund um Microsoft", "11.–22. Januar 2027 · über 120 Sessions aus der Community · Kostenlos anmelden"),
+    "es": ("M365Con 2027 – conferencia online gratuita sobre Microsoft", "11–22 de enero de 2027 · más de 120 sesiones de la comunidad · Inscripción gratuita"),
+    "fr": ("M365Con 2027 – conférence Microsoft en ligne et gratuite", "11–22 janvier 2027 · plus de 120 sessions de la communauté · Inscription gratuite"),
+    "it": ("M365Con 2027 – conferenza online gratuita su Microsoft", "11–22 gennaio 2027 · oltre 120 sessioni della community · Iscrizione gratuita"),
+    "pt": ("M365Con 2027 – conferência online gratuita sobre Microsoft", "11–22 de janeiro de 2027 · mais de 120 sessões da comunidade · Inscrição gratuita"),
+    "nl": ("M365Con 2027 – gratis online Microsoft-conferentie", "11–22 januari 2027 · ruim 120 sessies uit de community · Gratis aanmelden"),
+    "pl": ("M365Con 2027 – bezpłatna konferencja online o Microsoft", "11–22 stycznia 2027 · ponad 120 sesji społeczności · Bezpłatna rejestracja"),
+}
+
+
+def _house(base, lang, today=None):
+    """Eigener Hinweis fuer einen leer gebliebenen Block (nur sichtbar bei data-ad-status=unfilled): bis CON_UNTIL das
+    M365Con-Banner, danach der Hinweis auf die Sponsor-Seite."""
+    from datetime import date
+    if (today or date.today().isoformat()) <= CON_UNTIL:
+        h, sub = CON_TXT.get(lang, CON_TXT["en"])
+        cta = sub.rsplit(" · ", 1)[-1]
+        return (f'<a class="ad-house ad-con" href="{escape(CON_URL)}" rel="noopener"><b>{escape(h)}</b>'
+                f'<span>{escape(sub.rsplit(" · ", 1)[0])}</span><em>{escape(cta)}</em></a>')
     import site_sponsor as SPN
     return (f'<a class="ad-house" href="{escape(SPN.url(base, lang))}"><b>{escape(SPN.label(lang))}</b>'
             f'<span>{escape(SPN.tx(lang if lang in SPN.LANGS_ALL else "en", "h1"))}</span></a>')
