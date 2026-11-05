@@ -215,12 +215,15 @@ async function api(env, request, url, path, asUser, ctx) {
       return J({ ...status, allowed: status.allowed && status.remaining_eur >= estimate });
     }
     const input = Number(b.input_tokens), output = Number(b.output_tokens);
+    const cacheRead = Number(b.cache_read_input_tokens ?? 0), cacheWrite = Number(b.cache_creation_input_tokens ?? 0);   // optional: Anteile von input_tokens (Prompt-Cache)
     if (b.action !== "report" || !/^[A-Za-z0-9._:-]{1,100}$/.test(String(b.id || "")) ||
         !/^[a-z0-9_]{1,60}$/i.test(String(b.job || "")) || !/^claude-haiku[-a-z0-9.]*$/i.test(String(b.model || "")) ||
         !Number.isSafeInteger(input) || input < 0 || !Number.isSafeInteger(output) || output < 0 ||
+        !Number.isSafeInteger(cacheRead) || cacheRead < 0 || !Number.isSafeInteger(cacheWrite) || cacheWrite < 0 || cacheRead + cacheWrite > input ||
         String(b.lang || "").length > 20) return J({ error: "bad_request" }, 400);
     const status = await reportExternalAiUsage(env, {
       id: b.id, job: b.job, lang: String(b.lang || ""), model: b.model, input_tokens: input, output_tokens: output, batch: b.batch === true,
+      cache_read_input_tokens: cacheRead, cache_creation_input_tokens: cacheWrite,
     });
     return J({ ok: true, ...status });
   }

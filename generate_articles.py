@@ -31,18 +31,30 @@ def clean(html):
 
 CREDITS_OUT = False
 import threading
-from ai_gateway import anthropic_request, check_budget, estimated_eur, report_usage, urlopen
+from ai_gateway import anthropic_request, check_budget, estimated_eur, report_usage, urlopen, usage_tokens
 _ULOCK = threading.Lock()
-USAGE = {"in": 0, "out": 0, "calls": 0}
+USAGE = {"in": 0, "out": 0, "calls": 0, "cache_read": 0, "cache_write": 0}   # "in" = Eingabe gesamt, davon cache_read/cache_write aus dem Prompt-Cache
 
 
-def _post(prompt, max_tokens):
+def article_block(html):
+    """Gemeinsamer, gecachter Anfang der Folgeaufrufe (Infografik, FAQ, Quiz) zu einem Artikel: ueberall derselbe Text,
+    damit der Prompt-Cache greift (Sonnet 5.5: ab 512 Token, Lesen 0,05x statt 1x Eingabepreis)."""
+    return "Artikel:\n" + re.sub(r"<[^>]+>", " ", html)[:14000]
+
+
+def _post(prompt, max_tokens, prefix=None, cache=True):
+    """prefix: stabiler Textblock vor dem Prompt, bekommt mit cache=True einen Cache-Breakpoint (cache_control, 5 Minuten).
+    Alles Variable (Aufgabe, Zielsprache) steht danach in prompt. cache=False, wenn der Anfang nicht wiederverwendet wird (Schreiben kostet 1,25x)."""
     global CREDITS_OUT
     if CREDITS_OUT:
         raise RuntimeError("credits out")
-    if not check_budget("generate_articles", MODEL, estimated_eur(len(prompt) // 3, max_tokens)):
+    if not check_budget("generate_articles", MODEL, estimated_eur((len(prefix or "") + len(prompt)) // 3, max_tokens)):
         raise RuntimeError("Haiku-Tagesbudget erreicht")
-    body = {"model": MODEL, "max_tokens": max_tokens, "messages": [{"role": "user", "content": prompt}]}
+    content = prompt if prefix is None else [
+        {"type": "text", "text": prefix, **({"cache_control": {"type": "ephemeral"}} if cache else {})},
+        {"type": "text", "text": prompt},
+    ]
+    body = {"model": MODEL, "max_tokens": max_tokens, "messages": [{"role": "user", "content": content}]}
     req = anthropic_request("/v1/messages", body, job="generate_articles", lang="", model=MODEL, api_key=os.environ["ANTHROPIC_API_KEY"])
     r = None
     for attempt in range(5):
@@ -63,12 +75,14 @@ def _post(prompt, max_tokens):
                 time.sleep(15 * (attempt + 1))
                 continue
             raise
-    u = r.get("usage") or {}
-    report_usage("generate_articles", MODEL, int(u.get("input_tokens", 0)) + int(u.get("cache_creation_input_tokens", 0)) + int(u.get("cache_read_input_tokens", 0)), int(u.get("output_tokens", 0)))
+    tin, tout, cread, cwrite = usage_tokens(r.get("usage"))
+    report_usage("generate_articles", MODEL, tin, tout, cache_read=cread, cache_write=cwrite)
     try:
         with _ULOCK:
-            USAGE["in"] += int(u.get("input_tokens", 0)) + int(u.get("cache_creation_input_tokens", 0)) + int(u.get("cache_read_input_tokens", 0))
-            USAGE["out"] += int(u.get("output_tokens", 0))
+            USAGE["in"] += tin
+            USAGE["out"] += tout
+            USAGE["cache_read"] += cread
+            USAGE["cache_write"] += cwrite
             USAGE["calls"] += 1
     except Exception:
         pass
@@ -86,27 +100,25 @@ def parse_info(raw):
         return None
 
 
-def info_for(lang, html):
+def info_for(lang, html, cache=True):
     """Zweiter Versuch: nur die Infografik (JSON) aus dem fertigen Artikel ableiten."""
-    txt = re.sub(r"<[^>]+>", " ", html)[:12000]
-    p = (f"Erstelle aus dem folgenden Artikel eine Infografik als reines JSON (keine Erklärung, kein Markdown), Texte in {NAMES.get(lang, lang)}, "
+    p = (f"Erstelle aus dem obigen Artikel eine Infografik als reines JSON (keine Erklärung, kein Markdown), Texte in {NAMES.get(lang, lang)}, "
          'nur Inhalte aus dem Artikel. Format: {"titel": "...", "typ": "schritte", "punkte": [{"kopf": "max. 4 Wörter", "text": "max. 18 Wörter"}, ...4 bis 6 Punkte]}. '
-         'Alternativ "typ": "vergleich" mit "links"/"rechts": {"titel","punkte":[Strings]} oder "typ": "fakten" mit "punkte": [{"wert","text"}].\n\nArtikel:\n' + txt)
+         'Alternativ "typ": "vergleich" mit "links"/"rechts": {"titel","punkte":[Strings]} oder "typ": "fakten" mit "punkte": [{"wert","text"}].')
     try:
-        return parse_info(_post(p, 1500))
+        return parse_info(_post(p, 1500, article_block(html), cache))
     except Exception as ex:
         print("Infografik-Fehler", str(ex)[:100])
         return None
 
 
-def faq_for(lang, html):
+def faq_for(lang, html, cache=True):
     """3-4 Fragen/Antworten (JSON-Liste) aus dem fertigen Artikel."""
-    txt = re.sub(r"<[^>]+>", " ", html)[:14000]
-    p = (f"Erstelle aus dem folgenden Artikel 4 häufige Fragen mit kurzen, präzisen Antworten (je 25 bis 60 Wörter) in {NAMES.get(lang, lang)}. "
+    p = (f"Erstelle aus dem obigen Artikel 4 häufige Fragen mit kurzen, präzisen Antworten (je 25 bis 60 Wörter) in {NAMES.get(lang, lang)}. "
          "Nur Inhalte aus dem Artikel, keine Verweise auf Transkript/Podcast/Folge, keine Links. Die Fragen so formulieren, wie Leser sie bei Google oder einem KI-Assistenten stellen würden. "
-         'Ausgabe: reines JSON, keine Erklärung: [{"q": "...", "a": "..."}, ...]\n\nArtikel:\n' + txt)
+         'Ausgabe: reines JSON, keine Erklärung: [{"q": "...", "a": "..."}, ...]')
     try:
-        raw = _post(p, 2500)
+        raw = _post(p, 2500, article_block(html), cache)
         m = re.search(r"\[.*\]", raw, re.S)
         j = json.loads(m.group(0)) if m else None
         j = [{"q": str(x["q"]).strip(), "a": str(x["a"]).strip()} for x in j if x.get("q") and x.get("a")] if j else None
@@ -116,14 +128,13 @@ def faq_for(lang, html):
         return None
 
 
-def quiz_for(lang, html):
+def quiz_for(lang, html, cache=True):
     """4 Multiple-Choice-Fragen (je 4 Optionen) aus dem fertigen Artikel."""
-    txt = re.sub(r"<[^>]+>", " ", html)[:14000]
-    p = (f"Erstelle aus dem folgenden Artikel ein Quiz mit genau 4 Multiple-Choice-Fragen in {NAMES.get(lang, lang)}. Jede Frage hat genau 4 Antwortoptionen (je max. 14 Wörter), genau eine ist richtig, "
+    p = (f"Erstelle aus dem obigen Artikel ein Quiz mit genau 4 Multiple-Choice-Fragen in {NAMES.get(lang, lang)}. Jede Frage hat genau 4 Antwortoptionen (je max. 14 Wörter), genau eine ist richtig, "
          "die falschen sind plausibel, aber eindeutig falsch. Nur Wissen aus dem Artikel, keine Verweise auf Transkript/Podcast/Folge, keine Links, richtige Antwort nicht immer an derselben Position. "
-         'Zu jeder Frage eine kurze Erklärung (max. 25 Wörter). Ausgabe: reines JSON, keine Erklärung: [{"q": "...", "opts": ["...","...","...","..."], "a": 0, "why": "..."}, ...] ("a" = Index 0-3 der richtigen Option)\n\nArtikel:\n' + txt)
+         'Zu jeder Frage eine kurze Erklärung (max. 25 Wörter). Ausgabe: reines JSON, keine Erklärung: [{"q": "...", "opts": ["...","...","...","..."], "a": 0, "why": "..."}, ...] ("a" = Index 0-3 der richtigen Option)')
     try:
-        raw = _post(p, 3000)
+        raw = _post(p, 3000, article_block(html), cache)
         m = re.search(r"\[.*\]", raw, re.S)
         j = json.loads(m.group(0)) if m else None
         out = []
@@ -138,19 +149,18 @@ def quiz_for(lang, html):
         return None
 
 
-def infos_for(lang, html, have=()):
+def infos_for(lang, html, have=(), cache=True):
     """Zwei weitere Infografiken (andere Typen als die erste) als JSON-Liste."""
-    txt = re.sub(r"<[^>]+>", " ", html)[:14000]
-    p = (f"Erstelle aus dem folgenden Artikel genau 2 weitere Infografiken als reines JSON-Array (keine Erklärung, kein Markdown), Texte in {NAMES.get(lang, lang)}, "
+    p = (f"Erstelle aus dem obigen Artikel genau 2 weitere Infografiken als reines JSON-Array (keine Erklärung, kein Markdown), Texte in {NAMES.get(lang, lang)}, "
          "nur Inhalte aus dem Artikel, keine Verweise auf Transkript/Podcast/Folge. Die beiden sollen unterschiedliche Typen haben und möglichst nicht den Typ " + ", ".join(have or ("schritte",)) + " wiederholen. "
          'Typen: {"titel":"...","typ":"vergleich","links":{"titel":"...","punkte":["..."]},"rechts":{"titel":"...","punkte":["..."]}} (je 3-5 Punkte, max. 14 Wörter) | '
          '{"titel":"...","typ":"fakten","punkte":[{"wert":"nur wenn im Artikel genannt, sonst ein Stichwort","text":"max. 14 Wörter"}]} (3-5 Punkte) | '
          '{"titel":"...","typ":"checkliste","punkte":["max. 14 Wörter", ...]} (4-7 Punkte) | '
          '{"titel":"...","typ":"schritte","punkte":[{"kopf":"max. 4 Wörter","text":"max. 18 Wörter"}]} (4-6 Punkte) | '
          '{"titel":"...","typ":"prozess","punkte":[{"kopf":"max. 3 Wörter","text":"max. 14 Wörter","art":"start|schritt|entscheidung|ende"}]} (4-6 Knoten eines Prozessablaufs, erster "start", letzter "ende"; "entscheidung" nur wenn der Artikel eine Ja/Nein-Weiche beschreibt). '
-         "Ausgabe: [ {...}, {...} ]\n\nArtikel:\n" + txt)
+         "Ausgabe: [ {...}, {...} ]")
     try:
-        raw = _post(p, 3000)
+        raw = _post(p, 3000, article_block(html), cache)
         m = re.search(r"\[.*\]", raw, re.S)
         j = json.loads(m.group(0)) if m else []
         ok = [x for x in j if isinstance(x, dict) and x.get("typ") in ("vergleich", "fakten", "checkliste", "schritte", "prozess") and x.get("titel")]
@@ -300,9 +310,10 @@ def main():
     def fillwork(t):
         v, l = t
         a = store[v][l]
-        inf = a.get("info") or info_for(l, a["html"])
-        more = None if a.get("infos") else infos_for(l, a["html"], [(inf or {}).get("typ", "schritte")])
-        return v, l, (None if a.get("info") else inf), (None if a.get("faq") else faq_for(l, a["html"])), more, (None if a.get("quiz") else quiz_for(l, a["html"]))
+        c = sum(not a.get(k) for k in ("info", "infos", "faq", "quiz")) >= 2   # Prompt-Cache nur, wenn der Artikeltext mehrfach gesendet wird
+        inf = a.get("info") or info_for(l, a["html"], c)
+        more = None if a.get("infos") else infos_for(l, a["html"], [(inf or {}).get("typ", "schritte")], c)
+        return v, l, (None if a.get("info") else inf), (None if a.get("faq") else faq_for(l, a["html"], c)), more, (None if a.get("quiz") else quiz_for(l, a["html"], c))
     with ThreadPoolExecutor(WORKERS) as ex:
         for v, l, inf, fq, more, qz in ex.map(fillwork, fill):
             if inf: store[v][l]["info"] = inf
@@ -329,8 +340,12 @@ def main():
         mk = time.strftime("%Y-%m", time.gmtime())
         m = sd.setdefault(mk, {"input_tokens": 0, "output_tokens": 0, "calls": 0})
         m["input_tokens"] += USAGE["in"]; m["output_tokens"] += USAGE["out"]; m["calls"] += USAGE["calls"]
+        m["cache_read_tokens"] = m.get("cache_read_tokens", 0) + USAGE["cache_read"]       # Teil von input_tokens: aus dem Prompt-Cache gelesen (0,05x)
+        m["cache_write_tokens"] = m.get("cache_write_tokens", 0) + USAGE["cache_write"]    # Teil von input_tokens: in den Prompt-Cache geschrieben (1,25x)
         json.dump(sd, open(sp, "w", encoding="utf-8"), indent=1)
         print("Verbrauch dieser Lauf (Tokens):", USAGE, "| Monat gesamt:", m)
+        print(f"Prompt-Cache dieser Lauf: {USAGE['cache_read']} Token gelesen, {USAGE['cache_write']} Token geschrieben "
+              f"({100 * USAGE['cache_read'] / max(1, USAGE['in']):.0f} % der Eingabe aus dem Cache)")
 
 
 if __name__ == "__main__":
