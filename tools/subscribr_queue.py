@@ -26,7 +26,7 @@ def call(method, path, token, body=None, tries=4):
     data = json.dumps(body).encode() if body is not None else None
     for i in range(tries):
         rq = urllib.request.Request(API + path, data=data, method=method,
-                                    headers={"Authorization": "Bearer " + token, "Accept": "application/json", "Content-Type": "application/json"})
+                                    headers={"Authorization": "Bearer " + token, "Accept": "application/json", "Content-Type": "application/json", "User-Agent": "m365fm-subscribr-queue/1.0 (+https://www.m365.fm)"})
         try:
             with urllib.request.urlopen(rq, timeout=60) as r:
                 return r.status, json.loads(r.read().decode() or "{}")
