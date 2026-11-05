@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 """Fetch placement-scoped sponsor metrics and send verified daily rows to the community API."""
 import datetime as dt
+import functools
 import json
 import os
 import re
 import sys
 import time
+import unicodedata
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -85,7 +87,7 @@ def page_paths(record, placement):
         elif len(parts) == 3 and parts[:2] == ["show", "episodes"]:
             path = f"/show/episodes/{parts[2]}/"
         elif len(parts) == 2 and parts[0] in LANGS and parts[0] != "en":
-            path = f"/{parts[0]}/show/episodes/{parts[1]}/"
+            path = f"/{parts[0]}/{parts[1]}/"
         else:
             path = ""
         if path.startswith("/") and not path.startswith("//"):
@@ -106,6 +108,9 @@ def page_paths(record, placement):
         langs = ["en"]
     expanded = set(paths)
     for path in paths:
+        prefix = path.strip("/").split("/", 1)[0]
+        if prefix in LANGS:
+            continue
         for lang in langs:
             expanded.add(path if lang == "en" or path.startswith(f"/{lang}/") else f"/{lang}{path}")
     return sorted(expanded)
@@ -133,6 +138,7 @@ def duration_seconds(value):
 def episode_ids(placement):
     refs = slug_rows(placement["id"])
     wanted = set()
+    dub_refs = set()
     for value in refs.get("episodes", []):
         clean = re.sub(r"^https?://(?:www\.)?m365\.fm", "", str(value).strip()).strip("/")
         parts = clean.split("/")
@@ -142,13 +148,54 @@ def episode_ids(placement):
             wanted.add(parts[2])
         elif len(parts) == 4 and parts[0] in LANGS and parts[1:3] == ["show", "episodes"]:
             wanted.add(parts[3])
-    if not wanted:
-        return []
+        elif len(parts) == 2 and parts[0] in LANGS and parts[0] != "en":
+            dub_refs.add((parts[0], parts[1]))
+    ids = set()
     try:
         mapping = json.loads((ROOT / "data" / "episode_slugs.json").read_text("utf-8"))
     except (OSError, ValueError):
-        return []
-    return sorted({str(sid) for sid, slug in mapping.items() if slug in wanted and str(sid).isdigit()})
+        mapping = {}
+    ids.update(str(sid) for sid, slug in mapping.items() if slug in wanted and str(sid).isdigit())
+    dub_map = dub_episode_ids()
+    ids.update(dub_map[ref] for ref in dub_refs if ref in dub_map)
+    if dub_refs - dub_map.keys():
+        missing = ", ".join(f"{lang}/{slug}" for lang, slug in sorted(dub_refs - dub_map.keys()))
+        print(f"Dub-Folgen nicht zugeordnet ({placement['id']}): {missing}")
+    return sorted(ids)
+
+
+@functools.lru_cache(maxsize=1)
+def dub_episode_ids():
+    try:
+        published = json.loads((ROOT / "data" / "published.json").read_text("utf-8"))
+    except (OSError, ValueError):
+        return {}
+    result, seen = {}, set()
+    for path in sorted((ROOT / "episodes").glob("*.json")):
+        try:
+            episodes = json.loads(path.read_text("utf-8"))
+        except (OSError, ValueError):
+            continue
+        vid = path.stem
+        for lang, episode in episodes.items():
+            if lang not in LANGS or not isinstance(episode, dict) or not episode.get("title"):
+                continue
+            slug = unicodedata.normalize("NFKD", str(episode["title"]))
+            slug = "".join(char for char in slug if not unicodedata.combining(char))
+            slug = re.sub(r"\(.*?\)|（.*?）", "", slug)
+            slug = re.sub(r"[^A-Za-z0-9]+", "-", slug).strip("-").lower()
+            if len(slug) > 70:
+                slug = slug[:70].rsplit("-", 1)[0]
+            slug = slug.rstrip("-") if len(slug) >= 15 else vid.lower().replace("_", "-")
+            key = (lang, slug)
+            if key in seen:
+                slug = f"{slug}-{vid.lower()[:6]}"
+            seen.add(key)
+            item = published.get(f"{vid}:{lang}") or {}
+            episode_id = str(item.get("episode_id") or "")
+            if episode_id.isdigit():
+                result[(lang, slug)] = episode_id
+    return result
 
 
 def spreaker(placements, day, out, statuses):
@@ -479,7 +526,7 @@ def press_ranger(placements, day, out, statuses):
         statuses["Press Ranger"] = "Abruf abgeschlossen; nur erkannte Messwerte übernommen"
 
 
-def main():
+def main(today=None):
     cron_key = os.environ.get("CRON_KEY", "").strip()
     if not cron_key:
         print("CRON_KEY fehlt; keine Werte geschrieben")
@@ -490,30 +537,35 @@ def main():
         print(f"Platzierungen konnten nicht geladen werden (HTTP {status})")
         return 1
     placements = data.get("placements") or []
-    day = (dt.datetime.now(dt.timezone.utc).date() - dt.timedelta(days=1)).isoformat()
-    metrics, statuses = [], {}
-    for source in (spreaker, youtube, cloudflare, gsc, bing, press_ranger):
-        source_metrics = []
-        try:
-            source(placements, day, source_metrics, statuses)
-        except Exception as error:
-            statuses[source.__name__] = f"Abruf fehlgeschlagen ({type(error).__name__}); keine Werte geschrieben"
-            continue
-        metrics.extend(source_metrics)
+    today = today or dt.datetime.now(dt.timezone.utc).date()
+    if isinstance(today, dt.datetime):
+        today = today.date()
+    days = [(today - dt.timedelta(days=offset)).isoformat() for offset in range(1, 5)]
+    metrics, day_statuses = [], {}
+    sources = ((spreaker, "Spreaker"), (youtube, "YouTube Analytics"), (cloudflare, "Cloudflare"),
+               (gsc, "Google Search Console"), (bing, "Bing Webmaster API"), (press_ranger, "Press Ranger"))
+    for source, name in sources:
+        for day in days:
+            source_metrics, source_status = [], {}
+            try:
+                source(placements, day, source_metrics, source_status)
+            except Exception as error:
+                source_status[name] = f"Abruf fehlgeschlagen ({type(error).__name__}); keine Werte geschrieben"
+            metrics.extend(source_metrics)
+            state = source_status.get(name, "Abruf fehlgeschlagen; keine Werte geschrieben")
+            day_statuses.setdefault(name, []).append(f"{day}: {state}")
+    statuses = {name: " | ".join(states) for name, states in day_statuses.items()}
     # The internal API validates every placement, source, metric, value and date before UPSERT.
     count = 0
-    if len(metrics) > 5000:
-        statuses["D1"] = "Mehr als 5.000 Werte; nichts geschrieben"
-        report(statuses)
-        return 1
-    if metrics:
+    for offset in range(0, len(metrics), 500):
+        batch = metrics[offset:offset + 500]
         status, _, _ = json_request(f"{API}/api/internal/sponsor-metrics",
-            json.dumps({"metrics": metrics}).encode(), headers)
+            json.dumps({"metrics": batch}).encode(), headers)
         if status != 200:
-            print(f"Metriken wurden abgewiesen (HTTP {status}); nichts wurde gespeichert")
+            statuses["D1"] = f"Batch {offset // 500 + 1} abgewiesen (HTTP {status}); weitere Batches nicht gesendet"
             report(statuses)
             return 1
-        count = len(metrics)
+        count += len(batch)
     statuses["D1"] = f"{count} Tageswerte gespeichert" if count else "keine neuen Messwerte"
     report(statuses)
     return 0

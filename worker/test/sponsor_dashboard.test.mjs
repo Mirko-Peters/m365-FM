@@ -108,6 +108,7 @@ test("sponsor dashboard: CSV enthält Quelle, Messart, Datenstand und entschärf
   assert.ok(button, "Export-Schaltfläche wird gerendert: " + root.textContent);
   assert.doesNotMatch(root.textContent, /Future partner event/, "zukünftige Platzierungen erscheinen nicht in den letzten 30 Tagen");
   assert.match(root.textContent, /Undated placement/, "Platzierungen ohne Datum bleiben sichtbar und werden nicht als zukünftige gewertet");
+  assert.doesNotMatch(root.textContent, /No data date/, "Kennzahlen ohne Wert zeigen keinen Datenstand");
   button.click();
   assert.equal(blobs.length, 1);
   const csv = await blobs[0].text();

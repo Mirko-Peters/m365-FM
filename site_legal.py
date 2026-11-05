@@ -30,7 +30,7 @@ def impressum_en():
 
 def privacy_de():
     return f"""<h1>Datenschutzerklärung</h1>
-<p>Klicks auf Sponsor-Links (/go/…) zählen wir ohne Cookies nur als Tagessumme je Link, Fläche und Land. IP-Adresse und Browserkennung speichern wir nicht; zur Erkennung doppelter Klicks wird ein täglich wechselnder, nicht umkehrbarer Hash höchstens bis Tagesende im Zwischenspeicher gehalten.</p>
+<h2>Sponsor-Links</h2><p>Klicks auf Sponsor-Links (/go/…) zählen wir ohne Cookies nur als Tagessumme je Link, Fläche und Land. IP-Adresse und Browserkennung speichern wir nicht; zur Erkennung doppelter Klicks wird ein täglich wechselnder, nicht umkehrbarer Hash höchstens bis Tagesende im Zwischenspeicher gehalten.</p>
 <h2>Verantwortlicher</h2><p>{NAME}, {STREET}, {CITY}, Deutschland.</p>
 <h2>Hosting (GitHub Pages) und DNS (Cloudflare)</h2><p>Diese Seite wird über GitHub Pages (GitHub Inc., USA) ausgeliefert, die Domain über Cloudflare aufgelöst. Beim Aufruf verarbeiten diese Dienste technisch notwendige Daten (u. a. IP-Adresse, Zeitpunkt, aufgerufene Seite) in Server-Logs. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO (sicherer und effizienter Betrieb). Die Übermittlung in die USA erfolgt auf Basis des EU-US Data Privacy Framework bzw. von Standardvertragsklauseln.</p>
 <h2>Nachrichten zwischen Mitgliedern</h2><p>Nachrichten über die Community-Funktion werden zur Zustellung auf unseren Servern (Cloudflare) gespeichert und nach 7 Tagen automatisch gelöscht (Art. 6 Abs. 1 lit. b DSGVO). Pro Tag sind nur wenige neue Kontakte möglich, um Missbrauch zu verhindern. Beim Löschen Ihres Kontos werden Ihre Nachrichten sofort entfernt.</p>
@@ -48,7 +48,7 @@ def privacy_de():
 
 def privacy_en():
     return f"""<h1>Privacy policy</h1>
-<p>We count clicks on sponsor links (/go/…) without cookies only as daily totals per link, surface and country. We do not store IP addresses or browser identifiers; to detect duplicate clicks, a rotating, non-reversible hash is kept in temporary cache only until the end of the day.</p>
+<h2>Sponsor links</h2><p>We count clicks on sponsor links (/go/…) without cookies only as daily totals per link, surface and country. We do not store IP addresses or browser identifiers; to detect duplicate clicks, a rotating, non-reversible hash is kept in temporary cache only until the end of the day.</p>
 <h2>Controller</h2><p>{NAME}, {STREET}, {CITY}, Germany.</p>
 <h2>Hosting (GitHub Pages) and DNS (Cloudflare)</h2><p>This site is served via GitHub Pages (GitHub Inc., USA) and the domain is resolved through Cloudflare. When you visit, these services process technically necessary data (e.g. IP address, time, requested page) in server logs. Legal basis: Art. 6(1)(f) GDPR (secure and efficient operation). Transfers to the USA rely on the EU-US Data Privacy Framework or standard contractual clauses.</p>
 <h2>Messages between members</h2><p>Messages sent through the community feature are stored on our servers (Cloudflare) for delivery and deleted automatically after 7 days (Art. 6(1)(b) GDPR). Only a few new contacts per day are possible to prevent abuse. Deleting your account removes your messages immediately.</p>

@@ -26,9 +26,9 @@ unbekannte Felder sind deshalb ein Fehler):
         "episodes": ["<slug>", "de/<slug>"],       optional: Folgen. "<slug>" = englische Show (/show/episodes/<slug>/), "<sprache>/<slug>" = Dub-Folge (/de/<slug>/);
                                                    auch volle Pfade wie "/show/episodes/<slug>/". Gilt fuer alle Sprachfassungen der Folge (englische Seite,
                                                    lokalisierte Show-Seiten, Dub-Folgen desselben Videos) und DAUERHAFT, auch nach dem Ende der Laufzeit
-        "posts": ["/community/u/mirko-p/blog/<slug>/"],
+        "posts": ["/community/u/mirko-p/blog/<slug>/"], optional: Blogbeitraege (Pfad, mit oder ohne Sprachpraefix);
+                                                   gilt fuer alle Sprachfassungen, dauerhaft
         "go": "acme-2026-12"                        optionaler aktiver Linkcode aus dem Sponsor-Dashboard
-                                                   optional: Blogbeitraege (Pfad, mit oder ohne Sprachpraefix); gilt fuer alle Sprachfassungen, dauerhaft
       }
     ]
   }
@@ -42,6 +42,7 @@ import json, os, re
 from datetime import date
 from html import escape
 from pathlib import Path
+from urllib.parse import urlsplit
 from site_i18n import COMM_LANGS, T
 
 FILE = Path(__file__).parent / "data" / "sponsorships.json"
@@ -363,7 +364,11 @@ def _sponsors(recs):
 def link_url(recs, url, surface="sponsor-page"):
     """Sponsor-Website bei aktivem Linkcode ueber den datensparsamen Zaehler leiten."""
     for rec in recs or []:
-        if _host(rec.get("sponsor", {}).get("url")) != _host(url):
+        sponsor_url = urlsplit(str(rec.get("sponsor", {}).get("url") or "").strip())
+        linked_url = urlsplit(str(url or "").strip())
+        sponsor_site = (sponsor_url.scheme.lower(), sponsor_url.netloc.lower(), sponsor_url.path or "/")
+        linked_site = (linked_url.scheme.lower(), linked_url.netloc.lower(), linked_url.path or "/")
+        if sponsor_site != linked_site:
             continue
         code = rec.get("go")
         if not code or _GO_OFFLINE:

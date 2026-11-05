@@ -140,27 +140,28 @@ export async function handleSponsorLink(env, request, url, path, ctx) {
     !botManagement?.verifiedBot && !(Number.isFinite(score) && score < 30) &&
     !/(bot|crawl|spider|slurp|preview|facebookexternalhit|linkedinbot|slackbot|discordbot|whatsapp|telegrambot|curl|wget|python-requests|headless)/i.test(bot);
   if (shouldCount && env.SESSION_SECRET && ctx?.waitUntil) {
-    const day = new Date().toISOString().slice(0, 10);
-    const salt = await hmac(env.SESSION_SECRET, `go:${day}`);
-    const keyHash = await hmac(salt, `${request.headers.get("cf-connecting-ip") || ""}|${bot}|${code}`);
-    const cache = globalThis.caches?.default;
-    let duplicate = false;
-    if (cache) {
-      const cacheKey = new Request(`https://dedupe.m365.fm/${keyHash}`);
-      duplicate = !!(await cache.match(cacheKey));
-      if (!duplicate) {
-        const ttl = Math.max(1, Math.ceil((Date.parse(`${day}T23:59:59.999Z`) - Date.now()) / 1000));
-        await cache.put(cacheKey, new Response("1", { headers: { "cache-control": `public, max-age=${ttl}` } }));
+    ctx.waitUntil((async () => {
+      const day = new Date().toISOString().slice(0, 10);
+      const salt = await hmac(env.SESSION_SECRET, `go:${day}`);
+      const keyHash = await hmac(salt, `${request.headers.get("cf-connecting-ip") || ""}|${bot}|${code}`);
+      const cache = globalThis.caches?.default;
+      let duplicate = false;
+      if (cache) {
+        const cacheKey = new Request(`https://dedupe.m365.fm/${keyHash}`);
+        duplicate = !!(await cache.match(cacheKey));
+        if (!duplicate) {
+          const ttl = Math.max(1, Math.ceil((Date.parse(`${day}T23:59:59.999Z`) - Date.now()) / 1000));
+          await cache.put(cacheKey, new Response("1", { headers: { "cache-control": `public, max-age=${ttl}` } }));
+        }
       }
-    }
-    if (!duplicate) {
+      if (duplicate) return;
       const rawSurface = url.searchParams.get("s") || "";
       const surface = SURFACES.has(rawSurface) ? rawSurface : "other";
       const country = /^[A-Z]{2}$/.test(request.cf?.country || "") ? request.cf.country : "XX";
-      ctx.waitUntil(env.DB.prepare(`INSERT INTO sponsor_clicks_daily(day,code,surface,country,clicks)
+      await env.DB.prepare(`INSERT INTO sponsor_clicks_daily(day,code,surface,country,clicks)
         VALUES(?,?,?,?,1) ON CONFLICT(day,code,surface,country) DO UPDATE SET clicks=clicks+1`)
-        .bind(day, code, surface, country).run());
-    }
+        .bind(day, code, surface, country).run();
+    })().catch(() => {}));
   }
   headers.location = target.href;
   return new Response(null, { status: 302, headers });
@@ -175,12 +176,15 @@ export async function handleSponsor(env, request, url, path, J, user) {
     const orgFilter = url.searchParams.get("org") || "";
     const orgs = (await db.prepare(`SELECT DISTINCT o.id,o.handle,o.name
       FROM orgs o
-      WHERE (?=1 OR ((EXISTS (SELECT 1 FROM sponsor_placements sp WHERE sp.org_id=o.id)
-        OR EXISTS (SELECT 1 FROM event_partners ep WHERE ep.org_id=o.id))
-        AND EXISTS (SELECT 1 FROM org_members m WHERE m.org_id=o.id AND m.user_id=?
-          AND m.status='active' AND m.role IN ('owner','admin','events'))))
+      WHERE ((?=1 AND (?<>'' OR EXISTS (SELECT 1 FROM sponsor_placements sp WHERE sp.org_id=o.id)
+          OR EXISTS (SELECT 1 FROM event_partners ep WHERE ep.org_id=o.id)))
+        OR (?=0 AND (EXISTS (SELECT 1 FROM sponsor_placements sp WHERE sp.org_id=o.id)
+          OR EXISTS (SELECT 1 FROM event_partners ep WHERE ep.org_id=o.id))
+          AND EXISTS (SELECT 1 FROM org_members m WHERE m.org_id=o.id AND m.user_id=?
+            AND m.status='active' AND m.role IN ('owner','admin','events'))))
         AND (?='' OR o.handle=?)
-      ORDER BY o.name,o.id`).bind(user.admin ? 1 : 0, user.id, user.admin ? orgFilter : "", user.admin ? orgFilter : "").all()).results || [];
+      ORDER BY o.name,o.id`).bind(user.admin ? 1 : 0, orgFilter, user.admin ? 1 : 0, user.id,
+        user.admin ? orgFilter : "", user.admin ? orgFilter : "").all()).results || [];
     const companies = user.admin ? ((await db.prepare("SELECT id,handle,name FROM orgs ORDER BY name,id").all()).results || []) : [];
     const items = [];
     const nextMonthStart = new Date(`${period.to.slice(0, 7)}-01T00:00:00Z`);
@@ -338,6 +342,9 @@ export async function handleSponsor(env, request, url, path, J, user) {
       .bind(id, orgId, title, channel, langs, start, end, JSON.stringify(refs), now()).run();
     return J({ ok: true, id }, 200, { "cache-control": "no-store" });
   }
+  if (path === "/api/sponsor/link-stats" && request.method !== "GET") {
+    return J({ error: "method_not_allowed" }, 405, { "cache-control": "no-store" });
+  }
   if (path === "/api/sponsor/link-stats" && request.method === "GET") {
     if (!user) return J({ error: "login" }, 401, { "cache-control": "no-store" });
     const orgHandle = url.searchParams.get("org") || "";
@@ -349,9 +356,10 @@ export async function handleSponsor(env, request, url, path, J, user) {
       return J({ error: "not_found" }, 404, { "cache-control": "no-store" });
     }
     const stats = (await db.prepare(`SELECT l.code,l.placement_id,c.surface,c.country,SUM(c.clicks) clicks
-      FROM sponsor_links l LEFT JOIN sponsor_clicks_daily c ON c.code=l.code AND c.day>=? AND c.day<=?
-      WHERE l.org_id=? GROUP BY l.code,l.placement_id,c.surface,c.country ORDER BY l.code,c.surface,c.country`)
-      .bind(`${month}-01`, `${month}-31`, org.id).all()).results || [];
+      FROM sponsor_links l JOIN sponsor_placements p ON p.id=l.placement_id AND p.org_id=?
+      LEFT JOIN sponsor_clicks_daily c ON c.code=l.code AND c.day>=? AND c.day<=?
+      GROUP BY l.code,l.placement_id,c.surface,c.country ORDER BY l.code,c.surface,c.country`)
+      .bind(org.id, `${month}-01`, `${month}-31`).all()).results || [];
     return J({ month, org: org.handle, stats }, 200, { "cache-control": "no-store" });
   }
   if (path === "/api/sponsor/go-codes" && request.method === "GET") {
@@ -368,8 +376,11 @@ export async function handleSponsor(env, request, url, path, J, user) {
     if (!env.CRON_KEY || request.headers.get("x-cron-key") !== env.CRON_KEY) return J({ error: "forbidden" }, 403, { "cache-control": "no-store" });
     const body = (await request.json().catch(() => ({}))) || {};
     const entries = Array.isArray(body.metrics) ? body.metrics : [];
-    if (!entries.length || entries.length > 5000) return J({ error: "bad_request" }, 400, { "cache-control": "no-store" });
-    const fetchedAt = now(), writes = [];
+    if (!entries.length || entries.length > 1000) return J({ error: "bad_request" }, 400, { "cache-control": "no-store" });
+    const fetchedAt = now(), writes = [], placementIds = new Set();
+    const placements = (await db.prepare("SELECT id FROM sponsor_placements").all()).results || [];
+    const validPlacements = new Set(placements.map((placement) => placement.id));
+    const validated = [];
     for (const entry of entries) {
       const source = String(entry?.source || ""), metric = String(entry?.metric || ""), day = String(entry?.day || "");
       const placementId = String(entry?.placement_id || ""), dim = String(entry?.dim || "").slice(0, 200);
@@ -379,9 +390,13 @@ export async function handleSponsor(env, request, url, path, J, user) {
           !["measured", "estimated", "manual"].includes(kind)) {
         return J({ error: "bad_metric" }, 400, { "cache-control": "no-store" });
       }
-      if (!(await db.prepare("SELECT 1 FROM sponsor_placements WHERE id=?").bind(placementId).first())) {
-        return J({ error: "bad_placement" }, 400, { "cache-control": "no-store" });
-      }
+      placementIds.add(placementId);
+      validated.push({ placementId, day, metric, dim, value, source, kind });
+    }
+    if ([...placementIds].some((id) => !validPlacements.has(id))) {
+      return J({ error: "bad_placement" }, 400, { "cache-control": "no-store" });
+    }
+    for (const { placementId, day, metric, dim, value, source, kind } of validated) {
       writes.push(db.prepare(`INSERT INTO sponsor_metrics_daily(placement_id,day,metric,dim,value,source,kind,fetched_at)
         SELECT ?,?,?,?,?,?,?,? WHERE EXISTS(SELECT 1 FROM sponsor_placements WHERE id=?)
         ON CONFLICT(placement_id,day,metric,dim,source) DO UPDATE SET value=excluded.value,
@@ -406,9 +421,10 @@ export async function handleSponsor(env, request, url, path, J, user) {
         !await db.prepare("SELECT 1 FROM sponsor_placements WHERE id=? AND org_id=?").bind(placementId, orgId).first()) {
       return J({ error: "bad_request" }, 400, { "cache-control": "no-store" });
     }
-    await db.prepare(`INSERT INTO sponsor_links(code,org_id,placement_id,target_url,utm,active,created_at)
-      VALUES(?,?,?,?,?,1,?) ON CONFLICT(code) DO UPDATE SET org_id=excluded.org_id,placement_id=excluded.placement_id,
-      target_url=excluded.target_url,utm=excluded.utm`).bind(code, orgId, placementId, target.href, JSON.stringify(utm), now()).run();
+    const inserted = await db.prepare(`INSERT INTO sponsor_links(code,org_id,placement_id,target_url,utm,active,created_at)
+      VALUES(?,?,?,?,?,1,?) ON CONFLICT(code) DO NOTHING`)
+      .bind(code, orgId, placementId, target.href, JSON.stringify(utm), now()).run();
+    if (!inserted.meta.changes) return J({ error: "code_taken" }, 409, { "cache-control": "no-store" });
     return J({ ok: true }, 200, { "cache-control": "no-store" });
   }
   const linkUpdate = /^\/api\/admin\/sponsor-links\/([a-z0-9-]{3,40})$/.exec(path);

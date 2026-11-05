@@ -6,6 +6,7 @@ from unittest.mock import patch
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 import site_sponsor as SPN
+import site_legal as LEG
 
 
 class SponsorDashboardTests(unittest.TestCase):
@@ -42,15 +43,14 @@ class SponsorDashboardTests(unittest.TestCase):
         for view in ("placement", "report", "sources"):
             self.assertIn(f"sponsor/dashboard/{view}/index.html", written)
             self.assertIn(f"de/sponsor/dashboard/{view}/index.html", written)
-            self.assertEqual(len(rendered[f"https://www.m365.fm/sponsor/dashboard/{view}/"]["alternates"]), len(SPN.LANGS_ALL))
+            self.assertIsNone(rendered[f"https://www.m365.fm/sponsor/dashboard/{view}/"]["alternates"])
+            self.assertIn("<style>:root{--sdb-measured", rendered[f"https://www.m365.fm/sponsor/dashboard/{view}/"]["kwargs"]["extra_head"])
         self.assertIn("sponsor/dashboard/index.html", written)
         self.assertIn("de/sponsor/dashboard/index.html", written)
         self.assertIn("ar/sponsor/dashboard/index.html", written)
         self.assertIn("he/sponsor/dashboard/index.html", written)
-        self.assertEqual(len(rendered[en]["alternates"]), len(SPN.LANGS_ALL))
-        self.assertEqual(rendered[en]["alternates"]["ar"], ar)
-        self.assertEqual(rendered[en]["alternates"]["he"], he)
-        self.assertEqual(rendered[de]["alternates"]["en"], en)
+        self.assertIsNone(rendered[en]["alternates"])
+        self.assertIsNone(rendered[de]["alternates"])
         self.assertIn(f'href="{en}"', written["sponsor/index.html"])
         self.assertIn("A source-backed view", written["sponsor/dashboard/index.html"])
         self.assertIn("Quellenbasierte Übersicht", written["de/sponsor/dashboard/index.html"])
@@ -59,7 +59,9 @@ class SponsorDashboardTests(unittest.TestCase):
         self.assertNotIn('"campaigns"', written["sponsor/dashboard/index.html"])
         self.assertIn("What your sponsorship achieved", written["sponsor/dashboard/index.html"])
         self.assertIn("var(--bg)", rendered[en]["kwargs"]["extra_head"])
-        self.assertIn('rel="alternate" hreflang="de"', rendered[en]["kwargs"]["extra_head"])
+        self.assertIn("<style>:root{--sdb-measured", rendered[en]["kwargs"]["extra_head"])
+        self.assertNotIn("hreflang", rendered[en]["kwargs"]["extra_head"])
+        self.assertNotIn("hreflang", rendered[de]["kwargs"]["extra_head"])
         self.assertTrue(rendered[en]["kwargs"]["noindex"])
         self.assertFalse(any("/sponsor/dashboard/" in url for url, *_ in ctx["sitemap"]))
         for path in written.values():
@@ -76,11 +78,20 @@ class SponsorDashboardTests(unittest.TestCase):
 
     def test_detail_labels_unavailable_breakdowns_without_sample_values(self):
         frontend = (ROOT / "assets" / "sponsor-dashboard.js").read_text("utf-8")
-        for key in ("top_countries", "languages_viewed", "source_no_data"):
+        for key in ("languages_viewed", "source_no_data"):
             self.assertIn(f'"{key}"', frontend)
             self.assertIn(key, SPN.dashboard_copy("en"))
             self.assertIn(key, SPN.dashboard_copy("de"))
         self.assertIn(".sdb-lang-bars", SPN.DASHBOARD_CSS)
+        self.assertIn("body *{visibility:hidden!important}", SPN.DASHBOARD_CSS)
+        self.assertIn(".sdb-report,.sdb-report *{visibility:visible!important}", SPN.DASHBOARD_CSS)
+        self.assertNotIn("LinkedIn", frontend)
+        self.assertNotIn("HeySummit", frontend)
+
+    def test_sponsor_link_privacy_notice_is_a_section_in_both_languages(self):
+        de, en = LEG.privacy_de(), LEG.privacy_en()
+        self.assertIn("<h2>Sponsor-Links</h2><p>Klicks auf Sponsor-Links", de)
+        self.assertIn("<h2>Sponsor links</h2><p>We count clicks on sponsor links", en)
 
 
 if __name__ == "__main__":

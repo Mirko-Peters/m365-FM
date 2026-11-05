@@ -536,8 +536,10 @@ test("sponsor dashboard: Platzierungen, Firmenzugriff, Quellen und manuelle Wert
   const raw = new DatabaseSync(":memory:");
   const dir = new URL("../migrations/", import.meta.url);
   for (const f of readdirSync(dir).filter((f) => f.endsWith(".sql")).sort()) raw.exec(readFileSync(new URL(f, dir), "utf-8"));
+  let sponsorPlacementListQueries = 0;
   const db = {
     prepare(sql) {
+      if (sql === "SELECT id FROM sponsor_placements") sponsorPlacementListQueries++;
       const st = raw.prepare(sql); let args = [];
       const o = {
         bind(...a) { args = a; return o; },
@@ -552,7 +554,7 @@ test("sponsor dashboard: Platzierungen, Firmenzugriff, Quellen und manuelle Wert
   raw.exec(`
     INSERT INTO users(id,provider,sub,name,role,banned,created) VALUES
       (1,'google','sponsor','Sponsor User','user',0,1),(2,'google','admin','Platform Admin','admin',0,1),(3,'google','other','Other User','user',0,1);
-    INSERT INTO orgs(id,handle,name,website,created) VALUES (1,'acme','Acme GmbH','https://shared.example/',1),(2,'other-co','Other Company','https://shared.example/',1);
+    INSERT INTO orgs(id,handle,name,website,created) VALUES (1,'acme','Acme GmbH','https://shared.example/',1),(2,'other-co','Other Company','https://shared.example/',1),(3,'empty-co','No Sponsorship','https://empty.example/',1);
     INSERT INTO org_members(org_id,user_id,role,status,created) VALUES
       (1,1,'owner','active',1),(2,3,'owner','active',1),(1,3,'member','pending',1);
     INSERT INTO sponsor_placements(id,org_id,title,channel,langs,start,end,refs,created) VALUES
@@ -569,11 +571,11 @@ test("sponsor dashboard: Platzierungen, Firmenzugriff, Quellen und manuelle Wert
     INSERT INTO event_attendees(event_id,user_id,status,visible,created) VALUES
       (1,3,'going',0,1),(1,2,'waitlist',0,1),(3,1,'going',0,1);
   `);
-  const env = { DB: db, ADMIN_SUBS: "", SITE: "https://www.m365.fm" };
+  const env = { DB: db, ADMIN_SUBS: "", SITE: "https://www.m365.fm", CRON_KEY: "test-cron-key" };
   const J = (data, status = 200, headers = {}) => new Response(JSON.stringify(data), { status, headers });
-  const call = (path, method, user, body) => {
+  const call = (path, method, user, body, extraHeaders = {}) => {
     const request = new Request(`https://api.example${path}`, {
-      method, headers: { "content-type": "application/json", "x-requested-with": "m365" },
+      method, headers: { "content-type": "application/json", "x-requested-with": "m365", ...extraHeaders },
       ...(body === undefined ? {} : { body: JSON.stringify(body) }),
     });
     return handleSponsor(env, request, new URL(request.url), new URL(request.url).pathname, J, user);
@@ -604,6 +606,10 @@ test("sponsor dashboard: Platzierungen, Firmenzugriff, Quellen und manuelle Wert
     period: "2026-11", value: 12, link: "https://example.com/report", proof_key: "sponsors/acme/bing-2026-11.csv"
   })).status, 403, "manuelle Werte sind Admin-only");
   assert.equal((await call("/api/sponsor/sources", "GET", { id: 2, admin: true })).status, 200);
+  result = await (await call("/api/sponsor/dashboard?from=2026-11-01&to=2026-11-30", "GET", { id: 2, admin: true })).json();
+  assert.deepEqual(result.orgs.map((org) => org.handle).sort(), ["acme", "other-co"],
+    "Admin ohne org-Auswahl sieht nur Firmen mit Sponsorplatzierung oder Event-Partnerschaft");
+  assert.equal((await call("/api/sponsor/dashboard?org=empty-co&from=2026-11-01&to=2026-11-30", "GET", { id: 2, admin: true })).status, 200);
   assert.equal((await call("/api/sponsor/manual-metric", "POST", { id: 2, admin: true }, {
     placement_id: "acme-pod", source: "bing_ai", values: [{ metric: "ai_citations", value: 12 }],
     period: "2026-11", link: "https://example.com/report", proof_key: "sponsors/acme/bing-2026-11.csv"
@@ -614,12 +620,57 @@ test("sponsor dashboard: Platzierungen, Firmenzugriff, Quellen und manuelle Wert
   assert.equal(result.orgs[0].manual[0].kind, "manual");
   assert.equal(result.orgs[0].manual[0].period, "2026-11");
   assert.equal(Object.hasOwn(result.orgs[0].manual[0], "proof_key"), false, "interner Belegschlüssel wird nicht offengelegt");
+  assert.equal((await call("/api/sponsor/manual-metric", "POST", { id: 2, admin: true }, {
+    placement_id: "acme-pod", source: "bing_ai", metric: "ai_citations",
+    period: "2026-10", value: 5, link: "https://example.com/report", proof_key: "sponsors/acme/bing-2026-10.csv"
+  })).status, 200);
+  for (const range of ["from=2026-10-06&to=2026-11-04", "from=2026-01-01&to=2026-12-31"]) {
+    result = await (await call(`/api/sponsor/dashboard?${range}`, "GET", { id: 1 })).json();
+    assert.equal(result.orgs[0].metrics.find((metric) => metric.key === "ai_citations").value, 17,
+      "manueller Vormonatswert erscheint in Zeitraum-Auswahl und Jahresansicht");
+  }
   assert.equal(raw.prepare("PRAGMA foreign_key_list(sponsor_manual_metrics)").all().length, 0,
     "manuelle Historie blockiert keine Konto- oder Firmenlöschung");
   assert.equal((await call("/api/sponsor/manual-metric", "POST", { id: 2, admin: true }, {
     placement_id: "acme-pod", source: "bing_ai", metric: "clicks", period: "2026-11",
     value: 12, link: "https://example.com/report", proof_key: "sponsors/acme/bing-2026-11.csv"
   })).status, 400, "nicht erlaubte Quellenkennzahlen werden abgewiesen");
+  assert.equal((await call("/api/internal/sponsor-metrics", "POST", null, { metrics: [
+    { placement_id: "acme-pod", day: "2026-11-04", metric: "podcast_plays", value: 3, source: "spreaker" }
+  ] })).status, 403, "interne Route erfordert CRON_KEY");
+  sponsorPlacementListQueries = 0;
+  response = await call("/api/internal/sponsor-metrics", "POST", null, { metrics: [
+    { placement_id: "acme-pod", day: "2026-11-04", metric: "podcast_plays", value: 3, source: "spreaker", dim: "episode:1" },
+    { placement_id: "acme-pod", day: "2026-11-04", metric: "podcast_plays", value: 4, source: "spreaker", dim: "episode:2" }
+  ] }, { "x-cron-key": env.CRON_KEY });
+  assert.equal(response.status, 200);
+  assert.equal(sponsorPlacementListQueries, 1, "Platzierungen werden für den gesamten Batch einmal gelesen");
+
+  raw.exec(`INSERT INTO sponsor_links(code,org_id,placement_id,target_url,utm,created_at)
+    VALUES('shared-code',1,'acme-pod','https://acme.example/','{}',1);
+    INSERT INTO sponsor_clicks_daily(day,code,surface,country,clicks)
+    VALUES('2026-11-04','shared-code','episode','DE',500);`);
+  assert.equal((await call("/api/admin/sponsor-links", "POST", { id: 1 }, {
+    code: "shared-code", org_id: 2, placement_id: "other-web", target_url: "https://other.example/"
+  })).status, 403, "Sponsorlink-Verwaltung bleibt Admin-only");
+  response = await call("/api/admin/sponsor-links", "POST", { id: 2, admin: true }, {
+    code: "shared-code", org_id: 2, placement_id: "other-web", target_url: "https://other.example/"
+  });
+  assert.equal(response.status, 409, "bestehende Codes werden nicht überschrieben");
+  assert.equal(raw.prepare("SELECT org_id FROM sponsor_links WHERE code='shared-code'").get().org_id, 1);
+  assert.equal(raw.prepare("SELECT clicks FROM sponsor_clicks_daily WHERE code='shared-code'").get().clicks, 500);
+  assert.equal((await call("/api/admin/sponsor-links", "GET", { id: 1 })).status, 403);
+
+  raw.exec(`INSERT INTO sponsor_links(code,org_id,placement_id,target_url,utm,created_at)
+    VALUES('moved-link',1,'other-web','https://other.example/','{}',1);
+    INSERT INTO sponsor_clicks_daily(day,code,surface,country,clicks)
+    VALUES('2026-11-04','moved-link','episode','DE',7);`);
+  const priorStats = await (await call("/api/sponsor/link-stats?org=acme&month=2026-11", "GET", { id: 1 })).json();
+  assert.deepEqual(priorStats.stats.map((stat) => stat.code), ["shared-code"],
+    "alte Firma sieht keine Klicks für eine inzwischen fremde Platzierung");
+  const ownedStats = await (await call("/api/sponsor/link-stats?org=other-co&month=2026-11", "GET", { id: 3 })).json();
+  assert.equal(ownedStats.stats.length, 1, "Link-Klicks folgen der zugeordneten Platzierung, nicht sponsor_links.org_id");
+  assert.equal((await call("/api/sponsor/link-stats?org=acme", "POST", { id: 1 })).status, 405);
   raw.close();
 });
 
@@ -642,8 +693,8 @@ test("sponsor links: redirects, daily deduplication, bots and no cookies (SQLite
     match: async (key) => stored.get(key.url) || null,
     put: async (key, value) => { stored.set(key.url, value); },
   } } });
-  const call = async (method = "GET", ua = "Mozilla/5.0", query = "?s=episode", extra = {}, cf = { country: "DE" }) => {
-    const request = new Request(`https://api.example/go/acme-home${query}`, { method, headers: { "user-agent": ua, "cf-connecting-ip": "203.0.113.1", ...extra } });
+  const call = async (method = "GET", ua = "Mozilla/5.0", query = "?s=episode", extra = {}, cf = { country: "DE" }, code = "acme-home") => {
+    const request = new Request(`https://api.example/go/${code}${query}`, { method, headers: { "user-agent": ua, "cf-connecting-ip": "203.0.113.1", ...extra } });
     Object.defineProperty(request, "cf", { value: cf });
     const waits = [], response = await handleSponsorLink({ DB: db, SESSION_SECRET: "test-key" }, request,
       new URL(request.url), new URL(request.url).pathname, { waitUntil: (promise) => waits.push(promise) });
@@ -663,9 +714,20 @@ test("sponsor links: redirects, daily deduplication, bots and no cookies (SQLite
     await call("GET", "bot/1.0");
     await call("HEAD", "Mozilla/5.0");
     await call("GET", "Mozilla/5.0", "?s=episode", { "sec-purpose": "prefetch" });
+    await call("GET", "Verified bot", "?s=episode", {}, { country: "DE", botManagement: { verifiedBot: true } });
+    await call("GET", "Low score", "?s=episode", {}, { country: "DE", botManagement: { score: 20 } });
+    assert.equal(raw.prepare("SELECT SUM(clicks) n FROM sponsor_clicks_daily").get().n, 2,
+      "Cloudflare-verifizierte Bots und Score unter 30 werden nicht gezählt");
     response = await call("GET", "Another browser", "?s=invalid-surface");
     assert.equal(response.status, 302);
     assert.equal(raw.prepare("SELECT clicks FROM sponsor_clicks_daily WHERE surface='other'").get().clicks, 1);
+    raw.exec(`INSERT INTO sponsor_links(code,org_id,placement_id,target_url,utm,active,created_at)
+      VALUES('inactive',1,'p1','https://acme.example/', '{}',0,1);`);
+    response = await call("GET", "Mozilla/5.0", "?s=episode", {}, { country: "DE" }, "inactive");
+    assert.equal(response.status, 404);
+    assert.equal(response.headers.get("location"), null);
+    assert.equal(raw.prepare("SELECT SUM(clicks) n FROM sponsor_clicks_daily").get().n, 3,
+      "inaktive Codes werden nicht weitergeleitet oder gezählt");
     const missing = await handleSponsorLink({ DB: db }, new Request("https://api.example/go/unknown"),
       new URL("https://api.example/go/unknown"), "/go/unknown", { waitUntil() {} });
     assert.equal(missing.status, 404);

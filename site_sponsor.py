@@ -159,7 +159,14 @@ def dashboard_copy(lang):
         "project_requests": ("Project requests", "Projektanfragen"),
         "ai_citations": ("AI citations", "KI-Zitate"),
         "languages_viewed": ("Languages with views", "Sprachen mit Aufrufen"),
-        "top_countries": ("Top countries", "Top-Länder"),
+        "episodes_with_mention": ("Episodes with a mention", "Folgen mit Erwähnung"),
+        "method_follows": ("Method to be confirmed", "Methode folgt"),
+        "highlight": ("Highlight", "Highlight"),
+        "rules": ("Rules", "Regeln"),
+        "rule_aggregate": ("Only aggregate counts, never individual listener or visitor data.", "Nur zusammengefasste Zahlen, niemals Daten einzelner Hörer oder Besucher."),
+        "rule_clicks": ("Clicks are counted without cookies; the same device counts once per day.", "Klicks zählen wir ohne Cookies; dasselbe Gerät zählt pro Tag einmal."),
+        "rule_leads": ("Leads are shared only with consent.", "Leads geben wir nur mit Einwilligung weiter."),
+        "rule_source": ("Every figure shows its source and latest update.", "Jede Kennzahl zeigt Quelle und letzten Datenstand."),
         "search_impressions": ("Search impressions", "Such-Impressionen"),
         "detail_intro": ("Placement performance and source data", "Leistung und Quelldaten der Platzierung"),
         "podcast_tab": ("Podcast", "Podcast"),
@@ -263,9 +270,12 @@ DASHBOARD_CSS = """:root{--sdb-measured:#2f6b3a;--sdb-estimated:var(--ac);--sdb-
 .sdb-meta,.sdb-source{display:flex;flex-wrap:wrap;gap:.5em 1.5em;color:var(--mut)}
 .sdb-badge{display:inline-block;border:1px solid var(--bd);padding:.05em .5em;font:600 .8rem \"Barlow Condensed\",sans-serif;text-transform:uppercase}
 .sdb-kind-measured{color:var(--sdb-measured)}.sdb-kind-estimated{color:var(--sdb-estimated)}.sdb-kind-manual{color:var(--sdb-manual)}
+.sdb-status-ready{color:var(--sdb-measured);border-color:var(--sdb-measured)}.sdb-status-setup{color:var(--sdb-manual);border-color:var(--sdb-manual)}
+.sdb-status-build{color:var(--ac);border-color:var(--ac)}.sdb-status-source_manual{color:var(--sdb-manual);border-style:dashed}
+.sdb-status-later{color:var(--mut);background:var(--bd)}
 .sdb-table{overflow-x:auto}.sdb-table table{min-width:800px;width:100%;border-collapse:collapse}.sdb-table th,.sdb-table td{text-align:start;padding:.65em;border-bottom:1px solid var(--bd)}
-.sdb-placement-link{display:grid;grid-template-columns:2fr 1.1fr .6fr 1.2fr 1fr 1.2fr;gap:12px;align-items:center;color:var(--fg);text-decoration:none}
-.sdb-placement-link:hover{color:var(--ac)}
+.sdb-row-link{display:block;color:var(--fg);text-decoration:none}.sdb-row-link:hover{color:var(--ac)}
+.sdb-status{white-space:nowrap}.sdb-source-inline{display:block;margin-top:.35em}.sdb-rule-box{background:var(--ink);color:var(--bg)}
 .sdb-form{display:grid;gap:.8em;border-top:1px solid var(--bd);margin-top:1.5em;padding-top:1em}
 .sdb-form label{display:grid;gap:.25em}.sdb-form input,.sdb-form select{max-width:40em;font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--bd);padding:.6em}
 .sdb-status{border:1px solid var(--bd);padding:.05em .5em}
@@ -275,9 +285,9 @@ DASHBOARD_CSS = """:root{--sdb-measured:#2f6b3a;--sdb-estimated:var(--ac);--sdb-
 .sdb-lang-bars{display:grid;gap:.5em;grid-column:1/-1}.sdb-lang-row{display:grid;grid-template-columns:3em 1fr auto;gap:.75em;align-items:center}.sdb-lang-track{height:.65em;background:var(--bd)}.sdb-lang-bar{display:block;width:var(--bar-width);height:100%;background:var(--ac)}
 .sdb-legend{color:var(--mut);font-size:.9em}.sdb-company{display:flex;gap:.5em;align-items:center}
 .sdb-report{max-width:794px;margin:auto}.sdb-report-head{border-bottom:2px solid var(--bd);padding-bottom:1em}.sdb-report .cols{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
-@media(max-width:700px){.sdb-placement-link{grid-template-columns:1fr}.sdb-report .cols{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){.sdb-report .cols{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @page{size:A4;margin:0}
-@media print{.sdb-main>:not(#sdb),#sdb>:not(.sdb-report){display:none!important}.sdb-main{display:block}.sdb-report{display:block!important;max-width:none;width:210mm;margin:0}.sdb-report-page{min-height:297mm;padding:14mm;box-sizing:border-box;break-after:auto}.sdb-card,.sdb-report-head,.sdb-panel{break-inside:avoid}.sdb-report-page:last-child{break-after:auto}}"""
+@media print{body *{visibility:hidden!important}.sdb-report,.sdb-report *{visibility:visible!important}.sdb-report{position:absolute;inset-inline-start:0;top:0;display:block!important;max-width:none;width:210mm;margin:0}.sdb-report-page{min-height:297mm;padding:14mm;box-sizing:border-box;break-after:auto}.sdb-card,.sdb-report-head,.sdb-panel{break-inside:avoid}.sdb-report-page:last-child{break-after:auto}}"""
 
 
 def label(lang):
@@ -785,10 +795,9 @@ def build(g):
                             ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
         for view, title_key in views:
             canonical = urls[view]
-            view_alts = {l: dashboard_view_url(B, l, view) for l in ["en"] + [x for x in LANGS_ALL if x in LG]}
             dashboard_body = (f'{g["header"](lang, "")}<main class="wrap sdb-main">'
                               f'<div><div class="kicker">{E(q["dash_kicker"])}</div>'
-                              f'<h1>{E(q["achievement_title"] if view == "overview" else q[title_key])}</h1><p class="lede">{E(q["intro"])}</p></div>'
+                              f'<h1 id="sdb-title">{E(q["achievement_title"] if view == "overview" else q[title_key])}</h1><p class="lede">{E(q["intro"])}</p></div>'
                               f'<p class="mut" id="sdb-scope">{E(q["scope"])}</p>'
                               f'<div id="sdb" aria-live="polite"><p class="mut">{E(q["login"])}</p></div>'
                               f'<script>window.M365SP=Object.assign({config},{{view:"{view}"}})</script>'
@@ -796,13 +805,11 @@ def build(g):
             title = (q["achievement_title"] if view == "overview" else q[title_key]) + " – M365.FM"
             output_path = ("sponsor/dashboard/" if view == "overview" else f"sponsor/dashboard/{view}/") if lang == "en" else \
                           (f"{lang}/sponsor/dashboard/" if view == "overview" else f"{lang}/sponsor/dashboard/{view}/")
-            hreflang = "".join(f'<link rel="alternate" hreflang="{E(g["LANGS"][l][1] if l in LG else "en")}" href="{E(href)}">' for l, href in view_alts.items())
             g["write"](output_path + "index.html",
                        g["page"](lang, title, q["intro"], canonical, dashboard_body,
-                                 view_alts if len(view_alts) > 1 else None,
+                                 None,
                                  [{"@context": "https://schema.org", "@type": "WebPage", "name": q[title_key],
                                    "url": canonical, "inLanguage": g["LANGS"][lang][1] if lang in LG else "en"}],
-                                 xdefault=view_alts["en"],
-                                 og_type="website", extra_head=DASHBOARD_CSS + hreflang, share=False, noindex=True))
+                                 og_type="website", extra_head=f"<style>{DASHBOARD_CSS}</style>", share=False, noindex=True))
     print(f"Sponsor-Seite: {len(langs)} Sprachen ({'vorab gerendert' if ssr else 'ohne Vorab-Rendern'}), {len(per_lang[langs[0]][1]) if langs else 0} Themen in der Suche")
     return langs

@@ -3,17 +3,17 @@
   if (!C || !root) return;
   var Q = C.copy, metricKeys = ["people_reached", "podcast_plays", "video_views", "page_views", "link_clicks", "project_requests", "ai_citations", "search_impressions"];
   var sourceCatalog = [
-    ["source_reach", "people_reached", "source_desc_reach", "daily", "people_reached"],
-    ["source_spreaker", "podcast_plays", "source_desc_spreaker", "daily", "spreaker"],
-    ["source_youtube", "video_views", "source_desc_youtube", "daily", "youtube"],
-    ["source_cloudflare", "page_views", "source_desc_cloudflare", "daily", "cloudflare"],
-    ["source_counter", "link_clicks", "source_desc_counter", "live", "sponsor_links"],
-    ["source_gsc", "search_impressions", "source_desc_gsc", "daily", "gsc"],
-    ["source_bing_webmaster", "search_impressions", "source_desc_bing_webmaster", "daily", "bing_webmaster"],
-    ["source_bing", "ai_citations", "source_desc_bing", "monthly", "bing_ai"],
-    ["source_press", "page_views", "source_desc_press", "daily", "press_ranger"],
-    ["source_directory", "project_requests", "source_desc_directory", "live", "project_requests"],
-    ["source_app", "podcast_plays", "source_desc_app", "live", "app"]
+    ["source_reach", "people_reached", "source_desc_reach", "daily", "people_reached", "setup"],
+    ["source_spreaker", "podcast_plays", "source_desc_spreaker", "daily", "spreaker", "setup"],
+    ["source_youtube", "video_views", "source_desc_youtube", "daily", "youtube", "setup"],
+    ["source_cloudflare", "page_views", "source_desc_cloudflare", "daily", "cloudflare", "setup"],
+    ["source_counter", "link_clicks", "source_desc_counter", "live", "sponsor_links", "setup"],
+    ["source_gsc", "search_impressions", "source_desc_gsc", "daily", "gsc", "setup"],
+    ["source_bing_webmaster", "search_impressions", "source_desc_bing_webmaster", "daily", "bing_webmaster", "setup"],
+    ["source_bing", "ai_citations", "source_desc_bing", "monthly", "bing_ai", "source_manual"],
+    ["source_press", "page_views", "source_desc_press", "daily", "press_ranger", "setup"],
+    ["source_directory", "project_requests", "source_desc_directory", "live", "project_requests", "build"],
+    ["source_app", "podcast_plays", "source_desc_app", "live", "app", "later"]
   ];
   function node(tag, attrs, children) {
     var e = document.createElement(tag);
@@ -104,18 +104,21 @@
   }
   function kindLabel(kind) { return text(kind === "estimated" ? "estimated" : kind === "manual" ? "manual" : "measured"); }
   function sourceLine(metric) {
-    return node("p", { class: "sdb-source" }, [
+    var lines = [
       node("span", {}, [text("source") + ": ", sourceLabel(metric.source)]),
-      node("span", {}, [text("type") + ": ", node("b", { class: "sdb-badge sdb-kind-" + metric.kind, text: kindLabel(metric.kind) })]),
-      node("span", {}, [text("as_of") + ": ", metric.as_of ? formatDate(metric.as_of) : text("no_date")])
-    ]);
+      node("span", {}, [text("type") + ": ", node("b", { class: "sdb-badge sdb-kind-" + metric.kind, text: kindLabel(metric.kind) })])
+    ];
+    if (metric.value != null && metric.as_of) lines.push(node("span", {}, [text("as_of") + ": ", formatDate(metric.as_of)]));
+    return node("p", { class: "sdb-source" }, lines);
   }
   function metricCard(metric, label) {
-    return node("article", { class: "tile sdb-card" }, [
+    var children = [
       node("h3", { text: label }),
       node("strong", { text: metricValue(metric.value) }),
       sourceLine(metric)
-    ]);
+    ];
+    if (metric.key === "people_reached" && metric.value == null) children.push(node("p", { class: "mut", text: text("method_follows") }));
+    return node("article", { class: "tile sdb-card" }, children);
   }
   function metricsFor(org) {
     var records = Object.create(null);
@@ -277,17 +280,21 @@
       if (figure) value = metricValue(figure.value);
     }
     var key = figure ? metricLabel(figure.metric) : text("key_figure");
-    var link = node("a", { href: detailUrl(org, item), class: "sdb-placement-link" }, [
-      node("b", { text: item.title }),
-      node("span", { text: channel }),
-      node("span", { text: item.langs || "–" }),
-      node("span", { text: [formatDate(item.start), formatDate(item.end)].join(" – ") }),
-      node("span", { class: "sdb-status", text: text(item.status === "upcoming" ? "upcoming" : item.status === "ended" ? "ended" : item.start ? "active" : "planned") }),
-      node("span", {}, [key + ": ", value])
-    ]);
+    var href = detailUrl(org, item);
+    var link = function (content) { return node("a", { href: href, class: "sdb-row-link" }, [content]); };
+    var status = node("span", { class: "sdb-badge sdb-status",
+      text: text(item.status === "upcoming" ? "upcoming" : item.status === "ended" ? "ended" : item.start ? "active" : "planned") });
     var pressLink = item.channel === "press" && item.refs && item.refs.press_release;
-    return node("div", { class: "sdb-placement" }, [link, figure ? sourceLine(figure) : null, pressLink && /^https:\/\//.test(pressLink) ?
-      node("a", { href: pressLink, rel: "noopener nofollow sponsored", target: "_blank", text: text("link") }) : null]);
+    var pressAnchor = pressLink && /^https:\/\//.test(pressLink) ?
+      node("a", { href: pressLink, rel: "noopener nofollow sponsored", target: "_blank", text: text("link") }) : null;
+    return node("tr", {}, [
+      node("td", {}, [link(node("b", { text: item.title })), pressAnchor]),
+      node("td", {}, [link(channel)]),
+      node("td", {}, [link(item.langs || "–")]),
+      node("td", {}, [link([formatDate(item.start), formatDate(item.end)].join(" – "))]),
+      node("td", {}, [link(status)]),
+      node("td", {}, [link(key + ": " + value), figure ? node("div", { class: "sdb-source-inline" }, [sourceLine(figure)]) : null])
+    ]);
   }
   function renderOverview(orgs, admin) {
     header(orgs, admin);
@@ -303,24 +310,6 @@
     });
     root.appendChild(controls);
     orgs.forEach(function (org) {
-      var section = node("section", { class: "sdb-org" }, [node("h2", { text: org.name }), node("h3", { text: text("key_figures") })]);
-      var cards = node("div", { class: "cols" });
-      metricsFor(org).forEach(function (metric) { cards.appendChild(metricCard(metric, metricLabel(metric.key))); });
-      section.appendChild(cards);
-      section.appendChild(node("section", { class: "sdb-panel" }, [
-        node("h2", { text: text("reach_week") }), weeklyChart(org)
-      ]));
-      var placements = node("section", { class: "sdb-panel" });
-      placements.appendChild(node("h2", { text: text("placements") }));
-      var list = node("div", { class: "sdb-table" });
-      var labels = node("p", { class: "sdb-meta" }, [text("placement") + " · " + text("channel") + " · " + text("languages") +
-        " · " + text("period") + " · " + text("status") + " · " + text("key_figure")]);
-      list.appendChild(labels);
-      var rows = node("div");
-      placements.appendChild(list);
-      placements.appendChild(rows);
-      section.appendChild(placements);
-      root.appendChild(section);
       var period = currentPeriod || (function () {
         var range = rangeFor(selected, org);
         return { from: range[0], to: range[1] };
@@ -328,23 +317,62 @@
       var items = allPlacements(org).filter(function (item) {
         return (!item.start || item.start <= period.to) && (!item.end || item.end >= period.from);
       });
-      if (!items.length) rows.appendChild(node("p", { class: "mut", text: text("no_placements") }));
+      var section = node("section", { class: "sdb-org" }, [node("h2", { text: org.name }), node("h3", { text: text("key_figures") })]);
+      var cards = node("div", { class: "cols" });
+      metricsFor(org).forEach(function (metric) { cards.appendChild(metricCard(metric, metricLabel(metric.key))); });
+      section.appendChild(cards);
+      var highlights = [];
+      items.forEach(function (item) {
+        (item.metrics || []).forEach(function (metric) {
+          if (Number.isFinite(Number(metric.value)) && Number(metric.value) > 0) {
+            highlights.push({ placement: item.title, metric: Object.assign({}, metric, {
+              as_of: metric.day || (metric.fetched_at ? new Date(metric.fetched_at * 1000).toISOString().slice(0, 10) : null)
+            }) });
+          }
+        });
+      });
+      highlights.sort(function (a, b) { return Number(b.metric.value) - Number(a.metric.value); });
+      if (highlights.length) {
+        var highlight = highlights[0];
+        section.appendChild(node("section", { class: "sdb-panel" }, [
+          node("h2", { text: text("highlight") }),
+          node("p", { text: highlight.placement + " · " + metricLabel(highlight.metric.metric) + ": " + metricValue(highlight.metric.value) }),
+          sourceLine(highlight.metric)
+        ]));
+      }
+      section.appendChild(node("section", { class: "sdb-panel" }, [
+        node("h2", { text: text("reach_week") }), weeklyChart(org)
+      ]));
+      var placements = node("section", { class: "sdb-panel" });
+      placements.appendChild(node("h2", { text: text("placements") }));
+      var list = node("div", { class: "sdb-table" });
+      var table = node("table");
+      table.appendChild(node("thead", {}, [node("tr", {}, ["placement", "channel", "languages", "period", "status", "key_figure"]
+        .map(function (key) { return node("th", { scope: "col", text: text(key) }); }))]));
+      var rows = node("tbody");
+      table.appendChild(rows);
+      list.appendChild(table);
+      placements.appendChild(list);
+      section.appendChild(placements);
+      root.appendChild(section);
+      if (!items.length) rows.appendChild(node("tr", {}, [node("td", { colspan: "6", class: "mut", text: text("no_placements") })]));
       items.forEach(function (item) { rows.appendChild(placementRow(org, item)); });
     });
     var actions = node("div", { class: "sdb-actions" }, [
-      node("button", { type: "button", class: "btn", text: text("csv") }),
-      node("a", { class: "btn main", href: C.urls.report, text: text("report_view") })
+      node("a", { class: "btn main", href: C.urls.report, text: text("report_view") }),
+      node("button", { type: "button", class: "btn", text: text("csv") })
     ]);
     var reportUrl = new URL(C.urls.report, location.origin);
     if (admin && orgs.length === 1) reportUrl.searchParams.set("org", orgs[0].handle);
     actions.children[1].href = reportUrl.pathname + reportUrl.search;
-    actions.children[0].addEventListener("click", function () { exportCsv(orgs); });
+    actions.children[1].addEventListener("click", function () { exportCsv(orgs); });
     root.insertBefore(actions, root.children[1] || null);
     root.appendChild(node("section", { class: "sdb-panel" }, [
       node("h2", { text: text("how_count") }),
       node("p", { text: text("measured") + " = " + text("measured_desc") }),
       node("p", { text: text("estimated") + " = " + text("estimated_desc") }),
-      node("p", { text: text("manual") + " = " + text("manual_desc") })
+      node("p", { text: text("manual") + " = " + text("manual_desc") }),
+      node("p", { text: text("privacy_note") })
     ]));
   }
   function renderDetail(orgs, admin) {
@@ -360,7 +388,8 @@
     root.appendChild(node("p", { class: "kicker", text: text(placement.status === "upcoming" ? "upcoming" :
       placement.status === "ended" ? "ended" : placement.start ? "active" : "planned") +
       " · " + formatDate(placement.start) + " – " + formatDate(placement.end) + " · " + (placement.langs || text("unavailable")) }));
-    root.appendChild(node("h2", { text: placement.title }));
+    var title = document.getElementById("sdb-title");
+    if (title) title.textContent = placement.title;
     root.appendChild(node("p", { class: "lede", text: text("detail_intro") }));
     if (placement.type === "event_partner") {
       root.appendChild(node("p", { class: "mut", text: text("unavailable") }));
@@ -455,13 +484,17 @@
           }
         }
         if (channels[active][0] === "podcast_tab") {
-          content.appendChild(metricCard({ value: null, source: text("source_no_data"), kind: "measured", as_of: null }, text("top_countries")));
           var episodes = Object.create(null);
-        records.filter(function (record) { return record.metric === "podcast_plays" && /^episode:/.test(record.dim || ""); }).forEach(function (record) {
-          var episode = record.dim.slice(8), item = episodes[episode] || (episodes[episode] = { plays: 0, day: record.day });
-          item.plays += Number(record.value) || 0;
-          if (record.day > item.day) item.day = record.day;
-        });
+          records.filter(function (record) { return record.metric === "podcast_plays" && /^episode:/.test(record.dim || ""); }).forEach(function (record) {
+            var episode = record.dim.slice(8), item = episodes[episode] || (episodes[episode] = { plays: 0, day: record.day });
+            item.plays += Number(record.value) || 0;
+            if (record.day > item.day) item.day = record.day;
+          });
+          var mentioned = Object.keys(episodes);
+          content.appendChild(metricCard({ key: "episodes_with_mention", value: mentioned.length || null,
+            source: "Spreaker API", kind: "measured",
+            as_of: mentioned.length ? aggregate("podcast_plays", "Spreaker API", "measured").as_of : null },
+          text("episodes_with_mention")));
         var rows = Object.keys(episodes).map(function (episode) {
           return node("tr", {}, [episode, formatDate(episodes[episode].day), placement.langs || "–",
             metricValue(episodes[episode].plays), "–"].map(function (value) { return node("td", { text: value }); }));
@@ -524,27 +557,36 @@
       node("p", { class: "brand", text: "M365.FM / " + text("report_title") }),
       node("p", {}, [org.name, " · ", new Intl.DateTimeFormat(C.lang, { month: "long", year: "numeric" }).format(new Date(month + "-01T00:00:00Z"))])
     ]));
-    var reportMetrics = metricsFor(org).filter(function (metric) { return metric.key !== "people_reached"; });
-    var measuredSentences = reportMetrics.filter(function (metric) { return metric.value != null; })
+    var reportMetrics = metricsFor(org).filter(function (metric) { return metric.key !== "people_reached" && metric.value != null; });
+    var measuredSentences = reportMetrics
       .map(function (metric) { return metricLabel(metric.key) + ": " + metricValue(metric.value); });
-    report.appendChild(node("h1", { text: text("report_sentence") }));
-    report.appendChild(node("p", { class: "sdb-report-intro", text: measuredSentences.length ?
-      measuredSentences.slice(0, 3).join(" · ") : text("unavailable") }));
+    if (measuredSentences.length) {
+      report.appendChild(node("h1", { text: text("report_sentence") }));
+      report.appendChild(node("p", { class: "sdb-report-intro", text: measuredSentences.slice(0, 3).join(" · ") }));
+    }
     var reportPlacementNames = (org.placements || []).map(function (placement) { return placement.title; });
     if (reportPlacementNames.length) report.appendChild(node("p", { class: "sdb-report-placement", text: reportPlacementNames.join(", ") }));
     report.appendChild(node("p", { text: text("sponsored_label") }));
     var cards = node("div", { class: "cols" });
     reportMetrics.forEach(function (metric) { cards.appendChild(metricCard(metric, metricLabel(metric.key))); });
-    report.appendChild(cards);
-    var highlights = [];
+    if (reportMetrics.length) report.appendChild(cards);
+    var highlights = Object.create(null);
     (org.placements || []).forEach(function (placement) {
       (placement.metrics || []).forEach(function (metric) {
-        if (Number(metric.value) > 0) highlights.push({ placement: placement.title, metric: metric });
+        var amount = Number(metric.value);
+        if (!(amount > 0)) return;
+        var summary = highlights[metric.metric] || (highlights[metric.metric] = {
+          metric: Object.assign({}, metric, { value: 0 }), placement: placement.title
+        });
+        summary.metric.value += amount;
+        if (metric.day > (summary.metric.as_of || "")) summary.metric.as_of = metric.day;
       });
     });
-    if (highlights.length) {
+    var bestMetrics = Object.keys(highlights).map(function (key) { return highlights[key]; })
+      .sort(function (a, b) { return Number(b.metric.value) - Number(a.metric.value); });
+    if (bestMetrics.length) {
       var highlightBox = node("section", { class: "sdb-panel" }, [node("h2", { text: text("highlights") })]);
-      highlights.slice(0, 3).forEach(function (item) {
+      bestMetrics.slice(0, 3).forEach(function (item) {
         highlightBox.appendChild(node("p", { text: item.placement + " · " + metricLabel(item.metric.metric) + ": " + metricValue(item.metric.value) }));
       });
       report.appendChild(highlightBox);
@@ -561,6 +603,7 @@
       node("p", { text: text("measured") + " = " + text("measured_desc") }),
       node("p", { text: text("estimated") + " = " + text("estimated_desc") }),
       node("p", { text: text("manual") + " = " + text("manual_desc") }),
+      node("p", { text: text("privacy_note") }),
       node("p", { text: text("sponsored_label") })
     ]));
     var print = node("button", { class: "btn main sdb-actions", type: "button", text: text("print_report") });
@@ -589,9 +632,11 @@
     lastFetch.press_ranger = Math.max(lastFetch.press_ranger || 0, lastFetch.press_portal || 0);
     sourceCatalog.forEach(function (record) {
       var sourceId = record[4], fetched = lastFetch[sourceId];
-      var status = fetched ? text("ready") + " · " + formatDate(new Date(fetched * 1000).toISOString().slice(0, 10)) : text("source_no_data");
-      var cells = [text(record[0]), text(record[1]), text(record[2]), text(record[3]), status];
-      body.appendChild(node("tr", {}, cells.map(function (value) { return node("td", { text: value }); })));
+      var statusKey = fetched ? "ready" : record[5];
+      var status = text(statusKey) + (fetched ? " · " + formatDate(new Date(fetched * 1000).toISOString().slice(0, 10)) : "");
+      var cells = [text(record[0]), text(record[1]), text(record[2]), text(record[3])];
+      body.appendChild(node("tr", {}, cells.map(function (value) { return node("td", { text: value }); })
+        .concat(node("td", {}, [node("span", { class: "sdb-badge sdb-source-status sdb-status-" + statusKey, text: status })]))));
     });
     rows.appendChild(body);
     table.appendChild(rows);
@@ -681,6 +726,13 @@
       }).catch(function () { assignStatus.textContent = text("invalid"); }).finally(function () { assignSubmit.disabled = false; });
     });
     root.appendChild(assignment);
+    root.appendChild(node("aside", { class: "sdb-panel sdb-rule-box" }, [
+      node("h2", { text: text("rules") }),
+      node("p", { text: text("rule_aggregate") }),
+      node("p", { text: text("rule_clicks") }),
+      node("p", { text: text("rule_leads") }),
+      node("p", { text: text("rule_source") })
+    ]));
   }
   var currentPreset = "30";
   function loadDashboard(orgHandle, preset) {
