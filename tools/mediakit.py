@@ -4,14 +4,15 @@
 Quellen (jeweils nur, wenn verfuegbar; fehlende Werte werden weggelassen, nie geschaetzt):
   - YouTube Analytics + Data API (Kanal m365 Show): Aufrufe, Wiedergabezeit, Abos, Verlauf 6 Monate, Top-Videos,
     Laender, Alter/Geschlecht, Geraete, Traffic-Quellen
-  - Cloudflare GraphQL (Zone m365.fm): Seitenaufrufe 30 Tage (Rand-Statistik, ungefiltert), Verlauf, Laender
+  - Cloudflare Web Analytics (RUM, tools/cf_rum.py): Seitenaufrufe und Besuche 30 Tage (ab 29.10.2026), Verlauf, Laender -
+    echte Browser-Aufrufe, Bots weitgehend ausgeschlossen. Fallback, wenn RUM scheitert: Zonen-Statistik, als "ungefiltert" beschriftet
   - Bing Webmaster API: Klicks/Impressionen der Bing-Suche (28 Tage, Verlauf), Top-Suchanfragen
   - data/top.json: Spreaker-Downloads je Sprachfassung (7 Tage)
   - data/stats/ai_performance.json: KI-Zitate (Bing AI Performance, Export), Impressionen in Google AI Overviews und AI Mode
     (Search Console, Bericht Generative AI, Export; nur bei status "ok"), Google-Suche (Search Console API)
   - data/sponsor_pricing.json + data/sponsor_i18n.json: Sponsoring-Pakete und Listenpreise wie auf /sponsor/
 Aufruf: python tools/mediakit.py --out out/mediakit [--brand m365con]   (Umgebung: YT_CLIENT_ID, YT_CLIENT_SECRET, YT_REFRESH_TOKEN,
-        CLOUDFLARE_API_TOKEN, CF_ZONE_ID optional, BING_WEBMASTER_API_KEY)
+        CLOUDFLARE_API_TOKEN, CF_ACCOUNT_ID oder R2_ACCOUNT_ID, CF_RUM_SITE_TAG optional, CF_ZONE_ID optional, BING_WEBMASTER_API_KEY)
 Ergebnis: m365fm-media-kit-en.pdf, m365fm-media-kit-de.pdf, latest.json
 Zweite Marke (#260): --brand m365con baut das Sponsor-/Mediadaten-Deck der M365Con (tools/mediakit_con.py, eigenes Theme, keine Preise).
 """
@@ -93,6 +94,36 @@ def youtube():
 
 
 def cloudflare():
+    """Website-Zahlen fuer Sponsoren: zuerst Cloudflare Web Analytics (echte Seitenaufrufe im Browser, Bots weitgehend ausgeschlossen).
+    Nur wenn das scheitert (Recht/siteTag fehlt), die ungefilterte Zonen-Statistik - als "zone" markiert und so beschriftet. Nie geschaetzt."""
+    if not os.environ.get("CLOUDFLARE_API_TOKEN", "").strip(): return {}
+    out = cloudflare_rum()
+    if out: return out
+    return cloudflare_zone()
+
+
+def cloudflare_rum():
+    """Web Analytics (RUM) fuer die letzten 30 abgeschlossenen Tage, gekuerzt auf den Start am cf_rum.RUM_START; {} bei Fehler (mit Warnung)."""
+    from tools import cf_rum
+    until = TODAY - dt.timedelta(days=1); since = until - dt.timedelta(days=29)
+    try:
+        s = cf_rum.summary(cf_rum.Rum.connect(), since, until)
+    except cf_rum.RumError as e:
+        cf_rum.warn(f"{e}. Mediadaten nutzen die ungefilterte Zonen-Statistik (als 'ungefiltert' beschriftet).")
+        return {}
+    if not s["pageviews"]:
+        cf_rum.warn("Web Analytics lieferte 0 Seitenaufrufe - Beacon/siteTag pruefen. Mediadaten nutzen die ungefilterte Zonen-Statistik.")
+        return {}
+    out = {"source": "rum", "pageviews30": s["pageviews"], "visits30": s["visits"], "period30": f'{s["since"]}–{s["until"]}',
+           "since": s["since"], "until": s["until"], "clamped": s["clamped"],
+           "daily": [[d, pv] for d, pv, _ in s["daily"]], "daily_visits": [[d, v] for d, _, v in s["daily"]], "countries": s["countries"]}
+    print("Cloudflare Web Analytics:", out["pageviews30"], "Seitenaufrufe,", out["visits30"], "Besuche,", out["period30"],
+          "(gekuerzt auf Start von Web Analytics)" if s["clamped"] else "")
+    return out
+
+
+def cloudflare_zone():
+    """Fallback: Zonen-Statistik (httpRequests1dGroups) - zaehlt jede HTML-Antwort am Rand, auch Bots. Nur als 'ungefiltert' zeigen."""
     tok = os.environ.get("CLOUDFLARE_API_TOKEN", "").strip()
     if not tok: return {}
     H = {"authorization": "Bearer " + tok, "content-type": "application/json"}
@@ -112,10 +143,10 @@ def cloudflare():
         for c in (r.get("sum") or {}).get("countryMap") or []:
             cty[c["clientCountryName"]] = cty.get(c["clientCountryName"], 0) + int(c.get("requests") or 0)
     tot = sum(cty.values()) or 1
-    out = {"pageviews30": int(pv), "period30": f"{since}–{until}",
+    out = {"source": "zone", "pageviews30": int(pv), "period30": f"{since}–{until}",
            "daily": [[r["dimensions"]["date"], int((r.get("sum") or {}).get("pageViews") or 0)] for r in rows],
            "countries": [[k, round(v * 100 / tot, 1)] for k, v in sorted(cty.items(), key=lambda kv: -kv[1])[:10]]}
-    print("Cloudflare:", out["pageviews30"], "Seitenaufrufe,", len(out["countries"]), "Laender")
+    print("Cloudflare (Zone, UNGEFILTERT inkl. Bots):", out["pageviews30"], "Seitenaufrufe,", len(out["countries"]), "Laender")
     return out
 
 
@@ -267,11 +298,12 @@ TXT = {
         intro="M365.FM explains Microsoft 365, Copilot, Azure, Power Platform and security for IT professionals, architects and decision makers – as a podcast, as animated explainer videos on YouTube, as articles and as a community with expert profiles, events and a wiki, in {n} languages.",
         reach="At a glance",
         k=dict(yt_views="YouTube views", yt_minutes="YouTube watch time (minutes)", yt_subs_new="New YouTube subscribers", yt_subs="YouTube subscribers",
-               pv="Website page views", sp="Podcast downloads (all language editions)", ai="AI citations (Copilot and partners)",
+               pv="Website page views", visits="Website visits", sp="Podcast downloads (all language editions)", ai="AI citations (Copilot and partners)",
                b_clicks="Bing search clicks", b_imp="Bing search impressions", langs="Site languages", videos="Published videos",
                g_clicks="Google search clicks", g_imp="Google search impressions", gai="Google AI impressions",
                ys_imp="Google search impressions of the YouTube channel", ys_clicks="Google search clicks to the YouTube channel"),
-        s=dict(yt="YouTube Analytics", cf="Cloudflare (edge statistics, before bot filtering)", sp="Spreaker", ai="Bing Webmaster Tools, AI Performance", bing="Bing Webmaster Tools", site="M365.FM", gsc="Google Search Console",
+        s=dict(yt="YouTube Analytics", cf="Cloudflare edge statistics (unfiltered, includes bots)",
+               cf_rum="Cloudflare Web Analytics (real browser page loads, bots largely excluded)", sp="Spreaker", ai="Bing Webmaster Tools, AI Performance", bing="Bing Webmaster Tools", site="M365.FM", gsc="Google Search Console",
                gai="Google Search Console, Generative AI", ys="Search Console (YouTube channel)"),
         d28="last 28 days", d30="last 30 days", d7="7 days", total="total",
         yt_h="YouTube: m365 Show", yt_lead="Animated explainer videos, Shorts and certification courses on Microsoft 365, Copilot, Azure and security.",
@@ -281,7 +313,10 @@ TXT = {
         ys_src="Source: Google Search Console, property of the YouTube channel.",
         avd="Average view duration", likes="Likes", shares="Shares",
         web_h="Website and search: www.m365.fm", web_lead="Episode pages, articles, topic pages, wiki and expert directory – indexed by Google and Bing and cited by AI assistants.",
-        web_daily="Page views per day (30 days)", web_cty="Requests by country (share, 30 days, unfiltered)", b_week="Bing search per week (12 weeks)", b_q="What people search for on Bing to find M365.FM",
+        web_daily="Page views per day · {p}", web_daily_zone="Page views per day (30 days, unfiltered)",
+        web_cty="Page views by country · share", web_cty_zone="Requests by country (share, 30 days, unfiltered)",
+        web_src_rum="Source: Cloudflare Web Analytics – counts real page loads in the browser (JavaScript beacon, no cookies), so bots are largely excluded. Web Analytics has been active since 29 Oct 2026; earlier days are not included and not estimated.",
+        web_src_zone="Source: Cloudflare edge statistics, unfiltered – counts every HTML response including bots and crawlers (Web Analytics was not available for this edition).", b_week="Bing search per week (12 weeks)", b_q="What people search for on Bing to find M365.FM",
         q="Query", clicks="Clicks", imps="Impressions", ai_h="AI assistants", ai_t="Microsoft Copilot and partner AI services cited M365.FM pages {n} times between {p} – on average {d} different pages per day.",
         gai_t="Google showed M365.FM pages {n} times in AI Overviews and AI Mode between {p}.", gai_pages=" {g} different pages had AI impressions.",
         gai_src="Source: Google Search Console, Generative AI performance.",
@@ -312,11 +347,12 @@ TXT = {
         intro="M365.FM erklärt Microsoft 365, Copilot, Azure, Power Platform und Security für IT-Fachleute, Architekten und Entscheider – als Podcast, als animierte Erklärvideos auf YouTube, als Artikel und als Community mit Expertenprofilen, Events und Wiki, in {n} Sprachen.",
         reach="Auf einen Blick",
         k=dict(yt_views="YouTube-Aufrufe", yt_minutes="YouTube-Wiedergabezeit (Minuten)", yt_subs_new="Neue YouTube-Abonnenten", yt_subs="YouTube-Abonnenten",
-               pv="Website-Seitenaufrufe", sp="Podcast-Downloads (alle Sprachfassungen)", ai="KI-Zitate (Copilot und Partner)",
+               pv="Website-Seitenaufrufe", visits="Website-Besuche", sp="Podcast-Downloads (alle Sprachfassungen)", ai="KI-Zitate (Copilot und Partner)",
                b_clicks="Bing-Suchklicks", b_imp="Bing-Suchimpressionen", langs="Sprachen der Website", videos="Veröffentlichte Videos",
                g_clicks="Google-Suchklicks", g_imp="Google-Suchimpressionen", gai="Google-KI-Impressionen",
                ys_imp="Google-Suchimpressionen des YouTube-Kanals", ys_clicks="Google-Suchklicks auf den YouTube-Kanal"),
-        s=dict(yt="YouTube Analytics", cf="Cloudflare (Rand-Statistik, vor Bot-Filterung)", sp="Spreaker", ai="Bing Webmaster Tools, AI Performance", bing="Bing Webmaster Tools", site="M365.FM", gsc="Google Search Console",
+        s=dict(yt="YouTube Analytics", cf="Cloudflare-Randstatistik (ungefiltert, inkl. Bots)",
+               cf_rum="Cloudflare Web Analytics (echte Seitenaufrufe im Browser, weitgehend ohne Bots)", sp="Spreaker", ai="Bing Webmaster Tools, AI Performance", bing="Bing Webmaster Tools", site="M365.FM", gsc="Google Search Console",
                gai="Google Search Console, Generative AI", ys="Search Console (YouTube-Kanal)"),
         d28="letzte 28 Tage", d30="letzte 30 Tage", d7="7 Tage", total="gesamt",
         yt_h="YouTube: m365 Show", yt_lead="Animierte Erklärvideos, Shorts und Zertifizierungskurse zu Microsoft 365, Copilot, Azure und Security.",
@@ -326,7 +362,10 @@ TXT = {
         ys_src="Quelle: Google Search Console, Property des YouTube-Kanals.",
         avd="Durchschnittliche Wiedergabedauer", likes="Likes", shares="Geteilt",
         web_h="Website und Suche: www.m365.fm", web_lead="Folgenseiten, Artikel, Themenseiten, Wiki und Expertenverzeichnis – von Google und Bing indexiert und von KI-Assistenten zitiert.",
-        web_daily="Seitenaufrufe pro Tag (30 Tage)", web_cty="Anfragen nach Land (Anteil, 30 Tage, ungefiltert)", b_week="Bing-Suche pro Woche (12 Wochen)", b_q="Wonach Menschen bei Bing suchen, um M365.FM zu finden",
+        web_daily="Seitenaufrufe pro Tag · {p}", web_daily_zone="Seitenaufrufe pro Tag (30 Tage, ungefiltert)",
+        web_cty="Seitenaufrufe nach Land · Anteil", web_cty_zone="Anfragen nach Land (Anteil, 30 Tage, ungefiltert)",
+        web_src_rum="Quelle: Cloudflare Web Analytics – zählt echte Seitenaufrufe im Browser (JavaScript-Beacon, ohne Cookies), Bots sind damit weitgehend ausgeschlossen. Web Analytics ist seit 29.10.2026 aktiv; frühere Tage fehlen und werden nicht geschätzt.",
+        web_src_zone="Quelle: Cloudflare-Randstatistik, ungefiltert – zählt jede HTML-Antwort einschließlich Bots und Crawlern (Web Analytics war für diese Ausgabe nicht verfügbar).", b_week="Bing-Suche pro Woche (12 Wochen)", b_q="Wonach Menschen bei Bing suchen, um M365.FM zu finden",
         q="Suchanfrage", clicks="Klicks", imps="Impressionen", ai_h="KI-Assistenten", ai_t="Microsoft Copilot und KI-Dienste von Partnern haben M365.FM-Seiten zwischen {p} {n}-mal zitiert – im Schnitt {d} verschiedene Seiten pro Tag.",
         gai_t="Google hat M365.FM-Seiten zwischen {p} {n}-mal in AI Overviews und im KI-Modus angezeigt.", gai_pages=" {g} verschiedene Seiten hatten KI-Impressionen.",
         gai_src="Quelle: Google Search Console, Bericht „Generative AI“.",
@@ -365,6 +404,13 @@ def nm(table, key, lang):
     return v[0 if lang == "en" else 1] if v else key
 
 
+def web_period(lang, c):
+    """Zeitraum der Website-Zahlen: 'letzte 30 Tage' oder bei Web Analytics ab Start 'seit 29.10.2026 (n Tage)'."""
+    from tools import cf_rum
+    if c.get("source") != "rum" or not c.get("since"): return TXT[lang]["d30"]
+    return cf_rum.period_label(lang, dt.date.fromisoformat(c["since"]), dt.date.fromisoformat(c["until"]), bool(c.get("clamped")))
+
+
 def rows_for(lang, D):
     t = TXT[lang]; k, s = t["k"], t["s"]; R = []
     y, c, b, l = D.get("youtube", {}), D.get("cloudflare", {}), D.get("bing", {}), D.get("local", {})
@@ -376,8 +422,13 @@ def rows_for(lang, D):
     ys = D.get("yt_search") or {}   # Google-Suche fuer den YouTube-Kanal (Search-Console-Creator-Property), nur bei status ok
     if ys.get("impressions"):
         R += [(k["ys_imp"], fmt(lang, ys["impressions"]), s["ys"], ys.get("period", "")), (k["ys_clicks"], fmt(lang, ys["clicks"]), s["ys"], ys.get("period", ""))]
-    if "pageviews30" in c:   # Besucher (unique IPs) schwanken durch Bots stark - nur Seitenaufrufe, als ungefiltert gekennzeichnet
-        R.append((k["pv"], fmt(lang, c["pageviews30"]), s["cf"], t["d30"]))
+    if "pageviews30" in c:
+        if c.get("source") == "rum":   # Web Analytics: echte Browser-Aufrufe; Zeitraum ehrlich (ab Start von Web Analytics)
+            per = web_period(lang, c)
+            R.append((k["pv"], fmt(lang, c["pageviews30"]), s["cf_rum"], per))
+            if c.get("visits30"): R.append((k["visits"], fmt(lang, c["visits30"]), s["cf_rum"], per))
+        else:   # Fallback Zone: Besucher (unique IPs) schwanken durch Bots stark - nur Seitenaufrufe, als ungefiltert gekennzeichnet
+            R.append((k["pv"], fmt(lang, c["pageviews30"]), s["cf"], t["d30"]))
     if "spreaker7" in l: R.append((k["sp"], fmt(lang, l["spreaker7"]), s["sp"], l.get("spreaker_period") or t["d7"]))
     if "ai_citations" in l: R.append((k["ai"], fmt(lang, l["ai_citations"]), s["ai"], l.get("ai_period", "")))
     if "gai_impressions" in l: R.append((k["gai"], fmt(lang, l["gai_impressions"]), s["gai"], l.get("gai_period", "")))
@@ -447,7 +498,7 @@ def build_pdf(path, lang, D, F):
     def kicker(y, text, x=M, w=CW):
         cv.setFont(F["BarlowCondensed-SemiBold"], 11); cv.setFillColor(AC)
         cv.drawString(x, y, text.upper()); tw = cv.stringWidth(text.upper(), F["BarlowCondensed-SemiBold"], 11)
-        cv.setStrokeColor(BD); cv.setLineWidth(.6); cv.line(x + tw + 8, y + 3, x + w, y + 3)
+        if tw + 8 < w: cv.setStrokeColor(BD); cv.setLineWidth(.6); cv.line(x + tw + 8, y + 3, x + w, y + 3)   # sonst laege die Linie ueber dem Text
         return y - 18
 
     def hbars(y, items, x=M, w=CW, valfmt=None, bar_h=11, gap=6, label_w=None):
@@ -506,7 +557,9 @@ def build_pdf(path, lang, D, F):
     y = para(M, y, t["intro"].format(n=nl), F["Barlow"], 11.5, INK, lead=16.5) - 14
     y = kicker(y, t["reach"])
     rows = rows_for(lang, D)
-    cols, gap = 3, 10; cw = (CW - gap * (cols - 1)) / cols; ch = 72
+    cols, gap = 3, 10; cw = (CW - gap * (cols - 1)) / cols
+    src_lines = max([len(simpleSplit(f"{src}{' · ' + per if per else ''}", F["Barlow"], 7.2, cw - 20)) for _, _, src, per in rows] or [2])
+    ch = 72 + 9 * max(0, min(src_lines, 4) - 2)   # lange Quellenangaben (Web Analytics + Zeitraum) nicht abschneiden
     for i, (label, val, src, per) in enumerate(rows):
         cx = M + (i % cols) * (cw + gap); cy = y - (i // cols) * (ch + gap) - ch
         cv.setFillColor(WH); cv.setStrokeColor(BD); cv.setLineWidth(.6); cv.rect(cx, cy, cw, ch, stroke=1, fill=1)
@@ -514,7 +567,7 @@ def build_pdf(path, lang, D, F):
         cv.setFillColor(INK); cv.setFont(F["Barlow-SemiBold"], 8.6); ly = cy + ch - 44
         for line in simpleSplit(label, F["Barlow-SemiBold"], 8.6, cw - 20)[:2]: cv.drawString(cx + 10, ly, line); ly -= 10.5
         cv.setFillColor(MUT); cv.setFont(F["Barlow"], 7.2)
-        for line in simpleSplit(f"{src}{' · ' + per if per else ''}", F["Barlow"], 7.2, cw - 20)[:2]: cv.drawString(cx + 10, ly, line); ly -= 9
+        for line in simpleSplit(f"{src}{' · ' + per if per else ''}", F["Barlow"], 7.2, cw - 20)[:4]: cv.drawString(cx + 10, ly, line); ly -= 9
     y = y - ((len(rows) + cols - 1) // cols) * (ch + gap) - 10
     para(M, y, t["note"], F["Barlow"], 8, MUT, lead=11)
 
@@ -575,8 +628,9 @@ def build_pdf(path, lang, D, F):
     # --- Seite: Website, Suche, KI ---
     if c_ or b_ or l_.get("ai_citations") or l_.get("gai_impressions"):
         y = new_page(); y = h2(y, t["web_h"], t["web_lead"])
+        rum = c_.get("source") == "rum"
         if c_.get("daily"):
-            y = kicker(y, t["web_daily"])
+            y = kicker(y, t["web_daily"].format(p=web_period(lang, c_)) if rum else t["web_daily_zone"])
             y = vbars(y, [(d[8:10] + "." + d[5:7] if lang == "de" else d[5:7] + "/" + d[8:10], v) for d, v in c_["daily"]], h=95, lab_every=5, show_vals=False) - 4
         if b_.get("weekly"):
             y = kicker(y, t["b_week"] + f" · {t['imps']}")
@@ -587,7 +641,8 @@ def build_pdf(path, lang, D, F):
         if y < 230: y = new_page(); y = h2(y, t["web_h"])
         half = (CW - 24) / 2; ys = y; yl = yr = ys
         if c_.get("countries"):
-            yl = kicker(ys, t["web_cty"], M, half); yl = hbars(yl, [(k, v) for k, v in c_["countries"][:8]], M, half, pct, label_w=90)
+            yl = kicker(ys, t["web_cty"] if rum else t["web_cty_zone"], M, half)
+            yl = hbars(yl, [(nm(COUNTRY, k, lang), v) for k, v in c_["countries"][:8]], M, half, pct, label_w=90)
         if l_.get("ai_citations") or l_.get("gai_impressions"):
             yr = kicker(ys, t["ai_h"], M + half + 24, half)
         if l_.get("ai_citations"):
@@ -601,6 +656,8 @@ def build_pdf(path, lang, D, F):
             yr = para(M + half + 24, yr, txt, F["Barlow"], 9.5, INK, half, 13)
             yr = para(M + half + 24, yr - 2, t["gai_src"], F["Barlow"], 8, MUT, half, 11)
         y = min(yl, yr)
+        if c_ and y > M + 40:   # Quelle der Website-Zahlen immer nennen: Web Analytics oder ungefilterte Zonen-Statistik
+            y = para(M, y - 6, t["web_src_rum"] if rum else t["web_src_zone"], F["Barlow"], 8, MUT, lead=11) - 4
 
     # --- Seite: Podcast + Zielgruppe + Kanaele ---
     y = new_page(); y = h2(y, t["pod_h"], t["pod_lead"])
