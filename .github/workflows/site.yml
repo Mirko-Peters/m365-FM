@@ -24,7 +24,16 @@ jobs:
       - name: Sponsor-Rechner gegen die Testvektoren des Prototyps pruefen (T37, blockierend; Node ist auf dem Runner vorhanden)
         run: node --test tests/sponsor_calc.test.mjs
       - name: Interne Links ohne Umweg - Python-Nachbau der Site-Worker-Weiterleitungen pruefen (blockierend)
-        run: python3 -m unittest discover -s tests -p test_site_links.py && python3 -m unittest discover -s tests -p test_redirects_extra.py && (cd sitewrk && node --test test/legacy.test.mjs)
+        run: python3 -m unittest discover -s tests -p test_site_links.py && (cd sitewrk && node --test test/legacy.test.mjs)
+      - name: Zusatz-Weiterleitungen (data/redirects_extra.json) gegen den Datenstand pruefen (nicht blockierend)
+        # liest Live-Daten (Folgen, Entitaeten, Beitraege): eine Umbenennung oder ein geloeschtes Ziel darf nicht jeden Bau stoppen
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          if ! python3 -m unittest discover -s tests -p test_redirects_extra.py 2>&1 | tee "$RUNNER_TEMP/redirects-extra.log"; then
+            { echo "### Zusatz-Weiterleitungen: veraltete Eintraege in data/redirects_extra.json"; echo; echo '```'; grep -E "AssertionError|FAIL:|fehlt" "$RUNNER_TEMP/redirects-extra.log" | head -40; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+            echo "::warning::data/redirects_extra.json enthaelt Ziele, die es nicht mehr gibt (siehe Zusammenfassung)"; exit 1
+          fi
       - name: Cache fuer den Browser (fester Schluessel, einmal gefuellt)
         uses: actions/cache@v4
         with:
