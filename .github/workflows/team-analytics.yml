@@ -1,0 +1,53 @@
+name: Team-Analytics (GSC, YouTube, Bing per API)
+
+# Arbeitsdaten fuer die Routinen des KI-Teams (SEO-Audit, Content-Planung, Abendbericht): statt Exporte per Chrome
+# holen sie sich das Artefakt "team-analytics" des letzten Laufs:
+#   gh run download -R Mirko-Peters/m365-dub-downloader -n team-analytics -D analytics \
+#     $(gh run list -R Mirko-Peters/m365-dub-downloader -w team-analytics.yml -s success -L 1 --json databaseId -q '.[0].databaseId')
+# Inhalt: gsc.json, youtube.json, bing.json, summary.md (tools/team_analytics.py). Nicht im Repo (das Repo ist oeffentlich).
+on:
+  schedule:
+    - cron: "43 5 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: team-analytics
+  cancel-in-progress: false
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -q requests cryptography
+      - name: YouTube-Token bereitstellen
+        env:
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET || secrets.GOOGLE_CLIENT_SECRET }}
+        run: |
+          if [ -f data/yt_auth.enc ] && [ -n "$YT_CLIENT_SECRET" ]; then
+            python yt_auth.py env || echo "YouTube-Token nicht verfuegbar; Quelle wird uebersprungen."
+          fi
+      - name: Daten abrufen
+        env:
+          GSC_SERVICE_ACCOUNT_JSON: ${{ secrets.GSC_SERVICE_ACCOUNT_JSON }}
+          GSC_SITE: ${{ vars.GSC_SITE }}
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID || secrets.GOOGLE_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET || secrets.GOOGLE_CLIENT_SECRET }}
+          BING_WEBMASTER_API_KEY: ${{ secrets.BING_WEBMASTER_API_KEY }}
+        run: |
+          python tools/team_analytics.py out
+          cp data/stats/ai_performance.json out/ai_performance.json
+          cat out/summary.md >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: team-analytics
+          path: out/
+          retention-days: 14
