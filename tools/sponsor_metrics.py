@@ -336,8 +336,58 @@ def youtube(placements, day, out, statuses):
         statuses["YouTube Analytics"] = "Abruf abgeschlossen"
 
 
+@functools.lru_cache(maxsize=1)
+def rum_connection():
+    """Web-Analytics-Zugang (einmal pro Lauf) oder RumError-Text. Nie mit Token im Text."""
+    from tools import cf_rum
+    try:
+        return cf_rum.Rum.connect(), ""
+    except cf_rum.RumError as error:
+        return None, str(error)
+
+
 def cloudflare(placements, day, out, statuses):
-    token = os.environ.get("CLOUDFLARE_API_TOKEN", "").strip()
+    """Seitenaufrufe je gesponserter URL: Cloudflare Web Analytics (Quelle 'cloudflare_rum', echte Browser-Aufrufe, Bots weitgehend
+    ausgeschlossen). Nur wenn RUM nicht verfuegbar ist oder der Tag vor dem Start von Web Analytics liegt: Zonen-Anfragen (Quelle
+    'cloudflare', ungefiltert inkl. Bots). Der Worker zeigt fuer Tag+URL den RUM-Wert, sobald es einen gibt."""
+    from tools import cf_rum
+    token = cf_rum.token()   # CF_ANALYTICS_TOKEN (nur Lesen) oder CLOUDFLARE_API_TOKEN
+    if not token:
+        statuses["Cloudflare"] = "Secret fehlt; keine Werte geschrieben"
+        return
+    rum, reason = rum_connection()
+    if rum is not None and dt.date.fromisoformat(day) >= cf_rum.RUM_START:
+        source_rows, failed = [], ""
+        for placement in placements:
+            for path in page_paths(slug_rows(placement["id"]), placement):
+                try:
+                    groups = cf_rum.path_views(rum, day, path)
+                except cf_rum.RumError as error:
+                    failed = str(error)
+                    break
+                # Auch 0 schreiben: ein gemessener Null-Wert ersetzt im Dashboard einen aelteren ungefilterten Zonenwert desselben Tages
+                count = sum(value for date_value, value in groups if text_day(date_value) == day)
+                metric = row(placement["id"], day, "page_views", count, path, "cloudflare_rum")
+                if metric:
+                    source_rows.append(metric)
+            if failed:
+                break
+        if not failed:
+            out.extend(source_rows)
+            statuses["Cloudflare"] = "Web Analytics (echte Browser-Aufrufe) abgeschlossen"
+            return
+        reason = failed
+    if reason:
+        cf_rum.warn(f"{reason}. Sponsor-Seitenaufrufe {day}: Fallback auf ungefilterte Zonen-Anfragen (Quelle 'cloudflare').")
+    cloudflare_zone(placements, day, out, statuses)
+    if statuses.get("Cloudflare") == "Abruf abgeschlossen":
+        statuses["Cloudflare"] = "Abruf abgeschlossen (Zone, ungefiltert inkl. Bots)"
+
+
+def cloudflare_zone(placements, day, out, statuses):
+    """Fallback: Anfragen je Pfad aus der Zonen-Statistik (ungefiltert, auch Bots)."""
+    from tools import cf_rum
+    token = cf_rum.token()
     zone = os.environ.get("CF_ZONE_ID", "").strip()
     if not token:
         statuses["Cloudflare"] = "Secret fehlt; keine Werte geschrieben"
