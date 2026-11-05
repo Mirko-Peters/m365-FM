@@ -31,6 +31,7 @@ import site_sidebar as SBR
 import site_r2 as R2
 from site_size import sizes
 import site_sponsorships as SPM   # T37 Sponsor: Kennzeichnung bezahlter Inhalte (data/sponsorships.json)
+import site_transcripts as TRF   # #266: Transkripte als Dateien je Folge (R2, /…/transcript.txt|.vtt)
 import glob, hashlib, html, json, os, re, shutil, sys, unicodedata
 from datetime import date
 from pathlib import Path
@@ -942,6 +943,7 @@ def phase(name):
 def build():
     import shutil as _sh
     if (ROOT / "r2out").exists(): _sh.rmtree(ROOT / "r2out")
+    TRF.REG = TRF.Registry()   # #266: Transkripte dieses Baus (Index /show/transcripts.txt)
     SF.prefetch(COMMUNITY_API, langs=list(COMM_LANGS)); SF.check(COMMUNITY_API)   # alle Exporte einmal, parallel; ohne Pflicht-Exporte kein Bau
     phase("Exporte geholt")
     eps, pub, seo = load()
@@ -1136,6 +1138,8 @@ def build():
         spk = f'https://www.spreaker.com/episode/{it["eid"]}'
         yt = f"https://youtu.be/{vid}"
         tr = e.get("tr") or ""
+        _trf = TRF.REG.publish(write_r2, BASE, f'{l}/{it["slug"]}/', vtt=TRF.dub_vtt(l, vid), title=e["title"], lang=l, page=canonical, sid=it["eid"])   # #266: transcript.txt|.vtt neben der Seite (R2)
+        if _trf and vid in ORIG: TRF.REG.dub[(l, ORIG[vid])] = (vid, ui[2])   # dieselben Dateien fuer die Sprachfassung /<l>/show/episodes/<slug>/ (site_podpage.py)
         _nkp, _nnotes, _nfaq, _nld = SNT.blocks(SNT.get(l, ep_id=it["eid"]), l, edited_only=True)   # nur wenn im Editor bearbeitet: Kernpunkte, Show Notes, FAQ als eigene Bloecke
         _snx = SNALL.get(str(it["eid"]))   # T26: Vollfassung der Shownotes fuer die Dub-Folge (shownotes/site/<spreaker_episode_id>.md)
         if _snx:
@@ -1223,7 +1227,8 @@ def build():
         showrow = "".join(f'<a href="{sh[k]}" rel="noopener">{n}</a>' for k, n in (("apple_show", "Apple Podcasts"), ("spotify_show", "Spotify"), ("amazon_show", "Amazon Music"), ("deezer_show", "Deezer"), ("iheart_show", "iHeart"), ("youtube_show", "YouTube"), ("youtube_music_show", "YouTube Music"), ("castbox_show", "Castbox"), ("podcastaddict_show", "Podcast Addict"), ("podchaser_show", "Podchaser")) if sh.get(k))
         btns += f'<a class="btn" data-p="spreaker" href="{spk}" rel="noopener">🎧 {esc(ui[0])}</a>' 
         btns += f'<a class="btn" href="{yt}" rel="noopener">▶ {esc(ui[1])}</a>'
-        if tr: btns += f'<a class="btn" href="{tr}">📄 {esc(ui[2])}</a>'
+        if _trf: btns += f'<a class="btn" href="{_trf["txt"]}" type="text/plain" rel="nofollow">📄 {esc(ui[2])} (TXT)</a>' + (f'<a class="btn" href="{_trf["vtt"]}" type="text/vtt" rel="nofollow">VTT</a>' if _trf.get("vtt") else "")
+        elif tr: btns += f'<a class="btn" href="{tr}">📄 {esc(ui[2])}</a>'   # Datei (noch) nicht im Repo: bisheriger Link
         rel = "".join(f'<a class="row" href="{url_of(x)}" title="{esc(x["e"]["title"])}"><h3>{esc(anchor_title(x["e"]["title"]))}</h3></a>' for x in more)
         body = f"""{header(l, lang_switch(l, alts, active))}
 <main class="wrap"><article>
@@ -1658,6 +1663,7 @@ def build():
          f"- [Machine-readable feed]({BASE}/episodes.json): all episodes as JSON", f"- [Agent card]({BASE}/agent.json): capabilities for AI agents", f"- [Sitemap]({BASE}/sitemap.xml)", "",
          "## Main show, knowledge graph and blog (English)",
          f"- [M365.FM podcast, all episodes]({BASE}/show/episodes/): {len(_showix['items'])} English episodes with key points, FAQ and transcript – list in [llms-show.txt]({BASE}/llms-show.txt)",
+         *([f"- [Transcripts]({BASE}/show/transcripts.txt): {len(TRF.REG.entries)} episode transcripts (English main show and language versions) as plain text, one line per episode with title and URL; WebVTT with timestamps next to it where available (…/transcript.vtt)"] if TRF.REG.entries else []),   # #266
          f"- [Entities]({BASE}/entity/): {len(ENT.ENTS)} Microsoft products, concepts, certifications and people with definition, facts, sources, episodes and articles – list in [llms-entities.txt]({BASE}/llms-entities.txt), data in [entities.json]({BASE}/entities.json) and [entities.jsonld]({BASE}/entities.jsonld); each entity has a feed at /entity/<id>/feed.xml",
          f"- [Blog]({BASE}/community/u/mirko-p/blog/): {sum(1 for p in _posts if p.get('lang') == 'en')} articles by Mirko Peters – list in [llms-blog.txt]({BASE}/llms-blog.txt), data in [articles.json]({BASE}/articles.json)",
          f"- [Glossary]({BASE}/glossary/): short definitions of Microsoft terms (English and German)",
@@ -1670,6 +1676,9 @@ def build():
     for c in ORDER:
         L.append(f"- {cat_name(c, 'en')}: " + ", ".join(f"[{l}]({cat_url(l, c)})" for l in active if c in catidx[l]))
     write("llms.txt", "\n".join(L) + "\n")
+    if TRF.REG.entries:   # #266: Index der Transkript-Dateien (klein, liegt in GitHub Pages; die Dateien selbst im R2-Bucket)
+        write("show/transcripts.txt", TRF.REG.index_txt(BASE)); write("show/transcripts.json", TRF.REG.index_json(TODAY))
+    print(f"Transkript-Dateien: {TRF.REG.count['txt']} TXT, {TRF.REG.count['vtt']} VTT, {len(TRF.REG.entries)} im Index")
     # Hauptshow, Entitaeten und Blog als eigene Listen fuer KI-Suchen und Agenten (bisher kannten llms*.txt und episodes.json nur die Dub-Folgen)
     _S = [f"# M365.FM podcast – all {len(_showix['items'])} English episodes", "", "> Conversations with Microsoft MVPs, product experts and architects about Microsoft 365, Copilot, Azure, Power Platform, security and AI; host Mirko Peters (Microsoft MVP). Each page has key points, FAQ, guests and a transcript.", ""]
     for x in _showix["items"]:
