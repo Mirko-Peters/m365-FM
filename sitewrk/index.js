@@ -108,7 +108,10 @@ async function r2First(request, env, ctx, url, p, key, build) {
   return new Response(request.method === "HEAD" ? null : hit.body, { status: 200, headers: h });
 }
 // Datenexporte des Seitenbaus: fuer Programme da, nicht fuer die Suche (Allowlist - .well-known, openapi.json, agent.json, episodes.json, llms*.txt bleiben sichtbar)
-const NOINDEX = /^\/(search\/|entities\.json|entities-src\.json|entities\.jsonld|og-manifest\.json|seo-report\.json|top\.json|show\/redirects\.json|show-notes\/|blog-import\/|blog-content\/)|\.jsonld$/i;
+const NOINDEX = /^\/(search\/|entities\.json|entities-src\.json|entities\.jsonld|og-manifest\.json|seo-report\.json|top\.json|show\/redirects\.json|show\/transcripts\.json|show-notes\/|blog-import\/|blog-content\/)|\.jsonld$/i;
+// #266: Transkript-Dateien je Folge (Hauptshow, Dub-Folge, Sprachfassung) liegen im R2-Bucket (r2out/): fuer Podcast-Apps (CORS) und Programme,
+// nicht fuer die Suche (der Text steht schon auf der Folgenseite). Gleiche Regel wie site_transcripts.PATH_RX.
+export const TRANSCRIPT = /^(?:\/[a-z]{2})?(?:\/show\/episodes)?\/[a-z0-9-]+\/transcript\.(txt|vtt)$/;
 const R2_EXPORT = /^\/(?:blog-import\/[^/]+\.json|translations-blog\.json)$/i;
 
 async function redirectMap() {
@@ -140,6 +143,8 @@ function finishHeaders(h, p) {
   h.set("cache-control", HASHED.test(p) || FONT.test(p) ? "public, max-age=31536000, immutable" : isImg ? "public, max-age=86400, stale-while-revalidate=604800"
     : isStatic ? "public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400" : HTML_CC);
   if (NOINDEX.test(p)) h.set("x-robots-tag", "noindex");
+  const tm = TRANSCRIPT.exec(p);
+  if (tm) { h.set("content-type", CT[tm[1]]); h.set("x-robots-tag", "noindex"); h.set("access-control-allow-origin", "*"); }   // #266
   if (isImg) h.set("vary", "accept");
   if (p === "/") h.set("link", '</.well-known/api-catalog>; rel="api-catalog", </openapi.json>; rel="service-desc"; type="application/vnd.oai.openapi+json", </llms.txt>; rel="service-doc"; type="text/plain", </.well-known/agent.json>; rel="describedby"; type="application/json"');   // RFC 8288 / 9727: Startseite verweist auf maschinenlesbare Ressourcen
   if (p === "/.well-known/api-catalog") { h.set("content-type", 'application/linkset+json; profile="https://www.rfc-editor.org/info/rfc9727"'); h.set("access-control-allow-origin", "*"); }
@@ -204,6 +209,17 @@ export default {
         const h = new Headers({ "content-type": "application/json; charset=utf-8", "cache-control": HTML_CC });
         for (const [k, v] of Object.entries(SEC)) h.set(k, v);
         if (NOINDEX.test(p)) h.set("x-robots-tag", "noindex");
+        return new Response(request.method === "HEAD" ? null : obj.body, { headers: h });
+      }
+    }
+    if (res.status === 404 && env.PAGES && TRANSCRIPT.test(p) && (request.method === "GET" || request.method === "HEAD")) {   // #266: Transkript aus dem R2-Bucket (pages/<pfad>)
+      const obj = await env.PAGES.get("pages" + p).catch(() => null);
+      if (obj && !(obj.customMetadata && obj.customMetadata.gone === "1")) {
+        const h = new Headers();
+        if (obj.httpEtag) h.set("etag", obj.httpEtag);
+        if (obj.uploaded) h.set("last-modified", obj.uploaded.toUTCString());
+        finishHeaders(h, p);
+        if (notModified(request, h.get("etag"), h.get("last-modified"))) return new Response(null, { status: 304, headers: h });
         return new Response(request.method === "HEAD" ? null : obj.body, { headers: h });
       }
     }

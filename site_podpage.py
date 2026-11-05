@@ -8,6 +8,7 @@ import site_media as MED
 import site_img_dims as IMG
 from site_design import pager as PG   # Vor/Zurueck am Seitenende (rel=prev/next)
 import site_sponsorships as SPM   # T37 Sponsor: Kennzeichnung gesponserter Folgen (data/sponsorships.json)
+import site_transcripts as TRS   # #266: Transkripte als Dateien neben der Folgenseite (R2)
 import gzip, json, re, unicodedata, html as _h
 from html.parser import HTMLParser
 from pathlib import Path
@@ -444,6 +445,8 @@ def build(g):
         if not nkp and not nfaq and e["slug"] in SECTIONS:   # fuer die Folge geschriebene Kernpunkte und FAQ (data/episode_sections), solange im Editor keine eigenen gepflegt sind
             _sc = SECTIONS[e["slug"]]; nkp, nfaq, _sld = SNT.sections(_sc.get("keypoints"), _sc.get("faq"), "en"); nld = list(nld) + _sld
         _sid = (nrec or {}).get("id") or (r or {}).get("spreaker_id") or ""   # Spreaker-Folgen-ID: Show-Notes-Datensatz, sonst en_episodes.json
+        _ptx, _pvtt = TRS.podcast_files(_sid)   # #266: VoiceStudio-Folge (transcripts/podcast/<spreaker_id>.txt|.vtt) vor dem Spreaker-Transkript
+        _trf = TRS.REG.publish(g.get("write_r2") or write, BASE, f"show/episodes/{e['slug']}/", txt=_ptx or (None if _pvtt else tr), vtt=_pvtt, title=e["name"], lang="en", page=ep_url(e), sid=_sid)
         snx = SNALL.get(str(_sid)) if _sid else None   # T26: Vollfassung (Hook, Kapitel, Takeaways, Entitaeten mit Hover, FAQ) statt Podpage-Show-Notes
         if snx:
             _snh, _snld, _snfaq = SNS.render(snx, "en", ENTS_ALL, BASE)
@@ -465,7 +468,8 @@ def build(g):
         also = ('<h2>Also available in other languages</h2><ul>' + "".join(f'<li><a href="{u}" hreflang="{lg}">{esc(t)}</a> <span class="mut">({lg})</span></li>' for lg, (u, t) in sorted(oa.items())) + "</ul>") if oa else ""
         gl = "".join(f'<li><a href="{root}guests/{gg["slug"]}/">{esc(gg["name"])}</a></li>' for gg in eg[e["slug"]])
         _spr = SPM.episode(slug=e["slug"])   # T37 Sponsor: Folge aus einem Sponsoring (dauerhaft, auch die Sprachfassungen)
-        tx = f'<h2>Transcript</h2><details open><summary>Read the full transcript</summary><p style="white-space:pre-wrap;line-height:1.6">{esc(tr)}</p></details>' if len(tr) > 200 else ""
+        tx = (f'<h2>Transcript</h2>{TRS.links_html(_trf)}<details open><summary>Read the full transcript</summary><p style="white-space:pre-wrap;line-height:1.6">{esc(tr)}</p></details>' if len(tr) > 200
+              else f'<h2>Transcript</h2>{TRS.links_html(_trf)}' if _trf else "")   # #266: Dateien sichtbar verlinkt, Transkript im HTML unveraendert
         body = (f'<article><p class="mut">{day(e["create_time"])}{" · Season " + str(e["season"]) if e.get("season") else ""}</p><h1>{esc(e["name"])}</h1>{SPM.note("en", _spr, "episode")}{aud}'
                 f'<div style="display:flex;gap:1rem;align-items:flex-start;margin:1em 0">{img_tag(thumb_of(e, nrec), e["name"], 160)}<div><strong>{esc(short_desc(e, nrec, 300))}</strong></div></div>{nkp}<div class="pp-notes">{nnotes}{IMG.CSS if IMG.needs_responsive_css(nnotes) else ""}</div>{nfaq}{SNT.CSS if (nkp or nnotes or nfaq) else ""}'
                 + (f"<p>{ext}</p>" if ext else "") + (f'<p class="mut">Host: {hl}</p>' if hl else "") + (f"<h2>Guests</h2><ul>{gl}</ul>" if gl else "") + also
@@ -499,9 +503,12 @@ def build(g):
             ln = NTL.get(l, {}).get(e["slug"])
             ln_html = san(ln) if ln else ""
             lu = loc_url(l, f"episodes/{e['slug']}/")
+            _ldub = TRS.REG.dub.get((l, e["slug"]))   # #266: Dub-Folge der Sprache hat ein Transkript -> dieselben Dateien auch unter dieser Adresse
+            _ltrf = TRS.REG.publish(g.get("write_r2") or write, BASE, f"{l}/show/episodes/{e['slug']}/", vtt=TRS.dub_vtt(l, _ldub[0]), index=False) if _ldub else {}
             lbody = (f'<article><p class="mut">{day(e["create_time"])}</p><h1>{esc(lt)}</h1>{SPM.note(l, _spr, "episode")}{aud}'
                      f'<div style="display:flex;gap:1rem;align-items:flex-start;margin:1em 0">{img_tag(thumb_of(e, nrec), lt, 160)}<div><strong>{esc(ls)}</strong></div></div>'
                      + (f'<div class="pp-notes">{ln_html}{IMG.CSS if IMG.needs_responsive_css(ln_html) else ""}</div>' if ln else "") + (f"<p>{ext}</p>" if ext else "")
+                     + (TRS.links_html(_ltrf, _ldub[1]) if _ltrf else "")
                      + f'<p class="mut"><a href="{ep_url(e)}" hreflang="en" lang="en">{esc(e["name"])}</a> (English)</p></article>')
             lald = {"@context": "https://schema.org", "@type": "PodcastEpisode", "name": lt, "url": lu, "datePublished": day(e["create_time"]), "description": ls[:500],
                     "inLanguage": LG[l][1], "partOfSeries": {"@type": "PodcastSeries", "name": NAME, "url": root}, "author": {"@id": f"{BASE}/entity/mirko-peters/#entity"}}

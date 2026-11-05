@@ -1,6 +1,8 @@
 name: Podcast-Transkripte nach Spreaker
-# Traegt fuer jede Datei transcripts/podcast/<spreaker_episode_id>.vtt|.txt die oeffentliche raw-URL
-# als transcript_url in die Spreaker-Episode ein (auch bei Entwuerfen; es wird nichts veroeffentlicht).
+# Traegt fuer jede Datei transcripts/podcast/<spreaker_episode_id>.vtt|.txt die Adresse auf m365.fm
+# (/show/episodes/<slug>/transcript.vtt|.txt, nur wenn sie live antwortet) als transcript_url in die Spreaker-Episode ein;
+# neue Entwuerfe ohne Transkript bekommen bis zum Seitenbau die raw-URL (es wird nichts veroeffentlicht).
+# "all" (einmalig, von Hand): auch alle uebrigen Folgen aus /show/transcripts.json umstellen, die noch auf raw.githubusercontent.com zeigen.
 # Dateien legt der Podcast-Agent auf U8 nach jeder Folge ab (VoiceStudio-Kette).
 on:
   push:
@@ -12,6 +14,10 @@ on:
     inputs:
       dry_run:
         description: "Nur anzeigen, nichts bei Spreaker aendern"
+        type: boolean
+        default: false
+      all:
+        description: "Einmalig: alle Folgen aus /show/transcripts.json auf m365.fm umstellen (auch Dub-Folgen mit raw-URL)"
         type: boolean
         default: false
 permissions:
@@ -35,7 +41,8 @@ jobs:
           SPREAKER_CLIENT_ID: ${{ secrets.SPREAKER_CLIENT_ID }}
           SPREAKER_CLIENT_SECRET: ${{ secrets.SPREAKER_CLIENT_SECRET }}
           DRY: ${{ inputs.dry_run == true && '--dry-run' || '' }}
-        run: python tools/apply_podcast_transcripts.py $DRY
+          ALL: ${{ inputs.all == true && '--all' || '' }}
+        run: python tools/apply_podcast_transcripts.py $DRY $ALL
       - name: Protokoll speichern
         if: always()
         run: |
