@@ -1,7 +1,7 @@
 // Community-API (Cloudflare Worker + D1): Login (Google/Microsoft), Kommentare, Abzeichen, Kurator, Push, E-Mail
 import { json, cors, cookie, makeSession, readSession, cleanText, cleanName, randomToken, rateLimit, isLang, esc, b64u, sign, verify, audit, aiBudgetStatus, reportExternalAiUsage } from "./util.js";
 import { evalBadges, stats, topUsers, badgesFor, award } from "./badges.js";
-import { runDigest } from "./digest.js";
+import { runDigest, runPushDigest } from "./digest.js";
 import { sendMail } from "./mailer.js";
 import { handleEntity, importEntitiesFromSite } from "./entities.js";
 import { importLegacyBlog } from "./legacyblog.js";
@@ -179,7 +179,7 @@ function pubComment(c, mine, liked, badges, admin) {
 async function api(env, request, url, path, asUser) {
   const method = request.method, J = (d, s = 200, x) => json(d, s, env, request, x);
   if (method === "OPTIONS") return new Response(null, { status: 204, headers: cors(env, request) });
-  if (asUser === undefined && method !== "GET" && path !== "/api/internal/ai-spend" && request.headers.get("x-requested-with") !== "m365") return J({ error: "bad_request" }, 400);
+  if (asUser === undefined && method !== "GET" && !["/api/internal/ai-spend", "/api/email/unsub", "/api/mail/unsub"].includes(path) && request.headers.get("x-requested-with") !== "m365") return J({ error: "bad_request" }, 400);   // interne Route per CRON_KEY; One-Click-Abmeldung (RFC 8058) sendet keinen Zusatz-Header, beide Routen sind per Token geschuetzt
   // asUser: vom MCP-Server (Token bereits geprueft) - dann keine Cookie-Sitzung noetig
   const uid = asUser === undefined ? await readSession(env, request) : null, user = asUser === undefined ? (uid ? await me(env, uid) : null) : asUser;
   const need = () => (user ? null : J({ error: "login" }, 401));
@@ -396,7 +396,16 @@ async function api(env, request, url, path, asUser) {
   }
   if (path === "/api/email/unsub" && (method === "GET" || method === "POST")) {
     const t = url.searchParams.get("token") || "";
-    await db.prepare("DELETE FROM email_subs WHERE token=?").bind(t).run();
+    const weekly = await db.prepare("SELECT email FROM mail_weekly_unsub WHERE token=?").bind(t).first().catch(() => null);
+    if (weekly && url.searchParams.get("lang") === "all") {
+      await db.batch([
+        db.prepare("DELETE FROM email_subs WHERE lower(email)=lower(?)").bind(weekly.email),
+        db.prepare("INSERT OR REPLACE INTO mail_prefs(user_id,kind,on_) SELECT user_id,'weekly',0 FROM mail_addr WHERE lower(email)=lower(?)").bind(weekly.email),
+        db.prepare("DELETE FROM mail_weekly_unsub WHERE email=?").bind(weekly.email),
+      ]);
+    } else {
+      await db.prepare("DELETE FROM email_subs WHERE token=?").bind(t).run();
+    }
     return method === "POST" ? new Response("ok") : html("<h2>✓ Unsubscribed</h2><p>You will not receive further e-mails.</p>");
   }
 
@@ -409,7 +418,7 @@ async function api(env, request, url, path, asUser) {
   }
   if (path.startsWith("/api/admin/")) {
     const keyOk = env.CRON_KEY && (request.headers.get("x-cron-key") === env.CRON_KEY || url.searchParams.get("key") === env.CRON_KEY);   // Header bevorzugt (Query landet in Logs)
-    if (path === "/api/admin/run-daily" && keyOk) return J(await runDigest(env, { dry: url.searchParams.get("dry") === "1" }));
+    if ((path === "/api/admin/run-weekly" || path === "/api/admin/run-daily") && keyOk) return J(await runDigest(env, { dry: url.searchParams.get("dry") === "1" }));
     if (!user?.admin) return J({ error: "forbidden" }, 403);
     if (path === "/api/admin/expertise-sync" && method === "POST") { const r = await syncExpertise(env, entityMap); await audit(db, user.id, "expertise-sync", "", JSON.stringify(r)); return J(r); }   // Stufen sofort neu berechnen
     if (path === "/api/admin/reports" && method === "GET") {
@@ -449,9 +458,16 @@ export default {
     }
   },
   async scheduled(event, env, ctx) {
-    // Jede Aufgabe mit Protokoll (cron_runs: Start, Ende, ok, Fehlertext) statt verschluckter Fehler; Digest nur um 06:00 UTC
+    // Jede Aufgabe mit Protokoll (cron_runs: Start, Ende, ok, Fehlertext) statt verschluckter Fehler.
+    const scheduledAt = event.scheduledTime || Date.now();
+    const tick = new Date(scheduledAt);
+    if (event.cron === "*/30 * * * *" && tick.getUTCHours() === 6 && tick.getUTCMinutes() === 0) return;
     const T = (name, fn) => ctx.waitUntil(track(env, name, fn));
-    if (event.cron === "0 6 * * *") T("runDigest", () => runDigest(env));
+    if (event.cron === "0 6 * * *") {
+      T("runPushDigest", () => runPushDigest(env));
+      T("runDigest", () => runDigest(env, { at: scheduledAt }));
+    }
+    if (event.cron === "*/30 * * * *") T("runDigest", () => runDigest(env, { at: scheduledAt }));
     T("refreshFeeds", () => refreshFeeds(env));
     T("refreshContributions", () => refreshContributions(env));
     T("pollUpdates", () => pollUpdates(env));
@@ -480,7 +496,7 @@ export default {
     T("importTranslations", () => importTranslations(env));
     T("importSearchIndex", () => importSearchIndex(env));
     T("syncSearchVectors", () => syncSearchVectors(env));
-    if (event.cron !== "0 6 * * *") T("syncExpertise", () => syncExpertise(env, entityMap));   // nicht doppelt um 06:00 (beide Zeitplaene feuern)
+    T("syncExpertise", () => syncExpertise(env, entityMap));   // */30 kehrt um 06:00 oben zurueck, daher nicht doppelt
     ctx.waitUntil(env.DB.prepare("DELETE FROM cron_runs WHERE started<?").bind(Math.floor(Date.now() / 1000) - 7 * 86400).run().catch(() => 0));
   },
 };

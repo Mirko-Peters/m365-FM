@@ -19,6 +19,7 @@ export async function handleAdminPanel(env, request, url, path, user, J) {
     const cutoff = new Date(Date.now() - 29 * 86400000).toISOString().slice(0, 10);
     const spendRows = (await db.prepare("SELECT day,SUM(usd) usd FROM ai_spend WHERE day>=? AND model LIKE 'claude-haiku%' GROUP BY day ORDER BY day DESC LIMIT 30").bind(cutoff).all().catch(() => ({ results: [] }))).results || [];
     const spent30d = spendRows.reduce((sum, row) => sum + Number(row.usd || 0), 0);
+    const mailMonth = new Date().toISOString().slice(0, 7), mailSent = await n(db, "SELECT sent n FROM mail_monthly_usage WHERE month=?", mailMonth) ?? 0;
     return J({
       queues: {
         blog: await n(db, "SELECT COUNT(*) n FROM blog_posts WHERE status='pending'"),
@@ -42,6 +43,7 @@ export async function handleAdminPanel(env, request, url, path, user, J) {
       },
       ai_spend: { today_eur: aiBudget.spent_eur, spent_30d_eur: spent30d / (Number(env.USD_PER_EUR) || 1.08), remaining_eur: aiBudget.remaining_eur, budget_eur: aiBudget.budget_eur,
         days: spendRows.map((r) => ({ day: r.day, eur: Number(r.usd || 0) / (Number(env.USD_PER_EUR) || 1.08) })) },
+      mail: { month: mailMonth, sent: mailSent, warning: mailSent >= 2500 },
       flags: { tr_off: await meta(db, "tr_off"), atr_off: await meta(db, "atr_off"), atr_ent_cap: await meta(db, "atr_ent_cap"), entity_source: (await meta(db, "entity_source")) || "json",
         atr_today: +(await meta(db, "atr_count:" + day)) || 0, atr_ent_today: +(await meta(db, "atr_ent:" + day)) || 0, key: !!env.ANTHROPIC_API_KEY },
     });
