@@ -85,6 +85,52 @@
      "Nicht allein auf den grünen Status verlassen, Portalprotokolle prüfen"
     ]
    }
+  ],
+  "quiz": [
+   {
+    "q": "Was läuft bei Entra Cloud Sync im lokalen Netzwerk?",
+    "opts": [
+     "Ein vollständiger Synchronisierungsserver mit lokaler SQL-Datenbank",
+     "Ein Federation-Server, der Anmeldeanfragen weiterleitet",
+     "Nur ein kleiner Provisioning Agent, der ausgehend zur Cloud verbindet",
+     "Ein Proxy, der eingehende Verbindungen aus dem Internet annimmt"
+    ],
+    "a": 2,
+    "why": "Der Provisioning Agent liest Verzeichnisdaten, verschlüsselt sie und baut selbst eine ausgehende Verbindung auf. Die Verarbeitung erfolgt in Entra."
+   },
+   {
+    "q": "Wie erreicht Cloud Sync Hochverfügbarkeit?",
+    "opts": [
+     "Ein zweiter Server steht dauerhaft im Staging-Modus bereit",
+     "Mehrere Provisioning Agents nutzen dieselbe Konfiguration, und bei Ausfall übernimmt ein anderer",
+     "Änderungen werden lokal zwischengespeichert, bis der Server wieder läuft",
+     "Administratoren wechseln manuell auf einen Ersatz-Agenten"
+    ],
+    "a": 1,
+    "why": "Mehrere Agents in derselben Domäne teilen eine Konfiguration; Entra überwacht sie und lässt bei Ausfall einen anderen weiterarbeiten."
+   },
+   {
+    "q": "Wann bleibt Entra Connect laut Artikel die bessere Wahl?",
+    "opts": [
+     "Wenn nur Benutzer und Gruppen synchronisiert werden sollen",
+     "Wenn mehrere getrennte Gesamtstrukturen angebunden werden sollen",
+     "Wenn zunächst nur eine kleine Pilotgruppe angebunden werden soll",
+     "Wenn Pass-through- oder Verbund-Authentifizierung genutzt wird"
+    ],
+    "a": 3,
+    "why": "Cloud Sync unterstützt Pass-through- und Verbund-Authentifizierung nicht in gleicher Weise, daher behält Entra Connect hier seine Berechtigung."
+   },
+   {
+    "q": "Was bewirkt der Löschschutz in Cloud Sync?",
+    "opts": [
+     "Er stoppt Massenlöschungen, stellt die Konfiguration unter Quarantäne und warnt Administratoren",
+     "Er stellt gelöschte Konten automatisch aus dem Papierkorb wieder her",
+     "Er verhindert, dass Benutzer ihr eigenes Konto löschen können",
+     "Er löscht verwaiste Konten in Entra ID nach 30 Tagen automatisch"
+    ],
+    "a": 0,
+    "why": "Versucht eine Konfiguration plötzlich viele Objekte zu entfernen, stoppt der Dienst den Vorgang, setzt Quarantäne und warnt Administratoren."
+   }
   ]
  }
 }

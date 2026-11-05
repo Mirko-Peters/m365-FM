@@ -91,6 +91,52 @@
      }
     ]
    }
+  ],
+  "quiz": [
+   {
+    "q": "Worauf konzentriert sich Microsoft Defender for Identity vor allem bei der Überwachung?",
+    "opts": [
+     "Auf Domain-Controller, Active Directory und ADFS-Server im eigenen Rechenzentrum",
+     "Auf Cloud-Anmelderisiken von Benutzern in Microsoft Entra ID",
+     "Auf Malware-Dateien auf Laptops und Servern der Mitarbeiter",
+     "Auf Phishing-Mails und schädliche Anhänge in Kollaborationstools"
+    ],
+    "a": 0,
+    "why": "Das Tool überwacht die lokale Identitätsinfrastruktur. Cloud-Risiken deckt Entra ID Protection ab, Malware Defender for Endpoint, E-Mails Defender for Office 365."
+   },
+   {
+    "q": "Wie erkennt Defender for Identity verdächtige Anmeldungen grundsätzlich?",
+    "opts": [
+     "Durch Signaturen bekannter Malware auf den Domain-Controllern",
+     "Durch einen Abgleich mit starren, für alle Firmen gleichen Normalwerten",
+     "Durch gelernte Basisprofile für Benutzer und Geräte und Abweichungen davon",
+     "Durch das Blockieren aller Anmeldungen außerhalb der Bürozeiten"
+    ],
+    "a": 2,
+    "why": "Der Cloud-Dienst lernt aus der tatsächlichen Umgebung, was für jeden Benutzer normal ist, und markiert Abweichungen, statt starre Regeln zu nutzen."
+   },
+   {
+    "q": "Was passiert, wenn sich jemand mit einem Honeytoken-Konto anmeldet?",
+    "opts": [
+     "Das Konto wird automatisch gelöscht, ohne dass eine Warnung erscheint",
+     "Es wird sofort ein Alarm ausgelöst, der als bestätigter Eindringversuch gilt",
+     "Der Identity Security Score steigt, weil das Konto aktiv genutzt wird",
+     "Die Anmeldung wird erst nach einer komplexen Regelprüfung bewertet"
+    ],
+    "a": 1,
+    "why": "Honeytoken-Konten haben keinen legitimen Zweck. Jede Anmeldung löst sofort einen Alarm aus, ohne eigene Überwachung oder komplexe Regel."
+   },
+   {
+    "q": "Was zeigt der Angriffsgraf eines Vorfalls im Defender-Portal?",
+    "opts": [
+     "Eine Liste aller installierten Sensoren und ihrer Versionsstände",
+     "Die Kostenschätzung für die Wiederherstellung nach einem Angriff",
+     "Eine Übersicht aller globalen und regelspezifischen Ausschlüsse",
+     "Eine visuelle Karte der Angreiferbewegung mit Konten, Maschinen und Techniken"
+    ],
+    "a": 3,
+    "why": "Der Angriffsgraf zeigt Startpunkt, Zwischenschritte und Ziel des Angreifers sowie kompromittierte Konten, angesprochene Maschinen und genutzte Techniken."
+   }
   ]
  }
 }
