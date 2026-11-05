@@ -505,7 +505,7 @@ def press_ranger(placements, day, out, statuses):
         statuses["Press Ranger"] = "Secret fehlt; keine Werte geschrieben"
         return
     endpoint = "https://pressranger.com/mcp"
-    headers = {"Authorization": "Bearer " + token, "Content-Type": "application/json", "Accept": "application/json, text/event-stream"}
+    headers = {"Authorization": "Bearer " + token, "Content-Type": "application/json", "Accept": "application/json, text/event-stream", "User-Agent": USER_AGENT}
     session = ""
 
     def call(payload):
