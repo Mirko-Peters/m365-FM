@@ -160,6 +160,34 @@ class ContentBlogI18nTests(unittest.TestCase):
             f.write_text(package(self.today, extra="New paragraph added later."), "utf-8")
             self.assertEqual(CBL.translations(BASE, [self.original()], {"sap": {}}), [])   # Paket geaendert -> alte Fassung nicht zeigen
 
+    def test_no_translations_when_slug_belongs_to_another_post(self):
+        """Der Worker uebernimmt das Paket nicht, wenn der Slug schon von Hand vergeben ist: keine Fassungen am fremden Original."""
+        self.store(["de"])
+        other = {**self.original(), "title": "My unrelated manual post about Teams licensing"}
+        with patch.object(LBL, "tr_config", return_value=(["de"], ["de"])):
+            self.assertEqual(CBL.translations(BASE, [other], {"sap": {}}), [])
+            self.assertEqual(len(CBL.translations(BASE, [self.original()], {"sap": {}})), 1)
+
+    # ---------- Wiederholungen ----------
+    def submit_auto(self, tries):
+        s = next(p for p in TB.content_posts() if p["cp_slug"] == SLUG)
+        tpl, units, h = TB.source_of(s)
+        TB.save_lang("de", {s["slug"]: {"h": h, "n": len(units), "seg": {}, "ok": False, "tries": tries}})
+        a = TB.args(); a["mode"] = "auto"; a["langs"] = ["de"]
+        calls = []
+        def api(method, path, body=None, raw=False):
+            calls.append(path); return {"id": f"b{len(calls)}"}
+        with patch.object(TB, "api", api), patch.object(TB, "check_budget", lambda *x, **k: True), \
+             patch.object(TB, "spent_month", lambda *x: 0.0), patch.object(TB, "pending_cost", lambda *x: 0.0), patch.object(TB, "BUDGET", 25.0):
+            n = TB.submit(a)
+        return n, calls
+
+    def test_auto_stops_resending_after_max_tries(self):
+        n, calls = self.submit_auto(TB.MAX_TRIES)
+        self.assertEqual((n, calls), (0, []))   # nicht alle 3 h erneut senden
+        n, calls = self.submit_auto(TB.MAX_TRIES - 1)
+        self.assertGreater(n, 0); self.assertEqual(calls, ["/v1/messages/batches"])
+
     # ---------- Seiten ----------
     def test_rendered_pages_hreflang_original_link_and_directory(self):
         self.store(["de", "fr"])
@@ -215,3 +243,23 @@ class MonthlyBudget(unittest.TestCase):
     def test_no_months_yet(self):
         with patch.object(TB, "jload", lambda name, default: {"input_tokens": 10**9, "output_tokens": 10**9} if name == "usage.json" else default):
             self.assertEqual(TB.spent_month(), 0)
+
+
+class QaScript(unittest.TestCase):
+    """Schrift-Pruefung: Code und Produktnamen bleiben lateinisch und duerfen ja/ko/he nicht dauerhaft durchfallen lassen."""
+    def test_code_only_segment_passes(self):
+        code = "<code>service_events | summarize count() by bin(TimeGenerated, 1h) | render timechart</code>"
+        for lang in ("ja", "ko", "he", "ru"):
+            self.assertTrue(TB.qa(lang, code, code)[0], lang)
+
+    def test_names_do_not_count_against_dense_scripts(self):
+        src = "What is Azure Center for SAP solutions?"
+        self.assertTrue(TB.qa("ja", src, "Azure Center for SAP solutionsとは何ですか？")[0])
+        self.assertTrue(TB.qa("ko", src, "Azure Center for SAP solutions란 무엇입니까?")[0])
+        title = "Azure meets SAP: SAP on Azure Explained for Microsoft Teams"
+        self.assertTrue(TB.qa("ja", title, "Azure meets SAP：Microsoft Teams向けSAP on Azure解説")[0])
+
+    def test_untranslated_text_still_fails(self):
+        src = "The landing zone separates production and test workloads in their own subscriptions."
+        for lang in ("ja", "ko", "he", "ru", "ar"):
+            self.assertEqual(TB.qa(lang, src, src)[:2], (False, "falsche-schrift"), lang)

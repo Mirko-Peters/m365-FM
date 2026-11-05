@@ -47,6 +47,8 @@ KEEP = ["Microsoft 365", "Microsoft Teams", "SharePoint", "OneDrive", "Copilot S
         "Dynamics 365", "GitHub", "Windows", "Microsoft Graph", "PowerShell", "Mirko Peters", "M365.FM", "M365 Show", "M365Con", "MVP"]
 SCRIPT = {"ru": "Ѐ-ӿ", "uk": "Ѐ-ӿ", "ar": "؀-ۿ", "he": "֐-׿", "ja": "぀-ヿ一-鿿",
           "ko": "가-힯ᄀ-ᇿ"}
+DENSE = {"ja": 2, "ko": 2}   # ein Kana/Kanji/Hangul-Zeichen traegt etwa so viel wie zwei lateinische Buchstaben
+MAX_TRIES = int(os.environ.get("MAX_TRIES", "3"))   # danach sendet auto/submit einen Beitrag je Sprache nicht erneut (nur --slugs oder --redo)
 BLOCK = {"p", "li", "h2", "h3", "h4", "blockquote", "td", "th", "ul", "ol", "table", "thead", "tbody", "tr", "hr", "pre"}
 
 
@@ -195,15 +197,23 @@ TAG = re.compile(r"<\s*(/?[a-zA-Z0-9]+)")
 HREF = re.compile(r'href="([^"]*)"')
 
 
+def _plain(s):
+    """Buchstaben ohne Tags, Entities, Ziffern, <code>-Inhalt und geschuetzte Namen (KEEP) - Grundlage der Schrift-Pruefung."""
+    s = re.sub(r"<code\b[^>]*>.*?</code>", " ", s, flags=re.S | re.I)
+    for k in KEEP: s = s.replace(k, " ")
+    return re.sub(r"<[^>]+>|&\w+;|[\W\d_]", "", s)
+
+
 def qa(lang, src, out):
     """Gibt (ok, grund, warnung) zurueck. Harte Fehler -> Segment wird nicht gespeichert und spaeter neu uebersetzt."""
     if not out.strip(): return False, "leer", None
     if sorted(TAG.findall(src)) != sorted(TAG.findall(out)): return False, "html-tags", None
     if sorted(HREF.findall(src)) != sorted(HREF.findall(out)): return False, "links", None
-    alpha = re.sub(r"<[^>]+>|&\w+;|[\W\d_]", "", out)
-    if lang in SCRIPT and len(re.sub(r"<[^>]+>|&\w+;|[\W\d_]", "", src)) >= 20:
-        own = len(re.findall(f"[{SCRIPT[lang]}]", alpha))
-        if own < 0.25 * max(1, len(alpha)): return False, "falsche-schrift", None
+    if lang in SCRIPT and len(_plain(src)) >= 20:
+        # Code und Produktnamen bleiben lateinisch (Regel im System-Prompt) und zaehlen hier nicht mit, sonst fiele z. B. ein
+        # reiner <code>-Absatz oder "Azure Center for SAP solutionsとは何ですか？" bei jedem Versuch durch
+        alpha = _plain(out); raw = len(re.findall(f"[{SCRIPT[lang]}]", alpha)); own = raw * DENSE.get(lang, 1)
+        if own < 0.25 * max(1, own + len(alpha) - raw): return False, "falsche-schrift", None
     words = re.findall(r"[a-zA-Z]+", re.sub(r"<[^>]+>", " ", src))
     if lang not in SCRIPT and out.strip() == src.strip() and len(words) >= 8: return False, "unuebersetzt", None
     if len(src) >= 80 and not (0.3 <= len(out) / len(src) <= 5): return False, "laenge", None
@@ -396,6 +406,8 @@ def submit(a):
             rec = have.get(p["slug"])
             if a["redo"] or not rec or rec.get("h") != h: rec = {"h": h, "n": len(units), "seg": {}, "ok": False}
             if rec.get("ok"): continue
+            if rec.get("tries", 0) >= MAX_TRIES and not (a["redo"] or a["slugs"]):
+                continue   # schon MAX_TRIES Mal abgeholt und noch unvollstaendig: nicht alle 3 h erneut senden (Kosten, Commits)
             n_posts += 1
             cs = chunks(units, rec["seg"])
             ti, to = est(lang, [u for c in cs for u in c]); c_usd = cost(ti, to)
@@ -431,7 +443,7 @@ def collect():
         st = api("GET", f"/v1/messages/batches/{b['id']}")
         if st["processing_status"] != "ended": print(b["id"], st["processing_status"], st["request_counts"]); left.append(b); continue
         info = {(it["lang"], key(it["slug"])): it for it in b["items"]}
-        data, touched, qa_log = {}, {}, {}
+        data, touched, qa_log, seen = {}, {}, {}, set()
         tin = tout = ok = bad = 0; why = {}
         for line in api("GET", st["results_url"], raw=True).decode().splitlines():
             r = json.loads(line); lang, k, _ = r["custom_id"].split("_")
@@ -465,7 +477,11 @@ def collect():
                     bad += 1; why[reason] = why.get(reason, 0) + 1
                     qa_log.setdefault(lang, []).append({"slug": p["slug"], "seg": i, "fehler": reason, "src": src[i][:160], "out": t[:160]})
             rec["ok"] = all(i in rec["seg"] for i in src); rec["m"] = MODEL; rec["ts"] = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-            data[lang][p["slug"]] = rec; touched[lang].add(bucket(p["slug"]))
+            data[lang][p["slug"]] = rec; touched[lang].add(bucket(p["slug"])); seen.add((lang, p["slug"]))
+        for lang, sl in seen:   # ein Versuch je Beitrag und Sprache und Batch (nicht je Teilanfrage)
+            rc = data[lang].get(sl)
+            if rc is not None and rc.get("ok"): rc.pop("tries", None)
+            elif rc is not None: rc["tries"] = rc.get("tries", 0) + 1
         for lang, d in data.items(): save_lang(lang, d, touched[lang])
         for lang, lg in qa_log.items():
             (OUT / "qa").mkdir(parents=True, exist_ok=True)

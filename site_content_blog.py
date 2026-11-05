@@ -136,6 +136,11 @@ def translations(BASE, posts, ents):
     if clash: print(f"Content-Pakete Blog: Slug schon von einem frueheren Beitrag belegt, keine Sprachfassungen: {', '.join(clash[:5])}")
     srcs = [s for s in srcs if s["cp_slug"] not in old]
     orig = {(p["handle"], p["slug"]): p for p in posts if (p.get("lang") or "en") == "en" and not p.get("tr_of")}
+    # Der Worker uebernimmt ein Paket nicht, wenn der Slug schon von Hand vergeben ist: dann waere das live stehende "Original" ein
+    # fremder Beitrag (falsches hreflang, falscher Link aufs Original). Nur Originale mit dem Titel des Pakets zaehlen.
+    other = [s["cp_slug"] for s in srcs if (o := orig.get((s["author"], s["cp_slug"]))) and (o.get("title") or "").strip() != s["title"].strip()]
+    if other: print(f"Content-Pakete Blog: Slug gehoert einem anderen Beitrag (Titel weicht ab), keine Sprachfassungen: {', '.join(other[:5])}")
+    srcs = [s for s in srcs if s["cp_slug"] not in other]
     out = []
     for lang in build:
         data = TB.load_lang(lang); n = 0
