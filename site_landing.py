@@ -26,7 +26,7 @@ READY_MIN = 0.9   # Anteil uebersetzter Saetze, ab dem eine weitere Sprache inde
 HUB = {"path": "services/"}
 PAGES = [dict(path=p, **C.PAGES[p]) for p in C.ORDER_AUDIENCES + C.ORDER_GOALS]
 BY_PATH = {p["path"]: p for p in PAGES}
-MEDIAKIT_PAGES = {"for/sponsors/", "i-want-to/reach-microsoft-365-buyers/"}   # Seiten fuer Sponsoren: Knopf "Mediadaten anfordern"
+MEDIAKIT_PAGES = {"for/sponsors/", "for/advertisers/", "i-want-to/reach-microsoft-365-buyers/"}   # Seiten fuer Sponsoren: Knopf "Mediadaten anfordern"
 
 
 def _text(lang, text):
@@ -92,6 +92,8 @@ def _link(base, lang, key):
         return _url(base, lang, key)
     if key == "sponsor":
         return f"{base}{p}/sponsor/"
+    if key == "adbook":   # #281: Rechner und Buchung auf der Seite Werbeplaetze
+        return _url(base, lang, "for/advertisers/") + "#book"
     if key == "community":
         return f"{base}{p}/community/"
     if key == "directory":
@@ -332,6 +334,12 @@ CSS = ("""
 @media(min-width:901px){.lp-stats[data-c="3"] .lp-stat:nth-child(3n+1){padding-inline-start:0}.lp-stats[data-c="3"] .lp-stat:nth-child(3n){border-inline-end:0}.lp-stats[data-c="3"] .lp-stat:nth-child(n+4){border-top:1px solid var(--bd)}}
 .lp-intro{max-width:48em}.lp-intro p{margin:0 0 1em;font-size:1.06rem;line-height:1.7}
 .lp .faq details{scroll-margin-top:70px}
+.adb{display:grid;gap:28px}.adb h3{margin:0 0 .6em;font:600 1.35rem/1.15 CF_}.adb-calc,.adb-form{padding:22px;border:1px solid var(--bd);background:var(--card)}
+.adb-f{display:grid;gap:4px;margin:0 0 12px}.adb-f label{font-weight:600;font-size:.92rem}.adb input[type=text],.adb input[type=url],.adb input[type=email],.adb input[type=number],.adb input[type=date],.adb select{font:inherit;padding:8px 10px;border:1px solid var(--bd);background:var(--bg);color:var(--fg);max-width:32em;width:100%;box-sizing:border-box}
+.adb fieldset{border:1px solid var(--bd);margin:0 0 12px;padding:10px 14px}.adb legend{font-weight:600;font-size:.92rem;padding:0 4px}.adb-pt label{margin-inline-end:16px}
+.adb-sum{display:grid;grid-template-columns:max-content max-content;gap:4px 24px;margin:14px 0 0;padding:12px 0 0;border-top:2px solid var(--fg)}.adb-sum dd{margin:0;text-align:end;font-variant-numeric:tabular-nums}.adb-sum dt:last-of-type,.adb-sum dd:last-of-type{font-weight:700}
+.adb .adm-msg.bad{color:var(--ac)}.adb-mine h3{margin-top:18px}
+@media(min-width:1000px){.adb{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.adb>.adm-msg,.adb-mine{grid-column:1/-1}}
 @media(max-width:900px){.lp-cards{grid-template-columns:repeat(2,minmax(0,1fr))}.lp-steps{grid-template-columns:repeat(2,minmax(0,1fr))}
  .lp-steps li{padding-inline-start:0;border-inline-end:0;border-bottom:1px solid var(--bd);padding-bottom:18px}.lp-steps li:nth-child(odd){padding-inline-end:22px}
  .lp-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.lp-stat{padding-inline-start:0;border-inline-end:0;border-bottom:1px solid var(--bd)}.lp-stat:last-child{border-bottom:0}
@@ -345,6 +353,57 @@ CSS = ("""
  .lp-table td:last-child{grid-column:2;grid-row:1}}
 """).replace("CF_", CF)
 CSS_TAG = "<style>" + re.sub(r"\s*\n\s*", "", CSS) + "</style>"
+
+
+# ---------------------------------------------------------------- #281 Werbeplaetze: Preistabelle und Buchung
+
+def _ad_pricing():
+    try:
+        return json.loads((ROOT / "data" / "ad_pricing.json").read_text("utf-8"))
+    except (OSError, ValueError):
+        return {"products": [], "settings": {}}
+
+
+def _eur(lang, cents):
+    """Euro-Betrag in der Schreibweise der Sprache (Dezimalkomma, Tausendertrenner)."""
+    v = f"{cents / 100:,.2f}"
+    if lang in ("de", "es", "it", "pt", "nl", "id"):
+        v = v.replace(",", "_").replace(".", ",").replace("_", ".")
+    elif lang in ("fr", "pl", "ru", "uk"):
+        v = v.replace(",", "\u00a0").replace(".", ",")
+    return f"{v}\u00a0€"
+
+
+def _ads_sections(g, lang):
+    """Oeffentliche Preistabelle (Startwerte aus data/ad_pricing.json, die Seite laedt die aktuellen Werte aus D1 nach) und der Bereich
+    zum Berechnen und Buchen (assets/ads-book.js). Texte der Oberflaeche in 15 Sprachen aus data/ads_i18n.json."""
+    import site_ads as AD
+    P = _ad_pricing()
+    st = P.get("settings", {})
+    rows = ""
+    for p in P.get("products", []):
+        rows += (f'<tr data-product="{html.escape(p["id"], quote=True)}"><th scope="row">{_t(lang, C.ADS[p["id"]])}</th><td>{html.escape(p.get("size") or "–")}</td>'
+                 f'<td>{_t(lang, C.ADS[p["kind"]])}</td><td class="ad-price">{_eur(lang, p["price_cents"])}</td></tr>')
+    note = _text(lang, C.ADS["note"])
+    for k, v in (("min", _number(lang, int(st.get("min_impressions", 10000)))), ("topic", st.get("topic_pct", 25)), ("excl", st.get("exclusive_pct", 50)),
+                 ("r3", st.get("runtime3_pct", 10)), ("r6", st.get("runtime6_pct", 20)),
+                 ("lexp", _eur(lang, int(st.get("lead_expert_cents", 1000)))), ("lprem", _eur(lang, int(st.get("lead_premium_cents", 500))))):
+        note = note.replace("{" + k + "}", str(v))
+    base = g["BASE"]
+    names = {pid: _text(lang, C.ADS[pid]) for pid in ("banner_top", "banner_mid", "banner_bottom", "company_card", "lead_form")}
+    cfg = {"api": AD.API, "lang": lang, "t": AD.texts(lang, "book"), "names": names, "pricing": {k: v for k, v in P.items() if not k.startswith("_")},
+           "community": f"{base}/{'' if lang == 'en' else lang + '/'}community/", "page": _url(base, lang, "for/advertisers/")}
+    cfg_json = html.escape(json.dumps(cfg, ensure_ascii=False, separators=(",", ":")), quote=True)
+    js = ROOT / "assets" / "ads-book.js"
+    import hashlib
+    ver = hashlib.sha1(js.read_bytes()).hexdigest()[:10] if js.exists() else "0"
+    return (f'<section class="sec" id="prices"><div class="kicker">{_t(lang, C.ADS["prices_k"])}</div><h2>{_t(lang, C.ADS["prices"])}</h2>'
+            f'<table class="lp-table ad-prices"><thead><tr><th scope="col">{_t(lang, C.ADS["col_place"])}</th><th scope="col">{_t(lang, C.ADS["col_size"])}</th>'
+            f'<th scope="col">{_t(lang, C.ADS["col_billing"])}</th><th scope="col">{_t(lang, C.ADS["col_price"])}</th></tr></thead><tbody>{rows}</tbody></table>'
+            f'<p class="lp-note" id="ad-note">{html.escape(note, quote=True)}</p><p class="lp-note">{_t(lang, C.ADS["tax"])}</p></section>'
+            f'<section class="sec" id="book"><div class="kicker">{_t(lang, C.ADS["book_k"])}</div><h2>{_t(lang, C.ADS["book"])}</h2>'
+            f'<div id="adbook" class="adb" data-cfg="{cfg_json}" aria-live="polite"><noscript><p>{_t(lang, C.ADS["noscript"])}</p></noscript></div>'
+            f'<script defer src="{base}/assets/ads-book.js?v={ver}"></script></section>')
 
 
 # ---------------------------------------------------------------- Seiten
@@ -423,7 +482,9 @@ def _sub(g, lang, spec, features):
         cls, label = _status(lang, o["status"], o.get("feature"), features)
         text = o["p"] if cls != "soon" else (o.get("off") or C.UI["soon_text"])
         offer_html += f'<article class="lp-offer{" soon" if cls == "soon" else ""}"><span class="lp-badge {cls}">{label}</span><h3>{_t(lang, o["h"])}</h3><p>{_t(lang, text)}</p></article>'
-    toc = [("need", need_h), ("offer", offers_h), ("how", steps_h), ("who", who_h), ("examples", ex_h)] + ([("figures", C.UI["figures"])] if stats else []) + [("faq", C.UI["faq"])]
+    ads_html = _ads_sections(g, lang) if spec.get("ads") else ""
+    toc = ([("need", need_h), ("offer", offers_h)] + ([("prices", C.ADS["prices"]), ("book", C.ADS["book"])] if ads_html else []) +
+           [("how", steps_h), ("who", who_h), ("examples", ex_h)] + ([("figures", C.UI["figures"])] if stats else []) + [("faq", C.UI["faq"])])
     body = (f'{g["header"](lang, "")}<main class="wrap lp">'
             f'<nav class="crumbs" aria-label="{_t(lang, ("Breadcrumb", "Brotkrumennavigation"))}"><a href="{html.escape(f"{base}/" if lang == "en" else f"{base}/{lang}/", quote=True)}">{_u(lang, "crumb_home")}</a><a href="{html.escape(hub, quote=True)}">{_u(lang, "crumb")}</a></nav>'
             f'<div class="lp-hero"><div><div class="kicker">{_u(lang, "kicker")}</div><h1>{html.escape(h1_text, quote=True)}</h1><p class="lede">{html.escape(lead_text, quote=True)}</p>{directory_note}'
@@ -431,7 +492,7 @@ def _sub(g, lang, spec, features):
             f'{_hero_img(path, lang, html.escape(alt_text, quote=True))}</div>'
             f'<nav class="lp-toc" aria-label="{_u(lang, "toc")}"><b>{_u(lang, "toc")}:</b>{"".join(f"<a href=\"#{i}\">{_t(lang, h)}</a>" for i, h in toc)}</nav>'
             f'<section class="sec" id="need"><h2>{_t(lang, need_h)}</h2><div class="lp-prose">{"".join(f"<p>{_t(lang, p)}</p>" for p in need_ps)}</div></section>'
-            f'<section class="sec" id="offer"><h2>{_t(lang, offers_h)}</h2><div class="lp-offers">{offer_html}</div></section>'
+            f'<section class="sec" id="offer"><h2>{_t(lang, offers_h)}</h2><div class="lp-offers">{offer_html}</div></section>{ads_html}'
             f'<section class="sec" id="how"><h2>{_t(lang, steps_h)}</h2><ol class="lp-steps">{"".join(f"<li><h3>{_t(lang, h)}</h3><p>{_t(lang, p)}</p></li>" for h, p in steps)}</ol></section>'
             f'<section class="sec" id="who"><h2>{_t(lang, who_h)}</h2><div class="lp-who"><p>{_t(lang, who_p)}</p><ul class="lp-checks">{"".join(f"<li>{_t(lang, i)}</li>" for i in who_items)}</ul></div></section>'
             f'<section class="sec" id="examples"><h2>{_t(lang, ex_h)}</h2><div class="lp-ex">{"".join(f"<div><h3>{_t(lang, h)}</h3><p>{_t(lang, p)}</p></div>" for h, p in examples)}</div>'

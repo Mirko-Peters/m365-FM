@@ -118,3 +118,22 @@ test("sponsor dashboard: CSV enthält Quelle, Messart, Datenstand und entschärf
   assert.match(csv, /"'\=1\+1"/);
   assert.match(csv, /"42","Spreaker","measured","2026-11-04"/);
 });
+
+test("sponsor dashboard: gebuchte Werbeplätze mit Einblendungen, Klicks, Klickrate und Leads (#281)", async () => {
+  const root = new Element("main");
+  const document = { getElementById: () => root, createElement: (tag) => new Element(tag),
+    createTextNode: (text) => ({ textContent: String(text), children: [], querySelectorAll: () => [] }) };
+  const copy = new Proxy({ ads_title: "Booked ad placements", ads_ctr: "Click rate", ads_leads: "Leads" }, { get: (t, k) => t[k] ?? String(k) });
+  const config = { api: "https://api.example", base: "https://www.m365.fm", lang: "en", today: "2026-11-05", view: "overview",
+    urls: { dashboard: "/d/", placement: "/d/p/", report: "/d/r/", sources: "/d/s/" }, campaigns: [], copy };
+  const context = { window: { M365SP: config }, document, URL, URLSearchParams, Blob, Intl, Date, console, location: { origin: "https://www.m365.fm", search: "" },
+    fetch: async () => ({ status: 200, json: async () => ({ orgs: [{ handle: "contoso", name: "Contoso", metrics: [], placements: [],
+      ads: [{ code: "ad-abc12345", product: "banner_mid", impressions: 1200, clicks: 18, ctr: 1.5, leads: 0, delivered: 1200, quantity: 10000, status: "active" }] }] }) }) };
+  vm.runInNewContext(readFileSync(new URL("../../assets/sponsor-dashboard.js", import.meta.url), "utf8"), context);
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.match(root.textContent, /Booked ad placements/);
+  assert.match(root.textContent, /ad-abc12345 · banner_mid/);
+  assert.match(root.textContent, /1,200/);
+  assert.match(root.textContent, /1\.5 %/);
+  assert.match(root.textContent, /1200 \/ 10000/);
+});

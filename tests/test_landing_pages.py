@@ -53,9 +53,9 @@ class LandingPageTests(unittest.TestCase):
     def test_all_pages_have_localized_routes_and_hreflang_clusters(self):
         with self.tr_all():
             self.build()
-        self.assertEqual(len(site_landing.PAGES), 13)
-        self.assertEqual(len(self.files), 28)
-        self.assertEqual(len(self.r2_files), 14 * (len(site_landing.LANGS_ALL) - 2))
+        self.assertEqual(len(site_landing.PAGES), 14)   # #281: + Werbeplaetze
+        self.assertEqual(len(self.files), 30)
+        self.assertEqual(len(self.r2_files), 15 * (len(site_landing.LANGS_ALL) - 2))
         self.assertEqual(len(self.sitemap), len(self.files) + len(self.r2_files))
         self.assertEqual(len(self.pages), len(self.sitemap))
         for path in ("services/index.html", "de/services/index.html", "for/sponsors/index.html"):
@@ -72,7 +72,7 @@ class LandingPageTests(unittest.TestCase):
     def test_untranslated_languages_are_noindex_and_outside_the_cluster(self):
         with self.tr_de():
             self.build()
-        self.assertEqual(len(self.sitemap), 28)
+        self.assertEqual(len(self.sitemap), 30)
         for lang, canonical, alternates, xdefault, kwargs in self.pages:
             if lang in ("en", "de"):
                 self.assertEqual(set(alternates), {"en", "de"})
@@ -103,7 +103,7 @@ class LandingPageTests(unittest.TestCase):
         import re
         hub = self.files["services/index.html"]
         thumbs = re.findall(r'<img [^>]*loading="lazy"[^>]*>', hub)
-        self.assertEqual(len(thumbs), 13)
+        self.assertEqual(len(thumbs), 14)
         for tag in thumbs:
             self.assertIn('width="480" height="270"', tag)
             self.assertRegex(tag, r'alt="[^"]{20,}"')
@@ -158,6 +158,33 @@ class LandingPageTests(unittest.TestCase):
         self.assertIn('href="https://www.m365.fm/media-kit/"', buyers.replace("https://example.test", "https://www.m365.fm"))
         self.assertIn("/de/media-kit/", self.files["de/for/sponsors/index.html"])
         self.assertNotIn("/media-kit/", self.files["for/experts/index.html"])
+
+    def test_ad_placements_page_prices_booking_and_links(self):
+        """#281: neue Service-Seite Werbeplaetze mit oeffentlicher Preistabelle, Rechner/Buchung und Verlinkung (Hub, Mediadaten)."""
+        with self.tr_de():
+            self.build()
+        import html as H
+        import re
+        de = self.files["de/for/advertisers/index.html"]
+        en = self.files["for/advertisers/index.html"]
+        self.assertIn("Werbeplätze auf M365.FM direkt buchen", de)
+        rows = re.findall(r'<tr data-product="(\w+)"><th scope="row">([^<]+)</th><td>[^<]*</td><td>[^<]+</td><td class="ad-price">([^<]+)</td></tr>', de)
+        self.assertEqual([(r[0], r[2]) for r in rows], [("banner_top", "40,00\u00a0€"), ("banner_mid", "25,00\u00a0€"), ("banner_bottom", "15,00\u00a0€"),
+                                                        ("company_card", "0,80\u00a0€"), ("lead_form", "20,00\u00a0€")])
+        self.assertIn("Einführungspreise", de)
+        self.assertIn("Mindestbuchung für Banner: 10.000 Einblendungen", de)
+        self.assertIn('href="https://example.test/de/for/advertisers/#book"', de)
+        self.assertIn('href="https://example.test/de/media-kit/"', de)
+        self.assertIn('href="https://example.test/de/sponsor/"', de)
+        cfg = json.loads(H.unescape(re.search(r'<div id="adbook" class="adb" data-cfg="([^"]+)"', de).group(1)))
+        self.assertEqual(cfg["t"]["submit"], "Kostenpflichtig buchen")
+        self.assertEqual(cfg["names"]["banner_mid"], "Banner Mitte")
+        self.assertRegex(de, r'<script defer src="https://example\.test/assets/ads-book\.js\?v=[0-9a-f]{10}"></script>')
+        self.assertIn("40.00\u00a0€", en)
+        ja = json.loads(H.unescape(re.search(r'data-cfg="([^"]+)"', self.r2_files["ja/for/advertisers/index.html"]).group(1)))
+        self.assertEqual(ja["t"]["submit"], "支払い義務のある予約をする")   # Oberflaeche in allen 15 Sprachen
+        for hub in ("services/index.html", "de/services/index.html"):
+            self.assertIn("for/advertisers/", self.files[hub])
 
     def test_stats_put_value_label_and_source_on_separate_elements(self):
         with self.tr_de():

@@ -6,7 +6,7 @@
   function api(p, o) { o = o || {}; o.credentials = "include"; o.headers = Object.assign({ "x-requested-with": "m365" }, o.headers || {}); if (o.body && typeof o.body !== "string") { o.body = JSON.stringify(o.body); o.headers["content-type"] = "application/json"; } return fetch(API + p, o).then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { s: r.status, j: j }; }); }); }
   var TYPES = { product: "Produkt", platform: "Plattform", concept: "Konzept", org: "Firma", person: "Person", cert: "Zertifikat", event: "Event", media: "Medium", category: "Kategorie" };
   var ERR = { bad_name: "Name zu kurz", bad_type: "Typ fehlt", too_short: "Kurzbeschreibung fehlt (mindestens 20 Zeichen in Englisch oder Deutsch)", too_long: "Kurzbeschreibung zu lang (höchstens 300 Zeichen)", bad_url: "Eine Adresse ist ungültig (nur https, Docs nur microsoft.com, azure.com oder github.com)", bad_qid: "Wikidata-ID muss wie Q12345 aussehen", bad_relation: "Eine Beziehung zeigt auf eine unbekannte Entität", unchanged: "Nichts geändert", rate_limit: "Zu viele Änderungen in kurzer Zeit, bitte später", login: "Bitte anmelden", forbidden: "Nur für Admins", email_required: "Kein verifizierter E-Mail-Empfang für diese Person hinterlegt.", mail_off: "E-Mail-Versand ist nicht verfügbar; die Anfrage bleibt offen." };
-  var tabs = [["ov", "Übersicht"], ["fr", "Freigaben"], ["sponsor", "Sponsor-Anfragen"], ["slinks", "Sponsorlinks"], ["tr", "Übersetzungen"], ["ent", "Entitäten"], ["db", "Datenbank"], ["sw", "Schalter"]], panes = {}, bar = h("div", { class: "adm-tabs", role: "tablist" });
+  var tabs = [["ov", "Übersicht"], ["fr", "Freigaben"], ["sponsor", "Sponsor-Anfragen"], ["slinks", "Sponsorlinks"], ["ads", "Werbung"], ["tr", "Übersetzungen"], ["ent", "Entitäten"], ["db", "Datenbank"], ["sw", "Schalter"]], panes = {}, bar = h("div", { class: "adm-tabs", role: "tablist" });
   var LANGN = { de: "Deutsch", fr: "Französisch", es: "Spanisch", it: "Italienisch", nl: "Niederländisch", pt: "Portugiesisch", pl: "Polnisch", id: "Indonesisch", ru: "Russisch", uk: "Ukrainisch", ar: "Arabisch", he: "Hebräisch", ja: "Japanisch", ko: "Koreanisch", en: "Englisch" };
   var KINDN = { lblog: "Blog (früher)", blog: "Blog (Community)", podcast: "Podcast", video: "Video", notes: "Show Notes", entity: "Entität" };
   function ago(t) { if (!t) return "–"; var d = Math.round(Date.now() / 1000 - t); return d < 90 ? d + " s" : d < 5400 ? Math.round(d / 60) + " min" : d < 172800 ? Math.round(d / 3600) + " h" : Math.round(d / 86400) + " d"; }
@@ -43,6 +43,7 @@
     fr: function () { approvals(); },
     sponsor: function () { sponsorRequests(); },
     slinks: function () { sponsorLinks(); },
+    ads: function () { adsAdmin(); },
     db: function () { overview(function (o) { var p = panes.db, d = o.db, m = h("p", { class: "adm-msg" }); p.textContent = "";
       p.appendChild(h("h2", { text: "Umzug in die Datenbank" }));
       var miss = d.entities_file == null ? null : Math.max(0, d.entities_file - (d.entities_db || 0));
@@ -257,6 +258,132 @@
       });
     }
     load();
+  }
+
+  // ---------- #281 Werbung: Buchungen, Freigabe mit Vorschau, Preise, Profilstufen, Hausanzeigen, Zahlen, Leads ----------
+  function adsAdmin() {
+    var p = panes.ads, m = h("p", { class: "adm-msg", role: "status" }); p.textContent = "";
+    var PROD = { banner_top: "Banner oben", banner_mid: "Banner Mitte", banner_bottom: "Banner unten", company_card: "Firmenkarte", lead_form: "Lead-Formular" };
+    var ST = { draft: "Entwurf", awaiting: "wartet", active: "läuft", paused: "pausiert", ended: "beendet", cancelled: "storniert" };
+    var PAY = { pending: "offen", approved: "freigegeben (PayPal)", paid: "bezahlt", denied: "abgelehnt", refunded: "erstattet", cancelled: "storniert" };
+    var CR = { pending: "Freigabe offen", approved: "freigegeben", rejected: "abgelehnt" };
+    function eur(c) { return (Number(c || 0) / 100).toFixed(2).replace(".", ",") + " €"; }
+    function cell(v) { return v && v.nodeType ? h("td", {}, [v]) : h("td", { text: v == null ? "–" : String(v) }); }
+    function tbl(head, rows, empty) { var tb = h("tbody"); rows.forEach(function (r) { tb.appendChild(h("tr", {}, r.map(cell))); });
+      if (!rows.length) tb.appendChild(h("tr", {}, [h("td", { colspan: String(head.length), class: "mut", text: empty })]));
+      return h("div", { style: "overflow-x:auto" }, [h("table", { class: "adm-tbl" }, [h("thead", {}, [h("tr", {}, head.map(function (x) { return h("th", { text: x }); }))]), tb])]); }
+    function post(path, body, ok) { return api(path, { method: "POST", body: body }).then(function (r) { msg(m, r.s === 200 ? (ok || "Gespeichert.") : (ERR[(r.j || {}).error] || "Fehler " + r.s + (r.j && r.j.error ? " (" + r.j.error + ")" : "")), r.s !== 200); return r; }); }
+    p.append(h("h2", { text: "Werbung (Werbeplätze)" }), m);
+
+    // Buchungen
+    var bSec = h("section"), filter = h("select", { "aria-label": "Status filtern" }, [["", "Alle"], ["review", "Freigabe offen"], ["awaiting", "Wartet"], ["active", "Läuft"], ["paused", "Pausiert"], ["ended", "Beendet"], ["cancelled", "Storniert"]].map(function (o) { return h("option", { value: o[0], text: o[1] }); }));
+    var preview = h("div", { class: "adm-ad-preview" });
+    p.append(bSec);
+    function preview_(b) {   // Vorschau im echten Platz: feste Groesse wie auf der Seite
+      preview.textContent = "";
+      var box = function (src, w, hh) { return h("div", { style: "width:" + w + "px;height:" + hh + "px;max-width:100%;border:1px dashed var(--bd);display:flex;align-items:center;justify-content:center;margin:.4em 0" }, [src ? h("img", { src: src, width: String(w), height: String(hh), alt: b.alt || "" }) : h("span", { class: "mut", text: "kein Bild" })]); };
+      preview.append(h("h3", { text: "Vorschau " + b.code + " · " + (PROD[b.product] || b.product) }), h("small", { text: "Anzeige" }));
+      if (b.banner_url || /^banner_/.test(b.product)) { preview.appendChild(box(b.banner_url, b.banner_w || (b.product === "banner_mid" ? 300 : 728), b.banner_h || (b.product === "banner_mid" ? 250 : 90))); if (b.product !== "banner_mid") preview.appendChild(box(b.mobile_url, 320, 100)); }
+      else preview.appendChild(h("div", { style: "max-width:340px;border:1px dashed var(--bd);padding:1em;text-align:center" }, [h("b", { text: b.org_name || "" }), h("p", { text: b.tagline }), h("span", { class: "btn main", text: b.product === "lead_form" ? "Kontakt zu " + (b.org_name || "") : "Zum Firmenprofil" })]));
+      preview.appendChild(h("p", {}, ["Ziel: ", b.target_url ? h("a", { href: b.target_url, target: "_blank", rel: "noopener", text: b.target_url }) : "Firmenprofil / Formular", " · Alt: " + (b.alt || "–")]));
+      preview.scrollIntoView();
+    }
+    function loadBookings() {
+      api("/api/admin/ads/bookings" + (filter.value ? "?status=" + encodeURIComponent(filter.value) : "")).then(function (r) {
+        bSec.textContent = ""; bSec.append(h("h3", { text: "Buchungen" }), h("p", {}, ["Status: ", filter]));
+        if (r.s !== 200) { msg(m, "Buchungen nicht abrufbar", true); return; }
+        bSec.appendChild(h("p", { class: "mut", text: "PayPal-Umgebung: " + r.j.paypal_env + ". Kampagnen starten erst, wenn die Zahlung bestätigt und das Werbemittel freigegeben ist." }));
+        bSec.appendChild(tbl(["Code", "Firma", "Platz", "Volumen", "Preis", "Zahlung", "Werbemittel", "Status", "Zahlen", "Aktionen"], (r.j.bookings || []).map(function (b) {
+          var acts = h("span", {}, [h("button", { type: "button", class: "btn", text: "Vorschau", onclick: function () { preview_(b); } })]);
+          function act(label, path, body, main) { acts.append(" ", h("button", { type: "button", class: "btn" + (main ? " main" : ""), text: label, onclick: function (ev) { ev.target.disabled = true; post(path, body).then(loadBookings); } })); }
+          if (b.creative_status !== "approved" && ["cancelled", "ended"].indexOf(b.status) < 0) act("Freigeben", "/api/admin/ads/review", { id: b.id, decision: "approve" }, true);
+          if (b.creative_status !== "rejected" && ["cancelled", "ended"].indexOf(b.status) < 0) acts.append(" ", h("button", { type: "button", class: "btn", text: "Ablehnen", onclick: function () { var reason = window.prompt("Grund (sieht die Firma):") || ""; if (reason.length < 3) return; post("/api/admin/ads/review", { id: b.id, decision: "reject", reason: reason }).then(loadBookings); } }));
+          if (b.status === "active") act("Pausieren", "/api/admin/ads/status", { id: b.id, status: "paused" });
+          if (b.status === "paused" && b.pay_status === "paid" && b.creative_status === "approved") act("Fortsetzen", "/api/admin/ads/status", { id: b.id, status: "active" });
+          if (["pending", "approved"].indexOf(b.pay_status) >= 0 && ["draft", "awaiting"].indexOf(b.status) >= 0) acts.append(" ", h("button", { type: "button", class: "btn", text: "Zahlung manuell bestätigen", onclick: function () { if (window.confirm("Zahlung für " + b.code + " ohne PayPal als eingegangen markieren?")) post("/api/admin/ads/mark-paid", { id: b.id }).then(loadBookings); } }));
+          if (["ended", "cancelled"].indexOf(b.status) < 0) acts.append(" ", h("button", { type: "button", class: "btn", text: "Stornieren", onclick: function () { if (window.confirm("Buchung " + b.code + " stornieren? Eine Erstattung läuft in PayPal.")) post("/api/admin/ads/status", { id: b.id, status: "cancelled" }).then(loadBookings); } }));
+          var payInfo = h("span", {}, [(PAY[b.pay_status] || b.pay_status) + " · " + (b.pay_method === "invoice" ? "Rechnung" : "PayPal")]);
+          if (b.invoice_url) payInfo.append(" · ", h("a", { href: b.invoice_url, target: "_blank", rel: "noopener", text: "Rechnung" }));
+          return [b.code, b.org_name || b.org_id, PROD[b.product] || b.product, b.delivered + " / " + b.quantity, eur(b.total_cents), payInfo,
+            (CR[b.creative_status] || b.creative_status) + (b.reject_reason ? ": " + b.reject_reason : ""), (ST[b.status] || b.status) + (b.start ? " (" + b.start + " – " + (b.end || "") + ")" : ""),
+            b.impressions + " Einbl. · " + b.clicks + " Klicks · " + b.leads + " Leads", acts];
+        }), "Keine Buchungen."));
+        bSec.appendChild(preview);
+      });
+    }
+    filter.onchange = loadBookings; loadBookings();
+
+    // Preise, Regeln, Profilstufen
+    var pSec = h("section"); p.append(pSec);
+    api("/api/admin/ads/pricing").then(function (r) {
+      if (r.s !== 200) return;
+      var inputs = [], sets = {};
+      pSec.append(h("h3", { text: "Preise je Seitentyp (netto, Einführungspreise)" }), h("p", { class: "mut", text: "Banner: Preis je 1.000 Einblendungen; Firmenkarte je Klick; Lead-Formular je Lead (freies Profil). Bei mehreren Seitentypen gilt der teuerste." }));
+      pSec.appendChild(tbl(["Platz", "Seitentyp", "Preis in €", "aktiv"], (r.j.prices || []).map(function (x) {
+        var price = h("input", { type: "number", min: "0", step: "0.01", value: (x.price_cents / 100).toFixed(2), "aria-label": "Preis " + x.product + " " + x.page_type, style: "width:7em" });
+        var on = h("input", { type: "checkbox", "aria-label": "aktiv" }); on.checked = !!x.active;
+        inputs.push({ product: x.product, page_type: x.page_type, price: price, on: on });
+        return [PROD[x.product] || x.product, x.page_type, price, on];
+      }), ""));
+      var LBL = { min_impressions: "Mindestbuchung Einblendungen", min_clicks: "Mindestens Klicks", min_leads: "Mindestens Leads", topic_pct: "Themen-Targeting +%", exclusive_pct: "Exklusiv +%", runtime3_pct: "Rabatt ab 3 Monaten %", runtime6_pct: "Rabatt ab 6 Monaten %", lead_expert_cents: "Lead Expert-Profil (Cent)", lead_premium_cents: "Lead Premium (Cent)", premium_included_leads: "Premium: enthaltene Leads", vat_pct: "USt.-Satz % (mit Steuerberatung klären)", reverse_charge: "Reverse Charge für EU-Firmen mit USt-ID (0/1)", invoice_due_days: "Zahlungsziel Rechnung (Tage)", intro_prices: "Als Einführungspreis kennzeichnen (0/1)" };
+      var grid = h("div", { class: "adm-form" });
+      (r.j.setting_keys || []).forEach(function (k) { sets[k] = h("input", { type: "number", value: (r.j.settings || {})[k] || "0", style: "width:8em" }); grid.appendChild(h("label", {}, [LBL[k] || k, " ", sets[k]])); });
+      pSec.append(h("h3", { text: "Regeln" }), grid, h("p", {}, [h("button", { type: "button", class: "btn main", text: "Preise und Regeln speichern", onclick: function () {
+        var settings = {}; Object.keys(sets).forEach(function (k) { settings[k] = Number(sets[k].value); });
+        post("/api/admin/ads/pricing", { prices: inputs.map(function (x) { return { product: x.product, page_type: x.page_type, price_cents: Math.round(Number(x.price.value) * 100), active: x.on.checked }; }), settings: settings });
+      } })]));
+      var orgId = h("input", { type: "number", min: "1", placeholder: "Firmen-ID", style: "width:8em" }), plan = h("select", {}, ["free", "expert", "premium"].map(function (x) { return h("option", { value: x, text: x }); })), inc = h("input", { type: "number", min: "0", value: "10", style: "width:6em" });
+      pSec.append(h("h3", { text: "Lead-Preisstufe je Firma" }), tbl(["Firma", "Stufe", "enthaltene Leads"], (r.j.accounts || []).map(function (a) { return [a.name + " (#" + a.org_id + ")", a.plan, a.included_leads]; }), "Alle Firmen: freies Profil."),
+        h("p", {}, [orgId, " ", plan, " ", inc, " ", h("button", { type: "button", class: "btn", text: "Stufe setzen", onclick: function () { post("/api/admin/ads/account", { org_id: Number(orgId.value), plan: plan.value, included_leads: Number(inc.value) }).then(function () { LOAD.ads(); }); } })]));
+    });
+
+    // Hausanzeigen (Rueckfall vor den eingebauten Hausanzeigen)
+    var hSec = h("section"); p.append(hSec);
+    function loadHouse() {
+      api("/api/admin/ads/house").then(function (r) {
+        hSec.textContent = ""; if (r.s !== 200) return;
+        hSec.append(h("h3", { text: "Hausanzeigen" }), h("p", { class: "mut", text: "Erscheinen auf freien Plätzen statt der fest eingebauten Hausanzeigen (M365Con, Services, Werbeplätze). Sprachen leer = alle." }));
+        hSec.appendChild(tbl(["Platz", "Titel", "Ziel", "Sprachen", "Zeitraum", "Aktiv", ""], (r.j.house || []).map(function (x) {
+          return [x.slot, x.title, x.url, x.langs || "alle", (x.start || "…") + " – " + (x.end || "…"), x.active ? "ja" : "nein", h("button", { type: "button", class: "btn", text: "Löschen", onclick: function () { post("/api/admin/ads/house", { delete: x.id }).then(loadHouse); } })];
+        }), "Keine eigenen Hausanzeigen."));
+        var f = {}; ["title", "body", "cta", "url", "langs", "start", "end"].forEach(function (k) { f[k] = h("input", { type: k === "url" ? "url" : k === "start" || k === "end" ? "date" : "text" }); });
+        var slot = h("select", {}, ["top", "mid", "bottom"].map(function (x) { return h("option", { value: x, text: x }); }));
+        hSec.append(h("div", { class: "adm-form" }, [h("label", {}, ["Platz ", slot]), h("label", {}, ["Titel ", f.title]), h("label", {}, ["Text ", f.body]), h("label", {}, ["Knopf ", f.cta]), h("label", {}, ["Ziel (https) ", f.url]), h("label", {}, ["Sprachen (de,en …) ", f.langs]), h("label", {}, ["Von ", f.start]), h("label", {}, ["Bis ", f.end]),
+          h("button", { type: "button", class: "btn main", text: "Hausanzeige anlegen", onclick: function () { post("/api/admin/ads/house", { slot: slot.value, title: f.title.value, body: f.body.value, cta: f.cta.value, url: f.url.value, langs: f.langs.value, start: f.start.value || null, end: f.end.value || null }).then(loadHouse); } })]));
+      });
+    }
+    loadHouse();
+
+    // Zahlen + CSV
+    var sSec = h("section"), from = h("input", { type: "date" }), to = h("input", { type: "date" }); p.append(sSec);
+    function loadStats() {
+      var q = "?" + (from.value ? "from=" + from.value + "&" : "") + (to.value ? "to=" + to.value : "");
+      api("/api/admin/ads/stats" + q).then(function (r) {
+        sSec.textContent = ""; sSec.append(h("h3", { text: "Zahlen" }), h("p", {}, ["Von ", from, " bis ", to, " ", h("button", { type: "button", class: "btn", text: "Anzeigen", onclick: loadStats }), " ",
+          h("button", { type: "button", class: "btn", text: "CSV herunterladen", onclick: function () {
+            fetch(API + "/api/admin/ads/stats" + q + "&format=csv", { credentials: "include", headers: { "x-requested-with": "m365" } }).then(function (x) { return x.blob(); }).then(function (blob) {
+              var a = h("a", { href: URL.createObjectURL(blob), download: "m365fm-werbung.csv" }); document.body.appendChild(a); a.click(); a.remove(); });
+          } })]));
+        if (r.s !== 200) return; var t = r.j.totals;
+        sSec.appendChild(h("div", { class: "adm-grid" }, [tile("Einblendungen", t.impressions), tile("Klicks", t.clicks), tile("Klickrate", t.ctr == null ? "–" : t.ctr + " %"), tile("Leads", t.leads), tile("Umsatz netto (bezahlt)", eur(t.revenue_net_cents), t.paid_bookings + " Buchungen")]));
+        sSec.appendChild(tbl(["Tag", "Kampagne", "Firma", "Platz", "Seitentyp", "Einbl.", "Klicks", "Leads"], (r.j.rows || []).slice(0, 200).map(function (x) { return [x.day, x.code, x.org, x.slot, x.page_type, x.impressions, x.clicks, x.leads]; }), "Noch keine Zahlen."));
+      });
+    }
+    loadStats();
+
+    // Leads (alle; beanstandete zuerst)
+    var lSec = h("section"); p.append(lSec);
+    function loadLeads() {
+      api("/api/admin/ads/leads").then(function (r) {
+        lSec.textContent = ""; if (r.s !== 200) return;
+        lSec.append(h("h3", { text: "Leads" }), tbl(["Datum", "Kampagne", "Firma", "Name", "E-Mail", "Status", "Grund", ""], (r.j.leads || []).map(function (x) {
+          var acts = x.status === "disputed" ? h("span", {}, [h("button", { type: "button", class: "btn main", text: "Gutschreiben", onclick: function () { post("/api/admin/ads/lead", { id: x.id, credit: true }).then(loadLeads).then(loadBookings); } }), " ",
+            h("button", { type: "button", class: "btn", text: "Berechnen", onclick: function () { post("/api/admin/ads/lead", { id: x.id, credit: false }).then(loadLeads); } })]) : null;
+          return [new Date(x.created * 1000).toISOString().slice(0, 10), x.code, x.org, x.name, x.email, x.status + (x.charged ? "" : " (nicht berechnet)"), x.dispute_reason, acts];
+        }), "Noch keine Leads."));
+      });
+    }
+    loadLeads();
   }
 
   // ---------- Uebersetzungen: Uebersicht je Sprache, Filter, Vormerken ----------

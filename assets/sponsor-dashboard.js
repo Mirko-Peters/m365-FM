@@ -357,6 +357,18 @@
       root.appendChild(section);
       if (!items.length) rows.appendChild(node("tr", {}, [node("td", { colspan: "6", class: "mut", text: text("no_placements") })]));
       items.forEach(function (item) { rows.appendChild(placementRow(org, item)); });
+      if ((org.ads || []).length) {   // #281: gebuchte Werbeplaetze mit Einblendungen, Klicks, Klickrate, Leads
+        var adRows = node("tbody");
+        org.ads.forEach(function (ad) {
+          adRows.appendChild(node("tr", {}, [ad.code + " · " + ad.product, metricValue(ad.impressions), metricValue(ad.clicks),
+            ad.ctr == null ? "–" : ad.ctr + " %", metricValue(ad.leads), ad.delivered + " / " + ad.quantity,
+            text(ad.status === "active" ? "active" : ad.status === "ended" ? "ended" : "pending")].map(function (value) { return node("td", { text: String(value) }); })));
+        });
+        section.appendChild(node("section", { class: "sdb-panel" }, [node("h2", { text: text("ads_title") }),
+          node("div", { class: "sdb-table" }, [node("table", {}, [node("thead", {}, [node("tr", {}, ["placement", "ads_impressions", "clicks", "ads_ctr", "ads_leads", "ads_volume", "status"]
+            .map(function (key) { return node("th", { scope: "col", text: text(key) }); }))]), adRows])]),
+          node("p", { class: "mut", text: text("ads_note") })]));
+      }
     });
     var actions = node("div", { class: "sdb-actions" }, [
       node("a", { class: "btn main", href: C.urls.report, text: text("report_view") }),

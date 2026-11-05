@@ -173,6 +173,12 @@ def dashboard_copy(lang):
         "rule_leads": ("Leads are shared only with consent.", "Leads geben wir nur mit Einwilligung weiter."),
         "rule_source": ("Every figure shows its source and latest update.", "Jede Kennzahl zeigt Quelle und letzten Datenstand."),
         "search_impressions": ("Search impressions", "Such-Impressionen"),
+        "ads_title": ("Booked ad placements", "Gebuchte Werbeplätze"),
+        "ads_impressions": ("Impressions", "Einblendungen"),
+        "ads_ctr": ("Click rate", "Klickrate"),
+        "ads_leads": ("Leads", "Leads"),
+        "ads_volume": ("Used / booked", "Verbraucht / gebucht"),
+        "ads_note": ("Counted on M365.FM without cookies; bots are filtered out. Leads are listed on the ad placements page.", "Auf M365.FM ohne Cookies gezählt; Bots werden herausgefiltert. Leads stehen auf der Seite Werbeplätze."),
         "detail_intro": ("Placement performance and source data", "Leistung und Quelldaten der Platzierung"),
         "podcast_tab": ("Podcast", "Podcast"),
         "video_tab": ("Video", "Video"),
@@ -796,7 +802,9 @@ def build(g):
                "ents": search, "entBase": ebase, "key": S.get("key", ""), "dec": S.get("dec")}
         body = body_html(g, lang, stats, quick, S, n_main, n_langs, con_on)
         dash = dashboard_url(B, lang)
-        body = (f'{g["header"](lang, "")}<main class="wrap spn-wrap"><p><a class="btn" href="{E(dash)}">{E(tx(lang, "dash_h"))}</a></p>'
+        import site_ads as ADS   # #281: Verweis auf die direkt buchbaren Werbeplaetze
+        adv = f'<a class="btn" href="{E(ADS.advertise_url(B, lang))}">{E(ADS.texts(lang, "slot")["adv_cta"])}</a>'
+        body = (f'{g["header"](lang, "")}<main class="wrap spn-wrap"><p><a class="btn" href="{E(dash)}">{E(tx(lang, "dash_h"))}</a> {adv}</p>'
                 f'<div class="spn" id="spn" data-ssr="{1 if S else 0}" data-cfg="{E(json.dumps(cfg, ensure_ascii=False, separators=(",", ":")))}">'
                 f'{body}</div></main>{g["footer"](lang)}{js}')
         faqs = faq_items(lang, stats, S.get("nums") or {}, _day(g))

@@ -36,7 +36,7 @@ class NoAdSense(unittest.TestCase):
 
     def test_con_and_services_until_22_jan(self):
         out = A.inject(BASE, PAGE, "de", BASE + "/show/x/", today="2027-01-22")
-        self.assertEqual(out.count("ad-own"), 2)
+        self.assertEqual(out.count('class="ad ad-own ad-slot'), 3)   # #281: oben, Mitte, unten
         self.assertEqual(out.count("ad-con"), 1)
         self.assertIn("m365con.net", out)
         self.assertIn('href="https://www.m365.fm/de/services/"', out)
@@ -47,10 +47,10 @@ class NoAdSense(unittest.TestCase):
 
     def test_only_services_after_con(self):
         out = A.inject(BASE, PAGE, "en", BASE + "/show/x/", today="2027-01-23")
-        self.assertEqual(out.count("ad-own"), 1)
         self.assertNotIn("m365con.net", out)
         self.assertIn('href="https://www.m365.fm/services/"', out)
         self.assertIn("View services", out)
+        self.assertIn('href="https://www.m365.fm/sponsor/"', out)   # Mitte: wieder der Hinweis auf die Sponsor-Seite
 
     def test_rules_still_apply(self):
         self.assertEqual(A.inject(BASE, PAGE, "de", BASE + "/impressum/", today="2026-12-01"), PAGE)

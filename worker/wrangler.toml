@@ -33,6 +33,11 @@ AI_DAILY_EUR_HAIKU = "5"
 USD_PER_EUR = "1.08"
 SEARCH_GAP_THRESHOLD = "0.35"
 SEARCH_VECTOR_MIN_SCORE = "0.4"
+# #281 Werbeplaetze: PayPal-Umgebung (sandbox | live). Bis Mirko umstellt: sandbox (api-m.sandbox.paypal.com).
+# Sandbox nutzt PAYPAL_SANDBOX_CLIENT_ID/_SECRET/_WEBHOOK_ID, falls gesetzt, sonst PAYPAL_CLIENT_ID/_SECRET/_WEBHOOK_ID.
+PAYPAL_ENV = "sandbox"
+# Cloudflare Turnstile fuer das Lead-Formular: TURNSTILE_SITE_KEY und TURNSTILE_SECRET als Worker-Secrets (Dashboard, Typ "Secret",
+# damit ein Deploy sie nicht loescht). Ohne TURNSTILE_SECRET nimmt der Worker keine Leads an (fail closed).
 SPREAKER_SHOW_IDS = "6704921,7393187,7393248,7393223,7393231,7393243,7393222,7393242,7393230,7393247,7393254,7393221,7393227,7393228,7393232,7393236,7393238,7393244,7393250,7393253"
 
 [[send_email]]
