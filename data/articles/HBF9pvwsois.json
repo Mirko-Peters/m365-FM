@@ -93,6 +93,52 @@
     "q": "Wie verhindere ich, dass Benachrichtigungen verloren gehen oder Abonnements ausfallen?",
     "a": "Antworten Sie innerhalb von 3 Sekunden mit 202 Accepted und verarbeiten Sie die Benachrichtigung asynchron über eine Warteschlange. Erneuern Sie Abonnements vor dem Ablauf per PATCH mit der Abonnement-ID. Regelmäßige Delta-Abfragen dienen als Sicherheitsnetz, Lebenszyklus-Benachrichtigungen warnen vor dem Ablauf."
    }
+  ],
+  "quiz": [
+   {
+    "q": "Wie muss der Endpunkt beim Validierungs-Handshake auf die Verifizierungsanfrage von Graph antworten?",
+    "opts": [
+     "Innerhalb von 10 Sekunden das Validierungstoken als reinen Klartext zurücksenden",
+     "Innerhalb von 3 Sekunden das Validierungstoken als JSON-Objekt zurücksenden",
+     "Innerhalb von 30 Sekunden das Token als XML-Dokument zurücksenden",
+     "Das Validierungstoken per PATCH-Anfrage an die Abonnement-ID senden"
+    ],
+    "a": 0,
+    "why": "Das Token muss innerhalb von 10 Sekunden als Klartext ohne JSON oder XML zurückkommen, sonst schlägt der Handshake fehl."
+   },
+   {
+    "q": "Welche maximale Laufzeit gilt für ein Abonnement auf Teams-Chat-Nachrichten?",
+    "opts": [
+     "Eine Stunde",
+     "Sieben Tage",
+     "Etwa 30 Tage",
+     "Maximal drei Tage"
+    ],
+    "a": 3,
+    "why": "Teams-Chat-Nachrichten sind auf maximal drei Tage begrenzt; Outlook sieben Tage, SharePoint etwa 30 Tage, Präsenz eine Stunde."
+   },
+   {
+    "q": "Wie sollte ein Endpunkt auf eingehende Benachrichtigungen reagieren, um nicht als verworfen markiert zu werden?",
+    "opts": [
+     "Jede Benachrichtigung vollständig verarbeiten, bevor er antwortet",
+     "Sofort mit 202 Accepted antworten und asynchron per Warteschlange verarbeiten",
+     "Erst nach zehn Sekunden antworten, um Last zu verteilen",
+     "Benachrichtigungen ignorieren und stattdessen regelmäßig pollen"
+    ],
+    "a": 1,
+    "why": "Schnelle Bestätigung mit 202 Accepted und asynchrone Verarbeitung verhindert, dass Graph den Endpunkt als langsam oder verworfen einstuft."
+   },
+   {
+    "q": "Welcher Zustellkanal eignet sich für extrem große Mengen, etwa Millionen Postfächer?",
+    "opts": [
+     "Webhooks, weil sie die einfachste Variante darstellen",
+     "Event Grid, weil es Benachrichtigungen an Logic Apps sendet",
+     "Delta-Abfragen, weil sie alle Änderungen gesammelt abrufen",
+     "Event Hubs, weil sie Millionen Ereignisse pro Sekunde bewältigen"
+    ],
+    "a": 3,
+    "why": "Event Hubs ist für große Unternehmensszenarien gedacht; die App liest im eigenen Tempo, ohne den Endpunkt zu überlasten."
+   }
   ]
  }
 }
