@@ -29,13 +29,16 @@ def _country_slug(value):
 def fetch_directory(api):
     """Liest nur öffentliche, paginierte Verzeichniseinträge für Seiteninhalt und SEO-Landingpages."""
     import site_fetch as SF
-    items, page = [], 1
-    while page <= 20:
+    # Bis has_more endet: der Worker begrenzt je Tabelle (5000), Firmen zählen je Standort, die Summe kann darüber liegen.
+    items, page, last = [], 1, 1000   # Sicherheitsgrenze, danach aus total
+    while page <= last:
         data = SF.fetch(f"{api}/api/directory?limit=100&page={page}") or {}
         batch = data.get("items") or []
         items.extend(batch)
         if not data.get("has_more") or not batch:
             break
+        if data.get("total"):
+            last = min(last, -(-int(data["total"]) // 100))
         page += 1
     return items
 
@@ -81,8 +84,14 @@ def _read_intros(g):
         return {}
 
 
+# Japanisch/Chinesisch ohne Leerzeichen: jedes Han-/Kana-Zeichen zählt als Wort (sonst wäre ein ganzer Absatz ein Wort).
+# Koreanisch trennt Wörter mit Leerzeichen und wird wie andere Sprachen gezählt.
+_CJK = "\u3040-\u30ff\u31f0-\u31ff\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff\uff66-\uff9f"
+_WORD = re.compile(rf"[{_CJK}]|(?:(?![{_CJK}])[\w'-])+")
+
+
 def _words(value):
-    return re.findall(r"[\w'-]+", re.sub(r"<[^>]*>", " ", str(value or "")).lower())
+    return _WORD.findall(re.sub(r"<[^>]*>", " ", str(value or "")).lower())
 
 
 def _shingles(value):
@@ -145,6 +154,21 @@ def _facts_sections(entries, place, lang, s):
 DIR_CSS = "<style>.dir-wrap nav ol{display:flex;flex-wrap:wrap;gap:.3em .6em;list-style:none;padding:0;margin:1em 0;font-size:.9rem}.dir-wrap nav li+li::before{content:'›';margin-inline-end:.6em;color:var(--mut)}.dir-items{list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(16em,1fr));gap:.8em}.dir-item{border:1px solid var(--bd);background:var(--card);padding:.8em 1em}.dir-item p{margin:.3em 0 0;color:var(--mut)}</style>"
 
 
+def _facets(items):
+    """Filterwerte über alle Einträge (wie facets in /api/directory), nicht nur die eingebetteten ersten 30."""
+    out = {}
+    for key in ("country", "city", "topic", "program", "lang"):
+        seen = {}
+        for item in items:
+            values = (item.get("topics") or []) if key == "topic" else (item.get("programs") or []) if key == "program" else [item.get(key)]
+            for raw in values:
+                value = str(raw or "").strip()
+                if value and value.lower() not in seen:
+                    seen[value.lower()] = value
+        out[key] = sorted(seen.values())
+    return out
+
+
 def _breadcrumb(crumbs):
     items = [{"@type": "ListItem", "position": i + 1, "name": label, "item": url} for i, (label, url) in enumerate(crumbs)]
     return {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": items}
@@ -157,6 +181,7 @@ def build(g):
     items = fetch_directory(api)
     intros = _read_intros(g)
     today = g["TODAY"]
+    facets = _facets(items)
     hub_alternates = {
         lang: f"{BASE}{pfx(lang)}/directory/" for lang in COMM_LANGS
         if _indexable(items) and (lang in ("en", "de") or S[lang]["intro"] != S["en"]["intro"])
@@ -164,7 +189,7 @@ def build(g):
     for lang in COMM_LANGS:
         s = S[lang]
         canonical = f"{BASE}{pfx(lang)}/directory/"
-        config = json.dumps({"api": api, "base": BASE, "lang": lang, "items": items[:30], "labels": s, "mapsKey": maps_key}, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
+        config = json.dumps({"api": api, "base": BASE, "lang": lang, "items": items[:30], "facets": facets, "labels": s, "mapsKey": maps_key}, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
         filters = "".join(f'<label>{esc(s[key])}<select data-filter="{name}"><option value="">{esc(s["all"])}</option></select></label>' for key, name in [("type", "type"), ("topic", "topic"), ("program", "program"), ("lang", "lang"), ("country", "country"), ("city", "city"), ("mode", "mode")])
         filters = f'<label>{esc(s["search"])}<input type="search" data-filter="q" maxlength="100"></label>' + filters
         placeholder = f'<div class="dir-map-placeholder" role="img" aria-label="{esc(s["map_notice"])}"><svg viewBox="0 0 640 360" aria-hidden="true"><rect width="640" height="360" fill="var(--card)"/><path d="M0 70h640M0 150h640M0 245h640M95 0v360M245 0v360M430 0v360M560 0v360" stroke="var(--bd)" stroke-width="8"/><path d="M0 205h640M355 0v360" stroke="var(--ac)" stroke-width="5" opacity=".4"/></svg></div>'
@@ -185,27 +210,37 @@ def build(g):
         if hub_indexable:
             g["sitemap"].append((canonical, today, None))
 
-    groups = {}
+    groups, city_names = {}, {}
     for item in items:
         country = item.get("country") or ""
         code = _country_slug(country)
         if not code:
             continue
-        groups.setdefault(("country", code, "", ""), []).append(item)
-        city = item.get("city") or ""
-        if city:
-            groups.setdefault(("city", code, _slug(city), city), []).append(item)
+        groups.setdefault(("country", code, ""), []).append(item)
+        city = str(item.get("city") or "").strip()
+        city_slug = _slug(city)
+        if city_slug:   # Gruppe je Slug (Berlin/berlin = eine Seite); leerer Slug (z. B. 東京) würde sonst die Länderseite überschreiben
+            groups.setdefault(("city", code, city_slug), []).append(item)
+            names = city_names.setdefault((code, city_slug), {})
+            names[city] = names.get(city, 0) + 1
         for topic in item.get("topics") or []:
             if re.fullmatch(r"[a-z0-9-]{2,48}", str(topic)):
-                groups.setdefault(("topic", code, topic, topic), []).append(item)
+                groups.setdefault(("topic", code, topic), []).append(item)
+
+    def label_of(kind, country, slug):
+        if kind == "city":   # häufigste Schreibweise
+            return min(city_names[(country, slug)].items(), key=lambda pair: (-pair[1], pair[0]))[0]
+        if kind == "topic":   # Entitätsname statt Kennung; die Kennung bleibt im Pfad
+            return (ENTS.get(slug) or {}).get("name") or slug
+        return ""
+
     country_groups = {key[1]: value for key, value in groups.items() if key[0] == "country"}
     cities_by_country = {}
-    for kind, country, slug, label in groups:
+    for kind, country, slug in groups:
         if kind == "city":
-            cities_by_country.setdefault(country, []).append((slug, label))
-    for (kind, country, slug, label), entries in groups.items():
-        if kind == "city" and not entries:
-            continue
+            cities_by_country.setdefault(country, []).append((slug, label_of(kind, country, slug)))
+    for (kind, country, slug), entries in groups.items():
+        label = label_of(kind, country, slug)
         if kind == "country":
             rel = f"directory/{country}/"
             intro_key = f"country:{country}"

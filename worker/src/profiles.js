@@ -199,9 +199,10 @@ export async function saveOrgLocations(env, orgId, locations) {
     await db.prepare("UPDATE org_locations SET lat=?,lng=?,geo_precision=?,geo_address=?,geo_at=? WHERE id=? AND org_id=?")
       .bind(geo.lat, geo.lng, geo.geo_precision, geo.geo_address, geo.geo_at, id, orgId).run();
   }
+  // Entfernte Standorte loeschen (nicht nur verbergen): Adresse und Stadt sollen nicht gespeichert bleiben
   const ids = retainedIds;
-  if (ids.length) await db.prepare(`UPDATE org_locations SET public=0,lat=NULL,lng=NULL,geo_precision='',geo_address='',geo_at=0 WHERE org_id=? AND id NOT IN (${ids.map(() => "?").join(",")})`).bind(orgId, ...ids).run();
-  else await db.prepare("UPDATE org_locations SET public=0,lat=NULL,lng=NULL,geo_precision='',geo_address='',geo_at=0 WHERE org_id=?").bind(orgId).run();
+  if (ids.length) await db.prepare(`DELETE FROM org_locations WHERE org_id=? AND id NOT IN (${ids.map(() => "?").join(",")})`).bind(orgId, ...ids).run();
+  else await db.prepare("DELETE FROM org_locations WHERE org_id=?").bind(orgId).run();
 }
 
 async function replaceLists(db, t, id, { exp, prog, chan, certs }) {
@@ -626,7 +627,7 @@ export async function deleteUserData(db, id) {
     if (other) ops.push(db.prepare("UPDATE org_members SET role='owner' WHERE org_id=? AND user_id=?").bind(o.org_id, other.user_id));
     else ops.push(db.prepare("DELETE FROM org_sponsor WHERE org_id=?").bind(o.org_id), db.prepare("DELETE FROM images WHERE kind='o' AND owner_id=?").bind(o.org_id), db.prepare("DELETE FROM expertise WHERE owner_type='o' AND owner_id=?").bind(o.org_id), db.prepare("DELETE FROM programs WHERE owner_type='o' AND owner_id=?").bind(o.org_id),
       db.prepare("DELETE FROM item_votes WHERE item_id IN (SELECT id FROM feed_items WHERE owner_type='o' AND owner_id=?)").bind(o.org_id), db.prepare("DELETE FROM feed_items WHERE owner_type='o' AND owner_id=?").bind(o.org_id),
-      db.prepare("DELETE FROM channels WHERE owner_type='o' AND owner_id=?").bind(o.org_id), db.prepare("DELETE FROM org_members WHERE org_id=?").bind(o.org_id), db.prepare("DELETE FROM orgs WHERE id=?").bind(o.org_id));
+      db.prepare("DELETE FROM channels WHERE owner_type='o' AND owner_id=?").bind(o.org_id), db.prepare("DELETE FROM org_locations WHERE org_id=?").bind(o.org_id), db.prepare("DELETE FROM org_members WHERE org_id=?").bind(o.org_id), db.prepare("DELETE FROM orgs WHERE id=?").bind(o.org_id));
   }
   ops.push(
     db.prepare("DELETE FROM org_members WHERE user_id=?").bind(id),

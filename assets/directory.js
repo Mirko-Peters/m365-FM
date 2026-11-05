@@ -4,7 +4,7 @@
   var form = document.querySelector(".dir-filters"), count = document.querySelector("[data-count]");
   var more = document.querySelector("[data-more]"), mapBox = document.querySelector("[data-map]");
   var placeholder = document.querySelector(".dir-map-placeholder"), mapStatus = document.querySelector("[data-map-status]");
-  var mapButton = document.querySelector("[data-map-load]"), items = D.items || [], page = 1, total = 0, map, cluster, info;
+  var mapButton = document.querySelector("[data-map-load]"), items = D.items || [], facets = D.facets || null, facetsFresh = false, page = 1, total = 0, seq = 0, map, cluster, info, mapsApi;
   var labels = D.labels || {}, typeNames = { expert: labels.expert, company: labels.company, event: labels.event };
 
   function node(tag, cls, value) {
@@ -24,7 +24,9 @@
     ["type", "topic", "program", "lang", "country", "city", "mode"].forEach(function (key) {
       var sel = form.querySelector('[data-filter="' + key + '"]'), value = sel.value;
       while (sel.options.length > 1) sel.remove(1);
-      var values = key === "type" ? ["expert", "company", "event"] : key === "mode" ? ["online", "onsite", "hybrid"] : unique(key);
+      // Werte ueber alle Eintraege (facets von Seite/API), nicht nur die geladene Seite; die Auswahl bleibt erhalten
+      var values = key === "type" ? ["expert", "company", "event"] : key === "mode" ? ["online", "onsite", "hybrid"] : facets && facets[key] ? facets[key].slice() : unique(key);
+      if (value && values.indexOf(value) < 0) values.push(value);
       values.forEach(function (v) {
         var opt = document.createElement("option"); opt.value = v;
         opt.textContent = key === "type" ? (typeNames[v] || v) : v; sel.appendChild(opt);
@@ -53,16 +55,20 @@
   function params(nextPage) {
     var p = new URLSearchParams({ page: String(nextPage), limit: "30" });
     [].forEach.call(form.querySelectorAll("[data-filter]"), function (field) { if (field.value.trim()) p.set(field.dataset.filter, field.value.trim()); });
+    if (!facetsFresh) p.set("facets", "1");   // Filterwerte einmal aktuell holen (eingebettete stammen vom Seitenbau), nicht bei jeder Seite
     return p;
   }
   function load(nextPage) {
-    if (!nextPage) page = 1;
-    var target = nextPage || 1;
+    var my = ++seq, target = nextPage || 1;   // nur die juengste Anfrage zaehlt (Doppelklick, Filterwechsel waehrend "Weitere laden")
+    more.disabled = true;
     return fetch(D.api + "/api/directory?" + params(target).toString()).then(function (r) { if (!r.ok) throw new Error("directory"); return r.json(); }).then(function (data) {
+      if (my !== seq) return;
       page = target; total = data.total || 0; items = nextPage ? items.concat(data.items || []) : data.items || [];
+      if (data.facets) { facets = data.facets; facetsFresh = true; }
       options(); render(data.items || [], !!nextPage);
       if (map) updateMap(items);
-    }).catch(function () { if (!items.length) render([], false); });
+    }).catch(function () { if (my === seq && !items.length) render([], false); })
+      .then(function () { if (my === seq) more.disabled = false; });
   }
   function loadScript(src) {
     return new Promise(function (resolve, reject) {
@@ -88,24 +94,39 @@
     });
     cluster = new markerClusterer.MarkerClusterer({ map: map, markers: markers });
   }
+  function loadMapsApi() {
+    // Mit &loading=async gibt es google.maps.Map erst beim Callback, nicht schon bei onload. Das Skript wird nur einmal eingefuegt
+    // (sonst meldet Google "multiple inclusion"); nur nach einem Ladefehler darf ein weiterer Klick es erneut versuchen.
+    // Laedt das Skript, aber nicht Googles Folgemodule (Verbindung weg, Filterliste), kommt der Callback nie: dann nach 15 s aufgeben.
+    // Kam der Callback doch noch (nach der Wartezeit), ist die API da und wird nicht erneut eingefuegt.
+    if (!mapsApi && window.google && google.maps && google.maps.Map) mapsApi = Promise.resolve();
+    if (!mapsApi) mapsApi = new Promise(function (resolve, reject) {
+      var wait, done = false, fail = function (error) { if (done) return; done = true; clearTimeout(wait); mapsApi = null; reject(error); };
+      window.M365DirMapReady = function () { done = true; clearTimeout(wait); resolve(); };
+      loadScript("https://maps.googleapis.com/maps/api/js?key=" + encodeURIComponent(D.mapsKey) + "&loading=async&callback=M365DirMapReady")
+        .then(function () { if (!done) wait = setTimeout(function () { fail(new Error("maps_timeout")); }, 15000); }, fail);
+    });
+    return mapsApi;
+  }
   function loadMap() {
     if (!mapButton || !D.mapsKey || mapButton.disabled) return;
+    if (map) return;   // Karte steht schon
     mapButton.disabled = true; mapStatus.textContent = labels.loading;
-    loadScript("https://maps.googleapis.com/maps/api/js?key=" + encodeURIComponent(D.mapsKey) + "&loading=async")
-      .then(function () { return loadScript("https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js"); })
+    loadMapsApi()
+      .then(function () { return window.markerClusterer || loadScript("https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js"); })
       .then(function () {
-      if (!window.google || !window.markerClusterer) throw new Error("maps");
+      if (!window.google || !google.maps || !google.maps.Map || !window.markerClusterer) throw new Error("maps");
       var dark = matchMedia("(prefers-color-scheme: dark)").matches || document.documentElement.dataset.theme === "dark";
       map = new google.maps.Map(mapBox, { center: { lat: 48, lng: 10 }, zoom: 4, styles: dark ? [{ elementType: "geometry", stylers: [{ color: "#242a30" }] }, { elementType: "labels.text.fill", stylers: [{ color: "#d7dde3" }] }, { featureType: "road", elementType: "geometry", stylers: [{ color: "#39434c" }] }, { featureType: "water", elementType: "geometry", stylers: [{ color: "#17212a" }] }] : [] });
-      info = new google.maps.InfoWindow(); placeholder.hidden = true; mapBox.hidden = false; mapStatus.textContent = ""; updateMap(items);
+      info = new google.maps.InfoWindow(); placeholder.hidden = true; mapBox.hidden = false; mapStatus.textContent = ""; mapButton.hidden = true; updateMap(items);
       }).catch(function () { mapStatus.textContent = labels.map_missing; })
-      .finally(function () { mapButton.disabled = false; });
+      .finally(function () { mapButton.disabled = !!map; });   // Karte steht: Knopf bleibt aus
   }
   var timer;
   form.addEventListener("submit", function (event) { event.preventDefault(); });
   form.addEventListener("input", function () { clearTimeout(timer); timer = setTimeout(function () { load(0); }, 250); });
   form.addEventListener("change", function () { load(0); });   // erste Seite ersetzen, nicht anhaengen
-  more.addEventListener("click", function () { load(page + 1); });
+  more.addEventListener("click", function () { if (!more.disabled) load(page + 1); });
   if (mapButton) mapButton.addEventListener("click", loadMap);
   [].forEach.call(document.querySelectorAll("[data-view]"), function (button) {
     button.addEventListener("click", function () {
