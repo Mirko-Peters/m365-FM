@@ -1,11 +1,30 @@
 name: Website bauen und veröffentlichen
+# Wann gebaut wird (weniger Actions-Minuten, Ziel: privates Repo mit GitHub Pro):
+# - naechtlich einmal voll (01:07 UTC = 02:07 Berlin im Winter, 03:07 im Sommer): alle Daten-Abrufe, Plattform-Sync, Spotify;
+#   danach (04:47 UTC) setzt spreaker-links.yml das Website-Feld der neuen Folgen auf die frisch gebauten Seiten.
+# - bei Pushes nur, wenn sich Code oder Vorlagen aendern (Liste unten). Daten-Commits (data/**, episodes/**, imports/**, shownotes/**,
+#   Uebersetzungen, Artikel, Cover) bauen nicht mehr sofort - sie kommen mit dem naechtlichen Bau (oder per "Run workflow").
+# - neue Folgen: spreaker-feed-check.yml (alle 2 h) startet einen Frische-Bau (mode=fresh), sobald eine neu veroeffentlichte Folge noch
+#   keine Seite hat (tools/new_episodes_check.py, hoechstens alle SITE_FRESH_GAP_H Stunden, Standard 6).
+# - von Hand: "Run workflow" (mode=full wie naechtlich, mode=fresh ohne Spotify-/Plattform-Abgleich, ~30 min kuerzer).
 on:
   push:
     branches: [main]
-    paths: ["episodes/**", "data/**", "domain.txt", "sync_platforms.py", "sync_live.py", "site_live.py", "tools/build_speakers.py", "tools/generate_directory_intros.py", "platform_match.py", "show_notes.py", "sync_show_notes.py", "generate_og.py", "generate_service_images.py", "site_*.py", "site_taxonomy.py", "check_links.py", "check_schema.py", "assets/**", "generate_articles.py", "scrape_spotify.py", "fetch_en_episodes.py", "fetch_en_titles.py", "fetch_reviews.py", "generate_site.py", "translate_blog.py", "generate_covers.py", "sync_spreaker.py", "spreaker_auth.py", "site_cover.py", "site_design.py", "site_money.py", "site_legal.py", "shows_seo.json", ".github/workflows/site.yml", "check_*.py", "shownotes/site/**", "shownotes/QA.txt", "tests/sponsor_*", "tests/test_site_links.py", "tests/test_redirects_extra.py", "sitewrk/test/legacy_cases.json", "tools/sponsor_ssr.mjs"]
+    paths: ["generate_site.py", "site_*.py", "generate_og.py", "generate_service_images.py", "check_*.py", "assets/**", "domain.txt", "shows_seo.json",
+            "platform_match.py", "show_notes.py", "sync_platforms.py", "sync_live.py", "sync_show_notes.py", "sync_spreaker.py", "spreaker_auth.py",
+            "scrape_spotify.py", "fetch_en_episodes.py", "fetch_en_titles.py", "fetch_reviews.py", "generate_articles.py", "generate_covers.py", "translate_blog.py",
+            "tools/build_speakers.py", "tools/generate_directory_intros.py", "tools/sponsor_ssr.mjs", "tools/page_hashes.py", "tools/purge_changed.py",
+            "tools/r2_common.py", "tools/r2_pages_upload.py", "tools/r2_og_upload.py", "tools/r2_site_sync.py",
+            "tests/sponsor_*", "tests/test_site_links.py", "tests/test_redirects_extra.py", "sitewrk/test/legacy_cases.json", ".github/workflows/site.yml"]
   schedule:
-    - cron: "17 5 * * *"
+    - cron: "7 1 * * *"
   workflow_dispatch:
+    inputs:
+      mode:
+        description: "full = wie der naechtliche Bau (mit Spotify- und Plattform-Abgleich), fresh = ohne diese beiden (neue Folgen, ~30 min kuerzer)"
+        type: choice
+        options: [full, fresh]
+        default: full
 permissions:
   contents: write
   pages: write
@@ -95,8 +114,8 @@ jobs:
             git add data/reviews_ext.json && git commit -m "Bewertungen aktualisiert"
             (git pull --rebase --autostash -q -X theirs || git rebase --abort) && git push -q
           fi
-      - name: Spotify-Folgenlinks einsammeln (ohne API) – nur täglich/manuell, bei Pushes gilt der gespeicherte Stand
-        if: github.event_name != 'push'
+      - name: Spotify-Folgenlinks einsammeln (ohne API) – nur naechtlich/manuell (mode=full), sonst gilt der gespeicherte Stand
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode != 'fresh')
         timeout-minutes: 12
         continue-on-error: true
         run: |
@@ -149,8 +168,8 @@ jobs:
           fi
       - name: Plattform-Sync-Regressionen (offline)
         run: python3 tools/test_sync_platforms.py
-      - name: Folgenlinks zu Apple, Spotify, Deezer, YouTube zuordnen (taeglich/manuell, bei Pushes gilt der gespeicherte Stand)
-        if: github.event_name != 'push'
+      - name: Folgenlinks zu Apple, Spotify, Deezer, YouTube zuordnen (naechtlich/manuell mit mode=full, sonst gilt der gespeicherte Stand)
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode != 'fresh')
         timeout-minutes: 26
         continue-on-error: true
         env:
