@@ -388,6 +388,7 @@ PAGES["for/publishers/"] = dict(
     lead=("Find Microsoft 365 experts for an article, an interview or a quote. Browse public profiles by topic and see the sessions, episodes and articles behind each person.",
           "Finde Microsoft-365-Experten für einen Artikel, ein Interview oder ein Zitat. Durchsuche öffentliche Profile nach Thema und sieh die Sessions, Folgen und Artikel hinter jeder Person."),
     cta=(("Browse expert profiles", "Expertenprofile ansehen"), "members"),
+    cta_on=(("Open Expert Connect", "Expert Connect öffnen"), "expertconnect", "expert_requests"),
     card=(("Expert profiles by topic, with the context behind each person.", "Expertenprofile nach Thema, mit dem Kontext hinter jeder Person."),
           ("Journalists, editors and PR teams", "Journalisten, Redaktionen und PR-Teams"),
           [("Search by topic and program", "Suche nach Thema und Programm"), ("Sessions and episodes per expert", "Sessions und Folgen je Experte"), ("Free to browse", "Kostenlos durchsuchbar")]),

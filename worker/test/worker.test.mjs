@@ -423,6 +423,7 @@ test("schema: Migrationen sind idempotent und enthalten jede zur Laufzeit angele
   for (const s of stmts) {
     if (/^ALTER TABLE search_doc ADD COLUMN (?:grp|title_norm) TEXT NOT NULL DEFAULT ''$/i.test(s)
       || /^ALTER TABLE (?:push_subs ADD COLUMN digest INTEGER NOT NULL DEFAULT 1|events ADD COLUMN tz TEXT NOT NULL DEFAULT 'Europe\/Berlin')$/i.test(s)) continue;
+    if (/^ALTER TABLE (?:expert_requests ADD COLUMN (?:hide_outlet INTEGER NOT NULL DEFAULT 0|reach TEXT NOT NULL DEFAULT ''|audience TEXT NOT NULL DEFAULT 'all'|mode TEXT NOT NULL DEFAULT 'match'|held_reason TEXT NOT NULL DEFAULT '')|expert_request_replies ADD COLUMN (?:kind TEXT NOT NULL DEFAULT 'match'|status TEXT NOT NULL DEFAULT 'pending')|contributions ADD COLUMN expert_request_id INTEGER)$/i.test(s)) continue;
     assert.match(s, /^CREATE (TABLE|INDEX|UNIQUE INDEX) IF NOT EXISTS /i, "nur idempotente Anweisungen: " + s.slice(0, 60));
   }
   const inMig = new Set([...sql.matchAll(/CREATE (?:TABLE|UNIQUE INDEX|INDEX) IF NOT EXISTS (\w+)/gi)].map((m) => m[1]));
@@ -443,6 +444,20 @@ test("d1 backup: virtueller FTS-Index und Schatten werden vom Tabellenexport aus
   const args = d1BackupExportArgs(tables);
   assert.deepEqual(args.slice(-2), ["--table=search_doc", "--table=users"]);
   assert.deepEqual(d1BackupExportArgs([]), ["d1", "export", "m365-dub", "--remote", "--output=backup-d1.sql"]);
+});
+
+test("d1 backup: jede zur Laufzeit angelegte FTS5-Tabelle (samt Schatten) faellt aus der Sicherung", () => {
+  assert.deepEqual(d1BackupTables([
+    { name: "expert_profile_fts" }, { name: "expert_profile_fts_data" }, { name: "expert_profile_fts_idx" }, { name: "expert_profile_fts_content" },
+    { name: "expert_profile_fts_docsize" }, { name: "expert_profile_fts_config" }, { name: "fts_notes" }, { name: "expert_requests" },
+  ]), ["fts_notes", "expert_requests"]);
+  const src = new URL("../src/", import.meta.url);
+  for (const f of readdirSync(src).filter((f) => f.endsWith(".js"))) {
+    for (const m of readFileSync(new URL(f, src), "utf-8").matchAll(/CREATE VIRTUAL TABLE IF NOT EXISTS (\w+)/gi)) {
+      const shadow = ["", "_data", "_idx", "_content", "_docsize", "_config"].map((x) => ({ name: m[1] + x }));
+      assert.deepEqual(d1BackupTables(shadow), [], `${m[1]} (aus ${f}) muss aus der D1-Sicherung fallen`);
+    }
+  }
 });
 
 test("levels: Punkte sind je Art gedeckelt, Stufen 1-6 folgen Belegen und Bestaetigungen", () => {

@@ -22,6 +22,12 @@
   "/api/admin/expert-requests/reply-delete": {
    "skip": "Admin-Funktionen: gemeldete Antworten werden nur im Admin-Panel entfernt"
   },
+  "/api/admin/expert-requests/moderation-log": {
+   "skip": "Das Moderationsprotokoll ist ausschließlich für Admins im Verwaltungsbereich bestimmt"
+  },
+  "/api/admin/expert-requests/resolve": {
+   "skip": "Zurückgehaltene Anfragen werden nur durch Admins moderiert"
+  },
   "/api/admin/entity/claim": {
    "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
   },
@@ -399,11 +405,34 @@
     "find_experts"
    ]
   },
+  "/api/experts/search": {
+   "tools": [
+    "search_experts"
+   ]
+  },
+  "/api/expert-calls": {
+   "tools": [
+    "list_expert_calls"
+   ]
+  },
+  "/api/expert-settings": {
+   "skip": "Opt-in, Kontaktpräferenz und Pause werden nur im angemeldeten Browser verwaltet"
+  },
   "/api/expert-requests/block": {
    "skip": "Publisher sperren oder entsperren ist eine Browser-Funktion"
   },
   "/api/expert-requests/close": {
    "skip": "Eigene Publisher-Anfragen werden im Browser geschlossen"
+  },
+  "/api/expert-requests/accept": {
+   "tools": [
+    "accept_expert_answer"
+   ]
+  },
+  "/api/expert-requests/apply": {
+   "tools": [
+    "apply_to_expert_call"
+   ]
   },
   "/api/expert-requests/create": {
    "tools": [
@@ -420,11 +449,22 @@
     "list_my_matches"
    ]
   },
+  "/api/expert-requests/preview": {
+   "skip": "Die Vorschau liefert nur Trefferzahlen für das Anfrageformular"
+  },
+  "/api/expert-requests/update": {
+   "skip": "Entwürfe und Anfragen werden nur im angemeldeten Browser bearbeitet"
+  },
+  "/api/expert-requests/extend": {
+   "skip": "Fristen eigener Publisher-Anfragen werden nur im angemeldeten Browser verlängert"
+  },
   "/api/expert-requests/report": {
    "skip": "Meldungen sind eine Browser-Funktion"
   },
   "/api/expert-requests/respond": {
-   "skip": "Antworten auf Publisher-Anfragen werden im Browser gesendet"
+   "tools": [
+    "answer_expert_request"
+   ]
   },
   "/api/feed": {
    "skip": "Zähler/Listen nur für die Seitenanzeige (Stimmen, Follower) - in list_blog_posts enthalten"

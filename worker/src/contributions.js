@@ -212,6 +212,13 @@ export async function handleContributions(env, request, url, path, user, J) {
   return null;
 }
 
+export async function recordExpertContribution(db, userId, request, created = now()) {
+  const title = cleanText(`Expert Connect: ${request.title}`, 200).replace(/[<>]/g, "").trim();
+  await db.prepare(`INSERT OR IGNORE INTO contributions(user_id,title,published,kind,category,topics,public,manual,created,expert_request_id)
+    VALUES(?,?,?,'article','Speaker/Presenter',?,0,1,?,?)`)
+    .bind(userId, title, created, JSON.stringify(topicsOf(JSON.parse(request.topics || "[]"))), created, request.id).run();
+}
+
 export async function refreshContributions(env, max = 5) {
   const db = env.DB, t = now();
   await ensureContributionColumns(db);
