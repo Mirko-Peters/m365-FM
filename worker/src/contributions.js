@@ -27,13 +27,16 @@ const MESSAGES = {
   bad_contribution: "A contribution needs a title (3-200 characters), a known type and an optional https link.", contribution_limit: "Too many manual contributions.",
   bad_date: "Use a valid date as YYYY-MM-DD.", bad_category: `Category must be one of: ${MVP_CATEGORIES.join(", ")}.`, contribution_exists: "A contribution with this link already exists.",
   bad_period: "Use from/to as YYYY-MM-DD with from <= to.", bad_format: "format must be csv, mvp or gde.", bad_field: "A field is invalid.", not_editable: "Title, link, date and type can only be changed for contributions added by hand.",
-  bad_url: "Enter a public https link.", preview_failed: "The link could not be read. Fill in the fields by hand.",
+  bad_url: "Enter a public https link.", bad_month: "report_start must be a month number from 1 (January) to 12 (December).", preview_failed: "The link could not be read. Fill in the fields by hand.",
 };
 const fail = (J, error, status, extra = {}) => J({ error, message: MESSAGES[error] || "Request failed.", ...extra }, status);
 
 async function ensureContributionColumns(db) {
-  try { await db.prepare("SELECT topics_edited,portal,country FROM contributions LIMIT 1").first(); }
-  catch { for (const [name, type] of NEW_COLUMNS) { try { await db.prepare(`ALTER TABLE contributions ADD COLUMN ${name} ${type}`).run(); } catch {} } }
+  try { await db.prepare("SELECT topics_edited,portal,country,(SELECT report_start FROM user_prefs LIMIT 1) rs FROM contributions LIMIT 1").first(); }
+  catch {
+    for (const [name, type] of NEW_COLUMNS) { try { await db.prepare(`ALTER TABLE contributions ADD COLUMN ${name} ${type}`).run(); } catch {} }
+    try { await db.prepare("ALTER TABLE user_prefs ADD COLUMN report_start INTEGER NOT NULL DEFAULT 4").run(); } catch {}
+  }
   await db.prepare("CREATE TABLE IF NOT EXISTS contribution_ignored (user_id INTEGER NOT NULL, url TEXT NOT NULL, created INTEGER NOT NULL, PRIMARY KEY(user_id,url))").run();
 }
 
@@ -114,6 +117,13 @@ function contributionOutput(row) {
     portal: !!row.portal, portal_at: row.portal_at || 0, review: row.review || "", description: row.portal_desc || "", role: row.role || "",
     audience, area: row.area || "", attendees: row.attendees || 0, live_views: row.live_views || 0, sessions: row.sessions || 0,
     event_format: row.event_format || "", country: row.country || "", mvp };
+}
+
+// Beginn des Berichtsjahrs (Monat 1-12); ohne Eintrag April (ab April zaehlen Beitraege fuer die MVP-Verlaengerung)
+async function settingsOf(db, uid) {
+  const r = await db.prepare("SELECT report_start FROM user_prefs WHERE user_id=?").bind(uid).first().catch(() => null);
+  const m = Number(r?.report_start);
+  return { report_start: Number.isInteger(m) && m >= 1 && m <= 12 ? m : 4 };
 }
 
 const dayOf = (t) => new Date(t * 1000).toISOString().slice(0, 10);
@@ -309,7 +319,17 @@ export async function handleContributions(env, request, url, path, user, J) {
         ORDER BY c.published DESC,c.id DESC LIMIT 500`).bind(user.id).all()).results || [];
     return J({ sources: sources.map((s) => ({ ...s, public: !!s.public, active: !!s.active,
       status: s.fails >= 5 ? "paused_after_errors" : s.active ? "active" : "paused" })), contributions: rows.map(contributionOutput),
+      settings: await settingsOf(db, user.id),
       options: { categories: MVP_CATEGORIES, kinds: ENTRY_KINDS, roles: MVP_ROLES, audiences: MVP_AUDIENCES, event_formats: EVENT_FORMATS, portal: MVP_PORTAL_URL } }, 200, { "cache-control": "no-store" });
+  }
+  if (path === "/api/contributions/settings" && method === "GET") return J({ settings: await settingsOf(db, user.id) }, 200, { "cache-control": "no-store" });
+  if (path === "/api/contributions/settings" && method === "POST") {
+    if (!(await rateLimit(db, `contrib-settings:${user.id}`, 60, 86400))) return fail(J, "rate_limit", 429);
+    const b = await request.json().catch(() => ({})), m = Number(b.report_start);
+    if (!Number.isInteger(m) || m < 1 || m > 12) return fail(J, "bad_month", 400, { field: "report_start" });
+    // vorhandene Nutzer-Einstellungen (user_prefs) erweitern, andere Spalten bleiben unangetastet
+    await db.prepare("INSERT INTO user_prefs(user_id,report_start) VALUES(?,?) ON CONFLICT(user_id) DO UPDATE SET report_start=excluded.report_start").bind(user.id, m).run();
+    return J({ ok: true, settings: await settingsOf(db, user.id) });
   }
   if (path === "/api/contributions/update" && method === "POST") {
     if (!(await rateLimit(db, `contrib-update:${user.id}`, 600, 86400))) return fail(J, "rate_limit", 429);

@@ -2,6 +2,17 @@
    Laeuft als Reiter im Profil (#c-mvp) und als eigene App "M365.FM Contributor" (#mvp-app, /community/contributor/, PWA).
    Daten nur ueber /api/contributions/* (Sitzung + x-requested-with). Texte aus assets/cm-<sprache>.js (window.M365CT, Schluessel mvp_*), nur per textContent.
    Status "im Portal" wird hier gefuehrt - es gibt keine Portal-Schnittstelle, nichts wird an Microsoft gesendet. */
+// Berichtsjahr (#231): beginnt im gewaehlten Monat (1-12, Standard 4 = April: ab April zaehlen Beitraege fuer die MVP-Verlaengerung)
+// und endet am letzten Tag vor diesem Monat im Folgejahr; Monat 1 = Kalenderjahr. Alles in UTC. Rein und testbar (worker/test/mvp_tracker.test.mjs).
+window.M365MVPPeriod = (function () {
+  function month(m) { m = Math.floor(+m); return m >= 1 && m <= 12 ? m : 4; }
+  function yearOf(sec, start) { var d = new Date(sec * 1000), m = month(start); return d.getUTCMonth() >= m - 1 ? d.getUTCFullYear() : d.getUTCFullYear() - 1; }
+  function period(y, start) {
+    var m = month(start), s = Date.UTC(y, m - 1, 1), e = Date.UTC(y + 1, m - 1, 1);
+    return { start: s / 1000, end: e / 1000 - 1, from: new Date(s).toISOString().slice(0, 10), to: new Date(e - 86400000).toISOString().slice(0, 10), label: m === 1 ? String(y) : y + "/" + String(y + 1).slice(2) };
+  }
+  return { month: month, yearOf: yearOf, period: period };
+})();
 (function () {
   "use strict";
   var X = window.M365X, host = document.getElementById("mvp-app") || document.getElementById("c-mvp");
@@ -80,12 +91,12 @@
       return load(function () { say(okText || t("saved"), true); }).then(function () { return true; });
     });
   }
-  // MVP-Jahr: 1. April bis 31. März (Beitragszeitraum der MVP-Verlaengerung); Kalenderjahr als Alternative
-  function mvpYearOf(sec) { var d = new Date(sec * 1000); return d.getUTCMonth() >= 3 ? d.getUTCFullYear() : d.getUTCFullYear() - 1; }
-  function periodOf(kind, y) {
-    var s = kind === "mvp" ? Date.UTC(y, 3, 1) : Date.UTC(y, 0, 1), e = kind === "mvp" ? Date.UTC(y + 1, 3, 1) : Date.UTC(y + 1, 0, 1);
-    return { start: s / 1000, end: e / 1000 - 1, from: new Date(s).toISOString().slice(0, 10), to: new Date(e - 86400000).toISOString().slice(0, 10), label: kind === "mvp" ? y + "/" + String(y + 1).slice(2) : String(y) };
-  }
+  // Berichtsjahr ab dem Monat aus den Einstellungen (Standard April = MVP-Jahr); "cal" = Kalenderjahr
+  var P = window.M365MVPPeriod;
+  function startMonth() { return P.month(S.data && S.data.settings && S.data.settings.report_start); }
+  function mvpYearOf(sec) { return P.yearOf(sec, startMonth()); }
+  function periodOf(kind, y) { return P.period(y, kind === "mvp" ? startMonth() : 1); }
+  function monthName(m) { try { return new Intl.DateTimeFormat(LANG, { month: "long", timeZone: "UTC" }).format(new Date(Date.UTC(2026, m - 1, 1))); } catch (e) { return String(m); } }
   function nowSec() { return Math.floor(Date.now() / 1000); }
 
   // ---------- Navigation ----------
@@ -148,7 +159,7 @@
       el("b", { class: "mvp-big", text: open.length ? t("ov_open", { n: num(open.length) }) : t("ov_none_open") }),
       open.length ? btn(t("ov_open_btn"), function () { S.filter = "open"; go("log"); }, "main") : null]));
     if (pend.length) out.push(el("div", { class: "mvp-card" }, [el("b", { text: t("ov_review", { n: num(pend.length) }) }), btn(t("ov_review_btn"), function () { S.filter = "review"; go("log"); })]));
-    out.push(el("div", { class: "mvp-stats" }, [stat(month, t("ov_month")), stat(inYear.length, t("ov_year", { y: pr.label })), stat(inYear.filter(function (c) { return c.portal; }).length, t("im_portal"))]));
+    out.push(el("div", { class: "mvp-stats" }, [stat(month, t("ov_month")), stat(inYear.length, t(startMonth() === 4 ? "ov_year" : "ov_report", { y: pr.label })), stat(inYear.filter(function (c) { return c.portal; }).length, t("im_portal"))]));
     if (bad) out.push(el("div", { class: "mvp-card warn" }, [el("b", { text: t("ov_errors", { n: num(bad) }) }), btn(t("ov_sources_btn"), function () { go("sources"); })]));
     if (!srcs.length) out.push(el("div", { class: "mvp-card" }, [el("p", { text: t("ov_nosrc") }), btn(t("s_add"), function () { go("sources"); }, "main")]));
     return out;
@@ -362,7 +373,7 @@
     var ys = Object.keys(years).map(Number).sort(function (x, y) { return y - x; }).slice(0, 8);
     if (ys.indexOf(S.year) < 0) S.year = ys[0];
     var p = periodOf(S.period, S.year), inP = a.filter(function (c) { return c.published >= p.start && c.published <= p.end; });
-    var kindSel = select([["mvp", t("im_mvp")], ["cal", t("im_cal")]], S.period, { onchange: function () { S.period = this.value; S.year = 0; render(false); } });
+    var kindSel = select([["mvp", startMonth() === 4 ? t("im_mvp") : t("im_report", { m: monthName(startMonth()) })], ["cal", t("im_cal")]], S.period, { onchange: function () { S.period = this.value; S.year = 0; render(false); } });
     var yearSel = select(ys.map(function (y) { return [String(y), periodOf(S.period, y).label]; }), String(S.year), { onchange: function () { S.year = +this.value; render(false); } });
     var out = [heading(t("nav_impact")), el("div", { class: "mvp-tools" }, [field(t("im_period"), kindSel), field(t("im_year"), yearSel)])];
     if (!inP.length) { out.push(el("p", { class: "mvp-empty", text: t("im_none") })); return out; }
@@ -395,6 +406,7 @@
   // ---------- Export ----------
   function viewExport() {
     var p = periodOf("mvp", mvpYearOf(nowSec())), e = S.expForm || (S.expForm = { from: p.from, to: p.to, category: "", portal: "all", format: "csv" });
+    if (!e.touched) { e.from = p.from; e.to = p.to; }
     var from = input("date", e.from), to = input("date", e.to);
     var cat = select([["", t("cat_all")]].concat(CATS.map(function (x) { return [x, x]; })).concat([["none", t("cat_none")]]), e.category);
     var portal = select([["all", t("f_all")], ["open", t("f_open")], ["entered", t("f_entered")]], e.portal);
@@ -408,7 +420,7 @@
     f.addEventListener("submit", function (ev) {
       ev.preventDefault();
       var r0 = f.querySelector("input[name=mvp-fmt]:checked");
-      e.from = from.value; e.to = to.value; e.category = cat.value; e.portal = portal.value; e.format = r0 ? r0.value : "csv";
+      e.touched = e.touched || e.from !== from.value || e.to !== to.value; e.from = from.value; e.to = to.value; e.category = cat.value; e.portal = portal.value; e.format = r0 ? r0.value : "csv";
       if (e.from && e.to && e.from > e.to) return invalid(to, t("e_date"));
       var q = "from=" + encodeURIComponent(e.from) + "&to=" + encodeURIComponent(e.to) + "&portal=" + e.portal + (e.category ? "&category=" + encodeURIComponent(e.category) : "")
         + "&format=" + (e.format === "copy" ? "csv" : e.format) + "&lang=" + (LANG === "de" ? "de" : "en");
@@ -474,7 +486,22 @@
     });
     out.push(srcs.length ? ul : el("p", { class: "mvp-empty", text: t("s_none") }));
     out.push(el("section", { class: "mvp-card" }, [el("h3", { text: t("s_add") }), sourceForm(null)]));
+    out.push(settingsForm());
     return out;
+  }
+  function settingsForm() {
+    var months = []; for (var m = 1; m <= 12; m++) months.push([String(m), monthName(m)]);
+    var sel = select(months, String(startMonth()));
+    var f = el("form", { class: "mvp-card mvp-form", novalidate: true }, [el("h3", { text: t("set_h") }), field(t("set_start"), sel, t("set_hint")),
+      el("div", { class: "btns" }, [el("button", { type: "submit", class: "btn main", text: t("save") })])]);
+    f.addEventListener("submit", function (ev) {
+      ev.preventDefault();
+      api("/api/contributions/settings", { report_start: +sel.value }).then(function (r) {
+        if (r.s !== 200) return say(errText(r.j));
+        S.year = 0; S.exp = null; load(function () { say(t("saved"), true); });
+      });
+    });
+    return f;
   }
   function srcUpdate(b) { return api("/api/contributions/source/update", b).then(function (r) { if (r.s === 200) { S.srcEdit = 0; load(function () { say(t("saved"), true); }); } else say(errText(r.j)); }); }
   function sourceForm(s) {

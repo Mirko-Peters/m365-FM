@@ -237,3 +237,47 @@ test("MCP: Programm-Tools nur mit aktivem Programm, Fehler als lesbarer Text, fo
   assert.ok(TOOLS.filter((t) => t.program).every((t) => t.route && t.fixed && t.de));
   assert.equal((await visibleTools(env, null)).some((t) => t.program), false);
 });
+
+test("Einstellungen: Beginn des Berichtsjahrs (Standard April, eigener Monat, Prüfung) in user_prefs", async () => {
+  const { db, raw } = await makeDb(), call = caller(db);
+  assert.equal((await json(call("/api/contributions/mine"))).settings.report_start, 4, "Standard April");
+  raw.exec("INSERT INTO user_prefs(user_id,real_name,name_mode) VALUES(1,'Anna Real','full')");
+  assert.equal((await json(call("/api/contributions/settings"))).settings.report_start, 4, "bestehende Zeile ohne Angabe = April");
+  const r = await json(call("/api/contributions/settings", "POST", { report_start: 7 }));
+  assert.deepEqual([r.ok, r.settings.report_start], [true, 7]);
+  const row = raw.prepare("SELECT real_name,name_mode,report_start FROM user_prefs WHERE user_id=1").get();
+  assert.deepEqual([row.real_name, row.name_mode, row.report_start], ["Anna Real", "full", 7], "andere Einstellungen bleiben erhalten");
+  assert.equal((await json(call("/api/contributions/mine"))).settings.report_start, 7);
+  assert.equal((await json(call("/api/contributions/mine", "GET", undefined, { id: 2 }))).settings.report_start, 4, "je Nutzer");
+  for (const bad of [0, 13, 4.5, "x", null]) {
+    const e = await json(call("/api/contributions/settings", "POST", { report_start: bad }));
+    assert.equal(e.error, "bad_month", String(bad)); assert.ok(e.message);
+  }
+  assert.equal((await json(call("/api/contributions/settings", "POST", { report_start: 1 }))).settings.report_start, 1);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM user_prefs WHERE user_id=2").get().n, 0, "GET legt keine Zeile an");
+});
+
+test("Berichtsjahr im Frontend: April-Standard, Juli, Kalenderjahr und Jahresgrenzen (UTC)", async () => {
+  const vm = await import("node:vm");
+  const src = readFileSync(new URL("../../assets/mvp-tracker.js", import.meta.url), "utf8");
+  const ctx = { window: {}, document: { getElementById: () => null } };
+  vm.runInNewContext(src, ctx);
+  const P = ctx.window.M365MVPPeriod, s = (iso) => Date.parse(iso) / 1000;
+  assert.equal(P.month(undefined), 4); assert.equal(P.month(13), 4); assert.equal(P.month("7"), 7);
+  // April (Standard): 31.03. gehoert zum Vorjahr, 01.04. beginnt das neue Jahr
+  assert.equal(P.yearOf(s("2026-03-31T23:59:59Z"), 4), 2025);
+  assert.equal(P.yearOf(s("2026-04-01T00:00:00Z"), 4), 2026);
+  assert.deepEqual(JSON.parse(JSON.stringify(P.period(2026, 4))), { start: s("2026-04-01T00:00:00Z"), end: s("2027-04-01T00:00:00Z") - 1, from: "2026-04-01", to: "2027-03-31", label: "2026/27" });
+  // Juli
+  assert.equal(P.yearOf(s("2026-06-30T23:59:59Z"), 7), 2025);
+  assert.equal(P.yearOf(s("2026-07-01T00:00:00Z"), 7), 2026);
+  const jul = P.period(2025, 7);
+  assert.deepEqual([jul.from, jul.to, jul.label], ["2025-07-01", "2026-06-30", "2025/26"]);
+  // Januar = Kalenderjahr, auch ueber Jahreswechsel
+  assert.equal(P.yearOf(s("2026-12-31T23:59:59Z"), 1), 2026);
+  assert.equal(P.yearOf(s("2027-01-01T00:00:00Z"), 1), 2027);
+  assert.deepEqual([P.period(2026, 1).from, P.period(2026, 1).to, P.period(2026, 1).label], ["2026-01-01", "2026-12-31", "2026"]);
+  // Dezember: Zeitraum reicht bis 30.11. des Folgejahres; Schaltjahr bei Maerz-Start
+  assert.deepEqual([P.period(2026, 12).from, P.period(2026, 12).to], ["2026-12-01", "2027-11-30"]);
+  assert.equal(P.period(2027, 3).to, "2028-02-29");
+});
