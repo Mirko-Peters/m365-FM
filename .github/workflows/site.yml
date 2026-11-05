@@ -154,6 +154,7 @@ jobs:
             (git pull --rebase --autostash -q -X theirs || git rebase --abort) && git push -q
           fi
       - name: Verzeichnis-Einleitungen nur aus Fakten erzeugen
+        continue-on-error: true   # Einleitungen sind optional; ein Fehler hier darf den Seitenbau nicht aufhalten
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY_SHOW }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
@@ -163,6 +164,7 @@ jobs:
           CRON_KEY: ${{ secrets.CRON_KEY }}
         run: python3 tools/generate_directory_intros.py
       - name: Verzeichnis-Einleitungen-Cache sichern
+        continue-on-error: true   # Einleitungen sind optional; ein Fehler hier darf den Seitenbau nicht aufhalten
         run: |
           if [ -z "$(git status --porcelain data/directory_intros.json)" ]; then exit 0; fi
           git config user.name "m365-site-bot"

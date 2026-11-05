@@ -147,3 +147,46 @@ test("directory: neu angelegte Firmenstandorte bleiben nach dem Speichern öffen
   assert.equal(location.country, "Germany");
   raw.close();
 });
+
+test("directory: voruebergehende Geocoding-Fehler werden nicht gemerkt, endgueltige schon", async () => {
+  const oldFetch = globalThis.fetch; let status = "REQUEST_DENIED", calls = 0;
+  globalThis.fetch = async () => { calls++; return { json: async () => ({ status, results: [] }) }; };
+  try {
+    const env = { GOOGLE_GEOCODING_KEY: "test-key" };
+    for (const s of ["REQUEST_DENIED", "OVER_DAILY_LIMIT", "OVER_QUERY_LIMIT", "UNKNOWN_ERROR"]) {
+      status = s;
+      const geo = await geocodeAddress(env, "Berlin, Germany", {}, "city");
+      assert.equal(geo.geo_at, 0, `${s}: spaeter erneut versuchen`);
+      assert.equal(geo.geo_address, "", `${s}: kein Cache-Treffer beim naechsten Speichern`);
+    }
+    status = "ZERO_RESULTS";
+    const none = await geocodeAddress(env, "Nowhere, Germany", {}, "city");
+    assert.ok(none.geo_at > 0);
+    const before = calls;
+    assert.equal((await geocodeAddress(env, "Nowhere, Germany", none, "city")).status, "CACHED");
+    assert.equal(calls, before, "endgueltig ohne Treffer: dieselbe Adresse wird nicht erneut abgefragt");
+  } finally { globalThis.fetch = oldFetch; }
+});
+
+test("directory: Backfill fuer Events nimmt die Stadt von Google, nicht den Veranstaltungsort; OVER_* beendet den Lauf", async () => {
+  const { db, raw } = await database(), now = Math.floor(Date.now() / 1000), future = new Date(Date.now() + 86400000).toISOString().slice(0, 10);
+  raw.exec(`INSERT INTO events(handle,owner_id,title,start,mode,location,country,public,created,updated) VALUES
+    ('messe',1,'Messe','${future}','onsite','Messe Muenchen, Am Messesee 2, 81829 Muenchen','Germany',1,${now},${now}),
+    ('halle',1,'Halle','${future}','onsite','Halle 7, Koeln','Germany',1,${now},${now})`);
+  const oldFetch = globalThis.fetch; let status = "OVER_QUERY_LIMIT", calls = 0;
+  globalThis.fetch = async () => { calls++; return { json: async () => status === "OK"
+    ? { status, results: [{ geometry: { location: { lat: 48.13, lng: 11.69 } }, address_components: [{ long_name: "München", types: ["locality"] }] }] }
+    : { status, results: [] } }; };
+  try {
+    const env = { DB: db, GOOGLE_GEOCODING_KEY: "test-key" };
+    await backfillDirectoryGeocodes(env);
+    assert.equal(calls, 1, "OVER_QUERY_LIMIT beendet den Lauf");
+    assert.equal(raw.prepare("SELECT COUNT(*) n FROM events WHERE geo_at=0").get().n, 2, "beide Events bleiben fuer den naechsten Lauf offen");
+    status = "OK";
+    await backfillDirectoryGeocodes(env);
+    const messe = raw.prepare("SELECT city,lat,geo_address FROM events WHERE handle='messe'").get();
+    assert.equal(messe.city, "München");
+    assert.ok(messe.lat !== null);
+    assert.equal(messe.geo_address, "Messe Muenchen, Am Messesee 2, 81829 Muenchen, Germany");
+  } finally { globalThis.fetch = oldFetch; raw.close(); }
+});

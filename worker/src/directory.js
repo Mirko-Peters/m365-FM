@@ -7,6 +7,8 @@ const list = (value) => { try { const parsed = JSON.parse(value || "[]"); return
 const text = (value) => String(value || "").trim();
 const finite = (value) => value === null || value === undefined || value === "" ? null : Number.isFinite(Number(value)) ? Number(value) : null;
 const ready = new WeakSet();
+const GEO_FINAL = new Set(["OK", "ZERO_RESULTS", "INVALID_REQUEST"]);   // endgueltige Google-Antworten
+const GEO_STOP = new Set(["REQUEST_DENIED", "OVER_DAILY_LIMIT", "OVER_QUERY_LIMIT"]);   // Backfill fuer diesen Lauf beenden
 
 export function roundCoordinates(lat, lng) {
   const latitude = finite(lat), longitude = finite(lng);
@@ -36,7 +38,11 @@ export async function geocodeAddress(env, address, previous = {}, precision = "a
     if (coords && finite(coords.lat) !== null && finite(coords.lng) !== null && (precision !== "city" || city))
       return { ...coords, city, geo_precision: precision, geo_address: value, geo_at: now(), status };
   } catch {}
-  return { lat: null, lng: null, geo_precision: "", geo_address: value, geo_at: now(), status };
+  // Endgueltige Antwort ohne Treffer: merken, damit dieselbe Adresse nicht erneut abgefragt wird. Voruebergehende Fehler (REQUEST_DENIED ohne
+  // Abrechnung, OVER_*-Kontingent, UNKNOWN_ERROR, Zeitueberschreitung): geo_at=0 und keine Adresse, damit Speichern und Backfill es spaeter
+  // erneut versuchen. Sonst blieben z. B. alle Eintraege aus der Zeit ohne Google-Abrechnung fuer immer ohne Koordinaten.
+  return GEO_FINAL.has(status) ? { lat: null, lng: null, geo_precision: "", geo_address: value, geo_at: now(), status }
+    : { lat: null, lng: null, geo_precision: "", geo_address: "", geo_at: 0, status };
 }
 
 export async function recordGeocodeStatus(db, geo, address = geo?.geo_address || "") {
@@ -191,7 +197,7 @@ export async function backfillDirectoryGeocodes(env) {
       FROM profiles p JOIN profile_private pp ON pp.user_id=p.user_id WHERE p.public=1 AND pp.map_public=1 AND pp.city<>'' AND pp.geo_at=0 LIMIT 50`).all()).results || []),
     ...((await db.prepare(`SELECT 'o' kind,id,address,city,country,lat,lng,geo_at,geo_address,geo_precision FROM org_locations
       WHERE public=1 AND geo_at=0 AND (city<>'' OR address<>'') LIMIT 50`).all()).results || []),
-    ...((await db.prepare(`SELECT 'e' kind,id,location city,country,lat,lng,geo_at,geo_address,geo_precision FROM events
+    ...((await db.prepare(`SELECT 'e' kind,id,location address,city,country,lat,lng,geo_at,geo_address,geo_precision FROM events
       WHERE public=1 AND mode<>'online' AND location<>'' AND COALESCE(NULLIF(end,''),start)>=? AND geo_at=0 LIMIT 50`).bind(today).all()).results || []),
   ].slice(0, 50 - probes);
   let updated = 0;
@@ -204,7 +210,7 @@ export async function backfillDirectoryGeocodes(env) {
     await db.prepare(`UPDATE ${table} SET lat=?,lng=?,geo_precision=?,geo_address=?,geo_at=?${fillCity ? ",city=?" : ""}${row.kind === "u" ? ",geo_city=?" : ""} WHERE ${idCol}=?`)
       .bind(geo.lat, geo.lng, geo.geo_precision, geo.geo_address, geo.geo_at, ...(fillCity ? [row.city || geo.city || ""] : []), ...(row.kind === "u" ? [geo.city || ""] : []), row.id).run();
     updated++;
-    if (geo.status === "REQUEST_DENIED") break;
+    if (GEO_STOP.has(geo.status)) break;   // ohne Abrechnung oder Kontingent: weitere Aufrufe waeren nutzlos
   }
   return { updated };
 }

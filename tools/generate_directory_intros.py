@@ -5,12 +5,15 @@ import json
 import os
 import re
 import urllib.error
+import sys
 import urllib.request
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))   # ai_gateway.py liegt im Repo-Wurzelverzeichnis (Aufruf: python3 tools/...)
 from ai_gateway import anthropic_request, check_budget, estimated_eur, report_usage, urlopen
 
 ROOT = Path(__file__).resolve().parents[1]
+USER_AGENT = "m365fm-actions/1.0 (+https://www.m365.fm)"   # wie ai_gateway.py auf main; ohne User-Agent weist Cloudflare urllib mit 403 ab
 CACHE = ROOT / "data" / "directory_intros.json"
 API = os.environ.get("DIRECTORY_API", "https://api-dub.m365.fm").rstrip("/")
 MODEL = os.environ.get("DIRECTORY_INTRO_MODEL", "claude-haiku-5-5")
@@ -33,7 +36,8 @@ def _fetch_items():
     items = []
     for page in range(1, 21):
         url = f"{API}/api/directory?limit=100&page={page}"
-        with urllib.request.urlopen(url, timeout=20) as response:
+        request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, "Accept": "application/json"})   # ohne User-Agent: Cloudflare 403
+        with urllib.request.urlopen(request, timeout=20) as response:
             data = json.loads(response.read().decode("utf-8"))
         batch = data.get("items") or []
         items.extend(batch)
