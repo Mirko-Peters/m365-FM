@@ -2,7 +2,7 @@ name: Website bauen und veröffentlichen
 on:
   push:
     branches: [main]
-    paths: ["episodes/**", "data/**", "domain.txt", "sync_platforms.py", "sync_live.py", "site_live.py", "tools/build_speakers.py", "tools/generate_directory_intros.py", "platform_match.py", "show_notes.py", "sync_show_notes.py", "generate_og.py", "generate_service_images.py", "site_*.py", "site_taxonomy.py", "check_links.py", "check_schema.py", "assets/**", "generate_articles.py", "scrape_spotify.py", "fetch_en_episodes.py", "fetch_en_titles.py", "fetch_reviews.py", "generate_site.py", "translate_blog.py", "generate_covers.py", "sync_spreaker.py", "spreaker_auth.py", "site_cover.py", "site_design.py", "site_money.py", "site_legal.py", "shows_seo.json", ".github/workflows/site.yml", "check_*.py", "shownotes/site/**", "shownotes/QA.txt", "tests/sponsor_*", "tools/sponsor_ssr.mjs"]
+    paths: ["episodes/**", "data/**", "domain.txt", "sync_platforms.py", "sync_live.py", "site_live.py", "tools/build_speakers.py", "tools/generate_directory_intros.py", "platform_match.py", "show_notes.py", "sync_show_notes.py", "generate_og.py", "generate_service_images.py", "site_*.py", "site_taxonomy.py", "check_links.py", "check_schema.py", "assets/**", "generate_articles.py", "scrape_spotify.py", "fetch_en_episodes.py", "fetch_en_titles.py", "fetch_reviews.py", "generate_site.py", "translate_blog.py", "generate_covers.py", "sync_spreaker.py", "spreaker_auth.py", "site_cover.py", "site_design.py", "site_money.py", "site_legal.py", "shows_seo.json", ".github/workflows/site.yml", "check_*.py", "shownotes/site/**", "shownotes/QA.txt", "tests/sponsor_*", "tests/test_site_links.py", "tests/test_redirects_extra.py", "sitewrk/test/legacy_cases.json", "tools/sponsor_ssr.mjs"]
   schedule:
     - cron: "17 5 * * *"
   workflow_dispatch:
@@ -23,6 +23,17 @@ jobs:
         with: { python-version: "3.12" }
       - name: Sponsor-Rechner gegen die Testvektoren des Prototyps pruefen (T37, blockierend; Node ist auf dem Runner vorhanden)
         run: node --test tests/sponsor_calc.test.mjs
+      - name: Interne Links ohne Umweg - Python-Nachbau der Site-Worker-Weiterleitungen pruefen (blockierend)
+        run: python3 -m unittest discover -s tests -p test_site_links.py && (cd sitewrk && node --test test/legacy.test.mjs)
+      - name: Zusatz-Weiterleitungen (data/redirects_extra.json) gegen den Datenstand pruefen (nicht blockierend)
+        # liest Live-Daten (Folgen, Entitaeten, Beitraege): eine Umbenennung oder ein geloeschtes Ziel darf nicht jeden Bau stoppen
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          if ! python3 -m unittest discover -s tests -p test_redirects_extra.py 2>&1 | tee "$RUNNER_TEMP/redirects-extra.log"; then
+            { echo "### Zusatz-Weiterleitungen: veraltete Eintraege in data/redirects_extra.json"; echo; echo '```'; grep -E "AssertionError|FAIL:|fehlt" "$RUNNER_TEMP/redirects-extra.log" | head -40; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+            echo "::warning::data/redirects_extra.json enthaelt Ziele, die es nicht mehr gibt (siehe Zusammenfassung)"; exit 1
+          fi
       - name: Cache fuer den Browser (fester Schluessel, einmal gefuellt)
         uses: actions/cache@v4
         with:

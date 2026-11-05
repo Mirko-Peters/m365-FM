@@ -1863,6 +1863,24 @@ Mirko Peters, {BASE}/about/
     except Exception as _e:
         print("Register nicht geschrieben:", str(_e)[:160])
     phase("Agenten-Dateien, 404, UI-Quellen")
+    # Interne Links ohne Umweg: alte Adressen (Podpage, /blog/..., m365.fm ohne www ...) in allen gebauten Seiten direkt auf das Ziel
+    # setzen, mit denselben Regeln wie der Site-Worker (site_links.py, show/redirects.json). Bericht: work/redirect-links.json
+    try:
+        import site_links as SLK
+        _lst = SLK.Stats()
+        _lch = SLK.fix_tree([OUT, R2OUT], SLK.Resolver.from_build(OUT, R2OUT), _lst)
+        _lrep = _lst.report()
+        print(_lst.summary() + f" | Dateien geaendert: {_lch} | je Bereich (Seiten/Links): " + ", ".join(f"{k} {a}/{b}" for k, (a, b) in list(_lrep["by_section"].items())[:8]))
+        (ROOT / "work").mkdir(exist_ok=True)
+        (ROOT / "work" / "redirect-links.json").write_text(json.dumps(_lrep, ensure_ascii=False, indent=1), "utf-8")
+        if os.environ.get("GITHUB_STEP_SUMMARY"):
+            with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as _sf:
+                _sf.write(f"### Interne Links ohne Umweg\n\n{_lst.summary()}\n\n| Bereich | Seiten | Links |\n|---|---|---|\n"
+                          + "".join(f"| `{k}` | {a} | {b} |\n" for k, (a, b) in list(_lrep["by_section"].items())[:15])
+                          + "\nKaputte interne Links (404, keine Weiterleitung, nicht geaendert): " + ", ".join(f"`{h}`" for h in list((_lrep["unfixed"].get("broken") or {}))[:20]) + "\n\n")
+    except Exception as _e:
+        import traceback; traceback.print_exc(); print("Interne Links nicht umgeschrieben:", _e)
+    phase("Interne Links ohne Umweg")
     sizes()
     print(f"r2out/: {_r2n[0]} Seiten, {_r2n[1] / 1e6:.0f} MB (werden in den R2-Bucket geladen, nicht in GitHub Pages)")
     print(f"{len(items)} Episodenseiten, {len(active)} Sprachen, {len(sitemap)} URLs → docs/")
