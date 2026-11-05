@@ -11,6 +11,7 @@ import site_press as PRS
 import site_sponsor as SPN   # T37 Sponsor-Seite /sponsor/ (Seite, Fusszeilen-Link)
 import site_landing as LND
 import site_mediakit as MKT
+import site_support as SUP
 import site_expert_connect as ECN
 import site_entities as ENT
 from site_i18n import COMM_LANGS, pfx
@@ -825,7 +826,7 @@ def footer(lang):
     _nw = f'<a href="{BASE}/{"de/" if lang == "de" else ""}updates/">{"Updates & Roadmap" if lang == "de" else "Updates & roadmap"}</a>'
     return (f'<footer><div class="wrap">{_top}{_nw}'   # m365.fm, M365Con, LinkedIn, YouTube seit 4.11. nicht mehr im Footer (Wunsch Mirko); dafuer der Service-Hub /services/
             f'<a href="{ast_url(lang)}">{esc(ast_label(lang))}</a><a href="{BASE}/{"de/" if lang == "de" else ""}press/">{"Pressekit" if lang == "de" else "Press kit"}</a>'
-            f'<a href="{SPN.url(BASE, _tl)}">{esc(SPN.label(_tl))}</a><a href="{LND.hub_url(BASE, _tl)}">{LND.footer_label(_tl)}</a><a href="{BASE}/impressum/" rel="nofollow">Impressum</a><a href="{BASE}/legal/" rel="nofollow">Legal notice</a>'
+            f'<a href="{SPN.url(BASE, _tl)}">{esc(SPN.label(_tl))}</a>' + (f'<a href="{SUP.url(BASE, _tl)}">{"Unterstützen" if _tl == "de" else "Support us"}</a>' if SUP.active() else '') + f'<a href="{LND.hub_url(BASE, _tl)}">{LND.footer_label(_tl)}</a><a href="{BASE}/impressum/" rel="nofollow">Impressum</a><a href="{BASE}/legal/" rel="nofollow">Legal notice</a>'
             f'<a href="{BASE}/datenschutz/" rel="nofollow">Datenschutz</a><a href="{BASE}/privacy/" rel="nofollow">Privacy</a><a href="{BASE}/{"sicherheit" if lang == "de" else "security"}/" rel="nofollow">{"Sicherheit" if lang == "de" else "Security"}</a>'
             f'<div style="margin-top:10px">© {date.today().year} Mirko Peters · M365.FM</div></div></footer>')
 
@@ -1534,6 +1535,7 @@ def build():
     LND.build(dict(write=write, page=page, header=header, footer=footer, BASE=BASE, LANGS=LANGS,
                    write_r2=write_r2, sitemap=sitemap, TODAY=TODAY, n_main=_main_archive_episodes, n_langs=len(active), stats=SPN.load_stats()))
     MKT.build(dict(write=write, page=page, header=header, footer=footer, BASE=BASE, LANGS=LANGS, sitemap=sitemap, TODAY=TODAY, api=COMMUNITY_API))   # Mediadaten /media-kit/
+    SUP.build(dict(write=write, page=page, header=header, footer=footer, BASE=BASE, sitemap=sitemap, TODAY=TODAY))   # Unterstuetzen /support/ + /de/unterstuetzen/ (PayPal, data/support.json)
     ECN.build(dict(write=write, page=page, header=header, footer=footer, BASE=BASE, api=COMMUNITY_API), LRN.ENTS,
               [[l, "English" if l == "en" else LANGS[l][0] if l in LANGS else l] for l in COMM_LANGS])   # Expert Connect /community/expert-connect/ (Publisher-Tool, noindex)
 
