@@ -90,8 +90,22 @@ def segment(html_clean):
     return "".join(tpl), segs
 
 
+_SRC = {}   # Inhalts-Hash -> (tpl, units, h): der Seitenbau ruft source_of je Beitrag und Sprache auf (14 x, und items() zweimal) - einmal zerlegen reicht
+
+
 def source_of(p):
-    """Alle zu uebersetzenden Einheiten eines Beitrags: T (Titel), D (Beschreibung), Q/A (FAQ), 1..n (Absaetze)."""
+    """Alle zu uebersetzenden Einheiten eines Beitrags: T (Titel), D (Beschreibung), Q/A (FAQ), 1..n (Absaetze).
+    Ergebnis je Inhalt (HTML, Titel, Beschreibung, FAQ) gemerkt; dieselbe Eingabe ergibt dasselbe Ergebnis, units wird als Kopie zurueckgegeben."""
+    ck = hashlib.sha1(json.dumps([p["html"], p["title"], p.get("desc"), p.get("faq")], ensure_ascii=False, sort_keys=True, default=str).encode("utf-8")).hexdigest()
+    if ck in _SRC:
+        tpl, units, h = _SRC[ck]
+        return tpl, list(units), h
+    tpl, units, h = _source_of(p)
+    _SRC[ck] = (tpl, tuple(units), h)
+    return tpl, units, h
+
+
+def _source_of(p):
     import site_podpage as P
     tpl, segs = segment(P.san(p["html"]))
     units = [("T", p["title"].strip())]

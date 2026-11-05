@@ -40,7 +40,7 @@ import site_money as SM
 import site_cover
 import site_player as PL   # Player (YouTube, Spreaker) erst nach Klick: Platzhalter mit festen Massen statt iframe
 from site_content import FAQ
-from site_taxonomy import (CATS, ORDER, TOPICS, TAGW, cat_name, classify, tags_of, tag_slug, tag_url, related, autolink)
+from site_taxonomy import (CATS, ORDER, TOPICS, TAGW, cat_name, classify, tags_of, tag_slug, tag_url, related, autolink, _rx_i)
 
 ROOT = Path(__file__).parent
 OUT = ROOT / "docs"
@@ -1452,7 +1452,7 @@ def build():
             if lang == "en":
                 _epc[k] = PP.find_episodes(BASE, e, LRN.ent_names(e))
             else:
-                rx = [re.compile(r"(?<![\w-])" + re.escape(n) + r"(?![\w-])", re.I) for n in LRN.ent_names(e)]
+                rx = [_rx_i(r"(?<![\w-])" + re.escape(n) + r"(?![\w-])") for n in LRN.ent_names(e)]   # je Name einmal je Bau kompiliert (re.I)
                 _bye = {str(it["eid"]): it for it in by_lang.get(lang, [])}
                 _ext = [_bye[sid] for sid in SX.episodes_for(e["id"]) if sid in _bye]   # T27: QA-gepruefte Extraktion der Dub-Folge nennt die Entitaet
                 _hit = [it for it in by_lang.get(lang, []) if any(r.search(it["e"]["title"] + " " + (it["e"].get("tags") or "")) for r in rx)] if rx else []
@@ -1507,7 +1507,8 @@ def build():
     _ctx["posts_by_topic"] = _pbt; _ctx["author_box"] = author_box
     phase("Blog geladen, Folgen der Hauptshow zugeordnet")
     ENT.PERSON_LD = person_ld   # T4: eine Definition der Person Mirko Peters (Entitaetsseite nutzt denselben Knoten)
-    ENT.build(_ctx, lambda lang: LRN.gloss_links(lang, BASE), MEM.experts_index(_people, _orgs), _ep_find)
+    _glc = {}   # verlinkbare Begriffe je Sprache einmal (vorher je Entitaetsseite neu: 1.800 Eintraege x Seiten x Sprachen); nur gelesen
+    ENT.build(_ctx, lambda lang: _glc[lang] if lang in _glc else _glc.setdefault(lang, LRN.gloss_links(lang, BASE)), MEM.experts_index(_people, _orgs), _ep_find)
     phase("Entitaetsseiten")
     MEM.build(_ctx, _people, _orgs, extra={l: EVT.blocks(BASE, _events, l) for l in COMM_LANGS})
     DIR.build(_ctx)
