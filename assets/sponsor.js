@@ -12,7 +12,8 @@
   var el = { month: $("spn-month"), tline: $("spn-tline"), rows: $("spn-rows"), notopic: $("spn-notopic"), tl: $("spn-tl"), fgeo: $("spn-fgeo"), fseo: $("spn-fseo"),
              ttext: $("spn-ttext"), rec: $("spn-rec"), pk: $("spn-pk"), prrec: $("spn-prrec"), rtrec: $("spn-rtrec"), picked: $("spn-picked"), sum: $("spn-sum"),
              lock: $("spn-lock"), dash: $("spn-dash"), cpr: $("spn-cnt-pr"), cex: $("spn-cnt-ex"), cli: $("spn-cnt-li"), clv: $("spn-cnt-lv"), q: $("spn-q"), own: $("spn-own"), dl: $("spn-dl"),
-             qmsg: $("spn-q-msg"), ownmsg: $("spn-own-msg"), form: $("spn-form"), status: $("spn-status"), done: $("spn-done"), submit: $("spn-submit"), terr: $("spn-topics-e") };
+             qmsg: $("spn-q-msg"), ownmsg: $("spn-own-msg"), form: $("spn-form"), status: $("spn-status"), done: $("spn-done"), submit: $("spn-submit"), terr: $("spn-topics-e"),
+             inv: $("spn-inv"), invBody: $("spn-inv-body"), invCon: $("spn-inv-con") };
   var chips = root.querySelectorAll(".spn-chip");
 
   /* Themen: Schnellauswahl, kuratierte Suche, eigene Themen (Namen ohne Gross-/Kleinschreibung verglichen) */
@@ -64,6 +65,7 @@
     put(el.pk, "pk", v.pkCount); put(el.prrec, "pr", v.prRec); flag(el.prrec, "hidden", !v.prRecShow); put(el.rtrec, "rt", v.rtRec);
     put(el.cpr, "cpr", String(v.counts.pr)); put(el.cex, "cex", String(v.counts.ex)); put(el.cli, "cli", String(v.counts.li)); put(el.clv, "clv", String(v.counts.lv));
     put(el.picked, "pk2", SC.pickedHtml(s, P, L), true); put(el.sum, "sum", v.summary);
+    invSync(s);
     if (focusNext) { var f = focusNext; focusNext = null; focusLater(f()); }
   }
   function focusLater(node) {
@@ -212,6 +214,68 @@
       .then(done);
   }
   if (el.form) { el.form.addEventListener("submit", onSubmit); if (el.submit) el.submit.disabled = false; }   // vorher gesperrt: ohne Skript kein natives Absenden
+
+  /* #281: direkt bestellen und per PayPal-Rechnung bezahlen - nur ohne M365Con (bleibt auf Anfrage); der Server rechnet den Preis neu */
+  function invSync(s) { var ok = SC.invoiceAllowed(s); flag(el.inv, "hidden", !ok); flag(el.invCon, "hidden", ok); }
+  var invReady = false;
+  function mk(tag, attrs, kids) {
+    var n = document.createElement(tag); for (var k in attrs) { if (k === "text") n.textContent = attrs[k]; else n.setAttribute(k, attrs[k]); }
+    (kids || []).forEach(function (c) { if (c) n.appendChild(typeof c === "string" ? document.createTextNode(c) : c); }); return n;
+  }
+  function call(path, opt) {
+    opt = opt || {}; opt.credentials = "include"; opt.headers = { "x-requested-with": "m365", "content-type": "application/json" };
+    return fetch(C0.api + path, opt).then(function (r) { return r.json().then(function (j) { return { s: r.status, j: j }; }, function () { return { s: r.status, j: {} }; }); },
+      function () { return { s: 0, j: {} }; });
+  }
+  function invForm(orgs) {
+    var n = 0, f = mk("form", { class: "spn-form", novalidate: "" }), F = {};
+    function fld(k, label, type, auto) {
+      var id = "spn-inv-" + (++n), inp = mk(type === "select" ? "select" : "input", { id: id, name: k });
+      if (type !== "select") { inp.type = type || "text"; inp.maxLength = 200; if (auto) inp.autocomplete = auto; }
+      F[k] = inp; f.appendChild(mk("div", { class: "spn-f" }, [mk("label", { for: id, text: label }), inp])); return inp;
+    }
+    var org = fld("org", SC.t(L, "inv_org"), "select");
+    orgs.forEach(function (o) { org.appendChild(mk("option", { value: String(o.id), text: o.name })); });
+    fld("company", SC.t(L, "f_company"), "text", "organization"); fld("contact", SC.t(L, "f_name"), "text", "name");
+    fld("address", SC.t(L, "f_address"), "text", "street-address"); fld("postal", SC.t(L, "f_postal"), "text", "postal-code");
+    fld("city", SC.t(L, "f_city"), "text", "address-level2"); fld("country", SC.t(L, "f_country"), "text", "country"); fld("vat", SC.t(L, "f_vat"));
+    fld("email", SC.t(L, "f_bemail"), "email", "email");
+    var btn = mk("button", { type: "submit", class: "spn-btn", text: SC.t(L, "inv_submit") }), st = mk("p", { class: "spn-fine", role: "status" });
+    f.appendChild(mk("div", {}, [btn])); f.appendChild(st);
+    f.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var s = state(); if (s.goal === "lead") s.dash = true;
+      if (!SC.invoiceAllowed(s)) { invSync(s); return; }
+      btn.disabled = true; st.textContent = SC.t(L, "sending");
+      call("/api/sponsor/order", { method: "POST", body: JSON.stringify({ org_id: +F.org.value, lang: C0.lang, package: SC.orderPackage(s),
+        billing: { company: F.company.value, contact: F.contact.value, address: F.address.value, postal_code: F.postal.value, city: F.city.value,
+          country: F.country.value, vat_id: F.vat.value, email: F.email.value } }) }).then(function (r) {
+        btn.disabled = false;
+        if (r.s !== 200) { st.textContent = SC.t(L, "inv_err"); return; }
+        st.textContent = SC.t(L, "inv_sent", { email: F.email.value });
+        if (/^https:\/\/www\.(sandbox\.)?paypal\.com\//.test(r.j.invoice_url || "")) st.appendChild(mk("span", {}, [" ", mk("a", { href: r.j.invoice_url, target: "_blank", rel: "noopener", text: SC.t(L, "inv_open") })]));
+        f.querySelectorAll("input,select,button").forEach(function (x) { x.disabled = true; });
+      });
+    });
+    return f;
+  }
+  if (el.inv) {
+    invSync(state());
+    el.inv.addEventListener("toggle", function () {
+      if (!el.inv.open || invReady) return; invReady = true;
+      call("/api/me").then(function (me) {
+        if (!me.j || !me.j.user) {
+          var back = encodeURIComponent(location.href.split("#")[0] + "#spn-inv");
+          el.invBody.appendChild(mk("p", {}, [SC.t(L, "inv_login") + " ", mk("a", { href: C0.community + "?return=" + back, text: SC.t(L, "inv_signin") })])); return;
+        }
+        call("/api/ads/mine").then(function (r) {
+          var orgs = (r.j && r.j.orgs) || [];
+          if (!orgs.length) { el.invBody.appendChild(mk("p", { text: SC.t(L, "inv_noorg") })); return; }
+          el.invBody.appendChild(invForm(orgs));
+        });
+      });
+    });
+  }
 
   /* Start: nur rendern, wenn der Browser einen anderen Zustand wiederhergestellt hat oder nichts vorab gerendert ist. Sonst in einer
      Leerlaufphase einmal vorrechnen (JIT, Intl.PluralRules) und die vorab gerenderten Texte merken: die erste Interaktion schreibt dann nur,

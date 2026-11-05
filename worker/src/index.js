@@ -10,6 +10,7 @@ import { handleA2a } from "./a2a.js";
 import { handleAdminPanel } from "./adminpanel.js";
 import { handleSponsor, handleSponsorLink } from "./sponsor.js";
 import { handleAds, handlePaypalWebhook } from "./ads.js";
+import { handleSponsorOrders } from "./sponsor_orders.js";
 import { autoTranslateItems, autoTranslateEntities, runTrQueue } from "./autotr.js";
 import { syncLiveEvents } from "./liveevents.js";
 import { syncContentTopics, handleTopics } from "./topics.js";
@@ -270,6 +271,10 @@ async function api(env, request, url, path, asUser, ctx) {
   const sponsor = await handleSponsor(env, request, url, path, J, user);
   if (sponsor) return sponsor;
 
+  if (path === "/api/sponsor/order" || path === "/api/sponsor/orders" || path === "/api/admin/sponsor-orders") {   // Sponsoring-Paket per PayPal-Rechnung
+    const so = await handleSponsorOrders(env, request, url, path, user, J);
+    if (so) return so;
+  }
   if (path.startsWith("/api/ads/") || path.startsWith("/api/admin/ads/")) {   // #281 Werbeplaetze buchen
     const ads = await handleAds(env, request, url, path, user, J, ctx);
     if (ads) return ads;

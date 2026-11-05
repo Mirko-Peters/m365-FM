@@ -278,8 +278,18 @@
     return out;
   }
 
+  /* ---- Direkt bestellen per PayPal-Rechnung (#281): nur ohne M365Con (bleibt "auf Anfrage"). Der Server rechnet den Preis neu. ---- */
+  function invoiceAllowed(s) { return !(s && s.con); }
+  function orderPackage(s) {
+    var c = s.cnt || {};
+    return { goal: s.goal, rt: s.rt, topics: (s.topics || []).map(function (tp) { return clean(tp.en || tp.name).slice(0, 80); }),
+             video: !!s.video, pr: !!s.pr, auth: !!s.auth, dash: !!s.dash, l14: !!s.l14, topic: !!s.topic, expert: !!s.expert, li: !!s.li, live: !!s.live,
+             con: !!s.con, prTouched: !!s.prTouched, cnt: { pr: c.pr, ex: c.ex, li: c.li, lv: c.lv } };
+  }
+
   return { EMAIL_RE: EMAIL_RE, esc: esc, clean: clean, fmtUsd: fmtUsd, num: num, decimalSep: decimalSep, plural: pcat, lookup: lookup, fill: fill, t: t, tn: tn,
            clampStep: clampStep, levelOf: levelOf, prRecommendation: prRecommendation, recRuntime: recRuntime, effect: effect, span: span, pct: pct,
            compute: compute, rows: rows, view: view, rangeText: rangeText, months: months, rowsHtml: rowsHtml, recHtml: recHtml, pickedHtml: pickedHtml, badge: badge,
-           buildPackage: buildPackage, validate: validate, requestBody: requestBody, errorKey: errorKey, stateKey: stateKey, ssr: ssr };
+           buildPackage: buildPackage, validate: validate, requestBody: requestBody, errorKey: errorKey, stateKey: stateKey, ssr: ssr,
+           invoiceAllowed: invoiceAllowed, orderPackage: orderPackage };
 });

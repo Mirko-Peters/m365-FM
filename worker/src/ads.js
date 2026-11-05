@@ -6,6 +6,7 @@
 // - Einblendungen cookiefrei beim Ausliefern des Platzes gezaehlt (je Kampagne, Platz, Seitentyp, Tag), Klicks ueber /go/<code>.
 import { cleanText, esc, rateLimit, sha256hex, audit, cors } from "./util.js";
 import { notify } from "./mail.js";
+import { sponsorOrderInvoiceEvent } from "./sponsor_orders.js";
 
 const now = () => Math.floor(Date.now() / 1000);
 const today = () => new Date().toISOString().slice(0, 10);
@@ -36,7 +37,7 @@ const eur = (cents) => (Math.round(cents) / 100).toFixed(2);
 const int = (v) => (Number.isSafeInteger(Number(v)) ? Number(v) : NaN);
 const list = (v, max = 20) => (Array.isArray(v) ? v : String(v || "").split(",")).map((x) => String(x).trim().toLowerCase()).filter(Boolean).slice(0, max);
 const isDay = (v) => DAY.test(String(v || "")) && new Date(`${v}T00:00:00Z`).toISOString().slice(0, 10) === v;
-function addMonths(day, months) {
+export function addMonths(day, months) {
   const d = new Date(`${day}T00:00:00Z`); d.setUTCMonth(d.getUTCMonth() + months); d.setUTCDate(d.getUTCDate() - 1);
   return d.toISOString().slice(0, 10);
 }
@@ -57,7 +58,7 @@ export async function loadPricing(db) {
   return { products, prices, settings };
 }
 
-const num = (settings, key, fallback) => { const n = Number(settings?.[key]); return Number.isFinite(n) ? n : fallback; };
+export const num = (settings, key, fallback) => { const n = Number(settings?.[key]); return Number.isFinite(n) ? n : fallback; };
 
 // Reine Preisrechnung (auch fuer Tests): Positionen mit Laufzeitrabatt je Position und Steuer je Position, genau wie PayPal sie rechnet
 // (sonst weichen Bestellung und Rechnung um Cent-Rundungen ab). input: {product, page_types, topics, exclusive, months, quantity, plan, included, billing}
@@ -120,7 +121,7 @@ async function orgRole(db, orgId, userId) {
 }
 const canManage = (role) => role === "owner" || role === "admin";
 
-async function notifyAdmins(env, subject, bodyHtml, key) {
+export async function notifyAdmins(env, subject, bodyHtml, key) {
   const users = (await env.DB.prepare("SELECT id,role,provider,sub FROM users WHERE banned=0").all()).results || [];
   const allow = new Set((env.ADMIN_SUBS || "").split(",").map((s) => s.trim()).filter(Boolean));
   for (const u of users.filter((x) => x.role === "admin" || allow.has(`${x.provider}:${x.sub}`))) await notify(env, u.id, "system", subject, bodyHtml, `${key}:${u.id}`);
@@ -274,33 +275,40 @@ export async function createPaypalInvoice(env, b) {
   let billing = {};
   try { billing = JSON.parse(b.billing_json || "{}"); } catch {}
   const pr = JSON.parse(b.price_json || "{}");
-  const dueDays = Number(pr.invoice_due_days ?? 14);
-  const due = new Date(Date.now() + dueDays * 86400000).toISOString().slice(0, 10);
-  const items = invoiceItems(b).map((i) => ({
-    name: i.name.slice(0, 200), description: i.description.slice(0, 1000), quantity: "1",
-    unit_amount: { currency_code: "EUR", value: eur(i.amount_cents) },
-    tax: { name: de ? "USt." : "VAT", percent: String(i.tax_pct) },
-    ...(i.discount_pct ? { discount: { percent: String(i.discount_pct) } } : {}),
-  }));
   const note = [
     de ? `Buchung ${b.code} auf www.m365.fm. Die Kampagne startet nach Zahlungseingang und Freigabe des Werbemittels.` : `Booking ${b.code} on www.m365.fm. The campaign starts after payment and approval of the creative.`,
     billing.vat_id ? `${de ? "USt-IdNr. des Kunden" : "Customer VAT ID"}: ${billing.vat_id}` : "",
     pr.reverse_charge ? (de ? "Steuerschuldnerschaft des Leistungsempfängers (Reverse Charge)." : "Reverse charge: VAT to be accounted for by the recipient.") : "",
   ].filter(Boolean).join("\n");
+  return sendPaypalInvoice(env, { number: `M365FM-AD-${b.id}`, reference: b.code, currency: "EUR", lang: b.lang, billing, items: invoiceItems(b),
+    note, dueDays: Number(pr.invoice_due_days ?? 14), requestKey: `${b.code}-${b.total_cents}` });
+}
+
+// Rechnung ueber PayPal Invoicing v2 anlegen und versenden (Werbeplaetze und Sponsoring-Pakete).
+// items: [{name, description, amount_cents, discount_pct, tax_pct}] - Rabatt und Steuer je Position, wie in den Preisrechnungen.
+export async function sendPaypalInvoice(env, { number, reference, currency, lang, billing, items, note, dueDays = 14, requestKey }) {
+  const de = lang === "de";
+  const due = new Date(Date.now() + dueDays * 86400000).toISOString().slice(0, 10);
   const body = {
-    detail: { currency_code: "EUR", invoice_number: `M365FM-AD-${b.id}`, reference: b.code, invoice_date: today(), note: note.slice(0, 4000),
+    detail: { currency_code: currency, invoice_number: number, reference, invoice_date: today(), note: String(note || "").slice(0, 4000),
       payment_term: { term_type: "DUE_ON_DATE_SPECIFIED", due_date: due } },
     invoicer: { business_name: "M365.FM", website: env.SITE },
     primary_recipients: [{ billing_info: {
       business_name: String(billing.company || "").slice(0, 300), email_address: billing.email,
+      ...(billing.contact ? { name: { full_name: String(billing.contact).slice(0, 140) } } : {}),
       ...(billing.vat_id ? { additional_info_value: `VAT ID: ${billing.vat_id}`.slice(0, 40) } : {}),
       address: { address_line_1: billing.address, postal_code: billing.postal_code, admin_area_2: billing.city, country_code: billing.country },
       language: de ? "de-DE" : "en-US",
     } }],
-    items,
+    items: items.filter((i) => i.amount_cents > 0).map((i) => ({
+      name: String(i.name).slice(0, 200), description: String(i.description || "").slice(0, 1000), quantity: "1",
+      unit_amount: { currency_code: currency, value: eur(i.amount_cents) },
+      tax: { name: de ? "USt." : "VAT", percent: String(i.tax_pct ?? 0) },
+      ...(i.discount_pct ? { discount: { percent: String(i.discount_pct) } } : {}),
+    })),
     configuration: { tax_inclusive: false, allow_tip: false, tax_calculated_after_discount: true },
   };
-  const r = await pp(env, "POST", "/v2/invoicing/invoices", body, { Prefer: "return=representation", "PayPal-Request-Id": `invoice-${b.code}-${b.total_cents}` });
+  const r = await pp(env, "POST", "/v2/invoicing/invoices", body, { Prefer: "return=representation", "PayPal-Request-Id": `invoice-${requestKey}` });
   const id = r.json.id || /\/invoices\/([A-Z0-9-]+)$/.exec(r.json.href || "")?.[1];
   if (r.status >= 300 || !id) throw new Error("paypal_invoice");
   const s = await pp(env, "POST", `/v2/invoicing/invoices/${encodeURIComponent(id)}/send`, { send_to_invoicer: true, send_to_recipient: true }, { "PayPal-Request-Id": `send-${id}` });
@@ -354,7 +362,9 @@ export async function handlePaypalWebhook(env, request) {
   let result = "ignored", bookingId = 0;
   if (HANDLED.has(ev.event_type)) {
     const b = await bookingFor(db, ev);
-    if (!b) result = "no_booking";
+    const so = !b && ev.event_type.startsWith("INVOICING.") ? await sponsorOrderInvoiceEvent(env, ev) : null;   // Sponsoring-Pakete (/sponsor/)
+    if (so) result = so;
+    else if (!b) result = "no_booking";
     else {
       bookingId = b.id;
       const r = ev.resource || {};
@@ -615,11 +625,12 @@ async function uploadBanner(env, request, url, user, J) {
 
 // ---------------------------------------------------------------- Buchen und bezahlen
 
-function cleanBilling(v) {
+export function cleanBilling(v) {
   const b = v && typeof v === "object" ? v : {};
   const out = {
     company: cleanText(b.company, 200), address: cleanText(b.address, 200), postal_code: cleanText(b.postal_code, 20), city: cleanText(b.city, 100),
     country: String(b.country || "").trim().toUpperCase(), vat_id: String(b.vat_id || "").replace(/\s+/g, "").toUpperCase().slice(0, 20), email: cleanText(b.email, 254).toLowerCase(),
+    contact: cleanText(b.contact, 120).replace(/[<>]/g, ""),
   };
   if (out.company.length < 2 || out.address.length < 3 || out.postal_code.length < 2 || out.city.length < 2 || !/^[A-Z]{2}$/.test(out.country) ||
       (out.vat_id && !/^[A-Z0-9.-]{4,20}$/.test(out.vat_id)) || !EMAIL.test(out.email)) return null;

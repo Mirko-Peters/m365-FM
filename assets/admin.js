@@ -313,6 +313,18 @@
     }
     filter.onchange = loadBookings; loadBookings();
 
+    // Sponsoring-Pakete von /sponsor/, bestellt per PayPal-Rechnung (M365Con bleibt auf Anfrage)
+    var oSec = h("section"); p.append(oSec);
+    api("/api/admin/sponsor-orders").then(function (r) {
+      if (r.s !== 200) return;
+      oSec.append(h("h3", { text: "Sponsoring-Bestellungen (PayPal-Rechnung)" }), h("p", { class: "mut", text: "Preis vom Server aus data/sponsor_pricing.json neu berechnet. Nach Zahlungseingang steht die Platzierung im Sponsor-Dashboard der Firma." }));
+      oSec.appendChild(tbl(["Code", "Firma", "Laufzeit", "Netto", "Gesamt", "Zahlung", "Rechnung", "Platzierung"], (r.j.orders || []).map(function (o) {
+        var cur = " " + (o.currency || "");
+        return [o.code, o.org_name || o.org_id, (o.package && o.package.rt ? o.package.rt + " Monate" : "–"), (o.net_cents / 100).toFixed(2) + cur, (o.total_cents / 100).toFixed(2) + cur,
+          PAY[o.pay_status] || o.pay_status, o.invoice_url ? h("a", { href: o.invoice_url, target: "_blank", rel: "noopener", text: "öffnen" }) : "–", o.placement_id || "–"];
+      }), "Noch keine Bestellungen."));
+    });
+
     // Preise, Regeln, Profilstufen
     var pSec = h("section"); p.append(pSec);
     api("/api/admin/ads/pricing").then(function (r) {
