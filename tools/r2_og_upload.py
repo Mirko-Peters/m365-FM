@@ -3,7 +3,9 @@ https://img.m365.fm/og/<pfad>.png (generate_site.py OG_BASE). Laeuft im Bau-Job 
 erst live, wenn ihr Bild im Bucket ist - mit OG_REQUIRED=1 bricht jeder Fehler den Bau ab (kein Deploy, der naechste Lauf versucht es erneut).
 Abgleich direkt mit dem Bucket (Liste mit ETag = MD5 einfacher PUTs): geladen wird, was fehlt oder sich geaendert hat - unabhaengig von Caches.
 Es wird nichts geloescht (Bilder entfernter Seiten bleiben im Bucket). Zugang nur ueber GitHub-Secrets (R2_ACCOUNT_ID, R2_BUCKET,
-R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY). Aufruf: python tools/r2_og_upload.py [r2img]"""
+R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY). Aufruf: python tools/r2_og_upload.py [r2img]
+Seit dem Service-Umbau (4.11.2026) auch die Illustrationen der Service-Landingpages (generate_service_images.py -> r2img/services/...,
+WebP + PNG), Schluessel services/<IMG_VER>/<seite>/..., ausgeliefert ueber https://img.m365.fm/services/... (site_landing.py)."""
 import hashlib, os, sys
 from pathlib import Path
 
@@ -12,7 +14,8 @@ from r2_common import client, upload   # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 CC = "public, max-age=86400"   # Pfade sind fest (Titel aendert sich -> neues Bild unter derselben Adresse): 1 Tag statt immutable
-PREFIX = "og/"
+PREFIXES = ("og/", "services/")
+EXT = (".png", ".webp")
 
 
 def problem(msg):
@@ -23,18 +26,22 @@ def problem(msg):
 
 
 def bucket_etags(s3, bucket):
-    out, tok = {}, None
-    while True:
-        kw = {"Bucket": bucket, "Prefix": PREFIX, "MaxKeys": 1000}
-        if tok: kw["ContinuationToken"] = tok
-        r = s3.list_objects_v2(**kw)
-        for o in r.get("Contents", []): out[o["Key"]] = str(o.get("ETag", "")).strip('"')
-        if not r.get("IsTruncated"): return out
-        tok = r["NextContinuationToken"]
+    out = {}
+    for prefix in PREFIXES:
+        tok = None
+        while True:
+            kw = {"Bucket": bucket, "Prefix": prefix, "MaxKeys": 1000}
+            if tok: kw["ContinuationToken"] = tok
+            r = s3.list_objects_v2(**kw)
+            for o in r.get("Contents", []): out[o["Key"]] = str(o.get("ETag", "")).strip('"')
+            if not r.get("IsTruncated"): break
+            tok = r["NextContinuationToken"]
+    return out
 
 
 def main(src):
-    files = {f.relative_to(src).as_posix(): f for f in src.rglob("*.png") if f.is_file()} if src.exists() else {}
+    files = {f.relative_to(src).as_posix(): f for f in src.rglob("*") if f.is_file() and f.suffix.lower() in EXT
+             and f.relative_to(src).as_posix().startswith(PREFIXES)} if src.exists() else {}
     if not files: return problem(f"keine Bilder unter {src}")
     s3, bucket = client()
     if not s3: return problem("Zugangsdaten fehlen")

@@ -1,5 +1,5 @@
 // Community-API (Cloudflare Worker + D1): Login (Google/Microsoft), Kommentare, Abzeichen, Kurator, Push, E-Mail
-import { json, cors, cookie, makeSession, readSession, cleanText, cleanName, randomToken, rateLimit, isLang, esc, b64u, sign, verify, audit } from "./util.js";
+import { json, cors, cookie, makeSession, readSession, cleanText, cleanName, randomToken, rateLimit, isLang, esc, b64u, sign, verify, audit, aiBudgetStatus, reportExternalAiUsage } from "./util.js";
 import { evalBadges, stats, topUsers, badgesFor, award } from "./badges.js";
 import { runDigest } from "./digest.js";
 import { sendMail } from "./mailer.js";
@@ -14,7 +14,7 @@ import { syncLiveEvents } from "./liveevents.js";
 import { syncContentTopics, handleTopics } from "./topics.js";
 import { importQuotesFromSite, handleQuotes } from "./quotes.js";
 import { importEpisodes, importTranslations, handleRegister } from "./register.js";
-import { importSearchIndex, handleSearch } from "./search.js";
+import { importSearchIndex, syncSearchVectors, handleSearch } from "./search.js";
 import { entityMap } from "./entities.js";
 import { handleProfiles, deleteUserData, refreshProfilesExport } from "./profiles.js";
 import { handleEvents, deleteUserEvents, ensureM365Con } from "./events.js";
@@ -179,11 +179,32 @@ function pubComment(c, mine, liked, badges, admin) {
 async function api(env, request, url, path, asUser) {
   const method = request.method, J = (d, s = 200, x) => json(d, s, env, request, x);
   if (method === "OPTIONS") return new Response(null, { status: 204, headers: cors(env, request) });
-  if (asUser === undefined && method !== "GET" && request.headers.get("x-requested-with") !== "m365") return J({ error: "bad_request" }, 400);
+  if (asUser === undefined && method !== "GET" && path !== "/api/internal/ai-spend" && request.headers.get("x-requested-with") !== "m365") return J({ error: "bad_request" }, 400);
   // asUser: vom MCP-Server (Token bereits geprueft) - dann keine Cookie-Sitzung noetig
   const uid = asUser === undefined ? await readSession(env, request) : null, user = asUser === undefined ? (uid ? await me(env, uid) : null) : asUser;
   const need = () => (user ? null : J({ error: "login" }, 401));
   const db = env.DB;
+
+  if (path === "/api/internal/ai-spend") {
+    if (method !== "POST") return J({ error: "method_not_allowed" }, 405);
+    if (!env.CRON_KEY || request.headers.get("x-cron-key") !== env.CRON_KEY) return J({ error: "forbidden" }, 403);
+    const b = await request.json().catch(() => ({}));
+    if (b.action === "check") {
+      const estimate = Number(b.estimate_eur || 0);
+      if (!/^claude-haiku[-a-z0-9.]*$/i.test(String(b.model || "")) || !Number.isFinite(estimate) || estimate < 0 || estimate > 1000) return J({ error: "bad_request" }, 400);
+      const status = await aiBudgetStatus(env);
+      return J({ ...status, allowed: status.allowed && status.remaining_eur >= estimate });
+    }
+    const input = Number(b.input_tokens), output = Number(b.output_tokens);
+    if (b.action !== "report" || !/^[A-Za-z0-9._:-]{1,100}$/.test(String(b.id || "")) ||
+        !/^[a-z0-9_]{1,60}$/i.test(String(b.job || "")) || !/^claude-haiku[-a-z0-9.]*$/i.test(String(b.model || "")) ||
+        !Number.isSafeInteger(input) || input < 0 || !Number.isSafeInteger(output) || output < 0 ||
+        String(b.lang || "").length > 20) return J({ error: "bad_request" }, 400);
+    const status = await reportExternalAiUsage(env, {
+      id: b.id, job: b.job, lang: String(b.lang || ""), model: b.model, input_tokens: input, output_tokens: output, batch: b.batch === true,
+    });
+    return J({ ok: true, ...status });
+  }
 
   const sponsor = await handleSponsor(env, request, url, path, J);
   if (sponsor) return sponsor;
@@ -458,6 +479,7 @@ export default {
     T("importEpisodes", () => importEpisodes(env));
     T("importTranslations", () => importTranslations(env));
     T("importSearchIndex", () => importSearchIndex(env));
+    T("syncSearchVectors", () => syncSearchVectors(env));
     if (event.cron !== "0 6 * * *") T("syncExpertise", () => syncExpertise(env, entityMap));   // nicht doppelt um 06:00 (beide Zeitplaene feuern)
     ctx.waitUntil(env.DB.prepare("DELETE FROM cron_runs WHERE started<?").bind(Math.floor(Date.now() / 1000) - 7 * 86400).run().catch(() => 0));
   },

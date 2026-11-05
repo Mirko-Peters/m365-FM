@@ -38,7 +38,8 @@
     var h = '<p class="srch-c">' + esc((C.count || "{n}").replace("{n}", total.toLocaleString(C.lang))) + "</p>";
     if (!items.length) h += "<p>" + esc(C.none) + "</p>";
     else h += "<ol>" + items.map(function (r) {
-      var meta = [label("type", r.type), label("lang", r.lang), r.date || ""].filter(Boolean).join(" · ");
+      var language = r.other_lang ? (C.other || "in {lang}").replace("{lang}", label("lang", r.lang)) : label("lang", r.lang);
+      var meta = [label("type", r.type), language, r.date || ""].filter(Boolean).join(" · ");
       return '<li><a href="' + esc(r.url) + '"' + (r.lang && r.lang !== C.lang ? ' hreflang="' + esc(r.lang) + '"' : "") + ">" + esc(r.title) + '</a><div class="m">' + esc(meta) + "</div>" + (r.summary ? "<p>" + esc(r.summary) + "</p>" : "") + "</li>";
     }).join("") + "</ol>";
     if (items.length < total) h += '<p><button type="button" class="btn" data-more="1">' + esc(C.more) + "</button></p>";

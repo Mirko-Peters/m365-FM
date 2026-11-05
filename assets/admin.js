@@ -51,6 +51,10 @@
     }); },
     sw: function () { overview(function (o) { var p = panes.sw, f = o.flags, m = h("p", { class: "adm-msg" }); p.textContent = "";
       p.appendChild(h("h2", { text: "Automatische Übersetzung (Haiku)" }));
+      var ai = o.ai_spend || {};
+      p.appendChild(h("h3", { text: "Haiku-Tagesbudget" }));
+      p.appendChild(h("div", { class: "adm-grid" }, [tile("Heute", Number(ai.today_eur || 0).toFixed(2) + " €", "von " + Number(ai.budget_eur == null ? 5 : ai.budget_eur).toFixed(2) + " €"), tile("Letzte 30 Tage", Number(ai.spent_30d_eur || 0).toFixed(2) + " €"), tile("Heute noch verfügbar", Number(ai.remaining_eur || 0).toFixed(2) + " €")]));
+      if ((ai.days || []).length) p.appendChild(h("table", { class: "adm-tbl" }, [h("thead", {}, [h("tr", {}, [h("th", { text: "UTC-Tag" }), h("th", { text: "Haiku-Ausgaben" })])]), h("tbody", {}, ai.days.map(function (d) { return h("tr", {}, [h("td", { text: d.day }), h("td", { text: Number(d.eur || 0).toFixed(2) + " €" })]); }))]));
       p.appendChild(h("p", { class: "mut", text: f.key ? "API-Schlüssel ist hinterlegt. Heute verbraucht: " + f.atr_today + " Übersetzungen für Inhalte, " + f.atr_ent_today + " für Entitäten." : "Kein API-Schlüssel hinterlegt: Die automatische Übersetzung läuft nicht." }));
       function sw(k, label, on) { var b = h("button", { type: "button", class: "btn" + (on ? " main" : ""), "aria-pressed": on ? "true" : "false", text: label + ": " + (on ? "an" : "aus"), onclick: function () { var nv = /_on$/.test(k) ? (on ? "0" : "1") : (on ? "1" : "0"); api("/api/admin/panel/flag", { method: "POST", body: { k: k, v: nv } }).then(function (r) { if (r.s === 200) LOAD.sw(); else msg(m, ERR[r.j.error] || "Fehler", true); }); } }); return b; }
       p.appendChild(h("p", {}, [sw("atr_off", "Neue Inhalte nach 24 Stunden übersetzen", f.atr_off !== "1"), " ", sw("tr_off", "Entitäten Englisch/Deutsch ergänzen", f.tr_off !== "1"), " ", sw("tr_queue_on", "Vormerkungen mit Haiku abarbeiten", f.tr_queue_on === "1")]));

@@ -159,6 +159,11 @@ def local():
             if isinstance(a.get("cited_pages_per_day"), (int, float)): out["ai_pages_day"] = int(a["cited_pages_per_day"])
     except Exception: pass
     try:
+        g = json.loads((ROOT / "data" / "stats" / "ai_performance.json").read_text("utf-8")).get("gsc") or {}
+        if g.get("status") == "ok" and isinstance(g.get("clicks"), (int, float)):
+            out["gsc"] = {k: g.get(k) for k in ("clicks", "impressions", "pages")}; out["gsc_period"] = f'{(g.get("period") or {}).get("from", "")}–{(g.get("period") or {}).get("to", "")}'
+    except Exception: pass
+    try:
         from site_landing import LANGS_ALL
         out["site_languages"] = len(LANGS_ALL)
     except Exception: pass
@@ -203,8 +208,9 @@ TXT = {
         reach="At a glance",
         k=dict(yt_views="YouTube views", yt_minutes="YouTube watch time (minutes)", yt_subs_new="New YouTube subscribers", yt_subs="YouTube subscribers",
                pv="Website page views", sp="Podcast downloads (all language editions)", ai="AI citations (Copilot and partners)",
-               b_clicks="Bing search clicks", b_imp="Bing search impressions", langs="Site languages", videos="Published videos"),
-        s=dict(yt="YouTube Analytics", cf="Cloudflare (edge statistics, before bot filtering)", sp="Spreaker", ai="Bing Webmaster Tools, AI Performance", bing="Bing Webmaster Tools", site="M365.FM"),
+               b_clicks="Bing search clicks", b_imp="Bing search impressions", langs="Site languages", videos="Published videos",
+               g_clicks="Google search clicks", g_imp="Google search impressions"),
+        s=dict(yt="YouTube Analytics", cf="Cloudflare (edge statistics, before bot filtering)", sp="Spreaker", ai="Bing Webmaster Tools, AI Performance", bing="Bing Webmaster Tools", site="M365.FM", gsc="Google Search Console"),
         d28="last 28 days", d30="last 30 days", d7="7 days", total="total",
         yt_h="YouTube: m365 Show", yt_lead="Animated explainer videos, Shorts and certification courses on Microsoft 365, Copilot, Azure and security.",
         yt_month="Views per month", yt_top="Most watched videos (last 28 days)", yt_cty="Viewers by country (share of views, 28 days)", yt_age="Age groups (share of viewers)",
@@ -241,8 +247,9 @@ TXT = {
         reach="Auf einen Blick",
         k=dict(yt_views="YouTube-Aufrufe", yt_minutes="YouTube-Wiedergabezeit (Minuten)", yt_subs_new="Neue YouTube-Abonnenten", yt_subs="YouTube-Abonnenten",
                pv="Website-Seitenaufrufe", sp="Podcast-Downloads (alle Sprachfassungen)", ai="KI-Zitate (Copilot und Partner)",
-               b_clicks="Bing-Suchklicks", b_imp="Bing-Suchimpressionen", langs="Sprachen der Website", videos="Veröffentlichte Videos"),
-        s=dict(yt="YouTube Analytics", cf="Cloudflare (Rand-Statistik, vor Bot-Filterung)", sp="Spreaker", ai="Bing Webmaster Tools, AI Performance", bing="Bing Webmaster Tools", site="M365.FM"),
+               b_clicks="Bing-Suchklicks", b_imp="Bing-Suchimpressionen", langs="Sprachen der Website", videos="Veröffentlichte Videos",
+               g_clicks="Google-Suchklicks", g_imp="Google-Suchimpressionen"),
+        s=dict(yt="YouTube Analytics", cf="Cloudflare (Rand-Statistik, vor Bot-Filterung)", sp="Spreaker", ai="Bing Webmaster Tools, AI Performance", bing="Bing Webmaster Tools", site="M365.FM", gsc="Google Search Console"),
         d28="letzte 28 Tage", d30="letzte 30 Tage", d7="7 Tage", total="gesamt",
         yt_h="YouTube: m365 Show", yt_lead="Animierte Erklärvideos, Shorts und Zertifizierungskurse zu Microsoft 365, Copilot, Azure und Security.",
         yt_month="Aufrufe pro Monat", yt_top="Meistgesehene Videos (letzte 28 Tage)", yt_cty="Zuschauer nach Land (Anteil der Aufrufe, 28 Tage)", yt_age="Altersgruppen (Anteil der Zuschauer)",
@@ -298,6 +305,8 @@ def rows_for(lang, D):
         R.append((k["pv"], fmt(lang, c["pageviews30"]), s["cf"], t["d30"]))
     if "spreaker7" in l: R.append((k["sp"], fmt(lang, l["spreaker7"]), s["sp"], l.get("spreaker_period") or t["d7"]))
     if "ai_citations" in l: R.append((k["ai"], fmt(lang, l["ai_citations"]), s["ai"], l.get("ai_period", "")))
+    if l.get("gsc"):
+        R += [(k["g_imp"], fmt(lang, l["gsc"]["impressions"]), s["gsc"], l.get("gsc_period", "")), (k["g_clicks"], fmt(lang, l["gsc"]["clicks"]), s["gsc"], l.get("gsc_period", ""))]
     if b.get("impressions28"):
         R += [(k["b_imp"], fmt(lang, b["impressions28"]), s["bing"], t["d28"]), (k["b_clicks"], fmt(lang, b["clicks28"]), s["bing"], t["d28"])]
     if "site_languages" in l: R.append((k["langs"], str(l["site_languages"]), s["site"], ""))

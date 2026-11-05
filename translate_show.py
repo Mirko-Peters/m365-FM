@@ -5,6 +5,7 @@ import json, os, sys, time, urllib.request, urllib.error
 from site_text import bad as bad_text
 from pathlib import Path
 import site_podpage as P
+from ai_gateway import anthropic_request, check_budget, estimated_eur, report_usage, urlopen
 
 MODEL = os.environ.get("TRANSLATE_MODEL", "claude-haiku-5-5")
 OUT = Path(__file__).parent / "data" / "podpage_i18n"
@@ -52,11 +53,11 @@ def parse_json(txt):
         raise
 
 
-def call(method, path, body=None):
-    req = urllib.request.Request("https://api.anthropic.com" + path, json.dumps(body).encode() if body is not None else None, {
-        "x-api-key": os.environ["ANTHROPIC_API_KEY"], "anthropic-version": "2023-06-01", "content-type": "application/json"}, method=method)
+def call(method, path, body=None, job="translate_show"):
+    req = anthropic_request(path, body, job=job, lang="batch", model=MODEL, api_key=os.environ["ANTHROPIC_API_KEY"])
+    req.method = method
     try:
-        return json.loads(urllib.request.urlopen(req, timeout=300).read())
+        return json.loads(urlopen(req, timeout=300).read())
     except urllib.error.HTTPError as e:
         msg = f"API-Fehler {e.code} {method} {path}: {e.read()[:600]!r}"
         print(msg); OUT.mkdir(parents=True, exist_ok=True); (OUT / "last_error.txt").write_text(msg); raise
@@ -85,6 +86,8 @@ def main():
                          "messages": [{"role": "user", "content": src}]}})
     if not reqs:
         print("Nichts zu uebersetzen"); return
+    if not check_budget("translate_show", MODEL, estimated_eur(len(json.dumps(reqs)) // 3, len(reqs) * 1500, batch=True)):
+        return
     idmap = {r["custom_id"]: r["custom_id"] for r in reqs}
     slug_by_id = {str(e["id"]): e["slug"] for e in eps}
     print(len(reqs), "Anfragen, Modell", MODEL)
@@ -95,8 +98,8 @@ def main():
     while b["processing_status"] != "ended":
         time.sleep(120); b = call("GET", f"/v1/messages/batches/{bid}"); print(b["processing_status"], b["request_counts"], flush=True)
     tin = tout = ok = bad = 0; why = {}; samples = []
-    req = urllib.request.Request(b["results_url"], headers={"x-api-key": os.environ["ANTHROPIC_API_KEY"], "anthropic-version": "2023-06-01"})
-    for line in urllib.request.urlopen(req, timeout=600).read().decode().splitlines():
+    req = anthropic_request(b["results_url"], headers={"x-api-key": os.environ["ANTHROPIC_API_KEY"]}, job="translate_show", lang="batch", model=MODEL)
+    for line in urlopen(req, timeout=600).read().decode().splitlines():
         r = json.loads(line); cid = r["custom_id"]; l, key = cid.split("__", 1); key = slug_by_id.get(key, key)
         res = r["result"]
         if res["type"] != "succeeded":
@@ -115,6 +118,7 @@ def main():
     for l in langs: (OUT / f"{l}.json").write_text(json.dumps(have[l], ensure_ascii=False), encoding="utf-8")
     uf = OUT / "usage.json"; old = json.loads(uf.read_text()) if uf.exists() else {"input_tokens": 0, "output_tokens": 0, "runs": []}
     old["input_tokens"] += tin; old["output_tokens"] += tout; old["runs"].append({"batch": bid, "model": MODEL, "ok": ok, "failed": bad, "why": why, "input_tokens": tin, "output_tokens": tout})
+    report_usage("translate_show", MODEL, tin, tout, "batch", batch=True)
     uf.write_text(json.dumps(old, indent=1))
     if samples: (OUT / "fail_samples.json").write_text(json.dumps(samples, ensure_ascii=False, indent=1))
     rep = {"stage": "titles", "requests": len(reqs), "ok": ok, "failed": bad, "why": why, "input_tokens": tin, "output_tokens": tout, "cost_usd": round(cost(tin, tout), 3), "success_rate": round(ok / max(1, ok + bad), 4)}
