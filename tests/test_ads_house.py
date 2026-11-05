@@ -22,5 +22,33 @@ class HouseAd(unittest.TestCase):
         self.assertIn(".ad-con", A.CSS)
 
 
+BASE = "https://www.m365.fm"
+PAGE = ('<html><head></head><body><main><p>Intro ' + "x" * 3000 + '</p><h2>A</h2><p>a</p><h2>B</h2><p>b</p><h2>C</h2><p>c</p></main>'
+        '<footer>f</footer></body></html>')
+
+
+class NoAdSense(unittest.TestCase):
+    """Mirko, 5.11.2026: keine Google-Anzeigen mehr."""
+    def test_switched_off(self):
+        self.assertFalse(A.active(BASE))
+        self.assertIsNone(A.ads_txt(BASE))
+        self.assertEqual(A.head(BASE, PAGE, BASE + "/show/x/"), "")
+
+    def test_only_con_banner_until_22_jan(self):
+        out = A.inject(BASE, PAGE, "de", BASE + "/show/x/", today="2027-01-22")
+        self.assertEqual(out.count("ad-own"), 2)
+        self.assertIn("m365con.net", out)
+        self.assertNotIn("adsbygoogle", out)
+        self.assertNotIn("googlesyndication", out)
+
+    def test_nothing_after_con(self):
+        self.assertEqual(A.inject(BASE, PAGE, "de", BASE + "/show/x/", today="2027-01-23"), PAGE)
+        self.assertFalse(A.css_needed(BASE, "2027-01-23"))
+
+    def test_rules_still_apply(self):
+        self.assertEqual(A.inject(BASE, PAGE, "de", BASE + "/impressum/", today="2026-12-01"), PAGE)
+        self.assertEqual(A.inject(BASE, PAGE, "de", BASE + "/show/x/", noindex=True, today="2026-12-01"), PAGE)
+
+
 if __name__ == "__main__":
     unittest.main()
