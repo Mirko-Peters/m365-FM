@@ -1,8 +1,10 @@
 // Automatische Uebersetzung neuer Community-Inhalte (Blog, Podcast, Video) mit Claude Haiku: ohne Denkphase, Aufwand "low".
+import { AI_BUDGET_ERROR, haikuJson } from "./util.js";
+export { haikuJson } from "./util.js";
 // Regel: 24 Stunden nach dem Erscheinen eines Inhalts wird nachgeschaut; fehlt eine Sprachfassung (hat sie niemand uebersetzt), uebersetzt Haiku sie.
 // Sicherheitsnetz: nur mit Secret ANTHROPIC_API_KEY, Tageslimit, nur Inhalte der letzten 30 Tage, Notaus ueber meta atr_off=1.
 // Ergebnis in item_tr; Blogfassungen erscheinen ueber /api/blog/export als Beitraege der Zielsprache (mit KI-Hinweis).
-const MODEL = "claude-haiku-5-5", WAIT = 24 * 3600, WINDOW = 30 * 24 * 3600, DAILY_CAP = 150, PER_RUN = 4;
+const WAIT = 24 * 3600, WINDOW = 30 * 24 * 3600, DAILY_CAP = 150, PER_RUN = 4;
 const LANGS = { en: "English", de: "German", fr: "French", es: "Spanish", it: "Italian", nl: "Dutch", pt: "Portuguese (European)", pl: "Polish", id: "Indonesian", ru: "Russian", uk: "Ukrainian", ar: "Arabic", he: "Hebrew", ja: "Japanese", ko: "Korean" };
 const KINDS = {
   blog: { table: "blog_posts", sel: "id,lang,title,summary,body", where: "status='live' AND html='' AND published>0", t: "published", f: ["title", "summary", "body"] },
@@ -21,16 +23,7 @@ export async function ensureItemTr(db) {
 }
 const count = (s, re) => (String(s).match(re) || []).length;
 
-async function call(env, from, to, obj) {
-  const body = { model: MODEL, max_tokens: 8000, temperature: 0, system: SYS + ` Target language: ${LANGS[to]}.`, messages: [{ role: "user", content: JSON.stringify(obj) }] };
-  const go = (b) => fetch("https://api.anthropic.com/v1/messages", { method: "POST", headers: { "content-type": "application/json", "x-api-key": env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01" }, body: JSON.stringify(b) });
-  let r = await go({ ...body, output_config: { effort: "low" } });   // kein "thinking": keine Denkphase
-  if (r.status === 400) r = await go(body);                          // falls der Parameter fuer das Modell nicht akzeptiert wird
-  if (!r.ok) throw new Error("api " + r.status);
-  let txt = ((await r.json()).content?.[0]?.text || "").trim();
-  if (txt.startsWith("```")) txt = txt.replace(/^```[a-z]*\n?/, "").replace(/```$/, "");
-  return JSON.parse(txt);
-}
+const call = (env, from, to, obj) => haikuJson(env, SYS + ` Target language: ${LANGS[to]}.`, obj, { job: "worker_autotr_items", lang: to });
 
 export async function autoTranslateItems(env) {
   const db = env.DB;
@@ -47,7 +40,7 @@ export async function autoTranslateItems(env) {
     for (const r of rows) for (const to of Object.keys(LANGS)) if (to !== r.lang && !have.has(r.id + "|" + to)) todo.push({ kind, K, r, to });
     if (todo.length >= room) break;
   }
-  let done = 0, failed = 0;
+  let done = 0, failed = 0, blocked = 0;
   await Promise.all(todo.slice(0, room).map(async ({ kind, K, r, to }) => {
     const inp = {}; for (const f of K.f) inp[f] = String(r[f] || "").slice(0, f === "body" ? 12000 : 600);
     try {
@@ -57,11 +50,11 @@ export async function autoTranslateItems(env) {
       if (bad || (inp.body && (lr < 0.2 || lr > 3)) || (inp.body && count(out.body, /\{\{ref\|/g) !== count(inp.body, /\{\{ref\|/g))) { failed++; return; }
       await db.prepare("INSERT OR IGNORE INTO item_tr(kind,item_id,lang,title,summary,body,src,created) VALUES(?,?,?,?,?,?,?,?)").bind(kind, r.id, to, out.title.slice(0, 140), String(out.summary || "").slice(0, 400), String(out.body || ""), "auto", t).run();
       done++;
-    } catch { failed++; }
+    } catch (e) { if (e?.code === AI_BUDGET_ERROR) blocked++; else failed++; }
   }));
   await setMeta(db, "atr_count:" + day, used + done + failed);
   if (failed) await setMeta(db, "atr_err", `${failed} ${t}`);
-  return { done, failed, open: Math.max(0, todo.length - room) };
+  return { done, failed, open: Math.max(0, todo.length - room) + blocked };
 }
 
 // Blog: uebersetzte Fassungen als zusaetzliche Beitraege der Zielsprache (fuer /api/blog/export)
@@ -113,24 +106,19 @@ export async function autoTranslateEntities(env, entityMap) {
     for (const to of Object.keys(LANGS)) { if (to === from) continue; const need = due.filter((f) => !have.has(e.id + "|" + f + "|" + to)); if (need.length) jobs.push({ id: e.id, to, from, inp: Object.fromEntries(need.map((f) => [f, src[f]])) }); }
     if (jobs.length >= room * 3) break;
   }
-  let done = 0, failed = 0;
+  let done = 0, failed = 0, blocked = 0;
   await Promise.all(jobs.slice(0, room).map(async (j) => {
     try {
-      const body = { model: MODEL, max_tokens: 8000, temperature: 0, system: ESYS + ` Target language: ${LANGS[j.to]}.`, messages: [{ role: "user", content: JSON.stringify(j.inp) }] };
-      const go = (b) => fetch("https://api.anthropic.com/v1/messages", { method: "POST", headers: { "content-type": "application/json", "x-api-key": env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01" }, body: JSON.stringify(b) });
-      let r = await go({ ...body, output_config: { effort: "low" } }); if (r.status === 400) r = await go(body);
-      if (!r.ok) throw new Error("api " + r.status);
-      let txt = ((await r.json()).content?.[0]?.text || "").trim(); if (txt.startsWith("```")) txt = txt.replace(/^```[a-z]*\n?/, "").replace(/```$/, "");
-      const out = JSON.parse(txt);
+      const out = await haikuJson(env, ESYS + ` Target language: ${LANGS[j.to]}.`, j.inp, { job: "worker_autotr_entities", lang: j.to });
       for (const f of Object.keys(j.inp)) {
         const o = String(out[f] || "").replace(/<script/gi, "").trim(), ratio = o.length / Math.max(1, j.inp[f].length);
         if (!o || ratio < 0.2 || ratio > 3 || (f === "desc" && o.length > 400)) { failed++; continue; }
         await db.prepare("INSERT OR IGNORE INTO ent_tr(eid,field,lang,text,created) VALUES(?,?,?,?,?)").bind(j.id, f, j.to, o, t).run(); done++;
       }
-    } catch { failed++; }
+    } catch (e) { if (e?.code === AI_BUDGET_ERROR) blocked++; else failed++; }
   }));
-  await setMeta(db, "atr_ent:" + day, used + Math.min(room, jobs.length));
-  return { done, failed, open: Math.max(0, jobs.length - room) };
+  await setMeta(db, "atr_ent:" + day, used + Math.min(room, jobs.length) - blocked);
+  return { done, failed, open: Math.max(0, jobs.length - room) + blocked };
 }
 
 export async function entityTranslations(db) {   // fuer /api/entity/tr: {eid: {field: {lang: text}}}
@@ -157,6 +145,7 @@ export async function runTrQueue(env, entityMap) {
   await ensureItemTr(db); await ensureEntTr(db);
   const t = now(); let done = 0, failed = 0, map = null;
   const mark = (r, st, info) => db.prepare("UPDATE tr_queue SET status=?,info=? WHERE kind=? AND item_id=? AND lang=?").bind(st, String(info || "").slice(0, 200), r.kind, r.item_id, r.lang).run();
+  let blocked = 0;
   await Promise.all(rows.map(async (q) => {
     try {
       if (!LANGS[q.lang] && q.lang !== "en") { await mark(q, "failed", "unbekannte Sprache"); failed++; return; }
@@ -166,12 +155,7 @@ export async function runTrQueue(env, entityMap) {
         const inp = {}; let from = "en";
         for (const f of ["desc", "long"]) { const v = e[f] || {}; const txt = (v.en || "").trim() || (v.de || "").trim(); if (txt) { inp[f] = txt.slice(0, 8000); from = (v.en || "").trim() ? "en" : "de"; } }
         if (!Object.keys(inp).length || q.lang === from) { await mark(q, "failed", "kein Quelltext"); failed++; return; }
-        const body = { model: MODEL, max_tokens: 8000, temperature: 0, system: ESYS + ` Target language: ${LANGS[q.lang] || "English"}.`, messages: [{ role: "user", content: JSON.stringify(inp) }] };
-        const go = (b) => fetch("https://api.anthropic.com/v1/messages", { method: "POST", headers: { "content-type": "application/json", "x-api-key": env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01" }, body: JSON.stringify(b) });
-        let r = await go({ ...body, output_config: { effort: "low" } }); if (r.status === 400) r = await go(body);
-        if (!r.ok) throw new Error("api " + r.status);
-        let txt = ((await r.json()).content?.[0]?.text || "").trim(); if (txt.startsWith("```")) txt = txt.replace(/^```[a-z]*\n?/, "").replace(/```$/, "");
-        const out = JSON.parse(txt); let n = 0;
+        const out = await haikuJson(env, ESYS + ` Target language: ${LANGS[q.lang] || "English"}.`, inp, { job: "worker_translation_queue", lang: q.lang }); let n = 0;
         for (const f of Object.keys(inp)) { const o = String(out[f] || "").replace(/<script/gi, "").trim(), ratio = o.length / Math.max(1, inp[f].length); if (!o || ratio < 0.2 || ratio > 3 || (f === "desc" && o.length > 400)) continue;
           await db.prepare("INSERT OR REPLACE INTO ent_tr(eid,field,lang,text,created) VALUES(?,?,?,?,?)").bind(q.item_id, f, q.lang, o, t).run(); n++; }
         if (!n) { await mark(q, "failed", "Antwort unbrauchbar"); failed++; return; }
@@ -186,8 +170,8 @@ export async function runTrQueue(env, entityMap) {
       if (bad || (inp.body && (lr < 0.2 || lr > 3)) || (inp.body && count(out.body, /\{\{ref\|/g) !== count(inp.body, /\{\{ref\|/g))) { await mark(q, "failed", "Antwort unbrauchbar"); failed++; return; }
       await db.prepare("INSERT OR REPLACE INTO item_tr(kind,item_id,lang,title,summary,body,src,created) VALUES(?,?,?,?,?,?,?,?)").bind(q.kind, +q.item_id, q.lang, String(out.title || "").slice(0, 140), String(out.summary || "").slice(0, 400), String(out.body || ""), "queue", t).run();
       await mark(q, "done", ""); done++;
-    } catch (e) { await mark(q, "failed", String(e && e.message || e)); failed++; }
+    } catch (e) { if (e?.code === AI_BUDGET_ERROR) blocked++; else { await mark(q, "failed", String(e && e.message || e)); failed++; } }
   }));
   await setMeta(db, "atr_count:" + day, used + done + failed);
-  return { done, failed };
+  return { done, failed, ...(blocked ? { capped: true, open: blocked } : {}) };
 }

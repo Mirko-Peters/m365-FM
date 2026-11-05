@@ -1,6 +1,7 @@
 // Fragen & Antworten zu Entitaeten: Mitglieder fragen, antworten und stimmen ab; die beste Antwort landet in der FAQ-Box der Entitaetsseite
-import { cleanText, rateLimit } from "./util.js";
+import { cleanText, esc, rateLimit } from "./util.js";
 import { knownIds } from "./entities.js";
+import { notify } from "./mail.js";
 
 const ID = /^[a-z0-9-]{2,48}$/;
 const now = () => Math.floor(Date.now() / 1000);
@@ -16,10 +17,14 @@ export async function askQuestion(env, user, eid, q, lang) {
   return { ok: true, id: r.meta?.last_row_id };
 }
 export async function answerQuestion(env, user, qid, a) {
-  const q = await env.DB.prepare("SELECT id FROM entity_q WHERE id=? AND hidden=0").bind(+qid).first(); if (!q) return { error: "not_found" };
+  const q = await env.DB.prepare("SELECT id,user_id,eid,lang FROM entity_q WHERE id=? AND hidden=0").bind(+qid).first(); if (!q) return { error: "not_found" };
   a = txt(a, 600); if (a.length < 20) return { error: "too_short" };
   if (!(await rateLimit(env.DB, `qa:a:${user.id}`, 10, 86400))) return { error: "rate_limit" };
   const r = await env.DB.prepare("INSERT INTO entity_a(q_id,user_id,a,created) VALUES(?,?,?,?)").bind(q.id, user.id, a, now()).run();
+  if (q.user_id !== user.id) {
+    const de = q.lang === "de";
+    await notify(env, q.user_id, "reply", de ? "Neue Antwort auf deine Frage" : "New answer to your question", `<p>${de ? "Deine Frage zu" : "Your question about"} <b>${esc(q.eid)}</b> ${de ? "wurde beantwortet:" : "has been answered:"}</p><blockquote>${esc(a)}</blockquote><p><a href="${env.SITE}/entity/${encodeURIComponent(q.eid)}/">${de ? "Frage und Antwort ansehen" : "View question and answer"}</a></p>`, `qa:${r.meta?.last_row_id}`);
+  }
   return { ok: true, id: r.meta?.last_row_id };
 }
 const canAccept = async (db, user, eid) => !!(user && (user.admin || user.editor || user.pro || (await db.prepare("SELECT 1 x FROM entity_claims WHERE eid=? AND user_id=? AND status='verified'").bind(eid, user.id).first())));

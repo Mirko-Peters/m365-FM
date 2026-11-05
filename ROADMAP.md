@@ -23,9 +23,11 @@ Stand: 2026-10-29. Reihenfolge nach Absprache mit Mirko; alles mit Schema.org-Ve
 - Geplant: Umzug über die Spreaker-API (Show im M365.FM-Konto anlegen, Folgen hochladen, neuen Feed ausgeben) als GitHub-Action-Job; klären: Tarif/Speicher, neue Folgen nachziehen.
 - Offen: Nutzungsbedingungen rechtlich formulieren, Werbe-/Sponsoring-Platz auf Show-Seiten, eigener M365.FM-Feed je Show (`itunes:new-feed-url`).
 
-## Mail-System (gebaut, Versand braucht RESEND_API_KEY)
+## Mail-System (Cloudflare Email Service eingerichtet, Resend als Rückfall)
 - Bestätigte Adresse je Konto, Arten einzeln schaltbar (Antworten auf Kommentare, Wunsch-Status, Show-Freigabe, Einladungen), Warteschlange mit Wiederholung, Abmeldelink und List-Unsubscribe in jeder Mail, Cron-Versand alle 30 Minuten.
-- Offen: Absender-Domain bei Resend verifizieren (SPF/DKIM für m365.fm), weitere Auslöser (neue Microsoft-Updates je Produkt, Gäste-/Speaker-Anfragen, Digest wöchentlich).
+- Erledigt: Workers-Paid-Plan aktiv, Absender-Domain `m365.fm` eingerichtet (SPF/DKIM durch Cloudflare), `EMAIL`-Binding im Worker. Resend bleibt optionaler Rückfall über `RESEND_API_KEY`.
+- Noch prüfen: Admin-Testmail nach Deploy über `POST /api/admin/mail/test` an die bestätigte Benachrichtigungsadresse senden.
+- Weitere Auslöser: neue Microsoft-Updates je Produkt, Gäste-/Speaker-Anfragen, Digest wöchentlich.
 
 ## Backlog (später, wenn die Plattform genutzt wird)
 - **LinkedIn Events Management API** (Standard Tier, Self-Service): Events von Veranstaltern automatisch mit LinkedIn synchronisieren (anlegen/ändern, Anmeldungen, Leads). Vorher klären: Rechte/Endpunkte in der technischen Doku, ob ein Eintrag auf der Firmenseite „M365 Show“ möglich ist. Bis dahin: „Auf LinkedIn teilen“ + Anfrage „Auf M365 Show vorstellen“ mit Prüfung durch das Team.
@@ -33,7 +35,7 @@ Stand: 2026-10-29. Reihenfolge nach Absprache mit Mirko; alles mit Schema.org-Ve
 - **Automatisches Posten auf LinkedIn** (`w_member_social`, für Firmenseiten Community Management API / `w_organization_social`, Freigabe nötig).
 
 ## Offen (Betrieb)
-- Microsoft-Login (MS_CLIENT_ID/MS_CLIENT_SECRET), Resend (RESEND_API_KEY), ADMIN_SUBS
+- Microsoft-Login (MS_CLIENT_ID/MS_CLIENT_SECRET), E-Mail-Domain einrichten, ADMIN_SUBS
 - Glossar-Definitionen in 17 weitere Sprachen übersetzen, Muttersprachler-Prüfung ml/pa/ta/te/he/ar
 - Tags schrittweise durch Glossar/Entitäten ersetzen (sichtbare Tags und Tag-Seiten entfernen, wenn die Entitäten die häufigen Tags abdecken)
 - Monatsbudget für Artikel, Popularitäts-Reihenfolge, Original-Porträt fürs Presskit
@@ -186,6 +188,41 @@ Podpage kostet 65 $/Monat (ca. 780 $/Jahr). Ziel: m365.fm komplett auf dub.m365.
 - Vorher klären: Auszahlungsschwelle, Gebühren, Rechtsform (Plattform als Vermittler), Transparenz-Seite, was mit Beiträgen von Nutzern ohne Auszahlungsdaten passiert.
 - Passt zu Blog, später Podcast; Voraussetzung ist ein stabiler Blog mit Abonnenten (Follow).
 
+## Idee (4.11., Mirko): „KI-Topf“ – Unterstützung für die KI-Kosten, mit Stripe
+- **Entscheidung Mirko:** Zahlungsanbieter **Stripe**. Vorerst nur Idee, nicht gebaut.
+- **Ziel:** Besucher unterstützen freiwillig die KI-Kosten der Seite (Übersetzungen, KI-Antworten, Zusammenfassungen); das hilft der Seite zu wachsen.
+- **Geld kann nicht direkt auf das Claude-Konto fließen:**
+  - Anthropic hat keine Funktion, mit der Dritte auf ein fremdes API-Konto einzahlen. Credits kauft nur ein Admin oder Billing-Nutzer der eigenen Organisation, mit Karte, abgerechnet in USD.
+  - Credits sind nicht übertragbar, nicht erstattbar und verfallen nach einem Jahr (anthropic.com/legal/credit-terms, support.claude.com Artikel 8977456, Stand 4.11.2026).
+  - Weg: Stripe → Firmenkonto → Claude Console mit **Auto-Reload in kleinen Beträgen**, weil Credits verfallen.
+  - Ein Verbot, API-Kosten aus freiwilligen Zahlungen zu decken, gibt es in den Commercial Terms nicht. Verboten ist, Claude-Zugang weiterzuverkaufen. Unterstützer bekommen deshalb **kein Token-Kontingent und keinen Zugang**.
+- **Stripe:**
+  - **Payment Link** mit „Kunde wählt Betrag“ für Einmalzahlungen (Vorschlag 5 €, **Mindestbetrag etwa 3 €** gegen Karten-Tests mit gestohlenen Karten). Dazu 2–3 Links mit festen Monatsbeträgen; „Kunde wählt Betrag“ kann keine wiederkehrenden Zahlungen.
+  - Auf m365.fm steht **nur ein Link** zu buy.stripe.com, kein Skript: kein Cookie-Hinweis nötig.
+  - Gebühren laut Suchauszügen (vor dem Bau im Stripe-Dashboard prüfen): EWR-Standardkarte 1,5 % + 0,25 €, SEPA 0,35 €; ein Kartenstreit kostet 20 €.
+  - Bei Stripe als „Trinkgeld für Inhalte“ einordnen, nicht als Spende; Stripe erlaubt Spenden nur für gemeinnützige Zwecke.
+- **Recht und Steuer, vor dem Bau mit dem Steuerberater klären:**
+  - **Nicht „Spende“ nennen**, auch nicht „Token-Spende“: Eine Spendenquittung können nur steuerbegünstigte Körperschaften ausstellen, sonst droht Irreführung (§ 5 UWG). Besser „Unterstütze m365.fm“ / „Support m365.fm“, mit dem Hinweis „gewerbliches Angebot, keine Spendenquittung“.
+  - Die Zahlungen sind Betriebseinnahmen (FG Berlin-Brandenburg 14 K 14067/24, Revision BFH VIII R 18/25).
+  - **Umsatzsteuer ohne Gegenleistung ist umstritten:** FG Berlin-Brandenburg 2 K 2085/21 hält sie für nicht steuerbar, FG Düsseldorf und die Finanzverwaltung für steuerpflichtig mit 19 %. Der BFH entscheidet unter V R 10/25.
+  - **Keine Gegenleistung versprechen** (kein Abzeichen, keine Namensliste, keine zusätzlichen KI-Antworten): Mit Gegenleistung liegt sehr wahrscheinlich ein steuerpflichtiger Leistungsaustausch vor, dazu Verbraucherpflichten (Widerrufsbelehrung, Bestellbutton, bei Abos Kündigungsbutton).
+  - Weiter zu klären: Kleinunternehmer oder Regelbesteuerung. Auf Anthropic- und Cloudflare-Rechnungen schuldet Mirko die Umsatzsteuer selbst (Reverse Charge, § 13b UStG).
+  - Vorher festlegen, was mit einem Überschuss über die KI-Kosten passiert.
+  - Datenschutzerklärung DE/EN: Abschnitt „Stripe Payments Europe“ ergänzen (`site_legal.py`).
+- **Technik-Skizze (Worker):**
+  - `POST /api/support/webhook` für Stripe `checkout.session.completed`, Signatur über den Rohtext mit `constructEventAsync`/SubtleCrypto. In `worker/src/index.js` vor die `x-requested-with`-Prüfung setzen.
+  - Neue D1-Tabelle nur mit Betrag, Währung und Zeit, ohne Namen oder Mail; Migration ab Nummer 0013, weil #220 und #221 die 0012 belegen.
+  - Admin-Ansicht nach dem Muster von `sponsor.js` (Handler, Rate-Limit, Liste, `notify()`).
+  - Einfachste Vorstufe ohne Webhook: Monatssumme von Hand im Admin-Bereich eintragen.
+- **Transparenz-Seite „KI-Topf“** (de/en): „Diesen Monat X € KI-Kosten, Y € Unterstützung“ mit Balken.
+  - Die KI-Kosten kommen aus dem Haiku-Budget von #216 (`ai_spend`) bzw. dem AI Gateway; Anthropic rechnet in USD ab.
+  - **Budget-Formel:** Tagesbudget = 5 € + Unterstützung des Monats (netto nach Gebühren) / Tage des Monats.
+- **Voraussetzungen:**
+  - #216 (AI Gateway und Euro-Budget) gemergt;
+  - ein Stripe-Konto für die Firma (Mirko);
+  - die Klärung mit dem Steuerberater;
+  - Webhook-Secret `STRIPE_WEBHOOK_SECRET` nur als Secret.
+
 ## Blog Ergänzungen (gebaut, 30.10.)
 - Blog-Link auf der Profilseite, Badge „Blog-Autor“ (`author`), Punkte (5 je veröffentlichtem Beitrag bis 20, 1 je Upvote bis 200), Beiträge erscheinen im Creator-Feed (Kanal „blog“), Kommentare unter Beiträgen (vorhandenes Kommentar-System, `vid=blog<id>`, auch Englisch), Blog abonnieren (Follow, `blog_follows`) und RSS je Autor und gesamt (`feed.xml`).
 - Offen: E-Mail-Benachrichtigung an Abonnenten (mit dem Mailsystem/Resend), Newsletter-Kanal des Creators beim Abonnieren zeigen, Übersetzung der Badge-Texte (bisher Englisch/Deutsch).
@@ -237,7 +274,7 @@ Podpage kostet 65 $/Monat (ca. 780 $/Jahr). Ziel: m365.fm komplett auf dub.m365.
 - Eigene Seiten für gezogene Inhalte (`/community/feed/<id>-<slug>/`), SEO-Text per Editor oder MCP (`save_feed_item_text`), Push bei neuen Inhalten. Updates-Seite (`/updates/`) mit Microsoft-Updates und Tages-Batches.
 - Offen (siehe Roadmap im Profil-Bereich): Microsoft-Login, Mail-System, Statuswechsel-Benachrichtigung, Firmen-Angebote auf Entitäten-Seiten, Update-Wichtigkeit, Bibliothek-Versionen/Forks, OG-Bilder inkrementell, YouTube-Audit.
 
-## Hörer-Mitgliedschaft (Idee, 30.10.)
+## Hörer-Mitgliedschaft (verworfen, 4.11.: Mirko – werbefreie Hörerschaft wird es nicht geben, Feature komplett entfernt)
 - Preis: 6,99 USD pro Monat (von Mirko festgelegt).
 - Hörer zahlen auf m365.fm (Stripe/Lemon Squeezy, Webhook → DB-Status `adfree`). Vorteile: persönlicher werbefreier Feed (Token-URL, vom Worker ausgeliefert) und keine AdSense-Anzeigen auf der Seite (Skript erst nach Login-Check; EU-Einwilligung/CMP nötig).
 - Werbefreie Audiodateien: Spreaker-Folgen als werbefrei markieren (Supporters Club) oder eigener Speicher (R2). Spreaker fügt Werbung dynamisch ein, ein Feed auf die normale Audio-URL hätte weiter Werbung.

@@ -33,7 +33,7 @@ export async function ownedEntity(env, user, o) {
       if (v.err) return "";
       await db.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES(?,?,?,?,'live',?)").bind(o.eid, JSON.stringify(v.data), "Selbst verwaltet", user.id, now()).run(); created = true;
     }
-    if (created || user.admin) await db.prepare("INSERT INTO entity_claims(eid,user_id,status,via,created) VALUES(?,?,'verified','owner',?) ON CONFLICT(eid) DO NOTHING").bind(o.eid, user.id, now()).run();
+    if (created || user.admin) await db.prepare("INSERT INTO entity_claims(eid,user_id,status,via,created) VALUES(?,?,'verified','owner',?) ON CONFLICT(eid) DO UPDATE SET user_id=excluded.user_id,status='verified',via='owner',created=excluded.created WHERE entity_claims.status='rejected'").bind(o.eid, user.id, now()).run();
     return o.eid;
   } catch (e) { return ""; }
 }
@@ -537,7 +537,7 @@ export async function handleProfiles(env, request, url, path, user, J) {
           if (!v.err) await db.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES(?,?,?,?,?,?)").bind(eid, JSON.stringify(v.data), "Firma angelegt", user.id, (await trustedUser(db, user)) ? "live" : "pending", now()).run();
         }
         await db.prepare("INSERT OR REPLACE INTO org_entity(org_id,eid) VALUES(?,?)").bind(o.id, eid).run();
-        if (!known.has(eid) && !ex) await db.prepare("INSERT INTO entity_claims(eid,user_id,status,via,created) VALUES(?,?,'verified','owner',?) ON CONFLICT(eid) DO NOTHING").bind(eid, user.id, now()).run();
+        if (!known.has(eid) && !ex) await db.prepare("INSERT INTO entity_claims(eid,user_id,status,via,created) VALUES(?,?,'verified','owner',?) ON CONFLICT(eid) DO UPDATE SET user_id=excluded.user_id,status='verified',via='owner',created=excluded.created WHERE entity_claims.status='rejected'").bind(eid, user.id, now()).run();
       } catch (e) { /* Entitaet ist optional, Firmenkonto bleibt gueltig */ }
     } else {
       const mem = await db.prepare("SELECT role FROM org_members WHERE org_id=? AND user_id=? AND status='active'").bind(o.id, user.id).first();
@@ -613,6 +613,7 @@ export async function handleProfiles(env, request, url, path, user, J) {
 
 // Konto loeschen: alle Profil-, Firmen- und Entitaetsdaten des Nutzers entfernen bzw. anonymisieren
 export async function deleteUserData(db, id) {
+  const mailAddress = await db.prepare("SELECT email FROM mail_addr WHERE user_id=?").bind(id).first().catch(() => null);
   await db.prepare("DELETE FROM recommendations WHERE author_id=? OR subject_id=?").bind(id, id).run();
   await db.prepare("DELETE FROM profile_company WHERE user_id=?").bind(id).run();
   await db.prepare("DELETE FROM images WHERE kind='u' AND owner_id=?").bind(id).run();
@@ -627,11 +628,17 @@ export async function deleteUserData(db, id) {
   }
   ops.push(
     db.prepare("DELETE FROM org_members WHERE user_id=?").bind(id),
+    db.prepare("DELETE FROM contributions WHERE user_id=?").bind(id), db.prepare("DELETE FROM contribution_sources WHERE user_id=?").bind(id), db.prepare("DELETE FROM contribution_ignored WHERE user_id=?").bind(id),   // Loeschmarken enthalten URLs geloeschter Beitraege (DSGVO)
     db.prepare("DELETE FROM item_votes WHERE user_id=? OR item_id IN (SELECT id FROM feed_items WHERE owner_type='u' AND owner_id=?)").bind(id, id),
     db.prepare("DELETE FROM feed_items WHERE owner_type='u' AND owner_id=?").bind(id), db.prepare("DELETE FROM channels WHERE owner_type='u' AND owner_id=?").bind(id),
     db.prepare("DELETE FROM expertise WHERE owner_type='u' AND owner_id=?").bind(id), db.prepare("DELETE FROM expertise_evidence WHERE owner_id=?").bind(id), db.prepare("DELETE FROM expertise_score WHERE owner_id=?").bind(id), db.prepare("DELETE FROM programs WHERE owner_type='u' AND owner_id=?").bind(id),
     db.prepare("DELETE FROM profile_private WHERE user_id=?").bind(id), db.prepare("DELETE FROM profile_i18n WHERE user_id=?").bind(id), db.prepare("DELETE FROM certs WHERE user_id=?").bind(id), db.prepare("DELETE FROM cert_check WHERE user_id=?").bind(id), db.prepare("DELETE FROM cert_endorse WHERE owner_id=? OR by_id=?").bind(id, id), db.prepare("DELETE FROM endorsements WHERE owner_id=? OR by_id=?").bind(id, id),
     db.prepare("DELETE FROM profiles WHERE user_id=?").bind(id),
+    db.prepare("DELETE FROM mail_topic_follows WHERE user_id=?").bind(id),
+    db.prepare("DELETE FROM mail_prefs WHERE user_id=?").bind(id),
+    db.prepare("DELETE FROM mail_outbox WHERE user_id=?").bind(id),
+    db.prepare("DELETE FROM mail_addr WHERE user_id=?").bind(id),
     db.prepare("DELETE FROM entity_rev WHERE user_id=? AND status IN ('pending','rejected')").bind(id), db.prepare("UPDATE entity_rev SET user_id=0 WHERE user_id=?").bind(id));
   await db.batch(ops);
+  if (mailAddress?.email) await db.prepare("DELETE FROM mail_weekly_unsub WHERE lower(email)=lower(?) AND NOT EXISTS (SELECT 1 FROM email_subs WHERE lower(email)=lower(?) AND confirmed=1) AND NOT EXISTS (SELECT 1 FROM mail_addr WHERE lower(email)=lower(?) AND verified=1)").bind(mailAddress.email, mailAddress.email, mailAddress.email).run();
 }

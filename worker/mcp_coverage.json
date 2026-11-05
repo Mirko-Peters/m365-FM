@@ -21,6 +21,15 @@
   "/api/admin/demo": {
    "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
   },
+  "/api/admin/expert-requests/reports": {
+   "skip": "Moderationsberichte sind Admin-Funktionen und bewusst nicht per KI-Token erreichbar"
+  },
+  "/api/admin/expert-requests/close": {
+   "skip": "Admin-Funktionen: Publisher-Anfragen werden nur im Admin-Panel moderiert"
+  },
+  "/api/admin/expert-requests/reply-delete": {
+   "skip": "Admin-Funktionen: gemeldete Antworten werden nur im Admin-Panel entfernt"
+  },
   "/api/admin/entity/claim": {
    "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
   },
@@ -39,6 +48,12 @@
   "/api/admin/mail": {
    "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
   },
+  "/api/admin/mail/test": {
+   "skip": "Admin-Testmail: geschützter Browser-Endpunkt, absichtlich nicht per KI-Token auslösbar"
+  },
+  "/api/admin/mediakit": {
+   "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
+  },
   "/api/admin/panel/flag": {
    "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Verwaltung ueber /admin/"
   },
@@ -48,14 +63,14 @@
   "/api/admin/panel/ops": {
    "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Verwaltung unter /admin/"
   },
+  "/api/admin/panel/overview": {
+   "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Verwaltung ueber /admin/"
+  },
   "/api/admin/panel/sponsor-requests": {
    "skip": "Admin-Funktionen: Sponsor-Anfragen werden nur im Admin-Panel verwaltet"
   },
   "/api/admin/panel/sponsor-requests/status": {
    "skip": "Admin-Funktionen: Sponsor-Anfragen werden nur im Admin-Panel verwaltet"
-  },
-  "/api/admin/panel/overview": {
-   "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Verwaltung ueber /admin/"
   },
   "/api/admin/panel/topic": {
    "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Verwaltung unter /admin/"
@@ -86,6 +101,9 @@
   },
   "/api/admin/run-daily": {
    "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
+  },
+  "/api/admin/run-weekly": {
+   "skip": "Cron-Ausführungspunkt: ausschließlich mit CRON_KEY, nicht als Nutzerfunktion"
   },
   "/api/admin/show": {
    "skip": "Admin-Funktionen: bewusst nicht per KI-Token (Freigabe von Shows durch die Redaktion)"
@@ -181,6 +199,51 @@
   },
   "/api/comments": {
    "skip": "Seiten-Infrastruktur (kein Nutzerfunktion)"
+  },
+  "/api/contributions/export": {
+   "tools": [
+    "export_contributions"
+   ]
+  },
+  "/api/contributions/manual": {
+   "tools": [
+    "add_contribution"
+   ]
+  },
+  "/api/contributions/mine": {
+   "tools": [
+    "list_my_contributions"
+   ]
+  },
+  "/api/contributions/source": {
+   "tools": [
+    "add_contribution_source"
+   ]
+  },
+  "/api/contributions/source/delete": {
+   "tools": [
+    "delete_contribution_source"
+   ]
+  },
+  "/api/contributions/source/update": {
+   "tools": [
+    "update_contribution_source"
+   ]
+  },
+  "/api/contributions/sources": {
+   "tools": [
+    "list_my_contributions"
+   ]
+  },
+  "/api/contributions/update": {
+   "tools": [
+    "update_contribution"
+   ]
+  },
+  "/api/contributions/delete": {
+   "tools": [
+    "delete_contribution"
+   ]
   },
   "/api/credit/mine": {
    "tools": [
@@ -344,6 +407,33 @@
     "find_experts"
    ]
   },
+  "/api/expert-requests/block": {
+   "skip": "Publisher sperren oder entsperren ist eine Browser-Funktion"
+  },
+  "/api/expert-requests/close": {
+   "skip": "Eigene Publisher-Anfragen werden im Browser geschlossen"
+  },
+  "/api/expert-requests/create": {
+   "tools": [
+   "create_expert_request"
+   ]
+  },
+  "/api/expert-requests/list": {
+   "tools": [
+   "list_expert_requests"
+   ]
+  },
+  "/api/expert-requests/matches": {
+   "tools": [
+   "list_my_matches"
+   ]
+  },
+  "/api/expert-requests/report": {
+   "skip": "Meldungen sind eine Browser-Funktion"
+  },
+  "/api/expert-requests/respond": {
+   "skip": "Antworten auf Publisher-Anfragen werden im Browser gesendet"
+  },
   "/api/feed": {
    "skip": "Zähler/Listen nur für die Seitenanzeige (Stimmen, Follower) - in list_blog_posts enthalten"
   },
@@ -390,6 +480,9 @@
   "/api/health": {
    "skip": "Seiten-Infrastruktur (kein Nutzerfunktion)"
   },
+  "/api/internal/ai-spend": {
+   "skip": "Interner Actions-Endpunkt mit CRON_KEY; absichtlich nicht per MCP-Token erreichbar"
+  },
   "/api/library/delete": {
    "tools": [
     "delete_library_item"
@@ -424,6 +517,11 @@
   "/api/mail/confirm": {
    "skip": "Link aus der E-Mail (Token), wird im Browser geöffnet, nicht per KI"
   },
+  "/api/mail/follows": {
+   "tools": [
+    "set_mail_topics"
+   ]
+  },
   "/api/mail/me": {
    "tools": [
     "get_mail_settings"
@@ -457,6 +555,9 @@
   },
   "/api/me/li-follow": {
    "skip": "Seiten-Infrastruktur (kein Nutzerfunktion)"
+  },
+  "/api/mediakit": {
+   "skip": "Öffentliches Formular für Gäste ohne Konto (Name, Firma, E-Mail) – Versand an die eingegebene Adresse; per KI-Token nicht sinnvoll und Missbrauchsrisiko"
   },
   "/api/msg/prefs": {
    "skip": "Benachrichtigungs-Einstellungen gehören in den Browser"
@@ -621,9 +722,6 @@
     "vote_answer"
    ]
   },
-  "/api/search": {
-   "skip": "Oeffentliche Seitensuche fuer Browser und nicht fuer KI-Agenten"
-  },
   "/api/quotes/export": {
    "skip": "Datenexport der Quotes je Personen-Entitaet fuer Seitenbau und Agenten (Lesen ohne Token)"
   },
@@ -652,6 +750,9 @@
    "tools": [
     "mark_review_helpful"
    ]
+  },
+  "/api/search": {
+   "skip": "Oeffentliche Seitensuche fuer Browser und nicht fuer KI-Agenten"
   },
   "/api/seo/check": {
    "tools": [
