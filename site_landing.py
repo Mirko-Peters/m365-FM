@@ -243,7 +243,8 @@ def _stats(g, lang):
         rows.append(row(_number(lang, gsc["clicks"]), ("Google Search clicks", "Google-Suchklicks"), _t(lang, ("Source: Google Search Console", "Quelle: Google Search Console"))))
     if not rows:
         return ""
-    return (f'<div class="lp-stats" style="--n:{min(len(rows), 5)}" data-n="{len(rows)}" aria-label="{_u(lang, "figures_aria")}">{"".join(rows)}</div>'
+    cols = len(rows) if len(rows) <= 4 else 3   # Mirko, 5.11.2026: 6 Kennzahlen als 3 x 2 statt 5 + 1
+    return (f'<div class="lp-stats" style="--n:{cols}" data-n="{len(rows)}" data-c="{cols}" aria-label="{_u(lang, "figures_aria")}">{"".join(rows)}</div>'
             f'<p class="lp-note">{_u(lang, "figures_note")}</p>')
 
 
@@ -327,12 +328,13 @@ CSS = ("""
 .lp-stat b{font:600 clamp(2rem,3.6vw,2.8rem)/1 CF_;color:var(--ac)}
 .lp-stat span{font:600 .82rem/1.3 CF_;letter-spacing:.13em;text-transform:uppercase;color:var(--fg)}
 .lp-stat small{font-size:.8rem;line-height:1.45;color:var(--mut)}
+@media(min-width:901px){.lp-stats[data-c="3"] .lp-stat:nth-child(3n+1){padding-inline-start:0}.lp-stats[data-c="3"] .lp-stat:nth-child(3n){border-inline-end:0}.lp-stats[data-c="3"] .lp-stat:nth-child(n+4){border-top:1px solid var(--bd)}}
 .lp-intro{max-width:48em}.lp-intro p{margin:0 0 1em;font-size:1.06rem;line-height:1.7}
 .lp .faq details{scroll-margin-top:70px}
 @media(max-width:900px){.lp-cards{grid-template-columns:repeat(2,minmax(0,1fr))}.lp-steps{grid-template-columns:repeat(2,minmax(0,1fr))}
  .lp-steps li{padding-inline-start:0;border-inline-end:0;border-bottom:1px solid var(--bd);padding-bottom:18px}.lp-steps li:nth-child(odd){padding-inline-end:22px}
  .lp-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.lp-stat{padding-inline-start:0;border-inline-end:0;border-bottom:1px solid var(--bd)}.lp-stat:last-child{border-bottom:0}
- .lp-stats[data-n="3"] .lp-stat:last-child,.lp-stats[data-n="5"] .lp-stat:last-child,.lp-stats[data-n="1"] .lp-stat{grid-column:1/-1}}
+ .lp-stats[data-n="3"] .lp-stat:last-child,.lp-stats[data-n="5"] .lp-stat:last-child,.lp-stats[data-n="1"] .lp-stat{grid-column:1/-1}.lp-stats[data-n="2"] .lp-stat:nth-last-child(2),.lp-stats[data-n="4"] .lp-stat:nth-last-child(2),.lp-stats[data-n="6"] .lp-stat:nth-last-child(2){border-bottom:0}}
 @media(max-width:860px){.lp-hero{grid-template-columns:1fr;gap:26px;padding-top:22px}.lp-who{grid-template-columns:1fr;gap:18px}}
 @media(max-width:640px){.lp-offers,.lp-ex,.lp-cards,.lp-steps{grid-template-columns:1fr}.lp-steps li:nth-child(odd){padding-inline-end:0}
  .lp .sec{margin-top:52px}.lp-toc{gap:4px 16px}
