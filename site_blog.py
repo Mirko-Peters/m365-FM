@@ -11,6 +11,20 @@ import site_img_dims as IMG
 from site_design import pager as PG, neighbours as NB   # Vor/Zurueck am Seitenende (rel=prev/next)
 
 
+_H1 = re.compile(r"<h1(\s[^>]*)?>(.*?)</h1\s*>", re.I | re.S)
+
+
+def one_h1(html, title=""):
+    """Entfernt eine fuehrende <h1>, die nur den Titel wiederholt, und macht alle weiteren <h1> im Beitragstext zu <h2> (die Seite setzt den Titel selbst als einzige <h1>)."""
+    if not html or "<h1" not in html.lower():
+        return html
+    norm = lambda t: re.sub(r"\W+", "", re.sub(r"<[^>]+>", "", t or "")).lower()
+    m = _H1.search(html)
+    if m and not re.sub(r"<[^>]+>|\s", "", html[:m.start()]).strip() and norm(m.group(2)) == norm(title):
+        html = html[:m.start()] + html[m.end():]
+    return _H1.sub(lambda x: f"<h2{x.group(1) or ''}>{x.group(2)}</h2>", html)
+
+
 def fetch_posts(api):
     items = (_fetch_json(f"{api}/api/blog/export", timeout=120) or {}).get("items", [])
     if any(p.get("has_html") for p in items):   # uebernommene Beitraege: HTML seitenweise nachladen
@@ -96,6 +110,7 @@ def build(g, posts, people, api):
             a = pb[p["handle"]]; au = f"{BASE}/community/u/{a['handle']}/"
             u = f"{croot}u/{p['handle']}/blog/{p['slug']}/"
             body_html, refs = (p["html"], []) if p.get("html") else wiki_render(p["body"], links_l, w)   # uebernommene fruehere Blogbeitraege: HTML bleibt vollstaendig erhalten
+            body_html = one_h1(body_html, p["title"])   # Bing-SEO-Bericht: nur die Seitenueberschrift ist <h1>; <h1> im Beitragstext wird <h2>, eine Wiederholung des Titels entfaellt
             if p.get("html"):   # erste Nennung einer Entitaet im Text auf ihre Seite verlinken (Wissensgraph aus dem Artikel heraus), in allen Sprachen
                 body_html, _al = TOP.autolink_html(body_html, ENTS, lambda i: links_l[i][1], max_links=8)
             if not p.get("legacy"):
