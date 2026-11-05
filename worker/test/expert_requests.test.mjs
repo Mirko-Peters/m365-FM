@@ -146,6 +146,11 @@ test("expert requests: private matching, age/week limits, replies, reports, and 
   const search = await call("/api/experts/search?q=cloud+governance", { id: 1 }, "GET", {}, vectorEnv);
   assert.equal(search.data.items.find((item) => item.handle === "applicant").profile_lang, "de", "cross-language vector results show the profile language");
   assert.equal(JSON.stringify(search.data).includes("expert@example.com"), false);
+  const termSearch = await call("/api/experts/search?q=APPLICANT", { id: 1 }, "GET", {}, env);
+  assert.ok(termSearch.data.items.some((item) => item.handle === "applicant"), "Begriffssuche ohne Vektoren findet Namen (Gross/klein egal)");
+  assert.equal(raw.prepare("SELECT 1 FROM sqlite_schema WHERE name LIKE 'expert_profile_fts%'").get(), undefined, "keine FTS-Tabelle zur Laufzeit (D1-Sicherung)");
+  const plain = await call("/api/experts/search", { id: 1 }, "GET", {}, env);
+  assert.equal(new Set(plain.data.items.map((item) => item.id)).size, plain.data.items.length, "ohne Begriff jede Person nur einmal");
   const pending = [], ctx = { waitUntil(task) { pending.push(task); } };
   await call("/api/expert-settings", { id: 7 }, "POST", { opt_in: false }, vectorEnv, ctx);
   await Promise.all(pending);

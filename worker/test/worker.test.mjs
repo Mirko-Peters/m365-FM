@@ -446,6 +446,20 @@ test("d1 backup: virtueller FTS-Index und Schatten werden vom Tabellenexport aus
   assert.deepEqual(d1BackupExportArgs([]), ["d1", "export", "m365-dub", "--remote", "--output=backup-d1.sql"]);
 });
 
+test("d1 backup: jede zur Laufzeit angelegte FTS5-Tabelle (samt Schatten) faellt aus der Sicherung", () => {
+  assert.deepEqual(d1BackupTables([
+    { name: "expert_profile_fts" }, { name: "expert_profile_fts_data" }, { name: "expert_profile_fts_idx" }, { name: "expert_profile_fts_content" },
+    { name: "expert_profile_fts_docsize" }, { name: "expert_profile_fts_config" }, { name: "fts_notes" }, { name: "expert_requests" },
+  ]), ["fts_notes", "expert_requests"]);
+  const src = new URL("../src/", import.meta.url);
+  for (const f of readdirSync(src).filter((f) => f.endsWith(".js"))) {
+    for (const m of readFileSync(new URL(f, src), "utf-8").matchAll(/CREATE VIRTUAL TABLE IF NOT EXISTS (\w+)/gi)) {
+      const shadow = ["", "_data", "_idx", "_content", "_docsize", "_config"].map((x) => ({ name: m[1] + x }));
+      assert.deepEqual(d1BackupTables(shadow), [], `${m[1]} (aus ${f}) muss aus der D1-Sicherung fallen`);
+    }
+  }
+});
+
 test("levels: Punkte sind je Art gedeckelt, Stufen 1-6 folgen Belegen und Bestaetigungen", () => {
   assert.equal(scoreOf({ blog: 3 }), 3, "ein Beitrag = 3 Punkte");
   assert.equal(scoreOf({ library: 40 }), CAPS.library, "viele Bibliotheks-Eintraege zaehlen nur bis zur Obergrenze");

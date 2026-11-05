@@ -57,7 +57,7 @@ async function matchingExperts(env, request) {
       const [values] = await embed(env, [`${request.title}\n${request.description}\n${parse(request.topics).join(" ")}`], {
         collectLog: false, requestTimeoutMs: 1000,
       });
-      vectorMatches = await queryVectors(env, values, { topK: 100, filter: { type: "expert" } });
+      vectorMatches = await queryVectors(env, values, { topK: 50, filter: { type: "expert" } });
       vectorMatches = vectorMatches.filter((match) => candidates.has(Number(match.metadata?.user_id)))
         .map((match) => ({ id: String(match.metadata.user_id) }));
     }
@@ -267,26 +267,30 @@ async function expertSearch(env, query, filters = {}) {
     const terms = q.match(/[\p{L}\p{N}]+/gu)?.slice(0, 8) || [];
     if (terms.length) {
       try {
-        await db.prepare("CREATE VIRTUAL TABLE IF NOT EXISTS expert_profile_fts USING fts5(user_id UNINDEXED, text, tokenize='unicode61')").run();
-        await db.prepare("DELETE FROM expert_profile_fts").run();
+        // Begriffssuche im Speicher (hoechstens 1000 Profile): keine FTS-Tabelle zur Laufzeit. Eine solche Tabelle haette die D1-Sicherung
+        // (wrangler d1 export kann FTS5-Tabellen nicht sichern) und damit jeden Worker-Deploy blockiert; der Neuaufbau je Suche war zudem
+        // ein Wettlauf zwischen gleichzeitigen Suchen und bis zu 1000 D1-Schreibzugriffe pro oeffentlichem Aufruf.
+        const fold = (value) => String(value || "").normalize("NFKD").replace(/\p{M}+/gu, "").toLowerCase();
+        const wanted = [...new Set(terms.map(fold))];
         const map = await entityMap(env);
-        const docs = [];
+        const scored = [];
         for (const [id, row] of users) {
           const names = parse(row.topics).map((eid) => {
             const ent = map.get(eid);
             return ent ? `${ent.name} ${ent.desc?.en || ""} ${ent.desc?.de || ""}` : eid;
           }).join(" ");
-          docs.push(db.prepare("INSERT INTO expert_profile_fts(user_id,text) VALUES(?,?)").bind(id, `${row.name} ${row.headline} ${row.job} ${names}`));
+          const tokens = fold(`${row.name} ${row.headline} ${row.job} ${names}`).match(/[\p{L}\p{N}]+/gu) || [];
+          const counts = new Map();
+          for (const token of tokens) counts.set(token, (counts.get(token) || 0) + 1);
+          const hits = wanted.filter((term) => counts.has(term));
+          if (hits.length) scored.push({ id, distinct: hits.length, total: hits.reduce((sum, term) => sum + counts.get(term), 0) });
         }
-        for (let i = 0; i < docs.length; i += 99) await db.batch(docs.slice(i, i + 99));
-        const expression = terms.map((term) => `"${term.replaceAll('"', '""')}"`).join(" OR ");
-        ftsRows = (await db.prepare("SELECT CAST(user_id AS INTEGER) id,bm25(expert_profile_fts) score FROM expert_profile_fts WHERE expert_profile_fts MATCH ? ORDER BY score LIMIT 100")
-          .bind(expression).all()).results || [];
-      } catch (error) { console.warn("Expertensuche FTS fehlgeschlagen:", String(error?.message || error)); }
+        ftsRows = scored.sort((a, b) => b.distinct - a.distinct || b.total - a.total || a.id - b.id).slice(0, 100);
+      } catch (error) { console.warn("Expertensuche (Begriffe) fehlgeschlagen:", String(error?.message || error)); }
       try {
         if (env.AI && env.VEC) {
           const [values] = await embed(env, [q], { collectLog: false, requestTimeoutMs: 1000 });
-          vectorRows = await queryVectors(env, values, { topK: 100, filter: { type: "expert" } });
+          vectorRows = await queryVectors(env, values, { topK: 50, filter: { type: "expert" } });
           vectorRows = vectorRows.filter((item) => users.has(Number(item.metadata?.user_id)))
             .map((item) => ({ id: String(item.metadata.user_id) }));
         }
@@ -294,7 +298,7 @@ async function expertSearch(env, query, filters = {}) {
     }
   }
   const rules = ftsRows.map((row) => ({ id: String(row.id) }));
-  const ranked = q ? rrf([vectorRows, rules]) : eligible.map((row, i) => ({ id: String(row.id), rank: i + 1, rrfScore: 1 / (60 + i + 1) }));
+  const ranked = q ? rrf([vectorRows, rules]) : [...users.values()].map((row, i) => ({ id: String(row.id), rank: i + 1, rrfScore: 1 / (60 + i + 1) }));   // je Person einmal (eligible hat eine Zeile je Programm und Level)
   const maxScore = ranked[0]?.rrfScore || 1;
   return ranked.slice(0, 50).map((item) => {
     const row = users.get(Number(item.id));
@@ -314,6 +318,11 @@ export async function handleExpertRequests(env, request, path, user, J, ctx) {
   const db = env.DB, method = request.method, body = async () => request.json().catch(() => ({}));
   await ensureExpertConnectColumns(db);
   if (path === "/api/experts/search" && method === "GET") {
+    if (new URL(request.url).searchParams.get("q")) {   // oeffentliche Suche mit Begriff: Embedding (Workers AI) kostet, daher IP-Grenze wie /api/search
+      const day = new Date().toISOString().slice(0, 10);
+      const ipHash = await sha256hex(`${request.headers.get("cf-connecting-ip") || ""}|${day}|${env.SESSION_SECRET || ""}`);
+      if (!(await rateLimit(db, `expert_search:${ipHash}`, 60, 60))) return J({ error: "rate_limit" }, 429);
+    }
     const items = await expertSearch(env, new URL(request.url).searchParams.get("q"), {
       lang: new URL(request.url).searchParams.get("lang") || "",
       format: new URL(request.url).searchParams.get("format") || "",
