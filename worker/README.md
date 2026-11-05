@@ -18,11 +18,20 @@ Läuft unter `https://api-dub.m365.fm`. Schlüssel (Session, VAPID, Cron) erzeug
 7. **GitHub-Login**: github.com → Settings → Developer settings → OAuth Apps → New OAuth App. Application name `M365.FM`, Homepage URL `https://www.m365.fm`, Authorization callback URL `https://api-dub.m365.fm/auth/callback/github`. Client ID kopieren, Client Secret erzeugen und beides als Repo-Secrets `GH_OAUTH_CLIENT_ID` und `GH_OAUTH_CLIENT_SECRET` anlegen (GitHub-Secrets duerfen nicht mit `GITHUB_` beginnen). Danach den Workflow „Community-API … einrichten“ neu starten; der Knopf „Weiter mit GitHub“ erscheint automatisch (`/api/providers`). Scope `read:user`, Nutzer `github:<numerische ID>`.
 7. Workflow **„Community-API … einrichten“** starten (Actions → Run workflow). Er legt die D1-Datenbank `m365-dub` an, sichert sie (`backup-d1.sql`, als Artefakt 14 Tage nur verschlüsselt mit dem Secret `D1_BACKUP_KEY`, ohne Secret kein Artefakt; das Repo ist öffentlich), wendet die Migrationen aus `migrations/` an (`wrangler d1 migrations apply`, Stand in Tabelle `d1_migrations`), setzt Secrets, veröffentlicht den Worker.
 
+## Claude und AI Gateway
+
+- [ ] In Cloudflare unter **AI → AI Gateway** das Gateway `m365fm` anlegen. `AI_GATEWAY_ID` ist eine GitHub-Variable (Standard `m365fm`) und wird beim Worker-Deploy übernommen; ohne Gateway-Konfiguration bleibt der direkte Anthropic-Aufruf als Rückfall aktiv.
+- [ ] `CRON_KEY` als GitHub-Secret setzen und den Worker-Deploy erneut ausführen, damit derselbe Wert im Worker und in Actions liegt. Actions verwenden ihn für Budgetabfrage und Verbrauchsmeldung; ohne ihn werden Haiku-Läufe in Actions sicherheitshalber übersprungen.
+- [ ] **Authenticated Gateway** aktivieren und den Gateway-Token als GitHub-Secret `CF_AIG_TOKEN` hinterlegen. Worker-Deploy und Actions übernehmen das Secret; ohne Token wird direkt Anthropic verwendet.
+- [ ] Falls Cloudflare AI Gateway Ausgabenlimits anbietet, dort zusätzlich ein Limit als zweite Schutzschicht setzen.
+
+Das Haiku-Budget beträgt standardmäßig 5 € je UTC-Tag. Preise und Wechselkurs stehen als Worker-Variablen `HAIKU_USD_PER_MTOK_IN`, `HAIKU_USD_PER_MTOK_OUT`, `AI_DAILY_EUR_HAIKU` und `USD_PER_EUR` in `wrangler.toml`; für Actions können die entsprechenden Haiku-Preis- und Kurswerte als GitHub-Variablen gesetzt werden. Der Verbrauch erscheint im Admin-Bereich unter **Schalter**.
+
 Ohne Zugangsdaten tut der Workflow nichts; die Website blendet die Community-Bereiche automatisch aus, solange die API nicht erreichbar ist.
 
 ## Betrieb
 - Täglicher Digest: Cron `0 6 * * *` (UTC). Der erste Lauf markiert vorhandene Folgen nur als bekannt (kein Massenversand).
-- Manuell testen: `https://api-dub.m365.fm/api/admin/run-daily?key=<CRON_KEY>&dry=1` (CRON_KEY in Cloudflare → Worker → Settings → Variables; `dry=1` sendet nichts).
+- Manuell testen: `curl -H "x-cron-key: <CRON_KEY>" "https://api-dub.m365.fm/api/admin/run-daily?dry=1"` (`dry=1` sendet nichts). Den Schlüssel nicht als `?key=` in die Adresse schreiben, Adressen landen in den Worker-Logs. CRON_KEY wird nur in GitHub gepflegt; der Worker-Deploy überträgt ihn in den Worker (ein nur in Cloudflare geänderter Wert wird beim nächsten Deploy überschrieben). Ob beide gleich sind, zeigt der Workflow „Secrets prüfen“.
 - D1-Sicherung zurückholen: Artefakt `d1-backup-<Lauf>` laden, dann `openssl enc -d -aes-256-cbc -pbkdf2 -iter 600000 -in backup-d1.sql.enc -out backup-d1.sql -pass env:D1_BACKUP_KEY` (Schlüssel aus dem Passwort-Manager). Ohne Artefakt: Cloudflare → D1 → m365-dub → Time Travel (30 Tage).
 - Tarif: Workers Paid ($5/Monat) seit 10/2026: 1.000 Subrequests und 30 s CPU je Aufruf; D1 im Paid-Plan (Profil-Export und Import-Batches brauchen das).
 - Schema: `migrations/0001_baseline.sql` ist der Ausgangsstand; jede Aenderung ist eine neue Datei `migrations/000N_name.sql` (nur idempotente Anweisungen; neue Spalten in bestehenden Tabellen weiterhin per ensure*-Funktion, SQLite kennt kein ADD COLUMN IF NOT EXISTS). Vor jedem Deploy laufen `node --check`, `npm test` und die MCP-Abdeckung; rot heisst kein Deploy.
