@@ -6,6 +6,7 @@ import { baseIds, knownIds, validate, trustedUser, entityMap } from "./entities.
 import { findExperts } from "./experts.js";
 import { computeLevels } from "./levels.js";
 import { ensureDirectoryCols, geocodeAddress, recordGeocodeStatus } from "./directory.js";
+import { publicKindSql, publicItemSql } from "./feedpolicy.js";
 
 export const PROGRAMS = ["mvp", "mct", "rd", "msa", "ms_employee", "partner"];
 export const RELATIONS = ["colleague", "manager", "report", "client", "trainer", "student", "cospeaker", "podcast", "community", "mentor", "other"];
@@ -86,7 +87,7 @@ async function resolve(db, ref) {   // "u:handle" | "o:handle"
 async function itemsOf(db, where, binds, viewer, limit = 10) {
   const rows = (await db.prepare(`SELECT i.id,i.title,i.url,i.published,i.owner_type ot,i.owner_id oid,c.kind,(SELECT COUNT(*) FROM item_votes v WHERE v.item_id=i.id) votes,
       ${viewer ? "(SELECT COUNT(*) FROM item_votes v WHERE v.item_id=i.id AND v.user_id=" + (+viewer) + ")" : "0"} voted
-      FROM feed_items i JOIN channels c ON c.id=i.channel_id WHERE i.hidden=0 AND ${where} ORDER BY i.published DESC LIMIT ${+limit}`).bind(...binds).all()).results || [];
+      FROM feed_items i JOIN channels c ON c.id=i.channel_id WHERE i.hidden=0 AND ${publicKindSql()} AND ${where} ORDER BY i.published DESC LIMIT ${+limit}`).bind(...binds).all()).results || [];
   return rows.map((r) => ({ id: r.id, title: r.title, url: r.url, published: r.published, kind: r.kind, votes: r.votes, voted: !!r.voted, owner: r.ot + ":" + r.oid }));
 }
 
@@ -449,7 +450,7 @@ export async function handleProfiles(env, request, url, path, user, J) {
   if ((m = /^\/api\/vote\/(\d+)$/.exec(path)) && method === "POST") {
     if (need()) return need();
     if (!(await rateLimit(db, `vote:${user.id}`, 120, 3600))) return J({ error: "rate_limit" }, 429);
-    const id = +m[1]; if (!(await db.prepare("SELECT 1 x FROM feed_items WHERE id=? AND hidden=0").bind(id).first())) return J({ error: "not_found" }, 404);
+    const id = +m[1]; if (!(await db.prepare(`SELECT 1 x FROM feed_items i WHERE i.id=? AND i.hidden=0 AND ${publicItemSql()}`).bind(id).first())) return J({ error: "not_found" }, 404);
     const has = await db.prepare("SELECT 1 x FROM item_votes WHERE item_id=? AND user_id=?").bind(id, user.id).first();
     if (has) await db.prepare("DELETE FROM item_votes WHERE item_id=? AND user_id=?").bind(id, user.id).run(); else await db.prepare("INSERT INTO item_votes(item_id,user_id,created) VALUES(?,?,?)").bind(id, user.id, now()).run();
     return J({ ok: true, voted: !has, votes: (await db.prepare("SELECT COUNT(*) n FROM item_votes WHERE item_id=?").bind(id).first()).n });
@@ -457,13 +458,13 @@ export async function handleProfiles(env, request, url, path, user, J) {
   if (path === "/api/feed/mine" && method === "GET") {   // eigene gezogene Inhalte (fuer SEO-Texte, auch per MCP)
     if (need()) return need();
     await ensureSectionCols(db);
-    const rows = (await db.prepare("SELECT id,title,url,summary,thumb,body,published,topics,keypoints,faq,CASE WHEN length(body)>0 THEN 1 ELSE 0 END has_text FROM feed_items WHERE owner_type='u' AND owner_id=? ORDER BY published DESC LIMIT 100").bind(user.id).all()).results || [];
+    const rows = (await db.prepare(`SELECT id,title,url,summary,thumb,body,published,topics,keypoints,faq,CASE WHEN length(body)>0 THEN 1 ELSE 0 END has_text FROM feed_items WHERE owner_type='u' AND owner_id=? AND ${publicItemSql("feed_items")} ORDER BY published DESC LIMIT 100`).bind(user.id).all()).results || [];
     return J({ items: rows.map((r) => ({ ...r, has_text: !!r.has_text, keypoints: jsonList(r.keypoints), faq: jsonList(r.faq), topics: (() => { try { return JSON.parse(r.topics || "[]"); } catch { return []; } })() })) });
   }
   if (path === "/api/feed/text" && method === "POST") {   // Creator ergaenzt den gezogenen Inhalt um eigenen Text (Wiki-Markup, Quellen nur als {{ref}})
     if (need()) return need();
     if (!(await rateLimit(db, `ftext:${user.id}`, 60, 3600))) return J({ error: "rate_limit" }, 429);
-    const b = await body(), it = await db.prepare("SELECT id FROM feed_items WHERE id=? AND owner_type='u' AND owner_id=?").bind(+b.id, user.id).first(); if (!it) return J({ error: "not_found" }, 404);
+    const b = await body(), it = await db.prepare(`SELECT id FROM feed_items WHERE id=? AND owner_type='u' AND owner_id=? AND ${publicItemSql("feed_items")}`).bind(+b.id, user.id).first(); if (!it) return J({ error: "not_found" }, 404);
     const sb = sanitize(String(b.body || ""), { viz: true }); if (sb.err) return J({ error: sb.err }, 400);
     if (sb.body && sb.body.length < 300) return J({ error: "too_short" }, 400);
     const known = await baseIds(env), topics = [];
@@ -478,7 +479,7 @@ export async function handleProfiles(env, request, url, path, user, J) {
   if (path === "/api/feed/export" && method === "GET") {   // oeffentlich fuer den Seitenbau: externe Quellen (nur Titel+Link), eigene Seiten ausgenommen
     await ensureSectionCols(db);
     const rows = (await db.prepare(`SELECT i.id,i.title,i.url,i.summary,i.thumb,i.body,i.topics,i.keypoints,i.faq,i.published,c.kind,i.owner_type,i.owner_id,(SELECT COUNT(*) FROM item_votes v WHERE v.item_id=i.id) votes FROM feed_items i JOIN channels c ON c.id=i.channel_id
-      WHERE i.hidden=0 AND c.kind<>'github' AND i.url NOT LIKE ? AND i.published>? AND ((i.owner_type='u' AND i.owner_id IN (SELECT p.user_id FROM profiles p JOIN users u ON u.id=p.user_id AND u.banned=0 WHERE p.public=1)) OR (i.owner_type='o' AND i.owner_id IN (SELECT id FROM orgs WHERE public=1)))
+      WHERE i.hidden=0 AND ${publicKindSql()} AND i.url NOT LIKE ? AND i.published>? AND ((i.owner_type='u' AND i.owner_id IN (SELECT p.user_id FROM profiles p JOIN users u ON u.id=p.user_id AND u.banned=0 WHERE p.public=1)) OR (i.owner_type='o' AND i.owner_id IN (SELECT id FROM orgs WHERE public=1)))
       ORDER BY i.published DESC LIMIT 300`).bind(env.SITE + "%", now() - 120 * 86400).all()).results || [];
     const names = new Map(), out = [];
     for (const r of rows) {
@@ -490,7 +491,7 @@ export async function handleProfiles(env, request, url, path, user, J) {
   }
   if (path === "/api/feed" && method === "GET") {   // Neuestes der Creator (nur oeffentliche Profile/Firmen)
     const sort = url.searchParams.get("sort") === "top" ? "votes" : "published";
-    const rows = (await db.prepare(`SELECT i.id FROM feed_items i WHERE i.hidden=0 AND ((i.owner_type='u' AND i.owner_id IN (SELECT p.user_id FROM profiles p JOIN users u ON u.id=p.user_id AND u.banned=0 WHERE p.public=1)) OR (i.owner_type='o' AND i.owner_id IN (SELECT id FROM orgs WHERE public=1)))
+    const rows = (await db.prepare(`SELECT i.id FROM feed_items i WHERE i.hidden=0 AND ${publicItemSql()} AND ((i.owner_type='u' AND i.owner_id IN (SELECT p.user_id FROM profiles p JOIN users u ON u.id=p.user_id AND u.banned=0 WHERE p.public=1)) OR (i.owner_type='o' AND i.owner_id IN (SELECT id FROM orgs WHERE public=1)))
        ${sort === "votes" ? "AND i.published>" + (now() - 30 * 86400) : ""} ORDER BY ${sort === "votes" ? "(SELECT COUNT(*) FROM item_votes v WHERE v.item_id=i.id) DESC, i.published" : "i.published"} DESC LIMIT 30`).all()).results || [];
     const ids = rows.map((r) => r.id); if (!ids.length) return J({ items: [] });
     const items = await itemsOf(db, `i.id IN (${ids.join(",")})`, [], user?.id, 30);

@@ -3,6 +3,7 @@ import { cleanText } from "./util.js";
 import { sendPush } from "./push.js";
 import { goodHost, ensureFeedCols } from "./profiles.js";
 import { queueTopicNotification } from "./topic_notifications.js";
+import { PRIVATE_FEED_KINDS, publicKindSql } from "./feedpolicy.js";
 
 const dec = (s) => s.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, "$1").replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(Math.min(+n, 0x10ffff))).replace(/&#x([0-9a-f]+);/gi, (_, n) => String.fromCodePoint(Math.min(parseInt(n, 16), 0x10ffff)))
   .replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&amp;/g, "&");
@@ -54,11 +55,12 @@ export async function discoverFeed(kind, url) {
   return "";
 }
 
+// Private Kanal-Arten (feedpolicy.js, z. B. GitHub) werden nicht abgerufen: ihre Inhalte erscheinen nirgends oeffentlich. Fuer MVP-Nachweise liest contributions.js den Feed selbst.
 export async function refreshFeeds(env, max = 8) {
   const db = env.DB, now = Math.floor(Date.now() / 1000);
-  const rows = (await db.prepare("SELECT id,owner_type,owner_id,feed FROM channels WHERE feed<>'' AND fails<5 AND fetched<? ORDER BY fetched ASC LIMIT ?").bind(now - 1800, max).all()).results || [];
+  const rows = (await db.prepare(`SELECT id,owner_type,owner_id,feed FROM channels WHERE feed<>'' AND fails<5 AND fetched<? AND ${publicKindSql("kind")} ORDER BY fetched ASC LIMIT ?`).bind(now - 1800, max).all()).results || [];
   let n = 0;
-  const nofeed = (await db.prepare("SELECT id,kind,url FROM channels WHERE feed='' AND fails<3 AND fetched<? AND kind NOT IN ('linkedin','x','twitch') ORDER BY fetched ASC LIMIT 3").bind(now - 86400).all()).results || [];
+  const nofeed = (await db.prepare(`SELECT id,kind,url FROM channels WHERE feed='' AND fails<3 AND fetched<? AND kind NOT IN ('linkedin','x','twitch'${PRIVATE_FEED_KINDS.map((k) => `,'${k}'`).join("")}) ORDER BY fetched ASC LIMIT 3`).bind(now - 86400).all()).results || [];
   for (const c of nofeed) { const f = await discoverFeed(c.kind, c.url).catch(() => ""); await db.prepare("UPDATE channels SET feed=?, fetched=?, fails=fails+? WHERE id=?").bind(f, f ? 0 : now, f ? 0 : 1, c.id).run(); }
   for (const c of rows) {
     try {

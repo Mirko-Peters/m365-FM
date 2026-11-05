@@ -43,14 +43,14 @@ test("creator topic notifications include new organization feed items", async ()
   const { db, raw } = await database(), now = Math.floor(Date.now() / 1000);
   raw.exec(`
     INSERT INTO orgs(id,handle,name,public,created) VALUES(3,'acme-labs','Acme',1,1);
-    INSERT INTO channels(id,owner_type,owner_id,kind,url,feed,fetched) VALUES(10,'o',3,'github','https://github.com/acme','https://github.com/acme.atom',0);
-    INSERT INTO feed_items(channel_id,owner_type,owner_id,url,title,published) VALUES(10,'o',3,'https://github.com/acme/old','Old item',${now});
+    INSERT INTO channels(id,owner_type,owner_id,kind,url,feed,fetched) VALUES(10,'o',3,'blog','https://acme.example.com','https://acme.example.com/feed.xml',0);
+    INSERT INTO feed_items(channel_id,owner_type,owner_id,url,title,published) VALUES(10,'o',3,'https://acme.example.com/old','Old item',${now});
     INSERT INTO mail_addr(user_id,email,verified,token,created) VALUES(7,'test@example.invalid',1,'',1);
     INSERT INTO email_topics(user_id,kind,topic_id,lang,timezone,created) VALUES(7,'creator','acme-labs','en','UTC',1);
   `);
   const xml = `<rss><channel>
-    <item><title>Old item</title><link>https://github.com/acme/old</link></item>
-    <item><title>New organization item</title><link>https://github.com/acme/new</link></item>
+    <item><title>Old item</title><link>https://acme.example.com/old</link></item>
+    <item><title>New organization item</title><link>https://acme.example.com/new</link></item>
   </channel></rss>`;
   const oldFetch = globalThis.fetch;
   globalThis.fetch = async () => ({ ok: true, text: async () => xml });
@@ -58,7 +58,7 @@ test("creator topic notifications include new organization feed items", async ()
     await refreshFeeds({ DB: db, SITE: "https://www.m365.fm" });
     const queued = raw.prepare("SELECT title,url FROM topic_queue WHERE channel='email' AND recipient='7'").get();
     assert.equal(queued.title, "New organization item");
-    assert.equal(queued.url, "https://github.com/acme/new");
+    assert.equal(queued.url, "https://acme.example.com/new");
   } finally {
     globalThis.fetch = oldFetch;
   }

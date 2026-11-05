@@ -17,6 +17,7 @@ globalThis.fetch = async (req) => {
   if (u.pathname === "/assets/a.css") return new Response("a{}", { headers: { "content-type": "text/css", etag: 'W/"css1"' } });
   if (u.pathname === "/callback") return new Response(null, { status: 301, headers: { location: "https://www.m365.fm/callback/" } });
   if (u.pathname === "/og/alt.png") return new Response("PNG", { headers: { "content-type": "image/png" } });
+  if (u.pathname === "/community/feed/101-copilot-explained/") return new Response("<html>feed</html>", { headers: { "content-type": "text/html; charset=utf-8" } });
   return new Response("404", { status: 404, headers: { "content-type": "text/html" } });
 };
 const { default: W, r2Key, __resetR2Ready } = await import("../index.js");
@@ -238,4 +239,16 @@ test("Weiterleitung des Ursprungs behaelt die Query (OAuth-Code auf /callback)",
   assert.equal(r.status, 301); assert.equal(r.headers.get("location"), "https://www.m365.fm/callback/?code=4%2F0Ab&scope=x");
   const r2 = await run(req("/callback", "DE"));
   assert.equal(r2.headers.get("location"), "https://www.m365.fm/callback/");
+});
+
+test("Entfernte Inhaltsseiten (/community/feed/<id>-<slug>/, z. B. GitHub-Aktivitaet): 410 Gone mit noindex statt 404, bestehende bleiben 200", async () => {
+  for (const p of ["/community/feed/100-mirko-peters-pushed-to-main/", "/de/community/feed/100-mirko-peters-pushed-to-main/", "/community/feed/102-x", "/community/feed/102-x/index.html"]) {
+    const r = await run(req(p, "US")); assert.equal(r.status, 410, p);
+    assert.equal(r.headers.get("x-robots-tag"), "noindex", p); assert.match(r.headers.get("content-type"), /text\/html/);
+    const t = await r.text(); assert.match(t, /noindex/); assert.ok(!/github/i.test(t), p);
+    assert.match(t, p.startsWith("/de/") ? /href="\/de\/community\/"/ : /href="\/community\/"/);
+  }
+  const h = await run(req("/community/feed/100-x/", "US", {}, "HEAD")); assert.equal(h.status, 410); assert.equal(await h.text(), "");
+  const ok = await run(req("/community/feed/101-copilot-explained/", "US")); assert.equal(ok.status, 200);
+  for (const p of ["/community/feedback/", "/community/feed/", "/community/feed/abc/", "/fr/community/feed/100-x/"]) assert.equal((await run(req(p, "US"))).status, 404, p);
 });
