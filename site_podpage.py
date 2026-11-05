@@ -10,6 +10,7 @@ from site_design import pager as PG   # Vor/Zurueck am Seitenende (rel=prev/next
 import site_sponsorships as SPM   # T37 Sponsor: Kennzeichnung gesponserter Folgen (data/sponsorships.json)
 import site_transcripts as TRS   # #266: Transkripte als Dateien neben der Folgenseite (R2)
 import gzip, json, re, unicodedata, html as _h
+from functools import lru_cache
 from html.parser import HTMLParser
 from pathlib import Path
 from datetime import datetime
@@ -289,6 +290,11 @@ def episode_index(BASE):
     return _IDX[BASE]
 
 
+@lru_cache(maxsize=None)
+def _word_rx(name):   # einmal je Bau und Name kompiliert (vorher je Entitaet neu; der re-Cache fasst nur 512 Muster)
+    return re.compile(r"(?<![\w-])" + re.escape(name) + r"(?![\w-])")
+
+
 def find_episodes(BASE, e, names, n=12):
     """Folgen der Hauptshow zu einer Entitaet: Name/Alias im Titel zaehlt 3, in Kernpunkten/FAQ 1; die besten n nach Punkten, dann Datum.
     Gast-Entitaeten bekommen ihre Auftritte (Namensnennung in Titel/Show Notes)."""
@@ -301,7 +307,7 @@ def find_episodes(BASE, e, names, n=12):
     app = list({x["slug"]: x for x in ext + app}.values())
     if e.get("guest"):
         return app[:n]
-    rx = [re.compile(r"(?<![\w-])" + re.escape(x.lower()) + r"(?![\w-])") for x in names if len(x) > 1]
+    rx = [_word_rx(x.lower()) for x in names if len(x) > 1]
     if not rx:
         return app[:n]
     hits = []
