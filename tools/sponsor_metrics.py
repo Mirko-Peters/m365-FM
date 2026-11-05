@@ -16,11 +16,12 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 API = os.environ.get("SPONSOR_API", "https://api-dub.m365.fm").rstrip("/")
+USER_AGENT = "m365fm-actions/1.0 (+https://www.m365.fm)"   # ohne eigenen User-Agent weist Cloudflare urllib mit 403 ab (error code 1010, 5.11.2026)
 LANGS = ("en", "de", "es", "fr", "it", "pt", "nl", "pl", "id", "ru", "uk", "ar", "he", "ja", "ko")
 
 
 def json_request(url, data=None, headers=None, timeout=40):
-    request = urllib.request.Request(url, data=data, headers=headers or {}, method="POST" if data is not None else "GET")
+    request = urllib.request.Request(url, data=data, headers={"User-Agent": USER_AGENT, **(headers or {})}, method="POST" if data is not None else "GET")
     try:
         with urllib.request.urlopen(request, timeout=timeout) as response:
             return response.status, json.loads(response.read().decode("utf-8") or "{}"), response.headers
