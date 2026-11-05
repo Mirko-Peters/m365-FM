@@ -233,6 +233,11 @@ def _stats(g, lang):
         per = bing.get("period") or {}
         rows.append(row(_number(lang, bing["citations"]), ("AI citations", "KI-Zitate"),
                         _t(lang, ("Source: Bing Webmaster Tools", "Quelle: Bing Webmaster Tools")) + f' · {html.escape(per.get("from", ""), quote=True)} – {html.escape(per.get("to", ""), quote=True)}'))
+    gai = stats.get("google") or {}   # Google Search Console, Generative AI (AI Overviews und AI Mode); nur bei status "ok"
+    if gai.get("ok"):
+        per = gai.get("period") or {}
+        rows.append(row(_number(lang, gai["impressions"]), ("Google AI Overview impressions", "Impressionen in Google AI Overviews"),
+                        _t(lang, ("Source: Google Search Console, Generative AI", "Quelle: Google Search Console, Generative AI")) + f' · {html.escape(per.get("from", ""), quote=True)} – {html.escape(per.get("to", ""), quote=True)}'))
     gsc = stats.get("gsc") or {}
     if gsc.get("ok"):
         rows.append(row(_number(lang, gsc["clicks"]), ("Google Search clicks", "Google-Suchklicks"), _t(lang, ("Source: Google Search Console", "Quelle: Google Search Console"))))

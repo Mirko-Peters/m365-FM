@@ -5,7 +5,7 @@ indexierbar und in der Sitemap (wie die Barrierefreiheitserklaerung).
 - Rechnen und Texte bauen: assets/sponsor-calc.js (dieselben Funktionen im Browser, im Test und hier beim Vorab-Rendern ueber
   tools/sponsor_ssr.mjs). Ohne Node rendert das Skript das Standardpaket beim Laden (Hinweis im Baulog).
 - Bedienung: assets/sponsor.js (Ereignis-Delegation, ein Rendern je Frame, kein erzwungenes Layout).
-- Belegzahlen: data/stats/ai_performance.json (bing_ai, gsc) und data/stats/topic_difficulty.json; fehlen die Dateien, gelten die
+- Belegzahlen: data/stats/ai_performance.json (bing_ai, google_ai, gsc) und data/stats/topic_difficulty.json; fehlen die Dateien, gelten die
   eingebauten Startwerte (gleiche Felder wie design.md D4). Folgen der Hauptshow und Sprach-Shows zaehlt der Seitenbau.
 - Haengt nicht von generate_site ab: alle Helfer (page, header, footer, write, ...) kommen ueber den ctx-Dict."""
 import hashlib, html, json, math, re, subprocess
@@ -338,7 +338,8 @@ def load_stats():
     a = _json(D / "stats" / "ai_performance.json", None) or DEFAULT_AI
     src = a.get("sources") or {}
     bing, gsc = dict(a.get("bing_ai") or src.get("bing_ai") or {}), dict(a.get("gsc") or src.get("gsc") or {})
-    for b in (bing, gsc):   # auch die Variante mit "totals"/"label" lesen
+    gai = dict(a.get("google_ai") or src.get("google_ai") or {})   # Google Search Console, Generative AI (AI Overviews und AI Mode)
+    for b in (bing, gsc, gai):   # auch die Variante mit "totals"/"label" lesen
         for k, v in (b.get("totals") or {}).items(): b.setdefault(k, v)
         if not b.get("source") and isinstance(b.get("label"), dict): b["source"] = b["label"].get("en", "")
     def ok(b, *need):
@@ -346,6 +347,7 @@ def load_stats():
         return b.get("status") == "ok" and p.get("from") and p.get("to") and all(isinstance(b.get(k), (int, float)) for k in need)
     bing["ok"] = bool(ok(bing, "citations", "cited_pages_per_day"))
     gsc["ok"] = bool(ok(gsc, "clicks"))
+    gai["ok"] = bool(ok(gai, "impressions"))
     wk = [(str(d)[:10], float(v)) for d, v in (bing.get("weekly") or []) if isinstance(v, (int, float))]
     bing["weekly"] = wk if len(wk) >= 2 else []
     dd = _json(D / "stats" / "topic_difficulty.json", None) or DEFAULT_DIFF
@@ -356,7 +358,7 @@ def load_stats():
         lv = v.get("level") if isinstance(v, dict) else v
         if isinstance(lv, (int, float)) and 1 <= int(lv) <= 4:
             levels[str(k).strip().lower()] = (int(lv), ex_any or bool(isinstance(v, dict) and v.get("example")))
-    return {"bing": bing, "gsc": gsc, "levels": levels, "example": ex_any, "diff_updated": str(dd.get("updated") or "")[:10]}
+    return {"bing": bing, "gsc": gsc, "google": gai, "levels": levels, "example": ex_any, "diff_updated": str(dd.get("updated") or "")[:10]}
 
 
 def _level(levels, *keys):
@@ -593,7 +595,7 @@ def body_html(g, lang, stats, quick, ssr, n_main, n_langs, con_on):
     S = ssr or {}
     v, nums = S.get("view") or {}, S.get("nums") or {}
     eps = P["episodes_per_topic"]
-    bing, gsc = stats["bing"], stats["gsc"]
+    bing, gsc, gai = stats["bing"], stats["gsc"], stats.get("google") or {}
     # Belegkarten und Quellen
     cards, srcs = [], []
     if bing["ok"]:
@@ -602,6 +604,11 @@ def body_html(g, lang, stats, quick, ssr, n_main, n_langs, con_on):
         cards.append((nums.get("ppd") or _num(bing["cited_pages_per_day"]), t("card_pages"), per))
         srcs.append(t("src_bing", source=bing.get("source") or "Bing Webmaster Tools", date=day(bing.get("retrieved") or "", lang),
                       **{"from": day(bing["period"]["from"], lang), "to": day(bing["period"]["to"], lang)}))
+    if gai.get("ok"):   # neben den Bing-KI-Karten: Impressionen in Google AI Overviews und AI Mode
+        per = t("period", **{"from": day(gai["period"]["from"], lang), "to": day(gai["period"]["to"], lang)})
+        cards.append((nums.get("gai") or _num(gai["impressions"]), t("card_gai"), per))
+        srcs.append(t("src_gai", source=gai.get("source") or "Google Search Console, Generative AI", date=day(gai.get("retrieved") or "", lang),
+                      **{"from": day(gai["period"]["from"], lang), "to": day(gai["period"]["to"], lang)}))
     if gsc["ok"]:
         per = t("period", **{"from": day(gsc["period"]["from"], lang), "to": day(gsc["period"]["to"], lang)})
         cards.append((nums.get("gsc") or _num(gsc["clicks"]), t("card_gsc"), per))
@@ -746,7 +753,8 @@ def build(g):
     stats = load_stats()
     n_main, n_langs = int(g.get("n_main") or 0), int(g.get("n_langs") or len(LG))
     con_on = TODAY <= PRICING["m365con"]["until"]
-    _dates = [x for x in (PRICING.get("updated", ""), str(stats["bing"].get("retrieved") or "")[:10], stats["diff_updated"]) if re.fullmatch(r"\d{4}-\d{2}-\d{2}", x) and x <= TODAY]
+    _dates = [x for x in (PRICING.get("updated", ""), str(stats["bing"].get("retrieved") or "")[:10],
+                          str(stats["google"].get("retrieved") or "")[:10] if stats["google"].get("ok") else "", stats["diff_updated"]) if re.fullmatch(r"\d{4}-\d{2}-\d{2}", x) and x <= TODAY]
     lastmod = max(_dates) if _dates else TODAY   # Inhaltsdatum (Preise, Belegzahlen, Schwierigkeit), nicht das Baudatum
     P = PRICING
     per_lang, payload = {}, []
@@ -762,6 +770,7 @@ def build(g):
                 vals = [x for _, x in b["weekly"]]; ymax = _nice_max(max(vals))
                 nums += [[f"y{i}", ymax * i / 4, "compact"] for i in range(5)] + [["wmin", min(vals), "int"], ["wmax", max(vals), "int"],
                                                                                  ["low", _round_k(min(vals)), "int"], ["high", _round_k(max(vals)), "int"]]
+        if stats["google"]["ok"]: nums.append(["gai", stats["google"]["impressions"], "compact"])
         if stats["gsc"]["ok"]: nums.append(["gsc", stats["gsc"]["clicks"], "compact"])
         nums += [["eps", n_main, "int"], ["langs", n_langs, "int"]]
         per_lang[lang] = (quick, search, ebase, page, st)

@@ -2,6 +2,10 @@ name: Belegzahlen für /sponsor/ (monatlich, T37)
 # tools/update_ai_stats.py pflegt data/stats/ai_performance.json (Felder im Kopf des Werkzeugs; site_sponsor.py liest sie):
 # - bing_ai: Bing Webmaster Tools, AI Performance (Copilot-Zitate). Keine API -> Werte aus dem monatlichen Export von Hand ueber die
 #   Eingaben unten ("Run workflow"). citations, pages_per_day, from und to nur zusammen; weekly und retrieved optional.
+# - google_ai: Google Search Console, Bericht "Generative AI" (Impressionen in AI Overviews und AI Mode, Daten ab 2026-05-18). Keine API
+#   -> monatlich von Hand ueber EINE Eingabe google_ai (workflow_dispatch erlaubt hoechstens 10 Eingaben), Format:
+#   "impressions=123456; pages=420; from=2026-08-01; to=2026-10-31; retrieved=2026-11-04; weekly=2026-08-03=9000, 2026-08-10=9500"
+#   impressions, from und to nur zusammen; pages, retrieved und weekly optional (weekly zuletzt). Details im Kopf von tools/update_ai_stats.py.
 # - gsc: Google Search Console, Search Analytics (letzte 3 volle Monate: Klicks, Impressionen, Seiten) per Dienstkonto.
 #   Einrichtung: Dienstkonto in Google Cloud mit aktivierter "Google Search Console API", JSON-Schluessel als Secret
 #   GSC_SERVICE_ACCOUNT_JSON, die E-Mail des Dienstkontos in der Search Console als Nutzer (eingeschraenkt) der Property eintragen;
@@ -33,6 +37,9 @@ on:
         required: false
       bing_retrieved:
         description: "Optional: Datum des Exports (YYYY-MM-DD, Standard heute)"
+        required: false
+      google_ai:
+        description: "Google Search Console, Generative AI (AI Overviews + AI Mode), Format: 'impressions=123456; pages=420; from=2026-08-01; to=2026-10-31' - optional '; retrieved=YYYY-MM-DD' (Export-Datum, Standard heute) und '; weekly=YYYY-MM-DD=Zahl, ...' (zuletzt; oder CSV-Text). impressions, from und to nur zusammen; from nicht vor 2026-05-18; leer = unveraendert"
         required: false
       dry_run:
         description: "Nur prüfen und anzeigen, nichts speichern"
@@ -66,6 +73,7 @@ jobs:
           BING_TO: ${{ inputs.bing_to }}
           BING_WEEKLY: ${{ inputs.bing_weekly }}
           BING_RETRIEVED: ${{ inputs.bing_retrieved }}
+          GOOGLE_AI: ${{ inputs.google_ai }}
         run: python tools/update_ai_stats.py ${{ inputs.dry_run && '--dry-run' || '' }}
       - name: Speichern
         if: ${{ !inputs.dry_run }}
@@ -73,7 +81,7 @@ jobs:
           git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
           git add data/stats
           if git diff --cached --quiet; then echo "Nichts zu speichern"; exit 0; fi
-          git commit -q -m "Belegzahlen /sponsor/ aktualisiert (KI-Zitate, Search Console)"
+          git commit -q -m "Belegzahlen /sponsor/ aktualisiert (KI-Zitate, Google AI, Search Console)"
           # main bewegt sich oft (Bots): vor dem Push nachziehen und wiederholen; ein endgueltiger Fehlschlag faellt auf (kein || echo)
           for i in 1 2 3 4 5; do
             if git pull --rebase --autostash -q origin main; then
