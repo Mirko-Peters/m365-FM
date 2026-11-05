@@ -38,18 +38,25 @@ export async function verify(secret, data, sig) {
   try { return await crypto.subtle.verify("HMAC", await hmacKey(secret), b64u.dec(sig), enc.encode(data)); } catch { return false; }
 }
 
-export async function makeSession(env, uid, days = 60) {
+export const SESSION_DAYS = 60;
+export async function makeSession(env, uid, days = SESSION_DAYS) {
   const exp = Math.floor(Date.now() / 1000) + days * 86400;
   const body = `${uid}.${exp}`;
   return `${body}.${await sign(env.SESSION_SECRET, body)}`;
 }
-export async function readSession(env, request) {
+// Sitzung samt Anmeldezeitpunkt: Sitzungen laufen immer SESSION_DAYS Tage, also ist iat = exp - SESSION_DAYS Tage.
+// raw = Cookie-Wert (fuer die Bindung des Verknuepfungs-state an genau diese Sitzung, #279)
+export async function readSessionInfo(env, request) {
   const m = /(?:^|;\s*)m365s=([^;]+)/.exec(request.headers.get("cookie") || "");
   if (!m) return null;
   const [uid, exp, sig] = m[1].split(".");
   if (!uid || !exp || !sig || +exp < Date.now() / 1000) return null;
   if (!(await verify(env.SESSION_SECRET, `${uid}.${exp}`, sig))) return null;
-  return +uid;
+  return { uid: +uid, iat: +exp - SESSION_DAYS * 86400, raw: m[1] };
+}
+export async function readSession(env, request) {
+  const s = await readSessionInfo(env, request);
+  return s ? s.uid : null;
 }
 export function cookie(name, value, maxAge) {
   return `${name}=${value}; Max-Age=${maxAge}; Path=/; HttpOnly; Secure; SameSite=Lax`;

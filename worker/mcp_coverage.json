@@ -1,6 +1,15 @@
 {
  "_doc": "Jede API-Route unter worker/src muss hier einem MCP-Tool zugeordnet (tools) oder mit Begründung ausgenommen (skip) sein. tools/check_mcp_coverage.mjs prüft das täglich.",
  "routes": {
+  "/api/me/identities": {
+   "skip": "Anmeldungen verknüpfen/entfernen und Konten zusammenführen (#279) nur mit Browser-Sitzung und frischer Anmeldung, bewusst nicht per KI-Token"
+  },
+  "/api/me/identities/link": {
+   "skip": "Anmeldungen verknüpfen/entfernen und Konten zusammenführen (#279) nur mit Browser-Sitzung und frischer Anmeldung, bewusst nicht per KI-Token"
+  },
+  "/api/me/merge": {
+   "skip": "Anmeldungen verknüpfen/entfernen und Konten zusammenführen (#279) nur mit Browser-Sitzung und frischer Anmeldung, bewusst nicht per KI-Token"
+  },
  "/api/directory": {
   "tools": [
    "search_directory"

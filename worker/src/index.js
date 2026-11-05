@@ -1,5 +1,5 @@
 // Community-API (Cloudflare Worker + D1): Login (Google/Microsoft), Kommentare, Abzeichen, Kurator, Push, E-Mail
-import { json, cors, cookie, makeSession, readSession, cleanText, cleanName, randomToken, rateLimit, isLang, esc, b64u, sign, verify, audit, aiBudgetStatus, reportExternalAiUsage } from "./util.js";
+import { json, cors, cookie, makeSession, readSession, readSessionInfo, sha256hex, cleanText, cleanName, randomToken, rateLimit, isLang, esc, b64u, sign, verify, audit, aiBudgetStatus, reportExternalAiUsage } from "./util.js";
 import { evalBadges, stats, topUsers, badgesFor, award } from "./badges.js";
 import { runDigest, runPushDigest } from "./digest.js";
 import { sendMail } from "./mailer.js";
@@ -50,6 +50,7 @@ import { backfillDirectoryGeocodes, ensureDirectoryCols, handleDirectory } from 
 import { handleTopicSubscriptions, dispatchTopicNotifications, queueTopicArticles, queueSessionReminders } from "./topic_notifications.js";
 import { savePushSubscription } from "./push.js";
 import { handleContributions, refreshContributions } from "./contributions.js";
+import { findUserByIdentity, createUserWithIdentity, linkIdentity, mergeProof, handleIdentities, MERGE_WINDOW, freshSession, reloginFor } from "./identities.js";
 
 const PROVIDERS = {
   google: {
@@ -106,15 +107,22 @@ async function applyNameMode(db, user, b) {
 
 async function upsertUser(env, provider, sub, name) {
   const db = env.DB;
-  let u = await db.prepare("SELECT * FROM users WHERE provider=? AND sub=?").bind(provider, sub).first();
-  if (!u) {
-    const r = await db.prepare("INSERT INTO users(provider,sub,name,created) VALUES(?,?,?,?)").bind(provider, sub, shortName(name), now()).run();
-    u = await db.prepare("SELECT * FROM users WHERE id=?").bind(r.meta.last_row_id).first();
-  }
+  // #279: zuerst die verknuepften Anmeldungen (user_identities), dann users.provider/sub; sonst neues Konto mit erster Identitaet
+  let u = await findUserByIdentity(db, provider, sub);
+  if (!u) u = await createUserWithIdentity(db, provider, sub, shortName(name));
   const rn = cleanName(name);
   if (rn) await env.DB.prepare("INSERT INTO user_prefs(user_id,real_name) VALUES(?,?) ON CONFLICT(user_id) DO UPDATE SET real_name=excluded.real_name").bind(u.id, rn).run();
   await evalBadges(env, u.id);
   return u;
+}
+
+// OAuth-Start (Anmeldung oder Verknuepfung): signiertes state-Cookie m365o = state|Ruecksprung[|Verknuepfungsabsicht].
+// Die Redirect-URI bleibt fuer beide Faelle /auth/callback/<anbieter> (keine neuen URIs bei den Anbietern noetig).
+async function oauthStart(env, provider, ret, intent = "") {
+  const P = PROVIDERS[provider], state = randomToken(16);
+  const val = `${state}|${b64u.enc(new TextEncoder().encode(ret))}${intent ? "|" + intent : ""}`;
+  const q = new URLSearchParams({ client_id: P.id(env), redirect_uri: `${env.API}/auth/callback/${provider}`, response_type: "code", scope: P.scope, state, ...(provider === "linkedin" || P.noPrompt ? {} : { prompt: "select_account" }) });
+  return { location: `${P.auth}?${q}`, setCookie: cookie("m365o", `${val}.${await sign(env.SESSION_SECRET, val)}`, 600) };
 }
 
 async function auth(env, request, url, path) {
@@ -137,10 +145,8 @@ async function auth(env, request, url, path) {
   if (!P.id(env) || !P.secret(env)) return html("<p>Login not configured.</p>", 503);
   const redirect = `${env.API}/auth/callback/${m[2]}`;
   if (m[1] === "login") {
-    const state = randomToken(16), ret = safeReturn(env, url.searchParams.get("return") || env.SITE);
-    const val = `${state}|${b64u.enc(new TextEncoder().encode(ret))}`;
-    const q = new URLSearchParams({ client_id: P.id(env), redirect_uri: redirect, response_type: "code", scope: P.scope, state, ...(m[2] === "linkedin" || P.noPrompt ? {} : { prompt: "select_account" }) });
-    return new Response(null, { status: 302, headers: { location: `${P.auth}?${q}`, "set-cookie": cookie("m365o", `${val}.${await sign(env.SESSION_SECRET, val)}`, 600) } });
+    const o = await oauthStart(env, m[2], safeReturn(env, url.searchParams.get("return") || env.SITE));
+    return new Response(null, { status: 302, headers: { location: o.location, "set-cookie": o.setCookie } });
   }
   // callback
   const c = /(?:^|;\s*)m365o=([^;]+)/.exec(request.headers.get("cookie") || "");
@@ -159,6 +165,19 @@ async function auth(env, request, url, path) {
   const raw = await ir.json().catch(() => null);
   const info = P.profile ? P.profile(raw) : { sub: raw && raw.sub ? String(raw.sub) : "", name: raw && (raw.name || raw.given_name) };
   if (!info.sub) return html("<p>Login failed.</p>", 400);
+  const intent = val.split("|")[2] || "";
+  if (intent) {   // #279: weitere Anmeldung an das angemeldete Konto haengen; state ist an genau diese Sitzung gebunden (Hash), max. 10 Minuten
+    const sess = await readSessionInfo(env, request), [lu, lt, lh] = intent.slice(1).split(".");
+    const ok = intent[0] === "L" && sess && sess.uid === +lu && now() - +lt <= MERGE_WINDOW && (await sha256hex(sess.raw)).slice(0, 32) === lh;
+    const cur = ok ? await me(env, sess.uid) : null;
+    if (!cur) return html("<p>Linking failed (session expired). Please sign in and try again.</p>", 400);
+    const r = await linkIdentity(env, cur, m[2], info.sub);
+    const target = new URL(ret); target.searchParams.set("link", r.status);
+    const lh2 = new Headers({ location: target.href });
+    lh2.append("set-cookie", cookie("m365o", "", 0));
+    if (r.status === "merge") lh2.append("set-cookie", cookie("m365m", await mergeProof(env, cur.id, r.source), MERGE_WINDOW));
+    return new Response(null, { status: 302, headers: lh2 });
+  }
   const u = await upsertUser(env, m[2], info.sub, info.name || "User");
   if (u.banned) return html("<p>This account is blocked.</p>", 403);
   const h = new Headers({ location: ret });
@@ -181,6 +200,25 @@ async function auth(env, request, url, path) {
   h.append("set-cookie", cookie("m365s", await makeSession(env, u.id), 5184000));
   h.append("set-cookie", cookie("m365o", "", 0));
   return new Response(null, { status: 302, headers: h });
+}
+
+async function deleteAccount(env, id) {
+  const db = env.DB;
+  await db.batch([
+    db.prepare("DELETE FROM entity_claim_review WHERE eid IN (SELECT eid FROM entity_claims WHERE user_id=?)").bind(id),
+    db.prepare("DELETE FROM entity_claims WHERE user_id=? AND status<>'verified'").bind(id),
+    db.prepare("DELETE FROM likes WHERE user_id=? OR comment_id IN (SELECT id FROM comments WHERE user_id=?)").bind(id, id),
+    db.prepare("DELETE FROM reports WHERE user_id=? OR comment_id IN (SELECT id FROM comments WHERE user_id=?)").bind(id, id),
+    db.prepare("DELETE FROM comments WHERE user_id=?").bind(id), db.prepare("DELETE FROM user_badges WHERE user_id=?").bind(id),
+    db.prepare("DELETE FROM push_topics WHERE user_id=? OR endpoint IN (SELECT endpoint FROM push_subs WHERE user_id=?)").bind(id, id), db.prepare("DELETE FROM email_topics WHERE user_id=?").bind(id),
+    db.prepare("DELETE FROM topic_queue WHERE recipient=? OR recipient IN (SELECT endpoint FROM push_subs WHERE user_id=?)").bind(String(id), id),
+    db.prepare("DELETE FROM topic_deliveries WHERE recipient=? OR recipient IN (SELECT endpoint FROM push_subs WHERE user_id=?)").bind(String(id), id),
+    db.prepare("DELETE FROM topic_recipient_state WHERE recipient=? OR recipient IN (SELECT endpoint FROM push_subs WHERE user_id=?)").bind(String(id), id),
+    db.prepare("DELETE FROM push_subs WHERE user_id=?").bind(id), db.prepare("DELETE FROM wiki_reports WHERE user_id=?").bind(id), db.prepare("DELETE FROM wiki_rev WHERE user_id=? AND status IN ('pending','rejected')").bind(id), db.prepare("UPDATE wiki_rev SET user_id=0 WHERE user_id=?").bind(id), db.prepare("DELETE FROM curators WHERE user_id=?").bind(id), db.prepare("DELETE FROM user_identities WHERE user_id=?").bind(id), db.prepare("DELETE FROM users WHERE id=?").bind(id),
+  ]);
+  await deleteUserEvents(db, id);
+  await deleteUserMessages(db, id); await deleteUserTokens(db, id); await deleteUserQa(db, id); await deleteUserBlog(db, id); await deleteUserLibrary(db, id); await deleteUserPodcast(db, id); await deleteUserVideos(db, id); await deleteUserGuests(db, id); await deleteUserGuestCredits(db, id);
+  await deleteUserData(db, id); await deleteUserExpertRequests(env, id);
 }
 
 async function me(env, uid) {
@@ -246,6 +284,19 @@ async function api(env, request, url, path, asUser, ctx) {
     await award(db, user.id, "li_follower");
     return J({ ok: true });
   }
+  if (path === "/api/me/identities/link" && method === "POST") {   // #279: weitere Anmeldung verknuepfen (Start des OAuth-Ablaufs)
+    if (asUser !== undefined) return J({ error: "forbidden" }, 403);
+    if (need()) return need();
+    const b = await request.json().catch(() => ({})), P = Object.hasOwn(PROVIDERS, b.provider) ? PROVIDERS[b.provider] : null;
+    if (!P || !P.id(env) || !P.secret(env)) return J({ error: "bad_request" }, 400);
+    if (!(await freshSession(env, request, user))) return J({ error: "fresh", relogin: await reloginFor(db, user) }, 403);   // wie beim Zusammenfuehren
+    if (!(await rateLimit(db, `idl:${user.id}`, 10, 3600))) return J({ error: "rate" }, 429);
+    const sess = await readSessionInfo(env, request);
+    const o = await oauthStart(env, b.provider, safeReturn(env, b.return || env.SITE), `L${user.id}.${now()}.${(await sha256hex(sess.raw)).slice(0, 32)}`);
+    return J({ url: o.location }, 200, { "set-cookie": o.setCookie });
+  }
+  const ids = await handleIdentities(env, request, url, path, user, J, asUser !== undefined);
+  if (ids) return ids;
   if (path === "/api/me") {
     if (method === "GET") return J({ user: user ? { ...(await namePrefs(db, user)), id: user.id, name: user.name, bio: user.bio, lang: user.lang, admin: user.admin, editor: user.editor, provider: user.provider, ...(user.admin || user.editor ? {} : { sub_hint: `${user.provider}:${user.sub}` }), ...(await stats(db, user.id)) } : null });
     if (need()) return need();
@@ -256,23 +307,11 @@ async function api(env, request, url, path, asUser, ctx) {
       await db.prepare("UPDATE users SET name=?,bio=?,lang=? WHERE id=?").bind(name, bio, lang, user.id).run();
       return J({ ok: true });
     }
-    if (method === "DELETE") {   // Konto + alle eigenen Daten loeschen (DSGVO)
-      const id = user.id;
-      await db.batch([
-        db.prepare("DELETE FROM entity_claim_review WHERE eid IN (SELECT eid FROM entity_claims WHERE user_id=?)").bind(id),
-        db.prepare("DELETE FROM entity_claims WHERE user_id=? AND status<>'verified'").bind(id),
-        db.prepare("DELETE FROM likes WHERE user_id=? OR comment_id IN (SELECT id FROM comments WHERE user_id=?)").bind(id, id),
-        db.prepare("DELETE FROM reports WHERE user_id=? OR comment_id IN (SELECT id FROM comments WHERE user_id=?)").bind(id, id),
-        db.prepare("DELETE FROM comments WHERE user_id=?").bind(id), db.prepare("DELETE FROM user_badges WHERE user_id=?").bind(id),
-        db.prepare("DELETE FROM push_topics WHERE user_id=? OR endpoint IN (SELECT endpoint FROM push_subs WHERE user_id=?)").bind(id, id), db.prepare("DELETE FROM email_topics WHERE user_id=?").bind(id),
-        db.prepare("DELETE FROM topic_queue WHERE recipient=? OR recipient IN (SELECT endpoint FROM push_subs WHERE user_id=?)").bind(String(id), id),
-        db.prepare("DELETE FROM topic_deliveries WHERE recipient=? OR recipient IN (SELECT endpoint FROM push_subs WHERE user_id=?)").bind(String(id), id),
-        db.prepare("DELETE FROM topic_recipient_state WHERE recipient=? OR recipient IN (SELECT endpoint FROM push_subs WHERE user_id=?)").bind(String(id), id),
-        db.prepare("DELETE FROM push_subs WHERE user_id=?").bind(id), db.prepare("DELETE FROM wiki_reports WHERE user_id=?").bind(id), db.prepare("DELETE FROM wiki_rev WHERE user_id=? AND status IN ('pending','rejected')").bind(id), db.prepare("UPDATE wiki_rev SET user_id=0 WHERE user_id=?").bind(id), db.prepare("DELETE FROM curators WHERE user_id=?").bind(id), db.prepare("DELETE FROM users WHERE id=?").bind(id),
-      ]);
-      await deleteUserEvents(db, id);
-      await deleteUserMessages(db, id); await deleteUserTokens(db, id); await deleteUserQa(db, id); await deleteUserBlog(db, id); await deleteUserLibrary(db, id); await deleteUserPodcast(db, id); await deleteUserVideos(db, id); await deleteUserGuests(db, id); await deleteUserGuestCredits(db, id);
-      await deleteUserData(db, id); await deleteUserExpertRequests(env, id);
+    if (method === "DELETE") {   // Konto + alle eigenen Daten loeschen (DSGVO), auch frueher zusammengefuehrte (stillgelegte) Konten
+      // rekursiv: auch Ketten R -> S -> T aus der Zeit vor dem Abflachen in mergeStatements
+      const merged = (await db.prepare("WITH RECURSIVE m(id) AS (SELECT id FROM users WHERE merged_into=? UNION SELECT u.id FROM users u JOIN m ON u.merged_into=m.id) SELECT id FROM m").bind(user.id).all().catch(() => ({ results: [] }))).results || [];
+      for (const x of merged) await deleteAccount(env, x.id);
+      await deleteAccount(env, user.id);
       return J({ ok: true }, 200, { "set-cookie": cookie("m365s", "", 0) });
     }
   }
