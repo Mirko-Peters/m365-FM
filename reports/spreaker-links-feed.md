@@ -1,6 +1,6 @@
-# Spreaker-Website-Feld im RSS (2026-11-03 04:53 UTC)
+# Spreaker-Website-Feld im RSS (2026-11-05 05:03 UTC)
 
-Gesetzt laut Protokoll: 2851 · im Feed gleich: 2829 · im Feed anders: 0 · nicht im Feed: 22 · ausstehend (frisch gesetzt, Feed noch nicht erneuert): 0
+Gesetzt laut Protokoll: 3151 · im Feed gleich: 3115 · im Feed anders: 0 · nicht im Feed: 36 · ausstehend (frisch gesetzt, Feed noch nicht erneuert): 0
 
 - 67311542: nicht_im_feed · soll https://www.m365.fm/show/episodes/building-reusable-components-with-power-platform-cli-pac-cli/ · Feed None
 - 67312816: nicht_im_feed · soll https://www.m365.fm/show/episodes/using-microsoft-graph-for-custom-app-integrations/ · Feed None
@@ -24,3 +24,17 @@ Gesetzt laut Protokoll: 2851 · im Feed gleich: 2829 · im Feed anders: 0 · nic
 - 67362624: nicht_im_feed · soll https://www.m365.fm/show/episodes/advanced-teams-meeting-extensibility-with-apps-bots/ · Feed None
 - 67365584: nicht_im_feed · soll https://www.m365.fm/show/episodes/sharepoint-online-permission-auditing-at-scale/ · Feed None
 - 67368593: nicht_im_feed · soll https://www.m365.fm/show/episodes/integrating-viva-topics-with-microsoft-search-and-sharepoint/ · Feed None
+- 67370367: nicht_im_feed · soll https://www.m365.fm/show/episodes/dataverse-deep-dive-designing-scalable-data-models/ · Feed None
+- 67373924: nicht_im_feed · soll https://www.m365.fm/show/episodes/building-custom-copilot-plugins-for-microsoft-365/ · Feed None
+- 67375686: nicht_im_feed · soll https://www.m365.fm/show/episodes/using-microsoft-fabric-notebooks-for-ai-model-training/ · Feed None
+- 67377514: nicht_im_feed · soll https://www.m365.fm/show/episodes/copilot-in-dynamics-365-extending-ai-for-crm-erp/ · Feed None
+- 67380870: nicht_im_feed · soll https://www.m365.fm/show/episodes/fabric-data-activator-for-real-time-ai-insights/ · Feed None
+- 67386549: nicht_im_feed · soll https://www.m365.fm/show/episodes/zero-trust-by-design-in-microsoft-365-dynamics-365/ · Feed None
+- 67389972: nicht_im_feed · soll https://www.m365.fm/show/episodes/governed-ai-keeping-copilot-secure-and-compliant/ · Feed None
+- 67391246: nicht_im_feed · soll https://www.m365.fm/show/episodes/fabric-lakehouse-governance-data-lineage/ · Feed None
+- 67392349: nicht_im_feed · soll https://www.m365.fm/show/episodes/how-to-audit-user-activity-with-microsoft-purview/ · Feed None
+- 67393690: nicht_im_feed · soll https://www.m365.fm/show/episodes/dynamics-365-embedded-analytics-with-fabric-power-bi/ · Feed None
+- 67397579: nicht_im_feed · soll https://www.m365.fm/show/episodes/dev-tunnels-in-visual-studio-for-microsoft-365-app-testing/ · Feed None
+- 67400271: nicht_im_feed · soll https://www.m365.fm/show/episodes/microsoft-designer-for-business-content-creation/ · Feed None
+- 67401530: nicht_im_feed · soll https://www.m365.fm/show/episodes/fabric-dataflows-gen2-the-future-of-etl-in-microsoft-fabric/ · Feed None
+- 67405208: nicht_im_feed · soll https://www.m365.fm/show/episodes/dynamics-365-copilot-for-field-service/ · Feed None
