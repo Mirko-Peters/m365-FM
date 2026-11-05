@@ -277,9 +277,33 @@ def m_refresh(d, cx, cy, R, w):
         _disc(d, cx + x * R, cy, R * (0.09 if k == 3 else 0.06), LT if k == 3 else MID)
 
 
+def m_company(d, cx, cy, R, w):
+    """Firmengebaeude mit Fensterraster, daneben ein Standort-Marker; unten Themen-Marken (Verzeichnis: Firmen und Standorte)."""
+    bw, bh = R * 0.95, R * 1.25
+    x0, y0 = cx - R * 0.78, cy - bh * 0.55
+    _rect(d, x0, y0, x0 + bw, y0 + bh, fill=INK2, outline=MUT, w=w * 0.6)
+    cols, rows = 3, 4
+    gx, gy = bw / (cols * 2 + 1), bh * 0.7 / (rows * 2 + 1)
+    for r in range(rows):
+        for c in range(cols):
+            wx, wy = x0 + gx * (1 + 2 * c), y0 + bh * 0.08 + gy * (1 + 2 * r)
+            _rect(d, wx, wy, wx + gx, wy + gy, fill=AC2 if (r + c) % 3 == 0 else MID)
+    _rect(d, x0 + bw * 0.38, y0 + bh * 0.8, x0 + bw * 0.62, y0 + bh, fill=AC)
+    px, py, pr = cx + R * 0.62, cy - R * 0.28, R * 0.3
+    d.polygon([(px - pr * 0.82, py + pr * 0.45), (px + pr * 0.82, py + pr * 0.45), (px, py + pr * 1.75)], fill=AC)
+    _disc(d, px, py, pr, AC)
+    _disc(d, px, py, pr * 0.42, INK)
+    base = y0 + bh
+    d.line([(x0 - R * 0.12, base), (cx + R * 1.0, base)], fill=LT, width=round(w))
+    for t in (-0.45, 0.15, 0.75):
+        tx, ty = cx + t * R, base + R * 0.3
+        d.line([(tx, base), (tx, ty - R * 0.09)], fill=MUT, width=round(w * 0.5))
+        _rect(d, tx - R * 0.2, ty - R * 0.09, tx + R * 0.2, ty + R * 0.09, outline=AC2, w=w * 0.6, r=R * 0.09)
+
+
 MOTIFS = {"hub": m_hub, "broadcast": m_broadcast, "profile": m_profile, "mic": m_mic, "press": m_press, "calendar": m_calendar,
           "headphones": m_headphones, "target": m_target, "chart": m_chart, "network": m_network, "growth": m_growth,
-          "agenda": m_agenda, "refresh": m_refresh}
+          "agenda": m_agenda, "refresh": m_refresh, "company": m_company}
 
 
 # ---------------------------------------------------------------- Komposition
@@ -325,6 +349,9 @@ def render(motif, title, W, H):
     else:
         R = h2 * 0.27
         cx, cy = w2 * 0.5, h2 * 0.5
+    if motif not in MOTIFS:   # ein fehlendes Motiv darf den Seitenbau nicht abbrechen (5.11.: "company" fehlte, kein Deploy)
+        print(f"::warning::Motiv '{motif}' fehlt in generate_service_images.MOTIFS - Ersatz 'hub'")
+        motif = "hub"
     MOTIFS[motif](d, cx, cy, R, max(2 * SS, R * 0.045))
     brand = _font(700, round(h2 * 0.045))
     bx, by = pad + round(h2 * 0.02), h2 - pad - round(h2 * 0.07)
