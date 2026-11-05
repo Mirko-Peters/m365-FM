@@ -75,9 +75,7 @@ test("Wochenmail bündelt Sprachen und Antworten, versendet persönliche Kontohi
     assert.equal(sent.length, 0, "leere Woche sendet nichts");
 
     raw.prepare("INSERT INTO mail_outbox(user_id,kind,subject,html,created) VALUES(2,'reply','Antwort','<p>Persönliche Antwort</p>',?)").run(Math.floor(t / 1000));
-    const followsRequest = new Request("https://api-dub.m365.fm/api/mail/follows", { method: "POST", body: JSON.stringify({ eids: ["power-bi"] }) });
-    const followsResponse = await handleMail(env, followsRequest, new URL(followsRequest.url), "/api/mail/follows", { id: 1 }, (data) => new Response(JSON.stringify(data)));
-    assert.deepEqual(await followsResponse.json(), { ok: true, follows: ["power-bi"] });
+    raw.prepare("INSERT INTO email_topics(user_id,kind,topic_id,lang,created) VALUES(1,'entity','power-bi','de',1)").run();   // eine Themenliste (#205)
     raw.prepare("INSERT INTO blog_posts(user_id,slug,title,lang,status,created,updated,published) VALUES(1,'topic-article','Power BI article','de','live',?,?,?)").run(Math.floor(t / 1000), Math.floor(t / 1000), Math.floor(t / 1000));
     raw.prepare("INSERT INTO content_topic(kind,item_id,eid,weight,src,created) VALUES('blog','1','power-bi',1,'admin',?)").run(Math.floor(t / 1000));
     for (let i = 0; i < 45; i++) raw.prepare("INSERT INTO content_topic(kind,item_id,eid,weight,src,created) VALUES('lblog',?,'power-bi',1,'admin',?)").run(String(i), Math.floor(t / 1000));
@@ -178,6 +176,30 @@ test("Erster Lauf nach der Umstellung sendet nichts und merkt die Startwoche; ab
     const monday = await runDigest(env, { at: nextMonday });
     assert.ok(!monday.waiting);
     assert.equal(sent.length, 1, "erste Wochenmail am naechsten Montag");
+  } finally {
+    globalThis.fetch = oldFetch;
+    raw.close();
+  }
+});
+
+test("Eine Themenliste: Altbestand aus mail_topic_follows wird übernommen, schon verschickte Themen-Mails fehlen in der Wochenmail", async () => {
+  const { db, raw } = await database();
+  const t = Date.UTC(2026, 10, 9, 6, 0, 5), ts = Math.floor(t / 1000) - 3600;
+  raw.exec("INSERT INTO users(id,provider,sub,name,lang,created) VALUES(1,'test','one','User','de',1); INSERT INTO mail_addr(user_id,email,verified,created) VALUES(1,'member',1,1);");
+  raw.prepare("INSERT INTO mail_topic_follows(user_id,eid,created,active) VALUES(1,'power-bi',1,1)").run();
+  raw.prepare("INSERT INTO blog_posts(user_id,slug,title,lang,status,created,updated,published) VALUES(1,'schon-verschickt','Schon verschickt','de','live',?,?,?),(1,'neu-fuer-woche','Neu fuer die Woche','de','live',?,?,?)").run(ts, ts, ts, ts, ts, ts);
+  raw.prepare("INSERT INTO content_topic(kind,item_id,eid,weight,src,created) VALUES('blog','1','power-bi',1,'admin',?),('blog','2','power-bi',1,'admin',?)").run(ts, ts);
+  raw.prepare("INSERT INTO topic_queue(channel,recipient,lang,kind,topic_id,item_key,title,url,created,expires,sent) VALUES('email','1','de','entity','power-bi','article:x','Schon verschickt','https://www.m365.fm/community/u/user/blog/schon-verschickt/',?,?,1)").run(ts, ts + 86400);
+  const oldFetch = globalThis.fetch, sent = [];
+  globalThis.fetch = async () => ({ json: async () => ({ episodes: [] }) });
+  const env = { DB: db, SITE: "https://www.m365.fm", API: "https://api-dub.m365.fm", MAIL_FROM: "M365.FM", EMAIL: { send: async (message) => { sent.push(message); return { messageId: "m" + sent.length }; } } };
+  try {
+    await runDigest(env, { at: t });
+    assert.equal(raw.prepare("SELECT COUNT(*) n FROM email_topics WHERE user_id=1 AND kind='entity' AND topic_id='power-bi'").get().n, 1, "Altbestand übernommen");
+    assert.equal(raw.prepare("SELECT COUNT(*) n FROM mail_topic_follows WHERE active=1").get().n, 0);
+    assert.equal(sent.length, 1);
+    assert.match(sent[0].html, /Neu fuer die Woche/);
+    assert.doesNotMatch(sent[0].html, /Schon verschickt/, "schon als Themen-Mail verschickt");
   } finally {
     globalThis.fetch = oldFetch;
     raw.close();

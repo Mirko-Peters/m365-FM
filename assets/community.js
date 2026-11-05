@@ -122,10 +122,23 @@
       push.textContent = "";
       if (!pushOK) { push.appendChild(h("p", { class: "cmut", text: tt("push_unsupported") })); return; }
       navigator.serviceWorker.getRegistration("/").then(function (reg) { return reg ? reg.pushManager.getSubscription() : null; }).then(function (sub) {
-        if (sub) {
+        if (!sub) {
+          push.appendChild(h("button", { type: "button", class: "btn main", text: "🔔 " + tt("push_btn"), onclick: enable }));
+          return;
+        }
+        return api("/api/push/status?endpoint=" + encodeURIComponent(sub.endpoint)).then(function (r) {
+          var state = r.j || {};
+          if (state.digest) {
           push.appendChild(h("span", { class: "cok", text: "✓ " + tt("push_on") + " " }));
-          push.appendChild(h("button", { type: "button", class: "btn", text: tt("push_off"), onclick: function () { sub.unsubscribe().then(function () { return api("/api/push/unsubscribe", { method: "POST", body: { endpoint: sub.endpoint } }); }).then(setPush); } }));
-        } else push.appendChild(h("button", { type: "button", class: "btn main", text: "🔔 " + tt("push_btn"), onclick: enable }));
+          push.appendChild(h("button", { type: "button", class: "btn", text: tt("push_off"), onclick: function () {
+            if (state.topics) api("/api/push/digest", { method: "POST", body: { endpoint: sub.endpoint, on: false } }).then(setPush);
+            else sub.unsubscribe().then(function () { return api("/api/push/unsubscribe", { method: "POST", body: { endpoint: sub.endpoint } }); }).then(setPush);
+          } }));
+          } else push.appendChild(h("button", { type: "button", class: "btn main", text: "🔔 " + tt("push_btn"), onclick: function () {
+            var j = sub.toJSON();
+            api("/api/push/subscribe", { method: "POST", body: { endpoint: j.endpoint, keys: j.keys, lang: LANG, digest: 1 } }).then(setPush);
+          } }));
+        });
       });
     }
     function enable() {

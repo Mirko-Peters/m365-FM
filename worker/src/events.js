@@ -10,6 +10,7 @@ const FREE_ASKS = 2, ASK_COST = 1000;
 const HANDLE = /^[a-z0-9][a-z0-9-]{2,39}$/, PH = /^[a-z0-9][a-z0-9-]{2,29}$/;
 const DATE = /^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2})?$/, MODES = ["online", "onsite", "hybrid"], LEVELS = ["", "100", "200", "300", "400"];
 const now = () => Math.floor(Date.now() / 1000);
+const timezone = (value) => { try { return new Intl.DateTimeFormat("en", { timeZone: value }).resolvedOptions().timeZone; } catch { return ""; } };
 const txt = (s, n) => cleanText(s, n).replace(/[<>]/g, "").replace(/https?:\/\/\S+/gi, "").replace(/\s+/g, " ").trim();
 const long = (s, n) => cleanText(s, n).replace(/[<>]/g, "").replace(/https?:\/\/\S+/gi, "").trim();
 const okDate = (s) => DATE.test(s) && !isNaN(Date.parse(s.length === 10 ? s + "T00:00:00Z" : s + ":00Z"));
@@ -152,7 +153,7 @@ async function evView(db, ev, withPending) {
   const org = ev.org_id ? await db.prepare("SELECT handle,name,public FROM orgs WHERE id=?").bind(ev.org_id).first() : null;
   const ow = await db.prepare("SELECT u.name,p.handle FROM users u LEFT JOIN profiles p ON p.user_id=u.id AND p.public=1 WHERE u.id=?").bind(ev.owner_id).first();
   const rows = (await db.prepare("SELECT * FROM event_sessions WHERE event_id=? " + (withPending ? "" : "AND status='live' ") + "ORDER BY start,id").bind(ev.id).all()).results || [];
-  return { handle: ev.handle, title: ev.title, summary: ev.summary, about: ev.about, start: ev.start, end: ev.end, mode: ev.mode, location: ev.location, country: ev.country, url: ev.url, tickets_url: ev.tickets_url,
+  return { handle: ev.handle, title: ev.title, summary: ev.summary, about: ev.about, start: ev.start, end: ev.end, tz: ev.tz, mode: ev.mode, location: ev.location, country: ev.country, url: ev.url, tickets_url: ev.tickets_url,
     free: !!ev.free, lang: ev.lang, topics: parse(ev.topics, []), seeking_sponsor: !!ev.seeking_sponsor, public: !!ev.public,
     partners: ((await db.prepare("SELECT p.kind,p.level,o.handle,o.name,o.public FROM event_partners p JOIN orgs o ON o.id=p.org_id WHERE p.event_id=? AND p.status='confirmed' ORDER BY p.created").bind(ev.id).all()).results || []).map((x) => ({ kind: x.kind, level: x.level, name: x.name, handle: x.public ? x.handle : "" })),
     asked: withPending ? ((await db.prepare("SELECT o.handle FROM sponsor_asks a JOIN orgs o ON o.id=a.org_id WHERE a.event_id=?").bind(ev.id).all()).results || []).map((x) => x.handle) : undefined,
@@ -318,9 +319,10 @@ export async function handleEvents(env, request, url, path, user, J) {
     }
     const ex = await db.prepare("SELECT * FROM events WHERE handle=?").bind(handle).first();
     if (ex && !(await canManage(db, user, ex))) return J({ error: "handle_taken" }, 409);
-    const vals = [title, txt(b.summary, 200), long(b.about, 3000), b.start, end, mode, txt(b.location, 120), txt(b.country, 60), eu, tu, b.free === false ? 0 : 1, txt(b.lang, 10), JSON.stringify(tp), b.seeking_sponsor ? 1 : 0, b.public === false ? 0 : 1, now()];
-    if (ex) await db.prepare("UPDATE events SET title=?,summary=?,about=?,start=?,end=?,mode=?,location=?,country=?,url=?,tickets_url=?,free=?,lang=?,topics=?,seeking_sponsor=?,public=?,updated=?,org_id=? WHERE id=?").bind(...vals, b.org === undefined ? ex.org_id : orgId, ex.id).run();
-    else await db.prepare("INSERT INTO events(title,summary,about,start,end,mode,location,country,url,tickets_url,free,lang,topics,seeking_sponsor,public,updated,handle,owner_id,org_id,created) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)").bind(...vals, handle, user.id, orgId, now()).run();
+    const tz = timezone(String(b.tz || ex?.tz || "Europe/Berlin")); if (!tz) return J({ error: "bad_timezone" }, 400);
+    const vals = [title, txt(b.summary, 200), long(b.about, 3000), b.start, end, tz, mode, txt(b.location, 120), txt(b.country, 60), eu, tu, b.free === false ? 0 : 1, txt(b.lang, 10), JSON.stringify(tp), b.seeking_sponsor ? 1 : 0, b.public === false ? 0 : 1, now()];
+    if (ex) await db.prepare("UPDATE events SET title=?,summary=?,about=?,start=?,end=?,tz=?,mode=?,location=?,country=?,url=?,tickets_url=?,free=?,lang=?,topics=?,seeking_sponsor=?,public=?,updated=?,org_id=? WHERE id=?").bind(...vals, b.org === undefined ? ex.org_id : orgId, ex.id).run();
+    else await db.prepare("INSERT INTO events(title,summary,about,start,end,tz,mode,location,country,url,tickets_url,free,lang,topics,seeking_sponsor,public,updated,handle,owner_id,org_id,created) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)").bind(...vals, handle, user.id, orgId, now()).run();
     if (b.public !== false) await ownedEntity(env, user, { eid: handle, type: "event", name: title, en: `${title} is an event in the Microsoft community, starting ${b.start}.`, de: `${title} ist eine Veranstaltung der Microsoft-Community, Beginn ${b.start}.`, web: String(b.url || "").startsWith("https://") ? b.url : "" });
     return J({ ok: true });
   }
