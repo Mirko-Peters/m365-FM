@@ -2,7 +2,7 @@
 
 A) Haiku im Message Batch (guenstig, fuer die Masse) - laeuft als GitHub-Workflow translate-blog.yml:
    plan     Status + Kostenschaetzung (ohne Schluessel)
-   submit   offene Uebersetzungen als Batch(es) absenden (Budget-Deckel BLOG_BUDGET_USD)
+   submit   offene Uebersetzungen als Batch(es) absenden (Monatsbudget BLOG_BUDGET_USD)
    collect  fertige Batches abholen, pruefen (QA), speichern
    run      collect -> submit -> warten (WAIT_MIN) -> collect;  auto = run nur fuer Artikel der letzten NEW_DAYS Tage
 B) Claude-Agenten hier in Claude (Cowork, ohne API) - fuer Nacharbeit, Reviews, wichtige Artikel:
@@ -31,7 +31,7 @@ MODEL = os.environ.get("TRANSLATE_MODEL", "claude-haiku-5-5")
 AGENT_MODEL = os.environ.get("AGENT_MODEL", "claude-agent")   # Herkunft bei Weg B
 # Haiku 5.5 im Message Batch (50 % Rabatt, Prompts bis 100K Tokens), $ je 1 Mio. Tokens
 PRICE_IN, PRICE_OUT = float(os.environ.get("PRICE_IN", "0.05")), float(os.environ.get("PRICE_OUT", "0.25"))
-BUDGET = float(os.environ.get("BLOG_BUDGET_USD") or "10")
+BUDGET = float(os.environ.get("BLOG_BUDGET_USD") or "10")   # Monatsbudget in USD (Mirko, 5.11.2026: 25 $ im Monat); zaehlt je Kalendermonat (UTC) neu
 CHUNK = int(os.environ.get("CHUNK_CHARS", "4500"))        # Quelltext je Batch-Anfrage
 MAX_TOK = int(os.environ.get("MAX_TOKENS", "16000"))
 PER_BATCH = int(os.environ.get("PER_BATCH", "5000"))
@@ -370,14 +370,23 @@ def post_cost(units, langs=LANGS):
 def pending_cost(): return sum(b.get("est_usd", 0) for b in jload("batches.json", []))
 
 
-def spent(): u = jload("usage.json", {}); return cost(u.get("input_tokens", 0), u.get("output_tokens", 0))
+def spent(): u = jload("usage.json", {}); return cost(u.get("input_tokens", 0), u.get("output_tokens", 0))   # gesamt seit Beginn (nur Anzeige)
+
+
+def month(): return datetime.now(timezone.utc).strftime("%Y-%m")
+
+
+def spent_month(ym=None):
+    """Ausgaben im Kalendermonat (UTC) - dagegen gilt der Deckel BLOG_BUDGET_USD. Laeufe vor Einfuehrung (5.11.2026) haben keinen Monat und zaehlen nicht."""
+    m = jload("usage.json", {}).get("months", {}).get(ym or month(), {})
+    return cost(m.get("input_tokens", 0), m.get("output_tokens", 0))
 
 
 def submit(a):
     langs, ps = select(a, posts())
     busy = {(b2["lang"], b2["slug"]) for b in jload("batches.json", []) for b2 in b.get("items", [])}
     reqs, items, money = [], [], 0.0
-    room = BUDGET - spent() - pending_cost()
+    room = BUDGET - spent_month() - pending_cost()
     for lang in langs:
         have = load_lang(lang); sysp = system_prompt(lang); n_posts = 0
         for p in ps:
@@ -391,7 +400,7 @@ def submit(a):
             cs = chunks(units, rec["seg"])
             ti, to = est(lang, [u for c in cs for u in c]); c_usd = cost(ti, to)
             if money + c_usd > room:
-                print(f"Budget erreicht ({BUDGET:.2f} $; bisher {spent():.2f} $, offen {pending_cost():.2f} $) - Rest bleibt fuer spaeter"); break
+                print(f"Monatsbudget erreicht ({BUDGET:.2f} $; diesen Monat {spent_month():.2f} $, offen {pending_cost():.2f} $) - Rest bleibt fuer naechsten Monat"); break
             money += c_usd
             for ci, c in enumerate(cs):
                 reqs.append({"custom_id": f"{lang}_{key(p['slug'])}_{ci}", "params": {"model": MODEL, "max_tokens": MAX_TOK,
@@ -463,6 +472,8 @@ def collect():
             f = OUT / "qa" / f"{lang}.json"; old = json.loads(f.read_text("utf-8")) if f.exists() else []
             f.write_text(json.dumps((old + lg)[-500:], ensure_ascii=False, indent=1), encoding="utf-8")
         usage["input_tokens"] += tin; usage["output_tokens"] += tout
+        mo = usage.setdefault("months", {}).setdefault(month(), {"input_tokens": 0, "output_tokens": 0})
+        mo["input_tokens"] += tin; mo["output_tokens"] += tout
         report_usage("translate_blog", b["model"], tin, tout, "batch", batch=True)
         usage["runs"].append({"batch": b["id"], "model": b["model"], "segments_ok": ok, "segments_failed": bad, "why": why, "input_tokens": tin, "output_tokens": tout, "cost_usd": round(cost(tin, tout), 3)})
         jsave("usage.json", usage); print(f"{b['id']}: {ok} Segmente ok, {bad} fehlgeschlagen {why}, Kosten {cost(tin, tout):.3f} $")
@@ -473,7 +484,7 @@ def collect():
 def status():
     ps = posts(); per_round = len(LANGS) * PER_AGENT
     st = {"updated": datetime.now(timezone.utc).isoformat()[:19], "posts": len(ps), "engine": f"{MODEL} (Batch) + Claude-Agenten", "per_agent": PER_AGENT,
-          "budget_usd": BUDGET, "spent_usd": round(spent(), 3), "pending_batches": len(jload("batches.json", [])), "pending_est_usd": round(pending_cost(), 3), "langs": {}}
+          "budget_usd": BUDGET, "budget_period": "month", "month": month(), "spent_month_usd": round(spent_month(), 3), "spent_usd": round(spent(), 3), "pending_batches": len(jload("batches.json", [])), "pending_est_usd": round(pending_cost(), 3), "langs": {}}
     srcs0 = {p["slug"]: source_of(p) for p in ps}; srcs = {k: v[2] for k, v in srcs0.items()}; left = 0; all_ti = all_to = 0; cdone = {}
     for lang in LANGS:
         have = load_lang(lang)
@@ -496,7 +507,7 @@ def status():
                      for p in ps if p.get("cp_slug")]
     jsave("status.json", st)
     for c in st["content"]: print(f"  Content-Paket {c['slug']}: ~{c['est_usd_all_langs']} $ fuer {len(LANGS)} Sprachen, fertig {c['done_langs']}/{len(LANGS)}")
-    print(f"{st['posts']} Artikel x 19 Sprachen | offen {left} Uebersetzungen | Haiku-Batch ~{st['rest_est_usd_all']} $ (ausgegeben {st['spent_usd']} von {BUDGET} $) | Agenten ~{st['rounds_left']} Runden")
+    print(f"{st['posts']} Artikel x 19 Sprachen | offen {left} Uebersetzungen | Haiku-Batch ~{st['rest_est_usd_all']} $ (diesen Monat {st['spent_month_usd']} von {BUDGET} $, gesamt {st['spent_usd']} $) | Agenten ~{st['rounds_left']} Runden")
     for l, v in st["langs"].items(): print(f"  {l:3} {v['done']:5}/{st['posts']} fertig ({v['pct']} %), Rest ~{v['rest_est_usd']} $")
     return st
 

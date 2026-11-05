@@ -200,3 +200,18 @@ class ContentBlogI18nTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class MonthlyBudget(unittest.TestCase):
+    """Mirko, 5.11.2026: BLOG_BUDGET_USD ist ein Monatsbudget (25 $), nicht mehr die Summe seit Beginn."""
+    def test_counts_only_current_month(self):
+        u = {"input_tokens": 10**9, "output_tokens": 10**9,   # alte Gesamtsumme (> 90 $) zaehlt nicht
+             "months": {"2026-10": {"input_tokens": 10**8, "output_tokens": 10**8}, "2026-11": {"input_tokens": 1_000_000, "output_tokens": 1_000_000}}}
+        with patch.object(TB, "jload", lambda name, default: u if name == "usage.json" else default):
+            self.assertAlmostEqual(TB.spent_month("2026-11"), TB.cost(1_000_000, 1_000_000))
+            self.assertEqual(TB.spent_month("2026-12"), 0)
+            self.assertGreater(TB.spent(), 25)
+
+    def test_no_months_yet(self):
+        with patch.object(TB, "jload", lambda name, default: {"input_tokens": 10**9, "output_tokens": 10**9} if name == "usage.json" else default):
+            self.assertEqual(TB.spent_month(), 0)
