@@ -5,7 +5,7 @@ import { cleanText, esc, rateLimit } from "./util.js";
 import { baseIds, entityMap } from "./entities.js";
 import { cleanUrl } from "./profiles.js";
 import { stats } from "./badges.js";
-import { ensureDirectoryCols, geocodeAddress } from "./directory.js";
+import { ensureDirectoryCols, geocodeAddress, recordGeocodeStatus } from "./directory.js";
 
 const FREE_ASKS = 2, ASK_COST = 1000;
 const HANDLE = /^[a-z0-9][a-z0-9-]{2,39}$/, PH = /^[a-z0-9][a-z0-9-]{2,29}$/;
@@ -325,6 +325,7 @@ export async function handleEvents(env, request, url, path, user, J) {
     else eventId = (await db.prepare("INSERT INTO events(title,summary,about,start,end,mode,location,country,url,tickets_url,free,lang,topics,seeking_sponsor,public,updated,handle,owner_id,org_id,created) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)").bind(...vals, handle, user.id, orgId, now()).run()).meta.last_row_id;
     const address = mode === "online" || b.public === false ? "" : [txt(b.location, 120), txt(b.country, 60)].filter(Boolean).join(", ");
     const geo = address ? await geocodeAddress(env, address, ex || {}, "address") : { lat: null, lng: null, geo_precision: "", geo_address: "", geo_at: 0 };
+    await recordGeocodeStatus(db, geo, address);
     const city = geo.city || (address && address === ex?.geo_address ? ex.city || "" : "");
     await db.prepare("UPDATE events SET lat=?,lng=?,geo_precision=?,geo_address=?,geo_at=?,city=? WHERE id=?")
       .bind(geo.lat, geo.lng, geo.geo_precision, geo.geo_address, geo.geo_at, city, eventId).run();

@@ -21,20 +21,33 @@ export function roundCoordinates(lat, lng) {
 export async function geocodeAddress(env, address, previous = {}, precision = "address") {
   const value = text(address);
   if (value && value === previous.geo_address && previous.geo_at)
-    return { lat: finite(previous.lat), lng: finite(previous.lng), city: (precision === "city" ? previous.geo_city : previous.geo_city || previous.city) || "", geo_precision: previous.geo_precision || "", geo_address: value, geo_at: previous.geo_at };
-  if (!value || !env.GOOGLE_GEOCODING_KEY) return { lat: null, lng: null, geo_precision: "", geo_address: value, geo_at: 0 };
+    return { lat: finite(previous.lat), lng: finite(previous.lng), city: (precision === "city" ? previous.geo_city : previous.geo_city || previous.city) || "", geo_precision: previous.geo_precision || "", geo_address: value, geo_at: previous.geo_at, status: "CACHED" };
+  if (!value || !env.GOOGLE_GEOCODING_KEY) return { lat: null, lng: null, geo_precision: "", geo_address: value, geo_at: 0, status: "NO_KEY" };
   const params = new URLSearchParams({ address: value, key: env.GOOGLE_GEOCODING_KEY });
+  let status = "ERROR";
   try {
     const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?${params}`, { signal: AbortSignal.timeout(6000) });
     const result = await response.json();
+    status = text(result?.status) || "ERROR";
     const first = result?.status === "OK" ? result.results?.[0] : null;
     const point = first?.geometry?.location;
     const city = (first?.address_components || []).find((x) => x.types.includes("locality") || x.types.includes("postal_town"))?.long_name || "";
     const coords = point && precision === "city" ? roundCoordinates(point.lat, point.lng) : point && { lat: point.lat, lng: point.lng };
     if (coords && finite(coords.lat) !== null && finite(coords.lng) !== null && (precision !== "city" || city))
-      return { ...coords, city, geo_precision: precision, geo_address: value, geo_at: now() };
+      return { ...coords, city, geo_precision: precision, geo_address: value, geo_at: now(), status };
   } catch {}
-  return { lat: null, lng: null, geo_precision: "", geo_address: value, geo_at: now() };
+  return { lat: null, lng: null, geo_precision: "", geo_address: value, geo_at: now(), status };
+}
+
+export async function recordGeocodeStatus(db, geo, address = geo?.geo_address || "") {
+  if (!geo?.status || geo.status === "CACHED" || geo.status === "NO_KEY") return;
+  const timestamp = now(), denied = geo.status === "REQUEST_DENIED";
+  await db.prepare(`INSERT INTO directory_geocode_state(id,status,checked_at,paused,retry_after,probe_address)
+    VALUES(1,?,?,?, ?,?) ON CONFLICT(id) DO UPDATE SET status=excluded.status,checked_at=excluded.checked_at,
+    paused=CASE WHEN excluded.status='OK' THEN 0 WHEN excluded.status='REQUEST_DENIED' THEN 1 ELSE directory_geocode_state.paused END,
+    retry_after=CASE WHEN excluded.status='OK' THEN 0 WHEN excluded.status='REQUEST_DENIED' THEN excluded.retry_after ELSE directory_geocode_state.retry_after END,
+    probe_address=CASE WHEN excluded.status='REQUEST_DENIED' THEN excluded.probe_address WHEN excluded.status='OK' THEN '' ELSE directory_geocode_state.probe_address END`)
+    .bind(geo.status, timestamp, denied ? 1 : 0, denied ? timestamp + 86400 : 0, denied ? text(address) : "").run();
 }
 
 export async function ensureDirectoryCols(db) {
@@ -164,6 +177,13 @@ export async function backfillDirectoryGeocodes(env) {
   if (!env.GOOGLE_GEOCODING_KEY) return { skipped: true, updated: 0 };
   const db = env.DB, today = new Date().toISOString().slice(0, 10);
   await ensureDirectoryCols(db);
+  const state = await db.prepare("SELECT status,paused,retry_after,probe_address FROM directory_geocode_state WHERE id=1").first();
+  if (state?.paused) {
+    if (now() < Number(state.retry_after || 0) || !state.probe_address) return { skipped: true, paused: true, updated: 0 };
+    const probe = await geocodeAddress(env, state.probe_address, {}, "address");
+    await recordGeocodeStatus(db, probe, state.probe_address);
+    if (probe.status !== "OK") return { skipped: true, paused: true, updated: 0 };
+  }
   const rows = [
     ...((await db.prepare(`SELECT 'u' kind,p.user_id id,pp.city city,pp.geo_city geo_city,p.country country,pp.lat lat,pp.lng lng,pp.geo_at geo_at,pp.geo_address geo_address,pp.geo_precision geo_precision
       FROM profiles p JOIN profile_private pp ON pp.user_id=p.user_id WHERE p.public=1 AND pp.map_public=1 AND pp.city<>'' AND pp.geo_at=0 LIMIT 50`).all()).results || []),
@@ -176,11 +196,13 @@ export async function backfillDirectoryGeocodes(env) {
   for (const row of rows) {
     const address = row.kind === "u" ? `${row.city}, ${row.country}` : `${row.address || row.city}, ${row.country}`;
     const geo = await geocodeAddress(env, address, row, row.kind === "u" || (!row.address && row.city) ? "city" : "address");
+    await recordGeocodeStatus(db, geo, address);
     const table = row.kind === "u" ? "profile_private" : row.kind === "o" ? "org_locations" : "events", idCol = row.kind === "u" ? "user_id" : "id";
     const fillCity = row.kind === "e" || row.kind === "o";
     await db.prepare(`UPDATE ${table} SET lat=?,lng=?,geo_precision=?,geo_address=?,geo_at=?${fillCity ? ",city=?" : ""}${row.kind === "u" ? ",geo_city=?" : ""} WHERE ${idCol}=?`)
       .bind(geo.lat, geo.lng, geo.geo_precision, geo.geo_address, geo.geo_at, ...(fillCity ? [row.city || geo.city || ""] : []), ...(row.kind === "u" ? [geo.city || ""] : []), row.id).run();
     updated++;
+    if (geo.status === "REQUEST_DENIED") break;
   }
   return { updated };
 }

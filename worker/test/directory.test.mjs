@@ -107,6 +107,30 @@ test("directory: Geocode-Backfill verarbeitet höchstens 50 Einträge pro Lauf",
   } finally { globalThis.fetch = oldFetch; raw.close(); }
 });
 
+test("directory: REQUEST_DENIED pausiert den Backfill bis eine Google-Antwort OK ist", async () => {
+  const { db, raw } = await database(), now = Math.floor(Date.now() / 1000);
+  raw.exec(`INSERT INTO users(id,provider,sub,name,created) VALUES(1,'test','1','Person',${now});
+    INSERT INTO profiles(user_id,public,handle,country,updated) VALUES(1,1,'person','Germany',${now});
+    INSERT INTO profile_private(user_id,city,map_public) VALUES(1,'Berlin',1);`);
+  const oldFetch = globalThis.fetch; let calls = 0, status = "REQUEST_DENIED";
+  globalThis.fetch = async () => { calls++; return { json: async () => ({ status, results: [] }) }; };
+  try {
+    const env = { DB: db, GOOGLE_GEOCODING_KEY: "test-key" };
+    const denied = await backfillDirectoryGeocodes(env);
+    assert.equal(denied.updated, 1);
+    assert.equal(calls, 1);
+    assert.equal((await db.prepare("SELECT paused FROM directory_geocode_state WHERE id=1").first()).paused, 1);
+    const paused = await backfillDirectoryGeocodes(env);
+    assert.equal(paused.paused, true);
+    assert.equal(calls, 1);
+    raw.exec("UPDATE directory_geocode_state SET retry_after=0 WHERE id=1");
+    status = "OK";
+    await backfillDirectoryGeocodes(env);
+    assert.equal(calls, 2);
+    assert.equal((await db.prepare("SELECT paused FROM directory_geocode_state WHERE id=1").first()).paused, 0);
+  } finally { globalThis.fetch = oldFetch; raw.close(); }
+});
+
 test("directory: neu angelegte Firmenstandorte bleiben nach dem Speichern öffentlich", async () => {
   const { db, raw } = await database(), now = Math.floor(Date.now() / 1000);
   raw.exec("INSERT INTO orgs(handle,name,public,created) VALUES('example-co','Example Co',1," + now + ")");

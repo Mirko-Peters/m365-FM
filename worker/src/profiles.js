@@ -5,7 +5,7 @@ import { cleanText, rateLimit } from "./util.js";
 import { baseIds, knownIds, validate, trustedUser, entityMap } from "./entities.js";
 import { findExperts } from "./experts.js";
 import { computeLevels } from "./levels.js";
-import { ensureDirectoryCols, geocodeAddress } from "./directory.js";
+import { ensureDirectoryCols, geocodeAddress, recordGeocodeStatus } from "./directory.js";
 
 export const PROGRAMS = ["mvp", "mct", "rd", "msa", "ms_employee", "partner"];
 export const RELATIONS = ["colleague", "manager", "report", "client", "trainer", "student", "cospeaker", "podcast", "community", "mentor", "other"];
@@ -195,6 +195,7 @@ export async function saveOrgLocations(env, orgId, locations) {
     retainedIds.push(id);
     const address = location.public ? [location.address || location.city, location.country].filter(Boolean).join(", ") : "";
     const geo = address ? await geocodeAddress(env, address, previous || {}, location.address ? "address" : "city") : { lat: null, lng: null, geo_precision: "", geo_address: "", geo_at: 0 };
+    await recordGeocodeStatus(db, geo, address);
     await db.prepare("UPDATE org_locations SET lat=?,lng=?,geo_precision=?,geo_address=?,geo_at=? WHERE id=? AND org_id=?")
       .bind(geo.lat, geo.lng, geo.geo_precision, geo.geo_address, geo.geo_at, id, orgId).run();
   }
@@ -376,6 +377,7 @@ export async function handleProfiles(env, request, url, path, user, J) {
         .bind(user.id, city, zip, street, email, phone, V(vis.city), V(vis.zip), V(vis.street), V(vis.email), V(vis.phone), pr.map_public ? 1 : 0, now()).run();
       const location = pr.map_public && city && b.country ? `${city}, ${txt(b.country, 60)}` : "";
       const geo = location ? await geocodeAddress(env, location, previousLocation || {}, "city") : { lat: null, lng: null, geo_precision: "", geo_address: "", geo_at: 0 };
+      await recordGeocodeStatus(db, geo, location);
       await db.prepare("UPDATE profile_private SET lat=?,lng=?,geo_precision=?,geo_address=?,geo_at=?,geo_city=? WHERE user_id=?")
         .bind(geo.lat, geo.lng, geo.geo_precision, geo.geo_address, geo.geo_at, geo.city || "", user.id).run();
     }

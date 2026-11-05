@@ -14,3 +14,11 @@ CREATE TABLE IF NOT EXISTS org_locations (
   updated INTEGER NOT NULL DEFAULT 0
 );
 CREATE INDEX IF NOT EXISTS idx_org_locations_public ON org_locations(org_id,public);
+CREATE TABLE IF NOT EXISTS directory_geocode_state (
+  id INTEGER PRIMARY KEY CHECK(id=1),
+  status TEXT NOT NULL DEFAULT '',
+  checked_at INTEGER NOT NULL DEFAULT 0,
+  paused INTEGER NOT NULL DEFAULT 0,
+  retry_after INTEGER NOT NULL DEFAULT 0,
+  probe_address TEXT NOT NULL DEFAULT ''
+);
