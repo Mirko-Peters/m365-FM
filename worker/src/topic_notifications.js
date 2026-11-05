@@ -257,7 +257,7 @@ async function emailUnsubscribeUrl(env, uid) {
 export async function dispatchTopicNotifications(env, { at = new Date(), limit = 120 } = {}) {
   const db = env.DB, nowTs = Math.floor(at.getTime() / 1000), maxRecipients = Math.max(1, Math.min(120, limit));
   await db.batch([
-    db.prepare("DELETE FROM topic_queue WHERE expires<=? OR (sent=1 AND created<?)").bind(nowTs, nowTs - 14 * 86400),
+    db.prepare("DELETE FROM topic_queue WHERE (sent=0 AND expires<=?) OR (sent=1 AND created<?)").bind(nowTs, nowTs - 14 * 86400),
     db.prepare("DELETE FROM topic_deliveries WHERE created<?").bind(nowTs - 14 * 86400),
     db.prepare("DELETE FROM topic_recipient_state WHERE updated<?").bind(nowTs - 14 * 86400),
   ]);
@@ -331,7 +331,7 @@ export async function dispatchTopicNotifications(env, { at = new Date(), limit =
     const picks = candidates.filter((_, i) => claims[i * 2]?.meta?.changes && claims[i * 2 + 1]?.meta?.changes);
     if (!picks.length) continue;
     const visiblePicks = picks.map((pick) => first.channel === "push" ? pick.slice(0, 1) : pick.slice(0, 3));
-    const visibleItems = visiblePicks.flat(), text = queueText(first.lang, visibleItems), url = visibleItems[0].url;
+    const visibleItems = [...new Map(visiblePicks.flat().map((r) => [r.item_key, r])).values()], text = queueText(first.lang, visibleItems), url = visibleItems[0].url;
     let ok = false;
     if (first.channel === "push") {
       const sub = await db.prepare("SELECT endpoint,p256dh,auth FROM push_subs WHERE endpoint=?").bind(first.recipient).first();
@@ -396,6 +396,7 @@ export async function handleTopicSubscriptions(env, request, url, path, user, J)
       db.prepare("DELETE FROM topic_queue WHERE channel='email' AND recipient=?").bind(uid),
       db.prepare("DELETE FROM topic_deliveries WHERE channel='email' AND recipient=?").bind(uid),
       db.prepare("DELETE FROM topic_recipient_state WHERE channel='email' AND recipient=?").bind(uid),
+      db.prepare("UPDATE mail_topic_follows SET active=0 WHERE user_id=?").bind(+uid),
     ]);
     return method === "POST" ? new Response("ok") : new Response("<!doctype html><meta charset=utf-8><p>Topic e-mails unsubscribed / Themen-E-Mails abbestellt.</p>", { headers: { "content-type": "text/html; charset=utf-8" } });
   }
@@ -497,7 +498,7 @@ export async function handleTopicSubscriptions(env, request, url, path, user, J)
     if (!user && !endpoint) return J({ error: "login" }, 401);
     const ops = [];
     if (user) {
-      ops.push(db.prepare("DELETE FROM email_topics WHERE user_id=?").bind(user.id), db.prepare("DELETE FROM push_topics WHERE user_id=?").bind(user.id), db.prepare("DELETE FROM topic_queue WHERE channel='email' AND recipient=?").bind(String(user.id)), db.prepare("DELETE FROM topic_queue WHERE channel='push' AND recipient IN (SELECT endpoint FROM push_subs WHERE user_id=?)").bind(user.id), db.prepare("DELETE FROM topic_deliveries WHERE channel='push' AND recipient IN (SELECT endpoint FROM push_subs WHERE user_id=?)").bind(user.id), db.prepare("DELETE FROM topic_recipient_state WHERE channel='push' AND recipient IN (SELECT endpoint FROM push_subs WHERE user_id=?)").bind(user.id), db.prepare("DELETE FROM topic_recipient_state WHERE channel='email' AND recipient=?").bind(String(user.id)), db.prepare("DELETE FROM push_subs WHERE user_id=? AND digest=0").bind(user.id));
+      ops.push(db.prepare("DELETE FROM email_topics WHERE user_id=?").bind(user.id), db.prepare("DELETE FROM push_topics WHERE user_id=?").bind(user.id), db.prepare("DELETE FROM topic_queue WHERE channel='email' AND recipient=?").bind(String(user.id)), db.prepare("DELETE FROM topic_queue WHERE channel='push' AND recipient IN (SELECT endpoint FROM push_subs WHERE user_id=?)").bind(user.id), db.prepare("DELETE FROM topic_deliveries WHERE channel='push' AND recipient IN (SELECT endpoint FROM push_subs WHERE user_id=?)").bind(user.id), db.prepare("DELETE FROM topic_recipient_state WHERE channel='push' AND recipient IN (SELECT endpoint FROM push_subs WHERE user_id=?)").bind(user.id), db.prepare("DELETE FROM topic_recipient_state WHERE channel='email' AND recipient=?").bind(String(user.id)), db.prepare("DELETE FROM push_subs WHERE user_id=? AND digest=0").bind(user.id), db.prepare("UPDATE mail_topic_follows SET active=0 WHERE user_id=?").bind(user.id));
     }
     if (endpoint) {
       const sub = await db.prepare("SELECT user_id FROM push_subs WHERE endpoint=?").bind(endpoint).first();

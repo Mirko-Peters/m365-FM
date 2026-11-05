@@ -109,7 +109,7 @@ async function topicItems(db, ids, since, until, site) {
     JOIN content_topic ct ON ct.eid=f.topic_id AND ct.kind='blog'
     JOIN blog_posts b ON CAST(b.id AS TEXT)=ct.item_id AND b.status='live'
     WHERE b.published>=? AND b.published<=?
-      AND NOT EXISTS (SELECT 1 FROM topic_queue q WHERE q.channel='email' AND q.recipient=CAST(CAST(r.user_id AS INTEGER) AS TEXT) AND q.sent=1
+      AND NOT EXISTS (SELECT 1 FROM topic_queue q WHERE q.channel='email' AND q.recipient=CAST(CAST(r.user_id AS INTEGER) AS TEXT)
         AND q.url LIKE '%/blog/' || b.slug || '/%')   -- schon als Themen-Mail verschickt (URL /community/u/<handle>/blog/<slug>/)
     UNION ALL
     SELECT DISTINCT r.user_id,'podcast',p.title,p.description,p.lang,p.published,p.ep_url,''
