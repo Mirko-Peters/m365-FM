@@ -1,0 +1,143 @@
+{
+ "de": {
+  "html": "<p>Copilot liest, versteht und findet Inhalte aus SharePoint und OneDrive in Sekunden. Das steigert die Produktivität. Es bedeutet aber auch, dass alles, was zu großzügig geteilt wurde, plötzlich leichter auffindbar ist. Wer KI einführt, ohne seine Berechtigungen im Griff zu haben, lässt die Türen offen und gibt dem Assistenten trotzdem den Schlüssel zum Haus.</p>\n<p>SharePoint Advanced Management (SAM) ist Teil von SharePoint Premium und setzt genau hier an. Es bringt Kontrollen für eingeschränkten Zugriff, Berichte zur Datenzugriffs-Governance und Werkzeuge für den Website-Lebenszyklus mit. Dieser Artikel zeigt, wie Sie übermäßig freigegebene Websites erkennen, sensible Bereiche absichern und Website-Besitzer in die Pflicht nehmen. Außerdem geht es darum, wie Sie die Kosten im Blick behalten.</p>\n\n<h2>Oversharing und Copilot: Warum Basisberechtigungen nicht ausreichen</h2>\n<p>Das Problem ist nicht, dass Copilot selbst Daten verliert. Eine falsch konfigurierte Freigabe vergrößert die Angriffsfläche, aus der Copilot Erkenntnisse gewinnen kann. Eine vergessene Vertragsbibliothek mit weit offenen Links wirkt harmlos. Sobald das System die Dateien jedoch indiziert und durchsuchbar macht, wird aus dem versteckten Inhalt ein Teil des Wissensbestands.</p>\n<p>Die rollenbasierte Zugriffssteuerung allein fängt das nicht ab. Sie ist theoretisch stark, kann aber trügerische Sicherheit vermitteln, wenn ein unachtsam gesetzter Link den Zugriff weiter streut als geplant. Übermäßiges Teilen ist selten dramatisch, es bleibt meist unsichtbar. Genau darin liegt das größere Risiko.</p>\n<p>SAM ergänzt die Grundberechtigungen um zwei Elemente:</p>\n<ul>\n<li><strong>Durchsetzungsrichtlinien</strong>, die Sie selbst konfigurieren, wirken wie Schutzmauern.</li>\n<li><strong>Datenzugriffs-Governance-Ansichten</strong> (DAG) funktionieren wie Wachtürme, von denen aus Sie das Gelände überblicken.</li>\n</ul>\n\n<h2>Data Access Governance: Übermäßig freigegebene Websites erkennen</h2>\n<p>Die DAG-Berichte geben Administratoren Einblick in potenziell übermäßig freigegebene Websites und in extern freigegebene Daten. Sie zeigen außerdem, wie viele Dateien Vertraulichkeitsbezeichnungen tragen und welche Websites breite Gruppen wie „Alle außer externen Benutzern“ verwenden.</p>\n<p>Die Berichte arbeiten auf Website-Ebene und sind keine Forensik für einzelne Dateien. Sie sehen, wo Oversharing am wahrscheinlichsten ist, wer der primäre Administrator ist und wie sensible Inhalte möglicherweise verbreitet werden. Damit wissen IT-Abteilung und Inhaltseigentümer, wo sie nachsehen müssen, statt zu raten.</p>\n\n<h3>Ein Beispiel aus der Praxis</h3>\n<p>Kein Team kann jede Website manuell prüfen. Ein DAG-Bericht kann aber die eine Website aus einem abgeschlossenen Projekt zeigen, die noch externe Links enthält. Statt tausende Websites zu durchkämmen, konzentrieren Sie sich auf diese eine. So wandelt sich die Haltung von „Wir nehmen an, dass alles in Ordnung ist“ zu „Wir können nachweisen, dass alles in Ordnung ist“.</p>\n\n<h3>Grenzen der Berichte</h3>\n<p>Die Berichte haben Einschränkungen, die Sie einplanen sollten:</p>\n<ul>\n<li>Einige Berichte zeigen im Admin-Center nur die Top-100-Websites der letzten 30 Tage.</li>\n<li>CSV-Exporte umfassen bis zu 10.000 Zeilen, in einigen Fällen bis zu einer Million Zeilen.</li>\n<li>Die Berichterstellung kann Stunden dauern, und Sie können sie nur einmal pro Tag anstoßen.</li>\n</ul>\n<p>Eine lückenlose Dauerüberwachung ist das nicht. DAG liefert immer wieder hochwertige Hinweise, auf die Menschen reagieren müssen. Ohne dieses Eingreifen bleibt ein Bericht eine an die Wand gepinnte Schriftrolle.</p>\n\n<h2>Website-Zugriffsüberprüfungen: Website-Besitzer als Wächter</h2>\n<p>Viele Governance-Lücken entstehen durch die Aufteilung der Verantwortung. Die IT erstellt die Systeme, doch die Website-Besitzer stehen den Inhalten am nächsten. Nur sie erkennen, wenn ein Gastkonto oder ein früheres Teammitglied nicht mehr dazugehört.</p>\n<p>Die meisten SAM-Funktionen stellen Administratoren über das SharePoint Admin Center bereit. Zugriffsüberprüfungen für Websites beziehen dagegen die Besitzer direkt ein. Sie erhalten eine Liste der Personen mit Zugriff und bestätigen, wer ihn behalten soll. Das ist eine einfache Checkliste, die die Arbeit von überlasteten zentralen Administratoren zu den Menschen verlagert, die den Projektverlauf kennen. Tabellenkalkulationen und endlose Ticketwarteschlangen entfallen.</p>\n<p>Nehmen Sie eine inaktive Projekt-Website, deren externe Freigabe nie verschärft wurde und auf der Monate nach der Übergabe noch ein Gastkonto existiert. Ohne die Funktion muss die IT suchen und vermuten. Mit der Überprüfung erhält der Besitzer einen Hinweis und kann den Zugriff in Sekunden entfernen.</p>\n\n<h3>Zusammenspiel mit den DAG-Berichten</h3>\n<p>Beide Werkzeuge ergänzen sich. Die DAG-Berichte zeigen Websites mit breiten Gruppen wie „Jeder“ oder mit externen Links. Von dort aus lösen Sie eine Zugriffsüberprüfung als Korrekturmaßnahme aus. Ein Tool erkennt die offenen Tore, das andere gibt die Schlüssel an die Menschen zurück, die diese Tore betreiben. Wer in großem Umfang arbeitet, kann DAG-Ausgaben außerdem per PowerShell in Skripte oder umfassendere Workflows einbinden.</p>\n\n<h3>Ein verändertes Governance-Modell</h3>\n<p>Für Besitzer bedeutet das mehr Kontrolle. Sie treffen Entscheidungen auf Basis klarer Daten und müssen sich nicht fragen, warum die IT eine Berechtigung ohne Vorwarnung entzogen hat. Die IT ist nicht mehr der Flaschenhals. Sie legt Richtlinien fest, erzeugt die DAG-Berichte und überwacht die Compliance. So bauen sich Gastkonten nicht jahrelang auf, und häufig geteilte Websites werden regelmäßig überprüft. Die laufende Pflege ist dezentralisiert, das Framework bleibt bei den Administratoren.</p>\n\n<h2>Download blockieren oder Restricted Access Control: Welcher Schutz passt?</h2>\n<p>Nicht jeder Bereich braucht denselben Schutz. In SharePoint stehen dafür vor allem zwei Werkzeuge zur Wahl, die unterschiedlich arbeiten.</p>\n\n<h3>Download blockieren</h3>\n<p>Nutzer können Dateien im Browser ansehen, aber nicht herunterladen, drucken oder synchronisieren. Auch der Zugriff über Office-Desktop-Apps oder Programme von Drittanbietern ist nicht möglich. Die Daten bleiben in der kontrollierten Browsersitzung. Administratoren konfigurieren das auf Website-Ebene oder koppeln es an Vertraulichkeitsbezeichnungen, sodass nur gekennzeichnete Inhalte den zusätzlichen Schutz erhalten. Manche Konfigurationen, etwa für Teams-Aufzeichnungen, erfordern PowerShell und sind nicht per Schalter in der Oberfläche möglich.</p>\n\n<h3>Restricted Access Control (RAC)</h3>\n<p>RAC steuert nicht, was nach dem Betreten passiert, sondern wer überhaupt eintreten darf. Nur Mitglieder einer bestimmten Microsoft 365-Gruppe oder Entra-Sicherheitsgruppe können die Website sehen oder entdecken. Die Prüfung erfolgt zum Zeitpunkt des Zugriffs. Ein weitergegebener Freigabelink hilft Fremden daher nicht, wenn sie nicht zur erlaubten Gruppe gehören.</p>\n\n<h3>Wann welche Option?</h3>\n<ul>\n<li><strong>Download blockieren:</strong> Sinnvoll, wenn Transparenz nötig ist, Datenabfluss aber verhindert werden soll, etwa bei Finanzberichten, die externe Prüfer einsehen und kommentieren, ohne dass Entwürfe auf persönlichen Laufwerken landen.</li>\n<li><strong>RAC:</strong> Sinnvoll, wenn schon die Sichtbarkeit die Bedrohung ist, etwa bei einem Forschungstresor mit vertraulichen Entwürfen, den nur autorisierte Forscher überhaupt sehen sollen.</li>\n</ul>\n<p>Für KI ist der Unterschied entscheidend. Ein Assistent wie Copilot kann Inhalte, die nur durch „Download blockieren“ geschützt sind, weiterhin lesen und abrufen, sofern der jeweilige Nutzer Zugriff hat. Die Datei lässt sich nicht herunterladen, ihr Text bleibt aber verfügbar. RAC schließt diesen Pfad: Gehört jemand nicht zur autorisierten Gruppe, berührt der Assistent die Daten nie, und es gibt keine Ausschnitte oder Schlussfolgerungen daraus.</p>\n<p>Beide Richtlinien lassen sich kombinieren. Wer sie klug schichtet, vermeidet pauschale Einheitsregeln, die Nutzer frustrieren und unnötige Tickets erzeugen.</p>\n\n<h2>KI-Erkenntnisse und Copilot als strategischer Berater</h2>\n<p>SAM liefert auch KI-Erkenntnisse, die Berichte auswerten und Maßnahmen empfehlen. Im SharePoint Admin Center bieten die meisten Berichte eine Schaltfläche zum Abrufen dieser Erkenntnisse. Das System erkennt Muster, hebt Richtlinienabweichungen hervor und schlägt Schritte zur Behebung vor. Es kann etwa darauf hinweisen, dass die externe Freigabe einer Website nicht Ihren Standards entspricht oder dass einer Bibliothek mit sensiblen Dateien die Klassifizierung fehlt. Statt Rohdaten erhalten Sie eine kurze Prioritätenliste.</p>\n<p>Auch Copilot im Admin Center hilft. Sie können damit Websites mit zu vielen Freigaben, fehlender Klassifizierung oder langer Inaktivität identifizieren und daraus Richtlinien zur Behebung entwickeln.</p>\n<p>Beides sind Empfehlungen und keine automatische Durchsetzung. Die KI ist ein Berater, kein Autopilot. Sie schaltet nichts ohne Sie um, Administratoren prüfen, bestätigen und entscheiden. Das ist beabsichtigt, denn jede Umgebung hat Sonderfälle, in denen die Standardeinstellung nicht passt.</p>\n<p>Ein Beispiel: Ihre Norm verlangt für externe Freigaben immer eine Einladung. Ein Projektteam legt unter Zeitdruck eine Website an und lässt die Linkfreigabe weit offen. Normalerweise bliebe das womöglich monatelang unbemerkt. Mit den KI-Erkenntnissen taucht die Abweichung in den Empfehlungen auf, statt in einem Export mit tausend Zeilen zu verschwinden. Sie entscheiden dann bewusst, ob die Lockerung die Zusammenarbeit beschleunigen sollte oder ein Fehler ist.</p>\n<p>So wird aus reaktiver Bereinigung nach einem geleakten Dokument oder einer Prüferfrage eine geführte Strategie. Abweichungen erkennen Sie fortlaufend und nicht erst einmal im Quartal, und Sie müssen nicht auf heldenhafte Administratoren oder Stammeswissen setzen.</p>\n\n<h2>Lizenzierung und Budget: Governance zuerst, Content-AI danach</h2>\n<p>Das Lizenzmodell von SharePoint Premium besteht aus zwei Teilen:</p>\n<ul>\n<li><strong>Governance mit SAM</strong> wird pro Benutzer abgerechnet. Jeder Administrator und Website-Besitzer, der bei der Absicherung hilft, braucht eine Lizenz. Für kommerzielle Kunden liegt der Preis bei drei US-Dollar pro Benutzer und Monat. Zusätzlich sind eine qualifizierende SharePoint-Lizenz oder ein qualifizierender Microsoft 365-Plan nötig. Lebenszykluskontrollen, Zugriffsüberprüfungen und Einschränkungen sind dafür dauerhaft aktiv.</li>\n<li><strong>Inhaltsverarbeitung</strong> wie OCR, elektronische Signaturen und Übersetzung wird nach dem Pay-as-you-go-Modell abgerechnet. Die Kosten steigen in Spitzenzeiten, etwa bei Verträgen zum Quartalsende oder bei OCR-Massenläufen, und sinken danach wieder.</li>\n</ul>\n<p>Die empfohlene Reihenfolge lautet: Governance zuerst. Richten Sie SAM ein, damit Sie wissen, wer Zugriff hat, welche Einschränkungen gelten und wie Abweichungen auffallen. Aktivieren Sie Content-AI erst danach für Abteilungen oder Projekte mit klarem Nutzen. Beginnen Sie klein, beobachten Sie die Nutzung und erweitern Sie die Reichweite, wenn die eingesparte Arbeit die Kosten übersteigt. Die Verarbeitung lässt sich zunächst auf ausgewählte Standorte beschränken.</p>\n<p>Prüfen Sie außerdem, was Sie bereits besitzen. Einige Teile von SAM sind in Microsoft 365 E5 enthalten, und bestimmte Copilot-SKUs bringen die nötigen Governance-Funktionen schon mit. Zudem übernimmt Microsoft derzeit in einem Programm einen Teil der anfänglichen Kapazität für die Inhaltsverarbeitung. So lässt sich Pay-as-you-go testen, bevor die Abrechnung beginnt.</p>\n\n<h2>Häufige Fehler und Stolpersteine</h2>\n<ul>\n<li><strong>Berichte ohne Folgen:</strong> Ein DAG-Bericht bringt nichts, wenn niemand reagiert. Ohne zuständige Besitzer und klare Richtlinien bleibt das Risiko bestehen.</li>\n<li><strong>Dauerüberwachung erwarten:</strong> Die Berichte sind in Umfang, Dauer und Häufigkeit begrenzt. Planen Sie sie als wiederkehrende Prüfung ein.</li>\n<li><strong>Download blockieren und RAC verwechseln:</strong> Wer sie austauschbar nutzt, behindert entweder legitime Zusammenarbeit oder lässt eine größere Lücke offen als gedacht.</li>\n<li><strong>Annehmen, dass „Download blockieren“ Copilot aussperrt:</strong> Der Text bleibt für berechtigte Nutzer und damit für den Assistenten lesbar. Nur RAC verhindert das.</li>\n<li><strong>KI-Empfehlungen als Automatik verstehen:</strong> Die Erkenntnisse ersetzen Ihr Urteilsvermögen nicht, Sonderfälle müssen Sie selbst bewerten.</li>\n<li><strong>Zuerst Content-AI, dann Governance:</strong> Sonst droht ein gesprengtes Budget, bevor Leitplanken stehen. Prüfen Sie außerdem vorhandene Lizenzen, bevor Sie doppelt zahlen.</li>\n</ul>\n\n<h2>Praktische Takeaways</h2>\n<ul>\n<li>Erstellen Sie Berichte zur Datenzugriffs-Governance, um übermäßig freigegebene Websites zu finden.</li>\n<li>Aktivieren Sie Restricted Access Control für besonders wertvolle Bereiche, wenn auch die Sichtbarkeit geschützt werden muss.</li>\n<li>Nutzen Sie „Download blockieren“, wenn Inhalte einsehbar bleiben, aber nicht abfließen dürfen.</li>\n<li>Planen Sie Website-Zugriffsüberprüfungen, damit die Besitzer Abweichungen selbst bereinigen.</li>\n<li>Setzen Sie KI-Erkenntnisse und Copilot im Admin Center ein, um Schwachstellen aufzudecken und Korrekturen vorzubereiten.</li>\n<li>Starten Sie mit SAM, schalten Sie Content-AI gezielt und schrittweise dazu und prüfen Sie vorhandene Lizenzen zuerst.</li>\n</ul>\n\n<h2>Fazit</h2>\n<p>Copilot ist nur so sicher wie die Berechtigungsstruktur, auf der er arbeitet. SharePoint Advanced Management verbindet dafür Sichtbarkeit durch DAG-Berichte, Verantwortung der Website-Besitzer durch Zugriffsüberprüfungen und passgenaue Schutzmaßnahmen mit „Download blockieren“ und RAC. Die KI-Erkenntnisse setzen die Prioritäten, entscheiden müssen weiterhin Menschen. Wer zuerst die Governance aufbaut und Content-AI danach gezielt zuschaltet, schützt seine Inhalte und behält die Kosten im Griff.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Copilot-Oversharing mit SAM stoppen",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Oversharing erkennen",
+     "text": "DAG-Berichte zeigen Websites mit breiten Gruppen, externen Links und Vertraulichkeitsbezeichnungen."
+    },
+    {
+     "kopf": "Besitzer einbinden",
+     "text": "Website-Zugriffsüberprüfungen lassen Eigentümer entscheiden, wer Zugriff behält."
+    },
+    {
+     "kopf": "Passend absichern",
+     "text": "Download blockieren verhindert Abfluss, Restricted Access Control macht Websites für Nichtmitglieder unsichtbar."
+    },
+    {
+     "kopf": "KI-Erkenntnisse nutzen",
+     "text": "Empfehlungen zeigen Abweichungen und Prioritäten; Administratoren entscheiden weiterhin selbst."
+    },
+    {
+     "kopf": "Budget staffeln",
+     "text": "Erst SAM pro Benutzer einführen, dann Content-AI per Pay-as-you-go gezielt zuschalten."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Was ist SharePoint Advanced Management und wie hilft es gegen Oversharing bei Copilot?",
+    "a": "SharePoint Advanced Management (SAM) ist Teil von SharePoint Premium. Es bietet Kontrollen für eingeschränkten Zugriff, Berichte zur Datenzugriffs-Governance und Werkzeuge für den Website-Lebenszyklus. So erkennen Administratoren übermäßig freigegebene Websites, sichern sensible Bereiche ab und nehmen Website-Besitzer in die Verantwortung."
+   },
+   {
+    "q": "Wie finde ich übermäßig freigegebene SharePoint-Websites?",
+    "a": "Die Berichte zur Datenzugriffs-Governance zeigen potenziell übermäßig freigegebene Websites, extern freigegebene Daten und Websites mit breiten Gruppen wie „Alle außer externen Benutzern“. Sie arbeiten auf Website-Ebene, nicht für einzelne Dateien. Einige Berichte listen nur die Top-100-Websites der letzten 30 Tage. Die Erstellung dauert Stunden und ist einmal täglich möglich."
+   },
+   {
+    "q": "Was ist der Unterschied zwischen „Download blockieren“ und Restricted Access Control?",
+    "a": "„Download blockieren“ erlaubt das Ansehen im Browser, aber kein Herunterladen, Drucken oder Synchronisieren. Restricted Access Control legt fest, wer die Website überhaupt sehen darf, nämlich nur Mitglieder einer bestimmten Gruppe. Copilot kann bei „Download blockieren“ weiter Text lesen, bei RAC berührt er die Daten nie."
+   },
+   {
+    "q": "Was kostet SharePoint Advanced Management?",
+    "a": "Governance mit SAM wird pro Benutzer abgerechnet. Für kommerzielle Kunden kostet es drei US-Dollar pro Benutzer und Monat, zusätzlich zu einer qualifizierenden SharePoint-Lizenz oder einem Microsoft 365-Plan. Lizenzen brauchen Administratoren und Website-Besitzer. Einige Teile sind in Microsoft 365 E5 enthalten, Inhaltsverarbeitung wie OCR läuft nach Pay-as-you-go."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Download blockieren oder Restricted Access Control",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Download blockieren",
+     "punkte": [
+      "Dateien sind im Browser sichtbar, aber nicht herunterladbar, druckbar oder synchronisierbar.",
+      "Zugriff über Office-Desktop-Apps und Drittanbieter-Programme ist nicht möglich.",
+      "Sinnvoll, wenn Transparenz nötig ist, aber kein Datenabfluss entstehen soll.",
+      "Copilot kann den Text für berechtigte Nutzer weiterhin lesen und abrufen."
+     ]
+    },
+    "rechts": {
+     "titel": "Restricted Access Control (RAC)",
+     "punkte": [
+      "Steuert, wer überhaupt eintreten darf, nicht, was danach passiert.",
+      "Nur Mitglieder der erlaubten Microsoft 365- oder Entra-Gruppe sehen die Website.",
+      "Die Prüfung erfolgt beim Zugriff, weitergegebene Links helfen Fremden nicht.",
+      "Sinnvoll, wenn schon die Sichtbarkeit die Bedrohung ist.",
+      "Copilot berührt die Daten nicht, wenn jemand nicht zur Gruppe gehört."
+     ]
+    }
+   },
+   {
+    "titel": "Grenzen der Datenzugriffs-Governance-Berichte",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "Top 100",
+      "text": "Einige Berichte zeigen im Admin-Center nur die Top-100-Websites der letzten 30 Tage."
+     },
+     {
+      "wert": "10.000 Zeilen",
+      "text": "CSV-Exporte umfassen bis zu 10.000 Zeilen, in einigen Fällen bis zu einer Million."
+     },
+     {
+      "wert": "1× pro Tag",
+      "text": "Die Berichterstellung kann Stunden dauern und lässt sich nur einmal täglich anstoßen."
+     },
+     {
+      "wert": "Website-Ebene",
+      "text": "Die Berichte sind keine Forensik für einzelne Dateien, sondern zeigen Oversharing-Schwerpunkte."
+     }
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Welche Aussage über „Download blockieren“ im Zusammenspiel mit Copilot trifft zu?",
+    "opts": [
+     "Copilot kann den Text weiterhin lesen, sofern der Nutzer Zugriff hat.",
+     "Copilot wird vollständig von den geschützten Inhalten ausgesperrt.",
+     "Copilot darf die Inhalte nur zusammenfassen, aber nicht zitieren.",
+     "Copilot greift nur auf Dateien mit Vertraulichkeitsbezeichnung nicht zu."
+    ],
+    "a": 0,
+    "why": "Die Datei lässt sich nicht herunterladen, ihr Text bleibt für berechtigte Nutzer und damit für den Assistenten verfügbar. Nur RAC verhindert das."
+   },
+   {
+    "q": "Wie wirkt Restricted Access Control (RAC) auf eine Website?",
+    "opts": [
+     "Es verhindert Herunterladen, Drucken und Synchronisieren im Browser.",
+     "Es entfernt automatisch alle Gastkonten nach 90 Tagen Inaktivität.",
+     "Nur Mitglieder einer bestimmten Gruppe können die Website sehen oder entdecken.",
+     "Es verschlüsselt alle Dateien mit einer Vertraulichkeitsbezeichnung zusätzlich."
+    ],
+    "a": 2,
+    "why": "RAC steuert, wer überhaupt eintreten darf. Die Prüfung erfolgt beim Zugriff, weitergegebene Freigabelinks helfen Fremden daher nicht."
+   },
+   {
+    "q": "Welche Einschränkung gilt für die DAG-Berichte?",
+    "opts": [
+     "Sie analysieren ausschließlich einzelne Dateien, aber keine ganzen Websites.",
+     "Sie lassen sich nur einmal pro Tag anstoßen und können Stunden dauern.",
+     "Sie sind nur für externe Benutzer ohne Administratorrechte sichtbar.",
+     "Sie liefern eine lückenlose Echtzeit-Überwachung aller Freigaben."
+    ],
+    "a": 1,
+    "why": "Die Berichterstellung kann Stunden dauern und nur einmal täglich ausgelöst werden. Eine lückenlose Dauerüberwachung ist das nicht."
+   },
+   {
+    "q": "Welche Reihenfolge empfiehlt der Artikel bei Lizenzierung und Einführung?",
+    "opts": [
+     "Zuerst Content-AI für alle Abteilungen, danach die Governance mit SAM.",
+     "Content-AI und SAM gleichzeitig für alle Benutzer aktivieren.",
+     "Auf SAM verzichten und nur Pay-as-you-go-Inhaltsverarbeitung nutzen.",
+     "Zuerst Governance mit SAM, danach Content-AI gezielt und schrittweise."
+    ],
+    "a": 3,
+    "why": "Governance zuerst, damit Zugriffe und Abweichungen bekannt sind. Content-AI folgt gezielt, sonst droht ein gesprengtes Budget vor den Leitplanken."
+   }
+  ]
+ }
+}

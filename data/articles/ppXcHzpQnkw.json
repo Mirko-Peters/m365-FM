@@ -1,0 +1,152 @@
+{
+ "de": {
+  "html": "<p>Wer in Azure ein globales Netzwerk aufbauen will, startet meist übersichtlich: eine Region, ein paar virtuelle Netzwerke, alles läuft. Dann kommen eine zweite und eine dritte Region dazu, später Zweigstellen und Remote-Benutzer. Plötzlich müssen Peerings, Routing-Tabellen, Firewall-Regeln und VPN-Gateways an mehreren Standorten gepflegt werden.</p>\n<p>Azure Virtual WAN setzt genau hier an. Der Dienst nimmt Ihnen den schwierigsten Teil ab: Microsoft baut und betreibt die „Autobahn“, Sie bauen nur noch die Auffahrten. Dieser Artikel erklärt, wie Azure Virtual WAN funktioniert, wofür es gedacht ist und wann es sich gegenüber dem klassischen Hub-and-Spoke-Modell lohnt.</p>\n\n<h2>Hub-and-Spoke in Azure: Warum die klassische Architektur an Grenzen stößt</h2>\n<p>Der traditionelle Ansatz in Azure heißt Hub-and-Spoke. Ein zentrales virtuelles Netzwerk, der Hub, beherbergt gemeinsam genutzte Dienste wie Firewalls, Domain-Controller und VPN-Gateways. Die Anwendungsnetzwerke, die Spokes, werden per Peering an diesen Hub angebunden. Der Datenverkehr der Spokes läuft durch den Hub und kann dort überprüft und gesteuert werden.</p>\n<p>In einer einzelnen Region mit wenigen virtuellen Netzwerken funktioniert das hervorragend. Sie haben volle Kontrolle über Routing und Sicherheit, wissen, wohin jedes Paket geht, und die Lösung bleibt einfach und sauber.</p>\n<h3>Wo die Komplexität explodiert</h3>\n<p>Mit der zweiten Region ändert sich das Bild. Sie müssen die Hubs per Peering verbinden, benutzerdefinierte Routen (UDRs) einrichten, um den Datenverkehr durch die Firewalls zu zwingen, und für jeden einzelnen Spoke Routing-Tabellen konfigurieren. Mit jeder weiteren Region vervielfacht sich der Aufwand.</p>\n<p>Ein Beispiel: Ein Unternehmen mit Niederlassungen in Nordamerika, Europa und Asien, die alle miteinander verbunden sein sollen. Im klassischen Hub-and-Spoke-Aufbau bedeutet das mindestens zwölf Peerings. Jeder Hub muss mit jedem anderen verbunden sein, und jeder Spoke braucht Routing-Tabellen, die auf die richtige Firewall zeigen. Kommt eine Region hinzu, muss jede Routing-Tabelle manuell angepasst werden.</p>\n<p>Das Modell funktioniert also, es skaliert nur nicht. Je mehr Sie hinzufügen, desto mehr müssen Sie verwalten, bis die Verwaltung zum Vollzeitjob für ein Team von Netzwerktechnikern wird.</p>\n\n<h2>Was ist Azure Virtual WAN? Komponenten und Tarife</h2>\n<p>Azure Virtual WAN ist ein verwalteter Netzwerkdienst, der Niederlassungen, Benutzer und Cloud-Ressourcen über ein einziges, von Microsoft betriebenes Backbone verbindet. Das Routing und die Verbindungen zwischen den Regionen übernimmt Microsoft. Ihre Aufgabe beschränkt sich auf die Zufahrten: die Verbindungen von Zweigstellen, Remote-Benutzern und virtuellen Netzwerken.</p>\n<h3>Die vier Bausteine</h3>\n<ul>\n<li><strong>Virtual-WAN-Ressource:</strong> der übergeordnete Container, sozusagen das gesamte Autobahnsystem.</li>\n<li><strong>Virtuelle Hubs:</strong> die regionalen Verbindungspunkte, einer pro Azure-Region, vergleichbar mit einem Autobahnkreuz.</li>\n<li><strong>Virtuelle Spoke-Netzwerke:</strong> Ihre Anwendungen, die mit den Hubs verbunden sind.</li>\n<li><strong>Gateways:</strong> Sie verarbeiten VPN-Verbindungen aus den Zweigstellen und ExpressRoute-Verbindungen aus Rechenzentren.</li>\n</ul>\n<h3>Basic oder Standard</h3>\n<p>Es gibt zwei Ebenen. Basic bietet ausschließlich Site-to-Site-VPN und ist damit einfach, aber eingeschränkt. Standard liefert den vollen Funktionsumfang: ExpressRoute, Point-to-Site-VPN für Remote-Benutzer, Routing zwischen Hubs, Azure-Firewall-Integration und mehr. Für nahezu jedes reale Szenario ist Standard erforderlich.</p>\n<p>Der entscheidende Unterschied zu Hub-and-Spoke: Microsoft verwaltet das Routing zwischen den Hubs automatisch. Sie erstellen keine Peerings und konfigurieren keine Routing-Tabellen. Sie verbinden Ihre Spokes mit dem Hub, den Rest erledigt der Hub.</p>\n\n<h2>Der virtuelle Hub: Herzstück des globalen Netzwerks</h2>\n<p>Ein virtueller Hub ist ein von Microsoft verwalteter regionaler Router in einer bestimmten Azure-Region. Er ist der Verbindungspunkt für vier Arten von Teilnehmern:</p>\n<ul>\n<li>virtuelle Netzwerke (Ihre Spoke-Anwendungen),</li>\n<li>Zweigstellen, die per VPN oder ExpressRoute angebunden sind,</li>\n<li>Remote-Benutzer über Point-to-Site-VPN,</li>\n<li>andere Hubs in anderen Regionen.</li>\n</ul>\n<p>Der Hub übernimmt das gesamte Routing zwischen diesen Verbindungen automatisch. Es gibt keine manuellen Routing-Tabellen, keine benutzerdefinierten Routen und keine Peering-Konfigurationen. Sie verbinden etwas mit dem Hub, und der Hub findet heraus, wie der Datenverkehr zum richtigen Ziel kommt.</p>\n<p>Planen müssen Sie allerdings Ihre Adressräume: Jeder Hub braucht wie jede andere Netzwerkkomponente einen eigenen IP-Adressbereich. Wird ein virtuelles Netzwerk angebunden, lernt der Hub dessen Adressraum automatisch.</p>\n<h3>Mehrere Regionen, ein Backbone</h3>\n<p>Hubs in verschiedenen Regionen verbinden sich automatisch miteinander. Ein Hub in Nordamerika spricht mit einem Hub in Europa, dieser mit einem Hub in Asien, und zwar über das globale Microsoft-Backbone. Sie erstellen die Auffahrt für Ihre Region, die Verbindung dazwischen übernimmt Microsoft.</p>\n<p>Auch die Skalierbarkeit ist für Unternehmen ausgelegt: Ein einzelner Hub verarbeitet bis zu 1.000 Site-to-Site-VPN-Verbindungen, bis zu 100.000 Remote-Benutzer und einen Durchsatz von bis zu 50 Gigabit pro Sekunde über den Hub-Router.</p>\n\n<h2>Zweigstellen, Remote-Benutzer und Cloud-Ressourcen anbinden</h2>\n<h3>Site-to-Site-VPN für Zweigstellen</h3>\n<p>Site-to-Site-VPN verbindet physische Standorte über standardmäßige IPsec-Tunnel mit Azure. Es funktioniert mit praktisch jedem VPN-Gerät, etwa von Cisco oder Fortinet, und erfordert keine Spezialhardware. Sie legen im Hub ein VPN-Gateway an und geben die öffentliche IP-Adresse sowie den Adressraum der Zweigstelle an. Azure baut den Tunnel auf, verwaltet die Verschlüsselung und hält die Verbindung am Laufen.</p>\n<h3>Point-to-Site-VPN für Remote-Benutzer</h3>\n<p>Mitarbeiter können sich von überall verbinden, ob von zu Hause, aus dem Café oder dem Hotel. Unterstützt werden der Azure VPN-Client, OpenVPN und IKEv2. Wichtig ist die Authentifizierung über Microsoft Entra ID: Benutzer melden sich mit ihren gewohnten Arbeitsanmeldedaten an, es gibt keine separaten VPN-Kennwörter und keine Zertifikate zu verwalten. Die Verbindung läuft zum nächstgelegenen Hub, und der Benutzer erreicht automatisch alle daran angebundenen Ressourcen: virtuelle Netzwerke, Zweigstellen und andere Regionen.</p>\n<h3>ExpressRoute für Hauptstandorte und Rechenzentren</h3>\n<p>ExpressRoute ist eine private, dedizierte Verbindung vom lokalen Standort zu Azure, die das öffentliche Internet vollständig umgeht. Virtual WAN unterstützt VPN und ExpressRoute am selben Hub mit automatischem Failover: Fällt die ExpressRoute-Leitung aus, wird der Datenverkehr ohne manuellen Eingriff über VPN umgeleitet.</p>\n<h3>Virtuelle Netzwerke</h3>\n<p>Ein Spoke-Netzwerk binden Sie mit wenigen Klicks an: Hub und virtuelles Netzwerk auswählen, Verbindung herstellen. Kein Peering-Setup, keine Routing-Tabellen. Zwischen den Regionen kommunizieren die Hubs von selbst über das Microsoft-Backbone, Transitrouting müssen Sie nicht verwalten.</p>\n<p>Das Ergebnis ist eine „Any-to-Any“-Konnektivität: Jede Filiale, jeder Remote-Benutzer, jedes virtuelle Netzwerk und jeder lokale Standort kann die anderen erreichen, und der Datenverkehr bleibt im privaten Netz von Microsoft.</p>\n\n<h2>Routing-Absicht und Sicherheit: Eine Richtlinie für alle Hubs</h2>\n<p>Im klassischen Aufbau müssen Sie, um Datenverkehr durch eine Firewall zu zwingen, UDRs für jedes Subnetz in jedem Spoke anlegen, und bei mehreren Regionen alles erneut. Das ist aufwendig, fehleranfällig und bei Problemen schwer zu debuggen, weil man erst die Routing-Tabelle mit dem falschen Eintrag finden muss.</p>\n<p>Virtual WAN löst das mit der sogenannten Routing-Absicht. Eine einzige Konfiguration sagt dem Hub: Sende den Datenverkehr durch die Firewall. Sie umfasst:</p>\n<ul>\n<li>Internet-Datenverkehr,</li>\n<li>privaten Datenverkehr, etwa von Zweigstelle zu Zweigstelle oder von Zweigstelle zu virtuellem Netzwerk,</li>\n<li>Datenverkehr zwischen Hubs, also zwischen Regionen.</li>\n</ul>\n<p>Sie legen die Richtlinie einmal fest, und sie gilt global.</p>\n<h3>Gesicherte Hubs und Verschlüsselung</h3>\n<p>Die Firewall kommt über gesicherte Virtual Hubs ins Spiel. Sie betreiben Azure Firewall direkt im Hub oder eine Next-Generation-Firewall eines Drittanbieters wie Fortinet, Check Point oder Palo Alto. Die Firewall sitzt transparent im Datenpfad, UDRs sind nicht nötig: Der Verkehr fließt hinein, wird geprüft und fließt wieder hinaus.</p>\n<p>VPN-Tunnel nutzen standardmäßig IPsec, wobei Microsoft GCM-AES-256 für das beste Verhältnis aus Leistung und Sicherheit empfiehlt. Auch ExpressRoute-Datenverkehr lässt sich verschlüsseln, sodass selbst die private Leitung geschützt ist.</p>\n<p>Das passt zu Zero-Trust-Prinzipien: kein direkter Internetzugriff aus den Spokes, Prüfung des gesamten Datenverkehrs und Mikrosegmentierung innerhalb der Spoke-Netzwerke. Verwaltet wird alles zentral über Azure Firewall Manager, mit einer Richtlinie für alle Hubs weltweit. Statt Firewall-Regeln pro Region zu pflegen, verwalten Sie eine Richtlinie. Statt Routing-Tabellen zu reparieren, konfigurieren Sie die Routing-Absicht. Und wenn eine neue Region hinzukommt, gilt die Richtlinie automatisch.</p>\n\n<h2>Virtual WAN oder Hub-and-Spoke: Wann passt was?</h2>\n<p>Hub-and-Spoke ist nicht „kaputt“, sondern das richtige Werkzeug für bestimmte Aufgaben.</p>\n<h3>Wann Hub-and-Spoke besser ist</h3>\n<ul>\n<li>Sie arbeiten in einer einzelnen Region.</li>\n<li>Sie haben nur eine Handvoll virtueller Netzwerke, etwa fünf oder zehn.</li>\n<li>Sie benötigen volle Kontrolle über jede Route und jede Firewall-Regel.</li>\n<li>Ein kleines Team kennt das Netzwerk in- und auswendig.</li>\n</ul>\n<p>In diesem Fall ist Hub-and-Spoke einfacher und günstiger, weil Sie den Mehraufwand eines verwalteten Dienstes nicht brauchen.</p>\n<h3>Wann Virtual WAN besser ist</h3>\n<p>Virtual WAN lohnt sich bei mehreren Regionen, vielen Zweigstellen und Remote-Benutzern, die sich von überall verbinden. Je verteilter das Netzwerk, desto sinnvoller der Dienst.</p>\n<h3>Kosten, Latenz und Verwaltung</h3>\n<p>Bei kleinen Bereitstellungen, etwa mit zehn virtuellen Netzwerken, ist Hub-and-Spoke günstiger: Sie zahlen nur für Peerings und grundlegende Gateways. Bei rund 200 virtuellen Netzwerken ist Virtual WAN dagegen etwa 21 % günstiger, weil der Aufwand für Hunderte Peerings und Routing-Tabellen entfällt. Bei globalen Bereitstellungen nennt Microsoft zudem eine um 15 bis 25 % geringere Latenz, da das Backbone-Routing für weltweiten Datenverkehr optimiert ist.</p>\n<p>Bei der Verwaltung ist der Unterschied noch größer: Bei Hub-and-Spoke wird jede Region zum eigenen Projekt mit Peerings, Routing-Tabellen, Gateways und Firewalls. Virtual WAN bietet eine zentrale Oberfläche, eine Ansicht und einen Satz Richtlinien.</p>\n<h3>Stolpersteine bei der Entscheidung</h3>\n<ul>\n<li><strong>Zu klein gedacht:</strong> Wer nur für heute plant, übersieht die geplante Expansion. Die Leitfrage lautet: Baue ich für heute oder für die nächsten drei Jahre?</li>\n<li><strong>Falscher Tarif:</strong> Basic kann nur Site-to-Site-VPN. Für fast alle realen Szenarien braucht es Standard.</li>\n<li><strong>Adressräume vergessen:</strong> Jeder Hub benötigt einen eigenen IP-Adressbereich, der geplant werden muss.</li>\n<li><strong>Alles auf einmal wollen:</strong> Eine Migration muss nicht in einem Schritt erfolgen. Sie können mit Hub-and-Spoke starten und später migrieren, Microsoft unterstützt diesen Weg.</li>\n</ul>\n<p>Die Kurzformel lautet: Hub-and-Spoke für kontrollierte Bereitstellungen in einer einzelnen Region, Virtual WAN für umfangreiche globale Konnektivität.</p>\n\n<h2>Praxisszenarien: Einzelhandel, MPLS-Ersatz und Cloud-First-Startup</h2>\n<h3>Globale Einzelhandelskette</h3>\n<p>Eine Kette mit 50 Filialen auf drei Kontinenten, Remote-Mitarbeitern und einem zentralen ERP-System in Azure stellt je einen Hub in Nordamerika, Europa und Asien bereit. Jede Filiale verbindet sich per Site-to-Site-VPN mit ihrem regionalen Hub, die Filiale in London mit dem europäischen, die in Tokio mit dem asiatischen. Remote-Mitarbeiter nutzen Point-to-Site-VPN mit Microsoft Entra ID. Prüft die Londoner Filiale den Lagerbestand im nordamerikanischen Lager, läuft der Verkehr über den europäischen und den nordamerikanischen Hub bis ins ERP-System und berührt dabei nie das öffentliche Internet. Das Ergebnis sind einheitliche Konnektivität, zentralisierte Sicherheit und geringere Kosten als bei MPLS, ohne langfristige Anbieterverträge.</p>\n<h3>MPLS schrittweise ersetzen</h3>\n<p>Viele Unternehmen zahlen seit Jahren für teure, unflexible MPLS-Verbindungen. Der Umstieg gelingt schrittweise:</p>\n<ol>\n<li>Virtual WAN zunächst für neue Niederlassungen und die Azure-Anbindung nutzen.</li>\n<li>Bestehende MPLS-Standorte nach und nach auf VPN oder ExpressRoute migrieren.</li>\n<li>ExpressRoute für ältere Rechenzentren mit Bedarf an privater Konnektivität einsetzen.</li>\n<li>MPLS-Verbindungen reduzieren, sobald der Datenverkehr auf das Virtual-WAN-Backbone wandert.</li>\n</ol>\n<p>Beides lässt sich parallel betreiben. Bei jeder Vertragsverlängerung entscheiden Sie neu, ob der Standort migriert wird.</p>\n<h3>Cloud-First-Startup mit Expansionsplänen</h3>\n<p>Ein Startup startet mit einem Hub in der aktuellen Region, verbindet seine virtuellen Netzwerke und richtet Point-to-Site-VPN für das Remote-Team ein. Bei der Expansion nach Europa oder Asien kommen weitere Hubs hinzu, das Routing zwischen ihnen entsteht automatisch, und Remote-Benutzer verbinden sich ohne Änderungen mit dem nächstgelegenen Hub. Der Aufbau wächst mit, ohne dass neu konfiguriert werden muss.</p>\n\n<h2>Praktische Takeaways</h2>\n<ul>\n<li>Hub-and-Spoke eignet sich für eine Region mit wenigen virtuellen Netzwerken, skaliert aber über mehrere Regionen hinweg schlecht.</li>\n<li>Virtual WAN verlagert Backbone, Routing und Hub-Verbindungen zu Microsoft, Sie verwalten nur die Anbindungen.</li>\n<li>Für fast alle realen Szenarien ist der Standard-Tarif nötig, Basic bietet nur Site-to-Site-VPN.</li>\n<li>Planen Sie für jeden Hub einen eigenen IP-Adressbereich.</li>\n<li>Binden Sie Zweigstellen per Site-to-Site-VPN, Remote-Benutzer per Point-to-Site-VPN mit Microsoft Entra ID und Rechenzentren per ExpressRoute an.</li>\n<li>Nutzen Sie die Routing-Absicht und gesicherte Hubs, um Sicherheitsrichtlinien einmal festzulegen und global durchzusetzen.</li>\n<li>Migrieren Sie schrittweise, von Hub-and-Spoke oder von MPLS, ein Big Bang ist nicht nötig.</li>\n<li>Der Einstieg ist einfach: Virtual WAN erstellen, Hub bereitstellen, virtuelle Netzwerke und Benutzer anbinden.</li>\n</ul>\n\n<h2>Fazit</h2>\n<p>Azure Virtual WAN löst das Skalierungsproblem klassischer Hub-and-Spoke-Architekturen, ohne die Kontrolle über Routing und Sicherheit aufzugeben. Microsoft betreibt das Backbone und die Verbindungen zwischen den Regionen, während Sie über Routing-Absicht und eine zentrale Firewall-Richtlinie einheitliche Regeln durchsetzen. Für eine einzelne Region mit wenigen Netzwerken bleibt Hub-and-Spoke eine einfache und günstige Wahl. Sobald Ihr Netzwerk jedoch über Regionen, Zweigstellen und Remote-Benutzer wächst, wird Virtual WAN zur sinnvolleren Grundlage, und der Umstieg ist auch später noch Schritt für Schritt möglich.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Azure Virtual WAN: So starten Sie",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Virtual WAN anlegen",
+     "text": "Die Virtual-WAN-Ressource im Standard-Tarif als Container für das gesamte globale Netzwerk erstellen."
+    },
+    {
+     "kopf": "Hubs pro Region",
+     "text": "Je Azure-Region einen virtuellen Hub mit eigenem IP-Adressbereich bereitstellen."
+    },
+    {
+     "kopf": "Standorte anbinden",
+     "text": "Zweigstellen per Site-to-Site-VPN, Rechenzentren per ExpressRoute mit dem regionalen Hub verbinden."
+    },
+    {
+     "kopf": "Netze und Nutzer",
+     "text": "Virtuelle Netzwerke mit wenigen Klicks anbinden, Remote-Benutzer per Point-to-Site-VPN und Entra ID."
+    },
+    {
+     "kopf": "Routing-Absicht setzen",
+     "text": "Eine Einstellung leitet den Datenverkehr durch die Firewall, die Richtlinie gilt global."
+    },
+    {
+     "kopf": "Schrittweise erweitern",
+     "text": "Neue Regionen als Hubs hinzufügen und MPLS-Standorte nach und nach migrieren."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Was ist Azure Virtual WAN und wie funktioniert es?",
+    "a": "Azure Virtual WAN ist ein verwalteter Netzwerkdienst, der Niederlassungen, Benutzer und Cloud-Ressourcen über ein einziges, von Microsoft betriebenes Backbone verbindet. Microsoft übernimmt Routing und Verbindungen zwischen den Regionen, Sie konfigurieren nur die Anbindungen von Zweigstellen, Remote-Benutzern und virtuellen Netzwerken."
+   },
+   {
+    "q": "Was ist der Unterschied zwischen Azure Virtual WAN Basic und Standard?",
+    "a": "Basic bietet ausschließlich Site-to-Site-VPN und ist daher einfach, aber eingeschränkt. Standard liefert den vollen Funktionsumfang, darunter ExpressRoute, Point-to-Site-VPN für Remote-Benutzer, Routing zwischen Hubs und Azure-Firewall-Integration. Für nahezu jedes reale Szenario ist der Standard-Tarif erforderlich."
+   },
+   {
+    "q": "Wann lohnt sich Azure Virtual WAN statt Hub-and-Spoke?",
+    "a": "Virtual WAN lohnt sich bei mehreren Regionen, vielen Zweigstellen und Remote-Benutzern. Hub-and-Spoke bleibt für eine einzelne Region mit wenigen virtuellen Netzwerken einfacher und günstiger. Bei rund 200 virtuellen Netzwerken ist Virtual WAN laut Artikel etwa 21 % günstiger."
+   },
+   {
+    "q": "Wie binde ich Zweigstellen, Remote-Benutzer und Rechenzentren an Azure Virtual WAN an?",
+    "a": "Zweigstellen verbinden Sie per Site-to-Site-VPN mit IPsec-Tunneln, Remote-Benutzer per Point-to-Site-VPN mit Authentifizierung über Microsoft Entra ID und Rechenzentren per ExpressRoute. VPN und ExpressRoute laufen am selben Hub, mit automatischem Failover auf VPN bei Ausfall der ExpressRoute-Leitung."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Hub-and-Spoke oder Virtual WAN",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Klassisches Hub-and-Spoke",
+     "punkte": [
+      "Ideal für eine einzelne Region mit wenigen virtuellen Netzwerken",
+      "Volle Kontrolle über jede Route und jede Firewall-Regel",
+      "Peerings und Routing-Tabellen müssen manuell gepflegt werden",
+      "Jede weitere Region wird zum eigenen Projekt",
+      "Bei kleinen Bereitstellungen günstiger und einfacher"
+     ]
+    },
+    "rechts": {
+     "titel": "Azure Virtual WAN",
+     "punkte": [
+      "Ideal für mehrere Regionen, viele Zweigstellen und Remote-Benutzer",
+      "Microsoft verwaltet Backbone und Routing zwischen den Hubs automatisch",
+      "Keine Peerings und keine manuellen Routing-Tabellen nötig",
+      "Eine zentrale Oberfläche mit einem Satz Richtlinien",
+      "Bei rund 200 virtuellen Netzwerken etwa 21 % günstiger"
+     ]
+    }
+   },
+   {
+    "titel": "Virtual WAN in Zahlen",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "1.000",
+      "text": "Site-to-Site-VPN-Verbindungen verarbeitet ein einzelner Hub maximal."
+     },
+     {
+      "wert": "100.000",
+      "text": "Remote-Benutzer kann ein einzelner Hub bedienen."
+     },
+     {
+      "wert": "50 Gbit/s",
+      "text": "Durchsatz sind über den Hub-Router möglich."
+     },
+     {
+      "wert": "15–25 %",
+      "text": "geringere Latenz nennt Microsoft bei globalen Bereitstellungen."
+     },
+     {
+      "wert": "21 %",
+      "text": "günstiger als Hub-and-Spoke bei rund 200 virtuellen Netzwerken."
+     }
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Welche Aufgabe übernimmt bei Azure Virtual WAN Microsoft im Vergleich zum klassischen Hub-and-Spoke-Modell?",
+    "opts": [
+     "Das Routing zwischen den Hubs und das Backbone, ohne manuelle Peerings",
+     "Die Pflege der Firewall-Regeln für jeden einzelnen Spoke",
+     "Die Planung und Vergabe der IP-Adressbereiche für alle Hubs",
+     "Die Konfiguration der VPN-Geräte in den Zweigstellen"
+    ],
+    "a": 0,
+    "why": "Microsoft betreibt Backbone und Hub-Routing automatisch. Kunden verwalten nur die Anbindungen und müssen ihre Adressräume selbst planen."
+   },
+   {
+    "q": "Welche Einschränkung hat der Basic-Tarif von Azure Virtual WAN?",
+    "opts": [
+     "Er unterstützt nur eine einzige Azure-Region",
+     "Er bietet ausschließlich Site-to-Site-VPN",
+     "Er erlaubt höchstens zehn virtuelle Netzwerke pro Hub",
+     "Er verzichtet auf jegliche Verschlüsselung der VPN-Tunnel"
+    ],
+    "a": 1,
+    "why": "Basic bietet nur Site-to-Site-VPN. ExpressRoute, Point-to-Site, Hub-Routing und Firewall-Integration erfordern den Standard-Tarif."
+   },
+   {
+    "q": "Wie wird in Virtual WAN Datenverkehr über alle Hubs hinweg durch die Firewall geleitet?",
+    "opts": [
+     "Durch benutzerdefinierte Routen für jedes Subnetz in jedem Spoke",
+     "Durch manuelle Peerings zwischen allen Firewalls der Regionen",
+     "Durch die Routing-Absicht, die einmal festgelegt global gilt",
+     "Durch separate Firewall-Richtlinien, die pro Region gepflegt werden"
+    ],
+    "a": 2,
+    "why": "Die Routing-Absicht weist den Hub mit einer einzigen Konfiguration an, Verkehr durch die Firewall zu senden. Die Richtlinie gilt global."
+   },
+   {
+    "q": "Wann ist laut Artikel Hub-and-Spoke gegenüber Virtual WAN die bessere Wahl?",
+    "opts": [
+     "Bei rund 200 virtuellen Netzwerken in mehreren Regionen",
+     "Bei vielen Remote-Benutzern, die sich von überall verbinden",
+     "Bei globalen Bereitstellungen mit Bedarf an geringerer Latenz",
+     "Bei einer einzelnen Region mit nur wenigen virtuellen Netzwerken"
+    ],
+    "a": 3,
+    "why": "In einer Region mit fünf bis zehn virtuellen Netzwerken ist Hub-and-Spoke einfacher und günstiger und bietet volle Kontrolle."
+   }
+  ]
+ }
+}
