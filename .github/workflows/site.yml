@@ -23,6 +23,8 @@ jobs:
         with: { python-version: "3.12" }
       - name: Sponsor-Rechner gegen die Testvektoren des Prototyps pruefen (T37, blockierend; Node ist auf dem Runner vorhanden)
         run: node --test tests/sponsor_calc.test.mjs
+      - name: Player nach Klick (kein iframe im ersten HTML, feste Masse) und Ladezeit-Regeln pruefen (blockierend)
+        run: node --test tests/player_facade.test.mjs && python3 -m unittest discover -s tests -p test_player_facade.py
       - name: Interne Links ohne Umweg - Python-Nachbau der Site-Worker-Weiterleitungen pruefen (blockierend)
         run: python3 -m unittest discover -s tests -p test_site_links.py && (cd sitewrk && node --test test/legacy.test.mjs)
       - name: Zusatz-Weiterleitungen (data/redirects_extra.json) gegen den Datenstand pruefen (nicht blockierend)

@@ -1,4 +1,3 @@
-import { regionOf, conditional, markHtml, isHtmlPath } from "./consent.js";   // T32: Einwilligungs-Region je Anfrage
 // Worker vor der Plattform (GitHub Pages): Cache- und Sicherheits-Header, Bild-Optimierung (Polish), Weiterleitungen fuer den Umzug von www.m365.fm.
 const SEC = {
   "strict-transport-security": "max-age=31536000; includeSubDomains",
@@ -14,6 +13,9 @@ const HASHED = /^\/assets\/(site\.[0-9a-f]{8,}\.css|(page|a11y)\.[0-9a-f]{8,}\.j
 const EDGE_HTML = 14400, R2_TTL = 14400, R2_MISS_TTL = 600;
 const HTML_CC = "public, max-age=0, s-maxage=600, stale-while-revalidate=86400";
 const r2Path = (p) => (p.endsWith("/") ? p : p + "/");
+// HTML-Adressen: Verzeichnisse, .html und Pfade ohne Dateiendung. Dateien (.json, .xml, .txt, Bilder, Assets) sind keine Seiten.
+// (Bis 5.11.2026 bekamen Seiten hier eine Einwilligungs-Region fuer den Clarity-Hinweis (T32, consent.js); Clarity und Hinweis sind entfernt.)
+export const isHtmlPath = (p) => p.endsWith("/") || /\.html?$/i.test(p) || !/\.[a-z0-9]{1,8}$/i.test(p);
 
 function notModified(request, etag, lastMod) {
   const inm = request.headers.get("if-none-match");
@@ -175,15 +177,14 @@ export default {
       : isStatic ? { cacheEverything: true, cacheTtl: 86400 }
       : { cacheEverything: true, cacheTtlByStatus: { "200-299": EDGE_HTML, "404": 60, "500-599": 0 } };   // HTML: 4 h am Rand, Purge nach jedem Deploy
     // T41: ohne Query zum Ursprung - GitHub Pages ist statisch, so landen ?utm_…/?fbclid=… im selben Cache-Eintrag (Zone steht auf Caching-Level "basic": mit Query sonst gar kein Cache)
-    const page = !isImg && !isStatic && isHtmlPath(p);   // T32: nur HTML-Adressen bekommen Region und Regions-Validatoren
-    const cr = regionOf(request, env), rq = page && (request.method === "GET" || request.method === "HEAD") ? conditional(request, cr).req : request;   // Region nie im Cache-Schluessel oder Ursprungsabruf
+    const page = !isImg && !isStatic && isHtmlPath(p), rq = request;   // Seiten: R2 zuerst auch bei Range-Anfragen (s. u.)
     if (env.R2_PRIMARY === "1" && env.PAGES && !isImg && (request.method === "GET" || request.method === "HEAD") && !p.startsWith("/search/") && p !== "/r2-build.txt" && (page || !request.headers.has("range"))) {
       let dp = p; try { dp = decodeURIComponent(p); } catch { /* ungueltige Kodierung: wie angefragt */ }   // Schluessel im Bucket sind UTF-8 (z. B. /ru/tag/облако/)
       const key = r2Key(dp);
       const build = key ? r2Ready(env, url, ctx) : "";
       if (build) {
         const r2 = await r2First(rq, env, ctx, url, p, key, build);
-        if (r2) return page ? markHtml(r2, request, cr) : r2;
+        if (r2) return r2;
       }
     }
     const res = await fetch(url.search ? new Request(url.origin + p, rq) : rq, { cf });
@@ -225,13 +226,12 @@ export default {
     }
     if (res.status === 404 && env.PAGES && !IMG.test(p) && (request.method === "GET" || request.method === "HEAD")) {
       const r2 = await r2Page(rq, env, ctx, url, p);
-      if (r2) return page ? markHtml(r2, request, cr) : r2;
+      if (r2) return r2;
       const m = /^\/(de|es|fr|it|pt|nl|pl|id|ru|uk|ar|he|ja|ko)\/show\/episodes\/([a-z0-9-]+)\/?$/.exec(p);   // noch nicht hochgeladen: englisches Original statt 404
       if (m) return Response.redirect(url.origin + "/show/episodes/" + m[2] + "/", 301);
     }
     const h = new Headers(res.headers);
     finishHeaders(h, p);
-    const out = new Response(res.body, { status: res.status, statusText: res.statusText, headers: h });
-    return page ? markHtml(out, request, cr) : out;   // Assets, Bilder und Dateien bleiben unberuehrt (auch bei falschem Content-Type)
+    return new Response(request.method === "HEAD" ? null : res.body, { status: res.status, statusText: res.statusText, headers: h });
   },
 };

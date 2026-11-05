@@ -115,6 +115,7 @@ def build(g, posts, people, api):
                 body_html, _al = TOP.autolink_html(body_html, ENTS, lambda i: links_l[i][1], max_links=8)
             if not p.get("legacy"):
                 body_html = IMG.enhance(body_html)
+            body_html = IMG.eager_first(body_html)   # erstes Bild oben im Beitrag (oft das LCP-Element) nicht lazy laden
             _rel = TOP.related(mine, p, k=6)
             relbox = (f'<section class="bl-rel"><h2>{esc(T(lang, "Related articles", "Verwandte Artikel"))}</h2><ul class="bl-list">' + "".join(
                 f'<li><a href="{croot}u/{r["handle"]}/blog/{r["slug"]}/"><b>{esc(r["title"])}</b></a> <span class="mut">· {iso(r["published"])}</span></li>' for r in _rel) + "</ul></section>") if _rel else ""

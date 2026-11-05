@@ -16,7 +16,7 @@ jobs:
         with: { node-version: 22 }
       - name: Pruefen vor dem Deploy (Syntax, Tests) - rot heisst kein Deploy
         working-directory: sitewrk
-        run: node --check index.js && node --check consent.js && node --test
+        run: node --check index.js && node --test
       - name: Deploy
         working-directory: sitewrk
         continue-on-error: true

@@ -349,7 +349,7 @@ def build(g):
     root = f"{BASE}/show/"; NAME = pod.get("name") or "M365.FM Podcast"
     navitems = (("", "Home"), ("episodes/", "Episodes"), *(((f"{BASE}/community/u/mirko-p/blog/", "Blog"),) if (PD / "blog_posts.json.gz").exists() else ()), *((("guests/", "Guests"),) if guests else ()), ("hosts/", "Hosts"), ("sponsors/", "Sponsors"), ("reviews/", "Reviews"), ("work-with-me/", "Work with me"), ("about/", "About"))
     nav = '<section class="sb-card sb-nav"><h2>M365.FM Show</h2><ul class="sb-navl">' + "".join(f'<li><a href="{p if p.startswith("https://") else root + p}">{t}</a></li>' for p, t in navitems) + "</ul></section>"   # frueher zweite Menueleiste ueber dem Inhalt, jetzt Karte in der Sidebar
-    shell = lambda b, side="": f'{header("en", "")}<link rel="stylesheet" href="{BASE}/assets/sbar.css"><main class="wrap shw"><div class="shmain">{b}</div>{side}</main>{footer_en()}'
+    shell = lambda b, side="": f'{header("en", "")}<main class="wrap shw"><div class="shmain">{b}</div>{side}</main>{footer_en()}'
 
     SBX = SBR.Index(); SHP = json.loads((D / "platforms.json").read_text("utf-8")).get("en", {}) if (D / "platforms.json").exists() else {}
 
@@ -376,8 +376,9 @@ def build(g):
 
     def ep_url(e): return f"{root}episodes/{e['slug']}/"
 
-    def img_tag(u, alt, size):
-        return f'<img src="{esc(u)}" alt="{esc(alt)}" width="{size}" height="{size}" loading="lazy" decoding="async" style="width:{size}px;height:{size}px;object-fit:cover;border-radius:.5rem;flex:none">' if u else ""
+    def img_tag(u, alt, size, eager=False):   # eager: Bild im ersten Bildschirm (Folgenkopf) - nicht lazy, sonst startet es erst nach dem Layout (LCP)
+        lz = "" if eager else 'loading="lazy" '
+        return f'<img src="{esc(u)}" alt="{esc(alt)}" width="{size}" height="{size}" {lz}decoding="async" style="width:{size}px;height:{size}px;object-fit:cover;border-radius:.5rem;flex:none">' if u else ""
 
     def card(e):
         nr = SNT.get("en", title=e["name"])
@@ -477,7 +478,7 @@ def build(g):
         tx = (f'<h2>Transcript</h2>{TRS.links_html(_trf)}<details open><summary>Read the full transcript</summary><p style="white-space:pre-wrap;line-height:1.6">{esc(tr)}</p></details>' if len(tr) > 200
               else f'<h2>Transcript</h2>{TRS.links_html(_trf)}' if _trf else "")   # #266: Dateien sichtbar verlinkt, Transkript im HTML unveraendert
         body = (f'<article><p class="mut">{day(e["create_time"])}{" · Season " + str(e["season"]) if e.get("season") else ""}</p><h1>{esc(e["name"])}</h1>{SPM.note("en", _spr, "episode")}{aud}'
-                f'<div style="display:flex;gap:1rem;align-items:flex-start;margin:1em 0">{img_tag(thumb_of(e, nrec), e["name"], 160)}<div><strong>{esc(short_desc(e, nrec, 300))}</strong></div></div>{nkp}<div class="pp-notes">{nnotes}{IMG.CSS if IMG.needs_responsive_css(nnotes) else ""}</div>{nfaq}{SNT.CSS if (nkp or nnotes or nfaq) else ""}'
+                f'<div style="display:flex;gap:1rem;align-items:flex-start;margin:1em 0">{img_tag(thumb_of(e, nrec), e["name"], 160, eager=True)}<div><strong>{esc(short_desc(e, nrec, 300))}</strong></div></div>{nkp}<div class="pp-notes">{nnotes}{IMG.CSS if IMG.needs_responsive_css(nnotes) else ""}</div>{nfaq}{SNT.CSS if (nkp or nnotes or nfaq) else ""}'
                 + (f"<p>{ext}</p>" if ext else "") + (f'<p class="mut">Host: {hl}</p>' if hl else "") + (f"<h2>Guests</h2><ul>{gl}</ul>" if gl else "") + also
                 + (("<h2>Related articles</h2><ul>" + "".join(f'<li><a href="{bp_url(p)}">{esc(p["title"])}</a></li>' for p in related_posts(e["slug"])) + "</ul>") if related_posts(e["slug"]) else "") + tx + "</article>" + (g.get("author_box")("en") if g.get("author_box") else "")
                 + PG("en", (ep_url(prev_), prev_["name"]) if prev_ else None, (ep_url(next_), next_["name"]) if next_ else None))
@@ -512,7 +513,7 @@ def build(g):
             _ldub = TRS.REG.dub.get((l, e["slug"]))   # #266: Dub-Folge der Sprache hat ein Transkript -> dieselben Dateien auch unter dieser Adresse
             _ltrf = TRS.REG.publish(g.get("write_r2") or write, BASE, f"{l}/show/episodes/{e['slug']}/", vtt=TRS.dub_vtt(l, _ldub[0]), index=False) if _ldub else {}
             lbody = (f'<article><p class="mut">{day(e["create_time"])}</p><h1>{esc(lt)}</h1>{SPM.note(l, _spr, "episode")}{aud}'
-                     f'<div style="display:flex;gap:1rem;align-items:flex-start;margin:1em 0">{img_tag(thumb_of(e, nrec), lt, 160)}<div><strong>{esc(ls)}</strong></div></div>'
+                     f'<div style="display:flex;gap:1rem;align-items:flex-start;margin:1em 0">{img_tag(thumb_of(e, nrec), lt, 160, eager=True)}<div><strong>{esc(ls)}</strong></div></div>'
                      + (f'<div class="pp-notes">{ln_html}{IMG.CSS if IMG.needs_responsive_css(ln_html) else ""}</div>' if ln else "") + (f"<p>{ext}</p>" if ext else "")
                      + (TRS.links_html(_ltrf, _ldub[1]) if _ltrf else "")
                      + f'<p class="mut"><a href="{ep_url(e)}" hreflang="en" lang="en">{esc(e["name"])}</a> (English)</p></article>')

@@ -38,6 +38,7 @@ from pathlib import Path
 import hashlib
 import site_money as SM
 import site_cover
+import site_player as PL   # Player (YouTube, Spreaker) erst nach Klick: Platzhalter mit festen Massen statt iframe
 from site_content import FAQ
 from site_taxonomy import (CATS, ORDER, TOPICS, TAGW, cat_name, classify, tags_of, tag_slug, tag_url, related, autolink)
 
@@ -137,7 +138,7 @@ footer{border-top:1px solid var(--fg);margin-top:64px;padding:26px 0 48px;font-s
 .info{margin:1.6em 0;padding:20px 22px;border:1px solid var(--ln,#d9cfc2);background:#fff8;border-radius:6px}.info figcaption{font-family:Didot,"Bodoni 72",Georgia,serif;font-size:1.25rem;margin-bottom:14px}.info small{display:block;margin-top:12px;opacity:.6;font-size:.75rem}
 .isteps{list-style:none;padding:0;margin:0;display:grid;gap:12px}.isteps li{display:grid;grid-template-columns:36px 1fr;gap:2px 12px;align-items:start}.isteps i{grid-row:span 2;width:32px;height:32px;border-radius:50%;background:var(--ac);color:#fff;font-style:normal;display:flex;align-items:center;justify-content:center;font-weight:700}.isteps b{font-size:1rem}.isteps span{font-size:.92rem;opacity:.85}
 .icols{display:grid;grid-template-columns:1fr 1fr;gap:14px}.icol{border-top:3px solid var(--ac);padding-top:8px}.icol h4{margin:0 0 6px}.icol ul{margin:0;padding-left:18px}.ifacts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}.ifacts div{border-left:3px solid var(--ac);padding-left:10px}.ifacts b{display:block;font-size:1.5rem;font-family:Didot,"Bodoni 72",Georgia,serif}.ifacts span{font-size:.88rem}@media(max-width:560px){.icols{grid-template-columns:1fr}}
-.article{margin-top:2em;max-width:42em}.article h2{margin-top:1.6em}.article p,.article li{line-height:1.75}.cc{position:fixed;left:12px;right:12px;bottom:12px;z-index:50;max-width:760px;margin:0 auto;background:var(--ink);color:var(--onink);padding:12px 16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;box-shadow:0 6px 28px #0006}.cc[hidden]{display:none}@media(max-width:1180px){body:has(.fshare) .cc{bottom:58px}}.cc span{flex:1 1 260px;font-size:.92rem}.cc .btn{padding:6px 14px;color:var(--onink);border-color:var(--onink)}.cc .btn.main{color:#fff;border-color:var(--ac)}.share{border-top:1px solid var(--ln,#d9cfc2);margin-top:2.5em;padding:16px 0}.share .wrap{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.share b{margin-right:6px}.share .btn{font-size:.85rem;padding:6px 12px}.showrow{font-size:.85rem;margin:10px 0 0}.showrow a{margin-right:12px}.yt{position:relative;margin:22px 0;aspect-ratio:16/9;background:#000;border-radius:4px;overflow:hidden;cursor:pointer}.yt img{width:100%;height:100%;object-fit:cover;opacity:.85}.yt button{position:absolute;inset:0;margin:auto;width:76px;height:76px;border-radius:50%;border:0;background:var(--ac);color:#fff;font-size:30px;cursor:pointer}.yt iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.article{margin-top:2em;max-width:42em}.article h2{margin-top:1.6em}.article p,.article li{line-height:1.75}.share{border-top:1px solid var(--ln,#d9cfc2);margin-top:2.5em;padding:16px 0}.share .wrap{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.share b{margin-right:6px}.share .btn{font-size:.85rem;padding:6px 12px}.showrow{font-size:.85rem;margin:10px 0 0}.showrow a{margin-right:12px}.yt{position:relative;margin:22px 0;aspect-ratio:16/9;background:#000;border-radius:4px;overflow:hidden;cursor:pointer}.yt img{width:100%;height:100%;object-fit:cover;opacity:.85}.yt button{position:absolute;inset:0;margin:auto;width:76px;height:76px;border-radius:50%;border:0;background:var(--ac);color:#fff;font-size:30px;cursor:pointer}.yt iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .cover{margin:18px 0 6px;border-radius:4px;overflow:hidden;line-height:0}.cover svg{width:100%;height:auto;display:block}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:0;border-top:1px solid var(--fg);border-bottom:1px solid var(--fg);margin:30px 0}
 .stats div{padding:18px 14px;border-inline-end:1px solid var(--bd)}.stats b{display:block;font:700 2.4rem/1 Didot,"Bodoni 72",Georgia,serif;color:var(--ac)}.stats span{font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
@@ -149,7 +150,7 @@ footer{border-top:1px solid var(--fg);margin-top:64px;padding:26px 0 48px;font-s
 @media (max-width:560px){body{font-size:16px}.panel{padding:14px}.btn{padding:10px 16px}}"""
 from site_design import lang_dropdown, site_header, FONT_CSS, INDUSTRY, EN_NAMES, section, spec_box, lang_tile, spec_table, cta_box, hero_h1
 from site_design import pager as PAGER, neighbours as NEIGH   # Vor/Zurueck am Seitenende (rel=prev/next)
-CSS = FONT_CSS + CSS + INDUSTRY
+CSS = FONT_CSS + CSS + INDUSTRY + PL.CSS
 
 
 def esc(s): return html.escape(s or "", quote=True)
@@ -342,25 +343,6 @@ def share_html(lang, url, title):
     return fbar   # Klick-Logik in assets/page.js
 
 
-CLARITY_ID = "v5hs0d3310"
-CONSENT = {
-    "de": ("Wir nutzen Microsoft Clarity zur Nutzungsanalyse.", "Akzeptieren", "Ablehnen"), "es": ("Usamos Microsoft Clarity para analizar el uso.", "Aceptar", "Rechazar"),
-    "fr": ("Nous utilisons Microsoft Clarity pour analyser l'usage.", "Accepter", "Refuser"), "it": ("Usiamo Microsoft Clarity per analizzare l'utilizzo.", "Accetta", "Rifiuta"),
-    "pt": ("Usamos o Microsoft Clarity para analisar o uso.", "Aceitar", "Recusar"), "nl": ("We gebruiken Microsoft Clarity voor gebruiksanalyse.", "Accepteren", "Weigeren"),
-    "pl": ("Używamy Microsoft Clarity do analizy korzystania ze strony.", "Akceptuję", "Odrzucam"), "id": ("Kami memakai Microsoft Clarity untuk analisis penggunaan.", "Terima", "Tolak"),
-    "ru": ("Мы используем Microsoft Clarity для анализа использования сайта.", "Принять", "Отклонить"), "uk": ("Ми використовуємо Microsoft Clarity для аналізу використання сайту.", "Прийняти", "Відхилити"),
-    "ar": ("نستخدم Microsoft Clarity لتحليل الاستخدام.", "قبول", "رفض"), "he": ("אנו משתמשים ב-Microsoft Clarity לניתוח שימוש.", "אישור", "דחייה"),
-    "ja": ("利用状況の分析に Microsoft Clarity を使用しています。", "同意する", "拒否する"),
-    "ko": ("이용 분석을 위해 Microsoft Clarity를 사용합니다.", "동의", "거부"), "en": ("We use Microsoft Clarity for usage analytics.", "Accept", "Decline")}
-
-
-def consent_html(lang):
-    """Cookie-Hinweis; die Logik (Zustimmung merken, Clarity nur nach Zustimmung laden) liegt in assets/page.js."""
-    m, a, d = CONSENT.get(lang, CONSENT["en"])
-    return (f'<div id="cc" class="cc" hidden role="region" aria-label="Cookies" data-id="{CLARITY_ID}"><span>{esc(m)}</span>'
-            f'<button type="button" class="btn main" id="cc1">{esc(a)}</button><button type="button" class="btn" id="cc0">{esc(d)}</button></div>')
-
-
 def ext_links(html_):
     """Externe Links (andere Domain als die Seite) immer in neuem Tab oeffnen, mit rel=noopener."""
     host = BASE.split("//")[-1]
@@ -394,7 +376,9 @@ for _f in ("a11y_en.json", "a11y_i18n.json"):
 
 A11Y_EARLY = ("<script>try{var a=JSON.parse(localStorage.getItem('m365-a11y')||'{}'),c=document.documentElement.classList;"
               "if(a.s)c.add('a11y-s'+a.s);a.hc&&c.add('a11y-hc');a.font&&c.add('a11y-font');a.sp&&c.add('a11y-sp');a.ul&&c.add('a11y-ul');a.nomo&&c.add('a11y-nomo');"
-              "a.dk&&document.documentElement.setAttribute('data-theme','dark')}catch(e){}</script>")
+              "a.dk&&document.documentElement.setAttribute('data-theme','dark')}catch(e){}"
+              # Apple-Geraete: Apple Podcasts zuerst schon vor dem ersten Bild (vorher setzte page.js die Klasse nach dem Laden -> Knoepfe sprangen, CLS)
+              "(function(){try{var u=navigator.userAgent||'',p=navigator.platform||'';if(/iPhone|iPad|iPod|Macintosh|Mac OS X/.test(u)||/Mac|iPhone|iPad/.test(p)||(navigator.maxTouchPoints>1&&/Mac/.test(p)))document.documentElement.classList.add('apple-first')}catch(e){}})()</script>")
 
 
 def a11y_tags(lang):
@@ -460,6 +444,11 @@ FXCSS = _mini_css("fx.css")   # kleines CSS inline statt eigener Anfrage (Ladeze
 # Barrierefreiheits-Regeln stehen im gehashten site.css statt in einer eigenen Datei: vorher lag a11y.css als zweites renderblockierendes
 # Stylesheet am Anfang von <body> (eigene Anfrage, nur 1 h Cache). assets/a11y.css bleibt fuer noch gecachte alte Seiten liegen.
 A11Y_CSS = _mini_css("a11y.css")
+# Sidebar-Regeln (sbar.css) ebenfalls im Hash-Bundle (aus Copilot-Entwurf #167): Folgen-, Show- und Entitaetsseiten luden sie als zweites
+# renderblockierendes Stylesheet (eine Anfrage mehr vor dem ersten Bild, 1 h Cache). Reihenfolge wie bisher im <head>: vor dem Haupt-CSS.
+# Die Selektoren sind auf .shw/.sb-*/.att-* begrenzt; assets/sbar.css bleibt fuer gecachte alte Seiten liegen. data-sbar am <link> sagt
+# assets/attend.js, dass die Regeln schon da sind (sonst laedt das Popup sbar.css nach). community.css bleibt vorerst eigene Datei.
+SBAR_CSS = _mini_css("sbar.css")
 # Vorgeladen werden die Schnitte, die auf jeder Seite im ersten Bildschirm Text zeigen (gemessen auf Start-, Sprach-, Show- und Entitaetsseiten,
 # alle 15 Sprachen - Navigation, Logo und Ziffern/Leerzeichen sind lateinisch). Barlow 400 (Fliesstext) und Condensed 600 (Ueberschriften) normal;
 # Condensed 500 (Menue) und 700 (Logo) ab 701 px normal, darunter mit fetchpriority=low. Live-A/B 3.11.2026 (tools/preload_ab.mjs, 2 x 7 Laeufe):
@@ -541,7 +530,6 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
         if share: body = body.replace("<footer>", share_html(lang, canonical, title) + "<footer>", 1)   # T37: share=False (Sponsor-Seite, keine Fremdmarken)
     if side:   # Sidebar neben dem Hauptinhalt (wie auf den Show-Seiten): erstes <main> in zwei Spalten
         body = re.sub(r'<main class="wrap"([^>]*)>(.*?)</main>', lambda m: f'<main class="wrap shw"{m.group(1)}><div class="shmain">{m.group(2)}</div>{side}</main>', body, count=1, flags=re.S)
-        extra_head += f'<link rel="stylesheet" href="{BASE}/assets/sbar.css">'
     body = single_main(body)
     body = ADS.inject(BASE, body, lang, canonical, noindex)
     if 'id="main"' in body:
@@ -564,7 +552,6 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
 {ld}</head>
 <body>
 {ext_links(body)}
-{consent_html(lang)}
 {a11y_tags(lang)}
 <script defer src="{BASE}/assets/page.js"></script>
 <script defer src="{BASE}/assets/attend.js"></script>
@@ -582,11 +569,11 @@ def css_link():
     """Das gesamte Stylesheet liegt einmal als Datei mit Inhalts-Hash unter /assets/ (statt ~33 KB inline in jeder Seite): kleinere Seiten, Browser- und CDN-Cache."""
     if not _CSSF:
         import hashlib
-        css = CSS + (ADS.CSS if ADS.css_needed(BASE) else "") + "\n" + A11Y_CSS + "\n"
+        css = SBAR_CSS + "\n" + CSS + (ADS.CSS if ADS.css_needed(BASE) else "") + "\n" + A11Y_CSS + "\n"
         name = "site." + hashlib.sha1(css.encode("utf-8")).hexdigest()[:10] + ".css"
         (OUT / "assets").mkdir(parents=True, exist_ok=True); (OUT / "assets" / name).write_text(css, encoding="utf-8")
         _CSSF["u"] = f"{BASE}/assets/{name}"
-    return f'<link rel="stylesheet" href="{_CSSF["u"]}">'
+    return f'<link rel="stylesheet" href="{_CSSF["u"]}" data-sbar>'
 
 
 _IDENT = {"@id", "@type", "@context", "name", "url"}
@@ -759,12 +746,17 @@ def _cv(*names):
     return _CV[names]
 
 
-def community_tags(lang, vid=None, mode=""):
-    """Skripte/Stile fuer Community-Widgets (blenden sich aus, wenn die API nicht erreichbar ist)."""
+def community_tags(lang, vid=None, mode="", css_async=False):
+    """Skripte/Stile fuer Community-Widgets (blenden sich aus, wenn die API nicht erreichbar ist).
+    css_async: community.css nicht renderblockierend laden (Folgenseiten: die Widgets stehen unten und erscheinen erst nach der API-Antwort;
+    Lighthouse zaehlte das Stylesheet am Seitenende als blockierend, ~0,4 s auf dem Handy). Ohne JavaScript gibt es dort ohnehin keine Widgets."""
     priv = f"{BASE}/{'datenschutz' if lang == 'de' else 'privacy'}/"
     cfg = {"api": COMMUNITY_API, "lang": lang, "vid": vid, "privacy": priv, "communityUrl": f"{BASE}/{lang}/community/"}
     # Die Oberflaechentexte (ca. 6 KB je Sprache, auf jeder Seite gleich) liegen in assets/cm-<sprache>.js (gecacht), nicht mehr in jeder Seite.
-    return (f'<link rel="stylesheet" href="{BASE}/assets/community.css?v={_cv("assets/community.css")}"><script defer src="{BASE}/assets/cm-{lang if lang in _CI else "en"}.js?v={_cv("data/community_i18n.json")}"></script>'
+    css_url = f'{BASE}/assets/community.css?v={_cv("assets/community.css")}'
+    css = (f'<link rel="preload" as="style" href="{css_url}" onload="this.onload=null;this.rel=\'stylesheet\'">' if css_async
+           else f'<link rel="stylesheet" href="{css_url}">')
+    return (f'{css}<script defer src="{BASE}/assets/cm-{lang if lang in _CI else "en"}.js?v={_cv("data/community_i18n.json")}"></script>'
             f'<script>window.M365C={json.dumps(cfg, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")}</script><script defer src="{BASE}/assets/community.js?v={_cv("assets/community.js")}"></script>')
 
 
@@ -1249,9 +1241,9 @@ def build():
 <h1>{esc(h1_main)}</h1>{("<p class=sub>" + esc(h1_rest) + "</p>") if h1_rest else ""}{SPM.note(l, _spr, "episode")}
 {chips_html(l, it)}<p class="lede">{intro}</p>
 <figure class="cover" style="margin-inline:0">{art_svg(vid, LANGS[l][0], "M365.FM · " + ui[0], l)}</figure>
-<div class="panel"><iframe src="https://widget.spreaker.com/player?episode_id={it["eid"]}&amp;theme=light&amp;playlist=false" height="131" loading="lazy" title="{esc(e["title"])}"></iframe>
+<div class="panel">{PL.player("spreaker", it["eid"], e["title"], ui[0], link=spk)}
 <div class="btns">{btns}</div>{"<p class=showrow>M365.FM ▸ " + showrow + "</p>" if showrow else ""}</div>
-<div class="yt"><iframe src="https://www.youtube-nocookie.com/embed/{vid}?rel=0" title="{esc(e["title"])}" loading="lazy" allow="accelerometer; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+<div style="margin:22px 0">{PL.player("youtube", vid, e["title"], ui[1], link=yt)}</div>
 <p class="mut">▶ {esc(e["title"])}</p>
 <h2>{esc(hdr)}</h2><ol class="points">{lis}</ol>
 <p class="lede" style="margin-top:1.4em">{aud}</p>
@@ -1262,7 +1254,7 @@ def build():
 {('<h2>' + esc(ui[4]) + '</h2><div class="list">' + rel + '</div>') if rel else ''}
 <p style="margin-top:1.6em"><a class="btn" href="{BASE}/{l}/">{esc(ui[3])} →</a></p>
 <section id="c-comments"></section><section id="c-sub"></section></main>
-{footer(l)}{community_tags(l, vid)}"""
+{footer(l)}{community_tags(l, vid, css_async=True)}"""
         if _spr: body = SPM.mark(body, _spr, "episode")   # T37 Sponsor: Links zum Sponsor mit rel="sponsored"
         OG_COVER[canonical] = art_svg(vid, LANGS[l][0], lang=l)
         write(f'{l}/{it["slug"]}/index.html',
