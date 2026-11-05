@@ -100,6 +100,9 @@
   "/api/admin/run-daily": {
    "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
   },
+  "/api/admin/run-weekly": {
+   "skip": "Cron-Ausführungspunkt: ausschließlich mit CRON_KEY, nicht als Nutzerfunktion"
+  },
   "/api/admin/show": {
    "skip": "Admin-Funktionen: bewusst nicht per KI-Token (Freigabe von Shows durch die Redaktion)"
   },
@@ -433,17 +436,17 @@
   },
   "/api/expert-requests/create": {
    "tools": [
-   "create_expert_request"
+    "create_expert_request"
    ]
   },
   "/api/expert-requests/list": {
    "tools": [
-   "list_expert_requests"
+    "list_expert_requests"
    ]
   },
   "/api/expert-requests/matches": {
    "tools": [
-   "list_my_matches"
+    "list_my_matches"
    ]
   },
   "/api/expert-requests/preview": {
@@ -508,6 +511,12 @@
   },
   "/api/health": {
    "skip": "Seiten-Infrastruktur (kein Nutzerfunktion)"
+  },
+  "/api/internal/sponsor-metrics": {
+   "skip": "Ausschließlich durch den täglichen Cron-Workflow mit CRON_KEY aufrufbar"
+  },
+  "/api/internal/sponsor-placements": {
+   "skip": "Ausschließlich durch den täglichen Cron-Workflow mit CRON_KEY aufrufbar"
   },
   "/api/internal/ai-spend": {
    "skip": "Interner Actions-Endpunkt mit CRON_KEY; absichtlich nicht per MCP-Token erreichbar"
@@ -707,7 +716,13 @@
   "/api/push/key": {
    "skip": "Seiten-Infrastruktur (kein Nutzerfunktion)"
   },
+  "/api/push/status": {
+   "skip": "Seiten-Infrastruktur (kein Nutzerfunktion)"
+  },
   "/api/push/subscribe": {
+   "skip": "Seiten-Infrastruktur (kein Nutzerfunktion)"
+  },
+  "/api/push/digest": {
    "skip": "Seiten-Infrastruktur (kein Nutzerfunktion)"
   },
   "/api/push/unsubscribe": {
@@ -851,11 +866,52 @@
     "suggest_my_speaker_entries"
    ]
   },
+  "/api/admin/sponsor-links": {
+   "skip": "Admin-only Sponsorlinks werden ausschließlich im geschützten Admin-Bereich verwaltet"
+  },
+  "/api/sponsor/dashboard": {
+   "skip": "Browser-Dashboard mit CSV-/PDF-Export; Event-Partnerschaften sind über list_my_event_partners abrufbar"
+  },
+  "/api/sponsor/go-codes": {
+   "skip": "Öffentliche Liste aktiver Sponsorlink-Codes ausschließlich für den Seitenbau; enthält keine Ziele"
+  },
+  "/api/sponsor/link-stats": {
+   "tools": [
+    "list_sponsor_link_stats"
+   ]
+  },
+  "/api/sponsor/manual-metric": {
+   "skip": "Admin-Eingabe mit Belegprüfung ist ausschließlich im rollenbeschränkten Dashboard verfügbar"
+  },
+  "/api/sponsor/placement": {
+   "skip": "Platzierungsdetails und -zuordnung gehören in das rollenbeschränkte Browser-Dashboard"
+  },
   "/api/sponsor/request": {
    "skip": "Öffentliches Formular für Sponsor-Anfragen; Bearbeitung ausschließlich im Admin-Panel"
   },
+  "/api/sponsor/sources": {
+   "skip": "Status und Firmenauswahl der Datenquellenverwaltung sind Admin-only im Web-Dashboard"
+  },
+  "/api/topics/clear": {
+   "skip": "Persönliche Benachrichtigungs-Abos werden nur in der Website-Verwaltung gelöscht, nicht per KI-Token"
+  },
+  "/api/topics/email-unsub": {
+   "skip": "Signierter Abmeldelink aus einer Themen-E-Mail; wird im Browser geöffnet, nicht per KI"
+  },
   "/api/topics/export": {
    "skip": "Datenexport fuer Seitenbau und Agenten (Inhalt <-> Entitaet mit Gewicht); Lesetools nutzen die Entitaetsseiten/articles.json"
+  },
+  "/api/topics/follow": {
+   "skip": "Themen-Abos erfordern ausdrückliche Einwilligung und werden nur über die Website verwaltet"
+  },
+  "/api/topics/mine": {
+   "skip": "Persönliche Benachrichtigungs-Abos werden nur in der Website-Verwaltung angezeigt"
+  },
+  "/api/topics/status": {
+   "skip": "Private Abo-Prüfung für die Follow-Schaltfläche; Browser-Infrastruktur"
+  },
+  "/api/topics/unfollow": {
+   "skip": "Themen-Abos erfordern ausdrückliche Einwilligung und werden nur über die Website verwaltet"
   },
   "/api/tr-queue": {
    "skip": "Schnittstelle fuer die Uebersetzungs-Pipelines (translate_blog.py --queue): nur Schluessel, kein Inhalt"

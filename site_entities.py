@@ -9,7 +9,7 @@ import json
 import site_mentions as MEN   # Erwaehnungen in fremden Medien als Quellen (data/press_mentions.json)
 import re
 from datetime import date
-from urllib.parse import urlsplit
+from urllib.parse import quote, urlsplit
 from site_i18n import COMM_LANGS, pfx, pfx2, overlay
 from pathlib import Path
 from site_learn import (ENTS, esc, ent_names, fetch_wiki, wiki_block, WCSS, LCSS, WT, GLOSS, GLOSS_JS, write_wk_js)
@@ -292,12 +292,39 @@ def ent_ld(BASE, e, lang, glossary_set=None, person_aka=None):
     return n
 
 
-def claim_html(eid, lang):
+def linkedin_profile(url):
+    try:
+        p = urlsplit(url)
+        return p.scheme == "https" and not p.username and not p.password and p.hostname in ("linkedin.com", "www.linkedin.com") and bool(re.fullmatch(r"/in/[^/]+/?", p.path))
+    except ValueError:
+        return False
+
+
+def claim_html(eid, lang, entity, api):
     oh = ORGPAGES.get(eid)
     if oh and not CLAIMS.get(eid):
         return f'<p><a href="{BASE_}{pfx(lang)}/community/c/{oh}/">{T(lang, "Company profile on M365.FM", "Firmenprofil auf M365.FM")}</a></p>'
     h = CLAIMS.get(eid)
     if not h:
+        links = entity.get("same_as") if isinstance(entity.get("same_as"), list) else []
+        linkedin = next((u for u in links if isinstance(u, str) and linkedin_profile(u)), "")
+        if entity.get("type") == "person" and linkedin:
+            target = f"{BASE_}{pfx(lang)}/entity/{eid}/?claim=linkedin"
+            href = f'{api}/auth/login/linkedin?return={quote(target, safe="")}'
+            text = T(lang, "Claim this profile with LinkedIn", "Profil mit LinkedIn beanspruchen")
+            messages = json.dumps({
+                "verified": T(lang, "Profile claimed and automatically verified.", "Profil beansprucht und automatisch bestätigt."),
+                "pending": T(lang, "Request sent. The editors will review it.", "Anfrage gesendet. Die Redaktion prüft sie."),
+                "claimed": T(lang, "This profile has already been claimed.", "Dieses Profil ist bereits beansprucht."),
+                "not_claimable": T(lang, "This profile cannot be claimed.", "Dieses Profil kann nicht beansprucht werden."),
+                "rate_limit": T(lang, "Too many claim attempts. Please try again later.", "Zu viele Versuche. Bitte später erneut versuchen."),
+            }, ensure_ascii=False)
+            community = f"{BASE_}{pfx(lang)}/community/#c-expert"
+            login_text = T(lang, "Claim this profile through your community profile", "Profil über dein Community-Profil beanspruchen")
+            return (f'<p><a id="en-claim-link" class="btn main" rel="nofollow" hidden href="{esc(href)}">{esc(text)}</a></p>'
+                    f'<p id="en-claim-msg" role="status" aria-live="polite"></p><script>(function(){{var p=new URLSearchParams(location.search),r=p.get("claim_result"),m={messages},e=document.getElementById("en-claim-msg"),a=document.getElementById("en-claim-link");'
+                    f'if(e&&m[r]){{e.textContent=m[r];var u=new URL(location.href);u.searchParams.delete("claim_result");history.replaceState(null,"",u)}}'
+                    f'if(a)fetch("{esc(api)}/api/me",{{credentials:"include"}}).then(function(x){{return x.json()}}).then(function(x){{if(x.user&&x.user.provider!=="linkedin"){{a.href="{esc(community)}";a.textContent="{esc(login_text)}"}}a.hidden=false}}).catch(function(){{a.href="{esc(community)}";a.textContent="{esc(login_text)}";a.hidden=false}})}})();</script>')
         return ""
     return f'<p><a href="{BASE_}{pfx(lang)}/community/u/{h}/">{T(lang, "Profile on M365.FM (maintained by the person)", "Profil auf M365.FM (gepflegt von der Person)")}</a></p>'
 
@@ -448,7 +475,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                 facts.append(_aka)
             for k, key in (("website", "web"), ("docs", "docs"), ("wikipedia", "wikipedia")):
                 if e.get(key):
-                    facts.append((s[k], f'<a href="{esc(e[key])}" rel="{SPM.link_rel(_spr, e[key], own=_spown and key == "web")}">{esc(e[key].replace("https://", "").rstrip("/"))}</a>'))
+                    facts.append((s[k], f'<a href="{esc(SPM.link_url(_spr, e[key], "entity"))}" rel="{SPM.link_rel(_spr, e[key], own=_spown and key == "web")}">{esc(e[key].replace("https://", "").rstrip("/"))}</a>'))
             LIC = {"free": ("free", "kostenlos"), "included": ("included in Microsoft 365", "in Microsoft 365 enthalten"), "addon": ("add-on", "Add-on"), "paid": ("paid", "kostenpflichtig")}
             for lab_en, lab_de, val in (("Version", "Version", e.get("version")), ("Released", "Veröffentlicht", e.get("released")), ("Licence", "Lizenz", (T(lang, *LIC[e["license"]]) if True else "") if e.get("license") in LIC else ""),
                                         ("Level", "Stufe", (e.get("level") or "").capitalize()), ("Exam code", "Prüfungscode", e.get("exam")), ("Valid for", "Gültig für", (f"{e['valid_months']} " + (T(lang, "months", "Monate"))) if e.get("valid_months") else "")):
@@ -578,20 +605,20 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             _src = [(T(lang, "Official website", "Offizielle Website"), e.get("web")), (T(lang, "Documentation", "Dokumentation"), e.get("docs")), ("Wikipedia", e.get("wikipedia")),
                     ("Wikidata", f"https://www.wikidata.org/wiki/{e['wikidata']}" if e.get("wikidata") else "")] + [(T(lang, "Profile", "Profil"), u_) for u_ in (e.get("same_as") or [])[:4]]
             _src = [(n_, u_) for n_, u_ in _src if u_ and str(u_).startswith("http")]
-            srcbox = (f'<section class="en-src"><h2>{esc(T(lang, "Sources", "Quellen"))}</h2><ul>' + "".join(f'<li>{esc(n_)}: <a href="{esc(u_)}" rel="{SPM.link_rel(_spr, u_, own=_spown and u_ == e.get("web"))}">{esc(u_.replace("https://", "").rstrip("/"))}</a></li>' for n_, u_ in _src)
+            srcbox = (f'<section class="en-src"><h2>{esc(T(lang, "Sources", "Quellen"))}</h2><ul>' + "".join(f'<li>{esc(n_)}: <a href="{esc(SPM.link_url(_spr, u_, "entity"))}" rel="{SPM.link_rel(_spr, u_, own=_spown and u_ == e.get("web"))}">{esc(u_.replace("https://", "").rstrip("/"))}</a></li>' for n_, u_ in _src)
                       + (f'<li>{esc(T(lang, "Feed for this topic (RSS)", "Feed zu diesem Thema (RSS)"))}: <a href="{BASE}/entity/{e["id"]}/feed.xml">entity/{e["id"]}/feed.xml</a></li>' if (eps or _arts) else "")
                       + (f'<li>{esc(T(lang, "M365.FM episodes on this topic", "M365.FM-Folgen zum Thema"))}: {len(eps)}</li>' if eps else "") + (f'<li>{esc(T(lang, "Articles on this topic", "Artikel zum Thema"))}: {len(_arts)}</li>' if _arts else "") + MEN.src_li(lang, e["id"]) + "</ul></section>") if (_src or eps or _arts or MEN.for_entity(e["id"])) else ""
             _au = ENTS.get(AUTHOR_EID)
             updline = (f'<p class="mut en-upd">' + (f'{esc(T(lang, "Maintained by", "Gepflegt von"))} <a href="{root}{AUTHOR_EID}/">{esc(_au["name"])}</a> (Microsoft MVP) · ' if _au and e["id"] != AUTHOR_EID else "")
                        + f'{esc(T(lang, "Last updated", "Zuletzt aktualisiert"))}: <time datetime="{_mod}">{_mod}</time></p>')
-            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{root}">{esc(s["entities"])}</a></nav><h1>{esc(e["name"])}</h1>{SPM.note(lang, _spr)}<p class="mut">{esc(TL[e["type"]][li])}</p><p class="en-def" style="font-size:1.1em">{esc(d)}</p>{oldbanner}{claim_html(e["id"], lang)}{hero}{longbox}{ft}{evl}{kpbox}{eb}{tline}{artbox}'
+            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{root}">{esc(s["entities"])}</a></nav><h1>{esc(e["name"])}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="entity" data-topic-id="{esc(e["id"])}" data-topic-label="{esc(T(lang, "Follow", "Folgen"))}">🔔 {T(lang, "Follow", "Folgen")}</button>{SPM.note(lang, _spr, "entity")}<p class="mut">{esc(TL[e["type"]][li])}</p><p class="en-def" style="font-size:1.1em">{esc(d)}</p>{oldbanner}{claim_html(e["id"], lang, e, api)}{hero}{longbox}{ft}{evl}{kpbox}{eb}{tline}{artbox}'
                           f'{qbox}{faqbox}{relmap}{relx}<div class="en-rel">{rb}</div>{gloss}{SU.block(lang, e["id"])}{wb}{("<h2>" + esc(s["experts"]) + "</h2>" + ehtml) if ehtml else ""}{srcbox}{updline}{edit}'
-                          f'<script>window.M365E={{api:"{api}",lang:"{lang}",base:"{BASE}",s:{json.dumps({k: s[k] for k in ("edit_e",)}, ensure_ascii=False)}}};'
+                          f'<script>window.M365E={{api:"{api}",lang:"{lang}",base:"{BASE}",s:{json.dumps({k: s[k] for k in ("edit_e",)}, ensure_ascii=False)}}};window.M365TopicConfig={{api:{json.dumps(api)},lang:{json.dumps(lang)}}};'
                           f'(function(){{var d=0,u="{BASE}/assets/entity.js";function go(){{if(d)return;d=1;var s=document.createElement("script");s.src=u;document.body.appendChild(s)}}'
                           f'var t=document.getElementById("en-qa")||document.getElementById("en-edit");if(!t||!("IntersectionObserver" in window)||location.hash)return go();'
-                          f'var o=new IntersectionObserver(function(x){{if(x.some(function(y){{return y.isIntersecting}})){{o.disconnect();go()}}}},{{rootMargin:"600px"}});o.observe(t)}})();</script>')
+                          f'var o=new IntersectionObserver(function(x){{if(x.some(function(y){{return y.isIntersecting}})){{o.disconnect();go()}}}},{{rootMargin:"600px"}});o.observe(t)}})();</script><script defer src="{BASE}/assets/topic-follow.js"></script>')
             if _spr:   # T37 Sponsor: alle Links auf die Website des Sponsors als bezahlt kennzeichnen
-                b = SPM.mark(b, _spr)
+                b = SPM.mark(b, _spr, "entity")
             node = ent_ld(BASE, e, lang, gl_ids, person_aka)
             _qld = SQ.ld(BASE, e["id"], lang, _qurl) if e["type"] == "person" else []
             if arturls:

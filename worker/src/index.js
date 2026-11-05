@@ -1,14 +1,14 @@
 // Community-API (Cloudflare Worker + D1): Login (Google/Microsoft), Kommentare, Abzeichen, Kurator, Push, E-Mail
 import { json, cors, cookie, makeSession, readSession, cleanText, cleanName, randomToken, rateLimit, isLang, esc, b64u, sign, verify, audit, aiBudgetStatus, reportExternalAiUsage } from "./util.js";
 import { evalBadges, stats, topUsers, badgesFor, award } from "./badges.js";
-import { runDigest } from "./digest.js";
+import { runDigest, runPushDigest } from "./digest.js";
 import { sendMail } from "./mailer.js";
 import { handleEntity, importEntitiesFromSite } from "./entities.js";
 import { importLegacyBlog } from "./legacyblog.js";
 import { importContentBlog } from "./contentblog.js";
 import { handleA2a } from "./a2a.js";
 import { handleAdminPanel } from "./adminpanel.js";
-import { handleSponsor } from "./sponsor.js";
+import { handleSponsor, handleSponsorLink } from "./sponsor.js";
 import { autoTranslateItems, autoTranslateEntities, runTrQueue } from "./autotr.js";
 import { syncLiveEvents } from "./liveevents.js";
 import { syncContentTopics, handleTopics } from "./topics.js";
@@ -17,7 +17,7 @@ import { importEpisodes, importTranslations, handleRegister } from "./register.j
 import { importSearchIndex, syncSearchVectors, handleSearch } from "./search.js";
 import { entityMap } from "./entities.js";
 import { handleProfiles, deleteUserData, refreshProfilesExport } from "./profiles.js";
-import { handleEvents, deleteUserEvents, ensureM365Con } from "./events.js";
+import { handleEvents, deleteUserEvents, ensureM365Con, claimLinkedinEntity, purgeEntityClaimReview } from "./events.js";
 import { handleVotes } from "./votes.js";
 import { handleQa, deleteUserQa } from "./qa.js";
 import { handleBlog, deleteUserBlog } from "./blog.js";
@@ -46,6 +46,8 @@ import { refreshFeeds, refreshFollowers } from "./feeds.js";
 import { autoTranslate, translateStatus, uiI18nExport } from "./translate.js";
 import { handleWiki } from "./wiki.js";
 import { syncExpertise } from "./levels.js";
+import { handleTopicSubscriptions, dispatchTopicNotifications, queueTopicArticles, queueSessionReminders } from "./topic_notifications.js";
+import { savePushSubscription } from "./push.js";
 import { handleContributions, refreshContributions } from "./contributions.js";
 
 const PROVIDERS = {
@@ -59,7 +61,7 @@ const PROVIDERS = {
   },
   linkedin: {   // "Sign In with LinkedIn using OpenID Connect"
     auth: "https://www.linkedin.com/oauth/v2/authorization", token: "https://www.linkedin.com/oauth/v2/accessToken",
-    info: "https://api.linkedin.com/v2/userinfo", scope: "openid profile", id: (e) => e.LINKEDIN_CLIENT_ID, secret: (e) => e.LINKEDIN_CLIENT_SECRET,
+    info: "https://api.linkedin.com/v2/userinfo", scope: "openid profile email", id: (e) => e.LINKEDIN_CLIENT_ID, secret: (e) => e.LINKEDIN_CLIENT_SECRET,
   },
   github: {    // OAuth 2.0 ohne OIDC: Token als JSON anfordern, Profil von api.github.com/user, sub = stabile numerische ID (nie der Login-Name)
     auth: "https://github.com/login/oauth/authorize", token: "https://github.com/login/oauth/access_token",
@@ -159,6 +161,22 @@ async function auth(env, request, url, path) {
   const u = await upsertUser(env, m[2], info.sub, info.name || "User");
   if (u.banned) return html("<p>This account is blocked.</p>", 403);
   const h = new Headers({ location: ret });
+  if (m[2] === "linkedin") {
+    const target = new URL(ret), claim = target.searchParams.get("claim");
+    const match = claim === "linkedin" && /^\/(?:[a-z]{2}\/)?entity\/([a-z0-9][a-z0-9-]{1,78})\/?$/i.exec(target.pathname);
+    if (match) {
+      const result = await claimLinkedinEntity(env, u, raw, match[1]);
+      if (result.error === "claimed") {
+        const response = html("<p>Dieses Profil wurde bereits beansprucht.</p>", 409);
+        response.headers.append("set-cookie", cookie("m365s", await makeSession(env, u.id), 5184000));
+        response.headers.append("set-cookie", cookie("m365o", "", 0));
+        return response;
+      }
+      target.searchParams.delete("claim");
+      target.searchParams.set("claim_result", result.status || result.error || "pending");
+      h.set("location", target.href);
+    }
+  }
   h.append("set-cookie", cookie("m365s", await makeSession(env, u.id), 5184000));
   h.append("set-cookie", cookie("m365o", "", 0));
   return new Response(null, { status: 302, headers: h });
@@ -179,7 +197,7 @@ function pubComment(c, mine, liked, badges, admin) {
 async function api(env, request, url, path, asUser, ctx) {
   const method = request.method, J = (d, s = 200, x) => json(d, s, env, request, x);
   if (method === "OPTIONS") return new Response(null, { status: 204, headers: cors(env, request) });
-  if (asUser === undefined && method !== "GET" && path !== "/api/internal/ai-spend" && request.headers.get("x-requested-with") !== "m365") return J({ error: "bad_request" }, 400);
+  if (asUser === undefined && method !== "GET" && !["/api/internal/ai-spend", "/api/internal/sponsor-metrics", "/api/email/unsub", "/api/mail/unsub", "/api/topics/email-unsub"].includes(path) && request.headers.get("x-requested-with") !== "m365") return J({ error: "bad_request" }, 400);   // interne Routen per CRON_KEY; Abmeldelinks (RFC 8058) senden keinen Zusatz-Header, alle per Token geschuetzt
   // asUser: vom MCP-Server (Token bereits geprueft) - dann keine Cookie-Sitzung noetig
   const uid = asUser === undefined ? await readSession(env, request) : null, user = asUser === undefined ? (uid ? await me(env, uid) : null) : asUser;
   const need = () => (user ? null : J({ error: "login" }, 401));
@@ -206,7 +224,7 @@ async function api(env, request, url, path, asUser, ctx) {
     return J({ ok: true, ...status });
   }
 
-  const sponsor = await handleSponsor(env, request, url, path, J);
+  const sponsor = await handleSponsor(env, request, url, path, J, user);
   if (sponsor) return sponsor;
 
   const contributions = await handleContributions(env, request, url, path, user, J);
@@ -233,9 +251,15 @@ async function api(env, request, url, path, asUser, ctx) {
     if (method === "DELETE") {   // Konto + alle eigenen Daten loeschen (DSGVO)
       const id = user.id;
       await db.batch([
+        db.prepare("DELETE FROM entity_claim_review WHERE eid IN (SELECT eid FROM entity_claims WHERE user_id=?)").bind(id),
+        db.prepare("DELETE FROM entity_claims WHERE user_id=? AND status<>'verified'").bind(id),
         db.prepare("DELETE FROM likes WHERE user_id=? OR comment_id IN (SELECT id FROM comments WHERE user_id=?)").bind(id, id),
         db.prepare("DELETE FROM reports WHERE user_id=? OR comment_id IN (SELECT id FROM comments WHERE user_id=?)").bind(id, id),
         db.prepare("DELETE FROM comments WHERE user_id=?").bind(id), db.prepare("DELETE FROM user_badges WHERE user_id=?").bind(id),
+        db.prepare("DELETE FROM push_topics WHERE user_id=? OR endpoint IN (SELECT endpoint FROM push_subs WHERE user_id=?)").bind(id, id), db.prepare("DELETE FROM email_topics WHERE user_id=?").bind(id),
+        db.prepare("DELETE FROM topic_queue WHERE recipient=? OR recipient IN (SELECT endpoint FROM push_subs WHERE user_id=?)").bind(String(id), id),
+        db.prepare("DELETE FROM topic_deliveries WHERE recipient=? OR recipient IN (SELECT endpoint FROM push_subs WHERE user_id=?)").bind(String(id), id),
+        db.prepare("DELETE FROM topic_recipient_state WHERE recipient=? OR recipient IN (SELECT endpoint FROM push_subs WHERE user_id=?)").bind(String(id), id),
         db.prepare("DELETE FROM push_subs WHERE user_id=?").bind(id), db.prepare("DELETE FROM wiki_reports WHERE user_id=?").bind(id), db.prepare("DELETE FROM wiki_rev WHERE user_id=? AND status IN ('pending','rejected')").bind(id), db.prepare("UPDATE wiki_rev SET user_id=0 WHERE user_id=?").bind(id), db.prepare("DELETE FROM curators WHERE user_id=?").bind(id), db.prepare("DELETE FROM users WHERE id=?").bind(id),
       ]);
       await deleteUserEvents(db, id);
@@ -360,19 +384,40 @@ async function api(env, request, url, path, asUser, ctx) {
     return J({ user: u, ...(await stats(db, u.id)), recent: rc, curator: cur }, 200, { "cache-control": "public, max-age=120" });
   }
 
+  const topicResponse = await handleTopicSubscriptions(env, request, url, path, user, J);
+  if (topicResponse) return topicResponse;
+
   if (path === "/api/push/key" && method === "GET") return J({ key: env.VAPID_PUBLIC || "" });
+  if (path === "/api/push/status" && method === "GET") {
+    const endpoint = String(url.searchParams.get("endpoint") || "").slice(0, 600);
+    if (!/^https:\/\//.test(endpoint)) return J({ error: "bad_request" }, 400);
+    const sub = await db.prepare("SELECT user_id,digest FROM push_subs WHERE endpoint=?").bind(endpoint).first();
+    const topics = sub ? (await db.prepare("SELECT 1 x FROM push_topics WHERE endpoint=? LIMIT 1").bind(endpoint).first()) : null;
+    return J({ registered: !!sub, digest: !!sub?.digest, topics: !!topics }, 200, { "cache-control": "no-store" });
+  }
   if (path === "/api/push/subscribe" && method === "POST") {
     const b = await request.json().catch(() => ({}));
     const e = b.endpoint, k = b.keys || {};
-    if (!/^https:\/\//.test(e || "") || e.length > 600 || !k.p256dh || !k.auth || !isLang(b.lang)) return J({ error: "bad_request" }, 400);
+    if (!/^https:\/\//.test(e || "") || e.length > 600 || !k.p256dh || !k.auth || !(b.lang === "en" || isLang(b.lang))) return J({ error: "bad_request" }, 400);
     if (!(await rateLimit(db, `ps:${ip(request)}`, 20, 3600))) return J({ error: "rate" }, 429);
-    await db.prepare("INSERT OR REPLACE INTO push_subs(endpoint,p256dh,auth,lang,user_id,created) VALUES(?,?,?,?,?,?)").bind(e, String(k.p256dh), String(k.auth), b.lang, user?.id ?? null, now()).run();
+    await savePushSubscription(db, {
+      endpoint: e, p256dh: String(k.p256dh), auth: String(k.auth), lang: b.lang,
+      userId: user?.id ?? null, created: now(), digest: b.digest === 0 ? 0 : 1,
+    });
     if (user) await award(db, user.id, "notified");
     return J({ ok: true });
   }
+  if (path === "/api/push/digest" && method === "POST") {
+    const b = await request.json().catch(() => ({})), endpoint = String(b.endpoint || "").slice(0, 600);
+    if (!/^https:\/\//.test(endpoint) || typeof b.on !== "boolean") return J({ error: "bad_request" }, 400);
+    const sub = await db.prepare("SELECT user_id FROM push_subs WHERE endpoint=?").bind(endpoint).first();
+    if (!sub || (b.on && sub.user_id && sub.user_id !== user?.id)) return J({ error: "bad_subscription" }, 400);
+    await db.prepare("UPDATE push_subs SET digest=? WHERE endpoint=?").bind(b.on ? 1 : 0, endpoint).run();
+    return J({ ok: true, digest: b.on });
+  }
   if (path === "/api/push/unsubscribe" && method === "POST") {
     const b = await request.json().catch(() => ({}));
-    if (b.endpoint) await db.prepare("DELETE FROM push_subs WHERE endpoint=?").bind(String(b.endpoint)).run();
+    if (b.endpoint) await db.batch([db.prepare("DELETE FROM push_topics WHERE endpoint=?").bind(String(b.endpoint)), db.prepare("DELETE FROM topic_queue WHERE channel='push' AND recipient=?").bind(String(b.endpoint)), db.prepare("DELETE FROM topic_deliveries WHERE channel='push' AND recipient=?").bind(String(b.endpoint)), db.prepare("DELETE FROM topic_recipient_state WHERE channel='push' AND recipient=?").bind(String(b.endpoint)), db.prepare("DELETE FROM push_subs WHERE endpoint=?").bind(String(b.endpoint))]);
     return J({ ok: true });
   }
 
@@ -397,7 +442,16 @@ async function api(env, request, url, path, asUser, ctx) {
   }
   if (path === "/api/email/unsub" && (method === "GET" || method === "POST")) {
     const t = url.searchParams.get("token") || "";
-    await db.prepare("DELETE FROM email_subs WHERE token=?").bind(t).run();
+    const weekly = await db.prepare("SELECT email FROM mail_weekly_unsub WHERE token=?").bind(t).first().catch(() => null);
+    if (weekly && url.searchParams.get("lang") === "all") {
+      await db.batch([
+        db.prepare("DELETE FROM email_subs WHERE lower(email)=lower(?)").bind(weekly.email),
+        db.prepare("INSERT OR REPLACE INTO mail_prefs(user_id,kind,on_) SELECT user_id,'weekly',0 FROM mail_addr WHERE lower(email)=lower(?)").bind(weekly.email),
+        db.prepare("DELETE FROM mail_weekly_unsub WHERE email=?").bind(weekly.email),
+      ]);
+    } else {
+      await db.prepare("DELETE FROM email_subs WHERE token=?").bind(t).run();
+    }
     return method === "POST" ? new Response("ok") : html("<h2>✓ Unsubscribed</h2><p>You will not receive further e-mails.</p>");
   }
 
@@ -410,7 +464,7 @@ async function api(env, request, url, path, asUser, ctx) {
   }
   if (path.startsWith("/api/admin/")) {
     const keyOk = env.CRON_KEY && (request.headers.get("x-cron-key") === env.CRON_KEY || url.searchParams.get("key") === env.CRON_KEY);   // Header bevorzugt (Query landet in Logs)
-    if (path === "/api/admin/run-daily" && keyOk) return J(await runDigest(env, { dry: url.searchParams.get("dry") === "1" }));
+    if ((path === "/api/admin/run-weekly" || path === "/api/admin/run-daily") && keyOk) return J(await runDigest(env, { dry: url.searchParams.get("dry") === "1" }));
     if (!user?.admin) return J({ error: "forbidden" }, 403);
     if (path === "/api/admin/expertise-sync" && method === "POST") { const r = await syncExpertise(env, entityMap); await audit(db, user.id, "expertise-sync", "", JSON.stringify(r)); return J(r); }   // Stufen sofort neu berechnen
     if (path === "/api/admin/reports" && method === "GET") {
@@ -438,6 +492,10 @@ export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url), path = url.pathname.replace(/\/+$/, "") || "/";
     try {
+      if (path === "/robots.txt") return new Response("User-agent: *\nDisallow: /go/\n", {
+        headers: { "content-type": "text/plain; charset=utf-8", "cache-control": "public, max-age=3600" },
+      });
+      if (path.startsWith("/go/")) return await handleSponsorLink(env, request, url, path, ctx);
       if (path.startsWith("/auth/")) return (await auth(env, request, url, path)) || new Response("not found", { status: 404 });
       if (path === "/mcp") return await handleMcp(env, request, (uid) => me(env, uid), (req, user) => api(env, req, new URL(req.url), new URL(req.url).pathname, user, ctx));
       if (path === "/a2a") return await handleA2a(env, request);
@@ -450,17 +508,35 @@ export default {
     }
   },
   async scheduled(event, env, ctx) {
-    // Jede Aufgabe mit Protokoll (cron_runs: Start, Ende, ok, Fehlertext) statt verschluckter Fehler; Digest nur um 06:00 UTC
+    // Jede Aufgabe mit Protokoll (cron_runs: Start, Ende, ok, Fehlertext) statt verschluckter Fehler.
+    const scheduledAt = event.scheduledTime || Date.now();
+    const tick = new Date(scheduledAt);
+    if (event.cron === "*/30 * * * *" && tick.getUTCHours() === 6 && tick.getUTCMinutes() === 0) return;
     const T = (name, fn) => ctx.waitUntil(track(env, name, fn));
-    if (event.cron === "0 6 * * *") T("runDigest", () => runDigest(env));
+    if (event.cron === "*/15 * * * *") {
+      T("topicSessionReminders", async () => {
+        const queued = await queueSessionReminders(env);
+        const dispatched = await dispatchTopicNotifications(env);
+        return { queued, dispatched };
+      });
+      return;
+    }
+    if (event.cron === "0 6 * * *") {
+      T("runPushDigest", () => runPushDigest(env));
+      T("runDigest", () => runDigest(env, { at: scheduledAt }));
+    }
+    if (event.cron === "*/30 * * * *") T("runDigest", () => runDigest(env, { at: scheduledAt }));
     T("refreshFeeds", () => refreshFeeds(env));
     T("refreshContributions", () => refreshContributions(env));
     T("pollUpdates", () => pollUpdates(env));
+    T("queueTopicArticles", () => queueTopicArticles(env));
+    T("dispatchTopicNotifications", () => dispatchTopicNotifications(env));
     T("refreshFollowers", () => refreshFollowers(env));
     T("ensurePastEvents", () => ensurePastEvents(env).then(() => linkSpeakers(env)).then(() => linkSpeakerEntities(env)));
     T("ensureM365Con", () => ensureM365Con(env).then(() => linkSpeakers(env)).then(() => linkSpeakerEntities(env)));
     T("seedRoadmap", () => seedRoadmap(env));
     T("purgeMessages", () => purgeMessages(env.DB));
+    T("purgeEntityClaimReview", () => purgeEntityClaimReview(env.DB));
     T("autoTranslate", () => autoTranslate(env));
     T("autoTranslateItems", () => autoTranslateItems(env));
     T("autoTranslateEntities", () => autoTranslateEntities(env, entityMap));
@@ -483,7 +559,7 @@ export default {
     T("syncSearchVectors", () => syncSearchVectors(env));
     T("syncExpertVectors", () => syncExpertVectors(env));
     T("closeExpiredExpertRequests", () => closeExpiredExpertRequests(env));
-    if (event.cron !== "0 6 * * *") T("syncExpertise", () => syncExpertise(env, entityMap));   // nicht doppelt um 06:00 (beide Zeitplaene feuern)
+    T("syncExpertise", () => syncExpertise(env, entityMap));   // */30 kehrt um 06:00 oben zurueck, daher nicht doppelt
     ctx.waitUntil(env.DB.prepare("DELETE FROM cron_runs WHERE started<?").bind(Math.floor(Date.now() / 1000) - 7 * 86400).run().catch(() => 0));
   },
 };

@@ -1,5 +1,6 @@
 // Update-Waechter: schaut regelmaessig in offizielle Microsoft-Feeds und ordnet Meldungen den Produkt-Entitaeten zu (nur Titel, Link, Datum)
 import { parseFeed } from "./feeds.js";
+import { queueTopicNotification } from "./topic_notifications.js";
 
 // Quellen: eid = feste Zuordnung; ohne eid wird ueber Namen/Aliase der Produkt-Entitaeten zugeordnet
 export const SOURCES = [
@@ -36,14 +37,27 @@ export async function pollUpdates(env, max = 3) {
       const r = await fetch(s.url, { signal: ctl.signal, headers: { "user-agent": "M365FM-update-watch/1.0 (+https://www.m365.fm)", accept: "application/rss+xml, application/atom+xml, text/xml, */*" } });
       clearTimeout(to); if (!r.ok) throw new Error("http " + r.status);
       const items = parseFeed((await r.text()).slice(0, 900000), 40); if (!items.length) throw new Error("empty");
-      const ops = [];
+      const ops = [], records = [];
       for (const i of items) {
         let ids = s.eid ? [s.eid] : [];
         if (!ids.length || !s.eid) { for (const c of T.list) { if (ids.length >= 3) break; if (!ids.includes(c.id) && c.re.test(i.title)) ids.push(c.id); } }
         if (s.eid && !T.ids.has(s.eid) && T.ids.size) ids = ids.filter((x) => x !== s.eid);
-        for (const id of ids) ops.push(db.prepare("INSERT OR IGNORE INTO product_updates(eid,title,url,published,source) VALUES(?,?,?,?,?)").bind(id, i.title, i.url, i.t, s.name));
+        for (const id of ids) {
+          ops.push(db.prepare("INSERT OR IGNORE INTO product_updates(eid,title,url,published,source) VALUES(?,?,?,?,?)").bind(id, i.title, i.url, i.t, s.name));
+          records.push({ id, item: i });
+        }
       }
-      if (ops.length) await db.batch(ops);
+      if (ops.length) {
+        for (let i = 0; i < ops.length; i += 100) {
+          const inserted = await db.batch(ops.slice(i, i + 100));
+          for (let j = 0; j < inserted.length; j++) {
+            const r = records[i + j];
+            if (inserted[j]?.meta?.changes && r.item.t >= t - 7 * 86400) await queueTopicNotification(env, {
+              kind: "entity", topicId: r.id, key: `update:${r.id}:${r.item.url}`, title: r.item.title, url: r.item.url,
+            });
+          }
+        }
+      }
       n += ops.length;
       await db.prepare("INSERT INTO update_src(url,fetched,fails) VALUES(?,?,0) ON CONFLICT(url) DO UPDATE SET fetched=excluded.fetched,fails=0").bind(s.url, t).run();
     } catch { await db.prepare("INSERT INTO update_src(url,fetched,fails) VALUES(?,?,1) ON CONFLICT(url) DO UPDATE SET fetched=excluded.fetched,fails=fails+1").bind(s.url, t).run(); }

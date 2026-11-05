@@ -5,8 +5,8 @@
   function h(t, a, kids) { var e = document.createElement(t); a = a || {}; for (var k in a) { if (k === "text") e.textContent = a[k]; else if (k === "class") e.className = a[k]; else if (k.slice(0, 2) === "on") e[k] = a[k]; else e.setAttribute(k, a[k]); } (kids || []).forEach(function (x) { if (x != null) e.appendChild(typeof x === "string" ? document.createTextNode(x) : x); }); return e; }
   function api(p, o) { o = o || {}; o.credentials = "include"; o.headers = Object.assign({ "x-requested-with": "m365" }, o.headers || {}); if (o.body && typeof o.body !== "string") { o.body = JSON.stringify(o.body); o.headers["content-type"] = "application/json"; } return fetch(API + p, o).then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { s: r.status, j: j }; }); }); }
   var TYPES = { product: "Produkt", platform: "Plattform", concept: "Konzept", org: "Firma", person: "Person", cert: "Zertifikat", event: "Event", media: "Medium", category: "Kategorie" };
-  var ERR = { bad_name: "Name zu kurz", bad_type: "Typ fehlt", too_short: "Kurzbeschreibung fehlt (mindestens 20 Zeichen in Englisch oder Deutsch)", too_long: "Kurzbeschreibung zu lang (höchstens 300 Zeichen)", bad_url: "Eine Adresse ist ungültig (nur https, Docs nur microsoft.com, azure.com oder github.com)", bad_qid: "Wikidata-ID muss wie Q12345 aussehen", bad_relation: "Eine Beziehung zeigt auf eine unbekannte Entität", unchanged: "Nichts geändert", rate_limit: "Zu viele Änderungen in kurzer Zeit, bitte später", login: "Bitte anmelden", forbidden: "Nur für Admins" };
-  var tabs = [["ov", "Übersicht"], ["fr", "Freigaben"], ["sponsor", "Sponsor-Anfragen"], ["tr", "Übersetzungen"], ["ent", "Entitäten"], ["db", "Datenbank"], ["sw", "Schalter"]], panes = {}, bar = h("div", { class: "adm-tabs", role: "tablist" });
+  var ERR = { bad_name: "Name zu kurz", bad_type: "Typ fehlt", too_short: "Kurzbeschreibung fehlt (mindestens 20 Zeichen in Englisch oder Deutsch)", too_long: "Kurzbeschreibung zu lang (höchstens 300 Zeichen)", bad_url: "Eine Adresse ist ungültig (nur https, Docs nur microsoft.com, azure.com oder github.com)", bad_qid: "Wikidata-ID muss wie Q12345 aussehen", bad_relation: "Eine Beziehung zeigt auf eine unbekannte Entität", unchanged: "Nichts geändert", rate_limit: "Zu viele Änderungen in kurzer Zeit, bitte später", login: "Bitte anmelden", forbidden: "Nur für Admins", email_required: "Kein verifizierter E-Mail-Empfang für diese Person hinterlegt.", mail_off: "E-Mail-Versand ist nicht verfügbar; die Anfrage bleibt offen." };
+  var tabs = [["ov", "Übersicht"], ["fr", "Freigaben"], ["sponsor", "Sponsor-Anfragen"], ["slinks", "Sponsorlinks"], ["tr", "Übersetzungen"], ["ent", "Entitäten"], ["db", "Datenbank"], ["sw", "Schalter"]], panes = {}, bar = h("div", { class: "adm-tabs", role: "tablist" });
   var LANGN = { de: "Deutsch", fr: "Französisch", es: "Spanisch", it: "Italienisch", nl: "Niederländisch", pt: "Portugiesisch", pl: "Polnisch", id: "Indonesisch", ru: "Russisch", uk: "Ukrainisch", ar: "Arabisch", he: "Hebräisch", ja: "Japanisch", ko: "Koreanisch", en: "Englisch" };
   var KINDN = { lblog: "Blog (früher)", blog: "Blog (Community)", podcast: "Podcast", video: "Video", notes: "Show Notes", entity: "Entität" };
   function ago(t) { if (!t) return "–"; var d = Math.round(Date.now() / 1000 - t); return d < 90 ? d + " s" : d < 5400 ? Math.round(d / 60) + " min" : d < 172800 ? Math.round(d / 3600) + " h" : Math.round(d / 86400) + " d"; }
@@ -23,7 +23,8 @@
       p.appendChild(h("div", { class: "adm-grid" }, [tile("Blog-Beiträge", q.blog), tile("Podcast-Folgen", q.podcast), tile("Videos", q.video), tile("Wiki-Änderungen", q.wiki), tile("Entitäten-Vorschläge", q.entity), tile("Übernahme-Anfragen", q.claims), tile("Zertifikate", q.certs), tile("Meldungen", q.reports), tile("Gemeldete Publisher-Anfragen", q.expert_request_reports), tile("Sponsor-Anfragen (neu)", q.sponsor)]));
       p.appendChild(h("p", { class: "mut" }, ["Freigeben und ablehnen: ", h("a", { href: "#fr", text: "Reiter Freigaben", onclick: function (ev) { ev.preventDefault(); show("fr"); } }), ". Sponsor-Anfragen bearbeiten: ", h("a", { href: "#sponsor", text: "Reiter Sponsor-Anfragen", onclick: function (ev) { ev.preventDefault(); show("sponsor"); } }), "."]));
       p.appendChild(h("h2", { text: "Auf einen Blick" }));
-      p.appendChild(h("div", { class: "adm-grid" }, [tile("Mitglieder", o.db.users), tile("Öffentliche Profile", o.db.profiles), tile("Blog-Beiträge live", o.db.blog_live), tile("Entitäten in der Datenbank", o.db.entities_db, "von " + (o.db.entities_file == null ? "?" : o.db.entities_file) + " in der Datei")]));
+      p.appendChild(h("div", { class: "adm-grid" }, [tile("Mitglieder", o.db.users), tile("Öffentliche Profile", o.db.profiles), tile("Blog-Beiträge live", o.db.blog_live), tile("Entitäten in der Datenbank", o.db.entities_db, "von " + (o.db.entities_file == null ? "?" : o.db.entities_file) + " in der Datei"), tile("E-Mails " + o.mail.month, o.mail.sent, "Warnung ab 2.500 von 3.000")]));
+      if (o.mail.warning) p.appendChild(h("p", { class: "adm-msg bad", text: "Warnung: Im aktuellen Monat wurden mindestens 2.500 E-Mails versendet." }));
       var ops = h("div", {}); p.appendChild(h("h2", { text: "Betrieb" })); p.appendChild(ops); ops.appendChild(h("p", { class: "mut", text: "Lädt …" }));
       var lvBtn = h("button", { type: "button", class: "btn", text: "Expertise-Stufen jetzt neu berechnen" }), lvMsg = h("span", { class: "mut", style: "margin-left:.6em" });
       lvBtn.onclick = function () { lvBtn.disabled = true; lvMsg.textContent = "…"; api("/api/admin/expertise-sync", { method: "POST" }).then(function (r) { lvBtn.disabled = false; lvMsg.textContent = r.s === 200 ? ("✓ " + (r.j.evidence || 0) + " Belege, " + (r.j.pairs || 0) + " Themen-Paare, " + (r.j.changed || 0) + " geändert") : "Fehler " + r.s; }); };
@@ -41,6 +42,7 @@
     tr: function () { if (panes.tr.firstChild) return; translations(); },
     fr: function () { approvals(); },
     sponsor: function () { sponsorRequests(); },
+    slinks: function () { sponsorLinks(); },
     db: function () { overview(function (o) { var p = panes.db, d = o.db, m = h("p", { class: "adm-msg" }); p.textContent = "";
       p.appendChild(h("h2", { text: "Umzug in die Datenbank" }));
       var miss = d.entities_file == null ? null : Math.max(0, d.entities_file - (d.entities_db || 0));
@@ -75,7 +77,7 @@
     var p = panes.fr, m = h("p", { class: "adm-msg" }); p.textContent = ""; p.appendChild(h("h2", { text: "Wartet auf Freigabe" })); p.appendChild(m);
     var busy = 0; function done() { if (--busy <= 0 && !p.querySelector(".adm-list li")) p.appendChild(h("p", { class: "mut", text: "Nichts offen. Alles freigegeben." })); }
     function section(title, hint) { var s = h("section", {}, [h("h3", { text: title }), hint ? h("p", { class: "mut", text: hint }) : null, h("ul", { class: "adm-list" })]); p.appendChild(s); return s.querySelector("ul"); }
-    function act(label, main, fn, after) { return h("button", { type: "button", class: "btn" + (main ? " main" : ""), text: label, onclick: function (ev) { ev.target.disabled = true; fn().then(function (r) { if (r.s === 200) { msg(m, "Erledigt."); after(); } else { ev.target.disabled = false; msg(m, ERR[(r.j || {}).error] || "Fehler " + r.s, true); } }); } }); }
+    function act(label, main, fn, after) { return h("button", { type: "button", class: "btn" + (main ? " main" : ""), text: label, onclick: function (ev) { ev.target.disabled = true; fn().then(function (r) { if (r.s === 200) { msg(m, r.j && r.j.mailSent === false ? "Status gespeichert, E-Mail konnte nicht zugestellt werden." : "Erledigt.", !!(r.j && r.j.mailSent === false)); after(); } else { ev.target.disabled = false; msg(m, ERR[(r.j || {}).error] || "Fehler " + r.s, true); } }); } }); }
     function row(ul, kids, attrs) { var li = h("li", attrs || {}, kids); ul.appendChild(li); return function () { li.remove(); if (!ul.children.length) ul.parentNode.remove(); }; }
     function note() { return window.prompt("Grund für die Ablehnung (optional):") || ""; }
     function when(t) { return t ? new Date(t * 1000).toLocaleDateString("de-DE") : ""; }
@@ -83,7 +85,10 @@
     api("/api/admin/blog").then(function (r) { var it = (r.j || {}).items || []; if (it.length) { var ul = section("Blog-Beiträge (" + it.length + ")"); it.forEach(function (x) { var rm = row(ul, [h("b", { text: x.title }), " ", h("span", { class: "mut", text: (x.name || "") + " · " + (x.lang || "") + " · " + when(x.created) }), h("p", { class: "mut", text: (x.summary || x.body || "").slice(0, 220) }), h("p", {}, [act("Freigeben", true, function () { return api("/api/admin/blog/decide", { method: "POST", body: { id: x.id, ok: true } }); }, function () { rm(); }), " ", act("Ablehnen", false, function () { return api("/api/admin/blog/decide", { method: "POST", body: { id: x.id, ok: false, note: note() } }); }, function () { rm(); })])]); }); } done(); });
     api("/api/admin/wiki/pending").then(function (r) { var it = (r.j || {}).pending || []; if (it.length) { var ul = section("Wiki-Änderungen (" + it.length + ")"); it.forEach(function (x) { var rm = row(ul, [h("b", { text: x.term + " (" + x.lang + ")" }), " ", h("span", { class: "mut", text: (x.name || "") + " · " + when(x.created) + (x.summary ? " · " + x.summary : "") }), h("p", { class: "mut", text: (x.body || "").slice(0, 260) }), h("p", {}, [act("Freigeben", true, function () { return api("/api/admin/wiki/approve/" + x.id, { method: "POST", body: {} }); }, function () { rm(); }), " ", act("Ablehnen", false, function () { return api("/api/admin/wiki/reject/" + x.id, { method: "POST", body: {} }); }, function () { rm(); })])]); }); } done(); });
     api("/api/admin/entity/pending").then(function (r) { var it = (r.j || {}).pending || []; if (it.length) { var ul = section("Entitäten-Vorschläge (" + it.length + ")"); it.forEach(function (x) { var d = x.data || {}; var rm = row(ul, [h("b", { text: (d.name || x.eid) }), " ", h("span", { class: "mut", text: x.eid + " · " + (x.name || "") + " · " + when(x.created) + (x.summary ? " · " + x.summary : "") }), h("p", { class: "mut", text: ((d.desc || {}).en || (d.desc || {}).de || "").slice(0, 220) }), h("p", {}, [act("Freigeben", true, function () { return api("/api/admin/entity/approve/" + x.id, { method: "POST", body: {} }); }, function () { rm(); }), " ", act("Ablehnen", false, function () { return api("/api/admin/entity/reject/" + x.id, { method: "POST", body: {} }); }, function () { rm(); }), " ", h("a", { href: BASE + "/entity/" + x.eid + "/", target: "_blank", rel: "noopener", text: "Seite" })])]); }); } done(); });
-    api("/api/admin/entity/claims").then(function (r) { var it = (r.j || {}).claims || []; if (it.length) { var ul = section("Übernahme-Anfragen (" + it.length + ")", "Ein Mitglied möchte eine Entität (Firma, Produkt) als Inhaber betreuen."); it.forEach(function (x) { var rm = row(ul, [h("b", { text: x.eid }), " ", h("span", { class: "mut", text: (x.name || "") + (x.handle ? " (" + x.handle + ")" : "") }), h("p", {}, [act("Bestätigen", true, function () { return api("/api/admin/entity/claim", { method: "POST", body: { eid: x.eid, ok: true } }); }, function () { rm(); }), " ", act("Ablehnen", false, function () { return api("/api/admin/entity/claim", { method: "POST", body: { eid: x.eid, ok: false } }); }, function () { rm(); })])]); }); } done(); });
+    api("/api/admin/entity/claims").then(function (r) { var it = (r.j || {}).claims || []; if (it.length) { var ul = section("Übernahme-Anfragen (" + it.length + ")", "Ein Mitglied möchte eine Entität als Inhaber betreuen."); it.forEach(function (x) { var rm = row(ul, [h("b", { text: x.entity_name || x.eid }), " ", h("span", { class: "mut", text: x.eid + (x.handle ? " · " + x.handle : "") }), x.via === "linkedin" ? h("div", { style: "display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.75em;margin:.6em 0" }, [
+        h("div", {}, [x.picture ? h("img", { src: x.picture, alt: "LinkedIn-Profilbild", referrerpolicy: "no-referrer", style: "width:64px;height:64px;object-fit:cover;border-radius:50%" }) : null, h("p", { text: "LinkedIn: " + (x.name || "Unbekannt") })]),
+        h("div", {}, [h("p", { text: "Entität: " + (x.entity_name || x.eid) }), x.linkedin_url ? h("a", { href: x.linkedin_url, target: "_blank", rel: "noopener noreferrer", text: "LinkedIn-Link der Entität" }) : null, h("p", { class: "mut", text: x.name_match === "equal" ? "Name gleich" : x.name_match === "similar" ? "Name ähnlich" : "Name weicht ab" })])
+      ]) : h("span", { class: "mut", text: (x.name || "") + (x.handle ? " (" + x.handle + ")" : "") }), h("p", {}, [act("Bestätigen", true, function () { return api("/api/admin/entity/claim", { method: "POST", body: { eid: x.eid, ok: true } }); }, function () { rm(); }), " ", act("Ablehnen", false, function () { return api("/api/admin/entity/claim", { method: "POST", body: { eid: x.eid, ok: false } }); }, function () { rm(); })])]); }); } done(); });
     api("/api/admin/cert-queue").then(function (r) { var it = (r.j || {}).items || []; if (it.length) { var ul = section("Zertifikate prüfen (" + it.length + ")"); it.forEach(function (x) { var rm = row(ul, [h("b", { text: x.e + (x.year ? " · " + x.year : "") }), " ", h("span", { class: "mut", text: (x.name || "") + (x.handle ? " (" + x.handle + ")" : "") }), x.url ? h("p", {}, [h("a", { href: x.url, target: "_blank", rel: "noopener nofollow", text: "Nachweis öffnen" })]) : null, h("p", {}, [act("Bestätigen", true, function () { return api("/api/admin/verify", { method: "POST", body: { owner: "u:" + x.handle, kind: "cert", key: x.e, value: 1 } }); }, function () { rm(); }), " ", act("Ablehnen", false, function () { return api("/api/admin/verify", { method: "POST", body: { owner: "u:" + x.handle, kind: "cert", key: x.e, value: 0 } }); }, function () { rm(); })])]); }); } done(); });
     api("/api/admin/reports").then(function (r) { var it = (r.j || {}).reports || []; if (it.length) { var ul = section("Gemeldete Kommentare (" + it.length + ")"); it.forEach(function (x) { var rm = row(ul, [h("b", { text: x.n + "× gemeldet" }), " ", h("span", { class: "mut", text: (x.lang || "") + " · " + (x.status || "") }), h("p", { class: "mut", text: (x.body || "").slice(0, 260) }), h("p", {}, [act("Ausblenden", true, function () { return api("/api/admin/hide/" + x.id, { method: "POST", body: {} }); }, function () { rm(); }), " ", act("Behalten", false, function () { return api("/api/admin/show/" + x.id, { method: "POST", body: {} }); }, function () { rm(); })])]); }); } done(); });
     api("/api/admin/expert-requests/reports").then(function (r) { var it = (r.j || {}).reports || []; if (it.length) { var ul = section("Gemeldete Publisher-Anfragen (" + it.length + ")"); it.forEach(function (x) { var rm = row(ul, [h("b", { text: x.title }), " ", h("span", { class: "mut", text: "Publisher: " + (x.publisher_name || "–") + " (#" + x.publisher_id + ") · gemeldet von #" + x.reporter_id }), h("p", { class: "mut", text: x.reason || "" }), x.reply_id ? h("p", { class: "mut", text: "Gemeldete Antwort (" + (x.expert_name || "–") + " #" + (x.expert_id || "?") + "): " + (x.reply_body || "bereits gelöscht") }) : null, h("p", {}, [x.reply_id ? act("Antwort entfernen", true, function () { return api("/api/admin/expert-requests/reply-delete", { method: "POST", body: { reply_id: x.reply_id } }); }, function () { rm(); }) : null, x.reply_id ? " " : null, act("Anfrage schließen", !x.reply_id, function () { return api("/api/admin/expert-requests/close", { method: "POST", body: { id: x.request_id } }); }, function () { ul.querySelectorAll('li[data-request-id="' + x.request_id + '"]').forEach(function (li) { li.remove(); }); })])], { "data-request-id": x.request_id }); }); } done(); });
@@ -173,6 +178,84 @@
     prev.onclick = function () { offset = Math.max(0, offset - limit); load(); };
     next.onclick = function () { offset += limit; load(); };
     filter.addEventListener("change", function () { offset = 0; load(); });
+    load();
+  }
+
+  function sponsorLinks() {
+    var p = panes.slinks, message = h("p", { class: "adm-msg" }), orgs = [], placements = [];
+    p.textContent = "";
+    p.append(h("h2", { text: "Sponsorlinks" }), h("p", { class: "mut", text: "Links werden nicht gelöscht; zum Beenden auf inaktiv setzen. Ziele sind nur HTTPS-Adressen ohne Zugangsdaten." }), message);
+    api("/api/sponsor/sources").then(function (sources) {
+      if (sources.s !== 200) { msg(message, "Firmen und Platzierungen nicht abrufbar", true); return; }
+      orgs = sources.j.orgs || [];
+      placements = sources.j.placements || [];
+      var form = h("form", { class: "adm-form" });
+      var org = h("select", { required: "" }), placement = h("select", { required: "" });
+      orgs.forEach(function (item) { org.appendChild(h("option", { value: String(item.id), text: item.name })); });
+      function updatePlacements() {
+        placement.textContent = "";
+        placements.filter(function (item) { return String(item.org_id) === org.value; }).forEach(function (item) {
+          placement.appendChild(h("option", { value: item.id, text: item.title + " · " + item.id }));
+        });
+      }
+      org.addEventListener("change", updatePlacements);
+      updatePlacements();
+      var code = h("input", { required: "", minlength: "3", maxlength: "40", pattern: "[a-z0-9-]{3,40}", placeholder: "beispiel-2026" });
+      var target = h("input", { required: "", type: "url", pattern: "https://.*", placeholder: "https://firma.example/" });
+      var utm = h("input", { maxlength: "500", placeholder: "utm_source=m365.fm&utm_medium=referral" });
+      var status = h("p", { role: "status", class: "adm-msg" });
+      form.append(h("label", {}, ["Firma", org]), h("label", {}, ["Platzierung", placement]),
+        h("label", {}, ["Link-Code", code]), h("label", {}, ["Ziel (HTTPS)", target]),
+        h("label", {}, ["UTM-Parameter", utm]), h("button", { class: "btn main", type: "submit", text: "Sponsorlink anlegen" }), status);
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        var parsed;
+        try {
+          parsed = new URL(target.value);
+          if (parsed.protocol !== "https:" || parsed.username || parsed.password || !placement.value) throw new Error("invalid");
+        } catch (_) { msg(status, "Bitte HTTPS-Ziel ohne Zugangsdaten und eine Platzierung wählen.", true); return; }
+        var submit = form.querySelector("button[type=submit]");
+        submit.disabled = true;
+        api("/api/admin/sponsor-links", { method: "POST", body: { code: code.value, org_id: Number(org.value),
+          placement_id: placement.value, target_url: parsed.href, utm: utm.value } }).then(function (result) {
+          msg(status, result.s === 200 ? "Sponsorlink gespeichert." : "Sponsorlink konnte nicht gespeichert werden.", result.s !== 200);
+          if (result.s === 200) { form.reset(); updatePlacements(); load(); }
+        }).catch(function () { msg(status, "Sponsorlink konnte nicht gespeichert werden.", true); })
+          .finally(function () { submit.disabled = false; });
+      });
+      p.appendChild(form);
+    });
+    var table = h("table", { class: "adm-tbl" }), head = h("thead"), body = h("tbody");
+    head.appendChild(h("tr", {}, ["Code", "Firma", "Platzierung", "Ziel", "UTM", "Status", "Aktion"].map(function (value) {
+      return h("th", { text: value });
+    })));
+    table.append(head, body);
+    p.appendChild(h("div", { style: "overflow-x:auto" }, [table]));
+    function load() {
+      api("/api/admin/sponsor-links").then(function (result) {
+        body.textContent = "";
+        if (result.s !== 200) { msg(message, "Sponsorlinks nicht abrufbar", true); return; }
+        (result.j.links || []).forEach(function (link) {
+          var org = orgs.find(function (item) { return item.id === link.org_id; });
+          var item = placements.find(function (placementItem) { return placementItem.id === link.placement_id; });
+          var button = h("button", { type: "button", class: "btn", text: link.active ? "Deaktivieren" : "Aktivieren" });
+          button.addEventListener("click", function () {
+            button.disabled = true;
+            api("/api/admin/sponsor-links/" + encodeURIComponent(link.code), { method: "POST", body: { active: !link.active } })
+              .then(function (updated) {
+                if (updated.s === 200) load();
+                else { button.disabled = false; msg(message, "Status konnte nicht geändert werden.", true); }
+              }).catch(function () { button.disabled = false; msg(message, "Status konnte nicht geändert werden.", true); });
+          });
+          body.appendChild(h("tr", {}, [link.code, org ? org.name : String(link.org_id), item ? item.title : link.placement_id,
+            h("a", { href: link.target_url, target: "_blank", rel: "noopener", text: link.target_url }),
+            link.utm, link.active ? "Aktiv" : "Inaktiv", button].map(function (value) {
+              return value && value.nodeType ? h("td", {}, [value]) : h("td", { text: value });
+            })));
+        });
+        if (!(result.j.links || []).length) body.appendChild(h("tr", {}, [h("td", { colspan: "7", class: "mut", text: "Noch keine Sponsorlinks." })]));
+      });
+    }
     load();
   }
 

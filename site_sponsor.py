@@ -11,6 +11,7 @@ indexierbar und in der Sitemap (wie die Barrierefreiheitserklaerung).
 import hashlib, html, json, math, re, subprocess
 from pathlib import Path
 from urllib.parse import urlsplit
+from site_i18n import T
 
 ROOT = Path(__file__).parent
 D = ROOT / "data"
@@ -74,11 +75,219 @@ def url(base, lang):
     return f"{base}/sponsor/" if lang == "en" or lang not in LANGS_ALL else f"{base}/{lang}/sponsor/"
 
 
+def dashboard_url(base, lang):
+    return f"{base}/sponsor/dashboard/" if lang == "en" else f"{base}/{lang}/sponsor/dashboard/"
+
+
+def dashboard_view_url(base, lang, view):
+    root = dashboard_url(base, lang)
+    return root if view == "overview" else root + view + "/"
+
+
 def tx(lang, key, **kw):
     """Text der Sprache, sonst Englisch (je Schluessel); {platzhalter} aus kw."""
     s = I18N.get(lang, {}).get(key)
     if s is None: s = EN.get(key, key)
     return re.sub(r"\{([a-z_]+)\}", lambda m: str(kw[m.group(1)]) if m.group(1) in kw else m.group(0), s)
+
+
+def dashboard_copy(lang):
+    texts = {
+        "intro": ("A source-backed view of your sponsorship placements and results.",
+                  "Quellenbasierte Übersicht deiner Sponsorings und Ergebnisse."),
+        "dash_kicker": ("Sponsor dashboard", "Sponsor-Dashboard"),
+        "achievement_title": ("What your sponsorship achieved", "Was dein Sponsoring erreicht hat"),
+        "login": ("Sign in with a community account linked to a company to view its sponsorships.",
+                  "Melde dich mit einem Community-Konto an, das einer Firma zugeordnet ist, um deren Sponsorings zu sehen."),
+        "signin": ("Sign in", "Anmelden"),
+        "no_placements": ("No placements for this period.", "Keine Platzierungen für diesen Zeitraum."),
+        "scope": ("Only aggregate figures are shown. No individual listener or visitor data is shared.",
+                  "Es werden nur zusammengefasste Zahlen angezeigt. Daten einzelner Hörer oder Besucher werden nicht geteilt."),
+        "status": ("Status", "Status"),
+        "period": ("Period", "Zeitraum"),
+        "attendees": ("Event participants", "Event-Teilnehmer"),
+        "unavailable": ("No data", "Keine Daten"),
+        "csv": ("Export CSV", "CSV exportieren"),
+        "pdf": ("Print / save PDF", "Drucken / als PDF speichern"),
+        "error": ("Could not send the request. Please try again.", "Anfrage konnte nicht gesendet werden. Bitte versuche es erneut."),
+        "pending": ("Pending", "Offen"),
+        "confirmed": ("Confirmed", "Bestätigt"),
+        "event_partner": ("Event partner", "Event-Partner"),
+        "company": ("Company", "Firma"),
+        "type": ("Type", "Art"),
+        "placement": ("Placement", "Platzierung"),
+        "podcast": ("Podcast mention", "Podcast-Erwähnung"),
+        "page_banner": ("Page sponsorship", "Seitensponsoring"),
+        "article": ("Sponsored article", "Gesponserter Artikel"),
+        "impressions": ("Impressions", "Impressions"),
+        "clicks": ("Clicks", "Klicks"),
+        "downloads": ("Episode downloads", "Folgen-Downloads"),
+        "ended": ("Ended", "Beendet"),
+        "dashboard": ("Overview", "Übersicht"),
+        "placement_view": ("Placement detail", "Platzierungsdetails"),
+        "report_view": ("Monthly report", "Monatsbericht"),
+        "sources_view": ("Data sources", "Datenquellen"),
+        "period_30": ("Last 30 days", "Letzte 30 Tage"),
+        "period_campaign": ("This campaign", "Diese Kampagne"),
+        "period_year": ("This year", "Dieses Jahr"),
+        "active": ("Active", "Aktiv"),
+        "upcoming": ("Upcoming", "Demnächst"),
+        "planned": ("Planned", "Geplant"),
+        "key_figures": ("Key figures", "Kennzahlen"),
+        "reach_week": ("Reach per week", "Reichweite pro Woche"),
+        "weekly_no_data": ("No weekly reach data is available.", "Keine wöchentlichen Reichweitendaten verfügbar."),
+        "placements": ("Your placements", "Deine Platzierungen"),
+        "channel": ("Channel", "Kanal"),
+        "languages": ("Languages", "Sprachen"),
+        "key_figure": ("Key figure", "Kennzahl"),
+        "how_count": ("How we count", "So zählen wir"),
+        "measured": ("Measured", "Gemessen"),
+        "estimated": ("Estimated", "Geschätzt"),
+        "manual": ("Manual", "Manuell"),
+        "measured_desc": ("Counted by the platform.", "Von der Plattform gezählt."),
+        "estimated_desc": ("Calculated; the method is stated in the report.", "Berechnet; die Methode steht im Bericht."),
+        "manual_desc": ("Entered by an administrator from an export.", "Von einem Administrator aus einem Export eingetragen."),
+        "as_of": ("As of", "Stand"),
+        "no_date": ("No data date", "Kein Datenstand"),
+        "source": ("Source", "Quelle"),
+        "type": ("Type", "Art"),
+        "people_reached": ("People reached", "Erreichte Personen"),
+        "podcast_plays": ("Podcast plays", "Podcast-Aufrufe"),
+        "video_views": ("Video views", "Video-Aufrufe"),
+        "page_views": ("Sponsored page views", "Aufrufe gesponserter Seiten"),
+        "link_clicks": ("Clicks to your website", "Klicks zu deiner Website"),
+        "project_requests": ("Project requests", "Projektanfragen"),
+        "ai_citations": ("AI citations", "KI-Zitate"),
+        "languages_viewed": ("Languages with views", "Sprachen mit Aufrufen"),
+        "episodes_with_mention": ("Episodes with a mention", "Folgen mit Erwähnung"),
+        "method_follows": ("Method to be confirmed", "Methode folgt"),
+        "highlight": ("Highlight", "Highlight"),
+        "rules": ("Rules", "Regeln"),
+        "rule_aggregate": ("Only aggregate counts, never individual listener or visitor data.", "Nur zusammengefasste Zahlen, niemals Daten einzelner Hörer oder Besucher."),
+        "rule_clicks": ("Clicks are counted without cookies; the same device counts once per day.", "Klicks zählen wir ohne Cookies; dasselbe Gerät zählt pro Tag einmal."),
+        "rule_leads": ("Leads are shared only with consent.", "Leads geben wir nur mit Einwilligung weiter."),
+        "rule_source": ("Every figure shows its source and latest update.", "Jede Kennzahl zeigt Quelle und letzten Datenstand."),
+        "search_impressions": ("Search impressions", "Such-Impressionen"),
+        "detail_intro": ("Placement performance and source data", "Leistung und Quelldaten der Platzierung"),
+        "podcast_tab": ("Podcast", "Podcast"),
+        "video_tab": ("Video", "Video"),
+        "website_tab": ("Website", "Website"),
+        "search_ai_tab": ("Search & AI", "Suche & KI"),
+        "report_title": ("Monthly sponsorship report", "Monatsbericht Sponsoring"),
+        "report_sentence": ("Your month in one sentence", "Dein Monat in einem Satz"),
+        "month": ("Month", "Monat"),
+        "highlights": ("Highlights", "Höhepunkte"),
+        "next_month": ("Next month", "Nächster Monat"),
+        "print_report": ("Print / save as PDF", "Drucken / als PDF speichern"),
+        "sponsored_label": ("Sponsored content is labelled. No individual listener data is shared.",
+                            "Gesponserte Inhalte sind gekennzeichnet. Es werden keine Daten einzelner Hörer geteilt."),
+        "privacy_note": ("No individual listener data is shared. Leads are shown only with consent.",
+                         "Es werden keine Daten einzelner Hörer geteilt. Leads zeigen wir nur mit Einwilligung."),
+        "source_note": ("Source and measurement type are shown with every value; missing values are not estimated.",
+                        "Quelle und Messart stehen bei jedem Wert; fehlende Werte werden nicht geschätzt."),
+        "admin_only": ("This view is only available to administrators.", "Diese Ansicht ist nur für Administratoren verfügbar."),
+        "source_status": ("Source status", "Status der Datenquellen"),
+        "figures": ("Figures", "Kennzahlen"),
+        "method": ("How", "Methode"),
+        "frequency": ("Frequency", "Takt"),
+        "ready": ("Ready", "Bereit"),
+        "setup": ("Setup needed", "Einrichtung nötig"),
+        "build": ("To build", "Noch zu bauen"),
+        "source_manual": ("Manual entry", "Manuelle Eingabe"),
+        "later": ("Later", "Später"),
+        "enter_manual": ("Enter monthly figures", "Monatswerte eintragen"),
+        "manual_help": ("Enter only values from an export and provide the R2 evidence key. The value is labelled Manual.",
+                        "Trage nur Exportwerte ein und gib den R2-Belegschlüssel an. Der Wert wird als manuell gekennzeichnet."),
+        "company": ("Company", "Firma"),
+        "source_select": ("Source", "Quelle"),
+        "placement_name": ("Placement or issue", "Platzierung oder Ausgabe"),
+        "metric": ("Figure", "Kennzahl"),
+        "value": ("Value", "Wert"),
+        "link": ("Public report link", "Link zum öffentlichen Bericht"),
+        "proof": ("R2 evidence key", "R2-Belegschlüssel"),
+        "save": ("Save value", "Wert speichern"),
+        "saved": ("Saved · visible to the sponsor", "Gespeichert · für den Sponsor sichtbar"),
+        "invalid": ("Please check the fields and try again.", "Bitte prüfe die Eingaben und versuche es erneut."),
+        "source_bing": ("Bing AI Performance", "Bing AI Performance"),
+        "source_no_data": ("No data", "Keine Daten"),
+        "source_press": ("Press Ranger", "Press Ranger"),
+        "source_spreaker": ("Spreaker", "Spreaker"),
+        "source_youtube": ("YouTube Analytics", "YouTube Analytics"),
+        "source_cloudflare": ("Cloudflare analytics", "Cloudflare Analytics"),
+        "source_counter": ("M365.FM link counter", "M365.FM-Linkzähler"),
+        "source_gsc": ("Google Search Console", "Google Search Console"),
+        "source_bing_webmaster": ("Bing Webmaster Tools", "Bing Webmaster Tools"),
+        "source_events": ("Event registrations", "Event-Anmeldungen"),
+        "source_directory": ("Sponsor profile requests", "Anfragen über das Sponsorprofil"),
+        "source_app": ("News app", "News-App"),
+        "source_reach": ("Cross-channel estimate", "Kanalübergreifende Schätzung"),
+        "source_desc_spreaker": ("Plays per sponsored episode; no per-listener data.", "Aufrufe gesponserter Folgen; keine Daten einzelner Hörer."),
+        "source_desc_youtube": ("Views and watch time, after Analytics access is enabled.", "Aufrufe und Wiedergabezeit nach Freigabe des Analytics-Zugriffs."),
+        "source_desc_cloudflare": ("Page views by URL; no cookies or client-side tracking.", "Seitenaufrufe je URL; keine Cookies und kein Client-Tracking."),
+        "source_desc_counter": ("Cookie-free daily totals by link and page surface.", "Cookiefreie Tagessummen je Link und Fläche."),
+        "source_desc_gsc": ("Impressions and clicks for sponsored URLs.", "Impressions und Klicks für gesponserte URLs."),
+        "source_desc_bing_webmaster": ("Page statistics for sponsored URLs.", "Seitenstatistik für gesponserte URLs."),
+        "source_desc_bing": ("Monthly export entered by an administrator.", "Monatlicher Export, von einem Administrator eingetragen."),
+        "source_desc_press": ("Placement-specific distribution and AI visibility reports.", "Platzierungsbezogene Verteilungs- und KI-Sichtbarkeitsberichte."),
+        "source_desc_events": ("Registered attendees from event records.", "Registrierte Teilnehmer aus Event-Datensätzen."),
+        "source_desc_directory": ("Consent-based requests; source is not connected yet.", "Anfragen mit Einwilligung; Quelle noch nicht angebunden."),
+        "source_desc_app": ("App events are planned for a later version.", "App-Ereignisse sind für eine spätere Version geplant."),
+        "source_desc_reach": ("Planned estimate from channel totals with estimated overlap removed; not calculated yet.",
+                              "Geplante Schätzung aus Kanalwerten abzüglich geschätzter Überschneidungen; noch nicht berechnet."),
+        "daily": ("Daily", "Täglich"),
+        "monthly": ("Monthly", "Monatlich"),
+        "live": ("Live", "Live"),
+        "weekly": ("Weekly", "Wöchentlich"),
+        "not_connected": ("Not connected", "Noch nicht verbunden"),
+        "no_orgs": ("No sponsored company accounts are linked to your profile.",
+                    "Deinem Profil sind keine gesponserten Firmenkonten zugeordnet."),
+        "company_total": ("Company total", "Firma gesamt"),
+        "breadcrumbs": ("Breadcrumb", "Brotkrumen"),
+        "video_watch_minutes": ("Watch time (minutes)", "Wiedergabezeit (Minuten)"),
+        "video_retention": ("Retention at the mention", "Wiedergabe bis zur Erwähnung"),
+        "ai_visibility": ("Brand visibility in AI answers", "Markensichtbarkeit in KI-Antworten"),
+        "views": ("Views", "Aufrufe"),
+        "refs": ("References (JSON)", "Referenzen (JSON)"),
+        "placement_id": ("Placement ID", "Platzierungs-ID"),
+        "assign_placement": ("Assign a company placement", "Platzierung einer Firma zuordnen"),
+        "placement_help": ("Map a placement to one company; refs may contain video_ids, mention_sec, press_release and page_paths.",
+                           "Ordne eine Platzierung genau einer Firma zu; refs können video_ids, mention_sec, press_release und page_paths enthalten."),
+        "start": ("Start", "Beginn"),
+        "end": ("End", "Ende"),
+        "ai_citations": ("AI citations", "KI-Zitate"),
+    }
+    return {**{k: T(lang, en, de) for k, (en, de) in texts.items()}, "title": tx(lang, "dash_h")}
+
+
+DASHBOARD_CSS = """:root{--sdb-measured:#2f6b3a;--sdb-estimated:var(--ac);--sdb-manual:#9a4f0f}
+@media(prefers-color-scheme:dark){:root{--sdb-measured:#91d59a;--sdb-manual:#ffc078}}
+:root[data-theme=dark]{--sdb-measured:#91d59a;--sdb-manual:#ffc078}
+.sdb-main{display:grid;gap:1.5em}.sdb-org>.cols{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr))}
+.sdb-nav,.sdb-actions,.sdb-periods,.sdb-tabs{display:flex;flex-wrap:wrap;gap:.6em;margin:1em 0}
+.sdb-card,.sdb-org,.sdb-placement,.sdb-panel{border:1px solid var(--bd);background:var(--card);padding:1em;margin:.5em 0}
+.sdb-card{display:grid;gap:.4em}.sdb-card strong{font:600 1.8rem/1.1 \"Barlow Condensed\",sans-serif}
+.sdb-card h3,.sdb-org h2,.sdb-placement h3{margin:.1em 0 .4em}
+.sdb-meta,.sdb-source{display:flex;flex-wrap:wrap;gap:.5em 1.5em;color:var(--mut)}
+.sdb-badge{display:inline-block;border:1px solid var(--bd);padding:.05em .5em;font:600 .8rem \"Barlow Condensed\",sans-serif;text-transform:uppercase}
+.sdb-kind-measured{color:var(--sdb-measured)}.sdb-kind-estimated{color:var(--sdb-estimated)}.sdb-kind-manual{color:var(--sdb-manual)}
+.sdb-status-ready{color:var(--sdb-measured);border-color:var(--sdb-measured)}.sdb-status-setup{color:var(--sdb-manual);border-color:var(--sdb-manual)}
+.sdb-status-build{color:var(--ac);border-color:var(--ac)}.sdb-status-source_manual{color:var(--sdb-manual);border-style:dashed}
+.sdb-status-later{color:var(--mut);background:var(--bd)}
+.sdb-table{overflow-x:auto}.sdb-table table{min-width:800px;width:100%;border-collapse:collapse}.sdb-table th,.sdb-table td{text-align:start;padding:.65em;border-bottom:1px solid var(--bd)}
+.sdb-row-link{display:block;color:var(--fg);text-decoration:none}.sdb-row-link:hover{color:var(--ac)}
+.sdb-status{white-space:nowrap}.sdb-source-inline{display:block;margin-top:.35em}.sdb-rule-box{background:var(--ink);color:var(--bg)}
+.sdb-form{display:grid;gap:.8em;border-top:1px solid var(--bd);margin-top:1.5em;padding-top:1em}
+.sdb-form label{display:grid;gap:.25em}.sdb-form input,.sdb-form select{max-width:40em;font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--bd);padding:.6em}
+.sdb-status{border:1px solid var(--bd);padding:.05em .5em}
+.sdb-chart{min-height:8em;display:grid;gap:.6em}.sdb-bars{height:12em;display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:.5em;align-items:end;border-bottom:1px solid var(--bd)}
+.sdb-bar-group{height:100%;display:flex;flex-direction:column;justify-content:end;align-items:center;gap:1px;min-width:0}.sdb-bar-group small{font-size:.65em;color:var(--mut);overflow:hidden}
+.sdb-bar{display:block;width:70%;height:var(--bar-height);min-height:2px}.sdb-bar-podcast{background:var(--ac)}.sdb-bar-video{background:var(--sdb-measured)}.sdb-bar-website{background:var(--sdb-manual)}
+.sdb-lang-bars{display:grid;gap:.5em;grid-column:1/-1}.sdb-lang-row{display:grid;grid-template-columns:3em 1fr auto;gap:.75em;align-items:center}.sdb-lang-track{height:.65em;background:var(--bd)}.sdb-lang-bar{display:block;width:var(--bar-width);height:100%;background:var(--ac)}
+.sdb-legend{color:var(--mut);font-size:.9em}.sdb-company{display:flex;gap:.5em;align-items:center}
+.sdb-report{max-width:794px;margin:auto}.sdb-report-head{border-bottom:2px solid var(--bd);padding-bottom:1em}.sdb-report .cols{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+@media(max-width:700px){.sdb-report .cols{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@page{size:A4;margin:0}
+@media print{body *{visibility:hidden!important}.sdb-report,.sdb-report *{visibility:visible!important}.sdb-report{position:absolute;inset-inline-start:0;top:0;display:block!important;max-width:none;width:210mm;margin:0}.sdb-report-page{min-height:297mm;padding:14mm;box-sizing:border-box;break-after:auto}.sdb-card,.sdb-report-head,.sdb-panel{break-inside:avoid}.sdb-report-page:last-child{break-after:auto}}"""
 
 
 def label(lang):
@@ -567,7 +776,9 @@ def build(g):
                "con": con_on, "quick": [[q["id"], q["name"], q["en"], q["lvl"], q["rated"], q["example"], q["url"], q["default"], q["al"]] for q in quick],
                "ents": search, "entBase": ebase, "key": S.get("key", ""), "dec": S.get("dec")}
         body = body_html(g, lang, stats, quick, S, n_main, n_langs, con_on)
-        body = (f'{g["header"](lang, "")}<main class="wrap spn-wrap"><div class="spn" id="spn" data-ssr="{1 if S else 0}" data-cfg="{E(json.dumps(cfg, ensure_ascii=False, separators=(",", ":")))}">'
+        dash = dashboard_url(B, lang)
+        body = (f'{g["header"](lang, "")}<main class="wrap spn-wrap"><p><a class="btn" href="{E(dash)}">{E(tx(lang, "dash_h"))}</a></p>'
+                f'<div class="spn" id="spn" data-ssr="{1 if S else 0}" data-cfg="{E(json.dumps(cfg, ensure_ascii=False, separators=(",", ":")))}">'
                 f'{body}</div></main>{g["footer"](lang)}{js}')
         faqs = faq_items(lang, stats, S.get("nums") or {}, _day(g))
         meta = tx(lang, "meta", episodes=P["episodes_per_topic"])
@@ -576,5 +787,29 @@ def build(g):
                    g["page"](lang, tx(lang, "title") + " – M365.FM", meta, u, body, alts if len(alts) > 1 else None, jsonld(B, lang, u, hl, lastmod, faqs, n_langs),
                              xdefault=alts["en"], og_type="website", extra_head=CSS, share=False))
         g["sitemap"].append((u, lastmod, alts if len(alts) > 1 else None))
+        q = dashboard_copy(lang)
+        views = (("overview", "dashboard"), ("placement", "placement_view"),
+                 ("report", "report_view"), ("sources", "sources_view"))
+        urls = {view: dashboard_view_url(B, lang, view) for view, _ in views}
+        config = json.dumps({"api": g["api"], "base": B, "lang": lang, "today": TODAY, "copy": q, "urls": urls},
+                            ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
+        for view, title_key in views:
+            canonical = urls[view]
+            dashboard_body = (f'{g["header"](lang, "")}<main class="wrap sdb-main">'
+                              f'<div><div class="kicker">{E(q["dash_kicker"])}</div>'
+                              f'<h1 id="sdb-title">{E(q["achievement_title"] if view == "overview" else q[title_key])}</h1><p class="lede">{E(q["intro"])}</p></div>'
+                              f'<p class="mut" id="sdb-scope">{E(q["scope"])}</p>'
+                              f'<div id="sdb" aria-live="polite"><p class="mut">{E(q["login"])}</p></div>'
+                              f'<script>window.M365SP=Object.assign({config},{{view:"{view}"}})</script>'
+                              f'<script defer src="{asset_url(B, "sponsor-dashboard.js")}"></script></main>{g["footer"](lang)}')
+            title = (q["achievement_title"] if view == "overview" else q[title_key]) + " – M365.FM"
+            output_path = ("sponsor/dashboard/" if view == "overview" else f"sponsor/dashboard/{view}/") if lang == "en" else \
+                          (f"{lang}/sponsor/dashboard/" if view == "overview" else f"{lang}/sponsor/dashboard/{view}/")
+            g["write"](output_path + "index.html",
+                       g["page"](lang, title, q["intro"], canonical, dashboard_body,
+                                 None,
+                                 [{"@context": "https://schema.org", "@type": "WebPage", "name": q[title_key],
+                                   "url": canonical, "inLanguage": g["LANGS"][lang][1] if lang in LG else "en"}],
+                                 og_type="website", extra_head=f"<style>{DASHBOARD_CSS}</style>", share=False, noindex=True))
     print(f"Sponsor-Seite: {len(langs)} Sprachen ({'vorab gerendert' if ssr else 'ohne Vorab-Rendern'}), {len(per_lang[langs[0]][1]) if langs else 0} Themen in der Suche")
     return langs
