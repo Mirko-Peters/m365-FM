@@ -117,11 +117,6 @@ async function pdfFor(env, lang, brand = "m365fm") {
   return null;
 }
 
-function b64(buf) {
-  let s = "";
-  for (let i = 0; i < buf.length; i += 0x8000) s += String.fromCharCode.apply(null, buf.subarray(i, i + 0x8000));
-  return btoa(s);
-}
 
 async function notifyAdmins(env, row) {
   try {
@@ -194,7 +189,7 @@ export async function handleMediakit(env, request, url, path, user, J) {
     subject: t.subject,
     html: mailHtml(env, t, name, company, !!pdf, lang, brand),
     replyTo: "mirko.peters@m365.fm",
-    attachments: pdf ? [{ filename: B.file(pdf.lang), content: b64(pdf.buf), type: "application/pdf", disposition: "attachment" }] : [],
+    attachments: pdf ? [{ filename: B.file(pdf.lang), content: pdf.buf, type: "application/pdf", disposition: "attachment" }] : [],   // Binaerdaten; Base64 nur fuer Resend (mailer.js)
   });
   await db.prepare("UPDATE mediakit_requests SET sent=?,err=? WHERE id=?").bind(r.ok ? 1 : 0, r.ok ? (pdf ? "" : "no_pdf") : "http_" + r.status, id).run();
   await notifyAdmins(env, { name, company, title: B.push });
