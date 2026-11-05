@@ -26,6 +26,7 @@ READY_MIN = 0.9   # Anteil uebersetzter Saetze, ab dem eine weitere Sprache inde
 HUB = {"path": "services/"}
 PAGES = [dict(path=p, **C.PAGES[p]) for p in C.ORDER_AUDIENCES + C.ORDER_GOALS]
 BY_PATH = {p["path"]: p for p in PAGES}
+MEDIAKIT_PAGES = {"for/sponsors/", "i-want-to/reach-microsoft-365-buyers/"}   # Seiten fuer Sponsoren: Knopf "Mediadaten anfordern"
 
 
 def _text(lang, text):
@@ -404,6 +405,9 @@ def _sub(g, lang, spec, features):
     h1_text, lead_text, alt_text = _text(lang, spec["h1"]), _text(lang, spec["lead"]), _text(lang, spec["alt"])
     cta_text, cta_key = (spec["cta_on"] if spec.get("cta_on") and features.get(spec["cta_on"][2]) else spec["cta"])[:2]
     cta, cta_url = _t(lang, cta_text), _a(base, lang, cta_key)
+    # Mirko, 5.11.2026: auf den Seiten fuer Sponsoren immer die Mediadaten verlinken (Seite nur EN/DE, andere Sprachen auf EN)
+    mk_btn = (f'<a class="btn" href="{base}/{"de/" if lang == "de" else ""}media-kit/">{_t(lang, ("Request the media kit", "Mediadaten anfordern"))}</a>'
+              if spec["path"] in MEDIAKIT_PAGES else "")
     need_h, need_ps = spec["need"]
     offers_h, offers = spec["offers"]
     steps_h, steps = spec["steps"]
@@ -423,7 +427,7 @@ def _sub(g, lang, spec, features):
     body = (f'{g["header"](lang, "")}<main class="wrap lp">'
             f'<nav class="crumbs" aria-label="{_t(lang, ("Breadcrumb", "Brotkrumennavigation"))}"><a href="{html.escape(f"{base}/" if lang == "en" else f"{base}/{lang}/", quote=True)}">{_u(lang, "crumb_home")}</a><a href="{html.escape(hub, quote=True)}">{_u(lang, "crumb")}</a></nav>'
             f'<div class="lp-hero"><div><div class="kicker">{_u(lang, "kicker")}</div><h1>{html.escape(h1_text, quote=True)}</h1><p class="lede">{html.escape(lead_text, quote=True)}</p>{directory_note}'
-            f'<div class="btns"><a class="btn main" href="{cta_url}">{cta}</a><a class="btn" href="{html.escape(hub, quote=True)}">{_u(lang, "all")}</a></div></div>'
+            f'<div class="btns"><a class="btn main" href="{cta_url}">{cta}</a>{mk_btn}<a class="btn" href="{html.escape(hub, quote=True)}">{_u(lang, "all")}</a></div></div>'
             f'{_hero_img(path, lang, html.escape(alt_text, quote=True))}</div>'
             f'<nav class="lp-toc" aria-label="{_u(lang, "toc")}"><b>{_u(lang, "toc")}:</b>{"".join(f"<a href=\"#{i}\">{_t(lang, h)}</a>" for i, h in toc)}</nav>'
             f'<section class="sec" id="need"><h2>{_t(lang, need_h)}</h2><div class="lp-prose">{"".join(f"<p>{_t(lang, p)}</p>" for p in need_ps)}</div></section>'
@@ -436,7 +440,7 @@ def _sub(g, lang, spec, features):
             + f'<section class="sec faq" id="faq"><h2>{_u(lang, "faq")}</h2>{"".join(f"<details><summary>{_t(lang, q)}</summary><p>{_t(lang, a)}</p></details>" for q, a in faq_items)}</section>'
             f'<section class="sec" id="links"><h2>{_u(lang, "links")}</h2><ul class="lp-links">{"".join(f"<li><a href=\"{_a(base, lang, k)}\">{_t(lang, C.LINKS[k])}</a></li>" for k in spec["links"])}</ul></section>'
             f'<section class="sec" id="related"><h2>{_u(lang, "related")}</h2><div class="lp-cards">{"".join(_card(base, lang, BY_PATH[p], features) for p in spec["related"])}</div></section></main>'
-            f'<section class="band"><div class="wrap"><h2>{_u(lang, "cta_band")}</h2><p>{html.escape(lead_text, quote=True)}</p><div class="btns"><a class="btn main" href="{cta_url}">{cta}</a></div></div></section>'
+            f'<section class="band"><div class="wrap"><h2>{_u(lang, "cta_band")}</h2><p>{html.escape(lead_text, quote=True)}</p><div class="btns"><a class="btn main" href="{cta_url}">{cta}</a>{mk_btn}</div></div></section>'
             f'{g["footer"](lang)}')
     home = f"{base}/" if lang == "en" else f"{base}/{lang}/"
     hero = hero_src(path, lang)
