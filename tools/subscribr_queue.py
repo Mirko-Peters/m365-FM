@@ -84,6 +84,22 @@ def main():
     c = credits(token); print("Credits vorher:", c)
     if c is None or c < floor:
         print(f"Credits unter der Grenze {floor} oder unbekannt – nichts angelegt"); return
+    # Nachlauf: früher gestartete Läufe prüfen; abgebrochene neu starten (Subscribr erstattet die Credits, ein Neustart kostet
+    # wieder 6) – höchstens 2 Neustarts je Skript; fertige als "done" markieren. Abfragen mit Pause (Subscribr: ~20/min).
+    for it in q["items"]:
+        if it.get("status") != "created" or not it.get("script_id") or not it.get("run_id"): continue
+        st, j = call("GET", f"/scripts/{it['script_id']}/agent/runs/{it['run_id']}", token); time.sleep(3)
+        state = (j.get("data") or {}).get("status", "")
+        if state.startswith("completed"):
+            it["status"] = "done"
+        elif state == "failed" and int(it.get("restarts", 0)) < 2:
+            g, gj = call("POST", f"/scripts/{it['script_id']}/agent/generate", token, {"research": "auto", "visual_cues": "off"}); time.sleep(5)
+            if g in (200, 202):
+                it["run_id"] = gj.get("run_id"); it["restarts"] = int(it.get("restarts", 0)) + 1
+                print(f"neu gestartet {it['script_id']}: {it['title']}")
+        elif state == "failed":
+            it["status"] = "failed"; it["error"] = "Lauf dreimal abgebrochen"
+    QUEUE.write_text(json.dumps(q, ensure_ascii=False, indent=1) + "\n", "utf-8")
     made = 0
     for it in todo:
         st, j = call("POST", f"/channels/{int(it['channel'])}/scripts", token, {
@@ -93,8 +109,8 @@ def main():
         if st != 201 or not sid:
             it["status"] = "failed"; it["error"] = f"create {st}"; print("Fehler beim Anlegen:", it["title"], st); continue
         time.sleep(5)
-        g, _ = call("POST", f"/scripts/{sid}/agent/generate", token, {"research": "auto", "visual_cues": "off"})
-        it.update(status="created" if g in (200, 202) else "failed", script_id=sid, created=datetime.now(timezone.utc).strftime("%Y-%m-%d"))
+        g, gj = call("POST", f"/scripts/{sid}/agent/generate", token, {"research": "auto", "visual_cues": "off"})
+        it.update(status="created" if g in (200, 202) else "failed", script_id=sid, run_id=gj.get("run_id"), created=datetime.now(timezone.utc).strftime("%Y-%m-%d"))
         if g not in (200, 202): it["error"] = f"generate {g}"
         made += 1; print(f"angelegt {sid} ({g}): {it['title']}")
         QUEUE.write_text(json.dumps(q, ensure_ascii=False, indent=1) + "\n", "utf-8")   # Zwischenstand sichern
