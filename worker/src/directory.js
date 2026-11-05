@@ -9,6 +9,7 @@ const finite = (value) => value === null || value === undefined || value === "" 
 const ready = new WeakSet();
 const GEO_FINAL = new Set(["OK", "ZERO_RESULTS", "INVALID_REQUEST"]);   // endgueltige Google-Antworten
 const GEO_STOP = new Set(["REQUEST_DENIED", "OVER_DAILY_LIMIT", "OVER_QUERY_LIMIT"]);   // Backfill fuer diesen Lauf beenden
+const CITY_REGEO = "directory_city_regeo";   // meta: alte stadtgenaue Punkte einmal verworfen (siehe ensureDirectoryCols)
 
 export function roundCoordinates(lat, lng) {
   const latitude = finite(lat), longitude = finite(lng);
@@ -20,29 +21,49 @@ export function roundCoordinates(lat, lng) {
   };
 }
 
+const isCityType = (type) => type === "locality" || type === "postal_town" || String(type).startsWith("administrative_area_level_");
+const component = (result, kinds) => (result?.address_components || []).find((x) => kinds.some((kind) => (x.types || []).includes(kind)))?.long_name || "";
+
+async function geocodeOnce(env, address) {
+  const params = new URLSearchParams({ address, key: env.GOOGLE_GEOCODING_KEY });
+  const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?${params}`, { signal: AbortSignal.timeout(6000) });
+  const result = await response.json();
+  const status = text(result?.status) || "ERROR";
+  return { status, first: status === "OK" ? result.results?.[0] || null : null };
+}
+
 export async function geocodeAddress(env, address, previous = {}, precision = "address") {
   const value = text(address);
   if (value && value === previous.geo_address && previous.geo_at)
-    return { lat: finite(previous.lat), lng: finite(previous.lng), city: (precision === "city" ? previous.geo_city : previous.geo_city || previous.city) || "", geo_precision: previous.geo_precision || "", geo_address: value, geo_at: previous.geo_at, status: "CACHED" };
-  if (!value || !env.GOOGLE_GEOCODING_KEY) return { lat: null, lng: null, geo_precision: "", geo_address: value, geo_at: 0, status: "NO_KEY" };
-  const params = new URLSearchParams({ address: value, key: env.GOOGLE_GEOCODING_KEY });
-  let status = "ERROR";
+    return { lat: finite(previous.lat), lng: finite(previous.lng), city: (precision === "city" ? previous.geo_city : previous.geo_city || previous.city) || "", geo_precision: previous.geo_precision || "", geo_address: value, geo_at: previous.geo_at, status: "CACHED", calls: 0 };
+  if (!value || !env.GOOGLE_GEOCODING_KEY) return { lat: null, lng: null, geo_precision: "", geo_address: value, geo_at: 0, status: "NO_KEY", calls: 0 };
+  let status = "ERROR", calls = 0;
   try {
-    const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?${params}`, { signal: AbortSignal.timeout(6000) });
-    const result = await response.json();
-    status = text(result?.status) || "ERROR";
-    const first = result?.status === "OK" ? result.results?.[0] : null;
+    calls++;
+    let first;
+    ({ status, first } = await geocodeOnce(env, value));
+    const city = component(first, ["locality", "postal_town"]);
+    // Stadtgenau: ist der Treffer feiner als eine Stadt (Strasse, Gebaeude, PLZ), nicht diesen Punkt runden, sondern die Stadt selbst
+    // geocodieren. Sonst wuerde eine Strasse aus dem privaten Freitextfeld als (gerundeter) Punkt veroeffentlicht. Ohne Stadt: keine Koordinaten.
+    if (first && precision === "city" && Array.isArray(first.types) && !first.types.some(isCityType)) {
+      if (!city) first = null;
+      else {
+        // Region mitsenden (Springfield, Massachusetts statt Springfield, Illinois); Status zuruecksetzen, damit ein Fehler hier voruebergehend bleibt
+        const query = [...new Set([city, component(first, ["administrative_area_level_1"]), component(first, ["country"])].filter(Boolean))].join(", ");
+        calls++; status = "ERROR";
+        ({ status, first } = await geocodeOnce(env, query));
+      }
+    }
     const point = first?.geometry?.location;
-    const city = (first?.address_components || []).find((x) => x.types.includes("locality") || x.types.includes("postal_town"))?.long_name || "";
     const coords = point && precision === "city" ? roundCoordinates(point.lat, point.lng) : point && { lat: point.lat, lng: point.lng };
     if (coords && finite(coords.lat) !== null && finite(coords.lng) !== null && (precision !== "city" || city))
-      return { ...coords, city, geo_precision: precision, geo_address: value, geo_at: now(), status };
+      return { ...coords, city, geo_precision: precision, geo_address: value, geo_at: now(), status, calls };
   } catch {}
   // Endgueltige Antwort ohne Treffer: merken, damit dieselbe Adresse nicht erneut abgefragt wird. Voruebergehende Fehler (REQUEST_DENIED ohne
   // Abrechnung, OVER_*-Kontingent, UNKNOWN_ERROR, Zeitueberschreitung): geo_at=0 und keine Adresse, damit Speichern und Backfill es spaeter
   // erneut versuchen. Sonst blieben z. B. alle Eintraege aus der Zeit ohne Google-Abrechnung fuer immer ohne Koordinaten.
-  return GEO_FINAL.has(status) ? { lat: null, lng: null, geo_precision: "", geo_address: value, geo_at: now(), status }
-    : { lat: null, lng: null, geo_precision: "", geo_address: "", geo_at: 0, status };
+  return GEO_FINAL.has(status) ? { lat: null, lng: null, geo_precision: "", geo_address: value, geo_at: now(), status, calls }
+    : { lat: null, lng: null, geo_precision: "", geo_address: "", geo_at: 0, status, calls };
 }
 
 export async function recordGeocodeStatus(db, geo, address = geo?.geo_address || "") {
@@ -77,6 +98,19 @@ export async function ensureDirectoryCols(db) {
     try { await db.prepare(`SELECT ${name} FROM ${table} LIMIT 1`).first(); }
     catch { try { await db.prepare(`ALTER TABLE ${table} ADD COLUMN ${column}`).run(); } catch {} }
   }
+  // Einmalig (meta-Markierung statt Migrationsdatei): stadtgenaue Punkte aus der Zeit vor der Stadt-Regel verwerfen. Damals wurde ein
+  // Strassen-/PLZ-Treffer aus dem privaten Freitextfeld nur gerundet; Cache (gleiche Adresse) und Backfill (nur geo_at=0) haetten ihn nie
+  // ersetzt. Danach geocodiert der Backfill diese Zeilen stadtgenau neu (hoechstens 50 Aufrufe je Lauf). Ein Batch = eine Transaktion.
+  try {
+    if (!(await db.prepare("SELECT 1 x FROM meta WHERE k=?").bind(CITY_REGEO).first())) {
+      const reset = "SET lat=NULL,lng=NULL,geo_precision='',geo_address='',geo_at=0 WHERE geo_precision='city' AND NOT EXISTS (SELECT 1 FROM meta WHERE k=?)";
+      await db.batch([
+        db.prepare(`UPDATE profile_private ${reset}`).bind(CITY_REGEO),
+        db.prepare(`UPDATE org_locations ${reset}`).bind(CITY_REGEO),
+        db.prepare("INSERT OR IGNORE INTO meta(k,v) VALUES(?,?)").bind(CITY_REGEO, String(now())),
+      ]);
+    }
+  } catch {}
   ready.add(db);
 }
 
@@ -86,16 +120,18 @@ function inBbox(item, bbox) {
   return item.lng >= west && item.lng <= east && item.lat >= south && item.lat <= north;
 }
 
-export async function directoryItems(env, filters = {}) {
+// Alle oeffentlichen Eintraege (ungefiltert); Obergrenzen nur als Schutz, Filter und Seiten folgen danach
+const MAX_ROWS = 5000;
+async function allDirectoryItems(env) {
   const db = env.DB;
   const [people, orgs, events] = await Promise.all([
     db.prepare(`SELECT p.user_id,u.name,u.lang,p.handle,p.headline,p.job,p.country,pp.geo_city city,pp.map_public,pp.lat,pp.lng,pp.geo_precision
       FROM profiles p JOIN users u ON u.id=p.user_id AND u.banned=0
       LEFT JOIN profile_private pp ON pp.user_id=p.user_id
-      WHERE p.public=1 AND p.handle IS NOT NULL ORDER BY p.updated DESC LIMIT 300`).all(),
-    db.prepare("SELECT id,handle,name,tagline,country,public FROM orgs WHERE public=1 ORDER BY created DESC LIMIT 200").all(),
+      WHERE p.public=1 AND p.handle IS NOT NULL ORDER BY p.updated DESC LIMIT ${MAX_ROWS}`).all(),
+    db.prepare(`SELECT id,handle,name,tagline,country,public FROM orgs WHERE public=1 ORDER BY created DESC LIMIT ${MAX_ROWS}`).all(),
     db.prepare(`SELECT id,handle,title,summary,start,end,mode,location,country,url,lang,topics,city,lat,lng,geo_precision
-      FROM events WHERE public=1 AND COALESCE(NULLIF(end,''),start)>=? ORDER BY start LIMIT 300`).bind(new Date().toISOString().slice(0, 10)).all(),
+      FROM events WHERE public=1 AND COALESCE(NULLIF(end,''),start)>=? ORDER BY start LIMIT ${MAX_ROWS}`).bind(new Date().toISOString().slice(0, 10)).all(),
   ]);
   const result = [];
   const personRows = people.results || [];
@@ -136,7 +172,24 @@ export async function directoryItems(env, filters = {}) {
     lat: row.mode === "online" ? null : finite(row.lat), lng: row.mode === "online" ? null : finite(row.lng), geo_precision: row.geo_precision || "",
     mode: row.mode, address: row.mode === "online" ? "" : row.location || "", start: row.start, end: row.end, online: row.mode === "online",
   });
+  return result;
+}
 
+// Filterwerte ueber alle Eintraege (vor Filter und Seiten), damit die Auswahllisten nicht nur die geladene Seite zeigen
+export function directoryFacets(items) {
+  const facets = {};
+  for (const key of ["country", "city", "topic", "program", "lang"]) {
+    const seen = new Map();
+    for (const item of items) for (const raw of key === "topic" ? item.topics || [] : key === "program" ? item.programs || [] : [item[key]]) {
+      const value = text(raw), id = value.toLocaleLowerCase();
+      if (value && !seen.has(id)) seen.set(id, value);
+    }
+    facets[key] = [...seen.values()].sort();
+  }
+  return facets;
+}
+
+function filterDirectory(result, filters = {}) {
   const type = text(filters.type);
   if (type && !["expert", "company", "event"].includes(type)) throw new Error("bad_type");
   const lang = text(filters.lang);
@@ -164,19 +217,26 @@ export async function directoryItems(env, filters = {}) {
   return filtered;
 }
 
+export async function directoryItems(env, filters = {}) {
+  return filterDirectory(await allDirectoryItems(env), filters);
+}
+
 export async function handleDirectory(env, request, url, J) {
   const path = url.pathname.replace(/\/+$/, "");
   if (path === "/api/directory/key" && request.method === "GET")
     return J({ key: env.GOOGLE_MAPS_API_KEY || "" }, 200, { "cache-control": "public, max-age=300" });
-  if (path !== "/api/directory" || request.method !== "GET") return null;
-  let items;
-  try { items = await directoryItems(env, Object.fromEntries(url.searchParams)); }
+  if (path !== "/api/directory" && path !== "/api/directory/key") return null;
+  if (request.method !== "GET") return J({ error: "method_not_allowed" }, 405, { allow: "GET" });
+  let all, items;
+  try { all = await allDirectoryItems(env); items = filterDirectory(all, Object.fromEntries(url.searchParams)); }
   catch (error) { return J({ error: error.message || "bad_request" }, 400); }
   const limit = Math.max(1, Math.min(100, parseInt(url.searchParams.get("limit"), 10) || 30));
   const page = Math.max(1, Math.min(10000, parseInt(url.searchParams.get("page"), 10) || 1));
   const start = (page - 1) * limit;
-  return J({ items: items.slice(start, start + limit), total: items.length, page, limit, has_more: start + limit < items.length },
-    200, { "cache-control": "public, max-age=300" });
+  const body = { items: items.slice(start, start + limit), total: items.length, page, limit, has_more: start + limit < items.length };
+  // facets wachsen mit allen Orten/Themen: nur auf Anfrage (die Seite einmal beim Laden), nicht bei jeder Seite oder MCP-Suche
+  if (url.searchParams.get("facets") === "1") body.facets = directoryFacets(all);
+  return J(body, 200, { "cache-control": "public, max-age=300" });
 }
 
 export async function backfillDirectoryGeocodes(env) {
@@ -200,10 +260,13 @@ export async function backfillDirectoryGeocodes(env) {
     ...((await db.prepare(`SELECT 'e' kind,id,location address,city,country,lat,lng,geo_at,geo_address,geo_precision FROM events
       WHERE public=1 AND mode<>'online' AND location<>'' AND COALESCE(NULLIF(end,''),start)>=? AND geo_at=0 LIMIT 50`).bind(today).all()).results || []),
   ].slice(0, 50 - probes);
-  let updated = 0;
+  let updated = 0, calls = probes;   // hoechstens 50 Google-Aufrufe je Lauf
   for (const row of rows) {
     const address = row.kind === "u" ? `${row.city}, ${row.country}` : `${row.address || row.city}, ${row.country}`;
-    const geo = await geocodeAddress(env, address, row, row.kind === "u" || (!row.address && row.city) ? "city" : "address");
+    const precision = row.kind === "u" || (!row.address && row.city) ? "city" : "address";
+    if (calls + (precision === "city" ? 2 : 1) > 50) break;   // stadtgenau braucht evtl. einen zweiten Aufruf
+    const geo = await geocodeAddress(env, address, row, precision);
+    calls += geo.calls || 0;
     await recordGeocodeStatus(db, geo, address);
     const table = row.kind === "u" ? "profile_private" : row.kind === "o" ? "org_locations" : "events", idCol = row.kind === "u" ? "user_id" : "id";
     const fillCity = row.kind === "e" || row.kind === "o";

@@ -234,7 +234,7 @@ async function api(env, request, url, path, asUser, ctx) {
   if (path === "/api/health") return J({ ok: true }, 200);
   if (path === "/api/directory" || path === "/api/directory/key") {
     await ensureDirectoryCols(db);
-    return handleDirectory(env, request, url, J);
+    return (await handleDirectory(env, request, url, J)) || J({ error: "not_found" }, 404);
   }
   if (path === "/api/search") return handleSearch(env, request, url, J);
   if (path === "/api/providers") return J({ providers: Object.keys(PROVIDERS).filter((k) => PROVIDERS[k].id(env) && PROVIDERS[k].secret(env)) }, 200, { "cache-control": "public, max-age=300" });

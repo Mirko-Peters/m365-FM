@@ -308,7 +308,7 @@
       var acc = r.j.accepted || [];
       if (!acc.length) root.appendChild(el("p", { class: "mut", text: T.accepted_none }));
       else root.appendChild(el("div", { class: "ec-grid" }, acc.map(function (a) {
-        return el("article", { class: "ec-card" }, [el("p", {}, [statusBadge("accepted"), badge(T["kind_" + a.kind] || a.kind)]), el("h3", { text: a.title }), el("p", { class: "ec-meta", text: a.publisher || "" }), contactsList(a.contacts, "publisher")]);
+        return el("article", { class: "ec-card" }, [el("p", {}, [statusBadge("accepted"), badge(T["kind_" + a.kind] || a.kind)]), el("h3", { text: a.title }), el("p", { class: "ec-meta", text: [a.publisher || "", a.reach || ""].filter(Boolean).join(" — ") }), contactsList(a.contacts, "publisher")]);
       })));
       root.appendChild(el("h2", { class: "ec-sec", text: T.settings_h }));
       root.appendChild(settingsForm((s.j || {}).settings || {}));
@@ -323,13 +323,14 @@
     var oi = el("input", { type: "checkbox", checked: !!st.opt_in }), fo = checks(fmtOpts(), st.formats || []), la = checks(C.langs, (st.langs || []).length ? st.langs : [C.lang]);
     var no = select([["push", T.n_push], ["weekly", T.n_weekly], ["both", T.n_both], ["none", T.n_none]], st.notify || "push");
     var cp = select([["platform", T.c_platform], ["email", T.c_email], ["linkedin", T.c_linkedin], ["website", T.c_website]], st.contact_pref || "platform");
-    var cv = el("input", { type: "text", maxlength: "300", value: st.contact_value || "" }), pa = el("input", { type: "checkbox" }), m = msg();
-    var paused = st.paused_until && st.paused_until * 1000 > Date.now() ? el("p", { class: "ec-meta", text: t("paused_until", { d: date(st.paused_until) }) }) : null;
+    var active = !!(st.paused_until && st.paused_until * 1000 > Date.now());   // laufende Pause: Haken gesetzt, Speichern beendet sie nicht
+    var cv = el("input", { type: "text", maxlength: "300", value: st.contact_value || "" }), pa = el("input", { type: "checkbox", checked: active }), m = msg();
+    var paused = active ? el("p", { class: "ec-meta", text: t("paused_until", { d: date(st.paused_until) }) }) : null;
     return el("form", { class: "ec-form", onsubmit: function (ev) {
       ev.preventDefault();
       var body = { opt_in: oi.checked, formats: fo.get(), langs: la.get(), notify: no.value, contact_pref: cp.value, contact_value: cv.value };
-      if (pa.checked) body.pause_weeks = 2; else body.paused_until = 0;
-      api("/api/expert-settings", { method: "POST", body: body }).then(function (r) { if (needLogin(r)) return; say(m, r.j.ok ? T.saved : errText(r.j), !!r.j.ok); });
+      if (pa.checked && !active) body.pause_weeks = 2; else if (!pa.checked && active) body.paused_until = 0;
+      api("/api/expert-settings", { method: "POST", body: body }).then(function (r) { if (needLogin(r)) return; if (r.j.ok) active = pa.checked; say(m, r.j.ok ? T.saved : errText(r.j), !!r.j.ok); });
     } }, [el("label", { class: "ec-ck" }, [oi, el("span", { text: T.opt_in })]), el("div", { class: "ec-lbl" }, [T.s_formats, fo.node]), el("div", { class: "ec-lbl" }, [T.s_langs, la.node]),
       el("div", { class: "ec-row" }, [el("label", {}, [T.notify, no]), el("label", {}, [T.contact, cp]), el("label", {}, [T.contact_value, cv])]),
       el("label", { class: "ec-ck" }, [pa, el("span", { text: T.pause })]), paused, el("p", { class: "ec-meta", text: T.req_note }),

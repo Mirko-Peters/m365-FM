@@ -18,7 +18,7 @@ class DirectoryPageTests(unittest.TestCase):
         written, pages, sitemap = {}, [], []
 
         def page(lang, *args, **kwargs):
-            pages.append({"lang": lang, "canonical": args[2], "schema": args[5], "noindex": kwargs.get("noindex")})
+            pages.append({"lang": lang, "title": args[0], "description": args[1], "canonical": args[2], "schema": args[5], "noindex": kwargs.get("noindex")})
             return args[3]
 
         context = {
@@ -152,6 +152,107 @@ class DirectoryPageTests(unittest.TestCase):
         self.assertIn("copilot-studio", encoded)
         self.assertNotIn("Private Street", encoded)
         self.assertNotIn("address", encoded)
+
+    def test_hub_embeds_filter_facets_from_all_items(self):
+        items = [{"type": "expert", "name": f"Expert {i}", "url": f"https://www.m365.fm/community/u/expert-{i}/",
+                  "country": "Germany" if i < 35 else "France", "city": "Berlin" if i < 35 else "Paris",
+                  "topics": ["copilot-studio"] if i < 35 else ["purview"], "programs": ["mct"] if i == 39 else [], "lang": "fr" if i >= 35 else "de"}
+                 for i in range(40)]
+        written, _, _ = self.build(items)
+        hub = written["directory/index.html"]
+        config = json.loads(hub.split("window.M365D=", 1)[1].split("</script>", 1)[0])
+        self.assertEqual(len(config["items"]), 30)
+        self.assertEqual(config["facets"]["country"], ["France", "Germany"])
+        self.assertEqual(config["facets"]["city"], ["Berlin", "Paris"])
+        self.assertEqual(config["facets"]["topic"], ["copilot-studio", "purview"])
+        self.assertEqual(config["facets"]["program"], ["mct"])
+        self.assertEqual(config["facets"]["lang"], ["de", "fr"])
+
+    def test_city_pages_group_by_slug_and_skip_empty_slugs(self):
+        def expert(i, country, city):
+            return {"type": "expert", "name": f"Expert {i}", "url": f"https://www.m365.fm/community/u/expert-{i}/",
+                    "country": country, "city": city, "topics": []}
+        items = [expert(i, "Germany", "Berlin") for i in range(3)] + [expert(3, "Germany", "berlin")]
+        items += [expert(4 + i, "Japan", "東京") for i in range(3)]
+        written, pages, sitemap = self.build(items)
+        self.assertFalse([path for path in written if "//" in path])
+        japan = written["directory/japan/index.html"]
+        self.assertIn("<h1>Microsoft 365 experts in Japan</h1>", japan)
+        self.assertNotIn("東京, Japan", japan)
+        berlin = written["directory/de/berlin/index.html"]
+        self.assertIn("<h1>Microsoft 365 experts in Berlin, Germany</h1>", berlin)
+        self.assertIn("Directory: 4 entries", berlin)
+        self.assertEqual(len([page for page in pages if page["lang"] == "en" and page["canonical"].endswith("/directory/de/berlin/")]), 1)
+        facts = GEN.collect_facts(items)
+        self.assertEqual(facts["city:de:berlin"]["entries"], 4)
+        self.assertNotIn("city:japan:", facts)
+
+    def test_topic_pages_use_entity_name_not_id(self):
+        items = [{"type": "expert", "name": f"Expert {i}", "url": f"https://www.m365.fm/community/u/expert-{i}/",
+                  "country": "Germany", "city": "Berlin", "topics": ["test-topic-x"]} for i in range(5)]
+        with patch.dict(DIR.ENTS, {"test-topic-x": {"id": "test-topic-x", "name": "Test Topic X"}}):
+            written, pages, _ = self.build(items)
+        html = written["directory/de/topic/test-topic-x/index.html"]
+        self.assertIn("<h1>Test Topic X experts in Germany</h1>", html)
+        self.assertNotIn("test-topic-x experts", html)
+        page = next(page for page in pages if page["lang"] == "en" and page["canonical"].endswith("/directory/de/topic/test-topic-x/"))
+        self.assertEqual(page["title"], "Test Topic X experts in Germany")
+        self.assertEqual(page["description"], "Test Topic X experts in Germany")
+        self.assertEqual(page["schema"][0]["itemListElement"][-1]["name"], "Test Topic X experts in Germany")
+        self.assertEqual(page["schema"][1]["name"], "Test Topic X experts in Germany")
+
+    def test_cjk_text_counts_each_character_as_a_word(self):
+        self.assertEqual(len(DIR._words("東京のエキスパート")), 9)
+        self.assertEqual(len(DIR._words("Copilot 東京 experts")), 4)
+        self.assertEqual(len(DIR._words("서울의 전문가 목록")), 3)   # Koreanisch: Wörter mit Leerzeichen
+        items = [{"type": "expert", "name": f"Expert {i}", "url": "u", "country": "Japan", "city": "Tokyo", "topics": []} for i in range(3)]
+        intro = "".join(chr(0x4E00 + i) for i in range(100))
+        detail = "".join(chr(0x4E00 + 100 + i) for i in range(80))
+        parent = "".join(chr(0x5E00 + i) for i in range(200))
+        self.assertTrue(DIR._indexable(items, "city", intro, detail, parent))
+        self.assertFalse(DIR._indexable(items, "city", intro[:60], detail[:60], parent))
+
+    def test_fetch_reads_all_pages_beyond_5000_items(self):
+        # Worker begrenzt je Tabelle; die Summe (hier 6000) darf nicht bei Seite 50 abgeschnitten werden
+        total, requested = 6000, []
+
+        def page_of(url):
+            page = int(url.rsplit("page=", 1)[1])
+            requested.append(page)
+            start = (page - 1) * 100
+            return {"items": [{"id": f"i{n}"} for n in range(start, min(start + 100, total))], "total": total, "has_more": start + 100 < total}
+
+        import site_fetch
+        with patch.object(site_fetch, "fetch", side_effect=page_of):
+            self.assertEqual(len(DIR.fetch_directory("https://api.example.test")), total)
+        self.assertEqual(requested, list(range(1, 61)))
+
+        class Response:
+            def __init__(self, url):
+                self.body = json.dumps(page_of(url)).encode()
+            def __enter__(self):
+                return self
+            def __exit__(self, *_):
+                return False
+            def read(self):
+                return self.body
+
+        requested.clear()
+        with patch.object(GEN.urllib.request, "urlopen", side_effect=lambda request, timeout=None: Response(request.full_url)):
+            self.assertEqual(len(GEN._fetch_items()), total)
+        self.assertEqual(requested, list(range(1, 61)))
+
+    def test_fetch_stops_at_total_even_if_has_more_stays_true(self):
+        calls = []
+
+        def broken(url):
+            calls.append(url)
+            return {"items": [{"id": len(calls)}], "total": 250, "has_more": True}
+
+        import site_fetch
+        with patch.object(site_fetch, "fetch", side_effect=broken):
+            DIR.fetch_directory("https://api.example.test")
+        self.assertEqual(len(calls), 3)
 
     def test_jsonld_text_cannot_close_its_script_element(self):
         malicious = "</script><img src=x>"

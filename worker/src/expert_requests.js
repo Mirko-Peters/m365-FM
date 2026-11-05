@@ -7,12 +7,28 @@ import { recordExpertContribution } from "./contributions.js";
 const FORMATS = ["quote", "interview", "article", "podcast", "talk"];
 const MAX_REQUESTS_PER_WEEK = 5, MAX_REPLIES_PER_DAY = 10, MIN_ACCOUNT_AGE = 86400;
 const MAX_DEADLINE_DAYS = 60, MAX_OPEN_CALLS = 2, MAX_PITCH = 600, VECTOR_BATCH = 20;
+// Mindestaehnlichkeit (Kosinus, wie SEARCH_VECTOR_MIN_SCORE) fuer Vektor-Treffer: in beiden Richtungen gleich
+// (Anfrage -> Experten fuer Vorschau/Push, Experte -> Anfragen fuer Liste/Antworten), sonst passt bei kleinem Index jede Anfrage
+const MIN_VECTOR_SCORE = 0.4;
 const now = () => Math.floor(Date.now() / 1000);
 const parse = (s) => { if (Array.isArray(s)) return s; try { const x = JSON.parse(s || "[]"); return Array.isArray(x) ? x : []; } catch { return []; } };
 const text = (s, n) => cleanText(s, n).replace(/[<>]/g, "").replace(/https?:\/\/\S+/gi, "").replace(/\s+/g, " ").trim();
 const validLang = (lang) => lang === "en" || isLang(lang);
-const contactPattern = /(?:\b[\w.+-]+@[\w.-]+\.[a-z]{2,}\b|(?:https?:\/\/|www\.)\S+|\b(?:\+?\d[\d\s()./-]{6,}\d)\b)/i;
-const contact = (value) => typeof value === "string" && contactPattern.test(value);
+const contactPattern = /(?:\b[\w.+-]+@[\w.-]+\.[a-z]{2,}\b|(?:https?:\/\/|www\.)\S+)/i;
+// Telefonnummer nur bei mind. 9 Ziffern; Datum (12.11.2026, 2026-11-20, 12/11/2026, auch als Bereich), Jahresbereich (2019-2024)
+// und Version mit Build-Nummer (16.0.17928.20114, Build 16.0.1792) zaehlen nicht – aber nur fuer sich, nicht als Teil einer Ziffernkette (06.12.34.56.78).
+// Nur moegliche Daten (Tag/Monat 1-31, ISO-Monat 1-12, Jahr 19xx/20xx oder zweistellig) und dreiteilige Versionen nur mit v/Version/Build,
+// sonst verschwindet eine Teilnehmernummer wie "0475 12.34.56" oder "+43 1 23.45.678" als Datum/Version.
+const DAY = String.raw`(?:0?[1-9]|[12]\d|3[01])`, YEAR = String.raw`(?:19|20)\d{2}`;
+const DATE = String.raw`(?:${DAY}[./]${DAY}[./](?:${YEAR}|\d{2})|${YEAR}[-/.](?:0?[1-9]|1[0-2])[-/.]${DAY})`;
+const notPhone = new RegExp(String.raw`(?<![\d+][./-]?)\b(?:${DATE}(?:\s?[-–]\s?${DATE})?|${YEAR}\s?[-–]\s?${YEAR}|` +
+  String.raw`(?:v|version\s?|build\s?)\d{1,2}\.\d{1,2}\.\d{3,5}(?:\.\d{1,5})?|\d{1,2}\.\d{1,2}\.(?:\d{3,5}\.\d{1,5}|\d{1,2}\.\d{3,5}))\b(?![./-]?\d)`, "gi");
+const phonePattern = /\+?\d[\d\s()./-]{6,}\d/g;
+const phone = (value) => [...value.replace(notPhone, " x ").matchAll(phonePattern)].some((m) => m[0].replace(/\D/g, "").length >= 9);
+const contact = (value) => typeof value === "string" && (contactPattern.test(value) || phone(value));
+// Roh und bereinigt pruefen: text() entfernt <, >, Null-Breite- und Bidi-Zeichen, die im Rohtext eine Adresse/Nummer tarnen,
+// gespeichert und angezeigt wird aber der bereinigte Text
+const contactIn = (value, n) => contact(value) || contact(text(value, n));
 const audienceFits = (request, row) => request.audience === "all" || request.audience === "level" ||
   row.program === request.audience;
 const blocked = async (db, a, b) => !!(await db.prepare("SELECT 1 x FROM msg_blocks WHERE (user_id=?1 AND blocked_id=?2) OR (user_id=?2 AND blocked_id=?1)").bind(a, b).first());
@@ -58,7 +74,7 @@ async function matchingExperts(env, request) {
         collectLog: false, requestTimeoutMs: 1000,
       });
       vectorMatches = await queryVectors(env, values, { topK: 50, filter: { type: "expert" } });
-      vectorMatches = vectorMatches.filter((match) => candidates.has(Number(match.metadata?.user_id)))
+      vectorMatches = vectorMatches.filter((match) => match.score >= MIN_VECTOR_SCORE && candidates.has(Number(match.metadata?.user_id)))
         .map((match) => ({ id: String(match.metadata.user_id) }));
     }
   } catch (error) {
@@ -72,24 +88,64 @@ async function matchingExperts(env, request) {
   }));
 }
 
+// Passende Anfragen fuer eine Person (Listen und Pruefung vor Antworten): Profil einmal laden, Regeln im Speicher,
+// Vektoren mit einer Abfrage (gespeicherter Expertenvektor gegen Anfragevektoren). Kein Embedding je Anfrage.
+async function matchesForExpert(env, userId, requests, profile = null) {
+  const db = env.DB, result = new Map();
+  if (!requests.length) return result;
+  profile = profile || await profileRows(db, userId);
+  if (!profile.length) return result;
+  const candidates = new Map();
+  for (const request of requests) {
+    if (request.user_id === userId) continue;
+    const topics = new Set(parse(request.topics));
+    for (const row of profile) {
+      const langs = [...parse(row.listing_langs), ...parse(row.setting_langs)];
+      const formats = [...parse(row.listing_formats), ...parse(row.setting_formats)];
+      if (!langs.includes(request.lang) || !formats.includes(request.format) || !audienceFits(request, row)) continue;
+      const current = candidates.get(Number(request.id)) || new Set();
+      if (topics.has(row.eid) && parse(row.topics).includes(row.eid)) current.add(row.eid);
+      candidates.set(Number(request.id), current);
+    }
+  }
+  if (!candidates.size) return result;
+  const rules = [...candidates.entries()].filter(([, shared]) => shared.size)
+    .map(([id, shared]) => ({ id: String(id), n: shared.size }))
+    .sort((a, b) => b.n - a.n || a.id.localeCompare(b.id));
+  let vectorMatches = [];
+  try {
+    const own = env.VEC ? await db.prepare("SELECT vid FROM expert_vectors WHERE user_id=?").bind(userId).first() : null;
+    const [stored] = own ? await env.VEC.getByIds([own.vid]) : [];
+    if (stored?.values?.length) {
+      const byVid = new Map();
+      for (const id of candidates.keys()) byVid.set(await vectorId(`request:${id}`), id);
+      const matches = await queryVectors(env, Array.from(stored.values), { topK: 100, returnMetadata: "none", filter: { type: "request" } });
+      vectorMatches = matches.filter((match) => match.score >= MIN_VECTOR_SCORE && byVid.has(match.id)).map((match) => ({ id: String(byVid.get(match.id)) }));
+    }
+  } catch (error) {
+    console.warn("Anfrage-Matching per Vektor fehlgeschlagen:", String(error?.message || error));
+  }
+  const ranked = rrf([vectorMatches, rules]);
+  const best = ranked[0]?.rrfScore || 1;
+  for (const item of ranked) {
+    result.set(Number(item.id), { score: Math.round(item.rrfScore / best * 100), shared: [...candidates.get(Number(item.id))] });
+  }
+  return result;
+}
+
 async function visibleMatches(env, userId) {
   const db = env.DB, t = now(), rows = (await db.prepare(`SELECT r.*,u.name author,
     EXISTS(SELECT 1 FROM expert_request_replies x WHERE x.request_id=r.id AND x.user_id=?) responded
     FROM expert_requests r
     JOIN users u ON u.id=r.user_id AND u.banned=0
     WHERE r.status='open' AND r.mode='match' AND r.deadline>=? AND r.user_id<>? ORDER BY r.created DESC LIMIT 100`).bind(userId, new Date(t * 1000).toISOString().slice(0, 10), userId).all()).results || [];
-  const profile = await profileRows(db, userId);
-  if (!profile.length) return [];
   const blocks = await blockedUsers(db, userId);
-  const items = [];
-  for (const r of rows) {
-    if (!blocks.has(r.user_id)) {
-      const candidates = await matchingExperts(env, r);
-      const match = candidates.find((candidate) => candidate.id === userId);
-      if (match) items.push({ ...publicRequest(r), match_score: match.score, shared_topics: match.shared });
-    }
-  }
-  return items;
+  const visible = rows.filter((r) => !blocks.has(r.user_id));
+  const matches = await matchesForExpert(env, userId, visible);
+  return visible.filter((r) => matches.has(Number(r.id))).map((r) => {
+    const match = matches.get(Number(r.id));
+    return { ...publicRequest(r), match_score: match.score, shared_topics: match.shared };
+  });
 }
 
 async function notify(env, userId, payload) {
@@ -100,18 +156,24 @@ async function notify(env, userId, payload) {
   }
 }
 
+// Link auf Expert Connect (EN oder DE je Sprache der Empfangsperson); tab: calls | expert | requests
+const connectUrl = (env, lang, tab) => `${env.SITE}${lang === "de" ? "/de" : ""}/community/expert-connect/#${tab}`;
+
 async function notifyExperts(env, request) {
   if (!env.VAPID_PRIVATE_JWK || !env.VAPID_PUBLIC || !env.VAPID_SUBJECT) return;
-  const db = env.DB, users = await matchingExperts(env, request);
+  const db = env.DB;
+  // Nur bei der ersten Veroeffentlichung: Entwurf/Freigabe im Wechsel loest keine weiteren Pushes aus
+  if (!(await rateLimit(db, `expert_notify:${request.id}`, 1, 365 * 86400))) return;
+  const users = await matchingExperts(env, request);
   const blocks = await blockedUsers(db, request.user_id);
   for (const expert of users.slice(0, 100)) {
-    if (!blocks.has(expert.id)) await notifyExpert(env, expert.id, { title: "M365.FM · Publisher-Anfrage", body: request.title, url: `${env.SITE}/community/#c-guests`, tag: `expert-request-${request.id}` });
+    if (!blocks.has(expert.id)) await notifyExpert(env, expert.id, { title: "M365.FM · Publisher-Anfrage", body: request.title, tag: `expert-request-${request.id}` }, request.mode === "open" ? "calls" : "expert");
   }
 }
 
-async function notifyExpert(env, userId, payload) {
-  const settings = await env.DB.prepare("SELECT notify,opt_in,paused_until FROM expert_settings WHERE user_id=?").bind(userId).first();
-  if (settings?.opt_in && settings.paused_until <= now() && ["push", "both"].includes(settings.notify)) await notify(env, userId, payload);
+async function notifyExpert(env, userId, payload, tab = "expert") {
+  const settings = await env.DB.prepare("SELECT s.notify,s.opt_in,s.paused_until,u.lang FROM expert_settings s LEFT JOIN users u ON u.id=s.user_id WHERE s.user_id=?").bind(userId).first();
+  if (settings?.opt_in && settings.paused_until <= now() && ["push", "both"].includes(settings.notify)) await notify(env, userId, { ...payload, url: connectUrl(env, settings.lang, tab) });
 }
 
 function defer(ctx, task) {
@@ -121,22 +183,32 @@ function defer(ctx, task) {
 
 export async function deleteUserExpertRequests(env, userId) {
   const db = env.DB || env;
-  const vectors = await db.prepare("SELECT vid FROM expert_vectors WHERE user_id=?").bind(userId).first();
-  if (vectors && env.VEC) {
-    try { await env.VEC.deleteByIds([vectors.vid]); }
-    catch (error) { console.warn("Expertenvektor konnte bei Kontolöschung nicht entfernt werden:", String(error?.message || error)); }
+  // Experten- und Anfragevektoren gemeinsam entfernen; D1-Zeilen nur nach Erfolg loeschen, sonst raeumen
+  // syncExpertVectors / closeExpiredExpertRequests sie spaeter auf (sie lesen expert_vectors bzw. expert_request_vectors).
+  const vids = [
+    ...((await db.prepare("SELECT vid FROM expert_vectors WHERE user_id=?").bind(userId).all()).results || []),
+    ...((await db.prepare("SELECT v.vid FROM expert_request_vectors v JOIN expert_requests r ON r.id=v.request_id WHERE r.user_id=?").bind(userId).all()).results || []),
+  ].map((row) => row.vid);
+  let vectorsGone = !vids.length;
+  if (vids.length && env.VEC) {
+    try { await env.VEC.deleteByIds(vids); vectorsGone = true; }
+    catch (error) { console.warn("Vektoren konnten bei Kontolöschung nicht entfernt werden:", String(error?.message || error)); }
   }
   await db.batch([
     db.prepare("DELETE FROM expert_settings WHERE user_id=?").bind(userId),
-    db.prepare("DELETE FROM expert_vectors WHERE user_id=?").bind(userId),
-    db.prepare("DELETE FROM expert_request_vectors WHERE request_id IN (SELECT id FROM expert_requests WHERE user_id=?)").bind(userId),
+    ...(vectorsGone ? [
+      db.prepare("DELETE FROM expert_vectors WHERE user_id=?").bind(userId),
+      db.prepare("DELETE FROM expert_request_vectors WHERE request_id IN (SELECT id FROM expert_requests WHERE user_id=?)").bind(userId),
+    ] : []),
     db.prepare("DELETE FROM expert_request_reports WHERE user_id=? OR request_id IN (SELECT id FROM expert_requests WHERE user_id=?) OR reply_id IN (SELECT id FROM expert_request_replies WHERE user_id=?)").bind(userId, userId, userId),
     db.prepare("DELETE FROM expert_request_replies WHERE user_id=? OR request_id IN (SELECT id FROM expert_requests WHERE user_id=?)").bind(userId, userId),
     db.prepare("DELETE FROM expert_requests WHERE user_id=?").bind(userId),
   ]);
 }
 
+const columnsReady = new WeakSet();   // einmal je Isolate und DB (Migration 0018 legt die Spalten an)
 async function ensureExpertConnectColumns(db) {
+  if (columnsReady.has(db)) return;
   for (const [table, column, definition] of [
     ["expert_requests", "hide_outlet", "INTEGER NOT NULL DEFAULT 0"],
     ["expert_requests", "reach", "TEXT NOT NULL DEFAULT ''"],
@@ -155,6 +227,7 @@ async function ensureExpertConnectColumns(db) {
       if (!(current.results || []).some((item) => item.name === column)) throw error;
     }
   }
+  columnsReady.add(db);
 }
 
 function requestVectorText(request) {
@@ -240,7 +313,17 @@ export async function closeExpiredExpertRequests(env) {
       await env.DB.batch(oldVectors.map(({ request_id }) => env.DB.prepare("DELETE FROM expert_request_vectors WHERE request_id=?").bind(request_id)));
     } catch (error) { console.warn("Geschlossene Aufrufvektoren konnten nicht entfernt werden:", String(error?.message || error)); }
   }
-  return { closed: ids.length, vectors: oldVectors.length };
+  // Offene Anfragen ohne Vektor nachholen (Embedding-Timeout beim Anlegen); sonst sehen Experten nur per Vektor sie nicht
+  let synced = 0;
+  if (env.AI && env.VEC) {
+    const missing = (await env.DB.prepare(`SELECT r.* FROM expert_requests r LEFT JOIN expert_request_vectors v ON v.request_id=r.id
+      WHERE r.status='open' AND r.deadline>=? AND v.request_id IS NULL ORDER BY r.id LIMIT ?`).bind(today, VECTOR_BATCH).all()).results || [];
+    for (const item of missing) {
+      try { await syncRequestVector(env, item); synced++; }
+      catch (error) { console.warn("Anfragevektor konnte nicht nachgeholt werden:", String(error?.message || error)); break; }
+    }
+  }
+  return { closed: ids.length, vectors: oldVectors.length, synced };
 }
 
 async function expertSearch(env, query, filters = {}) {
@@ -261,7 +344,8 @@ async function expertSearch(env, query, filters = {}) {
       (!filters.program || row.program === filters.program) &&
       (!filters.level || Number(row.level) >= Number(filters.level));
   });
-  const users = new Map(eligible.map((row) => [row.id, row]));
+  const users = new Map();   // je Person die Zeile mit dem hoechsten Level (eligible: eine Zeile je Programm und Level)
+  for (const row of eligible) if (!users.has(row.id) || Number(row.level) > Number(users.get(row.id).level)) users.set(row.id, row);
   let ftsRows = [], vectorRows = [];
   if (q) {
     const terms = q.match(/[\p{L}\p{N}]+/gu)?.slice(0, 8) || [];
@@ -352,12 +436,15 @@ export async function handleExpertRequests(env, request, path, user, J, ctx) {
       const status = action === "release" ? "open" : "closed";
       const result = await db.prepare("UPDATE expert_requests SET status=?,held_reason='' WHERE id=? AND status='held'").bind(status, id).run();
       if (!result.meta.changes) return J({ error: "not_found" }, 404);
+      // Meldungen zur Anfrage selbst sind erledigt: Schwelle beginnt nach der Freigabe neu
+      await db.prepare("DELETE FROM expert_request_reports WHERE request_id=? AND reply_id=0").bind(id).run();
       const reason = text(b.reason, 300);
       await db.prepare("INSERT INTO moderation_log(actor_id,action,target_type,target_id,reason,created) VALUES(?,?,?,?,?,?)")
         .bind(user.id, action, "request", id, reason, now()).run();
       await audit(db, user.id, `expert_request_${action}`, String(id), reason);
       if (status === "open") {
         const item = await db.prepare("SELECT * FROM expert_requests WHERE id=?").bind(id).first();
+        defer(ctx, syncRequestVector(env, item));   // Listen/Antworten nutzen gespeicherte Anfragevektoren
         defer(ctx, notifyExperts(env, item));
       }
       return J({ ok: true, status });
@@ -400,9 +487,10 @@ export async function handleExpertRequests(env, request, path, user, J, ctx) {
         if (url.protocol !== "https:" || url.username || url.password) return J({ error: "bad_contact" }, 400);
       } catch { return J({ error: "bad_contact" }, 400); }
     }
-    let paused = 0;
+    let paused;
     if (b.pause_weeks) paused = now() + 14 * 86400;
     else if (b.paused_until !== undefined && Number.isSafeInteger(+b.paused_until)) paused = Math.max(0, Math.min(+b.paused_until, now() + 14 * 86400));
+    else paused = (await db.prepare("SELECT paused_until FROM expert_settings WHERE user_id=?").bind(user.id).first())?.paused_until || 0;   // ohne Pausenfelder bleibt die Pause
     const optIn = b.opt_in ? 1 : 0, t = now();
     await db.prepare(`INSERT INTO expert_settings(user_id,opt_in,formats,langs,notify,contact_pref,contact_value,paused_until,updated)
       VALUES(?,?,?,?,?,?,?,?,?) ON CONFLICT(user_id) DO UPDATE SET opt_in=excluded.opt_in,formats=excluded.formats,
@@ -425,7 +513,7 @@ export async function handleExpertRequests(env, request, path, user, J, ctx) {
         if (reply.status === "accepted" && r.status === "accepted") reply.contacts = await acceptedContacts(db, r.user_id, reply.user_id);
         delete reply.user_id;
       }
-      items.push({ ...publicRequest(r), replies });
+      items.push({ ...publicRequest(r), reach: r.reach, replies });   // eigene Anfrage: Medium auch bei hide_outlet
     }
     const accepted = await acceptedForExpert(db, user.id);
     return J({ requests: items, matches: await visibleMatches(env, user.id), accepted });
@@ -451,17 +539,18 @@ export async function handleExpertRequests(env, request, path, user, J, ctx) {
       FROM expert_requests r JOIN users u ON u.id=r.user_id AND u.banned=0
       WHERE r.mode='open' AND r.status='open' AND r.deadline>=? AND r.user_id<>? ORDER BY r.created DESC LIMIT 200`)
       .bind(user.id, new Date().toISOString().slice(0, 10), user.id).all()).results || [];
-    let calls = rows.filter((r) => (!topic || parse(r.topics).includes(topic)) && (!format || r.format === format) &&
+    const blocks = await blockedUsers(db, user.id);
+    let calls = rows.filter((r) => !blocks.has(r.user_id) && (!topic || parse(r.topics).includes(topic)) && (!format || r.format === format) &&
       (!lang || r.lang === lang) && (!deadline || r.deadline <= deadline));
     if (url.searchParams.get("sort") === "match") {
       const profile = await profileRows(db, user.id);
-      if (!profile.length) return J({ items: [] });
-      const ranked = [];
-      for (const call of calls) {
-        const users = await matchingExperts(env, call), match = users.find((x) => x.id === user.id);
-        ranked.push({ ...publicRequest(call), match_score: match?.score || 0, shared_topics: match?.shared || [] });
-      }
-      calls = ranked.sort((a, b) => b.match_score - a.match_score);
+      // ohne Expertenprofil: neueste zuerst statt leerer Liste
+      if (!profile.length) return J({ items: calls.map((call) => ({ ...publicRequest(call), match_score: 0, shared_topics: [] })), needs_profile: true });
+      const matches = await matchesForExpert(env, user.id, calls, profile);
+      calls = calls.map((call) => {
+        const match = matches.get(Number(call.id));
+        return { ...publicRequest(call), match_score: match?.score || 0, shared_topics: match?.shared || [] };
+      }).sort((a, b) => b.match_score - a.match_score);
     } else calls = calls.map(publicRequest);
     return J({ items: calls });
   }
@@ -471,7 +560,7 @@ export async function handleExpertRequests(env, request, path, user, J, ctx) {
     const item = await normalizeRequest(env, b);
     if (item.error) return J({ error: item.error, ...(item.topic ? { topic: item.topic } : {}) }, 400);
     if (b.mode !== undefined && !["match", "open"].includes(b.mode)) return J({ error: "bad_mode" }, 400);
-    if (contact(b.reach)) return J({ error: "contact_details" }, 400);
+    if (contactIn(b.reach, 100)) return J({ error: "contact_details" }, 400);
     const mode = b.mode === "open" ? "open" : "match", draft = b.draft === true;
     const heldReason = !draft ? moderationReason(item.title, item.description) : "";
     const status = draft ? "draft" : heldReason ? "held" : "open";
@@ -500,9 +589,13 @@ export async function handleExpertRequests(env, request, path, user, J, ctx) {
     const item = await normalizeRequest(env, { ...old, ...b, topics: b.topics ?? parse(old.topics) });
     if (item.error) return J({ error: item.error, ...(item.topic ? { topic: item.topic } : {}) }, 400);
     if (b.mode !== undefined && !["match", "open"].includes(b.mode)) return J({ error: "bad_mode" }, 400);
-    if (b.reach !== undefined && contact(b.reach)) return J({ error: "contact_details" }, 400);
+    if (b.reach !== undefined && contactIn(b.reach, 100)) return J({ error: "contact_details" }, 400);
     const deadline = b.deadline === undefined ? old.deadline : item.deadline;
-    const heldReason = moderationReason(item.title, item.description), status = b.draft ? "draft" : heldReason ? "held" : "open";
+    // Wegen Meldungen zurueckgehalten: bleibt zurueckgehalten, bis ein Admin entscheidet (auch bei Bearbeiten oder Entwurf)
+    const heldByReports = old.status === "held" && old.held_reason === "reports";
+    const autoReason = moderationReason(item.title, item.description);
+    const status = heldByReports ? "held" : b.draft ? "draft" : autoReason ? "held" : "open";
+    const heldReason = heldByReports ? "reports" : status === "held" ? autoReason : "";
     const mode = b.mode === undefined ? old.mode : b.mode;
     if (mode === "open" && status !== "draft" && (old.mode !== "open" || old.status === "draft")) {
       const open = await db.prepare("SELECT COUNT(*) n FROM expert_requests WHERE user_id=? AND id<>? AND mode='open' AND status IN ('open','held')").bind(user.id, id).first();
@@ -513,7 +606,7 @@ export async function handleExpertRequests(env, request, path, user, J, ctx) {
       .bind(item.title, item.description, JSON.stringify(item.topics), item.format, item.lang, deadline, status, heldReason,
         b.hide_outlet === undefined ? old.hide_outlet : b.hide_outlet ? 1 : 0, b.reach === undefined ? old.reach : text(b.reach, 100),
         item.audience, mode, id, user.id).run();
-    const saved = { ...old, ...item, id, user_id: user.id, deadline, status };
+    const saved = { ...old, ...item, id, user_id: user.id, deadline, status, mode };   // mode: Push-Link (#calls/#expert)
     if (status === "held" && old.status !== "held") await db.prepare("INSERT INTO moderation_log(actor_id,action,target_type,target_id,reason,created) VALUES(?,'auto_hold','request',?,?,?)")
       .bind(user.id, id, heldReason, now()).run();
     if (status === "open") {
@@ -533,7 +626,7 @@ export async function handleExpertRequests(env, request, path, user, J, ctx) {
     if (!Number.isSafeInteger(id) || id < 1) return J({ error: "not_found" }, 404);
     const item = await db.prepare("SELECT * FROM expert_requests WHERE id=? AND status='open' AND mode='match' AND deadline>=?")
       .bind(id, new Date().toISOString().slice(0, 10)).first();
-    if (!item || !(await matchingExperts(env, item)).some((match) => match.id === user.id)) return J({ error: "not_found" }, 404);
+    if (!item || !(await matchesForExpert(env, user.id, [item])).has(Number(item.id))) return J({ error: "not_found" }, 404);
     if (await blocked(db, user.id, item.user_id)) return J({ error: "blocked" }, 403);
     return createReply(env, item, user, b.body, "match", ctx, J);
   }
@@ -558,13 +651,19 @@ export async function handleExpertRequests(env, request, path, user, J, ctx) {
       .bind(replyId, user.id).first() : null;
     if (!reply || reply.status !== "pending" || reply.request_status !== "open") return J({ error: "not_found" }, 404);
     if (action === "accepted") {
-      await db.batch([
-        db.prepare("UPDATE expert_request_replies SET status='accepted' WHERE id=? AND status='pending'").bind(replyId),
-        db.prepare("UPDATE expert_request_replies SET status='declined' WHERE request_id=? AND id<>? AND status='pending'").bind(reply.request_id, replyId),
-        db.prepare("UPDATE expert_requests SET status='accepted' WHERE id=? AND status='open'").bind(reply.request_id),
+      // Erste Anweisung entscheidet (Antwort noch offen, Anfrage noch offen), die anderen haengen davon ab;
+      // doppeltes Annehmen oder inzwischen geschlossene/zurueckgehaltene Anfrage aendert nichts -> 409
+      const res = await db.batch([
+        db.prepare(`UPDATE expert_request_replies SET status='accepted' WHERE id=? AND request_id=? AND status='pending'
+          AND EXISTS(SELECT 1 FROM expert_requests WHERE id=? AND status='open')`).bind(replyId, reply.request_id, reply.request_id),
+        db.prepare(`UPDATE expert_requests SET status='accepted' WHERE id=? AND status='open'
+          AND EXISTS(SELECT 1 FROM expert_request_replies WHERE id=? AND status='accepted')`).bind(reply.request_id, replyId),
+        db.prepare(`UPDATE expert_request_replies SET status='declined' WHERE request_id=? AND id<>? AND status='pending'
+          AND EXISTS(SELECT 1 FROM expert_request_replies WHERE id=? AND status='accepted')`).bind(reply.request_id, replyId, replyId),
       ]);
+      if (!res?.[0]?.meta?.changes) return J({ error: "not_found" }, 409);
       await recordExpertContribution(db, reply.user_id, { ...reply, id: reply.request_id });
-      defer(ctx, notifyExpert(env, reply.user_id, { title: "M365.FM · Anfrage angenommen", body: reply.title, url: `${env.SITE}/community/#c-guests`, tag: `expert-accepted-${reply.request_id}` }));
+      defer(ctx, notifyExpert(env, reply.user_id, { title: "M365.FM · Anfrage angenommen", body: reply.title, tag: `expert-accepted-${reply.request_id}` }, "expert"));
       return J({ ok: true, status: "accepted", contacts: await acceptedContacts(db, user.id, reply.user_id) });
     }
     await db.prepare("UPDATE expert_request_replies SET status='declined' WHERE id=? AND status='pending'").bind(replyId).run();
@@ -580,17 +679,22 @@ export async function handleExpertRequests(env, request, path, user, J, ctx) {
       reportReplyId = replyId;
     } else {
       item = Number.isSafeInteger(id) && id > 0 ? await db.prepare("SELECT * FROM expert_requests WHERE id=? AND status='open'").bind(id).first() : null;
-      if (!item || !(await matchingExperts(env, item)).some((match) => match.id === user.id) || await blocked(db, user.id, item.user_id)) return J({ error: "not_found" }, 404);
+      if (!item || !(await matchesForExpert(env, user.id, [item])).has(Number(item.id)) || await blocked(db, user.id, item.user_id)) return J({ error: "not_found" }, 404);
     }
     if (!(await rateLimit(db, `expert_report:${user.id}`, 5, 86400))) return J({ error: "rate_limit" }, 429);
     await db.prepare("INSERT OR IGNORE INTO expert_request_reports(request_id,user_id,reply_id,reason,created) VALUES(?,?,?,?,?)")
       .bind(item.id, user.id, reportReplyId, text(b.reason, 300), now()).run();
-    const reports = await db.prepare("SELECT COUNT(*) n FROM expert_request_reports WHERE request_id=?").bind(item.id).first();
-    if (reports.n >= 2) {
-      await db.prepare("UPDATE expert_requests SET status='held',held_reason='reports' WHERE id=? AND status='open'").bind(item.id).run();
-      await db.prepare("INSERT INTO moderation_log(actor_id,action,target_type,target_id,reason,created) VALUES(0,'hold','request',?,'reports',?)").bind(item.id, now()).run();
+    // Schwelle: zwei verschiedene Meldende zur Anfrage selbst (nicht der Publisher, nicht Meldungen zu Antworten)
+    let held = false;
+    if (!reportReplyId) {
+      const reports = await db.prepare("SELECT COUNT(DISTINCT user_id) n FROM expert_request_reports WHERE request_id=? AND reply_id=0 AND user_id<>?").bind(item.id, item.user_id).first();
+      if (reports.n >= 2) {
+        const res = await db.prepare("UPDATE expert_requests SET status='held',held_reason='reports' WHERE id=? AND status='open'").bind(item.id).run();
+        if (res.meta.changes) await db.prepare("INSERT INTO moderation_log(actor_id,action,target_type,target_id,reason,created) VALUES(0,'hold','request',?,'reports',?)").bind(item.id, now()).run();
+        held = true;
+      }
     }
-    return J({ ok: true, held: reports.n >= 2 });
+    return J({ ok: true, held });
   }
   if (path === "/api/expert-requests/block" && (method === "POST" || method === "DELETE")) {
     const b = await body(), id = Number(b.id), replyId = Number(b.reply_id); let target = 0;
@@ -598,7 +702,7 @@ export async function handleExpertRequests(env, request, path, user, J, ctx) {
       target = (await db.prepare("SELECT x.user_id FROM expert_request_replies x JOIN expert_requests r ON r.id=x.request_id WHERE x.id=? AND r.user_id=?").bind(replyId, user.id).first())?.user_id || 0;
     } else {
       const item = Number.isSafeInteger(id) && id > 0 ? await db.prepare("SELECT * FROM expert_requests WHERE id=? AND status='open'").bind(id).first() : null;
-      if (item && item.user_id !== user.id && (await matchingExperts(env, item)).some((match) => match.id === user.id)) target = item.user_id;
+      if (item && item.user_id !== user.id && (await matchesForExpert(env, user.id, [item])).has(Number(item.id))) target = item.user_id;
     }
     if (!target || target === user.id) return J({ error: "not_found" }, 404);
     if (method === "POST") await db.prepare("INSERT OR IGNORE INTO msg_blocks(user_id,blocked_id) VALUES(?,?)").bind(user.id, target).run();
@@ -626,7 +730,7 @@ async function normalizeRequest(env, b) {
   const title = text(b.title, 120), description = text(b.description, 1000), format = FORMATS.includes(b.format) ? b.format : "";
   const lang = String(b.lang || ""), deadline = validDeadline(b.deadline), audience = b.audience === undefined ? "all" : b.audience;
   if (!["all", "mvp", "mct", "level"].includes(audience)) return { error: "audience" };
-  if (contact(b.title) || contact(b.description)) return { error: "contact_details" };
+  if (contact(b.title) || contact(b.description) || contact(title) || contact(description)) return { error: "contact_details" };
   if (title.length < 3 || description.length < 20) return { error: "text" };
   if (!format) return { error: "format" };
   if (!validLang(lang)) return { error: "lang" };
@@ -660,8 +764,8 @@ async function createReply(env, item, user, rawBody, kind, ctx, J) {
   const settings = await db.prepare("SELECT opt_in,paused_until FROM expert_settings WHERE user_id=?").bind(user.id).first();
   if (!account || now() - account.created < MIN_ACCOUNT_AGE) return J({ error: "account_too_new" }, 403);
   if (!settings?.opt_in || settings.paused_until > now()) return J({ error: "opt_in_required" }, 403);
-  if (contact(rawBody)) return J({ error: "contact_details" }, 400);
   const answer = text(rawBody, MAX_PITCH);
+  if (contact(rawBody) || contact(answer)) return J({ error: "contact_details" }, 400);
   if (answer.length < 5) return J({ error: "text" }, 400);
   if (await db.prepare("SELECT 1 x FROM expert_request_replies WHERE request_id=? AND user_id=?").bind(item.id, user.id).first()) return J({ error: "already_replied" }, 409);
   if (!(await rateLimit(db, `expert_reply:${user.id}`, MAX_REPLIES_PER_DAY, 86400))) return J({ error: "daily_limit" }, 429);
@@ -673,7 +777,8 @@ async function createReply(env, item, user, rawBody, kind, ctx, J) {
       .bind(item.id, user.id, answer, t, kind, user.id, t - 86400).run();
   } catch { return J({ error: "already_replied" }, 409); }
   if (!result.meta.changes) return J({ error: "daily_limit" }, 429);
-  defer(ctx, notify(env, item.user_id, { title: "M365.FM · Antwort auf deine Anfrage", body: item.title, url: `${env.SITE}/community/#c-guests`, tag: `expert-reply-${item.id}` }));
+  defer(ctx, db.prepare("SELECT lang FROM users WHERE id=?").bind(item.user_id).first().then((owner) =>
+    notify(env, item.user_id, { title: "M365.FM · Antwort auf deine Anfrage", body: item.title, url: connectUrl(env, owner?.lang, "requests"), tag: `expert-reply-${item.id}` })));
   return J({ ok: true, kind });
 }
 
@@ -688,7 +793,7 @@ function publicContact(row) {
 }
 
 async function acceptedForExpert(db, userId) {
-  const rows = (await db.prepare(`SELECT r.id request_id,r.title,r.status,x.id reply_id,x.body,x.kind,x.status reply_status,
+  const rows = (await db.prepare(`SELECT r.id request_id,r.title,r.reach,r.status,x.id reply_id,x.body,x.kind,x.status reply_status,
       r.user_id publisher_id,u.name publisher
     FROM expert_request_replies x JOIN expert_requests r ON r.id=x.request_id JOIN users u ON u.id=r.user_id
     WHERE x.user_id=? AND x.status='accepted' AND r.status='accepted' ORDER BY x.created DESC LIMIT 50`).bind(userId).all()).results || [];
