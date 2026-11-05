@@ -102,6 +102,12 @@ def rename_links(h):
     return pat.sub(lambda m: f'href="{m.group(1)}{m.group(2) if m.group(2) != "/" else "/show/episodes/"}{RENAMES[m.group(3)]}/{m.group(4) or ""}"', h)
 
 
+def extra_redirects():
+    """Gepruefte Zusatz-Weiterleitungen (data/redirects_extra.json): alte flache Adressen aus Artikeln/Show Notes, die nie eine Seite hatten -> Ziel."""
+    f = D / "redirects_extra.json"
+    return {k: v["to"] for k, v in (json.loads(f.read_text("utf-8")).get("redirects") or {}).items()} if f.exists() else {}
+
+
 _EXTRA = []   # einmal je Bau berechnet; load() gibt Kopien heraus
 _SLUGS_F = D / "episode_slugs.json"   # Spreaker-ID -> Slug, damit eine Titelaenderung die URL nicht verschiebt (der Seitenbau speichert die Datei)
 
@@ -645,6 +651,9 @@ def build(g):
         oid = old + "-guest" if old in baseids else old
         for pre in [""] + [f"/{l}" for l in LG]:
             rd[f"{pre}/entity/{oid}"] = f"{pre}/entity/{new}/"
+    for old, new in extra_redirects().items():   # alte Adressen ohne Seite (data/redirects_extra.json); bestehende Eintraege gehen vor
+        if old.strip("/").split("/")[0] in taken: clash.append(old); continue   # dort liegt inzwischen eine Seite: nicht wegleiten
+        rd.setdefault(old, new)
     write("show/redirects.json", json.dumps(rd))
     write("show/redirect-conflicts.json", json.dumps(sorted(set(clash))))
     print(f"podpage: {len(eps)} Folgen, {len(guests)} Gaeste, {len(bposts)} Blogposts, {len(plist)} Seiten, {len(rd)} Weiterleitungen, Konflikte mit Plattform-Seiten: {sorted(set(clash))}")
