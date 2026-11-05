@@ -517,6 +517,8 @@ def press_ranger(placements, day, out, statuses):
             session = response.headers.get("Mcp-Session-Id", session)
             content = response.read().decode("utf-8")
         events = re.findall(r"^data:\s*(\{.*\})\s*$", content, re.M)
+        if not events and not content.strip():
+            return {}   # Benachrichtigungen (notifications/initialized) beantwortet der Server mit 202 ohne Inhalt
         return json.loads(events[-1] if events else content)
 
     try:
