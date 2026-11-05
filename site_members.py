@@ -121,8 +121,9 @@ def person_ld(BASE, p, orgs_by_handle):
         n["jobTitle"] = p["job"]
     elif any(x.get("verified") and x["p"] == "mvp" for x in p.get("programs", [])):
         n["jobTitle"] = PROG_FULL["mvp"]
-    if p.get("country"):
-        n["address"] = {"@type": "PostalAddress", "addressCountry": p["country"]}
+    _city = ((p.get("contact") or {}).get("city") or "").strip()   # nur, wenn das Mitglied die Stadt fuer alle freigegeben hat (vis_city=all)
+    if p.get("country") or _city:
+        n["address"] = {"@type": "PostalAddress", **({"addressLocality": _city} if _city else {}), **({"addressCountry": p["country"]} if p.get("country") else {})}
     org = p.get("org")
     if org and org["handle"] in orgs_by_handle:
         n["worksFor"] = {"@id": f"{purl(BASE, 'en', 'c', org['handle'])}#org"}
