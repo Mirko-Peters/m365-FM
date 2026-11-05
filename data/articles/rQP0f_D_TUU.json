@@ -83,6 +83,52 @@
      "Den Menschen als Sicherheitsnetz mit manueller Übersteuerung behalten"
     ]
    }
+  ],
+  "quiz": [
+   {
+    "q": "Welche Kombination sorgt in Azure AI Search laut Artikel für stimmige Retrieval-Ergebnisse?",
+    "opts": [
+     "Reine Vektorsuche mit möglichst großem Sprachmodell",
+     "Hybride Suche aus Keyword- und Vektorsuche mit semantischem Reranker",
+     "Ausschließlich Keyword-Suche mit manuell gepflegten Synonymlisten",
+     "Feintuning des Modells ohne angeschlossene Wissensquelle"
+    ],
+    "a": 1,
+    "why": "Ein einzelnes Retrieval reicht nicht. Hybridsuche plus semantischer Reranker ordnet Treffer so, dass der passende Kontext oben steht."
+   },
+   {
+    "q": "Worin unterscheiden sich Agenten laut Artikel grundlegend von Copilots?",
+    "opts": [
+     "Agenten sind reaktive Prompt-Assistenten, Copilots handeln eigenständig",
+     "Agenten funktionieren nur mit Text, Copilots auch mit Bildern",
+     "Agenten entscheiden und handeln, ohne auf den Nutzer zu warten",
+     "Agenten benötigen keine Daten, Copilots dagegen immer eine Wissensquelle"
+    ],
+    "a": 2,
+    "why": "Ein Copilot antwortet auf Fragen und der Nutzer behält die Kontrolle. Agenten sind proaktiv und handeln selbstständig."
+   },
+   {
+    "q": "Was gehört laut Überlebens-Checkliste zu den Maßnahmen vor jeder Automatisierung?",
+    "opts": [
+     "Pauschale Adminrechte, damit der Agent nicht blockiert wird",
+     "Protokollierung und Rollback, damit jede schwerwiegende Aktion rückgängig gemacht werden kann",
+     "Verzicht auf Inhaltsfilter, um Antworten nicht zu verzögern",
+     "Einmaliger Test vor dem Livegang ohne spätere Überprüfung"
+    ],
+    "a": 1,
+    "why": "Jede Aktion soll eine prüfbare Spur hinterlassen, und schwerwiegende Aktionen brauchen einen Rückweg. Dazu kommen minimale Rechte und Filter."
+   },
+   {
+    "q": "Was zeigt das Beispiel des Unternehmens, das GPT-4 Turbo für Produktfotos einsetzte?",
+    "opts": [
+     "Unscharfe Handyfotos führten zu falschen Kategorien und erfundenen Seriennummern",
+     "Das Modell war zu teuer und wurde deshalb abgeschaltet",
+     "Saubere Studiofotos führten im Labor zu fehlerhaften Ergebnissen",
+     "Vertrauliche Personaldaten wurden an Praktikanten weitergegeben"
+    ],
+    "a": 0,
+    "why": "In der Produktion stufte die KI bei unscharfen Fotos Kinderwagen als Bürostühle ein und erfand Seriennummern aus UPC-Etiketten."
+   }
   ]
  },
  "es": {
@@ -183,6 +229,52 @@
      }
     ]
    }
+  ],
+  "quiz": [
+   {
+    "q": "¿Qué combinación recomienda el artículo para obtener resultados coherentes en la recuperación de información?",
+    "opts": [
+     "Búsqueda híbrida de palabras clave y vectores, más un reordenador semántico en Azure AI Search",
+     "Solo búsqueda por palabras clave con un modelo más grande y más GPU",
+     "Únicamente búsqueda vectorial sin ningún reordenamiento posterior de los resultados",
+     "Ajuste fino del modelo sin conectarlo a ninguna fuente de conocimiento externa"
+    ],
+    "a": 0,
+    "why": "El artículo propone búsqueda híbrida (palabras clave y vectores) con reordenador semántico para equilibrar coincidencias literales y significado."
+   },
+   {
+    "q": "¿Cuál es la diferencia principal entre un copiloto y un agente según el artículo?",
+    "opts": [
+     "El copiloto actúa solo, mientras que el agente siempre espera instrucciones del usuario",
+     "Un agente toma decisiones sin esperar; en un copiloto decide y controla la persona",
+     "Ambos funcionan igual, pero el agente solo se usa para procesar vídeo",
+     "El copiloto exige siempre derechos de administrador y el agente no necesita ninguno"
+    ],
+    "a": 1,
+    "why": "Un copiloto es un asistente que mantiene el control humano; un agente decide sin esperar y sigue instrucciones vagas al pie de la letra."
+   },
+   {
+    "q": "¿Cuál de estos NO es uno de los tres elementos esenciales antes de automatizar con agentes?",
+    "opts": [
+     "Alcance de identidad y acceso con derechos mínimos",
+     "Registro y reversión de las acciones del agente",
+     "Entrenar un modelo propio desde cero con datos internos",
+     "Filtros de contenido comprobados mediante seguridad de contenido de Azure AI"
+    ],
+    "a": 2,
+    "why": "Los tres elementos son identidad y acceso, registro y reversión, y filtros de contenido; entrenar un modelo desde cero no se menciona."
+   },
+   {
+    "q": "¿Cómo se factura el precio de Azure AI Foundry y qué riesgo implica según el artículo?",
+    "opts": [
+     "Tarifa fija anual; el riesgo es pagar por capacidad que nunca se usa",
+     "Solo se cobra el catálogo de modelos; las llamadas de recuperación son gratuitas",
+     "Se basa en el consumo; sin estimar ni supervisar el uso llega una factura sorpresa",
+     "Se paga únicamente por usuario; el riesgo son las licencias duplicadas en Finanzas"
+    ],
+    "a": 2,
+    "why": "El precio depende del consumo: cada conector, llamada de recuperación y mensaje se factura, así que sin estimación y supervisión hay sorpresas."
+   }
   ]
  },
  "fr": {
@@ -269,6 +361,52 @@
      "Maintenir une supervision humaine, avec audit et flux d'approbation"
     ]
    }
+  ],
+  "quiz": [
+   {
+    "q": "Selon l'article, pourquoi les applications multimodales échouent-elles le plus souvent en production ?",
+    "opts": [
+     "Parce que les données ne sont ni préparées, ni indexées, ni surveillées",
+     "Parce que les modèles manquent d'intelligence pour traiter les images",
+     "Parce que la puissance de calcul disponible est toujours insuffisante",
+     "Parce que les utilisateurs refusent d'utiliser les modèles multimodaux"
+    ],
+    "a": 0,
+    "why": "L'article précise que le modèle n'est pas en cause : l'échec vient de données mal préparées, mal indexées et non surveillées."
+   },
+   {
+    "q": "Quelle combinaison l'article recommande-t-il pour une récupération fiable dans Azure AI Search ?",
+    "opts": [
+     "Une recherche par mots-clés seule, avec un index très volumineux",
+     "Une recherche vectorielle seule, sans aucun reclassement des résultats",
+     "Une recherche hybride (mots-clés et vecteurs) avec un reclasseur sémantique",
+     "Une recherche hybride sans reclasseur, complétée par un modèle plus gros"
+    ],
+    "a": 2,
+    "why": "Une seule méthode ne suffit pas : il faut une recherche hybride combinant mots-clés et vecteurs, plus un reclassement sémantique."
+   },
+   {
+    "q": "Quelle différence l'article établit-il entre un copilote et un agent autonome ?",
+    "opts": [
+     "Le copilote agit seul, l'agent autonome attend toujours une validation humaine",
+     "Le copilote est réactif et vous gardez le contrôle ; l'agent autonome est proactif",
+     "Les deux sont identiques, seul leur prix de facturation diffère",
+     "Le copilote surveille les services, l'agent autonome ne répond qu'aux questions"
+    ],
+    "a": 1,
+    "why": "Les copilotes sont réactifs et laissent le contrôle ; les agents autonomes sont proactifs et agissent sans attendre d'autorisation."
+   },
+   {
+    "q": "Quel cycle de gouvernance l'article recommande-t-il d'appliquer tout au long de la vie d'un système d'IA ?",
+    "opts": [
+     "Concevoir, déployer, facturer, archiver, supprimer",
+     "Expérimenter, publier, ignorer, corriger, abandonner",
+     "Tester, approuver, publier, auditer, itérer",
+     "Indexer, entraîner, déployer, superviser, externaliser"
+    ],
+    "a": 2,
+    "why": "La méthode recommandée tient en cinq verbes : tester, approuver, publier, auditer, itérer."
+   }
   ]
  },
  "it": {
@@ -354,6 +492,52 @@
      "Applica filtri su contenuto e comportamento con Azure AI Content Safety.",
      "Stima i costi con il calcolatore Azure e controlla l'uso."
     ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Perché secondo l'articolo le app multimodali spesso falliscono nel mondo reale?",
+    "opts": [
+     "Perché i modelli non sono abbastanza intelligenti per gestire immagini e voce",
+     "Perché i dati reali sono scadenti e non preparati, indicizzati o monitorati",
+     "Perché le GPU disponibili in azienda sono sempre insufficienti",
+     "Perché i modelli multimodali non supportano il testo scritto"
+    ],
+    "a": 1,
+    "why": "Le demo usano input perfetti, mentre in produzione arrivano materiali scadenti; il problema sono dati non preparati e controlli assenti, non l'intelligenza del modello."
+   },
+   {
+    "q": "Quale combinazione serve per ottenere risultati di recupero coerenti in Azure AI Search?",
+    "opts": [
+     "Solo ricerca vettoriale senza altri componenti",
+     "Solo parole chiave con filtri manuali sui documenti",
+     "Ricerca ibrida di parole chiave e vettori, più riordinatore semantico",
+     "Fine tuning del modello al posto di qualsiasi recupero"
+    ],
+    "a": 2,
+    "why": "La ricerca ibrida combina parole chiave e vettori; il riordinatore semantico porta in cima il contesto corretto, riducendo le invenzioni del modello."
+   },
+   {
+    "q": "Qual è la differenza principale tra Copilot e gli agenti autonomi?",
+    "opts": [
+     "Gli agenti autonomi attendono sempre un prompt prima di agire",
+     "Copilot esegue flussi di lavoro in automatico senza alcun controllo umano",
+     "Copilot e agenti autonomi funzionano esattamente nello stesso modo",
+     "Copilot risponde ai prompt lasciando il controllo all'utente; gli agenti autonomi agiscono senza attendere"
+    ],
+    "a": 3,
+    "why": "Copilot è un assistente per i prompt con controllo all'utente; gli agenti autonomi monitorano ed eseguono azioni senza aspettare, e gli errori si propagano subito."
+   },
+   {
+    "q": "Quale compito resta all'azienda anche se Microsoft investe molto in sicurezza?",
+    "opts": [
+     "Blindare l'identità, isolare i dati, applicare la crittografia e configurare le policy",
+     "Assumere i 34.000 ingegneri Microsoft dedicati alla sicurezza",
+     "Sviluppare da zero un proprio catalogo di modelli",
+     "Rinunciare ai filtri di Content Safety perché già inclusi ovunque"
+    ],
+    "a": 0,
+    "why": "Nessun ingegnere Microsoft lavora dentro il tenant del cliente: identità, isolamento dei dati, crittografia e policy restano responsabilità dell'azienda."
    }
   ]
  },
@@ -444,6 +628,52 @@
      "Houd een mens in de loop bij autonome agents",
      "Volg het verbruik met de Azure-prijscalculator"
     ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Welke combinatie van retrievalmethoden raadt het artikel aan voor consistente resultaten in Azure AI Search?",
+    "opts": [
+     "Alleen vectorzoeken met een groter GPU-budget",
+     "Hybride zoeken (trefwoorden en vectoren) met semantische herrangschikking",
+     "Alleen zoeken op trefwoorden met handmatige filtering",
+     "Fine-tuning van het model zonder externe kennisbron"
+    ],
+    "a": 1,
+    "why": "Het artikel adviseert hybride zoeken te combineren met een ingebouwde semantische herrangschikker, zodat de juiste context bovenaan staat."
+   },
+   {
+    "q": "Wat is volgens het artikel het wezenlijke verschil tussen een copilot en een agent?",
+    "opts": [
+     "Een copilot werkt alleen met tekst, een agent alleen met beeld",
+     "Een copilot beslist zelfstandig, een agent wacht altijd op goedkeuring",
+     "Een copilot is duurder dan een agent in Azure AI Foundry",
+     "Bij een copilot houdt de gebruiker de controle, een agent beslist zonder te wachten"
+    ],
+    "a": 3,
+    "why": "Een copilot assisteert bij prompts en de gebruiker houdt de controle; agents beslissen zonder te wachten en volgen vage instructies letterlijk."
+   },
+   {
+    "q": "Wat is volgens het artikel de status van autonome agents in Copilot Studio?",
+    "opts": [
+     "Ze zijn nog in preview en nog niet beproefd in de echte wereld",
+     "Ze zijn officieel verouderd en vervangen door copilots",
+     "Ze zijn algemeen beschikbaar en volledig beproefd in productie",
+     "Ze werken alleen binnen Azure AI Foundry, niet in Copilot Studio"
+    ],
+    "a": 0,
+    "why": "Autonome agents in Copilot Studio zijn momenteel in preview: niet per se kapot, maar nog niet getest in complexe echte situaties."
+   },
+   {
+    "q": "Wie blijft er volgens het artikel verantwoordelijk voor identiteiten beveiligen, data isoleren en beleid configureren in jouw tenant?",
+    "opts": [
+     "Microsoft, dankzij zijn duizenden beveiligingsingenieurs",
+     "De softwareleverancier van het gebruikte taalmodel",
+     "Jijzelf als organisatie, ondanks Microsofts beveiligingsinspanningen",
+     "Een externe toezichthouder die de logboeken beheert"
+    ],
+    "a": 2,
+    "why": "Ondanks Microsofts investeringen zit niemand van hen in jouw tenant; identiteiten, isolatie, versleuteling en beleid blijven jouw taak."
    }
   ]
  },
@@ -545,6 +775,52 @@
      }
     ]
    }
+  ],
+  "quiz": [
+   {
+    "q": "Jakie dwa elementy według artykułu zapewniają spójne wyniki wyszukiwania w Azure AI Search?",
+    "opts": [
+     "Wyszukiwanie hybrydowe oraz semantyczny reranker wbudowany w usługę",
+     "Samo wyszukiwanie wektorowe oraz większy model językowy",
+     "Dostrajanie modelu oraz destylacja danych źródłowych",
+     "Wyłącznie słowa kluczowe oraz większa liczba procesorów GPU"
+    ],
+    "a": 0,
+    "why": "Artykuł wskazuje połączenie wyszukiwania hybrydowego (słowa kluczowe i wektory) z semantycznym rerankerem jako podstawę spójnych wyników."
+   },
+   {
+    "q": "Czym według artykułu różni się agent od kopilota?",
+    "opts": [
+     "Agent działa wyłącznie na pytania użytkownika, a kopilot samodzielnie",
+     "Agent podejmuje decyzje, nie czekając na użytkownika, a kopilot jest reaktywny",
+     "Agent nie korzysta z danych, a kopilot łączy się z wieloma źródłami",
+     "Agent działa tylko w trybie low-code, a kopilot w korporacyjnym"
+    ],
+    "a": 1,
+    "why": "Kopilot odpowiada na polecenia i zostawia kontrolę użytkownikowi, a agent jest proaktywny i działa bez czekania na pozwolenie."
+   },
+   {
+    "q": "Co według artykułu należy do trzech obowiązkowych punktów przed automatyzacją?",
+    "opts": [
+     "Wybór największego modelu z katalogu i maksymalna liczba łączników",
+     "Przejście wszystkich agentów z fazy preview od razu do produkcji",
+     "Ograniczenie ewaluacji do czystych danych ze studyjnych zdjęć",
+     "Minimalne uprawnienia agenta, logowanie z możliwością wycofania zmian oraz filtry treści"
+    ],
+    "a": 3,
+    "why": "Trzy punkty to: zakres tożsamości i dostępu, logowanie i wycofywanie zmian oraz filtry treści i zachowania."
+   },
+   {
+    "q": "Kto według artykułu odpowiada za konfigurację reguł dostępu w tenancie firmy?",
+    "opts": [
+     "Inżynierowie bezpieczeństwa Microsoftu, których jest 34 tysiące",
+     "Partnerzy Microsoftu, których jest 15 tysięcy",
+     "Sama firma, bo zabezpieczenie tożsamości i konfiguracja polityk pozostają jej zadaniem",
+     "Azure AI Content Safety, które ustawia je automatycznie"
+    ],
+    "a": 2,
+    "why": "Mimo zaangażowania tysięcy osób po stronie Microsoftu, nikt z nich nie ustawia reguł dostępu w tenancie klienta; to zadanie firmy."
+   }
   ]
  },
  "he": {
@@ -638,6 +914,52 @@
       "text": "לוחות מחוונים מראים כל צעד, ותמיד אפשר לעבור לשליטה ידנית."
      }
     ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "לפי המאמר, מהו הגורם המרכזי לכשלים של אפליקציות מולטי-מודליות בארגון האמיתי?",
+    "opts": [
+     "נתונים שאינם מוכנים, מאורגנים או מנוטרים כראוי",
+     "מחסור בכוח עיבוד GPU בארגון",
+     "חוסר חכמה בסיסי של המודלים עצמם",
+     "מחירי הרישוי הגבוהים של המודלים הגדולים"
+    ],
+    "a": 0,
+    "why": "המאמר קובע שהכשל אינו חוסר חכמה של המודל, אלא נתונים שאינם מוכנים, אינם מאורגנים ואינם מנוטרים."
+   },
+   {
+    "q": "איזה שילוב שליפה מומלץ ב-Azure AI Search כדי לקבל תוצאות עקביות?",
+    "opts": [
+     "חיפוש מילות מפתח בלבד עם אינדקס גדול יותר",
+     "חיפוש היברידי של מילות מפתח ווקטורים יחד עם דירוג סמנטי",
+     "כיוונון עדין של המודל במקום כל שיטת שליפה",
+     "חיפוש וקטורי בלבד ללא שלב דירוג מחדש"
+    ],
+    "a": 1,
+    "why": "המאמר ממליץ לשלב חיפוש היברידי (מילות מפתח ווקטורים) עם דירוג סמנטי, שמסדר מחדש את התוצאות."
+   },
+   {
+    "q": "מה ההבדל בין קופיילוט לסוכן לפי המאמר?",
+    "opts": [
+     "קופיילוט פועל אוטונומית, והסוכן מחכה תמיד לשאלות המשתמש",
+     "שניהם פועלים זהה ומובחנים רק בשם המסחרי שלהם",
+     "קופיילוט מלווה ומנחה בשליטת המשתמש, וסוכן מחליט בלי לחכות",
+     "קופיילוט מיועד לייצור בלבד, והסוכן לסביבת ניסוי בלבד"
+    ],
+    "a": 2,
+    "why": "קופיילוט הוא לוויה והנחיה והמשתמש נשאר בשליטה; סוכן מחליט החלטות בלי לחכות למשתמש."
+   },
+   {
+    "q": "מה נכלל ברשימת ההישרדות של שלושה דברים לפני כל אוטומציה?",
+    "opts": [
+     "בחירת המודל הגדול ביותר, הרחבת תקציב ומעבר לענן",
+     "הגדרת היקף זהות וגישה, רישום ושחזור, ומסנני תוכן והתנהגות",
+     "הדגמה עם חמישה משתמשים, אישור הנהלה ופרסום פנימי",
+     "כיוונון עדין, זיקוק מודלים והחלפת ספק הענן"
+    ],
+    "a": 1,
+    "why": "שלושת הדברים: הגדרת היקף זהות וגישה עם הרשאות מינימליות, רישום ושחזור פעולות, ומסנני תוכן והתנהגות."
    }
   ]
  },
@@ -736,6 +1058,52 @@
      }
     ]
    }
+  ],
+  "quiz": [
+   {
+    "q": "लेख के अनुसार AI में हैलुसिनेशन होने का मुख्य कारण क्या है जब मॉडल के पास ठोस आधार नहीं होता?",
+    "opts": [
+     "मॉडल कंपनी के गोपनीय डेटा को चुरा लेता है",
+     "मॉडल खाली जगह को अपनी कल्पना से भर देता है",
+     "मॉडल बहुत ज़्यादा भाषाओं का समर्थन करने लगता है",
+     "मॉडल यूज़र के प्रॉम्प्ट को पूरी तरह अनदेखा कर देता है"
+    ],
+    "a": 1,
+    "why": "मॉडल ने कुछ चुराया नहीं होता; ठोस आधार न होने पर वह खाली जगह को अपनी कल्पना से भर देता है।"
+   },
+   {
+    "q": "Azure AI Search में सटीक नतीजों के लिए किस संयोजन का इस्तेमाल करने की सलाह दी गई है?",
+    "opts": [
+     "सिर्फ़ Keyword Search और कोई Re-Ranker नहीं",
+     "सिर्फ़ Vector Search और Fine Tuning",
+     "Hybrid (Keyword और Vector) Search के साथ Semantic Re-Ranker",
+     "Distillation के साथ Content Safety फ़िल्टर"
+    ],
+    "a": 2,
+    "why": "सटीक नतीजों के लिए Hybrid Search को Semantic Re-Ranker के साथ इस्तेमाल करना चाहिए, ताकि सबसे सही संदर्भ ऊपर रहे।"
+   },
+   {
+    "q": "Copilot और एजेंट के बीच लेख में बताया गया मुख्य फ़र्क क्या है?",
+    "opts": [
+     "एजेंट आपके प्रॉम्प्ट का इंतज़ार करता है, Copilot खुद कदम उठाता है",
+     "Copilot केवल इमेज समझता है, एजेंट केवल टेक्स्ट",
+     "दोनों में कोई अंतर नहीं है, सिर्फ़ नाम अलग हैं",
+     "Copilot आपके नियंत्रण में जवाब देता है, एजेंट खुद कदम उठाते हैं"
+    ],
+    "a": 3,
+    "why": "Copilot प्रॉम्प्ट का जवाब देता है और नियंत्रण में रहता है, जबकि एजेंट इंतज़ार किए बिना खुद कदम उठाते हैं।"
+   },
+   {
+    "q": "Autonomous ऑटोमेशन से पहले लेख में कौन-से तीन काम ज़रूरी बताए गए हैं?",
+    "opts": [
+     "पहचान और एक्सेस का दायरा, लॉगिंग और रोलबैक, कंटेंट और व्यवहार फ़िल्टर",
+     "मॉडल का आकार बढ़ाना, बिलिंग घटाना, डेटा हटाना",
+     "Fine Tuning, Distillation और वीडियो रिट्रीवल",
+     "सभी एडमिन रोल देना, लॉगिंग बंद रखना, फ़िल्टर हटाना"
+    ],
+    "a": 0,
+    "why": "तीन काम हैं: पहचान और एक्सेस का दायरा तय करना, लॉगिंग और रोलबैक रखना, और कंटेंट व व्यवहार फ़िल्टर लगाना।"
+   }
   ]
  },
  "ja": {
@@ -821,6 +1189,52 @@
      "重大なアクションに元に戻す手段を用意しているか",
      "人間によるフォールバックの選択肢を残しているか"
     ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "記事によると、RAGで安定した検索結果を得るために組み合わせるべき構成はどれですか?",
+    "opts": [
+     "キーワード検索のみとモデルの大型化",
+     "ベクトル検索のみと画像の高解像度化",
+     "ハイブリッド検索とセマンティック再ランキング",
+     "全文検索とファインチューニングのみ"
+    ],
+    "a": 2,
+    "why": "キーワード検索とベクトル検索を組み合わせたハイブリッド検索に、Azure AI Searchのセマンティック再ランキングを加えると結果が安定します。"
+   },
+   {
+    "q": "CopilotとエージェントのIn違いについて、記事の説明として正しいものはどれですか?",
+    "opts": [
+     "エージェントは常にあなたの承認を待ってから動作する",
+     "Copilotは質問に答え、コントロールはユーザーの手元に残る",
+     "Copilotは自律的に判断し、曖昧な指示にも従い続ける",
+     "両者は基本的に同じもので、違いはない"
+    ],
+    "a": 1,
+    "why": "Copilotはプロンプトの相棒でコントロールはユーザーにあり、エージェントは待たずに決定し、結果が不合理でも実行を続けます。"
+   },
+   {
+    "q": "記事で、Copilot Studioの自律型エージェントの現状についてどう述べられていますか?",
+    "opts": [
+     "正式版として広く展開可能である",
+     "すでに廃止が決まっている",
+     "まだプレビューであり、広い展開前にガバナンスが必要",
+     "Azure AI Foundryでは利用できない"
+    ],
+    "a": 2,
+    "why": "自律型エージェントは現時点でプレビューで、現実世界で十分に試されておらず、Microsoftも事前にガバナンスとガードレールを求めています。"
+   },
+   {
+    "q": "記事によると、テナント内のIDのロックダウンやポリシー構成は誰の責任ですか?",
+    "opts": [
+     "Microsoftのセキュリティエンジニアが全て担当する",
+     "利用者であるあなた自身の仕事である",
+     "パートナー企業が自動的に代行する",
+     "Azureのコンテンツセーフティが自動処理する"
+    ],
+    "a": 1,
+    "why": "ガードレールはMicrosoftが提供しますが、IDのロックダウン、データ分離、暗号化、ポリシー構成は引き続き利用者の仕事です。"
    }
   ]
  },
