@@ -7,11 +7,12 @@ import worker from "../src/index.js";
 import { handleMail } from "../src/mail.js";
 import { deleteUserData } from "../src/profiles.js";
 
-async function database() {
+async function database({ fresh = false } = {}) {
   const { DatabaseSync } = await import("node:sqlite");
   const raw = new DatabaseSync(":memory:");
   const dir = new URL("../migrations/", import.meta.url);
   for (const file of readdirSync(dir).filter((name) => name.endsWith(".sql")).sort()) raw.exec(readFileSync(new URL(file, dir), "utf-8"));
+  if (!fresh) raw.exec("INSERT INTO meta(k,v) VALUES('weekly_start','2000-01-03')");   // Umstellung liegt in den Tests in der Vergangenheit
   const db = {
     prepare(sql) {
       const stmt = raw.prepare(sql); let args = [];
@@ -159,6 +160,28 @@ test("Mail-Abmeldung und Kontolöschung bereinigen Topic-Follows und unbenötigt
   assert.equal(raw.prepare("SELECT COUNT(*) n FROM mail_topic_follows WHERE user_id=2").get().n, 0);
   assert.equal(raw.prepare("SELECT COUNT(*) n FROM mail_addr WHERE user_id=2").get().n, 0);
   assert.equal(raw.prepare("SELECT COUNT(*) n FROM mail_weekly_unsub WHERE email='subscribed'").get().n, 1, "bestätigtes Newsletter-Abo hält den Abmeldetoken");
+});
+
+test("Erster Lauf nach der Umstellung sendet nichts und merkt die Startwoche; ab der naechsten Woche wird gesendet", async () => {
+  const { db, raw } = await database({ fresh: true });
+  const thursday = Date.UTC(2026, 10, 5, 7), nextMonday = Date.UTC(2026, 10, 9, 6, 0, 2);
+  raw.exec("INSERT INTO email_subs(email,lang,token,confirmed,created) VALUES('member','de','de-token',1,1);");
+  const oldFetch = globalThis.fetch, sent = [];
+  globalThis.fetch = async () => ({ json: async () => ({ episodes: [{ id: "e1", language: "de", date: new Date(nextMonday - 2 * 86400_000).toISOString(), url: "https://www.m365.fm/de/neu", title: "Neu" }] }) });
+  const env = { DB: db, SITE: "https://www.m365.fm", API: "https://api-dub.m365.fm", MAIL_FROM: "M365.FM", EMAIL: { send: async (message) => { sent.push(message); return { messageId: "m" + sent.length }; } } };
+  try {
+    const first = await runDigest(env, { at: thursday });
+    assert.equal(first.waiting, true);
+    assert.equal(sent.length, 0, "keine Mail am Tag der Umstellung");
+    assert.equal(raw.prepare("SELECT v FROM meta WHERE k='weekly_start'").get().v, "2026-11-02");
+    assert.equal((await runDigest(env, { at: thursday + 3600_000 })).waiting, true, "auch Nachläufe derselben Woche warten");
+    const monday = await runDigest(env, { at: nextMonday });
+    assert.ok(!monday.waiting);
+    assert.equal(sent.length, 1, "erste Wochenmail am naechsten Montag");
+  } finally {
+    globalThis.fetch = oldFetch;
+    raw.close();
+  }
 });
 
 test("One-Click-Abmeldung (List-Unsubscribe-Post) funktioniert ohne x-requested-with", async () => {

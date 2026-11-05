@@ -254,6 +254,11 @@ export async function runDigest(env, { dry = false, at = Date.now() } = {}) {
   const result = { recipients: recipients.size, sent: 0, skipped: 0, empty: 0, episodes: 0, personal: 0, period };
   if (dry) return result;
   if (!mailReady(env)) return { ...result, mailOff: true };
+  // Umstellung Tagesmail -> Wochenmail: beim ersten Lauf nur die Startwoche merken und ab der naechsten Woche senden.
+  // Sonst ginge sofort (z. B. an einem Donnerstag) eine Wochenmail mit Inhalten der Vorwoche raus, die die Tagesmail schon hatte.
+  const start = (await db.prepare("SELECT v FROM meta WHERE k='weekly_start'").first())?.v;
+  if (!start) { await db.prepare("INSERT OR IGNORE INTO meta(k,v) VALUES('weekly_start',?)").bind(period).run(); return { ...result, waiting: true }; }
+  if (period <= start) return { ...result, waiting: true };
   await db.prepare("DELETE FROM mail_weekly_delivery WHERE week_start<?").bind(period).run();   // Adress-Hashes nur fuer die laufende Woche halten
   const hashes = await Promise.all([...recipients.values()].map(async (recipient) => ({ recipient, hash: await addressHash(recipient.email) })));
   const sentRows = (await db.prepare("SELECT address_hash,week_start,status FROM mail_weekly_delivery").all()).results || [];

@@ -11,6 +11,13 @@ database_name = "m365-dub"
 database_id = "REPLACE_WITH_D1_ID"   # wird vom Workflow (worker.yml) automatisch eingetragen
 migrations_dir = "migrations"   # versioniertes Schema: wrangler d1 migrations apply
 
+[ai]
+binding = "AI"
+
+[[vectorize]]
+binding = "VEC"
+index_name = "m365-search"
+
 [triggers]
 crons = ["0 6 * * *", "*/30 * * * *"]   # Push taeglich, Wochenmail plus Nachlauf; Feeds alle 30 Minuten
 
@@ -19,6 +26,13 @@ SITE = "https://www.m365.fm"
 API = "https://api-dub.m365.fm"
 MAIL_FROM = "M365.FM <system@m365.fm>"
 VAPID_SUBJECT = "mailto:system@m365.fm"
+AI_GATEWAY_ID = "m365fm"
+HAIKU_USD_PER_MTOK_IN = "0.10"
+HAIKU_USD_PER_MTOK_OUT = "0.50"
+AI_DAILY_EUR_HAIKU = "5"
+USD_PER_EUR = "1.08"
+SEARCH_GAP_THRESHOLD = "0.35"
+SEARCH_VECTOR_MIN_SCORE = "0.4"
 SPREAKER_SHOW_IDS = "6704921,7393187,7393248,7393223,7393231,7393243,7393222,7393242,7393230,7393247,7393254,7393221,7393227,7393228,7393232,7393236,7393238,7393244,7393250,7393253"
 
 [[send_email]]

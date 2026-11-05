@@ -31,6 +31,7 @@ def clean(html):
 
 CREDITS_OUT = False
 import threading
+from ai_gateway import anthropic_request, check_budget, estimated_eur, report_usage, urlopen
 _ULOCK = threading.Lock()
 USAGE = {"in": 0, "out": 0, "calls": 0}
 
@@ -39,13 +40,15 @@ def _post(prompt, max_tokens):
     global CREDITS_OUT
     if CREDITS_OUT:
         raise RuntimeError("credits out")
-    body = json.dumps({"model": MODEL, "max_tokens": max_tokens, "messages": [{"role": "user", "content": prompt}]}).encode()
-    req = urllib.request.Request("https://api.anthropic.com/v1/messages", body, {
-        "x-api-key": os.environ["ANTHROPIC_API_KEY"], "anthropic-version": "2023-06-01", "content-type": "application/json"})
+    if not check_budget("generate_articles", MODEL, estimated_eur(len(prompt) // 3, max_tokens)):
+        raise RuntimeError("Haiku-Tagesbudget erreicht")
+    body = {"model": MODEL, "max_tokens": max_tokens, "messages": [{"role": "user", "content": prompt}]}
+    req = anthropic_request("/v1/messages", body, job="generate_articles", lang="", model=MODEL, api_key=os.environ["ANTHROPIC_API_KEY"])
     r = None
     for attempt in range(5):
         try:
-            r = json.load(urllib.request.urlopen(req, timeout=240))
+            with urlopen(req, timeout=240) as response:
+                r = json.load(response)
             break
         except urllib.error.HTTPError as ex:
             if ex.code in (400, 401, 402, 403):
@@ -60,8 +63,9 @@ def _post(prompt, max_tokens):
                 time.sleep(15 * (attempt + 1))
                 continue
             raise
+    u = r.get("usage") or {}
+    report_usage("generate_articles", MODEL, int(u.get("input_tokens", 0)) + int(u.get("cache_creation_input_tokens", 0)) + int(u.get("cache_read_input_tokens", 0)), int(u.get("output_tokens", 0)))
     try:
-        u = r.get("usage") or {}
         with _ULOCK:
             USAGE["in"] += int(u.get("input_tokens", 0)) + int(u.get("cache_creation_input_tokens", 0)) + int(u.get("cache_read_input_tokens", 0))
             USAGE["out"] += int(u.get("output_tokens", 0))

@@ -100,6 +100,138 @@ export async function rateLimit(db, key, max, windowSec) {
   return true;
 }
 
+const numeric = (value, fallback) => Number.isFinite(Number(value)) && Number(value) >= 0 ? Number(value) : fallback;
+const isHaiku = (model) => /^claude-haiku/i.test(String(model || ""));
+export const AI_BUDGET_ERROR = "AI_DAILY_BUDGET";
+let warnedMissingGatewayToken = false;
+
+function gatewayEnabled(env) {
+  const account = String(env.CLOUDFLARE_ACCOUNT_ID || "").trim(), gateway = env.AI_GATEWAY_ID === undefined ? "m365fm" : String(env.AI_GATEWAY_ID).trim();
+  if (!account || !gateway) return false;
+  if (!String(env.CF_AIG_TOKEN || "").trim()) {
+    if (!warnedMissingGatewayToken) {
+      console.warn("AI Gateway ist konfiguriert, aber CF_AIG_TOKEN fehlt; direkter Anthropic-Aufruf.");
+      warnedMissingGatewayToken = true;
+    }
+    return false;
+  }
+  return true;
+}
+
+export function anthropicUrl(env, path = "/v1/messages") {
+  const account = String(env.CLOUDFLARE_ACCOUNT_ID || "").trim(), gateway = env.AI_GATEWAY_ID === undefined ? "m365fm" : String(env.AI_GATEWAY_ID).trim();
+  const base = gatewayEnabled(env) ? `https://gateway.ai.cloudflare.com/v1/${encodeURIComponent(account)}/${encodeURIComponent(gateway)}/anthropic` : "https://api.anthropic.com";
+  return base + (path.startsWith("/") ? path : `/${path}`);
+}
+
+export function anthropicHeaders(env, { job, lang = "", model, cacheTtl, skipCache = false } = {}) {
+  const headers = {
+    "content-type": "application/json",
+    "x-api-key": env.ANTHROPIC_API_KEY,
+    "anthropic-version": "2023-06-01",
+  };
+  if (gatewayEnabled(env)) {
+    headers["cf-aig-metadata"] = JSON.stringify({ job, lang, model });
+    headers["cf-aig-authorization"] = "Bearer " + String(env.CF_AIG_TOKEN).trim();   // Format laut Cloudflare-Doku und secrets-check.yml
+    if (skipCache) headers["cf-aig-skip-cache"] = "true";
+    else if (cacheTtl) headers["cf-aig-cache-ttl"] = String(cacheTtl);
+  }
+  return headers;
+}
+
+function aiPrices(env) {
+  return {
+    input: numeric(env.HAIKU_USD_PER_MTOK_IN, 0.10),
+    output: numeric(env.HAIKU_USD_PER_MTOK_OUT, 0.50),
+    eur: numeric(env.AI_DAILY_EUR_HAIKU, 5),
+    rate: Math.max(0.000001, numeric(env.USD_PER_EUR, 1.08)),
+  };
+}
+
+export async function aiBudgetStatus(env) {
+  const day = new Date().toISOString().slice(0, 10), prices = aiPrices(env);
+  const row = await env.DB.prepare("SELECT COALESCE(SUM(usd),0) usd,COALESCE(SUM(reserved_usd),0) reserved_usd FROM ai_spend WHERE day=? AND model LIKE 'claude-haiku%'").bind(day).first();
+  const spentUsd = Number(row?.usd || 0), reservedUsd = Number(row?.reserved_usd || 0);
+  const budgetUsd = prices.eur * prices.rate;
+  return { day, spent_usd: spentUsd, spent_eur: spentUsd / prices.rate, reserved_eur: reservedUsd / prices.rate, budget_eur: prices.eur,
+    remaining_eur: Math.max(0, prices.eur - (spentUsd + reservedUsd) / prices.rate), allowed: spentUsd + reservedUsd < budgetUsd };
+}
+
+async function warnAiBudget(env, status, job) {
+  if (status.spent_eur + status.reserved_eur < status.budget_eur * 0.8) return;
+  const result = await env.DB.prepare("INSERT OR IGNORE INTO meta(k,v) VALUES(?,?)").bind(`ai_budget_warn:${status.day}`, "1").run();
+  if (result?.meta?.changes) console.warn("ai_budget_warning", { day: status.day, job, used_eur: status.spent_eur + status.reserved_eur, budget_eur: status.budget_eur });
+}
+
+async function reserveHaiku(env, body, job, lang, model) {
+  const prices = aiPrices(env), day = new Date().toISOString().slice(0, 10);
+  const text = JSON.stringify(body), inputTokens = new TextEncoder().encode(text).length + 32;
+  const outputTokens = Math.max(0, Number(body.max_tokens) || 0);
+  const reserveUsd = inputTokens * prices.input / 1e6 + outputTokens * prices.output / 1e6;
+  const id = crypto.randomUUID();
+  const result = await env.DB.prepare(
+    "INSERT INTO ai_spend(id,day,model,job,lang,in_tok,out_tok,usd,reserved_usd,created) " +
+    "SELECT ?,?,?,?,?,0,0,0,?,? WHERE COALESCE((SELECT SUM(usd+reserved_usd) FROM ai_spend WHERE day=? AND model LIKE 'claude-haiku%'),0)+?<=?",
+  ).bind(id, day, model, job, lang, reserveUsd, Math.floor(Date.now() / 1000), day, reserveUsd, prices.eur * prices.rate).run();
+  return result?.meta?.changes ? { id, day, reserveUsd } : null;
+}
+
+async function finishHaiku(env, reservation, usage, job, lang, model) {
+  const prices = aiPrices(env);
+  const input = Number(usage.input_tokens || 0) + Number(usage.cache_creation_input_tokens || 0) + Number(usage.cache_read_input_tokens || 0);
+  const output = Number(usage.output_tokens || 0);
+  const usd = input * prices.input / 1e6 + output * prices.output / 1e6;
+  if (reservation) {
+    await env.DB.prepare("UPDATE ai_spend SET in_tok=?,out_tok=?,usd=?,reserved_usd=0 WHERE id=?")
+      .bind(input, output, usd, reservation.id).run();
+  } else {
+    await env.DB.prepare("INSERT INTO ai_spend(id,day,model,job,lang,in_tok,out_tok,usd,reserved_usd,created) VALUES(?,?,?,?,?,?,?,?,0,?)")
+      .bind(crypto.randomUUID(), new Date().toISOString().slice(0, 10), model, job, lang, input, output, usd, Math.floor(Date.now() / 1000)).run();
+  }
+  const status = await aiBudgetStatus(env);
+  await warnAiBudget(env, status, job);
+  return status;
+}
+
+export async function reportExternalAiUsage(env, { id, job, lang = "", model, input_tokens, output_tokens, batch = false }) {
+  if (!isHaiku(model)) throw new Error("unsupported model");
+  const prices = aiPrices(env), input = Number(input_tokens || 0), output = Number(output_tokens || 0);
+  const usd = (input * prices.input / 1e6 + output * prices.output / 1e6) * (batch ? 0.5 : 1);   // Batch API: halber Preis
+  await env.DB.prepare("INSERT OR IGNORE INTO ai_spend(id,day,model,job,lang,in_tok,out_tok,usd,reserved_usd,created) VALUES(?,?,?,?,?,?,?,?,0,?)")
+    .bind(id, new Date().toISOString().slice(0, 10), model, job, lang, input, output, usd, Math.floor(Date.now() / 1000)).run();
+  const status = await aiBudgetStatus(env);
+  await warnAiBudget(env, status, job);
+  return status;
+}
+
+export async function anthropicFetch(env, body, { job, lang = "", cacheTtl, skipCache = false } = {}) {
+  const model = String(body?.model || "");
+  let reservation = null;
+  if (isHaiku(model)) {
+    reservation = await reserveHaiku(env, body, job, lang, model);
+    if (!reservation) {
+      const error = new Error(AI_BUDGET_ERROR);
+      error.code = AI_BUDGET_ERROR;
+      throw error;
+    }
+  }
+  const release = () => env.DB.prepare("UPDATE ai_spend SET reserved_usd=0 WHERE id=?").bind(reservation.id).run();
+  let response;
+  try {
+    response = await fetch(anthropicUrl(env), { method: "POST", headers: anthropicHeaders(env, { job, lang, model, cacheTtl, skipCache }), body: JSON.stringify(body) });
+  } catch {
+    if (reservation) await release();
+    throw new Error("Claude API request failed");
+  }
+  if (reservation) {
+    const cached = String(response.headers?.get?.("cf-aig-cache-status") || "").toUpperCase() === "HIT";   // Gateway-Cache: Anthropic berechnet nichts
+    const data = response.ok && !cached ? await response.clone().json().catch(() => null) : null;
+    if (data?.usage) await finishHaiku(env, reservation, data.usage, job, lang, model);
+    else await release();
+  }
+  return response;
+}
+
 export const LANGS = ["de", "es", "fr", "it", "pt", "nl", "pl", "id", "ru", "uk", "ar", "he", "ja", "ko"];
 export const isLang = (l) => LANGS.includes(l);
 export const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -111,3 +243,26 @@ export async function audit(db, userId, action, target = "", detail = "") {   //
 // Antworttext von Claude: nur Bloecke vom Typ "text" (Claude Haiku 5.5 denkt standardmaessig mit, eine Antwort kann mit thinking-Bloecken beginnen -
 // content[0].text waere dann leer). Gleiches Muster wie translate_blog.py.
 export const claudeText = (j) => (Array.isArray(j?.content) ? j.content : []).filter((b) => b && b.type === "text").map((b) => b.text || "").join("").trim();
+
+export async function haikuJson(env, system, obj, { job, lang = "", maxTokens = 8000, model = "claude-haiku-5-5", cacheTtl = 604800 } = {}) {
+  const body = { model, max_tokens: maxTokens, system, messages: [{ role: "user", content: JSON.stringify(obj) }] };
+  const options = { job, lang, cacheTtl };
+  let used = { ...body, thinking: { type: "disabled" }, output_config: { effort: "low" } };
+  let response = await anthropicFetch(env, used, options);
+  if (response.status === 400) response = await anthropicFetch(env, (used = body), options);
+  if (!response.ok) throw new Error("api " + response.status);
+  const parse = async (r) => {
+    let text = claudeText(await r.json());
+    if (text.startsWith("```")) text = text.replace(/^```[a-z]*\n?/, "").replace(/```$/, "");
+    return JSON.parse(text);
+  };
+  try {
+    return await parse(response.clone());
+  } catch (e) {
+    // Unbrauchbare Antwort aus dem Gateway-Cache (7 Tage): einmal am Cache vorbei neu fragen, sonst haengt derselbe Auftrag eine Woche fest
+    if (String(response.headers?.get?.("cf-aig-cache-status") || "").toUpperCase() !== "HIT") throw e;
+    const fresh = await anthropicFetch(env, used, { ...options, skipCache: true });
+    if (!fresh.ok) throw new Error("api " + fresh.status);
+    return parse(fresh);
+  }
+}
