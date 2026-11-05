@@ -64,7 +64,8 @@ test("brand=m365con: Con-PDF als Anhang, Con-Texte ohne Preise, Herkunft mit Pra
   const m = sent[0];
   assert.equal(m.subject, "Deine M365Con-Sponsoring- und Mediadaten");
   assert.equal(m.attachments[0].filename, "M365Con-Sponsor-Deck-DE.pdf");
-  assert.equal(atob(m.attachments[0].content), "%PDF-con");
+  assert.ok(m.attachments[0].content instanceof Uint8Array, "Cloudflare bekommt Binaerdaten, keinen Base64-Text");
+  assert.equal(new TextDecoder().decode(m.attachments[0].content), "%PDF-con");
   assert.match(m.html, /M365<span[^>]*>Con<\/span>/);
   assert.match(m.html, /\/de\/m365con\/sponsor\//);
   assert.doesNotMatch(m.html, /\$\s?\d|USD/);
@@ -115,4 +116,20 @@ test("CORS: m365con.net nur fuer die Mediadaten-Routen und ohne Cookies", () => 
   assert.equal(cors(env, req("/api/mediakit", "https://m365con.net"))["access-control-allow-credentials"], undefined);
   assert.equal(cors(env, req("/api/me", "https://www.m365.fm"))["access-control-allow-credentials"], "true", "eigene Seite unveraendert");
   assert.deepEqual(cors(env, { headers: new Headers({ origin: "https://m365con.net" }) }), { vary: "Origin" }, "ohne URL keine Ausnahme");
+});
+
+test("mailer: Resend bekommt Base64, Cloudflare Binaerdaten", async () => {
+  const { sendMail, b64 } = await import("../src/mailer.js");
+  const pdf = new TextEncoder().encode("%PDF-1.4 binary ÿ");
+  assert.equal(atob(b64(pdf)), String.fromCharCode(...pdf));
+  assert.equal(b64("JVBERi0="), "JVBERi0=");
+  let body;
+  const orig = globalThis.fetch;
+  globalThis.fetch = async (_u, o) => { body = JSON.parse(o.body); return new Response(JSON.stringify({ id: "r1" }), { status: 200 }); };
+  try {
+    const r = await sendMail({ RESEND_API_KEY: "k", MAIL_FROM: "x@m365.fm", DB: { prepare: () => ({ bind: () => ({ run: async () => {} }), run: async () => {} }) } },
+      { to: "a@b.test", subject: "s", html: "<p>x</p>", attachments: [{ filename: "a.pdf", content: pdf, type: "application/pdf" }] });
+    assert.equal(r.ok, true);
+    assert.equal(body.attachments[0].content, b64(pdf));
+  } finally { globalThis.fetch = orig; }
 });
