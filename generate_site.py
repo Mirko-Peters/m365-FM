@@ -747,13 +747,25 @@ COMMUNITY_API = os.environ.get("COMMUNITY_API", "https://api-dub.m365.fm")
 _CI = json.loads((ROOT / "data" / "community_i18n.json").read_text("utf-8")) if (ROOT / "data" / "community_i18n.json").exists() else {}
 
 
+_CV = {}
+def _cv(*names):
+    """Kurzer Inhalts-Hash als ?v= fuer die ungehashten Community-Dateien: neue Version = neue Adresse, kein alter Stand aus dem Browser-Cache (Mirko, 5.11.2026)."""
+    if names not in _CV:
+        h = hashlib.sha1()
+        for n in names:
+            try: h.update((ROOT / n).read_bytes())
+            except OSError: pass
+        _CV[names] = h.hexdigest()[:8]
+    return _CV[names]
+
+
 def community_tags(lang, vid=None, mode=""):
     """Skripte/Stile fuer Community-Widgets (blenden sich aus, wenn die API nicht erreichbar ist)."""
     priv = f"{BASE}/{'datenschutz' if lang == 'de' else 'privacy'}/"
     cfg = {"api": COMMUNITY_API, "lang": lang, "vid": vid, "privacy": priv, "communityUrl": f"{BASE}/{lang}/community/"}
     # Die Oberflaechentexte (ca. 6 KB je Sprache, auf jeder Seite gleich) liegen in assets/cm-<sprache>.js (gecacht), nicht mehr in jeder Seite.
-    return (f'<link rel="stylesheet" href="{BASE}/assets/community.css"><script defer src="{BASE}/assets/cm-{lang if lang in _CI else "en"}.js"></script>'
-            f'<script>window.M365C={json.dumps(cfg, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")}</script><script defer src="{BASE}/assets/community.js"></script>')
+    return (f'<link rel="stylesheet" href="{BASE}/assets/community.css?v={_cv("assets/community.css")}"><script defer src="{BASE}/assets/cm-{lang if lang in _CI else "en"}.js?v={_cv("data/community_i18n.json")}"></script>'
+            f'<script>window.M365C={json.dumps(cfg, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")}</script><script defer src="{BASE}/assets/community.js?v={_cv("assets/community.js")}"></script>')
 
 
 def write_cm_js(out):
