@@ -118,7 +118,7 @@ CSS = """<style>
 .ec-tabs a[aria-current=page]{color:var(--fg);border-bottom-color:var(--ac)}
 .ec-tabs a[hidden]{display:none}
 .ec-hero-actions{display:flex;gap:10px;margin-top:18px}
-.ec-hero-actions .btn{flex:1 1 0;min-width:0;text-align:center}
+.ec-hero-actions .btn{flex:1 1 0;min-width:0;justify-content:center;text-align:center}
 .ec-hero-expert{margin:8px 0 0;font-size:.9rem}
 @media(max-width:600px){.ec-tabs{display:grid;grid-template-columns:1fr}.ec-group{width:100%}}
 .ec-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
