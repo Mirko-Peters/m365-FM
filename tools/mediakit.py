@@ -10,9 +10,10 @@ Quellen (jeweils nur, wenn verfuegbar; fehlende Werte werden weggelassen, nie ge
   - data/stats/ai_performance.json: KI-Zitate (Bing AI Performance, Export), Impressionen in Google AI Overviews und AI Mode
     (Search Console, Bericht Generative AI, Export; nur bei status "ok"), Google-Suche (Search Console API)
   - data/sponsor_pricing.json + data/sponsor_i18n.json: Sponsoring-Pakete und Listenpreise wie auf /sponsor/
-Aufruf: python tools/mediakit.py --out out/mediakit   (Umgebung: YT_CLIENT_ID, YT_CLIENT_SECRET, YT_REFRESH_TOKEN,
+Aufruf: python tools/mediakit.py --out out/mediakit [--brand m365con]   (Umgebung: YT_CLIENT_ID, YT_CLIENT_SECRET, YT_REFRESH_TOKEN,
         CLOUDFLARE_API_TOKEN, CF_ZONE_ID optional, BING_WEBMASTER_API_KEY)
 Ergebnis: m365fm-media-kit-en.pdf, m365fm-media-kit-de.pdf, latest.json
+Zweite Marke (#260): --brand m365con baut das Sponsor-/Mediadaten-Deck der M365Con (tools/mediakit_con.py, eigenes Theme, keine Preise).
 """
 import argparse, datetime as dt, json, os, re, sys, urllib.request, urllib.parse
 from pathlib import Path
@@ -36,12 +37,18 @@ def http(url, data=None, headers=None, timeout=60):
 
 
 # ---------- Quellen ----------
-def youtube():
+def yt_headers():
+    """OAuth-Header fuer YouTube Analytics + Data API (Kanal m365 Show, channel==MINE) oder None. Gibt nie Token aus."""
     cid, sec, rt = (os.environ.get(k, "").strip() for k in ("YT_CLIENT_ID", "YT_CLIENT_SECRET", "YT_REFRESH_TOKEN"))
-    if not (cid and sec and rt): return {}
+    if not (cid and sec and rt): return None
     st, tok = http("https://oauth2.googleapis.com/token", urllib.parse.urlencode({"grant_type": "refresh_token", "refresh_token": rt, "client_id": cid, "client_secret": sec}).encode())
-    if st != 200: print("YouTube: Token", st); return {}
-    H = {"authorization": "Bearer " + tok["access_token"]}
+    if st != 200 or not tok.get("access_token"): print("YouTube: Token", st); return None
+    return {"authorization": "Bearer " + tok["access_token"]}
+
+
+def youtube():
+    H = yt_headers()
+    if not H: return {}
     end, start = TODAY, TODAY - dt.timedelta(days=28)
 
     def rep(**q):
@@ -112,11 +119,12 @@ def cloudflare():
     return out
 
 
-def bing():
+def bing(site="https://m365.fm/"):
+    """Bing Webmaster API fuer eine Website des Kontos (Schluessel gilt fuer das ganze Konto; M365Con: https://m365con.net/)."""
     key = os.environ.get("BING_WEBMASTER_API_KEY", "").strip()
     if not key: return {}
     base = "https://ssl.bing.com/webmaster/api.svc/json/"
-    q = lambda m: http(base + m + "?" + urllib.parse.urlencode({"siteUrl": "https://m365.fm/", "apikey": key}))
+    q = lambda m: http(base + m + "?" + urllib.parse.urlencode({"siteUrl": site, "apikey": key}))
     day = lambda s: (lambda m: dt.datetime.fromtimestamp(int(m.group()) / 1000, dt.timezone.utc).date() if m else None)(re.search(r"\d{9,}", str(s)))
     out = {}
     st, d = q("GetRankAndTrafficStats")
@@ -139,7 +147,51 @@ def bing():
             if dd and dd >= TODAY - dt.timedelta(days=35):
                 a = agg.setdefault(r.get("Query", ""), [0, 0]); a[0] += int(r.get("Clicks") or 0); a[1] += int(r.get("Impressions") or 0)
         out["queries"] = [[k, v[0], v[1]] for k, v in sorted(agg.items(), key=lambda kv: -kv[1][1]) if k][:12]
-    print("Bing:", {k: (v if not isinstance(v, list) else f"{len(v)} Zeilen") for k, v in out.items()} or ("keine Daten", st))
+    print("Bing", site + ":", {k: (v if not isinstance(v, list) else f"{len(v)} Zeilen") for k, v in out.items()} or ("keine Daten", st))
+    return out
+
+
+# Google Search Console fuer weitere Properties ueber tools/team_analytics.gsc (kein eigener Abruf hier; PR #262 macht gsc(site) parametrisch,
+# davor gilt die Umgebungsvariable GSC_SITE). YouTube-Kanal m365 Show als Creator-Property der Search Console:
+YT_GSC_SITE = "sc-creator-profile:youtube.com/channel/ido4tn3khkldhp3733e9ja"
+
+
+def _ta_gsc(TA, site):
+    import inspect
+    if "site" in inspect.signature(TA.gsc).parameters: return TA.gsc(site)
+    old = os.environ.get("GSC_SITE")
+    os.environ["GSC_SITE"] = site
+    try: return TA.gsc()
+    finally:
+        if old is None: os.environ.pop("GSC_SITE", None)
+        else: os.environ["GSC_SITE"] = old
+
+
+def gsc_site(*candidates, ta=None):
+    """Erste Property mit status "ok" -> {site, period, clicks, impressions, weekly (12 Wochen), queries (Top 10)}; sonst {} mit Log-Zeile.
+    Nur Summen und Suchanfragen, keine Einzel-URLs. ta: Ersatz fuer tools.team_analytics (Tests)."""
+    if ta is None:
+        if not os.environ.get("GSC_SERVICE_ACCOUNT_JSON", "").strip():
+            print("Search Console: Secret GSC_SERVICE_ACCOUNT_JSON fehlt -", candidates[0], "entfaellt"); return {}
+        from tools import team_analytics as ta
+    res, site = {}, None
+    for cand in candidates:   # erste Variante, die antwortet, gewinnt (Domain- oder URL-Praefix-Property)
+        res = _ta_gsc(ta, cand)
+        if res.get("status") == "ok": site = cand; break
+        print("Search Console", cand + ":", str(res.get("status"))[:200], "- Dienstkonto als Nutzer der Property eintragen?" if "403" in str(res.get("status")) else "")
+    if not site: return {}
+    tot, per = res.get("totals") or {}, res.get("period") or {}
+    if not tot.get("impressions"): print("Search Console", site + ": keine Impressionen im Zeitraum"); return {}
+    wk = {}
+    for d, c, i in res.get("daily") or []:
+        try: day = dt.date.fromisoformat(d)
+        except ValueError: continue
+        if day < TODAY - dt.timedelta(days=7 * 12 + 3): continue
+        k = str(day - dt.timedelta(days=day.weekday())); a = wk.setdefault(k, [0, 0]); a[0] += int(c); a[1] += int(i)
+    out = {"site": site, "period": f'{per.get("from", "")}–{per.get("to", "")}', "clicks": int(tot.get("clicks") or 0), "impressions": int(tot["impressions"]),
+           "weekly": [[k, v[0], v[1]] for k, v in sorted(wk.items())],
+           "queries": [[q.get("query", ""), int(q.get("clicks") or 0), int(q.get("impressions") or 0)] for q in (res.get("queries") or [])[:10] if q.get("query")]}
+    print("Search Console", site + ":", out["clicks"], "Klicks,", out["impressions"], "Impressionen")
     return out
 
 
@@ -217,13 +269,16 @@ TXT = {
         k=dict(yt_views="YouTube views", yt_minutes="YouTube watch time (minutes)", yt_subs_new="New YouTube subscribers", yt_subs="YouTube subscribers",
                pv="Website page views", sp="Podcast downloads (all language editions)", ai="AI citations (Copilot and partners)",
                b_clicks="Bing search clicks", b_imp="Bing search impressions", langs="Site languages", videos="Published videos",
-               g_clicks="Google search clicks", g_imp="Google search impressions", gai="Google AI impressions"),
+               g_clicks="Google search clicks", g_imp="Google search impressions", gai="Google AI impressions",
+               ys_imp="Google search impressions of the YouTube channel", ys_clicks="Google search clicks to the YouTube channel"),
         s=dict(yt="YouTube Analytics", cf="Cloudflare (edge statistics, before bot filtering)", sp="Spreaker", ai="Bing Webmaster Tools, AI Performance", bing="Bing Webmaster Tools", site="M365.FM", gsc="Google Search Console",
-               gai="Google Search Console, Generative AI"),
+               gai="Google Search Console, Generative AI", ys="Search Console (YouTube channel)"),
         d28="last 28 days", d30="last 30 days", d7="7 days", total="total",
         yt_h="YouTube: m365 Show", yt_lead="Animated explainer videos, Shorts and certification courses on Microsoft 365, Copilot, Azure and security.",
         yt_month="Views per month", yt_top="Most watched videos (last 28 days)", yt_cty="Viewers by country (share of views, 28 days)", yt_age="Age groups (share of viewers)",
         yt_gen="Gender (share of viewers)", yt_dev="Devices (share of views)", yt_src="How viewers find the videos", yt_eng="Engagement (28 days)",
+        ys_h="Google search for the YouTube channel", ys_t="Google showed the m365 Show channel and its videos {i} times in web search between {p}; {c} clicks led to YouTube.",
+        ys_src="Source: Google Search Console, property of the YouTube channel.",
         avd="Average view duration", likes="Likes", shares="Shares",
         web_h="Website and search: www.m365.fm", web_lead="Episode pages, articles, topic pages, wiki and expert directory – indexed by Google and Bing and cited by AI assistants.",
         web_daily="Page views per day (30 days)", web_cty="Requests by country (share, 30 days, unfiltered)", b_week="Bing search per week (12 weeks)", b_q="What people search for on Bing to find M365.FM",
@@ -246,7 +301,7 @@ TXT = {
               "Measurable: sponsor dashboard with downloads, tracked clicks, video views, leads and AI citations of your entities."],
         sp_h="Become a sponsor", sp_lead="Packages from the current price list on www.m365.fm/sponsor/ (list prices in USD, plus VAT where applicable). Configure your package there and send a request in two minutes.",
         sp_pkg="Package", sp_price="List price", sp_disc="Runtime discount on base and video package: {d}. At most {n} sponsors per topic.",
-        sp_rules="Sponsored content is always labelled; links to sponsors carry rel=\"sponsored\". No bought links, editorial independence of the episodes.",
+        sp_rules="Sponsored content is always labelled – including live sessions on LinkedIn and YouTube; links to sponsors carry rel=\"sponsored\". No bought links, editorial independence of the episodes.",
         cta="Configure your sponsorship", cta_url="www.m365.fm/sponsor/",
         contact="Contact", contact_t="Mirko Peters · mirko.peters@m365.fm · www.m365.fm",
         note="All figures come directly from the named sources for the stated period. Values that are not available are left out, not estimated.",
@@ -259,13 +314,16 @@ TXT = {
         k=dict(yt_views="YouTube-Aufrufe", yt_minutes="YouTube-Wiedergabezeit (Minuten)", yt_subs_new="Neue YouTube-Abonnenten", yt_subs="YouTube-Abonnenten",
                pv="Website-Seitenaufrufe", sp="Podcast-Downloads (alle Sprachfassungen)", ai="KI-Zitate (Copilot und Partner)",
                b_clicks="Bing-Suchklicks", b_imp="Bing-Suchimpressionen", langs="Sprachen der Website", videos="Veröffentlichte Videos",
-               g_clicks="Google-Suchklicks", g_imp="Google-Suchimpressionen", gai="Google-KI-Impressionen"),
+               g_clicks="Google-Suchklicks", g_imp="Google-Suchimpressionen", gai="Google-KI-Impressionen",
+               ys_imp="Google-Suchimpressionen des YouTube-Kanals", ys_clicks="Google-Suchklicks auf den YouTube-Kanal"),
         s=dict(yt="YouTube Analytics", cf="Cloudflare (Rand-Statistik, vor Bot-Filterung)", sp="Spreaker", ai="Bing Webmaster Tools, AI Performance", bing="Bing Webmaster Tools", site="M365.FM", gsc="Google Search Console",
-               gai="Google Search Console, Generative AI"),
+               gai="Google Search Console, Generative AI", ys="Search Console (YouTube-Kanal)"),
         d28="letzte 28 Tage", d30="letzte 30 Tage", d7="7 Tage", total="gesamt",
         yt_h="YouTube: m365 Show", yt_lead="Animierte Erklärvideos, Shorts und Zertifizierungskurse zu Microsoft 365, Copilot, Azure und Security.",
         yt_month="Aufrufe pro Monat", yt_top="Meistgesehene Videos (letzte 28 Tage)", yt_cty="Zuschauer nach Land (Anteil der Aufrufe, 28 Tage)", yt_age="Altersgruppen (Anteil der Zuschauer)",
         yt_gen="Geschlecht (Anteil der Zuschauer)", yt_dev="Geräte (Anteil der Aufrufe)", yt_src="Wie Zuschauer die Videos finden", yt_eng="Interaktion (28 Tage)",
+        ys_h="Google-Suche für den YouTube-Kanal", ys_t="Google hat den Kanal m365 Show und seine Videos zwischen {p} {i}-mal in der Websuche angezeigt; {c} Klicks führten zu YouTube.",
+        ys_src="Quelle: Google Search Console, Property des YouTube-Kanals.",
         avd="Durchschnittliche Wiedergabedauer", likes="Likes", shares="Geteilt",
         web_h="Website und Suche: www.m365.fm", web_lead="Folgenseiten, Artikel, Themenseiten, Wiki und Expertenverzeichnis – von Google und Bing indexiert und von KI-Assistenten zitiert.",
         web_daily="Seitenaufrufe pro Tag (30 Tage)", web_cty="Anfragen nach Land (Anteil, 30 Tage, ungefiltert)", b_week="Bing-Suche pro Woche (12 Wochen)", b_q="Wonach Menschen bei Bing suchen, um M365.FM zu finden",
@@ -288,7 +346,7 @@ TXT = {
               "Messbar: Sponsor-Dashboard mit Downloads, getrackten Klicks, Videoaufrufen, Leads und KI-Zitaten Ihrer Entitäten."],
         sp_h="Sponsor werden", sp_lead="Pakete aus der aktuellen Preisliste auf www.m365.fm/sponsor/ (Listenpreise in USD, ggf. zzgl. USt.). Dort stellen Sie Ihr Paket zusammen und schicken die Anfrage in zwei Minuten ab.",
         sp_pkg="Paket", sp_price="Listenpreis", sp_disc="Laufzeitrabatt auf Basis- und Videopaket: {d}. Höchstens {n} Sponsoren pro Thema.",
-        sp_rules="Gesponserte Inhalte sind immer gekennzeichnet; Links zu Sponsoren tragen rel=\"sponsored\". Keine gekauften Links, redaktionelle Unabhängigkeit der Folgen.",
+        sp_rules="Gesponserte Inhalte sind immer gekennzeichnet – auch Livesessions auf LinkedIn und YouTube; Links zu Sponsoren tragen rel=\"sponsored\". Keine gekauften Links, redaktionelle Unabhängigkeit der Folgen.",
         cta="Sponsoring zusammenstellen", cta_url="www.m365.fm/de/sponsor/",
         contact="Kontakt", contact_t="Mirko Peters · mirko.peters@m365.fm · www.m365.fm",
         note="Alle Zahlen stammen direkt aus den genannten Quellen für den angegebenen Zeitraum. Nicht verfügbare Werte werden weggelassen, nicht geschätzt.",
@@ -315,6 +373,9 @@ def rows_for(lang, D):
               (k["yt_subs_new"], fmt(lang, y["subs_gained28"]), s["yt"], t["d28"])]
     if "subscribers" in y: R.append((k["yt_subs"], fmt(lang, y["subscribers"]), s["yt"], t["total"]))
     if "videos" in y: R.append((k["videos"], fmt(lang, y["videos"]), s["yt"], t["total"]))
+    ys = D.get("yt_search") or {}   # Google-Suche fuer den YouTube-Kanal (Search-Console-Creator-Property), nur bei status ok
+    if ys.get("impressions"):
+        R += [(k["ys_imp"], fmt(lang, ys["impressions"]), s["ys"], ys.get("period", "")), (k["ys_clicks"], fmt(lang, ys["clicks"]), s["ys"], ys.get("period", ""))]
     if "pageviews30" in c:   # Besucher (unique IPs) schwanken durch Bots stark - nur Seitenaufrufe, als ungefiltert gekennzeichnet
         R.append((k["pv"], fmt(lang, c["pageviews30"]), s["cf"], t["d30"]))
     if "spreaker7" in l: R.append((k["sp"], fmt(lang, l["spreaker7"]), s["sp"], l.get("spreaker_period") or t["d7"]))
@@ -505,6 +566,11 @@ def build_pdf(path, lang, D, F):
                 cv.setFillColor(AC); cv.setFont(F["BarlowCondensed-SemiBold"], 20); cv.drawString(bx + 10, y - 24, val)
                 cv.setFillColor(INK); cv.setFont(F["Barlow-SemiBold"], 8.4); cv.drawString(bx + 10, y - 38, lab)
             y -= 60
+        ys = D.get("yt_search") or {}
+        if ys.get("impressions") and y > 120:   # Google-Suche fuer den Kanal (Search-Console-Property des Kanals, nur bei status ok)
+            y = kicker(y, t["ys_h"])
+            y = para(M, y, t["ys_t"].format(i=fmt(lang, ys["impressions"]), c=fmt(lang, ys["clicks"]), p=ys.get("period", "")), F["Barlow"], 9.5, INK, lead=13)
+            y = para(M, y - 2, t["ys_src"], F["Barlow"], 8, MUT, lead=11) - 6
 
     # --- Seite: Website, Suche, KI ---
     if c_ or b_ or l_.get("ai_citations") or l_.get("gai_impressions"):
@@ -559,7 +625,8 @@ def build_pdf(path, lang, D, F):
     if P.get("prices") and I:
         y = kicker(y, t["sp_pkg"] + " · " + t["sp_price"])
         order = [("base", "base_h", "base_b1"), ("video", "video_h", "video_b"), ("topic", "topic_h", "topic_hint"), ("lang", "lang_h", "lang_hint"),
-                 ("pr", "pr_h", "pr_b"), ("auth", "auth_h", None), ("expert", "expert_h", "expert_hint"), ("li", "li_h", "li_hint"), ("dash", "dash_h", "dash_hint")]
+                 ("pr", "pr_h", "pr_b"), ("auth", "auth_h", None), ("expert", "expert_h", "expert_hint"), ("li", "li_h", "li_hint"),
+                 ("live", "live_h", "live_hint"), ("dash", "dash_h", "dash_hint")]   # live: Livesession LinkedIn + YouTube (#260), je Stueck
         fillv = {"episodes": P.get("episodes_per_topic", ""), "n": P.get("topic_sponsors_max", "") if True else "", "code": 'rel="sponsored"'}
         for key, hk, bk in order:
             if key not in P["prices"] or hk not in I: continue
@@ -579,6 +646,7 @@ def build_pdf(path, lang, D, F):
     y = para(M, y, t["sp_rules"], F["Barlow"], 8.6, MUT) - 14
     # CTA-Kasten mit QR-Code
     box_h = 104
+    if y - box_h < M: y = new_page(); y = h2(y, t["sp_h"])   # mit der Livesession (#260) passt der Kasten nicht immer mehr auf die Seite
     cv.setFillColor(INK); cv.rect(M, y - box_h, CW, box_h, stroke=0, fill=1)
     cv.setFillColor(WH); cv.setFont(F["BarlowCondensed-SemiBold"], 26); cv.drawString(M + 18, y - 38, t["cta"] + " →")
     cv.setFont(F["Barlow-SemiBold"], 13); cv.setFillColor(AC2); cv.drawString(M + 18, y - 60, t["cta_url"])
@@ -600,9 +668,14 @@ def build_pdf(path, lang, D, F):
 
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument("--out", default="out/mediakit"); ap.add_argument("--fonts", default=".cache/fonts")
+    ap.add_argument("--brand", choices=("m365fm", "m365con"), default="m365fm", help="m365con: Sponsor- und Mediadaten der M365Con (tools/mediakit_con.py)")
     a = ap.parse_args()
+    if a.brand == "m365con":
+        sys.path.insert(0, str(ROOT / "tools"))
+        import mediakit_con
+        return mediakit_con.main(Path(a.out), Path(a.fonts))
     out = Path(a.out); out.mkdir(parents=True, exist_ok=True)
-    D = {"generated": str(TODAY), "youtube": youtube(), "cloudflare": cloudflare(), "bing": bing(), "local": local()}
+    D = {"generated": str(TODAY), "youtube": youtube(), "cloudflare": cloudflare(), "bing": bing(), "local": local(), "yt_search": gsc_site(YT_GSC_SITE)}
     F = fonts(Path(a.fonts))
     for lang in ("en", "de"):
         p = out / f"m365fm-media-kit-{lang}.pdf"; build_pdf(p, lang, D, F)

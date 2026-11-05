@@ -23,7 +23,7 @@ const LVL = { 1: "easy", 2: "medium", 3: "hard", 4: "very hard" };
 
 function state(inp) {
   return { goal: inp.goal, rt: inp.rt, topics: (inp.picked || []).map(([name, lvl, custom], i) => ({ id: "t" + i, name, lvl, rated: !custom, custom: !!custom, example: false })),
-           video: !!inp.video, pr: !!inp.pr, auth: !!inp.auth, dash: !!inp.dash, l14: !!inp.lang, topic: !!inp.topic, expert: !!inp.expert, li: !!inp.li, con: !!inp.con,
+           video: !!inp.video, pr: !!inp.pr, auth: !!inp.auth, dash: !!inp.dash, l14: !!inp.lang, topic: !!inp.topic, expert: !!inp.expert, li: !!inp.li, live: !!inp.live, con: !!inp.con,
            cnt: { pr: 2, ex: 1, li: 1, ...(inp.cnt || {}) }, prTouched: !!inp.prTouched };
 }
 const DEFAULT = { goal: "ai", rt: 6, picked: [["Your brand name", 1], ["Microsoft Teams Phone", 3]], pr: true };
@@ -139,6 +139,40 @@ test("Paket v1: Form, nur Zeichenketten, englisch, Grenzen der API", () => {
   }
   assert.ok(p2.extras.includes("M365Con 2027 – on request"));
   for (const k of ["goal", "topics", "duration", "components", "monthlyUsd", "totalUsd"]) assert.ok(k in p2, k);   // Mail/Admin lesen diese Schluessel
+});
+
+// Issue #260: Livesession (LinkedIn-Unternehmensseite M365 Show + YouTube), je Stueck einmalig, ohne Laufzeitrabatt
+test("Livesession: 1.000 USD je Stueck, einmalig, ohne Rabatt, Zeile und Paket", () => {
+  assert.equal(P.prices.live, 1000);
+  assert.equal(P.units.live, "each");
+  const off = SC.compute(state(DEFAULT), P);
+  for (const [rt, n] of [[1, 1], [6, 2], [12, 3]]) {
+    const s = state({ ...DEFAULT, rt, live: true, cnt: { lv: n } }), r = SC.compute(s, P);
+    const base = SC.compute(state({ ...DEFAULT, rt }), P);
+    assert.equal(r.lv, n);
+    assert.equal(r.monthly, base.monthly, "nicht im Monatsbetrag");
+    assert.equal(r.discount, base.discount, "kein Rabatt auf die Livesession");
+    assert.equal(r.oneOff, base.oneOff + n * 1000, "einmalig je Stueck");
+    assert.equal(r.total, base.total + n * 1000);
+  }
+  // Vektor 6 Monate, Standard + 2 Livesessions: $34,400 + $2,000
+  const s = state({ ...DEFAULT, live: true, cnt: { lv: 2 } }), v = SC.view(s, P, EN, CTX);
+  assert.equal(off.total, 34400);
+  assert.equal(v.totalLine, "$36,400 for 6 months, incl. one-time items");
+  const row = v.rows.find((x) => x.k === "live");
+  assert.deepEqual([row.label, row.amount, row.monthly], ["Live sessions × 2 (one-time)", "$2,000", false]);
+  assert.equal(v.counts.lv, 2);
+  assert.ok(!SC.view(state(DEFAULT), P, EN, CTX).rows.some((x) => x.k === "live"), "ohne Haken keine Zeile");
+  const pkg = SC.buildPackage(s, P, { lang: "de", T: I.de, E: I.en }, CTX);
+  assert.ok(pkg.extras.includes("Live sessions × 2 (one-time) – $2,000"), JSON.stringify(pkg.extras));
+  assert.equal(pkg.totalUsd, "$36,400");
+  // Stepper-Grenzen wie bei den anderen Zaehlern; ohne Zaehler gilt 1
+  assert.equal(SC.compute(state({ ...DEFAULT, live: true, cnt: { lv: 99 } }), P).lv, P.stepper.max);
+  const s0 = state({ ...DEFAULT, live: true }); delete s0.cnt.lv;
+  assert.equal(SC.compute(s0, P).oneOff, off.oneOff + 1000);
+  assert.notEqual(SC.stateKey(s), SC.stateKey(state(DEFAULT)), "Zustandsschluessel kennt die Livesession");
+  for (const lang of Object.keys(I).filter((k) => k !== "_doc"))
+    for (const k of ["live_h", "live_hint", "live_note", "live_stepper", "row_live", "unit_session"]) assert.ok(I[lang][k], `${lang}: ${k}`);
 });
 
 test("Formularpruefung wie die API und Fehlerzuordnung", () => {

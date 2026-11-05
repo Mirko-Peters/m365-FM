@@ -11,7 +11,7 @@
   function $(id) { return document.getElementById(id); }
   var el = { month: $("spn-month"), tline: $("spn-tline"), rows: $("spn-rows"), notopic: $("spn-notopic"), tl: $("spn-tl"), fgeo: $("spn-fgeo"), fseo: $("spn-fseo"),
              ttext: $("spn-ttext"), rec: $("spn-rec"), pk: $("spn-pk"), prrec: $("spn-prrec"), rtrec: $("spn-rtrec"), picked: $("spn-picked"), sum: $("spn-sum"),
-             lock: $("spn-lock"), dash: $("spn-dash"), cpr: $("spn-cnt-pr"), cex: $("spn-cnt-ex"), cli: $("spn-cnt-li"), q: $("spn-q"), own: $("spn-own"), dl: $("spn-dl"),
+             lock: $("spn-lock"), dash: $("spn-dash"), cpr: $("spn-cnt-pr"), cex: $("spn-cnt-ex"), cli: $("spn-cnt-li"), clv: $("spn-cnt-lv"), q: $("spn-q"), own: $("spn-own"), dl: $("spn-dl"),
              qmsg: $("spn-q-msg"), ownmsg: $("spn-own-msg"), form: $("spn-form"), status: $("spn-status"), done: $("spn-done"), submit: $("spn-submit"), terr: $("spn-topics-e") };
   var chips = root.querySelectorAll(".spn-chip");
 
@@ -27,14 +27,14 @@
     var o = { id: "e:" + x[0], name: x[1], en: x[1], lvl: x[2], rated: !!x[2], example: !!x[3], url: C0.entBase + x[0] + "/", custom: false };
     [x[1]].concat(x[4] || []).forEach(function (n) { BYNAME[key(n)] = BYNAME[key(n)] || o; });
   });
-  var S = { topics: [], cnt: { pr: 1, ex: P.defaults.cnt.ex, li: P.defaults.cnt.li }, prTouched: false };
+  var S = { topics: [], cnt: { pr: 1, ex: P.defaults.cnt.ex, li: P.defaults.cnt.li, lv: P.defaults.cnt.lv || 1 }, prTouched: false };
   C0.quick.forEach(function (q) { if (q[7]) S.topics.push(QUICK[q[0]]); });
 
   function radio(name) { var r = root.querySelector('input[name="' + name + '"]:checked'); return r ? r.value : null; }
   function chk(id) { var x = $(id); return !!(x && x.checked); }
   function state() {
     return { goal: radio("spn-goal") || P.defaults.goal, rt: +(radio("spn-rt") || P.defaults.runtime), topics: S.topics, video: chk("spn-video"), pr: chk("spn-pr"),
-             auth: chk("spn-auth"), dash: chk("spn-dash"), l14: chk("spn-l14"), topic: chk("spn-topic"), expert: chk("spn-expert"), li: chk("spn-li"), con: chk("spn-con"),
+             auth: chk("spn-auth"), dash: chk("spn-dash"), l14: chk("spn-l14"), topic: chk("spn-topic"), expert: chk("spn-expert"), li: chk("spn-li"), live: chk("spn-live"), con: chk("spn-con"),
              cnt: S.cnt, prTouched: S.prTouched };
   }
 
@@ -62,7 +62,7 @@
     prop(el.fseo, "sa", "--a", pc(v.bars.seo[0])); prop(el.fseo, "sw", "--w", pc(v.bars.seo[1]));
     put(el.ttext, "x", v.tText); put(el.rec, "rec", SC.recHtml(v), true);
     put(el.pk, "pk", v.pkCount); put(el.prrec, "pr", v.prRec); flag(el.prrec, "hidden", !v.prRecShow); put(el.rtrec, "rt", v.rtRec);
-    put(el.cpr, "cpr", String(v.counts.pr)); put(el.cex, "cex", String(v.counts.ex)); put(el.cli, "cli", String(v.counts.li));
+    put(el.cpr, "cpr", String(v.counts.pr)); put(el.cex, "cex", String(v.counts.ex)); put(el.cli, "cli", String(v.counts.li)); put(el.clv, "clv", String(v.counts.lv));
     put(el.picked, "pk2", SC.pickedHtml(s, P, L), true); put(el.sum, "sum", v.summary);
     if (focusNext) { var f = focusNext; focusNext = null; focusLater(f()); }
   }
@@ -123,7 +123,7 @@
     var cur = k === "pr" ? (S.prTouched ? S.cnt.pr : (lastV ? lastV.calc.prCount : SC.compute(state(), P).prCount)) : S.cnt[k];
     S.cnt[k] = SC.clampStep(cur + d, P);
     if (k === "pr") S.prTouched = true;
-    var cb = $({ pr: "spn-pr", ex: "spn-expert", li: "spn-li" }[k]);
+    var cb = $({ pr: "spn-pr", ex: "spn-expert", li: "spn-li", lv: "spn-live" }[k]);
     if (cb && !cb.checked) cb.checked = true;
     schedule();
   }
@@ -220,7 +220,7 @@
     if (lastV || raf) return;
     var s = state(), v = SC.view(s, P, L, CTX); lastV = v;
     var k = { m: v.monthly, t: v.totalLine, r: SC.rowsHtml(v.rows), x: v.tText, rec: SC.recHtml(v), pk: v.pkCount, pr: v.prRec, rt: v.rtRec, cpr: String(v.counts.pr),
-              cex: String(v.counts.ex), cli: String(v.counts.li), pk2: SC.pickedHtml(s, P, L), sum: v.summary, run: pc(v.bars.run), ga: pc(v.bars.geo[0]),
+              cex: String(v.counts.ex), cli: String(v.counts.li), clv: String(v.counts.lv), pk2: SC.pickedHtml(s, P, L), sum: v.summary, run: pc(v.bars.run), ga: pc(v.bars.geo[0]),
               gw: pc(v.bars.geo[1]), sa: pc(v.bars.seo[0]), sw: pc(v.bars.seo[1]) };
     for (var n in k) if (!(n in last)) last[n] = k[n];
   }
