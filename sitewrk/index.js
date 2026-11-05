@@ -126,6 +126,9 @@ async function legacyTarget(p0) {
   const m = /^\/m365-fm-podcast\/([a-z0-9-]+)$/.exec(p0);   // T8: Podpage-Folgenadressen unter dem Shownamen
   if (m) return "/show/episodes/" + m[1] + "/";
   if (/^\/categories(\/|$)/.test(p0)) return "/show/episodes/";   // T8: Podpage-Kategorien -> Folgenliste
+  if (/^\/people\/mirko-peters\/?$/.test(p0)) return "/about/mirko-peters/";   // Bing-SEO-Bericht 5.11.: fruehere Podpage-Personenseite (toter Link)
+  if (/^\/people(\/|$)/.test(p0)) return "/show/hosts/";
+  if (/^\/guests\/intake\/?$/.test(p0)) return "/community/guests/";   // fruehere Podpage-Gaesteanmeldung
   return /^\/(blog|videos|p)\//.test(p0) ? "/show/" : "";
 }
 

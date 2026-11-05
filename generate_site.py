@@ -279,9 +279,9 @@ def bare_title(t):
         t = u
 
 
-def seo_title(t, limit=62, hard=78):
+def seo_title(t, limit=62, hard=70):   # hard 70 statt 78: Bing-SEO-Bericht "Title too long" (5.11.)
     """T7: eine Titel-Vorlage fuer alle Seiten. Marke genau einmal hinten (' | M365.FM'), wenn der Titel sie nicht schon enthaelt
-    und alles in ~62 Zeichen passt; sonst der volle Titel ohne Marke (bis 78 Zeichen). Laengere Titel verlieren erst einen Anhang
+    und alles in ~62 Zeichen passt; sonst der volle Titel ohne Marke (bis 70 Zeichen, Bing-Grenze). Laengere Titel verlieren erst einen Anhang
     hinter dem letzten ' | ' oder ' – ' (wenn mindestens 40 Zeichen bleiben), sonst Schnitt an einer Wortgrenze mit Auslassungszeichen.
     Nie Schnitt am ersten Doppelpunkt: 'Microsoft Certified: …' wuerde sonst auf vielen Seiten gleich lauten."""
     b = bare_title(t)
