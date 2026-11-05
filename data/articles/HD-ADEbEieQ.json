@@ -1,0 +1,142 @@
+{
+ "de": {
+  "html": "<p>Tausend Sensoren melden jede Sekunde Temperatur, Druck und Vibration. Früher sammelte man solche Daten tagsüber, ließ nachts einen Batchjob laufen und las am nächsten Morgen den Bericht. Heute sind Daten von gestern oft wertlos, denn eine überhitzte Maschine kann binnen Minuten einen Brand auslösen. Gefragt ist Echtzeit.</p>\n<p>Genau dafür gibt es Azure Event Hubs. Dieser Artikel erklärt verständlich, was der Dienst ist, wie Partitionen, Consumergruppen und Durchsatzeinheiten zusammenspielen und für welche Szenarien er sich eignet. Außerdem geht es um die Abgrenzung zu Event Grid und Service Bus, um die Tarife und um typische Stolpersteine.</p>\n\n<h2>Was ist Azure Event Hubs? Echtzeit-Datenstreaming statt Batch</h2>\n<p>Wer Streaming-Daten in Echtzeit erfassen will, stößt mit klassischen Werkzeugen schnell an Grenzen:</p>\n<ul>\n<li><strong>Herkömmliche Datenbank:</strong> Sie ist für Abfragen und Transaktionen gebaut, nicht für eine Flut von Ereignissen, und gerät bei Streaming-Last ins Stocken.</li>\n<li><strong>Normale Nachrichtenwarteschlange:</strong> Sie ist darauf ausgelegt, dass ein einzelner Consumer eine Nachricht abruft und verarbeitet. Für Millionen Ereignisse pro Sekunde und mehrere nachgelagerte Systeme, die denselben Stream lesen wollen, passt das nicht.</li>\n</ul>\n<p>Gebraucht wird also eine Möglichkeit, riesige Datenmengen aufzunehmen, zu puffern, damit nichts verloren geht, und in Echtzeit an mehrere Consumer zu verteilen. Das ist ein Streaming-Problem.</p>\n<p>Azure Event Hubs ist eine vollständig verwaltete Echtzeit-Datenstreaming-Plattform mit geringer Latenz. Der Dienst ist weder Warteschlange noch Datenbank, sondern ein <strong>Datenstrom</strong>. In einer Warteschlange ist eine Nachricht weg, sobald ein Consumer sie abgeholt hat. Eine Datenbank speichert Daten, damit man sie später abfragen kann. Ein Datenstrom dagegen ist ein kontinuierlicher Fluss von Ereignissen, den mehrere Leser unabhängig voneinander und in ihrem eigenen Tempo lesen, ohne dass Ereignisse entfernt werden.</p>\n<p>Die Leistungsdaten:</p>\n<ul>\n<li>Event Hubs verarbeitet Millionen Ereignisse pro Sekunde, etwa Hunderttausende Nachrichten pro Sekunde von Tausenden Produzenten.</li>\n<li>Zwischen Senden und Lesen liegen nur Millisekunden.</li>\n<li>Der Dienst ist Kafka-kompatibel. Vorhandene Apache-Kafka-Tools und -Clients lassen sich nutzen, ohne dass man ein neues Protokoll lernen oder Anwendungen neu schreiben muss.</li>\n</ul>\n<p>Am besten stellt man sich Event Hubs als Hochgeschwindigkeits-Eingangstür für Daten vor. Wie die Tür eines belebten Bürogebäudes hält sie niemanden auf, stellt keine Fragen und lässt alle schnell herein. Verarbeitet, analysiert oder bewertet werden die Daten dort nicht. Das übernehmen die nachgelagerten Systeme.</p>\n\n<h2>Die Bausteine: Partitionen, Consumergruppen, Durchsatzeinheiten und Aufbewahrung</h2>\n<h3>Partitionen: Fahrspuren für Ihre Ereignisse</h3>\n<p>Eine Partition gleicht einer Fahrspur auf der Autobahn. Eingehende Daten landen auf einer dieser Spuren, und innerhalb einer Spur bleibt die Reihenfolge exakt erhalten: Ereignis 1 vor Ereignis 2, Ereignis 2 vor Ereignis 3. Wer eine strikte Reihenfolge braucht, muss die zugehörigen Ereignisse also in derselben Partition halten.</p>\n<p>Pro Event Hub sind 2 bis 32 Partitionen möglich. Die Zahl wird beim Erstellen festgelegt und lässt sich später nicht mehr ändern. Mehr Partitionen bedeuten mehr parallele Verarbeitung, weil mehrere Consumer gleichzeitig aus verschiedenen Spuren lesen können. Sie bedeuten aber auch mehr Komplexität. Die Wahl sollte sich deshalb am erwarteten Durchsatz orientieren. Wer unsicher ist, beginnt kleiner und testet.</p>\n\n<h3>Consumergruppen: Derselbe Stream für viele Anwendungen</h3>\n<p>Eine Consumergruppe ist eine eigenständige nachgelagerte Anwendung, die denselben Stream liest. Jede Gruppe erhält ihre eigene, unabhängige Sicht auf die Ereignisse. Eine Gruppe kann Temperaturdaten in Echtzeit auf Anomalien prüfen, während eine zweite dieselben Daten zur Langzeitspeicherung in einen Data Lake schreibt. Beide sehen jedes Ereignis, und keine blockiert die andere. Das unterscheidet Event Hubs grundlegend von einer klassischen Warteschlange.</p>\n\n<h3>Durchsatzeinheiten: Kapazität messen</h3>\n<p>Die Kapazität eines Event Hubs wird in Durchsatzeinheiten (TU) gemessen. Eine TU bietet 1 MB pro Sekunde eingehende und 2 MB pro Sekunde ausgehende Daten. Wer 10 MB pro Sekunde erfassen muss, braucht mindestens 10 TUs. Man kann manuell hochskalieren oder die automatische Erhöhung aktivieren, die TUs bei Lastspitzen selbstständig anhebt. Abgerechnet wird die maximale Zahl an TUs, die innerhalb einer Stunde genutzt wurde. Wer also 10 Minuten lang 20 TUs verwendet, zahlt für die ganze Stunde 20 TUs.</p>\n\n<h3>Aufbewahrung und Wiedergabe</h3>\n<p>Ereignisse verschwinden nicht, nachdem sie gelesen wurden. Sie bleiben für einen konfigurierbaren Zeitraum erhalten, im Standardtarif 1 bis 7 Tage, im Premiumtarif bis zu 90 Tage. Dadurch ist eine <strong>Wiedergabe</strong> (Replay) möglich: Fällt ein Consumer aus oder sollen Daten für eine neue Analyse erneut verarbeitet werden, liest man alte Ereignisse einfach noch einmal.</p>\n\n<h2>Producer und Consumer: So fließen die Daten</h2>\n<p>Ein Producer ist jede Anwendung oder jedes Gerät, das Ereignisse an den Hub sendet, zum Beispiel ein Temperatursensor, ein Webserver, der Seitenaufrufe protokolliert, oder eine Banking-App mit Transaktionsdaten. Producer sprechen mit Event Hubs über AMQP, HTTPS oder Kafka, unabhängig von Sprache oder Plattform.</p>\n<p>Der Hub entscheidet, in welche Partition ein Ereignis wandert. Standardmäßig verteilt er im Round-Robin-Verfahren. Mit einem <strong>Partitionsschlüssel</strong> lässt sich das steuern: Setzt man die Geräte-ID als Schlüssel, landen alle Ereignisse eines Geräts in derselben Partition, und ihre Reihenfolge bleibt erhalten. Der Hub selbst verarbeitet kaum etwas. Er puffert die Ereignisse und hält sie für den Aufbewahrungszeitraum bereit.</p>\n<p>Consumer sind die nachgelagerten Anwendungen. Sie arbeiten nach dem <strong>Pull-Modell</strong>: Sie bekommen nichts zugeschoben, sondern fordern den nächsten Batch an, wenn sie bereit sind, und bestimmen so ihr eigenes Tempo.</p>\n<h3>Offset und Prüfpunkte</h3>\n<p>Jede Consumergruppe merkt sich ihre Position im Stream, den sogenannten <strong>Offset</strong>. Er zeigt, welche Ereignisse bereits verarbeitet wurden. Der Consumer speichert ihn an einem dauerhaften Ort, in der Regel im Azure Blob-Speicher. Dieser Vorgang heißt Prüfpunktspeicherung (Checkpointing). Stürzt eine Anwendung mitten in der Verarbeitung ab, liest sie nach dem Neustart den letzten Prüfpunkt und macht genau dort weiter. Es werden keine alten Ereignisse doppelt verarbeitet und keine übersprungen.</p>\n<p>Event Hubs entkoppelt Producer und Consumer vollständig. Die Produzenten wissen nicht, wer ihre Daten liest, die Consumer nicht, wer sie sendet. Der Hub puffert und verteilt in der Mitte, und jede Seite arbeitet in ihrem eigenen Tempo. Das macht Systeme skalierbar und widerstandsfähig.</p>\n\n<h2>Typische Anwendungsfälle für Event Hubs</h2>\n<h3>IoT-Telemetrie</h3>\n<p>In einer intelligenten Fabrik messen Sensoren Temperatur, Druck, Vibration und Energieverbrauch und senden alle paar Sekunden einen Wert, je nach Fabrikgröße hunderttausende oder Millionen Ereignisse pro Sekunde. Alle Daten laufen in Event Hubs. Azure Stream Analytics führt darauf Echtzeitabfragen aus. Überschreitet ein Messwert einen Schwellenwert, wird eine Warnung ausgelöst, das Wartungsteam benachrichtigt und die Maschine heruntergefahren, bevor sie ausfällt. Das ist vorausschauende Wartung.</p>\n<h3>Anwendungsprotokollierung und Überwachung</h3>\n<p>In einer Microservice-Architektur mit 50 Diensten schreibt jeder Dienst Fehler, Warnungen und Leistungsmetriken. Statt sich auf mehreren Servern anzumelden, um einen Fehler zu finden, senden alle Dienste ihre Protokolle an einen zentralen Event Hub. Mehrere Consumergruppen lesen denselben Stream: Eine leitet kritische Fehler an ein Echtzeitwarnsystem, eine zweite schreibt alle Protokolle in Azure Data Lake, eine dritte speist ein Live-Dashboard.</p>\n<h3>Clickstream-Analysen</h3>\n<p>Ein E-Commerce-Shop sendet jeden Klick, Seitenaufruf und jede Suchanfrage an Event Hubs. Ein Consumer erstellt Nutzerprofile, ein zweiter erkennt Trends und plötzlich beliebte Produkte, ein dritter personalisiert Empfehlungen anhand der letzten Klicks, alles in Millisekunden statt über Nacht.</p>\n<h3>Betrugserkennung im Finanzwesen</h3>\n<p>Banken verarbeiten täglich Millionen Transaktionen. Jede wird an Event Hubs übertragen, und Machine-Learning-Modelle bewerten sie in Echtzeit auf Betrugsrisiko. Verdächtige Transaktionen werden binnen Sekunden gekennzeichnet und blockiert. Parallel speisen andere Consumergruppen denselben Stream in Compliance-Systeme und in operative Dashboards.</p>\n<p>Gemeinsam ist allen Szenarien: hohes Volumen, mehrere Verbraucher und der Bedarf an Echtzeit-Informationen. Für diese Kombination ist Event Hubs das richtige Werkzeug, aber nicht die Lösung für jedes Problem.</p>\n\n<h2>Event Hubs, Event Grid und Service Bus im Vergleich</h2>\n<p>Azure hat drei Hauptdienste zum Bewegen von Daten, die gern verwechselt werden:</p>\n<ul>\n<li><strong>Event Grid ist der Rauchmelder.</strong> Es meldet nur, dass etwas passiert ist, etwa dass ein Blob hochgeladen, der Status einer VM geändert oder eine Ressource erstellt wurde. Die Daten selbst überträgt es nicht. Die Benachrichtigung geht an Handler wie Azure Functions oder Logic Apps. Event Grid ist kein Datenstrom und nicht für hohen Durchsatz gedacht, passt aber zu Blob-Triggern, Statusänderungen und serverlosen Workflows.</li>\n<li><strong>Service Bus ist der Postdienst.</strong> Er garantiert die Zustellung und unterstützt FIFO-Reihenfolge, Erkennung von Duplikaten und Transaktionen. Nicht verarbeitbare Nachrichten landen in einer Warteschlange für unzustellbare Nachrichten (Dead-Letter). Er eignet sich für geschäftskritische Workflows wie Zahlungsabwicklung, Auftragserfüllung und Genehmigungsketten und verarbeitet tausende, nicht Millionen Nachrichten pro Sekunde. Bei einer Zahlung muss jede Nachricht genau einmal und in der richtigen Reihenfolge ankommen.</li>\n<li><strong>Event Hubs ist die Überwachungskamera.</strong> Der Dienst zeichnet alles für Wiedergabe und Analyse auf, ist auf Streaming mit hohem Volumen ausgelegt, und mehrere Consumer lesen denselben Stream unabhängig voneinander. Für Transaktionsnachrichten ist er nicht gedacht.</li>\n</ul>\n<p>Die Entscheidung fällt mit drei Fragen:</p>\n<ol>\n<li>Reagieren Sie auf eine Änderung, etwa einen Blob-Upload oder eine neue VM? Dann Event Grid.</li>\n<li>Brauchen Sie garantierte Zustellung und strikte Reihenfolge, etwa für Zahlungen oder Geschäftstransaktionen? Dann Service Bus.</li>\n<li>Streamen Sie große Datenmengen für Analysen, IoT-Telemetrie, Anwendungsprotokolle, Clickstreams oder Betrugserkennung? Dann Event Hubs.</li>\n</ol>\n<p>Die Dienste lassen sich kombinieren: Event Hubs erfasst den Rohdatenstrom, Event Grid reagiert auf Ereignisse darin und löst Folgeaktionen aus, Service Bus übernimmt die zuverlässige Nachrichtenübermittlung für Geschäftsworkflows.</p>\n\n<h2>Tarife und Kosten von Azure Event Hubs</h2>\n<p>Event Hubs gibt es in vier Tarifen:</p>\n<ul>\n<li><strong>Basic:</strong> der günstigste Tarif mit einem Tag Aufbewahrung, eingeschränkten Features und den niedrigsten Kosten pro Durchsatzeinheit. Er passt zu einfachen Szenarien.</li>\n<li><strong>Standard:</strong> die optimale Lösung für die meisten Produktions-Workloads, mit bis zu sieben Tagen Aufbewahrung, Event Hubs Capture zur automatischen Archivierung im Speicher, Kafka-Kompatibilität und bis zu 20 Consumergruppen. Hier beginnt man in der Regel.</li>\n<li><strong>Premium:</strong> 90 Tage Aufbewahrung, 1 TB Speicher pro Verarbeitungseinheit, vorhersagbare Leistung und Netzwerkisolierung. Der Tarif ist für anspruchsvolle Workloads gedacht, bei denen Latenz und Isolation eine Rolle spielen.</li>\n<li><strong>Dedicated:</strong> ein Single-Tenant-Cluster nur für Sie, mit 10 TB pro Kapazitätseinheit. Er ist teuer, kann bei kontinuierlich hohen Mengen aber günstiger sein als ein weiter skaliertes Premium.</li>\n</ul>\n<p>Die Kosten hängen von vier Faktoren ab: Durchsatzeinheiten (Datenmenge), Aufbewahrungsdauer, Capture (Archivierung im Speicher) und Georeplikation (regionsübergreifendes Kopieren für die Notfallwiederherstellung).</p>\n<p>Zur Kostenoptimierung gibt es einige Tipps:</p>\n<ul>\n<li>Mit Standard starten und nur bei Bedarf hochskalieren.</li>\n<li>Die Aufbewahrung im Hub kurz halten, ein bis zwei Tage, und Daten für die Langzeitanalyse in kostengünstigen Speicher wie Blob oder Data Lake auslagern.</li>\n<li>Die Durchsatznutzung überwachen und TUs richtig dimensionieren, ohne zu viel Kapazität vorzuhalten.</li>\n<li>Für Sender nach Möglichkeit HTTP statt AMQP nutzen, weil für AMQP-Verbindungen Gebühren anfallen, für HTTP nicht.</li>\n</ul>\n\n<h2>Erste Schritte und Stolpersteine</h2>\n<p>Das Grundmuster ist einfach: Producer senden Ereignisse an Event Hubs, Consumer lesen daraus. Ein konkretes Beispiel: IoT-Geräte senden Temperaturdaten an Event Hubs. Eine Azure-Funktion wird bei jedem neuen Ereignis-Batch ausgelöst, filtert Messwerte im normalen Bereich heraus, behält nur die Anomalien und schreibt sie für schnelle Abfragen in Cosmos DB. Das ist eine vollständige Pipeline aus drei Diensten. Funktionen skalieren dabei automatisch mit der Partitionszahl: Bei acht Partitionen können bis zu acht Instanzen parallel laufen.</p>\n<p>Diese Stolpersteine sollten Sie kennen:</p>\n<ul>\n<li><strong>Partitionszahl zu knapp oder zu willkürlich gewählt:</strong> Sie lässt sich nach dem Erstellen nicht mehr ändern. Planen Sie sie anhand des erwarteten Durchsatzes, und bedenken Sie, dass mehr Partitionen auch mehr Komplexität bringen.</li>\n<li><strong>Event Hubs als Warteschlange oder Datenbank missverstehen:</strong> Es ist ein Datenstrom und nicht für Transaktionsnachrichten gedacht. Dafür ist Service Bus der richtige Dienst.</li>\n<li><strong>Reihenfolge ohne Partitionsschlüssel erwarten:</strong> Die Reihenfolge gilt nur innerhalb einer Partition. Wer sie braucht, setzt zum Beispiel die Geräte-ID als Schlüssel.</li>\n<li><strong>Kurze Lastspitzen unterschätzen:</strong> Abgerechnet wird die maximale TU-Zahl pro Stunde, auch wenn sie nur zehn Minuten lang genutzt wurde.</li>\n<li><strong>Zu lange Aufbewahrung im Hub:</strong> Für Langzeitanalysen ist günstiger Speicher die bessere Wahl.</li>\n</ul>\n\n<h2>Praktische Takeaways</h2>\n<ul>\n<li>Nutzen Sie Event Hubs bei hohem Datenvolumen, mehreren Verbrauchern und Echtzeit-Anforderungen, etwa bei IoT-Telemetrie, Protokollen, Clickstreams oder Betrugserkennung.</li>\n<li>Planen Sie die Partitionszahl (2 bis 32) vorab, sie ist nachträglich nicht änderbar.</li>\n<li>Setzen Sie Partitionsschlüssel ein, wenn die Reihenfolge der Ereignisse eines Geräts erhalten bleiben soll.</li>\n<li>Legen Sie pro nachgelagerter Anwendung eine eigene Consumergruppe an, damit alle denselben Stream unabhängig lesen.</li>\n<li>Speichern Sie Offsets als Prüfpunkte, meist im Azure Blob-Speicher, damit Consumer nach einem Absturz nahtlos weiterarbeiten.</li>\n<li>Dimensionieren Sie Durchsatzeinheiten passend: 1 MB/s eingehend und 2 MB/s ausgehend pro TU.</li>\n<li>Starten Sie mit dem Standardtarif und lagern Sie Daten für die Langzeitanalyse in Blob oder Data Lake aus.</li>\n<li>Wählen Sie den Dienst nach der Aufgabe: Event Grid für Reaktionen auf Änderungen, Service Bus für garantierte Zustellung, Event Hubs für Streaming.</li>\n</ul>\n\n<h2>Fazit</h2>\n<p>Azure Event Hubs ist die Eingangstür für große Ereignisströme in Azure. Der Dienst nimmt Millionen Ereignisse pro Sekunde mit geringer Latenz auf, puffert sie und verteilt sie über Partitionen und Consumergruppen an beliebig viele unabhängige Verbraucher. Durch Aufbewahrung, Wiedergabe und Prüfpunkte bleibt das System auch bei Ausfällen zuverlässig, und die Kafka-Kompatibilität erleichtert den Einstieg. Wer die Rolle von Event Hubs neben Event Grid und Service Bus versteht und Partitionen und Durchsatz mit Bedacht plant, baut skalierbare und widerstandsfähige Echtzeit-Pipelines.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Azure Event Hubs: So fließen Echtzeitdaten",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Producer senden",
+     "text": "Sensoren, Webserver oder Apps schicken Ereignisse per AMQP, HTTPS oder Kafka an den Event Hub."
+    },
+    {
+     "kopf": "Partitionen verteilen",
+     "text": "Ereignisse landen per Round-Robin oder Partitionsschlüssel in Partitionen; die Reihenfolge bleibt innerhalb einer Partition erhalten."
+    },
+    {
+     "kopf": "Hub puffert",
+     "text": "Der Hub speichert Ereignisse für den Aufbewahrungszeitraum und ermöglicht jederzeit eine Wiedergabe."
+    },
+    {
+     "kopf": "Consumergruppen lesen",
+     "text": "Jede Gruppe liest denselben Stream unabhängig und im eigenen Tempo per Pull-Modell."
+    },
+    {
+     "kopf": "Prüfpunkte sichern",
+     "text": "Der Offset wird meist im Azure Blob-Speicher gespeichert, damit Consumer nach Abstürzen nahtlos weitermachen."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Was ist Azure Event Hubs und wofür wird es verwendet?",
+    "a": "Azure Event Hubs ist eine vollständig verwaltete Echtzeit-Datenstreaming-Plattform mit geringer Latenz. Sie nimmt Millionen Ereignisse pro Sekunde auf, puffert sie und verteilt sie an mehrere Consumer. Typische Einsatzfälle sind IoT-Telemetrie, Anwendungsprotokolle, Clickstream-Analysen und Betrugserkennung."
+   },
+   {
+    "q": "Was ist der Unterschied zwischen Event Hubs, Event Grid und Service Bus?",
+    "a": "Event Grid meldet nur, dass etwas passiert ist, etwa einen Blob-Upload, und überträgt keine Daten. Service Bus garantiert Zustellung und Reihenfolge für Geschäftsprozesse wie Zahlungen. Event Hubs streamt große Datenmengen, die mehrere Consumer unabhängig voneinander lesen."
+   },
+   {
+    "q": "Wie viele Partitionen braucht ein Event Hub und kann man sie später ändern?",
+    "a": "Pro Event Hub sind 2 bis 32 Partitionen möglich. Die Zahl wird beim Erstellen festgelegt und lässt sich später nicht mehr ändern. Sie sollte sich am erwarteten Durchsatz orientieren. Wer unsicher ist, beginnt kleiner und testet, da mehr Partitionen auch mehr Komplexität bedeuten."
+   },
+   {
+    "q": "Welche Tarife gibt es bei Azure Event Hubs und womit sollte man starten?",
+    "a": "Es gibt vier Tarife: Basic, Standard, Premium und Dedicated. Standard passt für die meisten Produktions-Workloads und bietet bis zu sieben Tage Aufbewahrung, Capture, Kafka-Kompatibilität und bis zu 20 Consumergruppen. Dort beginnt man in der Regel und skaliert nur bei Bedarf hoch."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Event Hubs, Event Grid und Service Bus im Vergleich",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Event Hubs: die Überwachungskamera",
+     "punkte": [
+      "Datenstrom mit hohem Volumen für Wiedergabe und Analyse",
+      "Mehrere Consumer lesen denselben Stream unabhängig voneinander",
+      "Geeignet für IoT-Telemetrie, Protokolle, Clickstreams und Betrugserkennung",
+      "Nicht für Transaktionsnachrichten gedacht"
+     ]
+    },
+    "rechts": {
+     "titel": "Service Bus: der Postdienst",
+     "punkte": [
+      "Garantierte Zustellung mit FIFO-Reihenfolge und Duplikaterkennung",
+      "Unterstützt Transaktionen und Dead-Letter-Warteschlange",
+      "Für Zahlungsabwicklung, Auftragserfüllung und Genehmigungsketten",
+      "Verarbeitet tausende, nicht Millionen Nachrichten pro Sekunde"
+     ]
+    }
+   },
+   {
+    "titel": "Die vier Tarife von Azure Event Hubs",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "Basic",
+      "text": "Günstigster Tarif mit einem Tag Aufbewahrung und eingeschränkten Features"
+     },
+     {
+      "wert": "Standard",
+      "text": "Bis zu 7 Tage Aufbewahrung, Capture, Kafka und bis zu 20 Consumergruppen"
+     },
+     {
+      "wert": "90 Tage",
+      "text": "Premium: 1 TB Speicher pro Verarbeitungseinheit, Netzwerkisolierung, vorhersagbare Leistung"
+     },
+     {
+      "wert": "10 TB",
+      "text": "Dedicated: Single-Tenant-Cluster pro Kapazitätseinheit, bei konstant hohen Mengen oft günstiger"
+     }
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Was unterscheidet Event Hubs grundlegend von einer klassischen Nachrichtenwarteschlange?",
+    "opts": [
+     "Mehrere Consumergruppen lesen denselben Stream unabhängig, ohne dass Ereignisse entfernt werden.",
+     "Jede Nachricht wird nach dem Abruf gelöscht und nur einmal zugestellt.",
+     "Der Dienst speichert Daten dauerhaft, damit man sie später per Abfrage auswerten kann.",
+     "Der Hub schiebt Ereignisse aktiv an die Consumer, die darauf warten müssen."
+    ],
+    "a": 0,
+    "why": "Ein Datenstrom bleibt erhalten und kann von mehreren Gruppen im eigenen Tempo gelesen werden; Warteschlangen entfernen Nachrichten nach dem Abruf."
+   },
+   {
+    "q": "Was gilt für die Anzahl der Partitionen eines Event Hubs?",
+    "opts": [
+     "Sie lässt sich jederzeit im laufenden Betrieb beliebig erhöhen oder senken.",
+     "Sie wird automatisch an die Zahl der Consumergruppen angepasst.",
+     "Sie wird beim Erstellen festgelegt und kann danach nicht mehr geändert werden.",
+     "Sie muss immer genau der Zahl der Durchsatzeinheiten entsprechen."
+    ],
+    "a": 2,
+    "why": "Pro Event Hub sind 2 bis 32 Partitionen möglich; die Zahl wird beim Erstellen festgelegt und ist später unveränderlich."
+   },
+   {
+    "q": "Ein Event Hub nutzt 10 Minuten lang 20 TUs, sonst weniger. Was wird abgerechnet?",
+    "opts": [
+     "Nur die tatsächlich genutzten 10 Minuten mit 20 TUs",
+     "Der Durchschnitt der TUs über die gesamte Stunde",
+     "Die Mindestzahl der in dieser Stunde genutzten TUs",
+     "Die maximale TU-Zahl der Stunde, also 20 TUs für die ganze Stunde"
+    ],
+    "a": 3,
+    "why": "Abgerechnet wird die maximale Zahl an TUs innerhalb einer Stunde, auch wenn die Spitze nur zehn Minuten dauerte."
+   },
+   {
+    "q": "Welchen Dienst wählt man für Zahlungsabwicklung mit garantierter Zustellung und strikter Reihenfolge?",
+    "opts": [
+     "Event Hubs, weil er Millionen Ereignisse pro Sekunde verarbeiten kann",
+     "Service Bus, weil er Zustellung garantiert und FIFO sowie Transaktionen unterstützt",
+     "Event Grid, weil es Daten zuverlässig an Azure Functions überträgt",
+     "Event Hubs, weil Consumergruppen Transaktionen genau einmal verarbeiten"
+    ],
+    "a": 1,
+    "why": "Service Bus garantiert Zustellung, unterstützt FIFO, Duplikaterkennung und Transaktionen; Event Hubs ist nicht für Transaktionsnachrichten gedacht."
+   }
+  ]
+ }
+}
