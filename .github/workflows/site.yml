@@ -7,6 +7,8 @@ name: Website bauen und veröffentlichen
 # - neue Folgen: spreaker-feed-check.yml (alle 2 h) startet einen Frische-Bau (mode=fresh), sobald eine neu veroeffentlichte Folge noch
 #   keine Seite hat (tools/new_episodes_check.py, hoechstens alle SITE_FRESH_GAP_H Stunden, Standard 6).
 # - von Hand: "Run workflow" (mode=full wie naechtlich, mode=fresh ohne Spotify-/Plattform-Abgleich, ~30 min kuerzer).
+# Stellschrauben (Repo-Variablen, alle optional): SITE_FRESH_GAP_H (Abstand der Frische-Baus, Standard 6), SITE_FRESH_OFF=1 (keine
+# Frische-Baus), SITE_PUSH_BUILD=0 (Code-Pushes bauen nicht sofort), SITE_LINKS_EVERY_DAYS=N (Spotify-/Plattform-Abgleich nur jeden N-ten Tag).
 on:
   push:
     branches: [main]
@@ -31,6 +33,8 @@ permissions:
   id-token: write
 jobs:
   build:
+    # Repo-Variable SITE_PUSH_BUILD=0: Code-Pushes bauen nicht sofort (kostet dann 0 Minuten), sie kommen mit dem naechtlichen/Frische-Bau
+    if: github.event_name != 'push' || vars.SITE_PUSH_BUILD != '0'
     runs-on: ubuntu-latest
     concurrency:
       group: site-build
@@ -119,6 +123,8 @@ jobs:
         timeout-minutes: 12
         continue-on-error: true
         run: |
+          N="${{ vars.SITE_LINKS_EVERY_DAYS || '1' }}"   # Repo-Variable: naechtlich nur jeden N-ten Tag (Tag im Jahr), spart je ausgelassenem Tag ~12 min
+          if [ "$GITHUB_EVENT_NAME" = "schedule" ] && [ "$N" -gt 1 ] && [ $((10#$(date -u +%j) % N)) -ne 0 ]; then echo "heute nicht (SITE_LINKS_EVERY_DAYS=$N), gespeicherter Stand gilt"; exit 0; fi
           pip install playwright
           playwright install --with-deps chromium
           python scrape_spotify.py
@@ -176,6 +182,8 @@ jobs:
           SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
           SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
         run: |
+          N="${{ vars.SITE_LINKS_EVERY_DAYS || '1' }}"   # Repo-Variable: naechtlich nur jeden N-ten Tag (Tag im Jahr), spart je ausgelassenem Tag ~20 min
+          if [ "$GITHUB_EVENT_NAME" = "schedule" ] && [ "$N" -gt 1 ] && [ $((10#$(date -u +%j) % N)) -ne 0 ]; then echo "heute nicht (SITE_LINKS_EVERY_DAYS=$N), gespeicherter Stand gilt"; exit 0; fi
           pip install -q yt-dlp ytmusicapi
           timeout 23m python sync_platforms.py || echo "::warning::Plattform-Sync vorzeitig beendet (Zeitlimit oder Fehler); der zuletzt gespeicherte Stand wird gesichert"
           if [ -n "$(git status --porcelain data/episode_links.json data/episode_links_report.json data/platforms.json)" ]; then
