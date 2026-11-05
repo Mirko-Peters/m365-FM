@@ -1,7 +1,10 @@
 // Mediadaten-Downloader: Formular (Name, Firma, E-Mail) -> E-Mail mit den aktuellen Mediadaten als PDF-Anhang.
-// Das PDF baut der Workflow "Mediadaten erzeugen" (tools/mediakit.py) taeglich aus Live-Daten und legt es in R2 ab:
+// Das PDF baut der Workflow "Mediadaten erzeugen" (tools/mediakit.py) monatlich aus Live-Daten und legt es in R2 ab:
 //   mediakit/m365fm-media-kit-<lang>.pdf  (+ mediakit/latest.json mit Kennzahlen und Stand)
-// Anfragen landen in D1 (mediakit_requests) fuer Mirkos Nachverfolgung; Admins bekommen einen Push.
+// Zweite Marke (#260): brand=m365con -> Sponsor-/Mediadaten der M365Con (tools/mediakit_con.py):
+//   mediakit/m365con/m365con-sponsor-deck-<lang>.pdf  (+ mediakit/m365con/latest.json, oeffentlich ueber GET /api/mediakit/summary?brand=m365con)
+// Das Formular darf auch von m365con.net (HeySummit-Pagebuilder, CORS in util.js) senden.
+// Anfragen landen in D1 (mediakit_requests) fuer Mirkos Nachverfolgung (Marke als Praefix in source); Admins bekommen einen Push.
 import { sendMail, mailReady } from "./mailer.js";
 import { esc, rateLimit } from "./util.js";
 import { sendPush } from "./push.js";
@@ -43,31 +46,69 @@ const T = {
   },
 };
 
-function mailHtml(env, t, name, company, hasPdf, lang) {
+// M365Con: eigene Texte, keine Preise ("Sponsoring auf Anfrage"), Kontakt Mirko
+const TC = {
+  en: {
+    subject: "Your M365Con sponsor & media data",
+    hi: (n) => `Hi ${n},`,
+    body: (c) => `thank you for your interest in M365Con${c ? ` on behalf of ${c}` : ""}. Attached you will find our current sponsor and media data with up-to-date figures for the editions, live streams, recaps and search visibility of the Microsoft 365 Community Convention.`,
+    next: "Sponsoring is on request: simply reply to this e-mail – it goes directly to Mirko Peters, who will get back to you with options and dates.",
+    links: "Useful links",
+    sponsor: "M365Con sponsor page", publishers: "M365Con – the convention", episodes: "M365.FM sponsorship packages",
+    bye: "Best regards,<br>Mirko Peters<br>M365Con · M365.FM",
+    nofile: "The PDF is being prepared – you can always request the latest version here:",
+    foot: "You receive this one-time e-mail because you requested the M365Con sponsor and media data. We do not add you to a newsletter.",
+  },
+  de: {
+    subject: "Deine M365Con-Sponsoring- und Mediadaten",
+    hi: (n) => `Hallo ${n},`,
+    body: (c) => `vielen Dank für dein Interesse an der M365Con${c ? ` für ${c}` : ""}. Im Anhang findest du unsere aktuellen Sponsoring- und Mediadaten mit den neuesten Zahlen zu den Ausgaben, Livestreams, Recaps und der Sichtbarkeit in der Suche.`,
+    next: "Sponsoring gibt es auf Anfrage: Antworte einfach auf diese E-Mail – sie geht direkt an Mirko Peters, der sich mit Möglichkeiten und Terminen meldet.",
+    links: "Hilfreiche Links",
+    sponsor: "M365Con-Sponsorseite", publishers: "M365Con – die Convention", episodes: "M365.FM-Sponsoring-Pakete",
+    bye: "Viele Grüße<br>Mirko Peters<br>M365Con · M365.FM",
+    nofile: "Das PDF wird gerade erstellt – die aktuelle Fassung kannst du jederzeit hier anfordern:",
+    foot: "Du erhältst diese einmalige E-Mail, weil du die M365Con-Sponsoring- und Mediadaten angefordert hast. Wir tragen dich in keinen Newsletter ein.",
+  },
+};
+
+// Marken: R2-Schluessel, Dateiname, Texte, Kopf und Links der Mail
+export const BRANDS = {
+  m365fm: { key: (l) => `mediakit/m365fm-media-kit-${l}.pdf`, file: (l) => `M365.FM-Media-Kit-${l.toUpperCase()}.pdf`, T, push: "Mediadaten angefordert", src: "" },
+  m365con: { key: (l) => `mediakit/m365con/m365con-sponsor-deck-${l}.pdf`, file: (l) => `M365Con-Sponsor-Deck-${l.toUpperCase()}.pdf`, T: TC,
+             push: "M365Con-Mediadaten angefordert", src: "m365con:", summary: "mediakit/m365con/latest.json" },
+};
+export const brandOf = (b) => (Object.prototype.hasOwnProperty.call(BRANDS, b) ? b : "m365fm");
+
+function mailHtml(env, t, name, company, hasPdf, lang, brand = "m365fm") {
   const site = env.SITE || "https://www.m365.fm";
   const pre = lang === "en" ? "" : "/" + lang;
-  const link = (href, label) => `<a href="${href}" style="color:#3b6391">${label}</a>`;
+  const con = brand === "m365con", ac = con ? "#0d93b3" : "#3b6391";
+  const link = (href, label) => `<a href="${href}" style="color:${ac}">${label}</a>`;
+  const head = con ? `M365<span style="color:${ac}">Con</span>` : `M365<span style="color:${ac}">.FM</span>`;
+  const kit = con ? `${site}${pre}/m365con/sponsor/` : `${site}${pre}/media-kit/`;
+  const links = con
+    ? [[`${site}${pre}/m365con/sponsor/`, t.sponsor], ["https://m365con.net", t.publishers], [`${site}${pre}/sponsor/`, t.episodes]]
+    : [[`${site}${pre}/sponsor/`, t.sponsor], [`${site}${pre}/for/publishers/`, t.publishers], [`${site}${pre}/show/episodes/`, t.episodes]];
   return `<div style="font-family:Barlow,Segoe UI,Arial,sans-serif;max-width:560px;margin:auto;color:#17191c;line-height:1.55;font-size:15px">
-<p style="font-weight:700;font-size:20px;letter-spacing:.04em;margin:0 0 18px">M365<span style="color:#3b6391">.FM</span></p>
+<p style="font-weight:700;font-size:20px;letter-spacing:.04em;margin:0 0 18px">${head}</p>
 <p>${esc(t.hi(name))}</p>
 <p>${esc(t.body(company))}</p>
-${hasPdf ? "" : `<p>${esc(t.nofile)} ${link(`${site}${pre}/media-kit/`, `${site.replace("https://", "")}${pre}/media-kit/`)}</p>`}
+${hasPdf ? "" : `<p>${esc(t.nofile)} ${link(kit, kit.replace("https://", ""))}</p>`}
 <p>${esc(t.next)}</p>
 <p style="margin-bottom:4px"><b>${esc(t.links)}</b></p>
 <ul style="margin-top:0;padding-left:18px">
-<li>${link(`${site}${pre}/sponsor/`, esc(t.sponsor))}</li>
-<li>${link(`${site}${pre}/for/publishers/`, esc(t.publishers))}</li>
-<li>${link(`${site}${pre}/show/episodes/`, esc(t.episodes))}</li>
+${links.map(([h, l]) => `<li>${link(h, esc(l))}</li>`).join("\n")}
 </ul>
 <p>${t.bye}</p>
 <hr style="border:0;border-top:1px solid #dde3ea;margin:24px 0">
 <p style="font-size:12px;color:#5d6470">${esc(t.foot)}</p></div>`;
 }
 
-async function pdfFor(env, lang) {
+async function pdfFor(env, lang, brand = "m365fm") {
   if (!env.PAGES) return null;
   for (const l of [lang, "en"]) {
-    const obj = await env.PAGES.get(`mediakit/m365fm-media-kit-${l}.pdf`).catch(() => null);
+    const obj = await env.PAGES.get(BRANDS[brand].key(l)).catch(() => null);
     if (obj) {
       const buf = new Uint8Array(await obj.arrayBuffer());
       if (buf.length > 0 && buf.length < 15 * 1024 * 1024) return { buf, lang: l };
@@ -92,15 +133,33 @@ async function notifyAdmins(env, row) {
     const subs = (await db.prepare(`SELECT endpoint,p256dh,auth FROM push_subs WHERE user_id IN (${ids.map(() => "?").join(",")})`).bind(...ids).all()).results || [];
     for (const s of subs) {
       try {
-        const r = await sendPush(env, s, { title: "Mediadaten angefordert", body: `${row.name} · ${row.company}`, url: `${env.SITE}/community/` });
+        const r = await sendPush(env, s, { title: row.title || "Mediadaten angefordert", body: `${row.name} · ${row.company}`, url: `${env.SITE}/community/` });
         if (r.gone) await db.prepare("DELETE FROM push_subs WHERE endpoint=?").bind(s.endpoint).run();
       } catch { /* Push ist optional */ }
     }
   } catch { /* nie den Versand blockieren */ }
 }
 
+// Kennzahlen-Vorschau (nur Summen aus latest.json, Felder einzeln uebernommen und gekuerzt) fuer /m365con/sponsor/ und die HeySummit-Einbettung
+function summaryOf(raw) {
+  const s = (v, n = 160) => String(v ?? "").replace(/[\u0000-\u001f\u007f<>]/g, " ").slice(0, n);
+  const lbl = (o) => ({ en: s(o?.en), de: s(o?.de || o?.en) });
+  const kpis = (Array.isArray(raw?.kpis) ? raw.kpis : []).filter((k) => Number.isFinite(k?.value) && k.value >= 0).slice(0, 24)
+    .map((k) => ({ key: s(k.key, 40), value: Math.round(k.value), label: lbl(k.label), source: lbl(k.source), period: lbl(k.period) }));
+  return { generated: s(raw?.generated, 10), brand: "m365con", kpis };
+}
+
 export async function handleMediakit(env, request, url, path, user, J) {
-  if (path !== "/api/mediakit" && path !== "/api/admin/mediakit") return null;
+  if (path !== "/api/mediakit" && path !== "/api/admin/mediakit" && path !== "/api/mediakit/summary") return null;
+  if (path === "/api/mediakit/summary") {
+    if (request.method !== "GET") return J({ error: "method" }, 405);
+    const b = BRANDS[brandOf(url.searchParams.get("brand"))];
+    if (!b.summary || !env.PAGES) return J({ error: "not_found" }, 404);
+    const obj = await env.PAGES.get(b.summary).catch(() => null);
+    if (!obj) return J({ error: "not_found" }, 404);
+    const raw = await obj.json().catch(() => null);
+    return J(summaryOf(raw), 200, { "cache-control": "public, max-age=3600" });
+  }
   const db = env.DB; await ensure(db);
 
   if (path === "/api/admin/mediakit") {
@@ -113,7 +172,8 @@ export async function handleMediakit(env, request, url, path, user, J) {
   const b = await request.json().catch(() => ({}));
   if (b.website) return J({ ok: true });   // Honigtopf: Bots fuellen das versteckte Feld, Menschen nicht
   const name = clean(b.name, 80), company = clean(b.company, 120), email = clean(b.email, 254).toLowerCase();
-  const lang = LANGS.includes(b.lang) ? b.lang : "en", source = clean(b.source, 60);
+  const brand = brandOf(b.brand || url.searchParams.get("brand")), B = BRANDS[brand];
+  const lang = LANGS.includes(b.lang) ? b.lang : "en", source = (B.src + clean(b.source, 60)).slice(0, 72);
   if (name.length < 2) return J({ error: "name" }, 400);
   if (company.length < 2) return J({ error: "company" }, 400);
   if (!EMAIL_RX.test(email)) return J({ error: "email" }, 400);
@@ -127,17 +187,17 @@ export async function handleMediakit(env, request, url, path, user, J) {
 
   const ins = await db.prepare("INSERT INTO mediakit_requests(name,company,email,lang,source,created) VALUES(?,?,?,?,?,?)").bind(name, company, email, lang, source, now()).run();
   const id = ins.meta.last_row_id;
-  const t = T[lang] || T.en;
-  const pdf = await pdfFor(env, lang);
+  const t = B.T[lang] || B.T.en;
+  const pdf = await pdfFor(env, lang, brand);
   const r = await sendMail(env, {
     to: email,
     subject: t.subject,
-    html: mailHtml(env, t, name, company, !!pdf, lang),
+    html: mailHtml(env, t, name, company, !!pdf, lang, brand),
     replyTo: "mirko.peters@m365.fm",
-    attachments: pdf ? [{ filename: `M365.FM-Media-Kit-${pdf.lang.toUpperCase()}.pdf`, content: b64(pdf.buf), type: "application/pdf", disposition: "attachment" }] : [],
+    attachments: pdf ? [{ filename: B.file(pdf.lang), content: b64(pdf.buf), type: "application/pdf", disposition: "attachment" }] : [],
   });
   await db.prepare("UPDATE mediakit_requests SET sent=?,err=? WHERE id=?").bind(r.ok ? 1 : 0, r.ok ? (pdf ? "" : "no_pdf") : "http_" + r.status, id).run();
-  await notifyAdmins(env, { name, company });
+  await notifyAdmins(env, { name, company, title: B.push });
   if (!r.ok) return J({ error: "send_failed" }, 502);
   return J({ ok: true, attached: !!pdf });
 }

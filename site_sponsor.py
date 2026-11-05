@@ -423,7 +423,8 @@ def default_state(quick):
     d = PRICING["defaults"]
     tops = [{k: q[k] for k in ("id", "name", "en", "lvl", "rated", "example", "custom", "url")} for q in quick if q["default"]]
     return {"goal": d["goal"], "rt": d["runtime"], "topics": tops, "video": False, "pr": bool(d["pr"]), "auth": False, "dash": False, "l14": False,
-            "topic": False, "expert": False, "li": False, "con": False, "cnt": {"pr": 1, "ex": d["cnt"]["ex"], "li": d["cnt"]["li"]}, "prTouched": False}
+            "topic": False, "expert": False, "li": False, "live": False, "con": False,
+            "cnt": {"pr": 1, "ex": d["cnt"]["ex"], "li": d["cnt"]["li"], "lv": d["cnt"].get("lv", 1)}, "prTouched": False}
 
 
 # ---- Seite ----
@@ -649,7 +650,7 @@ def body_html(g, lang, stats, quick, ssr, n_main, n_langs, con_on):
     s3 = step(3, "spn-s3", t("s3_h"), f'<p class="spn-hint">{E(t("s3_hint"))}</p><div class="spn-seg" role="radiogroup" aria-labelledby="spn-s3">{rts}</div>'
               f'<p class="spn-note" id="spn-rtrec">{E(v.get("rtRec", ""))}</p>')
     ul = lambda *xs: "<ul>" + "".join(f'<li>{E(x)}</li>' for x in xs) + "</ul>"
-    cnt = v.get("counts") or {"pr": "", "ex": d["cnt"]["ex"], "li": d["cnt"]["li"]}
+    cnt = {"lv": d["cnt"].get("lv", 1), **(v.get("counts") or {"pr": "", "ex": d["cnt"]["ex"], "li": d["cnt"]["li"]})}
     base = (f'<div class="spn-item spn-base"><input type="checkbox" id="spn-base" checked disabled aria-label="{E(t("base_aria"))}">'
             f'<div><h3><label for="spn-base">{E(t("base_h"))}</label> <span class="spn-tag" id="spn-pk">{E(v.get("pkCount", ""))}</span></h3>'
             f'{ul(t("base_b1", episodes=eps), t("base_b2"), t("base_b3"), t("base_b4"))}</div>'
@@ -666,6 +667,8 @@ def body_html(g, lang, stats, quick, ssr, n_main, n_langs, con_on):
               + _item("spn-topic", t("topic_h"), hint(t("topic_hint", n=P["topic_sponsors_max"])), fmt_usd(pr["topic"]), t("unit_month"))
               + _item("spn-expert", t("expert_h"), hint(t("expert_hint")), fmt_usd(pr["expert"]), t("unit_episode"), extra=_stepper("ex", t("expert_stepper"), t("one_less"), t("one_more"), cnt["ex"]))
               + _item("spn-li", t("li_h"), hint(t("li_hint")), fmt_usd(pr["li"]), t("unit_issue"), extra=_stepper("li", t("li_stepper"), t("one_less"), t("one_more"), cnt["li"]) + f'<p class="spn-note">{E(t("li_note"))}</p>')
+              + _item("spn-live", t("live_h"), hint(t("live_hint")) + f'<p class="spn-note">{E(t("live_note"))}</p>', fmt_usd(pr["live"]), t("unit_session"),
+                      extra=_stepper("lv", t("live_stepper"), t("one_less"), t("one_more"), cnt["lv"]))   # Livesession (LinkedIn + YouTube), immer als gesponsert gekennzeichnet
               + (_item("spn-con", t("con_h"), hint(t("con_hint")), "", t("on_request")) if con_on else ""))
     s5 = step(5, "spn-s5", t("s5_h"), f'<div class="spn-extras">{extras}</div>')
     # Preisuebersicht (sticky, nur die Summenzeile ist live)
@@ -727,7 +730,7 @@ def jsonld(B, lang, u, hl, lastmod, faqs, n_langs):
         if unit: o["priceSpecification"] = {"@type": "UnitPriceSpecification", "price": str(pr[key]), "priceCurrency": PRICING["currency"], "unitCode": unit}
         return o
     offers = [offer(t("base_h"), "base", "MON"), offer(t("video_h"), "video", "MON"), offer(t("pr_h"), "pr"), offer(t("row_auth"), "auth", "MON"),
-              offer(t("dash_h"), "dash"), offer(t("lang_h", n=n_langs), "lang", "MON"), offer(t("topic_h"), "topic", "MON"), offer(t("expert_h"), "expert"), offer(t("li_h"), "li")]
+              offer(t("dash_h"), "dash"), offer(t("lang_h", n=n_langs), "lang", "MON"), offer(t("topic_h"), "topic", "MON"), offer(t("expert_h"), "expert"), offer(t("li_h"), "li"), offer(t("live_h"), "live")]
     return [{"@context": "https://schema.org", "@type": "WebPage", "@id": u + "#page", "url": u, "name": t("h1"), "inLanguage": hl, "isPartOf": {"@id": f"{B}/#website"},
              "publisher": {"@id": f"{B}/#org"}, "dateModified": lastmod, "mainEntity": {"@id": u + "#service"}},
             {"@context": "https://schema.org", "@type": "Service", "@id": u + "#service", "name": t("svc_name"), "serviceType": t("svc_type"), "url": u,

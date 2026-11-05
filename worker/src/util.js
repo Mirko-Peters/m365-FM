@@ -55,6 +55,10 @@ export function cookie(name, value, maxAge) {
   return `${name}=${value}; Max-Age=${maxAge}; Path=/; HttpOnly; Secure; SameSite=Lax`;
 }
 
+// Fremde Urspruenge nur fuer einzelne oeffentliche Routen und ohne Cookies (credentials: omit):
+// das Mediadaten-Formular der M365Con im HeySummit-Pagebuilder (m365con.net und Ausgaben-Subdomains, #260)
+export const CON_ORIGINS = ["https://m365con.net", "https://www.m365con.net", "https://de.m365con.net", "https://2026.m365con.net"];
+export const ROUTE_ORIGINS = { "/api/mediakit": CON_ORIGINS, "/api/mediakit/summary": CON_ORIGINS };
 export function cors(env, request) {
   const origin = request.headers.get("origin");
   const h = { "vary": "Origin" };
@@ -64,6 +68,15 @@ export function cors(env, request) {
     h["access-control-allow-headers"] = "content-type, x-requested-with";
     h["access-control-allow-methods"] = "GET, POST, DELETE, OPTIONS";
     h["access-control-max-age"] = "86400";
+  } else if (origin) {
+    let path = "";
+    try { path = new URL(request.url).pathname; } catch { /* ohne URL keine Ausnahme */ }
+    if ((ROUTE_ORIGINS[path] || []).includes(origin)) {
+      h["access-control-allow-origin"] = origin;   // bewusst ohne allow-credentials
+      h["access-control-allow-headers"] = "content-type, x-requested-with";
+      h["access-control-allow-methods"] = "GET, POST, OPTIONS";
+      h["access-control-max-age"] = "86400";
+    }
   }
   return h;
 }

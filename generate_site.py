@@ -1535,6 +1535,7 @@ def build():
     LND.build(dict(write=write, page=page, header=header, footer=footer, BASE=BASE, LANGS=LANGS,
                    write_r2=write_r2, sitemap=sitemap, TODAY=TODAY, n_main=_main_archive_episodes, n_langs=len(active), stats=SPN.load_stats()))
     MKT.build(dict(write=write, page=page, header=header, footer=footer, BASE=BASE, LANGS=LANGS, sitemap=sitemap, TODAY=TODAY, api=COMMUNITY_API))   # Mediadaten /media-kit/
+    MKT.build_con(dict(write=write, page=page, header=header, footer=footer, BASE=BASE, LANGS=LANGS, sitemap=sitemap, TODAY=TODAY, api=COMMUNITY_API))   # M365Con-Sponsordaten /m365con/sponsor/ (#260)
     ECN.build(dict(write=write, page=page, header=header, footer=footer, BASE=BASE, api=COMMUNITY_API), LRN.ENTS,
               [[l, "English" if l == "en" else LANGS[l][0] if l in LANGS else l] for l in COMM_LANGS])   # Expert Connect /community/expert-connect/ (Publisher-Tool, noindex)
 
