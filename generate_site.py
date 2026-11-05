@@ -1102,6 +1102,9 @@ def build():
     TRL_SLUGS = {l: {k for k, v in json.load(open(_I18 / f"{l}.json", encoding="utf-8")).items() if v and v[0]} for l in LANGS if (_I18 / f"{l}.json").exists()}
     import site_podpage as _PPs   # T37 Sponsor: data/sponsorships.json pruefen (Entitaeten, Themen, Folgen, Daten, max. 3 je Thema) - Fehler brechen den Bau ab
     SPM.init(TODAY, LRN.ENTS, episodes={e["slug"] for e in _PPs.load("episodes")}, dubs={(it["lang"], it["slug"]): it["vid"] for it in items.values()}, orig=ORIG)
+    _go_offline = os.environ.get("SITE_OFFLINE") == "1"
+    _go_data = {} if _go_offline else (LRN._fetch_json(f"{COMMUNITY_API}/api/sponsor/go-codes") or {})
+    SPM.set_go_codes(_go_data.get("codes", []), offline=_go_offline)
     try:   # Speaker der M365Con-Programme: zusammengefuehrte Personen (tools/build_speakers.py) -> Entitaetsseiten und /speakers.json fuer den Worker
         _sp = json.loads((ROOT / "data" / "speakers.json").read_text("utf-8")).get("speakers", [])
         ENT.SPEAKERS.update({x["id"]: x for x in _sp})
@@ -1217,7 +1220,7 @@ def build():
 <main class="wrap"><article>
 <nav class="crumbs" aria-label="breadcrumb"><a href="{BASE}/{l}/">{esc(ui[7])}</a> / {esc(LANGS[l][0])} / {it["date"]}</nav>
 <div class="kicker">M365.FM · {esc(LANGS[l][0])}</div>{('<p class="mut"><a href="' + BASE + '/show/episodes/' + ORIG[vid] + '/" hreflang="en">' + ("Original (English)" if l != "de" else "Original (Englisch)") + '</a></p>') if vid in ORIG else ""}
-<h1>{esc(h1_main)}</h1>{("<p class=sub>" + esc(h1_rest) + "</p>") if h1_rest else ""}{SPM.note(l, _spr)}
+<h1>{esc(h1_main)}</h1>{("<p class=sub>" + esc(h1_rest) + "</p>") if h1_rest else ""}{SPM.note(l, _spr, "episode")}
 {chips_html(l, it)}<p class="lede">{intro}</p>
 <figure class="cover" style="margin-inline:0">{art_svg(vid, LANGS[l][0], "M365.FM · " + ui[0], l)}</figure>
 <div class="panel"><iframe src="https://widget.spreaker.com/player?episode_id={it["eid"]}&amp;theme=light&amp;playlist=false" height="131" loading="lazy" title="{esc(e["title"])}"></iframe>
@@ -1234,7 +1237,7 @@ def build():
 <p style="margin-top:1.6em"><a class="btn" href="{BASE}/{l}/">{esc(ui[3])} →</a></p>
 <section id="c-comments"></section><section id="c-sub"></section></main>
 {footer(l)}{community_tags(l, vid)}"""
-        if _spr: body = SPM.mark(body, _spr)   # T37 Sponsor: Links zum Sponsor mit rel="sponsored"
+        if _spr: body = SPM.mark(body, _spr, "episode")   # T37 Sponsor: Links zum Sponsor mit rel="sponsored"
         OG_COVER[canonical] = art_svg(vid, LANGS[l][0], lang=l)
         write(f'{l}/{it["slug"]}/index.html',
               page(l, e["title"], short(intro), canonical, body, alts, ld + _nld, xdefault=alts.get("en"), side=side_for(l, e["title"], body), extra_head=f'<meta property="article:section" content="{esc(cat_name(pc, l))}">' + "".join(f'<meta property="article:tag" content="{esc(t)}">' for t in tagraw[l][vid])))

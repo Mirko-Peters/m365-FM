@@ -8,7 +8,7 @@ import { importLegacyBlog } from "./legacyblog.js";
 import { importContentBlog } from "./contentblog.js";
 import { handleA2a } from "./a2a.js";
 import { handleAdminPanel } from "./adminpanel.js";
-import { handleSponsor } from "./sponsor.js";
+import { handleSponsor, handleSponsorLink } from "./sponsor.js";
 import { autoTranslateItems, autoTranslateEntities, runTrQueue } from "./autotr.js";
 import { syncLiveEvents } from "./liveevents.js";
 import { syncContentTopics, handleTopics } from "./topics.js";
@@ -197,7 +197,7 @@ function pubComment(c, mine, liked, badges, admin) {
 async function api(env, request, url, path, asUser) {
   const method = request.method, J = (d, s = 200, x) => json(d, s, env, request, x);
   if (method === "OPTIONS") return new Response(null, { status: 204, headers: cors(env, request) });
-  if (asUser === undefined && method !== "GET" && !["/api/internal/ai-spend", "/api/email/unsub", "/api/mail/unsub", "/api/topics/email-unsub"].includes(path) && request.headers.get("x-requested-with") !== "m365") return J({ error: "bad_request" }, 400);   // interne Route per CRON_KEY; Abmeldelinks (RFC 8058) senden keinen Zusatz-Header, alle per Token geschuetzt
+  if (asUser === undefined && method !== "GET" && !["/api/internal/ai-spend", "/api/internal/sponsor-metrics", "/api/email/unsub", "/api/mail/unsub", "/api/topics/email-unsub"].includes(path) && request.headers.get("x-requested-with") !== "m365") return J({ error: "bad_request" }, 400);   // interne Routen per CRON_KEY; Abmeldelinks (RFC 8058) senden keinen Zusatz-Header, alle per Token geschuetzt
   // asUser: vom MCP-Server (Token bereits geprueft) - dann keine Cookie-Sitzung noetig
   const uid = asUser === undefined ? await readSession(env, request) : null, user = asUser === undefined ? (uid ? await me(env, uid) : null) : asUser;
   const need = () => (user ? null : J({ error: "login" }, 401));
@@ -224,7 +224,7 @@ async function api(env, request, url, path, asUser) {
     return J({ ok: true, ...status });
   }
 
-  const sponsor = await handleSponsor(env, request, url, path, J);
+  const sponsor = await handleSponsor(env, request, url, path, J, user);
   if (sponsor) return sponsor;
 
   const contributions = await handleContributions(env, request, url, path, user, J);
@@ -488,9 +488,13 @@ async function api(env, request, url, path, asUser) {
 }
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const url = new URL(request.url), path = url.pathname.replace(/\/+$/, "") || "/";
     try {
+      if (path === "/robots.txt") return new Response("User-agent: *\nDisallow: /go/\n", {
+        headers: { "content-type": "text/plain; charset=utf-8", "cache-control": "public, max-age=3600" },
+      });
+      if (path.startsWith("/go/")) return await handleSponsorLink(env, request, url, path, ctx);
       if (path.startsWith("/auth/")) return (await auth(env, request, url, path)) || new Response("not found", { status: 404 });
       if (path === "/mcp") return await handleMcp(env, request, (uid) => me(env, uid), (req, user) => api(env, req, new URL(req.url), new URL(req.url).pathname, user));
       if (path === "/a2a") return await handleA2a(env, request);
