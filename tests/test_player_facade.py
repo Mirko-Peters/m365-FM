@@ -148,6 +148,11 @@ class LoadRules(unittest.TestCase):
         self.assertIn("{community_tags(l, vid, css_async=True)}", src)
         self.assertIn('<link rel="preload" as="style" href="{BASE}/assets/community.css" onload=', src)
 
+    def test_entity_qa_script_loads_early(self):
+        src = (ROOT / "site_entities.py").read_text("utf-8")
+        self.assertIn('rootMargin:"2500px 0px"', src)   # Q&A-Bereich fuellt sich, bevor er sichtbar ist (kein Verschieben beim Scrollen)
+        self.assertNotIn('rootMargin:"600px"', src)
+
     def test_reduced_motion(self):
         fx = (ROOT / "assets" / "fx.js").read_text("utf-8")
         self.assertIn("max-width:700px", fx.replace(" ", ""))
