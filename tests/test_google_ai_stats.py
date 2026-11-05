@@ -50,6 +50,15 @@ class Sponsor(Base):
         quick, _, _ = site_sponsor.topics_for(g, lang, stats)
         return stats, site_sponsor.body_html(g, lang, stats, quick, {}, 42, 14, False)
 
+    def test_mediakit_link(self):
+        self.with_file(ai_doc(GAI_OK))
+        _, en = self.render()
+        _, de = self.render("de")
+        self.assertIn('href="https://example.test/media-kit/"', en)
+        self.assertIn("Request the media kit (PDF)", en)
+        self.assertIn('href="https://example.test/de/media-kit/"', de)
+        self.assertIn("Mediadaten (PDF)", de)
+
     def test_card_when_ok(self):
         self.with_file(ai_doc(GAI_OK))
         stats, html = self.render()
