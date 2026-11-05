@@ -38,6 +38,7 @@ from pathlib import Path
 import hashlib
 import site_money as SM
 import site_cover
+import site_player as PL   # Player (YouTube, Spreaker) erst nach Klick: Platzhalter mit festen Massen statt iframe
 from site_content import FAQ
 from site_taxonomy import (CATS, ORDER, TOPICS, TAGW, cat_name, classify, tags_of, tag_slug, tag_url, related, autolink)
 
@@ -149,7 +150,7 @@ footer{border-top:1px solid var(--fg);margin-top:64px;padding:26px 0 48px;font-s
 @media (max-width:560px){body{font-size:16px}.panel{padding:14px}.btn{padding:10px 16px}}"""
 from site_design import lang_dropdown, site_header, FONT_CSS, INDUSTRY, EN_NAMES, section, spec_box, lang_tile, spec_table, cta_box, hero_h1
 from site_design import pager as PAGER, neighbours as NEIGH   # Vor/Zurueck am Seitenende (rel=prev/next)
-CSS = FONT_CSS + CSS + INDUSTRY
+CSS = FONT_CSS + CSS + INDUSTRY + PL.CSS
 
 
 def esc(s): return html.escape(s or "", quote=True)
@@ -394,7 +395,9 @@ for _f in ("a11y_en.json", "a11y_i18n.json"):
 
 A11Y_EARLY = ("<script>try{var a=JSON.parse(localStorage.getItem('m365-a11y')||'{}'),c=document.documentElement.classList;"
               "if(a.s)c.add('a11y-s'+a.s);a.hc&&c.add('a11y-hc');a.font&&c.add('a11y-font');a.sp&&c.add('a11y-sp');a.ul&&c.add('a11y-ul');a.nomo&&c.add('a11y-nomo');"
-              "a.dk&&document.documentElement.setAttribute('data-theme','dark')}catch(e){}</script>")
+              "a.dk&&document.documentElement.setAttribute('data-theme','dark')}catch(e){}"
+              # Apple-Geraete: Apple Podcasts zuerst schon vor dem ersten Bild (vorher setzte page.js die Klasse nach dem Laden -> Knoepfe sprangen, CLS)
+              "(function(){try{var u=navigator.userAgent||'',p=navigator.platform||'';if(/iPhone|iPad|iPod|Macintosh|Mac OS X/.test(u)||/Mac|iPhone|iPad/.test(p)||(navigator.maxTouchPoints>1&&/Mac/.test(p)))document.documentElement.classList.add('apple-first')}catch(e){}})()</script>")
 
 
 def a11y_tags(lang):
@@ -460,6 +463,11 @@ FXCSS = _mini_css("fx.css")   # kleines CSS inline statt eigener Anfrage (Ladeze
 # Barrierefreiheits-Regeln stehen im gehashten site.css statt in einer eigenen Datei: vorher lag a11y.css als zweites renderblockierendes
 # Stylesheet am Anfang von <body> (eigene Anfrage, nur 1 h Cache). assets/a11y.css bleibt fuer noch gecachte alte Seiten liegen.
 A11Y_CSS = _mini_css("a11y.css")
+# Sidebar-Regeln (sbar.css) ebenfalls im Hash-Bundle (aus Copilot-Entwurf #167): Folgen-, Show- und Entitaetsseiten luden sie als zweites
+# renderblockierendes Stylesheet (eine Anfrage mehr vor dem ersten Bild, 1 h Cache). Reihenfolge wie bisher im <head>: vor dem Haupt-CSS.
+# Die Selektoren sind auf .shw/.sb-*/.att-* begrenzt; assets/sbar.css bleibt fuer gecachte alte Seiten liegen. data-sbar am <link> sagt
+# assets/attend.js, dass die Regeln schon da sind (sonst laedt das Popup sbar.css nach). community.css bleibt vorerst eigene Datei.
+SBAR_CSS = _mini_css("sbar.css")
 # Vorgeladen werden die Schnitte, die auf jeder Seite im ersten Bildschirm Text zeigen (gemessen auf Start-, Sprach-, Show- und Entitaetsseiten,
 # alle 15 Sprachen - Navigation, Logo und Ziffern/Leerzeichen sind lateinisch). Barlow 400 (Fliesstext) und Condensed 600 (Ueberschriften) normal;
 # Condensed 500 (Menue) und 700 (Logo) ab 701 px normal, darunter mit fetchpriority=low. Live-A/B 3.11.2026 (tools/preload_ab.mjs, 2 x 7 Laeufe):
@@ -541,7 +549,6 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
         if share: body = body.replace("<footer>", share_html(lang, canonical, title) + "<footer>", 1)   # T37: share=False (Sponsor-Seite, keine Fremdmarken)
     if side:   # Sidebar neben dem Hauptinhalt (wie auf den Show-Seiten): erstes <main> in zwei Spalten
         body = re.sub(r'<main class="wrap"([^>]*)>(.*?)</main>', lambda m: f'<main class="wrap shw"{m.group(1)}><div class="shmain">{m.group(2)}</div>{side}</main>', body, count=1, flags=re.S)
-        extra_head += f'<link rel="stylesheet" href="{BASE}/assets/sbar.css">'
     body = single_main(body)
     body = ADS.inject(BASE, body, lang, canonical, noindex)
     if 'id="main"' in body:
@@ -582,11 +589,11 @@ def css_link():
     """Das gesamte Stylesheet liegt einmal als Datei mit Inhalts-Hash unter /assets/ (statt ~33 KB inline in jeder Seite): kleinere Seiten, Browser- und CDN-Cache."""
     if not _CSSF:
         import hashlib
-        css = CSS + (ADS.CSS if ADS.css_needed(BASE) else "") + "\n" + A11Y_CSS + "\n"
+        css = SBAR_CSS + "\n" + CSS + (ADS.CSS if ADS.css_needed(BASE) else "") + "\n" + A11Y_CSS + "\n"
         name = "site." + hashlib.sha1(css.encode("utf-8")).hexdigest()[:10] + ".css"
         (OUT / "assets").mkdir(parents=True, exist_ok=True); (OUT / "assets" / name).write_text(css, encoding="utf-8")
         _CSSF["u"] = f"{BASE}/assets/{name}"
-    return f'<link rel="stylesheet" href="{_CSSF["u"]}">'
+    return f'<link rel="stylesheet" href="{_CSSF["u"]}" data-sbar>'
 
 
 _IDENT = {"@id", "@type", "@context", "name", "url"}
@@ -1237,9 +1244,9 @@ def build():
 <h1>{esc(h1_main)}</h1>{("<p class=sub>" + esc(h1_rest) + "</p>") if h1_rest else ""}{SPM.note(l, _spr, "episode")}
 {chips_html(l, it)}<p class="lede">{intro}</p>
 <figure class="cover" style="margin-inline:0">{art_svg(vid, LANGS[l][0], "M365.FM · " + ui[0], l)}</figure>
-<div class="panel"><iframe src="https://widget.spreaker.com/player?episode_id={it["eid"]}&amp;theme=light&amp;playlist=false" height="131" loading="lazy" title="{esc(e["title"])}"></iframe>
+<div class="panel">{PL.player("spreaker", it["eid"], e["title"], ui[0], link=spk)}
 <div class="btns">{btns}</div>{"<p class=showrow>M365.FM ▸ " + showrow + "</p>" if showrow else ""}</div>
-<div class="yt"><iframe src="https://www.youtube-nocookie.com/embed/{vid}?rel=0" title="{esc(e["title"])}" loading="lazy" allow="accelerometer; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+<div style="margin:22px 0">{PL.player("youtube", vid, e["title"], ui[1], link=yt)}</div>
 <p class="mut">▶ {esc(e["title"])}</p>
 <h2>{esc(hdr)}</h2><ol class="points">{lis}</ol>
 <p class="lede" style="margin-top:1.4em">{aud}</p>

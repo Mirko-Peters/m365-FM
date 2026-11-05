@@ -25,7 +25,7 @@
   if (/\/(?:community|sponsor)\//.test(location.pathname)) return;   // kein Popup auf Community- und Sponsor-Seiten (T37)
   var until = +ls("m365_attend_until") || 0; if (until > Date.now()) return;
   var timer, shown = false, last;
-  function css() { if (document.querySelector('link[href*="sbar.css"]')) return; var l = document.createElement("link"); l.rel = "stylesheet"; l.href = BASE + "/assets/sbar.css"; document.head.appendChild(l); }
+  function css() { if (document.querySelector('link[href*="sbar.css"],link[data-sbar]')) return;   /* data-sbar: Regeln stecken schon im Hash-Bundle (site.<hash>.css) */ var l = document.createElement("link"); l.rel = "stylesheet"; l.href = BASE + "/assets/sbar.css"; document.head.appendChild(l); }
   function close(days) { var o = document.getElementById("att-ov"); if (o) o.remove(); ls("m365_attend_until", String(Date.now() + days * 864e5)); if (last && last.focus) try { last.focus(); } catch (e) {} document.removeEventListener("keydown", esc); }
   function esc(e) {
     if (e.key === "Escape") { close(7); return; }
