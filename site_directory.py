@@ -9,8 +9,8 @@ from site_learn import esc, LCSS
 ROOT = Path(__file__).parent
 
 S = {
-    "en": dict(title="Microsoft 365 directory", intro="Find experts, companies and upcoming events in the Microsoft community.", search="Search", type="Type", expert="Expert", company="Company", event="Event", topic="Topic", program="Program", lang="Language", country="Country", city="City", mode="Format", all="All", online="Online", onsite="On site", list="List", map="Map", map_notice="The map loads only after you choose to send data to Google.", map_load="Load map — data will be sent to Google", map_missing="The map is unavailable; the directory list remains available.", loading="Loading…", none="No matching entries.", more="Load more", result="entries", online_badge="Online", open="Open profile or event", experts_in="Microsoft 365 experts in {place}", city_in="Microsoft 365 experts in {city}, {country}", topic_in="{topic} experts in {country}", popular_topics="Popular topics", upcoming_events="Upcoming events", companies_in="Companies in {place}", nearby="Nearby cities", crumbs="Breadcrumb", directory="Directory", home="Home"),
-    "de": dict(title="Microsoft-365-Verzeichnis", intro="Finde Expert:innen, Firmen und kommende Events der Microsoft-Community.", search="Suche", type="Typ", expert="Experte", company="Firma", event="Event", topic="Thema", program="Programm", lang="Sprache", country="Land", city="Stadt", mode="Format", all="Alle", online="Online", onsite="Vor Ort", list="Liste", map="Karte", map_notice="Die Karte wird erst geladen, wenn du der Datenübertragung an Google zustimmst.", map_load="Karte laden – dabei werden Daten an Google übertragen", map_missing="Die Karte ist nicht verfügbar; die Verzeichnisliste bleibt nutzbar.", loading="Lädt …", none="Keine passenden Einträge.", more="Weitere laden", result="Einträge", online_badge="Online", open="Profil oder Event öffnen", experts_in="Microsoft-365-Expert:innen in {place}", city_in="Microsoft-365-Expert:innen in {city}, {country}", topic_in="Expert:innen für {topic} in {country}", popular_topics="Beliebte Themen", upcoming_events="Kommende Events", companies_in="Firmen in {place}", nearby="Nachbarstädte", crumbs="Brotkrumennavigation", directory="Verzeichnis", home="Startseite"),
+    "en": dict(title="Microsoft 365 directory", intro="Find experts, companies and upcoming events in the Microsoft community.", search="Search", type="Type", expert="Expert", company="Company", event="Event", topic="Topic", program="Program", lang="Language", country="Country", city="City", mode="Format", all="All", online="Online", onsite="On site", list="List", map="Map", map_notice="The map loads only after you choose to send data to Google.", map_load="Load map — data will be sent to Google", map_missing="The map is unavailable; the directory list remains available.", loading="Loading…", none="No matching entries.", more="Load more", result="entries", online_badge="Online", open="Open profile or event", experts_in="Microsoft 365 experts in {place}", city_in="Microsoft 365 experts in {city}, {country}", topic_in="{topic} experts in {country}", popular_topics="Popular topics", upcoming_events="Upcoming events", companies_in="Companies in {place}", nearby="Nearby cities", crumbs="Breadcrumb", directory="Directory", home="Home", faq="Directory facts", count_question="How many experts, companies and events are listed?", count_answer="{experts} experts, {companies} companies, and {events} upcoming events are listed.", topics_question="Which topics appear most often?", topics_answer="The most frequently listed topics are: {topics}."),
+    "de": dict(title="Microsoft-365-Verzeichnis", intro="Finde Expert:innen, Firmen und kommende Events der Microsoft-Community.", search="Suche", type="Typ", expert="Experte", company="Firma", event="Event", topic="Thema", program="Programm", lang="Sprache", country="Land", city="Stadt", mode="Format", all="Alle", online="Online", onsite="Vor Ort", list="Liste", map="Karte", map_notice="Die Karte wird erst geladen, wenn du der Datenübertragung an Google zustimmst.", map_load="Karte laden – dabei werden Daten an Google übertragen", map_missing="Die Karte ist nicht verfügbar; die Verzeichnisliste bleibt nutzbar.", loading="Lädt …", none="Keine passenden Einträge.", more="Weitere laden", result="Einträge", online_badge="Online", open="Profil oder Event öffnen", experts_in="Microsoft-365-Expert:innen in {place}", city_in="Microsoft-365-Expert:innen in {city}, {country}", topic_in="Expert:innen für {topic} in {country}", popular_topics="Beliebte Themen", upcoming_events="Kommende Events", companies_in="Firmen in {place}", nearby="Nachbarstädte", crumbs="Brotkrumennavigation", directory="Verzeichnis", home="Startseite", faq="Verzeichnis in Zahlen", count_question="Wie viele Experten, Firmen und Events sind aufgeführt?", count_answer="Aufgeführt sind {experts} Experten, {companies} Firmen und {events} kommende Events.", topics_question="Welche Themen sind am häufigsten vertreten?", topics_answer="Am häufigsten aufgeführt sind: {topics}."),
 }
 overlay("directory.S", S)
 
@@ -130,6 +130,14 @@ def _facts_sections(entries, place, lang, s):
         out.append(f'<section><h2>{esc(s["upcoming_events"])}</h2><ul>{event_html}</ul></section>')
     if company_html:
         out.append(f'<section><h2>{esc(s["companies_in"].format(place=place))}</h2><ul>{company_html}</ul></section>')
+    experts = sum(item.get("type") == "expert" for item in entries)
+    faq = (f'<section class="dir-faq"><h2>{esc(s["faq"])}</h2><details><summary>{esc(s["count_question"])}</summary>'
+           f'<p>{esc(s["count_answer"].format(experts=experts, companies=len(companies), events=len(events)))}</p></details>')
+    if topics:
+        top = sorted(topics.items(), key=lambda row: (-row[1], row[0]))[:3]
+        topic_names = ", ".join(f"{name} ({count})" for name, count in top)
+        faq += f'<details><summary>{esc(s["topics_question"])}</summary><p>{esc(s["topics_answer"].format(topics=topic_names))}</p></details>'
+    out.append(faq + "</section>")
     return "".join(out)
 
 
@@ -141,29 +149,36 @@ def _breadcrumb(crumbs):
 def build(g):
     BASE, write, page = g["BASE"], g["write"], g["page"]
     api = g.get("api", "https://api-dub.m365.fm")
+    maps_key = str(g.get("google_maps_key") or "").strip()
     items = fetch_directory(api)
     intros = _read_intros(g)
     today = g["TODAY"]
-    alternates = {lang: f"{BASE}{pfx(lang)}/directory/" for lang in COMM_LANGS}
+    hub_alternates = {
+        lang: f"{BASE}{pfx(lang)}/directory/" for lang in COMM_LANGS
+        if _indexable(items) and (lang in ("en", "de") or S[lang]["intro"] != S["en"]["intro"])
+    }
     for lang in COMM_LANGS:
         s = S[lang]
-        canonical = alternates[lang]
-        config = json.dumps({"api": api, "base": BASE, "lang": lang, "items": items[:30], "labels": s}, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
+        canonical = f"{BASE}{pfx(lang)}/directory/"
+        config = json.dumps({"api": api, "base": BASE, "lang": lang, "items": items[:30], "labels": s, "mapsKey": maps_key}, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
         filters = "".join(f'<label>{esc(s[key])}<select data-filter="{name}"><option value="">{esc(s["all"])}</option></select></label>' for key, name in [("type", "type"), ("topic", "topic"), ("program", "program"), ("lang", "lang"), ("country", "country"), ("city", "city"), ("mode", "mode")])
         filters = f'<label>{esc(s["search"])}<input type="search" data-filter="q" maxlength="100"></label>' + filters
         placeholder = f'<div class="dir-map-placeholder" role="img" aria-label="{esc(s["map_notice"])}"><svg viewBox="0 0 640 360" aria-hidden="true"><rect width="640" height="360" fill="var(--card)"/><path d="M0 70h640M0 150h640M0 245h640M95 0v360M245 0v360M430 0v360M560 0v360" stroke="var(--bd)" stroke-width="8"/><path d="M0 205h640M355 0v360" stroke="var(--ac)" stroke-width="5" opacity=".4"/></svg></div>'
+        map_view = f' <button class="btn" type="button" data-view="map" aria-pressed="false">{esc(s["map"])}</button>' if maps_key else ""
+        map_panel = (f'<section class="dir-map-panel"><h2>{esc(s["map"])}</h2><p class="mut">{esc(s["map_notice"])}</p>{placeholder}<div class="dir-map" data-map hidden></div>'
+                     f'<button class="btn main" type="button" data-map-load>{esc(s["map_load"])}</button><p class="mut" data-map-status role="status"></p></section>') if maps_key else ""
+        map_aria = f'{esc(s["list"])} / {esc(s["map"])}' if maps_key else esc(s["list"])
         hub_schema = [{"@context": "https://schema.org", "@type": "ItemList", "name": s["title"], "url": canonical, "numberOfItems": len(items),
                        "itemListElement": [{"@type": "ListItem", "position": i + 1, "item": _schema_item(BASE, item)} for i, item in enumerate(items)]}]
         body = (f'{g["header"](lang, "")}<main class="wrap dir-wrap"><h1>{esc(s["title"])}</h1><p class="mut">{esc(s["intro"])}</p>'
-                f'<form class="dir-filters" aria-label="{esc(s["search"])}">{filters}</form><div class="dir-view" role="group" aria-label="{esc(s["list"])} / {esc(s["map"])}"><button class="btn" type="button" data-view="list" aria-pressed="true">{esc(s["list"])}</button> <button class="btn" type="button" data-view="map" aria-pressed="false">{esc(s["map"])}</button></div><div class="dir-layout" data-view="list"><section class="dir-list"><h2>{esc(s["list"])}</h2><p class="mut" data-count></p><div data-results>{_list(items[:30], lang, s)}</div><button class="btn" type="button" data-more hidden>{esc(s["more"])}</button></section>'
-                f'<section class="dir-map-panel"><h2>{esc(s["map"])}</h2><p class="mut">{esc(s["map_notice"])}</p>{placeholder}<div class="dir-map" data-map hidden></div>'
-                f'<button class="btn main" type="button" data-map-load>{esc(s["map_load"])}</button><p class="mut" data-map-status role="status"></p></section></div></main>'
-                f'<style>.dir-wrap{{max-width:76em}}.dir-filters{{display:grid;grid-template-columns:repeat(auto-fit,minmax(10em,1fr));gap:.6em;margin:1.2em 0}}.dir-filters label{{display:grid;gap:.2em;font-weight:600}}.dir-filters input,.dir-filters select{{font:inherit;min-height:2.6em;padding:.35em;border:1px solid var(--bd);border-radius:0;background:var(--card);color:var(--fg)}}.dir-layout{{display:grid;grid-template-columns:minmax(0,1fr) minmax(20em,1fr);gap:1.2em}}.dir-list,.dir-map-panel{{min-width:0}}.dir-items{{list-style:none;padding:0}}.dir-item{{padding:.8em 0;border-bottom:1px solid var(--bd)}}.dir-item p{{margin:.2em 0;color:var(--mut)}}.dir-badge{{display:inline-block;border:1px solid var(--ac);padding:.05em .5em;font:600 .8em "Barlow Condensed",sans-serif;letter-spacing:.08em;text-transform:uppercase}}.dir-map-placeholder,.dir-map{{height:26em;border:1px solid var(--bd);overflow:hidden}}.dir-map-placeholder svg{{width:100%;height:100%}}.dir-map{{background:var(--card)}}.dir-wrap nav ol{{display:flex;flex-wrap:wrap;gap:.5em;list-style:none;padding:0;color:var(--mut)}}.dir-wrap nav li+li:before{{content:"/";margin-inline-end:.5em}}.dir-wrap section{{margin:2em 0}}@media(max-width:48em){{.dir-layout{{grid-template-columns:1fr}}.dir-layout[data-view=map] .dir-list{{display:none}}.dir-layout[data-view=list] .dir-map-panel{{display:none}}.dir-map-placeholder,.dir-map{{height:20em}}}}</style>'
+                f'<form class="dir-filters" aria-label="{esc(s["search"])}">{filters}</form><div class="dir-view" role="group" aria-label="{map_aria}"><button class="btn" type="button" data-view="list" aria-pressed="true">{esc(s["list"])}</button>{map_view}</div><div class="dir-layout" data-view="list" data-map-available="{str(bool(maps_key)).lower()}"><section class="dir-list"><h2>{esc(s["list"])}</h2><p class="mut" data-count></p><div data-results>{_list(items[:30], lang, s)}</div><button class="btn" type="button" data-more hidden>{esc(s["more"])}</button></section>{map_panel}</div></main>'
+                f'<style>.dir-wrap{{max-width:76em}}.dir-filters{{display:grid;grid-template-columns:repeat(auto-fit,minmax(10em,1fr));gap:.6em;margin:1.2em 0}}.dir-filters label{{display:grid;gap:.2em;font-weight:600}}.dir-filters input,.dir-filters select{{font:inherit;min-height:2.6em;padding:.35em;border:1px solid var(--bd);border-radius:0;background:var(--card);color:var(--fg)}}.dir-layout{{display:grid;grid-template-columns:minmax(0,1fr) minmax(20em,1fr);gap:1.2em}}.dir-layout[data-map-available=false]{{grid-template-columns:1fr}}.dir-list,.dir-map-panel{{min-width:0}}.dir-items{{list-style:none;padding:0}}.dir-item{{padding:.8em 0;border-bottom:1px solid var(--bd)}}.dir-item p{{margin:.2em 0;color:var(--mut)}}.dir-badge{{display:inline-block;border:1px solid var(--ac);padding:.05em .5em;font:600 .8em "Barlow Condensed",sans-serif;letter-spacing:.08em;text-transform:uppercase}}.dir-map-placeholder,.dir-map{{height:26em;border:1px solid var(--bd);overflow:hidden}}.dir-map-placeholder svg{{width:100%;height:100%}}.dir-map{{background:var(--card)}}.dir-wrap nav ol{{display:flex;flex-wrap:wrap;gap:.5em;list-style:none;padding:0;color:var(--mut)}}.dir-wrap nav li+li:before{{content:"/";margin-inline-end:.5em}}.dir-wrap section{{margin:2em 0}}@media(max-width:48em){{.dir-layout{{grid-template-columns:1fr}}.dir-layout[data-view=map] .dir-list{{display:none}}.dir-layout[data-view=list] .dir-map-panel{{display:none}}.dir-map-placeholder,.dir-map{{height:20em}}}}</style>'
                 f'<script>window.M365D={config}</script><script defer src="{BASE}/assets/directory.js"></script>'
                 f'{g["footer"](lang) if lang in g["LANGS"] else g["footer_en"]()}')
-        hub_indexable = _indexable(items) and (lang in ("en", "de") or s["intro"] != S["en"]["intro"])
-        write(f"{pfx2(lang)}directory/index.html", page(lang, s["title"], s["intro"], canonical, body, alternates, hub_schema, xdefault=alternates["en"], og_type="website", extra_head=LCSS, noindex=not hub_indexable))
-        if _indexable(items):
+        hub_indexable = lang in hub_alternates
+        alternates = hub_alternates if hub_indexable else None
+        write(f"{pfx2(lang)}directory/index.html", page(lang, s["title"], s["intro"], canonical, body, alternates, hub_schema, xdefault=alternates.get("en") if alternates else None, og_type="website", extra_head=LCSS, noindex=not hub_indexable))
+        if hub_indexable:
             g["sitemap"].append((canonical, today, None))
 
     groups = {}
@@ -199,6 +214,10 @@ def build(g):
         copy = intros.get(intro_key) or {}
         if not copy.get("eligible"):
             copy = {}
+        parent_copy = intros.get(f"country:{country}", {})
+        if not parent_copy.get("eligible"):
+            parent_copy = {}
+        localized = {}
         for lang in COMM_LANGS:
             s = S[lang]
             place = entries[0].get("country") or country
@@ -208,12 +227,18 @@ def build(g):
             intro_de, detail_de = copy.get("intro_de", ""), copy.get("detail_de", "")
             intro = _localized(lang, intro_en, intro_de) if intro_en and intro_de else (intro_en if lang == "en" else "")
             detail = _localized(lang, detail_en, detail_de) if detail_en and detail_de else (detail_en if lang == "en" else "")
-            parent_copy = intros.get(f"country:{country}", {})
-            if not parent_copy.get("eligible"):
-                parent_copy = {}
             parent_intro = _localized(lang, parent_copy.get("intro", ""), parent_copy.get("intro_de", "")) if parent_copy.get("intro") and parent_copy.get("intro_de") else parent_copy.get("intro", "")
             parent_detail = _localized(lang, parent_copy.get("detail", ""), parent_copy.get("detail_de", "")) if parent_copy.get("detail") and parent_copy.get("detail_de") else parent_copy.get("detail", "")
             parent = (parent_intro + " " + parent_detail) if kind != "country" else s["intro"]
+            translated = lang in ("en", "de") or (intro != intro_en and detail != detail_en)
+            localized[lang] = {"s": s, "place": place, "title": title, "canonical": canonical, "intro": intro,
+                               "detail": detail, "parent": parent,
+                               "indexable": _indexable(entries, kind, intro, detail, parent) and translated}
+        page_alternates = {l: localized[l]["canonical"] for l in COMM_LANGS if localized[l]["indexable"]}
+        for lang in COMM_LANGS:
+            data = localized[lang]
+            s, place, title, canonical = data["s"], data["place"], data["title"], data["canonical"]
+            intro, detail = data["intro"], data["detail"]
             crumb_rows = [(s["directory"], f"{BASE}{pfx(lang)}/directory/")]
             if kind == "country":
                 crumb_rows.append((title, canonical))
@@ -235,9 +260,8 @@ def build(g):
             body = (f'{g["header"](lang, "")}<main class="wrap dir-wrap"><nav aria-label="{esc(s["crumbs"])}"><ol>{crumbs_html}</ol></nav>'
                     f'<h1>{esc(title)}</h1>{f"<p>{esc(intro)}</p>" if intro else ""}{f"<p>{esc(detail)}</p>" if detail else ""}'
                     f'{sections}{neighbors}{_list(entries, lang, s)}</main>{g["footer"](lang) if lang in g["LANGS"] else g["footer_en"]()}')
-            translated = lang in ("en", "de") or (intro != intro_en and detail != detail_en)
-            own_indexable = _indexable(entries, kind, intro, detail, parent) and translated
-            page_alternates = {l: f"{BASE}{pfx(l)}/{rel}" for l in COMM_LANGS} if own_indexable else None
-            write(f"{pfx2(lang)}{rel}index.html", page(lang, title, intro or title, canonical, body, page_alternates, structured, xdefault=page_alternates.get("en") if page_alternates else None, og_type="website", extra_head=LCSS, noindex=not own_indexable))
+            own_indexable = data["indexable"]
+            alts = page_alternates if own_indexable else None
+            write(f"{pfx2(lang)}{rel}index.html", page(lang, title, intro or title, canonical, body, alts, structured, xdefault=alts.get("en") if alts else None, og_type="website", extra_head=LCSS, noindex=not own_indexable))
             if own_indexable:
                 g["sitemap"].append((canonical, today, None))

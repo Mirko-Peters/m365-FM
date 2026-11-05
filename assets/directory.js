@@ -89,17 +89,16 @@
     cluster = new markerClusterer.MarkerClusterer({ map: map, markers: markers });
   }
   function loadMap() {
-    if (mapButton.disabled) return;
+    if (!mapButton || !D.mapsKey || mapButton.disabled) return;
     mapButton.disabled = true; mapStatus.textContent = labels.loading;
-    fetch(D.api + "/api/directory/key").then(function (r) { return r.json(); }).then(function (config) {
-      if (!config.key) throw new Error("key");
-      return loadScript("https://maps.googleapis.com/maps/api/js?key=" + encodeURIComponent(config.key) + "&loading=async")
-        .then(function () { return loadScript("https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js"); });
-    }).then(function () {
+    loadScript("https://maps.googleapis.com/maps/api/js?key=" + encodeURIComponent(D.mapsKey) + "&loading=async")
+      .then(function () { return loadScript("https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js"); })
+      .then(function () {
+      if (!window.google || !window.markerClusterer) throw new Error("maps");
       var dark = matchMedia("(prefers-color-scheme: dark)").matches || document.documentElement.dataset.theme === "dark";
       map = new google.maps.Map(mapBox, { center: { lat: 48, lng: 10 }, zoom: 4, styles: dark ? [{ elementType: "geometry", stylers: [{ color: "#242a30" }] }, { elementType: "labels.text.fill", stylers: [{ color: "#d7dde3" }] }, { featureType: "road", elementType: "geometry", stylers: [{ color: "#39434c" }] }, { featureType: "water", elementType: "geometry", stylers: [{ color: "#17212a" }] }] : [] });
       info = new google.maps.InfoWindow(); placeholder.hidden = true; mapBox.hidden = false; mapStatus.textContent = ""; updateMap(items);
-    }).catch(function () { mapStatus.textContent = labels.map_missing; })
+      }).catch(function () { mapStatus.textContent = labels.map_missing; })
       .finally(function () { mapButton.disabled = false; });
   }
   var timer;
@@ -107,7 +106,7 @@
   form.addEventListener("input", function () { clearTimeout(timer); timer = setTimeout(function () { load(1); }, 250); });
   form.addEventListener("change", function () { load(1); });
   more.addEventListener("click", function () { load(page + 1); });
-  mapButton.addEventListener("click", loadMap);
+  if (mapButton) mapButton.addEventListener("click", loadMap);
   [].forEach.call(document.querySelectorAll("[data-view]"), function (button) {
     button.addEventListener("click", function () {
       root.dataset.view = button.dataset.view;

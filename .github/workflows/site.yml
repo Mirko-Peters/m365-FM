@@ -2,7 +2,7 @@ name: Website bauen und veröffentlichen
 on:
   push:
     branches: [main]
-    paths: ["episodes/**", "data/**", "domain.txt", "sync_platforms.py", "sync_live.py", "site_live.py", "tools/build_speakers.py", "platform_match.py", "show_notes.py", "sync_show_notes.py", "generate_og.py", "generate_service_images.py", "site_*.py", "site_taxonomy.py", "check_links.py", "check_schema.py", "assets/**", "generate_articles.py", "scrape_spotify.py", "fetch_en_episodes.py", "fetch_en_titles.py", "fetch_reviews.py", "generate_site.py", "translate_blog.py", "generate_covers.py", "sync_spreaker.py", "spreaker_auth.py", "site_cover.py", "site_design.py", "site_money.py", "site_legal.py", "shows_seo.json", ".github/workflows/site.yml", "check_*.py", "shownotes/site/**", "shownotes/QA.txt", "tests/sponsor_*", "tools/sponsor_ssr.mjs"]
+    paths: ["episodes/**", "data/**", "domain.txt", "sync_platforms.py", "sync_live.py", "site_live.py", "tools/build_speakers.py", "tools/generate_directory_intros.py", "platform_match.py", "show_notes.py", "sync_show_notes.py", "generate_og.py", "generate_service_images.py", "site_*.py", "site_taxonomy.py", "check_links.py", "check_schema.py", "assets/**", "generate_articles.py", "scrape_spotify.py", "fetch_en_episodes.py", "fetch_en_titles.py", "fetch_reviews.py", "generate_site.py", "translate_blog.py", "generate_covers.py", "sync_spreaker.py", "spreaker_auth.py", "site_cover.py", "site_design.py", "site_money.py", "site_legal.py", "shows_seo.json", ".github/workflows/site.yml", "check_*.py", "shownotes/site/**", "shownotes/QA.txt", "tests/sponsor_*", "tools/sponsor_ssr.mjs"]
   schedule:
     - cron: "17 5 * * *"
   workflow_dispatch:
@@ -153,7 +153,32 @@ jobs:
             git add data/episode_links.json data/episode_links_report.json data/platforms.json && git commit -m "Plattform-Folgenlinks aktualisiert" -q
             (git pull --rebase --autostash -q -X theirs || git rebase --abort) && git push -q
           fi
+      - name: Verzeichnis-Einleitungen nur aus Fakten erzeugen
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CF_AIG_TOKEN: ${{ secrets.CF_AIG_TOKEN }}
+          AI_GATEWAY_ID: ${{ vars.AI_GATEWAY_ID || 'm365fm' }}
+          COMMUNITY_API: https://api-dub.m365.fm
+          CRON_KEY: ${{ secrets.CRON_KEY }}
+        run: python3 tools/generate_directory_intros.py
+      - name: Verzeichnis-Einleitungen-Cache sichern
+        run: |
+          if [ -z "$(git status --porcelain data/directory_intros.json)" ]; then exit 0; fi
+          git config user.name "m365-site-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/directory_intros.json
+          git commit -m "Verzeichnis-Einleitungen aktualisiert"
+          for i in 1 2 3 4 5; do
+            if git pull --rebase --autostash -q origin main && git push -q origin HEAD:main; then exit 0; fi
+            git rebase --abort 2>/dev/null || true
+            sleep $((i * 5))
+          done
+          echo "::error::Verzeichnis-Einleitungen konnten nicht gesichert werden"
+          exit 1
       - run: python generate_site.py
+        env:
+          GOOGLE_MAPS_API_KEY: ${{ vars.GOOGLE_MAPS_API_KEY || secrets.GOOGLE_MAPS_API_KEY }}
       # Pruefsummenliste der R2-Seiten in einem eigenen Cache: wird direkt nach dem Upload gesichert (auch wenn spaeter eine blockierende Pruefung
       # scheitert oder der Lauf abgebrochen wird). Vorher ging sie dann verloren und der naechste Lauf lud dieselben Seiten noch einmal hoch.
       - name: Pruefsummenliste der R2-Seiten (letzter Stand)

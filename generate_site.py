@@ -500,6 +500,11 @@ def switch_from(body, alts):
     return re.sub(r'<details class="lsw">.*?</details>', lambda b: re.sub(r'<a href="([^"]*)" hreflang="([^"]+)"', lambda a: f'<a href="{m.get(a.group(2), a.group(1))}" hreflang="{a.group(2)}"', b.group(0)), body, count=1, flags=re.S)
 
 
+def _jsonld_script(value):
+    payload = json.dumps(value, ensure_ascii=False).replace("</", "<\\/")
+    return '<script type="application/ld+json">' + payload + "</script>\n"
+
+
 def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefault=None, og_type="article", extra_head="", noindex=False, side="", og_of=None, switch=None, self_url=None, share=True, og_image=None):
     if lang in COMM_LANGS[2:] and any(k in canonical for k in ("/community/", "/entity/", "/glossary/")):
         extra_head += f'<script defer src="{BASE}/assets/ui-{lang}.js"></script>'
@@ -517,7 +522,7 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
         SW_REG.append((lang, _self, noindex, _auto, alternates, switch))   # T42: fuer Umschalter (alle Seiten) und hreflang (nur _auto) am Ende des Baus
         if _auto: alt = "<!--hl-auto-->"
     body = switch_from(body, {**(switch or alternates or {}), (lang if lang in LANGS else "en"): _self})   # T42: eigene Sprache = diese Seite
-    ld = "".join(f'<script type="application/ld+json">{json.dumps(j, ensure_ascii=False)}</script>\n' for j in complete_ld(jsonld))
+    ld = "".join(_jsonld_script(j) for j in complete_ld(jsonld))
     desc = meta_desc(desc)   # T7: Beschreibung einheitlich begrenzt
     ogw, ogh = 1200, 630
     if canonical.endswith("404.html") or noindex:
@@ -1420,7 +1425,7 @@ def build():
                         articles=articles, url_of=url_of, cat_name=cat_name, ORDER=ORDER, strip_tags=strip_tags, anchor_title=anchor_title, short=short, parse_desc=parse_desc,
                         sitemap=sitemap, TODAY=TODAY, api=COMMUNITY_API, SCORE={l: (_QUI.get(l, {}).get("score") or _QUI["en"]["score"]) for l in list(LANGS) + ["en"]}))
 
-    _ctx = dict(community_tags=community_tags, write=write, write_r2=write_r2, page=page, header=header, footer=footer, footer_en=footer_en, BASE=BASE, LANGS=LANGS, active=active, url_of=url_of, anchor_title=anchor_title, sitemap=sitemap, TODAY=TODAY, api=COMMUNITY_API, orig_alts=ORIG_ALTS)
+    _ctx = dict(community_tags=community_tags, write=write, write_r2=write_r2, page=page, header=header, footer=footer, footer_en=footer_en, BASE=BASE, LANGS=LANGS, active=active, url_of=url_of, anchor_title=anchor_title, sitemap=sitemap, TODAY=TODAY, api=COMMUNITY_API, google_maps_key=os.environ.get("GOOGLE_MAPS_API_KEY", ""), orig_alts=ORIG_ALTS)
     phase("Folgenseiten (Dub-Sprachen), Startseiten")
     _people, _orgs = MEM.fetch_members(COMMUNITY_API)
 

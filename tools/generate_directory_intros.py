@@ -4,9 +4,7 @@ import hashlib
 import json
 import os
 import re
-import time
 import urllib.error
-import urllib.parse
 import urllib.request
 from pathlib import Path
 
@@ -141,11 +139,15 @@ def update_cache(facts_by_page, cache):
         digest = hashlib.sha256(encoded.encode("utf-8")).hexdigest()
         old = pages.get(key) or {}
         baseline_count = int(old.get("generated_count", 0))
-        count_changed = not baseline_count or abs(facts["entries"] / baseline_count - 1) >= 0.2
-        topics_changed = facts["top_topics"] != old.get("generated_top_topics", [])
-        significant = not old.get("intro") or count_changed or topics_changed
+        count_changed = not baseline_count or abs(facts["entries"] - baseline_count) >= baseline_count * 0.2
+        topics_changed = bool(set(facts["top_topics"]) - set(old.get("generated_top_topics", [])))
+        significant = not old.get("intro") or not old.get("eligible") or count_changed or topics_changed
         if significant and generated < LIMIT:
-            copy = _generate(facts)
+            try:
+                copy = _generate(facts)
+            except Exception as error:
+                print(f"::warning::Verzeichnis-Einleitung übersprungen: {type(error).__name__}")
+                copy = None
             if copy:
                 old.update(copy)
                 old.update(generated_count=facts["entries"], generated_top_topics=facts["top_topics"],

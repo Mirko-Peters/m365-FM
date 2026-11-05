@@ -109,9 +109,14 @@ test("directory: Geocode-Backfill verarbeitet höchstens 50 Einträge pro Lauf",
 
 test("directory: REQUEST_DENIED pausiert den Backfill bis eine Google-Antwort OK ist", async () => {
   const { db, raw } = await database(), now = Math.floor(Date.now() / 1000);
-  raw.exec(`INSERT INTO users(id,provider,sub,name,created) VALUES(1,'test','1','Person',${now});
-    INSERT INTO profiles(user_id,public,handle,country,updated) VALUES(1,1,'person','Germany',${now});
-    INSERT INTO profile_private(user_id,city,map_public) VALUES(1,'Berlin',1);`);
+  const user = raw.prepare("INSERT INTO users(id,provider,sub,name,created) VALUES(?,?,?,?,?)");
+  const profile = raw.prepare("INSERT INTO profiles(user_id,public,handle,country,updated) VALUES(?,1,?,'Germany',?)");
+  const privateProfile = raw.prepare("INSERT INTO profile_private(user_id,city,map_public) VALUES(?,?,1)");
+  for (let id = 1; id <= 55; id++) {
+    user.run(id, "test", String(id), `Person ${id}`, now);
+    profile.run(id, `person-${id}`, now);
+    privateProfile.run(id, `City ${id}`);
+  }
   const oldFetch = globalThis.fetch; let calls = 0, status = "REQUEST_DENIED";
   globalThis.fetch = async () => { calls++; return { json: async () => ({ status, results: [] }) }; };
   try {
@@ -125,8 +130,9 @@ test("directory: REQUEST_DENIED pausiert den Backfill bis eine Google-Antwort OK
     assert.equal(calls, 1);
     raw.exec("UPDATE directory_geocode_state SET retry_after=0 WHERE id=1");
     status = "OK";
+    const callsBeforeProbe = calls;
     await backfillDirectoryGeocodes(env);
-    assert.equal(calls, 2);
+    assert.ok(calls - callsBeforeProbe <= 50);
     assert.equal((await db.prepare("SELECT paused FROM directory_geocode_state WHERE id=1").first()).paused, 0);
   } finally { globalThis.fetch = oldFetch; raw.close(); }
 });

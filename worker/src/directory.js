@@ -177,12 +177,14 @@ export async function backfillDirectoryGeocodes(env) {
   if (!env.GOOGLE_GEOCODING_KEY) return { skipped: true, updated: 0 };
   const db = env.DB, today = new Date().toISOString().slice(0, 10);
   await ensureDirectoryCols(db);
+  let probes = 0;
   const state = await db.prepare("SELECT status,paused,retry_after,probe_address FROM directory_geocode_state WHERE id=1").first();
   if (state?.paused) {
     if (now() < Number(state.retry_after || 0) || !state.probe_address) return { skipped: true, paused: true, updated: 0 };
     const probe = await geocodeAddress(env, state.probe_address, {}, "address");
     await recordGeocodeStatus(db, probe, state.probe_address);
     if (probe.status !== "OK") return { skipped: true, paused: true, updated: 0 };
+    probes = 1;
   }
   const rows = [
     ...((await db.prepare(`SELECT 'u' kind,p.user_id id,pp.city city,pp.geo_city geo_city,p.country country,pp.lat lat,pp.lng lng,pp.geo_at geo_at,pp.geo_address geo_address,pp.geo_precision geo_precision
@@ -191,7 +193,7 @@ export async function backfillDirectoryGeocodes(env) {
       WHERE public=1 AND geo_at=0 AND (city<>'' OR address<>'') LIMIT 50`).all()).results || []),
     ...((await db.prepare(`SELECT 'e' kind,id,location city,country,lat,lng,geo_at,geo_address,geo_precision FROM events
       WHERE public=1 AND mode<>'online' AND location<>'' AND COALESCE(NULLIF(end,''),start)>=? AND geo_at=0 LIMIT 50`).bind(today).all()).results || []),
-  ].slice(0, 50);
+  ].slice(0, 50 - probes);
   let updated = 0;
   for (const row of rows) {
     const address = row.kind === "u" ? `${row.city}, ${row.country}` : `${row.address || row.city}, ${row.country}`;

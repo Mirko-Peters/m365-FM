@@ -1,4 +1,4 @@
-"""Mehrsprachige Service-Landingpages: Hub /services/, 6 x /for/<zielgruppe>/, 6 x /i-want-to/<ziel>/ in allen 15 Sprachpfaden.
+"""Mehrsprachige Service-Landingpages: Hub /services/, 7 x /for/<zielgruppe>/, 6 x /i-want-to/<ziel>/ in allen 15 Sprachpfaden.
 
 Texte: site_landing_copy.py (en, de). Weitere Sprachen ueber site_i18n.T (Worker uebersetzt die englischen Texte aus ui_js_en.json).
 Solange eine Sprache die Texte noch nicht uebersetzt hat (_ready), wird ihre Fassung noindex geschrieben, nicht in die Sitemap und nicht
@@ -93,6 +93,8 @@ def _link(base, lang, key):
         return f"{base}{p}/sponsor/"
     if key == "community":
         return f"{base}{p}/community/"
+    if key == "directory":
+        return f"{base}{p}/directory/"
     sub = {"members": "members", "companies": "companies", "events": "events", "guests": "guests", "cpodcast": "podcast",
            "blog": "blog", "videos": "video", "library": "library"}
     if key in sub:
@@ -345,6 +347,11 @@ def _hub(g, lang, features):
     intro_h, intro_ps = H["intro"]
     audiences = "".join(_card(base, lang, BY_PATH[p], features) for p in C.ORDER_AUDIENCES)
     goals = "".join(_card(base, lang, BY_PATH[p], features) for p in C.ORDER_GOALS)
+    dh, dw, dfor, dbens = H["directory_card"]
+    directory_card = (f'<article class="lp-card"><div class="lp-card-b"><h3><a href="{_a(base, lang, "directory")}">{_t(lang, dh)}</a></h3>'
+                      f'<p>{_t(lang, dw)}</p><p class="lp-for"><b>{_u(lang, "for")}:</b> {_t(lang, dfor)}</p>'
+                      f'<ul class="lp-ben">{"".join(f"<li>{_t(lang, item)}</li>" for item in dbens)}</ul>'
+                      f'<span class="lp-go">{_t(lang, C.STATUS["free"])}</span></div></article>')
     rows = ""
     for name, what, status, feature, key in H["glance"]:
         cls, label = _status(lang, status, feature, features)
@@ -361,6 +368,7 @@ def _hub(g, lang, features):
             f'<section class="sec" id="about"><h2>{_t(lang, intro_h)}</h2><div class="lp-intro">{"".join(f"<p>{_t(lang, p)}</p>" for p in intro_ps)}</div></section>'
             f'<section class="sec" id="audiences"><div class="kicker">{_u(lang, "by_audience_k")}</div><h2>{_u(lang, "by_audience")}</h2><div class="lp-cards">{audiences}</div></section>'
             f'<section class="sec" id="goals"><div class="kicker">{_u(lang, "by_goal_k")}</div><h2>{_u(lang, "by_goal")}</h2><div class="lp-cards">{goals}</div></section>'
+            f'<section class="sec" id="directory"><div class="kicker">{_t(lang, C.LINKS["directory"])}</div><div class="lp-cards">{directory_card}</div></section>'
             f'<section class="sec" id="overview"><div class="kicker">{_u(lang, "glance_k")}</div><h2>{_u(lang, "glance")}</h2>'
             f'<table class="lp-table"><thead><tr><th scope="col">{_u(lang, "col_service")}</th><th scope="col">{_u(lang, "col_what")}</th><th scope="col">{_u(lang, "col_status")}</th></tr></thead><tbody>{rows}</tbody></table></section>'
             + (f'<section class="sec" id="figures"><h2>{_u(lang, "figures")}</h2>{stats}</section>' if stats else "")
@@ -394,6 +402,8 @@ def _sub(g, lang, spec, features):
     ex_h, examples = spec["examples"]
     stats = _stats(g, lang) if spec.get("stats") else ""
     faq_items = _faq(lang, spec["faq"], features)
+    directory_note = (f'<p class="dir-note">{_t(lang, spec["directory_note"])}'
+                      f'<a href="{_a(base, lang, "directory")}">{_t(lang, C.LINKS["directory"])}</a>.</p>') if spec.get("directory_note") else ""
 
     offer_html = ""
     for o in offers:
@@ -403,7 +413,7 @@ def _sub(g, lang, spec, features):
     toc = [("need", need_h), ("offer", offers_h), ("how", steps_h), ("who", who_h), ("examples", ex_h)] + ([("figures", C.UI["figures"])] if stats else []) + [("faq", C.UI["faq"])]
     body = (f'{g["header"](lang, "")}<main class="wrap lp">'
             f'<nav class="crumbs" aria-label="{_t(lang, ("Breadcrumb", "Brotkrumennavigation"))}"><a href="{html.escape(f"{base}/" if lang == "en" else f"{base}/{lang}/", quote=True)}">{_u(lang, "crumb_home")}</a><a href="{html.escape(hub, quote=True)}">{_u(lang, "crumb")}</a></nav>'
-            f'<div class="lp-hero"><div><div class="kicker">{_u(lang, "kicker")}</div><h1>{html.escape(h1_text, quote=True)}</h1><p class="lede">{html.escape(lead_text, quote=True)}</p>'
+            f'<div class="lp-hero"><div><div class="kicker">{_u(lang, "kicker")}</div><h1>{html.escape(h1_text, quote=True)}</h1><p class="lede">{html.escape(lead_text, quote=True)}</p>{directory_note}'
             f'<div class="btns"><a class="btn main" href="{cta_url}">{cta}</a><a class="btn" href="{html.escape(hub, quote=True)}">{_u(lang, "all")}</a></div></div>'
             f'{_hero_img(path, lang, html.escape(alt_text, quote=True))}</div>'
             f'<nav class="lp-toc" aria-label="{_u(lang, "toc")}"><b>{_u(lang, "toc")}:</b>{"".join(f"<a href=\"#{i}\">{_t(lang, h)}</a>" for i, h in toc)}</nav>'
