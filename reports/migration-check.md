@@ -1,6 +1,6 @@
-# Prüfbericht Podpage-Migration (2026-11-04T06:54Z)
+# Prüfbericht Podpage-Migration (2026-11-05T06:53Z)
 
-Geprüft gegen https://www.m365.fm: 3645 frühere Adressen in 144 s.
+Geprüft gegen https://www.m365.fm: 3645 frühere Adressen in 85 s.
 
 | Art | gesamt | genau eine 301 auf 200 | 200 ohne 301 | mehrere 301 | Fehler |
 |---|---|---|---|---|---|
@@ -13,9 +13,8 @@ Geprüft gegen https://www.m365.fm: 3645 frühere Adressen in 144 s.
 
 Antwort auf dub.m365.fm: server=cloudflare, cf-ray=ja
 
-Stichprobe Blog: 48 von 50 Beiträgen ohne Befund.
+Stichprobe Blog: 49 von 50 Beiträgen ohne Befund.
 
 | alter Pfad | Ziel | Befund |
 |---|---|---|
-| /blog/copilot-connectivity-troubleshooter-complete-guide-for-microsoft-users/ | /community/u/mirko-p/blog/copilot-connectivity-troubleshooter-complete-guide-for-microsoft-users/ | Text kuerzer (2522 statt ~3207 Woerter) |
-| /blog/copilot-productivity-workflows-transform-how-you-work-in-microsoft-365/ | /community/u/mirko-p/blog/copilot-productivity-workflows-transform-how-you-work-in-microsoft-365/ | Text kuerzer (2409 statt ~3173 Woerter) |
+| /blog/microsoft-copilot-roadmap-explained/ | /community/u/mirko-p/blog/microsoft-copilot-roadmap-explained/ | Text kuerzer (3364 statt ~4724 Woerter) |

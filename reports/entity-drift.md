@@ -1,8 +1,8 @@
-# Entitäten: JSON gegen D1 (2026-11-04T06:54Z)
+# Entitäten: JSON gegen D1 (2026-11-05T06:53Z)
 
-JSON-Basis 2158 · D1 live 581 · in beiden 578 · nur JSON 1580 · nur D1 3
+JSON-Basis 2158 · D1 live 2161 · in beiden 2158 · nur JSON 0 · nur D1 3
 
-**3 Entitäten** weichen ab (letzte live-Fassung: import/auto 2, person 1).
+**2 Entitäten** weichen ab (letzte live-Fassung: import/auto 1, person 1).
 
 | Feld | JSON anders als D1 | davon in D1 leer | Beispiele |
 |---|---|---|---|
@@ -10,7 +10,7 @@ JSON-Basis 2158 · D1 live 581 · in beiden 578 · nur JSON 1580 · nur D1 3
 | type | 0 | 0 |  |
 | docs | 0 | 0 |  |
 | wikidata | 1 | 1 | m365fm |
-| wikipedia | 1 | 1 | copilot-adoption |
+| wikipedia | 0 | 0 |  |
 | web | 0 | 0 |  |
 | same_as | 0 | 0 |  |
 | aliases | 0 | 0 |  |
