@@ -103,8 +103,8 @@
   }
   var timer;
   form.addEventListener("submit", function (event) { event.preventDefault(); });
-  form.addEventListener("input", function () { clearTimeout(timer); timer = setTimeout(function () { load(1); }, 250); });
-  form.addEventListener("change", function () { load(1); });
+  form.addEventListener("input", function () { clearTimeout(timer); timer = setTimeout(function () { load(0); }, 250); });
+  form.addEventListener("change", function () { load(0); });   // erste Seite ersetzen, nicht anhaengen
   more.addEventListener("click", function () { load(page + 1); });
   if (mapButton) mapButton.addEventListener("click", loadMap);
   [].forEach.call(document.querySelectorAll("[data-view]"), function (button) {
@@ -113,5 +113,5 @@
       [].forEach.call(document.querySelectorAll("[data-view]"), function (x) { x.setAttribute("aria-pressed", x === button ? "true" : "false"); });
     });
   });
-  options(); render(items, false); load(1);
+  options(); render(items, false); load(0);
 })();

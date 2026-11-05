@@ -4,7 +4,7 @@ import re
 import unicodedata
 from pathlib import Path
 from site_i18n import COMM_LANGS, pfx, pfx2, overlay
-from site_learn import esc, LCSS
+from site_learn import esc, LCSS, ENTS
 
 ROOT = Path(__file__).parent
 
@@ -120,7 +120,8 @@ def _facts_sections(entries, place, lang, s):
             events.append(item)
         if item.get("type") == "company":
             companies.append(item)
-    topic_html = "".join(f'<li>{esc(name)} <span class="mut">({count})</span></li>' for name, count in sorted(topics.items(), key=lambda row: (-row[1], row[0]))[:5])
+    tn = lambda t: (ENTS.get(t) or {}).get("name") or t   # Entitaetsname statt Kennung
+    topic_html = "".join(f'<li>{esc(tn(name))} <span class="mut">({count})</span></li>' for name, count in sorted(topics.items(), key=lambda row: (-row[1], row[0]))[:5])
     event_html = "".join(f'<li><a href="{esc(item["url"])}">{esc(item["name"])}</a> <time>{esc(item.get("start", ""))}</time></li>' for item in sorted(events, key=lambda x: x.get("start", ""))[:5])
     company_html = "".join(f'<li><a href="{esc(item["url"])}">{esc(item["name"])}</a></li>' for item in companies[:5])
     out = []
@@ -135,10 +136,13 @@ def _facts_sections(entries, place, lang, s):
            f'<p>{esc(s["count_answer"].format(experts=experts, companies=len(companies), events=len(events)))}</p></details>')
     if topics:
         top = sorted(topics.items(), key=lambda row: (-row[1], row[0]))[:3]
-        topic_names = ", ".join(f"{name} ({count})" for name, count in top)
+        topic_names = ", ".join(f"{tn(name)} ({count})" for name, count in top)
         faq += f'<details><summary>{esc(s["topics_question"])}</summary><p>{esc(s["topics_answer"].format(topics=topic_names))}</p></details>'
     out.append(faq + "</section>")
     return "".join(out)
+
+
+DIR_CSS = "<style>.dir-wrap nav ol{display:flex;flex-wrap:wrap;gap:.3em .6em;list-style:none;padding:0;margin:1em 0;font-size:.9rem}.dir-wrap nav li+li::before{content:'›';margin-inline-end:.6em;color:var(--mut)}.dir-items{list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(16em,1fr));gap:.8em}.dir-item{border:1px solid var(--bd);background:var(--card);padding:.8em 1em}.dir-item p{margin:.3em 0 0;color:var(--mut)}</style>"
 
 
 def _breadcrumb(crumbs):
@@ -170,14 +174,14 @@ def build(g):
         map_aria = f'{esc(s["list"])} / {esc(s["map"])}' if maps_key else esc(s["list"])
         hub_schema = [{"@context": "https://schema.org", "@type": "ItemList", "name": s["title"], "url": canonical, "numberOfItems": len(items),
                        "itemListElement": [{"@type": "ListItem", "position": i + 1, "item": _schema_item(BASE, item)} for i, item in enumerate(items)]}]
-        body = (f'{g["header"](lang, "")}<main class="wrap dir-wrap"><h1>{esc(s["title"])}</h1><p class="mut">{esc(s["intro"])}</p>'
+        body = (f'{g["header"](lang, "")}<main class="wrap dir-wrap" style="padding-top:2em"><h1>{esc(s["title"])}</h1><p class="mut">{esc(s["intro"])}</p>'
                 f'<form class="dir-filters" aria-label="{esc(s["search"])}">{filters}</form><div class="dir-view" role="group" aria-label="{map_aria}"><button class="btn" type="button" data-view="list" aria-pressed="true">{esc(s["list"])}</button>{map_view}</div><div class="dir-layout" data-view="list" data-map-available="{str(bool(maps_key)).lower()}"><section class="dir-list"><h2>{esc(s["list"])}</h2><p class="mut" data-count></p><div data-results>{_list(items[:30], lang, s)}</div><button class="btn" type="button" data-more hidden>{esc(s["more"])}</button></section>{map_panel}</div></main>'
-                f'<style>.dir-wrap{{max-width:76em}}.dir-filters{{display:grid;grid-template-columns:repeat(auto-fit,minmax(10em,1fr));gap:.6em;margin:1.2em 0}}.dir-filters label{{display:grid;gap:.2em;font-weight:600}}.dir-filters input,.dir-filters select{{font:inherit;min-height:2.6em;padding:.35em;border:1px solid var(--bd);border-radius:0;background:var(--card);color:var(--fg)}}.dir-layout{{display:grid;grid-template-columns:minmax(0,1fr) minmax(20em,1fr);gap:1.2em}}.dir-layout[data-map-available=false]{{grid-template-columns:1fr}}.dir-list,.dir-map-panel{{min-width:0}}.dir-items{{list-style:none;padding:0}}.dir-item{{padding:.8em 0;border-bottom:1px solid var(--bd)}}.dir-item p{{margin:.2em 0;color:var(--mut)}}.dir-badge{{display:inline-block;border:1px solid var(--ac);padding:.05em .5em;font:600 .8em "Barlow Condensed",sans-serif;letter-spacing:.08em;text-transform:uppercase}}.dir-map-placeholder,.dir-map{{height:26em;border:1px solid var(--bd);overflow:hidden}}.dir-map-placeholder svg{{width:100%;height:100%}}.dir-map{{background:var(--card)}}.dir-wrap nav ol{{display:flex;flex-wrap:wrap;gap:.5em;list-style:none;padding:0;color:var(--mut)}}.dir-wrap nav li+li:before{{content:"/";margin-inline-end:.5em}}.dir-wrap section{{margin:2em 0}}@media(max-width:48em){{.dir-layout{{grid-template-columns:1fr}}.dir-layout[data-view=map] .dir-list{{display:none}}.dir-layout[data-view=list] .dir-map-panel{{display:none}}.dir-map-placeholder,.dir-map{{height:20em}}}}</style>'
+                f'<style>.dir-filters{{display:grid;grid-template-columns:repeat(auto-fit,minmax(10em,1fr));gap:.6em;margin:1.2em 0}}.dir-filters label{{display:grid;gap:.2em;font-weight:600}}.dir-filters input,.dir-filters select{{font:inherit;min-height:2.6em;padding:.35em;border:1px solid var(--bd);border-radius:0;background:var(--card);color:var(--fg)}}.dir-layout{{display:grid;grid-template-columns:minmax(0,1fr) minmax(20em,1fr);gap:1.2em}}.dir-layout[data-map-available=false]{{grid-template-columns:1fr}}.dir-list,.dir-map-panel{{min-width:0}}.dir-items{{list-style:none;padding:0}}.dir-item{{padding:.8em 0;border-bottom:1px solid var(--bd)}}.dir-item p{{margin:.2em 0;color:var(--mut)}}.dir-badge{{display:inline-block;border:1px solid var(--ac);padding:.05em .5em;font:600 .8em "Barlow Condensed",sans-serif;letter-spacing:.08em;text-transform:uppercase}}.dir-map-placeholder,.dir-map{{height:26em;border:1px solid var(--bd);overflow:hidden}}.dir-map-placeholder svg{{width:100%;height:100%}}.dir-map{{background:var(--card)}}.dir-wrap nav ol{{display:flex;flex-wrap:wrap;gap:.5em;list-style:none;padding:0;color:var(--mut)}}.dir-wrap nav li+li:before{{content:"/";margin-inline-end:.5em}}.dir-wrap section{{margin:2em 0}}@media(max-width:48em){{.dir-layout{{grid-template-columns:1fr}}.dir-layout[data-view=map] .dir-list{{display:none}}.dir-layout[data-view=list] .dir-map-panel{{display:none}}.dir-map-placeholder,.dir-map{{height:20em}}}}</style>'
                 f'<script>window.M365D={config}</script><script defer src="{BASE}/assets/directory.js"></script>'
                 f'{g["footer"](lang) if lang in g["LANGS"] else g["footer_en"]()}')
         hub_indexable = lang in hub_alternates
         alternates = hub_alternates if hub_indexable else None
-        write(f"{pfx2(lang)}directory/index.html", page(lang, s["title"], s["intro"], canonical, body, alternates, hub_schema, xdefault=alternates.get("en") if alternates else None, og_type="website", extra_head=LCSS, noindex=not hub_indexable))
+        write(f"{pfx2(lang)}directory/index.html", page(lang, s["title"], s["intro"], canonical, body, alternates, hub_schema, xdefault=alternates.get("en") if alternates else None, og_type="website", extra_head=LCSS + DIR_CSS, noindex=not hub_indexable))
         if hub_indexable:
             g["sitemap"].append((canonical, today, None))
 
@@ -259,9 +263,9 @@ def build(g):
             sections = _facts_sections(entries, place, lang, s)
             body = (f'{g["header"](lang, "")}<main class="wrap dir-wrap"><nav aria-label="{esc(s["crumbs"])}"><ol>{crumbs_html}</ol></nav>'
                     f'<h1>{esc(title)}</h1>{f"<p>{esc(intro)}</p>" if intro else ""}{f"<p>{esc(detail)}</p>" if detail else ""}'
-                    f'{sections}{neighbors}{_list(entries, lang, s)}</main>{g["footer"](lang) if lang in g["LANGS"] else g["footer_en"]()}')
+                    f'{sections}{neighbors}<section><h2>{esc(s["directory"])}: {len(entries)} {esc(s["result"])}</h2>{_list(entries, lang, s)}</section></main>{g["footer"](lang) if lang in g["LANGS"] else g["footer_en"]()}')
             own_indexable = data["indexable"]
             alts = page_alternates if own_indexable else None
-            write(f"{pfx2(lang)}{rel}index.html", page(lang, title, intro or title, canonical, body, alts, structured, xdefault=alts.get("en") if alts else None, og_type="website", extra_head=LCSS, noindex=not own_indexable))
+            write(f"{pfx2(lang)}{rel}index.html", page(lang, title, intro or title, canonical, body, alts, structured, xdefault=alts.get("en") if alts else None, og_type="website", extra_head=LCSS + DIR_CSS, noindex=not own_indexable))
             if own_indexable:
                 g["sitemap"].append((canonical, today, None))
