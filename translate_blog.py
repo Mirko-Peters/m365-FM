@@ -2,15 +2,16 @@
 
 A) Haiku im Message Batch (guenstig, fuer die Masse) - laeuft als GitHub-Workflow translate-blog.yml:
    plan     Status + Kostenschaetzung (ohne Schluessel)
-   submit   offene Uebersetzungen als Batch(es) absenden (Budget-Deckel BLOG_BUDGET_USD)
+   submit   offene Uebersetzungen als Batch(es) absenden (Monatsbudget BLOG_BUDGET_USD)
    collect  fertige Batches abholen, pruefen (QA), speichern
    run      collect -> submit -> warten (WAIT_MIN) -> collect;  auto = run nur fuer Artikel der letzten NEW_DAYS Tage
 B) Claude-Agenten hier in Claude (Cowork, ohne API) - fuer Nacharbeit, Reviews, wichtige Artikel:
    prepare  -> work/blog-i18n/<lang>/BRIEF.md + <key>.in.txt;  Agent schreibt <key>.out.txt;  apply -> pruefen, speichern
 sample: Stichprobe fuer die Review-Agenten (data/blog_i18n/review/<lang>.json)
 Optionen: --langs de,fr  --limit N (Artikel je Sprache, Batch)  --per-agent N  --order newest|oldest  --slugs a,b  --redo
-Profile: agents/blog-team/uebersetzer/<lang>.md (Systemprompt je Sprache). Quelle: data/podpage/blog_posts.json.gz (dieselben Beitraege liegen inzwischen in D1).
-Zwischenablage: data/blog_i18n/<lang>/<bucket>.json.gz {slug: {h, n, seg{id: text}, ok, m, ts}}; Ziel D1 (blog_posts je Sprache) folgt.
+Profile: agents/blog-team/uebersetzer/<lang>.md (Systemprompt je Sprache). Quellen: data/podpage/blog_posts.json.gz (dieselben Beitraege liegen inzwischen in D1)
+und die freigegebenen englischen Content-Pakete imports/blog/en/*.md (status: approved, site_content_blog.tr_sources; Schluessel content/<slug>, --slugs nimmt auch den nackten Slug).
+Zwischenablage: data/blog_i18n/<lang>/<bucket>.json.gz {slug: {h, n, seg{id: text}, ok, m, ts}}; Seiten baut site_legacy_blog bzw. site_content_blog.translations.
 """
 import gzip, hashlib, json, os, random, re, sys, time, urllib.request, urllib.error
 from site_text import bad as bad_text
@@ -30,7 +31,7 @@ MODEL = os.environ.get("TRANSLATE_MODEL", "claude-haiku-5-5")
 AGENT_MODEL = os.environ.get("AGENT_MODEL", "claude-agent")   # Herkunft bei Weg B
 # Haiku 5.5 im Message Batch (50 % Rabatt, Prompts bis 100K Tokens), $ je 1 Mio. Tokens
 PRICE_IN, PRICE_OUT = float(os.environ.get("PRICE_IN", "0.05")), float(os.environ.get("PRICE_OUT", "0.25"))
-BUDGET = float(os.environ.get("BLOG_BUDGET_USD") or "10")
+BUDGET = float(os.environ.get("BLOG_BUDGET_USD") or "10")   # Monatsbudget in USD (Mirko, 5.11.2026: 25 $ im Monat); zaehlt je Kalendermonat (UTC) neu
 CHUNK = int(os.environ.get("CHUNK_CHARS", "4500"))        # Quelltext je Batch-Anfrage
 MAX_TOK = int(os.environ.get("MAX_TOKENS", "16000"))
 PER_BATCH = int(os.environ.get("PER_BATCH", "5000"))
@@ -46,15 +47,23 @@ KEEP = ["Microsoft 365", "Microsoft Teams", "SharePoint", "OneDrive", "Copilot S
         "Dynamics 365", "GitHub", "Windows", "Microsoft Graph", "PowerShell", "Mirko Peters", "M365.FM", "M365 Show", "M365Con", "MVP"]
 SCRIPT = {"ru": "Ѐ-ӿ", "uk": "Ѐ-ӿ", "ar": "؀-ۿ", "he": "֐-׿", "ja": "぀-ヿ一-鿿",
           "ko": "가-힯ᄀ-ᇿ"}
+DENSE = {"ja": 2, "ko": 2}   # ein Kana/Kanji/Hangul-Zeichen traegt etwa so viel wie zwei lateinische Buchstaben
+MAX_TRIES = int(os.environ.get("MAX_TRIES", "3"))   # danach sendet auto/submit einen Beitrag je Sprache nicht erneut (nur --slugs oder --redo)
 BLOCK = {"p", "li", "h2", "h3", "h4", "blockquote", "td", "th", "ul", "ol", "table", "thead", "tbody", "tr", "hr", "pre"}
 
 
 # ---------- Quelle und Segmente ----------
 def posts():
-    if not SRC.exists(): return []
-    ps = [p for p in json.loads(gzip.open(SRC, "rt", encoding="utf-8").read()) if p.get("title") and p.get("html")]
+    ps = [p for p in json.loads(gzip.open(SRC, "rt", encoding="utf-8").read()) if p.get("title") and p.get("html")] if SRC.exists() else []
+    ps += content_posts()
     ps.sort(key=lambda p: p.get("iso") or "", reverse=True)
     return ps
+
+
+def content_posts():
+    """Freigegebene englische Content-Pakete (imports/blog/en/*.md) im Format der frueheren Beitraege; Schluessel content/<slug> (kollidiert nie mit einem Slug)."""
+    import site_content_blog as CBL
+    return CBL.tr_sources()
 
 
 def segment(html_clean):
@@ -188,15 +197,23 @@ TAG = re.compile(r"<\s*(/?[a-zA-Z0-9]+)")
 HREF = re.compile(r'href="([^"]*)"')
 
 
+def _plain(s):
+    """Buchstaben ohne Tags, Entities, Ziffern, <code>-Inhalt und geschuetzte Namen (KEEP) - Grundlage der Schrift-Pruefung."""
+    s = re.sub(r"<code\b[^>]*>.*?</code>", " ", s, flags=re.S | re.I)
+    for k in KEEP: s = s.replace(k, " ")
+    return re.sub(r"<[^>]+>|&\w+;|[\W\d_]", "", s)
+
+
 def qa(lang, src, out):
     """Gibt (ok, grund, warnung) zurueck. Harte Fehler -> Segment wird nicht gespeichert und spaeter neu uebersetzt."""
     if not out.strip(): return False, "leer", None
     if sorted(TAG.findall(src)) != sorted(TAG.findall(out)): return False, "html-tags", None
     if sorted(HREF.findall(src)) != sorted(HREF.findall(out)): return False, "links", None
-    alpha = re.sub(r"<[^>]+>|&\w+;|[\W\d_]", "", out)
-    if lang in SCRIPT and len(re.sub(r"<[^>]+>|&\w+;|[\W\d_]", "", src)) >= 20:
-        own = len(re.findall(f"[{SCRIPT[lang]}]", alpha))
-        if own < 0.25 * max(1, len(alpha)): return False, "falsche-schrift", None
+    if lang in SCRIPT and len(_plain(src)) >= 20:
+        # Code und Produktnamen bleiben lateinisch (Regel im System-Prompt) und zaehlen hier nicht mit, sonst fiele z. B. ein
+        # reiner <code>-Absatz oder "Azure Center for SAP solutionsとは何ですか？" bei jedem Versuch durch
+        alpha = _plain(out); raw = len(re.findall(f"[{SCRIPT[lang]}]", alpha)); own = raw * DENSE.get(lang, 1)
+        if own < 0.25 * max(1, own + len(alpha) - raw): return False, "falsche-schrift", None
     words = re.findall(r"[a-zA-Z]+", re.sub(r"<[^>]+>", " ", src))
     if lang not in SCRIPT and out.strip() == src.strip() and len(words) >= 8: return False, "unuebersetzt", None
     if len(src) >= 80 and not (0.3 <= len(out) / len(src) <= 5): return False, "laenge", None
@@ -222,7 +239,7 @@ def pick(a, lang, have, ps, busy):
     for p in ps:
         if len(out) >= n: break
         if p["slug"] in busy: continue
-        if QUEUE and p["slug"] not in QUEUE.get(lang, ()): continue   # Vormerkliste: nur die fuer diese Sprache markierten Beitraege
+        if QUEUE and p["slug"] not in QUEUE.get(lang, ()) and p.get("cp_slug") not in QUEUE.get(lang, ()): continue   # Vormerkliste: nur die fuer diese Sprache markierten Beitraege
         tpl, units, h = source_of(p); rec = have.get(p["slug"])
         if a["redo"] or not rec or rec.get("h") != h: rec = {"h": h, "n": len(units), "seg": {}, "ok": False}
         if rec.get("ok"): continue
@@ -320,7 +337,7 @@ def select(a, ps):
         QUEUE.clear(); QUEUE.update(queue_items()); langs = [l for l in langs if QUEUE.get(l)]
         sl = sl | set().union(*QUEUE.values()) if QUEUE else {"-"}
         print("Vormerkliste:", {l: len(v) for l, v in QUEUE.items()} or "leer")
-    if sl: ps = [p for p in ps if p["slug"] in sl]
+    if sl: ps = [p for p in ps if p["slug"] in sl or p.get("cp_slug") in sl]   # Content-Pakete auch ueber den nackten Slug
     if a["mode"] == "auto":
         lim = (datetime.now(timezone.utc) - timedelta(days=NEW_DAYS)).isoformat()
         ps = [p for p in ps if (p.get("iso") or "") >= lim]
@@ -355,17 +372,31 @@ def est(lang, units):
     return n_req * sys_tok + src_tok * 1.1, src_tok * measured_factor(lang)
 
 
+def post_cost(units, langs=LANGS):
+    """Geschaetzte Batch-Kosten (USD), einen Beitrag komplett in alle langs zu uebersetzen (gleiche Rechnung wie submit/plan)."""
+    return round(sum(cost(*est(lang, units)) for lang in langs), 4)
+
+
 def pending_cost(): return sum(b.get("est_usd", 0) for b in jload("batches.json", []))
 
 
-def spent(): u = jload("usage.json", {}); return cost(u.get("input_tokens", 0), u.get("output_tokens", 0))
+def spent(): u = jload("usage.json", {}); return cost(u.get("input_tokens", 0), u.get("output_tokens", 0))   # gesamt seit Beginn (nur Anzeige)
+
+
+def month(): return datetime.now(timezone.utc).strftime("%Y-%m")
+
+
+def spent_month(ym=None):
+    """Ausgaben im Kalendermonat (UTC) - dagegen gilt der Deckel BLOG_BUDGET_USD. Laeufe vor Einfuehrung (5.11.2026) haben keinen Monat und zaehlen nicht."""
+    m = jload("usage.json", {}).get("months", {}).get(ym or month(), {})
+    return cost(m.get("input_tokens", 0), m.get("output_tokens", 0))
 
 
 def submit(a):
     langs, ps = select(a, posts())
     busy = {(b2["lang"], b2["slug"]) for b in jload("batches.json", []) for b2 in b.get("items", [])}
     reqs, items, money = [], [], 0.0
-    room = BUDGET - spent() - pending_cost()
+    room = BUDGET - spent_month() - pending_cost()
     for lang in langs:
         have = load_lang(lang); sysp = system_prompt(lang); n_posts = 0
         for p in ps:
@@ -375,11 +406,13 @@ def submit(a):
             rec = have.get(p["slug"])
             if a["redo"] or not rec or rec.get("h") != h: rec = {"h": h, "n": len(units), "seg": {}, "ok": False}
             if rec.get("ok"): continue
+            if rec.get("tries", 0) >= MAX_TRIES and not (a["redo"] or a["slugs"]):
+                continue   # schon MAX_TRIES Mal abgeholt und noch unvollstaendig: nicht alle 3 h erneut senden (Kosten, Commits)
             n_posts += 1
             cs = chunks(units, rec["seg"])
             ti, to = est(lang, [u for c in cs for u in c]); c_usd = cost(ti, to)
             if money + c_usd > room:
-                print(f"Budget erreicht ({BUDGET:.2f} $; bisher {spent():.2f} $, offen {pending_cost():.2f} $) - Rest bleibt fuer spaeter"); break
+                print(f"Monatsbudget erreicht ({BUDGET:.2f} $; diesen Monat {spent_month():.2f} $, offen {pending_cost():.2f} $) - Rest bleibt fuer naechsten Monat"); break
             money += c_usd
             for ci, c in enumerate(cs):
                 reqs.append({"custom_id": f"{lang}_{key(p['slug'])}_{ci}", "params": {"model": MODEL, "max_tokens": MAX_TOK,
@@ -410,7 +443,7 @@ def collect():
         st = api("GET", f"/v1/messages/batches/{b['id']}")
         if st["processing_status"] != "ended": print(b["id"], st["processing_status"], st["request_counts"]); left.append(b); continue
         info = {(it["lang"], key(it["slug"])): it for it in b["items"]}
-        data, touched, qa_log = {}, {}, {}
+        data, touched, qa_log, seen = {}, {}, {}, set()
         tin = tout = ok = bad = 0; why = {}
         for line in api("GET", st["results_url"], raw=True).decode().splitlines():
             r = json.loads(line); lang, k, _ = r["custom_id"].split("_")
@@ -444,13 +477,19 @@ def collect():
                     bad += 1; why[reason] = why.get(reason, 0) + 1
                     qa_log.setdefault(lang, []).append({"slug": p["slug"], "seg": i, "fehler": reason, "src": src[i][:160], "out": t[:160]})
             rec["ok"] = all(i in rec["seg"] for i in src); rec["m"] = MODEL; rec["ts"] = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-            data[lang][p["slug"]] = rec; touched[lang].add(bucket(p["slug"]))
+            data[lang][p["slug"]] = rec; touched[lang].add(bucket(p["slug"])); seen.add((lang, p["slug"]))
+        for lang, sl in seen:   # ein Versuch je Beitrag und Sprache und Batch (nicht je Teilanfrage)
+            rc = data[lang].get(sl)
+            if rc is not None and rc.get("ok"): rc.pop("tries", None)
+            elif rc is not None: rc["tries"] = rc.get("tries", 0) + 1
         for lang, d in data.items(): save_lang(lang, d, touched[lang])
         for lang, lg in qa_log.items():
             (OUT / "qa").mkdir(parents=True, exist_ok=True)
             f = OUT / "qa" / f"{lang}.json"; old = json.loads(f.read_text("utf-8")) if f.exists() else []
             f.write_text(json.dumps((old + lg)[-500:], ensure_ascii=False, indent=1), encoding="utf-8")
         usage["input_tokens"] += tin; usage["output_tokens"] += tout
+        mo = usage.setdefault("months", {}).setdefault(month(), {"input_tokens": 0, "output_tokens": 0})
+        mo["input_tokens"] += tin; mo["output_tokens"] += tout
         report_usage("translate_blog", b["model"], tin, tout, "batch", batch=True)
         usage["runs"].append({"batch": b["id"], "model": b["model"], "segments_ok": ok, "segments_failed": bad, "why": why, "input_tokens": tin, "output_tokens": tout, "cost_usd": round(cost(tin, tout), 3)})
         jsave("usage.json", usage); print(f"{b['id']}: {ok} Segmente ok, {bad} fehlgeschlagen {why}, Kosten {cost(tin, tout):.3f} $")
@@ -461,11 +500,13 @@ def collect():
 def status():
     ps = posts(); per_round = len(LANGS) * PER_AGENT
     st = {"updated": datetime.now(timezone.utc).isoformat()[:19], "posts": len(ps), "engine": f"{MODEL} (Batch) + Claude-Agenten", "per_agent": PER_AGENT,
-          "budget_usd": BUDGET, "spent_usd": round(spent(), 3), "pending_batches": len(jload("batches.json", [])), "pending_est_usd": round(pending_cost(), 3), "langs": {}}
-    srcs0 = {p["slug"]: source_of(p) for p in ps}; srcs = {k: v[2] for k, v in srcs0.items()}; left = 0; all_ti = all_to = 0
+          "budget_usd": BUDGET, "budget_period": "month", "month": month(), "spent_month_usd": round(spent_month(), 3), "spent_usd": round(spent(), 3), "pending_batches": len(jload("batches.json", [])), "pending_est_usd": round(pending_cost(), 3), "langs": {}}
+    srcs0 = {p["slug"]: source_of(p) for p in ps}; srcs = {k: v[2] for k, v in srcs0.items()}; left = 0; all_ti = all_to = 0; cdone = {}
     for lang in LANGS:
         have = load_lang(lang)
         done = sum(1 for p in ps if (have.get(p["slug"]) or {}).get("ok") and have[p["slug"]].get("h") == srcs[p["slug"]])
+        for p in ps:
+            if p.get("cp_slug") and (have.get(p["slug"]) or {}).get("ok") and have[p["slug"]].get("h") == srcs[p["slug"]]: cdone[p["slug"]] = cdone.get(p["slug"], 0) + 1
         ti = to = 0
         for p in ps:
             rec = have.get(p["slug"]) or {}
@@ -478,8 +519,11 @@ def status():
                              "qa_errors_logged": sum(1 for x in ql if x.get("fehler")), "jobs_waiting": len(list((WORK / lang).glob("*.in.txt"))) if (WORK / lang).exists() else 0}
         left += len(ps) - done
     st["open_translations"] = left; st["rounds_left"] = -(-left // per_round); st["rest_est_usd_all"] = round(cost(all_ti, all_to), 2)
+    st["content"] = [{"slug": p["cp_slug"], "est_usd_all_langs": post_cost(srcs0[p["slug"]][1]), "done_langs": cdone.get(p["slug"], 0)}   # Content-Pakete: Kosten je Beitrag x 14 Sprachen (Batch-Preis)
+                     for p in ps if p.get("cp_slug")]
     jsave("status.json", st)
-    print(f"{st['posts']} Artikel x 19 Sprachen | offen {left} Uebersetzungen | Haiku-Batch ~{st['rest_est_usd_all']} $ (ausgegeben {st['spent_usd']} von {BUDGET} $) | Agenten ~{st['rounds_left']} Runden")
+    for c in st["content"]: print(f"  Content-Paket {c['slug']}: ~{c['est_usd_all_langs']} $ fuer {len(LANGS)} Sprachen, fertig {c['done_langs']}/{len(LANGS)}")
+    print(f"{st['posts']} Artikel x 19 Sprachen | offen {left} Uebersetzungen | Haiku-Batch ~{st['rest_est_usd_all']} $ (diesen Monat {st['spent_month_usd']} von {BUDGET} $, gesamt {st['spent_usd']} $) | Agenten ~{st['rounds_left']} Runden")
     for l, v in st["langs"].items(): print(f"  {l:3} {v['done']:5}/{st['posts']} fertig ({v['pct']} %), Rest ~{v['rest_est_usd']} $")
     return st
 
@@ -493,7 +537,7 @@ def sample(a):
         res = []
         for p in pick:
             t, d, h, _ = assemble(p, have[p["slug"]]); tpl, units, _h = source_of(p)
-            res.append({"slug": p["slug"], "url": f"https://www.m365.fm/{lang}/show/blog/{p['slug']}/", "pairs": [{"id": i, "en": s, lang: have[p["slug"]]["seg"].get(i, "")} for i, s in units][:60]})
+            res.append({"slug": p["slug"], "url": f"https://www.m365.fm/{lang}/community/u/{p.get('author') or 'mirko-p'}/blog/{p.get('cp_slug') or p['slug']}/", "pairs": [{"id": i, "en": s, lang: have[p["slug"]]["seg"].get(i, "")} for i, s in units][:60]})
         (OUT / "review").mkdir(parents=True, exist_ok=True)
         (OUT / "review" / f"{lang}.json").write_text(json.dumps(res, ensure_ascii=False, indent=1), encoding="utf-8")
         print(lang, len(res), "Beitraege ->", OUT / "review" / f"{lang}.json")

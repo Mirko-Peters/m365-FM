@@ -6,7 +6,9 @@ Bilder nur von img.m365.fm (CLAUDE.md), keine Skripte. Fehler stehen im Bericht 
 
 Kopf: title, summary, status (review|approved), publish (true|false), author (Profil-Handle, Standard mirko-p), date (JJJJ-MM-TT),
 topics (Entitaets-IDs), faq ([{q, a}]). Text: Markdown mit ##-Ueberschriften, Absaetzen, Listen, **fett**, *kursiv*, `code`,
-[Link](https://...) und Bildern ![Alt](https://img.m365.fm/...)."""
+[Link](https://...) und Bildern ![Alt](https://img.m365.fm/...).
+Englische Pakete uebersetzt das Uebersetzer-Team (translate_blog.py, Schluessel content/<slug>) in die 14 Sprachen; translations() baut daraus
+die Sprachfassungen unter /<sprache>/community/u/<autor>/blog/<slug>/ wie bei den frueheren Beitraegen."""
 import hashlib, json, re, time
 from datetime import datetime, timezone
 from pathlib import Path
@@ -96,3 +98,61 @@ def publish(write, ents):
         print(f"Content-Pakete Blog: {rep['approved']} freigegeben, {rep['review']} in Pruefung, {len(rep['errors'])} mit Fehlern")
         for e in rep["errors"][:20]: print("  FEHLER", e["file"], "; ".join(e["errors"]))
     return len(items)
+
+
+# ---------- Sprachfassungen der englischen Pakete (Uebersetzer-Team, translate_blog.py) ----------
+TR_PREFIX = "content/"   # Schluessel in data/blog_i18n: "content/<slug>" - getrennt von den Slugs der frueheren Podpage-Beitraege (kein Slug enthaelt "/")
+
+
+class _AnyTopic:
+    """Themen-Pruefung aus: das Uebersetzer-Team braucht die Entitaeten nicht (der Seitenbau prueft sie trotzdem)."""
+    def __contains__(self, x): return True
+
+
+def tr_sources(ents=None):
+    """Freigegebene, fehlerfreie englische Pakete als Quelle fuer translate_blog.py, mit denselben Feldern wie die frueheren Beitraege
+    (title, desc, html, faq im schema.org-Format, iso). HTML genau wie im Index fuer den Worker (render). Ohne ents keine Themen-Pruefung."""
+    items, _ = collect(_AnyTopic() if ents is None else ents)
+    return [{"slug": TR_PREFIX + it["slug"], "cp_slug": it["slug"], "author": it["author"], "title": it["title"], "desc": it["summary"], "html": it["html"],
+             "faq": [{"name": q["q"], "acceptedAnswer": {"text": q["a"]}} for q in it["faq"]],
+             "iso": datetime.fromtimestamp(it["published"], timezone.utc).isoformat()} for it in items if it["lang"] == "en"]
+
+
+COPY = ("id", "handle", "name", "slug", "topics", "published", "created", "updated", "coauthors")   # vom englischen Original (Datenbank) uebernommen
+
+
+def translations(BASE, posts, ents):
+    """Sprachfassungen der englischen Pakete aus data/blog_i18n, derselbe Weg wie bei den frueheren Beitraegen (site_legacy_blog.translations):
+    tr_of='en', ai_tr (KI-Hinweis + Link aufs Original), tr_index je Sprache aus data/blog_tr.json (Index, Sitemap, hreflang).
+    Nur vollstaendige, zum aktuellen Paket passende Fassungen (translate_blog.assemble) und nur, wenn das englische Original live in der
+    Datenbank steht (sonst zeigte 'Englisches Original lesen' ins Leere). Statisch wie die frueheren Beitraege (legacy: keine Stimmen/Kommentare)."""
+    import site_legacy_blog as LBL
+    build, index = LBL.tr_config()
+    srcs = tr_sources(ents) if build else []
+    if not srcs: return []
+    import translate_blog as TB
+    old = {p.get("slug") for p in LBL.P.load("blog_posts")}   # Slug eines frueheren Beitrags: der Worker uebernimmt das Paket dann nicht, das Original waere der alte Beitrag
+    clash = [s["cp_slug"] for s in srcs if s["cp_slug"] in old]
+    if clash: print(f"Content-Pakete Blog: Slug schon von einem frueheren Beitrag belegt, keine Sprachfassungen: {', '.join(clash[:5])}")
+    srcs = [s for s in srcs if s["cp_slug"] not in old]
+    orig = {(p["handle"], p["slug"]): p for p in posts if (p.get("lang") or "en") == "en" and not p.get("tr_of")}
+    # Der Worker uebernimmt ein Paket nicht, wenn der Slug schon von Hand vergeben ist: dann waere das live stehende "Original" ein
+    # fremder Beitrag (falsches hreflang, falscher Link aufs Original). Nur Originale mit dem Titel des Pakets zaehlen.
+    other = [s["cp_slug"] for s in srcs if (o := orig.get((s["author"], s["cp_slug"]))) and (o.get("title") or "").strip() != s["title"].strip()]
+    if other: print(f"Content-Pakete Blog: Slug gehoert einem anderen Beitrag (Titel weicht ab), keine Sprachfassungen: {', '.join(other[:5])}")
+    srcs = [s for s in srcs if s["cp_slug"] not in other]
+    out = []
+    for lang in build:
+        data = TB.load_lang(lang); n = 0
+        for s in srcs:
+            o = orig.get((s["author"], s["cp_slug"]))
+            r = TB.assemble(s, data.get(s["slug"])) if o else None
+            if not r: continue
+            title, desc, html, faq = r
+            out.append({**{k: o[k] for k in COPY if k in o}, "lang": lang, "title": title, "summary": (desc or "")[:400], "body": "", "html": html, "keypoints": [], "votes": 0,
+                        "faq": [{"q": q["name"], "a": q["acceptedAnswer"]["text"]} for q in faq if q.get("name")], "images": re.findall(r'<img[^>]+src="(https://[^"]+)"', html),
+                        "legacy": True, "content_tr": True, "tr_of": "en", "ai_tr": True, "tr_index": lang in index}); n += 1
+        if n: print(f"Content-Pakete Blog {lang}: {n} Sprachfassungen{' (index)' if lang in index else ' (noindex)'}")
+    wait = [s["cp_slug"] for s in srcs if (s["author"], s["cp_slug"]) not in orig]
+    if wait: print(f"Content-Pakete Blog: {len(wait)} englische Originale noch nicht live, Sprachfassungen warten: {', '.join(wait[:5])}")
+    return out
