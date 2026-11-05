@@ -754,12 +754,16 @@ COMMUNITY_API = os.environ.get("COMMUNITY_API", "https://api-dub.m365.fm")
 _CI = json.loads((ROOT / "data" / "community_i18n.json").read_text("utf-8")) if (ROOT / "data" / "community_i18n.json").exists() else {}
 
 
-def community_tags(lang, vid=None, mode=""):
-    """Skripte/Stile fuer Community-Widgets (blenden sich aus, wenn die API nicht erreichbar ist)."""
+def community_tags(lang, vid=None, mode="", css_async=False):
+    """Skripte/Stile fuer Community-Widgets (blenden sich aus, wenn die API nicht erreichbar ist).
+    css_async: community.css nicht renderblockierend laden (Folgenseiten: die Widgets stehen unten und erscheinen erst nach der API-Antwort;
+    Lighthouse zaehlte das Stylesheet am Seitenende als blockierend, ~0,4 s auf dem Handy). Ohne JavaScript gibt es dort ohnehin keine Widgets."""
     priv = f"{BASE}/{'datenschutz' if lang == 'de' else 'privacy'}/"
     cfg = {"api": COMMUNITY_API, "lang": lang, "vid": vid, "privacy": priv, "communityUrl": f"{BASE}/{lang}/community/"}
     # Die Oberflaechentexte (ca. 6 KB je Sprache, auf jeder Seite gleich) liegen in assets/cm-<sprache>.js (gecacht), nicht mehr in jeder Seite.
-    return (f'<link rel="stylesheet" href="{BASE}/assets/community.css"><script defer src="{BASE}/assets/cm-{lang if lang in _CI else "en"}.js"></script>'
+    css = (f'<link rel="preload" as="style" href="{BASE}/assets/community.css" onload="this.onload=null;this.rel=\'stylesheet\'">' if css_async
+           else f'<link rel="stylesheet" href="{BASE}/assets/community.css">')
+    return (f'{css}<script defer src="{BASE}/assets/cm-{lang if lang in _CI else "en"}.js"></script>'
             f'<script>window.M365C={json.dumps(cfg, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")}</script><script defer src="{BASE}/assets/community.js"></script>')
 
 
@@ -1257,7 +1261,7 @@ def build():
 {('<h2>' + esc(ui[4]) + '</h2><div class="list">' + rel + '</div>') if rel else ''}
 <p style="margin-top:1.6em"><a class="btn" href="{BASE}/{l}/">{esc(ui[3])} →</a></p>
 <section id="c-comments"></section><section id="c-sub"></section></main>
-{footer(l)}{community_tags(l, vid)}"""
+{footer(l)}{community_tags(l, vid, css_async=True)}"""
         if _spr: body = SPM.mark(body, _spr, "episode")   # T37 Sponsor: Links zum Sponsor mit rel="sponsored"
         OG_COVER[canonical] = art_svg(vid, LANGS[l][0], lang=l)
         write(f'{l}/{it["slug"]}/index.html',

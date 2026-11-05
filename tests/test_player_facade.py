@@ -143,6 +143,11 @@ class LoadRules(unittest.TestCase):
         self.assertIn("data-sbar", src)
         self.assertIn("data-sbar", (ROOT / "assets" / "attend.js").read_text("utf-8"))   # Popup laedt sbar.css nicht doppelt
 
+    def test_community_css_not_blocking_on_episode_pages(self):
+        src = (ROOT / "generate_site.py").read_text("utf-8")
+        self.assertIn("{community_tags(l, vid, css_async=True)}", src)
+        self.assertIn('<link rel="preload" as="style" href="{BASE}/assets/community.css" onload=', src)
+
     def test_reduced_motion(self):
         fx = (ROOT / "assets" / "fx.js").read_text("utf-8")
         self.assertIn("max-width:700px", fx.replace(" ", ""))
