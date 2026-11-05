@@ -1,0 +1,45 @@
+name: Subscribr-Skripte nachlegen (alle 3 Tage)
+# Legt aus data/subscribr_queue.json je Kanal ein paar neue Skripte an (tools/subscribr_queue.py).
+# Mirko, 5.11.2026: Nerdio 30 Tage und SAP 90 Tage je eine Folge pro Tag; Skripte nicht alle sofort, sondern alle paar Tage.
+on:
+  schedule:
+    - cron: "17 5 */3 * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Nur anzeigen, nichts anlegen"
+        type: boolean
+        default: false
+permissions:
+  contents: write
+concurrency: { group: subscribr-queue, cancel-in-progress: false }
+jobs:
+  queue:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Skripte anlegen
+        timeout-minutes: 30
+        env:
+          SUBSCRIBR_API_TOKEN: ${{ secrets.SUBSCRIBR_API_TOKEN }}
+        run: python tools/subscribr_queue.py ${{ inputs.dry_run && '--dry-run' || '' }}
+      - name: Stand speichern
+        # always(): auch nach einem Fehler oder Zeitlimit im Schritt davor sichern, sonst legt der naechste Lauf dieselben Skripte erneut an (Kosten)
+        if: ${{ always() && !inputs.dry_run }}
+        run: |
+          git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
+          git add data/subscribr_queue.json
+          if git diff --cached --quiet; then echo "Nichts zu speichern"; exit 0; fi
+          git commit -q -m "Subscribr-Warteschlange: neue Skripte angelegt"
+          for i in 1 2 3 4 5; do
+            if git pull --rebase --autostash -q origin main; then
+              if git push -q origin HEAD:main; then exit 0; fi
+            else
+              git rebase --abort 2>/dev/null || true
+            fi
+            sleep $((i*5))
+          done
+          echo "::error::Warteschlange konnte nicht gesichert werden"; exit 1
