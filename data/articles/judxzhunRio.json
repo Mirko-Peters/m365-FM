@@ -869,547 +869,6 @@
    }
   ]
  },
- "de": {
-  "html": "<p>Copilot verändert sich fast wöchentlich, Schulungsfolien tun das nicht. Anwender vergessen schnell, das Produkt entwickelt sich weiter, und genau diese Lücke erzeugt Tickets, Verwirrung und inoffizielle Anleitungen. Training ist kein Meeting, sondern ein System. Fehlt ein verwaltetes, ständig aktualisiertes Lernzentrum, bleibt vom Schulungsbudget vor allem ein Helpdesk-Rollenspiel übrig.</p>\n<p>Dieser Artikel zeigt, wie ein Copilot-Lernzentrum in SharePoint aufgebaut ist, wie es Tickets und Schattenschulungen zurückdrängt und mit welchen KPIs sich der Erfolg belegen lässt.</p>\n\n<h2>Warum Copilot-Training häufig scheitert</h2>\n<p>Viele Unternehmen betreiben ein statisches Trainingsprogramm für ein sich ständig veränderndes Ziel. Traditionelle Einführungspläne gehen von einem linearen Lernpfad aus: Anfänger, Fortgeschrittene, Experten. Copilot funktioniert anders. Es ist konversationsbasiert, kontextabhängig und sehr empfindlich gegenüber Datengrenzen und Promptqualität. Eine einmalige Schulung erreicht deshalb kaum jemanden nachhaltig. Wer dagegen direkt im Arbeitsfluss unterstützt, kann nach den Erfahrungen aus der Praxis rund 80 % der alltäglichen Unklarheiten auffangen, bevor daraus ein Ticket wird.</p>\n<h3>Der Irrtum vom Durchschnittsnutzer</h3>\n<p>Wer für die am wenigsten Vorbereiteten optimiert, verwässert Prompts, versteckt Nuancen und entkernt die Governance, bis sie harmlos und nutzlos ist. Es entstehen zwei Gruppen: Power-User, die die Vorgaben ignorieren und eigene Schattenpraktiken entwickeln, und verunsicherte Nutzer, die sich lautstark beschweren.</p>\n<h3>Die vier Ticket-Klassiker</h3>\n<ul>\n<li><strong>„Wo fange ich an?“</strong> – ein Orientierungsproblem.</li>\n<li><strong>„Welcher Copilot?“</strong> – Outlook, Word, Teams, Graph Grounded, Studio Build: Es gibt mehrere Oberflächen und Agenten mit unterschiedlichen Fähigkeiten und Risiken.</li>\n<li><strong>„Ist das sicher?“</strong> – Datengrenzen, Transkriptrichtlinien und genehmigte Konnektoren sind dort nicht transparent, wo der Nutzer arbeitet.</li>\n<li><strong>„Warum hat Copilot das geantwortet?“</strong> – meist ein Problem von Promptmuster und Abrufkontext, kein Fehler des Tools.</li>\n</ul>\n<h3>Schattentrainingsökonomie</h3>\n<p>Folien in Teams, PDFs in Chats, Wiki-Seiten mit Titeln wie „Ultimativer Copilot Guide V7 Final Final“: Es gibt keine Versionskontrolle, keine Zuständigkeit und keine Regel zur Außerbetriebnahme. Sobald offizielle Leitlinien erscheinen, entstehen mehrere inoffizielle Kopien. Die Suche liefert Widersprüche, und die „einzige Quelle der Wahrheit“ ist ein Märchen. Die Folgen sind mehr Tickets, inkonsistente Ergebnisse, Datenrisiken und Führungskräfte, die Lizenzkosten hinterfragen, weil sie keinen Nutzen sehen. Vierteljährliche Webinare ändern daran wenig, denn Anwender brauchen Antworten dort, wo die Frage entsteht: in Word, in Teams, direkt neben dem Eingabefeld.</p>\n<p>Die Einführung von Copilot ist im Kern ein Problem der Informationsarchitektur im Schulungskostüm. Wer nur Tickets beantwortet, wischt den Boden, während das Ventil weiter leckt.</p>\n\n<h2>Architektur: So ist das Copilot-Lernzentrum in SharePoint aufgebaut</h2>\n<p>Das Lernzentrum ist keine SharePoint-Seite mit ein paar Links. Es ist ein verwalteter, mandantenfähiger Hub, der Copilot-Know-how, Artefakte und sichere Nutzungsmuster bündelt. Man kann es sich wie einen Flughafen vorstellen: Gates, Sicherheit, Beschilderung und Flugverkehrskontrolle. Menschen bewegen sich, weil das System sie leitet.</p>\n<h3>Fundament: Hub-Site mit drei Bereichen</h3>\n<p>Modern SharePoint bietet eine schnelle Oberfläche mit nativer Teams-Integration. Über eine Hub-Site erben alle untergeordneten Seiten Navigation, Design und Governance. Der Hub hat drei Kernbereiche:</p>\n<ul>\n<li><strong>Lernen:</strong> kuratiertes Wissen.</li>\n<li><strong>Anwenden:</strong> das Verzeichnis für Prompts und Agents.</li>\n<li><strong>Verwalten:</strong> Richtlinien dort, wo Nutzer sie sehen, statt sie in Compliance-Archiven zu vergraben.</li>\n</ul>\n<h3>SPFx-Webparts als Gates</h3>\n<p>SPFx-Webparts übernehmen die Schwerstarbeit: Verzeichniskarten für Copilot-Studio-Agents, rollenbasierte Prompt-Galerien und Kontext-Banner, die den Geltungsbereich der Umgebung zeigen. SPFx ist mandantenfähig, schnell und lässt sich ohne iFrames in SharePoint, Teams und Viva Connections bereitstellen. Ein Code-Paket funktioniert so überall.</p>\n<h3>Auffindbarkeit mit PnP Modern Search</h3>\n<p>Über Erfolg oder Misserfolg entscheidet die Auffindbarkeit. PnP Modern Search dient als Suchengine, getragen von einer klaren Taxonomie:</p>\n<ul>\n<li>Oberflächen: Word, Outlook, Teams, Graph</li>\n<li>Funktionen: zusammenfassen, generieren, analysieren</li>\n<li>Rollen: Vertrieb, Finanzen, Personalwesen, Risiko</li>\n<li>Sensibilität: intern, extern, reguliert</li>\n<li>Bereiche: das eigene Team und die gesamte Organisation</li>\n</ul>\n<p>So sieht ein Vertriebsmitarbeiter zuerst die für seine Rolle genehmigten Prompts. Ergebniskarten zeigen Aktualitätsbadges, Besitzer und letztes Audit, damit Vertrauen sichtbar wird.</p>\n<h3>Inhaltsquellen und Lebenszyklus</h3>\n<p>Microsoft Learn und Viva Learning Feeds fließen mit klarer Herkunftsbezeichnung ein: offiziell, Community, intern. Community-Lernpfade sind erlaubt, aber nicht maßgeblich. Interne SOPs und Rollenleitfäden durchlaufen die Stufen Entwurf, Peer Review, Veröffentlichung und Archivierung, mit monatlichem Aktualisierungszyklus und Audit-Protokollen. Wer keinen Besitzer und kein Ablaufdatum hat, geht nicht live.</p>\n<h3>Das Agentenverzeichnis</h3>\n<p>Das Verzeichnis ist die Single Source of Truth für Copilot-Oberflächen und Studio-Agenten. Jeder Eintrag enthält Besitzer, Umgebung, Datenrichtlinien, Konnektoren, Zweck, Zielvorgaben und rote Linien. Dazu kommen Nutzungshinweise, Telemetrie-Links, ein „Ausprobieren“-Button für sichere Sandboxes und ein Zugriffsanfrage-Flow.</p>\n\n<h2>Wie das Lernzentrum Tickets reduziert</h2>\n<p>Das Ziel lautet: nicht mehr zufällige Fragen beantworten, sondern Absichten abfangen. Dafür sorgen drei Hebel: Intent Mapping, kanonische Antworten und sichtbare Aktualität.</p>\n<h3>Intent Mapping statt Vermutungen</h3>\n<p>FAQs werden mit echten Suchanfragen verknüpft. Suchprotokolle und Tickets werden in die vier Hauptkategorien zusammengeführt. Jede Kategorie erhält eine Landingpage mit Entscheidungsbaum und Promptbeispiel. Der Entscheidungsbaum führt in unter drei Klicks zum Ziel, das Beispiel zeigt, wie es richtig geht und was man vermeiden sollte. Nutzer brauchen keine Theorie, sie brauchen Kontrast.</p>\n<p>Die Frage „Welcher Copilot?“ wird zur geführten Auswahl über drei Schalter: Oberfläche, Rolle, Datensensibilität. Teams eignet sich für Notizen, Outlook für die Triage, Word für lange Texte und Studio-Agenten für Geschäftskontext mit freigegebenen Konnektoren. Ebenso wird benannt, wann man besser gar nichts nutzt.</p>\n<h3>Just-in-Time-Anleitungen</h3>\n<p>Kontextseiten werden in Teams-Kanäle eingebettet, das Zentrum wird über Viva Connections in Teams angeheftet. Ein Link wie „Hilf mir beim Schreiben“ öffnet rollenbasierte Prompts mit Kopier- und Ausführen-Buttons. Wer zum Lernen seinen Workflow verlassen muss, tut es nicht, sondern eröffnet ein Ticket.</p>\n<h3>Die Prompt-Bibliothek</h3>\n<p>Jeder genehmigte Prompt hat vier Felder:</p>\n<ol>\n<li><strong>Zweck:</strong> die Aufgabe in einer Zeile.</li>\n<li><strong>Aufbau:</strong> jeder Bestandteil beschriftet, damit Nutzer ihn anpassen können, ohne ihn zu zerstören.</li>\n<li><strong>Variationen:</strong> Anpassungen bei Tonfall oder Rolle.</li>\n<li><strong>Fehlerquellen:</strong> mehrdeutige Verben, fehlender Kontext, Halluzinationsfallen und schnelle Korrekturen.</li>\n</ol>\n<p>Ein guter Prompt definiert Absicht, Umfang und Einschränkungen, benennt Datenquellen und vermeidet führende Anweisungen. Ein roter Kasten „Nicht so machen“ zeigt ein verführerisches, aber unsicheres Beispiel. Die Buttons respektieren Rollen und Datengrenzen; ohne Zugriff sehen Nutzer den Weg zur Anforderung statt einer 403-Fehlermeldung.</p>\n<h3>Sichtbare Aktualität</h3>\n<p>Jede Seite zeigt Eigentümer, Vertretung, SLA und Aktualität. Das Abzeichen ist eindeutig: Grün steht für in den letzten 30 Tagen geprüft, Gelb für 31 bis 90 Tage, Rot für seit mehr als 90 Tagen veraltet. Tickets von einer roten Seite gehen direkt an den Eigentümer mit der Aufforderung zur Aktualisierung. Nutzer vertrauen Grün, hinterfragen Gelb und meiden Rot.</p>\n<h3>Ein Praxisbeispiel</h3>\n<p>Ausgangslage war ein Unternehmen mit tausenden Copilot-Lizenzen. Die Ticket-Warteschlange wurde von den vier klassischen Themen dominiert, Anleitungen lagen verstreut in Wikis, Präsentationen und PDFs, Eigentümer waren unbekannt, und Schatten-Agenten tauchten in zufälligen Umgebungen auf. Nach Einführung des Hubs, der in Teams angeheftet wurde, mit intentbasierter FAQ, Prompt-Bibliothek und Agentenverzeichnis stieg die Ticketentlastung von Woche zu Woche. Der Sucherfolg nahm zu, Duplikate gingen zurück, und Hochrisiko-Agenten wurden in verwaltete Umgebungen mit passender DLP verschoben. Auch die Haltung änderte sich: vom Reflex „Frag IT“ zu „Prüfe das Zentrum“. Sogar Power-User reichten Prompt-Variationen über den Beitrags-Workflow ein, statt Folklore in privaten Kanälen zu verbreiten.</p>\n\n<h2>Der Governance-Schalter gegen Schattenschulungen</h2>\n<p>Schattenschulungen enden nicht durch Verbote, sondern dadurch, dass dem inoffiziellen Wissen der Sauerstoff entzogen wird. Der entscheidende Schalter ist ein einziger, verbindlich vorgeschriebener Discovery-Dienst: das Learning Center als Teams-App für alle, der SharePoint-Hub als autoritativer Einstiegspunkt. Jeder Weg beginnt dort.</p>\n<h3>Die Richtlinie</h3>\n<p>Alle Copilot-bezogenen Inhalte – Leitfäden, Prompts, Agentendokumente und FAQs – liegen unter der Informationsarchitektur des Hubs. Es gibt keine Ausnahmen für Nebenwikis, temporäre Decks oder PDFs in privaten Kanälen. Was nicht im Hub ist, ist nicht offiziell.</p>\n<h3>Durchsetzung</h3>\n<ol>\n<li><strong>Link Governance:</strong> Alte URLs leiten automatisch auf die kanonische Seite um, inklusive Banner, der die Änderung erklärt.</li>\n<li><strong>Warnbanner:</strong> Inhalte außerhalb des Hubs weisen darauf hin, dass sie nicht autoritativ sind.</li>\n<li><strong>Automatische Archivierung:</strong> Inhalte ohne Besitzer oder Überprüfungsdatum werden markiert, in der Suche herabgestuft und für die Archivierung vorgemerkt. Geschichte wird nicht gelöscht, nur aus dem Entscheidungspfad entfernt.</li>\n</ol>\n<h3>Rollen, Verantwortung und DLP</h3>\n<p>Für jeden Bereich (Lernen, Anwenden, Verwalten), jeden Rollenleitfaden und jeden Agenteneintrag gibt es benannte Verantwortliche mit Stellvertretung. Vierteljährliche Reviews finden nach Kalender statt, nicht nach Gefühl. Besitzer, die ihre SLA ignorieren, verlieren Privilegien.</p>\n<p>Datenrichtlinien stehen in einfacher Sprache oben auf relevanten Seiten, etwa über eine Header-Komponente: Aufbewahrungsfrist von Transkripten, Datengrenzen und genehmigte Konnektoren mit Tooltips (erlaubt, bedingt, blockiert). Beispiele für unzulässige Anfragen erscheinen in rotem Text, zum Beispiel keine Zusammenfassung interner E-Mails oder kein Einfügen personenbezogener Kundendaten. Niemand liest Richtlinien, aber jeder erinnert sich an ein anschauliches „Tu das nicht“-Beispiel.</p>\n<h3>Beteiligung statt Kontrolle</h3>\n<p>Zentralisierung fördert Beteiligung. Wer weiß, wo der Standard liegt, reicht Verbesserungen ein, statt eigene Regeln aufzustellen. Der Beitragsprozess: Änderung vorschlagen, Belege anhängen, an den Inhaber leiten, mit Änderungsprotokoll veröffentlichen. Beitragende werden namentlich genannt. Jede Seite endet mit einer Zwei-Klick-Mikro-Umfrage („War das hilfreich?“), Expertenfragen laufen in eine kontrollierte Warteschlange, und eine wöchentliche Triage wertet Treffer und Fehlversuche aus.</p>\n\n<h2>Häufige Fehler und Stolpersteine</h2>\n<ul>\n<li><strong>Auffindbarkeit vernachlässigen:</strong> Taxonomie und Scopes entscheiden über Relevanz; Vermutungen führen zu mehr Tickets.</li>\n<li><strong>Mit veralteten Links verhandeln:</strong> Veraltetes muss konsequent umgeleitet werden.</li>\n<li><strong>Allgemeine Einstiegspfade:</strong> Allgemeine Anleitungen laden zu allgemeinen Fehlern ein, daher braucht es rollenbasierte Pfade.</li>\n<li><strong>Nicht messen:</strong> Suchbegriffe, Klickraten und Absprungraten zeigen, was im nächsten Monat zu beheben ist.</li>\n<li><strong>Inhalte ohne Besitzer:</strong> Ohne Eigentümer, Vertretung und SLA verkommt jede Wissensseite zur Legende.</li>\n<li><strong>Richtlinien als PDF:</strong> Sicherheitsregeln gehören vor den ersten Chat, nicht in ein Dokument, das niemand öffnet.</li>\n<li><strong>Nutzer statt Taxonomie korrigieren:</strong> Springen Nutzer ab, ist die Taxonomie falsch.</li>\n</ul>\n\n<h2>KPIs: So belegen Sie den Erfolg</h2>\n<p>Zahlen beenden Diskussionen. Vier Nordstern-Metriken zeigen, ob das System wirkt: Ticketvermeidungsrate, eindeutige Besucher im Hub, Wiederverwendung der Prompt-Bibliothek und Verfall wilder Dokumente.</p>\n<h3>Früh- und Spätindikatoren</h3>\n<p>Frühindikatoren sind Sucherfolgsrate, Klicks auf Copilot-Inhalte und Verweildauer auf Rollenleitfäden. Spätindikatoren bestätigen die Verhaltensänderung: weniger Schattenassets, weniger Duplikate, höhere Zufriedenheit. Ebenfalls aussagekräftig ist, ob sich der Themenmix der Tickets von Grundlagen zu Fortgeschrittenem verschiebt.</p>\n<h3>Konkrete Ziele</h3>\n<ul>\n<li>30 bis 40 % Vermeidungsrate innerhalb von 60 bis 90 Tagen</li>\n<li>70 % der Copilot-Fragen in drei Klicks oder weniger beantwortet</li>\n<li>Rate veralteter Inhalte bis zum zweiten Monat unter 10 %</li>\n<li>wöchentliche Nutzung von Prompts für die Top-5-Rollen</li>\n</ul>\n<p>Gemessen wird schlank: SharePoint-Nutzungsanalysen, Suchprotokolle und ein Power-BI-Dashboard, mit wöchentlicher Prüfung, monatlicher Aktualisierung und vierteljährlichem Governance-Audit. Wird die Scorecard veröffentlicht, sehen Führungskräfte den Nutzen der Lizenzen: weniger Tickets, schnellere Antworten, sichere Nutzung. Was nicht auf dem Dashboard steht, ist nicht passiert.</p>\n\n<h2>Praktische Takeaways</h2>\n<ul>\n<li>Behandeln Sie Copilot-Training als System mit Zuständigkeiten, Lebenszyklus und Telemetrie, nicht als einmalige Veranstaltung.</li>\n<li>Bauen Sie einen SharePoint-Hub mit den Bereichen Lernen, Anwenden und Verwalten und heften Sie ihn in Teams an.</li>\n<li>Nutzen Sie SPFx-Webparts und PnP Modern Search für Prompt-Galerien, Agentenverzeichnis und Auffindbarkeit.</li>\n<li>Ordnen Sie FAQs echten Suchanfragen und Tickets zu und bieten Sie Entscheidungsbäume mit höchstens drei Klicks.</li>\n<li>Führen Sie die Prompt-Bibliothek mit den Feldern Zweck, Aufbau, Variationen und Fehlerquellen.</li>\n<li>Zeigen Sie Eigentümer, Vertretung, SLA und Aktualitätsbadge (grün, gelb, rot) auf jeder Seite.</li>\n<li>Legen Sie per Richtlinie fest: Was nicht im Hub liegt, ist nicht offiziell. Setzen Sie Umleitungen, Warnbanner und Auto-Archivierung durch.</li>\n<li>Zeigen Sie Datengrenzen, Konnektorstatus und rote Linien an der Stelle, an der Nutzer arbeiten.</li>\n<li>Erfassen Sie Telemetrie und veröffentlichen Sie eine Scorecard, um das Budget zu sichern.</li>\n</ul>\n\n<h2>Fazit</h2>\n<p>Ein Copilot-Lernzentrum in SharePoint macht aus verstreuten Folien, PDFs und Wikis ein verwaltetes System, das Fragen beantwortet, bevor sie zu Tickets werden. Entscheidend sind eine klare Architektur, sichtbare Aktualität, eindeutige Verantwortlichkeiten und eine verbindliche Richtlinie, die den Hub zur einzigen offiziellen Quelle erklärt. Wer zusätzlich konsequent misst, kann gegenüber der Führungsebene belegen, dass weniger Tickets, schnellere Antworten und eine sicherere Nutzung von Copilot kein Versprechen sind, sondern messbare Ergebnisse.</p>",
-  "model": "claude-sonnet-5-5",
-  "info": {
-   "titel": "Vom Ticketchaos zum Copilot-Lernzentrum",
-   "typ": "schritte",
-   "punkte": [
-    {
-     "kopf": "Hub aufbauen",
-     "text": "SharePoint-Hub mit Lernen, Anwenden, Verwalten einrichten und in Teams anheften."
-    },
-    {
-     "kopf": "Intents abbilden",
-     "text": "FAQs an echte Suchanfragen knüpfen; Entscheidungsbäume führen in unter drei Klicks zum Ziel."
-    },
-    {
-     "kopf": "Prompts kuratieren",
-     "text": "Bibliothek mit Zweck, Aufbau, Variationen und Fehlerquellen, rollenbasiert und kopierbereit."
-    },
-    {
-     "kopf": "Aktualität sichtbar machen",
-     "text": "Eigentümer, SLA und Badge grün, gelb, rot auf jeder Seite anzeigen."
-    },
-    {
-     "kopf": "Hub verbindlich machen",
-     "text": "Umleitungen, Warnbanner und Auto-Archivierung entziehen Schattenschulungen die Grundlage."
-    },
-    {
-     "kopf": "KPIs messen",
-     "text": "Ticketvermeidung, Sucherfolg und Anteil veralteter Inhalte per Dashboard verfolgen."
-    }
-   ]
-  },
-  "faq": [
-   {
-    "q": "Warum scheitert Copilot-Training in Unternehmen so häufig?",
-    "a": "Viele Unternehmen setzen auf ein statisches Trainingsprogramm für ein sich ständig veränderndes Produkt. Copilot ist konversationsbasiert, kontextabhängig und empfindlich gegenüber Datengrenzen und Promptqualität, daher erreicht eine einmalige Schulung kaum jemanden nachhaltig. Folien veralten, Anwender vergessen schnell, und es entstehen Tickets und inoffizielle Anleitungen."
-   },
-   {
-    "q": "Wie ist ein Copilot-Lernzentrum in SharePoint aufgebaut?",
-    "a": "Es basiert auf einer SharePoint-Hub-Site mit drei Bereichen: Lernen (kuratiertes Wissen), Anwenden (Verzeichnis für Prompts und Agents) und Verwalten (Richtlinien dort, wo Nutzer sie sehen). SPFx-Webparts liefern Prompt-Galerien und Agentenverzeichnis, PnP Modern Search sorgt mit klarer Taxonomie für Auffindbarkeit."
-   },
-   {
-    "q": "Wie reduziert ein Copilot-Lernzentrum Support-Tickets?",
-    "a": "Drei Hebel wirken: Intent Mapping, kanonische Antworten und sichtbare Aktualität. FAQs werden echten Suchanfragen und Tickets zugeordnet, Entscheidungsbäume führen in unter drei Klicks zum Ziel, und Anleitungen erscheinen direkt in Teams. Als Ziel gelten 30 bis 40 % Vermeidungsrate innerhalb von 60 bis 90 Tagen."
-   },
-   {
-    "q": "Wie lassen sich Schattenschulungen zu Copilot verhindern?",
-    "a": "Nicht durch Verbote, sondern durch einen verbindlichen Discovery-Dienst: Der SharePoint-Hub ist der autoritative Einstieg, alle Copilot-Inhalte liegen dort. Alte URLs werden umgeleitet, Inhalte außerhalb des Hubs erhalten Warnbanner, und Inhalte ohne Besitzer oder Prüfdatum werden herabgestuft und für die Archivierung vorgemerkt."
-   }
-  ],
-  "infos": [
-   {
-    "titel": "Schattenschulung vs. Learning Center",
-    "typ": "vergleich",
-    "links": {
-     "titel": "Schattenschulung",
-     "punkte": [
-      "Folien in Teams, PDFs in Chats und Wikis ohne Versionskontrolle",
-      "Keine Zuständigkeit und keine Regel zur Außerbetriebnahme",
-      "Die Suche liefert Widersprüche, mehrere inoffizielle Kopien entstehen",
-      "Mehr Tickets, inkonsistente Ergebnisse und Datenrisiken",
-      "Führungskräfte hinterfragen Lizenzkosten ohne sichtbaren Nutzen"
-     ]
-    },
-    "rechts": {
-     "titel": "Copilot-Lernzentrum",
-     "punkte": [
-      "Ein verbindlicher Discovery-Dienst als autoritativer Einstiegspunkt",
-      "Jede Seite zeigt Eigentümer, Vertretung, SLA und Aktualität",
-      "Alte URLs leiten automatisch auf die kanonische Seite um",
-      "Datenrichtlinien stehen in einfacher Sprache oben auf den Seiten",
-      "Power-User reichen Prompt-Variationen über den Beitrags-Workflow ein"
-     ]
-    }
-   },
-   {
-    "titel": "Erfolg des Lernzentrums in Zahlen",
-    "typ": "fakten",
-    "punkte": [
-     {
-      "wert": "80 %",
-      "text": "der alltäglichen Unklarheiten lassen sich im Arbeitsfluss auffangen, bevor ein Ticket entsteht."
-     },
-     {
-      "wert": "30–40 %",
-      "text": "Ticketvermeidungsrate innerhalb von 60 bis 90 Tagen."
-     },
-     {
-      "wert": "70 %",
-      "text": "der Copilot-Fragen sind in drei Klicks oder weniger beantwortet."
-     },
-     {
-      "wert": "< 10 %",
-      "text": "Rate veralteter Inhalte bis zum zweiten Monat."
-     },
-     {
-      "wert": "Top 5",
-      "text": "Rollen nutzen die Prompts wöchentlich."
-     }
-    ]
-   }
-  ],
-  "quiz": [
-   {
-    "q": "Welche Bereiche bilden die drei Kernbereiche der Hub-Site des Copilot-Lernzentrums?",
-    "opts": [
-     "Lernen, Anwenden und Verwalten",
-     "Planen, Testen und Veröffentlichen",
-     "Starten, Üben und Zertifizieren",
-     "Beraten, Schulen und Kontrollieren"
-    ],
-    "a": 0,
-    "why": "Der Hub gliedert sich in Lernen (kuratiertes Wissen), Anwenden (Prompts und Agents) und Verwalten (Richtlinien dort, wo Nutzer sie sehen)."
-   },
-   {
-    "q": "Was bedeutet ein gelbes Aktualitätsabzeichen auf einer Seite des Lernzentrums?",
-    "opts": [
-     "Die Seite wurde in den letzten 30 Tagen geprüft",
-     "Die Seite wurde vor 31 bis 90 Tagen zuletzt geprüft",
-     "Die Seite ist seit mehr als 90 Tagen veraltet",
-     "Die Seite hat noch keinen Besitzer zugewiesen bekommen"
-    ],
-    "a": 1,
-    "why": "Grün steht für Prüfung innerhalb von 30 Tagen, Gelb für 31 bis 90 Tage, Rot für mehr als 90 Tage."
-   },
-   {
-    "q": "Wie sollen Schattenschulungen laut Artikel wirksam beendet werden?",
-    "opts": [
-     "Durch ein striktes Verbot aller inoffiziellen Dokumente im Unternehmen",
-     "Durch vierteljährliche Webinare für alle Mitarbeitenden mit Anwesenheitspflicht",
-     "Durch einen verbindlichen Discovery-Dienst, der inoffiziellem Wissen den Sauerstoff entzieht",
-     "Durch Löschung aller alten Inhalte ohne Archivierung der Geschichte"
-    ],
-    "a": 2,
-    "why": "Entscheidend ist ein einziger verbindlicher Einstiegspunkt, der Hub; Verbote wirken nicht. Geschichte wird zudem nicht gelöscht, nur aus dem Entscheidungspfad entfernt."
-   },
-   {
-    "q": "Welches Ziel nennt der Artikel für die Ticketvermeidungsrate innerhalb von 60 bis 90 Tagen?",
-    "opts": [
-     "10 bis 15 Prozent",
-     "80 bis 90 Prozent",
-     "50 bis 60 Prozent",
-     "30 bis 40 Prozent"
-    ],
-    "a": 3,
-    "why": "Als konkretes Ziel wird eine Vermeidungsrate von 30 bis 40 Prozent innerhalb von 60 bis 90 Tagen genannt."
-   }
-  ]
- },
- "es": {
-  "html": "<p>La formación en Copilot no es una reunión puntual, es un sistema. Muchas organizaciones invierten en sesiones y presentaciones que se quedan obsoletas en cuestión de semanas, mientras los tickets de soporte se acumulan y circulan guías no oficiales por todas partes. La alternativa es un centro de aprendizaje de Copilot en SharePoint, gobernado y siempre actualizado, que responda las preguntas antes de que se conviertan en tickets.</p>\n<p>Este artículo describe la arquitectura de ese centro, las reglas de gobernanza que lo sostienen, el modo de reducir tickets y los KPI que demuestran que funciona.</p>\n\n<h2>Por qué falla la formación en Copilot y qué es la formación en la sombra</h2>\n<p>El problema de fondo es una discrepancia: se ofrece un programa de formación estático para un objetivo móvil. Copilot cambia cada semana, las diapositivas no, y los usuarios olvidan. Además, los planes de adopción tradicionales suponen una ruta lineal (principiante, intermedio, avanzado), pero Copilot es conversacional, depende del contexto y es muy sensible a los límites de datos y a la calidad de los prompts. Enseñar una sola vez no sirve. Enseñar dentro del flujo de trabajo, en cambio, resuelve el 80 % de la confusión diaria antes de que llegue a ticket.</p>\n<h3>La falacia del usuario promedio</h3>\n<p>Si todo se diseña para el usuario menos preparado, los prompts se diluyen, se ocultan los matices y la gobernanza desaparece hasta que el contenido resulta inofensivo e inútil. El resultado son dos grupos: usuarios avanzados que ignoran la formación oficial y crean prácticas propias en la sombra, y usuarios confundidos que escalan quejas.</p>\n<h3>Los cuatro tickets que no desaparecen</h3>\n<ol>\n<li><strong>«¿Por dónde empiezo?»</strong> Es un fallo de descubrimiento.</li>\n<li><strong>«¿Cuál Copilot?»</strong> Outlook, Word, Teams, Graph o Copilot Studio son superficies y agentes distintos, con capacidades y riesgos diferentes.</li>\n<li><strong>«¿Es seguro?»</strong> Nadie mostró los límites de datos, las políticas de transcripción o los conectores aprobados donde el usuario trabaja.</li>\n<li><strong>«¿Por qué respondió eso?»</strong> Suele ser un asunto de patrones de prompt y de contexto de recuperación, no un error de Copilot.</li>\n</ol>\n<h3>La economía de la formación en la sombra</h3>\n<p>Presentaciones en Teams, PDF en chats y wikis con títulos heroicos como «Guía definitiva Copilot V7 Final Final» no tienen control de versiones, propietario ni política de retiro. Cuando se publica la guía oficial, aparecen cinco copias no oficiales. Las búsquedas devuelven contradicciones, aumentan los tickets, los resultados son inconsistentes, crecen los riesgos de datos y los ejecutivos empiezan a cuestionar el gasto en licencias porque no ven el retorno. Los seminarios web trimestrales no lo arreglan: los usuarios necesitan respuestas donde surge la pregunta, en Word, en Teams, junto al cuadro de redacción.</p>\n\n<h2>Arquitectura del centro de aprendizaje de Copilot en SharePoint</h2>\n<p>La adopción de Copilot es un problema de arquitectura de información disfrazado de formación. El centro de aprendizaje no es un sitio de SharePoint con unos cuantos enlaces, sino un centro gobernado y consciente del inquilino que concentra el conocimiento, los artefactos y los patrones de uso seguro. La analogía útil es la de un aeropuerto, no la de un tablón de anuncios: puertas de embarque, seguridad, señalización y control de tráfico. La gente se mueve porque el sistema la guía.</p>\n<h3>Base y componentes</h3>\n<ul>\n<li><strong>Hub de SharePoint moderno:</strong> es la terminal. Ofrece un lienzo rápido con integración nativa en Teams, y los sitios secundarios heredan navegación, tema y gobernanza.</li>\n<li><strong>Elementos web SPFx:</strong> son las puertas. Incluyen tarjetas de directorio para agentes de Copilot Studio, galerías de prompts por rol y banners de contexto que muestran el alcance del entorno. Se despliegan en SharePoint, en pestañas de Teams y en Viva Connections con un único paquete de código.</li>\n<li><strong>PnP Modern Search:</strong> es la señalización y el motor de búsqueda.</li>\n<li><strong>Capa de gobernanza:</strong> es la seguridad del aeropuerto.</li>\n</ul>\n<h3>Tres áreas: aprender, hacer y gobernar</h3>\n<p><strong>Aprender</strong> es conocimiento curado. <strong>Hacer</strong> es el directorio de prompts y agentes. <strong>Gobernar</strong> es la política colocada al frente, donde los usuarios realmente la ven.</p>\n<h3>Taxonomía y búsqueda</h3>\n<p>El descubrimiento decide si un proyecto vive o muere. La taxonomía se organiza por interfaz (Word, Outlook, Teams, Graph), por función (resumir, generar, analizar), por rol (por ejemplo ventas o finanzas) y por riesgo (interno, externo, regulado). Con los ámbitos adecuados, un vendedor ve primero las instrucciones aprobadas para su rol y no una presentación aleatoria de 2023. Las plantillas de resultados muestran tarjetas con insignias de frescura, propietario y última auditoría, de modo que la confianza es visible.</p>\n<p>Las fuentes de contenido llevan etiquetas claras de procedencia: oficial, comunidad o interno. Los recursos de la comunidad están permitidos, pero no son autoritativos. Los contenidos internos siguen un ciclo de vida (borrador, revisión, publicación, retiro) con actualización mensual y registros de auditoría. Sin propietario y sin fecha de vencimiento, no se publica.</p>\n\n<h2>Gobernanza visible: frescura, propiedad y límites de datos</h2>\n<p>La gobernanza no es un pie de página, es la puerta principal. Un componente de encabezado muestra la retención de transcripciones, las políticas de privacidad y los límites de datos en cada página relevante. Los conectores aprobados aparecen con información sobre herramientas y estado: permitido, condicional o bloqueado. Los ejemplos de solicitudes no permitidas se muestran en texto rojo, porque casi nadie lee la política, pero todos recuerdan un ejemplo vívido de lo que no se debe hacer.</p>\n<h3>Contenido siempre vigente</h3>\n<p>El ciclo de vida incluye oleadas de actualización mensual, insignias de versión y reglas de retiro automático. SPFx muestra el estado de frescura en línea («revisado hace 12 días» frente a «caducado hace 94 días»). Los propietarios reciben recordatorios y las páginas obsoletas pierden relevancia en la búsqueda. El semáforo es sencillo:</p>\n<ul>\n<li><strong>Verde:</strong> revisado hace 30 días o menos.</li>\n<li><strong>Ámbar:</strong> entre 31 y 90 días.</li>\n<li><strong>Rojo:</strong> obsoleto, más de 90 días.</li>\n</ul>\n<p>Los tickets generados desde una página roja se dirigen al propietario con un recordatorio para actualizar. Los usuarios ven la misma insignia: confían en el verde, cuestionan el ámbar y evitan el rojo.</p>\n<h3>Propiedad explícita</h3>\n<p>Cada página tiene un propietario, un suplente y un acuerdo de nivel de servicio (SLA). Los cambios quedan registrados y los usuarios pueden ver qué se modificó sin tener que buscarlo. Esa transparencia genera confianza, y la confianza permite desviar consultas.</p>\n\n<h2>Cómo reducir tickets: mapeo de intenciones, guía just-in-time y biblioteca de prompts</h2>\n<p>El volumen de tickets cae cuando el usuario puede relacionar lo que quiere con el lugar donde hacer clic. Para ello se usan tres palancas: mapeo de intenciones, respuestas canónicas y frescura visible.</p>\n<h3>Mapeo de intenciones</h3>\n<p>Las preguntas frecuentes deben basarse en consultas reales, tomadas de los registros de búsqueda y de los tickets, y no en lo que se supone que preguntan los usuarios. Los cuatro temas recurrentes se convierten en raíces, cada una con una página de destino que contiene un árbol de decisión y un ejemplo de prompt. El árbol lleva a la respuesta en menos de tres clics. El ejemplo muestra el buen resultado junto al patrón incorrecto, porque los usuarios no necesitan teoría, necesitan contraste.</p>\n<p>La pregunta «¿qué Copilot?» se vuelve una elección guiada con tres interruptores: superficie, rol y sensibilidad de los datos. Por ejemplo, Teams para notas de reuniones, Outlook para triaje, Word para formatos largos y un agente de Copilot Studio cuando hace falta contexto de línea de negocio con conectores aprobados. También se aclara cuándo no usar nada, porque a veces es la opción más segura.</p>\n<h3>Guía just-in-time</h3>\n<p>Las páginas de contexto se integran en los canales de Teams y el centro se fija con Viva Connections. Un enlace tipo «Ayúdame a escribir de forma segura» junto a las superficies de redacción abre un prompt basado en el rol, con botones de copiar y ejecutar. Si el usuario tiene que salir de su flujo para aprender, no lo hará y abrirá un ticket.</p>\n<h3>Biblioteca de prompts con criterio</h3>\n<p>Cada prompt aprobado tiene cuatro campos:</p>\n<ul>\n<li><strong>Propósito:</strong> la tarea en una sola línea.</li>\n<li><strong>Anatomía:</strong> cada cláusula etiquetada para poder remezclarla sin romperla.</li>\n<li><strong>Variaciones:</strong> ajustes de tono o de rol.</li>\n<li><strong>Modos de fallo:</strong> por qué el resultado fue extraño (verbos ambiguos, contexto ausente, trampas de alucinación) y la solución rápida.</li>\n</ul>\n<p>Los botones respetan los límites de rol y de datos. Quien no tiene acceso ve cómo solicitarlo, no un error 403.</p>\n<h3>Directorio de agentes</h3>\n<p>El directorio es la única fuente de verdad para los activos de Copilot y los agentes de Copilot Studio. Cada entrada es un objeto con propietario, entorno, políticas de datos, conectores, propósito, definición de éxito y límites, además de notas de uso, enlaces de telemetría, un botón de prueba para entornos seguros y un flujo real de solicitud de acceso.</p>\n\n<h2>El interruptor de gobernanza que colapsa la formación en la sombra</h2>\n<p>La formación en la sombra no se persigue, se queda sin oxígeno. Para lograrlo hace falta una política de descubrimiento centralizada, no una sugerencia.</p>\n<ol>\n<li><strong>Un único punto de entrada:</strong> el centro se fija como aplicación de Teams para todos y el hub de SharePoint es la entrada oficial. El coste cognitivo de «¿dónde busco?» cae a cero.</li>\n<li><strong>Todo bajo el mismo hub:</strong> guías, prompts, documentos de agentes y FAQ viven bajo su arquitectura de información. Si no está en el hub, no es oficial.</li>\n<li><strong>Aplicación de las normas:</strong> las URL antiguas redirigen a la página canónica con un aviso. El contenido fuera del hub muestra un aviso de que no es oficial. El contenido sin propietario o sin fecha de revisión se marca, se degrada en las búsquedas y se archiva. La historia no se borra, se retira de la ruta de decisión.</li>\n</ol>\n<h3>Roles, telemetría y DLP</h3>\n<p>Cada área, guía de rol y entrada de agente tiene propietario y suplente. Las revisiones trimestrales siguen el calendario. Las páginas con pocos clics se corrigen, se fusionan o se retiran, y las búsquedas con mucha fricción disparan la creación de contenido. Quien ignora su SLA pierde privilegios: la rendición de cuentas es mantenimiento.</p>\n<p>La alineación con DLP es el prólogo, no una nota al pie. Las políticas de datos aparecen arriba, en lenguaje claro y con ejemplos: no se resumen correos internos, no se pega información personal (PII) de clientes y el intercambio externo es condicional mediante conectores aprobados.</p>\n<h3>La paradoja de la centralización</h3>\n<p>Cuando la gente sabe dónde está lo oficial, envía mejoras en lugar de publicar normas paralelas. El flujo de contribución es simple: proponer un cambio, adjuntar evidencia, enviarlo al propietario y publicar con registro de cambios, dando crédito visible a los colaboradores. Cada página termina con una microencuesta de dos clics («¿fue útil?») y un campo opcional sobre lo que faltaba. La opción de preguntar a un experto escala a una cola gobernada. Además, conviene que la ayuda predeterminada en Teams abra el centro y que este forme parte de la incorporación y de las revisiones trimestrales.</p>\n\n<h2>KPI y caso de estudio: demostrar que funciona</h2>\n<p>Los números terminan las discusiones. Las métricas principales son la tasa de deflexión de tickets, los visitantes únicos al centro, la reutilización de la biblioteca de prompts y la decadencia de los documentos no oficiales.</p>\n<ul>\n<li><strong>Indicadores adelantados:</strong> tasa de éxito de búsqueda, clics en Copilot y tiempo en página de las guías de rol. Si los usuarios resuelven en tres clics o menos el 70 % de las veces, el rumbo es correcto. Si se van, la taxonomía está mal.</li>\n<li><strong>Indicadores rezagados:</strong> menos activos paralelos, menos agentes duplicados y mayor satisfacción en «¿fue útil?».</li>\n</ul>\n<p>Los objetivos propuestos son una deflexión del 30-40 % en 60-90 días, el 70 % de las preguntas sobre Copilot resueltas en tres clics, contenido obsoleto por debajo del 10 % en el segundo mes y reutilización semanal de prompts en las cinco guías de rol principales. La instrumentación es ligera: analítica de uso de SharePoint, registros de búsqueda y un panel de Power BI, con triaje semanal, actualización mensual y auditoría de gobernanza trimestral.</p>\n<h3>Un caso: de la dispersión al centro</h3>\n<p>Una empresa con miles de licencias de Copilot parecía ocupada, pero no aprendía. Su cola de tickets estaba dominada por los cuatro temas habituales, las guías estaban dispersas con propietarios desconocidos y fechas de revisión ficticias, y habían surgido agentes en la sombra con conectores misteriosos. La dirección preguntaba por el ROI.</p>\n<p>La intervención consistió en desplegar el centro con sus áreas de aprender, hacer y gobernar, anclado en Teams, con FAQ por intención, una biblioteca de prompts por roles con copiar y ejecutar, un directorio de agentes y PnP Modern Search para priorizar las páginas canónicas. Los resultados fueron estos:</p>\n<ul>\n<li>La reducción de tickets creció semana tras semana.</li>\n<li>El éxito de búsqueda aumentó y los artefactos duplicados disminuyeron.</li>\n<li>Hubo menos quejas por alucinaciones, porque los modos de fallo eran explícitos.</li>\n<li>Los agentes no autorizados disminuyeron y los de alto riesgo pasaron a entornos gestionados con la política de DLP adecuada.</li>\n<li>Ocurrieron menos episodios de «no debimos pegar eso».</li>\n</ul>\n<p>El cambio cultural fue el más notable: el reflejo pasó de «preguntar a la IA» a «consultar el centro», y hasta los usuarios avanzados enviaron variantes de prompts por el flujo de contribución.</p>\n\n<h2>Errores frecuentes y lecciones aprendidas</h2>\n<ul>\n<li><strong>Descuidar la capacidad de búsqueda:</strong> la taxonomía y los ámbitos determinan la relevancia, y las suposiciones aumentan los tickets.</li>\n<li><strong>Tolerar lo obsoleto:</strong> hay que declararlo con redirecciones sin concesiones y no negociar con los enlaces rotos.</li>\n<li><strong>Ofrecer guías genéricas:</strong> la guía genérica invita a errores genéricos, por eso hacen falta rutas de inicio por rol.</li>\n<li><strong>No medir:</strong> términos de búsqueda, clics y tasa de rebote indican qué corregir el mes siguiente.</li>\n<li><strong>Enterrar la política:</strong> un PDF no protege a nadie, los límites deben aparecer en el momento de la intención.</li>\n<li><strong>Evangelizar antes de centralizar:</strong> no se puede gobernar lo que no se ve ni escalar lo que no se encuentra. Primero se construye el aeropuerto y después los aviones.</li>\n</ul>\n\n<h2>Takeaways prácticos</h2>\n<ul>\n<li>Trata la formación en Copilot como un sistema con propiedad, ciclo de vida y telemetría, no como un evento.</li>\n<li>Crea un hub de SharePoint con tres áreas: aprender, hacer y gobernar.</li>\n<li>Usa SPFx para tarjetas, galerías de prompts y banners, y PnP Modern Search con taxonomía por interfaz, función, rol y riesgo.</li>\n<li>No publiques nada sin propietario, suplente, SLA y fecha de vencimiento.</li>\n<li>Muestra la frescura con insignias verde, ámbar y rojo, y los límites de datos con ejemplos en rojo.</li>\n<li>Mapea las preguntas frecuentes a intenciones reales y resuélvelas en tres clics o menos con árboles de decisión.</li>\n<li>Define cada prompt con propósito, anatomía, variaciones y modos de fallo.</li>\n<li>Establece la política de que, si no está en el hub, no es oficial, con redirecciones, avisos y autoarchivo.</li>\n<li>Mide deflexión de tickets, visitantes únicos, reutilización de prompts y decadencia de documentos no oficiales, y publica el cuadro de mando.</li>\n</ul>\n\n<h2>Conclusión</h2>\n<p>La formación en Copilot funciona cuando deja de ser un evento y se convierte en un sistema gobernado y constante, que responde las preguntas antes de que existan tickets y elimina la necesidad de guías paralelas. Un centro de aprendizaje en SharePoint, con búsqueda bien diseñada, gobernanza visible, contenido siempre vigente y una política clara de punto de entrada único, reduce tickets, frena los agentes y documentos en la sombra y ofrece datos concretos para demostrar el retorno de las licencias. Mide, corrige, publica y repite.</p>",
-  "model": "claude-sonnet-5-5",
-  "info": {
-   "titel": "Centro de aprendizaje de Copilot: del caos al sistema",
-   "typ": "schritte",
-   "punkte": [
-    {
-     "kopf": "Centralizar el acceso",
-     "text": "Un hub de SharePoint fijado en Teams como único punto de entrada oficial para todo el contenido de Copilot."
-    },
-    {
-     "kopf": "Aprender, hacer, gobernar",
-     "text": "Conocimiento curado, biblioteca de prompts y directorio de agentes, con la política visible al frente."
-    },
-    {
-     "kopf": "Desviar intenciones",
-     "text": "Árboles de decisión y prompts con contraste resuelven las preguntas frecuentes en tres clics o menos."
-    },
-    {
-     "kopf": "Mantener todo fresco",
-     "text": "Propietario, SLA e insignias verde, ámbar y rojo; el contenido sin dueño se archiva automáticamente."
-    },
-    {
-     "kopf": "Eliminar la sombra",
-     "text": "Redirecciones, avisos y autoarchivo quitan el oxígeno a wikis y guías paralelas."
-    },
-    {
-     "kopf": "Medir y publicar",
-     "text": "Deflexión de tickets, reutilización de prompts y contenido obsoleto en un panel de Power BI."
-    }
-   ]
-  },
-  "faq": [
-   {
-    "q": "¿Por qué fracasa la formación tradicional en Copilot y qué es la formación en la sombra?",
-    "a": "Fracasa porque ofrece un programa estático para un objetivo móvil: Copilot cambia cada semana, las diapositivas no y los usuarios olvidan. La formación en la sombra son presentaciones, PDF y wikis no oficiales, sin propietario, control de versiones ni política de retiro, que generan contradicciones, más tickets y riesgos de datos."
-   },
-   {
-    "q": "¿Cómo se estructura un centro de aprendizaje de Copilot en SharePoint?",
-    "a": "Se basa en un hub de SharePoint moderno, elementos web SPFx (tarjetas de agentes, galerías de prompts, banners de contexto), PnP Modern Search para la búsqueda y una capa de gobernanza. Se organiza en tres áreas: aprender (conocimiento curado), hacer (prompts y agentes) y gobernar (políticas visibles)."
-   },
-   {
-    "q": "¿Cómo se pueden reducir los tickets de soporte de Copilot?",
-    "a": "Con mapeo de intenciones basado en consultas reales, guía just-in-time integrada en Teams y Viva Connections, y una biblioteca de prompts con propósito, anatomía, variaciones y modos de fallo. Un árbol de decisión lleva a la respuesta en menos de tres clics, mostrando el buen resultado frente al patrón incorrecto."
-   },
-   {
-    "q": "¿Qué KPI demuestran que el centro de aprendizaje de Copilot funciona?",
-    "a": "Las métricas clave son la tasa de deflexión de tickets, los visitantes únicos, la reutilización de prompts y la decadencia de documentos no oficiales. Los objetivos propuestos: deflexión del 30-40 % en 60-90 días, 70 % de preguntas resueltas en tres clics y contenido obsoleto por debajo del 10 % en el segundo mes."
-   }
-  ],
-  "infos": [
-   {
-    "titel": "Formación estática frente a centro de aprendizaje gobernado",
-    "typ": "vergleich",
-    "links": {
-     "titel": "Formación en la sombra",
-     "punkte": [
-      "Presentaciones y PDF en chats sin control de versiones",
-      "Sin propietario ni política de retiro",
-      "Búsquedas que devuelven contradicciones",
-      "Aumentan los tickets y los riesgos de datos",
-      "Los ejecutivos cuestionan el gasto en licencias"
-     ]
-    },
-    "rechts": {
-     "titel": "Centro de SharePoint gobernado",
-     "punkte": [
-      "Un único punto de entrada oficial en Teams y SharePoint",
-      "Cada página con propietario, suplente y SLA",
-      "Insignias visibles de frescura y última auditoría",
-      "Las políticas de datos aparecen al frente",
-      "Los usuarios envían mejoras en lugar de normas paralelas"
-     ]
-    }
-   },
-   {
-    "titel": "Objetivos propuestos para demostrar el éxito",
-    "typ": "fakten",
-    "punkte": [
-     {
-      "wert": "30-40 %",
-      "text": "de deflexión de tickets en 60-90 días"
-     },
-     {
-      "wert": "70 %",
-      "text": "de las preguntas sobre Copilot resueltas en tres clics"
-     },
-     {
-      "wert": "< 10 %",
-      "text": "de contenido obsoleto en el segundo mes"
-     },
-     {
-      "wert": "5 guías",
-      "text": "de rol principales con reutilización semanal de prompts"
-     },
-     {
-      "wert": "Power BI",
-      "text": "panel con analítica de SharePoint y registros de búsqueda"
-     }
-    ]
-   }
-  ],
-  "quiz": [
-   {
-    "q": "¿Qué criterio define el estado ámbar en el semáforo de frescura del contenido?",
-    "opts": [
-     "Revisado hace 30 días o menos",
-     "Revisado entre 31 y 90 días atrás",
-     "Revisado hace más de 90 días",
-     "Contenido sin propietario asignado"
-    ],
-    "a": 1,
-    "why": "El semáforo define verde hasta 30 días, ámbar entre 31 y 90 días, y rojo para contenido obsoleto con más de 90 días."
-   },
-   {
-    "q": "¿Qué papel cumple PnP Modern Search en la arquitectura del centro de aprendizaje?",
-    "opts": [
-     "Es la terminal que ofrece el lienzo y la navegación",
-     "Es la seguridad que aplica las políticas de datos",
-     "Es la señalización y el motor de búsqueda",
-     "Es la puerta que muestra tarjetas de agentes"
-    ],
-    "a": 2,
-    "why": "En la analogía del aeropuerto, PnP Modern Search es la señalización y el motor de búsqueda; el hub es la terminal."
-   },
-   {
-    "q": "¿Qué ocurre con el contenido sin propietario o sin fecha de revisión?",
-    "opts": [
-     "Se marca, se degrada en las búsquedas y se archiva",
-     "Se publica con una insignia roja de advertencia",
-     "Se borra de inmediato junto con su historial",
-     "Se mueve a la sección de recursos de la comunidad"
-    ],
-    "a": 0,
-    "why": "El contenido sin propietario o fecha se marca, pierde relevancia en la búsqueda y se archiva; la historia no se borra."
-   },
-   {
-    "q": "¿Qué cuatro campos tiene cada prompt aprobado en la biblioteca?",
-    "opts": [
-     "Título, autor, fecha y número de versión",
-     "Propósito, anatomía, variaciones y modos de fallo",
-     "Rol, riesgo, interfaz y nivel de sensibilidad",
-     "Objetivo, contexto, ejemplo y resultado esperado"
-    ],
-    "a": 1,
-    "why": "Cada prompt aprobado incluye propósito, anatomía, variaciones y modos de fallo, con la solución rápida para resultados extraños."
-   }
-  ]
- },
- "fr": {
-  "html": "<p>Beaucoup d'entreprises déploient Copilot, organisent un webinaire, diffusent quelques diapositives, puis constatent que les tickets de support s'accumulent. La cause est structurelle : la formation Copilot est traitée comme un événement ponctuel, alors qu'elle doit fonctionner comme un système.</p>\n<p>Cet article présente un modèle concret : un centre d'apprentissage Copilot sur SharePoint, gouverné et toujours à jour. Il décrit son architecture, ses mécanismes de réduction des tickets, la politique de gouvernance qui fait disparaître la formation parallèle et les KPI qui prouvent son efficacité.</p>\n\n<h2>Pourquoi la formation Copilot échoue : tickets récurrents et formation fantôme</h2>\n<p>Le problème de fond est un décalage. Vous appliquez un programme de formation statique à une cible mouvante : Copilot change chaque semaine, vos diapositives non. Les utilisateurs oublient, Copilot continue d'évoluer. On forme pour un produit, alors qu'on a affaire à un moteur comportemental.</p>\n<p>Les plans d'adoption classiques supposent un parcours linéaire (débutant, intermédiaire, avancé). Or Copilot est conversationnel, dépendant du contexte et très sensible aux limites des données comme à la qualité des prompts. Enseigner une fois revient à n'enseigner à personne. Une diffusion en flux continu permet en revanche de couvrir environ 80 % de la confusion quotidienne avant qu'elle ne devienne un ticket.</p>\n<h3>Le piège de l'utilisateur moyen</h3>\n<p>Optimiser pour les utilisateurs les moins préparés revient à édulcorer les prompts, à gommer les nuances et à vider la gouvernance de sa substance. Le résultat : deux groupes. Les utilisateurs avancés vous ignorent et créent leurs propres pratiques parallèles ; les utilisateurs confus font remonter bruyamment leurs problèmes.</p>\n<h3>Les quatre tickets qui reviennent sans cesse</h3>\n<ol>\n<li><strong>« Par où commencer ? »</strong> : un échec de découverte.</li>\n<li><strong>« Quel Copilot ? »</strong> : Outlook, Word, Teams, Graph, Copilot Studio… Les utilisateurs croient à un Copilot unique, alors qu'il existe plusieurs interfaces et agents aux capacités et aux risques différents.</li>\n<li><strong>« Est-ce sûr ? »</strong> : les limites de données, les politiques de transcription et les connecteurs approuvés ne sont pas visibles là où l'on travaille.</li>\n<li><strong>« Pourquoi cette réponse ? »</strong> : un problème de modèle de prompt et de contexte de récupération, pas une « erreur de Copilot ».</li>\n</ol>\n<h3>L'économie de la formation fantôme</h3>\n<p>Présentation dans Teams, PDF dans les chats, page wiki intitulée « Guide Copilot Ultime V7 Final Final » : sans contrôle de version, sans responsable, sans politique de retrait, ces documents prolifèrent. Dès que vous publiez vos directives officielles, des copies non officielles apparaissent. La recherche renvoie alors des contradictions et la source de vérité unique devient une légende urbaine.</p>\n<p>Les conséquences s'enchaînent : confusion, tickets en hausse, résultats incohérents, risques pour les données, et dirigeants qui remettent en question les licences faute de retour sur investissement visible. Pendant ce temps, des agents hors de contrôle se multiplient dans des environnements non gérés. Ce n'est pas de l'adoption, c'est de l'entropie.</p>\n<p>Les webinaires trimestriels n'y changent rien. Les utilisateurs ont besoin de réponses là où la question se pose, par exemple dans Teams, à côté de la zone de rédaction. L'adoption de Copilot est en réalité un problème d'architecture de l'information déguisé en formation : inutile de passer la serpillière si la vanne fuit toujours.</p>\n\n<h2>L'architecture d'un centre d'apprentissage Copilot gouverné</h2>\n<p>Un centre d'apprentissage n'est pas un site avec quelques liens. C'est un hub gouverné, adapté au tenant, qui centralise le savoir-faire Copilot, les artefacts et les modèles d'usage sécurisés. L'image qui convient est celle d'un aéroport plutôt que d'un tableau d'affichage : portes d'embarquement, sécurité, signalétique, contrôle du trafic. Les gens avancent parce que le système les guide.</p>\n<h3>Les fondations : SharePoint Modern et site hub</h3>\n<p>SharePoint Modern offre une interface rapide et réactive, avec une intégration native à Teams. Un site hub permet à chaque site enfant d'hériter de la navigation, du thème et de la gouvernance. Le hub s'organise en trois zones :</p>\n<ul>\n<li><strong>Apprendre</strong> : la connaissance organisée ;</li>\n<li><strong>Agir</strong> : le répertoire des prompts et des agents ;</li>\n<li><strong>Gouverner</strong> : la politique, affichée là où les utilisateurs la voient vraiment.</li>\n</ul>\n<h3>Les composants SPFx</h3>\n<p>Les composants Web SPFx font le gros du travail : cartes de répertoire pour les agents Copilot Studio, galeries de prompts par rôle, bannières contextuelles indiquant la portée de l'environnement. Ils sont conscients du tenant, rapides, et se déploient dans SharePoint, les onglets Teams et Viva Connections sans iframes. Un seul ensemble de code s'affiche partout.</p>\n<h3>La recherche, moteur de trouvabilité</h3>\n<p>PnP Modern Search joue le rôle de signalétique. La taxonomie y est déterminante :</p>\n<ul>\n<li>la surface (Word, Outlook, Teams, Graph) ;</li>\n<li>la fonction (résumer, générer, analyser) ;</li>\n<li>le rôle (vente, finance, RH, risque) ;</li>\n<li>la portée (interne, externe, réglementé).</li>\n</ul>\n<p>Un commercial voit ainsi en premier les prompts approuvés pour son rôle, et non une présentation aléatoire de 2023. Les résultats s'affichent sous forme de cartes indiquant la fraîcheur, le propriétaire et le dernier audit, ce qui rend la confiance visible.</p>\n<h3>Contenus, répertoire et cycle de vie</h3>\n<p>Les flux Microsoft Learn et Viva Learning sont agrégés avec des étiquettes de provenance claires : officiel, communauté, interne. Les parcours communautaires sont autorisés, mais non officiels. Les procédures internes et les guides par rôle suivent un cycle de vie : brouillon, révision, publication, retrait. La mise à jour est mensuelle, avec piste d'audit. Règle simple : sans propriétaire ni date d'expiration, pas de mise en ligne.</p>\n<p>Le répertoire IA est la source unique de vérité pour les assets Copilot et les agents Copilot Studio. Chaque entrée est un objet avec un propriétaire, un environnement, une politique de données, des connecteurs, des objectifs, des critères de qualité et des limites. On y ajoute des notes d'usage, des liens de télémétrie, un bouton d'essai pour des bacs à sable sécurisés et un flux de demande d'accès.</p>\n\n<h2>Réduire les tickets : intentions, prompts et aide au bon moment</h2>\n<p>Le volume de tickets baisse lorsque les utilisateurs associent leur besoin au bon clic. Trois leviers y contribuent : la cartographie des intentions, la réponse de référence et la mise à jour visible.</p>\n<h3>Cartographier les intentions</h3>\n<p>Liez votre FAQ aux requêtes réelles, pas à ce que vous imaginez que les utilisateurs demandent. Passez les journaux de recherche et les tickets au crible des quatre racines : démarrer, quel Copilot, est-ce sûr, pourquoi cette réponse. Chaque racine dispose d'une page d'accueil avec deux ressources : un arbre de décision, qui mène au bon chemin en moins de trois clics, et un exemple de prompt accompagné de son antimodèle. Les utilisateurs n'ont pas besoin de théorie, ils ont besoin de contraste.</p>\n<p>Le choix du Copilot devient une démarche guidée selon la surface, le rôle et la sensibilité des données : Teams pour les notes de réunion, Outlook pour le tri, Word pour les longs textes, Copilot Studio pour le contexte métier avec des connecteurs approuvés. Parfois, la mesure la plus sûre est de ne rien utiliser, et le guide doit aussi le dire.</p>\n<h3>La bibliothèque de prompts</h3>\n<p>Chaque prompt approuvé comporte quatre champs :</p>\n<ul>\n<li><strong>Objectif</strong> : la mission en une ligne ;</li>\n<li><strong>Anatomie</strong> : chaque clause est étiquetée pour que l'on puisse remixer sans tout casser ;</li>\n<li><strong>Variantes</strong> : ajustements de ton ou de rôle ;</li>\n<li><strong>Mode de défaillance</strong> : verbes ambigus, contexte manquant, piège à hallucination, avec la correction rapide.</li>\n</ul>\n<p>Les boutons « copier-exécuter » respectent les rôles et les frontières de données. Sans accès, l'utilisateur voit la marche à suivre pour le demander, pas une erreur 403.</p>\n<h3>Aider là où le travail se fait</h3>\n<p>Épinglez le centre dans Teams, ajoutez des liens profonds près des zones de composition, intégrez des pages de contexte dans les canaux. Un lien « Aidez-moi à rédiger » ouvre un prompt par rôle, avec une note qui explique pourquoi il fonctionne : il définit l'intention, la portée et les contraintes, nomme les sources de données et évite les instructions suggestives. Si l'utilisateur doit quitter son flux pour apprendre, il ne le fera pas ; il ouvrira un ticket.</p>\n\n<h2>Fraîcheur, responsabilité et gouvernance visible</h2>\n<p>Le contenu doit rester « evergreen » : vague de rafraîchissement mensuelle, badge de version, règles de retrait automatique. Chaque page affiche son propriétaire, son suppléant, son SLA et sa fraîcheur, avec un code couleur sans équivoque :</p>\n<ul>\n<li><strong>vert</strong> : révisé il y a 30 jours ou moins ;</li>\n<li><strong>orange</strong> : 31 à 90 jours ;</li>\n<li><strong>rouge</strong> : obsolète depuis plus de 90 jours.</li>\n</ul>\n<p>Les utilisateurs font confiance au vert, doutent de l'orange et évitent le rouge. Les tickets issus d'une page rouge sont routés vers son propriétaire, avec une incitation à actualiser. Les pages obsolètes sont déclassées dans la recherche et les modifications sont consignées dans un journal des changements.</p>\n<p>La gouvernance n'est pas un pied de page, c'est la porte d'entrée. Rétention des transcriptions, politiques de confidentialité et limites de données apparaissent en en-tête des pages pertinentes. Les connecteurs approuvés sont listés avec leur statut (autorisé, conditionnel, bloqué) et un code de motif. Des exemples de requêtes interdites, en rouge, marquent les esprits : personne ne lit les politiques, mais tout le monde retient un exemple concret de ce qu'il ne faut pas faire.</p>\n<p>Chaque page se termine par un micro-sondage en deux clics (« Était-ce utile ? ») et une option « Demander à un expert » qui alimente une file gouvernée. Un triage hebdomadaire passe en revue les succès et les échecs ; la mise à jour mensuelle déploie les correctifs.</p>\n\n<h2>L'interrupteur de gouvernance : un point d'entrée unique</h2>\n<p>Pour faire s'effondrer la formation parallèle, imposez un service de découverte unique, par politique et non par suggestion. Épinglez le centre d'apprentissage comme application Teams pour tous et désignez le hub SharePoint comme point d'entrée officiel. La règle est binaire : tout contenu lié à Copilot (guide, prompt, documentation d'agent, FAQ) vit dans l'architecture d'information du hub. Ce qui n'y est pas n'est pas officiel. Pas de wiki annexe, pas de présentation temporaire dans une équipe aléatoire, pas de PDF en conversation privée.</p>\n<p>L'application de cette règle repose sur trois mécanismes :</p>\n<ol>\n<li><strong>Gouvernance des liens</strong> : les anciennes URL redirigent vers la page canonique, avec une bannière expliquant le changement.</li>\n<li><strong>Bannières d'avertissement</strong> sur le contenu hors hub : « Cette page n'est pas officielle, consultez les directives actuelles ».</li>\n<li><strong>Archivage automatique</strong> : le contenu sans propriétaire ni date de révision est signalé, rétrogradé dans la recherche, puis mis en file d'archivage. On ne supprime pas l'historique, on le retire du chemin décisionnel.</li>\n</ol>\n<p>Côté rôles, chaque domaine (apprendre, agir, gouverner), chaque guide de rôle et chaque entrée d'agent a un propriétaire nommé et un suppléant. Les révisions trimestrielles suivent un calendrier. Les pages à faible trafic sont corrigées, fusionnées ou retirées, et les recherches infructueuses déclenchent la création de contenu. Un propriétaire qui ignore son SLA perd ses privilèges : ce n'est pas de la sanction, c'est de la maintenance.</p>\n<p>Un flux de contributions complète le dispositif : proposer une modification, joindre des preuves, l'envoyer au propriétaire, publier avec un journal des changements et créditer visiblement les contributeurs. Quand on sait où se trouve la référence, on l'améliore au lieu de créer un document parallèle. Il reste à ancrer l'habitude : aide par défaut de Teams pointant vers le centre, intégration dans l'onboarding, le développement des performances et les revues d'activité trimestrielles.</p>\n\n<h2>Erreurs fréquentes et leçons d'un déploiement</h2>\n<p>Dans le cas d'une entreprise disposant de milliers de licences Copilot, la file de tickets était dominée par les quatre thèmes décrits plus haut. Les directives étaient dispersées entre wikis, présentations et PDF sans propriétaire connu, avec des dates de révision fictives, et des agents clandestins apparaissaient dans des environnements aléatoires.</p>\n<p>L'intervention a combiné le hub (apprendre, agir, gouverner), une FAQ liée aux intentions, une bibliothèque de prompts par rôle, un répertoire d'agents, l'optimisation des pages canoniques via PnP Modern Search, des redirections avec bannières et la gouvernance affichée en en-tête de page. Les effets observés : détournement de tickets en progression d'une semaine à l'autre, meilleur succès des recherches, disparition des doublons, forte réutilisation de la bibliothèque de prompts, moins de plaintes sur les hallucinations grâce aux modes de défaillance explicites, agents à haut risque déplacés vers des environnements gérés avec la DLP appropriée, et moins d'erreurs de copier-coller. Même les utilisateurs avancés ont fini par soumettre leurs variantes via le flux de contributions.</p>\n<h3>Les stolpersteine à éviter</h3>\n<ul>\n<li><strong>Sous-investir la trouvabilité</strong> : la taxonomie et les périmètres déterminent la pertinence ; les approximations font grimper les tickets.</li>\n<li><strong>Tolérer l'obsolète</strong> : déclarez ce qui est périmé et redirigez sans négocier avec la dégradation des liens.</li>\n<li><strong>Rester générique</strong> : une guidance générique invite à des erreurs génériques ; publiez des chemins de démarrage par rôle.</li>\n<li><strong>Ne rien mesurer</strong> : instrumentez les termes de recherche, les taux de clic et le rebond pour savoir quoi corriger le mois suivant.</li>\n</ul>\n\n<h2>Les KPI qui prouvent l'efficacité</h2>\n<p>Il faut des chiffres qui tranchent les débats. Les indicateurs principaux (North Star) sont le taux de réduction des tickets, les visiteurs uniques du hub, la réutilisation de la bibliothèque de prompts et la dégradation des documents sauvages.</p>\n<ul>\n<li><strong>Indicateurs avancés</strong> : taux de succès des recherches, taux de clic sur les pages Copilot, temps passé sur les guides de rôle. Si 70 % des questions Copilot trouvent leur réponse en trois clics ou moins, le routage est bon ; sinon, c'est la taxonomie qu'il faut corriger, pas les utilisateurs.</li>\n<li><strong>Indicateurs retardés</strong> : moins d'actifs sauvages, moins d'agents en double, meilleure satisfaction. Les badges rouges disparaissent-ils et les verts tiennent-ils ?</li>\n</ul>\n<p>Objectifs chiffrés :</p>\n<ul>\n<li>30 à 40 % de réduction des tickets en 60 à 90 jours ;</li>\n<li>70 % des questions Copilot résolues en trois clics ;</li>\n<li>contenu obsolète sous les 10 % dès le deuxième mois ;</li>\n<li>réutilisation hebdomadaire accrue des prompts sur les cinq principaux guides de rôle.</li>\n</ul>\n<p>L'instrumentation reste légère : analyse d'usage SharePoint, journaux de recherche et tableaux de bord Power BI. Le rythme : triage hebdomadaire, rafraîchissement mensuel, audit de gouvernance trimestriel. Publier la fiche de score répond à la question des dirigeants sur le retour sur investissement des licences : moins de tickets, des réponses plus rapides, un usage plus sûr.</p>\n\n<h2>Points à retenir</h2>\n<ul>\n<li>Traitez la formation Copilot comme un système gouverné en continu, pas comme un événement.</li>\n<li>Centralisez avant de promouvoir : un hub SharePoint, épinglé dans Teams, comme point d'entrée officiel.</li>\n<li>Structurez le hub en trois zones : apprendre, agir, gouverner.</li>\n<li>Cartographiez les quatre intentions récurrentes et proposez un arbre de décision et un exemple de prompt pour chacune.</li>\n<li>Documentez chaque prompt : objectif, anatomie, variantes, mode de défaillance.</li>\n<li>Affichez propriétaire, suppléant, SLA et badge de fraîcheur sur chaque page.</li>\n<li>Affichez les limites de données et la rétention des transcriptions en en-tête, avec des exemples de lignes rouges.</li>\n<li>Appliquez la règle « pas dans le hub, pas officiel » avec redirections, bannières et archivage automatique.</li>\n<li>Pilotez avec des KPI : réduction des tickets, trois clics pour 70 % des questions, contenu obsolète sous 10 %.</li>\n</ul>\n\n<h2>Conclusion</h2>\n<p>Réduire les tickets ne consiste pas à demander aux utilisateurs d'en ouvrir moins, mais à devancer leurs questions avec des réponses évidentes, actuelles et sûres, disponibles là où ils travaillent. Un centre d'apprentissage Copilot gouverné, avec un point d'entrée unique, un cycle de vie du contenu, des propriétaires identifiés et une mesure continue, remplace les légendes urbaines par une source de vérité vérifiable. Il fait ainsi reculer la formation parallèle et fournit à la direction les preuves chiffrées dont elle a besoin.</p>",
-  "model": "claude-sonnet-5-5",
-  "info": {
-   "titel": "Centre d'apprentissage Copilot : le modèle gouverné",
-   "typ": "schritte",
-   "punkte": [
-    {
-     "kopf": "Centraliser le hub",
-     "text": "Un hub SharePoint épinglé dans Teams comme point d'entrée officiel : apprendre, agir, gouverner."
-    },
-    {
-     "kopf": "Cartographier les intentions",
-     "text": "Quatre racines de tickets, chacune avec un arbre de décision en trois clics et un exemple de prompt."
-    },
-    {
-     "kopf": "Afficher la gouvernance",
-     "text": "Limites de données, connecteurs approuvés et exemples de lignes rouges visibles en en-tête de page."
-    },
-    {
-     "kopf": "Garder le contenu frais",
-     "text": "Propriétaire, SLA et badge de fraîcheur ; redirections, bannières et archivage automatique du contenu obsolète."
-    },
-    {
-     "kopf": "Mesurer et ajuster",
-     "text": "Triage hebdomadaire, mise à jour mensuelle, audit trimestriel et KPI publiés pour prouver l'efficacité."
-    }
-   ]
-  },
-  "faq": [
-   {
-    "q": "Pourquoi la formation Copilot échoue-t-elle dans la plupart des entreprises ?",
-    "a": "Elle est traitée comme un événement ponctuel (webinaire, diapositives) alors que Copilot évolue chaque semaine. Les utilisateurs oublient, les contenus vieillissent et des guides parallèles apparaissent. Il faut un système de diffusion continue, capable de couvrir environ 80 % de la confusion quotidienne avant qu'elle ne devienne un ticket."
-   },
-   {
-    "q": "Quels sont les quatre tickets de support Copilot qui reviennent le plus souvent ?",
-    "a": "Ce sont : « Par où commencer ? » (échec de découverte), « Quel Copilot ? » (Outlook, Word, Teams, Graph, Copilot Studio), « Est-ce sûr ? » (limites de données, transcriptions, connecteurs) et « Pourquoi cette réponse ? » (problème de prompt et de contexte de récupération)."
-   },
-   {
-    "q": "Comment structurer un centre d'apprentissage Copilot sur SharePoint ?",
-    "a": "On s'appuie sur SharePoint Modern et un site hub en trois zones : Apprendre (connaissance), Agir (répertoire de prompts et d'agents) et Gouverner (politiques visibles). Des composants SPFx et PnP Modern Search, avec une taxonomie par surface, fonction, rôle et portée, assurent la trouvabilité."
-   },
-   {
-    "q": "Comment éviter la formation fantôme et les contenus Copilot non officiels ?",
-    "a": "Imposez par politique un point d'entrée unique : le hub SharePoint, épinglé dans Teams. Tout contenu Copilot hors hub n'est pas officiel. Trois mécanismes l'appliquent : redirection des anciennes URL, bannières d'avertissement sur le contenu hors hub et archivage automatique des contenus sans propriétaire ni date de révision."
-   }
-  ],
-  "infos": [
-   {
-    "titel": "Les quatre tickets qui reviennent sans cesse",
-    "typ": "fakten",
-    "punkte": [
-     {
-      "wert": "Par où commencer ?",
-      "text": "Un échec de découverte : les utilisateurs ne trouvent pas le bon point de départ."
-     },
-     {
-      "wert": "Quel Copilot ?",
-      "text": "Outlook, Word, Teams, Graph, Copilot Studio : plusieurs interfaces aux capacités et risques différents."
-     },
-     {
-      "wert": "Est-ce sûr ?",
-      "text": "Limites de données, transcriptions et connecteurs approuvés ne sont pas visibles là où l'on travaille."
-     },
-     {
-      "wert": "Pourquoi cette réponse ?",
-      "text": "Un problème de modèle de prompt et de contexte de récupération, pas une erreur de Copilot."
-     }
-    ]
-   }
-  ],
-  "quiz": [
-   {
-    "q": "Selon l'article, pourquoi la formation Copilot échoue-t-elle le plus souvent ?",
-    "opts": [
-     "Elle est traitée comme un événement ponctuel au lieu d'un système continu.",
-     "Les licences Copilot sont attribuées à trop peu d'utilisateurs.",
-     "Les webinaires durent trop longtemps pour les équipes.",
-     "Les utilisateurs refusent d'utiliser les outils de Microsoft Learn."
-    ],
-    "a": 0,
-    "why": "L'article explique qu'un programme statique ne suit pas un Copilot qui change chaque semaine ; la formation doit fonctionner comme un système."
-   },
-   {
-    "q": "Quelle est la règle pour qu'un contenu soit mis en ligne dans le centre d'apprentissage ?",
-    "opts": [
-     "Il doit avoir été validé par la direction informatique.",
-     "Il doit être publié uniquement au format PDF.",
-     "Il doit avoir un propriétaire et une date d'expiration.",
-     "Il doit provenir exclusivement de Microsoft Learn."
-    ],
-    "a": 2,
-    "why": "La règle simple de l'article : sans propriétaire ni date d'expiration, pas de mise en ligne."
-   },
-   {
-    "q": "Que signifie le code couleur rouge pour la fraîcheur d'une page ?",
-    "opts": [
-     "La page a été révisée il y a 30 jours ou moins.",
-     "La page est obsolète depuis plus de 90 jours.",
-     "La page a été révisée entre 31 et 90 jours.",
-     "La page contient des requêtes interdites."
-    ],
-    "a": 1,
-    "why": "Vert : 30 jours ou moins ; orange : 31 à 90 jours ; rouge : obsolète depuis plus de 90 jours."
-   },
-   {
-    "q": "Que fait l'archivage automatique d'un contenu sans propriétaire ni date de révision ?",
-    "opts": [
-     "Il supprime définitivement le contenu et son historique.",
-     "Il transfère le contenu vers un wiki annexe.",
-     "Il envoie le contenu à tous les utilisateurs avancés.",
-     "Il le signale, le rétrograde dans la recherche, puis l'archive."
-    ],
-    "a": 3,
-    "why": "Le contenu est signalé, rétrogradé puis mis en file d'archivage : l'historique est conservé mais retiré du chemin décisionnel."
-   }
-  ]
- },
- "nl": {
-  "html": "<p>Veel organisaties behandelen Copilot-training als een evenement: een sessie, een presentatie, een handleiding. Toch blijft de helpdesk vollopen met dezelfde vragen. Dat ligt niet aan de gebruikers. Training is geen vergadering, het is een systeem. Wie geen continu beheerd leercentrum inricht, financiert in feite een tweede, ongeorganiseerde helpdesk.</p>\n<p>In dit artikel lees je hoe een Copilot-leercentrum in SharePoint is opgebouwd, hoe je met governance, een promptbibliotheek en zichtbare actualiteit het aantal tickets verlaagt en schaduwdocumentatie uitroeit, en welke KPI's bewijzen dat het werkt.</p>\n\n<h2>Waarom Copilot-training vaak mislukt</h2>\n<p>Het probleem is een mismatch. Je geeft een statisch trainingsprogramma voor een bewegend doelwit. Copilot verandert wekelijks, je slides niet. Gebruikers vergeten dingen, Copilot niet. Bovendien past het klassieke adoptiemodel (beginner, gemiddeld, gevorderd) slecht bij Copilot. Het product is conversationeel, contextafhankelijk en zeer gevoelig voor datagrenzen en promptkwaliteit. Eén keer lesgeven werkt dus niet.</p>\n<p>Leer je gebruikers wél hoe ze met Copilot moeten werken, dan neem je volgens de aanpak achter dit model zo'n 80% van de dagelijkse verwarring weg voordat het een ticket wordt.</p>\n<h3>De denkfout van de gemiddelde gebruiker</h3>\n<p>Wie alles afstemt op de minst voorbereide gebruiker, zwakt prompts af, verbergt nuances en haalt governance zo ver weg dat het onschadelijk en nutteloos wordt. Het resultaat: ervaren gebruikers negeren je en ontwikkelen hun eigen verborgen werkwijzen, terwijl verwarde gebruikers luidruchtig escaleren.</p>\n<h3>De vier tickets die steeds terugkomen</h3>\n<ol>\n<li><strong>Waar moet ik beginnen?</strong> Een ontdekkingsprobleem.</li>\n<li><strong>Welke Copilot?</strong> Gebruikers denken dat Copilot één product is, terwijl er meerdere interfaces en agents bestaan met verschillende mogelijkheden en risico's.</li>\n<li><strong>Is dit veilig?</strong> Datagrenzen, transcriptiebeleid en goedgekeurde connectors zijn nooit getoond op de plek waar de gebruiker werkt.</li>\n<li><strong>Waarom gaf Copilot dat antwoord?</strong> Meestal een kwestie van promptpatroon en retrievalcontext, niet van Copilot zelf.</li>\n</ol>\n\n<h2>De schaduwtrainingseconomie: entropie in plaats van adoptie</h2>\n<p>Zodra er geen centrale bron is, ontstaat er een parallelle wereld: presentaties in Teams, pdf's in chats, wikipagina's met titels als \"Ultieme Copilot Handleiding V7 Laatste Laatste\". Er is geen versiebeheer, geen eigenaar en geen beleid om content uit te faseren. Publiceer je een officiële handleiding, dan verschijnen er vijf onofficiële kopieën.</p>\n<p>Gevolgen:</p>\n<ul>\n<li>zoekresultaten die elkaar tegenspreken;</li>\n<li>meer tickets en inconsistente resultaten;</li>\n<li>datarisico's en malafide agents in onbeheerde omgevingen;</li>\n<li>managers die de licentie-uitgaven in twijfel trekken omdat ze geen rendement zien.</li>\n</ul>\n<p>Kwartaalsessies lossen dit niet op. Gebruikers hebben geen geplande lezingen nodig, maar antwoorden op de plek waar de vraag ontstaat: in Word, in Teams, naast het tekstvak. Adoptie van Copilot is in de kern een informatiearchitectuurprobleem dat zich voordoet als training. Tickets beantwoorden is de vloer dweilen terwijl de kraan blijft lekken. Repareer de kraan: bouw een permanent beheerd, vindbaar leercentrum met versiebeheer en verwijs er consequent naar.</p>\n\n<h2>Architectuur van het Copilot-leercentrum in SharePoint</h2>\n<p>Het leercentrum is geen SharePoint-site met wat links, maar een beheerde hub die kennis, artefacten en veilige gebruikspatronen van Copilot centraliseert. Denk aan een luchthaven, niet aan een prikbord: gates, beveiliging, bewegwijzering en luchtverkeersleiding. Mensen bewegen zich omdat het systeem houvast biedt.</p>\n<h3>Hubsite met drie kerngebieden</h3>\n<p>Een moderne SharePoint-hubsite zorgt dat elke subsite navigatie, thema en beheer erft, met native Teams-integratie. De hub heeft drie gebieden:</p>\n<ul>\n<li><strong>Leren:</strong> gecureerde kennis.</li>\n<li><strong>Doen:</strong> de prompt- en agentdirectory.</li>\n<li><strong>Beheren:</strong> beleid dat direct zichtbaar is voor gebruikers, niet verstopt in een compliance-structuur.</li>\n</ul>\n<h3>SPFx-webonderdelen en PnP-zoeken</h3>\n<p>SPFx-webonderdelen doen het zware werk: directorykaarten voor Copilot Studio-agents, rolgebaseerde promptgalerijen en contextbanners die de omgeving tonen. Het voordeel is dat één codebundel zonder iframes werkt in SharePoint, Teams-tabbladen en Viva Connections.</p>\n<p>Voor vindbaarheid gebruik je moderne PnP-zoekfunctionaliteit met een heldere taxonomie:</p>\n<ul>\n<li>service: Word, Outlook, Teams, Graph;</li>\n<li>functie: samenvatten, genereren, analyseren;</li>\n<li>rol: bijvoorbeeld verkoop en financiën;</li>\n<li>gevoeligheid: intern, extern, gereguleerd.</li>\n</ul>\n<p>Een verkoper ziet zo eerst goedgekeurde prompts voor zijn rol, geen willekeurige lijst uit 2023. Resultaatkaarten tonen statusbadges, eigenaar en de laatst gecontroleerde datum, zodat vertrouwen zichtbaar wordt.</p>\n<h3>Contentbronnen, levenscyclus en eigenaarschap</h3>\n<p>Microsoft Learn en Viva Learning-feeds worden gebundeld met duidelijke herkomstlabels. Communitypaden zijn toegestaan, maar niet bindend. Interne SOP's en rolgidsen doorlopen een levenscyclus: concept, collegiale toetsing, publicatie en verwijdering, met maandelijkse vernieuwingsrondes. Een document zonder eigenaar en vervaldatum wordt niet gepubliceerd.</p>\n<p>Elke pagina heeft een benoemde eigenaar, een backup en een SLA. Wijzigingen worden vastgelegd, zodat gebruikers zonder zoeken zien wat er veranderd is. De AI-directory is de enige bron van waarheid voor Copilot-oppervlakken en Studio-agents. Elk item bevat eigenaar, omgeving, databeleid, connectors, doel, wat een goede status inhoudt en de rode lijnen. Daarbij horen een probeerknop voor veilige sandboxes en een aanvraagstroom voor toegang.</p>\n<p>De regel: centraliseer voordat je gaat evangeliseren. Je kunt niet beheren wat je niet ziet en niet schalen wat je niet kunt vinden.</p>\n\n<h2>Tickets verminderen met intentiemapping en een promptbibliotheek</h2>\n<p>Je stopt met het beantwoorden van losse vragen en begint met het afbuigen van intenties. Dat doe je met drie middelen: intentiemapping, kanonieke antwoorden en zichtbare actualiteit.</p>\n<h3>Intentiemapping en beslisbomen</h3>\n<p>Koppel je FAQ aan de vragen die gebruikers werkelijk stellen, op basis van zoeklogs en tickets, verdeeld over de vier hoofdcategorieën. Elke categorie krijgt een landingspagina met een beslisboom en een promptvoorbeeld. De beslisboom wijst in minder dan drie klikken de weg. Het voorbeeld toont wat goed is en wat de foute aanpak is, want gebruikers hebben geen theorie nodig maar contrast.</p>\n<p>\"Welke Copilot?\" wordt een begeleide keuze met drie schakelaars: oppervlak, rol en datagevoeligheid. De pagina legt ook uit wanneer je iets níet moet gebruiken, want niets doen is soms de veiligste optie.</p>\n<h3>Promptbibliotheek met vier velden</h3>\n<p>Elke goedgekeurde prompt heeft vier velden:</p>\n<ul>\n<li><strong>Doel:</strong> de taak in één regel.</li>\n<li><strong>Structuur:</strong> labels die elke clausule benoemen, zodat gebruikers kunnen remixen zonder de prompt te breken.</li>\n<li><strong>Variaties:</strong> aanpassingen in toon of rol.</li>\n<li><strong>Foutmodi:</strong> waarom het misging, bijvoorbeeld dubbelzinnige werkwoorden, ontbrekende context of hallucinatievalkuilen, plus de snelle oplossing.</li>\n</ul>\n<p>Kopieer-en-uitvoerknoppen respecteren rol en datagrenzen. Heb je geen toegang, dan zie je het pad voor de toegangsaanvraag in plaats van een kale 403-foutmelding. Via Viva Connections en contextpagina's in Teams staan links als \"Help me veilig te schrijven\" direct naast het tekstvak.</p>\n<h3>Actualiteitsbadges</h3>\n<p>Elke pagina toont eigenaar, backup, SLA en een badge: groen (beoordeeld binnen 30 dagen), oranje (31 tot 90 dagen) of rood (verouderd na 90 dagen). Een ticket vanuit een rode pagina gaat naar de eigenaar met het verzoek de pagina te vernieuwen. Gebruikers vertrouwen groen, twijfelen bij oranje en mijden rood. Onderaan elke pagina staat bovendien de vraag \"Was dit nuttig?\" met een enquête van twee klikken. \"Vraag een expert\" escaleert naar een beheerde wachtrij. Wekelijkse triage en een maandelijkse update met openbaar wijzigingslogboek houden de cirkel gaande.</p>\n\n<h2>De governance-switch die schaduwtraining elimineert</h2>\n<p>De sleutel is één verplichte ontdekkingsservice, geen suggestie maar beleid. Pin het leercentrum als Teams-app voor iedereen en maak de SharePoint-hub het gezaghebbende toegangspunt. Alle Copilot-gerelateerde content valt onder die informatiearchitectuur: handleidingen, prompts, agentdocumentatie en FAQ's. Geen aparte wikis, geen tijdelijke decks in willekeurige teams, geen pdf's in privékanalen. Staat het niet in de hub, dan is het niet officieel.</p>\n<h3>Handhaving</h3>\n<ul>\n<li><strong>Linkbeheer:</strong> oude URL's verwijzen naar de kanonieke pagina, met een banner die de wijziging uitlegt.</li>\n<li><strong>Waarschuwingsbanners:</strong> content buiten de hub meldt dat ze niet gezaghebbend is.</li>\n<li><strong>Automatisch archiveren:</strong> content zonder eigenaar of beoordelingsdatum wordt gemarkeerd, lager gerankt en in de archiveringswachtrij gezet.</li>\n</ul>\n<h3>Rollen, DLP en cultuur</h3>\n<p>Elk gebied, elke rolgids en elke agentvermelding heeft een verantwoordelijke met een backup. Kwartaalbeoordelingen vinden volgens vast schema plaats. Wie zijn SLA niet nakomt, verliest zijn bevoegdheden. Databeleid staat bovenaan relevante pagina's in gewone taal, met concrete voorbeelden en rood gemarkeerde verboden verzoeken. Mensen onthouden geen beleidsparagrafen, wel een duidelijke grens op het moment van de handeling.</p>\n<p>Centralisatie verhoogt bovendien de bijdragen. Wie weet waar de kanon staat, dient verbeteringen in via een proces (wijziging voorstellen, bewijs toevoegen, naar de eigenaar sturen, publiceren met wijzigingslogboek) in plaats van eigen regels te publiceren. Zichtbare erkenning voor bijdragers werkt beter dan een strenge memo.</p>\n\n<h2>Praktijkcase en veelgemaakte fouten</h2>\n<p>Een bedrijf met duizenden Copilot-licenties leek veel te doen, maar leerde weinig. De ticketwachtrij werd gedomineerd door de vier bekende thema's. Wikis, presentaties en pdf's hadden geen bekende eigenaar en een fictieve reviewdatum. Schaduwagents doken op in willekeurige omgevingen met onduidelijke verbindingen, en het management vroeg waar het rendement bleef.</p>\n<p>De interventie: een leercentrum met leren, doen en beheren, vastgepind in Teams, een intentiegerichte FAQ, een rolgebaseerde promptbibliotheek met kopieer-en-uitvoerfuncties en een agentdirectory met eigenaar, omgeving en databeleid. Oude links werden doorgestuurd met archiefbanners en governance verhuisde van pdf naar paginaheaders.</p>\n<p>De effecten:</p>\n<ul>\n<li>meer tickets werden afgehandeld doordat antwoorden vindbaar waren;</li>\n<li>het zoeksucces nam toe dankzij beslisbomen;</li>\n<li>dubbele items verdwenen en wikis zonder eigenaar verdwenen uit de zoekresultaten;</li>\n<li>de promptbibliotheek werd het zwaartepunt, met minder onterechte klachten dankzij expliciete foutmodi;</li>\n<li>het aantal malafide agents daalde; agents met hoog risico verhuisden naar beheerde omgevingen met passende DLP;</li>\n<li>er waren minder incidenten met gegevens die niet geplakt hadden mogen worden.</li>\n</ul>\n<p>Ook de cultuur veranderde: de reflex verschoof van \"vraag het\" naar \"check het centrum\".</p>\n<h3>Stolpersteine</h3>\n<ul>\n<li><strong>Te weinig aandacht voor vindbaarheid:</strong> taxonomie en scopes maken of breken relevantie. Gokken leidt tot meer tickets.</li>\n<li><strong>Verouderde links dulden:</strong> geef met consequente redirects aan wat verouderd is.</li>\n<li><strong>Algemene richtlijnen:</strong> publiceer rolgebaseerde startpaden, want algemene richtlijnen leiden tot algemene fouten.</li>\n<li><strong>Niet meten:</strong> instrumenteer alles, van zoektermen tot doorklikken en bounce.</li>\n</ul>\n\n<h2>KPI's: bewijs dat het leercentrum werkt</h2>\n<p>Je hebt cijfers nodig die discussies beëindigen. De kernmetingen zijn het percentage afgehandelde tickets, het aantal unieke bezoekers van de hub, hergebruik van prompts in de bibliotheek en het verdwijnen van ongewenste documenten.</p>\n<h3>Voorlopende en achterlopende indicatoren</h3>\n<ul>\n<li><strong>Voorlopend:</strong> zoeksucces, doorklikratio van de \"Welke Copilot?\"-pagina en tijd op pagina bij startgidsen per rol. Vinden gebruikers in 70% van de gevallen binnen drie klikken een oplossing, dan werkt de opzet. Haken ze af, dan klopt de taxonomie niet.</li>\n<li><strong>Achterlopend:</strong> minder schaduwactiva, minder dubbele agents en hogere tevredenheid op \"Was dit nuttig?\". Verdwijnen rode badges en blijven groene badges groen, dan werkt de evergreen-aanpak.</li>\n</ul>\n<h3>Doelstellingen en instrumentatie</h3>\n<ul>\n<li>een afbuiging van 30 tot 40% binnen 60 tot 90 dagen;</li>\n<li>70% van de \"Welke Copilot?\"-vragen opgelost in drie klikken;</li>\n<li>verouderde content onder de 10% in de tweede maand;</li>\n<li>wekelijks hergebruik van prompts in de vijf belangrijkste rolgidsen.</li>\n</ul>\n<p>Als instrumenten volstaan SharePoint-gebruiksanalyses, zoeklogs en een Power BI-dashboard. Het ritme: wekelijkse triage, maandelijkse update en een governance-audit per kwartaal. Publiceer de scorekaart: minder tickets, snellere antwoorden en veiliger gebruik geven het management waar het om vraagt. Wat niet op het dashboard staat, is niet gebeurd.</p>\n\n<h2>Praktische takeaways</h2>\n<ul>\n<li>Behandel Copilot-adoptie als informatiearchitectuurprobleem, niet als eenmalige training.</li>\n<li>Bouw een SharePoint-hub met de gebieden leren, doen en beheren en pin die als Teams-app.</li>\n<li>Koppel je FAQ aan echte zoeklogs en tickets, met beslisbomen die in maximaal drie klikken naar de juiste Copilot leiden.</li>\n<li>Maak een promptbibliotheek met doel, structuur, variaties en foutmodi, afgestemd op rol en datagrenzen.</li>\n<li>Geef elke pagina een eigenaar, backup, SLA en een actualiteitsbadge (groen, oranje, rood).</li>\n<li>Maak de hub verplicht: alles buiten de hub krijgt een waarschuwingsbanner, redirect of archivering.</li>\n<li>Toon databeleid, transcriptretentie en goedgekeurde connectors op de plek van de handeling, met concrete voorbeelden.</li>\n<li>Meet wekelijks, werk maandelijks bij en audit per kwartaal, en publiceer het wijzigingslogboek.</li>\n</ul>\n\n<h2>Fazit</h2>\n<p>Copilot-training werkt alleen als het een continu beheerd systeem is met eigenaarschap, levenscyclus en telemetrie. Een centraal leercentrum in SharePoint beantwoordt vragen voordat ze tickets worden. Een promptbibliotheek met foutmodi maakt gebruikers vaardiger en governance op het juiste moment maakt het gebruik veiliger. Dat gedeelde, actuele startpunt neemt schaduwtraining de ruimte, en met de juiste KPI's toon je het management aantoonbaar rendement op de licenties.</p>",
-  "model": "claude-sonnet-5-5",
-  "info": {
-   "titel": "Van tickets naar een beheerd Copilot-leercentrum",
-   "typ": "schritte",
-   "punten": [],
-   "punkte": [
-    {
-     "kopf": "Centraliseer in één hub",
-     "text": "SharePoint-hub met leren, doen en beheren, vastgepind als Teams-app voor iedereen."
-    },
-    {
-     "kopf": "Map intenties",
-     "text": "Koppel FAQ aan echte zoeklogs en tickets, met beslisbomen die in maximaal drie klikken leiden."
-    },
-    {
-     "kopf": "Bouw promptbibliotheek",
-     "text": "Elke prompt heeft doel, structuur, variaties en foutmodi, afgestemd op rol en datagrenzen."
-    },
-    {
-     "kopf": "Handhaaf governance",
-     "text": "Eigenaar, SLA en actualiteitsbadge per pagina; redirects, banners en automatische archivering buiten de hub."
-    },
-    {
-     "kopf": "Meet en verbeter",
-     "text": "Volg tickets, zoeksucces en verouderde content via dashboard; wekelijkse triage, maandelijkse update."
-    }
-   ]
-  },
-  "faq": [
-   {
-    "q": "Waarom mislukt Copilot-training vaak in organisaties?",
-    "a": "Organisaties geven een statisch trainingsprogramma voor een bewegend doelwit. Copilot verandert wekelijks, slides niet, en gebruikers vergeten dingen. Eenmalige sessies, presentaties en handleidingen werken daarom niet. Training moet een continu beheerd systeem zijn, geen evenement."
-   },
-   {
-    "q": "Wat is een Copilot-leercentrum in SharePoint en hoe is het opgebouwd?",
-    "a": "Het is een beheerde SharePoint-hubsite die kennis, artefacten en veilige gebruikspatronen van Copilot centraliseert. De hub heeft drie gebieden: Leren (gecureerde kennis), Doen (prompt- en agentdirectory) en Beheren (zichtbaar beleid). Je pint de hub als Teams-app voor iedereen."
-   },
-   {
-    "q": "Hoe verminder je Copilot-tickets met een promptbibliotheek en intentiemapping?",
-    "a": "Koppel je FAQ aan echte zoeklogs en tickets, verdeeld over de vier terugkerende vragen, met beslisbomen en promptvoorbeelden. Elke goedgekeurde prompt heeft doel, structuur, variaties en foutmodi. Actualiteitsbadges maken vertrouwen zichtbaar. Het doel is 30 tot 40% afbuiging binnen 60 tot 90 dagen."
-   },
-   {
-    "q": "Hoe voorkom je schaduwdocumentatie rond Copilot?",
-    "a": "Maak de SharePoint-hub verplicht als enige gezaghebbende bron: staat het niet in de hub, dan is het niet officieel. Handhaaf dit met redirects van oude URL's, waarschuwingsbanners op content buiten de hub en automatisch archiveren van content zonder eigenaar of beoordelingsdatum."
-   }
-  ],
-  "infos": [
-   {
-    "titel": "Doelstellingen van het leercentrum",
-    "typ": "fakten",
-    "punten": [
-     {
-      "wert": "30–40%",
-      "text": "afbuiging van tickets binnen 60 tot 90 dagen"
-     },
-     {
-      "wert": "70%",
-      "text": "van de \"Welke Copilot?\"-vragen opgelost in drie klikken"
-     },
-     {
-      "wert": "<10%",
-      "text": "verouderde content in de tweede maand"
-     },
-     {
-      "wert": "80%",
-      "text": "van de dagelijkse verwarring weggenomen vóór het een ticket wordt"
-     },
-     {
-      "wert": "Wekelijks",
-      "text": "hergebruik van prompts in de vijf belangrijkste rolgidsen"
-     }
-    ]
-   }
-  ],
-  "quiz": [
-   {
-    "q": "Welke drie kerngebieden heeft de hubsite van het Copilot-leercentrum?",
-    "opts": [
-     "Leren, doen en beheren",
-     "Lezen, delen en controleren",
-     "Starten, oefenen en certificeren",
-     "Leren, testen en archiveren"
-    ],
-    "a": 0,
-    "why": "De hub bestaat uit Leren (gecureerde kennis), Doen (prompt- en agentdirectory) en Beheren (zichtbaar beleid voor gebruikers)."
-   },
-   {
-    "q": "Welke vier velden heeft elke goedgekeurde prompt in de promptbibliotheek?",
-    "opts": [
-     "Titel, auteur, versie en goedkeuringsdatum",
-     "Doel, structuur, variaties en foutmodi",
-     "Rol, gevoeligheid, service en functie",
-     "Context, voorbeeld, risico en eigenaar"
-    ],
-    "a": 1,
-    "why": "Elke prompt heeft doel, structuur, variaties en foutmodi. De andere opties lijken op taxonomie of metadata, maar zijn niet de vier velden."
-   },
-   {
-    "q": "Wanneer toont een pagina een rode actualiteitsbadge?",
-    "opts": [
-     "Na meer dan 30 dagen zonder beoordeling",
-     "Bij een ontbrekende backup van de eigenaar",
-     "Na meer dan 90 dagen zonder beoordeling",
-     "Bij meer dan tien negatieve beoordelingen"
-    ],
-    "a": 2,
-    "why": "Groen is beoordeeld binnen 30 dagen, oranje 31 tot 90 dagen en rood is verouderd na 90 dagen."
-   },
-   {
-    "q": "Wat gebeurt er met content zonder eigenaar of beoordelingsdatum?",
-    "opts": [
-     "Ze wordt direct definitief verwijderd",
-     "Ze blijft bovenaan staan met een waarschuwing",
-     "Ze wordt automatisch doorgestuurd naar de helpdesk",
-     "Ze wordt gemarkeerd, lager gerankt en in de archiveringswachtrij gezet"
-    ],
-    "a": 3,
-    "why": "Automatisch archiveren markeert zulke content, rankt haar lager en plaatst haar in de archiveringswachtrij."
-   }
-  ]
- },
  "ja": {
   "html": "<p>Copilotの導入で「研修をやったのに問い合わせが減らない」という悩みは珍しくありません。原因は研修の質ではなく、設計にあります。トレーニングは一度きりのイベントではなく、常に最新の状態に保たれ、管理されたシステムとして運用する必要があります。</p>\n<p>この記事では、SharePoint上にCopilot学習センターを構築し、ガバナンス、プロンプトライブラリ、KPIによって問い合わせとシャドートレーニングを減らす考え方と手順を整理します。</p>\n\n<h2>Copilotのトレーニングが失敗する理由</h2>\n<p>最大の原因は、動き続けるターゲットに対して静的なトレーニングを当てていることです。Copilotは毎週変わりますが、スライドは変わりません。ユーザーは内容を忘れますが、Copilotは進化し続けます。この不一致が根本原因です。</p>\n<p>従来の導入計画は、初心者・中級者・上級者という直線的なスキルパスを前提にしがちです。しかしCopilotは会話型でコンテキストに依存し、データの境界やプロンプトの品質に非常に敏感です。一度教えただけでは、教えたことにはなりません。</p>\n<p>さらに、準備が最も不十分なユーザーに合わせて最適化すると、最小公倍数的な混乱が生まれます。プロンプトは薄まり、ニュアンスは隠れ、ガバナンスは骨抜きになって、無害だが役に立たない状態になります。その結果、次の2つのグループが生まれます。</p>\n<ul>\n<li>ガイダンスを無視して独自のシャドウプラクティスを作るパワーユーザー</li>\n<li>混乱して大声でエスカレーションするユーザー</li>\n</ul>\n<p>基礎を継続的に教えれば、チケットになる前に日々の混乱の約80%をカバーできます。</p>\n\n<h2>よくある問い合わせパターンとシャドートレーニングの実態</h2>\n<h3>頻出する4つの問い合わせ</h3>\n<ol>\n<li><strong>「どこから始めればいいですか?」</strong>:情報を見つけられないという発見の失敗です。</li>\n<li><strong>「どのCopilotを使うのですか?」</strong>:Outlook、Word、Teams、Graph grounded、Copilot Studioで作るエージェントなど、ユーザーはCopilotを単一のものと考えがちです。実際には機能もリスクも異なる複数のサーフェスとエージェントがあります。</li>\n<li><strong>「これは安全ですか?」</strong>:会議の文字起こしなど、実際に扱うデータについて、ポリシーで承認されたコネクタが明示されていないことが原因です。</li>\n<li><strong>「なぜその回答になったのですか?」</strong>:多くはプロンプトパターンと取得コンテキストの問題であり、Copilotが間違っているわけではありません。</li>\n</ol>\n<h3>シャドートレーニングエコノミー</h3>\n<p>チームのプレゼン資料、チャット内のPDF、「Copilot完全ガイド v7 最終 最終」のようなWikiページが出回ります。バージョン管理も所有者も廃止ポリシーもないため、公式ガイダンスを公開した途端に非公式のコピーが何本も現れます。検索結果は矛盾し、唯一の情報源は民間伝承になります。</p>\n<p>その結果、問い合わせの増加、出力の不整合、データリスクが生まれ、経営層は「投資対効果が見えない」とライセンス費用に疑問を持ちます。管理されない環境では不正なエージェントも増え、プロンプトの基本を繰り返し教える時間も浪費されます。これは定着ではなくエントロピーの増大です。</p>\n<p>定期ウェビナーでは解決できません。ユーザーが必要としているのは予定された講義ではなく、質問が生まれた場所での回答です。Word、Teamsの作成ボックスの横にガイダンスがない、あるいはワンクリックで届かないのであれば、博物館の展示と同じです。Copilot導入は、トレーニングの仮面をかぶった情報アーキテクチャの問題なのです。</p>\n\n<h2>Copilot学習センターのアーキテクチャ:SharePointで作るガバナンスハブ</h2>\n<p>学習センターは、リンクを並べたSharePointサイトではありません。Copilotのノウハウや安全な使用パターンを一元化し、避けて通れないものにする、テナント認識型のガバナンスハブです。掲示板ではなく空港に例えると分かりやすく、ユーザーはゲート、セキュリティ、案内標識によって導かれて移動します。</p>\n<h3>基盤とコンポーネント</h3>\n<ul>\n<li><strong>モダンSharePointのハブサイト</strong>:Teams統合を備えた高速で応答性の高いキャンバスです。ハブにより、すべての子サイトがナビゲーション、テーマ、ガバナンスを継承します。</li>\n<li><strong>SPFx Webパーツ</strong>:Copilot Studioエージェントのディレクトリカード、ロール別プロンプトギャラリー、環境スコープを示すコンテキストバナーを担います。iFrameなしで、SharePoint、Teamsタブ、Viva Connectionsに展開できるため、1つのコードバンドルであらゆる場所に表示できます。</li>\n<li><strong>PnPモダン検索</strong>:発見のための検索エンジンです。</li>\n<li><strong>ガバナンスレイヤー</strong>:セキュリティを担保します。</li>\n</ul>\n<p>ハブは「学習」「実行」「ガバナンス」の3領域を扱います。学習はキュレーションされた知識、実行はプロンプトとエージェントのディレクトリ、ガバナンスは、ユーザーが実際に目にする場所に前面表示されるポリシーです。</p>\n<h3>発見性と分類</h3>\n<p>検索では分類が重要です。サーフェス(Word、Outlook、Teams、Graph)、機能(要約、生成、分析)、ロール(営業、財務、人事)、リスク(内部、外部、規制)、スコープ(個人、チーム、組織)で整理すると、営業担当者は古いデッキではなく、自分のロール向けに承認されたプロンプトを最初に目にできます。結果テンプレートは、鮮度バッジ、所有者、最終監査日付きのカードで表示され、信頼性が見えるようになります。</p>\n<h3>コンテンツソースとライフサイクル</h3>\n<p>Microsoft LearnとViva Learningのフィードを、公式・コミュニティ・内部といった出所ラベル付きで集約します。コミュニティの情報は許可されますが、権威はありません。内部のSOPやロールガイドには、ドラフト、ピアレビュー、公開、廃止というライフサイクルを適用し、監査ログ付きの月次更新サイクルを回します。</p>\n<p>各エントリは、所有者、環境、データポリシー、コネクタ、目的、状態といったフィールドを持つオブジェクトとして管理します。使用上の注意とテレメトリへのリンクを備え、安全なサンドボックスで試せる「使用」ボタンと、バックエンドを経由するアクセス要求フローも用意します。</p>\n\n<h2>問い合わせを減らす3つのレバー</h2>\n<p>ランダムな質問に答えるのをやめ、意図を先回りして解決します。ユーザーがOutlookを開いて迷ったとき、クリックした場所に答えがあれば、チケットは減ります。レバーは「意図マッピング」「正規の回答」「目に見える鮮度」の3つです。</p>\n<h3>意図マッピング</h3>\n<p>FAQは、ユーザーが尋ねそうな内容ではなく、実際のクエリに結びつけます。検索ログとチケットを分析し、「どのCopilotを使うか」「これは安全か、なぜその回答なのか」などの主要ルートに振り分けます。各ルートのランディングページには、判断ツリーとプロンプト例の2つを置きます。</p>\n<ul>\n<li><strong>判断ツリー</strong>:3クリック未満で進むべき道を選べます。サーフェス、ロール、データ機密性の3つのトグルでページがリアルタイムに更新されます。たとえば会議メモにはTeams、トリアージにはOutlook、長文にはWordを使い、承認済みコネクタで業務コンテキストが必要な場合はCopilot Studioのエージェントを使います。何も使わないほうが安全な場面があることも明示します。</li>\n<li><strong>プロンプト例</strong>:良い例と、その横にアンチパターンを並べます。ユーザーに必要なのは理論ではなく対比です。</li>\n</ul>\n<h3>ジャストインタイムのガイダンス</h3>\n<p>コンテキストページをTeamsに埋め込み、作成サーフェスの近くにヘルプへのディープリンクを置きます。コピーボタンと実行ボタン付きのロール別プロンプトを開けるようにし、プロンプトだけでなく「なぜ機能するのか」のメモも添えます。意図、範囲、制約を設定し、データソースに名前を付け、誘導的な指示を避けます。赤いボックスには「魅力的だが安全でない例」を示します。</p>\n<h3>プロンプトライブラリの設計</h3>\n<p>承認済みプロンプトには、4つのフィールドを持たせます。</p>\n<ul>\n<li><strong>目的</strong>:一行で表せる仕事。</li>\n<li><strong>構造</strong>:各句にラベルを付け、ユーザーが壊さずにリミックスできるようにする。</li>\n<li><strong>バリエーション</strong>:トーンやロールの微調整を示す。</li>\n<li><strong>失敗モード</strong>:曖昧な動詞、欠落したコンテキスト、ハルシネーションの罠と、そのクイックフィックス。</li>\n</ul>\n<p>コピーと実行のボタンは、ロールとデータの境界を尊重します。アクセス権がない場合は403エラーではなく、アクセス申請の導線を表示します。</p>\n\n<h2>ガバナンススイッチ:シャドートレーニングを止める</h2>\n<p>シャドートレーニングを追いかけるのではなく、存続に必要な酸素を断ちます。そのために、単一の検索・発見サービスを「提案」ではなく「ポリシー」として義務付けます。</p>\n<h3>強制の仕組み</h3>\n<ul>\n<li>学習センターを全員のTeamsアプリとしてピン止めし、SharePointハブを権威あるエントリポイントに設定する。</li>\n<li>Copilot関連のコンテンツ(ガイド、プロンプト、エージェントのドキュメント、FAQ)はすべてハブの情報アーキテクチャ配下に置く。サイドWiki、一時的なデッキ、プライベートチャンネルのPDFは例外にしない。<strong>ハブにないものは公式ではない</strong>、という原則です。</li>\n<li>レガシーURLは正規ページに自動リダイレクトし、変更を説明するバナーを表示する。</li>\n<li>ハブ外のコンテンツには「このページは権威あるものではありません」という警告バナーを表示する。</li>\n<li>レビュー日のないコンテンツにはフラグを立て、検索順位を下げ、アーカイブへ移す。履歴は消さず、意思決定の経路から外します。</li>\n</ul>\n<h3>所有権とDLPの整合</h3>\n<p>学習・実行・ガバナンスの各領域、各ロールガイド、各エージェントエントリに所有者とバックアップを置き、月次レビューを雰囲気ではなくカレンダーで運用します。SLAを守らない所有者は権限を失います。</p>\n<p>DLPとの整合は事後ではなく「序章」として扱います。関連ページの冒頭に、平易な言葉と例でデータポリシーを示します。内部メールは要約できるか、顧客の個人情報は貼り付けてよいか、承認済みコネクタ経由の条件付き外部共有はどうするか、といった内容です。意図的に警告を発する赤線の例を理由とともに載せます。ユーザーはポリシーの条文ではなく、必要な瞬間に提示された、シンプルで鮮明な境界線を覚えています。</p>\n<h3>鮮度バッジと貢献フロー</h3>\n<p>バッジは緑が30日以内にレビュー済み、琥珀色が31〜90日、赤が90日超です。赤いページから発生したチケットは、更新を促すメッセージ付きで所有者にルーティングされます。ユーザーも同じバッジを見るので、緑を信頼し、琥珀色を疑い、赤を避けるようになります。</p>\n<p>意外にも、一元化によって貢献は増えます。規範の場所が分かっていれば、人は独自ルールを公開せず、改善を提案するからです。変更を提案し、根拠を添付し、所有者にルーティングし、変更ログとともに公開する流れを整え、貢献者を目に見える形でクレジットします。</p>\n\n<h2>KPIで効果を証明する</h2>\n<h3>主要指標と先行指標</h3>\n<p>最優先の指標は、チケット回避率、ハブへのユニークビジター、ライブラリのプロンプト再利用、不正ドキュメントの減少です。これらが正しい方向に動いていれば、残りは補足にすぎません。先行指標としては、次のものを追跡します。</p>\n<ul>\n<li>検索成功率</li>\n<li>「どのCopilotを使うか」ページでのクリックスルー</li>\n<li>ロール別開始ガイドの滞在時間</li>\n</ul>\n<p>ユーザーが3クリック以内で解決できていればルーティングは機能しており、離脱が多いなら直すべきはユーザーではなく分類体系です。行動変化の指標には、シャドウアセットの減少、重複エージェントの減少、「役に立った」満足度の上昇があります。</p>\n<h3>目標設定</h3>\n<ul>\n<li>60〜90日でチケット回避率30〜40%を達成する。</li>\n<li>Copilotの質問の70%を3クリック以内で解決する。</li>\n<li>2か月目までに古いコンテンツの割合を10%未満にする。</li>\n<li>上位5つのロールガイドの再利用を毎週促進する。</li>\n</ul>\n<p>計測にはSharePointの利用状況分析、検索ログ、Power BIダッシュボードを使い、毎週のトリアージ、毎月の更新、四半期ごとのガバナンス監査スコアカードを回します。経営層が求めるライセンスのROIは、チケット削減、回答の迅速化、安全性の向上で示せます。ダッシュボードにないものは、起きていないのと同じです。</p>\n<h3>導入事例で見えた変化</h3>\n<p>数千のCopilotライセンスを持つある企業では、チケットが「どこから始めるか」「どのCopilotか」「安全か」「なぜその回答か」の4テーマに集中していました。ガイダンスは各所に散在し、所有者は不明で、レビュー日は形だけでした。導入後は、質問の発生場所に回答があるためチケット回避率が週ごとに上がり、決定ツリーで3クリック未満に解決できて検索成功率が改善し、重複した成果物も減りました。所有者のいないサイトは自動的に期限切れとなり、検索結果から消えました。</p>\n<p>ガバナンス面でも、承認済みディレクトリの存在により不正なエージェントが減速し、高リスクのエージェントは適切なDLPを備えた管理環境に移りました。マイクロサーベイでは「不足しているバリエーション」と「より明確な境界例」の2種類のフィードバックが集まり、月次更新で反映されました。パワーユーザーも、非公開チャンネルで知識を囲い込む代わりに、貢献フローでプロンプトのバリエーションを提出するようになりました。</p>\n\n<h2>よくある失敗と学んだ教訓</h2>\n<ul>\n<li><strong>検索性を軽視する</strong>:分類とスコープ、過剰なインデックスが関連性を左右します。推測で作ると、チケットが膨らみます。</li>\n<li><strong>古いリンクを放置する</strong>:非推奨は容赦ないリダイレクトで宣言し、リンク腐敗と交渉しないことです。</li>\n<li><strong>汎用ガイダンスだけにする</strong>:一般的なガイダンスは一般的なエラーを招きます。ロール別の開始パスを公開します。</li>\n<li><strong>計測しない</strong>:検索後のクリックスルーや離脱ループを含め、すべて計測します。来月直すべき点はデータが教えてくれます。</li>\n<li><strong>利用者に「チケットを開くな」と言う</strong>:それでチケットは減りません。先に答えを出し、その答えを明確・最新・安全にして、非公式コピーを意図的に本物より使いにくくします。</li>\n</ul>\n\n<h2>実践のためのテイクアウェイ</h2>\n<ul>\n<li>トレーニングは会議ではなくシステムとして設計し、所有権、ライフサイクル、テレメトリを持たせる。</li>\n<li>SharePointハブとSPFx、PnPモダン検索で、テナント認識型の学習センターを構築する。</li>\n<li>FAQは実際の検索ログとチケットから意図にマッピングし、判断ツリーとプロンプト例を用意する。</li>\n<li>プロンプトは目的・構造・バリエーション・失敗モードの4項目で管理し、ロールとデータ境界を尊重する。</li>\n<li>鮮度バッジ(緑・琥珀・赤)と所有者・バックアップ・SLAを全ページに表示する。</li>\n<li>センターをTeamsアプリとしてピン止めし、「ハブにないものは公式ではない」をポリシー化する。</li>\n<li>レガシーURLのリダイレクト、警告バナー、自動アーカイブで非公式コピーを排除する。</li>\n<li>データポリシーとDLPの境界は、赤線の例とともにページの冒頭に示す。</li>\n<li>チケット回避率、3クリック解決率、古いコンテンツ比率などのKPIを設定し、毎週・毎月見直す。</li>\n</ul>\n\n<h2>まとめ</h2>\n<p>Copilot導入の課題は、研修の量ではなく情報アーキテクチャにあります。質問が生まれる場所で、明確で最新かつ安全な回答に到達できれば、チケットは減り、シャドートレーニングは居場所を失います。SharePointの学習センターで知識を一元化し、ガバナンスを前面に出し、KPIで効果を示し続けることが、Copilot活用を定着させ、ライセンス投資の価値を経営層に示す近道です。</p>",
   "model": "claude-sonnet-5-5",
@@ -1557,6 +1016,600 @@
     ],
     "a": 1,
     "why": "目標は、60〜90日でチケット回避率30〜40%を達成することです。古いコンテンツは2か月目までに10%未満が目標です。"
+   }
+  ]
+ },
+ "de": {
+  "html": "<p>Viele Unternehmen behandeln die Copilot-Einführung wie ein Schulungsprojekt: ein paar Webinare, Folien, ein PDF. Das Ergebnis sind steigende Support-Tickets, Wildwuchs bei Anleitungen und Führungskräfte, die den Nutzen der Lizenzen hinterfragen. Der Grund ist selten mangelnder Einsatz. Training ist hier kein Termin, sondern ein System.</p>\n<p>Dieser Artikel zeigt, wie ein verwaltetes Copilot-Lernzentrum in SharePoint aufgebaut ist, wie Governance, Prompt-Bibliothek und Agentenverzeichnis zusammenspielen und welche KPIs belegen, dass es funktioniert.</p>\n\n<h2>Warum Copilot-Training scheitert: statische Schulung für ein bewegliches Ziel</h2>\n<p>Copilot ändert sich wöchentlich, Schulungsfolien nicht. Anwender vergessen, das Produkt entwickelt sich weiter. Diese Diskrepanz ist die Grundursache vieler Probleme. Klassische Einführungspläne gehen von einem linearen Lernpfad aus (Anfänger, Fortgeschrittene, Experten). Copilot arbeitet aber konversationsbasiert, kontextabhängig und reagiert sehr empfindlich auf Datengrenzen und Promptqualität.</p>\n<p>Auch der Gedanke vom „Durchschnittsnutzer“ schadet. Wer für die am wenigsten Vorbereiteten optimiert, verwässert Prompts, versteckt Nuancen und höhlt die Governance aus, bis sie harmlos und nutzlos ist. Es entstehen zwei Gruppen: Power-User, die eigene Schattenpraktiken entwickeln, und verunsicherte Nutzer, die sich beschweren.</p>\n<h3>Die vier Tickets, die ständig wiederkehren</h3>\n<ol>\n<li><strong>„Wo fange ich an?“</strong> – ein Orientierungsproblem.</li>\n<li><strong>„Welcher Copilot?“</strong> – Anwender halten Copilot für eine einzige Sache. Tatsächlich gibt es mehrere Oberflächen und Agenten (Outlook, Word, Teams, Copilot Studio) mit unterschiedlichen Fähigkeiten und Risiken.</li>\n<li><strong>„Ist das sicher?“</strong> – Datengrenzen, Richtlinien zu Transkripten und genehmigte Konnektoren sind dort nicht transparent, wo gearbeitet wird.</li>\n<li><strong>„Warum diese Antwort?“</strong> – meist ein Zusammenspiel aus Promptmuster und Abrufkontext, kein Produktfehler.</li>\n</ol>\n<h3>Schattentraining als Folge</h3>\n<p>Wo es keine zentrale Quelle gibt, entsteht eine Schattenökonomie: Folien in Teams, PDFs in Chats, Wiki-Seiten mit Titeln wie „Ultimativer Copilot Guide V7 Final Final“. Es gibt keine Versionskontrolle, keine Zuständigkeit und keine Regel zur Außerbetriebnahme. Veröffentlicht die IT offizielle Leitlinien, entstehen schnell inoffizielle Kopien. Die Suche liefert Widersprüche, Tickets nehmen zu, Ergebnisse werden inkonsistent und Datenrisiken wachsen. Quartalsweise Webinare lösen das nicht, denn Nutzer brauchen Antworten dort, wo die Frage entsteht: in Word, in Teams, direkt neben dem Eingabefeld. Wer im Arbeitsfluss lehrt, kann nach den bisherigen Erfahrungen rund 80 % der alltäglichen Unklarheiten abfangen, bevor daraus ein Ticket wird.</p>\n<p>Die Einführung von Copilot ist damit im Kern ein Problem der Informationsarchitektur im Schulungskostüm. Die Lösung ist ein stets aktuelles, verwaltetes, versioniertes und auffindbares Zentrum, auf das konsequent verwiesen wird.</p>\n\n<h2>Architektur des Copilot-Lernzentrums in SharePoint</h2>\n<p>Das Lernzentrum ist keine SharePoint-Seite mit ein paar Links, sondern ein verwalteter, mandantenfähiger Hub, der Know-how, Artefakte und sichere Nutzungsmuster bündelt. Man kann es sich wie einen Flughafen vorstellen: Gates, Sicherheit, Beschilderung und Flugverkehrskontrolle. Menschen bewegen sich dort, weil das System sie leitet.</p>\n<h3>Das Fundament: Hub-Site mit drei Bereichen</h3>\n<p>Modernes SharePoint bietet eine schnelle, responsive Oberfläche mit nativer Teams-Integration. Über eine Hub-Site erben alle untergeordneten Seiten Navigation, Design und Governance. Der Hub besteht aus drei Kernbereichen:</p>\n<ul>\n<li><strong>Lernen:</strong> kuratiertes Wissen.</li>\n<li><strong>Anwenden:</strong> Verzeichnis für Prompts und Agents.</li>\n<li><strong>Verwalten:</strong> Richtlinien dort, wo Nutzer sie sehen, statt sie in Archiven zu vergraben.</li>\n</ul>\n<h3>SPFx-Webparts als Gates</h3>\n<p>SPFx-Webparts übernehmen die Schwerstarbeit: Verzeichniskarten für Copilot-Studio-Agents, rollenbasierte Prompt-Galerien und Kontext-Banner, die den Geltungsbereich der Umgebung zeigen. Der Vorteil: Sie sind mandantenfähig, schnell und lassen sich ohne iFrames in SharePoint, Teams und Viva Connections bereitstellen. Ein Code-Paket funktioniert überall.</p>\n<h3>PnP Modern Search als Beschilderung</h3>\n<p>Über Erfolg oder Misserfolg entscheidet die Auffindbarkeit. PnP Modern Search dient als Suchmaschine, getragen von einer sauberen Taxonomie:</p>\n<ul>\n<li>Oberflächen: Word, Outlook, Teams, Graph</li>\n<li>Funktionen: zusammenfassen, generieren, analysieren</li>\n<li>Rollen: Vertrieb, Finanzen, Personalwesen, Risiko</li>\n<li>Kategorien: intern, extern, reguliert</li>\n<li>Bereiche: das eigene Team und die gesamte Organisation</li>\n</ul>\n<p>So sieht ein Vertriebsmitarbeiter zuerst die für seine Rolle genehmigten Prompts und keine zufällige Präsentation von 2023. Ergebniskarten zeigen Aktualitätsbadges, Besitzer und letztes Audit, damit Vertrauen sichtbar wird.</p>\n<h3>Inhaltsquellen mit klarer Herkunft</h3>\n<p>Microsoft Learn und Viva Learning Feeds fließen in den Bereich „Lernen“ ein, mit eindeutiger Kennzeichnung: offiziell, Community, intern. Community-Lernpfade sind erlaubt, aber nicht maßgeblich. Interne SOPs und Rollenleitfäden durchlaufen einen Lebenszyklus aus Entwurf, Peer Review, Veröffentlichung und Archivierung, mit monatlichem Aktualisierungszyklus und Audit-Protokollen. Die Regel lautet: Was keinen Besitzer und kein Ablaufdatum hat, geht nicht live.</p>\n\n<h2>Prompt-Bibliothek und Agentenverzeichnis: Wissen, das man sofort nutzen kann</h2>\n<p>Das Agentenverzeichnis ist die zentrale Single Source of Truth für Copilot-Oberflächen und Studio-Agenten. Jeder Eintrag ist ein Objekt mit Besitzer, Umgebung, Datenrichtlinien, Konnektoren, Zweck, Zielvorgaben und roten Linien. Dazu kommen Nutzungshinweise, Telemetrie-Links, ein „Ausprobieren“-Button für sichere Sandboxes und ein Zugriffsanfrage-Flow über das eigene Backend.</p>\n<p>Die Prompt-Bibliothek ist bewusst meinungsstark. Jeder genehmigte Prompt hat vier Felder:</p>\n<ul>\n<li><strong>Zweck:</strong> die Aufgabe in einer Zeile.</li>\n<li><strong>Aufbau:</strong> jeder Teil ist beschriftet, damit Nutzer ihn anpassen können, ohne ihn zu zerstören.</li>\n<li><strong>Variationen:</strong> Anpassungen bei Tonfall oder Rolle.</li>\n<li><strong>Fehlerquellen:</strong> mehrdeutige Verben, fehlender Kontext, Halluzinationsfallen und schnelle Korrekturen.</li>\n</ul>\n<p>Ein guter Prompt definiert Absicht, Umfang und Einschränkungen, benennt Datenquellen und vermeidet führende Anweisungen. Ergänzt wird er durch einen roten Kasten „Nicht so machen“ mit einem verführerischen, aber unsicheren Beispiel. Nutzer brauchen weniger Theorie als Kontrast.</p>\n<p>„Kopieren und ausführen“-Buttons respektieren Rollen und Datenbegrenzungen. Wer keinen Zugriff hat, sieht den Weg zur Anforderung statt einer 403-Fehlermeldung.</p>\n<h3>Intent Mapping statt Vermutungen</h3>\n<p>FAQs werden mit echten Suchanfragen verknüpft. Dafür führt man Suchprotokolle und Tickets in vier Hauptkategorien zusammen (Start, welcher Copilot, Sicherheit, Antwortqualität). Jede Kategorie bekommt eine Landingpage mit Entscheidungsbaum und Promptbeispiel. „Welcher Copilot?“ wird zur geführten Auswahl über drei Schalter: Oberfläche, Rolle, Datensensibilität. Die Empfehlungen reichen von Teams für Notizen über Outlook für die Triage und Word für lange Texte bis zu Studio-Agenten für Geschäftskontext mit freigegebenen Konnektoren. Ebenso wichtig: Die Seite benennt ausdrücklich, wann man besser nichts nutzt.</p>\n\n<h2>Governance, Aktualität und Verantwortung: Schattentraining den Boden entziehen</h2>\n<p>Governance ist keine Fußnote, sondern die Eingangstür. Auf jeder relevanten Seite zeigt eine Header-Komponente die Aufbewahrungsfrist von Transkripten, Datenschutzrichtlinien und Datengrenzen. Genehmigte Konnektoren sind mit Tooltips als erlaubt, bedingt oder blockiert markiert, jeweils mit Begründung. Beispiele für unzulässige Anfragen stehen in rotem Text. Die Richtlinie zur Transkriptspeicherung erscheint vor dem ersten Chat, nicht erst nach einem Vorfall. Ein anschauliches „Tu das nicht“-Beispiel (etwa: keine Patientendaten hochladen) bleibt besser im Gedächtnis als ein Richtlinienparagraf.</p>\n<h3>Just-in-Time statt Suchen</h3>\n<p>Über Viva Connections wird das Zentrum in Teams angeheftet. Deep-Links neben den Eingabefeldern („Hilf mir beim Schreiben“) öffnen rollenspezifische Prompt-Muster mit Kopier- und Ausführen-Buttons. Kontextseiten lassen sich direkt in Teams-Kanäle einbetten. Wer seinen Workflow verlassen muss, um zu lernen, tut es nicht, sondern eröffnet ein Ticket.</p>\n<h3>Evergreen mit Aktualitätsbadges</h3>\n<p>Der Inhalts-Lebenszyklus ist nicht verhandelbar: monatliche Aktualisierungswellen, Versions-Badges und automatische Archivierung. Die Ampel ist eindeutig:</p>\n<ul>\n<li><strong>Grün:</strong> vor höchstens 30 Tagen geprüft.</li>\n<li><strong>Gelb:</strong> 31 bis 90 Tage.</li>\n<li><strong>Rot:</strong> seit mehr als 90 Tagen veraltet.</li>\n</ul>\n<p>Besitzer erhalten Erinnerungen, veraltete Seiten werden in der Suche herabgestuft, Tickets von roten Seiten gehen direkt an den Eigentümer. Jede Seite nennt Eigentümer, Vertretung und SLA, Änderungen werden protokolliert.</p>\n<h3>Der Governance-Schalter</h3>\n<p>Der wirksamste Hebel ist eine verbindliche Discovery-Richtlinie: Das Learning Center wird für alle als Teams-App angeheftet, der SharePoint-Hub ist der autoritative Einstiegspunkt. Alle Copilot-Inhalte (Leitfäden, Prompts, Agentendokumente, FAQs) liegen unter dieser Informationsarchitektur. Was nicht im Hub ist, ist nicht offiziell. Durchgesetzt wird das auf drei Wegen:</p>\n<ol>\n<li><strong>Link Governance:</strong> Alte URLs leiten automatisch auf die kanonische Seite um, mit erklärendem Banner.</li>\n<li><strong>Warnbanner:</strong> Inhalte außerhalb des Hubs weisen darauf hin, dass sie nicht autoritativ sind.</li>\n<li><strong>Automatische Archivierung:</strong> Inhalte ohne Besitzer oder Prüfdatum werden markiert, in der Suche abgestuft und zur Archivierung vorgemerkt. Man löscht keine Geschichte, sondern nimmt sie nur aus dem Entscheidungspfad.</li>\n</ol>\n<p>Zuständigkeiten halten das System stabil: Verantwortliche für Lernen, Anwenden und Verwalten sowie für jeden Rollenleitfaden und Agenteneintrag, jeweils mit Stellvertretung. Vierteljährliche Reviews finden nach Kalender statt, nicht nach Gefühl. Seiten mit wenigen Klicks werden korrigiert, zusammengeführt oder stillgelegt. Besitzer, die ihre SLA ignorieren, verlieren Privilegien.</p>\n\n<h2>Was sich in der Praxis verändert</h2>\n<p>Ausgangslage in einem Unternehmen mit tausenden Copilot-Lizenzen: Anleitungen lagen überall, Eigentümer waren unbekannt, Prüfdaten fiktiv, Schatten-Agenten tauchten in zufälligen Umgebungen mit unklaren Konnektoren auf. Nach Einführung des Hubs (Lernen, Anwenden, Steuern, in Teams angeheftet) mit intent-basierter FAQ, rollenbasierter Prompt-Bibliothek, Agentenverzeichnis und umgeleiteten Altlinks zeigte sich ein klarer Trend:</p>\n<ul>\n<li>Die Ticketentlastung stieg von Woche zu Woche.</li>\n<li>Der Sucherfolg nahm zu, weil Entscheidungsbäume in unter drei Klicks zum richtigen Copilot führten.</li>\n<li>Doppelte Artefakte nahmen ab, Wikis ohne Eigentümer liefen automatisch ab.</li>\n<li>Die Prompt-Bibliothek wurde zum Gravitationszentrum, mit hoher Wiederverwendung auf den Rollen-Startseiten und weniger Beschwerden über Halluzinationen.</li>\n<li>Wilde Agenten wurden weniger; Hochrisiko-Agenten zogen in verwaltete Umgebungen mit passender DLP um.</li>\n<li>Selbst Power-User reichten Prompt-Variationen über den Beitrags-Workflow ein, statt Wissen in privaten Kanälen zu verbreiten.</li>\n</ul>\n<p>Mikroumfragen („War das hilfreich?“) lieferten Hinweise auf fehlende Variationen und klarere Grenzbeispiele. Beides floss in das monatliche Update ein, das ein öffentliches Änderungsprotokoll dokumentierte. Beiträge werden dabei namentlich genannt, denn soziale Bestätigung fördert Governance besser als ein strenges Memo.</p>\n\n<h2>Häufige Fehler und Stolpersteine</h2>\n<ul>\n<li><strong>Auffindbarkeit vernachlässigen:</strong> Taxonomie und Scopes entscheiden über Relevanz. Vermutungen führen zu mehr Tickets.</li>\n<li><strong>Mit verfallenen Links verhandeln:</strong> Veraltetes muss konsequent umgeleitet werden.</li>\n<li><strong>Allgemeine Anleitungen veröffentlichen:</strong> Sie laden zu allgemeinen Fehlern ein. Rollenbasierte Einstiegspfade sind besser.</li>\n<li><strong>Nicht messen:</strong> Suchbegriffe, Klickraten und Absprungraten zeigen, was im nächsten Monat zu beheben ist.</li>\n<li><strong>Ausnahmen für Neben-Wikis zulassen:</strong> Jede Ausnahme nährt das Schattentraining.</li>\n<li><strong>Richtlinien als PDF ablegen:</strong> Datenregeln gehören in einfacher Sprache und mit Beispielen an den Seitenanfang.</li>\n</ul>\n\n<h2>KPIs: Der Beweis, dass es funktioniert</h2>\n<p>Zahlen beenden Diskussionen. Die Nordstern-Metriken sind Ticketvermeidungsrate, eindeutige Besucher im Hub, Wiederverwendung der Prompt-Bibliothek und Verfall wilder Dokumente.</p>\n<h3>Früh- und Spätindikatoren</h3>\n<p>Frühindikatoren zeigen die Richtung: Sucherfolgsrate, Klicks auf Copilot-Inhalte und Verweildauer auf Rollenleitfäden. Springen Nutzer ab, stimmt die Taxonomie nicht – dann korrigiert man diese, nicht die Nutzer. Spätindikatoren bestätigen die Verhaltensänderung: weniger Schattenassets, weniger Duplikate, höhere Zufriedenheit. Auch der Themenmix der Tickets sollte sich von Grundlagen zu Fortgeschrittenem verschieben.</p>\n<h3>Konkrete Ziele</h3>\n<ul>\n<li>30 bis 40 % Ticketvermeidung innerhalb von 60 bis 90 Tagen</li>\n<li>70 % der Copilot-Fragen in drei Klicks oder weniger beantwortet</li>\n<li>Rate veralteter Inhalte bis zum zweiten Monat unter 10 %, Aktualitätsbadges im grünen Bereich</li>\n<li>Wöchentliche Nutzung von Prompts für die Top-5-Rollen</li>\n</ul>\n<p>Die Messung bleibt schlank: SharePoint-Nutzungsanalysen, Suchprotokolle und ein Dashboard (Power BI). Der Rhythmus: wöchentliche Prüfung, monatliche Aktualisierung, vierteljährliches Governance-Audit. Eine veröffentlichte Scorecard zeigt der Führungsebene weniger Tickets, schnellere Antworten und sichere Nutzung. Das stützt die Budgetfrage.</p>\n\n<h2>Praktische Takeaways</h2>\n<ul>\n<li>Behandeln Sie Training als System mit Zuständigkeiten, Lebenszyklus und Telemetrie, nicht als Einzeltermin.</li>\n<li>Bauen Sie einen SharePoint-Hub mit den Bereichen Lernen, Anwenden und Verwalten und heften Sie ihn in Teams an.</li>\n<li>Nutzen Sie SPFx-Webparts und PnP Modern Search, damit Nutzer rollenspezifische Inhalte in unter drei Klicks finden.</li>\n<li>Strukturieren Sie jeden Prompt in Zweck, Aufbau, Variationen und Fehlerquellen.</li>\n<li>Führen Sie ein Agentenverzeichnis mit Besitzer, Umgebung, Datenrichtlinien, Konnektoren und roten Linien.</li>\n<li>Zeigen Sie Datengrenzen, Konnektorstatus und Negativbeispiele direkt auf den Seiten, vor dem ersten Chat.</li>\n<li>Vergeben Sie für jede Seite Eigentümer, Vertretung, SLA und eine Aktualitätsampel (grün, gelb, rot).</li>\n<li>Leiten Sie veraltete Links um, markieren Sie Inhalte außerhalb des Hubs und archivieren Sie Inhalte ohne Besitzer automatisch.</li>\n<li>Erheben Sie Suchprotokolle, Klickraten und Feedback und veröffentlichen Sie ein Änderungsprotokoll.</li>\n<li>Messen Sie Ticketvermeidung, Sucherfolg und Verfall wilder Dokumente und zeigen Sie die Scorecard der Führung.</li>\n</ul>\n\n<h2>Fazit</h2>\n<p>Copilot-Einführung gelingt nicht mit mehr Folien, sondern mit besserer Informationsarchitektur. Ein verwaltetes Lernzentrum in SharePoint beantwortet Fragen dort, wo sie entstehen, macht Governance sichtbar und entzieht inoffiziellen Kopien die Grundlage. Mit klaren Zuständigkeiten, Aktualitätsregeln und messbaren KPIs wird aus Schulung ein lebendiges System, das Tickets vermeidet, sichere Nutzung fördert und den Nutzen der Lizenzen belegt.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Copilot-Lernzentrum: Vom Ticket zur Antwort",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Hub aufbauen",
+     "text": "SharePoint-Hub mit Lernen, Anwenden, Verwalten bauen und als Teams-App für alle anheften."
+    },
+    {
+     "kopf": "Auffindbar machen",
+     "text": "SPFx-Webparts und PnP Modern Search liefern rollenbasierte Inhalte in unter drei Klicks."
+    },
+    {
+     "kopf": "Prompts und Agenten",
+     "text": "Prompt-Bibliothek mit Zweck, Aufbau, Variationen, Fehlerquellen plus Agentenverzeichnis mit Besitzer und Datenrichtlinien."
+    },
+    {
+     "kopf": "Governance sichtbar",
+     "text": "Datengrenzen, Konnektoren und rote Linien direkt auf der Seite; Aktualitätsampel mit Eigentümer und SLA."
+    },
+    {
+     "kopf": "Schattenschulung beenden",
+     "text": "Altlinks umleiten, Warnbanner setzen, Inhalte ohne Besitzer automatisch archivieren."
+    },
+    {
+     "kopf": "KPIs messen",
+     "text": "Ticketvermeidung, Sucherfolg und Verfall wilder Dokumente wöchentlich prüfen und der Führung zeigen."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Warum scheitert die Copilot-Einführung in Unternehmen oft, wenn sie als Schulungsprojekt behandelt wird?",
+    "a": "Copilot verändert sich wöchentlich, Folien und Webinare veralten dagegen schnell. Ohne zentrale Quelle entstehen Schattentrainings, widersprüchliche Anleitungen und mehr Support-Tickets. Training muss daher ein System mit Zuständigkeiten, Lebenszyklus und Telemetrie sein, kein einmaliger Termin."
+   },
+   {
+    "q": "Wie ist ein Copilot-Lernzentrum in SharePoint aufgebaut?",
+    "a": "Es basiert auf einer Hub-Site mit drei Bereichen: Lernen für kuratiertes Wissen, Anwenden für das Verzeichnis von Prompts und Agents, Verwalten für Richtlinien. SPFx-Webparts liefern Verzeichniskarten und Prompt-Galerien, PnP Modern Search sorgt mit einer sauberen Taxonomie für Auffindbarkeit."
+   },
+   {
+    "q": "Woraus besteht ein guter Prompt in einer Prompt-Bibliothek?",
+    "a": "Jeder genehmigte Prompt hat vier Felder: Zweck als Aufgabe in einer Zeile, Aufbau mit beschrifteten Teilen, Variationen bei Tonfall oder Rolle sowie Fehlerquellen wie mehrdeutige Verben oder Halluzinationsfallen. Ein roter Kasten „Nicht so machen“ zeigt zusätzlich ein unsicheres Beispiel."
+   },
+   {
+    "q": "Mit welchen KPIs lässt sich der Erfolg eines Copilot-Lernzentrums messen?",
+    "a": "Wichtige Metriken sind Ticketvermeidungsrate, eindeutige Hub-Besucher, Wiederverwendung der Prompt-Bibliothek und Verfall wilder Dokumente. Ziele: 30 bis 40 % Ticketvermeidung in 60 bis 90 Tagen, 70 % der Fragen in höchstens drei Klicks beantwortet und unter 10 % veraltete Inhalte ab dem zweiten Monat."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Statisches Training vs. Lernzentrum als System",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Klassische Schulung",
+     "punkte": [
+      "Webinare, Folien und PDFs als Einzeltermin",
+      "Lineare Lernpfade für ein sich wöchentlich änderndes Produkt",
+      "Keine Versionskontrolle, keine Zuständigkeit, keine Außerbetriebnahme",
+      "Schattentraining wie „Ultimativer Copilot Guide V7 Final Final“",
+      "Steigende Tickets und widersprüchliche Suchergebnisse"
+     ]
+    },
+    "rechts": {
+     "titel": "Verwaltetes Lernzentrum",
+     "punkte": [
+      "Training als System mit Zuständigkeiten, Lebenszyklus und Telemetrie",
+      "Antworten im Arbeitsfluss, direkt neben dem Eingabefeld",
+      "Versionierte, auffindbare Inhalte mit Besitzer und Ablaufdatum",
+      "Was nicht im Hub ist, ist nicht offiziell",
+      "Weniger Tickets, schnellere Antworten, sichere Nutzung"
+     ]
+    }
+   },
+   {
+    "titel": "Zielwerte für den Erfolg des Lernzentrums",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "30–40 %",
+      "text": "Ticketvermeidung innerhalb von 60 bis 90 Tagen"
+     },
+     {
+      "wert": "70 %",
+      "text": "der Copilot-Fragen in drei Klicks oder weniger beantwortet"
+     },
+     {
+      "wert": "< 10 %",
+      "text": "veraltete Inhalte bis zum zweiten Monat, Aktualitätsbadges im grünen Bereich"
+     },
+     {
+      "wert": "Top 5",
+      "text": "Rollen nutzen die Prompts wöchentlich"
+     },
+     {
+      "wert": "80 %",
+      "text": "der alltäglichen Unklarheiten lassen sich im Arbeitsfluss abfangen"
+     }
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Wie lautet laut Artikel die Regel für Inhalte im Copilot-Lernzentrum, bevor sie live gehen?",
+    "opts": [
+     "Was keinen Besitzer und kein Ablaufdatum hat, geht nicht live.",
+     "Jeder Inhalt muss zuvor von der Geschäftsführung unterzeichnet werden.",
+     "Inhalte gehen live, sobald mindestens drei Nutzer sie positiv bewertet haben.",
+     "Nur Inhalte von Microsoft Learn dürfen ohne Prüfung veröffentlicht werden."
+    ],
+    "a": 0,
+    "why": "Der Artikel nennt als klare Regel: Ohne Besitzer und ohne Ablaufdatum wird nichts veröffentlicht."
+   },
+   {
+    "q": "Welche Aktualitätsampel gilt für eine Seite, die vor 45 Tagen geprüft wurde?",
+    "opts": [
+     "Grün, weil sie innerhalb eines Quartals geprüft wurde",
+     "Gelb, weil die letzte Prüfung 31 bis 90 Tage zurückliegt",
+     "Rot, weil sie älter als 30 Tage ist",
+     "Sie erhält keine Farbe, sondern wird sofort archiviert"
+    ],
+    "a": 1,
+    "why": "Gelb gilt für 31 bis 90 Tage; Grün höchstens 30 Tage, Rot über 90 Tage."
+   },
+   {
+    "q": "Welche vier Felder hat laut Artikel jeder genehmigte Prompt in der Prompt-Bibliothek?",
+    "opts": [
+     "Titel, Autor, Datum, Bewertung",
+     "Zweck, Aufbau, Variationen, Fehlerquellen",
+     "Rolle, Oberfläche, Konnektor, Ablaufdatum",
+     "Absicht, Umfang, Einschränkung, Datenquelle"
+    ],
+    "a": 1,
+    "why": "Jeder genehmigte Prompt gliedert sich in Zweck, Aufbau, Variationen und Fehlerquellen."
+   },
+   {
+    "q": "Was passiert laut Artikel mit Inhalten ohne Besitzer oder Prüfdatum bei der automatischen Archivierung?",
+    "opts": [
+     "Sie werden sofort endgültig gelöscht.",
+     "Sie werden an alle Nutzer als Warnung per E-Mail verschickt.",
+     "Sie werden markiert, in der Suche abgestuft und zur Archivierung vorgemerkt.",
+     "Sie werden automatisch dem IT-Leiter als neuer Besitzer zugewiesen."
+    ],
+    "a": 2,
+    "why": "Man löscht keine Geschichte, sondern nimmt sie aus dem Entscheidungspfad: markieren, abstufen, vormerken."
+   }
+  ]
+ },
+ "es": {
+  "html": "<p>La formación en Copilot no es una reunión puntual, es un sistema. Muchas organizaciones la tratan como un evento: una sesión, unas diapositivas y un webinar trimestral. Mientras tanto, la herramienta cambia cada semana, los usuarios olvidan y el equipo de soporte sigue respondiendo las mismas preguntas.</p>\n<p>Este artículo describe un modelo basado en un centro de aprendizaje de Copilot en SharePoint. Explica su arquitectura, cómo reduce tickets y formación en la sombra, qué reglas de gobernanza lo sostienen y qué KPI demuestran que funciona.</p>\n\n<h2>Por qué falla la formación tradicional en Copilot</h2>\n<p>La causa raíz es una discrepancia: se ejecuta un programa de formación estático contra un objetivo móvil. Copilot cambia con frecuencia, las diapositivas no. Se forma a las personas para un producto, pero en realidad hay un motor de comportamiento, conversacional, dependiente del contexto y muy sensible a los límites de datos y a la calidad de los prompts.</p>\n<p>Los planes de adopción clásicos asumen una ruta lineal (principiante, intermedio, avanzado). Copilot no funciona así. Si enseñas una sola vez, no has enseñado a nadie. Si enseñas dentro del flujo de trabajo, resuelves buena parte de la confusión diaria (el 80%, según este enfoque) antes de que se convierta en un ticket.</p>\n\n<h3>La falacia del usuario promedio</h3>\n<p>Optimizar para el usuario menos preparado produce un mínimo común denominador: prompts diluidos, matices ocultos y una gobernanza tan suavizada que resulta inofensiva e inútil. El resultado son dos grupos. Los usuarios avanzados te ignoran y crean prácticas propias en la sombra, y los usuarios confundidos escalan quejas.</p>\n\n<h3>Los cuatro tickets que no desaparecen</h3>\n<ol>\n<li><strong>«¿Por dónde empiezo?»</strong> Es un fallo de descubrimiento.</li>\n<li><strong>«¿Cuál Copilot?»</strong> Outlook, Word, Teams, Graph o Copilot Studio son superficies y agentes distintos, con capacidades y riesgos diferentes.</li>\n<li><strong>«¿Es seguro?»</strong> Nadie mostró los límites de datos, las políticas de transcripción o los conectores aprobados donde el usuario trabaja.</li>\n<li><strong>«¿Por qué respondió eso?»</strong> Suele ser un problema de patrones de prompt y de contexto de recuperación, no un error de Copilot.</li>\n</ol>\n\n<h3>La economía de la formación en la sombra</h3>\n<p>Presentaciones en Teams, PDF en chats y páginas wiki con títulos como «Guía definitiva Copilot V7 Final Final» carecen de control de versiones, propietario y política de retiro. En cuanto publicas la guía oficial, aparecen copias no oficiales. Las búsquedas devuelven contradicciones, aumentan los tickets, los resultados se vuelven inconsistentes, crecen los riesgos de datos y los ejecutivos cuestionan el gasto en licencias porque no ven el retorno. Eso no es adopción, es entropía.</p>\n<p>La adopción de Copilot es, en el fondo, un problema de arquitectura de información disfrazado de formación. La solución es un centro gobernado, actualizado, versionado y fácil de encontrar, hacia el que se dirija a todos de forma constante.</p>\n\n<h2>Arquitectura del centro de aprendizaje de Copilot en SharePoint</h2>\n<p>No se trata de un sitio de SharePoint con unos cuantos enlaces. Es un centro gobernado y consciente del inquilino que centraliza el conocimiento, los artefactos y los patrones de uso seguro. La mejor imagen es la de un aeropuerto, no la de un tablón de anuncios: puertas de embarque, seguridad, señalización y control de tráfico. La gente se mueve porque el sistema la guía.</p>\n\n<h3>La base: hub de SharePoint moderno</h3>\n<p>SharePoint moderno ofrece un lienzo rápido, adaptable y con integración nativa en Teams. Un sitio central hace que cada sitio secundario herede navegación, tema y gobernanza. El centro se organiza en tres áreas:</p>\n<ul>\n<li><strong>Aprender:</strong> conocimiento curado.</li>\n<li><strong>Hacer:</strong> directorio de prompts y agentes.</li>\n<li><strong>Gobernar:</strong> la política al frente, donde el usuario realmente la ve.</li>\n</ul>\n\n<h3>Componentes SPFx</h3>\n<p>Los elementos web SPFx hacen el trabajo pesado: tarjetas de directorio para agentes de Copilot Studio, galerías de prompts por rol y banners de contexto que muestran el alcance del entorno. Se despliegan en SharePoint, en pestañas de Teams y en Viva Connections con un único paquete de código.</p>\n\n<h3>Descubrimiento con PnP Modern Search</h3>\n<p>El descubrimiento decide si el proyecto vive o muere. PnP Modern Search actúa como motor de búsqueda, apoyado en una taxonomía clara:</p>\n<ul>\n<li><strong>Interfaz:</strong> Word, Outlook, Teams, Graph.</li>\n<li><strong>Función:</strong> resumir, generar, analizar.</li>\n<li><strong>Rol:</strong> ventas, finanzas, RR. HH.</li>\n<li><strong>Riesgo:</strong> interno, externo, regulado.</li>\n</ul>\n<p>Así, una persona de ventas ve primero los prompts aprobados para su rol, no una presentación aleatoria antigua. Las plantillas de resultados muestran tarjetas con insignias de frescura, propietario y última auditoría, para que la confianza sea visible.</p>\n\n<h3>Fuentes de contenido con procedencia</h3>\n<p>Se integran los feeds de Microsoft Learn y Viva Learning con etiquetas de procedencia: oficial, comunidad o interno. Las rutas de la comunidad están permitidas, pero no son autoritativas. Los contenidos internos siguen un ciclo de vida (borrador, revisión, publicación, retiro) con actualización mensual y registros de auditoría. Si no tiene propietario y fecha de vencimiento, no se publica.</p>\n\n<h2>Cómo reducir tickets: mapeo de intenciones, prompts y guía en el flujo</h2>\n<p>El volumen de tickets baja cuando el usuario puede relacionar lo que quiere con dónde hacer clic. Para lograrlo se usan tres palancas: mapeo de intenciones, respuestas canónicas y frescura visible.</p>\n\n<h3>Mapeo de intenciones</h3>\n<p>Las preguntas frecuentes deben basarse en consultas reales, extraídas de los registros de búsqueda y de los tickets, y agruparse en las cuatro raíces ya descritas. Cada una tiene una página de destino con un árbol de decisión y un ejemplo de prompt. El árbol lleva a la respuesta en menos de tres clics. El ejemplo muestra el buen resultado junto al patrón incorrecto, porque los usuarios no necesitan teoría, necesitan contraste.</p>\n<p>Elegir qué Copilot usar se convierte en una decisión guiada por tres variables: superficie, rol y sensibilidad de los datos. Teams sirve para notas de reuniones, Outlook para el triaje y Word para textos largos. Un agente de Copilot Studio encaja cuando hace falta contexto de línea de negocio con conectores aprobados. La guía también debe indicar cuándo no usar nada, porque a veces es la acción más segura.</p>\n\n<h3>Guía justo a tiempo</h3>\n<p>Viva Connections permite fijar el centro en Teams, y los enlaces profundos junto a los cuadros de redacción abren patrones de prompt por rol con botones de copiar y ejecutar. Si el usuario tiene que abandonar su flujo para aprender, no lo hará: enviará un ticket.</p>\n\n<h3>La biblioteca de prompts</h3>\n<p>Cada prompt aprobado tiene cuatro campos:</p>\n<ul>\n<li><strong>Propósito:</strong> la tarea en una línea.</li>\n<li><strong>Anatomía:</strong> cada cláusula etiquetada, para remezclarla sin romperla.</li>\n<li><strong>Variaciones:</strong> ajustes de tono o de rol.</li>\n<li><strong>Modos de fallo:</strong> verbos ambiguos, contexto ausente, trampas de alucinación y su solución rápida.</li>\n</ul>\n<p>Además de la plantilla, se explica por qué funciona: establecer intención, alcance y restricciones, nombrar las fuentes de datos y evitar instrucciones que condicionen la respuesta. Los botones respetan los límites de rol y de datos. Si no tienes acceso, ves la ruta para solicitarlo en lugar de un error 403.</p>\n\n<h3>Insignias de frescura y propiedad</h3>\n<p>Cada página muestra propietario, suplente, SLA y estado de frescura:</p>\n<ul>\n<li><strong>Verde:</strong> revisado hace 30 días o menos.</li>\n<li><strong>Ámbar:</strong> entre 31 y 90 días.</li>\n<li><strong>Rojo:</strong> obsoleto, más de 90 días.</li>\n</ul>\n<p>Los tickets generados desde una página roja llegan al propietario con un recordatorio de actualización. Los usuarios ven la misma insignia: confían en el verde, dudan del ámbar y evitan el rojo.</p>\n\n<h2>Gobernanza visible: el interruptor que colapsa la formación en la sombra</h2>\n<p>La gobernanza no es un pie de página, es la puerta principal. Los límites de datos aparecen en la parte superior de las páginas de decisión mediante un componente de encabezado. La retención de transcripciones se muestra antes del primer chat, no después de un incidente. Los conectores aprobados se listan como permitidos, condicionales o bloqueados, con códigos de motivo. Los ejemplos de solicitudes prohibidas, en texto rojo, funcionan mejor que cualquier política: nadie lee el párrafo 7a, pero todos recuerdan un ejemplo vívido, como no subir datos de pacientes.</p>\n\n<h3>Una política de descubrimiento única</h3>\n<p>El interruptor consiste en exigir un único servicio de descubrimiento, no como sugerencia sino como política:</p>\n<ol>\n<li>Fijar el centro de aprendizaje como aplicación de Teams para todos y establecer el hub de SharePoint como punto de entrada oficial.</li>\n<li>Obligar a que todo el contenido de Copilot (guías, prompts, documentos de agentes, FAQ) viva bajo la arquitectura de información del hub. Si no está ahí, no es oficial.</li>\n</ol>\n<p>Esa línea binaria elimina el folclore sin destruir la cultura de colaboración.</p>\n\n<h3>Aplicación de normas</h3>\n<ul>\n<li><strong>Gobernanza de enlaces:</strong> las URL antiguas redirigen a la página canónica con un aviso que explica el cambio.</li>\n<li><strong>Avisos fuera del hub:</strong> las páginas externas indican que no son oficiales y remiten a la guía actual.</li>\n<li><strong>Autoarchivo:</strong> el contenido sin propietario o sin fecha de revisión se marca, pierde relevancia en la búsqueda y pasa a archivo. No se borra la historia, se retira de la ruta de decisión.</li>\n</ul>\n\n<h3>Roles, telemetría y DLP</h3>\n<p>Cada área, cada guía de rol y cada entrada de agente tiene propietario y suplente. Las revisiones trimestrales siguen el calendario. La telemetría guía la depuración: las páginas con pocos clics se corrigen, se fusionan o se retiran, y las búsquedas con mucha fricción disparan la creación de contenido. Quien ignora su SLA pierde privilegios, porque la rendición de cuentas es mantenimiento.</p>\n<p>La alineación con DLP debe ser el prólogo, no una nota al pie. Las políticas de datos se explican en lenguaje claro y con ejemplos, como no resumir correos internos o no pegar información personal (PII) de clientes. El intercambio externo solo se admite de forma condicional, mediante conectores aprobados.</p>\n<p>Curiosamente, la centralización aumenta la contribución. Cuando la gente sabe dónde está lo oficial, envía mejoras en lugar de publicar normas paralelas. El flujo es sencillo: proponer el cambio, adjuntar evidencia, enviarlo al propietario y publicarlo con registro de cambios, dando crédito visible a quien colabora.</p>\n\n<h2>Caso práctico, resultados y errores frecuentes</h2>\n<p>Una empresa con miles de licencias de Copilot parecía muy activa, pero no aprendía. La cola de tickets estaba dominada por los cuatro temas conocidos. Las guías estaban dispersas en wikis de Teams, presentaciones y PDF con nombres heroicos, con propietarios desconocidos y fechas de revisión ficticias. Aparecían agentes en la sombra en entornos aleatorios con conectores misteriosos, y la dirección preguntaba dónde estaba el ROI.</p>\n<p>La intervención fue desplegar el centro con Aprender, Hacer y Gobernar anclado en Teams, con FAQ por intención, biblioteca de prompts por rol con copiar y ejecutar, y un directorio de agentes con propietario, entorno y política de datos. PnP Modern Search impulsó las páginas canónicas y los enlaces heredados redirigían con banners de «archivado» frente a «actual».</p>\n\n<h3>Qué cambió</h3>\n<ul>\n<li>La reducción de tickets creció semana tras semana y el éxito en las búsquedas aumentó con los árboles de decisión.</li>\n<li>Disminuyeron los artefactos duplicados, y las wikis sin propietario caducaron y desaparecieron de los resultados.</li>\n<li>La biblioteca de prompts se volvió el centro de gravedad, con menos quejas por alucinaciones gracias a los modos de fallo explícitos.</li>\n<li>Los agentes no autorizados disminuyeron, y los de alto riesgo pasaron a entornos gestionados con la política DLP correcta.</li>\n<li>Hubo menos incidentes de «no debimos pegar eso», porque la página advertía antes.</li>\n<li>El reflejo pasó de «preguntar a la IA» a «consultar el centro», y hasta los usuarios avanzados enviaron variantes de prompts por el flujo de contribución.</li>\n</ul>\n\n<h3>Errores que conviene evitar</h3>\n<ul>\n<li><strong>Descuidar la capacidad de búsqueda:</strong> la taxonomía y los ámbitos determinan la relevancia, y las suposiciones aumentan los tickets.</li>\n<li><strong>Tolerar contenido obsoleto:</strong> hay que declararlo con redirecciones implacables y no negociar con los enlaces rotos.</li>\n<li><strong>Ofrecer guías genéricas:</strong> las rutas de inicio deben basarse en roles, porque la guía genérica invita a errores genéricos.</li>\n<li><strong>No instrumentar:</strong> términos de búsqueda, clics y tasa de rebote indican qué corregir el mes siguiente.</li>\n<li><strong>Apoyarse solo en webinars trimestrales:</strong> los usuarios necesitan respuestas donde surge la pregunta.</li>\n</ul>\n\n<h2>KPI para demostrar que funciona</h2>\n<p>Hacen falta números que cierren discusiones. Las métricas North Star son:</p>\n<ul>\n<li>Tasa de deflexión de tickets.</li>\n<li>Visitantes únicos al centro.</li>\n<li>Reutilización de la biblioteca de prompts.</li>\n<li>Decadencia de documentos no oficiales.</li>\n</ul>\n<p>Los indicadores adelantados muestran la dirección pronto: tasa de éxito de búsqueda, clics hacia Copilot y tiempo en página en las guías por rol. Si los usuarios resuelven en tres clics o menos el 70% de las veces, vas bien encaminado. Si se marchan, falla la taxonomía y hay que arreglarla a ella, no a ellos.</p>\n<p>Los indicadores rezagados confirman el cambio de comportamiento: menos activos paralelos, menos agentes duplicados y mayor satisfacción en la microencuesta «¿fue útil?». También conviene ver si las insignias rojas desaparecen y las verdes se mantienen.</p>\n\n<h3>Objetivos concretos</h3>\n<ul>\n<li>Alcanzar entre un 30% y un 40% de deflexión en 60 a 90 días.</li>\n<li>Resolver el 70% de las preguntas sobre Copilot en tres clics.</li>\n<li>Bajar el contenido obsoleto por debajo del 10% en el segundo mes.</li>\n<li>Impulsar semanalmente la reutilización de prompts en las cinco guías de rol principales.</li>\n</ul>\n<p>La instrumentación es ligera: analítica de uso de SharePoint, registros de búsqueda y un panel de Power BI. El ritmo es triaje semanal, actualización mensual y auditoría de gobernanza trimestral. Publicar el cuadro de mando permite responder a los ejecutivos con menos tickets, respuestas más rápidas y un uso más seguro.</p>\n\n<h2>Takeaways prácticos</h2>\n<ul>\n<li>Trata la formación como un sistema con propiedad, ciclo de vida y telemetría, no como un evento.</li>\n<li>Construye un hub de SharePoint con tres áreas: aprender, hacer y gobernar.</li>\n<li>Mapea las preguntas frecuentes a intenciones reales y ofrece árboles de decisión de menos de tres clics.</li>\n<li>Crea una biblioteca de prompts con propósito, anatomía, variaciones y modos de fallo.</li>\n<li>Muestra la gobernanza en cada página relevante, con ejemplos de líneas rojas.</li>\n<li>Usa insignias de frescura verde, ámbar y rojo, con propietario, suplente y SLA.</li>\n<li>Establece una política única: si no está en el hub, no es oficial.</li>\n<li>Redirige enlaces heredados, avisa en el contenido externo y archiva automáticamente lo que no tiene propietario.</li>\n<li>Mide la deflexión de tickets, el éxito de búsqueda, la reutilización de prompts y la decadencia de documentos no oficiales, y publica el cuadro de mando.</li>\n</ul>\n\n<h2>Conclusión</h2>\n<p>Reducir tickets no consiste en pedir a la gente que deje de abrirlos, sino en ganarle al ticket con una respuesta obvia, actual y segura, y en conseguir que cualquier copia no oficial sea peor que la original. Un centro de aprendizaje de Copilot gobernado en SharePoint, con descubrimiento sólido, biblioteca de prompts, gobernanza visible y KPI claros, sustituye el folclore por un sistema que responde antes de que la pregunta se convierta en ticket. Con los números en la mano, defender el retorno de las licencias deja de ser un acto de fe.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Centro de aprendizaje de Copilot: del folclore al sistema",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Centralizar en el hub",
+     "text": "Un hub de SharePoint con Aprender, Hacer y Gobernar, fijado como aplicación de Teams."
+    },
+    {
+     "kopf": "Mapear intenciones",
+     "text": "Árboles de decisión y ejemplos de prompt que responden en menos de tres clics."
+    },
+    {
+     "kopf": "Biblioteca de prompts",
+     "text": "Propósito, anatomía, variaciones y modos de fallo, con botones de copiar y ejecutar."
+    },
+    {
+     "kopf": "Gobernanza visible",
+     "text": "Límites de datos, conectores aprobados y ejemplos prohibidos en cada página relevante."
+    },
+    {
+     "kopf": "Frescura y propiedad",
+     "text": "Insignias verde, ámbar y rojo, con propietario, suplente, SLA y autoarchivo."
+    },
+    {
+     "kopf": "Medir con KPI",
+     "text": "Deflexión de tickets, éxito de búsqueda, reutilización de prompts y decadencia de documentos no oficiales."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "¿Por qué falla la formación tradicional en Copilot?",
+    "a": "Porque aplica un programa estático a un objetivo móvil: Copilot cambia cada semana y las diapositivas no. Además, Copilot es un motor de comportamiento, sensible al contexto, a los límites de datos y a la calidad de los prompts. Y quien recibe una sola sesión acaba olvidando."
+   },
+   {
+    "q": "¿Qué es un centro de aprendizaje de Copilot en SharePoint y cómo se organiza?",
+    "a": "Es un centro gobernado, basado en un hub de SharePoint moderno, que centraliza conocimiento, artefactos y patrones de uso seguro. Se organiza en tres áreas: Aprender (conocimiento curado), Hacer (directorio de prompts y agentes) y Gobernar (política visible). Usa componentes SPFx y PnP Modern Search para el descubrimiento."
+   },
+   {
+    "q": "¿Qué tickets de soporte sobre Copilot se repiten y cómo se reducen?",
+    "a": "Se repiten cuatro: «¿Por dónde empiezo?», «¿Cuál Copilot?», «¿Es seguro?» y «¿Por qué respondió eso?». Se reducen con mapeo de intenciones, árboles de decisión que llevan a la respuesta en menos de tres clics, una biblioteca de prompts con modos de fallo, guía en el flujo de trabajo e insignias de frescura."
+   },
+   {
+    "q": "¿Qué KPI y objetivos permiten demostrar que el centro de aprendizaje funciona?",
+    "a": "Las métricas North Star son la tasa de deflexión de tickets, los visitantes únicos, la reutilización de prompts y la decadencia de documentos no oficiales. Los objetivos son un 30-40% de deflexión en 60-90 días, un 70% de preguntas resueltas en tres clics y menos de un 10% de contenido obsoleto en el segundo mes."
+   }
+  ],
+  "infos": [
+   {
+    "titulo": "Formación tradicional frente a centro de aprendizaje",
+    "titel": "Formación tradicional frente a centro de aprendizaje",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Formación tradicional",
+     "punkte": [
+      "Evento puntual: una sesión, diapositivas y un webinar trimestral",
+      "Programa estático contra una herramienta que cambia cada semana",
+      "Genera guías no oficiales sin propietario ni control de versiones",
+      "Los mismos tickets se repiten en soporte",
+      "Los ejecutivos no ven el retorno de las licencias"
+     ]
+    },
+    "rechts": {
+     "titel": "Centro de aprendizaje en SharePoint",
+     "punkte": [
+      "Sistema gobernado, actualizado, versionado y fácil de encontrar",
+      "Guía dentro del flujo de trabajo, donde surge la pregunta",
+      "Un único punto oficial: si no está en el hub, no es oficial",
+      "Insignias de frescura y propietario visibles en cada página",
+      "Los tickets se deflectan y la telemetría guía la mejora"
+     ]
+    }
+   },
+   {
+    "titel": "Objetivos concretos para medir el éxito",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "30-40%",
+      "text": "de deflexión de tickets en 60 a 90 días"
+     },
+     {
+      "wert": "70%",
+      "text": "de las preguntas sobre Copilot resueltas en tres clics o menos"
+     },
+     {
+      "wert": "<10%",
+      "text": "de contenido obsoleto a partir del segundo mes"
+     },
+     {
+      "wert": "5 guías",
+      "text": "de rol principales con reutilización semanal de prompts"
+     },
+     {
+      "wert": "Semanal",
+      "text": "triaje, con actualización mensual y auditoría de gobernanza trimestral"
+     }
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "¿Cuál es la causa raíz por la que falla la formación tradicional en Copilot?",
+    "opts": [
+     "Los usuarios no tienen interés en aprender herramientas de inteligencia artificial.",
+     "Se aplica un programa de formación estático a un objetivo que cambia constantemente.",
+     "Las licencias de Copilot son demasiado caras para formar a todos.",
+     "Los webinars trimestrales son demasiado largos y se hacen aburridos."
+    ],
+    "a": 1,
+    "why": "El artículo señala una discrepancia: diapositivas estáticas frente a un Copilot que cambia con frecuencia, por lo que la formación puntual no funciona."
+   },
+   {
+    "q": "¿Qué ocurre con el contenido de Copilot que no tiene propietario ni fecha de vencimiento?",
+    "opts": [
+     "Se publica con una insignia roja de advertencia.",
+     "Se borra definitivamente junto con su historial.",
+     "No se publica; si ya existe, se marca, pierde relevancia y se archiva.",
+     "Se traslada a las rutas de la comunidad como contenido autoritativo."
+    ],
+    "a": 2,
+    "why": "Sin propietario y fecha de vencimiento no se publica; el contenido existente pierde relevancia en la búsqueda y pasa a archivo sin borrar la historia."
+   },
+   {
+    "q": "¿Qué significa una insignia de frescura ámbar en una página del centro?",
+    "opts": [
+     "Revisada hace entre 31 y 90 días.",
+     "Revisada hace 30 días o menos.",
+     "Obsoleta, con más de 90 días sin revisión.",
+     "Contenido de la comunidad sin propietario asignado."
+    ],
+    "a": 0,
+    "why": "Verde es 30 días o menos, ámbar entre 31 y 90 días, y rojo es obsoleto, con más de 90 días."
+   },
+   {
+    "q": "¿Qué política de descubrimiento propone el artículo para frenar la formación en la sombra?",
+    "opts": [
+     "Permitir varios sitios de guías, siempre que tengan un propietario asignado.",
+     "Prohibir el uso de Copilot hasta completar un webinar trimestral obligatorio.",
+     "Delegar cada guía a los equipos de soporte de cada departamento.",
+     "Exigir un único servicio de descubrimiento: si no está en el hub, no es oficial."
+    ],
+    "a": 3,
+    "why": "Todo el contenido de Copilot debe vivir bajo la arquitectura de información del hub de SharePoint; lo que no esté allí no es oficial."
+   }
+  ]
+ },
+ "fr": {
+  "html": "<p>La formation à Copilot n'est pas une réunion ponctuelle : c'est un système. Sans centre d'apprentissage permanent et gouverné, les organisations financent surtout un support technique déguisé, avec des tickets qui se répètent et des documents sans propriétaire.</p>\n<p>Cet article présente un modèle fondé sur SharePoint : son architecture, son mode de fonctionnement, les règles de gouvernance et les indicateurs qui prouvent son efficacité.</p>\n\n<h2>Pourquoi la formation Copilot échoue : une cible mouvante et des tickets récurrents</h2>\n<p>Le problème de fond est simple : on applique un programme de formation statique à une cible qui bouge. Copilot évolue chaque semaine, les diapositives non. Les utilisateurs oublient, Copilot non. On forme à un produit alors qu'on déploie un moteur comportemental.</p>\n<p>Les plans d'adoption classiques supposent un parcours linéaire (débutant, intermédiaire, avancé). Or Copilot est conversationnel, dépendant du contexte et très sensible aux limites des données comme à la qualité des prompts. Enseigner une seule fois revient à n'enseigner à personne. Une diffusion en flux continu permet en revanche de couvrir environ 80 % de la confusion quotidienne avant qu'elle ne devienne un ticket.</p>\n<p>Le mythe de l'utilisateur moyen aggrave la situation. En optimisant pour les moins préparés, on édulcore les prompts, on gomme les nuances et on vide la gouvernance de sa substance. Deux groupes apparaissent alors : des utilisateurs avancés qui ignorent le dispositif et créent leurs pratiques parallèles, et des utilisateurs perdus qui font remonter leurs problèmes en masse.</p>\n\n<h3>Les quatre tickets qui reviennent sans cesse</h3>\n<ol>\n<li><strong>Par où commencer ?</strong> C'est un échec de découverte.</li>\n<li><strong>Quel Copilot ?</strong> Outlook, Word, Teams, Graph, Copilot Studio : les utilisateurs croient à un outil unique alors qu'il s'agit de multiples interfaces et agents, aux capacités et aux risques différents.</li>\n<li><strong>Est-ce sûr ?</strong> Les limites de données, les politiques de transcription et les connecteurs approuvés ne sont pas visibles là où l'on travaille.</li>\n<li><strong>Pourquoi cette réponse ?</strong> Il s'agit d'un problème de modèle de prompt et de contexte de récupération, pas d'une « erreur » de Copilot.</li>\n</ol>\n\n<h3>L'économie de la formation fantôme</h3>\n<p>Présentation dans Teams, PDF dans les conversations, page wiki au titre héroïque du genre « Guide Copilot Ultime V7 Final Final » : sans contrôle de version, sans responsable ni politique de retrait, chaque publication officielle fait surgir cinq copies non officielles. La recherche renvoie alors des contradictions, et la source de vérité unique devient une légende urbaine.</p>\n<p>Les conséquences sont connues : confusion, tickets en hausse, résultats incohérents, risques pour les données, et dirigeants qui remettent en question les licences faute de retour sur investissement visible. Les webinaires trimestriels n'y changent rien. Les utilisateurs ont besoin de réponses là où la question se pose, par exemple dans Teams, à côté de la zone de rédaction.</p>\n<p>L'adoption de Copilot est en réalité un problème d'architecture de l'information déguisé en formation. Répondre aux tickets, c'est passer la serpillère pendant que la vanne continue de fuir.</p>\n\n<h2>L'architecture d'un centre d'apprentissage Copilot sur SharePoint</h2>\n<p>Un centre d'apprentissage n'est pas un simple site avec quelques liens. C'est un hub gouverné, adapté au tenant, qui centralise le savoir-faire, les artefacts et les modèles d'usage sécurisés. L'image juste est celle d'un aéroport plutôt que d'un tableau d'affichage : portes d'embarquement, sécurité, signalétique, contrôle du trafic. Les gens avancent parce que le système les guide.</p>\n\n<h3>Les fondations : SharePoint Modern et un site hub</h3>\n<p>SharePoint Modern offre une interface rapide, avec une intégration native à Teams. Le site hub permet à chaque site enfant d'hériter de la navigation, du thème et de la gouvernance. Le hub s'organise en trois zones :</p>\n<ul>\n<li><strong>Apprendre</strong> : la connaissance organisée.</li>\n<li><strong>Agir</strong> : le répertoire des prompts et des agents.</li>\n<li><strong>Gouverner</strong> : la politique, affichée là où les utilisateurs la voient vraiment.</li>\n</ul>\n\n<h3>Les composants : SPFx et PnP Modern Search</h3>\n<p>Les composants web SPFx font l'essentiel du travail : cartes de répertoire pour les agents Copilot Studio, galeries de prompts par rôle, bannières contextuelles indiquant la portée de l'environnement. Leur avantage : ils sont conscients du tenant, rapides, et se déploient dans SharePoint, dans les onglets Teams et dans Viva Connections sans iframes. Un seul code s'affiche partout.</p>\n<p>La découverte fait la différence entre réussite et échec. PnP Modern Search sert de moteur de trouvabilité, appuyé sur une taxonomie :</p>\n<ul>\n<li><strong>Surface</strong> : Word, Outlook, Teams, Graph.</li>\n<li><strong>Fonction</strong> : résumer, générer, analyser.</li>\n<li><strong>Rôle</strong> : vente, finance, RH, risque.</li>\n<li><strong>Périmètre</strong> : interne, externe, réglementé.</li>\n</ul>\n<p>Un commercial voit ainsi en premier les prompts approuvés pour son rôle. Les cartes de résultats affichent la fraîcheur, le propriétaire et le dernier audit, ce qui rend la confiance visible.</p>\n\n<h3>Contenus, répertoire IA et cycle de vie</h3>\n<p>Les flux Microsoft Learn et Viva Learning sont agrégés avec des labels de provenance clairs : officiel, communauté, interne. Les parcours communautaires sont autorisés, mais signalés comme non officiels. Les procédures internes et guides de rôle suivent un cycle de vie (brouillon, révision, publication, retrait), avec une mise à jour mensuelle et une piste d'audit. Règle simple : sans propriétaire ni date d'expiration, rien ne passe en ligne.</p>\n<p>Le répertoire IA est la source unique de vérité pour les assets Copilot et les agents Copilot Studio. Chaque entrée est un objet structuré : propriétaire, environnement, politique de données, connecteurs, objectifs, critères de qualité et limites. Il comporte aussi des notes d'usage, des liens de télémétrie, un bouton d'essai dans des bacs à sable sécurisés et un vrai flux de demande d'accès.</p>\n\n<h2>Réduire les tickets : cartographie des intentions, prompts et aide au bon moment</h2>\n<p>Le volume de tickets baisse quand on cesse de répondre à des questions isolées pour rediriger des intentions. Trois leviers y contribuent : la cartographie des intentions, la réponse de référence et la mise à jour visible.</p>\n\n<h3>Cartographier les intentions réelles</h3>\n<p>La FAQ doit s'appuyer sur les journaux de recherche et les tickets, pas sur ce que l'on imagine que les utilisateurs demandent. Chacune des quatre racines (démarrer, quel Copilot, est-ce sûr, pourquoi cette réponse) a sa page d'accueil avec deux ressources : un arbre de décision, qui mène au bon chemin en moins de trois clics, et un exemple de prompt avec son antimodèle. Les utilisateurs n'ont pas besoin de théorie, ils ont besoin de contraste.</p>\n<p>Le choix du Copilot devient une démarche guidée par la surface, le rôle et la sensibilité des données : Teams pour les notes de réunion, Outlook pour le tri, Word pour les longs textes, Copilot Studio pour le contexte métier avec des connecteurs approuvés. Parfois, la bonne réponse est de ne rien utiliser.</p>\n\n<h3>Une bibliothèque de prompts structurée</h3>\n<p>Chaque prompt approuvé comporte quatre champs :</p>\n<ul>\n<li><strong>Objectif</strong> : la mission en une ligne.</li>\n<li><strong>Anatomie</strong> : chaque clause est étiquetée pour qu'on puisse remixer sans tout casser.</li>\n<li><strong>Variantes</strong> : ajustements de ton ou de rôle.</li>\n<li><strong>Mode de défaillance</strong> : verbes ambigus, contexte manquant, piège à hallucination, avec la correction rapide.</li>\n</ul>\n<p>Des boutons « copier-exécuter » respectent les rôles et les frontières de données. Sans accès, l'utilisateur voit la marche à suivre pour le demander, pas une erreur 403. Un lien « Aidez-moi à rédiger » près des zones de composition, ainsi que des pages de contexte intégrées aux canaux Teams, apportent l'aide au moment où elle sert.</p>\n\n<h3>Fraîcheur et responsabilité visibles</h3>\n<p>Chaque page affiche son propriétaire, son suppléant, son niveau de service et un badge de fraîcheur : vert (révisé il y a 30 jours ou moins), orange (31 à 90 jours), rouge (obsolète depuis plus de 90 jours). Les tickets émis depuis une page rouge sont acheminés vers le propriétaire. Chaque page se termine par un micro-sondage « Était-ce utile ? » et une option « Demandez à un expert ». Un tri hebdomadaire, une mise à jour mensuelle et un journal des modifications publié montrent que l'on écoute les retours.</p>\n\n<h2>Gouvernance : un point d'entrée unique pour asphyxier la formation parallèle</h2>\n<p>Le levier décisif est une politique de découverte centralisée, pas une suggestion. Le centre d'apprentissage est épinglé comme application Teams pour tous, et le hub SharePoint devient le point d'entrée officiel. Tout contenu lié à Copilot (guides, prompts, documentation d'agents, FAQ) vit dans son architecture de l'information. La règle est binaire : si ce n'est pas dans le hub, ce n'est pas officiel.</p>\n<p>Trois mécanismes la rendent applicable :</p>\n<ol>\n<li><strong>Redirections</strong> : les anciennes URL pointent vers la page canonique, avec une bannière expliquant le changement.</li>\n<li><strong>Bannières d'avertissement</strong> sur tout contenu hors hub.</li>\n<li><strong>Archivage automatique</strong> : un contenu sans propriétaire ni date de révision est signalé, rétrogradé dans la recherche, puis mis en file d'archivage. On ne supprime pas l'historique, on le retire du chemin décisionnel.</li>\n</ol>\n<p>Côté rôles, chaque domaine (apprendre, agir, gouverner), chaque guide de rôle et chaque entrée d'agent a un propriétaire et un suppléant. Les révisions trimestrielles suivent un calendrier. Les pages peu consultées sont corrigées, fusionnées ou retirées, et les recherches infructueuses déclenchent la création de contenu. Un propriétaire qui ignore son niveau de service perd ses privilèges : c'est de la maintenance, pas de la sanction.</p>\n<p>La protection des données se montre en tête des pages concernées, en langage clair : ne pas résumer d'e-mails internes, ne pas coller de données personnelles de clients, partage externe conditionnel via un connecteur approuvé. Les connecteurs sont classés autorisés, conditionnels ou bloqués, et des exemples de requêtes interdites en rouge s'impriment dans les mémoires bien mieux qu'un paragraphe de politique. La politique de conservation des transcriptions apparaît avant le premier chat, pas après une fuite.</p>\n<p>La centralisation favorise aussi la contribution : quand on sait où se trouve la référence, on propose des améliorations au lieu de créer des documents parallèles. Le flux est simple : proposer une modification, joindre des preuves, l'envoyer au propriétaire, publier avec un journal des changements et créditer visiblement les contributeurs.</p>\n\n<h2>Mesurer l'efficacité : KPI et résultats attendus</h2>\n<p>Pour trancher les débats, il faut des chiffres. Les indicateurs principaux sont le taux de réduction des tickets, les visiteurs uniques du hub, la réutilisation de la bibliothèque de prompts et la dégradation des documents sauvages.</p>\n<ul>\n<li><strong>Indicateurs avancés</strong> : taux de réussite des recherches, taux de clic vers Copilot, temps passé sur les guides de rôle. Si 70 % des questions Copilot trouvent leur réponse en trois clics ou moins, le routage est bon ; sinon, c'est la taxonomie qu'il faut corriger.</li>\n<li><strong>Indicateurs retardés</strong> : moins d'actifs sauvages, moins d'agents en double, meilleure satisfaction, et badges rouges qui disparaissent pendant que les verts se maintiennent.</li>\n</ul>\n<p>Les objectifs fixés sont précis :</p>\n<ul>\n<li>30 à 40 % de réduction des tickets en 60 à 90 jours.</li>\n<li>70 % des questions Copilot résolues en trois clics.</li>\n<li>Contenu obsolète sous 10 % dès le deuxième mois.</li>\n<li>Réutilisation hebdomadaire accrue des prompts sur les cinq principaux guides de rôle.</li>\n</ul>\n<p>L'instrumentation reste légère : analyse d'usage SharePoint, journaux de recherche et tableaux de bord Power BI, avec tri hebdomadaire, rafraîchissement mensuel et audit de gouvernance trimestriel. Dans un cas d'entreprise décrit, la même démarche a produit des effets cohérents : détournement de tickets en progression semaine après semaine, artefacts en double disparus, agents isolés en baisse, agents à haut risque déplacés vers des environnements gérés avec la DLP appropriée, moins d'erreurs de copier-coller. Le réflexe a aussi changé, de « demander » à « vérifier le centre ». Publier la fiche de score répond directement à la question des dirigeants sur le retour sur investissement des licences.</p>\n\n<h2>Erreurs fréquentes et pièges à éviter</h2>\n<ul>\n<li><strong>Sous-investir la trouvabilité</strong> : taxonomie et périmètres déterminent la pertinence, et les approximations font grimper les tickets.</li>\n<li><strong>Tolérer l'obsolète</strong> : il faut le déclarer comme tel, avec des redirections systématiques, sans négocier avec les liens dégradés.</li>\n<li><strong>Rester générique</strong> : une guidance générique appelle des erreurs génériques, d'où l'intérêt de parcours de démarrage par rôle.</li>\n<li><strong>Ne pas instrumenter</strong> : termes de recherche, taux de clic et rebond indiquent ce qu'il faut corriger le mois suivant.</li>\n<li><strong>Cacher la politique</strong> dans un PDF au lieu de l'afficher dans le parcours.</li>\n<li><strong>Lancer la promotion avant la centralisation</strong> : on ne gouverne pas ce qu'on ne voit pas ni ce qu'on ne trouve pas. Construisez l'aéroport, puis les avions.</li>\n</ul>\n\n<h2>Les points clés à retenir</h2>\n<ul>\n<li>Traitez la formation comme un système continu avec gestion, cycle de vie et télémétrie.</li>\n<li>Bâtissez un hub SharePoint en trois zones : apprendre, agir, gouverner.</li>\n<li>Rendez la recherche efficace avec une taxonomie par surface, fonction, rôle et périmètre.</li>\n<li>Structurez chaque prompt : objectif, anatomie, variantes, modes de défaillance.</li>\n<li>Affichez propriétaire, suppléant, niveau de service et badge de fraîcheur sur chaque page.</li>\n<li>Imposez un point d'entrée unique : si ce n'est pas dans le hub, ce n'est pas officiel.</li>\n<li>Montrez les limites de données avec des exemples concrets, au moment de l'action.</li>\n<li>Suivez les KPI et publiez la fiche de score.</li>\n</ul>\n\n<h2>Conclusion</h2>\n<p>Réduire les tickets Copilot ne consiste pas à demander aux utilisateurs d'en ouvrir moins, mais à devancer leurs questions avec des réponses évidentes, à jour et sûres, là où ils travaillent. Un centre d'apprentissage gouverné, un point d'entrée unique et des indicateurs publiés remplacent la formation fantôme par un système fiable et mesurable. C'est ce système qui donne à la direction des preuves concrètes de la valeur des licences : moins de tickets, des réponses plus rapides et un usage plus sûr.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Centre d'apprentissage Copilot : du chaos au système gouverné",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Centraliser le hub",
+     "text": "Un hub SharePoint avec trois zones : apprendre, agir, gouverner, comme point d'entrée officiel unique."
+    },
+    {
+     "kopf": "Cartographier les intentions",
+     "text": "Arbres de décision et exemples de prompts pour les quatre questions récurrentes, en trois clics maximum."
+    },
+    {
+     "kopf": "Structurer les prompts",
+     "text": "Chaque prompt : objectif, anatomie, variantes et mode de défaillance, avec boutons copier-exécuter par rôle."
+    },
+    {
+     "kopf": "Gouverner la fraîcheur",
+     "text": "Propriétaire, suppléant, badge vert-orange-rouge, redirections et archivage automatique du contenu sans responsable."
+    },
+    {
+     "kopf": "Afficher les limites",
+     "text": "Politiques de données, connecteurs approuvés et exemples interdits en rouge, visibles avant l'action."
+    },
+    {
+     "kopf": "Mesurer les KPI",
+     "text": "Réduction des tickets, succès des recherches, réutilisation des prompts et contenu obsolète sous 10 %."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Pourquoi la formation à Copilot échoue-t-elle souvent dans les organisations ?",
+    "a": "On applique un programme de formation statique à une cible qui évolue chaque semaine. Les diapositives vieillissent, les utilisateurs oublient, et sans centre d'apprentissage permanent et gouverné, les tickets se répètent. Les contenus se multiplient sans propriétaire, sans version ni politique de retrait."
+   },
+   {
+    "q": "Quels sont les quatre tickets Copilot qui reviennent le plus souvent ?",
+    "a": "Les quatre questions récurrentes sont : « Par où commencer ? » (échec de découverte), « Quel Copilot ? » (Outlook, Word, Teams, Graph, Copilot Studio), « Est-ce sûr ? » (limites de données, transcriptions, connecteurs) et « Pourquoi cette réponse ? » (prompt et contexte de récupération)."
+   },
+   {
+    "q": "Comment structurer un centre d'apprentissage Copilot sur SharePoint ?",
+    "a": "On s'appuie sur SharePoint Modern et un site hub en trois zones : Apprendre (connaissance organisée), Agir (répertoire de prompts et d'agents) et Gouverner (politique visible). Des composants SPFx et PnP Modern Search, avec une taxonomie par surface, fonction, rôle et périmètre, facilitent la découverte."
+   },
+   {
+    "q": "Comment mesurer l'efficacité d'un centre d'apprentissage Copilot et quels objectifs viser ?",
+    "a": "On suit la réduction des tickets, les visiteurs du hub, la réutilisation des prompts et la disparition des documents sauvages. Objectifs : 30 à 40 % de tickets en moins en 60 à 90 jours, 70 % des questions résolues en trois clics, contenu obsolète sous 10 % dès le deuxième mois."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Formation statique ou centre d'apprentissage gouverné",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Formation ponctuelle",
+     "punkte": [
+      "Diapositives figées face à un Copilot qui évolue chaque semaine",
+      "Copies non officielles sans propriétaire ni contrôle de version",
+      "Les mêmes quatre tickets reviennent sans cesse",
+      "Politique cachée dans un PDF",
+      "Dirigeants qui doutent du retour sur investissement des licences"
+     ]
+    },
+    "rechts": {
+     "titel": "Centre d'apprentissage sur SharePoint",
+     "punkte": [
+      "Diffusion en flux continu, là où la question se pose",
+      "Point d'entrée unique : hors du hub, rien n'est officiel",
+      "Intentions cartographiées avec arbres de décision et prompts structurés",
+      "Politique affichée dans le parcours, avant le premier chat",
+      "Fiche de score publiée avec des KPI clairs"
+     ]
+    }
+   },
+   {
+    "titel": "Objectifs chiffrés du centre d'apprentissage",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "30 à 40 %",
+      "text": "de réduction des tickets en 60 à 90 jours"
+     },
+     {
+      "wert": "70 %",
+      "text": "des questions Copilot résolues en trois clics ou moins"
+     },
+     {
+      "wert": "< 10 %",
+      "text": "de contenu obsolète dès le deuxième mois"
+     },
+     {
+      "wert": "80 %",
+      "text": "de la confusion quotidienne couverte par une diffusion en flux continu"
+     },
+     {
+      "wert": "30 jours",
+      "text": "ou moins pour un badge de fraîcheur vert"
+     }
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Quelle règle simple détermine si un contenu Copilot peut être mis en ligne dans le hub ?",
+    "opts": [
+     "Il doit avoir été validé par la direction informatique chaque trimestre.",
+     "Il doit avoir un propriétaire et une date d'expiration.",
+     "Il doit avoir été consulté par au moins cent utilisateurs.",
+     "Il doit provenir exclusivement des flux officiels de Microsoft Learn."
+    ],
+    "a": 1,
+    "why": "L'article pose une règle claire : sans propriétaire ni date d'expiration, rien ne passe en ligne."
+   },
+   {
+    "q": "Que signifie un badge de fraîcheur orange sur une page du hub ?",
+    "opts": [
+     "La page a été révisée il y a 30 jours ou moins.",
+     "La page est obsolète depuis plus de 90 jours.",
+     "La page a été révisée il y a 31 à 90 jours.",
+     "La page n'a ni propriétaire ni suppléant désigné."
+    ],
+    "a": 2,
+    "why": "Vert : 30 jours ou moins ; orange : 31 à 90 jours ; rouge : obsolète depuis plus de 90 jours."
+   },
+   {
+    "q": "Quel est le rôle de PnP Modern Search dans l'architecture décrite ?",
+    "opts": [
+     "Il sert de moteur de trouvabilité appuyé sur une taxonomie.",
+     "Il héberge les agents Copilot Studio dans des bacs à sable.",
+     "Il archive automatiquement les contenus sans propriétaire dans Teams.",
+     "Il remplace le site hub pour la navigation et le thème."
+    ],
+    "a": 0,
+    "why": "PnP Modern Search fait office de moteur de trouvabilité, fondé sur une taxonomie : surface, fonction, rôle, périmètre."
+   },
+   {
+    "q": "Quel objectif de réduction des tickets l'article fixe-t-il pour 60 à 90 jours ?",
+    "opts": [
+     "10 à 15 % de réduction des tickets",
+     "50 à 60 % de réduction des tickets",
+     "Une réduction de 80 % des tickets",
+     "30 à 40 % de réduction des tickets"
+    ],
+    "a": 3,
+    "why": "Parmi les objectifs précis figure une réduction des tickets de 30 à 40 % en 60 à 90 jours."
+   }
+  ]
+ },
+ "nl": {
+  "html": "<p>Veel organisaties behandelen Copilot-training als een evenement: een webinar, een presentatie, een kwartaalsessie. Het resultaat is voorspelbaar: dezelfde vragen bij de helpdesk, losse handleidingen in allerlei kanalen en managers die zich afvragen wat de licenties opleveren. Training is geen vergadering maar een systeem. Een continu beheerd Copilot-leercentrum in SharePoint beantwoordt vragen voordat ze tickets worden, centraliseert de governance en haalt de voedingsbodem weg onder schaduwdocumentatie.</p>\n<p>In dit artikel lees je hoe zo'n leercentrum is opgebouwd, hoe je promptbibliotheek en agentdirectory inricht, welke governancemaatregelen schaduwtraining stoppen en met welke KPI's je aantoont dat het werkt.</p>\n\n<h2>Waarom Copilot-training mislukt</h2>\n<p>De kern van het probleem: je voert een statisch trainingsprogramma uit tegen een bewegend doelwit. Copilot verandert wekelijks, je slides niet. Gebruikers vergeten dingen, Copilot niet. Bovendien gaan traditionele adoptieplannen uit van een lineair pad van beginner naar gevorderd. Copilot is conversationeel, contextafhankelijk en zeer gevoelig voor datagrenzen en promptkwaliteit. Je traint dus niet voor een product, maar voor gedrag. Leer je gebruikers goed werken, dan neem je volgens deze aanpak een groot deel (ongeveer 80%) van de dagelijkse verwarring weg voordat het een ticket wordt.</p>\n<p>Een tweede valkuil is optimaliseren voor de minst voorbereide gebruiker. Dan verzwak je prompts, verberg je nuances en schaaf je governance af tot het onschadelijk en nutteloos is. Ervaren gebruikers haken af en bouwen hun eigen verborgen werkwijzen. Verwarde gebruikers escaleren luidruchtig.</p>\n\n<h3>De vier tickets die steeds terugkomen</h3>\n<ol>\n<li><strong>Waar moet ik beginnen?</strong> Een ontdekkingsprobleem.</li>\n<li><strong>Welke Copilot?</strong> Gebruikers denken dat Copilot één ding is, terwijl het om meerdere interfaces en agents gaat met verschillende mogelijkheden en risico's.</li>\n<li><strong>Is dit veilig?</strong> Datagrenzen, transcriptiebeleid en goedgekeurde connectors zijn nooit getoond op de plek waar de gebruiker werkt.</li>\n<li><strong>Waarom gaf Copilot dit antwoord?</strong> Meestal een kwestie van promptpatroon en retrievalcontext, niet van Copilot zelf.</li>\n</ol>\n\n<h3>De schaduwtrainingseconomie</h3>\n<p>Presentaties in Teams, pdf's in chats, wikipagina's met titels als \"Ultieme Copilot Handleiding V7 Laatste Laatste\": geen versiebeheer, geen eigenaar, geen uitfaseringsbeleid. Zodra je een officiële handleiding publiceert, duiken er onofficiële kopieën op. Zoekresultaten spreken elkaar tegen en de enige bron van waarheid wordt een fabeltje. Het gevolg zijn meer tickets, inconsistente resultaten, datarisico's en onbeheerde agents in willekeurige omgevingen. Dat is geen adoptie maar entropie.</p>\n<p>De conclusie: Copilot-adoptie is een informatiearchitectuurprobleem vermomd als training. Alleen tickets beantwoorden is de vloer dweilen terwijl de kraan blijft lekken. Antwoorden moeten staan waar de vraag ontstaat, in Word, in Teams, naast het tekstvak, of op zijn minst één klik daarvandaan.</p>\n\n<h2>Architectuur van een Copilot-leercentrum in SharePoint</h2>\n<p>Een leercentrum is geen SharePoint-site met wat links. Het is een beheerde hub die kennis, artefacten en veilige gebruikspatronen van Copilot centraliseert. Denk aan een luchthaven in plaats van een prikbord: poorten, beveiliging, bewegwijzering en verkeersleiding zorgen ervoor dat mensen zich verplaatsen omdat het systeem hen houvast biedt.</p>\n\n<h3>De hub met drie kerngebieden</h3>\n<p>Moderne SharePoint biedt een snel, responsief canvas met native Teams-integratie. Met een hubsite erft elke subsite navigatie, thema en beheer. De hub heeft drie gebieden:</p>\n<ul>\n<li><strong>Leren:</strong> gecureerde kennis.</li>\n<li><strong>Doen:</strong> de prompt- en agentdirectory.</li>\n<li><strong>Beheren:</strong> beleid dat direct zichtbaar is voor gebruikers, niet verstopt in een compliance-structuur.</li>\n</ul>\n\n<h3>SPFx-webonderdelen en PnP-zoeken</h3>\n<p>SPFx-webonderdelen doen het zware werk: directorykaarten voor Copilot Studio-agents, op rollen gebaseerde promptgalerijen en contextbanners die de omgeving tonen. Het voordeel is dat ze tenantbewust en snel zijn en zonder iframes kunnen draaien in SharePoint, Teams-tabbladen en Viva Connections. Eén codebundel dus, die overal wordt weergegeven.</p>\n<p>Voor vindbaarheid gebruik je moderne PnP-zoekfunctionaliteit. De taxonomie is hierbij doorslaggevend:</p>\n<ul>\n<li><strong>Oppervlak:</strong> Word, Outlook, Teams, Graph.</li>\n<li><strong>Functie:</strong> samenvatten, genereren, analyseren.</li>\n<li><strong>Rol:</strong> bijvoorbeeld verkoop, financiën, HR en risico.</li>\n<li><strong>Type:</strong> intern, extern, gereguleerd.</li>\n</ul>\n<p>Een verkoper ziet zo eerst de goedgekeurde prompts voor zijn rol en geen willekeurige lijst uit 2023. Resultaatkaarten tonen statusbadges, eigenaar en laatst gecontroleerde datum, zodat vertrouwen zichtbaar wordt.</p>\n\n<h3>Contentbronnen met herkomst</h3>\n<p>Microsoft Learn en Viva Learning-feeds worden gebundeld onder Leren, met duidelijke herkomstlabels. Communitypaden zijn toegestaan maar niet bindend. Interne SOP's en rolgidsen doorlopen een levenscyclus: concept, collegiale toetsing, publicatie en verwijdering. Een document zonder eigenaar en vervaldatum wordt niet gepubliceerd.</p>\n\n<h2>Promptbibliotheek, agentdirectory en intentiemapping</h2>\n<p>Het aantal tickets daalt wanneer gebruikers kunnen koppelen wat ze willen aan waar ze moeten klikken. Daarvoor zijn drie middelen nodig: intentiemapping, kanonieke antwoorden en zichtbare actualiteit.</p>\n\n<h3>Intentiemapping: begin bij echte vragen</h3>\n<p>Koppel je FAQ aan de vragen die gebruikers werkelijk stellen. Gebruik zoeklogs en tickets en groepeer ze in vier hoofdcategorieën: waar begin ik, welke Copilot, is het veilig en waarom dit antwoord. Elke categorie krijgt een landingspagina met een beslissingsboom en een promptvoorbeeld. De beslissingsboom leidt in minder dan drie klikken naar het juiste pad. Het voorbeeld laat zien hoe het goed gaat en wat de foute aanpak is, want gebruikers hebben geen theorie nodig maar contrast.</p>\n<p>De keuze voor de juiste Copilot wordt een begeleide keuze met drie schakelaars: oppervlak, rol en gegevensgevoeligheid. De pagina legt ook uit wanneer je iets níet moet gebruiken, want niets doen is soms de veiligste optie.</p>\n\n<h3>De promptbibliotheek</h3>\n<p>Elke goedgekeurde prompt heeft vier velden:</p>\n<ul>\n<li><strong>Doel:</strong> de taak in één regel.</li>\n<li><strong>Structuur:</strong> met anatomielabels per clausule, zodat gebruikers kunnen variëren zonder de opbouw te breken.</li>\n<li><strong>Variaties:</strong> aanpassingen in toon of rol.</li>\n<li><strong>Foutmodi:</strong> waarom het misging, bijvoorbeeld dubbelzinnige werkwoorden, ontbrekende context of hallucinatievalkuilen, inclusief de snelle oplossing.</li>\n</ul>\n<p>Kopieer- en uitvoerknoppen respecteren rol en datagrenzen. Heb je geen toegang, dan zie je het pad voor een toegangsaanvraag in plaats van een 403-foutmelding. Naast elke prompt staat ook waarom die werkt: de intentie, het bereik en de beperkingen worden benoemd, gegevensbronnen worden genoemd en sturende instructies worden vermeden. Een rood kader toont een verleidelijk maar onveilig voorbeeld.</p>\n\n<h3>De agentdirectory</h3>\n<p>De agentdirectory is de enige bron van waarheid voor Copilot-oppervlakken en Studio-agents. Elk item bevat eigenaar, omgeving, gegevensbeleid, connectors, doel, wat een goede status inhoudt en rode lijnen. Daarbij komen gebruiksnotities, telemetrielinks, een proefknop voor veilige sandboxes en een toegangsaanvraagstroom via de backend.</p>\n\n<h2>Governance en actualiteit: vertrouwen zichtbaar maken</h2>\n<p>Governance hoort niet in de voettekst maar bij de voordeur. Via een headercomponent toon je op elke relevante pagina het bewaren van transcripten, het privacybeleid en de datagrenzen. Goedgekeurde connectors krijgen tooltips met de status toegestaan, voorwaardelijk of geblokkeerd. Voorbeelden van niet-toegestane verzoeken staan in rode tekst. Niemand leest beleid, maar iedereen onthoudt een levendig voorbeeld van wat je niet moet doen, bijvoorbeeld \"upload geen patiëntgegevens\". Het beleid voor transcripten verschijnt vóór het eerste chatgesprek, niet na een datalek.</p>\n\n<h3>Evergreen met badges en eigenaarschap</h3>\n<p>Stel een contentlevenscyclus in met maandelijkse vernieuwingsrondes, versiebadges en regels voor automatisch verwijderen. SPFx toont de actualiteit direct, bijvoorbeeld \"beoordeeld 12 dagen geleden\" tegenover \"verouderd, 94 dagen\". De badges werken zo:</p>\n<ul>\n<li><strong>Groen:</strong> beoordeeld binnen 30 dagen.</li>\n<li><strong>Oranje:</strong> 31 tot 90 dagen.</li>\n<li><strong>Rood:</strong> verouderd, na 90 dagen.</li>\n</ul>\n<p>Elke pagina toont een benoemde eigenaar, een backup en een SLA. Wijzigingen worden vastgelegd, zodat gebruikers zien wat er veranderd is. Tickets die vanaf een rode pagina ontstaan, gaan naar de eigenaar met een herinnering om de pagina te vernieuwen. Gebruikers vertrouwen groen, twijfelen bij oranje en mijden rood.</p>\n\n<h3>Just-in-time en feedbackloop</h3>\n<p>Met Viva Connections zet je het centrum vast in Teams. Diepe links naast tekstvakken (\"Help me veilig te schrijven\") openen rolspecifieke promptpatronen, en contextpagina's worden direct in Teams-kanalen ingesloten. Wie zijn workflow moet verlaten om iets te leren, doet dat niet en opent een ticket. Elke pagina eindigt met de vraag \"Was dit nuttig?\", een korte enquête met twee klikken en een optionele toelichting. \"Vraag een expert\" escaleert naar een beheerde wachtrij met categorieën gekoppeld aan eigenaren. Wekelijkse triage beoordeelt successen en missers, een maandelijkse update levert verbeteringen en het wijzigingslogboek wordt gepubliceerd.</p>\n\n<h2>De governance-schakelaar die schaduwtraining stopt</h2>\n<p>Schaduwtraining sterft wanneer kanonieke antwoorden alles overtreffen en verouderde content zichzelf onschadelijk maakt. Daarvoor is één verplichte ontdekkingsservice nodig, geen suggestie maar beleid: pin het leercentrum als Teams-app voor iedereen en maak de SharePoint-hub het gezaghebbende toegangspunt. Alle Copilot-gerelateerde content, dus handleidingen, prompts, agentdocumentatie en FAQ's, valt onder die informatiearchitectuur. Geen uitzonderingen voor aparte wikis, tijdelijke decks of pdf's in privékanalen. Staat het niet in de hub, dan is het niet officieel.</p>\n\n<h3>Handhaving</h3>\n<ul>\n<li><strong>Linkbeheer:</strong> oude URL's verwijzen automatisch door naar de kanonieke pagina, met een banner die de wijziging uitlegt.</li>\n<li><strong>Waarschuwingsbanners:</strong> content buiten de hub meldt dat die niet gezaghebbend is.</li>\n<li><strong>Automatisch archiveren:</strong> content zonder eigenaar of beoordelingsdatum wordt gemarkeerd, lager gerangschikt en in de wachtrij voor archivering gezet. Je wist geen geschiedenis, je haalt die uit het beslissingsproces.</li>\n</ul>\n<p>Eigenaren hebben backups, kwartaalbeoordelingen vinden plaats volgens een vast schema en telemetrie stuurt het opschonen. Pagina's met weinig kliks worden gerepareerd, samengevoegd of verwijderd. Zoekopdrachten met veel wrijving leiden tot nieuwe content. Eigenaren die hun SLA niet nakomen, verliezen hun bevoegdheden.</p>\n<p>Contra-intuïtief genoeg verhoogt centralisatie de bijdragen. Weten mensen waar de kanon staat, dan dienen ze verbeteringen in in plaats van afwijkende versies te publiceren. Laat het bijdrageproces simpel zijn: wijziging voorstellen, bewijs toevoegen, doorsturen naar de eigenaar en publiceren met een wijzigingslogboek. Erken bijdragers zichtbaar. Neem het centrum ook op in onboarding, prestatiegesprekken en kwartaaloverzichten, en laat de standaard helpinstructies in Teams het centrum openen.</p>\n\n<h2>KPI's en resultaten: bewijs dat het werkt</h2>\n<p>Je hebt cijfers nodig die discussies beëindigen. De belangrijkste meetwaarden zijn het percentage afgehandelde tickets, het aantal unieke bezoekers van de hub, het hergebruik van prompts in de bibliotheek en het verdwijnen van ongewenste documenten.</p>\n\n<h3>Voorlopende en achterlopende indicatoren</h3>\n<ul>\n<li><strong>Voorlopend:</strong> zoeksucces, doorklikratio op de pagina \"Welke Copilot?\" en tijd op pagina bij startgidsen per rol.</li>\n<li><strong>Achterlopend:</strong> minder schaduwactiva, minder dubbele agents en meer tevredenheid op de vraag \"Was dit nuttig?\". Blijven de groene badges groen en verdwijnen de rode, dan werkt de evergreen-aanpak.</li>\n</ul>\n\n<h3>Doelstellingen</h3>\n<ul>\n<li>Een afbuiging van 30 tot 40% van tickets binnen 60 tot 90 dagen.</li>\n<li>Voor 70% van de vragen over welke Copilot geschikt is een oplossing binnen drie klikken.</li>\n<li>Verouderde content onder de 10% in de tweede maand.</li>\n<li>Wekelijks hergebruik van prompts in de vijf belangrijkste rolgidsen.</li>\n</ul>\n<p>De instrumentatie blijft licht: SharePoint-gebruiksanalyses, zoeklogs en een Power BI-dashboard, met wekelijkse triage, een maandelijkse update en een driemaandelijkse governance-audit. Publiceer de scorekaart. Leidinggevenden willen rendement op licenties zien, en dat laten minder tickets, snellere antwoorden en veiliger gebruik zien.</p>\n\n<h3>Casus: duizenden licenties, weinig leereffect</h3>\n<p>Een bedrijf met duizenden Copilot-licenties leek het druk te hebben maar leerde weinig. De ticketwachtrij werd gedomineerd door de vier bekende thema's, de documentatie was verspreid over wiki's, presentaties en pdf's zonder bekende eigenaar of reviewdatum, en malafide agents verschenen in willekeurige omgevingen. De interventie bestond uit een leercentrum met leren, doen en beheren, vastgepind in Teams, een op intenties afgestemde FAQ, een rolgebaseerde promptbibliotheek, een agentdirectory, verbeterde zoekfunctionaliteit en doorverwijzingen van oude links met gearchiveerd-banners.</p>\n<p>De resultaten: het aantal afgehandelde tickets nam week na week toe, het zoeksucces steeg, dubbele items verdwenen en wiki's zonder eigenaar vielen uit de zoekresultaten. De promptbibliotheek werd het zwaartepunt, met veel hergebruik op rolstartpagina's en minder onterechte klachten dankzij expliciete foutmodi. Bezoekers concentreerden zich op de startpagina en enkele rolgidsen. Het aantal malafide agents nam af nu er een geautoriseerde directory bestond, en risicovolle agents verhuisden naar beheerde omgevingen met passende DLP. Ook de cultuur veranderde: van \"vraag het\" naar \"check het centrum\", en zelfs ervaren gebruikers dienden promptvarianten in via de bijdragestroom.</p>\n\n<h2>Veelgemaakte fouten en stolpersteine</h2>\n<ul>\n<li><strong>Te weinig aandacht voor vindbaarheid:</strong> taxonomie en scopes maken of breken relevantie. Gokken leidt tot een opgeblazen ticketaantal.</li>\n<li><strong>Verouderde content laten bestaan:</strong> geef met consequente redirects aan wat verouderd is en ga geen compromissen aan met oude links.</li>\n<li><strong>Generieke richtlijnen:</strong> algemene richtlijnen leiden tot algemene fouten. Publiceer rolgebaseerde startpaden.</li>\n<li><strong>Niet meten:</strong> instrumenteer alles, van zoektermen tot doorkliks en bounce. Die cyclus laat zien wat je volgende maand moet repareren.</li>\n<li><strong>Beleid als pdf:</strong> veiligheidsrichtlijnen horen op de plek van gebruik, met duidelijke voorbeelden.</li>\n<li><strong>Zonder eigenaar publiceren:</strong> geen eigenaar en geen vervaldatum betekent geen publicatie.</li>\n</ul>\n\n<h2>Praktische takeaways</h2>\n<ul>\n<li>Behandel Copilot-adoptie als informatiearchitectuurprobleem, niet als eenmalige training.</li>\n<li>Bouw een SharePoint-hub met de gebieden leren, doen en beheren en pin die als Teams-app.</li>\n<li>Begin met intentiemapping op basis van zoeklogs en tickets, met beslissingsbomen die in minder dan drie klikken tot de juiste Copilot leiden.</li>\n<li>Leg elke prompt vast met doel, structuur, variaties en foutmodi, en toon waarom hij werkt.</li>\n<li>Houd een agentdirectory bij met eigenaar, omgeving, gegevensbeleid en connectors.</li>\n<li>Toon gegevensbeleid, transcriptbewaring en goedgekeurde connectors op de plek waar gebruikers werken, met voorbeelden van wat niet mag.</li>\n<li>Gebruik groene, oranje en rode actualiteitsbadges en geef elke pagina een eigenaar, backup en SLA.</li>\n<li>Maak één ontdekkingsservice verplicht en archiveer of degradeer content buiten de hub automatisch.</li>\n<li>Meet wekelijks en rapporteer maandelijks aan het management met een scorekaart.</li>\n</ul>\n\n<h2>Fazit</h2>\n<p>Een Copilot-leercentrum dat als beheerd systeem is ingericht, met eigenaarschap, levenscyclus en telemetrie, vermindert tickets omdat het antwoorden geeft vóór de vraag wordt gesteld. Het ontneemt schaduwtraining de zuurstof door het officiële antwoord duidelijker, actueler en veiliger te maken dan elke onofficiële kopie. Centraliseer eerst, meet consequent en laat het dashboard het bewijs leveren. Zo wordt Copilot-training een aantoonbaar rendement op je licenties in plaats van folklore.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Copilot-leercentrum: van tickets naar systeem",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Intenties in kaart",
+     "text": "Koppel FAQ aan echte vragen uit zoeklogs en tickets, met beslissingsbomen van maximaal drie klikken."
+    },
+    {
+     "kopf": "Hub bouwen",
+     "text": "SharePoint-hub met leren, doen en beheren, vastgepind in Teams als enige toegangspunt."
+    },
+    {
+     "kopf": "Prompts en agents",
+     "text": "Promptbibliotheek met doel, structuur, variaties en foutmodi plus een agentdirectory met eigenaren."
+    },
+    {
+     "kopf": "Governance zichtbaar",
+     "text": "Datagrenzen, connectors en actualiteitsbadges tonen waar gebruikers werken; oude content automatisch archiveren."
+    },
+    {
+     "kopf": "Meten en bijsturen",
+     "text": "Wekelijkse triage, maandelijkse update en dashboard met tickets, zoeksucces en prompthergebruik."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Waarom mislukt Copilot-training in veel organisaties?",
+    "a": "Organisaties behandelen training als een evenement, zoals een webinar of kwartaalsessie, terwijl Copilot wekelijks verandert en slides niet. Gebruikers vergeten dingen, en je traint voor gedrag in plaats van voor een product. Training moet daarom een continu beheerd systeem zijn."
+   },
+   {
+    "q": "Welke vier vragen komen steeds terug bij de helpdesk over Copilot?",
+    "a": "De vier terugkerende tickets zijn: 'Waar moet ik beginnen?' (ontdekkingsprobleem), 'Welke Copilot?' (meerdere interfaces en agents), 'Is dit veilig?' (datagrenzen, transcriptiebeleid, connectors) en 'Waarom gaf Copilot dit antwoord?' (meestal promptpatroon en retrievalcontext)."
+   },
+   {
+    "q": "Hoe is een Copilot-leercentrum in SharePoint opgebouwd?",
+    "a": "Het is een beheerde hubsite met drie kerngebieden: Leren (gecureerde kennis), Doen (de prompt- en agentdirectory) en Beheren (voor gebruikers direct zichtbaar beleid). SPFx-webonderdelen en PnP-zoeken met een heldere taxonomie zorgen voor bruikbaarheid en vindbaarheid."
+   },
+   {
+    "q": "Hoe stop je schaduwtraining en verouderde Copilot-handleidingen?",
+    "a": "Maak het leercentrum het verplichte, gezaghebbende toegangspunt en pin het als Teams-app. Handhaaf dit met linkdoorverwijzingen, waarschuwingsbanners voor content buiten de hub en automatisch archiveren van content zonder eigenaar of beoordelingsdatum. Staat het niet in de hub, dan is het niet officieel."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Training als evenement versus als systeem",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Training als evenement",
+     "punkte": [
+      "Webinar, presentatie of kwartaalsessie die statisch blijft",
+      "Losse handleidingen in allerlei kanalen zonder versiebeheer",
+      "Dezelfde vragen komen steeds terug bij de helpdesk",
+      "Managers vragen zich af wat de licenties opleveren",
+      "Onofficiële kopieën zorgen voor schaduwdocumentatie"
+     ]
+    },
+    "rechts": {
+     "titel": "Training als systeem",
+     "punkte": [
+      "Continu beheerd leercentrum in SharePoint als hub",
+      "Antwoorden staan waar de vraag ontstaat, in de werkflow",
+      "Vragen worden beantwoord voordat ze tickets worden",
+      "Eén gezaghebbende bron met eigenaar en vervaldatum",
+      "KPI's tonen rendement op licenties aan"
+     ]
+    }
+   },
+   {
+    "titel": "Doelstellingen van het leercentrum",
+    "typ": "fakten",
+    "punten": [],
+    "punkte": [
+     {
+      "wert": "30–40%",
+      "text": "afbuiging van tickets binnen 60 tot 90 dagen"
+     },
+     {
+      "wert": "70%",
+      "text": "van de vragen over welke Copilot geschikt is opgelost binnen drie klikken"
+     },
+     {
+      "wert": "<10%",
+      "text": "verouderde content in de tweede maand"
+     },
+     {
+      "wert": "5 rolgidsen",
+      "text": "met wekelijks hergebruik van prompts in de belangrijkste gidsen"
+     }
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Welke drie kerngebieden heeft de hub van het Copilot-leercentrum?",
+    "opts": [
+     "Leren, Doen en Beheren",
+     "Plannen, Bouwen en Meten",
+     "Starten, Oefenen en Certificeren",
+     "Lezen, Delen en Archiveren"
+    ],
+    "a": 0,
+    "why": "De hub bestaat uit Leren (gecureerde kennis), Doen (prompt- en agentdirectory) en Beheren (zichtbaar beleid)."
+   },
+   {
+    "q": "Welke vier velden heeft elke goedgekeurde prompt in de promptbibliotheek?",
+    "opts": [
+     "Titel, Auteur, Datum en Beoordeling",
+     "Doel, Structuur, Variaties en Foutmodi",
+     "Doel, Eigenaar, Kosten en Risico",
+     "Context, Rol, Oppervlak en Status"
+    ],
+    "a": 1,
+    "why": "Het artikel noemt Doel, Structuur (met anatomielabels), Variaties en Foutmodi als de vier velden van elke prompt."
+   },
+   {
+    "q": "Wanneer krijgt een pagina een oranje badge voor actualiteit?",
+    "opts": [
+     "Beoordeeld binnen 30 dagen",
+     "Beoordeeld tussen 31 en 90 dagen geleden",
+     "Beoordeeld na meer dan 90 dagen",
+     "Nog nooit beoordeeld door een eigenaar"
+    ],
+    "a": 1,
+    "why": "Groen is binnen 30 dagen, oranje 31 tot 90 dagen en rood verouderd na 90 dagen."
+   },
+   {
+    "q": "Wat gebeurt er met content zonder eigenaar of beoordelingsdatum volgens de handhaving?",
+    "opts": [
+     "Die wordt direct en definitief verwijderd, inclusief geschiedenis",
+     "Die blijft ongewijzigd staan tot iemand klaagt",
+     "Die wordt gemarkeerd, lager gerangschikt en in de archiveringswachtrij gezet",
+     "Die wordt automatisch aan de helpdesk toegewezen"
+    ],
+    "a": 2,
+    "why": "Zulke content wordt gemarkeerd, lager gerangschikt en in de wachtrij voor archivering gezet; geschiedenis wordt niet gewist."
    }
   ]
  }
