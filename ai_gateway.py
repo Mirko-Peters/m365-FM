@@ -8,6 +8,7 @@ import uuid
 
 
 ANTHROPIC_API = "https://api.anthropic.com"
+USER_AGENT = "m365fm-actions/1.0 (+https://www.m365.fm)"   # ohne User-Agent weist Cloudflare urllib-Anfragen mit 403 ab
 _warned_missing_gateway_token = False
 
 
@@ -33,7 +34,7 @@ def anthropic_request(path, data=None, headers=None, *, job, lang="", model="", 
         path = parsed.path + (("?" + parsed.query) if parsed.query else "")
     if not path.startswith("/"):
         path = "/" + path
-    h = {"anthropic-version": "2023-06-01", "content-type": "application/json"}
+    h = {"anthropic-version": "2023-06-01", "content-type": "application/json", "user-agent": USER_AGENT}
     gateway_enabled = gateway_base_url() != ANTHROPIC_API
     if gateway_enabled:
         h["cf-aig-metadata"] = json.dumps({"job": job, "lang": lang, "model": model}, separators=(",", ":"))
@@ -67,14 +68,20 @@ def _budget_request(payload):
     req = urllib.request.Request(
         api.rstrip("/") + "/api/internal/ai-spend",
         json.dumps(payload).encode(),
-        {"content-type": "application/json", "x-cron-key": key},
+        {"content-type": "application/json", "accept": "application/json", "x-cron-key": key, "user-agent": USER_AGENT},
     )
     try:
         with urlopen(req, timeout=15) as response:
             return json.loads(response.read().decode())
     except urllib.error.HTTPError as exc:
-        if exc.code == 403:
+        try:
+            body = exc.read().decode("utf-8", "replace")[:300]
+        except Exception:
+            body = ""
+        if exc.code == 403 and '"forbidden"' in body:   # Antwort des Workers: Schluessel passt nicht
             return "CRON_KEY in GitHub und im Worker verschieden (Worker-Workflow starten, er uebertraegt den GitHub-Wert)"
+        if exc.code == 403:
+            return "Zugriff von Cloudflare abgelehnt (HTTP 403 ohne Antwort des Workers)"
         return f"Community-Worker antwortet mit HTTP {exc.code}"
     except Exception:
         return "Community-Worker nicht erreichbar"
