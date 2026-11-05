@@ -95,6 +95,8 @@ def _link(base, lang, key):
         return f"{base}{p}/community/"
     if key == "directory":
         return f"{base}{p}/directory/"
+    if key == "expertconnect":   # Expert Connect (Publisher-Tool) gibt es auf Englisch und Deutsch
+        return f"{base}{ed}/community/expert-connect/"
     sub = {"members": "members", "companies": "companies", "events": "events", "guests": "guests", "cpodcast": "podcast",
            "blog": "blog", "videos": "video", "library": "library"}
     if key in sub:
@@ -393,7 +395,7 @@ def _sub(g, lang, spec, features):
     url = _url(base, lang, path)
     hub = hub_url(base, lang)
     h1_text, lead_text, alt_text = _text(lang, spec["h1"]), _text(lang, spec["lead"]), _text(lang, spec["alt"])
-    cta_text, cta_key = spec["cta"]
+    cta_text, cta_key = (spec["cta_on"] if spec.get("cta_on") and features.get(spec["cta_on"][2]) else spec["cta"])[:2]
     cta, cta_url = _t(lang, cta_text), _a(base, lang, cta_key)
     need_h, need_ps = spec["need"]
     offers_h, offers = spec["offers"]

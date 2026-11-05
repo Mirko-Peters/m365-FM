@@ -50,11 +50,11 @@ const b64u = (b) => Buffer.from(b).toString("base64url");
   const metadata = await cf(`${metadataPath}/list`);
   if (!metadata.success) fail(`Vectorize-Metadatenindizes nicht lesbar: ${maskAccount(JSON.stringify(metadata.errors || []))}. Das Cloudflare-Token braucht „Vectorize Read“ und „Vectorize Write“.`);
   const indexed = new Set((metadata.result?.metadataIndexes || []).map(({ propertyName }) => propertyName));
-  for (const propertyName of ["lang", "type"]) {
+  for (const [propertyName, indexType] of [["lang", "string"], ["type", "string"], ["programs", "string"], ["level", "number"], ["formats", "string"], ["opt_in", "number"]]) {
     if (indexed.has(propertyName)) continue;
     const created = await cf(`${metadataPath}/create`, {
       method: "POST",
-      body: JSON.stringify({ propertyName, indexType: "string" }),
+      body: JSON.stringify({ propertyName, indexType }),
     });
     if (!created.success) fail(`Vectorize-Metadatenindex ${propertyName} konnte nicht angelegt werden: ${maskAccount(JSON.stringify(created.errors || []))}. Dem Cloudflare-Token fehlt vermutlich „Vectorize Write“.`);
     console.log(`Vectorize-Metadatenindex ${propertyName}: angelegt`);
