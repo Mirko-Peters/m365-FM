@@ -427,6 +427,8 @@ def bing(placements, day, out, statuses):
                 continue
             attempted = True
             for item in (data.get("d") or []):
+                if str(item.get("Query") or "").rstrip("/") != page.rstrip("/"):   # GetPageStats liefert alle Seiten der Site
+                    continue
                 raw_date = str(item.get("Date") or "")
                 match = re.search(r"\d{9,}", raw_date)
                 try:
@@ -523,7 +525,7 @@ def press_ranger(placements, day, out, statuses):
         statuses["Press Ranger"] = "Abruf fehlgeschlagen; keine Werte geschrieben"
     else:
         out.extend(source_rows)
-        statuses["Press Ranger"] = "Abruf abgeschlossen; nur erkannte Messwerte übernommen"
+        statuses["Press Ranger"] = f"Abruf abgeschlossen; {len(source_rows)} Werte übernommen" if source_rows else "Keine auswertbaren Werte (Verteilungsbericht/AI-Visibility noch nicht angebunden); nichts geschrieben"
 
 
 def main(today=None):

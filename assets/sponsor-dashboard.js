@@ -364,7 +364,7 @@
     ]);
     var reportUrl = new URL(C.urls.report, location.origin);
     if (admin && orgs.length === 1) reportUrl.searchParams.set("org", orgs[0].handle);
-    actions.children[1].href = reportUrl.pathname + reportUrl.search;
+    actions.children[0].href = reportUrl.pathname + reportUrl.search;
     actions.children[1].addEventListener("click", function () { exportCsv(orgs); });
     root.insertBefore(actions, root.children[1] || null);
     root.appendChild(node("section", { class: "sdb-panel" }, [
@@ -738,7 +738,7 @@
   function loadDashboard(orgHandle, preset) {
     var explicitPreset = !!preset;
     var params = new URLSearchParams(location.search);
-    var month = params.get("month");
+    var month = params.get("month") || (C.view === "report" ? new Date().toISOString().slice(0, 7) : null);   // Bericht ohne ?month= = laufender Monat, nicht 30 Tage
     var from, to;
     if (C.view === "report" && month && /^\d{4}-(0[1-9]|1[0-2])$/.test(month)) {
       from = month + "-01";

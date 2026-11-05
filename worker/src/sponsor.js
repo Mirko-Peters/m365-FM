@@ -376,7 +376,7 @@ export async function handleSponsor(env, request, url, path, J, user) {
     if (!env.CRON_KEY || request.headers.get("x-cron-key") !== env.CRON_KEY) return J({ error: "forbidden" }, 403, { "cache-control": "no-store" });
     const body = (await request.json().catch(() => ({}))) || {};
     const entries = Array.isArray(body.metrics) ? body.metrics : [];
-    if (!entries.length || entries.length > 1000) return J({ error: "bad_request" }, 400, { "cache-control": "no-store" });
+    if (!entries.length || entries.length > 500) return J({ error: "bad_request" }, 400, { "cache-control": "no-store" });
     const fetchedAt = now(), writes = [], placementIds = new Set();
     const placements = (await db.prepare("SELECT id FROM sponsor_placements").all()).results || [];
     const validPlacements = new Set(placements.map((placement) => placement.id));

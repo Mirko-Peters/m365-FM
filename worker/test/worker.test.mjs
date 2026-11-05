@@ -807,6 +807,7 @@ test("sponsor dashboard: Platzierungen, Firmenzugriff, Quellen und manuelle Wert
   const ownedStats = await (await call("/api/sponsor/link-stats?org=other-co&month=2026-11", "GET", { id: 3 })).json();
   assert.equal(ownedStats.stats.length, 1, "Link-Klicks folgen der zugeordneten Platzierung, nicht sponsor_links.org_id");
   assert.equal((await call("/api/sponsor/link-stats?org=acme", "POST", { id: 1 })).status, 405);
+  assert.equal((await call("/api/sponsor/link-stats?org=acme&month=2026-11", "GET", { id: 3 })).status, 404, "link-stats einer fremden Firma liefern 404");
   raw.close();
 });
 

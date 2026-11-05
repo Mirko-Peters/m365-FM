@@ -22,7 +22,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: Google-Dienstkonto-Unterstützung
-        run: pip install -q cryptography
+        run: pip install -q requests cryptography
       - name: YouTube-Token bereitstellen
         env:
           YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET || secrets.GOOGLE_CLIENT_SECRET }}
