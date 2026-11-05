@@ -44,7 +44,11 @@ def post_form(url, form):
 
 def err(e):
     if isinstance(e, urllib.error.HTTPError):
-        return f"HTTP {e.code}"
+        try:   # Google-APIs nennen den Grund im JSON-Body (error.message); nur der Text, nie Header oder Token
+            msg = (json.loads(e.read().decode("utf-8", "replace") or "{}").get("error") or {}).get("message") or ""
+        except Exception:   # noqa: BLE001
+            msg = ""
+        return f"HTTP {e.code}" + (f": {msg[:160]}" if msg else "")
     return type(e).__name__
 
 
@@ -112,24 +116,44 @@ def youtube():
             cols = [c["name"] for c in d.get("columnHeaders") or []]
             return [dict(zip(cols, r)) for r in d.get("rows") or []]
 
+        errors = {}
+
+        def part(name, fn, empty):   # jede Teilabfrage fuer sich: ein Fehler kostet nur diesen Teil, nicht alle YouTube-Daten
+            try:
+                return fn()
+            except Exception as e:   # noqa: BLE001
+                errors[name] = err(e)
+                print(f"youtube {name}: {errors[name]}")
+                return empty
+
         m = "views,estimatedMinutesWatched,averageViewDuration,subscribersGained,subscribersLost,likes,comments,shares"
-        cur, prev = (rep(START, END, m) or [{}])[0], (rep(PREV_START, PREV_END, m) or [{}])[0]
-        top = rep(START, END, "views,estimatedMinutesWatched,averageViewPercentage,subscribersGained", "video", "-views", 50)
+        cur = part("totals", lambda: (rep(START, END, m) or [{}])[0], {})
+        prev = part("previous", lambda: (rep(PREV_START, PREV_END, m) or [{}])[0], {})
+        top = part("top_videos", lambda: rep(START, END, "views,estimatedMinutesWatched,averageViewPercentage,subscribersGained", "video", "-views", 50), [])
         ids = [r["video"] for r in top]
-        titles = {}
-        for i in range(0, len(ids), 50):
-            d = get_json("https://www.googleapis.com/youtube/v3/videos?" + urllib.parse.urlencode({"part": "snippet", "id": ",".join(ids[i:i + 50])}), hd)
-            titles.update({v["id"]: v["snippet"]["title"] for v in d.get("items") or []})
+
+        def titles():
+            out = {}
+            for i in range(0, len(ids), 50):
+                d = get_json("https://www.googleapis.com/youtube/v3/videos?" + urllib.parse.urlencode({"part": "snippet", "id": ",".join(ids[i:i + 50])}), hd)
+                out.update({v["id"]: v["snippet"]["title"] for v in d.get("items") or []})
+            return out
+        names = part("titles", titles, {}) if ids else {}
         for r in top:
-            r["title"] = titles.get(r["video"], ""); r["url"] = "https://youtu.be/" + r["video"]
-        return {"status": "ok", "period": {"from": START.isoformat(), "to": END.isoformat()}, "totals": cur,
+            r["title"] = names.get(r["video"], ""); r["url"] = "https://youtu.be/" + r["video"]
+        data = {"period": {"from": START.isoformat(), "to": END.isoformat()}, "totals": cur,
                 "previous": {**prev, "from": PREV_START.isoformat(), "to": PREV_END.isoformat()},
-                "daily": rep(END - dt.timedelta(days=89), END, "views,estimatedMinutesWatched,subscribersGained", "day", "day"),
+                "daily": part("daily", lambda: rep(END - dt.timedelta(days=89), END, "views,estimatedMinutesWatched,subscribersGained", "day", "day"), []),
                 "top_videos": top,
-                "traffic_sources": rep(START, END, "views,estimatedMinutesWatched", "insightTrafficSourceType", "-views"),
-                "countries": rep(START, END, "views,estimatedMinutesWatched", "country", "-views", 25),
-                "youtube_search_terms": rep(START, END, "views", "insightTrafficSourceDetail", "-views", 50, "insightTrafficSourceType==YT_SEARCH")}
-    except Exception as e:   # noqa: BLE001
+                "traffic_sources": part("traffic_sources", lambda: rep(START, END, "views,estimatedMinutesWatched", "insightTrafficSourceType", "-views"), []),
+                "countries": part("countries", lambda: rep(START, END, "views,estimatedMinutesWatched", "country", "-views"), []),
+                # Traffic-Quellen-Details: YouTube erlaubt hoechstens 25 Zeilen
+                "youtube_search_terms": part("youtube_search_terms", lambda: rep(START, END, "views", "insightTrafficSourceDetail", "-views", 25, "insightTrafficSourceType==YT_SEARCH"), [])}
+        if errors:
+            data["errors"] = errors
+        status = "ok" if cur else f"Abruf fehlgeschlagen ({errors.get('totals', 'keine Daten')})"
+        return {"status": status, **data}
+    except Exception as e:   # noqa: BLE001   (Token-Abruf)
         return {"status": f"Abruf fehlgeschlagen ({err(e)})"}
 
 
