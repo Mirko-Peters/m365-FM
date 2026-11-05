@@ -455,7 +455,7 @@ test("schema: Migrationen sind idempotent und enthalten jede zur Laufzeit angele
     if (/^ALTER TABLE (?:expert_requests ADD COLUMN (?:hide_outlet INTEGER NOT NULL DEFAULT 0|reach TEXT NOT NULL DEFAULT ''|audience TEXT NOT NULL DEFAULT 'all'|mode TEXT NOT NULL DEFAULT 'match'|held_reason TEXT NOT NULL DEFAULT '')|expert_request_replies ADD COLUMN (?:kind TEXT NOT NULL DEFAULT 'match'|status TEXT NOT NULL DEFAULT 'pending')|contributions ADD COLUMN expert_request_id INTEGER)$/i.test(s)) continue;
     if (/^ALTER TABLE users ADD COLUMN (?:merged_into INTEGER|merged_at INTEGER NOT NULL DEFAULT 0)$/i.test(s)
       || /^INSERT OR IGNORE INTO user_identities\(user_id, provider, sub, created\) SELECT id, provider, sub, created FROM users$/i.test(s)) continue;   // #279: Rueckfuellung ist idempotent
-    // MVP-Tracker (0026): Spalten mit Standardwert; die Laufzeit-Absicherung in contributions.js legt sie nur an, wenn sie fehlen
+    // MVP-Tracker (0027): Spalten mit Standardwert; die Laufzeit-Absicherung in contributions.js legt sie nur an, wenn sie fehlen
     if (/^ALTER TABLE contributions ADD COLUMN (?:portal|portal_at|attendees|live_views|sessions) INTEGER NOT NULL DEFAULT 0$/i.test(s)
       || /^ALTER TABLE contributions ADD COLUMN (?:review|portal_desc|role|area|event_format|country) TEXT NOT NULL DEFAULT ''$/i.test(s)
       || /^ALTER TABLE contributions ADD COLUMN audience TEXT NOT NULL DEFAULT '\[\]'$/i.test(s)) continue;
