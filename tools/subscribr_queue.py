@@ -3,7 +3,7 @@
 
 Warteschlange: data/subscribr_queue.json
   {"_doc": ..., "floor": 700, "defaults": {...}, "channels": {"63800": {"name": "SAP Community", "per_run": 4}, ...},
-   "items": [{"channel": 63800, "title": "...", "topic": "...", "status": "pending|created|failed", "script_id": null, "created": ""}]}
+   "items": [{"channel": 63800, "title": "...", "topic": "...", "status": "pending|created|done|check|failed", "script_id": null, "created": ""}]}
 
 Je Lauf und Kanal werden höchstens `per_run` offene Einträge angelegt (POST /api/v1/channels/{id}/scripts) und die Skript-
 Erstellung gestartet (POST /api/v1/scripts/{id}/agent/generate, research auto). Vorher und nach jedem Skript wird der Credit-Stand
@@ -22,24 +22,41 @@ BLOCKED = {63579}   # Rencore: Reserve für die Sponsor-Folge, nie anfassen
 PAUSE = 35          # Subscribr drosselt das Anlegen (429 bei schnellerer Folge)
 
 
+def _json(raw):
+    """Antworttext als Objekt; kaputtes JSON oder etwas anderes als ein Objekt ergibt {} (nie eine Ausnahme)."""
+    try:
+        j = json.loads(raw or "{}")
+    except ValueError:
+        return {}
+    return j if isinstance(j, dict) else {}
+
+
 def call(method, path, token, body=None, tries=4):
+    """Nur GET wird bei Netzfehlern wiederholt. POST (Skript anlegen, kostenpflichtige Generierung starten) ist nicht idempotent:
+    nach einer Zeitüberschreitung kann Subscribr den Auftrag schon angenommen haben, ein zweiter POST würde doppelt anlegen bzw.
+    doppelt Credits kosten. POST wird deshalb nur bei 429 (sicher abgelehnt) wiederholt; sonst kommt (0, {}) zurück = Ausgang unklar."""
     data = json.dumps(body).encode() if body is not None else None
     for i in range(tries):
         rq = urllib.request.Request(API + path, data=data, method=method,
                                     headers={"Authorization": "Bearer " + token, "Accept": "application/json", "Content-Type": "application/json", "User-Agent": "m365fm-subscribr-queue/1.0 (+https://www.m365.fm)"})
         try:
             with urllib.request.urlopen(rq, timeout=60) as r:
-                return r.status, json.loads(r.read().decode() or "{}")
+                status, raw = r.status, r.read().decode(errors="replace")
+            return status, _json(raw)
         except urllib.error.HTTPError as e:
             if e.code == 429 and i < tries - 1:
                 time.sleep(60 * (i + 1)); continue
             raw = e.read().decode(errors="replace")
-            try: return e.code, json.loads(raw or "{}")
-            except Exception: return e.code, {"_raw": raw[:160], "_ctype": e.headers.get("content-type", ""), "_server": e.headers.get("server", "")}
+            j = _json(raw)
+            return e.code, j or {"_raw": raw[:160], "_ctype": e.headers.get("content-type", ""), "_server": e.headers.get("server", "")}
         except Exception as e:   # noqa: BLE001
-            if i < tries - 1: time.sleep(15); continue
-            print("Abruf fehlgeschlagen:", path.split("?")[0], type(e).__name__); return 0, {}
+            if method == "GET" and i < tries - 1: time.sleep(15); continue
+            print("Abruf fehlgeschlagen:", method, path.split("?")[0], type(e).__name__); return 0, {}
     return 0, {}
+
+
+def save(q):
+    QUEUE.write_text(json.dumps(q, ensure_ascii=False, indent=1) + "\n", "utf-8")
 
 
 def credits(token):
@@ -86,39 +103,54 @@ def main():
         print(f"Credits unter der Grenze {floor} oder unbekannt – nichts angelegt"); return
     # Nachlauf: früher gestartete Läufe prüfen; abgebrochene neu starten (Subscribr erstattet die Credits, ein Neustart kostet
     # wieder 6) – höchstens 2 Neustarts je Skript; fertige als "done" markieren. Abfragen mit Pause (Subscribr: ~20/min).
-    for it in q["items"]:
-        if it.get("status") != "created" or not it.get("script_id") or not it.get("run_id"): continue
-        st, j = call("GET", f"/scripts/{it['script_id']}/agent/runs/{it['run_id']}", token); time.sleep(3)
-        state = (j.get("data") or {}).get("status", "")
-        if state.startswith("completed"):
-            it["status"] = "done"
-        elif state == "failed" and int(it.get("restarts", 0)) < 2:
-            g, gj = call("POST", f"/scripts/{it['script_id']}/agent/generate", token, {"research": "auto", "visual_cues": "off"}); time.sleep(5)
-            if g in (200, 202):
-                it["run_id"] = gj.get("run_id"); it["restarts"] = int(it.get("restarts", 0)) + 1
-                print(f"neu gestartet {it['script_id']}: {it['title']}")
-        elif state == "failed":
-            it["status"] = "failed"; it["error"] = "Lauf dreimal abgebrochen"
-    QUEUE.write_text(json.dumps(q, ensure_ascii=False, indent=1) + "\n", "utf-8")
+    # Jeder Zwischenstand wird sofort gespeichert und der Workflow sichert die Datei auch nach einem Fehler (always()), damit
+    # ein späterer Lauf nichts doppelt anlegt oder doppelt bezahlt.
     made = 0
-    for it in todo:
-        st, j = call("POST", f"/channels/{int(it['channel'])}/scripts", token, {
-            "title": it["title"], "topic": it["topic"] + d.get("topic_suffix", ""), "angle": it.get("angle") or d.get("angle", ""),
-            "length": int(it.get("length") or d.get("length", 3200)), "language": it.get("language") or d.get("language", "English")})
-        sid = (j.get("data") or {}).get("script_id")
-        if st != 201 or not sid:
-            it["status"] = "failed"; it["error"] = f"create {st}"; print("Fehler beim Anlegen:", it["title"], st); continue
-        time.sleep(5)
-        g, gj = call("POST", f"/scripts/{sid}/agent/generate", token, {"research": "auto", "visual_cues": "off"})
-        it.update(status="created" if g in (200, 202) else "failed", script_id=sid, run_id=gj.get("run_id"), created=datetime.now(timezone.utc).strftime("%Y-%m-%d"))
-        if g not in (200, 202): it["error"] = f"generate {g}"
-        made += 1; print(f"angelegt {sid} ({g}): {it['title']}")
-        QUEUE.write_text(json.dumps(q, ensure_ascii=False, indent=1) + "\n", "utf-8")   # Zwischenstand sichern
-        c = credits(token)
-        if c is not None and c < floor:
-            print(f"Credits {c} unter {floor} – Lauf beendet"); break
-        time.sleep(PAUSE)
-    QUEUE.write_text(json.dumps(q, ensure_ascii=False, indent=1) + "\n", "utf-8")
+    try:
+        for it in q["items"]:
+            if it.get("status") != "created" or not it.get("script_id") or not it.get("run_id"): continue
+            st, j = call("GET", f"/scripts/{it['script_id']}/agent/runs/{it['run_id']}", token); time.sleep(3)
+            data = j.get("data") if isinstance(j.get("data"), dict) else {}
+            state = str(data.get("status") or "")
+            if state.startswith("completed"):
+                it["status"] = "done"
+            elif state == "failed" and int(it.get("restarts", 0)) < 2:
+                g, gj = call("POST", f"/scripts/{it['script_id']}/agent/generate", token, {"research": "auto", "visual_cues": "off"}); time.sleep(5)
+                it["restarts"] = int(it.get("restarts", 0)) + 1   # zählt auch einen Neustart mit unklarem Ausgang
+                if g in (200, 202) and gj.get("run_id"):
+                    it["run_id"] = gj.get("run_id")
+                    print(f"neu gestartet {it['script_id']}: {it['title']}")
+                else:
+                    it["status"] = "check"; it["error"] = f"Neustart unklar ({g}) – bitte in Subscribr prüfen"
+                    print(f"::warning::Neustart von {it['script_id']} unklar ({g}) – wird nicht erneut gestartet")
+            elif state == "failed":
+                it["status"] = "failed"; it["error"] = "Lauf dreimal abgebrochen"
+            save(q)
+        for it in todo:
+            st, j = call("POST", f"/channels/{int(it['channel'])}/scripts", token, {
+                "title": it["title"], "topic": it["topic"] + d.get("topic_suffix", ""), "angle": it.get("angle") or d.get("angle", ""),
+                "length": int(it.get("length") or d.get("length", 3200)), "language": it.get("language") or d.get("language", "English")})
+            sid = (j.get("data") if isinstance(j.get("data"), dict) else {}).get("script_id")
+            if st != 201 or not sid:
+                # 0 = Ausgang unklar (Zeitüberschreitung): das Skript kann trotzdem angelegt sein, darum nicht "pending" lassen
+                it["status"] = "check" if st == 0 else "failed"; it["error"] = f"create {st}"
+                print("Fehler beim Anlegen:", it["title"], st); save(q); continue
+            time.sleep(5)
+            g, gj = call("POST", f"/scripts/{sid}/agent/generate", token, {"research": "auto", "visual_cues": "off"})
+            ok = g in (200, 202) and gj.get("run_id")
+            # Ohne run_id (Zeitüberschreitung, unlesbare Antwort) kann die Generierung trotzdem laufen und Credits kosten:
+            # "check" statt "failed", damit nichts doppelt gestartet wird; Mirko prüft das Skript in Subscribr.
+            it.update(status="created" if ok else ("check" if g in (0, 200, 202) else "failed"), script_id=sid, run_id=gj.get("run_id"),
+                      created=datetime.now(timezone.utc).strftime("%Y-%m-%d"))
+            if not ok: it["error"] = f"generate {g}"
+            made += 1; print(f"angelegt {sid} ({g}): {it['title']}")
+            save(q)   # Zwischenstand sichern
+            c = credits(token)
+            if c is not None and c < floor:
+                print(f"Credits {c} unter {floor} – Lauf beendet"); break
+            time.sleep(PAUSE)
+    finally:
+        save(q)
     print(f"Angelegt: {made}, Credits nachher: {credits(token)}")
 
 
