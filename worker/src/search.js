@@ -293,7 +293,7 @@ function mergeHybridCandidates(ftsRows, vectorRows, query, pref, filters) {
 }
 
 export async function classifyQuery(env, q, lang) {
-  if (!env.AI || !env.VEC) return { type: "unavailable", documents: [] };
+  if (!env.AI || !env.VEC || Array.from(String(q || "").trim()).length < 3) return { type: "unavailable", documents: [] };   // zu kurze Anfragen sind keine Inhaltsluecke
   const threshold = Number(env.SEARCH_GAP_THRESHOLD);
   const minimum = Number.isFinite(threshold) && threshold >= 0 && threshold <= 1 ? threshold : 0.35;
   let matches = [];
@@ -503,10 +503,7 @@ function dedupeLanguages(rows, pref) {
     if (!previous || priority(row) > priority(previous) ||
         (priority(row) === priority(previous) && row.rank > previous.rank)) byPath.set(path, row);
   }
-  return [...byPath.values()].sort((a, b) =>
-    (a.hybridScore === undefined && b.hybridScore === undefined
-      ? Number(b.lang === pref && !!pref) - Number(a.lang === pref && !!pref) : 0) ||
-    b.rank - a.rank || a.title.localeCompare(b.title));
+  return [...byPath.values()].sort((a, b) => b.rank - a.rank || a.title.localeCompare(b.title));   // Seitensprache wirkt ueber den Rang, nicht als harte Sortierung
 }
 
 function countFacet(rows, scope, field) {

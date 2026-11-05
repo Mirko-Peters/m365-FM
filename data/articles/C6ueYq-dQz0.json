@@ -84,6 +84,52 @@
      "Sie wünschen zentrale Logs und Metriken zu Fehlern, Latenzen und Last"
     ]
    }
+  ],
+  "quiz": [
+   {
+    "q": "Welches Problem entsteht, wenn Clients jeden Microservice direkt ansprechen?",
+    "opts": [
+     "Clients müssen Adressen, Authentifizierung und Fehlerbehandlung jedes einzelnen Services kennen.",
+     "Die Backend-Services können keine Daten mehr untereinander austauschen.",
+     "Clients können nur noch XML statt JSON verwenden.",
+     "Die Services lassen sich nicht mehr in mehreren Versionen betreiben."
+    ],
+    "a": 0,
+    "why": "Ohne Gateway muss jeder Client wissen, wo Services liegen, wie die Authentifizierung funktioniert und was bei Fehlern zu tun ist."
+   },
+   {
+    "q": "Was passiert, wenn der API-Schlüssel eines Clients kompromittiert wurde?",
+    "opts": [
+     "Alle Backend-Dienste müssen aktualisiert und neu gestartet werden.",
+     "Der Schlüssel wird am Gateway gesperrt und sofort abgelehnt.",
+     "Der Schlüssel läuft erst nach der nächsten Bereitstellung ab.",
+     "Jeder Dienst muss den Schlüssel einzeln in seiner Sperrliste eintragen."
+    ],
+    "a": 1,
+    "why": "Eine Änderung am Gateway genügt: Die nächste Anfrage mit dem Schlüssel wird abgelehnt, kein Dienst muss angepasst werden."
+   },
+   {
+    "q": "Wie reagiert das Gateway bei Lastspitzen und ausgefallenen Dienstinstanzen?",
+    "opts": [
+     "Es schaltet alle Backends ab, bis die Last wieder sinkt.",
+     "Es leitet jede Anfrage an die zuletzt genutzte Instanz weiter.",
+     "Es begrenzt Anfragen pro Client und umgeht per Gesundheitschecks ausgefallene Instanzen.",
+     "Es speichert alle Anfragen und liefert sie erst am nächsten Tag aus."
+    ],
+    "a": 2,
+    "why": "Das Gateway setzt Ratenlimits durch und verteilt Last. Dank Gesundheitschecks schickt es keinen Traffic an nicht erreichbare Instanzen."
+   },
+   {
+    "q": "Wie löst ein Gateway das Problem eines XML-Altsystems und einer JSON-App?",
+    "opts": [
+     "Das Altsystem muss auf JSON umgeschrieben werden.",
+     "Die App wird gezwungen, künftig XML zu senden.",
+     "Beide Systeme tauschen Daten über eine gemeinsame Datenbank aus.",
+     "Das Gateway wandelt JSON in XML um und die Antwort zurück."
+    ],
+    "a": 3,
+    "why": "Durch Anforderungs- und Antworttransformation übersetzt das Gateway die Formate, sodass weder Altsystem noch App geändert werden müssen."
+   }
   ]
  }
 }
