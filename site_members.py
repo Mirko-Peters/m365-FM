@@ -6,7 +6,7 @@ BLOGS = {}   # handle -> Sprachen mit Beiträgen
 from site_i18n import COMM_LANGS, pfx, pfx2, overlay, T
 from datetime import datetime, timezone
 from site_learn import ENTS, esc, _fetch_json, LCSS
-from site_entities import TL, eurl, eid_of
+from site_entities import TL, eurl, eid_of, tlab
 
 PROG_FULL = {"gde": "Google Developer Expert (GDE)", "mvp": "Microsoft Most Valuable Professional (MVP)", "mct": "Microsoft Certified Trainer (MCT)", "rd": "Microsoft Regional Director (RD)", "msa": "Microsoft Student Ambassador (MSA)", "ms_employee": "Microsoft employee", "partner": "Microsoft Partner"}
 PROG = {"gde": ("Google Developer Expert", "Google Developer Expert"), "mvp": ("Microsoft MVP", "Microsoft MVP"), "mct": ("Microsoft Certified Trainer (MCT)", "Microsoft Certified Trainer (MCT)"), "rd": ("Microsoft Regional Director", "Microsoft Regional Director"),
@@ -154,6 +154,16 @@ def mvp_contrib_ld(BASE, p):
     return out
 
 
+def kind_ids(x, kind):
+    """Auswahl eines Profils (Branchen: industries, Job: job_eid) als Liste vorhandener Entitaeten des Typs (nur live veroeffentlichte stehen im Export)."""
+    ids = x.get("industries") if kind == "industry" else ([x["job_eid"]] if x.get("job_eid") else [])
+    return [i for i in dict.fromkeys(ids or []) if (ENTS.get(i) or {}).get("type") == kind]
+
+
+def kind_links(BASE, lang, ids):
+    return ", ".join(f'<a href="{eurl(BASE, lang, i)}">{esc(ENTS[i]["name"])}</a>' for i in ids)
+
+
 def person_ld(BASE, p, orgs_by_handle):
     pid = f"{purl(BASE, 'en', 'u', p['handle'])}#person"
     n = {"@type": "Person", "@id": pid, "name": p["name"], "url": purl(BASE, "en", "u", p["handle"]), "mainEntityOfPage": {"@id": purl(BASE, "en", "u", p["handle"]) + "#profile"}}
@@ -165,6 +175,9 @@ def person_ld(BASE, p, orgs_by_handle):
         n["description"] = p["headline"]
     if p.get("about"):
         n["disambiguatingDescription"] = p["about"][:300]
+    _job = kind_ids(p, "job")
+    if _job:   # Job/Rolle als Entitaet (Occupation) und Titel als Text
+        n["hasOccupation"] = {"@id": eid_of(BASE, _job[0])}
     if p.get("job"):
         n["jobTitle"] = p["job"]
     elif any(x.get("verified") and x["p"] == "mvp" for x in p.get("programs", [])):
@@ -179,7 +192,7 @@ def person_ld(BASE, p, orgs_by_handle):
         n["worksFor"] = {"@id": eid_of(BASE, p["company_eid"])}
     elif p.get("company"):
         n["worksFor"] = {"@type": "Organization", "name": p["company"]}
-    n["knowsAbout"] = [{"@id": eid_of(BASE, e["e"])} for e in p.get("expertise", []) if e["e"] in ENTS]
+    n["knowsAbout"] = [{"@id": eid_of(BASE, e["e"])} for e in p.get("expertise", []) if e["e"] in ENTS] + [{"@id": eid_of(BASE, i)} for i in kind_ids(p, "industry")]
     creds = []
     for c in sorted(p.get("certs", []), key=lambda c: -c.get("endorsed", 0)):
         if c["e"] in ENTS and c.get("verified"):
@@ -227,7 +240,7 @@ def org_ld(BASE, o, people_by_handle):
     sz = SIZE_N.get(o.get("size") or "")
     if sz:
         n["numberOfEmployees"] = {"@type": "QuantitativeValue", "minValue": sz[0], **({"maxValue": sz[1]} if sz[1] else {})}
-    n["knowsAbout"] = [{"@id": eid_of(BASE, e["e"])} for e in o.get("expertise", []) if e["e"] in ENTS]
+    n["knowsAbout"] = [{"@id": eid_of(BASE, e["e"])} for e in o.get("expertise", []) if e["e"] in ENTS] + [{"@id": eid_of(BASE, i)} for i in kind_ids(o, "industry")]
     emp = [{"@id": f"{purl(BASE, 'en', 'u', m['handle'])}#person"} for m in o.get("members", []) if m["handle"] in people_by_handle]
     if emp:
         n["employee"] = emp
@@ -318,7 +331,10 @@ def build(g, people, orgs, extra=None):
             facts = []
             if p.get("job") or p.get("company") or org:
                 comp = f'<a href="{purl(BASE, lang, "c", org["handle"])}">{esc(org["name"])}</a>' if org and org["handle"] in ob else (f'<a href="{eurl(BASE, lang, p["company_eid"])}">{esc(ENTS[p["company_eid"]]["name"])}</a>' if p.get("company_eid") in ENTS else esc(p.get("company", "")))
-                facts.append((s["company"], esc(p.get("job", "")) + (" · " if p.get("job") and comp else "") + comp))
+                _jl = kind_links(BASE, lang, kind_ids(p, "job")) or esc(p.get("job", ""))
+                facts.append((s["company"], _jl + (" · " if _jl and comp else "") + comp))
+            if kind_ids(p, "industry"):
+                facts.append((tlab(lang, "industry"), kind_links(BASE, lang, kind_ids(p, "industry"))))
             if p.get("country"):
                 facts.append((s["country"], esc(p["country"])))
             _bl = BLOGS.get(p["handle"])
@@ -359,6 +375,8 @@ def build(g, people, orgs, extra=None):
             facts = [(s["size"], esc(o["size"]))] if o.get("size") else []
             if o.get("country"):
                 facts.append((s["country"], esc(o["country"])))
+            if kind_ids(o, "industry"):
+                facts.append((tlab(lang, "industry"), kind_links(BASE, lang, kind_ids(o, "industry"))))
             if o.get("website"):
                 facts.append((s["site"], f'<a href="{esc(o["website"])}" rel="nofollow ugc noopener" target="_blank">{esc(o["website"].replace("https://", "").rstrip("/"))}</a>'))
             if o.get("ms"):

@@ -6,6 +6,7 @@ import { baseIds, knownIds, validate, trustedUser, entityMap } from "./entities.
 import { findExperts } from "./experts.js";
 import { computeLevels } from "./levels.js";
 import { ensureDirectoryCols, geocodeAddress, recordGeocodeStatus } from "./directory.js";
+import { checkKindIds } from "./kinds.js";
 import { publicKindSql, publicItemSql } from "./feedpolicy.js";
 
 export const PROGRAMS = ["mvp", "mct", "rd", "msa", "ms_employee", "partner", "gde"];   // gde: Google Developer Experts (MVP-Tracker, format=gde)
@@ -167,10 +168,12 @@ async function personView(db, uid, viewer) {
   const recs = (await q("SELECT r.id,r.relation,r.body,r.created,u.name,(SELECT handle FROM profiles WHERE user_id=r.author_id AND public=1) h FROM recommendations r JOIN users u ON u.id=r.author_id AND u.banned=0 WHERE r.subject_id=? AND r.status='live' ORDER BY r.created DESC LIMIT 30", uid)).map((r) => ({ id: r.id, relation: r.relation, body: r.body, created: r.created, by: { name: r.name, handle: r.h || "" } }));
   const im = await db.prepare("SELECT updated FROM images WHERE kind='u' AND owner_id=?").bind(uid).first();
   const pce = (await db.prepare("SELECT eid FROM profile_company WHERE user_id=?").bind(uid).first())?.eid || "";
+  const industries = (await q("SELECT eid FROM profile_industry WHERE user_id=? ORDER BY rowid", uid).catch(() => [])).map((r) => r.eid);   // Branchen (Entitaeten vom Typ industry) und Job/Rolle (Typ job), 0030
+  const jobEid = (await db.prepare("SELECT eid FROM profile_job WHERE user_id=?").bind(uid).first().catch(() => null))?.eid || "";
   const pv = await db.prepare("SELECT * FROM profile_private WHERE user_id=?").bind(uid).first(), CF = ["city", "zip", "street", "email", "phone"];
   const contact = {}; let priv = null;
   if (pv) { for (const k of CF) if (pv["vis_" + k] === "all" && pv[k]) contact[k] = pv[k]; if (+viewer === uid) priv = { ...Object.fromEntries([...CF.map((k) => [k, pv[k]]), ...CF.map((k) => ["vis_" + k, pv["vis_" + k]])]), map_public: !!pv.map_public }; }
-  return { type: "u", i18n: await readI18n(db, uid), contact, ...(priv ? { private: priv } : {}), img: im?.updated || 0, company_eid: pce, id: uid, handle: p.handle, name: p.name, bio: p.bio, headline: p.headline, about: p.about, company: p.company, job: p.job, country: p.country, public: !!p.public, show_org: !!p.show_org,
+  return { type: "u", i18n: await readI18n(db, uid), contact, ...(priv ? { private: priv } : {}), img: im?.updated || 0, company_eid: pce, industries, job_eid: jobEid, id: uid, handle: p.handle, name: p.name, bio: p.bio, headline: p.headline, about: p.about, company: p.company, job: p.job, country: p.country, public: !!p.public, show_org: !!p.show_org,
     expertise: exp.map((e) => ({ ...e, verified: !!e.verified, me: !!e.me, ev: evs[e.e] || {} })), programs: programs.map((x) => ({ ...x, verified: !!x.verified })), certs, channels, org, contrib, mvp_contributions: mvpContributions, counts, badges, recs,
     items: await itemsOf(db, "i.owner_type='u' AND i.owner_id=?", [uid], viewer, 8) };
 }
@@ -193,7 +196,8 @@ async function orgView(db, oid, viewer, showPrivate = false) {
   const im = await db.prepare("SELECT updated FROM images WHERE kind='o' AND owner_id=?").bind(oid).first();
   const oer = await db.prepare("SELECT * FROM org_entity WHERE org_id=?").bind(oid).first(), oe = oer?.eid || "";   // confirmed (0026): nur bestaetigte Verknuepfung zeigt das Team auf der Entitaetsseite
   const locations = await q(`SELECT id,label,address,city,country,public,lat,lng,geo_precision FROM org_locations WHERE org_id=? ${showPrivate ? "" : "AND public=1"} ORDER BY id`, oid);
-  return { type: "o", eid: oe, eid_ok: !!(oe && oer?.confirmed), img: im?.updated || 0, id: o.id, handle: o.handle, name: o.name, tagline: o.tagline, about: o.about, website: o.website, country: o.country, size: o.size, public: !!o.public, locations,
+  const industries = (await q("SELECT eid FROM org_industry WHERE org_id=? ORDER BY rowid", oid).catch(() => [])).map((r) => r.eid);
+  return { type: "o", eid: oe, industries, eid_ok: !!(oe && oer?.confirmed), img: im?.updated || 0, id: o.id, handle: o.handle, name: o.name, tagline: o.tagline, about: o.about, website: o.website, country: o.country, size: o.size, public: !!o.public, locations,
     expertise: (await q("SELECT eid e,level,verified FROM expertise WHERE owner_type='o' AND owner_id=?", oid)).map((e) => ({ ...e, verified: !!e.verified })),
     programs: (await q("SELECT program p,year,url,verified FROM programs WHERE owner_type='o' AND owner_id=?", oid)).map((x) => ({ ...x, verified: !!x.verified })),
     channels: await q("SELECT kind,url,feed,followers FROM channels WHERE owner_type='o' AND owner_id=?", oid),
@@ -256,10 +260,12 @@ export async function refreshProfilesExport(env) {
     const one = async (u) => {
       const v = await personView(db, u.user_id, 0); if (!v) return null;
       v.expertise = v.expertise.filter((e) => emap.has(e.e));
+      v.industries = (v.industries || []).filter((e) => emap.get(e)?.type === "industry");   // oeffentlich nur live veroeffentlichte Entitaeten
+      if (v.job_eid && emap.get(v.job_eid)?.type !== "job") v.job_eid = "";
       delete v.id; return v;
     };
     for (let k = 0; k < us.length; k += 6) for (const v of await Promise.all(us.slice(k, k + 6).map((u) => one(u).catch((e) => { errs.push(String((e && e.message) || e).slice(0, 200)); return null; })))) if (v) people.push(v);   // in Gruppen parallel, Reihenfolge bleibt; ein defektes Profil stoppt den Export nicht
-    for (const o of os) { const v = await orgView(db, o.id, 0); if (v) { delete v.id; orgs.push(v); } }
+    for (const o of os) { const v = await orgView(db, o.id, 0); if (v) { delete v.id; v.industries = (v.industries || []).filter((e) => emap.get(e)?.type === "industry"); orgs.push(v); } }
   const out = { people, orgs, ...(errs.length ? { failed: errs.length, errors: errs.slice(0, 3) } : {}) };   // Fehler einzelner Profile bleiben sichtbar (Diagnose), der Seitenbau ignoriert die Felder
   await db.prepare("INSERT INTO export_cache(k,v,updated) VALUES('profiles',?,?) ON CONFLICT(k) DO UPDATE SET v=excluded.v,updated=excluded.updated").bind(JSON.stringify(out), now()).run();
   return out;
@@ -385,11 +391,15 @@ export async function handleProfiles(env, request, url, path, user, J) {
       const u = cleanUrl(c?.url, null); if (!ID.test(c?.e || "") || !known.has(c.e) || u === null) return J({ error: "bad_cert" }, 400);
       certs.push({ e: c.e, year: Math.min(2100, Math.max(0, parseInt(c.year) || 0)), url: u });
     }
+    const ind = b.industries === undefined ? null : await checkKindIds(env, user, b.industries, "industry", 5); if (ind?.err) return J({ error: ind.err }, 400);
+    const jb = b.job_eid === undefined ? null : await checkKindIds(env, user, b.job_eid ? [b.job_eid] : [], "job", 1); if (jb?.err) return J({ error: jb.err }, 400);
     await db.prepare(`INSERT INTO profiles(user_id,public,handle,headline,about,company,job,country,show_org,updated) VALUES(?,?,?,?,?,?,?,?,?,?)
       ON CONFLICT(user_id) DO UPDATE SET public=excluded.public,handle=excluded.handle,headline=excluded.headline,about=excluded.about,company=excluded.company,job=excluded.job,country=excluded.country,show_org=excluded.show_org,updated=excluded.updated`)
       .bind(user.id, isPublic, handle || null, txt(b.headline, 100), long(b.about, 1500), txt(b.company, 80), txt(b.job, 80), txt(b.country, 60), b.show_org === false ? 0 : 1, now()).run();
     await db.prepare("UPDATE users SET bio=? WHERE id=?").bind(txt(b.headline, 100), user.id).run();
     if (b.i18n && typeof b.i18n === "object") await saveI18n(db, user.id, cleanI18n(b.i18n));
+    if (ind) await db.batch([db.prepare("DELETE FROM profile_industry WHERE user_id=?").bind(user.id), ...ind.list.map((e) => db.prepare("INSERT INTO profile_industry(user_id,eid) VALUES(?,?)").bind(user.id, e))]);
+    if (jb) await db.batch(jb.list.length ? [db.prepare("INSERT INTO profile_job(user_id,eid) VALUES(?,?) ON CONFLICT(user_id) DO UPDATE SET eid=excluded.eid").bind(user.id, jb.list[0])] : [db.prepare("DELETE FROM profile_job WHERE user_id=?").bind(user.id)]);
     const ce = String(b.company_eid || "").toLowerCase();
     if (ce) { if (ID.test(ce) && ((await baseIds(env)).has(ce) || (await db.prepare("SELECT 1 x FROM entity_rev WHERE eid=? AND status IN ('live','pending')").bind(ce).first()))) await db.prepare("INSERT INTO profile_company(user_id,eid) VALUES(?,?) ON CONFLICT(user_id) DO UPDATE SET eid=excluded.eid").bind(user.id, ce).run(); }
     else await db.prepare("DELETE FROM profile_company WHERE user_id=?").bind(user.id).run();
@@ -547,6 +557,7 @@ export async function handleProfiles(env, request, url, path, user, J) {
     const ch = await checkChannels(b.channels); if (ch.err) return J({ error: ch.err }, 400);
     const ex = await checkExpertise(env, b.expertise); if (ex.err) return J({ error: ex.err }, 400);
     const pr = checkPrograms(b.programs, true); if (pr.err) return J({ error: pr.err }, 400);
+    const oind = b.industries === undefined ? null : await checkKindIds(env, user, b.industries, "industry", 5); if (oind?.err) return J({ error: oind.err }, 400);
     const locations = cleanOrgLocations(b.locations);
     const size = SIZES.includes(b.size) ? b.size : "";
     const wantEid = b.eid === undefined || b.eid === null ? undefined : String(b.eid).toLowerCase().trim();   // Firmen-Entitaet waehlen (leer = Verknuepfung loesen)
@@ -586,6 +597,7 @@ export async function handleProfiles(env, request, url, path, user, J) {
       if (wantEid === "" && ["owner", "admin"].includes(mem.role)) await db.prepare("DELETE FROM org_entity WHERE org_id=?").bind(o.id).run();   // Verknuepfung loesen
     }
     if (link) await setOrgEntity(db, o.id, link.eid, link.confirmed);
+    if (oind) await db.batch([db.prepare("DELETE FROM org_industry WHERE org_id=?").bind(o.id), ...oind.list.map((e) => db.prepare("INSERT INTO org_industry(org_id,eid) VALUES(?,?)").bind(o.id, e))]);
     if (Array.isArray(b.locations)) await saveOrgLocations(env, o.id, locations);
     await replaceLists(db, "o", o.id, { exp: ex.list, prog: pr.list, chan: ch.list, certs: null });
     return J({ ok: true });
@@ -658,6 +670,7 @@ export async function deleteUserData(db, id) {
   const mailAddress = await db.prepare("SELECT email FROM mail_addr WHERE user_id=?").bind(id).first().catch(() => null);
   await db.prepare("DELETE FROM recommendations WHERE author_id=? OR subject_id=?").bind(id, id).run();
   await db.prepare("DELETE FROM profile_company WHERE user_id=?").bind(id).run();
+  await db.prepare("DELETE FROM profile_industry WHERE user_id=?").bind(id).run(); await db.prepare("DELETE FROM profile_job WHERE user_id=?").bind(id).run();
   await db.prepare("DELETE FROM images WHERE kind='u' AND owner_id=?").bind(id).run();
   const own = (await db.prepare("SELECT org_id FROM org_members WHERE user_id=? AND role='owner'").bind(id).all()).results || [];
   const ops = [];

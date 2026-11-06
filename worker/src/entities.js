@@ -2,9 +2,10 @@
 import { cleanText, rateLimit } from "./util.js";
 import { entityTranslations } from "./autotr.js";
 import { stats, evalBadges } from "./badges.js";
+import { findDuplicate } from "./kinds.js";
 
 const ID = /^[a-z0-9-]{2,48}$/;
-export const TYPES = ["product", "platform", "concept", "org", "person", "cert", "event", "media", "category"];
+export const TYPES = ["product", "platform", "concept", "org", "person", "cert", "event", "media", "category", "industry", "job"];
 export const PRED = ["instance_of", "part_of", "developed_by", "related_to", "requires", "covers", "created_by", "organized_by", "similar_to"];
 const TRUST_POINTS = 25;
 const now = () => Math.floor(Date.now() / 1000);
@@ -187,6 +188,11 @@ export async function validate(env, id, raw) {
   d.outdated = !!raw.outdated;   // nicht mehr aktuell: Seite bleibt, wird aber standardmaessig ausgeblendet
   d.replaced_by = String(raw.replaced_by || "").trim();
   if (d.replaced_by) { if (!ID.test(d.replaced_by) || d.replaced_by === id || !(known.has(d.replaced_by) || dbIds.has(d.replaced_by))) return bad("bad_relation"); d.outdated = true; }
+  if (raw.industries !== undefined) {   // Branchen einer Firma (Entitaeten vom Typ industry), Reihenfolge = Gewicht
+    const inds = [];
+    for (const x of (Array.isArray(raw.industries) ? raw.industries : []).slice(0, 8)) { const t = String(x || ""); if (!ID.test(t) || !(known.has(t) || dbIds.has(t))) return bad("bad_industry"); if (!inds.includes(t)) inds.push(t); }
+    if (inds.length) d.industries = inds;
+  }
   for (const k of ["same_as", "job", "start", "end"]) if (raw[k] !== undefined && k !== "same_as") d[k] = txt(raw[k], 40);
   return { data: d };
 }
@@ -214,6 +220,7 @@ export async function handleEntity(env, request, url, path, user, J) {
     if (!ID.test(id)) return J({ error: "bad_id" }, 400);
     if (!(await rateLimit(db, `ent:h:${user.id}`, 8, 3600)) || !(await rateLimit(db, `ent:d:${user.id}`, 30, 86400))) return J({ error: "rate_limit" }, 429);
     const v = await validate(env, id, b.data || {}); if (v.err) return J({ error: v.err }, 400);
+    const dup = await findDuplicate(env, id, v.data); if (dup) return J({ error: "duplicate", id: dup }, 409);   // Branche/Job: gleicher normalisierter Name oder Alias existiert schon
     const data = JSON.stringify(v.data), summary = cleanText(b.summary || "", 140).replace(/[<>]/g, "");
     const cur = await liveOf(db, id); if (cur && cur.data === data) return J({ error: "unchanged" }, 400);
     const t = now();

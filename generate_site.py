@@ -1542,6 +1542,7 @@ def build():
     for _x in (LRN._fetch_json(f"{COMMUNITY_API}/api/qa/export") or {}).get("items", []):
         ENT.FAQ.setdefault(_x["eid"], []).append(_x)
     ENT.CLAIMS.update({c["eid"]: c["handle"] for c in _cl}); MEM.CLAIMED.update({c["handle"]: c["eid"] for c in _cl})
+    ENT.set_kinds(_orgs, _people)   # Branchen und Jobs: Mitglieder und Firmen auf den Entitaetsseiten
     ENT.set_teams(_orgs, _people, {p["handle"]: MEM.person_entity(p["handle"]) for p in _people})   # Mitarbeitende der Community-Firma -> Personen auf der verknuepften Firmen-Entitaet
     import site_updates as _SU
     _SU.load(COMMUNITY_API)
