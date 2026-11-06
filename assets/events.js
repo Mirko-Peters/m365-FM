@@ -108,6 +108,43 @@
       });
       sec.insertBefore(box, sec.children[2] || null); });
   }
+  var ES = M365L(de, "events.ES", {"lab": "Name oder Website des Events", "hint": "Zuerst suchen: Gibt es das Event schon, brauchst du kein neues Formular.", "exists": "Gibt es schon: ", "open": "Zur Eventseite", "take": "Übernehmen", "no": "Nein, mein Event ist nicht dabei", "cont": "Weiter: Event neu anlegen", "none": "Kein passendes Event gefunden.", "claimsent": "Anfrage gesendet – die Redaktion prüft sie.", "err": "Nicht möglich (bereits vergeben oder Limit erreicht)."}, {"lab": "Event name or website", "hint": "Search first: if the event already exists you do not need a new form.", "exists": "Already exists: ", "open": "Open event page", "take": "Take over", "no": "No, my event is not listed", "cont": "Continue: create a new event", "none": "No matching event found.", "claimsent": "Request sent – the editors will review it.", "err": "Not possible (already claimed or limit reached)."});
+  // Neues Event: zuerst suchen (Community-Events + Event-Entitaeten), das volle Formular erst danach
+  var evCache = null;
+  function loadEvents() {
+    if (evCache) return Promise.resolve(evCache);
+    return Promise.all([fetch(X.api + "/api/events/export").then(function (r) { return r.json(); }).catch(function () { return {}; }), fetch(X.base + "/entities.json", { cache: "no-cache" }).then(function (r) { return r.json(); }).catch(function () { return {}; })]).then(function (a) {
+      var list = (a[0].events || []).map(function (e) { return { id: e.handle, name: e.title, web: e.url || "", type: "event", src: "community" }; });
+      (a[1].entities || []).forEach(function (e) { if (e.type === "event") list.push({ id: e.id, name: e.name, aliases: e.aliases, web: e.web, same_as: e.same_as, type: "event", src: "entity" }); });
+      evCache = list; return list;
+    });
+  }
+  function eventStart(orgs, reload) {
+    var EM = window.M365EntityMatch, nw = h("details", { class: "wk-edit" }, [h("summary", { text: "+ " + Q.newev })]), st1 = h("div", { class: "wk-form" }), ff = h("div", { hidden: "" });
+    var q = inp("", 120), res = h("div", { role: "status", "aria-live": "polite" }), jm = h("p", { class: "wk-msg", role: "status", "aria-live": "polite" }), t;
+    q.setAttribute("aria-label", ES.lab); q.setAttribute("placeholder", ES.lab);
+    function showForm() {
+      var v = q.value.trim(), isSite = EM && EM.domainOf(v), ev = { title: isSite ? "" : v, url: isSite ? (/^https?:/i.test(v) ? v : "https://" + v) : "", start: "", sessions: [] };
+      st1.hidden = true; ff.textContent = ""; ff.appendChild(eventCard(ev, orgs, reload).lastChild); ff.hidden = false;
+    }
+    function search() {
+      var v = q.value.trim(); res.textContent = ""; jm.textContent = ""; if (v.length < 2 || !EM) return;
+      loadEvents().then(function (list) {
+        if (q.value.trim() !== v) return; var m = EM.match(v, list, "event"), hits = m.entity ? [m.entity] : m.candidates;
+        hits.forEach(function (e) {
+          var link = h("a", { href: e.src === "community" ? (de ? "/de" : "") + "/community/events/" + e.id + "/" : X.base + (de ? "/de" : "") + "/entity/" + e.id + "/", text: ES.open }), kids = [ES.exists + e.name + " · ", link];
+          if (e.src === "entity") { kids.push(" "); kids.push(h("button", { type: "button", class: "btn", text: ES.take, onclick: function () { api("/api/entity/claim", { method: "POST", body: { eid: e.id } }).then(function (r) { jm.textContent = (r.j || {}).ok ? ES.claimsent : ES.err; }); } })); }
+          res.appendChild(h("p", {}, kids));
+        });
+        if (!hits.length) res.appendChild(h("p", { class: "cmut", text: ES.none }));
+        res.appendChild(h("p", {}, [h("button", { type: "button", class: hits.length ? "btn" : "btn main", text: hits.length ? ES.no : ES.cont, onclick: showForm })]));
+      });
+    }
+    q.addEventListener("input", function () { clearTimeout(t); t = setTimeout(search, 300); });
+    [h("p", { class: "cmut", text: ES.hint }), lab(ES.lab, q), res, jm].forEach(function (x) { st1.appendChild(x); }); nw.appendChild(st1); nw.appendChild(ff);
+    if (!EM) showForm();
+    return nw;
+  }
   function proposeBox(want) {
     var sec = h("div", { class: "ccard" }, [h("h3", { text: Q.propose })]);
     fetch(X.api + "/api/events/export").then(function (r) { return r.json(); }).then(function (j) {
@@ -148,7 +185,7 @@
     api("/api/events/mine").then(function (r) {
       var j = r.j || {}; sec.appendChild(h("h3", { text: Q.mine }));
       (j.events || []).forEach(function (e) { sec.appendChild(eventCard(e, j.orgs, reload)); });
-      var nw = h("details", { class: "wk-edit" }, [h("summary", { text: "+ " + Q.newev })]); nw.appendChild(eventCard({ title: "", start: "", sessions: [] }, j.orgs, reload).lastChild); sec.appendChild(nw);
+      sec.appendChild(eventStart(j.orgs, reload));
       sec.appendChild(proposeBox(want));
       api("/api/events/for-sponsors").then(function (r3) { if (r3.s !== 200) return; var box = h("div", {}, [h("h3", { text: Q.forsp })]), l = r3.j.events || [];
         l.sort(function (a, b) { return (b.match ? 1 : 0) - (a.match ? 1 : 0); });

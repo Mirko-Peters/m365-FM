@@ -37,3 +37,12 @@ test("Vorschlag fuer Community-Firma: Domain vor Name, nur eindeutig", () => {
   assert.equal(M.suggest("Unbekannt", "https://unbekannt.io", ents), null);
   assert.equal(M.slug("Müller & Söhne GmbH"), "muller-sohne");
 });
+test("Schritt 1 (Firma/Event): Name oder Website findet vorhandene Einträge, getrennt nach Typ", () => {
+  const evs = [{ id: "m365con", type: "event", name: "M365Con 2027", web: "https://m365con.net" }, { id: "summit-berlin", type: "event", name: "Summit Berlin", web: "https://summit.example.com/2027" }, { id: "summit-hamburg", type: "event", name: "Summit Hamburg" }];
+  assert.equal(M.match("https://m365con.net/tickets", evs, "event").entity?.id, "m365con");
+  assert.equal(M.match("M365Con", evs, "event").entity?.id, "m365con");
+  assert.equal(M.match("m365con 2027", evs, "event").entity?.id, "m365con");
+  const many = M.match("summit", evs, "event"); assert.equal(many.entity, null); assert.equal(many.candidates.length, 2);
+  assert.equal(M.match("ifakt", [...ents, ...evs], "event").candidates.length, 0);   // Firma taucht nicht bei Events auf
+  assert.equal(M.match("ifakt.de", [...ents, ...evs], "org").entity?.id, "ifakt");
+});
