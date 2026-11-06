@@ -2,11 +2,13 @@
    window.M365ADM = {api, base} */
 (function () {
   var C = window.M365ADM || {}, API = C.api, BASE = C.base || "", root = document.getElementById("adm"); if (!root || !API) return;
+  // mailto-Link: Adresse kodieren, damit ?cc=/&body= aus einer eingeschleusten Adresse nicht als Mail-Parameter wirken
+  function mailto(a) { return "mailto:" + encodeURIComponent(String(a || "")).replace(/%40/g, "@"); }
   function h(t, a, kids) { var e = document.createElement(t); a = a || {}; for (var k in a) { if (k === "text") e.textContent = a[k]; else if (k === "class") e.className = a[k]; else if (k.slice(0, 2) === "on") e[k] = a[k]; else e.setAttribute(k, a[k]); } (kids || []).forEach(function (x) { if (x != null) e.appendChild(typeof x === "string" ? document.createTextNode(x) : x); }); return e; }
   function api(p, o) { o = o || {}; o.credentials = "include"; o.headers = Object.assign({ "x-requested-with": "m365" }, o.headers || {}); if (o.body && typeof o.body !== "string") { o.body = JSON.stringify(o.body); o.headers["content-type"] = "application/json"; } return fetch(API + p, o).then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { s: r.status, j: j }; }); }); }
   var TYPES = { product: "Produkt", platform: "Plattform", concept: "Konzept", org: "Firma", person: "Person", cert: "Zertifikat", event: "Event", media: "Medium", category: "Kategorie" };
   var ERR = { bad_name: "Name zu kurz", bad_type: "Typ fehlt", too_short: "Kurzbeschreibung fehlt (mindestens 20 Zeichen in Englisch oder Deutsch)", too_long: "Kurzbeschreibung zu lang (höchstens 300 Zeichen)", bad_url: "Eine Adresse ist ungültig (nur https, Docs nur microsoft.com, azure.com oder github.com)", bad_qid: "Wikidata-ID muss wie Q12345 aussehen", bad_relation: "Eine Beziehung zeigt auf eine unbekannte Entität", unchanged: "Nichts geändert", rate_limit: "Zu viele Änderungen in kurzer Zeit, bitte später", login: "Bitte anmelden", forbidden: "Nur für Admins", email_required: "Kein verifizierter E-Mail-Empfang für diese Person hinterlegt.", mail_off: "E-Mail-Versand ist nicht verfügbar; die Anfrage bleibt offen." };
-  var tabs = [["ov", "Übersicht"], ["fr", "Freigaben"], ["sponsor", "Sponsor-Anfragen"], ["slinks", "Sponsorlinks"], ["ads", "Werbung"], ["tr", "Übersetzungen"], ["ent", "Entitäten"], ["db", "Datenbank"], ["sw", "Schalter"]], panes = {}, bar = h("div", { class: "adm-tabs", role: "tablist" });
+  var tabs = [["ov", "Übersicht"], ["fr", "Freigaben"], ["sponsor", "Sponsor-Anfragen"], ["slinks", "Sponsorlinks"], ["ads", "Werbung"], ["mk", "Mediadaten-Anfragen"], ["tr", "Übersetzungen"], ["ent", "Entitäten"], ["db", "Datenbank"], ["sw", "Schalter"]], panes = {}, bar = h("div", { class: "adm-tabs", role: "tablist" });
   var LANGN = { de: "Deutsch", fr: "Französisch", es: "Spanisch", it: "Italienisch", nl: "Niederländisch", pt: "Portugiesisch", pl: "Polnisch", id: "Indonesisch", ru: "Russisch", uk: "Ukrainisch", ar: "Arabisch", he: "Hebräisch", ja: "Japanisch", ko: "Koreanisch", en: "Englisch" };
   var KINDN = { lblog: "Blog (früher)", blog: "Blog (Community)", podcast: "Podcast", video: "Video", notes: "Show Notes", entity: "Entität" };
   function ago(t) { if (!t) return "–"; var d = Math.round(Date.now() / 1000 - t); return d < 90 ? d + " s" : d < 5400 ? Math.round(d / 60) + " min" : d < 172800 ? Math.round(d / 3600) + " h" : Math.round(d / 86400) + " d"; }
@@ -44,6 +46,7 @@
     sponsor: function () { sponsorRequests(); },
     slinks: function () { sponsorLinks(); },
     ads: function () { adsAdmin(); },
+    mk: function () { mediakitLeads(); },
     db: function () { overview(function (o) { var p = panes.db, d = o.db, m = h("p", { class: "adm-msg" }); p.textContent = "";
       p.appendChild(h("h2", { text: "Umzug in die Datenbank" }));
       var miss = d.entities_file == null ? null : Math.max(0, d.entities_file - (d.entities_db || 0));
@@ -127,6 +130,34 @@
     return dl;
   }
 
+  function mediakitLeads() {   // Mediadaten-Anfragen (Leads): personenbezogen, nur Admin; Werbe-Anfragen (ad_leads) stehen im Reiter Werbung
+    var p = panes.mk, rows = [], COLS = ["Datum", "Name", "Firma", "E-Mail", "Sprache", "Herkunft", "Mail gesendet"];
+    var filter = h("input", { type: "search", "aria-label": "Anfragen filtern", placeholder: "Filter (Name, Firma, E-Mail, Herkunft)" }), msgEl = h("p", { class: "adm-msg" }), count = h("span", { class: "mut" });
+    var csvBtn = h("button", { type: "button", class: "btn", text: "CSV exportieren" }), body = h("tbody");
+    function day(t) { return t ? new Date(t * 1000).toISOString().slice(0, 10) : ""; }
+    function sent(x) { return x.sent ? "ja" : "nein" + (x.err ? " (" + x.err + ")" : ""); }
+    function view() {
+      var q = filter.value.trim().toLowerCase();
+      var list = rows.filter(function (x) { return !q || [x.name, x.company, x.email, x.source, x.lang, x.err].join(" ").toLowerCase().indexOf(q) >= 0; });
+      body.textContent = "";
+      list.forEach(function (x) { body.appendChild(h("tr", {}, [h("td", { text: day(x.created) }), h("td", { text: x.name }), h("td", { text: x.company }), h("td", {}, [h("a", { href: mailto(x.email), text: x.email })]), h("td", { text: x.lang }), h("td", { text: x.source }), h("td", { text: sent(x) })])); });
+      count.textContent = list.length + " von " + rows.length; csvBtn._list = list;
+    }
+    function cell(v) { v = String(v == null ? "" : v); if (/^[=+\-@\t\r]/.test(v)) v = "'" + v; return '"' + v.replace(/"/g, '""') + '"'; }
+    csvBtn.onclick = function () {
+      var lines = [COLS.join(",")].concat((csvBtn._list || []).map(function (x) { return [day(x.created), x.name, x.company, x.email, x.lang, x.source, sent(x)].map(cell).join(","); }));
+      var a = h("a", { href: URL.createObjectURL(new Blob(["\ufeff" + lines.join("\r\n")], { type: "text/csv;charset=utf-8" })), download: "m365fm-mediadaten-anfragen.csv" }); document.body.appendChild(a); a.click(); a.remove();
+    };
+    filter.oninput = view;
+    p.textContent = "";
+    p.append(h("h2", { text: "Mediadaten-Anfragen (Leads)" }), h("p", { class: "mut", text: "Personenbezogene Daten, nur für Admins. Neueste zuerst, höchstens 200. Werbe-Anfragen der Banner-Formulare stehen im Reiter Werbung unter Leads." }), filter, " ", csvBtn, " ", count, msgEl,
+      h("div", { style: "overflow-x:auto" }, [h("table", { class: "adm-tbl" }, [h("thead", {}, [h("tr", {}, COLS.map(function (c) { return h("th", { text: c }); }))]), body])]));
+    api("/api/admin/mediakit").then(function (r) {
+      if (r.s !== 200) { msg(msgEl, ERR[(r.j || {}).error] || "Fehler " + r.s, true); return; }
+      rows = (r.j.items || []).slice().sort(function (a, b) { return (b.created || 0) - (a.created || 0) || (b.id || 0) - (a.id || 0); }); view();
+    });
+  }
+
   function sponsorRequests() {
     var p = panes.sponsor, filter = h("select", { "aria-label": "Status filtern" }), msgEl = h("p", { class: "adm-msg" });
     var table = h("table", { class: "adm-tbl" }), head = h("thead"), body = h("tbody"), prev = h("button", { type: "button", class: "btn", text: "Zurück" }), next = h("button", { type: "button", class: "btn", text: "Weiter" }), count = h("span", { class: "mut" });
@@ -153,7 +184,7 @@
         });
       });
       var main = h("tr", {}, [h("td", { style: NB, text: when }), h("td", { style: NB, text: x.company }), h("td", { style: NB, text: x.name }),
-        h("td", { style: NB }, [x.email ? h("a", { href: "mailto:" + x.email, text: x.email }) : "–"]),
+        h("td", { style: NB }, [x.email ? h("a", { href: mailto(x.email), text: x.email }) : "–"]),
         h("td", { style: NB }, [LANGN[lang] ? LANGN[lang] + " (" + lang + ")" : lang || "–", page ? h("div", { class: "mut", text: page }) : null]),
         h("td", { style: NB }, pkgCell), h("td", { style: NB }, [bullets(topics)]), h("td", { style: NB + ";white-space:nowrap" }, money.length ? money : ["–"]), h("td", { style: NB }, [state])]);
       var detail = h("tr", {}, [h("td", { colspan: String(COLS.length), style: "padding-top:0" }, [
