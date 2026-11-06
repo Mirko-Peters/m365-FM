@@ -17,7 +17,7 @@ T = {
              "rate_limit": "Too many requests – please try again tomorrow.", "default": "Sending failed. Please try again later or write to mirko.peters@m365.fm."},
         inside="What's inside", items=["Reach per channel with source and period", "Audience: who listens, watches and reads", "Channels and formats: podcast, video, articles, community, events", "Sponsorship and partnership options (always labelled)", "Contact for interviews, sponsorships and projects"],
         privacy="Privacy", privacy_t="We store name, company and e-mail to send the PDF and to answer follow-up questions. Details: ", privacy_l="privacy policy",
-        also="Also interesting", sponsor="Sponsorship packages", publishers="For journalists, editors and PR", services="All services",
+        also="Also interesting", ads="Ad placements (book online)", sponsor="Sponsorship packages", publishers="For journalists, editors and PR", services="All services",
     ),
     "de": dict(
         title="M365.FM-Mediadaten – Zielgruppe, Reichweite und Formate",
@@ -31,7 +31,7 @@ T = {
              "rate_limit": "Zu viele Anfragen – bitte morgen erneut versuchen.", "default": "Senden fehlgeschlagen. Bitte später erneut versuchen oder an mirko.peters@m365.fm schreiben."},
         inside="Das steckt drin", items=["Reichweite je Kanal mit Quelle und Zeitraum", "Zielgruppe: wer zuhört, zuschaut und liest", "Kanäle und Formate: Podcast, Video, Artikel, Community, Events", "Sponsoring- und Partnerschaftsmöglichkeiten (immer gekennzeichnet)", "Kontakt für Interviews, Sponsorings und Projekte"],
         privacy="Datenschutz", privacy_t="Wir speichern Name, Firma und E-Mail, um das PDF zu senden und Rückfragen zu beantworten. Details: ", privacy_l="Datenschutzerklärung",
-        also="Auch interessant", sponsor="Sponsoring-Pakete", publishers="Für Journalisten, Redaktionen und PR", services="Alle Services",
+        also="Auch interessant", ads="Werbeplätze (online buchen)", sponsor="Sponsoring-Pakete", publishers="Für Journalisten, Redaktionen und PR", services="Alle Services",
     ),
 }
 
@@ -39,8 +39,8 @@ CSS = """<style>
 .mk-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:28px;align-items:start;margin:28px 0}
 @media(max-width:820px){.mk-grid{grid-template-columns:1fr}}
 .mk-card{background:var(--card);border:1px solid var(--bd);padding:22px;display:grid;gap:14px}
-.mk-card label{display:grid;gap:6px;font-size:.82rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}
-.mk-card input[type=text],.mk-card input[type=email]{font:inherit;font-size:1rem;letter-spacing:0;text-transform:none;color:var(--fg);background:var(--bg);border:1px solid var(--bd);padding:11px 12px;border-radius:0}
+.mk-card label{display:grid;gap:6px;font-weight:600;line-height:1.35}
+.mk-card input[type=text],.mk-card input[type=email]{width:100%}
 .mk-card .mk-ck{display:flex;gap:10px;align-items:flex-start;text-transform:none;letter-spacing:0;font-weight:400;font-size:.92rem;color:var(--fg)}
 .mk-card .mk-ck input{margin-top:4px;width:18px;height:18px;flex:none}
 .mk-hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
@@ -59,6 +59,8 @@ def build(g):
         url = alts[lang]
         items = "".join(f"<li>{e(i)}</li>" for i in t["items"])
         cfg = json.dumps({"api": api, "lang": lang, "ok": t["ok"], "err": t["err"], "sending": t["sending"], "send": t["send"]}, ensure_ascii=False).replace("</", "<\\/")
+        import site_ads as ADS   # #281: Werbeplaetze nur verlinken, wenn die Buchung an ist
+        ads_link = f'<a href="{base}{pre}/for/advertisers/">{e(t["ads"])}</a> · ' if ADS.booking_on() else ""
         body = (f'{g["header"](lang, "")}<main class="wrap">{CSS}<div class="hero"><div class="kicker">{e(t["kicker"])}</div>'
                 f'<h1>{e(t["h1"])}</h1><p class="lede">{e(t["lede"])}</p></div>'
                 f'<div class="mk-grid">'
@@ -71,7 +73,7 @@ def build(g):
                 f'<button class="btn main" type="submit">{e(t["send"])}</button><p class="mk-msg" role="status" aria-live="polite"></p></form>'
                 f'<div class="mk-card"><h2 style="margin:0">{e(t["inside"])}</h2><ul class="mk-list">{items}</ul>'
                 f'<h3 style="margin:8px 0 0">{e(t["privacy"])}</h3><p style="margin:0">{e(t["privacy_t"])}<a href="{base}/{"datenschutz" if lang == "de" else "privacy"}/">{e(t["privacy_l"])}</a></p>'
-                f'<h3 style="margin:8px 0 0">{e(t["also"])}</h3><p style="margin:0"><a href="{base}{pre}/sponsor/">{e(t["sponsor"])}</a> · '
+                f'<h3 style="margin:8px 0 0">{e(t["also"])}</h3><p style="margin:0"><a href="{base}{pre}/sponsor/">{e(t["sponsor"])}</a> · {ads_link}'
                 f'<a href="{base}{pre}/for/publishers/">{e(t["publishers"])}</a> · <a href="{base}{pre}/services/">{e(t["services"])}</a></p></div>'
                 f'</div></main><script>window.M365MK={cfg}</script><script defer src="{base}/assets/mediakit.js"></script>{g["footer"](lang)}')
         ld = [{"@context": "https://schema.org", "@type": "WebPage", "@id": url + "#page", "url": url, "name": t["h1"], "description": t["desc"],

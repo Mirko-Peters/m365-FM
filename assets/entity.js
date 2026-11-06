@@ -18,7 +18,7 @@
 
   function form(e, isNew, all) {
     var f = h("div", { class: "wk-form en-form" }), msg = h("p", { class: "wk-msg", role: "status", "aria-live": "polite" });
-    function field(label, el) { var id = "en-" + Math.random().toString(36).slice(2, 8); el.id = id; return h("div", {}, [h("label", { for: id, text: label, style: "display:block;margin-top:.5em;font-weight:600" }), el]); }
+    function field(label, el) { var id = "en-" + Math.random().toString(36).slice(2, 8); el.id = id; return h("div", {}, [h("label", { for: id, text: label }), el]); }
     var name = h("input", { type: "text", maxlength: 80 }), type = h("select"), al = h("input", { type: "text", maxlength: 700 }), den = h("textarea", { rows: 3, maxlength: 600 }), dde = h("textarea", { rows: 3, maxlength: 600 }), len = h("textarea", { rows: 8, maxlength: 3000 }), lde = h("textarea", { rows: 8, maxlength: 3000 });
     var web = h("input", { type: "text", maxlength: 250 }), docs = h("input", { type: "text", maxlength: 250 }), wp = h("input", { type: "text", maxlength: 250 }), wd = h("input", { type: "text", maxlength: 12 }), xl = h("input", { type: "text", maxlength: 250 }), xv = h("input", { type: "text", maxlength: 30 }), xr = h("input", { type: "text", maxlength: 10, placeholder: "2025-11-01" }), xe = h("input", { type: "text", maxlength: 20 }), xm = h("input", { type: "number", min: 0, max: 120 }), xs = h("select"), xk = h("select"), od = h("input", { type: "checkbox" }), rb = h("input", { type: "text", maxlength: 48 }), sum = h("input", { type: "text", maxlength: 140, placeholder: X.sum, "aria-label": X.sum });
     Object.keys(TYPES).forEach(function (k) { type.appendChild(h("option", { value: k, text: TYPES[k][li] })); });
@@ -34,7 +34,7 @@
       var sel = h("select", { "aria-label": X.pred }); Object.keys(PRED).forEach(function (k) { sel.appendChild(h("option", { value: k, text: PRED[k][li] })); }); sel.value = p || "related_to";
       var inp = h("input", { type: "text", list: "en-dl", placeholder: X.target, "aria-label": X.target, maxlength: 80 });
       if (to) { var t = all.filter(function (x) { return x.id === to; })[0]; inp.value = t ? t.name : to; }
-      var row = h("div", { class: "en-relrow", style: "display:flex;gap:.4em;flex-wrap:wrap;margin:.3em 0" }, [sel, inp, h("button", { type: "button", class: "btn", text: X.rm, onclick: function () { row.remove(); } })]);
+      var row = h("div", { class: "en-relrow", style: "display:flex;flex-wrap:wrap;margin:0 0 12px" }, [sel, inp, h("button", { type: "button", class: "btn", text: X.rm, onclick: function () { row.remove(); } })]);
       row._get = function () { var v = inp.value.trim().toLowerCase(), hit = all.filter(function (x) { return x.name.toLowerCase() === v || x.id === v; })[0]; return hit ? [sel.value, hit.id] : (v ? null : false); };
       rels.appendChild(row);
     }

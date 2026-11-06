@@ -8,6 +8,7 @@ import site_members as MEM
 import site_topics as TOP
 import site_sponsorships as SPM   # T37 Sponsor: Kennzeichnung bezahlter Beitraege (data/sponsorships.json)
 import site_img_dims as IMG
+import site_milestones as MST   # Wochenzusammenfassungen: eigene Vor/Zurueck-Reihe, darunter nur weitere Zusammenfassungen statt Inhaltslisten
 from site_design import pager as PG, neighbours as NB   # Vor/Zurueck am Seitenende (rel=prev/next)
 
 
@@ -104,8 +105,10 @@ def build(g, posts, people, api):
         links_l = {i: [e["name"], f"{BASE}{pfx(lang) if lang == 'de' else ''}/entity/{i}/"] for i, e in ENTS.items()}
         title_blog = T(lang, "Blog", "Blog")
         _seq = {}   # Beitraege je Autor in dieser Sprache, neueste zuerst: Vor/Zurueck blaettert durch den Blog der Autorin bzw. des Autors
-        for q in sorted(mine, key=lambda q: (q.get("published") or 0, q["slug"]), reverse=True): _seq.setdefault(q["handle"], []).append(q)
+        _sk = lambda q: (q["handle"], MST.is_milestone(q))   # Wochenzusammenfassungen blaettern nur untereinander, die uebrigen Beitraege ohne sie
+        for q in sorted(mine, key=lambda q: (q.get("published") or 0, q["slug"]), reverse=True): _seq.setdefault(_sk(q), []).append(q)
         _pos = {(q["handle"], q["slug"]): i for h, s_ in _seq.items() for i, q in enumerate(s_)}
+        _content = [q for q in mine if not MST.is_milestone(q)]
         for p in mine:
             a = pb[p["handle"]]; au = f"{BASE}/community/u/{a['handle']}/"
             u = f"{croot}u/{p['handle']}/blog/{p['slug']}/"
@@ -116,8 +119,9 @@ def build(g, posts, people, api):
             if not p.get("legacy"):
                 body_html = IMG.enhance(body_html)
             body_html = IMG.eager_first(body_html)   # erstes Bild oben im Beitrag (oft das LCP-Element) nicht lazy laden
-            _rel = TOP.related(mine, p, k=6)
-            relbox = (f'<section class="bl-rel"><h2>{esc(T(lang, "Related articles", "Verwandte Artikel"))}</h2><ul class="bl-list">' + "".join(
+            _ms = MST.is_milestone(p)
+            _rel = [] if _ms else TOP.related(_content, p, k=6)
+            relbox = MST.more_box(lang, BASE, posts, p) if _ms else (f'<section class="bl-rel"><h2>{esc(T(lang, "Related articles", "Verwandte Artikel"))}</h2><ul class="bl-list">' + "".join(
                 f'<li><a href="{croot}u/{r["handle"]}/blog/{r["slug"]}/"><b>{esc(r["title"])}</b></a> <span class="mut">· {iso(r["published"])}</span></li>' for r in _rel) + "</ul></section>") if _rel else ""
             if p.get("html") and not p.get("images"): p["images"] = re.findall(r'<img[^>]+src="(https://[^"]+)"', p["html"])
             topics = [t for t in p.get("topics", []) if t in ENTS]
@@ -134,7 +138,7 @@ def build(g, posts, people, api):
                             f'{("<p>" + esc(p["summary"]) + "</p>") if p.get("summary") else ""}{_aitr(p, lang, BASE)}{_kp}{body_html}{IMG.CSS if IMG.needs_responsive_css(body_html) else ""}{_fq}{SNT.CSS if (_kp or _fq) else ""}</article>{tl}{relbox}{vote}'
                             f'<p>{("" if p.get("legacy") else "<button type=" + chr(34) + "button" + chr(34) + " class=" + chr(34) + "bl-vote bl-follow" + chr(34) + " data-h=" + chr(34) + esc(p["handle"]) + chr(34) + " aria-pressed=" + chr(34) + "false" + chr(34) + "><span class=" + chr(34) + "t" + chr(34) + ">" + esc(T(lang, "Follow this blog", "Blog abonnieren")) + "</span></button> ")}<a href="{croot}u/{p["handle"]}/blog/feed.xml">RSS</a></p>'
                             + ((g.get("author_box")(lang) if g.get("author_box") and p["handle"] == "mirko-p" and lang in ("en", "de") else ""))
-                            + PG(lang, *[(f'{croot}u/{x["handle"]}/blog/{x["slug"]}/', x["title"]) if x else None for x in NB(_seq[p["handle"]], _pos[(p["handle"], p["slug"])])], kind="article")
+                            + PG(lang, *[(f'{croot}u/{x["handle"]}/blog/{x["slug"]}/', x["title"]) if x else None for x in NB(_seq[_sk(p)], _pos[(p["handle"], p["slug"])])], kind="article")
                             + ("" if p.get("legacy") else (f'<section id="c-comments"></section>'
                             f'<script>{VOTEJS.replace("%API%", api).replace("%H%", p["handle"])}</script><script>{FOLLOWJS.replace("%API%", api).replace("%FOLLOW%", esc(T(lang, "Follow this blog", "Blog abonnieren"))).replace("%FOLLOWING%", esc(T(lang, "Following", "Abonniert")))}</script>'
                             + (ctags(lang, "blog%d" % p["id"]) if ctags else ""))))   # fruehere Blogbeitraege: keine Verbindung zur Community-Datenbank (kein Upvote, Abo, Kommentar)

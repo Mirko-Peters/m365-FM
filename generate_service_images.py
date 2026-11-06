@@ -301,7 +301,25 @@ def m_company(d, cx, cy, R, w):
         _rect(d, tx - R * 0.2, ty - R * 0.09, tx + R * 0.2, ty + R * 0.09, outline=AC2, w=w * 0.6, r=R * 0.09)
 
 
-MOTIFS = {"hub": m_hub, "broadcast": m_broadcast, "profile": m_profile, "mic": m_mic, "press": m_press, "calendar": m_calendar,
+def m_adslots(d, cx, cy, R, w):
+    """Webseite mit drei Werbeplaetzen (oben, Mitte im Text, unten) und einem Zeiger (#281 Werbeplaetze)."""
+    x0, y0, x1, y1 = cx - R * 1.05, cy - R * 0.95, cx + R * 1.05, cy + R * 0.95
+    _rect(d, x0, y0, x1, y1, fill=INK2, outline=MUT, w=w * 0.6, r=R * 0.06)
+    _rect(d, x0, y0, x1, y0 + R * 0.16, fill=MID)
+    _rect(d, x0 + R * 0.12, y0 + R * 0.26, x1 - R * 0.12, y0 + R * 0.5, fill=AC)
+    for i in range(3):
+        yy = y0 + R * (0.66 + i * 0.16)
+        _rect(d, x0 + R * 0.12, yy, cx + R * 0.05, yy + R * 0.06, fill=MUT)
+    _rect(d, cx + R * 0.2, y0 + R * 0.62, x1 - R * 0.12, y0 + R * 1.18, fill=AC2)
+    for i in range(2):
+        yy = y0 + R * (1.24 + i * 0.14)
+        _rect(d, x0 + R * 0.12, yy, x1 - R * 0.12, yy + R * 0.06, fill=MUT)
+    _rect(d, x0 + R * 0.12, y1 - R * 0.36, x1 - R * 0.12, y1 - R * 0.14, fill=AC)
+    px, py = cx + R * 0.55, cy + R * 0.25
+    d.polygon([(px, py), (px + R * 0.12, py + R * 0.42), (px + R * 0.2, py + R * 0.26), (px + R * 0.36, py + R * 0.24)], fill=LT)
+
+
+MOTIFS = {"adslots": m_adslots, "hub": m_hub, "broadcast": m_broadcast, "profile": m_profile, "mic": m_mic, "press": m_press, "calendar": m_calendar,
           "headphones": m_headphones, "target": m_target, "chart": m_chart, "network": m_network, "growth": m_growth,
           "agenda": m_agenda, "refresh": m_refresh, "company": m_company}
 

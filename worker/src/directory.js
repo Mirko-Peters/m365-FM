@@ -1,7 +1,7 @@
 const now = () => Math.floor(Date.now() / 1000);
 const EID = /^[a-z0-9-]{2,48}$/;
 const LANG = /^[a-z]{2}$/;
-const PROGRAMS = ["mvp", "mct", "rd", "msa", "ms_employee", "partner"];
+const PROGRAMS = ["mvp", "mct", "rd", "msa", "ms_employee", "partner", "gde"];
 const MODES = ["online", "onsite", "hybrid"];
 const list = (value) => { try { const parsed = JSON.parse(value || "[]"); return Array.isArray(parsed) ? parsed : []; } catch { return []; } };
 const text = (value) => String(value || "").trim();

@@ -116,6 +116,20 @@ const NOINDEX = /^\/(search\/|entities\.json|entities-src\.json|entities\.jsonld
 export const TRANSCRIPT = /^(?:\/[a-z]{2})?(?:\/show\/episodes)?\/[a-z0-9-]+\/transcript\.(txt|vtt)$/;
 const R2_EXPORT = /^\/(?:blog-import\/[^/]+\.json|translations-blog\.json)$/i;
 
+// Eigene Seiten gezogener Inhalte (/community/feed/<id>-<slug>/, site_feed.py), die der Seitenbau nicht mehr erzeugt - GitHub-Aktivitaet
+// (worker/src/feedpolicy.js), ausgeblendete oder aeltere Inhalte: 410 Gone statt 404, damit Suchmaschinen sie zuegig aus dem Index nehmen.
+// Kurzer Hinweis mit Link zur Community, noindex. Nur wenn weder GitHub Pages noch R2 die Seite liefern.
+export const FEED_ITEM = /^(?:\/(de))?\/community\/feed\/\d+-[a-z0-9-]*\/?(?:index\.html)?$/;
+function feedGone(request, p) {
+  const de = FEED_ITEM.exec(p)[1] === "de", pre = de ? "/de" : "";
+  const [t, msg, back] = de ? ["Inhalt entfernt", "Diesen Inhalt gibt es hier nicht mehr.", "Zur Community"] : ["Content removed", "This item is no longer available here.", "Go to the community"];
+  const html = `<!doctype html><html lang="${de ? "de" : "en"}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>${t} | M365.FM</title></head>` +
+    `<body style="font-family:system-ui,sans-serif;max-width:40em;margin:3em auto;padding:0 1em"><h1>${t}</h1><p>${msg}</p><p><a href="${pre}/community/">${back}</a></p></body></html>`;
+  const h = new Headers({ "content-type": "text/html; charset=utf-8", "cache-control": "public, max-age=3600", "x-robots-tag": "noindex" });
+  for (const [k, v] of Object.entries(SEC)) h.set(k, v);
+  return new Response(request.method === "HEAD" ? null : html, { status: 410, headers: h });
+}
+
 // Je Isolate 5 Minuten gemerkt: die Tabelle hat ~10.000 Eintraege, vorher wurde sie bei jeder alten Adresse neu gelesen und geparst
 let RMAP = { t: -1e15, v: null };
 async function redirectMap() {
@@ -311,6 +325,7 @@ export default {
       const m = LANG_EP.exec(p);   // noch nicht hochgeladen: englisches Original statt 404 - umbenannt gleich auf den neuen Slug (ein Schritt)
       if (m) return Response.redirect(url.origin + ((migrated && (await redirectMap())["/show/episodes/" + m[2]]) || "/show/episodes/" + m[2] + "/") + url.search, 301);
     }
+    if (res.status === 404 && FEED_ITEM.test(p) && (request.method === "GET" || request.method === "HEAD")) return feedGone(request, p);
     const h = new Headers(res.headers);
     finishHeaders(h, p);
     return new Response(request.method === "HEAD" ? null : res.body, { status: res.status, statusText: res.statusText, headers: h });

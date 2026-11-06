@@ -6,7 +6,7 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 ROOT = Path(__file__).parent
-MODEL = os.environ.get("ARTICLE_MODEL", "claude-sonnet-5-5")
+MODEL = os.environ.get("ARTICLE_MODEL") or "claude-sonnet-5-5"   # Mirko, 6.11.2026: Sonnet bleibt (Haiku per Repo-Variable ARTICLE_MODEL moeglich)
 LIMIT = int(os.environ.get("ARTICLE_LIMIT", "90"))
 WORKERS = int(os.environ.get("ARTICLE_WORKERS", "10"))
 NAMES = {"de": "Deutsch", "es": "Spanisch", "fr": "Französisch", "it": "Italienisch", "pt": "Portugiesisch", "nl": "Niederländisch",
@@ -34,20 +34,27 @@ import threading
 from ai_gateway import anthropic_request, check_budget, estimated_eur, report_usage, urlopen, usage_tokens
 _ULOCK = threading.Lock()
 USAGE = {"in": 0, "out": 0, "calls": 0, "cache_read": 0, "cache_write": 0}   # "in" = Eingabe gesamt, davon cache_read/cache_write aus dem Prompt-Cache
+MONTH_START_USD = 0.0   # Monatskosten vor diesem Lauf (setzt main); _post stoppt, sobald Monatsstand + dieser Lauf die Grenze erreicht
+BUDGET_HIT = False
 
 
 def article_block(html):
     """Gemeinsamer, gecachter Anfang der Folgeaufrufe (Infografik, FAQ, Quiz) zu einem Artikel: ueberall derselbe Text,
-    damit der Prompt-Cache greift (Sonnet 5.5: ab 512 Token, Lesen 0,05x statt 1x Eingabepreis)."""
+    damit der Prompt-Cache greift (Sonnet 5.5: ab 512 Token, Lesen 0,1x statt 1x Eingabepreis)."""
     return "Artikel:\n" + re.sub(r"<[^>]+>", " ", html)[:14000]
 
 
 def _post(prompt, max_tokens, prefix=None, cache=True):
     """prefix: stabiler Textblock vor dem Prompt, bekommt mit cache=True einen Cache-Breakpoint (cache_control, 5 Minuten).
     Alles Variable (Aufgabe, Zielsprache) steht danach in prompt. cache=False, wenn der Anfang nicht wiederverwendet wird (Schreiben kostet 1,25x)."""
-    global CREDITS_OUT
+    global CREDITS_OUT, BUDGET_HIT
     if CREDITS_OUT:
         raise RuntimeError("credits out")
+    if BUDGET_HIT or MONTH_START_USD + run_cost_usd() >= BUDGET_USD:
+        if not BUDGET_HIT:
+            BUDGET_HIT = True
+            print(f"MONATSGRENZE ERREICHT waehrend des Laufs ({MONTH_START_USD + run_cost_usd():.2f} von {BUDGET_USD:.2f} USD) - weitere Aufrufe werden uebersprungen")
+        raise RuntimeError("Monatsgrenze erreicht")
     if not check_budget("generate_articles", MODEL, estimated_eur((len(prefix or "") + len(prompt)) // 3, max_tokens)):
         raise RuntimeError("Haiku-Tagesbudget erreicht")
     content = prompt if prefix is None else [
@@ -278,10 +285,53 @@ def popularity():
     return score
 
 
+# Monatsgrenze (Mirko, 6.11.2026: Sonnet behalten, aber mit Grenze). Repo-Variable ARTICLE_BUDGET_USD, Standard 25 USD je Kalendermonat (UTC).
+BUDGET_USD = float(os.environ.get("ARTICLE_BUDGET_USD") or 25)
+# Preise je 1 Mio. Token (Stand Okt./Nov. 2026, Prompts unter 100.000 Token; per Repo-Variable anpassbar). Kosten werden je Lauf in USD in data/spend.json
+# aufsummiert ("usd"); aeltere Monate ohne "usd" wurden komplett mit Sonnet geschrieben.
+PRICES = {"sonnet": {"in": float(os.environ.get("SONNET_USD_PER_MTOK_IN") or 2.0), "out": float(os.environ.get("SONNET_USD_PER_MTOK_OUT") or 10.0),
+                     "cw": float(os.environ.get("SONNET_USD_PER_MTOK_CACHE_WRITE") or 2.5), "cr": float(os.environ.get("SONNET_USD_PER_MTOK_CACHE_READ") or 0.20)},
+          "haiku": {"in": float(os.environ.get("HAIKU_USD_PER_MTOK_IN") or 0.10), "out": float(os.environ.get("HAIKU_USD_PER_MTOK_OUT") or 0.50),
+                    "cw": float(os.environ.get("HAIKU_USD_PER_MTOK_CACHE_WRITE") or 0.125), "cr": float(os.environ.get("HAIKU_USD_PER_MTOK_CACHE_READ") or 0.01)}}
+
+
+def price_of(model):
+    return PRICES["haiku"] if "haiku" in str(model).lower() else PRICES["sonnet"]
+
+
+def cost_usd(tin, tout, cr, cw, model):
+    p = price_of(model)
+    return (max(0, tin - cr - cw) * p["in"] + cw * p["cw"] + cr * p["cr"] + tout * p["out"]) / 1e6
+
+
+def run_cost_usd():
+    """Kosten dieses Laufs bisher (zum Preis von MODEL)."""
+    return cost_usd(USAGE["in"], USAGE["out"], USAGE["cache_read"], USAGE["cache_write"], MODEL)
+
+
+def month_spend_usd(sd, month):
+    """Kosten des Monats aus data/spend.json: Feld usd (seit 6.11.2026 je Lauf mit dem Preis des benutzten Modells); fehlt es, Token zu Sonnet-Preisen."""
+    m = (sd or {}).get(month) or {}
+    if "usd" in m:
+        return float(m["usd"])
+    return cost_usd(m.get("input_tokens", 0), m.get("output_tokens", 0), m.get("cache_read_tokens", 0), m.get("cache_write_tokens", 0), "claude-sonnet")
+
+
 def main():
+    global MONTH_START_USD
     if not os.environ.get("ANTHROPIC_API_KEY"):
         print("Kein ANTHROPIC_API_KEY – übersprungen")
         return
+    try:
+        _sd = json.load(open(ROOT / "data" / "spend.json", encoding="utf-8"))
+    except Exception:
+        _sd = {}
+    _mk = time.strftime("%Y-%m", time.gmtime()); _spent = month_spend_usd(_sd, _mk)
+    if _spent >= BUDGET_USD:
+        print(f"Monatsgrenze erreicht: {_spent:.2f} USD von {BUDGET_USD:.2f} USD in {_mk} – keine neuen Artikel bis zum Monatswechsel.")
+        return
+    MONTH_START_USD = _spent
+    print(f"Artikel-Budget {_mk}: {_spent:.2f} von {BUDGET_USD:.2f} USD verbraucht")
     (ROOT / "data" / "articles").mkdir(parents=True, exist_ok=True)
     jobs, store = [], {}
     for p in sorted(glob.glob(str(ROOT / "episodes" / "*.json"))):
@@ -340,8 +390,11 @@ def main():
         mk = time.strftime("%Y-%m", time.gmtime())
         m = sd.setdefault(mk, {"input_tokens": 0, "output_tokens": 0, "calls": 0})
         m["input_tokens"] += USAGE["in"]; m["output_tokens"] += USAGE["out"]; m["calls"] += USAGE["calls"]
-        m["cache_read_tokens"] = m.get("cache_read_tokens", 0) + USAGE["cache_read"]       # Teil von input_tokens: aus dem Prompt-Cache gelesen (0,05x)
+        m["cache_read_tokens"] = m.get("cache_read_tokens", 0) + USAGE["cache_read"]       # Teil von input_tokens: aus dem Prompt-Cache gelesen (0,1x)
         m["cache_write_tokens"] = m.get("cache_write_tokens", 0) + USAGE["cache_write"]    # Teil von input_tokens: in den Prompt-Cache geschrieben (1,25x)
+        m["usd"] = round((m["usd"] if "usd" in m else month_spend_usd({mk: {k: v for k, v in m.items() if k != "usd"}}, mk) - cost_usd(USAGE["in"], USAGE["out"], USAGE["cache_read"], USAGE["cache_write"], "claude-sonnet"))
+                         + cost_usd(USAGE["in"], USAGE["out"], USAGE["cache_read"], USAGE["cache_write"], MODEL), 4)   # bisherige Monatstoken (Sonnet) + dieser Lauf zum Preis von MODEL
+        m.setdefault("models", {})[MODEL] = m.get("models", {}).get(MODEL, 0) + USAGE["calls"]
         json.dump(sd, open(sp, "w", encoding="utf-8"), indent=1)
         print("Verbrauch dieser Lauf (Tokens):", USAGE, "| Monat gesamt:", m)
         print(f"Prompt-Cache dieser Lauf: {USAGE['cache_read']} Token gelesen, {USAGE['cache_write']} Token geschrieben "

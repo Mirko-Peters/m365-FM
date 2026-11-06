@@ -67,3 +67,15 @@ class ExpertConnectPageTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class HowItWorksTests(unittest.TestCase):
+    """Mirko, 5.11.2026: Erklaerung, wie Expert Connect funktioniert."""
+    def test_how_section(self):
+        out = ExpertConnectPageTests().build()
+        for path, lang in (("community/expert-connect/index.html", "en"), ("de/community/expert-connect/index.html", "de")):
+            body = json.loads(out[path])["body"]
+            self.assertIn('id="how"', body)
+            self.assertIn(ECN.T[lang]["how_h"], body)
+            self.assertEqual(body.count("<li>"), 8)
+            self.assertLess(body.index('id="how"'), body.index('class="ec-tabs"'))
