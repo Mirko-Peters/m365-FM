@@ -39,8 +39,8 @@ CSS = """<style>
 .mk-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:28px;align-items:start;margin:28px 0}
 @media(max-width:820px){.mk-grid{grid-template-columns:1fr}}
 .mk-card{background:var(--card);border:1px solid var(--bd);padding:22px;display:grid;gap:14px}
-.mk-card label{display:grid;gap:6px;font-size:.82rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}
-.mk-card input[type=text],.mk-card input[type=email]{font:inherit;font-size:1rem;letter-spacing:0;text-transform:none;color:var(--fg);background:var(--bg);border:1px solid var(--bd);padding:11px 12px;border-radius:0}
+.mk-card label{display:grid;gap:6px;font-weight:600;line-height:1.35}
+.mk-card input[type=text],.mk-card input[type=email]{width:100%}
 .mk-card .mk-ck{display:flex;gap:10px;align-items:flex-start;text-transform:none;letter-spacing:0;font-weight:400;font-size:.92rem;color:var(--fg)}
 .mk-card .mk-ck input{margin-top:4px;width:18px;height:18px;flex:none}
 .mk-hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}

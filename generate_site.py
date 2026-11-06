@@ -449,6 +449,9 @@ A11Y_CSS = _mini_css("a11y.css")
 # Die Selektoren sind auf .shw/.sb-*/.att-* begrenzt; assets/sbar.css bleibt fuer gecachte alte Seiten liegen. data-sbar am <link> sagt
 # assets/attend.js, dass die Regeln schon da sind (sonst laedt das Popup sbar.css nach). community.css bleibt vorerst eigene Datei.
 SBAR_CSS = _mini_css("sbar.css")
+# Gemeinsames Formular-Design (assets/forms.css, Mirko 6.11.2026 "Design-Konsistenz"): ebenfalls im Hash-Buendel, weil Formulare auch auf Seiten
+# ohne community.css entstehen (Entitaeten-Bearbeitung, Profile, Events, Expert Connect, Verwaltung). ~1 KB gzip; bei #295 ins Community-/Entitaeten-Buendel.
+FORMS_CSS = _mini_css("forms.css")
 # Vorgeladen werden die Schnitte, die auf jeder Seite im ersten Bildschirm Text zeigen (gemessen auf Start-, Sprach-, Show- und Entitaetsseiten,
 # alle 15 Sprachen - Navigation, Logo und Ziffern/Leerzeichen sind lateinisch). Barlow 400 (Fliesstext) und Condensed 600 (Ueberschriften) normal;
 # Condensed 500 (Menue) und 700 (Logo) ab 701 px normal, darunter mit fetchpriority=low. Live-A/B 3.11.2026 (tools/preload_ab.mjs, 2 x 7 Laeufe):
@@ -569,7 +572,7 @@ def css_link():
     """Das gesamte Stylesheet liegt einmal als Datei mit Inhalts-Hash unter /assets/ (statt ~33 KB inline in jeder Seite): kleinere Seiten, Browser- und CDN-Cache."""
     if not _CSSF:
         import hashlib
-        css = SBAR_CSS + "\n" + CSS + (ADS.CSS if ADS.css_needed(BASE) else "") + "\n" + A11Y_CSS + "\n"
+        css = SBAR_CSS + "\n" + CSS + (ADS.CSS if ADS.css_needed(BASE) else "") + "\n" + FORMS_CSS + "\n" + A11Y_CSS + "\n"
         name = "site." + hashlib.sha1(css.encode("utf-8")).hexdigest()[:10] + ".css"
         (OUT / "assets").mkdir(parents=True, exist_ok=True); (OUT / "assets" / name).write_text(css, encoding="utf-8")
         _CSSF["u"] = f"{BASE}/assets/{name}"
@@ -1834,12 +1837,12 @@ Mirko Peters, {BASE}/about/
     _adm_css = ("<style>.adm-tabs{display:flex;gap:6px;flex-wrap:wrap;margin:1em 0}.adm-tabs button{font:inherit;padding:.45em 1em;border:1px solid var(--bd);border-radius:2em;background:var(--card);color:inherit;cursor:pointer}"
                 ".adm-tabs button[aria-selected=true]{border-color:var(--ac);background:var(--ac);color:#fff}.adm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(11em,1fr));gap:10px}"
                 ".adm-tile{border:1px solid var(--bd);border-radius:.6em;padding:.8em;background:var(--card);display:flex;flex-direction:column;gap:.1em}.adm-tile b{font-size:1.7rem;line-height:1.1}.adm-tile.on b{color:var(--ac)}.adm-tile small{color:var(--mut)}"
-                ".adm-row{display:flex;gap:8px;flex-wrap:wrap}.adm-row input{flex:1;min-width:12em}.adm-row input,.adm-row select{font:inherit;padding:.5em .7em;border:1px solid var(--bd);border-radius:.4em;background:var(--card);color:inherit}.adm-list{list-style:none;padding:0;margin:1em 0}.adm-item{font:inherit;color:inherit;background:none;border:0;border-bottom:1px solid var(--bd);width:100%;text-align:start;padding:.55em .2em;cursor:pointer}.adm-item:hover{background:var(--card)}"
+                ".adm-row{display:flex;gap:8px;flex-wrap:wrap}.adm-row input{flex:1;min-width:12em}.adm-list{list-style:none;padding:0;margin:1em 0}.adm-item{font:inherit;color:inherit;background:none;border:0;border-bottom:1px solid var(--bd);width:100%;text-align:start;padding:.55em .2em;cursor:pointer}.adm-item:hover{background:var(--card)}"
                 ".adm-tbl{width:100%;border-collapse:collapse;font-size:.92rem}.adm-tbl th,.adm-tbl td{text-align:start;padding:.35em .4em;border-bottom:1px solid var(--bd);vertical-align:top}.adm-tbl th{position:sticky;top:0;background:var(--bg)}"
                 ".adm-chip{display:inline-block;min-width:2.2em;text-align:center;font:600 .78rem/1.6 inherit;border:1px solid var(--bd);border-radius:1em;margin:1px;background:none;color:inherit;cursor:pointer;padding:0 .3em}.adm-chip.ok{background:#1e7a4a;color:#fff;border-color:#1e7a4a;cursor:default}.adm-chip.q{background:var(--ac);color:#fff;border-color:var(--ac)}.adm-chip.fail{border-color:#b43;color:#b43}"
                 ".adm-sum{display:grid;grid-template-columns:repeat(auto-fill,minmax(7.5em,1fr));gap:6px;margin:.6em 0}.adm-sum div{border:1px solid var(--bd);border-radius:.5em;padding:.4em .6em;background:var(--card)}.adm-sum b{display:block;font-size:1.1rem}.adm-sum small{color:var(--mut)}.adm-ops td{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.85rem}"
                 ".adm-badge{font-size:.75rem;border:1px solid var(--bd);border-radius:1em;padding:.05em .6em;color:var(--mut)}.adm-badge.on{border-color:var(--ac);color:var(--ac)}"
-                ".adm-form{border:1px solid var(--bd);border-radius:.7em;padding:1em 1.2em;background:var(--card);margin:1em 0}.adm-field{display:flex;flex-direction:column;gap:.2em;margin:.7em 0}.adm-field input,.adm-field textarea,.adm-field select{font:inherit;padding:.45em .6em;border:1px solid var(--bd);border-radius:.4em;background:var(--bg);color:inherit}"
+                ".adm-form{border:1px solid var(--bd);border-radius:.7em;padding:1em 1.2em;background:var(--card);margin:1em 0}.adm-field{display:flex;flex-direction:column;gap:6px;margin:.9em 0;font-weight:600}"
                 ".adm-msg{min-height:1.4em}.adm-msg.bad{color:var(--ac);font-weight:600}</style>")
     write("admin/index.html", page("de", "Verwaltung – M365.FM", "Verwaltung der Website ohne Code", f"{BASE}/admin/",
           f'{header("de", "")}<main class="wrap" id="main"><h1>Verwaltung</h1><p class="mut">Inhalte, Datenbank und Schalter der Website, ohne Code. Nur für Admins.</p>'
