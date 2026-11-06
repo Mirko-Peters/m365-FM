@@ -32,6 +32,17 @@ class ArticleBudgetTests(unittest.TestCase):
                 GA.main()   # kehrt vor jeder Arbeit zurueck
             self.assertFalse((Path(tmp) / "data" / "articles").exists())
 
+    def test_post_stops_during_run_when_budget_reached(self):
+        with mock.patch.object(GA, "MONTH_START_USD", GA.BUDGET_USD - 0.01), mock.patch.object(GA, "BUDGET_HIT", False), \
+             mock.patch.dict(GA.USAGE, {"in": 0, "out": 10_000, "calls": 1, "cache_read": 0, "cache_write": 0}), \
+             mock.patch.object(GA, "anthropic_request", side_effect=AssertionError("kein Aufruf nach erreichter Grenze")):
+            with self.assertRaises(RuntimeError):
+                GA._post("x", 10)
+            self.assertTrue(GA.BUDGET_HIT)
+
+    def test_sonnet_cache_read_price(self):
+        self.assertAlmostEqual(GA.cost_usd(1_000_000, 0, 1_000_000, 0, "claude-sonnet-5-5"), 0.2)
+
 
 if __name__ == "__main__":
     unittest.main()
