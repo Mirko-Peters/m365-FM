@@ -75,7 +75,9 @@ document.querySelectorAll(".yt[data-id]").forEach(function(b){b.addEventListener
     if (!a) return;
     var l = String(a.getAttribute("data-setlang") || a.getAttribute("hreflang") || "").toLowerCase().split("-")[0];
     if (L.indexOf(l) < 0) return;
-    try { document.cookie = "m365_lang=" + l + "; Max-Age=31536000; Path=/; SameSite=Lax" + (location.protocol === "https:" ? "; Secure" : ""); } catch (x) {}
+    // Domain=m365.fm: auch m365.fm und dub.m365.fm (alte Adressen, leiten "/" selbst nach Sprache weiter) muessen die Wahl kennen
+    var d = /(^|\.)m365\.fm$/.test(location.hostname) ? "; Domain=m365.fm" : "";
+    try { document.cookie = "m365_lang=" + l + "; Max-Age=31536000; Path=/; SameSite=Lax" + d + (location.protocol === "https:" ? "; Secure" : ""); } catch (x) {}
   }, true);
 })();
 /* Formulare (gemeinsames Design assets/forms.css, Mirko 6.11.2026): Zeichenzaehler "123 / 600" fuer Textfelder mit maxlength (sitzt im unteren

@@ -103,6 +103,11 @@ test("Weiterleitung auf / und alter Host auf /: fuer einen deutschen Browser gle
   assert.equal(r.status, 301); assert.equal(r.headers.get("location"), "https://www.m365.fm/"); assert.equal(r.headers.get("vary"), "Accept-Language, Cookie");
   r = await run(req("https://m365.fm/", { "accept-language": "es-ES" }));
   assert.equal(r.status, 302); assert.equal(r.headers.get("location"), "https://www.m365.fm/es/");
+  // Wahl per Cookie (Domain=m365.fm) gilt auch auf dem alten Host: Englisch -> www/, gewaehlte Sprache vor der Browsersprache
+  r = await run(req("https://m365.fm/", { "accept-language": "de-DE", cookie: "m365_lang=en" }));
+  assert.equal(r.status, 301); assert.equal(r.headers.get("location"), "https://www.m365.fm/");
+  r = await run(req("https://dub.m365.fm/", { "accept-language": "de-DE", cookie: "m365_lang=fr" }));
+  assert.equal(r.status, 302); assert.equal(r.headers.get("location"), "https://www.m365.fm/fr/");
   r = await run(req("https://dub.m365.fm/", { "accept-language": "es-ES", "user-agent": "Twitterbot/1.0" }));
   assert.equal(r.status, 301); assert.equal(r.headers.get("location"), "https://www.m365.fm/");
   r = await run(req("/hi/", { "accept-language": "ko-KR" }));
