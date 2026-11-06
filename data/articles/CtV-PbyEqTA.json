@@ -566,5 +566,1136 @@
     "why": "Il kit è descritto come centro di comando: inventario del tenant, analisi d'uso, avvisi, revisioni e sospensione dei flussi fuori norma."
    }
   ]
+ },
+ "pt": {
+  "html": "<p>Muitas demonstrações de IA no Power Platform impressionam: um chatbot de vendas que responde em segundos ou um aplicativo de atendimento que organiza tickets sozinho. Quando a ideia chega a fluxos de trabalho reais, porém, surgem problemas de desempenho, respostas sem sentido, custos inesperados e dados sensíveis expostos.</p>\n<p>Este artigo explica como conectar o Azure OpenAI ao Power Apps e ao Dynamics 365 de forma profissional, com arquitetura, segurança e governança. O conector é só o começo. O que separa uma demo de uma solução corporativa é o que está ao redor dele.</p>\n\n<h2>Arquitetura de IA no Power Platform: os quatro participantes</h2>\n<p>A ideia de que basta adicionar um conector e ligá-lo ao Azure OpenAI persiste porque, no papel, tudo parece fácil demais. Em qualquer configuração séria, porém, quatro peças trabalham juntas.</p>\n\n<h3>1. Power Apps ou Dynamics 365</h3>\n<p>É a camada com a qual o usuário interage e o gatilho de cada solicitação de IA. Ela coleta mensagens de clientes, resultados de pesquisas, avaliações ou qualquer entrada que precise ser analisada. O Power Apps, no entanto, não conversa diretamente com o Azure OpenAI.</p>\n\n<h3>2. Power Automate</h3>\n<p>Ele orquestra o processo. Quando o usuário clica em um botão ou envia um formulário, o fluxo coleta os dados, ajusta o formato e os encaminha. Também pode limpar o texto, combiná-lo com outras fontes ou mascarar campos por privacidade antes do envio.</p>\n\n<h3>3. Endpoint do Azure OpenAI</h3>\n<p>É o \"cérebro\" que entrega análise de sentimento, resumo de texto ou geração de respostas para clientes.</p>\n\n<h3>4. Azure API Management</h3>\n<p>É a peça mais esquecida, até que algo dê errado. Ele cuida de segurança e limitação de uso, e é o que mantém o fluxo constante em vez de inundar os canais.</p>\n\n<p>As camadas dependem umas das outras. Se o fluxo roda devagar porque outra automação consome recursos, a latência se acumula no aplicativo. Se o Power Automate não prepara bem a carga útil, por exemplo com um texto sem contexto ou com formatação estranha, o modelo devolve resultados estranhos ou respostas alucinadas. Não há inteligência quando a \"fiação\" anterior está confusa.</p>\n\n<h2>Por que a escala muda tudo</h2>\n<p>Imagine um app de feedback de vendas com análise de sentimento. Com 10 pessoas, o fluxo funciona bem e o resultado chega em menos de um segundo. Quando o número salta para 10 mil, talvez depois de uma campanha de e-mail ou de uma fusão, aparecem esperas de 30 segundos e erros, porque o endpoint não acompanha as solicitações.</p>\n<p>Pode acontecer ainda de parte do feedback falhar porque a carga útil excedeu os limites do Azure, ou porque as políticas de segurança no API Management não foram aplicadas. Em vez de ajudar as vendas, o pipeline de IA passa a bloqueá-las. Entender como cada camada interage, e quão frágil ela fica ao crescer, é o que leva uma solução do sandbox para a empresa.</p>\n\n<h2>Azure OpenAI para negócios: sentimento, resumo e geração de texto</h2>\n<p>Um único endpoint pode detectar sentimento negativo, resumir uma troca de e-mails ou esboçar um produto. Isso não significa que basta trocar o prompt. Cada caso de uso exige uma abordagem própria, e a fantasia do \"plug and play\" desmorona rapidamente.</p>\n\n<h3>Análise de sentimento: o caso mais simples</h3>\n<p>Imagine um app no Dynamics 365 que sinaliza reclamações de clientes. As entradas são curtas, as respostas rápidas, o custo baixo e quase não há contexto a acompanhar. O Power Automate só precisa enviar uma ou duas frases junto com o prompt certo. Esses fluxos são fáceis de gerenciar e controlar, e raramente precisam ser reescritos.</p>\n\n<h3>Resumos: a complexidade começa</h3>\n<p>Quando gerentes colam notas detalhadas de reuniões e esperam resumos coerentes, o prompt precisa ser conciso e ter o tom certo. Se a carga for muito grande ou o texto muito desestruturado, o modelo pode parafrasear em vez de resumir, ou inventar detalhes que nunca aconteceram. Por isso o Power Automate deve preparar a entrada: remover assinaturas e formatação e, se o documento for longo, dividi-lo em partes.</p>\n\n<h3>Geração completa e classificação em escala</h3>\n<p>Respostas de e-mail personalizadas ou a categorização de cada ticket por tipo de problema são outra história. Percorrer milhares de registros não tem nada a ver com a demo perfeita. A taxa de transferência cai e a conta do Azure sobe, às vezes rápido o bastante para chamar a atenção da contabilidade.</p>\n<p>A análise de sentimento custa frações de centavo por solicitação. A geração de textos longos aumenta a complexidade, consome centenas de tokens e demora mais. Instruções personalizadas, como um tom diferente para cada cliente, exigem engenharia de prompt, que se parece mais com ajustar um algoritmo de busca: testa-se, obtêm-se resultados bizarros e reescreve-se. Cada variação afeta a saída, o tempo, o custo e o perfil de segurança do fluxo.</p>\n\n<h2>Segurança: o Azure API Management como escudo</h2>\n<p>Quando um piloto interno vira produção, o endpoint deixa de responder apenas a prompts de teste. Ele passa a ser uma janela potencial para tudo o que o aplicativo expõe. Se a chave de API vai parar em um script ou em um fluxo de teste, quem a obtiver pode enviar prompts, extrair respostas e aumentar o uso. Mesmo sem má-fé, um app mal configurado, preso em loop sobre o registro errado, pode martelar o endpoint sem parar. O resultado são dores de cabeça de governança, custos altos e riscos de conformidade.</p>\n\n<h3>O que o API Management faz que o conector não faz</h3>\n<ul>\n<li><strong>Autenticação e autorização</strong> a cada solicitação, e não apenas quando alguém se lembra de programá-las.</li>\n<li><strong>Limitação de requisições</strong>, para que um erro de desenvolvedor ou um script descontrolado não ponha orçamento e reputação em risco.</li>\n<li><strong>Registros detalhados</strong>, que dão uma trilha de auditoria para responder quem acessou o quê e quando.</li>\n</ul>\n\n<h3>Políticas que funcionam como rede de segurança</h3>\n<p>É possível definir limites de taxa, como um número máximo de acessos por minuto por usuário. Também dá para restringir chamadas por IP, aceitando apenas gateways conhecidos do Power Platform. Para organizações com regras de conformidade rígidas, é possível exigir cabeçalhos ou tokens exclusivos do processo de negócio, o que torna o acesso aleatório de fora \"barulhento\" e fácil de bloquear.</p>\n<p>O equilíbrio importa. Se a limitação for agressiva demais, solicitações legítimas falham e os usuários passam a reenviar os mesmos dados até que passem. O monitoramento e a análise dentro do API Management permitem ver padrões de uso, identificar chamadas com falha e ajustar políticas antes que o usuário perceba. Com ele, também é possível acompanhar a adoção e ver quais fluxos geram valor e quais consomem capacidade sem motivo.</p>\n\n<h2>Governança de IA: custos, conformidade e controle</h2>\n<p>Os problemas de governança costumam aparecer depois do sucesso. O aplicativo funciona tão bem que todos continuam usando, e então alguém olha a fatura do Azure ou recebe uma mensagem da área de segurança da informação. Surgem perguntas: quem controla o acesso aos endpoints do Azure OpenAI? Quantas solicitações cada Power App faz? Todas são necessárias? Onde fica o limite entre experimentação e automação que devora o orçamento?</p>\n\n<h3>Custos sob controle</h3>\n<p>O Azure contabiliza com precisão cada token, chamada de API e gigabyte, mas, se ninguém acompanha, os custos disparam em silêncio. Desenvolvedores cidadãos querem inovar e nem sempre sabem que o fluxo chama o endpoint de IA mil vezes por dia. O Azure Cost Management oferece painéis, alertas e limites de gastos, mas alguém precisa definir tetos e monitorar picos semanais. Marcar (tag) cada recurso, como endpoints de IA, fluxos e Power Apps individuais, ajuda a ratear gastos por equipe ou linha de negócio. Também ajuda na limpeza: se uma automação segue rodando após o piloto, o recurso marcado se destaca.</p>\n\n<h3>Conformidade</h3>\n<p>Mesmo com o API Management na porta de entrada, restam perguntas. Quais dados são enviados? Por quanto tempo ficam armazenados? O desenvolvedor mascarou informações pessoais antes de enviar o texto de um ticket? Existe registro de quem acessou o quê, de acordo com as políticas da organização? Em setores regulados, uma única falha, como enviar dados confidenciais para um resumo sem a filtragem adequada, pode paralisar projetos por semanas.</p>\n\n<h3>Visibilidade no lado do Power Platform</h3>\n<p>O kit inicial de governança do Power Platform é o mais próximo de um centro de comando de IA. Ele varre o tenant em busca de fluxos, conectores, aplicativos e bots e cria um inventário sobre o qual a TI pode agir. Com ele, é possível configurar análises de uso, receber alertas sobre padrões suspeitos, lembrar desenvolvedores cidadãos das boas práticas internas e gerar relatórios sobre o uso da API e sobre quem cria o quê. Um processo de centro de excelência teria sinalizado cedo o crescimento descontrolado de um app e forçado uma revisão.</p>\n\n<h2>Erros e armadilhas comuns</h2>\n<ul>\n<li><strong>Tratar todos os casos de IA como iguais.</strong> Uma empresa usou um endpoint voltado à geração de texto geral para triar tickets. O modelo analisava o histórico completo e escrevia rascunhos longos a cada vez. Os custos subiram da noite para o dia, os fluxos ficaram lentos e a IA começou a inventar informações. Uma classificação curta teria bastado.</li>\n<li><strong>Expor a chave de API.</strong> Em um caso, a chave foi parar em uma pasta de documentação compartilhada, e um loop recursivo gerou milhares de chamadas repetidas ao endpoint. A conta subiu e, pior, ficou a dúvida sobre se dados confidenciais tinham ido parar no lugar errado. Com limites de taxa e melhor registro, o problema teria sido barrado muito antes.</li>\n<li><strong>Ignorar o API Management</strong> até que algo quebre.</li>\n<li><strong>Enviar dados mal preparados</strong> ao modelo, sem limpeza, contexto ou divisão de textos longos.</li>\n<li><strong>Não definir tetos de custo</strong> nem em provas de conceito.</li>\n<li><strong>Deixar a governança para depois</strong>: num aplicativo de feedback de clientes, o uso dobrou em uma semana e triplicou depois. Só a fatura forçou uma revisão, que revelou dados sensíveis indo ao endpoint sem aprovação.</li>\n</ul>\n\n<h2>Takeaways práticos</h2>\n<ul>\n<li>Pense a solução em quatro camadas: Power Apps/Dynamics 365, Power Automate, Azure OpenAI e API Management.</li>\n<li>Use o Power Automate para limpar, formatar e mascarar dados antes de enviá-los ao modelo.</li>\n<li>Para tarefas rápidas, como classificação ou análise de sentimento, use o menor modelo que dê conta do trabalho.</li>\n<li>Em textos longos, limite os tokens e a frequência de acesso dos usuários.</li>\n<li>Defina cotas de uso nos fluxos e acompanhe solicitações e tokens no portal do Azure.</li>\n<li>Coloque o API Management na frente do endpoint, com autenticação, limites de taxa, restrição por IP quando fizer sentido e registros.</li>\n<li>Nunca deixe chaves de API em scripts, fluxos de teste ou pastas compartilhadas.</li>\n<li>Marque todos os recursos e defina orçamentos ou tetos flexíveis, mesmo em provas de conceito.</li>\n<li>Revise periodicamente quem pode acessar os endpoints e documente quais fluxos enviam quais dados e por quê.</li>\n<li>Trate a governança como processo contínuo, com revisões regulares conforme a lógica de negócio e as regras de privacidade mudam.</li>\n</ul>\n\n<h2>Conclusão</h2>\n<p>Conectar o Azure OpenAI ao Power Apps ou ao Dynamics 365 é a parte fácil. Para a IA sobreviver a usuários e dados reais, é preciso entender como cada camada se comporta, escolher a configuração certa para cada caso de uso, proteger os endpoints com o API Management e manter custos e conformidade sob acompanhamento constante. Com esses controles, a IA deixa de ser uma demo frágil e passa a sustentar processos de negócio, e a empresa ganha confiança para expandir e inovar.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "IA corporativa no Power Platform: da demo à produção",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Entender a arquitetura",
+     "text": "Power Apps/Dynamics 365, Power Automate, Azure OpenAI e API Management trabalham juntos como quatro camadas."
+    },
+    {
+     "kopf": "Preparar os dados",
+     "text": "O Power Automate limpa, formata e mascara informações antes de enviá-las ao modelo."
+    },
+    {
+     "kopf": "Escolher o modelo certo",
+     "text": "Sentimento, resumo e geração de texto exigem abordagens, prompts e custos diferentes."
+    },
+    {
+     "kopf": "Proteger com API Management",
+     "text": "Autenticação, limites de taxa e registros evitam abusos, loops e chaves expostas."
+    },
+    {
+     "kopf": "Governar custos e conformidade",
+     "text": "Tags, orçamentos, auditoria de acesso e inventário mantêm a IA sob controle ao escalar."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Quais são as quatro camadas de uma arquitetura de IA no Power Platform com Azure OpenAI?",
+    "a": "São quatro peças: Power Apps ou Dynamics 365, que é a interface e o gatilho; Power Automate, que orquestra o processo; o endpoint do Azure OpenAI, que faz sentimento, resumo e geração de texto; e o Azure API Management, que cuida de segurança e limitação de uso."
+   },
+   {
+    "q": "Por que não basta usar um conector para ligar o Power Apps ao Azure OpenAI?",
+    "a": "O Power Apps não conversa diretamente com o Azure OpenAI. O Power Automate coleta os dados, ajusta o formato, limpa o texto e mascara campos sensíveis. O API Management protege o endpoint com autenticação, limites de taxa e registros, algo que o conector sozinho não oferece."
+   },
+   {
+    "q": "O que o Azure API Management faz para proteger o endpoint do Azure OpenAI?",
+    "a": "Ele autentica e autoriza cada solicitação, limita requisições e mantém registros detalhados para auditoria. Também permite limites por minuto por usuário, restrição por IP a gateways conhecidos do Power Platform e exigência de cabeçalhos ou tokens. Limites agressivos demais, porém, fazem solicitações legítimas falharem."
+   },
+   {
+    "q": "Como controlar os custos de IA em soluções com Power Platform e Azure OpenAI?",
+    "a": "Use o Azure Cost Management para painéis, alertas e limites de gastos, e monitore picos semanais. Marque os recursos com tags para ratear custos. Escolha o menor modelo que dê conta da tarefa, limite tokens e frequência em textos longos e defina cotas nos fluxos."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Demo versus solução corporativa",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Demo de IA",
+     "punkte": [
+      "Funciona bem com 10 pessoas, com resposta em menos de um segundo",
+      "Apenas um conector ligado ao Azure OpenAI",
+      "Sem tetos de custo nem acompanhamento de uso",
+      "Chave de API pode parar em scripts ou pastas compartilhadas"
+     ]
+    },
+    "rechts": {
+     "titel": "Solução corporativa",
+     "punkte": [
+      "Quatro camadas trabalhando juntas e preparadas para crescer",
+      "API Management com autenticação, limites de taxa e registros",
+      "Custos marcados, monitorados e com orçamentos definidos",
+      "Governança contínua com inventário e revisões regulares"
+     ]
+    }
+   },
+   {
+    "titel": "Custo e complexidade por caso de uso",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "Frações de centavo",
+      "text": "Custo da análise de sentimento por solicitação, com entradas curtas e respostas rápidas."
+     },
+     {
+      "wert": "Resumos",
+      "text": "Exigem entrada limpa e dividida em partes, para evitar paráfrases e detalhes inventados."
+     },
+     {
+      "wert": "Centenas de tokens",
+      "text": "Geração de textos longos consome mais tokens e demora mais."
+     },
+     {
+      "wert": "10 mil usuários",
+      "text": "Em escala, surgem esperas de 30 segundos e erros no endpoint."
+     }
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Qual é o papel do Power Automate na arquitetura de IA descrita no artigo?",
+    "opts": [
+     "Orquestrar o processo, preparando, formatando e mascarando os dados antes de enviá-los ao modelo",
+     "Hospedar o modelo de linguagem e gerar as respostas aos clientes",
+     "Aplicar limites de taxa e registrar a trilha de auditoria de cada acesso",
+     "Armazenar as chaves de API para que os aplicativos as usem diretamente"
+    ],
+    "a": 0,
+    "why": "O fluxo coleta dados, ajusta o formato, limpa texto e mascara campos antes de encaminhá-los ao Azure OpenAI."
+   },
+   {
+    "q": "Qual destas funções o Azure API Management cumpre e o conector sozinho não cumpre?",
+    "opts": [
+     "Treinar o modelo com os dados internos da empresa",
+     "Autenticar cada solicitação, limitar requisições e manter registros detalhados de acesso",
+     "Criar automaticamente os prompts ideais para cada caso de uso",
+     "Substituir o inventário de fluxos feito pelo kit inicial de governança"
+    ],
+    "a": 1,
+    "why": "O API Management oferece autenticação e autorização a cada chamada, limitação de requisições e registros para auditoria."
+   },
+   {
+    "q": "Segundo o artigo, o que aconteceu quando uma empresa usou um endpoint de geração de texto geral para triar tickets?",
+    "opts": [
+     "A triagem ficou mais precisa e os custos caíram",
+     "O modelo recusou os tickets mais longos e os fluxos pararam",
+     "Os custos subiram, os fluxos ficaram lentos e a IA passou a inventar informações",
+     "Os dados dos tickets foram automaticamente mascarados pelo modelo"
+    ],
+    "a": 2,
+    "why": "O modelo analisava o histórico completo e escrevia rascunhos longos, elevando custos, lentidão e invenções; uma classificação curta bastaria."
+   },
+   {
+    "q": "Qual prática o artigo recomenda para tarefas rápidas como classificação ou análise de sentimento?",
+    "opts": [
+     "Usar sempre o maior modelo disponível para garantir qualidade",
+     "Enviar o histórico completo do cliente em cada solicitação",
+     "Dispensar limites de custo, pois essas tarefas são baratas",
+     "Usar o menor modelo que dê conta do trabalho"
+    ],
+    "a": 3,
+    "why": "Nos takeaways, o artigo recomenda o menor modelo capaz de executar a tarefa, reduzindo custo e latência."
+   }
+  ]
+ },
+ "nl": {
+  "html": "<p>Een gelikte AI-demo in Power Apps is zo gebouwd: een chatbot die binnen seconden antwoord geeft of een app die tickets als vanzelf sorteert. Maar zodra zo'n oplossing echte gebruikers, echte data en een echt bedrijfsproces tegenkomt, lopen veel projecten vast. De prestaties zakken in, de antwoorden worden onbetrouwbaar en gevoelige klantgegevens belanden op plekken waar ze niet horen.</p>\n<p>Dit artikel laat zien hoe je Azure OpenAI professioneel koppelt aan Power Apps en Dynamics 365. Het gaat over de architectuur eronder, het afstemmen van AI op zakelijke use cases, beveiliging met Azure API Management en governance die kosten en compliance in de hand houdt.</p>\n\n<h2>De mythe van \"even een connector toevoegen\"</h2>\n<p>Het idee dat AI toevoegen aan Power Platform neerkomt op een connector toevoegen en die koppelen aan Azure OpenAI blijft hardnekkig. Op papier lijken de tools bijna te eenvoudig. In een demo met twee gebruikers werkt het ook prima.</p>\n<p>Daarna volgen de problemen: prestatieproblemen, chatbots die onzin uitkramen en gevoelige klantgegevens die per ongeluk lekken. Een connector is niet meer dan de uitnodiging voor het architectuurfeestje. Het echte werk is begrijpen hoe elke laag met de andere samenwerkt en hoe fragiel dat wordt zodra je opschaalt.</p>\n\n<h2>De anatomie van AI in Power Platform: vier spelers</h2>\n<p>In vrijwel elke serieuze opstelling zijn vier onderdelen betrokken. Samen bepalen ze of een oplossing stabiel blijft of niet.</p>\n<h3>Power Apps of Dynamics 365</h3>\n<p>Hier werken de eindgebruikers. Zij leveren de input, zoals een klantbericht, enquêteresultaat of productreview, en vormen de trigger voor elk AI-verzoek.</p>\n<h3>Power Automate</h3>\n<p>Power Apps praten niet rechtstreeks met Azure OpenAI. Power Automate orkestreert het geheel: een flow pakt de data, brengt die in het juiste formaat en stuurt hem door. Onderweg kan de flow tekst opschonen, context uit andere bronnen toevoegen of velden maskeren voor privacy voordat het verzoek naar Azure OpenAI gaat.</p>\n<h3>Het Azure OpenAI-eindpunt</h3>\n<p>Dit is het brein achter sentimentanalyse, tekstsamenvattingen of het genereren van klantreacties. Het eindpunt is alleen zo goed als wat het aangeleverd krijgt. Mist een productreview context of heeft hij een vreemde opmaak, dan krijg je vreemde resultaten of zelfs gehallucineerde antwoorden.</p>\n<h3>Azure API Management</h3>\n<p>Dit onderdeel zit weggestopt in de stack en wordt vaak genegeerd tot het misgaat. Het zorgt voor beveiliging en throttling en maakt het verschil tussen een stabiele stroom en een overbelast systeem.</p>\n\n<h2>Waarom schaal en prestaties een demo ontmaskeren</h2>\n<p>Demo's zijn geoptimaliseerd voor een handvol gebruikers en bijna perfecte netwerkomstandigheden. In een echt bedrijf heb je te maken met SLA's, privacykwesties en prestatiedrempels.</p>\n<p>Neem een Sales Feedback Power App met ingebouwde sentimentanalyse. Met tien gebruikers draait de flow soepel en komt er binnen een seconde een bruikbaar resultaat. Springt het aantal naar 10.000, bijvoorbeeld na een e-mailcampagne of een fusie, dan krijg je wachttijden van 30 seconden of foutmeldingen, omdat het eindpunt de aanvragen niet kan bijhouden. Het kan ook gebeuren dat de helft van de feedback niet meer wordt verwerkt, omdat de payload de Azure-limieten overschrijdt of omdat de beveiligingsregels in API Management nooit zijn aangescherpt.</p>\n<p>Je AI-pipeline blokkeert dan de verkoopafdeling in plaats van haar te helpen, en de helpdesk is daar niet blij mee. Als een andere automatisering resources opslokt, loopt de vertraging in je app bovendien op.</p>\n\n<h2>Azure OpenAI afstemmen op de zakelijke use case</h2>\n<p>Met hetzelfde model kun je negatief sentiment herkennen, een e-mailreeks samenvatten en een productomschrijving opstellen. Toch kun je niet zomaar de prompt vervangen. Elke use case vraagt een andere aanpak.</p>\n<h3>Sentimentanalyse: kort, snel en goedkoop</h3>\n<p>Wil je dat een Dynamics 365-app klantklachten markeert, dan is sentimentanalyse de voor de hand liggende eerste stap. De input is kort, de antwoorden komen snel, de kosten zijn laag en er is nauwelijks context om bij te houden. Power Automate stuurt een zin of twee mee, plus een prompt die het model vertelt waarop het moet letten. Zulke flows zijn makkelijk te beheren, eenvoudig te begrenzen en hoeven bijna nooit herschreven te worden.</p>\n<h3>Samenvattingen: de grenzen worden opgezocht</h3>\n<p>Laat je managers gedetailleerde notulen plakken en verwacht je samenhangende samenvattingen, dan moet de prompt nauwkeurig zijn en de juiste toon hebben. Is de payload te groot of de brontekst te ongestructureerd, dan gaat het model parafraseren in plaats van samenvatten, of verzint het details die nooit hebben plaatsgevonden. Power Automate moet daarom de input vormgeven: handtekeningen strippen, opmaak verwijderen en lange documenten eventueel opdelen. Dat gebeurt allemaal voordat de AI aan zet is.</p>\n<h3>Tekstgeneratie en classificatie op grote schaal</h3>\n<p>Het wordt pas echt ingewikkeld bij aangepaste e-mailantwoorden voor het verkoopteam of bij het categoriseren van elk supportticket. Dan moet de flow door enorme datasets lussen, wordt het eindpunt overspoeld, daalt de doorvoer en loopt de Azure-rekening snel op.</p>\n<p>Lange tekstgeneratie verhoogt de modelcomplexiteit, verbruikt honderden tokens en heeft meer tijd nodig om te reageren. Sentimentanalyse kost misschien maar een fractie van een cent per verzoek. Behandel deze processen dus niet als uitwisselbaar.</p>\n<p>Prompt engineering lijkt op het afstellen van een gevoelig algoritme: je test, krijgt bizarre resultaten en herschrijft. Elke variatie beïnvloedt niet alleen de output, maar ook de tijd, de kosten en het beveiligingsprofiel van je workflow.</p>\n\n<h2>De stroom beveiligen met Azure API Management</h2>\n<p>Zodra een pilot van de testomgeving naar productie gaat, is het OpenAI-eindpunt niet langer een plek voor ongevaarlijke testvragen. Het is een potentieel venster naar alles wat je app blootstelt. Komt de API-sleutel in verkeerde handen, bijvoorbeeld omdat hij in een script of een teststroom staat, dan kan iemand prompts sturen, antwoorden ophalen en kosten opbouwen. Overbelasting door aanvallen is een reële zorg. Maar ook zonder kwade opzet kan een verkeerd geconfigureerde app die in een lus op het verkeerde record draait je eindpunt onophoudelijk belasten.</p>\n<h3>Wat API Management doet</h3>\n<p>API Management fungeert als portier bij de deur. Het kan dingen die Power Automate en de connectoren zelf niet kunnen:</p>\n<ul>\n<li>authenticatie en autorisatie afdwingen bij elk verzoek;</li>\n<li>het aantal verzoeken aan je eindpunt beperken, zodat een fout of een op hol geslagen script je budget en reputatie niet in gevaar brengt;</li>\n<li>gedetailleerde logs bijhouden, zodat je een audit trail hebt als iemand vraagt wie wat wanneer heeft benaderd.</li>\n</ul>\n<h3>Een incident uit de praktijk</h3>\n<p>Een organisatie rolde een AI-classificatiestroom uit voor klant-e-mails in Dynamics 365 en zette de API-sleutel in Power Automate. De sleutel belandde in een gedeelde documentatiemap en een enthousiast maar ongetraind teamlid bouwde per ongeluk een recursieve lus in de test-app. Binnen enkele uren raakten duizenden API-aanroepen het eindpunt, vaak voor dezelfde records. De Azure-rekening steeg onverwacht. Het ergste was de onzekerheid of er gevoelige informatie op de verkeerde plek was terechtgekomen. Met API Management had de lus een snelheidslimietfout geactiveerd voordat de situatie escaleerde, en betere logging had de vloedgolf direct gemarkeerd.</p>\n<h3>Beleid met de juiste balans</h3>\n<p>Met API-managementbeleid kun je snelheidslimieten instellen, bijvoorbeeld een maximaal aantal hits per minuut per gebruiker. Je kunt aanroepen beperken op IP-bereik, zodat alleen bekende Power Platform-gateways toegang krijgen. Voor organisaties met strikt compliancebeleid kun je headers of tokens eisen die uniek zijn voor het bedrijfsproces, waardoor willekeurige toegang van buitenaf opvalt en eenvoudig te blokkeren is.</p>\n<p>De balans is belangrijk. Is de throttling te agressief ingesteld, dan falen legitieme verzoeken en gaan gebruikers omwegen verzinnen, zoals dezelfde gegevens steeds opnieuw indienen. Monitoring en analytics in API Management helpen hierbij: je ziet gebruikspatronen, spot mislukte aanroepen en stemt het beleid af voordat gebruikers er last van hebben. Zie API Management dus minder als leidingwerk en meer als je hoofdingang.</p>\n\n<h2>Governance: kosten, compliance en grip op AI</h2>\n<p>Governanceproblemen steken meestal de kop op na het succes. Een app werkt zo goed dat iedereen hem blijft gebruiken. Dan kijkt iemand naar de Azure-factuur of komt er een bericht van InfoSec, en blijkt dat niemand weet wie waarvoor verantwoordelijk is.</p>\n<h3>Kosten in de hand houden</h3>\n<p>Azure houdt bij hoeveel tokens, API-aanroepen en gigabytes aan data door de OpenAI-eindpunten gaan, maar die cijfers helpen alleen als iemand ze bekijkt. Je betaalt per gebruik, en dat gebruik wordt onvoorspelbaar wanneer citizen developers innoveren zonder te beseffen dat hun flow het AI-eindpunt duizend keer per dag aanroept. Wie dit negeert, riskeert dat een project wordt stopgezet of dat het management het vertrouwen in het hele AI-experiment verliest.</p>\n<p>Azure Cost Management biedt dashboards, waarschuwingen en uitgavelimieten. Je moet zelf drempelwaarden instellen, wekelijkse pieken in het gebruik volgen en op pauze drukken voordat het escaleert. Het labelen van elke resource (AI-eindpunten, flows en zelfs individuele Power Apps) maakt uitgaven herleidbaar tot een team of bedrijfsonderdeel. Blijft een automatisering draaien na afloop van een pilot, dan valt die op.</p>\n<h3>Compliance</h3>\n<p>Ook met API Management aan de ingang blijven er vragen. Welke data wordt verzonden? Hoe lang wordt die opgeslagen? Waar kunnen kopieën terechtkomen? Is persoonlijk identificeerbare informatie gemaskeerd voordat de tekst van een supportticket naar Azure OpenAI ging? En komt het overzicht van wie toegang had tot wat overeen met het beleid van de organisatie? Auditors zijn niet onder de indruk van \"we denken van wel\". In gereguleerde sectoren kan één enkele fout projecten wekenlang stilleggen.</p>\n<h3>De CoE Starter Kit als commandocentrum</h3>\n<p>Aan de kant van het Power Platform komt de Center of Excellence Starter Kit het dichtst bij een AI-commandocentrum. Het scant je tenant op elke flow, custom connector, app en bot en bouwt een inventaris op waar je op kunt acteren. IT kan gebruiksanalyses opzetten, waarschuwingen sturen bij verdachte patronen en citizen developers herinneren aan interne best practices. De kit biedt ook sjablonen voor gecontroleerde implementatie, activeert beoordelingen voor risicovolle apps en kan bedrijfsbeleid afdwingen door stromen buiten de compliancekaders af te sluiten of te pauzeren.</p>\n\n<h2>Veelgemaakte fouten en valkuilen</h2>\n<ul>\n<li><strong>Alleen de connector begrijpen.</strong> Wie alleen de connector kent, gokt met stabiliteit en beveiliging.</li>\n<li><strong>Slecht voorbereide payloads.</strong> Ontbrekende context of rare opmaak leidt tot vreemde resultaten of hallucinaties.</li>\n<li><strong>Alle AI-taken als uitwisselbaar behandelen.</strong> In een voorbeeld uit de praktijk werd een ticket-triageflow ingesteld op algemene tekstgeneratie in plaats van korte classificatie. Het model analyseerde de volledige ticketgeschiedenis en schreef steeds concepten van meerdere alinea's. De kosten schoten 's nachts omhoog, workflows vertraagden en de AI begon informatie te verzinnen.</li>\n<li><strong>API-sleutels onbeveiligd laten.</strong> Een sleutel in een gedeelde map of teststroom is een open uitnodiging.</li>\n<li><strong>Geen throttling.</strong> Eén defecte app of lus kan het eindpunt overspoelen en de rekening laten exploderen.</li>\n<li><strong>Te agressieve limieten.</strong> Legitieme verzoeken falen en gebruikers zoeken omwegen.</li>\n<li><strong>Governance pas achteraf regelen.</strong> Bij een klantfeedbackapp die veel sneller aansloeg dan verwacht, verdubbelde het gebruik in een week en verdrievoudigde het daarna. De kosten schoten omhoog en de app bleek zonder goedkeuring vertrouwelijke gegevens naar het AI-eindpunt te sturen. Een proces via een center of excellence had de groei vroeg kunnen signaleren en een beoordeling kunnen afdwingen.</li>\n</ul>\n\n<h2>Praktische takeaways</h2>\n<ul>\n<li>Ontwerp de hele keten: Power Apps of Dynamics 365, Power Automate, Azure OpenAI en Azure API Management.</li>\n<li>Laat Power Automate de input voorbereiden: opschonen, context toevoegen, gevoelige velden maskeren en lange teksten opdelen.</li>\n<li>Kies per use case de juiste aanpak en gebruik voor snelle taken zoals classificatie of sentimentanalyse parallelle stromen en het kleinste model dat het werk doet.</li>\n<li>Beperk bij lange teksten het aantal tokens en begrens hoe vaak gebruikers die functies kunnen aanroepen.</li>\n<li>Stel gebruiksquota in en controleer verzoeken en tokengebruik via de Azure portal. Bekijk regelmatig de logboeken om pieken vroeg te ontdekken.</li>\n<li>Zet Azure API Management voor je eindpunt met authenticatie, snelheidslimieten, eventueel IP-beperkingen en logging.</li>\n<li>Voorzie resources van labels en stel budgetten of zachte limieten in, ook voor proofs of concept.</li>\n<li>Controleer en audit de toegang tot eindpunten en documenteer welke stromen welke gegevens versturen en waarom.</li>\n<li>Gebruik de CoE Starter Kit voor inventaris, analyses en beoordelingen.</li>\n<li>Herhaal beoordelingen en updates regelmatig, want modellen, bedrijfslogica en privacyregels veranderen.</li>\n</ul>\n\n<h2>Fazit</h2>\n<p>Het verschil tussen een leuke AI-demo en een enterpriseoplossing zit niet in de connector, maar in alles eromheen. Een goed voorbereide flow, een op de use case afgestemd model, API Management als hoofdingang en governance die kosten en compliance bewaakt zorgen samen dat AI onder druk blijft werken. Met die controles krijgen IT en bedrijfsleiders het vertrouwen om uit te breiden, te experimenteren en te innoveren, en verandert AI van een mogelijke aansprakelijkheid in een betrouwbare bondgenoot.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Enterprise-AI in Power Platform: van demo naar productie",
+   "typ": "schritte",
+   "punten": [],
+   "punkte": [
+    {
+     "kopf": "Architectuur begrijpen",
+     "text": "Power Apps of Dynamics 365, Power Automate, Azure OpenAI en API Management werken samen als één keten."
+    },
+    {
+     "kopf": "Input voorbereiden",
+     "text": "Power Automate schoont tekst op, voegt context toe, maskeert privacygevoelige velden en deelt lange teksten op."
+    },
+    {
+     "kopf": "AI afstemmen",
+     "text": "Kies per use case: sentimentanalyse, samenvatting of tekstgeneratie. Gebruik het kleinste model dat het werk doet."
+    },
+    {
+     "kopf": "Eindpunt beveiligen",
+     "text": "Azure API Management regelt authenticatie, snelheidslimieten en logging als portier voor je Azure OpenAI-eindpunt."
+    },
+    {
+     "kopf": "Governance inrichten",
+     "text": "Labels, budgetten, Azure Cost Management en de CoE Starter Kit houden kosten en compliance onder controle."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Waarom is een connector niet genoeg om Azure OpenAI aan Power Apps te koppelen?",
+    "a": "Een connector is slechts het begin. Een stabiele oplossing vraagt om een keten van vier onderdelen: Power Apps of Dynamics 365, Power Automate, het Azure OpenAI-eindpunt en Azure API Management. Wie niet snapt hoe die lagen samenwerken, krijgt problemen met prestaties, onbetrouwbare antwoorden en lekkende klantgegevens."
+   },
+   {
+    "q": "Wat doet Azure API Management bij een Azure OpenAI-koppeling?",
+    "a": "Azure API Management werkt als portier voor je eindpunt. Het dwingt bij elk verzoek authenticatie en autorisatie af, beperkt het aantal aanroepen met snelheidslimieten, kan toegang op IP-bereik beperken en houdt gedetailleerde logs bij. Zo kan een defecte lus of gelekte sleutel het eindpunt niet overbelasten."
+   },
+   {
+    "q": "Hoe houd je de kosten van Azure OpenAI in Power Platform onder controle?",
+    "a": "Gebruik Azure Cost Management voor dashboards, waarschuwingen en uitgavelimieten, en stel zelf drempelwaarden in. Volg wekelijkse pieken en label elke resource, zodat kosten herleidbaar zijn tot een team. Kies per taak het kleinste model dat voldoet en beperk het aantal tokens bij lange teksten."
+   },
+   {
+    "q": "Waarom moet je sentimentanalyse, samenvattingen en tekstgeneratie verschillend aanpakken?",
+    "a": "Sentimentanalyse werkt met korte input en is snel en goedkoop. Samenvattingen vragen een nauwkeurige prompt en opgeschoonde, eventueel opgedeelde invoer. Lange tekstgeneratie verbruikt veel tokens, tijd en geld. Een ticketflow die op tekstgeneratie stond in plaats van classificatie, zorgde voor hoge kosten, vertraging en verzonnen informatie."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Aanpak per AI-use case",
+    "typ": "fakten",
+    "punten": [
+     {
+      "wert": "Sentimentanalyse",
+      "text": "Korte input, snelle antwoorden, lage kosten en nauwelijks context om bij te houden."
+     },
+     {
+      "wert": "Samenvattingen",
+      "text": "Vraagt een nauwkeurige prompt en voorbewerkte input, anders parafraseert of verzint het model."
+     },
+     {
+      "wert": "Tekstgeneratie",
+      "text": "Verbruikt honderden tokens, heeft meer reactietijd nodig en verhoogt de modelcomplexiteit."
+     },
+     {
+      "wert": "Classificatie op schaal",
+      "text": "Lussen door enorme datasets overspoelen het eindpunt en laten de rekening oplopen."
+     }
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Welke rol heeft Power Automate in de keten tussen Power Apps en Azure OpenAI?",
+    "opts": [
+     "Het orkestreert de data en bereidt die voor, bijvoorbeeld door velden te maskeren",
+     "Het vervangt Azure OpenAI als het brein achter de sentimentanalyse",
+     "Het beheert de API-sleutels en past de snelheidslimieten toe",
+     "Het scant de tenant en bouwt een inventaris van alle apps"
+    ],
+    "a": 0,
+    "why": "Power Apps praten niet rechtstreeks met Azure OpenAI. Power Automate pakt de data, schoont op, voegt context toe en maskeert gevoelige velden."
+   },
+   {
+    "q": "Wat had een recursieve lus in de test-app kunnen stoppen voordat de situatie escaleerde?",
+    "opts": [
+     "Een groter Azure OpenAI-model met meer tokens per verzoek",
+     "Een snelheidslimiet in Azure API Management die een foutmelding geeft",
+     "Een extra connector tussen Power Apps en Dynamics 365",
+     "Een prompt met een kortere en duidelijkere instructie"
+    ],
+    "a": 1,
+    "why": "Met API Management had de lus een snelheidslimietfout geactiveerd, en betere logging had de vloedgolf direct gemarkeerd."
+   },
+   {
+    "q": "Wat ging er mis bij de ticket-triageflow die op algemene tekstgeneratie was ingesteld?",
+    "opts": [
+     "De flow weigerde tickets met gevoelige klantgegevens te verwerken",
+     "De API-sleutel verliep waardoor alle tickets onbehandeld bleven",
+     "Het model schreef lange concepten, waardoor kosten stegen en informatie werd verzonnen",
+     "De throttling was te agressief, waardoor legitieme tickets faalden"
+    ],
+    "a": 2,
+    "why": "Het model analyseerde de volledige ticketgeschiedenis en schreef meeralinea-concepten: kosten schoten omhoog, workflows vertraagden en de AI verzon informatie."
+   },
+   {
+    "q": "Waarvoor dient de CoE Starter Kit volgens het artikel?",
+    "opts": [
+     "Het versleutelt alle verzoeken naar het Azure OpenAI-eindpunt",
+     "Het berekent automatisch het goedkoopste model per use case",
+     "Het vervangt Azure Cost Management voor het instellen van uitgavelimieten",
+     "Het maakt een inventaris van flows, apps en bots en kan beleid afdwingen"
+    ],
+    "a": 3,
+    "why": "De kit scant de tenant, bouwt een inventaris, activeert beoordelingen voor risicovolle apps en kan flows buiten de compliancekaders pauzeren."
+   }
+  ]
+ },
+ "pl": {
+  "html": "<p>Wiele pokazów AI w Power Platform wygląda świetnie: chatbot sprzedażowy odpowiada w kilka sekund, aplikacja do obsługi zgłoszeń sama podsuwa odpowiedzi. Dopiero w realnym biznesie okazuje się, że samo dodanie konektora do Azure OpenAI to najłatwiejsza część zadania. Poniżej wyjaśniamy, jak wygląda architektura firmowego rozwiązania AI z Power Apps, Dynamics 365 i Azure OpenAI oraz jak zadbać o wydajność, bezpieczeństwo i governance.</p>\n<p>Jeśli wolisz mniej magii, a więcej konkretów, ten tekst jest dla Ciebie. Pokazujemy, co dzieje się „pod maską”, gdzie najczęściej pojawiają się problemy i jak im zapobiegać.</p>\n\n<h2>Architektura AI w Power Platform: cztery kluczowe elementy</h2>\n<p>W niemal każdym poważnym wdrożeniu AI w Power Platform występują cztery główne elementy. Każdy z nich odpowiada za inną część drogi od danych do odpowiedzi.</p>\n\n<h3>Power Apps i Dynamics 365: punkt wejścia</h3>\n<p>To z tymi aplikacjami pracują użytkownicy i to one inicjują każde zapytanie do AI. Zbierają dane do analizy: wiadomość od klienta, wynik ankiety, recenzję produktu czy notatkę z rozmowy sprzedażowej. Aplikacje te nie komunikują się jednak bezpośrednio z Azure OpenAI.</p>\n\n<h3>Power Automate: koordynator przepływu</h3>\n<p>Power Automate pobiera dane po kliknięciu przycisku lub wysłaniu formularza, formatuje je i przekazuje dalej. Przepływ nie tylko przenosi informacje z punktu A do B. Może oczyścić tekst, dołączyć kontekst z innych źródeł lub zamaskować pola ze względu na prywatność, zanim żądanie trafi do modelu.</p>\n\n<h3>Punkt końcowy Azure OpenAI: „mózg” operacji</h3>\n<p>To tutaj powstaje analiza nastrojów, podsumowanie tekstu czy propozycja odpowiedzi dla klienta. Jakość wyniku zależy jednak od tego, co dostanie na wejściu.</p>\n\n<h3>Azure API Management: strażnik, o którym łatwo zapomnieć</h3>\n<p>Ta warstwa odpowiada za bezpieczeństwo i ograniczanie przepustowości. To ona decyduje, czy system działa stabilnie, czy ulega przeciążeniu. Zwykle o niej zapominamy, dopóki coś nie zawiedzie.</p>\n\n<p>Elementy te zależą od siebie. Jeśli przepływ działa wolno, bo inna automatyzacja zużywa zasoby, użytkownik widzi narastające opóźnienia w aplikacji. Jeśli Power Automate źle przygotuje dane, na przykład recenzji brakuje kontekstu albo ma dziwny format, model zwróci nieprzewidywalne wyniki albo zacznie zmyślać. Gdy wcześniejsze ogniwa zawodzą, nie pomoże nawet najlepszy model.</p>\n\n<h2>Dlaczego demo nie pokazuje problemów ze skalą</h2>\n<p>Pokazy są zoptymalizowane pod kilku użytkowników i niemal idealne warunki sieciowe. W prawdziwej organizacji obowiązują SLA, wymogi prywatności danych i progi wydajnościowe, których nie da się zignorować.</p>\n<p>Weźmy aplikację Power Apps do opinii sprzedażowych z wbudowaną analizą nastrojów. Przy 10 użytkownikach przepływ działa płynnie, a wynik pojawia się w mniej niż sekundę. Gdy liczba skacze do 10 tysięcy, na przykład po kampanii e-mailowej lub fuzji, pojawiają się 30-sekundowe czasy oczekiwania i błędy. Punkt końcowy nie nadąża z żądaniami. Może się też okazać, że część danych w ogóle nie jest przetwarzana, bo rozmiar ładunku przekroczył limity Azure, albo że zasady bezpieczeństwa w API Management nigdy nie zostały zaostrzone. Zamiast wspierać sprzedaż, potok danych ją blokuje.</p>\n<p>Wniosek jest prosty: samo połączenie konektora to dopiero początek. Trzeba zrozumieć, jak działa każda warstwa i jak kruche stają się rzeczy, gdy rośnie skala. Ta wiedza oddziela bota z piaskownicy od rozwiązania gotowego dla przedsiębiorstwa.</p>\n\n<h2>Dopasuj konfigurację do przypadku użycia: sentyment, podsumowania, generowanie tekstu</h2>\n<p>Często zakłada się, że wystarczy zmienić prompt i ten sam punkt końcowy poradzi sobie ze wszystkim. Tymczasem każdy przypadek użycia wymaga innego podejścia, a koncepcja „plug and play” szybko się wtedy załamuje.</p>\n\n<h3>Analiza sentymentu: najlepszy pierwszy krok</h3>\n<p>Przy oznaczaniu skarg klientów w Dynamics 365 dane wejściowe są krótkie, odpowiedzi szybkie, koszt niski, a kontekstu prawie nie trzeba śledzić. Power Automate przekazuje jedno lub dwa zdania i prompt, który mówi modelowi, czego szukać. Takimi przepływami łatwo zarządzać, można je ograniczać i rzadko wymagają przebudowy.</p>\n\n<h3>Podsumowania: większe wymagania wobec danych</h3>\n<p>Gdy menedżerowie wklejają szczegółowe notatki ze spotkań, prompt musi być precyzyjny i mieć właściwy ton. Jeśli wsad jest zbyt duży lub nieustrukturyzowany, model może zacząć parafrazować zamiast streszczać, a nawet halucynować nieistniejące szczegóły. Dlatego Power Automate powinien przygotować dane: usunąć podpisy, wyczyścić formatowanie i ewentualnie podzielić zbyt długi dokument.</p>\n\n<h3>Generowanie tekstu i klasyfikacja na dużą skalę</h3>\n<p>Prawdziwe wyzwania zaczynają się, gdy zespół sprzedaży chce tworzyć odpowiedzi e-mail w locie albo dział wsparcia kategoryzuje każde zgłoszenie. Przepływ przetwarza wtedy ogromne zbiory w pętli, punkt końcowy jest zasypywany żądaniami, przepustowość spada, a rachunek za Azure rośnie. Analiza sentymentu kosztuje ułamek centa za żądanie. Generowanie długich tekstów zwiększa złożoność, zużywa setki tokenów i wydłuża czas odpowiedzi.</p>\n<p>Inżynieria promptów to też nie tylko lepsze pisanie poleceń. Bardziej przypomina dostrajanie algorytmu wyszukiwania: testujesz, dostajesz dziwne wyniki i poprawiasz. Każda zmiana wpływa na rezultat, czas, koszt i profil bezpieczeństwa przepływu.</p>\n\n<h2>Bezpieczeństwo: dlaczego Azure API Management to Twoja tarcza</h2>\n<p>Większość demonstracji traktuje bezpieczeństwo jak punkt do odhaczenia na końcu. Gdy pilotaż wychodzi z wewnętrznej piaskownicy do produkcji, punkt końcowy OpenAI przestaje odpowiadać na niewinne zapytania testowe. Staje się potencjalnym oknem na wszystko, co udostępnia aplikacja.</p>\n<p>Ryzyka są konkretne:</p>\n<ul>\n<li>klucz API leżący w skrypcie lub przepływie testowym może zostać przejęty, a wtedy ktoś zacznie wysyłać zapytania i nabijać koszty;</li>\n<li>chatbot zasilany kluczem widocznym dla wszystkich otwiera drogę do nieautoryzowanego dostępu;</li>\n<li>zapętlona, źle skonfigurowana aplikacja może bez przerwy obciążać endpoint, nawet bez złych zamiarów;</li>\n<li>w zależności od przesyłanych danych pojawiają się ryzyka związane ze zgodnością z przepisami.</li>\n</ul>\n<p>API Management robi to, czego same konektory i Power Automate nie potrafią. Wymusza uwierzytelnianie i autoryzację przy każdym zapytaniu, ogranicza liczbę żądań docierających do endpointu i prowadzi szczegółowe logi, czyli ścieżkę audytu: kto uzyskał dostęp i kiedy.</p>\n\n<h3>Polityki, które działają jak siatka bezpieczeństwa</h3>\n<ul>\n<li>limity częstotliwości, na przykład maksymalna liczba wywołań na minutę dla użytkownika;</li>\n<li>ograniczenie wywołań według zakresu IP, tak aby dozwolone były tylko żądania ze znanych bramek Power Platform;</li>\n<li>w organizacjach o surowych wymogach zgodności: nagłówki lub tokeny unikalne dla procesu biznesowego, dzięki którym dostęp z zewnątrz łatwo wykryć i zablokować.</li>\n</ul>\n<p>Kluczowa jest równowaga. Zbyt agresywne ograniczanie przepustowości powoduje, że poprawne żądania zawodzą, a użytkownicy szukają obejść, na przykład wielokrotnie wysyłają te same dane. Monitoring i analityka w API Management pozwalają obserwować wzorce użycia, zauważać nieudane wywołania i dostrajać polityki, zanim użytkownicy to poczują. Dzięki temu można też sprawdzać, które procesy tworzą realną wartość, a które niepotrzebnie obciążają zasoby. API Management to mniej kanalizacja, a bardziej brama wejściowa.</p>\n\n<h2>Governance: koszty, zgodność i kontrola nad rozrostem rozwiązań</h2>\n<p>Luki w zarządzaniu pojawiają się zwykle po sukcesie. Aplikacja działa na tyle dobrze, że ludzie chcą z niej korzystać, a wtedy padają pytania: kto kontroluje dostęp do endpointów Azure OpenAI, ile zapytań pochodzi z każdej aplikacji i czy wszystkie są potrzebne, gdzie kończy się eksperymentowanie, a zaczyna automatyzacja pożerająca budżet.</p>\n\n<h3>Koszty pod kontrolą</h3>\n<p>Azure liczy każdy token, każde wywołanie API i każdy gigabajt danych. Jeśli nikt nie śledzi tych liczb, koszty rosną niepostrzeżenie, zwłaszcza gdy programiści obywatelscy nie wiedzą, że ich przepływ wywołuje endpoint tysiąc razy dziennie. Skutkiem bywa nie tylko wyższy rachunek, lecz także zamknięcie projektu lub utrata zaufania kierownictwa do całego eksperymentu z AI. Pomaga Azure Cost Management z pulpitami, alertami i limitami wydatków, ale ktoś musi ustawić progi i reagować na skoki zużycia. Warto też tagować zasoby: endpointy, przepływy, a nawet poszczególne aplikacje Power Apps. Wydatki da się wtedy przypisać do zespołu lub linii biznesowej, a po zakończeniu pilotażu nie zostanie „tajemnicze obciążenie”.</p>\n\n<h3>Zgodność z przepisami</h3>\n<p>Nawet gdy API Management kontroluje dostęp, pozostają pytania: jakie dane są wysyłane, jak długo są przechowywane i gdzie mogą trafić ich kopie. Czy dane umożliwiające identyfikację osób zostały zamaskowane przed wysłaniem treści zgłoszenia do Azure OpenAI? Czy istnieje rejestr dostępu zgodny z polityką organizacji? Audytorów nie przekona odpowiedź „chyba tak”. W branżach regulowanych jedno uchybienie może wstrzymać projekty na tygodnie.</p>\n\n<h3>Center of Excellence Starter Kit</h3>\n<p>W Power Platform najbliższym odpowiednikiem centrum dowodzenia jest Center of Excellence Starter Kit. Przeszukuje dzierżawę w poszukiwaniu przepływów, niestandardowych łączników, aplikacji i botów, tworząc spis, na którego podstawie można działać. Dział IT może konfigurować analitykę użycia, wysyłać alerty przy podejrzanych wzorcach i przypominać programistom obywatelskim o dobrych praktykach. Zestaw dostarcza też szablony dla wdrożeń warunkowych, inicjuje przeglądy aplikacji wysokiego ryzyka i może egzekwować polityki, wyłączając lub wstrzymując przepływy niezgodne z normami.</p>\n\n<h2>Częste błędy i stolpersteiny</h2>\n<p>Z opisanych sytuacji wynika kilka powtarzalnych potknięć.</p>\n<ul>\n<li><strong>Przepływ ze zgłoszeniami wsparcia.</strong> W środowisku testowym wyglądał idealnie. Po udostępnieniu wszystkim pracownikom endpoint dostawał żądania dla każdego zgłoszenia w każdej minucie. Model był ustawiony na ogólne generowanie tekstu zamiast prostej klasyfikacji, więc analizował pełną historię i tworzył wieloakapitowe szkice. Koszty gwałtownie wzrosły, procesy zwolniły, a AI zaczęła zmyślać. Nikt nie zapytał, po co do prostej segregacji endpoint nastawiony na generowanie tekstu.</li>\n<li><strong>Klucz API w udostępnionym folderze.</strong> Przy klasyfikacji e-maili w Dynamics 365 klucz trafił do folderu z dokumentacją, a członek zespołu przypadkowo zbudował pętlę rekurencyjną w aplikacji testowej. W ciągu kilku godzin tysiące zapytań uderzyło w endpoint. Najgorsza była niepewność, czy poufne informacje nie wyciekły. API Management zatrzymałoby pętlę limitem zapytań, a logi od razu pokazałyby problem.</li>\n<li><strong>Aplikacja do opinii klientów, która stała się hitem.</strong> Użycie podwoiło się w tydzień, potem potroiło, a koszty skoczyły. Okazało się, że aplikacja przesyłała poufne dane do endpointu bez zatwierdzenia. Proces Centrum Doskonałości mógłby wcześniej zasygnalizować wzrost i wymusić przegląd.</li>\n<li><strong>Traktowanie wszystkich zadań jako zamiennych.</strong> Klasyfikacja, sentyment i generowanie długich treści mają różne koszty, czasy odpowiedzi i ryzyka.</li>\n<li><strong>Zbyt agresywne limity.</strong> Skutkiem są odrzucane poprawne żądania i obejścia po stronie użytkowników.</li>\n</ul>\n\n<h2>Praktyczne wskazówki na start</h2>\n<ul>\n<li>Ustal limity zużycia w przepływach Power Automate i monitoruj liczbę żądań oraz zużycie tokenów w portalu Azure.</li>\n<li>Do szybkich zadań, takich jak klasyfikacja czy analiza nastrojów, używaj najmniejszego modelu, który wykona zadanie, i konfiguruj równoległe przepływy.</li>\n<li>Przy generowaniu dłuższych treści ogranicz maksymalną liczbę tokenów i częstotliwość korzystania z funkcji przez użytkowników.</li>\n<li>Przygotowuj dane w Power Automate: czyść tekst, usuwaj podpisy, dziel zbyt długie dokumenty i maskuj dane osobowe.</li>\n<li>Stawiaj Azure API Management przed endpointem: uwierzytelnianie, limity częstotliwości, ograniczenia IP i logi.</li>\n<li>Regularnie przeglądaj logi i wykrywaj skoki lub niekontrolowane użycie jak najwcześniej.</li>\n<li>Taguj wszystkie zasoby i ustawiaj budżety lub limity miękkie nawet dla dowodów koncepcji.</li>\n<li>Audytuj dostęp do endpointów, bo lista uprawnionych osób zmienia się wraz z zespołami.</li>\n<li>Dokumentuj, które przepływy przesyłają jakie dane i dlaczego.</li>\n<li>Wykorzystaj Center of Excellence Starter Kit do inwentaryzacji i nadzoru nad rozwiązaniami.</li>\n</ul>\n\n<h2>Podsumowanie</h2>\n<p>Firmowa AI w Power Platform to coś więcej niż konektor do Azure OpenAI. O powodzeniu decyduje zrozumienie całego łańcucha: aplikacji, przepływów Power Automate, modelu i warstwy API Management. Do tego dochodzi dopasowanie konfiguracji do konkretnego zadania oraz stałe zarządzanie kosztami, dostępem i zgodnością. Governance nie jest etapem, który kończy się po wdrożeniu. Modele się zmieniają, logika biznesowa ewoluuje, a zasady prywatności stale się przekształcają, więc przeglądy i aktualizacje muszą być regularne. Dzięki temu AI nie pada pod presją, tylko rozwija się w sposób zrównoważony razem z biznesem, a liderzy IT i biznesu mogą bezpiecznie eksperymentować i wprowadzać innowacje.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Firmowa AI w Power Platform: od demo do produkcji",
+   "typ": "schritte",
+   "punkty": [],
+   "punkte": [
+    {
+     "kopf": "Zrozum architekturę",
+     "text": "Power Apps, Power Automate, Azure OpenAI i API Management tworzą jeden łańcuch zależnych warstw."
+    },
+    {
+     "kopf": "Przygotuj dane",
+     "text": "Power Automate czyści tekst, maskuje dane osobowe i dzieli długie dokumenty przed wysłaniem do modelu."
+    },
+    {
+     "kopf": "Dopasuj model do zadania",
+     "text": "Do klasyfikacji i sentymentu używaj najmniejszego modelu, a przy długich tekstach limituj tokeny."
+    },
+    {
+     "kopf": "Zabezpiecz API Management",
+     "text": "Uwierzytelnianie, limity częstotliwości, ograniczenia IP i logi chronią endpoint oraz budżet."
+    },
+    {
+     "kopf": "Pilnuj kosztów i zgodności",
+     "text": "Tagowanie zasobów, budżety, alerty i Azure Cost Management utrzymują wydatki pod kontrolą."
+    },
+    {
+     "kopf": "Wdróż governance",
+     "text": "Center of Excellence Starter Kit daje inwentaryzację, przeglądy i regularny nadzór nad rozwiązaniami."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Jakie elementy zawiera architektura rozwiązania AI w Power Platform z Azure OpenAI?",
+    "a": "W typowym wdrożeniu są cztery elementy: Power Apps i Dynamics 365 jako punkt wejścia, Power Automate jako koordynator przepływu, punkt końcowy Azure OpenAI jako model analizujący oraz Azure API Management odpowiadający za bezpieczeństwo i ograniczanie przepustowości. Elementy te zależą od siebie."
+   },
+   {
+    "q": "Dlaczego demo AI w Power Platform działa dobrze, a po wdrożeniu pojawiają się problemy?",
+    "a": "Pokazy są zoptymalizowane pod kilku użytkowników i idealne warunki sieciowe. Przy 10 tysiącach użytkowników mogą pojawić się 30-sekundowe czasy oczekiwania, błędy, przekroczone limity ładunku Azure oraz niezaostrzone zasady bezpieczeństwa w API Management. Samo połączenie konektora to dopiero początek."
+   },
+   {
+    "q": "Do czego służy Azure API Management przy korzystaniu z Azure OpenAI?",
+    "a": "Wymusza uwierzytelnianie i autoryzację przy każdym zapytaniu, ogranicza liczbę żądań docierających do endpointu i prowadzi szczegółowe logi pokazujące, kto i kiedy uzyskał dostęp. Pozwala ustawić limity częstotliwości oraz ograniczenia według zakresu IP, co chroni przed skutkami przejęcia klucza i zapętlonych aplikacji."
+   },
+   {
+    "q": "Jak kontrolować koszty i governance rozwiązań AI w Power Platform?",
+    "a": "Warto korzystać z Azure Cost Management z pulpitami, alertami i limitami wydatków, tagować endpointy, przepływy i aplikacje oraz regularnie przeglądać logi. Center of Excellence Starter Kit tworzy spis przepływów, aplikacji i botów, wysyła alerty o podejrzanych wzorcach i może wstrzymywać niezgodne przepływy."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Demo kontra produkcja",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Demo",
+     "punkty": [
+      "Zoptymalizowane pod kilku użytkowników",
+      "Niemal idealne warunki sieciowe",
+      "Wynik w mniej niż sekundę przy 10 użytkownikach",
+      "Bezpieczeństwo traktowane jako punkt na koniec"
+     ]
+    },
+    "rechts": {
+     "titel": "Realny biznes",
+     "punkty": [
+      "Obowiązują SLA, wymogi prywatności i progi wydajnościowe",
+      "Przy 10 tysiącach użytkowników pojawiają się błędy",
+      "Ładunek może przekroczyć limity Azure",
+      "Potrzebne uwierzytelnianie, limity i logi audytu"
+     ]
+    }
+   },
+   {
+    "titel": "Koszt i złożoność zadań AI",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "Sentyment",
+      "text": "Krótkie dane, szybkie odpowiedzi, niski koszt, najlepszy pierwszy krok."
+     },
+     {
+      "wert": "Podsumowania",
+      "text": "Wymagają precyzyjnego promptu i wcześniejszego przygotowania danych w Power Automate."
+     },
+     {
+      "wert": "Ułamek centa",
+      "text": "Tyle kosztuje analiza sentymentu za pojedyncze żądanie."
+     },
+     {
+      "wert": "Setki tokenów",
+      "text": "Generowanie długich tekstów zużywa je i wydłuża czas odpowiedzi."
+     },
+     {
+      "wert": "30 sekund",
+      "text": "Tyle trwa oczekiwanie przy 10 tysiącach użytkowników bez przygotowanej skali."
+     }
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Którą rolę w architekturze rozwiązania AI pełni Azure API Management?",
+    "opts": [
+     "Zbiera dane od użytkowników i wysyła je bezpośrednio do modelu",
+     "Odpowiada za bezpieczeństwo, uwierzytelnianie, ograniczanie przepustowości i logowanie wywołań",
+     "Generuje analizę nastrojów i podsumowania tekstu",
+     "Czyści i formatuje tekst przed wysłaniem do modelu"
+    ],
+    "a": 1,
+    "why": "API Management to strażnik: wymusza uwierzytelnianie, ogranicza liczbę żądań i prowadzi logi z ścieżką audytu."
+   },
+   {
+    "q": "Co według artykułu dzieje się w aplikacji do opinii, gdy liczba użytkowników skacze z 10 do 10 tysięcy?",
+    "opts": [
+     "Wynik nadal pojawia się w mniej niż sekundę",
+     "Model automatycznie przełącza się na tańszą wersję",
+     "Pojawiają się 30-sekundowe czasy oczekiwania i błędy",
+     "Power Automate samodzielnie dzieli ruch na kilka endpointów"
+    ],
+    "a": 2,
+    "why": "Przy dużej skali punkt końcowy nie nadąża z żądaniami, więc pojawiają się 30-sekundowe opóźnienia i błędy."
+   },
+   {
+    "q": "Dlaczego analiza sentymentu jest wskazana jako najlepszy pierwszy krok wdrożenia AI?",
+    "opts": [
+     "Wymaga śledzenia pełnej historii rozmów z klientem",
+     "Zużywa setki tokenów, dzięki czemu wyniki są dokładniejsze",
+     "Nie potrzebuje żadnego promptu ani przygotowania danych",
+     "Dane wejściowe są krótkie, odpowiedzi szybkie, koszt niski, a przepływy łatwe do zarządzania"
+    ],
+    "a": 3,
+    "why": "Krótkie dane, szybkie odpowiedzi i niski koszt sprawiają, że takimi przepływami łatwo zarządzać i rzadko trzeba je przebudowywać."
+   },
+   {
+    "q": "Do czego służy Center of Excellence Starter Kit w Power Platform?",
+    "opts": [
+     "Przeszukuje dzierżawę i tworzy spis przepływów, aplikacji, łączników oraz botów do nadzoru",
+     "Zastępuje Azure Cost Management w ustawianiu limitów wydatków",
+     "Szyfruje klucze API i przechowuje je w przepływach",
+     "Przyspiesza działanie modelu w Azure OpenAI"
+    ],
+    "a": 0,
+    "why": "Zestaw inwentaryzuje zasoby w dzierżawie, umożliwia analitykę użycia, alerty, przeglądy aplikacji ryzykownych i egzekwowanie polityk."
+   }
+  ]
+ },
+ "id": {
+  "html": "<p>Demo AI di Power Platform biasanya terlihat meyakinkan: chatbot penjualan menjawab dalam hitungan detik, atau aplikasi layanan pelanggan menyortir tiket secara otomatis. Begitu solusi itu dipakai pengguna dan data nyata, banyak yang tersendat. Performa menurun, jawaban mulai ngawur, tagihan Azure naik, dan data sensitif berisiko bocor.</p>\n<p>Artikel ini membahas apa yang ada di balik layar integrasi Azure OpenAI dengan Power Apps dan Dynamics 365: arsitektur, penyesuaian model, keamanan lewat Azure API Management, serta tata kelola biaya dan kepatuhan.</p>\n\n<h2>Mengapa AI di Power Platform Sering Berhenti di Demo Chatbot</h2>\n<p>Polanya hampir selalu sama. Pengguna bisnis melihat demo menarik dan berpikir, \"Mari kita masukkan langsung ke Power Apps.\" Konektor tersedia, layar menyala, dan semua orang mulai membayangkan AI mengerjakan tugas rutin mereka. Konektor memang bekerja untuk segelintir pengguna. Setelah itu muncul masalah performa, keluaran yang tidak jelas, atau kebocoran data pelanggan yang tidak disengaja.</p>\n<p>Akar masalahnya adalah anggapan bahwa menambahkan AI ke Power Platform hanya soal menambah konektor dan menautkannya ke Azure OpenAI. Di atas kertas alat-alatnya terlihat mudah, padahal bagian yang sulit ada di arsitektur, konfigurasi, dan pengelolaannya. Memahami di mana kecerdasan AI benar-benar bekerja menentukan apakah solusi Anda hanya sukses sebagai demo atau sungguh mendukung proses bisnis.</p>\n\n<h2>Arsitektur AI Perusahaan: Empat Komponen yang Saling Bergantung</h2>\n<p>Hampir setiap pengaturan AI Power Platform yang serius melibatkan empat pemain utama.</p>\n<h3>1. Power Apps atau Dynamics 365</h3>\n<p>Ini adalah tempat pengguna berinteraksi sekaligus pemicu setiap permintaan AI. Di sinilah data dikumpulkan, misalnya pesan pelanggan, hasil survei, atau ulasan produk. Power Apps tidak berkomunikasi langsung dengan Azure OpenAI.</p>\n<h3>2. Power Automate sebagai orkestrator</h3>\n<p>Setiap kali pengguna menekan tombol atau mengirim formulir, alur Power Automate mengambil data, membentuknya ke format yang tepat, lalu mengirimkannya. Alur ini bisa membersihkan teks, menggabungkan konteks dari sumber lain, atau menyembunyikan kolom demi privasi sebelum permintaan dikirim. Jika payload disiapkan dengan buruk, misalnya ulasan produk kehilangan konteks atau formatnya aneh, endpoint akan memberi hasil janggal atau bahkan halusinasi. Alur yang lambat karena otomatisasi lain juga membuat latensi menumpuk di aplikasi.</p>\n<h3>3. Endpoint Azure OpenAI</h3>\n<p>Inilah \"otak\" sistem yang melakukan analisis sentimen, meringkas teks, atau menyusun balasan pelanggan.</p>\n<h3>4. Azure API Management</h3>\n<p>Komponen ini sering diabaikan sampai ada masalah besar. Ia berperan sebagai penjaga pintu masuk: memeriksa setiap permintaan, menerapkan autentikasi, dan memastikan penggunaan tidak berlebihan. Ia juga mencatat siapa melakukan apa, sehingga ada jejak audit.</p>\n\n<h3>Ketika skala bertambah</h3>\n<p>Bayangkan aplikasi umpan balik penjualan dengan analisis sentimen bawaan. Dengan 10 pengguna, hasil muncul dalam waktu kurang dari 1 detik. Setelah jumlah pengguna melonjak menjadi 10 ribu, misalnya setelah kampanye email atau merger, waktu tunggu bisa mencapai 30 detik atau muncul error karena endpoint tidak sanggup menangani permintaan. Sebagian data juga bisa gagal diproses karena ukuran payload melampaui batas Azure, atau karena kebijakan keamanan di API Management tidak pernah diperketat. Pipeline AI yang seharusnya membantu tim penjualan akhirnya malah menghambat mereka.</p>\n<p>Menghubungkan konektor hanyalah undangan masuk ke \"pesta arsitektur\". Yang membedakan bot yang terjebak di sandbox dari solusi siap pakai tingkat perusahaan adalah pemahaman tentang bagaimana setiap lapisan berinteraksi.</p>\n\n<h2>Menyetel Azure OpenAI untuk Kebutuhan Bisnis: Sentimen, Ringkasan, dan Pembuatan Teks</h2>\n<p>Satu endpoint Azure OpenAI bisa mendeteksi sentimen negatif, meringkas rantai email, dan menyusun deskripsi produk. Namun itu tidak berarti Anda cukup mengganti prompt lalu selesai. Setiap kasus penggunaan memerlukan pendekatan berbeda.</p>\n<h3>Analisis sentimen: ringan dan mudah dikendalikan</h3>\n<p>Dalam Dynamics 365, analisis sentimen cocok untuk menandai keluhan pelanggan. Inputnya pendek, responsnya cepat, biayanya rendah, dan hampir tidak ada konteks yang perlu dilacak. Power Automate cukup mengirim satu atau dua kalimat beserta prompt yang tepat. Alur seperti ini mudah dikelola, mudah dibatasi, dan jarang perlu ditulis ulang.</p>\n<h3>Ringkasan: butuh persiapan input</h3>\n<p>Jika manajer menempelkan catatan rapat yang panjang dan mengharapkan ringkasan yang koheren, prompt harus dirancang dengan tepat, termasuk nadanya. Jika data terlalu besar atau teks sumber terlalu tidak terstruktur, model bisa melenceng: hanya menyusun ulang kata alih-alih meringkas, atau mengarang detail yang tidak pernah terjadi. Karena itu Power Automate perlu membentuk input terlebih dahulu, misalnya menghapus tanda tangan, menghilangkan format, dan membagi dokumen yang terlalu panjang.</p>\n<h3>Pembuatan teks dan klasifikasi skala besar</h3>\n<p>Balasan email khusus yang dibuat instan atau kategorisasi tiket dukungan dalam jumlah ribuan jauh lebih berat daripada demonstrasinya. Alur harus melakukan perulangan pada set data besar, endpoint dibanjiri permintaan, throughput turun, dan tagihan Azure merangkak naik. Pembuatan teks panjang menaikkan kompleksitas model, memakai ratusan token, dan butuh waktu respons lebih lama. Instruksi khusus, misalnya nada berbeda untuk pelanggan berbeda, menuntut rekayasa prompt yang presisi. Rekayasa prompt bukan sekadar mengetik instruksi yang lebih baik. Prosesnya mirip menyetel algoritma pencarian: Anda menguji, mendapat hasil aneh, lalu menyusun ulang, dan setiap variasi memengaruhi keluaran, waktu, biaya, serta profil keamanan alur kerja.</p>\n<h3>Contoh kasus: klasifikasi tiket yang salah konfigurasi</h3>\n<p>Sebuah perusahaan membangun alur yang memakai OpenAI untuk memilah tiket layanan pelanggan, mengklasifikasikannya berdasarkan sentimen, dan menyarankan tanggapan standar. Masalah muncul ketika alur dibuka untuk semua staf dukungan dan endpoint menerima permintaan untuk setiap tiket setiap menit. Model ternyata diatur untuk pembuatan teks umum, bukan klasifikasi sederhana, sehingga sistem membaca seluruh tiket dan menulis draf beberapa paragraf setiap kali. Biaya membengkak dalam semalam, alur melambat drastis, dan AI mulai mengarang informasi dalam sarannya. Penyelidikan memakan waktu berjam-jam sebelum orang sadar bahwa pengaturan di Power Automate dan konfigurasi endpoint menjadi penyebabnya.</p>\n<p>Langkah pengendaliannya:</p>\n<ul>\n<li>Tetapkan kuota penggunaan pada alur Power Automate.</li>\n<li>Pantau jumlah permintaan dan token melalui portal Azure.</li>\n<li>Untuk tugas cepat seperti klasifikasi atau analisis sentimen, siapkan alur paralel dan gunakan model terkecil yang mampu menyelesaikan tugas.</li>\n<li>Untuk pembuatan teks panjang, batasi jumlah token maksimum dan atur seberapa sering pengguna dapat mengakses fitur tersebut.</li>\n<li>Pantau secara berkala agar lonjakan atau penggunaan tidak wajar terdeteksi sedini mungkin.</li>\n</ul>\n\n<h2>Mengamankan Alur AI dengan Azure API Management</h2>\n<p>Banyak demo memperlakukan keamanan sebagai kotak centang di akhir. Begitu proyek percontohan pindah dari lingkungan uji ke produksi, endpoint OpenAI menjadi jendela potensial ke apa pun yang diekspos aplikasi Anda. Kunci API yang tertinggal di skrip atau terkubur dalam alur pengujian bisa dipakai pihak yang salah untuk mengirim prompt, menarik respons, dan menumpuk biaya. Serangan DoS juga menjadi kekhawatiran nyata. Bahkan tanpa pelaku jahat, aplikasi yang salah konfigurasi dan berulang pada data yang salah dapat menghujani endpoint tanpa henti.</p>\n<h3>Apa yang dilakukan API Management</h3>\n<p>API Management mengerjakan hal-hal yang tidak bisa dilakukan Power Automate dan konektor sendiri:</p>\n<ul>\n<li>Menegakkan autentikasi dan otorisasi setiap kali permintaan dibuat.</li>\n<li>Membatasi jumlah permintaan ke endpoint, sehingga kesalahan pengembang atau skrip liar tidak membahayakan anggaran dan reputasi.</li>\n<li>Menyimpan log terperinci tentang siapa mengakses apa dan kapan.</li>\n</ul>\n<h3>Contoh insiden</h3>\n<p>Sebuah organisasi meluncurkan alur klasifikasi AI untuk email pelanggan di Dynamics 365 dan menaruh kunci API di Power Automate. Kunci itu akhirnya masuk ke folder dokumentasi bersama, lalu seorang anggota tim yang antusias namun kurang berhati-hati tanpa sengaja membuat loop rekursif di aplikasi uji. Dalam hitungan jam, ribuan panggilan API menghantam endpoint OpenAI, banyak di antaranya mengulang catatan yang sama. Tagihan melonjak, dan yang lebih mengkhawatirkan, tidak jelas apakah ada informasi sensitif yang berakhir di tempat yang salah. Dengan API Management, loop itu akan memicu kesalahan batas kecepatan jauh sebelum situasi memburuk, dan pencatatan yang baik akan langsung menandai lonjakannya.</p>\n<h3>Kebijakan yang bisa diterapkan</h3>\n<ul>\n<li>Batas kecepatan, misalnya jumlah maksimum permintaan per menit per pengguna.</li>\n<li>Pembatasan berdasarkan IP, sehingga hanya permintaan dari gateway Power Platform yang dikenal yang diizinkan.</li>\n<li>Kewajiban header atau token unik untuk proses bisnis tertentu, sehingga akses acak dari luar mudah terlihat dan diblokir.</li>\n</ul>\n<p>Keseimbangan itu penting. Jika pembatasan terlalu agresif, permintaan sah mulai gagal dan pengguna mengirim data yang sama berulang kali sampai berhasil. Pemantauan dan analitik di API Management membantu Anda melihat pola penggunaan dari waktu ke waktu, menemukan panggilan yang gagal, dan menyesuaikan kebijakan sebelum pengguna merasakan dampaknya. Dengan begitu Anda juga bisa melihat alur kerja mana yang benar-benar menghasilkan nilai dan tidak menghabiskan kapasitas tanpa alasan.</p>\n\n<h2>Tata Kelola AI: Biaya, Kepatuhan, dan Kontrol yang Berkelanjutan</h2>\n<p>Masalah tata kelola biasanya muncul setelah kesuksesan. Sebuah power app yang tadinya proyek sampingan menjadi alat favorit semua orang, lalu biaya naik dan tidak ada yang yakin siapa yang bertanggung jawab. Pertanyaan yang perlu dijawab: siapa yang mengontrol akses ke endpoint Azure OpenAI, berapa banyak permintaan datang dari setiap power app, dan apakah semuanya benar-benar diperlukan?</p>\n<h3>Biaya yang membengkak</h3>\n<p>Azure mencatat setiap token dan panggilan API, tetapi angka itu tidak berguna jika tidak ada yang memantaunya. Anda membayar berdasarkan penggunaan, dan citizen developer sering tidak sadar bahwa alur mereka memanggil endpoint AI ribuan kali sehari. Akibatnya bisa berupa proyek dihentikan atau hilangnya kepercayaan pimpinan pada eksperimen AI.</p>\n<h3>Pertanyaan kepatuhan</h3>\n<p>Meski API Management menjaga pintu depan, masih ada pertanyaan tentang data apa yang dikirim, berapa lama disimpan, dan ke mana salinannya bisa berakhir. Apakah informasi identitas pribadi sudah disamarkan sebelum teks tiket dukungan dikirim ke Azure OpenAI? Apakah ada catatan pengguna mana yang mengakses apa, dan selaras dengan kebijakan organisasi? Di industri yang diatur ketat, satu pelanggaran saja bisa menghentikan proyek selama berminggu-minggu.</p>\n<h3>Alat bantu dari Microsoft</h3>\n<ul>\n<li><strong>Azure Cost Management</strong> menyediakan dashboard, peringatan, dan batas pengeluaran. Seseorang tetap perlu menetapkan ambang batas dan memantau lonjakan penggunaan.</li>\n<li><strong>Pemberian tag</strong> pada sumber daya, endpoint AI, alur, hingga power apps individual memudahkan pelacakan pengeluaran ke tiap tim atau lini bisnis, serta membantu pembersihan otomatisasi yang tertinggal setelah uji coba.</li>\n<li><strong>Center of Excellence Starter Kit</strong> menyisir tenant untuk menyusun inventaris alur, konektor kustom, aplikasi, dan bot. Kit ini mendukung analitik penggunaan, peringatan pola mencurigakan, templat penerapan bertahap, peninjauan aplikasi berisiko tinggi, bahkan penjedaan alur yang melanggar batasan kepatuhan.</li>\n</ul>\n<p>Tata kelola bukan langkah sekali atur lalu lupakan. Model berubah, logika bisnis berkembang, dan aturan privasi terus berevolusi, sehingga peninjauan dan pembaruan harus dilakukan secara berkala.</p>\n\n<h2>Kesalahan Umum dan Stolpersteine dalam Proyek AI Power Platform</h2>\n<ul>\n<li><strong>Menganggap konektor sudah cukup.</strong> Tanpa memahami orkestrasi, endpoint, dan lapisan keamanan, stabilitas dan keamanan selalu dipertaruhkan.</li>\n<li><strong>Menganggap semua tugas AI bisa saling menggantikan.</strong> Analisis sentimen dan pembuatan teks panjang berbeda jauh dalam biaya, waktu respons, dan kompleksitas.</li>\n<li><strong>Mengabaikan persiapan data di Power Automate.</strong> Payload yang berantakan menghasilkan jawaban yang aneh atau halusinasi.</li>\n<li><strong>Menyimpan kunci API sembarangan.</strong> Kunci di folder bersama atau skrip uji membuka risiko akses tidak sah dan biaya tak terkendali.</li>\n<li><strong>Tanpa kebijakan pembatasan.</strong> Satu aplikasi yang rusak bisa membanjiri instans OpenAI dan memicu tagihan tinggi.</li>\n<li><strong>Pembatasan yang terlalu agresif.</strong> Permintaan sah gagal dan pengguna mengirim ulang data berulang kali.</li>\n<li><strong>Tidak memantau penggunaan.</strong> Biaya baru disadari ketika peringatan anggaran muncul atau bagian keuangan menemukan kejanggalan.</li>\n<li><strong>Mengirim data pribadi tanpa penyaringan.</strong> Ini menciptakan risiko kepatuhan yang nyata.</li>\n<li><strong>Tata kelola yang hanya diatur sekali.</strong> Aturan dan aplikasi terus berubah, sehingga kontrol harus ditinjau rutin.</li>\n</ul>\n\n<h2>Takeaways Praktis untuk Penerapan AI Tingkat Perusahaan</h2>\n<ul>\n<li>Rancang arsitektur secara utuh: Power Apps atau Dynamics 365, Power Automate, Azure OpenAI, dan Azure API Management.</li>\n<li>Siapkan dan bersihkan data di Power Automate sebelum dikirim ke model, termasuk menyamarkan kolom sensitif.</li>\n<li>Pilih model terkecil yang cukup untuk tugas sederhana seperti klasifikasi dan analisis sentimen.</li>\n<li>Batasi token maksimum dan frekuensi akses untuk pembuatan teks panjang.</li>\n<li>Pasang API Management dengan autentikasi, batas kecepatan, pembatasan IP, dan log terperinci.</li>\n<li>Jangan menaruh kunci API di tempat yang mudah diakses, seperti dokumentasi bersama.</li>\n<li>Pantau permintaan dan token lewat portal Azure, dan gunakan Azure Cost Management untuk peringatan serta batas pengeluaran.</li>\n<li>Beri tag pada sumber daya, tetapkan anggaran atau batas lunak bahkan untuk proof of concept.</li>\n<li>Manfaatkan Center of Excellence Starter Kit untuk inventaris dan peninjauan aplikasi berisiko tinggi.</li>\n<li>Dokumentasikan alur mana yang mengirim data apa dan mengapa, lalu tinjau akses secara berkala.</li>\n</ul>\n\n<h2>Kesimpulan</h2>\n<p>AI di Power Platform baru bernilai bagi bisnis jika dibangun dengan arsitektur, konfigurasi, keamanan, dan tata kelola yang matang, bukan hanya konektor yang menyala saat demo. Power Automate menyiapkan data dengan benar, endpoint Azure OpenAI disetel sesuai kasus penggunaan, Azure API Management menjaga akses dan batas penggunaan, dan tata kelola yang konsisten mengendalikan biaya serta kepatuhan. Dengan fondasi ini, pimpinan IT dan bisnis bisa berekspansi, bereksperimen, dan berinovasi dengan aman, dan fitur AI tumbuh berkelanjutan seiring ketergantungan bisnis padanya.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "AI Perusahaan di Power Platform: Dari Demo ke Produksi",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Pahami arsitektur",
+     "text": "Power Apps/Dynamics 365, Power Automate, Azure OpenAI, dan API Management harus dirancang sebagai satu kesatuan."
+    },
+    {
+     "kopf": "Siapkan data",
+     "text": "Power Automate membersihkan teks, menyamarkan kolom sensitif, dan membentuk payload sebelum dikirim ke model."
+    },
+    {
+     "kopf": "Setel model",
+     "text": "Sesuaikan model, prompt, dan batas token dengan kasus: sentimen, ringkasan, atau pembuatan teks."
+    },
+    {
+     "kopf": "Amankan dengan API Management",
+     "text": "Terapkan autentikasi, batas kecepatan, pembatasan IP, dan log untuk jejak audit."
+    },
+    {
+     "kopf": "Kendalikan biaya",
+     "text": "Pantau token dan permintaan, pakai Azure Cost Management, beri tag, dan tetapkan anggaran."
+    },
+    {
+     "kopf": "Tata kelola berkala",
+     "text": "Gunakan CoE Starter Kit, dokumentasikan alur data, dan tinjau akses serta kebijakan secara rutin."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Mengapa AI di Power Platform sering gagal setelah demo chatbot?",
+    "a": "Banyak orang mengira cukup menambah konektor ke Azure OpenAI. Padahal bagian yang sulit ada di arsitektur, konfigurasi, dan pengelolaan. Setelah dipakai pengguna dan data nyata, muncul masalah performa, jawaban ngawur, tagihan Azure naik, dan risiko kebocoran data sensitif."
+   },
+   {
+    "q": "Apa saja komponen arsitektur AI perusahaan di Power Platform?",
+    "a": "Ada empat komponen. Power Apps atau Dynamics 365 menjadi tempat interaksi pengguna. Power Automate mengorkestrasi dan menyiapkan data. Endpoint Azure OpenAI menjadi \"otak\" analisis. Azure API Management menjaga pintu masuk dengan autentikasi, pembatasan penggunaan, dan jejak audit."
+   },
+   {
+    "q": "Apa fungsi Azure API Management untuk mengamankan Azure OpenAI?",
+    "a": "API Management menegakkan autentikasi dan otorisasi pada setiap permintaan, membatasi jumlah permintaan ke endpoint agar kesalahan atau skrip liar tidak membahayakan anggaran, dan menyimpan log siapa mengakses apa dan kapan. Kebijakannya bisa berupa batas kecepatan, pembatasan IP, serta header atau token unik."
+   },
+   {
+    "q": "Bagaimana cara mengendalikan biaya Azure OpenAI di Power Platform?",
+    "a": "Tetapkan kuota pada alur Power Automate dan pantau permintaan serta token lewat portal Azure. Pakai model terkecil untuk klasifikasi atau sentimen, dan batasi token maksimum untuk teks panjang. Azure Cost Management memberi peringatan dan batas pengeluaran, sedangkan tag sumber daya melacak biaya per tim."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Sentimen vs. Pembuatan Teks Panjang",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Analisis sentimen / klasifikasi",
+     "punkte": [
+      "Input pendek, cukup satu atau dua kalimat",
+      "Respons cepat dan biaya rendah",
+      "Hampir tidak ada konteks yang perlu dilacak",
+      "Gunakan model terkecil yang mampu menyelesaikan tugas",
+      "Mudah dikelola dan dibatasi"
+     ]
+    },
+    "rechts": {
+     "titel": "Pembuatan teks panjang",
+     "punkte": [
+      "Memakai ratusan token per permintaan",
+      "Kompleksitas model naik, waktu respons lebih lama",
+      "Nada berbeda menuntut rekayasa prompt presisi",
+      "Batasi token maksimum dan frekuensi akses",
+      "Tagihan Azure merangkak naik pada skala besar"
+     ]
+    }
+   },
+   {
+    "titel": "Tiga Kemampuan Azure API Management",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "Autentikasi",
+      "text": "Menegakkan autentikasi dan otorisasi setiap kali permintaan dibuat."
+     },
+     {
+      "wert": "Batas kecepatan",
+      "text": "Membatasi permintaan ke endpoint agar kesalahan pengembang tidak membahayakan anggaran."
+     },
+     {
+      "wert": "Log terperinci",
+      "text": "Mencatat siapa mengakses apa dan kapan, sehingga ada jejak audit."
+     },
+     {
+      "wert": "Pembatasan IP",
+      "text": "Hanya permintaan dari gateway Power Platform yang dikenal yang diizinkan."
+     }
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Apa peran utama Power Automate dalam arsitektur AI di Power Platform menurut artikel?",
+    "opts": [
+     "Menjadi orkestrator yang mengambil, membersihkan, dan membentuk data sebelum dikirim ke endpoint",
+     "Menjalankan model bahasa secara langsung di dalam aplikasi Power Apps",
+     "Menyimpan log audit tentang siapa mengakses endpoint dan kapan",
+     "Menggantikan Azure API Management sebagai penjaga pintu masuk"
+    ],
+    "a": 0,
+    "why": "Power Apps tidak berbicara langsung ke Azure OpenAI. Alur Power Automate menyiapkan payload, misalnya membersihkan teks atau menyembunyikan kolom sensitif."
+   },
+   {
+    "q": "Mengapa klasifikasi tiket dalam contoh kasus perusahaan menyebabkan biaya membengkak dalam semalam?",
+    "opts": [
+     "Kunci API tersimpan di folder dokumentasi bersama dan dipakai orang luar",
+     "Model diatur untuk pembuatan teks umum sehingga menulis draf panjang untuk setiap tiket",
+     "Azure Cost Management otomatis menaikkan batas pengeluaran setiap malam",
+     "Ukuran payload melampaui batas Azure sehingga permintaan terus diulang"
+    ],
+    "a": 1,
+    "why": "Model dikonfigurasi untuk pembuatan teks umum, bukan klasifikasi sederhana, sehingga membaca seluruh tiket dan menulis beberapa paragraf tiap kali."
+   },
+   {
+    "q": "Dalam insiden loop rekursif di aplikasi uji, apa yang akan dilakukan API Management?",
+    "opts": [
+     "Menghapus kunci API dari folder dokumentasi bersama secara otomatis",
+     "Mengganti model dengan versi yang lebih kecil dan murah",
+     "Memicu kesalahan batas kecepatan sebelum situasi memburuk dan mencatat lonjakannya",
+     "Menyamarkan informasi identitas pribadi pada setiap catatan yang diulang"
+    ],
+    "a": 2,
+    "why": "Artikel menyebut loop itu akan memicu kesalahan batas kecepatan lebih awal, dan pencatatan yang baik langsung menandai lonjakannya."
+   },
+   {
+    "q": "Apa fungsi Center of Excellence Starter Kit menurut artikel?",
+    "opts": [
+     "Menetapkan batas pengeluaran dan peringatan anggaran untuk sumber daya Azure",
+     "Memberi tag pada endpoint AI agar biaya terlacak per tim",
+     "Membatasi permintaan per menit untuk setiap pengguna endpoint",
+     "Menyisir tenant untuk membuat inventaris dan meninjau aplikasi berisiko tinggi"
+    ],
+    "a": 3,
+    "why": "Kit ini menyusun inventaris alur, konektor kustom, aplikasi, dan bot, serta mendukung peninjauan aplikasi berisiko tinggi dan penjedaan alur yang melanggar kepatuhan."
+   }
+  ]
+ },
+ "ru": {
+  "html": "<p>Демонстрации ИИ на Power Platform выглядят впечатляюще: чат-бот для продаж отвечает за секунды, приложение для поддержки само сортирует тикеты. Бизнес-пользователи делают вывод, что достаточно встроить это в Power Apps. Но в реальных процессах такие решения часто не приживаются: появляются проблемы с производительностью, утечки конфиденциальных данных и неожиданные счета за Azure.</p>\n<p>Разберём, как устроен корпоративный ИИ на Power Platform и Azure OpenAI. Речь пойдёт об архитектуре, настройке под бизнес-задачи, безопасности и управлении затратами.</p>\n\n<h2>Почему демо-чат-боты не доходят до реальных бизнес-процессов</h2>\n<p>Самый живучий миф звучит так: добавить ИИ в Power Platform — значит нажать плюс, подключить коннектор и связать его с Azure OpenAI. На бумаге всё действительно выглядит подозрительно просто. Экраны светятся, коннектор работает для пары человек, и кажется, что задача решена.</p>\n<p>Реальность наступает позже. Модель начинает «нести чепуху», приложение тормозит, а конфиденциальные данные оказываются там, где их быть не должно. Настройка коннектора — лишь приглашение на архитектурную вечеринку. Разница между красивым демо и реальной автоматизацией бизнеса определяется тем, как взаимодействуют уровни системы и насколько она устойчива при масштабировании.</p>\n\n<h2>Архитектура ИИ в Power Platform: четыре ключевых компонента</h2>\n<p>В любой серьёзной ИИ-системе на базе Power Platform участвуют четыре игрока.</p>\n<h3>Power Apps и Dynamics 365</h3>\n<p>Это интерфейсы, с которыми работают пользователи и из которых запускается каждый запрос к ИИ. Они собирают данные: сообщения клиентов, результаты опросов, отзывы о продукте — всё, что требует интеллектуального анализа. Но напрямую с Azure OpenAI они не взаимодействуют.</p>\n<h3>Power Automate</h3>\n<p>Этот компонент координирует весь процесс. Когда пользователь нажимает кнопку или отправляет форму, поток подхватывает данные, приводит их к нужному формату и направляет по адресу. Поток не просто переносит данные из точки А в точку Б: он может очищать текст, добавлять контекст из других источников и скрывать поля в целях конфиденциальности до отправки запроса.</p>\n<h3>Конечная точка Azure OpenAI</h3>\n<p>Это «мозг» системы. Она анализирует тональность, делает краткие сводки текстов и генерирует ответы клиентам.</p>\n<h3>Azure API Management</h3>\n<p>Этот уровень отвечает за безопасность и ограничение нагрузки. О нём незаслуженно забывают, пока что-то не пойдёт не так.</p>\n<p>Важно, что качество результата зависит от всей цепочки. Если поток медленно работает, потому что другие автоматизации потребляют ресурсы, в приложении возникают задержки. Если Power Automate плохо подготовил данные (в отзыве не хватает контекста или странное форматирование), конечная точка выдаст неверные результаты или начнёт галлюцинировать. Никакого интеллекта не получится, если на входе беспорядок.</p>\n\n<h2>Настройка Azure OpenAI под бизнес-задачу: тональность, сводки, генерация текста</h2>\n<p>Одна и та же конечная точка может выявить негатив в предложении, составить краткое изложение переписки или написать описание продукта. Но это не значит, что достаточно поменять промпт. Для каждого бизнес-кейса нужен свой подход.</p>\n<h3>Анализ тональности</h3>\n<p>Это самый простой сценарий. Например, приложение Dynamics 365 помечает жалобы клиентов. Входные данные короткие, ответы быстрые, стоимость низкая, а контекст почти не нужно отслеживать. Power Automate передаёт в endpoint пару предложений и правильный промпт, указывающий, что искать. Такими потоками легко управлять и легко их ограничивать, а переписывать их приходится почти никогда.</p>\n<h3>Суммаризация</h3>\n<p>Здесь ресурсы расходуются интенсивнее. Если менеджеры вставляют подробные заметки о встречах и хотят получить связное резюме за секунды, запрос нужно чётко сформулировать и выдержать в нужном тоне. При слишком большом объёме или неструктурированном тексте модель может начать перефразировать вместо выводов или даже выдумывать детали. Поэтому Power Apps должно привести входные данные в порядок: убрать подписи, удалить форматирование и при необходимости разбить длинный документ на части. И всё это до того, как в дело вступит ИИ.</p>\n<h3>Генерация текста и классификация в больших объёмах</h3>\n<p>Сложнее всего персонализированные ответы на письма «на лету» и классификация каждого обращения по типу проблемы. Запуск таких потоков на тысячах записей не похож на демо: endpoint заваливается запросами, пропускная способность падает, а счёт Azure растёт, иногда так быстро, что приходится подключать бухгалтерию.</p>\n<p>Главная ловушка — считать эти ИИ-сценарии взаимозаменяемыми. Анализ тональности стоит доли цента за запрос, а генерация длинных текстов расходует сотни токенов и требует больше времени. Проектирование запросов тоже не сводится к удачным инструкциям. Это скорее настройка поискового алгоритма: вы тестируете, получаете странные результаты и переписываете промпт. Каждый вариант влияет не только на результат, но и на время, стоимость и параметры безопасности процесса.</p>\n\n<h2>Azure API Management: надёжный щит для конечных точек</h2>\n<p>Большинство демо воспринимают безопасность как формальность в конце. Но когда пилот выходит из песочницы, конечная точка OpenAI становится потенциальным окном ко всему, что открывает ваше приложение. Если чужой человек найдёт API-ключ в скрипте или тестовом потоке, он сможет отправлять запросы, получать ответы и увеличивать ваши расходы. Реальную угрозу представляют и DDoS-атаки. Даже без злого умысла приложение, зациклившееся на неверной записи, способно непрерывно нагружать API.</p>\n<p>API Management выступает в роли швейцара на входе и делает то, что не под силу ни Power Automate, ни самому коннектору:</p>\n<ul>\n<li>обеспечивает аутентификацию и авторизацию при каждом запросе;</li>\n<li>ограничивает количество обращений к конечной точке;</li>\n<li>ведёт подробные журналы: кто, что и когда запрашивал.</li>\n</ul>\n<h3>Какие политики можно применять</h3>\n<ul>\n<li>лимиты скорости, например максимальное число обращений в минуту для пользователя;</li>\n<li>ограничение вызовов по диапазону IP-адресов, чтобы разрешать запросы только от известных шлюзов Power Platform;</li>\n<li>обязательные заголовки или токены, уникальные для вашего бизнес-процесса, благодаря чему сторонний доступ становится заметным и легко блокируемым.</li>\n</ul>\n<p>Здесь важен баланс. Если ограничения слишком жёсткие, легитимные запросы начинают сбоить, а пользователи ищут обходные пути, например отправляют одни и те же данные снова и снова. Поэтому нужны мониторинг и аналитика внутри API Management: вы видите шаблоны использования, находите неудачные вызовы и корректируете политики раньше, чем пользователи заметят проблему.</p>\n<p>Один из показательных случаев: организация передала API-ключ в Power Automate, и он попал в общую папку с документацией. Неопытный сотрудник случайно создал рекурсивный цикл в тестовом приложении, и за несколько часов на endpoint обрушились тысячи вызовов, многие из которых повторяли одни и те же записи. Счёт вырос, а причину удалось найти только после изучения журналов. Хуже самого счёта была неопределённость: не попала ли конфиденциальная информация не в те руки. С API Management цикл упёрся бы в ограничение скорости задолго до эскалации, а журналы мгновенно показали бы поток запросов.</p>\n\n<h2>Управление, контроль затрат и соответствие требованиям</h2>\n<p>Проблемы управления обычно возникают после успеха. Приложение за ночь становится любимым инструментом сотрудников, расходы растут, и никто не понимает, кто должен держать ситуацию под контролем. Типичные вопросы такие: кто контролирует доступ к конечным точкам Azure OpenAI, сколько запросов приходит от каждого Power App и все ли они нужны, где проходит грань между экспериментами и автоматизацией, которая съедает бюджет.</p>\n<h3>Контроль затрат</h3>\n<p>Azure отслеживает каждый токен, каждый вызов API и каждый гигабайт данных, но если никто не смотрит на эти цифры, расходы растут незаметно. Гражданские разработчики искренне стремятся к инновациям, но не всегда знают, что их поток обращается к endpoint тысячи раз в день. Обычно об этом узнают, когда срабатывает бюджетное уведомление или финансовый отдел заподозрит ошибку в счетах. Тогда есть риск, что проект закроют ради остановки утечки средств или руководство потеряет доверие ко всему эксперименту с ИИ.</p>\n<p>Azure Cost Management даёт панели мониторинга, оповещения и лимиты расходов, но кто-то должен устанавливать пороги, следить за всплесками активности и вовремя нажимать паузу. Простой и действенный приём — маркировка тегами ресурсов, конечных точек, потоков и отдельных приложений Power Apps. Так расходы относятся на конкретную команду или направление, а после завершения пилота сразу видно, какая автоматизация продолжает работать впустую.</p>\n<h3>Соответствие требованиям</h3>\n<p>Даже когда вход защищён, остаются вопросы: какие данные отправляются, как долго хранятся и где могут оказаться их копии. Замаскировал ли разработчик персональные данные перед отправкой заявки в Azure OpenAI? Есть ли запись о том, кто и к чему обращался? Соответствует ли это политике организации? Аудиторов не устраивают ответы вроде «мы так думаем». В регулируемых отраслях один промах, например отправка конфиденциальных данных на суммаризацию без фильтрации, может остановить проекты.</p>\n<h3>Center of Excellence в Power Platform</h3>\n<p>Ближайший аналог центра управления в Power Platform — инструментарий Center of Excellence. Он сканирует тенант и составляет инвентарный список потоков, пользовательских коннекторов, приложений и ботов. ИТ-отдел может настроить аналитику использования, получать оповещения о подозрительных закономерностях, напоминать гражданским разработчикам о правилах и строить регулярные отчёты. Кроме того, инструментарий даёт шаблоны для контролируемого развёртывания, запускает проверки приложений с высоким риском и может приостанавливать потоки, нарушающие требования соответствия.</p>\n\n<h2>Частые ошибки и стопоры при внедрении ИИ</h2>\n<ul>\n<li><strong>Ставка только на коннектор.</strong> Демо для 10 пользователей даёт ответ меньше чем за секунду. При 10 тысячах пользователей, например после рассылки или слияния компаний, возможны ожидание около 30 секунд, ошибки и необработанные отзывы из-за превышения лимитов размера полезной нагрузки.</li>\n<li><strong>Неподходящая конфигурация endpoint.</strong> В одной компании поток для сортировки обращений тестировался идеально. Когда его открыли всем сотрудникам поддержки, endpoint стал получать запросы по каждому тикету каждую минуту. Модель была настроена на общую генерацию текста, а не на краткую классификацию, поэтому она разбирала всю историю обращений и писала многоабзацные черновики. Затраты взлетели за ночь, процессы замедлились, а ИИ начал выдумывать информацию.</li>\n<li><strong>Ключ API в открытом доступе</strong> и отсутствие ограничений на частоту запросов.</li>\n<li><strong>Слишком жёсткие лимиты,</strong> из-за которых пользователи придумывают обходные пути.</li>\n<li><strong>Отсутствие бюджетов и тегов</strong> даже для пилотных проектов.</li>\n<li><strong>Управление «один раз и навсегда».</strong> Модели меняются, бизнес-логика трансформируется, а правила конфиденциальности развиваются.</li>\n</ul>\n\n<h2>Практические выводы: как довести ИИ до корпоративного уровня</h2>\n<ul>\n<li>Проектируйте систему как цепочку из Power Apps или Dynamics 365, Power Automate, Azure OpenAI и API Management, а не как один коннектор.</li>\n<li>Готовьте данные до отправки в модель: очищайте текст, убирайте форматирование, разбивайте длинные документы, скрывайте персональные поля.</li>\n<li>Для быстрых задач (классификация, анализ тональности) используйте параллельные потоки и самую простую модель, которая справляется с работой.</li>\n<li>Для генерации длинных текстов ограничивайте максимальное число токенов и частоту обращений пользователей.</li>\n<li>Устанавливайте квоты на потоки Power Automate и отслеживайте запросы и токены через портал Azure.</li>\n<li>Размещайте API Management перед endpoint: аутентификация, лимиты скорости, фильтрация по IP, журналы.</li>\n<li>Помечайте ресурсы тегами и задавайте бюджеты или мягкие лимиты даже для пилотов.</li>\n<li>Регулярно проверяйте, кто имеет доступ к конечным точкам, и документируйте, какие потоки отправляют какие данные и зачем.</li>\n<li>Просматривайте журналы, чтобы как можно раньше находить всплески и аномалии.</li>\n</ul>\n\n<p>Корпоративный ИИ на Power Platform и Azure OpenAI — это не коннектор и не удачный промпт, а продуманная архитектура с безопасностью и управлением. Правильная настройка под каждый тип задачи, защита конечных точек через API Management и системный контроль затрат и соответствия превращают ИИ из эффектной демонстрации в устойчивый рабочий инструмент. Когда эти элементы на месте, ИТ-специалисты и бизнес-лидеры могут уверенно расширять эксперименты и внедрять инновации.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Корпоративный ИИ на Power Platform и Azure OpenAI",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Продумать архитектуру",
+     "text": "Power Apps, Power Automate, Azure OpenAI и API Management работают как единая цепочка, а не один коннектор."
+    },
+    {
+     "kopf": "Подготовить данные",
+     "text": "Очистить текст, убрать форматирование, разбить длинные документы и скрыть персональные поля до отправки в модель."
+    },
+    {
+     "kopf": "Настроить под задачу",
+     "text": "Для тональности и классификации — простая модель; для длинных текстов — лимиты токенов и частоты запросов."
+    },
+    {
+     "kopf": "Защитить endpoint",
+     "text": "API Management проверяет доступ, ограничивает скорость запросов, фильтрует по IP и ведёт журналы."
+    },
+    {
+     "kopf": "Контролировать затраты",
+     "text": "Теги, бюджеты, оповещения в Azure Cost Management и мониторинг запросов и токенов."
+    },
+    {
+     "kopf": "Выстроить управление",
+     "text": "Center of Excellence, аудит доступа, документация потоков и регулярные проверки."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Почему ИИ-демо на Power Platform не приживаются в реальных бизнес-процессах?",
+    "a": "Демо выглядит просто: подключил коннектор к Azure OpenAI, и всё работает. В реальности появляются проблемы с производительностью, утечки конфиденциальных данных и неожиданные счета. Результат зависит от всей цепочки: интерфейса, Power Automate, конечной точки и API Management, а также от масштабирования и качества входных данных."
+   },
+   {
+    "q": "Из каких компонентов состоит архитектура корпоративного ИИ на Power Platform и Azure OpenAI?",
+    "a": "Четыре компонента. Power Apps или Dynamics 365 служат интерфейсом и собирают данные. Power Automate координирует процесс: очищает текст, добавляет контекст, скрывает поля. Конечная точка Azure OpenAI анализирует и генерирует текст. Azure API Management отвечает за безопасность и ограничение нагрузки."
+   },
+   {
+    "q": "Зачем нужен Azure API Management перед конечной точкой Azure OpenAI?",
+    "a": "Он работает как «швейцар»: проверяет аутентификацию и авторизацию каждого запроса, ограничивает число обращений и ведёт журналы о том, кто, что и когда запрашивал. Можно задать лимиты скорости, фильтрацию по IP и обязательные заголовки. Это защищает от утечки ключа, зацикленных потоков и неожиданных расходов."
+   },
+   {
+    "q": "Как контролировать затраты на ИИ в Power Platform и Azure OpenAI?",
+    "a": "Используйте Azure Cost Management: панели мониторинга, оповещения и лимиты расходов. Кто-то должен задавать пороги и следить за всплесками. Помечайте тегами ресурсы, конечные точки, потоки и приложения Power Apps, чтобы относить расходы на команды. Для простых задач берите самую простую модель, а длинную генерацию ограничивайте по токенам."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Демо и реальный процесс: в чём разница",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Демо на коннекторе",
+     "punkte": [
+      "Работает для 10 пользователей, ответ быстрее секунды",
+      "Безопасность воспринимается как формальность в конце",
+      "Нет бюджетов, тегов и ограничений на частоту запросов",
+      "API-ключ может оказаться в открытом доступе",
+      "Настройка делается один раз и навсегда"
+     ]
+    },
+    "rechts": {
+     "titel": "Корпоративная архитектура",
+     "punkte": [
+      "Цепочка: Power Apps, Power Automate, Azure OpenAI, API Management",
+      "Аутентификация, лимиты скорости и журналы на каждом запросе",
+      "Данные очищаются и маскируются до отправки в модель",
+      "Расходы помечены тегами и ограничены бюджетами",
+      "Правила регулярно пересматриваются вместе с моделями и логикой"
+     ]
+    }
+   },
+   {
+    "титель": "",
+    "titel": "Три ИИ-сценария и их особенности",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "Тональность",
+      "text": "Короткие входные данные, быстрые ответы, низкая стоимость, почти не нужен контекст."
+     },
+     {
+      "wert": "Суммаризация",
+      "text": "Ресурсов нужно больше: текст очищают, убирают форматирование и разбивают на части."
+     },
+     {
+      "wert": "Генерация",
+      "text": "Сотни токенов на запрос, больше времени и риск стремительного роста счёта."
+     },
+     {
+      "wert": "Классификация",
+      "text": "На тысячах записей endpoint перегружается, а пропускная способность падает."
+     }
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Какую роль в архитектуре ИИ на Power Platform выполняет Power Automate?",
+    "opts": [
+     "Координирует процесс: подготавливает данные, добавляет контекст и скрывает поля до отправки запроса",
+     "Анализирует тональность и генерирует ответы клиентам",
+     "Ограничивает частоту обращений и ведёт журналы запросов",
+     "Напрямую обращается к Azure OpenAI из интерфейса Power Apps"
+    ],
+    "a": 0,
+    "why": "Power Automate координирует процесс: очищает текст, добавляет контекст и скрывает конфиденциальные поля до отправки запроса в конечную точку."
+   },
+   {
+    "q": "Какой сценарий использования ИИ в статье назван самым простым и дешёвым?",
+    "opts": [
+     "Суммаризация подробных заметок о встречах",
+     "Анализ тональности коротких сообщений, например жалоб клиентов",
+     "Персонализированные ответы на письма «на лету»",
+     "Классификация тысяч обращений по типу проблемы"
+    ],
+    "a": 1,
+    "why": "Анализ тональности работает с короткими входными данными, отвечает быстро, стоит мало и почти не требует отслеживания контекста."
+   },
+   {
+    "q": "Что из перечисленного делает Azure API Management, чего не может Power Automate?",
+    "opts": [
+     "Очищает текст отзывов от форматирования и подписей",
+     "Разбивает длинные документы на части перед обработкой",
+     "Обеспечивает аутентификацию, ограничивает число обращений и ведёт журналы запросов",
+     "Составляет инвентарный список приложений и ботов в тенанте"
+    ],
+    "a": 2,
+    "why": "API Management обеспечивает аутентификацию и авторизацию, ограничивает число обращений и ведёт подробные журналы: кто, что и когда запрашивал."
+   },
+   {
+    "q": "Какой приём помогает отнести расходы Azure на конкретную команду и найти лишние автоматизации?",
+    "opts": [
+     "Отключение журналов в API Management",
+     "Использование одной общей модели для всех сценариев",
+     "Маркировка тегами ресурсов, конечных точек, потоков и приложений Power Apps",
+     "Ручная проверка счетов бухгалтерией раз в год"
+    ],
+    "a": 2,
+    "why": "Теги позволяют относить расходы на команду или направление, а после пилота сразу видно, какая автоматизация работает впустую."
+   }
+  ]
+ },
+ "uk": {
+  "html": "<p>Демонстрації корпоративного ШІ на Power Platform зазвичай виглядають переконливо: чат-бот для продажів відповідає за секунди, а застосунок підтримки сам сортує тікети. Коли ж такий прототип намагаються перенести в реальний бізнес-процес, виникають проблеми з продуктивністю, безпекою та витратами. Причина здебільшого в тому, що підключення Azure OpenAI до Power Apps чи Dynamics 365 вважають справою одного коннектора.</p>\n<p>У цій статті розглянемо, з чого складається серйозна ШІ-архітектура на Power Platform, як налаштувати модель під конкретні завдання, чому Azure API Management стає захисним щитом і як не втратити контроль над витратами та відповідністю вимогам.</p>\n\n<h2>Чому ШІ-інтеграції на Power Platform застрягають на стадії демо</h2>\n<p>Типовий сценарій такий. Бізнес-користувачі бачать ефектне демо й вирішують додати щось подібне просто в Power Apps. Коннектор налаштовано, екрани оживають, усі вже уявляють, як ШІ виконує рутинну роботу. Але те, що працювало для двох людей під час показу, у реальних умовах починає давати збої: падає швидкість, чат-бот видає недоречні відповіді, а конфіденційні дані клієнтів можуть витекти.</p>\n<p>В основі лежить міф, що додати ШІ до Power Platform означає натиснути «плюс», додати коннектор і зв'язати його з Azure OpenAI. На папері це справді виглядає майже занадто просто. Проте коннектор лише запрошує до розмови про архітектуру. Різницю між марним демо та запуском бізнес-процесу створює розуміння того, де саме відбувається «магія» і які рівні задіяні.</p>\n\n<h2>Архітектура ШІ-рішення: чотири ключові компоненти</h2>\n<p>Майже в кожній серйозній системі зі ШІ на Power Platform працюють чотири гравці.</p>\n<h3>Power Apps або Dynamics 365</h3>\n<p>Це інтерфейс, з яким взаємодіють користувачі, і водночас тригер кожного запиту до ШІ. Тут збираються дані для аналізу: повідомлення клієнта, результати опитування, відгук про продукт.</p>\n<h3>Power Automate як координатор</h3>\n<p>Power Apps не спілкуються з Azure OpenAI напряму. Щоразу, коли користувач натискає кнопку чи надсилає форму, потік Power Automate підхоплює дані, приводить їх до потрібного формату й спрямовує далі. Наприклад, коли в Dynamics 365 реєструють дзвінок із продажу, потік може очистити текст, додати контекст з інших джерел або приховати конфіденційні поля ще до звернення до моделі.</p>\n<h3>Кінцева точка Azure OpenAI</h3>\n<p>Це інтелектуальний центр рішення: аналіз тональності, підсумовування тексту, генерація відповідей клієнтам.</p>\n<h3>Azure API Management</h3>\n<p>Цей елемент непомітно захований у стеку, і про нього згадують, лише коли щось «вибухає». Він відповідає за безпеку та регулювання навантаження: перевіряє кожен запит, застосовує автентифікацію й не дає використанню вийти з-під контролю.</p>\n<p>Якість результату залежить від усього ланцюжка. Якщо потік працює повільно, бо інша автоматизація споживає ресурси, застосунок отримає затримки. Якщо Power Automate неправильно підготує дані, наприклад відгук надійде без контексту або з дивним форматуванням, модель видасть нелогічний результат чи навіть почне галюцинувати. Недбале налаштування «вище за течією» знищує будь-який інтелект.</p>\n\n<h2>Масштабування: що відбувається, коли користувачів стає тисячі</h2>\n<p>Демонстрації оптимізовані під кількох користувачів та майже ідеальні мережеві умови. У реальному бізнесі діють угоди про рівень обслуговування (SLA), вимоги до приватності даних і порогові показники продуктивності.</p>\n<p>Припустімо, Power App для зворотного зв'язку з продажу містить вбудований аналіз тональності. Для 10 користувачів усе працює гладко, і результат приходить менш ніж за секунду. Але якщо після email-кампанії чи злиття компаній користувачів стане 10 тисяч, можуть з'явитися 30-секундні очікування й помилки, бо кінцева точка не встигає обробляти запити. Частина відгуків може взагалі перестати оброблятися: розмір корисного навантаження перевищив ліміти Azure або політики безпеки ніколи не були налаштовані як слід. Замість допомоги відділу продажів ШІ-конвеєр блокує його роботу.</p>\n\n<h2>Налаштування ШІ під бізнес-завдання: тональність, підсумки, генерація</h2>\n<p>Одна кінцева точка Azure OpenAI вміє багато: визначати негативні настрої, узагальнювати ланцюжок листів, створювати описи продуктів. Через це здається, що достатньо змінити промпт, і справу зроблено. Насправді кожен бізнес-кейс потребує власного підходу.</p>\n<h3>Аналіз тональності: найпростіший сценарій</h3>\n<p>Припустімо, застосунок на Dynamics 365 має позначати скарги клієнтів. Вхідні дані короткі, відповіді швидкі, вартість низька, а контекст відстежувати майже не потрібно. Потоку достатньо передати модель одне-два речення разом із правильним промптом. Такими потоками легко керувати, їх просто регулювати, і вони майже не потребують переробки.</p>\n<h3>Підсумки: потрібна підготовка даних</h3>\n<p>Коли менеджери вставляють детальні нотатки з нарад і чекають зрозумілого резюме, промпт має бути чітко сформульований і витриманий у правильному тоні. Але навіть так якість нерівна. Якщо обсяг завеликий або текст неструктурований, модель може перефразовувати замість узагальнення чи навіть вигадувати деталі. Тому Power Automate має структурувати дані, прибрати підписи й форматування та, за потреби, розбити довгий документ на частини.</p>\n<h3>Генерація тексту та класифікація у великому масштабі</h3>\n<p>Найскладніший варіант: індивідуальні відповіді на листи «на льоту» або класифікація тікетів за типом проблеми. Обробка тисяч завдань зовсім не схожа на ідеальну демонстрацію. Кінцева точка отримує шквал запитів, пропускна здатність падає, а рахунок Azure зростає іноді так швидко, що доводиться втручатися бухгалтерії.</p>\n<p>Головна пастка в тому, що всі ШІ-процеси вважають взаємозамінними. Аналіз тональності коштує мізерні частки цента за запит, а генерація довгих текстів підвищує складність, споживає сотні токенів і потребує більше часу. Якщо додати індивідуальні інструкції та різний тон для різних клієнтів, кожне коригування вимагатиме точного промпт-інжинірингу. Це не просто краще написані інструкції, а радше налаштування пошукового алгоритму: тестуєш, отримуєш дивні результати, переробляєш. Кожна зміна впливає на результат, час, вартість і безпеку робочого процесу.</p>\n\n<h2>Azure API Management: захисний щит для кінцевих точок</h2>\n<p>У більшості демо безпеку сприймають як формальний пункт наприкінці. Але щойно пілот виходить за межі внутрішніх тестів, кінцева точка Azure OpenAI стає потенційним вікном до всього, що відкриває ваш застосунок. Якщо API-ключ потрапить до сторонньої особи, наприклад із скрипта чи тестового потоку, вона зможе надсилати запити, отримувати відповіді й накопичувати витрати. Реальною загрозою стають і DoS-атаки. Навіть без зловмисників неправильно налаштований застосунок, що зациклився на помилковому записі, може безперервно перевантажувати кінцеву точку. Залежно від даних, що передаються мережею, виникають і ризики порушення вимог відповідності.</p>\n<h3>Що саме робить Azure API Management</h3>\n<ul>\n<li>забезпечує автентифікацію й авторизацію при кожному запиті, а не лише там, де розробник не забув це запрограмувати;</li>\n<li>обмежує кількість запитів до кінцевої точки, тож помилка розробника чи безконтрольний скрипт не загрожують бюджету й репутації;</li>\n<li>веде детальні журнали, які показують, хто, до чого й коли звертався.</li>\n</ul>\n<h3>Політики, які варто налаштувати</h3>\n<p>Можна задати ліміти швидкості, наприклад максимальну кількість звернень за хвилину на користувача. Можна обмежити виклики за діапазоном IP, дозволивши лише запити з відомих шлюзів Power Platform. Для організацій зі строгими вимогами відповідності можна вимагати заголовки чи токени, унікальні для вашого бізнес-процесу, щоб випадковий доступ був помітним і легко блокувався.</p>\n<p>Важливо знайти баланс. Якщо тротлінг надто агресивний, правомірні запити починають падати, а користувачі шукають обхідні шляхи й надсилають одні й ті самі дані знову і знову. Тому моніторинг і аналітика всередині API Management критично важливі: вони показують моделі використання в часі та невдалі виклики, і політики можна коригувати до того, як проблему помітять користувачі.</p>\n\n<h2>Управління витратами й відповідність вимогам</h2>\n<p>Проблеми з управлінням зазвичай виникають після успіху. Застосунок працює настільки добре, що ним користуються всі, і раптом стає незрозуміло, хто контролює доступ до кінцевих точок, скільки запитів надходить від кожного Power App і чи всі вони потрібні. Коли дедалі більше співробітників створюють власні автоматизації, стежити за тим, що відбувається за лаштунками, складніше з кожним тижнем.</p>\n<h3>Витрати</h3>\n<p>Azure точно рахує кожен токен, кожен виклик API і кожен гігабайт даних. Але якщо ніхто не дивиться на ці цифри, витрати зростають непомітно. Часто про це дізнаються із бюджетного сповіщення або від фінансового відділу, що помітив помилку в рахунку. Наслідки не обмежуються грошима: проєкт можуть закрити, щоб зупинити втрати, а керівництво втратить довіру до всього ШІ-експерименту.</p>\n<p>Azure Cost Management надає інформаційні панелі, сповіщення та ліміти витрат, але пороги, щотижневий перегляд піків і вчасну паузу все одно має забезпечувати людина. Простий і дієвий інструмент: маркувати ресурси, а саме кінцеві точки ШІ, потоки й окремі Power Apps. Так видно витрати кожної команди чи напряму, а після завершення пілота легко знайти автоматизації, що продовжують працювати без потреби.</p>\n<h3>Відповідність вимогам</h3>\n<p>Навіть із контролем входу залишаються питання: які дані надсилаються, як довго зберігаються і де можуть опинитися їхні копії. Чи приховав розробник персональні дані перед відправкою тексту звернення до Azure OpenAI? Чи є запис, хто і до чого мав доступ? Аудиторам відповідь «ми так думаємо» не підходить. У регульованих галузях одна помилка, наприклад відправка конфіденційних даних для резюме без фільтрації, може зупинити проєкти на тижні.</p>\n<h3>Center of Excellence toolkit</h3>\n<p>З боку Power Platform найближче до «командного центру ШІ» стоїть Center of Excellence toolkit. Він сканує тенант, знаходить усі потоки, власні коннектори, застосунки та боти й формує інвентар. ІТ-відділ може налаштувати аналітику використання, сповіщення про підозрілі шаблони й нагадування розробникам-аматорам про внутрішні найкращі практики. Інструментарій також дає шаблони для поетапного розгортання, запускає перевірки ризикованих застосунків і може застосовувати бізнес-політики, зупиняючи потоки, що виходять за межі вимог.</p>\n\n<h2>Часті помилки та стопори</h2>\n<p>Усі описані проблеми добре ілюструють реальні сценарії.</p>\n<ul>\n<li><strong>Модель, налаштована не під завдання.</strong> Одна компанія використала Azure OpenAI для сортування тікетів, класифікації за настроєм і пропозицій готових відповідей. Під час тестів усе було ідеально, але після розгортання на всіх співробітників підтримки кінцева точка почала отримувати запити на кожен тікет щохвилини. Модель була налаштована на загальну генерацію тексту, а не на коротку класифікацію, тож кожного разу аналізувала всю історію й писала чернетки на кілька абзаців. Витрати різко зросли за ніч, процеси сповільнилися, а ШІ почав вигадувати інформацію. Причина була в кількох налаштуваннях Power Automate та конфігурації кінцевої точки.</li>\n<li><strong>Ключ API у спільному доступі.</strong> Організація передала ключ у Power Automate для класифікації листів у Dynamics 365. Ключ потрапив у спільну папку документації, і співробітник випадково створив рекурсивний цикл у тестовому застосунку. За лічені години тисячі викликів, багато з яких повторювали ті самі записи, надійшли до кінцевої точки. Рахунок Azure несподівано зріс. Найгіршою була невпевненість, чи не потрапила конфіденційна інформація не в ті руки. З API Management цикл швидко вперся б у обмеження швидкості, а логування одразу показало б потік запитів.</li>\n<li><strong>Відгуки клієнтів без нагляду.</strong> Застосунок для збору відгуків виявився популярнішим, ніж очікувалося: використання подвоїлося за тиждень, потім потроїлося, а витрати за місяць різко зросли. Аналіз рахунку показав, що без дозволу застосунок передавав конфіденційні дані до кінцевої точки ШІ. Перевірка, ініційована процесом Center of Excellence, могла б помітити це зростання завчасно.</li>\n<li><strong>Одна модель для всіх завдань.</strong> Для простої класифікації не потрібна модель, налаштована на довгу генерацію.</li>\n<li><strong>Управління «налаштував і забув».</strong> Моделі змінюються, бізнес-логіка трансформується, правила конфіденційності еволюціонують.</li>\n</ul>\n\n<h2>Практичні висновки</h2>\n<ul>\n<li>Проєктуйте весь ланцюжок: Power Apps або Dynamics 365, Power Automate, Azure OpenAI та Azure API Management, а не лише коннектор.</li>\n<li>Готуйте дані у Power Automate: очищайте текст, додавайте контекст, приховуйте конфіденційні поля, розбивайте довгі документи.</li>\n<li>Підбирайте модель під завдання. Для класифікації й аналізу тональності беріть найменшу модель, яка справляється, і налаштуйте паралельні потоки.</li>\n<li>Для довгих текстів обмежуйте максимальну кількість токенів і частоту звернень користувачів.</li>\n<li>Встановлюйте квоти на використання потоків Power Automate і відстежуйте запити та токени через портал Azure.</li>\n<li>Не передавайте API-ключі відкрито. Налаштуйте в API Management автентифікацію, ліміти швидкості, обмеження за IP і унікальні заголовки чи токени.</li>\n<li>Регулярно переглядайте журнали, щоб якомога раніше помічати сплески та збої.</li>\n<li>Маркуйте всі ресурси, задайте бюджети чи м'які ліміти навіть для пілотів і налаштуйте сповіщення в Azure Cost Management.</li>\n<li>Перевіряйте список тих, хто має доступ до кінцевих точок, і документуйте, які потоки та які дані передають.</li>\n<li>Використовуйте Center of Excellence toolkit для інвентаризації, аналітики та перевірок ризикованих застосунків.</li>\n</ul>\n\n<h2>Висновок</h2>\n<p>Корпоративний ШІ на Power Platform не зводиться до готового коннектора. Це поєднання продуманої архітектури, налаштування моделі під конкретне завдання, захисту кінцевих точок через Azure API Management та постійного нагляду за витратами й відповідністю вимогам. Коли всі ці рівні працюють разом, ШІ стає надійним помічником бізнесу. Керування тут не разова дія, а регулярна практика, і саме вона дає ІТ та бізнесу впевненість масштабувати експерименти без прихованих ризиків.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Корпоративний ШІ на Power Platform: від демо до продакшну",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Продумайте архітектуру",
+     "text": "Power Apps або Dynamics 365, Power Automate, Azure OpenAI та Azure API Management працюють як єдиний ланцюжок."
+    },
+    {
+     "kopf": "Підготуйте дані",
+     "text": "Power Automate очищає текст, додає контекст і приховує конфіденційні поля до запиту."
+    },
+    {
+     "kopf": "Підберіть модель",
+     "text": "Для простих завдань беріть найменшу модель, для довгих текстів обмежте токени й частоту звернень."
+    },
+    {
+     "kopf": "Захистіть кінцеву точку",
+     "text": "Azure API Management: автентифікація, ліміти швидкості, обмеження за IP та журнали викликів."
+    },
+    {
+     "kopf": "Контролюйте витрати",
+     "text": "Маркуйте ресурси, задайте бюджети й сповіщення в Azure Cost Management."
+    },
+    {
+     "kopf": "Ведіть нагляд",
+     "text": "Center of Excellence toolkit, регулярні перевірки доступів і документація потоків."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Чому ШІ-демо на Power Platform не працює в реальному бізнесі?",
+    "a": "Демо розраховане на кількох користувачів і ідеальні умови, а коннектор вважають достатнім рішенням. У реальності при тисячах користувачів падає швидкість, з'являються помилки, недоречні відповіді та ризик витоку даних. Потрібна архітектура з усього ланцюжка: застосунок, Power Automate, Azure OpenAI і API Management."
+   },
+   {
+    "q": "З яких компонентів складається ШІ-архітектура на Power Platform?",
+    "a": "Чотири: Power Apps або Dynamics 365 як інтерфейс і тригер запитів; Power Automate, що готує дані й спрямовує їх далі; кінцева точка Azure OpenAI для аналізу, підсумовування й генерації; Azure API Management, який відповідає за безпеку та регулювання навантаження."
+   },
+   {
+    "q": "Навіщо потрібен Azure API Management для Azure OpenAI?",
+    "a": "Він захищає кінцеву точку: забезпечує автентифікацію й авторизацію кожного запиту, обмежує кількість звернень, щоб помилка чи зациклений скрипт не вдарили по бюджету, і веде журнали, хто й коли звертався. Також можна обмежити доступ за IP та вимагати унікальні заголовки чи токени."
+   },
+   {
+    "q": "Як контролювати витрати та відповідність вимогам у ШІ-рішеннях на Power Platform?",
+    "a": "Маркуйте ресурси, задайте бюджети й сповіщення в Azure Cost Management та щотижня переглядайте піки витрат. Приховуйте конфіденційні дані до відправлення в модель, документуйте доступ, а Center of Excellence toolkit використовуйте для інвентаризації потоків, застосунків і ботів та перевірок ризикованих рішень."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Демо проти реального бізнес-процесу",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Демо-прототип",
+     "punkte": [
+      "Працює для двох-десяти користувачів",
+      "Результат приходить менш ніж за секунду",
+      "Ідеальні мережеві умови",
+      "Безпека — формальний пункт наприкінці",
+      "Підключення сприймають як справу одного коннектора"
+     ]
+    },
+    "rechts": {
+     "titel": "Реальний бізнес-процес",
+     "punkte": [
+      "Тисячі користувачів, можливі 30-секундні очікування",
+      "Діють SLA, вимоги до приватності й пороги продуктивності",
+      "Потрібні автентифікація, ліміти швидкості та журнали",
+      "Витрати потребують тегів, бюджетів і сповіщень",
+      "Потрібна повна архітектура з чотирьох компонентів"
+     ]
+    }
+   },
+   {
+    "titel": "Три ШІ-сценарії: різні підходи",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "Тональність",
+      "text": "Найпростіший сценарій: одне-два речення, швидкі відповіді, низька вартість, контекст майже не потрібен."
+     },
+     {
+      "wert": "Підсумки",
+      "text": "Потрібна підготовка даних: прибрати підписи, структурувати текст, розбити довгий документ на частини."
+     },
+     {
+      "wert": "Генерація",
+      "text": "Довгі тексти споживають сотні токенів, потребують більше часу й точного промпт-інжинірингу."
+     },
+     {
+      "wert": "Класифікація",
+      "text": "Тисячі завдань створюють шквал запитів, знижують пропускну здатність і підвищують рахунок Azure."
+     },
+     {
+      "wert": "Помилка",
+      "text": "Вважати всі ШІ-процеси взаємозамінними — головна пастка при налаштуванні моделі."
+     }
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Яку роль у ШІ-архітектурі на Power Platform виконує Power Automate?",
+    "opts": [
+     "Координує дані: очищає текст, додає контекст і приховує конфіденційні поля перед зверненням до моделі",
+     "Зберігає API-ключі та автоматично змінює їх щотижня",
+     "Навчає модель Azure OpenAI на даних компанії",
+     "Показує користувачам інтерфейс і збирає їхні відгуки"
+    ],
+    "a": 0,
+    "why": "Power Apps не спілкуються з Azure OpenAI напряму: потік Power Automate готує дані й спрямовує їх далі."
+   },
+   {
+    "q": "Що з переліченого робить Azure API Management у такому рішенні?",
+    "opts": [
+     "Генерує відповіді клієнтам замість моделі Azure OpenAI",
+     "Автентифікує кожен запит, обмежує їхню кількість і веде журнали звернень",
+     "Створює інвентар застосунків і ботів у тенанті",
+     "Розбиває довгі документи на частини перед відправленням"
+    ],
+    "a": 1,
+    "why": "API Management забезпечує автентифікацію й авторизацію, ліміти швидкості та детальні журнали. Інвентар формує Center of Excellence toolkit."
+   },
+   {
+    "q": "Чому надто агресивний тротлінг у політиках API Management є проблемою?",
+    "opts": [
+     "Він автоматично збільшує рахунок Azure за кожен токен",
+     "Він розкриває API-ключі стороннім особам",
+     "Правомірні запити падають, а користувачі надсилають ті самі дані повторно",
+     "Він вимикає журнали й аналітику використання"
+    ],
+    "a": 2,
+    "why": "За надто жорстких лімітів правомірні запити відхиляються, і користувачі шукають обхідні шляхи, повторно надсилаючи дані."
+   },
+   {
+    "q": "Що саме робить Center of Excellence toolkit?",
+    "opts": [
+     "Замінює Azure Cost Management і сам ставить витрати на паузу",
+     "Шифрує всі дані, що надсилаються до Azure OpenAI",
+     "Автоматично підбирає найменшу модель для кожного завдання",
+     "Сканує тенант, формує інвентар потоків, застосунків і ботів та перевіряє ризиковані застосунки"
+    ],
+    "a": 3,
+    "why": "Toolkit знаходить потоки, коннектори, застосунки та боти, дає аналітику, перевірки ризиків і може зупиняти потоки, що порушують політики."
+   }
+  ]
+ },
+ "ar": {
+  "html": "<h2>مقدمة</h2>\n<p>كثير من عروض الذكاء الاصطناعي على Power Platform تبدو مبهرة: روبوت دردشة للمبيعات يرد في ثوانٍ، أو تطبيق لخدمة العملاء يصنّف التذاكر تلقائيًا. المشكلة أن هذه العروض تُبنى لعدد قليل من المستخدمين وفي ظروف شبكة مثالية. عند الانتقال إلى سير عمل إنتاجي حقيقي تظهر مشكلات الأداء والأمان والتكلفة والامتثال.</p>\n<p>يشرح هذا المقال كيف تُربط خدمة Azure OpenAI مع Power Apps وDynamics 365 بشكل احترافي، وما الدور الذي تؤديه كل طبقة، وكيف تتجنب الأخطاء التي تحوّل الذكاء الاصطناعي من حليف إلى عبء.</p>\n\n<h2>لماذا تتوقف مشاريع الذكاء الاصطناعي على Power Platform عند مرحلة العرض التجريبي؟</h2>\n<p>تبدأ القصة عادة بالطريقة نفسها: يشاهد مستخدم الأعمال عرضًا جذابًا ويقرر وضعه مباشرة في Power Apps. الموصل موجود، والشاشات تعمل، ويبدأ الجميع بتخيّل الذكاء الاصطناعي وهو ينجز المهام الروتينية. لكن الواقع يظهر بسرعة. يعمل الحل لشخصين في العرض، ثم تظهر مشكلات الأداء، وقد تبدأ الإجابات بالهلوسة، وقد تتسرب بيانات حساسة للعملاء عن طريق الخطأ.</p>\n<p>وراء ذلك أسطورة شائعة: أن إضافة الذكاء الاصطناعي تعني مجرد إضافة موصل ثم الضغط على زر. هذه الأدوات تبدو سهلة على الورق، لكن توصيل الموصل ليس إلا الدعوة إلى الحفل. العمل الحقيقي هو فهم كيف تتفاعل الطبقات مع بعضها، وإلى أي مدى تصبح هشة عند التوسع.</p>\n\n<h2>البنية الأساسية: أربعة أطراف لكل حل جاد</h2>\n<p>في كل إعداد جدي للذكاء الاصطناعي على Power Platform هناك أربعة أطراف أساسية، ولكل منها دور لا يمكن إهماله.</p>\n<h3>1. تطبيقات Power Apps وDynamics 365</h3>\n<p>هي الواجهة التي يتعامل معها المستخدم النهائي، وهي التي تطلق كل طلب ذكاء اصطناعي. تجمع المدخلات، مثل رسالة عميل أو نتيجة استبيان أو مراجعة منتج، لكنها لا تتصل بـ Azure OpenAI مباشرة.</p>\n<h3>2. Power Automate</h3>\n<p>ينسّق العملية كلها. عندما يضغط المستخدم زرًا أو يرسل نموذجًا، يلتقط التدفق البيانات ويهيئها بالتنسيق المناسب ويرسلها إلى وجهتها. وقد ينقّي النصوص، أو يدمج سياقًا من مصادر أخرى، أو يخفي حقولًا حفاظًا على الخصوصية قبل إرسال الطلب.</p>\n<h3>3. نقطة نهاية Azure OpenAI</h3>\n<p>هي العقل الفعلي الذي يقدّم تحليل المشاعر وتلخيص النصوص وصياغة ردود العملاء.</p>\n<h3>4. Azure API Management</h3>\n<p>هو الطرف الذي يُتجاهل كثيرًا حتى تقع المشكلة. مسؤوليته الأمان والتحكم في التدفق، وهو الفرق بين تدفق منتظم وإغراق النظام بالطلبات.</p>\n<p>تعتمد هذه القطع على بعضها. إذا كان التدفق بطيئًا لأن أتمتة أخرى تستهلك الموارد، يتراكم التأخير في التطبيق. وإذا أعدّ Power Automate الحمولة بشكل سيئ، كأن تفتقر مراجعة المنتج إلى السياق أو تصل بتنسيق غريب، فسيعطي Azure OpenAI نتائج غريبة أو إجابات لا قيمة لها.</p>\n\n<h2>اختيار حالة الاستخدام: تحليل المشاعر والتلخيص وتوليد النصوص</h2>\n<p>قد تؤدي نقطة نهاية واحدة مهام كثيرة، لكن هذا لا يعني أن كل حالة استخدام تُعالج بالطريقة نفسها. لا يكفي تبديل المطالبة (Prompt) وانتهاء الأمر، فلكل حالة نهج مختلف.</p>\n<h3>تحليل المشاعر: الحالة الأسهل</h3>\n<p>مثال ذلك وضع علامة على شكاوى العملاء في Dynamics 365. المدخل قصير، والاستجابة سريعة، والتكلفة منخفضة، ولا حاجة تقريبًا إلى سياق للمتابعة. يكفي أن يمرر Power Automate جملة أو جملتين مع مطالبة صحيحة تحدد ما يجب البحث عنه. تُعالج عشرات السجلات بسرعة وبخطر ضئيل، وهذه التدفقات سهلة الإدارة والتقييد.</p>\n<h3>التلخيص: دقة أعلى في المدخلات</h3>\n<p>إذا سمح التطبيق للمديرين بلصق ملاحظات اجتماع مفصلة وانتظار ملخص متماسك، فيجب أن تكون المطالبة دقيقة وموجهة بالنبرة الصحيحة. ومع ذلك تتفاوت الجودة. إذا كان المحتوى ضخمًا جدًا أو النص المصدر غير منظم، فقد يعيد النموذج الصياغة بدل التلخيص، أو يختلق تفاصيل لم تحدث. لذلك يجب أن يهيئ Power Automate المدخلات قبل الإرسال: يحذف التوقيعات، ويزيل التنسيقات، ويقسّم المستند إذا كان طويلًا جدًا.</p>\n<h3>توليد النصوص والتصنيف على نطاق واسع: الأكثر تعقيدًا</h3>\n<p>عندما يريد فريق المبيعات ردود بريد مخصصة تُولَّد فورًا، أو يريد موظفو الدعم تصنيف كل تذكرة حسب نوع المشكلة، يختلف الوضع تمامًا عن العرض البسيط. يمر التدفق عبر مجموعات بيانات ضخمة، وتتلقى نقطة النهاية وابلًا من الطلبات، فتنخفض الإنتاجية وترتفع الفاتورة بسرعة.</p>\n<p>الفخ الكبير هو التعامل مع هذه العمليات كأنها قابلة للتبديل. تحليل المشاعر قد يكلف أجزاء بسيطة من السنت لكل طلب، أما توليد النصوص الطويلة فيزيد تعقيد النموذج ويستهلك مئات الرموز المميزة (Tokens) ويستغرق وقتًا أطول. وهندسة المطالبات أقرب إلى ضبط خوارزمية بحث منها إلى كتابة تعليمات أفضل: تختبر، فتحصل على نتائج غريبة، فتعيد الكتابة. وكل تغيير يؤثر في النتائج والوقت والتكلفة وملف الأمان.</p>\n<h3>مثال واقعي: فرز تذاكر الدعم</h3>\n<p>بنت شركة تدفقًا يستخدم Azure OpenAI لفرز تذاكر خدمة العملاء حسب المشاعر واقتراح رد جاهز. بدا كل شيء مثاليًا في الاختبار. لكن عندما أُتيح التدفق لجميع موظفي الدعم، أُطلقت طلبات لكل تذكرة في كل دقيقة. وكان النموذج مضبوطًا لتوليد نصوص عامة لا لتصنيف بسيط، فحلّل سجل التذاكر بالكامل وكتب مسودات من عدة فقرات في كل مرة. تضخمت التكاليف بين عشية وضحاها، وتباطأت التدفقات، وبدأ النموذج يخترع معلومات في اقتراحاته. ولم يسأل أحد لماذا تحتاج مهمة فرز بسيطة إلى نقطة نهاية لتوليد النصوص بدل تصنيف قصير.</p>\n\n<h2>Azure API Management: درعك الواقي لتأمين نقاط النهاية</h2>\n<p>تتعامل عروض كثيرة مع الأمان كأنه خانة اختيار إضافية. لكن عند الانتقال من الاختبار الداخلي إلى الإنتاج تظهر المخاطر: سير عمل يمرر بيانات العملاء عبر واجهة غير آمنة، أو مفتاح API مكشوف. من يحصل على المفتاح، ولو كان مدفونًا في نص برمجي أو تدفق اختبار، يستطيع إرسال المطالبات وسحب الاستجابات وتراكم الاستخدام. وتصبح هجمات حجب الخدمة الموزعة (DDoS) مصدر قلق، بل إن تطبيقًا مضبوطًا بشكل خاطئ ويكرر الطلب على سجل خطأ قد يُنهك نقطة النهاية دون أي جهة خبيثة.</p>\n<h3>ما الذي تفعله إدارة واجهات برمجة التطبيقات؟</h3>\n<ul>\n<li>تفرض المصادقة والتفويض في كل طلب، لا حين يتذكر المطور إضافتها.</li>\n<li>تحد من عدد الطلبات التي تصل إلى نقطة النهاية، فلا يعرّض خطأ واحد الميزانية أو السمعة للخطر.</li>\n<li>تحتفظ بسجلات مفصلة تبيّن من وصل إلى ماذا ومتى.</li>\n</ul>\n<h3>حادثة توضّح الفكرة</h3>\n<p>أطلقت مؤسسة تدفقًا لتصنيف رسائل البريد الإلكتروني للعملاء في Dynamics 365، ومُرر مفتاح واجهة البرمجة إلى Power Automate. وصل المفتاح إلى مجلد وثائق مشترك، وأنشأ أحد أعضاء الفريق عن طريق الخطأ حلقة تكرارية (Recursive Flow) في تطبيق الاختبار. خلال ساعات وصلت آلاف الطلبات إلى نقطة نهاية Azure OpenAI، وكثير منها يكرر السجلات القليلة نفسها. ارتفعت فاتورة Azure ولم يفهم الفريق ما حدث إلا بعد فحص السجلات. والأسوأ من الفاتورة كان الشك في أن معلومات حساسة ربما وصلت إلى مكان خاطئ. لو وُجدت إدارة واجهات برمجة التطبيقات لأطلقت الحلقة خطأ تجاوز حد المعدل قبل أن يتفاقم الوضع.</p>\n<h3>سياسات عملية</h3>\n<ul>\n<li>تحديد حدود للمعدل، مثل أقصى عدد من الطلبات في الدقيقة لكل مستخدم.</li>\n<li>تقييد الطلبات حسب نطاق عناوين IP بحيث لا يُسمح إلا بالقادمة من بوابات Power Platform المعروفة.</li>\n<li>طلب رؤوس أو رموز مميزة فريدة لعمليات العمل، فيسهل حظر الوصول العشوائي من الخارج.</li>\n</ul>\n<p>التوازن مهم. إذا كان التقييد صارمًا أكثر من اللازم، تفشل الطلبات المشروعة ويعيد المستخدمون إرسال البيانات مرارًا حتى تنجح. لذلك تفيد المراقبة والتحليلات داخل إدارة واجهات برمجة التطبيقات في رؤية أنماط الاستخدام واكتشاف الطلبات الفاشلة وتعديل السياسات قبل أن يلاحظ المستخدمون. كما تتيح تتبع معدلات الاعتماد ومعرفة المسارات التي تحقق قيمة فعلية.</p>\n\n<h2>الحوكمة وضبط التكاليف والامتثال</h2>\n<p>غالبًا ما تظهر فجوات الحوكمة بعد النجاح. يعمل التطبيق جيدًا فيستمر الناس في استخدامه، ثم ينظر أحدهم إلى فاتورة Azure أو تصل رسالة من أمن المعلومات. عندها تتضح الأسئلة: من يتحكم في الوصول إلى نقاط النهاية؟ كم طلبًا يأتي من كل تطبيق؟ وأين الحد بين التجريب والأتمتة التي تستنزف الميزانية؟</p>\n<h3>التكاليف المنفلتة</h3>\n<p>تسجل Azure كل رمز مميز وكل استدعاء وكل كمية بيانات، لكن التكاليف تتضخم إن لم يتتبع أحد هذه الأرقام. وقد لا يدرك مطور عادي أن تدفقه يستدعي نقطة النهاية ألف مرة في اليوم. وتجاهل ذلك لا يعني دفع مبالغ أكبر فقط، بل مخاطرة بإيقاف المشروع أو بفقدان القيادة الثقة في تجربة الذكاء الاصطناعي كلها.</p>\n<h3>أسئلة الامتثال</h3>\n<p>حتى مع المراقبة، تبقى أسئلة مهمة: ما البيانات المرسلة؟ ومدة تخزينها؟ وأين قد تنتهي نسخها؟ وهل أُخفيت المعلومات الشخصية القابلة للتحديد قبل إرسال نص تذكرة الدعم؟ وهل يوجد سجل بمن وصل إلى ماذا؟ المراجعون لا يقتنعون بعبارة «نعتقد ذلك»، وخطأ امتثال واحد قد يوقف المشاريع أسابيع في القطاعات الخاضعة للتنظيم.</p>\n<h3>الأدوات المتاحة</h3>\n<p>توفر إدارة تكاليف Azure لوحات تحكم وتنبيهات وحدودًا للإنفاق، لكن على شخص ما أن يحدد العتبات ويراقب طفرات الاستخدام الأسبوعية. ووضع وسوم على الموارد ونقاط النهاية والتدفقات وتطبيقات Power Apps يسهّل نسبة الإنفاق إلى كل فريق، ويساعد في التنظيف وإعداد التقارير. أما على جانب Power Platform فتعمل مجموعة أدوات مركز التميز أشبه بمركز قيادة: تمسح المستأجر بحثًا عن التدفقات والموصلات المخصصة والتطبيقات والروبوتات وتبني مخزونًا يمكن التصرف بناءً عليه. ويمكن بها إعداد تحليلات الاستخدام وتنبيهات للأنماط المشبوهة، وتوفير قوالب للنشر المقيد، وإطلاق مراجعة للتطبيقات عالية المخاطر، وحتى إيقاف التدفقات الخارجة عن الامتثال.</p>\n<h3>مثال: تطبيق ملاحظات العملاء</h3>\n<p>لاقى تطبيق لملاحظات العملاء رواجًا أسرع من المتوقع: تضاعف الاستخدام في أسبوع، ثم تضاعف ثلاث مرات في غضون شهر. ارتفعت التكاليف بحدة وأجبرت فاتورة Azure على إعادة التنبؤ، وتبين أن التطبيق ينقل بيانات سرية إلى نقطة نهاية الذكاء الاصطناعي دون موافقة. كان يمكن لعملية مركز تميز رصد هذا النمو مبكرًا وفرض مراجعة إلزامية.</p>\n\n<h2>أخطاء شائعة وأبرز الأفخاخ</h2>\n<ul>\n<li><strong>الاكتفاء بالموصل:</strong> الاعتقاد بأن الربط التقني يعني جاهزية الإنتاج.</li>\n<li><strong>استخدام نموذج توليد للتصنيف:</strong> يرفع التكلفة والتأخير ويزيد خطر اختلاق المعلومات.</li>\n<li><strong>إهمال إعداد المدخلات:</strong> نصوص غير منظمة أو طويلة جدًا تعطي نتائج رديئة.</li>\n<li><strong>ترك مفاتيح API في أماكن مشتركة:</strong> كمجلدات الوثائق أو النصوص البرمجية أو تدفقات الاختبار.</li>\n<li><strong>غياب حدود المعدل:</strong> قد تنتج عن حلقة تكرارية واحدة آلاف الطلبات خلال ساعات.</li>\n<li><strong>تقييد مفرط:</strong> يدفع المستخدمين إلى إعادة الإرسال والتحايل.</li>\n<li><strong>تأجيل الحوكمة إلى ما بعد النجاح:</strong> تُكتشف المشكلة عندما تكون التكاليف قد ارتفعت والبيانات قد انتقلت.</li>\n</ul>\n\n<h2>خلاصات عملية للتطبيق</h2>\n<ul>\n<li>افهم الأطراف الأربعة وعلاقتها: التطبيق، وPower Automate، وAzure OpenAI، وAzure API Management.</li>\n<li>اختر لكل حالة استخدام نهجًا خاصًا بها، ولا تفترض أن تبديل المطالبة يكفي.</li>\n<li>هيّئ المدخلات في Power Automate: نقِّ النص، وأخفِ الحقول الحساسة، وقسّم المستندات الطويلة.</li>\n<li>للمهام السريعة كالتصنيف وتحليل المشاعر، استخدم تدفقات متوازية وأصغر نموذج ينجز المهمة.</li>\n<li>للتوليد الطويل، ضع حدًا أقصى للرموز المميزة وقيّد عدد مرات وصول المستخدمين.</li>\n<li>ضع حصص استخدام على التدفقات وراقب الطلبات والرموز المميزة في بوابة Azure.</li>\n<li>اجعل Azure API Management بوابة إلزامية: مصادقة، وحدود معدل، وتقييد حسب IP، وسجلات.</li>\n<li>ضع وسومًا على كل المورد ونقاط النهاية والتدفقات والتطبيقات، وحدد ميزانيات أو حدودًا مرنة حتى لإثباتات المفهوم.</li>\n<li>راجع الوصول إلى نقاط النهاية بانتظام ووثّق التدفقات التي ترسل البيانات ولماذا.</li>\n<li>استخدم مجموعة أدوات مركز التميز لبناء مخزون ورصد الأنماط المشبوهة.</li>\n</ul>\n\n<h2>الخلاصة</h2>\n<p>النجاح في الذكاء الاصطناعي المؤسسي على Power Platform لا يتوقف على ربط Azure OpenAI بتطبيق، بل على تصميم يصمد أمام مستخدمين حقيقيين وبيانات حقيقية. يتطلب ذلك فهم دور كل طبقة، واختيار النموذج والمطالبة المناسبين لكل مهمة، وحماية نقاط النهاية عبر Azure API Management، وإرساء حوكمة مستمرة تتابع التكاليف والامتثال. الحوكمة ليست خطوة تُنجز مرة وتُنسى، فالنماذج ومنطق الأعمال وقواعد الخصوصية تتغير، ولذلك تلزم مراجعات وتحديثات منتظمة. بهذه الضوابط تكتسب فرق تكنولوجيا المعلومات والأعمال الثقة للتوسع والتجربة والابتكار.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "ذكاء اصطناعي مؤسسي على Power Platform: من العرض إلى الإنتاج",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "افهم البنية",
+     "text": "التطبيق وPower Automate وAzure OpenAI وAzure API Management: أربعة أطراف مترابطة في كل حل جاد."
+    },
+    {
+     "kopf": "اختر النهج المناسب",
+     "text": "تحليل المشاعر والتلخيص وتوليد النصوص تختلف في التكلفة والتعقيد، وتحتاج مطالبات ونماذج مختلفة."
+    },
+    {
+     "kopf": "هيّئ المدخلات",
+     "text": "نقِّ النصوص، وأخفِ الحقول الحساسة، وقسّم المستندات الطويلة قبل الإرسال إلى النموذج."
+    },
+    {
+     "kopf": "أمّن نقاط النهاية",
+     "text": "استخدم API Management للمصادقة وحدود المعدل والتقييد حسب IP والسجلات."
+    },
+    {
+     "kopf": "راقب التكاليف",
+     "text": "ضع وسومًا وحدودًا للإنفاق، وتتبع الطلبات والرموز المميزة بانتظام."
+    },
+    {
+     "kopf": "رسّخ الحوكمة",
+     "text": "راجع الوصول، ووثّق التدفقات، واستخدم مجموعة أدوات مركز التميز لرصد المخاطر مبكرًا."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "لماذا تتوقف مشاريع الذكاء الاصطناعي على Power Platform عند مرحلة العرض التجريبي؟",
+    "a": "لأن العروض تُبنى لعدد قليل من المستخدمين وفي ظروف مثالية. عند الانتقال إلى الإنتاج تظهر مشكلات الأداء والأمان والتكلفة والامتثال. إضافة موصل لا تكفي، فالعمل الحقيقي هو فهم تفاعل الطبقات وهشاشتها عند التوسع."
+   },
+   {
+    "q": "ما الأطراف الأربعة في حل Azure OpenAI مع Power Apps وDynamics 365؟",
+    "a": "التطبيقات (Power Apps وDynamics 365) تجمع المدخلات وتطلق الطلب. Power Automate ينسّق العملية ويهيئ البيانات ويخفي الحقول الحساسة. نقطة نهاية Azure OpenAI تقدّم التحليل والتلخيص والصياغة. وAzure API Management يتولى الأمان والتحكم في التدفق."
+   },
+   {
+    "q": "لماذا لا يصلح نموذج توليد النصوص لتصنيف التذاكر أو تحليل المشاعر؟",
+    "a": "لأن التصنيف مهمة قصيرة ومنخفضة التكلفة، أما نموذج التوليد فيرفع التكلفة والتأخير ويزيد خطر اختلاق المعلومات. في مثال فرز التذاكر حلّل النموذج السجل كاملًا وكتب مسودات طويلة، فتضخمت التكاليف وتباطأت التدفقات. للمهام السريعة يُنصح بأصغر نموذج ينجز المهمة."
+   },
+   {
+    "q": "كيف يحمي Azure API Management نقاط نهاية Azure OpenAI؟",
+    "a": "يفرض المصادقة والتفويض على كل طلب، ويحد من عدد الطلبات عبر حدود المعدل، ويقيّد الوصول حسب عناوين IP، ويحتفظ بسجلات مفصلة لمن وصل إلى ماذا ومتى. وبذلك يوقف الحلقات التكرارية وإساءة استخدام المفاتيح قبل أن تتفاقم التكاليف."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "تحليل المشاعر مقابل توليد النصوص على نطاق واسع",
+    "typ": "vergleich",
+    "links": {
+     "titel": "تحليل المشاعر",
+     "punkte": [
+      "المدخل قصير، وتكفي جملة أو جملتان مع مطالبة صحيحة",
+      "الاستجابة سريعة والتكلفة منخفضة، أجزاء بسيطة من السنت لكل طلب",
+      "لا حاجة تقريبًا إلى سياق للمتابعة",
+      "تدفقات سهلة الإدارة والتقييد وبخطر ضئيل"
+     ]
+    },
+    "rechts": {
+     "titel": "توليد النصوص والتصنيف الواسع",
+     "punkte": [
+      "التدفق يمر عبر مجموعات بيانات ضخمة",
+      "نقطة النهاية تتلقى وابلًا من الطلبات",
+      "النصوص الطويلة تستهلك مئات الرموز المميزة ووقتًا أطول",
+      "الإنتاجية تنخفض والفاتورة ترتفع بسرعة"
+     ]
+    }
+   },
+   {
+    "titel": "قائمة فحص قبل الانتقال إلى الإنتاج",
+    "typ": "checkliste",
+    "punkte": [
+     "هيّئ المدخلات في Power Automate: نقِّ النص وأخفِ الحقول الحساسة",
+     "اجعل Azure API Management بوابة إلزامية للمصادقة وحدود المعدل والسجلات",
+     "قيّد الطلبات حسب نطاق عناوين IP لبوابات Power Platform المعروفة",
+     "لا تترك مفاتيح API في مجلدات الوثائق أو تدفقات الاختبار",
+     "ضع وسومًا على الموارد والتدفقات والتطبيقات، وحدد ميزانيات وتنبيهات للإنفاق",
+     "استخدم أصغر نموذج ينجز المهمة، وضع حدًا أقصى للرموز المميزة",
+     "راجع الوصول إلى نقاط النهاية بانتظام ووثّق التدفقات التي ترسل البيانات"
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "ما الدور الرئيسي لـ Power Automate في الحل؟",
+    "opts": [
+     "عرض الشاشات للمستخدم النهائي وجمع المدخلات فقط",
+     "تقديم تحليل المشاعر وتلخيص النصوص بنفسه",
+     "تنسيق العملية وتهيئة البيانات وإخفاء الحقول الحساسة قبل الإرسال",
+     "تطبيق حدود المعدل وتسجيل من وصل إلى ماذا"
+    ],
+    "a": 2,
+    "why": "ينسّق التدفق العملية كلها، فيلتقط البيانات وينقّيها ويخفي الحقول الحساسة قبل إرسال الطلب إلى Azure OpenAI."
+   },
+   {
+    "q": "أي طرف مسؤول عن الأمان والتحكم في تدفق الطلبات نحو نقطة النهاية؟",
+    "opts": [
+     "Azure API Management",
+     "تطبيقات Power Apps",
+     "تطبيقات Dynamics 365",
+     "نقطة نهاية Azure OpenAI"
+    ],
+    "a": 0,
+    "why": "مسؤولية Azure API Management هي الأمان والتحكم في التدفق، وهو الفرق بين تدفق منتظم وإغراق النظام بالطلبات."
+   },
+   {
+    "q": "ما الخطأ الذي أدى إلى تضخم التكاليف في مثال فرز تذاكر الدعم؟",
+    "opts": [
+     "استخدام Power Apps بدل Dynamics 365 في واجهة المستخدم",
+     "تقييد الطلبات بصرامة فأعاد الموظفون الإرسال مرارًا",
+     "كشف مفتاح API في مجلد وثائق مشترك",
+     "ضبط النموذج لتوليد نصوص عامة بدل تصنيف قصير"
+    ],
+    "a": 3,
+    "why": "كان النموذج مضبوطًا لتوليد نصوص عامة، فحلّل سجل التذاكر وكتب مسودات طويلة بدل تصنيف بسيط."
+   },
+   {
+    "q": "ماذا كانت ستفعل إدارة واجهات برمجة التطبيقات في حادثة الحلقة التكرارية؟",
+    "opts": [
+     "كانت ستحذف المفتاح من مجلد الوثائق تلقائيًا",
+     "كانت ستطلق خطأ تجاوز حد المعدل قبل تفاقم الوضع",
+     "كانت ستحوّل الطلبات إلى نموذج أرخص تلقائيًا",
+     "كانت ستخفي المعلومات الشخصية من نصوص الرسائل"
+    ],
+    "a": 1,
+    "why": "ذكر المقال أن وجود إدارة واجهات برمجة التطبيقات كان سيُطلق خطأ تجاوز حد المعدل قبل أن يتفاقم الوضع."
+   }
+  ]
+ },
+ "he": {
+  "html": "<h2>מעבר לצ'אטבוט: מה באמת נדרש כדי להכניס Azure OpenAI לתהליך עסקי</h2>\n<p>הדגמות AI ב-Power Platform נראות מרשימות: צ'אטבוט שמגיב בשניות, או אפליקציית שירות לקוחות שממיינת פניות כמעט מעצמה. אבל הרבה מהן נעצרות בשלב הצ'אטבוט ולא שורדות בתוך תהליך עבודה אמיתי. הסיבה פשוטה: הוספת קונקטור ל-Azure OpenAI היא החלק הקל. ארכיטקטורה, אבטחה, ביצועים וממשל הם החלק שקובע אם הפתרון יחזיק בארגון.</p>\n<p>במאמר נעבור על המרכיבים של פריסה מקצועית של Azure OpenAI עם Power Apps, Power Automate ו-Dynamics 365. נראה איפה הדברים נשברים בדרך כלל, ומה אפשר לעשות כדי למנוע זאת.</p>\n\n<h2>ארכיטקטורת AI ב-Power Platform: ארבעה שחקנים ולא רק קונקטור</h2>\n<p>כמעט בכל הגדרת AI רצינית ב-Power Platform יש ארבעה מרכיבים שפועלים יחד:</p>\n<ol>\n<li><strong>Power Apps או Dynamics 365</strong> – הממשק שבו המשתמשים עובדים, והטריגר האמיתי לכל בקשת AI. כאן נאספים הנתונים: הודעת לקוח, תוצאת סקר, ביקורת מוצר או כל טקסט שרוצים להפיק ממנו תובנות.</li>\n<li><strong>Power Automate</strong> – המתזמר. Power Apps לא מדבר ישירות עם Azure OpenAI. בכל לחיצה על כפתור או שליחת טופס, הזרימה אוספת את הנתונים, מעצבת אותם בפורמט הנכון ושולחת אותם ליעד.</li>\n<li><strong>נקודת הקצה של Azure OpenAI</strong> – ה\"מוח\" שמבצע ניתוח סנטימנט, סיכום טקסט או יצירת תשובות ללקוחות.</li>\n<li><strong>Azure API Management</strong> – השכבה השקטה שמתעלמים ממנה עד שמשהו מתפוצץ. היא אחראית על אבטחה ועל הגבלת קצב, ומבדילה בין זרימה יציבה להצפת המערכת.</li>\n</ol>\n<h3>איך החלקים נשענים זה על זה</h3>\n<p>נניח שמשתמש ב-Dynamics 365 מתעד שיחת לקוח. הפעולה מפעילה זרימה ב-Power Automate, והזרימה עושה הרבה יותר מהעברת נתונים. היא יכולה לנקות טקסט, למזג הקשר ממקורות אחרים ולהסתיר שדות רגישים לצורך פרטיות, עוד לפני שהבקשה יוצאת ל-Azure OpenAI.</p>\n<p>אם הזרימה איטית כי אוטומציה אחרת צורכת משאבים, האפליקציה תסבול מעומס מצטבר. אם המטען לא הוכן כראוי, למשל ביקורת מוצר שחסר לה הקשר או שהעיצוב שלה מוזר, המודל יחזיר תוצאות מוזרות ואף עלול להמציא תשובות. כלומר, אין בינה טובה כשהחומר שמוזן אליה מבולגן.</p>\n\n<h2>למה הדגמות לא משקפות את המציאות הארגונית</h2>\n<p>בסרטוני הדגמה הכול מותאם למספר קטן של משתמשים ולתנאי רשת כמעט מושלמים. בארגון אמיתי יש הסכמי רמת שירות (SLA), חששות לפרטיות נתונים וספי ביצועים שאי אפשר להתעלם מהם.</p>\n<p>דמיינו אפליקציית Power Apps למשוב לקוחות עם ניתוח סנטימנט מובנה. כשעשרה אנשים משתמשים בה, התוצאות חוזרות בפחות משנייה. אחרי קמפיין אימיילים, או בכל אירוע אחר שמזניק את מספר המשתמשים, מתחילים להופיע זמני המתנה של שלושים שניות ושגיאות, כי נקודת הקצה לא עומדת בעומס. גרוע מזה: חלק מנתוני המשוב מפסיקים לעבוד כי גודל המטען חורג ממגבלות Azure, או כי מדיניות האבטחה ב-API Management מעולם לא הוגדרה. במקום לעזור ללקוחות, צינור ה-AI מתסכל אותם, ומוקד התמיכה לא מרוצה.</p>\n<p>המסקנה: הקונקטור הוא רק הזמנה למסיבת הארכיטקטורה. מי שמבין רק אותו מהמר על יציבות ואבטחה. כדי לעבור מבוט בארגז חול לפתרון מוכן לארגון צריך להבין איך Power Apps מפעיל את התזמור, איך הזרימות מעבדות ומאבטחות נתונים, איך נקודות הקצה מפרשות אותם, ואיך ניהול ה-API משמש מעקה בטיחות.</p>\n\n<h2>ניתוח סנטימנט, סיכום ויצירת טקסט: כל משימה דורשת גישה אחרת</h2>\n<p>אותה נקודת קצה של Azure OpenAI יכולה לזהות סנטימנט שלילי, לסכם שרשור אימיילים או לנסח תיאור מוצר. אבל זה לא אומר שמספיק להחליף פרומפט ולסגור עניין. כל משימה דורשת הגדרות אחרות.</p>\n<h3>ניתוח סנטימנט: המקרה הקל</h3>\n<p>סימון תלונות לקוחות הוא נקודת פתיחה טובה: קלט קצר, תגובה מהירה, עלות נמוכה וכמעט בלי הקשר לעקוב אחריו. Power Automate צריך להעביר רק משפט או שניים יחד עם פרומפט שמנחה את המודל מה לחפש. אפשר לעבור על עשרות רשומות בלי סיכון שהמודל יצא משליטה או שהתקציב יחרוג. תהליכים כאלה קלים לניהול ולהגבלה, ולרוב לא צריך לשכתב אותם.</p>\n<h3>סיכומים: כאן העבודה מתחילה להיות מאתגרת</h3>\n<p>כשמנהלים מדביקים סיכומי פגישות מפורטים ומצפים לסיכום עקבי בתוך שניות, ההנחיה חייבת להיות מנוסחת היטב ומכוונת לטון הנכון. גם אז, אם המטען גדול מדי או שהטקסט חסר מבנה, המודל עלול לנסח מחדש במקום לסכם, ואפילו להמציא פרטים שלא קרו. לכן Power Automate צריך להכין את הקלט: להסיר חתימות, לנקות עיצוב ואולי לפצל מסמך ארוך. כל זה קורה לפני שה-AI מתחיל לעבוד.</p>\n<h3>יצירת טקסט וסיווג בהיקף גדול</h3>\n<p>כשצוות המכירות רוצה תשובות אימייל מותאמות אישית בזמן אמת, או כשצוות התמיכה רוצה לסווג כל פנייה לפי סוג הבעיה, ההבדל מההדגמה גדול. הזרימה צריכה לעבור בלולאה על מערכי נתונים גדולים, והחשבון ב-Azure עולה במהירות. ניתוח סנטימנט עולה שבריר קטן לבקשה, ויצירת טקסט ארוך מורכבת יותר, צורכת יותר אסימונים ולוקחת יותר זמן.</p>\n<p>הנדסת פרומפטים אינה רק \"להקליד הוראות טובות יותר\". היא דומה יותר לכוונון אלגוריתם חיפוש: בודקים, מקבלים תוצאות מוזרות ומתקנים. כל שינוי משפיע לא רק על הפלט אלא גם על הזמן, העלות ופרופיל האבטחה של הזרימה.</p>\n\n<h2>עלויות ותצורה: שגיאה אחת בהגדרות יכולה לשבור את התקציב</h2>\n<p>חברה אחת בנתה תהליך שהשתמש ב-OpenAI כדי למיין פניות שירות, לסווג אותן לפי סנטימנט ולהציע תגובה מוכנה. בסביבת הבדיקות הכול נראה מושלם. הבעיה התגלתה כשהתהליך נפתח לכל אנשי התמיכה והנקודה קיבלה בקשות על כל פנייה, בכל דקה. המודל הוגדר ליצירת טקסט כללית ולא לסיווג פשוט, ולכן ניתח את כל היסטוריית הפניות וכתב טיוטות של כמה פסקאות בכל פעם. העלויות זינקו בן לילה, התהליכים האטו, וה-AI התחיל להמציא מידע. אף אחד לא שאל מדוע משימת מיון פשוטה משתמשת בנקודת קצה שמכוונת ליצירת טקסט, והחקירה לקחה שעות.</p>\n<p>כדי להימנע ממצב כזה:</p>\n<ul>\n<li>הגדירו מכסות שימוש בתהליכי Power Automate ועקבו אחר הבקשות והאסימונים בפורטל Azure.</li>\n<li>למשימות מהירות כמו סיווג וניתוח סנטימנט, השתמשו במודל הקטן ביותר שמבצע את העבודה.</li>\n<li>ליצירת טקסט ארוך, הגבילו את מספר האסימונים המרבי ואת תדירות הגישה של המשתמשים.</li>\n<li>עברו על יומני הרישום באופן קבוע כדי לזהות קפיצות וחריגות מוקדם.</li>\n</ul>\n\n<h2>אבטחת נקודות הקצה: למה Azure API Management הוא שער הכניסה</h2>\n<p>בהדגמות רבות האבטחה מטופלת כאילו היא תיבת סימון בסוף התהליך. במעבר מפיילוט פנימי לייצור, נקודת הקצה של OpenAI הופכת לחלון אל כל מה שהאפליקציה חושפת. תהליך שירות לקוחות שמעביר נתוני לקוחות דרך API לא מאובטח, או מפתח שעובר מיד ליד, חושפים את הארגון לגישה לא מורשית, לדליפות מידע ולהצפת קריאות מגורמים לא רצויים. מי שמשיג את מפתח ה-API יכול לשלוח הנחיות, למשוך תגובות ולצבור עלויות. גם בלי גורם עוין, אפליקציה שהוגדרה לא נכון ונכנסת ללולאה על הרשומה הלא נכונה יכולה להפציץ את נקודת הקצה.</p>\n<h3>מה API Management עושה ש-Power Automate לא עושה</h3>\n<ul>\n<li>אוכף אימות והרשאות בכל בקשה, ולא רק כשמישהו זכר לתכנת זאת.</li>\n<li>מגביל את מספר הבקשות שמגיעות לנקודת הקצה, כך שטעות של מפתח או סקריפט שיצא משליטה לא תסכן את התקציב.</li>\n<li>שומר יומנים מפורטים שמאפשרים לענות מי ניגש למה ומתי.</li>\n</ul>\n<h3>תקרית לדוגמה</h3>\n<p>ארגון הטמיע תהליך סיווג מבוסס AI לפניות לקוחות ב-Dynamics 365 והעביר את מפתח ה-API לתוך Power Automate. המפתח הגיע לתיקיית תיעוד משותפת, וחבר צוות נלהב אך חסר ניסיון בנה בטעות לולאה רקורסיבית באפליקציית הבדיקות שלו. תוך שעות הגיעו אלפי קריאות לנקודת הקצה, רבות מהן על אותן רשומות. חשבון Azure זינק, והצוות הבין מה קרה רק אחרי בדיקה מעמיקה של היומנים. החלק הקשה היה אי-הוודאות אם מידע רגיש הגיע למקום הלא נכון. עם API Management מופעל, הלולאה הייתה מפעילה את הגבלת הקצב הרבה לפני שהמצב החמיר, והרישום היה מצביע על ההצפה מיד.</p>\n<h3>מדיניות ואיזון</h3>\n<p>אפשר להגדיר מגבלות קצב, למשל מספר מרבי של פניות בדקה לכל משתמש. אפשר להגביל קריאות לפי טווח IP כך שיתקבלו רק בקשות משערי Power Platform מוכרים, ועבור ארגונים עם דרישות ציות קפדניות אפשר לדרוש כותרות ייחודיות לתהליך העסקי.</p>\n<p>צריך גם איזון. מדיניות שמוגדרת באגרסיביות מדי גורמת לבקשות לגיטימיות להיכשל, והמשתמשים מתחילים לעקוף אותה, למשל בשליחת אותם נתונים שוב ושוב. לכן הניטור וניתוח הנתונים ב-API Management חשובים: הם מראים דפוסי שימוש לאורך זמן, מזהים קריאות שנכשלו ומאפשרים לכוונן מדיניות לפני שהמשתמשים מרגישים. הם גם מראים אילו תהליכים מייצרים ערך ואילו צורכים קיבולת בלי סיבה.</p>\n\n<h2>ממשל, ציות ובקרת עלויות: כשה-AI מצליח, מתחילות השאלות</h2>\n<p>בעיות ממשל מופיעות בדרך כלל אחרי הצלחה. אפליקציה שעובדת מספיק טוב ממשיכה למשוך משתמשים, ואז שואלים: מי שולט בגישה לנקודות הקצה? כמה בקשות מגיעות מכל אפליקציה, והאם צריך את כולן? איפה עובר הגבול בין ניסוי לאוטומציה שאוכלת את התקציב?</p>\n<h3>עלויות</h3>\n<p>Azure מתעדת כל אסימון, כל קריאת API וכל כמות נתונים שעוברת בנקודות הקצה. אבל התשלום מבוסס שימוש, ובלי מעקב אקטיבי העלויות תופחות ברקע. מפתחים אזרחיים מחדשים בתום לב ולא תמיד יודעים שהזרימה שלהם פונה ל-AI אלפי פעמים ביום. התוצאה עלולה להיות סגירת פרויקט כדי לעצור הפסדים, או אובדן אמון של ההנהלה בכל ניסוי ה-AI.</p>\n<h3>ציות ופרטיות</h3>\n<p>גם כש-API Management שומר על הכניסה, נשארות שאלות: אילו נתונים נשלחים, כמה זמן הם מאוחסנים ואיפה עלולים להימצא עותקים שלהם. האם הוסתר מידע מזהה אישי לפני ששלחו את טקסט הפנייה ל-Azure OpenAI? האם יש רישום של מי ניגש למה, והאם הוא תואם את מדיניות הארגון? מבקרים לא מסתפקים ב\"אנחנו חושבים שכן\". בתעשיות מוסדרות, שליחת נתונים סודיים לסיכום בלי סינון מתאים עלולה לעצור פרויקטים לשבועות.</p>\n<h3>כלים שעוזרים</h3>\n<ul>\n<li><strong>Azure Cost Management</strong> – לוחות מחוונים, התראות ומכסות תקציב. עדיין צריך להגדיר ספים ולעקוב אחר קפיצות שבועיות.</li>\n<li><strong>תיוג משאבים</strong> – נקודות קצה, זרימות ואפילו אפליקציות Power Apps בודדות. כך אפשר לשייך הוצאות לצוות או ליחידה עסקית, ולזהות אוטומציה שנשארה פעילה אחרי סיום פיילוט.</li>\n<li><strong>Center of Excellence Starter Kit</strong> – הדבר הקרוב ביותר למרכז פיקוד ל-Power Platform. הוא בונה מלאי של זרימות, מחברים מותאמים, אפליקציות ויוצרים, ומאפשר ניתוח שימוש, התראות על דפוסים חשודים ודוחות תקופתיים. הוא גם מספק תבניות להטמעה מדורגת, מפעיל ביקורות לאפליקציות בסיכון גבוה, ויכול לאכוף מדיניות.</li>\n</ul>\n<p>דוגמה: אפליקציית משוב לקוחות צמחה מהר מהצפוי, והשימוש הוכפל ואז שולש. תוך חודש זינקו העלויות, ובדיקת החשבון חשפה שהיא העבירה נתונים סודיים ל-AI ללא אישור. תהליך של מרכז מצוינות היה יכול לסמן את הצמיחה מוקדם ולחייב בחינה מחדש.</p>\n\n<h2>טעויות נפוצות ואבני נגף</h2>\n<ul>\n<li>להניח שהוספת AI היא רק פלוס, קונקטור וחיבור ל-Azure OpenAI.</li>\n<li>להתייחס לכל משימות ה-AI כאל דבר הניתן להחלפה, ולהשתמש בהגדרות של יצירת טקסט למשימת סיווג פשוטה.</li>\n<li>להזין את המודל בקלט מבולגן או ארוך מדי, בלי ניקוי, עיצוב ופיצול ב-Power Automate.</li>\n<li>להעביר מפתחות API בין אנשים או לשמור אותם בתיקיות תיעוד משותפות.</li>\n<li>לא להגדיר הגבלת קצב, ולא לתעד מי עשה מה.</li>\n<li>להגדיר הגבלה אגרסיבית מדי, כך שמשתמשים מנסים לעקוף אותה.</li>\n<li>לשלוח נתונים רגישים ל-AI בלי הסתרת מידע מזהה אישי.</li>\n<li>להתייחס לממשל כצעד של \"הגדר ושכח\".</li>\n</ul>\n\n<h2>טיפים מעשיים להטמעה</h2>\n<ul>\n<li>תכננו את כל ארבע השכבות: Power Apps או Dynamics 365, Power Automate, Azure OpenAI ו-API Management.</li>\n<li>הכינו את הנתונים ב-Power Automate: נקו טקסט, הוסיפו הקשר, הסתירו שדות רגישים ופצלו מסמכים ארוכים.</li>\n<li>התאימו מודל והגדרות לכל משימה, והשתמשו במודל הקטן ביותר שמספיק.</li>\n<li>הגבילו אסימונים ותדירות שימוש ביצירת טקסט ארוך.</li>\n<li>הפעילו מדיניות הגבלת קצב, הגבלת IP ודרישת כותרות ב-API Management, ועקבו אחר הניטור כדי לכוונן אותה.</li>\n<li>תייגו משאבים, הגדירו התראות תקציב ב-Azure Cost Management והשתמשו ב-Center of Excellence Starter Kit.</li>\n<li>בחנו הרשאות גישה לנקודות קצה באופן סדיר, ותעדו אילו תהליכים שולחים אילו נתונים ומדוע.</li>\n<li>הגדירו מגבלות רכות ותקציב גם להוכחות היתכנות.</li>\n</ul>\n\n<h2>סיכום</h2>\n<p>הצלחה של AI ב-Power Platform נמדדת לא בהדגמה אלא בשאלה אם הפתרון שורד משתמשים אמיתיים, נתונים אמיתיים ותקציב אמיתי. הקונקטור הוא רק נקודת ההתחלה. מה שמבדיל בין צעצוע לפתרון ארגוני הוא ארכיטקטורה מוגדרת היטב, הגדרות שמתאימות לכל משימה, שער כניסה מאובטח ב-API Management וממשל שוטף של עלויות וציות. כשהבקרות האלה במקומן, אנשי ה-IT והעסק יכולים להתרחב, להתנסות ולחדש בביטחון.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "AI ארגוני ב-Power Platform: מהדגמה לייצור",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "ארבע שכבות",
+     "text": "Power Apps או Dynamics 365, Power Automate, Azure OpenAI ו-API Management פועלים יחד."
+    },
+    {
+     "kopf": "הכנת הנתונים",
+     "text": "Power Automate מנקה טקסט, מוסיף הקשר ומסתיר שדות רגישים לפני השליחה למודל."
+    },
+    {
+     "kopf": "הגדרה לפי משימה",
+     "text": "סנטימנט, סיכום ויצירת טקסט דורשים מודל, אסימונים ופרומפט שונים."
+    },
+    {
+     "kopf": "אבטחה ב-API Management",
+     "text": "אימות, הגבלת קצב, הגבלת IP ויומנים מונעים הצפות וחשיפת מפתחות."
+    },
+    {
+     "kopf": "בקרת עלויות",
+     "text": "מכסות, תיוג משאבים והתראות ב-Azure Cost Management מונעים הפתעות בחשבון."
+    },
+    {
+     "kopf": "ממשל מתמשך",
+     "text": "Center of Excellence Starter Kit, ביקורות ובחינת הרשאות סדירה שומרים על שליטה."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "אילו רכיבים נדרשים כדי להטמיע Azure OpenAI בתהליך עסקי ב-Power Platform?",
+    "a": "נדרשים ארבעה רכיבים: Power Apps או Dynamics 365 כממשק וכטריגר, Power Automate כמתזמר שאוסף ומכין את הנתונים, נקודת קצה של Azure OpenAI שמבצעת את הניתוח או היצירה, ו-Azure API Management לאבטחה ולהגבלת קצב. קונקטור לבדו לא מספיק."
+   },
+   {
+    "q": "למה הדגמות AI ב-Power Platform נכשלות כשמעבירים אותן לסביבת ייצור?",
+    "a": "ההדגמות מותאמות למספר קטן של משתמשים ולרשת כמעט מושלמת. בארגון אמיתי, כשמספר המשתמשים קופץ, מופיעים זמני המתנה של שלושים שניות ושגיאות. בנוסף, המטען עלול לחרוג ממגבלות Azure, ומדיניות האבטחה ב-API Management עלולה להישאר לא מוגדרת."
+   },
+   {
+    "q": "איך אפשר למנוע זינוק בלתי צפוי בעלויות של Azure OpenAI?",
+    "a": "הגדירו מכסות שימוש בתהליכי Power Automate ועקבו אחר בקשות ואסימונים בפורטל Azure. למשימות כמו סיווג השתמשו במודל הקטן ביותר שמספיק. ליצירת טקסט ארוך הגבילו אסימונים ותדירות גישה. תייגו משאבים, הגדירו התראות תקציב ועברו על יומני הרישום באופן קבוע."
+   },
+   {
+    "q": "מה Azure API Management נותן ש-Power Automate לא נותן?",
+    "a": "הוא אוכף אימות והרשאות בכל בקשה, מגביל את מספר הבקשות כדי שטעות או לולאה לא יסכנו את התקציב, ושומר יומנים מפורטים של מי ניגש למה ומתי. אפשר גם להגביל לפי טווח IP ולדרוש כותרות ייחודיות, בלי להקשיח את המדיניות עד שמשתמשים מנסים לעקוף אותה."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "הדגמה מול ארגון אמיתי",
+    "typ": "vergleich",
+    "links": {
+     "titel": "הדגמה",
+     "punkte": [
+      "מספר קטן של משתמשים",
+      "תנאי רשת כמעט מושלמים",
+      "תוצאות חוזרות בפחות משנייה",
+      "אבטחה מטופלת כתיבת סימון בסוף התהליך"
+     ]
+    },
+    "rechts": {
+     "titel": "ארגון אמיתי",
+     "punkte": [
+      "הסכמי רמת שירות (SLA) וספי ביצועים מחייבים",
+      "חששות לפרטיות נתונים וציות",
+      "זמני המתנה של שלושים שניות ושגיאות בעומס",
+      "הגבלת קצב ורישום ב-API Management",
+      "ממשל שוטף של עלויות והרשאות"
+     ]
+    }
+   },
+   {
+    "titel": "ארבע שכבות בארכיטקטורת AI",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "ממשק וטריגר",
+      "text": "Power Apps או Dynamics 365: כאן נאספים הנתונים ומתחילה כל בקשת AI."
+     },
+     {
+      "wert": "מתזמר",
+      "text": "Power Automate אוסף, מנקה, מעצב ושולח את הנתונים ליעד."
+     },
+     {
+      "wert": "מוח",
+      "text": "Azure OpenAI מבצע ניתוח סנטימנט, סיכום טקסט ויצירת תשובות."
+     },
+     {
+      "wert": "מעקה בטיחות",
+      "text": "Azure API Management אחראי על אבטחה, אימות והגבלת קצב."
+     }
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "מדוע Power Apps לא פונה ישירות ל-Azure OpenAI לפי המאמר?",
+    "opts": [
+     "Power Automate מתזמר: אוסף נתונים, מעצב אותם ושולח אותם ליעד",
+     "Azure OpenAI מקבל בקשות רק מ-Dynamics 365",
+     "Power Apps אינו תומך בשליחת טקסט מעבר לשורה אחת",
+     "Azure API Management מחליף את הצורך בכל קונקטור"
+    ],
+    "a": 0,
+    "why": "הזרימה ב-Power Automate היא המתזמר: היא אוספת את הנתונים, מעצבת אותם בפורמט הנכון ושולחת אותם ליעד."
+   },
+   {
+    "q": "איזו משימה מתוארת במאמר כמקרה הקל ובעלת העלות הנמוכה ביותר?",
+    "opts": [
+     "סיכום מפורט של שרשורי אימיילים ארוכים",
+     "ניתוח סנטימנט של משפט או שניים",
+     "יצירת תשובות אימייל מותאמות אישית בזמן אמת",
+     "ניסוח תיאורי מוצר ארוכים לקטלוג שלם"
+    ],
+    "a": 1,
+    "why": "ניתוח סנטימנט כולל קלט קצר, תגובה מהירה, עלות נמוכה וכמעט בלי הקשר שצריך לעקוב אחריו."
+   },
+   {
+    "q": "מה היה הכשל בחברה שמיינה פניות שירות והעלויות שלה זינקו בן לילה?",
+    "opts": [
+     "המפתח של נקודת הקצה נחשף בתיקיית תיעוד משותפת",
+     "הוגדרה הגבלת קצב אגרסיבית מדי שחסמה בקשות לגיטימיות",
+     "משימת מיון פשוטה רצה על נקודת קצה שהוגדרה ליצירת טקסט כללית",
+     "הזרימה לא הסתירה מידע מזהה אישי לפני השליחה"
+    ],
+    "a": 2,
+    "why": "המודל הוגדר ליצירת טקסט ולא לסיווג פשוט, ולכן ניתח את כל היסטוריית הפניות וכתב טיוטות ארוכות בכל פעם."
+   },
+   {
+    "q": "מה היה קורה בתקרית הלולאה הרקורסיבית אילו API Management היה מופעל?",
+    "opts": [
+     "המפתח היה מוחלף אוטומטית בכל שעה",
+     "הלולאה הייתה נעצרת כי Power Automate חוסם רקורסיה",
+     "הקריאות היו עוברות למודל זול יותר ללא התראה",
+     "הגבלת הקצב הייתה מופעלת מוקדם והרישום היה מצביע מיד על ההצפה"
+    ],
+    "a": 3,
+    "why": "לפי המאמר, הגבלת הקצב הייתה נכנסת לפעולה הרבה לפני החמרת המצב, והרישום היה מצביע מיד על ההצפה."
+   }
+  ]
  }
 }
