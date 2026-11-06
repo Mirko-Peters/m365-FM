@@ -35,7 +35,8 @@ def build(g, people, posts, pods, vids, feed, author, urls):
     BASE, write, page, header, footer, footer_en, LANGS, sitemap = g["BASE"], g["write"], g["page"], g["header"], g["footer"], g["footer_en"], g["LANGS"], g["sitemap"]
     by = {p.get("handle"): p for p in people}
     items = []
-    for kind, lst in (("blog", posts), ("podcast", pods), ("video", vids), ("feed", feed)):
+    import site_feed
+    for kind, lst in (("blog", posts), ("podcast", pods), ("video", vids), ("feed", site_feed.public_items(feed))):
         for x in lst:
             if kind == "podcast" and x.get("status") not in (None, "published"):
                 continue

@@ -70,8 +70,7 @@ def hub(g, lang, base, api, videos, vid_html, root=False):
             tag(it["name"], it.get("topics"), it["title"])
     KL = {"youtube": "YouTube", "github": "GitHub", "blog": "Blog", "podcast": "Podcast", "newsletter": "Newsletter", "mastodon": "Mastodon", "bluesky": "Bluesky", "website": "Web"}
     import site_feed
-    for f in C["feed"]:
-        if f.get("kind") == "github": continue   # T6: GitHub-Aktivitaet (Commits, Stars) gehoert nicht in den oeffentlichen Feed
+    for f in site_feed.public_items(C["feed"]):   # T6: GitHub-Aktivitaet (Commits, Stars) gehoert nicht in den oeffentlichen Feed
         d = __import__("datetime").datetime.fromtimestamp(f["published"]).strftime("%Y-%m-%d")
         who = f'{base}/community/{"c" if f["type"] == "o" else "u"}/{f["handle"]}/'
         cards.append((d, "feed", f'<div class="hub-card" data-k="feed"><div class="kicker">{esc(T(lang, "From the creators", "Von den Creatorn"))} · {esc(KL.get(f["kind"], f["kind"].title()))}</div><h3><a href="{(base + ("/de" if lang == "de" else "") + "/" + site_feed.path_of(f)) if f.get("id") else esc(f["url"])}">{esc(f["title"])}</a></h3><p class="mut"><a href="{who}">{esc(f["name"])}</a> · {d}</p></div>'))

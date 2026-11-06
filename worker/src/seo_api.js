@@ -4,6 +4,7 @@ import { seoCheck, aiPrompt, suggestEntities } from "./seo.js";
 import { entityMap } from "./entities.js";
 import { rateLimit } from "./util.js";
 import { ensureSectionCols, parseKeypointsText, parseFaqText } from "./sections.js";
+import { publicItemSql } from "./feedpolicy.js";
 
 const jp = (s) => { try { const v = JSON.parse(s || "[]"); return Array.isArray(v) ? v : []; } catch { return []; } };
 const KINDS = ["blog", "feed", "podcast", "video"];
@@ -31,7 +32,7 @@ function input(kind, r, author) {
 }
 const ROWS = {
   blog: "SELECT id,title,summary,body,html,lang,topics,keypoints,faq,status FROM blog_posts WHERE user_id=?1",
-  feed: "SELECT id,title,summary,body,'' lang,topics,keypoints,faq,'' status FROM feed_items WHERE owner_type='u' AND owner_id=?1 AND body<>''",
+  feed: `SELECT id,title,summary,body,'' lang,topics,keypoints,faq,'' status FROM feed_items WHERE owner_type='u' AND owner_id=?1 AND body<>'' AND ${publicItemSql("feed_items")}`,   // GitHub-Aktivitaet hat keine Seite mehr (feedpolicy.js)
   podcast: "SELECT id,title,description,lang,topics,status FROM pod_episodes WHERE user_id=?1",
   video: "SELECT id,title,description,lang,topics,status FROM yt_videos WHERE user_id=?1",
 };
