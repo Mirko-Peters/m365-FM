@@ -38,3 +38,21 @@ def src_li(lang, eid):
     """Zeilen fuer den Quellen-Block einer Entitaetsseite."""
     lab = "Erwähnt in" if lang == "de" else "Mentioned in"
     return "".join(f'<li>{lab}: <a href="{E(m["url"])}" rel="noopener">{E(m["title"])}</a> ({E(m.get("outlet", ""))}, <time datetime="{E(m.get("date", ""))}">{E(m.get("date", ""))}</time>)</li>' for m in for_entity(eid))
+
+
+def section_eids(eid):
+    """Entitaeten mit sichtbarem Abschnitt "Erwaehnungen": iFAKT und die Polaris-Produkte."""
+    return eid == "ifakt" or eid.startswith("polaris")
+
+
+def section_html(lang, eid, mentions=None):
+    """Sichtbarer Abschnitt "Erwaehnungen" (Titel · Medium · Jahr, Link rel=noopener; Pressemitteilungen gekennzeichnet). Ohne gepruefte Erwaehnung leer."""
+    from site_i18n import T
+    ms = for_entity(eid) if mentions is None else mentions
+    if not section_eids(eid) or not ms:
+        return ""
+    pr = T(lang, "Press release", "Pressemitteilung")
+    li = "".join(f'<li><a href="{E(m["url"])}" rel="noopener">{E(m["title"])}</a> <span class="mut">· {E(m.get("publisher") or m.get("outlet", ""))}'
+                 + (f' · {E(str(m["date"])[:4])}' if m.get("date") else "") + "</span>"
+                 + (f' <small class="mut en-pr">[{E(pr)}]</small>' if m.get("kind") == "press_release" else "") + "</li>" for m in ms)
+    return f'<h3 id="mentions">{E(T(lang, "In the press / mentions", "Erwähnungen"))}</h3><ul class="en-mentions">{li}</ul>'
