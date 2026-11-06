@@ -131,5 +131,877 @@
     "why": "Durch Anforderungs- und Antworttransformation übersetzt das Gateway die Formate, sodass weder Altsystem noch App geändert werden müssen."
    }
   ]
+ },
+ "es": {
+  "html": "<p>Empiezas con una aplicación que funciona. Después añades otro servicio, y otro más, y de repente dirigir el tráfico entre ellos se convierte en una pesadilla. Cada cliente tiene que saber dónde vive cada servicio, cómo autenticarse y qué hacer cuando algo falla. Ahí aparece la pregunta: ¿qué es exactamente una API Gateway y de verdad necesitas una?</p>\n<p>En este artículo repasamos qué hace una API Gateway, qué problema resuelve en arquitecturas de microservicios y cómo saber si ya te toca incorporarla. Veremos sus cuatro funciones principales (enrutamiento, seguridad, gestión de tráfico y transformación de datos) y cómo trabajan juntas.</p>\n\n<h2>El problema: demasiadas puertas de entrada</h2>\n<p>Imagina una empresa que crece rápido: ventas en el tercer piso, contabilidad en el sótano y TI en el ala trasera. Ahora supón que cada departamento tiene su propia puerta, su propio teléfono y su propio guardia de seguridad, y que ninguno habla con los demás. Si eres un visitante que intenta entregar un paquete, tienes que saber exactamente qué puerta usar, con qué guardia hablar y qué hacer cuando ese guardia está en su descanso.</p>\n<p>Eso es lo que ocurre cuando una aplicación tiene varios servicios de backend y cada cliente (una app móvil, un sitio web u otro servicio) los llama directamente. El cliente debe conocer la ubicación de cada servicio, el método de autenticación de cada uno y la forma de gestionar sus errores. A su vez, cada servicio tiene que implementar su propia seguridad, su propio límite de tasa y su propio manejo de errores. El resultado es trabajo duplicado y un terreno fértil para las inconsistencias.</p>\n<p>Piensa en un banco con servicios separados para cuentas, pagos, préstamos y detección de fraude. Si cada uno se expone directamente, la aplicación móvil necesita conocer cuatro URLs, cuatro métodos de autenticación y cuatro formas distintas de tratar los errores. Es cuatro veces la complejidad y cuatro veces la superficie en la que algo puede salir mal.</p>\n\n<h2>Qué es una API Gateway y cómo funciona</h2>\n<p>La mejor analogía es la recepción de un hotel. Al llegar no necesitas saber en qué piso está el servicio de limpieza, dónde está la cocina ni cómo contactar con mantenimiento. Vas a recepción, dices lo que necesitas y ellos se encargan del resto: dirigen tu solicitud a la persona indicada, comprueban que tienes permiso y resuelven por su cuenta las peticiones básicas.</p>\n<p>Una API Gateway hace lo mismo con tu software. Es un <strong>punto de entrada único</strong> situado entre tus clientes y tus servicios de backend. Cada solicitud pasa primero por la gateway, que decide a dónde enviarla, si debe permitirla y qué devolver. El cliente nunca habla directamente con los servicios; solo habla con la gateway.</p>\n<p>La idea no es nueva: los proxies inversos existen desde hace décadas. Pero la API Gateway se ha vuelto esencial con los microservicios, porque al dividir una aplicación en muchos servicios pequeños aparecen de golpe muchas puertas. La gateway te ofrece una sola puerta principal. En el mundo de Azure, Azure API Management es la plataforma completa y la gateway es el componente central que gestiona el tráfico.</p>\n\n<h2>Enrutamiento de tráfico: cada solicitud al servicio correcto</h2>\n<p>La tarea más básica de una API Gateway es el enrutamiento. Funciona como en la web: cada solicitud lleva una ruta. Si la ruta es <em>Users</em>, la gateway la envía al servicio de usuarios; si es <em>Orders</em>, va al servicio de pedidos. La gateway lee la ruta, determina el destino y reenvía la petición.</p>\n<p>Sin gateway, los clientes deben conocer la URL de cada servicio, y si alguna dirección cambia hay que actualizar todos los clientes. Con una gateway, los clientes conocen una única URL, la de la propia gateway, y no les importa dónde residen realmente los servicios.</p>\n\n<h3>Enrutamiento por distintos criterios</h3>\n<p>Este enrutamiento basado en recursos es uno de los casos de uso más comunes. Además de la ruta, puedes decidir según:</p>\n<ul>\n<li>el método HTTP,</li>\n<li>los encabezados de la solicitud,</li>\n<li>la geolocalización del cliente.</li>\n</ul>\n<p>Así, una petición desde Europa puede dirigirse a un centro de datos europeo y una desde Estados Unidos a uno estadounidense. El cliente no se entera: simplemente recibe una respuesta rápida.</p>\n\n<h3>Control de versiones sin romper a nadie</h3>\n<p>El enrutamiento también facilita el versionado. Si lanzas una nueva versión de tu servicio de usuarios, los clientes antiguos pueden seguir usando la ruta de la versión uno mientras los nuevos usan la de la versión dos, y la gateway los dirige a backends distintos. Puedes cambiar tu backend sin afectar a tus clientes, algo fundamental cuando gestionas una aplicación en vivo con usuarios reales.</p>\n<p>Un ejemplo típico es una plataforma de comercio electrónico con servicios separados para catálogo, carrito, pago y cuentas de usuario. La app móvil solo conoce una URL; la gateway lee la ruta y envía cada petición al servicio que corresponde.</p>\n\n<h2>Seguridad en la entrada: autenticación y autorización centralizadas</h2>\n<p>Cada llamada a la API debe verificarse: ¿quién hace esta solicitud y tiene los permisos necesarios? Sin gateway, cada servicio gestiona su propia autenticación. Un servicio puede validar bien los tokens, otro saltarse un paso y un tercero usar un método distinto. El resultado es una seguridad inconsistente en toda la aplicación.</p>\n<p>La gateway cambia esto al manejar autenticación y autorización en un lugar centralizado: un punto para verificar, uno para aplicar y uno para actualizar cuando cambian las políticas. Puede validar claves API, JWT, tokens OAuth o certificados en cada solicitud, sin excepciones.</p>\n\n<h3>Permisos granulares y revocación inmediata</h3>\n<p>La gateway también aplica reglas. Puedes definir, por ejemplo, que una clave API solo pueda llamar a endpoints de lectura, o que un cliente acceda al servicio de catálogo pero no al de pagos. Esos permisos se definen a nivel de gateway y se aplican automáticamente, de modo que los servicios de backend se limitan a procesar la solicitud y devolver los datos.</p>\n<p>Otra ventaja clave: la gateway es el único lugar desde donde revocar el acceso cuando algo sale mal. Si la clave API de un cliente se compromete, la revocas en la gateway y la siguiente solicitud con esa clave se rechaza al instante, sin actualizar servicios ni reiniciar nada.</p>\n<p>Un ejemplo bancario lo ilustra: con un servicio de pagos y otro de facturación, solo el de pagos necesita acceso de escritura al sistema de facturación. Si un cliente intenta escribir en facturación a través de un endpoint incorrecto, la gateway lo bloquea y el servicio de facturación ni siquiera ve la solicitud. Además, la gateway puede soportar TLS mutuo e integración con WAF para una protección más profunda. En esencia, es tu primera línea de defensa.</p>\n\n<h2>Gestión de tráfico: limitación de tasa y balanceo de carga</h2>\n<p>¿Qué pasa cuando 10.000 usuarios entran a tu aplicación a la vez? Puede ser una venta flash, un lanzamiento viral o simplemente un martes cualquiera. Sin gateway, tus servicios reciben todo el impacto directamente y pueden colapsar, no poco a poco, sino de golpe.</p>\n\n<h3>Limitación de tasa y estrangulamiento</h3>\n<p>La gateway puede limitar cuántas solicitudes hace cada cliente. La limitación de tasa (<em>rate limiting</em>) y el estrangulamiento (<em>throttling</em>) son funciones estándar: defines las reglas en la gateway y ella las aplica. Puedes fijar cuotas por usuario, por clave API o por dirección IP.</p>\n<p>Esto permite, por ejemplo, ofrecer un nivel gratuito con menos solicitudes permitidas que el nivel premium. La gateway contabiliza cada petición y, cuando un usuario gratuito alcanza su límite, le devuelve un mensaje para que lo intente más tarde. Los servicios de backend ni siquiera saben que hubo una solicitud y siguen atendiendo con normalidad al resto de clientes.</p>\n\n<h3>Balanceo de carga y chequeos de salud</h3>\n<p>Si tienes varias instancias del mismo servicio, la gateway reparte las solicitudes entre ellas: la primera petición a la instancia 1, la siguiente a la 2, la siguiente a la 3. Es automático. Si una instancia falla, la gateway redirige el tráfico a otra y los clientes ni se enteran.</p>\n<p>Con los chequeos de salud, la gateway comprueba periódicamente que cada instancia está activa y, si no lo está, deja de enviarle tráfico. Es especialmente importante en APIs de alto tráfico: el pico llega primero a la gateway, que lo absorbe, lo distribuye y evita que tus servicios se saturen.</p>\n\n<h2>Transformación de datos: la gateway como traductor</h2>\n<p>A veces los datos que envía el cliente no coinciden con lo que espera el backend. Quizá el cliente envía JSON y el backend solo entiende XML, o los nombres de los campos no coinciden. Tradicionalmente tendrías que arreglar cada cliente o reescribir el backend. La gateway ofrece otra vía: transformar peticiones y respuestas, al entrar, al salir o en ambos sentidos.</p>\n<p>Piensa en un sistema heredado que espera XML y lleva 15 años funcionando bien. Ahora creas una aplicación móvil que habla JSON. Sin gateway tendrías que reescribir el sistema o forzar a la app a enviar XML. Con gateway no haces ninguna de las dos cosas: la app envía JSON, la gateway lo convierte a XML, el sistema recibe lo que espera y la respuesta vuelve a la app ya en JSON.</p>\n<p>La gateway también puede añadir o eliminar encabezados, cambiar URLs y enmascarar datos sensibles. Si una respuesta incluye un número de tarjeta, la gateway puede eliminarlo o sustituirlo por una versión enmascarada antes de que llegue al cliente, sin tocar el backend. Es especialmente útil al modernizar sistemas antiguos: no reescribes el backend ni obligas a los clientes a cambiar; solo ajustas la gateway.</p>\n\n<h2>Todo en una sola tubería: integración y visibilidad</h2>\n<p>Enrutamiento, seguridad, limitación y transformación no son tareas aisladas. Se ejecutan juntas en cada petición: la gateway verifica la autenticación, valida el límite de velocidad, enruta al servicio, transforma los datos si hace falta, recibe la respuesta, la transforma también si es necesario y la devuelve al cliente. Cada paso ocurre automáticamente y en orden, sin que el servicio tenga que preocuparse.</p>\n<p>El verdadero poder está en la integración. Puedes añadir una política de seguridad sin tocar el enrutamiento, cambiar un servicio de backend sin modificar el cliente o actualizar los límites de tasa sin redesplegar nada. Cada pieza es independiente, pero todas funcionan en la misma tubería.</p>\n<p>Y como todo pasa por un único punto, obtienes visibilidad total: registros, métricas y analíticas. Puedes ver cuántas solicitudes llegaron, cuáles fallaron, cuáles fueron lentas y qué clientes consumen más recursos. Sin gateway tendrías que recopilar esos datos servicio por servicio. Por eso la gateway no es solo un enrutador, sino un centro de control de toda tu plataforma de APIs.</p>\n\n<h2>¿Necesitas una API Gateway? Conclusiones prácticas</h2>\n<ul>\n<li><strong>Con uno o dos servicios</strong>, probablemente aún no la necesites: puedes gestionar el enrutamiento tú mismo y la autenticación en cada servicio. No es elegante, pero funciona.</li>\n<li><strong>A partir de tres servicios</strong>, o en cuanto expongas APIs a clientes externos, la complejidad crece rápido y la gateway se paga sola enseguida.</li>\n<li><strong>Primer paso:</strong> centraliza la autenticación en la gateway antes que cualquier otra cosa. Elige un servicio y traslada su verificación de autenticación a la gateway.</li>\n<li>Notarás que el código del servicio se vuelve más limpio: desaparece la lógica de validación de tokens dispersa y la duda de si la implementaste igual en todos los servicios.</li>\n<li><strong>Segundo paso:</strong> añade limitación de tasa. Incluso un límite sencillo protege tu backend de una sobrecarga; por ejemplo, 100 solicitudes por minuto por cliente evita que un cliente descontrolado tumbe tu servicio.</li>\n<li>Aprovecha la gateway para el versionado, el balanceo de carga con chequeos de salud y la transformación de datos cuando integres sistemas heredados.</li>\n</ul>\n\n<h2>Fazit</h2>\n<p>Una API Gateway sustituye muchas puertas por una sola y concentra en ella el enrutamiento, la seguridad, el control de tráfico y la transformación de datos. Con pocos servicios puedes prescindir de ella, pero cuando la arquitectura crece o abres tus APIs al exterior, ofrece coherencia, protección y visibilidad que son difíciles de lograr servicio por servicio. Empieza por centralizar la autenticación, añade después la limitación de tasa y ve incorporando el resto de funciones según lo necesites.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "API Gateway: una sola puerta para tus microservicios",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Enrutamiento",
+     "text": "Lee la ruta, el método o la ubicación y envía cada solicitud al servicio correcto."
+    },
+    {
+     "kopf": "Seguridad",
+     "text": "Centraliza autenticación y autorización; revoca accesos en un solo lugar."
+    },
+    {
+     "kopf": "Gestión de tráfico",
+     "text": "Limita solicitudes por cliente y reparte la carga entre instancias sanas."
+    },
+    {
+     "kopf": "Transformación",
+     "text": "Convierte formatos como JSON a XML y enmascara datos sensibles."
+    },
+    {
+     "kopf": "Visibilidad total",
+     "text": "Registros, métricas y analíticas de todas las solicitudes desde un único punto."
+    },
+    {
+     "kopf": "Primeros pasos",
+     "text": "Con tres servicios o APIs externas: centraliza la autenticación y añade limitación de tasa."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "¿Qué es una API Gateway y para qué sirve?",
+    "a": "Una API Gateway es un punto de entrada único situado entre los clientes y los servicios de backend. Cada solicitud pasa primero por ella, que decide a dónde enviarla, si debe permitirla y qué devolver, de modo que el cliente nunca habla directamente con los servicios."
+   },
+   {
+    "q": "¿Cuáles son las principales funciones de una API Gateway?",
+    "a": "Son cuatro: enrutamiento (envía cada solicitud al servicio correcto según ruta, método, encabezados o geolocalización), seguridad (autenticación y autorización centralizadas), gestión de tráfico (limitación de tasa y balanceo de carga con chequeos de salud) y transformación de datos, como convertir JSON a XML. Todas se ejecutan juntas en la misma tubería."
+   },
+   {
+    "q": "¿Cuándo necesito una API Gateway?",
+    "a": "Con uno o dos servicios probablemente aún no la necesites. A partir de tres servicios, o cuando expongas APIs a clientes externos, la complejidad crece rápido y la gateway se paga sola. Conviene empezar centralizando la autenticación y añadir después la limitación de tasa."
+   },
+   {
+    "q": "¿Cómo mejora la seguridad una API Gateway?",
+    "a": "Centraliza la autenticación y autorización: valida claves API, JWT, tokens OAuth o certificados en cada solicitud y aplica permisos granulares, como limitar una clave a endpoints de lectura. Además permite revocar un acceso comprometido al instante desde un solo lugar, sin actualizar servicios, y admite TLS mutuo e integración con WAF."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Sin gateway vs. con API Gateway",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Sin API Gateway",
+     "punkte": [
+      "El cliente debe conocer la URL de cada servicio",
+      "Cada servicio implementa su propia autenticación y seguridad",
+      "Cada servicio gestiona su propio límite de tasa y sus errores",
+      "Los picos de tráfico golpean directamente a los servicios",
+      "Los datos de registros y métricas se recopilan servicio por servicio"
+     ]
+    },
+    "rechts": {
+     "titel": "Con API Gateway",
+     "punkte": [
+      "El cliente conoce una única URL: la de la gateway",
+      "Autenticación y autorización centralizadas en un solo lugar",
+      "Limitación de tasa y balanceo de carga definidos en la gateway",
+      "La gateway absorbe el pico y distribuye las solicitudes",
+      "Visibilidad total: registros, métricas y analíticas en un punto"
+     ]
+    }
+   },
+   {
+    "titel": "¿Cuándo necesitas una API Gateway?",
+    "typ": "checkliste",
+    "punkte": [
+     "Con uno o dos servicios, probablemente aún no la necesites",
+     "A partir de tres servicios, la complejidad crece rápido",
+     "Si expones APIs a clientes externos, la gateway se paga sola",
+     "Primer paso: centraliza la autenticación en un servicio elegido",
+     "Segundo paso: añade limitación de tasa, por ejemplo 100 solicitudes por minuto",
+     "Usa la gateway para versionado y balanceo con chequeos de salud",
+     "Aprovecha la transformación de datos al integrar sistemas heredados"
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "¿Qué función principal cumple una API Gateway entre los clientes y los servicios de backend?",
+    "opts": [
+     "Sustituir todos los servicios de backend por una única aplicación monolítica",
+     "Actuar como punto de entrada único que decide destino, permiso y respuesta",
+     "Almacenar las bases de datos de cada servicio en un solo lugar",
+     "Generar automáticamente el código de los clientes móviles y web"
+    ],
+    "a": 1,
+    "why": "La gateway es un punto de entrada único: cada solicitud pasa por ella, que decide a dónde enviarla, si permitirla y qué devolver."
+   },
+   {
+    "q": "Si la clave API de un cliente se compromete, ¿qué ventaja ofrece la gateway?",
+    "opts": [
+     "Hay que actualizar y reiniciar cada servicio de backend uno por uno",
+     "La clave sigue funcionando hasta que expira automáticamente en todos los servicios",
+     "Se revoca en la gateway y la siguiente solicitud se rechaza al instante",
+     "Los clientes deben cambiar su URL para seguir accediendo a los servicios"
+    ],
+    "a": 2,
+    "why": "La gateway es el único lugar desde donde revocar el acceso; la siguiente solicitud con esa clave se rechaza sin tocar servicios."
+   },
+   {
+    "q": "¿Cómo ayuda la gateway con un sistema heredado que solo entiende XML?",
+    "opts": [
+     "Obliga a la aplicación móvil a enviar siempre los datos en XML",
+     "Exige reescribir el sistema heredado para que acepte JSON",
+     "Bloquea las peticiones JSON porque el backend no puede procesarlas",
+     "Convierte el JSON de la app a XML y devuelve la respuesta en JSON"
+    ],
+    "a": 3,
+    "why": "La gateway transforma peticiones y respuestas: la app envía JSON, el sistema recibe XML y la respuesta vuelve a la app en JSON."
+   },
+   {
+    "q": "Según el artículo, ¿cuál debería ser el primer paso al incorporar una API Gateway?",
+    "opts": [
+     "Centralizar la autenticación en la gateway, empezando por un servicio",
+     "Configurar el balanceo de carga con chequeos de salud en todos los servicios",
+     "Transformar todos los formatos de datos a JSON de una vez",
+     "Añadir primero la limitación de tasa de 100 solicitudes por minuto"
+    ],
+    "a": 0,
+    "why": "El artículo recomienda centralizar primero la autenticación, trasladando la verificación de un servicio a la gateway; la limitación de tasa es el segundo paso."
+   }
+  ]
+ },
+ "fr": {
+  "html": "<p>Vous avez créé une application qui fonctionne. Vous ajoutez un service, puis un autre, et diriger le trafic entre tous ces éléments devient vite un casse-tête. Une passerelle d'API (API gateway) est conçue pour résoudre ce problème.</p>\n<p>Cet article explique à quoi sert une passerelle d'API, quels problèmes elle règle dans une architecture multiservices et comment savoir si elle est nécessaire dans votre projet. Nous partons du problème, passons en revue les fonctions clés (routage, sécurité, limitation de débit, transformation) et voyons comment elles s'articulent.</p>\n\n<h2>Le problème : trop de portes d'entrée</h2>\n<p>Imaginez une entreprise en pleine croissance : l'équipe commerciale au troisième étage, la comptabilité au sous-sol, l'informatique dans l'aile arrière. Chaque département aurait sa propre porte, son propre numéro de téléphone et son propre agent de sécurité, sans aucune communication entre eux. Un visiteur qui veut déposer un colis doit savoir quelle porte utiliser, à quel garde s'adresser et que faire quand celui-ci est en pause.</p>\n<p>C'est exactement ce qui se produit quand une application compte plusieurs services back-end et que chaque client appelle directement chacun d'eux. Le client, qu'il s'agisse d'une application mobile, d'un site web ou d'un autre service, doit alors savoir où se trouve chaque service, comment s'y authentifier et que faire en cas de panne. De son côté, chaque service doit gérer sa propre sécurité, sa propre limitation de débit et sa propre gestion des erreurs. Le travail est dupliqué, et les incohérences s'installent facilement.</p>\n<p>Prenons une banque dotée de services distincts pour les comptes, les paiements, les prêts et la détection des fraudes. Si chacun est exposé directement, l'application mobile doit connaître quatre URL, quatre méthodes d'authentification et quatre façons de gérer les erreurs. La complexité est multipliée par quatre, et le risque de problème aussi.</p>\n\n<h2>Qu'est-ce qu'une passerelle d'API ?</h2>\n<p>Pensez à la réception d'un hôtel. En arrivant, vous n'avez pas besoin de savoir où se trouvent la cuisine, le service d'étage ou l'entretien. Vous dites ce dont vous avez besoin à la réception, qui oriente votre demande vers la bonne personne, vérifie que vous avez le droit d'être là et règle même certaines demandes simples elle-même.</p>\n<p>Une passerelle d'API joue ce rôle pour votre logiciel. Il s'agit d'un <strong>point d'entrée unique</strong> placé entre vos clients et vos services back-end. Chaque requête passe d'abord par elle : elle décide où l'envoyer, si elle est autorisée et ce qui doit être renvoyé. Le client ne dialogue jamais directement avec les services back-end.</p>\n<p>L'idée n'est pas nouvelle, puisque les proxys inversés existent depuis des décennies. Mais la passerelle d'API est devenue incontournable avec les microservices : dès que l'on découpe une application en nombreux petits services, on multiplie les portes d'entrée. Dans l'écosystème Azure, Azure API Management est la plateforme complète, et la passerelle en est le composant central qui gère le trafic. Le modèle reste le même partout : un seul point d'entrée et un contrôle centralisé.</p>\n\n<h2>Le routage du trafic : envoyer chaque requête au bon service</h2>\n<p>La fonction la plus simple d'une passerelle est le routage. Chaque requête possède un chemin : si le chemin est « user », la passerelle l'envoie au service utilisateur ; s'il s'agit de « order », elle l'oriente vers le service de commande. Elle lit le chemin, détermine la destination et transmet.</p>\n<p>Sans passerelle, l'application mobile doit connaître l'adresse du service utilisateur, du service de commande, du service de paiement et du service catalogue. Si l'une de ces adresses change, il faut mettre à jour chaque client. Avec une passerelle, les clients ne connaissent qu'une seule URL : celle de la passerelle. Peu leur importe l'endroit où résident les services.</p>\n<h3>Des critères de routage variés</h3>\n<p>On peut router selon le chemin, la méthode HTTP, les en-têtes, voire la géolocalisation du client. Une requête émise depuis l'Europe peut être dirigée vers un centre de données européen, et une requête venue des États-Unis vers un centre de données américain. Le client ne voit rien de tout cela : il obtient simplement une réponse rapide.</p>\n<h3>Le versionnage sans rupture</h3>\n<p>Le routage facilite aussi la gestion des versions. Supposons que vous déployiez une nouvelle version du service utilisateur : les anciens clients continuent d'appeler « /v1/user » et les nouveaux « /user ». La passerelle les dirige vers des back-ends différents. Vous pouvez faire évoluer votre back-end sans perturber vos clients, un avantage majeur pour une application en production avec de vrais utilisateurs.</p>\n<p>Sur une plateforme d'e-commerce avec des services distincts pour le catalogue, le panier, le paiement et les comptes, la passerelle lit le chemin et envoie chaque requête au bon service, alors que l'application mobile n'a qu'une seule adresse à connaître.</p>\n\n<h2>La sécurité à l'entrée : authentification et autorisation centralisées</h2>\n<p>Chaque appel d'API doit être vérifié : qui fait cette requête, et dispose-t-il des bonnes permissions ? Sans passerelle, chaque service gère sa propre authentification. Un service vérifie correctement les jetons, un autre saute une étape, un troisième emploie une méthode différente, et la sécurité devient incohérente sur l'ensemble de l'application.</p>\n<p>La passerelle centralise l'authentification et l'autorisation. Il existe un seul endroit pour vérifier, appliquer et mettre à jour les politiques. Elle peut valider des clés API, des JWT, des jetons ou des certificats sur chaque requête, sans exception.</p>\n<h3>Des règles d'accès précises</h3>\n<p>Vous pouvez définir par exemple qu'une clé API ne peut appeler que des points de terminaison en lecture, ou qu'un client n'a accès qu'au service catalogue et pas au service de paiement. Ces permissions sont appliquées automatiquement, et les services back-end se contentent de traiter la requête et de renvoyer les données.</p>\n<h3>Révoquer l'accès en un seul endroit</h3>\n<p>Si la clé API d'un client est compromise, vous la révoquez au niveau de la passerelle. Il n'y a ni service à mettre à jour ni redémarrage à prévoir : la requête suivante utilisant cette clé est immédiatement rejetée.</p>\n<p>Exemple : dans une banque, seul le service de paiement a besoin d'un accès en écriture au système de facturation. La passerelle fait respecter cette règle et bloque toute tentative d'écriture via un mauvais point de terminaison. Le service de facturation ne voit même jamais la requête. La passerelle peut en outre prendre en charge le TLS mutuel et l'intégration d'un WAF pour renforcer la protection, mais sa vocation reste celle d'une première ligne de défense.</p>\n\n<h2>Gestion du trafic : limitation de débit et équilibrage de charge</h2>\n<p>Que se passe-t-il quand un très grand nombre d'utilisateurs accèdent à votre application en même temps, lors d'une vente flash, d'un produit devenu viral ou d'un mardi ordinaire où tout le monde se connecte simultanément ? Sans passerelle, les services back-end sont directement submergés et peuvent tomber, tous en même temps.</p>\n<h3>Limitation de débit et bridage</h3>\n<p>La passerelle peut limiter le nombre de requêtes de chaque client. La limitation de débit (rate limiting) et le bridage (throttling) sont des fonctionnalités standard : vous définissez les règles au niveau de la passerelle et elle les applique. Les quotas peuvent porter sur l'utilisateur, la clé API ou l'adresse IP.</p>\n<p>Prenons une API avec une offre gratuite et une offre premium : les utilisateurs gratuits ont un quota plus bas, les utilisateurs premium un quota plus élevé. La passerelle suit chaque requête et applique les limites dès l'entrée. Quand un utilisateur gratuit atteint la sienne, elle lui renvoie un message l'invitant à réessayer plus tard. Les services back-end n'en savent rien et continuent de fonctionner normalement pour les clients payants.</p>\n<h3>Équilibrage de charge et contrôles de santé</h3>\n<p>Si un service compte plusieurs instances, la passerelle répartit les requêtes entre elles : la première instance reçoit une requête, la deuxième la suivante, et ainsi de suite. Si une instance tombe en panne, le trafic est redirigé vers une autre sans que les clients s'en aperçoivent. Grâce aux contrôles de santé, la passerelle interroge chaque instance et cesse de lui envoyer du trafic si elle n'est pas opérationnelle. C'est particulièrement précieux pour les API à fort trafic : le pic frappe d'abord la passerelle, qui l'absorbe, le répartit et protège les services de la surcharge.</p>\n\n<h2>La transformation des données : un traducteur entre client et back-end</h2>\n<p>Il arrive que les données envoyées par le client ne correspondent pas aux attentes du back-end. Le client envoie du JSON alors que le back-end ne comprend que le XML, ou bien les noms de champs diffèrent. Il fallait autrefois corriger chaque client ou réécrire le back-end, ce qui n'a rien d'idéal.</p>\n<p>La passerelle peut transformer les requêtes et les réponses, à l'entrée, à la sortie ou dans les deux sens. Prenons un système ancien qui attend du XML, en service depuis 15 ans et qui fonctionne très bien. Vous développez une application mobile qui utilise du JSON. L'application envoie du JSON, la passerelle le convertit en XML, le système reçoit exactement ce qu'il attend, et la réponse repart au format JSON. Personne n'a eu à réécrire quoi que ce soit.</p>\n<p>La passerelle peut aussi ajouter ou retirer des en-têtes, modifier des URL et masquer des données. Si une réponse contient une information sensible qui ne doit pas atteindre le client, elle peut la retirer ou la remplacer par une version masquée, sans que le back-end change. C'est un atout pour moderniser d'anciens systèmes : il suffit d'adapter la passerelle. Elle joue le rôle d'un interprète lors d'une conférence internationale : chacun parle sa langue, et tout le monde se comprend.</p>\n\n<h2>Un pipeline unique et une visibilité complète</h2>\n<p>Ces quatre fonctions ne sont pas isolées : elles s'enchaînent sur chaque requête. La passerelle vérifie l'authentification, valide la limite de débit, route vers le bon service, transforme les données si nécessaire, puis reçoit la réponse, la transforme au besoin et la renvoie au client. Chaque étape se déroule automatiquement et dans l'ordre, sans qu'aucun service n'ait à s'en préoccuper.</p>\n<p>La vraie force réside dans cette intégration. Vous pouvez ajouter une règle de sécurité sans toucher au routage, modifier un service back-end sans changer le client, ajuster les limites de débit sans rien redéployer. Chaque élément reste indépendant tout en travaillant dans le même pipeline.</p>\n<p>Comme tout transite par un seul endroit, vous bénéficiez aussi d'une visibilité complète : journaux et métriques sont analysés depuis un point unique. Vous voyez combien de requêtes sont arrivées, lesquelles ont échoué, lesquelles étaient lentes et quels clients consomment le plus de ressources. Sans passerelle, il faudrait collecter ces données service par service. La passerelle n'est donc pas un simple routeur, mais un centre de contrôle pour toute votre plateforme d'API.</p>\n\n<h2>En avez-vous vraiment besoin ? Conseils pratiques</h2>\n<p>Soyons réalistes : avec un ou deux services, vous n'avez probablement pas encore besoin d'une passerelle d'API. Vous pouvez gérer le routage vous-même et l'authentification dans chaque service. Ce n'est pas élégant, mais cela fonctionne. En revanche, dès que vous atteignez trois services ou que vous exposez des API à des clients externes, la complexité augmente vite et la passerelle devient rapidement rentable.</p>\n<ul>\n  <li><strong>Évaluez le seuil :</strong> un ou deux services peuvent s'en passer ; à partir de trois services ou avec des clients externes, la passerelle s'impose peu à peu.</li>\n  <li><strong>Commencez par l'authentification :</strong> choisissez un service et déplacez sa vérification d'authentification vers la passerelle. Le code du service s'allège, la logique de validation des jetons n'est plus éparpillée, et tous les services en profitent.</li>\n  <li><strong>Ajoutez ensuite la limitation de débit :</strong> même une limite simple, comme 100 requêtes par minute et par client, protège le back-end et empêche un client incontrôlé de faire tomber vos services.</li>\n  <li><strong>Centralisez l'accès :</strong> donnez aux clients une seule URL, celle de la passerelle, pour pouvoir déplacer ou versionner vos services sans impact.</li>\n  <li><strong>Exploitez la visibilité :</strong> utilisez les journaux et métriques centralisés pour repérer les erreurs, les lenteurs et les plus gros consommateurs.</li>\n</ul>\n\n<h2>Conclusion</h2>\n<p>Une passerelle d'API remplace une multitude de portes d'entrée par un point d'accès unique qui route, sécurise, régule et adapte chaque requête dans un même pipeline. Elle simplifie la vie des clients, allège les services back-end et offre une vision centralisée de la plateforme. Pour une application de petite taille, elle n'est pas indispensable, mais dès que les services se multiplient ou que des clients externes entrent en jeu, elle devient un investissement judicieux. Le plus simple est de commencer par l'authentification, puis d'ajouter une limitation de débit basique.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "La passerelle d'API : un pipeline pour chaque requête",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Authentification",
+     "text": "La passerelle vérifie clés API, jetons ou certificats et applique les permissions au point d'entrée."
+    },
+    {
+     "kopf": "Limite de débit",
+     "text": "Elle applique les quotas par utilisateur, clé API ou IP pour protéger les services back-end."
+    },
+    {
+     "kopf": "Routage",
+     "text": "Elle lit le chemin et envoie la requête au bon service, avec équilibrage de charge."
+    },
+    {
+     "kopf": "Transformation",
+     "text": "Elle convertit les formats, comme JSON en XML, et peut masquer des données sensibles."
+    },
+    {
+     "kopf": "Réponse et suivi",
+     "text": "Elle renvoie la réponse au client et centralise journaux et métriques."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Qu'est-ce qu'une passerelle d'API et à quoi sert-elle ?",
+    "a": "Une passerelle d'API est un point d'entrée unique placé entre vos clients et vos services back-end. Chaque requête passe d'abord par elle : elle décide où l'envoyer, si elle est autorisée et ce qui doit être renvoyé. Le client ne dialogue jamais directement avec les services."
+   },
+   {
+    "q": "Quelles sont les principales fonctions d'une passerelle d'API ?",
+    "a": "Elle assure le routage des requêtes vers le bon service, la sécurité centralisée (authentification et autorisation), la limitation de débit avec équilibrage de charge, et la transformation des données, par exemple de JSON en XML. Ces fonctions s'enchaînent dans un même pipeline, avec des journaux et métriques centralisés."
+   },
+   {
+    "q": "Ai-je vraiment besoin d'une passerelle d'API pour mon projet ?",
+    "a": "Avec un ou deux services, probablement pas : vous pouvez gérer le routage et l'authentification dans chaque service. Dès que vous atteignez trois services ou que vous exposez des API à des clients externes, la complexité augmente vite et la passerelle devient rapidement rentable."
+   },
+   {
+    "q": "Comment une passerelle d'API protège-t-elle les services back-end ?",
+    "a": "Elle valide les clés API, JWT, jetons ou certificats sur chaque requête et applique des règles d'accès précises. Elle limite aussi le nombre de requêtes par utilisateur, clé API ou adresse IP, et répartit la charge. Une clé compromise se révoque immédiatement, en un seul endroit."
+   }
+  ],
+  "infos": [
+   {
+    "titre_interne": "comparaison",
+    "titel": "Sans passerelle ou avec passerelle d'API",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Sans passerelle",
+     "punkte": [
+      "Le client doit connaître l'URL de chaque service",
+      "Chaque service gère sa propre sécurité et ses erreurs",
+      "Authentification incohérente d'un service à l'autre",
+      "Les pics de trafic submergent directement les services back-end",
+      "Journaux et métriques à collecter service par service"
+     ]
+    },
+    "rechts": {
+     "titel": "Avec passerelle",
+     "punkte": [
+      "Une seule URL pour tous les clients",
+      "Authentification et autorisation centralisées en un seul endroit",
+      "Limitation de débit et équilibrage de charge appliqués dès l'entrée",
+      "Révocation immédiate d'une clé API compromise",
+      "Visibilité complète depuis un point unique"
+     ]
+    }
+   },
+   {
+    "titel": "Les fonctions clés d'une passerelle d'API",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "Routage",
+      "text": "Selon le chemin, la méthode HTTP, les en-têtes ou la géolocalisation du client."
+     },
+     {
+      "wert": "Sécurité",
+      "text": "Validation des clés API, JWT, jetons ou certificats sur chaque requête."
+     },
+     {
+      "wert": "100 requêtes/minute",
+      "text": "Exemple de limite simple par client pour protéger le back-end."
+     },
+     {
+      "wert": "Transformation",
+      "text": "Conversion JSON/XML, modification des en-têtes et masquage des données sensibles."
+     },
+     {
+      "wert": "3 services",
+      "text": "Seuil à partir duquel la passerelle devient rapidement rentable."
+     }
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Quel problème principal une passerelle d'API résout-elle dans une architecture multiservices ?",
+    "opts": [
+     "Elle remplace complètement les services back-end par un seul service.",
+     "Elle réduit la multiplication des portes d'entrée en offrant un point d'accès unique.",
+     "Elle transforme chaque service en base de données centralisée.",
+     "Elle supprime le besoin d'authentification pour les clients externes."
+    ],
+    "a": 1,
+    "why": "Sans passerelle, chaque client doit connaître chaque service et sa sécurité. La passerelle centralise l'accès en un seul point d'entrée."
+   },
+   {
+    "q": "Que se passe-t-il quand la clé API d'un client est compromise ?",
+    "opts": [
+     "Chaque service back-end doit être mis à jour puis redémarré.",
+     "Il faut modifier le code de tous les clients concernés.",
+     "On la révoque à la passerelle et les requêtes suivantes sont rejetées immédiatement.",
+     "Elle reste valide jusqu'à l'expiration du quota de requêtes."
+    ],
+    "a": 2,
+    "why": "La révocation se fait en un seul endroit, la passerelle, sans mise à jour ni redémarrage des services : la requête suivante est rejetée."
+   },
+   {
+    "q": "Comment la passerelle protège-t-elle les services lors d'un pic de trafic ?",
+    "opts": [
+     "Elle absorbe le pic, répartit les requêtes entre instances et applique des limites de débit.",
+     "Elle transmet toutes les requêtes directement aux services pour accélérer le traitement.",
+     "Elle désactive les contrôles de santé pour économiser des ressources.",
+     "Elle bloque définitivement tous les utilisateurs gratuits pendant le pic."
+    ],
+    "a": 0,
+    "why": "Le pic frappe d'abord la passerelle, qui l'absorbe, le répartit via l'équilibrage de charge et limite les clients, protégeant ainsi les services."
+   },
+   {
+    "q": "À partir de quel seuil une passerelle d'API devient-elle généralement rentable selon l'article ?",
+    "opts": [
+     "Dès le premier service développé, quel que soit le contexte.",
+     "Uniquement lorsque l'application dépasse cent services déployés.",
+     "Seulement si tous les services utilisent le format XML.",
+     "À partir de trois services ou avec des clients externes."
+    ],
+    "a": 3,
+    "why": "Avec un ou deux services, on peut s'en passer. Dès trois services ou des clients externes, la complexité croît et la passerelle s'impose."
+   }
+  ]
+ },
+ "it": {
+  "html": "<p>Hai creato un'app funzionante, poi hai aggiunto un servizio dopo l'altro, e ora gestire il traffico tra client e back-end è diventato un incubo. È il momento in cui molti team si chiedono cos'è esattamente un API Gateway e se serva davvero.</p>\n<p>In questo articolo vediamo il problema da cui nasce, i quattro compiti principali del Gateway (routing, sicurezza, gestione del traffico e trasformazione dei dati), come lavorano insieme e come capire se ne hai bisogno oggi.</p>\n\n<h2>API Gateway: il problema di avere troppe porte</h2>\n<p>Immagina un'azienda in rapida crescita: il team vendite al terzo piano, la contabilità nel seminterrato, altri reparti sul retro. Ogni reparto ha la sua porta, il suo numero di telefono e la sua guardia di sicurezza, e le guardie non si parlano. Per un visitatore che deve consegnare un pacco non è semplice. Deve sapere quale porta usare, con quale guardia parlare e che fare se quella guardia è in pausa.</p>\n<p>Lo stesso accade quando un'app ha più servizi back-end e ogni client li chiama direttamente. Che sia un'app mobile, un sito web o un altro servizio, il client deve sapere dove si trova ogni servizio, come autenticarsi e come comportarsi in caso di errore. Ogni servizio, a sua volta, deve gestire da solo sicurezza, rate limiting ed errori. Il lavoro si duplica e le incoerenze nascono facilmente.</p>\n<h3>L'esempio della banca</h3>\n<p>Prendiamo una banca con servizi separati per conti, pagamenti, prestiti e rilevamento delle frodi. Se ognuno è esposto direttamente, l'app mobile deve conoscere quattro URL, quattro metodi di autenticazione e quattro modalità di gestione degli errori. La complessità è quadrupla e la superficie di rischio è quattro volte più ampia.</p>\n<h3>Cos'è un API Gateway</h3>\n<p>Un API Gateway è come la reception di un hotel. Non devi sapere dove si trovi il personale delle pulizie, dove sia la cucina o come contattare la manutenzione. Spieghi alla reception cosa ti serve e lei gestisce il resto: indirizza la richiesta alla persona giusta, verifica che tu abbia il permesso di essere lì e risolve da sola le richieste più semplici.</p>\n<p>Per il software è la stessa cosa. Il Gateway è un unico punto di ingresso tra i client e i servizi di back-end. Ogni richiesta passa prima da lì, e il Gateway decide dove inviarla, se autorizzarla e cosa rispondere. Il client non parla mai direttamente con i servizi.</p>\n<p>L'idea non è nuova: i reverse proxy esistono da decenni. Con i microservizi, però, il Gateway è diventato essenziale, perché dividere un'app in tanti piccoli servizi significa ritrovarsi con tante porte. Nel mondo Azure, Azure API Management è la piattaforma completa e il Gateway ne è il componente che gestisce il traffico. Il modello resta lo stesso ovunque: un punto di ingresso e un controllo centralizzato.</p>\n\n<h2>Routing del traffico: ogni richiesta al servizio giusto</h2>\n<p>Il compito più semplice è il routing: indirizzare ogni richiesta al servizio corretto. Ogni richiesta ha un percorso. Se è <em>/users</em>, il Gateway la inoltra al servizio utenti; se è <em>/orders</em>, al servizio ordini. Il Gateway legge il percorso, capisce la destinazione e inoltra.</p>\n<p>Senza Gateway, il client deve conoscere l'URL di ogni servizio: utenti, ordini, pagamenti, catalogo. Se un indirizzo cambia, bisogna aggiornare ogni singolo client. Con il Gateway, i client conoscono un solo URL, quello del Gateway, e non importa dove risiedano davvero i servizi.</p>\n<h3>Su cosa si basa l'instradamento</h3>\n<p>Questo è uno dei casi d'uso più comuni, il routing basato sulle risorse. Si può instradare in base a:</p>\n<ul>\n<li>percorso della richiesta;</li>\n<li>metodo HTTP;</li>\n<li>header;</li>\n<li>geolocalizzazione del client.</li>\n</ul>\n<p>Una richiesta dall'Europa può quindi finire in un datacenter europeo, mentre una dagli Stati Uniti viene indirizzata a un datacenter americano. Il client non vede nulla di tutto questo e riceve semplicemente la sua risposta.</p>\n<h3>Versionamento senza interruzioni</h3>\n<p>Il routing aiuta anche con il versionamento. Se esiste una nuova versione del servizio utenti, i vecchi client possono continuare a usare il percorso precedente mentre i nuovi usano quello aggiornato. Il Gateway li manda verso back-end diversi, così puoi cambiare il back-end senza rompere i client. È un vantaggio enorme quando gestisci un'applicazione live con utenti reali.</p>\n<p>In una piattaforma di e-commerce con servizi separati per catalogo, carrello, checkout e account utente, l'app mobile conosce un solo URL. Il Gateway legge il percorso e smista ogni richiesta al servizio corretto.</p>\n\n<h2>Sicurezza all'ingresso: autenticazione e autorizzazione centralizzate</h2>\n<p>Ogni chiamata API va controllata: chi la sta facendo e se ha i permessi giusti. Senza Gateway, ogni servizio gestisce la propria autenticazione. Uno controlla i token correttamente, un altro salta un passaggio, un terzo usa un metodo completamente diverso. Il risultato è una sicurezza incoerente su tutta l'applicazione.</p>\n<p>Il Gateway sposta tutto in un punto centrale: uno per controllare, uno per applicare le regole, uno per aggiornarle quando le policy cambiano. È una delle migliori pratiche di sicurezza. Il Gateway può validare chiavi API, JWT, token OAuth o certificati su ogni richiesta, senza eccezioni.</p>\n<h3>Permessi granulari</h3>\n<p>A livello di Gateway puoi stabilire, per esempio, che una certa chiave API possa chiamare solo l'endpoint di lettura, oppure che un client acceda al servizio catalogo ma non a quello di pagamento. Le regole si applicano automaticamente e i servizi di back-end non devono occuparsi di autorizzazione: elaborano la richiesta e restituiscono i dati.</p>\n<h3>Revocare l'accesso in un colpo solo</h3>\n<p>Se la chiave API di un client viene compromessa, la revochi sul Gateway. Basta una modifica: non devi aggiornare ogni servizio né riavviare nulla, e la richiesta successiva con quella chiave viene rifiutata subito.</p>\n<p>Un esempio bancario: solo il servizio di pagamento può scrivere nel sistema di fatturazione. Se un client prova a scrivere tramite l'endpoint sbagliato, il Gateway lo blocca e il servizio di fatturazione non vede nemmeno la richiesta. Per una protezione più profonda il Gateway può supportare anche il TLS reciproco e l'integrazione con un WAF. In ogni caso resta la tua prima linea di difesa.</p>\n\n<h2>Rate limiting e bilanciamento del carico: proteggere i servizi dai picchi</h2>\n<p>Che cosa succede quando 10.000 utenti accedono all'app nello stesso momento? Magari c'è una vendita flash, un lancio virale o semplicemente un martedì in cui tutti si collegano insieme. Senza Gateway, i back-end vengono colpiti direttamente e possono andare in crash, e non gradualmente ma tutti insieme.</p>\n<h3>Rate limiting e throttling</h3>\n<p>Il Gateway può limitare il numero di richieste che ogni client può effettuare. Rate limiting e throttling sono funzionalità standard: le regole si impostano sul Gateway e lui le applica, così i servizi non subiscono il picco. Le quote possono essere definite per utente, per chiave API o per indirizzo IP.</p>\n<p>Con un piano gratuito, per esempio, gli utenti free possono avere 100 richieste all'ora e gli utenti premium 10.000. Il Gateway traccia ogni richiesta e applica i limiti all'ingresso. Quando un utente gratuito raggiunge la soglia, riceve un messaggio che lo invita a riprovare più tardi. I servizi di back-end non ne sanno nulla e continuano a servire i clienti paganti.</p>\n<h3>Load balancing e controllo di integrità</h3>\n<p>Se hai più istanze dello stesso servizio, il Gateway distribuisce le richieste tra di esse in automatico. Se un'istanza si blocca, sposta il traffico su un'altra e i clienti non se ne accorgono. Con il controllo di integrità, il Gateway verifica periodicamente che ogni istanza sia attiva e, se non lo è, smette di inviarle traffico. Conta soprattutto per le API ad alto traffico: il picco colpisce prima il Gateway, che lo assorbe, lo distribuisce e protegge i servizi dal sovraccarico.</p>\n\n<h2>Trasformazione di richieste e risposte</h2>\n<p>A volte i dati inviati dal client non corrispondono a quelli attesi dal back-end. Il client manda JSON e il back-end capisce solo XML, oppure i nomi dei campi non coincidono: il client usa <em>First Name</em> e il back-end si aspetta <em>nome</em>. Sono discrepanze che generano errori, e il vecchio approccio era correggere ogni client o riscrivere il back-end.</p>\n<p>Il Gateway fa da traduttore: sta nel mezzo e può modificare i dati in entrata e in uscita.</p>\n<h3>Il caso del sistema legacy</h3>\n<p>Immagina un sistema legacy che si aspetta XML, in funzione da 15 anni e perfettamente stabile. Ora stai sviluppando una nuova app mobile che parla JSON. Senza Gateway dovresti riscrivere il sistema o costringere l'app a inviare XML. Con il Gateway, l'app invia JSON, il Gateway lo converte in XML, il sistema riceve ciò che si aspetta e la risposta torna all'app già in JSON. Nessuno ha riscritto nulla.</p>\n<h3>Header, URL e dati sensibili</h3>\n<p>Il Gateway può anche aggiungere o rimuovere header, modificare URL e mascherare dati sensibili. Se una risposta contiene un numero di carta di credito che non deve tornare al client, il Gateway può rimuoverlo o sostituirlo con una versione mascherata, senza toccare il back-end. È molto utile quando modernizzi vecchi sistemi: non riscrivi il back-end e non obblighi i client a cambiare, ma intervieni solo sul Gateway.</p>\n\n<h2>Una pipeline unica e il momento giusto per adottarla</h2>\n<p>Routing, sicurezza, gestione del traffico e trasformazione non sono quattro compiti separati. Lavorano insieme su ogni singola richiesta. Il Gateway verifica l'autenticazione, controlla il limite di frequenza, instrada verso il servizio, trasforma i dati se serve, riceve la risposta, la trasforma se necessario e la restituisce al client. Ogni passaggio avviene in ordine e in automatico, senza che i servizi se ne occupino.</p>\n<p>Il vero valore sta nell'integrazione. Puoi aggiungere una policy di sicurezza senza toccare il routing, cambiare un back-end senza modificare il client, aggiornare i limiti di velocità senza ridistribuire nulla. Ogni pezzo è indipendente, ma tutti lavorano nella stessa pipeline.</p>\n<h3>Visibilità completa</h3>\n<p>Poiché tutto passa da un unico punto, il Gateway offre anche log, metriche e analisi: quante richieste sono arrivate, quali sono fallite, quali erano lente, quali client consumano più risorse. Senza Gateway dovresti raccogliere questi dati da ogni servizio. Per questo è più di un semplice router: è un centro di controllo dell'intera piattaforma API.</p>\n<h3>Ne hai davvero bisogno?</h3>\n<p>Con uno o due servizi, probabilmente non ancora. Puoi gestire il routing da solo e l'autenticazione dentro il servizio: non è elegante, ma funziona. Quando arrivi a tre servizi ed esponi API a client esterni, la complessità cresce rapidamente e il Gateway si ripaga in fretta.</p>\n\n<h2>Takeaway pratici e conclusione</h2>\n<ul>\n<li>Con uno o due servizi il Gateway può aspettare; da tre servizi in su, soprattutto con API esposte a client esterni, conviene valutarlo seriamente.</li>\n<li>Parti dall'autenticazione: scegli un servizio e sposta il suo controllo sul Gateway. Il codice del servizio diventa più pulito e non dovrai chiederti se la validazione dei token è uguale ovunque.</li>\n<li>Aggiungi poi un rate limiting semplice, per esempio 100 richieste al minuto per client, per evitare che un client fuori controllo mandi in tilt i servizi.</li>\n<li>Usa il routing per dare ai client un solo URL e per gestire versioni diverse delle API senza interruzioni.</li>\n<li>Sfrutta la trasformazione dei dati per integrare sistemi legacy e mascherare informazioni sensibili senza modificare il back-end.</li>\n<li>Usa log e metriche centralizzati per capire cosa succede nella piattaforma.</li>\n</ul>\n<p>Un API Gateway risolve il caos di avere molti servizi e molte porte con un unico punto di ingresso. Lì si concentrano routing, sicurezza, controllo del traffico e trasformazione dei dati, con una visibilità completa su tutto ciò che accade. Non è obbligatorio per ogni progetto, ma quando i servizi crescono e le API vengono esposte all'esterno diventa uno strumento molto efficace. Il modo più sensato di adottarlo è graduale: prima l'autenticazione, poi il rate limiting.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "API Gateway: un unico punto di ingresso",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Routing",
+     "text": "Il Gateway legge il percorso e inoltra ogni richiesta al servizio corretto; i client conoscono un solo URL."
+    },
+    {
+     "kopf": "Sicurezza",
+     "text": "Autenticazione e autorizzazione centralizzate: chiavi API, JWT, token OAuth o certificati controllati su ogni richiesta."
+    },
+    {
+     "kopf": "Gestione del traffico",
+     "text": "Rate limiting, throttling e bilanciamento del carico proteggono i servizi dai picchi di richieste."
+    },
+    {
+     "kopf": "Trasformazione dati",
+     "text": "Conversione tra formati come JSON e XML, modifica di header e mascheramento dei dati sensibili."
+    },
+    {
+     "kopf": "Visibilità centrale",
+     "text": "Log, metriche e analisi in un unico punto, per vedere richieste, errori e consumi."
+    },
+    {
+     "kopf": "Da dove iniziare",
+     "text": "Prima l'autenticazione sul Gateway, poi un rate limiting semplice, ad esempio 100 richieste al minuto per client."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Cos'è un API Gateway e a cosa serve?",
+    "a": "Un API Gateway è un unico punto di ingresso tra i client e i servizi di back-end, simile alla reception di un hotel. Ogni richiesta passa da lì: il Gateway decide dove inviarla, se autorizzarla e cosa rispondere, così il client non parla mai direttamente con i servizi."
+   },
+   {
+    "q": "Quali sono i compiti principali di un API Gateway?",
+    "a": "I quattro compiti principali sono routing, sicurezza, gestione del traffico e trasformazione dei dati. Lavorano insieme su ogni richiesta: il Gateway verifica l'autenticazione, controlla il limite di frequenza, instrada verso il servizio, trasforma i dati se serve e restituisce la risposta al client. Offre inoltre log e metriche centralizzati."
+   },
+   {
+    "q": "Quando serve davvero un API Gateway?",
+    "a": "Con uno o due servizi probabilmente non serve ancora: routing e autenticazione si gestiscono dentro i servizi. Da tre servizi in su, soprattutto se esponi API a client esterni, la complessità cresce rapidamente e il Gateway si ripaga in fretta. Conviene adottarlo gradualmente, partendo dall'autenticazione."
+   },
+   {
+    "q": "Come protegge i servizi un API Gateway dai picchi di traffico?",
+    "a": "Il Gateway applica rate limiting e throttling, con quote per utente, chiave API o indirizzo IP, e distribuisce le richieste tra più istanze con il load balancing. Con il controllo di integrità smette di inviare traffico alle istanze non attive, assorbendo il picco prima che raggiunga i servizi."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Senza Gateway o con Gateway",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Senza API Gateway",
+     "punkte": [
+      "Il client deve conoscere l'URL di ogni servizio",
+      "Ogni servizio gestisce da solo sicurezza, rate limiting ed errori",
+      "Il lavoro si duplica e nascono incoerenze",
+      "Se un indirizzo cambia, bisogna aggiornare ogni client",
+      "Un picco di traffico colpisce direttamente i back-end"
+     ]
+    },
+    "rechts": {
+     "titel": "Con API Gateway",
+     "punkte": [
+      "I client conoscono un solo URL, quello del Gateway",
+      "Sicurezza e regole centralizzate in un unico punto",
+      "Si può cambiare il back-end senza rompere i client",
+      "Il Gateway assorbe e distribuisce i picchi di traffico",
+      "Log, metriche e analisi in un unico posto"
+     ]
+    }
+   },
+   {
+    "titel": "Il percorso di una richiesta nel Gateway",
+    "typ": "prozess",
+    "punkte": [
+     {
+      "kopf": "Richiesta del client",
+      "text": "Il client invia la richiesta al Gateway, unico punto di ingresso.",
+      "art": "start"
+     },
+     {
+      "kopf": "Autenticazione",
+      "text": "Il Gateway verifica chiavi API, token o certificati e i permessi.",
+      "art": "schritt"
+     },
+     {
+      "kopf": "Limite di frequenza",
+      "text": "Controlla che il client non superi la quota di richieste consentita.",
+      "art": "schritt"
+     },
+     {
+      "kopf": "Routing e trasformazione",
+      "text": "Instrada verso il servizio giusto e trasforma i dati se serve.",
+      "art": "schritt"
+     },
+     {
+      "kopf": "Risposta al client",
+      "text": "Riceve la risposta, la trasforma se necessario e la restituisce.",
+      "art": "ende"
+     }
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Quale funzione svolge un API Gateway rispetto ai servizi di back-end?",
+    "opts": [
+     "Sostituisce i servizi di back-end con un'unica applicazione monolitica",
+     "Fa da unico punto di ingresso tra i client e i servizi",
+     "Permette ai client di chiamare direttamente ogni servizio con più URL",
+     "Si occupa solo di memorizzare i dati degli utenti nel database"
+    ],
+    "a": 1,
+    "why": "Il Gateway è un unico punto di ingresso: ogni richiesta passa da lì e il client non parla mai direttamente con i servizi."
+   },
+   {
+    "q": "Cosa succede se la chiave API di un client viene compromessa e si usa il Gateway?",
+    "opts": [
+     "Bisogna aggiornare e riavviare ogni servizio di back-end separatamente",
+     "La chiave resta valida finché non scade da sola dopo alcuni giorni",
+     "Si revoca la chiave sul Gateway e le richieste successive vengono rifiutate subito",
+     "Il Gateway deve essere spento finché tutti i client non cambiano chiave"
+    ],
+    "a": 2,
+    "why": "Basta una modifica sul Gateway: non serve aggiornare i servizi né riavviare nulla, e la richiesta successiva viene rifiutata."
+   },
+   {
+    "q": "Come aiuta il Gateway quando i servizi subiscono un picco improvviso di traffico?",
+    "opts": [
+     "Assorbe il picco, applica rate limiting e distribuisce le richieste tra le istanze",
+     "Inoltra tutte le richieste a una sola istanza per semplificare la gestione",
+     "Blocca definitivamente tutti i client che superano la media di richieste",
+     "Trasforma tutte le richieste in XML per renderle più leggere da elaborare"
+    ],
+    "a": 0,
+    "why": "Il Gateway assorbe il picco, applica quote e distribuisce il carico tra le istanze, proteggendo i servizi dal sovraccarico."
+   },
+   {
+    "q": "Come permette il Gateway a una nuova app JSON di usare un sistema legacy XML?",
+    "opts": [
+     "Obbliga l'app mobile a inviare direttamente richieste in formato XML",
+     "Richiede di riscrivere il sistema legacy in modo che comprenda JSON",
+     "Sostituisce il sistema legacy con un nuovo servizio sviluppato dal team",
+     "Converte il JSON in XML in entrata e la risposta di nuovo in JSON"
+    ],
+    "a": 3,
+    "why": "Il Gateway fa da traduttore: converte JSON in XML per il sistema legacy e la risposta torna all'app in JSON, senza riscritture."
+   }
+  ]
+ },
+ "pt": {
+  "html": "<p>Você criou um aplicativo que funciona. Depois adicionou outro serviço, e mais outro. De repente, direcionar o tráfego entre eles virou um pesadelo: cada serviço tem seu endereço, sua autenticação e seu jeito de tratar erros. É nesse ponto que surge o API Gateway.</p>\n<p>Neste artigo você vai entender o que um API Gateway faz, por que ele resolve o caos de gerenciar vários serviços e como saber se já chegou a hora de usar um. Vamos do problema às funções principais (roteamento, segurança, limitação de taxa e transformação de dados) e depois a como tudo se encaixa.</p>\n\n<h2>O problema: portas demais e o que é um API Gateway</h2>\n<p>Imagine uma empresa que cresce rápido. A equipe de vendas fica no terceiro andar, a contabilidade no subsolo, outros setores na ala dos fundos. Agora imagine que cada departamento tenha sua própria porta de entrada, seu próprio telefone e seu próprio segurança, e que nenhum deles converse com os outros. Quem for entregar um pacote precisa saber qual porta usar, com quem falar e o que fazer quando esse segurança estiver no intervalo.</p>\n<p>É exatamente o que acontece quando um aplicativo tem vários serviços de back-end e cada cliente chama cada serviço diretamente. O cliente pode ser um aplicativo móvel, um site ou outro serviço. Ele precisa saber onde cada serviço \"mora\", como se autenticar em cada um e o que fazer quando algo quebra. Cada serviço, por sua vez, lida sozinho com segurança, limite de taxa e tratamento de erros. O resultado é trabalho duplicado e comportamento inconsistente.</p>\n<p>Pense em um banco com serviços separados para contas, pagamentos, empréstimos e detecção de fraude. Se cada um for exposto diretamente, o aplicativo móvel precisa conhecer quatro URLs, quatro métodos de autenticação e quatro formas de tratar erros. São quatro vezes mais complexidade e quatro vezes mais chances de algo dar errado.</p>\n\n<h3>A recepção do hotel</h3>\n<p>Um API Gateway funciona como a recepção de um hotel. Você não precisa saber em que andar fica a limpeza ou como contatar a manutenção. Vai à recepção, diz o que precisa, e a equipe encaminha o pedido à pessoa certa, confere se você tem autorização e resolve sozinha as solicitações básicas.</p>\n<p>Tecnicamente, o API Gateway é um ponto de entrada único entre seus clientes e seus serviços de back-end. Toda solicitação passa primeiro por ele, que decide para onde enviá-la, se deve permiti-la e o que deve retornar. O cliente nunca fala diretamente com o back-end.</p>\n<p>A ideia não é nova: proxies reversos existem há décadas. O gateway se tornou essencial com os microsserviços, porque dividir uma aplicação em muitos serviços pequenos significa ter muitas portas, e o gateway devolve uma só. No mundo Azure, o Azure API Management é a plataforma completa e o gateway é o componente central que gerencia o tráfego. O padrão, porém, é o mesmo em qualquer lugar: um ponto de entrada e controle centralizado.</p>\n\n<h2>Roteamento de tráfego: cada requisição para o serviço certo</h2>\n<p>A função mais simples do gateway é o roteamento. Cada solicitação traz um caminho. Se o caminho indica usuários, o gateway envia a requisição ao serviço de usuários. Se indica pedidos, ela vai para o serviço de pedidos. O gateway lê o caminho, descobre o destino e encaminha.</p>\n<p>Sem gateway, o aplicativo móvel precisa do endereço dos serviços de usuários, pedidos, pagamentos e catálogo. Se qualquer um desses endereços mudar, é preciso atualizar todos os clientes. Com o gateway, os clientes conhecem apenas a URL do gateway e não se importam com o local real de cada serviço.</p>\n\n<h3>Roteamento baseado em recursos</h3>\n<p>O roteamento pode considerar bem mais do que o caminho:</p>\n<ul>\n<li>o método HTTP;</li>\n<li>os cabeçalhos da requisição;</li>\n<li>a geolocalização do cliente.</li>\n</ul>\n<p>Uma solicitação vinda da Europa pode ser enviada a um datacenter europeu, e o cliente nem percebe. Ele só recebe uma resposta rápida.</p>\n\n<h3>Controle de versão sem quebrar clientes</h3>\n<p>O roteamento também ajuda no versionamento. Suponha que você lance uma nova versão do serviço de usuários. Clientes antigos continuam usando <em>/v1/users</em> e os novos usam <em>/v2/users</em>. O gateway direciona cada grupo para um back-end diferente, e os clientes antigos seguem funcionando enquanto a nova versão entra no ar. Isso é fundamental em uma aplicação ativa, com usuários reais.</p>\n<p>Em uma plataforma de e-commerce com serviços separados para catálogo, carrinho, checkout e conta de usuário, o aplicativo móvel conhece uma única URL. O gateway lê o caminho e envia cada requisição ao serviço certo.</p>\n\n<h2>Segurança na porta de entrada</h2>\n<p>Toda chamada de API precisa responder a duas perguntas: quem está fazendo essa solicitação e se essa pessoa tem as permissões corretas. Sem gateway, cada serviço cuida da própria autenticação. Um verifica tokens corretamente, outro pula uma etapa, um terceiro usa um método diferente. A segurança fica inconsistente em toda a aplicação.</p>\n<p>O gateway concentra autenticação e autorização em um único lugar: um ponto para verificar, um para aplicar e um para atualizar quando as políticas mudarem. Ele valida chaves de API, JWTs, tokens e certificados em cada requisição, sem exceções.</p>\n\n<h3>Permissões granulares e revogação rápida</h3>\n<p>No gateway você pode definir regras como \"esta chave de API só pode chamar endpoints de leitura\" ou \"este cliente só acessa o serviço de catálogo, não o de pagamento\". Os serviços de back-end deixam de se preocupar com autorização: apenas processam a solicitação e devolvem os dados.</p>\n<p>Outra vantagem é poder revogar o acesso em um só lugar. Se a chave de API de um cliente for comprometida, você a revoga no gateway. Não é preciso atualizar cada serviço nem reiniciar nada, e a próxima requisição com essa chave é rejeitada imediatamente.</p>\n<p>Um exemplo bancário: só o serviço de pagamento deve ter acesso de escrita ao sistema de cobrança. O gateway impõe essa regra. Se um cliente tentar escrever no sistema de cobrança pelo endpoint errado, o gateway bloqueia, e o serviço de cobrança nem chega a ver a solicitação. O gateway também pode suportar mTLS para reforçar a proteção, mas, em essência, é a sua primeira linha de defesa.</p>\n\n<h2>Gerenciamento de tráfego: limitação de taxa e balanceamento de carga</h2>\n<p>O que acontece quando 10 mil usuários acessam o aplicativo ao mesmo tempo? Pode ser uma promoção relâmpago, o lançamento de um produto viral ou uma terça-feira comum em que todo mundo resolveu entrar de uma vez. Sem gateway, o back-end é atingido diretamente e pode travar de uma só vez.</p>\n\n<h3>Rate limiting e throttling</h3>\n<p>O gateway limita quantas solicitações cada cliente pode fazer. Rate limiting e throttling são recursos padrão: você define as regras no gateway e ele as aplica, de modo que o back-end nunca sente o pico. As cotas podem ser definidas por usuário, por chave de API ou por endereço IP.</p>\n<p>Um exemplo: sua API tem um nível gratuito com 100 solicitações por hora, e usuários premium têm 10 mil. O gateway acompanha cada requisição e aplica esses limites na entrada. Quando um usuário gratuito atinge o limite, recebe uma mensagem educada pedindo para tentar mais tarde. Os serviços de back-end nem ficam sabendo e continuam atendendo normalmente os clientes pagantes.</p>\n\n<h3>Balanceamento de carga e verificações de saúde</h3>\n<p>Se existem várias instâncias do mesmo serviço, o gateway distribui as solicitações entre elas: a primeira requisição vai para a instância 1, a seguinte para a 2, depois para a 3. Se uma instância cair, o gateway roteia para outra, e os clientes nem percebem.</p>\n<p>Com verificações de saúde, o gateway \"pinga\" cada instância para confirmar que está ativa. Se não estiver, ele para de enviar tráfego para ela. Isso é especialmente importante em APIs de alto tráfego: o pico atinge primeiro o gateway, que o absorve, o distribui e protege os serviços da sobrecarga.</p>\n\n<h2>Transformação de dados: o gateway como tradutor</h2>\n<p>Às vezes os dados enviados pelo cliente não correspondem ao que o back-end espera. O cliente manda JSON e o back-end só entende XML. Ou os nomes dos campos não combinam: o cliente usa <em>first name</em> e o back-end espera <em>nome</em>. Antes, a saída era corrigir cada cliente ou reescrever o back-end.</p>\n<p>O gateway pode transformar os dados na entrada, na saída ou em ambas as direções. É a chamada transformação de requisição e de resposta.</p>\n\n<h3>Modernizando um sistema legado</h3>\n<p>Imagine um sistema legado que espera XML e funciona bem há 15 anos. Agora você cria um aplicativo móvel, que fala JSON. Sem gateway, seria preciso reescrever o sistema legado ou forçar o app a enviar XML. Com o gateway, nenhuma das duas coisas é necessária: o app envia JSON, o gateway converte para XML, o sistema recebe o que espera e o app recebe a resposta de volta em JSON. Ninguém precisou reescrever nada.</p>\n\n<h3>Outras transformações úteis</h3>\n<ul>\n<li>adicionar ou remover cabeçalhos;</li>\n<li>alterar URLs;</li>\n<li>mascarar dados sensíveis.</li>\n</ul>\n<p>Se uma resposta inclui o número de um cartão de crédito, o gateway pode removê-lo antes que a resposta saia, ou substituí-lo por uma versão mascarada. O back-end não precisa mudar. É como um tradutor em uma conferência internacional: cada um fala seu idioma, e o tradutor garante que todos se entendam.</p>\n\n<h2>Um pipeline integrado e visibilidade total</h2>\n<p>Roteamento, segurança, limitação e transformação não são quatro tarefas isoladas. Elas trabalham juntas em cada requisição, como um pipeline:</p>\n<ol>\n<li>o gateway verifica a autenticação;</li>\n<li>valida o limite de taxa;</li>\n<li>roteia para o serviço correto;</li>\n<li>transforma os dados, se necessário;</li>\n<li>recebe a resposta, transforma-a também, se preciso, e a devolve ao cliente.</li>\n</ol>\n<p>Cada etapa acontece automaticamente e em ordem, sem que nenhum serviço precise pensar nisso. O verdadeiro poder está na integração, não em um recurso isolado. Você pode adicionar uma política de segurança sem tocar no roteamento, trocar o serviço de back-end sem alterar o cliente e atualizar os limites de taxa sem reimplantar nada.</p>\n<p>Como tudo passa por um só lugar, você também ganha visibilidade total: logs, métricas e análises em um único ponto. Dá para ver quantas requisições chegaram, quais falharam, quais foram lentas e quais clientes consomem mais recursos. Sem gateway, esses dados teriam de ser coletados serviço por serviço. Por isso o gateway é mais do que um roteador: é um centro de controle de toda a plataforma de API.</p>\n\n<h2>Você realmente precisa de um API Gateway?</h2>\n<p>Com sinceridade: se você tem um ou dois serviços, provavelmente ainda não precisa. Dá para cuidar do roteamento por conta própria e gerenciar a autenticação em cada serviço. Não é elegante, mas funciona.</p>\n<p>A situação muda quando você chega a três serviços ou passa a expor APIs a clientes externos. A complexidade cresce rápido e o gateway se paga rapidamente.</p>\n\n<h2>Takeaways práticos</h2>\n<ul>\n<li><strong>Avalie o tamanho do seu cenário:</strong> com um ou dois serviços, o gateway pode esperar; com três ou mais, ou com clientes externos, ele passa a fazer sentido.</li>\n<li><strong>Comece pela autenticação:</strong> escolha um serviço e mova a verificação de autenticação dele para o gateway. O código do serviço fica mais limpo e acaba a lógica de validação de token espalhada.</li>\n<li><strong>Depois, adicione limite de taxa:</strong> um limite simples, como 100 requisições por minuto por cliente, já impede que um cliente descontrolado derrube seus serviços.</li>\n<li><strong>Exponha uma única URL aos clientes:</strong> assim, mudanças de endereço no back-end não exigem atualizar aplicativos.</li>\n<li><strong>Use o gateway para versionar e modernizar:</strong> roteie <em>/v1</em> e <em>/v2</em> para back-ends diferentes e traduza formatos como JSON e XML sem reescrever sistemas legados.</li>\n<li><strong>Aproveite a visão centralizada:</strong> logs e métricas no gateway mostram falhas, lentidão e consumo por cliente.</li>\n</ul>\n\n<h2>Conclusão</h2>\n<p>Um API Gateway transforma várias portas em uma só e concentra no mesmo lugar o roteamento, a segurança, o controle de tráfego e a transformação de dados. Os serviços de back-end ficam mais simples e os clientes só precisam conhecer um endereço. Se você já tem três ou mais serviços, ou expõe APIs a clientes externos, vale começar centralizando a autenticação e, em seguida, aplicar um limite de taxa básico.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "O caminho de uma requisição pelo API Gateway",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Autenticação",
+     "text": "O gateway valida chaves de API, JWTs, tokens ou certificados em cada requisição, sem exceções."
+    },
+    {
+     "kopf": "Limite de taxa",
+     "text": "Cotas por usuário, chave de API ou IP protegem o back-end contra picos e sobrecarga."
+    },
+    {
+     "kopf": "Roteamento",
+     "text": "Caminho, método HTTP, cabeçalhos ou geolocalização definem o serviço de destino correto."
+    },
+    {
+     "kopf": "Transformação",
+     "text": "Converte formatos como JSON e XML, ajusta cabeçalhos e mascara dados sensíveis."
+    },
+    {
+     "kopf": "Resposta ao cliente",
+     "text": "A resposta volta pelo gateway, que a transforma se preciso e registra logs e métricas."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "O que é um API Gateway e para que serve?",
+    "a": "É um ponto de entrada único entre os clientes e os serviços de back-end. Toda solicitação passa primeiro por ele, que decide para onde enviá-la, se deve permiti-la e o que retornar. Assim, roteamento, segurança, controle de tráfego e transformação de dados ficam centralizados e o cliente nunca fala diretamente com o back-end."
+   },
+   {
+    "q": "Quando vale a pena usar um API Gateway?",
+    "a": "Com um ou dois serviços, provavelmente ainda não é necessário, pois dá para cuidar do roteamento e da autenticação em cada serviço. A partir de três serviços, ou ao expor APIs a clientes externos, a complexidade cresce rápido e o gateway se paga rapidamente."
+   },
+   {
+    "q": "Quais são as principais funções de um API Gateway?",
+    "a": "As principais funções são roteamento (por caminho, método HTTP, cabeçalhos, geolocalização e versão), segurança centralizada (chaves de API, JWTs, tokens e certificados), gerenciamento de tráfego (limitação de taxa, balanceamento de carga e verificações de saúde) e transformação de dados, como converter JSON em XML ou mascarar informações sensíveis."
+   },
+   {
+    "q": "Como o API Gateway ajuda na segurança e na limitação de taxa?",
+    "a": "Ele valida a autenticação e as permissões em um só lugar, e uma chave de API comprometida pode ser revogada ali, com efeito imediato. Também aplica cotas por usuário, chave de API ou IP, de modo que os picos de tráfego não chegam ao back-end."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Sem gateway x com gateway",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Sem API Gateway",
+     "punkte": [
+      "O cliente precisa conhecer o endereço de cada serviço",
+      "Cada serviço cuida da própria autenticação, de forma inconsistente",
+      "Limite de taxa e tratamento de erros duplicados em cada serviço",
+      "O pico de acessos atinge o back-end diretamente",
+      "Logs e métricas coletados serviço por serviço"
+     ]
+    },
+    "rechts": {
+     "titel": "Com API Gateway",
+     "punkte": [
+      "Os clientes conhecem apenas uma URL",
+      "Autenticação e autorização concentradas em um único lugar",
+      "Limites de taxa aplicados na entrada, sem tocar no back-end",
+      "O gateway absorve e distribui o pico de tráfego",
+      "Logs, métricas e análises em um único ponto"
+     ]
+    }
+   },
+   {
+    "titel": "Quando usar um API Gateway",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "1 ou 2 serviços",
+      "text": "Provavelmente ainda não precisa: roteamento e autenticação por serviço funcionam."
+     },
+     {
+      "wert": "3 ou mais serviços",
+      "text": "A complexidade cresce rápido e o gateway se paga rapidamente."
+     },
+     {
+      "wert": "Clientes externos",
+      "text": "Expor APIs a terceiros também justifica adotar um gateway."
+     },
+     {
+      "wert": "100 por hora",
+      "text": "Exemplo de limite do nível gratuito, contra 10 mil para usuários premium."
+     },
+     {
+      "wert": "100 por minuto",
+      "text": "Limite simples por cliente que já impede um cliente descontrolado de derrubar serviços."
+     }
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Qual é a principal função de um API Gateway em uma arquitetura com vários serviços?",
+    "opts": [
+     "Armazenar todos os dados dos serviços de back-end em um banco único",
+     "Ser o ponto de entrada único entre os clientes e os serviços de back-end",
+     "Substituir todos os serviços de back-end por um único serviço monolítico",
+     "Compilar o código dos serviços antes de colocá-los em produção"
+    ],
+    "a": 1,
+    "why": "O gateway é o ponto de entrada único: toda solicitação passa por ele, que decide o destino, a permissão e a resposta."
+   },
+   {
+    "q": "Como o gateway ajuda a lançar uma nova versão de um serviço sem quebrar clientes antigos?",
+    "opts": [
+     "Obriga todos os clientes a atualizarem o aplicativo antes do lançamento",
+     "Desativa a versão antiga assim que a nova versão entra no ar",
+     "Roteia /v1 e /v2 para back-ends diferentes, mantendo os clientes antigos funcionando",
+     "Copia automaticamente os dados da versão antiga para todos os clientes"
+    ],
+    "a": 2,
+    "why": "Pelo roteamento, clientes antigos continuam em /v1 e os novos usam /v2, cada grupo atendido por um back-end diferente."
+   },
+   {
+    "q": "O que acontece quando a chave de API de um cliente é comprometida e revogada no gateway?",
+    "opts": [
+     "É preciso atualizar cada serviço e reiniciar todos os back-ends",
+     "A chave continua válida até o fim do período de cobrança",
+     "O gateway só bloqueia a chave depois de uma verificação de saúde",
+     "A próxima requisição com essa chave é rejeitada imediatamente, sem mexer nos serviços"
+    ],
+    "a": 3,
+    "why": "Como a autenticação está centralizada, revogar a chave no gateway basta; a requisição seguinte é rejeitada sem alterar serviços."
+   },
+   {
+    "q": "Em que situação o artigo diz que um API Gateway já passa a fazer sentido?",
+    "opts": [
+     "Quando há três ou mais serviços ou APIs expostas a clientes externos",
+     "Somente quando a aplicação tem mais de cem microsserviços em produção",
+     "Sempre, mesmo com um único serviço e nenhum cliente externo",
+     "Apenas quando a empresa abandona totalmente os sistemas legados"
+    ],
+    "a": 0,
+    "why": "Com um ou dois serviços o gateway pode esperar; com três ou mais, ou clientes externos, a complexidade justifica seu uso."
+   }
+  ]
+ },
+ "nl": {
+  "html": "<p>Je hebt een app gebouwd die werkt. Dan voeg je een tweede service toe, daarna een derde, en ineens wordt het verkeer tussen clients en services een nachtmerrie. Op dat punt komt de API Gateway in beeld. Wat doet hij precies, welk probleem lost hij op en wanneer heb je er echt een nodig?</p>\n<p>In dit artikel lopen we eerst het probleem door en daarna de vier kerntaken van een API Gateway: routing, beveiliging, verkeersbeheer en datatransformatie. Tot slot laten we zien hoe die samenwerken en hoe je beslist of je er nu al een nodig hebt.</p>\n\n<h2>Het probleem: te veel deuren naar je backend</h2>\n<p>Stel je een snel groeiend bedrijf voor. Sales zit op de derde verdieping, de boekhouding in de kelder en IT in de achtervleugel. Elke afdeling heeft een eigen voordeur, een eigen telefoonnummer en een eigen beveiliger die niet met de anderen praat. Wie een pakketje wil afleveren, moet precies weten welke deur hij moet nemen, welke beveiliger hij moet spreken en wat hij moet doen als die beveiliger pauze heeft.</p>\n<p>Dat gebeurt ook wanneer je applicatie meerdere backendservices heeft en elke client ze rechtstreeks aanroept. Een mobiele app, een website of een andere service moet dan weten:</p>\n<ul>\n<li>waar elke service zich bevindt;</li>\n<li>hoe je bij elke service authenticeert;</li>\n<li>wat je moet doen als er iets misgaat.</li>\n</ul>\n<p>Ook elke service zelf moet zijn eigen beveiliging, rate limiting en foutafhandeling regelen. Dat is dubbel werk, en het wordt vanzelf inconsistent.</p>\n<p>Neem een bank met aparte services voor rekeningen, betalingen, leningen en fraudedetectie. Als alles rechtstreeks wordt blootgesteld, moet de mobiele app vier URL's, vier authenticatiemethoden en vier manieren van foutafhandeling kennen. Dat is vier keer de complexiteit en vier keer zoveel kans dat er iets misgaat.</p>\n\n<h2>Wat is een API Gateway?</h2>\n<p>Zie een API Gateway als de receptie van een hotel. Als gast hoef je niet te weten waar de keuken zit of hoe je de onderhoudsdienst bereikt. Je vertelt de receptie wat je nodig hebt en die regelt de rest: ze stuurt je verzoek naar de juiste persoon, controleert of je er mag zijn en handelt eenvoudige verzoeken zelf af.</p>\n<p>Een API Gateway doet hetzelfde voor je software. Het is één toegangspunt tussen je clients en je backendservices. Elk verzoek gaat eerst door de Gateway, die bepaalt waar het heen gaat, of het is toegestaan en wat er wordt teruggestuurd. De client praat nooit rechtstreeks met je backend, alleen met de Gateway.</p>\n<p>Het idee is niet nieuw: reverse proxies bestaan al decennia. Met microservices is de Gateway wel essentieel geworden. Wie zijn applicatie opdeelt in veel kleine services, krijgt veel deuren. De Gateway maakt daar één voordeur van. In de Azure-wereld is Azure API Management het volledige platform en vormt de Gateway de kerncomponent die het verkeer afhandelt. Het patroon is overal hetzelfde: één toegangspunt en gecentraliseerde controle.</p>\n\n<h2>Routing: elk verzoek naar de juiste service</h2>\n<p>De eenvoudigste taak van een Gateway is routing. Een verzoek bevat een pad. Is dat Users, dan stuurt de Gateway het naar de gebruikerservice. Is het Orders, dan gaat het naar de bestelservice. De Gateway leest het pad, bepaalt de bestemming en stuurt het door.</p>\n<p>Zonder Gateway moet elke client alle service-URL's kennen. Verandert er één adres, dan moet je elke client bijwerken. Met een Gateway kennen clients slechts één URL: die van de Gateway. Waar de services echt draaien, maakt voor hen niet uit.</p>\n<h3>Routeren op meer dan het pad</h3>\n<p>Resourcegebaseerde routing kan zich baseren op het pad, de HTTP-methode, headers en zelfs de geolocatie van de client. Stuurt iemand in Europa een verzoek, dan kun je dat naar een Europees datacenter sturen. Een gebruiker in de VS gaat naar een Amerikaans datacenter. De client merkt daar niets van en krijgt gewoon snel antwoord.</p>\n<h3>Versiebeheer zonder gedoe</h3>\n<p>Routing helpt ook bij versies. Oude clients blijven V1-users gebruiken, nieuwe clients gebruiken V2-users, en de Gateway stuurt ze naar verschillende backends. Zo rol je een nieuwe versie uit terwijl oude clients gewoon blijven werken. Je kunt je backend wijzigen zonder je clients te storen, en dat is cruciaal bij een live applicatie met echte gebruikers.</p>\n<h3>Voorbeeld: een e-commerceplatform</h3>\n<p>Een webshop heeft aparte services voor de catalogus, het winkelwagentje, de checkout en gebruikersaccounts. Zonder Gateway moet de mobiele app vier URL's kennen. Met een Gateway kent hij er één: de Gateway leest het pad en stuurt elk verzoek naar de juiste service.</p>\n\n<h2>Beveiliging bij de voordeur</h2>\n<p>Elke API-aanroep moet worden gecontroleerd: wie doet dit verzoek en heeft diegene de juiste rechten? Zonder Gateway regelt elke service zijn eigen authenticatie. De ene service controleert tokens goed, een andere slaat een stap over en een derde gebruikt een heel andere methode. Het resultaat is inconsistente beveiliging.</p>\n<p>De Gateway regelt authenticatie en autorisatie op één centrale plek: één plek om te controleren, af te dwingen en bij te werken wanneer beleid verandert. Dat is een belangrijke beveiligingsbestpractice. Bij elk verzoek valideert de Gateway API-sleutels, JWT's, OAuth-tokens of certificaten, zonder uitzonderingen.</p>\n<h3>Gedetailleerde rechten op Gateway-niveau</h3>\n<p>Je kunt ook regels afdwingen, bijvoorbeeld dat een bepaalde API-sleutel alleen leesendpoints mag aanroepen, of dat een client wel bij de catalogusservice kan maar niet bij de betalingsservice. Die rechten definieer je één keer bij de Gateway en ze gelden automatisch. Backendservices hoeven zich niet met autorisatie bezig te houden. Ze verwerken het verzoek en sturen de gegevens terug.</p>\n<h3>Toegang snel intrekken</h3>\n<p>Is de API-sleutel van een klant gecompromitteerd, dan trek je hem in bij de Gateway. Eén wijziging en klaar: geen enkele service hoeft te worden bijgewerkt of herstart. Het volgende verzoek met die sleutel wordt direct afgewezen.</p>\n<p>Een bankvoorbeeld: alleen de betalingsservice heeft schrijftoegang nodig tot het facturatiesysteem. Probeert een client via het verkeerde eindpunt te schrijven, dan blokkeert de Gateway dat en ziet de facturatieservice het verzoek niet eens. Voor diepere beveiliging ondersteunt de Gateway ook mutual TLS en WAF-integratie, maar in de kern is hij je eerste verdedigingslinie.</p>\n\n<h2>Verkeersbeheer: rate limiting en load balancing</h2>\n<p>Wat gebeurt er als 10.000 gebruikers tegelijk je app bezoeken? Misschien door een flitsverkoop of een virale productlancering, of omdat iedereen op een gewone dinsdag tegelijk besluit in te loggen. Zonder Gateway worden je backendservices direct bestookt en kunnen ze allemaal tegelijk crashen.</p>\n<h3>Rate limiting en throttling</h3>\n<p>De Gateway beperkt hoeveel verzoeken elke client mag indienen. Rate limiting en throttling zijn standaardfuncties: jij stelt de regels in, de Gateway dwingt ze af en je backend merkt niets van de piek. Quota stel je in per gebruiker, per API-sleutel of per IP-adres.</p>\n<p>Stel dat je een gratis versie van je API aanbiedt. Gratis gebruikers krijgen 100 verzoeken per uur, premiumgebruikers 10.000. De Gateway volgt elk verzoek en past de limieten toe bij de poort. Bereikt een gratis gebruiker zijn limiet, dan krijgt hij een beleefde melding om het later opnieuw te proberen. De backend weet niet eens dat er een verzoek was en blijft rustig de betalende klanten bedienen.</p>\n<h3>Load balancing met gezondheidscontroles</h3>\n<p>Draaien er meerdere instanties van dezelfde service, dan verdeelt de Gateway de verzoeken daarover: de eerste instantie krijgt het eerste verzoek, de tweede het volgende, enzovoort. Valt een instantie uit, dan leidt de Gateway het verkeer om naar een andere. Met gezondheidschecks controleert hij elke instantie en stuurt hij geen verkeer meer naar een instantie die niet actief is. Dat is vooral belangrijk voor API's met veel verkeer: een piek raakt eerst de Gateway, die hem opvangt, verspreidt en je services tegen belasting beschermt.</p>\n\n<h2>Datatransformatie: de tolk tussen client en backend</h2>\n<p>Soms komt de data van de client niet overeen met wat de backend verwacht. De client stuurt JSON terwijl de backend alleen XML begrijpt, of de veldnamen verschillen: de client gebruikt \"first name\" en de backend verwacht \"voornaam\". Vroeger moest je dan elke client aanpassen of de backend herschrijven.</p>\n<p>De Gateway kan de data transformeren voordat die de backend bereikt. Hij werkt als een vertaler in het midden en kan data wijzigen bij binnenkomst, bij vertrek of allebei. Dat heet verzoek- en responstransformatie.</p>\n<h3>Voorbeeld: een legacysysteem van 15 jaar oud</h3>\n<p>Een legacysysteem verwacht XML, draait al 15 jaar en werkt prima. Nu bouw je een nieuwe mobiele app, en die spreekt JSON. Zonder Gateway moet je het systeem herschrijven of de app dwingen XML te sturen. Met een Gateway doe je geen van beide: de app verstuurt JSON, de Gateway zet het om naar XML, het systeem ontvangt wat het verwacht en de app krijgt het antwoord weer terug in JSON.</p>\n<h3>Headers, URL's en gevoelige data</h3>\n<p>De Gateway kan ook headers toevoegen of verwijderen, URL's wijzigen en gevoelige data maskeren. Bevat een antwoord een creditcardnummer dat niet naar de client mag, dan filtert de Gateway het eruit of vervangt hij het door een gemaskeerde versie. De backend hoeft daarvoor niet te veranderen. Daarom is dit vooral handig bij het moderniseren van oude systemen: je past alleen de Gateway aan. Het is als een tolk op een internationale conferentie: iedereen spreekt zijn eigen taal en de tolk zorgt dat iedereen elkaar begrijpt.</p>\n\n<h2>Alles in één pipeline, met volledig inzicht</h2>\n<p>Routing, beveiliging, throttling en transformatie zijn geen losse functies. Ze werken samen bij elk verzoek. De Gateway:</p>\n<ol>\n<li>controleert de authenticatie;</li>\n<li>valideert de snelheidslimiet;</li>\n<li>routeert naar de juiste service;</li>\n<li>transformeert indien nodig de data;</li>\n<li>ontvangt de respons en transformeert die indien nodig ook;</li>\n<li>stuurt alles terug naar de client.</li>\n</ol>\n<p>Elke stap gebeurt automatisch en in volgorde, zonder dat een service erover hoeft na te denken. De kracht zit niet in één functie, maar in de integratie. Je kunt een nieuw beveiligingsbeleid toevoegen zonder de routing aan te passen, een backendservice wijzigen zonder de client aan te raken en snelheidslimieten bijwerken zonder iets opnieuw te deployen. Elk onderdeel is onafhankelijk, maar ze draaien in dezelfde pipeline.</p>\n<p>Omdat alles door één plek loopt, krijg je ook volledig inzicht: logs, statistieken en analytics vanaf één punt. Je ziet hoeveel verzoeken er binnenkwamen, welke mislukten, welke traag waren en welke clients de meeste resources gebruiken. Zonder Gateway moet je die data bij elke service afzonderlijk verzamelen. Daarom is de Gateway meer dan een router: het is een controlecentrum voor je volledige API-platform.</p>\n\n<h2>Heb je een API Gateway nodig? Praktische takeaways</h2>\n<p>Eerlijk is eerlijk: met één of twee services heb je waarschijnlijk nog geen API Gateway nodig. Je kunt de routing zelf afhandelen en de authenticatie in elke service regelen. Dat is niet elegant, maar het werkt. Zodra je drie services hebt of API's blootstelt aan externe clients, neemt de complexiteit snel toe en verdient een Gateway zichzelf snel terug.</p>\n<ul>\n<li><strong>Begin met authenticatie.</strong> Kies één service en verplaats de authenticatiecontrole naar de Gateway. Je servicecode wordt meteen schoner, want de tokenvalidatie staat niet meer verspreid over je code.</li>\n<li><strong>Voeg daarna rate limiting toe.</strong> Zelfs een simpele limiet beschermt je backend, bijvoorbeeld 100 verzoeken per minuut per client. Zo voorkom je dat een op hol geslagen client je services platlegt.</li>\n<li><strong>Geef clients één URL.</strong> Laat ze alleen het adres van de Gateway kennen, zodat je backendadressen kunt wijzigen zonder clients bij te werken.</li>\n<li><strong>Gebruik routing voor versiebeheer.</strong> Stuur V1- en V2-clients naar verschillende backends en rol nieuwe versies veilig uit.</li>\n<li><strong>Laat de Gateway data vertalen.</strong> Zo moderniseer je legacysystemen zonder ze te herschrijven.</li>\n<li><strong>Gebruik de centrale logs en statistieken.</strong> Eén punt geeft je overzicht over alle verzoeken, fouten en trage reacties.</li>\n</ul>\n\n<h2>Fazit</h2>\n<p>Een API Gateway vervangt de chaos van vele deuren door één voordeur. Hij routeert verkeer, dwingt beveiliging centraal af, beschermt je services met rate limiting en load balancing en vertaalt data tussen clients en backends. Dat alles gebeurt in één pipeline met volledig inzicht in wat er gebeurt. Heb je maar een of twee services, dan kun je nog zonder. Groeit je landschap naar drie of meer services, of stel je API's bloot aan externe clients, dan is het slim om te beginnen met centrale authenticatie en een eenvoudige rate limit.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Zo verwerkt een API Gateway elk verzoek",
+   "typ": "prozess",
+   "punkte": [
+    {
+     "kopf": "Verzoek van client",
+     "text": "De client praat alleen met de Gateway, nooit rechtstreeks met de backend.",
+     "art": "start"
+    },
+    {
+     "kopf": "Authenticatie controleren",
+     "text": "API-sleutels, JWT's, OAuth-tokens of certificaten worden centraal gevalideerd.",
+     "art": "schritt"
+    },
+    {
+     "kopf": "Snelheidslimiet checken",
+     "text": "Rate limiting en throttling per gebruiker, API-sleutel of IP-adres.",
+     "art": "entscheidung"
+    },
+    {
+     "kopf": "Routeren naar service",
+     "text": "Op basis van pad, methode, headers of geolocatie naar de juiste backend.",
+     "art": "schritt"
+    },
+    {
+     "kopf": "Data transformeren",
+     "text": "Indien nodig verzoek en respons omzetten, bijvoorbeeld JSON naar XML.",
+     "art": "schritt"
+    },
+    {
+     "kopf": "Antwoord naar client",
+     "text": "De respons gaat terug via de Gateway, met logs en statistieken op één plek.",
+     "art": "ende"
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Wat is een API Gateway en wat doet het?",
+    "a": "Een API Gateway is één toegangspunt tussen je clients en je backendservices. Elk verzoek gaat eerst door de Gateway, die bepaalt waar het heen gaat, of het is toegestaan en wat er wordt teruggestuurd. Clients praten nooit rechtstreeks met de backend."
+   },
+   {
+    "q": "Welke taken heeft een API Gateway?",
+    "a": "Een API Gateway heeft vier kerntaken: routing naar de juiste service, centrale beveiliging (authenticatie en autorisatie), verkeersbeheer met rate limiting en load balancing, en datatransformatie, zoals JSON omzetten naar XML. Ze werken samen in één pipeline."
+   },
+   {
+    "q": "Wanneer heb je een API Gateway nodig?",
+    "a": "Met één of twee services heb je meestal nog geen Gateway nodig. Zodra je drie of meer services hebt of API's blootstelt aan externe clients, neemt de complexiteit snel toe en verdient een Gateway zichzelf snel terug."
+   },
+   {
+    "q": "Hoe verbetert een API Gateway de beveiliging van mijn API's?",
+    "a": "De Gateway regelt authenticatie en autorisatie centraal en valideert bij elk verzoek API-sleutels, JWT's, OAuth-tokens of certificaten. Rechten definieer je één keer. Een gecompromitteerde sleutel trek je in met één wijziging, zonder dat services worden aangepast of herstart."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Zonder Gateway versus met Gateway",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Zonder API Gateway",
+     "punten": [],
+     "punkte": [
+      "Clients moeten alle service-URL's kennen",
+      "Elke service regelt eigen beveiliging en foutafhandeling",
+      "Inconsistente beveiliging en dubbel werk",
+      "Backends worden direct bestookt bij verkeerspieken",
+      "Logs en statistieken moet je per service verzamelen"
+     ]
+    },
+    "rechts": {
+     "titel": "Met API Gateway",
+     "punkte": [
+      "Clients kennen slechts één URL: die van de Gateway",
+      "Authenticatie en autorisatie centraal op één plek",
+      "Rate limiting en load balancing beschermen je services",
+      "Data wordt vertaald zonder de backend te wijzigen",
+      "Logs, statistieken en analytics vanaf één punt"
+     ]
+    }
+   },
+   {
+    "titel": "Wanneer heb je een API Gateway nodig?",
+    "typ": "checkliste",
+    "punkte": [
+     "Je hebt drie of meer backendservices",
+     "Je stelt API's bloot aan externe clients",
+     "Begin met authenticatie in de Gateway",
+     "Voeg een eenvoudige rate limit toe, bijvoorbeeld 100 verzoeken per minuut",
+     "Geef clients alleen het adres van de Gateway",
+     "Gebruik routing om V1- en V2-clients te scheiden",
+     "Gebruik de centrale logs en statistieken voor overzicht"
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Welk kernprobleem lost een API Gateway op bij meerdere backendservices?",
+    "opts": [
+     "Clients moeten elke service-URL, authenticatiemethode en foutafhandeling zelf kennen",
+     "Services kunnen niet in verschillende programmeertalen worden geschreven",
+     "Databases kunnen niet meer dan één applicatie tegelijk bedienen",
+     "Mobiele apps kunnen geen JSON-berichten verwerken"
+    ],
+    "a": 0,
+    "why": "Zonder Gateway moet elke client alle services kennen. De Gateway maakt daar één toegangspunt van."
+   },
+   {
+    "q": "Wat gebeurt er als de API-sleutel van een klant gecompromitteerd is?",
+    "opts": [
+     "Alle backendservices moeten worden bijgewerkt en opnieuw opgestart",
+     "Je trekt de sleutel in bij de Gateway en het volgende verzoek wordt afgewezen",
+     "De sleutel blijft geldig tot de volgende deployment van de clients",
+     "Elke service moet de sleutel afzonderlijk op een zwarte lijst zetten"
+    ],
+    "a": 1,
+    "why": "Toegang trek je centraal in bij de Gateway. Er hoeft geen enkele service te worden aangepast of herstart."
+   },
+   {
+    "q": "Hoe kan een Gateway een legacysysteem dat XML verwacht met een JSON-app laten werken?",
+    "opts": [
+     "Het legacysysteem moet eerst volledig worden herschreven naar JSON",
+     "De mobiele app moet verplicht XML gaan versturen",
+     "De Gateway zet verzoeken om naar XML en antwoorden terug naar JSON",
+     "De Gateway weigert alle verzoeken die geen XML bevatten"
+    ],
+    "a": 2,
+    "why": "Via verzoek- en responstransformatie vertaalt de Gateway tussen de formaten, zonder dat client of legacysysteem verandert."
+   },
+   {
+    "q": "Wanneer heb je volgens het artikel waarschijnlijk nog geen API Gateway nodig?",
+    "opts": [
+     "Wanneer je API's blootstelt aan externe clients",
+     "Wanneer je drie of meer services hebt",
+     "Wanneer je applicatie ouder is dan vijftien jaar",
+     "Wanneer je slechts één of twee services hebt"
+    ],
+    "a": 3,
+    "why": "Met één of twee services kun je routing en authenticatie nog zelf regelen; vanaf drie services loont een Gateway."
+   }
+  ]
+ },
+ "pl": {
+  "html": "<p>Zaczyna się niewinnie: działająca aplikacja, potem kolejna usługa, następna i jeszcze jedna. Po jakimś czasie samo zarządzanie ruchem między usługami zaczyna sprawiać więcej kłopotu niż ich tworzenie. Każdy klient musi wiedzieć, gdzie która usługa się znajduje, jak się do niej uwierzytelnić i co zrobić, gdy coś zawiedzie.</p>\n<p>Na ten problem odpowiada API Gateway, czyli bramka API. W tym artykule wyjaśniamy, co robi, dlaczego porządkuje chaos w architekturze mikrousług i jak ocenić, czy jest Ci już potrzebna.</p>\n\n<h2>Problem: zbyt wiele drzwi do aplikacji</h2>\n<p>Wyobraź sobie szybko rosnącą firmę. Sprzedaż jest na trzecim piętrze, księgowość w piwnicy, a dział IT w tylnym skrzydle. Każdy dział ma własne wejście, własny numer telefonu i własnego ochroniarza, który nie rozmawia z pozostałymi. Gość, który chce zostawić przesyłkę, musi dokładnie wiedzieć, jakich drzwi użyć, z którym ochroniarzem rozmawiać i co zrobić, gdy ten akurat ma przerwę.</p>\n<p>Tak właśnie wygląda aplikacja z wieloma usługami zaplecza, jeśli każdy klient woła każdą z nich bezpośrednio. Klientem może być aplikacja mobilna, strona internetowa albo inna usługa. Musi on znać lokalizację każdej usługi, sposób uwierzytelniania i sposób reagowania na błędy. Jednocześnie każda usługa osobno obsługuje własne bezpieczeństwo, limity żądań i błędy. To powielona praca, a o brak spójności bardzo łatwo.</p>\n<p>Weźmy bank z oddzielnymi usługami dla kont, płatności, kredytów i wykrywania oszustw. Jeśli każda z nich jest udostępniona bezpośrednio, aplikacja mobilna musi znać cztery adresy URL, cztery metody uwierzytelniania i cztery sposoby obsługi błędów. Złożoność rośnie czterokrotnie, a pole do pomyłek razem z nią. Ten właśnie bałagan ma uporządkować bramka API.</p>\n\n<h2>Czym jest API Gateway?</h2>\n<p>Najłatwiej porównać bramkę API do recepcji w hotelu. Wchodząc, nie musisz wiedzieć, na którym piętrze jest kuchnia ani jak skontaktować się z obsługą techniczną. Podchodzisz do recepcji i mówisz, czego potrzebujesz. Recepcja kieruje prośbę do właściwej osoby, sprawdza, czy masz prawo tam być, a proste sprawy załatwia sama.</p>\n<p>Dla oprogramowania bramka API robi to samo. To pojedynczy punkt wejścia między klientami a usługami zaplecza. Każde żądanie przechodzi najpierw przez nią, a ona decyduje, dokąd je wysłać, czy w ogóle na nie pozwolić i co odesłać w odpowiedzi. Klient nigdy nie rozmawia bezpośrednio z usługami zaplecza, tylko z bramką.</p>\n<p>Sam pomysł nie jest nowy, bo odwrotne serwery proxy istnieją od dekad. Prawdziwie niezbędna stała się jednak w świecie mikrousług. Gdy dzielisz aplikację na wiele małych usług, nagle pojawia się wiele drzwi, a bramka daje jedne drzwi wejściowe. W ekosystemie Azure pełną platformą jest Azure API Management, a bramka jest jego kluczowym elementem obsługującym ruch. Wzorzec pozostaje wszędzie ten sam: jeden punkt wejścia i scentralizowana kontrola.</p>\n\n<h2>Routing: kierowanie ruchem do właściwej usługi</h2>\n<p>Najprostsze zadanie bramki to routing, czyli przekazanie każdego żądania do odpowiedniej usługi. Bramka odczytuje ścieżkę żądania, ustala cel i przekazuje je dalej. Jeśli ścieżka dotyczy użytkowników, żądanie trafia do usługi użytkowników. Jeśli dotyczy zamówień, trafia do usługi zamówień.</p>\n<p>Bez bramki klienci muszą znać adres każdej usługi, a gdy któryś się zmieni, trzeba zaktualizować wszystkich klientów. Z bramką znają tylko jeden adres, a lokalizacja usług przestaje ich obchodzić.</p>\n<h3>Na czym może opierać się routing</h3>\n<ul>\n<li>ścieżka żądania,</li>\n<li>metoda HTTP,</li>\n<li>nagłówki,</li>\n<li>lokalizacja klienta.</li>\n</ul>\n<p>Przy kierowaniu według lokalizacji zapytanie z Europy może trafić do europejskiego centrum danych, a z USA do amerykańskiego. Klient nie ma o tym pojęcia, po prostu dostaje szybką odpowiedź.</p>\n<h3>Wersjonowanie bez przerw w działaniu</h3>\n<p>Routing ułatwia też wersjonowanie. Stary klient dalej korzysta z V1 Users, nowy z V2 Users, a bramka kieruje każdego do właściwego backendu. Możesz wdrażać nową wersję usługi, nie psując działania aplikacji u obecnych użytkowników.</p>\n<p>W platformie e-commerce, z osobnymi usługami katalogu, koszyka, kasy i kont, aplikacja mobilna zna dzięki bramce jeden adres. Bramka odczytuje ścieżkę i wysyła żądanie do właściwej usługi.</p>\n\n<h2>Bezpieczeństwo na wejściu: uwierzytelnianie i autoryzacja</h2>\n<p>Każde wywołanie API trzeba sprawdzić: kto wysyła zapytanie i czy ma do tego uprawnienia. Gdy każda usługa robi to sama, praca się powiela i łatwo o błędy. Jedna usługa poprawnie weryfikuje tokeny, inna pomija krok, a trzecia używa zupełnie innej metody. Efektem jest niespójne bezpieczeństwo całej aplikacji.</p>\n<p>Bramka przenosi uwierzytelnianie i autoryzację w jedno centralne miejsce. Przy każdym zapytaniu weryfikuje klucze API, tokeny JWT, OAuth lub certyfikaty. Każde żądanie przechodzi przez tę samą kontrolę, bez wyjątków. Zmiana zasad wymaga też aktualizacji tylko w jednym miejscu.</p>\n<h3>Precyzyjne uprawnienia na poziomie bramki</h3>\n<p>Na bramce można ustalić, że dany klucz API wywołuje wyłącznie punkty końcowe typu odczyt. Można też określić, że klient ma dostęp do usługi katalogu, ale nie do płatności. Usługi zaplecza nie muszą wtedy zajmować się autoryzacją, tylko przetwarzają żądanie i odsyłają dane.</p>\n<p>W banku z usługą płatności i usługą rozliczeniową tylko ta pierwsza potrzebuje zapisu w systemie rozliczeniowym. Gdy ktoś próbuje zapisać dane przez niewłaściwy punkt końcowy, bramka go blokuje. Usługa rozliczeniowa nawet nie widzi takiego żądania.</p>\n<h3>Szybkie cofanie dostępu</h3>\n<p>Bramka to także jedno miejsce, w którym można odebrać dostęp. Jeśli klucz API klienta zostanie przejęty, wystarczy unieważnić go na bramce. Nie trzeba aktualizować usług ani niczego restartować, a kolejne żądanie z tym kluczem zostaje od razu odrzucone. Dla głębszej ochrony bramka może wspierać wzajemne TLS i integrację z WAF, ale w swojej istocie pozostaje pierwszą linią obrony.</p>\n\n<h2>Zarządzanie ruchem: limity żądań i równoważenie obciążenia</h2>\n<p>Co się dzieje, gdy 10 tysięcy użytkowników wchodzi do aplikacji w tym samym czasie? Może to wyprzedaż błyskawiczna, może viralowa premiera produktu, a może zwykły wtorek, w którym wszyscy logują się naraz. Bez bramki usługi zaplecza są atakowane bezpośrednio i mogą ulec awarii, i to nagle, a nie stopniowo.</p>\n<h3>Limitowanie i dławienie żądań</h3>\n<p>Bramka może ograniczać liczbę żądań, które wysyła każdy klient. Limitowanie tempa i dławienie to jej standardowe funkcje. Limity ustawia się na użytkownika, na klucz API lub na adres IP, a usługi zaplecza nie odczuwają skoku ruchu.</p>\n<p>Przykład: darmowy poziom dostępu do API daje 100 żądań na godzinę, a użytkownicy premium dostają 10 tysięcy. Bramka śledzi żądania i egzekwuje limity już przy wejściu. Gdy darmowy użytkownik wyczerpie swój limit, dostaje uprzejmą wiadomość, by spróbować później. Usługi zaplecza nawet nie wiedzą o tym żądaniu i dalej obsługują płacących klientów.</p>\n<h3>Równoważenie obciążenia i kontrole stanu</h3>\n<p>Jeśli działa wiele instancji tej samej usługi, bramka rozdziela między nie ruch. Robi to automatycznie. Dzięki kontrolom stanu sprawdza każdą instancję, czy działa, a jeśli któraś przestanie, kieruje ruch do innej. Klienci się o tym nie dowiadują. Jest to szczególnie ważne przy API o dużym natężeniu ruchu, bo nagły wzrost trafia najpierw do bramki, która go przejmuje i rozkłada. Usługi są chronione przed przeciążeniem.</p>\n\n<h2>Transformacja danych: bramka jako tłumacz</h2>\n<p>Czasem dane od klienta nie pasują do tego, czego oczekuje backend. Klient wysyła JSON, a backend rozumie tylko XML. Albo nazwy pól się różnią: klient używa „first name\", a backend oczekuje „imię\". Bez bramki trzeba by poprawiać wszystkich klientów albo przepisywać backend, a to słabe rozwiązanie.</p>\n<p>Bramka może przekształcić dane, zanim dotrą do backendu, i to zarówno w żądaniu, jak i w odpowiedzi. Działa jak tłumacz na międzynarodowej konferencji: każdy mówi w swoim języku, a wszyscy się rozumieją.</p>\n<h3>Przykład: system legacy i aplikacja mobilna</h3>\n<p>Załóżmy, że system legacy działa od 15 lat, sprawdza się doskonale i oczekuje XML. Powstaje nowa aplikacja mobilna, która komunikuje się w formacie JSON. Zamiast przepisywać stary system lub zmuszać aplikację do wysyłania XML, wystarczy bramka. Aplikacja wysyła JSON, bramka konwertuje go na XML, a odpowiedź wraca do aplikacji znowu jako JSON. Nikt niczego nie musiał przepisywać.</p>\n<h3>Nagłówki, adresy URL i maskowanie danych</h3>\n<p>Bramka potrafi też dodawać lub usuwać nagłówki, zmieniać adresy URL i maskować wrażliwe dane. Jeśli odpowiedź zawiera numer karty kredytowej, bramka może go usunąć przed wysłaniem albo zastąpić wersją zamaskowaną, a backend nie wymaga żadnych zmian. Jest to szczególnie przydatne przy modernizacji starych systemów, bo wystarczy zmienić konfigurację bramki.</p>\n\n<h2>Jeden potok i pełny wgląd w ruch</h2>\n<p>Routing, bezpieczeństwo, zarządzanie ruchem i transformacja nie są osobnymi światami. Współpracują przy każdym pojedynczym żądaniu, w jednym potoku:</p>\n<ol>\n<li>bramka sprawdza uwierzytelnienie,</li>\n<li>weryfikuje limit zapytań,</li>\n<li>kieruje ruch do odpowiedniej usługi,</li>\n<li>w razie potrzeby przekształca dane,</li>\n<li>odbiera odpowiedź i w razie potrzeby również ją przekształca,</li>\n<li>odsyła wynik do klienta.</li>\n</ol>\n<p>Każdy krok dzieje się automatycznie i w ustalonej kolejności, bez angażowania usług zaplecza. Siła rozwiązania tkwi w integracji. Możesz dodać nową politykę bezpieczeństwa, nie ruszając routingu, zmienić usługę backendową bez zmian po stronie klienta albo zaktualizować limity bez ponownego wdrażania czegokolwiek.</p>\n<p>Ponieważ wszystko przechodzi przez jedno miejsce, masz też pełny wgląd w sytuację: logi, metryki i analitykę z jednego punktu. Widzisz, ile zapytań wpłynęło, które się nie powiodły, które były wolne i kto zużywa najwięcej zasobów. Bez bramki dane trzeba byłoby zbierać z każdej usługi osobno. Bramka jest więc czymś więcej niż routerem: to centrum sterowania całą platformą API.</p>\n\n<h2>Czy potrzebujesz API Gateway? Praktyczne wskazówki</h2>\n<p>Przy jednej lub dwóch usługach prawdopodobnie jeszcze nie potrzebujesz bramki. Routingiem i uwierzytelnianiem możesz zarządzać w każdej usłudze samodzielnie. Nie jest to eleganckie, ale działa. Gdy dojdziesz do trzech usług albo zaczniesz udostępniać API klientom zewnętrznym, złożoność szybko rośnie, a bramka szybko się zwraca.</p>\n<ul>\n<li><strong>Zacznij od uwierzytelniania.</strong> Wybierz jedną usługę i przenieś sprawdzanie dostępu na bramkę. Kod usługi stanie się czystszy, zniknie rozproszona logika walidacji tokenów i wątpliwości, czy wszędzie wdrożono ją tak samo.</li>\n<li><strong>Dodaj limity zapytań.</strong> Nawet prosty limit chroni backend przed przeciążeniem. Dobry punkt startowy to na przykład 100 zapytań na minutę dla klienta, co powstrzyma niekontrolowanego klienta przed wyłączeniem usług.</li>\n<li><strong>Daj klientom jeden adres.</strong> Dzięki routingowi zmiana lokalizacji usługi nie wymusza aktualizacji klientów.</li>\n<li><strong>Wykorzystaj wersjonowanie.</strong> Utrzymuj V1 i V2 równolegle, by wdrażać nowe wersje bez przerywania pracy obecnych klientów.</li>\n<li><strong>Modernizuj przez konfigurację.</strong> Konwersję formatów i maskowanie danych zostaw bramce zamiast przepisywać stary backend.</li>\n<li><strong>Korzystaj z centralnego wglądu.</strong> Logi, metryki i analityka z jednego punktu ułatwiają znalezienie wolnych lub zawodzących zapytań.</li>\n</ul>\n\n<h2>Podsumowanie</h2>\n<p>API Gateway zastępuje wiele drzwi jednym wejściem i bierze na siebie powtarzalne zadania: routing, bezpieczeństwo, zarządzanie ruchem i transformację danych. Usługi zaplecza mogą dzięki temu skupić się na swojej właściwej pracy, a klienci znają tylko jeden adres. Przy jednej czy dwóch usługach da się obejść bez bramki, ale gdy usług jest co najmniej trzy lub API trafia do klientów zewnętrznych, korzyści szybko przewyższają koszt. Najlepiej zacząć od centralizacji uwierzytelniania, a potem dodać limity zapytań.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Droga żądania przez API Gateway",
+   "typ": "prozess",
+   "punkte": [
+    {
+     "kopf": "Żądanie klienta",
+     "text": "Klient zna tylko jeden adres bramki i nie komunikuje się bezpośrednio z usługami.",
+     "art": "start"
+    },
+    {
+     "kopf": "Uwierzytelnienie",
+     "text": "Bramka weryfikuje klucze API, tokeny JWT, OAuth lub certyfikaty w jednym centralnym miejscu.",
+     "art": "schritt"
+    },
+    {
+     "kopf": "Limit zapytań",
+     "text": "Limitowanie i dławienie chronią backend przed przeciążeniem przy nagłym skoku ruchu.",
+     "art": "schritt"
+    },
+    {
+     "kopf": "Routing",
+     "text": "Bramka kieruje żądanie do właściwej usługi na podstawie ścieżki, metody, nagłówków lub lokalizacji.",
+     "art": "schritt"
+    },
+    {
+     "kopf": "Transformacja",
+     "text": "W razie potrzeby bramka konwertuje dane, np. JSON na XML, i maskuje wrażliwe informacje.",
+     "art": "schritt"
+    },
+    {
+     "kopf": "Odpowiedź do klienta",
+     "text": "Odpowiedź wraca przez bramkę, a logi i metryki trafiają do jednego miejsca.",
+     "art": "ende"
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Co to jest API Gateway i do czego służy?",
+    "a": "API Gateway, czyli bramka API, to pojedynczy punkt wejścia między klientami a usługami zaplecza. Każde żądanie przechodzi najpierw przez nią, a ona decyduje, dokąd je wysłać, czy na nie pozwolić i co odesłać. Klient rozmawia tylko z bramką, nie bezpośrednio z usługami."
+   },
+   {
+    "q": "Jakie zadania wykonuje API Gateway w architekturze mikrousług?",
+    "a": "Bramka bierze na siebie routing, czyli kierowanie żądań do właściwej usługi, oraz uwierzytelnianie i autoryzację w jednym miejscu. Zarządza też ruchem przez limity żądań i równoważenie obciążenia, przekształca dane, na przykład JSON na XML, oraz zapewnia centralne logi i metryki."
+   },
+   {
+    "q": "Kiedy potrzebuję bramki API?",
+    "a": "Przy jednej lub dwóch usługach zwykle jeszcze jej nie potrzebujesz, bo routing i uwierzytelnianie możesz obsłużyć w każdej usłudze osobno. Gdy dojdziesz do trzech usług albo zaczniesz udostępniać API klientom zewnętrznym, złożoność szybko rośnie, a bramka szybko się zwraca."
+   },
+   {
+    "q": "Jak API Gateway poprawia bezpieczeństwo i chroni przed przeciążeniem?",
+    "a": "Bramka centralnie weryfikuje klucze API, tokeny JWT, OAuth lub certyfikaty, więc każde żądanie przechodzi tę samą kontrolę, a skompromitowany klucz unieważnisz w jednym miejscu. Limity na użytkownika, klucz API lub adres IP chronią usługi zaplecza przed nagłym skokiem ruchu."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Bez bramki API a z bramką API",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Bez bramki",
+     "punkty": [
+      "Klient zna adres każdej usługi",
+      "Każda usługa osobno obsługuje bezpieczeństwo i limity",
+      "Zmiana adresu wymaga aktualizacji wszystkich klientów",
+      "Dane trzeba zbierać z każdej usługi osobno",
+      "Nagły skok ruchu uderza prosto w usługi"
+     ]
+    },
+    "rechts": {
+     "titel": "Z bramką API",
+     "punkty": [
+      "Klient zna tylko jeden adres",
+      "Uwierzytelnianie i autoryzacja w jednym miejscu",
+      "Lokalizacja usług przestaje obchodzić klientów",
+      "Logi, metryki i analityka z jednego punktu",
+      "Bramka przejmuje i rozkłada nagły wzrost ruchu"
+     ]
+    }
+   },
+   {
+    "titel": "Kiedy wdrożyć bramkę API: wskazówki",
+    "typ": "checkliste",
+    "punkte": [
+     "Przy jednej lub dwóch usługach bramka zwykle jeszcze nie jest potrzebna",
+     "Od trzech usług albo API dla klientów zewnętrznych bramka szybko się zwraca",
+     "Zacznij od przeniesienia uwierzytelniania na bramkę",
+     "Dodaj limity zapytań, np. 100 na minutę dla klienta",
+     "Daj klientom jeden adres dzięki routingowi",
+     "Utrzymuj równolegle wersje V1 i V2",
+     "Konwersję formatów i maskowanie danych zostaw bramce"
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Dlaczego bez bramki API aplikacja mobilna musi radzić sobie z większą złożonością?",
+    "opts": [
+     "Musi znać adres, metodę uwierzytelniania i obsługę błędów każdej usługi z osobna",
+     "Musi samodzielnie konwertować wszystkie dane z JSON na XML",
+     "Musi sama przechowywać logi i metryki wszystkich usług zaplecza",
+     "Musi uruchamiać własne instancje każdej usługi zaplecza"
+    ],
+    "a": 0,
+    "why": "Przy bezpośrednim wołaniu usług klient musi znać lokalizację, uwierzytelnianie i reakcję na błędy każdej z nich, więc złożoność rośnie."
+   },
+   {
+    "q": "Co się dzieje, gdy klucz API klienta zostanie przejęty, a organizacja używa bramki?",
+    "opts": [
+     "Trzeba zaktualizować i zrestartować wszystkie usługi zaplecza",
+     "Wystarczy unieważnić klucz na bramce, a kolejne żądania są od razu odrzucane",
+     "Trzeba poczekać, aż klucz wygaśnie samoczynnie w usługach",
+     "Każda usługa musi osobno zablokować ten klucz u siebie"
+    ],
+    "a": 1,
+    "why": "Bramka jest jednym miejscem odbierania dostępu. Unieważnienie klucza działa od razu, bez zmian w usługach i restartów."
+   },
+   {
+    "q": "Jak bramka pomaga, gdy stary system legacy oczekuje XML, a nowa aplikacja używa JSON?",
+    "opts": [
+     "Wymaga przepisania systemu legacy do formatu JSON",
+     "Zmusza aplikację mobilną do wysyłania żądań w formacie XML",
+     "Konwertuje JSON na XML w żądaniu, a odpowiedź z powrotem na JSON",
+     "Przekierowuje aplikację do osobnego systemu działającego tylko z JSON"
+    ],
+    "a": 2,
+    "why": "Bramka przekształca dane w obu kierunkach, więc nikt nie musi przepisywać starego backendu ani zmieniać formatu w aplikacji."
+   },
+   {
+    "q": "Od jakiej liczby usług lub w jakiej sytuacji bramka API zaczyna się szybko zwracać?",
+    "opts": [
+     "Już przy jednej usłudze używanej wyłącznie wewnętrznie",
+     "Dopiero przy kilkudziesięciu usługach w jednej firmie",
+     "Wyłącznie wtedy, gdy backend używa formatu XML",
+     "Przy trzech usługach lub udostępnianiu API klientom zewnętrznym"
+    ],
+    "a": 3,
+    "why": "Artykuł wskazuje, że przy jednej–dwóch usługach bramka nie jest konieczna, ale od trzech usług lub przy klientach zewnętrznych szybko się opłaca."
+   }
+  ]
  }
 }
