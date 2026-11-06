@@ -457,6 +457,7 @@ test("schema: Migrationen sind idempotent und enthalten jede zur Laufzeit angele
       || /^INSERT OR IGNORE INTO user_identities\(user_id, provider, sub, created\) SELECT id, provider, sub, created FROM users$/i.test(s)) continue;   // #279: Rueckfuellung ist idempotent
     if (/^INSERT OR IGNORE INTO ad_(?:products|prices|settings)\(/i.test(s)) continue;   // #281: Startwerte, idempotent (vorhandene Admin-Werte bleiben)
     if (/^ALTER TABLE org_entity ADD COLUMN confirmed INTEGER NOT NULL DEFAULT 0$/i.test(s) || /^UPDATE org_entity SET confirmed=1 WHERE EXISTS \(/i.test(s)) continue;   // 0026: Rueckfuellung setzt nur 1, idempotent
+    if (/^ALTER TABLE ad_leads ADD COLUMN (?:sponsor|assigned) TEXT NOT NULL DEFAULT ''$/i.test(s)) continue;   // 0030: Sponsor-Leads, Spalten mit Standardwert
     // MVP-Tracker (0027): Spalten mit Standardwert; die Laufzeit-Absicherung in contributions.js legt sie nur an, wenn sie fehlen
     if (/^ALTER TABLE contributions ADD COLUMN (?:portal|portal_at|attendees|live_views|sessions) INTEGER NOT NULL DEFAULT 0$/i.test(s)
       || /^ALTER TABLE contributions ADD COLUMN (?:review|portal_desc|role|area|event_format|country) TEXT NOT NULL DEFAULT ''$/i.test(s)

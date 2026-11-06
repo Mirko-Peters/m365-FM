@@ -4,7 +4,8 @@ from site_i18n import T
 import site_updates as SU
 import site_quotes as SQ   # Quotes an Personen-Entitaeten
 import site_media as MED
-import site_sponsorships as SPM   # T37 Sponsor: Kennzeichnung gesponserter Entitaeten (data/sponsorships.json)
+import site_sponsorships as SPM
+import site_ads as ADS   # T37 Sponsor: Kennzeichnung gesponserter Entitaeten (data/sponsorships.json)
 import json
 import site_mentions as MEN   # Erwaehnungen in fremden Medien als Quellen (data/press_mentions.json)
 import re
@@ -754,12 +755,13 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                       + (f'<li>{esc(T(lang, "M365.FM episodes on this topic", "M365.FM-Folgen zum Thema"))}: {len(eps)}</li>' if eps else "") + (f'<li>{esc(T(lang, "Articles on this topic", "Artikel zum Thema"))}: {len(_arts)}</li>' if _arts else "") + MEN.src_li(lang, e["id"]) + "</ul></section>") if (_src or eps or _arts or MEN.for_entity(e["id"])) else ""
             _dt = disclosure_of(e, lang)   # Transparenzhinweis (z. B. Arbeitgeber des Hosts), kein Sponsoring: keine rel=sponsored-Links
             _disc = f'<p class="en-disc" role="note" style="{SPM.NOTE_STYLE}">{esc(_dt)}</p>' if _dt else ""
+            _lead = ADS.sponsor_lead(BASE, lang, e["id"], e["name"]) if any(o["id"] == e["id"] for o in SPM.active_sponsor_orgs(SPM._state()["today"], ENTS)) else ""   # Lead-Formular nur bei laufendem Sponsoring der Firma
             _au = ENTS.get(AUTHOR_EID)
             updline = (f'<p class="mut en-upd">' + (f'{esc(T(lang, "Maintained by", "Gepflegt von"))} <a href="{root}{AUTHOR_EID}/">{esc(_au["name"])}</a> (Microsoft MVP) · ' if _au and e["id"] != AUTHOR_EID else "")
                        + f'{esc(T(lang, "Last updated", "Zuletzt aktualisiert"))}: <time datetime="{_mod}">{_mod}</time></p>')
             # entity.js (Fragen und Antworten #en-qa) laedt, sobald der Bereich 2500 px vor dem Bildschirm ist (vorher 600 px): auf dem Handy setzte
             # das Skript Ueberschrift und Fragen erst ein, wenn der Bereich schon sichtbar war, und schob den Rest der Seite weg (CLS ~0,18 im Labor beim Scrollen)
-            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{root}">{esc(s["entities"])}</a></nav><h1>{esc(e["name"])}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="entity" data-topic-id="{esc(e["id"])}" data-topic-label="{esc(T(lang, "Follow", "Folgen"))}">🔔 {T(lang, "Follow", "Folgen")}</button>{SPM.note(lang, _spr, "entity")}{_disc}<p class="mut">{esc(TL[e["type"]][li])}</p><p class="en-def" style="font-size:1.1em">{esc(d)}</p>{oldbanner}{claim_html(e["id"], lang, e, api)}{hero}{longbox}{ft}{evl}{kpbox}{eb}{tline}{artbox}'
+            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{root}">{esc(s["entities"])}</a></nav><h1>{esc(e["name"])}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="entity" data-topic-id="{esc(e["id"])}" data-topic-label="{esc(T(lang, "Follow", "Folgen"))}">🔔 {T(lang, "Follow", "Folgen")}</button>{SPM.note(lang, _spr, "entity")}{_disc}{_lead}<p class="mut">{esc(TL[e["type"]][li])}</p><p class="en-def" style="font-size:1.1em">{esc(d)}</p>{oldbanner}{claim_html(e["id"], lang, e, api)}{hero}{longbox}{ft}{evl}{kpbox}{eb}{tline}{artbox}'
                           f'{qbox}{faqbox}{relmap}{relx}<div class="en-rel">{rb}</div>{gloss}{SU.block(lang, e["id"])}{wb}{("<h2>" + esc(s["experts"]) + "</h2>" + ehtml) if ehtml else ""}{srcbox}{updline}{edit}'
                           f'<script>window.M365E={{api:"{api}",lang:"{lang}",base:"{BASE}",s:{json.dumps({k: s[k] for k in ("edit_e",)}, ensure_ascii=False)}}};window.M365TopicConfig={{api:{json.dumps(api)},lang:{json.dumps(lang)}}};'
                           f'(function(){{var d=0,u="{BASE}/assets/entity.js";function go(){{if(d)return;d=1;var s=document.createElement("script");s.src=u;document.body.appendChild(s)}}'

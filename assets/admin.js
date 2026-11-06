@@ -443,7 +443,7 @@
         lSec.append(h("h3", { text: "Leads" }), tbl(["Datum", "Kampagne", "Firma", "Name", "E-Mail", "Status", "Grund", ""], (r.j.leads || []).map(function (x) {
           var acts = x.status === "disputed" ? h("span", {}, [h("button", { type: "button", class: "btn main", text: "Gutschreiben", onclick: function () { post("/api/admin/ads/lead", { id: x.id, credit: true }).then(loadLeads).then(loadBookings); } }), " ",
             h("button", { type: "button", class: "btn", text: "Berechnen", onclick: function () { post("/api/admin/ads/lead", { id: x.id, credit: false }).then(loadLeads); } })]) : null;
-          return [new Date(x.created * 1000).toISOString().slice(0, 10), x.code, x.org, x.name, x.email, x.status + (x.charged ? "" : " (nicht berechnet)"), x.dispute_reason, acts];
+          return [new Date(x.created * 1000).toISOString().slice(0, 10), x.code, x.org + (x.assigned ? " → " + x.assigned : ""), x.name, x.email, x.status + (x.charged ? "" : " (nicht berechnet)"), x.dispute_reason, acts];
         }), "Noch keine Leads."));
       });
     }
