@@ -3,6 +3,7 @@ import { cleanText, rateLimit } from "./util.js";
 import { entityTranslations } from "./autotr.js";
 import { stats, evalBadges } from "./badges.js";
 import { findDuplicate } from "./kinds.js";
+import { pairNewOrgEntity } from "./orgpair.js";
 
 const ID = /^[a-z0-9-]{2,48}$/;
 export const TYPES = ["product", "platform", "concept", "org", "person", "cert", "event", "media", "category", "industry", "job"];
@@ -224,6 +225,7 @@ export async function handleEntity(env, request, url, path, user, J) {
     const data = JSON.stringify(v.data), summary = cleanText(b.summary || "", 140).replace(/[<>]/g, "");
     const cur = await liveOf(db, id); if (cur && cur.data === data) return J({ error: "unchanged" }, 400);
     const t = now();
+    const fresh = v.data.type === "org" && !cur && !(await baseIds(env)).has(id);   // neue Firmen-Entitaet: Community-Firma im selben Request mitanlegen
     const claimed = await db.prepare("SELECT 1 x FROM entity_claims WHERE eid=? AND user_id=? AND status='verified'").bind(id, user.id).first();
     if (!claimed && !(user.admin || user.editor)) {   // Selbst verwaltete Entitaeten (Event, Profil, Firma): lange Beschreibung nur durch den Eigentuemer
       const hasOwner = await db.prepare("SELECT 1 x FROM entity_claims WHERE eid=? AND status='verified'").bind(id).first();
@@ -232,11 +234,14 @@ export async function handleEntity(env, request, url, path, user, J) {
     }
     if (claimed || (await trustedUser(db, user)) || (await certScoped(env, user, id))) {
       await db.batch([db.prepare("UPDATE entity_rev SET status='old' WHERE eid=? AND status='live'").bind(id), db.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES(?,?,?,?,'live',?)").bind(id, data, summary, user.id, t)]);
-      await evalBadges(env, user.id); return J({ ok: true, status: "live" });
+      await evalBadges(env, user.id);
+      const pair = fresh ? await pairNewOrgEntity(env, user, id, v.data).catch(() => null) : null;
+      return J({ ok: true, status: "live", ...(pair ? { company: pair.handle, owner: pair.owner } : {}) });
     }
     await db.prepare("DELETE FROM entity_rev WHERE eid=? AND user_id=? AND status='pending'").bind(id, user.id).run();
     await db.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES(?,?,?,?,'pending',?)").bind(id, data, summary, user.id, t).run();
-    return J({ ok: true, status: "pending" });
+    const pair = fresh ? await pairNewOrgEntity(env, user, id, v.data).catch(() => null) : null;
+    return J({ ok: true, status: "pending", ...(pair ? { company: pair.handle, owner: pair.owner } : {}) });
   }
   if (path === "/api/entity/tr" && method === "GET") return J({ items: await entityTranslations(env.DB) }, 200, { "cache-control": "public, max-age=300" });   // automatische Uebersetzungen (autotr.js)
   if (path === "/api/entity/export" && method === "GET") {

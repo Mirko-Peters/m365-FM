@@ -2,6 +2,7 @@
 import { mailReady, sendMail } from "./mailer.js";
 import { cleanText, esc, randomToken, rateLimit, sha256hex } from "./util.js";
 import { entityMap } from "./entities.js";
+import { adoptUnclaimedForEntity } from "./orgpair.js";
 
 const now = () => Math.floor(Date.now() / 1000);
 const EID = /^[a-z0-9][a-z0-9-]{1,78}$/;
@@ -88,6 +89,7 @@ async function issue(env, { kind, eid, user, email, domain, lang }) {
 // Nach Bestaetigung: Firmenkonto <-> Entitaet (0026) fuer Inhaber/Admin der Firma sofort bestaetigen
 async function confirmOrgLinks(db, uid, eid) {
   await db.prepare("UPDATE org_entity SET confirmed=1 WHERE eid=? AND org_id IN (SELECT org_id FROM org_members WHERE user_id=? AND status='active' AND role IN ('owner','admin'))").bind(eid, uid).run();
+  await adoptUnclaimedForEntity(db, uid, eid);   // unbeanspruchte Paar-Firma der Entitaet (0034) -> Inhaber
 }
 
 export async function handleClaimVerify(env, request, url, path, user, J) {
