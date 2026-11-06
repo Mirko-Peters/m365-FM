@@ -6,6 +6,7 @@ import site_quotes as SQ   # Quotes an Personen-Entitaeten
 import site_media as MED
 import site_sponsorships as SPM   # T37 Sponsor: Kennzeichnung gesponserter Entitaeten (data/sponsorships.json)
 import json
+import site_facts as FX   # belegte Fakten (Rechtsform, Register, Kunden, Partner, Positionen ...)
 import site_mentions as MEN   # Erwaehnungen in fremden Medien als Quellen (data/press_mentions.json)
 import re
 from datetime import date
@@ -19,7 +20,14 @@ MUSICGROUP_ID = "mirko-peters"
 MUSICGROUP_NAME = "Mirko Peters & The Music Valued People"
 
 TL = {"product": ("Product", "Produkt"), "platform": ("Platform", "Plattform"), "concept": ("Concept", "Konzept"), "org": ("Organization", "Organisation"), "person": ("Person", "Person"),
-      "cert": ("Certification", "Zertifizierung"), "event": ("Event", "Veranstaltung"), "media": ("Media", "Medium"), "category": ("Category", "Kategorie")}
+      "cert": ("Certification", "Zertifizierung"), "event": ("Event", "Veranstaltung"), "media": ("Media", "Medium"), "category": ("Category", "Kategorie"),
+      "industry": ("Industry", "Branche"), "job": ("Job / role", "Job / Rolle")}
+
+
+def tlab(lang, t):
+    """Typname der Entitaet in der Sprache der Seite (en/de gepflegt, weitere Sprachen ueber site_i18n.T -> data/py_i18n.json)."""
+    en, de = TL[t]
+    return T(lang, en, de)
 FWD = {"instance_of": ("Is a", "Ist ein"), "part_of": ("Part of", "Teil von"), "developed_by": ("Developed by", "Entwickelt von"), "related_to": ("Related to", "Verwandt mit"), "requires": ("Requires", "Benötigt"),
        "covers": ("Covers", "Behandelt"), "created_by": ("Created by", "Erstellt von"), "organized_by": ("Organized by", "Veranstaltet von"), "similar_to": ("Similar to", "Ähnlich wie")}
 INV = {"instance_of": ("Examples", "Beispiele"), "part_of": ("Includes", "Enthält"), "developed_by": ("Products and works", "Produkte und Werke"), "related_to": ("Related to", "Verwandt mit"),
@@ -162,6 +170,52 @@ def people_of(oid):
     return sorted((x["id"] for x in ENTS.values() if x.get("type") == "person" and x.get("company") and (company_org(x) or {}).get("id") == oid), key=lambda i: ENTS[i]["name"].lower())
 
 
+KIND_MEMBERS = {}   # Branche/Job-Entitaet -> oeffentliche Community-Mitglieder [{handle, name, job}] (set_kinds)
+KIND_ORGS = {}   # Branche-Entitaet -> Community-Firmen [{handle, name, eid}] (set_kinds)
+
+
+def industries_of(oid):
+    """Branchen-Entitaeten einer Org-Entitaet (Feld industries, Reihenfolge bleibt)."""
+    return [i for i in dict.fromkeys((ENTS.get(oid) or {}).get("industries") or []) if (ENTS.get(i) or {}).get("type") == "industry"]
+
+
+def set_kinds(orgs, people):
+    """Export /api/profiles/export -> Mitglieder und Firmen je Branche/Job. Der Export enthaelt nur oeffentliche Profile und live veroeffentlichte Auswahlen."""
+    KIND_MEMBERS.clear(); KIND_ORGS.clear()
+    for p in people or []:
+        if not p.get("handle"):
+            continue
+        ids = list(p.get("industries") or []) + ([p["job_eid"]] if p.get("job_eid") else [])
+        for i in dict.fromkeys(ids):
+            if (ENTS.get(i) or {}).get("type") in ("industry", "job"):
+                KIND_MEMBERS.setdefault(i, []).append({"handle": p["handle"], "name": p.get("name") or p["handle"], "job": str(p.get("job") or "").strip()[:80]})
+    for o in orgs or []:
+        for i in dict.fromkeys(o.get("industries") or []):
+            if (ENTS.get(i) or {}).get("type") == "industry":
+                KIND_ORGS.setdefault(i, []).append({"handle": o["handle"], "name": o.get("name") or o["handle"], "eid": o.get("eid") if o.get("eid_ok") else ""})
+
+
+def kind_html(BASE, lang, e, root):
+    """Entitaetsseite einer Branche/eines Jobs: Firmen (Entitaeten und Community-Firmen) und Mitglieder; leer, wenn niemand verknuepft ist."""
+    i, t = e["id"], e["type"]
+    out = ""
+    if t == "industry":
+        rows = [{"href": f"{root}{x}/", "name": ENTS[x]["name"], "tag": esc(tlab(lang, "org"))} for x in sorted((x["id"] for x in ENTS.values() if x.get("type") == "org" and i in industries_of(x["id"])), key=lambda k: ENTS[k]["name"].lower())]
+        have = {r["name"].lower() for r in rows}
+        ent_ids = {x["id"] for x in ENTS.values() if x.get("type") == "org" and i in industries_of(x["id"])}
+        for c in sorted(KIND_ORGS.get(i, []), key=lambda c: c["name"].lower()):
+            if c["eid"] in ent_ids:
+                continue   # dieselbe Firma steht schon als Entitaet da
+            rows.append({"href": f"{BASE}{pfx(lang)}/community/c/{c['handle']}/", "name": c["name"], "tag": esc(T(lang, "Community company", "Community-Firma"))})
+        if rows:
+            out += f'<h3>{esc(T(lang, "Companies", "Firmen"))}</h3><ul id="en-companies">' + "".join(f'<li><a href="{r["href"]}">{esc(r["name"])}</a> <span class="mut">· {r["tag"]}</span></li>' for r in rows) + "</ul>"
+    mem = sorted(KIND_MEMBERS.get(i, []), key=lambda m: _norm(m["name"]))
+    if mem:
+        prof = f"{BASE}{pfx(lang)}/community/u/"
+        out += f'<h3>{esc(T(lang, "Members", "Mitglieder"))}</h3><ul id="en-members">' + "".join(f'<li><a href="{prof}{m["handle"]}/">{esc(m["name"])}</a>' + (f' <span class="mut">· {esc(m["job"])}</span>' if m["job"] and t == "industry" else "") + "</li>" for m in mem) + "</ul>"
+    return out
+
+
 TEAMS = {}   # Org-Entitaet -> oeffentliche Mitglieder der verknuepften Community-Firma(n): [{handle, name, job, eid}] (set_teams)
 TEAM_ORG = {}   # Org-Entitaet -> Handle der (ersten) bestaetigt verknuepften Community-Firma (Nachladen neuer Kolleg:innen im Browser)
 
@@ -231,7 +285,7 @@ def team_html(BASE, lang, oid, root, api):
     items = []
     for r in rows:
         href = f"{root}{r['eid']}/" if r["eid"] else f"{prof}{r['handle']}/"
-        note = " · ".join(x for x in ([esc(TL['person'][li])] if r["eid"] else []) + ([esc(r["job"])] if r["job"] else []) + ([] if r["eid"] or r["job"] else [esc(mem)]))
+        note = " · ".join(x for x in ([esc(tlab(lang, 'person'))] if r["eid"] else []) + ([esc(r["job"])] if r["job"] else []) + ([] if r["eid"] or r["job"] else [esc(mem)]))
         extra = f' · <a href="{prof}{r["handle"]}/">{esc(T(lang, "Profile", "Profil"))}</a>' if r["eid"] and r["handle"] else ""
         items.append(f'<li data-h="{esc(r["handle"])}" data-n="{esc(_norm(r["name"]))}"><a href="{href}">{esc(r["name"])}</a> <span class="mut">· {note}</span>{extra}</li>')
     head = f'<h3>{esc(T(lang, "People", "Personen"))}</h3>'
@@ -286,7 +340,7 @@ def ent_ld(BASE, e, lang, glossary_set=None, person_aka=None):
     if CLAIMS.get(i):
         same.append(f"{BASE}/community/u/{CLAIMS[i]}/")
     n = {"@type": {"product": "SoftwareApplication", "platform": "SoftwareApplication", "concept": "DefinedTerm", "category": "DefinedTerm", "org": "Organization", "person": "Person", "cert": "EducationalOccupationalCredential",
-                   "event": "Event", "media": "PodcastSeries"}[t], "@id": eid_of(BASE, i), "name": e["name"], "url": eurl(BASE, "en", i), "description": d}
+                   "event": "Event", "media": "PodcastSeries", "industry": "DefinedTerm", "job": "Occupation"}[t], "@id": eid_of(BASE, i), "name": e["name"], "url": eurl(BASE, "en", i), "description": d}
     names = person_names(e, person_aka) if t == "person" else (e.get("aliases") or [])
     if names:
         n["alternateName"] = names
@@ -296,6 +350,8 @@ def ent_ld(BASE, e, lang, glossary_set=None, person_aka=None):
         pass
     if same:
         n["sameAs"] = same
+    if e.get("award"):   # Auszeichnungen (Text, Beleg als Erwaehnung in data/press_mentions.json)
+        n["award"] = [x.get("en", "") if isinstance(x, dict) else x for x in e["award"]]
     inv_map = [x for x in rel.get("related_to", [])] + [x for x in rel.get("similar_to", [])]
     if t in ("product", "platform"):
         n["applicationCategory"] = ", ".join(ENTS[c]["name"] for c in rel.get("instance_of", []) if ENTS[c]["type"] == "category") or "BusinessApplication"
@@ -339,7 +395,18 @@ def ent_ld(BASE, e, lang, glossary_set=None, person_aka=None):
     elif t in ("concept", "category"):
         n["inDefinedTermSet"] = {"@type": "DefinedTermSet", "@id": f"{BASE}/glossary/#set", "name": "M365.FM Glossary"} if i in (glossary_set or ()) else {"@type": "DefinedTermSet", "@id": f"{BASE}/entity/#set", "name": "M365.FM Entities"}
         n["termCode"] = i
+    elif t == "industry":   # Branche: DefinedTerm im Begriffsset "Industries"
+        n["inDefinedTermSet"] = {"@type": "DefinedTermSet", "@id": f"{BASE}/entity/#industries", "name": "Industries"}
+        n["termCode"] = i
+        if inv_map:
+            n["mentions"] = [ref(x) for x in inv_map]
+    elif t == "job":   # Job/Rolle: schema.org Occupation
+        if inv_map:
+            n["mentions"] = [ref(x) for x in inv_map]
     elif t == "org":
+        _ind = industries_of(i)
+        if _ind:   # Branchen der Firma (Reihenfolge = Gewicht): knowsAbout wie bei Community-Firmen, Verweis auf die Branchen-Entitaet
+            n["knowsAbout"] = [ref(x) for x in _ind]
         if rel.get("part_of"):
             n["parentOrganization"] = ref(rel["part_of"][0])
         _sub = [x for q, x in _inv.get(i, []) if q == "part_of" and ENTS[x]["type"] == "org"]
@@ -416,6 +483,20 @@ def ent_ld(BASE, e, lang, glossary_set=None, person_aka=None):
                 n["performerIn"].append(_ev)
             if not n["performerIn"]:
                 n.pop("performerIn")
+    _x = FX.ld_extra(BASE, e, ENTS)   # Faktenfelder: nur vorhandene Werte
+    _wf = _x.pop("_worksFor", [])
+    for k, v in _x.items():
+        if k == "subjectOf":
+            n["subjectOf"] = (n.get("subjectOf") or []) + v
+        elif k == "hasOccupation":   # nicht ueberschreiben: der Autorenknoten (PERSON_LD) bringt schon eine Taetigkeit mit
+            _old = n.get(k); _old = [] if not _old else (_old if isinstance(_old, list) else [_old])
+            n[k] = (_old + [x for x in (v if isinstance(v, list) else [v]) if x not in _old]) if _old else v
+        else:
+            n[k] = v
+    if _wf:
+        _have = n.get("worksFor"); _have = [] if not _have else (_have if isinstance(_have, list) else [_have])
+        _have += [w for w in _wf if w not in _have]
+        n["worksFor"] = _have if len(_have) > 1 else _have[0]
     return n
 
 
@@ -555,6 +636,8 @@ def build(g, wiki_links, experts_by_ent, ep_find):
     entity_graph = [ent_ld(BASE, e, "en", gl_ids, person_aka) for e in recs]
     if person_aka.get(MUSICGROUP_ID):
         entity_graph.append(musicgroup_ld(BASE))
+    if any(e["type"] == "industry" for e in recs):
+        entity_graph.append({"@type": "DefinedTermSet", "@id": f"{BASE}/entity/#industries", "name": "Industries", "url": f"{BASE}/entity/"})
     write("entities.jsonld", json.dumps({"@context": "https://schema.org", "@graph": entity_graph}, ensure_ascii=False))
 
     cfg_t = lambda lang: S[lang]
@@ -569,11 +652,11 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             d = (e["desc"].get(lang) or e["desc"].get("en") or "")[:140]
             old = is_old(e, TODAY)
             _spb = SPM.badge(lang, SPM.entity(e["id"]))   # T37 Sponsor: Badge auch in der Liste (Teaser)
-            return (f'<li class="en-i" data-t="{e["type"]}"{" data-old=1 hidden" if old else ""}><a href="{root}{e["id"]}/"><b>{esc(e["name"])}</b></a> <span class="mut">· {esc(TL[e["type"]][li])}{(" · " + OLD[lang][0]) if old else ""}{(" · <strong>" + esc(_spb) + "</strong>") if _spb else ""}</span><br><span class="mut">{esc(d)}</span></li>')
+            return (f'<li class="en-i" data-t="{e["type"]}"{" data-old=1 hidden" if old else ""}><a href="{root}{e["id"]}/"><b>{esc(e["name"])}</b></a> <span class="mut">· {esc(tlab(lang, e["type"]))}{(" · " + OLD[lang][0]) if old else ""}{(" · <strong>" + esc(_spb) + "</strong>") if _spb else ""}</span><br><span class="mut">{esc(d)}</span></li>')
         counts = {}
         for e in recs:
             counts[e["type"]] = counts.get(e["type"], 0) + 1
-        filt = f'<button type="button" class="en-f" data-f="" aria-pressed="true">{esc(s["all"])} ({len(recs)})</button>' + "".join(f'<button type="button" class="en-f" data-f="{k}" aria-pressed="false">{esc(TL[k][li])} ({counts[k]})</button>' for k in TL if k in counts)
+        filt = f'<button type="button" class="en-f" data-f="" aria-pressed="true">{esc(s["all"])} ({len(recs)})</button>' + "".join(f'<button type="button" class="en-f" data-f="{k}" aria-pressed="false">{esc(tlab(lang, k))} ({counts[k]})</button>' for k in TL if k in counts)
         js = ('<script>(function(){var b=[].slice.call(document.querySelectorAll(".en-f")),l=[].slice.call(document.querySelectorAll(".en-i")),o=document.getElementById("en-old"),cur=b[0];function ap(){l.forEach(function(i){i.hidden=(!!cur.dataset.f&&i.dataset.t!==cur.dataset.f)||(!!i.dataset.old&&!(o&&o.checked))})}b.forEach(function(x){x.addEventListener("click",function(){b.forEach(function(y){y.setAttribute("aria-pressed",y===x?"true":"false")});cur=x;ap()})});if(o)o.addEventListener("change",ap)})()</script>')
         css = '<style>' + MED.CSS + '.en-ep{margin:1em 0}.en-ep h3{margin:.2em 0}.en-ep p{margin:.2em 0}.en-faq details,.wk-q{border:1px solid var(--bd);border-radius:.4em;padding:.5em .8em;margin:.4em 0;background:var(--card)}.en-faq summary{cursor:pointer;font-weight:600}.wk-a{margin:.4em 0 .4em 1em}.en-old{border:1px solid var(--bd);border-left:4px solid #b45309;background:var(--card);padding:.6em .9em;border-radius:.4em}.en-f{font:inherit;cursor:pointer;border:1px solid var(--bd);border-radius:2em;padding:.35em .9em;margin:.2em .3em .2em 0;background:var(--card);color:var(--fg);min-height:2.5rem}.en-f[aria-pressed=true]{background:var(--ac);color:var(--onac);border-color:var(--ac)}.en-list{list-style:none;padding:0}.en-list li{padding:.55em 0;border-bottom:1px solid var(--bd)}.en-list li[hidden]{display:none}.en-facts{border-collapse:collapse;width:100%}.en-facts th{text-align:start;padding:.4em .8em .4em 0;vertical-align:top;white-space:nowrap}.en-facts td{padding:.4em 0;overflow-wrap:anywhere}.en-rel h3{margin:.9em 0 .2em;font-size:1rem}.en-rel ul{margin:.2em 0;padding-inline-start:1.3em}.en-artl{list-style:none;padding:0}.en-artl li{padding:.5em 0;border-bottom:1px solid var(--bd)}.en-arts details{margin:.6em 0}.en-arts summary{cursor:pointer}.en-upd{font-size:.9em}.en-kp{border:1px solid var(--bd);border-inline-start:4px solid var(--ac,#0a5);border-radius:.4em;padding:.4em 1em;margin:1em 0}.en-kp h2{margin:.3em 0;font-size:1.1rem}.en-kp ul{margin:.3em 0;padding-inline-start:1.2em}.en-src ul{padding-inline-start:1.2em}.en-src li{margin:.2em 0;overflow-wrap:anywhere}</style>'
         newbtn = f'<div id="en-new" data-lang="{lang}"></div>'
@@ -601,11 +684,14 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             _co = company_org(e) if e["type"] == "person" else None
             if _co:   # Person -> Arbeitgeber (Feld company) und Gegenrichtung Firma -> Personen
                 groups.setdefault(T(lang, "Works for", "Arbeitet bei"), []).append(_co["id"])
-            rb = "".join(f'<h3>{esc(k)}</h3><ul>' + "".join(f'<li><a href="{root}{x}/">{esc(ENTS[x]["name"])}</a> <span class="mut">· {esc(TL[ENTS[x]["type"]][li])}</span></li>' for x in dict.fromkeys(v)) + "</ul>" for k, v in groups.items())
+            rb = "".join(f'<h3>{esc(k)}</h3><ul>' + "".join(f'<li><a href="{root}{x}/">{esc(ENTS[x]["name"])}</a> <span class="mut">· {esc(tlab(lang, ENTS[x]["type"]))}</span></li>' for x in dict.fromkeys(v)) + "</ul>" for k, v in groups.items())
+            if e["type"] in ("industry", "job"):
+                rb += kind_html(BASE, lang, e, root)
+            rb += MEN.section_html(lang, e["id"])   # sichtbare Erwaehnungen (nur iFAKT und Polaris, nur geprueft eingetragene)
             if e["type"] == "org":   # Gegenrichtung Firma -> Personen: Entitaeten (Feld company) plus Community-Mitglieder der verknuepften Firma (team_of)
                 rb += team_html(BASE, lang, e["id"], root, api)
             _spr, _spown = SPM.entity(e["id"]), SPM.entity_own(e["id"])   # T37 Sponsor: laufende Sponsorings dieser Entitaet
-            facts = [(s["type"], esc(TL[e["type"]][li]))]
+            facts = [(s["type"], esc(tlab(lang, e["type"])))]
             _aka = aka_fact(e, lang, person_aka)
             if _aka:
                 facts.append(_aka)
@@ -617,14 +703,19 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                                         ("Level", "Stufe", (e.get("level") or "").capitalize()), ("Exam code", "Prüfungscode", e.get("exam")), ("Valid for", "Gültig für", (f"{e['valid_months']} " + (T(lang, "months", "Monate"))) if e.get("valid_months") else "")):
                 if val:
                     facts.append((T(lang, lab_en, lab_de), esc(str(val))))
+            if e["type"] == "org" and industries_of(e["id"]):
+                facts.append((tlab(lang, "industry"), ", ".join(f'<a href="{root}{x}/">{esc(ENTS[x]["name"])}</a>' for x in industries_of(e["id"]))))
             if _co:
                 facts.append((T(lang, "Works for", "Arbeitet bei"), f'<a href="{root}{_co["id"]}/">{esc(_co["name"])}</a>'))
             elif e["type"] == "person" and e.get("company"):
                 facts.append((T(lang, "Works for", "Arbeitet bei"), esc(e["company"])))
+            if e.get("award"):
+                facts.append((T(lang, "Awards", "Auszeichnungen"), "<br>".join(esc((x.get(lang) or x.get("en", "")) if isinstance(x, dict) else x) for x in e["award"])))
             if location_text(e) and e["type"] in ("person", "org"):
                 facts.append((T(lang, "Headquarters", "Sitz") if e["type"] == "org" else T(lang, "City", "Stadt"), f'<span translate="no">{esc(location_text(e))}</span>'))
             if e.get("founded") and e["type"] == "org":
                 facts.append((T(lang, "Founded", "Gegründet"), esc(str(e["founded"]))))
+            facts += FX.rows(lang, e, root, ENTS)
             if e.get("wikidata"):
                 facts.append((s["wikidata"], f'<a href="https://www.wikidata.org/wiki/{e["wikidata"]}" rel="noopener">{e["wikidata"]}</a>'))
             if e.get("start"):
@@ -672,9 +763,9 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             _ytl = lambda x: (f' · <a href="https://www.youtube.com/watch?v={esc(_yt(x))}" rel="noopener">{esc(T(lang, "Video on YouTube", "Video auf YouTube"))}</a>') if _yt(x) else ""
             eb = (f'<h2>{esc(ept.format(t=e["name"]))}</h2>' + "".join(
                 f'<article class="en-ep"><h3><a href="{_epu(x)}">{esc(g["anchor_title"](x["e"]["title"]))}</a></h3><p class="mut">{esc(x.get("date", ""))}{_ytl(x)}</p><p>{esc(g["ep_sum"](x))}</p></article>' for x in eps)) if eps else ""
-            tlab = TL[e["type"]][li]
-            alt_h = T(lang, f"Title graphic: {e['name']} ({tlab})", f"Titelbild: {e['name']} ({tlab})")
-            hero = MED.hero_svg(e, tlab, alt_h)
+            _tl = tlab(lang, e["type"])   # nicht "tlab" nennen: das verdeckte die Funktion in ganz build() (NameError, Seitenbau bricht ab)
+            alt_h = T(lang, f"Title graphic: {e['name']} ({_tl})", f"Titelbild: {e['name']} ({_tl})")
+            hero = MED.hero_svg(e, _tl, alt_h)
             rel_items = [(k, f"{root}{x}/", ENTS[x]["name"]) for k, v in groups.items() for x in dict.fromkeys(v)]
             relmap = MED.relation_svg(e, rel_items, T(lang, f"Relationship map of {e['name']}: linked topics", f"Beziehungskarte {e['name']}: verknüpfte Themen"))
             relx = ""
@@ -684,7 +775,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                     _id = _u.rstrip("/").rsplit("/", 1)[-1]
                     if _id in _seen or _id not in ENTS: continue
                     _seen.add(_id); _dd = ENTS[_id]["desc"].get(lang) or ENTS[_id]["desc"].get("en") or ""
-                    _li.append(f'<li><a href="{_u}"><b>{esc(_n)}</b></a> <span class="mut">· {esc(_k)} · {esc(TL[ENTS[_id]["type"]][li])}</span>' + (f'<br>{esc(_dd)}' if _dd else "") + "</li>")
+                    _li.append(f'<li><a href="{_u}"><b>{esc(_n)}</b></a> <span class="mut">· {esc(_k)} · {esc(tlab(lang, ENTS[_id]["type"]))}</span>' + (f'<br>{esc(_dd)}' if _dd else "") + "</li>")
                     if len(_li) >= 14: break
                 relx = f'<h2>{T(lang, "Related topics in brief", "Verwandte Themen kurz erklärt")}</h2><ul class="en-relx">' + "".join(_li) + "</ul>" if _li else ""
             tline = MED.timeline_svg([(x.get("date", ""), g["anchor_title"](x["e"]["title"]), _epu(x)) for x in eps], T(lang, f"Timeline of episodes about {e['name']}", f"Zeitleiste der Folgen zu {e['name']}"))
@@ -759,7 +850,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                        + f'{esc(T(lang, "Last updated", "Zuletzt aktualisiert"))}: <time datetime="{_mod}">{_mod}</time></p>')
             # entity.js (Fragen und Antworten #en-qa) laedt, sobald der Bereich 2500 px vor dem Bildschirm ist (vorher 600 px): auf dem Handy setzte
             # das Skript Ueberschrift und Fragen erst ein, wenn der Bereich schon sichtbar war, und schob den Rest der Seite weg (CLS ~0,18 im Labor beim Scrollen)
-            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{root}">{esc(s["entities"])}</a></nav><h1>{esc(e["name"])}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="entity" data-topic-id="{esc(e["id"])}" data-topic-label="{esc(T(lang, "Follow", "Folgen"))}">🔔 {T(lang, "Follow", "Folgen")}</button>{SPM.note(lang, _spr, "entity")}{_disc}<p class="mut">{esc(TL[e["type"]][li])}</p><p class="en-def" style="font-size:1.1em">{esc(d)}</p>{oldbanner}{claim_html(e["id"], lang, e, api)}{hero}{longbox}{ft}{evl}{kpbox}{eb}{tline}{artbox}'
+            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{root}">{esc(s["entities"])}</a></nav><h1>{esc(e["name"])}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="entity" data-topic-id="{esc(e["id"])}" data-topic-label="{esc(T(lang, "Follow", "Folgen"))}">🔔 {T(lang, "Follow", "Folgen")}</button>{SPM.note(lang, _spr, "entity")}{_disc}<p class="mut">{esc(tlab(lang, e["type"]))}</p><p class="en-def" style="font-size:1.1em">{esc(d)}</p>{oldbanner}{claim_html(e["id"], lang, e, api)}{FX.logo_html(lang, e)}{hero}{longbox}{ft}{FX.sections(lang, e, root, ENTS)}{evl}{kpbox}{eb}{tline}{artbox}'
                           f'{qbox}{faqbox}{relmap}{relx}<div class="en-rel">{rb}</div>{gloss}{SU.block(lang, e["id"])}{wb}{("<h2>" + esc(s["experts"]) + "</h2>" + ehtml) if ehtml else ""}{srcbox}{updline}{edit}'
                           f'<script>window.M365E={{api:"{api}",lang:"{lang}",base:"{BASE}",s:{json.dumps({k: s[k] for k in ("edit_e",)}, ensure_ascii=False)}}};window.M365TopicConfig={{api:{json.dumps(api)},lang:{json.dumps(lang)}}};'
                           f'(function(){{var d=0,u="{BASE}/assets/entity.js";function go(){{if(d)return;d=1;var s=document.createElement("script");s.src=u;document.body.appendChild(s)}}'
@@ -770,7 +861,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             node = ent_ld(BASE, e, lang, gl_ids, person_aka)
             _qld = SQ.ld(BASE, e["id"], lang, _qurl) if e["type"] == "person" else []
             if arturls:
-                node["subjectOf"] = [{"@id": x + "#post"} for x in arturls[:20]]   # Artikel ueber diese Entitaet (Gegenrichtung zu BlogPosting.about)
+                node["subjectOf"] = (node.get("subjectOf") or []) + [{"@id": x + "#post"} for x in arturls[:20]]   # Artikel ueber diese Entitaet (Gegenrichtung zu BlogPosting.about)
             if MEN.for_entity(e["id"]):   # Belege: Erwaehnungen in fremden Medien (z. B. Microsoft Tech Community)
                 node["subjectOf"] = (node.get("subjectOf") or []) + [MEN.ld(m) for m in MEN.for_entity(e["id"])]
             ld = [{"@context": "https://schema.org", "@type": "WebPage", "@id": u + "#page", "url": u, "name": e["name"], "inLanguage": lang, "mainEntity": node, "dateModified": _mod,
@@ -820,7 +911,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             _w = write if lang in ("en", "de") else (g.get("write_r2") or write)   # Entitaetsseiten der 13 weiteren Sprachen (noindex, bis ihre Uebersetzungen angezeigt werden) liegen im R2-Bucket, nicht in GitHub Pages (~620 MB)
             ld = ld + _qld   # Quotation-Knoten der Person
             _side = g["side"](lang, f'{e["name"]} {d} {_lt[:1500]}', ids=[x for v in groups.values() for x in v], exclude=(e["id"],)) if g.get("side") else ""   # Sidebar wie auf allen Inhaltsseiten; Themen = verwandte Entitaeten
-            _w(f"{rel}/{e['id']}/index.html", page(lang, f'{e["name"]} – {TL[e["type"]][li]} | M365.FM', d[:155], u, b, _alts if lang in ("en", "de") else None, ld, xdefault=eurl(BASE, "en", e["id"]), og_type="website", extra_head=LCSS + css + _fhead, noindex=_noidx, side=_side))
+            _w(f"{rel}/{e['id']}/index.html", page(lang, f'{e["name"]} – {tlab(lang, e["type"])} | M365.FM', d[:155], u, b, _alts if lang in ("en", "de") else None, ld, xdefault=eurl(BASE, "en", e["id"]), og_type="website", extra_head=LCSS + css + _fhead, noindex=_noidx, side=_side))
             if not _noidx: sitemap.append((u, _mod, _alts))
 
 
