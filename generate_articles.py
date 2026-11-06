@@ -6,7 +6,7 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 ROOT = Path(__file__).parent
-MODEL = os.environ.get("ARTICLE_MODEL") or "claude-haiku-5-5"   # Mirko, 6.11.2026: Haiku (vorher Sonnet, ~20x teurer)
+MODEL = os.environ.get("ARTICLE_MODEL") or "claude-sonnet-5-5"   # Mirko, 6.11.2026: Sonnet bleibt (Haiku per Repo-Variable ARTICLE_MODEL moeglich)
 LIMIT = int(os.environ.get("ARTICLE_LIMIT", "90"))
 WORKERS = int(os.environ.get("ARTICLE_WORKERS", "10"))
 NAMES = {"de": "Deutsch", "es": "Spanisch", "fr": "Französisch", "it": "Italienisch", "pt": "Portugiesisch", "nl": "Niederländisch",
@@ -279,6 +279,7 @@ def popularity():
 
 
 # Monatsgrenze (Mirko, 6.11.2026: Sonnet behalten, aber mit Grenze). Repo-Variable ARTICLE_BUDGET_USD, Standard 25 USD je Kalendermonat (UTC).
+BUDGET_USD = float(os.environ.get("ARTICLE_BUDGET_USD") or 25)
 # Preise je 1 Mio. Token (Stand Okt./Nov. 2026, Prompts unter 100.000 Token; per Repo-Variable anpassbar). Kosten werden je Lauf in USD in data/spend.json
 # aufsummiert ("usd"); aeltere Monate ohne "usd" wurden komplett mit Sonnet geschrieben.
 PRICES = {"sonnet": {"in": float(os.environ.get("SONNET_USD_PER_MTOK_IN") or 2.0), "out": float(os.environ.get("SONNET_USD_PER_MTOK_OUT") or 10.0),

@@ -34,7 +34,7 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY_SHOW }}
           ARTICLE_LIMIT: ${{ inputs.limit || '20' }}
           ARTICLE_WORKERS: ${{ inputs.workers || '5' }}
-          ARTICLE_MODEL: ${{ vars.ARTICLE_MODEL || 'claude-haiku-5-5' }}   # Mirko, 6.11.2026: Haiku statt Sonnet
+          ARTICLE_MODEL: ${{ vars.ARTICLE_MODEL || 'claude-sonnet-5-5' }}   # Mirko, 6.11.2026: Sonnet bleibt; Monatsgrenze haelt die Artikel im November an (erst ab 1.12. wieder)
           ARTICLE_BUDGET_USD: ${{ inputs.budget || vars.ARTICLE_BUDGET_USD || '25' }}   # Sonnet-Kosten je Kalendermonat; ist sie erreicht, schreibt der Lauf nichts mehr
         run: python generate_articles.py
       - name: Cover-Texte entwerfen
