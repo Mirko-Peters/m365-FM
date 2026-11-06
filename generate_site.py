@@ -28,6 +28,7 @@ import site_text
 import site_ads as ADS
 import site_media as MED
 import site_sidebar as SBR
+import site_topweek as TOPW   # Top 10 der Vorwoche (data/top.json): Wochenbezeichnung, ItemList, englische Seite /top/
 import site_r2 as R2
 from site_size import sizes
 import site_sponsorships as SPM   # T37 Sponsor: Kennzeichnung bezahlter Inhalte (data/sponsorships.json)
@@ -847,8 +848,9 @@ def footer(lang):
     ui = UI.get(lang)
     about = ui[5] if ui else "About Mirko Peters"
     _tl = lang if lang in LANGS else "en"
-    # Top-/Empfehlungsseiten gibt es nur je Dub-Sprache; englische Seiten verlinken die Folgenliste der Hauptshow (vorher /en/top/ = 404 auf jeder englischen Seite)
-    _top = f'<a href="{BASE}/{_tl}/top/">{esc((TOP_L if _tl in TOP_REAL else REC_L).get(_tl, "Top"))}</a>' if _tl in LANGS else f'<a href="{BASE}/show/episodes/">Recommended episodes</a>'
+    # Top-Seiten je Dub-Sprache /<l>/top/; Englisch /top/ (Top 10 der Hauptshow), solange es echte Wochendaten gibt - sonst die Folgenliste der Hauptshow
+    _top = (f'<a href="{BASE}/{_tl}/top/">{esc((TOP_L if _tl in TOP_REAL else REC_L).get(_tl, "Top"))}</a>' if _tl in LANGS else
+            f'<a href="{BASE}/{TOPW.EN_REL}">{esc(TOP_L["en"])}</a>' if "en" in TOP_REAL else f'<a href="{BASE}/show/episodes/">{esc(REC_L["en"])}</a>')
     _nw = f'<a href="{BASE}/{"de/" if lang == "de" else ""}updates/">{"Updates & Roadmap" if lang == "de" else "Updates & roadmap"}</a>'
     return (f'<footer><div class="wrap">{_top}{_nw}'   # m365.fm, M365Con, LinkedIn, YouTube seit 4.11. nicht mehr im Footer (Wunsch Mirko); dafuer der Service-Hub /services/
             f'<a href="{ast_url(lang)}">{esc(ast_label(lang))}</a><a href="{BASE}/{"de/" if lang == "de" else ""}press/">{"Pressekit" if lang == "de" else "Press kit"}</a>'
@@ -1102,7 +1104,7 @@ def build():
     def top_real(l, n=10):
         rows = (topdata.get("langs") or {}).get(l) or []
         by_eid = {i["eid"]: i for i in by_lang.get(l, [])}
-        return [by_eid[r["episode_id"]] for r in rows if r.get("score", 0) > 0 and r["episode_id"] in by_eid][:n]
+        return [by_eid[r["episode_id"]] for r in rows if r.get("score", 0) > 0 and r["episode_id"] in by_eid][:min(n, TOPW.N_TOP)]   # hoechstens Top 10 der Vorwoche
 
     def top_for(l, n=10):
         """Echte Top-Liste (Spreaker-Statistik); solange keine Daten da sind: vorlaeufige Auswahl = meistverlinkte (Money-Keyword-Ziele), dann neueste."""
@@ -1125,10 +1127,12 @@ def build():
         return (REC_L if is_prov(l) else TOP_L).get(l, (REC_L if is_prov(l) else TOP_L)["en"])
 
     def top_block(l):
-        t = top_for(l, 5)
+        t = top_for(l, TOPW.N_TEASER)
         if not t:
             return ""
-        return (f'<h2>★ {esc(top_label(l))}</h2><div class="list">' + "".join(
+        _pa, _pb = TOPW.period(topdata)
+        _per = f'<p class="mut">{esc(TOPW.fmt_range(l, _pa, _pb))}</p>' if _pa and not is_prov(l) else ""   # Zeitraum der Vorwoche
+        return (f'<h2>★ {esc(top_label(l))}</h2>{_per}<div class="list">' + "".join(
             f'<a class="row" href="{url_of(x)}" title="{esc(x["e"]["title"])}"><h3>{n + 1}. {esc(anchor_title(x["e"]["title"]))}</h3></a>' for n, x in enumerate(t)) +
             f'</div><p><a class="btn" href="{BASE}/{l}/top/">{esc(top_label(l))} →</a></p>')
 
@@ -1160,6 +1164,8 @@ def build():
     except Exception as _e:
         print("Speaker-Daten:", _e)
     SNT.load(COMMUNITY_API); SNT.publish(OUT)   # Show Notes aus Spreaker (data/show_notes) + Bearbeitungen aus dem Editor; Rohdaten fuer den Editor unter /show-notes/
+    EN_TOP = TOPW.en_items(topdata, _PPs.episode_index(BASE)["by_sid"])   # Top 10 der Hauptshow (erst nach SNT.load: episode_index wird je Bau zwischengespeichert)
+    if EN_TOP: TOP_REAL.add("en")   # Fusszeile englischer Seiten -> /top/
     # Episoden-Seiten
     DPOS = {l: {i["vid"]: n for n, i in enumerate(seq)} for l, seq in by_lang.items()}   # Stelle jeder Folge in ihrer Sprache (neueste zuerst) fuer Vor/Zurueck
     for (vid, l), it in items.items():
@@ -1664,39 +1670,45 @@ def build():
                 ntag += 1
     print(ncat, "Kategorie-Seiten,", ntag, "Tag-Seiten (noindex),", sum(len(v) for _, v in autolink_log), "automatische interne Links in", sum(1 for _, v in autolink_log if v), "Artikeln")
 
-    # "Top diese Woche" je Sprache (nur wenn Statistik-Daten vorliegen)
+    # Top 10 der Vorwoche je Sprache (Wochen-Schnappschuss Mo-So aus data/top.json, sync_spreaker.py); Englisch: /top/ (Hauptshow)
     topfeed = {}
+    wk = TOPW.snapshot_date(topdata) or TODAY   # dateModified/lastmod = Datum des Schnappschusses
+    en_top_url = f"{BASE}/{TOPW.EN_REL}" if EN_TOP else None
+    sw_top = {x: f"{BASE}/{x}/top/" for x in active if top_for(x, 1)}
+    alts = {x: v for x, v in sw_top.items() if not is_prov(x)}   # T42: vorlaeufige (noindex) Fassungen nicht im Cluster
+    if en_top_url:
+        sw_top = {"en": en_top_url, **sw_top}; alts = {"en": en_top_url, **alts}
+    _pa, _pb = TOPW.period(topdata)
     for l in active:
-        t = top_for(l, 10)
+        t = top_for(l, TOPW.N_TOP)
         if not t:
             continue
         label = top_label(l)
         prov = is_prov(l)
         u = f"{BASE}/{l}/top/"
         ui = UI[l]
-        wk = topdata.get("week_end", TODAY)
+        h1 = (None if prov else TOPW.heading(l, len(t), topdata)) or label
         rows = "".join(f'<div class="row"><a href="{url_of(x)}" title="{esc(x["e"]["title"])}"><h3>{n + 1}. {esc(anchor_title(x["e"]["title"]))}</h3></a><p>{esc(short(parse_desc(x["e"]["desc"])[0], 150))}</p></div>' for n, x in enumerate(t))
-        ld = [{"@context": "https://schema.org", "@type": "CollectionPage", "name": label, "url": u, "inLanguage": LANGS[l][1], "dateModified": wk,
-               "mainEntity": {"@type": "ItemList", "itemListOrder": "https://schema.org/ItemListOrderDescending", "numberOfItems": len(t),
-                              "itemListElement": [{"@type": "ListItem", "position": n + 1, "url": url_of(x)} for n, x in enumerate(t)]}},
-              {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
-                  {"@type": "ListItem", "position": 1, "name": "M365.FM", "item": f"{BASE}/"}, {"@type": "ListItem", "position": 2, "name": LANGS[l][0], "item": f"{BASE}/{l}/"},
-                  {"@type": "ListItem", "position": 3, "name": label, "item": u}]}]
-        sw_top = {x: f"{BASE}/{x}/top/" for x in active if top_for(x, 1)}
-        alts = {x: v for x, v in sw_top.items() if not is_prov(x)}   # T42: vorlaeufige (noindex) Fassungen nicht im Cluster
+        ld = TOPW.item_list_ld(h1, u, LANGS[l][1], wk, [(url_of(x), strip_tags(x["e"]["title"])) for x in t],
+                               [("M365.FM", f"{BASE}/"), (LANGS[l][0], f"{BASE}/{l}/"), (label, u)])
         body = f"""{header(l, lang_switch(l, sw_top, active))}
 <main class="wrap"><nav class="crumbs" aria-label="breadcrumb"><a href="{BASE}/{l}/">{esc(ui[7])}</a> / {esc(LANGS[l][0])}</nav>
-<div class="kicker">★ {esc(LANGS[l][0])} · {esc(wk)}</div><h1>{esc(label)}</h1>
-<h2>{esc(ui[3])}</h2><div class="list">{rows}</div>
+<div class="kicker">★ {esc(LANGS[l][0])}{"" if prov or not _pa else " · " + esc(TOPW.fmt_range(l, _pa, _pb))}</div><h1>{esc(h1)}</h1>{"" if prov else f'<p class="mut">{esc(TOPW.note(l))}</p>'}
+<div class="list">{rows}</div>
 <p style="margin-top:1.6em"><a class="btn" href="{BASE}/{l}/podcast/">{esc(ui[3])} →</a></p></main>{footer(l)}"""
         write(f"{l}/top/index.html", page(l, f"{label} – M365.FM {LANGS[l][0]}", short(" · ".join(strip_tags(x["e"]["title"]).split(":")[0] for x in t[:3]), 155), u, body, None if prov else alts, ld, og_type="website", noindex=prov, side=side_for(l, label, body), switch=sw_top))
         if not prov:
             sitemap.append((u, wk, alts))
         topfeed[l] = [{"rank": n + 1, "title": strip_tags(x["e"]["title"]), "url": url_of(x), "episode": x["eid"]} for n, x in enumerate(t)]
     topfeed = {l: v for l, v in topfeed.items() if not is_prov(l)}
+    if en_top_url:   # englische Top-Seite /top/ (Folgen der Hauptshow unter /show/episodes/<slug>/)
+        _u, topfeed["en"] = TOPW.build_en(dict(BASE=BASE, write=write, page=page, header=header("en", lang_switch("en", sw_top, active)), footer=footer, esc=esc, short=short),
+                                          EN_TOP, topdata, TOP_L["en"], alts, sw_top)
+        sitemap.append((_u, wk, alts))
     if topfeed:
-        write("top.json", json.dumps({"period": "last 7 days", "from": topdata.get("from"), "to": topdata.get("week_end"), "languages": topfeed}, ensure_ascii=False, indent=1))
-        print(len(topfeed), "Sprachen mit Top-Woche")
+        write("top.json", json.dumps({"period": "previous week (Monday-Sunday, Spreaker UTC days)", "week": topdata.get("week"), "from": topdata.get("from"),
+                                      "to": topdata.get("to") or topdata.get("week_end"), "languages": topfeed}, ensure_ascii=False, indent=1))
+        print(len(topfeed), "Sprachen mit Top-Woche", topdata.get("week") or "")
 
     phase("Lernseiten, Updates, Top-Listen")
     # Sitemap-Index je Sprache und Typ (T1): sitemap-<sprache>-<typ>.xml mit echtem lastmod und x-default; Hubs (lastmod = Baudatum)

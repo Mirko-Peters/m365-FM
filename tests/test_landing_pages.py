@@ -331,22 +331,30 @@ class LandingPageTests(unittest.TestCase):
                 rendered = site_landing._stats({"stats": {"bing": {}, "gsc": {}}}, "en")
         self.assertNotIn("Spreaker downloads", rendered)
 
-    def test_spreaker_updates_language_lists_and_keeps_previous_complete_totals(self):
+    def test_spreaker_week_snapshot_needs_all_languages_and_keeps_previous_complete_totals(self):
+        from datetime import date
         with tempfile.TemporaryDirectory() as tmp:
             data = Path(tmp) / "data" / "top.json"
             data.parent.mkdir()
             previous = {"from": "old-start", "to": "old-end", "downloads": {"en": 22, "de": 11}, "complete": True}
-            data.write_text(json.dumps({"spreaker": previous, "langs": {"en": [1]}}), "utf-8")
+            data.write_text(json.dumps({"week": "2026-W44", "spreaker": previous, "langs": {"en": [1]}}), "utf-8")
             required = {"en", "de", "ru", "ja"}
+            monday = date(2026, 11, 2)
+            # eine Website-Sprache fehlt -> nichts geschrieben, vorige Woche bleibt
             self.assertFalse(_save_top(Path(tmp), required, {"en": [], "de": [2], "ru": []},
-                                       {"en": 2, "de": 3, "ru": 0}, "start", "end"))
+                                       {"en": 2, "de": 3, "ru": 0}, monday))
             updated = json.loads(data.read_text("utf-8"))
-            self.assertEqual(updated["langs"], {"en": [], "de": [2], "ru": []})
-            self.assertEqual(updated["spreaker"], previous)
+            self.assertEqual((updated["week"], updated["langs"], updated["spreaker"]), ("2026-W44", {"en": [1]}, previous))
+            # alle Sprachen da, aber Downloads fuer ja fehlen -> neue Liste, Downloads-Stand bleibt der vorige
             self.assertTrue(_save_top(Path(tmp), required, {"en": [], "de": [2], "ru": [], "ja": []},
-                                      {"en": 2, "de": 3, "ru": 0, "ja": 0}, "start", "end"))
+                                      {"en": 2, "de": 3, "ru": 0}, monday))
+            updated = json.loads(data.read_text("utf-8"))
+            self.assertEqual((updated["week"], updated["langs"]["de"], updated["spreaker"]), ("2026-W45", [2], previous))
+            self.assertTrue(_save_top(Path(tmp), required, {"en": [], "de": [2], "ru": [], "ja": []},
+                                      {"en": 2, "de": 3, "ru": 0, "ja": 0}, monday))
             updated = json.loads(data.read_text("utf-8"))
             self.assertEqual(updated["spreaker"]["downloads"]["ru"], 0)
+            self.assertEqual((updated["spreaker"]["from"], updated["spreaker"]["to"]), ("2026-11-02", "2026-11-08"))
 
     def test_non_site_shows_remain_in_sync(self):
         shows, required = _show_maps({"en": 1, "hi": 2, "ml": 3})
