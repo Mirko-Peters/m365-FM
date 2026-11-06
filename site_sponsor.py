@@ -438,7 +438,7 @@ def default_state(quick):
     d = PRICING["defaults"]
     tops = [{k: q[k] for k in ("id", "name", "en", "lvl", "rated", "example", "custom", "url")} for q in quick if q["default"]]
     return {"goal": d["goal"], "rt": d["runtime"], "topics": tops, "video": False, "pr": bool(d["pr"]), "auth": False, "dash": False, "l14": False,
-            "topic": False, "expert": False, "li": False, "live": False, "con": False,
+            "ads": False, "expert": False, "li": False, "live": False, "con": False,
             "cnt": {"pr": 1, "ex": d["cnt"]["ex"], "li": d["cnt"]["li"], "lv": d["cnt"].get("lv", 1)}, "prTouched": False}
 
 
@@ -519,6 +519,16 @@ html.a11y-hc .spn{--spn-on:#ffb52e;--spn-good:#3cc9a1;--spn-red:#ff8a80}
 .spn-cnt{min-width:44px;text-align:center;font-variant-numeric:tabular-nums}
 .spn-lock{margin:4px 0 0;font-size:.82rem;color:var(--ac)}
 .spn-extras{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px}
+.spn-extras>.spn-wide{grid-column:1/-1}.spn-adsbox{grid-column:1/-1;margin-top:6px;display:grid;gap:12px;min-width:0}.spn-adsbox[hidden]{display:none}
+.spn-row.spn-ads{border-top:1px dashed var(--bd);padding-top:6px}
+/* Rechner der Werbeplaetze (assets/ads-book.js) im Konfigurator: einspaltig, Formularfelder wie die uebrigen Felder der Seite */
+.spn .adb{display:grid;gap:16px}.spn .adb h3{margin:0 0 .5em;font-size:1.1rem}.spn .adb-calc,.spn .adb-form{padding:16px;border:1px solid var(--bd);background:var(--bg)}
+.spn .adb-f{display:grid;gap:4px;margin:0 0 10px}.spn .adb-f label{font-weight:600}
+.spn .adb input[type=text],.spn .adb input[type=url],.spn .adb input[type=email],.spn .adb input[type=number],.spn .adb input[type=date],.spn .adb select{width:100%;max-width:32em}   /* Aussehen: assets/forms.css (#298) */
+.spn .adb fieldset{border:1px solid var(--bd);margin:0 0 10px;padding:8px 12px}.spn .adb legend{font-size:.9rem;color:var(--mut);padding:0 4px}.spn .adb-pt label{display:inline-block;margin-inline-end:14px}
+.spn .adb-sum{display:grid;grid-template-columns:minmax(0,1fr) max-content;gap:4px 18px;margin:12px 0 0;padding:10px 0 0;border-top:1px solid var(--bd)}.spn .adb-sum dt,.spn .adb-sum dd{margin:0}.spn .adb-sum dd{text-align:end;font-variant-numeric:tabular-nums}.spn .adb-sum dt:last-of-type,.spn .adb-sum dd:last-of-type{font-weight:600}
+.spn .adb .lp-note,.spn .adb .mut{margin:6px 0 0;font-size:.84rem;color:var(--mut)}.spn .adb .adm-msg.bad{color:var(--spn-red)}.spn .adb .btn{margin-top:6px}
+.spn .adb .lp-table{width:100%;border-collapse:collapse;font-size:.88rem}.spn .adb .lp-table th,.spn .adb .lp-table td{text-align:start;padding:6px 8px;border-bottom:1px solid var(--bd)}
 @media (max-width:480px){.spn-item{grid-template-columns:auto minmax(0,1fr)}.spn-price{grid-column:2;text-align:start}.spn-prow{grid-template-columns:minmax(0,1fr) auto}.spn-meter{display:none}}
 .spn-total{display:grid;gap:4px}
 .spn-big{font:600 2.6rem/1 "Barlow Condensed","Barlow Condensed FB0","Barlow Condensed FB1",sans-serif;font-variant-numeric:tabular-nums}
@@ -589,11 +599,12 @@ def _chart(lang, bing, nums, day):
     return (f'<figure class="spn-chart"><h2>{E(tx(lang, "chart_h"))}</h2>' + (desk + mob).replace("{aria}", E(aria)) + '</figure>')
 
 
-def _item(cid, title, body, price, unit, checked=False, extra="", also="", cls="spn-item"):
+def _item(cid, title, body, price, unit, checked=False, extra="", also="", cls="spn-item", ctl="", after=""):
     d = f"{cid}-d"
-    return (f'<div class="{cls}"><input type="checkbox" id="{cid}" aria-describedby="{d}{(" " + also) if also else ""}"{" checked" if checked else ""}>'
+    ctl = f' aria-controls="{ctl}"' if ctl else ""
+    return (f'<div class="{cls}"><input type="checkbox" id="{cid}" aria-describedby="{d}{(" " + also) if also else ""}"{" checked" if checked else ""}{ctl}>'
             f'<div><h3><label for="{cid}">{E(title)}</label></h3><div id="{d}">{body}</div>{extra}</div>'
-            f'<div class="spn-price"><span dir="ltr">{E(price)}</span><small>{E(unit)}</small></div></div>')
+            f'<div class="spn-price"><span dir="ltr">{E(price)}</span><small>{E(unit)}</small></div>{after}</div>')   # after: ganze Breite unter der Zeile
 
 
 def _stepper(k, aria, less, more, n):
@@ -683,7 +694,7 @@ def body_html(g, lang, stats, quick, ssr, n_main, n_langs, con_on):
     hint = lambda s: f'<p class="spn-hint">{E(s)}</p>'
     extras = (_item("spn-dash", t("dash_h"), hint(t("dash_hint")), fmt_usd(pr["dash"]), t("unit_once"), extra=f'<p class="spn-lock" id="spn-lock" hidden>{E(t("dash_lock"))}</p>', also="spn-lock")
               + _item("spn-l14", t("lang_h", n=n_langs), hint(t("lang_hint")), fmt_usd(pr["lang"]), t("unit_month"))
-              + _item("spn-topic", t("topic_h"), hint(t("topic_hint", n=P["topic_sponsors_max"])), fmt_usd(pr["topic"]), t("unit_month"))
+              + ads_item(g, lang, t)   # Banner-Werbung (Mirko, 6.11.2026): ersetzt das Themen-Sponsoring, klappt die Buchung aus #285 auf
               + _item("spn-expert", t("expert_h"), hint(t("expert_hint")), fmt_usd(pr["expert"]), t("unit_episode"), extra=_stepper("ex", t("expert_stepper"), t("one_less"), t("one_more"), cnt["ex"]))
               + _item("spn-li", t("li_h"), hint(t("li_hint")), fmt_usd(pr["li"]), t("unit_issue"), extra=_stepper("li", t("li_stepper"), t("one_less"), t("one_more"), cnt["li"]) + f'<p class="spn-note">{E(t("li_note"))}</p>')
               + _item("spn-live", t("live_h"), hint(t("live_hint")) + f'<p class="spn-note">{E(t("live_note"))}</p>', fmt_usd(pr["live"]), t("unit_session"),
@@ -728,6 +739,32 @@ def body_html(g, lang, stats, quick, ssr, n_main, n_langs, con_on):
     return hero + nojs + f'<div class="spn-grid"><div class="spn-build">{s1}{s2}{s3}{s4}{s5}</div>{console}{form}{faq}</div>'
 
 
+def banner_range():
+    """Kleinster und groesster TKP der Banner (EUR, ganze Euro) aus den Startwerten data/ad_pricing.json - nur fuer die Anzeige im Konfigurator;
+    der Preis der Auswahl kommt immer vom Server (/api/ads/quote, Werte aus D1)."""
+    import site_landing as LP
+    c = [p["price_cents"] for p in LP._ad_pricing().get("products", []) if p.get("id") in LP.BANNERS and isinstance(p.get("price_cents"), int)]
+    if not c: return None
+    f = lambda v: str(v // 100) if v % 100 == 0 else f"{v / 100:.2f}"
+    return f(min(c)), f(max(c))
+
+
+def ads_item(g, lang, t):
+    """Extra "Banner-Werbung": Haken klappt den Rechner der Werbeplaetze auf (assets/ads-book.js, nur die drei Banner; Seitentypen inkl.
+    Blogbeitraege und Themenseiten, fruehe Platzierung im Text = banner_mid, Themen-Targeting mit den Themen aus Schritt 2). Buchung aus
+    (data/ad_slots.json "booking"): nur Rechner, die Auswahl geht mit der Anfrage mit; an: Anmeldung, Werbemittel, PayPal wie auf /for/advertisers/."""
+    import site_ads as ADS
+    import site_landing as LP
+    B = g["BASE"]
+    on = ADS.booking_on()
+    cfg = LP.adbook_cfg(B, lang, url(B, lang), products=LP.BANNERS, product="banner_mid", booking=on, anchor="#spn-ads")
+    rng = banner_range()
+    price = t("ads_price", min=rng[0], max=rng[1]) if rng else t("on_request")
+    box = (f'<div class="spn-adsbox" id="spn-adsbox" hidden><p class="spn-note">{E(t("ads_on" if on else "ads_off"))}</p>'
+           f'<div class="adb" id="spn-adb" data-cfg="{E(json.dumps(cfg, ensure_ascii=False, separators=(",", ":")))}"></div></div>')
+    return _item("spn-ads", t("ads_h"), f'<p class="spn-hint">{E(t("ads_hint"))}</p>', price, t("unit_cpm"), after=box, cls="spn-item spn-wide", ctl="spn-adsbox")
+
+
 def advertise_button(B, lang):
     """#281: Verweis auf die direkt buchbaren Werbeplaetze - nur, wenn die Buchung an ist (data/ad_slots.json "booking")."""
     import site_ads as ADS
@@ -769,7 +806,12 @@ def jsonld(B, lang, u, hl, lastmod, faqs, n_langs):
         if unit: o["priceSpecification"] = {"@type": "UnitPriceSpecification", "price": str(pr[key]), "priceCurrency": PRICING["currency"], "unitCode": unit}
         return o
     offers = [offer(t("base_h"), "base", "MON"), offer(t("video_h"), "video", "MON"), offer(t("pr_h"), "pr"), offer(t("row_auth"), "auth", "MON"),
-              offer(t("dash_h"), "dash"), offer(t("lang_h", n=n_langs), "lang", "MON"), offer(t("topic_h"), "topic", "MON"), offer(t("expert_h"), "expert"), offer(t("li_h"), "li"), offer(t("live_h"), "live")]
+              offer(t("dash_h"), "dash"), offer(t("lang_h", n=n_langs), "lang", "MON"), offer(t("expert_h"), "expert"), offer(t("li_h"), "li"), offer(t("live_h"), "live")]
+    rng = banner_range()
+    if rng:   # Banner-Werbung: TKP in EUR (Startwerte), je 1.000 Einblendungen
+        offers.append({"@type": "Offer", "name": t("ads_h"), "priceCurrency": "EUR",
+                       "priceSpecification": {"@type": "UnitPriceSpecification", "minPrice": rng[0], "maxPrice": rng[1], "priceCurrency": "EUR",
+                                              "referenceQuantity": {"@type": "QuantitativeValue", "value": 1000, "unitText": "impressions"}}})
     return [{"@context": "https://schema.org", "@type": "WebPage", "@id": u + "#page", "url": u, "name": t("h1"), "inLanguage": hl, "isPartOf": {"@id": f"{B}/#website"},
              "publisher": {"@id": f"{B}/#org"}, "dateModified": lastmod, "mainEntity": {"@id": u + "#service"}},
             {"@context": "https://schema.org", "@type": "Service", "@id": u + "#service", "name": t("svc_name"), "serviceType": t("svc_type"), "url": u,
@@ -824,9 +866,9 @@ def build(g):
         S = ssr.get(lang) or {}
         hl = g["LANGS"][lang][1] if lang in LG else "en"
         cfg = {"P": P, "T": I18N.get(lang, {}) if lang != "en" else {}, "E": EN, "lang": lang, "api": g["api"], "page": page, "mail": MAIL, "nLangs": n_langs,
-               "con": con_on, "quick": [[q["id"], q["name"], q["en"], q["lvl"], q["rated"], q["example"], q["url"], q["default"], q["al"]] for q in quick],
+               "con": con_on, "quick": [[q["id"], q["name"], q["en"], q["lvl"], q["rated"], q["example"], q["url"], q["default"], q["al"], q["eid"] or ""] for q in quick],
                "ents": search, "entBase": ebase, "key": S.get("key", ""), "dec": S.get("dec"),
-               "community": f"{B}/{'' if lang == 'en' else lang + '/'}community/"}
+               "community": f"{B}/{'' if lang == 'en' else lang + '/'}community/", "adsJs": asset_url(B, "ads-book.js")}
         body = body_html(g, lang, stats, quick, S, n_main, n_langs, con_on)
         dash = dashboard_url(B, lang)
         adv = advertise_button(B, lang)

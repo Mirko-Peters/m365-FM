@@ -3,7 +3,9 @@
    UMD: im Browser window.SponsorCalc, in Node require("assets/sponsor-calc.js") (Tests, Vorab-Rendern im Seitenbau).
    Preise und Regeln kommen nur aus data/sponsor_pricing.json (P), Texte aus data/sponsor_i18n.json (C = {lang, T: eigene Texte, E: Englisch}).
    Rechnet wie Prototyp v2 (Mirko), mit den Vorgaben aus design.md D1: 14 Sprachen in USD im Monatsbetrag, keine Einheiten-Mischung
-   in einer Spanne, PR-Hinweis nur bei gewaehlten PR-Artikeln. */
+   in einer Spanne, PR-Hinweis nur bei gewaehlten PR-Artikeln.
+   Banner-Werbung (s.ads, Mirko 6.11.2026, ersetzt das Themen-Sponsoring): Preis nur vom Server (/api/ads/quote, EUR netto, s.adsSel.net_cents),
+   eigene Zeile nach der USD-Summe, nicht im USD-Paketpreis und nicht in der Zeit bis zur Wirkung. */
 (function (root, factory) {
   if (typeof module === "object" && module.exports) module.exports = factory();
   else root.SponsorCalc = factory();
@@ -100,15 +102,17 @@
     var tips = [];
     if (s.rt < r.recRt) tips.push("rt<recRt");
     if (s.goal === "ai") { if (!s.pr) tips.push("ai:noPR"); if (!s.auth && r.hardest >= r.hardFrom) tips.push("ai:noAuthHard"); }
-    if (s.goal === "vis") { if (!s.video) tips.push("vis:noVideo"); if (!s.l14) tips.push("vis:noLang"); if (!s.topic) tips.push("vis:noTopic"); }
+    if (s.goal === "vis") { if (!s.video) tips.push("vis:noVideo"); if (!s.l14) tips.push("vis:noLang"); if (!s.ads) tips.push("vis:noAds"); }
     if (s.goal === "lead") { tips.push("lead:dash"); if (!s.video) tips.push("lead:noVideo"); if (!s.expert) tips.push("lead:noExpert"); }
     if (r.n > 2) tips.push("manyTopics");
     if (!tips.length) tips.push("fits");
     return tips;
   }
 
-  /* s = {goal: ai|vis|lead, rt, topics: [{id, name, en, lvl, rated, example, custom, url}], video, pr, auth, dash, l14, topic, expert, li, live, con,
-          cnt: {pr, ex, li, lv}, prTouched}   live = Livesession (LinkedIn M365 Show + YouTube), je Stueck, einmalig, ohne Rabatt */
+  /* s = {goal: ai|vis|lead, rt, topics: [{id, name, en, lvl, rated, example, custom, url, eid}], video, pr, auth, dash, l14, ads, expert, li, live, con,
+          cnt: {pr, ex, li, lv}, prTouched, adsSel}   live = Livesession (LinkedIn M365 Show + YouTube), je Stueck, einmalig, ohne Rabatt
+     ads = Banner-Werbung gewaehlt; adsSel = Auswahl im aufgeklappten Rechner (assets/ads-book.js): {product, name, page_types, topics, months,
+          quantity, exclusive, net_cents|null} - net_cents kommt nur vom Server */
   function compute(s, P) {
     var pr = P.prices, n = s.topics.length, packs = Math.max(1, n), cnt = s.cnt || {};
     var lv = s.topics.map(function (tp) { return levelOf(tp, P); });
@@ -116,15 +120,27 @@
     var ex = clampStep(cnt.ex, P), li = clampStep(cnt.li, P), lvN = clampStep(cnt.lv, P);
     var rate = +P.discount[s.rt] || 0;
     var discBase = (pr.base + (s.video ? pr.video : 0)) * packs, discount = Math.round(discBase * rate);
-    var monthly = discBase - discount + (s.auth ? pr.auth : 0) + (s.topic ? pr.topic : 0) + (s.li ? li * pr.li : 0) + (s.l14 ? pr.lang : 0);
+    var monthly = discBase - discount + (s.auth ? pr.auth : 0) + (s.li ? li * pr.li : 0) + (s.l14 ? pr.lang : 0);
     var dash = !!(s.dash || s.goal === "lead");   // Leads: Dashboard Pflicht
     var oneOff = (s.pr ? prCount * pr.pr : 0) + (dash ? pr.dash : 0) + (s.expert ? ex * pr.expert : 0) + (s.live ? lvN * pr.live : 0);
     var hardest = n ? Math.max.apply(null, lv) : P.levels.none, recRt = recRuntime(lv, P);
     var eff = effect(s, hardest, prCount, P);
+    var ads = s.ads ? adsOf(s) : null;
     return { n: n, packs: packs, levels: lv, prRec: prRec, prCount: prCount, ex: ex, li: li, lv: lvN, discountRate: rate, discountPct: Math.round(rate * 100),
              discBase: discBase, discount: discount, monthly: monthly, oneOff: oneOff, total: monthly * s.rt + oneOff, dash: dash,
              hardest: hardest, recRt: recRt, geo: eff.geo, seo: eff.seo, geoR: eff.geoR, seoR: eff.seoR, bars: eff.bars, run: pct(s.rt, P),
-             tips: tipsFor(s, { recRt: recRt, hardest: hardest, hardFrom: P.levels.hard_from, n: n }) };
+             tips: tipsFor(s, { recRt: recRt, hardest: hardest, hardFrom: P.levels.hard_from, n: n }), ads: ads };
+  }
+  function adsOf(s) {   // Banner-Auswahl ohne eigene Preisrechnung: der Betrag ist der des Servers oder offen (null)
+    var a = s.adsSel || {}, c = a.net_cents;
+    return { product: String(a.product || ""), name: clean(a.name), page_types: (a.page_types || []).slice(0, 5), topics: (a.topics || []).slice(0, 10),
+             months: +a.months || 1, quantity: +a.quantity || 0, exclusive: !!a.exclusive, net_cents: typeof c === "number" && c >= 0 ? Math.round(c) : null };
+  }
+  var NFE = {};
+  function fmtEur(C, cents) {   // Euro mit Cent in der Schreibweise der Sprache (wie assets/ads-book.js), lateinische Ziffern
+    var k = (C && C.lang) || "en";
+    try { return (NFE[k] || (NFE[k] = new Intl.NumberFormat(k + "-u-nu-latn", { style: "currency", currency: "EUR" }))).format(cents / 100); }
+    catch (e) { return "€" + (cents / 100).toFixed(2); }
   }
 
   /* ---- Texte der Ansicht ---- */
@@ -147,7 +163,6 @@
     if (s.video) add("video", t(C, "row_video", { topics: nT }), fmtUsd(pr.video * r.packs), "", true);
     if (r.discount > 0) add("disc", t(C, "row_disc", { pct: num(C, r.discountPct) }), fmtUsd(-r.discount), "save", true);
     if (s.auth) add("auth", t(C, "row_auth"), fmtUsd(pr.auth), "", true);
-    if (s.topic) add("topic", t(C, "row_topic"), fmtUsd(pr.topic), "", true);
     if (s.li) add("li", t(C, "row_li", { n: num(C, r.li) }), fmtUsd(r.li * pr.li), "", true);
     if (s.l14) add("l14", t(C, "row_lang", { n: num(C, ctx.nLangs) }), fmtUsd(pr.lang), "", true);
     add("month", t(C, "row_month"), fmtUsd(r.monthly), "sum");
@@ -157,6 +172,7 @@
     if (r.dash) add("dash", t(C, "row_dash"), fmtUsd(pr.dash));
     if (s.con && ctx.con !== false) add("con", t(C, "row_con"), t(C, "on_request"));
     add("total", t(C, "row_total"), fmtUsd(r.total), "sum");
+    if (r.ads) add("ads", r.ads.quantity ? t(C, "row_ads", { n: num(C, r.ads.quantity) }) : t(C, "ads_h"), r.ads.net_cents == null ? t(C, "row_ads_open") : fmtEur(C, r.ads.net_cents), "ads");
     return out;
   }
   function tipText(C, P, ctx, r, code) {
@@ -166,7 +182,7 @@
       case "ai:noAuthHard": return t(C, "tip_ai_auth");
       case "vis:noVideo": return t(C, "tip_vis_video");
       case "vis:noLang": return t(C, "tip_vis_lang", { n: num(C, ctx.nLangs) });
-      case "vis:noTopic": return t(C, "tip_vis_topic", { n: num(C, P.topic_sponsors_max) });
+      case "vis:noAds": return t(C, "tip_vis_ads");
       case "lead:dash": return t(C, "tip_lead_dash");
       case "lead:noVideo": return t(C, "tip_lead_video");
       case "lead:noExpert": return t(C, "tip_lead_expert");
@@ -192,6 +208,7 @@
     v.tips = r.tips.map(function (c) { return tipText(C, P, ctx, r, c); });
     v.lock = s.goal === "lead";
     v.summary = t(C, "req_summary", { monthly: fmtUsd(r.monthly), total: fmtUsd(r.total), runtime: months(C, s.rt) });
+    if (r.ads) v.summary += " " + (r.ads.net_cents == null ? t(C, "sum_ads_open") : t(C, "sum_ads", { ads: fmtEur(C, r.ads.net_cents) }));
     v.bars = { geo: [r.bars.geo[0], r.bars.geo[1] - r.bars.geo[0]], seo: [r.bars.seo[0], r.bars.seo[1] - r.bars.seo[0]], run: r.run };
     return v;
   }
@@ -219,7 +236,7 @@
   }
 
   /* ---- Anfrage: Paket v1 (nur Zeichenketten, englische Bezeichnungen, Tiefe <= 2, <= 30 Schluessel, <= 5000 Zeichen) ---- */
-  var COMPONENTS = { base: 1, video: 1, disc: 1, auth: 1, pr: 1 }, EXTRAS = { l14: 1, topic: 1, li: 1, expert: 1, live: 1, dash: 1, con: 1 };
+  var COMPONENTS = { base: 1, video: 1, disc: 1, auth: 1, pr: 1 }, EXTRAS = { l14: 1, li: 1, expert: 1, live: 1, dash: 1, con: 1 };
   function buildPackage(s, P, C, ctx) {
     var E = { lang: "en", T: (C && C.E) || (C && C.T) || {}, E: (C && C.E) || (C && C.T) || {} };
     var r = compute(s, P), list = rows(s, r, P, E, ctx);
@@ -231,9 +248,16 @@
       if (!tp.rated) return t(E, "pkg_unrated", { name: nm });
       return t(E, tp.example ? "pkg_example" : "pkg_rated", { name: nm, level: lvlName(E, tp.lvl) });
     });
+    var extras = list.filter(function (x) { return EXTRAS[x.k]; }).map(line);
+    if (r.ads) {   // Banner-Werbung: Auswahl als eine Zeile (englisch), Betrag netto in EUR vom Server oder offen
+      var a = r.ads;
+      extras.push(t(E, "pkg_ads", { place: a.name || a.product || "-", n: num(E, a.quantity), months: months(E, a.months), pages: a.page_types.join(", ") || "-",
+                                    topics: a.topics.join(", ") || "-", exclusive: a.exclusive ? t(E, "pkg_ads_excl") : "",
+                                    amount: a.net_cents == null ? t(E, "row_ads_open") : fmtEur(E, a.net_cents) }).slice(0, 280));   // API: hoechstens 300 Zeichen je Zeile
+    }
     var pkg = { v: "1", goal: t(E, "pkg_goal_" + s.goal), topics: topics, duration: months(E, s.rt),
                 components: list.filter(function (x) { return COMPONENTS[x.k]; }).map(line),
-                extras: list.filter(function (x) { return EXTRAS[x.k]; }).map(line),
+                extras: extras,
                 monthlyUsd: fmtUsd(r.monthly), oneOffUsd: fmtUsd(r.oneOff), totalUsd: fmtUsd(r.total), discount: r.discountPct + "%",
                 effect: t(E, "pkg_effect", { geo: rng(r.geoR), seo: rng(r.seoR) }), page: String(ctx.page || "") };
     while (JSON.stringify(pkg).length > 5000 && pkg.topics.length > 1) pkg.topics.pop();
@@ -258,7 +282,7 @@
     return "err_send";
   }
   function stateKey(s) {
-    return JSON.stringify([s.goal, s.rt, s.topics.map(function (x) { return x.id; }), !!s.video, !!s.pr, !!s.auth, !!s.dash, !!s.l14, !!s.topic, !!s.expert,
+    return JSON.stringify([s.goal, s.rt, s.topics.map(function (x) { return x.id; }), !!s.video, !!s.pr, !!s.auth, !!s.dash, !!s.l14, !!s.ads, !!s.expert,
                            !!s.li, !!s.con, s.prTouched ? s.cnt.pr : 0, s.cnt.ex, s.cnt.li, !!s.live, s.cnt.lv]);
   }
 
@@ -278,18 +302,19 @@
     return out;
   }
 
-  /* ---- Direkt bestellen per PayPal-Rechnung (#281): nur ohne M365Con (bleibt "auf Anfrage"). Der Server rechnet den Preis neu. ---- */
+  /* ---- Direkt bestellen per PayPal-Rechnung (#281): nur ohne M365Con (bleibt "auf Anfrage"). Der Server rechnet den Preis neu.
+     Banner-Werbung gehoert nicht in diese Bestellung: sie wird im aufgeklappten Rechner ueber /api/ads/bookings gebucht (#285). ---- */
   function invoiceAllowed(s) { return !(s && s.con); }
   function orderPackage(s) {
     var c = s.cnt || {};
     return { goal: s.goal, rt: s.rt, topics: (s.topics || []).map(function (tp) { return clean(tp.en || tp.name).slice(0, 80); }),
-             video: !!s.video, pr: !!s.pr, auth: !!s.auth, dash: !!s.dash, l14: !!s.l14, topic: !!s.topic, expert: !!s.expert, li: !!s.li, live: !!s.live,
+             video: !!s.video, pr: !!s.pr, auth: !!s.auth, dash: !!s.dash, l14: !!s.l14, expert: !!s.expert, li: !!s.li, live: !!s.live,
              con: !!s.con, prTouched: !!s.prTouched, cnt: { pr: c.pr, ex: c.ex, li: c.li, lv: c.lv } };
   }
 
   return { EMAIL_RE: EMAIL_RE, esc: esc, clean: clean, fmtUsd: fmtUsd, num: num, decimalSep: decimalSep, plural: pcat, lookup: lookup, fill: fill, t: t, tn: tn,
            clampStep: clampStep, levelOf: levelOf, prRecommendation: prRecommendation, recRuntime: recRuntime, effect: effect, span: span, pct: pct,
-           compute: compute, rows: rows, view: view, rangeText: rangeText, months: months, rowsHtml: rowsHtml, recHtml: recHtml, pickedHtml: pickedHtml, badge: badge,
+           compute: compute, rows: rows, fmtEur: fmtEur, view: view, rangeText: rangeText, months: months, rowsHtml: rowsHtml, recHtml: recHtml, pickedHtml: pickedHtml, badge: badge,
            buildPackage: buildPackage, validate: validate, requestBody: requestBody, errorKey: errorKey, stateKey: stateKey, ssr: ssr,
            invoiceAllowed: invoiceAllowed, orderPackage: orderPackage };
 });

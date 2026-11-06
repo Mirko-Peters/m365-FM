@@ -11,6 +11,7 @@ Quellen (jeweils nur, wenn verfuegbar; fehlende Werte werden weggelassen, nie ge
   - data/stats/ai_performance.json: KI-Zitate (Bing AI Performance, Export), Impressionen in Google AI Overviews und AI Mode
     (Search Console, Bericht Generative AI, Export; nur bei status "ok"), Google-Suche (Search Console API)
   - data/sponsor_pricing.json + data/sponsor_i18n.json: Sponsoring-Pakete und Listenpreise wie auf /sponsor/
+  - data/ad_pricing.json: TKP-Spanne der Banner-Werbung (Startwerte, EUR), das Extra im Konfigurator statt des frueheren Themen-Sponsorings
 Aufruf: python tools/mediakit.py --out out/mediakit [--brand m365con]   (Umgebung: YT_CLIENT_ID, YT_CLIENT_SECRET, YT_REFRESH_TOKEN,
         CF_ANALYTICS_TOKEN oder CLOUDFLARE_API_TOKEN, CF_ACCOUNT_ID oder R2_ACCOUNT_ID, CF_RUM_SITE_TAG optional, CF_ZONE_ID optional, BING_WEBMASTER_API_KEY)
 Ergebnis: m365fm-media-kit-en.pdf, m365fm-media-kit-de.pdf, latest.json
@@ -263,6 +264,7 @@ def local():
     try:
         out["pricing"] = json.loads((ROOT / "data" / "sponsor_pricing.json").read_text("utf-8"))
         out["sponsor_i18n"] = json.loads((ROOT / "data" / "sponsor_i18n.json").read_text("utf-8"))
+        out["ad_pricing"] = json.loads((ROOT / "data" / "ad_pricing.json").read_text("utf-8"))
     except Exception: pass
     return out
 
@@ -337,12 +339,12 @@ TXT = {
               "International: language editions and a website in {n} languages instead of a single market.",
               "Measurable: sponsor dashboard with downloads, tracked clicks, video views, leads and AI citations of your entities."],
         sp_h="Become a sponsor", sp_lead="Packages from the current price list on www.m365.fm/sponsor/ (list prices in USD, plus VAT where applicable). Configure your package there and send a request in two minutes.",
-        sp_pkg="Package", sp_price="List price", sp_disc="Runtime discount on base and video package: {d}. At most {n} sponsors per topic.",
+        sp_pkg="Package", sp_price="List price", sp_disc="Runtime discount on base and video package: {d}.",
         sp_rules="Sponsored content is always labelled – including live sessions on LinkedIn and YouTube; links to sponsors carry rel=\"sponsored\". No bought links, editorial independence of the episodes.",
         cta="Configure your sponsorship", cta_url="www.m365.fm/sponsor/",
         contact="Contact", contact_t="Mirko Peters · mirko.peters@m365.fm · www.m365.fm",
         note="All figures come directly from the named sources for the stated period. Values that are not available are left out, not estimated.",
-        units={"topic_month": "per topic and month", "each": "each", "month": "per month", "once": "one-time", "issue_month": "per issue"},
+        units={"topic_month": "per topic and month", "each": "each", "month": "per month", "once": "one-time", "issue_month": "per issue", "cpm": "per 1,000 impressions"},
     ),
     "de": dict(
         title="Mediadaten", sub="Microsoft-365-Podcast, Video- und Wissensplattform", asof="Stand der Zahlen", page="Seite",
@@ -386,12 +388,12 @@ TXT = {
               "International: Sprachfassungen und eine Website in {n} Sprachen statt nur eines Marktes.",
               "Messbar: Sponsor-Dashboard mit Downloads, getrackten Klicks, Videoaufrufen, Leads und KI-Zitaten Ihrer Entitäten."],
         sp_h="Sponsor werden", sp_lead="Pakete aus der aktuellen Preisliste auf www.m365.fm/sponsor/ (Listenpreise in USD, ggf. zzgl. USt.). Dort stellen Sie Ihr Paket zusammen und schicken die Anfrage in zwei Minuten ab.",
-        sp_pkg="Paket", sp_price="Listenpreis", sp_disc="Laufzeitrabatt auf Basis- und Videopaket: {d}. Höchstens {n} Sponsoren pro Thema.",
+        sp_pkg="Paket", sp_price="Listenpreis", sp_disc="Laufzeitrabatt auf Basis- und Videopaket: {d}.",
         sp_rules="Gesponserte Inhalte sind immer gekennzeichnet – auch Livesessions auf LinkedIn und YouTube; Links zu Sponsoren tragen rel=\"sponsored\". Keine gekauften Links, redaktionelle Unabhängigkeit der Folgen.",
         cta="Sponsoring zusammenstellen", cta_url="www.m365.fm/de/sponsor/",
         contact="Kontakt", contact_t="Mirko Peters · mirko.peters@m365.fm · www.m365.fm",
         note="Alle Zahlen stammen direkt aus den genannten Quellen für den angegebenen Zeitraum. Nicht verfügbare Werte werden weggelassen, nicht geschätzt.",
-        units={"topic_month": "pro Thema und Monat", "each": "je Stück", "month": "pro Monat", "once": "einmalig", "issue_month": "pro Ausgabe"},
+        units={"topic_month": "pro Thema und Monat", "each": "je Stück", "month": "pro Monat", "once": "einmalig", "issue_month": "pro Ausgabe", "cpm": "pro 1.000 Einblendungen"},
     ),
 }
 
@@ -683,17 +685,22 @@ def build_pdf(path, lang, D, F):
     P = l_.get("pricing") or {}; I = (l_.get("sponsor_i18n") or {}).get(lang) or (l_.get("sponsor_i18n") or {}).get("en") or {}
     if P.get("prices") and I:
         y = kicker(y, t["sp_pkg"] + " · " + t["sp_price"])
-        order = [("base", "base_h", "base_b1"), ("video", "video_h", "video_b"), ("topic", "topic_h", "topic_hint"), ("lang", "lang_h", "lang_hint"),
+        order = [("base", "base_h", "base_b1"), ("video", "video_h", "video_b"), ("ads", "ads_h", "ads_hint"), ("lang", "lang_h", "lang_hint"),
                  ("pr", "pr_h", "pr_b"), ("auth", "auth_h", None), ("expert", "expert_h", "expert_hint"), ("li", "li_h", "li_hint"),
                  ("live", "live_h", "live_hint"), ("dash", "dash_h", "dash_hint")]   # live: Livesession LinkedIn + YouTube (#260), je Stueck
-        fillv = {"episodes": P.get("episodes_per_topic", ""), "n": P.get("topic_sponsors_max", "") if True else "", "code": 'rel="sponsored"'}
+        fillv = {"episodes": P.get("episodes_per_topic", ""), "code": 'rel="sponsored"'}
+        cpm = sorted(p["price_cents"] for p in (l_.get("ad_pricing") or {}).get("products", []) if str(p.get("id", "")).startswith("banner_") and isinstance(p.get("price_cents"), int))
         for key, hk, bk in order:
-            if key not in P["prices"] or hk not in I: continue
-            name = I[hk].replace("{n}", str(nl) if key == "lang" else str(P.get("topic_sponsors_max", "")))
+            if (key not in P["prices"] and not (key == "ads" and cpm)) or hk not in I: continue
+            name = I[hk].replace("{n}", str(nl))
             desc = (I.get(bk) or "") if bk else ""
             for a, b in fillv.items(): desc = desc.replace("{" + a + "}", str(b))
             unit = t["units"].get(P.get("units", {}).get(key, ""), "")
-            price = ("$" + fmt("en", P["prices"][key])) + (f" · {unit}" if unit else "")
+            if key == "ads":   # Banner-Werbung: TKP-Spanne in EUR (Startwerte; massgeblich ist die Preisabfrage im Konfigurator)
+                e = lambda c: str(c // 100) if c % 100 == 0 else f"{c / 100:.2f}"
+                price = I.get("ads_price", "€{min}–{max}").replace("{min}", e(cpm[0])).replace("{max}", e(cpm[-1])) + " · " + t["units"]["cpm"]
+            else:
+                price = ("$" + fmt("en", P["prices"][key])) + (f" · {unit}" if unit else "")
             cv.setFillColor(INK); cv.setFont(F["Barlow-SemiBold"], 10); cv.drawString(M, y, name)
             cv.setFillColor(AC); cv.setFont(F["Barlow-SemiBold"], 10); cv.drawRightString(W - M, y, price)
             y -= 12
@@ -701,7 +708,7 @@ def build_pdf(path, lang, D, F):
             cv.setStrokeColor(BD); cv.setLineWidth(.4); cv.line(M, y + 2, W - M, y + 2); y -= 10
         disc = P.get("discount") or {}
         dtxt = ", ".join(f"{k} {'Monate' if lang == 'de' else 'months'} −{int(v * 100)} %" for k, v in disc.items() if v)
-        y = para(M, y, t["sp_disc"].format(d=dtxt, n=P.get("topic_sponsors_max", "")), F["Barlow"], 8.6, MUT) - 2
+        y = para(M, y, t["sp_disc"].format(d=dtxt), F["Barlow"], 8.6, MUT) - 2
     y = para(M, y, t["sp_rules"], F["Barlow"], 8.6, MUT) - 14
     # CTA-Kasten mit QR-Code
     box_h = 104
@@ -740,7 +747,7 @@ def main():
         p = out / f"m365fm-media-kit-{lang}.pdf"; build_pdf(p, lang, D, F)
         print("PDF:", p, p.stat().st_size // 1024, "KB,", len(rows_for(lang, D)), "Kennzahlen")
     pub = {k: v for k, v in D.items() if k != "local"}
-    pub["local"] = {k: v for k, v in D["local"].items() if k not in ("pricing", "sponsor_i18n")}
+    pub["local"] = {k: v for k, v in D["local"].items() if k not in ("pricing", "sponsor_i18n", "ad_pricing")}
     (out / "latest.json").write_text(json.dumps(pub, ensure_ascii=False, indent=1), "utf-8")
     if not rows_for("en", D): sys.exit("Keine Kennzahlen verfuegbar - PDF nicht veroeffentlichen")
 
