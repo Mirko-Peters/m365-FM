@@ -8,7 +8,7 @@ import { computeLevels } from "./levels.js";
 import { ensureDirectoryCols, geocodeAddress, recordGeocodeStatus } from "./directory.js";
 import { publicKindSql, publicItemSql } from "./feedpolicy.js";
 
-export const PROGRAMS = ["mvp", "mct", "rd", "msa", "ms_employee", "partner"];
+export const PROGRAMS = ["mvp", "mct", "rd", "msa", "ms_employee", "partner", "gde"];   // gde: Google Developer Experts (MVP-Tracker, format=gde)
 export const RELATIONS = ["colleague", "manager", "report", "client", "trainer", "student", "cospeaker", "podcast", "community", "mentor", "other"];
 export const KINDS = ["linkedin", "github", "youtube", "x", "mastodon", "bluesky", "twitch", "spotify", "apple", "amazon", "deezer", "instagram", "tiktok", "facebook", "blog", "podcast", "newsletter", "website", "other"];
 const KIND_HOST = { linkedin: /(^|\.)linkedin\.com$/, github: /(^|\.)github\.com$/, youtube: /(^|\.)(youtube\.com|youtu\.be)$/, x: /(^|\.)(x\.com|twitter\.com)$/, twitch: /(^|\.)twitch\.tv$/, bluesky: /(^|\.)bsky\.app$/, spotify: /(^|\.)spotify\.com$/, apple: /(^|\.)(podcasts|music)\.apple\.com$/, amazon: /(^|\.)(music\.amazon\.[a-z.]+|audible\.[a-z.]+)$/, deezer: /(^|\.)deezer\.com$/, instagram: /(^|\.)instagram\.com$/, tiktok: /(^|\.)tiktok\.com$/, facebook: /(^|\.)(facebook\.com|fb\.com)$/ };
@@ -157,6 +157,11 @@ async function personView(db, uid, viewer) {
   const org = p.show_org ? await db.prepare("SELECT o.handle,o.name FROM org_members m JOIN orgs o ON o.id=m.org_id WHERE m.user_id=? AND m.status='active' AND o.public=1 ORDER BY m.created LIMIT 1").bind(uid).first() : null;
   const contrib = [...(await q("SELECT 'wiki' k,term t,lang l,summary s,created c FROM wiki_rev WHERE user_id=? AND status IN ('live','old') ORDER BY created DESC LIMIT 15", uid)),
     ...(await q("SELECT 'entity' k,eid t,'' l,summary s,created c FROM entity_rev WHERE user_id=? AND status IN ('live','old') ORDER BY created DESC LIMIT 15", uid))].sort((a, b) => b.c - a.c).slice(0, 15);
+  // MVP-Tracker (#231): nur freigegebene (public=1) und nicht verborgene/unbestaetigte (review='') Beitraege, nur bei oeffentlichem Profil
+  const mvpContributions = p.public ? (await q("SELECT id,title,url,published,category,kind,topics FROM contributions WHERE user_id=? AND public=1 AND review='' ORDER BY published DESC,id DESC LIMIT 50", uid).catch(() => [])).map((c) => {
+    let topics = []; try { topics = JSON.parse(c.topics || "[]"); } catch {}
+    return { id: c.id, title: c.title, url: c.url, published: c.published, category: c.category, kind: c.kind, topics };
+  }) : [];
   const counts = { wiki: (await db.prepare("SELECT COUNT(*) n FROM wiki_rev WHERE user_id=? AND status IN ('live','old')").bind(uid).first()).n, entity: (await db.prepare("SELECT COUNT(*) n FROM entity_rev WHERE user_id=? AND status IN ('live','old')").bind(uid).first()).n };
   const badges = (await q("SELECT badge FROM user_badges WHERE user_id=?", uid)).map((b) => b.badge);
   const recs = (await q("SELECT r.id,r.relation,r.body,r.created,u.name,(SELECT handle FROM profiles WHERE user_id=r.author_id AND public=1) h FROM recommendations r JOIN users u ON u.id=r.author_id AND u.banned=0 WHERE r.subject_id=? AND r.status='live' ORDER BY r.created DESC LIMIT 30", uid)).map((r) => ({ id: r.id, relation: r.relation, body: r.body, created: r.created, by: { name: r.name, handle: r.h || "" } }));
@@ -166,7 +171,7 @@ async function personView(db, uid, viewer) {
   const contact = {}; let priv = null;
   if (pv) { for (const k of CF) if (pv["vis_" + k] === "all" && pv[k]) contact[k] = pv[k]; if (+viewer === uid) priv = { ...Object.fromEntries([...CF.map((k) => [k, pv[k]]), ...CF.map((k) => ["vis_" + k, pv["vis_" + k]])]), map_public: !!pv.map_public }; }
   return { type: "u", i18n: await readI18n(db, uid), contact, ...(priv ? { private: priv } : {}), img: im?.updated || 0, company_eid: pce, id: uid, handle: p.handle, name: p.name, bio: p.bio, headline: p.headline, about: p.about, company: p.company, job: p.job, country: p.country, public: !!p.public, show_org: !!p.show_org,
-    expertise: exp.map((e) => ({ ...e, verified: !!e.verified, me: !!e.me, ev: evs[e.e] || {} })), programs: programs.map((x) => ({ ...x, verified: !!x.verified })), certs, channels, org, contrib, counts, badges, recs,
+    expertise: exp.map((e) => ({ ...e, verified: !!e.verified, me: !!e.me, ev: evs[e.e] || {} })), programs: programs.map((x) => ({ ...x, verified: !!x.verified })), certs, channels, org, contrib, mvp_contributions: mvpContributions, counts, badges, recs,
     items: await itemsOf(db, "i.owner_type='u' AND i.owner_id=?", [uid], viewer, 8) };
 }
 export async function ensureFeedCols(db) {
