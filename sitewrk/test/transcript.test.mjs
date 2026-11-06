@@ -24,13 +24,13 @@ const B = {
 };
 let gets = 0;
 const PAGES = { get: async (k) => { gets++; return B[k] || null; } };
-const env = { PAGES, MIGRATED: "1", CONSENT_COUNTRIES: "DE" };
+const env = { PAGES, MIGRATED: "1" };
 const req = (path, h = {}, method = "GET") => new Request("https://www.m365.fm" + path, { headers: h, method });
 const run = async (r, e = env) => { const w = []; const res = await W.fetch(r, e, { waitUntil: (p) => w.push(p) }); await Promise.all(w); return res; };
 const hdr = (res, ct) => {
   assert.equal(res.headers.get("content-type"), ct); assert.equal(res.headers.get("x-robots-tag"), "noindex");
   assert.equal(res.headers.get("access-control-allow-origin"), "*"); assert.equal(res.headers.get("x-content-type-options"), "nosniff");
-  assert.equal(res.headers.get("x-m365-cr"), null, "keine HTML-Behandlung (Region)");
+  assert.equal(res.headers.get("x-m365-cr"), null);
 };
 
 test("Regel: Hauptshow, Dub-Folge und Sprachfassung; Index und andere Dateien nicht", () => {

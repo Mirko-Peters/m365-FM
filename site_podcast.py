@@ -3,6 +3,7 @@ from datetime import datetime, timezone
 from site_i18n import COMM_LANGS, pfx, pfx2, T
 from site_learn import ENTS, esc, _fetch_json, LCSS
 from site_design import pager as PG, neighbours as NB   # Vor/Zurueck am Seitenende (rel=prev/next)
+import site_player as PL   # Spreaker-Player erst nach Klick
 
 
 def fetch_eps(api):
@@ -41,7 +42,7 @@ def build(g, eps, people, api):
             u = f"{croot}podcast/{e['slug']}/"; au = f"{BASE}/community/u/{e['handle']}/"
             topics = [t for t in e.get("topics", []) if t in ENTS]
             tl = "".join(f'<a class="mb-tag" href="{BASE}/entity/{t}/">{esc(ENTS[t]["name"])}</a> ' for t in topics)
-            player = "" if not e["spreaker_id"] else f'<iframe title="{esc(e["title"])}" src="https://widget.spreaker.com/player?episode_id={e["spreaker_id"]}&theme=light" width="100%" height="200" loading="lazy" style="border:0"></iframe>'
+            player = "" if not e["spreaker_id"] else PL.player("spreaker", e["spreaker_id"], e["title"], T(lang, "Listen on Spreaker", "Bei Spreaker anhören"), link=e.get("ep_url"), height=200)
             gs = [g for g in (e.get("guests") or []) if g.get("handle") != e["handle"]]
             guests_html = (f'<p class="mut">{esc(T(lang, "Guests", "Gäste"))}: ' + ", ".join(f'<a href="{croot}u/{g["handle"]}/">{esc(g["name"])}</a>' for g in gs) + "</p>") if gs else ""
             b = shell(lang, f'<p class="mut"><a href="{croot}podcast/">{esc(ttl)}</a></p><article><h1>{esc(e["title"])}</h1>'

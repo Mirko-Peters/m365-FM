@@ -1,0 +1,135 @@
+{
+ "de": {
+  "html": "<p>CRM, ERP und Datenbanken enthalten wertvolle Erkenntnisse. Nur lassen sie sich selten gemeinsam durchsuchen, weil jedes System in seinem eigenen Silo steckt. Dieser Artikel zeigt, wie Microsoft Copilot zusammen mit Fabric Data Agents diese Mauern abbaut. Mitarbeiter stellen dann eine Frage in normaler Sprache und erhalten eine Antwort, die Daten aus mehreren Systemen zusammenführt.</p>\n<p>Wir betrachten, warum verstreute Daten so teuer sind, was Fabric-Konnektoren leisten, wie Sie Ihren ersten Daten-Chatbot aufsetzen und warum daraus mehr werden kann als ein schnellerer Bericht, nämlich ein Prognosewerkzeug.</p>\n\n<h2>Die versteckten Kosten verstreuter Daten</h2>\n<p>Die meisten Unternehmen haben mehr Dashboards als echte Erkenntnisse. Die Finanzabteilung arbeitet mit ERP-Tabellen, das Marketing mit eigenen CRM-Exporten, und die IT hütet Datenbanken, die außerhalb des Teams kaum jemand versteht. Auf dem Papier ist das eine Goldgrube. In der Praxis sind es Fragmente, die sich nicht zusammenfügen lassen.</p>\n<p>Das Problem ist nicht, dass Informationen fehlen. Jedes System hält an seiner eigenen Sicht der Wahrheit fest. ERP-Systeme speichern Transaktionen über Jahre, CRM-Systeme wissen, mit wem der Vertrieb gestern gesprochen hat, und weitere Datenbanken halten alles von Lieferkettenupdates bis zu Produktivitätszahlen fest. Am Ende verschicken Mitarbeiter statische Excel-Dateien per E-Mail und kopieren Zahlen in PowerPoint. Dabei hoffen sie, dass niemand die Lücke zwischen Präsentation und aktueller Realität bemerkt.</p>\n<h3>Drei Sichten auf dasselbe Quartal</h3>\n<p>Ein typisches Szenario: Der Vertriebsleiter zieht am Montag Daten aus der CRM-Pipeline. Am Donnerstag wartet das Finanzteam noch auf den Abgleich im ERP. Das Marketing bringt Kampagnendaten der Vorwoche ein. Das Unternehmen hat nun drei Ausblicke auf dasselbe Quartal, und Entscheidungen fallen mitunter auf Basis veralteter Zahlen.</p>\n<p>Hinzu kommt die Routinearbeit: Exporte ausführen, Spaltenüberschriften bereinigen, Dateien zusammenführen, Formate korrigieren, wieder hochladen. Die Energie fließt in mechanische Aufgaben statt in Analyse. Projekte stocken, Führungskräfte zögern, weil niemand den Zahlen traut, und Chancen gehen verloren. Lieferengpässe könnten früher auffallen, eine Kampagne könnte pausiert werden, bevor weiteres Geld in einen schwachen Kanal fließt. Vertriebsmitarbeiter könnten Angebote auf Basis tatsächlicher Umsatzpositionen machen statt auf Vermutungen. Bis der vollständige Bericht vorliegt, ist der Moment zum Handeln oft vorbei.</p>\n\n<h2>Warum klassische Integration oft nicht genügt</h2>\n<p>Herkömmliche ETL-Systeme und Middleware spielen durchaus eine Rolle: Sie übertragen Informationen von einer Anwendung zur anderen. Sie laden Daten aber meist in Intervallen in Data Warehouses, wo sie bis zum nächsten Batchlauf liegen. Für Monatsabschluss, Abstimmung oder Compliance-Berichte ist das in Ordnung. Wenn Agilität gefragt ist, bricht dieses Modell zusammen. Wer eine Live-Frage stellt und Stunden oder Tage auf die Antwort wartet, kann kein Verkaufsgespräch führen, keine operative Prognose anpassen und kein Kundenproblem lösen, bevor es eskaliert.</p>\n<p>Dazu kommt der Aufwand: Wochen für Konfiguration, Feldzuordnung, Transformationsskripte, Pipeline-Tests und Anpassungen, sobald sich ein Schema im Upstream ändert. Solche Systeme sind eher für Spezialisten gebaut als für Mitarbeiter, die Antworten brauchen.</p>\n<h3>Häufige Fehler und Stolpersteine</h3>\n<ul>\n<li><strong>Integration als reines Installationsproblem sehen:</strong> Ein weiteres Data Warehouse oder Extraktionstool fügt oft nur einen Schritt zwischen Nutzer und Antwort ein. Verzögerung und Diskrepanz bleiben.</li>\n<li><strong>Mehr Dashboards statt weniger Mauern:</strong> Zusätzliche Ansichten auf unvollständigen Grundlagen schließen die Vertrauenslücke nicht. Die Herausforderung ist strukturell, nicht ein Mangel an Rohmaterial.</li>\n<li><strong>Abhängigkeit von Tickets:</strong> Wenn Geschäftsanwender für jede neue Auswertung ein Ticket bei der IT einreichen müssen, entsteht der Engpass erneut. Ein Beispiel: Ein Vertriebsleiter braucht freitags noch Aufschlüsselungen nach Produktstufen in Südostasien für die Vorstandssitzung am Montag. Die Analyse kommt zu spät, und das Meeting findet ohne diese Zahlen statt.</li>\n<li><strong>Individuelle Integrationen, die bei Updates brechen:</strong> Aktualisiert ein Anbieter sein Produkt, funktioniert der selbst gebaute Integrationscode oft nicht mehr. Patches und Tests beginnen von vorn.</li>\n</ul>\n\n<h2>Copilot und Fabric Data Agents: Dialog statt Dashboard</h2>\n<p>Microsoft Copilot in Kombination mit Fabric Data Agents setzt an genau diesem Punkt an. Das Werkzeug ist kein Spezial-Tool nur für Berichte, sondern in die Microsoft 365-Umgebung eingebettet, in der sich die meisten Mitarbeiter ohnehin täglich bewegen. Es wirkt weniger wie eine externe Ergänzung als wie eine natürliche Erweiterung des Arbeitsplatzes.</p>\n<p>Fabric Data Agents bringen Wissen über Konnektoren mit. Sie wissen, wie Daten abgerufen und so strukturiert werden, wie es die Geschäftslogik verlangt. Das System interpretiert natürliche Fragen und erzeugt die Datenabfragen im Hintergrund. Fragen Sie etwa nach den Umsatztrends hochkarätiger Kunden im letzten Quartal, übersetzt Copilot die Frage in passende Abfragen und liefert kombinierte Erkenntnisse aus CRM- und ERP-Datensätzen.</p>\n<h3>Was sich für Anwender ändert</h3>\n<ul>\n<li>Wer im Finanzwesen arbeitet, muss kein SQL lernen. Im Vertrieb muss niemand in technische Schnittstellendokumentation eintauchen.</li>\n<li>Die Interaktion ist dialogorientiert, die Ergebnisse sind sofort nutzbar und nicht an verzögerte Batches gebunden.</li>\n<li>Der Zugriff hängt nicht mehr von technischen Fähigkeiten ab. Jeder hat gewissermaßen einen Dateningenieur am Schreibtisch.</li>\n</ul>\n<p>Die Bearbeitungszeit sinkt von wochenlangem Warten nach einer Berichtsanforderung auf einfaches Fragen und Antworten. Das passt auch besser dazu, wie Menschen im Geschäftskontext ohnehin denken.</p>\n\n<h2>Fabric-Konnektoren: das Rückgrat des Ansatzes</h2>\n<p>Die dialogorientierte Einfachheit steht und fällt damit, wie gut Daten aus vielen Systemen abgerufen und vereinheitlicht werden. Dafür sorgen Fabric-Konnektoren: vorgefertigte Komponenten, die mit gängigen Geschäftssystemen kommunizieren können.</p>\n<h3>Das Problem der klassischen Punkt-zu-Punkt-Integration</h3>\n<p>Jedes System hat ein eigenes Datenmodell, eigene Besonderheiten, Authentifizierungsmethoden und APIs, die sich weiterentwickeln. Traditionell bauen Ingenieure ein Kartenhaus aus Extraktion, Transformation und Laden in Intervallen plus Middleware, die Datenkonflikte ausgleicht. Das dauert Wochen oder Monate. Nehmen wir SAP ERP und Salesforce CRM: Beide strukturieren ihre Daten völlig unterschiedlich. Selbst mit Beratern oder Middleware stimmen Umsatzzahlen in SAP nicht immer mit der Vertriebspipeline in Salesforce überein, und jemand korrigiert Fehler nachgelagert von Hand.</p>\n<h3>Vorgefertigte Brücken zu einer gemeinsamen Plattform</h3>\n<p>Fabric-Konnektoren drehen dieses Prinzip um. Sie kennen bereits Authentifizierung, Schlüsselzuordnung und Datenstrukturen des jeweiligen Systems. Ein Dynamics 365-Konnektor fängt nicht bei null an, er weiß, wie Tabellen in Dynamics zusammenhängen und wie sie in eine einheitliche Fabric-Umgebung gelangen. Dasselbe gilt für SQL Server, Oracle, SAP, Salesforce und weitere gängige Plattformen. Auch SharePoint, Azure SQL, Dateifreigaben und Cloud-Speicherkonten gehören zu den unterstützten Quellen.</p>\n<p>Statt dass jedes System mit jedem anderen sprechen muss, treffen sich alle an einem zentralen Punkt, und genau diesen Hub kann Copilot abfragen. Das ist wichtig, weil nur wenige Unternehmen eine einzige Plattform betreiben. Die meisten haben eine über Jahrzehnte gewachsene Mischung aus Cloud und lokalen Lösungen.</p>\n<p>Die schwierigste Arbeit, die technische Übersetzung, steckt bereits im Konnektor. Anwender müssen keine SQL-Joins, gespeicherten Prozeduren oder REST-APIs verstehen. Sie wählen die Quelle, konfigurieren die Sicherheitsberechtigungen, und Fabric erledigt den Rest. Aus einem Entwicklungsprojekt wird eine Einrichtungsaufgabe, die ein erfahrener Administrator bewältigen kann. Wer eine neue CRM-Instanz oder Lieferkettendaten aus SAP anbinden will, wählt den passenden Konnektor, authentifiziert sich und prüft, ob die Daten korrekt fließen. Das senkt die Hürde so stark, dass sich auch Quellen lohnen, deren Anbindung bisher zu teuer schien.</p>\n\n<h2>Den ersten KI-Daten-Chatbot aufbauen</h2>\n<p>Stellen Sie sich vor, Sie fragen: „Was waren die Top-Produkte des letzten Quartals in Europa?“ Innerhalb von Sekunden kommt die Antwort, nicht aus einem bestellten Bericht oder einer zusammengebastelten Tabelle, sondern von einem Chatbot, der weiß, wo er suchen muss.</p>\n<p>Früher bedeutete ein unternehmensspezifischer Bot die Investition in Sprachverarbeitungsmodelle, eigene Konnektoren und viel Entwicklungsarbeit. Viele Projekte wurden zu langwierigen Experimenten, bei denen mehr Zeit in Pipelines floss als später in Fragen der Nutzer. Mit Copilot und Fabric Data Agents entfällt das manuelle Modelltraining. Ein mittelständischer Hersteller könnte so einen Ort schaffen, an dem Vertrieb, Finanzen und Betriebsleiter wichtige Leistungsdaten abfragen.</p>\n<h3>Schritt 1: Die richtigen Datenquellen verbinden</h3>\n<p>In der Fabric-Umgebung authentifizieren Sie sich beim ERP-System, importieren CRM-Datensätze über den passenden Konnektor und binden SQL- oder dateibasierte Quellen mit unterstützendem Kontext an. Die Schwerstarbeit steckt im Konnektor-Setup, das Formate und Anmeldemethoden bereits versteht.</p>\n<h3>Schritt 2: Copilot und Fabric Data Agents aktivieren</h3>\n<p>Hier legen Sie fest, welche Datensätze und Konversationsabfragen einfließen sollen. Eine eigene Entwicklung ist nicht nötig. Das Projekt gleicht eher der Aktivierung einer Erweiterung eines Tools, das Sie bereits nutzen. Select-Anweisungen oder Joins schreiben Sie nicht selbst, die strukturierten Anfragen entstehen im Hintergrund.</p>\n<h3>Ein Beispiel aus dem Finanzteam</h3>\n<p>Ein Teammitglied bittet um die überfälligen Rechnungen der letzten 30 Tage. Es erhält in Sekunden ein klares Ergebnis, und ein vorhandenes Power BI Dashboard zeigt zugleich die gefilterte Ansicht. Es gibt keine E-Mail-Kette und keinen CSV-Export auf dem Desktop. Sobald eine Abteilung das nutzt, erkennen andere, dass sie dasselbe für ihre täglichen Fragen tun können.</p>\n<p>Der größere Mehrwert entsteht, wenn viele im Unternehmen Zugriff haben: Mitarbeiter an der Front, Führungskräfte und Backoffice-Teams. Anfragen müssen nicht mehr durch einen zentralen IT-Engpass. Erkenntnisse werden Teil des Alltags statt eines vierteljährlichen Rituals, und Fragen kommen auch von Menschen, die früher nie gefragt hätten. Die schwierigste Aufgabe ist nicht mehr die Integration, sondern die Entscheidung, welche Fragen Sie zuerst priorisieren.</p>\n\n<h2>Echtzeiteinblicke und Prognosen</h2>\n<p>Berichte sagen, was bereits passiert ist. Viele Unternehmen prüfen den Umsatz nach dem Quartalsabschluss, den Lagerbestand, wenn er schon fehlt, und die Kundenabwanderung, nachdem Verträge verloren sind. Liegen die Daten einheitlich vor, können dieselben Zahlen Prognosen speisen, die zeigen, was als Nächstes wahrscheinlich geschieht.</p>\n<h3>Lieferkette: Warnung vor dem Engpass</h3>\n<p>Im klassischen Betrieb zeigen sich Engpässe im ERP erst, wenn Bestellungen zu spät eintreffen. Mit Prognosen auf integrierten Daten erhält ein Logistikmanager Tage im Voraus einen Hinweis auf zu erwartende Lieferantenverzögerungen. Copilot kann dazu die Verkaufsgeschwindigkeit aus dem CRM, Lagerbestände aus dem ERP und Lieferzeiten aus Betriebsdatenbanken auswerten und das Risiko markieren. Beschaffungsteams verhandeln dann Alternativen, bevor die Kundennachfrage die Lücke bemerkt.</p>\n<h3>Vertrieb: Welche Deals kritisch werden</h3>\n<p>Hat die KI Zugriff auf CRM-Opportunities, historische Abschlussraten und Einkaufsmuster, zeigt sie, welche Pipeline-Segmente wahrscheinlich noch abschließen. Der Vertriebsleiter sieht nicht nur Abgeschlossenes, sondern erkennt auch, welche Geschäfte vor Quartalsende kritisch werden. Das Marketing kann Kampagnen gezielt darauf ausrichten.</p>\n<p>Solche Prognosen kann kein einzelnes System allein liefern. Das CRM kennt die Aktivitäten, aber nicht die Lieferantenverzögerungen. Das ERP kennt die Kostenseite, aber nicht die Trends beim Customer Lifetime Value. Erst die Kombination macht Muster sichtbar, die in isolierten Abteilungen untergehen.</p>\n<p>Für Manager bedeutet das: Ein Dashboard zeigt nicht nur einen Lagerbestand von 6000 Einheiten, sondern auch, dass er in 10 Tagen unter den Sicherheitsbestand fällt, wenn die Verkaufsgeschwindigkeit anhält. Ressourcen lassen sich früher umschichten, Budgets gezielter zuweisen, Fehler reduzieren, bevor sie in einem Standardbericht auftauchen. Als Muster aus verschiedenen Branchen werden genannt: Einzelhändler vermeiden Fehl- und Überbestände, Hersteller erkennen Wartungsbedarf vor Geräteausfällen, Dienstleister sehen Abwanderungsrisiken voraus. Das sind keine Ersatzprozesse, sondern Erweiterungen bestehender Systeme, die den Blick nach hinten um Vorausschau ergänzen. Strategie wird so vom jährlich angepassten Plan zum dynamischen Prozess, und Prognosen können sich auf Marge, Kundenzufriedenheit und Marktpositionierung auswirken.</p>\n\n<h2>Praktische Takeaways</h2>\n<ul>\n<li>Der Engpass sind nicht fehlende Daten, sondern die Mauern zwischen den Systemen. Mehr Dashboards oder Exporte lösen das nicht.</li>\n<li>Fabric-Konnektoren bringen Authentifizierung, Schlüsselzuordnung und Datenstrukturen vieler gängiger Systeme mit, etwa Dynamics 365, SQL Server, Oracle, SAP und Salesforce.</li>\n<li>Die Anbindung einer Quelle wird zur Einrichtungsaufgabe: Konnektor wählen, authentifizieren, Berechtigungen setzen, Datenfluss prüfen.</li>\n<li>Der Aufbau eines Daten-Chatbots erfolgt in zwei Schritten: Datenquellen verbinden, dann Copilot und Fabric Data Agents aktivieren.</li>\n<li>Anwender stellen Fragen in natürlicher Sprache. Die strukturierten Abfragen entstehen im Hintergrund, SQL-Kenntnisse sind nicht nötig.</li>\n<li>Legen Sie vorab fest, welche Fragen für Ihre Teams zuerst zählen. Das ist die eigentliche Priorisierungsaufgabe.</li>\n<li>Nutzen Sie die einheitliche Datenbasis auch vorausschauend, etwa für Lieferkettenrisiken oder die Pipeline-Entwicklung.</li>\n</ul>\n\n<h2>Fazit</h2>\n<p>Verstreute Daten kosten Zeit, Vertrauen und Handlungsspielraum, und klassische Integrationsprojekte bringen Antworten oft zu spät oder nur über die IT. Fabric-Konnektoren bündeln die Quellen auf einer gemeinsamen Plattform, Copilot und Fabric Data Agents machen sie im gewohnten Microsoft 365-Umfeld per Dialog nutzbar. Damit rückt die Integration aus dem Zentrum der Aufgabe. Entscheidend wird, welche Fragen Ihr Unternehmen stellt, und aus rückblickenden Berichten werden Prognosen, mit denen Teams früher und fundierter handeln können.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Vom Datensilo zum KI-Daten-Chatbot",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Silos erkennen",
+     "text": "CRM, ERP und Datenbanken halten getrennte Wahrheiten; Exporte und Abgleiche kosten Zeit und Vertrauen."
+    },
+    {
+     "kopf": "Quellen verbinden",
+     "text": "Fabric-Konnektoren authentifizieren sich bei ERP, CRM, SQL und Dateien und bündeln alles auf einer Plattform."
+    },
+    {
+     "kopf": "Agents aktivieren",
+     "text": "Copilot und Fabric Data Agents erhalten die Datensätze, die per Konversation abgefragt werden dürfen."
+    },
+    {
+     "kopf": "Einfach fragen",
+     "text": "Anwender stellen Fragen in natürlicher Sprache; die Abfragen entstehen im Hintergrund, ohne SQL-Kenntnisse."
+    },
+    {
+     "kopf": "Prognosen nutzen",
+     "text": "Kombinierte Daten zeigen Risiken und Chancen früher, etwa Lieferengpässe oder kritische Deals."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Was sind Fabric Data Agents und wie arbeiten sie mit Microsoft Copilot zusammen?",
+    "a": "Fabric Data Agents bringen Wissen über Konnektoren mit und wissen, wie Daten abgerufen und nach der Geschäftslogik strukturiert werden. Copilot interpretiert Fragen in natürlicher Sprache, erzeugt die Datenabfragen im Hintergrund und liefert kombinierte Erkenntnisse etwa aus CRM- und ERP-Datensätzen."
+   },
+   {
+    "q": "Was leisten Fabric-Konnektoren?",
+    "a": "Fabric-Konnektoren sind vorgefertigte Komponenten, die Authentifizierung, Schlüsselzuordnung und Datenstrukturen gängiger Systeme wie Dynamics 365, SQL Server, Oracle, SAP und Salesforce kennen. Alle Quellen laufen an einem zentralen Punkt zusammen, den Copilot abfragen kann. Die Anbindung wird so zur Einrichtungsaufgabe statt zum Entwicklungsprojekt."
+   },
+   {
+    "q": "Wie baue ich einen KI-Daten-Chatbot mit Copilot und Fabric Data Agents auf?",
+    "a": "In zwei Schritten: Zuerst verbinden Sie in der Fabric-Umgebung die Datenquellen über passende Konnektoren, etwa ERP, CRM sowie SQL- oder dateibasierte Quellen. Dann aktivieren Sie Copilot und Fabric Data Agents und legen fest, welche Datensätze und Konversationsabfragen einfließen. Eigenes Modelltraining oder selbst geschriebene Joins sind nicht nötig."
+   },
+   {
+    "q": "Warum reicht klassische ETL-Integration oft nicht aus?",
+    "a": "ETL und Middleware laden Daten meist in Intervallen in Data Warehouses, wo sie bis zum nächsten Batchlauf liegen. Für Monatsabschluss oder Compliance genügt das, für Live-Fragen nicht. Dazu kommen wochenlange Konfiguration und Anpassungen, wenn sich ein Schema ändert, und die Systeme sind eher für Spezialisten gebaut."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Klassische Integration vs. Fabric-Konnektoren",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Klassisch (ETL/Middleware)",
+     "punkte": [
+      "Daten werden in Intervallen in Data Warehouses geladen",
+      "Wochen für Konfiguration, Feldzuordnung und Pipeline-Tests",
+      "Anpassungen nötig, sobald sich ein Schema im Upstream ändert",
+      "Eher für Spezialisten gebaut als für Mitarbeiter",
+      "Umsatzzahlen in SAP und Salesforce stimmen nicht immer überein"
+     ]
+    },
+    "rechts": {
+     "titel": "Fabric-Konnektoren",
+     "punkte": [
+      "Vorgefertigte Komponenten kennen Authentifizierung und Schlüsselzuordnung",
+      "Alle Systeme treffen sich an einem zentralen Hub",
+      "Copilot kann den Hub direkt abfragen",
+      "Einrichtungsaufgabe, die ein erfahrener Administrator bewältigen kann",
+      "Auch bisher zu teure Quellen lohnen sich"
+     ]
+    }
+   },
+   {
+    "titel": "Typische Stolpersteine bei der Datenintegration",
+    "typ": "checkliste",
+    "punkte": [
+     "Integration nicht als reines Installationsproblem sehen",
+     "Nicht mehr Dashboards statt weniger Mauern bauen",
+     "Geschäftsanwender nicht von IT-Tickets abhängig machen",
+     "Selbst gebaute Integrationen brechen bei Anbieter-Updates",
+     "Vorab festlegen, welche Fragen für Teams zuerst zählen",
+     "Berechtigungen beim Anbinden einer Quelle sauber konfigurieren",
+     "Prüfen, ob die Daten korrekt fließen"
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Was ist laut Artikel das eigentliche Problem verstreuter Unternehmensdaten?",
+    "opts": [
+     "Die Mauern zwischen den Systemen, nicht fehlende Informationen",
+     "Es fehlen grundsätzlich Daten in CRM und ERP",
+     "Es gibt zu wenige Dashboards in den Abteilungen",
+     "Mitarbeiter lehnen den Einsatz moderner Software generell ab"
+    ],
+    "a": 0,
+    "why": "Der Artikel betont, dass Informationen nicht fehlen. Jedes System hält an seiner eigenen Sicht fest, die Herausforderung ist strukturell."
+   },
+   {
+    "q": "Was bringen Fabric-Konnektoren laut Artikel bereits von Haus aus mit?",
+    "opts": [
+     "Eigene Sprachmodelle, die vorab mit Unternehmensdaten trainiert werden",
+     "Fertige Dashboards für jede Abteilung des Unternehmens",
+     "Authentifizierung, Schlüsselzuordnung und Datenstrukturen des jeweiligen Systems",
+     "Automatische Stilllegung veralteter ERP- und CRM-Systeme"
+    ],
+    "a": 2,
+    "why": "Konnektoren kennen Authentifizierung, Schlüsselzuordnung und Datenstrukturen. Dadurch wird aus einem Entwicklungsprojekt eine Einrichtungsaufgabe."
+   },
+   {
+    "q": "Aus welchen zwei Schritten besteht der Aufbau des Daten-Chatbots?",
+    "opts": [
+     "Sprachmodell trainieren, anschließend Transformationsskripte schreiben",
+     "Datenquellen verbinden, dann Copilot und Fabric Data Agents aktivieren",
+     "Data Warehouse aufbauen, danach Tickets an die IT senden",
+     "SQL-Schulungen durchführen, danach Berichte manuell exportieren"
+    ],
+    "a": 1,
+    "why": "Zuerst werden die Quellen über Konnektoren angebunden, dann werden Copilot und Fabric Data Agents aktiviert. Modelltraining entfällt."
+   },
+   {
+    "q": "Welchen zusätzlichen Nutzen bieten Prognosen auf einheitlich integrierten Daten?",
+    "opts": [
+     "Sie ersetzen bestehende Systeme wie ERP und CRM vollständig",
+     "Sie ermöglichen ausschließlich schnellere Monatsabschlüsse und Compliance-Berichte",
+     "Sie machen Batchläufe über Nacht überflüssig, aber keine Vorhersagen",
+     "Sie zeigen früh, etwa wann der Lagerbestand unter den Sicherheitsbestand fällt"
+    ],
+    "a": 3,
+    "why": "Prognosen ergänzen den Blick zurück um Vorausschau, etwa Engpasswarnungen. Sie sind Erweiterungen bestehender Systeme, keine Ersatzprozesse."
+   }
+  ]
+ }
+}

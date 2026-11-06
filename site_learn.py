@@ -1,5 +1,6 @@
 """Lern-Bereich: Glossar, Lernpfade, Übungs-Trainer (alles aus vorhandenen Daten, ohne API-Kosten)."""
 import json, re, html, os
+from functools import lru_cache
 import site_media as MED
 from pathlib import Path
 
@@ -475,6 +476,13 @@ def drop_glossed(money):
     return {k: v for k, v in money.items() if k.lower() not in names}
 
 
+@lru_cache(maxsize=None)
+def _word_rx(nm):
+    """Kompiliertes Wortgrenzen-Muster je Name, einmal je Bau: der re-Cache (512 Eintraege) ist fuer die Tausende Glossar-/Entitaetsnamen
+    zu klein, vorher wurde jedes Muster je Absatz neu kompiliert (~90 % der Laufzeit der Folgenseiten-Phase). Gleiches Muster, gleiche Treffer."""
+    return re.compile(r"(?<![\w-])" + re.escape(nm) + r"(?![\w-])")
+
+
 def gloss_link(html_, lang, base, max_links=8):
     """Erste Nennung bekannter Begriffe im Artikel auf die Glossar-Seite verlinken (nur Absätze/Listen, nie in Links)."""
     if not GLOSS or not html_:
@@ -493,13 +501,16 @@ def gloss_link(html_, lang, base, max_links=8):
     def blk(m):
         if cnt[0] >= max_links:
             return m.group(0)
-        parts = re.split(r"(<[^>]+>)", m.group(0))
+        block = m.group(0)
+        parts = re.split(r"(<[^>]+>)", block)
         for nm, x in cands:
             if cnt[0] >= max_links:
                 break
             if x["id"] in used:
                 continue
-            rx = re.compile(r"(?<![\w-])" + re.escape(nm) + r"(?![\w-])")
+            if nm not in block:   # Muster ist der woertliche Name (ohne re.I): kommt er im Block nicht vor, trifft er in keinem Textstueck
+                continue
+            rx = _word_rx(nm)
             depth = 0
             for i, seg in enumerate(parts):
                 if i % 2 == 1:

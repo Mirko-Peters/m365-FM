@@ -36,7 +36,7 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY_SHOW }}
           COVER_LIMIT: "100"
         run: python generate_covers.py
-      - name: Speichern (der Push auf data/ loest den Seitenbau aus; kein zusaetzlicher Start von site.yml)
+      - name: Speichern (auf die Website kommen Artikel und Cover mit dem naechtlichen Seitenbau, site.yml 01:07 UTC - Bot-Commits loesen keinen Bau aus)
         run: |
           if [ -n "$(git status --porcelain data/articles data/covers data/spend.json)" ]; then
             git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"

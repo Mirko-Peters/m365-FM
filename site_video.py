@@ -3,6 +3,7 @@ from datetime import datetime, timezone
 from site_i18n import COMM_LANGS, pfx, pfx2, T
 from site_learn import ENTS, esc, _fetch_json, LCSS
 from site_design import pager as PG, neighbours as NB   # Vor/Zurueck am Seitenende (rel=prev/next)
+import site_player as PL   # YouTube-Player erst nach Klick
 
 
 def fetch_videos(api):
@@ -41,7 +42,7 @@ def build(g, vids, people, api):
             u = f"{croot}video/{v['slug']}/"; au = f"{BASE}/community/u/{v['handle']}/"
             topics = [t for t in v.get("topics", []) if t in ENTS]
             tl = "".join(f'<a class="mb-tag" href="{BASE}/entity/{t}/">{esc(ENTS[t]["name"])}</a> ' for t in topics)
-            player = f'<div style="position:relative;padding-top:56.25%"><iframe title="{esc(v["title"])}" src="https://www.youtube-nocookie.com/embed/{v["video_id"]}" loading="lazy" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:0"></iframe></div>'
+            player = PL.player("youtube", v["video_id"], v["title"], T(lang, "Watch on YouTube", "Auf YouTube ansehen"), link=f"https://youtu.be/{v['video_id']}")
             gs = [g for g in (v.get("guests") or []) if g.get("handle") != v["handle"]]
             guests_html = (f'<p class="mut">{esc(T(lang, "Guests", "Gäste"))}: ' + ", ".join(f'<a href="{croot}u/{g["handle"]}/">{esc(g["name"])}</a>' for g in gs) + "</p>") if gs else ""
             b = shell(lang, f'<p class="mut"><a href="{croot}video/">{esc(ttl)}</a></p><article><h1>{esc(v["title"])}</h1>'
