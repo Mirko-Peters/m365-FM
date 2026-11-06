@@ -207,7 +207,7 @@ class SponsorBannerOption(unittest.TestCase):
         import site_sponsor as SPN
         t = lambda k, **kw: SPN.tx(lang, k, **kw)
         out = SPN.ads_item({"BASE": BASE}, lang, t)
-        cfg = J.loads(H.unescape(RE.search(r'id="spn-adb" aria-live="polite" data-cfg="([^"]+)"', out).group(1)))
+        cfg = J.loads(H.unescape(RE.search(r'id="spn-adb" data-cfg="([^"]+)"', out).group(1)))
         return out, cfg
 
     def test_off_calculator_only(self):

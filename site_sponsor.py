@@ -761,7 +761,7 @@ def ads_item(g, lang, t):
     rng = banner_range()
     price = t("ads_price", min=rng[0], max=rng[1]) if rng else t("on_request")
     box = (f'<div class="spn-adsbox" id="spn-adsbox" hidden><p class="spn-note">{E(t("ads_on" if on else "ads_off"))}</p>'
-           f'<div class="adb" id="spn-adb" aria-live="polite" data-cfg="{E(json.dumps(cfg, ensure_ascii=False, separators=(",", ":")))}"></div></div>')
+           f'<div class="adb" id="spn-adb" data-cfg="{E(json.dumps(cfg, ensure_ascii=False, separators=(",", ":")))}"></div></div>')
     return _item("spn-ads", t("ads_h"), f'<p class="spn-hint">{E(t("ads_hint"))}</p>', price, t("unit_cpm"), extra=box, cls="spn-item spn-wide", ctl="spn-adsbox")
 
 
