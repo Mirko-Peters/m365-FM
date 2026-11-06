@@ -40,6 +40,17 @@ def _fetch_export(url):
     return j
 
 
+def strip_private_items(j):
+    """Gezogene Inhalte privater Kanal-Arten (GitHub-Aktivitaet, site_feed.PRIVATE_KINDS) aus Personen und Firmen entfernen - vor dem
+    Zwischenspeichern und fuer alle Abnehmer (Profilseiten, Verzeichnis, Suche). Kanaele selbst (Profil-Links) bleiben."""
+    import site_feed
+    for key in ("people", "orgs"):
+        for x in j.get(key) or []:
+            if isinstance(x, dict) and isinstance(x.get("items"), list):
+                x["items"] = site_feed.public_items(x["items"])
+    return j
+
+
 def fetch_members(api):
     import sys, time
     j = None
@@ -49,13 +60,14 @@ def fetch_members(api):
             break
         print(f"WARNUNG: Profil-Export Versuch {n + 1}/3 fehlgeschlagen", file=sys.stderr); time.sleep(5 * (n + 1))
     if j and j.get("people"):
+        j = strip_private_items(j)
         try:
             CACHE.write_text(json.dumps(j, ensure_ascii=False), encoding="utf-8")
         except Exception:
             pass
     elif CACHE.exists():
         print("WARNUNG: Profil-Export nicht erreichbar, nutze die gespeicherte Fassung", file=sys.stderr)
-        j = json.loads(CACHE.read_text("utf-8"))
+        j = strip_private_items(json.loads(CACHE.read_text("utf-8")))
     else:
         print("FEHLER: Profil-Export nicht erreichbar und keine gespeicherte Fassung: es entstehen keine Profilseiten", file=sys.stderr)
         j = j or {}
@@ -157,8 +169,9 @@ def person_ld(BASE, p, orgs_by_handle):
         n["jobTitle"] = p["job"]
     elif any(x.get("verified") and x["p"] == "mvp" for x in p.get("programs", [])):
         n["jobTitle"] = PROG_FULL["mvp"]
-    if p.get("country"):
-        n["address"] = {"@type": "PostalAddress", "addressCountry": p["country"]}
+    _city = ((p.get("contact") or {}).get("city") or "").strip()   # nur, wenn das Mitglied die Stadt fuer alle freigegeben hat (vis_city=all)
+    if p.get("country") or _city:
+        n["address"] = {"@type": "PostalAddress", **({"addressLocality": _city} if _city else {}), **({"addressCountry": p["country"]} if p.get("country") else {})}
     org = p.get("org")
     if org and org["handle"] in orgs_by_handle:
         n["worksFor"] = {"@id": f"{purl(BASE, 'en', 'c', org['handle'])}#org"}
@@ -274,7 +287,8 @@ def build(g, people, orgs, extra=None):
         return "<ul>" + "".join(out) + "</ul>" + legend if out else ""
 
     def items_ul(x):
-        its = x.get("items", [])
+        import site_feed
+        its = site_feed.public_items(x.get("items", []))   # GitHub-Aktivitaet nie auf Profil-/Firmenseiten (auch bei aelterem Export-Zwischenspeicher)
         if not its:
             return ""
         return '<ul class="pf-list">' + "".join(f'<li class="pf-item" data-id="{i["id"]}"><button type="button" class="vt" aria-pressed="false" aria-label="Upvote"><span aria-hidden="true">▲</span> <span class="n">{i["votes"]}</span></button>'
@@ -329,7 +343,7 @@ def build(g, people, orgs, extra=None):
             b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{croot}members/">{esc(s["members"])}</a></nav>{img_tag("u", p, p["name"])}<h1>{esc(p["name"])}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="creator" data-topic-id="{esc(p["handle"])}" data-topic-label="{esc(T(lang, "Follow", "Folgen"))}">🔔 {T(lang, "Follow", "Folgen")}</button><p style="font-size:1.1em">{esc(p.get("headline", ""))}</p><p>{tags_of_p(p, li, s)}</p>{ft}'
                           + (f'<h2>{esc(s["about"])}</h2><p style="white-space:pre-line">{esc(p["about"])}</p>' if p.get("about") else "")
                           + (f'<h2>{esc(s["expertise"])}</h2>{exp_ul(p, lang, li, s)}' if p.get("expertise") else "") + (f'<h2>{esc(s["certs"])}</h2>{certs}' if certs else "")
-                          + (f'<h2>{esc(s["latest"])}</h2>{items_ul(p)}' if p.get("items") else "") + (f'<h2>{esc(s["channels"])}</h2>{chan_ul(p, lang)}' if p.get("channels") else "")
+                          + (f'<h2>{esc(s["latest"])}</h2>{items_ul(p)}' if items_ul(p) else "") + (f'<h2>{esc(s["channels"])}</h2>{chan_ul(p, lang)}' if p.get("channels") else "")
                           + rec_html(p, lang, li, pb) + (f'<h2>{esc(s["contrib"])}</h2>{contrib}' if contrib else "") + mvp_contrib_html(p, s) + ((extra or {}).get(lang, {}).get("u", {}).get(p["handle"], "")) + live_js + topic_js + css)
             node = person_ld(BASE, p, ob)
             ld = [{"@context": "https://schema.org", "@type": "ProfilePage", "@id": purl(BASE, "en", "u", p["handle"]) + "#profile", "url": u, "name": p["name"], "inLanguage": lang, "dateModified": TODAY, "mainEntity": node}]
@@ -353,7 +367,7 @@ def build(g, people, orgs, extra=None):
             b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{croot}companies/">{esc(s["companies"])}</a></nav>{img_tag("o", o, o["name"])}<h1>{esc(o["name"])}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="creator" data-topic-id="{esc(o["handle"])}" data-topic-label="{esc(T(lang, "Follow", "Folgen"))}">🔔 {T(lang, "Follow", "Folgen")}</button><p style="font-size:1.1em">{esc(o.get("tagline", ""))}</p><p>{tags_of_p(o, li, s)}</p>{ft}'
                           + (f'<h2>{esc(s["about"])}</h2><p style="white-space:pre-line">{esc(o["about"])}</p>' if o.get("about") else "")
                           + (f'<h2>{esc(s["expertise"])}</h2>{exp_ul(o, lang, li, s)}' if o.get("expertise") else "") + (f'<h2>{esc(s["team"])}</h2>{mem}' if mem else "")
-                          + (f'<h2>{esc(s["latest"])}</h2>{items_ul(o)}' if o.get("items") else "") + (f'<h2>{esc(s["channels"])}</h2>{chan_ul(o, lang)}' if o.get("channels") else "") + ((extra or {}).get(lang, {}).get("c", {}).get(o["handle"], "")) + live_js + topic_js + css)
+                          + (f'<h2>{esc(s["latest"])}</h2>{items_ul(o)}' if items_ul(o) else "") + (f'<h2>{esc(s["channels"])}</h2>{chan_ul(o, lang)}' if o.get("channels") else "") + ((extra or {}).get(lang, {}).get("c", {}).get(o["handle"], "")) + live_js + topic_js + css)
             ld = [{"@context": "https://schema.org", "@type": "ProfilePage", "@id": purl(BASE, "en", "c", o["handle"]) + "#profile", "url": u, "name": o["name"], "inLanguage": lang, "dateModified": TODAY, "mainEntity": org_ld(BASE, o, pb)}]
             write(f"{pfx2(lang)}community/c/{o['handle']}/index.html", page(lang, f'{o["name"]} – {o.get("tagline") or s["companies"]} | M365.FM', (o.get("tagline") or o.get("about") or "")[:155], u, b, None, ld, og_type="profile", extra_head=LCSS, noindex=noidx))
             if not noidx:

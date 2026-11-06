@@ -6,14 +6,15 @@ import re
 from pathlib import Path
 
 from site_learn import esc, ENTS
+import site_player as PL   # Player erst nach Klick (wie der Live-Player oben)
 
 D = Path(__file__).parent / "data"
 T = {"en": dict(title="M365 Show – the live stream", h="M365 Show", kicker="Live on YouTube", lede="The M365 Show is a running live stream show: conversations and demos with Microsoft community experts about Microsoft 365, Copilot, Azure, the Power Platform and AI agents. Hosted by Mirko Peters, Microsoft MVP.",
-                watch="Watch live", watchh="Live now or next stream", watchp="The player shows the current live stream of the channel; when nothing is live it shows the channel's latest stream or an offline message.", open="Open on YouTube", load="Load the live player (YouTube)",
+                watch="Watch live", play="Play video", watchh="Live now or next stream", watchp="The player shows the current live stream of the channel; when nothing is live it shows the channel's latest stream or an offline message.", open="Open on YouTube", load="Load the live player (YouTube)",
                 upc="Upcoming streams", noupc="No stream is scheduled right now – subscribe on YouTube to get notified.", past="Past streams", recent="Latest videos", livenow="Live now", on="Live on", dur="Duration", views="views", back="All streams",
                 desc="Description", more="More from the M365 Show", sub="Subscribe", follow="Follow the show"),
      "de": dict(title="M365 Show – der Livestream", h="M365 Show", kicker="Live auf YouTube", lede="Die M365 Show ist eine laufende Livestream-Show: Gespräche und Demos mit Expertinnen und Experten der Microsoft-Community zu Microsoft 365, Copilot, Azure, der Power Platform und KI-Agenten. Moderiert von Mirko Peters, Microsoft MVP.",
-                watch="Live ansehen", watchh="Jetzt live oder nächster Stream", watchp="Der Player zeigt den aktuellen Livestream des Kanals; läuft gerade nichts, erscheint der letzte Stream oder ein Offline-Hinweis.", open="Auf YouTube öffnen", load="Live-Player laden (YouTube)",
+                watch="Live ansehen", play="Video abspielen", watchh="Jetzt live oder nächster Stream", watchp="Der Player zeigt den aktuellen Livestream des Kanals; läuft gerade nichts, erscheint der letzte Stream oder ein Offline-Hinweis.", open="Auf YouTube öffnen", load="Live-Player laden (YouTube)",
                 upc="Kommende Streams", noupc="Aktuell ist kein Stream geplant – abonniere den Kanal auf YouTube, um benachrichtigt zu werden.", past="Vergangene Streams", recent="Neueste Videos", livenow="Jetzt live", on="Live am", dur="Dauer", views="Aufrufe", back="Alle Streams",
                 desc="Beschreibung", more="Mehr von der M365 Show", sub="Abonnieren", follow="Der Show folgen")}
 SOC = [("YouTube", "https://www.youtube.com/@m365show"), ("LinkedIn", "https://www.linkedin.com/company/m365-show/"), ("X", "https://x.com/m365show"), ("Instagram", "https://www.instagram.com/m365.show/"),
@@ -101,7 +102,7 @@ def build(g):
             if s.get("duration"):
                 m, sec = divmod(int(s["duration"]), 60); hh, m = divmod(m, 60); vid["duration"] = f"PT{hh}H{m}M{sec}S"
             sb = (f'<p class="mut"><a href="{root}">{esc(t["back"])}</a></p><article><h1>{esc(s["title"])}</h1><p class="mut">{when(s)}{" · " + str(s["views"]) + " " + t["views"] if s.get("views") else ""}</p>'
-                  f'<div class="yt"><iframe src="https://www.youtube-nocookie.com/embed/{s["id"]}?rel=0" title="{esc(s["title"])}" loading="lazy" allow="accelerometer;encrypted-media;picture-in-picture;fullscreen" allowfullscreen style="width:100%;aspect-ratio:16/9;border:0;border-radius:.5rem"></iframe></div>'
+                  f'<div style="margin:22px 0">{PL.player("youtube", s["id"], s["title"], t["play"])}</div>'
                   f'{("<h2>" + esc(t["desc"]) + "</h2>" + paras) if paras else ""}<p><a class="btn" href="https://www.youtube.com/watch?v={s["id"]}" rel="noopener">{esc(t["open"])} ↗</a></p></article>')
             write(f"{'de/' if lang == 'de' else ''}live/{s['slug']}/index.html", page(lang, f'{s["title"]} – M365 Show | M365.FM', short(d, 155) or s["title"], u, shell(sb), None, [vid], og_type="video.other"))
             sitemap.append((u, (s.get("published") or TODAY)[:10], None))

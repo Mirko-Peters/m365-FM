@@ -1,6 +1,6 @@
 """Expert Connect (Publisher-Tool) /community/expert-connect/ (EN) und /de/community/expert-connect/ (DE).
-Eine Seite mit Bereichen (Anker): Experten finden, Anfrage stellen, Meine Anfragen, Für Experten, Offene Aufrufe, Moderation (nur Admins).
-Die Seite ist eine Anwendung fuer angemeldete Konten (noindex); Daten kommen aus dem Worker (worker/src/expert_requests.js).
+Eine Seite mit nach Rollen gruppierten Bereichen: Experten finden, Anfrage ausschreiben, Meine Anfragen, passende Anfragen, Offene Aufrufe, Moderation (nur Admins).
+Die Seite ist noindex; Anfragen lassen sich ohne Anmeldung ausfüllen, Veröffentlichungen laufen über den Worker (worker/src/expert_requests.js).
 Themen fuer die Auswahl: community/expert-connect/topics.json (Entitaeten ohne Personen, Firmen und Events), wird nur bei Bedarf geladen.
 Entwurf: design/publisher/ (Klickdummy)."""
 import hashlib
@@ -13,11 +13,14 @@ TOPIC_TYPES = {"concept", "product", "cert", "platform", "category"}
 
 T = {
     "en": {
-        "title": "Expert Connect – find Microsoft 365 experts", "kicker": "Expert Connect",
-        "h1": "Expert Connect: find Microsoft 365 experts",
+        "title": "Expert Connect: find experts or post a request", "kicker": "Expert Connect",
+        "h1": "Expert Connect: find experts or post a request",
         "lede": "Find verified experts for quotes, interviews, guest articles, podcasts and talks – or post a topic and let experts apply. Free, opt-in only, contact details after acceptance.",
-        "desc": "Expert Connect by M365.FM: search verified Microsoft 365 experts, post requests and open calls, answer as an expert. Free and opt-in only.",
-        "tab_search": "Find experts", "tab_request": "New request", "tab_requests": "My requests", "tab_expert": "For experts", "tab_calls": "Open calls", "tab_mod": "Moderation",
+        "desc": "Expert Connect: find experts or post a request",
+        "hero_search": "Find experts", "hero_request": "Post a request", "hero_calls": "Are you an expert? See open calls",
+        "group_seek": "I need an expert", "group_expert": "I am an expert",
+        "tab_search": "Find experts", "tab_request": "Post a request", "tab_requests": "My requests", "tab_expert": "Matching requests & settings", "tab_calls": "Open calls", "tab_mod": "Moderation",
+        "request_guest": "To publish, sign in with your community account – your text is kept.",
         "loading": "Loading …", "login": "Sign in with your community account to use this area.", "signin": "Sign in", "error": "Something went wrong. Please try again.",
         "q": "Topic or keyword", "search": "Search", "any": "Any", "format": "Format", "lang": "Language", "program": "Program", "level": "Level", "level_min": "Level ≥",
         "no_hits": "No matching experts yet. Try a broader topic or post a request – matching experts are notified.",
@@ -56,13 +59,28 @@ T = {
         "e_bad_contact": "Please enter a valid e-mail address or https link.", "e_editorial": "Please confirm that this is an editorial request.",
         "e_not_found": "This item is no longer available.", "e_pitch": "Please write a short pitch.",
         "also": "Also useful", "mediakit": "Media kit", "landing": "How Expert Connect works", "members": "Member directory",
+        "how_h": "How Expert Connect works",
+        "how_seek_h": "For editors, podcasters and organizers",
+        "how_seek": ["Post a request: title, short briefing, 1–10 topics, format (quote, interview, guest article, podcast, talk), language and a deadline of up to 60 days. Choose a request to matching experts or an open call.",
+                     "We match it: verified Microsoft MVPs and MCTs who have switched on Expert Connect, have a public profile and are strong in your topic get notified by push or weekly e-mail. Some requests are checked by a moderator first.",
+                     "Experts answer with a short pitch – or apply to your open call. You see why each expert fits.",
+                     "You accept or decline. Only after you accept do you receive the contact details the expert has shared."],
+        "how_expert_h": "For experts",
+        "how_expert": ["Switch on Expert Connect in your settings (opt-in) and choose the formats, languages, notifications and the contact you want to share.",
+                       "Keep your public profile and speaker listing up to date – topics and expertise decide which requests reach you.",
+                       "Answer matching requests or apply to open calls with a short pitch (max. 600 characters, no contact details).",
+                       "If the requester accepts, they receive the contact you chose. You can pause for two weeks at any time."],
+        "how_rules": "Free for both sides. Editorial requests only – no advertising, link building, surveys or sales. No contact details before acceptance.",
     },
     "de": {
-        "title": "Expert Connect – Microsoft-365-Experten finden", "kicker": "Expert Connect",
-        "h1": "Expert Connect: Microsoft-365-Experten finden",
+        "title": "Expert Connect: Experten finden oder Anfrage ausschreiben", "kicker": "Expert Connect",
+        "h1": "Expert Connect: Experten finden oder Anfrage ausschreiben",
         "lede": "Finde verifizierte Experten für Zitate, Interviews, Gastbeiträge, Podcasts und Vorträge – oder stelle ein Thema ein und lass Experten sich bewerben. Kostenlos, nur mit Zustimmung, Kontakt erst nach Annahme.",
-        "desc": "Expert Connect von M365.FM: verifizierte Microsoft-365-Experten finden, Anfragen und offene Aufrufe stellen, als Experte antworten. Kostenlos und nur mit Zustimmung.",
-        "tab_search": "Experten finden", "tab_request": "Neue Anfrage", "tab_requests": "Meine Anfragen", "tab_expert": "Für Experten", "tab_calls": "Offene Aufrufe", "tab_mod": "Moderation",
+        "desc": "Expert Connect: Experten finden oder Anfrage ausschreiben",
+        "hero_search": "Experten finden", "hero_request": "Anfrage ausschreiben", "hero_calls": "Du bist Experte? Offene Aufrufe ansehen",
+        "group_seek": "Ich suche Experten", "group_expert": "Ich bin Experte",
+        "tab_search": "Experten finden", "tab_request": "Anfrage ausschreiben", "tab_requests": "Meine Anfragen", "tab_expert": "Passende Anfragen & Einstellungen", "tab_calls": "Offene Aufrufe", "tab_mod": "Moderation",
+        "request_guest": "Zum Veröffentlichen meldest du dich mit deinem Community-Konto an – dein Text bleibt erhalten.",
         "loading": "Wird geladen …", "login": "Melde dich mit deinem Community-Konto an, um diesen Bereich zu nutzen.", "signin": "Anmelden", "error": "Da ist etwas schiefgegangen. Bitte erneut versuchen.",
         "q": "Thema oder Stichwort", "search": "Suchen", "any": "Alle", "format": "Format", "lang": "Sprache", "program": "Programm", "level": "Level", "level_min": "Level ≥",
         "no_hits": "Noch keine passenden Experten. Versuche ein breiteres Thema oder stelle eine Anfrage – passende Experten werden benachrichtigt.",
@@ -101,24 +119,49 @@ T = {
         "e_bad_contact": "Bitte eine gültige E-Mail-Adresse oder einen https-Link angeben.", "e_editorial": "Bitte bestätige, dass es eine redaktionelle Anfrage ist.",
         "e_not_found": "Dieser Eintrag ist nicht mehr verfügbar.", "e_pitch": "Bitte schreibe einen kurzen Pitch.",
         "also": "Auch hilfreich", "mediakit": "Mediadaten", "landing": "So funktioniert Expert Connect", "members": "Mitgliederverzeichnis",
+        "how_h": "So funktioniert Expert Connect",
+        "how_seek_h": "Für Redaktionen, Podcaster und Veranstalter",
+        "how_seek": ["Anfrage ausschreiben: Titel, kurzes Briefing, 1–10 Themen, Format (Zitat, Interview, Gastbeitrag, Podcast, Vortrag), Sprache und eine Frist von bis zu 60 Tagen. Du wählst: Anfrage an passende Experten oder offener Aufruf.",
+                     "Wir gleichen ab: Verifizierte Microsoft MVPs und MCTs, die Expert Connect eingeschaltet haben, ein öffentliches Profil haben und im Thema stark sind, werden per Push oder wöchentlicher E-Mail benachrichtigt. Manche Anfragen prüft vorher die Moderation.",
+                     "Experten antworten mit einem kurzen Pitch – oder bewerben sich auf deinen offenen Aufruf. Du siehst, warum jemand passt.",
+                     "Du nimmst an oder lehnst ab. Erst nach der Annahme bekommst du die Kontaktdaten, die der Experte freigegeben hat."],
+        "how_expert_h": "Für Experten",
+        "how_expert": ["Schalte Expert Connect in deinen Einstellungen ein (Opt-in) und wähle Formate, Sprachen, Benachrichtigung und den Kontakt, den du teilen möchtest.",
+                       "Halte dein öffentliches Profil und deinen Speaker-Eintrag aktuell – Themen und Fachlevel entscheiden, welche Anfragen dich erreichen.",
+                       "Beantworte passende Anfragen oder bewirb dich auf offene Aufrufe mit einem kurzen Pitch (max. 600 Zeichen, ohne Kontaktdaten).",
+                       "Nimmt die Redaktion an, bekommt sie den Kontakt, den du gewählt hast. Du kannst jederzeit für zwei Wochen pausieren."],
+        "how_rules": "Kostenlos für beide Seiten. Nur redaktionelle Anfragen – keine Werbung, kein Linkaufbau, keine Umfragen, kein Vertrieb. Keine Kontaktdaten vor der Annahme.",
     },
 }
 
 CSS = """<style>
 .ec-tabs{display:flex;flex-wrap:wrap;gap:0;border-bottom:1px solid var(--bd);margin:24px 0 20px}
+.ec-group{display:flex;flex:1 1 320px;flex-wrap:wrap;align-content:flex-start;min-width:0}
+.ec-group-h{width:100%;padding:10px 16px 4px;color:var(--mut);font-size:.8rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
 .ec-tabs a{padding:10px 16px;text-decoration:none;color:var(--mut);font:600 .95rem "Barlow Condensed",sans-serif;letter-spacing:.06em;text-transform:uppercase;border-bottom:3px solid transparent;margin-bottom:-1px}
 .ec-tabs a[aria-current=page]{color:var(--fg);border-bottom-color:var(--ac)}
 .ec-tabs a[hidden]{display:none}
+.ec-hero-actions{display:flex;gap:10px;margin-top:18px}
+.ec-hero-actions .btn{flex:1 1 0;min-width:0;justify-content:center;text-align:center}
+.ec-hero-expert{margin:8px 0 0;font-size:.9rem}
+.ec-how{margin:28px 0 8px;border-top:2px solid var(--fg);padding-top:14px}
+.ec-how h2{margin:0 0 12px}
+.ec-how-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px}
+.ec-how h3{margin:0 0 8px;font-size:1.05rem}
+.ec-how ol{margin:0;padding-inline-start:1.3em;display:grid;gap:8px}
+.ec-how li{line-height:1.5}
+.ec-how-rules{margin:14px 0 0;color:var(--mut);font-size:.95rem}
+@media(max-width:600px){.ec-tabs{display:grid;grid-template-columns:1fr}.ec-group{width:100%}}
 .ec-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
 .ec-card{background:var(--card);border:1px solid var(--bd);padding:16px;display:grid;gap:8px;align-content:start}
 .ec-card h3{margin:0;font-size:1.1rem}.ec-card p{margin:0}
 .ec-form{display:grid;gap:12px;max-width:760px}
-.ec-form label,.ec-lbl{display:grid;gap:5px;font-size:.8rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}
-.ec-form input[type=text],.ec-form input[type=date],.ec-form input[type=email],.ec-form select,.ec-form textarea,.ec-bar input,.ec-bar select,.ec-card textarea,.ec-card input[type=text]{font:inherit;font-size:1rem;letter-spacing:0;text-transform:none;color:var(--fg);background:var(--bg);border:1px solid var(--bd);padding:9px 10px;border-radius:0;width:100%;box-sizing:border-box}
+.ec-form label,.ec-lbl{display:grid;gap:6px;font-weight:600;line-height:1.35}
+.ec-form input[type=text],.ec-form input[type=date],.ec-form input[type=email],.ec-form select,.ec-form textarea,.ec-bar input,.ec-bar select,.ec-card textarea,.ec-card input[type=text]{width:100%}
 .ec-ck{display:flex!important;gap:8px;align-items:flex-start;text-transform:none!important;letter-spacing:0!important;font-weight:400!important;font-size:.95rem!important;color:var(--fg)!important}
-.ec-ck input{margin-top:3px;flex:none}
+.ec-ck{min-height:44px;align-items:center!important;cursor:pointer}
 .ec-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
-.ec-bar{display:flex;flex-wrap:wrap;gap:8px;align-items:end;margin-bottom:16px}.ec-bar input,.ec-bar select,.ec-form select,.ec-form input[type=text],.ec-form input[type=date]{height:42px}.ec-bar>*{flex:1 1 150px}.ec-bar .btn{flex:0 0 auto}
+.ec-bar{display:flex;flex-wrap:wrap;gap:8px;align-items:end;margin-bottom:16px}.ec-bar>*{flex:1 1 150px}.ec-bar .btn{flex:0 0 auto}
 .ec-chips{display:flex;flex-wrap:wrap;gap:6px}.ec-chip{border:1px solid var(--bd);background:var(--bg);padding:2px 8px;font-size:.85rem}
 .ec-chip button{border:0;background:none;color:var(--mut);cursor:pointer;padding:0 0 0 6px;font:inherit}
 .ec-badge{display:inline-block;border:1px solid var(--bd);padding:0 6px;font:600 .78rem "Barlow Condensed",sans-serif;letter-spacing:.06em;text-transform:uppercase;margin-inline-end:4px}
@@ -145,6 +188,14 @@ def topics(ents):
     return sorted(out, key=lambda x: x[1].lower())
 
 
+def how(t, e):
+    """Abschnitt "So funktioniert Expert Connect": je Rolle vier Schritte und die Regeln (Mirko, 5.11.2026)."""
+    col = lambda h, steps: f'<div><h3>{e(h)}</h3><ol>' + "".join(f"<li>{e(x)}</li>" for x in steps) + "</ol></div>"
+    return (f'<section class="ec-how" id="how" aria-labelledby="ec-how-h"><h2 id="ec-how-h">{e(t["how_h"])}</h2><div class="ec-how-cols">'
+            + col(t["how_seek_h"], t["how_seek"]) + col(t["how_expert_h"], t["how_expert"])
+            + f'</div><p class="ec-how-rules">{e(t["how_rules"])}</p></section>')
+
+
 def build(g, ents, langs_all):
     """g: write, page, header, footer, BASE, LANGS, api. ents: Entitaeten (site_learn.ENTS). langs_all: Sprachen fuer Anfragen [(code, Name)]."""
     base, api = g["BASE"], g.get("api", "https://api-dub.m365.fm")
@@ -153,13 +204,21 @@ def build(g, ents, langs_all):
     for lang in ("en", "de"):
         t, e = T[lang], (lambda s: html.escape(s, quote=True))
         pre = "" if lang == "en" else "/de"
-        tabs = "".join(f'<a href="#{k}" data-tab="{k}"{" hidden" if k == "mod" else ""}>{e(t["tab_" + k])}</a>'
-                       for k in ("search", "request", "requests", "expert", "calls", "mod"))
+        def tab(k):
+            return f'<a href="#{k}" data-tab="{k}"{" hidden" if k == "mod" else ""}>{e(t["tab_" + k])}</a>'
+        tabs = (f'<div class="ec-group"><span class="ec-group-h">{e(t["group_seek"])}</span>'
+                + "".join(tab(k) for k in ("search", "request", "requests"))
+                + f'</div><div class="ec-group"><span class="ec-group-h">{e(t["group_expert"])}</span>'
+                + "".join(tab(k) for k in ("calls", "expert")) + f'</div>{tab("mod")}')
         cfg = json.dumps({"api": api, "base": base, "lang": lang, "t": t, "topics": f"{base}/community/expert-connect/topics.json",
                           "langs": langs_all, "formats": ["quote", "interview", "article", "podcast", "talk"]},
                          ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
         body = (f'{g["header"](lang, "")}<main class="wrap">{CSS}<div class="hero"><div class="kicker">{e(t["kicker"])}</div>'
-                f'<h1>{e(t["h1"])}</h1><p class="lede">{e(t["lede"])}</p></div>'
+                f'<h1>{e(t["h1"])}</h1><p class="lede">{e(t["lede"])}</p>'
+                f'<div class="ec-hero-actions"><a class="btn" href="#search">{e(t["hero_search"])}</a>'
+                f'<a class="btn main" href="#request">{e(t["hero_request"])}</a></div>'
+                f'<p class="ec-hero-expert"><a href="#calls">{e(t["hero_calls"])}</a></p></div>'
+                + how(t, e) +
                 f'<nav class="ec-tabs" aria-label="Expert Connect">{tabs}</nav>'
                 f'<div id="ec" aria-live="polite"><p class="mut">{e(t["loading"])}</p></div>'
                 f'<p class="mut" style="margin-top:32px">{e(t["also"])}: <a href="{base}{pre}/for/publishers/">{e(t["landing"])}</a> · '

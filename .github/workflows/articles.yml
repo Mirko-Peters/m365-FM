@@ -1,8 +1,12 @@
-name: Artikel und Cover nachziehen (stuendlich, wenige)
+name: Artikel und Cover nachziehen (taeglich, mit Monatsgrenze)
 on:
   schedule:
-    - cron: "23 * * * *"
+    - cron: "23 23 * * *"   # einmal taeglich 23:23 UTC, vor dem naechtlichen Seitenbau (01:07 UTC); vorher stuendlich (Mirko, 6.11.2026)
   workflow_dispatch:
+    inputs:
+      limit: { description: "Neue Artikel in diesem Lauf (leer = 20; fuer einen kompletten Nachholdurchlauf z. B. 600)", required: false, default: "" }
+      budget: { description: "Monatsgrenze in USD fuer diesen Lauf (leer = Repo-Variable ARTICLE_BUDGET_USD, sonst 25)", required: false, default: "" }
+      workers: { description: "Parallele Aufrufe (leer = 5)", required: false, default: "" }
 permissions:
   contents: write
 concurrency:
@@ -11,7 +15,7 @@ concurrency:
 jobs:
   articles:
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 240   # Nachholdurchlauf mit vielen Artikeln; der taegliche Lauf braucht wenige Minuten
     env:
       CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
       AI_GATEWAY_ID: ${{ vars.AI_GATEWAY_ID || 'm365fm' }}
@@ -28,19 +32,21 @@ jobs:
       - name: Artikel schreiben (wenige pro Lauf)
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY_SHOW }}
-          ARTICLE_LIMIT: "20"
-          ARTICLE_WORKERS: "5"
+          ARTICLE_LIMIT: ${{ inputs.limit || '20' }}
+          ARTICLE_WORKERS: ${{ inputs.workers || '5' }}
+          ARTICLE_MODEL: ${{ vars.ARTICLE_MODEL || 'claude-sonnet-5-5' }}   # Mirko, 6.11.2026: Sonnet bleibt; Monatsgrenze haelt die Artikel im November an (erst ab 1.12. wieder)
+          ARTICLE_BUDGET_USD: ${{ inputs.budget || vars.ARTICLE_BUDGET_USD || '25' }}   # Sonnet-Kosten je Kalendermonat; ist sie erreicht, schreibt der Lauf nichts mehr
         run: python generate_articles.py
       - name: Cover-Texte entwerfen
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY_SHOW }}
           COVER_LIMIT: "100"
         run: python generate_covers.py
-      - name: Speichern (der Push auf data/ loest den Seitenbau aus; kein zusaetzlicher Start von site.yml)
+      - name: Speichern (auf die Website kommen Artikel und Cover mit dem naechtlichen Seitenbau, site.yml 01:07 UTC - Bot-Commits loesen keinen Bau aus)
         run: |
           if [ -n "$(git status --porcelain data/articles data/covers data/spend.json)" ]; then
             git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
-            git add data/articles data/covers data/spend.json && git commit -m "Artikel/Cover ergänzt (stündlich)"
+            git add data/articles data/covers data/spend.json && git commit -m "Artikel/Cover ergänzt (täglich)"
             (git pull --rebase -q -X theirs || git rebase --abort) && git push -q
           else
             echo "Nichts Neues"

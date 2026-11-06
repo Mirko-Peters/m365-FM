@@ -1,10 +1,13 @@
-/* Seitenskripte (fruher je Seite inline): Teilen-Leiste, Cookie-Hinweis (Microsoft Clarity nur nach Zustimmung), Plattform-Auswahl, Info-Bloecke, Glossar-Tooltips, Quiz, YouTube-Vorschau.
-   Wird mit defer geladen und vom Browser gecacht; jeder Teil prueft selbst, ob seine Elemente auf der Seite sind. */
+/* Seitenskripte (fruher je Seite inline): Teilen-Leiste, Plattform-Auswahl, Info-Bloecke, Glossar-Tooltips, Quiz, Player nach Klick (YouTube, Spreaker).
+   Wird mit defer geladen und vom Browser gecacht; jeder Teil prueft selbst, ob seine Elemente auf der Seite sind.
+   Microsoft Clarity und der Cookie-Hinweis dazu sind seit 5.11.2026 entfernt (keine Analyse-Skripte, kein Banner). */
 (function(){try{document.querySelectorAll('[data-share]').forEach(function(b){b.addEventListener('click',function(){var u=b.dataset.url,t=b.dataset.title;if(navigator.share){navigator.share({title:t,url:u}).catch(function(){})}else if(navigator.clipboard){navigator.clipboard.writeText(u).then(function(){var o=b.textContent;b.textContent='✓';setTimeout(function(){b.textContent=o},1500)})}})});}catch(e){}})();
-try{(function(){var b=document.getElementById('cc');if(!b)return;var K='m365-consent',v=null,id=b.dataset.id;try{v=localStorage.getItem(K)}catch(e){}function load(){if(!id)return;(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src='https://www.clarity.ms/tag/'+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y)})(window,document,'clarity','script',id)}if(v==='1'){load()}else if(v===null){b.hidden=false}function set(x){try{localStorage.setItem(K,x)}catch(e){}b.hidden=true;if(x==='1')load()}document.getElementById('cc1').onclick=function(){set('1')};document.getElementById('cc0').onclick=function(){set('0')}})();}catch(e){}
+try{localStorage.removeItem('m365-consent')}catch(e){}   // Zustimmung zum frueheren Clarity-Hinweis nicht weiter speichern
 (function(){try{var ua=navigator.userAgent||"",pl=navigator.platform||"";var apple=/iPhone|iPad|iPod|Macintosh|Mac OS X/.test(ua)||/Mac|iPhone|iPad/.test(pl)||(navigator.maxTouchPoints>1&&/Mac/.test(pl));
-var d=document.documentElement;if(apple)d.className+=" apple-first";var pick=document.querySelector(apple?'[data-p=apple]':'[data-p=spotify]')||document.querySelector('[data-p=spotify]')||document.querySelector('[data-p=apple]')||document.querySelector('[data-p=spreaker]');if(pick)pick.className+=" main"}catch(e){}})();
-(function(){try{var f=document.querySelectorAll(".info");if(!f.length)return;var rm=matchMedia("(prefers-reduced-motion:reduce)").matches;if(!rm)document.documentElement.classList.add("js");
+var d=document.documentElement;if(apple&&!d.classList.contains("apple-first"))d.classList.add("apple-first");   // setzt normalerweise schon das Kopfskript (A11Y_EARLY) vor dem ersten Bild
+var pick=document.querySelector(apple?'[data-p=apple]':'[data-p=spotify]')||document.querySelector('[data-p=spotify]')||document.querySelector('[data-p=apple]')||document.querySelector('[data-p=spreaker]');if(pick)pick.className+=" main"}catch(e){}})();
+(function(){try{var f=document.querySelectorAll(".info");if(!f.length)return;var rm=matchMedia("(prefers-reduced-motion:reduce),(max-width:700px)").matches||document.documentElement.classList.contains("a11y-nomo");   // Handy: keine Einblend- und Zaehl-Animationen (weniger Arbeit beim Scrollen)
+if(!rm)document.documentElement.classList.add("js");
 function cnt(el){var t=el.textContent,m=t.match(/^(\D*)(\d[\d.,]*)(.*)$/);if(!m||rm)return;var n=parseFloat(m[2].replace(/,/g,"")),d=(m[2].split(/[.]/)[1]||"").length;if(!isFinite(n)||n>1e6)return;var s=performance.now();(function st(x){var p=Math.min(1,(x-s)/900),v=n*(1-Math.pow(1-p,3));el.textContent=m[1]+(d?v.toFixed(d):Math.round(v).toLocaleString("en-US").replace(/,/g,m[2].indexOf(",")>-1?",":""))+m[3];if(p<1)requestAnimationFrame(st);else el.textContent=t})(s)}
 var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");e.target.querySelectorAll(".ifacts b").forEach(cnt);io.unobserve(e.target)}})},{threshold:.25});
 f.forEach(function(x){io.observe(x);
@@ -35,7 +38,18 @@ var txt=T.share_text.replace("{s}",score).replace("{n}",n).replace("{t}",C.title
 row.appendChild(btn(T.share,function(){var u=C.url+"#quiz";if(navigator.share){navigator.share({title:C.title,text:txt,url:u}).catch(function(){})}else if(navigator.clipboard){navigator.clipboard.writeText(txt+" "+u).then(function(){fb.className="qfb ok";fb.textContent=T.copied})}},1));
 var a=el("a","btn","LinkedIn");a.href="https://www.linkedin.com/sharing/share-offsite/?url="+encodeURIComponent(C.url+"#quiz");a.target="_blank";a.rel="noopener nofollow";row.appendChild(a);row.appendChild(btn(T.retry,function(){i=0;score=0;qs.forEach(function(q){q.disabled=false;[].forEach.call(q.querySelectorAll("input"),function(x){x.checked=false});[].forEach.call(q.querySelectorAll(".qo"),function(l){l.classList.remove("ok","no")})});Q.removeChild(r);show(0)}));r.appendChild(row);Q.insertBefore(r,ctl)}
 show(0)}catch(e){}})();
-(function(){try{document.querySelectorAll('.yt').forEach(function(b){b.addEventListener('click',function(){var i=document.createElement('iframe');i.src='https://www.youtube-nocookie.com/embed/'+b.dataset.id+'?autoplay=1&rel=0';i.allow='accelerometer;autoplay;encrypted-media;picture-in-picture';i.allowFullscreen=true;i.title='YouTube';b.innerHTML='';b.appendChild(i)},{once:true})});}catch(e){}})();
+/* Player nach Klick (site_player.py): der Platzhalter ist ohne JavaScript ein Link zur Folge bei YouTube/Spreaker. Hier wird daraus ein <button>
+   (Tastatur, aria-label bleibt); der Klick setzt das echte iframe mit Autoplay in den reservierten Platz (feste Masse, kein Layoutsprung).
+   Nur https-Ziele bei youtube-nocookie.com und widget.spreaker.com. Aeltere Vorschau-Kaesten .yt[data-id] laufen ueber dieselbe Funktion. */
+(function(){try{var OK={"www.youtube-nocookie.com":1,"widget.spreaker.com":1};
+function play(box,src){var u;try{u=new URL(src)}catch(e){return}if(u.protocol!=="https:"||!OK[u.hostname])return;
+u.searchParams.set("autoplay",u.hostname==="widget.spreaker.com"?"true":"1");
+var f=document.createElement("iframe");f.src=u.href;f.title=box.getAttribute("data-title")||"Player";f.allow="accelerometer; autoplay; encrypted-media; picture-in-picture; fullscreen";f.allowFullscreen=true;f.referrerPolicy="strict-origin-when-cross-origin";
+box.textContent="";box.appendChild(f);box.classList.add("on");try{f.focus({preventScroll:true})}catch(e){}}
+document.querySelectorAll(".mp[data-src]").forEach(function(box){var a=box.querySelector("a.mp-l");if(!a)return;var b=document.createElement("button");b.type="button";b.className="mp-l";b.setAttribute("aria-label",a.getAttribute("aria-label")||"");
+while(a.firstChild)b.appendChild(a.firstChild);a.replaceWith(b);b.addEventListener("click",function(){play(box,box.getAttribute("data-src"))},{once:true})});
+document.querySelectorAll(".yt[data-id]").forEach(function(b){b.addEventListener("click",function(){play(b,"https://www.youtube-nocookie.com/embed/"+encodeURIComponent(b.getAttribute("data-id"))+"?rel=0")},{once:true})});
+}catch(e){}})();
 ;(function(){   // T10: Menues (Sprachwahl, Menuegruppen, Burger) schliessen mit Escape, Klick daneben oder wenn der Fokus sie verlaesst
   var SEL = "details.lsw[open],details.mg[open],details.mm[open]", MENU = "details.lsw,details.mg,details.mm";
   // T29: offene Menues ueber das toggle-Ereignis merken statt bei jedem Klick und Fokuswechsel den ganzen DOM zu durchsuchen (6-15 ms auf grossen Seiten)
@@ -52,3 +66,19 @@ show(0)}catch(e){}})();
   document.addEventListener("click", function(e){ closeAll(e.target.closest ? e.target.closest("details") : null); });
   document.addEventListener("focusin", function(e){ closeAll(e.target.closest ? e.target.closest("details") : null); });
 })();
+/* Formulare (gemeinsames Design assets/forms.css, Mirko 6.11.2026): Zeichenzaehler "123 / 600" fuer Textfelder mit maxlength (sitzt im unteren
+   Innenrand des Felds, verschiebt nichts; per aria-describedby vorgelesen, nicht bei jedem Tastendruck) und mitwachsende Textfelder in Browsern
+   ohne CSS field-sizing. Ein Listener fuer alle Formulare, auch fuer spaeter per Skript gebaute; der Blog-Editor (.ed-ta) hat einen eigenen Zaehler. */
+(function(){try{
+  var FS=!!(window.CSS&&CSS.supports&&CSS.supports("field-sizing","content"));
+  function ok(t){return t&&t.tagName==="TEXTAREA"&&!(t.classList&&t.classList.contains("ed-ta"))&&!t.hasAttribute("data-nocount")}
+  function upd(t){
+    if(!ok(t))return;var m=t.maxLength;
+    if(m>0){var c=t._fcnt;if(!c){c=document.createElement("span");c.className="f-cnt";c.id="fcnt-"+Math.random().toString(36).slice(2,9);
+      t.insertAdjacentElement("afterend",c);t._fcnt=c;var d=t.getAttribute("aria-describedby");t.setAttribute("aria-describedby",(d?d+" ":"")+c.id)}
+      var n=t.value.length;c.textContent=n+" / "+m;c.classList.toggle("near",n>=m*.9)}
+    if(!FS&&t.scrollHeight>t.clientHeight){t.style.height="auto";t.style.height=(t.scrollHeight+2)+"px"}
+  }
+  document.addEventListener("focusin",function(e){upd(e.target)});
+  document.addEventListener("input",function(e){upd(e.target)});
+}catch(e){}})();

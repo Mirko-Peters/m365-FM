@@ -38,8 +38,9 @@ from pathlib import Path
 import hashlib
 import site_money as SM
 import site_cover
+import site_player as PL   # Player (YouTube, Spreaker) erst nach Klick: Platzhalter mit festen Massen statt iframe
 from site_content import FAQ
-from site_taxonomy import (CATS, ORDER, TOPICS, TAGW, cat_name, classify, tags_of, tag_slug, tag_url, related, autolink)
+from site_taxonomy import (CATS, ORDER, TOPICS, TAGW, cat_name, classify, tags_of, tag_slug, tag_url, related, autolink, _rx_i)
 
 ROOT = Path(__file__).parent
 OUT = ROOT / "docs"
@@ -137,7 +138,7 @@ footer{border-top:1px solid var(--fg);margin-top:64px;padding:26px 0 48px;font-s
 .info{margin:1.6em 0;padding:20px 22px;border:1px solid var(--ln,#d9cfc2);background:#fff8;border-radius:6px}.info figcaption{font-family:Didot,"Bodoni 72",Georgia,serif;font-size:1.25rem;margin-bottom:14px}.info small{display:block;margin-top:12px;opacity:.6;font-size:.75rem}
 .isteps{list-style:none;padding:0;margin:0;display:grid;gap:12px}.isteps li{display:grid;grid-template-columns:36px 1fr;gap:2px 12px;align-items:start}.isteps i{grid-row:span 2;width:32px;height:32px;border-radius:50%;background:var(--ac);color:#fff;font-style:normal;display:flex;align-items:center;justify-content:center;font-weight:700}.isteps b{font-size:1rem}.isteps span{font-size:.92rem;opacity:.85}
 .icols{display:grid;grid-template-columns:1fr 1fr;gap:14px}.icol{border-top:3px solid var(--ac);padding-top:8px}.icol h4{margin:0 0 6px}.icol ul{margin:0;padding-left:18px}.ifacts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}.ifacts div{border-left:3px solid var(--ac);padding-left:10px}.ifacts b{display:block;font-size:1.5rem;font-family:Didot,"Bodoni 72",Georgia,serif}.ifacts span{font-size:.88rem}@media(max-width:560px){.icols{grid-template-columns:1fr}}
-.article{margin-top:2em;max-width:42em}.article h2{margin-top:1.6em}.article p,.article li{line-height:1.75}.cc{position:fixed;left:12px;right:12px;bottom:12px;z-index:50;max-width:760px;margin:0 auto;background:var(--ink);color:var(--onink);padding:12px 16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;box-shadow:0 6px 28px #0006}.cc[hidden]{display:none}@media(max-width:1180px){body:has(.fshare) .cc{bottom:58px}}.cc span{flex:1 1 260px;font-size:.92rem}.cc .btn{padding:6px 14px;color:var(--onink);border-color:var(--onink)}.cc .btn.main{color:#fff;border-color:var(--ac)}.share{border-top:1px solid var(--ln,#d9cfc2);margin-top:2.5em;padding:16px 0}.share .wrap{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.share b{margin-right:6px}.share .btn{font-size:.85rem;padding:6px 12px}.showrow{font-size:.85rem;margin:10px 0 0}.showrow a{margin-right:12px}.yt{position:relative;margin:22px 0;aspect-ratio:16/9;background:#000;border-radius:4px;overflow:hidden;cursor:pointer}.yt img{width:100%;height:100%;object-fit:cover;opacity:.85}.yt button{position:absolute;inset:0;margin:auto;width:76px;height:76px;border-radius:50%;border:0;background:var(--ac);color:#fff;font-size:30px;cursor:pointer}.yt iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.article{margin-top:2em;max-width:42em}.article h2{margin-top:1.6em}.article p,.article li{line-height:1.75}.share{border-top:1px solid var(--ln,#d9cfc2);margin-top:2.5em;padding:16px 0}.share .wrap{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.share b{margin-right:6px}.share .btn{font-size:.85rem;padding:6px 12px}.showrow{font-size:.85rem;margin:10px 0 0}.showrow a{margin-right:12px}.yt{position:relative;margin:22px 0;aspect-ratio:16/9;background:#000;border-radius:4px;overflow:hidden;cursor:pointer}.yt img{width:100%;height:100%;object-fit:cover;opacity:.85}.yt button{position:absolute;inset:0;margin:auto;width:76px;height:76px;border-radius:50%;border:0;background:var(--ac);color:#fff;font-size:30px;cursor:pointer}.yt iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .cover{margin:18px 0 6px;border-radius:4px;overflow:hidden;line-height:0}.cover svg{width:100%;height:auto;display:block}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:0;border-top:1px solid var(--fg);border-bottom:1px solid var(--fg);margin:30px 0}
 .stats div{padding:18px 14px;border-inline-end:1px solid var(--bd)}.stats b{display:block;font:700 2.4rem/1 Didot,"Bodoni 72",Georgia,serif;color:var(--ac)}.stats span{font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
@@ -149,7 +150,7 @@ footer{border-top:1px solid var(--fg);margin-top:64px;padding:26px 0 48px;font-s
 @media (max-width:560px){body{font-size:16px}.panel{padding:14px}.btn{padding:10px 16px}}"""
 from site_design import lang_dropdown, site_header, FONT_CSS, INDUSTRY, EN_NAMES, section, spec_box, lang_tile, spec_table, cta_box, hero_h1
 from site_design import pager as PAGER, neighbours as NEIGH   # Vor/Zurueck am Seitenende (rel=prev/next)
-CSS = FONT_CSS + CSS + INDUSTRY
+CSS = FONT_CSS + CSS + INDUSTRY + PL.CSS
 
 
 def esc(s): return html.escape(s or "", quote=True)
@@ -342,25 +343,6 @@ def share_html(lang, url, title):
     return fbar   # Klick-Logik in assets/page.js
 
 
-CLARITY_ID = "v5hs0d3310"
-CONSENT = {
-    "de": ("Wir nutzen Microsoft Clarity zur Nutzungsanalyse.", "Akzeptieren", "Ablehnen"), "es": ("Usamos Microsoft Clarity para analizar el uso.", "Aceptar", "Rechazar"),
-    "fr": ("Nous utilisons Microsoft Clarity pour analyser l'usage.", "Accepter", "Refuser"), "it": ("Usiamo Microsoft Clarity per analizzare l'utilizzo.", "Accetta", "Rifiuta"),
-    "pt": ("Usamos o Microsoft Clarity para analisar o uso.", "Aceitar", "Recusar"), "nl": ("We gebruiken Microsoft Clarity voor gebruiksanalyse.", "Accepteren", "Weigeren"),
-    "pl": ("Używamy Microsoft Clarity do analizy korzystania ze strony.", "Akceptuję", "Odrzucam"), "id": ("Kami memakai Microsoft Clarity untuk analisis penggunaan.", "Terima", "Tolak"),
-    "ru": ("Мы используем Microsoft Clarity для анализа использования сайта.", "Принять", "Отклонить"), "uk": ("Ми використовуємо Microsoft Clarity для аналізу використання сайту.", "Прийняти", "Відхилити"),
-    "ar": ("نستخدم Microsoft Clarity لتحليل الاستخدام.", "قبول", "رفض"), "he": ("אנו משתמשים ב-Microsoft Clarity לניתוח שימוש.", "אישור", "דחייה"),
-    "ja": ("利用状況の分析に Microsoft Clarity を使用しています。", "同意する", "拒否する"),
-    "ko": ("이용 분석을 위해 Microsoft Clarity를 사용합니다.", "동의", "거부"), "en": ("We use Microsoft Clarity for usage analytics.", "Accept", "Decline")}
-
-
-def consent_html(lang):
-    """Cookie-Hinweis; die Logik (Zustimmung merken, Clarity nur nach Zustimmung laden) liegt in assets/page.js."""
-    m, a, d = CONSENT.get(lang, CONSENT["en"])
-    return (f'<div id="cc" class="cc" hidden role="region" aria-label="Cookies" data-id="{CLARITY_ID}"><span>{esc(m)}</span>'
-            f'<button type="button" class="btn main" id="cc1">{esc(a)}</button><button type="button" class="btn" id="cc0">{esc(d)}</button></div>')
-
-
 def ext_links(html_):
     """Externe Links (andere Domain als die Seite) immer in neuem Tab oeffnen, mit rel=noopener."""
     host = BASE.split("//")[-1]
@@ -394,7 +376,9 @@ for _f in ("a11y_en.json", "a11y_i18n.json"):
 
 A11Y_EARLY = ("<script>try{var a=JSON.parse(localStorage.getItem('m365-a11y')||'{}'),c=document.documentElement.classList;"
               "if(a.s)c.add('a11y-s'+a.s);a.hc&&c.add('a11y-hc');a.font&&c.add('a11y-font');a.sp&&c.add('a11y-sp');a.ul&&c.add('a11y-ul');a.nomo&&c.add('a11y-nomo');"
-              "a.dk&&document.documentElement.setAttribute('data-theme','dark')}catch(e){}</script>")
+              "a.dk&&document.documentElement.setAttribute('data-theme','dark')}catch(e){}"
+              # Apple-Geraete: Apple Podcasts zuerst schon vor dem ersten Bild (vorher setzte page.js die Klasse nach dem Laden -> Knoepfe sprangen, CLS)
+              "(function(){try{var u=navigator.userAgent||'',p=navigator.platform||'';if(/iPhone|iPad|iPod|Macintosh|Mac OS X/.test(u)||/Mac|iPhone|iPad/.test(p)||(navigator.maxTouchPoints>1&&/Mac/.test(p)))document.documentElement.classList.add('apple-first')}catch(e){}})()</script>")
 
 
 def a11y_tags(lang):
@@ -460,6 +444,14 @@ FXCSS = _mini_css("fx.css")   # kleines CSS inline statt eigener Anfrage (Ladeze
 # Barrierefreiheits-Regeln stehen im gehashten site.css statt in einer eigenen Datei: vorher lag a11y.css als zweites renderblockierendes
 # Stylesheet am Anfang von <body> (eigene Anfrage, nur 1 h Cache). assets/a11y.css bleibt fuer noch gecachte alte Seiten liegen.
 A11Y_CSS = _mini_css("a11y.css")
+# Sidebar-Regeln (sbar.css) ebenfalls im Hash-Bundle (aus Copilot-Entwurf #167): Folgen-, Show- und Entitaetsseiten luden sie als zweites
+# renderblockierendes Stylesheet (eine Anfrage mehr vor dem ersten Bild, 1 h Cache). Reihenfolge wie bisher im <head>: vor dem Haupt-CSS.
+# Die Selektoren sind auf .shw/.sb-*/.att-* begrenzt; assets/sbar.css bleibt fuer gecachte alte Seiten liegen. data-sbar am <link> sagt
+# assets/attend.js, dass die Regeln schon da sind (sonst laedt das Popup sbar.css nach). community.css bleibt vorerst eigene Datei.
+SBAR_CSS = _mini_css("sbar.css")
+# Gemeinsames Formular-Design (assets/forms.css, Mirko 6.11.2026 "Design-Konsistenz"): ebenfalls im Hash-Buendel, weil Formulare auch auf Seiten
+# ohne community.css entstehen (Entitaeten-Bearbeitung, Profile, Events, Expert Connect, Verwaltung). ~1 KB gzip; bei #295 ins Community-/Entitaeten-Buendel.
+FORMS_CSS = _mini_css("forms.css")
 # Vorgeladen werden die Schnitte, die auf jeder Seite im ersten Bildschirm Text zeigen (gemessen auf Start-, Sprach-, Show- und Entitaetsseiten,
 # alle 15 Sprachen - Navigation, Logo und Ziffern/Leerzeichen sind lateinisch). Barlow 400 (Fliesstext) und Condensed 600 (Ueberschriften) normal;
 # Condensed 500 (Menue) und 700 (Logo) ab 701 px normal, darunter mit fetchpriority=low. Live-A/B 3.11.2026 (tools/preload_ab.mjs, 2 x 7 Laeufe):
@@ -541,7 +533,6 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
         if share: body = body.replace("<footer>", share_html(lang, canonical, title) + "<footer>", 1)   # T37: share=False (Sponsor-Seite, keine Fremdmarken)
     if side:   # Sidebar neben dem Hauptinhalt (wie auf den Show-Seiten): erstes <main> in zwei Spalten
         body = re.sub(r'<main class="wrap"([^>]*)>(.*?)</main>', lambda m: f'<main class="wrap shw"{m.group(1)}><div class="shmain">{m.group(2)}</div>{side}</main>', body, count=1, flags=re.S)
-        extra_head += f'<link rel="stylesheet" href="{BASE}/assets/sbar.css">'
     body = single_main(body)
     body = ADS.inject(BASE, body, lang, canonical, noindex)
     if 'id="main"' in body:
@@ -564,7 +555,6 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
 {ld}</head>
 <body>
 {ext_links(body)}
-{consent_html(lang)}
 {a11y_tags(lang)}
 <script defer src="{BASE}/assets/page.js"></script>
 <script defer src="{BASE}/assets/attend.js"></script>
@@ -582,11 +572,11 @@ def css_link():
     """Das gesamte Stylesheet liegt einmal als Datei mit Inhalts-Hash unter /assets/ (statt ~33 KB inline in jeder Seite): kleinere Seiten, Browser- und CDN-Cache."""
     if not _CSSF:
         import hashlib
-        css = CSS + (ADS.CSS if ADS.css_needed(BASE) else "") + "\n" + A11Y_CSS + "\n"
+        css = SBAR_CSS + "\n" + CSS + (ADS.CSS if ADS.css_needed(BASE) else "") + "\n" + FORMS_CSS + "\n" + A11Y_CSS + "\n"
         name = "site." + hashlib.sha1(css.encode("utf-8")).hexdigest()[:10] + ".css"
         (OUT / "assets").mkdir(parents=True, exist_ok=True); (OUT / "assets" / name).write_text(css, encoding="utf-8")
         _CSSF["u"] = f"{BASE}/assets/{name}"
-    return f'<link rel="stylesheet" href="{_CSSF["u"]}">'
+    return f'<link rel="stylesheet" href="{_CSSF["u"]}" data-sbar>'
 
 
 _IDENT = {"@id", "@type", "@context", "name", "url"}
@@ -747,13 +737,30 @@ COMMUNITY_API = os.environ.get("COMMUNITY_API", "https://api-dub.m365.fm")
 _CI = json.loads((ROOT / "data" / "community_i18n.json").read_text("utf-8")) if (ROOT / "data" / "community_i18n.json").exists() else {}
 
 
-def community_tags(lang, vid=None, mode=""):
-    """Skripte/Stile fuer Community-Widgets (blenden sich aus, wenn die API nicht erreichbar ist)."""
+_CV = {}
+def _cv(*names):
+    """Kurzer Inhalts-Hash als ?v= fuer die ungehashten Community-Dateien: neue Version = neue Adresse, kein alter Stand aus dem Browser-Cache (Mirko, 5.11.2026)."""
+    if names not in _CV:
+        h = hashlib.sha1()
+        for n in names:
+            try: h.update((ROOT / n).read_bytes())
+            except OSError: pass
+        _CV[names] = h.hexdigest()[:8]
+    return _CV[names]
+
+
+def community_tags(lang, vid=None, mode="", css_async=False):
+    """Skripte/Stile fuer Community-Widgets (blenden sich aus, wenn die API nicht erreichbar ist).
+    css_async: community.css nicht renderblockierend laden (Folgenseiten: die Widgets stehen unten und erscheinen erst nach der API-Antwort;
+    Lighthouse zaehlte das Stylesheet am Seitenende als blockierend, ~0,4 s auf dem Handy). Ohne JavaScript gibt es dort ohnehin keine Widgets."""
     priv = f"{BASE}/{'datenschutz' if lang == 'de' else 'privacy'}/"
     cfg = {"api": COMMUNITY_API, "lang": lang, "vid": vid, "privacy": priv, "communityUrl": f"{BASE}/{lang}/community/"}
     # Die Oberflaechentexte (ca. 6 KB je Sprache, auf jeder Seite gleich) liegen in assets/cm-<sprache>.js (gecacht), nicht mehr in jeder Seite.
-    return (f'<link rel="stylesheet" href="{BASE}/assets/community.css"><script defer src="{BASE}/assets/cm-{lang if lang in _CI else "en"}.js"></script>'
-            f'<script>window.M365C={json.dumps(cfg, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")}</script><script defer src="{BASE}/assets/community.js"></script>')
+    css_url = f'{BASE}/assets/community.css?v={_cv("assets/community.css")}'
+    css = (f'<link rel="preload" as="style" href="{css_url}" onload="this.onload=null;this.rel=\'stylesheet\'">' if css_async
+           else f'<link rel="stylesheet" href="{css_url}">')
+    return (f'{css}<script defer src="{BASE}/assets/cm-{lang if lang in _CI else "en"}.js?v={_cv("data/community_i18n.json")}"></script>'
+            f'<script>window.M365C={json.dumps(cfg, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")}</script><script defer src="{BASE}/assets/community.js?v={_cv("assets/community.js")}"></script>')
 
 
 def write_cm_js(out):
@@ -1237,9 +1244,9 @@ def build():
 <h1>{esc(h1_main)}</h1>{("<p class=sub>" + esc(h1_rest) + "</p>") if h1_rest else ""}{SPM.note(l, _spr, "episode")}
 {chips_html(l, it)}<p class="lede">{intro}</p>
 <figure class="cover" style="margin-inline:0">{art_svg(vid, LANGS[l][0], "M365.FM · " + ui[0], l)}</figure>
-<div class="panel"><iframe src="https://widget.spreaker.com/player?episode_id={it["eid"]}&amp;theme=light&amp;playlist=false" height="131" loading="lazy" title="{esc(e["title"])}"></iframe>
+<div class="panel">{PL.player("spreaker", it["eid"], e["title"], ui[0], link=spk)}
 <div class="btns">{btns}</div>{"<p class=showrow>M365.FM ▸ " + showrow + "</p>" if showrow else ""}</div>
-<div class="yt"><iframe src="https://www.youtube-nocookie.com/embed/{vid}?rel=0" title="{esc(e["title"])}" loading="lazy" allow="accelerometer; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+<div style="margin:22px 0">{PL.player("youtube", vid, e["title"], ui[1], link=yt)}</div>
 <p class="mut">▶ {esc(e["title"])}</p>
 <h2>{esc(hdr)}</h2><ol class="points">{lis}</ol>
 <p class="lede" style="margin-top:1.4em">{aud}</p>
@@ -1250,7 +1257,7 @@ def build():
 {('<h2>' + esc(ui[4]) + '</h2><div class="list">' + rel + '</div>') if rel else ''}
 <p style="margin-top:1.6em"><a class="btn" href="{BASE}/{l}/">{esc(ui[3])} →</a></p>
 <section id="c-comments"></section><section id="c-sub"></section></main>
-{footer(l)}{community_tags(l, vid)}"""
+{footer(l)}{community_tags(l, vid, css_async=True)}"""
         if _spr: body = SPM.mark(body, _spr, "episode")   # T37 Sponsor: Links zum Sponsor mit rel="sponsored"
         OG_COVER[canonical] = art_svg(vid, LANGS[l][0], lang=l)
         write(f'{l}/{it["slug"]}/index.html',
@@ -1347,14 +1354,7 @@ def build():
                   f'<div class="thumbs">{"".join(_ch)}</div>{PAGER(_hl, _pv, _nx, kind="page")}</main>{footer(_hl) if _hl in LANGS else footer_en()}')
             write(f"{_pre}page/{_n}/index.html", page(_hl, _ttl, f"{_SD.HUB_DESC.get(_hl, _SD.HUB_DESC['en'])} – {_pw} {_n}.", _purl(_n), _b,
                                                          og_type="website", og_of=_purl(1)))
-    import site_updates as _SU2; _SU2.load(COMMUNITY_API)
-    from site_learn import ENTS as _E2
-    for _nl in ("en", "de"):
-        _nu = f"{BASE}/{'de/' if _nl == 'de' else ''}updates/"
-        _nt = "Updates – neu seit gestern" if _nl == "de" else "Updates – new since yesterday"
-        _nb = f'{header(_nl, "")}<main class="wrap"><h1>{esc(_nt)}</h1><p class="mut">{esc("Was seit dem letzten Tag neu dazugekommen ist. Die Seite wird höchstens einmal täglich erweitert (abgeschlossene Tage)." if _nl == "de" else "What was added since the last day. The page grows at most once a day (completed days only).")}</p><p><a class="btn main" href="{BASE}/{"de/" if _nl == "de" else ""}community/#c-wish">{"Roadmap &amp; Wunschliste" if _nl == "de" else "Roadmap &amp; wishlist"}</a></p>{_SU2.page_block(_nl, lambda i, _l=_nl: f"{BASE}{'/' + _l if _l != 'en' else ''}/entity/{i}/", {k: v["name"] for k, v in _E2.items()})}{HUB.news(_nl, BASE)}</main>{footer(_nl)}'
-        write(f"{'de/' if _nl == 'de' else ''}updates/index.html", page(_nl, f"{_nt} – M365.FM", "Neue Beiträge, Folgen, Videos, Bibliothekseinträge und Updates pro Tag." if _nl == "de" else "New posts, episodes, videos, library items and updates per day.", _nu, _nb, None, [{"@context": "https://schema.org", "@type": "CollectionPage", "@id": _nu + "#page", "name": _nt, "url": _nu, "inLanguage": _nl, "dateModified": TODAY, "isPartOf": {"@id": f"{BASE}/#website"}, "publisher": {"@id": f"{BASE}/#org"}}]))
-        sitemap.append((_nu, TODAY, None))
+    # /updates/ (Wochenzusammenfassungen) entsteht nach dem Laden der Blogbeitraege: site_milestones.build weiter unten
 
     # Rechtliche Seiten (noindex)
     import site_legal as SL
@@ -1452,7 +1452,7 @@ def build():
             if lang == "en":
                 _epc[k] = PP.find_episodes(BASE, e, LRN.ent_names(e))
             else:
-                rx = [re.compile(r"(?<![\w-])" + re.escape(n) + r"(?![\w-])", re.I) for n in LRN.ent_names(e)]
+                rx = [_rx_i(r"(?<![\w-])" + re.escape(n) + r"(?![\w-])") for n in LRN.ent_names(e)]   # je Name einmal je Bau kompiliert (re.I)
                 _bye = {str(it["eid"]): it for it in by_lang.get(lang, [])}
                 _ext = [_bye[sid] for sid in SX.episodes_for(e["id"]) if sid in _bye]   # T27: QA-gepruefte Extraktion der Dub-Folge nennt die Entitaet
                 _hit = [it for it in by_lang.get(lang, []) if any(r.search(it["e"]["title"] + " " + (it["e"].get("tags") or "")) for r in rx)] if rx else []
@@ -1485,6 +1485,7 @@ def build():
     for _x in (LRN._fetch_json(f"{COMMUNITY_API}/api/qa/export") or {}).get("items", []):
         ENT.FAQ.setdefault(_x["eid"], []).append(_x)
     ENT.CLAIMS.update({c["eid"]: c["handle"] for c in _cl}); MEM.CLAIMED.update({c["handle"]: c["eid"] for c in _cl})
+    ENT.set_teams(_orgs, _people, {p["handle"]: MEM.person_entity(p["handle"]) for p in _people})   # Mitarbeitende der Community-Firma -> Personen auf der verknuepften Firmen-Entitaet
     import site_updates as _SU
     _SU.load(COMMUNITY_API)
     import site_blog as BLG
@@ -1505,9 +1506,12 @@ def build():
         for _t in _p.get("topics", []):
             _pbt.setdefault(_t, []).append(_p)
     _ctx["posts_by_topic"] = _pbt; _ctx["author_box"] = author_box
+    import site_milestones as MST
+    print("Updates-Seite (Wochenzusammenfassungen):", MST.build(_ctx, _posts))   # Mirko 6.11.2026: nur die woechentlichen Meilensteine, keine Tagesliste mit Inhalten oder GitHub-Meldungen
     phase("Blog geladen, Folgen der Hauptshow zugeordnet")
     ENT.PERSON_LD = person_ld   # T4: eine Definition der Person Mirko Peters (Entitaetsseite nutzt denselben Knoten)
-    ENT.build(_ctx, lambda lang: LRN.gloss_links(lang, BASE), MEM.experts_index(_people, _orgs), _ep_find)
+    _glc = {}   # verlinkbare Begriffe je Sprache einmal (vorher je Entitaetsseite neu: 1.800 Eintraege x Seiten x Sprachen); nur gelesen
+    ENT.build(_ctx, lambda lang: _glc[lang] if lang in _glc else _glc.setdefault(lang, LRN.gloss_links(lang, BASE)), MEM.experts_index(_people, _orgs), _ep_find)
     phase("Entitaetsseiten")
     MEM.build(_ctx, _people, _orgs, extra={l: EVT.blocks(BASE, _events, l) for l in COMM_LANGS})
     DIR.build(_ctx)
@@ -1837,12 +1841,12 @@ Mirko Peters, {BASE}/about/
     _adm_css = ("<style>.adm-tabs{display:flex;gap:6px;flex-wrap:wrap;margin:1em 0}.adm-tabs button{font:inherit;padding:.45em 1em;border:1px solid var(--bd);border-radius:2em;background:var(--card);color:inherit;cursor:pointer}"
                 ".adm-tabs button[aria-selected=true]{border-color:var(--ac);background:var(--ac);color:#fff}.adm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(11em,1fr));gap:10px}"
                 ".adm-tile{border:1px solid var(--bd);border-radius:.6em;padding:.8em;background:var(--card);display:flex;flex-direction:column;gap:.1em}.adm-tile b{font-size:1.7rem;line-height:1.1}.adm-tile.on b{color:var(--ac)}.adm-tile small{color:var(--mut)}"
-                ".adm-row{display:flex;gap:8px;flex-wrap:wrap}.adm-row input{flex:1;min-width:12em}.adm-row input,.adm-row select{font:inherit;padding:.5em .7em;border:1px solid var(--bd);border-radius:.4em;background:var(--card);color:inherit}.adm-list{list-style:none;padding:0;margin:1em 0}.adm-item{font:inherit;color:inherit;background:none;border:0;border-bottom:1px solid var(--bd);width:100%;text-align:start;padding:.55em .2em;cursor:pointer}.adm-item:hover{background:var(--card)}"
+                ".adm-row{display:flex;gap:8px;flex-wrap:wrap}.adm-row input{flex:1;min-width:12em}.adm-list{list-style:none;padding:0;margin:1em 0}.adm-item{font:inherit;color:inherit;background:none;border:0;border-bottom:1px solid var(--bd);width:100%;text-align:start;padding:.55em .2em;cursor:pointer}.adm-item:hover{background:var(--card)}"
                 ".adm-tbl{width:100%;border-collapse:collapse;font-size:.92rem}.adm-tbl th,.adm-tbl td{text-align:start;padding:.35em .4em;border-bottom:1px solid var(--bd);vertical-align:top}.adm-tbl th{position:sticky;top:0;background:var(--bg)}"
                 ".adm-chip{display:inline-block;min-width:2.2em;text-align:center;font:600 .78rem/1.6 inherit;border:1px solid var(--bd);border-radius:1em;margin:1px;background:none;color:inherit;cursor:pointer;padding:0 .3em}.adm-chip.ok{background:#1e7a4a;color:#fff;border-color:#1e7a4a;cursor:default}.adm-chip.q{background:var(--ac);color:#fff;border-color:var(--ac)}.adm-chip.fail{border-color:#b43;color:#b43}"
                 ".adm-sum{display:grid;grid-template-columns:repeat(auto-fill,minmax(7.5em,1fr));gap:6px;margin:.6em 0}.adm-sum div{border:1px solid var(--bd);border-radius:.5em;padding:.4em .6em;background:var(--card)}.adm-sum b{display:block;font-size:1.1rem}.adm-sum small{color:var(--mut)}.adm-ops td{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.85rem}"
                 ".adm-badge{font-size:.75rem;border:1px solid var(--bd);border-radius:1em;padding:.05em .6em;color:var(--mut)}.adm-badge.on{border-color:var(--ac);color:var(--ac)}"
-                ".adm-form{border:1px solid var(--bd);border-radius:.7em;padding:1em 1.2em;background:var(--card);margin:1em 0}.adm-field{display:flex;flex-direction:column;gap:.2em;margin:.7em 0}.adm-field input,.adm-field textarea,.adm-field select{font:inherit;padding:.45em .6em;border:1px solid var(--bd);border-radius:.4em;background:var(--bg);color:inherit}"
+                ".adm-form{border:1px solid var(--bd);border-radius:.7em;padding:1em 1.2em;background:var(--card);margin:1em 0}.adm-field{display:flex;flex-direction:column;gap:6px;margin:.9em 0;font-weight:600}"
                 ".adm-msg{min-height:1.4em}.adm-msg.bad{color:var(--ac);font-weight:600}</style>")
     write("admin/index.html", page("de", "Verwaltung – M365.FM", "Verwaltung der Website ohne Code", f"{BASE}/admin/",
           f'{header("de", "")}<main class="wrap" id="main"><h1>Verwaltung</h1><p class="mut">Inhalte, Datenbank und Schalter der Website, ohne Code. Nur für Admins.</p>'

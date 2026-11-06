@@ -32,6 +32,50 @@ class ExpertConnectPageTests(unittest.TestCase):
     def test_copy_complete(self):
         self.assertEqual(set(ECN.T["en"]), set(ECN.T["de"]))
 
+    def test_role_based_hero_and_navigation(self):
+        out = self.build()
+        cases = {
+            "community/expert-connect/index.html": {
+                "find": "Find experts", "request": "Post a request", "expert": "Are you an expert? See open calls",
+                "group_seek": "I need an expert", "group_expert": "I am an expert",
+                "title": "Expert Connect: find experts or post a request",
+            },
+            "de/community/expert-connect/index.html": {
+                "find": "Experten finden", "request": "Anfrage ausschreiben", "expert": "Du bist Experte? Offene Aufrufe ansehen",
+                "group_seek": "Ich suche Experten", "group_expert": "Ich bin Experte",
+                "title": "Expert Connect: Experten finden oder Anfrage ausschreiben",
+            },
+        }
+        for path, text in cases.items():
+            page = json.loads(out[path])
+            body = page["body"]
+            lang = "de" if path.startswith("de/") else "en"
+            self.assertEqual(page["title"], text["title"])
+            self.assertEqual(ECN.T[lang]["desc"], text["title"])
+            self.assertIn(f'<h1>{ECN.T[lang]["h1"]}</h1>', body)
+            self.assertIn(f'href="#search">{text["find"]}</a>', body)
+            self.assertIn(f'href="#request">{text["request"]}</a>', body)
+            self.assertIn(f'href="#calls">{text["expert"]}</a>', body)
+            self.assertIn(f'<span class="ec-group-h">{text["group_seek"]}</span>', body)
+            self.assertIn(f'<span class="ec-group-h">{text["group_expert"]}</span>', body)
+            for tab in ("search", "request", "requests", "expert", "calls", "mod"):
+                self.assertIn(f'data-tab="{tab}"', body)
+            self.assertIn('data-tab="mod" hidden', body)
+        self.assertEqual(ECN.T["en"]["tab_request"], "Post a request")
+        self.assertEqual(ECN.T["de"]["tab_request"], "Anfrage ausschreiben")
+
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class HowItWorksTests(unittest.TestCase):
+    """Mirko, 5.11.2026: Erklaerung, wie Expert Connect funktioniert."""
+    def test_how_section(self):
+        out = ExpertConnectPageTests().build()
+        for path, lang in (("community/expert-connect/index.html", "en"), ("de/community/expert-connect/index.html", "de")):
+            body = json.loads(out[path])["body"]
+            self.assertIn('id="how"', body)
+            self.assertIn(ECN.T[lang]["how_h"], body)
+            self.assertEqual(body.count("<li>"), 8)
+            self.assertLess(body.index('id="how"'), body.index('class="ec-tabs"'))

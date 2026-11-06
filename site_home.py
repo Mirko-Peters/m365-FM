@@ -38,20 +38,6 @@ PAGES = {}     # Schluessel -> Sprache und Pfad-Praefix der Hub-Seite
 N_FIRST = 24   # Karten im HTML (T6: Startseite unter 300 kB)
 
 
-_LAST = {}
-
-
-def news(lang, base, days=30):
-    """Tages-Batches: nur abgeschlossene Tage (bis gestern), daher ändert sich die Seite höchstens einmal pro Tag."""
-    cards = _LAST.get(lang) or []; today = date.today().isoformat(); by = {}
-    for d, k, h in cards:
-        if d < today: by.setdefault(d, []).append((k, h))
-    out = []
-    for d in sorted(by, reverse=True)[:days]:
-        n = len(by[d]); out.append(f'<section class="news-day"><h2 id="d{d}">{d} <span class="mut" style="font-size:.6em">· {n} {esc(T(lang, "new items", "neue Inhalte"))}</span></h2><div class="thumbs">' + "".join(h for _, h in by[d]) + "</div></section>")
-    return CSS + ("".join(out) or f'<p class="mut">{esc(T(lang, "Nothing yet.", "Noch nichts."))}</p>')
-
-
 def hub(g, lang, base, api, videos, vid_html, root=False):
     """videos: Liste von Episoden-Items (mit "date"), vid_html(item) -> HTML-Karte. Rückgabe: HTML-Block."""
     C = _load(api); today = date.today().isoformat(); cards = []
@@ -84,8 +70,7 @@ def hub(g, lang, base, api, videos, vid_html, root=False):
             tag(it["name"], it.get("topics"), it["title"])
     KL = {"youtube": "YouTube", "github": "GitHub", "blog": "Blog", "podcast": "Podcast", "newsletter": "Newsletter", "mastodon": "Mastodon", "bluesky": "Bluesky", "website": "Web"}
     import site_feed
-    for f in C["feed"]:
-        if f.get("kind") == "github": continue   # T6: GitHub-Aktivitaet (Commits, Stars) gehoert nicht in den oeffentlichen Feed
+    for f in site_feed.public_items(C["feed"]):   # T6: GitHub-Aktivitaet (Commits, Stars) gehoert nicht in den oeffentlichen Feed
         d = __import__("datetime").datetime.fromtimestamp(f["published"]).strftime("%Y-%m-%d")
         who = f'{base}/community/{"c" if f["type"] == "o" else "u"}/{f["handle"]}/'
         cards.append((d, "feed", f'<div class="hub-card" data-k="feed"><div class="kicker">{esc(T(lang, "From the creators", "Von den Creatorn"))} · {esc(KL.get(f["kind"], f["kind"].title()))}</div><h3><a href="{(base + ("/de" if lang == "de" else "") + "/" + site_feed.path_of(f)) if f.get("id") else esc(f["url"])}">{esc(f["title"])}</a></h3><p class="mut"><a href="{who}">{esc(f["name"])}</a> · {d}</p></div>'))
@@ -115,7 +100,6 @@ def hub(g, lang, base, api, videos, vid_html, root=False):
         if _key in _seen_t: continue
         _seen_t.add(_key); _dedup.append(c_)
     cards = _dedup
-    _LAST[lang] = list(cards)
     counts = {}
     for _, k, _h in cards: counts[k] = counts.get(k, 0) + 1
     labels = [("all", T(lang, "All", "Alle")), ("blog", "Blog"), ("podcast", "Podcast"), ("event", T(lang, "Events", "Events")), ("library", T(lang, "Library", "Bibliothek")), ("feed", T(lang, "From the creators", "Von den Creatorn")), ("update", T(lang, "Microsoft updates", "Microsoft-Updates")), ("creatorvideo", T(lang, "Creator videos", "Creator-Videos")), ("video", T(lang, "Stick-man videos", "Stick-Man-Videos"))]

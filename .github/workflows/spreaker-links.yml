@@ -3,7 +3,7 @@ name: Spreaker-Website-Feld auf die Episodenseite setzen (T36)
 # Alte Werte stehen im Protokoll data/spreaker_links.tsv. shownotes/PAUSED haelt auch diesen Lauf an.
 on:
   schedule:
-    - cron: "47 4 * * *"   # taeglich nach dem naechtlichen Seitenbau: neue Folgen nachziehen
+    - cron: "47 4 * * *"   # taeglich nach dem naechtlichen Seitenbau (site.yml 01:07 UTC, fertig ~02:30): neue Folgen nachziehen
   workflow_dispatch:
     inputs:
       ids: { description: "Nur diese Folgen-IDs (Komma)", required: false, default: "" }

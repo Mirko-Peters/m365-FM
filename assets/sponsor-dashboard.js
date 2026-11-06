@@ -6,6 +6,7 @@
     ["source_reach", "people_reached", "source_desc_reach", "daily", "people_reached", "setup"],
     ["source_spreaker", "podcast_plays", "source_desc_spreaker", "daily", "spreaker", "setup"],
     ["source_youtube", "video_views", "source_desc_youtube", "daily", "youtube", "setup"],
+    ["source_cloudflare_rum", "page_views", "source_desc_cloudflare_rum", "daily", "cloudflare_rum", "setup"],
     ["source_cloudflare", "page_views", "source_desc_cloudflare", "daily", "cloudflare", "setup"],
     ["source_counter", "link_clicks", "source_desc_counter", "live", "sponsor_links", "setup"],
     ["source_gsc", "search_impressions", "source_desc_gsc", "daily", "gsc", "setup"],
@@ -50,14 +51,22 @@
   function sourceLabel(source) {
     return text(({
       "Cross-channel estimate": "source_reach", "Spreaker API": "source_spreaker", "YouTube Analytics API": "source_youtube",
-      "Cloudflare Analytics": "source_cloudflare", "M365.FM-Linkzähler": "source_counter",
+      "Cloudflare Analytics": "source_cloudflare", "Cloudflare Web Analytics": "source_cloudflare_rum", "M365.FM-Linkzähler": "source_counter",
       "D1-Projektanfragen (#232)": "source_directory", "Bing AI Performance": "source_bing",
       "Google Search Console": "source_gsc", "Bing Webmaster API": "source_bing_webmaster",
       "Press Ranger": "source_press", "bing_ai": "source_bing", "press_portal": "source_press",
-      spreaker: "source_spreaker", youtube: "source_youtube", cloudflare: "source_cloudflare",
+      spreaker: "source_spreaker", youtube: "source_youtube", cloudflare: "source_cloudflare", cloudflare_rum: "source_cloudflare_rum",
       gsc: "source_gsc", bing_webmaster: "source_bing_webmaster",
       press_ranger: "source_press", sponsor_links: "source_counter"
     })[source] || source || "source_no_data");
+  }
+  // Quelle einer Summe: nur wenn alle Werte aus derselben Quelle stammen (z. B. nur Web Analytics); gemischt mit der
+  // ungefilterten Zonen-Statistik gilt deren Kennzeichnung, damit nichts als gefiltert erscheint, was es nicht ist.
+  function commonSource(records, fallback) {
+    var sources = records.map(function (record) { return record.source; }).filter(Boolean);
+    if (!sources.length) return fallback;
+    if (sources.every(function (source) { return source === sources[0]; })) return sources[0];
+    return sources.indexOf("cloudflare") >= 0 ? "cloudflare" : fallback;
   }
   function formatDate(value) {
     if (!value) return text("unavailable");
@@ -273,7 +282,7 @@
       for (var i = 0; i < preferred.length && !figure; i++) {
         var records = (item.metrics || []).filter(function (metric) { return metric.metric === preferred[i]; });
         if (records.length) figure = { metric: preferred[i], value: records.reduce(function (sum, metric) { return sum + Number(metric.value || 0); }, 0),
-          source: records[0].source, kind: records[0].kind, as_of: records.reduce(function (latest, metric) { return metric.day > latest ? metric.day : latest; }, "") };
+          source: commonSource(records, records[0].source), kind: records[0].kind, as_of: records.reduce(function (latest, metric) { return metric.day > latest ? metric.day : latest; }, "") };
       }
       var manual = (item.manual || []).slice().sort(function (a, b) { return b.period.localeCompare(a.period); })[0];
       if (!figure && manual) figure = { metric: manual.metric, value: manual.value, source: manual.source, kind: "manual", as_of: manual.as_of };
@@ -357,6 +366,18 @@
       root.appendChild(section);
       if (!items.length) rows.appendChild(node("tr", {}, [node("td", { colspan: "6", class: "mut", text: text("no_placements") })]));
       items.forEach(function (item) { rows.appendChild(placementRow(org, item)); });
+      if ((org.ads || []).length) {   // #281: gebuchte Werbeplaetze mit Einblendungen, Klicks, Klickrate, Leads
+        var adRows = node("tbody");
+        org.ads.forEach(function (ad) {
+          adRows.appendChild(node("tr", {}, [ad.code + " · " + ad.product, metricValue(ad.impressions), metricValue(ad.clicks),
+            ad.ctr == null ? "–" : ad.ctr + " %", metricValue(ad.leads), ad.delivered + " / " + ad.quantity,
+            text(ad.status === "active" ? "active" : ad.status === "ended" ? "ended" : "pending")].map(function (value) { return node("td", { text: String(value) }); })));
+        });
+        section.appendChild(node("section", { class: "sdb-panel" }, [node("h2", { text: text("ads_title") }),
+          node("div", { class: "sdb-table" }, [node("table", {}, [node("thead", {}, [node("tr", {}, ["placement", "ads_impressions", "clicks", "ads_ctr", "ads_leads", "ads_volume", "status"]
+            .map(function (key) { return node("th", { scope: "col", text: text(key) }); }))]), adRows])]),
+          node("p", { class: "mut", text: text("ads_note") })]));
+      }
     });
     var actions = node("div", { class: "sdb-actions" }, [
       node("a", { class: "btn main", href: C.urls.report, text: text("report_view") }),
@@ -406,7 +427,7 @@
       var latest = selected.reduce(function (date, record) {
         return Math.max(date, Number(record.fetched_at) || 0, Date.parse((record.day || "") + "T00:00:00Z") / 1000 || 0);
       }, 0);
-      return { value: value, source: source, kind: selected.length ? selected[0].kind : kind,
+      return { value: value, source: commonSource(selected, source), kind: selected.length ? selected[0].kind : kind,
         as_of: latest ? new Date(latest * 1000).toISOString().slice(0, 10) : null };
     }
     function clickAggregate(surfaces) {

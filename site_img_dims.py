@@ -99,6 +99,19 @@ def enhance(source):
     return source
 
 
+
+def eager_first(source, window=1500):
+    """Erstes Inhaltsbild nicht lazy laden, wenn es oben im Text steht (sonst ist es oft das LCP-Element und startet erst nach dem Layout).
+    window: das Bild muss in den ersten so vielen Zeichen des HTML beginnen; weiter unten bleibt loading="lazy"."""
+    m = re.search(r"<img\b[^>]*>", source or "", flags=re.I)
+    if not m or m.start() > window or not re.search(r'\sloading\s*=\s*["\']?lazy', m.group(0), flags=re.I):
+        return source
+    tag = re.sub(r'\sloading\s*=\s*["\']?lazy["\']?', "", m.group(0), count=1, flags=re.I)
+    if "fetchpriority" not in tag.lower():
+        tag = re.sub(r"\s*/?>$", lambda x: ' fetchpriority="high"' + x.group(0), tag)
+    return source[:m.start()] + tag + source[m.end():]
+
+
 def has_dimensions(source):
     parser = _Images(source)
     parser.feed(source)
