@@ -278,10 +278,34 @@ def popularity():
     return score
 
 
+# Monatsgrenze (Mirko, 6.11.2026: Sonnet behalten, aber mit Grenze). Repo-Variable ARTICLE_BUDGET_USD, Standard 25 USD je Kalendermonat (UTC).
+# Preise je 1 Mio. Token fuer Sonnet 5.5 (Stand Oktober 2026), per Repo-Variable anpassbar.
+BUDGET_USD = float(os.environ.get("ARTICLE_BUDGET_USD") or 25)
+PRICE = {"in": float(os.environ.get("SONNET_USD_PER_MTOK_IN") or 2.0), "out": float(os.environ.get("SONNET_USD_PER_MTOK_OUT") or 10.0),
+         "cw": float(os.environ.get("SONNET_USD_PER_MTOK_CACHE_WRITE") or 2.5), "cr": float(os.environ.get("SONNET_USD_PER_MTOK_CACHE_READ") or 0.10)}
+
+
+def month_spend_usd(sd, month):
+    """Kosten des Monats aus data/spend.json (input_tokens enthaelt Cache-Lese- und -Schreib-Token)."""
+    m = (sd or {}).get(month) or {}
+    cr, cw = m.get("cache_read_tokens", 0), m.get("cache_write_tokens", 0)
+    base = max(0, m.get("input_tokens", 0) - cr - cw)
+    return (base * PRICE["in"] + cw * PRICE["cw"] + cr * PRICE["cr"] + m.get("output_tokens", 0) * PRICE["out"]) / 1e6
+
+
 def main():
     if not os.environ.get("ANTHROPIC_API_KEY"):
         print("Kein ANTHROPIC_API_KEY – übersprungen")
         return
+    try:
+        _sd = json.load(open(ROOT / "data" / "spend.json", encoding="utf-8"))
+    except Exception:
+        _sd = {}
+    _mk = time.strftime("%Y-%m", time.gmtime()); _spent = month_spend_usd(_sd, _mk)
+    if _spent >= BUDGET_USD:
+        print(f"Monatsgrenze erreicht: {_spent:.2f} USD von {BUDGET_USD:.2f} USD in {_mk} – keine neuen Artikel bis zum Monatswechsel.")
+        return
+    print(f"Artikel-Budget {_mk}: {_spent:.2f} von {BUDGET_USD:.2f} USD verbraucht")
     (ROOT / "data" / "articles").mkdir(parents=True, exist_ok=True)
     jobs, store = [], {}
     for p in sorted(glob.glob(str(ROOT / "episodes" / "*.json"))):
