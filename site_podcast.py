@@ -55,7 +55,7 @@ def build(g, eps, people, api):
                    "datePublished": iso(e["published"]), "author": {"@type": "Person", "@id": au + "#person", "name": e["name"], "url": au}, **({"actor": [{"@type": "Person", "@id": f"{BASE}/community/u/{g['handle']}/#person", "name": g["name"], "url": f"{BASE}/community/u/{g['handle']}/"} for g in gs]} if gs else {}),
                    "partOfSeries": {"@type": "PodcastSeries", "name": "M365.FM", "url": f"{BASE}/"}, "about": [{"@id": f"{BASE}/entity/{t}/#entity"} for t in topics],
                    "associatedMedia": {"@type": "AudioObject", "contentUrl": e["ep_url"]}}]
-            write(f"{pfx2(lang)}community/podcast/{e['slug']}/index.html", page(lang, f'{e["title"]} – {ttl} | M365.FM', (e.get("description") or "")[:155], u, b, None, ld, og_type="article", extra_head=LCSS, noindex=e["title"].startswith("[Test]")))
+            write(f"{pfx2(lang)}community/podcast/{e['slug']}/index.html", page(lang, f'{e["title"]} – {ttl} | M365.FM', (e.get("description") or "")[:155], u, b, None, ld, og_type="article", extra_head=LCSS, noindex=e["title"].startswith("[Test]"), side=(g["side"](lang, e["title"] + " " + (e.get("description") or "")[:1500], ids=topics) if g.get("side") else "")))
             if not e["title"].startswith("[Test]"): sitemap.append((u, iso(e["published"]), None))
         it = sorted(mine, key=lambda x: -x["published"]); ru = f"{croot}podcast/"
         lst = '<ul class="bl-list" style="padding:0;list-style:none">' + "".join(f'<li style="padding:.7em 0;border-bottom:1px solid var(--bd)"><a href="{croot}podcast/{e["slug"]}/"><b>{esc(e["title"])}</b></a> <span class="mut">· {esc(e["name"])} · {iso(e["published"])}</span></li>' for e in it) + "</ul>"

@@ -134,7 +134,7 @@ h2{font-size:1.5rem;line-height:1.2;margin:2.1em 0 .6em;font-weight:700}
 .author .badge{flex:none;width:58px;height:58px;border-radius:50%;background:var(--ink);color:var(--onink);display:grid;place-items:center;font:700 1.15rem Didot,Georgia,serif}
 .author p{margin:0;font-size:.95rem;color:var(--mut)}.author .auth-ex{margin:.5em 0 0}.author .auth-ul{list-style:none;display:flex;flex-wrap:wrap;gap:.35em .5em;padding:0;margin:.2em 0 0}.author .auth-ul li{border:1px solid var(--bd);border-radius:1em;padding:.05em .7em;font-size:.88rem}.author strong{color:var(--fg);display:block;font-size:1.02rem}
 .mut{color:var(--mut);font-size:.9rem}.crumbs{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);margin-top:26px}.crumbs a{text-decoration:none}
-footer{border-top:1px solid var(--fg);margin-top:64px;padding:26px 0 48px;font-size:.85rem;color:var(--mut)}footer a{margin-right:14px;display:inline-block}
+footer{border-top:1px solid var(--fg);margin-top:64px;padding:26px 0 48px;font-size:.85rem;color:var(--mut)}footer .wrap{display:flex;flex-wrap:wrap;gap:6px 14px}footer .wrap>:not(a){flex-basis:100%}
 .info{margin:1.6em 0;padding:20px 22px;border:1px solid var(--ln,#d9cfc2);background:#fff8;border-radius:6px}.info figcaption{font-family:Didot,"Bodoni 72",Georgia,serif;font-size:1.25rem;margin-bottom:14px}.info small{display:block;margin-top:12px;opacity:.6;font-size:.75rem}
 .isteps{list-style:none;padding:0;margin:0;display:grid;gap:12px}.isteps li{display:grid;grid-template-columns:36px 1fr;gap:2px 12px;align-items:start}.isteps i{grid-row:span 2;width:32px;height:32px;border-radius:50%;background:var(--ac);color:#fff;font-style:normal;display:flex;align-items:center;justify-content:center;font-weight:700}.isteps b{font-size:1rem}.isteps span{font-size:.92rem;opacity:.85}
 .icols{display:grid;grid-template-columns:1fr 1fr;gap:14px}.icol{border-top:3px solid var(--ac);padding-top:8px}.icol h4{margin:0 0 6px}.icol ul{margin:0;padding-left:18px}.ifacts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}.ifacts div{border-left:3px solid var(--ac);padding-left:10px}.ifacts b{display:block;font-size:1.5rem;font-family:Didot,"Bodoni 72",Georgia,serif}.ifacts span{font-size:.88rem}@media(max-width:560px){.icols{grid-template-columns:1fr}}
@@ -739,7 +739,7 @@ def HT(lang, key):
 
 
 import site_design as _SD
-_SD.EN_URL = f"{BASE}/show/"
+_SD.EN_URL = f"{BASE}/"   # Englisch ist ein Eintrag der Sprachauswahl wie jede Sprache: Rueckfall ist die englische Startseite (vorher /show/)
 globals_ctx = None
 COMMUNITY_API = os.environ.get("COMMUNITY_API", "https://api-dub.m365.fm")
 _CI = json.loads((ROOT / "data" / "community_i18n.json").read_text("utf-8")) if (ROOT / "data" / "community_i18n.json").exists() else {}
@@ -785,20 +785,31 @@ def about_url(lang):
     return f"{BASE}/de/entity/mirko-peters/" if lang == "de" else f"{BASE}/entity/mirko-peters/"
 
 
+# Untermenue "Community" je Sprache (Podcast, Blog, Videos, Bibliothek, Gaeste): gleiche Reihenfolge in allen Sprachen
+NAV_CL = {"en": ("Podcast", "Blog", "Videos", "Library", "Guests"), "de": ("Podcast", "Blog", "Videos", "Bibliothek", "Gäste"),
+          "es": ("Podcast", "Blog", "Vídeos", "Biblioteca", "Invitados"), "fr": ("Podcast", "Blog", "Vidéos", "Bibliothèque", "Invités"),
+          "it": ("Podcast", "Blog", "Video", "Biblioteca", "Ospiti"), "pt": ("Podcast", "Blog", "Vídeos", "Biblioteca", "Convidados"),
+          "nl": ("Podcast", "Blog", "Video's", "Bibliotheek", "Gasten"), "pl": ("Podcast", "Blog", "Wideo", "Biblioteka", "Goście"),
+          "id": ("Podcast", "Blog", "Video", "Perpustakaan", "Tamu"), "ru": ("Подкаст", "Блог", "Видео", "Библиотека", "Гости"),
+          "uk": ("Подкаст", "Блог", "Відео", "Бібліотека", "Гості"), "ar": ("بودكاست", "مدونة", "فيديوهات", "المكتبة", "الضيوف"),
+          "he": ("פודקאסט", "בלוג", "סרטונים", "ספרייה", "אורחים"), "ja": ("ポッドキャスト", "ブログ", "動画", "ライブラリ", "ゲスト"),
+          "ko": ("팟캐스트", "블로그", "동영상", "라이브러리", "게스트")}
+
+
 def header(lang, switch):
-    ui = UI.get(lang)
-    if lang in LANGS:
-        home = f"{BASE}/{lang}/"
-        menu = []
-        menu.insert(0, (LRN.T(lang)["learn"], f"{BASE}/{lang}/learn/"))
-        menu.append(("Podcast", f"{BASE}/{lang}/podcast/"))   # der gedubbte Podcast der Sprache (Spreaker-Show); die Live-Show gibt es nur auf Englisch
-        menu.insert(0, (_CI.get(lang, _CI.get("en", {})).get("profile", "Profile"), f"{BASE}/{lang}/community/"))
-        menu.insert(0, (DIR.S[lang]["title"], f"{BASE}/{lang}/directory/"))
-        _cl = {"de": ("Community", "Podcast", "Blog", "Videos", "Bibliothek", "Gäste")}.get(lang, ("Community", "Podcast", "Blog", "Videos", "Library", "Guests"))
-        menu.insert(0, (_CI.get(lang, _CI.get("en", {})).get("community", _cl[0]), [(ui[3], f"{BASE}/{lang}/podcast/")] + [(_cl[i + 1], f"{BASE}/{lang}/community/{p}/") for i, p in enumerate(("podcast", "blog", "video", "library", "guests"))]))
+    """Ein Menue fuer alle Sprachen, Englisch eingeschlossen (Mirko, 6.11.2026): Community ▾ (Alle Folgen, Podcast, Blog, Videos, Bibliothek, Gaeste),
+    Microsoft-365-Verzeichnis, Profil, Lernen, Podcast; die Sprache waehlt man ueber die Flaggen-Auswahl. Englisch hat keinen eigenen "Show"-Punkt
+    und keinen "Languages"-Link mehr: About the show = Podcast (/show/), All episodes = /show/episodes/, Live, Gaeste und Hosts stehen auf /show/.
+    Alle Ziele sind endgueltige Adressen (keine Weiterleitung des Site-Workers)."""
+    L = lang if lang in LANGS else "en"
+    ci = _CI.get(L, _CI.get("en", {}))
+    if L == "en":
+        home = f"{BASE}/"; pre = BASE; all_eps = (f"{BASE}/show/episodes/", "All episodes"); pod = f"{BASE}/show/"
     else:
-        home = f"{BASE}/"
-        menu = [("Languages", f"{BASE}/#languages"), (DIR.S["en"]["title"], f"{BASE}/directory/"), ("Community", [("Podcast", f"{BASE}/community/podcast/"), ("Blog", f"{BASE}/community/blog/"), ("Videos", f"{BASE}/community/video/"), ("Library", f"{BASE}/community/library/"), ("Guests", f"{BASE}/community/guests/")]), ("Show", [("About the show", f"{BASE}/show/"), ("All episodes", f"{BASE}/show/episodes/")] + ([("M365 Show Live", f"{BASE}/live/")] if (ROOT / "data" / "live.json").exists() else []) + [("Guests", f"{BASE}/show/guests/"), ("Hosts", f"{BASE}/show/hosts/")]), ("Profile", f"{BASE}/community/")]
+        home = f"{BASE}/{L}/"; pre = f"{BASE}/{L}"; all_eps = (f"{BASE}/{L}/podcast/", UI[L][3]); pod = f"{BASE}/{L}/podcast/"   # der gedubbte Podcast der Sprache (Spreaker-Show)
+    cl = NAV_CL.get(L, NAV_CL["en"])
+    menu = [(ci.get("community", "Community"), [(all_eps[1], all_eps[0])] + [(cl[i], f"{pre}/community/{p}/") for i, p in enumerate(("podcast", "blog", "video", "library", "guests"))]),
+            (DIR.S[L]["title"], f"{pre}/directory/"), (ci.get("profile", "Profile"), f"{pre}/community/"), (LRN.T(L)["learn"], f"{pre}/learn/"), ("Podcast", pod)]
     if not switch:
         items = [(x, LANGS[x][0], f"{BASE}/{x}/", LANGS[x][1]) for x in LANGS if (ROOT / "episodes").exists()]
         switch = lang_dropdown(lang if lang in LANGS else "en", items, "")
@@ -1015,8 +1026,19 @@ def build():
 
     def url_of(it): return f'{BASE}/{it["lang"]}/{it["slug"]}/'
     SBX = SBR.Index()
-    def side_for(l, title, body_html):   # Sidebar der Sprachseiten: Themen der Seite, neueste Folgen der Sprache, Community
-        return SBR.render_lang(SBX, BASE, l, strip_tags(title + " " + body_html.split("<main", 1)[-1])[:2500], by_lang.get(l, []), url_of, lambda x: anchor_title(x["e"]["title"]), pfx(l) if l in COMM_LANGS else "")
+    _SHP = json.loads((ROOT / "data" / "platforms.json").read_text("utf-8")) if (ROOT / "data" / "platforms.json").exists() else {}
+    def sidebar(l, text="", ids=None, exclude=(), home=False):
+        """Die eine Sidebar aller Inhaltsseiten (site_sidebar.render), gleich in allen Sprachen: Englisch mit den Folgen der Hauptshow (/show/),
+        die Dub-Sprachen mit den Folgen ihrer Sprache. ids: feste Themenliste der Seite (Entitaets-IDs), sonst Treffer im Text."""
+        if l in LANGS:
+            return SBR.render(SBX, BASE, l, text, by_lang.get(l, []), url_of, lambda x: anchor_title(x["e"]["title"]), f"{BASE}/{l}/podcast/", _SHP.get(l), "",
+                              f"https://www.spreaker.com/show/{LANGS[l][3]}/episodes/feed", pfx(l), f"{BASE}/{l}/community/", ids, exclude, home)
+        import site_podpage as _PP
+        _en = _PP.episode_index(BASE)["items"]
+        return SBR.render(SBX, BASE, "en", text, _en, lambda x: x["url"], lambda x: x["e"]["title"], f"{BASE}/show/episodes/", _SHP.get("en"),
+                          f"{BASE}/show/listen/" if _SHP.get("en") else "", "https://www.spreaker.com/show/6704921/episodes/feed", "", f"{BASE}/community/", ids, exclude, home)
+    def side_for(l, title, body_html, home=False):   # Sidebar der Sprachseiten: Themen der Seite (Treffer im Text), neueste Folgen der Sprache, Community
+        return sidebar(l, strip_tags(title + " " + body_html.split("<main", 1)[-1])[:2500], home=home)
 
     R2_EXT = (".html", ".json", ".jsonld", ".xml")   # T32: Bild-URLs auch in Exporten (entities*.json, Register, Sitemaps) auf img.m365.fm
     R2OUT = ROOT / "r2out"; _r2n = [0, 0]   # Seiten, die nicht in GitHub Pages liegen, sondern im R2-Bucket (tools/r2_pages_upload.py laedt sie hoch, der Site-Worker liefert sie aus)
@@ -1468,7 +1490,7 @@ def build():
                         articles=articles, url_of=url_of, cat_name=cat_name, ORDER=ORDER, strip_tags=strip_tags, anchor_title=anchor_title, short=short, parse_desc=parse_desc,
                         sitemap=sitemap, TODAY=TODAY, api=COMMUNITY_API, SCORE={l: (_QUI.get(l, {}).get("score") or _QUI["en"]["score"]) for l in list(LANGS) + ["en"]}))
 
-    _ctx = dict(community_tags=community_tags, write=write, write_r2=write_r2, page=page, header=header, footer=footer, footer_en=footer_en, BASE=BASE, LANGS=LANGS, active=active, url_of=url_of, anchor_title=anchor_title, sitemap=sitemap, TODAY=TODAY, api=COMMUNITY_API, google_maps_key=os.environ.get("GOOGLE_MAPS_API_KEY", ""), orig_alts=ORIG_ALTS)
+    _ctx = dict(community_tags=community_tags, write=write, write_r2=write_r2, page=page, header=header, footer=footer, footer_en=footer_en, BASE=BASE, LANGS=LANGS, active=active, url_of=url_of, anchor_title=anchor_title, sitemap=sitemap, TODAY=TODAY, api=COMMUNITY_API, google_maps_key=os.environ.get("GOOGLE_MAPS_API_KEY", ""), orig_alts=ORIG_ALTS, side=sidebar)   # side: die eine Sidebar der Inhaltsseiten (Entitaeten, Blog, Videos, Bibliothek, Events, Profile, Show)
     phase("Folgenseiten (Dub-Sprachen), Startseiten")
     _people, _orgs = MEM.fetch_members(COMMUNITY_API)
 

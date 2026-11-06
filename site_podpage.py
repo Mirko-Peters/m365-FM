@@ -1,4 +1,3 @@
-import site_sidebar as SBR
 """Englische Show-Seite (Nachbau von www.m365.fm / Podpage) unter /show/: Folgen, Seiten, Hosts, Sponsoren, Reviews, Gaeste (als Personen-Entitaeten).
 Daten: data/podpage/*.json(.gz); Audio/Transkript aus data/en_episodes.json (fetch_en_episodes.py). Videos sind bewusst ausgeschlossen."""
 import site_notes as SNT
@@ -416,15 +415,16 @@ def build(g):
     baseids = {e["id"] for e in json.loads((D / "entities.json").read_text("utf-8"))}
     gent = {gg["name"]: (gg["slug"] + ("-guest" if gg["slug"] not in {e["id"] for e in []} and gg["slug"] + "-guest" in ents else "")) for gg in guests}
     root = f"{BASE}/show/"; NAME = pod.get("name") or "M365.FM Podcast"
-    navitems = (("", "Home"), ("episodes/", "Episodes"), *(((f"{BASE}/community/u/mirko-p/blog/", "Blog"),) if (PD / "blog_posts.json.gz").exists() else ()), *((("guests/", "Guests"),) if guests else ()), ("hosts/", "Hosts"), ("sponsors/", "Sponsors"), ("reviews/", "Reviews"), ("work-with-me/", "Work with me"), ("about/", "About"))
-    nav = '<section class="sb-card sb-nav"><h2>M365.FM Show</h2><ul class="sb-navl">' + "".join(f'<li><a href="{p if p.startswith("https://") else root + p}">{t}</a></li>' for p, t in navitems) + "</ul></section>"   # frueher zweite Menueleiste ueber dem Inhalt, jetzt Karte in der Sidebar
+    # Show-Unterseiten: frueher Karte "M365.FM Show" in der Sidebar und Menue "Show" im englischen Kopf, jetzt Linkliste auf /show/ (Mirko, 6.11.2026)
+    showlinks = (("episodes/", "All episodes"), *((("guests/", "Guests"),) if guests else ()), ("hosts/", "Hosts"), *(((f"{BASE}/live/", "M365 Show Live"),) if (D / "live.json").exists() else ()),
+                 ("sponsors/", "Sponsors"), ("reviews/", "Reviews"), ("work-with-me/", "Work with me"), ("about/", "About"))
     shell = lambda b, side="": f'{header("en", "")}<main class="wrap shw"><div class="shmain">{b}</div>{side}</main>{footer_en()}'
 
-    SBX = SBR.Index(); SHP = json.loads((D / "platforms.json").read_text("utf-8")).get("en", {}) if (D / "platforms.json").exists() else {}
+    sidebar = g["side"]   # die eine Sidebar aller Inhaltsseiten (generate_site.sidebar, site_sidebar.render)
 
     def pub(rel, title, desc, body, ld=None, og="website", noindex=False, last=TODAY, alts=None, canon=None):
         u = f"{root}{rel}"
-        side = SBR.render(SBX, BASE, root, title + " " + plain(body)[:8000], eps, SHP, nav=nav) if not noindex else SBR.render(SBX, BASE, root, "", [], {}, nav=nav)
+        side = sidebar("en", (title + " " + plain(body)[:8000]) if not noindex else "")
         h = page("en", (title if title == NAME else f"{title} – {NAME}"), desc[:300], u, shell(body, side), alts, ld, xdefault=u, og_type=og, noindex=noindex)
         if canon:   # T12: Seite bleibt erreichbar, die kanonische Adresse ist eine andere (z. B. Personen-Entitaet); nicht in die Sitemap
             h = h.replace(f'<link rel="canonical" href="{u}">', f'<link rel="canonical" href="{canon}">', 1)
@@ -686,7 +686,8 @@ def build(g):
     shp = json.loads((D / "platforms.json").read_text("utf-8")).get("en", {}) if (D / "platforms.json").exists() else {}
     listen = " · ".join(f'<a href="{esc(shp[k])}" rel="noopener">{n}</a>' for k, n in (("apple_show", "Apple Podcasts"), ("spotify_show", "Spotify"), ("amazon_show", "Amazon Music"), ("deezer_show", "Deezer"), ("iheart_show", "iHeart"), ("youtube_show", "YouTube"), ("youtube_music_show", "YouTube Music"), ("castbox_show", "Castbox"), ("podcastaddict_show", "Podcast Addict"), ("podchaser_show", "Podchaser")) if shp.get(k))
     hub = (f'<h1>{esc(NAME)}</h1><p>{esc(plain(pod.get("description")))[:600]}</p>' + (f'<p><strong>Listen on:</strong> {listen}</p>' if listen else "") + f'<h2>Latest episodes</h2><ul style="list-style:none;padding:0">{"".join(card(e) for e in eps[:20])}</ul>'
-           f'<p><a href="{root}episodes/">All {len(eps)} episodes →</a></p>' + (f'<h2>Latest articles</h2><ul>{"".join(f"<li><a href=\"{bp_url(p)}\">{esc(p[chr(116)+chr(105)+chr(116)+chr(108)+chr(101)])}</a></li>" for p in bposts[:8])}</ul><p><a href="{BASE}/community/u/mirko-p/blog/">All {len(bposts)} articles →</a></p>' if bposts else "") + (f"<h2>Topics</h2><ul>{ct}</ul>" if ct else ""))
+           f'<p><a href="{root}episodes/">All {len(eps)} episodes →</a></p>' + (f'<h2>Latest articles</h2><ul>{"".join(f"<li><a href=\"{bp_url(p)}\">{esc(p[chr(116)+chr(105)+chr(116)+chr(108)+chr(101)])}</a></li>" for p in bposts[:8])}</ul><p><a href="{BASE}/community/u/mirko-p/blog/">All {len(bposts)} articles →</a></p>' if bposts else "") + (f"<h2>Topics</h2><ul>{ct}</ul>" if ct else "")
+           + '<h2>More from the show</h2><ul>' + "".join(f'<li><a href="{p_ if p_.startswith("https://") else root + p_}">{t_}</a></li>' for p_, t_ in showlinks) + "</ul>")
     ld = {"@context": "https://schema.org", "@type": "PodcastSeries", "@id": root + "#series", "name": NAME, "url": root, "description": plain(pod.get("description"))[:500], "inLanguage": "en", "webFeed": "https://www.spreaker.com/show/6704921/episodes/feed",
           "author": {"@id": f"{BASE}/entity/mirko-peters/#entity"}, "publisher": {"@id": f"{BASE}/#org"}, **({"image": pod["image"]} if str(pod.get("image", "")).startswith("http") else {}), **({"sameAs": [shp[k] for k in ("apple_show", "spotify_show", "amazon_show", "deezer_show", "iheart_show", "youtube_show", "youtube_music_show", "castbox_show", "podcastaddict_show", "podchaser_show") if shp.get(k)]} if shp else {})}
     pub("", NAME, plain(pod.get("description")) or NAME, hub, ld)
