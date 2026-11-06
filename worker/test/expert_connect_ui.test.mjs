@@ -31,7 +31,7 @@ async function boot(responses) {
     return new Response(JSON.stringify(data), { status: 200 });
   };
   const T = new Proxy({}, { get: (_, k) => (typeof k === "string" ? k : undefined) });   // Texte = Schluessel
-  const document = { createElement: (t) => new El(t), createTextNode: (t) => new Text(t), getElementById: (id) => (id === "ec" ? root : null), querySelectorAll: () => [], querySelector: () => null };
+  const document = { createElement: (t) => new El(t), createTextNode: (t) => new Text(t), getElementById: (id) => (id === "ec" ? root : null), querySelectorAll: () => [], querySelector: () => null, addEventListener() {} };   // #271: Klick-Handler fuer Anker auf document
   const window = { M365EC: { api: "https://api.test", base: "https://www.m365.fm", lang: "en", t: T, topics: "https://www.m365.fm/community/expert-connect/topics.json",
     langs: [["en", "English"], ["de", "Deutsch"]], formats: ["quote", "interview"] }, addEventListener() {} };
   const ctx = vm.createContext({ window, document, location: { hash: "#expert", href: "https://www.m365.fm/community/expert-connect/#expert" }, fetch, setTimeout, URL, URLSearchParams, sessionStorage: { getItem: () => null, setItem() {} } });
