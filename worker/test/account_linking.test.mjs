@@ -439,6 +439,29 @@ test("Zusammenfuehren: Slug-Umbenennung kollidiert nie, staerkere Event-Rolle vo
   assert.equal(raw.prepare("SELECT role FROM event_roles WHERE event_id=5 AND user_id=?").get(T).role, "organisator");
 });
 
+test("Zusammenfuehren: Branche und Job (#304) gehen nicht verloren, die Auswahl des Ziels gilt", async () => {
+  const { db, raw } = await d1(), env = { ...ENV, DB: db };
+  const { tSess, T, S } = await twoAccounts(env);
+  raw.prepare("INSERT INTO profile_job(user_id,eid) VALUES(?,?)").run(S, "cio");
+  raw.prepare("INSERT INTO profile_industry(user_id,eid) VALUES(?,?),(?,?)").run(S, "aviation", S, "manufacturing");
+  let m = await link(env, tSess, "li-anna");
+  assert.equal((await call(env, "POST", "/api/me/merge", `m365s=${tSess}; m365m=${m.proof}`, { confirm: true })).s, 200);
+  assert.equal(raw.prepare("SELECT eid FROM profile_job WHERE user_id=?").get(T).eid, "cio", "T hatte keinen Job: der von S wird uebernommen");
+  assert.deepEqual(raw.prepare("SELECT eid FROM profile_industry WHERE user_id=? ORDER BY eid").all(T).map((r) => r.eid), ["aviation", "manufacturing"]);
+  // hat das Ziel schon eine Auswahl, bleibt sie (wie Profil und Handle)
+  const e2 = { ...ENV, DB: (await d1()).db }, r2 = e2.DB;
+  const a = await twoAccounts(e2);
+  await r2.prepare("INSERT INTO profile_job(user_id,eid) VALUES(?,?),(?,?)").bind(a.T, "ceo", a.S, "cio").run();
+  await r2.prepare("INSERT INTO profile_industry(user_id,eid) VALUES(?,?),(?,?)").bind(a.T, "energy", a.S, "aviation").run();
+  m = await link(e2, a.tSess, "li-anna");
+  assert.equal((await call(e2, "POST", "/api/me/merge", `m365s=${a.tSess}; m365m=${m.proof}`, { confirm: true })).s, 200);
+  assert.equal((await r2.prepare("SELECT eid FROM profile_job WHERE user_id=?").bind(a.T).first()).eid, "ceo");
+  assert.deepEqual(((await r2.prepare("SELECT eid FROM profile_industry WHERE user_id=?").bind(a.T).all()).results || []).map((r) => r.eid), ["energy"]);
+  // Loeschen des Ziels entfernt auch die Reste am stillgelegten Konto
+  assert.equal((await call(e2, "DELETE", "/api/me", `m365s=${a.tSess}`)).s, 200);
+  assert.equal((await r2.prepare("SELECT COUNT(*) n FROM profile_job").first()).n + (await r2.prepare("SELECT COUNT(*) n FROM profile_industry").first()).n, 0);
+});
+
 test("KI-Token (MCP) duerfen Anmeldungen weder lesen noch aendern", async () => {
   const { db } = await d1(), env = { ...ENV, DB: db };
   const sess = await signIn(env, "gh-anna"), uid = uidOf(sess);
