@@ -137,9 +137,29 @@ test("Admin: Override bei Entität ohne Domain, Liste zeigt Status, Domain-Verif
     assert.deepEqual(list.claims.map((c) => [c.eid, c.status]).sort(), [["acme", "forwarded"], ["nodom", "pending"]]);
     assert.equal((await admin("POST", { eid: "nodom", ok: true })).status, 200);
     assert.deepEqual(Object.values(raw.prepare("SELECT status,verified_via FROM entity_claims WHERE eid='nodom'").get()), ["verified", "admin"]);
+    raw.prepare("INSERT INTO orgs(id,handle,name,created) VALUES(7,'nd','No Dom',1)").run();
+    raw.prepare("INSERT INTO org_members(org_id,user_id,role,status,created) VALUES(7,2,'admin','active',1),(7,3,'member','active',1)").run();
+    raw.prepare("INSERT INTO org_entity(org_id,eid,confirmed) VALUES(7,'nodom',0)").run();
+    assert.equal((await admin("POST", { eid: "nodom", ok: true })).status, 404);   // schon bestätigt
     assert.equal((await admin("POST", { eid: "acme", ok: false })).status, 200);
     assert.equal(raw.prepare("SELECT status FROM entity_claims WHERE eid='acme'").get().status, "rejected");
     raw.prepare("INSERT INTO entity_claims(eid,user_id,status,via,verified_via,verified_domain,created) VALUES('acme-tool',3,'verified','domain_email','domain_email','acme.de',2)").run();
     assert.equal((await (await admin("GET")).json()).domain_verified[0].domain, "acme.de");
+  } finally { restore(); raw.close(); }
+});
+
+test("Admin-Bestätigung setzt org_entity.confirmed automatisch (nur Inhaber/Admin der Firma)", async () => {
+  const { raw, env } = await setup(), restore = withEntities();
+  try {
+    claim(raw, "nodom", 2); claim(raw, "acme", 3);
+    raw.exec(`INSERT INTO orgs(id,handle,name,created) VALUES(7,'nd','No Dom',1),(8,'ac','Acme',1);
+      INSERT INTO org_members(org_id,user_id,role,status,created) VALUES(7,2,'admin','active',1),(8,3,'member','active',1);
+      INSERT INTO org_entity(org_id,eid,confirmed) VALUES(7,'nodom',0),(8,'acme',0);`);
+    const req = new Request("https://api.test/api/admin/entity/claim", { method: "POST", body: JSON.stringify({ eid: "nodom", ok: true }) });
+    assert.equal((await handleEvents(env, req, new URL(req.url), "/api/admin/entity/claim", { id: 4, admin: true }, J)).status, 200);
+    assert.equal(raw.prepare("SELECT confirmed FROM org_entity WHERE org_id=7").get().confirmed, 1);
+    const req2 = new Request("https://api.test/api/admin/entity/claim", { method: "POST", body: JSON.stringify({ eid: "acme", ok: true }) });
+    await handleEvents(env, req2, new URL(req2.url), "/api/admin/entity/claim", { id: 4, admin: true }, J);
+    assert.equal(raw.prepare("SELECT confirmed FROM org_entity WHERE org_id=8").get().confirmed, 0, "einfaches Mitglied: nicht bestätigt");
   } finally { restore(); raw.close(); }
 });
