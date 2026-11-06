@@ -104,6 +104,6 @@ def build(g):
             sb = (f'<p class="mut"><a href="{root}">{esc(t["back"])}</a></p><article><h1>{esc(s["title"])}</h1><p class="mut">{when(s)}{" · " + str(s["views"]) + " " + t["views"] if s.get("views") else ""}</p>'
                   f'<div style="margin:22px 0">{PL.player("youtube", s["id"], s["title"], t["play"])}</div>'
                   f'{("<h2>" + esc(t["desc"]) + "</h2>" + paras) if paras else ""}<p><a class="btn" href="https://www.youtube.com/watch?v={s["id"]}" rel="noopener">{esc(t["open"])} ↗</a></p></article>')
-            write(f"{'de/' if lang == 'de' else ''}live/{s['slug']}/index.html", page(lang, f'{s["title"]} – M365 Show | M365.FM', short(d, 155) or s["title"], u, shell(sb), None, [vid], og_type="video.other"))
+            write(f"{'de/' if lang == 'de' else ''}live/{s['slug']}/index.html", page(lang, f'{s["title"]} – M365 Show | M365.FM', short(d, 155) or s["title"], u, shell(sb), None, [vid], og_type="video.other", side=(g["side"](lang, s["title"] + " " + d[:2000]) if g.get("side") else "")))
             sitemap.append((u, (s.get("published") or TODAY)[:10], None))
     write("de/live/index.html", f'<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="robots" content="noindex"><meta http-equiv="refresh" content="0;url={BASE}/de/podcast/"><link rel="canonical" href="{BASE}/de/podcast/"><title>Podcast auf Deutsch</title></head><body><p><a href="{BASE}/de/podcast/">Weiter zum deutschen Podcast</a></p></body></html>')
