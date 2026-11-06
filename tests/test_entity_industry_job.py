@@ -28,7 +28,7 @@ class Daten(unittest.TestCase):
             self.assertIn(t, E.TL)
 
     def test_ifakt_und_industrie_4_0(self):
-        self.assertEqual(RAW["ifakt"]["industries"], ["aerospace", "manufacturing", "mechanical-engineering"], "Luftfahrt zuerst")
+        self.assertEqual(RAW["ifakt"]["industries"], ["aerospace", "manufacturing", "mechanical-engineering", "automotive", "energy"], "Luftfahrt zuerst")
         self.assertIn(["related_to", "manufacturing"], RAW["industry-4-0"]["rel"])
         for i in RAW["ifakt"]["industries"]:
             self.assertEqual(RAW[i]["type"], "industry")

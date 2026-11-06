@@ -6,6 +6,7 @@ import site_quotes as SQ   # Quotes an Personen-Entitaeten
 import site_media as MED
 import site_sponsorships as SPM   # T37 Sponsor: Kennzeichnung gesponserter Entitaeten (data/sponsorships.json)
 import json
+import site_facts as FX   # belegte Fakten (Rechtsform, Register, Kunden, Partner, Positionen ...)
 import site_mentions as MEN   # Erwaehnungen in fremden Medien als Quellen (data/press_mentions.json)
 import re
 from datetime import date
@@ -482,6 +483,17 @@ def ent_ld(BASE, e, lang, glossary_set=None, person_aka=None):
                 n["performerIn"].append(_ev)
             if not n["performerIn"]:
                 n.pop("performerIn")
+    _x = FX.ld_extra(BASE, e, ENTS)   # Faktenfelder: nur vorhandene Werte
+    _wf = _x.pop("_worksFor", [])
+    for k, v in _x.items():
+        if k == "subjectOf":
+            n["subjectOf"] = (n.get("subjectOf") or []) + v
+        else:
+            n[k] = v
+    if _wf:
+        _have = n.get("worksFor"); _have = [] if not _have else (_have if isinstance(_have, list) else [_have])
+        _have += [w for w in _wf if w not in _have]
+        n["worksFor"] = _have if len(_have) > 1 else _have[0]
     return n
 
 
@@ -700,6 +712,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                 facts.append((T(lang, "Headquarters", "Sitz") if e["type"] == "org" else T(lang, "City", "Stadt"), f'<span translate="no">{esc(location_text(e))}</span>'))
             if e.get("founded") and e["type"] == "org":
                 facts.append((T(lang, "Founded", "Gegründet"), esc(str(e["founded"]))))
+            facts += FX.rows(lang, e, root, ENTS)
             if e.get("wikidata"):
                 facts.append((s["wikidata"], f'<a href="https://www.wikidata.org/wiki/{e["wikidata"]}" rel="noopener">{e["wikidata"]}</a>'))
             if e.get("start"):
@@ -834,7 +847,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                        + f'{esc(T(lang, "Last updated", "Zuletzt aktualisiert"))}: <time datetime="{_mod}">{_mod}</time></p>')
             # entity.js (Fragen und Antworten #en-qa) laedt, sobald der Bereich 2500 px vor dem Bildschirm ist (vorher 600 px): auf dem Handy setzte
             # das Skript Ueberschrift und Fragen erst ein, wenn der Bereich schon sichtbar war, und schob den Rest der Seite weg (CLS ~0,18 im Labor beim Scrollen)
-            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{root}">{esc(s["entities"])}</a></nav><h1>{esc(e["name"])}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="entity" data-topic-id="{esc(e["id"])}" data-topic-label="{esc(T(lang, "Follow", "Folgen"))}">🔔 {T(lang, "Follow", "Folgen")}</button>{SPM.note(lang, _spr, "entity")}{_disc}<p class="mut">{esc(tlab(lang, e["type"]))}</p><p class="en-def" style="font-size:1.1em">{esc(d)}</p>{oldbanner}{claim_html(e["id"], lang, e, api)}{hero}{longbox}{ft}{evl}{kpbox}{eb}{tline}{artbox}'
+            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{root}">{esc(s["entities"])}</a></nav><h1>{esc(e["name"])}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="entity" data-topic-id="{esc(e["id"])}" data-topic-label="{esc(T(lang, "Follow", "Folgen"))}">🔔 {T(lang, "Follow", "Folgen")}</button>{SPM.note(lang, _spr, "entity")}{_disc}<p class="mut">{esc(tlab(lang, e["type"]))}</p><p class="en-def" style="font-size:1.1em">{esc(d)}</p>{oldbanner}{claim_html(e["id"], lang, e, api)}{FX.logo_html(lang, e)}{hero}{longbox}{ft}{FX.sections(lang, e, root, ENTS)}{evl}{kpbox}{eb}{tline}{artbox}'
                           f'{qbox}{faqbox}{relmap}{relx}<div class="en-rel">{rb}</div>{gloss}{SU.block(lang, e["id"])}{wb}{("<h2>" + esc(s["experts"]) + "</h2>" + ehtml) if ehtml else ""}{srcbox}{updline}{edit}'
                           f'<script>window.M365E={{api:"{api}",lang:"{lang}",base:"{BASE}",s:{json.dumps({k: s[k] for k in ("edit_e",)}, ensure_ascii=False)}}};window.M365TopicConfig={{api:{json.dumps(api)},lang:{json.dumps(lang)}}};'
                           f'(function(){{var d=0,u="{BASE}/assets/entity.js";function go(){{if(d)return;d=1;var s=document.createElement("script");s.src=u;document.body.appendChild(s)}}'
@@ -845,7 +858,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             node = ent_ld(BASE, e, lang, gl_ids, person_aka)
             _qld = SQ.ld(BASE, e["id"], lang, _qurl) if e["type"] == "person" else []
             if arturls:
-                node["subjectOf"] = [{"@id": x + "#post"} for x in arturls[:20]]   # Artikel ueber diese Entitaet (Gegenrichtung zu BlogPosting.about)
+                node["subjectOf"] = (node.get("subjectOf") or []) + [{"@id": x + "#post"} for x in arturls[:20]]   # Artikel ueber diese Entitaet (Gegenrichtung zu BlogPosting.about)
             if MEN.for_entity(e["id"]):   # Belege: Erwaehnungen in fremden Medien (z. B. Microsoft Tech Community)
                 node["subjectOf"] = (node.get("subjectOf") or []) + [MEN.ld(m) for m in MEN.for_entity(e["id"])]
             ld = [{"@context": "https://schema.org", "@type": "WebPage", "@id": u + "#page", "url": u, "name": e["name"], "inLanguage": lang, "mainEntity": node, "dateModified": _mod,
