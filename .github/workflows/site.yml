@@ -48,8 +48,8 @@ jobs:
         run: node --test tests/sponsor_calc.test.mjs
       - name: Player nach Klick (kein iframe im ersten HTML, feste Masse) und Ladezeit-Regeln pruefen (blockierend)
         run: node --test tests/player_facade.test.mjs && python3 -m unittest discover -s tests -p test_player_facade.py
-      - name: Interne Links ohne Umweg - Python-Nachbau der Site-Worker-Weiterleitungen pruefen (blockierend)
-        run: python3 -m unittest discover -s tests -p test_site_links.py && (cd sitewrk && node --test test/legacy.test.mjs)
+      - name: Interne Links ohne Umweg - Python-Nachbau der Site-Worker-Weiterleitungen, jede alte Adresse in einem Schritt, Sprachwahl auf / (blockierend)
+        run: python3 -m unittest discover -s tests -p test_site_links.py && python3 -m unittest discover -s tests -p test_redirect_hops.py && (cd sitewrk && node --test test/legacy.test.mjs test/lang.test.mjs)
       - name: Zusatz-Weiterleitungen (data/redirects_extra.json) gegen den Datenstand pruefen (nicht blockierend)
         # liest Live-Daten (Folgen, Entitaeten, Beitraege): eine Umbenennung oder ein geloeschtes Ziel darf nicht jeden Bau stoppen
         continue-on-error: true
@@ -273,6 +273,8 @@ jobs:
       - name: Interne Links prüfen
         continue-on-error: true
         run: python check_links.py
+      - name: Interne Links ohne Weiterleitung (href, JSON-LD, Sitemaps, Feeds; blockierend)
+        run: python check_redirect_links.py
       - name: Schema.org (JSON-LD) prüfen (blockierend seit T7, Integrationsbau 1.11. ohne Fehler)
         run: python check_schema.py
       - name: Sitemaps prüfen (blockierend)

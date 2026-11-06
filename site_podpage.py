@@ -337,6 +337,69 @@ def make_guest_entities():
     return out
 
 
+def redirect_table(eps, plist, guests, bposts, gmerge, baseids, LG, docs=None):
+    """Weiterleitungstabelle show/redirects.json (alte Adresse ohne "/" am Ende -> Ziel), die der Site-Worker liest. Eigene Funktion, damit
+    tests/test_redirect_hops.py dieselbe Tabelle aus dem Datenstand bauen und jede alte Adresse durch den Worker schicken kann.
+    Ketten werden am Ende auf einen Schritt gekuerzt (site_links.collapse). Rueckgabe: (Tabelle, Konflikte, gekuerzte Ketten, entfernte Eintraege)."""
+    # Weiterleitungsliste fuer den Umzug (Podpage-Struktur: Folgen und Seiten direkt unter /<slug>/, Gaeste unter /guests/<slug>/, Blog /blog/<slug>/)
+    _docs = docs if docs is not None else Path(__file__).parent / "docs"   # belegt ist ein Pfad nur, wenn dort eine Seite liegt (docs/about/ hat nur about/mirko-peters/, /about wurde sonst nie umgeleitet)
+    taken = {x.name for x in _docs.iterdir() if x.is_file() or (x / "index.html").exists()} if _docs.exists() else set()
+    taken |= {"show", "shows", "community", "entity", "glossary", "learn", "assets", "updates", "sponsor", "de", "en", "es", "fr", "it", "pt", "nl", "pl", "id", "ru", "uk", "ar", "he", "hi", "ja", "ko", "ml", "pa", "ta", "te"}
+    rd, clash = {}, []
+    def add(old, new):
+        top = old.strip("/").split("/")[0]
+        if "/" not in old.strip("/") and top in taken: clash.append(old); return
+        rd[old] = new
+    for e in eps: add(f"/{e['slug']}", f"/show/episodes/{e['slug']}/")
+    for sl in plist: add(f"/{sl}", f"/show/{sl}/")
+    for x in guests: add(f"/guests/{x['slug']}", "/entity/mirko-peters/" if x["slug"] == "mirko-peters" else f"/show/guests/{x['slug']}/")   # T12: Mirko direkt auf die Personen-Entitaet
+    for old, new in (("/episodes", "/show/episodes/"), ("/guests", "/show/guests/"), ("/hosts", "/show/hosts/"), ("/people", "/show/hosts/"), ("/sponsors", "/show/sponsors/"), ("/reviews", "/show/reviews/"), ("/podroll", "/show/listen/"), ("/videos", "/show/"), ("/blog", "/community/u/mirko-p/blog/" if bposts else "/show/")): rd.setdefault(old, new)
+    for p in bposts: rd[f"/blog/{p['slug']}"] = f"/community/u/mirko-p/blog/{p['slug']}/"; rd[f"/show/blog/{p['slug']}"] = f"/community/u/mirko-p/blog/{p['slug']}/"
+    if bposts: rd["/show/blog"] = "/community/u/mirko-p/blog/"
+    # T12: umbenannte Folgen (data/slug_renames.json): alte Folgenadresse in allen Sprachen per 301 auf die neue (der Site-Worker
+    # fragt die Tabelle fuer /show/episodes/... erst, wenn die Seite fehlt); die fruehere Podpage-Adresse /mirko-peters zeigt auf die Person
+    _ren = (json.loads((D / "slug_renames.json").read_text("utf-8")).get("episodes") or {}) if (D / "slug_renames.json").exists() else {}
+    for _old, _new in _ren.items():
+        for pre in [""] + [f"/{l}" for l in LG]:
+            rd[f"{pre}/show/episodes/{_old}"] = f"{pre}/show/episodes/{_new}/"
+    for _old, _new in _ren.items():   # weitere fruehere Folgenadressen mit dem alten Slug direkt auf die neue Folge (ein Schritt)
+        rd.setdefault(f"/videos/{_old}", f"/show/episodes/{_new}/"); rd[f"/m365-fm-podcast/{_old}"] = f"/show/episodes/{_new}/"
+    if "mirko-peters" in _ren: rd["/mirko-peters"] = "/entity/mirko-peters/"
+    # T8: weitere Podpage-Seiten ohne eigenen Inhalt (SKIPP), die in alten Beitraegen verlinkt sind
+    # T37: ("/sponsor", "/show/sponsors/") entfernt - /sponsor/ ist jetzt die Sponsor-Seite (der Site-Worker prueft die Tabelle vor der Seite, sonst 301 auf die alte Liste)
+    for old, new in (("/community-events", "/community/events/"), ("/follow", "/show/listen/"), ("/subscribe", "/show/listen/"), ("/contact", "/about/mirko-peters/"), ("/voicemail", "/about/mirko-peters/"),
+                     ("/guest_intake", "/about/mirko-peters/"), ("/join", "/community/"), ("/newsletter", "/community/"), ("/leave_review", "/show/reviews/"), ("/rate", "/show/reviews/"),
+                     ("/courses", "/glossary/"), ("/store", "/show/")):
+        rd.setdefault(old, new)
+    for e in eps: rd.setdefault(f"/videos/{e['slug']}", f"/show/episodes/{e['slug']}/")   # alte Video-Adressen mit Folgen-Slug direkt auf die Folge, der Rest auf /show/
+    for p in bposts:   # alte Beitraege, in Show Notes oft ohne /blog/ verlinkt: /<slug> direkt auf den Beitrag (Folgen und Seiten haben Vorrang)
+        if f"/{p['slug']}" not in rd: add(f"/{p['slug']}", f"/community/u/mirko-p/blog/{p['slug']}/")
+    for old, new in gmerge.items():   # zusammengefuehrte Personen: alte Entitaets-Adressen (alle Sprachpfade) auf die eine Entitaet
+        oid = old + "-guest" if old in baseids else old
+        for pre in [""] + [f"/{l}" for l in LG]:
+            rd[f"{pre}/entity/{oid}"] = f"{pre}/entity/{new}/"
+    for old, new in extra_redirects().items():   # alte Adressen ohne Seite (data/redirects_extra.json); bestehende Eintraege gehen vor
+        if old.strip("/").split("/")[0] in taken: clash.append(old); continue   # dort liegt inzwischen eine Seite: nicht wegleiten
+        rd.setdefault(old, new)
+    import site_links as _SL
+    rd, chains, dropped = _SL.collapse(rd)   # A -> B -> C wird A -> C (Wunsch Mirko 6.11.2026: so wenig Weiterleitungen wie moeglich)
+    return rd, clash, chains, dropped
+
+
+def table_inputs():
+    """Eingaben von redirect_table() aus dem Datenstand im Repo (wie build(), ohne Seitenbau) - fuer Tests und Auswertungen."""
+    import gzip as _gz
+    eps = [e for e in load("episodes") if e.get("published") not in (False, "False") and e.get("hidden") not in (True, "True")]
+    guests = [x for x in load("guests") if x.get("hidden") not in (True, "True")]
+    SKIPP = {"episodes", "blog", "reviews", "podroll", "courses", "store", "videos", "guests", "people", "sponsors", "contact", "join", "leave_review", "rate", "guest_intake", "newsletter", "follow", "voicemail", "community-events", "legal", "hosts"}
+    plist = [p["slug"] for p in load("pages") if p["slug"] not in SKIPP and p.get("page_content") not in (None, "", "None")]
+    _bf = PD / "blog_posts.json.gz"
+    bposts = [p for p in json.loads(_gz.open(_bf, "rt", encoding="utf-8").read()) if p.get("title") and p.get("html")] if _bf.exists() else []
+    _gm = json.loads((D / "guest_merge.json").read_text("utf-8")) if (D / "guest_merge.json").exists() else {}
+    baseids = {e["id"] for e in json.loads((D / "entities.json").read_text("utf-8"))}
+    return eps, plist, guests, bposts, (_gm.get("merge") or {}), baseids
+
+
 def build(g):
     BASE, write, page, header, footer_en, sitemap, TODAY = g["BASE"], g["write"], g["page"], g["header"], g["footer_en"], g["sitemap"], g["TODAY"]
     eps = [e for e in load("episodes") if e.get("published") not in (False, "False") and e.get("hidden") not in (True, "True")]
@@ -627,47 +690,8 @@ def build(g):
     ld = {"@context": "https://schema.org", "@type": "PodcastSeries", "@id": root + "#series", "name": NAME, "url": root, "description": plain(pod.get("description"))[:500], "inLanguage": "en", "webFeed": "https://www.spreaker.com/show/6704921/episodes/feed",
           "author": {"@id": f"{BASE}/entity/mirko-peters/#entity"}, "publisher": {"@id": f"{BASE}/#org"}, **({"image": pod["image"]} if str(pod.get("image", "")).startswith("http") else {}), **({"sameAs": [shp[k] for k in ("apple_show", "spotify_show", "amazon_show", "deezer_show", "iheart_show", "youtube_show", "youtube_music_show", "castbox_show", "podcastaddict_show", "podchaser_show") if shp.get(k)]} if shp else {})}
     pub("", NAME, plain(pod.get("description")) or NAME, hub, ld)
-    # Weiterleitungsliste fuer den Umzug (Podpage-Struktur: Folgen und Seiten direkt unter /<slug>/, Gaeste unter /guests/<slug>/, Blog /blog/<slug>/)
-    from pathlib import Path as _P
-    _docs = _P(__file__).parent / "docs"   # belegt ist ein Pfad nur, wenn dort eine Seite liegt (docs/about/ hat nur about/mirko-peters/, /about wurde sonst nie umgeleitet)
-    taken = {x.name for x in _docs.iterdir() if x.is_file() or (x / "index.html").exists()} if _docs.exists() else set()
-    taken |= {"show", "shows", "community", "entity", "glossary", "learn", "assets", "updates", "sponsor", "de", "en", "es", "fr", "it", "pt", "nl", "pl", "id", "ru", "uk", "ar", "he", "hi", "ja", "ko", "ml", "pa", "ta", "te"}
-    rd, clash = {}, []
-    def add(old, new):
-        top = old.strip("/").split("/")[0]
-        if "/" not in old.strip("/") and top in taken: clash.append(old); return
-        rd[old] = new
-    for e in eps: add(f"/{e['slug']}", f"/show/episodes/{e['slug']}/")
-    for sl, _ in plist: add(f"/{sl}", f"/show/{sl}/")
-    for x in guests: add(f"/guests/{x['slug']}", "/entity/mirko-peters/" if x["slug"] == "mirko-peters" else f"/show/guests/{x['slug']}/")   # T12: Mirko direkt auf die Personen-Entitaet
-    for old, new in (("/episodes", "/show/episodes/"), ("/guests", "/show/guests/"), ("/hosts", "/show/hosts/"), ("/people", "/show/hosts/"), ("/sponsors", "/show/sponsors/"), ("/reviews", "/show/reviews/"), ("/podroll", "/show/listen/"), ("/videos", "/show/"), ("/blog", "/community/u/mirko-p/blog/" if bposts else "/show/")): rd.setdefault(old, new)
-    for p in bposts: rd[f"/blog/{p['slug']}"] = f"/community/u/mirko-p/blog/{p['slug']}/"; rd[f"/show/blog/{p['slug']}"] = f"/community/u/mirko-p/blog/{p['slug']}/"
-    if bposts: rd["/show/blog"] = "/community/u/mirko-p/blog/"
-    # T12: umbenannte Folgen (data/slug_renames.json): alte Folgenadresse in allen Sprachen per 301 auf die neue (der Site-Worker
-    # fragt die Tabelle fuer /show/episodes/... erst, wenn die Seite fehlt); die fruehere Podpage-Adresse /mirko-peters zeigt auf die Person
-    _ren = (json.loads((D / "slug_renames.json").read_text("utf-8")).get("episodes") or {}) if (D / "slug_renames.json").exists() else {}
-    for _old, _new in _ren.items():
-        for pre in [""] + [f"/{l}" for l in LG]:
-            rd[f"{pre}/show/episodes/{_old}"] = f"{pre}/show/episodes/{_new}/"
-    for _old, _new in _ren.items():   # weitere fruehere Folgenadressen mit dem alten Slug direkt auf die neue Folge (ein Schritt)
-        rd.setdefault(f"/videos/{_old}", f"/show/episodes/{_new}/"); rd[f"/m365-fm-podcast/{_old}"] = f"/show/episodes/{_new}/"
-    if "mirko-peters" in _ren: rd["/mirko-peters"] = "/entity/mirko-peters/"
-    # T8: weitere Podpage-Seiten ohne eigenen Inhalt (SKIPP), die in alten Beitraegen verlinkt sind
-    # T37: ("/sponsor", "/show/sponsors/") entfernt - /sponsor/ ist jetzt die Sponsor-Seite (der Site-Worker prueft die Tabelle vor der Seite, sonst 301 auf die alte Liste)
-    for old, new in (("/community-events", "/community/events/"), ("/follow", "/show/listen/"), ("/subscribe", "/show/listen/"), ("/contact", "/about/mirko-peters/"), ("/voicemail", "/about/mirko-peters/"),
-                     ("/guest_intake", "/about/mirko-peters/"), ("/join", "/community/"), ("/newsletter", "/community/"), ("/leave_review", "/show/reviews/"), ("/rate", "/show/reviews/"),
-                     ("/courses", "/glossary/"), ("/store", "/show/")):
-        rd.setdefault(old, new)
-    for e in eps: rd.setdefault(f"/videos/{e['slug']}", f"/show/episodes/{e['slug']}/")   # alte Video-Adressen mit Folgen-Slug direkt auf die Folge, der Rest auf /show/
-    for p in bposts:   # alte Beitraege, in Show Notes oft ohne /blog/ verlinkt: /<slug> direkt auf den Beitrag (Folgen und Seiten haben Vorrang)
-        if f"/{p['slug']}" not in rd: add(f"/{p['slug']}", f"/community/u/mirko-p/blog/{p['slug']}/")
-    for old, new in gmerge.items():   # zusammengefuehrte Personen: alte Entitaets-Adressen (alle Sprachpfade) auf die eine Entitaet
-        oid = old + "-guest" if old in baseids else old
-        for pre in [""] + [f"/{l}" for l in LG]:
-            rd[f"{pre}/entity/{oid}"] = f"{pre}/entity/{new}/"
-    for old, new in extra_redirects().items():   # alte Adressen ohne Seite (data/redirects_extra.json); bestehende Eintraege gehen vor
-        if old.strip("/").split("/")[0] in taken: clash.append(old); continue   # dort liegt inzwischen eine Seite: nicht wegleiten
-        rd.setdefault(old, new)
+    rd, clash, _chains, _dropped = redirect_table(eps, [sl for sl, _ in plist], guests, bposts, gmerge, baseids, LG)
+    if _chains or _dropped: print(f"Weiterleitungen: {len(_chains)} Ketten auf einen Schritt gekuerzt, {len(_dropped)} Eintraege im Kreis/auf sich selbst entfernt")
     write("show/redirects.json", json.dumps(rd))
     write("show/redirect-conflicts.json", json.dumps(sorted(set(clash))))
     print(f"podpage: {len(eps)} Folgen, {len(guests)} Gaeste, {len(bposts)} Blogposts, {len(plist)} Seiten, {len(rd)} Weiterleitungen, Konflikte mit Plattform-Seiten: {sorted(set(clash))}")

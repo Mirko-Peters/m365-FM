@@ -52,36 +52,65 @@ def news(lang, base, days=30):
     return CSS + ("".join(out) or f'<p class="mut">{esc(T(lang, "Nothing yet.", "Noch nichts."))}</p>')
 
 
-def hub(g, lang, base, api, videos, vid_html, root=False):
-    """videos: Liste von Episoden-Items (mit "date"), vid_html(item) -> HTML-Karte. Rückgabe: HTML-Block."""
+# Startseite je Sprache (6.11.2026): Inhalte der Sprache zuerst; gibt es von einer Art (Blog, Podcast, Bibliothek, Creator-Videos) in der Sprache
+# nichts, stehen bis zu FB_N englische Eintraege da - gekennzeichnet ("· Englisch") und mit lang="en".
+FB_N = 8
+EN_WORD = {"de": "Englisch", "fr": "Anglais", "es": "Inglés", "it": "Inglese", "nl": "Engels", "pt": "Inglês", "pl": "Angielski", "id": "Bahasa Inggris",
+           "ru": "Английский", "uk": "Англійська", "ar": "الإنجليزية", "he": "אנגלית", "ja": "英語", "ko": "영어"}
+
+
+def pick(items, lang, root=False, n=FB_N):
+    """-> (Eintraege fuer die Startseite der Sprache, englischer Rueckfall?)."""
+    if root: return list(items), False
+    own = [x for x in items if (x.get("lang") or "en") == lang]
+    if own or lang == "en": return own, False
+    return [x for x in items if (x.get("lang") or "en") == "en"][:n], True
+
+
+def _fb(h, lang, kicker):
+    """Karte als englischer Rueckfall kennzeichnen: Sprachhinweis in der Kopfzeile, lang/hreflang fuer Leser und Suchmaschinen."""
+    if kicker: h = h.replace(f"{kicker}</div>", f"{kicker} · {esc(EN_WORD.get(lang, 'English'))}</div>", 1)
+    h = h.replace('class="hub-card"', 'class="hub-card" lang="en"', 1).replace('class="thumb"', 'class="thumb" lang="en"', 1)
+    return h.replace("<a href=", '<a hreflang="en" href=', 1)
+
+
+def hub(g, lang, base, api, videos, vid_html, root=False, posts=None):
+    """videos: Liste von Episoden-Items (mit "date"), vid_html(item) -> HTML-Karte. posts: Blogbeitraege inkl. Sprachfassungen (sonst die
+    Datenbank-Beitraege). Rückgabe: HTML-Block."""
     C = _load(api); today = date.today().isoformat(); cards = []
-    ok = lambda l: root or l == lang
     def tag(author, topics, title):
         dd, kk, hh = cards[-1]
         hh = hh.replace(f'data-k="{kk}"', f'data-k="{kk}" data-a="{esc(author or "")}" data-t="{esc(" ".join(t for t in (topics or []) if t in ENTS))}" data-q="{esc((title or "").lower())}"', 1)
         cards[-1] = (dd, kk, hh)
     croot = f"{base}{pfx(lang)}/community/"
-    for p in C["posts"]:
-        if ok(p["lang"]):
-            d = __import__("datetime").datetime.fromtimestamp(p["published"]).strftime("%Y-%m-%d")
-            cards.append((d, "blog", f'<div class="hub-card" data-k="blog"><a href="{base}{pfx(p["lang"])}/community/u/{p["handle"]}/blog/{p["slug"]}/"><div class="kicker">{esc(T(lang, "Blog", "Blog"))}</div><h3>{esc(p["title"])}</h3></a><p class="mut">{esc(p.get("summary") or "")} {esc(p["name"])} · {d}</p></div>'))
-            tag(p["name"], p.get("topics"), p["title"])
-    for e in C["eps"]:
-        if ok(e["lang"]):
-            d = __import__("datetime").datetime.fromtimestamp(e["published"]).strftime("%Y-%m-%d")
-            cards.append((d, "podcast", f'<div class="hub-card" data-k="podcast"><a href="{base}{pfx(e["lang"])}/community/podcast/{e["slug"]}/"><div class="kicker">{esc(T(lang, "Podcast", "Podcast"))}</div><h3>{esc(e["title"])}</h3></a><p class="mut">{esc(e["name"])} · {d}</p></div>'))
-            tag(e["name"], e.get("topics"), e["title"])
+    _posts = sorted(C["posts"] if posts is None else posts, key=lambda p: -(p.get("published") or 0))
+    _sel, _fbk = pick(_posts, lang, root, n=10**9 if root else 60)   # eigene Sprache: alle (Karten jenseits der ersten N stehen auf /page/N/)
+    _kb = esc(T(lang, "Blog", "Blog"))
+    for p in _sel:
+        d = __import__("datetime").datetime.fromtimestamp(p["published"]).strftime("%Y-%m-%d")
+        h = f'<div class="hub-card" data-k="blog"><a href="{base}{pfx(p.get("lang") or "en")}/community/u/{p["handle"]}/blog/{p["slug"]}/"><div class="kicker">{_kb}</div><h3>{esc(p["title"])}</h3></a><p class="mut">{esc(p.get("summary") or "")} {esc(p["name"])} · {d}</p></div>'
+        cards.append((d, "blog", _fb(h, lang, _kb) if _fbk else h))
+        tag(p["name"], p.get("topics"), p["title"])
+    _sel, _fbk = pick(C["eps"], lang, root, n=10**9 if root else FB_N)
+    _kp = esc(T(lang, "Podcast", "Podcast"))
+    for e in _sel:
+        d = __import__("datetime").datetime.fromtimestamp(e["published"]).strftime("%Y-%m-%d")
+        h = f'<div class="hub-card" data-k="podcast"><a href="{base}{pfx(e["lang"])}/community/podcast/{e["slug"]}/"><div class="kicker">{_kp}</div><h3>{esc(e["title"])}</h3></a><p class="mut">{esc(e["name"])} · {d}</p></div>'
+        cards.append((d, "podcast", _fb(h, lang, _kp) if _fbk else h))
+        tag(e["name"], e.get("topics"), e["title"])
     for ev in C["events"]:
         d = (ev.get("start") or "")[:10]
         if d and d >= today:
             cards.append((d, "event", f'<div class="hub-card" data-k="event"><a href="{croot}events/{ev["handle"]}/"><div class="kicker">{esc(T(lang, "Event", "Event"))}</div><h3>{esc(ev["title"])}</h3></a><p class="mut">{esc(d)}{(" · " + esc(ev["summary"][:110])) if ev.get("summary") else ""}</p></div>'))
             tag("", ev.get("topics"), ev["title"])
     import site_library as SL
-    for it in C["lib"]:
-        if ok(it["lang"]):
-            d = __import__("datetime").datetime.fromtimestamp(it["published"]).strftime("%Y-%m-%d")
-            cards.append((d, "library", f'<div class="hub-card" data-k="library"><a href="{base}{pfx(it["lang"])}/community/library/{it["handle"]}-{it["slug"]}/"><div class="kicker">{esc(T(lang, "Library", "Bibliothek"))} · {esc(SL.kl(lang, it["kind"]))}</div><h3>{esc(it["title"])}</h3></a><p class="mut">{esc(it.get("summary") or "")} {esc(it["name"])} · {d}</p></div>'))
-            tag(it["name"], it.get("topics"), it["title"])
+    _sel, _fbk = pick(C["lib"], lang, root, n=10**9 if root else FB_N)
+    for it in _sel:
+        d = __import__("datetime").datetime.fromtimestamp(it["published"]).strftime("%Y-%m-%d")
+        _kl = f'{esc(T(lang, "Library", "Bibliothek"))} · {esc(SL.kl(lang, it["kind"]))}'
+        h = f'<div class="hub-card" data-k="library"><a href="{base}{pfx(it["lang"])}/community/library/{it["handle"]}-{it["slug"]}/"><div class="kicker">{_kl}</div><h3>{esc(it["title"])}</h3></a><p class="mut">{esc(it.get("summary") or "")} {esc(it["name"])} · {d}</p></div>'
+        cards.append((d, "library", _fb(h, lang, _kl) if _fbk else h))
+        tag(it["name"], it.get("topics"), it["title"])
     KL = {"youtube": "YouTube", "github": "GitHub", "blog": "Blog", "podcast": "Podcast", "newsletter": "Newsletter", "mastodon": "Mastodon", "bluesky": "Bluesky", "website": "Web"}
     import site_feed
     for f in C["feed"]:
@@ -99,11 +128,13 @@ def hub(g, lang, base, api, videos, vid_html, root=False):
         eurl = f'{base}{"/de" if lang == "de" else ""}/entity/{u["eids"][0]}/'
         cards.append((u["modified"], "update", f'<div class="hub-card" data-k="update"><div class="kicker">{esc(T(lang, "Update", "Update"))} · {esc(u["src"])}</div><h3><a href="{esc(eurl)}">{esc(u["title"])}</a></h3><p class="mut">{SU.day(u["modified"], lang)}</p></div>'))
         tag("Microsoft", u["eids"], u["title"])
-    for e in C["cv"]:
-        if ok(e["lang"]):
-            d = __import__("datetime").datetime.fromtimestamp(e["published"]).strftime("%Y-%m-%d")
-            cards.append((d, "creatorvideo", f'<div class="thumb" data-k="creatorvideo"><a href="{base}{pfx(e["lang"])}/community/video/{e["slug"]}/"><figure class="cover" style="margin-inline:0"><img src="https://i.ytimg.com/vi/{e["video_id"]}/hqdefault.jpg" alt="" loading="lazy" width="480" height="360"></figure><h3>{esc(e["title"])}</h3></a><p>{esc(e["name"])} · {d}</p></div>'))
-            tag(e["name"], e.get("topics"), e["title"])
+    _sel, _fbk = pick(C["cv"], lang, root, n=10**9 if root else FB_N)
+    for e in _sel:
+        d = __import__("datetime").datetime.fromtimestamp(e["published"]).strftime("%Y-%m-%d")
+        h = f'<div class="thumb" data-k="creatorvideo"><a href="{base}{pfx(e["lang"])}/community/video/{e["slug"]}/"><figure class="cover" style="margin-inline:0"><img src="https://i.ytimg.com/vi/{e["video_id"]}/hqdefault.jpg" alt="" loading="lazy" width="480" height="360"></figure><h3>{esc(e["title"])}</h3></a><p>{esc(e["name"])} · {d}</p></div>'
+        if _fbk: h = _fb(h, lang, "").replace("</h3></a><p>", f'</h3></a><p>{esc(EN_WORD.get(lang, "English"))} · ', 1)
+        cards.append((d, "creatorvideo", h))
+        tag(e["name"], e.get("topics"), e["title"])
     for v in videos[:24]:
         cards.append((str(v["date"])[:10], "video", vid_html(v).replace('<div class="thumb">', '<div class="thumb" data-k="video">', 1)))
         tag("Mirko Peters", [], str(v["e"]["title"]))

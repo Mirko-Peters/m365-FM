@@ -116,9 +116,14 @@ const NOINDEX = /^\/(search\/|entities\.json|entities-src\.json|entities\.jsonld
 export const TRANSCRIPT = /^(?:\/[a-z]{2})?(?:\/show\/episodes)?\/[a-z0-9-]+\/transcript\.(txt|vtt)$/;
 const R2_EXPORT = /^\/(?:blog-import\/[^/]+\.json|translations-blog\.json)$/i;
 
+// Je Isolate 5 Minuten gemerkt: die Tabelle hat ~10.000 Eintraege, vorher wurde sie bei jeder alten Adresse neu gelesen und geparst
+let RMAP = { t: -1e15, v: null };
 async function redirectMap() {
+  if (RMAP.v && Date.now() - RMAP.t < 300000) return RMAP.v;
   const r = await fetch("https://www.m365.fm/show/redirects.json", { cf: { cacheTtl: 3600, cacheEverything: true } });
-  return r.ok ? r.json() : {};
+  const v = r.ok ? await r.json().catch(() => ({})) : {};
+  if (r.ok) RMAP = { t: Date.now(), v };
+  return v;
 }
 // T8: nur Pfade, die alte Podpage-Adressen sein koennen, fragen die Weiterleitungstabelle ab (keine Dateien, keine Assets);
 // unter /show nur die frueheren Blog-Adressen /show/blog/... (dort liegen sonst nur Meta-Refresh-Seiten).
@@ -148,8 +153,84 @@ function finishHeaders(h, p) {
   const tm = TRANSCRIPT.exec(p);
   if (tm) { h.set("content-type", CT[tm[1]]); h.set("x-robots-tag", "noindex"); h.set("access-control-allow-origin", "*"); }   // #266
   if (isImg) h.set("vary", "accept");
+  if (p === "/") h.set("vary", VARY_HOME);   // Startseite: Antwort haengt von Sprache und Cookie ab (s. homeLang) - nie fuer eine andere Sprache aus einem Cache
   if (p === "/") h.set("link", '</.well-known/api-catalog>; rel="api-catalog", </openapi.json>; rel="service-desc"; type="application/vnd.oai.openapi+json", </llms.txt>; rel="service-doc"; type="text/plain", </.well-known/agent.json>; rel="describedby"; type="application/json"');   // RFC 8288 / 9727: Startseite verweist auf maschinenlesbare Ressourcen
   if (p === "/.well-known/api-catalog") { h.set("content-type", 'application/linkset+json; profile="https://www.rfc-editor.org/info/rfc9727"'); h.set("access-control-allow-origin", "*"); }
+}
+
+// Startseite in der Sprache des Browsers (Wunsch Mirko 6.11.2026): nur GET/HEAD auf genau "/", nur fuer HTML-Anfragen von Menschen.
+// Reihenfolge: Cookie m365_lang (Wahl im Sprachmenue, assets/page.js) > Bot/Crawler (nie umleiten) > Accept-Language (q-Werte, Hauptsprache:
+// de-AT -> de, pt-BR -> pt; zh -> keine Site-Sprache -> Englisch). Englisch bleibt auf "/", sonst 302 auf /<sprache>/ (privat, nie im Cache).
+export const SITE_LANGS = ["en", "de", "fr", "es", "it", "nl", "pt", "pl", "id", "ru", "uk", "ar", "he", "ja", "ko"];
+const LANG_ALIAS = { iw: "he", in: "id", nb: "", no: "" };   // alte ISO-Codes (Java/Android) auf die heutigen
+export const BOT_UA = /bot\b|bot\/|crawl|spider|slurp|archiver|mediapartners|google-|googleother|feedfetcher|bingpreview|gptbot|chatgpt|oai-searchbot|claude|anthropic|perplexity|cohere|facebookexternalhit|facebot|meta-external|linkedinbot|slackbot|twitterbot|discordbot|telegrambot|whatsapp|skypeuripreview|redditbot|pinterest|embedly|applebot|duckduck|yandex|baidu|petalbot|bytespider|amazonbot|ccbot|semrush|ahrefs|mj12|dotbot|seznam|qwant|ia_archiver|lighthouse|pagespeed|chrome-lighthouse|headlesschrome|phantomjs|curl\/|wget|python-|go-http|okhttp|java\/|node-fetch|axios|postman|uptime|pingdom|statuscake|monitor/i;
+export function isBot(ua) { return !ua || BOT_UA.test(ua); }
+export function langCookie(cookie) {
+  const m = /(?:^|;\s*)m365_lang=([a-z]{2})(?:;|$)/.exec(cookie || "");
+  return m && SITE_LANGS.includes(m[1]) ? m[1] : "";
+}
+// Beste Site-Sprache aus Accept-Language ("" = keine passende Sprache). Gleiche q-Werte: Reihenfolge im Header.
+export function pickLang(al) {
+  const xs = String(al || "").split(",").map((part, i) => {
+    const [tag, ...ps] = part.trim().split(";");
+    let q = 1;
+    for (const x of ps) { const m = /^\s*q\s*=\s*([0-9.]+)\s*$/i.exec(x); if (m) q = Number(m[1]); }
+    return { tag: tag.trim().toLowerCase(), q: Number.isFinite(q) ? q : 0, i };
+  }).filter((x) => x.tag && x.tag !== "*" && x.q > 0).sort((a, b) => b.q - a.q || a.i - b.i);
+  for (const x of xs) {
+    let p = x.tag.split(/[-_]/)[0];
+    if (p in LANG_ALIAS) p = LANG_ALIAS[p];
+    if (SITE_LANGS.includes(p)) return p;
+  }
+  return "";
+}
+// Sprache fuer die Startseite dieser Anfrage oder "" (bleibt auf "/"). Pfad prueft der Aufrufer.
+export function homeLang(request) {
+  if (request.method !== "GET" && request.method !== "HEAD") return "";
+  const acc = request.headers.get("accept") || "";
+  if (!/text\/html|\*\/\*/i.test(acc)) return "";   // nur Seitenaufrufe (Browser schicken text/html), keine Feeds/Programme
+  const c = langCookie(request.headers.get("cookie"));
+  if (c) return c === "en" ? "" : c;
+  if (isBot(request.headers.get("user-agent"))) return "";
+  const l = pickLang(request.headers.get("accept-language"));
+  return l && l !== "en" ? l : "";
+}
+const VARY_HOME = "Accept-Language, Cookie";
+function langRedirect(origin, lang, search) {
+  const h = new Headers({ location: origin + "/" + lang + "/" + (search || ""), vary: VARY_HOME, "cache-control": "private, no-store" });
+  for (const [k, v] of Object.entries(SEC)) h.set(k, v);
+  return new Response(null, { status: 302, headers: h });
+}
+// Jede Weiterleitung in genau einem Schritt (Wunsch Mirko 6.11.2026): Ziel "/" bekommt fuer Menschen gleich die Sprach-Startseite (302),
+// sonst 301. Weiterleitungen auf "/" tragen Vary, damit kein Cache die Antwort fuer eine andere Sprache wiederverwendet.
+function redirect(request, origin, path, search, status = 301) {
+  if (path === "/") {
+    const l = homeLang(request);
+    if (l) return langRedirect(origin, l, search);
+    return new Response(null, { status, headers: { location: origin + "/" + (search || ""), vary: VARY_HOME } });
+  }
+  return Response.redirect(origin + path + (search || ""), status);
+}
+const GONE_LANG = /^\/(pa|hi|ml|ta|te)(\/|$)/, MIRKO = /^(\/[a-z]{2})?\/community\/u\/mirko-peters(\/.*)?$/, EN_PREFIX = /^\/en(\/.*)?$/;
+const LANG_EP = /^\/(de|es|fr|it|pt|nl|pl|id|ru|uk|ar|he|ja|ko)\/show\/episodes\/([a-z0-9-]+)\/?$/;
+// Reine Adressregeln (ohne Ursprung) - ein Schritt: Ziel oder "". site_links.py rule_target() ist der Nachbau.
+async function ruleStep(p, migrated) {
+  const p0 = p.replace(/\/+$/, "") || "/";
+  if (migrated) { const to = await legacyTarget(p0); if (to) return to; }
+  const mp = MIRKO.exec(p); if (mp) return (mp[1] || "") + "/community/u/mirko-p" + (mp[2] || "/");   // alter Name des Blog-Profils
+  if (GONE_LANG.test(p)) return "/";   // diese Sprachen gibt es nicht mehr (Punjabi, Hindi, Malayalam, Tamil, Telugu)
+  const me = EN_PREFIX.exec(p); if (me) return me[1] || "/";   // Englisch liegt ohne Sprachpfad unter "/" (/en/ gab es nie)
+  return "";
+}
+// Alle Regeln hintereinander bis zum Endziel (A -> C statt A -> B -> C); "" = keine Weiterleitung. Schleife: letzter Stand vor der Wiederholung.
+export async function finalTarget(p, migrated) {
+  let cur = p, n = 0; const seen = new Set([p]);
+  while (n < 6) {
+    const nx = await ruleStep(cur, migrated);
+    if (!nx || seen.has(nx)) break;
+    seen.add(nx); cur = nx; n++;
+  }
+  return n ? cur : "";
 }
 
 export default {
@@ -159,20 +240,20 @@ export default {
     // gedacht (doppelte Inhalte, als entfernt markierte Seiten). Nur diese Pfade sind hierher geroutet; Bilder (i/, og/) kommen weiter direkt aus R2.
     if (url.hostname === "img.m365.fm") return new Response("Not found", { status: 404, headers: { "content-type": "text/plain; charset=utf-8", "x-robots-tag": "noindex", "cache-control": "public, max-age=3600" } });
     // Umzug (MIGRATED=1): dub.m365.fm und m365.fm -> www.m365.fm, alte Podpage-Adressen -> /show/ (301, damit der SEO-Traffic erhalten bleibt)
-    if (env.MIGRATED === "1") {
-      const p0 = url.pathname.replace(/\/+$/, "") || "/";
-      let to = await legacyTarget(p0);
-      // T8: dub.m365.fm/m365.fm und alte Adresse in einem Schritt auf das Ziel (vorher zwei 301 hintereinander)
-      if (url.hostname === "dub.m365.fm" || url.hostname === "m365.fm") {
-        if (!to && /^(\/[a-z]{2})?\/show\/episodes\/[a-z0-9-]+$/.test(p0)) to = (await redirectMap())[p0] || "";   // T12: umbenannte Folge auch vom alten Host in einem Schritt
-        return Response.redirect("https://www.m365.fm" + (to || url.pathname) + url.search, 301);
-      }
-      if (to) return Response.redirect(url.origin + to + url.search, 301);
+    // Alle Adressregeln (alte Podpage-Adressen, alter Blog-Profilname, entfernte Sprachen, /en/) in EINEM Schritt bis zum Endziel;
+    // alter Host (dub.m365.fm, m365.fm) und http:// gleich mit (T8: vorher zwei oder drei 301 hintereinander).
+    const migrated = env.MIGRATED === "1";
+    const oldHost = migrated && (url.hostname === "dub.m365.fm" || url.hostname === "m365.fm");
+    {
+      let to = await finalTarget(url.pathname, migrated);
+      if (oldHost && !to && /^(\/[a-z]{2})?\/show\/episodes\/[a-z0-9-]+\/?$/.test(url.pathname)) to = (await redirectMap())[url.pathname.replace(/\/+$/, "")] || "";   // T12: umbenannte Folge auch vom alten Host in einem Schritt
+      if (oldHost) return redirect(request, "https://www.m365.fm", to || url.pathname, url.search);
+      if (url.protocol === "http:" && /(^|\.)m365\.fm$/.test(url.hostname)) return redirect(request, "https://" + url.hostname, to || url.pathname, url.search);
+      if (to) return redirect(request, url.origin, to, url.search);
     }
-    { const mp = /^(\/[a-z]{2})?\/community\/u\/mirko-peters(\/.*)?$/.exec(url.pathname); if (mp) return Response.redirect(url.origin + (mp[1] || "") + "/community/u/mirko-p" + (mp[2] || "/") + url.search, 301); }   // alter Name des Blog-Profils
-    if (/^\/(pa|hi|ml|ta|te)(\/|$)/.test(url.pathname)) return Response.redirect(url.origin + "/", 301);   // diese Sprachen gibt es nicht mehr (Punjabi, Hindi, Malayalam, Tamil, Telugu)
     const p = url.pathname, isImg = IMG.test(p), isStatic = STATIC.test(p) || FONT.test(p);
     if (p.startsWith("/__r2c/")) return new Response("Not found", { status: 404 });   // interner Cache-Schluessel, keine oeffentliche Adresse
+    if (p === "/") { const hl = homeLang(request); if (hl) return langRedirect(url.origin, hl, url.search); }   // vor jedem Cache: eine englische Startseite aus dem Cache erreicht nie einen deutschen Browser
     const cf = isImg ? { cacheEverything: true, cacheTtl: 604800, polish: "lossy", mirage: true }
       : isStatic ? { cacheEverything: true, cacheTtl: 86400 }
       : { cacheEverything: true, cacheTtlByStatus: { "200-299": EDGE_HTML, "404": 60, "500-599": 0 } };   // HTML: 4 h am Rand, Purge nach jedem Deploy
@@ -198,7 +279,7 @@ export default {
     // Seiten aus dem R2-Bucket (Paket 20): uebersetzte Seiten (Blog-Sprachfassungen, Sprachfassungen der Folgen) liegen unter pages/<pfad>/index.html im Bucket statt in GitHub Pages - gleiche Adressen, indexierbar
     if (res.status === 404 && env.MIGRATED === "1" && /^(\/[a-z]{2})?\/show\/episodes\/[a-z0-9-]+\/?$/.test(p)) {   // T12: umbenannte Folge (show/redirects.json), vor dem R2-Rueckfall mit der alten Seite
       const to = (await redirectMap())[p.replace(/\/+$/, "")];
-      if (to) return Response.redirect(url.origin + to + url.search, 301);
+      if (to) return redirect(request, url.origin, (await finalTarget(to, migrated)) || to, url.search);
     }
     if (res.status === 404 && env.PAGES && /^\/search\/(manifest|part-\d{1,4})\.json$/.test(p)) {   // T37: Suchindex liegt im R2-Bucket (pages/search/...)
       const obj = await env.PAGES.get("pages" + p).catch(() => null);
@@ -227,8 +308,8 @@ export default {
     if (res.status === 404 && env.PAGES && !IMG.test(p) && (request.method === "GET" || request.method === "HEAD")) {
       const r2 = await r2Page(rq, env, ctx, url, p);
       if (r2) return r2;
-      const m = /^\/(de|es|fr|it|pt|nl|pl|id|ru|uk|ar|he|ja|ko)\/show\/episodes\/([a-z0-9-]+)\/?$/.exec(p);   // noch nicht hochgeladen: englisches Original statt 404
-      if (m) return Response.redirect(url.origin + "/show/episodes/" + m[2] + "/", 301);
+      const m = LANG_EP.exec(p);   // noch nicht hochgeladen: englisches Original statt 404 - umbenannt gleich auf den neuen Slug (ein Schritt)
+      if (m) return Response.redirect(url.origin + ((migrated && (await redirectMap())["/show/episodes/" + m[2]]) || "/show/episodes/" + m[2] + "/") + url.search, 301);
     }
     const h = new Headers(res.headers);
     finishHeaders(h, p);
