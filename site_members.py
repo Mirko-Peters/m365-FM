@@ -298,7 +298,7 @@ def build(g, people, orgs, extra=None):
             node = person_ld(BASE, p, ob)
             ld = [{"@context": "https://schema.org", "@type": "ProfilePage", "@id": purl(BASE, "en", "u", p["handle"]) + "#profile", "url": u, "name": p["name"], "inLanguage": lang, "dateModified": TODAY, "mainEntity": node}]
             ld.append({"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "M365.FM", "item": f"{BASE}/"}, {"@type": "ListItem", "position": 2, "name": s["members"], "item": f"{BASE}{pfx(lang)}/community/members/"}, {"@type": "ListItem", "position": 3, "name": p["name"], "item": u}]})   # T4
-            write(f"{pfx2(lang)}community/u/{p['handle']}/index.html", page(lang, f'{p["name"]} – {p.get("headline") or s["members"]} | M365.FM', (p.get("headline") or p.get("about") or "")[:155], u, b, None, ld, og_type="profile", extra_head=LCSS, noindex=noidx))
+            write(f"{pfx2(lang)}community/u/{p['handle']}/index.html", page(lang, f'{p["name"]} – {p.get("headline") or s["members"]} | M365.FM', (p.get("headline") or p.get("about") or "")[:155], u, b, None, ld, og_type="profile", extra_head=LCSS, noindex=noidx, side=(g["side"](lang, (p.get("headline") or "") + " " + (p.get("about") or "")[:1500], ids=[x["e"] for x in p.get("expertise", []) + p.get("certs", [])], exclude=()) if g.get("side") else "")))
             if not noidx:
                 sitemap.append((u, TODAY, None))
         # ---- Firmen-Seiten ----
@@ -318,7 +318,7 @@ def build(g, people, orgs, extra=None):
                           + (f'<h2>{esc(s["expertise"])}</h2>{exp_ul(o, lang, li, s)}' if o.get("expertise") else "") + (f'<h2>{esc(s["team"])}</h2>{mem}' if mem else "")
                           + (f'<h2>{esc(s["latest"])}</h2>{items_ul(o)}' if o.get("items") else "") + (f'<h2>{esc(s["channels"])}</h2>{chan_ul(o, lang)}' if o.get("channels") else "") + ((extra or {}).get(lang, {}).get("c", {}).get(o["handle"], "")) + live_js + topic_js + css)
             ld = [{"@context": "https://schema.org", "@type": "ProfilePage", "@id": purl(BASE, "en", "c", o["handle"]) + "#profile", "url": u, "name": o["name"], "inLanguage": lang, "dateModified": TODAY, "mainEntity": org_ld(BASE, o, pb)}]
-            write(f"{pfx2(lang)}community/c/{o['handle']}/index.html", page(lang, f'{o["name"]} – {o.get("tagline") or s["companies"]} | M365.FM', (o.get("tagline") or o.get("about") or "")[:155], u, b, None, ld, og_type="profile", extra_head=LCSS, noindex=noidx))
+            write(f"{pfx2(lang)}community/c/{o['handle']}/index.html", page(lang, f'{o["name"]} – {o.get("tagline") or s["companies"]} | M365.FM', (o.get("tagline") or o.get("about") or "")[:155], u, b, None, ld, og_type="profile", extra_head=LCSS, noindex=noidx, side=(g["side"](lang, (o.get("tagline") or "") + " " + (o.get("about") or "")[:1500], ids=[x["e"] for x in o.get("expertise", [])]) if g.get("side") else "")))
             if not noidx:
                 sitemap.append((u, TODAY, None))
         # ---- Verzeichnisse ----

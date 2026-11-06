@@ -673,7 +673,8 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             _fhead = f'<link rel="alternate" type="application/rss+xml" title="{esc(e["name"])} – M365.FM" href="{_feedu}">' if (_arts or eps) else ""
             _w = write if lang in ("en", "de") else (g.get("write_r2") or write)   # Entitaetsseiten der 13 weiteren Sprachen (noindex, bis ihre Uebersetzungen angezeigt werden) liegen im R2-Bucket, nicht in GitHub Pages (~620 MB)
             ld = ld + _qld   # Quotation-Knoten der Person
-            _w(f"{rel}/{e['id']}/index.html", page(lang, f'{e["name"]} – {TL[e["type"]][li]} | M365.FM', d[:155], u, b, _alts if lang in ("en", "de") else None, ld, xdefault=eurl(BASE, "en", e["id"]), og_type="website", extra_head=LCSS + css + _fhead, noindex=_noidx))
+            _side = g["side"](lang, f'{e["name"]} {d} {_lt[:1500]}', ids=[x for v in groups.values() for x in v], exclude=(e["id"],)) if g.get("side") else ""   # Sidebar wie auf allen Inhaltsseiten; Themen = verwandte Entitaeten
+            _w(f"{rel}/{e['id']}/index.html", page(lang, f'{e["name"]} – {TL[e["type"]][li]} | M365.FM', d[:155], u, b, _alts if lang in ("en", "de") else None, ld, xdefault=eurl(BASE, "en", e["id"]), og_type="website", extra_head=LCSS + css + _fhead, noindex=_noidx, side=_side))
             if not _noidx: sitemap.append((u, _mod, _alts))
 
 

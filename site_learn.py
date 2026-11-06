@@ -378,6 +378,18 @@ def build_learn(ctx):
         b = shell(lang, f'<h1>{esc(t["learn"])}</h1><p class="mut">{esc(t["learn_intro"])}</p><h2>{esc(t["paths"])}</h2><div class="ln-grid">{pl}</div><div class="ln-grid">{cards}</div>')
         write(f"{lang}/learn/index.html", page(lang, f'{t["learn"]} – M365.FM {LANGS[lang][0]}', t["learn_intro"], hu, b, None, None, og_type="website", extra_head=LCSS))
         sitemap.append((hu, TODAY, None))
+    # Englischer Lern-Hub /learn/ (Menuepunkt "Learn" wie in allen Sprachen, Mirko 6.11.2026): Glossar, Entitaeten, Mitglieder, Firmen, Events.
+    # Lernpfade und Trainer entstehen aus den Folgen der Dub-Sprachen und gibt es auf Englisch (noch) nicht.
+    t = T("en"); hu = f"{BASE}/learn/"
+    cards = (f'<a class="ln-card" href="{BASE}/glossary/"><b>{esc(t["glossary"])}</b><span>{esc(t["glossary_intro"])}</span></a>'
+             f'<a class="ln-card" href="{BASE}/entity/"><b>Entity database</b><span>Products, concepts and relationships around Microsoft</span></a>'
+             f'<a class="ln-card" href="{BASE}/community/members/"><b>Members</b><span>Experts, programs and profiles of the community</span></a>'
+             f'<a class="ln-card" href="{BASE}/community/companies/"><b>Companies</b><span>Companies and organizations of the community</span></a>'
+             f'<a class="ln-card" href="{BASE}/community/events/"><b>Events</b><span>Conferences, sessions and speakers of the community</span></a>')
+    _li = "Free resources to learn Microsoft 365, Copilot, Azure and security: the glossary, the entity database and the experts, companies and events of the community."
+    b = shell("en", f'<h1>{esc(t["learn"])}</h1><p class="mut">{esc(_li)}</p><div class="ln-grid">{cards}</div>')
+    write("learn/index.html", page("en", f'{t["learn"]} – M365.FM', _li, hu, b, None, None, og_type="website", extra_head=LCSS))
+    sitemap.append((hu, TODAY, None))
 
 
 _GEN = {"prompt", "governance", "graph", "teams", "viva", "fabric"}
