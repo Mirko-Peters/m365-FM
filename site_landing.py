@@ -26,6 +26,7 @@ READY_MIN = 0.9   # Anteil uebersetzter Saetze, ab dem eine weitere Sprache inde
 HUB = {"path": "services/"}
 PAGES = [dict(path=p, **C.PAGES[p]) for p in C.ORDER_AUDIENCES + C.ORDER_GOALS]
 BY_PATH = {p["path"]: p for p in PAGES}
+MEDIAKIT_PAGES = {"for/sponsors/", "i-want-to/reach-microsoft-365-buyers/"}   # Seiten fuer Sponsoren: Knopf "Mediadaten anfordern"
 
 
 def _text(lang, text):
@@ -243,7 +244,8 @@ def _stats(g, lang):
         rows.append(row(_number(lang, gsc["clicks"]), ("Google Search clicks", "Google-Suchklicks"), _t(lang, ("Source: Google Search Console", "Quelle: Google Search Console"))))
     if not rows:
         return ""
-    return (f'<div class="lp-stats" style="--n:{min(len(rows), 5)}" data-n="{len(rows)}" aria-label="{_u(lang, "figures_aria")}">{"".join(rows)}</div>'
+    cols = len(rows) if len(rows) <= 4 else 3   # Mirko, 5.11.2026: 6 Kennzahlen als 3 x 2 statt 5 + 1
+    return (f'<div class="lp-stats" style="--n:{cols}" data-n="{len(rows)}" data-c="{cols}" aria-label="{_u(lang, "figures_aria")}">{"".join(rows)}</div>'
             f'<p class="lp-note">{_u(lang, "figures_note")}</p>')
 
 
@@ -327,12 +329,13 @@ CSS = ("""
 .lp-stat b{font:600 clamp(2rem,3.6vw,2.8rem)/1 CF_;color:var(--ac)}
 .lp-stat span{font:600 .82rem/1.3 CF_;letter-spacing:.13em;text-transform:uppercase;color:var(--fg)}
 .lp-stat small{font-size:.8rem;line-height:1.45;color:var(--mut)}
+@media(min-width:901px){.lp-stats[data-c="3"] .lp-stat:nth-child(3n+1){padding-inline-start:0}.lp-stats[data-c="3"] .lp-stat:nth-child(3n){border-inline-end:0}.lp-stats[data-c="3"] .lp-stat:nth-child(n+4){border-top:1px solid var(--bd)}}
 .lp-intro{max-width:48em}.lp-intro p{margin:0 0 1em;font-size:1.06rem;line-height:1.7}
 .lp .faq details{scroll-margin-top:70px}
 @media(max-width:900px){.lp-cards{grid-template-columns:repeat(2,minmax(0,1fr))}.lp-steps{grid-template-columns:repeat(2,minmax(0,1fr))}
  .lp-steps li{padding-inline-start:0;border-inline-end:0;border-bottom:1px solid var(--bd);padding-bottom:18px}.lp-steps li:nth-child(odd){padding-inline-end:22px}
  .lp-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.lp-stat{padding-inline-start:0;border-inline-end:0;border-bottom:1px solid var(--bd)}.lp-stat:last-child{border-bottom:0}
- .lp-stats[data-n="3"] .lp-stat:last-child,.lp-stats[data-n="5"] .lp-stat:last-child,.lp-stats[data-n="1"] .lp-stat{grid-column:1/-1}}
+ .lp-stats[data-n="3"] .lp-stat:last-child,.lp-stats[data-n="5"] .lp-stat:last-child,.lp-stats[data-n="1"] .lp-stat{grid-column:1/-1}.lp-stats[data-n="2"] .lp-stat:nth-last-child(2),.lp-stats[data-n="4"] .lp-stat:nth-last-child(2),.lp-stats[data-n="6"] .lp-stat:nth-last-child(2){border-bottom:0}}
 @media(max-width:860px){.lp-hero{grid-template-columns:1fr;gap:26px;padding-top:22px}.lp-who{grid-template-columns:1fr;gap:18px}}
 @media(max-width:640px){.lp-offers,.lp-ex,.lp-cards,.lp-steps{grid-template-columns:1fr}.lp-steps li:nth-child(odd){padding-inline-end:0}
  .lp .sec{margin-top:52px}.lp-toc{gap:4px 16px}
@@ -402,6 +405,9 @@ def _sub(g, lang, spec, features):
     h1_text, lead_text, alt_text = _text(lang, spec["h1"]), _text(lang, spec["lead"]), _text(lang, spec["alt"])
     cta_text, cta_key = (spec["cta_on"] if spec.get("cta_on") and features.get(spec["cta_on"][2]) else spec["cta"])[:2]
     cta, cta_url = _t(lang, cta_text), _a(base, lang, cta_key)
+    # Mirko, 5.11.2026: auf den Seiten fuer Sponsoren immer die Mediadaten verlinken (Seite nur EN/DE, andere Sprachen auf EN)
+    mk_btn = (f'<a class="btn" href="{base}/{"de/" if lang == "de" else ""}media-kit/">{_t(lang, ("Request the media kit", "Mediadaten anfordern"))}</a>'
+              if spec["path"] in MEDIAKIT_PAGES else "")
     need_h, need_ps = spec["need"]
     offers_h, offers = spec["offers"]
     steps_h, steps = spec["steps"]
@@ -421,7 +427,7 @@ def _sub(g, lang, spec, features):
     body = (f'{g["header"](lang, "")}<main class="wrap lp">'
             f'<nav class="crumbs" aria-label="{_t(lang, ("Breadcrumb", "Brotkrumennavigation"))}"><a href="{html.escape(f"{base}/" if lang == "en" else f"{base}/{lang}/", quote=True)}">{_u(lang, "crumb_home")}</a><a href="{html.escape(hub, quote=True)}">{_u(lang, "crumb")}</a></nav>'
             f'<div class="lp-hero"><div><div class="kicker">{_u(lang, "kicker")}</div><h1>{html.escape(h1_text, quote=True)}</h1><p class="lede">{html.escape(lead_text, quote=True)}</p>{directory_note}'
-            f'<div class="btns"><a class="btn main" href="{cta_url}">{cta}</a><a class="btn" href="{html.escape(hub, quote=True)}">{_u(lang, "all")}</a></div></div>'
+            f'<div class="btns"><a class="btn main" href="{cta_url}">{cta}</a>{mk_btn}<a class="btn" href="{html.escape(hub, quote=True)}">{_u(lang, "all")}</a></div></div>'
             f'{_hero_img(path, lang, html.escape(alt_text, quote=True))}</div>'
             f'<nav class="lp-toc" aria-label="{_u(lang, "toc")}"><b>{_u(lang, "toc")}:</b>{"".join(f"<a href=\"#{i}\">{_t(lang, h)}</a>" for i, h in toc)}</nav>'
             f'<section class="sec" id="need"><h2>{_t(lang, need_h)}</h2><div class="lp-prose">{"".join(f"<p>{_t(lang, p)}</p>" for p in need_ps)}</div></section>'
@@ -434,7 +440,7 @@ def _sub(g, lang, spec, features):
             + f'<section class="sec faq" id="faq"><h2>{_u(lang, "faq")}</h2>{"".join(f"<details><summary>{_t(lang, q)}</summary><p>{_t(lang, a)}</p></details>" for q, a in faq_items)}</section>'
             f'<section class="sec" id="links"><h2>{_u(lang, "links")}</h2><ul class="lp-links">{"".join(f"<li><a href=\"{_a(base, lang, k)}\">{_t(lang, C.LINKS[k])}</a></li>" for k in spec["links"])}</ul></section>'
             f'<section class="sec" id="related"><h2>{_u(lang, "related")}</h2><div class="lp-cards">{"".join(_card(base, lang, BY_PATH[p], features) for p in spec["related"])}</div></section></main>'
-            f'<section class="band"><div class="wrap"><h2>{_u(lang, "cta_band")}</h2><p>{html.escape(lead_text, quote=True)}</p><div class="btns"><a class="btn main" href="{cta_url}">{cta}</a></div></div></section>'
+            f'<section class="band"><div class="wrap"><h2>{_u(lang, "cta_band")}</h2><p>{html.escape(lead_text, quote=True)}</p><div class="btns"><a class="btn main" href="{cta_url}">{cta}</a>{mk_btn}</div></div></section>'
             f'{g["footer"](lang)}')
     home = f"{base}/" if lang == "en" else f"{base}/{lang}/"
     hero = hero_src(path, lang)

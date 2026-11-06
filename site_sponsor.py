@@ -75,6 +75,11 @@ def url(base, lang):
     return f"{base}/sponsor/" if lang == "en" or lang not in LANGS_ALL else f"{base}/{lang}/sponsor/"
 
 
+def mediakit_url(base, lang):
+    """Mediadaten-Seite: nur EN und DE (site_mediakit.py), andere Sprachen auf EN."""
+    return f"{base}/de/media-kit/" if lang == "de" else f"{base}/media-kit/"
+
+
 def dashboard_url(base, lang):
     return f"{base}/sponsor/dashboard/" if lang == "en" else f"{base}/{lang}/sponsor/dashboard/"
 
@@ -213,7 +218,8 @@ def dashboard_copy(lang):
         "source_press": ("Press Ranger", "Press Ranger"),
         "source_spreaker": ("Spreaker", "Spreaker"),
         "source_youtube": ("YouTube Analytics", "YouTube Analytics"),
-        "source_cloudflare": ("Cloudflare analytics", "Cloudflare Analytics"),
+        "source_cloudflare": ("Cloudflare edge statistics (unfiltered)", "Cloudflare-Randstatistik (ungefiltert)"),
+        "source_cloudflare_rum": ("Cloudflare Web Analytics", "Cloudflare Web Analytics"),
         "source_counter": ("M365.FM link counter", "M365.FM-Linkzähler"),
         "source_gsc": ("Google Search Console", "Google Search Console"),
         "source_bing_webmaster": ("Bing Webmaster Tools", "Bing Webmaster Tools"),
@@ -223,7 +229,10 @@ def dashboard_copy(lang):
         "source_reach": ("Cross-channel estimate", "Kanalübergreifende Schätzung"),
         "source_desc_spreaker": ("Plays per sponsored episode; no per-listener data.", "Aufrufe gesponserter Folgen; keine Daten einzelner Hörer."),
         "source_desc_youtube": ("Views and watch time, after Analytics access is enabled.", "Aufrufe und Wiedergabezeit nach Freigabe des Analytics-Zugriffs."),
-        "source_desc_cloudflare": ("Page views by URL; no cookies or client-side tracking.", "Seitenaufrufe je URL; keine Cookies und kein Client-Tracking."),
+        "source_desc_cloudflare": ("Requests by URL at the edge, unfiltered and including bots; only used where Web Analytics has no value.",
+                                   "Anfragen je URL am Rand, ungefiltert und einschließlich Bots; nur genutzt, wo Web Analytics keinen Wert hat."),
+        "source_desc_cloudflare_rum": ("Real page loads in the browser by URL (cookie-free beacon), bots largely excluded; available since 29 Oct 2026.",
+                                       "Echte Seitenaufrufe im Browser je URL (Beacon ohne Cookies), Bots weitgehend ausgeschlossen; verfügbar seit 29.10.2026."),
         "source_desc_counter": ("Cookie-free daily totals by link and page surface.", "Cookiefreie Tagessummen je Link und Fläche."),
         "source_desc_gsc": ("Impressions and clicks for sponsored URLs.", "Impressions und Klicks für gesponserte URLs."),
         "source_desc_bing_webmaster": ("Page statistics for sponsored URLs.", "Seitenstatistik für gesponserte URLs."),
@@ -423,7 +432,8 @@ def default_state(quick):
     d = PRICING["defaults"]
     tops = [{k: q[k] for k in ("id", "name", "en", "lvl", "rated", "example", "custom", "url")} for q in quick if q["default"]]
     return {"goal": d["goal"], "rt": d["runtime"], "topics": tops, "video": False, "pr": bool(d["pr"]), "auth": False, "dash": False, "l14": False,
-            "topic": False, "expert": False, "li": False, "con": False, "cnt": {"pr": 1, "ex": d["cnt"]["ex"], "li": d["cnt"]["li"]}, "prTouched": False}
+            "topic": False, "expert": False, "li": False, "live": False, "con": False,
+            "cnt": {"pr": 1, "ex": d["cnt"]["ex"], "li": d["cnt"]["li"], "lv": d["cnt"].get("lv", 1)}, "prTouched": False}
 
 
 # ---- Seite ----
@@ -443,8 +453,9 @@ html.a11y-hc .spn{--spn-on:#ffb52e;--spn-good:#3cc9a1;--spn-red:#ff8a80}
 .spn-dot:after{content:"";position:absolute;inset:-4px;border-radius:50%;background:var(--spn-on);opacity:.22}
 @media (prefers-reduced-motion:no-preference){.spn-dot:after{animation:spn-pulse 2.4s ease-in-out infinite;will-change:transform,opacity}}
 @keyframes spn-pulse{50%{transform:scale(1.35);opacity:.08}}
-.spn-lead{max-width:62ch;color:var(--mut);font-size:1.1rem;margin:0 0 20px}
+.spn-lead{max-width:62ch;color:var(--mut);font-size:1.1rem;margin:0 0 20px}.spn-mk{margin:-6px 0 22px}
 .spn-cards{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+@media(min-width:720px){.spn-cards{grid-template-columns:repeat(3,1fr)}.spn-cards[data-n="4"]{grid-template-columns:repeat(2,1fr)}}   /* Mirko, 5.11.2026: 3 x 2 statt 6 nebeneinander */
 .spn-card{background:var(--card);border:1px solid var(--bd);padding:14px 16px;display:grid;gap:3px;align-content:start}
 .spn-card b{unicode-bidi:isolate;font:600 2rem/1.05 "Barlow Condensed","Barlow Condensed FB0","Barlow Condensed FB1",sans-serif;font-variant-numeric:tabular-nums;color:var(--ac)}
 .spn-card span{color:var(--fg);font-size:.92rem;line-height:1.35}.spn-card small{color:var(--mut);font-size:.78rem}
@@ -617,10 +628,12 @@ def body_html(g, lang, stats, quick, ssr, n_main, n_langs, con_on):
     cards.append((nums.get("eps") or _num(n_main), t("card_episodes"), ""))
     cards.append((nums.get("langs") or _num(n_langs), t("card_langs"), ""))
     srcs.append(t("src_build", date=day(g["TODAY"], lang)))
-    proof = ('<ul class="spn-cards">' + "".join(f'<li class="spn-card"><b dir="auto">{E(a)}</b><span>{E(b)}</span>' + (f'<small>{E(c)}</small>' if c else "") + "</li>" for a, b, c in cards) + "</ul>"
+    proof = (f'<ul class="spn-cards" data-n="{len(cards)}">' + "".join(f'<li class="spn-card"><b dir="auto">{E(a)}</b><span>{E(b)}</span>' + (f'<small>{E(c)}</small>' if c else "") + "</li>" for a, b, c in cards) + "</ul>"
              + "".join(f'<p class="spn-src">{E(s)}</p>' for s in srcs) + (_chart(lang, bing, nums, day) if bing["ok"] and bing["weekly"] else ""))
     hero = (f'<header class="spn-hero"><p class="spn-eyebrow"><span class="spn-dot" aria-hidden="true"></span>{E(t("eyebrow"))}</p><h1>{E(t("h1"))}</h1>'
-            f'<p class="spn-lead">{E(t("lead", episodes=eps))}</p><section aria-label="{E(t("proof_aria"))}">{proof}</section></header>')
+            f'<p class="spn-lead">{E(t("lead", episodes=eps))}</p>'
+            f'<p class="spn-mk"><a class="btn" href="{E(mediakit_url(B, lang))}">{E(t("mediakit_cta"))} →</a></p>'   # Mirko, 5.11.2026: Mediadaten immer verlinken
+            f'<section aria-label="{E(t("proof_aria"))}">{proof}</section></header>')
     mail = f'<a href="mailto:{MAIL}">{MAIL}</a>'
     nojs = f'<noscript><p class="spn-nojs">{E(t("noscript", mail="{mail}")).replace("{mail}", mail)}</p></noscript>'
     step = lambda n, hid, h, inner: (f'<section class="spn-step" aria-labelledby="{hid}"><div class="spn-sh"><span class="spn-n">{E(t("step", n=n))}</span>'
@@ -649,7 +662,7 @@ def body_html(g, lang, stats, quick, ssr, n_main, n_langs, con_on):
     s3 = step(3, "spn-s3", t("s3_h"), f'<p class="spn-hint">{E(t("s3_hint"))}</p><div class="spn-seg" role="radiogroup" aria-labelledby="spn-s3">{rts}</div>'
               f'<p class="spn-note" id="spn-rtrec">{E(v.get("rtRec", ""))}</p>')
     ul = lambda *xs: "<ul>" + "".join(f'<li>{E(x)}</li>' for x in xs) + "</ul>"
-    cnt = v.get("counts") or {"pr": "", "ex": d["cnt"]["ex"], "li": d["cnt"]["li"]}
+    cnt = {"lv": d["cnt"].get("lv", 1), **(v.get("counts") or {"pr": "", "ex": d["cnt"]["ex"], "li": d["cnt"]["li"]})}
     base = (f'<div class="spn-item spn-base"><input type="checkbox" id="spn-base" checked disabled aria-label="{E(t("base_aria"))}">'
             f'<div><h3><label for="spn-base">{E(t("base_h"))}</label> <span class="spn-tag" id="spn-pk">{E(v.get("pkCount", ""))}</span></h3>'
             f'{ul(t("base_b1", episodes=eps), t("base_b2"), t("base_b3"), t("base_b4"))}</div>'
@@ -666,6 +679,8 @@ def body_html(g, lang, stats, quick, ssr, n_main, n_langs, con_on):
               + _item("spn-topic", t("topic_h"), hint(t("topic_hint", n=P["topic_sponsors_max"])), fmt_usd(pr["topic"]), t("unit_month"))
               + _item("spn-expert", t("expert_h"), hint(t("expert_hint")), fmt_usd(pr["expert"]), t("unit_episode"), extra=_stepper("ex", t("expert_stepper"), t("one_less"), t("one_more"), cnt["ex"]))
               + _item("spn-li", t("li_h"), hint(t("li_hint")), fmt_usd(pr["li"]), t("unit_issue"), extra=_stepper("li", t("li_stepper"), t("one_less"), t("one_more"), cnt["li"]) + f'<p class="spn-note">{E(t("li_note"))}</p>')
+              + _item("spn-live", t("live_h"), hint(t("live_hint")) + f'<p class="spn-note">{E(t("live_note"))}</p>', fmt_usd(pr["live"]), t("unit_session"),
+                      extra=_stepper("lv", t("live_stepper"), t("one_less"), t("one_more"), cnt["lv"]))   # Livesession (LinkedIn + YouTube), immer als gesponsert gekennzeichnet
               + (_item("spn-con", t("con_h"), hint(t("con_hint")), "", t("on_request")) if con_on else ""))
     s5 = step(5, "spn-s5", t("s5_h"), f'<div class="spn-extras">{extras}</div>')
     # Preisuebersicht (sticky, nur die Summenzeile ist live)
@@ -727,7 +742,7 @@ def jsonld(B, lang, u, hl, lastmod, faqs, n_langs):
         if unit: o["priceSpecification"] = {"@type": "UnitPriceSpecification", "price": str(pr[key]), "priceCurrency": PRICING["currency"], "unitCode": unit}
         return o
     offers = [offer(t("base_h"), "base", "MON"), offer(t("video_h"), "video", "MON"), offer(t("pr_h"), "pr"), offer(t("row_auth"), "auth", "MON"),
-              offer(t("dash_h"), "dash"), offer(t("lang_h", n=n_langs), "lang", "MON"), offer(t("topic_h"), "topic", "MON"), offer(t("expert_h"), "expert"), offer(t("li_h"), "li")]
+              offer(t("dash_h"), "dash"), offer(t("lang_h", n=n_langs), "lang", "MON"), offer(t("topic_h"), "topic", "MON"), offer(t("expert_h"), "expert"), offer(t("li_h"), "li"), offer(t("live_h"), "live")]
     return [{"@context": "https://schema.org", "@type": "WebPage", "@id": u + "#page", "url": u, "name": t("h1"), "inLanguage": hl, "isPartOf": {"@id": f"{B}/#website"},
              "publisher": {"@id": f"{B}/#org"}, "dateModified": lastmod, "mainEntity": {"@id": u + "#service"}},
             {"@context": "https://schema.org", "@type": "Service", "@id": u + "#service", "name": t("svc_name"), "serviceType": t("svc_type"), "url": u,

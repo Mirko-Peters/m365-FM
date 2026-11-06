@@ -108,8 +108,16 @@ def check_budget(job, model, estimate_eur=0):
     return True
 
 
-def report_usage(job, model, input_tokens, output_tokens, lang="", batch=False):
-    """Meldet bezahlten Verbrauch; wirft nie (das Ergebnis ist bezahlt und darf nicht verloren gehen)."""
+def usage_tokens(usage):
+    """usage-Antwort von Claude -> (Eingabe gesamt inkl. Prompt-Cache, Ausgabe, davon Cache gelesen, davon Cache geschrieben)."""
+    u = usage or {}
+    read, write = int(u.get("cache_read_input_tokens") or 0), int(u.get("cache_creation_input_tokens") or 0)
+    return int(u.get("input_tokens") or 0) + read + write, int(u.get("output_tokens") or 0), read, write
+
+
+def report_usage(job, model, input_tokens, output_tokens, lang="", batch=False, cache_read=0, cache_write=0):
+    """Meldet bezahlten Verbrauch; wirft nie (das Ergebnis ist bezahlt und darf nicht verloren gehen).
+    input_tokens = Eingabe gesamt; cache_read/cache_write = Anteil daraus, der aus dem Prompt-Cache gelesen (0,1x) bzw. in ihn geschrieben (1,25x) wurde."""
     if "haiku" not in str(model).lower() or not os.environ.get("COMMUNITY_API"):
         return
     payload = {
@@ -118,6 +126,10 @@ def report_usage(job, model, input_tokens, output_tokens, lang="", batch=False):
     }
     if batch:
         payload["batch"] = True
+    if cache_read:
+        payload["cache_read_input_tokens"] = int(cache_read)
+    if cache_write:
+        payload["cache_creation_input_tokens"] = int(cache_write)
     result = _budget_request(payload)
     if not isinstance(result, dict) or not result.get("ok"):
         print(f"::warning::Haiku-Verbrauch von {job} konnte nicht gemeldet werden: {result if not isinstance(result, dict) else 'Antwort ohne ok'}.")

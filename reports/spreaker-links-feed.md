@@ -1,6 +1,6 @@
-# Spreaker-Website-Feld im RSS (2026-11-05 05:03 UTC)
+# Spreaker-Website-Feld im RSS (2026-11-06 04:54 UTC)
 
-Gesetzt laut Protokoll: 3151 · im Feed gleich: 3115 · im Feed anders: 0 · nicht im Feed: 36 · ausstehend (frisch gesetzt, Feed noch nicht erneuert): 0
+Gesetzt laut Protokoll: 3202 · im Feed gleich: 3159 · im Feed anders: 0 · nicht im Feed: 43 · ausstehend (frisch gesetzt, Feed noch nicht erneuert): 0
 
 - 67311542: nicht_im_feed · soll https://www.m365.fm/show/episodes/building-reusable-components-with-power-platform-cli-pac-cli/ · Feed None
 - 67312816: nicht_im_feed · soll https://www.m365.fm/show/episodes/using-microsoft-graph-for-custom-app-integrations/ · Feed None
@@ -38,3 +38,10 @@ Gesetzt laut Protokoll: 3151 · im Feed gleich: 3115 · im Feed anders: 0 · nic
 - 67400271: nicht_im_feed · soll https://www.m365.fm/show/episodes/microsoft-designer-for-business-content-creation/ · Feed None
 - 67401530: nicht_im_feed · soll https://www.m365.fm/show/episodes/fabric-dataflows-gen2-the-future-of-etl-in-microsoft-fabric/ · Feed None
 - 67405208: nicht_im_feed · soll https://www.m365.fm/show/episodes/dynamics-365-copilot-for-field-service/ · Feed None
+- 67411474: nicht_im_feed · soll https://www.m365.fm/show/episodes/step-by-step-guide-to-automating-grc-reports-with-power-automate/ · Feed None
+- 67419834: nicht_im_feed · soll https://www.m365.fm/show/episodes/what-is-microsoft-intune-used-for/ · Feed None
+- 67429865: nicht_im_feed · soll https://www.m365.fm/show/episodes/microsoft-purview-and-azure-information-protection/ · Feed None
+- 67441755: nicht_im_feed · soll https://www.m365.fm/show/episodes/azure-logic-apps-for-automation/ · Feed None
+- 67450573: nicht_im_feed · soll https://www.m365.fm/show/episodes/step-by-step-guide-to-organizing-projects-in-teams/ · Feed None
+- 67455991: nicht_im_feed · soll https://www.m365.fm/show/episodes/how-to-monitor-compliance-in-microsoft-defender-for-cloud/ · Feed None
+- 67464190: nicht_im_feed · soll https://www.m365.fm/show/episodes/how-to-set-up-data-loss-prevention-dlp-in-microsoft-365/ · Feed None

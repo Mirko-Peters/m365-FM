@@ -1,4 +1,3 @@
-import { regionOf, conditional, markHtml, isHtmlPath } from "./consent.js";   // T32: Einwilligungs-Region je Anfrage
 // Worker vor der Plattform (GitHub Pages): Cache- und Sicherheits-Header, Bild-Optimierung (Polish), Weiterleitungen fuer den Umzug von www.m365.fm.
 const SEC = {
   "strict-transport-security": "max-age=31536000; includeSubDomains",
@@ -14,6 +13,9 @@ const HASHED = /^\/assets\/(site\.[0-9a-f]{8,}\.css|(page|a11y)\.[0-9a-f]{8,}\.j
 const EDGE_HTML = 14400, R2_TTL = 14400, R2_MISS_TTL = 600;
 const HTML_CC = "public, max-age=0, s-maxage=600, stale-while-revalidate=86400";
 const r2Path = (p) => (p.endsWith("/") ? p : p + "/");
+// HTML-Adressen: Verzeichnisse, .html und Pfade ohne Dateiendung. Dateien (.json, .xml, .txt, Bilder, Assets) sind keine Seiten.
+// (Bis 5.11.2026 bekamen Seiten hier eine Einwilligungs-Region fuer den Clarity-Hinweis (T32, consent.js); Clarity und Hinweis sind entfernt.)
+export const isHtmlPath = (p) => p.endsWith("/") || /\.html?$/i.test(p) || !/\.[a-z0-9]{1,8}$/i.test(p);
 
 function notModified(request, etag, lastMod) {
   const inm = request.headers.get("if-none-match");
@@ -108,7 +110,10 @@ async function r2First(request, env, ctx, url, p, key, build) {
   return new Response(request.method === "HEAD" ? null : hit.body, { status: 200, headers: h });
 }
 // Datenexporte des Seitenbaus: fuer Programme da, nicht fuer die Suche (Allowlist - .well-known, openapi.json, agent.json, episodes.json, llms*.txt bleiben sichtbar)
-const NOINDEX = /^\/(search\/|entities\.json|entities-src\.json|entities\.jsonld|og-manifest\.json|seo-report\.json|top\.json|show\/redirects\.json|show-notes\/|blog-import\/|blog-content\/)|\.jsonld$/i;
+const NOINDEX = /^\/(search\/|entities\.json|entities-src\.json|entities\.jsonld|og-manifest\.json|seo-report\.json|top\.json|show\/redirects\.json|show\/transcripts\.json|show-notes\/|blog-import\/|blog-content\/)|\.jsonld$/i;
+// #266: Transkript-Dateien je Folge (Hauptshow, Dub-Folge, Sprachfassung) liegen im R2-Bucket (r2out/): fuer Podcast-Apps (CORS) und Programme,
+// nicht fuer die Suche (der Text steht schon auf der Folgenseite). Gleiche Regel wie site_transcripts.PATH_RX.
+export const TRANSCRIPT = /^(?:\/[a-z]{2})?(?:\/show\/episodes)?\/[a-z0-9-]+\/transcript\.(txt|vtt)$/;
 const R2_EXPORT = /^\/(?:blog-import\/[^/]+\.json|translations-blog\.json)$/i;
 
 async function redirectMap() {
@@ -140,6 +145,8 @@ function finishHeaders(h, p) {
   h.set("cache-control", HASHED.test(p) || FONT.test(p) ? "public, max-age=31536000, immutable" : isImg ? "public, max-age=86400, stale-while-revalidate=604800"
     : isStatic ? "public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400" : HTML_CC);
   if (NOINDEX.test(p)) h.set("x-robots-tag", "noindex");
+  const tm = TRANSCRIPT.exec(p);
+  if (tm) { h.set("content-type", CT[tm[1]]); h.set("x-robots-tag", "noindex"); h.set("access-control-allow-origin", "*"); }   // #266
   if (isImg) h.set("vary", "accept");
   if (p === "/") h.set("link", '</.well-known/api-catalog>; rel="api-catalog", </openapi.json>; rel="service-desc"; type="application/vnd.oai.openapi+json", </llms.txt>; rel="service-doc"; type="text/plain", </.well-known/agent.json>; rel="describedby"; type="application/json"');   // RFC 8288 / 9727: Startseite verweist auf maschinenlesbare Ressourcen
   if (p === "/.well-known/api-catalog") { h.set("content-type", 'application/linkset+json; profile="https://www.rfc-editor.org/info/rfc9727"'); h.set("access-control-allow-origin", "*"); }
@@ -170,15 +177,14 @@ export default {
       : isStatic ? { cacheEverything: true, cacheTtl: 86400 }
       : { cacheEverything: true, cacheTtlByStatus: { "200-299": EDGE_HTML, "404": 60, "500-599": 0 } };   // HTML: 4 h am Rand, Purge nach jedem Deploy
     // T41: ohne Query zum Ursprung - GitHub Pages ist statisch, so landen ?utm_…/?fbclid=… im selben Cache-Eintrag (Zone steht auf Caching-Level "basic": mit Query sonst gar kein Cache)
-    const page = !isImg && !isStatic && isHtmlPath(p);   // T32: nur HTML-Adressen bekommen Region und Regions-Validatoren
-    const cr = regionOf(request, env), rq = page && (request.method === "GET" || request.method === "HEAD") ? conditional(request, cr).req : request;   // Region nie im Cache-Schluessel oder Ursprungsabruf
+    const page = !isImg && !isStatic && isHtmlPath(p), rq = request;   // Seiten: R2 zuerst auch bei Range-Anfragen (s. u.)
     if (env.R2_PRIMARY === "1" && env.PAGES && !isImg && (request.method === "GET" || request.method === "HEAD") && !p.startsWith("/search/") && p !== "/r2-build.txt" && (page || !request.headers.has("range"))) {
       let dp = p; try { dp = decodeURIComponent(p); } catch { /* ungueltige Kodierung: wie angefragt */ }   // Schluessel im Bucket sind UTF-8 (z. B. /ru/tag/облако/)
       const key = r2Key(dp);
       const build = key ? r2Ready(env, url, ctx) : "";
       if (build) {
         const r2 = await r2First(rq, env, ctx, url, p, key, build);
-        if (r2) return page ? markHtml(r2, request, cr) : r2;
+        if (r2) return r2;
       }
     }
     const res = await fetch(url.search ? new Request(url.origin + p, rq) : rq, { cf });
@@ -207,15 +213,25 @@ export default {
         return new Response(request.method === "HEAD" ? null : obj.body, { headers: h });
       }
     }
+    if (res.status === 404 && env.PAGES && TRANSCRIPT.test(p) && (request.method === "GET" || request.method === "HEAD")) {   // #266: Transkript aus dem R2-Bucket (pages/<pfad>)
+      const obj = await env.PAGES.get("pages" + p).catch(() => null);
+      if (obj && !(obj.customMetadata && obj.customMetadata.gone === "1")) {
+        const h = new Headers();
+        if (obj.httpEtag) h.set("etag", obj.httpEtag);
+        if (obj.uploaded) h.set("last-modified", obj.uploaded.toUTCString());
+        finishHeaders(h, p);
+        if (notModified(request, h.get("etag"), h.get("last-modified"))) return new Response(null, { status: 304, headers: h });
+        return new Response(request.method === "HEAD" ? null : obj.body, { headers: h });
+      }
+    }
     if (res.status === 404 && env.PAGES && !IMG.test(p) && (request.method === "GET" || request.method === "HEAD")) {
       const r2 = await r2Page(rq, env, ctx, url, p);
-      if (r2) return page ? markHtml(r2, request, cr) : r2;
+      if (r2) return r2;
       const m = /^\/(de|es|fr|it|pt|nl|pl|id|ru|uk|ar|he|ja|ko)\/show\/episodes\/([a-z0-9-]+)\/?$/.exec(p);   // noch nicht hochgeladen: englisches Original statt 404
       if (m) return Response.redirect(url.origin + "/show/episodes/" + m[2] + "/", 301);
     }
     const h = new Headers(res.headers);
     finishHeaders(h, p);
-    const out = new Response(res.body, { status: res.status, statusText: res.statusText, headers: h });
-    return page ? markHtml(out, request, cr) : out;   // Assets, Bilder und Dateien bleiben unberuehrt (auch bei falschem Content-Type)
+    return new Response(request.method === "HEAD" ? null : res.body, { status: res.status, statusText: res.statusText, headers: h });
   },
 };

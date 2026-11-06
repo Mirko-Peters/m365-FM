@@ -88,7 +88,7 @@ nav.langs{font-family:"Barlow Condensed","Barlow Condensed FB0","Barlow Condense
 .faq summary{list-style:none;display:flex;justify-content:space-between;gap:14px;text-transform:uppercase;font-size:1.15rem}.faq summary::-webkit-details-marker{display:none}.faq summary:after{content:"×";color:var(--ac);font-weight:400}.faq details[open] summary:after{content:"−"}
 .faq p{max-width:40em}
 footer{margin-top:80px}
-.cc .btn{background:transparent;color:var(--onink);border-color:var(--onink)}.cc .btn.main{background:var(--ac);color:var(--onac);border-color:var(--ac)}
+
 
 /* ---- Kopfbereich: M365Con-Leiste, Menue, Sprachwahl mit Flaggen ---- */
 :focus-visible{outline:3px solid var(--ac);outline-offset:2px}summary:focus-visible{outline-offset:0}
@@ -136,7 +136,7 @@ footer{margin-top:80px}
 .pn.entscheidung{clip-path:none;border-style:dashed}.pn.start .pi,.pn.ende .pi{border-radius:50%}.pn.ende.on{background:color-mix(in srgb,var(--ac) 12%,var(--card))}
 .iplay{margin-top:12px}.iplay .btn{padding:4px 14px;font-size:.85rem}
 @keyframes flowdash{to{background-position:20px 0}}
-@media (max-width:720px){.iflow{flex-direction:column}.pn{margin-inline-end:0;margin-bottom:30px}.pn:last-child{margin-bottom:0}.pn:after{inset-inline-start:50%;top:100%;width:2px;height:30px;background:repeating-linear-gradient(180deg,var(--ac) 0 6px,transparent 6px 10px);background-size:2px 20px;animation-name:flowdashv}@keyframes flowdashv{to{background-position:0 20px}}}
+@media (max-width:720px){.iflow{flex-direction:column}.pn{margin-inline-end:0;margin-bottom:30px}.pn:last-child{margin-bottom:0}.pn:after{inset-inline-start:50%;top:100%;width:2px;height:30px;background:repeating-linear-gradient(180deg,var(--ac) 0 6px,transparent 6px 10px);background-size:2px 20px;animation:none}}
 @media (prefers-reduced-motion:reduce){.pn:after{animation:none}}
 
 .js .info.rv{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}.js .info.rv.in{opacity:1;transform:none}

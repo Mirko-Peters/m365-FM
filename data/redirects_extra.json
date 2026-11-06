@@ -1,0 +1,497 @@
+{
+ "_doc": "Zusaetzliche Weiterleitungen fuer alte flache Adressen, die in Artikeln und Show Notes verlinkt sind, aber nie eine Seite hatten (404). Geprueft am 2026-11-05 (PR #265): Ziel ist die passende Folge, sonst die Entitaet/Themenseite, sonst der passende Beitrag; Fremdlinks und allgemeine Links ('/help', '/resources' ...) zeigen auf das Thema des verlinkenden Artikels bzw. eine allgemeine Seite. site_podpage.py uebernimmt sie per setdefault in show/redirects.json (bestehende Eintraege gehen vor), Site-Worker und site_links.py lesen von dort. Format: alter Pfad (ohne '/' am Ende) -> {to, why}.",
+ "redirects": {
+  "/500-episodes-later-why-consistency-is-ania-lie-and-what-actually-works": {
+   "to": "/show/episodes/500-episodes-later-why-consistency-is-a-lie-and-what-actually-works/",
+   "why": "Tippfehler im Folgen-Slug"
+  },
+  "/active-directory-monitoring": {
+   "to": "/entity/active-directory/",
+   "why": "Thema"
+  },
+  "/adoption-copilot-rollout-launch-playbook": {
+   "to": "/entity/copilot-adoption/",
+   "why": "Thema"
+  },
+  "/agent-governance-explained-how-to-enable-the-ai-agent-revolution-with-thomas-zou-microsoft": {
+   "to": "/show/episodes/agent-governance-explained-how-it-can-enable-the-ai-agent-revolution-with-thomas-zou-microsoft/",
+   "why": "Folge (Slug-Abweichung to/it-can)"
+  },
+  "/archives": {
+   "to": "/community/u/mirko-p/blog/",
+   "why": "allgemein: Blog-Uebersicht"
+  },
+  "/audit-user-activity-with-microsoft-purview": {
+   "to": "/show/episodes/how-to-audit-user-activity-with-microsoft-purview/",
+   "why": "Folge (Slug ohne how-to)"
+  },
+  "/awareness-training-implement": {
+   "to": "/entity/insider-risk-management/",
+   "why": "Thema des Artikels (Insider-Risiken)"
+  },
+  "/azure-ai-vs-copilot-vs-fabric-ai": {
+   "to": "/show/episodes/azure-ai-vs-copilot-vs-fabric-ai-simply-explained/",
+   "why": "Folge (Simply Explained)"
+  },
+  "/azure-managed-identities-simply-explained": {
+   "to": "/show/episodes/managed-identities-simply-explained/",
+   "why": "Folge Managed Identities - Simply Explained"
+  },
+  "/azure-management-groups-simply-explained": {
+   "to": "/show/episodes/azure-management-groups-and-subscriptions/",
+   "why": "Folge Azure Management Groups and Subscriptions - Simply Explained"
+  },
+  "/blogs": {
+   "to": "/community/u/mirko-p/blog/",
+   "why": "allgemein: Blog-Uebersicht"
+  },
+  "/build-data-foundation": {
+   "to": "/entity/data-governance/",
+   "why": "Thema des Artikels"
+  },
+  "/build-trust-leveraging": {
+   "to": "/entity/copilot/",
+   "why": "Thema (Copilot-Ausgaben)"
+  },
+  "/conduct-regular-policies": {
+   "to": "/entity/insider-risk-management/",
+   "why": "Thema des Artikels (Insider-Risk-Richtlinien)"
+  },
+  "/contact-our-sales-team": {
+   "to": "/about/mirko-peters/",
+   "why": "Kontakt (wie /contact)"
+  },
+  "/copilot-studios-game-changing-ai-feature-explained": {
+   "to": "/entity/copilot-studio/",
+   "why": "Thema (keine eindeutige Folge)"
+  },
+  "/create-a-service-principal-app-identity-in-your-microsoft-entra-id": {
+   "to": "/entity/service-principal/",
+   "why": "Thema"
+  },
+  "/create-your-free-account": {
+   "to": "/community/",
+   "why": "Anmeldung (wie /join)"
+  },
+  "/data-ingestion-strategies-in-fabric": {
+   "to": "/community/u/mirko-p/blog/demystifying-data-ingestion-choosing-the-right-tool-in-microsoft-fabric/",
+   "why": "Beitrag Datenaufnahme in Fabric"
+  },
+  "/data-privacy-within-fabric": {
+   "to": "/entity/fabric/",
+   "why": "Thema"
+  },
+  "/define-cases-copilot": {
+   "to": "/entity/copilot/",
+   "why": "Thema (Copilot-Anwendungsfaelle)"
+  },
+  "/demo": {
+   "to": "/about/mirko-peters/",
+   "why": "Kontakt"
+  },
+  "/enhanced-collaboration": {
+   "to": "/entity/teams/",
+   "why": "Thema (Zusammenarbeit)"
+  },
+  "/enterprise-data-governance-strategy": {
+   "to": "/entity/data-governance/",
+   "why": "Thema"
+  },
+  "/espc-hub": {
+   "to": "/community/events/",
+   "why": "Konferenz: Events"
+  },
+  "/explore": {
+   "to": "/entity/",
+   "why": "Wissenszentrum (Entitaeten)"
+  },
+  "/explore-content-categories": {
+   "to": "/entity/",
+   "why": "Wissenszentrum (Entitaeten)"
+  },
+  "/fabric-analytics-case-studies": {
+   "to": "/entity/fabric/",
+   "why": "Thema"
+  },
+  "/fabric-automated-testing-strategies": {
+   "to": "/entity/fabric/",
+   "why": "Thema"
+  },
+  "/fabric-catalog-and-metadata-management": {
+   "to": "/entity/fabric/",
+   "why": "Thema"
+  },
+  "/fabric-ci-cd-with-azure-devops": {
+   "to": "/community/u/mirko-p/blog/seamlessly-integrating-microsoft-fabric-with-github-and-azure-devops/",
+   "why": "Beitrag Fabric mit Azure DevOps"
+  },
+  "/fabric-collaboration-workflows": {
+   "to": "/entity/fabric/",
+   "why": "Thema"
+  },
+  "/fabric-community-resources": {
+   "to": "/entity/fabric/",
+   "why": "Thema"
+  },
+  "/fabric-cost-optimization-tips": {
+   "to": "/community/u/mirko-p/blog/fabric-cost-optimization-strategies-for-microsoft-data-environments/",
+   "why": "Beitrag Fabric-Kostenoptimierung"
+  },
+  "/fabric-data-lifecycle-management": {
+   "to": "/entity/fabric/",
+   "why": "Thema"
+  },
+  "/fabric-data-sharing-framework": {
+   "to": "/entity/fabric/",
+   "why": "Thema"
+  },
+  "/fabric-deployment-best-practices": {
+   "to": "/entity/fabric-deployment-pipelines/",
+   "why": "Thema"
+  },
+  "/fabric-errors-common-issues": {
+   "to": "/entity/fabric/",
+   "why": "Thema (passender Beitrag ist die Quelle selbst)"
+  },
+  "/fabric-governance-truths": {
+   "to": "/show/episodes/microsoft-fabric-governance-truths/",
+   "why": "Folge"
+  },
+  "/fabric-migration-strategies": {
+   "to": "/community/u/mirko-p/blog/fabric-migration-strategy-complete-guide-for-enterprise-data/",
+   "why": "Beitrag Fabric-Migration"
+  },
+  "/fabric-multicloud-strategies": {
+   "to": "/entity/fabric/",
+   "why": "Thema"
+  },
+  "/fabric-notebooks-deep-dive": {
+   "to": "/show/episodes/fabric-notebooks/",
+   "why": "Folge Fabric Notebooks - Simply Explained"
+  },
+  "/fabric-performance-tuning": {
+   "to": "/community/u/mirko-p/blog/fabric-performance-tuning-strategies-for-optimal-workloads/",
+   "why": "Beitrag Fabric-Performance"
+  },
+  "/fabric-policy-enforcement": {
+   "to": "/entity/fabric/",
+   "why": "Thema"
+  },
+  "/fabric-securing-sensitive-data": {
+   "to": "/entity/fabric/",
+   "why": "Thema"
+  },
+  "/fabric-security-and-access-controls": {
+   "to": "/community/u/mirko-p/blog/understanding-the-microsoft-fabric-security-model/",
+   "why": "Beitrag Fabric-Sicherheitsmodell"
+  },
+  "/fabric-streaming-analytics-guide": {
+   "to": "/entity/fabric-real-time-intelligence/",
+   "why": "Thema"
+  },
+  "/fabric-table-storage-optimization": {
+   "to": "/entity/fabric/",
+   "why": "Thema"
+  },
+  "/fabric-troubleshooting-checklist": {
+   "to": "/entity/fabric/",
+   "why": "Thema"
+  },
+  "/fabric-user-permissions": {
+   "to": "/entity/fabric/",
+   "why": "Thema"
+  },
+  "/fabric-versus-synapse-comparison": {
+   "to": "/show/episodes/fabric-vs-synapse-vs-databricks/",
+   "why": "Folge Fabric vs Synapse vs Databricks"
+  },
+  "/faq-data-security-governance-m365": {
+   "to": "/entity/data-governance/",
+   "why": "Thema"
+  },
+  "/feedback": {
+   "to": "/about/mirko-peters/",
+   "why": "Kontakt"
+  },
+  "/full-stack-skills-why-why-youre-not-using-them-in-teams": {
+   "to": "/show/episodes/full-stack-skills-why-youre-not-using-them-in-teams/",
+   "why": "Folge (doppeltes why)"
+  },
+  "/get-the-most-out-of-us": {
+   "to": "/show/learning-hub/",
+   "why": "Ressourcen-Seite"
+  },
+  "/goals-protection-strategy": {
+   "to": "/entity/purview/",
+   "why": "Thema (Purview-Strategie)"
+  },
+  "/guide-identity-protection": {
+   "to": "/entity/microsoft-entra-id-protection/",
+   "why": "Thema"
+  },
+  "/help": {
+   "to": "/about/mirko-peters/",
+   "why": "Kontakt"
+  },
+  "/identity-governance-entra": {
+   "to": "/show/episodes/entra-id-governance/",
+   "why": "Folge Entra ID Governance"
+  },
+  "/industry-insights": {
+   "to": "/show/learning-hub/",
+   "why": "allgemein: Ressourcen-Seite"
+  },
+  "/inline-governance-checklist": {
+   "to": "/entity/governance/",
+   "why": "Thema"
+  },
+  "/introduction-to-microsoft-fabric-data-lakehouse": {
+   "to": "/entity/fabric-lakehouse/",
+   "why": "Thema"
+  },
+  "/intune-and-fabric-integration": {
+   "to": "/entity/fabric/",
+   "why": "Thema des Artikels"
+  },
+  "/issues-feedback-governance": {
+   "to": "/entity/governance/",
+   "why": "Thema"
+  },
+  "/itpromentor-blog": {
+   "to": "/entity/conditional-access/",
+   "why": "Fremdlink (Blog eines Dritten): Thema des Artikels"
+  },
+  "/learn-how-to-scale-power-apps-and-dataverse-for-growth": {
+   "to": "/entity/power-apps/",
+   "why": "Thema"
+  },
+  "/learn-more-on-this-subject": {
+   "to": "/entity/dlp/",
+   "why": "Thema des Artikels (DLP)"
+  },
+  "/legal": {
+   "to": "/entity/microsoft-purview-records-management/",
+   "why": "Thema (Aufbewahrung von Datensaetzen)"
+  },
+  "/lumos-today": {
+   "to": "/entity/conditional-access/",
+   "why": "Fremdlink (Anbieter): Thema des Artikels"
+  },
+  "/m365-data-governance-hub": {
+   "to": "/entity/data-governance/",
+   "why": "Thema"
+  },
+  "/metomic-secure-microsoft": {
+   "to": "/entity/copilot-governance/",
+   "why": "Fremdlink (Anbieter): Thema des Artikels"
+  },
+  "/microsoft-365-apps-activation-error": {
+   "to": "/entity/microsoft-365-apps/",
+   "why": "Thema"
+  },
+  "/microsoft-365-governance-a-practical-governance-framework": {
+   "to": "/community/u/mirko-p/blog/microsoft-365-governance-framework/",
+   "why": "Beitrag Microsoft 365 Governance Framework"
+  },
+  "/microsoft-365-governance-and-compliance-essentials": {
+   "to": "/show/microsoft-365-governance/",
+   "why": "Themenseite"
+  },
+  "/microsoft-365-governance-automation": {
+   "to": "/show/microsoft-365-governance/",
+   "why": "Themenseite"
+  },
+  "/microsoft-365-governance-automation-m365-fm-podcast": {
+   "to": "/show/microsoft-365-governance/",
+   "why": "Themenseite"
+  },
+  "/microsoft-365-maturity-model-based-on-500-tenant-audits": {
+   "to": "/show/episodes/i-audited-500-m365-tenants-heres-the-maturity-formula/",
+   "why": "Folge mit genau diesem Titel"
+  },
+  "/microsoft-365-security-governance-best-practices-for-2025": {
+   "to": "/show/microsoft-365-governance/",
+   "why": "Themenseite"
+  },
+  "/microsoft-cowork-iq-implementation-architecting-scalable-knowledge-graphs-for-modern-hybrid-work": {
+   "to": "/show/episodes/microsoft-cowork-iq-implementation-architecting-scalable-knowledge-graphs-for-modern-hybrid-workfor/",
+   "why": "Folge (Slug gekuerzt)"
+  },
+  "/microsoft-fabric-ai-assistant-use-cases": {
+   "to": "/show/episodes/copilot-for-microsoft-fabric-simply-explained/",
+   "why": "Folge Copilot for Microsoft Fabric"
+  },
+  "/microsoft-fabric-analytics-overview": {
+   "to": "/show/episodes/microsoft-fabric-simply-explained/",
+   "why": "Folge Microsoft Fabric - Simply Explained"
+  },
+  "/microsoft-fabric-best-practices": {
+   "to": "/entity/fabric/",
+   "why": "Thema"
+  },
+  "/microsoft-fabric-data-architectures": {
+   "to": "/community/u/mirko-p/blog/understanding-microsoft-fabric-architecture/",
+   "why": "Beitrag Fabric-Architektur"
+  },
+  "/microsoft-fabric-data-governance-podcast": {
+   "to": "/community/u/mirko-p/blog/microsoft-fabric-data-governance-principles-and-practice/",
+   "why": "Beitrag Fabric Data Governance"
+  },
+  "/microsoft-fabric-data-modeling": {
+   "to": "/entity/fabric/",
+   "why": "Thema"
+  },
+  "/microsoft-fabric-data-ops": {
+   "to": "/entity/fabric/",
+   "why": "Thema"
+  },
+  "/microsoft-fabric-data-quality": {
+   "to": "/entity/fabric/",
+   "why": "Thema"
+  },
+  "/microsoft-fabric-event-series": {
+   "to": "/community/events/",
+   "why": "Events"
+  },
+  "/microsoft-fabric-for-developers": {
+   "to": "/entity/fabric/",
+   "why": "Thema"
+  },
+  "/microsoft-fabric-security-hardening": {
+   "to": "/community/u/mirko-p/blog/understanding-the-microsoft-fabric-security-model/",
+   "why": "Beitrag Fabric-Sicherheitsmodell"
+  },
+  "/microsoft-fabric-updates-and-roadmap": {
+   "to": "/entity/fabric/",
+   "why": "Thema"
+  },
+  "/microsoft-teams-simply-explained": {
+   "to": "/entity/teams/",
+   "why": "keine Teams-Simply-Explained-Folge: Entitaet"
+  },
+  "/modernizing-endpoint-management": {
+   "to": "/community/u/mirko-p/blog/mastering-microsoft-intune-the-ultimate-guide-to-modern-endpoint-management/",
+   "why": "Beitrag modernes Endpunktmanagement"
+  },
+  "/operating-model-microsoft-365-governance": {
+   "to": "/community/u/mirko-p/blog/building-a-robust-governance-operating-model-for-microsoft-365/",
+   "why": "Beitrag Governance-Betriebsmodell"
+  },
+  "/people-problem-not-tool-problem": {
+   "to": "/entity/teams/",
+   "why": "Thema des Artikels"
+  },
+  "/poster": {
+   "to": "/entity/zero-trust/",
+   "why": "Thema des Artikels"
+  },
+  "/power-bi-integrations-with-fabric": {
+   "to": "/entity/power-bi/",
+   "why": "Thema"
+  },
+  "/python-in-power-platform-automation": {
+   "to": "/show/episodes/python-in-microsoft-power-platform-automation/",
+   "why": "Folge"
+  },
+  "/recent-posts": {
+   "to": "/community/u/mirko-p/blog/",
+   "why": "Blog-Uebersicht"
+  },
+  "/reco-protect-microsoft": {
+   "to": "/entity/dlp/",
+   "why": "Fremdlink (Anbieter): Thema des Artikels"
+  },
+  "/resources": {
+   "to": "/show/learning-hub/",
+   "why": "Ressourcen-Seite"
+  },
+  "/restore-drill-microsoft-365-backup": {
+   "to": "/show/episodes/microsoft-365-backup-and-recovery-what-native-tools-do-not-protect/",
+   "why": "Folge Microsoft 365 Backup and Recovery"
+  },
+  "/rigorous-offboarding-procedures": {
+   "to": "/community/u/mirko-p/blog/essential-steps-for-terminating-employees-with-microsoft-365-accounts/",
+   "why": "Beitrag Offboarding"
+  },
+  "/security-awareness-training": {
+   "to": "/entity/attack-simulation-training/",
+   "why": "Thema"
+  },
+  "/semantic-models-in-microsoft-fabric": {
+   "to": "/show/episodes/building-reusable-semantic-models-with-microsoft-fabric/",
+   "why": "Folge"
+  },
+  "/sharepoint-governance-fix-data-strategy": {
+   "to": "/show/episodes/sharepoint-ai-governance-fix-data-strategy/",
+   "why": "Folge (Slug ohne ai)"
+  },
+  "/sharepoint-premium-simply-explained": {
+   "to": "/show/episodes/what-is-sharepoint-premium-simply-explained/",
+   "why": "Folge SharePoint Premium - Simply Explained"
+  },
+  "/stop-blaming-the-cloud-fix-m365-performance": {
+   "to": "/entity/microsoft-365/",
+   "why": "Thema (keine passende Folge)"
+  },
+  "/teams-management-global": {
+   "to": "/entity/teams/",
+   "why": "Thema"
+  },
+  "/teams-mobile": {
+   "to": "/entity/teams/",
+   "why": "Thema"
+  },
+  "/teams-sprawl-sharepoint-oversharing": {
+   "to": "/entity/oversharing/",
+   "why": "Thema"
+  },
+  "/teams-templates": {
+   "to": "/entity/teams-templates/",
+   "why": "Thema"
+  },
+  "/teams-training-governance": {
+   "to": "/show/episodes/microsoft-teams-governance/",
+   "why": "Folge Microsoft Teams Governance"
+  },
+  "/tech-training-in-demand": {
+   "to": "/show/learning-hub/",
+   "why": "Ressourcen-Seite"
+  },
+  "/templates": {
+   "to": "/show/microsoft-365-governance/",
+   "why": "Themenseite des Artikels"
+  },
+  "/the-agentic-advantage-scaling-intelligence-without-chaos": {
+   "to": "/show/episodes/agentic-advantage-governance-ai/",
+   "why": "Folge (Agenten skalieren ohne Chaos)"
+  },
+  "/the-death-of-the-pipeline-why-ai-agents-are-replacing-traditional-ci-cd": {
+   "to": "/show/episodes/the-death-of-the-pipeline-why-ai-agents-are-replacing-traditional/",
+   "why": "Folge (Slug gekuerzt)"
+  },
+  "/the-death-of-the-ui-why-cua-is-the-end-of-saas-as-know-it": {
+   "to": "/show/episodes/the-death-of-the-ui-why-cua-is-the-end-of-saas-as-we-know-it/",
+   "why": "Folge (fehlendes we)"
+  },
+  "/the-hidden-risks-of-skipping-power-apps-testing": {
+   "to": "/show/episodes/automated-testing-for-power-apps-and-dataverse/",
+   "why": "Folge Power-Apps-Tests"
+  },
+  "/train-employees": {
+   "to": "/entity/insider-risk-management/",
+   "why": "Thema des Artikels"
+  },
+  "/turning-governance-strategic": {
+   "to": "/entity/governance/",
+   "why": "Thema"
+  },
+  "/viva-connections-automate-what-type-you-thought-was-manual": {
+   "to": "/show/episodes/viva-connections-automate-what-you-thought-was-manual/",
+   "why": "Folge (Tippfehler type)"
+  },
+  "/your-powerapps-form-looks-graph-but-fails-you": {
+   "to": "/show/episodes/your-powerapps-form-looks-great-but-fails-you/",
+   "why": "Folge (Tippfehler graph)"
+  }
+ }
+}

@@ -2,7 +2,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
-import { cleanText, cleanName, esc, isLang, LANGS, b64u, sign, verify, sha256hex, anthropicUrl, anthropicHeaders, anthropicFetch, haikuJson, AI_BUDGET_ERROR } from "../src/util.js";
+import { cleanText, cleanName, esc, isLang, LANGS, b64u, sign, verify, sha256hex, anthropicUrl, anthropicHeaders, anthropicFetch, haikuJson, usageUsd, AI_BUDGET_ERROR } from "../src/util.js";
 import { runTrQueue } from "../src/autotr.js";
 import worker from "../src/index.js";
 import { sanitize } from "../src/wiki.js";
@@ -216,7 +216,36 @@ test("AI-Budget-API: Cron-Key schützt Abfrage und idempotente Verbrauchsmeldung
     response = await worker.fetch(new Request(url, { method: "POST", headers: { "x-cron-key": env.CRON_KEY, "content-type": "application/json" }, body: JSON.stringify({ ...report, id: "workflow-batch-1", batch: true }) }), env);
     assert.equal(response.status, 200);
     assert.ok(Math.abs(raw.prepare("SELECT usd FROM ai_spend WHERE id='workflow-batch-1'").get().usd - 0.00055) < 1e-10, "Batch API: halber Preis");
+    // Prompt-Cache: 1000 Eingabe-Token, davon 800 gelesen (0,1x) und 100 geschrieben (1,25x) -> (100 + 80 + 125) x 0,10 $/MTok + 2000 x 0,50 $/MTok
+    response = await worker.fetch(new Request(url, { method: "POST", headers: { "x-cron-key": env.CRON_KEY, "content-type": "application/json" }, body: JSON.stringify({ ...report, id: "workflow-cache-1", cache_read_input_tokens: 800, cache_creation_input_tokens: 100 }) }), env);
+    assert.equal(response.status, 200);
+    assert.ok(Math.abs(raw.prepare("SELECT usd FROM ai_spend WHERE id='workflow-cache-1'").get().usd - (305 * 0.10 + 2000 * 0.50) / 1e6) < 1e-12);
+    assert.equal(raw.prepare("SELECT in_tok FROM ai_spend WHERE id='workflow-cache-1'").get().in_tok, 1000);
+    response = await worker.fetch(new Request(url, { method: "POST", headers: { "x-cron-key": env.CRON_KEY, "content-type": "application/json" }, body: JSON.stringify({ ...report, id: "workflow-cache-2", cache_read_input_tokens: 900, cache_creation_input_tokens: 200 }) }), env);
+    assert.equal(response.status, 400, "Cache-Anteile groesser als die Eingabe werden abgelehnt");
   } finally {
+    raw.close();
+  }
+});
+
+test("Prompt-Cache: Kosten aus usage mit gelesenen und geschriebenen Cache-Token", async () => {
+  const prices = { input: 0.10, output: 0.50 };
+  assert.ok(Math.abs(usageUsd(prices, { input_tokens: 1000, output_tokens: 2000 }) - 0.0011) < 1e-12);
+  assert.ok(Math.abs(usageUsd(prices, { input_tokens: 100, cache_read_input_tokens: 1000, cache_creation_input_tokens: 400, output_tokens: 0 }) - (100 + 100 + 500) * 0.10 / 1e6) < 1e-12);
+  assert.ok(Math.abs(usageUsd(prices, { input_tokens: 0, cache_creation_input_tokens: 400, cache_creation: { ephemeral_1h_input_tokens: 400 } }) - 800 * 0.10 / 1e6) < 1e-12, "1-h-Cache: 2x");
+  assert.ok(Math.abs(usageUsd(prices, { input_tokens: 1000 }, true) - 0.00005) < 1e-12, "Batch: halber Preis");
+  const { db, raw } = await searchDb();
+  const oldFetch = globalThis.fetch; let sent;
+  const body = { model: "claude-haiku-5-5", max_tokens: 100, system: [{ type: "text", text: "lange Regeln", cache_control: { type: "ephemeral", ttl: "1h" } }], messages: [{ role: "user", content: "x" }] };
+  globalThis.fetch = async (url, init) => { sent = JSON.parse(init.body); return new Response(JSON.stringify({ usage: { input_tokens: 50, cache_read_input_tokens: 1000, output_tokens: 10 }, content: [{ type: "text", text: "ok" }] }), { status: 200 }); };
+  try {
+    await anthropicFetch({ DB: db, ANTHROPIC_API_KEY: "unit-test-key", CLOUDFLARE_ACCOUNT_ID: "account", CF_AIG_TOKEN: "unit-test-token" }, body, { job: "prompt_cache_test" });
+    assert.deepEqual(sent, body, "cache_control geht unveraendert ueber das AI Gateway");
+    const row = raw.prepare("SELECT in_tok,usd FROM ai_spend WHERE job='prompt_cache_test'").get();
+    assert.equal(row.in_tok, 1050);
+    assert.ok(Math.abs(row.usd - ((50 + 100) * 0.10 + 10 * 0.50) / 1e6) < 1e-12, "Cache-Lesen kostet 0,1x");
+  } finally {
+    globalThis.fetch = oldFetch;
     raw.close();
   }
 });
@@ -424,6 +453,8 @@ test("schema: Migrationen sind idempotent und enthalten jede zur Laufzeit angele
     if (/^ALTER TABLE search_doc ADD COLUMN (?:grp|title_norm) TEXT NOT NULL DEFAULT ''$/i.test(s)
       || /^ALTER TABLE (?:push_subs ADD COLUMN digest INTEGER NOT NULL DEFAULT 1|events ADD COLUMN tz TEXT NOT NULL DEFAULT 'Europe\/Berlin')$/i.test(s)) continue;
     if (/^ALTER TABLE (?:expert_requests ADD COLUMN (?:hide_outlet INTEGER NOT NULL DEFAULT 0|reach TEXT NOT NULL DEFAULT ''|audience TEXT NOT NULL DEFAULT 'all'|mode TEXT NOT NULL DEFAULT 'match'|held_reason TEXT NOT NULL DEFAULT '')|expert_request_replies ADD COLUMN (?:kind TEXT NOT NULL DEFAULT 'match'|status TEXT NOT NULL DEFAULT 'pending')|contributions ADD COLUMN expert_request_id INTEGER)$/i.test(s)) continue;
+    if (/^ALTER TABLE users ADD COLUMN (?:merged_into INTEGER|merged_at INTEGER NOT NULL DEFAULT 0)$/i.test(s)
+      || /^INSERT OR IGNORE INTO user_identities\(user_id, provider, sub, created\) SELECT id, provider, sub, created FROM users$/i.test(s)) continue;   // #279: Rueckfuellung ist idempotent
     assert.match(s, /^CREATE (TABLE|INDEX|UNIQUE INDEX) IF NOT EXISTS /i, "nur idempotente Anweisungen: " + s.slice(0, 60));
   }
   const inMig = new Set([...sql.matchAll(/CREATE (?:TABLE|UNIQUE INDEX|INDEX) IF NOT EXISTS (\w+)/gi)].map((m) => m[1]));

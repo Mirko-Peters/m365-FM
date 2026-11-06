@@ -107,21 +107,21 @@
     return tips;
   }
 
-  /* s = {goal: ai|vis|lead, rt, topics: [{id, name, en, lvl, rated, example, custom, url}], video, pr, auth, dash, l14, topic, expert, li, con,
-          cnt: {pr, ex, li}, prTouched} */
+  /* s = {goal: ai|vis|lead, rt, topics: [{id, name, en, lvl, rated, example, custom, url}], video, pr, auth, dash, l14, topic, expert, li, live, con,
+          cnt: {pr, ex, li, lv}, prTouched}   live = Livesession (LinkedIn M365 Show + YouTube), je Stueck, einmalig, ohne Rabatt */
   function compute(s, P) {
     var pr = P.prices, n = s.topics.length, packs = Math.max(1, n), cnt = s.cnt || {};
     var lv = s.topics.map(function (tp) { return levelOf(tp, P); });
     var prRec = prRecommendation(s.rt, n, P), prCount = s.prTouched ? clampStep(cnt.pr, P) : prRec;
-    var ex = clampStep(cnt.ex, P), li = clampStep(cnt.li, P);
+    var ex = clampStep(cnt.ex, P), li = clampStep(cnt.li, P), lvN = clampStep(cnt.lv, P);
     var rate = +P.discount[s.rt] || 0;
     var discBase = (pr.base + (s.video ? pr.video : 0)) * packs, discount = Math.round(discBase * rate);
     var monthly = discBase - discount + (s.auth ? pr.auth : 0) + (s.topic ? pr.topic : 0) + (s.li ? li * pr.li : 0) + (s.l14 ? pr.lang : 0);
     var dash = !!(s.dash || s.goal === "lead");   // Leads: Dashboard Pflicht
-    var oneOff = (s.pr ? prCount * pr.pr : 0) + (dash ? pr.dash : 0) + (s.expert ? ex * pr.expert : 0);
+    var oneOff = (s.pr ? prCount * pr.pr : 0) + (dash ? pr.dash : 0) + (s.expert ? ex * pr.expert : 0) + (s.live ? lvN * pr.live : 0);
     var hardest = n ? Math.max.apply(null, lv) : P.levels.none, recRt = recRuntime(lv, P);
     var eff = effect(s, hardest, prCount, P);
-    return { n: n, packs: packs, levels: lv, prRec: prRec, prCount: prCount, ex: ex, li: li, discountRate: rate, discountPct: Math.round(rate * 100),
+    return { n: n, packs: packs, levels: lv, prRec: prRec, prCount: prCount, ex: ex, li: li, lv: lvN, discountRate: rate, discountPct: Math.round(rate * 100),
              discBase: discBase, discount: discount, monthly: monthly, oneOff: oneOff, total: monthly * s.rt + oneOff, dash: dash,
              hardest: hardest, recRt: recRt, geo: eff.geo, seo: eff.seo, geoR: eff.geoR, seoR: eff.seoR, bars: eff.bars, run: pct(s.rt, P),
              tips: tipsFor(s, { recRt: recRt, hardest: hardest, hardFrom: P.levels.hard_from, n: n }) };
@@ -153,6 +153,7 @@
     add("month", t(C, "row_month"), fmtUsd(r.monthly), "sum");
     if (s.pr) add("pr", t(C, "row_pr", { n: num(C, r.prCount) }), fmtUsd(r.prCount * pr.pr));
     if (s.expert) add("expert", t(C, "row_expert", { n: num(C, r.ex) }), fmtUsd(r.ex * pr.expert));
+    if (s.live) add("live", t(C, "row_live", { n: num(C, r.lv) }), fmtUsd(r.lv * pr.live));
     if (r.dash) add("dash", t(C, "row_dash"), fmtUsd(pr.dash));
     if (s.con && ctx.con !== false) add("con", t(C, "row_con"), t(C, "on_request"));
     add("total", t(C, "row_total"), fmtUsd(r.total), "sum");
@@ -176,7 +177,7 @@
   function view(s, P, C, ctx) {
     ctx = ctx || {};
     var r = compute(s, P), eps = r.packs * P.episodes_per_topic;
-    var v = { calc: r, counts: { pr: r.prCount, ex: r.ex, li: r.li } };
+    var v = { calc: r, counts: { pr: r.prCount, ex: r.ex, li: r.li, lv: r.lv } };
     v.pkCount = t(C, "pk_count", { topics: tn(C, "topics", r.packs), episodes: tn(C, "episodes_month", eps) });
     v.prRec = t(C, "pr_rec", { runtime: months(C, s.rt), topics: tn(C, "topics", r.packs), articles: tn(C, "articles", r.prRec) });
     v.prRecShow = !!s.pr;
@@ -218,7 +219,7 @@
   }
 
   /* ---- Anfrage: Paket v1 (nur Zeichenketten, englische Bezeichnungen, Tiefe <= 2, <= 30 Schluessel, <= 5000 Zeichen) ---- */
-  var COMPONENTS = { base: 1, video: 1, disc: 1, auth: 1, pr: 1 }, EXTRAS = { l14: 1, topic: 1, li: 1, expert: 1, dash: 1, con: 1 };
+  var COMPONENTS = { base: 1, video: 1, disc: 1, auth: 1, pr: 1 }, EXTRAS = { l14: 1, topic: 1, li: 1, expert: 1, live: 1, dash: 1, con: 1 };
   function buildPackage(s, P, C, ctx) {
     var E = { lang: "en", T: (C && C.E) || (C && C.T) || {}, E: (C && C.E) || (C && C.T) || {} };
     var r = compute(s, P), list = rows(s, r, P, E, ctx);
@@ -258,7 +259,7 @@
   }
   function stateKey(s) {
     return JSON.stringify([s.goal, s.rt, s.topics.map(function (x) { return x.id; }), !!s.video, !!s.pr, !!s.auth, !!s.dash, !!s.l14, !!s.topic, !!s.expert,
-                           !!s.li, !!s.con, s.prTouched ? s.cnt.pr : 0, s.cnt.ex, s.cnt.li]);
+                           !!s.li, !!s.con, s.prTouched ? s.cnt.pr : 0, s.cnt.ex, s.cnt.li, !!s.live, s.cnt.lv]);
   }
 
   /* ---- Vorab-Rendern im Seitenbau (tools/sponsor_ssr.mjs): Standardpaket je Sprache + Zahlen fuer die Belegkarten ---- */

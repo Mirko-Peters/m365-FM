@@ -154,6 +154,10 @@ class LandingPageTests(unittest.TestCase):
         self.assertIn("Bald verfügbar", self.files["de/for/experts/index.html"])
         self.assertNotIn("MVP Contribution Tracker ist kostenlos", self.files["de/i-want-to/prove-my-community-impact/index.html"])
         self.assertNotIn("$", buyers)
+        # Mirko, 5.11.2026: Seiten fuer Sponsoren verlinken immer die Mediadaten
+        self.assertIn('href="https://www.m365.fm/media-kit/"', buyers.replace("https://example.test", "https://www.m365.fm"))
+        self.assertIn("/de/media-kit/", self.files["de/for/sponsors/index.html"])
+        self.assertNotIn("/media-kit/", self.files["for/experts/index.html"])
 
     def test_stats_put_value_label_and_source_on_separate_elements(self):
         with self.tr_de():

@@ -28,8 +28,18 @@ async function countMail(env) {
   } catch { /* Mailversand nicht von der Statistik abhängig machen. */ }
 }
 
+// Anhang-Inhalt als Base64 (fuer Resend). Binaerdaten (Uint8Array/ArrayBuffer) werden umgewandelt, Strings gelten schon als Base64.
+export function b64(content) {
+  if (typeof content === "string") return content;
+  const buf = content instanceof Uint8Array ? content : new Uint8Array(content);
+  let s = "";
+  for (let i = 0; i < buf.length; i += 0x8000) s += String.fromCharCode.apply(null, buf.subarray(i, i + 0x8000));
+  return btoa(s);
+}
+
 export async function sendMail(env, { to, subject, html, text, headers = {}, replyTo = "", attachments = [], lang = "en", bannerAt = Date.now() }) {
-  // attachments: [{ filename, content (Base64), type, disposition }] - Cloudflare Email Service und Resend
+  // attachments: [{ filename, content (Uint8Array/ArrayBuffer oder Base64-String), type, disposition }] - Cloudflare Email Service und Resend.
+  // Cloudflare bekommt Binaerdaten unveraendert (5.11.2026: per Base64-String verschickte Mediadaten kamen als ungueltiges PDF an).
   const banner = conBanner(lang, bannerAt);
   if (banner && typeof html === "string") html += banner;
   if (banner && typeof text === "string") text += lang === "de"
@@ -66,7 +76,7 @@ export async function sendMail(env, { to, subject, html, text, headers = {}, rep
       headers: { authorization: "Bearer " + resendKey, "content-type": "application/json" },
       body: JSON.stringify({ from: env.MAIL_FROM, to, subject, html, ...(text !== undefined ? { text } : {}), headers,
         ...(replyTo ? { reply_to: replyTo } : {}),
-        ...(attachments.length ? { attachments: attachments.map((a) => ({ filename: a.filename, content: a.content, content_type: a.type })) } : {}) }),
+        ...(attachments.length ? { attachments: attachments.map((a) => ({ filename: a.filename, content: b64(a.content), content_type: a.type })) } : {}) }),
     });
     const data = await response.json().catch(() => ({}));
     const messageId = typeof data?.id === "string" ? data.id : "";

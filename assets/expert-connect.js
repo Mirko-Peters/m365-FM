@@ -99,7 +99,8 @@
   }
   function needLogin(r) { if (r.s === 401) { login(); return true; } return false; }
   function readRequestDraft() {
-    try { return JSON.parse(sessionStorage.getItem("ec_draft") || "null"); } catch (e) { return null; }
+    // nur Entwuerfe NEUER Anfragen; ein Entwurf mit id (Bearbeitung) wuerde eine neue Anfrage zur Aenderung einer bestehenden machen
+    try { var d = JSON.parse(sessionStorage.getItem("ec_draft") || "null"); return d && typeof d === "object" && !d.id ? d : null; } catch (e) { return null; }
   }
   function saveRequestDraft(data, editorial) {
     try { sessionStorage.setItem("ec_draft", JSON.stringify(Object.assign({}, data, { editorial: !!editorial }))); } catch (e) { /* optional */ }
@@ -193,7 +194,7 @@
                  mode: mo.value, audience: au.value, reach: re.value, hide_outlet: hi.checked, draft: !!draft };
       }
       function saveAndLogin(draft) {
-        saveRequestDraft(data(draft), ed.checked);
+        if (!edit.id) saveRequestDraft(data(draft), ed.checked);   // eine Bearbeitung liegt schon auf dem Server
         login();
       }
       function send(draft) {
@@ -202,7 +203,7 @@
         api(edit.id ? "/api/expert-requests/update" : "/api/expert-requests/create", { method: "POST", body: data(draft) }).then(function (r) {
           if (r.s === 401) { saveAndLogin(draft); return; }
           if (!r.j.ok) { say(m, errText(r.j)); return; }
-          clearRequestDraft();
+          if (!edit.id) clearRequestDraft();   // Speichern einer anderen (bearbeiteten) Anfrage loescht den offenen Entwurf nicht
           say(m, r.j.status === "draft" ? T.drafted : r.j.status === "held" ? T.held : T.published, true);
           setTimeout(function () { location.hash = "#requests"; }, 1200);
         });
@@ -419,6 +420,11 @@
     ({ search: viewSearch, request: function () { viewRequest(null); }, requests: viewRequests, expert: viewExpert, calls: viewCalls, mod: viewMod })[tab]();
   }
   window.addEventListener("hashchange", route);
+  // Klick auf einen Link zum aktuellen Anker (z. B. "Anfrage ausschreiben" nach dem Anmeldehinweis): kein hashchange, darum selbst neu zeichnen
+  document.addEventListener("click", function (e) {
+    var a = e.target && e.target.closest ? e.target.closest('a[href^="#"]') : null;
+    if (a && a.getAttribute("href") === location.hash && !e.defaultPrevented) { e.preventDefault(); route(); }
+  });
   loadMe().then(function (u) { if (u && u.admin) { var a = document.querySelector('.ec-tabs a[data-tab="mod"]'); if (a) a.hidden = false; } });
   route();
 })();

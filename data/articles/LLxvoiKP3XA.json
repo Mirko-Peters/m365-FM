@@ -1364,6 +1364,52 @@
      "Existe ação compensatória caso uma etapa posterior falhe?"
     ]
    }
+  ],
+  "quiz": [
+   {
+    "q": "Qual é o papel do executor, segundo o artigo, na relação com o LLM?",
+    "opts": [
+     "Gerar prompts melhores para que o modelo planeje com mais precisão",
+     "Aplicar regras e verificar efeitos, enquanto o LLM cuida da cognição",
+     "Substituir o modelo de raciocínio sempre que ele falhar em uma tarefa",
+     "Armazenar a memória mutável compartilhada entre todas as sessões de conversa"
+    ],
+    "a": 1,
+    "why": "O artigo diz que LLMs cuidam da cognição e executores das operações: o executor verifica, valida e aplica políticas."
+   },
+   {
+    "q": "Para que serve a chave de idempotência no ciclo do executor?",
+    "opts": [
+     "Criptografar o token de acesso antes de passá-lo ao próximo nó",
+     "Classificar o tipo de erro retornado pela ferramenta chamada",
+     "Evitar que novas tentativas sejam cobradas ou publicadas duas vezes",
+     "Aumentar a confiança do modelo na resposta que ele gerou"
+    ],
+    "a": 2,
+    "why": "A chave torna a reexecução nula ou uma substituição consistente, evitando cobrança ou publicação duplicada em novas tentativas."
+   },
+   {
+    "q": "Quais são as três verificações do portão triplo antes de executar uma ferramenta?",
+    "opts": [
+     "Latência, custo e precisão da chamada proposta",
+     "Autenticação, criptografia e registro de logs do usuário",
+     "Capacidade, conformidade com a política e viabilidade da pós-condição",
+     "Aprovação humana, cache atualizado e deduplicação por ETag"
+    ],
+    "a": 2,
+    "why": "O validador prova, em ordem, correspondência de capacidade, conformidade com a política e viabilidade da pós-condição; se uma falhar, nada executa."
+   },
+   {
+    "q": "Segundo o artigo, o que o grafo faz se um nó posterior falhar de forma fatal?",
+    "opts": [
+     "Percorre as ações de compensação na ordem inversa",
+     "Reinicia todo o fluxo desde o primeiro nó automaticamente",
+     "Ignora a falha e declara sucesso se o texto soar confiante",
+     "Copia o token do nó falho para um nó alternativo"
+    ],
+    "a": 0,
+    "why": "Nós que alteram o mundo externo registram ações inversas; em falha fatal posterior, o grafo executa as compensações em ordem inversa."
+   }
   ]
  },
  "ru": {
@@ -1457,6 +1503,44 @@
     ],
     "a": 2,
     "why": "Успех подтверждают проверяемые постусловия в источнике истины, а не слова модели: идентификатор сообщения, ETag, идентификатор события."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Агент только на промптах и агент с исполнителем",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Только промпты",
+     "punkte": [
+      "Модель вызывает незарегистрированные функции и несуществующие поля",
+      "Нет проверки доступа перед редактированием элемента SharePoint",
+      "Частичные ошибки остаются молчаливыми, текст звучит уверенно",
+      "Просьба «проверь свою работу» почти всегда даёт ответ «да»"
+     ]
+    },
+    "rechts": {
+     "titel": "Исполнитель, граф и валидатор",
+     "punkte": [
+      "Схемы и реестр проверяются до запуска инструмента",
+      "Предусловия охватывают входные данные, разрешения и инварианты",
+      "Постусловия подтверждаются в Graph, SharePoint или Exchange",
+      "Ошибки классифицируются, у каждого класса свой путь восстановления"
+     ]
+    }
+   },
+   {
+    "титель": "Предварительная проверка контракта",
+    "titel": "Предварительная проверка контракта",
+    "typ": "checkliste",
+    "punkte": [
+     "Инструмент, метод и версия схемы указаны точно",
+     "Обязательные поля на месте, типы верны, лишних полей нет",
+     "Используется каноническое имя инструмента, псевдонимы запрещены",
+     "Инструменты и домены входят в списки разрешений",
+     "Правила RBAC или ABAC соответствуют идентификации и областям действия",
+     "Целевая система поддерживает ключи идемпотентности и выдаёт ID или ETag",
+     "Есть компенсирующие действия и проверяемые постусловия"
+    ]
    }
   ]
  },
@@ -1595,144 +1679,137 @@
   ]
  },
  "fr": {
-  "html": "<p>Un agent IA qui rédige un plan convaincant n'est pas pour autant un agent fiable. Un modèle de langage raisonne en probabilités, alors que les opérations réelles (envoyer un e-mail, enregistrer un fichier, vérifier une autorisation) exigent des garanties. C'est pourquoi la fiabilité d'un agent ne vient pas de meilleurs prompts, mais de son architecture.</p>\n<p>Cet article présente un modèle mental simple : les exécuteurs appliquent, les graphes de workflow contraignent, les validateurs décident. Nous verrons comment ces briques s'articulent, comment les relier à Microsoft 365, Azure OpenAI et Copilot Studio, et comment mesurer leur effet sur la précision, la latence, le coût et la vérifiabilité.</p>\n\n<h2>Pourquoi les prompts échouent là où les exécuteurs réussissent</h2>\n<p>Les prompts guident la réflexion, mais ils n'exécutent aucune opération. Le LLM gère la cognition, l'exécuteur gère les opérations. Le modèle peut proposer un plan, mais il ne peut pas garantir que l'e-mail est parti, que le fichier est enregistré ou que l'autorisation existe. Mélanger les deux rôles est la source de la plupart des incidents.</p>\n<p>Demander au modèle de vérifier son propre travail ne change rien : il répondra presque toujours que tout est en ordre. Les professionnels ont besoin de preuves, et celles-ci viennent de post-conditions contrôlées auprès de vraies sources de vérité comme Microsoft Graph, SharePoint ou Exchange, pas de la mémoire du modèle.</p>\n<h3>Les trois modes d'échec des agents « prompt only »</h3>\n<ul>\n<li><strong>Les outils hallucinés</strong> : le modèle appelle une fonction non enregistrée ou utilise des champs qui n'existent pas.</li>\n<li><strong>Les préconditions manquantes</strong> : il tente de modifier un élément SharePoint sans vérifier l'accès au site, à la liste ou à la version de l'élément.</li>\n<li><strong>Les échecs partiels silencieux</strong> : la deuxième étape échoue, mais l'agent poursuit et annonce un succès parce que son texte paraît sûr de lui.</li>\n</ul>\n\n<h2>L'exécuteur : une boucle volontairement ennuyeuse</h2>\n<p>L'exécuteur est l'adulte dans la pièce : un exécuteur de fonctions lié à une politique, avec des contraintes d'état et de l'idempotence. Il ne croit pas qu'une action a réussi, il le vérifie. Il ne suppose pas qu'un outil existe, il valide la capacité, les paramètres et les autorisations avant d'essayer. Quand il échoue, il échoue bruyamment, classe l'erreur et suit le chemin de récupération prévu.</p>\n<p>Sa boucle comporte cinq temps :</p>\n<ol>\n<li><strong>Précondition</strong> : vérifier les entrées, les autorisations et les invariants.</li>\n<li><strong>Action</strong> : appeler l'outil avec une clé d'idempotence, pour que les nouvelles tentatives ne provoquent ni double facturation ni double publication.</li>\n<li><strong>Postcondition</strong> : confirmer les effets auprès de la source de vérité.</li>\n<li><strong>Taxonomie des erreurs</strong> : distinguer validation, erreur transitoire, limite de débit, authentification, autorisation et violation de politique.</li>\n<li><strong>Récupération</strong> : réessayer avec un délai croissant pour le transitoire, se réauthentifier ou redemander un consentement pour l'authentification, passer à une solution de repli connue, ou s'arrêter net avec les raisons en cas de violation de politique.</li>\n</ol>\n<p>L'idempotence n'est pas négociable : si une action peut être rejouée, elle a besoin d'une clé qui transforme la seconde tentative en non-opération ou en remplacement cohérent. Les délais d'attente évitent les appels bloqués, et le recul respecte les limites de débit. C'est un comportement déterministe qui encadre une génération de texte par nature stochastique. L'image à retenir : l'exécuteur est la boîte de vitesses, le LLM est le moteur.</p>\n<h3>Des sorties pilotées par contrat</h3>\n<p>Le modèle de raisonnement ne doit pas divaguer. Il émet un JSON conforme à un schéma, avec le nom de l'outil, les arguments et la post-condition attendue. Les validateurs contrôlent la conformité au schéma avant toute exécution. Si la forme est incorrecte, l'exécuteur refuse avec une raison, demande un plan corrigé ou fait remonter le problème.</p>\n\n<h2>Les graphes de workflow : nœuds, arêtes et état maîtrisé</h2>\n<p>Les vrais workflows comportent des branches, du parallélisme, des compensations et des points de contrôle humains. L'exécuteur a donc besoin d'une carte : le graphe de workflow. Les nœuds sont des tâches ou des sous-agents aux contrats explicites. Les arêtes définissent le flux de contrôle et le flux de données. Le graphe code ce qui s'exécute, quand, et quelles données ont le droit de franchir les frontières. Ce n'est pas du jazz improvisé, c'est une partition.</p>\n<h3>Forme, routage et parallélisme</h3>\n<p>La plupart des graphes de production sont des DAG, des graphes acycliques dirigés, car les cycles invitent aux boucles infinies et à la corruption d'état. Les boucles restent possibles, à condition de les déclarer avec des compteurs et des gardes : itérations maximales, prédicats de sortie, délais d'attente. Le routage conditionnel est explicite : si la confiance de la récupération dépasse un seuil, on passe à la synthèse, sinon on reformule la requête. Le parallélisme est de première classe : synthèse et extraction de citations tournent côte à côte, puis un nœud barrière vérifie que les deux ont rempli leur post-condition.</p>\n<h3>Trois types d'état</h3>\n<ul>\n<li><strong>État persistant</strong> : point de contrôle durable, récupérable après un crash (entrée, décision, action signée).</li>\n<li><strong>État éphémère</strong> : tampon de courte durée, comme les sorties intermédiaires du modèle, qui ne doivent pas polluer la mémoire à long terme.</li>\n<li><strong>État dérivé</strong> : artefacts recalculables de façon déterministe, comme les embeddings ou les résultats filtrés.</li>\n</ul>\n<p>La règle : ne conserver que ce que l'on peut défendre lors d'un audit. Le reste est jetable par conception.</p>\n<h3>Compensation, contrats d'arêtes et points de contrôle humains</h3>\n<p>Quand un nœud modifie le monde extérieur (création d'un événement de calendrier, mise à jour d'un élément de liste), on enregistre l'action inverse si elle existe, ou un plan de compensation sinon. Si un nœud en aval échoue de façon fatale, le graphe parcourt ses compensations dans l'ordre inverse.</p>\n<p>Une arête n'est pas un tuyau mystérieux, c'est une API entre nœuds : schémas, types, champs obligatoires, valeurs autorisées, listes d'autorisation et balises de capacité. Un nœud de résumé ne peut donc pas faire passer en douce un jeton SharePoint. Chaque nœud déclare aussi sa taxonomie d'erreurs, avec un chemin par classe, et les cas inconnus partent dans une file de lettres mortes où les charges utiles échouées sont mises en quarantaine avec leur contexte complet.</p>\n<p>Les points de contrôle humains gèlent l'exécution, présentent l'action proposée avec ses preuves et exigent une approbation ou une modification, consignée et signée. En cas de refus, le graphe bascule vers une solution de repli sûre. Enfin, chaque session reçoit un contexte délimité, sans mémoire mutable partagée, pour éviter qu'un empoisonnement ou une injection ne se propage d'une conversation à l'autre.</p>\n\n<h2>Le validateur : la porte à trois contrôles</h2>\n<p>Avant l'exécution de tout outil, le validateur prouve trois choses, dans l'ordre. Si l'une échoue, rien ne s'exécute, sans tentative « quand même ».</p>\n<h3>1. La correspondance de capacité</h3>\n<p>L'intention doit correspondre à une capacité réelle : quel outil, quelle méthode, quelle version de schéma. Les arguments sont comparés au registre : champs obligatoires présents, types corrects, plages de valeurs saines, aucun champ supplémentaire glissé en contrebande. Les alias d'outils sont interdits, seul le nom canonique passe. Les outils hallucinés et les paramètres devinés sont ainsi éliminés avant de causer des dégâts.</p>\n<h3>2. La conformité aux politiques</h3>\n<p>Le moteur de politique évalue l'appel proposé face à la politique active : listes d'autorisation pour les outils et les domaines, contrôle RBAC ou ABAC lié aux revendications d'identité et aux étendues, règles par environnement, limites de classification des données. Un agent limité à un site précis ne peut pas mettre à jour un autre site. Une charge utile qui bascule vers une classification restreinte sans point de contrôle humain est refusée. Les jetons doivent être à jour, les étendues exactes, et une élévation de privilèges ponctuelle est traitée pour ce qu'elle est : une tentative de violation.</p>\n<h3>3. La faisabilité de la post-condition</h3>\n<p>Vouloir un résultat ne suffit pas, il doit être réalisable et vérifiable. Le validateur se demande si la destination prend en charge les clés d'idempotence, si le système renverra un identifiant durable ou un e-tag permettant de vérifier ensuite, et s'il existe une action compensatoire en cas d'échec en aval. Sans post-condition vérifiable, le plan est rejeté ou réécrit. « Faites-moi confiance, je l'enregistrerai plus tard » n'est pas accepté : c'est plus tard que naissent les incidents.</p>\n<h3>Un refus utile, jamais mystérieux</h3>\n<p>Le chemin de refus est poli, complet et sans ambiguïté : ce qui a été tenté, la politique ou le schéma enfreint, des alternatives sûres. Si l'intention peut être réparée, le validateur réduit la portée, passe à un résumé en lecture seule ou oriente vers un site autorisé, puis demande l'approbation d'un plan conforme. Sinon, il transfère à un humain avec le contexte complet, ou il s'arrête. Pas de blocage mystérieux, pas de succès silencieux.</p>\n<p>Exemple : on demande à l'agent de résumer tous les documents RH du dernier trimestre et d'envoyer un e-mail au service juridique. Le validateur détecte un franchissement de limites : les RH sont restreints, le juridique est interne. La porte bloque la lecture croisée et l'e-mail sortant, puis propose de résumer l'index de la politique interne et de fournir une demande d'accès pour le contenu RH. L'utilisateur approuve ce plan conforme, l'exécuteur l'applique, sans fuite.</p>\n\n<h2>Validation statique et garde-fous d'exécution</h2>\n<p>La fiabilité ne se prouve pas en semant le chaos en production, mais en rejetant les workflows dangereux avant qu'ils ne s'exécutent. Cela repose sur deux volets.</p>\n<h3>Le contrôle statique, avant le démarrage</h3>\n<ul>\n<li>Les cycles qui créent des boucles illimitées sont rejetés ou doivent déclarer des gardes d'itération.</li>\n<li>Les nœuds inaccessibles sont supprimés ou justifiés.</li>\n<li>Chaque nœud déclare ses schémas d'entrée et de sortie, ses capacités requises et ses effets secondaires.</li>\n<li>Les nœuds qui modifient des systèmes externes s'exécutent dans des segments aux identifiants de moindre privilège et aux listes d'autorisation explicites. Un nœud de résumé qui réclame soudain un accès en écriture à SharePoint est refusé.</li>\n</ul>\n<h3>Les garde-fous d'exécution</h3>\n<p>Le moteur de politique se place à côté de l'exécuteur, pas derrière lui. À chaque appel, il vérifie RBAC ou ABAC, les jetons Entra ID, les étendues et les revendications. Aucun super-pouvoir ambiant : les jetons sont limités en portée, rafraîchis quand c'est autorisé, jamais transmis en contrebande.</p>\n<p>L'assainissement des entrées et des sorties relève de l'hygiène. Le contenu entrant passe par des filtres, des nettoyeurs HTML et Markdown et des pare-feux d'instructions contre l'injection de prompt. La sortie passe par des validateurs de schéma : si un nœud promet du JSON, la prose est rejetée. Le sandboxing et la segmentation limitent le rayon d'action, avec passerelles API, limites de débit et trafic sortant restreint aux domaines approuvés. La découverte de nouvelles sources se fait en développement, pas en production.</p>\n<p>L'observabilité est « chirurgicale » : traces par nœud, décisions du moteur de politique corrélées sous un identifiant d'exécution, journaux d'audit immuables. Côté chaîne d'approvisionnement, l'analyse des dépendances tourne à chaque build, les connecteurs et plugins sont audités et leur version épinglée. Pour une spécification MCP ou OpenAPI, on vérifie que les méthodes déclarées respectent la politique de moindre privilège.</p>\n<p>La surcharge est mécanique et automatisée : la validation statique s'exécute au build et au déploiement, la politique d'exécution tourne en sidecar, local et rapide. Le coût évité (incidents, revues manuelles) dépasse la micro-latence ajoutée.</p>\n\n<h2>Le scénario Microsoft : Graph, Azure OpenAI et Copilot Studio</h2>\n<p>Dans l'écosystème Microsoft, chaque acteur a un rôle précis :</p>\n<ul>\n<li><strong>Agent de récupération</strong> : un bibliothécaire discipliné qui ne lit que via Microsoft Graph, avec le moindre privilège.</li>\n<li><strong>Agent de raisonnement</strong> : le modèle Azure OpenAI, qui planifie sans dépasser son objectif.</li>\n<li><strong>Exécuteur</strong> : un opérateur lié à la politique, avec contrôles d'idempotence et de post-condition.</li>\n<li><strong>Validateur</strong> : le videur, qui applique schéma, politique et limites.</li>\n<li><strong>Policy Guard</strong> : un sidecar d'exécution qui relie tout aux étendues Entra ID et au RBAC.</li>\n</ul>\n<p>L'accès aux données passe par Graph avec des étendues granulaires (lecture de fichiers pour un site précis, lecture de courrier pour une boîte confinée, lecture d'un calendrier de ressources), jamais par un accès global en lecture/écriture. Les requêtes utilisent des champs sélectifs et le delta, la pagination est gérée de façon déterministe, et les erreurs 429 déclenchent un recul exponentiel.</p>\n<p>Le <em>grounding</em> est un pipeline : récupération des documents candidats, déduplication par identifiant d'élément et balise de version, découpage par frontières sémantiques, puis ajout de la provenance (site, chemin, identifiant, dernière modification, hachage). L'agent de raisonnement ne voit que ces fragments et doit produire des citations rattachées à leurs identifiants. Pas de citations, pas d'affirmations : l'exécuteur l'impose comme post-condition avant toute action externe.</p>\n<p>Copilot Studio assure l'orchestration. Les outils sont déclaratifs (requêtes Graph, écritures SharePoint, publications Teams, envois Outlook), chacun derrière un proxy aux schémas explicites et aux listes d'autorisation. L'agent de récupération expose un outil, l'agent de raisonnement le sollicite, et l'exécuteur sert de médiateur. Un nœud d'action proposé interrompt l'exécution, présente le plan avec ses citations et demande une approbation signée.</p>\n<p>Illustration : un utilisateur demande un résumé des décisions de la feuille de route du dernier trimestre, avec liens. Le validateur confirme que les étendues correspondent au rôle de l'agent, l'exécuteur récupère et dédoublonne, le raisonnement produit un résumé aux citations en ligne, le validateur contrôle schéma et citations, puis un humain approuve. L'exécuteur publie dans Teams et envoie l'e-mail, avec des clés d'idempotence, et prouve le succès par les identifiants de messages créés ou les e-tags mis à jour, et non sur la foi du modèle.</p>\n<p>En cas d'incident, les réponses sont déterministes : sur un 429, nouvelle tentative avec gigue puis requête moins coûteuse ; sur un cache obsolète, rafraîchissement forcé ; sur un refus d'autorisation, alternative ou file de lettres mortes avec contexte complet.</p>\n\n<h2>Mesurer : précision, latence, coût et charge d'administration</h2>\n<p>Sans cadre, les agents « prompt only » ont une précision incohérente, une latence de queue brutale et des coûts qui grimpent, car chaque tour renvoie au modèle transcriptions et documents bruts. Les incidents y sont difficiles à diagnostiquer et les audits ressemblent à de l'archéologie.</p>\n<ul>\n<li><strong>Précision</strong> : une réponse sans provenance ne passe pas le validateur, d'où moins de mauvaises réponses et moins de boucles de reprise.</li>\n<li><strong>Latence</strong> : parallélisme, cache indexé par hachage de contenu et périmètre d'autorisation, sortie anticipée quand couverture et confiance atteignent le seuil.</li>\n<li><strong>Coût</strong> : sorties bornées par schéma, contexte sélectif, moins de nouvelles tentatives grâce à l'idempotence et au recul, donc moins de jetons par résultat réussi et une variance réduite.</li>\n<li><strong>Administration</strong> : traces par nœud et journaux immuables raccourcissent le diagnostic, et la conformité cesse d'être une crise saisonnière.</li>\n</ul>\n<p>Pour le vérifier, construisez un jeu d'évaluation de tâches représentatives (questions-réponses avec citations, résumés avec liens, propositions d'action avec approbations) et définissez des critères d'acceptation. Instrumentez la latence P50 et P95 de bout en bout, la dépense de jetons, le taux de réussite et le taux de refus de politique, et reliez chaque métrique aux traces. Si vous ne pouvez pas ouvrir une exécution et voir quel nœud a gonflé les jetons ou la latence, vous avez des impressions horodatées, pas de l'observabilité.</p>\n\n<h2>Points clés à retenir</h2>\n<ul>\n<li>Séparez la cognition (le LLM propose) des opérations (l'exécuteur applique, le validateur décide).</li>\n<li>Faites passer chaque appel par la porte à trois contrôles : capacité, politique, faisabilité de la post-condition.</li>\n<li>Exigez des sorties JSON conformes à un schéma et interdisez les alias d'outils.</li>\n<li>Utilisez des clés d'idempotence, des délais d'attente et un recul exponentiel pour toute action rejouable.</li>\n<li>Modélisez vos workflows en graphes, avec des boucles gardées, des compensations et une taxonomie d'erreurs par nœud.</li>\n<li>Ne conservez que l'état que vous pouvez défendre en audit, et isolez la mémoire par session.</li>\n<li>Prévoyez des refus avec raisons et alternatives, et des points de contrôle humains signés.</li>\n<li>Appliquez le moindre privilège avec Entra ID et des étendues Graph précises.</li>\n<li>Exigez des citations rattachées aux identifiants d'éléments et prouvez le succès par des post-conditions vérifiées.</li>\n<li>Mesurez avec des traces par nœud : précision, latence P95, jetons, taux de refus.</li>\n</ul>\n\n<h2>Conclusion</h2>\n<p>Les prompts expriment des opinions, les exécuteurs et les graphes validés assurent des opérations, et la vérification de contrat avant exécution est la barrière qui garde les deux honnêtes. En prouvant la capacité, l'autorisation et un résultat vérifiable avant toute modification du monde réel, vous obtenez des agents qui semblent toujours intelligents, mais qui sont désormais supervisés : ils échouent en sécurité, s'expliquent et se rétablissent de façon prévisible.</p>",
+  "html": "<p>Beaucoup d'équipes pensent encore que de meilleurs prompts suffisent à corriger les défauts de leurs agents IA. C'est une jolie théorie : un prompt guide la réflexion du modèle, mais il n'exécute aucune opération. La fiabilité vient d'ailleurs, de l'architecture : des exécuteurs, des graphes de workflow et une étape de validation qui vérifie chaque action avant qu'elle ne touche le monde réel.</p>\n<p>Cet article présente un modèle mental simple, puis le met en pratique dans l'écosystème Microsoft. Les enjeux sont concrets : précision, latence, coût et auditabilité, des critères mesurables et non des impressions.</p>\n\n<h2>Pourquoi les prompts ne suffisent pas pour des agents IA fiables</h2>\n<p>Le principe de départ tient en une phrase : les LLM gèrent la cognition, les exécuteurs gèrent les opérations. Mélanger les deux est la source de la plupart des problèmes. Le modèle peut proposer un plan, mais il ne peut pas garantir qu'un email a été envoyé, qu'un fichier a été enregistré ou qu'une autorisation existe. Il raisonne en probabilités, alors que les opérations exigent des garanties.</p>\n<p>Demander au modèle de vérifier son propre travail ne change pas grand-chose : il répondra presque toujours que tout est en ordre. Les professionnels ont besoin de preuves, et ces preuves se trouvent dans des post-conditions vérifiées auprès de vraies sources de vérité comme Microsoft Graph, SharePoint ou Exchange, pas dans la mémoire du modèle.</p>\n<p>D'où la répartition des rôles à retenir : <strong>les exécuteurs appliquent, les graphes contraignent, les validateurs décident</strong>. Le modèle, lui, propose uniquement à l'intérieur d'un périmètre clôturé.</p>\n\n<h2>Erreurs fréquentes : les trois modes d'échec des agents pilotés par prompt</h2>\n<p>Les agents qui reposent uniquement sur des prompts tombent généralement dans trois travers.</p>\n<h3>1. Les outils hallucinés</h3>\n<p>Le modèle appelle une fonction qui n'est pas enregistrée, ou une fonction réelle avec des champs qui n'existent pas.</p>\n<h3>2. Les préconditions oubliées</h3>\n<p>L'agent tente de modifier un élément SharePoint sans vérifier s'il a accès au site, à la liste ou à la version de l'élément.</p>\n<h3>3. Les échecs partiels silencieux</h3>\n<p>La deuxième étape échoue, mais l'agent poursuit et annonce un succès, simplement parce que son texte sonne de façon confiante.</p>\n<p>Ces trois défauts ont la même cause : on laisse un système probabiliste décider seul de ce qui s'exécute et de ce qui est réussi.</p>\n\n<h2>L'exécuteur : un comportement déterministe autour d'un modèle stochastique</h2>\n<p>L'exécuteur est l'adulte dans la pièce : un exécuteur de fonctions lié à une politique, avec des contraintes d'état et de l'idempotence. Il ne croit pas qu'une action a réussi, il le vérifie. Sa boucle paraît ennuyeuse, et c'est pour cela qu'elle fonctionne :</p>\n<ol>\n<li><strong>Précondition</strong> : vérifier les entrées, les autorisations et les invariants.</li>\n<li><strong>Action</strong> : appeler l'outil avec une clé d'idempotence, pour que les nouvelles tentatives ne créent ni double facturation ni double publication.</li>\n<li><strong>Postcondition</strong> : confirmer les effets auprès de la source de vérité.</li>\n<li><strong>Taxonomie des erreurs</strong> : distinguer validation, erreur transitoire, limite de débit, authentification, politique.</li>\n<li><strong>Récupération</strong> : réessayer avec un délai croissant pour le transitoire, ré-authentifier ou redemander le consentement pour l'authentification, basculer vers une alternative connue, ou s'arrêter net avec une raison en cas de violation de politique.</li>\n</ol>\n<p>L'idempotence n'est pas négociable : une action rejouable a besoin d'une clé qui transforme la seconde tentative en non-opération ou en remplacement cohérent. Les délais d'attente évitent les appels bloqués, et le recul progressif respecte les limites de débit. Pour résumer par une image : l'exécuteur est la boîte de vitesses, le LLM est le moteur.</p>\n<p>Les sorties pilotées par contrat complètent le dispositif. Au lieu de produire un paragraphe « au mieux », le modèle émet du JSON conforme à un schéma : nom de l'outil, arguments, post-condition attendue. Si la forme est incorrecte, l'exécuteur refuse avec une raison, demande un plan corrigé ou escalade.</p>\n\n<h2>Graphes de workflow : nœuds, arêtes et état maîtrisé</h2>\n<p>Un exécuteur seul ne suffit pas : les vrais workflows comportent des branches, du parallélisme, des compensations et des points de contrôle humains. Il faut une carte que l'exécuteur sait lire, le graphe de workflow. Les nœuds sont des tâches ou des sous-agents avec des contrats explicites, et les arêtes définissent le flux de contrôle et le flux de données.</p>\n<h3>Forme, routage et parallélisme</h3>\n<p>La plupart des graphes de production sont des DAG (graphes orientés acycliques), car les cycles invitent aux boucles infinies et à la corruption d'état. Quand une boucle est voulue, elle est marquée explicitement, avec des compteurs, un nombre maximal d'itérations, des prédicats de sortie et des délais d'attente. Le routage conditionnel est explicite : si la confiance de la récupération dépasse un seuil, on passe à la synthèse, sinon on relance une requête. Le parallélisme est de première classe : synthèse et extraction de citations peuvent tourner côte à côte avant un nœud barrière qui vérifie que les deux post-conditions sont remplies.</p>\n<h3>Trois types d'état</h3>\n<ul>\n<li><strong>État persistant</strong> : point de contrôle durable, récupérable après un crash (entrée, décision, action signée).</li>\n<li><strong>État éphémère</strong> : tampon de courte durée, comme les sorties intermédiaires du modèle.</li>\n<li><strong>État dérivé</strong> : artefacts recalculables, comme les embeddings ou les résultats filtrés.</li>\n</ul>\n<p>La règle : ne conserver que ce que l'on peut défendre lors d'un audit.</p>\n<h3>Compensation, contrats et gestion des erreurs</h3>\n<p>Quand un nœud modifie le monde extérieur (création d'un événement de calendrier, mise à jour d'un élément de liste), on enregistre l'action inverse si elle existe, ou un plan de compensation sinon. En cas d'échec fatal en aval, le graphe déroule ses compensations dans l'ordre inverse. Les arêtes portent aussi des contrats : schémas, types, champs obligatoires, listes d'autorisation et balises de capacité. Un nœud de résumé ne peut donc pas faire passer un jeton SharePoint en contrebande.</p>\n<p>Chaque nœud déclare sa taxonomie d'erreurs, et le graphe prévoit un chemin par classe : nouvelle tentative avec recul exponentiel, rafraîchissement du jeton, autre outil en cas de limitation de débit, refus motivé pour une violation de politique. Les cas inconnus vont dans une file de lettres mortes, avec contexte complet, pour inspection humaine.</p>\n<p>Les points de contrôle humains gèlent l'exécution, présentent l'action proposée et ses preuves, et exigent une approbation consignée et signée. Enfin, l'isolation de la mémoire est indispensable : chaque session reçoit un contexte limité, sans mémoire mutable partagée, afin d'éviter l'empoisonnement entre sessions et l'exfiltration accidentelle de données. Les traces au niveau des nœuds, regroupées sous un identifiant d'exécution, permettent de rejouer, diagnostiquer et prouver la conformité.</p>\n\n<h2>Le validateur : une porte à trois contrôles avant toute exécution</h2>\n<p>C'est l'étape qui empêche les agents intelligents de faire des bêtises. Avant l'exécution de tout outil, le validateur prouve trois choses, dans l'ordre. Si l'une échoue, rien ne s'exécute.</p>\n<h3>1. Correspondance des capacités</h3>\n<p>Le plan correspond-il à une capacité réelle ? Le validateur contrôle l'outil, la méthode et la version de schéma, puis compare les arguments au registre : champs obligatoires présents, types corrects, plages de valeurs saines, aucun champ supplémentaire introduit en contrebande. Les alias d'outils sont interdits, seul le nom canonique est accepté. Les outils hallucinés et les paramètres devinés sont ainsi éliminés avant de causer des dégâts.</p>\n<h3>2. Conformité aux politiques</h3>\n<p>Le moteur de politique évalue l'appel proposé : listes d'autorisation pour les outils et les domaines, contrôle RBAC ou ABAC lié aux revendications et aux étendues, règles par niveau d'environnement, limites de classification des données. Un agent limité à un site précis ne peut pas mettre à jour un autre site. Une charge utile qui bascule vers une classification restreinte sans point de contrôle humain est refusée. Les jetons doivent être à jour, les étendues exactes, et une élévation de privilèges ponctuelle est traitée comme une tentative de violation.</p>\n<h3>3. Faisabilité des post-conditions</h3>\n<p>Vouloir un résultat ne suffit pas, il doit être réalisable et vérifiable. La destination prend-elle en charge les clés d'idempotence ? Renverra-t-elle un identifiant durable ou un e-tag ? Existe-t-il une action compensatoire en cas d'échec en aval ? Sans post-condition vérifiable, le plan est rejeté ou réécrit : « fais-moi confiance, je l'enregistrerai plus tard » n'est pas acceptable, car c'est plus tard que les incidents se produisent.</p>\n<h3>Un refus poli, complet et utile</h3>\n<p>Le chemin de refus indique ce qui a été tenté, la politique ou le schéma exact enfreint, et propose des alternatives sûres : réduire la portée, passer à un résumé en lecture seule, rediriger vers un site autorisé. Si l'intention peut être réparée, le validateur propose un plan conforme et demande l'approbation. Sinon, il transfère à un point de contrôle humain avec le contexte complet, ou s'arrête purement et simplement. Pas de blocage mystérieux, pas de succès silencieux.</p>\n<p>Exemple : un agent doit résumer tous les documents RH du dernier trimestre et envoyer le résultat au service juridique. Le validateur constate un franchissement de limites : les RH sont restreintes, le juridique est interne. La lecture croisée et l'email sortant sont bloqués. L'agent propose alors de résumer l'index de la politique interne et de fournir un lien de demande d'accès pour le contenu RH aux réviseurs autorisés. L'utilisateur approuve, l'exécuteur applique, et aucune fuite n'a lieu.</p>\n<p>Côté mise en œuvre, rien de spectaculaire : un DSL de politique, un registre de schémas (noms, versions, formes d'arguments, conditions de publication), un résolveur de listes d'autorisation, et un enregistrement d'audit pour chaque décision, avec entrées, évaluations de politique et résultats.</p>\n\n<h2>Validation statique et garde-fous d'exécution</h2>\n<p>La fiabilité ne se prouve pas en semant le chaos en production. Elle se prouve en rejetant les workflows dangereux avant leur exécution, grâce à deux niveaux de contrôle.</p>\n<h3>Contrôles statiques avant le démarrage</h3>\n<ul>\n<li>Cycles sans garde d'itération : rejetés ou contraints à déclarer des gardes.</li>\n<li>Nœuds inaccessibles : supprimés ou justifiés.</li>\n<li>Contrats manquants : chaque nœud déclare schémas d'entrée et de sortie, capacités requises et effets de bord.</li>\n<li>Limites de privilège : les nœuds qui modifient des systèmes externes s'exécutent dans des segments avec identifiants de moindre privilège et listes d'autorisation explicites.</li>\n</ul>\n<p>Si un nœud de résumé réclame soudain un accès en écriture à SharePoint, le validateur refuse.</p>\n<h3>Garde-fous à l'exécution</h3>\n<p>Un moteur de politique se place à côté de l'exécuteur et vérifie à chaque appel RBAC ou ABAC, jetons Entra ID, étendues et revendications. Les jetons sont limités en portée, rafraîchis si nécessaire et jamais transmis en contrebande. L'agent obtient l'accès à chaque appel, ou il n'appelle pas.</p>\n<p>L'assainissement fait partie de l'hygiène de base : les contenus entrants passent par des filtres de contenu, des nettoyeurs HTML et Markdown et des pare-feu d'instructions contre l'injection de prompt. Les sorties passent par des validateurs de schéma : si un nœud promet du JSON, la prose est rejetée. Le sandboxing et la segmentation limitent le rayon d'action, avec passerelles API, limites de débit et contrôle des sorties réseau vers des domaines approuvés uniquement. La découverte de nouvelles sources se fait en développement, jamais en production.</p>\n<p>Les journaux d'audit sont immuables et indiquent quel principal a autorisé quelle action, avec quelles étendues, quand et pourquoi. Côté chaîne d'approvisionnement, les dépendances sont analysées à chaque build, les connecteurs et plugins audités, leurs versions épinglées. Si une spécification MCP ou OpenAPI est importée, on vérifie que les méthodes déclarées respectent la politique de moindre privilège.</p>\n<p>Le surcoût reste mécanique et automatisé : la validation statique s'exécute au build et au déploiement, la politique d'exécution tourne en sidecar, rapide et locale, et les vérifications de schéma sont très rapides. Cette micro-latence pèse peu face au coût des incidents et des revues manuelles. La validation est en outre composable : on peut encapsuler des outils tiers derrière des nœuds proxy et segmenter les graphes par sensibilité (public, interne, restreint), en ne promouvant un workflow vers un autre niveau qu'après validation de la nouvelle limite.</p>\n\n<h2>Le scénario Microsoft : Graph, Azure OpenAI et Copilot Studio</h2>\n<p>Dans l'écosystème Microsoft, chaque rôle trouve sa place : un agent de récupération qui n'interroge que Microsoft Graph avec le moindre privilège, un agent de raisonnement sur Azure OpenAI qui planifie, un exécuteur lié à la politique, un validateur et un Policy Guard qui relie tout aux étendues Entra ID et au contrôle d'accès.</p>\n<p>L'accès aux données repose sur des étendues granulaires (par exemple lecture de fichiers pour un site précis), pas sur des permissions larges en lecture/écriture. Les requêtes utilisent Delta et la sélection de champs, la pagination est gérée de façon déterministe, et en cas d'erreur 429 le recul est exponentiel. Le pipeline d'ancrage récupère les candidats, les déduplique par identifiant d'élément et par version, découpe selon les limites sémantiques et joint la provenance (site, chemin, identifiant, dernière modification). Le modèle doit produire des citations liées à ces identifiants : sans citation, pas d'affirmation, et l'exécuteur l'impose comme post-condition avant toute action externe.</p>\n<p>Copilot Studio assure l'orchestration : outils déclaratifs (requêtes Graph, écritures SharePoint, publications Teams, envois Outlook) derrière des proxys avec schémas et listes d'autorisation, et points de contrôle humains natifs. Les actions sont signées par le principal de service ou l'utilisateur délégué et horodatées avec l'identifiant d'exécution, l'outil, les paramètres et le résultat, ce qui permet de rejouer une exécution sans réexécuter les effets de bord.</p>\n<h3>Des résultats à mesurer, pas à supposer</h3>\n<p>Les bénéfices attendus se vérifient par des mesures avant/après : validité des réponses grâce aux citations obligatoires, latence réduite par le parallélisme, la mise en cache et la sortie anticipée, coût réduit par un contexte sélectif et des sorties limitées par schéma, moins de charge d'administration grâce à l'observabilité intégrée. Pour le vérifier, on construit un jeu d'évaluation représentatif (questions-réponses avec citations, résumés avec liens, propositions d'action avec approbations) et on instrumente la latence P50 et P95, les dépenses de jetons, le taux de réussite et le taux de refus de politique, chaque mesure reliée aux traces. Sans la possibilité d'ouvrir une exécution et d'identifier le nœud qui a gonflé les jetons ou la latence, il n'y a pas d'observabilité.</p>\n\n<h2>Les points clés à retenir</h2>\n<ul>\n<li>Séparez la cognition (LLM) des opérations (exécuteur) : le modèle propose, l'exécuteur applique, le validateur décide.</li>\n<li>Faites vérifier chaque action avant exécution : capacité, autorisation et résultat vérifiable.</li>\n<li>Exigez des sorties JSON conformes à un schéma et refusez les alias d'outils.</li>\n<li>Prévoyez des clés d'idempotence, des délais d'attente et un recul progressif pour chaque action rejouable.</li>\n<li>Modélisez les workflows en graphes, avec contrats sur les arêtes, état classé et compensations.</li>\n<li>Combinez validation statique et garde-fous d'exécution, avec moindre privilège et jetons limités en portée.</li>\n<li>Insérez des points de contrôle humains signés et consignés pour les actions sensibles.</li>\n<li>Instrumentez traces et journaux immuables sous un identifiant d'exécution, et mesurez précision, latence P95, coût et taux de refus.</li>\n</ul>\n\n<h2>Conclusion</h2>\n<p>Les prompts sont des opinions ; les exécuteurs et les graphes validés sont des opérations. Une vérification de contrat avant exécution, qui prouve la capacité, l'autorisation et le résultat vérifiable avant toute modification du monde réel, est la barrière qui maintient les deux honnêtes. En séparant clairement la réflexion du modèle de l'application des règles, vous obtenez des agents toujours intelligents, mais désormais supervisés : des workflows qui échouent en sécurité, expliquent leurs décisions et se rétablissent de façon prévisible.</p>",
   "model": "claude-sonnet-5-5",
   "info": {
-   "titel": "Des agents IA fiables : proposer, décider, appliquer",
+   "titre": "Des agents IA fiables : l'architecture en cinq étapes",
+   "titel": "Des agents IA fiables : l'architecture en cinq étapes",
    "typ": "schritte",
    "punkte": [
     {
      "kopf": "Le LLM propose",
-     "text": "Le modèle émet un plan en JSON conforme à un schéma, avec outil, arguments et post-condition attendue."
+     "text": "Le modèle planifie et émet du JSON conforme à un schéma : outil, arguments, post-condition attendue."
+    },
+    {
+     "kopf": "Le graphe contraint",
+     "text": "Nœuds, arêtes avec contrats, état classé, compensations et points de contrôle humains encadrent le flux."
     },
     {
      "kopf": "Le validateur décide",
-     "text": "Trois contrôles avant toute exécution : correspondance de capacité, conformité aux politiques, faisabilité de la post-condition."
-    },
-    {
-     "kopf": "Refus avec alternatives",
-     "text": "En cas d'échec, rien ne s'exécute : raisons claires, alternatives sûres ou point de contrôle humain."
+     "text": "Trois contrôles : capacité réelle, conformité aux politiques, post-condition vérifiable. Un échec bloque tout."
     },
     {
      "kopf": "L'exécuteur applique",
-     "text": "Précondition, action idempotente, post-condition vérifiée, erreurs classées et récupération prescrite."
+     "text": "Précondition, action idempotente, post-condition, classification des erreurs et récupération prescrite."
     },
     {
-     "kopf": "Le graphe encadre",
-     "text": "Nœuds, arêtes à contrats, état maîtrisé, compensations et observabilité par nœud pour tout prouver."
+     "kopf": "L'observabilité prouve",
+     "text": "Traces par nœud et journaux immuables répondent à : qui a fait quoi, quand et pourquoi."
     }
    ]
   },
   "faq": [
    {
-    "q": "Pourquoi un agent IA qui rédige un bon plan n'est-il pas forcément fiable ?",
-    "a": "Un modèle de langage raisonne en probabilités, alors que les opérations réelles (envoyer un e-mail, enregistrer un fichier, vérifier une autorisation) exigent des garanties. La fiabilité ne vient donc pas de meilleurs prompts, mais de l'architecture : les exécuteurs appliquent, les graphes contraignent, les validateurs décident."
+    "q": "Pourquoi de meilleurs prompts ne suffisent-ils pas à rendre un agent IA fiable ?",
+    "a": "Un prompt guide la réflexion du modèle, mais il n'exécute aucune opération. La fiabilité vient de l'architecture : des exécuteurs qui appliquent, des graphes de workflow qui contraignent et un validateur qui décide avant que l'action ne touche le monde réel."
    },
    {
-    "q": "Quelles sont les étapes de la boucle d'un exécuteur d'agent IA ?",
-    "a": "La boucle comporte cinq temps : précondition (vérifier entrées, autorisations, invariants), action avec clé d'idempotence, postcondition confirmée auprès de la source de vérité, taxonomie des erreurs (validation, transitoire, limite de débit, authentification, autorisation, politique) et récupération adaptée à chaque classe d'erreur."
+    "q": "Quels sont les trois modes d'échec des agents IA pilotés uniquement par prompt ?",
+    "a": "Il y a les outils hallucinés (fonctions ou champs inexistants), les préconditions oubliées (par exemple modifier un élément SharePoint sans vérifier l'accès) et les échecs partiels silencieux, où l'agent annonce un succès alors qu'une étape a échoué."
    },
    {
-    "q": "Que contrôle le validateur avant l'exécution d'un outil par un agent IA ?",
-    "a": "Le validateur prouve trois choses, dans l'ordre : la correspondance de capacité (outil, méthode, schéma réels), la conformité aux politiques (autorisations, RBAC ou ABAC, classification des données) et la faisabilité d'une post-condition vérifiable. Si un contrôle échoue, rien ne s'exécute."
+    "q": "Que fait un exécuteur dans une architecture d'agent IA ?",
+    "a": "L'exécuteur apporte un comportement déterministe autour du modèle. Il vérifie les préconditions, appelle l'outil avec une clé d'idempotence, confirme les postconditions auprès de la source de vérité, classe les erreurs et applique une récupération adaptée : nouvelle tentative, ré-authentification, alternative ou arrêt."
    },
    {
-    "q": "Quels sont les principaux modes d'échec des agents « prompt only » ?",
-    "a": "Il y en a trois : les outils hallucinés (fonctions non enregistrées ou champs inexistants), les préconditions manquantes (modification sans vérifier l'accès au site, à la liste ou à la version) et les échecs partiels silencieux, où l'agent annonce un succès malgré l'échec d'une étape."
+    "q": "Quels contrôles le validateur effectue-t-il avant d'exécuter un outil ?",
+    "a": "Le validateur prouve trois choses, dans l'ordre : la correspondance avec une capacité réelle (outil, schéma, arguments), la conformité aux politiques (autorisations, RBAC/ABAC, classification) et la faisabilité de post-conditions vérifiables. Si un contrôle échoue, rien ne s'exécute."
    }
   ],
   "infos": [
    {
-    "titel": "Prompt only ou architecture fiable",
+    "titel": "Agent piloté par prompt ou par architecture",
     "typ": "vergleich",
     "links": {
-     "titel": "Agent « prompt only »",
+     "titre": "",
+     "titel": "Agent reposant uniquement sur des prompts",
      "punkte": [
-      "Le modèle gère à la fois la cognition et les opérations",
-      "Outils hallucinés et champs inexistants",
-      "Préconditions non vérifiées avant de modifier un élément",
-      "Échecs partiels silencieux annoncés comme des succès",
-      "Auto-vérification : le modèle répond que tout est en ordre"
+      "Le modèle décide seul de ce qui s'exécute",
+      "Outils hallucinés et préconditions oubliées",
+      "Échecs partiels annoncés comme des succès",
+      "Auto-vérification : le modèle répond que tout va bien",
+      "Raisonnement probabiliste sans aucune garantie"
      ]
     },
     "rechts": {
-     "titel": "Architecture exécuteur, graphe, validateur",
+     "titel": "Agent fiabilisé par l'architecture",
      "punkte": [
-      "Le LLM raisonne, l'exécuteur gère les opérations",
-      "Le validateur contrôle capacité, politique et post-condition",
+      "Les exécuteurs appliquent, les graphes contraignent, les validateurs décident",
+      "Plan validé avant tout appel d'outil",
       "Post-conditions vérifiées auprès de vraies sources de vérité",
-      "Échec bruyant, erreur classée, chemin de récupération prévu",
-      "Le graphe de workflow code ce qui s'exécute et quand"
+      "Sorties JSON conformes à un schéma, sinon refus",
+      "Journaux d'audit immuables pour chaque décision"
      ]
     }
    },
    {
-    "titel": "Les trois contrôles du validateur",
-    "typ": "fakten",
+    "titel": "Checklist des garde-fous avant et pendant l'exécution",
+    "typ": "checkliste",
     "punkte": [
-     {
-      "wert": "1",
-      "text": "Correspondance de capacité : outil, méthode, version de schéma et arguments conformes au registre."
-     },
-     {
-      "wert": "2",
-      "text": "Conformité aux politiques : listes d'autorisation, RBAC ou ABAC, jetons à jour, classification des données."
-     },
-     {
-      "wert": "3",
-      "text": "Faisabilité de la post-condition : idempotence, identifiant durable ou e-tag, action compensatoire."
-     },
-     {
-      "wert": "Refus utile",
-      "text": "Ce qui a été tenté, la règle enfreinte, des alternatives sûres."
-     }
+     "Rejeter les cycles sans garde d'itération",
+     "Déclarer schémas, capacités requises et effets de bord pour chaque nœud",
+     "Exécuter les nœuds d'écriture avec identifiants de moindre privilège",
+     "Utiliser une clé d'idempotence pour chaque action rejouable",
+     "Filtrer les contenus entrants contre l'injection de prompt",
+     "Valider les sorties par schéma : la prose est rejetée",
+     "Épingler les versions et auditer connecteurs et plugins"
     ]
    }
   ],
   "quiz": [
    {
-    "q": "Selon le modèle mental présenté, quel est le rôle des validateurs ?",
+    "q": "Selon l'article, quelle est la répartition des rôles entre le modèle, les exécuteurs et les validateurs ?",
     "opts": [
-     "Ils appliquent les actions demandées auprès des systèmes externes",
-     "Ils décident si une action peut être exécutée",
-     "Ils contraignent le flux de contrôle entre les nœuds",
-     "Ils génèrent les plans de raisonnement à partir des prompts"
+     "Le modèle décide, les exécuteurs proposent, les graphes valident",
+     "Les exécuteurs appliquent, les graphes contraignent, les validateurs décident",
+     "Les validateurs appliquent, les exécuteurs décident, le modèle contraint",
+     "Les graphes décident, les validateurs proposent, les exécuteurs raisonnent"
     ],
     "a": 1,
-    "why": "Le modèle est : les exécuteurs appliquent, les graphes de workflow contraignent, les validateurs décident."
+    "why": "L'article résume : les exécuteurs appliquent, les graphes contraignent, les validateurs décident. Le modèle propose seulement dans un périmètre clôturé."
    },
    {
-    "q": "Pourquoi l'exécuteur utilise-t-il une clé d'idempotence lors de l'action ?",
+    "q": "Pourquoi l'exécuteur utilise-t-il une clé d'idempotence lors de l'appel d'un outil ?",
     "opts": [
-     "Pour accélérer l'appel de l'outil en réduisant la latence",
-     "Pour chiffrer les arguments envoyés à l'outil appelé",
-     "Pour éviter que les nouvelles tentatives provoquent des doublons, comme une double facturation",
-     "Pour permettre au modèle de vérifier son propre travail"
+     "Pour accélérer l'appel en contournant les vérifications de politique",
+     "Pour chiffrer les arguments envoyés à l'outil",
+     "Pour que les nouvelles tentatives ne créent ni double facturation ni double publication",
+     "Pour remplacer la vérification des postconditions auprès de la source de vérité"
     ],
     "a": 2,
-    "why": "La clé transforme la seconde tentative en non-opération ou en remplacement cohérent, évitant double facturation ou double publication."
+    "why": "Une action rejouable avec une clé d'idempotence transforme la seconde tentative en non-opération ou en remplacement cohérent, évitant les doublons."
    },
    {
     "q": "Pourquoi la plupart des graphes de workflow de production sont-ils des DAG ?",
     "opts": [
-     "Parce que les cycles invitent aux boucles infinies et à la corruption d'état",
-     "Parce que le parallélisme est impossible dans les graphes cycliques",
-     "Parce que les DAG suppriment tout besoin de points de contrôle humains",
-     "Parce que Copilot Studio refuse techniquement tout graphe contenant une boucle"
+     "Les cycles invitent aux boucles infinies et à la corruption d'état",
+     "Les DAG interdisent tout parallélisme entre les nœuds",
+     "Les DAG suppriment le besoin de contrats sur les arêtes",
+     "Les cycles empêchent l'utilisation de points de contrôle humains"
     ],
     "a": 0,
-    "why": "Les cycles favorisent boucles infinies et corruption d'état ; les boucles restent possibles avec compteurs et gardes déclarés."
+    "why": "Les cycles favorisent boucles infinies et corruption d'état ; une boucle voulue doit être marquée explicitement avec compteurs, maximum d'itérations et délais."
    },
    {
-    "q": "Quelles sont les trois vérifications du validateur avant l'exécution d'un outil ?",
+    "q": "Quels sont les trois contrôles successifs du validateur avant toute exécution d'outil ?",
     "opts": [
-     "Correspondance de capacité, conformité aux politiques, faisabilité de la post-condition",
-     "Latence acceptable, coût estimé, précision du modèle",
-     "Authentification, chiffrement, journalisation des décisions d'audit",
-     "Validation du prompt, approbation humaine, résumé en lecture seule"
+     "Latence, coût et précision des réponses",
+     "Authentification, chiffrement et journalisation des appels",
+     "Correspondance des capacités, conformité aux politiques, faisabilité des postconditions",
+     "Détection d'injection, nettoyage HTML et validation du JSON"
     ],
-    "a": 0,
-    "why": "Le validateur prouve dans l'ordre la capacité réelle, la conformité à la politique active et la vérifiabilité de la post-condition."
+    "a": 2,
+    "why": "Le validateur prouve dans l'ordre : capacité réelle, conformité à la politique, puis postconditions réalisables et vérifiables. Si l'un échoue, rien ne s'exécute."
    }
   ]
  }

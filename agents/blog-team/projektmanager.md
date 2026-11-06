@@ -35,9 +35,9 @@ Team-Regeln (stehen in jedem BRIEF.md): Inhalt nicht kürzen oder ergänzen; Nam
 
 ## Weg A · Haiku-Batch (die Masse, günstig)
 - Workflow „Blog uebersetzen“: `gh workflow run translate-blog.yml -R Mirko-Peters/m365-dub-downloader --ref main -f mode=<plan|pilot|run|collect|sample> [-f langs=de,fr] [-f limit=100] [-f order=newest] [-f slugs=a,b] [-f redo=true] [-f budget=40]`. Klappt `gh` nicht: Chrome → `https://github.com/Mirko-Peters/m365-dub-downloader/actions/workflows/translate-blog.yml` → „Run workflow“.
-- Ablauf: fertige Batches abholen → neue Anfragen absenden (bis Budget) → bis ~5 h warten → abholen, prüfen, committen. Länger laufende Batches holt der Zeitplan alle 3 h ab. `BLOG_AUTO=true` (Repo-Variable) übersetzt zusätzlich neue Artikel der letzten 14 Tage automatisch.
+- Ablauf: fertige Batches abholen → neue Anfragen absenden (bis Budget) → bis ~5 h warten → abholen, prüfen, committen. Länger laufende Batches holt der Zeitplan alle 3 h ab und übersetzt dabei neue Artikel der letzten 14 Tage automatisch, auch die freigegebenen englischen Content-Pakete `imports/blog/en/*.md` (Schlüssel `content/<slug>`, ~0,02 $ je Beitrag für alle 14 Sprachen). `BLOG_AUTO=false` (Repo-Variable) schaltet das ab (dann nur Abholen). Der Budget-Deckel gilt auch hier.
 - Kosten (Haiku 5.5 Batch, 0,05 $/0,25 $ je Mio. Tokens, Schätzung 30.10.): alles ~170 $; neueste 100 Artikel × 19 Sprachen ~7–8 $; Pilot (3 Artikel × 19) ~0,25 $; je europäische Sprache ~6 $, ml/pa/ta/te je ~15–18 $. Aktuell: `status.json` (`rest_est_usd`, nach dem Pilot mit gemessenem Faktor).
-- Geld nur mit Mirkos OK: Gesamtbudget `BLOG_BUDGET_USD` (Repo-Variable, Standard 10 $) oder Eingabe `budget`; vor jedem Auftrag über 2 $ Kosten nennen und Freigabe holen; Budget nie eigenmächtig erhöhen.
+- Geld nur mit Mirkos OK: Monatsbudget `BLOG_BUDGET_USD` (Repo-Variable, USD je Kalendermonat, Standard 10 $; Mirko 5.11.2026: 25 $) oder Eingabe `budget`; vor jedem Auftrag über 2 $ Kosten nennen und Freigabe holen; Budget nie eigenmächtig erhöhen.
 - Schlüssel: Secret `ANTHROPIC_API_KEY_BLOG` (Fallback `ANTHROPIC_API_KEY_SHOW`), nie den GitHub-Artikel-Schlüssel; Schlüssel nie anfassen.
 - Immer erst `mode=pilot`, dann Review (unten), dann größere Aufträge.
 

@@ -1,0 +1,148 @@
+{
+ "de": {
+  "html": "<p>Wer Power Apps nutzt, kennt das Muster: Eine kleine Layout-Änderung zieht stundenlanges Justieren nach sich, ein zusätzlicher Toggle bringt verschachtelte Container ins Wanken. Canvas-Apps versprachen Freiheit und Kreativität per Drag-and-Drop. Im Alltag binden sie aber viel Zeit an Pixel, Container und Formeln.</p>\n<p>Mit den generativen Seiten in Power Apps verschiebt sich der Ansatz. Statt Rechtecke zu ziehen, beschreiben Sie in natürlicher Sprache, was Sie brauchen. Die KI baut daraus eine funktionierende Oberfläche auf Basis Ihrer Dataverse-Tabellen. Dieser Artikel erklärt, wie das funktioniert, warum die Architektur dahinter den Unterschied macht und was das für die Rolle von Entwicklern bedeutet.</p>\n\n<h2>Warum Canvas-Apps an ihre Grenzen stoßen</h2>\n<p>Als Canvas-Apps erschienen, wirkten sie wie eine Befreiung von starren modellgesteuerten Formularen. Man konnte Labels, Icons und Galerien frei auf einer leeren Fläche platzieren. Power-FX-Formeln gaben Fachanwendern einen ersten Zugang zu echter Berechnung. Doch Freiheit ohne Struktur macht Anwendungen zerbrechlich.</p>\n<p>Jedes Steuerelement bringt eigene Regeln, Referenzen und Eigenschaften mit. Eine vertippte Variable kann dazu führen, dass sich Teile der Oberfläche von der Logik lösen. Ineinander verschachtelte Container erzeugen fragile Abhängigkeitsketten, sodass schon eine Umgestaltung riskant wird. Viele Entwickler scheuen deshalb selbst einfache Größenänderungen.</p>\n<h3>Technische Schulden in dekorativer Verpackung</h3>\n<p>Pixelgenaue Ausrichtung wurde oft als Zeichen von Professionalität gesehen. Skalierbarkeit brachte sie jedoch nicht, eher technische Schulden. Mit jeder neuen Anforderung wuchsen sie, bis die App schön aussah, aber bei jeder Änderung Angst machte.</p>\n<p>Typische Symptome sind:</p>\n<ul>\n<li>endlose Patch-Releases für einfache Updates,</li>\n<li>überlange Formelketten, die kaum noch zu durchschauen sind,</li>\n<li>Deployments, auf die ein Support-Kanal voller Screenshots folgt.</li>\n</ul>\n<p>Währenddessen bleiben Geschäftslogik, Sicherheit, Performance und Data Governance oft ungeprüft. Teams verwechseln künstlerische Kontrolle mit Produktivität und werden zu Layout-Technikern, obwohl sie Strategien verfeinern könnten.</p>\n\n<h2>Generative Seiten in Power Apps: Was dahintersteckt</h2>\n<p>Generative Seiten ersetzen das Pixel-Handwerk durch Beschreibung. Sie schildern Ihr Ziel in einfacher Sprache, etwa einen Ideentracker, optional mit angehängtem Referenzbild und Filterkriterien. Das System übersetzt diesen Prompt in ein voll funktionsfähiges Interface. Das Ergebnis ist kein Screenshot-Mockup, sondern eine betriebsbereite Seite auf Basis von React-Komponenten mit schemabewussten Bindungen.</p>\n<p>Die KI rät dabei nicht, sondern leitet die Struktur direkt aus Ihren Tabellen ab. Da die Engine innerhalb der modellgesteuerten Umgebung sitzt, kennt sie Dataverse-Beziehungen, Spaltentypen und Sicherheitsrollen. Sagen Sie „zeige Ideen nach Kategorie“, erkennt das System, welche Tabelle die Ideen enthält, welches Feld die Kategorie nachschlägt und wie sich diese Werte sinnvoll nutzen lassen.</p>\n<p>Die Seite bringt Sortierung, Suche und Formularfunktionen von Beginn an mit. Sie müssen kein einziges Formular beschreiben. Das ähnelt weniger klassischer Code-Generierung als dem Auto-Vervollständigen einer ganzen App.</p>\n<h3>Der Unterschied zur Canvas-Entwicklung</h3>\n<p>In Canvas ist jede Entscheidung eine manuelle Übersetzung: Welche Galerie-Vorlage, welches Steuerelement, wie werden Daten abgerufen, wie entstehen Filter, responsive Raster und Corporate Design? Generative Seiten überspringen diese Schritte. Die Designsprache ist konsistent, standardmäßig responsiv, und Barrierefreiheit ist eine grundlegende Eigenschaft statt eines Nachtrags.</p>\n\n<h2>Die Architektur: React, Dataverse und eingebaute Standards</h2>\n<p>Die Geschwindigkeit entsteht nicht allein durch KI-Prompts. Der gesamte Rendering-Unterbau hat sich geändert, denn die Seiten laufen auf React-basiertem Rendering in Power Apps. React bietet Zustandsverwaltung, dynamisches Rendering und modulare Komponenten. Sie erhalten Web-Performance und Reaktionsfähigkeit ohne Formel-Notlösungen. Ändern Sie die Fenstergröße, ordnen sich die Elemente fließend neu an, weil die Layout-Engine auf Responsivität ausgelegt ist.</p>\n<h3>Dataverse-Logik wird geerbt</h3>\n<p>Jede generierte Komponente, ob Liste, Formular oder Diagramm, versteht die Tabellenstruktur von Grund auf. Filter, Sortierungen und Lookups entstehen nicht mehr aus zusammengeflickten Filterformeln, sondern übernehmen das Verhalten des Schemas. Erzwingt eine Dataverse-Beziehung referenzielle Integrität, berücksichtigt die Oberfläche das automatisch. Die KI erfindet die Regel nicht neu, sie wendet sie an.</p>\n<h3>CRUD, Feldtypen und Flyouts</h3>\n<p>Erstellen, Lesen, Aktualisieren und Löschen sind bereits vorverdrahtet. Aus den Feldtypen leitet das System passende Elemente ab:</p>\n<ul>\n<li>Datumsspalten aktivieren Kalender,</li>\n<li>Lookups werden zu Dropdowns,</li>\n<li>mehrzeilige Textfelder passen sich automatisch an.</li>\n</ul>\n<p>Beschreiben Sie, dass bei einem Klick auf „Neue Idee“ ein Flyout-Formular erscheinen soll, entsteht eine echte Flyout-Komponente. Ihre Übermittlungslogik ist direkt mit der richtigen Tabelle verknüpft, ganz ohne Patch-Formeln oder On-Select-Akrobatik.</p>\n<h3>Barrierefreiheit, Dark Mode und Rückgängig-Funktion</h3>\n<p>Farbkontraste, Tastaturnavigation und Dark-Mode-Kompatibilität sind bereits integriert. Fordern Sie ein dunkles Design an, tauscht das Framework seine Styling-Token aus. Die Palette wechselt, ohne das Layout zu zerstören, weil die CSS-Logik tokenbasiert statt hardcodiert ist.</p>\n<p>Hinzu kommt die Nachvollziehbarkeit. Jede Interaktion mit dem App-Agenten erzeugt ein umkehrbares Diff, das einer Versionskontrolle entspricht. Gefällt Ihnen eine Änderung nicht, machen Sie sie rückgängig. Der Agent behält Kontext und Historie, und Sie arbeiten iterativ im Gespräch mit voller Revisionssicherheit.</p>\n\n<h2>Apps mit natürlicher Sprache erstellen und weiterentwickeln</h2>\n<p>Die Weiterentwicklung läuft über den App-Agenten, die konversationelle KI in Power Apps. Ein Satz wie „Füge Dropdown-Filter, einen Datumsbereich und ein Balkendiagramm der Top-Kategorien hinzu“ genügt. Filter werden gerendert, das Diagramm erscheint, das Layout bleibt aufgeräumt.</p>\n<p>Dahinter steckt mehrstufige Schlussfolgerung: Der Agent übersetzt die Anfrage in Operationen, validiert sie gegen die Dataverse-Metadaten und führt sie als umkehrbare Updates aus. Auch zusammengesetzte Anweisungen funktionieren, etwa die Suche durch ein Kategorie-Dropdown zu ersetzen und danach ein nach Ideenanzahl sortiertes Diagramm einzufügen. Die zugrunde liegende Logik bleibt erhalten, weil der Agent das Schema respektiert, statt Formeln zu improvisieren.</p>\n<h3>Live und interaktiv</h3>\n<p>Alles, was das System erstellt, ist sofort interaktiv. Wenden Sie einen Filter an, reagieren verbundene Diagramme in Echtzeit. Wählen Sie einen Balken aus, filtert sich das Raster darunter. In Canvas erforderte ein solches Verhalten sehr lange Formeln. Hier entsteht Reaktionsfähigkeit durch Datenbewusstsein, nicht durch manuelle Verkabelung.</p>\n<h3>Ein Beispiel aus der Praxis</h3>\n<p>Ein Flyout-Formular für neue Ideen erfordert in Canvas, Bildschirme zu klonen, Datensätze zu patchen und mit Z-Index-Problemen zu kämpfen. Hier genügt die Anweisung, bei Klick auf „Neue Idee“ ein mit der Ideentabelle verknüpftes Flyout-Formular zu öffnen. Auch ein Themenumschalter oder ein Excel-Export lässt sich auf diesem Weg ergänzen.</p>\n<p>Der Arbeitsrhythmus lautet: denken, beschreiben, beobachten, verfeinern. Die Konversation ist dabei der Editor, ein Wechsel zwischen Editor, Vorschau und Dokumentation entfällt. Iterationen, die früher ganze Nachmittage dauerten, schrumpfen auf Minuten. Was früher einen Sprint beanspruchte, ist so in einer halben Stunde erledigt.</p>\n\n<h2>Häufige Fehler und Stolpersteine</h2>\n<p>Beim Umstieg lauern einige Denkfehler und Fallen:</p>\n<ul>\n<li><strong>Kontrolle mit Produktivität verwechseln:</strong> Endloses Feilen am Layout fühlt sich nach Arbeit an, bringt aber kaum Wert. Entscheidend ist das Ergebnis, nicht der sichtbare Aufwand.</li>\n<li><strong>Dataverse vernachlässigen:</strong> In vielen Canvas-Projekten dominierte die Interface-Pflege, während Datenmodellierung in den Hintergrund trat. Generative Seiten leben vom Schema. Ein schwaches Datenmodell wirkt sich daher direkt auf das Ergebnis aus.</li>\n<li><strong>Generative Seiten für ein Eingabefenster halten:</strong> Sie sind eine Umgebung für geführte Generierung. Änderungen werden in strukturierte Diffs übersetzt, die Sie prüfen, rückgängig machen oder erweitern können.</li>\n<li><strong>Den Eingriff in die Logik scheuen:</strong> Die KI übernimmt die Struktur. Geschäftsregeln, Validierungslogik und Governance-Richtlinien bleiben Ihre Aufgabe, und Anpassungen bleiben ausdrücklich möglich.</li>\n<li><strong>Zu wenig Kontext liefern:</strong> Je mehr Geschäftsregeln, Beziehungen und Richtlinien der Agent kennt, desto besser unterstützt er als verlässlicher Assistent.</li>\n</ul>\n\n<h2>Die neue Rolle des professionellen Entwicklers</h2>\n<p>Wenn die KI Layout und Komponentenlogik übernimmt, verschwinden Entwickler nicht, ihre Arbeit wird anspruchsvoller. Der Wert verschiebt sich vom ästhetischen Mikromanagement zur architektonischen Absicht. Datenschemata, Performance, Compliance-Richtlinien und Sicherheit werden zu den eigentlichen Designparametern. Eine KI kann ein Formular ableiten, aber keine Unternehmens-Governance-Logik schreiben und die Risikobereitschaft eines Unternehmens nicht beurteilen.</p>\n<p>Man kann es als Wechsel vom Zimmermann zum Stadtplaner beschreiben: gleiche Materialien, deutlich größere Tragweite. Entwickler entwerfen das Dataverse-Modell, optimieren Indizes, orchestrieren Abläufe und sichern Endpunkte. Die KI arrangiert die visuellen Elemente innerhalb dieser Rahmenbedingungen.</p>\n<p>Auch die Gespräche im Team verändern sich. Statt über Farbpaletten spricht man über Dateneffizienz, und Stakeholder-Meetings drehen sich weniger um das Aussehen einer Seite als darum, wie die Logik so modelliert wird, dass die KI sie weiterentwickeln kann.</p>\n<p>Für Unternehmen bedeutet das kürzere Lieferzyklen, konsistenteres Design und weniger technische Schulden, weil kein Chaos mehr vervielfältigt wird. Komponenten, Identitätsmanagement und Designvorgaben stammen direkt aus der verwalteten Umgebung. Die Engine greift auf geteilte Logikkomponenten aus modellgesteuerten Apps zurück, die Microsoft bereits erstellt und abgesichert hat. Jede neue Seite erbt denselben Standard: gleiche Barrierefreiheit, gleiche Ereignisverarbeitung, gleiche Rendering-Pipeline. Das ist architektonische Hygiene, und sie sorgt für Vorhersehbarkeit, Wartbarkeit und wiederholbare Qualität.</p>\n<h3>Hat Canvas noch eine Berechtigung?</h3>\n<p>Canvas-Apps haben das Design demokratisiert, aber auch unkontrollierten Wildwuchs begünstigt. Für Prototypen und schnelle Entwürfe behalten sie ihren Charme, vergleichbar mit einer Skizze auf einer Serviette. Für den produktiven Einsatz, Compliance und langfristige Governance sind generative Seiten die tragfähigere Wahl.</p>\n\n<h2>Praktische Takeaways</h2>\n<ul>\n<li>Beschreiben Sie Ziele und Absichten in natürlicher Sprache, statt Container und Steuerelemente von Hand anzuordnen.</li>\n<li>Investieren Sie zuerst in ein sauberes Dataverse-Schema, denn Beziehungen, Spaltentypen und Sicherheitsrollen bestimmen die Qualität der generierten Seite.</li>\n<li>Nutzen Sie den App-Agenten für schrittweise Verfeinerungen wie Dropdown-Filter, Datumsbereiche oder Diagramme und prüfen Sie jede Änderung über die Diffs.</li>\n<li>Verwenden Sie die Rückgängig-Funktion bewusst als Sicherheitsnetz, wenn eine Änderung nicht überzeugt.</li>\n<li>Konzentrieren Sie Ihre Expertise auf Geschäftsregeln, Validierungslogik, Governance, Sicherheit und Performance.</li>\n<li>Geben Sie dem Agenten möglichst viel Kontext zu Regeln, Beziehungen und Richtlinien.</li>\n<li>Setzen Sie Canvas gezielt für Prototypen und schnelle Skizzen ein, nicht für den langfristigen produktiven Betrieb.</li>\n<li>Messen Sie Ihre Arbeit am Ergebnis statt am Zeitaufwand.</li>\n</ul>\n\n<h2>Fazit</h2>\n<p>Generative Seiten in Power Apps verschieben die App-Entwicklung vom Zeichnen zum Beschreiben. Sie bauen auf React-Rendering, Dataverse-Schema und einem App-Agenten mit umkehrbaren Änderungen auf und liefern konsistente, responsive und barrierefreie Oberflächen. Für Entwickler heißt das, weniger Zeit mit Layout-Details zu verbringen und mehr mit Architektur, Governance und Geschäftslogik. Wer lernt, Absichten präzise zu formulieren und Strukturen sauber zu modellieren, gewinnt Zeit, Qualität und Skalierbarkeit.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Von Canvas zu generativen Seiten",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Absicht beschreiben",
+     "text": "Ziel in natürlicher Sprache formulieren, optional mit Referenzbild und Filterkriterien."
+    },
+    {
+     "kopf": "Schema auslesen",
+     "text": "Die KI leitet Struktur aus Dataverse-Tabellen, Beziehungen, Spaltentypen und Sicherheitsrollen ab."
+    },
+    {
+     "kopf": "Seite generieren",
+     "text": "Eine betriebsbereite React-Seite mit Suche, Sortierung, Formularen und CRUD entsteht."
+    },
+    {
+     "kopf": "Per Agent verfeinern",
+     "text": "Filter, Diagramme und Flyouts per Konversation ergänzen, jede Änderung als umkehrbares Diff."
+    },
+    {
+     "kopf": "Governance steuern",
+     "text": "Entwickler verfeinern Geschäftsregeln, Validierung, Sicherheit und Performance statt Pixel."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Was sind generative Seiten in Power Apps?",
+    "a": "Generative Seiten sind ein KI-gestützter Ansatz, bei dem Sie in natürlicher Sprache beschreiben, was Sie brauchen. Das System erzeugt daraus eine betriebsbereite Oberfläche auf Basis von React-Komponenten und Ihren Dataverse-Tabellen, inklusive Sortierung, Suche und Formularfunktionen, ohne manuelles Platzieren von Steuerelementen."
+   },
+   {
+    "q": "Worin unterscheiden sich generative Seiten von Canvas-Apps?",
+    "a": "In Canvas muss jede Entscheidung manuell umgesetzt werden, von der Galerie über Filter bis zum Corporate Design. Generative Seiten leiten die Struktur aus dem Dataverse-Schema ab, sind standardmäßig responsiv und barrierefrei und nutzen ein konsistentes Design. Dadurch entfallen fragile Container und lange Formelketten."
+   },
+   {
+    "q": "Wie ändere ich eine generierte Seite und kann ich Änderungen rückgängig machen?",
+    "a": "Die Weiterentwicklung läuft über den App-Agenten, eine konversationelle KI. Sie formulieren etwa neue Filter oder ein Diagramm in einem Satz. Der Agent validiert die Anfrage gegen die Dataverse-Metadaten und führt sie als umkehrbares Diff aus, das Sie prüfen oder rückgängig machen können."
+   },
+   {
+    "q": "Brauchen Entwickler bei generativen Seiten noch Fachwissen, und wofür eignet sich Canvas weiterhin?",
+    "a": "Ja, ihre Arbeit verlagert sich auf die Architektur. Entwickler entwerfen das Dataverse-Modell und definieren Geschäftsregeln, Validierung, Governance, Sicherheit und Performance. Die KI übernimmt Layout und Komponentenlogik. Canvas bleibt vor allem für Prototypen und schnelle Skizzen sinnvoll, nicht für den langfristigen produktiven Betrieb."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Canvas-Apps vs. generative Seiten",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Canvas-Apps",
+     "punkte": [
+      "Jede Entscheidung ist eine manuelle Übersetzung von Steuerelementen und Formeln",
+      "Verschachtelte Container erzeugen fragile Abhängigkeitsketten",
+      "Pixelgenaue Ausrichtung häuft technische Schulden an",
+      "Interaktive Verknüpfungen erfordern sehr lange Formeln",
+      "Sinnvoll für Prototypen und schnelle Skizzen"
+     ]
+    },
+    "rechts": {
+     "titel": "Generative Seiten",
+     "punkte": [
+      "Beschreibung in natürlicher Sprache ersetzt das Pixel-Handwerk",
+      "Struktur wird direkt aus den Dataverse-Tabellen abgeleitet",
+      "Responsives Design und Barrierefreiheit sind standardmäßig enthalten",
+      "Reaktionsfähigkeit entsteht durch Datenbewusstsein statt manueller Verkabelung",
+      "Tragfähiger für produktiven Einsatz, Compliance und Governance"
+     ]
+    }
+   },
+   {
+    "titel": "Das steckt in generativen Seiten",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "React",
+      "text": "Rendering-Unterbau mit Zustandsverwaltung, dynamischem Rendering und modularen Komponenten."
+     },
+     {
+      "wert": "Dataverse",
+      "text": "Beziehungen, Spaltentypen und Sicherheitsrollen fließen automatisch in die Oberfläche ein."
+     },
+     {
+      "wert": "CRUD",
+      "text": "Erstellen, Lesen, Aktualisieren und Löschen sind bereits vorverdrahtet."
+     },
+     {
+      "wert": "Diffs",
+      "text": "Jede Agenten-Interaktion erzeugt ein umkehrbares Diff wie in einer Versionskontrolle."
+     },
+     {
+      "wert": "Tokens",
+      "text": "Tokenbasiertes CSS ermöglicht Dark Mode ohne zerstörtes Layout."
+     }
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Worauf basieren die von generativen Seiten erzeugten Oberflächen technisch?",
+    "opts": [
+     "Auf React-Komponenten mit schemabewussten Bindungen",
+     "Auf statischen Screenshot-Mockups mit manuellen Formeln",
+     "Auf verschachtelten Canvas-Containern mit Power-FX-Formeln",
+     "Auf klassischen modellgesteuerten Formularen ohne Responsivität"
+    ],
+    "a": 0,
+    "why": "Das Ergebnis ist laut Artikel eine betriebsbereite Seite auf Basis von React-Komponenten mit schemabewussten Bindungen, kein Mockup."
+   },
+   {
+    "q": "Was passiert, wenn eine Dataverse-Beziehung referenzielle Integrität erzwingt?",
+    "opts": [
+     "Entwickler müssen die Regel zusätzlich per Patch-Formel nachbauen",
+     "Die Oberfläche berücksichtigt die Regel automatisch, die KI wendet sie an",
+     "Die KI erfindet eine eigene, davon abweichende Regel für die Seite",
+     "Die Regel wird beim Generieren der Seite bewusst ignoriert"
+    ],
+    "a": 1,
+    "why": "Die Oberfläche übernimmt das Verhalten des Schemas automatisch: Die KI erfindet die Regel nicht neu, sondern wendet sie an."
+   },
+   {
+    "q": "Wie funktioniert die Rückgängig-Funktion beim App-Agenten?",
+    "opts": [
+     "Nur die letzte Änderung lässt sich einmalig zurücknehmen",
+     "Änderungen werden erst nach manueller Freigabe im Editor gespeichert",
+     "Jede Interaktion erzeugt ein umkehrbares Diff ähnlich einer Versionskontrolle",
+     "Der Agent vergisst nach jeder Anweisung Kontext und Historie"
+    ],
+    "a": 2,
+    "why": "Jede Interaktion mit dem App-Agenten erzeugt ein umkehrbares Diff, das einer Versionskontrolle entspricht; Kontext und Historie bleiben erhalten."
+   },
+   {
+    "q": "Welche Aufgabe bleibt laut Artikel bei Entwicklern, wenn die KI Layout und Komponentenlogik übernimmt?",
+    "opts": [
+     "Pixelgenaue Ausrichtung von Containern und Steuerelementen",
+     "Manuelle Anpassung von Farbpaletten für den Dark Mode",
+     "Handarbeit beim Schreiben von Flyout-Komponenten und Filterformeln",
+     "Geschäftsregeln, Validierungslogik, Governance, Sicherheit und Performance"
+    ],
+    "a": 3,
+    "why": "Der Wert verschiebt sich zur architektonischen Absicht: Datenschemata, Performance, Compliance und Sicherheit bleiben Aufgabe der Entwickler."
+   }
+  ]
+ }
+}

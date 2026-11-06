@@ -142,7 +142,7 @@ CSS = """<style>
 .ec-tabs a[aria-current=page]{color:var(--fg);border-bottom-color:var(--ac)}
 .ec-tabs a[hidden]{display:none}
 .ec-hero-actions{display:flex;gap:10px;margin-top:18px}
-.ec-hero-actions .btn{flex:1 1 0;min-width:0;text-align:center}
+.ec-hero-actions .btn{flex:1 1 0;min-width:0;justify-content:center;text-align:center}
 .ec-hero-expert{margin:8px 0 0;font-size:.9rem}
 .ec-how{margin:28px 0 8px;border-top:2px solid var(--fg);padding-top:14px}
 .ec-how h2{margin:0 0 12px}
