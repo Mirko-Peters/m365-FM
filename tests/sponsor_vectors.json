@@ -1,5 +1,5 @@
 {
- "_doc": "T37: Testvektoren aus Prototyp v2 (Mirko), unveraendert uebernommen aus spec_constants.json (test_vectors, exact_outputs_from_prototype_script; erzeugt durch Ausfuehren des Prototyp-Skripts). Abweichungen nach design.md D1/D2 stehen in tests/sponsor_calc.test.mjs.",
+ "_doc": "T37: Testvektoren aus Prototyp v2 (Mirko), uebernommen aus spec_constants.json (test_vectors, exact_outputs_from_prototype_script; erzeugt durch Ausfuehren des Prototyp-Skripts). Abweichungen nach design.md D1/D2 stehen in tests/sponsor_calc.test.mjs. Einzige Aenderung an den Vektoren selbst: A5 (6.11.2026, Themen-Sponsoring durch Banner-Werbung ersetzt) - zwei Vektoren mit \"topic\": true jetzt mit \"ads\": true und ohne die 1.500 USD/Monat und den Topic-Abzug in der Wirkung, Tipp vis:noTopic -> vis:noAds; Begruendung in tests/sponsor_calc.test.mjs.",
  "test_vectors": {
   "default (goal ai, Your brand name easy + Microsoft Teams Phone hard, 6 months, PR on)": {
    "input": {
@@ -182,11 +182,11 @@
     "tips": [
      "rt<recRt",
      "vis:noLang",
-     "vis:noTopic"
+     "vis:noAds"
     ]
    }
   },
-  "1 very hard topic, 12 months, video+PR+auth+topic+lang": {
+  "1 very hard topic, 12 months, video+PR+auth+banner ads+lang (A5)": {
    "input": {
     "goal": "ai",
     "rt": 12,
@@ -199,15 +199,15 @@
     "video": true,
     "pr": true,
     "auth": true,
-    "topic": true,
+    "ads": true,
     "lang": true
    },
    "output": {
     "usdTarget": {
-     "monthlyUsd": 6200,
-     "monthlyText": "$6,200",
-     "totalUsd": 76400,
-     "totalText": "$76,400",
+     "monthlyUsd": 4700,
+     "monthlyText": "$4,700",
+     "totalUsd": 58400,
+     "totalText": "$58,400",
      "note": "ticket: 14 languages = USD 300/month, undiscounted, added to monthly"
     },
     "packs": 1,
@@ -215,11 +215,11 @@
     "prRec": 4,
     "discountRate": 0.15,
     "discount": 600,
-    "monthlyUsd": 5900,
-    "monthlyText": "$5,900",
+    "monthlyUsd": 4400,
+    "monthlyText": "$4,400",
     "oneOffUsd": 2000,
-    "totalUsd": 72800,
-    "totalText": "$72,800",
+    "totalUsd": 54800,
+    "totalText": "$54,800",
     "eurLang": {
      "perMonth": 300,
      "runtime": 3600
@@ -231,10 +231,10 @@
     ],
     "seo": [
      3.61,
-     7.41
+     8.36
     ],
     "geoText": "6 weeks to 8 weeks",
-    "seoText": "3.6 months to 7.4 months",
+    "seoText": "3.6 months to 8.4 months",
     "barPct": {
      "geo": [
       10.2308,
@@ -242,7 +242,7 @@
      ],
      "seo": [
       27.7692,
-      57
+      64.3077
      ],
      "run": 92.3077
     },
@@ -517,7 +517,7 @@
     ]
    }
   },
-  "custom topic only (medium, to be rated), 6 months": {
+  "custom topic only (medium, to be rated), 6 months, banner ads (A5)": {
    "input": {
     "goal": "vis",
     "rt": 6,
@@ -530,14 +530,14 @@
     ],
     "video": true,
     "lang": true,
-    "topic": true
+    "ads": true
    },
    "output": {
     "usdTarget": {
-     "monthlyUsd": 5400,
-     "monthlyText": "$5,400",
-     "totalUsd": 32400,
-     "totalText": "$32,400",
+     "monthlyUsd": 3900,
+     "monthlyText": "$3,900",
+     "totalUsd": 23400,
+     "totalText": "$23,400",
      "note": "ticket: 14 languages = USD 300/month, undiscounted, added to monthly"
     },
     "packs": 1,
@@ -545,11 +545,11 @@
     "prRec": 2,
     "discountRate": 0.1,
     "discount": 400,
-    "monthlyUsd": 5100,
-    "monthlyText": "$5,100",
+    "monthlyUsd": 3600,
+    "monthlyText": "$3,600",
     "oneOffUsd": 0,
-    "totalUsd": 30600,
-    "totalText": "$30,600",
+    "totalUsd": 21600,
+    "totalText": "$21,600",
     "eurLang": {
      "perMonth": 300,
      "runtime": 1800
@@ -561,10 +561,10 @@
     ],
     "seo": [
      3.5,
-     6
+     6.5
     ],
     "geoText": "5 weeks to 8 weeks",
-    "seoText": "3.5 months to 6 months",
+    "seoText": "3.5 months to 6.5 months",
     "barPct": {
      "geo": [
       9.6154,
@@ -572,7 +572,7 @@
      ],
      "seo": [
       26.9231,
-      46.1538
+      50
      ],
      "run": 46.1538
     },
@@ -757,7 +757,7 @@
     "Your topics need about 6 months to pay off. A longer runtime lets you see the full effect and raises your discount.",
     "Add the video package: every episode then also reaches the YouTube audience.",
     "The 14 language shows multiply your reach beyond English.",
-    "A topic sponsorship puts your brand on a whole cluster. Only 3 slots per topic."
+    "Banner advertising puts your brand on episodes, topic pages and blog posts about your topics – booked per 1,000 impressions."
    ],
    "x-dash": {
     "checked": true,

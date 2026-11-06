@@ -199,6 +199,53 @@ class BookingSwitch(unittest.TestCase):
             self.assertIn("/de/for/advertisers/", self.build_mediakit()["de/media-kit/index.html"])
 
 
+class SponsorBannerOption(unittest.TestCase):
+    """Mirko, 6.11.2026: kein eigenes Themen-Sponsoring mehr; "Banner-Werbung" im Konfigurator klappt Rechner und Buchung der Werbeplaetze auf
+    (dieselbe Komponente assets/ads-book.js und dieselbe API wie /for/advertisers/), ohne Platzgrenze je Thema."""
+    def item(self, lang="de"):
+        import html as H, json as J, re as RE
+        import site_sponsor as SPN
+        t = lambda k, **kw: SPN.tx(lang, k, **kw)
+        out = SPN.ads_item({"BASE": BASE}, lang, t)
+        cfg = J.loads(H.unescape(RE.search(r'id="spn-adb" aria-live="polite" data-cfg="([^"]+)"', out).group(1)))
+        return out, cfg
+
+    def test_off_calculator_only(self):
+        out, cfg = self.item()
+        self.assertIn('<input type="checkbox" id="spn-ads" aria-describedby="spn-ads-d" aria-controls="spn-adsbox">', out)
+        self.assertIn('<div class="spn-adsbox" id="spn-adsbox" hidden>', out)
+        self.assertEqual(cfg["products"], ["banner_top", "banner_mid", "banner_bottom"])
+        self.assertEqual(cfg["product"], "banner_mid")   # frueher Platz im Text nach der Einleitung
+        self.assertIs(cfg["booking"], False)
+        self.assertEqual(cfg["page"], "https://www.m365.fm/de/sponsor/")
+        self.assertEqual(cfg["anchor"], "#spn-ads")
+        self.assertIn("topics_mine", cfg["t"])
+        self.assertIn("15–40 €", out)   # TKP-Spanne aus data/ad_pricing.json
+        self.assertNotIn("höchstens", out.lower())
+
+    def test_on_booking(self):
+        with patch.object(A, "slot_cfg", return_value={**A.slot_cfg(), "booking": True}):
+            out, cfg = self.item("en")
+        self.assertIs(cfg["booking"], True)
+        self.assertIn("€15–40", out)
+
+    def test_no_topic_sponsorship_left(self):
+        import site_sponsor as SPN, site_sponsorships as SPM
+        for lang in LANGS:
+            for k in ("topic_h", "topic_hint", "row_topic", "tip_vis_topic"):
+                self.assertNotIn(k, SPN.I18N[lang], (lang, k))
+            for k in ("ads_h", "ads_hint", "ads_on", "ads_off", "row_ads", "tip_vis_ads"):
+                self.assertIn(k, SPN.I18N[lang], (lang, k))
+            for k in ("topics_mine", "topics_none"):
+                self.assertTrue(A.texts(lang, "book").get(k), (lang, k))
+        self.assertNotIn("topic", SPN.PRICING["prices"])
+        self.assertFalse(hasattr(SPM, "TOPIC_MAX"))
+        from pathlib import Path
+        js = (Path(A.__file__).parent / "assets" / "ads-book.js").read_text("utf-8")
+        self.assertIn("window.AdBook = { mount: mount }", js)
+        self.assertIn('document.getElementById("adbook")', js)   # /for/advertisers/ startet weiter selbst
+
+
 class HouseAdsAllLanguages(unittest.TestCase):
     """Mirko, 5.11.2026: Hausanzeigen (M365Con, Services, Werben/Sponsoring) in allen 15 Sprachen der Website."""
     def test_every_language_has_all_house_strings(self):

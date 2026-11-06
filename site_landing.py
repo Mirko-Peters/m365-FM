@@ -387,6 +387,20 @@ def _eur(lang, cents):
     return f"{v}\u00a0€"
 
 
+AD_PRODUCTS = ("banner_top", "banner_mid", "banner_bottom", "company_card", "lead_form")
+BANNERS = ("banner_top", "banner_mid", "banner_bottom")
+
+
+def adbook_cfg(base, lang, page, products=None, **extra):
+    """data-cfg der Buchungs-Komponente assets/ads-book.js: hier fuer /for/advertisers/, in site_sponsor fuer die Banner-Werbung im
+    Konfigurator (products = nur die Banner, booking = Schalter, off = Hinweis ohne Buchung, anchor = Ruecksprung nach der Anmeldung)."""
+    import site_ads as AD
+    P = _ad_pricing()
+    names = {pid: _text(lang, C.ADS[pid]) for pid in AD_PRODUCTS}
+    return {"api": AD.API, "lang": lang, "t": AD.texts(lang, "book"), "names": names, "pricing": {k: v for k, v in P.items() if not k.startswith("_")},
+            "community": f"{base}/{'' if lang == 'en' else lang + '/'}community/", "page": page, "products": list(products or AD_PRODUCTS), **extra}
+
+
 def _ads_sections(g, lang):
     """Oeffentliche Preistabelle (Startwerte aus data/ad_pricing.json, die Seite laedt die aktuellen Werte aus D1 nach) und der Bereich
     zum Berechnen und Buchen (assets/ads-book.js). Texte der Oberflaeche in 15 Sprachen aus data/ads_i18n.json."""
@@ -403,10 +417,7 @@ def _ads_sections(g, lang):
                  ("lexp", _eur(lang, int(st.get("lead_expert_cents", 1000)))), ("lprem", _eur(lang, int(st.get("lead_premium_cents", 500))))):
         note = note.replace("{" + k + "}", str(v))
     base = g["BASE"]
-    names = {pid: _text(lang, C.ADS[pid]) for pid in ("banner_top", "banner_mid", "banner_bottom", "company_card", "lead_form")}
-    cfg = {"api": AD.API, "lang": lang, "t": AD.texts(lang, "book"), "names": names, "pricing": {k: v for k, v in P.items() if not k.startswith("_")},
-           "community": f"{base}/{'' if lang == 'en' else lang + '/'}community/", "page": _url(base, lang, "for/advertisers/")}
-    cfg_json = html.escape(json.dumps(cfg, ensure_ascii=False, separators=(",", ":")), quote=True)
+    cfg_json = html.escape(json.dumps(adbook_cfg(base, lang, _url(base, lang, "for/advertisers/")), ensure_ascii=False, separators=(",", ":")), quote=True)
     js = ROOT / "assets" / "ads-book.js"
     import hashlib
     ver = hashlib.sha1(js.read_bytes()).hexdigest()[:10] if js.exists() else "0"

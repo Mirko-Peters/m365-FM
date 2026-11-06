@@ -102,14 +102,11 @@ class SponsorshipTests(unittest.TestCase):
             SPM.check_posts(POSTS)
         self.assertIn('Beitrag "/de/community/u/mirko-p/blog/gone/" gibt es nicht', str(cm.exception))
 
-    def test_topic_limit(self):
+    def test_no_topic_limit(self):   # Mirko, 6.11.2026: kein eigenes Themen-Sponsoring mehr, also keine Obergrenze je Thema
+        self.assertFalse(hasattr(SPM, "TOPIC_MAX"))
         four = [rec(id=f"t{i}", topics=["entra-id"], start="2026-11-01", end="2027-01-31") for i in range(4)]
-        self.assertIn('Thema "entra-id": 4 Themen-Sponsorings gleichzeitig am 2026-11-01 (hoechstens 3)', self.errors(four))
-        later = four[:3] + [rec(id="t3", topics=["entra-id"], start="2027-02-01", end="2027-04-30")]   # folgt nahtlos: nie mehr als 3 gleichzeitig
-        self.init(later)
-        future = four[:3] + [rec(id="t3", topics=["entra-id"], start="2027-01-31", end="2027-04-30")]   # ueberschneidet sich am letzten Tag
-        self.assertIn("4 Themen-Sponsorings gleichzeitig am 2027-01-31", self.errors(future, today="2026-11-03"))
-        self.init([rec(id=f"t{i}", topics=["entra-id"]) for i in range(3)] + [rec(id="p1", topics=["purview"])])
+        self.init(four)   # vier gleichzeitig: kein Fehler mehr
+        self.assertEqual(len(SPM.entity("entra-id")), 4)   # alle bleiben gekennzeichnet
 
     # --- Index und Laufzeit ---
     def test_entity_banner_only_while_running_content_label_permanent(self):

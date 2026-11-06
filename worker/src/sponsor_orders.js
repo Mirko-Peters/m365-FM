@@ -1,6 +1,7 @@
 // #281 Folge: Sponsoring-Paket von /sponsor/ direkt bestellen und per PayPal-Rechnung (Invoicing v2) bezahlen.
 // - Preise und Regeln aus data/sponsor_pricing.json (dieselbe Datei wie die Seite und assets/sponsor-calc.js); der Client schickt nur die Auswahl.
 // - M365Con-Sponsoring bleibt "auf Anfrage": eine Auswahl mit M365Con wird abgelehnt (nur das Anfrageformular).
+// - Kein Themen-Sponsoring mehr (Mirko, 6.11.2026): "topic" in der Auswahl wird ignoriert; Banner-Werbung bucht der Konfigurator getrennt (ads.js).
 // - Steuer wie bei den Werbeplaetzen (ad_settings: vat_pct, reverse_charge), Rabatt und Steuer je Position wie bei PayPal.
 // - Nach Zahlungseingang (Webhook INVOICING.INVOICE.PAID) entsteht eine Platzierung im Sponsor-Dashboard (#177).
 import PRICING from "../../data/sponsor_pricing.json" with { type: "json" };
@@ -38,7 +39,6 @@ export function sponsorQuote(P, sel, settings = {}, billing = {}) {
   add("base", packs, pr.base, rt, true);
   if (s.video) add("video", packs, pr.video, rt, true);
   if (s.auth) add("auth", 1, pr.auth, rt);
-  if (s.topic) add("topic", 1, pr.topic, rt);
   if (s.li) add("li", li, pr.li, rt);
   if (s.l14) add("lang", 1, pr.lang, rt);
   if (s.pr) add("pr", prCount, pr.pr, 1);
@@ -55,7 +55,7 @@ export function sponsorQuote(P, sel, settings = {}, billing = {}) {
     it.tax_pct = taxPct;
     gross += it.amount_cents; discount += it.discount_cents; net += it.net_cents; tax += it.tax_cents;
   }
-  const pkg = { goal, rt, topics, video: !!s.video, pr: !!s.pr, auth: !!s.auth, dash, l14: !!s.l14, topic: !!s.topic, expert: !!s.expert, li: !!s.li, live: !!s.live,
+  const pkg = { goal, rt, topics, video: !!s.video, pr: !!s.pr, auth: !!s.auth, dash, l14: !!s.l14, expert: !!s.expert, li: !!s.li, live: !!s.live,
     cnt: { pr: prCount, ex, li, lv } };
   return { package: pkg, items, currency: P.currency, discount_pct: dpct, subtotal_cents: gross, discount_cents: discount, net_cents: net,
     tax_pct: taxPct, tax_cents: tax, total_cents: net + tax, reverse_charge: reverse };
@@ -63,7 +63,8 @@ export function sponsorQuote(P, sel, settings = {}, billing = {}) {
 
 const LABEL = {
   base: ["Basispaket", "Base package"], video: ["Videopaket", "Video package"], auth: ["Autoritätspaket", "Authority package"],
-  topic: ["Themen-Sponsoring", "Topic sponsorship"], li: ["LinkedIn-Newsletter", "LinkedIn newsletter"], lang: ["Sprach-Shows", "Language shows"],
+  topic: ["Themen-Sponsoring", "Topic sponsorship"],   // nur fuer Rechnungen alter Bestellungen (Produkt seit 6.11.2026 entfallen)
+  li: ["LinkedIn-Newsletter", "LinkedIn newsletter"], lang: ["Sprach-Shows", "Language shows"],
   pr: ["PR-Artikel", "PR articles"], expert: ["Experten-Interview", "Expert interview"], live: ["Livesession", "Live session"], dash: ["Sponsor-Dashboard", "Sponsor dashboard"],
 };
 export function orderItems(o) {

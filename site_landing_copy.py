@@ -230,7 +230,7 @@ PAGES["for/sponsors/"] = dict(
     lead=("Put your product in front of people who work with Microsoft 365 every day. M365.FM combines podcast episodes, explainer videos and topic pages that search engines and AI assistants can cite.",
           "Bring dein Produkt zu Menschen, die jeden Tag mit Microsoft 365 arbeiten. M365.FM verbindet Podcast-Folgen, Erklärvideos und Themenseiten, die Suchmaschinen und KI-Assistenten zitieren können."),
     cta=(("Build your sponsor package", "Sponsoring-Paket zusammenstellen"), "sponsor"),
-    card=(("Podcast, video and topic sponsorship with clear labelling and monthly reporting.", "Podcast-, Video- und Themen-Sponsoring mit klarer Kennzeichnung und monatlichem Reporting."),
+    card=(("Podcast and video sponsorship plus banner advertising, with clear labelling and monthly reporting.", "Podcast- und Video-Sponsoring plus Banner-Werbung, mit klarer Kennzeichnung und monatlichem Reporting."),
           ("Microsoft partners, software vendors and service providers", "Microsoft-Partner, Softwareanbieter und Dienstleister"),
           [("Sponsored episodes per topic", "Gesponserte Folgen je Thema"), ("Optional explainer videos on YouTube", "Optionale Erklärvideos auf YouTube"), ("Configurator with current prices", "Konfigurator mit aktuellen Preisen")]),
     need=(("Why vendors sponsor a Microsoft 365 podcast", "Warum Anbieter einen Microsoft-365-Podcast sponsern"), [
@@ -250,8 +250,8 @@ PAGES["for/sponsors/"] = dict(
            ("Editorial articles on fitting topics reference your entities and the episodes. Digital PR works towards earned mentions in relevant Microsoft 365 publications – no bought links.",
             "Redaktionelle Artikel zu passenden Themen verweisen auf deine Entitäten und die Folgen. Digital PR arbeitet auf verdiente Erwähnungen in relevanten Microsoft-365-Medien hin – ohne gekaufte Links."), "paid"),
         _o(("Extras", "Extras"),
-           ("Language shows, a topic sponsorship with at most three sponsors per topic, expert interview episodes, a feature in the M365 Show LinkedIn newsletter and a sponsor dashboard can be added in the configurator.",
-            "Sprach-Shows, ein Themen-Sponsoring mit höchstens drei Sponsoren je Thema, Experten-Interviewfolgen, ein Beitrag im LinkedIn-Newsletter der M365 Show und ein Sponsoren-Dashboard lassen sich im Konfigurator ergänzen."), "paid"),
+           ("Language shows, banner advertising on episode pages, topic pages and blog posts (booked per 1,000 impressions, optionally only on pages about your topics), expert interview episodes, a feature in the M365 Show LinkedIn newsletter and a sponsor dashboard can be added in the configurator.",
+            "Sprach-Shows, Banner-Werbung auf Folgenseiten, Themenseiten und Blogbeiträgen (gebucht pro 1.000 Einblendungen, auf Wunsch nur auf Seiten zu deinen Themen), Experten-Interviewfolgen, ein Beitrag im LinkedIn-Newsletter der M365 Show und ein Sponsoren-Dashboard lassen sich im Konfigurator ergänzen."), "paid"),
     ]),
     steps=(("How sponsoring works", "So funktioniert das Sponsoring"), [
         (("Pick a goal", "Ziel wählen"), ("Choose whether you want to be cited by AI assistants, build brand visibility or generate leads. The configurator adapts its recommendations to that goal.",
@@ -712,7 +712,7 @@ PAGES["i-want-to/reach-microsoft-365-buyers/"] = dict(
     lead=("Promote your Microsoft partner company or product where Microsoft 365 professionals research solutions: in podcast episodes, on topic pages and in the answers of AI assistants.",
           "Mach dein Microsoft-Partnerunternehmen oder Produkt dort sichtbar, wo Microsoft-365-Fachleute nach Lösungen suchen: in Podcast-Folgen, auf Themenseiten und in den Antworten von KI-Assistenten."),
     cta=(("View sponsorship options", "Sponsoring-Möglichkeiten ansehen"), "sponsor"),
-    card=(("Topic sponsorship, entity pages and AI visibility with sourced figures.", "Themen-Sponsoring, Entitätsseiten und KI-Sichtbarkeit mit belegten Zahlen."),
+    card=(("Topic-based sponsorship, banner advertising on topic pages, entity pages and AI visibility with sourced figures.", "Themenbasiertes Sponsoring, Banner-Werbung auf Themenseiten, Entitätsseiten und KI-Sichtbarkeit mit belegten Zahlen."),
           ("Marketing teams of Microsoft partners and vendors", "Marketing-Teams von Microsoft-Partnern und Anbietern"),
           [("Be found for buyer topics", "Für Käuferthemen gefunden werden"), ("Tracked AI citations", "Gemessene KI-Zitate"), ("Company profile in the directory", "Firmenprofil im Verzeichnis")]),
     need=(("The challenge: buyers research before they talk to sales", "Die Herausforderung: Käufer recherchieren, bevor sie mit dem Vertrieb sprechen"), [
@@ -761,8 +761,8 @@ PAGES["i-want-to/reach-microsoft-365-buyers/"] = dict(
     ]),
     faq=[
         (("How can I promote my Microsoft partner company?", "Wie mache ich mein Microsoft-Partnerunternehmen bekannter?"),
-         ("Combine a company profile in the community directory with a topic sponsorship from the sponsor page. The profile shows your partner status and expertise; the sponsorship connects your brand with the topics buyers research.",
-          "Kombiniere ein Firmenprofil im Community-Verzeichnis mit einem Themen-Sponsoring von der Sponsoring-Seite. Das Profil zeigt Partnerstatus und Fachgebiete; das Sponsoring verbindet deine Marke mit den Themen, die Käufer recherchieren.")),
+         ("Combine a company profile in the community directory with a topic-based sponsorship or banner advertising on topic pages from the sponsor page. The profile shows your partner status and expertise; the sponsorship connects your brand with the topics buyers research.",
+          "Kombiniere ein Firmenprofil im Community-Verzeichnis mit einem themenbasierten Sponsoring oder Banner-Werbung auf Themenseiten von der Sponsoring-Seite. Das Profil zeigt Partnerstatus und Fachgebiete; das Sponsoring verbindet deine Marke mit den Themen, die Käufer recherchieren.")),
         (("What is GEO and why does it matter?", "Was ist GEO und warum ist es wichtig?"),
          ("Generative engine optimisation means making your brand a source that AI assistants such as Microsoft Copilot cite in their answers. M365.FM tracks AI citations through Bing Webmaster Tools.",
           "Generative Engine Optimisation bedeutet, deine Marke zu einer Quelle zu machen, die KI-Assistenten wie Microsoft Copilot in ihren Antworten zitieren. M365.FM misst KI-Zitate über die Bing Webmaster Tools.")),

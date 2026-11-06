@@ -22,7 +22,9 @@ unbekannte Felder sind deshalb ein Fehler):
                                                    WebPage.sponsor, Link "Offizielle Website" mit rel="sponsored noopener"
         "topics": ["entra-id"],                    optional: Themen-Sponsoring (Entitaets-ids vom Typ product, platform, concept, category, cert).
                                                    Wie "entities", aber rel="sponsored" nur fuer Links auf die Website des Sponsors (die offizielle Website
-                                                   eines Microsoft-Produkts ist kein bezahlter Link). Hoechstens 3 Themen-Sponsorings je Thema gleichzeitig
+                                                   eines Microsoft-Produkts ist kein bezahlter Link). Ohne Obergrenze je Thema: das eigene Produkt
+                                                   "Themen-Sponsoring" (max. 3 je Thema) gibt es nicht mehr, Banner-Werbung mit Themen-Targeting ersetzt es
+                                                   (Mirko, 6.11.2026); bestehende Eintraege bleiben gekennzeichnet
         "episodes": ["<slug>", "de/<slug>"],       optional: Folgen. "<slug>" = englische Show (/show/episodes/<slug>/), "<sprache>/<slug>" = Dub-Folge (/de/<slug>/);
                                                    auch volle Pfade wie "/show/episodes/<slug>/". Gilt fuer alle Sprachfassungen der Folge (englische Seite,
                                                    lokalisierte Show-Seiten, Dub-Folgen desselben Videos) und DAUERHAFT, auch nach dem Ende der Laufzeit
@@ -34,8 +36,7 @@ unbekannte Felder sind deshalb ein Fehler):
   }
 
 Felder, die mit "_" beginnen, sind nur auf oberster Ebene erlaubt (Hinweise, z. B. "_doc").
-Pruefungen beim Bau: Aufbau und Felder, Datumsangaben (start <= end), unbekannte Entitaeten, Themen, Folgen und Beitraege,
-hoechstens TOPIC_MAX gleichzeitig laufende Themen-Sponsorings je Thema (an jedem Tag, auch in der Zukunft), Uebersetzungen der Kennzeichnung
+Pruefungen beim Bau: Aufbau und Felder, Datumsangaben (start <= end), unbekannte Entitaeten, Themen, Folgen und Beitraege, Uebersetzungen der Kennzeichnung
 fuer alle 15 Sprachen in data/py_i18n.json. Mit SITE_OFFLINE=1 (lokaler Bau ohne Community-API) werden unbekannte Verweise nur gemeldet.
 Zum Testen: Umgebungsvariable M365_SPONSORSHIPS = Pfad einer anderen Datei (nie echte Daten aus Tests committen)."""
 import json, os, re
@@ -49,7 +50,6 @@ FILE = Path(__file__).parent / "data" / "sponsorships.json"
 I18N = Path(__file__).parent / "data" / "py_i18n.json"
 ENV = "M365_SPONSORSHIPS"
 LABELS = ("sponsored", "advertisement")
-TOPIC_MAX = 3   # "max. 3 sponsors per topic" (Sponsor-Seite); der Bau prueft es hier
 TOPIC_TYPES = ("product", "platform", "concept", "category", "cert")
 REC_KEYS = ("id", "sponsor", "label", "start", "end", "entities", "topics", "episodes", "posts", "go")
 REF_KEYS = ("entities", "topics", "episodes", "posts")
@@ -173,25 +173,6 @@ def post_ref(x):
     return (m.group(1), m.group(2)) if m else None
 
 
-def check_topic_limit(recs):
-    """Hoechstens TOPIC_MAX Themen-Sponsorings je Thema, die sich zeitlich ueberschneiden (an jedem Tag, auch in der Zukunft;
-    die groesste Ueberschneidung liegt immer an einem Starttag)."""
-    errs, by = [], {}
-    for r in recs:
-        s, e = _day(r.get("start")), _day(r.get("end"))
-        if not (s and e): continue
-        for t in r.get("topics") or []:
-            by.setdefault(t, []).append((s, e, str(r.get("id"))))
-    for t, lst in sorted(by.items()):
-        worst, day0 = [], None
-        for a in lst:
-            hit = [b for b in lst if b[0] <= a[0] <= b[1]]
-            if len(hit) > len(worst): worst, day0 = hit, a[0]
-        if len(worst) > TOPIC_MAX:
-            errs.append(f'Thema "{t}": {len(worst)} Themen-Sponsorings gleichzeitig am {day0.isoformat()} (hoechstens {TOPIC_MAX}): ' + ", ".join(sorted(b[2] for b in worst)))
-    return errs
-
-
 def check_i18n():
     """Kennzeichnung muss in allen 15 Sprachen von Hand gepflegt sein (keine maschinelle Uebersetzung fuer Rechtstexte)."""
     try: d = json.loads(I18N.read_text("utf-8"))
@@ -243,7 +224,7 @@ def init(today, ents, episodes=(), dubs=None, orig=None, path=None):
     errs, ref = check_refs(recs, ents, episodes, dubs)
     if ref and _offline():
         print("WARNUNG (SITE_OFFLINE=1) Sponsorings:\n - " + "\n - ".join(ref)); ref = []
-    _fail(check_topic_limit(recs) + errs + ref)
+    _fail(errs + ref)
     st = _index(recs, today, dubs or {}, orig or {})
     print(f"Sponsorings: {len(recs)} Eintraege, {sum(1 for r in recs if _active(r, st['today']))} laufend; gekennzeichnet: {len(st['ent'])} Entitaetsseiten, "
           f"{len(st['ep'])} Folgen der Show, {len(st['vid'])} Videos (Dub-Folgen), {len(st['post'])} Beitraege")
@@ -295,7 +276,7 @@ def check_posts(posts):
 def _state():
     if _S is None:   # ohne init() (einzelnes Modul, Tests): Aufbau und Themen-Grenze pruefen, Verweise nicht
         recs, errs = check_structure(read())
-        _fail(errs + check_topic_limit(recs))
+        _fail(errs)
         _index(recs, date.today().isoformat(), {}, {})
     return _S
 

@@ -56,7 +56,7 @@ afterEach(() => { globalThis.fetch = realFetch; });
 
 const topic = (name, lvl = 2) => ({ id: name, name, en: name, lvl, rated: true, example: false, custom: false });
 function state(extra = {}) {
-  return { goal: "ai", rt: 6, topics: [topic("Teams Phone")], video: false, pr: true, auth: false, dash: false, l14: false, topic: false, expert: false, li: false, live: false, con: false,
+  return { goal: "ai", rt: 6, topics: [topic("Teams Phone")], video: false, pr: true, auth: false, dash: false, l14: false, ads: false, expert: false, li: false, live: false, con: false,
     cnt: { pr: 1, ex: 1, li: 1, lv: 1 }, prTouched: false, ...extra };
 }
 async function call(path, { method = "GET", body, user } = {}) {
@@ -73,7 +73,7 @@ test("Server-Preis = Seiten-Preis (SponsorCalc.compute) für viele Kombinationen
     state(),
     state({ rt: 1, pr: false }),
     state({ rt: 3, video: true, topics: [topic("A"), topic("B", 4)] }),
-    state({ rt: 12, video: true, auth: true, topic: true, l14: true, li: true, cnt: { pr: 3, ex: 2, li: 4, lv: 2 }, prTouched: true, expert: true, live: true }),
+    state({ rt: 12, video: true, auth: true, ads: true, l14: true, li: true, cnt: { pr: 3, ex: 2, li: 4, lv: 2 }, prTouched: true, expert: true, live: true }),   // Banner: nicht im Paketpreis
     state({ goal: "lead", rt: 6, topics: [] }),   // Leads: Dashboard Pflicht
     state({ goal: "vis", rt: 12, topics: [topic("A"), topic("B"), topic("C"), topic("D")], video: true, dash: true }),
   ];
@@ -90,6 +90,11 @@ test("Server-Preis = Seiten-Preis (SponsorCalc.compute) für viele Kombinationen
   // Client-Summen werden ignoriert, unbekannte Laufzeit abgelehnt
   assert.equal(sponsorQuote(P, { ...SC.orderPackage(state()), total: 1, monthly: 1 }, {}).net_cents, SC.compute(state(), P).total * 100);
   assert.equal(sponsorQuote(P, { ...SC.orderPackage(state()), rt: 2 }, {}).error, "bad_runtime");
+  // Themen-Sponsoring entfallen (6.11.2026): eine alte Auswahl mit topic aendert den Preis nicht, keine Position "topic"
+  const old = sponsorQuote(P, { ...SC.orderPackage(state()), topic: true }, {});
+  assert.equal(old.net_cents, SC.compute(state(), P).total * 100);
+  assert.ok(!old.items.some((i) => i.key === "topic"));
+  assert.ok(!("topic" in SC.orderPackage(state({ ads: true }))), "Banner-Werbung nicht in der Paket-Bestellung");
 });
 
 test("M365Con in der Auswahl: keine Rechnung (Seite blendet um, Server lehnt ab)", async () => {

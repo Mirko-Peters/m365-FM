@@ -8,6 +8,14 @@
 //   A3 Plural ueber Intl.PluralRules (Auftrag): "4 article(s)." -> "4 articles."; Zeilen "Base package × 2" -> "Base package × 2 topics"
 //      (wie im Paket-Beispiel von design.md D2 "Base package × 2 topics – …").
 //   A4 Ticket-Name "Digital PR" (spec §10 #15): Tipp "authority building adds …" -> "digital PR adds …", Zeile "Authority building" -> "Digital PR".
+//   A5 Mirko, 6.11.2026: das Extra "Themen-Sponsoring" (1.500 USD/Monat, hoechstens 3 je Thema) gibt es nicht mehr; an seiner Stelle klappt
+//      "Banner-Werbung" die Buchung der Werbeplaetze (#285) auf. Banner zaehlen nicht zum USD-Paketpreis (TKP in EUR vom Server) und nicht zur
+//      Zeit bis zur Wirkung. Geaendert in tests/sponsor_vectors.json, nur wo "topic" vorkam:
+//      - "1 very hard topic, 12 months, video+PR+auth+topic+lang" -> "... +banner ads+lang (A5)": topic -> ads; Monat 6.200 -> 4.700 USD,
+//        Summe 76.400 -> 58.400 USD (ohne 1.500 USD x 12); SEO-Ende 7.41 -> 8.36 Monate (kein Topic-Abzug 0.5 x 1.9), Balken 57 -> 64.3077 %.
+//      - "custom topic only (medium, to be rated), 6 months" -> "..., banner ads (A5)": topic -> ads; Monat 5.400 -> 3.900 USD,
+//        Summe 32.400 -> 23.400 USD; SEO-Ende 6 -> 6.5 Monate, Balken 46.1538 -> 50 %. GEO bleibt (Mindestwerte).
+//      - "1 medium topic, 3 months, video + PR" und vis_3m_no_topics_pr_off_dash_kept: Tipp vis:noTopic -> vis:noAds (Text tip_vis_ads).
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { createRequire } from "node:module";
@@ -23,7 +31,7 @@ const LVL = { 1: "easy", 2: "medium", 3: "hard", 4: "very hard" };
 
 function state(inp) {
   return { goal: inp.goal, rt: inp.rt, topics: (inp.picked || []).map(([name, lvl, custom], i) => ({ id: "t" + i, name, lvl, rated: !custom, custom: !!custom, example: false })),
-           video: !!inp.video, pr: !!inp.pr, auth: !!inp.auth, dash: !!inp.dash, l14: !!inp.lang, topic: !!inp.topic, expert: !!inp.expert, li: !!inp.li, live: !!inp.live, con: !!inp.con,
+           video: !!inp.video, pr: !!inp.pr, auth: !!inp.auth, dash: !!inp.dash, l14: !!inp.lang, ads: !!inp.ads, expert: !!inp.expert, li: !!inp.li, live: !!inp.live, con: !!inp.con,
            cnt: { pr: 2, ex: 1, li: 1, ...(inp.cnt || {}) }, prTouched: !!inp.prTouched };
 }
 const DEFAULT = { goal: "ai", rt: 6, picked: [["Your brand name", 1], ["Microsoft Teams Phone", 3]], pr: true };
@@ -128,7 +136,7 @@ test("Paket v1: Form, nur Zeichenketten, englisch, Grenzen der API", () => {
     extras: ["LinkedIn newsletter × 2 – $200/month", "Expert episodes × 2 (one-time) – $300", "Sponsor dashboard (one-time) – $500"],
     monthlyUsd: "$7,400", oneOffUsd: "$2,800", totalUsd: "$47,200", discount: "10%",
     effect: "AI citations in ~6–8 weeks, rankings in ~4.1–8.3 months", page: "/de/sponsor/" });
-  const big = state({ goal: "vis", rt: 12, picked: Array.from({ length: 25 }, (_, i) => ["x".repeat(78) + i, 2, true]), video: true, lang: true, topic: true, li: true, expert: true, pr: true, con: true });
+  const big = state({ goal: "vis", rt: 12, picked: Array.from({ length: 25 }, (_, i) => ["x".repeat(78) + i, 2, true]), video: true, lang: true, ads: true, li: true, expert: true, pr: true, con: true });
   const p2 = SC.buildPackage(big, P, EN, { nLangs: 14, page: "/sponsor/", con: true });
   const js = JSON.stringify(p2);
   assert.ok(js.length <= 5000, "<= 5000 Zeichen: " + js.length);
@@ -173,6 +181,44 @@ test("Livesession: 1.000 USD je Stueck, einmalig, ohne Rabatt, Zeile und Paket",
   assert.notEqual(SC.stateKey(s), SC.stateKey(state(DEFAULT)), "Zustandsschluessel kennt die Livesession");
   for (const lang of Object.keys(I).filter((k) => k !== "_doc"))
     for (const k of ["live_h", "live_hint", "live_note", "live_stepper", "row_live", "unit_session"]) assert.ok(I[lang][k], `${lang}: ${k}`);
+});
+
+// A5: Banner-Werbung statt Themen-Sponsoring - Zeile nach der USD-Summe, Betrag nur vom Server, Paketzeile fuer die Anfrage
+test("Banner-Werbung: nicht im USD-Preis, eigene Zeile, Zusammenfassung, Paket, Tipp, keine Platzgrenze", () => {
+  assert.ok(!("topic" in P.prices) && !("topic_sponsors_max" in P), "kein Themen-Sponsoring mehr in den Preisen");
+  assert.ok(!P.effect.adjust.some((a) => a.if === "topic" || a.if === "ads"), "Banner aendern die Zeit bis zur Wirkung nicht");
+  const off = SC.compute(state(DEFAULT), P);
+  const sel = { product: "banner_mid", name: "Middle banner (300×250)", page_types: ["episode", "entity", "blog"], topics: ["teams-phone"], months: 3, quantity: 20000, exclusive: false, net_cents: 62500 };
+  const s = { ...state(DEFAULT), ads: true, adsSel: sel }, r = SC.compute(s, P);
+  assert.equal(r.monthly, off.monthly); assert.equal(r.total, off.total); assert.deepEqual(r.seo, off.seo);
+  const v = SC.view(s, P, EN, CTX), rows = v.rows.map((x) => x.k);
+  assert.deepEqual(rows.slice(-2), ["total", "ads"], "Banner nach der USD-Summe");
+  const row = v.rows.find((x) => x.k === "ads");
+  assert.deepEqual([row.label, row.amount, row.cls], ["Banner advertising · 20,000 impressions (net, EUR, billed separately)", "€625.00", "ads"]);
+  assert.equal(v.summary, "Your package: $5,400 per month, $34,400 for 6 months. Plus banner advertising: €625.00 net, billed separately.");
+  const de = SC.view(s, P, { lang: "de", T: I.de, E: I.en }, CTX).rows.find((x) => x.k === "ads");
+  assert.deepEqual([de.label, de.amount], ["Banner-Werbung · 20.000 Einblendungen (netto, EUR, separat berechnet)", "625,00\u00a0€"]);
+  // ohne Preis vom Server (Abfrage laeuft noch / API nicht erreichbar): offen, nie ein selbst gerechneter Betrag
+  const open = SC.view({ ...s, adsSel: { ...sel, net_cents: null } }, P, EN, CTX);
+  assert.equal(open.rows.find((x) => x.k === "ads").amount, "price follows");
+  assert.equal(open.summary, "Your package: $5,400 per month, $34,400 for 6 months. Plus banner advertising – the price follows with our offer.");
+  assert.equal(SC.view({ ...state(DEFAULT), ads: true }, P, EN, CTX).rows.find((x) => x.k === "ads").label, "Banner advertising", "vor der ersten Abfrage");
+  // Anfrage (Buchung aus): Auswahl als eine englische Zeile in extras, Schluessel des Pakets unveraendert
+  const pkg = SC.buildPackage(s, P, { lang: "de", T: I.de, E: I.en }, CTX);
+  assert.deepEqual(Object.keys(pkg), ["v", "goal", "topics", "duration", "components", "extras", "monthlyUsd", "oneOffUsd", "totalUsd", "discount", "effect", "page"]);
+  assert.ok(pkg.extras.includes("Banner advertising: Middle banner (300×250), 20,000 impressions, 3 months, pages: episode, entity, blog, topics: teams-phone – €625.00 net"), JSON.stringify(pkg.extras));
+  assert.equal(pkg.totalUsd, "$34,400");
+  assert.ok(!("topic" in SC.orderPackage(s)) && !("ads" in SC.orderPackage(s)), "Banner nicht in der Paket-Bestellung (eigene Buchung)");
+  assert.notEqual(SC.stateKey(s), SC.stateKey(state(DEFAULT)), "Zustandsschluessel kennt die Banner-Werbung");
+  // Tipp fuer Markensichtbarkeit; ohne Haken ein Hinweis auf Banner, keine Platzgrenze mehr im Text
+  const vis = SC.view(state({ goal: "vis", rt: 6, picked: [["Teams Rooms", 2]], video: true, lang: true }), P, EN, CTX);
+  assert.ok(vis.calc.tips.includes("vis:noAds"));
+  assert.ok(!SC.view({ ...state({ goal: "vis", rt: 6, picked: [["Teams Rooms", 2]], video: true, lang: true }), ads: true }, P, EN, CTX).calc.tips.includes("vis:noAds"));
+  for (const lang of Object.keys(I).filter((k) => k !== "_doc")) {
+    for (const k of ["ads_h", "ads_hint", "ads_price", "unit_cpm", "ads_on", "ads_off", "row_ads", "row_ads_open", "sum_ads", "sum_ads_open", "tip_vis_ads"]) assert.ok(I[lang][k], `${lang}: ${k}`);
+    for (const k of ["topic_h", "topic_hint", "row_topic", "tip_vis_topic"]) assert.ok(!(k in I[lang]), `${lang}: ${k} entfernt`);
+    assert.ok(!/\{n\}/.test(I[lang].tip_vis_ads), `${lang}: keine Platzzahl`);
+  }
 });
 
 test("Formularpruefung wie die API und Fehlerzuordnung", () => {
