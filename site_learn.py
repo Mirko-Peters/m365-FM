@@ -319,7 +319,7 @@ def build_learn(ctx):
             u = f"{gb}{x['id']}/"; tgt = f"{BASE}/{'de/' if lang == 'de' else ''}entity/{x['id']}/"
             tl = ("Seite ausgemustert", "Dieser Glossareintrag ist jetzt die Entität:", "Glossar") if lang == "de" else ("Page retired", "This glossary entry is now the entity:", "Glossary")
             bb = f'<main class="wrap"><h1>{tl[0]}</h1><p>{tl[1]} <a class="btn main" href="{tgt}">{esc(x["name"])}</a></p><p><a class="btn" href="{gb}">{tl[2]}</a></p></main>'
-            write(f"{rel}/{x['id']}/index.html", page(lang, tl[0], tl[1], u, bb, None, [], noindex=True))
+            (g.get("write_r2") or write)(f"{rel}/{x['id']}/index.html", page(lang, tl[0], tl[1], u, bb, None, [], noindex=True))   # noindex-Hinweisseiten (je ~12 kB, ~44 MB): R2 statt GitHub Pages (Groessenlimit docs/)
 
     for lang in langs_all:
         t = T(lang)
