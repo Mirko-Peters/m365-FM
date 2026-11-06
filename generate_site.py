@@ -1305,7 +1305,7 @@ def build():
     # Steht vor den Sprach-Startseiten (6.11.2026), damit jede Startseite die Beitraege ihrer Sprache zeigt.
     import site_blog as BLG
     import site_legacy_blog as LBL
-    _posts = BLG.fetch_posts(COMMUNITY_API); _have = {(p["slug"], p.get("lang") or "en") for p in _posts if p["handle"] == "mirko-p"}
+    _posts = list(BLG.fetch_posts(COMMUNITY_API)); _have = {(p["slug"], p.get("lang") or "en") for p in _posts if p["handle"] == "mirko-p"}
     import site_content_blog as CBL; _posts += [p for p in CBL.translations(BASE, _posts, LRN.ENTS) if (p["slug"], p["lang"]) not in _have]   # Sprachfassungen der englischen Content-Pakete (Uebersetzer-Team, data/blog_i18n), nur zu live stehenden Originalen
     _posts += [p for p in LBL.items(BASE) if (p["slug"], p.get("lang") or "en") not in _have]   # plus die frueheren Podpage-Blogbeitraege als Community-Beitraege von mirko-p; T6: je Slug UND Sprache (die deutschen Fassungen blieben sonst beim D1-Import auf der Strecke)
     # Sprach-Startseiten (Wunsch Mirko 6.11.2026: "Behandle die Startseite als komplett eigene"): /<sprache>/ ist die Startseite von "/" in der
@@ -1492,7 +1492,7 @@ def build():
             body = f'<main class="wrap"><h1>{tl[0]}</h1><p>{tl[1]}</p>' + (f'<p>{tl[2]} <a class="btn main" href="{tgt}">{esc(r.get("name") or to)}</a></p>' if tgt else "") + f'<p><a class="btn" href="{BASE}/{pre if lang in LANGS else ""}">{tl[3]}</a></p></main>'
             write(path + "index.html", page("de" if lang == "de" else "en", tl[0], tl[1], f"{BASE}/{path}", body, None, [], noindex=True))
 
-    LRN.build_learn(dict(write=write, page=page, header=header, footer=footer, footer_en=footer_en, BASE=BASE, LANGS=LANGS, active=active, by_lang=by_lang, catidx=catidx,
+    LRN.build_learn(dict(write=write, write_r2=write_r2, page=page, header=header, footer=footer, footer_en=footer_en, BASE=BASE, LANGS=LANGS, active=active, by_lang=by_lang, catidx=catidx,
                         articles=articles, url_of=url_of, cat_name=cat_name, ORDER=ORDER, strip_tags=strip_tags, anchor_title=anchor_title, short=short, parse_desc=parse_desc,
                         sitemap=sitemap, TODAY=TODAY, api=COMMUNITY_API, SCORE={l: (_QUI.get(l, {}).get("score") or _QUI["en"]["score"]) for l in list(LANGS) + ["en"]}))
 
