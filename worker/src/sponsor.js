@@ -1,5 +1,6 @@
 import { cleanText, esc, rateLimit, sha256hex } from "./util.js";
 import { notify } from "./mail.js";
+import { handleAdGo, handleHouseGo, adStatsForOrg } from "./ads.js";
 
 const now = () => Math.floor(Date.now() / 1000);
 const STATUSES = new Set(["new", "contacted", "won", "lost", "spam"]);
@@ -132,6 +133,8 @@ export async function handleSponsorLink(env, request, url, path, ctx) {
     return new Response(null, { status: code ? 404 : 404, headers });
   }
   const link = await env.DB.prepare("SELECT code,target_url,utm FROM sponsor_links WHERE code=? AND active=1").bind(code).first();
+  if (!link && code.startsWith("ad-")) return handleAdGo(env, request, url, code, ctx);   // #281: gebuchte Werbeplaetze
+  if (!link && code.startsWith("h-")) return handleHouseGo(env, request, url, code, ctx);   // #281: Hausanzeigen (M365Con, Services ...)
   const target = safeTarget(link?.target_url);
   if (!link || !target) return miss();
   for (const [key, value] of Object.entries(cleanUtm(link.utm))) target.searchParams.set(key, value);
@@ -182,9 +185,11 @@ export async function handleSponsor(env, request, url, path, J, user) {
     const orgs = (await db.prepare(`SELECT DISTINCT o.id,o.handle,o.name
       FROM orgs o
       WHERE ((?=1 AND (?<>'' OR EXISTS (SELECT 1 FROM sponsor_placements sp WHERE sp.org_id=o.id)
-          OR EXISTS (SELECT 1 FROM event_partners ep WHERE ep.org_id=o.id)))
+          OR EXISTS (SELECT 1 FROM event_partners ep WHERE ep.org_id=o.id)
+          OR EXISTS (SELECT 1 FROM ad_bookings ab WHERE ab.org_id=o.id AND ab.status<>'draft')))
         OR (?=0 AND (EXISTS (SELECT 1 FROM sponsor_placements sp WHERE sp.org_id=o.id)
-          OR EXISTS (SELECT 1 FROM event_partners ep WHERE ep.org_id=o.id))
+          OR EXISTS (SELECT 1 FROM event_partners ep WHERE ep.org_id=o.id)
+          OR EXISTS (SELECT 1 FROM ad_bookings ab WHERE ab.org_id=o.id AND ab.status<>'draft'))
           AND EXISTS (SELECT 1 FROM org_members m WHERE m.org_id=o.id AND m.user_id=?
             AND m.status='active' AND m.role IN ('owner','admin','events'))))
         AND (?='' OR o.handle=?)
@@ -256,7 +261,8 @@ export async function handleSponsor(env, request, url, path, J, user) {
           .bind(placement.id, period.from, period.to).all()).results || [];
         placementRows.push({ ...placement, refs, metrics: records, clicks: clickBreakdown });
       }
-      items.push({ id: org.id, handle: org.handle, name: org.name, metrics, weekly, next_placements: nextPlacements,
+      const ads = await adStatsForOrg(db, org.id, period.from, period.to).catch(() => []);   // #281: gebuchte Werbeplaetze
+      items.push({ id: org.id, handle: org.handle, name: org.name, metrics, weekly, next_placements: nextPlacements, ads,
         manual: manual.map((metric) => ({ ...metric, kind: "manual", as_of: new Date(metric.updated * 1000).toISOString().slice(0, 10) })),
         placements: placementRows.map((placement) => ({ ...placement, type: placement.channel })),
         event_partners: eventPartners.map((event) => ({ ...event, type: "event_partner", metric: null })),

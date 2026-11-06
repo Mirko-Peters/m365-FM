@@ -173,6 +173,12 @@ def dashboard_copy(lang):
         "rule_leads": ("Leads are shared only with consent.", "Leads geben wir nur mit Einwilligung weiter."),
         "rule_source": ("Every figure shows its source and latest update.", "Jede Kennzahl zeigt Quelle und letzten Datenstand."),
         "search_impressions": ("Search impressions", "Such-Impressionen"),
+        "ads_title": ("Booked ad placements", "Gebuchte Werbeplätze"),
+        "ads_impressions": ("Impressions", "Einblendungen"),
+        "ads_ctr": ("Click rate", "Klickrate"),
+        "ads_leads": ("Leads", "Leads"),
+        "ads_volume": ("Used / booked", "Verbraucht / gebucht"),
+        "ads_note": ("Counted on M365.FM without cookies; bots are filtered out. Leads are listed on the ad placements page.", "Auf M365.FM ohne Cookies gezählt; Bots werden herausgefiltert. Leads stehen auf der Seite Werbeplätze."),
         "detail_intro": ("Placement performance and source data", "Leistung und Quelldaten der Platzierung"),
         "podcast_tab": ("Podcast", "Podcast"),
         "video_tab": ("Video", "Video"),
@@ -542,6 +548,7 @@ html.a11y-hc .spn{--spn-on:#ffb52e;--spn-good:#3cc9a1;--spn-red:#ff8a80}
 .spn-err{margin:0;font-size:.86rem;color:var(--spn-red)}
 .spn-hp{position:absolute;inset-inline-start:-10000px;width:1px;height:1px;overflow:hidden}
 .spn-status{padding:10px 12px;border:1px solid var(--spn-red)}.spn-status:focus{outline:3px solid var(--ac)}
+.spn-inv{margin-top:20px;padding:14px 18px;border:1px solid var(--bd);background:var(--card)}.spn-inv summary{cursor:pointer;font-weight:700}.spn-inv form{margin-top:10px}
 .spn-done{padding:16px 18px;border:1px solid var(--ac);background:var(--spn-soft)}.spn-done h3{font-size:1.3rem;margin-bottom:6px}.spn-done p{margin:0}
 .spn-faq{margin-top:8px}.spn-faq h2{font-size:1.5rem;margin:28px 0 8px}
 /* Rueckfall-Texte (englisch) auf ar/he-Seiten: Reihenfolge nach dem Inhalt, Ausrichtung bleibt die der Seite */
@@ -714,10 +721,30 @@ def body_html(g, lang, stats, quick, ssr, n_main, n_langs, con_on):
             f'<p class="spn-err" id="spn-topics-e" hidden></p><div><button type="submit" class="spn-btn" id="spn-submit" disabled>{E(t("submit"))}</button></div>'
             f'<p class="spn-fine">{E(t("privacy", link="{link}")).replace("{link}", plink)}</p>'
             f'<div class="spn-status" id="spn-status" tabindex="-1" hidden></div></form>'
-            f'<div class="spn-done" id="spn-done" tabindex="-1" hidden><h3>{E(t("done_h"))}</h3><p>{E(t("done_p"))}</p></div></section>')
+            f'<div class="spn-done" id="spn-done" tabindex="-1" hidden><h3>{E(t("done_h"))}</h3><p>{E(t("done_p"))}</p></div>'
+            + invoice_html(t) + '</section>')
     faq = "".join(f'<details><summary>{E(q)}</summary><p>{E(a)}</p></details>' for q, a in faq_items(lang, stats, nums, day))
     faq = f'<section class="faq spn-faq" aria-labelledby="spn-faq-h"><h2 id="spn-faq-h">{E(t("faq_h"))}</h2>{faq}</section>'
     return hero + nojs + f'<div class="spn-grid"><div class="spn-build">{s1}{s2}{s3}{s4}{s5}</div>{console}{form}{faq}</div>'
+
+
+def advertise_button(B, lang):
+    """#281: Verweis auf die direkt buchbaren Werbeplaetze - nur, wenn die Buchung an ist (data/ad_slots.json "booking")."""
+    import site_ads as ADS
+    if not ADS.booking_on():
+        return ""
+    return f'<a class="btn" href="{E(ADS.advertise_url(B, lang))}">{E(ADS.texts(lang, "slot")["adv_cta"])}</a>'
+
+
+def invoice_html(t):
+    """#281: direkt bestellen per PayPal-Rechnung, nur ohne M365Con (assets/sponsor.js blendet um; Preis rechnet der Server neu).
+    Solange die Buchung aus ist (data/ad_slots.json "booking"), gibt es nur das Anfrageformular."""
+    import site_ads as ADS
+    if not ADS.booking_on():
+        return ""
+    return (f'<details class="spn-inv" id="spn-inv" hidden><summary>{E(t("inv_h"))}</summary><p>{E(t("inv_intro"))}</p>'
+            f'<div id="spn-inv-body" aria-live="polite"></div></details>'
+            f'<p class="spn-fine" id="spn-inv-con" hidden>{E(t("inv_con"))}</p>')
 
 
 def faq_items(lang, stats, nums, day):
@@ -798,10 +825,12 @@ def build(g):
         hl = g["LANGS"][lang][1] if lang in LG else "en"
         cfg = {"P": P, "T": I18N.get(lang, {}) if lang != "en" else {}, "E": EN, "lang": lang, "api": g["api"], "page": page, "mail": MAIL, "nLangs": n_langs,
                "con": con_on, "quick": [[q["id"], q["name"], q["en"], q["lvl"], q["rated"], q["example"], q["url"], q["default"], q["al"]] for q in quick],
-               "ents": search, "entBase": ebase, "key": S.get("key", ""), "dec": S.get("dec")}
+               "ents": search, "entBase": ebase, "key": S.get("key", ""), "dec": S.get("dec"),
+               "community": f"{B}/{'' if lang == 'en' else lang + '/'}community/"}
         body = body_html(g, lang, stats, quick, S, n_main, n_langs, con_on)
         dash = dashboard_url(B, lang)
-        body = (f'{g["header"](lang, "")}<main class="wrap spn-wrap"><p><a class="btn" href="{E(dash)}">{E(tx(lang, "dash_h"))}</a></p>'
+        adv = advertise_button(B, lang)
+        body = (f'{g["header"](lang, "")}<main class="wrap spn-wrap"><p><a class="btn" href="{E(dash)}">{E(tx(lang, "dash_h"))}</a> {adv}</p>'
                 f'<div class="spn" id="spn" data-ssr="{1 if S else 0}" data-cfg="{E(json.dumps(cfg, ensure_ascii=False, separators=(",", ":")))}">'
                 f'{body}</div></main>{g["footer"](lang)}{js}')
         faqs = faq_items(lang, stats, S.get("nums") or {}, _day(g))
