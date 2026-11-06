@@ -168,7 +168,7 @@ test("Admin-Leads: Admin sieht die Mediadaten-Anfragen, neueste zuerst, Cache-Co
 test("Admin-Leads: Reiter in assets/admin.js (nur Text, mailto, CSV, Filter) und keine oeffentliche Seite kennt den Endpunkt", () => {
   const js = readFileSync(new URL("../../assets/admin.js", import.meta.url), "utf8");
   assert.match(js, /\["mk", "Mediadaten-Anfragen"\]/); assert.match(js, /api\("\/api\/admin\/mediakit"\)/);
-  assert.match(js, /"mailto:" \+ x\.email/); assert.match(js, /text\/csv/); assert.match(js, /Mediadaten-Anfragen \(Leads\)/);
+  assert.match(js, /href: mailto\(x\.email\)/); assert.match(js, /encodeURIComponent\(String\(a \|\| ""\)\)\.replace\(\/%40\/g, "@"\)/); assert.doesNotMatch(js, /"mailto:" \+ x\.email/); assert.match(js, /text\/csv/); assert.match(js, /Mediadaten-Anfragen \(Leads\)/);
   assert.doesNotMatch(js, /\binnerHTML\b|insertAdjacentHTML/);
   for (const f of readdirSync(new URL("../../assets/", import.meta.url)).filter((f) => f.endsWith(".js") && f !== "admin.js"))
     assert.doesNotMatch(readFileSync(new URL("../../assets/" + f, import.meta.url), "utf8"), /\/api\/admin\/mediakit/, f);

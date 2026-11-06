@@ -2,6 +2,8 @@
    window.M365ADM = {api, base} */
 (function () {
   var C = window.M365ADM || {}, API = C.api, BASE = C.base || "", root = document.getElementById("adm"); if (!root || !API) return;
+  // mailto-Link: Adresse kodieren, damit ?cc=/&body= aus einer eingeschleusten Adresse nicht als Mail-Parameter wirken
+  function mailto(a) { return "mailto:" + encodeURIComponent(String(a || "")).replace(/%40/g, "@"); }
   function h(t, a, kids) { var e = document.createElement(t); a = a || {}; for (var k in a) { if (k === "text") e.textContent = a[k]; else if (k === "class") e.className = a[k]; else if (k.slice(0, 2) === "on") e[k] = a[k]; else e.setAttribute(k, a[k]); } (kids || []).forEach(function (x) { if (x != null) e.appendChild(typeof x === "string" ? document.createTextNode(x) : x); }); return e; }
   function api(p, o) { o = o || {}; o.credentials = "include"; o.headers = Object.assign({ "x-requested-with": "m365" }, o.headers || {}); if (o.body && typeof o.body !== "string") { o.body = JSON.stringify(o.body); o.headers["content-type"] = "application/json"; } return fetch(API + p, o).then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { s: r.status, j: j }; }); }); }
   var TYPES = { product: "Produkt", platform: "Plattform", concept: "Konzept", org: "Firma", person: "Person", cert: "Zertifikat", event: "Event", media: "Medium", category: "Kategorie" };
@@ -138,7 +140,7 @@
       var q = filter.value.trim().toLowerCase();
       var list = rows.filter(function (x) { return !q || [x.name, x.company, x.email, x.source, x.lang, x.err].join(" ").toLowerCase().indexOf(q) >= 0; });
       body.textContent = "";
-      list.forEach(function (x) { body.appendChild(h("tr", {}, [h("td", { text: day(x.created) }), h("td", { text: x.name }), h("td", { text: x.company }), h("td", {}, [h("a", { href: "mailto:" + x.email, text: x.email })]), h("td", { text: x.lang }), h("td", { text: x.source }), h("td", { text: sent(x) })])); });
+      list.forEach(function (x) { body.appendChild(h("tr", {}, [h("td", { text: day(x.created) }), h("td", { text: x.name }), h("td", { text: x.company }), h("td", {}, [h("a", { href: mailto(x.email), text: x.email })]), h("td", { text: x.lang }), h("td", { text: x.source }), h("td", { text: sent(x) })])); });
       count.textContent = list.length + " von " + rows.length; csvBtn._list = list;
     }
     function cell(v) { v = String(v == null ? "" : v); if (/^[=+\-@\t\r]/.test(v)) v = "'" + v; return '"' + v.replace(/"/g, '""') + '"'; }
@@ -182,7 +184,7 @@
         });
       });
       var main = h("tr", {}, [h("td", { style: NB, text: when }), h("td", { style: NB, text: x.company }), h("td", { style: NB, text: x.name }),
-        h("td", { style: NB }, [x.email ? h("a", { href: "mailto:" + x.email, text: x.email }) : "–"]),
+        h("td", { style: NB }, [x.email ? h("a", { href: mailto(x.email), text: x.email }) : "–"]),
         h("td", { style: NB }, [LANGN[lang] ? LANGN[lang] + " (" + lang + ")" : lang || "–", page ? h("div", { class: "mut", text: page }) : null]),
         h("td", { style: NB }, pkgCell), h("td", { style: NB }, [bullets(topics)]), h("td", { style: NB + ";white-space:nowrap" }, money.length ? money : ["–"]), h("td", { style: NB }, [state])]);
       var detail = h("tr", {}, [h("td", { colspan: String(COLS.length), style: "padding-top:0" }, [
