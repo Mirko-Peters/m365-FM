@@ -449,7 +449,10 @@ def load_entities(api):
     return base
 
 
-REPO_KEYS = ("city", "country", "street", "zip", "founded", "company", "disclosure", "logo_src")   # nur in data/entities.json gepflegt (Redaktion), nicht im Bearbeiten-Formular
+REPO_KEYS = ("city", "country", "street", "zip", "founded", "company", "disclosure", "logo_src", "logo_bg", "award",
+             # belegte Fakten (site_facts.py, #305): ebenfalls nur hier gepflegt, fehlen im Formular und damit in der D1-Fassung
+             "legal_form", "register", "employees", "founders", "ceo", "certifications", "partners", "customers",
+             "deployment", "integrations", "release_year", "trial_url", "positions")   # nur in data/entities.json gepflegt (Redaktion), nicht im Bearbeiten-Formular
 
 
 COMMUNITY_API_DEFAULT = os.environ.get("COMMUNITY_API", "https://api-dub.m365.fm")
