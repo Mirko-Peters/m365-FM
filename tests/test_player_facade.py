@@ -146,7 +146,8 @@ class LoadRules(unittest.TestCase):
     def test_community_css_not_blocking_on_episode_pages(self):
         src = (ROOT / "generate_site.py").read_text("utf-8")
         self.assertIn("{community_tags(l, vid, css_async=True)}", src)
-        self.assertIn('<link rel="preload" as="style" href="{BASE}/assets/community.css" onload=', src)
+        self.assertIn("css_url = f'{BASE}/assets/community.css?v=", src)   # #290: Version im Dateinamen
+        self.assertIn('<link rel="preload" as="style" href="{css_url}" onload=', src)
 
     def test_entity_qa_script_loads_early(self):
         src = (ROOT / "site_entities.py").read_text("utf-8")
