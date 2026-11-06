@@ -125,12 +125,12 @@ CSS = """<style>
 .ec-card{background:var(--card);border:1px solid var(--bd);padding:16px;display:grid;gap:8px;align-content:start}
 .ec-card h3{margin:0;font-size:1.1rem}.ec-card p{margin:0}
 .ec-form{display:grid;gap:12px;max-width:760px}
-.ec-form label,.ec-lbl{display:grid;gap:5px;font-size:.8rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}
-.ec-form input[type=text],.ec-form input[type=date],.ec-form input[type=email],.ec-form select,.ec-form textarea,.ec-bar input,.ec-bar select,.ec-card textarea,.ec-card input[type=text]{font:inherit;font-size:1rem;letter-spacing:0;text-transform:none;color:var(--fg);background:var(--bg);border:1px solid var(--bd);padding:9px 10px;border-radius:0;width:100%;box-sizing:border-box}
+.ec-form label,.ec-lbl{display:grid;gap:6px;font-weight:600;line-height:1.35}
+.ec-form input[type=text],.ec-form input[type=date],.ec-form input[type=email],.ec-form select,.ec-form textarea,.ec-bar input,.ec-bar select,.ec-card textarea,.ec-card input[type=text]{width:100%}
 .ec-ck{display:flex!important;gap:8px;align-items:flex-start;text-transform:none!important;letter-spacing:0!important;font-weight:400!important;font-size:.95rem!important;color:var(--fg)!important}
-.ec-ck input{margin-top:3px;flex:none}
+.ec-ck{min-height:44px;align-items:center!important;cursor:pointer}
 .ec-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
-.ec-bar{display:flex;flex-wrap:wrap;gap:8px;align-items:end;margin-bottom:16px}.ec-bar input,.ec-bar select,.ec-form select,.ec-form input[type=text],.ec-form input[type=date]{height:42px}.ec-bar>*{flex:1 1 150px}.ec-bar .btn{flex:0 0 auto}
+.ec-bar{display:flex;flex-wrap:wrap;gap:8px;align-items:end;margin-bottom:16px}.ec-bar>*{flex:1 1 150px}.ec-bar .btn{flex:0 0 auto}
 .ec-chips{display:flex;flex-wrap:wrap;gap:6px}.ec-chip{border:1px solid var(--bd);background:var(--bg);padding:2px 8px;font-size:.85rem}
 .ec-chip button{border:0;background:none;color:var(--mut);cursor:pointer;padding:0 0 0 6px;font:inherit}
 .ec-badge{display:inline-block;border:1px solid var(--bd);padding:0 6px;font:600 .78rem "Barlow Condensed",sans-serif;letter-spacing:.06em;text-transform:uppercase;margin-inline-end:4px}

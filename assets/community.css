@@ -4,54 +4,31 @@
 .citem header{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.cuser{font-weight:700;text-decoration:none}.cbody{margin:.5em 0;white-space:pre-wrap;overflow-wrap:anywhere}
 .cact{display:flex;flex-wrap:wrap;gap:6px}.cbtn{background:none;border:1px solid var(--bd);color:var(--mut);padding:3px 10px;font:inherit;font-size:.82rem;cursor:pointer}.cbtn:hover,.cbtn.on{border-color:var(--ac);color:var(--ac)}
 .cbs{display:inline-flex;gap:3px}.cb{font-size:1rem;line-height:1;cursor:help}.cb.big{font-size:1.7rem}
-.cform textarea,.cprof textarea,.cprof input,.csub input{width:100%;box-sizing:border-box;padding:10px;font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--bd);border-radius:0;margin:6px 0}
+.cform textarea,.cprof textarea,.cprof input:not([type=checkbox],[type=radio]),.csub input{width:100%;margin:6px 0}   /* Aussehen der Felder: assets/forms.css (site.css) */
 .csub{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0}.csub input{flex:1 1 220px;width:auto;margin:0}
 .clb{list-style:none;margin:0;padding:0}.clb li{display:flex;gap:12px;align-items:center;padding:8px 0;border-top:1px solid var(--bd)}.clb .cr{width:26px;height:26px;line-height:26px;text-align:center;background:var(--ac);color:var(--onac);font-weight:700}.clb li .cmut{margin-inline-start:auto}
 .cbadges{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}.cbadge{display:flex;gap:12px;align-items:center;padding:12px;border:1px solid var(--bd);background:var(--card);border-style:dashed;filter:grayscale(1)}.cbadge:not(.got) .cb{opacity:.45}.cbadge.got{filter:none;border-style:solid;border-color:var(--ac)}.cbadge.got .cb{opacity:1}.cbadge div{display:flex;flex-direction:column}
-.cprof label{display:block;margin-top:10px;font-weight:600}.cdel{margin-top:18px}.ccur{font-weight:600}
+.cdel{margin-top:18px}.ccur{font-weight:600}
 .ccard>h2:first-child,#c-sub>h2:first-child,#c-curator>h2:first-child,#c-comments>h2:first-child{margin-top:0}
 /* Profil-/Firmen-Editor */
 #c-expert .ccard{margin:24px 0;padding:20px 22px;border:1px solid var(--bd);background:var(--card);border-radius:12px}
 #c-expert .ccard h2{margin:0 0 6px;font-size:1.25rem}
 #c-expert .ccard h3{margin:26px 0 8px;padding-top:16px;border-top:1px solid var(--bd);font-size:1.05rem}
-#c-expert .ccard label{display:block;margin:14px 0 4px;font-weight:600}
-#c-expert .ccard input[type=text],#c-expert .ccard input[type=number],#c-expert .ccard input:not([type]),#c-expert .ccard select,#c-expert .ccard textarea{width:100%;box-sizing:border-box;padding:10px 12px;font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--bd);border-radius:8px;margin:0}
-#c-expert .ccard textarea{min-height:120px;resize:vertical}
-#c-expert .ccard input:focus,#c-expert .ccard select:focus,#c-expert .ccard textarea:focus{outline:2px solid var(--ac);outline-offset:1px}
-#c-expert .ccard input[type=checkbox]{width:20px;height:20px;margin:0 10px 0 0;vertical-align:-4px;accent-color:var(--ac)}
-#c-expert .ccard label:has(>input[type=checkbox]){display:flex;align-items:center;font-weight:500;margin:10px 0}
-#c-expert .ccard div[style*=flex] input,#c-expert .ccard div[style*=flex] select{width:auto;flex:1 1 150px;min-width:0}#c-expert .ccard div[style*=flex]{gap:8px!important;margin:6px 0!important}
-#c-expert .ccard .btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
-#c-expert .ccard .btn{padding:9px 18px;border:1px solid var(--bd);border-radius:8px;background:var(--card);color:var(--fg);font:inherit;cursor:pointer}
-#c-expert .ccard .btn.main{background:var(--ac);color:var(--onac);border-color:var(--ac);font-weight:600}
+#c-expert .ccard div[style*=flex]{margin:6px 0!important}
 .clogin{padding:16px 18px;margin:16px 0;border:1px solid var(--bd);border-radius:12px;background:var(--card)}
-.wk-form label{display:block;margin:14px 0 4px;font-weight:600}
-.wk-form input[type=text],.wk-form input[type=number],.wk-form input:not([type]),.wk-form select,.wk-form textarea{width:100%;box-sizing:border-box;padding:10px 12px;font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--bd);border-radius:8px;margin:0}
-.wk-form textarea{min-height:120px;resize:vertical}
-.wk-form input:focus,.wk-form select:focus,.wk-form textarea:focus{outline:2px solid var(--ac);outline-offset:1px}
-.wk-form input[type=checkbox]{width:20px;height:20px;margin:0 10px 0 0;accent-color:var(--ac)}
-.wk-form label:has(>input[type=checkbox]){display:flex;align-items:center;font-weight:500}
-.wk-form .btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
-.wk-form h4,#c-expert .ccard h4{margin:26px 0 8px;padding-top:16px;border-top:1px solid var(--bd);font-size:1.05rem}
-.wk-form div[style*=flex] input,.wk-form div[style*=flex] select{width:auto;flex:1 1 150px;min-width:0}
-.cprof select{width:100%;box-sizing:border-box;padding:10px 12px;font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--bd);border-radius:8px;margin:6px 0}
-#c-events .ccard,#c-events .wk-edit{margin:18px 0}#c-events select,#c-events input[type=text],#c-events textarea{width:100%;box-sizing:border-box;padding:10px 12px;font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--bd);border-radius:8px;margin:0}
-#c-events label{display:block;margin:14px 0 4px;font-weight:600}#c-events label:has(>input[type=checkbox]){display:flex;align-items:center;font-weight:500}#c-events input[type=checkbox]{width:20px;height:20px;margin:0 10px 0 0;accent-color:var(--ac)}
-#c-events .ev-s{padding:10px 0;border-top:1px solid var(--bd)}#c-events .btns{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}
+.cprof select{margin:6px 0}
+#c-events .ccard,#c-events .wk-edit{margin:18px 0}#c-events .ev-s{padding:10px 0;border-top:1px solid var(--bd)}#c-events .btns{margin:14px 0}
 
 .ctabs{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 18px;border-bottom:1px solid var(--bd,#8884)}.ctab{font:inherit;padding:8px 14px;border:1px solid var(--bd,#8884);border-bottom:0;border-radius:8px 8px 0 0;background:transparent;color:inherit;cursor:pointer}.ctab[aria-selected=true]{background:var(--accent,#0a66c2);color:#fff;border-color:transparent}.ctab:focus-visible{outline:2px solid currentColor;outline-offset:2px}[hidden]{display:none!important}
 /* Editor (Blog, Bibliothek) */
 .ed-form>div,.ed-form>p{margin:0 0 16px}.ed-form label{display:block;margin:0 0 6px;font-weight:600}
-.ed-form input[type=text],.ed-form input:not([type]),.ed-form select,.ed-form textarea{width:100%;box-sizing:border-box;padding:10px 12px;font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--bd);border-radius:8px;margin:0}
-.ed-form input:focus,.ed-form select:focus,.ed-form textarea:focus{outline:2px solid var(--ac);outline-offset:1px}
-.ed-form textarea:not(.ed-ta){min-height:70px;resize:vertical}
 .ed-wrap{display:grid;grid-template-columns:1fr;gap:16px}
 .ed-cap{font-size:.8em;text-transform:uppercase;letter-spacing:.08em;color:var(--mut,#8a949c);margin-bottom:6px}
 .ed-bar{display:flex;flex-wrap:wrap;gap:4px;padding:6px;border:1px solid var(--bd);border-bottom:0;border-radius:8px 8px 0 0;background:var(--bg)}
 .ed-b{min-width:36px;height:34px;padding:0 8px;font:inherit;font-weight:600;color:var(--fg);background:transparent;border:1px solid var(--bd);border-radius:6px;cursor:pointer}
 .ed-b:hover,.ed-b:focus-visible{border-color:var(--ac)}.ed-bold{font-weight:900}.ed-ital{font-style:italic}.ed-wide{padding:0 12px}
 .ed-panel{display:flex;flex-wrap:wrap;gap:6px;padding:8px;border:1px solid var(--bd);border-bottom:0;background:var(--bg)}.ed-panel[hidden]{display:none}.ed-panel input{flex:1 1 160px;min-width:0}
-.ed-ta{min-height:420px;resize:vertical;border-radius:0 0 8px 8px!important;line-height:1.55;font-family:ui-monospace,Menlo,Consolas,monospace!important;font-size:.95em}
+.ed-ta{min-height:420px;max-height:none;field-sizing:fixed;resize:vertical;border-radius:0 0 8px 8px!important;line-height:1.55;font-family:ui-monospace,Menlo,Consolas,monospace!important;font-size:max(16px,.95em)}
 .ed-cnt{display:block;text-align:right;font-size:.8em;margin-top:4px}
 .ed-pv{min-height:420px;max-height:70vh;overflow:auto;padding:14px 18px;border:1px dashed var(--bd);border-radius:8px;line-height:1.6}
 .ed-pv h3{font-size:1.35em;margin:1em 0 .4em}.ed-pv h4{font-size:1.1em;margin:1em 0 .3em}.ed-pv blockquote{margin:.8em 0;padding:.2em 1em;border-left:3px solid var(--ac)}

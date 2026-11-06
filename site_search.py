@@ -168,7 +168,7 @@ UI = {   # Oberflaeche der Suchseite (15 Sprachen); Typ-Namen in derselben Reihe
 OTHER_LANG = {
     lang: "{lang}" for lang in ("en", "de", "fr", "es", "it", "nl", "pt", "pl", "id", "ru", "uk", "ar", "he", "ja", "ko")
 }
-CSS = (".srch-f{display:flex;gap:8px;margin:12px 0 18px}.srch-f input{flex:1;min-width:0;font:inherit;padding:10px 12px;border:1px solid var(--line,#ccd);border-radius:6px;background:var(--bg,#fff);color:inherit}"
+CSS = (".srch-f{display:flex;gap:8px;margin:12px 0 18px}.srch-f input{flex:1;min-width:0}"
        ".srch{display:grid;grid-template-columns:220px minmax(0,1fr);gap:24px}@media(max-width:760px){.srch{grid-template-columns:1fr}}"
        ".srch-fa h2{font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;margin:14px 0 6px;color:var(--mut,#667)}"
        ".srch-fa button{display:flex;justify-content:space-between;width:100%;gap:8px;border:0;background:none;color:inherit;font:inherit;text-align:start;padding:3px 0;cursor:pointer}"
