@@ -1003,5 +1003,1026 @@
     "why": "Artykuł wskazuje, że przy jednej–dwóch usługach bramka nie jest konieczna, ale od trzech usług lub przy klientach zewnętrznych szybko się opłaca."
    }
   ]
+ },
+ "id": {
+  "html": "<p>Awalnya aplikasi Anda berjalan baik. Lalu satu layanan ditambahkan, kemudian satu lagi, dan tiba-tiba mengatur lalu lintas antarlayanan terasa seperti pekerjaan tersendiri. Di titik inilah API Gateway sering masuk pembicaraan. Apa sebenarnya fungsinya, masalah apa yang diselesaikan, dan kapan Anda benar-benar membutuhkannya?</p>\n<p>Artikel ini membahas masalahnya lebih dulu, lalu empat tugas utama API Gateway: perutean, keamanan, manajemen lalu lintas, dan transformasi data. Di akhir, Anda akan tahu cara menilai apakah arsitektur Anda sudah memerlukannya.</p>\n\n<h2>Masalah microservices: terlalu banyak pintu</h2>\n<p>Bayangkan sebuah perusahaan yang berkembang besar. Tim sales ada di lantai tiga, akuntansi di tempat lain, dan IT di sisi belakang gedung. Sekarang bayangkan setiap departemen punya pintu depan, nomor telepon, dan satpam sendiri, dan para satpam itu tidak saling berkomunikasi. Seorang pengunjung yang ingin mengantar paket harus tahu persis pintu mana yang dipakai, satpam mana yang diajak bicara, dan apa yang harus dilakukan ketika satpamnya sedang tidak ada.</p>\n<p>Hal yang sama terjadi ketika aplikasi memiliki banyak layanan back-end dan setiap klien memanggilnya langsung satu per satu. Klien, baik aplikasi seluler, situs web, maupun layanan lain, harus tahu:</p>\n<ul>\n<li>di mana setiap layanan berada,</li>\n<li>cara autentikasi ke masing-masing layanan,</li>\n<li>apa yang harus dilakukan saat terjadi masalah.</li>\n</ul>\n<p>Di sisi lain, setiap layanan harus mengurus keamanan, pembatasan kecepatan, dan penanganan error sendiri. Hasilnya pekerjaan ganda, dan sistem mudah menjadi tidak konsisten.</p>\n<h3>Contoh: aplikasi bank</h3>\n<p>Sebuah bank memiliki layanan terpisah untuk rekening, pembayaran, pinjaman, dan deteksi penipuan. Jika semua layanan terekspos langsung, aplikasi seluler harus mengenal 4 URL berbeda, 4 metode autentikasi berbeda, dan 4 cara berbeda menangani kesalahan. Kompleksitas menjadi empat kali lipat, dan risiko kesalahan ikut naik. Kekacauan semacam inilah yang hendak dirapikan oleh API Gateway.</p>\n\n<h2>Apa itu API Gateway?</h2>\n<p>Cara mudah memahaminya adalah membayangkan resepsionis hotel. Saat masuk, Anda tidak perlu tahu di lantai mana bagian kebersihan berada, di mana dapurnya, atau bagaimana menghubungi tim pemeliharaan. Anda cukup menghampiri meja resepsionis dan menyampaikan kebutuhan Anda. Resepsionis meneruskan permintaan ke orang yang tepat, memeriksa izin Anda, bahkan menangani permintaan dasar sendiri.</p>\n<p>API Gateway bekerja serupa untuk perangkat lunak. Ia adalah satu titik masuk yang berada di antara klien dan layanan back-end. Setiap permintaan harus melewati Gateway lebih dulu, dan Gateway memutuskan ke mana permintaan dikirim, apakah diizinkan, dan apa yang dikirim kembali.</p>\n<p>Idenya sendiri tidak baru. Reverse proxy sudah ada puluhan tahun, tetapi gateway menjadi sangat penting sejak microservices populer. Ketika satu aplikasi dipecah menjadi banyak layanan kecil, tiba-tiba ada banyak pintu, dan Gateway menyatukannya menjadi satu pintu depan. Di dunia Azure, Azure API Management adalah platform lengkapnya, dengan Gateway sebagai komponen inti yang menangani lalu lintas. Polanya sama di mana pun: satu titik masuk dengan kontrol terpusat. Klien tidak pernah berbicara langsung dengan layanan back-end, hanya dengan Gateway.</p>\n\n<h2>Perutean: mengarahkan setiap permintaan ke layanan yang tepat</h2>\n<p>Tugas paling mendasar Gateway adalah perutean. Setiap permintaan web membawa sebuah jalur (path). Jika jalurnya mengarah ke pengguna, Gateway meneruskannya ke layanan pengguna. Jika mengarah ke pesanan, permintaan dikirim ke layanan pesanan. Gateway membaca jalur, menentukan tujuan, lalu meneruskannya.</p>\n<p>Tanpa Gateway, aplikasi seluler harus menyimpan alamat layanan pengguna, pesanan, pembayaran, dan katalog. Jika salah satu alamat berubah, setiap klien harus diperbarui. Dengan Gateway, klien cukup mengetahui satu URL, yaitu alamat Gateway. Letak layanan yang sebenarnya tidak lagi menjadi urusan mereka.</p>\n<h3>Perutean berbasis sumber daya dan geolokasi</h3>\n<p>Perutean tidak terbatas pada path. Anda juga bisa merutekan berdasarkan metode HTTP, header, bahkan geolokasi klien. Permintaan dari Eropa dapat diarahkan ke pusat data Eropa, sedangkan permintaan dari AS diarahkan ke pusat data di sana. Klien tidak menyadari semua itu dan hanya merasakan respons yang cepat.</p>\n<h3>Pembuatan versi</h3>\n<p>Perutean juga membantu saat Anda merilis versi baru sebuah layanan. Klien lama tetap diarahkan ke versi lama, sementara klien baru memakai versi baru. Gateway merutekan keduanya ke back-end yang berbeda, sehingga Anda dapat mengubah back-end tanpa merusak klien yang sudah ada. Ini penting untuk aplikasi yang sudah dipakai pengguna sungguhan.</p>\n<p>Pada platform e-commerce dengan layanan terpisah untuk katalog, keranjang belanja, check-out, dan akun pengguna, aplikasi seluler cukup mengenal satu alamat. Gateway membaca path, lalu mengirim setiap permintaan ke layanan yang sesuai.</p>\n\n<h2>Keamanan di pintu depan</h2>\n<p>Setiap panggilan API perlu diperiksa: siapa yang meminta, dan apakah ia punya izin yang tepat. Tanpa Gateway, setiap layanan menangani autentikasinya sendiri. Satu layanan mungkin memeriksa token dengan benar, yang lain melewatkan satu langkah, dan yang ketiga memakai metode yang sama sekali berbeda. Hasilnya keamanan yang tidak konsisten di seluruh aplikasi.</p>\n<p>Gateway menangani autentikasi dan otorisasi di satu tempat terpusat: satu tempat untuk memeriksa, menegakkan, dan memperbarui aturan. Pada setiap permintaan, Gateway dapat memvalidasi kunci API, JWT, token OAuth, atau sertifikat. Semua permintaan melewati pemeriksaan yang sama tanpa jalan pintas.</p>\n<h3>Izin terperinci dan pencabutan akses</h3>\n<p>Di tingkat Gateway Anda dapat menetapkan aturan yang berlaku otomatis, misalnya:</p>\n<ul>\n<li>kunci API tertentu hanya boleh memanggil endpoint baca,</li>\n<li>klien tertentu hanya boleh mengakses layanan katalog, bukan layanan pembayaran.</li>\n</ul>\n<p>Layanan back-end tidak perlu memikirkan otorisasi. Mereka cukup memproses permintaan dan mengirim data kembali. Keuntungan lainnya, Gateway menjadi satu tempat untuk mencabut akses. Jika kunci API klien bocor, cukup cabut di Gateway. Tidak perlu memperbarui setiap layanan atau memulai ulang apa pun, dan permintaan berikutnya dari kunci itu langsung ditolak.</p>\n<p>Contohnya, di sebuah bank hanya layanan pembayaran yang boleh menulis ke sistem penagihan. Jika klien mencoba menulis lewat endpoint yang salah, Gateway memblokirnya, dan layanan penagihan bahkan tidak pernah melihat permintaan itu. Gateway juga mendukung mutual TLS dan integrasi WAF untuk perlindungan yang lebih dalam, tetapi inti perannya adalah sebagai garis pertahanan pertama.</p>\n\n<h2>Manajemen lalu lintas: rate limiting, throttling, dan load balancing</h2>\n<p>Apa yang terjadi ketika 10 ribu pengguna mengakses aplikasi Anda bersamaan, misalnya saat flash sale, peluncuran produk viral, atau sekadar hari biasa ketika semua orang login serentak? Tanpa Gateway, layanan back-end langsung dibanjiri dan bisa lumpuh sekaligus.</p>\n<h3>Pembatasan laju dan kuota</h3>\n<p>Pembatasan laju (rate limiting) dan throttling adalah fitur standar Gateway. Anda menetapkan aturan, dan Gateway yang menegakkannya, sehingga lonjakan tidak terasa oleh layanan back-end. Kuota bisa ditentukan per pengguna, per kunci API, atau per alamat IP.</p>\n<p>Misalnya API Anda punya tingkat gratis dan premium: pengguna gratis mendapat 100 permintaan per jam, pengguna premium 10 ribu. Gateway melacak setiap permintaan. Ketika pengguna gratis mencapai batas, Gateway mengirim pesan sopan untuk mencoba lagi nanti, sementara layanan back-end tidak tahu ada permintaan masuk dan tetap melayani pelanggan berbayar dengan lancar.</p>\n<h3>Penyeimbangan beban dan pemeriksaan kesehatan</h3>\n<p>Jika satu layanan berjalan dalam beberapa instans, Gateway menyebarkan permintaan ke semuanya secara otomatis. Bila satu instans mati, lalu lintas dialihkan ke instans lain tanpa disadari klien. Melalui pemeriksaan kesehatan (health check), Gateway secara berkala memeriksa kondisi tiap instans dan berhenti mengirim lalu lintas ke instans yang tidak sehat. Dengan begitu lonjakan trafik tertahan di Gateway, diserap, disebarkan, dan layanan Anda terlindungi dari kewalahan.</p>\n\n<h2>Transformasi permintaan dan respons</h2>\n<p>Kadang data yang dikirim klien tidak sesuai dengan harapan back-end. Klien mengirim JSON, padahal back-end hanya memahami XML. Atau nama kolom tidak selaras: klien memakai satu penamaan, back-end mengharapkan yang lain. Cara lama menuntut Anda memperbaiki setiap klien atau menulis ulang back-end.</p>\n<p>Gateway dapat mengubah data sebelum mencapai back-end. Ia berada di tengah dan bisa mengubah data saat masuk, saat keluar, atau keduanya. Itulah yang disebut transformasi permintaan dan respons.</p>\n<h3>Contoh: sistem lama berformat XML</h3>\n<p>Anggap ada sistem lama yang sudah berjalan 15 tahun dan membutuhkan XML, sementara aplikasi seluler baru Anda memakai JSON. Tanpa Gateway, Anda harus menulis ulang sistem lama atau memaksa aplikasi seluler mengirim XML. Dengan Gateway, aplikasi seluler tetap mengirim JSON, Gateway mengubahnya menjadi XML, dan sistem lama menerima format yang ia harapkan. Respons kemudian dikembalikan ke aplikasi seluler dalam JSON. Tidak ada yang perlu ditulis ulang.</p>\n<p>Gateway juga dapat menambah atau menghapus header, mengubah URL, dan menyamarkan data sensitif. Jika sebuah respons memuat nomor kartu kredit, Gateway dapat menghapusnya atau menggantinya dengan versi tersamar sebelum respons dikirim ke klien, tanpa mengubah back-end sama sekali. Ini sangat berguna saat memodernisasi sistem lama. Gateway berperan seperti penerjemah di konferensi internasional: semua orang berbicara dalam bahasanya sendiri, tetapi semua tetap saling mengerti.</p>\n\n<h2>Semua fungsi bekerja bersama dan memberi visibilitas penuh</h2>\n<p>Keempat tugas tadi tidak berdiri sendiri. Pada setiap permintaan, Gateway memeriksa autentikasi, memvalidasi batas kecepatan, merutekan ke layanan, mengubah data bila perlu, lalu menerima respons kembali. Semua terjadi otomatis dan berurutan, tanpa layanan perlu memikirkannya.</p>\n<p>Kekuatan sebenarnya ada pada integrasinya. Setiap bagian bersifat independen: Anda bisa menambah kebijakan keamanan baru tanpa mengubah perutean, mengganti layanan back-end tanpa mengubah klien, atau memperbarui batas kecepatan tanpa melakukan deployment ulang. Meski demikian, semuanya berjalan dalam satu alur yang sama.</p>\n<p>Karena semua lalu lintas melewati satu titik, Anda juga mendapat visibilitas penuh lewat log, metrik, dan analitik. Anda bisa melihat berapa banyak permintaan masuk, mana yang gagal, mana yang lambat, dan klien mana yang memakai sumber daya paling banyak. Tanpa Gateway, data itu harus dikumpulkan dari tiap layanan secara terpisah. Gateway bukan sekadar router, melainkan pusat kendali bagi seluruh platform API Anda.</p>\n\n<h2>Apakah Anda membutuhkan API Gateway? Langkah praktis</h2>\n<p>Secara realistis, jika Anda hanya punya satu atau dua layanan, API Gateway mungkin belum diperlukan. Anda masih bisa menangani perutean sendiri dan mengelola autentikasi di tiap layanan. Cara itu kurang elegan, tetapi berfungsi. Begitu Anda mencapai tiga layanan, atau mulai membuka API ke klien eksternal, kompleksitas bertambah cepat dan Gateway akan segera terbayar.</p>\n<ul>\n<li><strong>Tentukan ambang batas:</strong> tiga layanan atau API yang terbuka bagi klien eksternal adalah sinyal bahwa Gateway layak dipertimbangkan.</li>\n<li><strong>Mulai dari autentikasi:</strong> pilih satu layanan dan pindahkan pemeriksaan autentikasinya ke Gateway. Kode layanan akan lebih bersih, tanpa logika validasi token yang tersebar.</li>\n<li><strong>Lanjutkan dengan rate limiting:</strong> bahkan batas sederhana melindungi back-end dari kelebihan beban. Mulailah dengan sesuatu yang dasar, seperti 100 permintaan per menit per klien, untuk menghentikan klien nakal yang bisa melumpuhkan layanan.</li>\n<li><strong>Sentralisasikan, jangan duplikasi:</strong> keamanan, pembatasan kecepatan, dan penanganan error cukup diatur sekali di Gateway.</li>\n<li><strong>Manfaatkan visibilitas:</strong> gunakan log, metrik, dan analitik dari satu titik untuk memantau lalu lintas.</li>\n</ul>\n\n<h2>Fazit</h2>\n<p>API Gateway menjawab masalah klasik microservices: terlalu banyak pintu, terlalu banyak aturan, dan terlalu banyak pekerjaan ganda. Dengan satu titik masuk, ia merutekan permintaan, menegakkan keamanan, mengendalikan lalu lintas, dan menerjemahkan format data, sambil memberi Anda pandangan menyeluruh atas platform API. Untuk satu atau dua layanan, Gateway mungkin belum wajib. Namun begitu jumlah layanan bertambah atau API dibuka ke pihak luar, mulailah dari hal sederhana, yaitu memusatkan autentikasi lalu menambahkan pembatasan kecepatan, dan manfaatnya akan segera terlihat.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "API Gateway: satu pintu depan untuk microservices",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Perutean",
+     "text": "Mengarahkan setiap permintaan ke layanan yang tepat berdasarkan path, metode HTTP, header, atau geolokasi."
+    },
+    {
+     "kopf": "Keamanan terpusat",
+     "text": "Autentikasi dan otorisasi di satu tempat: kunci API, JWT, token OAuth, atau sertifikat."
+    },
+    {
+     "kopf": "Manajemen lalu lintas",
+     "text": "Rate limiting, throttling, load balancing, dan health check melindungi back-end dari lonjakan."
+    },
+    {
+     "kopf": "Transformasi data",
+     "text": "Mengubah format, header, dan URL, serta menyamarkan data sensitif tanpa mengubah back-end."
+    },
+    {
+     "kopf": "Visibilitas penuh",
+     "text": "Log, metrik, dan analitik dari satu titik untuk memantau seluruh platform API."
+    },
+    {
+     "kopf": "Mulai bertahap",
+     "text": "Pusatkan autentikasi dulu, lalu tambahkan pembatasan kecepatan seperti 100 permintaan per menit per klien."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Apa itu API Gateway dan apa fungsinya?",
+    "a": "API Gateway adalah satu titik masuk yang berada di antara klien dan layanan back-end. Setiap permintaan melewatinya lebih dulu, lalu Gateway memutuskan ke mana permintaan dikirim, apakah diizinkan, dan apa yang dikirim kembali. Tugas utamanya: perutean, keamanan, manajemen lalu lintas, dan transformasi data."
+   },
+   {
+    "q": "Kapan saya benar-benar membutuhkan API Gateway?",
+    "a": "Jika hanya punya satu atau dua layanan, Gateway mungkin belum diperlukan. Begitu mencapai tiga layanan, atau mulai membuka API ke klien eksternal, kompleksitas bertambah cepat dan Gateway segera terbayar. Mulailah dengan memindahkan autentikasi satu layanan ke Gateway, lalu tambahkan rate limiting dasar."
+   },
+   {
+    "q": "Bagaimana API Gateway meningkatkan keamanan API?",
+    "a": "Gateway menangani autentikasi dan otorisasi di satu tempat terpusat. Pada setiap permintaan, ia dapat memvalidasi kunci API, JWT, token OAuth, atau sertifikat, serta menetapkan izin terperinci per klien. Jika kunci API bocor, aksesnya cukup dicabut di Gateway tanpa memperbarui setiap layanan."
+   },
+   {
+    "q": "Bagaimana API Gateway melindungi layanan back-end dari lonjakan trafik?",
+    "a": "Gateway menerapkan rate limiting dan throttling per pengguna, kunci API, atau alamat IP, sehingga lonjakan tidak terasa oleh back-end. Ia juga menyebarkan permintaan ke beberapa instans lewat penyeimbangan beban dan berhenti mengirim lalu lintas ke instans yang tidak sehat berdasarkan pemeriksaan kesehatan."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Tanpa Gateway vs Dengan Gateway",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Tanpa API Gateway",
+     "punkte": [
+      "Klien harus tahu alamat setiap layanan back-end",
+      "Setiap layanan mengurus autentikasi dan keamanan sendiri",
+      "Keamanan tidak konsisten di seluruh aplikasi",
+      "Lonjakan trafik langsung membanjiri layanan back-end",
+      "Data lalu lintas harus dikumpulkan dari tiap layanan"
+     ]
+    },
+    "rechts": {
+     "titel": "Dengan API Gateway",
+     "punkte": [
+      "Klien cukup mengenal satu URL, yaitu alamat Gateway",
+      "Autentikasi dan otorisasi dipusatkan di satu tempat",
+      "Akses yang bocor dicabut sekali di Gateway",
+      "Rate limiting dan load balancing menyerap lonjakan trafik",
+      "Log, metrik, dan analitik tersedia dari satu titik"
+     ]
+    }
+   },
+   {
+    "titel": "Empat Tugas Utama API Gateway",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "Perutean",
+      "text": "Membaca path, metode HTTP, header, atau geolokasi lalu meneruskan ke layanan tepat."
+     },
+     {
+      "wert": "Keamanan",
+      "text": "Memvalidasi kunci API, JWT, token OAuth, atau sertifikat pada setiap permintaan."
+     },
+     {
+      "wert": "Lalu lintas",
+      "text": "Menegakkan rate limiting, throttling, load balancing, dan pemeriksaan kesehatan instans."
+     },
+     {
+      "wert": "Transformasi",
+      "text": "Mengubah JSON ke XML, mengatur header, dan menyamarkan data sensitif tanpa mengubah back-end."
+     }
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Apa masalah utama yang muncul ketika klien memanggil setiap layanan back-end secara langsung?",
+    "opts": [
+     "Klien harus mengenal banyak alamat, metode autentikasi, dan cara penanganan error yang berbeda.",
+     "Layanan back-end tidak bisa lagi dijalankan dalam beberapa instans sekaligus.",
+     "Semua data klien otomatis tersimpan dalam satu basis data pusat.",
+     "Klien tidak dapat lagi memakai format JSON untuk berkomunikasi."
+    ],
+    "a": 0,
+    "why": "Tanpa Gateway, klien harus tahu lokasi tiap layanan, cara autentikasinya, dan penanganan error, sehingga kompleksitas dan risiko kesalahan meningkat."
+   },
+   {
+    "q": "Jika kunci API milik klien bocor, apa keuntungan memiliki API Gateway?",
+    "opts": [
+     "Setiap layanan back-end harus diperbarui dan dimulai ulang satu per satu.",
+     "Kunci itu cukup dicabut di Gateway dan permintaan berikutnya langsung ditolak.",
+     "Gateway menunggu sampai kunci kedaluwarsa dengan sendirinya sebelum menolaknya.",
+     "Klien harus mengubah alamat Gateway agar kunci lama tidak berlaku."
+    ],
+    "a": 1,
+    "why": "Gateway adalah satu tempat untuk mencabut akses, tanpa memperbarui layanan atau memulai ulang apa pun."
+   },
+   {
+    "q": "Apa yang dilakukan Gateway ketika pengguna gratis mencapai batas 100 permintaan per jam?",
+    "opts": [
+     "Meneruskan semua permintaan tambahan ke layanan back-end untuk diproses.",
+     "Otomatis memindahkan pengguna tersebut ke paket premium.",
+     "Mengirim pesan agar mencoba lagi nanti, tanpa permintaan itu sampai ke back-end.",
+     "Mematikan seluruh layanan back-end sampai jam berikutnya dimulai."
+    ],
+    "a": 2,
+    "why": "Gateway menegakkan kuota dan menolak dengan sopan, sehingga back-end tetap melayani pelanggan berbayar dengan lancar."
+   },
+   {
+    "q": "Bagaimana Gateway membantu ketika sistem lama hanya memahami XML sedangkan aplikasi seluler memakai JSON?",
+    "opts": [
+     "Aplikasi seluler harus ditulis ulang agar mengirim XML.",
+     "Sistem lama harus dimigrasikan ke JSON sebelum bisa dipakai.",
+     "Gateway menolak permintaan karena format data tidak sesuai.",
+     "Gateway mengubah JSON menjadi XML dan mengembalikan respons dalam JSON."
+    ],
+    "a": 3,
+    "why": "Transformasi permintaan dan respons di Gateway menerjemahkan format sehingga tidak ada klien atau sistem lama yang perlu ditulis ulang."
+   }
+  ]
+ },
+ "ru": {
+  "html": "<p>Вы построили работающее приложение, потом добавили ещё один сервис, потом ещё, и вдруг управление трафиком между ними превратилось в кошмар. Знакомая ситуация для всех, кто переходит на микросервисы. Решает её API-шлюз (API Gateway): единая точка входа, которая берёт на себя маршрутизацию, безопасность, ограничение нагрузки и преобразование данных.</p>\n<p>Разберём, что делает API-шлюз, какие проблемы он закрывает, как его функции работают вместе и в какой момент он действительно нужен.</p>\n\n<h2>Что такое API-шлюз и какую проблему он решает</h2>\n<p>Представьте быстро растущую компанию: отдел продаж на третьем этаже, бухгалтерия в подвале, ещё один отдел в заднем крыле. У каждого своя дверь, свой телефон и свой охранник, и охранники друг с другом не общаются. Курьеру, который привёз посылку, придётся угадывать, в какую дверь стучаться и что делать, если охранник на перерыве.</p>\n<p>Так выглядит приложение, где клиенты обращаются к бэкенд-сервисам напрямую. Мобильное приложение, сайт или другой сервис должны знать адрес каждого сервиса, способ аутентификации и порядок действий при сбое. Каждый сервис при этом сам занимается безопасностью, ограничением частоты запросов и обработкой ошибок. Работа дублируется, а решения получаются несогласованными.</p>\n<p>Возьмём банк с отдельными сервисами для счетов, платежей, кредитов и обнаружения мошенничества. Если все они открыты напрямую, мобильному приложению нужно знать 4 разных URL, 4 метода аутентификации и 4 способа обработки ошибок. Сложностей в четыре раза больше, и возможностей для сбоев тоже.</p>\n<h3>Шлюз как стойка регистрации</h3>\n<p>Лучшая аналогия для API-шлюза — стойка регистрации в отеле. Гостю не нужно знать, на каком этаже горничная и где кухня. Он говорит стойке, что ему нужно, а она направляет запрос нужному сотруднику, проверяет право доступа и иногда сама закрывает простые запросы.</p>\n<p>Технически шлюз располагается между клиентами и серверными службами. Каждый запрос сначала попадает на него, а шлюз решает, куда его направить, разрешить ли его и что отправить в ответ. Клиент никогда не общается с бэкендом напрямую.</p>\n<p>Идея не новая: обратные прокси-серверы существуют десятилетиями. Но с появлением микросервисов, когда «дверей» внезапно стало много, шлюз стал почти незаменим. В мире Azure полноценная платформа для этого называется Azure API Management, а шлюз — её ключевой компонент, управляющий трафиком. Сам шаблон везде одинаков: одна точка входа и централизованный контроль.</p>\n\n<h2>Маршрутизация трафика: каждый запрос — в нужный сервис</h2>\n<p>Простейшая задача шлюза — направить запрос к нужному сервису. У каждого запроса есть путь. Если он ведёт к пользователям, шлюз отправит его в сервис пользователей, если к заказам — в сервис заказов. Шлюз считывает путь, определяет назначение и перенаправляет запрос.</p>\n<p>Без шлюза мобильному приложению нужны адреса сервисов пользователей, заказов, платежей и каталога. Если любой адрес изменится, придётся обновлять каждого клиента. С шлюзом клиент знает один URL, адрес самого шлюза, и ему неважно, где фактически расположены сервисы.</p>\n<h3>На чём строятся маршруты</h3>\n<ul>\n<li>путь запроса;</li>\n<li>HTTP-метод;</li>\n<li>заголовки;</li>\n<li>геолокация клиента.</li>\n</ul>\n<p>Если запрос пришёл из Европы, его можно направить в европейский дата-центр, а если из США — в американский. Клиент об этом не догадывается и просто получает быстрый ответ.</p>\n<h3>Версионирование без боли</h3>\n<p>Маршрутизация помогает и с версиями. Допустим, вышла новая версия сервиса пользователей. Старые клиенты продолжают использовать V1, новые идут на V2, и шлюз разводит их по разным бэкендам. Вы разворачиваете новую версию, а старые клиенты продолжают работать. Для живого приложения с реальными пользователями это критично.</p>\n<p>В интернет-магазине с отдельными сервисами каталога, корзины, оформления заказа и аккаунтов шлюз читает путь и пересылает запрос нужному сервису, а приложению достаточно знать один адрес.</p>\n\n<h2>Безопасность на входе: аутентификация и авторизация в одном месте</h2>\n<p>Каждый вызов API нужно проверить: кто отправил запрос и есть ли у него права. Если каждый сервис делает это сам, легко ошибиться. Один сервис проверяет токены правильно, другой пропускает шаг, третий использует иной метод. В итоге безопасность в приложении получается разрозненной.</p>\n<p>Шлюз берёт аутентификацию и авторизацию на себя: одно место для проверки, одно для контроля и одно для обновления правил. Он проверяет API-ключи, JWT, токены или сертификаты, и любой запрос проходит одну и ту же проверку без исключений.</p>\n<h3>Точечные права и быстрый отзыв доступа</h3>\n<p>На уровне шлюза можно задать, что конкретный API-ключ вызывает только эндпоинты чтения, а клиент имеет доступ к сервису каталога, но не к сервису оплаты. Правила применяются автоматически, и бэкенд-сервисам не нужно думать об авторизации: они обрабатывают запрос и возвращают данные.</p>\n<p>Шлюз к тому же служит единым центром отзыва доступа. Если ключ клиента скомпрометирован, его отзывают на шлюзе одним изменением. Обновлять сервисы или что-то перезапускать не нужно, а следующий запрос с этим ключом будет отклонён сразу.</p>\n<p>Пример из банка: только платёжный сервис должен иметь право записи в биллинг. Если клиент обращается к биллингу через неверный эндпоинт, шлюз блокирует запрос, и биллинговый сервис его даже не видит. Для усиленной защиты шлюз может поддерживать взаимный TLS и интеграцию с WAF, но в основе это ваша первая линия обороны.</p>\n\n<h2>Управление трафиком: лимиты, квоты и балансировка нагрузки</h2>\n<p>Что будет, если 10 тысяч пользователей одновременно зайдут в приложение? Причиной может быть флеш-распродажа, вирусный запуск продукта или обычный вторник. Без шлюза бэкенд-сервисы примут удар на себя и могут выйти из строя сразу все.</p>\n<h3>Ограничение частоты запросов и тротлинг</h3>\n<p>Ограничение частоты запросов (rate limiting) и тротлинг — стандартные функции шлюза. Правила задаются на шлюзе, и он их применяет. Квоты можно устанавливать на пользователя, на API-ключ или на IP-адрес.</p>\n<p>Например, у API есть бесплатная версия: бесплатные пользователи получают 100 запросов в час, премиум-пользователи — 10 тысяч. Шлюз отслеживает каждый запрос и применяет лимиты на входе. Когда бесплатный пользователь упирается в лимит, он получает вежливое сообщение «Попробуйте позже». Бэкенд о таком запросе не узнаёт и спокойно обслуживает платных клиентов.</p>\n<h3>Балансировка нагрузки и проверка работоспособности</h3>\n<p>Если запущено несколько экземпляров одного сервиса, шлюз распределяет запросы между ними: первый — первому экземпляру, второй — второму, третий — третьему. Если один экземпляр выйдет из строя, трафик уйдёт на другой, и клиенты этого не заметят.</p>\n<p>Для этого шлюз проверяет работоспособность: он «пингует» каждый экземпляр и перестаёт отправлять трафик туда, где сервис не отвечает. Для высоконагруженных API это особенно важно. Всплеск сначала попадает на шлюз, а он поглощает и распределяет нагрузку, защищая сервисы от перегрузки.</p>\n\n<h2>Преобразование данных и единый конвейер</h2>\n<h3>Шлюз как переводчик</h3>\n<p>Иногда данные клиента не совпадают с тем, что ожидает бэкенд. Клиент отправляет JSON, а бэкенд понимает только XML, или названия полей различаются. Раньше пришлось бы переделывать клиентов или переписывать бэкенд. Шлюз может преобразовывать запросы и ответы на входе, на выходе или в обоих направлениях.</p>\n<p>Пример: устаревшая система работает на XML уже 15 лет и работает исправно, а новое мобильное приложение общается на JSON. Приложение отправляет JSON, шлюз конвертирует его в XML, система получает привычный формат. Ответ шлюз превращает обратно в JSON. Никому ничего переписывать не пришлось.</p>\n<p>Кроме того, шлюз умеет:</p>\n<ul>\n<li>добавлять и удалять заголовки;</li>\n<li>менять URL;</li>\n<li>маскировать конфиденциальные данные.</li>\n</ul>\n<p>Если ответ содержит номер кредитной карты, шлюз удалит его или заменит маскированной версией, а бэкенд менять не придётся. Особенно полезно это при модернизации старых систем: достаточно изменить настройки шлюза.</p>\n<h3>Четыре функции — один конвейер</h3>\n<p>Маршрутизация, безопасность, ограничение трафика и преобразование не существуют по отдельности. Они работают вместе с каждым запросом:</p>\n<ol>\n<li>шлюз проверяет аутентификацию;</li>\n<li>проверяет лимит запросов;</li>\n<li>направляет запрос нужному сервису;</li>\n<li>при необходимости преобразует данные;</li>\n<li>получает ответ, при необходимости преобразует и его;</li>\n<li>отправляет результат клиенту.</li>\n</ol>\n<p>Все шаги выполняются автоматически и по порядку, а сервисам об этом думать не нужно. Сила шлюза в интеграции: можно добавить политику безопасности, не трогая маршрутизацию, заменить бэкенд, не затрагивая клиента, или обновить лимиты без повторного развёртывания.</p>\n<h3>Единая точка наблюдения</h3>\n<p>Раз всё проходит через одно место, там же собираются логи, метрики и аналитика. Видно, сколько пришло запросов, какие завершились ошибкой, какие были медленными и какие клиенты потребляют больше всего ресурсов. Без шлюза эти данные пришлось бы собирать с каждого сервиса отдельно. Поэтому шлюз — не просто маршрутизатор, а центр управления всей API-платформой.</p>\n\n<h2>Нужен ли вам API-шлюз: практические выводы</h2>\n<p>Если у вас один-два сервиса, шлюз, скорее всего, пока не нужен. Маршрутизацию можно настроить самостоятельно, а авторизацию держать в каждом сервисе. Это неизящно, но работает.</p>\n<p>Ситуация меняется, когда сервисов становится три или когда вы открываете API внешним клиентам. Сложность быстро растёт, и шлюз быстро окупается.</p>\n<ul>\n<li><strong>Оцените масштаб.</strong> Один-два сервиса — шлюз можно отложить. Три и больше или внешние клиенты — самое время задуматься о нём.</li>\n<li><strong>Начните с аутентификации.</strong> Выберите один сервис и перенесите проверку авторизации на шлюз. Код сервиса сразу станет чище, а логика проверки токенов перестанет быть разбросанной по системе.</li>\n<li><strong>Добавьте ограничение частоты запросов.</strong> Даже простой лимит защищает бэкенд от перегрузки. Для начала подойдёт что-то базовое, например 100 запросов в минуту на клиента: так один вышедший из-под контроля клиент не уронит ваши сервисы.</li>\n<li><strong>Используйте шлюз для маршрутизации.</strong> Клиентам достаточно одного адреса, а бэкенд и версии можно менять без их участия.</li>\n<li><strong>Не переписывайте старые системы ради новых клиентов.</strong> Преобразование форматов, например JSON в XML, можно настроить на шлюзе.</li>\n<li><strong>Смотрите на данные в одном месте.</strong> Логи, метрики и аналитика по всем запросам доступны с одной точки.</li>\n</ul>\n\n<h2>Заключение</h2>\n<p>API-шлюз заменяет множество «дверей» одной парадной: клиенты знают один адрес, а безопасность, лимиты, маршрутизация и преобразование данных работают как единый конвейер и дают полный обзор происходящего. Для небольшого приложения с одним-двумя сервисами он избыточен. Когда сервисов три и больше или API открыт внешним клиентам, шлюз упрощает архитектуру. Начните с централизации аутентификации и базового ограничения частоты запросов, а затем наращивайте возможности по мере роста системы.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "API-шлюз: путь к единой точке входа",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Единая точка входа",
+     "text": "Клиенты знают только адрес шлюза, а не адреса всех сервисов."
+    },
+    {
+     "kopf": "Маршрутизация",
+     "text": "Шлюз читает путь, метод, заголовки и направляет запрос в нужный сервис."
+    },
+    {
+     "kopf": "Безопасность",
+     "text": "Аутентификация и авторизация проверяются централизованно, доступ отзывается одним изменением."
+    },
+    {
+     "kopf": "Лимиты и балансировка",
+     "text": "Квоты, тротлинг и распределение нагрузки защищают бэкенд от перегрузки."
+    },
+    {
+     "kopf": "Преобразование данных",
+     "text": "Шлюз переводит форматы, например JSON в XML, и маскирует конфиденциальные данные."
+    },
+    {
+     "kopf": "С чего начать",
+     "text": "Сначала перенесите аутентификацию на шлюз, затем добавьте ограничение частоты запросов."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Что такое API-шлюз и зачем он нужен в микросервисной архитектуре?",
+    "a": "API-шлюз — это единая точка входа между клиентами и бэкенд-сервисами. Каждый запрос сначала попадает на него, а шлюз решает, куда его направить, разрешить ли его и что вернуть в ответ. Он берёт на себя маршрутизацию, безопасность, ограничение нагрузки и преобразование данных."
+   },
+   {
+    "q": "Как API-шлюз обрабатывает запрос и в каком порядке выполняются шаги?",
+    "a": "Шлюз сначала проверяет аутентификацию, затем лимит запросов, после этого направляет запрос нужному сервису. При необходимости он преобразует данные запроса, получает ответ, при необходимости преобразует и его, и отправляет результат клиенту. Все шаги выполняются автоматически и по порядку, сервисам об этом думать не нужно."
+   },
+   {
+    "q": "Как API-шлюз защищает бэкенд от перегрузки?",
+    "a": "Шлюз применяет ограничение частоты запросов и тротлинг: квоты задаются на пользователя, API-ключ или IP-адрес. Например, бесплатные пользователи получают 100 запросов в час, премиум — 10 тысяч. Кроме того, шлюз распределяет трафик между экземплярами сервиса и проверяет их работоспособность, поглощая всплески нагрузки."
+   },
+   {
+    "q": "Когда API-шлюз действительно нужен, а когда можно обойтись без него?",
+    "a": "Если у вас один-два сервиса, шлюз, скорее всего, пока не нужен: маршрутизацию и авторизацию можно держать в самих сервисах. Когда сервисов становится три и больше или API открывается внешним клиентам, сложность быстро растёт, и шлюз быстро окупается. Начать лучше с аутентификации и базового лимита запросов."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Без шлюза и с шлюзом",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Прямые обращения к сервисам",
+     "punkte": [
+      "Клиент знает адрес каждого сервиса",
+      "Каждый сервис сам занимается безопасностью и лимитами",
+      "Работа дублируется, решения несогласованны",
+      "Смена адреса требует обновления всех клиентов",
+      "Данные приходится собирать с каждого сервиса отдельно"
+     ]
+    },
+    "rechts": {
+     "titel": "Единая точка входа — API-шлюз",
+     "punkte": [
+      "Клиент знает один URL — адрес шлюза",
+      "Аутентификация и авторизация в одном месте",
+      "Лимиты и балансировка защищают бэкенд от перегрузки",
+      "Бэкенд и версии меняются без участия клиентов",
+      "Логи, метрики и аналитика доступны с одной точки"
+     ]
+    }
+   },
+   {
+    "титель": "",
+    "titel": "Конвейер обработки запроса на шлюзе",
+    "typ": "prozess",
+    "punkte": [
+     {
+      "kopf": "Запрос клиента",
+      "text": "Каждый запрос сначала попадает на шлюз, а не на бэкенд",
+      "art": "start"
+     },
+     {
+      "kopf": "Аутентификация",
+      "text": "Шлюз проверяет API-ключ, JWT, токен или сертификат",
+      "art": "schritt"
+     },
+     {
+      "kopf": "Проверка лимита",
+      "text": "Применяются квоты на пользователя, ключ или IP-адрес",
+      "art": "schritt"
+     },
+     {
+      "kopf": "Маршрутизация",
+      "text": "По пути запроса шлюз выбирает нужный сервис или версию",
+      "art": "schritt"
+     },
+     {
+      "kopf": "Преобразование",
+      "text": "При необходимости меняются формат запроса и ответа, например JSON и XML",
+      "art": "schritt"
+     },
+     {
+      "kopf": "Ответ клиенту",
+      "text": "Шлюз отправляет результат клиенту",
+      "art": "ende"
+     }
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Какую главную проблему решает API-шлюз в архитектуре с микросервисами?",
+    "opts": [
+     "Он заменяет все бэкенд-сервисы одним монолитным приложением",
+     "Он служит единой точкой входа вместо множества прямых обращений к сервисам",
+     "Он хранит данные всех сервисов в единой общей базе",
+     "Он ускоряет компиляцию кода отдельных сервисов при развёртывании"
+    ],
+    "a": 1,
+    "why": "Шлюз стоит между клиентами и сервисами: клиенту нужен один адрес, а маршрутизация, безопасность и лимиты централизованы."
+   },
+   {
+    "q": "Что произойдёт, если API-ключ клиента скомпрометирован и его отозвали на шлюзе?",
+    "opts": [
+     "Нужно обновить и перезапустить все бэкенд-сервисы по очереди",
+     "Ключ перестанет работать только после следующего планового развёртывания",
+     "Следующий запрос с этим ключом будет отклонён сразу, без изменений в сервисах",
+     "Каждый сервис должен отдельно удалить ключ из собственного хранилища"
+    ],
+    "a": 2,
+    "why": "Шлюз — единый центр отзыва доступа: одно изменение на нём, и последующие запросы с ключом отклоняются."
+   },
+   {
+    "q": "Как шлюз помогает при ограничении нагрузки для бесплатных и премиум-пользователей?",
+    "opts": [
+     "Применяет лимиты на входе, а бэкенд не узнаёт о заблокированных запросах",
+     "Передаёт все запросы бэкенду, который сам решает, кого отклонить",
+     "Отключает бесплатных пользователей полностью во время любого всплеска трафика",
+     "Копирует запросы бесплатных пользователей в отдельную базу данных"
+    ],
+    "a": 0,
+    "why": "Квоты задаются на шлюзе: пользователь, упёршийся в лимит, получает сообщение, а бэкенд спокойно обслуживает остальных."
+   },
+   {
+    "q": "Как шлюз решает проблему устаревшей системы на XML и нового мобильного приложения на JSON?",
+    "opts": [
+     "Требует переписать устаревшую систему на JSON перед подключением",
+     "Блокирует запросы мобильного приложения, пока клиент не перейдёт на XML",
+     "Хранит две копии данных: одну в XML, другую в JSON",
+     "Преобразует JSON в XML для системы и ответ обратно в JSON"
+    ],
+    "a": 3,
+    "why": "Шлюз конвертирует запросы и ответы в обоих направлениях, поэтому ни клиента, ни старую систему переписывать не нужно."
+   }
+  ]
+ },
+ "uk": {
+  "html": "<p>Спочатку у вас був один робочий застосунок. Потім з'явився ще один сервіс, за ним ще один, і керувати трафіком між ними стало дуже важко. Кожен клієнт мусить знати адреси всіх сервісів, а кожен сервіс сам піклується про безпеку й обробку помилок. У такій ситуації на допомогу приходить API Gateway.</p>\n<p>У статті пояснюємо, що таке API Gateway, як він вирішує хаос у системі з багатьма сервісами та за якими ознаками зрозуміти, що він вам справді потрібен. Розглянемо чотири його основні завдання: маршрутизацію, безпеку, керування трафіком і трансформацію даних.</p>\n\n<h2>Проблема: забагато «дверей» у мікросервісній архітектурі</h2>\n<p>Уявіть компанію, що швидко росте. Відділ продажів сидить на третьому поверсі, бухгалтерія в підвалі, ІТ-відділ у задньому крилі. Кожен відділ має власний вхід, свій номер телефону й охоронця, який не спілкується з іншими. Щоб залишити посилку, відвідувач має знати, якими дверима скористатися, з яким охоронцем говорити і що робити, коли той на перерві.</p>\n<p>Так виглядає застосунок із кількома серверними службами, до яких клієнти звертаються напряму. Мобільний застосунок, вебсайт чи інший сервіс повинні знати, де розташована кожна служба, як проходити автентифікацію і що робити, коли щось ламається. Кожна служба своєю чергою сама відповідає за безпеку, ліміти запитів і обробку помилок. Роботу доводиться дублювати, а розбіжностей легко припуститися.</p>\n<p>Візьмімо банк із окремими сервісами для рахунків, платежів, кредитів і виявлення шахрайства. Якщо кожен доступний напряму, мобільний застосунок має знати чотири URL-адреси, чотири методи автентифікації та чотири способи обробки помилок. Складність зростає вчетверо, і ймовірність збоїв теж.</p>\n\n<h3>Що таке API Gateway</h3>\n<p>Найпростіше порівняти API Gateway з рецепцією готелю. Гостю не потрібно знати, де кухня, на якому поверсі покоївки і як зв'язатися з технічною службою. Він підходить до стійки й каже, що йому потрібно. Рецепція спрямовує запит до потрібної людини, перевіряє наявність доступу, а прості питання вирішує сама.</p>\n<p>API Gateway працює так само. Це єдина точка входу між клієнтами та бекенд-сервісами. Кожен запит спершу потрапляє до шлюзу, а той вирішує, куди його спрямувати, чи дозволити його і що надіслати у відповідь. Клієнт ніколи не спілкується з бекенд-сервісами напряму.</p>\n<p>Сама ідея не нова: зворотні проксі-сервери існують десятиліттями. Незамінним шлюз став з появою мікросервісів. Коли додаток розбито на багато дрібних сервісів, дверей раптом стає багато, а шлюз дає одні парадні. У світі Azure є Azure API Management, повноцінна платформа, де шлюз є основним компонентом обробки трафіку. Сам шаблон однаковий скрізь: одна точка входу і централізований контроль.</p>\n\n<h2>Маршрутизація трафіку: один вхід для всіх сервісів</h2>\n<p>Маршрутизація є найпростішою функцією шлюзу. Вона спрямовує кожен запит до потрібного сервісу. Будь-який запит має шлях. Якщо це <em>/users</em>, шлюз знає, що запит іде до сервісу користувачів. Якщо <em>/orders</em>, то до сервісу замовлень. Шлюз зчитує шлях, визначає призначення і пересилає запит.</p>\n<p>Без шлюзу клієнти мають знати адресу кожного сервісу: користувачів, замовлень, платежів, каталогу. Це багато адрес, а коли хоча б одна зміниться, доведеться оновлювати кожного клієнта. Зі шлюзом клієнти знають лише його адресу, а де фізично розташовані сервіси, їх не цікавить.</p>\n\n<h3>Гнучкі правила та геолокація</h3>\n<p>Маршрути можна налаштовувати за шляхом, HTTP-методом, заголовками і навіть геолокацією клієнта. Запит з Європи шлюз спрямує до європейського дата-центру, а запит зі США до американського. Клієнт цього не помічає й просто отримує швидку відповідь.</p>\n\n<h3>Версіонування без болю</h3>\n<p>Маршрутизація допомагає й з версіями. Припустімо, з'явилася нова версія сервісу користувачів. Старі клієнти й далі звертаються до <em>/v1/users</em>, нові до <em>/v2/users</em>, а шлюз спрямовує їх на різні бекенди. Старі клієнти продовжують працювати, поки ви впроваджуєте нову версію. Для живого застосунку з реальними користувачами це критично важливо.</p>\n<p>Ще один приклад: платформа електронної комерції з окремими сервісами каталогу, кошика, оформлення замовлення та облікових записів. Мобільному застосунку достатньо знати одну адресу, а шлюз за шляхом визначає, до якого сервісу переслати запит.</p>\n\n<h2>Безпека на вході: автентифікація й авторизація в одному місці</h2>\n<p>Кожен виклик API треба перевіряти: хто його робить і чи має цей користувач відповідні дозволи. Якщо кожен сервіс керує автентифікацією самостійно, роботу доводиться дублювати, і помилки неминучі. Один сервіс перевірить токен неправильно, інший пропустить крок, третій використає зовсім інший метод. У підсумку безпека в застосунку буде неузгодженою.</p>\n<p>Шлюз обробляє автентифікацію та авторизацію в одному центральному місці. Там перевіряють доступ, виконують правила й оновлюють політики. Це одна з найкращих практик безпеки. Шлюз підтверджує API-ключі, JWT, OAuth-токени або сертифікати, і кожен запит проходить однакову перевірку без винятків.</p>\n\n<h3>Детальні дозволи та швидке відкликання доступу</h3>\n<p>На рівні шлюзу можна задавати детальні правила. Наприклад, певний API-ключ може викликати лише ендпоінти читання, а певний клієнт має доступ тільки до сервісу каталогу, але не до сервісу оплати. Бекенд-сервіси про авторизацію не турбуються: вони обробляють запит і повертають дані.</p>\n<p>Шлюз також є єдиним місцем, де можна швидко скасувати доступ. Якщо API-ключ клієнта скомпрометовано, його анулюють на шлюзі. Оновлювати сервіси чи щось перезапускати не потрібно, бо наступний запит із цим ключем буде відхилено негайно.</p>\n<p>Приклад із банку: лише сервіс платежів має право запису в білінгову систему. Якщо клієнт намагається записати дані в білінг через неправильну кінцеву точку, шлюз блокує запит, і сервіс білінгу його навіть не бачить. Для глибшого захисту шлюз підтримує взаємний TLS та інтеграцію з WAF, але насамперед це перший рубіж оборони.</p>\n\n<h2>Керування трафіком: обмеження запитів і балансування навантаження</h2>\n<p>Що станеться, коли 10 тисяч користувачів одночасно звернуться до застосунку? Причиною може бути флеш-розпродаж, вірусний запуск продукту або просто звичайний вівторок. Без шлюзу бекенд-сервіси отримають прямий удар і можуть вийти з ладу не поступово, а відразу всі.</p>\n\n<h3>Rate limiting і квоти</h3>\n<p>Шлюз може обмежувати кількість запитів від кожного клієнта. Обмеження частоти й регулювання швидкості належать до стандартних функцій. Ви задаєте правила на шлюзі, і він їх виконує, тож сплески навантаження до бекенду не доходять.</p>\n<p>Квоти можна встановлювати на користувача, на API-ключ або на IP-адресу. Припустімо, є безкоштовний рівень API: безкоштовні користувачі отримують 100 запитів на годину, преміум-користувачі 10 тисяч. Шлюз відстежує кожен запит і застосовує ліміти на вході. Коли користувач безкоштовного рівня вичерпує ліміт, він отримує ввічливе повідомлення «Спробуйте пізніше». Бекенд про цей запит не знає й далі обслуговує платних клієнтів.</p>\n\n<h3>Балансування навантаження та перевірки стану</h3>\n<p>Якщо працює кілька екземплярів одного сервісу, шлюз розподіляє запити між ними: перший запит іде на перший екземпляр, наступний на другий, потім на третій. Коли один екземпляр виходить з ладу, шлюз перенаправляє запити на інші, а клієнти нічого не помічають.</p>\n<p>Для безперебійної роботи шлюз виконує перевірки стану: «пінгує» кожен екземпляр і, якщо той не відповідає, припиняє надсилати йому трафік. Для API з високим навантаженням це особливо важливо. Сплеск трафіку спершу потрапляє на шлюз, той поглинає його, розподіляє і захищає сервіси від перевантаження.</p>\n\n<h2>Трансформація даних: шлюз як перекладач</h2>\n<p>Іноді дані від клієнта не відповідають тому, чого очікує бекенд. Клієнт надсилає JSON, а бекенд розуміє лише XML, або назви полів не збігаються. Традиційно довелося б виправляти кожного клієнта чи переписувати бекенд, а це не найкращий варіант.</p>\n<p>Шлюз може трансформувати дані, перш ніж вони дійдуть до бекенду. Він стоїть посередині й змінює дані під час входу, виходу або в обох напрямках. Припустімо, старіша система працює з XML, а новий мобільний застосунок говорить мовою JSON. Без шлюзу довелося б переписувати стару систему або змушувати застосунок надсилати XML. Зі шлюзом мобільний застосунок надсилає JSON, шлюз конвертує його в XML, система отримує очікуване, а відповідь повертається клієнтові знову у форматі JSON. Нічого переписувати не потрібно.</p>\n\n<h3>Заголовки, URL-адреси та маскування даних</h3>\n<p>Шлюз також може додавати або видаляти заголовки, змінювати URL-адреси та маскувати конфіденційні дані. Якщо у відповіді є номер кредитної картки, клієнт його побачити не повинен. Шлюз видалить його перед відправленням або замінить замаскованою версією, а бекенд при цьому залишиться без змін.</p>\n<p>Особливо корисно це під час модернізації старих систем. Бекенд переписувати не треба, клієнтів змінювати теж, достатньо змінити налаштування шлюзу. Він працює як перекладач на міжнародній конференції: кожен говорить своєю мовою, а перекладач забезпечує взаєморозуміння.</p>\n\n<h2>Єдиний конвеєр і повна прозорість</h2>\n<p>Маршрутизація, безпека, обмеження швидкості й трансформація не є окремими функціями. Вони працюють разом над кожним запитом. Шлюз перевіряє автентифікацію, потім ліміт запитів, спрямовує запит до потрібного сервісу й за потреби перетворює дані. Далі він отримує відповідь, також за потреби трансформує її і повертає клієнтові. Це один конвеєр, і кожен крок виконується автоматично та по черзі, без участі сервісів.</p>\n<p>Сила шлюзу в інтеграції цих функцій. Ви можете додати нову політику безпеки, не чіпаючи маршрутизацію, змінити бекенд-сервіс, не змінюючи клієнтську частину, або оновити ліміти без повторного розгортання. Кожен елемент незалежний, але всі працюють в одному конвейєрі.</p>\n<p>Оскільки все проходить через одну точку, ви отримуєте повний огляд системи: логи, метрики й аналітику. Видно кількість запитів, які з них завершилися помилкою, які були повільними і які клієнти споживають найбільше ресурсів. Без шлюзу ці дані довелося б збирати з кожного сервісу окремо. Тож шлюз є не просто маршрутизатором, а центром керування всією API-платформою.</p>\n\n<h2>Чи потрібен вам API Gateway: практичні рекомендації</h2>\n<p>Якщо у вас один-два сервіси, API Gateway, найімовірніше, ще не потрібен. Маршрутизацію можна налаштувати самостійно, а доступ контролювати в кожному сервісі. Це не елегантно, але працює. Та коли сервісів стає три або ви відкриваєте API для зовнішніх клієнтів, складність швидко зростає, і шлюз швидко окупається.</p>\n<p>Найкращий перший крок — централізувати автентифікацію на шлюзі. Оберіть один сервіс і перенесіть перевірку доступу на шлюз. Код сервісу одразу стане чистішим: логіка перевірки токенів більше не буде розкидана скрізь, а сумніви, чи однаково її реалізовано в кожному сервісі, зникнуть. Наступний крок — обмеження запитів. Навіть просте обмеження захистить бекенд від перевантаження.</p>\n<ul>\n<li>Один-два сервіси: шлюз, імовірно, ще не потрібен, бо маршрутизацію й доступ можна налаштувати самостійно.</li>\n<li>Три сервіси або зовнішні клієнти: складність швидко зростає, і шлюз швидко окупається.</li>\n<li>Почніть із централізації автентифікації: перенесіть перевірку доступу одного сервісу на шлюз.</li>\n<li>Додайте базові ліміти, наприклад 100 запитів на хвилину для клієнта, щоб неконтрольований клієнт не вивів сервіси з ладу.</li>\n<li>Використовуйте маршрутизацію для версіонування: старі клієнти працюють з V1, нові з V2.</li>\n<li>Трансформуйте дані та маскуйте конфіденційну інформацію на шлюзі, не чіпаючи бекенд.</li>\n<li>Збирайте логи, метрики й аналітику в одній точці замість того, щоб опитувати кожен сервіс окремо.</li>\n</ul>\n\n<h2>Висновок</h2>\n<p>API Gateway дає клієнтам одну точку входу та бере на себе маршрутизацію, безпеку, обмеження запитів і трансформацію даних. Завдяки цьому бекенд-сервіси залишаються простішими, а контроль над усією API-платформою зосереджений в одному місці. Для невеликої системи з одним-двома сервісами шлюз може бути зайвим, але з трьома сервісами або зовнішніми клієнтами він стає виправданою інвестицією. Починайте з малого: перенесіть автентифікацію на шлюз і додайте прості ліміти запитів.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "API Gateway: єдина точка входу для сервісів",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Маршрутизація",
+     "text": "Шлюз зчитує шлях запиту та спрямовує його до потрібного сервісу, версії чи дата-центру."
+    },
+    {
+     "kopf": "Безпека на вході",
+     "text": "Автентифікація й авторизація в одному місці: API-ключі, JWT, OAuth-токени, сертифікати."
+    },
+    {
+     "kopf": "Керування трафіком",
+     "text": "Обмеження запитів, квоти та балансування навантаження захищають бекенд від перевантаження."
+    },
+    {
+     "kopf": "Трансформація даних",
+     "text": "Конвертація форматів, зміна заголовків і маскування конфіденційних даних без змін бекенду."
+    },
+    {
+     "kopf": "Єдиний конвеєр",
+     "text": "Усі кроки працюють разом, а логи й метрики зібрані в одній точці."
+    },
+    {
+     "kopf": "Коли потрібен",
+     "text": "Від трьох сервісів або при відкритті API зовнішнім клієнтам; почніть з автентифікації."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Що таке API Gateway і навіщо він потрібен?",
+    "a": "API Gateway — це єдина точка входу між клієнтами та бекенд-сервісами. Кожен запит спершу потрапляє до шлюзу, який вирішує, куди його спрямувати, чи дозволити його і що надіслати у відповідь. Клієнтам не потрібно знати адреси всіх сервісів."
+   },
+   {
+    "q": "Які основні функції виконує API Gateway?",
+    "a": "Шлюз виконує чотири основні завдання: маршрутизує запити до потрібного сервісу, централізовано обробляє автентифікацію й авторизацію, керує трафіком (ліміти запитів, балансування навантаження, перевірки стану) і трансформує дані, наприклад конвертує JSON в XML або маскує конфіденційну інформацію."
+   },
+   {
+    "q": "Коли API Gateway справді потрібен, а коли можна без нього?",
+    "a": "Якщо у вас один-два сервіси, шлюз, найімовірніше, ще не потрібен: маршрутизацію й доступ можна налаштувати самостійно. Коли сервісів стає три або ви відкриваєте API для зовнішніх клієнтів, складність швидко зростає, і шлюз швидко окупається."
+   },
+   {
+    "q": "З чого почати впровадження API Gateway?",
+    "a": "Найкращий перший крок — централізувати автентифікацію: оберіть один сервіс і перенесіть перевірку доступу на шлюз. Потім додайте базові ліміти запитів, наприклад 100 запитів на хвилину для клієнта, щоб захистити бекенд від перевантаження."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Без шлюзу та зі шлюзом",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Без API Gateway",
+     "punkte": [
+      "Клієнт мусить знати адреси всіх сервісів",
+      "Кожен сервіс сам відповідає за безпеку й помилки",
+      "Роботу доводиться дублювати, розбіжності неминучі",
+      "Зміна адреси вимагає оновлення кожного клієнта",
+      "Логи й метрики доводиться збирати з кожного сервісу"
+     ]
+    },
+    "rechts": {
+     "titel": "З API Gateway",
+     "punkte": [
+      "Клієнти знають лише одну адресу шлюзу",
+      "Автентифікація й авторизація в одному місці",
+      "Сплески навантаження до бекенду не доходять",
+      "Бекенд не потрібно переписувати чи змінювати",
+      "Повний огляд системи в одній точці"
+     ]
+    }
+   },
+   {
+    "titel": "Коли вам потрібен API Gateway",
+    "typ": "checkliste",
+    "punkte": [
+     "Один-два сервіси: шлюз, імовірно, ще не потрібен",
+     "Три сервіси або зовнішні клієнти: шлюз швидко окупається",
+     "Перенесіть перевірку доступу одного сервісу на шлюз",
+     "Додайте базові ліміти, наприклад 100 запитів на хвилину",
+     "Використовуйте маршрутизацію для версій V1 і V2",
+     "Маскуйте конфіденційні дані на шлюзі, не чіпаючи бекенд",
+     "Збирайте логи, метрики й аналітику в одній точці"
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Що відбувається з API-ключем клієнта, якщо його скомпрометовано, коли використовується API Gateway?",
+    "opts": [
+     "Його анулюють на шлюзі, і наступний запит із цим ключем буде відхилено негайно",
+     "Доводиться оновлювати та перезапускати кожен бекенд-сервіс окремо",
+     "Ключ діє, доки не завершиться термін дії квоти на годину",
+     "Усі клієнти мають оновити свої застосунки з новою адресою шлюзу"
+    ],
+    "a": 0,
+    "why": "Шлюз — єдине місце, де можна швидко скасувати доступ, без оновлення чи перезапуску сервісів."
+   },
+   {
+    "q": "Як шлюз допомагає з версіонуванням сервісу користувачів?",
+    "opts": [
+     "Автоматично оновлює всіх старих клієнтів до нової версії сервісу",
+     "Спрямовує /v1/users і /v2/users на різні бекенди, тож старі клієнти працюють",
+     "Вимикає стару версію одразу після появи нової",
+     "Об'єднує обидві версії сервісу в один бекенд-екземпляр"
+    ],
+    "a": 1,
+    "why": "Маршрутизація за шляхом дозволяє старим клієнтам використовувати V1, а новим V2, поки впроваджується нова версія."
+   },
+   {
+    "q": "Що робить шлюз, коли один екземпляр сервісу перестає відповідати на перевірки стану?",
+    "opts": [
+     "Зупиняє весь трафік до всіх екземплярів цього сервісу",
+     "Повідомляє клієнтам про збій і просить повторити запит пізніше",
+     "Припиняє надсилати йому трафік і перенаправляє запити на інші екземпляри",
+     "Перезавантажує екземпляр та чекає на його відповідь від клієнта"
+    ],
+    "a": 2,
+    "why": "Шлюз «пінгує» екземпляри, а несправному не надсилає трафік, тому клієнти нічого не помічають."
+   },
+   {
+    "q": "Коли, за статтею, API Gateway найімовірніше ще не потрібен?",
+    "opts": [
+     "Коли API відкривають для зовнішніх клієнтів",
+     "Коли в системі вже три сервіси",
+     "Коли потрібно маскувати номери кредитних карток",
+     "Коли в системі лише один-два сервіси"
+    ],
+    "a": 3,
+    "why": "З одним-двома сервісами маршрутизацію й доступ можна налаштувати самостійно; з трьома або зовнішніми клієнтами шлюз окупається."
+   }
+  ]
+ },
+ "he": {
+  "html": "<p>בניתם אפליקציה שעובדת, הוספתם עוד שירות ועוד אחד, ופתאום ניהול התעבורה ביניהם הופך לסיוט. כל לקוח צריך לדעת איפה כל שירות יושב, איך מבצעים מולו אימות ומה עושים כשמשהו משתבש. כאן נכנס לתמונה ה-API Gateway.</p>\n<p>במאמר נסביר מה עושה API Gateway, מדוע הוא מביא סדר באפליקציה עם שירותים רבים, ואיך להחליט אם אתם צריכים אחד כזה כבר היום.</p>\n\n<h2>מהו API Gateway ולמה הוא נחוץ?</h2>\n<h3>הבעיה: יותר מדי דלתות</h3>\n<p>דמיינו חברה שצומחת מהר. צוות המכירות יושב בקומה השלישית, הנהלת החשבונות במרתף ומחלקת ה-IT באגף האחורי. עכשיו דמיינו שלכל מחלקה יש דלת כניסה משלה, מספר טלפון משלו ומאבטח משלו, והמאבטחים לא מדברים זה עם זה. מבקר שרוצה להשאיר חבילה צריך לדעת באיזו דלת להשתמש, עם איזה מאבטח לדבר ומה לעשות כשהמאבטח בהפסקה.</p>\n<p>כך נראית אפליקציה עם כמה שירותי צד שרת שבה כל לקוח, בין אם זו אפליקציית מובייל, אתר או שירות אחר, פונה לכל שירות ישירות. כל שירות צריך אז לטפל בעצמו באבטחה, בהגבלת קצב (rate limiting) ובטיפול בשגיאות. זו עבודה כפולה, והתוצאה נוטה להיות לא עקבית.</p>\n<p>קחו בנק עם שירותים נפרדים לחשבונות, תשלומים, הלוואות וזיהוי הונאות. אם כולם חשופים ישירות, אפליקציית המובייל צריכה להכיר ארבע כתובות URL, ארבע שיטות אימות וארבע דרכים לטפל בשגיאות. זו מורכבות כפולה פי ארבעה, ופי ארבעה מקומות שבהם משהו עלול להשתבש.</p>\n\n<h3>הפתרון: דלפק קבלה אחד</h3>\n<p>אפשר לחשוב על API Gateway כעל דלפק הקבלה של מלון. האורח לא צריך לדעת באיזו קומה נמצא משק הבית או איפה המטבח. הוא ניגש לדלפק, אומר מה הוא צריך, והצוות מפנה אותו לגורם הנכון, בודק שמותר לו להיות שם ואפילו מטפל בבקשות בסיסיות בעצמו.</p>\n<p>ה-API Gateway הוא נקודת כניסה אחת שיושבת בין הלקוחות לבין שירותי ה-backend. כל בקשה עוברת קודם דרכו. הוא מחליט לאן לשלוח אותה, אם לאשר אותה ומה להחזיר. הלקוח לעולם לא מדבר ישירות עם שירותי ה-backend, רק עם השער.</p>\n<p>הרעיון אינו חדש. Reverse proxies קיימים כבר עשורים, אבל השער הפך לחיוני עם עליית המיקרו-שירותים. כשמפרקים אפליקציה להרבה שירותים קטנים, נוצרות הרבה דלתות, והשער מחזיר דלת אחת. בעולם Azure, Azure API Management היא הפלטפורמה המלאה והשער הוא הרכיב שמטפל בתעבורה. התבנית זהה בכל מקום: נקודת כניסה אחת ושליטה מרכזית.</p>\n\n<h2>ניתוב תעבורה: כל בקשה לשירות הנכון</h2>\n<p>התפקיד הבסיסי ביותר של השער הוא ניתוב. כל בקשה מגיעה עם נתיב. אם הנתיב הוא Users, השער שולח אותה לשירות המשתמשים. אם הוא Orders, היא מגיעה לשירות ההזמנות. השער קורא את הנתיב, מבין לאן הבקשה צריכה להגיע ומעביר אותה הלאה.</p>\n<p>בלי שער, הלקוחות צריכים להכיר את הכתובת של כל שירות: משתמשים, הזמנות, תשלומים וקטלוג. ואם כתובת אחת משתנה, צריך לעדכן כל לקוח. עם שער, הלקוחות מכירים כתובת אחת בלבד ולא אכפת להם איפה השירותים באמת נמצאים.</p>\n\n<h3>ניתוב לפי נתיב, כותרות ומיקום</h3>\n<p>ניתוב מבוסס משאבים הוא אחד ממקרי השימוש הנפוצים ביותר. אפשר לנתב לפי הנתיב, שיטת ה-HTTP, הכותרות ואפילו המיקום הגיאוגרפי של הלקוח, כפי שמציינת התיעוד של Apache APISIX. בקשה מאירופה יכולה להגיע למרכז נתונים אירופי, ובקשה מארצות הברית למרכז נתונים אמריקאי. הלקוח לא מודע לכך ופשוט מקבל תגובה מהירה.</p>\n\n<h3>ניתוב וגרסאות</h3>\n<p>הניתוב מסייע גם בניהול גרסאות. נניח שיש גרסה חדשה לשירות המשתמשים. לקוחות ישנים ממשיכים לפנות ל-v1/users, והחדשים ל-v2/users, והשער מנתב כל קבוצה ל-backend אחר. לקוחות ישנים ממשיכים לעבוד בזמן שהגרסה החדשה נפרסת, ואפשר לשנות את ה-backend בלי לשבור את הלקוחות. זה חשוב במיוחד באפליקציה חיה עם משתמשים אמיתיים.</p>\n<p>בפלטפורמת מסחר אלקטרוני עם שירותים נפרדים לקטלוג, לעגלת קניות, לתשלום ולחשבונות, אפליקציית המובייל מכירה כתובת אחת במקום ארבע. השער קורא את הנתיב ושולח כל בקשה ליעד הנכון.</p>\n\n<h2>אבטחה בדלת הכניסה</h2>\n<p>כל קריאת API צריכה להיבדק: מי מבצע את הבקשה, והאם יש לו הרשאה. בלי שער, כל שירות מטפל באימות בעצמו. אחד יבדוק טוקנים כראוי, אחר ידלג על שלב, ושלישי ישתמש בשיטה אחרת לגמרי. התוצאה היא אבטחה לא עקבית בכל האפליקציה.</p>\n<p>השער מרכז את האימות וההרשאות במקום אחד: נקודה אחת לבדיקה, נקודה אחת לאכיפה ונקודה אחת לעדכון כשהמדיניות משתנה. הוא יכול לאמת מפתחות API, JWT, טוקנים של OAuth או תעודות, בכל בקשה וללא יוצא מן הכלל.</p>\n\n<h3>כללי גישה מדויקים</h3>\n<p>השער יכול גם לאכוף כללים. למשל, מפתח API מסוים יכול לקרוא רק מנקודות קצה מסוימות, ולקוח מסוים יכול לגשת לשירות הקטלוג אבל לא לשירות התשלומים. ההרשאות מוגדרות ברמת השער וחלות אוטומטית, ושירותי ה-backend לא צריכים לדאוג להן. הם מקבלים את הבקשה ומחזירים נתונים.</p>\n<p>בבנק, למשל, רק שירות התשלומים זקוק להרשאת כתיבה למערכת החיובים. אם לקוח מנסה לכתוב אליה דרך נקודת קצה שגויה, השער חוסם את הבקשה ושירות החיובים אפילו לא רואה אותה.</p>\n\n<h3>ביטול גישה במקום אחד</h3>\n<p>כשמפתח API של לקוח נחשף, מבטלים אותו בשער בשינוי אחד. אין צורך לעדכן שירותים או להפעיל משהו מחדש, והבקשה הבאה עם המפתח הזה נדחית מיידית. השער יכול לתמוך גם ב-Mutual TLS ובשילוב עם WAF להגנה מעמיקה יותר, אבל בליבה הוא קו ההגנה הראשון שלכם.</p>\n\n<h2>ניהול תעבורה: הגבלת קצב ואיזון עומסים</h2>\n<p>מה קורה כשעשרת אלפים משתמשים נכנסים לאפליקציה בו-זמנית? אולי יש מבצע בזק, אולי השקת מוצר הפכה לוויראלית, ואולי סתם כולם החליטו להתחבר יחד. בלי שער, שירותי ה-backend מופגזים ישירות והם עלולים לקרוס בבת אחת.</p>\n\n<h3>הגבלת קצב ומכסות</h3>\n<p>הגבלת קצב (rate limiting) והאטה מבוקרת (throttling) הן יכולות סטנדרטיות של שער. מגדירים את הכללים בשער והוא אוכף אותם, כך ששירותי ה-backend לא מרגישים את העומס. אפשר להגדיר מכסות לכל משתמש, לכל מפתח API או לכל כתובת IP.</p>\n<p>למשל, ב-API עם גרסה חינמית, משתמשים חינמיים מקבלים מאה בקשות בשעה ומשתמשי פרימיום מקבלים עשרת אלפים. השער עוקב אחרי כל בקשה. כשמשתמש חינמי מגיע למכסה, הוא מקבל הודעה מנומסת לנסות שוב מאוחר יותר, ושירותי ה-backend ממשיכים לשרת את הלקוחות המשלמים כרגיל.</p>\n\n<h3>איזון עומסים ובדיקות תקינות</h3>\n<p>כשיש כמה מופעים (instances) של אותו שירות, השער מפזר ביניהם את הבקשות באופן אוטומטי. אם מופע אחד נופל, הוא מנתב למופע אחר והלקוחות לא מרגישים בכך. בדיקות תקינות משלימות את התמונה: השער שולח פינג לכל מופע כדי לוודא שהוא חי, ואם לא, הוא מפסיק לשלוח אליו תעבורה.</p>\n<p>זה חשוב במיוחד ל-APIs עם תעבורה גבוהה. זינוק בתעבורה פוגע קודם בשער, והוא סופג אותו, מפיץ אותו ומגן על השירותים מקריסה.</p>\n\n<h2>טרנספורמציה של נתונים: השער כמתרגם</h2>\n<p>לפעמים הנתונים שהלקוח שולח אינם תואמים למה שה-backend מצפה לו. הלקוח שולח JSON וה-backend מבין רק XML, או ששמות השדות שונים: הלקוח משתמש ב-first name וה-backend מצפה לשם אחר. בדרך הישנה היה צריך לתקן כל לקוח בנפרד או לשכתב את ה-backend.</p>\n<p>השער יכול לשנות את הנתונים בדרך פנימה, בדרך החוצה או בשני הכיוונים. זו טרנספורמציה של בקשות ותגובות.</p>\n\n<h3>דוגמה: מערכת ישנה ואפליקציה חדשה</h3>\n<p>נניח שיש מערכת ישנה שמצפה ל-XML ורצה כבר 15 שנה. היא עובדת מצוין, אבל עכשיו בונים אפליקציית מובייל שמדברת JSON. בלי שער צריך לשכתב את המערכת הישנה או להכריח את האפליקציה לשלוח XML. עם שער, האפליקציה שולחת JSON, השער ממיר ל-XML, המערכת מקבלת את מה שהיא מצפה לו, והתשובה חוזרת לאפליקציה כ-JSON.</p>\n\n<h3>כותרות, כתובות ונתונים רגישים</h3>\n<p>השער יכול גם להוסיף או להסיר כותרות, לשנות כתובות URL ולהסתיר נתונים רגישים. אם תגובה מכילה מספר כרטיס אשראי, השער יכול להסיר אותו לפני שהתגובה יוצאת או להחליף אותו בגרסה מוסתרת, בלי לשנות את ה-backend. זה שימושי במיוחד במודרניזציה של מערכות ישנות: לא משכתבים את ה-backend, לא מכריחים לקוחות להשתנות, ופשוט משנים את השער. כמו מתרגם בכנס בינלאומי, כולם מדברים בשפה שלהם והמתרגם מוודא שכולם מבינים.</p>\n\n<h2>צינור עיבוד אחד ונראות מלאה</h2>\n<p>ניתוב, אבטחה, הגבלת קצב וטרנספורמציה אינם ארבעה דברים נפרדים. הם פועלים יחד על כל בקשה:</p>\n<ol>\n<li>השער בודק אימות.</li>\n<li>הוא אוכף את מגבלת הקצב.</li>\n<li>הוא מנתב לשירות הנכון.</li>\n<li>הוא משנה את הנתונים במידת הצורך.</li>\n<li>הוא מקבל את התגובה, משנה גם אותה אם צריך, ושולח אותה ללקוח.</li>\n</ol>\n<p>זהו צינור עיבוד אחד שבו כל שלב קורה אוטומטית ובסדר קבוע, בלי ששירות כלשהו צריך לחשוב על כך. הכוח האמיתי טמון באינטגרציה ולא בתכונה בודדת. אפשר להוסיף מדיניות אבטחה בלי לגעת בניתוב, להחליף שירות backend בלי לשנות את הלקוח ולעדכן הגבלות קצב בלי לפרוס דבר מחדש.</p>\n<p>ומכיוון שהכול עובר דרך מקום אחד, מקבלים נראות מלאה: לוגים, מדדים וניתוחים מנקודה אחת. אפשר לראות כמה בקשות התקבלו, אילו נכשלו, אילו היו איטיות ואילו לקוחות צורכים הכי הרבה משאבים. בלי שער, צריך לאסוף את הנתונים האלה מכל שירות בנפרד. לכן השער הוא יותר מנתב: הוא מרכז בקרה לכל פלטפורמת ה-API.</p>\n\n<h2>האם אתם צריכים API Gateway? צעדים ראשונים</h2>\n<p>אם יש לכם שירות אחד או שניים, כנראה שעדיין אין לכם צורך בשער. אפשר לטפל בניתוב בעצמכם ולנהל הרשאות בכל שירות. זה פחות אלגנטי, אבל זה עובד. ברגע שמגיעים לשלושה שירותים או חושפים APIs ללקוחות חיצוניים, המורכבות מצטברת מהר והשער מחזיר את ההשקעה במהירות.</p>\n<p>אם מחליטים להתחיל, הצעד הראשון הוא לרכז את האימות בשער, לפני כל דבר אחר. בוחרים שירות אחד ומעבירים את בדיקת ההרשאות שלו לשער. קוד השירות נעשה נקי יותר מיד: אין עוד לוגיקת בדיקת טוקנים מפוזרת, ואין ספק אם האימות מיושם באותו אופן בכל שירות. הצעד הבא הוא הגבלת קצב. אפילו הגבלה פשוטה מגינה על ה-backend מעומס יתר, למשל מאה בקשות לדקה לכל לקוח, וכך לקוח סורר לא יכול להפיל את השירותים.</p>\n<ul>\n<li>עד שירות אחד או שניים אפשר להסתדר בלי שער.</li>\n<li>משלושה שירותים, או כשחושפים APIs ללקוחות חיצוניים, כדאי לשקול שער.</li>\n<li>מתחילים מריכוז האימות וההרשאות בשער, שירות אחד בכל פעם.</li>\n<li>מוסיפים הגבלת קצב בסיסית, כמו מאה בקשות לדקה לכל לקוח.</li>\n<li>משתמשים בניתוב כדי לתת ללקוחות כתובת אחת ולנהל גרסאות בלי לשבור לקוחות קיימים.</li>\n<li>משתמשים בטרנספורמציה כדי לחבר מערכות ישנות ללקוחות חדשים בלי לשכתב קוד.</li>\n<li>מנצלים את הלוגים והמדדים המרכזיים כדי לראות מה קורה בפלטפורמה.</li>\n</ul>\n\n<h3>סיכום</h3>\n<p>API Gateway מחליף את מבוך הדלתות בנקודת כניסה אחת שמנתבת, מאבטחת, מגבילה קצב ומתרגמת נתונים בצינור עיבוד אחד, ומעניקה נראות מלאה לכל מה שקורה. הוא מתאים בעיקר כשיש שלושה שירותים ומעלה או כשחושפים APIs החוצה. כדאי להתחיל מאימות מרוכז ומהגבלת קצב בסיסית, ולהרחיב משם.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "מסלול הבקשה דרך ה-API Gateway",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "אימות והרשאות",
+     "text": "השער בודק מפתחות API, JWT או תעודות בכל בקשה, במקום אחד ובאופן עקבי."
+    },
+    {
+     "kopf": "הגבלת קצב",
+     "text": "השער אוכף מכסות לכל משתמש, מפתח או כתובת IP ומגן על ה-backend."
+    },
+    {
+     "kopf": "ניתוב לשירות",
+     "text": "הבקשה מנותבת לשירות הנכון לפי נתיב, כותרות, גרסה או מיקום."
+    },
+    {
+     "kopf": "טרנספורמציה",
+     "text": "השער ממיר נתונים, למשל בין JSON ל-XML, ומסתיר מידע רגיש."
+    },
+    {
+     "kopf": "תגובה ללקוח",
+     "text": "התגובה חוזרת דרך השער, ולוגים ומדדים נאספים בנקודה אחת."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "מהו API Gateway ומה תפקידו?",
+    "a": "API Gateway הוא נקודת כניסה אחת שיושבת בין הלקוחות לבין שירותי ה-backend. כל בקשה עוברת דרכו, והוא מחליט לאן לשלוח אותה, אם לאשר אותה ומה להחזיר. הלקוח מדבר רק עם השער ולא ישירות עם השירותים."
+   },
+   {
+    "q": "מתי כדאי להתחיל להשתמש ב-API Gateway?",
+    "a": "עד שירות אחד או שניים אפשר להסתדר בלי שער, עם ניתוב והרשאות בכל שירות. משלושה שירותים, או כשחושפים APIs ללקוחות חיצוניים, המורכבות מצטברת מהר והשער מחזיר את ההשקעה במהירות."
+   },
+   {
+    "q": "איך API Gateway משפר את האבטחה?",
+    "a": "השער מרכז אימות והרשאות במקום אחד. הוא בודק בכל בקשה מפתחות API, JWT, טוקנים של OAuth או תעודות, ואוכף כללי גישה לכל מפתח או לקוח. מפתח שנחשף מבטלים בשינוי אחד בשער, בלי לעדכן שירותים."
+   },
+   {
+    "q": "איך API Gateway מגן על שירותי ה-backend מעומס יתר?",
+    "a": "השער מגדיר הגבלת קצב ומכסות לכל משתמש, מפתח API או כתובת IP, ומפזר בקשות בין מופעים של אותו שירות. בדיקות תקינות מפסיקות לשלוח תעבורה למופע שנפל, כך שזינוק בתעבורה נספג בשער ולא מפיל את השירותים."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "בלי שער מול עם שער",
+    "typ": "vergleich",
+    "links": {
+     "titel": "בלי API Gateway",
+     "punkte": [
+      "כל לקוח צריך להכיר את הכתובת של כל שירות",
+      "כל שירות מטפל בעצמו באבטחה ובהגבלת קצב",
+      "אבטחה לא עקבית בכל האפליקציה",
+      "שינוי כתובת אחת מחייב עדכון של כל לקוח",
+      "צריך לאסוף לוגים ונתונים מכל שירות בנפרד"
+     ]
+    },
+    "rechts": {
+     "titel": "עם API Gateway",
+     "punkte": [
+      "הלקוחות מכירים כתובת אחת בלבד",
+      "אימות והרשאות מרוכזים בנקודה אחת",
+      "השער סופג זינוקי תעבורה ומגן על השירותים",
+      "אפשר להחליף backend בלי לשנות את הלקוח",
+      "לוגים ומדדים מנקודה אחת"
+     ]
+    }
+   },
+   {
+    "titel": "מה השער עושה לבקשה",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "ניתוב",
+      "text": "קורא את הנתיב ושולח כל בקשה לשירות הנכון, גם לפי כותרות ומיקום."
+     },
+     {
+      "wert": "אבטחה",
+      "text": "מאמת מפתחות API, JWT, טוקנים של OAuth ותעודות בכל בקשה."
+     },
+     {
+      "wert": "100 בקשות בשעה",
+      "text": "מכסה למשתמשים חינמיים, לעומת עשרת אלפים למשתמשי פרימיום."
+     },
+     {
+      "wert": "טרנספורמציה",
+      "text": "ממיר JSON ל-XML ומסתיר נתונים רגישים בלי לשנות את ה-backend."
+     },
+     {
+      "wert": "איזון עומסים",
+      "text": "מפזר בקשות בין מופעים ומפסיק לשלוח תעבורה למופע שלא תקין."
+     }
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "מהו התפקיד המרכזי של ה-API Gateway באפליקציה עם שירותים רבים?",
+    "opts": [
+     "לאחסן את כל הנתונים של השירותים במסד נתונים מרכזי אחד",
+     "לשמש נקודת כניסה אחת בין הלקוחות לשירותי ה-backend",
+     "להחליף את כל שירותי ה-backend בשירות יחיד וגדול",
+     "לאפשר ללקוחות לפנות ישירות לכל שירות בלי אימות"
+    ],
+    "a": 1,
+    "why": "השער הוא נקודת כניסה אחת שיושבת בין הלקוחות לשירותים. כל בקשה עוברת דרכו, והלקוח לא מדבר ישירות עם ה-backend."
+   },
+   {
+    "q": "כיצד מסייע הניתוב בשער בניהול גרסאות של שירות?",
+    "opts": [
+     "השער מוחק אוטומטית את הגרסה הישנה ברגע שהחדשה עולה",
+     "כל הלקוחות מועברים בכפייה לגרסה החדשה בלי הודעה מוקדמת",
+     "לקוחות ישנים פונים ל-v1 והחדשים ל-v2, וכל קבוצה מנותבת ל-backend אחר",
+     "השער ממיר את כל הבקשות לפורמט XML לפני שליחתן"
+    ],
+    "a": 2,
+    "why": "השער מנתב לקוחות ישנים ל-v1/users וחדשים ל-v2/users, כך שלקוחות קיימים ממשיכים לעבוד בזמן פריסת הגרסה החדשה."
+   },
+   {
+    "q": "מה קורה כשמשתמש חינמי מגיע למכסת הבקשות שהוגדרה בשער?",
+    "opts": [
+     "כל שירותי ה-backend מושבתים עד סוף השעה",
+     "הוא מקבל הודעה מנומסת לנסות שוב מאוחר יותר, והלקוחות המשלמים ממשיכים כרגיל",
+     "הוא עובר אוטומטית לשדרוג פרימיום בלי תשלום נוסף",
+     "הבקשות שלו מועברות לשירות התשלומים לבדיקה"
+    ],
+    "a": 1,
+    "why": "השער אוכף את המכסה, מחזיר למשתמש החינמי הודעה לנסות מאוחר יותר, ושירותי ה-backend ממשיכים לשרת לקוחות משלמים."
+   },
+   {
+    "q": "מתי לפי המאמר כדאי לשקול להשתמש ב-API Gateway?",
+    "opts": [
+     "רק כשיש יותר ממאה שירותים בסביבת ענן אחת",
+     "כבר משירות אחד, כי השער הכרחי בכל אפליקציה",
+     "רק כשכל הלקוחות הם אפליקציות מובייל ולא אתרים",
+     "משלושה שירותים, או כשחושפים APIs ללקוחות חיצוניים"
+    ],
+    "a": 3,
+    "why": "עד שירות או שניים אפשר להסתדר בלי שער. משלושה שירותים או בחשיפת APIs חיצונית המורכבות גדלה והשער משתלם."
+   }
+  ]
+ },
+ "hi": {
+  "html": "<p>आपने एक छोटा-सा ऐप बनाया और वह ठीक चल रहा था। फिर एक और सर्विस जुड़ी, फिर एक और, और देखते-देखते उनके बीच ट्रैफ़िक संभालना सिरदर्द बन गया। माइक्रोसर्विसेज़ अपनाने वाली ज़्यादातर टीमें इस मोड़ पर पहुँचती हैं।</p>\n<p>इस लेख में हम सरल भाषा में समझेंगे कि API Gateway क्या है, वह कई सेवाओं की अव्यवस्था को कैसे सुलझाता है, routing, सुरक्षा, rate limiting और load balancing में उसकी क्या भूमिका है, और कैसे तय करें कि आपको उसकी ज़रूरत है या नहीं।</p>\n\n<h2>समस्या: बहुत सारे दरवाज़े</h2>\n<p>एक तेज़ी से बढ़ती कंपनी की कल्पना कीजिए। तीसरी मंज़िल पर सेल्स टीम है, बेसमेंट में अकाउंटिंग और पिछले विंग में आईटी। अब मान लीजिए हर विभाग का अपना दरवाज़ा, अपना फ़ोन नंबर और अपना सुरक्षा गार्ड है, और ये गार्ड आपस में बात नहीं करते।</p>\n<p>अगर आप कोई पैकेज देने आए कूरियर वाले हैं, तो आपको पता होना चाहिए कि कौन-सा दरवाज़ा इस्तेमाल करना है, किस गार्ड से बात करनी है, और गार्ड ब्रेक पर हो तो क्या करना है। यह बहुत झंझट भरा है।</p>\n<p>जब आपके ऐप में कई बैकएंड सेवाएँ हों और हर क्लाइंट सीधे हर सेवा को कॉल करे, तो यही होता है। क्लाइंट मोबाइल ऐप हो, वेबसाइट हो या कोई दूसरी सेवा, उसे हर सेवा का पता और नियम जानना पड़ता है। इससे जटिलता तेज़ी से बढ़ती है और गलतियों की संभावना भी। API Gateway इसी अव्यवस्था को ठीक करने के लिए बनाया गया है।</p>\n\n<h2>API Gateway क्या है?</h2>\n<p>API Gateway को किसी होटल के front desk की तरह समझें। होटल में घुसते समय आपको यह जानने की ज़रूरत नहीं कि हाउसकीपिंग किस मंज़िल पर है, किचन कहाँ है या मेंटेनेंस टीम से कैसे संपर्क करना है। आप front desk पर जाकर अपनी ज़रूरत बताते हैं, और बाकी सब वे संभाल लेते हैं। वे आपका अनुरोध सही व्यक्ति तक पहुँचाते हैं, जाँचते हैं कि आप वहाँ ठहरे हुए मेहमान हैं, और कई बुनियादी अनुरोध खुद ही निपटा देते हैं।</p>\n<p>सॉफ़्टवेयर में API Gateway यही काम करता है। वह एकल प्रवेश बिंदु (single entry point) है, जो क्लाइंट्स और बैकएंड सेवाओं के बीच बैठता है। हर अनुरोध सबसे पहले Gateway से गुज़रता है। वही तय करता है कि अनुरोध कहाँ भेजना है, उसे अनुमति देनी है या नहीं, और जवाब में क्या लौटाना है।</p>\n<p>यह कोई बिल्कुल नया विचार नहीं है। reverse proxy दशकों से मौजूद है। लेकिन जब आप अपने ऐप को कई छोटी सेवाओं में तोड़ते हैं, तो अचानक आपके पास बहुत सारे दरवाज़े हो जाते हैं। तब API Gateway लगभग अनिवार्य बन जाता है।</p>\n\n<h2>Routing: हर अनुरोध सही सेवा तक</h2>\n<p>Gateway का सबसे बुनियादी काम routing है, यानी हर अनुरोध को सही सेवा तक पहुँचाना। जब आप किसी लिंक पर क्लिक करते हैं, तो ब्राउज़र एक अनुरोध भेजता है जिसमें एक path होता है। अगर path <em>users</em> है, तो Gateway उसे यूज़र सर्विस तक भेजता है। अगर path <em>orders</em> है, तो वह ऑर्डर सर्विस तक जाता है। Gateway path पढ़ता है, तय करता है कि उसे कहाँ जाना चाहिए, और आगे बढ़ा देता है।</p>\n<h3>Gateway के बिना क्या होता है</h3>\n<p>Gateway न हो तो क्लाइंट को हर सेवा का URL जानना पड़ता है: यूज़र, ऑर्डर, पेमेंट और कैटलॉग, सबके पते। इन सबको सँभालना मुश्किल है। और अगर इनमें से कोई पता बदल जाए, तो हर क्लाइंट को अपडेट करना पड़ेगा।</p>\n<h3>Gateway के साथ क्या बदलता है</h3>\n<p>Gateway के साथ क्लाइंट को सिर्फ़ एक URL पता होता है, यानी Gateway का। सेवाएँ असल में कहाँ चल रही हैं, इसकी उसे परवाह नहीं होती। वह अपना अनुरोध Gateway को भेजता है और बाकी काम Gateway करता है। चार अलग-अलग URL की जगह एक ही पता, और Gateway path (जैसे कैटलॉग, कार्ट, चेकआउट, अकाउंट) पढ़कर हर अनुरोध सही सेवा पर भेज देता है।</p>\n<h3>Routing के और तरीक़े</h3>\n<p>Routing सिर्फ़ path तक सीमित नहीं है। आप इन आधारों पर भी route कर सकते हैं:</p>\n<ul>\n<li>path</li>\n<li>HTTP method</li>\n<li>headers</li>\n<li>क्लाइंट की geolocation</li>\n</ul>\n<p>उदाहरण के लिए, यूरोप से आने वाले अनुरोध यूरोपीय डेटा सेंटर पर और अमेरिका से आने वाले अनुरोध अमेरिकी डेटा सेंटर पर भेजे जा सकते हैं। क्लाइंट को पता भी नहीं चलता, उसे बस तेज़ जवाब मिलता है। routing versioning भी संभालती है। मान लीजिए यूज़र सर्विस का नया वर्ज़न आ गया है, तब भी पुराने क्लाइंट पुराने वर्ज़न से काम करते रह सकते हैं।</p>\n\n<h2>सुरक्षा: authentication और authorization एक जगह</h2>\n<p>अगर हर सेवा अपने तरीक़े से सुरक्षा सँभाले, तो एक सेवा एक तरीक़ा अपनाती है, दूसरी कुछ और, और तीसरी बिल्कुल अलग। Gateway के साथ पूरे एप्लिकेशन में एक जैसी सुरक्षा मिलती है, क्योंकि वह authentication और authorization को केंद्रीय स्थान पर सँभालता है।</p>\n<p>आप Gateway स्तर पर बारीक अनुमतियाँ परिभाषित कर सकते हैं। जैसे कोई क्लाइंट सिर्फ़ कैटलॉग सेवा तक पहुँच सकता है, पेमेंट सेवा तक नहीं। ये नीतियाँ एक बार तय होती हैं और हर जगह एक जैसी लागू हो जाती हैं। बैकएंड सेवाओं को हर बार ऑथराइज़ेशन की चिंता नहीं करनी पड़ती।</p>\n<p>मान लीजिए कोई क्लाइंट गलत endpoint के रास्ते बिलिंग सिस्टम में लिखने की कोशिश करता है। Gateway उसे वहीं रोक देता है, और बिलिंग सर्विस को वह अनुरोध कभी दिखाई ही नहीं देता। बेहतर सुरक्षा के लिए Gateway के स्तर पर mutual TLS जैसे उपाय भी इस्तेमाल किए जा सकते हैं।</p>\n\n<h2>Rate limiting: अचानक आए ट्रैफ़िक से बचाव</h2>\n<p>सोचिए आपका प्रोडक्ट लॉन्च वायरल हो जाए, या मंगलवार सुबह सबने एक साथ लॉग इन करने का फ़ैसला कर लिया हो। Gateway के बिना यह दबाव सीधे बैकएंड सेवाओं पर पड़ता है। वे धीरे-धीरे नहीं, बल्कि एक ही बार में क्रैश हो सकती हैं।</p>\n<p>Rate limiting इसी का समाधान है। इसमें अलग-अलग उपयोगकर्ताओं के लिए अलग सीमाएँ तय होती हैं। उदाहरण के लिए, मुफ़्त उपयोगकर्ताओं को प्रति घंटे 100 अनुरोध और प्रीमियम उपयोगकर्ताओं को 10,000 अनुरोध दिए जा सकते हैं।</p>\n<p>Gateway हर अनुरोध को ट्रैक करता है और ये सीमाएँ गेट पर ही लागू कर देता है। जब कोई मुफ़्त उपयोगकर्ता अपनी सीमा पार कर लेता है, तो Gateway उसे बाद में प्रयास करने का संदेश लौटा देता है। बैकएंड तक वह अनुरोध पहुँचता ही नहीं, इसलिए सेवाएँ सुरक्षित रहती हैं।</p>\n\n<h2>Load balancing और health checks</h2>\n<p>load balancing और health checks चीज़ों को सुचारु रूप से चलाए रखते हैं। Gateway यह सुनिश्चित करने के लिए हर instance की स्थिति जाँचता रहता है। अगर कोई instance ठीक से काम नहीं कर रहा, तो Gateway अनुरोध को दूसरे instance पर route कर देता है। क्लाइंट को इसका पता नहीं चलता, उसे बस अपना जवाब मिल जाता है।</p>\n\n<h2>Request और response transformation</h2>\n<p>Gateway अनुरोध और जवाब को आते या जाते समय, या दोनों समय, बदल भी सकता है। इसे संक्षेप में request और response transformation कहते हैं।</p>\n<p>एक व्यावहारिक स्थिति देखिए। आपके पास एक पुराना सिस्टम है जो XML में जवाब देता है। वह 15 साल से चल रहा है और ठीक काम कर रहा है। अब आप नया मोबाइल ऐप बना रहे हैं, और मोबाइल ऐप JSON समझते हैं। Gateway के बिना आपको या तो पुराने सिस्टम में बदलाव करना पड़ेगा या हर क्लाइंट में अलग कोड लिखना पड़ेगा। Gateway के साथ वह बीच में ही फ़ॉर्मैट बदल देता है।</p>\n<p>इसी तरह अगर जवाब में कोई संवेदनशील जानकारी है जो क्लाइंट तक नहीं जानी चाहिए, तो Gateway जवाब बाहर जाने से पहले उसे हटा सकता है या उसकी जगह masked वर्ज़न रख सकता है। इसके लिए बैकएंड को कभी बदलना नहीं पड़ता।</p>\n\n<h2>चारों काम एक पाइपलाइन में: यह सब कैसे जुड़ता है</h2>\n<p>routing, सुरक्षा, rate limiting और transformation चार अलग चीज़ें नहीं हैं। जब भी कोई अनुरोध आता है, ये एक साथ, एक ही पाइपलाइन में काम करते हैं।</p>\n<p>फिर भी हर हिस्सा स्वतंत्र रहता है, और इसके कई फ़ायदे हैं:</p>\n<ul>\n<li>आप routing को छुए बिना नई सुरक्षा नीति जोड़ सकते हैं।</li>\n<li>क्लाइंट को बदले बिना बैकएंड सेवा बदल सकते हैं।</li>\n<li>कुछ दोबारा तैनात (redeploy) किए बिना rate limit अपडेट कर सकते हैं।</li>\n</ul>\n<p>चूँकि सब कुछ एक ही जगह से गुज़रता है, आपको पूरी दृश्यता (visibility) भी मिलती है: logs, metrics और analytics। हर अनुरोध और हर जवाब एक ही स्थान से प्रवाहित होता है, इसलिए जो कुछ हो रहा है उसे एक जगह से देखा जा सकता है।</p>\n\n<h2>क्या आपको API Gateway की ज़रूरत है?</h2>\n<p>इस सवाल का जवाब ऊपर की समस्या में छिपा है। अगर आपके पास कई बैकएंड सेवाएँ हैं और क्लाइंट्स को हर सेवा का अलग पता और नियम जानना पड़ता है, तो Gateway आपके काम का है। अगर हर सेवा में टोकन वैलिडेशन और सुरक्षा जाँच का वही कोड बार-बार लिखा जा रहा है, तो यह भी एक संकेत है। और अगर अचानक बढ़े ट्रैफ़िक से आपकी सेवाओं के क्रैश होने का जोखिम है, तो Gateway पर rate limiting इसका सीधा उपाय है।</p>\n<p>शुरुआत के लिए कोई एक सेवा चुनिए और उसकी जाँचें Gateway पर ले जाइए। आप जल्दी देखेंगे कि सर्विस का कोड साफ़ हो गया है। टोकन वैलिडेशन का बिखरा हुआ लॉजिक हर जगह नहीं रहेगा।</p>\n\n<h2>व्यावहारिक सीख (Takeaways)</h2>\n<ul>\n<li>API Gateway क्लाइंट्स और बैकएंड सेवाओं के बीच एकल प्रवेश बिंदु है, जैसे होटल का front desk।</li>\n<li>क्लाइंट को सिर्फ़ Gateway का एक URL जानना होता है, हर सेवा का पता नहीं।</li>\n<li>routing path, HTTP method, headers और geolocation के आधार पर हो सकती है, और versioning भी संभालती है।</li>\n<li>authentication और authorization एक केंद्रीय जगह पर रखने से पूरे एप्लिकेशन में एक जैसी सुरक्षा मिलती है।</li>\n<li>rate limiting से अलग-अलग उपयोगकर्ता वर्गों के लिए सीमाएँ तय करें और अचानक आए ट्रैफ़िक से बैकएंड को बचाएँ।</li>\n<li>health checks के साथ load balancing खराब instance से अनुरोध हटाकर दूसरे पर भेज देती है।</li>\n<li>transformation से पुराने XML सिस्टम और JSON चाहने वाले नए ऐप साथ चल सकते हैं, और संवेदनशील डेटा बाहर जाने से पहले हटाया या mask किया जा सकता है।</li>\n<li>छोटी शुरुआत करें: एक सेवा चुनें और उसकी सुरक्षा जाँचें Gateway पर ले जाएँ।</li>\n</ul>\n\n<h2>निष्कर्ष</h2>\n<p>API Gateway माइक्रोसर्विसेज़ की बिखरी हुई जटिलता को एक जगह समेट देता है। routing, सुरक्षा, rate limiting, load balancing और transformation एक ही पाइपलाइन में चलते हैं, फिर भी हर हिस्सा स्वतंत्र रहता है। इससे क्लाइंट सरल होते हैं, सेवाओं का कोड साफ़ रहता है और पूरे सिस्टम पर आपकी नज़र बनी रहती है। अगर आपके पास कई सेवाएँ और बहुत सारे \"दरवाज़े\" हो गए हैं, तो API Gateway पर विचार करना समझदारी है।</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "API Gateway: एक दरवाज़ा, कई काम",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Routing",
+     "text": "path, method, headers या geolocation के आधार पर हर अनुरोध सही सेवा तक पहुँचता है।"
+    },
+    {
+     "kopf": "सुरक्षा",
+     "text": "authentication और authorization एक केंद्रीय जगह पर, गलत अनुरोध गेट पर ही रुकते हैं।"
+    },
+    {
+     "kopf": "Rate limiting",
+     "text": "उपयोगकर्ता वर्ग के अनुसार सीमा तय होती है, जैसे मुफ़्त 100 और प्रीमियम 10,000 प्रति घंटा।"
+    },
+    {
+     "kopf": "Load balancing",
+     "text": "health checks के आधार पर अनुरोध स्वस्थ instance पर भेजे जाते हैं।"
+    },
+    {
+     "kopf": "Transformation",
+     "text": "XML से JSON जैसे बदलाव और संवेदनशील डेटा को हटाना या mask करना।"
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "API Gateway क्या है और माइक्रोसर्विसेज़ में यह क्या काम करता है?",
+    "a": "API Gateway क्लाइंट्स और बैकएंड सेवाओं के बीच बैठा एकल प्रवेश बिंदु है, जैसे होटल का front desk। हर अनुरोध सबसे पहले उसी से गुज़रता है। वही तय करता है कि अनुरोध कहाँ भेजना है, अनुमति देनी है या नहीं, और जवाब में क्या लौटाना है।"
+   },
+   {
+    "q": "API Gateway में routing कैसे काम करती है?",
+    "a": "Gateway अनुरोध का path पढ़कर तय करता है कि उसे किस सेवा पर भेजना है, जैसे users पर यूज़र सर्विस और orders पर ऑर्डर सर्विस। routing HTTP method, headers और क्लाइंट की geolocation पर भी हो सकती है, और versioning भी संभालती है। क्लाइंट को सिर्फ़ Gateway का एक URL जानना होता है।"
+   },
+   {
+    "q": "Rate limiting क्या है और यह बैकएंड सेवाओं को कैसे बचाती है?",
+    "a": "Rate limiting में अलग-अलग उपयोगकर्ताओं के लिए अलग सीमाएँ तय होती हैं, जैसे मुफ़्त उपयोगकर्ता को प्रति घंटे 100 और प्रीमियम को 10,000 अनुरोध। सीमा पार होने पर Gateway बाद में प्रयास करने का संदेश लौटा देता है, इसलिए वह अनुरोध बैकएंड तक पहुँचता ही नहीं।"
+   },
+   {
+    "q": "मुझे API Gateway की ज़रूरत कब पड़ती है?",
+    "a": "अगर आपके पास कई बैकएंड सेवाएँ हैं और क्लाइंट्स को हर सेवा का अलग पता जानना पड़ता है, तो Gateway काम का है। हर सेवा में टोकन वैलिडेशन का वही कोड दोहराना या अचानक बढ़े ट्रैफ़िक से क्रैश का जोखिम भी संकेत हैं। शुरुआत एक सेवा की जाँचें Gateway पर ले जाकर करें।"
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Gateway के बिना बनाम Gateway के साथ",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Gateway के बिना",
+     "punkte": [
+      "क्लाइंट को यूज़र, ऑर्डर, पेमेंट और कैटलॉग, हर सेवा का URL जानना पड़ता है।",
+      "कोई पता बदले तो हर क्लाइंट को अपडेट करना पड़ता है।",
+      "हर सेवा अपने तरीक़े से सुरक्षा सँभालती है।",
+      "अचानक बढ़ा ट्रैफ़िक सीधे बैकएंड सेवाओं पर पड़ता है।",
+      "पुराने XML सिस्टम के लिए बैकएंड या हर क्लाइंट का कोड बदलना पड़ता है।"
+     ]
+    },
+    "rechts": {
+     "titel": "Gateway के साथ",
+     "punkte": [
+      "क्लाइंट को सिर्फ़ Gateway का एक URL पता होता है।",
+      "Gateway path पढ़कर हर अनुरोध सही सेवा पर भेज देता है।",
+      "authentication और authorization एक केंद्रीय जगह पर होते हैं।",
+      "rate limiting से बैकएंड तक अनुरोध पहुँचने से पहले ही रुक जाते हैं।",
+      "Gateway बीच में ही फ़ॉर्मैट बदल देता है।"
+     ]
+    }
+   },
+   {
+    "titel": "API Gateway के प्रमुख काम",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "Routing",
+      "text": "path, HTTP method, headers और geolocation के आधार पर अनुरोध सही सेवा तक पहुँचते हैं।"
+     },
+     {
+      "wert": "सुरक्षा",
+      "text": "authentication और authorization एक जगह होने से पूरे एप्लिकेशन में एक जैसी सुरक्षा मिलती है।"
+     },
+     {
+      "wert": "100 बनाम 10,000",
+      "text": "rate limiting में मुफ़्त उपयोगकर्ताओं को प्रति घंटे 100, प्रीमियम को 10,000 अनुरोध दिए जा सकते हैं।"
+     },
+     {
+      "wert": "Health checks",
+      "text": "खराब instance से अनुरोध हटाकर Gateway उन्हें दूसरे instance पर भेज देता है।"
+     },
+     {
+      "wert": "Transformation",
+      "text": "XML को JSON में बदलना और संवेदनशील जानकारी हटाना या mask करना संभव है।"
+     }
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "API Gateway की तुलना लेख में किससे की गई है, और वह क्लाइंट्स और बैकएंड सेवाओं के बीच क्या भूमिका निभाता है?",
+    "opts": [
+     "होटल के front desk से; वह एकल प्रवेश बिंदु के रूप में काम करता है",
+     "होटल की रसोई से; वह सेवाओं के लिए डेटा तैयार करता है",
+     "कूरियर कंपनी से; वह हर सेवा को अलग पैकेज भेजता है",
+     "सुरक्षा गार्ड से; वह हर सेवा के लिए अलग दरवाज़ा बनाता है"
+    ],
+    "a": 0,
+    "why": "लेख के अनुसार Gateway होटल के front desk जैसा है: क्लाइंट्स और बैकएंड सेवाओं के बीच एकल प्रवेश बिंदु, जो अनुरोध सही जगह भेजता है।"
+   },
+   {
+    "q": "Gateway के साथ routing करने पर क्लाइंट को क्या जानना पड़ता है?",
+    "opts": [
+     "यूज़र, ऑर्डर, पेमेंट और कैटलॉग, चारों सेवाओं के अलग-अलग URL",
+     "केवल Gateway का एक URL, सेवाएँ कहाँ चलती हैं यह नहीं",
+     "हर सेवा का सुरक्षा नियम और उसके instance का पता",
+     "बैकएंड सेवा का वर्ज़न और उसका डेटा सेंटर"
+    ],
+    "a": 1,
+    "why": "Gateway के साथ क्लाइंट को सिर्फ़ Gateway का URL पता होता है; path पढ़कर Gateway अनुरोध सही सेवा तक भेज देता है।"
+   },
+   {
+    "q": "कोई मुफ़्त उपयोगकर्ता rate limit की सीमा पार कर ले, तो Gateway क्या करता है?",
+    "opts": [
+     "अनुरोध बैकएंड को भेजता है, पर उसे धीमी प्राथमिकता देता है",
+     "उपयोगकर्ता को अपने आप प्रीमियम श्रेणी में बदल देता है",
+     "बैकएंड सेवा को बंद करके दोबारा तैनात करता है",
+     "उसे बाद में प्रयास करने का संदेश लौटाता है; अनुरोध बैकएंड तक नहीं पहुँचता"
+    ],
+    "a": 3,
+    "why": "Gateway सीमा गेट पर ही लागू करता है और बाद में प्रयास करने का संदेश लौटाता है, इसलिए बैकएंड सेवाएँ सुरक्षित रहती हैं।"
+   },
+   {
+    "q": "पुराना सिस्टम XML में जवाब देता है और नया मोबाइल ऐप JSON चाहता है। Gateway क्या करता है?",
+    "opts": [
+     "पुराने सिस्टम को बंद करवाकर नया सिस्टम बनवाता है",
+     "हर क्लाइंट में अलग कोड लिखने की सलाह देता है",
+     "बीच में ही जवाब का फ़ॉर्मैट XML से JSON में बदल देता है",
+     "मोबाइल ऐप को केवल XML स्वीकार करने पर मजबूर करता है"
+    ],
+    "a": 2,
+    "why": "Request और response transformation से Gateway बीच में फ़ॉर्मैट बदल देता है, इसलिए पुराने सिस्टम या क्लाइंट्स में बदलाव नहीं करना पड़ता।"
+   }
+  ]
+ },
+ "ja": {
+  "html": "<p>アプリにサービスを追加していくうちに、トラフィックの管理が手に負えないほど複雑になっていないでしょうか。マイクロサービス構成では、クライアントが呼び出すべき入り口が増え、認証やエラー処理もサービスごとにばらばらになりがちです。この問題を整理する仕組みが APIゲートウェイ です。</p>\n<p>この記事では、APIゲートウェイの役割、混乱を解消できる理由、そして「本当に必要か」を判断する基準を順に解説します。ルーティング、セキュリティ、レート制限、データ変換という4つの機能と、その組み合わせ方まで見ていきます。</p>\n\n<h2>APIゲートウェイとは?入り口が多すぎる問題を解決する単一の窓口</h2>\n<h3>問題の本質は「入り口の多さ」</h3>\n<p>急成長している会社を想像してください。営業チーム、経理、IT部門がそれぞれ独自の玄関と電話番号を持ち、互いに連携しない警備員が立っています。荷物を届ける訪問者は、どのドアを使い、どの警備員に話しかけ、相手が休憩中ならどうするかまで把握しなければなりません。</p>\n<p>アプリが複数のバックエンドサービスを持ち、各クライアントがそれぞれを直接呼び出す構成でも、同じことが起こります。モバイルアプリやウェブサイトは、全サービスの場所、認証方法、障害時の対応を知っている必要があります。各サービスも、セキュリティ、レート制限、エラーハンドリングを個別に実装しなければなりません。これは重複作業であり、一貫性も失われやすくなります。</p>\n<p>銀行の例なら、口座、支払い、ローン、不正検知が独立したサービスとして存在します。各サービスを直接公開すると、モバイルアプリは4つのURL、4つの認証方法、4つのエラー処理方法を知っておく必要があります。複雑さも問題の起こる可能性も4倍になります。</p>\n<h3>ホテルのフロントデスクという考え方</h3>\n<p>APIゲートウェイは、ホテルのフロントデスクに例えると分かりやすくなります。宿泊客は清掃係の居場所やキッチンの場所を知る必要はなく、フロントに用件を伝えるだけです。フロントは要求を適切な担当者に回し、滞在が許可されているかを確認し、簡単な依頼なら自分で処理することもあります。</p>\n<p>ソフトウェアでも同じです。APIゲートウェイは、クライアントとバックエンドサービスの間に置く<strong>単一の入り口</strong>です。すべての要求はまずゲートウェイを通り、ゲートウェイが「どこへ送るか」「許可するか」「何を返すか」を判断します。クライアントはバックエンドと直接話さず、ゲートウェイとだけ通信します。</p>\n<p>リバースプロキシは何十年も前から存在する考え方ですが、アプリを多数の小さなサービスに分割するマイクロサービスでは、ゲートウェイが不可欠になりました。Azure の世界では Azure API Management が完全なプラットフォームで、ゲートウェイはそのトラフィックを処理する中核コンポーネントです。ただし「単一の入り口と一元化された制御」というパターン自体は、どの環境でも共通です。</p>\n\n<h2>ルーティング:リクエストを適切なサービスへ振り分ける</h2>\n<p>最も基本的な役割がルーティングです。リクエストにはパスが含まれており、パスが users ならユーザーサービスへ、orders なら注文サービスへ、とゲートウェイが送信先を特定して転送します。</p>\n<p>ゲートウェイがなければ、クライアントは全サービスのURLを持つ必要があります。どれかのアドレスが変われば、すべてのクライアントを更新しなければなりません。ゲートウェイがあれば、クライアントが知るのはゲートウェイのアドレスひとつだけです。サービスの場所を気にせず、リクエストを送るだけで済みます。</p>\n<h3>パス以外の条件でも振り分けられる</h3>\n<p>これはリソースベースのルーティングと呼ばれる、APIゲートウェイの代表的なユースケースです。振り分けの条件には次のようなものがあります。</p>\n<ul>\n<li>パス</li>\n<li>HTTPメソッド</li>\n<li>ヘッダー</li>\n<li>クライアントの地理的位置情報</li>\n</ul>\n<p>たとえばヨーロッパからのリクエストはヨーロッパのデータセンターへ、米国からのリクエストは米国のデータセンターへ送れます。クライアントはこの処理を意識せず、迅速なレスポンスを受け取るだけです。</p>\n<h3>バージョン管理にも役立つ</h3>\n<p>ユーザーサービスの新バージョンを作ったとします。古いクライアントは v1/users、新しいクライアントは v2/users を使い、ゲートウェイがそれぞれ別のバックエンドへ振り分けます。新バージョンを導入している間も古いクライアントは動き続けるため、実際のユーザーを抱えるライブアプリケーションでも、クライアントに影響を与えずにバックエンドを変更できます。</p>\n<p>eコマースなら、カタログ、ショッピングカート、チェックアウト、ユーザーアカウントの4サービスがあっても、モバイルアプリが知るURLは1つで済みます。ゲートウェイがパスを読み取り、各リクエストを適切なサービスへ送ります。</p>\n\n<h2>セキュリティ:フロントドアで認証と認可を一元化する</h2>\n<p>すべてのAPI呼び出しについて、誰が要求しているのか、適切な権限を持っているのかを確認する必要があります。ゲートウェイがないと、各サービスが認証を個別に処理することになり、作業が重複してミスも起きやすくなります。あるサービスはトークンを正しく検証しても、別のサービスは手順を省略してしまうかもしれません。</p>\n<p>ゲートウェイに集約すれば、チェックする場所も、ルールを強制する場所も、ポリシー変更時に更新する場所も一箇所にまとまります。これは主要なセキュリティのベストプラクティスです。</p>\n<h3>検証できるものとルールの適用</h3>\n<p>ゲートウェイは、すべてのリクエストでAPIキー、JWT、OAuthトークン、証明書を検証します。すべてのリクエストが同じチェックを通り、例外はありません。さらに、次のようなきめ細かな権限も定義できます。</p>\n<ul>\n<li>このAPIキーは読み取り用エンドポイントだけ呼び出せる</li>\n<li>このクライアントはカタログサービスにアクセスできるが、決済サービスにはできない</li>\n</ul>\n<p>こうしたルールはゲートウェイレベルで自動的に適用されます。バックエンドサービスは認証を気にせず、リクエストを処理してデータを返すことに専念できます。</p>\n<h3>アクセス権の取り消しも一度で済む</h3>\n<p>クライアントのAPIキーが漏えいした場合も、ゲートウェイで無効化するだけです。全サービスの更新や再起動は要りません。そのキーからの次のリクエストは即座に拒否されます。</p>\n<p>銀行の例では、請求システムへの書き込み権限が必要なのは決済サービスだけです。ゲートウェイがこれを強制し、クライアントが誤ったエンドポイントから書き込もうとしてもブロックします。請求サービスはそのリクエストを検知すらしません。ゲートウェイは相互TLSやWAF統合にも対応し、より強固な保護が可能ですが、本質的には最初の防御ラインです。</p>\n\n<h2>トラフィック管理:レート制限・スロットリング・負荷分散</h2>\n<p>フラッシュセールや突然のヒットで、1万人のユーザーが同時にアクセスしたらどうなるでしょうか。ゲートウェイがなければ、バックエンドサービスは直接の負荷にさらされ、ゆっくりではなく一気にクラッシュする可能性があります。</p>\n<h3>レート制限でバックエンドを守る</h3>\n<p>レート制限やスロットリングはゲートウェイの標準的な機能です。クォータは、ユーザーごと、APIキーごと、IPアドレスごとに設定できます。たとえば無料プランのユーザーには1時間あたり100リクエスト、プレミアムユーザーには1万リクエストを許可します。ゲートウェイがすべてのリクエストを追跡して入り口で制限を適用し、上限に達した無料ユーザーには再試行を促すメッセージを返します。バックエンドはそのリクエストの存在すら知らないので、有料顧客へのサービスを快適に続けられます。</p>\n<h3>負荷分散とヘルスチェック</h3>\n<p>同じサービスを複数インスタンスで動かしている場合、ゲートウェイがリクエストを1番目、2番目、3番目と順に振り分けます。これは自動で行われ、あるインスタンスが停止しても別のインスタンスへルーティングされるため、クライアントは気づきません。</p>\n<p>ヘルスチェックでは、ゲートウェイが各インスタンスにpingを送って稼働を確認し、停止していればそこへのトラフィックを止めます。高トラフィックなAPIでは特に重要です。急激なスパイクはまずゲートウェイで吸収・分散されるため、サービスがパンクするのを防げます。</p>\n\n<h2>データ変換:バックエンドを書き換えずに互換性を保つ</h2>\n<p>クライアントが送るデータが、バックエンドの期待する形式と一致しないことがあります。クライアントはJSONで送るのにバックエンドはXMLしか理解できない場合や、クライアントが firstName を使うのにバックエンドは first_name を期待している場合です。こうした不一致はシステムを壊します。従来はすべてのクライアントを修正するか、バックエンドを書き直すしかありませんでした。</p>\n<p>ゲートウェイは、国際会議の翻訳者のように中央に立ち、行きのデータ、帰りのデータ、あるいは両方を変換します。これがリクエスト変換とレスポンス変換です。</p>\n<h3>レガシーシステムの例</h3>\n<p>XMLを期待するレガシーシステムが15年間問題なく動いているところに、JSONを扱う新しいモバイルアプリを作るとします。ゲートウェイがなければ、レガシーシステムを書き換えるか、モバイルアプリに無理やりXMLを送らせるしかありません。ゲートウェイがあれば、モバイルアプリはJSONを送り、ゲートウェイがXMLに変換し、システムは想定通りのデータを受け取ります。レスポンスも、モバイルアプリには JSON 形式で返ります。誰も何も書き直す必要がありません。</p>\n<h3>そのほかの変換</h3>\n<ul>\n<li>ヘッダーの追加・削除</li>\n<li>URLの変更</li>\n<li>機密データのマスク</li>\n</ul>\n<p>たとえばレスポンスにクレジットカード番号が含まれていても、ゲートウェイが返す前に取り除くか、マスクした値に置き換えられます。バックエンドの変更は不要で、古いシステムのモダナイゼーションにも向いています。</p>\n\n<h2>4つの機能をひとつのパイプラインで動かす</h2>\n<p>ルーティング、セキュリティ、スロットリング、変換は、別々の仕事ではありません。リクエストが来るたびに、これらが連携して動きます。</p>\n<ol>\n<li>認証を確認する</li>\n<li>レート制限を検証する</li>\n<li>正しいサービスへルーティングする</li>\n<li>必要に応じてデータを変換する</li>\n<li>レスポンスを受け取り、必要なら変換してクライアントへ返す</li>\n</ol>\n<p>これが1本のパイプラインで、各サービスが意識しなくても、全ステップが順序通りに自動実行されます。真の力は個々の機能ではなく統合にあります。ルーティングに触れずに新しいセキュリティポリシーを追加でき、クライアントを変えずにバックエンドを変更でき、何も再デプロイせずにレート制限を更新できます。各パーツは独立しながら、同じパイプラインで動作します。</p>\n<p>すべてが一箇所を通るため、可視性も高まります。ログ、メトリクス、分析が集約され、リクエスト数、失敗したリクエスト、遅かったリクエスト、リソースを最も消費しているクライアントを確認できます。ゲートウェイがなければ、各サービスから個別にデータを集めなければなりません。ゲートウェイは単なるルーターではなく、APIプラットフォーム全体の司令塔であり、全体を見渡せる単一の管理画面になります。</p>\n\n<h2>APIゲートウェイは本当に必要?判断基準と導入ステップ</h2>\n<h3>サービスが1〜2個なら不要なこともある</h3>\n<p>現実的に考えましょう。サービスが一つか二つなら、まだゲートウェイは必要ないかもしれません。ルーティングは自前で処理でき、認証も各サービスで管理できます。洗練されてはいませんが、機能はします。</p>\n<p>ただし、サービスが三つになったとき、あるいは外部クライアントにAPIを公開するようになったときには、複雑さが急速に増します。そうなればゲートウェイはすぐに元が取れます。</p>\n<h3>ゲートウェイがないと起こりがちな問題</h3>\n<ul>\n<li>サービスごとに認証の実装が異なり、チェックの抜けが生じる</li>\n<li>サービスのアドレスが変わるたびに、すべてのクライアントを更新する必要がある</li>\n<li>急激なトラフィック増がバックエンドを直撃する</li>\n<li>データ形式の不一致のたびに、クライアントかバックエンドの書き換えが必要になる</li>\n<li>ログやメトリクスが各サービスに散らばる</li>\n</ul>\n<h3>最初のステップは認証の集約</h3>\n<p>何よりもまず、認証をゲートウェイに集約してください。サービスを一つ選び、その認証チェックをゲートウェイへ移行します。サービスのコードはすぐにすっきりし、トークン検証のロジックが至るところに散らばることもなくなります。すべてのサービスで同じ実装になっているかを悩む必要もありません。ゲートウェイが一度処理すれば、すべてのサービスがその恩恵を受けます。</p>\n<p>次のステップはレート制限です。1クライアントあたり毎分100リクエストといった基本的な設定から始めましょう。単純な制限でも、バックエンドの過負荷を防ぎ、暴走するクライアントがサービスを止めてしまうことを避けられます。</p>\n\n<h2>実践のためのポイント</h2>\n<ul>\n<li>クライアントが知るURLをゲートウェイのアドレスひとつに絞り、サービスの場所を隠す。</li>\n<li>認証・認可をゲートウェイに集約し、APIキー漏えい時もゲートウェイで一度無効化すれば済むようにする。</li>\n<li>ユーザー、APIキー、IPアドレス単位でクォータを設定し、バックエンドを急な負荷から守る。</li>\n<li>ヘルスチェック付きの負荷分散で、停止したインスタンスを自動的に避ける。</li>\n<li>JSONとXMLの違いなどはゲートウェイで変換し、レガシーシステムを書き換えずに済ませる。</li>\n<li>クレジットカード番号などの機密データは、レスポンス返却前にマスクする。</li>\n<li>サービスが3つ以上になるか、外部にAPIを公開するなら、導入を検討する。</li>\n<li>まず1つのサービスの認証移行から始め、次に基本的なレート制限を入れる。</li>\n</ul>\n\n<h2>まとめ</h2>\n<p>APIゲートウェイは、クライアントとバックエンドの間に置く単一の入り口として、ルーティング、セキュリティ、トラフィック管理、データ変換をひとつのパイプラインで担います。サービスごとの重複実装や、クライアントが負う複雑さを減らし、ログやメトリクスも一箇所に集約できます。サービスが少ないうちは不要な場合もありますが、三つ以上に増えたり外部にAPIを公開したりするなら、導入の効果は大きくなります。まずは認証の集約とシンプルなレート制限から、段階的に始めてみてください。</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "APIゲートウェイが処理するリクエストの流れ",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "認証の確認",
+     "text": "APIキー、JWT、OAuthトークン、証明書をすべてのリクエストで検証する。"
+    },
+    {
+     "kopf": "レート制限",
+     "text": "ユーザー、APIキー、IPごとのクォータを入り口で適用し、バックエンドを守る。"
+    },
+    {
+     "kopf": "ルーティング",
+     "text": "パスやメソッド、ヘッダー、位置情報から適切なサービスへ振り分ける。"
+    },
+    {
+     "kopf": "データ変換",
+     "text": "JSONとXMLの変換や機密データのマスクを、バックエンドを変えずに行う。"
+    },
+    {
+     "kopf": "レスポンス返却",
+     "text": "必要ならレスポンスも変換し、ログとメトリクスを集約してクライアントへ返す。"
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "APIゲートウェイとは何ですか?",
+    "a": "APIゲートウェイは、クライアントとバックエンドサービスの間に置く単一の入り口です。すべてのリクエストがまずゲートウェイを通り、送信先、許可の可否、返す内容を判断します。クライアントはバックエンドと直接通信せず、ゲートウェイとだけやり取りします。"
+   },
+   {
+    "q": "APIゲートウェイにはどんな機能がありますか?",
+    "a": "主な機能は、ルーティング、セキュリティ、トラフィック管理(レート制限・負荷分散)、データ変換の4つです。これらが1本のパイプラインで連携し、認証確認、制限の検証、振り分け、変換の順に自動で実行されます。ログやメトリクスも一箇所に集約されます。"
+   },
+   {
+    "q": "APIゲートウェイは本当に必要ですか?サービスが少なくても導入すべき?",
+    "a": "サービスが1〜2個なら、ルーティングも認証も自前で処理できるため、必須ではないかもしれません。ただしサービスが3つ以上に増えたとき、または外部クライアントにAPIを公開するときは複雑さが急速に増すため、導入を検討する価値があります。"
+   },
+   {
+    "q": "APIゲートウェイを導入するとき、最初に何から始めればいいですか?",
+    "a": "まず認証をゲートウェイに集約します。サービスを1つ選び、その認証チェックをゲートウェイへ移行してください。次に、1クライアントあたり毎分100リクエストといった基本的なレート制限を設定します。これだけでもバックエンドの過負荷を防げます。"
+   }
+  ],
+  "infos": [
+   {
+    "titel": "ゲートウェイあり・なしの比較",
+    "typ": "vergleich",
+    "links": {
+     "titel": "ゲートウェイなし",
+     "punkte": [
+      "クライアントが全サービスのURLと認証方法を把握する必要がある",
+      "サービスごとに認証の実装が異なり、チェックの抜けが生じる",
+      "急激なトラフィック増がバックエンドを直撃する",
+      "データ形式が合わないたびに書き換えが必要になる",
+      "ログやメトリクスが各サービスに散らばる"
+     ]
+    },
+    "rechts": {
+     "titel": "ゲートウェイあり",
+     "punkte": [
+      "クライアントが知るURLはゲートウェイのアドレスひとつ",
+      "認証とルールの適用が一箇所に集約される",
+      "入り口でレート制限をかけ、バックエンドを守れる",
+      "JSONとXMLなどの違いをゲートウェイが変換する",
+      "ログやメトリクスが一箇所に集約される"
+     ]
+    }
+   },
+   {
+    "titel": "ゲートウェイの4つの主要機能",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "ルーティング",
+      "text": "パスやメソッド、ヘッダー、位置情報で適切なサービスへ振り分ける"
+     },
+     {
+      "wert": "セキュリティ",
+      "text": "APIキー、JWT、OAuthトークン、証明書を全リクエストで検証する"
+     },
+     {
+      "wert": "1時間100リクエスト",
+      "text": "無料プランの例。プレミアムは1万リクエストまで許可できる"
+     },
+     {
+      "wert": "データ変換",
+      "text": "JSONをXMLへ変換し、機密データのマスクもできる"
+     }
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "APIゲートウェイがない場合、クライアントのAPIキーが漏えいしたとき何が必要になりますか?",
+    "opts": [
+     "ゲートウェイで一度無効化するだけで、全サービスに即座に反映される",
+     "各サービスで個別に対応が必要になり、作業が重複してミスも起きやすい",
+     "クライアント側のアプリを再配布すれば、キーは自動的に無効になる",
+     "バックエンドのデータ形式をすべて変更しなければならない"
+    ],
+    "a": 1,
+    "why": "ゲートウェイがないと認証は各サービスが個別に処理するため、作業が重複しミスも起きやすくなります。"
+   },
+   {
+    "q": "ユーザーサービスの新バージョンを導入する際、ゲートウェイはどのように役立ちますか?",
+    "opts": [
+     "古いクライアントをすべて強制的に新バージョンへ切り替える",
+     "新旧のデータ形式を統合して、ひとつのバックエンドだけを動かす",
+     "v1/users と v2/users を別々のバックエンドへ振り分け、古いクライアントも動かし続ける",
+     "新バージョンのリクエストだけレート制限の対象から外す"
+    ],
+    "a": 2,
+    "why": "パスに応じて別のバックエンドへ振り分けるため、導入中も古いクライアントは影響を受けずに動作します。"
+   },
+   {
+    "q": "XMLを期待するレガシーシステムにJSONのモバイルアプリをつなぐ場合、ゲートウェイはどうしますか?",
+    "opts": [
+     "ゲートウェイがJSONをXMLに変換し、レスポンスはJSONで返す",
+     "モバイルアプリにXMLで送信するよう強制する",
+     "レガシーシステムを書き換えてJSONに対応させる",
+     "JSONのリクエストを拒否して、エラーメッセージを返す"
+    ],
+    "a": 0,
+    "why": "リクエスト変換とレスポンス変換により、どちらも書き直さずに互換性を保てます。"
+   },
+   {
+    "q": "記事によると、APIゲートウェイの導入を検討すべき目安はどれですか?",
+    "opts": [
+     "サービスが1つだけで、内部クライアントのみが利用している場合",
+     "ログやメトリクスをまったく収集する必要がない場合",
+     "データ形式がすべてJSONに統一されている場合",
+     "サービスが3つ以上になったとき、または外部にAPIを公開するとき"
+    ],
+    "a": 3,
+    "why": "サービスが1〜2個なら不要なこともありますが、3つ以上や外部公開では複雑さが急増し、導入の効果が大きくなります。"
+   }
+  ]
+ },
+ "ko": {
+  "html": "<p>작동하는 앱을 만들고 서비스를 하나둘 추가하다 보면, 어느 순간 서비스 간 트래픽 관리가 악몽처럼 느껴집니다. 이때 자주 등장하는 해법이 API 게이트웨이입니다. 그런데 API 게이트웨이는 정확히 무엇이고, 우리 프로젝트에 정말 필요할까요?</p>\n<p>이 글에서는 API 게이트웨이가 해결하는 문제부터 라우팅, 보안, 속도 제한, 데이터 변환 같은 핵심 기능, 그리고 도입 시점을 판단하는 기준까지 차례로 정리합니다.</p>\n\n<h2>마이크로서비스에서 출입구가 너무 많아지는 문제</h2>\n<p>빠르게 성장하는 회사를 떠올려 보세요. 3층에는 영업팀, 지하에는 회계팀, 뒤쪽 별관에는 IT팀이 있습니다. 부서마다 전용 출입구와 전화번호가 있고, 서로 소통하지 않는 경비원이 따로 지키고 있다면 어떨까요? 택배를 전달하려는 방문객은 어느 출입구로 가야 하는지, 누구에게 말해야 하는지, 경비원이 자리를 비우면 어떻게 하는지를 모두 알아야 합니다.</p>\n<p>백엔드 서비스가 여러 개인데 모든 클라이언트가 각 서비스를 직접 호출하면 똑같은 상황이 벌어집니다. 모바일 앱, 웹사이트, 다른 서비스 같은 클라이언트가 모든 서비스의 위치와 인증 방식, 장애 시 대처법을 일일이 알아야 합니다. 각 서비스도 보안, 속도 제한, 오류 처리를 스스로 해결해야 합니다. 이는 중복 작업이고, 일관성이 깨지기 쉽습니다.</p>\n<h3>은행 서비스로 보는 복잡성</h3>\n<p>은행이 계좌, 결제, 대출, 부정행위 탐지를 각각 별도 서비스로 운영한다고 해 보겠습니다. 이 서비스들이 모두 외부에 직접 노출되면 모바일 앱은 4개의 URL, 4개의 인증 방식, 4개의 오류 처리 방법을 알아야 합니다. 복잡성이 4배가 되고, 문제가 생길 수 있는 지점도 4배로 늘어납니다. API 게이트웨이는 바로 이 혼란을 줄이기 위해 설계되었습니다.</p>\n\n<h2>API 게이트웨이란? 단일 진입점과 중앙 집중식 제어</h2>\n<p>API 게이트웨이는 호텔의 프런트 데스크에 비유할 수 있습니다. 투숙객은 객실 정비팀이 몇 층에 있는지, 주방이 어디인지, 유지 보수팀에 어떻게 연락하는지 몰라도 됩니다. 프런트 데스크에 필요한 것을 말하면 요청을 적절한 담당자에게 연결해 주고, 투숙객인지 확인하고, 기본적인 요청은 직접 처리하기도 합니다.</p>\n<p>API 게이트웨이도 소프트웨어에서 같은 역할을 합니다. 클라이언트와 백엔드 서비스 사이에 놓인 단일 진입점이며, 모든 요청은 먼저 게이트웨이를 통과합니다. 게이트웨이는 요청을 어디로 보낼지, 허용할지 말지, 무엇을 돌려줄지를 결정합니다. 클라이언트는 백엔드 서비스와 직접 통신하지 않고 오직 게이트웨이하고만 통신합니다.</p>\n<p>이 개념이 완전히 새로운 것은 아닙니다. 리버스 프록시는 수십 년 전부터 있었습니다. 다만 앱을 여러 개의 작은 서비스로 나누는 마이크로서비스 환경에서는 문이 여러 개 생기기 때문에, 하나의 정문을 제공하는 게이트웨이가 필수 요소가 되었습니다. Azure 환경에서는 Azure API Management가 전체 플랫폼이고, 게이트웨이는 트래픽을 처리하는 핵심 구성 요소입니다. 어디서나 패턴은 같습니다. 단일 진입점과 중앙 집중식 제어입니다.</p>\n\n<h2>트래픽 라우팅: 요청을 올바른 서비스로 안내하기</h2>\n<p>게이트웨이의 가장 기본적인 작업은 각 요청을 올바른 서비스로 안내하는 라우팅입니다. 요청에는 경로가 포함되어 있습니다. 경로가 users이면 사용자 서비스로, orders이면 주문 서비스로 보내면 됩니다.</p>\n<p>게이트웨이가 없다면 모바일 앱은 사용자, 주문, 결제, 카탈로그 서비스의 주소를 모두 알아야 합니다. 그중 하나라도 주소가 바뀌면 모든 클라이언트를 업데이트해야 합니다. 게이트웨이가 있으면 클라이언트는 게이트웨이 주소 하나만 알면 되고, 서비스가 실제로 어디에 있는지는 신경 쓰지 않아도 됩니다.</p>\n<h3>경로, 헤더, 지리적 위치에 따른 라우팅</h3>\n<p>Apache APISIX에서도 언급하듯이, 리소스 기반 라우팅은 가장 일반적인 사용 사례 중 하나입니다. 경로, HTTP 메서드, 헤더, 심지어 클라이언트의 지리적 위치에 따라 라우팅할 수 있습니다. 유럽에서 온 요청은 유럽 데이터 센터로, 미국에서 온 요청은 미국 데이터 센터로 보내는 식입니다. 클라이언트는 이 과정을 전혀 알지 못하고 빠른 응답만 받습니다.</p>\n<h3>버전 관리</h3>\n<p>라우팅은 버전 관리에도 쓰입니다. 사용자 서비스에 새 버전이 나오면 기존 클라이언트는 계속 V1 users를, 새 클라이언트는 V2 users를 쓰도록 서로 다른 백엔드로 보낼 수 있습니다. 새 버전을 배포하는 동안에도 기존 클라이언트는 계속 작동하므로, 실제 사용자가 있는 라이브 애플리케이션을 관리할 때 매우 중요합니다.</p>\n<p>카탈로그, 장바구니, 결제, 사용자 계정이 각각 분리된 전자상거래 플랫폼도 마찬가지입니다. 게이트웨이가 요청 경로를 읽고 각 요청을 알맞은 서비스로 보내므로, 앱이 알아야 할 URL은 하나로 줄어듭니다.</p>\n\n<h2>입구에서의 보안: 인증과 인가를 한 곳에서</h2>\n<p>모든 API 호출에는 누가 요청을 보냈는지, 적절한 권한이 있는지 확인이 필요합니다. 게이트웨이가 없으면 각 서비스가 자체적으로 인증을 처리해야 합니다. 어떤 서비스는 토큰을 제대로 검증하고, 다른 서비스는 단계를 건너뛰거나 전혀 다른 방식을 쓸 수 있습니다. 결과적으로 애플리케이션 전체의 보안 상태가 일관되지 않게 됩니다.</p>\n<p>게이트웨이는 인증과 인가를 중앙 한 곳에서 처리합니다. 확인할 곳도, 강제할 곳도, 정책이 바뀔 때 업데이트할 곳도 한 군데뿐입니다. 모든 요청에 대해 API 키, JWT, OAuth 토큰 또는 인증서를 검증하며, 예외는 없습니다.</p>\n<h3>세밀한 권한 규칙</h3>\n<p>게이트웨이에서는 규칙도 정할 수 있습니다. 예를 들어 이 API 키는 읽기 엔드포인트만 호출할 수 있다거나, 이 클라이언트는 카탈로그 서비스에만 접근할 수 있고 결제 서비스는 안 된다고 설정할 수 있습니다. 한 번 정의하면 자동으로 적용되므로 백엔드 서비스는 권한 부여를 걱정하지 않고 요청을 처리하고 데이터를 돌려주기만 하면 됩니다.</p>\n<h3>접근 권한을 즉시 취소하는 단일 지점</h3>\n<p>클라이언트의 API 키가 유출되었다면 게이트웨이에서 바로 취소하면 됩니다. 모든 서비스를 업데이트하거나 무언가를 재시작할 필요 없이 한 번의 변경으로 끝나고, 그 키로 들어오는 다음 요청부터 즉시 거부됩니다.</p>\n<p>은행의 결제 서비스와 청구 서비스를 예로 들어 보겠습니다. 청구 시스템에 쓰기 권한이 필요한 것은 결제 서비스뿐입니다. 클라이언트가 잘못된 엔드포인트로 청구 시스템에 쓰기를 시도하면 게이트웨이가 차단하고, 청구 서비스는 그 요청을 보지도 못합니다. 더 깊은 보호를 위해 mutual TLS 같은 기능을 지원할 수도 있지만, 기본적으로 게이트웨이는 첫 번째 방어선입니다.</p>\n\n<h2>트래픽 관리: 속도 제한, 스로틀링, 로드 밸런싱</h2>\n<p>만 명의 사용자가 동시에 접속하면 어떻게 될까요? 플래시 세일이나 신제품 출시 때문일 수도 있고, 평범한 화요일에 모두가 동시에 로그인했을 수도 있습니다. 게이트웨이가 없으면 백엔드 서비스가 직접 타격을 입고, 서서히가 아니라 한꺼번에 다운될 수 있습니다.</p>\n<h3>속도 제한과 스로틀링</h3>\n<p>게이트웨이는 각 클라이언트가 보낼 수 있는 요청 수를 제한할 수 있으며, 속도 제한과 스로틀링은 표준 기능입니다. 사용자별, API 키별, IP 주소별로 할당량을 설정할 수 있습니다. API에 무료 계층이 있다면 무료 사용자는 시간당 100개, 프리미엄 사용자는 1만 개까지 허용하는 식입니다. 무료 사용자가 한도에 도달하면 게이트웨이가 나중에 다시 시도하라는 메시지를 보내고, 백엔드 서비스는 그런 요청이 있었는지조차 모른 채 유료 고객을 위해 계속 원활하게 동작합니다.</p>\n<h3>로드 밸런싱과 상태 확인</h3>\n<p>같은 서비스의 인스턴스를 여러 개 실행 중이라면 게이트웨이가 요청을 분산합니다. 첫 번째 인스턴스, 두 번째, 세 번째 순으로 자동으로 나눠 받습니다. 인스턴스 하나가 다운되면 게이트웨이가 다른 곳으로 경로를 바꾸며, 클라이언트는 이를 알지 못합니다. 상태 확인 기능을 쓰면 게이트웨이가 각 인스턴스에 핑을 보내 살아 있는지 확인하고, 응답이 없는 인스턴스에는 트래픽 전송을 멈춥니다. 트래픽이 많은 API에서는 특히 중요합니다. 게이트웨이가 급증한 트래픽을 먼저 받아 흡수하고 분산시켜 서비스를 과부하로부터 보호하기 때문입니다.</p>\n\n<h2>데이터 변환: 게이트웨이는 소프트웨어의 통역사</h2>\n<p>클라이언트가 보낸 데이터가 백엔드가 기대하는 형식과 다를 때가 있습니다. 클라이언트는 JSON을 보내는데 백엔드는 XML만 이해할 수도 있고, 필드 이름이 서로 다를 수도 있습니다. 예전에는 모든 클라이언트를 고치거나 백엔드를 다시 작성해야 했습니다. 게이트웨이는 데이터가 백엔드에 도달하기 전에 변환할 수 있습니다. 중간에서 들어오거나 나가는 데이터, 혹은 양쪽을 모두 바꿔 주는 통역사와 같습니다.</p>\n<h3>레거시 시스템과 새 모바일 앱 연결하기</h3>\n<p>XML을 쓰는 레거시 시스템이 15년 동안 잘 운영되어 왔는데, 이제 JSON을 사용하는 새 모바일 앱을 만든다고 해 보겠습니다. 게이트웨이가 없다면 레거시 시스템을 다시 작성하거나 모바일 앱이 XML을 보내도록 강제해야 합니다. 게이트웨이가 있으면 앱은 JSON을 보내고, 게이트웨이가 이를 XML로 변환해 시스템에 전달합니다. 응답은 다시 JSON으로 바뀌어 앱에 돌아갑니다. 누구도 아무것도 다시 작성할 필요가 없습니다.</p>\n<h3>헤더 조작과 민감 정보 마스킹</h3>\n<p>게이트웨이는 헤더를 추가하거나 삭제하고, URL을 변경하고, 민감한 데이터를 마스킹할 수도 있습니다. 응답에 신용카드 번호가 들어 있다면 응답이 나가기 전에 해당 정보를 제거하거나 마스킹한 버전으로 바꿀 수 있고, 백엔드는 전혀 수정하지 않아도 됩니다. 오래된 시스템을 현대화할 때 특히 유용한 기능입니다.</p>\n\n<h2>하나의 파이프라인과 관제센터로서의 게이트웨이</h2>\n<p>라우팅, 보안, 스로틀링, 변환은 별개의 기능이 아니라 하나의 파이프라인으로 연결됩니다. 게이트웨이는 인증을 확인하고, 속도 제한을 검증하고, 올바른 서비스로 라우팅하고, 필요하면 데이터를 변환합니다. 응답을 받으면 필요에 따라 변환한 뒤 클라이언트로 돌려보냅니다. 이 모든 단계가 서비스의 개입 없이 자동으로 순차 처리됩니다.</p>\n<p>진정한 힘은 개별 기능이 아니라 통합에 있습니다. 라우팅을 건드리지 않고 새 보안 정책을 추가할 수 있고, 클라이언트를 바꾸지 않고 백엔드 서비스를 교체할 수 있으며, 아무것도 재배포하지 않고 속도 제한을 조정할 수 있습니다. 각 요소는 독립적이지만 같은 파이프라인에서 동작합니다.</p>\n<p>모든 요청이 한곳을 지나므로 가시성도 확보됩니다. 로그, 메트릭, 분석을 한 곳에서 관리하면서 요청 수, 실패한 요청, 느린 요청, 자원을 가장 많이 쓰는 클라이언트를 확인할 수 있습니다. 게이트웨이가 없다면 각 서비스에서 데이터를 따로 수집해야 합니다. 그래서 게이트웨이는 단순한 라우터가 아니라 전체 API 플랫폼의 관제센터입니다.</p>\n\n<h2>API 게이트웨이 도입 시점과 실천 팁</h2>\n<p>현실적으로 보면, 서비스가 한두 개뿐이라면 아직 API 게이트웨이가 필요 없을 수 있습니다. 라우팅을 직접 처리하고 각 서비스에서 인증을 관리해도 세련되지는 않지만 작동은 합니다. 하지만 서비스가 3개가 되거나 외부 클라이언트에 API를 노출하는 순간 복잡성이 빠르게 커지고, 게이트웨이는 금방 제값을 합니다.</p>\n<ul>\n<li><strong>인증부터 중앙화하세요.</strong> 다른 무엇보다 먼저 서비스 하나를 골라 인증 확인을 게이트웨이로 옮기면, 서비스 코드가 즉시 깔끔해집니다. 토큰 검증 로직이 여기저기 흩어지지 않고, 모든 서비스에 똑같이 구현했는지 고민할 필요도 없어집니다.</li>\n<li><strong>그다음은 속도 제한입니다.</strong> 클라이언트당 분당 100건 같은 기본 설정만으로도 문제 있는 클라이언트가 서비스를 다운시키는 일을 막을 수 있습니다.</li>\n<li><strong>클라이언트에는 게이트웨이 주소 하나만 알려 주세요.</strong> 백엔드 서비스의 위치가 바뀌어도 클라이언트를 업데이트할 필요가 없습니다.</li>\n<li><strong>버전별로 백엔드를 나눠 라우팅하세요.</strong> 새 버전을 배포하는 동안에도 기존 클라이언트가 계속 동작합니다.</li>\n<li><strong>레거시 시스템은 게이트웨이에서 변환하세요.</strong> 백엔드를 다시 쓰거나 클라이언트에 변경을 강요하지 않고도 현대화할 수 있습니다.</li>\n<li><strong>로그와 메트릭을 게이트웨이에서 확인하세요.</strong> 서비스마다 데이터를 따로 모으지 않아도 됩니다.</li>\n</ul>\n\n<h2>결론</h2>\n<p>API 게이트웨이는 클라이언트와 백엔드 서비스 사이의 단일 진입점으로, 라우팅, 보안, 속도 제한, 로드 밸런싱, 데이터 변환을 하나의 파이프라인에서 처리해 마이크로서비스의 혼란을 줄여 줍니다. 서비스가 한두 개라면 없어도 되지만, 서비스가 3개 이상이거나 API를 외부에 공개한다면 도입 가치가 빠르게 커집니다. 먼저 인증을 게이트웨이로 옮기고, 이어서 간단한 속도 제한을 적용하는 것부터 시작해 보세요.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "API 게이트웨이의 요청 처리 흐름",
+   "typ": "prozess",
+   "punkte": [
+    {
+     "kopf": "요청 수신",
+     "text": "클라이언트는 백엔드가 아닌 게이트웨이 주소 하나로만 요청을 보냅니다.",
+     "art": "start"
+    },
+    {
+     "kopf": "인증·인가 확인",
+     "text": "API 키, JWT, OAuth 토큰 또는 인증서를 모든 요청에 대해 검증합니다.",
+     "art": "entscheidung"
+    },
+    {
+     "kopf": "속도 제한 검증",
+     "text": "사용자, API 키, IP별 할당량을 확인하고 초과 요청은 막습니다.",
+     "art": "schritt"
+    },
+    {
+     "kopf": "라우팅",
+     "text": "경로, 메서드, 헤더, 위치에 따라 올바른 서비스 인스턴스로 보냅니다.",
+     "art": "schritt"
+    },
+    {
+     "kopf": "데이터 변환",
+     "text": "필요하면 요청과 응답 형식을 바꾸고 민감한 정보를 마스킹합니다.",
+     "art": "schritt"
+    },
+    {
+     "kopf": "응답 반환",
+     "text": "처리된 응답을 클라이언트로 돌려보내고 로그와 메트릭을 한곳에 남깁니다.",
+     "art": "ende"
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "API 게이트웨이란 무엇인가요?",
+    "a": "API 게이트웨이는 클라이언트와 백엔드 서비스 사이에 놓인 단일 진입점입니다. 모든 요청이 먼저 게이트웨이를 통과하고, 게이트웨이가 요청을 어디로 보낼지, 허용할지 말지, 무엇을 돌려줄지 결정합니다. 클라이언트는 백엔드 서비스와 직접 통신하지 않고 게이트웨이하고만 통신합니다."
+   },
+   {
+    "q": "API 게이트웨이는 어떤 기능을 제공하나요?",
+    "a": "라우팅, 인증과 인가 같은 보안, 속도 제한과 스로틀링, 로드 밸런싱과 상태 확인, 데이터 변환을 제공합니다. 이 기능들은 하나의 파이프라인으로 연결되어 인증 확인, 속도 제한 검증, 라우팅, 필요 시 변환 순으로 서비스 개입 없이 자동 처리되며, 로그와 메트릭도 한곳에서 볼 수 있습니다."
+   },
+   {
+    "q": "서비스가 한두 개뿐인데도 API 게이트웨이가 필요한가요?",
+    "a": "서비스가 한두 개라면 아직 필요 없을 수 있습니다. 라우팅과 인증을 직접 처리해도 세련되지는 않지만 작동합니다. 하지만 서비스가 3개가 되거나 외부 클라이언트에 API를 노출하는 순간 복잡성이 빠르게 커져, 게이트웨이가 금방 제값을 합니다."
+   },
+   {
+    "q": "API 게이트웨이를 도입한다면 무엇부터 시작해야 하나요?",
+    "a": "먼저 서비스 하나를 골라 인증 확인을 게이트웨이로 옮기세요. 토큰 검증 로직이 흩어지지 않아 서비스 코드가 깔끔해집니다. 그다음 클라이언트당 분당 100건 같은 기본 속도 제한을 적용하면 문제 있는 클라이언트가 서비스를 다운시키는 일을 막을 수 있습니다."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "API 게이트웨이 도입 전후 비교",
+    "typ": "vergleich",
+    "links": {
+     "titel": "게이트웨이 없이 직접 호출",
+     "punkte": [
+      "클라이언트가 모든 서비스의 주소와 인증 방식을 알아야 함",
+      "각 서비스가 보안, 속도 제한, 오류 처리를 따로 구현함",
+      "서비스 주소가 바뀌면 모든 클라이언트를 업데이트해야 함",
+      "로그와 메트릭을 서비스마다 따로 수집해야 함",
+      "중복 작업이 많고 보안 상태가 일관되지 않음"
+     ]
+    },
+    "rechts": {
+     "titel": "게이트웨이를 단일 진입점으로 사용",
+     "punkte": [
+      "클라이언트는 게이트웨이 주소 하나만 알면 됨",
+      "인증과 인가를 중앙 한 곳에서 처리함",
+      "서비스 위치가 바뀌어도 클라이언트 변경이 필요 없음",
+      "API 키를 한 번에 즉시 취소할 수 있음",
+      "로그, 메트릭, 분석을 한 곳에서 관리함"
+     ]
+    }
+   },
+   {
+    "titel": "API 게이트웨이 도입 실천 체크리스트",
+    "typ": "checkliste",
+    "punkte": [
+     "서비스가 3개 이상이거나 외부에 API를 공개하는지 확인하기",
+     "서비스 하나를 골라 인증 확인을 게이트웨이로 옮기기",
+     "클라이언트당 분당 100건 같은 기본 속도 제한 적용하기",
+     "클라이언트에는 게이트웨이 주소 하나만 알려 주기",
+     "버전별로 백엔드를 나눠 라우팅하기",
+     "레거시 시스템은 게이트웨이에서 데이터 변환하기",
+     "로그와 메트릭을 게이트웨이에서 확인하기"
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "API 게이트웨이가 없을 때 클라이언트가 겪는 가장 큰 문제는 무엇인가요?",
+    "opts": [
+     "각 서비스의 위치, 인증 방식, 장애 대처법을 모두 알아야 한다",
+     "모든 요청이 하나의 서버로만 전달되어 속도가 느려진다",
+     "백엔드 서비스가 클라이언트의 요청을 전혀 받을 수 없게 된다",
+     "클라이언트가 데이터를 항상 XML 형식으로만 보내야 한다"
+    ],
+    "a": 0,
+    "why": "게이트웨이가 없으면 클라이언트가 모든 서비스의 위치, 인증 방식, 장애 시 대처법을 직접 알아야 해서 복잡성이 커집니다."
+   },
+   {
+    "q": "API 키가 유출되었을 때 게이트웨이에서는 어떻게 대응할 수 있나요?",
+    "opts": [
+     "모든 백엔드 서비스를 각각 업데이트한 뒤 재시작해야 한다",
+     "게이트웨이에서 키를 취소하면 다음 요청부터 즉시 거부된다",
+     "모든 클라이언트에 새 게이트웨이 주소를 다시 배포해야 한다",
+     "키가 만료될 때까지 기다리며 속도 제한만 낮춘다"
+    ],
+    "a": 1,
+    "why": "게이트웨이에서 한 번 취소하면 서비스 수정이나 재시작 없이 그 키로 들어오는 다음 요청부터 바로 거부됩니다."
+   },
+   {
+    "q": "무료 사용자가 속도 제한 한도에 도달하면 어떤 일이 일어나나요?",
+    "opts": [
+     "백엔드 서비스가 모든 사용자의 요청을 일시적으로 중단한다",
+     "해당 사용자의 요청이 자동으로 프리미엄 서비스로 전달된다",
+     "게이트웨이가 나중에 다시 시도하라고 알리고 백엔드는 이를 모른다",
+     "게이트웨이가 해당 사용자의 API 키를 영구적으로 삭제한다"
+    ],
+    "a": 2,
+    "why": "게이트웨이가 재시도 안내를 보내므로 백엔드는 그 요청을 알지 못한 채 유료 고객을 위해 원활하게 동작합니다."
+   },
+   {
+    "q": "XML을 쓰는 레거시 시스템에 JSON 기반 새 모바일 앱을 연결하는 방법은?",
+    "opts": [
+     "레거시 시스템 전체를 JSON을 쓰도록 다시 작성한다",
+     "모바일 앱이 XML을 직접 보내도록 강제한다",
+     "모바일 앱이 레거시 시스템과 직접 통신하도록 허용한다",
+     "게이트웨이가 JSON을 XML로, 응답은 다시 JSON으로 변환한다"
+    ],
+    "a": 3,
+    "why": "게이트웨이가 요청은 XML로, 응답은 JSON으로 변환하므로 레거시 시스템이나 앱을 다시 작성할 필요가 없습니다."
+   }
+  ]
  }
 }
