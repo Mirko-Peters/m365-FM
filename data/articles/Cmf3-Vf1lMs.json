@@ -130,5 +130,1093 @@
     "why": "Vorgesehen ist eine Erneuerung alle 90 Tage. Ohne Erneuerung wird der Agent automatisch deaktiviert."
    }
   ]
+ },
+ "es": {
+  "html": "<p>Cuando un agente de SharePoint muestra información que no debería, rara vez se trata de una \"alucinación\". Lo habitual es que se le haya dado acceso a demasiado contenido y que los permisos heredados hagan el resto. Fuentes de conocimiento sobredimensionadas y herencia permisiva producen una revelación accidental a velocidad de máquina.</p>\n<p>La solución no tiene nada de mágico: alcance acotado, permisos endurecidos y DLP que bloquee de verdad. Este artículo explica cómo ven los datos los agentes, por qué la fundamentación no aísla los permisos y qué cuatro controles limitan el riesgo sin quitarle utilidad al agente.</p>\n\n<h2>Cómo ven los datos los agentes de SharePoint: Microsoft Graph y permisos</h2>\n<p>Los agentes no leen tus intenciones, leen Microsoft Graph. Si un contenido es accesible a través de tus ACL, el agente lo ve. Ampliar una fuente de conocimiento más de la cuenta equivale a abrir un bypass alrededor de tus carpetas cuidadosamente etiquetadas.</p>\n<h3>Persona de usuario y filtros de recuperación</h3>\n<p>Un agente se compone de dos ingredientes:</p>\n<ul>\n<li><strong>Persona de usuario:</strong> la identidad del agente y sus permisos en SharePoint, OneDrive y otras superficies conectadas.</li>\n<li><strong>Filtros de recuperación:</strong> aquello a lo que lo has apuntado, ya sea una biblioteca, una carpeta, un conjunto de archivos o unas URL.</li>\n</ul>\n<p>Los filtros de recuperación no son límites de seguridad. La recuperación dice \"busca aquí primero\"; los permisos dicen \"puedes entrar\". Primero mandan los permisos y después la recuperación. Si recuerdas una sola cosa de este artículo, que sea ese orden.</p>\n<h3>Etiquetas, DLP y fundamentación</h3>\n<p>Las etiquetas de sensibilidad clasifican el contenido. Purview DLP, por su parte, aplica un comportamiento cuando se procesa o se excede cierto contenido. La fundamentación (grounding) ayuda a encontrar el párrafo correcto, pero no reduce la autoridad de la identidad. Si el agente puede ver bibliotecas vecinas porque la herencia sigue intacta, el modelo puede combinar verdades cercanas en una sola respuesta.</p>\n<p>Por eso un piloto de una sola biblioteca puede acabar citando una política de RR. HH. de otra biblioteca. No se aisló nada: solo se sugirió un estante preferido en una habitación sin llave.</p>\n<p>Un modelo mental útil es esta pila: los permisos deciden si se podía ver el párrafo, la recuperación lo encuentra, las etiquetas marcan su sensibilidad y la DLP decide qué acciones se permiten, incluso cuando todo lo anterior dice que sí.</p>\n\n<h2>Plano de control 1: limitar las fuentes de conocimiento como un contrato</h2>\n<p>El alcance de un agente debe redactarse con precisión casi jurídica: acotado, comprobable y sin ambigüedad. Las fuentes amplias crean interferencias y el modelo mezcla alegremente datos cercanos.</p>\n<h3>Reglas de alcance</h3>\n<ul>\n<li><strong>Solo fuentes a nivel de biblioteca.</strong> Nada de sitios completos ni de \"todo lo que cuelgue de este centro\". Una biblioteca por propósito declarado: un agente de preguntas frecuentes de producto recibe esa biblioteca y nada más.</li>\n<li><strong>Evita las raíces de sitio</strong> y especifica siempre una ruta de biblioteca concreta.</li>\n<li><strong>Carpetas superficiales.</strong> Si necesitas carpetas, fíjalas a un nivel poco profundo y sin estructura recursiva.</li>\n<li><strong>Filtros de metadatos.</strong> Ingiere solo elementos con estado aprobado, versión publicada y el departamento correspondiente. Sin metadatos, no hay ingesta.</li>\n<li><strong>Excluye borradores, archivos y subárboles de trabajo.</strong> Si no puedes excluirlos, muévelos fuera.</li>\n</ul>\n<h3>Límites de la plataforma: divide, no amplíes</h3>\n<p>Copilot Studio y los generadores de agentes de SharePoint imponen topes prácticos de archivos, carpetas y URL por fuente de conocimiento. Más que simples notas de rendimiento, son barreras de gobernanza. Prueba esos techos antes de lanzar, con una fuente piloto que refleje la distribución real de tu contenido.</p>\n<p>Cuando llegues a un límite, el instinto equivocado es ampliar el alcance a la raíz del sitio \"solo por ahora\". Así empiezan las filtraciones. Lo correcto es dividir: un dominio por fuente y una fuente por agente.</p>\n<h3>Varios agentes especializados en lugar de un monstruo enciclopédico</h3>\n<p>Crea un agente de políticas de RR. HH., otro de beneficios y otro de viajes, cada uno con su biblioteca y sus filtros. Si necesitas un punto de entrada único, añade un agente que dirija cada consulta al especialista adecuado. Distribuye el conocimiento y mantén la autoridad mínima.</p>\n<h3>Sin conocimiento general y con respuesta alternativa</h3>\n<p>En agentes regulados, desactiva el conocimiento general de la IA. Si el agente tiene autoridad en un dominio, debe callar fuera de él. Configura una respuesta alternativa clara, del tipo: \"No tengo autoridad para eso; estas son las fuentes aprobadas que cubro\". Sin ella, el modelo rellena los huecos con conocimiento que ignora tus etiquetas y tu postura de cumplimiento.</p>\n<p>La curación también cuenta. Añade solo contenido que haya pasado revisión de precisión, frescura y etiquetado de sensibilidad confirmado. Si no puedes demostrar el linaje de un documento, no debe estar al alcance del agente.</p>\n<h3>Cómo probar el alcance</h3>\n<p>Haz al agente preguntas autorizadas que debería responder y provócalo con temas adyacentes que debe rechazar. Si responde fuera de dominio, el alcance o la respuesta alternativa están mal. Si rechaza contenido de su dominio, los filtros o las aprobaciones son demasiado estrictos. Ajusta restando, no sumando, hasta que las respuestas sean aburridamente predecibles. Tres métricas ayudan:</p>\n<ul>\n<li><strong>Capacidad de respuesta:</strong> porcentaje de consultas del dominio resueltas con citas a la biblioteca prevista.</li>\n<li><strong>Contención:</strong> porcentaje de respuestas que citan solo fuentes aprobadas.</li>\n<li><strong>Calidad del silencio:</strong> claridad y frecuencia de la respuesta alternativa ante preguntas fuera de dominio.</li>\n</ul>\n\n<h2>Plano de control 2: romper la herencia y etiquetar con criterio</h2>\n<p>Un conocimiento bien acotado sirve de poco si las puertas están abiertas de par en par. Los permisos heredados son como un suéter viejo: parecen suficientes hasta que llega el viento frío. Los agentes respetan las ACL, no las buenas intenciones.</p>\n<h3>Auditoría y ruptura de herencia</h3>\n<p>Clasifica tus bibliotecas sensibles en tres grupos: \"debe aislarse\", \"se puede compartir\" y \"desconocido\". Lo desconocido es una señal de alerta: si no puedes explicar en una frase quién tiene acceso, trátalo como \"debe aislarse\" hasta que se demuestre lo contrario.</p>\n<p>Rompe la herencia de permisos en la biblioteca que contiene las joyas de la corona, no en todo el sitio. Apunta a una membresía mínima y explícita, con un grupo pequeño de propietarios. Extrae los grupos amplios (\"todos\", \"todos excepto usuarios externos\", \"usuarios autenticados\"), que se esconden dentro de los grupos de SharePoint como muñecas rusas, y sustitúyelos por grupos de seguridad de Azure AD asignados a roles que realmente administres. Los invitados deben ser excepcionales, temporales y localizables, y nunca estar anidados en un grupo creado hace años durante el arranque de un proyecto.</p>\n<h3>Niveles de permisos estandarizados</h3>\n<ul>\n<li><strong>Nivel A (confidencial):</strong> propietarios y miembros en número reducido, lectores limitados, sin invitados.</li>\n<li><strong>Nivel B (solo interno):</strong> propietarios y miembros gestionados, lectores del grupo del departamento, sin externos.</li>\n<li><strong>Nivel C (interno público):</strong> lectores de todos los empleados, aun así sin invitados.</li>\n</ul>\n<p>El modelo es simple a propósito, porque lo aplican personas que se distraen con facilidad.</p>\n<h3>Etiquetas que significan algo</h3>\n<p>Las etiquetas no son pegatinas, son claves de política. El error más común es dejarlas como decoración. Aliníalas con Purview DLP para que la etiqueta signifique algo que las máquinas puedan hacer cumplir. Por ejemplo, una etiqueta \"confidencial RR. HH.\" puede activar una política que bloquee el procesamiento por parte de agentes aunque el usuario pueda abrir el archivo en SharePoint. Etiquetas y DLP separan la visibilidad humana de la automatización de la máquina.</p>\n<p>Un caso concreto: una biblioteca de políticas de RR. HH. etiquetada como confidencial. El agente de RR. HH. recibe acceso de lectura solo a esa biblioteca. Las bibliotecas vecinas, como los borradores de trabajo, quedan aisladas con permisos únicos que la identidad del agente no posee. La política DLP dice que, si la etiqueta es confidencial de RR. HH. y el intento es un procesamiento de agente, solo se permite si el agente figura en el grupo de agentes aprobados de RR. HH. Cualquier otro, incluido un generalista de conocimiento corporativo, queda bloqueado, aunque alguien le haya dado acceso por error.</p>\n<h3>Identidad de servicio con mínimo privilegio</h3>\n<p>No construyas agentes que se ejecuten como quien los invoque: heredarían su acceso amplio. Hazlos funcionar con una identidad de servicio con el menor privilegio posible y combínala con etiquetas y DLP, para que ni siquiera un usuario privilegiado pueda engañar al agente y hacerle procesar datos fuera de límites.</p>\n<p>La herencia en el resto del sitio puede quedarse como está. Reserva los permisos únicos para las bibliotecas que alimentan a los agentes, así la carga administrativa sigue siendo razonable.</p>\n\n<h2>Plano de control 3: aprobaciones, licencias y políticas de datos</h2>\n<p>Si cualquiera puede crear un agente, la gobernanza se convierte en un caos colaborativo. La solución es aburrida y efectiva: aprobaciones, límites de licencia y políticas de datos.</p>\n<h3>Flujo de aprobación para crear agentes</h3>\n<p>Las solicitudes van a aprobadores designados: seguridad, cumplimiento y un responsable de negocio que entienda el dominio. Se exigen convenciones de nombres, propósito declarado, propietario documentado, contacto de soporte y fecha de caducidad. Sin propietario o sin propósito, no hay aprobación. El formulario debe pedir también audiencia objetivo, capacidad de negocio, fuentes exactas con URL a nivel de biblioteca, etiquetas esperadas, comportamiento de respaldo y la identidad de servicio que se usará. Si los solicitantes parten de plantillas (preguntas de RR. HH., buscador de políticas, base de conocimiento de TI), heredan valores predeterminados acotados en lugar de improvisar.</p>\n<h3>Licencias: Microsoft 365 Copilot o pago por uso</h3>\n<p>La licencia no es solo presupuesto, también marca hasta dónde se puede expandir el uso:</p>\n<ul>\n<li><strong>Copilot basado en usuario:</strong> solo los usuarios con licencia usan funciones de agente, lo que limita la expansión. Exige una lista de usuarios con licencia y un plan de baja.</li>\n<li><strong>Pago por uso:</strong> consumo a nivel de inquilino o entorno con facturación centralizada. Es flexible, pero sin vallas se vuelve barra libre. Exige centro de costos, un responsable que firme los cargos y un perfil de uso estimado, con entornos separados para pruebas y producción y alertas de costos.</li>\n</ul>\n<h3>Políticas de datos de Power Platform</h3>\n<p>Restringe qué conectores pueden convivir con SharePoint. Los agentes regulados viven en un grupo restringido con Microsoft 365 y APIs internas aprobadas, sin web arbitraria, servicios de consumo ni SaaS en la sombra. Si hace falta una integración, pasa por revisión y termina en la lista de permitidos. Combina esta política con Purview para definir ubicaciones de contenido sensible, rutas de exfiltración prohibidas y monitoreo de intentos de cruzar grupos.</p>\n<p>Las plantillas de agente con fuentes preaprobadas son la pieza que muchos se saltan: integran conocimiento general desactivado, respuesta alternativa, fuentes a nivel de biblioteca, filtros de metadatos y la identidad de servicio correcta. Cada aprobación debe llevar fecha de caducidad y una renovación a 90 días; sin renovación, el agente se desactiva automáticamente.</p>\n\n<h2>Plano de control 4: Purview DLP que realmente detiene a los agentes</h2>\n<p>Sin aplicación en tiempo real, los agentes son canales de fuga de alta velocidad. Los agentes procesan contenido, no solo lo muestran, y lo que es aceptable para una persona que lo ve no lo es para un procesamiento automatizado. Hay que vincular la detección de sensibilidad y de patrones a bloqueos de acción explícitos.</p>\n<h3>Qué configurar</h3>\n<p>Crea políticas que apunten a las ubicaciones de SharePoint que alimentan a los agentes, que coincidan con etiquetas de sensibilidad y tipos de información confidencial, y que bloqueen el procesamiento, el uso compartido o la descarga por parte de agentes. Patrones útiles:</p>\n<ul>\n<li><strong>Etiquetas de sensibilidad</strong> asignadas al bloqueo de agentes, salvo los que estén en lista de permitidos.</li>\n<li><strong>Tipos de información confidencial</strong> (IDs financieros, identificadores gubernamentales, términos de salud) con mayor confianza. En patrones ruidosos, sube el umbral y exige varias evidencias.</li>\n<li><strong>Coincidencia exacta de datos (EDM)</strong> para tus identificadores reales, como números de empleado o IDs de cliente, para que los falsos positivos no te ahoguen.</li>\n<li><strong>Diccionarios de palabras clave</strong> para nombres en clave de proyectos propietarios: poco volumen, alta señal.</li>\n</ul>\n<h3>Acciones que importan</h3>\n<ul>\n<li>Bloqueo con anulación deshabilitada para agentes: las personas pueden justificar una excepción, las máquinas solo tienen disparadores.</li>\n<li>Cuarentena o restricción de descarga cuando lo active un flujo de trabajo. Si el agente no obtiene el archivo, no puede inventar a partir de él.</li>\n<li>Alerta al equipo de operaciones de seguridad con contexto: etiqueta, biblioteca del sitio, patrón activado e identidad que llama.</li>\n</ul>\n<h3>Reducir el ruido sin aflojar el control</h3>\n<p>Empieza en modo de simulación en sitios que no sean de producción y ajusta los umbrales hasta que las alertas reflejen la realidad. Limita primero el alcance a las bibliotecas de agentes y amplíalo solo cuando la señal sea limpia. Usa condiciones combinadas, por ejemplo etiqueta más tipo de información confidencial: dos cerraduras, una puerta.</p>\n<p>El mensaje al usuario también importa. Un texto como \"Este agente no está autorizado para procesar contenido confidencial de RR. HH.; consulta al agente de RR. HH. o solicita acceso mediante el proceso\" ofrece una puerta alternativa. Si solo dice \"bloqueado\", la gente pegará los datos en Teams.</p>\n\n<h2>Errores comunes y puntos ciegos que debes evitar</h2>\n<ul>\n<li>Mezclar dominios (políticas, documentos técnicos, contratos de proveedores) en una sola fuente.</li>\n<li>Dejar que los agentes rastreen URL externas, lo que amplía el radio de impacto y limita la auditabilidad.</li>\n<li>Ingerir borradores y archivos: el modelo no distingue lo incompleto de lo publicado si no hay metadatos ni ubicaciones que los separen.</li>\n<li>Creer que \"oculto\" significa \"protegido\". Ocultar es una decisión de interfaz; los permisos son la ley.</li>\n<li>Dejar sitios de proyecto con herencia predeterminada, mantener acceso de invitados tras la salida de un proveedor o añadir grupos amplios de M365 como lectores \"porque era más fácil\".</li>\n<li>Permitir pruebas en sitios no gestionados, activar el pago por uso sin etiquetas ni alertas de costos y repartir roles de creador sin control.</li>\n<li>Limitar DLP a Exchange y Teams o excluir SharePoint \"por rendimiento\", en lugar de ajustar las políticas.</li>\n<li>Confiar solo en tipos de información genéricos e ignorar EDM.</li>\n</ul>\n\n<h2>Puntos clave y conclusión</h2>\n<ul>\n<li>Los permisos mandan primero; la recuperación solo indica dónde buscar.</li>\n<li>Una biblioteca por propósito, carpetas superficiales y metadatos estrictos, con solo contenido aprobado.</li>\n<li>Desactiva el conocimiento general en agentes regulados y define una respuesta alternativa clara.</li>\n<li>Prefiere varios agentes especializados a uno enciclopédico y prueba los límites antes de lanzar.</li>\n<li>Rompe la herencia en las bibliotecas que alimentan agentes y sustituye los grupos amplios por grupos de roles.</li>\n<li>Usa una identidad de servicio con mínimo privilegio y vincula etiquetas con Purview DLP.</li>\n<li>Exige aprobación, propietario, propósito, fecha de caducidad y renovación a 90 días.</li>\n<li>Elige la licencia con control de costos y restringe conectores con políticas de datos.</li>\n<li>Valida con una prueba de fuego: un agente fuera de alcance que pide un archivo confidencial debe recibir bloqueo inmediato, mensaje instructivo y alerta de alta gravedad.</li>\n</ul>\n<p>Los agentes de SharePoint no filtran datos por capricho: reflejan el diseño de alcance y de permisos que les has dado. Si acotas las fuentes, cierras la herencia donde importa, controlas quién crea agentes y haces que la DLP tenga dientes, el agente seguirá siendo útil y dejará de ser un riesgo. Si en la prueba final recibes una respuesta en lugar de un bloqueo, tu DLP es decorativo y toca corregir el mapeo.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Cuatro planos de control para agentes de SharePoint",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Limitar las fuentes",
+     "text": "Una biblioteca por propósito, metadatos estrictos, solo contenido aprobado y sin conocimiento general de IA."
+    },
+    {
+     "kopf": "Romper la herencia",
+     "text": "Permisos únicos en bibliotecas sensibles, grupos de roles, sin invitados y con identidad de servicio mínima."
+    },
+    {
+     "kopf": "Aprobar y licenciar",
+     "text": "Flujo de aprobación, propietario, caducidad, control de costos y políticas de datos para conectores."
+    },
+    {
+     "kopf": "DLP que bloquea",
+     "text": "Etiquetas vinculadas a Purview DLP: bloqueo sin anulación, alertas con contexto y mensajes claros."
+    },
+    {
+     "kopf": "Probar con casos reales",
+     "text": "Un agente fuera de alcance debe recibir bloqueo inmediato, mensaje instructivo y alerta de alta gravedad."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "¿Por qué un agente de SharePoint muestra información confidencial si no es una alucinación?",
+    "a": "Normalmente se debe a que el agente tiene acceso a demasiado contenido: fuentes de conocimiento sobredimensionadas y permisos heredados permisivos. El agente lee lo que Microsoft Graph y las ACL le permiten ver, y la fundamentación no reduce esa autoridad, así que mezcla datos de bibliotecas vecinas."
+   },
+   {
+    "q": "¿Los filtros de recuperación de un agente de SharePoint sirven como límite de seguridad?",
+    "a": "No. La recuperación solo indica dónde buscar primero, mientras que los permisos determinan si el agente puede entrar. Primero mandan los permisos y después la recuperación. Si la herencia sigue intacta, el agente puede ver bibliotecas vecinas aunque lo apuntes a una sola."
+   },
+   {
+    "q": "¿Qué reglas de alcance debo aplicar a las fuentes de conocimiento de un agente de SharePoint?",
+    "a": "Usa solo fuentes a nivel de biblioteca, con una biblioteca por propósito y ruta concreta, nunca raíces de sitio. Limita las carpetas a un nivel poco profundo, filtra por metadatos (estado aprobado, versión publicada, departamento) y excluye borradores, archivos y subárboles de trabajo."
+   },
+   {
+    "q": "¿Cómo evito que Purview DLP deje pasar a los agentes con contenido confidencial?",
+    "a": "Crea políticas sobre las ubicaciones de SharePoint que alimentan a los agentes, vinculadas a etiquetas de sensibilidad y tipos de información confidencial, con bloqueo del procesamiento y la anulación deshabilitada. Solo los agentes de una lista de permitidos pueden procesar ese contenido. Empieza en modo de simulación y ajusta umbrales."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Permisos y recuperación: quién manda",
+    "typ": "vergleich",
+    "links": {
+     "titulo": "Permisos",
+     "titel": "Permisos",
+     "punkte": [
+      "Dicen «puedes entrar»: deciden si el contenido era visible.",
+      "Mandan primero, antes que cualquier recuperación.",
+      "Los agentes respetan las ACL, no las buenas intenciones.",
+      "La herencia intacta deja ver las bibliotecas vecinas."
+     ]
+    },
+    "rechts": {
+     "titel": "Filtros de recuperación",
+     "punkte": [
+      "Dicen «busca aquí primero»: solo sugieren un estante preferido.",
+      "Actúan después de los permisos.",
+      "No son límites de seguridad.",
+      "La fundamentación no reduce la autoridad de la identidad."
+     ]
+    }
+   },
+   {
+    "titel": "Checklist: acotar y proteger el agente",
+    "typ": "checkliste",
+    "punkte": [
+     "Usar solo fuentes a nivel de biblioteca, nunca raíces de sitio.",
+     "Ingerir solo elementos con metadatos: aprobado, publicado y departamento correcto.",
+     "Desactivar el conocimiento general y configurar una respuesta alternativa clara.",
+     "Romper la herencia solo en las bibliotecas que alimentan a los agentes.",
+     "Ejecutar el agente con identidad de servicio de mínimo privilegio.",
+     "Alinear etiquetas de sensibilidad con Purview DLP y bloqueo sin anulación.",
+     "Aprobar cada agente con fecha de caducidad y renovación a 90 días."
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "¿Qué ocurre primero cuando un agente de SharePoint accede a contenido: permisos o recuperación?",
+    "opts": [
+     "Primero mandan los filtros de recuperación y después los permisos",
+     "Primero mandan los permisos y después la recuperación",
+     "Ambos se aplican a la vez con idéntica prioridad",
+     "La fundamentación sustituye a los permisos del usuario"
+    ],
+    "a": 1,
+    "why": "Los filtros de recuperación no son límites de seguridad: los permisos dicen si puedes entrar y la recuperación solo indica dónde buscar primero."
+   },
+   {
+    "q": "Si se alcanza el límite de archivos de una fuente de conocimiento, ¿qué se recomienda?",
+    "opts": [
+     "Ampliar el alcance a la raíz del sitio temporalmente",
+     "Desactivar los filtros de metadatos para ingerir más contenido",
+     "Dividir: un dominio por fuente y una fuente por agente",
+     "Activar el conocimiento general de la IA como complemento"
+    ],
+    "a": 2,
+    "why": "Ampliar a la raíz del sitio es el instinto equivocado y origina filtraciones; lo correcto es dividir el conocimiento en fuentes y agentes especializados."
+   },
+   {
+    "q": "¿Cómo debería ejecutarse un agente para evitar heredar un acceso demasiado amplio?",
+    "opts": [
+     "Con una identidad de servicio de mínimo privilegio",
+     "Como el usuario que lo invoque en cada momento",
+     "Con la cuenta de un administrador global del inquilino",
+     "Con un grupo anidado creado durante el arranque del proyecto"
+    ],
+    "a": 0,
+    "why": "Una identidad de servicio con el menor privilegio, combinada con etiquetas y DLP, impide que un usuario privilegiado engañe al agente."
+   },
+   {
+    "q": "¿Qué enfoque recomienda el artículo para las acciones de DLP aplicadas a agentes?",
+    "opts": [
+     "Permitir anulación con justificación, igual que para las personas",
+     "Mostrar solo el mensaje genérico \"bloqueado\" sin más detalles",
+     "Aplicar la política directamente a todo el inquilino desde el primer día",
+     "Bloqueo con anulación deshabilitada para agentes, porque las máquinas solo tienen disparadores"
+    ],
+    "a": 3,
+    "why": "Las personas pueden justificar excepciones, pero las máquinas no; por eso el bloqueo para agentes debe tener la anulación deshabilitada."
+   }
+  ]
+ },
+ "fr": {
+  "html": "<p>Quand un agent SharePoint cite un document qu'il n'aurait jamais dû voir, il n'a pas « halluciné » une fuite. On lui a tendu une lance à incendie alors qu'on lui demandait une gorgée. Des sources de connaissances trop larges, combinées à un héritage de permissions trop permissif, produisent une divulgation accidentelle à la vitesse de la machine.</p>\n<p>La solution n'a rien de magique. Elle repose sur une discipline de périmètre, un renforcement des permissions, une gouvernance de la création des agents et une DLP qui bloque réellement le traitement. Voici comment les agents voient vos données et quels contrôles les encadrent sans les rendre inutiles.</p>\n\n<h2>Comment un agent SharePoint voit réellement vos données</h2>\n<p>Un agent ne lit pas vos intentions, il lit Microsoft Graph. Si un contenu est accessible via vos ACL, l'agent peut le voir. Un agent repose sur deux ingrédients :</p>\n<ul>\n<li><strong>Le persona utilisateur</strong> : l'identité de l'agent et ses permissions dans SharePoint, OneDrive et les autres surfaces connectées.</li>\n<li><strong>Le filtre de récupération</strong> : ce que vous lui avez désigné, c'est-à-dire une bibliothèque, un dossier, un lot de fichiers ou quelques URL.</li>\n</ul>\n<p>Beaucoup d'administrateurs confondent filtres de récupération et frontières de sécurité. La récupération définit où chercher en priorité, tandis que les permissions décident si l'agent a le droit d'entrer. L'agent obéit aux permissions d'abord, à la récupération ensuite.</p>\n\n<h3>Le grounding ne remplace pas les droits</h3>\n<p>Le grounding filtre la pertinence, il ne réduit pas l'autorité de l'agent. Si son identité peut voir des bibliothèques adjacentes parce que l'héritage est resté intact, le modèle peut assembler des informations voisines dans une même réponse. C'est prévisible, et cela explique pourquoi un pilote limité à une seule bibliothèque peut soudain citer une politique RH venue d'une bibliothèque voisine.</p>\n<p>L'héritage des permissions est une escalade silencieuse. Un site jugé strictement interne peut contenir un groupe SharePoint qui inclut tout le monde ou les utilisateurs authentifiés. Les invités s'attardent et les groupes de projet persistent. L'agent respecte les ACL, pas les intentions.</p>\n\n<h3>Le modèle mental à retenir</h3>\n<ul>\n<li>Agent = persona utilisateur + filtre de recherche.</li>\n<li>Les permissions contrôlent en premier, la recherche vient ensuite.</li>\n<li>Les étiquettes de sensibilité décrivent la sensibilité du contenu.</li>\n<li>La DLP décide quelles actions sont autorisées lorsque cette sensibilité est présente, et peut refuser le traitement même si le reste dit oui.</li>\n</ul>\n\n<h2>Plan de contrôle 1 : définir la portée des sources comme un contrat</h2>\n<p>La portée d'une source doit se rédiger comme une clause juridique : précise, délimitée, intolérante à l'ambiguïté. Les filtres de recherche orientent la requête, ils ne forment pas un pare-feu. Cibler la racine d'un site, ajouter des sous-dossiers et espérer que les métadonnées sauveront la situation ne fonctionne pas.</p>\n\n<h3>Les mécanismes de portée à appliquer</h3>\n<ul>\n<li><strong>Source au niveau de la bibliothèque uniquement</strong>, jamais le site entier ni tout ce qui se trouve sous un hub. Une bibliothèque par objectif déclaré : un agent de FAQ produit reçoit la bibliothèque de FAQ produit et rien d'autre.</li>\n<li><strong>Dossiers limités</strong> : si vous devez en utiliser, gardez une profondeur faible, sans récupération récursive.</li>\n<li><strong>Filtres de métadonnées</strong> : n'ingérez que les éléments approuvés, en version publiée, pour le service concerné. Pas de métadonnées, pas d'ingestion.</li>\n<li><strong>Exclusion des brouillons, archives et sous-arborescences de travail</strong>. Si vous ne pouvez pas les exclure, déplacez-les : refactoriser, c'est de la gouvernance.</li>\n</ul>\n\n<h3>Respecter les limites de la plateforme</h3>\n<p>Les plateformes imposent des plafonds sur les fichiers, les dossiers et les URL par source de connaissances. Ce sont aussi des garde-fous de gouvernance. Dans Copilot Studio et les outils de création d'agents SharePoint, testez ces plafonds avant le lancement avec une source pilote représentative. Si l'ingestion ralentit, expire ou ignore des éléments, ne remontez pas à la racine du site : segmentez. Un domaine par source, une source par persona d'agent.</p>\n\n<h3>Plusieurs agents spécialisés plutôt qu'un bot encyclopédique</h3>\n<p>Créez un agent pour la politique RH, un pour les avantages sociaux, un pour les voyages, chacun avec sa bibliothèque et ses filtres. Si vous voulez un point d'entrée unique, utilisez un agent routeur qui transmet les requêtes aux bons spécialistes. Entasser 200 fichiers de domaines variés dans un seul agent produit des réponses confuses.</p>\n\n<h3>Désactiver les connaissances générales et prévoir un repli</h3>\n<p>Pour les agents réglementés, désactivez les connaissances générales de l'IA. Un agent qui fait autorité sur un domaine doit rester silencieux en dehors de celui-ci. Configurez une réponse de repli claire et humble, du type : « Je ne suis pas habilité à répondre à cela. Voici les sources que je couvre. » Sans elle, le modèle comble les lacunes avec des informations invérifiables qui ignorent vos étiquettes et vos politiques DLP.</p>\n\n<h3>La curation comme garde-fou</h3>\n<p>Désignez des sources officielles et placez un flux d'approbation en amont de l'ingestion. Le contenu doit être vérifié pour sa précision, sa fraîcheur et sa classification de sensibilité. Si vous ne pouvez pas prouver la provenance d'un document, un agent ne doit pas l'utiliser : le modèle est confiant, pas nécessairement correct.</p>\n\n<h2>Plan de contrôle 2 : briser l'héritage et étiqueter sérieusement</h2>\n<p>Une connaissance limitée ne sert à rien si les portes sont grandes ouvertes. Il faut couper l'héritage là où cela compte, attribuer des permissions uniques et supprimer les groupes larges qui transforment silencieusement l'interne en accès public.</p>\n\n<h3>L'audit et l'isolement</h3>\n<p>Répartissez vos bibliothèques sensibles en trois catégories : à isoler, partageable et inconnu. L'inconnu est un signal d'alerte : si vous ne pouvez pas expliquer en une phrase qui a accès à une bibliothèque, elle appartient à la catégorie « à isoler » jusqu'à preuve du contraire. Brisez ensuite l'héritage au niveau de la bibliothèque qui contient les données critiques, pas au niveau du site, avec un petit groupe de propriétaires et des groupes définis de membres et de lecteurs, uniquement là où l'activité l'exige.</p>\n<p>Supprimez les groupes larges comme « Tout le monde » ou « Utilisateurs authentifiés », qui se cachent dans les groupes SharePoint comme des poupées russes. Remplacez-les par des groupes de sécurité Azure mappés sur des rôles que vous gérez réellement. Les invités doivent rester exceptionnels, temporaires et identifiables. Standardisez aussi vos niveaux d'autorisation : un modèle simple est applicable par des humains qui se laissent distraire.</p>\n\n<h3>Des étiquettes de sensibilité qui ont des conséquences</h3>\n<p>Une étiquette n'est pas un autocollant. Le piège classique consiste à la laisser purement décorative. Alignez vos étiquettes avec Purview DLP pour qu'elles déclenchent des comportements que les machines peuvent appliquer. Par exemple, une étiquette « RH confidentiel » peut déclencher une politique DLP qui bloque le traitement par les agents, même si un utilisateur peut lire le fichier dans SharePoint. Les étiquettes couplées à la DLP dissocient ainsi la visibilité humaine de l'automatisation machine.</p>\n<p>Un exemple concret : l'agent RH reçoit un accès en lecture à la bibliothèque de politique RH uniquement. Les bibliothèques adjacentes, comme les brouillons RH, ont des permissions uniques que son identité ne possède pas. La politique DLP n'autorise le traitement du contenu « RH confidentiel » que pour les agents de la liste approuvée. Tous les autres, y compris un agent généraliste d'entreprise, sont bloqués.</p>\n\n<h3>Une identité de service au moindre privilège</h3>\n<p>Ne créez pas d'agents qui s'exécutent avec les permissions de la personne qui les appelle : ils hériteraient de sa portée trop large. Faites-les tourner sous une identité de service au moindre privilège, puis ajoutez étiquettes et DLP pour que même les utilisateurs privilégiés ne puissent pas pousser un agent à traiter des données non autorisées.</p>\n<p>L'héritage peut rester au niveau du site pour les contenus banals : on ne fait pas de chirurgie cardiaque pour le menu de la cafétéria. Réservez les permissions uniques aux bibliothèques qui alimentent les agents.</p>\n\n<h2>Plan de contrôle 3 : porte d'approbation, licences et politiques de données</h2>\n<p>Si tout le monde peut créer un agent, la gouvernance devient un chaos participatif. Trois mécanismes, ennuyeux mais efficaces, y remédient.</p>\n\n<h3>Un flux d'approbation pour la création d'agents</h3>\n<p>Les demandes vont à des approbateurs désignés : sécurité, conformité et un responsable métier qui comprend le domaine. Exigez des conventions de nommage, un énoncé de mission, un propriétaire, un contact support et une date d'expiration. Pas de propriétaire, pas d'approbation ; pas de but, pas d'approbation. Le formulaire doit préciser l'audience cible, la fonction métier, les sources jusqu'à la bibliothèque, le comportement par défaut et l'identité de service. Imposez le choix parmi des modèles approuvés (FAQ RH, navigateur de politique, base de connaissances IT), qui intègrent d'emblée la désactivation des connaissances générales, le repli, les sources au niveau bibliothèque, les filtres de métadonnées et la bonne identité de service.</p>\n\n<h3>La licence comme surface de contrôle</h3>\n<p>Deux voies existent : Microsoft 365 Copilot par utilisateur ou SharePoint à l'usage. Avec la licence par utilisateur, seuls les utilisateurs sous licence peuvent utiliser les fonctions d'agent, ce qui limite l'expansion. Avec le paiement à l'usage, la consommation s'active au niveau du tenant ou de l'environnement avec une facturation centralisée : c'est flexible, mais cela peut devenir un open bar sans précautions. Séparez les environnements de test et de production, n'activez le paiement à l'usage que là où la finance peut suivre le compteur, et réglez des alertes de coût.</p>\n<ul>\n<li>À l'usage : exigez un centre de coût, un responsable qui signe pour les frais et un profil d'utilisation estimé.</li>\n<li>Par utilisateur : exigez la liste des utilisateurs sous licence et un plan de fin de droit.</li>\n</ul>\n\n<h3>Des politiques de données au niveau du tenant</h3>\n<p>Utilisez les politiques de données de Power Platform pour restreindre les connecteurs autorisés dans le même groupe de données que SharePoint. Les agents réglementés vivent dans un groupe restreint, avec uniquement Microsoft 365 et des API internes approuvées : pas de web aléatoire, pas de service grand public, pas de SaaS fantôme. Toute intégration requise est examinée, reçoit un connecteur d'entreprise et rejoint la liste autorisée. Purview complète le dispositif en définissant les limites de données, les emplacements du contenu sensible étiqueté, les chemins d'exfiltration interdits et la surveillance des tentatives de contournement entre groupes.</p>\n<p>Le rythme final : demande via modèle, revue sécurité, validation conformité, choix de licence avec contrôle des coûts, rattachement au groupe de données restreint, confirmation des limites Purview, puis approbation avec expiration et renouvellement planifié à 90 jours. Sans renouvellement, l'agent est désactivé automatiquement : les agents ne sont pas immortels, leur cas d'usage non plus.</p>\n\n<h2>Plan de contrôle 4 : une DLP Purview qui bloque vraiment les agents</h2>\n<p>Un agent traite le contenu, il ne se contente pas de l'afficher. Autoriser la consultation pour un humain n'est pas la même chose qu'autoriser le traitement automatisé : ce sont deux catégories de risque. Sans application en temps réel, les agents ne sont que des coursiers de données à haute vitesse.</p>\n\n<h3>La structure des politiques</h3>\n<p>Créez des politiques ciblant les emplacements SharePoint qui alimentent les agents. Faites-les correspondre à des étiquettes de sensibilité et à des types d'informations sensibles, avec des actions de blocage du traitement, du partage ou du téléchargement par l'agent lorsque le seuil de confiance est atteint. Traitez ces seuils sérieusement : pour les modèles bruyants, augmentez la confiance et exigez plusieurs preuves concordantes ; pour les données critiques, utilisez une sévérité élevée avec blocage immédiat.</p>\n\n<h3>Les modèles de détection efficaces</h3>\n<ul>\n<li><strong>Étiquette de sensibilité</strong> liée au blocage des agents, sauf ceux de la liste d'autorisation.</li>\n<li><strong>Types d'informations sensibles</strong> (identifiants financiers, officiels, termes de santé) ajustés avec une confiance accrue.</li>\n<li><strong>EDM (correspondance exacte de données)</strong> pour vos vrais identifiants, comme les numéros d'employé ou les identifiants clients, afin de ne pas être noyé sous les faux positifs.</li>\n<li><strong>Dictionnaire de mots-clés</strong> pour les noms de code de projets propriétaires : faible volume, signal fort.</li>\n</ul>\n\n<h3>Les actions qui comptent</h3>\n<ul>\n<li>Blocage avec remplacement désactivé pour les agents : un humain peut se justifier, une machine n'a pas de contexte métier, seulement des déclencheurs.</li>\n<li>Mise en quarantaine ou restriction du téléchargement lorsque la règle est déclenchée par des flux d'agents : si l'agent ne peut pas récupérer le fichier, il ne peut pas en tirer de réponse.</li>\n<li>Alerte au SecOps avec un contexte riche : bibliothèque, étiquettes, modèle déclencheur, identité de l'agent appelant.</li>\n</ul>\n\n<h3>Réduire le bruit et guider l'utilisateur</h3>\n<p>Commencez en mode simulation sur des sites hors production et ajustez les seuils jusqu'à ce que les alertes reflètent la réalité. Ciblez d'abord les bibliothèques d'agents, puis élargissez quand le signal est clair. Utilisez des conditions combinées, par exemple étiquette plus type d'information sensible. Rédigez un message d'erreur clair : « Cet agent n'est pas autorisé à traiter du contenu RH confidentiel. Demandez à l'agent RH ou sollicitez un accès via la procédure prévue. » Un simple « bloqué » pousse les utilisateurs à coller les données dans Teams.</p>\n\n<h2>Erreurs courantes et tests à mettre en place</h2>\n<h3>Les erreurs à cesser dès aujourd'hui</h3>\n<ul>\n<li>Mélanger politiques, documents techniques et contrats fournisseurs dans une seule source.</li>\n<li>Laisser les agents explorer des URL web arbitraires : les URL externes étendent le rayon d'action et nuisent à l'auditabilité.</li>\n<li>Ingérer des brouillons : sans métadonnées ni emplacement dédié, le modèle ne distingue pas le final du publié.</li>\n<li>Croire que masquer protège : masquer est un choix d'interface, les autorisations font la règle.</li>\n<li>Laisser proliférer des pilotes sur des sites non gérés, activer le paiement à l'usage sans suivi des coûts, accorder le rôle de créateur à n'importe qui.</li>\n<li>Limiter la DLP à Exchange et Teams parce que les politiques SharePoint étaient bruyantes, ou exclure SharePoint pour des raisons de performance, ou se fier aux seuls types génériques en ignorant l'EDM.</li>\n</ul>\n\n<h3>Tester le périmètre</h3>\n<p>Posez à l'agent des questions d'autorité auxquelles il doit répondre, puis des sujets adjacents qu'il doit décliner. S'il répond hors domaine, le périmètre ou le repli est erroné ; s'il refuse dans son domaine, filtres ou approbations sont trop stricts. Le réglage est une soustraction : supprimez les chemins non pertinents, réduisez l'ambiguïté des métadonnées et segmentez jusqu'à obtenir des réponses prévisibles. Trois indicateurs suffisent :</p>\n<ul>\n<li><strong>Capacité de réponse</strong> : part des requêtes du domaine résolues avec des citations vers la bibliothèque cible.</li>\n<li><strong>Confinement</strong> : part des réponses citant uniquement des sources approuvées.</li>\n<li><strong>Qualité du silence</strong> : clarté et fréquence du repli face à une question hors domaine.</li>\n</ul>\n<p>Le test ultime côté DLP : un agent hors périmètre tente de répondre à une question qui exige un fichier confidentiel. Le résultat attendu est un blocage immédiat, un message instructif et une alerte de haute priorité. Si l'agent répond avec aplomb, votre DLP est décorative.</p>\n\n<h2>Les points essentiels à retenir</h2>\n<ul>\n<li>Les permissions priment sur la récupération : le grounding ne remplace jamais les droits.</li>\n<li>Une source = une bibliothèque, des dossiers peu profonds, des métadonnées strictes, uniquement du contenu approuvé.</li>\n<li>Préférez plusieurs agents spécialisés, éventuellement derrière un agent routeur, à un bot encyclopédique.</li>\n<li>Désactivez les connaissances générales pour les agents réglementés et configurez une réponse de repli claire.</li>\n<li>Brisez l'héritage au niveau des bibliothèques qui alimentent les agents et remplacez les groupes larges par des groupes de sécurité Azure basés sur des rôles.</li>\n<li>Exécutez les agents sous une identité de service au moindre privilège.</li>\n<li>Reliez les étiquettes de sensibilité à Purview DLP pour bloquer le traitement par les agents non approuvés.</li>\n<li>Encadrez la création : modèles approuvés, propriétaire, expiration, renouvellement à 90 jours, licence et coûts maîtrisés, politiques de données restrictives.</li>\n<li>Démarrez la DLP en mode simulation, ajustez les seuils, alertez le SecOps et rédigez des messages d'erreur utiles.</li>\n<li>Testez avec des requêtes dans le domaine, adjacentes et hors périmètre, et mesurez capacité de réponse, confinement et qualité du silence.</li>\n</ul>\n\n<h2>Conclusion</h2>\n<p>Les fuites attribuées aux agents SharePoint viennent rarement d'une IA capricieuse : elles viennent d'une portée mal conçue qui rencontre un héritage permissif. En limitant les sources au niveau de la bibliothèque, en brisant l'héritage là où cela compte, en encadrant la création des agents et en appliquant une DLP Purview qui bloque réellement le traitement, vous cessez de blâmer le modèle et vous contrôlez ce qu'il peut prendre en compte. La pièce est alors verrouillée, pas seulement le classeur.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titre": "Sécuriser un agent SharePoint en 5 contrôles",
+   "titel": "Sécuriser un agent SharePoint en 5 contrôles",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Limiter la portée",
+     "text": "Une bibliothèque par objectif, métadonnées strictes, contenu approuvé, connaissances générales désactivées et réponse de repli claire."
+    },
+    {
+     "kopf": "Briser l'héritage",
+     "text": "Permissions uniques sur les bibliothèques des agents, groupes larges remplacés par des groupes de sécurité Azure par rôle."
+    },
+    {
+     "kopf": "Étiqueter et relier",
+     "text": "Étiquettes de sensibilité liées à Purview DLP, identité de service au moindre privilège pour chaque agent."
+    },
+    {
+     "kopf": "Encadrer la création",
+     "text": "Modèles approuvés, propriétaire, expiration, licence maîtrisée, politiques de données restrictives, renouvellement à 90 jours."
+    },
+    {
+     "kopf": "Bloquer avec la DLP",
+     "text": "Seuils de confiance, EDM, blocage sans remplacement, alerte SecOps, mode simulation au départ."
+    },
+    {
+     "kopf": "Tester et mesurer",
+     "text": "Requêtes dans le domaine, adjacentes et hors périmètre ; suivre capacité de réponse, confinement et qualité du silence."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Pourquoi un agent SharePoint peut-il citer un document qu'il n'aurait pas dû voir ?",
+    "a": "L'agent lit Microsoft Graph et obéit d'abord aux permissions, puis à la récupération. Si l'héritage des permissions laisse accessibles des bibliothèques voisines ou des groupes larges comme « Tout le monde », l'agent peut voir et assembler ces contenus. Le grounding filtre la pertinence, pas l'autorité de l'agent."
+   },
+   {
+    "q": "Comment limiter la portée des sources de connaissances d'un agent SharePoint ?",
+    "a": "Utilisez une source au niveau de la bibliothèque uniquement, jamais le site entier, avec une bibliothèque par objectif. Gardez une faible profondeur de dossiers, filtrez par métadonnées (éléments approuvés, version publiée), excluez brouillons et archives, et préférez plusieurs agents spécialisés à un bot encyclopédique."
+   },
+   {
+    "q": "Comment empêcher un agent de traiter des données confidentielles avec Purview DLP ?",
+    "a": "Alignez les étiquettes de sensibilité avec Purview DLP : une étiquette comme « RH confidentiel » peut bloquer le traitement par les agents, sauf ceux de la liste d'autorisation. Désactivez le remplacement pour les agents, restreignez le téléchargement, alertez le SecOps et commencez en mode simulation."
+   },
+   {
+    "q": "Comment gouverner la création d'agents dans une organisation ?",
+    "a": "Instaurez un flux d'approbation impliquant sécurité, conformité et un responsable métier. Exigez propriétaire, mission, sources jusqu'à la bibliothèque, identité de service et date d'expiration, via des modèles approuvés. Contrôlez les licences, appliquez des politiques de données Power Platform et renouvelez l'agent tous les 90 jours."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Permissions et DLP : deux rôles distincts",
+    "typ": "vergleich",
+    "links": {
+     "titre_placeholder": "",
+     "titel": "Permissions et récupération",
+     "punkte": [
+      "Les permissions décident si l'agent a le droit d'entrer.",
+      "Elles s'appliquent en premier, la recherche vient ensuite.",
+      "L'agent respecte les ACL, pas les intentions.",
+      "L'héritage intact ouvre silencieusement les bibliothèques adjacentes."
+     ]
+    },
+    "rechts": {
+     "titel": "Étiquettes et DLP Purview",
+     "punkte": [
+      "L'étiquette décrit la sensibilité du contenu.",
+      "La DLP décide quelles actions sont autorisées.",
+      "Elle peut refuser le traitement même si le reste dit oui.",
+      "Elle dissocie la visibilité humaine de l'automatisation machine."
+     ]
+    }
+   },
+   {
+    "titel": "Checklist de gouvernance des agents SharePoint",
+    "typ": "checkliste",
+    "punkte": [
+     "Source au niveau de la bibliothèque, jamais le site entier.",
+     "Désactiver les connaissances générales et configurer une réponse de repli.",
+     "Briser l'héritage sur les bibliothèques critiques et supprimer les groupes larges.",
+     "Faire tourner l'agent sous une identité de service au moindre privilège.",
+     "Exiger propriétaire, mission et date d'expiration avant toute approbation.",
+     "Bloquer le traitement avec remplacement désactivé pour les agents.",
+     "Tester la DLP en mode simulation avant de l'appliquer."
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Selon l'article, que décide en premier si un agent SharePoint peut accéder à un contenu ?",
+    "opts": [
+     "Le filtre de récupération défini sur la bibliothèque ciblée",
+     "Les permissions de l'identité de l'agent, avant tout filtre de recherche",
+     "Les métadonnées de version publiée des documents",
+     "Le niveau de confiance du modèle de langage"
+    ],
+    "a": 1,
+    "why": "L'agent obéit aux permissions d'abord, à la récupération ensuite : le filtre de recherche n'est pas une frontière de sécurité."
+   },
+   {
+    "q": "Où faut-il briser l'héritage des permissions pour protéger des données critiques ?",
+    "opts": [
+     "Au niveau du site entier, pour tout verrouiller d'un coup",
+     "Au niveau de chaque fichier individuel, sans exception",
+     "Au niveau de la bibliothèque qui contient les données critiques",
+     "Au niveau du hub regroupant tous les sites"
+    ],
+    "a": 2,
+    "why": "L'article recommande de briser l'héritage au niveau de la bibliothèque critique, pas du site, et de le conserver pour les contenus banals."
+   },
+   {
+    "q": "Pourquoi activer un blocage avec remplacement désactivé pour les agents dans la DLP ?",
+    "opts": [
+     "Une machine n'a pas de contexte métier pour justifier un contournement",
+     "Les agents ne génèrent jamais d'alertes pour le SecOps",
+     "Le remplacement ralentit trop l'ingestion des fichiers",
+     "Les utilisateurs humains ne peuvent jamais se justifier"
+    ],
+    "a": 0,
+    "why": "Un humain peut se justifier, alors qu'une machine n'a que des déclencheurs et aucun contexte métier."
+   },
+   {
+    "q": "Quel est le rythme de renouvellement prévu pour l'approbation d'un agent ?",
+    "opts": [
+     "Renouvellement planifié à 30 jours, avec désactivation manuelle",
+     "Renouvellement annuel, sans expiration automatique",
+     "Aucun renouvellement tant que le propriétaire reste en poste",
+     "Renouvellement planifié à 90 jours, sinon désactivation automatique"
+    ],
+    "a": 3,
+    "why": "L'approbation comporte une expiration et un renouvellement à 90 jours ; sans renouvellement, l'agent est désactivé automatiquement."
+   }
+  ]
+ },
+ "he": {
+  "html": "<p>כשסוכן SharePoint מצטט פתאום מדיניות משאבי אנוש מספרייה סמוכה, קל להאשים את המודל ולומר שהוא \"הוזה\". בפועל כמעט תמיד מדובר בהיקף רחב מדי של מקורות ידע בשילוב הרשאות שעברו בירושה. התוצאה היא חשיפה מקרית של מידע, במהירות של מכונה.</p>\n<p>הפתרון אינו קסם. הוא מבוסס על משמעת בהגדרת ההיקף, הידוק הרשאות ומדיניות DLP שאוכפת בפועל. במאמר נעבור על ארבעה מישורי בקרה שאפשר ליישם כבר היום, ועל הטעויות שכדאי להפסיק לעשות.</p>\n\n<h2>איך סוכני SharePoint רואים את הנתונים: Microsoft Graph, הרשאות וגראונדינג</h2>\n<p>סוכן אינו קורא את הכוונות שלכם. הוא קורא את Microsoft Graph. אם תוכן נגיש דרך ההרשאות של הזהות שהסוכן פועל תחתיה, הסוכן יכול לראות אותו. מקור ידע רחב מדי הוא מעקף לגבולות שחשבתם שסימנתם.</p>\n<p>לסוכן יש שני מרכיבים עיקריים:</p>\n<ul>\n<li><strong>פרסונת משתמש (זהות):</strong> כל מה שהזהות הזו מורשית לראות.</li>\n<li><strong>מסנני שליפה:</strong> מה שהסוכן הופנה אליו, כמו ספרייה, תיקייה, קבוצת קבצים או כמה כתובות URL.</li>\n</ul>\n<p>רבים מבלבלים בין מסנני שליפה לבין גבולות אבטחה. שליפה אומרת \"חפש כאן קודם\", והרשאות אומרות \"מותר לך להיכנס\". הסוכן מציית להרשאות תחילה ולשליפה רק אחר כך.</p>\n<p>תוויות רגישות ו-Purview DLP פועלות מעל התוכן כמו שילוט ומעקות בטיחות. הן קובעות מה מותר לעשות כשניגשים לתוכן מסוים. נקודה אחרונה שרבים מפספסים: גראונדינג (ביסוס) אינו עוקף הרשאות ואינו מצמצם אותן. הוא רק מסנן לפי רלוונטיות. אם זהות הסוכן רואה ספריות סמוכות בגלל ירושת הרשאות, המודל עשוי לשלב מידע נכון מהן לתוך תשובה. זה צפוי, ואין בזה שום תקלה מסתורית.</p>\n<h3>מודל מנטלי לשימוש בלחץ</h3>\n<ul>\n<li>סוכן = דמות משתמש + מסנן שליפה.</li>\n<li>הרשאות הן השער הראשון ושליפה היא השנייה.</li>\n<li>תוויות מתארות רגישות, ו-DLP מחליט אילו פעולות מותרות כשהרגישות קיימת.</li>\n<li>גראונדינג עוזר למצוא את הפסקה הנכונה, הרשאות קובעות אם מותר לראות אותה, ו-DLP יכול עדיין למנוע עיבוד גם כששני השלבים הקודמים אישרו.</li>\n</ul>\n<p>מי שמפנים את זה מפסיק להאשים את המודל השפתי, ומתחיל לשלוט במה שמותר לו לשקול.</p>\n\n<h2>מישור בקרה ראשון: הגבלת מקורות ידע בדיוק משפטי</h2>\n<p>הגדירו מקורות ידע כמו חוזה: מדויק, תחום ונטול עמימות. מקורות רחבים יוצרים הצלבת מידע, והמודל ישמח לצרף לתשובה מסמכים שכנים כמו רכלן עם עדשת זום.</p>\n<p>הכלל שמבדיל בין מקצוענים למתחילים הוא מקורות ברמת ספרייה בלבד: לא אתרים, ולא \"כל מה שנמצא תחת המרכז הזה\". ספריית מסמכים אחת לכל מטרה מוצהרת. סוכן שעונה על שאלות נפוצות על מוצר מקבל את ספריית השאלות הנפוצות של המוצר, ותו לא.</p>\n<h3>מנגנוני הגדרת היקף מעשיים</h3>\n<ul>\n<li>להימנע משורשי אתרים ולציין תמיד נתיב ספרייה קונקרטי.</li>\n<li>להגביל את עומק התיקיות, ואם חייבים להשתמש בהן, לעצור ברמה רדודה בלי איסוף רקורסיבי.</li>\n<li>לנצל מסנני מטא-דאטה: לקלוט רק פריטים עם סטטוס \"מאושר\", גרסה \"פורסמה\" או מחלקה מוגדרת. אין מטא-דאטה, אין קליטה.</li>\n<li>להחריג טיוטות, ארכיונים ותתי-עצים של עבודה. אם אי אפשר להחריג, מעבירים אותם למקום אחר. כן, זה אומר לארגן מחדש, וזה ממשל.</li>\n</ul>\n<p>מסנני שליפה מכוונים חיפוש ואינם חומת אש. הכיוון הנכון הוא להצר ולא להרחיב.</p>\n\n<h2>מגבלות פלטפורמה וסוכנים ממוקדים: לתזמר ולא לדחוס</h2>\n<p>לפלטפורמות יש מגבלות על מספר הקבצים, התיקיות וכתובות ה-URL לכל מקור ידע. אל תראו בהן הערות ביצועים, אלא מעקות בטיחות לממשל תקין. כשמגיעים למגבלה, האינסטינקט השגוי הוא להרחיב את ההיקף לשורש האתר \"רק לבינתיים\". כך מתחילות דליפות.</p>\n<p>לפני עלייה לאוויר, בדקו את תקרות הביצועים ב-Copilot Studio ובבוני הסוכנים של SharePoint. צרו מקור פיילוט עם התפלגות אמיתית של תוכן, למשל כמה מאות קובצי PDF מאושרים, מדריכי Word ומצגות PowerPoint. אם הקליטה נכשלת או מדלגת על מידע, אל תרחיבו את ההיקף אלא פצלו אותו: תחום אחד למקור, מקור אחד לסוכן.</p>\n<p>סוכנים ממוקדים ומרובים מנצחים סוכן אנציקלופדי אחד. בנו סוכן למדיניות משאבי אנוש, סוכן להטבות וסוכן לנסיעות, כל אחד עם ספרייה משלו ומסננים אכופים. אם צריך נקודת כניסה אחת, אפשר להציב בדלת הכניסה סוכן ניתוב שמעביר שאילתות למומחה המתאים. מי שדוחס 200 קבצים מתחומים מעורבים לסוכן אחד מקבל תשובות שנשמעות כמו ישיבת ועדה.</p>\n<h3>לכבות ידע כללי ולהגדיר תגובה חלופית</h3>\n<p>עבור סוכנים מוסדרים, כבו את הידע הכללי של ה-AI. סוכן שהוא הסמכות לתחום מסוים צריך לשתוק מחוץ לו. הגדירו תגובה חלופית ברורה וצנועה, בנוסח כמו \"אני לא סמכות בנושא הזה, אלו המקורות המאושרים שאני מכסה\". ברגע שהמודל ממלא פערים מידע כללי, אתם חוזרים לטריוויה שאי אפשר לאמת, והיא מתעלמת מהתוויות ומהמדיניות שלכם.</p>\n<p>הגדרת \"מקורות רשמיים\" משמעה גם תהליך אישור שקודם לקליטה: בדיקת דיוק, רעננות ותיוג רגישות. מסמך שאי אפשר להוכיח את מקורו לא צריך להיאמר על ידי סוכן. המודל בטוח בעצמו, אבל לא בהכרח צודק.</p>\n\n<h2>מישור בקרה שני: שבירת הורשת הרשאות ותוויות רגישות</h2>\n<p>ידע מוגבל חסר תועלת אם הדלתות נשארות פתוחות. הרשאות שעוברות בירושה ב-SharePoint הן כמו סוודר משפחתי שעבר מדור לדור: לא מתאים, מלא חורים, ועובד עד שמגיעה הרוח הקרה. הסוכנים מכבדים רשימות בקרת גישה, ולא אופטימיות.</p>\n<h3>ביקורת הרשאות בשלוש קטגוריות</h3>\n<p>חלקו את הספריות הרגישות שלכם לשלוש קטגוריות: <strong>חובה לבודד</strong>, <strong>אפשר לשתף</strong> ו<strong>לא ידוע</strong>. \"לא ידוע\" הוא נורת אזהרה אדומה. אם אי אפשר להסביר במשפט אחד למי יש גישה, הספרייה שייכת לקטגוריית החובה לבודד עד שיוכח אחרת.</p>\n<p>בספריות שחובה לבודד, בטלו את ירושת ההרשאות ברמת הספרייה, לא ברמת האתר. שאפו לחברות מינימלית ומפורשת: קבוצת בעלים קטנה, קבוצת חברים מוגדרת וקוראים בלבד, רק איפה שהעסק דורש זאת.</p>\n<ul>\n<li>הוציאו קבוצות רחבות כמו \"כולם\", \"כולם מלבד משתמשים חיצוניים\" ו\"משתמשים מאומתים\", שמסתתרות בתוך קבוצות SharePoint כמו בובות מטריושקה.</li>\n<li>החליפו אותן בקבוצות אבטחה של Azure AD הממופות לתפקידים שאתם באמת מנהלים.</li>\n<li>אורחים צריכים להיות חריגים, זמניים וניתנים לזיהוי, ולעולם לא קבורים בקבוצה שנוצרה בפרויקט לפני שלוש שנים.</li>\n</ul>\n<h3>שלוש רמות הרשאה סטנדרטיות</h3>\n<ul>\n<li><strong>רמה א':</strong> ספריות סודיות. בעלים, חברים וקוראים בקבוצות קטנות וממוקדות, ללא אורחים.</li>\n<li><strong>רמה ב':</strong> ספריות פנימיות בלבד. בעלים, חברים וקוראים מקבוצת מחלקה, ללא גורמים חיצוניים.</li>\n<li><strong>רמה ג':</strong> ספריות פנימיות פתוחות. קוראים מכלל העובדים, עדיין ללא אורחים.</li>\n</ul>\n<p>המודל פשוט בכוונה, כי בני אדם שאוכפים אותו נוטים להסיח את דעתם. סוכנים יבצעו כל מה שתקודדו, אז קודדו שפיות.</p>\n<h3>תוויות רגישות כמפתחות מדיניות</h3>\n<p>תווית אינה מדבקה אלא מפתח מדיניות. התאימו תוויות כמו \"סודי\", \"מוגבל\" ו\"ציבורי\" להתנהגויות ב-Purview DLP, כך שהתווית תהיה משמעותית למכונות. לדוגמה, תווית \"HR סודי\" מפעילה מדיניות החוסמת פעולות עיבוד של סוכנים, גם כשהמשתמש עצמו יכול לצפות בקובץ. בני אדם והאוטומציה מופרדים כאן.</p>\n<p>בדוגמה מעשית, סוכן משאבי אנוש מקבל הרשאת קריאה לספרייה הספציפית בלבד, וספריות סמוכות כמו טיוטות עבודה מבודדות בהרשאות ייחודיות שאין לזהות הסוכן. מדיניות ה-DLP קובעת שעיבוד של תוכן עם התווית הזו מותר רק לסוכנים ברשימת \"סוכנים מאושרים HR\". כל סוכן אחר, כולל הסוכן הכללי של החברה, נחסם. כך עוצרים דליפה גם כשמישהו מעניק בטעות גישה לסוכן הלא נכון.</p>\n<p>כדי להימנע מהסלמה שקטה, אל תבנו סוכנים שפועלים כמי שמפעיל אותם, כי הם יורשים את ההרשאות הרחבות שלו. בנו אותם כזהות שירות עם הרשאות מינימליות, ושלבו תוויות ו-DLP כדי שגם משתמשים מורשים לא יוכלו לתמרן סוכן להוציא נתונים מחוץ לתחום.</p>\n\n<h2>מישור בקרה שלישי: שערי אישור, רישוי ומדיניות נתונים</h2>\n<p>אם כל אחד יכול ליצור סוכן, הממשל הופך לכאוס מבוסס המונים. הפתרון משעמם ויעיל: אישורים, גבולות רישוי ומדיניות נתונים.</p>\n<h3>זרימת אישור ליצירת סוכנים</h3>\n<p>בקשות לסוכנים חדשים מגיעות למאשרים מוגדרים, כמו אבטחה, ציות ובעלים עסקי שמבין את התחום. אכפו מוסכמות שמות, הצהרת מטרה, בעלים מתועד, איש קשר לתמיכה ותאריך תפוגה. אין בעלים, אין אישור. אין מטרה, אין אישור.</p>\n<p>טופס הבקשה צריך לכלול קהל יעד, יכולת עסקית, מקורות ידע עם כתובות ברמת ספרייה, ציפיות לגבי תוויות, התנהגות במקרה של כישלון, אי-סמכות מחוץ לתחום וזהות השירות. עדיף לבחור מתוך תבניות מאושרות מראש, כמו שאלות ותשובות למשאבי אנוש או דפדפן מדיניות. התבניות כוללות ידע כללי מושבת, גיבוי לא סמכותי, מקורות ברמת ספרייה, מסנני מטא-דאטה נדרשים וזהות שירות נכונה.</p>\n<h3>רישוי כמשטח בקרה</h3>\n<p>יש שני מסלולים: Microsoft 365 Copilot מבוסס משתמש, או SharePoint בתשלום לפי שימוש. ברישוי מבוסס משתמש רק בעלי רישיון יכולים להשתמש בתכונות סוכנים, מה שמרסן התפשטות. בתשלום לפי שימוש יש גמישות וחיוב מרכזי, ובלי זהירות זה הופך לבר פתוח.</p>\n<ul>\n<li>הפרידו בין סביבות פיילוט לייצור.</li>\n<li>הפעילו תשלום לפי שימוש רק איפה שהכספים רואים את המונה, והגדירו התראות עלות.</li>\n<li>תעדו את בחירת הרישוי באישור: בתשלום לפי שימוש דרושים מרכז עלות, בעלים שחותם על החיובים ופרופיל שימוש משוער. ברישוי מבוסס משתמש דרושות רשימת משתמשים מורשים ותוכנית יציאה.</li>\n</ul>\n<h3>מדיניות נתונים ב-Power Platform</h3>\n<p>השתמשו במדיניות נתונים ברמת הדייר ב-Power Platform כדי להגביל אילו מחברים יכולים לשבת באותה קבוצת נתונים עם SharePoint. סוכנים מוסדרים חיים בקבוצה מוגבלת, עם Microsoft 365 וממשקי API פנימיים מאושרים בלבד. אינטגרציה חדשה עוברת סקירה ומקבלת מחבר ארגוני. שלבו את כל זה עם Purview להגדרת גבולות נתונים, מיקומי תוכן רגיש, נתיבי דליפה אסורים וניטור ניסיונות לחצות בין קבוצות. סוף האישור הוא אישור עם תוקף ותהליך חידוש: ללא חידוש, מתבצעת השבתה אוטומטית.</p>\n\n<h2>מישור בקרה רביעי: Purview DLP שעוצר סוכנים בפועל</h2>\n<p>סוכנים מאבדים תוכן, לא רק צופים בו. צפייה יכולה להיות מותרת לבן אדם, ואיבוד אוטומטי הוא סוג סיכון אחר. לכן צריך לקשור רגישות וזיהוי דפוסים לחסימות פעולה מפורשות בהקשר של סוכנים.</p>\n<p>בנו מדיניות שממוקדת במיקומי SharePoint המזינים סוכנים, התאימו תוויות רגישות וסוגי מידע רגיש, והגדירו חסימה של איבוד, שיתוף או הורדה על ידי סוכן כשרמת הביטחון מגיעה לסף שלכם.</p>\n<h3>דפוסים שעובדים</h3>\n<ul>\n<li>תוויות רגישות ממופות לחסימת סוכנים, אלא אם הסוכן ברשימת היתרים.</li>\n<li>סוגי מידע רגיש, כמו מזהים פיננסיים וממשלתיים ומונחי בריאות, מכוונים לרמת ביטחון גבוהה יותר.</li>\n<li>בדפוסים רועשים עדיף להעלות את רמת הביטחון ולדרוש כמה מופעי ראיות. בנכסים יקרי ערך, כמו סודות מסחריים והתאמה מדויקת של מזהי עובדים, משתמשים בחומרה גבוהה ובחסימה מיידית.</li>\n<li>התאמת נתונים מדויקת (EDM) עבור המזהים האמיתיים שלכם, כמו מספרי עובדים ומזהי לקוחות, מפחיתה תוצאות חיוביות שגויות.</li>\n<li>מילוני מילות מפתח לשמות קוד של פרויקטים קנייניים.</li>\n</ul>\n<h3>פעולות והטמעה</h3>\n<p>לסוכנים אין עקיפה מנומקת, כי למכונות אין הקשר עסקי אלא טריגרים. הסגירו או הגבילו הורדה כשהטריגר מגיע מתהליכי עבודה של סוכנים. אם הסוכן לא יכול להביא את הקובץ, הוא לא יכול לאבד אותו. שלחו התראות ל-SecOps עם הקשר עשיר: תווית, ספריית האתר, דפוס מפעיל וזהות הסוכן.</p>\n<p>התחילו במצב סימולציה באתרים שאינם בייצור וכווננו ספים עד שההתראות משקפות מציאות. הגדירו היקף הדוק לספריות הסוכנים והרחיבו רק כשהאות נקי. השתמשו בתנאים משולבים, כמו תווית ועוד סוג מידע רגיש. כתבו גם הודעת שגיאה ברורה, בנוסח \"סוכן זה אינו מורשה לאבד תוכן משאבי אנוש חסוי, פנו לסוכן משאבי האנוש או בקשו גישה דרך התהליך\". בלי דלת חלופית, משתמשים פשוט יעתיקו את המידע ל-Teams.</p>\n\n<h2>טעויות נפוצות ובדיקות: איך מוודאים שהבקרות באמת עובדות</h2>\n<p>הטעויות שחוזרות על עצמן:</p>\n<ul>\n<li>לערבב תחומים שונים, כמו מדיניות, מסמכים טכניים וחוזי ספקים, במקור אחד.</li>\n<li>לאפשר לסוכנים לסרוק כתובות אתרים שרירותיות או חיצוניות, מה שמרחיב את רדיוס הפגיעה ופוגע ביכולת הביקורת.</li>\n<li>לקלוט טיוטות וקבצי צ'אט. המודל לא מבדיל בין תוכן גולמי לתוכן שפורסם בלי אכיפת מטא-דאטה והפרדת מיקומים.</li>\n<li>להניח ש\"מוסתר\" שווה \"מוגן\". הסתרה היא בחירה עיצובית בממשק, והרשאות הן החוק.</li>\n<li>להשאיר אתרי פרויקטים עם הורשת הרשאות כברירת מחדל, להשאיר גישת אורח פעילה אחרי סיום עבודה עם ספק, ולהעניק קבוצות M365 רחבות הרשאת קריאה כי זה היה פשוט.</li>\n<li>לאפשר פיילוטים באתרים לא מנוהלים, להפעיל תשלום לפי שימוש בלי תיוג עלויות והתראות, ולתת תפקידי יוצר לכל מי שיש לו דופק.</li>\n<li>להגביל את ה-DLP ל-Exchange ול-Teams ולהוציא את SharePoint בגלל רעש או ביצועים, או להסתמך רק על סוגי מידע גנריים ולהתעלם מ-EDM.</li>\n</ul>\n<h3>בדיקות ומדדים</h3>\n<p>בדקו את ההיקף בפועל. שאלו את הסוכן שאלות סמכותיות שעליו לענות עליהן מיד, ואז פתו אותו בנושאים דומים שעליו לסרב להם. אם הוא עונה מחוץ לתחום, ההיקף או התגובה החלופית שגויים. אם הוא מסרב בתוך התחום, המסננים או האישורים מחמירים מדי. הכוונון הוא תהליך של חיסור: מסירים נתיבים לא רלוונטיים, מצמצמים עמימות במטא-דאטה וקוצצים עד שהתשובות צפויות ו\"משעממות\".</p>\n<ul>\n<li><strong>יכולת מענה:</strong> אחוז השאילתות בתחום שנענו עם ציטוטים מהספרייה המיועדת.</li>\n<li><strong>דיוק מקורות:</strong> אחוז התשובות שמצטטות מקורות מאושרים בלבד.</li>\n<li><strong>איכות השתיקה:</strong> בהירות ותדירות של ההודעה כשנשאלים מחוץ לתחום.</li>\n</ul>\n<p>מבחן מציאות ל-DLP: סוכן לא מורשה מנסה לענות על שאלה שדורשת קובץ מסווג. התוצאה הנכונה היא חסימה מיידית, הודעה מנחה והתראה בחומרה גבוהה. אם קיבלתם תשובה בטוחה בעצמה, ה-DLP הוא רק קישוט. אם תשובה דולפת, ההרשאות שגויות. אם הסוכן מאבד תוכן מסומן ללא אישור, מיפוי ה-DLP שגוי.</p>\n\n<h2>טייק-אווייז מעשיים וסיכום</h2>\n<ul>\n<li>קשרו מקורות ידע לספריות ספציפיות, לא לשורש האתר, ושמרו על תיקיות רדודות.</li>\n<li>קלטו רק תוכן מאושר באמצעות מסנני מטא-דאטה, והחריגו טיוטות וארכיונים.</li>\n<li>בנו סוכנים ממוקדים, אחד לכל תחום, ואם צריך, הוסיפו סוכן ניתוב.</li>\n<li>כבו ידע כללי והגדירו תגובה חלופית ברורה לשאלות מחוץ לתחום.</li>\n<li>שברו הורשת הרשאות בספריות שמזינות סוכנים, והחליפו קבוצות רחבות בקבוצות Azure AD מבוססות תפקיד.</li>\n<li>הפעילו סוכנים תחת זהות שירות עם הרשאות מינימליות.</li>\n<li>קשרו תוויות רגישות למדיניות DLP עם תנאי אישור סוכן מפורשים.</li>\n<li>הנהיגו זרימת אישור עם בעלים, מטרה, תאריך תפוגה ותבניות מאושרות מראש.</li>\n<li>תעדו את בחירת הרישוי, הפרידו בין פיילוט לייצור והגדירו התראות עלות.</li>\n<li>התחילו ב-DLP במצב סימולציה, כווננו ספים והשתמשו ב-EDM וכן בהודעות משתמש ברורות.</li>\n</ul>\n<p>דליפת מידע מסוכן SharePoint אינה תקלה של המודל. היא תוצאה של היקף רחב, הרשאות בירושה ואכיפה חלשה. מי שמגביל מקורות לספריות מוגדרות, שובר הורשה, מכניס שערי אישור ומחבר תוויות ל-Purview DLP עם אכיפה אמיתית, שולט במה שהסוכן מורשה לראות ולעשות. הגדירו נכון את המקורות, ההרשאות והחסימות, ובדקו אותם באופן שוטף.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "ארבעה מישורי בקרה לסוכן SharePoint מאובטח",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "הגבלת מקורות ידע",
+     "text": "ספרייה אחת לכל מטרה, תיקיות רדודות, מטא-דאטה מאושר בלבד וידע כללי כבוי."
+    },
+    {
+     "kopf": "שבירת הורשת הרשאות",
+     "text": "בידוד ספריות רגישות, קבוצות Azure AD לפי תפקיד וזהות שירות מינימלית לסוכן."
+    },
+    {
+     "kopf": "תוויות רגישות",
+     "text": "תווית היא מפתח מדיניות: קשרו אותה ל-DLP כדי שתחסום עיבוד של סוכנים."
+    },
+    {
+     "kopf": "שערי אישור ורישוי",
+     "text": "בעלים, מטרה ותפוגה לכל סוכן, בקרת עלויות ומדיניות נתונים ב-Power Platform."
+    },
+    {
+     "kopf": "Purview DLP עם שיניים",
+     "text": "חסימה אמיתית, EDM, סימולציה לפני אכיפה, הודעות ברורות ובדיקת גבולות קבועה."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "למה סוכן SharePoint מצטט מסמכים ממקומות שלא התכוונו לחשוף?",
+    "a": "בדרך כלל זו לא הזיה של המודל, אלא היקף רחב מדי של מקורות ידע בשילוב הרשאות שעברו בירושה. הסוכן קורא דרך Microsoft Graph את כל מה שהזהות שלו מורשית לראות. גראונדינג רק מסנן לפי רלוונטיות ואינו מצמצם הרשאות."
+   },
+   {
+    "q": "איך מגבילים נכון את מקורות הידע של סוכן SharePoint?",
+    "a": "מגדירים מקורות ברמת ספרייה בלבד, לא אתרים ולא שורשי אתר, ספרייה אחת לכל מטרה. שומרים על תיקיות רדודות, משתמשים במסנני מטא-דאטה כמו סטטוס \"מאושר\" ומחריגים טיוטות וארכיונים. בנוסף בונים סוכן ממוקד לכל תחום, מכבים ידע כללי ומגדירים תגובה חלופית."
+   },
+   {
+    "q": "מה ההבדל בין מסנני שליפה להרשאות, ואיך שוברים ירושת הרשאות?",
+    "a": "מסנני שליפה רק מכוונים חיפוש ואינם גבול אבטחה, ואילו הרשאות קובעות אם מותר להיכנס, והסוכן מציית להן תחילה. בספריות רגישות מבטלים ירושה ברמת הספרייה, מגדירים חברות מינימלית, מסירים קבוצות רחבות כמו \"כולם\" ומחליפים אותן בקבוצות Azure AD לפי תפקיד."
+   },
+   {
+    "q": "איך Purview DLP ותוויות רגישות עוצרים סוכן מלהדליף מידע?",
+    "a": "קושרים תוויות רגישות למדיניות DLP שחוסמת עיבוד תוכן על ידי סוכנים, אלא אם הסוכן ברשימת סוכנים מאושרים. כך החסימה פועלת גם כשניתנה גישה בטעות. מתחילים במצב סימולציה, משתמשים ב-EDM, מוסיפים הודעת שגיאה ברורה ושולחים התראות ל-SecOps."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "שליפה מול הרשאות: מי שולט במה",
+    "typ": "vergleich",
+    "links": {
+     "titel": "מסנני שליפה",
+     "punkte": [
+      "מכוונים חיפוש: \"חפש כאן קודם\"",
+      "אינם גבול אבטחה ואינם חומת אש",
+      "הכיוון הנכון הוא להצר ולא להרחיב",
+      "גראונדינג מסנן לפי רלוונטיות בלבד",
+      "פועלים רק אחרי שההרשאות אישרו גישה"
+     ]
+    },
+    "rechts": {
+     "titel": "הרשאות",
+     "punkte": [
+      "קובעות אם מותר להיכנס: השער הראשון",
+      "הסוכן רואה כל מה שהזהות שלו מורשית לראות",
+      "ירושת הרשאות חושפת ספריות סמוכות",
+      "גראונדינג אינו עוקף אותן ואינו מצמצם אותן",
+      "DLP יכול עדיין למנוע עיבוד אחרי אישורן"
+     ]
+    }
+   },
+   {
+    "titel": "בדיקות ומדדים: האם הבקרות עובדות",
+    "typ": "checkliste",
+    "punkte": [
+     "שאלו שאלות סמכותיות בתחום וודאו שהסוכן עונה עליהן מיד",
+     "פתו את הסוכן בנושאים דומים מחוץ לתחום וודאו שהוא מסרב",
+     "מדדו יכולת מענה: אחוז שאילתות בתחום עם ציטוטים מהספרייה",
+     "מדדו דיוק מקורות: אחוז תשובות שמצטטות מקורות מאושרים בלבד",
+     "בדקו איכות שתיקה: בהירות ותדירות ההודעה מחוץ לתחום",
+     "הריצו מבחן DLP: סוכן לא מורשה מול קובץ מסווג",
+     "צפו לחסימה מיידית, הודעה מנחה והתראה בחומרה גבוהה"
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "מדוע סוכן SharePoint מצטט לפעמים מדיניות ממקור סמוך שלא נועד לו, לפי המאמר?",
+    "opts": [
+     "המודל השפתי הוזה ומייצר מידע שאינו קיים בארגון",
+     "היקף מקורות רחב מדי בשילוב הרשאות שעברו בירושה",
+     "מסנני השליפה פועלים כחומת אש ומעבירים תוכן נוסף",
+     "תוויות הרגישות מחליפות את ההרשאות ופותחות גישה רחבה"
+    ],
+    "a": 1,
+    "why": "המאמר קובע שזו כמעט תמיד בעיית היקף רחב והרשאות בירושה, לא הזיה של המודל."
+   },
+   {
+    "q": "מהו הכלל שלפי המאמר מבדיל בין מקצוענים למתחילים בהגדרת מקורות ידע?",
+    "opts": [
+     "להגדיר מקורות ברמת האתר כדי שהסוכן יענה על יותר שאלות",
+     "להגדיר מקורות ברמת המרכז כולו ולהסתמך על מסנני שליפה",
+     "להגדיר מקורות ברמת ספרייה בלבד, ספרייה אחת לכל מטרה",
+     "להגדיר מקורות רחבים ולהגביל אותם רק באמצעות תיקיות עמוקות"
+    ],
+    "a": 2,
+    "why": "המאמר מורה על מקורות ברמת ספרייה בלבד: לא אתרים ולא כל מה שנמצא תחת המרכז."
+   },
+   {
+    "q": "כיצד מונעת מדיניות DLP עם התווית \"HR סודי\" דליפה, גם כשניתנה גישה לסוכן הלא נכון?",
+    "opts": [
+     "היא מתירה עיבוד רק לסוכנים שברשימת הסוכנים המאושרים של HR",
+     "היא מוחקת אוטומטית את הקובץ מהספרייה לאחר כל שאילתה",
+     "היא מסתירה את הקובץ בממשק המשתמש בלי לשנות הרשאות",
+     "היא מאפשרת לכל סוכן פנימי לעבד את התוכן בתנאי שהמשתמש מורשה"
+    ],
+    "a": 0,
+    "why": "העיבוד מותר רק לסוכנים ברשימת המאושרים; כל סוכן אחר, גם הכללי של החברה, נחסם."
+   },
+   {
+    "q": "איזו תוצאה מצביעה לפי המאמר על כך שמיפוי ה-DLP שגוי?",
+    "opts": [
+     "הסוכן מסרב לענות על שאלה בתוך התחום שלו",
+     "הסוכן עונה על שאלה מחוץ לתחום שהוגדר לו",
+     "תשובה דולפת מידע שלא אמור להיות נגיש לסוכן",
+     "הסוכן מאבד תוכן מסומן ללא אישור"
+    ],
+    "a": 3,
+    "why": "לפי המאמר, אם הסוכן מאבד תוכן מסומן ללא אישור, מיפוי ה-DLP שגוי."
+   }
+  ]
+ },
+ "hi": {
+  "html": "<p>कल्पना कीजिए कि आपका SharePoint एजेंट किसी लीक की ओर इशारा कर रहा है, और आपने उसे आग बुझाने का पाइप थमाने के बजाय पानी मांगने भेज दिया हो। बहुत बड़ी ज्ञान सीमाएं और ढीली अनुमतियां मिलकर मशीन की गति से अनपेक्षित खुलासा करती हैं। इसका समाधान कोई जादू नहीं है। यह दायरे (scope) का अनुशासन है: अनुमतियां सख्त करना और ऐसी DLP नीति लगाना जो आज ही लागू की जा सकती है।</p>\n<p>इस लेख में हम देखेंगे कि एजेंट वास्तव में डेटा कैसे \"देखते\" हैं, ज्ञान स्रोतों को कैसे सीमित करें, इनहेरिटेंस कहां तोड़ें और Purview DLP को एजेंटों पर कैसे लागू करें। एक बात पहले ही: अगर आपने ज्ञान स्रोतों का दायरा बहुत बड़ा रखा है, तो आपने अपनी सुरक्षा में खुद सेंध लगा दी है।</p>\n\n<h2>SharePoint एजेंट डेटा कैसे एक्सेस करते हैं: परसोना और अनुमतियां</h2>\n<p>एजेंट के दो मुख्य घटक होते हैं: एक यूजर परसोना (यानी पहचान) और SharePoint व OneDrive पर उस पहचान की अनुमतियां। एजेंट पहले अनुमतियों का पालन करता है और रिट्रीवल बाद में करता है। इसलिए सोचने का सही मॉडल यह है:</p>\n<ul>\n<li><strong>एजेंट = यूजर परसोना + रिट्रीवल फ़िल्टर।</strong></li>\n<li>अनुमतियां पहले गेट का काम करती हैं, रिट्रीवल दूसरे स्थान पर आता है।</li>\n<li>सेंसिटिविटी लेबल संवेदनशीलता का वर्णन करते हैं, और DLP उसे लागू (enforce) करता है।</li>\n</ul>\n<p>अगर आप और कुछ याद न रखें, तो यह याद रखें: सेंसिटिविटी लेबल और Purview DLP सामग्री पर सुरक्षा घेरे की तरह काम करते हैं। लेबल वर्गीकरण करते हैं और DLP नियम लागू करता है। इस तरह परिणाम डरावना नहीं, बल्कि पूर्वानुमेय बनता है।</p>\n<p>समस्या वहां शुरू होती है जहां आपका स्कोप डिज़ाइन अनुमतियों से टकराता है। पड़ोसी लाइब्रेरी मॉडल के लिए \"पास\" होती हैं, क्योंकि वे आपकी अनुमतियों के दायरे में भी होती हैं। और मॉडल खुशी-खुशी उन सीमाओं के पार जानकारी जोड़ देगा जिन्हें आपने कभी सुरक्षा की दृष्टि से सोचा ही नहीं था।</p>\n\n<h2>अनुमति इनहेरिटेंस: चुपचाप बढ़ता जोखिम</h2>\n<p>अनुमति इनहेरिटेंस एक मौन वृद्धि है। आप दावा करते हैं कि साइट आंतरिक है, फिर पता चलता है कि उसमें सभी उपयोगकर्ता शामिल हैं, अतिथि उपयोगकर्ता भी, और पुराने प्रोजेक्ट समूह अब भी बने हुए हैं। आपने कुछ अलग से गलत नहीं किया था; आपने बस एक खुले कमरे में पसंदीदा शेल्फ का सुझाव दे दिया था।</p>\n<h3>इनहेरिटेंस कहां तोड़ें</h3>\n<p>इनहेरिटेंस साइट पर नहीं, बल्कि उस विशिष्ट लाइब्रेरी पर तोड़ें जहां संवेदनशील डेटा रहता है। इनहेरिटेंस तोड़ना कोई ड्रामा नहीं, परिपक्वता है। आपका लक्ष्य स्पष्ट न्यूनतम सदस्यता है, जैसे एक छोटा ओनर ग्रुप। तीन साल पहले किसी प्रोजेक्ट के दौरान बने पुराने SharePoint ग्रुप में दबी हुई सदस्यता इसका विकल्प नहीं है।</p>\n<p>एक और चेतावनी: अगर किसी ग्रुप के नाम में \"All\" जैसा शब्द आता है, तो आपका एजेंट उसे बुफे की तरह समझेगा। यह मॉडल सरल है क्योंकि इसे इंसानों को लागू करना है, और इंसान अक्सर भटक जाते हैं। एजेंट वही करेंगे जो आप उन्हें निर्देश देंगे।</p>\n\n<h2>ज्ञान स्रोत सीमित करें: वकील की तरह स्कोप लिखें</h2>\n<p>न्यूनतम आवश्यक ज्ञान मॉडल अपनाइए। साइट रूट देने के बजाय ज्ञान स्रोतों को किसी विशिष्ट लाइब्रेरी से जोड़ें। इसके बिना मॉडल अंतराल को सामान्य ज्ञान से भर देता है, जो आपकी अनुपालन आवश्यकताओं का पालन नहीं करता। स्कोप को कानूनी भाषा की तरह लिखें: सटीक, सीमित, और अस्पष्टता के लिए कोई जगह नहीं। व्यापक स्रोत क्रॉस-टॉक पैदा करते हैं, और LLM पास की सामग्री को खुशी-खुशी जोड़ देता है। हर अतिरिक्त स्रोत एक ऐसा जोखिम बन जाता है जिसे मॉडल मिलीसेकंड में सक्रिय कर सकता है।</p>\n<h3>व्यावहारिक सीमाएं भी मायने रखती हैं</h3>\n<p>प्लेटफ़ॉर्म प्रति ज्ञान स्रोत फ़ाइलों, फ़ोल्डरों और URL पर व्यावहारिक सीमाएं लगाते हैं। ये केवल प्रदर्शन संबंधी नोट नहीं हैं; ये एक ऐसा मानसिक मॉडल देती हैं जो दबाव में आपको बचाता है।</p>\n<h3>स्कोप डिज़ाइन के व्यावहारिक नियम</h3>\n<ul>\n<li>साइट रूट की ओर इशारा न करें। केवल आवश्यक फ़ोल्डर या लाइब्रेरी जोड़ें, और सब कुछ ठीक होने की उम्मीद न करें।</li>\n<li>फ़ोल्डर संरचना उथली रखें, ताकि रिकर्सिव \"ग्रैब बैग\" जैसी स्थिति न बने।</li>\n<li>मेटाडेटा फ़िल्टर लागू करें और केवल वही आइटम इंजेस्ट करें जिनकी स्थिति \"स्वीकृत\" या \"प्रकाशित\" है और जो सही विभाग के हैं। मेटाडेटा नहीं, तो इंजेशन नहीं।</li>\n<li>बारीक सीमाओं का परीक्षण करें: वास्तविक वितरण वाला एक पायलट स्रोत बनाएं, जिसमें PDF, Docs, प्लेबुक और PPT का मिश्रण हो। अगर इंजेशन धीमा हो जाए, टाइमआउट हो या आइटम छोड़ने लगे, तो स्कोप घटाइए।</li>\n</ul>\n\n<h2>क्यूरेशन और राउटर एजेंट: एक एजेंट सब कुछ नहीं</h2>\n<p>अगर आपको एक एकल प्रवेश बिंदु चाहिए, तो सामने के दरवाज़े पर एक राउटर एजेंट रखें जो प्रश्नों को सही विशेषज्ञ एजेंट को सौंपे। एक विशाल एजेंट के बजाय कई विशिष्ट एजेंट रखना बेहतर है। नहीं तो आप फिर उसी \"सामान्य ट्रिविया\" पर लौट आते हैं जो आपके लेबल और DLP इरादे को अनदेखा करती है।</p>\n<p>क्यूरेशन मायने रखता है:</p>\n<ul>\n<li>आधिकारिक स्रोतों को नामित करें, यानी इंजेशन से पहले एक अनुमोदन चरण रखें।</li>\n<li>स्रोतों को एक ढेर में न डालें; उन्हें उद्देश्य के आधार पर विभाजित करें।</li>\n<li>एजेंटों को मनमाने वेब URL क्रॉल न करने दें। बाहरी URL ब्लास्ट रेडियस बढ़ाते हैं और ऑडिट की क्षमता खत्म करते हैं।</li>\n<li>ड्राफ़्ट और चैट फ़ाइलें शामिल करते समय सावधानी बरतें।</li>\n</ul>\n<h3>परीक्षण और ट्यूनिंग</h3>\n<p>अगर मॉडल अपने डोमेन से बाहर के सवालों का जवाब देता है, तो आपका दायरा या फ़ॉलबैक गलत है। अगर वह डोमेन के भीतर के सवालों को मना कर देता है, तो आपके फ़िल्टर या अनुमतियां बहुत सख्त हैं। ट्यूनिंग घटाव है, जोड़ना नहीं: असंगत रास्ते हटाएं और मेटाडेटा की अस्पष्टता कम करें।</p>\n<p>चेकलिस्ट: केवल लाइब्रेरी, उथले फ़ोल्डर, सख्त मेटाडेटा, केवल स्वीकृत सामग्री, सामान्य ज्ञान नहीं, और कई विशिष्ट एजेंट।</p>\n\n<h2>लेबल और DLP से मशीन स्वचालन को मानवीय दृश्यता से अलग करें</h2>\n<p>एजेंट ACL (एक्सेस कंट्रोल) का सम्मान करते हैं, आशावाद का नहीं। इसलिए लक्ष्य यह है कि जवाब बाहर निकले ही नहीं, और प्रोसेसिंग की परत पर ही इनकार हो जाए। यही गेम चेंजर है: लेबल और DLP मानवीय दृश्यता को मशीन स्वचालन से अलग कर देते हैं।</p>\n<h3>HR का उदाहरण</h3>\n<p>मान लीजिए आपके पास \"Confidential HR\" लेबल वाली HR नीतियों की लाइब्रेरी है। एक HR एजेंट को उस तक पहुंच दी जाती है, जबकि दूसरे एजेंटों की पहचान के पास वह पहुंच नहीं है। इसके साथ आपकी DLP पॉलिसी कहती है: यदि लेबल \"Confidential HR\" के बराबर है और एक्सेस का प्रयास एजेंट प्रोसेसिंग है, तो केवल तभी अनुमति दें जब एजेंट \"Approved Agents HR\" समूह में हो। इसी तरह पहुंच नियंत्रित होती है।</p>\n<h3>पहचान को न्यूनतम विशेषाधिकार पर रखें</h3>\n<p>एजेंट की पहचान को सीमित रखें और उसे सबसे कम विशेषाधिकार वाली सर्विस पहचान के रूप में चलाएं। फिर उसे लेबल और DLP से जोड़ें। व्यापक M365 समूहों को Reader में डाल देना आसान है, जब तक कि आपका एजेंट किसी कानूनी उद्धरण को सेल्स के जवाब में नहीं जोड़ देता। उसके बाद मामला इंसिडेंट रिस्पॉन्स का ड्रामा बन जाता है।</p>\n<p>जब कोई जवाब बाहर निकलता है, तो अनुमतियां गलत हैं। अगर एजेंट स्वीकृत हुए बिना लेबल वाली सामग्री को प्रोसेस करता है, तो आपकी DLP मैपिंग गलत है। माफ़ी मांगने के बजाय मैपिंग ठीक करें। लेबल को DLP से जोड़ें, ताकि इंसान भूल भी जाए तो एजेंट नियमों का पालन करे। अब कमरा लॉक है, सिर्फ़ फ़ाइलिंग कैबिनेट नहीं।</p>\n\n<h2>कंट्रोल प्लेन: अप्रूवल गेट, लाइसेंसिंग और डेटा नीतियां</h2>\n<p>कंट्रोल प्लेन में तीन चीज़ें आती हैं: अप्रूवल गेट, Pay-as-you-go लाइसेंसिंग सीमाएं और डेटा नीतियां। ये सीट बेल्ट की तरह काम करती हैं, जिन्हें आप चलते हुए नहीं बांध सकते।</p>\n<h3>अप्रूवल वर्कफ़्लो</h3>\n<p>एजेंट निर्माण की शुरुआत अप्रूवल वर्कफ़्लो से करें, मनमानी से नहीं। नए एजेंट अनुरोध निर्दिष्ट अनुमोदकों के पास जाएं: सुरक्षा, अनुपालन और लाइब्रेरी मालिक। अनुरोध में ये बातें अनिवार्य रखें:</p>\n<ul>\n<li>ज्ञान स्रोत और उनके लेबल</li>\n<li>अपेक्षाएं और फ़ॉलबैक व्यवहार</li>\n<li>दायरे के बाहर क्या है</li>\n<li>स्रोत आधिकारिक हैं या नहीं</li>\n<li>उपयोग की जाने वाली सर्विस आइडेंटिटी</li>\n</ul>\n<p>लोगों को पहले से स्वीकृत टेम्पलेट दें: HR, Q&amp;A, Policy, Browser और IT।</p>\n<h3>लाइसेंसिंग और डेटा नीतियां</h3>\n<p>यूजर-आधारित पायलट के साथ केवल लाइसेंस प्राप्त उपयोगकर्ता ही एजेंट सुविधाओं का उपयोग कर सकते हैं, जिससे स्वाभाविक रूप से प्रसार सीमित रहता है। Pay-as-you-go के साथ टेनेंट या एन्वायरमेंट स्तर पर जवाबदेह मालिक और अनुमानित उपयोग प्रोफ़ाइल अनिवार्य करें। अगर यह उपयोग-आधारित है, तो लाइसेंस प्राप्त उपयोगकर्ताओं की सूची और ऑफ़बोर्डिंग योजना भी अनिवार्य करें। इसमें आप मुश्किल नहीं बन रहे; यह नीति का उल्लंघन न होने देने का तरीका है।</p>\n<p>डेटा नीतियों को Purview के साथ जोड़ें: डेटा सीमाएं, संवेदनशील लेबल वाली सामग्री के स्थान, प्रतिबंधित निकास पते, और समूह जोड़ने के प्रयासों को चिह्नित करने वाली निगरानी।</p>\n\n<h2>सामान्य गलतियां: टेम्पलेट और सामान्य ज्ञान</h2>\n<p>सबसे अधिक छोड़ा जाने वाला हिस्सा टेम्पलेट है, और बाद में सब इसी पर पछताते हैं। टेम्पलेट में ये बातें होनी चाहिए:</p>\n<ul>\n<li>सामान्य ज्ञान बंद रहे और फ़ॉलबैक न्यूनतम हो।</li>\n<li>केवल लाइब्रेरी-स्तरीय स्रोत हों।</li>\n<li>आवश्यक मेटाडेटा, फ़िल्टर और सही सर्विस पहचान तय हो।</li>\n</ul>\n<p>एजेंटों को सामान्य ज्ञान इस्तेमाल करने की अनुमति कभी न दें। वरना आपको भरोसे के साथ लिपटी हुई आत्मविश्वासी बकवास मिलती है। अंतिम लय यही है: टेम्पलेट के ज़रिए अनुरोध, सुरक्षा के ज़रिए अनुमोदन, और ऐसी DLP जो वास्तव में एजेंटों को रोकती है। Purview पैटर्न के बिना, जो हर बार लागू होता है, एजेंट केवल हाई-स्पीड डेटा कूरियर हैं।</p>\n\n<h2>Purview DLP पैटर्न: एजेंटों के लिए व्यावहारिक नियम</h2>\n<p>अब ब्रेक लगाने का समय है। ऐसा Purview DLP पैटर्न अपनाएं जो:</p>\n<ul>\n<li>केवल उन SharePoint स्थानों को लक्षित करे जो एजेंटों को डेटा देते हैं;</li>\n<li>सेंसिटिविटी लेबल और संवेदनशील जानकारी के प्रकारों (SIT) का मिलान करे;</li>\n<li>आत्मविश्वास सीमा तक पहुंचने पर एजेंट प्रोसेसिंग, शेयरिंग या डाउनलोडिंग को ब्लॉक करे।</li>\n</ul>\n<p>संवेदनशील जानकारी के प्रकारों में वित्तीय आईडी, सरकारी पहचान और स्वास्थ्य संबंधी शब्द आ सकते हैं, जिन्हें उच्च आत्मविश्वास के साथ ट्यून किया गया हो। इसके साथ सटीक डेटा मिलान (EDM) उपयोग करें, अपने वास्तविक पहचानकर्ताओं के लिए, जैसे कर्मचारी नंबर और ग्राहक आईडी। लेबल और संवेदनशील जानकारी प्रकार, दो ताले एक ही दरवाज़े पर।</p>\n<h3>उपयोगकर्ता संदेश: दरवाज़ा दिखाएं, दीवार नहीं</h3>\n<p>उपयोगकर्ता को दिखने वाला संदेश केवल शिष्टाचार नहीं है; यह अनुपालन और शैडो चैनलों के बीच का अंतर है। साफ़ लिखें कि यह एजेंट HR सामग्री को प्रोसेस करने के लिए अधिकृत नहीं है, और उपयोगकर्ता को HR एजेंट से पूछने या निर्धारित प्रक्रिया से एक्सेस लेने का रास्ता बताएं। आप उन्हें सही दरवाज़ा दिखा रहे हैं, दीवार नहीं। अगर आप सिर्फ़ ब्लॉक करेंगे, तो लोग दूसरे रास्ते खोज लेंगे।</p>\n<h3>अंतिम परीक्षण</h3>\n<p>एक आउट-ऑफ़-स्कोप एजेंट से ऐसे प्रश्न का उत्तर देने को कहें जिसके लिए गोपनीय लेबल वाली फ़ाइल चाहिए। परिणाम तुरंत ब्लॉक होना चाहिए।</p>\n\n<h2>व्यावहारिक निष्कर्ष (Takeaways)</h2>\n<ul>\n<li>एजेंट = यूजर परसोना + रिट्रीवल फ़िल्टर; अनुमतियां पहले, रिट्रीवल बाद में।</li>\n<li>साइट रूट के बजाय ज्ञान स्रोतों को विशिष्ट लाइब्रेरी या फ़ोल्डर से जोड़ें।</li>\n<li>संवेदनशील लाइब्रेरी पर इनहेरिटेंस तोड़ें और छोटा ओनर ग्रुप रखें।</li>\n<li>\"All\" जैसे नाम वाले व्यापक समूहों को एजेंट की पहुंच से दूर रखें।</li>\n<li>मेटाडेटा फ़िल्टर लगाएं: केवल स्वीकृत और प्रकाशित सामग्री इंजेस्ट हो।</li>\n<li>एक राउटर एजेंट के पीछे कई विशिष्ट एजेंट रखें।</li>\n<li>एजेंट को न्यूनतम विशेषाधिकार वाली सर्विस पहचान पर चलाएं और लेबल को DLP से जोड़ें।</li>\n<li>एजेंट निर्माण के लिए अप्रूवल वर्कफ़्लो और स्वीकृत टेम्पलेट अनिवार्य करें।</li>\n<li>सामान्य ज्ञान और मनमाने बाहरी URL बंद रखें।</li>\n<li>ब्लॉक संदेश में सही रास्ता बताएं, और आउट-ऑफ़-स्कोप परीक्षण से पुष्टि करें।</li>\n</ul>\n\n<h2>निष्कर्ष</h2>\n<p>SharePoint एजेंट तभी सुरक्षित हैं जब उनका दायरा वकील की भाषा जितना सटीक हो, अनुमतियां न्यूनतम हों और Purview DLP हर बार नियम लागू करे। लीक की जड़ अक्सर एजेंट नहीं, बल्कि बहुत बड़ा स्कोप और विरासत में मिली ढीली अनुमतियां होती हैं। जब आप इनहेरिटेंस सही जगह तोड़ते हैं, स्रोत सीमित करते हैं, अप्रूवल और टेम्पलेट अनिवार्य करते हैं और लेबल को DLP से जोड़ते हैं, तब एजेंट डेटा कूरियर नहीं, नियंत्रित और भरोसेमंद सहायक बनते हैं।</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "SharePoint एजेंट को सुरक्षित बनाने के चरण",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "स्रोत सीमित करें",
+     "text": "साइट रूट नहीं, केवल विशिष्ट लाइब्रेरी या फ़ोल्डर जोड़ें और मेटाडेटा फ़िल्टर लगाएं।"
+    },
+    {
+     "kopf": "इनहेरिटेंस तोड़ें",
+     "text": "संवेदनशील लाइब्रेरी पर इनहेरिटेंस तोड़ें और छोटा ओनर ग्रुप रखें।"
+    },
+    {
+     "kopf": "न्यूनतम पहचान",
+     "text": "एजेंट को सबसे कम विशेषाधिकार वाली सर्विस पहचान के रूप में चलाएं।"
+    },
+    {
+     "kopf": "लेबल और DLP",
+     "text": "सेंसिटिविटी लेबल को Purview DLP से जोड़ें ताकि प्रोसेसिंग स्तर पर ही इनकार हो।"
+    },
+    {
+     "kopf": "अप्रूवल और टेम्पलेट",
+     "text": "एजेंट निर्माण पर अनुमोदन वर्कफ़्लो और सामान्य ज्ञान बंद रखने वाले टेम्पलेट अनिवार्य करें।"
+    },
+    {
+     "kopf": "परीक्षण करें",
+     "text": "आउट-ऑफ़-स्कोप एजेंट से गोपनीय सामग्री मांगें; परिणाम तुरंत ब्लॉक होना चाहिए।"
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "SharePoint एजेंट डेटा को कैसे एक्सेस करते हैं और इसमें अनुमतियों की क्या भूमिका है?",
+    "a": "एजेंट = यूजर परसोना + रिट्रीवल फ़िल्टर। एजेंट की एक पहचान होती है और SharePoint व OneDrive पर उसकी अनुमतियां होती हैं। अनुमतियां पहले गेट का काम करती हैं, रिट्रीवल बाद में आता है। इसलिए एजेंट वही देखता है जो उसकी अनुमतियां अनुमति देती हैं।"
+   },
+   {
+    "q": "SharePoint एजेंट के ज्ञान स्रोतों का दायरा कैसे सीमित करें?",
+    "a": "साइट रूट की ओर इशारा न करें। ज्ञान स्रोत को केवल आवश्यक लाइब्रेरी या फ़ोल्डर से जोड़ें और फ़ोल्डर संरचना उथली रखें। मेटाडेटा फ़िल्टर लगाएं ताकि केवल \"स्वीकृत\" या \"प्रकाशित\" और सही विभाग की सामग्री इंजेस्ट हो। पायलट स्रोत से सीमाओं का परीक्षण करें।"
+   },
+   {
+    "q": "परमिशन इनहेरिटेंस कहां तोड़नी चाहिए और \"All\" जैसे समूह क्यों जोखिम भरे हैं?",
+    "a": "इनहेरिटेंस पूरी साइट पर नहीं, बल्कि उस विशिष्ट लाइब्रेरी पर तोड़ें जहां संवेदनशील डेटा है, और छोटा ओनर ग्रुप रखें। \"All\" जैसे नाम वाले समूहों को एजेंट बुफे की तरह समझता है, इसलिए उन्हें एजेंट की पहुंच से दूर रखें।"
+   },
+   {
+    "q": "Purview DLP और सेंसिटिविटी लेबल एजेंटों को संवेदनशील डेटा से कैसे रोकते हैं?",
+    "a": "लेबल सामग्री का वर्गीकरण करते हैं और DLP नियम लागू करता है। पॉलिसी लेबल और संवेदनशील जानकारी प्रकारों का मिलान करके, सीमा पूरी होने पर एजेंट प्रोसेसिंग, शेयरिंग या डाउनलोड ब्लॉक करती है। जैसे \"Confidential HR\" केवल \"Approved Agents HR\" समूह के एजेंट को मिले। ब्लॉक संदेश में सही रास्ता भी बताएं।"
+   }
+  ],
+  "infos": [
+   {
+    "titel": "ढीला स्कोप बनाम सख्त स्कोप",
+    "typ": "vergleich",
+    "links": {
+     "titel": "ढीला स्कोप (जोखिम)",
+     "punkte": [
+      "ज्ञान स्रोत के रूप में साइट रूट दे दिया जाता है",
+      "\"All\" जैसे नाम वाले व्यापक समूहों को एजेंट बुफे की तरह समझता है",
+      "सामान्य ज्ञान चालू रहने से आत्मविश्वासी बकवास मिलती है",
+      "मनमाने बाहरी URL ब्लास्ट रेडियस बढ़ाते हैं और ऑडिट खत्म करते हैं",
+      "एक विशाल एजेंट लेबल और DLP इरादे को अनदेखा करता है"
+     ]
+    },
+    "rechts": {
+     "titel": "सख्त स्कोप (सुरक्षित)",
+     "punkte": [
+      "ज्ञान स्रोत केवल विशिष्ट लाइब्रेरी या फ़ोल्डर से जुड़ते हैं",
+      "संवेदनशील लाइब्रेरी पर इनहेरिटेंस तोड़कर छोटा ओनर ग्रुप रखा जाता है",
+      "सामान्य ज्ञान बंद रहता है और फ़ॉलबैक न्यूनतम होता है",
+      "केवल आधिकारिक, स्वीकृत और प्रकाशित सामग्री इंजेस्ट होती है",
+      "राउटर एजेंट के पीछे कई विशिष्ट एजेंट काम करते हैं"
+     ]
+    }
+   },
+   {
+    "titel": "एजेंट सुरक्षा के लिए चेकलिस्ट",
+    "typ": "checkliste",
+    "punkte": [
+     "ज्ञान स्रोत साइट रूट के बजाय केवल विशिष्ट लाइब्रेरी से जोड़ें",
+     "फ़ोल्डर संरचना उथली रखें, ताकि रिकर्सिव \"ग्रैब बैग\" न बने",
+     "मेटाडेटा फ़िल्टर लगाएं: केवल स्वीकृत और प्रकाशित आइटम इंजेस्ट करें",
+     "एजेंट को न्यूनतम विशेषाधिकार वाली सर्विस पहचान पर चलाएं",
+     "सेंसिटिविटी लेबल को Purview DLP नियमों से जोड़ें",
+     "एजेंट निर्माण के लिए अप्रूवल वर्कफ़्लो और स्वीकृत टेम्पलेट अनिवार्य करें",
+     "ब्लॉक संदेश में सही रास्ता बताएं और आउट-ऑफ़-स्कोप परीक्षण करें"
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "लेख के अनुसार SharePoint एजेंट को समझने का सही मॉडल क्या है?",
+    "opts": [
+     "एजेंट = सामान्य ज्ञान + वेब क्रॉलर",
+     "एजेंट = यूजर परसोना + रिट्रीवल फ़िल्टर; अनुमतियां पहले, रिट्रीवल बाद में",
+     "एजेंट = रिट्रीवल फ़िल्टर + सेंसिटिविटी लेबल, अनुमतियों से स्वतंत्र",
+     "एजेंट = सर्विस पहचान + लाइसेंस सीमा"
+    ],
+    "a": 1,
+    "why": "लेख कहता है कि अनुमतियां पहला गेट हैं और रिट्रीवल दूसरे स्थान पर आता है।"
+   },
+   {
+    "q": "संवेदनशील डेटा वाली लाइब्रेरी के लिए इनहेरिटेंस कहां तोड़ना चाहिए?",
+    "opts": [
+     "पूरी साइट के स्तर पर, ताकि सभी लाइब्रेरी प्रभावित हों",
+     "टेनेंट स्तर पर, सभी एजेंटों के लिए एक साथ",
+     "केवल उस विशिष्ट लाइब्रेरी पर जहां संवेदनशील डेटा रहता है",
+     "केवल हर व्यक्तिगत फ़ाइल पर, लाइब्रेरी पर नहीं"
+    ],
+    "a": 2,
+    "why": "लेख के अनुसार इनहेरिटेंस साइट पर नहीं, बल्कि संवेदनशील डेटा वाली विशिष्ट लाइब्रेरी पर तोड़ें, छोटे ओनर ग्रुप के साथ।"
+   },
+   {
+    "q": "ज्ञान स्रोत सीमित करने के संदर्भ में लेख कौन-सा नियम सुझाता है?",
+    "opts": [
+     "बेहतर कवरेज के लिए ज्ञान स्रोत को साइट रूट से जोड़ें",
+     "गहरी फ़ोल्डर संरचना रखें ताकि सब कुछ रिकर्सिव रूप से मिले",
+     "ड्राफ़्ट और चैट फ़ाइलें डिफ़ॉल्ट रूप से शामिल करें",
+     "केवल स्वीकृत या प्रकाशित और सही विभाग वाली सामग्री इंजेस्ट करें"
+    ],
+    "a": 3,
+    "why": "मेटाडेटा फ़िल्टर से केवल 'स्वीकृत' या 'प्रकाशित' और सही विभाग की सामग्री इंजेस्ट होनी चाहिए; मेटाडेटा नहीं, तो इंजेशन नहीं।"
+   },
+   {
+    "q": "DLP ब्लॉक होने पर उपयोगकर्ता को दिखने वाले संदेश में क्या होना चाहिए?",
+    "opts": [
+     "केवल 'अनुमति अस्वीकृत' लिखा हो, कोई अतिरिक्त विवरण न हो",
+     "HR एजेंट से पूछने या निर्धारित प्रक्रिया से एक्सेस लेने का रास्ता बताया जाए",
+     "उपयोगकर्ता को सीधे फ़ाइल डाउनलोड करने का विकल्प दिया जाए",
+     "संदेश छिपाया जाए ताकि उपयोगकर्ता को ब्लॉक का पता न चले"
+    ],
+    "a": 1,
+    "why": "संदेश को दरवाज़ा दिखाना चाहिए, दीवार नहीं; केवल ब्लॉक करने पर लोग दूसरे रास्ते खोज लेते हैं।"
+   }
+  ]
+ },
+ "id": {
+  "html": "<p>Agen SharePoint yang membocorkan data biasanya bukan sedang berhalusinasi. Penyebabnya, agen diberi selang pemadam kebakaran padahal yang dibutuhkan hanya selang taman. Sumber pengetahuan yang terlalu luas, ditambah pewarisan izin yang longgar, menghasilkan pengungkapan tak sengaja dengan kecepatan masif.</p>\n<p>Solusinya bukan sihir, melainkan disiplin cakupan, pengetatan izin, dan DLP yang tegas. Artikel ini membahas cara agen benar-benar melihat data, mengapa grounding tidak mengisolasi izin, serta empat kontrol yang membatasi agen tanpa mengurangi kegunaannya.</p>\n\n<h2>Bagaimana Agen SharePoint Melihat Data Anda</h2>\n<p>Agen tidak membaca niat Anda, mereka membaca Microsoft Graph. Anggap Graph sebagai aliran darah: jika konten bisa diakses melalui ACL, agen akan melihatnya. Memperluas cakupan sumber pengetahuan sama saja dengan membuat jalan pintas di sekitar arteri yang sudah Anda beri label dengan hati-hati.</p>\n<p>Agen punya dua bahan utama:</p>\n<ul>\n<li><strong>Persona pengguna:</strong> identitas beserta izinnya di SharePoint, OneDrive, dan permukaan terhubung lainnya.</li>\n<li><strong>Filter pengambilan data:</strong> apa yang Anda tunjuk sebagai sumber, misalnya pustaka, folder, kumpulan file, atau beberapa URL.</li>\n</ul>\n<p>Banyak orang mengira filter pengambilan data adalah batas keamanan. Keduanya berbeda. Izin menentukan apakah agen boleh masuk, sedangkan pengambilan data menentukan apa yang dicari. Urutannya: patuhi izin terlebih dahulu, baru pengambilan data.</p>\n<h3>Grounding tidak mengesampingkan hak akses</h3>\n<p>Grounding membantu model menemukan paragraf yang tepat, tetapi tidak mempersempit otoritas agen. Jika identitas agen bisa melihat beberapa pustaka di sekitarnya karena pewarisan dibiarkan utuh, model bisa dan akan menggabungkan fakta-fakta terdekat menjadi satu jawaban. Pewarisan izin adalah eskalasi yang sunyi. Anda mengira situs hanya untuk internal, lalu menemukan grup SharePoint berisi semua orang atau pengguna terautentikasi, sisa anggota tim lama, dan grup proyek yang tak pernah dihapus.</p>\n<h3>Model mental yang praktis</h3>\n<p>Izin membatasi akses lebih dulu. Label menjelaskan tingkat sensitivitas. DLP memutuskan tindakan apa yang diizinkan ketika sensitivitas itu ada. DLP bahkan bisa melarang pemrosesan walaupun izin dan grounding mengizinkan. Dengan tumpukan gerbang ini, Anda berhenti menyalahkan LLM karena memberi jawaban dan mulai mengontrol apa yang boleh dipertimbangkannya.</p>\n\n<h2>Kontrol 1: Batasi Sumber Pengetahuan Seperti Menulis Kontrak</h2>\n<p>Sumber yang luas menciptakan crosstalk. Tulis cakupan seperti bahasa hukum: tepat, terbatas, dan bisa diuji.</p>\n<h3>Aturan cakupan</h3>\n<ul>\n<li><strong>Tingkat pustaka saja.</strong> Bukan seluruh situs dan bukan semua yang ada di bawah sebuah hub. Agen FAQ produk hanya mendapat pustaka FAQ produk.</li>\n<li><strong>Hindari akar situs.</strong> Menunjuk akar situs lalu berharap metadata menyelamatkan Anda tidak akan berhasil, karena filter pengambilan memandu pencarian dan bukan firewall.</li>\n<li><strong>Folder dangkal.</strong> Jika harus memakai folder, batasi pada level dangkal tanpa pengambilan rekursif.</li>\n<li><strong>Filter metadata.</strong> Masukkan hanya item berstatus disetujui dan versi diterbitkan milik departemen terkait. Tanpa metadata, tidak ada input.</li>\n<li><strong>Kecualikan draft, arsip, dan area kerja.</strong> Jika tidak bisa dikecualikan, pindahkan keluar. Refaktor semacam ini adalah bagian dari tata kelola.</li>\n</ul>\n<h3>Matikan pengetahuan umum, siapkan respons cadangan</h3>\n<p>Di Copilot Studio dan pembuat agen SharePoint, Anda bisa menentukan sumber resmi, menonaktifkan pengetahuan AI umum, dan menambahkan respons cadangan. Tanpa itu, model mengisi kekosongan dengan pengetahuan umum yang tidak mematuhi postur kepatuhan Anda. Konfigurasikan respons yang jelas dan rendah hati, misalnya bahwa agen tidak berwenang untuk topik tersebut, disertai sumber resmi yang menjadi cakupannya.</p>\n<h3>Batas platform dan orkestrasi banyak agen</h3>\n<p>Platform menerapkan batas praktis pada jumlah file, folder, dan URL per sumber pengetahuan. Anggap itu pagar pembatas tata kelola, bukan sekadar catatan performa. Uji batasnya sebelum peluncuran dengan sumber percontohan yang berdistribusi nyata. Jika proses melambat, kehabisan waktu, atau mulai melewatkan data, jangan memperluas cakupan. Bagi cakupannya: satu domain per sumber, satu sumber per persona agen.</p>\n<p>Bangun agen kebijakan SDM, agen tunjangan, dan agen perjalanan, masing-masing dengan pustaka dan filter yang ditegakkan. Jika perlu satu pintu masuk, tempatkan agen router di depan yang meneruskan pertanyaan ke spesialis yang tepat. Menjejalkan file domain campuran ke satu agen hanya menghasilkan jawaban yang terdengar seperti rapat komite.</p>\n<h3>Kurasi dan pengujian</h3>\n<p>Tentukan sumber resmi dengan alur persetujuan sebelum konten dimasukkan. Hanya tambahkan konten yang sudah ditinjau, akurat, dan label sensitivitasnya terkonfirmasi. Jika asal dokumen tidak bisa dibuktikan, jangan masukkan.</p>\n<p>Untuk pengujian, ajukan pertanyaan yang harus dijawab agen, lalu pancing dengan topik terkait yang seharusnya ditolak. Jika agen menjawab di luar domain, cakupan atau cadangan Anda salah. Jika agen menolak di dalam domain, filter atau persetujuan terlalu ketat. Penyetelan adalah pengurangan: hapus jalur tak relevan, kurangi ambiguitas metadata, dan terus potong sampai jawaban mudah ditebak. Metrik yang layak dilacak:</p>\n<ul>\n<li>kemampuan menjawab, yaitu persentase pertanyaan dalam domain yang terjawab dengan kutipan ke pustaka yang dituju;</li>\n<li>keterbatasan, yaitu persentase jawaban yang hanya mengutip sumber yang disetujui;</li>\n<li>kualitas keheningan, yaitu kejelasan dan frekuensi respons cadangan saat ditanya di luar domain.</li>\n</ul>\n\n<h2>Kontrol 2: Putus Pewarisan Izin dan Beri Label dengan Sungguh-Sungguh</h2>\n<p>Pengetahuan yang terlingkup tidak berguna jika pintunya terbuka lebar. Di SharePoint, izin warisan sering menjadi lubang yang baru terasa ketika masalah muncul. Kuncinya: hentikan pewarisan di tempat yang penting, tetapkan izin unik, dan singkirkan grup luas.</p>\n<h3>Mulai dengan audit</h3>\n<p>Kelompokkan pustaka sensitif ke dalam tiga kategori: wajib diisolasi, boleh dibagikan, dan tidak diketahui. Kategori terakhir adalah tanda bahaya. Jika Anda tidak bisa menjelaskan siapa yang punya akses dalam satu kalimat, anggap pustaka itu wajib diisolasi sampai terbukti sebaliknya. Putus pewarisan di pustaka yang menyimpan data paling berharga, bukan di seluruh situs, dengan keanggotaan minimum yang eksplisit: grup pemilik kecil, grup anggota yang jelas, dan pembaca hanya jika bisnis mengharuskannya.</p>\n<h3>Singkirkan grup luas</h3>\n<p>Grup seperti everyone, everyone except external users, dan authenticated users sering bersembunyi di dalam grup SharePoint seperti boneka Matryoshka. Keluarkan, lalu ganti dengan grup keamanan Azure ID yang dipetakan ke peran yang benar-benar Anda kelola. Akses tamu harus bersifat sementara dan mudah ditemukan, bukan disisipkan ke grup lama yang dibuat saat peluncuran proyek bertahun-tahun silam.</p>\n<h3>Standarkan tingkat izin</h3>\n<ul>\n<li><strong>Tingkat A, pustaka rahasia:</strong> pemilik, anggota kecil, pembaca terbatas, tanpa tamu.</li>\n<li><strong>Tingkat B, khusus internal:</strong> pemilik, anggota terkelola, pembaca dari grup departemen, tanpa eksternal.</li>\n<li><strong>Tingkat C, internal publik:</strong> pemilik, anggota, pembaca seluruh karyawan, tetap tanpa tamu.</li>\n</ul>\n<h3>Label sensitivitas yang dipasangkan dengan DLP</h3>\n<p>Label bukan stiker, melainkan kunci kebijakan. Jika dibiarkan sebagai hiasan, label tidak melindungi apa pun. Pasangkan label dengan Purview DLP agar maknanya bisa ditegakkan mesin. Contohnya, label SDM rahasia memicu kebijakan DLP yang memblokir pemrosesan oleh agen, meskipun pengguna tetap bisa membaca file tersebut di SharePoint. Label ditambah DLP memisahkan visibilitas manusia dari otomatisasi mesin.</p>\n<p>Ambil pustaka kebijakan SDM berlabel SDM rahasia. Identitas agen SDM diberi akses baca hanya ke pustaka itu, sedangkan pustaka di sekitarnya, seperti draft kerja SDM, diisolasi dengan izin unik. Kebijakan DLP lalu menyatakan bahwa konten berlabel SDM rahasia hanya boleh diproses agen yang ada dalam daftar agen SDM yang disetujui. Agen lain, termasuk agen pengetahuan perusahaan yang umum, diblokir, bahkan jika seseorang tak sengaja memberinya akses.</p>\n<h3>Identitas layanan dengan hak istimewa minimum</h3>\n<p>Jika agen berjalan atas nama siapa pun yang memanggilnya, ia mewarisi akses luas pengguna itu. Bangun agen agar berjalan sebagai identitas layanan dengan hak istimewa paling rendah, lalu padukan dengan label dan DLP agar pengguna berhak istimewa pun tidak bisa menipu agen memproses data di luar batas. Pewarisan di tingkat situs boleh tetap ada untuk hal-hal biasa. Izin unik cukup difokuskan pada pustaka yang menjadi sumber data agen, sehingga beban admin tetap masuk akal.</p>\n\n<h2>Kontrol 3: Gerbang Persetujuan, Batas Lisensi, dan Kebijakan Data</h2>\n<p>Setelah sumber dibatasi dan pewarisan diputus, kunci pintu depannya agar tidak muncul agen bayangan dengan akses berbahaya.</p>\n<h3>Alur persetujuan untuk pembuat agen</h3>\n<p>Permintaan agen baru harus melewati penyetuju yang ditunjuk dari pihak keamanan, kepatuhan, dan pemilik bisnis yang memahami domainnya. Tegakkan konvensi penamaan, pernyataan tujuan, pemilik terdokumentasi, kontak dukungan, dan tanggal kedaluwarsa. Tanpa pemilik atau tujuan, tidak ada persetujuan. Standarkan formulir aplikasi: target audiens, kemampuan bisnis yang dilayani, sumber pengetahuan hingga URL tingkat pustaka, ekspektasi label, perilaku cadangan, pernyataan tidak otoritatif di luar cakupan, dan identitas layanan yang dipakai. Minta pemohon memilih dari template yang sudah disetujui, seperti tanya jawab SDM atau penjelajah kebijakan.</p>\n<h3>Pilihan lisensi</h3>\n<p>Ada dua jalur: Microsoft 365 Copilot berbasis pengguna atau SharePoint bayar sesuai penggunaan. Pada model berbasis pengguna, hanya pengguna berlisensi yang bisa memakai fitur agen, sehingga penyebaran terbatas secara alami. Pada bayar sesuai penggunaan, konsumsi diaktifkan di tingkat penyewa atau lingkungan dengan penagihan terpusat yang fleksibel, tetapi bisa tak terkendali jika ceroboh. Pisahkan lingkungan uji coba dan produksi, aktifkan bayar sesuai penggunaan hanya di tempat keuangan siap menanggungnya, dan atur peringatan biaya. Kebijakan persetujuan perlu menanyakan pusat biaya dan perkiraan profil penggunaan untuk model bayar sesuai penggunaan, atau daftar pengguna berlisensi dan rencana offboarding untuk model berbasis pengguna.</p>\n<h3>Kebijakan data dan batas Purview</h3>\n<p>Gunakan kebijakan data tingkat penyewa di Power Platform untuk membatasi konektor yang boleh berada dalam grup data yang sama dengan SharePoint. Agen yang diatur ditempatkan di grup terbatas yang hanya berisi Microsoft 365 dan API internal yang disetujui. Integrasi tambahan harus lewat tinjauan dan masuk daftar yang diizinkan. Pasangkan dengan Purview untuk menentukan batas data, lokasi konten berlabel sensitif, jalur eksfiltrasi yang dilarang, dan pemantauan yang menandai upaya menjembatani grup.</p>\n<p>Siapkan juga template agen dengan sumber yang telah disetujui: pengetahuan umum dinonaktifkan, cadangan tidak otoritatif, sumber tingkat pustaka, filter metadata wajib, dan identitas layanan yang tepat. Tutup siklusnya dengan kedaluwarsa dan jadwal pembaruan 90 hari. Tanpa pembaruan, nonaktifkan secara otomatis, karena agen dan kasus penggunaannya tidak abadi.</p>\n\n<h2>Kontrol 4: Pola Purview DLP yang Benar-Benar Memblokir Agen</h2>\n<p>Tanpa penegakan waktu nyata, agen hanyalah kurir data berkecepatan tinggi. Agen memproses konten, tidak sekadar melihatnya. Melihat mungkin wajar bagi manusia, tetapi pemrosesan otomatis adalah kelas risiko yang berbeda. Karena itu, kebijakan harus menargetkan lokasi SharePoint yang memberi makan agen, mencocokkan label sensitivitas dan jenis informasi sensitif, lalu memblokir pemrosesan, berbagi, atau pengunduhan oleh agen saat tingkat kepercayaan mencapai ambang batas.</p>\n<h3>Pola yang efektif</h3>\n<ul>\n<li><strong>Label ke blokir:</strong> label sensitivitas dipetakan ke blokir agen, kecuali agen ada dalam daftar yang diizinkan.</li>\n<li><strong>Jenis informasi sensitif:</strong> ID keuangan, pengenal pemerintah, dan istilah kesehatan disetel dengan kepercayaan lebih tinggi.</li>\n<li><strong>EDM:</strong> kecocokan data persis untuk pengenal nyata seperti nomor karyawan dan ID pelanggan, agar positif palsu tidak menenggelamkan Anda.</li>\n<li><strong>Kamus kata kunci:</strong> untuk nama kode proyek kepemilikan, volume rendah dengan sinyal tinggi.</li>\n</ul>\n<p>Untuk pola yang bising, seperti PII generik, naikkan tingkat kepercayaan dan minta beberapa bukti temuan. Untuk data paling berharga, rahasia dagang, dan kecocokan EDM, gunakan tingkat keparahan tinggi dengan blokir instan.</p>\n<h3>Tindakan dan pesan pengguna</h3>\n<p>Gunakan blokir dengan opsi penimpaan dinonaktifkan untuk agen. Manusia mungkin bisa membenarkan pengecualian, sedangkan agen tidak punya konteks bisnis. Jika agen tidak bisa mengambil file, ia tidak bisa membuat jawaban dari file itu. Kirim peringatan ke SecOps dengan konteks kaya: label, pustaka, situs, pola pemicu, dan identitas agen pemanggil. Tulis pesan yang jelas, misalnya bahwa agen tidak diotorisasi memproses konten SDM rahasia dan pengguna dapat bertanya pada agen SDM atau meminta akses. Berikan pintu yang benar, bukan tembok. Jika hanya diblokir, pengguna akan menempelkan data ke Teams.</p>\n<h3>Penerapan bertahap</h3>\n<p>Mulai dalam mode simulasi, sesuaikan ambang batas hingga peringatan mencerminkan kenyataan, dan batasi dulu ke pustaka agen. Perluas hanya setelah sinyal bersih. Gunakan kondisi gabungan, yaitu label ditambah jenis informasi sensitif.</p>\n\n<h2>Kesalahan Umum yang Harus Dihentikan</h2>\n<ul>\n<li>Menumpuk berbagai domain (kebijakan, dokumen teknis, kontrak vendor) dalam satu sumber.</li>\n<li>Membiarkan agen menjelajahi URL eksternal secara bebas, yang memperluas radius dampak dan mempersulit audit.</li>\n<li>Menyerap draft dan file kerja tanpa metadata atau lokasi yang memisahkannya dari materi terbit.</li>\n<li>Mengira \"tersembunyi\" berarti aman. Izin adalah hukumnya.</li>\n<li>Membiarkan situs proyek dengan pewarisan default dan akses tamu yang tetap ada setelah vendor pergi.</li>\n<li>Memasukkan grup M365 yang luas ke pembaca karena lebih mudah.</li>\n<li>Membiarkan uji coba muncul di situs tak terkelola, mengaktifkan bayar sesuai penggunaan tanpa penandaan biaya, atau mengizinkan pengetahuan umum secara default.</li>\n<li>Membatasi DLP hanya ke Exchange dan Teams karena kebijakan SharePoint dianggap berisik, mengecualikan SharePoint demi performa, atau hanya mengandalkan jenis informasi sensitif generik sambil mengabaikan EDM.</li>\n</ul>\n\n<h2>Takeaways Praktis</h2>\n<ul>\n<li>Ingat urutannya: izin lebih dulu, pengambilan data kemudian.</li>\n<li>Ikat sumber ke pustaka tertentu, gunakan folder dangkal dan filter metadata, dan hanya masukkan konten yang disetujui.</li>\n<li>Nonaktifkan pengetahuan AI umum dan konfigurasikan respons cadangan yang jelas.</li>\n<li>Pecah kebutuhan menjadi banyak agen khusus, dengan agen router bila perlu satu pintu masuk.</li>\n<li>Audit pustaka sensitif, putus pewarisan di pustaka penting, dan ganti grup luas dengan grup keamanan Azure ID berbasis peran.</li>\n<li>Jalankan agen sebagai identitas layanan dengan hak istimewa paling rendah.</li>\n<li>Hubungkan label sensitivitas ke kebijakan DLP dengan daftar agen yang diizinkan secara eksplisit.</li>\n<li>Terapkan persetujuan pembuat agen, template yang disetujui, kontrol biaya lisensi, dan kebijakan data konektor.</li>\n<li>Mulai DLP dalam mode simulasi, lalu tegakkan blokir tanpa opsi penimpaan untuk agen.</li>\n<li>Uji dengan kasus nyata: domain yang diizinkan harus terjawab, area terkait harus ditolak, dan agen berlabel yang tidak disetujui harus diblokir dengan pesan jelas.</li>\n</ul>\n\n<h2>Fazit</h2>\n<p>Kebocoran data oleh agen SharePoint hampir selalu berakar pada cakupan yang terlalu luas dan izin warisan yang longgar, bukan pada kecerdasan modelnya. Dengan membatasi sumber di tingkat pustaka, memutus pewarisan, menautkan label ke DLP, mengatur persetujuan, lisensi, dan konektor, serta menegakkan pola Purview yang benar-benar memblokir, Anda mengendalikan apa yang boleh dipertimbangkan agen. Jika sebuah pengujian menghasilkan jawaban yang meyakinkan padahal seharusnya diblokir, perbaiki izin dan pemetaan DLP-nya, supaya kontrol Anda berfungsi dan bukan sekadar hiasan.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Empat Kontrol agar Agen SharePoint Tidak Membocorkan Data",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Batasi sumber",
+     "text": "Ikat agen ke pustaka tertentu, folder dangkal, filter metadata, dan matikan pengetahuan AI umum."
+    },
+    {
+     "kopf": "Putus pewarisan",
+     "text": "Isolasi pustaka sensitif, singkirkan grup luas, dan pakai grup berbasis peran."
+    },
+    {
+     "kopf": "Label plus DLP",
+     "text": "Hubungkan label sensitivitas ke kebijakan DLP dengan daftar agen yang diizinkan."
+    },
+    {
+     "kopf": "Gerbang persetujuan",
+     "text": "Atur persetujuan pembuat agen, pilihan lisensi, kebijakan data konektor, dan pembaruan 90 hari."
+    },
+    {
+     "kopf": "Blokir dengan DLP",
+     "text": "Blokir pemrosesan agen tanpa opsi penimpaan, mulai dari mode simulasi."
+    },
+    {
+     "kopf": "Uji dan ukur",
+     "text": "Pastikan domain terjawab, area terkait ditolak, dan agen tidak disetujui diblokir."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Mengapa agen SharePoint bisa membocorkan data padahal tidak berhalusinasi?",
+    "a": "Penyebabnya biasanya sumber pengetahuan terlalu luas ditambah pewarisan izin yang longgar. Agen membaca Microsoft Graph, sehingga semua konten yang bisa diakses melalui ACL akan terlihat. Akibatnya, model menggabungkan fakta-fakta terdekat dan mengungkapkan data secara tidak sengaja dengan kecepatan masif."
+   },
+   {
+    "q": "Bagaimana cara membatasi sumber pengetahuan agen SharePoint?",
+    "a": "Batasi cakupan pada tingkat pustaka saja, hindari akar situs, gunakan folder dangkal tanpa pengambilan rekursif, dan terapkan filter metadata untuk item disetujui dan diterbitkan. Kecualikan draft, arsip, dan area kerja. Nonaktifkan pengetahuan AI umum dan siapkan respons cadangan yang jelas."
+   },
+   {
+    "q": "Apa peran label sensitivitas dan DLP Purview dalam memblokir agen?",
+    "a": "Label menjelaskan tingkat sensitivitas, sedangkan DLP Purview menentukan tindakan yang diizinkan. Kebijakan dapat memblokir pemrosesan oleh agen yang tidak masuk daftar izin, meski pengguna tetap bisa membaca file di SharePoint. Gunakan blokir tanpa opsi penimpaan, dan mulai dari mode simulasi."
+   },
+   {
+    "q": "Bagaimana mengatur izin dan identitas agar agen SharePoint aman?",
+    "a": "Putus pewarisan izin pada pustaka sensitif dengan keanggotaan minimum, singkirkan grup luas seperti everyone atau authenticated users, dan ganti dengan grup keamanan Azure ID. Jalankan agen sebagai identitas layanan dengan hak istimewa paling rendah, bukan atas nama pengguna yang memanggilnya."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Izin, Pengambilan Data, dan DLP: Peran Masing-Masing",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Filter pengambilan data",
+     "punkte": [
+      "Menentukan apa yang dicari agen",
+      "Memandu pencarian, bukan firewall",
+      "Berupa pustaka, folder, kumpulan file, atau URL",
+      "Bukan batas keamanan"
+     ]
+    },
+    "rechts": {
+     "titel": "Izin dan DLP",
+     "punkte": [
+      "Izin menentukan apakah agen boleh masuk",
+      "Label menjelaskan tingkat sensitivitas",
+      "DLP memutuskan tindakan yang diizinkan",
+      "DLP bisa melarang pemrosesan meski izin mengizinkan"
+     ]
+    }
+   },
+   {
+    "titel": "Checklist Penghentian Kebocoran Agen SharePoint",
+    "typ": "checkliste",
+    "punkte": [
+     "Batasi sumber pengetahuan pada tingkat pustaka, bukan akar situs",
+     "Matikan pengetahuan AI umum dan siapkan respons cadangan",
+     "Putus pewarisan izin di pustaka yang menyimpan data paling berharga",
+     "Singkirkan grup luas seperti everyone dan authenticated users",
+     "Jalankan agen dengan identitas layanan berhak istimewa minimum",
+     "Pasangkan label sensitivitas dengan Purview DLP, mulai dari mode simulasi",
+     "Terapkan kedaluwarsa dan jadwal pembaruan 90 hari untuk setiap agen"
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Menurut artikel, mengapa agen SharePoint biasanya membocorkan data?",
+    "opts": [
+     "Model berhalusinasi karena kekurangan data pelatihan yang relevan",
+     "Sumber pengetahuan terlalu luas dan pewarisan izin terlalu longgar",
+     "Agen sengaja mengabaikan label sensitivitas yang terpasang pada file",
+     "Microsoft Graph tidak mampu membaca daftar kontrol akses"
+    ],
+    "a": 1,
+    "why": "Artikel menyebut penyebabnya adalah selang pemadam kebakaran: cakupan sumber terlalu luas ditambah pewarisan izin longgar, bukan halusinasi."
+   },
+   {
+    "q": "Apa hubungan antara filter pengambilan data dan keamanan menurut artikel?",
+    "opts": [
+     "Filter pengambilan data berfungsi sebagai firewall yang menggantikan izin",
+     "Filter pengambilan data otomatis memutus pewarisan izin pada pustaka",
+     "Filter hanya memandu pencarian, sedangkan izin menentukan apakah agen boleh masuk",
+     "Filter pengambilan data lebih penting daripada izin dan label sensitivitas"
+    ],
+    "a": 2,
+    "why": "Artikel menegaskan bahwa filter memandu pencarian dan bukan firewall; izin menentukan akses, jadi patuhi izin dulu, baru pengambilan data."
+   },
+   {
+    "q": "Bagaimana artikel menyarankan penggunaan label SDM rahasia bersama Purview DLP?",
+    "opts": [
+     "Label memblokir pengguna manusia membaca file di SharePoint",
+     "Label hanya berfungsi sebagai stiker visual untuk membantu pencarian",
+     "Label menghapus otomatis file rahasia dari pustaka setelah 90 hari",
+     "Label memicu DLP yang memblokir pemrosesan agen, meski manusia tetap bisa membaca"
+    ],
+    "a": 3,
+    "why": "Label plus DLP memisahkan visibilitas manusia dari otomatisasi mesin: agen diblokir memproses konten, sementara pengguna tetap bisa membaca file."
+   },
+   {
+    "q": "Pengaturan tindakan DLP manakah yang direkomendasikan untuk agen?",
+    "opts": [
+     "Blokir dengan opsi penimpaan dinonaktifkan, karena agen tidak punya konteks bisnis",
+     "Hanya peringatan tanpa blokir, agar pengguna tidak terganggu",
+     "Blokir dengan opsi penimpaan aktif agar agen bisa membenarkan pengecualian",
+     "Blokir hanya pada jam kerja dan izinkan pemrosesan di luar jam itu"
+    ],
+    "a": 0,
+    "why": "Manusia mungkin bisa membenarkan pengecualian, tetapi agen tidak punya konteks bisnis, sehingga penimpaan harus dinonaktifkan."
+   }
+  ]
+ },
+ "it": {
+  "html": "<p>Quando un agente SharePoint espone informazioni che non dovrebbe, di solito il modello linguistico non ha \"allucinato\" nulla. Gli è stato dato un idrante, con la sola richiesta di indicare una fonte. Fonti di conoscenza troppo ampie e permessi ereditati troppo permissivi producono una diffusione accidentale dei dati, e a velocità di macchina.</p>\n<p>La soluzione non ha nulla di magico: è disciplina. Questo articolo spiega come gli agenti vedono davvero i dati, perché il grounding non isola i permessi e quali controlli applicare per contenere i rischi senza ridurre l'utilità dell'agente.</p>\n\n<h2>Come gli agenti SharePoint vedono davvero i tuoi dati</h2>\n<p>Gli agenti non leggono le tue intenzioni: leggono Microsoft Graph. Se un contenuto è accessibile attraverso le ACL dell'identità dell'agente, l'agente può vederlo. Estendere troppo una fonte di conoscenza equivale a costruire un bypass attorno a permessi pensati con cura.</p>\n\n<h3>Persona utente e filtri di recupero</h3>\n<p>Un agente si compone di due elementi: una persona utente e dei filtri di recupero. La persona corrisponde all'identità e ai suoi permessi su SharePoint, OneDrive e le altre superfici connesse. Il recupero è ciò a cui l'agente è stato puntato: una libreria, una cartella, un insieme di file o alcuni URL.</p>\n<p>L'errore più diffuso è scambiare i filtri di recupero per confini di sicurezza. Il recupero dice \"cerca prima qui\"; i permessi dicono \"puoi entrare\". L'agente rispetta prima i permessi e poi il recupero. Se ricordi una sola cosa, ricorda quest'ordine.</p>\n\n<h3>Grounding, etichette e DLP</h3>\n<p>Il grounding non annulla i diritti di accesso: filtra soltanto ciò che è pertinente. Se l'identità dell'agente può vedere più librerie adiacenti perché l'ereditarietà è rimasta intatta, il modello può combinare informazioni vicine in un'unica risposta. Per questo un progetto pilota su una sola libreria può citare all'improvviso una policy HR di una libreria vicina.</p>\n<p>Le etichette di sensibilità classificano i contenuti, mentre il DLP di Purview impone il comportamento quando quel contenuto viene consultato o elaborato. Un modello mentale utile:</p>\n<ul>\n<li>l'agente è uguale a persona utente più filtro di recupero;</li>\n<li>i permessi filtrano per primi, il recupero viene dopo;</li>\n<li>le etichette descrivono la sensibilità, il DLP decide quali azioni sono consentite;</li>\n<li>il DLP può negare l'elaborazione anche quando permessi e grounding dicono di sì.</li>\n</ul>\n\n<h2>Delimitare le fonti di conoscenza come un contratto</h2>\n<p>L'ambito di un agente va scritto come una clausola legale: preciso, limitato e intollerante all'ambiguità. Fonti ampie creano interferenze, e il modello unisce volentieri verità vicine in una sola risposta.</p>\n\n<h3>La regola: fonti solo a livello di libreria</h3>\n<p>Niente siti interi, niente \"tutto ciò che sta sotto questo hub\". Una singola libreria di documenti per ogni scopo dichiarato: se un agente risponde alle FAQ di prodotto, riceve la libreria delle FAQ di prodotto e nient'altro. Ogni elemento in più è un rischio latente.</p>\n<ul>\n<li><strong>Evita le root dei siti</strong> e indica sempre un percorso concreto.</li>\n<li><strong>Limita le cartelle</strong>: se servono, resta a un livello superficiale, senza inclusioni ricorsive.</li>\n<li><strong>Imponi filtri sui metadati</strong>: acquisisci solo elementi con stato approvato, versione pubblicata, dipartimento specifico. Senza metadati, niente acquisizione.</li>\n<li><strong>Escludi bozze, archivi e sottostrutture di lavoro</strong>; se non puoi escluderli, spostali altrove.</li>\n</ul>\n\n<h3>Limiti delle piattaforme e agenti specializzati</h3>\n<p>Le piattaforme impongono tetti pratici su file, cartelle e URL per ogni fonte. Vanno trattati come limiti di governance, non come semplici note sulle prestazioni. In Copilot Studio e nei builder di agenti SharePoint conviene verificarli prima di andare live, con una fonte pilota che rispecchi la distribuzione reale. Se l'acquisizione rallenta, va in timeout o salta file, la risposta giusta non è allargare l'ambito alla root del sito ma suddividerlo: un dominio per fonte, una fonte per agente.</p>\n<p>Molti agenti ristretti battono sempre un unico agente enciclopedico. Puoi costruirne uno per le policy HR, uno per i benefit, uno per i viaggi, ciascuno con la propria libreria e i propri filtri. Se serve un unico punto di accesso, un agente router può girare le richieste allo specialista giusto.</p>\n\n<h3>Conoscenza generale e risposte di fallback</h3>\n<p>Per gli agenti regolamentati disabilita la conoscenza AI generale: se l'agente è autorevole per un dominio, fuori da quel dominio deve tacere. Configura un fallback chiaro e umile, del tipo \"non sono autorizzato a rispondere su questo argomento; ecco le fonti approvate che copro\". Senza fallback il modello riempie i vuoti con conoscenze generali che ignorano la tua postura di conformità.</p>\n<p>Conta anche la cura dei contenuti: serve un flusso di approvazione a monte dell'acquisizione, e vanno inseriti solo documenti che hanno superato revisione, verifica di precisione, attualità e classificazione della sensibilità. Se non puoi dimostrare la provenienza di un documento, non deve finire nelle risposte di un agente.</p>\n\n<h2>Interrompere l'ereditarietà dei permessi</h2>\n<p>Una conoscenza delimitata serve a poco se le porte sono spalancate. I permessi ereditati sono un'escalation silenziosa: un sito \"solo interno\" può contenere un gruppo con tutti gli utenti autenticati, ospiti dimenticati o gruppi di progetto mai ripuliti.</p>\n\n<h3>Un audit scomodo</h3>\n<p>Dividi le librerie sensibili in tre categorie: da isolare, condivisibili e sconosciute. Le sconosciute sono un segnale d'allarme: se non riesci a spiegare in una frase chi ha accesso, la libreria va isolata finché non si dimostra il contrario. Interrompi l'ereditarietà non a livello di sito ma a livello della libreria che custodisce i documenti sensibili.</p>\n\n<h3>Membership minima e gruppi sicuri</h3>\n<p>Punta a una membership minima ed esplicita: un piccolo gruppo di proprietari, un gruppo definito di membri e lettori solo dove il business lo richiede. Rimuovi gruppi come \"tutti\", \"tutti tranne gli esterni\" e \"utenti autenticati\", e sostituiscili con gruppi di sicurezza Azure mappati su ruoli realmente gestiti. Gli ospiti devono essere eccezioni temporanee e identificabili, mai inseriti in un gruppo SharePoint creato anni fa.</p>\n\n<h3>Tre livelli di autorizzazione</h3>\n<ul>\n<li><strong>Livello A, riservato:</strong> proprietari, membri e un piccolo gruppo di lettori, senza ospiti.</li>\n<li><strong>Livello B, solo uso interno:</strong> proprietari, membri e gruppi di lettori gestiti, come il gruppo di dipartimento, senza esterni.</li>\n<li><strong>Livello C, interno pubblico:</strong> proprietari, membri e lettori tra tutti i dipendenti, ancora senza ospiti.</li>\n</ul>\n<p>Il modello è semplice di proposito, perché deve essere applicato da persone che si distraggono facilmente. L'ereditarietà può restare per i contenuti banali: le autorizzazioni univoche vanno riservate alle librerie che alimentano gli agenti.</p>\n\n<h2>Etichette di sensibilità e DLP: separare visibilità umana e automazione</h2>\n<p>Le etichette non sono adesivi, sono chiavi di policy. L'errore tipico è lasciarle puramente decorative. Vanno allineate alle policy DLP di Purview, così che diventino qualcosa che le macchine possono far rispettare.</p>\n<p>Un esempio: l'etichetta \"HR riservato\" attiva una policy DLP che blocca l'elaborazione da parte dell'agente anche se l'utente può aprire il file. Le etichette e il DLP separano la visibilità umana dall'automazione.</p>\n\n<h3>Il caso concreto della libreria HR</h3>\n<p>Hai una libreria di policy HR etichettata \"HR riservato\" e un agente HR che deve rispondere a domande basate su di essa. All'identità di quell'agente viene concesso l'accesso in lettura a quella sola libreria. Le librerie adiacenti, come le bozze di lavoro HR, sono isolate con permessi univoci che l'identità dell'agente non possiede. La policy DLP consente l'elaborazione dell'etichetta \"HR riservato\" solo agli agenti HR approvati. Ogni altro agente, compreso il generalista di conoscenza aziendale, viene bloccato anche se qualcuno ha concesso per errore l'accesso.</p>\n<p>Un ultimo punto riguarda l'identità: non creare agenti che operano come chiunque li richiami. Costruiscili con un'identità di servizio a privilegi limitati e abbina le etichette al DLP, così nemmeno gli utenti privilegiati possono indurre un agente a elaborare dati non autorizzati.</p>\n\n<h2>Governance: approvazioni, licenze e policy sui dati</h2>\n<p>Se chiunque può creare un agente, nascono agenti ombra con accessi impropri. La soluzione è noiosa ma efficace.</p>\n\n<h3>Flusso di approvazione</h3>\n<p>Le richieste passano da approvatori designati: sicurezza, conformità e un responsabile aziendale che conosca il dominio. Il modulo standard richiede:</p>\n<ul>\n<li>pubblico di riferimento e capacità aziendale servita;</li>\n<li>fonti di conoscenza esatte, con URL fino al livello di libreria;</li>\n<li>aspettative di etichettatura e comportamento di fallback fuori ambito;</li>\n<li>identità di servizio da utilizzare, proprietario documentato, contatto di supporto e data di scadenza.</li>\n</ul>\n<p>Offri modelli preapprovati, per esempio per le policy HR, con impostazioni predefinite corrette: conoscenza generale disabilitata, fallback non autorevole, fonti a livello di libreria, filtri di metadati obbligatori e identità di servizio adeguata.</p>\n\n<h3>Licenze come superficie di controllo</h3>\n<p>Le strade sono due: Microsoft 365 Copilot basato sull'utente oppure il consumo a pagamento (pay as you go). Nel primo caso solo gli utenti con licenza usano le funzioni di agente, il che limita la proliferazione. Nel secondo il consumo si abilita a livello di tenant o ambiente, con fatturazione centralizzata: flessibile, ma rischioso se non presidiato. Servono ambienti separati per pilota e produzione, avvisi di costo, un centro di costo e un responsabile che firmi la spesa.</p>\n\n<h3>Policy sui dati di Power Platform</h3>\n<p>Le policy sui dati a livello di tenant di Power Platform limitano i connettori ammessi. Gli agenti regolamentati vivono in un gruppo ristretto: solo Microsoft 365 e API interne approvate, niente web casuale, niente servizi consumer. Ogni integrazione necessaria passa da una revisione e finisce nella lista dei consentiti. Purview completa il quadro definendo i confini dei dati, le posizioni dei contenuti sensibili, i percorsi di esfiltrazione vietati e il monitoraggio dei tentativi di aggirare i controlli.</p>\n<p>Le approvazioni devono avere una scadenza, con rinnovo a 90 giorni: senza rinnovo, l'agente si disabilita automaticamente.</p>\n\n<h2>Purview DLP che blocca davvero gli agenti</h2>\n<p>Senza un'applicazione in tempo reale, gli agenti sono corrieri di dati ad alta velocità. Gli agenti elaborano i contenuti, non si limitano a mostrarli, e l'elaborazione automatizzata è una classe di rischio diversa dalla visualizzazione umana.</p>\n\n<h3>Struttura di base</h3>\n<p>Crea policy che puntino alle posizioni SharePoint che alimentano gli agenti, corrispondano alle etichette di sensibilità e ai tipi di informazioni sensibili, e blocchino elaborazione, condivisione e download da parte degli agenti.</p>\n<ul>\n<li><strong>Etichette di sensibilità:</strong> mappate al blocco dell'agente, a meno che non sia in lista consentita.</li>\n<li><strong>Tipi di informazioni sensibili:</strong> identificatori finanziari, governativi e termini sanitari, con soglie di confidenza più alte per i modelli rumorosi.</li>\n<li><strong>Exact Data Match (EDM):</strong> per i tuoi identificatori reali, come numeri di dipendenti o clienti, per ridurre i falsi positivi.</li>\n<li><strong>Dizionari di parole chiave:</strong> per i nomi in codice di progetti proprietari, a basso volume e alto segnale.</li>\n</ul>\n\n<h3>Azioni che contano</h3>\n<p>Per gli agenti conviene il blocco: le persone possono giustificarsi, le macchine no, perché non hanno contesto aziendale ma solo trigger. Metti in quarantena o limita il download quando il flusso si attiva: se l'agente non può recuperare il file, non può basare una risposta su di esso. Avvisa il SecOps con contesto ricco: etichetta della libreria, modello che ha attivato la regola, identità dell'agente chiamante.</p>\n\n<h3>Messa a punto e messaggi per l'utente</h3>\n<p>Parti in modalità simulazione su siti non di produzione e ottimizza le soglie finché gli avvisi riflettono la realtà. Limita rigorosamente le librerie degli agenti all'inizio ed espandi solo quando il segnale è pulito. Usa condizioni combinate, per esempio etichetta più tipo di informazione sensibile: due serrature, una porta.</p>\n<p>Anche i messaggi contano. Un testo come \"questo agente non è autorizzato a elaborare contenuti HR riservati; rivolgiti all'agente HR o richiedi l'accesso tramite il canale previsto\" offre la porta giusta. Un semplice \"bloccato\" spinge a incollare i dati altrove, per esempio su Teams.</p>\n\n<h2>Errori comuni e come testare</h2>\n<ul>\n<li>Accumulare domini misti in un'unica fonte: policy, documenti tecnici e contratti con i fornitori vanno divisi per scopo.</li>\n<li>Lasciare che gli agenti analizzino URL web arbitrari: gli URL esterni ampliano il raggio d'azione e riducono l'auditabilità.</li>\n<li>Ingerire bozze e archivi di chat: il modello non distingue i contenuti completi da quelli pubblicati, se non imponi metadati e posizioni separate.</li>\n<li>Credere che \"nascosto\" significhi protetto: è una scelta di interfaccia, i permessi sono la regola.</li>\n<li>Lasciare i siti di progetto con l'ereditarietà predefinita o l'accesso guest attivo dopo la fine di una collaborazione.</li>\n<li>Inserire ampi gruppi M365 tra i lettori \"perché era più facile\".</li>\n<li>Far nascere i piloti in siti non gestiti, attivare il pay as you go senza tag di costo né avvisi, concedere il ruolo di maker a chiunque.</li>\n<li>Limitare il DLP a Exchange e Teams perché le policy di SharePoint erano rumorose: erano rumorose perché non erano state ottimizzate. Affidarsi solo ai tipi generici ignorando EDM è un errore analogo.</li>\n</ul>\n\n<h3>Come verificare che funzioni</h3>\n<p>Poni all'agente domande a cui deve rispondere senza esitazione e poi provocalo con richieste che deve rifiutare. Se risponde fuori dominio, i perimetri o il fallback sono sbagliati. Se rifiuta nel dominio, filtri o approvazioni sono troppo restrittivi. La calibrazione procede per sottrazione: rimuovi percorsi, riduci l'ambiguità dei metadati e continua a segmentare finché le risposte diventano prevedibili.</p>\n<p>Un test di controllo: un agente non autorizzato prova a rispondere a una domanda che richiede un file riservato. Il risultato atteso è un blocco immediato, un messaggio istruttivo e un avviso ad alta gravità. Se ottieni una risposta, il DLP è solo decorativo. Monitora tre metriche:</p>\n<ul>\n<li><strong>Capacità di risposta:</strong> percentuale di query nel dominio risolte con citazioni della libreria prevista.</li>\n<li><strong>Contenimento:</strong> percentuale di risposte che citano solo fonti approvate.</li>\n<li><strong>Qualità del silenzio:</strong> chiarezza e frequenza del fallback quando l'agente è interrogato fuori dominio.</li>\n</ul>\n\n<h2>Takeaway pratici</h2>\n<ul>\n<li>Ricorda l'ordine: permessi prima, recupero dopo, DLP come ultima parola.</li>\n<li>Usa solo fonti a livello di libreria, cartelle poco profonde e metadati rigorosi.</li>\n<li>Ammetti solo contenuti approvati e disabilita la conoscenza generale per gli agenti regolamentati.</li>\n<li>Preferisci più agenti specializzati, con un router se serve un accesso unico.</li>\n<li>Interrompi l'ereditarietà sulle librerie che alimentano gli agenti e sostituisci i gruppi ampi con gruppi di sicurezza basati sui ruoli.</li>\n<li>Assegna agli agenti un'identità di servizio e collega le etichette di sensibilità a policy DLP con condizioni esplicite.</li>\n<li>Richiedi approvazione, scelta della licenza con controllo dei costi, policy sui dati e scadenza con rinnovo a 90 giorni.</li>\n<li>Parti dal DLP in modalità simulazione, poi passa a blocco, quarantena e avvisi SecOps.</li>\n<li>Testa i casi limite e misura capacità di risposta, contenimento e qualità del silenzio.</li>\n</ul>\n\n<h2>Conclusione</h2>\n<p>Un agente SharePoint che perde dati non è un modello fuori controllo: è il risultato di un ambito troppo largo che incontra permessi ereditati troppo permissivi. Quattro livelli di controllo lavorano insieme: fonti delimitate, ereditarietà interrotta con etichette collegate al DLP, governance di approvazioni, licenze e policy sui dati, e regole Purview DLP che bloccano davvero l'elaborazione. Con questi livelli, l'agente resta utile dentro il proprio perimetro e le risposte diventano prevedibili.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Agenti SharePoint sicuri: i quattro piani di controllo",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Delimita le fonti",
+     "text": "Solo librerie specifiche, cartelle poco profonde, metadati rigorosi, contenuti approvati e conoscenza generale disabilitata."
+    },
+    {
+     "kopf": "Interrompi l'ereditarietà",
+     "text": "Permessi univoci sulle librerie degli agenti, gruppi di sicurezza basati sui ruoli, niente gruppi ampi né ospiti."
+    },
+    {
+     "kopf": "Etichetta e collega al DLP",
+     "text": "Le etichette di sensibilità diventano regole applicabili e separano la visibilità umana dall'elaborazione dell'agente."
+    },
+    {
+     "kopf": "Governa la creazione",
+     "text": "Approvazione, scelta della licenza, policy sui dati e scadenza con rinnovo a 90 giorni."
+    },
+    {
+     "kopf": "Blocca con Purview DLP",
+     "text": "Blocco, quarantena e avvisi SecOps per gli agenti non autorizzati, con messaggi chiari agli utenti."
+    },
+    {
+     "kopf": "Testa e misura",
+     "text": "Verifica i casi limite e monitora capacità di risposta, contenimento e qualità del silenzio."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Perché un agente SharePoint può esporre dati riservati anche se il modello non ha allucinato?",
+    "a": "Perché l'agente vede tutto ciò che l'identità con cui opera può raggiungere tramite le ACL di Microsoft Graph. Fonti di conoscenza troppo ampie e permessi ereditati troppo permissivi causano una diffusione accidentale dei dati, a velocità di macchina, senza alcuna allucinazione."
+   },
+   {
+    "q": "I filtri di recupero di un agente SharePoint sono un confine di sicurezza?",
+    "a": "No. Il recupero indica solo dove cercare per prima cosa, mentre i permessi stabiliscono a cosa l'agente può accedere. L'agente rispetta prima i permessi e poi il recupero. Il grounding filtra ciò che è pertinente, ma non annulla i diritti di accesso."
+   },
+   {
+    "q": "Come si dovrebbero delimitare le fonti di conoscenza di un agente SharePoint?",
+    "a": "Usando fonti solo a livello di libreria, una per ogni scopo dichiarato. Evita root dei siti e hub interi, limita le cartelle a un livello superficiale, imponi filtri sui metadati come lo stato approvato ed escludi bozze e archivi. Se l'ambito è troppo grande, suddividilo tra più agenti."
+   },
+   {
+    "q": "Come funzionano insieme etichette di sensibilità e DLP di Purview per bloccare un agente?",
+    "a": "Le etichette classificano i contenuti, mentre il DLP di Purview decide quali azioni sono consentite. Una policy può bloccare l'elaborazione di contenuti con etichetta \"HR riservato\" da parte di qualsiasi agente non approvato, anche se l'utente può aprire il file o l'accesso è stato concesso per errore."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Recupero e permessi: due logiche diverse",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Filtri di recupero",
+     "punkte": [
+      "Dicono all'agente \"cerca prima qui\"",
+      "Puntano a una libreria, una cartella, file o URL",
+      "Filtrano solo ciò che è pertinente",
+      "Non sono un confine di sicurezza"
+     ]
+    },
+    "rechts": {
+     "titel": "Permessi",
+     "punkte": [
+      "Dicono \"puoi entrare\"",
+      "Si basano sulle ACL dell'identità dell'agente",
+      "L'agente li rispetta per primi",
+      "Con l'ereditarietà intatta possono esporre librerie adiacenti"
+     ]
+    }
+   },
+   {
+    "titel": "Governance degli agenti: i numeri e le regole chiave",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "90 giorni",
+      "text": "Rinnovo delle approvazioni: senza rinnovo l'agente si disabilita automaticamente."
+     },
+     {
+      "wert": "3 livelli",
+      "text": "Autorizzazioni A riservato, B solo uso interno, C interno pubblico."
+     },
+     {
+      "wert": "1 libreria",
+      "text": "Una singola libreria di documenti per ogni scopo dichiarato dell'agente."
+     },
+     {
+      "wert": "3 categorie",
+      "text": "Librerie sensibili: da isolare, condivisibili e sconosciute."
+     },
+     {
+      "wert": "2 serrature",
+      "text": "Condizioni combinate, come etichetta più tipo di informazione sensibile, per una porta."
+     }
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Quale ordine seguono permessi e recupero quando un agente SharePoint accede ai dati?",
+    "opts": [
+     "Prima il recupero, poi i permessi dell'identità dell'agente",
+     "Prima i permessi, poi il recupero come filtro di pertinenza",
+     "Permessi e recupero vengono valutati solo dal DLP di Purview",
+     "Il recupero sostituisce i permessi quando la fonte è delimitata"
+    ],
+    "a": 1,
+    "why": "Il recupero indica dove cercare, i permessi stabiliscono se si può entrare. L'agente rispetta prima i permessi e poi il recupero."
+   },
+   {
+    "q": "Cosa si dovrebbe fare se l'acquisizione di una fonte rallenta o salta file?",
+    "opts": [
+     "Allargare l'ambito alla root del sito per includere tutto",
+     "Disabilitare i filtri sui metadati per velocizzare il processo",
+     "Suddividere l'ambito: un dominio per fonte, una fonte per agente",
+     "Attivare la conoscenza AI generale come compensazione dei file mancanti"
+    ],
+    "a": 2,
+    "why": "I limiti delle piattaforme sono limiti di governance: la risposta corretta è segmentare le fonti, non allargare l'ambito alla root del sito."
+   },
+   {
+    "q": "Come dovrebbe comportarsi il DLP con l'etichetta \"HR riservato\" nel caso della libreria HR?",
+    "opts": [
+     "Consentire l'elaborazione solo agli agenti HR approvati, bloccando tutti gli altri",
+     "Consentire l'elaborazione a qualsiasi agente la cui identità abbia accesso",
+     "Bloccare l'apertura del file anche agli utenti umani autorizzati",
+     "Limitarsi a mostrare l'etichetta come adesivo puramente informativo"
+    ],
+    "a": 0,
+    "why": "Il DLP separa visibilità umana e automazione: solo gli agenti HR approvati elaborano l'etichetta, gli altri sono bloccati anche con accesso concesso per errore."
+   },
+   {
+    "q": "Perché per gli agenti conviene usare azioni di blocco nelle policy DLP?",
+    "opts": [
+     "Perché il blocco riduce i costi di licenza del pay as you go",
+     "Perché le macchine, a differenza delle persone, possono sempre giustificarsi",
+     "Perché il blocco elimina la necessità di avvisare il SecOps",
+     "Perché le macchine non hanno contesto aziendale ma solo trigger"
+    ],
+    "a": 3,
+    "why": "Le persone possono giustificarsi, le macchine no: non hanno contesto aziendale ma solo trigger, quindi il blocco è la scelta più adatta."
+   }
+  ]
+ },
+ "ja": {
+  "html": "<p>SharePoint のエージェントが情報を漏らすのは、エージェントが誤作動したからではありません。ナレッジソースの範囲が広すぎる、権限の継承が緩すぎる、といった設計の側に原因があります。その状態では、機械のスピードで意図しない情報漏洩が起こります。</p>\n<p>対策に魔法はありません。必要なのは、範囲の規律、権限の強化、そしてベースラインとして展開できる強力な DLP です。本記事では、エージェントがデータをどう見ているかを押さえたうえで、ナレッジソースの限定、継承の解除、承認ゲート、Purview DLP の使い方を順に整理します。</p>\n\n<h2>SharePoint エージェントはデータをどう見ているのか</h2>\n<p>エージェントはユーザーの意図を読み取るのではなく、Microsoft Graph を読み取ります。コンテンツが ACL を通じてアクセス可能であれば、エージェントはそれを参照できます。ナレッジソースの範囲を広げることは、丁寧にラベル付けした領域の周りにバイパスを作るようなものです。</p>\n<p>エージェントを構成する要素は大きく二つあります。</p>\n<ul>\n<li><strong>ユーザーペルソナ</strong>:SharePoint や OneDrive など接続されたサーフェス全体における ID と、その権限に相当します。</li>\n<li><strong>検索フィルター</strong>:ライブラリ、フォルダー、ファイル群、特定の URL など、エージェントが参照する対象を指定するものです。</li>\n</ul>\n<p>多くの人が検索フィルターをセキュリティ境界と混同しますが、両者は別物です。検索は「どこを探すか」を指示し、権限は「アクセスを許すかどうか」を決めます。エージェントはまず権限に従い、次に検索に従います。この順序は必ず覚えておいてください。</p>\n<p>センシティビティラベルと Purview DLP は、コンテンツの上に置かれる標識とガードレールです。ラベルは分類を担い、DLP は特定のコンテンツにアクセスまたは処理したときの動作を強制します。</p>\n<p>見落とされがちな点があります。グラウンディングは権限を上書きせず、関連性をフィルタリングするだけです。継承をそのままにして、エージェントの ID が隣接する複数のライブラリを見られる状態だと、LLM は近くの情報を結び付けて回答を組み立てます。単一ライブラリのパイロットが隣のライブラリの人事ポリシーを引用した、というのはこのためです。何も隔離されていなかったのです。</p>\n\n<h2>ナレッジソースを契約書のように限定する</h2>\n<p>最初に行うべきは、ナレッジソースの範囲を法律文書のように厳密に書くことです。広いソースはクロストークを生み、モデルは近くの情報を喜んで縫い合わせます。</p>\n<h3>スコープのルール</h3>\n<ul>\n<li>ソースはライブラリ単位にします。サイト全体や「このハブの下すべて」は避けます。</li>\n<li>宣言した目的ごとにドキュメントライブラリを一つ割り当てます。製品 FAQ に答えるエージェントなら、製品 FAQ ライブラリだけを取得します。</li>\n<li>サイトルートは避け、具体的なライブラリパスを指定します。</li>\n<li>フォルダーの深さを制限し、使う場合も浅い階層に固定します。</li>\n<li>メタデータフィルターで、ステータスが承認済み、バージョンが公開済み、部門が該当部門、といったアイテムだけを取り込みます。メタデータがないものは取り込みません。</li>\n<li>下書き、アーカイブ、作業用のサブツリーは除外します。除外できない場合は移動します。これもガバナンスです。</li>\n</ul>\n<p>検索フィルターは検索を導きますが、ファイアウォールにはなりません。メタデータが守ってくれると期待して、サイトルートを指しサブフォルダーを足すだけでは不十分です。</p>\n<h3>上限は「広げる」のではなく「分割する」</h3>\n<p>プラットフォームには、ナレッジソースごとのファイル、フォルダー、URL に実質的な上限があります。これは単なる性能上の注意ではなく、ガバナンスのガードレールです。上限に達したからといって範囲をサイトルートまで広げるのは、情報漏洩の始まりとなる誤った本能です。</p>\n<p>Copilot Studio や SharePoint Agent Builder では、本番稼働前に実際の上限をテストします。承認済み PDF 数百件、docx のプレイブック、PowerPoint 数件といった実際に近い構成でパイロットソースを作ります。取り込みが遅くなる、タイムアウトする、ファイルがスキップされるといった兆候が出たら、範囲を広げずに分割します。ソースごとにドメイン一つ、エージェントペルソナごとにソース一つが基本です。</p>\n<p>何でも答える百科事典のようなボットより、狭いエージェントを複数組み合わせるほうが優れています。人事ポリシー、福利厚生、出張といった単位で、それぞれ専用のライブラリと強制フィルターを持たせます。入口を一本にしたい場合は、適切な専門エージェントに問い合わせを振り分けるルーターエージェントを置きます。200種類ものドメインのファイルを一つのエージェントに詰め込むと、回答が委員会の議事録のようになります。</p>\n<h3>一般知識を無効にし、フォールバックを設定する</h3>\n<p>規制対象のエージェントでは、一般的な AI 知識を無効にします。権限を持つドメインの外では沈黙すべきだからです。ギャップを一般知識で埋めると、ラベルや DLP の意図を無視した、検証できない情報に戻ってしまいます。代わりに、権威のないフォールバック応答として「その件については回答する権限がありません。対応している承認済みソースは次のとおりです」といった、明確で控えめな文面を設定します。</p>\n<p>公式ソースを指定する以上、取り込みの上流に承認ワークフローも必要です。正確性、鮮度、機密ラベルが確認されたコンテンツだけを追加し、出所を証明できない文書はエージェントに扱わせません。</p>\n\n<h2>継承を解除し、権限を最小限にする</h2>\n<p>ナレッジソースを絞っても、ドアが開いたままでは意味がありません。SharePoint の継承された権限は、サイズが合わず穴だらけの「お下がりのセーター」のようなものです。エージェントは楽観ではなく ACL を尊重するため、重要な場所では継承を止め、固有の権限を割り当てます。</p>\n<h3>監査から始める</h3>\n<p>機密性の高いライブラリを三つのバケットに分けます。</p>\n<ol>\n<li><strong>隔離必須</strong></li>\n<li><strong>共有可能</strong></li>\n<li><strong>不明</strong></li>\n</ol>\n<p>「不明」は危険信号です。誰がアクセスできるかを一文で説明できないライブラリは、別途証明されるまで「隔離必須」に分類します。そして隔離必須の各ライブラリで、サイトではなくライブラリ単位で継承を解除します。目指すのは、少数の所有者グループ、定義されたメンバーグループ、必要な場合のみの閲覧者という明示的で最小限のメンバーシップです。</p>\n<h3>広範なグループを排除する</h3>\n<p>「全員」「外部ユーザーを除く全員」「認証済みユーザー」といった広範なグループは、SharePoint グループの中にマトリョーシカのように潜んでいることがあります。ゲストユーザーがプロジェクトグループに居座り続けるケースもあります。これらを取り除き、実際に管理する役割にマッピングしたグループに置き換えます。グループ名に「全員」を意味する語が含まれていれば、エージェントはそれをビュッフェのように扱います。</p>\n<p>権限は次のような階層に標準化すると、推論しやすくなります。</p>\n<ul>\n<li><strong>階層 A(機密ライブラリ)</strong>:所有者、メンバー、小規模な閲覧者、または厳密に範囲を絞ったグループ。ゲストなし。</li>\n<li><strong>階層 B(内部専用ライブラリ)</strong>:所有者、メンバー、管理された閲覧者、部門グループ。外部なし。</li>\n<li><strong>階層 C(社内公開ライブラリ)</strong>:所有者、メンバー、閲覧者は全従業員。ゲストなし。</li>\n</ul>\n<p>日常的な用途のサイトでは継承を残してかまいません。カフェテリアのメニューに外科手術は不要です。固有の権限は、エージェントに情報を供給するライブラリのために取っておきます。</p>\n\n<h2>ラベルと DLP で人間の閲覧とエージェントの処理を切り離す</h2>\n<p>ラベルはステッカーではなくポリシーのキーです。機密、制限付き、パブリックなどのラベルを動作にマッピングします。ラベルを飾りにしてしまうのが、管理者が陥りやすい落とし穴です。Purview DLP と結び付けることで、ラベルに機械が強制できる意味を持たせます。</p>\n<p>たとえば機密性の高い人事情報では、ユーザーが SharePoint でファイルを読める場合でも、エージェントの処理アクションをブロックする DLP ポリシーを発動させられます。これにより、人間の可視性と機械による自動化を切り離せます。</p>\n<h3>人事ライブラリの構成例</h3>\n<ul>\n<li>「機密性の高い人事情報」ラベルを付けた人事ポリシーライブラリを用意します。</li>\n<li>人事エージェントの ID には、そのライブラリへの読み取りアクセスのみを付与します。</li>\n<li>人事の作業ドラフトなど隣接するライブラリは、エージェント ID が持たない固有の権限で分離します。</li>\n<li>DLP ポリシーでは、ラベルが該当し、アクセス手段がエージェント処理の場合、承認済みの人事エージェントだけを許可します。社内知識を扱う汎用エージェントを含む他のエージェントはブロックされます。</li>\n</ul>\n<h3>エージェントはサービス ID で動かす</h3>\n<p>ユーザーの可視性だけに頼ると、ユーザーに代わって動くエージェントはその過大な権限を引き継ぎ、サイレントなエスカレーションが起きます。呼び出したユーザーとして実行されるエージェントは作らず、最小限の権限を持つサービス ID として実行させます。ラベルと DLP を組み合わせれば、特権ユーザーであってもエージェントを誘導して範囲外のデータを処理させることはできません。</p>\n\n<h2>承認ゲート・ライセンス・データポリシーで入口を管理する</h2>\n<p>誰でもエージェントを作れる状態では、ガバナンスはクラウドソーシングの混乱になります。エージェント作成には承認ワークフローを設け、要求はセキュリティ、コンプライアンス、そしてドメインを理解するビジネスオーナーに回します。</p>\n<ul>\n<li>命名規則、目的の宣言、文書化されたオーナー、サポート連絡先、有効期限を必須にします。オーナーがいなければ、目的がなければ承認しません。</li>\n<li>申請フォームでは、対象ユーザー、業務機能、ライブラリ単位までの URL、ラベルの期待、範囲外でのフォールバック動作、使用するサービス ID を求めます。</li>\n<li>HR Q&A、ポリシーブラウザー、IT KB といった事前承認済みテンプレートから選ばせ、即興ではなく制約されたデフォルトを継承させます。</li>\n</ul>\n<h3>ライセンスは予算項目ではなく制御の手段</h3>\n<p>ユーザーベースの Microsoft 365 Copilot では、ライセンスを持つユーザーだけがエージェント機能を使えるため、乱立が自然に抑えられます。従量課金制はテナントや環境レベルで消費を管理でき柔軟ですが、不注意だと際限なく消費される恐れがあります。パイロット環境と本番環境を分け、従量課金は財務担当者がメーターを確認できる環境でのみ有効にし、コストアラートも調整します。承認ポリシーにもライセンスの選択を反映させ、従量課金なら費用の責任を負う所有者と推定使用プロファイルを、ユーザーベースならライセンス取得者の一覧と取り消し計画を必須にします。</p>\n<h3>Power Platform のデータポリシー</h3>\n<p>テナントレベルのデータポリシーで、SharePoint と同じデータグループで使えるコネクタを制限します。規制対象のエージェントは、Microsoft 365 と承認済みの内部 API だけを含む制限グループに置きます。一般消費者向けの Web サービスは許可しません。統合が必要なときは、レビューを経てエンタープライズコネクタを許可リストに追加します。Purview では、機密ラベル付きコンテンツの所在、許可されていない流出経路、グループ間のブリッジを検知する監視を定義します。</p>\n<p>承認は期限付きにします。90 日ごとの更新をスケジュールし、更新されなければ自動的に無効化します。エージェントも、そのユースケースも不滅ではありません。</p>\n\n<h2>エージェントを実際に止める Purview DLP パターン</h2>\n<p>リアルタイムの強制がなければ、エージェントは高速のデータ運搬役にすぎません。人間が閲覧することは許されても、自動処理は別のリスククラスです。そこで、感度とパターン検出を、エージェントのコンテキストにおける明示的なブロックアクションに結び付けます。</p>\n<p>基本は、エージェントにデータを供給する SharePoint の場所を対象にポリシーを作ることです。センシティビティラベルと機密情報タイプに一致させ、信頼度のしきい値に達したらエージェントによる処理、共有、ダウンロードをブロックします。</p>\n<h3>検出パターンの例</h3>\n<ul>\n<li>許可リストにない限りエージェントのブロックにマッピングする、センシティビティラベル。</li>\n<li>金融 ID、政府発行の識別子、健康関連用語などの機密情報タイプ。ノイズの多いパターンは信頼度を高め、複数の証拠ヒットを要求します。</li>\n<li>実在の識別子、従業員番号、顧客 ID には完全一致データ(EDM)を使い、誤検知に埋もれないようにします。</li>\n<li>独自のプロジェクトコード名には、低ボリュームで高シグナルのキーワード辞書を使います。</li>\n</ul>\n<h3>運用のポイント</h3>\n<ul>\n<li>エージェントに対するオーバーライドは無効にしてブロックします。人間は正当化できますが、機械にビジネスコンテキストはなく、あるのはトリガーだけです。</li>\n<li>エージェントのワークフローが引き金のダウンロードは隔離または制限します。ファイルを取得できなければ、そこから幻覚を起こすこともできません。</li>\n<li>サイト、ライブラリ、ラベル、トリガーパターン、呼び出したエージェント ID といった豊富なコンテキストを付けて SecOps にアラートします。</li>\n<li>最初はシミュレーションモードで開始し、アラートが現実を反映するまで調整します。エージェントのライブラリに厳密に絞り、シグナルがきれいになってから拡張します。</li>\n<li>複合条件(ラベルと機密情報タイプ)を使います。</li>\n<li>ユーザー向けのメッセージも設計します。「このエージェントは機密性の高い人事コンテンツを処理する権限がありません。人事エージェントに問い合わせるか、所定のプロセスでアクセスを申請してください」のように、正しい扉を示します。ただブロックするだけだと、ユーザーはデータを Teams に貼り付けてしまいます。</li>\n</ul>\n\n<h2>よくある間違いとテストの規律</h2>\n<ul>\n<li>ポリシー、技術文書、ベンダー契約など複数のドメインを単一ソースにまとめる。</li>\n<li>エージェントに任意の Web URL をクロールさせる。外部 URL は影響範囲を広げ、監査可能性を損ないます。</li>\n<li>下書きやチャットファイルを、メタデータと場所で分離せずに取り込む。モデルは未完成版と公開版を区別できません。</li>\n<li>「非表示」を保護と考える。非表示は UI 上の選択にすぎず、権限こそが実効的な制御です。</li>\n<li>プロジェクトサイトをデフォルト継承のままにする、ベンダー退場後もゲストアクセスを残す、手軽さから広範な Microsoft 365 グループを閲覧者に入れる。</li>\n<li>管理外のサイトでパイロットを立ち上げる、コストやアラートのタグ付けなしに従量課金を有効にする、見つからない場合に一般知識を使うデフォルトにする。</li>\n<li>「ノイズが多い」という理由で、SharePoint を DLP の対象から外し、Exchange と Teams にだけ適用する。ノイズはチューニング不足の結果です。</li>\n<li>EDM を無視し、汎用パターンだけに頼る。</li>\n</ul>\n<p>テストは、実際にスコープを確かめる作業です。エージェントが即答すべき権威ある質問を投げ、次に断るべき関連トピックで誘い込みます。ドメイン外で答えたならスコープかフォールバックが誤りで、ドメイン内で拒否したならフィルターか承認が厳しすぎます。チューニングは足し算ではなく引き算で、無関係なパスを削り、メタデータの曖昧さを減らし、回答が退屈なほど予測可能になるまで絞り込みます。追跡する指標は次の三つです。</p>\n<ul>\n<li><strong>回答可能性</strong>:意図したライブラリへの引用で解決できたドメイン内クエリの割合。</li>\n<li><strong>根拠の健全性</strong>:承認済みソースだけを引用した回答の割合。</li>\n<li><strong>沈黙の質</strong>:ドメイン外の質問に対するフォールバックの明確さと頻度。</li>\n</ul>\n<p>DLP の検証では、スコープ外のエージェントが機密ラベル付きファイルを必要とする質問に答えようとしたとき、即座にブロックされ、案内メッセージが表示され、重大度の高いアラートが上がるはずです。代わりに自信に満ちた回答が返ってくるなら、その DLP は飾りにすぎません。</p>\n\n<h2>今日から使える実践ポイント</h2>\n<ul>\n<li>権限が先、検索はその後。グラウンディングは権限を縮小しないと理解する。</li>\n<li>ナレッジソースはライブラリ単位、浅いフォルダー、厳密なメタデータ、承認済みコンテンツのみにする。</li>\n<li>上限に達したらスコープを広げず、狭いエージェントに分割する。必要ならルーターエージェントを置く。</li>\n<li>一般 AI 知識を無効にし、権威のないフォールバック応答を設定する。</li>\n<li>機密ライブラリを「隔離必須・共有可能・不明」に分類し、継承を解除して広範なグループをロールグループに置き換える。</li>\n<li>エージェントは最小権限のサービス ID で実行する。</li>\n<li>ラベルを Purview DLP に結び付け、承認済みエージェントだけを許可する。</li>\n<li>エージェント作成には承認ワークフロー、テンプレート、ライセンスの選択、データポリシー、90 日ごとの更新を組み合わせる。</li>\n<li>DLP はシミュレーションモードで調整し、EDM と複合条件を活用する。ユーザーには明確なブロックメッセージを返す。</li>\n</ul>\n\n<h2>まとめ</h2>\n<p>SharePoint エージェントによる情報漏洩の多くは、AI の気まぐれではなく、広すぎるスコープと緩い継承の組み合わせから起こります。ナレッジソースを契約書のように限定し、継承を解除して権限を最小化し、ラベルと Purview DLP でエージェントの処理そのものを制御してください。そこに承認ゲートとテストの規律が加われば、エージェントの有用性を保ったまま、境界の内側にとどめられます。</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "SharePoint エージェントの情報漏洩を防ぐ5つの対策",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "ソースを限定",
+     "text": "ライブラリ単位で指定し、浅いフォルダーと厳密なメタデータで承認済みコンテンツだけを取り込む。"
+    },
+    {
+     "kopf": "継承を解除",
+     "text": "機密ライブラリの継承を止め、広範なグループをロールグループに置き換える。"
+    },
+    {
+     "kopf": "ラベルとDLP",
+     "text": "ラベルをPurview DLPに結び付け、承認済みエージェントだけに処理を許可する。"
+    },
+    {
+     "kopf": "承認ゲート",
+     "text": "テンプレート、ライセンス、データポリシー、90日ごとの更新でエージェント作成を管理する。"
+    },
+    {
+     "kopf": "テストと調整",
+     "text": "シミュレーションモードで調整し、ドメイン内外の質問でスコープとブロックを検証する。"
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "SharePoint のエージェントが情報を漏らす原因は何ですか？",
+    "a": "エージェントの誤作動ではなく、設計に原因があります。ナレッジソースの範囲が広すぎることと、権限の継承が緩すぎることが主な要因です。エージェントはACLでアクセス可能なものを参照するため、その状態では機械のスピードで意図しない漏洩が起こります。"
+   },
+   {
+    "q": "SharePoint エージェントの検索フィルターはセキュリティ境界になりますか？",
+    "a": "なりません。検索フィルターは「どこを探すか」を指示するだけで、アクセスを許すかどうかは権限が決めます。エージェントはまず権限に従い、次に検索に従います。そのため、継承を解除して固有の権限を設定し、境界は権限で作る必要があります。"
+   },
+   {
+    "q": "ナレッジソースのファイル数やフォルダー数の上限に達したらどうすればいいですか？",
+    "a": "範囲をサイトルートまで広げてはいけません。それは漏洩の始まりです。ドメインごと、ペルソナごとにソースを分割し、人事・福利厚生・出張のような狭い専用エージェントを複数用意します。入口を一本にしたい場合は、ルーターエージェントで振り分けます。"
+   },
+   {
+    "q": "Purview DLP で機密ファイルのエージェント処理を止めるにはどう設定しますか？",
+    "a": "エージェントにデータを供給する SharePoint の場所を対象に、センシティビティラベルと機密情報タイプを組み合わせたポリシーを作ります。許可リスト外のエージェントによる処理、共有、ダウンロードはブロックし、オーバーライドは無効にします。まずシミュレーションモードで調整し、SecOps へのアラートと案内メッセージも設定します。"
+   }
+  ],
+  "infos": [
+   {
+    "titel": "検索フィルターと権限の違い",
+    "typ": "vergleich",
+    "links": {
+     "titel": "検索フィルター",
+     "punkte": [
+      "「どこを探すか」を指示する",
+      "ライブラリ、フォルダー、ファイル群、URLを指定する",
+      "関連性をフィルタリングするだけ",
+      "ファイアウォールにはならない"
+     ]
+    },
+    "rechts": {
+     "titel": "権限(ACL)",
+     "punkte": [
+      "「アクセスを許すかどうか」を決める",
+      "エージェントはまず権限に従う",
+      "継承を解除し固有の権限を割り当てる",
+      "「非表示」ではなく権限が実効的な制御"
+     ]
+    }
+   },
+   {
+    "titel": "エージェントの品質を測る三つの指標",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "回答可能性",
+      "text": "意図したライブラリへの引用で解決できたドメイン内クエリの割合"
+     },
+     {
+      "wert": "根拠の健全性",
+      "text": "承認済みソースだけを引用した回答の割合"
+     },
+     {
+      "wert": "沈黙の質",
+      "text": "ドメイン外の質問に対するフォールバックの明確さと頻度"
+     },
+     {
+      "wert": "90日",
+      "text": "承認の更新サイクル。更新されなければ自動的に無効化する"
+     }
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "SharePoint エージェントが情報を漏らす主な原因として、記事が挙げているものはどれですか。",
+    "opts": [
+     "エージェントが誤作動してユーザーの意図を読み違えること",
+     "ナレッジソースの範囲が広すぎることや、権限の継承が緩すぎること",
+     "Microsoft Graph の検索速度が遅く、処理が途中で止まること",
+     "センシティビティラベルの種類が少なすぎて分類できないこと"
+    ],
+    "a": 1,
+    "why": "記事は、漏洩の原因はエージェントの誤作動ではなく、広すぎるナレッジソースや緩い継承といった設計の側にあると述べています。"
+   },
+   {
+    "q": "検索フィルターと権限の関係について、記事の説明として正しいものはどれですか。",
+    "opts": [
+     "検索フィルターが権限より先に適用され、範囲外のファイルを完全に遮断する",
+     "検索フィルターはファイアウォールとして機能するため、権限設定は省略できる",
+     "エージェントはまず権限に従い、次に検索フィルターに従う",
+     "メタデータフィルターを設定すれば、サイトルートを指しても安全である"
+    ],
+    "a": 2,
+    "why": "検索は「どこを探すか」を示すだけで、権限が「アクセスを許すか」を決めます。エージェントは権限が先、検索が後です。"
+   },
+   {
+    "q": "ナレッジソースのファイル数などが上限に達したとき、記事が推奨する対応はどれですか。",
+    "opts": [
+     "範囲をサイトルートまで広げて、すべてのファイルを取り込む",
+     "上限を無視して、遅くなっても一つのエージェントで運用を続ける",
+     "一般的な AI 知識を有効にして、不足分を補わせる",
+     "範囲を広げず、ドメインごとの狭いエージェントに分割する"
+    ],
+    "a": 3,
+    "why": "上限は広げる理由ではなく分割の合図です。ソースごとにドメイン一つとし、必要ならルーターエージェントを置きます。"
+   },
+   {
+    "q": "機密性の高い人事情報で、DLP を使って人間とエージェントを切り離す方法はどれですか。",
+    "opts": [
+     "ユーザーが読める場合でも、承認済みの人事エージェント以外の処理をブロックする",
+     "ユーザーによる閲覧とエージェントによる処理の両方を、一律にブロックする",
+     "エージェントがユーザーの権限で動くようにして、閲覧範囲を揃える",
+     "エージェントへのオーバーライドを許可して、人間が正当化できるようにする"
+    ],
+    "a": 0,
+    "why": "ユーザーがファイルを読める場合でも、ラベルとエージェント処理の条件に一致すれば、承認済み人事エージェント以外をブロックできます。"
+   }
+  ]
+ },
+ "ko": {
+  "html": "<p>SharePoint 에이전트가 민감한 정보를 답변에 섞어 내보냈다면, 에이전트가 오작동한 것이 아닙니다. 소방호스를 건네주고 한 모금만 마시라고 한 것과 같습니다. 지식 범위를 지나치게 넓게 잡고 권한 상속까지 허술하게 두면, 정보는 기계적인 속도로 새어 나갑니다.</p>\n<p>해결책에 마법은 없습니다. 범위 제한, 권한 강화, 그리고 실제로 에이전트를 차단하는 Purview DLP 정책이 필요합니다. 이 글에서는 에이전트가 데이터를 보는 방식부터 지식 소스 제한, 상속 끊기, 승인 절차, DLP 패턴까지 순서대로 정리합니다.</p>\n\n<h2>SharePoint 에이전트는 어떻게 데이터를 볼까: 권한이 먼저, 검색 범위는 그다음</h2>\n<p>에이전트는 사용자의 의도를 읽지 않고 Microsoft Graph를 읽습니다. ACL을 통해 접근할 수 있는 콘텐츠라면 에이전트도 읽을 수 있습니다. 지식 소스 범위를 넓게 잡는 것은 세심하게 분류해 둔 경로를 우회하는 통로를 뚫어 놓는 것과 같습니다.</p>\n<p>에이전트는 두 가지 요소로 구성됩니다.</p>\n<ul>\n<li><strong>사용자 페르소나</strong>: SharePoint, OneDrive 등 연결된 모든 영역에서 해당 아이디가 가진 권한입니다.</li>\n<li><strong>검색 필터(범위)</strong>: 라이브러리, 폴더, 파일 묶음, 몇 개의 URL처럼 에이전트가 \"여기서 먼저 찾으라\"고 지시받은 영역입니다.</li>\n</ul>\n<p>많은 관리자가 검색 필터를 보안 경계로 착각합니다. 검색 범위는 \"여기서 먼저 찾아라\"는 뜻이고, 권한은 \"들어와도 좋다\"는 뜻입니다. 에이전트는 권한을 먼저 따르고 검색 범위는 그다음에 적용합니다. 이 우선순위는 반드시 기억해야 합니다.</p>\n\n<h2>그라운딩은 권한을 격리하지 못한다</h2>\n<p>민감도 레이블과 Purview DLP는 콘텐츠 위에 놓인 가드레일입니다. 레이블은 분류를 맡고, DLP는 특정 콘텐츠에 접근하거나 처리할 때 행동을 강제합니다. 반면 그라운딩은 관련성을 걸러낼 뿐이며 에이전트의 실제 권한 범위를 줄이지 않습니다.</p>\n<p>권한 상속을 그대로 두어 에이전트 아이디가 인접한 여러 라이브러리를 볼 수 있다면, LLM은 근처 정보까지 끌어와 답변을 구성할 수 있습니다. 단일 라이브러리용 파일럿이 갑자기 옆 라이브러리의 인사 규정을 인용하는 이유가 이것입니다. 이는 이상 현상이 아니라 예견된 결과입니다.</p>\n<p>권한 상속은 조용히 권한을 확대합니다. 내부용이라고 믿었던 사이트에 \"모든 인증된 사용자\"가 SharePoint 그룹으로 포함되어 있거나, 게스트 계정과 오래된 프로젝트 그룹 권한이 그대로 남아 있는 경우가 대표적입니다. 에이전트는 분위기가 아니라 ACL을 따릅니다.</p>\n<h3>기억해 둘 사고 모델</h3>\n<ul>\n<li>레이블은 민감도를 설명합니다.</li>\n<li>그라운딩은 모델이 올바른 문맥을 찾도록 돕습니다.</li>\n<li>권한은 그 문맥을 볼 수 있는지 결정합니다.</li>\n<li>DLP는 앞의 두 단계가 모두 승인해도 \"처리 불가\"를 결정할 수 있습니다.</li>\n</ul>\n<p>AI가 이상하게 행동하는 것처럼 보여도 실제로는 범위 설계가 허술한 상속과 충돌한 것입니다. 모델을 탓하기보다 모델이 무엇을 고려할 수 있는지를 통제해야 합니다.</p>\n\n<h2>지식 소스 범위 제한: 계약서처럼 정확하게</h2>\n<p>범위는 변호사가 계약서를 쓰듯 정확하고 배타적이며 테스트 가능하게 작성해야 합니다. 소스가 넓을수록 교차 간섭이 생기고, LLM은 주변 사실을 기꺼이 엮어 답을 만들어 냅니다.</p>\n<h3>실무 범위 설정 규칙</h3>\n<ul>\n<li>사이트 루트나 허브 전체를 넣지 말고 구체적인 라이브러리 경로를 지정합니다.</li>\n<li>목적 하나에 문서 라이브러리 하나만 사용합니다. 제품 FAQ 에이전트라면 제품 FAQ 라이브러리 외에는 아무것도 주지 않습니다.</li>\n<li>폴더가 필요하면 얕은 수준에서 고정하고 재귀적 포함은 피합니다.</li>\n<li>메타데이터 필터로 상태가 '승인됨', 버전이 '게시됨', 부서가 해당 부서인 항목만 수집합니다. 메타데이터가 없으면 수집도 없습니다.</li>\n<li>초안, 보관함, 작업용 하위 트리는 제외합니다. 제외할 수 없다면 다른 곳으로 옮겨 구조를 정리합니다.</li>\n</ul>\n<h3>플랫폼 한계는 거버넌스 가드레일</h3>\n<p>플랫폼은 지식 소스당 파일, 폴더, URL 수에 실질적인 상한을 둡니다. 이는 단순한 성능 제한이 아니라 거버넌스를 위한 가드레일입니다. 한도에 닿았을 때 범위를 사이트 루트까지 넓히는 것이 정보 유출의 시작점입니다. 올바른 대응은 범위를 확장하지 않고 분할하는 것입니다.</p>\n<p>서비스를 시작하기 전에 Copilot Studio와 SharePoint 에이전트 빌더에서 실제 한계를 테스트하세요. 승인된 PDF 수백 개, docx 매뉴얼, PPT 몇 개처럼 실제 배포 환경과 비슷한 파일로 파일럿 소스를 만들면 충분합니다. 수집이 느려지거나 시간 초과가 나거나 파일을 임의로 건너뛰기 시작하면 쪼개야 한다는 신호입니다.</p>\n<h3>백과사전형 에이전트 대신 좁은 전문 에이전트</h3>\n<p>소스당 하나의 도메인, 에이전트 페르소나당 하나의 소스를 배정하세요. 인사정책, 복리후생, 출장 에이전트처럼 각자 고유한 라이브러리와 필터를 가진 에이전트를 만들고, 단일 진입점이 필요하면 질문을 적절한 전문가에게 넘기는 라우터 에이전트를 앞에 두면 됩니다. 서로 다른 도메인의 파일 200개를 한 에이전트에 몰아넣으면 답변이 위원회 회의처럼 모호해집니다.</p>\n<h3>일반 AI 지식 비활성화와 폴백 응답</h3>\n<p>규제 대상 에이전트에서는 일반 AI 지식을 끄고, 공식 소스만 지정하고, 대체 응답(폴백)을 설정하세요. 예를 들어 \"해당 분야에 대한 권한이 없습니다. 제가 다루는 승인된 소스는 다음과 같습니다\"라고 답하게 하는 식입니다. 일반 지식이 빈틈을 메우도록 두면 레이블과 DLP의 의도를 무시하는, 검증할 수 없는 상식의 세계로 돌아갑니다.</p>\n<p>소스를 추가하기 전에는 승인 워크플로우를 거치세요. 정확성, 최신성, 민감도 레이블링이 확인된 콘텐츠만 넣어야 합니다. 출처를 증명할 수 없는 문서는 에이전트가 답변에 쓸 자격이 없습니다.</p>\n\n<h2>상속 끊기와 민감도 레이블: 방 전체를 잠그기</h2>\n<p>문이 열려 있다면 범위를 아무리 좁혀도 소용없습니다. SharePoint의 상속 권한은 낡은 물려받은 스웨터처럼 헐렁하고 구멍이 많습니다. 에이전트는 낙관론이 아니라 ACL을 존중하므로 중요한 곳에서는 상속을 멈추고 고유 권한을 부여해야 합니다.</p>\n<h3>불편한 감사부터 시작</h3>\n<p>민감한 라이브러리를 세 개의 버킷으로 나눕니다: <strong>격리 필수, 공유 가능, 미확인</strong>. 미확인은 위험 신호입니다. 누가 접근할 수 있는지 한 문장으로 설명하지 못한다면 입증되기 전까지 격리 필수로 분류합니다. 그다음 격리 필수 라이브러리의 상속을 끊되, 사이트 단위가 아니라 핵심 자산이 담긴 라이브러리 단위로 진행합니다. 목표는 명시적인 최소 멤버십, 소수의 소유자 그룹, 정의된 멤버 그룹, 업무상 필요할 때만 주는 읽기 전용 권한입니다.</p>\n<h3>광범위한 그룹 제거와 권한 계층 표준화</h3>\n<p>\"모든 사람\", \"외부 사용자 제외 모든 사람\", \"인증된 사용자\" 같은 그룹은 마트료시카 인형처럼 SharePoint 그룹 안에 숨어 있습니다. 이를 제거하고 실제 관리되는 역할에 매핑된 Entra, AD 보안 그룹으로 교체하세요. 게스트는 예외적이고 일시적이며 식별 가능해야 합니다. 그룹 이름에 \"All\"이나 \"전체\"가 들어 있다면 에이전트는 그것을 뷔페처럼 취급할 것입니다.</p>\n<ul>\n<li><strong>A계층(기밀 라이브러리)</strong>: 소유자, 구성원, 소수의 읽기 권한자만 허용하고 게스트는 제외합니다.</li>\n<li><strong>B계층(내부 전용)</strong>: 소유자, 구성원, 관리되는 읽기 권한자, 부서 그룹만 허용하고 외부인은 제외합니다.</li>\n<li><strong>C계층(공개 내부)</strong>: 소유자, 구성원, 전 임직원 읽기를 허용하되 게스트는 제외합니다.</li>\n</ul>\n<h3>레이블은 스티커가 아니라 신분증</h3>\n<p>기밀, 제한, 공개 같은 민감도 레이블을 구체적인 동작에 매핑하세요. 레이블을 장식으로 두는 것이 가장 흔한 함정입니다. 레이블을 Purview DLP와 연동하면 기계가 강제할 수 있는 의미가 생깁니다. 예를 들어 '기밀 HR' 레이블은 사용자가 파일을 볼 수 있더라도 에이전트의 처리를 막는 DLP 정책을 트리거할 수 있습니다. 사람의 가시성과 기계의 자동화를 분리하는 것이 핵심입니다.</p>\n<p>구체적인 구성은 이렇습니다. '기밀 HR' 레이블이 붙은 인사정책 라이브러리에는 HR 에이전트 아이디에만 읽기 권한을 줍니다. 인사 업무 초안 같은 인접 라이브러리는 그 아이디가 접근할 수 없는 고유 권한으로 격리합니다. 그리고 DLP 정책으로 '기밀 HR' 콘텐츠는 승인된 HR 에이전트 목록에 있는 에이전트만 처리하게 하고, 일반 회사 지식 에이전트를 포함한 나머지는 모두 차단합니다. 누군가 실수로 잘못된 에이전트에 권한을 줘도 유출은 막힙니다.</p>\n<p>또 하나, 호출하는 사용자의 권한으로 실행되는 에이전트를 만들지 마세요. 너무 많은 것을 볼 수 있는 사용자의 권한을 에이전트가 그대로 물려받기 때문입니다. 최소 권한을 가진 서비스 아이디로 실행하고 레이블 및 DLP와 결합하면, 권한이 큰 사용자조차 에이전트가 범위 밖 데이터를 처리하도록 속이지 못합니다. 사소한 콘텐츠는 사이트 상속을 유지해도 됩니다. 고유 권한은 에이전트에 데이터를 공급하는 라이브러리에만 쓰면 관리 부담을 줄이면서 자동화가 닿는 지점을 단단히 보호할 수 있습니다.</p>\n\n<h2>에이전트 승인 절차, 라이선스 경계, 데이터 정책</h2>\n<p>누구나 에이전트를 만들 수 있다면 거버넌스는 혼돈에 빠집니다. 정문을 막고 섀도우 에이전트를 방지하려면 승인, 라이선스, 데이터 정책이 필요합니다.</p>\n<h3>승인 워크플로우</h3>\n<p>에이전트 생성 요청은 보안, 규정 준수, 해당 도메인을 이해하는 비즈니스 담당자에게 전달되어야 합니다. 명명 규칙, 목적 기술서, 명시된 소유자, 지원 연락처, 만료일을 강제하세요. 소유자가 없거나 목적이 없으면 승인하지 않습니다. 신청 양식에는 대상 독자, 비즈니스 기능, 라이브러리 수준의 정확한 URL 기반 지식 소스, 레이블 기대치, 폴백 동작, 범위 외 권한 제한, 사용할 서비스 아이디를 요구하세요. 인사 Q&amp;A, 정책 브라우저, IT 기술 자료 같은 사전 승인된 템플릿을 제공하면 제약된 기본 설정을 상속받게 할 수 있습니다.</p>\n<h3>라이선스는 통제 수단</h3>\n<p>사용자 기반 Microsoft 365 Copilot은 라이선스가 있는 사용자만 에이전트 기능을 쓸 수 있어 무분별한 확장이 자연스럽게 제한됩니다. 종량제(pay-as-you-go)는 테넌트나 환경 수준에서 소비를 켜고 비용을 중앙에서 관리할 수 있어 유연하지만, 부주의하면 과도한 지출로 이어집니다. 파일럿과 운영 환경을 분리하고, 재무 부서가 비용을 확인할 수 있는 곳에서만 종량제를 활성화하며, 비용 알림을 설정하세요. 승인 정책에는 라이선스 선택도 포함합니다. 종량제라면 비용 센터, 결제 책임자, 예상 사용량 프로필을, 사용자 기반이라면 라이선스 사용자 명단과 오프보딩 계획을 요구합니다.</p>\n<h3>Power Platform 데이터 정책과 Purview 연동</h3>\n<p>Power Platform 테넌트 수준 데이터 정책으로 SharePoint와 같은 데이터 그룹 안에서 허용되는 커넥터를 제한하세요. 규제 대상 에이전트는 Microsoft 365와 승인된 내부 API만 포함된 제한적 그룹에 둡니다. 웹, 소비자 서비스, 섀도우 서비스는 허용하지 않고, 통합이 필요하면 검토를 거쳐 허용 목록에 올립니다. Purview로는 데이터 경계와 민감 레이블 콘텐츠의 위치, 허용되지 않는 유출 경로를 정의하고 그룹 간 연결 시도를 감시합니다. 에이전트는 차선 안에서는 빠르게 달리되 중앙분리대를 넘어 공용 엔드포인트로 뛰어들 수는 없어야 합니다.</p>\n<p>승인 이후에는 90일 단위 갱신 일정을 두고, 갱신하지 않으면 자동으로 비활성화되게 하세요. 에이전트도, 그 사용 사례도 영원하지 않습니다.</p>\n\n<h2>에이전트를 실제로 차단하는 Purview DLP 패턴</h2>\n<p>실시간 시행이 없으면 에이전트는 고속 데이터 전달자에 불과합니다. 에이전트는 콘텐츠를 보기만 하는 것이 아니라 처리하기 때문에, 사람에게 허용되는 열람과 자동화된 처리는 위험의 차원이 다릅니다.</p>\n<ul>\n<li><strong>대상 지정</strong>: 에이전트에 데이터를 공급하는 SharePoint 위치에 정책을 적용하고, 민감도 레이블과 민감정보 유형을 매칭합니다. 신뢰도가 임계값에 도달하면 에이전트의 처리, 공유, 다운로드를 차단합니다.</li>\n<li><strong>신뢰도 임계값 조정</strong>: 일반 PII처럼 노이즈가 많은 패턴은 신뢰도를 높이고 여러 증거가 일치하도록 요구합니다.</li>\n<li><strong>정확한 데이터 일치(EDM)</strong>: 직원 번호, 고객 아이디 같은 실제 식별자에는 EDM을 사용해 오탐으로 인한 혼란을 막습니다.</li>\n<li><strong>키워드 사전</strong>: 독점 프로젝트 코드명처럼 볼륨은 낮고 신호는 높은 항목에 씁니다.</li>\n<li><strong>재정의 비활성화</strong>: 중요한 조치에는 에이전트에 대한 재정의를 끈 차단 설정을 둡니다. 사람은 정당성을 입증할 수 있지만 기계는 비즈니스 맥락을 이해하지 못하고 트리거에만 반응합니다.</li>\n<li><strong>파일 격리와 다운로드 제한</strong>: 에이전트가 파일을 가져올 수 없다면 그 파일로 환각을 일으킬 수도 없습니다.</li>\n<li><strong>풍부한 알림</strong>: 사이트·라이브러리 레이블, 트리거 패턴, 호출한 에이전트 식별자를 담아 SIEM으로 보냅니다.</li>\n</ul>\n<p>도입 순서도 중요합니다. 비운영 사이트에서 시뮬레이션 모드로 시작해 알림이 현실을 반영할 때까지 임계값을 조정하고, 먼저 에이전트 라이브러리에 엄격히 범위를 지정한 뒤 신호가 선명해지면 확장하세요. 레이블과 민감정보 유형을 조합한 다중 조건은 문 하나에 잠금장치를 두 개 다는 효과가 있습니다.</p>\n<p>사용자 메시지도 설계 대상입니다. 단순히 \"차단됨\"이라고만 하면 사용자는 데이터를 Teams에 붙여 넣을 것입니다. \"이 에이전트는 기밀 HR 콘텐츠를 처리할 권한이 없습니다. HR 에이전트에게 문의하거나 정해진 절차로 접근을 요청하세요\"처럼 올바른 문을 안내해야 합니다.</p>\n\n<h2>흔한 실수와 놓치기 쉬운 함정</h2>\n<ul>\n<li>정책, 기술 문서, 공급업체 계약서를 하나의 소스에 몰아넣는 것</li>\n<li>에이전트가 외부 웹 URL을 크롤링하게 두는 것. 공격 범위가 넓어지고 감사 가능성이 떨어집니다.</li>\n<li>초안과 작업 파일을 메타데이터나 위치로 구분하지 않고 수집하는 것</li>\n<li>숨겨져 있으면 보호된다고 가정하는 것. 숨김은 UI 선택일 뿐이고, 권한이 곧 범위입니다.</li>\n<li>프로젝트 사이트를 기본 상속 설정 그대로 두거나, 벤더가 떠난 뒤에도 게스트 액세스를 유지하거나, 편하다는 이유로 광범위한 M365 그룹에 읽기 권한을 주는 것</li>\n<li>테스트용 파일럿을 관리되지 않는 사이트에 방치하거나, 비용 태그와 알림 없이 종량제를 켜거나, 아무에게나 메이커 역할을 주는 것</li>\n<li>에이전트가 답을 못 찾을 때 일반 지식을 기본값으로 쓰게 하는 것</li>\n<li>SharePoint 정책이 시끄럽다는 이유로 DLP 범위를 Exchange와 Teams로만 제한하거나 성능을 이유로 SharePoint를 제외하는 것. 시끄러운 것은 조정하지 않았기 때문입니다.</li>\n<li>EDM을 무시하고 일반적인 PII 유형에만 의존하는 것</li>\n</ul>\n\n<h2>바로 적용할 수 있는 실무 체크리스트</h2>\n<ul>\n<li>\"권한이 먼저, 검색 범위는 그다음\"이라는 원칙으로 설계하고, 검색 필터를 보안 경계로 착각하지 않습니다.</li>\n<li>지식 소스는 라이브러리 수준으로 제한하고, 얕은 폴더 구조와 엄격한 메타데이터 필터, 승인된 콘텐츠만 사용합니다.</li>\n<li>하나의 거대한 에이전트 대신 목적별로 좁은 에이전트를 여러 개 만들고, 필요하면 라우터 에이전트를 둡니다.</li>\n<li>규제 대상 에이전트는 일반 AI 지식을 끄고 명확한 폴백 응답을 설정합니다.</li>\n<li>민감한 라이브러리를 '격리 필수, 공유 가능, 미확인'으로 분류하고, 핵심 라이브러리의 상속을 끊습니다.</li>\n<li>광범위한 그룹을 역할 기반 보안 그룹으로 교체하고, 에이전트는 최소 권한 서비스 아이디로 실행합니다.</li>\n<li>민감도 레이블을 Purview DLP와 연결해 승인된 에이전트만 해당 콘텐츠를 처리하게 합니다.</li>\n<li>에이전트 생성은 템플릿 기반 승인 절차를 거치게 하고, 라이선스·비용 통제와 90일 갱신 주기를 포함합니다.</li>\n<li>DLP는 시뮬레이션 모드에서 시작해 임계값을 조정하고, 명확한 안내 메시지와 함께 차단합니다.</li>\n<li>도메인 내 질문 해결률, 승인된 소스만 인용한 비율, 도메인 밖 질문에서 폴백이 작동하는 빈도를 지표로 추적합니다.</li>\n</ul>\n\n<h2>결론</h2>\n<p>SharePoint 에이전트의 데이터 유출은 AI의 변덕이 아니라 설계의 결과입니다. 넓은 지식 범위, 조용히 확대된 상속 권한, 시행되지 않는 DLP가 겹칠 때 에이전트는 접근 가능한 모든 정보를 빠르게 엮어 냅니다. 범위를 좁히고, 상속을 끊고, 레이블과 DLP를 연결하고, 승인 절차로 에이전트 생성을 통제하면 에이전트는 유용성을 유지하면서도 안전한 경계 안에서 움직입니다. 마지막 점검 기준은 간단합니다. 범위 밖 에이전트가 기밀 레이블이 붙은 파일을 요구했을 때 즉시 차단, 안내 메시지, 고위험 경고가 나와야 합니다. 대신 자신 있는 답변이 나온다면 그 DLP는 표지판일 뿐 방어수단이 아닙니다.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "SharePoint 에이전트 데이터 유출 방지 4단계 통제",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "지식 범위 제한",
+     "text": "라이브러리 단위 소스, 메타데이터 필터, 일반 AI 지식 비활성화, 좁은 전문 에이전트로 분리합니다."
+    },
+    {
+     "kopf": "상속 끊기",
+     "text": "핵심 라이브러리의 상속을 끊고 광범위한 그룹을 역할 기반 그룹으로 교체합니다."
+    },
+    {
+     "kopf": "레이블과 서비스 아이디",
+     "text": "민감도 레이블을 DLP와 연결하고 에이전트는 최소 권한 서비스 아이디로 실행합니다."
+    },
+    {
+     "kopf": "승인과 라이선스",
+     "text": "템플릿 기반 승인, 비용 통제, 데이터 정책, 90일 갱신으로 섀도우 에이전트를 막습니다."
+    },
+    {
+     "kopf": "Purview DLP 차단",
+     "text": "신뢰도 임계값과 EDM으로 에이전트의 처리·다운로드를 차단하고 명확한 안내 메시지를 제공합니다."
+    }
+   ]
+  },
+  "infos": [
+   {
+    "titel": "권한과 검색 범위: 흔한 오해 바로잡기",
+    "typ": "vergleich",
+    "links": {
+     "titel": "검색 범위(필터)",
+     "punkte": [
+      "\"여기서 먼저 찾아라\"라는 지시일 뿐입니다",
+      "라이브러리, 폴더, 파일 묶음, URL로 지정합니다",
+      "보안 경계가 아닙니다",
+      "권한 다음에 적용됩니다"
+     ]
+    },
+    "rechts": {
+     "titel": "권한(ACL)",
+     "punkte": [
+      "\"들어와도 좋다\"는 허가를 뜻합니다",
+      "에이전트는 분위기가 아니라 ACL을 따릅니다",
+      "상속이 조용히 권한을 확대합니다",
+      "실제 접근 범위를 결정합니다"
+     ]
+    }
+   },
+   {
+    "titel": "Purview DLP 차단 패턴 핵심 요소",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "대상 지정",
+      "text": "에이전트에 데이터를 공급하는 SharePoint 위치에 레이블과 민감정보 유형으로 정책을 적용합니다."
+     },
+     {
+      "wert": "EDM",
+      "text": "직원 번호, 고객 아이디 같은 실제 식별자는 정확한 데이터 일치로 오탐을 줄입니다."
+     },
+     {
+      "wert": "키워드 사전",
+      "text": "독점 프로젝트 코드명처럼 볼륨은 낮고 신호는 높은 항목에 씁니다."
+     },
+     {
+      "wert": "재정의 비활성화",
+      "text": "기계는 비즈니스 맥락을 모르므로 중요한 조치는 에이전트 재정의를 끈 채 차단합니다."
+     },
+     {
+      "wert": "시뮬레이션 모드",
+      "text": "비운영 사이트에서 시작해 알림이 현실을 반영할 때까지 임계값을 조정합니다."
+     }
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "SharePoint 에이전트가 데이터에 접근할 때 권한과 검색 범위의 관계에 대한 설명으로 옳은 것은?",
+    "opts": [
+     "검색 범위를 먼저 적용하고 그 안에서만 권한을 확인한다",
+     "권한을 먼저 따르고 검색 범위는 그다음에 적용한다",
+     "검색 범위가 보안 경계 역할을 하여 권한 설정이 필요 없다",
+     "권한과 검색 범위는 서로 무관하게 독립적으로 작동한다"
+    ],
+    "a": 1,
+    "why": "에이전트는 ACL 권한을 먼저 따르고 검색 범위는 그다음에 적용하므로, 검색 필터를 보안 경계로 착각하면 안 됩니다."
+   },
+   {
+    "q": "지식 소스가 플랫폼 한도에 닿았을 때 올바른 대응은 무엇인가?",
+    "opts": [
+     "범위를 사이트 루트까지 넓혀 모든 파일을 포함시킨다",
+     "일반 AI 지식을 켜서 부족한 부분을 보완한다",
+     "범위를 확장하지 않고 여러 소스로 분할한다",
+     "초안과 보관함 파일까지 포함해 수집량을 늘린다"
+    ],
+    "a": 2,
+    "why": "한도에 닿을 때 범위를 사이트 루트로 넓히는 것이 유출의 시작점이며, 올바른 대응은 확장이 아니라 분할입니다."
+   },
+   {
+    "q": "'기밀 HR' 레이블 콘텐츠를 보호하는 구성으로 가장 적절한 것은?",
+    "opts": [
+     "모든 에이전트에 읽기 권한을 주고 레이블 표시만 유지한다",
+     "호출하는 사용자의 권한으로 실행되는 에이전트를 사용한다",
+     "레이블 없이 폴더 숨김 기능만으로 접근을 막는다",
+     "승인된 HR 에이전트만 처리하게 하고 나머지는 DLP로 차단한다"
+    ],
+    "a": 3,
+    "why": "DLP로 승인된 HR 에이전트 목록의 에이전트만 처리하게 하면, 실수로 권한이 잘못 부여돼도 유출이 막힙니다."
+   },
+   {
+    "q": "Purview DLP를 처음 도입할 때 권장되는 순서는 무엇인가?",
+    "opts": [
+     "운영 사이트 전체에 즉시 차단 모드로 적용한다",
+     "SharePoint는 성능 때문에 제외하고 Exchange와 Teams에만 적용한다",
+     "처음부터 모든 에이전트에 재정의를 허용하는 설정을 둔다",
+     "비운영 사이트에서 시뮬레이션 모드로 시작해 임계값을 조정한다"
+    ],
+    "a": 3,
+    "why": "시뮬레이션 모드에서 알림이 현실을 반영할 때까지 임계값을 조정하고, 에이전트 라이브러리부터 좁게 시작해 확장해야 합니다."
+   }
+  ]
  }
 }
