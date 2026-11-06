@@ -349,6 +349,8 @@ def ent_ld(BASE, e, lang, glossary_set=None, person_aka=None):
         pass
     if same:
         n["sameAs"] = same
+    if e.get("award"):   # Auszeichnungen (Text, Beleg als Erwaehnung in data/press_mentions.json)
+        n["award"] = [x.get("en", "") if isinstance(x, dict) else x for x in e["award"]]
     inv_map = [x for x in rel.get("related_to", [])] + [x for x in rel.get("similar_to", [])]
     if t in ("product", "platform"):
         n["applicationCategory"] = ", ".join(ENTS[c]["name"] for c in rel.get("instance_of", []) if ENTS[c]["type"] == "category") or "BusinessApplication"
@@ -692,6 +694,8 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                 facts.append((T(lang, "Works for", "Arbeitet bei"), f'<a href="{root}{_co["id"]}/">{esc(_co["name"])}</a>'))
             elif e["type"] == "person" and e.get("company"):
                 facts.append((T(lang, "Works for", "Arbeitet bei"), esc(e["company"])))
+            if e.get("award"):
+                facts.append((T(lang, "Awards", "Auszeichnungen"), "<br>".join(esc((x.get(lang) or x.get("en", "")) if isinstance(x, dict) else x) for x in e["award"])))
             if location_text(e) and e["type"] in ("person", "org"):
                 facts.append((T(lang, "Headquarters", "Sitz") if e["type"] == "org" else T(lang, "City", "Stadt"), f'<span translate="no">{esc(location_text(e))}</span>'))
             if e.get("founded") and e["type"] == "org":
