@@ -523,8 +523,8 @@ html.a11y-hc .spn{--spn-on:#ffb52e;--spn-good:#3cc9a1;--spn-red:#ff8a80}
 .spn-row.spn-ads{border-top:1px dashed var(--bd);padding-top:6px}
 /* Rechner der Werbeplaetze (assets/ads-book.js) im Konfigurator: einspaltig, Formularfelder wie die uebrigen Felder der Seite */
 .spn .adb{display:grid;gap:16px}.spn .adb h3{margin:0 0 .5em;font-size:1.1rem}.spn .adb-calc,.spn .adb-form{padding:16px;border:1px solid var(--bd);background:var(--bg)}
-.spn .adb-f{display:grid;gap:4px;margin:0 0 10px}.spn .adb-f label{font-size:.9rem;color:var(--mut)}
-.spn .adb input[type=text],.spn .adb input[type=url],.spn .adb input[type=email],.spn .adb input[type=number],.spn .adb input[type=date],.spn .adb select{font:inherit;color:var(--fg);background:var(--card);border:1px solid var(--bd);padding:9px 11px;max-width:32em;width:100%;box-sizing:border-box}
+.spn .adb-f{display:grid;gap:4px;margin:0 0 10px}.spn .adb-f label{font-weight:600}
+.spn .adb input[type=text],.spn .adb input[type=url],.spn .adb input[type=email],.spn .adb input[type=number],.spn .adb input[type=date],.spn .adb select{width:100%;max-width:32em}   /* Aussehen: assets/forms.css (#298) */
 .spn .adb fieldset{border:1px solid var(--bd);margin:0 0 10px;padding:8px 12px}.spn .adb legend{font-size:.9rem;color:var(--mut);padding:0 4px}.spn .adb-pt label{display:inline-block;margin-inline-end:14px}
 .spn .adb-sum{display:grid;grid-template-columns:minmax(0,1fr) max-content;gap:4px 18px;margin:12px 0 0;padding:10px 0 0;border-top:1px solid var(--bd)}.spn .adb-sum dt,.spn .adb-sum dd{margin:0}.spn .adb-sum dd{text-align:end;font-variant-numeric:tabular-nums}.spn .adb-sum dt:last-of-type,.spn .adb-sum dd:last-of-type{font-weight:600}
 .spn .adb .lp-note,.spn .adb .mut{margin:6px 0 0;font-size:.84rem;color:var(--mut)}.spn .adb .adm-msg.bad{color:var(--spn-red)}.spn .adb .btn{margin-top:6px}
