@@ -59,6 +59,18 @@ T = {
         "e_bad_contact": "Please enter a valid e-mail address or https link.", "e_editorial": "Please confirm that this is an editorial request.",
         "e_not_found": "This item is no longer available.", "e_pitch": "Please write a short pitch.",
         "also": "Also useful", "mediakit": "Media kit", "landing": "How Expert Connect works", "members": "Member directory",
+        "how_h": "How Expert Connect works",
+        "how_seek_h": "For editors, podcasters and organizers",
+        "how_seek": ["Post a request: title, short briefing, 1–10 topics, format (quote, interview, guest article, podcast, talk), language and a deadline of up to 60 days. Choose a request to matching experts or an open call.",
+                     "We match it: verified Microsoft MVPs and MCTs who have switched on Expert Connect, have a public profile and are strong in your topic get notified by push or weekly e-mail. Some requests are checked by a moderator first.",
+                     "Experts answer with a short pitch – or apply to your open call. You see why each expert fits.",
+                     "You accept or decline. Only after you accept do you receive the contact details the expert has shared."],
+        "how_expert_h": "For experts",
+        "how_expert": ["Switch on Expert Connect in your settings (opt-in) and choose the formats, languages, notifications and the contact you want to share.",
+                       "Keep your public profile and speaker listing up to date – topics and expertise decide which requests reach you.",
+                       "Answer matching requests or apply to open calls with a short pitch (max. 600 characters, no contact details).",
+                       "If the requester accepts, they receive the contact you chose. You can pause for two weeks at any time."],
+        "how_rules": "Free for both sides. Editorial requests only – no advertising, link building, surveys or sales. No contact details before acceptance.",
     },
     "de": {
         "title": "Expert Connect: Experten finden oder Anfrage ausschreiben", "kicker": "Expert Connect",
@@ -107,6 +119,18 @@ T = {
         "e_bad_contact": "Bitte eine gültige E-Mail-Adresse oder einen https-Link angeben.", "e_editorial": "Bitte bestätige, dass es eine redaktionelle Anfrage ist.",
         "e_not_found": "Dieser Eintrag ist nicht mehr verfügbar.", "e_pitch": "Bitte schreibe einen kurzen Pitch.",
         "also": "Auch hilfreich", "mediakit": "Mediadaten", "landing": "So funktioniert Expert Connect", "members": "Mitgliederverzeichnis",
+        "how_h": "So funktioniert Expert Connect",
+        "how_seek_h": "Für Redaktionen, Podcaster und Veranstalter",
+        "how_seek": ["Anfrage ausschreiben: Titel, kurzes Briefing, 1–10 Themen, Format (Zitat, Interview, Gastbeitrag, Podcast, Vortrag), Sprache und eine Frist von bis zu 60 Tagen. Du wählst: Anfrage an passende Experten oder offener Aufruf.",
+                     "Wir gleichen ab: Verifizierte Microsoft MVPs und MCTs, die Expert Connect eingeschaltet haben, ein öffentliches Profil haben und im Thema stark sind, werden per Push oder wöchentlicher E-Mail benachrichtigt. Manche Anfragen prüft vorher die Moderation.",
+                     "Experten antworten mit einem kurzen Pitch – oder bewerben sich auf deinen offenen Aufruf. Du siehst, warum jemand passt.",
+                     "Du nimmst an oder lehnst ab. Erst nach der Annahme bekommst du die Kontaktdaten, die der Experte freigegeben hat."],
+        "how_expert_h": "Für Experten",
+        "how_expert": ["Schalte Expert Connect in deinen Einstellungen ein (Opt-in) und wähle Formate, Sprachen, Benachrichtigung und den Kontakt, den du teilen möchtest.",
+                       "Halte dein öffentliches Profil und deinen Speaker-Eintrag aktuell – Themen und Fachlevel entscheiden, welche Anfragen dich erreichen.",
+                       "Beantworte passende Anfragen oder bewirb dich auf offene Aufrufe mit einem kurzen Pitch (max. 600 Zeichen, ohne Kontaktdaten).",
+                       "Nimmt die Redaktion an, bekommt sie den Kontakt, den du gewählt hast. Du kannst jederzeit für zwei Wochen pausieren."],
+        "how_rules": "Kostenlos für beide Seiten. Nur redaktionelle Anfragen – keine Werbung, kein Linkaufbau, keine Umfragen, kein Vertrieb. Keine Kontaktdaten vor der Annahme.",
     },
 }
 
@@ -120,6 +144,13 @@ CSS = """<style>
 .ec-hero-actions{display:flex;gap:10px;margin-top:18px}
 .ec-hero-actions .btn{flex:1 1 0;min-width:0;justify-content:center;text-align:center}
 .ec-hero-expert{margin:8px 0 0;font-size:.9rem}
+.ec-how{margin:28px 0 8px;border-top:2px solid var(--fg);padding-top:14px}
+.ec-how h2{margin:0 0 12px}
+.ec-how-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px}
+.ec-how h3{margin:0 0 8px;font-size:1.05rem}
+.ec-how ol{margin:0;padding-inline-start:1.3em;display:grid;gap:8px}
+.ec-how li{line-height:1.5}
+.ec-how-rules{margin:14px 0 0;color:var(--mut);font-size:.95rem}
 @media(max-width:600px){.ec-tabs{display:grid;grid-template-columns:1fr}.ec-group{width:100%}}
 .ec-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
 .ec-card{background:var(--card);border:1px solid var(--bd);padding:16px;display:grid;gap:8px;align-content:start}
@@ -157,6 +188,14 @@ def topics(ents):
     return sorted(out, key=lambda x: x[1].lower())
 
 
+def how(t, e):
+    """Abschnitt "So funktioniert Expert Connect": je Rolle vier Schritte und die Regeln (Mirko, 5.11.2026)."""
+    col = lambda h, steps: f'<div><h3>{e(h)}</h3><ol>' + "".join(f"<li>{e(x)}</li>" for x in steps) + "</ol></div>"
+    return (f'<section class="ec-how" id="how" aria-labelledby="ec-how-h"><h2 id="ec-how-h">{e(t["how_h"])}</h2><div class="ec-how-cols">'
+            + col(t["how_seek_h"], t["how_seek"]) + col(t["how_expert_h"], t["how_expert"])
+            + f'</div><p class="ec-how-rules">{e(t["how_rules"])}</p></section>')
+
+
 def build(g, ents, langs_all):
     """g: write, page, header, footer, BASE, LANGS, api. ents: Entitaeten (site_learn.ENTS). langs_all: Sprachen fuer Anfragen [(code, Name)]."""
     base, api = g["BASE"], g.get("api", "https://api-dub.m365.fm")
@@ -179,6 +218,7 @@ def build(g, ents, langs_all):
                 f'<div class="ec-hero-actions"><a class="btn" href="#search">{e(t["hero_search"])}</a>'
                 f'<a class="btn main" href="#request">{e(t["hero_request"])}</a></div>'
                 f'<p class="ec-hero-expert"><a href="#calls">{e(t["hero_calls"])}</a></p></div>'
+                + how(t, e) +
                 f'<nav class="ec-tabs" aria-label="Expert Connect">{tabs}</nav>'
                 f'<div id="ec" aria-live="polite"><p class="mut">{e(t["loading"])}</p></div>'
                 f'<p class="mut" style="margin-top:32px">{e(t["also"])}: <a href="{base}{pre}/for/publishers/">{e(t["landing"])}</a> · '
