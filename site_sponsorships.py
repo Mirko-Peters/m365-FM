@@ -40,7 +40,7 @@ Pruefungen beim Bau: Aufbau und Felder, Datumsangaben (start <= end), unbekannte
 fuer alle 15 Sprachen in data/py_i18n.json. Mit SITE_OFFLINE=1 (lokaler Bau ohne Community-API) werden unbekannte Verweise nur gemeldet.
 Zum Testen: Umgebungsvariable M365_SPONSORSHIPS = Pfad einer anderen Datei (nie echte Daten aus Tests committen)."""
 import json, os, re
-from datetime import date
+from datetime import date, timedelta
 from html import escape
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -52,6 +52,11 @@ ENV = "M365_SPONSORSHIPS"
 LABELS = ("sponsored", "advertisement")
 TOPIC_TYPES = ("product", "platform", "concept", "category", "cert")
 REC_KEYS = ("id", "sponsor", "label", "start", "end", "entities", "topics", "episodes", "posts", "go")
+# Mirko 6.11.2026: Entitaeten des Sponsors (Firma + Produkte) sind bei gesponserten Inhalten EXTRA zur Obergrenze von 10 Themen, solange das Sponsoring
+# laeuft und GRACE_MONTHS danach. Umgesetzt als 182 Tage (6 x ~30,4 Tage) nach "end", nicht als Kalendermonate: Tag 182 zaehlt noch, Tag 183 nicht mehr.
+GRACE_MONTHS = 6   # Mirko 6.11.2026
+GRACE_DAYS = 182
+TOPIC_CAP = 10
 REF_KEYS = ("entities", "topics", "episodes", "posts")
 # Kennzeichnung je Art: (Badge en, Badge de, Zusatz en, Zusatz de). Die 13 weiteren Sprachen sind von Hand in data/py_i18n.json gepflegt
 # (Schluessel = englischer Text); T() zieht sie dort den maschinellen Uebersetzungen vor. Deutsch immer "Anzeige".
@@ -261,6 +266,43 @@ def _index(recs, today, dubs, orig):
             st["post_refs"].setdefault(k, []).append((r["id"], x)); add(st["post"], k, r)
     _S = st
     return st
+
+
+def _in_grace(r, today):
+    """Laeuft oder ist vor hoechstens GRACE_DAYS Tagen zu Ende gegangen (end + 182 Tage eingeschlossen)."""
+    t, s, e = _day(today), _day(r["start"]), _day(r["end"])
+    return bool(t and s and e and s <= t <= e + timedelta(days=GRACE_DAYS))
+
+
+def sponsor_extra_entities(org_id, today, ents, recs=None):
+    """Extra-Entitaeten eines Sponsors: [org_id] + Produkte (rel developed_by -> org; Produkte/Plattformen mit part_of -> org), in Reihenfolge von ents.
+    Nur wenn ein Sponsoring mit org_id in "entities" laeuft oder vor <= GRACE_DAYS Tagen endete (GRACE_MONTHS = 6), sonst []."""
+    recs = _state()["recs"] if recs is None else recs
+    if org_id not in ents or not any(org_id in (r.get("entities") or []) and _in_grace(r, today) for r in recs): return []
+    out = [org_id]
+    for eid, e in ents.items():
+        if eid in out: continue
+        for rel in e.get("rel") or []:
+            if len(rel) == 2 and rel[1] == org_id and (rel[0] == "developed_by" or (rel[0] == "part_of" and e.get("type") in ("product", "platform"))):
+                out.append(eid); break
+    return out
+
+
+def split_topics(topics, extras, cap=TOPIC_CAP):
+    """Themenliste fuer Chips: extras vorn (ohne Doppelte), danach die ersten cap normalen Themen in bisheriger Reihenfolge.
+    Gibt (Liste, Menge der Extras) zurueck; ohne extras einfach die ersten cap Themen."""
+    ex = list(dict.fromkeys(extras or []))
+    return ex + [t for t in dict.fromkeys(topics or []) if t not in ex][:cap], set(ex)
+
+
+def post_extras(recs, today, ents):
+    """Extras fuer einen gesponserten Beitrag: Vereinigung ueber alle zugehoerigen Sponsorings (nur Sponsor-Entitaeten aus "entities")."""
+    out = []
+    for r in recs or []:
+        for o in r.get("entities") or []:
+            for x in sponsor_extra_entities(o, today, ents, [r]):
+                if x not in out: out.append(x)
+    return out
 
 
 def check_posts(posts):
