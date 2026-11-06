@@ -1538,379 +1538,382 @@
   ]
  },
  "fr": {
-  "html": "<p>Beaucoup d'utilisateurs pensent que la mémoire de Copilot est un moyen discret de les espionner. Cette idée repose sur une confusion entre trois fonctions qui n'ont pas le même fonctionnement : Copilot Memory, Windows Recall et Vision. Chacune suit un modèle de consentement différent, et c'est cette différence qui détermine le vrai risque pour la vie privée.</p>\n<p>Cet article détaille ce que la mémoire de Copilot conserve réellement, comment le vérifier et le supprimer, comment Recall et Vision s'en distinguent, et ce que les administrateurs peuvent contrôler dans Microsoft 365.</p>\n\n<h2>Copilot Memory : une mémoire intentionnelle, pas un journal intime</h2>\n<p>La mémoire de Copilot ne fonctionne pas en arrière-plan et ne collecte rien d'elle-même. Elle ne retient une information que si vous exprimez clairement l'intention de la conserver, par une instruction explicite ou une préférence clairement signalée. Elle ressemble à un bloc-notes que vous tendez à votre assistant en disant « écrivez ceci ». Si vous ne le faites pas, rien ne reste.</p>\n<p>Concrètement, vous pouvez demander à Copilot de retenir que vous préférez des résumés de moins de 100 mots, que vous aimez les exemples de jardinage ou que vous préférez les puces dans vos présentations. Copilot enregistre alors l'information et affiche un petit badge de mise à jour de la mémoire. Ce badge est un signal clair : quelque chose a changé.</p>\n\n<h3>Ce que la mémoire ignore volontairement</h3>\n<p>Microsoft a prévu des limites à ce que Copilot peut retenir. Les catégories sensibles sont ignorées : âge, origine ethnique, problèmes de santé, opinions politiques, orientation sexuelle. Même si vous essayez de lui fournir de tels détails, il ne les personnalisera pas. Copilot ne dresse donc pas discrètement votre profil ni votre dossier médical.</p>\n\n<h3>Ce qui est mémorisé, et ce qui ne l'est pas</h3>\n<p>Les requêtes ordinaires, comme « écris du code pour un algorithme de clustering », ne sont pas mémorisées. En revanche, une phrase comme « pars toujours du principe que je préfère Python pour l'analyse » est une intention déclarée, donc elle est retenue. Seul ce que vous déclarez est stocké. Parler de « profil » est trompeur : vous construisez votre mémoire une brique à la fois, à travers ce que vous choisissez de partager.</p>\n<p>Une bonne image est celle du post-it numérique. Vous le collez là où Copilot peut le voir, et il reste épinglé dans Outlook, Word, Excel et PowerPoint jusqu'à ce que vous le retiriez. Copilot n'ajoute pas ses propres notes cachées : il ne lit que celles que vous avez collées.</p>\n\n<h2>Les contrôles à la disposition des utilisateurs</h2>\n<p>Microsoft a prévu plusieurs leviers pour que la mémoire reste vérifiable et sous votre contrôle.</p>\n<h3>Activer ou désactiver la mémoire</h3>\n<p>Dans Copilot, le chemin est : Paramètres, Compte, Confidentialité, Personnalisation et Mémoire. C'est l'interrupteur principal. Tant qu'il est désactivé, Copilot fonctionne avec une sorte d'amnésie à court terme. Une fois activé, il peut retenir ce que vous lui indiquez intentionnellement. La personnalisation est activée par défaut dans de nombreuses régions, mais vous pouvez la désactiver complètement.</p>\n<h3>Consulter, corriger, effacer</h3>\n<ul>\n<li><strong>Vérifier :</strong> demandez simplement « que sais-tu de moi ? ». Copilot résume les entrées actuelles.</li>\n<li><strong>Supprimer une entrée :</strong> dites par exemple « oublie que j'aime jardiner » ou « oublie que j'aime les puces ».</li>\n<li><strong>Tout effacer :</strong> demandez un effacement complet et Copilot oublie tout d'un coup.</li>\n<li><strong>Entraînement du modèle :</strong> vous pouvez vous désinscrire pour que vos conversations ne servent pas à entraîner le modèle, tout en gardant votre mémoire personnelle. Vos préférences personnalisent votre Copilot sans améliorer automatiquement le modèle global, sauf si vous choisissez d'y contribuer.</li>\n</ul>\n<p>La comparaison avec les cookies de navigateur est parlante, avec une différence de taille : ici, vous placez vous-même les « cookies », vous pouvez les détruire quand vous le souhaitez, et ils ne vous suivent pas sur d'autres sites.</p>\n\n<h2>Windows Recall : la capture automatique qui inquiète</h2>\n<p>Si l'on cherche la fonction qui donne le sentiment d'être observé, c'est Recall. Elle capture automatiquement l'activité à l'écran, sans invite et sans demande d'autorisation à chaque fois. Ce n'est pas non plus une fonction disponible sur tous les PC Windows : Recall est une exclusivité des Copilot+ PC. Il constitue son archive en prenant régulièrement des instantanés chiffrés de ce qui s'affiche.</p>\n\n<h3>Local et chiffré, mais pas anodin</h3>\n<p>Sur le plan technique, les arguments sont solides : les instantanés sont chiffrés et stockés localement. Par défaut, les données ne quittent pas l'appareil, sans synchronisation dans le cloud ni cache de serveur caché. Des outils informatiques permettent de définir des politiques, des audits et des limites de conservation.</p>\n<p>Le malaise vient pourtant d'ailleurs. Imaginez quelqu'un qui passe à intervalles réguliers près de votre bureau, sans prévenir, et photographie ce qui s'y trouve, puis range chaque photo dans une armoire que personne d'autre ne touche. Même sécurisé, le simple fait que ces photos existent dérange. Un chiffrement ne supprime pas la réaction humaine : emails à moitié rédigés, images ouvertes une fraction de seconde, tout peut être documenté.</p>\n\n<h3>L'enjeu pour les entreprises</h3>\n<p>À l'échelle d'une organisation, les écrans peuvent contenir des feuilles de calcul, des chiffres financiers non publiés, des documents médicaux confidentiels ou des projets juridiques sensibles. Ces fragments restent du matériel capturé. Les équipes de gouvernance doivent désormais tenir compte du fait que le PC d'un employé stocke des captures d'écran. Présenter Recall comme une simple fonction de prise de notes mène droit à l'échec en matière de conformité.</p>\n<p>La différence fondamentale ne tient ni au chiffrement ni au lieu de stockage, mais au modèle de consentement. Avec Memory, l'utilisateur gère ce qui est retenu. Avec Recall, l'archivage est automatique et par défaut, sauf réglementation explicite.</p>\n\n<h2>Vision : un interprète éphémère</h2>\n<p>Vision est souvent confondue avec les deux autres fonctions, alors qu'elle est conçue pour disparaître. Elle n'accumule rien et agit comme un interprète en temps réel qui n'intervient que lorsque vous l'invoquez.</p>\n<h3>Comment elle fonctionne</h3>\n<p>Vous pointez votre écran ou votre caméra vers un élément : un document ouvert, une diapositive confuse, un flux en direct depuis votre téléphone. Vision analyse l'entrée en temps réel et renvoie du contexte ou des suggestions directement dans le chat. Lorsque la session se termine, les images et le son sont effacés.</p>\n<h3>Une fonction facultative</h3>\n<p>Vision n'est pas toujours active. Elle se lance lorsque vous cliquez sur l'icône en forme de lunettes dans le compositeur de Copilot, ou lorsque vous l'autorisez explicitement dans les paramètres d'Edge ou de Windows. Fermer la fenêtre, la désactiver ou passer en mode inactif met fin à la session, et il faut la relancer manuellement.</p>\n<h3>Le point de nuance : la transcription</h3>\n<p>Vision ne conserve ni photos ni vidéos, mais la transcription textuelle de l'échange peut rester dans l'historique de chat. Vous pouvez la consulter et la supprimer à tout moment. Il s'agit d'un historique de conversation sous votre contrôle, pas d'une surveillance. Pour les entreprises, il suffit de rappeler aux utilisateurs que ces transcriptions existent : c'est une question d'habitude, pas de refonte de la gouvernance.</p>\n\n<h2>Le rôle des administrateurs : gouvernance et traçabilité</h2>\n<p>Les administrateurs disposent d'outils puissants pour encadrer la mémoire :</p>\n<ul>\n<li>désactivation de la mémoire pour l'ensemble d'un locataire, ou seulement pour certains groupes ;</li>\n<li>détection de chaque action de mémoire (création, mise à jour, suppression) via Microsoft Purview et Discovery ;</li>\n<li>pistes d'audit permettant de savoir qui a retenu ou oublié quoi.</li>\n</ul>\n<p>Les équipes de conformité n'ont donc pas à se contenter de promesses vagues : elles obtiennent une supervision concrète. Ces contrôles ne sont pas décoratifs, ils sont opérationnels. Ne pas les utiliser revient à laisser le marteau sur la table puis à se plaindre des clous.</p>\n\n<h2>Pourquoi la mémoire de Copilot améliore la productivité</h2>\n<p>Sans mémoire, chaque session repart de zéro. Il faut répéter « limite à moins de 200 mots », « utilise des puces », « garde un ton formel », jour après jour. Multipliée par toute une organisation, cette répétition représente des heures perdues : analystes qui ressaisissent des consignes de mise en forme dans Excel, chefs de projet qui rappellent les mêmes conventions de nommage dans Teams, concepteurs qui expliquent comment structurer des diapositives.</p>\n<p>Avec la mémoire, on donne une consigne une fois et elle persiste. Une préférence de mise en forme dans Word, une convention de nommage dans SharePoint ou un style d'email dans Outlook semblent minimes, mais répétés dans de nombreux flux de travail, ils deviennent des gains mesurables.</p>\n<p>La mémoire améliore aussi la pertinence des réponses. Un cas concret : un utilisateur demande de l'aide pour PowerShell. Sa mémoire contenant déjà du travail lié à Microsoft Graph, Copilot a fait référence de lui-même au SDK PowerShell Graph. Le contexte stocké a produit une meilleure réponse technique.</p>\n<p>L'enjeu est aussi celui de l'adoption. Les entreprises déploient un assistant IA pour gagner en efficacité à grande échelle. Si l'outil paraît générique ou fastidieux, l'adoption stagne. Dans Excel, des métriques liées à un rôle remontent à la surface ; dans Word, le modèle de rapport attendu est retrouvé ; dans Outlook, les brouillons reflètent la voix de l'organisation plutôt qu'un ton fade.</p>\n\n<h2>Erreurs fréquentes et pièges à éviter</h2>\n<ul>\n<li><strong>Croire que Copilot consigne tout automatiquement.</strong> C'est faux pour Memory : sans intention déclarée, rien n'est stocké. Le vrai risque est de partir de cette fausse hypothèse.</li>\n<li><strong>Confondre Memory, Recall et Vision.</strong> La mémoire est organisée et intentionnelle, Recall est automatisé et constant, Vision est limité à une session. Les mélanger conduit à de mauvaises décisions de gouvernance.</li>\n<li><strong>Traiter Recall comme une simple fonction de prise de notes.</strong> Il s'agit d'une collecte automatique de données, avec des implications de conformité.</li>\n<li><strong>Oublier la transcription de Vision.</strong> Les images et l'audio disparaissent, mais le texte de l'échange peut rester dans l'historique de chat jusqu'à ce que vous le supprimiez.</li>\n<li><strong>Ne pas utiliser les contrôles disponibles.</strong> Interrupteur de mémoire, commande de consultation, suppression ciblée, options d'administration : tout existe, mais encore faut-il s'en servir.</li>\n</ul>\n\n<h2>Points pratiques à retenir</h2>\n<ul>\n<li>Memory ne retient que ce que vous demandez explicitement, et signale chaque ajout par un badge.</li>\n<li>Les catégories sensibles (âge, origine ethnique, santé, opinions politiques, orientation sexuelle) ne sont pas personnalisées.</li>\n<li>Demandez « que sais-tu de moi ? » pour vérifier le contenu de votre mémoire, puis supprimez par une simple phrase.</li>\n<li>Le réglage se trouve dans Paramètres, Compte, Confidentialité, Personnalisation et Mémoire.</li>\n<li>Vous pouvez vous désinscrire de l'utilisation de vos conversations pour l'entraînement du modèle.</li>\n<li>Recall est réservé aux Copilot+ PC, capture régulièrement l'écran en local avec chiffrement et exige une réflexion de gouvernance.</li>\n<li>Vision est activée volontairement, efface images et audio en fin de session ; seule la transcription textuelle peut rester.</li>\n<li>Les administrateurs peuvent désactiver la mémoire pour un locataire ou des groupes et auditer les actions via Microsoft Purview et Discovery.</li>\n</ul>\n\n<h2>Conclusion</h2>\n<p>La mémoire de Copilot n'est ni un espion ni un journal intime : c'est une couche de persistance délibérée, visible et contrôlable. Recall relève d'une autre logique, celle d'une capture d'écran locale automatique, et Vision d'une analyse limitée à la session dont seule la transcription peut subsister. Trois outils, trois modèles de consentement : bien les distinguer évite les fausses craintes comme les mauvaises décisions. Pour vous en assurer, demandez à Copilot ce qu'il sait de vous et, si la réponse vous gêne, ajustez ou désactivez la personnalisation dans les paramètres de confidentialité du compte.</p>",
+  "html": "<p>Beaucoup d'utilisateurs de Microsoft 365 mettent dans le même sac trois fonctions : la mémoire de Copilot (Copilot Memory), Recall et Vision. Résultat : on soupçonne Copilot d'espionner en silence, alors que ce n'est pas la fonction visée. Ces trois outils reposent sur des modèles de consentement très différents, et ce sont ces différences qui déterminent le vrai risque pour la vie privée.</p>\n<p>Cet article détaille ce que chaque fonction conserve réellement, comment vérifier ce qui est stocké et comment les administrateurs peuvent garder la main.</p>\n\n<h2>Copilot Memory : une mémoire volontaire, pas un journal intime</h2>\n<p>La mémoire de Copilot n'est pas un enregistreur qui tournerait en arrière-plan. Elle ne retient quelque chose que si vous exprimez une intention claire de vous en souvenir, par une instruction explicite ou une préférence clairement signalée. L'image la plus juste est celle d'un bloc-notes que vous tendez vous-même à votre assistant en disant « note ceci ». Sans cette demande, rien n'est conservé.</p>\n<p>Si Copilot enregistrait en cachette, vous ne verriez pas le petit badge « mémoire mise à jour » qui s'affiche à chaque nouvelle information retenue. Ce badge n'est pas décoratif : c'est un signal qui indique que quelque chose a changé.</p>\n\n<h3>Ce que vous pouvez lui demander de retenir</h3>\n<ul>\n<li>« N'oublie pas que je préfère mes résumés de moins de 100 mots. »</li>\n<li>« N'oublie pas que j'aime les exemples de jardinage. »</li>\n<li>« N'oublie pas que je préfère les puces dans les présentations. »</li>\n<li>Une préférence de ton ou un libellé de projet.</li>\n</ul>\n\n<h3>Ce que Memory ne retient pas</h3>\n<p>Les invites ordinaires, comme « écris du code pour un algorithme de clustering », ne sont pas mémorisées. En revanche, « pars toujours du principe que je préfère Python pour l'analyse » est une intention déclarée, donc elle est retenue. Microsoft a de plus prévu des limites : Copilot ignore les catégories sensibles comme l'âge, l'origine ethnique, les problèmes de santé, les opinions politiques ou l'orientation sexuelle. Même si vous essayez de lui en faire mémoriser, il ne les personnalisera pas.</p>\n<p>Parler de « profil » est donc trompeur. Vous construisez le contenu brique par brique, à travers ce que vous choisissez de partager. Une bonne analogie : un post-it numérique que vous collez là où Copilot peut le voir. Ces notes restent épinglées dans Outlook, Word, Excel et PowerPoint jusqu'à ce que vous les retiriez, et Copilot n'en ajoute jamais de cachées. Ici, le silence équivaut à l'oubli : pas de déclaration, pas de persistance.</p>\n\n<h2>Windows Recall : la capture automatique qui inquiète</h2>\n<p>Si le sentiment d'être observé vous préoccupe, c'est Recall qu'il faut regarder, pas Memory. Recall capture automatiquement votre activité à l'écran. Il ne demande pas poliment s'il doit se souvenir de ceci ou de cela : il effectue une collecte régulière et silencieuse. Il s'agit d'une exclusivité Copilot+ PC, qui constitue son archive en prenant régulièrement des instantanés chiffrés de ce qui s'affiche.</p>\n\n<h3>Une protection technique réelle, un malaise bien réel</h3>\n<p>Côté technique, les arguments sont solides. Les instantanés sont chiffrés et stockés localement, les données ne quittent pas l'appareil par défaut, et il n'y a ni synchronisation dans le cloud ni cache de serveur caché. Des outils informatiques permettent de définir des politiques, des audits et des limites de conservation.</p>\n<p>Pourtant, la tranquillité technique n'efface pas l'image d'un PC qui prend des photos que vous n'avez jamais demandées. Imaginez que quelqu'un passe à intervalles réguliers près de votre bureau, sans annonce ni autorisation, photographie ce qui s'y trouve et range chaque cliché dans une armoire que personne d'autre ne touche. Sécurisé, certes, mais le simple fait que ces photos existent crée un malaise. Cela vaut pour des emails à moitié rédigés comme pour un classeur Excel que vous n'avez fait qu'entrevoir.</p>\n\n<h3>L'enjeu pour les entreprises</h3>\n<p>À l'échelle d'une organisation, les écrans peuvent afficher des feuilles de calcul, des chiffres financiers non publiés, des documents médicaux confidentiels ou des projets juridiques sensibles. Ces fragments, même enfermés dans un album chiffré, restent du matériel capturé. Les équipes de gouvernance doivent désormais tenir compte du fait que le PC d'un employé stocke des captures d'écran, et non des informations soigneusement choisies par l'utilisateur. Traiter Recall comme une simple fonction de prise de notes est un raccourci vers l'échec de la conformité.</p>\n<p>La différence fondamentale tient au modèle de consentement. Avec Memory, vous décidez de ce qui est conservé. Avec Recall, l'archivage est la règle par défaut, sauf réglementation explicite.</p>\n\n<h2>Copilot Vision : un interprète en temps réel, pas une archive</h2>\n<p>Vision relève d'une tout autre catégorie. Elle est conçue pour disparaître dès que vous cessez de l'utiliser. Vous la lancez en cliquant sur l'icône en forme de lunettes dans le compositeur Copilot, ou en l'autorisant explicitement dans les paramètres Edge ou Windows. Vous pointez ensuite votre écran ou votre caméra vers un document ouvert, une diapositive en désordre ou un flux en direct depuis votre téléphone, et Vision analyse le contenu en temps réel pour renvoyer du contexte ou des suggestions dans le chat.</p>\n<p>L'analogie la plus parlante est celle d'un interprète de conférence : il vous souffle des mots utiles pendant la réunion, mais ne produit pas le journal de chaque parole échangée.</p>\n\n<h3>Ce qui disparaît, ce qui peut rester</h3>\n<p>À la fin de la session, les images et le contexte sont effacés. Fermez la fenêtre, désactivez la fonction ou passez en mode inactif : la session se termine automatiquement, et il faut la relancer manuellement pour repartir. Une nuance importante toutefois : la transcription textuelle de l'échange peut rester dans votre historique de chat. Vous pouvez la consulter et la supprimer à tout moment. Ce n'est pas de la surveillance, mais un historique de conversation traçable sous votre contrôle.</p>\n<p>Pour les entreprises, Vision ne figure donc pas parmi les cauchemars de conformité. Il suffit de rappeler aux utilisateurs que ces transcriptions existent, ce qui relève d'une simple habitude d'usage et non d'une refonte de la gouvernance.</p>\n\n<h2>Les contrôles de confidentialité : pour les utilisateurs et les administrateurs</h2>\n<p>Microsoft a prévu une série de leviers pour que Memory ne soit jamais confondue avec un enregistreur de frappe.</p>\n\n<h3>Côté utilisateur</h3>\n<ol>\n<li><strong>L'interrupteur principal :</strong> dans Copilot, ouvrez Paramètres, puis Compte, puis Confidentialité, puis Personnalisation et Mémoire. Tant que la mémoire n'est pas activée, Copilot ne retient rien d'une session à l'autre.</li>\n<li><strong>Le badge de mise à jour :</strong> il signale chaque nouvel ajout.</li>\n<li><strong>La vérification :</strong> demandez « que sais-tu de moi ? » et Copilot résume les entrées actuelles.</li>\n<li><strong>La suppression ciblée ou totale :</strong> dites par exemple « oublie que j'aime les puces », ou commandez un effacement complet.</li>\n<li><strong>La désinscription de l'entraînement :</strong> vous pouvez demander que vos conversations ne servent pas à entraîner le modèle, tout en conservant votre mémoire personnelle.</li>\n</ol>\n<p>La personnalisation est activée par défaut dans de nombreuses régions, mais vous pouvez la désactiver entièrement. La transparence fait partie de l'architecture.</p>\n\n<h3>Côté administrateur</h3>\n<p>Les administrateurs peuvent désactiver la mémoire pour l'ensemble d'un locataire ou seulement pour certains groupes. Chaque action de mémoire (création, mise à jour, suppression) est détectable via Microsoft Purview et Discovery. Les équipes de gouvernance disposent ainsi de pistes d'audit : elles savent qui a mémorisé ou oublié quoi. Ces contrôles sont comparables à des cookies de navigateur, à ceci près que vous les placez vous-même, qu'ils ne vous suivent pas sur d'autres sites et que vous pouvez les détruire quand vous voulez.</p>\n\n<h2>Pourquoi la mémoire de Copilot compte vraiment</h2>\n<p>Sans mémoire, chaque session repart de zéro : limiter à moins de 200 mots, utiliser des puces, adopter un registre formel, jour après jour. À l'échelle d'une organisation, ces répétitions deviennent des heures perdues. Les analystes retapent leurs consignes de mise en forme dans Excel, les chefs de projet répètent les mêmes conventions de nommage dans Teams, les concepteurs expliquent à Copilot comment structurer leurs diapositives.</p>\n<p>Avec la mémoire, vous le dites une fois et cela persiste. Une préférence de mise en forme dans Word, une convention de nommage dans SharePoint, un style d'email dans Outlook : multipliées sur de nombreux flux de travail, ces petites économies s'additionnent en gains de productivité.</p>\n<p>La mémoire améliore aussi la qualité des réponses. Un utilisateur a demandé de l'aide pour PowerShell ; sa mémoire contenait déjà du travail lié à Microsoft Graph, et Copilot a spontanément mentionné le SDK PowerShell Graph. La pertinence vient du contexte stocké. Dans Excel, des métriques propres à un rôle peuvent remonter ; dans Word, le modèle de rapport attendu est retenu ; dans Outlook, les brouillons se rapprochent de la voix de l'organisation. Pour les entreprises, c'est un facteur d'adoption : un assistant qui paraît cohérent est davantage utilisé, alors qu'un outil jugé fastidieux voit l'adoption stagner.</p>\n\n<h2>Erreurs fréquentes et pièges à éviter</h2>\n<ul>\n<li><strong>Croire que Copilot consigne tout automatiquement.</strong> Ce n'est pas le cas de Memory : sans intention déclarée, rien n'est stocké. Le vrai risque est cette supposition erronée.</li>\n<li><strong>Confondre Memory et Recall.</strong> L'une est organisée et intentionnelle, l'autre automatisée et constante. Cela revient à comparer un collègue qui note ce que vous lui dictez à un collègue qui photographie votre bureau toutes les minutes.</li>\n<li><strong>Traiter Recall comme une simple fonction de prise de notes.</strong> Ses captures d'écran peuvent contenir des données sensibles, ce qui pose un vrai sujet de conformité.</li>\n<li><strong>Oublier les transcriptions de Vision.</strong> Les images et l'audio disparaissent, mais le texte de l'échange peut rester dans l'historique de chat tant que vous ne le supprimez pas.</li>\n<li><strong>Ne jamais ouvrir les paramètres.</strong> Les contrôles existent ; ne pas les utiliser revient à laisser le marteau sur la table.</li>\n</ul>\n\n<h2>Points à retenir et conclusion</h2>\n<ul>\n<li>Memory est volontaire et vérifiable : rien n'est retenu sans intention claire, et le badge signale chaque mise à jour.</li>\n<li>Recall est une capture d'écran locale automatique, chiffrée, réservée aux Copilot+ PC ; c'est elle qui soulève les questions de gouvernance.</li>\n<li>Vision fonctionne par session : images et audio sont effacés à la fin, mais la transcription du chat peut subsister.</li>\n<li>Pour contrôler Memory : Paramètres, Compte, Confidentialité, Personnalisation et Mémoire.</li>\n<li>Demandez « que sais-tu de moi ? » pour vérifier, puis supprimez une entrée ou videz tout.</li>\n<li>Vous pouvez refuser que vos conversations servent à entraîner le modèle.</li>\n<li>Les administrateurs peuvent désactiver la mémoire pour un locataire ou des groupes, et auditer les actions via Microsoft Purview et Discovery.</li>\n</ul>\n<p>En résumé, ces trois fonctions suivent trois modèles de consentement distincts : Memory est une couche de persistance délibérée, visible et contrôlable ; Recall archive automatiquement l'écran en local ; Vision analyse en direct, le temps d'une session. Les confondre conduit à de mauvaises hypothèses, qu'il s'agisse de s'inquiéter à tort de Memory ou de sous-estimer Recall. Le meilleur réflexe reste simple : demandez à Copilot ce qu'il sait de vous, et ajustez la personnalisation si la réponse ne vous convient pas.</p>",
   "model": "claude-sonnet-5-5",
   "info": {
    "titel": "Memory, Recall, Vision : trois modèles de consentement",
    "typ": "schritte",
    "punkte": [
     {
-     "kopf": "Memory : intentionnelle",
-     "text": "Ne retient que ce que vous demandez explicitement ; un badge signale chaque mise à jour."
+     "kopf": "Memory : volontaire",
+     "text": "Ne retient que ce que vous demandez explicitement ; badge de mise à jour, consultation et suppression possibles."
     },
     {
      "kopf": "Recall : automatique",
-     "text": "Instantanés chiffrés réguliers de l'écran, stockés localement, exclusivité des Copilot+ PC."
+     "text": "Instantanés chiffrés et locaux de l'écran sur Copilot+ PC, sans demande préalable ; enjeu de gouvernance."
     },
     {
      "kopf": "Vision : par session",
-     "text": "Images et audio effacés en fin de session ; la transcription texte peut rester dans le chat."
+     "text": "Images et audio effacés en fin de session ; la transcription du chat peut rester."
     },
     {
-     "kopf": "Contrôle utilisateur",
-     "text": "Demandez « que sais-tu de moi ? », supprimez une entrée ou désactivez la mémoire."
+     "kopf": "Contrôles utilisateur",
+     "text": "Interrupteur dans les paramètres, « que sais-tu de moi ? », suppression ciblée ou totale."
     },
     {
-     "kopf": "Contrôle administrateur",
+     "kopf": "Contrôles administrateur",
      "text": "Désactivation par locataire ou groupe, audit des actions via Microsoft Purview et Discovery."
     }
    ]
   },
   "faq": [
    {
-    "q": "La mémoire de Copilot m'espionne-t-elle ou enregistre-t-elle tout automatiquement ?",
-    "a": "Non. Copilot Memory ne collecte rien en arrière-plan : elle ne retient une information que si vous exprimez clairement l'intention de la conserver, par une instruction explicite. Les requêtes ordinaires ne sont pas mémorisées, et les catégories sensibles comme la santé, l'âge ou les opinions politiques sont ignorées."
+    "q": "Quelle est la différence entre Copilot Memory, Recall et Vision ?",
+    "a": "Ce sont trois modèles de consentement distincts. Memory retient uniquement ce que vous demandez explicitement de mémoriser. Recall, réservé aux Copilot+ PC, capture automatiquement l'écran en local sous forme d'instantanés chiffrés. Vision analyse en direct votre écran ou votre caméra, le temps d'une session."
    },
    {
-    "q": "Comment voir et supprimer ce que Copilot sait de moi ?",
-    "a": "Demandez simplement à Copilot « que sais-tu de moi ? » pour obtenir un résumé des entrées actuelles. Pour supprimer, dites par exemple « oublie que j'aime jardiner », ou demandez un effacement complet. Vous pouvez aussi désactiver la mémoire dans Paramètres, Compte, Confidentialité, Personnalisation et Mémoire."
+    "q": "Copilot Memory enregistre-t-il tout ce que je fais en secret ?",
+    "a": "Non. Copilot Memory ne retient rien sans intention claire de votre part, par exemple « n'oublie pas que je préfère les puces ». Les invites ordinaires ne sont pas mémorisées, et un badge « mémoire mise à jour » signale chaque ajout. Les catégories sensibles, comme la santé, sont ignorées."
    },
    {
-    "q": "Quelle est la différence entre Copilot Memory, Windows Recall et Vision ?",
-    "a": "Memory est intentionnelle : seul ce que vous déclarez est retenu. Recall, réservé aux Copilot+ PC, capture automatiquement l'écran en instantanés chiffrés stockés localement. Vision se lance volontairement, analyse l'écran ou la caméra pendant la session, puis efface images et audio ; seule la transcription peut rester dans l'historique."
+    "q": "Comment vérifier et supprimer ce que Copilot a mémorisé sur moi ?",
+    "a": "Demandez à Copilot « que sais-tu de moi ? » pour obtenir un résumé des entrées actuelles. Pour supprimer, dites par exemple « oublie que j'aime les puces » ou commandez un effacement complet. Vous pouvez aussi désactiver la mémoire dans Paramètres, Compte, Confidentialité, Personnalisation et Mémoire."
    },
    {
-    "q": "Que peuvent contrôler les administrateurs Microsoft 365 concernant la mémoire de Copilot ?",
-    "a": "Les administrateurs peuvent désactiver la mémoire pour tout le locataire ou seulement pour certains groupes. Ils peuvent aussi détecter chaque action de mémoire (création, mise à jour, suppression) via Microsoft Purview et Discovery, et disposent de pistes d'audit indiquant qui a retenu ou oublié quoi."
+    "q": "Que devient ce que Copilot Vision voit sur mon écran après la session ?",
+    "a": "À la fin de la session, les images et le contexte sont effacés. Fermer la fenêtre ou désactiver la fonction suffit à l'arrêter. Seule la transcription textuelle de l'échange peut rester dans votre historique de chat, où vous pouvez la consulter et la supprimer à tout moment."
    }
   ],
   "infos": [
    {
-    "titre_note": "",
     "titel": "Memory, Recall et Vision : trois modèles de consentement",
     "typ": "vergleich",
     "links": {
      "titel": "Copilot Memory",
      "punkte": [
-      "Ne retient que ce que vous demandez explicitement",
-      "Un badge signale chaque mise à jour de la mémoire",
-      "Catégories sensibles ignorées : santé, âge, opinions politiques",
-      "Consultation, suppression ciblée ou effacement complet possibles",
-      "L'utilisateur gère ce qui est retenu"
+      "Retient uniquement ce que vous demandez explicitement de mémoriser",
+      "Un badge « mémoire mise à jour » signale chaque ajout",
+      "Sans déclaration, pas de persistance : le silence équivaut à l'oubli",
+      "Vérifiable et supprimable à tout moment par l'utilisateur"
      ]
     },
     "rechts": {
      "titel": "Windows Recall",
      "punkte": [
-      "Capture automatique de l'écran, sans invite à chaque fois",
-      "Réservé aux Copilot+ PC",
-      "Instantanés chiffrés, stockés localement sur l'appareil",
-      "Archivage automatique et par défaut",
-      "Implications de conformité pour les entreprises"
+      "Capture automatique et régulière de l'activité à l'écran",
+      "Exclusivité Copilot+ PC, instantanés chiffrés stockés localement",
+      "Archivage par défaut, sans demande préalable de l'utilisateur",
+      "Soulève de vraies questions de gouvernance et de conformité"
      ]
     }
    },
    {
-    "titel": "Ce que Vision conserve et ce qu'elle efface",
+    "titel": "Les trois fonctions en bref",
     "typ": "fakten",
     "punkte": [
      {
-      "wert": "Facultative",
-      "text": "Lancée via l'icône en forme de lunettes ou autorisée dans les paramètres."
+      "wert": "Memory",
+      "text": "Mémoire volontaire : rien n'est retenu sans intention clairement déclarée."
      },
      {
-      "wert": "Session",
-      "text": "Fermer la fenêtre ou passer en mode inactif met fin à la session."
+      "wert": "Recall",
+      "text": "Captures d'écran locales chiffrées, automatiques, réservées aux Copilot+ PC."
      },
      {
-      "wert": "Effacés",
-      "text": "Les images et le son sont supprimés à la fin de la session."
+      "wert": "Vision",
+      "text": "Analyse en temps réel ; images et audio effacés en fin de session."
      },
      {
       "wert": "Transcription",
-      "text": "Le texte de l'échange peut rester dans l'historique de chat."
+      "text": "Le texte de l'échange Vision peut rester dans l'historique de chat."
      },
      {
-      "wert": "Contrôle",
-      "text": "Vous pouvez consulter et supprimer la transcription à tout moment."
+      "wert": "Purview",
+      "text": "Les administrateurs auditent création, mise à jour et suppression des mémoires."
      }
     ]
-   }
-  ],
-  "quiz": [
-   {
-    "q": "Dans quel cas Copilot Memory retient-il une information vous concernant ?",
-    "opts": [
-     "Lorsque vous exprimez clairement l'intention de la conserver, par une instruction explicite",
-     "Dès que vous posez une requête technique, comme écrire du code",
-     "Lorsqu'il détecte une information utile en arrière-plan pendant vos sessions",
-     "Chaque fois que vous mentionnez votre âge ou votre état de santé"
-    ],
-    "a": 0,
-    "why": "Memory ne collecte rien d'elle-même : seule une intention déclarée est retenue, et un badge de mise à jour signale chaque ajout."
-   },
-   {
-    "q": "Que faut-il dire à Copilot pour vérifier le contenu de sa mémoire ?",
-    "opts": [
-     "« Efface tout l'historique de mes conversations »",
-     "« Que sais-tu de moi ? »",
-     "« Active le mode Vision sur mon écran »",
-     "« Exporte mon profil complet vers Purview »"
-    ],
-    "a": 1,
-    "why": "La question « que sais-tu de moi ? » pousse Copilot à résumer les entrées actuelles de la mémoire."
-   },
-   {
-    "q": "Quelle différence fondamentale distingue Recall de Copilot Memory selon l'article ?",
-    "opts": [
-     "Recall envoie ses données dans le cloud, contrairement à Memory",
-     "Recall n'est pas chiffré, alors que Memory l'est",
-     "Recall fonctionne sur tous les PC Windows, pas Memory",
-     "Recall archive automatiquement par défaut, alors qu'avec Memory l'utilisateur décide"
-    ],
-    "a": 3,
-    "why": "La différence tient au modèle de consentement, non au chiffrement ni au stockage : Recall capture automatiquement, Memory dépend de l'utilisateur."
-   },
-   {
-    "q": "Que peut-il rester après la fin d'une session Vision ?",
-    "opts": [
-     "Les photos prises par la caméra, stockées localement",
-     "L'enregistrement audio complet de la session",
-     "La transcription textuelle dans l'historique de chat",
-     "Des instantanés chiffrés de l'écran partagé"
-    ],
-    "a": 2,
-    "why": "Images et son sont effacés en fin de session, mais la transcription textuelle peut rester dans l'historique jusqu'à suppression."
    }
   ]
  },
  "nl": {
-  "html": "<p>Veel mensen denken dat het geheugen van Copilot een stiekeme manier is om je te bespioneren. Dat klopt niet. Het echte privacyrisico zit in de verwarring tussen drie verschillende functies: Copilot Memory, Windows Recall en Vision. Ze lijken op elkaar, maar werken met totaal verschillende toestemmingsmodellen.</p>\n<p>In dit artikel lees je wat Memory werkelijk bijhoudt, waarom Recall wél reden tot zorg geeft, hoe Vision zich gedraagt en welke instellingen jij en je beheerders hebben om de controle te houden.</p>\n\n<h2>Wat Copilot Memory wel en niet is</h2>\n<p>Het geheugen van Copilot is geen alziend dagboek dat elke toetsaanslag of privégedachte vastlegt. Het draait niet op de achtergrond om alles te verzamelen. Er wordt alleen iets bewaard als jij een duidelijke intentie uitspreekt, via een expliciete instructie of een duidelijk aangegeven voorkeur. Denk aan een notitieblok dat je aan een assistent geeft met de woorden \"schrijf dit op\". Doe je dat niet, dan wordt er niets opgeslagen.</p>\n<p>Dat zie je ook in de praktijk: elke keer dat er iets wordt vastgelegd, verschijnt de melding \"geheugen bijgewerkt\". Een systeem dat in het geheim spioneert, zou dat signaal niet geven.</p>\n<h3>Wat de intentie om te onthouden inhoudt</h3>\n<p>Het werkt in twee stappen:</p>\n<ul>\n<li><strong>Toevoegen:</strong> je zegt het expliciet, bijvoorbeeld dat je samenvattingen het liefst onder de 100 woorden wilt, dat je van tuinbouwvoorbeelden houdt of dat je opsommingstekens in presentaties verkiest.</li>\n<li><strong>Beheren:</strong> je vraagt wat Copilot over je weet, laat een item verwijderen met een opdracht als \"vergeet dat ik van tuinieren hou\", of schakel het geheugen helemaal uit in de instellingen.</li>\n</ul>\n<h3>Gewone opdrachten blijven niet hangen</h3>\n<p>Een gewone gespreksopdracht, zoals code schrijven voor een clusteralgoritme, wordt niet onthouden. Zeg je daarentegen dat Copilot er altijd van uit moet gaan dat je Python verkiest voor analyse, dan is dat een expliciete intentie en blijft het bewaard. Het geheugen slaat dus op wat je zelf aangeeft, niet wat toevallig voorbijkomt. Daarom is \"profiel\" een misleidend woord: je bouwt het zelf op, steen voor steen, met wat je besluit te delen.</p>\n<h3>Gevoelige categorieën worden gefilterd</h3>\n<p>Microsoft heeft bewust grenzen ingebouwd. Copilot negeert gevoelige categorieën als leeftijd, etniciteit, gezondheidstoestand, politieke opvattingen en seksuele geaardheid. Ook als je zulke details probeert op te geven, past het zich daar niet op aan. Een stil kiezersprofiel of medisch dossier ligt dus niet in de lijn der verwachting.</p>\n\n<h2>Windows Recall: de automatische screenshotverzamelaar</h2>\n<p>Recall is de functie die mensen terecht ongemakkelijk maakt. Het legt automatisch schermactiviteit vast, zonder dat je elk moment apart toestemming geeft. Het is geen optionele extra voor elke Windows-machine: Recall is exclusief voor Copilot+ PC's en bouwt een archief op door regelmatig versleutelde snapshots van je scherm te maken. Die snapshots worden lokaal en versleuteld opgeslagen.</p>\n<p>Technisch is dat degelijk uitgewerkt. Toch verdwijnt het onbehaaglijke gevoel niet door te wijzen op versleuteling, lokale opslag en het principe van private by design. Je pc legt alles vast, van conceptmails tot afbeeldingen die je maar een fractie van een seconde opende, in een album met tijdstempels.</p>\n<h3>Een beeld om het verschil te voelen</h3>\n<p>Stel je voor dat je op kantoor een contract neerlegt, notities maakt en koffie drinkt. Af en toe loopt iemand zonder aankondiging langs en maakt een foto van wat daar toevallig ligt. Alle foto's gaan chronologisch in een kast waar niemand anders bij kan. Veilig, misschien, maar het feit dat die foto's bestaan zorgt voor ongemak. Dat is Recall in een notendop: lokaal en versleuteld, maar constant opgenomen zonder te wachten op jouw besluit.</p>\n<h3>Waarom beheerders hiervan wakker liggen</h3>\n<p>Op een bedrijfsscherm kunnen loonlijsten, niet-vrijgegeven financiële cijfers, vertrouwelijke medische documenten of gevoelige juridische concepten staan. Zodra zulke fragmenten in het Recall-archief zitten, tellen ze als vastgelegd materiaal. Governance-afdelingen moeten dan niet alleen documenten en chatlogs beheren, maar ook rekening houden met screenshots op de pc van een medewerker. Omdat dit geautomatiseerde dataverzameling is en geen zorgvuldig samengestelde gebruikersinstructie, moet Recall apart worden meegewogen in compliance- en risicoanalyses. Het afdoen als simpele notitiefunctie is een snelle weg naar een compliance-schending.</p>\n<p>Microsoft benadrukt de beperkende ontwerpkeuzes: de gegevens verlaten standaard het apparaat niet, er is geen cloudsynchronisatie en geen verborgen servercache. Er zijn IT-tools voor beleid, audits en retentielimieten. Op papier is de architectuur solide, maar werknemers vinden het niet prettig te horen dat hun pc de hele dag screenshots maakt. Recall is technisch verdedigbaar, maar psychologisch verontrustend.</p>\n\n<h2>Vision: de vluchtige real-time hulp</h2>\n<p>Vision draait niet om verzamelen, loggen of archiveren. Het is gebouwd om te verdwijnen zodra je stopt. Het werkt sessiegebonden: jij start het door op het brilicoon in de Copilot Composer te klikken, of door het expliciet toe te staan in de instellingen van Edge of Windows. Sluit je het venster, schakel je het uit of word je inactief, dan eindigt de sessie automatisch. Opnieuw starten gebeurt handmatig. Vision staat dus nooit permanent aan en is opt-in.</p>\n<h3>Wat er tijdens een sessie gebeurt</h3>\n<p>Je richt je scherm of camera op iets, zoals een open document, een rommelige slide of een live feed vanaf je telefoon. Vision analyseert de invoer in real time en geeft context of suggesties direct in de chat. Beelden en audio worden na afloop gewist. Vision verwerkt context lokaal en bewaart geen screenshots in een of andere kluis.</p>\n<h3>De nuance: het tekstgesprek kan blijven staan</h3>\n<p>Vision bewaart geen foto's of video, maar het tekstuele transcript van je interactie kan in je chatgeschiedenis blijven staan. Dat beheer je zelf en je kunt het op elk moment verwijderen. Wil je helemaal niets laten bestaan, dan verwijder je de chatgeschiedenis, en het is alsof de sessie nooit heeft plaatsgevonden. Het is dus overdreven om te zeggen dat Vision niets achterlaat; nauwkeuriger is: vluchtig voor beelden en audio, met een verwijderbare gespreksgeschiedenis onder jouw controle.</p>\n<p>Voor organisaties betekent dit dat Vision geen digitaal mijnenveld achterlaat. De gevoeligheid zit in persistente gegevens als documenten, tijdlijnen en registers, en die slaat Vision over. Je moet medewerkers hooguit herinneren aan het bestaan van transcripten, en dat is een kwestie van gebruikersgewoonte, niet van bestuurlijke zorg.</p>\n\n<h2>De privacy-toolkit: zo houd je Memory onder controle</h2>\n<p>Microsoft heeft Memory met zichtbare bedieningselementen uitgerust, zodat niemand het voor een keylogger op de achtergrond aanziet.</p>\n<h3>Stap 1: de hoofdschakelaar</h3>\n<p>Ga in Copilot naar instellingen, dan account, privacy, en vervolgens personalisatie en geheugen. Dat is de hoofdschakelaar. Zolang hij uit staat, werkt Copilot met een soort kortetermijngeheugenverlies. Zet je hem aan, dan kan Copilot onthouden wat jij bewust aanlevert. Er zijn geen halve schaduwen: het is uitgeschakeld of expliciet actief.</p>\n<h3>Stap 2: de badge als signaal</h3>\n<p>Elke keer dat je Copilot iets nieuws leert, verschijnt de melding \"geheugen bijgewerkt\". Dat is geen versiering, maar een noodzakelijk signaal dat er iets is veranderd.</p>\n<h3>Stap 3: inzien en verwijderen</h3>\n<p>Je hoeft niet te raden wat er is opgeslagen. Vraag: \"Wat weet je over mij?\" en Copilot somt de huidige items op. Wil je één item kwijt, dan zeg je bijvoorbeeld \"vergeet dat ik van opsommingstekens hou\". Wil je alles wissen, dan geef je opdracht tot een volledige wisactie.</p>\n<h3>Stap 4: afmelden voor modeltraining</h3>\n<p>Je kunt ook een schakelaar omzetten zodat je gesprekken niet worden gebruikt voor modeltraining, terwijl je persoonlijke geheugen gewoon blijft werken. Je voorkeuren personaliseren jouw Copilot en verbeteren het globale model niet automatisch, tenzij je ervoor kiest bij te dragen.</p>\n<h3>Wat beheerders kunnen doen</h3>\n<ul>\n<li>Het geheugen uitschakelen voor een hele tenant of alleen voor bepaalde groepen.</li>\n<li>Elke geheugenactie (aanmaken, bijwerken, verwijderen) terugvinden via Microsoft Purview eDiscovery, inclusief audit trails.</li>\n</ul>\n<p>Je kunt het vergelijken met browsercookies, maar dan cookies die je zelf benoemt, plaatst en weggooit wanneer je wilt. Ze ontstaan niet stilletjes en volgen je niet naar andere websites.</p>\n\n<h2>Waarom Memory productiviteit oplevert</h2>\n<p>Zonder geheugen begint elke sessie bij nul. Je typt telkens dezelfde instructies, zoals \"hou het onder de 200 woorden, gebruik opsommingstekens, formele afsluiting\". Individueel is dat een ergernis, maar binnen een organisatie lekken er zo uren weg. Analisten typen opmaakinstructies opnieuw in Excel, projectmanagers herhalen naamgevingsconventies in Teams en ontwerpers leggen telkens uit hoe dia's ingedeeld moeten worden.</p>\n<p>Met Memory vertel je het één keer en blijft het hangen. Een opmaakvoorkeur in Word, een aanduidingsconventie in SharePoint of een e-mailstijl in Outlook lijkt klein, maar levert na honderden herhalingen meetbare winst op. Het gaat niet om heldendaden, maar om opgebouwd gemak.</p>\n<h3>Ook betere antwoorden</h3>\n<p>Soms verandert geheugen ook de kwaliteit van de output. Een voorbeeld uit de praktijk: een gebruiker vroeg Copilot om hulp bij PowerShell. Omdat eerder werk met Microsoft Graph al was opgeslagen, verwees Copilot uit zichzelf naar de Graph PowerShell SDK. Dat is geen goocheltruc, maar relevantie dankzij opgeslagen context.</p>\n<h3>Adoptie in organisaties</h3>\n<p>Bedrijven voeren AI-assistenten in om efficiëntie op schaal te halen. Voelt een tool irrelevant of belastend aan, dan stagneert de adoptie. Een assistent die consistent aanvoelt en je voorkeuren kent, wordt eerder gebruikt dan verlaten. In Excel komen dan statistieken bovendrijven die bij je rol passen, in Word wordt het verwachte rapportsjabloon toegepast en in Outlook klinken concepten meer als de organisatie zelf.</p>\n<p>Personalisatie staat in veel regio's standaard aan, maar je kunt het volledig uitschakelen. Zo blijft het een keuze en geen verborgen verplichting.</p>\n\n<h2>Memory, Recall en Vision naast elkaar</h2>\n<p>Het belangrijkste verschil zit in het toestemmingsmodel, niet in versleuteling of opslag:</p>\n<ul>\n<li><strong>Memory</strong> is bewust opt-in, gecureerd en controleerbaar. Zonder jouw instructie wordt niets opgeslagen.</li>\n<li><strong>Recall</strong> maakt automatisch, lokaal en versleuteld screenshots op Copilot+ PC's en archiveert standaard alles zonder onderscheid, tenzij het expliciet wordt beheerd.</li>\n<li><strong>Vision</strong> is sessiegebaseerde analyse; beelden en audio verdwijnen, maar het teksttranscript kan blijven bestaan tot je het verwijdert.</li>\n</ul>\n<p>Wie ze door elkaar haalt, gaat van de verkeerde aannames uit. Wie bang is om in de gaten te worden gehouden, moet bij Recall zijn, niet bij Memory.</p>\n\n<h2>Praktische takeaways</h2>\n<ul>\n<li>Zie Memory als een notitieblok dat je zelf aanlevert: alleen wat je expliciet vraagt te onthouden, wordt opgeslagen.</li>\n<li>Controleer regelmatig wat Copilot weet door te vragen: \"Wat weet je over mij?\"</li>\n<li>Verwijder losse items met een opdracht als \"vergeet dat…\" of wis alles in één keer.</li>\n<li>Vind de hoofdschakelaar via instellingen, account, privacy, personalisatie en geheugen, en schakel personalisatie uit als het antwoord je ongemakkelijk maakt.</li>\n<li>Gebruik de aparte opt-out voor modeltraining als je niet wilt dat je gesprekken daarvoor worden gebruikt.</li>\n<li>Beheerders kunnen Memory per tenant of per groep uitschakelen en acties auditen via Microsoft Purview eDiscovery.</li>\n<li>Weeg Recall in compliance- en risicoanalyses altijd afzonderlijk mee, omdat het automatische dataverzameling betreft.</li>\n<li>Herinner medewerkers eraan dat Vision-transcripten in de chatgeschiedenis kunnen blijven staan en verwijderbaar zijn.</li>\n</ul>\n\n<h2>Fazit</h2>\n<p>Copilot Memory is geen verborgen spion, maar een zichtbare, controleerbare laag van persistentie die alleen opslaat wat jij uitdrukkelijk aangeeft. Recall is de functie die om extra aandacht vraagt, omdat die automatisch en constant schermen vastlegt, ook al gebeurt dat lokaal en versleuteld. Vision is vluchtig, met alleen een verwijderbaar tekstgesprek als overblijfsel. Wie de drie toestemmingsmodellen uit elkaar houdt en de beschikbare instellingen gebruikt, kan de productiviteitswinst van Memory benutten zonder de controle over de eigen gegevens uit handen te geven.</p>",
+  "html": "<p>Wie hoort dat Copilot dingen onthoudt, denkt al snel aan een tool die stiekem meekijkt. Naast Copilot Memory bestaan bovendien Windows Recall en Copilot Vision, en die worden voortdurend door elkaar gehaald. Toch werken de drie functies totaal verschillend en hebben ze elk een eigen toestemmingsmodel.</p>\n<p>In dit artikel lees je wat Copilot Memory werkelijk bijhoudt, waarom Recall een heel ander verhaal is, wat Vision doet en welke privacy-instellingen je zelf en je beheerders in handen hebben.</p>\n\n<h2>Copilot Memory: een notitieblok, geen spionagetool</h2>\n<p>Het hardnekkige idee is dat Copilot Memory een alziend dagboek is dat elke toetsaanslag en elke gedachte vastlegt. Dat klopt niet. Memory draait niet op de achtergrond om alles te verzamelen. Er wordt alleen iets bewaard wanneer jij een duidelijke intentie laat blijken, via een expliciete instructie of een duidelijk uitgesproken voorkeur. Zie het als een notitieblok dat je aan je assistent geeft met de woorden \"schrijf dit op\". Doe je dat niet, dan wordt er niets opgeslagen.</p>\n\n<h3>Toevoegen en beheren in twee stappen</h3>\n<p>Eerst voeg je een geheugenitem toe door het gewoon uit te spreken. Voorbeelden: \"Onthoud dat ik mijn samenvattingen het liefst onder de 100 woorden heb\", \"Onthoud dat ik van tuinbouwvoorbeelden hou\" of \"Onthoud dat ik de voorkeur geef aan opsommingstekens in mijn presentaties\". Copilot slaat het op en toont de badge \"geheugen bijgewerkt\". Dat signaal is geen versiering. Het laat zien dat er iets is veranderd.</p>\n<p>Daarna beheer je de items wanneer je maar wilt. Vraag bijvoorbeeld: \"Wat weet je over mij?\" en Copilot vat de huidige items samen. Wil je één ding kwijt, dan zeg je letterlijk: \"Vergeet dat ik van tuinieren hou.\" Wil je het hele concept niet meer, dan schakel je het geheugen uit in de instellingen.</p>\n\n<h3>Wat Memory bewust niet onthoudt</h3>\n<p>Microsoft heeft grenzen ingebouwd. Gevoelige categorieën zoals leeftijd, etniciteit, gezondheidstoestand, politieke opvattingen en seksuele geaardheid negeert Copilot, ook als je zulke details probeert op te dringen. Daarnaast worden gewone gespreksopdrachten, zoals \"schrijf code voor een clusteralgoritme\", niet onthouden. Zeg je daarentegen \"ga er altijd vanuit dat ik Python verkies voor analyse\", dan is dat een expliciete intentie en blijft het staan.</p>\n<p>Memory slaat dus op wat jij zelf aangeeft, niet wat toevallig voorbijkomt. Je bouwt het steen voor steen zelf op. Een goede vergelijking is een digitaal memoblaadje dat je neerlegt waar Copilot het kan zien, in Outlook, Word, Excel en PowerPoint. Copilot voegt nooit zelf verborgen notities toe. Stilte betekent hier vergeten: geen instructie, geen opslag.</p>\n\n<h2>Windows Recall: de automatische screenshotverzamelaar</h2>\n<p>Recall werkt volgens een heel ander principe. De functie legt automatisch schermactiviteit vast. Er is geen vraag of iets onthouden moet worden, alleen stille en constante verzameling. Recall is bovendien exclusief voor Copilot+ PC's. Het archief bestaat uit regelmatig gemaakte, versleutelde snapshots van wat er op je scherm staat, lokaal opgeslagen.</p>\n\n<h3>Technisch verdedigbaar, psychologisch verontrustend</h3>\n<p>Versleuteling, lokale opslag en het \"private by design\"-principe zijn echte pluspunten. Toch neemt dat het ongemak niet weg. Stel je voor dat iemand zonder aankondiging of toestemming af en toe een foto maakt van wat er op je bureau ligt, en alle foto's chronologisch opbergt in een kast waar niemand anders bij kan. Veilig, misschien. Onschadelijk is het niet per se, want het ongemak zit in het feit dát die foto's bestaan. Zo voelt Recall voor veel mensen: van conceptmails tot afbeeldingen die je maar een fractie van een seconde opende, alles kan in dat album met tijdstempels terechtkomen.</p>\n<p>Het fundamentele verschil zit dus niet in versleuteling of opslag, maar in het toestemmingsmodel. Memory geeft je de macht om te cureren. Recall archiveert standaard alles zonder onderscheid, tenzij het expliciet wordt beheerd.</p>\n\n<h3>Wat Recall betekent voor organisaties</h3>\n<p>In een bedrijfsomgeving staan er loonlijsten, niet-vrijgegeven financiële cijfers, vertrouwelijke medische documenten en gevoelige juridische concepten op het scherm. Fragmenten daarvan die in het versleutelde album van Recall belanden, tellen nog steeds als vastgelegd materiaal. Governance-afdelingen moeten dus niet alleen documenten en chatlogs beheren, maar ook rekening houden met screenshots op de pc van een medewerker. Omdat dit automatische dataverzameling is en geen zorgvuldig samengestelde gebruikersinstructie, moet Recall apart worden meegewogen in compliance- en risicoanalyses. Het afdoen als een simpele notitiefunctie is een snelle weg naar een compliance-schending.</p>\n<p>Microsoft benadrukt de ontwerpkeuzes die het risico beperken. De gegevens verlaten standaard het apparaat niet, er is geen cloudsynchronisatie en er is geen verborgen servercache. IT-tools bieden mogelijkheden voor beleid, audits en retentielimieten. Op papier is dat solide, maar medewerkers vinden het nog steeds niet prettig om te horen dat hun pc de hele dag screenshots maakt.</p>\n\n<h2>Copilot Vision: vluchtig en alleen op jouw verzoek</h2>\n<p>Vision draait niet om verzamelen, loggen of archiveren. De functie is gebouwd om te verdwijnen zodra je stopt. Je start een sessie door op het brilicoon in de Copilot Composer te klikken, of door het expliciet toe te staan in de instellingen van Edge of Windows. Daarna richt je je scherm of camera op iets, zoals een open document, een rommelige slide of een livebeeld vanaf je telefoon. Vision analyseert de invoer in realtime en geeft context of suggesties direct in de chat.</p>\n<p>Sluit je het venster, schakel je het uit of word je inactief, dan eindigt de sessie automatisch. Beelden en audio worden gewist. Wil je Vision opnieuw gebruiken, dan moet je het handmatig weer inschakelen. Het is dus nadrukkelijk opt-in en staat niet altijd aan.</p>\n<p>Eén nuance is belangrijk: hoewel Vision geen foto's of video bewaart, kan het tekstuele transcript van de interactie in je chatgeschiedenis blijven staan. Dat is geen surveillance maar een gesprekshistorie die je zelf beheert en op elk moment kunt verwijderen. Een goede vergelijking is een tolk die komt wanneer je begint en vertrekt wanneer je eindigt. Hooguit staat er een korte samenvatting in de notulen, en die kun je wissen.</p>\n<p>Voor organisaties is Vision daarom geen groot compliancerisico. Gevoeligheid zit in persistente gegevens zoals documenten, tijdlijnen en registers, en die bouwt Vision niet op. Het volstaat om medewerkers eraan te herinneren dat transcripten bestaan.</p>\n\n<h2>De privacytoolkit: zo houd je Copilot Memory onder controle</h2>\n<p>Microsoft heeft een reeks bedieningselementen ingebouwd, zodat Memory niet kan worden aangezien voor een keylogger op de achtergrond. Dit zijn de belangrijkste:</p>\n<ol>\n<li><strong>De aan/uit-schakelaar:</strong> ga in Copilot naar Instellingen, dan Account, dan Privacy, dan Personalisatie en geheugen. Zolang je dit niet inschakelt, heeft Copilot in feite kortetermijngeheugenverlies. Er is geen tussenvorm: het is uit of expliciet actief.</li>\n<li><strong>De badge \"geheugen bijgewerkt\":</strong> bij elke nieuwe toevoeging verschijnt dit signaal, zodat je altijd weet dat er iets is opgeslagen.</li>\n<li><strong>Inzage:</strong> met de vraag \"Wat weet je over mij?\" laat Copilot zien wat er in het geheugen staat.</li>\n<li><strong>Gericht of volledig wissen:</strong> je kunt één item laten vergeten of in één keer een volledige wisactie geven.</li>\n<li><strong>Opt-out voor modeltraining:</strong> met een aparte schakelaar worden je gesprekken niet gebruikt voor modeltraining, ook al blijft je persoonlijke geheugen werken. Je voorkeuren personaliseren jouw Copilot en verbeteren het globale model niet, tenzij je ervoor kiest bij te dragen.</li>\n</ol>\n<h3>Wat beheerders kunnen doen</h3>\n<p>Beheerders kunnen het geheugen uitschakelen voor een hele tenant of alleen voor bepaalde groepen. Bovendien is elke geheugenactie (aanmaken, bijwerken, verwijderen) terug te vinden via Microsoft Purview e-Discovery. Governanceteams krijgen zo audit trails en volledig toezicht, en auditors zien wie wat heeft onthouden of vergeten.</p>\n<p>Je kunt het vergelijken met browsercookies, met dit verschil dat jij ze zelf benoemt, plaatst en verwijdert. Ze ontstaan niet stilletjes op de achtergrond en volgen je niet naar andere websites. Wie deze mogelijkheden niet gebruikt, laat de hamer op tafel liggen en klaagt vervolgens over de spijkers.</p>\n\n<h2>Waarom Memory belangrijker is dan je denkt</h2>\n<p>Zonder geheugen begint elke sessie bij nul. Je geeft dezelfde instructies telkens opnieuw, bijvoorbeeld \"hou het onder de 200 woorden, gebruik opsommingstekens, formele afsluiting\". Dat is geen productiviteit maar ondersteunde nutteloosheid.</p>\n<p>Op organisatieniveau loopt dit op. Analisten typen opmaakinstructies steeds opnieuw in Excel, projectmanagers herhalen naamgevingsconventies in Teams en ontwerpers leggen Copilot telkens uit hoe dia's moeten worden ingedeeld. Een opmaakvoorkeur in Word, een conventie in SharePoint of een e-mailstijl in Outlook levert individueel minuten op, maar wordt over afdelingen heen meetbare winst. Met Memory wordt Copilot van een digitale goudvis een betrouwbare notulist.</p>\n<p>Soms verbetert opgeslagen context ook de kwaliteit. In een praktijkvoorbeeld vroeg een gebruiker hulp bij PowerShell, terwijl Copilot al had onthouden dat die gebruiker met de Microsoft Graph werkte. Copilot verwees daardoor uit eigen beweging naar de Graph PowerShell SDK. Dat is geen goocheltruc, maar relevantie die voortkomt uit opgeslagen context.</p>\n<p>Dat heeft ook gevolgen voor adoptie. Bedrijven voeren AI-assistenten in om efficiëntie op schaal te halen. Voelt de tool irrelevant of belastend, dan stagneert het gebruik. Een assistent die de gebruiker herkent, in Excel, Word of Outlook, wordt eerder geadopteerd dan verlaten. Personalisatie is in veel regio's standaard ingeschakeld, maar je kunt het volledig uitschakelen. Het blijft een keuze en geen verborgen verplichting.</p>\n\n<h2>Veelgemaakte denkfouten</h2>\n<ul>\n<li><strong>\"Memory is een verborgen opname.\"</strong> Nee, er wordt alleen iets bewaard bij een duidelijke intentie en je ziet de melding \"geheugen bijgewerkt\".</li>\n<li><strong>\"Copilot legt alles vast.\"</strong> Gewone gespreksopdrachten worden niet onthouden en gevoelige categorieën worden genegeerd.</li>\n<li><strong>Memory verwarren met Recall.</strong> Memory is gecureerd en intentioneel, Recall is geautomatiseerd en constant. Het ene is een collega die de notitie noteert die je aanreikt, het andere een collega die elke minuut je hele bureau fotografeert.</li>\n<li><strong>\"Vision is de grootste spionagerisico's.\"</strong> Vision is vluchtig wat betreft beeld en audio, maar de teksttranscriptie kan blijven bestaan tot je die zelf verwijdert.</li>\n<li><strong>Recall afdoen als notitiefunctie.</strong> Voor compliance en risicoanalyse verdient het een eigen beoordeling.</li>\n<li><strong>De controles niet gebruiken.</strong> De schakelaars bestaan, maar ze werken alleen als je ze ook inzet.</li>\n</ul>\n\n<h2>Praktische takeaways</h2>\n<ul>\n<li>Memory is opt-in: pas na inschakelen en alleen op jouw expliciete instructie wordt iets onthouden.</li>\n<li>Vraag regelmatig \"Wat weet je over mij?\" om te controleren wat er is opgeslagen.</li>\n<li>Verwijder gericht met een zin als \"vergeet dat ik van tuinieren hou\", of wis alles in één keer.</li>\n<li>Gebruik de aparte opt-out als je niet wilt dat gesprekken voor modeltraining worden gebruikt.</li>\n<li>Beheerders kunnen Memory per tenant of per groep uitschakelen en acties terugvinden via Microsoft Purview e-Discovery.</li>\n<li>Behandel Recall in compliance- en risicoanalyses als een aparte functie met automatische dataverzameling.</li>\n<li>Herinner collega's eraan dat Vision-transcripten in de chatgeschiedenis kunnen blijven staan en dat ze die zelf kunnen verwijderen.</li>\n<li>Maakt het antwoord op \"Wat weet je over mij?\" je ongemakkelijk, schakel personalisatie dan uit via Instellingen, Account, Privacy.</li>\n</ul>\n\n<h2>Conclusie</h2>\n<p>Memory, Recall en Vision zijn drie verschillende functies met drie verschillende toestemmingsmodellen. Memory is bewust, opt-in en controleerbaar. Recall maakt automatisch lokale, versleutelde screenshots op Copilot+ PC's. Vision werkt sessiegebaseerd en laat hooguit een tekstransscriptie achter die je zelf kunt wissen. Wie ze door elkaar haalt, gaat uit van verkeerde aannames. Wie het verschil kent en de beschikbare instellingen gebruikt, houdt zelf de regie over wat Copilot onthoudt.</p>",
   "model": "claude-sonnet-5-5",
   "info": {
-   "titel": "Memory, Recall en Vision: drie toestemmingsmodellen",
+   "titel": "Copilot Memory onder controle houden",
    "typ": "schritte",
    "punkte": [
     {
-     "kopf": "Memory: bewust opt-in",
-     "text": "Alleen wat jij expliciet laat onthouden wordt opgeslagen; zichtbaar via de melding 'geheugen bijgewerkt'."
+     "kopf": "Instellingen openen",
+     "text": "Ga naar Instellingen, Account, Privacy, Personalisatie en geheugen: daar zit de hoofdschakelaar."
     },
     {
-     "kopf": "Recall: automatisch",
-     "text": "Versleutelde screenshots lokaal op Copilot+ PC's, constant vastgelegd zonder jouw besluit per snapshot."
+     "kopf": "Geheugen inschakelen",
+     "text": "Zonder inschakelen onthoudt Copilot niets. Aan betekent: alleen wat jij expliciet opgeeft."
     },
     {
-     "kopf": "Vision: alleen sessie",
-     "text": "Beelden en audio verdwijnen na afloop; het teksttranscript kan blijven staan tot je het verwijdert."
+     "kopf": "Badge volgen",
+     "text": "Bij elke nieuwe toevoeging verschijnt de melding 'geheugen bijgewerkt' als duidelijk signaal."
     },
     {
-     "kopf": "Controle voor gebruikers",
-     "text": "Vraag 'wat weet je over mij?', verwijder items of schakel personalisatie uit in de instellingen."
+     "kopf": "Inhoud controleren",
+     "text": "Vraag 'Wat weet je over mij?' en Copilot vat de opgeslagen items samen."
     },
     {
-     "kopf": "Controle voor beheerders",
-     "text": "Memory uitschakelen per tenant of groep en acties terugvinden via Microsoft Purview eDiscovery."
+     "kopf": "Gericht of volledig wissen",
+     "text": "Laat één item vergeten of geef opdracht om het hele geheugen in één keer te wissen."
+    },
+    {
+     "kopf": "Modeltraining uitzetten",
+     "text": "Met een aparte schakelaar worden gesprekken niet gebruikt voor modeltraining, terwijl je geheugen blijft werken."
     }
    ]
   },
   "faq": [
    {
-    "q": "Houdt het geheugen van Copilot mij in het geheim in de gaten?",
-    "a": "Nee. Copilot Memory slaat alleen iets op als jij een duidelijke intentie uitspreekt, zoals een expliciete instructie of voorkeur. Bij elke wijziging verschijnt de melding \"geheugen bijgewerkt\". Gewone gespreksopdrachten worden niet onthouden, en gevoelige categorieën zoals gezondheid of politieke opvattingen worden genegeerd."
+    "q": "Wat onthoudt Copilot Memory precies en wat niet?",
+    "a": "Copilot Memory bewaart alleen iets wanneer je een duidelijke intentie laat blijken, bijvoorbeeld met \"Onthoud dat ik opsommingstekens verkies\". Gewone gespreksopdrachten worden niet opgeslagen. Gevoelige categorieën zoals leeftijd, etniciteit, gezondheid, politieke opvattingen en seksuele geaardheid negeert Copilot bewust."
    },
    {
-    "q": "Wat is het verschil tussen Copilot Memory, Windows Recall en Vision?",
-    "a": "Het verschil zit in het toestemmingsmodel. Memory is opt-in en slaat alleen op wat jij aangeeft. Recall maakt automatisch versleutelde, lokale screenshots op Copilot+ PC's. Vision is sessiegebonden: beelden en audio verdwijnen, maar het teksttranscript kan in je chatgeschiedenis blijven staan."
+    "q": "Wat is het verschil tussen Copilot Memory en Windows Recall?",
+    "a": "Memory is gecureerd en opt-in: er wordt alleen opgeslagen wat jij expliciet aangeeft. Recall legt automatisch en constant schermactiviteit vast als versleutelde, lokale snapshots, exclusief op Copilot+ PC's. Het verschil zit dus in het toestemmingsmodel, niet in versleuteling of opslag."
    },
    {
-    "q": "Hoe bekijk of verwijder ik wat Copilot over mij onthoudt?",
-    "a": "Vraag \"Wat weet je over mij?\" en Copilot somt de opgeslagen items op. Met een opdracht als \"vergeet dat ik van tuinieren hou\" verwijder je één item, of je laat alles wissen. Via Instellingen, Account, Privacy, Personalisatie en geheugen schakel je Memory helemaal uit."
+    "q": "Hoe bekijk en verwijder ik wat Copilot over mij heeft onthouden?",
+    "a": "Vraag \"Wat weet je over mij?\" om de opgeslagen items te zien. Wil je één item kwijt, zeg dan bijvoorbeeld \"Vergeet dat ik van tuinieren hou\". Je kunt ook alles in één keer wissen of het geheugen uitschakelen via Instellingen, Account, Privacy, Personalisatie en geheugen."
    },
    {
-    "q": "Waarom vormt Windows Recall een groter privacyrisico voor organisaties?",
-    "a": "Recall legt automatisch schermactiviteit vast zonder aparte toestemming per moment, ook loonlijsten, financiële cijfers of vertrouwelijke documenten. Zulke screenshots tellen als vastgelegd materiaal. Daarom moet Recall apart worden meegewogen in compliance- en risicoanalyses, ondanks lokale opslag en versleuteling."
-   }
-  ],
-  "quiz": [
-   {
-    "q": "Wanneer slaat Copilot Memory iets op over de gebruiker?",
-    "opts": [
-     "Alleen wanneer de gebruiker een expliciete instructie of duidelijke voorkeur uitspreekt",
-     "Bij elke opdracht die de gebruiker tijdens een gesprek geeft",
-     "Zodra Copilot patronen in het gedrag van de gebruiker opmerkt",
-     "Alleen wanneer een beheerder het opslaan voor de gebruiker goedkeurt"
-    ],
-    "a": 0,
-    "why": "Memory slaat alleen op wat je zelf expliciet aangeeft. Gewone gespreksopdrachten, zoals code schrijven, worden niet onthouden."
-   },
-   {
-    "q": "Waarom is Windows Recall volgens het artikel reden tot zorg?",
-    "opts": [
-     "De snapshots worden onversleuteld in de cloud opgeslagen",
-     "Het legt automatisch en continu schermactiviteit vast zonder jouw besluit",
-     "Het werkt alleen als de gebruiker het zelf handmatig start",
-     "Het negeert gevoelige categorieën zoals gezondheid en politieke opvattingen"
-    ],
-    "a": 1,
-    "why": "Recall maakt automatisch regelmatig snapshots, ook al zijn die lokaal en versleuteld. Dat maakt het psychologisch verontrustend en relevant voor compliance."
-   },
-   {
-    "q": "Wat blijft er mogelijk bestaan na een Vision-sessie?",
-    "opts": [
-     "Screenshots van het scherm in een versleutelde lokale kluis",
-     "Opgeslagen audio-opnamen van de sessie in de chatgeschiedenis",
-     "Het tekstuele transcript van het gesprek, dat je zelf kunt verwijderen",
-     "Een permanente camerastream die in de achtergrond blijft draaien"
-    ],
-    "a": 2,
-    "why": "Beelden en audio worden gewist, maar het tekstuele transcript kan in de chatgeschiedenis blijven staan tot je het verwijdert."
-   },
-   {
-    "q": "Welke mogelijkheid hebben beheerders voor Copilot Memory in een organisatie?",
-    "opts": [
-     "Alleen de opgeslagen voorkeuren van individuele gebruikers inhoudelijk bewerken",
-     "Memory alleen per individuele gebruiker uitschakelen, nooit per groep",
-     "Geheugenacties uitsluitend door Microsoft laten controleren buiten de organisatie",
-     "Memory per tenant of groep uitschakelen en acties auditen via Purview eDiscovery"
-    ],
-    "a": 3,
-    "why": "Beheerders kunnen het geheugen voor een hele tenant of bepaalde groepen uitschakelen en elke geheugenactie terugvinden via Microsoft Purview eDiscovery."
-   }
-  ]
- },
- "pt": {
-  "html": "<p>Muita gente acredita que a memória do Copilot é um jeito discreto de a Microsoft observar tudo o que você faz. Não é. Quando algo é guardado, você vê um aviso de memória atualizada. Além disso, a memória só armazena informações quando existe uma intenção clara de lembrar, e você pode revisar ou apagar qualquer entrada quando quiser.</p>\n<p>O risco real para a privacidade está em outro lugar: confundir três recursos que funcionam de maneiras muito diferentes. Neste artigo, comparamos Copilot Memory, Windows Recall e Vision, mostramos como verificar o que está guardado e explicamos quais controles existem para usuários e administradores.</p>\n\n<h2>Copilot Memory: o que é e o que não é</h2>\n<p>A memória do Copilot não é um diário onisciente que registra cada tecla digitada ou cada decisão trivial. Ela não roda em segundo plano coletando dados. Só persiste algo quando você cria uma intenção explícita de lembrar, por uma instrução direta ou por uma preferência claramente sinalizada. Pense menos em vigilância e mais em um bloco de notas que você entrega ao assistente: se você não pedir para anotar, nada é guardado.</p>\n\n<h3>Como adicionar, verificar e excluir memórias</h3>\n<ol>\n<li><strong>Adicionar:</strong> peça em linguagem natural, por exemplo \"lembre-se de que prefiro meus resumos com menos de 100 palavras\", \"lembre-se de que gosto de exemplos sobre jardinagem\" ou \"lembre-se de que prefiro tópicos em meus slides\". O Copilot registra e exibe o aviso de memória atualizada.</li>\n<li><strong>Verificar:</strong> pergunte \"o que você sabe sobre mim?\" e o Copilot resume as entradas atuais.</li>\n<li><strong>Excluir:</strong> diga, por exemplo, \"esqueça que eu gosto de jardinagem\". Se quiser, peça uma limpeza total. Também é possível desativar a memória nas configurações.</li>\n</ol>\n\n<h3>O que a memória não guarda</h3>\n<p>Pedidos comuns de conversa, como \"escreva código para um algoritmo de agrupamento\", não são lembrados. Já uma instrução como \"sempre assuma que prefiro Python para análise\" é uma intenção declarada e permanece. A memória armazena o que é autodeclarado, não o que é incidental.</p>\n<p>Além disso, a Microsoft definiu limites para categorias sensíveis: idade, etnia, condições de saúde, visões políticas e orientação sexual. Mesmo que você tente fornecer esses detalhes, o Copilot não se personaliza com base neles.</p>\n<p>Uma boa analogia é o post-it digital: as notas ficam fixadas no Outlook, Word, Excel e PowerPoint até você removê-las, e o Copilot só lê as que você mesmo colou. Por isso chamar a memória de \"perfil construído pelas suas costas\" é enganoso. Você a constrói, tijolo por tijolo, com o que escolhe compartilhar.</p>\n\n<h2>Windows Recall: captura automática de tela</h2>\n<p>O Recall se comporta de modo bem diferente. Ele captura a atividade da sua tela automaticamente, formando um arquivo de imagens com marcação de tempo. Não é um recurso opcional para todas as máquinas Windows: está disponível apenas em PCs específicos com Copilot.</p>\n<p>As capturas ficam armazenadas localmente, sob criptografia. Por padrão, os dados não saem do dispositivo, não há sincronização na nuvem e existem ferramentas de TI para definir políticas, auditorias e limites de retenção. No papel, a arquitetura é sólida.</p>\n<p>Mesmo assim, o método incomoda. Imagine alguém que passa pela sua mesa de tempos em tempos, sem avisar nem pedir permissão, e fotografa o que estiver ali, guardando tudo em ordem cronológica num armário que ninguém mais toca. Ninguém vê as fotos, mas a existência delas já causa desconforto. A criptografia não apaga a sensação de ter uma câmera que você nunca pegou.</p>\n\n<h3>O impacto nas empresas</h3>\n<p>Em ambiente corporativo, a preocupação aumenta. As telas podem incluir planilhas de folha de pagamento, números financeiros confidenciais, documentos médicos e rascunhos jurídicos sensíveis. Essas informações, mesmo trancadas num arquivo criptografado, continuam sendo material capturado. A governança passa a considerar que o PC de um funcionário está acumulando capturas de tela.</p>\n<p>Por isso o Recall deve ser avaliado separadamente em auditorias de conformidade e risco. Tratá-lo como mais um recurso de anotação é um atalho para falhas de conformidade. E, mesmo com todas as garantias técnicas, muitos funcionários simplesmente não gostam de ler que o PC tira capturas de tela: a reação humana não se resolve com uma nota sobre criptografia.</p>\n\n<h2>Vision: um recurso efêmero, apenas para a sessão</h2>\n<p>O Vision não foi feito para acumular nem arquivar nada. Funciona como um intérprete em tempo real: você aponta a tela ou a câmera para algo, como um documento aberto, um slide bagunçado ou a transmissão ao vivo do celular, e ele analisa a entrada e responde com texto ou sugestões no chat. Quando a sessão termina, as imagens e o áudio são apagados.</p>\n<p>Há uma ressalva importante. A transcrição de texto da interação pode permanecer no histórico de chat. Isso não é vigilância, e sim um histórico de conversa que você controla e pode excluir a qualquer momento. Apagando as notas e o histórico, é como se a sessão nunca tivesse acontecido.</p>\n\n<h3>Ativação sempre explícita</h3>\n<p>O Vision não fica à espreita em segundo plano. Ele só é ativado quando você clica no ícone de óculos no Copilot ou o permite explicitamente nas configurações do Edge ou do Windows. Se você fecha a janela, desativa ou fica inativo, a sessão termina automaticamente, e para reiniciá-lo é preciso começar de novo, manualmente. Para as empresas, isso significa menos preocupação: a sensibilidade está nos dados persistentes, como documentos, cronogramas e registros. Basta lembrar as pessoas de que as transcrições existem, o que é um hábito de uso, não uma revisão de governança.</p>\n\n<h2>Controles de privacidade para usuários e administradores</h2>\n<p>A privacidade na memória do Copilot não depende de confiança cega. Há controles concretos.</p>\n\n<h3>O que o usuário pode fazer</h3>\n<ul>\n<li><strong>Interruptor principal:</strong> no Copilot, vá em Configurações, Conta, Privacidade, Personalização e Memória. Desativada, a memória deixa o Copilot sem lembrar nada entre conversas; ativada, ele guarda os fatos que você fornece de propósito.</li>\n<li><strong>Aviso de memória atualizada:</strong> aparece sempre que você ensina algo novo ao Copilot.</li>\n<li><strong>Consulta direta:</strong> \"o que você sabe sobre mim?\" mostra o que está armazenado.</li>\n<li><strong>Exclusão pontual ou total:</strong> peça para esquecer um item específico ou limpar tudo de uma vez.</li>\n<li><strong>Treinamento do modelo:</strong> é possível optar por não usar suas conversas no treinamento, e a memória pessoal continua funcionando. Suas preferências personalizam o seu Copilot e não melhoram automaticamente o modelo global, a menos que você escolha contribuir.</li>\n</ul>\n\n<h3>O que o administrador pode fazer</h3>\n<ul>\n<li>Desativar a memória em todo o locatário ou apenas para determinados grupos.</li>\n<li>Detectar cada ação de memória (criação, atualização e exclusão) pelo Microsoft Purview Discovery, com registros de auditoria comprováveis.</li>\n</ul>\n<p>Um paralelo útil são os cookies de navegador, com uma diferença: aqui você nomeia, coloca e destrói o conteúdo quando quiser, e ele não segue você para outros sites. Esses controles só têm valor se forem usados. Vale tratar a memória como um mecanismo central do trabalho, e não como um incômodo escondido no painel de configurações.</p>\n\n<h2>Por que a memória do Copilot importa para a produtividade</h2>\n<p>Sem memória, cada sessão volta ao zero. Você repete \"mantenha abaixo de 200 palavras, use listas com marcadores, feche de forma formal\" toda vez. Individualmente é um incômodo; em escala, são horas perdidas. Analistas redigitam instruções de formatação no Excel, gerentes de projeto repetem as mesmas convenções de nomenclatura no Teams e designers explicam de novo como organizar slides.</p>\n<p>Com a memória ativada, o Copilot deixa de ser um assistente que descarta informações e passa a ser um que anota. Uma preferência de formatação no Word, uma convenção de nomenclatura no SharePoint ou um estilo de e-mail no Outlook, repetidos em centenas de fluxos de trabalho, viram ganhos mensuráveis.</p>\n<p>A memória também pode melhorar a qualidade da resposta. Em um caso concreto, um usuário pediu ajuda com PowerShell. Como a memória já continha trabalhos ligados ao Microsoft Graph, o Copilot citou por conta própria o SDK do PowerShell para o Graph. Foi relevância criada por contexto armazenado, não um truque.</p>\n<p>Há ainda o efeito sobre a adoção. Os usuários se engajam mais com assistentes consistentes, e se a ferramenta parecer irrelevante ou trabalhosa, a adoção estagna e o investimento fica esquecido na gaveta. Em muitas regiões, a personalização vem ativada por padrão, mas você pode desativá-la completamente. A transparência faz parte da arquitetura.</p>\n\n<h2>Erros comuns ao avaliar Memory, Recall e Vision</h2>\n<p>O principal equívoco é conceitual: tratar os três recursos como se fossem um só.</p>\n<ul>\n<li><strong>Achar que a memória registra tudo automaticamente.</strong> Ela só guarda o que você pede para lembrar ou declara como preferência.</li>\n<li><strong>Confundir memória com Recall.</strong> A memória é curada e intencional; o Recall é automatizado e constante. É a diferença entre pedir a um colega que anote algo e ter esse colega fotografando sua mesa a cada minuto.</li>\n<li><strong>Presumir que o Vision grava imagens.</strong> Imagens e áudio desaparecem no fim da sessão, mas a transcrição de texto pode permanecer no histórico de chat até você excluí-la.</li>\n<li><strong>Tratar o Recall como mais um recurso de anotação.</strong> Ele exige avaliação própria nas auditorias de conformidade e risco.</li>\n<li><strong>Ignorar os controles disponíveis.</strong> Opções de desativar, consultar e excluir existem, mas só funcionam se alguém as usar.</li>\n</ul>\n<p>A diferença decisiva não está na criptografia nem no local de armazenamento, e sim no modelo de consentimento. Um recurso permite que você faça a curadoria; o outro arquiva de forma indiscriminada por padrão, a menos que seja explicitamente controlado.</p>\n\n<h2>Takeaways práticos</h2>\n<ul>\n<li>Memory é opt-in e auditável: só guarda o que você pede para lembrar.</li>\n<li>Recall faz capturas de tela automáticas, armazenadas localmente e criptografadas, e merece avaliação separada em conformidade.</li>\n<li>Vision é uma análise por sessão: imagens e áudio somem, mas a transcrição de texto pode persistir no histórico de chat.</li>\n<li>Pergunte ao Copilot \"o que você sabe sobre mim?\" para conferir o que está armazenado.</li>\n<li>Use comandos como \"esqueça que eu gosto de jardinagem\" para excluir itens, ou peça uma limpeza total.</li>\n<li>O interruptor fica em Configurações, Conta, Privacidade, Personalização e Memória.</li>\n<li>Você pode optar por não usar suas conversas no treinamento do modelo, mantendo a memória pessoal ativa.</li>\n<li>Administradores podem desativar a memória no locatário ou por grupos e acompanhar as ações pelo Microsoft Purview Discovery.</li>\n<li>Se a resposta sobre o que o Copilot sabe de você causar desconforto, desative a personalização nas configurações de privacidade da conta.</li>\n</ul>\n\n<h2>Conclusão</h2>\n<p>Memory, Recall e Vision são três ferramentas com três modelos de consentimento. A memória do Copilot é uma camada de persistência deliberada, visível e controlável, que existe para você não repetir as mesmas instruções todos os dias. Quem a confunde com um arquivo oculto acaba discutindo privacidade a partir de premissas erradas. Quem entende as diferenças, testa o comando \"o que você sabe sobre mim?\" e usa os controles disponíveis decide com clareza o que o assistente deve lembrar.</p>",
-  "model": "claude-sonnet-5-5",
-  "info": {
-   "titel": "Memory, Recall e Vision: três modelos de consentimento",
-   "typ": "vergleich",
-   "links": {
-    "titel": "Copilot Memory",
-    "punkte": [
-     "Guarda só o que você pede para lembrar",
-     "Aviso de memória atualizada a cada mudança",
-     "Consulta, edição e exclusão a qualquer momento",
-     "Administradores auditam com Microsoft Purview Discovery"
-    ]
-   },
-   "rechts": {
-    "titel": "Recall e Vision",
-    "punkte": [
-     "Recall: capturas de tela automáticas, locais e criptografadas",
-     "Recall exige avaliação separada em conformidade",
-     "Vision: análise só durante a sessão",
-     "Vision: imagens e áudio somem, transcrição de texto pode ficar"
-    ]
-   }
-  },
-  "faq": [
-   {
-    "q": "A memória do Copilot registra tudo o que eu faço?",
-    "a": "Não. Ela não roda em segundo plano coletando dados. Só guarda algo quando existe uma intenção explícita de lembrar, por instrução direta ou preferência claramente sinalizada. Você vê um aviso de memória atualizada e pode revisar ou apagar qualquer entrada quando quiser."
-   },
-   {
-    "q": "Como ver e apagar o que o Copilot guardou sobre mim?",
-    "a": "Pergunte \"o que você sabe sobre mim?\" e o Copilot resume as entradas atuais. Para excluir, diga, por exemplo, \"esqueça que eu gosto de jardinagem\" ou peça uma limpeza total. Também dá para desativar a memória em Configurações, Conta, Privacidade, Personalização e Memória."
-   },
-   {
-    "q": "Qual é a diferença entre Copilot Memory e Windows Recall?",
-    "a": "A memória é curada e intencional: guarda só o que você pede. O Recall captura a tela automaticamente, formando um arquivo de imagens com marcação de tempo, armazenado localmente com criptografia, apenas em PCs específicos com Copilot. A diferença decisiva está no modelo de consentimento."
-   },
-   {
-    "q": "O Copilot Vision grava imagens ou áudio da minha tela e câmera?",
-    "a": "Não. O Vision analisa a entrada em tempo real e só é ativado quando você o permite explicitamente. Imagens e áudio são apagados quando a sessão termina, mas a transcrição de texto pode permanecer no histórico de chat até você excluí-la."
+    "q": "Bewaart Copilot Vision mijn scherm- of camerabeelden?",
+    "a": "Nee, Vision werkt per sessie en alleen op jouw verzoek. Na het sluiten, uitschakelen of bij inactiviteit eindigt de sessie en worden beelden en audio gewist. Het tekstuele transcript kan wel in je chatgeschiedenis blijven staan, tot je het zelf verwijdert."
    }
   ],
   "infos": [
    {
-    "titel": "Controles de privacidade da memória do Copilot",
-    "typ": "checkliste",
-    "punkte": [
-     "Use o interruptor principal em Configurações, Conta, Privacidade, Personalização e Memória.",
-     "Fique atento ao aviso de memória atualizada sempre que ensinar algo novo.",
-     "Pergunte \"o que você sabe sobre mim?\" para ver o que está armazenado.",
-     "Peça para esquecer um item específico ou limpar tudo de uma vez.",
-     "Opte por não usar suas conversas no treinamento do modelo.",
-     "Administradores podem desativar a memória no locatário ou por grupos.",
-     "Acompanhe criação, atualização e exclusão de memórias pelo Microsoft Purview Discovery."
-    ]
+    "titel": "Memory versus Recall",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Copilot Memory",
+     "punkte": [
+      "Bewaart alleen bij een duidelijke, expliciete intentie van de gebruiker",
+      "Gecureerd en intentioneel: jij bouwt het zelf op",
+      "Badge 'geheugen bijgewerkt' toont elke wijziging",
+      "Gevoelige categorieën worden genegeerd",
+      "Opt-in en altijd te wissen"
+     ]
+    },
+    "rechts": {
+     "titel": "Windows Recall",
+     "punkte": [
+      "Legt automatisch en constant schermactiviteit vast",
+      "Geen vraag of iets onthouden moet worden",
+      "Exclusief voor Copilot+ PC's",
+      "Versleutelde snapshots, lokaal opgeslagen",
+      "Moet apart worden meegewogen in compliance- en risicoanalyses"
+     ]
+    }
    },
    {
-    "titel": "Como funciona uma sessão do Vision",
-    "typ": "prozess",
+    "titel": "Privacytoolkit voor Copilot Memory",
+    "typ": "checkliste",
+    "punten": [],
+    "punkte": [
+     "Schakel Memory in via Instellingen, Account, Privacy, Personalisatie en geheugen",
+     "Let op de badge 'geheugen bijgewerkt' bij elke toevoeging",
+     "Vraag regelmatig: 'Wat weet je over mij?'",
+     "Laat één item vergeten of wis het hele geheugen",
+     "Gebruik de aparte opt-out voor modeltraining",
+     "Beheerders: schakel Memory uit per tenant of per groep",
+     "Beheerders: controleer geheugenacties via Microsoft Purview e-Discovery"
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Wanneer slaat Copilot Memory iets op?",
+    "opts": [
+     "Alleen wanneer de gebruiker een expliciete instructie of duidelijke voorkeur geeft",
+     "Zodra Copilot merkt dat een onderwerp vaak terugkomt in gesprekken",
+     "Bij elk gesprek, zodat de assistent de gebruiker steeds beter leert kennen",
+     "Wanneer een beheerder bepaalde gespreksonderwerpen als belangrijk markeert"
+    ],
+    "a": 0,
+    "why": "Memory bewaart alleen iets bij een duidelijke intentie van de gebruiker, zoals 'onthoud dat...'. Zonder instructie wordt niets opgeslagen."
+   },
+   {
+    "q": "Wat is het fundamentele verschil tussen Memory en Windows Recall?",
+    "opts": [
+     "Recall slaat zijn gegevens onversleuteld in de cloud op, Memory niet",
+     "Het toestemmingsmodel: Memory is gecureerd en intentioneel, Recall verzamelt automatisch en constant",
+     "Memory werkt alleen op Copilot+ PC's, Recall op alle Windows-apparaten",
+     "Recall onthoudt alleen tekst, terwijl Memory ook beelden en audio bewaart"
+    ],
+    "a": 1,
+    "why": "Het verschil zit niet in versleuteling of opslag, maar in het toestemmingsmodel: Memory laat de gebruiker cureren, Recall archiveert standaard alles."
+   },
+   {
+    "q": "Wat gebeurt er met Copilot Vision wanneer je het venster sluit?",
+    "opts": [
+     "De sessie blijft op de achtergrond actief tot de volgende herstart",
+     "Beelden en audio worden zeven dagen bewaard voor controle door beheerders",
+     "De sessie eindigt en beelden en audio worden gewist; een transcript kan blijven",
+     "Alle chatgeschiedenis wordt automatisch en onomkeerbaar verwijderd"
+    ],
+    "a": 2,
+    "why": "Vision beëindigt de sessie en wist beelden en audio. Het tekstuele transcript kan in de chatgeschiedenis blijven staan tot je het verwijdert."
+   },
+   {
+    "q": "Welke mogelijkheid hebben beheerders voor Copilot Memory?",
+    "opts": [
+     "Ze kunnen alleen individuele geheugenitems van gebruikers inhoudelijk herschrijven",
+     "Ze kunnen Recall-screenshots van medewerkers rechtstreeks in Copilot Memory importeren",
+     "Ze kunnen gevoelige categorieën zoals gezondheid voor alle gebruikers toestaan",
+     "Ze kunnen Memory per tenant of groep uitschakelen en acties via Purview e-Discovery terugvinden"
+    ],
+    "a": 3,
+    "why": "Beheerders schakelen Memory uit voor een tenant of groepen en zien aanmaken, bijwerken en verwijderen terug via Microsoft Purview e-Discovery."
+   }
+  ]
+ },
+ "pt": {
+  "html": "<p>Muita gente imagina que a memória do Copilot é uma forma discreta de a Microsoft espionar o que você faz. Não é bem assim. A memória só guarda informações quando existe uma intenção clara de lembrar, por exemplo quando você pede que o assistente anote sua preferência de tom ou o nome de um projeto. Você pode revisar e excluir essas entradas quando quiser.</p>\n<p>O risco real para a privacidade está em outro lugar: presumir que a ferramenta registra tudo automaticamente, ou confundir a memória do Copilot com recursos de natureza completamente diferente, como o Recall e o Vision. Este artigo explica o que cada um faz, como verificar o que está armazenado e que controles existem para usuários e administradores.</p>\n\n<h2>O que a memória do Copilot é (e o que não é)</h2>\n<p>A memória não funciona como um diário onisciente que registra cada tecla digitada, cada pensamento privado ou cada escolha de almoço. Ela não roda em segundo plano coletando dados. Pense menos em um sistema de vigilância e mais em um bloco de notas que você entrega ao assistente com a instrução \"anote isto\". Se você não pede, nada é guardado.</p>\n<p>Na prática, a intenção de lembrar aparece em pedidos explícitos ou em preferências claramente declaradas, como:</p>\n<ul>\n<li>\"Lembre-se de que prefiro meus resumos com menos de 100 palavras.\"</li>\n<li>\"Lembre-se de que gosto de exemplos sobre jardinagem.\"</li>\n<li>\"Lembre-se de que prefiro tópicos em meus slides.\"</li>\n</ul>\n<p>Quando isso acontece, o Copilot exibe um pequeno aviso de memória atualizada. Não há adivinhação nem leitura mental. Uma analogia útil é a de um post-it digital que você cola onde o Copilot pode ver. Essas notas ficam disponíveis no Outlook, Word, Excel e PowerPoint até você removê-las, e o Copilot nunca acrescenta notas escondidas por conta própria.</p>\n\n<h3>O que não é lembrado</h3>\n<p>Pedidos comuns de conversa, como \"escreva código para um algoritmo de agrupamento\", não entram na memória. Já uma frase como \"sempre assuma que prefiro Python para análise\" é uma intenção declarada e permanece. A memória guarda o que é autodeclarado, não o que é incidental. Por isso, chamá-la de perfil montado pelas suas costas é enganoso: quem a constrói, tijolo por tijolo, é você, com o que escolhe compartilhar.</p>\n<p>Há ainda limites de projeto. O Copilot ignora categorias sensíveis como idade, etnia, condições de saúde, visões políticas e orientação sexual. Mesmo que você tente forçar esses detalhes, ele não se personaliza com base neles.</p>\n\n<h2>Recall: o acumulador automático de capturas de tela</h2>\n<p>O Recall funciona de maneira bem diferente. Ele captura a atividade da sua tela automaticamente, em uma coleta constante e silenciosa, sem nenhum pedido de confirmação. Não é um recurso de todas as máquinas Windows: está restrito a uma categoria específica de PCs com Copilot e constrói seu arquivo a partir de capturas de tela regulares.</p>\n<p>Essas capturas ficam armazenadas localmente, sob criptografia. Por padrão, os dados não saem do dispositivo, não há sincronização na nuvem e existem ferramentas de TI para definir políticas, auditorias e limites de retenção. No papel, a arquitetura é sólida. Mas a garantia técnica não apaga a sensação de ter uma câmera que você nunca pegou registrando fatias do seu fluxo de trabalho, de e-mails incompletos a imagens abertas por um segundo.</p>\n<p>Imagine alguém passando pela sua mesa de tempos em tempos, sem avisar nem pedir permissão, fotografando o que estiver lá e guardando as fotos em ordem cronológica num armário que ninguém mais toca. Mesmo que ninguém veja, o simples fato de as fotos existirem causa desconforto. É isso o Recall: armazenamento local e criptografado, mas gravação constante, sem esperar pela sua decisão.</p>\n\n<h3>Por que o Recall preocupa as empresas</h3>\n<p>Em um ambiente corporativo, as telas podem incluir planilhas de folha de pagamento, números financeiros confidenciais, documentos médicos e rascunhos jurídicos sensíveis. Quando esse material é capturado, a governança passa a considerar que o PC de um funcionário está acumulando capturas de tela. Diferentemente da memória, isso não é uma instrução curada pelo usuário, e sim coleta automática de dados.</p>\n<p>Por isso o Recall deve ser avaliado separadamente em auditorias de conformidade e risco. Tratá-lo como mais um recurso de anotação é um atalho para falhas de conformidade. Além disso, funcionários tendem a estranhar a ideia de que o PC tira capturas de tela, e essa reação humana não se resolve apenas com um item sobre criptografia.</p>\n\n<h2>Vision: a análise em tempo real que desaparece com a sessão</h2>\n<p>O Vision não serve para acumular, registrar ou arquivar. Ele é um intérprete em tempo real: só atua quando você o chama e deixa de existir quando você para de usá-lo. Você aponta a tela ou a câmera para algo, como um documento aberto, um slide bagunçado ou a transmissão ao vivo do celular, e ele devolve texto ou sugestões no próprio chat.</p>\n<p>O recurso é opcional por design. Ele só é ativado dentro de uma sessão definida, quando você clica no ícone de óculos no Copilot ou o permite explicitamente nas configurações do Edge ou do Windows. Se você fecha a janela, desativa o recurso ou simplesmente fica inativo, a sessão termina automaticamente. Para voltar a usá-lo, é preciso iniciá-lo manualmente.</p>\n\n<h3>O que fica depois da sessão</h3>\n<p>Imagens e áudio são apagados ao fim da sessão. A ressalva é que a transcrição de texto da interação pode permanecer no histórico de chat. Isso não é vigilância, e sim um histórico de conversa rastreável e sob seu controle: você pode excluí-lo quando quiser. Quem não quer registro algum basta apagar as notas e o histórico do chat.</p>\n<p>Dizer que o Vision \"espiona menos\" seria uma simplificação. O mais preciso é afirmar que ele foi projetado para ser efêmero com imagens e áudio, enquanto o texto pode persistir até que você o exclua. Para as empresas, a sensibilidade está nos dados persistentes, como documentos, cronogramas e registros. O Vision não entra nessa lista, embora valha lembrar os usuários de que as transcrições existem.</p>\n\n<h2>Controles de privacidade da memória: onde ficam e como usar</h2>\n<p>Como a memória persiste após o fim de uma sessão, a Microsoft a acompanha de controles visíveis, e a privacidade não depende de confiança cega.</p>\n<h3>Para usuários</h3>\n<ol>\n<li><strong>Interruptor principal:</strong> em Configurações, Conta, Privacidade, Personalização e Memória. Desligada, a memória deixa o Copilot sem lembrar nada entre conversas; ligada, ele pode guardar o que você fornece de forma intencional.</li>\n<li><strong>Aviso de memória atualizada:</strong> aparece sempre que você ensina algo novo, sinalizando que algo mudou.</li>\n<li><strong>Verificação:</strong> pergunte \"o que você sabe sobre mim?\" e o Copilot recita as entradas atuais.</li>\n<li><strong>Exclusão pontual:</strong> peça, por exemplo, \"esqueça que eu gosto de jardinagem\".</li>\n<li><strong>Limpeza total:</strong> peça uma limpeza completa e ele esquece tudo de uma vez.</li>\n<li><strong>Treinamento do modelo:</strong> é possível optar por não ter suas conversas usadas no treinamento, mesmo com a memória pessoal funcionando. Suas preferências personalizam o seu Copilot e não melhoram o modelo global, a menos que você escolha contribuir.</li>\n</ol>\n<h3>Para administradores</h3>\n<p>Os administradores podem desativar a memória em todo o locatário ou apenas para determinados grupos. Além disso, cada ação de memória (criação, atualização e exclusão) é detectável pelo Microsoft Purview Discovery, o que dá às equipes de governança registros de auditoria comprovantes em vez de promessas vagas.</p>\n<p>A comparação mais próxima são os cookies de navegador, com uma diferença: aqui você nomeia, coloca e destrói as informações quando quiser. Elas não surgem silenciosamente em segundo plano nem seguem você para outros sites.</p>\n\n<h2>Por que a memória importa para a produtividade</h2>\n<p>Sem memória, cada sessão volta ao zero. É preciso repetir sempre as mesmas instruções: manter o texto curto, usar listas com marcadores, fechar de modo formal. Para uma pessoa, isso é um incômodo. Em escala, com analistas redigitando instruções de formatação no Excel, gerentes repetindo convenções de nomenclatura no Teams e designers explicando como organizar slides, são horas perdidas em pequenos incrementos invisíveis.</p>\n<p>Com a memória ativada, o Copilot deixa de ser um assistente que descarta tudo e passa a ser um anotador confiável. Uma preferência de formatação no Word, uma convenção de nomenclatura no SharePoint ou um estilo de e-mail no Outlook, repetidos em centenas de fluxos de trabalho, tornam-se ganhos mensuráveis.</p>\n<p>A memória também pode melhorar a qualidade da resposta. Em um caso real, um usuário pediu ajuda ao Copilot com PowerShell. Como a memória já continha trabalhos ligados ao Microsoft Graph, o Copilot referenciou por conta própria o SDK do PowerShell para o Graph. Não foi truque, e sim relevância criada por contexto armazenado.</p>\n<p>Isso pesa na adoção. Se os usuários acham a ferramenta irrelevante ou trabalhosa, o investimento acaba esquecido na gaveta. Assistentes que parecem consistentes e reconhecem quem está por trás do teclado ganham confiança, e o uso cresce. A personalização vem ativada por padrão em muitas regiões, mas você pode desativá-la completamente. A transparência faz parte da arquitetura.</p>\n\n<h2>Erros comuns e armadilhas conceituais</h2>\n<ul>\n<li><strong>Confundir memória com Recall.</strong> A memória é curada e intencional; o Recall é automatizado e constante. É a diferença entre pedir a um colega que anote algo e ter esse colega fotografando sua mesa a cada minuto.</li>\n<li><strong>Presumir que o Copilot registra tudo.</strong> Sem declaração, não há persistência. O silêncio equivale ao esquecimento.</li>\n<li><strong>Tratar o Recall como um recurso de anotação qualquer.</strong> Ele exige avaliação própria em auditorias de conformidade e risco.</li>\n<li><strong>Esquecer a transcrição do Vision.</strong> As imagens e o áudio somem, mas o texto da conversa pode ficar no histórico de chat até ser excluído.</li>\n<li><strong>Ignorar os controles.</strong> Eles existem, mas só ajudam se forem usados. Tratar a memória como um mero incômodo no painel de configurações é deixar o martelo na mesa e reclamar dos pregos.</li>\n</ul>\n\n<h2>Takeaways práticos</h2>\n<ul>\n<li>A memória do Copilot só guarda o que você declara de forma explícita; conversas comuns não são lembradas.</li>\n<li>Pergunte \"o que você sabe sobre mim?\" para ver tudo o que está armazenado.</li>\n<li>Exclua itens específicos com uma frase simples ou limpe tudo de uma vez.</li>\n<li>O caminho das configurações é: Configurações, Conta, Privacidade, Personalização e Memória.</li>\n<li>Você pode impedir que suas conversas sejam usadas no treinamento do modelo sem perder a memória pessoal.</li>\n<li>O Recall captura telas automaticamente e armazena tudo localmente sob criptografia; as empresas devem avaliá-lo separadamente.</li>\n<li>O Vision é opcional, limitado à sessão e apaga imagens e áudio ao final; apague o histórico de chat se não quiser a transcrição.</li>\n<li>Administradores podem desativar a memória no locatário ou por grupo e auditar criações, atualizações e exclusões pelo Microsoft Purview Discovery.</li>\n</ul>\n\n<h2>Conclusão</h2>\n<p>Memória, Recall e Vision são três ferramentas com três modelos de consentimento distintos. A memória é intencional, visível, controlável e auditável. O Recall é automático e fica no dispositivo. O Vision é uma análise por sessão, cuja transcrição de texto pode persistir. Misturá-los leva a discussões baseadas em premissas erradas. Entendida pelo que realmente é, a memória do Copilot deixa de ser motivo de pânico e vira uma camada de persistência deliberada que economiza trabalho repetitivo, sempre sob o seu controle.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Memory, Recall e Vision: três modelos de consentimento",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Memory: você decide",
+     "text": "Só guarda o que você pede explicitamente; dá para consultar, editar, excluir ou desativar a qualquer momento."
+    },
+    {
+     "kopf": "Recall: captura automática",
+     "text": "Tira capturas de tela criptografadas, armazenadas localmente, sem esperar sua decisão; exige avaliação própria nas empresas."
+    },
+    {
+     "kopf": "Vision: só na sessão",
+     "text": "Analisa tela ou câmera em tempo real; imagens e áudio somem, mas a transcrição de texto pode ficar."
+    },
+    {
+     "kopf": "Controles do usuário",
+     "text": "Configurações, Conta, Privacidade, Personalização e Memória; pergunte o que o Copilot sabe sobre você."
+    },
+    {
+     "kopf": "Controles do administrador",
+     "text": "Desativar a memória no locatário ou por grupo e auditar cada ação pelo Microsoft Purview Discovery."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "A memória do Copilot registra tudo o que eu faço?",
+    "a": "Não. A memória só guarda informações quando há uma intenção clara de lembrar, como um pedido explícito ou uma preferência declarada, por exemplo \"lembre-se de que prefiro resumos curtos\". Conversas comuns não são lembradas, e o Copilot não acrescenta notas escondidas. Você pode revisar e excluir as entradas quando quiser."
+   },
+   {
+    "q": "Qual é a diferença entre a memória do Copilot, o Recall e o Vision?",
+    "a": "A memória guarda apenas o que você declara e pode ser editada e auditada. O Recall captura telas de forma automática e constante, armazenando tudo localmente sob criptografia. O Vision analisa tela ou câmera em tempo real durante uma sessão; imagens e áudio são apagados ao final, mas a transcrição de texto pode permanecer."
+   },
+   {
+    "q": "Como posso ver e apagar o que o Copilot sabe sobre mim?",
+    "a": "Pergunte \"o que você sabe sobre mim?\" e o Copilot recita as entradas atuais. Para apagar um item, peça algo como \"esqueça que eu gosto de jardinagem\"; para remover tudo, peça uma limpeza completa. O interruptor fica em Configurações, Conta, Privacidade, Personalização e Memória."
+   },
+   {
+    "q": "Os administradores podem controlar a memória do Copilot na empresa?",
+    "a": "Sim. Os administradores podem desativar a memória em todo o locatário ou apenas para determinados grupos. Além disso, cada criação, atualização e exclusão de memória é detectável pelo Microsoft Purview Discovery, o que fornece registros de auditoria comprovantes às equipes de governança."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Memória, Recall e Vision: três modelos de consentimento",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Memória do Copilot",
+     "punkte": [
+      "Guarda apenas o que você declara de forma explícita",
+      "Exibe aviso sempre que a memória é atualizada",
+      "Pode ser revisada, excluída pontualmente ou limpa por completo",
+      "Administradores auditam criação, atualização e exclusão no Purview Discovery"
+     ]
+    },
+    "rechts": {
+     "titel": "Recall",
+     "punkte": [
+      "Captura a tela automaticamente, de forma constante e silenciosa",
+      "Restrito a uma categoria específica de PCs com Copilot",
+      "Armazena localmente, sob criptografia, sem sincronização na nuvem",
+      "Empresas devem avaliá-lo separadamente em auditorias de conformidade e risco"
+     ]
+    }
+   },
+   {
+    "titel": "Vision: o que desaparece e o que pode ficar",
+    "typ": "fakten",
     "punkte": [
      {
-      "kopf": "Ativação explícita",
-      "text": "Você clica no ícone de óculos ou permite o Vision nas configurações do Edge ou do Windows.",
-      "art": "start"
+      "wert": "Opcional",
+      "text": "Só é ativado numa sessão definida, pelo ícone de óculos ou pelas configurações."
      },
      {
-      "kopf": "Compartilhar entrada",
-      "text": "Você aponta a tela ou a câmera para um documento, um slide ou a transmissão do celular.",
-      "art": "schritt"
+      "wert": "Imagens",
+      "text": "São apagadas ao fim da sessão."
      },
      {
-      "kopf": "Análise em tempo real",
-      "text": "O Vision analisa a entrada e responde com texto ou sugestões no chat.",
-      "art": "schritt"
+      "wert": "Áudio",
+      "text": "Também é apagado quando a sessão termina."
      },
      {
-      "kopf": "Sessão termina",
-      "text": "Fechar a janela, desativar ou ficar inativo encerra a sessão automaticamente.",
-      "art": "schritt"
+      "wert": "Transcrição",
+      "text": "O texto da interação pode permanecer no histórico de chat até você excluí-lo."
      },
      {
-      "kopf": "Imagens e áudio apagados",
-      "text": "A transcrição pode permanecer no histórico de chat até você excluí-la.",
-      "art": "ende"
+      "wert": "Sessão",
+      "text": "Fechar a janela, desativar o recurso ou ficar inativo encerra a sessão automaticamente."
      }
     ]
    }
   ],
   "quiz": [
    {
-    "q": "Quando a memória do Copilot passa a guardar uma informação sobre o usuário?",
+    "q": "Em que situação a memória do Copilot guarda uma informação sobre o usuário?",
     "opts": [
-     "Quando existe uma intenção explícita de lembrar, por instrução direta ou preferência clara",
-     "Sempre que o usuário digita algo repetidamente em qualquer aplicativo do Microsoft 365",
-     "Em segundo plano, a cada conversa, para melhorar o modelo global automaticamente",
-     "Somente quando o administrador ativa a coleta de dados no locatário"
+     "Quando existe uma intenção clara de lembrar, como um pedido explícito",
+     "Sempre que o usuário digita qualquer pedido comum de conversa",
+     "Quando o Copilot deduz preferências a partir do comportamento em segundo plano",
+     "Quando o administrador ativa a coleta automática de todas as conversas"
     ],
     "a": 0,
-    "why": "A memória só persiste algo diante de uma intenção explícita de lembrar; não roda em segundo plano coletando dados."
+    "why": "A memória só guarda o que é autodeclarado. Pedidos comuns de conversa não entram, e o Copilot não acrescenta notas escondidas."
    },
    {
-    "q": "Qual é a principal diferença entre o Windows Recall e a memória do Copilot?",
+    "q": "Qual característica diferencia o Recall da memória do Copilot?",
     "opts": [
-     "O Recall armazena os dados na nuvem, enquanto a memória os guarda localmente",
-     "O Recall captura a tela automaticamente, enquanto a memória é curada e intencional",
-     "O Recall funciona em todos os PCs Windows, enquanto a memória exige hardware específico",
-     "O Recall pode ser consultado por comando de voz, enquanto a memória não"
+     "Ele só funciona quando o usuário clica no ícone de óculos",
+     "Ele captura a tela automaticamente, sem pedir confirmação",
+     "Ele envia as capturas para a nuvem para sincronizar dispositivos",
+     "Ele ignora documentos confidenciais e planilhas financeiras da empresa"
     ],
     "a": 1,
-    "why": "O Recall é automatizado e constante; a memória é curada e intencional. O artigo destaca o modelo de consentimento como diferença decisiva."
+    "why": "O Recall faz coleta constante e silenciosa de capturas de tela. Os dados ficam locais e criptografados, mas sem decisão do usuário."
    },
    {
-    "q": "O que acontece com os dados do Vision quando a sessão termina?",
+    "q": "O que pode permanecer depois que uma sessão do Vision termina?",
     "opts": [
-     "Imagens e áudio são apagados, mas a transcrição pode permanecer no histórico de chat",
-     "Imagens, áudio e transcrição são mantidos por padrão em um arquivo criptografado",
-     "Somente o áudio é apagado, enquanto as imagens ficam salvas no dispositivo",
-     "Tudo é enviado ao administrador para auditoria no Microsoft Purview Discovery"
-    ],
-    "a": 0,
-    "why": "Imagens e áudio desaparecem no fim da sessão, mas a transcrição de texto pode ficar no histórico, que o usuário pode excluir."
-   },
-   {
-    "q": "O que os administradores podem fazer em relação à memória do Copilot?",
-    "opts": [
-     "Ler o conteúdo pessoal de cada memória sem registro de auditoria",
-     "Apenas orientar os usuários, pois não há controles administrativos disponíveis",
-     "Desativar a memória no locatário ou por grupos e acompanhar ações no Purview Discovery",
-     "Ativar a personalização com base em idade, etnia e condições de saúde"
+     "As imagens da câmera, guardadas no histórico por trinta dias",
+     "O áudio gravado, disponível para revisão posterior pelos administradores",
+     "A transcrição de texto da interação no histórico de chat",
+     "Nada, pois tudo é apagado automaticamente junto com a sessão"
     ],
     "a": 2,
-    "why": "Administradores podem desativar a memória em todo o locatário ou em grupos e detectar criação, atualização e exclusão pelo Purview Discovery."
+    "why": "Imagens e áudio são apagados, mas a transcrição em texto pode ficar no histórico de chat até o usuário excluí-la."
+   },
+   {
+    "q": "Qual controle permite aos administradores auditar ações de memória, como criação e exclusão?",
+    "opts": [
+     "O interruptor principal em Configurações, Conta e Privacidade",
+     "O aviso de memória atualizada exibido ao usuário",
+     "O comando \"o que você sabe sobre mim?\" no chat",
+     "O Microsoft Purview Discovery, que detecta cada ação de memória"
+    ],
+    "a": 3,
+    "why": "Criação, atualização e exclusão de memória são detectáveis pelo Microsoft Purview Discovery, gerando registros de auditoria para a governança."
    }
   ]
  }
