@@ -9,6 +9,8 @@ import { importContentBlog } from "./contentblog.js";
 import { handleA2a } from "./a2a.js";
 import { handleAdminPanel } from "./adminpanel.js";
 import { handleSponsor, handleSponsorLink } from "./sponsor.js";
+import { handleAds, handlePaypalWebhook } from "./ads.js";
+import { handleSponsorOrders } from "./sponsor_orders.js";
 import { autoTranslateItems, autoTranslateEntities, runTrQueue } from "./autotr.js";
 import { syncLiveEvents } from "./liveevents.js";
 import { syncContentTopics, handleTopics } from "./topics.js";
@@ -268,6 +270,15 @@ async function api(env, request, url, path, asUser, ctx) {
 
   const sponsor = await handleSponsor(env, request, url, path, J, user);
   if (sponsor) return sponsor;
+
+  if (path === "/api/sponsor/order" || path === "/api/sponsor/orders" || path === "/api/admin/sponsor-orders") {   // Sponsoring-Paket per PayPal-Rechnung
+    const so = await handleSponsorOrders(env, request, url, path, user, J);
+    if (so) return so;
+  }
+  if (path.startsWith("/api/ads/") || path.startsWith("/api/admin/ads/")) {   // #281 Werbeplaetze buchen
+    const ads = await handleAds(env, request, url, path, user, J, ctx);
+    if (ads) return ads;
+  }
 
   const contributions = await handleContributions(env, request, url, path, user, J);
   if (contributions) return contributions;
@@ -543,6 +554,7 @@ export default {
         headers: { "content-type": "text/plain; charset=utf-8", "cache-control": "public, max-age=3600" },
       });
       if (path.startsWith("/go/")) return await handleSponsorLink(env, request, url, path, ctx);
+      if (path === "/paypal/webhook") return await handlePaypalWebhook(env, request);   // #281: Signatur wird vor jeder Aktion bei PayPal geprueft
       if (path.startsWith("/auth/")) return (await auth(env, request, url, path)) || new Response("not found", { status: 404 });
       if (path === "/mcp") return await handleMcp(env, request, (uid) => me(env, uid), (req, user) => api(env, req, new URL(req.url), new URL(req.url).pathname, user, ctx));
       if (path === "/a2a") return await handleA2a(env, request);
