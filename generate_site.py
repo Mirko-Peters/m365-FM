@@ -134,7 +134,7 @@ h2{font-size:1.5rem;line-height:1.2;margin:2.1em 0 .6em;font-weight:700}
 .author .badge{flex:none;width:58px;height:58px;border-radius:50%;background:var(--ink);color:var(--onink);display:grid;place-items:center;font:700 1.15rem Didot,Georgia,serif}
 .author p{margin:0;font-size:.95rem;color:var(--mut)}.author .auth-ex{margin:.5em 0 0}.author .auth-ul{list-style:none;display:flex;flex-wrap:wrap;gap:.35em .5em;padding:0;margin:.2em 0 0}.author .auth-ul li{border:1px solid var(--bd);border-radius:1em;padding:.05em .7em;font-size:.88rem}.author strong{color:var(--fg);display:block;font-size:1.02rem}
 .mut{color:var(--mut);font-size:.9rem}.crumbs{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);margin-top:26px}.crumbs a{text-decoration:none}
-footer{border-top:1px solid var(--fg);margin-top:64px;padding:26px 0 48px;font-size:.85rem;color:var(--mut)}footer a{margin-right:14px}
+footer{border-top:1px solid var(--fg);margin-top:64px;padding:26px 0 48px;font-size:.85rem;color:var(--mut)}footer .wrap{display:flex;flex-wrap:wrap;gap:6px 14px}footer .wrap>:not(a){flex-basis:100%}
 .info{margin:1.6em 0;padding:20px 22px;border:1px solid var(--ln,#d9cfc2);background:#fff8;border-radius:6px}.info figcaption{font-family:Didot,"Bodoni 72",Georgia,serif;font-size:1.25rem;margin-bottom:14px}.info small{display:block;margin-top:12px;opacity:.6;font-size:.75rem}
 .isteps{list-style:none;padding:0;margin:0;display:grid;gap:12px}.isteps li{display:grid;grid-template-columns:36px 1fr;gap:2px 12px;align-items:start}.isteps i{grid-row:span 2;width:32px;height:32px;border-radius:50%;background:var(--ac);color:#fff;font-style:normal;display:flex;align-items:center;justify-content:center;font-weight:700}.isteps b{font-size:1rem}.isteps span{font-size:.92rem;opacity:.85}
 .icols{display:grid;grid-template-columns:1fr 1fr;gap:14px}.icol{border-top:3px solid var(--ac);padding-top:8px}.icol h4{margin:0 0 6px}.icol ul{margin:0;padding-left:18px}.ifacts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}.ifacts div{border-left:3px solid var(--ac);padding-left:10px}.ifacts b{display:block;font-size:1.5rem;font-family:Didot,"Bodoni 72",Georgia,serif}.ifacts span{font-size:.88rem}@media(max-width:560px){.icols{grid-template-columns:1fr}}
@@ -449,6 +449,9 @@ A11Y_CSS = _mini_css("a11y.css")
 # Die Selektoren sind auf .shw/.sb-*/.att-* begrenzt; assets/sbar.css bleibt fuer gecachte alte Seiten liegen. data-sbar am <link> sagt
 # assets/attend.js, dass die Regeln schon da sind (sonst laedt das Popup sbar.css nach). community.css bleibt vorerst eigene Datei.
 SBAR_CSS = _mini_css("sbar.css")
+# Gemeinsames Formular-Design (assets/forms.css, Mirko 6.11.2026 "Design-Konsistenz"): ebenfalls im Hash-Buendel, weil Formulare auch auf Seiten
+# ohne community.css entstehen (Entitaeten-Bearbeitung, Profile, Events, Expert Connect, Verwaltung). ~1 KB gzip; bei #295 ins Community-/Entitaeten-Buendel.
+FORMS_CSS = _mini_css("forms.css")
 # Vorgeladen werden die Schnitte, die auf jeder Seite im ersten Bildschirm Text zeigen (gemessen auf Start-, Sprach-, Show- und Entitaetsseiten,
 # alle 15 Sprachen - Navigation, Logo und Ziffern/Leerzeichen sind lateinisch). Barlow 400 (Fliesstext) und Condensed 600 (Ueberschriften) normal;
 # Condensed 500 (Menue) und 700 (Logo) ab 701 px normal, darunter mit fetchpriority=low. Live-A/B 3.11.2026 (tools/preload_ab.mjs, 2 x 7 Laeufe):
@@ -569,7 +572,7 @@ def css_link():
     """Das gesamte Stylesheet liegt einmal als Datei mit Inhalts-Hash unter /assets/ (statt ~33 KB inline in jeder Seite): kleinere Seiten, Browser- und CDN-Cache."""
     if not _CSSF:
         import hashlib
-        css = SBAR_CSS + "\n" + CSS + (ADS.CSS if ADS.css_needed(BASE) else "") + "\n" + A11Y_CSS + "\n"
+        css = SBAR_CSS + "\n" + CSS + (ADS.CSS if ADS.css_needed(BASE) else "") + "\n" + FORMS_CSS + "\n" + A11Y_CSS + "\n"
         name = "site." + hashlib.sha1(css.encode("utf-8")).hexdigest()[:10] + ".css"
         (OUT / "assets").mkdir(parents=True, exist_ok=True); (OUT / "assets" / name).write_text(css, encoding="utf-8")
         _CSSF["u"] = f"{BASE}/assets/{name}"
@@ -728,7 +731,7 @@ def con_bar(lang):
 
 import site_home as HUB
 import site_design as _SD
-_SD.EN_URL = f"{BASE}/show/"
+_SD.EN_URL = f"{BASE}/"   # Englisch ist ein Eintrag der Sprachauswahl wie jede Sprache: Rueckfall ist die englische Startseite (vorher /show/)
 globals_ctx = None
 COMMUNITY_API = os.environ.get("COMMUNITY_API", "https://api-dub.m365.fm")
 _CI = json.loads((ROOT / "data" / "community_i18n.json").read_text("utf-8")) if (ROOT / "data" / "community_i18n.json").exists() else {}
@@ -774,20 +777,31 @@ def about_url(lang):
     return f"{BASE}/de/entity/mirko-peters/" if lang == "de" else f"{BASE}/entity/mirko-peters/"
 
 
+# Untermenue "Community" je Sprache (Podcast, Blog, Videos, Bibliothek, Gaeste): gleiche Reihenfolge in allen Sprachen
+NAV_CL = {"en": ("Podcast", "Blog", "Videos", "Library", "Guests"), "de": ("Podcast", "Blog", "Videos", "Bibliothek", "Gäste"),
+          "es": ("Podcast", "Blog", "Vídeos", "Biblioteca", "Invitados"), "fr": ("Podcast", "Blog", "Vidéos", "Bibliothèque", "Invités"),
+          "it": ("Podcast", "Blog", "Video", "Biblioteca", "Ospiti"), "pt": ("Podcast", "Blog", "Vídeos", "Biblioteca", "Convidados"),
+          "nl": ("Podcast", "Blog", "Video's", "Bibliotheek", "Gasten"), "pl": ("Podcast", "Blog", "Wideo", "Biblioteka", "Goście"),
+          "id": ("Podcast", "Blog", "Video", "Perpustakaan", "Tamu"), "ru": ("Подкаст", "Блог", "Видео", "Библиотека", "Гости"),
+          "uk": ("Подкаст", "Блог", "Відео", "Бібліотека", "Гості"), "ar": ("بودكاست", "مدونة", "فيديوهات", "المكتبة", "الضيوف"),
+          "he": ("פודקאסט", "בלוג", "סרטונים", "ספרייה", "אורחים"), "ja": ("ポッドキャスト", "ブログ", "動画", "ライブラリ", "ゲスト"),
+          "ko": ("팟캐스트", "블로그", "동영상", "라이브러리", "게스트")}
+
+
 def header(lang, switch):
-    ui = UI.get(lang)
-    if lang in LANGS:
-        home = f"{BASE}/{lang}/"
-        menu = []
-        menu.insert(0, (LRN.T(lang)["learn"], f"{BASE}/{lang}/learn/"))
-        menu.append(("Podcast", f"{BASE}/{lang}/podcast/"))   # der gedubbte Podcast der Sprache (Spreaker-Show); die Live-Show gibt es nur auf Englisch
-        menu.insert(0, (_CI.get(lang, _CI.get("en", {})).get("profile", "Profile"), f"{BASE}/{lang}/community/"))
-        menu.insert(0, (DIR.S[lang]["title"], f"{BASE}/{lang}/directory/"))
-        _cl = {"de": ("Community", "Podcast", "Blog", "Videos", "Bibliothek", "Gäste")}.get(lang, ("Community", "Podcast", "Blog", "Videos", "Library", "Guests"))
-        menu.insert(0, (_CI.get(lang, _CI.get("en", {})).get("community", _cl[0]), [(ui[3], home)] + [(_cl[i + 1], f"{BASE}/{lang}/community/{p}/") for i, p in enumerate(("podcast", "blog", "video", "library", "guests"))]))
+    """Ein Menue fuer alle Sprachen, Englisch eingeschlossen (Mirko, 6.11.2026): Community ▾ (Alle Folgen, Podcast, Blog, Videos, Bibliothek, Gaeste),
+    Microsoft-365-Verzeichnis, Profil, Lernen, Podcast; die Sprache waehlt man ueber die Flaggen-Auswahl. Englisch hat keinen eigenen "Show"-Punkt
+    und keinen "Languages"-Link mehr: About the show = Podcast (/show/), All episodes = /show/episodes/, Live, Gaeste und Hosts stehen auf /show/.
+    Alle Ziele sind endgueltige Adressen (keine Weiterleitung des Site-Workers)."""
+    L = lang if lang in LANGS else "en"
+    ci = _CI.get(L, _CI.get("en", {}))
+    if L == "en":
+        home = f"{BASE}/"; pre = BASE; all_eps = (f"{BASE}/show/episodes/", "All episodes"); pod = f"{BASE}/show/"
     else:
-        home = f"{BASE}/"
-        menu = [("Languages", f"{BASE}/#languages"), (DIR.S["en"]["title"], f"{BASE}/directory/"), ("Community", [("Podcast", f"{BASE}/community/podcast/"), ("Blog", f"{BASE}/community/blog/"), ("Videos", f"{BASE}/community/video/"), ("Library", f"{BASE}/community/library/"), ("Guests", f"{BASE}/community/guests/")]), ("Show", [("About the show", f"{BASE}/show/"), ("All episodes", f"{BASE}/show/episodes/")] + ([("M365 Show Live", f"{BASE}/live/")] if (ROOT / "data" / "live.json").exists() else []) + [("Guests", f"{BASE}/show/guests/"), ("Hosts", f"{BASE}/show/hosts/")]), ("Profile", f"{BASE}/community/")]
+        home = f"{BASE}/{L}/"; pre = f"{BASE}/{L}"; all_eps = (f"{BASE}/{L}/podcast/", UI[L][3]); pod = f"{BASE}/{L}/podcast/"   # der gedubbte Podcast der Sprache (Spreaker-Show)
+    cl = NAV_CL.get(L, NAV_CL["en"])
+    menu = [(ci.get("community", "Community"), [(all_eps[1], all_eps[0])] + [(cl[i], f"{pre}/community/{p}/") for i, p in enumerate(("podcast", "blog", "video", "library", "guests"))]),
+            (DIR.S[L]["title"], f"{pre}/directory/"), (ci.get("profile", "Profile"), f"{pre}/community/"), (LRN.T(L)["learn"], f"{pre}/learn/"), ("Podcast", pod)]
     if not switch:
         items = [(x, LANGS[x][0], f"{BASE}/{x}/", LANGS[x][1]) for x in LANGS if (ROOT / "episodes").exists()]
         switch = lang_dropdown(lang if lang in LANGS else "en", items, "")
@@ -1004,8 +1018,19 @@ def build():
 
     def url_of(it): return f'{BASE}/{it["lang"]}/{it["slug"]}/'
     SBX = SBR.Index()
-    def side_for(l, title, body_html):   # Sidebar der Sprachseiten: Themen der Seite, neueste Folgen der Sprache, Community
-        return SBR.render_lang(SBX, BASE, l, strip_tags(title + " " + body_html.split("<main", 1)[-1])[:2500], by_lang.get(l, []), url_of, lambda x: anchor_title(x["e"]["title"]), pfx(l) if l in COMM_LANGS else "")
+    _SHP = json.loads((ROOT / "data" / "platforms.json").read_text("utf-8")) if (ROOT / "data" / "platforms.json").exists() else {}
+    def sidebar(l, text="", ids=None, exclude=(), home=False):
+        """Die eine Sidebar aller Inhaltsseiten (site_sidebar.render), gleich in allen Sprachen: Englisch mit den Folgen der Hauptshow (/show/),
+        die Dub-Sprachen mit den Folgen ihrer Sprache. ids: feste Themenliste der Seite (Entitaets-IDs), sonst Treffer im Text."""
+        if l in LANGS:
+            return SBR.render(SBX, BASE, l, text, by_lang.get(l, []), url_of, lambda x: anchor_title(x["e"]["title"]), f"{BASE}/{l}/podcast/", _SHP.get(l), "",
+                              f"https://www.spreaker.com/show/{LANGS[l][3]}/episodes/feed", pfx(l), f"{BASE}/{l}/community/", ids, exclude, home)
+        import site_podpage as _PP
+        _en = _PP.episode_index(BASE)["items"]
+        return SBR.render(SBX, BASE, "en", text, _en, lambda x: x["url"], lambda x: x["e"]["title"], f"{BASE}/show/episodes/", _SHP.get("en"),
+                          f"{BASE}/show/listen/" if _SHP.get("en") else "", "https://www.spreaker.com/show/6704921/episodes/feed", "", f"{BASE}/community/", ids, exclude, home)
+    def side_for(l, title, body_html, home=False):   # Sidebar der Sprachseiten: Themen der Seite (Treffer im Text), neueste Folgen der Sprache, Community
+        return sidebar(l, strip_tags(title + " " + body_html.split("<main", 1)[-1])[:2500], home=home)
 
     R2_EXT = (".html", ".json", ".jsonld", ".xml")   # T32: Bild-URLs auch in Exporten (entities*.json, Register, Sitemaps) auf img.m365.fm
     R2OUT = ROOT / "r2out"; _r2n = [0, 0]   # Seiten, die nicht in GitHub Pages liegen, sondern im R2-Bucket (tools/r2_pages_upload.py laedt sie hoch, der Site-Worker liefert sie aus)
@@ -1294,7 +1319,7 @@ def build():
 <div class="sec"><div class="kicker">01 · {esc(ui[3])}</div>{HUB.hub(globals_ctx, l, BASE, COMMUNITY_API, newest, lambda i: thumb_html(i))}</div></main>
 {m365con_band()}
 <main class="wrap"><section id="c-curator"></section><section id="c-sub"></section>{faq_html(l, "FAQ")}{author_box(l)}</main>{footer(l)}{community_tags(l)}"""
-        write(f"{l}/index.html", page(l, title, short(d), f"{BASE}/{l}/", body, alts_home, ld, og_type="website", side=side_for(l, title, body)))
+        write(f"{l}/index.html", page(l, title, short(d), f"{BASE}/{l}/", body, alts_home, ld, og_type="website", side=side_for(l, title, body, home=True)))
         sitemap.append((f"{BASE}/{l}/", TODAY, alts_home))
 
     # Wurzel
@@ -1351,14 +1376,7 @@ def build():
                   f'<div class="thumbs">{"".join(_ch)}</div>{PAGER(_hl, _pv, _nx, kind="page")}</main>{footer(_hl) if _hl in LANGS else footer_en()}')
             write(f"{_pre}page/{_n}/index.html", page(_hl, _ttl, f"{_SD.HUB_DESC.get(_hl, _SD.HUB_DESC['en'])} – {_pw} {_n}.", _purl(_n), _b,
                                                          og_type="website", og_of=_purl(1)))
-    import site_updates as _SU2; _SU2.load(COMMUNITY_API)
-    from site_learn import ENTS as _E2
-    for _nl in ("en", "de"):
-        _nu = f"{BASE}/{'de/' if _nl == 'de' else ''}updates/"
-        _nt = "Updates – neu seit gestern" if _nl == "de" else "Updates – new since yesterday"
-        _nb = f'{header(_nl, "")}<main class="wrap"><h1>{esc(_nt)}</h1><p class="mut">{esc("Was seit dem letzten Tag neu dazugekommen ist. Die Seite wird höchstens einmal täglich erweitert (abgeschlossene Tage)." if _nl == "de" else "What was added since the last day. The page grows at most once a day (completed days only).")}</p><p><a class="btn main" href="{BASE}/{"de/" if _nl == "de" else ""}community/#c-wish">{"Roadmap &amp; Wunschliste" if _nl == "de" else "Roadmap &amp; wishlist"}</a></p>{_SU2.page_block(_nl, lambda i, _l=_nl: f"{BASE}{'/' + _l if _l != 'en' else ''}/entity/{i}/", {k: v["name"] for k, v in _E2.items()})}{HUB.news(_nl, BASE)}</main>{footer(_nl)}'
-        write(f"{'de/' if _nl == 'de' else ''}updates/index.html", page(_nl, f"{_nt} – M365.FM", "Neue Beiträge, Folgen, Videos, Bibliothekseinträge und Updates pro Tag." if _nl == "de" else "New posts, episodes, videos, library items and updates per day.", _nu, _nb, None, [{"@context": "https://schema.org", "@type": "CollectionPage", "@id": _nu + "#page", "name": _nt, "url": _nu, "inLanguage": _nl, "dateModified": TODAY, "isPartOf": {"@id": f"{BASE}/#website"}, "publisher": {"@id": f"{BASE}/#org"}}]))
-        sitemap.append((_nu, TODAY, None))
+    # /updates/ (Wochenzusammenfassungen) entsteht nach dem Laden der Blogbeitraege: site_milestones.build weiter unten
 
     # Rechtliche Seiten (noindex)
     import site_legal as SL
@@ -1382,7 +1400,11 @@ def build():
     # Community-Seite je Sprache (noindex) + Service Worker fuer Web-Push
     for l in list(active) + ["en"]:
         ct = _CI.get(l, _CI.get("en", {})).get("profile", "Profile")
-        write("community/index.html" if l == "en" else f"{l}/community/index.html", page(l, f"{ct} – M365.FM" + ("" if l == "en" else f" {LANGS[l][0]}"), ct, (f"{BASE}/community/" if l == "en" else f"{BASE}/{l}/community/"), f'{header(l, "")}<main class="wrap" style="max-width:48em"><h1 id="c-h1">{esc(ct)}</h1><div id="c-page"></div><div id="c-expert"></div><div id="c-events"></div><div id="c-blog"></div><div id="c-podcast"></div><div id="c-shows"></div><div id="c-video"></div><div id="c-library"></div><div id="c-guests"></div><div id="c-feed"></div><div id="c-notes"></div><div id="c-wish"></div><div id="c-mail"></div><div id="c-messages"></div></main>{footer(l)}{community_tags(l)}<script>window.M365X={{api:"{COMMUNITY_API}",base:"{BASE}",lang:"{l}"}}</script><script defer src="{BASE}/assets/profile.js"></script><script defer src="{BASE}/assets/events.js"></script><script defer src="{BASE}/assets/editor.js"></script><script defer src="{BASE}/assets/seo.js"></script><script defer src="{BASE}/assets/credits.js"></script><script defer src="{BASE}/assets/notes.js"></script><script defer src="{BASE}/assets/blog.js"></script><script defer src="{BASE}/assets/podcast.js"></script><script defer src="{BASE}/assets/shows.js"></script><script defer src="{BASE}/assets/video.js"></script><script defer src="{BASE}/assets/library.js"></script><script defer src="{BASE}/assets/guests.js"></script><script defer src="{BASE}/assets/feeditems.js"></script><script defer src="{BASE}/assets/wish.js"></script><script defer src="{BASE}/assets/mailprefs.js"></script><script defer src="{BASE}/assets/messages.js"></script>', og_type="website", extra_head=LRN.WCSS, noindex=True))
+        write("community/index.html" if l == "en" else f"{l}/community/index.html", page(l, f"{ct} – M365.FM" + ("" if l == "en" else f" {LANGS[l][0]}"), ct, (f"{BASE}/community/" if l == "en" else f"{BASE}/{l}/community/"), f'{header(l, "")}<main class="wrap" style="max-width:48em"><h1 id="c-h1">{esc(ct)}</h1><div id="c-page"></div><div id="c-expert"></div><div id="c-mvp"></div><div id="c-events"></div><div id="c-blog"></div><div id="c-podcast"></div><div id="c-shows"></div><div id="c-video"></div><div id="c-library"></div><div id="c-guests"></div><div id="c-feed"></div><div id="c-notes"></div><div id="c-wish"></div><div id="c-mail"></div><div id="c-messages"></div></main>{footer(l)}{community_tags(l)}<script>window.M365X={{api:"{COMMUNITY_API}",base:"{BASE}",lang:"{l}"}}</script><script defer src="{BASE}/assets/profile.js"></script><script defer src="{BASE}/assets/mvp-tracker.js"></script><script defer src="{BASE}/assets/events.js"></script><script defer src="{BASE}/assets/editor.js"></script><script defer src="{BASE}/assets/seo.js"></script><script defer src="{BASE}/assets/credits.js"></script><script defer src="{BASE}/assets/notes.js"></script><script defer src="{BASE}/assets/blog.js"></script><script defer src="{BASE}/assets/podcast.js"></script><script defer src="{BASE}/assets/shows.js"></script><script defer src="{BASE}/assets/video.js"></script><script defer src="{BASE}/assets/library.js"></script><script defer src="{BASE}/assets/guests.js"></script><script defer src="{BASE}/assets/feeditems.js"></script><script defer src="{BASE}/assets/wish.js"></script><script defer src="{BASE}/assets/mailprefs.js"></script><script defer src="{BASE}/assets/messages.js"></script>', og_type="website", extra_head=LRN.WCSS + f'<link rel="stylesheet" href="{BASE}/assets/mvp-tracker.css">', noindex=True))
+    # MVP-Tracker als eigene App "M365.FM Contributor" (PWA nur fuer /community/contributor/, eigenes Manifest und eigener Service Worker)
+    import site_contributor as CONTRIB
+    CONTRIB.build({"BASE": BASE, "write": write, "page": page, "header": header, "footer": footer, "community_tags": community_tags,
+                   "COMMUNITY_API": COMMUNITY_API, "CI": _CI, "langs": list(dict.fromkeys(list(active) + ["en"]))})
     shutil.copy(ROOT / "assets" / "sw.js", OUT / "sw.js")
     if (ROOT / "data" / "m365con_program.json").exists():
         shutil.copy(ROOT / "data" / "m365con_program.json", OUT / "m365con_program.json")
@@ -1439,7 +1461,7 @@ def build():
                         articles=articles, url_of=url_of, cat_name=cat_name, ORDER=ORDER, strip_tags=strip_tags, anchor_title=anchor_title, short=short, parse_desc=parse_desc,
                         sitemap=sitemap, TODAY=TODAY, api=COMMUNITY_API, SCORE={l: (_QUI.get(l, {}).get("score") or _QUI["en"]["score"]) for l in list(LANGS) + ["en"]}))
 
-    _ctx = dict(community_tags=community_tags, write=write, write_r2=write_r2, page=page, header=header, footer=footer, footer_en=footer_en, BASE=BASE, LANGS=LANGS, active=active, url_of=url_of, anchor_title=anchor_title, sitemap=sitemap, TODAY=TODAY, api=COMMUNITY_API, google_maps_key=os.environ.get("GOOGLE_MAPS_API_KEY", ""), orig_alts=ORIG_ALTS)
+    _ctx = dict(community_tags=community_tags, write=write, write_r2=write_r2, page=page, header=header, footer=footer, footer_en=footer_en, BASE=BASE, LANGS=LANGS, active=active, url_of=url_of, anchor_title=anchor_title, sitemap=sitemap, TODAY=TODAY, api=COMMUNITY_API, google_maps_key=os.environ.get("GOOGLE_MAPS_API_KEY", ""), orig_alts=ORIG_ALTS, side=sidebar)   # side: die eine Sidebar der Inhaltsseiten (Entitaeten, Blog, Videos, Bibliothek, Events, Profile, Show)
     phase("Folgenseiten (Dub-Sprachen), Startseiten")
     _people, _orgs = MEM.fetch_members(COMMUNITY_API)
 
@@ -1485,6 +1507,7 @@ def build():
     for _x in (LRN._fetch_json(f"{COMMUNITY_API}/api/qa/export") or {}).get("items", []):
         ENT.FAQ.setdefault(_x["eid"], []).append(_x)
     ENT.CLAIMS.update({c["eid"]: c["handle"] for c in _cl}); MEM.CLAIMED.update({c["handle"]: c["eid"] for c in _cl})
+    ENT.set_teams(_orgs, _people, {p["handle"]: MEM.person_entity(p["handle"]) for p in _people})   # Mitarbeitende der Community-Firma -> Personen auf der verknuepften Firmen-Entitaet
     import site_updates as _SU
     _SU.load(COMMUNITY_API)
     import site_blog as BLG
@@ -1505,6 +1528,8 @@ def build():
         for _t in _p.get("topics", []):
             _pbt.setdefault(_t, []).append(_p)
     _ctx["posts_by_topic"] = _pbt; _ctx["author_box"] = author_box
+    import site_milestones as MST
+    print("Updates-Seite (Wochenzusammenfassungen):", MST.build(_ctx, _posts))   # Mirko 6.11.2026: nur die woechentlichen Meilensteine, keine Tagesliste mit Inhalten oder GitHub-Meldungen
     phase("Blog geladen, Folgen der Hauptshow zugeordnet")
     ENT.PERSON_LD = person_ld   # T4: eine Definition der Person Mirko Peters (Entitaetsseite nutzt denselben Knoten)
     _glc = {}   # verlinkbare Begriffe je Sprache einmal (vorher je Entitaetsseite neu: 1.800 Eintraege x Seiten x Sprachen); nur gelesen
@@ -1838,12 +1863,12 @@ Mirko Peters, {BASE}/about/
     _adm_css = ("<style>.adm-tabs{display:flex;gap:6px;flex-wrap:wrap;margin:1em 0}.adm-tabs button{font:inherit;padding:.45em 1em;border:1px solid var(--bd);border-radius:2em;background:var(--card);color:inherit;cursor:pointer}"
                 ".adm-tabs button[aria-selected=true]{border-color:var(--ac);background:var(--ac);color:#fff}.adm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(11em,1fr));gap:10px}"
                 ".adm-tile{border:1px solid var(--bd);border-radius:.6em;padding:.8em;background:var(--card);display:flex;flex-direction:column;gap:.1em}.adm-tile b{font-size:1.7rem;line-height:1.1}.adm-tile.on b{color:var(--ac)}.adm-tile small{color:var(--mut)}"
-                ".adm-row{display:flex;gap:8px;flex-wrap:wrap}.adm-row input{flex:1;min-width:12em}.adm-row input,.adm-row select{font:inherit;padding:.5em .7em;border:1px solid var(--bd);border-radius:.4em;background:var(--card);color:inherit}.adm-list{list-style:none;padding:0;margin:1em 0}.adm-item{font:inherit;color:inherit;background:none;border:0;border-bottom:1px solid var(--bd);width:100%;text-align:start;padding:.55em .2em;cursor:pointer}.adm-item:hover{background:var(--card)}"
+                ".adm-row{display:flex;gap:8px;flex-wrap:wrap}.adm-row input{flex:1;min-width:12em}.adm-list{list-style:none;padding:0;margin:1em 0}.adm-item{font:inherit;color:inherit;background:none;border:0;border-bottom:1px solid var(--bd);width:100%;text-align:start;padding:.55em .2em;cursor:pointer}.adm-item:hover{background:var(--card)}"
                 ".adm-tbl{width:100%;border-collapse:collapse;font-size:.92rem}.adm-tbl th,.adm-tbl td{text-align:start;padding:.35em .4em;border-bottom:1px solid var(--bd);vertical-align:top}.adm-tbl th{position:sticky;top:0;background:var(--bg)}"
                 ".adm-chip{display:inline-block;min-width:2.2em;text-align:center;font:600 .78rem/1.6 inherit;border:1px solid var(--bd);border-radius:1em;margin:1px;background:none;color:inherit;cursor:pointer;padding:0 .3em}.adm-chip.ok{background:#1e7a4a;color:#fff;border-color:#1e7a4a;cursor:default}.adm-chip.q{background:var(--ac);color:#fff;border-color:var(--ac)}.adm-chip.fail{border-color:#b43;color:#b43}"
                 ".adm-sum{display:grid;grid-template-columns:repeat(auto-fill,minmax(7.5em,1fr));gap:6px;margin:.6em 0}.adm-sum div{border:1px solid var(--bd);border-radius:.5em;padding:.4em .6em;background:var(--card)}.adm-sum b{display:block;font-size:1.1rem}.adm-sum small{color:var(--mut)}.adm-ops td{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.85rem}"
                 ".adm-badge{font-size:.75rem;border:1px solid var(--bd);border-radius:1em;padding:.05em .6em;color:var(--mut)}.adm-badge.on{border-color:var(--ac);color:var(--ac)}"
-                ".adm-form{border:1px solid var(--bd);border-radius:.7em;padding:1em 1.2em;background:var(--card);margin:1em 0}.adm-field{display:flex;flex-direction:column;gap:.2em;margin:.7em 0}.adm-field input,.adm-field textarea,.adm-field select{font:inherit;padding:.45em .6em;border:1px solid var(--bd);border-radius:.4em;background:var(--bg);color:inherit}"
+                ".adm-form{border:1px solid var(--bd);border-radius:.7em;padding:1em 1.2em;background:var(--card);margin:1em 0}.adm-field{display:flex;flex-direction:column;gap:6px;margin:.9em 0;font-weight:600}"
                 ".adm-msg{min-height:1.4em}.adm-msg.bad{color:var(--ac);font-weight:600}</style>")
     write("admin/index.html", page("de", "Verwaltung – M365.FM", "Verwaltung der Website ohne Code", f"{BASE}/admin/",
           f'{header("de", "")}<main class="wrap" id="main"><h1>Verwaltung</h1><p class="mut">Inhalte, Datenbank und Schalter der Website, ohne Code. Nur für Admins.</p>'

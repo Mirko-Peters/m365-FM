@@ -14,6 +14,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 import site_shownotes as SNS
+import site_milestones as MST
 from site_learn import esc
 
 ROOT = Path(__file__).resolve().parent
@@ -54,12 +55,14 @@ def check(rec, lang, slug, ents):
     if not 10 <= len(title) <= 140: err.append(f"Titel {len(title)} Zeichen (10-140)")
     if not 50 <= len(summary) <= 300: err.append(f"Kurzfassung {len(summary)} Zeichen (50-300)")
     if not HANDLE.match(author): err.append("Autor-Handle ungueltig")
-    words = len(re.sub(r"[#*`>\[\]()!-]", " ", body).split())
-    if words < 300: err.append(f"Text {words} Woerter (mindestens 300)")
+    ms = MST.week_of(slug) is not None   # Wochenzusammenfassung "M365.FM milestones" (Freitagsaufgabe): auch kurze Wochen erscheinen, Thema M365.FM immer dabei
+    words, wmin = len(re.sub(r"[#*`>\[\]()!-]", " ", body).split()), (MST.MIN_WORDS if ms else 300)
+    if words < wmin: err.append(f"Text {words} Woerter (mindestens {wmin})")
     if re.search(r"<\s*(script|iframe|style|form)", body, re.I): err.append("HTML-Element nicht erlaubt (script/iframe/style/form)")
     bad = sorted({u for _, u in IMG.findall(body) if not u.startswith("https://img.m365.fm/")})
     if bad: err.append("Bilder nur von https://img.m365.fm/: " + ", ".join(bad[:3]))
     topics = [t for t in (m.get("topics") or []) if isinstance(t, str)]
+    if ms and MST.TOPIC not in topics and MST.TOPIC in ents: topics.insert(0, MST.TOPIC)
     unknown = [t for t in topics if t not in ents]
     if unknown: err.append("unbekannte Themen: " + ", ".join(unknown[:5]))
     faq = [{"q": str(x.get("q") or "")[:200], "a": str(x.get("a") or "")[:600]} for x in (m.get("faq") or []) if isinstance(x, dict) and x.get("q") and x.get("a")]

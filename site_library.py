@@ -67,7 +67,7 @@ def build(g, items, people, api):
             if lang_code: node["programmingLanguage"] = lang_code
             ld = [{"@context": "https://schema.org", **node}]
             noidx = p.get("votes", 0) < INDEX_VOTES
-            write(f"{pfx2(lang)}community/library/{p['handle']}-{p['slug']}/index.html", page(lang, f'{p["title"]} – {kl(lang, p["kind"])} | M365.FM', (p.get("summary") or "")[:155], u, b, None, ld, og_type="article", extra_head=LCSS, noindex=noidx))
+            write(f"{pfx2(lang)}community/library/{p['handle']}-{p['slug']}/index.html", page(lang, f'{p["title"]} – {kl(lang, p["kind"])} | M365.FM', (p.get("summary") or "")[:155], u, b, None, ld, og_type="article", extra_head=LCSS, noindex=noidx, side=(g["side"](lang, p["title"] + " " + (p.get("summary") or ""), ids=topics) if g.get("side") else "")))
             if not noidx:
                 sitemap.append((u, iso(p.get("updated") or p["published"]), None))
         groups = ""

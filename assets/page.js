@@ -66,3 +66,19 @@ document.querySelectorAll(".yt[data-id]").forEach(function(b){b.addEventListener
   document.addEventListener("click", function(e){ closeAll(e.target.closest ? e.target.closest("details") : null); });
   document.addEventListener("focusin", function(e){ closeAll(e.target.closest ? e.target.closest("details") : null); });
 })();
+/* Formulare (gemeinsames Design assets/forms.css, Mirko 6.11.2026): Zeichenzaehler "123 / 600" fuer Textfelder mit maxlength (sitzt im unteren
+   Innenrand des Felds, verschiebt nichts; per aria-describedby vorgelesen, nicht bei jedem Tastendruck) und mitwachsende Textfelder in Browsern
+   ohne CSS field-sizing. Ein Listener fuer alle Formulare, auch fuer spaeter per Skript gebaute; der Blog-Editor (.ed-ta) hat einen eigenen Zaehler. */
+(function(){try{
+  var FS=!!(window.CSS&&CSS.supports&&CSS.supports("field-sizing","content"));
+  function ok(t){return t&&t.tagName==="TEXTAREA"&&!(t.classList&&t.classList.contains("ed-ta"))&&!t.hasAttribute("data-nocount")}
+  function upd(t){
+    if(!ok(t))return;var m=t.maxLength;
+    if(m>0){var c=t._fcnt;if(!c){c=document.createElement("span");c.className="f-cnt";c.id="fcnt-"+Math.random().toString(36).slice(2,9);
+      t.insertAdjacentElement("afterend",c);t._fcnt=c;var d=t.getAttribute("aria-describedby");t.setAttribute("aria-describedby",(d?d+" ":"")+c.id)}
+      var n=t.value.length;c.textContent=n+" / "+m;c.classList.toggle("near",n>=m*.9)}
+    if(!FS&&t.scrollHeight>t.clientHeight){t.style.height="auto";t.style.height=(t.scrollHeight+2)+"px"}
+  }
+  document.addEventListener("focusin",function(e){upd(e.target)});
+  document.addEventListener("input",function(e){upd(e.target)});
+}catch(e){}})();

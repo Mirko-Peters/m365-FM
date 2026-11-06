@@ -63,6 +63,19 @@ AGENT_TEXT = {
 }
 
 
+# MVP-Tracker (#231, Kommentar 5.11.): Eintragen ins MVP-Portal oder bei Advocu nur lokal kombiniert - das Portal-Token bleibt auf dem eigenen Rechner.
+MVP_TEXT = {
+    "en": dict(title="MVP portal and Advocu: export, then submit locally",
+               p=["The MVP Tracker keeps your contributions ready for the Microsoft MVP portal: export_contributions with format=mvp returns every entry mapped to the portal's activity fields (type, title, date, description, link, role, target audience, technology area, metrics) and lists what is still missing or too long. format=gde returns drafts for Advocu (Google Developer Experts). If the program is active in your profile, export_mvp_activities and export_gde_activities appear as their own tools.",
+                  "M365.FM never submits anything to the MVP portal and never stores portal tokens: the portal has no official API. If you want to automate the submission, run our MCP server together with an MVP/Advocu MCP server (for example the MIT-licensed carlosazaustre/advocu-mcp-server) locally in Claude. Your AI reads the export from us and submits it with the other server; the portal token stays on your own computer. Afterwards mark each entry with update_contribution portal=true."],
+               ex="Example: “Get my contributions from April 2026 that are not in the MVP portal yet (export_mvp_activities, portal=open), show me the issues, fix them with update_contribution and then submit the ready ones with the MVP server.”"),
+    "de": dict(title="MVP-Portal und Advocu: exportieren, lokal eintragen",
+               p=["Der MVP-Tracker hält deine Beiträge fürs Microsoft-MVP-Portal bereit: export_contributions mit format=mvp liefert jeden Eintrag mit den Feldern des Portals (Typ, Titel, Datum, Beschreibung, Link, Rolle, Zielgruppe, Technologiebereich, Kennzahlen) und nennt, was noch fehlt oder zu lang ist. format=gde liefert Entwürfe für Advocu (Google Developer Experts). Ist das Programm in deinem Profil aktiv, erscheinen export_mvp_activities und export_gde_activities als eigene Tools.",
+                  "M365.FM reicht nichts beim MVP-Portal ein und speichert keine Portal-Tokens: Das Portal hat keine offizielle Schnittstelle. Wer das Eintragen automatisieren will, nutzt unseren MCP-Server lokal in Claude zusammen mit einem MVP-/Advocu-MCP-Server (zum Beispiel dem MIT-lizenzierten carlosazaustre/advocu-mcp-server). Deine KI liest den Export bei uns und trägt ihn mit dem anderen Server ein; das Portal-Token bleibt auf deinem eigenen Rechner. Danach jeden Eintrag mit update_contribution portal=true abhaken."],
+               ex="Beispiel: „Hol meine Beiträge seit April 2026, die noch nicht im MVP-Portal sind (export_mvp_activities, portal=open), zeig mir die Hinweise, behebe sie mit update_contribution und trage die fertigen dann mit dem MVP-Server ein.“"),
+}
+
+
 def build(g):
     BASE, write, page, header, footer, footer_en, LANGS = g["BASE"], g["write"], g["page"], g["header"], g["footer"], g["footer_en"], g["LANGS"]
     sitemap, TODAY = g["sitemap"], g["TODAY"]
@@ -81,6 +94,8 @@ def build(g):
         how = "".join(f'<li>{esc(h[lang])} <small>(<code>{"</code>, <code>".join(h["tools"])}</code>)</small></li>' for h in HOWTO)
         ex = "".join(f"<li>{esc(x)}</li>" for x in t["ex"]); sl = "".join(f"<li>{esc(x)}</li>" for x in t["safel"])
         agent = AGENT_TEXT[lang]
+        mt = MVP_TEXT[lang]
+        mvp_html = f'<section id="mvp-portal"><h2>{esc(mt["title"])}</h2>' + "".join(f'<p>{esc(x)}</p>' for x in mt["p"]) + f'<p><i>{esc(mt["ex"])}</i></p></section>'
         auth_scheme = "Bearer"
         agent_command = f'claude mcp add --transport http m365-community-agent {AGENT_URL} --header "Authorization: {auth_scheme} $M365_MCP_TOKEN"'
         copilot_config = json.dumps({
@@ -99,7 +114,7 @@ def build(g):
                   f'<h2>{esc(t["tools"])}</h2><table class="mcp-t"><thead><tr><th>{esc(t["tool"])}</th><th>{esc(t["does"])}</th><th>{esc(t["auth"])}</th></tr></thead><tbody>{rows}</tbody></table><p><small>{esc(t["more"])}</small></p>'
                   f'<h2>{esc(t["howh"])}</h2><p>{esc(t["howp"])}</p><ul>{how}</ul><h2>{esc(t["conn"])}</h2><ol><li><b>{esc(t["st1"])}</b><br>{esc(t["st1p"])}</li><li><b>{esc(t["st2"])}</b><br>{esc(t["st2p"])} <code>{MCP_URL}</code><p>{esc(t["st2c"])}</p><pre class="mcp-pre">{cc}</pre><p>{esc(t["st2d"])}</p><pre class="mcp-pre">{js}</pre><p>{esc(t["st2e"])}</p></li>'
                   f'<li><b>{esc(t["st3"])}</b><br>{esc(t["st3p"])}<ul>{ex}</ul></li></ol>'
-                  f'{agent_html}<h2>{esc(t["safe"])}</h2><ul>{sl}</ul><h2>{esc(t["faq"])}</h2><p>{esc(t["faqp"])}</p><h2>{esc(t["skh"])}</h2><p>{esc(t["skp"])}</p><p><a class="btn main" href="{BASE}/m365-fm-skill/SKILL.md" download>{esc(t["skd"])}</a></p><h3>{esc(t["cop"])}</h3><p>{esc(t["copp"])}</p><h3>{esc(t["chat"])}</h3><p>{esc(t["chatp"])}</p>{css}')
+                  f'{mvp_html}{agent_html}<h2>{esc(t["safe"])}</h2><ul>{sl}</ul><h2>{esc(t["faq"])}</h2><p>{esc(t["faqp"])}</p><h2>{esc(t["skh"])}</h2><p>{esc(t["skp"])}</p><p><a class="btn main" href="{BASE}/m365-fm-skill/SKILL.md" download>{esc(t["skd"])}</a></p><h3>{esc(t["cop"])}</h3><p>{esc(t["copp"])}</p><h3>{esc(t["chat"])}</h3><p>{esc(t["chatp"])}</p>{css}')
         ld = [{"@context": "https://schema.org", "@type": "HowTo", "name": t["title"], "description": t["intro"], "inLanguage": lang, "url": ru,
                "step": [{"@type": "HowToStep", "name": t["st1"], "text": t["st1p"]}, {"@type": "HowToStep", "name": t["st2"], "text": t["st2p"] + " " + MCP_URL}, {"@type": "HowToStep", "name": t["st3"], "text": t["ex"][0]}]}]
         write(f"{'de/' if lang == 'de' else ''}community/mcp/index.html", page(lang, f'{t["title"]} – M365.FM', t["intro"][:155], ru, b, None, ld, og_type="website", extra_head=LCSS))

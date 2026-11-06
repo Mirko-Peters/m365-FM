@@ -8,19 +8,19 @@ from datetime import datetime, timezone
 from site_learn import ENTS, esc, _fetch_json, LCSS
 from site_entities import TL, eurl, eid_of
 
-PROG_FULL = {"mvp": "Microsoft Most Valuable Professional (MVP)", "mct": "Microsoft Certified Trainer (MCT)", "rd": "Microsoft Regional Director (RD)", "msa": "Microsoft Student Ambassador (MSA)", "ms_employee": "Microsoft employee", "partner": "Microsoft Partner"}
-PROG = {"mvp": ("Microsoft MVP", "Microsoft MVP"), "mct": ("Microsoft Certified Trainer (MCT)", "Microsoft Certified Trainer (MCT)"), "rd": ("Microsoft Regional Director", "Microsoft Regional Director"),
+PROG_FULL = {"gde": "Google Developer Expert (GDE)", "mvp": "Microsoft Most Valuable Professional (MVP)", "mct": "Microsoft Certified Trainer (MCT)", "rd": "Microsoft Regional Director (RD)", "msa": "Microsoft Student Ambassador (MSA)", "ms_employee": "Microsoft employee", "partner": "Microsoft Partner"}
+PROG = {"gde": ("Google Developer Expert", "Google Developer Expert"), "mvp": ("Microsoft MVP", "Microsoft MVP"), "mct": ("Microsoft Certified Trainer (MCT)", "Microsoft Certified Trainer (MCT)"), "rd": ("Microsoft Regional Director", "Microsoft Regional Director"),
         "msa": ("Microsoft Student Ambassador", "Microsoft Student Ambassador"), "ms_employee": ("Microsoft employee", "Microsoft-Mitarbeiter:in"), "partner": ("Microsoft Partner", "Microsoft Partner")}
 KIND = {"linkedin": "LinkedIn", "github": "GitHub", "youtube": "YouTube", "x": "X", "mastodon": "Mastodon", "bluesky": "Bluesky", "twitch": "Twitch", "spotify": "Spotify", "apple": "Apple Podcasts", "amazon": "Amazon Music / Audible", "deezer": "Deezer", "instagram": "Instagram", "tiktok": "TikTok", "facebook": "Facebook", "blog": "Blog", "podcast": "Podcast", "newsletter": "Newsletter", "website": "Website", "other": "Link"}
 LV = {1: ("learning", "lernt"), 2: ("practitioner", "Praxis"), 3: ("expert", "Experte"), 4: ("Evangelist", "Evangelist"), 5: ("Master", "Master"), 6: ("Master Evangelist", "Master Evangelist")}   # gesetzt vom System (worker/src/levels.js)
 EVK = {"en": dict(blog="posts", coauthor="co-author", session="sessions", podcast="episodes", video="videos", guest="guest", library="library", listing="guest exchange", wiki="wiki", entity="entity", cert="certifications", answer="answers", self="former self-declaration"),
        "de": dict(blog="Beiträge", coauthor="Co-Autor", session="Sessions", podcast="Folgen", video="Videos", guest="Gast", library="Bibliothek", listing="Gäste-Börse", wiki="Wiki", entity="Entität", cert="Zertifikate", answer="Antworten", self="frühere Selbstangabe")}
 S = {"en": dict(members="Members", companies="Companies", mintro="Experts of the Microsoft community – with programs such as MVP and MCT, certifications, topics and channels. Profiles are opt-in.", cintro="Companies in the Microsoft ecosystem and their teams.",
-                about="About", expertise="Topics and expertise", certs="Certifications", channels="Channels and links", contrib="Contributions", latest="Latest from this creator", team="Team", verified="confirmed by the editorial team", selfdecl="self-declared", endorsed="confirmed by {n} members", evidence="evidence: {e}", points="{n} points",
+                about="About", expertise="Topics and expertise", certs="Certifications", channels="Channels and links", contrib="Contributions", mvp_contrib="Community contributions", mvp_other="Other", latest="Latest from this creator", team="Team", verified="confirmed by the editorial team", selfdecl="self-declared", endorsed="confirmed by {n} members", evidence="evidence: {e}", points="{n} points",
                 levels="Levels are set by the system from evidence: learning, practitioner (3 points), expert (10 points or editorial confirmation), evangelist (expert + 100 endorsements by members), master (1000 endorsements), master evangelist (1000 endorsements by evangelists of the same topic). Evidence: published posts, confirmed sessions, episodes, videos, library items, wiki and entity edits, verified certifications, accepted answers.",
                 none="No public profiles yet.", join="Create your profile", filter="Filter", all="All", feed="Latest from the creators", feedtop="Most upvoted (30 days)", company="Company", country="Country", wiki="wiki edit", entity="entity edit", prog="Programs", size="Employees", site="Website", since="since"),
      "de": dict(members="Mitglieder", companies="Firmen", mintro="Expert:innen der Microsoft-Community – mit Programmen wie MVP und MCT, Zertifizierungen, Themen und Kanälen. Profile sind freiwillig.", cintro="Firmen im Microsoft-Ökosystem und ihre Teams.",
-                about="Über", expertise="Themen und Expertise", certs="Zertifizierungen", channels="Kanäle und Links", contrib="Beiträge", latest="Das Neueste von diesem Creator", team="Team", verified="vom Redaktionsteam bestätigt", selfdecl="Selbstangabe", endorsed="von {n} Mitgliedern bestätigt", evidence="belegt durch {e}", points="{n} Punkte",
+                about="Über", expertise="Themen und Expertise", certs="Zertifizierungen", channels="Kanäle und Links", contrib="Beiträge", mvp_contrib="Community-Beiträge", mvp_other="Sonstige", latest="Das Neueste von diesem Creator", team="Team", verified="vom Redaktionsteam bestätigt", selfdecl="Selbstangabe", endorsed="von {n} Mitgliedern bestätigt", evidence="belegt durch {e}", points="{n} Punkte",
                 levels="Die Stufen setzt das System aus Belegen: Lernt, Praxis (3 Punkte), Experte (10 Punkte oder Redaktion), Evangelist (Experte + 100 Bestätigungen von Mitgliedern), Master (1000 Bestätigungen), Master Evangelist (1000 Bestätigungen von Evangelisten im selben Thema). Belege: veröffentlichte Beiträge, bestätigte Sessions, Folgen, Videos, Bibliotheks-Einträge, Wiki- und Entitäts-Änderungen, geprüfte Zertifikate, angenommene Antworten.",
                 none="Noch keine öffentlichen Profile.", join="Eigenes Profil anlegen", filter="Filter", all="Alle", feed="Das Neueste der Creator", feedtop="Meist gelobt (30 Tage)", company="Firma", country="Land", wiki="Wiki-Änderung", entity="Entitäts-Änderung", prog="Programme", size="Mitarbeitende", site="Webseite", since="seit")}
 SIZE_N = {"1": (1, 1), "2-10": (2, 10), "11-50": (11, 50), "51-200": (51, 200), "201-1000": (201, 1000), "1000+": (1001, None)}
@@ -40,6 +40,17 @@ def _fetch_export(url):
     return j
 
 
+def strip_private_items(j):
+    """Gezogene Inhalte privater Kanal-Arten (GitHub-Aktivitaet, site_feed.PRIVATE_KINDS) aus Personen und Firmen entfernen - vor dem
+    Zwischenspeichern und fuer alle Abnehmer (Profilseiten, Verzeichnis, Suche). Kanaele selbst (Profil-Links) bleiben."""
+    import site_feed
+    for key in ("people", "orgs"):
+        for x in j.get(key) or []:
+            if isinstance(x, dict) and isinstance(x.get("items"), list):
+                x["items"] = site_feed.public_items(x["items"])
+    return j
+
+
 def fetch_members(api):
     import sys, time
     j = None
@@ -49,13 +60,14 @@ def fetch_members(api):
             break
         print(f"WARNUNG: Profil-Export Versuch {n + 1}/3 fehlgeschlagen", file=sys.stderr); time.sleep(5 * (n + 1))
     if j and j.get("people"):
+        j = strip_private_items(j)
         try:
             CACHE.write_text(json.dumps(j, ensure_ascii=False), encoding="utf-8")
         except Exception:
             pass
     elif CACHE.exists():
         print("WARNUNG: Profil-Export nicht erreichbar, nutze die gespeicherte Fassung", file=sys.stderr)
-        j = json.loads(CACHE.read_text("utf-8"))
+        j = strip_private_items(json.loads(CACHE.read_text("utf-8")))
     else:
         print("FEHLER: Profil-Export nicht erreichbar und keine gespeicherte Fassung: es entstehen keine Profilseiten", file=sys.stderr)
         j = j or {}
@@ -106,6 +118,42 @@ def person_entity(handle):
     return CLAIMED.get(handle) or AUTHOR_ENT.get(handle)
 
 
+def _https(u):
+    return u if isinstance(u, str) and u.startswith("https://") else ""
+
+
+def mvp_contrib_html(p, s):
+    """MVP-Tracker (#231): oeffentliche Beitraege des Profils. Der Worker liefert nur public=1 und bestaetigte Eintraege (profiles.js)."""
+    items = p.get("mvp_contributions") or []
+    if not items:
+        return ""
+    li = []
+    for c in items:
+        day = datetime.fromtimestamp(int(c.get("published") or 0), timezone.utc).strftime("%Y-%m-%d")
+        title = esc(c.get("title") or "")
+        link = f'<a href="{esc(_https(c.get("url")))}" rel="nofollow ugc noopener">{title}</a>' if _https(c.get("url")) else title
+        li.append(f'<li>{link} <span class="mut">· {esc(c.get("category") or s["mvp_other"])} · <time datetime="{day}">{day}</time></span></li>')
+    return f'<h2 id="contributions">{esc(s["mvp_contrib"])}</h2><ul class="pf-mvp">{"".join(li)}</ul>'
+
+
+def mvp_contrib_ld(BASE, p):
+    """Schema.org CreativeWork je oeffentlichem Beitrag, author -> @id der Person (wie person_ld)."""
+    pid = f"{purl(BASE, 'en', 'u', p['handle'])}#person"
+    out = []
+    for c in p.get("mvp_contributions") or []:
+        url = _https(c.get("url"))
+        node = {"@context": "https://schema.org", "@type": "CreativeWork", "@id": url or f"{pid}-contribution-{c.get('id', '')}", "name": c.get("title") or "",
+                "datePublished": datetime.fromtimestamp(int(c.get("published") or 0), timezone.utc).strftime("%Y-%m-%d"), "author": {"@id": pid}}
+        if url:
+            node["url"] = url
+        if c.get("category"):
+            node["genre"] = c["category"]
+        if c.get("topics"):
+            node["keywords"] = ", ".join(c["topics"])
+        out.append(node)
+    return out
+
+
 def person_ld(BASE, p, orgs_by_handle):
     pid = f"{purl(BASE, 'en', 'u', p['handle'])}#person"
     n = {"@type": "Person", "@id": pid, "name": p["name"], "url": purl(BASE, "en", "u", p["handle"]), "mainEntityOfPage": {"@id": purl(BASE, "en", "u", p["handle"]) + "#profile"}}
@@ -121,8 +169,9 @@ def person_ld(BASE, p, orgs_by_handle):
         n["jobTitle"] = p["job"]
     elif any(x.get("verified") and x["p"] == "mvp" for x in p.get("programs", [])):
         n["jobTitle"] = PROG_FULL["mvp"]
-    if p.get("country"):
-        n["address"] = {"@type": "PostalAddress", "addressCountry": p["country"]}
+    _city = ((p.get("contact") or {}).get("city") or "").strip()   # nur, wenn das Mitglied die Stadt fuer alle freigegeben hat (vis_city=all)
+    if p.get("country") or _city:
+        n["address"] = {"@type": "PostalAddress", **({"addressLocality": _city} if _city else {}), **({"addressCountry": p["country"]} if p.get("country") else {})}
     org = p.get("org")
     if org and org["handle"] in orgs_by_handle:
         n["worksFor"] = {"@id": f"{purl(BASE, 'en', 'c', org['handle'])}#org"}
@@ -238,7 +287,8 @@ def build(g, people, orgs, extra=None):
         return "<ul>" + "".join(out) + "</ul>" + legend if out else ""
 
     def items_ul(x):
-        its = x.get("items", [])
+        import site_feed
+        its = site_feed.public_items(x.get("items", []))   # GitHub-Aktivitaet nie auf Profil-/Firmenseiten (auch bei aelterem Export-Zwischenspeicher)
         if not its:
             return ""
         return '<ul class="pf-list">' + "".join(f'<li class="pf-item" data-id="{i["id"]}"><button type="button" class="vt" aria-pressed="false" aria-label="Upvote"><span aria-hidden="true">▲</span> <span class="n">{i["votes"]}</span></button>'
@@ -293,12 +343,13 @@ def build(g, people, orgs, extra=None):
             b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{croot}members/">{esc(s["members"])}</a></nav>{img_tag("u", p, p["name"])}<h1>{esc(p["name"])}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="creator" data-topic-id="{esc(p["handle"])}" data-topic-label="{esc(T(lang, "Follow", "Folgen"))}">🔔 {T(lang, "Follow", "Folgen")}</button><p style="font-size:1.1em">{esc(p.get("headline", ""))}</p><p>{tags_of_p(p, li, s)}</p>{ft}'
                           + (f'<h2>{esc(s["about"])}</h2><p style="white-space:pre-line">{esc(p["about"])}</p>' if p.get("about") else "")
                           + (f'<h2>{esc(s["expertise"])}</h2>{exp_ul(p, lang, li, s)}' if p.get("expertise") else "") + (f'<h2>{esc(s["certs"])}</h2>{certs}' if certs else "")
-                          + (f'<h2>{esc(s["latest"])}</h2>{items_ul(p)}' if p.get("items") else "") + (f'<h2>{esc(s["channels"])}</h2>{chan_ul(p, lang)}' if p.get("channels") else "")
-                          + rec_html(p, lang, li, pb) + (f'<h2>{esc(s["contrib"])}</h2>{contrib}' if contrib else "") + ((extra or {}).get(lang, {}).get("u", {}).get(p["handle"], "")) + live_js + topic_js + css)
+                          + (f'<h2>{esc(s["latest"])}</h2>{items_ul(p)}' if items_ul(p) else "") + (f'<h2>{esc(s["channels"])}</h2>{chan_ul(p, lang)}' if p.get("channels") else "")
+                          + rec_html(p, lang, li, pb) + (f'<h2>{esc(s["contrib"])}</h2>{contrib}' if contrib else "") + mvp_contrib_html(p, s) + ((extra or {}).get(lang, {}).get("u", {}).get(p["handle"], "")) + live_js + topic_js + css)
             node = person_ld(BASE, p, ob)
             ld = [{"@context": "https://schema.org", "@type": "ProfilePage", "@id": purl(BASE, "en", "u", p["handle"]) + "#profile", "url": u, "name": p["name"], "inLanguage": lang, "dateModified": TODAY, "mainEntity": node}]
+            ld.extend(mvp_contrib_ld(BASE, p))
             ld.append({"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "M365.FM", "item": f"{BASE}/"}, {"@type": "ListItem", "position": 2, "name": s["members"], "item": f"{BASE}{pfx(lang)}/community/members/"}, {"@type": "ListItem", "position": 3, "name": p["name"], "item": u}]})   # T4
-            write(f"{pfx2(lang)}community/u/{p['handle']}/index.html", page(lang, f'{p["name"]} – {p.get("headline") or s["members"]} | M365.FM', (p.get("headline") or p.get("about") or "")[:155], u, b, None, ld, og_type="profile", extra_head=LCSS, noindex=noidx))
+            write(f"{pfx2(lang)}community/u/{p['handle']}/index.html", page(lang, f'{p["name"]} – {p.get("headline") or s["members"]} | M365.FM', (p.get("headline") or p.get("about") or "")[:155], u, b, None, ld, og_type="profile", extra_head=LCSS, noindex=noidx, side=(g["side"](lang, (p.get("headline") or "") + " " + (p.get("about") or "")[:1500], ids=[x["e"] for x in p.get("expertise", []) + p.get("certs", [])], exclude=()) if g.get("side") else "")))
             if not noidx:
                 sitemap.append((u, TODAY, None))
         # ---- Firmen-Seiten ----
@@ -316,9 +367,9 @@ def build(g, people, orgs, extra=None):
             b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{croot}companies/">{esc(s["companies"])}</a></nav>{img_tag("o", o, o["name"])}<h1>{esc(o["name"])}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="creator" data-topic-id="{esc(o["handle"])}" data-topic-label="{esc(T(lang, "Follow", "Folgen"))}">🔔 {T(lang, "Follow", "Folgen")}</button><p style="font-size:1.1em">{esc(o.get("tagline", ""))}</p><p>{tags_of_p(o, li, s)}</p>{ft}'
                           + (f'<h2>{esc(s["about"])}</h2><p style="white-space:pre-line">{esc(o["about"])}</p>' if o.get("about") else "")
                           + (f'<h2>{esc(s["expertise"])}</h2>{exp_ul(o, lang, li, s)}' if o.get("expertise") else "") + (f'<h2>{esc(s["team"])}</h2>{mem}' if mem else "")
-                          + (f'<h2>{esc(s["latest"])}</h2>{items_ul(o)}' if o.get("items") else "") + (f'<h2>{esc(s["channels"])}</h2>{chan_ul(o, lang)}' if o.get("channels") else "") + ((extra or {}).get(lang, {}).get("c", {}).get(o["handle"], "")) + live_js + topic_js + css)
+                          + (f'<h2>{esc(s["latest"])}</h2>{items_ul(o)}' if items_ul(o) else "") + (f'<h2>{esc(s["channels"])}</h2>{chan_ul(o, lang)}' if o.get("channels") else "") + ((extra or {}).get(lang, {}).get("c", {}).get(o["handle"], "")) + live_js + topic_js + css)
             ld = [{"@context": "https://schema.org", "@type": "ProfilePage", "@id": purl(BASE, "en", "c", o["handle"]) + "#profile", "url": u, "name": o["name"], "inLanguage": lang, "dateModified": TODAY, "mainEntity": org_ld(BASE, o, pb)}]
-            write(f"{pfx2(lang)}community/c/{o['handle']}/index.html", page(lang, f'{o["name"]} – {o.get("tagline") or s["companies"]} | M365.FM', (o.get("tagline") or o.get("about") or "")[:155], u, b, None, ld, og_type="profile", extra_head=LCSS, noindex=noidx))
+            write(f"{pfx2(lang)}community/c/{o['handle']}/index.html", page(lang, f'{o["name"]} – {o.get("tagline") or s["companies"]} | M365.FM', (o.get("tagline") or o.get("about") or "")[:155], u, b, None, ld, og_type="profile", extra_head=LCSS, noindex=noidx, side=(g["side"](lang, (o.get("tagline") or "") + " " + (o.get("about") or "")[:1500], ids=[x["e"] for x in o.get("expertise", [])]) if g.get("side") else "")))
             if not noidx:
                 sitemap.append((u, TODAY, None))
         # ---- Verzeichnisse ----

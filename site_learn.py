@@ -113,9 +113,10 @@ WT = {
 }
 WT['en'].update({'rules': 'Write plain text with simple markup (toolbar). Sources go in via “Source”; no other links or advertising. Keep it factual and cite where you can.', 'toc': 'Contents', 'refs': 'Sources', 'back': 'Back to text', 'cn': 'source needed', 'toolbar': 'Formatting', 'tb_h': 'Heading', 'tb_b': 'Bold', 'tb_i': 'Italic', 'tb_ul': 'Bulleted list', 'tb_ol': 'Numbered list', 'tb_q': 'Quote', 'tb_link': 'Link to a term', 'tb_ref': 'Add source', 'tb_cn': 'Mark as needing a source', 'link_ph': 'Search for a term…', 'insert': 'Insert', 'cancel': 'Cancel', 'ref_title': 'Title of the source', 'ref_pub': 'Publisher (optional)', 'ref_date': 'Date (optional)', 'preview': 'Preview', 'back_edit': 'Back to editing', 'bad_ref': 'A source needs a title and an https:// link (no link shorteners, max. 25).', 'current': 'current', 'changes': 'Show changes', 'added': 'Added', 'removed': 'Removed', 'restore': 'Restore this version'})
 WT['de'].update({'rules': 'Schreibe Text mit einfacher Formatierung (Werkzeugleiste). Quellen fügst du über „Quelle“ ein; sonst keine Links oder Werbung. Bleib sachlich und belege, wo du kannst.', 'toc': 'Inhalt', 'refs': 'Quellen', 'back': 'Zurück zum Text', 'cn': 'Beleg fehlt', 'toolbar': 'Formatierung', 'tb_h': 'Überschrift', 'tb_b': 'Fett', 'tb_i': 'Kursiv', 'tb_ul': 'Aufzählung', 'tb_ol': 'Nummerierte Liste', 'tb_q': 'Zitat', 'tb_link': 'Auf einen Begriff verlinken', 'tb_ref': 'Quelle hinzufügen', 'tb_cn': 'Als belegbedürftig markieren', 'link_ph': 'Begriff suchen…', 'insert': 'Einfügen', 'cancel': 'Abbrechen', 'ref_title': 'Titel der Quelle', 'ref_pub': 'Herausgeber (optional)', 'ref_date': 'Datum (optional)', 'preview': 'Vorschau', 'back_edit': 'Zurück zum Bearbeiten', 'bad_ref': 'Eine Quelle braucht einen Titel und einen https://-Link (keine Kurzlinks, max. 25).', 'current': 'aktuell', 'changes': 'Änderungen anzeigen', 'added': 'Hinzugefügt', 'removed': 'Entfernt', 'restore': 'Diese Version wiederherstellen'})
-WCSS = """<style>.wk{margin:.6em 0}.wk-body{line-height:1.7;max-width:46em}.wk-body h3{font-size:1.2em;margin:1.2em 0 .3em}.wk-body h4{font-size:1.05em;margin:1em 0 .3em}.wk-body blockquote{margin:.8em 0;padding:.1em 1em;border-inline-start:3px solid var(--ac);color:var(--mut)}.wk-fn a,.wk-back{text-decoration:none;font-weight:700}.wk-cn{color:var(--mut);font-size:.8em}.wk-toc{border:1px solid var(--bd);border-radius:.6em;padding:.5em 1em;display:inline-block;margin:.5em 0;background:var(--card)}.wk-toc ol{margin:.3em 0;padding-inline-start:1.3em}.wk-refs{font-size:.92rem;padding-inline-start:1.5em}.wk-refs li{margin:.25em 0}.wk-refh{font-size:1rem;margin:1.2em 0 .2em}.wk-bar{display:flex;flex-wrap:wrap;gap:.3em;margin:.4em 0}.wk-tb{font:inherit;min-width:2.5rem;min-height:2.5rem;cursor:pointer;border:1px solid var(--bd);border-radius:.5em;background:var(--card);color:var(--fg)}.wk-panel{border:1px dashed var(--bd);border-radius:.5em;padding:.4em .7em;margin:.4em 0}.wk-panel[hidden],.wk-prev[hidden]{display:none}.wk-prev{border:1px solid var(--bd);border-radius:.5em;padding:.5em 1em;margin:.4em 0;background:var(--bg)}.wk input[aria-invalid=true]{border-color:#b00020}.wk-hl{list-style:none;padding:0}.wk-hl>li{margin:.5em 0}.wk-dl{font:.85rem/1.5 ui-monospace,monospace;margin:.4em 0;max-height:16em;overflow:auto;border:1px solid var(--bd);border-radius:.4em;padding:.3em .6em;white-space:pre-wrap}.wk-add{border-inline-start:4px solid #1a7f37;padding-inline-start:.4em}.wk-del{border-inline-start:4px solid #b00020;padding-inline-start:.4em;text-decoration:line-through}.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}.wk-meta,.wk-empty{color:var(--mut)}.wk-link{font:inherit;background:none;border:0;color:var(--ac);text-decoration:underline;cursor:pointer;padding:0}
-.wk-edit,.wk-hist{margin:1em 0;border:1px solid var(--bd);border-radius:.7em;padding:.6em 1em;background:var(--card)}.wk-edit summary,.wk-hist summary{cursor:pointer;font-weight:700}.wk textarea,.wk input[type=text]{width:100%;box-sizing:border-box;font:inherit;padding:.5em;border:1px solid var(--bd);border-radius:.5em;background:var(--bg);color:var(--fg);margin:.4em 0}
-.wk .btn{font:inherit;cursor:pointer;border:1px solid var(--bd);border-radius:.5em;padding:.45em 1em;background:var(--card);color:var(--fg);text-decoration:none;display:inline-block;margin:.2em .3em .2em 0}.wk .btn.main{background:var(--ac);color:var(--onac);border-color:var(--ac)}.wk-pend{border-top:1px solid var(--bd);padding:.5em 0}</style>"""
+# Aussehen der Felder und Knoepfe (auch .wk-edit-Formulare der Entitaeten): gemeinsames Formular-Design assets/forms.css im site.css-Buendel.
+WCSS = """<style>.wk{margin:.6em 0}.wk-body{line-height:1.7;max-width:46em}.wk-body h3{font-size:1.2em;margin:1.2em 0 .3em}.wk-body h4{font-size:1.05em;margin:1em 0 .3em}.wk-body blockquote{margin:.8em 0;padding:.1em 1em;border-inline-start:3px solid var(--ac);color:var(--mut)}.wk-fn a,.wk-back{text-decoration:none;font-weight:700}.wk-cn{color:var(--mut);font-size:.8em}.wk-toc{border:1px solid var(--bd);border-radius:.6em;padding:.5em 1em;display:inline-block;margin:.5em 0;background:var(--card)}.wk-toc ol{margin:.3em 0;padding-inline-start:1.3em}.wk-refs{font-size:.92rem;padding-inline-start:1.5em}.wk-refs li{margin:.25em 0}.wk-refh{font-size:1rem;margin:1.2em 0 .2em}.wk-bar{display:flex;flex-wrap:wrap;gap:.3em;margin:.4em 0}.wk-tb{font:inherit;min-width:2.5rem;min-height:2.5rem;cursor:pointer;border:1px solid var(--bd);border-radius:.5em;background:var(--card);color:var(--fg)}.wk-panel{border:1px dashed var(--bd);border-radius:.5em;padding:.4em .7em;margin:.4em 0}.wk-panel[hidden],.wk-prev[hidden]{display:none}.wk-prev{border:1px solid var(--bd);border-radius:.5em;padding:.5em 1em;margin:.4em 0;background:var(--bg)}.wk-hl{list-style:none;padding:0}.wk-hl>li{margin:.5em 0}.wk-dl{font:.85rem/1.5 ui-monospace,monospace;margin:.4em 0;max-height:16em;overflow:auto;border:1px solid var(--bd);border-radius:.4em;padding:.3em .6em;white-space:pre-wrap}.wk-add{border-inline-start:4px solid #1a7f37;padding-inline-start:.4em}.wk-del{border-inline-start:4px solid #b00020;padding-inline-start:.4em;text-decoration:line-through}.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}.wk-meta,.wk-empty{color:var(--mut)}.wk-link{font:inherit;background:none;border:0;color:var(--ac);text-decoration:underline;cursor:pointer;padding:0}
+.wk-edit,.wk-hist{margin:1em 0;border:1px solid var(--bd);border-radius:.7em;padding:.6em 1em;background:var(--card)}.wk-edit summary,.wk-hist summary{cursor:pointer;font-weight:700}.wk textarea,.wk input[type=text]{width:100%;margin:.4em 0}
+.wk .btn{margin:.2em .3em .2em 0}.wk-pend{border-top:1px solid var(--bd);padding:.5em 0}</style>"""
 
 
 def fetch_wiki(api, lang):
@@ -378,6 +379,18 @@ def build_learn(ctx):
         b = shell(lang, f'<h1>{esc(t["learn"])}</h1><p class="mut">{esc(t["learn_intro"])}</p><h2>{esc(t["paths"])}</h2><div class="ln-grid">{pl}</div><div class="ln-grid">{cards}</div>')
         write(f"{lang}/learn/index.html", page(lang, f'{t["learn"]} – M365.FM {LANGS[lang][0]}', t["learn_intro"], hu, b, None, None, og_type="website", extra_head=LCSS))
         sitemap.append((hu, TODAY, None))
+    # Englischer Lern-Hub /learn/ (Menuepunkt "Learn" wie in allen Sprachen, Mirko 6.11.2026): Glossar, Entitaeten, Mitglieder, Firmen, Events.
+    # Lernpfade und Trainer entstehen aus den Folgen der Dub-Sprachen und gibt es auf Englisch (noch) nicht.
+    t = T("en"); hu = f"{BASE}/learn/"
+    cards = (f'<a class="ln-card" href="{BASE}/glossary/"><b>{esc(t["glossary"])}</b><span>{esc(t["glossary_intro"])}</span></a>'
+             f'<a class="ln-card" href="{BASE}/entity/"><b>Entity database</b><span>Products, concepts and relationships around Microsoft</span></a>'
+             f'<a class="ln-card" href="{BASE}/community/members/"><b>Members</b><span>Experts, programs and profiles of the community</span></a>'
+             f'<a class="ln-card" href="{BASE}/community/companies/"><b>Companies</b><span>Companies and organizations of the community</span></a>'
+             f'<a class="ln-card" href="{BASE}/community/events/"><b>Events</b><span>Conferences, sessions and speakers of the community</span></a>')
+    _li = "Free resources to learn Microsoft 365, Copilot, Azure and security: the glossary, the entity database and the experts, companies and events of the community."
+    b = shell("en", f'<h1>{esc(t["learn"])}</h1><p class="mut">{esc(_li)}</p><div class="ln-grid">{cards}</div>')
+    write("learn/index.html", page("en", f'{t["learn"]} – M365.FM', _li, hu, b, None, None, og_type="website", extra_head=LCSS))
+    sitemap.append((hu, TODAY, None))
 
 
 _GEN = {"prompt", "governance", "graph", "teams", "viva", "fabric"}
@@ -428,8 +441,15 @@ def load_entities(api):
     for it in over:
         d = it.get("data") or {}
         if it.get("id") and d.get("name") and d.get("type"):
-            base[it["id"]] = {"id": it["id"], **d, "desc": d.get("desc") or {"en": "", "de": ""}, "rel": d.get("rel") or [], "aliases": d.get("aliases") or [], "edited": it.get("created")}
+            rec = {"id": it["id"], **d, "desc": d.get("desc") or {"en": "", "de": ""}, "rel": d.get("rel") or [], "aliases": d.get("aliases") or [], "edited": it.get("created")}
+            for k in REPO_KEYS:   # Felder ohne Formularfeld: fehlen sie in der D1-Fassung (Formular-Bearbeitung, selbst verwaltete Entitaet), gilt die Repo-Fassung
+                if k not in rec and (base.get(it["id"]) or {}).get(k):
+                    rec[k] = base[it["id"]][k]
+            base[it["id"]] = rec
     return base
+
+
+REPO_KEYS = ("city", "country", "street", "zip", "founded", "company", "disclosure", "logo_src")   # nur in data/entities.json gepflegt (Redaktion), nicht im Bearbeiten-Formular
 
 
 COMMUNITY_API_DEFAULT = os.environ.get("COMMUNITY_API", "https://api-dub.m365.fm")
