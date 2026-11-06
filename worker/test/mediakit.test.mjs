@@ -5,6 +5,7 @@ import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { handleMediakit, BRANDS, brandOf } from "../src/mediakit.js";
 import { cors, json, CON_ORIGINS } from "../src/util.js";
+import { handleAds } from "../src/ads.js";
 
 async function mkDb() {
   const { DatabaseSync } = await import("node:sqlite");
@@ -132,4 +133,43 @@ test("mailer: Resend bekommt Base64, Cloudflare Binaerdaten", async () => {
     assert.equal(r.ok, true);
     assert.equal(body.attachments[0].content, b64(pdf));
   } finally { globalThis.fetch = orig; }
+});
+
+// ---------------------------------------------------------------- Admin-Liste der Leads (personenbezogen)
+
+const asUser = (env, path, user) => {
+  const url = new URL("https://api-dub.m365.fm" + path), request = new Request(url, { headers: { origin: "https://www.m365.fm" } });
+  const J = (d, s = 200, x) => json(d, s, env, request, x);
+  return path.startsWith("/api/admin/ads/") ? handleAds(env, request, url, url.pathname, user, J) : handleMediakit(env, request, url, url.pathname, user, J);
+};
+
+test("Admin-Leads: Nicht-Admins und Anonyme bekommen 401/403, keine Daten", async () => {
+  const { env, raw } = await setup({});
+  await call(env, "/api/mediakit", body({ email: "geheim@contoso.com" })).catch(() => null);
+  raw.prepare("INSERT INTO mediakit_requests(name,company,email,lang,source,created) VALUES('Ada','Contoso','geheim@contoso.com','de','/x/',1)").run();
+  for (const path of ["/api/admin/mediakit", "/api/admin/ads/leads"]) {
+    for (const user of [null, { id: 5, admin: false }]) {
+      const r = await asUser(env, path, user);
+      assert.ok([401, 403].includes(r.status), `${path} ${JSON.stringify(user)} -> ${r.status}`);
+      assert.doesNotMatch(await r.text(), /geheim@contoso/);
+    }
+  }
+});
+
+test("Admin-Leads: Admin sieht die Mediadaten-Anfragen, neueste zuerst, Cache-Control no-store", async () => {
+  const { env, raw } = await setup({});
+  const ins = raw.prepare("INSERT INTO mediakit_requests(name,company,email,lang,source,created) VALUES(?,?,?,?,?,?)");
+  ins.run("Alt", "A GmbH", "alt@a.de", "de", "/media-kit/", 100); ins.run("Neu", "B Inc", "neu@b.com", "en", "/sponsor/", 200);
+  const r = await asUser(env, "/api/admin/mediakit", { id: 1, admin: true });
+  assert.equal(r.status, 200); assert.equal(r.headers.get("cache-control"), "no-store");
+  assert.deepEqual((await r.json()).items.map((x) => x.name), ["Neu", "Alt"]);
+});
+
+test("Admin-Leads: Reiter in assets/admin.js (nur Text, mailto, CSV, Filter) und keine oeffentliche Seite kennt den Endpunkt", () => {
+  const js = readFileSync(new URL("../../assets/admin.js", import.meta.url), "utf8");
+  assert.match(js, /\["mk", "Mediadaten-Anfragen"\]/); assert.match(js, /api\("\/api\/admin\/mediakit"\)/);
+  assert.match(js, /"mailto:" \+ x\.email/); assert.match(js, /text\/csv/); assert.match(js, /Mediadaten-Anfragen \(Leads\)/);
+  assert.doesNotMatch(js, /\binnerHTML\b|insertAdjacentHTML/);
+  for (const f of readdirSync(new URL("../../assets/", import.meta.url)).filter((f) => f.endsWith(".js") && f !== "admin.js"))
+    assert.doesNotMatch(readFileSync(new URL("../../assets/" + f, import.meta.url), "utf8"), /\/api\/admin\/mediakit/, f);
 });

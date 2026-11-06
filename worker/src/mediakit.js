@@ -160,7 +160,7 @@ export async function handleMediakit(env, request, url, path, user, J) {
   if (path === "/api/admin/mediakit") {
     if (!user?.admin) return J({ error: "forbidden" }, 403);
     const rows = (await db.prepare("SELECT id,name,company,email,lang,source,created,sent,err FROM mediakit_requests ORDER BY id DESC LIMIT 200").all()).results || [];
-    return J({ items: rows });
+    return J({ items: rows }, 200, { "cache-control": "no-store" });   // personenbezogen: nie cachen
   }
   if (request.method !== "POST") return J({ error: "method" }, 405);
 
