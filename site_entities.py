@@ -488,6 +488,9 @@ def ent_ld(BASE, e, lang, glossary_set=None, person_aka=None):
     for k, v in _x.items():
         if k == "subjectOf":
             n["subjectOf"] = (n.get("subjectOf") or []) + v
+        elif k == "hasOccupation":   # nicht ueberschreiben: der Autorenknoten (PERSON_LD) bringt schon eine Taetigkeit mit
+            _old = n.get(k); _old = [] if not _old else (_old if isinstance(_old, list) else [_old])
+            n[k] = (_old + [x for x in (v if isinstance(v, list) else [v]) if x not in _old]) if _old else v
         else:
             n[k] = v
     if _wf:

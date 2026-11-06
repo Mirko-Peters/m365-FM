@@ -154,3 +154,33 @@ class Schema(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class Review305(unittest.TestCase):
+    """Review vor dem Merge: Fakten ueberleben eine D1-Fassung, der Autorenknoten behaelt seine Taetigkeit, Everllence richtig."""
+    def test_d1_fassung_behaelt_fakten_und_logo_bg(self):
+        from unittest import mock
+        item = {"id": "ifakt", "data": {"name": "iFAKT GmbH", "type": "org", "desc": {"en": "x" * 30, "de": ""}}, "created": 1}
+        with mock.patch.object(SL, "_fetch_json", return_value={"items": [item]}):
+            ents = SL.load_entities("https://api.example.test")
+        for k in ("legal_form", "register", "employees", "founders", "ceo", "certifications", "partners", "customers", "logo_bg", "logo_src"):
+            if k in RAW["ifakt"]:
+                self.assertEqual(ents["ifakt"].get(k), RAW["ifakt"][k], k)
+        self.assertEqual(ents["ifakt"]["desc"]["en"], "x" * 30, "Rest kommt weiter aus D1")
+
+    def test_autor_behaelt_taetigkeit(self):
+        old = E.PERSON_LD
+        E.PERSON_LD = lambda: {"@type": "Person", "@id": BASE + "/#mirko", "name": "Mirko Peters",
+                               "hasOccupation": {"@type": "Occupation", "name": "Microsoft MVP, podcaster and conference organizer"}}
+        try:
+            n = E.ent_ld(BASE, E.ENTS["mirko-peters"], "en", set(), {})
+        finally:
+            E.PERSON_LD = old
+        occ = n["hasOccupation"]; names = [x["name"] for x in (occ if isinstance(occ, list) else [occ])]
+        self.assertIn("Microsoft MVP, podcaster and conference organizer", names)
+        self.assertGreater(len(names), 1, "neue Position kommt dazu, ueberschreibt aber nicht")
+
+    def test_everllence(self):
+        txt = json.dumps(RAW["ifakt"], ensure_ascii=False)
+        self.assertIn("Everllence", txt)
+        self.assertNotIn('"name": "Everllance"', txt)
