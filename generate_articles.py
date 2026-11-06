@@ -6,7 +6,7 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 ROOT = Path(__file__).parent
-MODEL = os.environ.get("ARTICLE_MODEL", "claude-sonnet-5-5")
+MODEL = os.environ.get("ARTICLE_MODEL") or "claude-haiku-5-5"   # Mirko, 6.11.2026: Haiku (vorher Sonnet, ~20x teurer)
 LIMIT = int(os.environ.get("ARTICLE_LIMIT", "90"))
 WORKERS = int(os.environ.get("ARTICLE_WORKERS", "10"))
 NAMES = {"de": "Deutsch", "es": "Spanisch", "fr": "Französisch", "it": "Italienisch", "pt": "Portugiesisch", "nl": "Niederländisch",
@@ -279,18 +279,29 @@ def popularity():
 
 
 # Monatsgrenze (Mirko, 6.11.2026: Sonnet behalten, aber mit Grenze). Repo-Variable ARTICLE_BUDGET_USD, Standard 25 USD je Kalendermonat (UTC).
-# Preise je 1 Mio. Token fuer Sonnet 5.5 (Stand Oktober 2026), per Repo-Variable anpassbar.
-BUDGET_USD = float(os.environ.get("ARTICLE_BUDGET_USD") or 25)
-PRICE = {"in": float(os.environ.get("SONNET_USD_PER_MTOK_IN") or 2.0), "out": float(os.environ.get("SONNET_USD_PER_MTOK_OUT") or 10.0),
-         "cw": float(os.environ.get("SONNET_USD_PER_MTOK_CACHE_WRITE") or 2.5), "cr": float(os.environ.get("SONNET_USD_PER_MTOK_CACHE_READ") or 0.10)}
+# Preise je 1 Mio. Token (Stand Okt./Nov. 2026, Prompts unter 100.000 Token; per Repo-Variable anpassbar). Kosten werden je Lauf in USD in data/spend.json
+# aufsummiert ("usd"); aeltere Monate ohne "usd" wurden komplett mit Sonnet geschrieben.
+PRICES = {"sonnet": {"in": float(os.environ.get("SONNET_USD_PER_MTOK_IN") or 2.0), "out": float(os.environ.get("SONNET_USD_PER_MTOK_OUT") or 10.0),
+                     "cw": float(os.environ.get("SONNET_USD_PER_MTOK_CACHE_WRITE") or 2.5), "cr": float(os.environ.get("SONNET_USD_PER_MTOK_CACHE_READ") or 0.10)},
+          "haiku": {"in": float(os.environ.get("HAIKU_USD_PER_MTOK_IN") or 0.10), "out": float(os.environ.get("HAIKU_USD_PER_MTOK_OUT") or 0.50),
+                    "cw": float(os.environ.get("HAIKU_USD_PER_MTOK_CACHE_WRITE") or 0.125), "cr": float(os.environ.get("HAIKU_USD_PER_MTOK_CACHE_READ") or 0.01)}}
+
+
+def price_of(model):
+    return PRICES["haiku"] if "haiku" in str(model).lower() else PRICES["sonnet"]
+
+
+def cost_usd(tin, tout, cr, cw, model):
+    p = price_of(model)
+    return (max(0, tin - cr - cw) * p["in"] + cw * p["cw"] + cr * p["cr"] + tout * p["out"]) / 1e6
 
 
 def month_spend_usd(sd, month):
-    """Kosten des Monats aus data/spend.json (input_tokens enthaelt Cache-Lese- und -Schreib-Token)."""
+    """Kosten des Monats aus data/spend.json: Feld usd (seit 6.11.2026 je Lauf mit dem Preis des benutzten Modells); fehlt es, Token zu Sonnet-Preisen."""
     m = (sd or {}).get(month) or {}
-    cr, cw = m.get("cache_read_tokens", 0), m.get("cache_write_tokens", 0)
-    base = max(0, m.get("input_tokens", 0) - cr - cw)
-    return (base * PRICE["in"] + cw * PRICE["cw"] + cr * PRICE["cr"] + m.get("output_tokens", 0) * PRICE["out"]) / 1e6
+    if "usd" in m:
+        return float(m["usd"])
+    return cost_usd(m.get("input_tokens", 0), m.get("output_tokens", 0), m.get("cache_read_tokens", 0), m.get("cache_write_tokens", 0), "claude-sonnet")
 
 
 def main():
@@ -366,6 +377,9 @@ def main():
         m["input_tokens"] += USAGE["in"]; m["output_tokens"] += USAGE["out"]; m["calls"] += USAGE["calls"]
         m["cache_read_tokens"] = m.get("cache_read_tokens", 0) + USAGE["cache_read"]       # Teil von input_tokens: aus dem Prompt-Cache gelesen (0,05x)
         m["cache_write_tokens"] = m.get("cache_write_tokens", 0) + USAGE["cache_write"]    # Teil von input_tokens: in den Prompt-Cache geschrieben (1,25x)
+        m["usd"] = round((m["usd"] if "usd" in m else month_spend_usd({mk: {k: v for k, v in m.items() if k != "usd"}}, mk) - cost_usd(USAGE["in"], USAGE["out"], USAGE["cache_read"], USAGE["cache_write"], "claude-sonnet"))
+                         + cost_usd(USAGE["in"], USAGE["out"], USAGE["cache_read"], USAGE["cache_write"], MODEL), 4)   # bisherige Monatstoken (Sonnet) + dieser Lauf zum Preis von MODEL
+        m.setdefault("models", {})[MODEL] = m.get("models", {}).get(MODEL, 0) + USAGE["calls"]
         json.dump(sd, open(sp, "w", encoding="utf-8"), indent=1)
         print("Verbrauch dieser Lauf (Tokens):", USAGE, "| Monat gesamt:", m)
         print(f"Prompt-Cache dieser Lauf: {USAGE['cache_read']} Token gelesen, {USAGE['cache_write']} Token geschrieben "
