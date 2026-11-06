@@ -1,0 +1,152 @@
+{
+ "de": {
+  "html": "<p>Ein neuer Laptop soll E-Mail, Dateifreigaben, das Büro-WLAN und vielleicht ein VPN fürs Homeoffice nutzen. Jede dieser Verbindungen stellt dieselbe stille Frage: Gehört dieses Gerät hierher? In vielen kleinen Unternehmen lautet die Antwort noch immer: ein gemeinsames WLAN-Passwort, ein VPN-Login per Nachricht und manuelle Korrekturen, wenn jemand ein Passwort ändert, einen Laptop ersetzt oder das Unternehmen verlässt.</p>\n<p>Dieses Problem betrifft nicht nur kleine Büros. Im Unternehmen mit zehn Personen stellt sich dieselbe Frage wie im Konzern mit zehntausend. Gebraucht wird eine Methode, mit der ein Gerät seine Zugehörigkeit nachweist, ohne selbst Geheimnisse einzutippen. Dieser Artikel erklärt, wie Zertifikate das leisten, was Microsoft Cloud PKI ist und wie Intune den Nachweis im Hintergrund abwickelt.</p>\n\n<h2>Warum Zertifikate sicherer sind als ein geteiltes Passwort</h2>\n<p>Wer eine sichere Website öffnet, nutzt Zertifikate, ohne es zu merken. Der Browser prüft im Hintergrund ein digitales Zertifikat und bestätigt damit, dass er die richtige Website erreicht hat und eine geschützte Verbindung aufbauen kann.</p>\n<p>Ein Zertifikat funktioniert ähnlich wie ein Firmenausweis. Es enthält einen Namen beziehungsweise eine Identität und einen öffentlichen Schlüssel. Dazu kommt eine vertrauenswürdige digitale Signatur, die besagt: Die ausstellende Stelle hat diese Identität geprüft und genehmigt.</p>\n<h3>Der private Schlüssel: der entscheidende Unterschied</h3>\n<p>Ein Ausweis allein genügt nicht, denn jemand könnte ihn einfach vom Schreibtisch nehmen. Deshalb gehört zu jedem Zertifikat ein privater Schlüssel. Er bleibt auf dem Laptop, dem Telefon oder beim Benutzer. Das Gerät nutzt ihn, um zu beweisen, dass es tatsächlich der Eigentümer des Zertifikats ist. Das Geheimnis gibt es dabei weder an das WLAN noch an das VPN oder die App weiter, die den Ausweis prüfen.</p>\n<p>Ein gemeinsames WLAN-Passwort kann dagegen weitergereicht, aufgeschrieben, auf privaten Geräten verwendet oder nach dem Ausscheiden aus dem Unternehmen behalten werden. Ein Gerätezertifikat gibt jedem verwalteten Laptop oder Telefon einen eigenen Nachweis.</p>\n\n<h2>PKI und Zertifizierungsstelle: Wer stellt die digitalen Ausweise aus?</h2>\n<p>Diese Aufgabe übernimmt die PKI, die Public Key Infrastructure. Man kann sie sich als Ausweisbüro für die digitale Arbeitswelt vorstellen. Sie erstellt Zertifikate, verteilt sie an die richtigen Personen oder Geräte, erneuert sie vor Ablauf und sperrt sie, wenn sie nicht mehr gültig sein sollen.</p>\n<p>Herzstück ist die Zertifizierungsstelle (CA), die vertrauenswürdige Ausstellerin. Wenn ein WLAN, ein VPN-Dienst oder eine interne App ein Zertifikat sieht, fragt sie sich: Vertraue ich der Stelle, die das genehmigt hat? Lautet die Antwort Ja, kann sie das Zertifikat prüfen und über die Zulassung des Geräts entscheiden.</p>\n<h3>Stamm-CA und ausstellende CA</h3>\n<p>Üblicherweise gibt es zwei Ebenen:</p>\n<ul>\n<li><strong>Stamm-CA (Root CA):</strong> die „Unternehmenszentrale“, die das gesamte Ausweissystem genehmigt. Sie muss nicht jeden Ausweis selbst drucken.</li>\n<li><strong>Ausstellende CA:</strong> sie erledigt die tägliche Arbeit und stellt Zertifikate für Geräte und Benutzer aus. Ihre Befugnis geht auf die Stamm-CA zurück.</li>\n</ul>\n<p>Ein Dienst, der diese Kette prüft, kann das Zertifikat des Laptops über die ausstellende CA bis zur vertrauenswürdigen Stamm-CA zurückverfolgen. Das gibt dem Verfahren eine feste Struktur. Genutzt wird es für sicheres WLAN, für VPN-Zugriffe und für interne Apps, die nur verwaltete Firmengeräte zulassen sollen. Der Mitarbeiter muss davon nichts verstehen: Er klappt den Laptop auf, wählt das Firmen-WLAN und ist verbunden.</p>\n\n<h2>Warum klassische PKI für kleine Unternehmen zur Last wird</h2>\n<p>Lange bedeutete dieses Ausweisbüro, eigene Hardware aufzubauen und zu betreiben. Man installierte Windows-Server und ergänzte Active Directory Certificate Services (ADCS) als Zertifizierungsstelle im Firmennetzwerk. Für Intune-verwaltete Geräte kam weiterer Aufwand hinzu: ein Intune Certificate Connector, ein Server für Zertifikatsanfragen, ein Reverse Proxy für sicheren externen Zugriff und passende Firewall-Regeln. Aus einem einfachen Ziel wie einem passwortlosen WLAN wird so ein umfangreiches Serverprojekt.</p>\n<p>Das ist, als wollte man Zugangskarten für Mitarbeiter ausgeben und dafür nicht einfach einen Kartendrucker kaufen, sondern einen abschließbaren Raum mit Schränken, Notstromversorgung und Zutrittsregeln bauen. Dazu braucht man jemanden, der weiß, was zu tun ist, wenn der Drucker streikt.</p>\n<h3>Der Betrieb endet nicht mit der Einrichtung</h3>\n<ul>\n<li>Server brauchen Updates, und Hardware erreicht ihr Lebensende.</li>\n<li>Backups müssen tatsächlich getestet werden, ein grünes Häkchen im Backup-Tool reicht nicht.</li>\n<li>Zertifikate laufen ab und müssen rechtzeitig erneuert werden.</li>\n</ul>\n<p>Schlägt die Erneuerung fehl, merkt es oft zuerst ein Mitarbeiter, der sich am Montagmorgen nicht mit dem WLAN verbinden kann. Sein Passwort funktioniert vielleicht einwandfrei, und über eine mobile Verbindung öffnet er auch Word und E-Mails. Aber das Zertifikat, mit dem das Netzwerk den Laptop erkennt, ist abgelaufen. Das Support-Ticket klingt zunächst merkwürdig: „Mein Passwort funktioniert, aber ich komme nicht online.“ Dann muss jemand klären, ob es am Gerät, am Zertifikatsprofil, am Netzwerkdienst, an der lokalen CA, am Connector oder an der Firewall liegt. Ein kleines IT-Team kann damit einen halben Tag verbringen.</p>\n<p>Remote-Arbeit verschärft das Ganze. Ein Laptop am Küchentisch braucht einen sicheren Weg, um ein Zertifikat oder ein neues zu erhalten. Über Reverse Proxy und Firewall-Regeln lässt sich das lösen, bringt aber mehr bewegliche Teile und mehr Stellen für kleine Fehler mit sich. Die Kosten bestehen nicht nur aus der Serverlizenz, sondern auch aus Zeit für Patches, Fachwissen und aktuelle Dokumentation. Verlässt die eine Person, die das System versteht, das Unternehmen, geht das Wissen mit.</p>\n<p>PKI ist also nicht nur etwas für Großunternehmen. Ein kleines Unternehmen kann vom gleichen Gerätenachweis profitieren. Nur der Betrieb einer herkömmlichen PKI kann den Aufwand einer viel größeren IT-Abteilung erfordern.</p>\n\n<h2>Was Microsoft Cloud PKI ist</h2>\n<p>Microsoft Cloud PKI ist der verwaltete Zertifizierungsstellendienst von Microsoft innerhalb von Intune. Er erstellt und verwaltet Zertifikate für Geräte und Benutzer, die von Intune verwaltet werden. Statt das Ausweissystem auf eigenen Servern zu betreiben, läuft die Zertifizierungsstelle in der Microsoft Cloud. Mitarbeiter müssen dafür keine App öffnen, keine Datei speichern und sich kein weiteres Passwort merken. Cloud PKI stellt Zertifikate aus, wenn ein verwaltetes Gerät eines benötigt, erneuert sie vor Ablauf und widerruft sie, wenn sie nicht mehr gültig sein sollen.</p>\n<h3>Die Rollenverteilung im Bürogebäude</h3>\n<ul>\n<li><strong>Entra ID</strong> sitzt an der Rezeption: Es weiß, wer die Leute sind, und kontrolliert die Anmeldeidentität.</li>\n<li><strong>Intune</strong> ist der Gebäudemanager: Es weiß, welche Laptops und Telefone zum Unternehmen gehören, und sendet Einstellungen, Apps und Regeln.</li>\n<li><strong>Cloud PKI</strong> ist das sichere Ausweisbüro im Gebäude und erstellt das Zertifikat.</li>\n</ul>\n<p>Sie brauchen keinen lokalen Windows-Server für eine Stamm-CA und keinen weiteren für eine ausstellende CA. Microsoft kann beide Teile in einer Cloud-First-Konfiguration hosten. Im lizenzierten Produktionsansatz schützt Microsoft die Schlüssel der Zertifizierungsstelle mit Hardware-Sicherheitsmodulen (HSMs), also gesicherten Tresoren für hochsensible kryptografische Schlüssel. Diese Hardware müssen Sie nicht selbst kaufen, installieren, patchen oder bewachen. Ihre Aufgabe konzentriert sich auf die geschäftliche Entscheidung: Welche Geräte sollen Zertifikate erhalten, und wozu sollen diese berechtigen?</p>\n<h3>SCEP, Geräte und Lizenzierung</h3>\n<p>Für die Anforderung kommt das Simple Certificate Enrollment Protocol (SCEP) ins Spiel. Es ist der geschützte Anforderungskanal zwischen verwaltetem Gerät und Zertifizierungsstelle. Der private Schlüssel wird darüber nie übertragen. Das Gerät erstellt ihn lokal und behält ihn dort.</p>\n<p>Unterstützt werden Windows-Laptops, Macs, iPhones, iPads und Android-Geräte. Voraussetzung ist, dass das Gerät in Intune registriert und verwaltet wird und die Plattform das Zertifikatsprofil von Intune unterstützt. Ein privater Laptop ohne Intune-Verwaltung passt nicht in dieses Modell. Cloud PKI benötigt zudem neben Intune die passende Microsoft-Lizenzierung. Da Microsoft die Plandetails regelmäßig anpasst, sollten Sie Ihre aktuellen Ansprüche prüfen und klären, wer eine Lizenz braucht.</p>\n\n<h2>So läuft die Zertifikatsausstellung im Hintergrund ab</h2>\n<p>Ein neuer Mitarbeiter öffnet am ersten Morgen zu Hause seinen Firmenlaptop, der bereits in Intune registriert ist. Er soll später im Büro ins WLAN und von zu Hause per VPN auf interne Systeme zugreifen können, ohne nach Passwörtern zu suchen oder die IT anzurufen. Dahinter passiert Folgendes:</p>\n<ol>\n<li><strong>Vertrauen herstellen:</strong> Intune sendet dem Laptop zuerst das Stammzertifikat und das Zertifikat der ausstellenden CA aus Ihrer Cloud-PKI-Konfiguration. Ohne dieses Fundament kann der Laptop nicht wissen, ob ein Zertifikat von einem zugelassenen Dienst stammt.</li>\n<li><strong>Privaten Schlüssel erzeugen:</strong> Der Laptop generiert ihn selbst, und er verlässt das Gerät nie. Er wird weder in Intune kopiert noch an Cloud PKI oder den WLAN-Dienst gesendet.</li>\n<li><strong>Anforderung stellen:</strong> Der Laptop erstellt eine Zertifikatsanforderung mit den nötigen Informationen und dem Nachweis, dass er den privaten Schlüssel kontrolliert. Übertragen wird nur die Anforderung, nicht der Schlüssel.</li>\n<li><strong>Prüfung durch Intune:</strong> Intune bestätigt, dass die Anforderung von einem registrierten, verwalteten Gerät stammt, und schützt sie so, dass Cloud PKI Manipulationen erkennen kann. Stimmt etwas nicht, wird kein Zertifikat ausgestellt.</li>\n<li><strong>Ausstellung:</strong> Die ausstellende CA signiert das Zertifikat für die Geräteidentität, und Intune liefert es an den Laptop zurück.</li>\n</ol>\n<p>Im Büro präsentiert der Laptop statt eines gemeinsamen Passworts sein Zertifikat. Das Netzwerk prüft die Kette: Wurde das Zertifikat von der ausstellenden CA ausgestellt, der es vertraut, und lässt sich diese auf die vertrauenswürdige Stamm-CA zurückführen? Wenn ja, wird die Verbindung hergestellt. Dasselbe Muster funktioniert mit einem VPN oder einer internen App. Das Zertifikat ersetzt nicht jede Anmeldeaufforderung überall, bietet dem Dienst aber eine weitere starke Methode, das Gerät zu identifizieren.</p>\n<h3>Ablauf und Erneuerung</h3>\n<p>Zertifikate halten nicht ewig, und das ist gewollt: Eine alte Geräteberechtigung soll nicht ohne erneute Überprüfung unbegrenzt gültig bleiben. Cloud PKI und Intune können die Erneuerung schon vor dem Ablaufdatum einleiten, sobald sich das verwaltete Gerät meldet. Der Laptop fordert ein Ersatzzertifikat an, über denselben geschützten Pfad. Für den Mitarbeiter ändert sich nichts, und aus dem Ablauf wird kein unerwartetes Support-Ticket.</p>\n<h3>Widerruf bei Verlust oder Austritt</h3>\n<p>Verschwindet ein Gerät, verlässt ein Mitarbeiter das Unternehmen oder gilt ein Zertifikat als nicht mehr vertrauenswürdig, widerrufen Sie es in Intune. Cloud PKI veröffentlicht die Änderung, sodass Dienste, die den Zertifikatsstatus prüfen, das alte Zertifikat ablehnen können. Das Gerät existiert vielleicht noch, sein digitaler Nachweis funktioniert nicht mehr. Das ist eine deutlich bessere Ausgangslage, als ein geteiltes WLAN-Passwort zu ändern und zu hoffen, dass es niemand mehr kennt.</p>\n\n<h2>Wo Cloud PKI passt und wo nicht</h2>\n<p>Cloud PKI eignet sich, wenn ein verwaltetes Firmengerät seine Identität nachweisen muss, bevor es zugreift:</p>\n<ul>\n<li><strong>Sicheres WLAN:</strong> Intune platziert ein Zertifikat auf dem Gerät, das das Netzwerk akzeptiert.</li>\n<li><strong>VPN-Zugriff:</strong> Das Gerät legt bei der Verbindung sein Zertifikat vor. Das macht wiederholte Passworteingaben überflüssig und gibt dem VPN eine weitere Möglichkeit, das Gerät zu verifizieren.</li>\n<li><strong>Interne Apps:</strong> Manche können so konfiguriert werden, dass sie nur vom Unternehmen verwaltete Geräte akzeptieren.</li>\n</ul>\n<p>Für kleine Unternehmen verändert das ein bekanntes Problem. Ein geteiltes WLAN-Passwort verbreitet sich leicht: in Willkommens-E-Mails, Chats, Notizbüchern und auf alten Handys. Wer geht, löst oft die Neuverbindung jedes Druckers, Laptops und Tablets aus. Mit Gerätezertifikaten trägt jedes verwaltete Gerät seinen eigenen Zugriffsbeleg. Zudem wird die Entscheidung präziser: Ein Passwort beweist nur, dass jemand es kennt. Ein Cloud-PKI-Zertifikat verknüpft den Zugriff mit einem Gerät, das Intune kennt und verwaltet. Das entspricht dem Zero-Trust-Gedanken, Zugriff nicht allein deshalb zu gewähren, weil sich etwas im Büronetzwerk befindet.</p>\n<h3>Zwei Wege für den Start</h3>\n<p>Arbeitet Ihr Unternehmen hauptsächlich in der Cloud und hat kein Zertifikatssystem, erstellen Sie in Cloud PKI eine Stamm-CA und eine ausstellende CA. Anschließend konfigurieren Sie WLAN-Dienst, VPN-Gateway oder ausgewählte Apps so, dass sie dieser Kette vertrauen. Alternativ kann Cloud PKI eine ausstellende CA nutzen, die mit einer bestehenden Stamm-CA verknüpft ist. So fügen sich neue Intune-Geräte in bereits genutzte Vertrauensregeln ein. Welcher Weg passt, hängt davon ab, was Ihr Netzwerk schon als vertrauenswürdig einstuft.</p>\n\n<h2>Häufige Stolpersteine und Grenzen</h2>\n<ul>\n<li><strong>Kein Allzweck-Zertifikatsdienst:</strong> Cloud PKI richtet sich an Intune-registrierte Geräte. Es ersetzt keine Zertifikate auf Webservern, VPN-Gateways, Load-Balancern oder anderen Servern. Auch nicht verwaltete Computer, isolierte Systeme ohne Cloud-Verbindung oder Linux-Geräte außerhalb der Intune-Unterstützung deckt es nicht ab. Dafür kann weiterhin ein anderer Dienst nötig sein.</li>\n<li><strong>Die Gegenseite muss vertrauen:</strong> WLAN-Controller, VPN-Gateway oder interne App brauchen Einrichtungsarbeit. Sie müssen der Stamm- und der ausstellenden Zertifikatskette von Cloud PKI vertrauen. Erkennt der Dienst Ihre Zertifizierungsstelle nicht, lehnt er selbst ein einwandfreies Gerätezertifikat ab.</li>\n<li><strong>Verwendungszweck zu eng gewählt:</strong> Beim Erstellen einer CA legen Sie fest, wofür deren Zertifikate gelten, etwa Client-Authentifizierung für WLAN oder VPN. Wählen Sie zu eng und brauchen später einen anderen Zweck, müssen Sie womöglich eine neue CA erstellen und die Geräte migrieren.</li>\n<li><strong>Lizenzierung nicht geprüft:</strong> Cloud PKI braucht neben Intune die passende Lizenz, und die Plandetails ändern sich.</li>\n<li><strong>Zertifikat isoliert betrachtet:</strong> Der Netzwerkdienst muss wissen, welche Zertifikatskette er akzeptieren soll.</li>\n</ul>\n\n<h2>Praktische Takeaways für den Einstieg</h2>\n<ul>\n<li>Beginnen Sie mit einem konkreten Problem, nicht mit einer unternehmensweiten Einführung, etwa einem WLAN mit gemeinsamem Passwort, einem VPN mit ständigen Neuanmeldungen oder einer internen App nur für verwaltete Laptops.</li>\n<li>Klären Sie die Grundlagen: Sind die Geräte in Intune registriert? Melden sich Benutzer über Entra ID an? Deckt Ihre Microsoft-Lizenzierung Cloud PKI ab?</li>\n<li>Starten Sie mit einem kleinen Pilotprojekt und einer begrenzten Gerätegruppe.</li>\n<li>Bauen Sie Vertrauenskette, Zertifikatsprofil und passende WLAN- oder VPN-Richtlinie als zusammenhängende Aufgabe auf.</li>\n<li>Legen Sie den ersten Anwendungsfall fest, bevor Sie eine Zertifizierungsstelle erstellen.</li>\n<li>Binden Sie die Person ein, die für das Netzwerk verantwortlich ist.</li>\n</ul>\n\n<h2>Fazit</h2>\n<p>Gerätezertifikate ersetzen das geteilte Passwort durch einen individuellen, gerätegebundenen Nachweis, bei dem der private Schlüssel nie das Gerät verlässt. Microsoft Cloud PKI verlagert den aufwendigen Betrieb der Zertifizierungsstelle aus dem Serverraum in die Cloud. Ausstellung, Erneuerung und Widerruf laufen über Intune im Hintergrund. Das Werkzeug hat klare Grenzen, denn es deckt verwaltete Geräte ab und keine Serverzertifikate. Wer mit einem konkreten Anwendungsfall und einem kleinen Pilotprojekt startet, kann den Zugriff auf WLAN, VPN und interne Apps deutlich sicherer und gleichzeitig für die Mitarbeiter unsichtbarer gestalten.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Gerätezertifikate mit Microsoft Cloud PKI und Intune",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Vertrauen herstellen",
+     "text": "Intune sendet Stamm- und ausstellendes Zertifikat an den verwalteten Laptop."
+    },
+    {
+     "kopf": "Privaten Schlüssel erzeugen",
+     "text": "Das Gerät erstellt den Schlüssel selbst und behält ihn dauerhaft bei sich."
+    },
+    {
+     "kopf": "Anforderung senden",
+     "text": "Nur die Zertifikatsanforderung wird über SCEP übertragen, nie der private Schlüssel."
+    },
+    {
+     "kopf": "Prüfung und Ausstellung",
+     "text": "Intune prüft das Gerät, die ausstellende CA signiert das Zertifikat."
+    },
+    {
+     "kopf": "Zugriff per Zertifikat",
+     "text": "WLAN, VPN oder interne App prüfen die Zertifikatskette statt eines gemeinsamen Passworts."
+    },
+    {
+     "kopf": "Erneuern und widerrufen",
+     "text": "Erneuerung läuft automatisch im Hintergrund, bei Verlust wird das Zertifikat in Intune widerrufen."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Was ist Microsoft Cloud PKI und wofür wird es verwendet?",
+    "a": "Microsoft Cloud PKI ist der verwaltete Zertifizierungsstellendienst von Microsoft innerhalb von Intune. Er stellt Zertifikate für Intune-verwaltete Geräte und Benutzer aus, erneuert sie vor Ablauf und widerruft sie bei Bedarf. Eigene Server für die Zertifizierungsstelle sind nicht nötig."
+   },
+   {
+    "q": "Warum sind Zertifikate sicherer als ein gemeinsames WLAN-Passwort?",
+    "a": "Ein Zertifikat hat einen privaten Schlüssel, der auf dem Gerät bleibt und nie weitergegeben wird. Ein geteiltes Passwort lässt sich dagegen weitergeben, aufschreiben oder nach dem Ausscheiden behalten. Mit Zertifikaten erhält jedes verwaltete Gerät einen eigenen Nachweis."
+   },
+   {
+    "q": "Wie stellt Intune mit Cloud PKI ein Zertifikat für einen Laptop aus?",
+    "a": "Intune sendet zuerst das Stamm- und das CA-Zertifikat an den Laptop. Dieser erzeugt lokal den privaten Schlüssel und stellt eine Zertifikatsanforderung. Intune prüft sie, die ausstellende CA signiert das Zertifikat, und Intune liefert es an das Gerät zurück."
+   },
+   {
+    "q": "Welche Geräte unterstützt Cloud PKI und was sind die Grenzen?",
+    "a": "Unterstützt werden Windows-Laptops, Macs, iPhones, iPads und Android-Geräte, sofern sie in Intune verwaltet werden. Nicht abgedeckt sind private Geräte ohne Intune, isolierte Systeme ohne Cloud-Verbindung sowie Server-Zertifikate, etwa für Webserver, VPN-Gateways oder Load-Balancer."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Gemeinsames WLAN-Passwort oder Gerätezertifikat",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Geteiltes Passwort",
+     "punkte": [
+      "Kann weitergereicht oder aufgeschrieben werden",
+      "Lässt sich auf privaten Geräten verwenden",
+      "Kann nach dem Ausscheiden behalten werden",
+      "Beweist nur, dass jemand es kennt",
+      "Bei Austritt müssen alle Geräte neu verbunden werden"
+     ]
+    },
+    "rechts": {
+     "titel": "Cloud-PKI-Zertifikat",
+     "punkte": [
+      "Jedes verwaltete Gerät hat einen eigenen Nachweis",
+      "Privater Schlüssel bleibt auf dem Gerät",
+      "Verknüpft den Zugriff mit einem Gerät, das Intune kennt",
+      "Einzelne Zertifikate lassen sich in Intune widerrufen",
+      "Entspricht dem Zero-Trust-Gedanken"
+     ]
+    }
+   },
+   {
+    "titel": "Rollenverteilung im Bürogebäude",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "Entra ID",
+      "text": "Die Rezeption: weiß, wer die Leute sind, und kontrolliert die Anmeldeidentität."
+     },
+     {
+      "wert": "Intune",
+      "text": "Der Gebäudemanager: kennt die Firmengeräte und sendet Einstellungen, Apps und Regeln."
+     },
+     {
+      "wert": "Cloud PKI",
+      "text": "Das sichere Ausweisbüro: erstellt das Zertifikat für das verwaltete Gerät."
+     },
+     {
+      "wert": "HSMs",
+      "text": "Hardware-Sicherheitsmodule schützen die CA-Schlüssel, ohne dass Sie Hardware betreiben müssen."
+     },
+     {
+      "wert": "SCEP",
+      "text": "Geschützter Anforderungskanal zwischen Gerät und CA; der private Schlüssel wird nie übertragen."
+     }
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Warum verlässt der private Schlüssel das Gerät beim Zertifikatsverfahren nie?",
+    "opts": [
+     "Das Gerät erzeugt ihn lokal und sendet nur die Zertifikatsanforderung.",
+     "Intune speichert ihn verschlüsselt und gibt ihn nur auf Anfrage heraus.",
+     "Die ausstellende CA erzeugt ihn und überträgt ihn per SCEP.",
+     "Der WLAN-Dienst hinterlegt ihn und prüft damit jede Verbindung."
+    ],
+    "a": 0,
+    "why": "Das Gerät generiert den privaten Schlüssel selbst und behält ihn. Übertragen wird nur die Anforderung, nie der Schlüssel."
+   },
+   {
+    "q": "Welche Rolle hat Intune im Zusammenspiel mit Entra ID und Cloud PKI?",
+    "opts": [
+     "Intune kontrolliert die Anmeldeidentität der Personen an der Rezeption.",
+     "Intune ist der Gebäudemanager, der weiß, welche Geräte zum Unternehmen gehören.",
+     "Intune erstellt als sicheres Ausweisbüro selbst die Zertifikate.",
+     "Intune speichert die privaten Schlüssel aller Geräte in Tresoren."
+    ],
+    "a": 1,
+    "why": "Entra ID kennt die Identitäten, Intune kennt die verwalteten Geräte und sendet Einstellungen, Cloud PKI erstellt die Zertifikate."
+   },
+   {
+    "q": "Was passiert, wenn ein Mitarbeiter das Unternehmen verlässt und sein Zertifikat widerrufen wird?",
+    "opts": [
+     "Alle Geräte müssen danach ein neues gemeinsames WLAN-Passwort erhalten.",
+     "Das Gerät wird automatisch aus der Ferne vollständig gelöscht.",
+     "Der private Schlüssel wird zur Stamm-CA zurückgesendet und vernichtet.",
+     "Dienste, die den Status prüfen, lehnen das alte Zertifikat ab."
+    ],
+    "a": 3,
+    "why": "Cloud PKI veröffentlicht den Widerruf. Das Gerät existiert noch, doch sein digitaler Nachweis funktioniert nicht mehr."
+   },
+   {
+    "q": "Was gehört laut Artikel zu den Grenzen von Cloud PKI?",
+    "opts": [
+     "Es unterstützt ausschließlich Windows-Laptops und keine Smartphones.",
+     "Es ersetzt Zertifikate auf Webservern und VPN-Gateways nicht.",
+     "Es benötigt zwingend einen lokalen Windows-Server als Stamm-CA.",
+     "Es kann Zertifikate nicht vor dem Ablauf erneuern."
+    ],
+    "a": 1,
+    "why": "Cloud PKI richtet sich an Intune-registrierte Geräte und ist kein Allzweck-Zertifikatsdienst für Webserver, Gateways oder Load-Balancer."
+   }
+  ]
+ }
+}

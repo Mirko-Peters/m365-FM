@@ -9,6 +9,7 @@ CT = {".html": "text/html; charset=utf-8", ".json": "application/json; charset=u
       ".woff2": "font/woff2", ".woff": "font/woff", ".ttf": "font/ttf", ".ics": "text/calendar; charset=utf-8", ".vtt": "text/vtt; charset=utf-8", ".webmanifest": "application/manifest+json",
       ".xsl": "application/xslt+xml", ".pdf": "application/pdf", ".csv": "text/csv; charset=utf-8"}
 IMG = re.compile(r"\.(png|jpe?g|gif|webp|avif|svg|ico)$", re.I)   # wie im Site-Worker: Bilder kommen nie aus R2 zuerst, also auch nie unter /__r2c
+THREADS = max(1, int(os.environ.get("R2_THREADS") or 32))   # parallele Uploads (vorher fest 16; naechtlicher Bau: ~28.000 geaenderte Seiten in 18 min)
 GONE_KEY = "meta/gone.json"   # Liste der als entfernt markierten Schluessel (nur r2_site_sync.py schreibt sie)
 
 
@@ -28,8 +29,14 @@ def client():
     if miss:
         print("Zugangsdaten fehlen: " + ", ".join(miss)); return None, None
     import boto3
+    kw = {}
+    try:   # Verbindungs-Pool so gross wie die Zahl der Upload-Threads (Standard von botocore: 10 - mehr Threads warteten sonst auf eine Verbindung)
+        from botocore.config import Config
+        kw["config"] = Config(max_pool_connections=THREADS + 4, retries={"max_attempts": 5, "mode": "standard"})
+    except ImportError:
+        pass
     s3 = boto3.client("s3", endpoint_url=f"https://{os.environ['R2_ACCOUNT_ID']}.r2.cloudflarestorage.com", aws_access_key_id=os.environ["R2_ACCESS_KEY_ID"],
-                      aws_secret_access_key=os.environ["R2_SECRET_ACCESS_KEY"], region_name="auto")
+                      aws_secret_access_key=os.environ["R2_SECRET_ACCESS_KEY"], region_name="auto", **kw)
     return s3, os.environ["R2_BUCKET"]
 
 
@@ -53,7 +60,7 @@ def upload(s3, bucket, todo, meta=None, retries=1, on_ok=None, strict=False, cac
             s3.put_object(Bucket=bucket, Key=key, Body=f.read_bytes(), ContentType=ctype(key), CacheControl=cache_control, **kw); return item, None
         except Exception as e: return item, str(e)[:120]
     ok, failed, shown = [], [], [0]
-    with ThreadPoolExecutor(16) as ex:
+    with ThreadPoolExecutor(THREADS) as ex:
         for phase in ([t for t in todo if not t[0].endswith(".html")], [t for t in todo if t[0].endswith(".html")]):
             if failed and strict: break   # Seiten erst, wenn alle Dateien da sind
             rest = phase

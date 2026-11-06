@@ -1,7 +1,8 @@
 # Website (GitHub Pages) – Einrichtung & Betrieb
 
 Die Seite wird **automatisch** aus `episodes/*.json` + `data/published.json` gebaut (`generate_site.py`) und per GitHub Actions veröffentlicht
-(bei jedem Push, sowie täglich 05:17 UTC). Nichts von Hand pflegen.
+(nächtlich 01:07 UTC voll, bei Pushes nur für Code/Vorlagen, bei neu veröffentlichten Folgen per Frische-Bau aus
+`spreaker-feed-check.yml`, Kopf von `.github/workflows/site.yml`). Daten-Commits warten auf den nächtlichen Bau; sofort: **Run workflow**. Nichts von Hand pflegen.
 
 ## Einmalig einschalten
 1. GitHub → Repo → Settings → Pages → **Source: GitHub Actions**.

@@ -224,7 +224,8 @@ def dashboard_copy(lang):
         "source_press": ("Press Ranger", "Press Ranger"),
         "source_spreaker": ("Spreaker", "Spreaker"),
         "source_youtube": ("YouTube Analytics", "YouTube Analytics"),
-        "source_cloudflare": ("Cloudflare analytics", "Cloudflare Analytics"),
+        "source_cloudflare": ("Cloudflare edge statistics (unfiltered)", "Cloudflare-Randstatistik (ungefiltert)"),
+        "source_cloudflare_rum": ("Cloudflare Web Analytics", "Cloudflare Web Analytics"),
         "source_counter": ("M365.FM link counter", "M365.FM-Linkzähler"),
         "source_gsc": ("Google Search Console", "Google Search Console"),
         "source_bing_webmaster": ("Bing Webmaster Tools", "Bing Webmaster Tools"),
@@ -234,7 +235,10 @@ def dashboard_copy(lang):
         "source_reach": ("Cross-channel estimate", "Kanalübergreifende Schätzung"),
         "source_desc_spreaker": ("Plays per sponsored episode; no per-listener data.", "Aufrufe gesponserter Folgen; keine Daten einzelner Hörer."),
         "source_desc_youtube": ("Views and watch time, after Analytics access is enabled.", "Aufrufe und Wiedergabezeit nach Freigabe des Analytics-Zugriffs."),
-        "source_desc_cloudflare": ("Page views by URL; no cookies or client-side tracking.", "Seitenaufrufe je URL; keine Cookies und kein Client-Tracking."),
+        "source_desc_cloudflare": ("Requests by URL at the edge, unfiltered and including bots; only used where Web Analytics has no value.",
+                                   "Anfragen je URL am Rand, ungefiltert und einschließlich Bots; nur genutzt, wo Web Analytics keinen Wert hat."),
+        "source_desc_cloudflare_rum": ("Real page loads in the browser by URL (cookie-free beacon), bots largely excluded; available since 29 Oct 2026.",
+                                       "Echte Seitenaufrufe im Browser je URL (Beacon ohne Cookies), Bots weitgehend ausgeschlossen; verfügbar seit 29.10.2026."),
         "source_desc_counter": ("Cookie-free daily totals by link and page surface.", "Cookiefreie Tagessummen je Link und Fläche."),
         "source_desc_gsc": ("Impressions and clicks for sponsored URLs.", "Impressions und Klicks für gesponserte URLs."),
         "source_desc_bing_webmaster": ("Page statistics for sponsored URLs.", "Seitenstatistik für gesponserte URLs."),
@@ -457,6 +461,7 @@ html.a11y-hc .spn{--spn-on:#ffb52e;--spn-good:#3cc9a1;--spn-red:#ff8a80}
 @keyframes spn-pulse{50%{transform:scale(1.35);opacity:.08}}
 .spn-lead{max-width:62ch;color:var(--mut);font-size:1.1rem;margin:0 0 20px}.spn-mk{margin:-6px 0 22px}
 .spn-cards{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+@media(min-width:720px){.spn-cards{grid-template-columns:repeat(3,1fr)}.spn-cards[data-n="4"]{grid-template-columns:repeat(2,1fr)}}   /* Mirko, 5.11.2026: 3 x 2 statt 6 nebeneinander */
 .spn-card{background:var(--card);border:1px solid var(--bd);padding:14px 16px;display:grid;gap:3px;align-content:start}
 .spn-card b{unicode-bidi:isolate;font:600 2rem/1.05 "Barlow Condensed","Barlow Condensed FB0","Barlow Condensed FB1",sans-serif;font-variant-numeric:tabular-nums;color:var(--ac)}
 .spn-card span{color:var(--fg);font-size:.92rem;line-height:1.35}.spn-card small{color:var(--mut);font-size:.78rem}
@@ -630,7 +635,7 @@ def body_html(g, lang, stats, quick, ssr, n_main, n_langs, con_on):
     cards.append((nums.get("eps") or _num(n_main), t("card_episodes"), ""))
     cards.append((nums.get("langs") or _num(n_langs), t("card_langs"), ""))
     srcs.append(t("src_build", date=day(g["TODAY"], lang)))
-    proof = ('<ul class="spn-cards">' + "".join(f'<li class="spn-card"><b dir="auto">{E(a)}</b><span>{E(b)}</span>' + (f'<small>{E(c)}</small>' if c else "") + "</li>" for a, b, c in cards) + "</ul>"
+    proof = (f'<ul class="spn-cards" data-n="{len(cards)}">' + "".join(f'<li class="spn-card"><b dir="auto">{E(a)}</b><span>{E(b)}</span>' + (f'<small>{E(c)}</small>' if c else "") + "</li>" for a, b, c in cards) + "</ul>"
              + "".join(f'<p class="spn-src">{E(s)}</p>' for s in srcs) + (_chart(lang, bing, nums, day) if bing["ok"] and bing["weekly"] else ""))
     hero = (f'<header class="spn-hero"><p class="spn-eyebrow"><span class="spn-dot" aria-hidden="true"></span>{E(t("eyebrow"))}</p><h1>{E(t("h1"))}</h1>'
             f'<p class="spn-lead">{E(t("lead", episodes=eps))}</p>'

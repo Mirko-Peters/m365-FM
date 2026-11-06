@@ -1,5 +1,7 @@
 name: Spreaker-Feed gegen geschriebene Shownotes (T25)
 # Nachkontrolle nach apply-shownotes: stehen Text und Links im oeffentlichen RSS (Apple/Spotify)? Bericht reports/spreaker-feed-check.md
+# Ausserdem (alle 2 h, kostet keinen eigenen Lauf): neu veroeffentlichte Folgen ohne Episodenseite? Dann Seitenbau site.yml mit mode=fresh
+# starten (tools/new_episodes_check.py; hoechstens alle SITE_FRESH_GAP_H Stunden, Standard 6). Sonst baut site.yml nur naechtlich und bei Code-Pushes.
 on:
   workflow_dispatch:
   workflow_run:
@@ -7,6 +9,7 @@ on:
     types: [completed]
 permissions:
   contents: write
+  actions: write   # Seitenbau per workflow_dispatch starten (Commits mit dem Standard-Token loesen keinen Push-Lauf aus)
 concurrency: { group: spreaker-feed-check, cancel-in-progress: false }
 jobs:
   check:
@@ -15,6 +18,19 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: "3.12" }
+      - name: Neue Folgen ohne Episodenseite? (oeffentliche RSS-Feeds)
+        id: neweps
+        continue-on-error: true   # die Shownotes-Pruefung darf daran nicht haengen; der naechtliche Bau nimmt neue Folgen ohnehin mit
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          SITE_FRESH_GAP_H: ${{ vars.SITE_FRESH_GAP_H || '6' }}
+        run: python tools/new_episodes_check.py
+      - name: Seitenbau fuer neue Folgen starten (mode=fresh)
+        if: steps.neweps.outputs.dispatch == '1' && vars.SITE_FRESH_OFF != '1'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run site.yml --ref main -f mode=fresh
       - run: python tools/check_spreaker_feed.py
       - name: Bericht speichern
         run: |

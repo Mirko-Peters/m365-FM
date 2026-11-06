@@ -1,7 +1,7 @@
 """Die frueheren Podpage-Blogbeitraege (data/podpage/blog_posts.json.gz) als Community-Beitraege von mirko-p.
 Sie werden von site_blog.build wie echte Community-Beitraege ausgegeben (URL /community/u/mirko-p/blog/<slug>/, Autorenzeile, Verzeichnisse, RSS),
 bleiben aber statisch (HTML mit Tabellen und Bildern bleibt vollstaendig erhalten; kein Datenbank-Eintrag, kein Laengenlimit des Wiki-Markups)."""
-import ast, re, zlib
+import ast, json, re, zlib
 from datetime import datetime, timezone
 
 import site_media as MED
@@ -71,6 +71,14 @@ def translations(BASE, posts_by_slug, fixhtml):
     return out
 
 
+_ROWS = {}   # BASE -> Zeilen fuer publish(): die englischen Originale, als Kopie gesichert, bevor Aufrufer die Beitraege veraendern
+
+
+def _rows(its):
+    rows = [{"slug": p["slug"], "title": p["title"], "summary": p["summary"], "html": p["html"], "topics": p["topics"], "faq": p["faq"], "published": p["published"], "updated": p["updated"]} for p in its if not p.get("tr_of")]   # nur die englischen Originale (Sprachfassungen liegen im R2-Bucket, nicht im Import)
+    return json.loads(json.dumps(rows, ensure_ascii=False))
+
+
 def items(BASE):
     posts = [p for p in P.load("blog_posts") if p.get("title") and p.get("html")]
     eslug = {e["slug"] for e in P.load("episodes") if e.get("published") not in (False, "False") and e.get("hidden") not in (True, "True")}
@@ -109,6 +117,7 @@ def items(BASE):
     by_slug = {x["slug"]: x for x in out}
     out += translations(BASE, by_slug, fix)
     for x in out: x.pop("src", None); x.pop("hero", None)
+    _ROWS[BASE] = _rows(out)
     return out
 
 
@@ -122,8 +131,9 @@ def publish(write, BASE):
     cfg = Path(__file__).parent / "data" / "blog_import.json"
     if not cfg.exists() or not json.loads(cfg.read_text("utf-8")).get("enabled"):
         return 0
-    its = items(BASE)
-    rows = [{"slug": p["slug"], "title": p["title"], "summary": p["summary"], "html": p["html"], "topics": p["topics"], "faq": p["faq"], "published": p["published"], "updated": p["updated"]} for p in its if not p.get("tr_of")]   # nur die englischen Originale (Sprachfassungen liegen im R2-Bucket, nicht im Import)
+    rows = _ROWS.pop(BASE, None)   # Stand aus items() dieses Baus (vorher lief items() hier ein zweites Mal komplett, mit allen Sprachfassungen)
+    if rows is None:
+        items(BASE); rows = _ROWS.pop(BASE)
     for i in range(0, len(rows), PER):
         write(f"blog-import/part-{i // PER + 1}.json", R2.rewrite(json.dumps(rows[i:i + PER], ensure_ascii=False, separators=(",", ":"))))
     write("blog-import/index.json", json.dumps({"total": len(rows), "per": PER}))
