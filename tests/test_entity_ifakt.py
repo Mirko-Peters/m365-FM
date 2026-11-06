@@ -45,7 +45,7 @@ class Schema(unittest.TestCase):
         self.assertEqual(n["address"], {"@type": "PostalAddress", "streetAddress": "Curiestr. 2", "postalCode": "70563", "addressLocality": "Stuttgart", "addressCountry": "Germany"})
         self.assertEqual(n["foundingDate"], "2001")
         self.assertIn({"@id": f"{BASE}/entity/polaris/#entity"}, n["brand"])
-        self.assertEqual(n["employee"], [{"@id": f"{BASE}/entity/mirko-peters/#entity"}])
+        self.assertEqual(n["employee"], [{"@id": f"{BASE}/entity/jorg-drees/#entity"}, {"@id": f"{BASE}/entity/mirko-peters/#entity"}])
 
     def test_person_stadt_ohne_strasse_und_arbeitgeber_zusaetzlich(self):
         p = dict(E.ENTS["mirko-peters"], street="Geheim 1", zip="70000")

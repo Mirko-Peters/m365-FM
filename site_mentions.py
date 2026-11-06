@@ -9,6 +9,9 @@ try:
 except Exception:
     ALL = []
 
+# Pressekit (/press/) nur mit Erwaehnungen von Mirko Peters, M365.FM und M365Con; Fachpublikationen zu iFAKT usw. erscheinen nur auf den Entitaetsseiten
+PRESSKIT = [m for m in ALL if any(x == "mirko-peters" or x.startswith("m365") for x in (m.get("about") or []))]
+
 
 def for_entity(eid):
     return [m for m in ALL if eid in (m.get("about") or [])]
@@ -16,9 +19,13 @@ def for_entity(eid):
 
 def ld(m, BASE=None):
     """Die Erwaehnung als CreativeWork (fuer subjectOf der Person bzw. das Pressekit)."""
-    n = {"@type": "CreativeWork", "name": m["title"], "url": m["url"], "datePublished": m.get("date", ""),
+    sch = m.get("kind") == "scholarly"
+    n = {"@type": "ScholarlyArticle" if sch else "CreativeWork", "name": m["title"], "url": m["url"], "datePublished": m.get("date", ""),
          "publisher": {"@type": "Organization", "name": m.get("publisher") or m.get("outlet", "")}}
-    if m.get("author"): n["author"] = {"@type": "Person", "name": m["author"]}
+    if sch and m.get("outlet"): n["isPartOf"] = {"@type": "Periodical", "name": m["outlet"]}
+    if m.get("doi"): n["sameAs"] = "https://doi.org/" + m["doi"]
+    if m.get("authors"): n["author"] = [{"@type": "Person", "name": a} for a in m["authors"]]
+    elif m.get("author"): n["author"] = {"@type": "Person", "name": m["author"]}
     if BASE and m.get("about"): n["about"] = [{"@id": f"{BASE}/entity/{x}/#entity"} for x in m["about"]]
     if (m.get("work") or {}).get("url"): n["mentions"] = {"@type": "CreativeWork", "name": m["work"].get("title", ""), "url": m["work"]["url"]}
     return n
@@ -52,7 +59,20 @@ def section_html(lang, eid, mentions=None):
     if not section_eids(eid) or not ms:
         return ""
     pr = T(lang, "Press release", "Pressemitteilung")
-    li = "".join(f'<li><a href="{E(m["url"])}" rel="noopener">{E(m["title"])}</a> <span class="mut">· {E(m.get("publisher") or m.get("outlet", ""))}'
-                 + (f' · {E(str(m["date"])[:4])}' if m.get("date") else "") + "</span>"
-                 + (f' <small class="mut en-pr">[{E(pr)}]</small>' if m.get("kind") == "press_release" else "") + "</li>" for m in ms)
-    return f'<h3 id="mentions">{E(T(lang, "In the press / mentions", "Erwähnungen"))}</h3><ul class="en-mentions">{li}</ul>'
+
+    def row(m):
+        if m.get("kind") == "scholarly":   # Fachpublikation: Autoren · Titel · Zeitschrift · Jahr
+            au = ", ".join(m.get("authors") or [])
+            return (f'<li>{E(au) + " · " if au else ""}<a href="{E(m["url"])}" rel="noopener">{E(m["title"])}</a> <span class="mut">· {E(m.get("outlet") or m.get("publisher", ""))}'
+                    + (f' · {E(str(m["date"])[:4])}' if m.get("date") else "") + "</span></li>")
+        return (f'<li><a href="{E(m["url"])}" rel="noopener">{E(m["title"])}</a> <span class="mut">· {E(m.get("publisher") or m.get("outlet", ""))}'
+                + (f' · {E(str(m["date"])[:4])}' if m.get("date") else "") + "</span>"
+                + (f' <small class="mut en-pr">[{E(pr)}]</small>' if m.get("kind") == "press_release" else "") + "</li>")
+    press = [m for m in ms if m.get("kind") != "scholarly"]
+    sch = [m for m in ms if m.get("kind") == "scholarly"]
+    out = f'<h3 id="mentions">{E(T(lang, "In the press / mentions", "Erwähnungen"))}</h3>'
+    if press:
+        out += '<ul class="en-mentions">' + "".join(row(m) for m in press) + "</ul>"
+    if sch:
+        out += f'<h4 id="publications">{E(T(lang, "Scholarly publications", "Fachpublikationen"))}</h4><ul class="en-mentions">' + "".join(row(m) for m in sch) + "</ul>"
+    return out

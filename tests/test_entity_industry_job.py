@@ -146,5 +146,25 @@ class Erwaehnungen(unittest.TestCase):
         self.assertEqual(self.MEN.section_html("en", "polaris-analyzer"), "", "keine geprueften Eintraege in data/press_mentions.json")
 
 
+class Fachpublikationen(unittest.TestCase):
+    import site_mentions as MEN
+
+    def test_unterueberschrift_und_scholarly_ld(self):
+        m = [{"kind": "scholarly", "title": "Paper", "outlet": "ZWF", "publisher": "De Gruyter Brill", "date": "2018-09-28", "authors": ["A", "B"], "doi": "10.1/x", "url": "https://doi.org/10.1/x"}]
+        h = self.MEN.section_html("de", "ifakt", m)
+        self.assertIn('<h4 id="publications">Fachpublikationen</h4>', h)
+        self.assertIn('A, B · <a href="https://doi.org/10.1/x" rel="noopener">Paper</a> <span class="mut">· ZWF · 2018</span>', h)
+        self.assertIn("Scholarly publications", self.MEN.section_html("en", "ifakt", m))
+        n = self.MEN.ld(m[0])
+        self.assertEqual(n["@type"], "ScholarlyArticle")
+        self.assertEqual(n["isPartOf"]["name"], "ZWF")
+        self.assertEqual([a["name"] for a in n["author"]], ["A", "B"])
+
+    def test_ifakt_hat_gepruefte_erwaehnungen_pressekit_bleibt_m365(self):
+        self.assertIn("Fachpublikationen", self.MEN.section_html("de", "ifakt"))
+        self.assertTrue(all(any(x == "mirko-peters" or x.startswith("m365") for x in m["about"]) for m in self.MEN.PRESSKIT))
+        self.assertFalse(any("ifakt" in m["about"] for m in self.MEN.PRESSKIT))
+
+
 if __name__ == "__main__":
     unittest.main()
