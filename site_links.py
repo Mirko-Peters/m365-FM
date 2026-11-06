@@ -62,6 +62,65 @@ def legacy_target(p0, table):
     return "/show/" if re.match(r"^/(blog|videos|p)/", p0) else ""
 
 
+_EN_PREFIX = re.compile(r"/en(/.*)?", re.S)
+
+
+def rule_step(p, table):
+    """sitewrk/index.js ruleStep(): reine Adressregeln ohne Ursprung, ein Schritt. Ziel oder ""."""
+    to = legacy_target(p.rstrip("/") or "/", table)
+    if to:
+        return to
+    m = _MIRKO.fullmatch(p)   # alter Name des Blog-Profils
+    if m:
+        return (m.group(1) or "") + "/community/u/mirko-p" + (m.group(2) or "/")
+    if _GONE_LANG.match(p):   # Sprachen, die es nicht mehr gibt
+        return "/"
+    m = _EN_PREFIX.fullmatch(p)   # Englisch liegt ohne Sprachpfad unter "/"
+    if m:
+        return m.group(1) or "/"
+    return ""
+
+
+def rule_target(p, table):
+    """sitewrk/index.js finalTarget(): alle Adressregeln hintereinander bis zum Endziel (ein 301 statt einer Kette); "" = keine Weiterleitung."""
+    cur, n, seen = p, 0, {p}
+    while n < 6:
+        nx = rule_step(cur, table)
+        if not nx or nx in seen:
+            break
+        seen.add(nx); cur = nx; n += 1
+    return cur if n else ""
+
+
+def collapse(table):
+    """Ketten in der Weiterleitungstabelle (show/redirects.json) auf einen Schritt kuerzen: zeigt ein Ziel selbst auf eine alte Adresse
+    (Tabelle, feste Regeln des Site-Workers, umbenannte Folge), wird es durch das Endziel ersetzt; Ziele ohne Dateiendung enden auf "/"
+    (sonst leitet GitHub Pages noch einmal um). Eintraege, die auf sich selbst oder im Kreis fuehren, fliegen raus.
+    Rueckgabe: (neue Tabelle, {alt: (vorher, nachher)} fuer verkuerzte Ketten, [entfernte Eintraege])."""
+    out, changed, dropped = {}, {}, []
+    def norm(t):
+        path, q = (t.split("?", 1) + [""])[:2]
+        if not path.endswith("/") and not _EXT.search(path): path += "/"
+        return path + (("?" + q) if q else "")
+    for old, to in table.items():
+        cur, seen, ok = norm(to), {old.rstrip("/") or "/"}, True
+        for _ in range(MAX_HOPS + 1):
+            k = cur.split("?", 1)[0].rstrip("/") or "/"
+            if k in seen: ok = False; break
+            seen.add(k)
+            nx = rule_target(cur.split("?", 1)[0], table)
+            if not nx and _EPISODE_SL.fullmatch(cur.split("?", 1)[0]): nx = table.get(k, "")   # umbenannte Folge (Worker: nach 404 des Ursprungs)
+            if not nx: break
+            cur = norm(nx)
+        else:
+            ok = False
+        if not ok:
+            dropped.append(old); continue
+        out[old] = cur
+        if cur != to: changed[old] = (to, cur)
+    return out, changed, dropped
+
+
 class Site:
     """Was der Ursprung ausliefert: GitHub Pages (docs/) und der R2-Bucket (r2out/). Ohne Verzeichnisse (None) gilt: nichts existiert."""
 
@@ -105,18 +164,13 @@ class Resolver:
         """Eine Antwort des Site-Workers (MIGRATED=1) fuer https://<host><path>: (host, pfad) des 301-Ziels oder None (keine Weiterleitung).
         Reihenfolge wie in sitewrk/index.js fetch()."""
         p0 = path.rstrip("/") or "/"
-        to = legacy_target(p0, self.table)
+        to = rule_target(path, self.table)   # alle Adressregeln in einem Schritt (A -> C statt A -> B -> C)
         if host in OLD_HOSTS:   # T8: alter Host und alte Adresse in einem Schritt
             if not to and _EPISODE.fullmatch(p0):
                 to = self.table.get(p0) or ""
             return WWW, (to or path)
         if to:
             return host, to
-        m = _MIRKO.fullmatch(path)   # alter Name des Blog-Profils
-        if m:
-            return host, (m.group(1) or "") + "/community/u/mirko-p" + (m.group(2) or "/")
-        if _GONE_LANG.match(path):   # Sprachen, die es nicht mehr gibt
-            return host, "/"
         w = self.site.where(path)
         if w == "slash":   # GitHub Pages: Verzeichnis ohne abschliessenden Schraegstrich
             return host, path + "/"
@@ -125,12 +179,12 @@ class Resolver:
         if _EPISODE_SL.fullmatch(path):   # T12: umbenannte Folge (404 bei GitHub Pages, vor dem R2-Rueckfall)
             to = self.table.get(path.rstrip("/"))
             if to:
-                return host, to
+                return host, (rule_target(to, self.table) or to)
         if w == "r2":
             return None
-        m = _LANG_EP.fullmatch(path)   # Sprachfassung (noch) nicht da: englisches Original
+        m = _LANG_EP.fullmatch(path)   # Sprachfassung (noch) nicht da: englisches Original (umbenannt: gleich der neue Slug)
         if m:
-            return host, "/show/episodes/" + m.group(2) + "/"
+            return host, self.table.get("/show/episodes/" + m.group(2)) or "/show/episodes/" + m.group(2) + "/"
         return None
 
     def resolve(self, host, path):
@@ -214,6 +268,39 @@ def rewrite_html(html, res, stats=None, page=""):
     return _HREF.sub(rep, html)
 
 
+_LD = re.compile(r'(<script type="application/ld\+json">)(.*?)(</script>)', re.S)
+_JSTR = re.compile(r'"((?:https?:)?//(?:www\.|dub\.)?m365\.fm(?:[/?#][^"\\\s]*)?)"', re.I)
+_XML = re.compile(r"(<(loc|link)>\s*)([^<\s]+)(\s*</\2>)|(\shref=)([\"'])([^\"'<>]*)\6", re.I)
+
+
+def _sub_url(url, res, stats, page):
+    new, st, tgt = fix_href(url, res)
+    if stats is not None and st not in ("external", "ok"):
+        stats.add(page, url, st, tgt)
+    return new
+
+
+def rewrite_jsonld(html, res, stats=None, page=""):
+    """URLs der eigenen Seite in JSON-LD-Bloecken (url, @id, item, sameAs ...) wie Links behandeln: weiterleitende Adressen direkt aufs Ziel."""
+    if "application/ld+json" not in html:
+        return html
+    def blk(m):
+        body = _JSTR.sub(lambda x: f'"{_sub_url(x.group(1), res, stats, page) or x.group(1)}"', m.group(2))
+        return m.group(1) + body + m.group(3)
+    return _LD.sub(blk, html)
+
+
+def rewrite_xml(xml, res, stats=None, page=""):
+    """Sitemaps und Feeds: <loc>, <link> und href= (xhtml:link, atom:link); <guid> bleibt (Kennung, keine Adresse)."""
+    def rep(m):
+        if m.group(1) is not None:
+            new = _sub_url(m.group(3), res, stats, page)
+            return f"{m.group(1)}{new}{m.group(4)}" if new else m.group(0)
+        new = _sub_url(m.group(7), res, stats, page)
+        return f"{m.group(5)}{m.group(6)}{new}{m.group(6)}" if new else m.group(0)
+    return _XML.sub(rep, xml)
+
+
 def section(page):
     """Bereich einer Seite fuer den Bericht, z. B. /show/episodes/, /<lang>/community/u/*/blog/, /entity/."""
     segs = [x for x in page.split("/") if x]
@@ -263,6 +350,40 @@ class Stats:
                 "top_pages": top[:300], "examples": self.examples, "unfixed": self.unfixed}
 
 
+def _files(root):
+    """HTML-Seiten und XML-Dateien (Sitemaps, Feeds) eines Baus."""
+    yield from root.rglob("*.html")
+    yield from root.rglob("*.xml")
+
+
+BLOCKING = ("redirect", "soft", "loop", "long")   # nach fix_tree darf kein interner Link mehr ueber eine Weiterleitung laufen
+
+
+def verify_tree(roots, res, limit=200):
+    """Pruefung nach fix_tree (check_redirect_links.py, blockierend im Seitenbau): jede interne Adresse in href, JSON-LD, Sitemaps und Feeds
+    muss ohne Weiterleitung ankommen. Rueckgabe (Stats, [(datei, url, status, ziel)] der blockierenden Funde, hoechstens limit)."""
+    st, bad = Stats(), []
+    class _S(Stats):
+        def add(self, page, href, s_, tgt):
+            st.add(page, href, s_, tgt)
+            if s_ in BLOCKING and len(bad) < limit: bad.append((page, href, s_, tgt))
+    rec = _S()
+    for root in roots:
+        root = Path(root)
+        if not root.is_dir():
+            continue
+        for f in _files(root):
+            try:
+                h = f.read_text("utf-8")
+            except (OSError, UnicodeDecodeError):
+                continue
+            page = "/" + str(f.relative_to(root)).replace("\\", "/")
+            page = page[:-len("index.html")] if page.endswith("/index.html") else page
+            if f.suffix == ".xml": rewrite_xml(h, res, rec, page)
+            else: rewrite_jsonld(rewrite_html(h, res, rec, page), res, rec, page)
+    return st, bad
+
+
 def fix_tree(roots, res, stats=None, rel_of=None):
     """Alle HTML-Dateien unter roots umschreiben (nur geaenderte Dateien werden neu geschrieben). Gibt die Zahl geaenderter Dateien zurueck."""
     stats = stats if stats is not None else Stats()
@@ -271,14 +392,14 @@ def fix_tree(roots, res, stats=None, rel_of=None):
         root = Path(root)
         if not root.is_dir():
             continue
-        for f in root.rglob("*.html"):
+        for f in _files(root):
             try:
                 h = f.read_text("utf-8")
             except (OSError, UnicodeDecodeError):
                 continue
             page = "/" + str(f.relative_to(root)).replace("\\", "/")
             page = page[:-len("index.html")] if page.endswith("/index.html") else page
-            n = rewrite_html(h, res, stats, page)
+            n = rewrite_xml(h, res, stats, page) if f.suffix == ".xml" else rewrite_jsonld(rewrite_html(h, res, stats, page), res, stats, page)
             if n != h:
                 f.write_text(n, "utf-8")
                 changed += 1

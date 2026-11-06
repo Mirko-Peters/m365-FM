@@ -10,7 +10,9 @@
     "/show/episodes/old-slug": "/show/episodes/new-slug/",
     "/de/show/episodes/old-slug": "/de/show/episodes/new-slug/",
     "/entity/dup": "/entity/main/",
-    "/guests/jane-doe": "/show/guests/jane-doe/"
+    "/guests/jane-doe": "/show/guests/jane-doe/",
+    "/chain-a": "/old-episode",
+    "/chain-b": "/blog/post-a/"
   },
   "cases": [
     ["https://www.m365.fm/m365-fm-podcast/foo-bar", "https://www.m365.fm/show/episodes/foo-bar/"],
@@ -44,12 +46,25 @@
     ["https://m365.fm/show/episodes/old-slug", "https://www.m365.fm/show/episodes/new-slug/"],
     ["https://dub.m365.fm/show/episodes/some-episode/", "https://www.m365.fm/show/episodes/some-episode/"],
     ["https://m365.fm/", "https://www.m365.fm/"],
+    ["https://m365.fm/community/u/mirko-peters/blog/x/", "https://www.m365.fm/community/u/mirko-p/blog/x/"],
+    ["https://dub.m365.fm/hi/", "https://www.m365.fm/"],
+    ["https://m365.fm/chain-a?x=1", "https://www.m365.fm/show/episodes/old-episode/?x=1"],
+    ["https://www.m365.fm/chain-a", "https://www.m365.fm/show/episodes/old-episode/"],
+    ["https://www.m365.fm/chain-b/", "https://www.m365.fm/community/u/mirko-p/blog/post-a/"],
+    ["https://www.m365.fm/en/", "https://www.m365.fm/"],
+    ["https://www.m365.fm/en", "https://www.m365.fm/"],
+    ["https://www.m365.fm/en/show/episodes/some-episode/", "https://www.m365.fm/show/episodes/some-episode/"],
+    ["https://www.m365.fm/en/blog/post-a", "https://www.m365.fm/community/u/mirko-p/blog/post-a/"],
+    ["https://m365.fm/en/m365-fm-podcast/foo-bar", "https://www.m365.fm/show/episodes/foo-bar/"],
+    ["https://www.m365.fm/es/show/episodes/old-slug/", "https://www.m365.fm/show/episodes/new-slug/"],
     ["https://www.m365.fm/show/episodes/some-episode/", null],
     ["https://www.m365.fm/show/", null],
     ["https://www.m365.fm/shows/", null],
     ["https://www.m365.fm/entity/main/", null],
     ["https://www.m365.fm/assets/site.css", null],
     ["https://www.m365.fm/m365-fm-podcast/feed.xml", null],
-    ["https://www.m365.fm/", null]
+    ["https://www.m365.fm/", null],
+    ["https://www.m365.fm/enterprise-search", null],
+    ["https://www.m365.fm/de/", null]
   ]
 }
