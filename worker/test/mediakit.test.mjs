@@ -244,7 +244,10 @@ test("Lead-Status Werbung: GET liefert lead_status, Status setzen, 400/401/403, 
     assert.ok([401, 403].includes(x.status), `${JSON.stringify(user)} ${data.action} -> ${x.status}`);
   }
   assert.equal(t.raw.prepare("SELECT COUNT(*) n FROM ad_leads").get().n, 1);
+  // Benachrichtigungen zum Lead liegen im Postausgang (Name/E-Mail/Nachricht); die eines anderen Leads (70) bleiben
+  for (const k of ["adlead:7:5", "adlead:7:6", "adlead:70:5"]) t.raw.prepare("INSERT INTO mail_outbox(user_id,kind,subject,html,key,created) VALUES(5,'system','M365.FM Lead: Max','<p>max@example.com</p>',?,1)").run(k);
   assert.equal((await post(t.env, "/api/admin/ads/lead-status", ADMIN, { action: "delete", id: 7 })).status, 200);
   assert.equal(t.raw.prepare("SELECT COUNT(*) n FROM ad_leads").get().n, 0);
+  assert.deepEqual(t.raw.prepare("SELECT key FROM mail_outbox ORDER BY key").all().map(x => x.key), ["adlead:70:5"]);
   assert.equal((await post(t.env, "/api/admin/ads/lead-status", ADMIN, { action: "delete", id: 7 })).status, 404);
 });

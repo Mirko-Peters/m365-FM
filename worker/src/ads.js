@@ -1024,6 +1024,9 @@ export async function handleAds(env, request, url, path, user, J, ctx) {
       return r.meta.changes ? J({ ok: true, status: body.status }, 200, NS) : E("not_found");
     }
     if (body.action === "delete") {
+      // Zuerst die Benachrichtigungs-Mails zum Lead (Name, E-Mail, Nachricht) loeschen, sonst bleiben die Daten im Postausgang;
+      // scheitert danach das Loeschen des Leads, kann der Admin es einfach wiederholen
+      await db.prepare("DELETE FROM mail_outbox WHERE key LIKE ?").bind(`adlead:${id}:%`).run();
       const r = await db.prepare("DELETE FROM ad_leads WHERE id=?").bind(id).run();
       if (!r.meta.changes) return E("not_found");
       await audit(db, user.id, "ad-lead", String(id), "deleted").catch(() => 0);
