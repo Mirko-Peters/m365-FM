@@ -519,7 +519,7 @@ html.a11y-hc .spn{--spn-on:#ffb52e;--spn-good:#3cc9a1;--spn-red:#ff8a80}
 .spn-cnt{min-width:44px;text-align:center;font-variant-numeric:tabular-nums}
 .spn-lock{margin:4px 0 0;font-size:.82rem;color:var(--ac)}
 .spn-extras{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px}
-.spn-extras>.spn-wide{grid-column:1/-1}.spn-adsbox{margin-top:12px;display:grid;gap:12px}.spn-adsbox[hidden]{display:none}
+.spn-extras>.spn-wide{grid-column:1/-1}.spn-adsbox{grid-column:1/-1;margin-top:6px;display:grid;gap:12px;min-width:0}.spn-adsbox[hidden]{display:none}
 .spn-row.spn-ads{border-top:1px dashed var(--bd);padding-top:6px}
 /* Rechner der Werbeplaetze (assets/ads-book.js) im Konfigurator: einspaltig, Formularfelder wie die uebrigen Felder der Seite */
 .spn .adb{display:grid;gap:16px}.spn .adb h3{margin:0 0 .5em;font-size:1.1rem}.spn .adb-calc,.spn .adb-form{padding:16px;border:1px solid var(--bd);background:var(--bg)}
@@ -599,12 +599,12 @@ def _chart(lang, bing, nums, day):
     return (f'<figure class="spn-chart"><h2>{E(tx(lang, "chart_h"))}</h2>' + (desk + mob).replace("{aria}", E(aria)) + '</figure>')
 
 
-def _item(cid, title, body, price, unit, checked=False, extra="", also="", cls="spn-item", ctl=""):
+def _item(cid, title, body, price, unit, checked=False, extra="", also="", cls="spn-item", ctl="", after=""):
     d = f"{cid}-d"
     ctl = f' aria-controls="{ctl}"' if ctl else ""
     return (f'<div class="{cls}"><input type="checkbox" id="{cid}" aria-describedby="{d}{(" " + also) if also else ""}"{" checked" if checked else ""}{ctl}>'
             f'<div><h3><label for="{cid}">{E(title)}</label></h3><div id="{d}">{body}</div>{extra}</div>'
-            f'<div class="spn-price"><span dir="ltr">{E(price)}</span><small>{E(unit)}</small></div></div>')
+            f'<div class="spn-price"><span dir="ltr">{E(price)}</span><small>{E(unit)}</small></div>{after}</div>')   # after: ganze Breite unter der Zeile
 
 
 def _stepper(k, aria, less, more, n):
@@ -762,7 +762,7 @@ def ads_item(g, lang, t):
     price = t("ads_price", min=rng[0], max=rng[1]) if rng else t("on_request")
     box = (f'<div class="spn-adsbox" id="spn-adsbox" hidden><p class="spn-note">{E(t("ads_on" if on else "ads_off"))}</p>'
            f'<div class="adb" id="spn-adb" data-cfg="{E(json.dumps(cfg, ensure_ascii=False, separators=(",", ":")))}"></div></div>')
-    return _item("spn-ads", t("ads_h"), f'<p class="spn-hint">{E(t("ads_hint"))}</p>', price, t("unit_cpm"), extra=box, cls="spn-item spn-wide", ctl="spn-adsbox")
+    return _item("spn-ads", t("ads_h"), f'<p class="spn-hint">{E(t("ads_hint"))}</p>', price, t("unit_cpm"), after=box, cls="spn-item spn-wide", ctl="spn-adsbox")
 
 
 def advertise_button(B, lang):
