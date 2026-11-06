@@ -37,8 +37,16 @@ def urls():
         if f.exists():
             found |= set(URL_RX.findall(gzip.open(f, "rt", encoding="utf-8").read() if f.suffix == ".gz" else f.read_text("utf-8")))
     found = {u.rstrip(".,;") for u in found}
-    return sorted(u for u in found if u.startswith("http") and any(h in u for h in HOSTS)
-                  and (re.search(r"\.(jpe?g|jfif|png|gif|webp|svg|avif|pdf)(\?|$)", u, re.I) or "redwood-labs" in u or "neuroncdn" in u))
+    return sorted({u for u in found if u.startswith("http") and any(h in u for h in HOSTS)
+                   and (re.search(r"\.(jpe?g|jfif|png|gif|webp|svg|avif|pdf)(\?|$)", u, re.I) or "redwood-labs" in u or "neuroncdn" in u)} | entity_logos())
+
+
+def entity_logos():
+    """Logos von Entitaeten (Feld logo_src in data/entities.json, z. B. Firmenlogo von der Firmenwebsite): von der Redaktion
+    eingetragen, daher ohne Host-Liste; die Seite zeigt sie erst nach dem Kopieren ueber img.m365.fm (site_entities.py)."""
+    f = ROOT / "data" / "entities.json"
+    ents = json.loads(f.read_text("utf-8")) if f.exists() else []
+    return {str(e["logo_src"]).strip() for e in ents if isinstance(e, dict) and str(e.get("logo_src") or "").startswith("https://")}
 
 
 def image_dimensions(data):

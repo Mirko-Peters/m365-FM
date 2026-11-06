@@ -456,6 +456,7 @@ test("schema: Migrationen sind idempotent und enthalten jede zur Laufzeit angele
     if (/^ALTER TABLE users ADD COLUMN (?:merged_into INTEGER|merged_at INTEGER NOT NULL DEFAULT 0)$/i.test(s)
       || /^INSERT OR IGNORE INTO user_identities\(user_id, provider, sub, created\) SELECT id, provider, sub, created FROM users$/i.test(s)) continue;   // #279: Rueckfuellung ist idempotent
     if (/^INSERT OR IGNORE INTO ad_(?:products|prices|settings)\(/i.test(s)) continue;   // #281: Startwerte, idempotent (vorhandene Admin-Werte bleiben)
+    if (/^ALTER TABLE org_entity ADD COLUMN confirmed INTEGER NOT NULL DEFAULT 0$/i.test(s) || /^UPDATE org_entity SET confirmed=1 WHERE EXISTS \(/i.test(s)) continue;   // 0026: Rueckfuellung setzt nur 1, idempotent
     assert.match(s, /^CREATE (TABLE|INDEX|UNIQUE INDEX) IF NOT EXISTS /i, "nur idempotente Anweisungen: " + s.slice(0, 60));
   }
   const inMig = new Set([...sql.matchAll(/CREATE (?:TABLE|UNIQUE INDEX|INDEX) IF NOT EXISTS (\w+)/gi)].map((m) => m[1]));

@@ -198,7 +198,7 @@ Mirko Peters is a Microsoft MVP, podcaster, author and conference organizer focu
     if (!o) { const r = await db.prepare("INSERT INTO orgs(handle,name,tagline,about,website,country,size,public,created) VALUES(?,?,?,?,?,'Germany','2-10',1,?)").bind(h, nm, tg, about, web, t).run(); o = { id: r.meta.last_row_id }; }
     else await db.prepare("UPDATE orgs SET about=CASE WHEN about='' THEN ? ELSE about END, tagline=CASE WHEN tagline='' THEN ? ELSE tagline END WHERE id=?").bind(about, tg, o.id).run();
     await db.prepare("INSERT OR IGNORE INTO org_members(org_id,user_id,role,status,created) VALUES(?,?,'owner','active',?)").bind(o.id, owner.id, t).run();
-    await db.prepare("INSERT OR IGNORE INTO org_entity(org_id,eid) VALUES(?,?)").bind(o.id, eid).run();
+    await db.prepare("INSERT OR IGNORE INTO org_entity(org_id,eid,confirmed) VALUES(?,?,1)").bind(o.id, eid).run();   // eigene Firmen der Plattform: Verknuepfung bestaetigt
     for (const [k, u] of chs) await db.prepare("INSERT OR IGNORE INTO channels(owner_type,owner_id,kind,url) VALUES('o',?,?,?)").bind(o.id, k, u).run();
   }
   for (const eid of ["m365con", "m365fm", "m365show", "mirko-peters"]) await db.prepare("INSERT INTO entity_claims(eid,user_id,status,via,created) VALUES(?,?,'verified','admin',?) ON CONFLICT(eid) DO NOTHING").bind(eid, owner.id, t).run();

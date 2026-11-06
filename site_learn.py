@@ -428,8 +428,15 @@ def load_entities(api):
     for it in over:
         d = it.get("data") or {}
         if it.get("id") and d.get("name") and d.get("type"):
-            base[it["id"]] = {"id": it["id"], **d, "desc": d.get("desc") or {"en": "", "de": ""}, "rel": d.get("rel") or [], "aliases": d.get("aliases") or [], "edited": it.get("created")}
+            rec = {"id": it["id"], **d, "desc": d.get("desc") or {"en": "", "de": ""}, "rel": d.get("rel") or [], "aliases": d.get("aliases") or [], "edited": it.get("created")}
+            for k in REPO_KEYS:   # Felder ohne Formularfeld: fehlen sie in der D1-Fassung (Formular-Bearbeitung, selbst verwaltete Entitaet), gilt die Repo-Fassung
+                if k not in rec and (base.get(it["id"]) or {}).get(k):
+                    rec[k] = base[it["id"]][k]
+            base[it["id"]] = rec
     return base
+
+
+REPO_KEYS = ("city", "country", "street", "zip", "founded", "company", "disclosure", "logo_src")   # nur in data/entities.json gepflegt (Redaktion), nicht im Bearbeiten-Formular
 
 
 COMMUNITY_API_DEFAULT = os.environ.get("COMMUNITY_API", "https://api-dub.m365.fm")

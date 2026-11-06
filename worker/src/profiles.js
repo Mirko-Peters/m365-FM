@@ -39,6 +39,25 @@ export async function ownedEntity(env, user, o) {
 }
 const slug = (s) => String(s || "").toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 24);
 
+// Firmenkonto mit einer Firmen-Entitaet verknuepfen (Feld eid, z. B. "ifakt"): die oeffentlichen Mitglieder erscheinen dann auf der Entitaetsseite.
+// Bestaetigt nur, wenn die Entitaet vom Typ org ist und der Nutzer sie bestaetigt beansprucht hat (oder Redaktion/Admin ist) - sonst koennte
+// jede Firma ihr Team z. B. auf die Microsoft-Seite schreiben. Fehler: bad_entity (keine Firmen-Entitaet), entity_claim_required.
+export async function orgEntityCheck(env, user, eid) {
+  if (!ID.test(eid || "")) return { error: "bad_entity" };
+  const e = (await entityMap(env)).get(eid);
+  if (!e || e.type !== "org") return { error: "bad_entity" };
+  if (user.admin || user.editor) return { ok: true };
+  const c = await env.DB.prepare("SELECT 1 x FROM entity_claims WHERE eid=? AND user_id=? AND status='verified'").bind(eid, user.id).first();
+  return c ? { ok: true } : { error: "entity_claim_required" };
+}
+// Vorhandene Firmen-Entitaet zum Firmennamen (Name oder Alias, ohne Gross-/Kleinschreibung): "iFAKT GmbH" -> ifakt statt einer neuen Entitaet ifakt-gmbh
+async function orgEntityByName(env, name) {
+  const n = String(name || "").trim().toLowerCase(); if (!n) return "";
+  for (const e of (await entityMap(env)).values()) if (e.type === "org" && (String(e.name || "").toLowerCase() === n || (e.aliases || []).some((a) => String(a).toLowerCase() === n))) return e.id;
+  return "";
+}
+const setOrgEntity = (db, orgId, eid, confirmed) => db.prepare("INSERT INTO org_entity(org_id,eid,confirmed) VALUES(?,?,?) ON CONFLICT(org_id) DO UPDATE SET eid=excluded.eid,confirmed=excluded.confirmed").bind(orgId, eid, confirmed ? 1 : 0).run();
+
 function channelFeed(kind, url, feed) {
   const m = kind === "youtube" ? /\/channel\/(UC[\w-]{22})/.exec(url) : null;
   if (m) return `https://www.youtube.com/feeds/videos.xml?channel_id=${m[1]}`;
@@ -166,9 +185,9 @@ async function orgView(db, oid, viewer, showPrivate = false) {
   const o = await db.prepare("SELECT * FROM orgs WHERE id=?").bind(oid).first(); if (!o) return null;
   const q = async (sql, ...b) => (await db.prepare(sql).bind(...b).all()).results || [];
   const im = await db.prepare("SELECT updated FROM images WHERE kind='o' AND owner_id=?").bind(oid).first();
-  const oe = (await db.prepare("SELECT eid FROM org_entity WHERE org_id=?").bind(oid).first())?.eid || "";
+  const oer = await db.prepare("SELECT * FROM org_entity WHERE org_id=?").bind(oid).first(), oe = oer?.eid || "";   // confirmed (0026): nur bestaetigte Verknuepfung zeigt das Team auf der Entitaetsseite
   const locations = await q(`SELECT id,label,address,city,country,public,lat,lng,geo_precision FROM org_locations WHERE org_id=? ${showPrivate ? "" : "AND public=1"} ORDER BY id`, oid);
-  return { type: "o", eid: oe, img: im?.updated || 0, id: o.id, handle: o.handle, name: o.name, tagline: o.tagline, about: o.about, website: o.website, country: o.country, size: o.size, public: !!o.public, locations,
+  return { type: "o", eid: oe, eid_ok: !!(oe && oer?.confirmed), img: im?.updated || 0, id: o.id, handle: o.handle, name: o.name, tagline: o.tagline, about: o.about, website: o.website, country: o.country, size: o.size, public: !!o.public, locations,
     expertise: (await q("SELECT eid e,level,verified FROM expertise WHERE owner_type='o' AND owner_id=?", oid)).map((e) => ({ ...e, verified: !!e.verified })),
     programs: (await q("SELECT program p,year,url,verified FROM programs WHERE owner_type='o' AND owner_id=?", oid)).map((x) => ({ ...x, verified: !!x.verified })),
     channels: await q("SELECT kind,url,feed,followers FROM channels WHERE owner_type='o' AND owner_id=?", oid),
@@ -524,29 +543,43 @@ export async function handleProfiles(env, request, url, path, user, J) {
     const pr = checkPrograms(b.programs, true); if (pr.err) return J({ error: pr.err }, 400);
     const locations = cleanOrgLocations(b.locations);
     const size = SIZES.includes(b.size) ? b.size : "";
+    const wantEid = b.eid === undefined || b.eid === null ? undefined : String(b.eid).toLowerCase().trim();   // Firmen-Entitaet waehlen (leer = Verknuepfung loesen)
     let o = await db.prepare("SELECT id FROM orgs WHERE handle=?").bind(handle).first();
+    let link = null;   // { eid, confirmed } -> nach dem Speichern setzen
+    if (wantEid) {   // vor dem Anlegen pruefen: eine ungueltige Wahl legt keine Firma an
+      const cur = o ? await db.prepare("SELECT * FROM org_entity WHERE org_id=?").bind(o.id).first() : null;
+      const role = o ? (await db.prepare("SELECT role FROM org_members WHERE org_id=? AND user_id=? AND status='active'").bind(o.id, user.id).first())?.role : "owner";
+      if (!cur || cur.eid !== wantEid || !cur.confirmed) {
+        const chk = ["owner", "admin"].includes(role) ? await orgEntityCheck(env, user, wantEid) : { error: "forbidden" };
+        if (chk.ok) link = { eid: wantEid, confirmed: 1 };
+        else if (!(cur && cur.eid === wantEid)) return J({ error: chk.error }, chk.error === "bad_entity" ? 400 : 403);   // dieselbe (unbestaetigte) Verknuepfung bleibt einfach stehen
+      }
+    }
     if (!o) {
       if (await db.prepare("SELECT 1 x FROM profiles WHERE handle=?").bind(handle).first()) return J({ error: "handle_taken" }, 409);
       if ((await db.prepare("SELECT COUNT(*) n FROM org_members WHERE user_id=? AND role='owner'").bind(user.id).first()).n >= 3) return J({ error: "limit" }, 400);
       const r = await db.prepare("INSERT INTO orgs(handle,name,tagline,about,website,country,size,public,created) VALUES(?,?,?,?,?,?,?,?,?)").bind(handle, name, txt(b.tagline, 120), long(b.about, 1500), website, txt(b.country, 60), size, b.public ? 1 : 0, now()).run();
       o = { id: r.meta.last_row_id };
       await db.prepare("INSERT INTO org_members(org_id,user_id,role,status,created) VALUES(?,?,'owner','active',?)").bind(o.id, user.id, now()).run();
-      // Firmen-Entitaet erzeugen oder wiederverwenden (nie Freitext): gleiche Namen -> gleiche Entitaet
-      try {
-        const eid = slug(name).replace(/-+$/g, "") || `firma-${o.id}`;
+      // Firmen-Entitaet erzeugen oder wiederverwenden (nie Freitext): gewaehlte Entitaet (eid) > gleicher Name/Alias > gleicher Slug > neu
+      if (!link) try {
+        const eid = (await orgEntityByName(env, name)) || slug(name).replace(/-+$/g, "") || `firma-${o.id}`;
         const known = await baseIds(env), ex = await db.prepare("SELECT 1 x FROM entity_rev WHERE eid=? AND status IN ('live','pending')").bind(eid).first();
         if (!known.has(eid) && !ex) {
           const v = await validate(env, eid, { name, type: "org", desc: { en: `${name} is a company in the Microsoft ecosystem.`, de: `${name} ist ein Unternehmen im Microsoft-Umfeld.` }, web: website || "", rel: [] });
           if (!v.err) await db.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES(?,?,?,?,?,?)").bind(eid, JSON.stringify(v.data), "Firma angelegt", user.id, (await trustedUser(db, user)) ? "live" : "pending", now()).run();
         }
-        await db.prepare("INSERT OR REPLACE INTO org_entity(org_id,eid) VALUES(?,?)").bind(o.id, eid).run();
-        if (!known.has(eid) && !ex) await db.prepare("INSERT INTO entity_claims(eid,user_id,status,via,created) VALUES(?,?,'verified','owner',?) ON CONFLICT(eid) DO UPDATE SET user_id=excluded.user_id,status='verified',via='owner',created=excluded.created WHERE entity_claims.status='rejected'").bind(eid, user.id, now()).run();
+        // selbst erzeugte Entitaet gehoert der Firma (bestaetigt); eine schon vorhandene bleibt unbestaetigt, bis Inhaber/Admin sie mit Claim bestaetigt
+        const claimed = !known.has(eid) && !ex ? Number((await db.prepare("INSERT INTO entity_claims(eid,user_id,status,via,created) VALUES(?,?,'verified','owner',?) ON CONFLICT(eid) DO UPDATE SET user_id=excluded.user_id,status='verified',via='owner',created=excluded.created WHERE entity_claims.status='rejected'").bind(eid, user.id, now()).run()).meta?.changes || 0) > 0 : false;
+        await setOrgEntity(db, o.id, eid, claimed);
       } catch (e) { /* Entitaet ist optional, Firmenkonto bleibt gueltig */ }
     } else {
       const mem = await db.prepare("SELECT role FROM org_members WHERE org_id=? AND user_id=? AND status='active'").bind(o.id, user.id).first();
       if (!mem || !["owner", "admin", "editor"].includes(mem.role)) return J({ error: "forbidden" }, 403);
       await db.prepare("UPDATE orgs SET name=?,tagline=?,about=?,website=?,country=?,size=?,public=? WHERE id=?").bind(name, txt(b.tagline, 120), long(b.about, 1500), website, txt(b.country, 60), size, b.public ? 1 : 0, o.id).run();
+      if (wantEid === "" && ["owner", "admin"].includes(mem.role)) await db.prepare("DELETE FROM org_entity WHERE org_id=?").bind(o.id).run();   // Verknuepfung loesen
     }
+    if (link) await setOrgEntity(db, o.id, link.eid, link.confirmed);
     if (Array.isArray(b.locations)) await saveOrgLocations(env, o.id, locations);
     await replaceLists(db, "o", o.id, { exp: ex.list, prog: pr.list, chan: ch.list, certs: null });
     return J({ ok: true });
