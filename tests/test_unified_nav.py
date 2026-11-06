@@ -95,6 +95,17 @@ class HeaderSourceTest(unittest.TestCase):
         self.assertIn("More from the show", pp)
 
 
+class MobileOverflowTest(unittest.TestCase):
+    """Footer-Links stehen ohne Leerzeichen hintereinander: nur mit Flex-Umbruch passt der Footer auf 360-390 px (vorher ~461 px breit)."""
+    def test_footer_wraps_between_links(self):
+        src = (ROOT / "generate_site.py").read_text("utf-8")
+        self.assertIn("footer .wrap{display:flex;flex-wrap:wrap;", src)
+        self.assertNotIn("footer a{margin-right:14px}", src)
+
+    def test_entity_facts_break_long_urls(self):
+        self.assertIn(".en-facts td{padding:.4em 0;overflow-wrap:anywhere}", (ROOT / "site_entities.py").read_text("utf-8"))
+
+
 class ContentPagesHaveSidebarTest(unittest.TestCase):
     def test_content_builders_pass_side(self):
         for f in ("site_entities.py", "site_blog.py", "site_video.py", "site_podcast.py", "site_library.py", "site_events.py", "site_members.py", "site_live.py"):
