@@ -162,6 +162,85 @@ def people_of(oid):
     return sorted((x["id"] for x in ENTS.values() if x.get("type") == "person" and x.get("company") and (company_org(x) or {}).get("id") == oid), key=lambda i: ENTS[i]["name"].lower())
 
 
+TEAMS = {}   # Org-Entitaet -> oeffentliche Mitglieder der verknuepften Community-Firma(n): [{handle, name, job, eid}] (set_teams)
+TEAM_ORG = {}   # Org-Entitaet -> Handle der (ersten) bestaetigt verknuepften Community-Firma (Nachladen neuer Kolleg:innen im Browser)
+
+
+def _norm(s):
+    return " ".join(str(s or "").lower().split())
+
+
+def set_teams(orgs, people, person_of=None):
+    """Community-Firmen (Export /api/profiles/export) mit bestaetigter Entitaet (eid + eid_ok) -> TEAMS.
+    Nur Mitglieder, deren Profil im Export steht (oeffentlich) und die die Firma auf ihrer Firmenseite zeigen (members: public=1, show_org=1),
+    also genau die Team-Liste der Firmenseite /community/c/<handle>/. person_of: Profil-Handle -> Personen-Entitaet (Claim, Autor)."""
+    person_of = person_of or {}
+    pb = {p["handle"]: p for p in people or [] if p.get("handle")}
+    TEAMS.clear(); TEAM_ORG.clear()
+    for o in orgs or []:
+        oid = o.get("eid")
+        if not oid or not o.get("eid_ok") or (ENTS.get(oid) or {}).get("type") != "org":
+            continue   # unbestaetigte Verknuepfung (z. B. automatisch ueber den Namen) wirkt nicht auf die Entitaetsseite
+        TEAM_ORG.setdefault(oid, o["handle"])
+        lst = TEAMS.setdefault(oid, [])
+        for m in o.get("members") or []:
+            p = pb.get(m.get("handle"))
+            if not p or any(x["handle"] == p["handle"] for x in lst):
+                continue
+            pe = person_of.get(p["handle"]) or ""
+            lst.append({"handle": p["handle"], "name": p.get("name") or m.get("name") or p["handle"], "job": str(p.get("job") or "").strip()[:80],
+                        "eid": pe if (ENTS.get(pe) or {}).get("type") == "person" else ""})
+
+
+def team_of(oid):
+    """Personen einer Firma: Personen-Entitaeten (Feld company) plus Community-Mitglieder der verknuepften Firma.
+    Dieselbe Person erscheint einmal (gleiche Personen-Entitaet per Claim oder gleicher Name), die Entitaet hat Vorrang.
+    Eintraege {eid, handle, name, job}: eid -> Link auf die Entitaet; handle -> oeffentliches Community-Profil (nur Mitglieder)."""
+    rows = [{"eid": i, "handle": "", "name": ENTS[i]["name"], "job": ""} for i in people_of(oid)]
+    for m in TEAMS.get(oid, []):
+        hit = next((r for r in rows if (m["eid"] and r["eid"] == m["eid"]) or _norm(r["name"]) == _norm(m["name"])), None)
+        if hit:
+            hit["handle"] = hit["handle"] or m["handle"]; hit["job"] = hit["job"] or m["job"]
+            continue
+        rows.append({"eid": m["eid"], "handle": m["handle"], "name": ENTS[m["eid"]]["name"] if m["eid"] else m["name"], "job": m["job"]})
+    return sorted(rows, key=lambda r: _norm(r["name"]))
+
+
+def team_ref(BASE, r):
+    """Schema.org-Verweis auf eine Person aus team_of: Entitaet (#entity) oder Community-Profil (#person wie site_members.person_ld)."""
+    return {"@id": eid_of(BASE, r["eid"])} if r["eid"] else {"@id": f"{BASE}/community/u/{r['handle']}/#person"}
+
+
+TEAM_JS = ('<script>(function(){var ul=document.getElementById("en-team");if(!ul)return;var w=document.getElementById("en-teamw"),have={},nm={};'
+           '[].forEach.call(ul.querySelectorAll("li"),function(li){if(li.dataset.h)have[li.dataset.h]=1;if(li.dataset.n)nm[li.dataset.n]=1});'
+           'fetch(%API%+"/api/org/"+ul.dataset.org).then(function(r){return r.json()}).then(function(j){((j.org||{}).members||[]).forEach(function(m){'
+           'var n=String(m.name||"").toLowerCase().replace(/\\s+/g," ").trim();if(!m.handle||have[m.handle]||nm[n])return;have[m.handle]=1;'
+           'var li=document.createElement("li"),a=document.createElement("a");a.href=%PROF%+m.handle+"/";a.textContent=m.name;li.appendChild(a);'
+           'var s=document.createElement("span");s.className="mut";s.textContent=" · "+(String(m.headline||"").slice(0,80)||%MEM%);li.appendChild(s);ul.appendChild(li);if(w)w.hidden=false})}).catch(function(){})})()</script>')
+
+
+def team_html(BASE, lang, oid, root, api):
+    """Gruppe People/Personen einer Org-Entitaet (HTML); leer, wenn es weder Personen noch eine verknuepfte Community-Firma gibt.
+    Neue Kolleg:innen der verknuepften Firma laedt das Skript aus /api/org/<handle> nach (bis zum naechsten Seitenbau, Profil-Links wie im Verzeichnis)."""
+    li = 1 if lang == "de" else 0
+    rows, oh = team_of(oid), TEAM_ORG.get(oid)
+    if not rows and not oh:
+        return ""
+    prof = f"{BASE}{pfx(lang)}/community/u/"
+    mem = T(lang, "Community member", "Community-Mitglied")
+    items = []
+    for r in rows:
+        href = f"{root}{r['eid']}/" if r["eid"] else f"{prof}{r['handle']}/"
+        note = " · ".join(x for x in ([esc(TL['person'][li])] if r["eid"] else []) + ([esc(r["job"])] if r["job"] else []) + ([] if r["eid"] or r["job"] else [esc(mem)]))
+        extra = f' · <a href="{prof}{r["handle"]}/">{esc(T(lang, "Profile", "Profil"))}</a>' if r["eid"] and r["handle"] else ""
+        items.append(f'<li data-h="{esc(r["handle"])}" data-n="{esc(_norm(r["name"]))}"><a href="{href}">{esc(r["name"])}</a> <span class="mut">· {note}</span>{extra}</li>')
+    head = f'<h3>{esc(T(lang, "People", "Personen"))}</h3>'
+    if not oh:
+        return f'{head}<ul>{"".join(items)}</ul>'
+    js = TEAM_JS.replace("%API%", json.dumps(api)).replace("%PROF%", json.dumps(prof)).replace("%MEM%", json.dumps(mem))
+    return f'<div id="en-teamw"{"" if rows else " hidden"}>{head}<ul id="en-team" data-org="{esc(oh)}">{"".join(items)}</ul></div>{js}'
+
+
 def postal_address(e):
     """PostalAddress aus street/zip/city/country (Personen: nur Stadt und Land); None ohne Ortsangabe."""
     a = {"@type": "PostalAddress"}
@@ -276,9 +355,9 @@ def ent_ld(BASE, e, lang, glossary_set=None, person_aka=None):
             n["address"] = postal_address(e)
         if e.get("founded"):
             n["foundingDate"] = str(e["founded"])
-        _emp = people_of(i)
+        _emp = team_of(i)   # Personen-Entitaeten (Feld company) und oeffentliche Mitglieder der verknuepften Community-Firma, je Person einmal
         if _emp:
-            n["employee"] = [ref(x) for x in _emp]
+            n["employee"] = [team_ref(BASE, x) for x in _emp]
     elif t == "cert":
         if rel.get("developed_by"):
             n["recognizedBy"] = ref(rel["developed_by"][0])
@@ -522,10 +601,9 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             _co = company_org(e) if e["type"] == "person" else None
             if _co:   # Person -> Arbeitgeber (Feld company) und Gegenrichtung Firma -> Personen
                 groups.setdefault(T(lang, "Works for", "Arbeitet bei"), []).append(_co["id"])
-            if e["type"] == "org":
-                for _p in people_of(e["id"]):
-                    groups.setdefault(T(lang, "People", "Personen"), []).append(_p)
             rb = "".join(f'<h3>{esc(k)}</h3><ul>' + "".join(f'<li><a href="{root}{x}/">{esc(ENTS[x]["name"])}</a> <span class="mut">· {esc(TL[ENTS[x]["type"]][li])}</span></li>' for x in dict.fromkeys(v)) + "</ul>" for k, v in groups.items())
+            if e["type"] == "org":   # Gegenrichtung Firma -> Personen: Entitaeten (Feld company) plus Community-Mitglieder der verknuepften Firma (team_of)
+                rb += team_html(BASE, lang, e["id"], root, api)
             _spr, _spown = SPM.entity(e["id"]), SPM.entity_own(e["id"])   # T37 Sponsor: laufende Sponsorings dieser Entitaet
             facts = [(s["type"], esc(TL[e["type"]][li]))]
             _aka = aka_fact(e, lang, person_aka)
