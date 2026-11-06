@@ -69,8 +69,10 @@ class ResolverTest(unittest.TestCase):
     def test_loop_and_too_long_chain_stay_unchanged(self):
         self.assertIsNone(self.fix("/loop-a"))
         self.assertEqual(self.res.resolve(SL.WWW, "/loop-a")[0], "loop")
-        self.assertIsNone(self.fix("/c1"))
-        self.assertEqual(self.res.resolve(SL.WWW, "/c1")[0], "long")
+        # Ketten aus Tabelleneintraegen loest der Worker selbst auf (finalTarget, bis 6 Regeln je Antwort): /c1 -> /c7/ -> /show/
+        self.assertEqual(self.res.hop(SL.WWW, "/c1"), (SL.WWW, "/c7/"))
+        self.assertEqual(self.fix("/c1"), "/show/")
+        self.assertEqual(self.res.hop(SL.WWW, "/old-flat"), (SL.WWW, "/show/episodes/foo/"))   # Tabelle -> Podpage-Regel in einem Schritt
 
     def test_query_and_fragment_are_kept(self):
         self.assertEqual(self.fix("https://www.m365.fm/blog/post-a?utm_source=x#teil-2"), "https://www.m365.fm/community/u/mirko-p/blog/post-a/?utm_source=x#teil-2")
@@ -129,6 +131,44 @@ class RenderTest(unittest.TestCase):
         self.assertIn("4 umgeschrieben in 1 Seiten", st.summary())
         self.assertEqual(st.report()["by_section"], {"/community/u/*/blog/": [1, 4]})
         self.assertEqual(SL.fix_tree([d / "docs"], res), 0)   # zweiter Lauf: nichts mehr zu tun
+
+
+class StructuredDataTest(unittest.TestCase):
+    """JSON-LD, Sitemaps und Feeds: dieselben Regeln wie fuer href (Wunsch Mirko 6.11.2026), plus die blockierende Pruefung verify_tree."""
+    def setUp(self):
+        self.d = site({
+            "docs/index.html": "x", "docs/show/index.html": "x", "docs/show/episodes/foo/index.html": "x",
+            "docs/community/u/mirko-p/blog/post-a/index.html": "x",
+            "docs/show/redirects.json": json.dumps({"/blog/post-a": "/community/u/mirko-p/blog/post-a/", "/la": "/lb/", "/lb": "/la/"}),
+        })
+        self.res = SL.Resolver.from_build(self.d / "docs", self.d / "r2out")
+
+    def test_jsonld_and_xml(self):
+        h = ('<a href="/blog/post-a">A</a><script type="application/ld+json">{"url": "https://www.m365.fm/blog/post-a", "@id": "https://www.m365.fm/#org", '
+             '"sameAs": ["https://m365.fm/m365-fm-podcast/foo", "https://learn.microsoft.com/x"]}</script>')
+        out = SL.rewrite_jsonld(SL.rewrite_html(h, self.res), self.res)
+        self.assertIn('href="/community/u/mirko-p/blog/post-a/"', out)
+        self.assertIn('"url": "https://www.m365.fm/community/u/mirko-p/blog/post-a/"', out)
+        self.assertIn('"@id": "https://www.m365.fm/#org"', out)
+        self.assertIn('"https://www.m365.fm/show/episodes/foo/"', out)
+        self.assertIn('"https://learn.microsoft.com/x"', out)
+        x = ('<urlset><url><loc>https://www.m365.fm/blog/post-a</loc><xhtml:link rel="alternate" hreflang="en" href="https://m365.fm/show/"/></url></urlset>'
+             '<rss><item><link>https://www.m365.fm/m365-fm-podcast/foo</link><guid>https://www.m365.fm/m365-fm-podcast/foo</guid></item></rss>')
+        o = SL.rewrite_xml(x, self.res)
+        self.assertIn("<loc>https://www.m365.fm/community/u/mirko-p/blog/post-a/</loc>", o)
+        self.assertIn('href="https://www.m365.fm/show/"', o)
+        self.assertIn("<link>https://www.m365.fm/show/episodes/foo/</link>", o)
+        self.assertIn("<guid>https://www.m365.fm/m365-fm-podcast/foo</guid>", o, "guid ist eine Kennung, keine Adresse")
+
+    def test_verify_tree_blocks_leftover_redirects(self):
+        d = self.d / "docs"
+        (d / "show" / "index.html").write_text('<a href="/show/episodes/foo/">ok</a><a href="/blog/post-a">alt</a>', "utf-8")
+        (d / "sitemap.xml").write_text("<urlset><url><loc>https://www.m365.fm/la</loc></url></urlset>", "utf-8")
+        st, bad = SL.verify_tree([d], self.res)
+        self.assertEqual(sorted((b[0], b[1], b[2]) for b in bad), [("/show/", "/blog/post-a", "redirect"), ("/sitemap.xml", "https://www.m365.fm/la", "loop")])
+        SL.fix_tree([d], self.res)
+        st, bad = SL.verify_tree([d], self.res)
+        self.assertEqual([b[2] for b in bad], ["loop"], "Schleifen kann fix_tree nicht aufloesen - die Pruefung bleibt rot")
 
 
 if __name__ == "__main__":

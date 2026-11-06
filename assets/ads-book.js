@@ -1,11 +1,16 @@
 /* #281 Werbeplaetze: Rechner (Preis kommt immer vom Server, /api/ads/quote), Buchung mit Banner-Upload (WebP in exakter Groesse),
-   PayPal-Zahlung, eigene Buchungen mit Zahlen und Leads. Konfiguration im data-cfg von #adbook (site_landing._ads_sections). */
+   PayPal-Zahlung, eigene Buchungen mit Zahlen und Leads. Konfiguration im data-cfg (site_landing.adbook_cfg).
+   Eine Komponente fuer zwei Stellen: /for/advertisers/ (#adbook, startet selbst) und die Banner-Werbung im Sponsoring-Konfigurator
+   (/sponsor/, assets/sponsor.js ruft AdBook.mount auf). cfg.products = angebotene Plaetze, cfg.booking = false: nur Rechner, keine Buchung
+   (Schalter "booking" in data/ad_slots.json). opt.topics() = Themen fuer das Targeting ([{id, name}], statt des Freitextfelds),
+   opt.onQuote(quote|null, eingabe, platzname) nach jeder Preisabfrage. */
 (function () {
-  var root = document.getElementById("adbook"); if (!root) return;
-  var C = {}; try { C = JSON.parse(root.getAttribute("data-cfg") || "{}"); } catch (e) { return; }
+  function mount(root, C, opt) {
+  opt = opt || {};
   var T = C.t || {}, N = C.names || {}, API = C.api, LANG = C.lang || "en";
   var SIZES = { banner_top: [[728, 90], [320, 100]], banner_mid: [[300, 250]], banner_bottom: [[728, 90], [320, 100]] };
   var KIND = { banner_top: "cpm", banner_mid: "cpm", banner_bottom: "cpm", company_card: "cpc", lead_form: "cpl" };
+  var OFFER = (C.products || Object.keys(KIND)).filter(function (k) { return KIND[k]; });
   function h(tag, a, kids) {
     var e = document.createElement(tag); a = a || {};
     Object.keys(a).forEach(function (k) { var v = a[k]; if (v == null || v === false) return; if (k === "text") e.textContent = v; else if (k === "class") e.className = v; else if (k.slice(0, 2) === "on") e.addEventListener(k.slice(2), v); else e.setAttribute(k, v === true ? "" : v); });
@@ -24,24 +29,34 @@
 
   // ---------- Rechner
   var S = (C.pricing && C.pricing.settings) || {};
-  var product = h("select", {}, Object.keys(KIND).map(function (k) { return h("option", { value: k, text: N[k] || k }); }));
+  var product = h("select", {}, OFFER.map(function (k) { return h("option", { value: k, text: N[k] || k, selected: k === C.product }); }));
   var PT = ["episode", "lang", "entity", "blog"];
   var pts = PT.map(function (p) { return h("input", { type: "checkbox", value: p, checked: true }); });
   var ptBox = h("fieldset", { class: "adb-pt" }, [h("legend", { text: T.page_types })].concat(pts.map(function (c, i) { return h("label", {}, [c, " " + T["pt_" + PT[i]]]); })));
   var topics = h("input", { type: "text", maxlength: "400", placeholder: "teams-phone, copilot", autocomplete: "off" });
+  // Konfigurator: Themen aus Schritt 2 statt Freitext (ein Haken, darunter die angesteuerten Themen)
+  var tMine = h("input", { type: "checkbox" }), tList = h("small", { class: "mut" }), tLabel = h("span");
+  var topicRow = opt.topics ? h("p", { class: "adb-f" }, [h("label", {}, [tMine, " ", tLabel]), tList]) : field(T.topics, topics);
+  function topicIds() {
+    if (!opt.topics) return topics.value;
+    var l = opt.topics() || [];
+    tList.textContent = l.length ? l.map(function (x) { return x.name; }).join(", ") : T.topics_none;
+    tMine.disabled = !l.length;
+    return tMine.checked ? l.map(function (x) { return x.id; }) : [];
+  }
   var excl = h("input", { type: "checkbox" }), exclRow = h("p", { class: "adb-f" }, [h("label", {}, [excl, " " + T.exclusive])]);
   var months = h("select", {}, [1, 2, 3, 4, 5, 6, 9, 12].map(function (m) { return h("option", { value: String(m), text: String(m) }); }));
   var qty = h("input", { type: "number", min: "1", step: "1", value: String(S.min_impressions || 10000), inputmode: "numeric" });
   var qtyLabel = h("label"), minHint = h("small", { class: "mut" });
   var out = h("dl", { class: "adb-sum", "aria-live": "polite" }), note = h("p", { class: "lp-note", text: fmt(T.intro, { topic: S.topic_pct, excl: S.exclusive_pct, r3: S.runtime3_pct, r6: S.runtime6_pct }) });
-  var calc = h("div", { class: "adb-calc" }, [h("h3", { text: T.calc }), field(T.product, product), ptBox, field(T.topics, topics), exclRow, field(T.months, months),
+  var calc = h("div", { class: "adb-calc" }, [h("h3", { text: T.calc }), field(T.product, product), ptBox, topicRow, exclRow, field(T.months, months),
     h("p", { class: "adb-f" }, [qtyLabel, qty, minHint]), out, note]);
   qtyLabel.setAttribute("for", qty.id = "adb-qty");
   var lastQuote = null, timer = 0;
   function input() {
     var k = KIND[product.value];
     return { product: product.value, page_types: pts.filter(function (c) { return c.checked; }).map(function (c) { return c.value; }),
-      topics: topics.value, exclusive: k === "cpm" && excl.checked, months: Number(months.value), quantity: Number(qty.value) };
+      topics: topicIds(), exclusive: k === "cpm" && excl.checked, months: Number(months.value), quantity: Number(qty.value) };
   }
   function row(dt, dd) { out.appendChild(h("dt", { text: dt })); out.appendChild(h("dd", { text: dd })); }
   function quote() {
@@ -49,10 +64,13 @@
     qtyLabel.textContent = T["qty_" + k]; exclRow.hidden = k !== "cpm";
     var min = k === "cpm" ? S.min_impressions || 10000 : k === "cpc" ? S.min_clicks || 1 : S.min_leads || 1;
     qty.min = String(min); minHint.textContent = " " + fmt(T.min, { n: num(min) });
+    tLabel.textContent = fmt(T.topics_mine, { topic: S.topic_pct });
     clearTimeout(timer);
     timer = setTimeout(function () {
-      api("/api/ads/quote", { method: "POST", body: input() }).then(function (r) {
+      var inp = input();
+      api("/api/ads/quote", { method: "POST", body: inp }).catch(function () { return { s: 0, j: {} }; }).then(function (r) {
         out.textContent = ""; lastQuote = r.s === 200 ? r.j.quote : null;
+        if (opt.onQuote) opt.onQuote(lastQuote, inp, N[inp.product] || inp.product);
         if (!lastQuote) { out.appendChild(h("dd", { class: "adm-msg bad", text: r.j && r.j.error === "bad_quantity" ? fmt(T.min, { n: num(r.j.min) }) : T.err })); return; }
         var q = lastQuote;
         row(T.subtotal, eur(q.subtotal_cents));
@@ -61,10 +79,10 @@
       });
     }, 250);
   }
-  [product, topics, excl, months, qty].concat(pts).forEach(function (el) { el.addEventListener("input", quote); el.addEventListener("change", quote); });
+  [product, topics, tMine, excl, months, qty].concat(pts).forEach(function (el) { el.addEventListener("input", quote); el.addEventListener("change", quote); });
 
   // aktuelle Preise aus D1 in die Tabelle
-  api("/api/ads/pricing").then(function (r) {
+  api("/api/ads/pricing").catch(function () { return { s: 0, j: {} }; }).then(function (r) {
     if (r.s !== 200) return; S = r.j.settings || S;
     note.textContent = fmt(T.intro, { topic: S.topic_pct, excl: S.exclusive_pct, r3: S.runtime3_pct, r6: S.runtime6_pct });
     (r.j.prices || []).filter(function (p) { return p.page_type === "episode"; }).forEach(function (p) {
@@ -76,6 +94,10 @@
   // ---------- Buchung
   var book = h("div", { class: "adb-book" }), msg = h("p", { class: "adm-msg", role: "status", "aria-live": "polite" }), mine = h("div", { class: "adb-mine" });
   root.textContent = ""; root.append(calc, book, msg, mine);
+  if (C.booking === false) {   // Buchung noch aus: nur der Rechner; die Auswahl geht mit der Anfrage mit (Konfigurator)
+    quote();
+    return { refresh: quote };
+  }
   var params = new URLSearchParams(location.search), ret = params.get("pay");
   if (ret) msg.textContent = ret === "paid" ? T.ret_paid : ret === "cancelled" ? T.ret_cancelled : T.ret_other;
 
@@ -191,7 +213,7 @@
 
   fetch(API + "/api/me", { credentials: "include" }).then(function (r) { return r.json(); }).then(function (j) {
     if (!j || !j.user) {
-      var ret = encodeURIComponent(C.page + "#book");
+      var ret = encodeURIComponent(C.page + (C.anchor || "#book"));
       book.append(h("p", { text: T.login }), h("p", {}, [h("a", { class: "btn main", href: C.community + "?return=" + ret, text: T.signin })]));
       return;
     }
@@ -202,4 +224,10 @@
     });
   }).catch(function () { book.appendChild(h("p", { text: T.login })); });
   quote();
+  return { refresh: quote };
+  }
+
+  window.AdBook = { mount: mount };
+  var el = document.getElementById("adbook");
+  if (el) { var C = null; try { C = JSON.parse(el.getAttribute("data-cfg") || "{}"); } catch (e) {} if (C) mount(el, C); }
 })();

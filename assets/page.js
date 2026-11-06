@@ -66,6 +66,20 @@ document.querySelectorAll(".yt[data-id]").forEach(function(b){b.addEventListener
   document.addEventListener("click", function(e){ closeAll(e.target.closest ? e.target.closest("details") : null); });
   document.addEventListener("focusin", function(e){ closeAll(e.target.closest ? e.target.closest("details") : null); });
 })();
+// Sprachwahl merken (6.11.2026): wer im Sprachmenue (Flaggen) oder bei den Sprach-Kacheln eine Sprache waehlt, bekommt das funktionale Cookie
+// m365_lang=<code> (1 Jahr). Der Site-Worker leitet "/" dann nicht mehr nach der Browsersprache um (Englisch bleibt auf "/", sonst /<code>/).
+(function(){
+  var L = ["en","de","fr","es","it","nl","pt","pl","id","ru","uk","ar","he","ja","ko"];
+  document.addEventListener("click", function(e){
+    var a = e.target.closest && e.target.closest("details.lsw a[hreflang], a.lt[hreflang], a[data-setlang]");
+    if (!a) return;
+    var l = String(a.getAttribute("data-setlang") || a.getAttribute("hreflang") || "").toLowerCase().split("-")[0];
+    if (L.indexOf(l) < 0) return;
+    // Domain=m365.fm: auch m365.fm und dub.m365.fm (alte Adressen, leiten "/" selbst nach Sprache weiter) muessen die Wahl kennen
+    var d = /(^|\.)m365\.fm$/.test(location.hostname) ? "; Domain=m365.fm" : "";
+    try { document.cookie = "m365_lang=" + l + "; Max-Age=31536000; Path=/; SameSite=Lax" + d + (location.protocol === "https:" ? "; Secure" : ""); } catch (x) {}
+  }, true);
+})();
 /* Formulare (gemeinsames Design assets/forms.css, Mirko 6.11.2026): Zeichenzaehler "123 / 600" fuer Textfelder mit maxlength (sitzt im unteren
    Innenrand des Felds, verschiebt nichts; per aria-describedby vorgelesen, nicht bei jedem Tastendruck) und mitwachsende Textfelder in Browsern
    ohne CSS field-sizing. Ein Listener fuer alle Formulare, auch fuer spaeter per Skript gebaute; der Blog-Editor (.ed-ta) hat einen eigenen Zaehler. */
