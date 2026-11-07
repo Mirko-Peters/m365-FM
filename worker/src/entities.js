@@ -240,7 +240,9 @@ export async function handleEntity(env, request, url, path, user, J) {
     }
     await db.prepare("DELETE FROM entity_rev WHERE eid=? AND user_id=? AND status='pending'").bind(id, user.id).run();
     await db.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES(?,?,?,?,'pending',?)").bind(id, data, summary, user.id, t).run();
-    const pair = fresh ? await pairNewOrgEntity(env, user, id, v.data).catch(() => null) : null;
+    // wartende Firmen-Entitaet: Paar-Firma nur, wenn der Ersteller Inhaber werden darf (Firmen-E-Mail der Domain); sonst erst bei der
+    // Freigabe (/api/admin/entity/approve) - ein ungeprueftes Mitglied soll Namen und Handle der echten Firma nicht belegen
+    const pair = fresh ? await pairNewOrgEntity(env, user, id, v.data, { requireOwner: true }).catch(() => null) : null;
     return J({ ok: true, status: "pending", ...(pair ? { company: pair.handle, owner: pair.owner } : {}) });
   }
   if (path === "/api/entity/tr" && method === "GET") return J({ items: await entityTranslations(env.DB) }, 200, { "cache-control": "public, max-age=300" });   // automatische Uebersetzungen (autotr.js)
@@ -257,8 +259,14 @@ export async function handleEntity(env, request, url, path, user, J) {
     if ((m = /^\/api\/admin\/entity\/(approve|reject)\/(\d+)$/.exec(path)) && method === "POST") {
       const r = await db.prepare("SELECT id,eid,user_id FROM entity_rev WHERE id=?").bind(+m[2]).first(); if (!r) return J({ error: "not_found" }, 404);
       if (m[1] === "reject") { await db.prepare("UPDATE entity_rev SET status='rejected' WHERE id=?").bind(r.id).run(); return J({ ok: true }); }
+      const wasLive = !!(await liveOf(db, r.eid)) || (await baseIds(env)).has(r.eid);
       await db.batch([db.prepare("UPDATE entity_rev SET status='old' WHERE eid=? AND status='live'").bind(r.eid), db.prepare("UPDATE entity_rev SET status='live' WHERE id=?").bind(r.id)]);
-      if (r.user_id) await evalBadges(env, r.user_id); return J({ ok: true });
+      if (r.user_id) await evalBadges(env, r.user_id);
+      if (!wasLive) {   // neue Firmen-Entitaet freigegeben: jetzt die (unbeanspruchte) Paar-Firma anlegen; Inhaber wird, wer die Entitaet uebernimmt
+        let d = null; try { d = JSON.parse((await db.prepare("SELECT data FROM entity_rev WHERE id=?").bind(r.id).first())?.data || "null"); } catch { d = null; }
+        if (d?.type === "org") await pairNewOrgEntity(env, null, r.eid, d).catch(() => null);
+      }
+      return J({ ok: true });
     }
   }
   return null;

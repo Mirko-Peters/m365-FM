@@ -8,7 +8,7 @@ import { computeLevels } from "./levels.js";
 import { ensureDirectoryCols, geocodeAddress, recordGeocodeStatus } from "./directory.js";
 import { checkKindIds } from "./kinds.js";
 import { publicKindSql, publicItemSql } from "./feedpolicy.js";
-import { createOrgEntity, findOrgEntity, orgEntities, setOrgEntity, unclaimedOrgOf, adoptOrg } from "./orgpair.js";
+import { createOrgEntity, findOrgEntity, setOrgEntity, unclaimedOrgOf, adoptOrg } from "./orgpair.js";
 
 export const PROGRAMS = ["mvp", "mct", "rd", "msa", "ms_employee", "partner", "gde"];   // gde: Google Developer Experts (MVP-Tracker, format=gde)
 export const RELATIONS = ["colleague", "manager", "report", "client", "trainer", "student", "cospeaker", "podcast", "community", "mentor", "other"];
@@ -571,7 +571,8 @@ export async function handleProfiles(env, request, url, path, user, J) {
       if ((await db.prepare("SELECT COUNT(*) n FROM org_members WHERE user_id=? AND role='owner'").bind(user.id).first()).n >= 3) return J({ error: "limit" }, 400);
       // Firma und Entitaet sind immer ein Paar: gewaehlte Entitaet (eid) > Treffer ueber Domain/Name ohne Rechtsform > neue Entitaet (live bei vertrauenswuerdigen Mitgliedern, sonst wartend)
       let eid = link ? link.eid : "", made = false;
-      try { if (!eid) eid = findOrgEntity(name, website, await orgEntities(env)); } catch { /* ohne Treffer weiter */ }
+      // nur freigegebene Firmen-Entitaeten: ein ungeprueftes Mitglied darf mit einem wartenden Vorschlag keine echte Firma blockieren (claim_required ohne Domain)
+      try { if (!eid) eid = findOrgEntity(name, website, [...(await entityMap(env)).values()].filter((e) => e.type === "org")); } catch { /* ohne Treffer weiter */ }
       const un = eid ? await unclaimedOrgOf(db, eid) : null;   // zur Entitaet gibt es schon eine unbeanspruchte Firma: nicht verdoppeln
       if (un && !link) return J({ ok: true, handle: un.handle, claim_required: true });   // Inhaber wird, wer die Entitaet per Firmen-E-Mail uebernimmt
       if (un) { o = { id: un.id }; await adoptOrg(db, un.id, user.id); await db.prepare("UPDATE orgs SET name=?,tagline=?,about=?,website=?,country=?,size=?,public=? WHERE id=?").bind(name, txt(b.tagline, 120), long(b.about, 1500), website, txt(b.country, 60), size, b.public ? 1 : 0, o.id).run(); }

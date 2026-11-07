@@ -89,10 +89,16 @@ async function ownerRight(env, user, data) {
 }
 
 // Neue Firmen-Entitaet (POST /api/entity, Admin, "Neu anlegen") -> Community-Firma im selben Request. Vorhandene unverknuepfte Firma mit gleichem Namen/Domain wird verknuepft statt verdoppelt.
-export async function pairNewOrgEntity(env, user, eid, data) {
+// requireOwner (wartende Entitaet): nur paaren, wenn der Ersteller Inhaber werden darf - sonst erst bei der Freigabe, damit ein ungeprueftes
+// Mitglied mit einem Vorschlag keine echte Firma blockiert (POST /api/org meldete sonst claim_required ohne erreichbare Firmen-Domain)
+export async function pairNewOrgEntity(env, user, eid, data, { requireOwner = false } = {}) {
   if (data?.type !== "org") return null;
   const db = env.DB;
   if (await db.prepare("SELECT 1 x FROM org_entity WHERE eid=?").bind(eid).first()) return null;   // schon gepaart (idempotent)
+  if (requireOwner) {
+    const r0 = await ownerRight(env, user, data);
+    if (!r0 || !(user.admin || (await db.prepare("SELECT COUNT(*) n FROM org_members WHERE user_id=? AND role='owner'").bind(user.id).first()).n < MAX_OWNED)) return null;
+  }
   const loose = (await db.prepare("SELECT o.id,o.handle,o.name,o.website FROM orgs o WHERE NOT EXISTS (SELECT 1 FROM org_entity e WHERE e.org_id=o.id)").all()).results || [];
   const same = loose.find((o) => EM.suggest(o.name, o.website, [{ id: eid, ...data }]));
   if (same) { await setOrgEntity(db, same.id, eid, false); return { handle: same.handle, linked: true, owner: false }; }
@@ -115,7 +121,8 @@ async function plan(env) {
     const eid = findOrgEntity(o.name, o.website, ents);
     if (eid) { link.push({ org: o, eid }); paired.add(eid); } else create.push(o);
   }
-  const missing = ents.filter((e) => !paired.has(e.id) && byId.has(e.id));
+  const live = await entityMap(env);   // unbeanspruchte Firmen nur zu freigegebenen Entitaeten, nie zu wartenden Vorschlaegen
+  const missing = ents.filter((e) => !paired.has(e.id) && byId.has(e.id) && live.get(e.id)?.type === "org");
   return { link, create, missing };
 }
 export async function pairExisting(env, { dry = true, limit = 150 } = {}) {

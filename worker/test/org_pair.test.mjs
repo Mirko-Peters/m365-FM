@@ -42,6 +42,7 @@ const req = (path, method, body) => new Request("https://api.test" + path, { met
 const org = async (env, user, path, method = "GET", body) => { const r = req(path, method, body), u = new URL(r.url), x = await handleProfiles(env, r, u, u.pathname, user, J); return { s: x.status, j: await x.json() }; };
 const ent = async (env, user, body) => { const r = req("/api/entity", "POST", body), x = await handleEntity(env, r, new URL(r.url), "/api/entity", user, J); return { s: x.status, j: await x.json() }; };
 const pair = async (env, user, method, body) => { const r = req("/api/admin/org-pair", method, body), x = await handleOrgPair(env, r, new URL(r.url), "/api/admin/org-pair", user, J); return { s: x.status, j: await x.json() }; };
+const adminEnt = async (env, path) => { const r = req(path, "POST", {}), x = await handleEntity(env, r, new URL(r.url), path, { id: 99, admin: true }, J); return { s: x.status, j: await x.json() }; };
 const newOrg = (name, extra = {}) => ({ id: name.toLowerCase().replace(/[^a-z0-9]+/g, "-"), data: { name, type: "org", aliases: [], desc: { en: `${name} builds Microsoft 365 solutions.`, de: "" }, web: "https://www.fabrikam-example.com", rel: [] }, summary: "", ...extra });
 const orgs = (raw) => raw.prepare("SELECT o.handle,o.unclaimed,o.public,e.eid,e.confirmed,(SELECT COUNT(*) FROM org_members m WHERE m.org_id=o.id AND m.role='owner') owners FROM orgs o LEFT JOIN org_entity e ON e.org_id=o.id ORDER BY o.id").all().map((r) => ({ ...r }));
 const revs = (raw) => raw.prepare("SELECT eid,status,data FROM entity_rev ORDER BY id").all().map((r) => ({ ...r, data: JSON.parse(r.data) }));
@@ -80,7 +81,10 @@ test("Weg 2: neue Firmen-Entitaet -> unbeanspruchte Community-Firma (kein Inhabe
     addUser(raw, 1);
     const r = await ent(env, { id: 1 }, newOrg("Fabrikam"));
     assert.deepEqual([r.s, r.j.status], [200, "pending"]);
-    assert.equal(r.j.owner, false);
+    assert.equal(r.j.owner, undefined);
+    assert.deepEqual(orgs(raw), [], "wartender Vorschlag ohne Firmen-E-Mail: noch keine Firma (Review #311)");
+    const rev = raw.prepare("SELECT id FROM entity_rev WHERE eid='fabrikam' AND status='pending'").get().id;
+    assert.equal((await adminEnt(env, `/api/admin/entity/approve/${rev}`)).s, 200);   // Freigabe -> unbeanspruchte Paar-Firma
     assert.deepEqual(orgs(raw), [{ handle: "fabrikam", unclaimed: 1, public: 0, eid: "fabrikam", confirmed: 0, owners: 0 }]);
     assert.equal(raw.prepare("SELECT website FROM orgs").get().website, "https://www.fabrikam-example.com/");
     assert.equal((await org(env, null, "/api/org/fabrikam")).s, 404, "keine oeffentliche Ansicht");
@@ -107,7 +111,10 @@ test("Weg 2: Eigentum nur unter den Claim-Bedingungen (Admin oder verifizierte F
     const by = Object.fromEntries(orgs(raw).map((o) => [o.eid, o]));
     assert.deepEqual([by.fabrikam.unclaimed, by.fabrikam.owners, by.fabrikam.confirmed], [0, 1, 1]);
     assert.deepEqual(raw.prepare("SELECT verified_via,verified_domain,status FROM entity_claims WHERE eid='fabrikam'").get() && { ...raw.prepare("SELECT verified_via,verified_domain,status FROM entity_claims WHERE eid='fabrikam'").get() }, { verified_via: "domain_email", verified_domain: "fabrikam-example.com", status: "verified" });
-    for (const k of ["northwind", "litware"]) assert.deepEqual([by[k].unclaimed, by[k].owners], [1, 0], "Freemail/fremde Domain -> unbeansprucht");
+    for (const k of ["northwind", "litware"]) assert.equal(by[k], undefined, "Freemail/fremde Domain, wartend -> noch keine Firma");
+    for (const k of ["northwind", "litware"]) await adminEnt(env, `/api/admin/entity/approve/${raw.prepare("SELECT id FROM entity_rev WHERE eid=? AND status='pending'").get(k).id}`);
+    const by2 = Object.fromEntries(orgs(raw).map((o) => [o.eid, o]));
+    for (const k of ["northwind", "litware"]) assert.deepEqual([by2[k].unclaimed, by2[k].owners], [1, 0], "nach der Freigabe unbeansprucht");
     assert.deepEqual([by.adatum.unclaimed, by.adatum.owners], [0, 1]);
     assert.equal(raw.prepare("SELECT status FROM entity_rev WHERE eid='adatum'").get().status, "live");
   } finally { restore(); raw.close(); }
@@ -119,8 +126,15 @@ test("Weg 2: gleichnamige unverknuepfte Firma wird verknuepft statt verdoppelt; 
     addUser(raw, 1); addUser(raw, 2);
     raw.exec("INSERT INTO orgs(id,handle,name,website,public,created) VALUES(50,'fabrikam-alt','Fabrikam Inc.','https://fabrikam-example.com',1,1)");
     await ent(env, { id: 1 }, newOrg("Fabrikam"));
+    await adminEnt(env, `/api/admin/entity/approve/${raw.prepare("SELECT id FROM entity_rev WHERE eid='fabrikam' AND status='pending'").get().id}`);
     assert.deepEqual(orgs(raw).map((o) => [o.handle, o.eid, o.confirmed, o.unclaimed]), [["fabrikam-alt", "fabrikam", 0, 0]]);
     await ent(env, { id: 1 }, newOrg("Northwind"));
+    // Review #311: solange der Vorschlag wartet, blockiert er die echte Firma nicht - POST /api/org legt eine eigene an
+    const early = await org(env, { id: 2 }, "/api/org", "POST", { handle: "northwind-echt", name: "Northwind", public: true });
+    assert.deepEqual([early.s, early.j.claim_required], [200, undefined]);
+    raw.prepare("DELETE FROM org_entity WHERE org_id=(SELECT id FROM orgs WHERE handle='northwind-echt')").run(); raw.prepare("DELETE FROM org_members WHERE org_id=(SELECT id FROM orgs WHERE handle='northwind-echt')").run(); raw.prepare("DELETE FROM orgs WHERE handle='northwind-echt'").run();
+    raw.prepare("DELETE FROM entity_rev WHERE user_id=2").run(); raw.prepare("DELETE FROM entity_claims WHERE user_id=2").run();
+    await adminEnt(env, `/api/admin/entity/approve/${raw.prepare("SELECT id FROM entity_rev WHERE eid='northwind' AND status='pending'").get().id}`);
     assert.equal(raw.prepare("SELECT unclaimed u FROM orgs WHERE handle='northwind'").get().u, 1);
     // "Nein, meine Firma ist nicht dabei" fuer eine Firma, deren Entitaet eine unbeanspruchte Firma hat: keine zweite Firma
     const again = await org(env, { id: 2 }, "/api/org", "POST", { handle: "meine-northwind", name: "Northwind Ltd", public: true });
@@ -154,5 +168,23 @@ test("Admin-Aktion Firmen und Entitaeten paaren: Probelauf aendert nichts, Lauf 
     const again = await pair(env, { id: 1, admin: true }, "POST", { dry: false });
     assert.deepEqual(again.j, { dry: false, linked: 0, entities_created: 0, orgs_created: 0, remaining: 0 });
     assert.equal(raw.prepare("SELECT COUNT(*) n FROM orgs").get().n, 3); assert.equal(raw.prepare("SELECT COUNT(*) n FROM entity_rev").get().n, 1);
+  } finally { restore(); raw.close(); }
+});
+
+test("Widerruf einer per Firmen-E-Mail bestätigten Übernahme gibt die übernommene Paar-Firma wieder frei (Review #311)", async () => {
+  const { raw, env } = await setup(), restore = withEntities();
+  try {
+    addUser(raw, 1); addUser(raw, 2);
+    await ent(env, { id: 1 }, newOrg("Fabrikam"));
+    await adminEnt(env, `/api/admin/entity/approve/${raw.prepare("SELECT id FROM entity_rev WHERE eid='fabrikam' AND status='pending'").get().id}`);
+    raw.prepare("INSERT INTO entity_claims(eid,user_id,status,via,verified_via,verified_domain,created) VALUES('fabrikam',2,'verified','domain_email','domain_email','fabrikam-example.com',1)").run();
+    assert.equal(await adoptUnclaimedForEntity(env.DB, 2, "fabrikam"), "fabrikam");
+    assert.deepEqual(orgs(raw).map((o) => [o.unclaimed, o.owners, o.confirmed]), [[0, 1, 1]]);
+    const { handleEvents } = await import("../src/events.js");
+    const r = req("/api/admin/entity/claim", "POST", { eid: "fabrikam", revoke: true });
+    const x = await handleEvents(env, r, new URL(r.url), "/api/admin/entity/claim", { id: 99, admin: true }, J), j = await x.json();
+    assert.deepEqual([x.status, j.org_released], [200, true]);
+    assert.deepEqual(orgs(raw).map((o) => [o.unclaimed, o.public, o.owners]), [[1, 0, 0]]);
+    assert.equal(raw.prepare("SELECT status FROM entity_claims WHERE eid='fabrikam'").get().status, "rejected");
   } finally { restore(); raw.close(); }
 });

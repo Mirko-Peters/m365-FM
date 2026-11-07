@@ -613,7 +613,10 @@ export async function handleEvents(env, request, url, path, user, J) {
         db.prepare("UPDATE org_entity SET confirmed=0 WHERE eid=? AND org_id IN (SELECT org_id FROM org_members WHERE user_id=? AND status='active' AND role IN ('owner','admin'))").bind(eid, c.user_id),
         db.prepare("UPDATE entity_claim_mail SET used=1 WHERE eid=?").bind(eid),
       ]);
-      return J({ ok: true, revoked: true });
+      // per Uebernahme erhaltene Paar-Firma (#311, adoptOrg) wieder unbeansprucht machen, wenn der Widerrufene ihr einziges Mitglied ist
+      const o = await db.prepare("SELECT o.id FROM org_entity e JOIN orgs o ON o.id=e.org_id WHERE e.eid=? AND EXISTS (SELECT 1 FROM org_members m WHERE m.org_id=o.id AND m.user_id=? AND m.role='owner' AND m.status='active') AND (SELECT COUNT(*) FROM org_members m WHERE m.org_id=o.id AND m.status='active')=1").bind(eid, c.user_id).first();
+      if (o) await db.batch([db.prepare("DELETE FROM org_members WHERE org_id=? AND user_id=?").bind(o.id, c.user_id), db.prepare("UPDATE orgs SET unclaimed=1,public=0 WHERE id=?").bind(o.id)]);
+      return J({ ok: true, revoked: true, org_released: !!o });
     }
     if (!EID.test(eid) || typeof b.ok !== "boolean") return J({ error: "bad_request" }, 400);
     const claim = await db.prepare("SELECT user_id,via FROM entity_claims WHERE eid=? AND status IN ('pending','email_sent','forwarded')").bind(eid).first();
