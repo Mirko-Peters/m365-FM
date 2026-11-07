@@ -590,7 +590,7 @@ export async function handleEvents(env, request, url, path, user, J) {
   }
   if (path === "/api/admin/entity/claims" && method === "GET") {
     if (!(user?.admin || user?.editor)) return J({ error: "forbidden" }, 403);
-    const rows = (await db.prepare("SELECT c.eid,c.user_id,c.via,c.status,c.fwd_mask,u.name,u.provider,p.handle,up.real_name,cr.picture FROM entity_claims c JOIN users u ON u.id=c.user_id LEFT JOIN profiles p ON p.user_id=c.user_id LEFT JOIN user_prefs up ON up.user_id=c.user_id LEFT JOIN entity_claim_review cr ON cr.eid=c.eid WHERE c.status IN ('pending','email_sent','forwarded')").all()).results || [];
+    const rows = (await db.prepare("SELECT c.eid,c.user_id,c.via,c.status,c.fwd_mask,c.verified_domain,u.name,u.provider,p.handle,up.real_name,cr.picture FROM entity_claims c JOIN users u ON u.id=c.user_id LEFT JOIN profiles p ON p.user_id=c.user_id LEFT JOIN user_prefs up ON up.user_id=c.user_id LEFT JOIN entity_claim_review cr ON cr.eid=c.eid WHERE c.status IN ('pending','email_sent','forwarded')").all()).results || [];
     const entities = await entityMap(env);
     const dv = (await db.prepare("SELECT c.eid,c.verified_domain domain,u.name FROM entity_claims c JOIN users u ON u.id=c.user_id WHERE c.status='verified' AND c.verified_via='domain_email' ORDER BY c.created DESC LIMIT 20").all()).results || [];
     return J({ domain_verified: dv, claims: rows.map((r) => {
@@ -598,7 +598,7 @@ export async function handleEvents(env, request, url, path, user, J) {
       const linkedin = r.via === "linkedin" && r.provider === "linkedin";
       const link = linkedin ? (Array.isArray(entity.same_as) ? entity.same_as : []).find(linkedinProfile) || "" : "";
       const name_match = norm(name).join(" ") === norm(entityName).join(" ") ? "equal" : similarName(name, entityName) ? "similar" : "different";
-      return { eid: r.eid, user_id: r.user_id, name, handle: r.handle, via: r.via, status: r.status, fwd_mask: r.fwd_mask, entity_name: entityName, linkedin_url: link, name_match: linkedin ? name_match : "", picture: linkedin ? r.picture : "" };
+      return { eid: r.eid, user_id: r.user_id, name, handle: r.handle, via: r.via, status: r.status, fwd_mask: r.fwd_mask, proof_domain: r.via === "domain_email" ? r.verified_domain : "", entity_name: entityName, linkedin_url: link, name_match: linkedin ? name_match : "", picture: linkedin ? r.picture : "" };
     }) });
   }
   if (path === "/api/admin/entity/claim" && method === "POST") {
@@ -608,7 +608,8 @@ export async function handleEvents(env, request, url, path, user, J) {
       const c = await db.prepare("SELECT user_id FROM entity_claims WHERE eid=? AND status='verified' AND verified_via='domain_email'").bind(eid).first();
       if (!c) return J({ error: "not_found" }, 404);
       await db.batch([
-        db.prepare("UPDATE entity_claims SET status='rejected',verified_via='',fwd_mask='' WHERE eid=? AND status='verified' AND verified_via='domain_email'").bind(eid),
+        // verified_via 'revoked' bleibt bei einer neuen Anfrage stehen (claimEntity setzt es nicht zurueck): jede weitere Uebernahme per Firmen-E-Mail geht an die Redaktion
+        db.prepare("UPDATE entity_claims SET status='rejected',verified_via='revoked',fwd_mask='' WHERE eid=? AND status='verified' AND verified_via='domain_email'").bind(eid),
         db.prepare("UPDATE org_entity SET confirmed=0 WHERE eid=? AND org_id IN (SELECT org_id FROM org_members WHERE user_id=? AND status='active' AND role IN ('owner','admin'))").bind(eid, c.user_id),
         db.prepare("UPDATE entity_claim_mail SET used=1 WHERE eid=?").bind(eid),
       ]);
@@ -627,7 +628,7 @@ export async function handleEvents(env, request, url, path, user, J) {
     }
     const status = b.ok ? "verified" : "rejected";
     const updated = linkedIn
-      ? await db.prepare("UPDATE entity_claims SET status=?,verified_via=?,fwd_mask='' WHERE eid=? AND status IN ('pending','email_sent','forwarded')").bind(status, b.ok ? "admin" : "", eid).run()
+      ? await db.prepare("UPDATE entity_claims SET status=?,verified_via=CASE WHEN ?=1 THEN 'admin' WHEN verified_via='revoked' THEN 'revoked' ELSE '' END,fwd_mask='' WHERE eid=? AND status IN ('pending','email_sent','forwarded')").bind(status, b.ok ? 1 : 0, eid).run()
       : b.ok
         ? await db.prepare("UPDATE entity_claims SET status='verified',verified_via='admin',fwd_mask='' WHERE eid=? AND status IN ('pending','email_sent','forwarded')").bind(eid).run()
         : await db.prepare("UPDATE entity_claims SET status='rejected',fwd_mask='' WHERE eid=? AND status IN ('pending','email_sent','forwarded')").bind(eid).run();
