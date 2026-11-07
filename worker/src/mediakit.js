@@ -18,8 +18,12 @@ let ready = false;
 async function ensure(db) {
   if (ready) return;
   await db.prepare("CREATE TABLE IF NOT EXISTS mediakit_requests (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, company TEXT NOT NULL, email TEXT NOT NULL, lang TEXT NOT NULL, source TEXT NOT NULL DEFAULT '', created INTEGER NOT NULL, sent INTEGER NOT NULL DEFAULT 0, err TEXT NOT NULL DEFAULT '')").run();
+  // Lead-Status (0031); auf aelteren Datenbanken ohne Migration nachziehen (doppelte Spalte ignorieren)
+  for (const col of ["status TEXT NOT NULL DEFAULT 'open'", "status_updated INTEGER"]) { try { await db.prepare("ALTER TABLE mediakit_requests ADD COLUMN " + col).run(); } catch { /* Spalte ist schon da */ } }
   ready = true;
 }
+
+export const LEAD_STATUS = ["open", "in_progress", "closed_lost", "closed_won"];
 
 const T = {
   en: {
@@ -159,8 +163,25 @@ export async function handleMediakit(env, request, url, path, user, J) {
 
   if (path === "/api/admin/mediakit") {
     if (!user?.admin) return J({ error: "forbidden" }, 403);
-    const rows = (await db.prepare("SELECT id,name,company,email,lang,source,created,sent,err FROM mediakit_requests ORDER BY id DESC LIMIT 200").all()).results || [];
-    return J({ items: rows }, 200, { "cache-control": "no-store" });   // personenbezogen: nie cachen
+    const NS = { "cache-control": "no-store" };   // personenbezogen: nie cachen
+    if (request.method === "POST") {   // Status setzen oder Anfrage endgueltig loeschen (DSGVO); der x-requested-with-Check fuer Schreibzugriffe sitzt in index.js
+      const b = await request.json().catch(() => ({})) || {};
+      const id = Number(b.id);
+      if (!Number.isSafeInteger(id) || id < 1) return J({ error: "bad_request" }, 400, NS);
+      if (b.action === "status") {
+        if (!LEAD_STATUS.includes(b.status)) return J({ error: "bad_status" }, 400, NS);
+        const r = await db.prepare("UPDATE mediakit_requests SET status=?,status_updated=? WHERE id=?").bind(b.status, now(), id).run();
+        return r.meta.changes ? J({ ok: true, status: b.status }, 200, NS) : J({ error: "not_found" }, 404, NS);
+      }
+      if (b.action === "delete") {
+        const r = await db.prepare("DELETE FROM mediakit_requests WHERE id=?").bind(id).run();
+        return r.meta.changes ? J({ ok: true }, 200, NS) : J({ error: "not_found" }, 404, NS);
+      }
+      return J({ error: "bad_request" }, 400, NS);
+    }
+    if (request.method !== "GET") return J({ error: "method" }, 405, NS);
+    const rows = (await db.prepare("SELECT id,name,company,email,lang,source,created,sent,err,status,status_updated FROM mediakit_requests ORDER BY id DESC LIMIT 200").all()).results || [];
+    return J({ items: rows }, 200, NS);
   }
   if (request.method !== "POST") return J({ error: "method" }, 405);
 

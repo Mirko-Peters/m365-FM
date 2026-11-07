@@ -1,4 +1,5 @@
 // Blog je Mitglied: Beitraege schreiben (Wiki-Markup mit Quellen), Pruefung fuer Neue, Upvotes, Export fuer den Seitenbau
+import { limitTopics } from "./sponsor_extra.js";
 import { cleanText, rateLimit, isLang } from "./util.js";
 import { translatedBlogItems } from "./autotr.js";
 import { stats } from "./badges.js";
@@ -117,7 +118,7 @@ export async function handleBlog(env, request, url, path, user, J) {
     const sb = sanitize(String(b.body || ""), { viz: true }); if (sb.err) return J({ error: sb.err }, 400);
     if (b.submit && sb.body.length < 300) return J({ error: "too_short" }, 400);
     const known = await baseIds(env), topics = [];
-    for (const t of (Array.isArray(b.topics) ? b.topics : []).slice(0, 10)) { if (!known.has(t)) return J({ error: "bad_topic", topic: t }, 400); if (!topics.includes(t)) topics.push(t); }
+    for (const t of limitTopics(b.topics)) { if (!known.has(t)) return J({ error: "bad_topic", topic: t }, 400); if (!topics.includes(t)) topics.push(t); }
     const pr = await db.prepare("SELECT handle,public FROM profiles WHERE user_id=?").bind(user.id).first();
     if (b.submit && !(pr?.public && pr.handle)) return J({ error: "need_profile" }, 400);
     const cos = await resolveCoauthors(db, user, b.coauthors); if (cos.err) return J({ error: cos.err, handle: cos.handle }, 400);

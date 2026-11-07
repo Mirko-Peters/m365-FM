@@ -1,4 +1,5 @@
 // Copilot-Bibliothek: Prompts, Agenten-Anweisungen, KQL/DAX/PowerShell, Flows, Adaptive Cards ... teilen, upvoten, versionieren
+import { limitTopics } from "./sponsor_extra.js";
 import { cleanText, rateLimit, isLang } from "./util.js";
 import { baseIds } from "./entities.js";
 
@@ -60,7 +61,7 @@ export async function handleLibrary(env, request, url, path, user, J) {
     const body = String(b.body || "").replace(/\r\n/g, "\n").replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/g, "").trim().slice(0, 20000);
     if (body.length < 20) return J({ error: "too_short" }, 400);
     const known = await baseIds(env), topics = [];
-    for (const t of (Array.isArray(b.topics) ? b.topics : []).slice(0, 10)) { if (!known.has(t)) return J({ error: "bad_topic", topic: t }, 400); if (!topics.includes(t)) topics.push(t); }
+    for (const t of limitTopics(b.topics)) { if (!known.has(t)) return J({ error: "bad_topic", topic: t }, 400); if (!topics.includes(t)) topics.push(t); }
     const pr = await db.prepare("SELECT handle,public FROM profiles WHERE user_id=?").bind(user.id).first();
     if (!(pr?.public && pr.handle)) return J({ error: "need_profile" }, 400);
     const t = now();

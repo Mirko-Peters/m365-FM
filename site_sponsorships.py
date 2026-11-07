@@ -16,7 +16,10 @@ unbekannte Felder sind deshalb ein Fehler):
                                                    "advertisement": vom Sponsor beauftragter Inhalt (PR-Artikel) - EN "Advertisement · Paid content on behalf of Acme",
                                                    DE "Anzeige · Bezahlter Inhalt im Auftrag von Acme"
         "start": "2026-12-01", "end": "2027-05-31",
-                                                   Laufzeit, ISO-Datum, beide Tage eingeschlossen
+                                                   Laufzeit, ISO-Datum, beide Tage eingeschlossen. "end": null (oder fehlt) = unbefristet: immer aktiv, keine Nachfrist
+        "manager": {"handle": "mirko-p", "entity": "mirko-peters"},
+                                                   optional: Betreuer des Sponsorings (Community-Handle, Personen-Entitaet); Leads des Lead-Formulars werden ihm zugewiesen
+        "note": "...",                             optional: interne Notiz (max. 400 Zeichen, wird nicht angezeigt)
         "entities": ["acme-backup"],               optional: Entitaeten des Sponsors (ids aus data/entities.json bzw. der Entitaetsdatenbank).
                                                    Nur waehrend der Laufzeit: Kennzeichnung auf der Entitaetsseite, Badge in der Entitaetsliste,
                                                    WebPage.sponsor, Link "Offizielle Website" mit rel="sponsored noopener"
@@ -40,7 +43,7 @@ Pruefungen beim Bau: Aufbau und Felder, Datumsangaben (start <= end), unbekannte
 fuer alle 15 Sprachen in data/py_i18n.json. Mit SITE_OFFLINE=1 (lokaler Bau ohne Community-API) werden unbekannte Verweise nur gemeldet.
 Zum Testen: Umgebungsvariable M365_SPONSORSHIPS = Pfad einer anderen Datei (nie echte Daten aus Tests committen)."""
 import json, os, re
-from datetime import date
+from datetime import date, timedelta
 from html import escape
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -51,7 +54,12 @@ I18N = Path(__file__).parent / "data" / "py_i18n.json"
 ENV = "M365_SPONSORSHIPS"
 LABELS = ("sponsored", "advertisement")
 TOPIC_TYPES = ("product", "platform", "concept", "category", "cert")
-REC_KEYS = ("id", "sponsor", "label", "start", "end", "entities", "topics", "episodes", "posts", "go")
+REC_KEYS = ("id", "sponsor", "label", "start", "end", "entities", "topics", "episodes", "posts", "go", "note", "manager")
+# Mirko 6.11.2026: Entitaeten des Sponsors (Firma + Produkte) sind bei gesponserten Inhalten EXTRA zur Obergrenze von 10 Themen, solange das Sponsoring
+# laeuft und GRACE_MONTHS danach. Umgesetzt als 182 Tage (6 x ~30,4 Tage) nach "end", nicht als Kalendermonate: Tag 182 zaehlt noch, Tag 183 nicht mehr.
+GRACE_MONTHS = 6   # Mirko 6.11.2026
+GRACE_DAYS = 182
+TOPIC_CAP = 10
 REF_KEYS = ("entities", "topics", "episodes", "posts")
 # Kennzeichnung je Art: (Badge en, Badge de, Zusatz en, Zusatz de). Die 13 weiteren Sprachen sind von Hand in data/py_i18n.json gepflegt
 # (Schluessel = englischer Text); T() zieht sie dort den maschinellen Uebersetzungen vor. Deutsch immer "Anzeige".
@@ -142,8 +150,13 @@ def check_structure(d):
         if "go" in r and (not isinstance(r["go"], str) or not re.fullmatch(r"[a-z0-9-]{3,40}", r["go"])):
             errs.append(f'{w}: "go" muss ein aktiver Linkcode aus a-z, 0-9 und Bindestrich sein')
         s, e = _day(r.get("start")), _day(r.get("end"))
+        if "note" in r and (not isinstance(r["note"], str) or len(r["note"]) > 400): errs.append(f'{w}: "note" muss ein Text bis 400 Zeichen sein (interne Notiz, wird nicht angezeigt)')
+        mg = r.get("manager")
+        if mg is not None and (not isinstance(mg, dict) or set(mg) - {"handle", "entity"} or not re.fullmatch(r"[a-z0-9][a-z0-9-]{1,63}", str(mg.get("handle", "")))
+                               or ("entity" in mg and not re.fullmatch(r"[a-z0-9][a-z0-9-]{1,63}", str(mg.get("entity"))))):
+            errs.append(f'{w}: "manager" muss {{"handle": "<Mitglieds-Handle>", "entity": "<Personen-Entitaet>"}} sein (Betreuer; Leads werden ihm zugewiesen)')
         if not s: errs.append(f'{w}: "start" fehlt oder ist kein Datum (JJJJ-MM-TT)')
-        if not e: errs.append(f'{w}: "end" fehlt oder ist kein Datum (JJJJ-MM-TT)')
+        if r.get("end") is not None and not e: errs.append(f'{w}: "end" muss ein Datum (JJJJ-MM-TT) oder null sein (null = unbefristet)')
         if s and e and e < s: errs.append(f'{w}: "end" liegt vor "start"')
         for k in REF_KEYS:
             if k not in r: continue
@@ -233,7 +246,8 @@ def init(today, ents, episodes=(), dubs=None, orig=None, path=None):
 
 def _active(r, today):
     t = _day(today)
-    return bool(t and _day(r["start"]) <= t <= _day(r["end"]))
+    if not t: return False
+    return _day(r["start"]) <= t and (r.get("end") is None or t <= _day(r["end"]))   # end null/fehlt: unbefristet
 
 
 def _index(recs, today, dubs, orig):
@@ -261,6 +275,63 @@ def _index(recs, today, dubs, orig):
             st["post_refs"].setdefault(k, []).append((r["id"], x)); add(st["post"], k, r)
     _S = st
     return st
+
+
+def _in_grace(r, today):
+    """Laeuft oder ist vor hoechstens GRACE_DAYS Tagen zu Ende gegangen (end + 182 Tage eingeschlossen)."""
+    t, s = _day(today), _day(r["start"])
+    if r.get("end") is None: return bool(t and s and s <= t)   # unbefristet: immer aktiv, keine Nachfrist
+    e = _day(r["end"])
+    return bool(t and s and e and s <= t <= e + timedelta(days=GRACE_DAYS))
+
+
+def sponsor_extra_entities(org_id, today, ents, recs=None):
+    """Extra-Entitaeten eines Sponsors: [org_id] + Produkte (rel developed_by -> org; Produkte/Plattformen mit part_of -> org), in Reihenfolge von ents.
+    Nur wenn ein Sponsoring mit org_id in "entities" laeuft oder vor <= GRACE_DAYS Tagen endete (GRACE_MONTHS = 6), sonst []."""
+    recs = _state()["recs"] if recs is None else recs
+    if org_id not in ents or not any(org_id in (r.get("entities") or []) and _in_grace(r, today) for r in recs): return []
+    out = [org_id]
+    for eid, e in ents.items():
+        if eid in out: continue
+        for rel in e.get("rel") or []:
+            if len(rel) == 2 and rel[1] == org_id and (rel[0] == "developed_by" or (rel[0] == "part_of" and e.get("type") in ("product", "platform"))):
+                out.append(eid); break
+    return out
+
+
+def active_sponsor_orgs(today, ents, recs=None):
+    """Aktive Sponsor-Firmen (Entitaetstyp org in "entities" eines laufenden Sponsorings, unbefristet eingeschlossen): [{"id", "name", "rec"}].
+    Grundlage fuer Firmenverzeichnis, Lead-Formular und sponsors.json (der Worker nimmt Leads nur fuer diese Firmen ohne Buchung an)."""
+    recs = _state()["recs"] if recs is None else recs
+    out, seen = [], set()
+    for r in sorted(recs, key=lambda r: (r["start"], r["id"])):
+        if not _active(r, today): continue
+        for x in r.get("entities") or []:
+            if x in seen or (ents.get(x) or {}).get("type") != "org": continue
+            seen.add(x); out.append({"id": x, "name": ents[x].get("name") or x, "rec": r})
+    return out
+
+
+def sponsors_json(today, ents, recs=None):
+    """Inhalt von sponsors.json: nur ids und Namen der aktiven Sponsor-Firmen (keine Vertragsdaten)."""
+    return {"orgs": [{"id": o["id"], "name": o["name"], "manager": (o["rec"].get("manager") or {}).get("handle", "")} for o in active_sponsor_orgs(today, ents, recs)]}
+
+
+def split_topics(topics, extras, cap=TOPIC_CAP):
+    """Themenliste fuer Chips: extras vorn (ohne Doppelte), danach die ersten cap normalen Themen in bisheriger Reihenfolge.
+    Gibt (Liste, Menge der Extras) zurueck; ohne extras einfach die ersten cap Themen."""
+    ex = list(dict.fromkeys(extras or []))
+    return ex + [t for t in dict.fromkeys(topics or []) if t not in ex][:cap], set(ex)
+
+
+def post_extras(recs, today, ents):
+    """Extras fuer einen gesponserten Beitrag: Vereinigung ueber alle zugehoerigen Sponsorings (nur Sponsor-Entitaeten aus "entities")."""
+    out = []
+    for r in recs or []:
+        for o in r.get("entities") or []:
+            for x in sponsor_extra_entities(o, today, ents, [r]):
+                if x not in out: out.append(x)
+    return out
 
 
 def check_posts(posts):

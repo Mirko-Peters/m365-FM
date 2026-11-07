@@ -4,6 +4,26 @@
   var C = window.M365ADM || {}, API = C.api, BASE = C.base || "", root = document.getElementById("adm"); if (!root || !API) return;
   // mailto-Link: Adresse kodieren, damit ?cc=/&body= aus einer eingeschleusten Adresse nicht als Mail-Parameter wirken
   function mailto(a) { return "mailto:" + encodeURIComponent(String(a || "")).replace(/%40/g, "@"); }
+  // Lead-Status (Mediadaten-Anfragen und Werbung > Leads): stabile Schluessel, Badge, Auswahl, Zaehler, Loeschen mit Rueckfrage im Zeilen-Feld
+  var LEAD_ST = [["open", "offen", "#fde68a", "#5b4300"], ["in_progress", "in Bearbeitung", "#bfdbfe", "#0b2e66"], ["closed_lost", "geschlossen – verloren", "#fecaca", "#6b1111"], ["closed_won", "geschlossen – gewonnen", "#bbf7d0", "#0b4a1f"]];
+  function leadSt(k) { for (var i = 0; i < LEAD_ST.length; i++) if (LEAD_ST[i][0] === k) return LEAD_ST[i]; return LEAD_ST[0]; }
+  function leadBadge(k) { var o = leadSt(k); return h("span", { class: "adm-badge", "data-status": o[0], style: "display:inline-block;padding:.1em .6em;border-radius:1em;font-size:.85em;white-space:nowrap;background:" + o[2] + ";color:" + o[3], text: o[1] }); }
+  function leadFilterSel() { var s = h("select", { "aria-label": "Lead-Status filtern" }); [["", "Alle Status"]].concat(LEAD_ST).forEach(function (o) { s.appendChild(h("option", { value: o[0], text: o[1] })); }); return s; }
+  function leadCounts(list, key) { var n = {}; list.forEach(function (x) { var k = leadSt(x[key]) [0]; n[k] = (n[k] || 0) + 1; }); return h("p", { class: "mut" }, LEAD_ST.map(function (o) { return h("span", { style: "margin-right:.8em" }, [leadBadge(o[0]), " " + (n[o[0]] || 0)]); })); }
+  function leadStatusSel(x, key, url, msgEl, done) {   // POST {action:"status"}; bei Fehler zurueck auf den alten Wert
+    var sel = h("select", { "aria-label": "Status für " + (x.name || x.id) }); LEAD_ST.forEach(function (o) { var op = h("option", { value: o[0], text: o[1] }); if (leadSt(x[key])[0] === o[0]) op.selected = true; sel.appendChild(op); });
+    sel.addEventListener("change", function () { var old = x[key]; sel.disabled = true;
+      api(url, { method: "POST", body: { action: "status", id: x.id, status: sel.value } }).then(function (r) { sel.disabled = false;
+        if (r.s === 200) { x[key] = sel.value; done(); } else { sel.value = leadSt(old)[0]; msg(msgEl, "Status konnte nicht gespeichert werden (" + ((r.j || {}).error || r.s) + ")", true); } }); });
+    return sel;
+  }
+  function leadDelete(x, url, msgEl, done) {   // Button -> "Wirklich löschen? Ja / Nein"; Ja loescht die Zeile endgueltig (personenbezogene Daten)
+    var box = h("span");
+    function idle() { box.textContent = ""; box.appendChild(h("button", { type: "button", class: "btn", text: "Löschen", "aria-label": "Lead löschen: " + (x.name || x.id), onclick: ask })); }
+    function ask() { box.textContent = ""; box.append(h("span", { text: "Wirklich löschen? " }), h("button", { type: "button", class: "btn main", text: "Ja", onclick: function () {
+        api(url, { method: "POST", body: { action: "delete", id: x.id } }).then(function (r) { if (r.s === 200) done(); else { idle(); msg(msgEl, "Löschen fehlgeschlagen (" + ((r.j || {}).error || r.s) + ")", true); } }); } }), " ", h("button", { type: "button", class: "btn", text: "Nein", onclick: idle })); }
+    idle(); return box;
+  }
   function h(t, a, kids) { var e = document.createElement(t); a = a || {}; for (var k in a) { if (k === "text") e.textContent = a[k]; else if (k === "class") e.className = a[k]; else if (k.slice(0, 2) === "on") e[k] = a[k]; else e.setAttribute(k, a[k]); } (kids || []).forEach(function (x) { if (x != null) e.appendChild(typeof x === "string" ? document.createTextNode(x) : x); }); return e; }
   function api(p, o) { o = o || {}; o.credentials = "include"; o.headers = Object.assign({ "x-requested-with": "m365" }, o.headers || {}); if (o.body && typeof o.body !== "string") { o.body = JSON.stringify(o.body); o.headers["content-type"] = "application/json"; } return fetch(API + p, o).then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { s: r.status, j: j }; }); }); }
   var TYPES = { product: "Produkt", platform: "Plattform", concept: "Konzept", org: "Firma", person: "Person", cert: "Zertifikat", event: "Event", media: "Medium", category: "Kategorie" };
@@ -131,26 +151,27 @@
   }
 
   function mediakitLeads() {   // Mediadaten-Anfragen (Leads): personenbezogen, nur Admin; Werbe-Anfragen (ad_leads) stehen im Reiter Werbung
-    var p = panes.mk, rows = [], COLS = ["Datum", "Name", "Firma", "E-Mail", "Sprache", "Herkunft", "Mail gesendet"];
+    var p = panes.mk, rows = [], COLS = ["Datum", "Name", "Firma", "E-Mail", "Sprache", "Herkunft", "Mail gesendet", "Status", "Ändern", ""], MKU = "/api/admin/mediakit";
     var filter = h("input", { type: "search", "aria-label": "Anfragen filtern", placeholder: "Filter (Name, Firma, E-Mail, Herkunft)" }), msgEl = h("p", { class: "adm-msg" }), count = h("span", { class: "mut" });
-    var csvBtn = h("button", { type: "button", class: "btn", text: "CSV exportieren" }), body = h("tbody");
+    var csvBtn = h("button", { type: "button", class: "btn", text: "CSV exportieren" }), body = h("tbody"), stFilter = leadFilterSel(), counts = h("div");
     function day(t) { return t ? new Date(t * 1000).toISOString().slice(0, 10) : ""; }
     function sent(x) { return x.sent ? "ja" : "nein" + (x.err ? " (" + x.err + ")" : ""); }
     function view() {
       var q = filter.value.trim().toLowerCase();
-      var list = rows.filter(function (x) { return !q || [x.name, x.company, x.email, x.source, x.lang, x.err].join(" ").toLowerCase().indexOf(q) >= 0; });
-      body.textContent = "";
-      list.forEach(function (x) { body.appendChild(h("tr", {}, [h("td", { text: day(x.created) }), h("td", { text: x.name }), h("td", { text: x.company }), h("td", {}, [h("a", { href: mailto(x.email), text: x.email })]), h("td", { text: x.lang }), h("td", { text: x.source }), h("td", { text: sent(x) })])); });
+      var list = rows.filter(function (x) { return (!q || [x.name, x.company, x.email, x.source, x.lang, x.err].join(" ").toLowerCase().indexOf(q) >= 0) && (!stFilter.value || leadSt(x.status)[0] === stFilter.value); });
+      body.textContent = ""; counts.textContent = ""; counts.appendChild(leadCounts(rows, "status"));
+      list.forEach(function (x) { body.appendChild(h("tr", {}, [h("td", { text: day(x.created) }), h("td", { text: x.name }), h("td", { text: x.company }), h("td", {}, [h("a", { href: mailto(x.email), text: x.email })]), h("td", { text: x.lang }), h("td", { text: x.source }), h("td", { text: sent(x) }),
+        h("td", {}, [leadBadge(x.status)]), h("td", {}, [leadStatusSel(x, "status", MKU, msgEl, view)]), h("td", {}, [leadDelete(x, MKU, msgEl, function () { rows = rows.filter(function (y) { return y.id !== x.id; }); view(); })])])); });
       count.textContent = list.length + " von " + rows.length; csvBtn._list = list;
     }
     function cell(v) { v = String(v == null ? "" : v); if (/^[=+\-@\t\r]/.test(v)) v = "'" + v; return '"' + v.replace(/"/g, '""') + '"'; }
     csvBtn.onclick = function () {
-      var lines = [COLS.join(",")].concat((csvBtn._list || []).map(function (x) { return [day(x.created), x.name, x.company, x.email, x.lang, x.source, sent(x)].map(cell).join(","); }));
+      var lines = [COLS.slice(0, 7).concat(["Status"]).join(",")].concat((csvBtn._list || []).map(function (x) { return [day(x.created), x.name, x.company, x.email, x.lang, x.source, sent(x), leadSt(x.status)[1]].map(cell).join(","); }));
       var a = h("a", { href: URL.createObjectURL(new Blob(["\ufeff" + lines.join("\r\n")], { type: "text/csv;charset=utf-8" })), download: "m365fm-mediadaten-anfragen.csv" }); document.body.appendChild(a); a.click(); a.remove();
     };
-    filter.oninput = view;
+    filter.oninput = view; stFilter.onchange = view;
     p.textContent = "";
-    p.append(h("h2", { text: "Mediadaten-Anfragen (Leads)" }), h("p", { class: "mut", text: "Personenbezogene Daten, nur für Admins. Neueste zuerst, höchstens 200. Werbe-Anfragen der Banner-Formulare stehen im Reiter Werbung unter Leads." }), filter, " ", csvBtn, " ", count, msgEl,
+    p.append(h("h2", { text: "Mediadaten-Anfragen (Leads)" }), h("p", { class: "mut", text: "Personenbezogene Daten, nur für Admins. Neueste zuerst, höchstens 200. Werbe-Anfragen der Banner-Formulare stehen im Reiter Werbung unter Leads." }), filter, " ", stFilter, " ", csvBtn, " ", count, counts, msgEl,
       h("div", { style: "overflow-x:auto" }, [h("table", { class: "adm-tbl" }, [h("thead", {}, [h("tr", {}, COLS.map(function (c) { return h("th", { text: c }); }))]), body])]));
     api("/api/admin/mediakit").then(function (r) {
       if (r.s !== 200) { msg(msgEl, ERR[(r.j || {}).error] || "Fehler " + r.s, true); return; }
@@ -437,15 +458,26 @@
 
     // Leads (alle; beanstandete zuerst)
     var lSec = h("section"); p.append(lSec);
+    var lSt = leadFilterSel(), lMsg = h("p", { class: "adm-msg" }), lAll = [], lCsv = h("button", { type: "button", class: "btn", text: "CSV exportieren" }), LU = "/api/admin/ads/lead-status";
+    function lcell(v) { v = String(v == null ? "" : v); if (/^[=+\-@\t\r]/.test(v)) v = "'" + v; return '"' + v.replace(/"/g, '""') + '"'; }
+    function lday(x) { return new Date(x.created * 1000).toISOString().slice(0, 10); }
+    function leadsView() {
+      var list = lAll.filter(function (x) { return !lSt.value || leadSt(x.lead_status)[0] === lSt.value; }); lCsv._list = list;
+      lSec.textContent = "";
+      lSec.append(h("h3", { text: "Leads" }), lSt, " ", lCsv, leadCounts(lAll, "lead_status"), lMsg, tbl(["Datum", "Kampagne", "Firma", "Name", "E-Mail", "Abrechnung", "Grund", "", "Lead-Status", "Ändern", ""], list.map(function (x) {
+        var acts = x.status === "disputed" ? h("span", {}, [h("button", { type: "button", class: "btn main", text: "Gutschreiben", onclick: function () { post("/api/admin/ads/lead", { id: x.id, credit: true }).then(loadLeads).then(loadBookings); } }), " ",
+          h("button", { type: "button", class: "btn", text: "Berechnen", onclick: function () { post("/api/admin/ads/lead", { id: x.id, credit: false }).then(loadLeads); } })]) : null;
+        return [lday(x), x.code, x.org + (x.assigned ? " → " + x.assigned : ""), x.name, x.email, x.status + (x.charged ? "" : " (nicht berechnet)"), x.dispute_reason, acts, leadBadge(x.lead_status), leadStatusSel(x, "lead_status", LU, lMsg, leadsView),
+          leadDelete(x, LU, lMsg, function () { lAll = lAll.filter(function (y) { return y.id !== x.id; }); leadsView(); })];
+      }), "Noch keine Leads."));
+    }
+    lSt.onchange = leadsView;
+    lCsv.onclick = function () {
+      var lines = [["Datum", "Kampagne", "Firma", "Name", "E-Mail", "Abrechnung", "Grund", "Lead-Status"].join(",")].concat((lCsv._list || []).map(function (x) { return [lday(x), x.code, x.org + (x.assigned ? " → " + x.assigned : ""), x.name, x.email, x.status, x.dispute_reason, leadSt(x.lead_status)[1]].map(lcell).join(","); }));
+      var a = h("a", { href: URL.createObjectURL(new Blob(["\ufeff" + lines.join("\r\n")], { type: "text/csv;charset=utf-8" })), download: "m365fm-werbe-leads.csv" }); document.body.appendChild(a); a.click(); a.remove();
+    };
     function loadLeads() {
-      api("/api/admin/ads/leads").then(function (r) {
-        lSec.textContent = ""; if (r.s !== 200) return;
-        lSec.append(h("h3", { text: "Leads" }), tbl(["Datum", "Kampagne", "Firma", "Name", "E-Mail", "Status", "Grund", ""], (r.j.leads || []).map(function (x) {
-          var acts = x.status === "disputed" ? h("span", {}, [h("button", { type: "button", class: "btn main", text: "Gutschreiben", onclick: function () { post("/api/admin/ads/lead", { id: x.id, credit: true }).then(loadLeads).then(loadBookings); } }), " ",
-            h("button", { type: "button", class: "btn", text: "Berechnen", onclick: function () { post("/api/admin/ads/lead", { id: x.id, credit: false }).then(loadLeads); } })]) : null;
-          return [new Date(x.created * 1000).toISOString().slice(0, 10), x.code, x.org, x.name, x.email, x.status + (x.charged ? "" : " (nicht berechnet)"), x.dispute_reason, acts];
-        }), "Noch keine Leads."));
-      });
+      return api("/api/admin/ads/leads").then(function (r) { if (r.s !== 200) { lSec.textContent = ""; return; } lAll = r.j.leads || []; leadsView(); });
     }
     loadLeads();
   }
