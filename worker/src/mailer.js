@@ -8,6 +8,17 @@ function senderAddress(from) {
   return name ? { email, name } : email;
 }
 
+// Anzeigename setzen (technische Absenderadresse bleibt die von MAIL_FROM)
+function withName(from, name) {
+  if (!name) return from;
+  const email = typeof from === "string" ? from : from.email;
+  return { email, name: String(name).replace(/[<>"\r\n]/g, "") };
+}
+function resendFrom(from, name) {
+  const w = withName(senderAddress(from), name);
+  return typeof w === "string" ? w : `${w.name} <${w.email}>`;
+}
+
 export function mailReady(env) {
   return !!(env?.EMAIL || env?.RESEND_API_KEY);
 }
@@ -37,7 +48,7 @@ export function b64(content) {
   return btoa(s);
 }
 
-export async function sendMail(env, { to, subject, html, text, headers = {}, replyTo = "", attachments = [], lang = "en", bannerAt = Date.now() }) {
+export async function sendMail(env, { to, subject, html, text, headers = {}, replyTo = "", fromName = "", attachments = [], lang = "en", bannerAt = Date.now() }) {
   // attachments: [{ filename, content (Uint8Array/ArrayBuffer oder Base64-String), type, disposition }] - Cloudflare Email Service und Resend.
   // Cloudflare bekommt Binaerdaten unveraendert (5.11.2026: per Base64-String verschickte Mediadaten kamen als ungueltiges PDF an).
   const banner = conBanner(lang, bannerAt);
@@ -49,7 +60,7 @@ export async function sendMail(env, { to, subject, html, text, headers = {}, rep
     try {
       const response = await env.EMAIL.send({
         to,
-        from: senderAddress(env.MAIL_FROM),
+        from: withName(senderAddress(env.MAIL_FROM), fromName),
         subject,
         ...(html !== undefined ? { html } : {}),
         ...(text !== undefined ? { text } : {}),
@@ -74,7 +85,7 @@ export async function sendMail(env, { to, subject, html, text, headers = {}, rep
     const response = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: { authorization: "Bearer " + resendKey, "content-type": "application/json" },
-      body: JSON.stringify({ from: env.MAIL_FROM, to, subject, html, ...(text !== undefined ? { text } : {}), headers,
+      body: JSON.stringify({ from: fromName ? resendFrom(env.MAIL_FROM, fromName) : env.MAIL_FROM, to, subject, html, ...(text !== undefined ? { text } : {}), headers,
         ...(replyTo ? { reply_to: replyTo } : {}),
         ...(attachments.length ? { attachments: attachments.map((a) => ({ filename: a.filename, content: b64(a.content), content_type: a.type })) } : {}) }),
     });

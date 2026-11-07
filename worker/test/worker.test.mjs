@@ -465,7 +465,8 @@ test("schema: Migrationen sind idempotent und enthalten jede zur Laufzeit angele
     if (/^ALTER TABLE contributions ADD COLUMN (?:portal|portal_at|attendees|live_views|sessions) INTEGER NOT NULL DEFAULT 0$/i.test(s)
       || /^ALTER TABLE contributions ADD COLUMN (?:review|portal_desc|role|area|event_format|country) TEXT NOT NULL DEFAULT ''$/i.test(s)
       || /^ALTER TABLE contributions ADD COLUMN audience TEXT NOT NULL DEFAULT '\[\]'$/i.test(s)
-      || /^ALTER TABLE user_prefs ADD COLUMN report_start INTEGER NOT NULL DEFAULT 4$/i.test(s)) continue;
+      || /^ALTER TABLE user_prefs ADD COLUMN report_start INTEGER NOT NULL DEFAULT 4$/i.test(s)
+      || /^ALTER TABLE entity_contacts ADD COLUMN source TEXT NOT NULL DEFAULT 'guest'$/i.test(s)) continue;
     assert.match(s, /^CREATE (TABLE|INDEX|UNIQUE INDEX) IF NOT EXISTS /i, "nur idempotente Anweisungen: " + s.slice(0, 60));
   }
   const inMig = new Set([...sql.matchAll(/CREATE (?:TABLE|UNIQUE INDEX|INDEX) IF NOT EXISTS (\w+)/gi)].map((m) => m[1]));
