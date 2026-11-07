@@ -612,6 +612,19 @@ export async function verifyTurnstile(env, token, ip) {
   return j.success === true ? { ok: true } : { ok: false, error: "captcha" };
 }
 
+// Laufende Sponsoren (data/sponsorships.json): sponsors.json des Seitenbaus {orgs:[{id,name,manager}]}; der Worker nimmt Leads fuer diese Firmen ohne Buchung an
+export async function activeSponsor(env, id) {
+  if (!/^[a-z0-9][a-z0-9-]{1,63}$/.test(String(id || ""))) return null;
+  let j; try { j = await (await fetch(`${env.SITE}/sponsors.json`, { cf: { cacheTtl: 600 } })).json(); } catch { return null; }
+  return (j?.orgs || []).find((o) => o.id === id) || null;
+}
+
+async function sponsorLeadInfo(env, url, J) {
+  const sp = await activeSponsor(env, url.searchParams.get("e"));
+  if (!sp) return J({ error: "not_found" }, 404, NS);
+  return J({ ad: { type: "lead", code: `sponsor-${sp.id}`, sponsor: sp.id, org: sp.name, tagline: "", turnstile: env.TURNSTILE_SITE_KEY || "" } }, 200, NS);
+}
+
 async function submitLead(env, request, J) {
   const db = env.DB;
   const b = await request.json().catch(() => ({})) || {};
@@ -619,7 +632,13 @@ async function submitLead(env, request, J) {
   const name = cleanText(b.name, 80).replace(/[<>]/g, ""), email = cleanText(b.email, 254).toLowerCase(), message = cleanText(b.message, 2000);
   const lang = /^[a-z]{2}$/.test(String(b.lang || "")) ? b.lang : "en";
   if (name.length < 2 || !EMAIL.test(email) || /\.(invalid|test|example|localhost)$/.test(email)) return J({ error: "bad_request" }, 400, NS);
-  const booking = await db.prepare("SELECT b.*,o.name org_name FROM ad_bookings b JOIN orgs o ON o.id=b.org_id WHERE b.code=? AND b.product='lead_form'").bind(String(b.code || "")).first();
+  let sponsor = null, booking = null;
+  if (b.sponsor) {   // Sponsor-Lead: Firma muss laufend gesponsert sein (sponsors.json), keine Buchung, nicht berechnet
+    sponsor = await activeSponsor(env, b.sponsor);
+    if (!sponsor) return J({ error: "not_found" }, 404, NS);
+    const link = await db.prepare("SELECT org_id FROM org_entity WHERE eid=?").bind(sponsor.id).first();
+    booking = { id: 0, org_id: link?.org_id || 0, org_name: sponsor.name, status: "active", delivered: 0, quantity: 1 };
+  } else booking = await db.prepare("SELECT b.*,o.name org_name FROM ad_bookings b JOIN orgs o ON o.id=b.org_id WHERE b.code=? AND b.product='lead_form'").bind(String(b.code || "")).first();
   if (!booking || booking.status !== "active" || booking.delivered >= booking.quantity) return J({ error: "not_found" }, 404, NS);
   const ip = request.headers.get("cf-connecting-ip") || "";
   const ipHash = await sha256hex(`${env.SESSION_SECRET}:adlead:${ip}`);
@@ -628,22 +647,33 @@ async function submitLead(env, request, J) {
   if (!ts.ok) return J({ error: ts.error }, ts.error === "captcha_unavailable" ? 503 : 400, NS);
   const emailHash = await sha256hex(`${env.SESSION_SECRET}:leadmail:${email}`);
   // Doppelt = gleiche Adresse an dieselbe Firma in 30 Tagen: wird zugestellt, aber nicht berechnet (Gutschrift)
-  const dup = await db.prepare("SELECT 1 x FROM ad_leads WHERE org_id=? AND email_hash=? AND created>?").bind(booking.org_id, emailHash, now() - 30 * 86400).first();
+  const dup = sponsor
+    ? await db.prepare("SELECT 1 x FROM ad_leads WHERE sponsor=? AND email_hash=? AND created>?").bind(sponsor.id, emailHash, now() - 30 * 86400).first()
+    : await db.prepare("SELECT 1 x FROM ad_leads WHERE org_id=? AND email_hash=? AND created>?").bind(booking.org_id, emailHash, now() - 30 * 86400).first();
   const shown = cleanText(b.consent_text, 600);
   const consentText = shown && shown.includes(booking.org_name) ? shown : (CONSENT[lang] || CONSENT.en)(booking.org_name);
   const page = (() => { try { const u = new URL(String(b.page || "")); return u.origin === env.SITE ? u.href.slice(0, 500) : ""; } catch { return ""; } })();
   let charged = 0;
-  if (!dup) charged = (await consume(db, booking.id)) ? 1 : 0;
-  if (!dup && !charged) return J({ error: "not_found" }, 404, NS);   // Volumen in der Zwischenzeit aufgebraucht
-  const r = await db.prepare(`INSERT INTO ad_leads(booking_id,org_id,name,email,message,consent_text,page,lang,email_hash,status,charged,created)
-    VALUES(?,?,?,?,?,?,?,?,?,?,?,?)`).bind(booking.id, booking.org_id, name, email, message, consentText, page, lang, emailHash, dup ? "duplicate" : "new", charged, now()).run();
+  if (!dup && !sponsor) charged = (await consume(db, booking.id)) ? 1 : 0;
+  if (!dup && !charged && !sponsor) return J({ error: "not_found" }, 404, NS);   // Volumen in der Zwischenzeit aufgebraucht
+  const r = await db.prepare(`INSERT INTO ad_leads(booking_id,org_id,name,email,message,consent_text,page,lang,email_hash,status,charged,created,sponsor,assigned)
+    VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)`).bind(booking.id, booking.org_id, name, email, message, consentText, page, lang, emailHash, dup ? "duplicate" : "new", charged, now(), sponsor ? sponsor.id : "", sponsor?.manager || "").run();
   const id = r.meta.last_row_id;
   const pt = PAGE_TYPES.includes(b.pt) ? b.pt : "other";
   if (charged) await countStat(db, booking.id, "mid", pt, "leads", countryOf(request));
-  const members = (await db.prepare("SELECT user_id FROM org_members WHERE org_id=? AND status='active' AND role IN ('owner','admin')").bind(booking.org_id).all()).results || [];
+  // Sponsor-Lead: an den Betreuer (Community-Handle aus sponsors.json; Adresse nur serverseitig aus D1), sonst an die Admins; Buchungs-Lead: Inhaber/Admins der Firma
+  let members = [];
+  if (sponsor) {
+    const mgr = sponsor.manager ? await db.prepare("SELECT user_id FROM profiles WHERE handle=?").bind(sponsor.manager).first() : null;
+    members = mgr ? [{ user_id: mgr.user_id }] : [];
+  } else members = (await db.prepare("SELECT user_id FROM org_members WHERE org_id=? AND status='active' AND role IN ('owner','admin')").bind(booking.org_id).all()).results || [];
   let mailed = 0;
   const html = `<p>Neuer Kontakt über M365.FM für <b>${esc(booking.org_name)}</b> / New lead:</p><p>Name: ${esc(name)}<br>E-Mail: <a href="mailto:${esc(email)}">${esc(email)}</a></p>${message ? `<blockquote style="border-left:3px solid #3E8BC0;margin:0;padding:.2em 1em">${esc(message).replace(/\n/g, "<br>")}</blockquote>` : ""}<p style="font-size:12px">Einwilligung / consent: ${esc(consentText)}</p>${dup ? "<p>Hinweis: dieselbe Adresse hat in den letzten 30 Tagen schon angefragt – nicht berechnet.</p>" : ""}<p><a href="${env.SITE}/for/advertisers/#book">Alle Leads im Dashboard</a></p>`;
   for (const m of members) if (await notify(env, m.user_id, "system", `M365.FM Lead: ${name}`, html, `adlead:${id}:${m.user_id}`)) mailed = 1;
+  if (sponsor && !mailed) {   // kein Betreuer oder keine Zustellung: Admins benachrichtigen
+    await notifyAdmins(env, `M365.FM Lead (Sponsor ${sponsor.name}): ${name}`, html.replace(`${env.SITE}/for/advertisers/#book">Alle Leads im Dashboard`, `${env.SITE}/admin/#ads">Admin: Werbung, Leads`), `adlead:${id}`);
+    mailed = 1;
+  }
   await db.prepare("UPDATE ad_leads SET mailed=? WHERE id=?").bind(mailed, id).run();
   return J({ ok: true }, 200, NS);
 }
@@ -844,6 +874,8 @@ export async function handleAds(env, request, url, path, user, J, ctx) {
     return q.error ? E(q.error, { min: q.min }) : J({ quote: q }, 200, NS);
   }
   if (path === "/api/ads/serve" && method === "GET") return serve(env, request, url, J);
+  if (path === "/api/ads/sponsor-lead" && method === "GET") return sponsorLeadInfo(env, url, J);
+  if (path === "/api/ads/lead" && method === "POST" && (await request.clone().json().catch(() => ({})))?.sponsor) return submitLead(env, request, J);   // Sponsor-Lead: kostenlos, ohne Buchung, unabhaengig vom Buchungsschalter
   if (OFF_ROUTES.has(path) && !bookingOn(env)) return J({ error: "not_available_yet", message: "Ad booking is not available yet. Please use the request form on https://www.m365.fm/sponsor/." }, 503, NS);
   if (path === "/api/ads/lead" && method === "POST") return submitLead(env, request, J);
   if (path === "/api/ads/paypal-return" && method === "GET") return paypalReturn(env, url);
@@ -1010,8 +1042,8 @@ export async function handleAds(env, request, url, path, user, J, ctx) {
       by_slot: agg((r) => `${r.house} · ${r.slot}`), by_country: agg((r) => `${r.house} · ${r.country}`), by_lang: agg((r) => `${r.house} · ${r.lang}`) }, 200, NS);
   }
   if (path === "/api/admin/ads/leads" && method === "GET") {
-    const leads = (await db.prepare(`SELECT l.id,b.code,o.name org,l.name,l.email,l.message,l.page,l.lang,l.status,l.lead_status,l.lead_status_updated,l.charged,l.dispute_reason,l.mailed,l.created
-      FROM ad_leads l JOIN ad_bookings b ON b.id=l.booking_id LEFT JOIN orgs o ON o.id=l.org_id ORDER BY (l.status='disputed') DESC,l.created DESC LIMIT 500`).all()).results || [];
+    const leads = (await db.prepare(`SELECT l.id,COALESCE(b.code,'sponsor:'||l.sponsor) code,COALESCE(o.name,l.sponsor) org,l.sponsor,l.assigned,l.name,l.email,l.message,l.page,l.lang,l.status,l.lead_status,l.lead_status_updated,l.charged,l.dispute_reason,l.mailed,l.created
+      FROM ad_leads l LEFT JOIN ad_bookings b ON b.id=l.booking_id LEFT JOIN orgs o ON o.id=l.org_id ORDER BY (l.status='disputed') DESC,l.created DESC LIMIT 500`).all()).results || [];
     return J({ leads }, 200, NS);
   }
   if (path === "/api/admin/ads/lead-status" && method === "POST") {   // Nachverfolgung (open/in_progress/closed_*) oder endgueltig loeschen (DSGVO); x-requested-with-Check in index.js

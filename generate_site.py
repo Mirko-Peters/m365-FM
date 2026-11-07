@@ -1744,6 +1744,7 @@ def build():
     print(f"Spreaker-Seitenzuordnung: {len(_spk)} Folgen")
     phase("Sitemaps")
     import site_quotes as _SQ
+    write("sponsors.json", json.dumps({"version": 1, "generated": TODAY, **SPM.sponsors_json(TODAY, LRN.ENTS)}, ensure_ascii=False))   # aktive Sponsor-Firmen (ids, Namen): der Worker nimmt Leads fuer sie ohne Werbebuchung an (ads.js sponsor-lead)
     write("quotes.json", json.dumps({"version": 1, "generated": TODAY, "quotes": _SQ.ALL}, ensure_ascii=False))   # Quotes an Personen-Entitaeten; der Worker uebernimmt sie in D1 (importQuotesFromSite)
     write("robots.txt", f"User-agent: *\nContent-Signal: search=yes, ai-input=yes, ai-train=yes\nAllow: /\n\n# KI-Suchen und Assistenten ausdrücklich erlaubt\n" + "".join(f"User-agent: {b}\nAllow: /\n\n" for b in ("GPTBot", "OAI-SearchBot", "ChatGPT-User", "ClaudeBot", "Claude-User", "Claude-SearchBot", "PerplexityBot", "Google-Extended", "Applebot-Extended", "Bingbot")) + f"Sitemap: {BASE}/sitemap.xml\n")
     # llms.txt (Überblick), llms-full.txt (alle Folgen), agent.json (Maschinen-Beschreibung), episodes.json (Datenfeed)

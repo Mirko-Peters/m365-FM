@@ -467,13 +467,13 @@
       lSec.append(h("h3", { text: "Leads" }), lSt, " ", lCsv, leadCounts(lAll, "lead_status"), lMsg, tbl(["Datum", "Kampagne", "Firma", "Name", "E-Mail", "Abrechnung", "Grund", "", "Lead-Status", "Ändern", ""], list.map(function (x) {
         var acts = x.status === "disputed" ? h("span", {}, [h("button", { type: "button", class: "btn main", text: "Gutschreiben", onclick: function () { post("/api/admin/ads/lead", { id: x.id, credit: true }).then(loadLeads).then(loadBookings); } }), " ",
           h("button", { type: "button", class: "btn", text: "Berechnen", onclick: function () { post("/api/admin/ads/lead", { id: x.id, credit: false }).then(loadLeads); } })]) : null;
-        return [lday(x), x.code, x.org, x.name, x.email, x.status + (x.charged ? "" : " (nicht berechnet)"), x.dispute_reason, acts, leadBadge(x.lead_status), leadStatusSel(x, "lead_status", LU, lMsg, leadsView),
+        return [lday(x), x.code, x.org + (x.assigned ? " → " + x.assigned : ""), x.name, x.email, x.status + (x.charged ? "" : " (nicht berechnet)"), x.dispute_reason, acts, leadBadge(x.lead_status), leadStatusSel(x, "lead_status", LU, lMsg, leadsView),
           leadDelete(x, LU, lMsg, function () { lAll = lAll.filter(function (y) { return y.id !== x.id; }); leadsView(); })];
       }), "Noch keine Leads."));
     }
     lSt.onchange = leadsView;
     lCsv.onclick = function () {
-      var lines = [["Datum", "Kampagne", "Firma", "Name", "E-Mail", "Abrechnung", "Grund", "Lead-Status"].join(",")].concat((lCsv._list || []).map(function (x) { return [lday(x), x.code, x.org, x.name, x.email, x.status, x.dispute_reason, leadSt(x.lead_status)[1]].map(lcell).join(","); }));
+      var lines = [["Datum", "Kampagne", "Firma", "Name", "E-Mail", "Abrechnung", "Grund", "Lead-Status"].join(",")].concat((lCsv._list || []).map(function (x) { return [lday(x), x.code, x.org + (x.assigned ? " → " + x.assigned : ""), x.name, x.email, x.status, x.dispute_reason, leadSt(x.lead_status)[1]].map(lcell).join(","); }));
       var a = h("a", { href: URL.createObjectURL(new Blob(["\ufeff" + lines.join("\r\n")], { type: "text/csv;charset=utf-8" })), download: "m365fm-werbe-leads.csv" }); document.body.appendChild(a); a.click(); a.remove();
     };
     function loadLeads() {
