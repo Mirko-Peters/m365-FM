@@ -3,6 +3,7 @@
 import { mailReady, sendMail } from "./mailer.js";
 import { esc, randomToken, rateLimit, cleanText } from "./util.js";
 import { claimEntity } from "./events.js";
+import { recordInvite } from "./inviter.js";
 
 const now = () => Math.floor(Date.now() / 1000);
 const EID = /^[a-z0-9][a-z0-9-]{1,78}$/;
@@ -64,6 +65,7 @@ export async function handleEntityInvite(env, request, url, path, user, J) {
     const pr = await db.prepare("SELECT 1 x FROM profiles WHERE user_id=? AND public=1 AND handle IS NOT NULL").bind(user.id).first(); if (!pr) return J({ error: "need_profile" }, 409);
     if (!(await claimEntity(db, i.eid, user.id, "invite"))) return J({ error: "claimed" }, 409);
     await db.prepare("UPDATE entity_invites SET status='claimed' WHERE token=?").bind(i.token).run();
+    await recordInvite(env, { inviter: i.by_user, invitee: user.id, source: "entity", ref: i.eid, since: i.created });
     return J({ ok: true, eid: i.eid });
   }
   if (path === "/api/entityinvite/mine" && method === "GET") {
