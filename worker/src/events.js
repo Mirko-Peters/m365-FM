@@ -153,12 +153,14 @@ const sessView = (r, mgr) => ({ id: r.id, title: r.title, abstract: r.abstract, 
 async function evView(db, ev, withPending) {
   const org = ev.org_id ? await db.prepare("SELECT handle,name,public FROM orgs WHERE id=?").bind(ev.org_id).first() : null;
   const ow = await db.prepare("SELECT u.name,p.handle FROM users u LEFT JOIN profiles p ON p.user_id=u.id AND p.public=1 WHERE u.id=?").bind(ev.owner_id).first();
-  const rows = (await db.prepare("SELECT * FROM event_sessions WHERE event_id=? " + (withPending ? "" : "AND status='live' ") + "ORDER BY start,id").bind(ev.id).all()).results || [];
+  const rows = (await db.prepare("SELECT * FROM event_sessions WHERE event_id=? AND merged_into=0 " + (withPending ? "" : "AND status='live' ") + "ORDER BY start,id").bind(ev.id).all()).results || [];
   return { handle: ev.handle, title: ev.title, summary: ev.summary, about: ev.about, start: ev.start, end: ev.end, tz: ev.tz, mode: ev.mode, location: ev.location, country: ev.country, url: ev.url, tickets_url: ev.tickets_url,
     free: !!ev.free, lang: ev.lang, topics: parse(ev.topics, []), seeking_sponsor: !!ev.seeking_sponsor, public: !!ev.public,
     partners: ((await db.prepare("SELECT p.kind,p.level,o.handle,o.name,o.public FROM event_partners p JOIN orgs o ON o.id=p.org_id WHERE p.event_id=? AND p.status='confirmed' ORDER BY p.created").bind(ev.id).all()).results || []).map((x) => ({ kind: x.kind, level: x.level, name: x.name, handle: x.public ? x.handle : "" })),
     asked: withPending ? ((await db.prepare("SELECT o.handle FROM sponsor_asks a JOIN orgs o ON o.id=a.org_id WHERE a.event_id=?").bind(ev.id).all()).results || []).map((x) => x.handle) : undefined,
-    organizer: org ? { kind: "o", handle: org.public ? org.handle : "", name: org.name } : { kind: "u", handle: ow?.handle || "", name: ow?.name || "" }, sessions: rows.map((r) => sessView(r, withPending)) };
+    organizer: org ? { kind: "o", handle: org.public ? org.handle : "", name: org.name } : { kind: "u", handle: ow?.handle || "", name: ow?.name || ev.organizer_name || "" }, unclaimed: !!ev.unclaimed, source: ev.source || "", retired: !!ev.retired,
+    sources: ((await db.prepare("SELECT kind,url FROM event_source WHERE event_id=? AND kind IN ('communitydays','sessionize_event') AND url<>''").bind(ev.id).all()).results || []),
+    sessions: rows.map((r) => sessView(r, withPending)) };
 }
 
 export async function ensureM365Con(env) {   // M365Con 2027 ist ein Event und gehoert dem Admin als Veranstalter
@@ -297,7 +299,7 @@ export async function handleEvents(env, request, url, path, user, J) {
   }
   if (path === "/api/events/mine" && method === "GET") {
     if (need()) return need();
-    const evs = (await db.prepare("SELECT e.* FROM events e WHERE e.owner_id=?1 OR e.id IN (SELECT event_id FROM event_roles WHERE user_id=?1) OR e.org_id IN (SELECT org_id FROM org_members WHERE user_id=?1 AND status='active' AND role IN ('owner','admin','events')) ORDER BY e.start DESC").bind(user.id).all()).results || [];
+    const evs = (await db.prepare("SELECT e.* FROM events e WHERE e.merged_into=0 AND (e.owner_id=?1 OR e.id IN (SELECT event_id FROM event_roles WHERE user_id=?1) OR e.org_id IN (SELECT org_id FROM org_members WHERE user_id=?1 AND status='active' AND role IN ('owner','admin','events'))) ORDER BY e.start DESC").bind(user.id).all()).results || [];
     const out = []; for (const e of evs) out.push(await evView(db, e, true));
     const orgs = (await db.prepare("SELECT o.handle,o.name FROM org_members m JOIN orgs o ON o.id=m.org_id WHERE m.user_id=? AND m.status='active' AND m.role IN ('owner','admin','events')").bind(user.id).all()).results || [];
     return J({ events: out, orgs });

@@ -19,6 +19,7 @@ import { importEpisodes, importTranslations, handleRegister } from "./register.j
 import { importSearchIndex, syncSearchVectors, handleSearch } from "./search.js";
 import { entityMap } from "./entities.js";
 import { handleProfiles, deleteUserData, refreshProfilesExport } from "./profiles.js";
+import { handleEventImport, IMPORT_ROUTE, dailyEventImport } from "./eventimport.js";
 import { handleEvents, deleteUserEvents, ensureM365Con, claimLinkedinEntity, purgeEntityClaimReview } from "./events.js";
 import { handleVotes } from "./votes.js";
 import { handleQa, deleteUserQa } from "./qa.js";
@@ -391,6 +392,7 @@ async function api(env, request, url, path, asUser, ctx) {
 
   if (/^\/api\/points(\/|$)/.test(path) || path.startsWith("/api/admin/points/")) { const p = await handlePoints(env, request, url, path, user, J); if (p) return p; }
   if (/^\/api\/msg(\/|$)/.test(path)) { const p = await handleMessages(env, request, url, path, user, J); if (p) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return p; } }
+  if (IMPORT_ROUTE.test(path)) { const p = await handleEventImport(env, request, url, path, user, J); if (p) return p; }
   if (/^\/api\/(events?|speaker)(\/|$)/.test(path) || /^\/api\/entity\/claims?(\/|$)/.test(path) || /^\/api\/admin\/entity\/claims?$/.test(path)) { const p = await handleEvents(env, request, url, path, user, J); if (p) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return p; } }
   if (path === "/api/ui-i18n" && request.method === "GET") return J(await uiI18nExport(env), 200, { "cache-control": "public, max-age=300" });
   if (path === "/api/admin/translate" && user?.admin) {   // Status und Notaus der Auto-Uebersetzung
@@ -582,6 +584,7 @@ export default {
     }
     if (event.cron === "0 6 * * *") {
       T("runPushDigest", () => runPushDigest(env));
+      T("dailyEventImport", () => dailyEventImport(env));   // Community Days + Sessionize-Abgleich (taeglich)
       T("runDigest", () => runDigest(env, { at: scheduledAt }));
     }
     if (event.cron === "*/30 * * * *") T("runDigest", () => runDigest(env, { at: scheduledAt }));

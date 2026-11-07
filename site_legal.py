@@ -115,3 +115,12 @@ def security_de():
 <p>Forschung, die sich an diese Regeln hält, gilt als in gutem Glauben; ich gehe dagegen nicht vor.</p>
 <h2>In der Regel nicht berücksichtigt</h2>
 <ul><li>Meldungen automatischer Scanner ohne nachgewiesene Auswirkung</li><li>Fehlende Sicherheits-Header oder Cookie-Flags ohne konkreten Angriff</li><li>Empfehlungen zu SPF, DKIM oder DMARC ohne nachgewiesenes Spoofing-Problem</li><li>Clickjacking auf Seiten ohne sensible Aktionen, Self-XSS sowie Ratenbegrenzung bei nicht sensiblen Funktionen</li><li>Probleme, die ein kompromittiertes Gerät oder einen kompromittierten Browser voraussetzen</li></ul>"""
+
+
+def bot_page():
+    """Erklaerung des Event-Bots (EN, mit deutschem Abschnitt). Im User-Agent steht bewusst keine E-Mail-Adresse, nur diese Seite."""
+    return """<h1>M365.FM EventBot</h1>
+<p>The M365.FM EventBot reads public event listings from Microsoft community sources to list Microsoft-related community events on <a href="https://www.m365.fm/community/">M365.FM</a>. It identifies itself as <code>M365.FM-EventBot (+https://www.m365.fm/bot/)</code>.</p>
+<h2>How it behaves</h2><ul><li>It obeys <code>robots.txt</code> (user-agent token <code>M365.FM-EventBot</code>) and never fetches pages that are disallowed.</li><li>It runs about once a day, waits between requests to the same host and caches responses.</li><li>It reads only event name, dates, place, organizer and links. Imported events can be claimed and edited by their organizers.</li><li>Sessionize pages are fetched only when a member asks for it with their own public profile URL.</li></ul>
+<h2>Contact and opt-out</h2><p>To exclude your site, disallow <code>M365.FM-EventBot</code> in your <code>robots.txt</code>. For anything else use the contact details in the <a href="/legal/">legal notice</a>.</p>
+<h2>Deutsch</h2><p>Der M365.FM-EventBot liest öffentliche Veranstaltungslisten der Microsoft-Community, um Microsoft-bezogene Events auf M365.FM zu zeigen. Er beachtet die <code>robots.txt</code> (Token <code>M365.FM-EventBot</code>), ruft höchstens täglich mit Abstand zwischen den Anfragen ab und speichert Antworten zwischen. Sessionize-Seiten werden nur auf Wunsch eines Mitglieds und nur mit dessen eigener Profil-URL gelesen. Ausschluss: <code>M365.FM-EventBot</code> in der eigenen <code>robots.txt</code> sperren; Kontakt siehe <a href="/impressum/">Impressum</a>.</p>"""
