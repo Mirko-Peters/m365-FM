@@ -50,12 +50,12 @@ class SponsorshipTests(unittest.TestCase):
         return str(cm.exception)
 
     # --- Datei im Repo und Uebersetzungen ---
-    def test_repo_file_is_valid_and_empty(self):
+    def test_repo_file_is_valid(self):   # seit #308 mit iFAKT (unbefristet)
         d = json.loads((ROOT / "data" / "sponsorships.json").read_text("utf-8"))
         recs, errs = SPM.check_structure(d)
-        self.assertEqual((recs, errs), ([], []))
-        st = SPM.init("2026-11-03", {}, path=ROOT / "data" / "sponsorships.json")
-        self.assertEqual((st["ent"], st["ep"], st["vid"], st["post"]), ({}, {}, {}, {}))
+        self.assertEqual(errs, [])
+        for r in recs:
+            self.assertTrue(r.get("end") is None or SPM._day(r["end"]), r["id"])
 
     def test_labels_hand_written_for_all_languages(self):
         self.assertEqual(SPM.check_i18n(), [])
@@ -73,8 +73,14 @@ class SponsorshipTests(unittest.TestCase):
                            rec(id="x4", sponsor={"name": "", "url": "http://acme.example/"}), rec(id="x5", sponsor={"name": "M", "url": "https://www.m365.fm/"}),
                            rec(id="x6", price=1500), rec(id="x6", entities="acme-backup"), rec(id="x7", end="2027/01/01"), rec(id="x8", topics=["entra-id", "entra-id"])])
         for part in ('"id" fehlt oder ungueltig', '"x1": "label"', '"x2": "start"', '"x3": "end" liegt vor "start"', '"x4": "sponsor.name"', '"x4": "sponsor.url" muss',
-                     '"x5": "sponsor.url" darf nicht auf m365.fm', 'unbekanntes Feld "price"', '"x6": id doppelt', '"entities" muss eine Liste', '"x7": "end" fehlt oder ist kein Datum', '"topics" enthaelt Doppelte'):
+                     '"x5": "sponsor.url" darf nicht auf m365.fm', 'unbekanntes Feld "price"', '"x6": id doppelt', '"entities" muss eine Liste', '"x7": "end" muss ein Datum', '"topics" enthaelt Doppelte'):
             self.assertIn(part, msg)
+
+    def test_open_ended_sponsorship(self):   # "end": null = unbefristet, kein Fehler, immer aktiv ab "start"
+        st = self.init([rec(id="u1", end=None, entities=["acme-backup"])], today="2030-01-01")   # kein Fehler, nach Jahren noch aktiv
+        self.assertIn("acme-backup", st["ent"])
+        self.assertTrue(SPM._active({"start": "2026-11-06", "end": None}, "2030-01-01"))
+        self.assertFalse(SPM._active({"start": "2026-11-06", "end": None}, "2026-11-05"))
 
     def test_sponsor_url_on_shared_platform_is_rejected(self):   # sonst bekaemen eigene LinkedIn-/YouTube-Links der Seite rel="sponsored"
         msg = self.errors([rec(id="s1", sponsor={"name": "Acme", "url": "https://www.linkedin.com/company/acme/"}),
