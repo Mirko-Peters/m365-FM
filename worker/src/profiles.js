@@ -1,4 +1,5 @@
 // Experten- und Firmenprofile, Programme (MVP/MCT/...), Kanaele mit Feeds, Upvotes, Bestaetigungen
+import { scopeOf } from "./perm.js";
 import { cleanKeypoints, cleanFaq, jsonList, ensureSectionCols } from "./sections.js";
 import { sanitize } from "./wiki.js";
 import { cleanText, rateLimit } from "./util.js";
@@ -147,7 +148,7 @@ const ORG_ROLES = ["owner", "admin", "editor", "events", "member"];
 const assignable = (mine, role) => ORG_ROLES.includes(role) && (mine === "owner" || (mine === "admin" && ["editor", "events", "member"].includes(role)));
 
 async function personView(db, uid, viewer) {
-  const p = await db.prepare("SELECT p.*,u.name,u.bio FROM profiles p JOIN users u ON u.id=p.user_id WHERE p.user_id=? AND u.banned=0").bind(uid).first(); if (!p) return null;
+  const p = await db.prepare("SELECT p.*,u.name,u.bio,u.role urole FROM profiles p JOIN users u ON u.id=p.user_id WHERE p.user_id=? AND u.banned=0").bind(uid).first(); if (!p) return null;
   const q = async (sql, ...b) => (await db.prepare(sql).bind(...b).all()).results || [];
   // Stufe und Punkte setzt das System (levels.js); ev = Belege je Art (z. B. {blog: 2, session: 1})
   const exp = await q("SELECT e.eid e,e.level,e.verified,COALESCE(s.score,0) score,COALESCE(s.endorsed_ev,0) endorsed_ev,(SELECT COUNT(*) FROM endorsements n WHERE n.owner_id=e.owner_id AND n.eid=e.eid) endorsed, (SELECT COUNT(*) FROM endorsements n2 WHERE n2.owner_id=e.owner_id AND n2.eid=e.eid AND n2.by_id=?) me FROM expertise e LEFT JOIN expertise_score s ON s.owner_id=e.owner_id AND s.eid=e.eid WHERE e.owner_type='u' AND e.owner_id=? ORDER BY e.level DESC,s.score DESC,e.verified DESC", +viewer || 0, uid);
@@ -173,7 +174,7 @@ async function personView(db, uid, viewer) {
   const pv = await db.prepare("SELECT * FROM profile_private WHERE user_id=?").bind(uid).first(), CF = ["city", "zip", "street", "email", "phone"];
   const contact = {}; let priv = null;
   if (pv) { for (const k of CF) if (pv["vis_" + k] === "all" && pv[k]) contact[k] = pv[k]; if (+viewer === uid) priv = { ...Object.fromEntries([...CF.map((k) => [k, pv[k]]), ...CF.map((k) => ["vis_" + k, pv["vis_" + k]])]), map_public: !!pv.map_public }; }
-  return { type: "u", i18n: await readI18n(db, uid), contact, ...(priv ? { private: priv } : {}), img: im?.updated || 0, company_eid: pce, industries, job_eid: jobEid, id: uid, handle: p.handle, name: p.name, bio: p.bio, headline: p.headline, about: p.about, company: p.company, job: p.job, country: p.country, public: !!p.public, show_org: !!p.show_org,
+  return { type: "u", ...(p.urole === "editor" || p.urole === "moderator" ? { role: p.urole } : {}), ...(p.urole === "editor" && (await scopeOf(db, uid)) ? { scope: [...(await scopeOf(db, uid)).topics].slice(0, 6) } : {}), i18n: await readI18n(db, uid), contact, ...(priv ? { private: priv } : {}), img: im?.updated || 0, company_eid: pce, industries, job_eid: jobEid, id: uid, handle: p.handle, name: p.name, bio: p.bio, headline: p.headline, about: p.about, company: p.company, job: p.job, country: p.country, public: !!p.public, show_org: !!p.show_org,
     expertise: exp.map((e) => ({ ...e, verified: !!e.verified, me: !!e.me, ev: evs[e.e] || {} })), programs: programs.map((x) => ({ ...x, verified: !!x.verified })), certs, channels, org, contrib, mvp_contributions: mvpContributions, counts, badges, recs,
     items: await itemsOf(db, "i.owner_type='u' AND i.owner_id=?", [uid], viewer, 8) };
 }

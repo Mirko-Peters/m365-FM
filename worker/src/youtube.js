@@ -1,5 +1,6 @@
 // Creator-Videos fuer den YouTube-Kanal "m365 Show": Der Worker legt eine resumable Upload-Session an (privat), der Browser
 // laedt direkt zu YouTube hoch. Abstimmung -> ab Schwelle Aufgabe fuer Mirko -> Freigabe (oeffentlich schalten) in YouTube Studio.
+import { logEdit } from "./perm.js";
 import { guestsOf, dropGuests } from "./credits.js";
 import { cleanText, rateLimit, isLang } from "./util.js";
 import { baseIds } from "./entities.js";
@@ -106,6 +107,7 @@ export async function handleVideo(env, request, url, path, user, J) {
       const b = await request.json().catch(() => ({})), v = await db.prepare("SELECT * FROM yt_videos WHERE id=?").bind(+b.id).first(); if (!v) return J({ error: "not_found" }, 404);
       await dropVideo(env, v);
       await db.prepare("UPDATE yt_videos SET status='rejected',note=?,updated=? WHERE id=?").bind(txt(b.note || "", 300), now(), v.id).run();
+      if (!user._viaEditor) await logEdit(db, user, "review.reject", "video", v.id, { reason: b.note || "", before: { status: v.status }, after: { status: "rejected" } });
       return J({ ok: true });
     }
     if (path === "/api/admin/video/poll" && method === "POST") return J(await pollVideos(env));

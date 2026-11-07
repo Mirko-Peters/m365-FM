@@ -1,4 +1,5 @@
 // Community-Wiki fuer Glossarbegriffe: kurze Ergaenzung zur Kurzinfo, Revisionen, Moderation
+import { decide } from "./editor.js";
 import { cleanText, rateLimit, isLang } from "./util.js";
 import { stats, evalBadges } from "./badges.js";
 import { baseIds } from "./entities.js";
@@ -137,9 +138,9 @@ export async function handleWiki(env, request, url, path, user, J) {
       return J({ pending: rows });
     }
     if ((m = /^\/api\/admin\/wiki\/(approve|reject|restore)\/(\d+)$/.exec(path)) && method === "POST") {
+      if (m[1] !== "restore") { const r = await decide(env, user, { kind: "wiki", id: m[2], action: m[1], legacy: true }); return J(r.body, r.status); }   // can() + Protokoll in editor.js
       const r = await db.prepare("SELECT id,term,lang,status,user_id FROM wiki_rev WHERE id=?").bind(+m[2]).first();
       if (!r) return J({ error: "not_found" }, 404);
-      if (m[1] === "reject") { await db.prepare("UPDATE wiki_rev SET status='rejected' WHERE id=?").bind(r.id).run(); return J({ ok: true }); }
       await db.batch([
         db.prepare("UPDATE wiki_rev SET status='old' WHERE term=? AND lang=? AND status='live'").bind(r.term, r.lang),
         db.prepare("UPDATE wiki_rev SET status='live' WHERE id=?").bind(r.id),

@@ -22,6 +22,16 @@
 
   function SPN(d, n, e) { return (document.documentElement.lang || "en").slice(0, 2) === "de" ? "Speaker " + d + " (" + n + " bestätigte Sessions)" : "Speaker " + (e || d) + " (" + n + " confirmed sessions)"; }
   var PGI = { speaker_bronze: "🥉", speaker_silver: "🥈", speaker_gold: "🥇", speaker_platinum: "💎", mvp: "🏆", mct: "🎓", rd: "🧭", msa: "🌟", ms_employee: "🪟", partner: "🤝" }, PGN = { speaker_bronze: SPN("Bronze", "1+"), speaker_silver: SPN("Silber", "3+", "Silver"), speaker_gold: SPN("Gold", "7+"), speaker_platinum: SPN("Platin", "15+", "Platinum"), mvp: "Microsoft MVP", mct: "Microsoft Certified Trainer", rd: "Microsoft Regional Director", msa: "Microsoft Student Ambassador", ms_employee: "Microsoft", partner: "Microsoft Partner" };
+  /* Rollen-Chip (Editor/Moderator) wie auf den statischen Seiten (site_roles.py): Tooltip und Link zur Erklaerung, Symbol als Inline-SVG per DOM */
+  var ROLE_PATH = { editor: "M3 17.25V21h3.75L17.8 9.94l-3.75-3.75L3 17.25zm17.7-10.2a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z", moderator: "M12 2 4 5v6c0 5 3.4 9.6 8 11 4.6-1.4 8-6 8-11V5l-8-3zm-1 14-3.5-3.5 1.4-1.4L11 13.2l4.1-4.1 1.4 1.4L11 16z" };
+  function roleChip(role, scope) {
+    var R = C.roles; if (!R || !ROLE_PATH[role]) return null;
+    var NS = "http://www.w3.org/2000/svg", svg = document.createElementNS(NS, "svg"), path = document.createElementNS(NS, "path");
+    svg.setAttribute("viewBox", "0 0 24 24"); svg.setAttribute("width", "12"); svg.setAttribute("height", "12"); svg.setAttribute("aria-hidden", "true"); svg.setAttribute("focusable", "false");
+    path.setAttribute("fill", "currentColor"); path.setAttribute("d", ROLE_PATH[role]); svg.appendChild(path);
+    var a = h("a", { class: "rchip rchip-" + role, href: R.url + "#" + role, title: role === "editor" && scope && scope.length ? R.subject + " " + scope.join(", ") : R[role], "data-role": role });
+    a.appendChild(svg); a.appendChild(h("span", { text: role === "editor" ? "Editor" : "Moderator" })); return a;
+  }
   function badgeEls(list, big) {
     return h("span", { class: "cbs" }, (list || []).map(function (b) { return h("span", { class: "cb" + (big ? " big" : ""), title: /^prog_/.test(b) ? PGN[b.slice(5)] : tt("b_" + b) + " – " + tt("b_" + b + "_d"), text: PGI[b.slice(5)] && /^prog_/.test(b) ? PGI[b.slice(5)] : (ICON[b] || "★") }); }));
   }
@@ -95,7 +105,7 @@
         if (c.canDelete) act.appendChild(h("button", { type: "button", class: "cbtn", text: tt("delete"), onclick: function () { api("/api/comments/" + c.id, { method: "DELETE" }).then(load); } }));
       }
       return h("article", { class: "citem" + (isReply ? " reply" : "") }, [
-        h("header", {}, [u, badgeEls(c.user.badges), h("time", { class: "cmut", text: date(c.created) })]),
+        h("header", {}, [u, roleChip(c.user.role, c.user.scope), badgeEls(c.user.badges), h("time", { class: "cmut", text: date(c.created) })]),
         h("p", { class: "cbody", text: c.hidden ? "—" : c.body }), act]);
     }
     function act1(p, msg) { api(p, { method: "POST" }).then(function (r) { if (msg) note(msg); load(); }); }
@@ -160,7 +170,7 @@
 
   /* ---------- Kurator / Bestenliste ---------- */
   function memberRow(u, i) {
-    return h("li", {}, [h("span", { class: "cr", text: String(i + 1) }), h("a", { href: C.communityUrl + "?u=" + u.id, text: u.name }), badgeEls(u.badges), h("span", { class: "cmut", text: u.points + " " + tt("points") })]);
+    return h("li", {}, [h("span", { class: "cr", text: String(i + 1) }), h("a", { href: C.communityUrl + "?u=" + u.id, text: u.name }), roleChip(u.role, u.scope), badgeEls(u.badges), h("span", { class: "cmut", text: u.points + " " + tt("points") })]);
   }
   function mountCurator(root, full) {
     api("/api/curator?lang=" + LANG).then(function (r) {

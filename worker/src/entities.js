@@ -1,4 +1,5 @@
 // Entitaetsdatenbank fuer das Microsoft-Oekosystem: Community-Revisionen ueber den statischen Basisdaten (data/entities.json)
+import { decide } from "./editor.js";
 import { cleanText, rateLimit } from "./util.js";
 import { entityTranslations } from "./autotr.js";
 import { stats, evalBadges } from "./badges.js";
@@ -250,10 +251,8 @@ export async function handleEntity(env, request, url, path, user, J) {
       return J({ pending: rows.map((r) => ({ ...r, data: JSON.parse(r.data) })) });
     }
     if ((m = /^\/api\/admin\/entity\/(approve|reject)\/(\d+)$/.exec(path)) && method === "POST") {
-      const r = await db.prepare("SELECT id,eid,user_id FROM entity_rev WHERE id=?").bind(+m[2]).first(); if (!r) return J({ error: "not_found" }, 404);
-      if (m[1] === "reject") { await db.prepare("UPDATE entity_rev SET status='rejected' WHERE id=?").bind(r.id).run(); return J({ ok: true }); }
-      await db.batch([db.prepare("UPDATE entity_rev SET status='old' WHERE eid=? AND status='live'").bind(r.eid), db.prepare("UPDATE entity_rev SET status='live' WHERE id=?").bind(r.id)]);
-      if (r.user_id) await evalBadges(env, r.user_id); return J({ ok: true });
+      const r = await decide(env, user, { kind: "entity", id: m[2], action: m[1], legacy: true });   // can() + Protokoll in editor.js
+      return J(r.body, r.status);
     }
   }
   return null;

@@ -3,6 +3,7 @@ import { limitTopics } from "./sponsor_extra.js";
 import { cleanText, rateLimit, isLang } from "./util.js";
 import { translatedBlogItems } from "./autotr.js";
 import { stats } from "./badges.js";
+import { decide } from "./editor.js";
 import { baseIds } from "./entities.js";
 import { sanitize } from "./wiki.js";
 import { cleanKeypoints, cleanFaq, jsonList, ensureSectionCols } from "./sections.js";
@@ -90,11 +91,8 @@ export async function handleBlog(env, request, url, path, user, J) {
       return J({ items: rows });
     }
     if (path === "/api/admin/blog/decide" && method === "POST") {
-      const b = await request.json().catch(() => ({})), id = +b.id;
-      const p = await db.prepare("SELECT id FROM blog_posts WHERE id=? AND status='pending'").bind(id).first(); if (!p) return J({ error: "not_found" }, 404);
-      if (b.ok) await db.prepare("UPDATE blog_posts SET status='live',published=COALESCE(NULLIF(published,0),?),note='',updated=? WHERE id=?").bind(now(), now(), id).run();
-      else await db.prepare("UPDATE blog_posts SET status='rejected',note=?,updated=? WHERE id=?").bind(txt(b.note || "", 300), now(), id).run();
-      return J({ ok: true });
+      const b = await request.json().catch(() => ({})), r = await decide(env, user, { kind: "blog", id: String(+b.id), action: b.ok ? "approve" : "reject", reason: b.note || "", legacy: true });   // can() + Protokoll in editor.js
+      return J(r.body, r.status);
     }
     return null;
   }

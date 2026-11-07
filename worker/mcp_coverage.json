@@ -10,6 +10,30 @@
   "/api/me/merge": {
    "skip": "Anmeldungen verknüpfen/entfernen und Konten zusammenführen (#279) nur mit Browser-Sitzung und frischer Anmeldung, bewusst nicht per KI-Token"
   },
+ "/api/editor/queue": {
+  "tools": [
+   "editor_queue"
+  ]
+ },
+ "/api/editor/item": {
+  "tools": [
+   "editor_view_item"
+  ]
+ },
+ "/api/editor/proposals": {
+  "tools": [
+   "editor_propose_decision"
+  ]
+ },
+ "/api/editor/edit": {
+  "skip": "Inhaltsbearbeitung nur im Browser (/redaktion/): wird protokolliert und der Autor benachrichtigt, bewusst nicht per KI-Token"
+ },
+ "/api/editor/decide": {
+  "skip": "Entscheidungen werden per MCP nur vorgeschlagen (editor_propose_decision) und im Browser bestätigt"
+ },
+ "/api/admin/editlog": {
+  "skip": "Admin-Protokoll mit Rückgängig nur im Browser"
+ },
  "/api/directory": {
   "tools": [
    "search_directory"

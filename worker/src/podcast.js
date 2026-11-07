@@ -1,5 +1,6 @@
 // Community-Podcast: Mitglieder reichen Episoden ein (Audio -> Entwurf bei Spreaker), die Community stimmt ab,
 // ab der Schwelle prueft Mirko in Spreaker und veroeffentlicht dort; der Cron erkennt die Veroeffentlichung.
+import { logEdit } from "./perm.js";
 import { guestsOf, dropGuests } from "./credits.js";
 import { cleanText, rateLimit, isLang } from "./util.js";
 import { baseIds } from "./entities.js";
@@ -90,6 +91,7 @@ export async function handlePodcast(env, request, url, path, user, J) {
       const b = await request.json().catch(() => ({})), ep = await db.prepare("SELECT * FROM pod_episodes WHERE id=?").bind(+b.id).first(); if (!ep) return J({ error: "not_found" }, 404);
       await dropDraft(env, ep);
       await db.prepare("UPDATE pod_episodes SET status='rejected',note=?,updated=? WHERE id=?").bind(txt(b.note || "", 300), now(), ep.id).run();
+      if (!user._viaEditor) await logEdit(db, user, "review.reject", "podcast", ep.id, { reason: b.note || "", before: { status: ep.status }, after: { status: "rejected" } });
       return J({ ok: true });
     }
     if (path === "/api/admin/podcast/poll" && method === "POST") return J(await pollPodcast(env));

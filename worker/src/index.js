@@ -8,6 +8,8 @@ import { importLegacyBlog } from "./legacyblog.js";
 import { importContentBlog } from "./contentblog.js";
 import { handleA2a } from "./a2a.js";
 import { handleAdminPanel } from "./adminpanel.js";
+import { handleEditor, decide } from "./editor.js";
+import { can, roleOf, isStaff, publicRoles, loadActor, logEdit } from "./perm.js";
 import { handleSponsor, handleSponsorLink } from "./sponsor.js";
 import { handleAds, handlePaypalWebhook } from "./ads.js";
 import { handleSponsorOrders } from "./sponsor_orders.js";
@@ -227,11 +229,11 @@ async function me(env, uid) {
   const u = await env.DB.prepare("SELECT id,provider,sub,name,bio,lang,banned,role,created FROM users WHERE id=?").bind(uid).first();
   if (!u || u.banned) return null;
   const pro = !!(await env.DB.prepare("SELECT 1 x FROM programs WHERE owner_type='u' AND owner_id=? AND verified=1 AND program IN ('mvp','mct','rd','msa','ms_employee') LIMIT 1").bind(uid).first());
-  return { ...u, admin: isAdmin(env, u), editor: u.role === "editor", pro };
+  return { ...u, admin: isAdmin(env, u), editor: u.role === "editor", moderator: u.role === "moderator", pro };
 }
 
-function pubComment(c, mine, liked, badges, admin) {
-  return { id: c.id, parent: c.parent_id, user: { id: c.user_id, name: c.name, badges: badges.get(c.user_id) || [] }, body: c.status === "hidden" ? "" : c.body,
+function pubComment(c, mine, liked, badges, admin, roles) {
+  return { id: c.id, parent: c.parent_id, user: { id: c.user_id, name: c.name, badges: badges.get(c.user_id) || [], ...(roles?.get(c.user_id) ? { role: roles.get(c.user_id) } : {}), ...(roles?.scopes?.get(c.user_id) ? { scope: roles.scopes.get(c.user_id) } : {}) }, body: c.status === "hidden" ? "" : c.body,
     hidden: c.status === "hidden", created: c.created, likes: c.likes, liked: liked.has(c.id), mine: mine === c.user_id, canDelete: mine === c.user_id || admin };
 }
 
@@ -309,7 +311,7 @@ async function api(env, request, url, path, asUser, ctx) {
   const ids = await handleIdentities(env, request, url, path, user, J, asUser !== undefined);
   if (ids) return ids;
   if (path === "/api/me") {
-    if (method === "GET") return J({ user: user ? { ...(await namePrefs(db, user)), id: user.id, name: user.name, bio: user.bio, lang: user.lang, admin: user.admin, editor: user.editor, provider: user.provider, ...(user.admin || user.editor ? {} : { sub_hint: `${user.provider}:${user.sub}` }), ...(await stats(db, user.id)) } : null });
+    if (method === "GET") return J({ user: user ? { ...(await namePrefs(db, user)), id: user.id, name: user.name, bio: user.bio, lang: user.lang, admin: user.admin, editor: user.editor, moderator: user.moderator, provider: user.provider, ...(user.admin || user.editor || user.moderator ? {} : { sub_hint: `${user.provider}:${user.sub}` }), ...(await stats(db, user.id)) } : null });
     if (need()) return need();
     if (method === "POST") {
       const b = await request.json().catch(() => ({}));
@@ -334,9 +336,9 @@ async function api(env, request, url, path, asUser, ctx) {
     const rows = (await db.prepare(
       `SELECT c.id,c.user_id,c.parent_id,c.body,c.status,c.created,u.name,(SELECT COUNT(*) FROM likes l WHERE l.comment_id=c.id) likes
        FROM comments c JOIN users u ON u.id=c.user_id WHERE c.vid=? AND c.lang=? AND u.banned=0 ORDER BY c.created ASC LIMIT 300`).bind(vid, lang).all()).results || [];
-    const badges = await badgesFor(db, [...new Set(rows.map((r) => r.user_id))]);
+    const badges = await badgesFor(db, [...new Set(rows.map((r) => r.user_id))]), roles = await publicRoles(db, rows.map((r) => r.user_id));
     const liked = new Set(user ? ((await db.prepare("SELECT comment_id FROM likes WHERE user_id=?").bind(user.id).all()).results || []).map((r) => r.comment_id) : []);
-    return J({ comments: rows.filter((r) => r.status === "ok" || rows.some((x) => x.parent_id === r.id)).map((r) => pubComment(r, user?.id, liked, badges, user?.admin)) }, 200, { "cache-control": "no-store" });
+    return J({ comments: rows.filter((r) => r.status === "ok" || rows.some((x) => x.parent_id === r.id)).map((r) => pubComment(r, user?.id, liked, badges, user?.admin, roles)) }, 200, { "cache-control": "no-store" });
   }
   if (path === "/api/comments" && method === "POST") {
     if (need()) return need();
@@ -389,6 +391,7 @@ async function api(env, request, url, path, asUser, ctx) {
     return J({ ok: true });
   }
 
+  if (path.startsWith("/api/editor/") || path.startsWith("/api/admin/editlog") || path.startsWith("/api/admin/editor-scope")) return await handleEditor(env, request, url, path, user, J);   // Redaktion/Moderation (perm.js can())
   if (/^\/api\/points(\/|$)/.test(path) || path.startsWith("/api/admin/points/")) { const p = await handlePoints(env, request, url, path, user, J); if (p) return p; }
   if (/^\/api\/msg(\/|$)/.test(path)) { const p = await handleMessages(env, request, url, path, user, J); if (p) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return p; } }
   if (/^\/api\/(events?|speaker)(\/|$)/.test(path) || /^\/api\/entity\/claims?(\/|$)/.test(path) || /^\/api\/admin\/entity\/claims?$/.test(path)) { const p = await handleEvents(env, request, url, path, user, J); if (p) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return p; } }
@@ -430,9 +433,9 @@ async function api(env, request, url, path, asUser, ctx) {
     const lang = url.searchParams.get("lang");
     if (!isLang(lang)) return J({ error: "bad_request" }, 400);
     const d = new Date(), since = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1) / 1000;
-    const top = await topUsers(db, lang, since, 5), bm = await badgesFor(db, top.map((t) => t.id));
+    const top = await topUsers(db, lang, since, 5), bm = await badgesFor(db, top.map((t) => t.id)), rm = await publicRoles(db, top.map((t) => t.id));
     const last = await db.prepare("SELECT c.month,c.points,u.id,u.name,u.bio FROM curators c JOIN users u ON u.id=c.user_id WHERE c.lang=? ORDER BY c.month DESC LIMIT 1").bind(lang).first();
-    return J({ month: d.toISOString().slice(0, 7), top: top.map((t) => ({ ...t, badges: bm.get(t.id) || [] })), last: last || null }, 200, { "cache-control": "public, max-age=300" });
+    return J({ month: d.toISOString().slice(0, 7), top: top.map((t) => ({ ...t, badges: bm.get(t.id) || [], ...(rm.get(t.id) ? { role: rm.get(t.id) } : {}), ...(rm.scopes.get(t.id) ? { scope: rm.scopes.get(t.id) } : {}) })), last: last || null }, 200, { "cache-control": "public, max-age=300" });
   }
   if ((m = /^\/api\/u\/(\d+)$/.exec(path)) && method === "GET") {
     const u = await db.prepare("SELECT id,name,bio,lang,created FROM users WHERE id=? AND banned=0").bind(+m[1]).first();
@@ -523,21 +526,29 @@ async function api(env, request, url, path, asUser, ctx) {
   if (path.startsWith("/api/admin/")) {
     const keyOk = env.CRON_KEY && (request.headers.get("x-cron-key") === env.CRON_KEY || url.searchParams.get("key") === env.CRON_KEY);   // Header bevorzugt (Query landet in Logs)
     if ((path === "/api/admin/run-weekly" || path === "/api/admin/run-daily") && keyOk) return J(await runDigest(env, { dry: url.searchParams.get("dry") === "1" }));
+    if (isStaff(user) && !user.admin && path === "/api/admin/reports" && method === "GET") {   // Redaktion/Moderation: gemeldete Kommentare (Lesen)
+      const rows = (await db.prepare("SELECT c.id,c.vid,c.lang,c.body,c.status,c.user_id,(SELECT COUNT(*) FROM reports r WHERE r.comment_id=c.id) n FROM comments c WHERE c.id IN (SELECT comment_id FROM reports) ORDER BY n DESC LIMIT 50").all()).results || [];
+      return J({ reports: rows });
+    }
+    if (isStaff(user) && !user.admin && (m = /^\/api\/admin\/(hide|show)\/(\d+)$/.exec(path)) && method === "POST") {   // wie Admin, aber ueber can() und mit Protokoll
+      const r = await decide(env, user, { kind: "comment", id: m[2], action: m[1] === "hide" ? "hide" : "resolve", reason: "" });
+      return J(r.body, r.status);
+    }
     if (!user?.admin) return J({ error: "forbidden" }, 403);
     if (path === "/api/admin/expertise-sync" && method === "POST") { const r = await syncExpertise(env, entityMap); await audit(db, user.id, "expertise-sync", "", JSON.stringify(r)); return J(r); }   // Stufen sofort neu berechnen
     if (path === "/api/admin/reports" && method === "GET") {
       const rows = (await db.prepare("SELECT c.id,c.vid,c.lang,c.body,c.status,c.user_id,(SELECT COUNT(*) FROM reports r WHERE r.comment_id=c.id) n FROM comments c WHERE c.id IN (SELECT comment_id FROM reports) ORDER BY n DESC LIMIT 50").all()).results || [];
       return J({ reports: rows });
     }
-    if ((m = /^\/api\/admin\/(hide|show)\/(\d+)$/.exec(path)) && method === "POST") { await db.prepare("UPDATE comments SET status=? WHERE id=?").bind(m[1] === "hide" ? "hidden" : "ok", +m[2]).run(); return J({ ok: true }); }
+    if ((m = /^\/api\/admin\/(hide|show)\/(\d+)$/.exec(path)) && method === "POST") { const c = await db.prepare("SELECT status FROM comments WHERE id=?").bind(+m[2]).first(); await db.prepare("UPDATE comments SET status=? WHERE id=?").bind(m[1] === "hide" ? "hidden" : "ok", +m[2]).run(); if (c) await logEdit(db, user, m[1] === "hide" ? "review.hide" : "report.resolve", "comment", m[2], { before: { status: c.status }, after: { status: m[1] === "hide" ? "hidden" : "ok" } }); return J({ ok: true }); }
     if (path === "/api/admin/users" && method === "GET") {
       const q = cleanName(url.searchParams.get("q") || "").replace(/[%_]/g, "");
-      const rows = (await db.prepare("SELECT id,name,role,banned FROM users WHERE name LIKE ? ORDER BY (role='editor') DESC, id DESC LIMIT 20").bind(`%${q}%`).all()).results || [];
+      const rows = (await db.prepare("SELECT id,name,role,banned FROM users WHERE name LIKE ? ORDER BY (role IN ('editor','moderator','admin')) DESC, id DESC LIMIT 20").bind(`%${q}%`).all()).results || [];
       return J({ users: rows });
     }
     if ((m = /^\/api\/admin\/role\/(\d+)$/.exec(path)) && method === "POST") {
-      const b = await request.json().catch(() => ({})), role = b.role === "editor" ? "editor" : b.role === "admin" ? "admin" : "user";   // Rollen in der Datenbank: user, editor, admin
-      await db.prepare("UPDATE users SET role=? WHERE id=?").bind(role, +m[1]).run(); await audit(db, user.id, "role", m[1], role);
+      const b = await request.json().catch(() => ({})), role = ["editor", "moderator", "admin"].includes(b.role) ? b.role : "user";   // Rollen in der Datenbank: user, moderator, editor, admin
+      await db.prepare("UPDATE users SET role=? WHERE id=?").bind(role, +m[1]).run(); await audit(db, user.id, "role", m[1], role); await logEdit(db, user, "admin.role", "user", m[1], { reason: role });
       await evalBadges(env, +m[1]);
       return J({ ok: true, role });
     }
