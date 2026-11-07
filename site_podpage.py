@@ -7,6 +7,7 @@ import site_media as MED
 import site_img_dims as IMG
 from site_design import pager as PG   # Vor/Zurueck am Seitenende (rel=prev/next)
 import site_sponsorships as SPM   # T37 Sponsor: Kennzeichnung gesponserter Folgen (data/sponsorships.json)
+import site_shownotes_seo as SSEO   # neu geschriebene englische Show Notes (rewrite_shownotes.py)
 import site_transcripts as TRS   # #266: Transkripte als Dateien neben der Folgenseite (R2)
 import gzip, json, re, unicodedata, html as _h
 from functools import lru_cache
@@ -532,6 +533,10 @@ def build(g):
             nnotes = IMG.enhance(nnotes)
         else:
             nnotes = san(e.get("show_notes"))
+        _rw = False
+        if not snx:   # die kuratierte Vollfassung (shownotes/site) geht vor; sonst ersetzen neu geschriebene Notes die alten (Fallback: alte Notes)
+            nkp, nnotes, nfaq, nld, _rw = SSEO.choose(e["slug"], ENTS_ALL, BASE, (nkp, nnotes, nfaq, nld))
+        _rwm = (SSEO.get(e["slug"]) or {}).get("meta") if _rw else ""
         nnotes = rename_links(nnotes)   # T12: Show Notes verlinken die Folge oft ueber die alte Podpage-Adresse
         prev_, next_ = (eps[k + 1] if k + 1 < len(eps) else None), (eps[k - 1] if k else None)
         aud = f'<audio controls preload="none" style="width:100%" src="{esc(r["audio"])}"></audio>' if r and r.get("audio") else ""
@@ -547,7 +552,7 @@ def build(g):
         tx = (f'<h2>Transcript</h2>{TRS.links_html(_trf)}<details open><summary>Read the full transcript</summary><p style="white-space:pre-wrap;line-height:1.6">{esc(tr)}</p></details>' if len(tr) > 200
               else f'<h2>Transcript</h2>{TRS.links_html(_trf)}' if _trf else "")   # #266: Dateien sichtbar verlinkt, Transkript im HTML unveraendert
         body = (f'<article><p class="mut">{day(e["create_time"])}{" · Season " + str(e["season"]) if e.get("season") else ""}</p><h1>{esc(e["name"])}</h1>{SPM.note("en", _spr, "episode")}{aud}'
-                f'<div style="display:flex;gap:1rem;align-items:flex-start;margin:1em 0">{img_tag(thumb_of(e, nrec), e["name"], 160, eager=True)}<div><strong>{esc(short_desc(e, nrec, 300))}</strong></div></div>{nkp}<div class="pp-notes">{nnotes}{IMG.CSS if IMG.needs_responsive_css(nnotes) else ""}</div>{nfaq}{SNT.CSS if (nkp or nnotes or nfaq) else ""}'
+                f'<div style="display:flex;gap:1rem;align-items:flex-start;margin:1em 0">{img_tag(thumb_of(e, nrec), e["name"], 160, eager=True)}<div><strong>{esc(_rwm or short_desc(e, nrec, 300))}</strong></div></div>{nkp}<div class="pp-notes">{nnotes}{IMG.CSS if IMG.needs_responsive_css(nnotes) else ""}</div>{nfaq}{SNT.CSS if (nkp or nnotes or nfaq) else ""}'
                 + (f"<p>{ext}</p>" if ext else "") + (f'<p class="mut">Host: {hl}</p>' if hl else "") + (f"<h2>Guests</h2><ul>{gl}</ul>" if gl else "") + also
                 + (("<h2>Related articles</h2><ul>" + "".join(f'<li><a href="{bp_url(p)}">{esc(p["title"])}</a></li>' for p in related_posts(e["slug"])) + "</ul>") if related_posts(e["slug"]) else "") + tx + "</article>" + (g.get("author_box")("en") if g.get("author_box") else "")
                 + PG("en", (ep_url(prev_), prev_["name"]) if prev_ else None, (ep_url(next_), next_["name"]) if next_ else None))
@@ -569,8 +574,8 @@ def build(g):
         # Alternates nur fuer Sprachfassungen mit uebersetzten Show Notes (150 je Sprache); die uebrigen ~14.000 Fassungen (nur Titel + Teaser) bleiben noindex und ausserhalb der Sitemap
         alts = {"en": ep_url(e), **{l: loc_url(l, f"episodes/{e['slug']}/") for l in TRL if e["slug"] in TRL[l] and TRL[l][e["slug"]][0]}}   # alle Sprachfassungen (uebersetzte Titel/Teaser, teils Show Notes) sind indexierbar und verknuepft
         for _dl, (_du, _) in oa.items(): alts[_dl] = _du   # T3: die Dub-Fassung (eigene Folge in der Sprache) ist die Sprachalternative, nicht die duenne Show-Kopie
-        pub(f"episodes/{e['slug']}/", e.get("meta_title") or e["name"], e.get("meta_description") or short_desc(e, nrec, 155), body, ([ld] + nld) if nld else ld, "article", last=day(e.get("update_time")) or TODAY, alts=alts if len(alts) > 1 else None,
-            noindex=e.get("source") == "spreaker" and not snx and not plain(e.get("show_notes")) and not (nrec or {}).get("markup"))   # T28: neue Folge ohne Show Notes erst nach dem Show-Notes-Abgleich in den Index
+        pub(f"episodes/{e['slug']}/", e.get("meta_title") or e["name"], _rwm or e.get("meta_description") or short_desc(e, nrec, 155), body, ([ld] + nld) if nld else ld, "article", last=day(e.get("update_time")) or TODAY, alts=alts if len(alts) > 1 else None,
+            noindex=e.get("source") == "spreaker" and not snx and not _rw and not plain(e.get("show_notes")) and not (nrec or {}).get("markup"))   # T28: neue Folge ohne Show Notes erst nach dem Show-Notes-Abgleich in den Index
         # lokalisierte Fassungen dieser Folge
         for l in TRL:
             tt = TRL[l].get(e["slug"])
