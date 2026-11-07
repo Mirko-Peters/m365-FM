@@ -122,6 +122,11 @@ export async function mergeStatements(db, S, T) {
   for (const t of ["comments", "curators", "wiki_rev", "entity_rev", "entity_q", "entity_a", "push_subs", "push_topics", "points_spent", "api_tokens",
     "entity_claims", "episode_notes", "pod_episodes", "yt_videos", "guest_listings", "shows", "wish", "expert_requests", "mail_outbox"]) simple(t);
   simple("events", "owner_id"); simple("event_sessions", "proposer_id"); simple("event_roles", "added_by"); simple("entity_invites", "by_user");
+  // Einlader: Einladungen von S gehoeren T; ist S selbst eingeladen worden, zaehlt das nur, wenn T noch keinen Einlader hat (kein doppeltes Zaehlen)
+  st.push(q("UPDATE invite_success SET inviter_user_id=? WHERE inviter_user_id=?", T, S));
+  st.push(q("DELETE FROM invite_success WHERE invitee_user_id=? AND EXISTS (SELECT 1 FROM invite_success x WHERE x.invitee_user_id=?)", S, T));
+  st.push(q("UPDATE invite_success SET invitee_user_id=? WHERE invitee_user_id=?", T, S));
+  st.push(q("DELETE FROM invite_success WHERE inviter_user_id=invitee_user_id"));
   simple("msg_messages", "from_id"); simple("sponsor_manual_metrics", "entered_by"); simple("tr_queue", "requested_by");
   // Blog und Bibliothek: UNIQUE(user_id, slug) -> Slug von S bei Kollision umbenennen
   for (const t of ["blog_posts", "lib_items"]) {
