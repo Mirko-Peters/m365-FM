@@ -10,6 +10,7 @@ import { handleA2a } from "./a2a.js";
 import { handleAdminPanel } from "./adminpanel.js";
 import { handleEditor, decide } from "./editor.js";
 import { syncAutoRoles } from "./roles.js";
+import { handleI18nPublic } from "./i18n_edit.js";
 import { can, roleOf, isStaff, publicRoles, loadActor, logEdit } from "./perm.js";
 import { handleSponsor, handleSponsorLink } from "./sponsor.js";
 import { handleAds, handlePaypalWebhook } from "./ads.js";
@@ -392,6 +393,7 @@ async function api(env, request, url, path, asUser, ctx) {
     return J({ ok: true });
   }
 
+  if (path.startsWith("/api/i18n/")) { const q = await handleI18nPublic(env, request, url, path, J); if (q) return q; }   // Overrides-Export fuer den Seitenbau, Neuuebersetzungs-Wuensche
   if (path.startsWith("/api/editor/") || path.startsWith("/api/admin/editlog") || path.startsWith("/api/admin/editor-scope")) return await handleEditor(env, request, url, path, user, J);   // Redaktion/Moderation (perm.js can())
   if (/^\/api\/points(\/|$)/.test(path) || path.startsWith("/api/admin/points/")) { const p = await handlePoints(env, request, url, path, user, J); if (p) return p; }
   if (/^\/api\/msg(\/|$)/.test(path)) { const p = await handleMessages(env, request, url, path, user, J); if (p) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return p; } }

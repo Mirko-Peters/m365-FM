@@ -58,8 +58,10 @@ def translations(BASE, posts_by_slug, fixhtml):
     import translate_blog as TB
     out = []
     for lang in build:
-        data = TB.load_lang(lang); n = 0
+        import site_i18n_overrides as OVR
+        data = OVR.apply_blog(lang, TB.load_lang(lang)); n = 0
         for slug, p in posts_by_slug.items():
+            OVR.note_blog(lang, slug, p["src"], data.get(slug))
             r = TB.assemble(p["src"], data.get(slug))
             if not r: continue
             title, desc, html, faq = r

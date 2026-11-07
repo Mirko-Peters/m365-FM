@@ -29,7 +29,9 @@ export function can(user, action, item = {}) {
     const mine = new Set((user.orgIds || []).map(Number));
     if ((item.orgIds || []).some((o) => mine.has(Number(o)))) return { ok: false, propose: false, why: "own_company" };
   }
-  if (role === "editor" && user.scope) {   // Fach-Editor: nur Eintraege mit Themen im eigenen Bereich (ohne Thema nur allgemeine Editoren)
+  if (role === "editor" && user.scope && item.i18n) {   // Sprachfassungen: Fach-Editor nur in den eigenen Sprachen (ohne Sprachliste darf jeder Editor)
+    if (user.scope.langs.size && !user.scope.langs.has(item.lang)) return { ok: false, propose: false, why: "out_of_scope" };
+  } else if (role === "editor" && user.scope) {   // Fach-Editor: nur Eintraege mit Themen im eigenen Bereich (ohne Thema nur allgemeine Editoren)
     const t = item.topics || [];
     if (!t.length || !t.some((x) => user.scope.topics.has(x))) return { ok: false, propose: false, why: "out_of_scope" };
     if (user.scope.langs.size && item.lang && !user.scope.langs.has(item.lang)) return { ok: false, propose: false, why: "out_of_scope" };

@@ -82,3 +82,42 @@ CREATE TABLE IF NOT EXISTS editor_votes (
   ts INTEGER NOT NULL,
   PRIMARY KEY (app_id, voter_id)
 );
+
+-- Sprachfassungen: einmal uebersetzen, danach von Redakteuren pro Absatz anpassen. Der Seitenbau liest die Texte aus /api/i18n/overrides
+-- (data/i18n_overrides/<kind>/<lang>.json). Jede Aenderung ist versioniert (wer, wann, warum, Diff, Zuruecksetzen).
+CREATE TABLE IF NOT EXISTS i18n_override (
+  kind TEXT NOT NULL,            -- lblog | episode | notes
+  item TEXT NOT NULL,            -- Slug (Blog-Pakete: content/<slug>)
+  lang TEXT NOT NULL,
+  unit TEXT NOT NULL,            -- Absatz-ID (T, D, Q1, A1, 1..n; episode: title, summary; notes: n0..)
+  text TEXT NOT NULL,
+  by INTEGER NOT NULL,
+  ts INTEGER NOT NULL,
+  PRIMARY KEY (kind, item, lang, unit)
+);
+CREATE TABLE IF NOT EXISTS i18n_override_rev (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  kind TEXT NOT NULL,
+  item TEXT NOT NULL,
+  lang TEXT NOT NULL,
+  unit TEXT NOT NULL,
+  text TEXT NOT NULL,
+  user_id INTEGER NOT NULL,
+  role TEXT NOT NULL,            -- machine (Ursprungsfassung) | editor | moderator | admin
+  action TEXT NOT NULL,          -- baseline | edit | revert
+  reason TEXT NOT NULL DEFAULT '',
+  ts INTEGER NOT NULL
+);
+CREATE INDEX IF NOT EXISTS i18n_override_rev_unit ON i18n_override_rev(kind, item, lang, unit, id);
+-- Wunsch "Geaenderte Absaetze neu uebersetzen": nur vermerkt, ein spaeterer Workflow-Lauf mit --stale holt die Wuensche ab (kein API-Aufruf im Worker)
+CREATE TABLE IF NOT EXISTS i18n_retranslate_req (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  kind TEXT NOT NULL,
+  item TEXT NOT NULL,
+  lang TEXT NOT NULL,
+  units TEXT NOT NULL DEFAULT '[]',
+  by INTEGER NOT NULL,
+  ts INTEGER NOT NULL,
+  status TEXT NOT NULL DEFAULT 'open',   -- open | done
+  UNIQUE (kind, item, lang, status)
+);

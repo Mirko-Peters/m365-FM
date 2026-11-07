@@ -3,6 +3,7 @@
 import { can, roleOf, isStaff, loadActor, logEdit, emailFor, scopeOf } from "./perm.js";
 import { evalBadges } from "./badges.js";
 import { notify } from "./mail.js";
+import { saveUnit, unitHistory, revertUnit, requestRetranslate, currentOverrides, runProposal, I18N_KINDS, LANGS as I18N_LANGS } from "./i18n_edit.js";
 import { applyForRole, myApplications, listApplications, decideApplication, NEEDED } from "./roles.js";
 import { handlePodcast } from "./podcast.js";
 import { handleVideo } from "./youtube.js";
@@ -242,7 +243,8 @@ async function settleProposal(env, user, pid, confirm) {
   let res = { status: 200, body: { ok: true } };
   if (confirm) {
     const inv = Object.entries(ACT).find(([, v]) => v === p.action)?.[0];
-    if (p.action.startsWith("content.edit")) { const pl = JSON.parse(p.payload || "{}"); res = await editItem(env, actor, { kind: p.kind, id: p.item_id, level: pl.level, fields: pl.fields, reason: p.reason, viaProposal: p.id }); }
+    if (p.kind === "i18n") res = await runProposal(env, actor, p);
+    else if (p.action.startsWith("content.edit")) { const pl = JSON.parse(p.payload || "{}"); res = await editItem(env, actor, { kind: p.kind, id: p.item_id, level: pl.level, fields: pl.fields, reason: p.reason, viaProposal: p.id }); }
     else if (inv) res = await decide(env, actor, { kind: p.kind, id: p.item_id, action: inv, reason: p.reason || "Empfehlung bestaetigt", viaProposal: p.id });
     else res = { status: 400, body: { error: "unsupported" } };
     if (res.status !== 200) return res;
@@ -317,6 +319,19 @@ export async function handleEditor(env, request, url, path, user, J) {
   if (path === "/api/editor/decide" && method === "POST") { const b = await body(); return R(await decide(env, user, { kind: String(b.kind || ""), id: String(b.id || ""), action: String(b.action || ""), reason: txt(b.reason, 300) })); }
   if (path === "/api/editor/edit" && method === "POST") { const b = await body(); return R(await editItem(env, user, { kind: String(b.kind || ""), id: String(b.id || ""), level: b.level === "full" ? "full" : "minor", fields: b.fields && typeof b.fields === "object" ? b.fields : {}, reason: txt(b.reason, 300) })); }
   if (path === "/api/editor/proposals" && method === "GET") return J({ proposals: role === "moderator" ? [] : await listProposals(db, url.searchParams.get("status") === "done" ? "executed" : "open") }, 200, NS);
+  if (path.startsWith("/api/editor/i18n/")) {   // Sprachfassungen: Absatz speichern, Verlauf, Zuruecksetzen, neu uebersetzen vormerken
+    const q = (k) => url.searchParams.get(k) || "";
+    if (path === "/api/editor/i18n/overrides" && method === "GET") return J({ overrides: await currentOverrides(db, q("kind"), q("item"), q("lang")) }, 200, NS);
+    if (path === "/api/editor/i18n/history" && method === "GET") {
+      const h = await unitHistory(db, q("kind"), q("item"), q("lang"), q("unit")), actor = await loadActor(db, user), perm = can(actor, "content.edit_full", { ownerId: null, orgIds: [], topics: [], lang: q("lang"), i18n: true });
+      return J({ ...h, canRevert: perm.ok && !perm.propose }, 200, NS);
+    }
+    const b = method === "POST" ? await body() : {};
+    if (path === "/api/editor/i18n/save" && method === "POST") return R(await saveUnit(env, user, { kind: String(b.kind || ""), item: String(b.item || ""), lang: String(b.lang || ""), unit: String(b.unit || ""), text: b.text, prev: b.prev, reason: txt(b.reason, 300) }));
+    if (path === "/api/editor/i18n/revert" && method === "POST") return R(await revertUnit(env, user, { kind: String(b.kind || ""), item: String(b.item || ""), lang: String(b.lang || ""), unit: String(b.unit || ""), rev: b.rev }));
+    if (path === "/api/editor/i18n/retranslate" && method === "POST") return R(await requestRetranslate(env, user, { kind: String(b.kind || ""), item: String(b.item || ""), lang: String(b.lang || ""), units: b.units }));
+    return J({ error: "not_found" }, 404, NS);
+  }
   if (path === "/api/editor/history" && method === "GET") {
     const kind = url.searchParams.get("kind") || "", v = ["blog", "wiki", "entity"].includes(kind) ? await versionsOf(db, kind, url.searchParams.get("id") || "") : null;
     if (!v) return J({ error: "not_found" }, 404, NS);

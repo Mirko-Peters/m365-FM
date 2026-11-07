@@ -974,7 +974,7 @@ def build():
     import shutil as _sh
     if (ROOT / "r2out").exists(): _sh.rmtree(ROOT / "r2out")
     TRF.REG = TRF.Registry()   # #266: Transkripte dieses Baus (Index /show/transcripts.txt)
-    SF.prefetch(COMMUNITY_API, langs=list(COMM_LANGS)); SF.check(COMMUNITY_API)   # alle Exporte einmal, parallel; ohne Pflicht-Exporte kein Bau
+    SF.prefetch(COMMUNITY_API, langs=list(COMM_LANGS)); SF.check(COMMUNITY_API); import site_i18n_overrides as _OV0; _OV0.sync(COMMUNITY_API)   # alle Exporte einmal, parallel; ohne Pflicht-Exporte kein Bau
     phase("Exporte geholt")
     eps, pub, seo = load()
     try:
@@ -1442,6 +1442,7 @@ def build():
     import site_contributor as CONTRIB
     CONTRIB.build({"BASE": BASE, "write": write, "page": page, "header": header, "footer": footer, "community_tags": community_tags,
                    "COMMUNITY_API": COMMUNITY_API, "CI": _CI, "langs": list(dict.fromkeys(list(active) + ["en"]))})
+    import site_i18n_overrides as OVR; OVR.publish(OUT)   # Veraltet-Liste und Absatz-Ansicht fuer /redaktion/
     shutil.copy(ROOT / "assets" / "sw.js", OUT / "sw.js")
     if (ROOT / "data" / "m365con_program.json").exists():
         shutil.copy(ROOT / "data" / "m365con_program.json", OUT / "m365con_program.json")

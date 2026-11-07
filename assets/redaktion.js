@@ -183,5 +183,91 @@
       state.role = r.j.role || ""; state.items = r.j.items || []; state.props = r.j.proposals || []; state.modKinds = r.j.modKinds || []; state.scope = r.j.scope || null; scopeBox.textContent = MOD || !state.scope ? "" : state.scope.subject ? t("mine") + ": " + (state.scope.topics.join(", ") || "–") : t("general"); say(""); filtersUI(); drawProps(); draw();
     });
   }
+
+  /* ---- Sprachfassungen: Original neben Fassung, Absatz fuer Absatz bearbeiten (versioniert), Veraltet-Liste ---- */
+  var T2 = {
+    en: { tab: "Language versions", tabr: "To review", tabs: "Outdated", kind: "Kind", lang: "Language", item: "Entry (slug)", load: "Open", orig: "English original", cur: "Current version", reason: "Reason for the change", save: "Save", saved: "Saved.", proposed: "Saved as a recommendation for the editors.", hist: "History", retr: "Retranslate changed paragraphs", retrOk: "Noted. The next translation run (--stale) picks it up.", noItem: "No paragraphs published for this entry. The paragraph view covers outdated and already edited entries; others follow with the next build.", stale: "outdated", edited: "edited", none: "No outdated entries.", open: "Open", only: "Translated once by machine, from here on edited by hand.", base: "Machine translation", unchanged: "Nothing changed.", reasonReq: "Please give a reason.", err: "That did not work.", mine: "Your languages", all: "All", ep: "Episode (title, summary)", nt: "Show notes", bl: "Blog post" },
+    de: { tab: "Sprachfassungen", tabr: "Zu prüfen", tabs: "Veraltet", kind: "Art", lang: "Sprache", item: "Eintrag (Slug)", load: "Öffnen", orig: "Englisches Original", cur: "Aktuelle Fassung", reason: "Grund der Änderung", save: "Speichern", saved: "Gespeichert.", proposed: "Als Empfehlung für die Editoren gespeichert.", hist: "Verlauf", retr: "Geänderte Absätze neu übersetzen", retrOk: "Vorgemerkt. Der nächste Übersetzungslauf (--stale) holt es ab.", noItem: "Für diesen Eintrag sind keine Absätze veröffentlicht. Die Absatz-Ansicht umfasst veraltete und schon bearbeitete Einträge; die übrigen folgen mit dem nächsten Bau.", stale: "veraltet", edited: "bearbeitet", none: "Keine veralteten Einträge.", open: "Öffnen", only: "Einmal maschinell übersetzt, danach von Hand bearbeitet.", base: "Maschinelle Übersetzung", unchanged: "Nichts geändert.", reasonReq: "Bitte einen Grund angeben.", err: "Das hat nicht geklappt.", mine: "Deine Sprachen", all: "Alle", ep: "Folge (Titel, Teaser)", nt: "Show Notes", bl: "Blog-Beitrag" }
+  };
+  function t2(k) { return (T2[LANG][k] != null ? T2[LANG][k] : T2.en[k]) || k; }
+  var LL = ["de", "fr", "es", "it", "nl", "pt", "pl", "id", "ru", "uk", "ar", "he", "ja", "ko"], KK = [["lblog", "bl"], ["episode", "ep"], ["notes", "nt"]];
+  var tabs = h("div", { role: "tablist", style: "display:flex;gap:.4em;margin:.6em 0" }), panel = h("div", { style: "display:none" }), SKIP = [status, tabs, panel];
+  root.insertBefore(tabs, scopeBox); root.appendChild(panel);
+  function showTab(n) {
+    Array.prototype.forEach.call(root.children, function (c) { if (SKIP.indexOf(c) < 0) c.style.display = n === "review" ? "" : "none"; });
+    panel.style.display = n === "review" ? "none" : ""; panel.textContent = "";
+    Array.prototype.forEach.call(tabs.children, function (b) { b.setAttribute("aria-selected", b.dataset.n === n ? "true" : "false"); b.style.fontWeight = b.dataset.n === n ? "700" : ""; });
+    if (n === "units") unitsUI(panel); if (n === "stale") staleUI(panel);
+  }
+  [["review", "tabr"], ["units", "tab"], ["stale", "tabs"]].forEach(function (x) { var b = h("button", { type: "button", role: "tab", class: "btn", text: t2(x[1]), onclick: function () { showTab(x[0]); } }); b.dataset.n = x[0]; tabs.appendChild(b); });
+  function sel(opts, val) { var s = h("select"); opts.forEach(function (o) { s.appendChild(h("option", { value: o[0], text: o[1] })); }); if (val) s.value = val; return s; }
+  function getJSON(u) { return fetch(u, { cache: "no-cache" }).then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; }); }
+  var sticky = { kind: "lblog", lang: "de", item: "" };
+
+  function unitsUI(host) {
+    var kS = sel(KK.map(function (k) { return [k[0], t2(k[1])]; }), sticky.kind), lS = sel(LL.map(function (l) { return [l, l]; }), sticky.lang), iI = h("input", { type: "text", maxlength: "160", value: sticky.item, style: "min-width:16em" }), out = h("div"), msg = h("p", { class: "mut", role: "status" });
+    host.appendChild(h("p", { class: "mut", text: t2("only") }));
+    var bar = h("div", { style: "display:flex;gap:.8em;flex-wrap:wrap;align-items:flex-end" }, [field(t("kind"), kS), field(t("lang"), lS), field(t2("item"), iI), h("button", { type: "button", class: "btn main", text: t2("load"), onclick: go })]);
+    host.appendChild(bar); host.appendChild(msg); host.appendChild(out);
+    function go() {
+      sticky = { kind: kS.value, lang: lS.value, item: iI.value.trim() }; out.textContent = ""; msg.textContent = t("loading");
+      Promise.all([getJSON(C.base + "/i18n-units/" + sticky.kind + "/" + sticky.lang + ".json"), api("/api/editor/i18n/overrides?kind=" + sticky.kind + "&item=" + encodeURIComponent(sticky.item) + "&lang=" + sticky.lang)]).then(function (a) {
+        var d = a[0] && a[0][sticky.item]; msg.textContent = ""; if (a[1].s === 401 || a[1].s === 403) { msg.textContent = a[1].s === 401 ? t("login") : t("denied"); return; }
+        if (!d) { msg.textContent = t2("noItem"); return; }
+        drawUnits(out, d, a[1].j.overrides || {}, msg);
+      });
+    }
+    if (sticky.item) go();
+  }
+  function drawUnits(out, d, ov, msg) {
+    var rs = h("input", { type: "text", maxlength: "300", style: "width:100%" }); out.appendChild(field(t2("reason"), rs));
+    d.units.forEach(function (u) {
+      var id = u[0], shown = ov[id] != null ? ov[id] : u[2], isSt = (d.stale || []).indexOf(id) >= 0;
+      var ta = h("textarea", { rows: "3", maxlength: "20000", style: "width:100%", "aria-label": t2("cur") }); ta.value = shown;
+      var row = h("div", { style: "border:1px solid var(--bd);border-radius:.5em;padding:.6em;margin:.7em 0" }), hb = h("div"), cur = { v: shown };
+      row.appendChild(h("strong", { text: id + (isSt ? " · " + t2("stale") : "") + (ov[id] != null ? " · " + t2("edited") : "") }));
+      if (u[1]) row.appendChild(h("div", { class: "mut", style: "white-space:pre-wrap;margin:.3em 0" }, [h("em", { text: t2("orig") + ": " }), document.createTextNode(u[1])]));
+      row.appendChild(ta);
+      row.appendChild(h("button", { type: "button", class: "btn main", text: t2("save"), onclick: function (ev) {
+        if (!rs.value.trim() && state.role !== "admin") { msg.textContent = t2("reasonReq"); rs.focus(); return; } var b = ev.target; b.disabled = true;
+        api("/api/editor/i18n/save", { method: "POST", body: { kind: sticky.kind, item: sticky.item, lang: sticky.lang, unit: id, text: ta.value, prev: cur.v, reason: rs.value } }).then(function (r) {
+          b.disabled = false; msg.textContent = r.s === 200 ? (r.j.proposed ? t2("proposed") : t2("saved")) : r.j.error === "unchanged" ? t2("unchanged") : errText(r.j); if (r.s === 200 && !r.j.proposed) { cur.v = ta.value; hb.textContent = ""; }
+        });
+      } }));
+      row.appendChild(h("button", { type: "button", class: "btn", style: "margin-inline-start:.4em", text: t2("hist"), onclick: function () { if (hb.firstChild) hb.textContent = ""; else unitHist(id, hb, ta, cur); } }));
+      row.appendChild(hb); out.appendChild(row);
+    });
+    var st = d.stale || [];
+    if (st.length) out.appendChild(h("button", { type: "button", class: "btn", text: t2("retr"), onclick: function () { api("/api/editor/i18n/retranslate", { method: "POST", body: { kind: sticky.kind, item: sticky.item, lang: sticky.lang, units: st } }).then(function (r) { msg.textContent = r.s === 200 ? (r.j.proposed ? t2("proposed") : t2("retrOk")) : errText(r.j); }); } }));
+  }
+  function unitHist(id, host, ta, cur) {
+    host.textContent = t("loading");
+    api("/api/editor/i18n/history?kind=" + sticky.kind + "&item=" + encodeURIComponent(sticky.item) + "&lang=" + sticky.lang + "&unit=" + encodeURIComponent(id)).then(function (r) {
+      host.textContent = ""; if (r.s !== 200) { host.textContent = errText(r.j); return; }
+      var vs = r.j.versions || [], ul = h("ul", { style: "padding:0" });
+      vs.forEach(function (v, k) {
+        var li = h("li", { style: "list-style:none;margin:.4em 0" }), box = h("div"), older = vs[k + 1];
+        li.appendChild(h("span", { text: "#" + v.id + " · " + new Date(v.ts * 1000).toLocaleString(LANG) + " · " + (v.user || "–") + (v.role ? " (" + v.role + ")" : "") + (v.action === "baseline" ? " · " + t2("base") : v.action === "revert" ? " · ↩" : "") + (v.reason ? " · " + v.reason : "") + (v.id === r.j.current ? " · " + t("cur") : "") }));
+        if (older) li.appendChild(h("button", { type: "button", class: "btn", style: "margin-inline-start:.5em", text: t("diffb"), onclick: function () { if (box.firstChild) box.textContent = ""; else box.appendChild(diffView(older.body, v.body)); } }));
+        if (r.j.canRevert && v.id !== r.j.current) li.appendChild(h("button", { type: "button", class: "btn", style: "margin-inline-start:.4em", text: t("revert"), onclick: function (ev) { ev.target.disabled = true; api("/api/editor/i18n/revert", { method: "POST", body: { kind: sticky.kind, item: sticky.item, lang: sticky.lang, unit: id, rev: v.id } }).then(function (x) { if (x.s === 200) { ta.value = v.body; cur.v = v.body; unitHist(id, host, ta, cur); } else { host.textContent = errText(x.j); } }); } }));
+        li.appendChild(box); ul.appendChild(li);
+      });
+      host.appendChild(ul);
+    });
+  }
+  function staleUI(host) {
+    var lS = sel([["", t2("all")]].concat(LL.map(function (l) { return [l, l]; })), ""), out = h("div");
+    host.appendChild(field(t("lang"), lS)); host.appendChild(out);
+    getJSON(C.base + "/i18n-stale.json").then(function (j) {
+      function draw() {
+        out.textContent = ""; var xs = ((j || {}).items || []).filter(function (x) { return !lS.value || x.lang === lS.value; });
+        if (!xs.length) { out.appendChild(h("p", { class: "mut", text: t2("none") })); return; }
+        var ul = h("ul", { style: "padding:0" });
+        xs.slice(0, 500).forEach(function (x) { ul.appendChild(h("li", { style: "list-style:none;margin:.4em 0" }, [h("span", { text: x.lang + " · " + x.kind + " · " + x.item + " · " + x.units.slice(0, 12).join(", ") + " "}), h("button", { type: "button", class: "btn", text: t2("open"), onclick: function () { sticky = { kind: x.kind, lang: x.lang, item: x.item }; showTab("units"); } })])); });
+        out.appendChild(ul);
+      }
+      lS.onchange = draw; draw();
+    });
+  }
   load();
 })();

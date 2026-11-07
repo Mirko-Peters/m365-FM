@@ -329,3 +329,70 @@ test("Wortdiff: nur Einfuegungen/Loeschungen, sicher gerendert (kein innerHTML)"
   assert.equal(d.filter((p) => p.t !== "del").map((p) => p.s).join(""), "Der neue Text hier und mehr");
   assert.deepEqual(j(ctx.window.M365Diff("<b>x</b>", "<b>x</b>")), [{ t: "eq", s: "<b>x</b>" }]);   // Markup bleibt Text
 });
+
+// ---- Sprachfassungen ----
+import { saveUnit, unitHistory, revertUnit, requestRetranslate, overridesExport, handleI18nPublic, cleanUnit } from "../src/i18n_edit.js";
+const pub = async (env, path) => { const u = new URL("https://x" + path); const r = await handleI18nPublic(env, new Request(u), u, u.pathname, (d, s = 200, h = {}) => new Response(JSON.stringify(d), { status: s, headers: h })); return r && { s: r.status, j: await r.json(), c: r.headers.get("cache-control") }; };
+const seed = (raw) => {
+  raw.prepare("INSERT INTO blog_posts(id,user_id,slug,title,body,lang,status,created,updated) VALUES(20,4,'live-post','L','x','en','live',1,1)").run();
+  raw.prepare("INSERT INTO blog_posts(id,user_id,slug,title,body,lang,status,created,updated) VALUES(21,4,'draft-post','D','x','en','pending',1,1)").run();
+};
+const base = { kind: "lblog", item: "live-post", lang: "de", unit: "1", prev: "Maschinell", reason: "Fachbegriff" };
+
+test("Sprachfassungen: Rechte (Editor ja, Moderator nur Empfehlung, andere nein, Sprach-Scope)", async () => {
+  const { raw, db } = await mkdb(), env = { DB: db }; seed(raw);
+  assert.equal((await saveUnit(env, U.editor, { ...base, text: "Besser" })).status, 200);
+  const m = await saveUnit(env, U.mod, { ...base, text: "Vorschlag" });
+  assert.equal(m.body.proposed, true);
+  assert.equal(raw.prepare("SELECT text FROM i18n_override WHERE unit='1'").get().text, "Besser");   // Empfehlung ist noch nicht live
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM edit_proposals WHERE kind='i18n'").get().n, 1);
+  assert.equal((await saveUnit(env, U.user, { ...base, text: "x" })).status, 403);
+  assert.equal((await saveUnit(env, U.editor, { ...base, text: "x", reason: "" })).body.error, "reason_required");
+  assert.equal((await saveUnit(env, U.editor, { ...base, text: "x", lang: "xx" })).status, 400);
+  assert.equal((await saveUnit(env, U.editor, { ...base, item: "draft-post", text: "x" })).status, 404);
+  // Fach-Editor mit Sprachen: nur diese Sprache
+  assert.deepEqual([can({ ...U.editor, scope: { topics: new Set(), langs: new Set(["fr"]) } }, "content.edit_full", { i18n: true, lang: "de" }).why, can({ ...U.editor, scope: { topics: new Set(), langs: new Set(["fr"]) } }, "content.edit_full", { i18n: true, lang: "fr" }).ok], ["out_of_scope", true]);
+  // Empfehlung des Moderators: Editor bestaetigt im Browser -> wird gespeichert
+  const pid = raw.prepare("SELECT id FROM edit_proposals WHERE kind='i18n'").get().id;
+  const r = await call(env, U.editor, "POST", `/api/editor/proposals/${pid}/confirm`, {});
+  assert.equal(r.s, 200);
+  assert.equal(raw.prepare("SELECT text FROM i18n_override WHERE unit='1'").get().text, "Vorschlag");
+});
+
+test("Sprachfassungen: Absatz-Versionen, Verlauf, Zuruecksetzen", async () => {
+  const { raw, db } = await mkdb(), env = { DB: db }; seed(raw);
+  await saveUnit(env, U.editor, { ...base, text: "Eins" });
+  await saveUnit(env, U.editor2, { ...base, text: "Zwei", prev: "Eins", reason: "Stil" });
+  let h = await unitHistory(db, "lblog", "live-post", "de", "1");
+  assert.deepEqual(h.versions.map((v) => [v.action, v.body]), [["edit", "Zwei"], ["edit", "Eins"], ["baseline", "Maschinell"]]);
+  assert.equal(h.current, h.versions[0].id);
+  assert.equal((await saveUnit(env, U.editor, { ...base, text: "Zwei", prev: "Eins" })).body.error, "unchanged");
+  assert.equal((await revertUnit(env, U.editor, { ...base, rev: h.versions[1].id })).status, 200);
+  assert.equal(raw.prepare("SELECT text FROM i18n_override WHERE unit='1'").get().text, "Eins");
+  h = await unitHistory(db, "lblog", "live-post", "de", "1");
+  assert.equal(h.versions[0].action, "revert"); assert.equal(h.versions.length, 4);
+  assert.equal((await revertUnit(env, U.mod, { ...base, rev: h.versions[3].id })).status, 403);
+  await revertUnit(env, U.editor, { ...base, rev: h.versions[3].id });   // Ursprungsfassung: Override verschwindet, Build nimmt die Maschinenfassung
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM i18n_override").get().n, 0);
+  assert.ok(raw.prepare("SELECT COUNT(*) n FROM edit_log WHERE kind='i18n'").get().n >= 4);
+  assert.equal(cleanUnit('a<script>x()</script><b onclick="y()">b</b><a href="javascript:z()">c</a>'), 'a<b>b</b><a href="#">c</a>');
+});
+
+test("Sprachfassungen: Export enthaelt nur veroeffentlichte Eintraege; Neuuebersetzung nur vormerken", async () => {
+  const { raw, db } = await mkdb(), env = { DB: db }; seed(raw);
+  await saveUnit(env, U.editor, { ...base, text: "Eins" });
+  raw.prepare("INSERT INTO i18n_override(kind,item,lang,unit,text,by,ts) VALUES('lblog','draft-post','de','1','geheim',2,1)").run();   // Entwurf: darf nicht raus
+  raw.prepare("INSERT INTO i18n_override(kind,item,lang,unit,text,by,ts) VALUES('lblog','live-post','fr','1','autre',2,1)").run();
+  const e = await pub(env, "/api/i18n/overrides?kind=lblog&lang=de");
+  assert.deepEqual(e.j, { kind: "lblog", lang: "de", items: { "live-post": { 1: "Eins" } } });
+  assert.match(e.c, /public/);
+  assert.deepEqual((await overridesExport(db, "lblog", "fr")).items, { "live-post": { 1: "autre" } });
+  assert.equal((await pub(env, "/api/i18n/overrides?kind=x&lang=de")).s, 400);
+  assert.equal((await requestRetranslate(env, U.editor, { kind: "lblog", item: "live-post", lang: "de", units: ["1", "T"] })).status, 200);
+  await requestRetranslate(env, U.editor, { kind: "lblog", item: "live-post", lang: "de", units: ["2"] });
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM i18n_retranslate_req WHERE status='open'").get().n, 1);   // ein offener Wunsch je Eintrag und Sprache
+  assert.equal((await requestRetranslate(env, U.mod, { kind: "lblog", item: "live-post", lang: "de", units: ["2"] })).body.proposed, true);
+  assert.equal((await requestRetranslate(env, U.user, { kind: "lblog", item: "live-post", lang: "de" })).status, 403);
+  assert.deepEqual((await pub(env, "/api/i18n/retranslate")).j.items.map((x) => [x.item, x.units]), [["live-post", ["2"]]]);
+  assert.equal((await pub({ ...env, CRON_KEY: "k" }, "/api/i18n/retranslate/done")), null);   // POST-only
+});
