@@ -3,6 +3,7 @@
 import { can, roleOf, isStaff, loadActor, logEdit, emailFor, scopeOf } from "./perm.js";
 import { evalBadges } from "./badges.js";
 import { notify } from "./mail.js";
+import { applyForRole, myApplications, listApplications, decideApplication, NEEDED } from "./roles.js";
 import { handlePodcast } from "./podcast.js";
 import { handleVideo } from "./youtube.js";
 
@@ -126,9 +127,68 @@ export async function editItem(env, user, { kind, id, level, fields = {}, reason
   for (const k of keys) { before[k] = String(it[k] ?? "").slice(0, 300); after[k] = String(val[k]).slice(0, 300); }
   await db.prepare(`UPDATE blog_posts SET ${keys.map((k) => `${k}=?`).join(",")},updated=? WHERE id=?`).bind(...keys.map((k) => val[k]), now(), it.id).run();
   const logId = await logEdit(db, actor, action, kind, id, { reason: viaProposal ? `${reason} (Empfehlung #${viaProposal})` : reason, before, after });
+  await recordRev(db, actor, it, { title: keys.includes("title") ? val.title : it.title, summary: keys.includes("summary") ? val.summary : it.summary, body: keys.includes("body") ? val.body : it.body, topics: keys.includes("topics") ? val.topics : (it.topics || "[]") }, reason);
   if (level === "full" && roleOf(actor) === "editor" && it.ownerId) await notify(env, it.ownerId, "system", "Dein Beitrag wurde von der Redaktion bearbeitet", `<p>Die Redaktion von M365.FM hat deinen Beitrag „${esc(it.title)}“ überarbeitet. Grund: ${esc(txt(reason, 300) || "–")}</p>`, `edit:${logId}`);
   return { status: 200, body: { ok: true, log: logId } };
 }
+// ---- Versionsverlauf (wie ein Wiki): Blog ueber content_rev, Wiki/Entitaeten ueber ihre Revisionstabellen ----
+async function recordRev(db, actor, it, st, reason, action = "edit") {
+  const ts = now(), ins = db.prepare("INSERT INTO content_rev(kind,item_id,user_id,role,action,reason,title,summary,body,topics,ts) VALUES('blog',?,?,?,?,?,?,?,?,?,?)");
+  if (!(await db.prepare("SELECT 1 x FROM content_rev WHERE kind='blog' AND item_id=?").bind(String(it.id)).first()))   // Ursprungsfassung vor der ersten Redaktionsaenderung
+    await ins.bind(String(it.id), it.ownerId || 0, "author", "baseline", "Fassung vor der Redaktion", it.title || "", it.summary || "", it.body || "", it.topics || "[]", it.updated || it.created || ts).run();
+  await ins.bind(String(it.id), actor.id, roleOf(actor), action, String(reason || "").slice(0, 300), st.title || "", st.summary || "", st.body || "", st.topics || "[]", ts).run();
+}
+const entText = (d) => [d.name, d.desc?.en && "EN: " + d.desc.en, d.desc?.de && "DE: " + d.desc.de, d.long?.en && "\n" + d.long.en].filter(Boolean).join("\n");
+const hv = (r) => ({ id: r.id, ts: r.ts, user: r.name || "", role: r.role || "", action: r.action || "edit", reason: r.reason || "", title: r.title || "", summary: r.summary || "", body: String(r.body || "").slice(0, 20000), status: r.status || "" });
+// Liefert { versions (neueste zuerst), current, ownerId } oder null
+export async function versionsOf(db, kind, id) {
+  if (kind === "blog") {
+    const it = await A.blog.load(db, +id); if (!it) return null;
+    const rows = (await db.prepare("SELECT r.id,r.ts,r.role,r.action,r.reason,r.title,r.summary,r.body,COALESCE(u.name,'') name FROM content_rev r LEFT JOIN users u ON u.id=r.user_id WHERE r.kind='blog' AND r.item_id=? ORDER BY r.id DESC LIMIT 30").bind(String(id)).all()).results || [];
+    return { versions: rows.map(hv), current: rows[0]?.id || 0, ownerId: it.ownerId, it };
+  }
+  if (kind === "wiki" || kind === "entity") {
+    const it = await A[kind].load(db, +id); if (!it) return null;
+    const rows = kind === "wiki"
+      ? (await db.prepare("SELECT r.id,r.created ts,r.status,r.summary reason,r.body,r.user_id,COALESCE(u.name,'') name,COALESCE(u.role,'user') role FROM wiki_rev r LEFT JOIN users u ON u.id=r.user_id WHERE r.term=? AND r.lang=? ORDER BY r.created DESC,r.id DESC LIMIT 30").bind(it.term, it.lang).all()).results || []
+      : (await db.prepare("SELECT r.id,r.created ts,r.status,r.summary reason,r.data,r.user_id,COALESCE(u.name,'') name,COALESCE(u.role,'user') role FROM entity_rev r LEFT JOIN users u ON u.id=r.user_id WHERE r.eid=? ORDER BY r.created DESC,r.id DESC LIMIT 30").bind(it.eid).all()).results || [];
+    const vs = rows.map((r) => { let d = {}; if (r.data) { try { d = JSON.parse(r.data); } catch { /* leer */ } } return { ...hv({ ...r, title: kind === "wiki" ? it.term : d.name || it.eid, body: r.data ? entText(d) : r.body, action: "edit" }), authorId: r.user_id }; });
+    return { versions: vs, current: vs.find((v) => v.status === "live")?.id || 0, ownerId: it.ownerId, it };
+  }
+  return null;
+}
+
+// Zuruecksetzen: Editor nur auf Basis einer Redaktionsaenderung (aktuelle Fassung stammt von einem Editor), Admin jederzeit
+export async function revertTo(env, user, kind, id, revId) {
+  const db = env.DB, v = await versionsOf(db, kind, id);
+  if (!v) return { status: 404, body: { error: "not_found" } };
+  const actor = await loadActor(db, user), role = roleOf(actor), target = v.versions.find((x) => x.id === +revId);
+  if (!target) return { status: 404, body: { error: "not_found" } };
+  if (role !== "admin" && role !== "editor") return { status: 403, body: { error: "forbidden" } };
+  const perm = can(actor, "content.edit_full", await itemPerm(db, v.it, kind));
+  if (!perm.ok || perm.propose) return { status: 403, body: { error: perm.why || "forbidden" } };
+  if (target.id === v.current) return { status: 409, body: { error: "already_current" } };
+  const cur = v.versions.find((x) => x.id === v.current);
+  if (role !== "admin") {   // Editor: nur Redaktionsaenderungen zuruecknehmen
+    const curRole = kind === "blog" ? cur?.role : (await db.prepare("SELECT role FROM users WHERE id=?").bind(cur?.authorId || 0).first())?.role;
+    if (curRole !== "editor") return { status: 403, body: { error: "not_editor_edit" } };
+  }
+  const reason = `Zurückgesetzt auf Version #${target.id}`;
+  if (kind === "blog") {
+    const tr = await db.prepare("SELECT title,summary,body,topics FROM content_rev WHERE id=?").bind(target.id).first();
+    await db.prepare("UPDATE blog_posts SET title=?,summary=?,body=?,topics=?,updated=? WHERE id=?").bind(tr.title, tr.summary, tr.body, tr.topics, now(), +id).run();
+    await recordRev(db, actor, v.it, tr, reason, "revert");
+  } else {
+    const t = kind === "wiki" ? "wiki_rev" : "entity_rev", cond = kind === "wiki" ? "term=? AND lang=?" : "eid=?", args = kind === "wiki" ? [v.it.term, v.it.lang] : [v.it.eid];
+    const row = await db.prepare(`SELECT status FROM ${t} WHERE id=?`).bind(target.id).first();
+    if (!row || !["old", "live"].includes(row.status)) return { status: 409, body: { error: "not_revertable" } };
+    await db.batch([db.prepare(`UPDATE ${t} SET status='old' WHERE ${cond} AND status='live'`).bind(...args), db.prepare(`UPDATE ${t} SET status='live' WHERE id=?`).bind(target.id)]);
+  }
+  const logId = await logEdit(db, actor, "content.edit_full", kind, id, { reason, before: { version: v.current }, after: { version: target.id } });
+  if (role === "editor" && v.ownerId && kind === "blog") await notify(env, v.ownerId, "system", "Dein Beitrag wurde von der Redaktion bearbeitet", `<p>Die Redaktion hat deinen Beitrag „${esc(v.it.title)}“ auf eine frühere Fassung zurückgesetzt.</p>`, `edit:${logId}`);
+  return { status: 200, body: { ok: true, log: logId } };
+}
+
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
 // ---- Pruefliste ----
@@ -231,6 +291,17 @@ export async function handleEditor(env, request, url, path, user, J) {
     if ((m = /^\/api\/admin\/editlog\/undo\/(\d+)$/.exec(path)) && method === "POST") return R(await undoLog(env, user, +m[1]));
     return J({ error: "not_found" }, 404, NS);
   }
+  // Bewerbung und eigener Verlauf: fuer jedes angemeldete Mitglied
+  if (path === "/api/editor/apply" || path === "/api/editor/my-history") {
+    if (!user) return J({ error: "login" }, 401, NS);
+    if (path === "/api/editor/apply" && method === "GET") return J({ items: await myApplications(db, user.id), needed: NEEDED }, 200, NS);
+    if (path === "/api/editor/apply" && method === "POST") return R(await applyForRole(env, user, await body()));
+    if (method === "GET") {   // Autor sieht den Verlauf des eigenen Eintrags (Blog) bzw. der eigenen Wiki-/Entitaeten-Aenderungen
+      const kind = url.searchParams.get("kind") || "", v = ["blog", "wiki", "entity"].includes(kind) ? await versionsOf(db, kind, url.searchParams.get("id") || "") : null;
+      if (!v || (kind === "blog" ? v.ownerId !== user.id : !v.versions.some((x) => x.authorId === user.id))) return J({ error: "not_found" }, 404, NS);
+      return J({ versions: v.versions, current: v.current }, 200, NS);
+    }
+  }
   if (!isStaff(user)) return J({ error: user ? "forbidden" : "login" }, user ? 403 : 401, NS);
   const role = roleOf(user);
   if (path === "/api/editor/queue" && method === "GET") {
@@ -246,7 +317,16 @@ export async function handleEditor(env, request, url, path, user, J) {
   if (path === "/api/editor/decide" && method === "POST") { const b = await body(); return R(await decide(env, user, { kind: String(b.kind || ""), id: String(b.id || ""), action: String(b.action || ""), reason: txt(b.reason, 300) })); }
   if (path === "/api/editor/edit" && method === "POST") { const b = await body(); return R(await editItem(env, user, { kind: String(b.kind || ""), id: String(b.id || ""), level: b.level === "full" ? "full" : "minor", fields: b.fields && typeof b.fields === "object" ? b.fields : {}, reason: txt(b.reason, 300) })); }
   if (path === "/api/editor/proposals" && method === "GET") return J({ proposals: role === "moderator" ? [] : await listProposals(db, url.searchParams.get("status") === "done" ? "executed" : "open") }, 200, NS);
+  if (path === "/api/editor/history" && method === "GET") {
+    const kind = url.searchParams.get("kind") || "", v = ["blog", "wiki", "entity"].includes(kind) ? await versionsOf(db, kind, url.searchParams.get("id") || "") : null;
+    if (!v) return J({ error: "not_found" }, 404, NS);
+    const actor = await loadActor(db, user), perm = can(actor, "content.edit_full", await itemPerm(db, v.it, kind));
+    return J({ versions: v.versions, current: v.current, canRevert: perm.ok && !perm.propose }, 200, NS);
+  }
+  if (path === "/api/editor/revert" && method === "POST") { const b = await body(); return R(await revertTo(env, user, String(b.kind || ""), String(b.id || ""), b.rev)); }
+  if (path === "/api/editor/applications" && method === "GET") return role === "moderator" ? J({ error: "forbidden" }, 403, NS) : J({ items: await listApplications(db, user) }, 200, NS);
   let m;
+  if ((m = /^\/api\/editor\/applications\/(\d+)\/(confirm|reject|override)$/.exec(path)) && method === "POST") return R(await decideApplication(env, user, +m[1], m[2], await body()));
   if ((m = /^\/api\/editor\/proposals\/(\d+)\/(confirm|dismiss)$/.exec(path)) && method === "POST") return R(await settleProposal(env, user, +m[1], m[2] === "confirm"));
   return J({ error: "not_found" }, 404, NS);
 }

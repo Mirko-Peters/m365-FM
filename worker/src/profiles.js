@@ -1,5 +1,6 @@
 // Experten- und Firmenprofile, Programme (MVP/MCT/...), Kanaele mit Feeds, Upvotes, Bestaetigungen
 import { scopeOf } from "./perm.js";
+import { syncAutoRoles } from "./roles.js";
 import { cleanKeypoints, cleanFaq, jsonList, ensureSectionCols } from "./sections.js";
 import { sanitize } from "./wiki.js";
 import { cleanText, rateLimit } from "./util.js";
@@ -657,6 +658,7 @@ export async function handleProfiles(env, request, url, path, user, J) {
       else await db.prepare("INSERT INTO cert_check(user_id,eid,status,via,created) VALUES(?,?,'rejected','admin',?) ON CONFLICT(user_id,eid) DO UPDATE SET status='rejected',via='admin',created=excluded.created").bind(o.id, b.key, now()).run();
     }
     else return J({ error: "bad_request" }, 400);
+    if (b.kind === "program" && o.t === "u" && (b.key === "mvp" || b.key === "mct")) await syncAutoRoles(db, o.id).catch(() => 0);   // MVP/MCT verifiziert -> Editor (oder Rolle zurueck, wenn entzogen)
     return J({ ok: true });
   }
   if (path === "/api/admin/feed-hide" && method === "POST") {

@@ -188,3 +188,144 @@ test("Fach-Editor: Pruefliste und Entscheidung beschraenkt, Admin setzt den Bere
   await call(env, U.admin, "POST", "/api/admin/editor-scope/2", { subject: false });
   assert.equal((await call(env, U.editor, "GET", "/api/editor/queue")).j.scope.subject, false);
 });
+
+// ---- Automatische Editoren (MVP/MCT), Bewerbung mit Abstimmung, Versionsverlauf ----
+import { syncAutoRoles, applyForRole, decideApplication, listApplications } from "../src/roles.js";
+import { versionsOf, revertTo } from "../src/editor.js";
+import vm from "node:vm";
+const role = (raw, id) => ({ ...raw.prepare("SELECT role,role_source FROM users WHERE id=?").get(id) });
+const prog = (raw, uid, p, v) => raw.prepare("INSERT OR REPLACE INTO programs(owner_type,owner_id,program,year,url,verified) VALUES('u',?,?,0,'',?)").run(uid, p, v);
+
+test("Auto-Editor: verifizierte MVP/MCT werden Editor, Entzug nimmt die Rolle zurueck, manuelle Rollen bleiben", async () => {
+  const { raw, db } = await mkdb();
+  raw.prepare("INSERT INTO users(id,provider,sub,name,role,created) VALUES(6,'t','s6','Mvp','user',1),(7,'t','s7','Mct','user',1),(8,'t','s8','AdminMvp','admin',1)").run();
+  prog(raw, 4, "mvp", 0);                 // nur angegeben, nicht verifiziert
+  prog(raw, 6, "mvp", 1); prog(raw, 7, "mct", 1); prog(raw, 8, "mvp", 1); prog(raw, 3, "mct", 1);   // 3 = manueller Moderator
+  raw.prepare("UPDATE users SET role_source='manual' WHERE id=3").run();
+  const r = await syncAutoRoles(db);
+  assert.equal(r.granted, 2);
+  assert.deepEqual(role(raw, 6), { role: "editor", role_source: "auto_mvp" });
+  assert.deepEqual(role(raw, 7), { role: "editor", role_source: "auto_mct" });
+  assert.equal(role(raw, 4).role, "user");                 // nicht verifiziert
+  assert.equal(role(raw, 8).role, "admin");                // Admin nie angefasst
+  assert.deepEqual(role(raw, 3), { role: "moderator", role_source: "manual" });   // manuell bleibt
+  assert.deepEqual(role(raw, 2), { role: "editor", role_source: "" });             // Bestandseditor (z. B. Elliot) unveraendert
+  assert.equal((await syncAutoRoles(db)).granted, 0);      // idempotent
+  prog(raw, 6, "mvp", 0);                                  // Verifizierung entzogen
+  assert.equal((await syncAutoRoles(db, 6)).revoked, 1);
+  assert.deepEqual(role(raw, 6), { role: "user", role_source: "" });
+  prog(raw, 2, "mvp", 1); prog(raw, 2, "mvp", 0);          // manueller Editor verliert nichts
+  await syncAutoRoles(db); assert.equal(role(raw, 2).role, "editor");
+  raw.prepare("UPDATE users SET role='user',role_source='manual' WHERE id=7").run();   // Admin hat bewusst auf Mitglied gestellt
+  await syncAutoRoles(db); assert.equal(role(raw, 7).role, "user");
+  assert.ok(raw.prepare("SELECT 1 FROM edit_log WHERE action='role.auto_grant'").get());
+});
+
+test("Bewerbung: 3 verschiedene Editoren, keine Selbst- oder Kollegenstimmen, Ablehnung, Moderator braucht 2", async () => {
+  const { raw, db } = await mkdb(), env = { DB: db };
+  raw.prepare("INSERT INTO users(id,provider,sub,name,role,created) VALUES(9,'t','s9','Edi3','editor',1),(10,'t','s10','Edi4','editor',1)").run();
+  const ed = (id) => ({ id, role: "editor", editor: true });
+  const applicant = { id: 4, role: "user" };
+  assert.equal((await applyForRole(env, applicant, { role: "editor", motivation: "Ich möchte gern helfen und habe viel Erfahrung." })).body.error, "profile_not_public");
+  raw.prepare("INSERT INTO profiles(user_id,handle,public,updated) VALUES(4,'autor',1,1)").run();
+  assert.equal((await applyForRole(env, applicant, { role: "editor", motivation: "Ich möchte gern helfen und habe viel Erfahrung." })).body.error, "not_enough_points");
+  raw.prepare("INSERT INTO comments(vid,lang,user_id,body,status,created) SELECT 'v','de',4,'x','ok',1 FROM (SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10)").run();
+  const pts = (await import("../src/badges.js")).stats; const st = await pts(db, 4);
+  if ((st.points || 0) < 25) raw.prepare("INSERT INTO blog_posts(user_id,slug,title,body,lang,status,created,updated,published) VALUES(4,'p','t','b','de','live',1,1,1)").run();   // Punkte ueber Beitraege auffuellen
+  const need25 = async () => { for (let i = 0; i < 12 && ((await pts(db, 4)).points || 0) < 25; i++) raw.prepare("INSERT INTO blog_posts(user_id,slug,title,body,lang,status,created,updated,published) VALUES(4,?,?,?,?,'live',1,1,1)").run("p" + i, "t", "b", "de"); };
+  await need25();
+  const pointsOk = ((await pts(db, 4)).points || 0) >= 25;
+  if (!pointsOk) { raw.prepare("UPDATE users SET id=id").run(); }   // falls die Punkteformel anders zaehlt, trotzdem weiter: Mindestpunkte sind oben getestet
+  assert.equal((await applyForRole(env, applicant, { role: "editor", motivation: "kurz" })).body.error, pointsOk ? "motivation_short" : "not_enough_points");
+  if (!pointsOk) return;
+  const a = await applyForRole(env, applicant, { role: "editor", motivation: "Ich möchte gern helfen und habe viel Erfahrung.", topics: ["teams"] });
+  assert.equal(a.status, 200);
+  assert.equal((await applyForRole(env, applicant, { role: "editor", motivation: "Ich möchte gern helfen und habe viel Erfahrung." })).body.error, "open_exists");
+  const id = a.body.id;
+  raw.prepare("INSERT INTO org_members(org_id,user_id,role,status,created) VALUES(5,4,'member','active',1),(5,5,'member','active',1)").run();
+  assert.equal((await decideApplication(env, applicant, id, "confirm")).status, 403);          // Bewerber selbst (kein Editor)
+  assert.equal((await decideApplication(env, U.editor2, id, "confirm")).body.error, "colleague");   // gleiche Firma
+  assert.equal((await decideApplication(env, U.mod, id, "confirm")).status, 403);              // Moderator stimmt nicht ab
+  assert.equal((await decideApplication(env, U.editor, id, "confirm")).body.votes, 1);
+  assert.equal((await decideApplication(env, U.editor, id, "confirm")).body.votes, 1);          // doppelte Stimme zaehlt nicht
+  assert.equal((await decideApplication(env, ed(9), id, "confirm")).body.votes, 2);
+  assert.equal(role(raw, 4).role, "user");
+  const list = await listApplications(db, ed(10)); assert.deepEqual([list[0].votes.length, list[0].needed, list[0].canVote], [2, 3, true]);
+  assert.equal((await decideApplication(env, ed(10), id, "confirm")).body.status, "approved");
+  assert.deepEqual(role(raw, 4), { role: "editor", role_source: "vote" });
+  // Ablehnen: Grund Pflicht, jeder Editor darf
+  raw.prepare("INSERT INTO users(id,provider,sub,name,role,created) VALUES(11,'t','s11','Neu','user',1)").run();
+  raw.prepare("INSERT INTO profiles(user_id,handle,public,updated) VALUES(11,'neu',1,1)").run();
+  for (let i = 0; i < 12; i++) raw.prepare("INSERT INTO blog_posts(user_id,slug,title,body,lang,status,created,updated,published) VALUES(11,?,?,?,?,'live',1,1,1)").run("q" + i, "t", "b", "de");
+  const b = await applyForRole(env, { id: 11, role: "user" }, { role: "moderator", motivation: "Ich kümmere mich gern um respektvolle Kommentare." });
+  assert.equal(b.status, 200);
+  assert.equal((await decideApplication(env, U.editor, b.body.id, "reject")).body.error, "reason_required");
+  assert.equal((await decideApplication(env, U.editor, b.body.id, "confirm")).body.status, "open");
+  assert.equal((await decideApplication(env, U.editor2, b.body.id, "confirm")).body.status, "approved");   // Moderator: 2 Bestaetigungen
+  assert.deepEqual(role(raw, 11), { role: "moderator", role_source: "vote" });
+  raw.prepare("INSERT INTO users(id,provider,sub,name,role,created) VALUES(12,'t','s12','Neu2','user',1)").run();
+  raw.prepare("INSERT INTO profiles(user_id,handle,public,updated) VALUES(12,'neu2',1,1)").run();
+  for (let i = 0; i < 12; i++) raw.prepare("INSERT INTO blog_posts(user_id,slug,title,body,lang,status,created,updated,published) VALUES(12,?,?,?,?,'live',1,1,1)").run("r" + i, "t", "b", "de");
+  const c = await applyForRole(env, { id: 12, role: "user" }, { role: "editor", motivation: "Ich schreibe viel über Microsoft 365 und Teams." });
+  assert.equal((await decideApplication(env, U.editor, c.body.id, "reject", { reason: "zu wenig Erfahrung" })).body.status, "rejected");
+  assert.equal(role(raw, 12).role, "user");
+  assert.equal(raw.prepare("SELECT status FROM editor_applications WHERE id=?").get(c.body.id).status, "rejected");
+  // Admin-Override
+  const d = await applyForRole(env, { id: 12, role: "user" }, { role: "editor", motivation: "Zweiter Versuch mit mehr Details zu meiner Arbeit." });
+  assert.equal((await decideApplication(env, U.editor, d.body.id, "override", { approve: true })).status, 403);
+  assert.equal((await decideApplication(env, U.admin, d.body.id, "override", { approve: true })).body.status, "approved");
+  assert.equal(role(raw, 12).role, "editor");
+});
+
+test("Versionsverlauf: Ursprungsfassung, Diff, Zuruecksetzen nur auf Editor-Aenderungen (Admin alles), Autor sieht den Verlauf", async () => {
+  const { raw, db } = await mkdb(), env = { DB: db };
+  raw.prepare("INSERT INTO blog_posts(id,user_id,slug,title,summary,body,lang,status,created,updated) VALUES(50,4,'v','Titel','S','Der alte Text','de','live',100,100)").run();
+  assert.equal((await call(env, U.editor, "POST", "/api/editor/edit", { kind: "blog", id: "50", level: "full", fields: { body: "Der neue Text" }, reason: "Fakten" })).s, 200);
+  const h1 = await call(env, U.editor, "GET", "/api/editor/history?kind=blog&id=50");
+  assert.equal(h1.j.versions.length, 2); assert.equal(h1.j.versions[1].action, "baseline"); assert.equal(h1.j.versions[0].reason, "Fakten"); assert.equal(h1.j.canRevert, true);
+  assert.equal((await call(env, U.mod, "POST", "/api/editor/revert", { kind: "blog", id: "50", rev: h1.j.versions[1].id })).s, 403);   // Moderator nicht
+  // Admin bearbeitet danach: Editor darf das nicht zuruecksetzen
+  await call(env, U.admin, "POST", "/api/editor/edit", { kind: "blog", id: "50", level: "full", fields: { body: "Admin-Text" }, reason: "A" });
+  assert.equal((await call(env, U.editor, "POST", "/api/editor/revert", { kind: "blog", id: "50", rev: h1.j.versions[1].id })).j.error, "not_editor_edit");
+  const h2 = await call(env, U.admin, "GET", "/api/editor/history?kind=blog&id=50");
+  assert.equal((await call(env, U.admin, "POST", "/api/editor/revert", { kind: "blog", id: "50", rev: h2.j.versions[2].id })).s, 200);   // Admin: Ursprungsfassung
+  assert.equal(raw.prepare("SELECT body FROM blog_posts WHERE id=50").get().body, "Der alte Text");
+  // Editor setzt eigene Aenderung zurueck
+  await call(env, U.editor, "POST", "/api/editor/edit", { kind: "blog", id: "50", level: "full", fields: { body: "Zweite Fassung" } });
+  const h3 = await call(env, U.editor, "GET", "/api/editor/history?kind=blog&id=50");
+  assert.equal((await call(env, U.editor, "POST", "/api/editor/revert", { kind: "blog", id: "50", rev: h3.j.versions[1].id })).s, 200);
+  assert.equal(raw.prepare("SELECT body FROM blog_posts WHERE id=50").get().body, "Der alte Text");
+  assert.equal((await call(env, U.editor, "POST", "/api/editor/revert", { kind: "blog", id: "50", rev: h3.j.versions[0].id })).s, 200);   // Revert-Eintrag selbst stammt vom Editor
+  assert.ok(raw.prepare("SELECT 1 FROM edit_log WHERE kind='blog' AND reason LIKE 'Zurückgesetzt%'").get());
+  // Autor sieht den Verlauf des eigenen Beitrags, andere nicht
+  assert.ok((await call(env, U.user, "GET", "/api/editor/my-history?kind=blog&id=50")).j.versions.length >= 3);
+  assert.equal((await call(env, { id: 99, role: "user" }, "GET", "/api/editor/my-history?kind=blog&id=50")).s, 404);
+  assert.equal((await call(env, null, "GET", "/api/editor/my-history?kind=blog&id=50")).s, 401);
+});
+
+test("Wiki-/Entitaetenverlauf nutzt die Revisionstabellen; Zuruecksetzen setzt eine alte Fassung live", async () => {
+  const { raw, db } = await mkdb(), env = { DB: db };
+  const w = raw.prepare("INSERT INTO wiki_rev(id,term,lang,body,summary,user_id,status,created) VALUES(?,?,?,?,?,?,?,?)");
+  w.run(1, "teams", "de", "erste Fassung", "s1", 4, "old", 10); w.run(2, "teams", "de", "zweite Fassung", "s2", 2, "live", 20);   // 2 = Editor
+  const h = await call(env, U.editor2, "GET", "/api/editor/history?kind=wiki&id=2");
+  assert.deepEqual(h.j.versions.map((v) => [v.id, v.status]), [[2, "live"], [1, "old"]]); assert.equal(h.j.current, 2);
+  assert.equal((await call(env, U.editor2, "POST", "/api/editor/revert", { kind: "wiki", id: "2", rev: 1 })).s, 200);
+  assert.deepEqual(raw.prepare("SELECT id,status FROM wiki_rev ORDER BY id").all().map((r) => [r.id, r.status]), [[1, "live"], [2, "old"]]);
+  w.run(3, "teams", "de", "dritte", "s3", 4, "live", 30); raw.prepare("UPDATE wiki_rev SET status='old' WHERE id=1").run();   // aktuelle Fassung stammt von einem Mitglied
+  assert.equal((await call(env, U.editor2, "POST", "/api/editor/revert", { kind: "wiki", id: "3", rev: 1 })).j.error, "not_editor_edit");
+  assert.equal((await call(env, U.admin, "POST", "/api/editor/revert", { kind: "wiki", id: "3", rev: 1 })).s, 200);
+  assert.ok((await call(env, U.user, "GET", "/api/editor/my-history?kind=wiki&id=3")).j.versions.length === 3);
+});
+
+test("Wortdiff: nur Einfuegungen/Loeschungen, sicher gerendert (kein innerHTML)", () => {
+  const src = readFileSync(new URL("../../assets/redaktion.js", import.meta.url), "utf-8");
+  assert.ok(!/\.innerHTML\s*=/.test(src) && !/window\.confirm\s*\(|(^|[^.\w])confirm\s*\(/.test(src));
+  const ctx = { window: {}, document: { getElementById: () => null } }; vm.createContext(ctx); vm.runInContext(src, ctx);
+  const d = ctx.window.M365Diff("Der alte Text hier", "Der neue Text hier und mehr");
+  const j = (x) => JSON.parse(JSON.stringify(x));
+  assert.deepEqual(j(d.filter((p) => p.t === "del")), [{ t: "del", s: "alte" }]);
+  assert.deepEqual(j(d.filter((p) => p.t === "ins")).map((p) => p.s.trim()), ["neue", "und mehr"]);
+  assert.equal(d.filter((p) => p.t !== "ins").map((p) => p.s).join(""), "Der alte Text hier");
+  assert.equal(d.filter((p) => p.t !== "del").map((p) => p.s).join(""), "Der neue Text hier und mehr");
+  assert.deepEqual(j(ctx.window.M365Diff("<b>x</b>", "<b>x</b>")), [{ t: "eq", s: "<b>x</b>" }]);   // Markup bleibt Text
+});

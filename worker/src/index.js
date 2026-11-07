@@ -9,6 +9,7 @@ import { importContentBlog } from "./contentblog.js";
 import { handleA2a } from "./a2a.js";
 import { handleAdminPanel } from "./adminpanel.js";
 import { handleEditor, decide } from "./editor.js";
+import { syncAutoRoles } from "./roles.js";
 import { can, roleOf, isStaff, publicRoles, loadActor, logEdit } from "./perm.js";
 import { handleSponsor, handleSponsorLink } from "./sponsor.js";
 import { handleAds, handlePaypalWebhook } from "./ads.js";
@@ -548,7 +549,7 @@ async function api(env, request, url, path, asUser, ctx) {
     }
     if ((m = /^\/api\/admin\/role\/(\d+)$/.exec(path)) && method === "POST") {
       const b = await request.json().catch(() => ({})), role = ["editor", "moderator", "admin"].includes(b.role) ? b.role : "user";   // Rollen in der Datenbank: user, moderator, editor, admin
-      await db.prepare("UPDATE users SET role=? WHERE id=?").bind(role, +m[1]).run(); await audit(db, user.id, "role", m[1], role); await logEdit(db, user, "admin.role", "user", m[1], { reason: role });
+      await db.prepare("UPDATE users SET role=?,role_source='manual' WHERE id=?").bind(role, +m[1]).run(); await audit(db, user.id, "role", m[1], role); await logEdit(db, user, "admin.role", "user", m[1], { reason: role });
       await evalBadges(env, +m[1]);
       return J({ ok: true, role });
     }
@@ -593,6 +594,7 @@ export default {
     }
     if (event.cron === "0 6 * * *") {
       T("runPushDigest", () => runPushDigest(env));
+      T("syncAutoRoles", () => syncAutoRoles(env.DB));   // taeglich: MVP/MCT -> Editor, entzogene Verifizierung -> Rolle zurueck (idempotent)
       T("runDigest", () => runDigest(env, { at: scheduledAt }));
     }
     if (event.cron === "*/30 * * * *") T("runDigest", () => runDigest(env, { at: scheduledAt }));

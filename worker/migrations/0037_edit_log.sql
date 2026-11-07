@@ -42,3 +42,43 @@ CREATE TABLE IF NOT EXISTS editor_scope (
   langs TEXT NOT NULL DEFAULT '[]',
   updated INTEGER NOT NULL DEFAULT 0
 );
+
+-- Automatische und per Abstimmung vergebene Rollen: role_source '' (nie entschieden) | manual (Admin) | auto_mvp | auto_mct | vote.
+-- Bestehende Editoren behalten ihre Rolle ('' zaehlt wie manuell: die Automatik fasst sie nie an).
+ALTER TABLE users ADD COLUMN role_source TEXT NOT NULL DEFAULT '';
+-- Versionsverlauf fuer Inhalte ohne eigene Revisionstabelle (Blog-Beitraege); Wiki und Entitaeten nutzen wiki_rev/entity_rev.
+CREATE TABLE IF NOT EXISTS content_rev (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  kind TEXT NOT NULL,
+  item_id TEXT NOT NULL,
+  user_id INTEGER NOT NULL,
+  role TEXT NOT NULL,            -- author | editor | moderator | admin (Rolle zum Zeitpunkt der Aenderung)
+  action TEXT NOT NULL,          -- baseline | edit | revert
+  reason TEXT NOT NULL DEFAULT '',
+  title TEXT NOT NULL DEFAULT '',
+  summary TEXT NOT NULL DEFAULT '',
+  body TEXT NOT NULL DEFAULT '',
+  topics TEXT NOT NULL DEFAULT '[]',
+  ts INTEGER NOT NULL
+);
+CREATE INDEX IF NOT EXISTS content_rev_item ON content_rev(kind, item_id, id);
+-- Bewerbungen um die Rolle Editor/Moderator mit Bestaetigung durch andere Editoren
+CREATE TABLE IF NOT EXISTS editor_applications (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  role TEXT NOT NULL,            -- editor | moderator
+  motivation TEXT NOT NULL,
+  topics TEXT NOT NULL DEFAULT '[]',
+  status TEXT NOT NULL DEFAULT 'open',   -- open | approved | rejected
+  created INTEGER NOT NULL,
+  decided_by INTEGER,
+  decided_ts INTEGER,
+  reason TEXT NOT NULL DEFAULT ''
+);
+CREATE INDEX IF NOT EXISTS editor_applications_open ON editor_applications(status, created);
+CREATE TABLE IF NOT EXISTS editor_votes (
+  app_id INTEGER NOT NULL,
+  voter_id INTEGER NOT NULL,
+  ts INTEGER NOT NULL,
+  PRIMARY KEY (app_id, voter_id)
+);
