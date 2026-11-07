@@ -17,7 +17,7 @@ Je Datei ein Screen (390 × 844), Stil wie die Seite.
 
 Zahlen und Namen sind Beispieldaten bzw. Platzhalter. Planung: Issue #203.
 
-**Ansehen:** Die Screens laden `./support.js`, die Laufzeit von Claude Design. Die Datei liegt nicht im Repo, deshalb zeigt eine direkt geöffnete Datei nur rohe `{{Platzhalter}}`. Ansehen und klicken über den Canvas-Link oben.
+**Ansehen:** Die Screens laden `./support.js`, die Laufzeit des Design-Canvas. Die Datei liegt nicht im Repo, deshalb zeigt eine direkt geöffnete Datei nur rohe `{{Platzhalter}}`. Ansehen und klicken über den Canvas-Link oben.
 
 ## Abgleich mit dem Formular im MVP-Portal
 
