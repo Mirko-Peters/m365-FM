@@ -22,7 +22,7 @@ for (const r of live) {
 for (const r of Object.keys(cov)) if (!live.includes(r)) notes.push(`Eintrag \`${r}\` in mcp_coverage.json hat keine Route mehr (aufräumen).`);
 
 const inHowto = new Set(HOWTO.flatMap((h) => h.tools));
-const adminOnly = new Set(["get_help", "list_event_transfers", "mark_event_transfers_done", "list_video_todo", "list_podcast_todo"]);
+const adminOnly = new Set(["get_help", "list_event_transfers", "mark_event_transfers_done", "linkedin_event_proposals", "publish_linkedin_event", "list_video_todo", "list_podcast_todo"]);
 for (const t of TOOLS) {
   if (!inHowto.has(t.name) && !adminOnly.has(t.name)) problems.push(`Tool \`${t.name}\` steht in keiner Anleitung (HOWTO) - get_help und Skill kennen es sonst nicht.`);
   if (!t.de) problems.push(`Tool \`${t.name}\` hat keine deutsche Beschreibung (de).`);

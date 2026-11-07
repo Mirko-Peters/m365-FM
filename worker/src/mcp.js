@@ -5,6 +5,7 @@ import { levelName } from "./levels.js";
 import { baseIds, entityMap, handleEntity } from "./entities.js";
 import { autoVerifyCert, cleanI18n, saveI18n, readI18n } from "./profiles.js";
 import { canManage, EVENT_ROLES, promoteWaitlist, partnerAction, handleEvents } from "./events.js";
+import { proposals as liProposals, act as liAct } from "./linkedin_events.js";
 import { askQuestion, answerQuestion } from "./qa.js";
 import { handleBlog } from "./blog.js";
 import { handlePodcast } from "./podcast.js";
@@ -185,6 +186,8 @@ export const TOOLS = [
   { name: "respond_speaker_request", de: "Eine Speaker-Anfrage annehmen oder ablehnen.", write: true, description: "Confirm or decline a speaker invitation for a session (session id from list_my_speaker_requests). Confirming requires a public profile.", inputSchema: { type: "object", properties: { session_id: { type: "number" }, accept: { type: "boolean" } }, required: ["session_id", "accept"] } },
   { name: "update_my_session", de: "Beschreibung oder Aufzeichnungslink einer eigenen, bestätigten Session ändern.", write: true, description: "Confirmed speakers can update the abstract (no links, max 1500 chars) and the recording URL of their own session. Title, time and other speakers are managed by the organiser team. Never translate the session title.", inputSchema: { type: "object", properties: { session_id: { type: "number" }, abstract: { type: "string" }, recording_url: { type: "string", description: "https URL" } }, required: ["session_id"] } },
   { name: "manage_event_partner", de: "Sponsor oder Medienpartner eines Events vorschlagen, bestätigen, ablehnen oder entfernen (die Gegenseite bestätigt).", write: true, description: "Manage sponsors and media partners of an event. action=propose: the event team (organiser, co-organiser, sponsor manager) proposes a company, or a company admin offers to sponsor; the other side then confirms with accept (or decline). remove deletes a partner. kind: sponsor or media. level is an optional label (e.g. Gold). Confirmed partners appear on the public event page.", inputSchema: { type: "object", properties: { event: { type: "string", description: "event handle" }, org: { type: "string", description: "company handle" }, action: { type: "string", enum: ["propose", "accept", "decline", "remove"] }, kind: { type: "string", enum: ["sponsor", "media"] }, level: { type: "string" } }, required: ["event", "org", "action"] } },
+  { name: "linkedin_event_proposals", de: "Admin: LinkedIn-Event-Vorschläge (m365.fm-Events mit gleichzeitigem HeySummit-Event) mit Vorschau des LinkedIn-Texts.", write: false, description: "Admin only. List m365.fm events that coincide with a HeySummit event (m365con.net) and could be published as LinkedIn Events on the M365 Show page, with a preview of the LinkedIn text and the state (proposal, published, cancelled). Read only.", inputSchema: { type: "object", properties: {} } },
+  { name: "publish_linkedin_event", de: "Admin: Vorschau eines LinkedIn-Events; Veröffentlichen geschieht nur per Klick im Browser (/admin/, Reiter LinkedIn).", write: false, description: "Admin only. Returns the exact LinkedIn payload preview for an event handle. It never publishes: Mirko confirms each event in the browser at https://www.m365.fm/admin/#li (button 'Auf LinkedIn veröffentlichen').", inputSchema: { type: "object", properties: { handle: { type: "string" } }, required: ["handle"] } },
   { name: "list_event_transfers", de: "Admin: Anmeldungen, die an das Event-System (z. B. HeySummit für m365con.net) übergeben werden sollen.", write: false, description: "Admin only. List registrations with consent that still have to be copied to the external event system (target e.g. heysummit:229506 = M365 Con 27). Create each attendee there (name, email), then call mark_event_transfers_done so the email addresses are deleted here.", inputSchema: { type: "object", properties: {} } },
   { name: "mark_event_transfers_done", de: "Admin: übertragene Anmeldungen abhaken (E-Mail-Adressen werden gelöscht).", write: true, description: "Admin only. Mark transfers as done after the attendees were created in the external system; the stored email addresses are deleted.", inputSchema: { type: "object", properties: { ids: { type: "array", items: { type: "number" } } }, required: ["ids"] } },
   { name: "list_my_blog_posts", de: "Meine Blog-Beiträge anzeigen (Entwurf, in Prüfung, veröffentlicht).", write: false, description: "List the signed-in member's own blog posts with status (draft, pending, live, rejected), title, language and upvotes.", inputSchema: { type: "object", properties: {} } },
@@ -238,7 +241,7 @@ export const TOOLS = [
 ];
 TOOLS.push(...BRIDGE);
 
-async function callTool(env, user, name, a) {
+export async function callTool(env, user, name, a) {
   const db = env.DB;
   if (name === "search_entities") {
     const q = String(a.query || "").toLowerCase().trim(); if (!q) return { error: "query_required" };
@@ -279,6 +282,12 @@ async function callTool(env, user, name, a) {
   if (name === "manage_event_partner") {
     const ev = await db.prepare("SELECT * FROM events WHERE handle=? AND public=1").bind(String(a.event || "")).first(); if (!ev) return { error: "not_found" };
     return await partnerAction(db, user, ev, a.org, a.kind, a.level, ["accept", "decline", "remove"].includes(a.action) ? a.action : "propose");
+  }
+  if (name === "linkedin_event_proposals" || name === "publish_linkedin_event") {
+    if (!user.admin) return { error: "forbidden" };
+    if (name === "linkedin_event_proposals") return await liProposals(env);
+    const r = await liAct(env, user, "publish", a.handle, false);   // confirm bleibt immer false: nur Vorschau
+    return r.preview ? { preview: r.preview, confirm_in_browser: `${env.SITE}/admin/#li` } : r;
   }
   if (name === "list_event_transfers" || name === "mark_event_transfers_done") {
     if (!user.admin) return { error: "forbidden" };

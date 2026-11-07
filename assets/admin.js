@@ -28,7 +28,7 @@
   function api(p, o) { o = o || {}; o.credentials = "include"; o.headers = Object.assign({ "x-requested-with": "m365" }, o.headers || {}); if (o.body && typeof o.body !== "string") { o.body = JSON.stringify(o.body); o.headers["content-type"] = "application/json"; } return fetch(API + p, o).then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { s: r.status, j: j }; }); }); }
   var TYPES = { product: "Produkt", platform: "Plattform", concept: "Konzept", org: "Firma", person: "Person", cert: "Zertifikat", event: "Event", media: "Medium", category: "Kategorie" };
   var ERR = { bad_name: "Name zu kurz", bad_type: "Typ fehlt", too_short: "Kurzbeschreibung fehlt (mindestens 20 Zeichen in Englisch oder Deutsch)", too_long: "Kurzbeschreibung zu lang (höchstens 300 Zeichen)", bad_url: "Eine Adresse ist ungültig (nur https, Docs nur microsoft.com, azure.com oder github.com)", bad_qid: "Wikidata-ID muss wie Q12345 aussehen", bad_relation: "Eine Beziehung zeigt auf eine unbekannte Entität", unchanged: "Nichts geändert", rate_limit: "Zu viele Änderungen in kurzer Zeit, bitte später", login: "Bitte anmelden", forbidden: "Nur für Admins", email_required: "Kein verifizierter E-Mail-Empfang für diese Person hinterlegt.", mail_off: "E-Mail-Versand ist nicht verfügbar; die Anfrage bleibt offen." };
-  var tabs = [["ov", "Übersicht"], ["fr", "Freigaben"], ["sponsor", "Sponsor-Anfragen"], ["slinks", "Sponsorlinks"], ["ads", "Werbung"], ["mk", "Mediadaten-Anfragen"], ["tr", "Übersetzungen"], ["ent", "Entitäten"], ["db", "Datenbank"], ["sw", "Schalter"]], panes = {}, bar = h("div", { class: "adm-tabs", role: "tablist" });
+  var tabs = [["ov", "Übersicht"], ["fr", "Freigaben"], ["sponsor", "Sponsor-Anfragen"], ["slinks", "Sponsorlinks"], ["ads", "Werbung"], ["mk", "Mediadaten-Anfragen"], ["tr", "Übersetzungen"], ["ent", "Entitäten"], ["li", "LinkedIn-Events"], ["db", "Datenbank"], ["sw", "Schalter"]], panes = {}, bar = h("div", { class: "adm-tabs", role: "tablist" });
   var LANGN = { de: "Deutsch", fr: "Französisch", es: "Spanisch", it: "Italienisch", nl: "Niederländisch", pt: "Portugiesisch", pl: "Polnisch", id: "Indonesisch", ru: "Russisch", uk: "Ukrainisch", ar: "Arabisch", he: "Hebräisch", ja: "Japanisch", ko: "Koreanisch", en: "Englisch" };
   var KINDN = { lblog: "Blog (früher)", blog: "Blog (Community)", podcast: "Podcast", video: "Video", notes: "Show Notes", entity: "Entität" };
   function ago(t) { if (!t) return "–"; var d = Math.round(Date.now() / 1000 - t); return d < 90 ? d + " s" : d < 5400 ? Math.round(d / 60) + " min" : d < 172800 ? Math.round(d / 3600) + " h" : Math.round(d / 86400) + " d"; }
@@ -570,6 +570,39 @@
       });
     }
   }
+
+  // LinkedIn-Events (Vorschlaege): nichts geht automatisch raus, jede Veroeffentlichung, Aktualisierung und Absage braucht einen Klick plus Rueckfrage
+  LOAD.li = function () {
+    var p = panes.li, m = h("p", { class: "adm-msg" }), LIERR = { not_connected: "LinkedIn-Seite ist noch nicht verbunden.", no_org: "Bitte zuerst die Seite auswählen.", no_match: "Kein gleichzeitiges HeySummit-Event.", past: "Das Event liegt in der Vergangenheit.", no_time: "Das Event hat keine Uhrzeit.", already_published: "Schon veröffentlicht.", no_heysummit_key: "HEYSUMMIT_API_KEY fehlt im Worker.", expired: "LinkedIn-Zugang abgelaufen, bitte neu verbinden.", forbidden: "Nur für Admins." };
+    function err(j) { return LIERR[j.error] || (/^li_/.test(j.error || "") ? "LinkedIn lehnt ab (" + j.error.slice(3) + ")." : "Fehler: " + (j.error || "unbekannt")); }
+    p.textContent = ""; p.append(h("h2", { text: "LinkedIn-Events (Vorschläge)" }), m);
+    var q = /[?&]li=([a-z_]+)/.exec(location.search); if (q) msg(m, q[1] === "ok" ? "LinkedIn verbunden." : "Verbindung fehlgeschlagen (" + q[1] + ").", q[1] !== "ok");
+    api("/api/admin/linkedin/status").then(function (r) {
+      if (r.s !== 200) { msg(m, err(r.j), true); return; }
+      var st = r.j, box = h("div");
+      p.appendChild(h("p", {}, [h("span", { text: st.connected ? "Verbunden mit: " + (st.org_name || "(Seite noch nicht gewählt)") : "Nicht verbunden. " }), " ",
+        st.configured ? h("a", { class: "btn" + (st.connected ? "" : " main"), href: API + "/auth/linkedin-events/start", text: "LinkedIn-Seite verbinden" }) : h("span", { class: "adm-msg bad", text: "LinkedIn-Zugang (Client-ID/Secret) fehlt im Worker." })]));
+      if (st.connected) {
+        var sel = h("select", { "aria-label": "LinkedIn-Seite" });
+        p.appendChild(h("p", {}, [h("button", { type: "button", class: "btn", text: "Meine LinkedIn-Seiten laden", onclick: function () { api("/api/admin/linkedin/orgs").then(function (o) { if (o.s !== 200) { msg(m, err(o.j), true); return; } sel.textContent = ""; (o.j.orgs || []).forEach(function (x) { var op = h("option", { value: x.urn, text: x.name }); sel.appendChild(op); }); }); } }), " ", sel, " ",
+          h("button", { type: "button", class: "btn", text: "Diese Seite verwenden", onclick: function () { var op = sel.options[sel.selectedIndex]; if (!op) return; api("/api/admin/linkedin/org", { method: "POST", body: { urn: op.value, name: op.text } }).then(function (x) { if (x.s === 200) LOAD.li(); else msg(m, err(x.j), true); }); } })]));
+      }
+      p.appendChild(box);
+      api("/api/admin/linkedin/proposals").then(function (x) {
+        if (x.s !== 200) { msg(m, err(x.j), true); return; }
+        if (x.j.hs_error) msg(m, "HeySummit nicht lesbar: " + x.j.hs_error, true);
+        if (!x.j.items.length) { box.appendChild(h("p", { class: "mut", text: "Keine Vorschläge: kein kommendes m365.fm-Event mit gleichzeitigem HeySummit-Event." })); return; }
+        var body = h("tbody");
+        x.j.items.forEach(function (it) {
+          function act(a, ask) { return h("button", { type: "button", class: "btn" + (a === "publish" ? " main" : ""), text: { publish: "Auf LinkedIn veröffentlichen", update: "Aktualisieren", cancel: "Absagen" }[a], onclick: function (e) { if (!window.confirm(ask + "\n\n" + it.title + "\n" + it.when)) return; e.target.disabled = true; api("/api/admin/linkedin/" + a, { method: "POST", body: { handle: it.handle, confirm: true } }).then(function (r) { e.target.disabled = false; if (r.s === 200) LOAD.li(); else msg(m, err(r.j), true); }); } }); }
+          var pv = it.preview ? h("details", {}, [h("summary", { text: it.preview.name }), h("pre", { style: "white-space:pre-wrap", text: it.preview.description })]) : h("span", { class: "mut", text: "–" });
+          var btns = it.state === "proposal" ? [act("publish", "Jetzt öffentlich auf LinkedIn veröffentlichen?")] : it.state === "published" ? [it.linkedin_url ? h("a", { href: it.linkedin_url, target: "_blank", rel: "noopener", text: "Auf LinkedIn ansehen" }) : null, it.changed ? h("span", {}, [" ", act("update", "Änderungen an LinkedIn senden?")]) : null, " ", act("cancel", "Event auf LinkedIn absagen?")] : [h("span", { class: "mut", text: "Abgesagt" })];
+          body.appendChild(h("tr", {}, [h("td", { text: it.title }), h("td", { text: it.when }), h("td", { text: it.hs ? it.hs.event + (it.hs.talk ? " · " + it.hs.talk : "") : "–" }), h("td", {}, [pv]), h("td", {}, btns)]));
+        });
+        box.appendChild(h("div", { style: "overflow-x:auto" }, [h("table", { class: "adm-tbl" }, [h("thead", {}, [h("tr", {}, ["Titel", "Zeit (Berlin)", "HeySummit", "LinkedIn-Text", ""].map(function (c) { return h("th", { text: c }); }))]), body])]));
+      });
+    });
+  };
 
   root.textContent = ""; root.append(bar); tabs.forEach(function (t) { root.appendChild(panes[t[0]]); });
   overview(function () { var k = (location.hash || "").slice(1); show(panes[k] ? k : "ov"); });
