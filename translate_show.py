@@ -1,8 +1,11 @@
 """Uebersetzt Titel + Zusammenfassungen der englischen Show (data/podpage) mit Claude Haiku per Message Batch (halber Preis).
 Aufruf: python translate_show.py [--langs de,es,...] [--limit N]. Ergebnis: data/podpage_i18n/<lang>.json {folgen-slug: [titel, zusammenfassung]}
-und data/podpage_i18n/usage.json (Tokens gesamt, fuer die Kostenrechnung). Bereits uebersetzte Folgen werden uebersprungen."""
+und data/podpage_i18n/usage.json (Tokens gesamt, fuer die Kostenrechnung). Je Folge und Sprache steht der Hash der englischen Quelle in
+data/podpage_i18n/src/<lang>.json: Folgen mit unveraendertem Original werden uebersprungen, geaenderte neu uebersetzt. Erster Lauf: Hashes fuer vorhandene Uebersetzungen
+werden ohne API aus dem aktuellen Original eingetragen."""
 import json, os, sys, time, urllib.request, urllib.error
 from site_text import bad as bad_text
+from tm_hash import fields_hash
 from pathlib import Path
 import site_podpage as P
 from ai_gateway import anthropic_request, check_budget, estimated_eur, report_usage, urlopen
@@ -39,6 +42,40 @@ def guard(n, est_in, est_out, what):
     if spent() + already + est > BUDGET: raise SystemExit(f"Abbruch: Budget {BUDGET} $ wuerde ueberschritten")
 
 
+def load_hashes(name, langs):
+    """{lang: {slug: Quell-Hash}} aus data/podpage_i18n/src/<name-praefix><lang>.json (name: '' fuer Titel, 'notes_' fuer Show Notes)."""
+    return {l: (json.loads((OUT / "src" / f"{name}{l}.json").read_text("utf-8")) if (OUT / "src" / f"{name}{l}.json").exists() else {}) for l in langs}
+
+
+def save_hashes(name, hashes):
+    (OUT / "src").mkdir(parents=True, exist_ok=True)
+    for l, d in hashes.items(): (OUT / "src" / f"{name}{l}.json").write_text(json.dumps(d, ensure_ascii=False, sort_keys=True), encoding="utf-8")
+
+
+def sync_hashes(have, hashes, src_hash):
+    """Erster Lauf / Altbestand: vorhandene Uebersetzung ohne gespeicherten Hash -> aktuellen Quell-Hash eintragen (Annahme: Uebersetzung passt zum Original), keine API.
+    src_hash: {slug: hash}. -> Anzahl neu eingetragener Hashes."""
+    n = 0
+    for slug, h in src_hash.items():
+        if slug in have and slug not in hashes: hashes[slug] = h; n += 1
+    return n
+
+
+def is_pending(slug, have, hashes, h):
+    """Offen, wenn noch keine Uebersetzung existiert oder das englische Original sich seit der Uebersetzung geaendert hat."""
+    return slug not in have or hashes.get(slug) != h
+
+
+def show_source(e):
+    """(Titel, Zusammenfassung <= 900 Zeichen) einer Folge - genau der Text, der uebersetzt wird."""
+    summ = (P.plain(e.get("summary")) or P.plain(e.get("show_notes")))[:900]
+    if len(summ) == 900: summ = summ.rsplit(" ", 1)[0] + " …"
+    return e["name"], summ
+
+
+def show_hash(e): return fields_hash(*show_source(e))
+
+
 def parse_json(txt):
     """Robust: Codezaeune entfernen, sonst Felder per Regex holen."""
     import re
@@ -72,12 +109,15 @@ def main():
     if limit: eps = eps[:limit]
     OUT.mkdir(parents=True, exist_ok=True)
     have = {l: (json.loads((OUT / f"{l}.json").read_text("utf-8")) if (OUT / f"{l}.json").exists() else {}) for l in langs}
-    reqs = []
+    hashes = load_hashes("", langs); eh = {e["slug"]: show_hash(e) for e in eps}
+    mig = sum(sync_hashes(have[l], hashes[l], eh) for l in langs)
+    if mig: save_hashes("", hashes); print(f"{mig} Quell-Hashes aus dem Bestand eingetragen (ohne API)")
+    shash = {}; reqs = []
     for l in langs:
         for e in eps:
-            if e["slug"] in have[l]: continue
-            summ = (P.plain(e.get("summary")) or P.plain(e.get("show_notes")))[:900]
-            if len(summ) == 900: summ = summ.rsplit(" ", 1)[0] + " …"
+            if not is_pending(e["slug"], have[l], hashes[l], eh[e["slug"]]): continue
+            shash[(l, e["slug"])] = eh[e["slug"]]
+            _, summ = show_source(e)
             src = (f"Translate the following podcast episode into {NAMES[l]}. The text below is the SOURCE to translate (it is complete as given; a trailing '…' only marks a shortened summary).\n\n"
                    f"TITLE: {e['name']}\n\nSUMMARY: {summ or '(none)'}\n\n"
                    f"Reply with one JSON object only, no other text: {{\"title\": \"<translated title>\", \"summary\": \"<translated summary, or empty string if the summary is (none)>\"}}")
@@ -111,11 +151,12 @@ def main():
             bad += 1; why["max_tokens"] = why.get("max_tokens", 0) + 1; continue
         if any(bad_text(c.get("text", "")) for c in res["message"]["content"]): bad += 1; why["encoding"] = why.get("encoding", 0) + 1; continue   # T5
         try:
-            t, sm = parse_json(text_of(res["message"])); have[l][key] = [t.strip(), sm.strip()]; ok += 1
+            t, sm = parse_json(text_of(res["message"])); have[l][key] = [t.strip(), sm.strip()]; hashes[l][key] = shash.get((l, key), ""); ok += 1
         except Exception:
             bad += 1; why["parse"] = why.get("parse", 0) + 1
             if len(samples) < 8: samples.append({"id": cid, "text": text_of(res["message"])[:400]})
     for l in langs: (OUT / f"{l}.json").write_text(json.dumps(have[l], ensure_ascii=False), encoding="utf-8")
+    save_hashes("", hashes)
     uf = OUT / "usage.json"; old = json.loads(uf.read_text()) if uf.exists() else {"input_tokens": 0, "output_tokens": 0, "runs": []}
     old["input_tokens"] += tin; old["output_tokens"] += tout; old["runs"].append({"batch": bid, "model": MODEL, "ok": ok, "failed": bad, "why": why, "input_tokens": tin, "output_tokens": tout})
     report_usage("translate_show", MODEL, tin, tout, "batch", batch=True)
