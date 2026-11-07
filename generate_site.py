@@ -1717,6 +1717,11 @@ def build():
     import site_sitemaps as SMAP
     _nhl, _nsw, _clu = finish_hreflang([OUT, R2OUT]); print("hreflang (gleicher Pfad) / Sprachumschalter auf Seitenebene:", _nhl, _nsw)   # T42
     sitemap[:] = [(u, lm, a or _clu.get(u)) for u, lm, a in sitemap]   # T42: Sitemap-Alternates wie im HTML
+    _rtf = OUT / "show" / "redirects.json"   # weitergeleitete Adressen nicht in die Sitemap (sonst doppelte loc nach dem Link-Umbau)
+    _keep, _gone = SMAP.drop_redirected(sitemap, json.loads(_rtf.read_text("utf-8")) if _rtf.exists() else {})
+    if _gone:
+        print(f"Sitemap: {len(_gone)} weitergeleitete Adressen ausgelassen, z. B. " + ", ".join(_gone[:5]))
+        sitemap[:] = _keep
     files = SMAP.write_all(sitemap, write, BASE, LANGS, TODAY)
     print(f"Sitemaps: {len(files)} Dateien, {len(sitemap)} URLs")
     # T37 Seitensuche: Index aus allen indexierbaren Seiten (alle Sprachen) nach r2out/search/, Suchseite je Sprache (noindex)
