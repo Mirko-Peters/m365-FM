@@ -48,16 +48,20 @@ if tok:
 else:
     print("Kein Cloudflare-Token - kein Purge")
 
+# IndexNow: nur neue, entfallene und inhaltlich geaenderte Seiten (Hauptinhalt, ohne Sidebar/Kopf/Fuss/Werbung/Zeitangaben). Der Datei-Hash oben bleibt fuer den Purge.
+# Inhalts-Hashes: Umgebung OLD_CONTENT/NEW_CONTENT (Dateien). Erster Lauf ohne alte Inhalts-Hashes: nur sichern, nichts melden.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from content_hash import indexnow_select
 key = os.environ.get("INDEXNOW_KEY", "")
-pages = [base + u for u in changed if u.endswith("/") and not u.startswith("/assets/")]
-if key and pages and old:
+_j = lambda p: json.load(open(p)) if p and os.path.exists(p) else {}
+sel, st = indexnow_select(old, new, _j(os.environ.get("OLD_CONTENT")), _j(os.environ.get("NEW_CONTENT")))
+print(f"IndexNow: neu {st['new']}, entfallen {st['removed']}, Inhalt geaendert {st['content']}, nur Boilerplate uebersprungen {st['boilerplate']}" + (f", ueber Limit abgeschnitten {st['capped']}" if st["capped"] else "") + (" (erster Lauf: Inhalts-Hashes gesichert, keine Meldung)" if st["seed"] else ""))
+pages = [base + q(u) for u in sel]
+if key and pages:
     host = base.split("//")[1]
-    for i in range(0, len(pages), 9000):
-        body = json.dumps({"host": host, "key": key, "keyLocation": f"{base}/{key}.txt", "urlList": pages[i:i + 9000]}).encode()
-        try:
-            with urllib.request.urlopen(urllib.request.Request("https://api.indexnow.org/indexnow", body, {"Content-Type": "application/json; charset=utf-8", "User-Agent": "m365fm-site-build/1.0 (+https://www.m365.fm/)"}), timeout=60) as r: print("IndexNow:", r.status, len(pages[i:i + 9000]), "geaenderte Seiten gemeldet")
-        except Exception as e: print("IndexNow-Fehler:", str(e)[:120])
-elif key and not old:
-    print("IndexNow: erster Vergleich, keine Meldung (sonst alle Seiten)")
+    body = json.dumps({"host": host, "key": key, "keyLocation": f"{base}/{key}.txt", "urlList": pages}).encode()
+    try:
+        with urllib.request.urlopen(urllib.request.Request("https://api.indexnow.org/indexnow", body, {"Content-Type": "application/json; charset=utf-8", "User-Agent": "m365fm-site-build/1.0 (+https://www.m365.fm/)"}), timeout=60) as r: print("IndexNow:", r.status, len(pages), "Seiten gemeldet")
+    except Exception as e: print("IndexNow-Fehler:", str(e)[:120])
 else:
     print("IndexNow: nichts zu melden")
