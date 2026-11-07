@@ -135,10 +135,10 @@ test("Nur Mitarbeitende kommen an /api/editor, Undo-Log bleibt Admin", async () 
   assert.equal((await call(env, U.mod, "GET", "/api/admin/editlog")).s, 403);
 });
 
-test("Migration 0036 legt edit_log an", async () => {
+test("Migration 0037 legt edit_log an", async () => {
   const { raw } = await mkdb();
   assert.ok(raw.prepare("SELECT 1 FROM sqlite_master WHERE name='edit_log'").get());
-  assert.ok(readdirSync(new URL("../migrations/", import.meta.url)).includes("0036_edit_log.sql"));
+  assert.ok(readdirSync(new URL("../migrations/", import.meta.url)).includes("0037_edit_log.sql"));
 });
 
 // ---- Fach-Editoren: Bereich aus bestaetigter Expertise ----
