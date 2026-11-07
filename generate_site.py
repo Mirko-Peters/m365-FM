@@ -34,7 +34,7 @@ from site_size import sizes
 import site_sponsorships as SPM   # T37 Sponsor: Kennzeichnung bezahlter Inhalte (data/sponsorships.json)
 import site_transcripts as TRF   # #266: Transkripte als Dateien je Folge (R2, /…/transcript.txt|.vtt)
 import glob, hashlib, html, json, os, re, shutil, sys, unicodedata
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 import hashlib
 import site_money as SM
@@ -1305,7 +1305,7 @@ def build():
     # Steht vor den Sprach-Startseiten (6.11.2026), damit jede Startseite die Beitraege ihrer Sprache zeigt.
     import site_blog as BLG
     import site_legacy_blog as LBL
-    _posts = BLG.fetch_posts(COMMUNITY_API); _have = {(p["slug"], p.get("lang") or "en") for p in _posts if p["handle"] == "mirko-p"}
+    _posts = list(BLG.fetch_posts(COMMUNITY_API)); _have = {(p["slug"], p.get("lang") or "en") for p in _posts if p["handle"] == "mirko-p"}
     import site_content_blog as CBL; _posts += [p for p in CBL.translations(BASE, _posts, LRN.ENTS) if (p["slug"], p["lang"]) not in _have]   # Sprachfassungen der englischen Content-Pakete (Uebersetzer-Team, data/blog_i18n), nur zu live stehenden Originalen
     _posts += [p for p in LBL.items(BASE) if (p["slug"], p.get("lang") or "en") not in _have]   # plus die frueheren Podpage-Blogbeitraege als Community-Beitraege von mirko-p; T6: je Slug UND Sprache (die deutschen Fassungen blieben sonst beim D1-Import auf der Strecke)
     # Sprach-Startseiten (Wunsch Mirko 6.11.2026: "Behandle die Startseite als komplett eigene"): /<sprache>/ ist die Startseite von "/" in der
@@ -1492,7 +1492,7 @@ def build():
             body = f'<main class="wrap"><h1>{tl[0]}</h1><p>{tl[1]}</p>' + (f'<p>{tl[2]} <a class="btn main" href="{tgt}">{esc(r.get("name") or to)}</a></p>' if tgt else "") + f'<p><a class="btn" href="{BASE}/{pre if lang in LANGS else ""}">{tl[3]}</a></p></main>'
             write(path + "index.html", page("de" if lang == "de" else "en", tl[0], tl[1], f"{BASE}/{path}", body, None, [], noindex=True))
 
-    LRN.build_learn(dict(write=write, page=page, header=header, footer=footer, footer_en=footer_en, BASE=BASE, LANGS=LANGS, active=active, by_lang=by_lang, catidx=catidx,
+    LRN.build_learn(dict(write=write, write_r2=write_r2, page=page, header=header, footer=footer, footer_en=footer_en, BASE=BASE, LANGS=LANGS, active=active, by_lang=by_lang, catidx=catidx,
                         articles=articles, url_of=url_of, cat_name=cat_name, ORDER=ORDER, strip_tags=strip_tags, anchor_title=anchor_title, short=short, parse_desc=parse_desc,
                         sitemap=sitemap, TODAY=TODAY, api=COMMUNITY_API, SCORE={l: (_QUI.get(l, {}).get("score") or _QUI["en"]["score"]) for l in list(LANGS) + ["en"]}))
 
@@ -1717,6 +1717,11 @@ def build():
     import site_sitemaps as SMAP
     _nhl, _nsw, _clu = finish_hreflang([OUT, R2OUT]); print("hreflang (gleicher Pfad) / Sprachumschalter auf Seitenebene:", _nhl, _nsw)   # T42
     sitemap[:] = [(u, lm, a or _clu.get(u)) for u, lm, a in sitemap]   # T42: Sitemap-Alternates wie im HTML
+    _rtf = OUT / "show" / "redirects.json"   # weitergeleitete Adressen nicht in die Sitemap (sonst doppelte loc nach dem Link-Umbau)
+    _keep, _gone = SMAP.drop_redirected(sitemap, json.loads(_rtf.read_text("utf-8")) if _rtf.exists() else {})
+    if _gone:
+        print(f"Sitemap: {len(_gone)} weitergeleitete Adressen ausgelassen, z. B. " + ", ".join(_gone[:5]))
+        sitemap[:] = _keep
     files = SMAP.write_all(sitemap, write, BASE, LANGS, TODAY)
     print(f"Sitemaps: {len(files)} Dateien, {len(sitemap)} URLs")
     # T37 Seitensuche: Index aus allen indexierbaren Seiten (alle Sprachen) nach r2out/search/, Suchseite je Sprache (noindex)
@@ -1739,6 +1744,7 @@ def build():
     print(f"Spreaker-Seitenzuordnung: {len(_spk)} Folgen")
     phase("Sitemaps")
     import site_quotes as _SQ
+    write("sponsors.json", json.dumps({"version": 1, "generated": TODAY, **SPM.sponsors_json(TODAY, LRN.ENTS)}, ensure_ascii=False))   # aktive Sponsor-Firmen (ids, Namen): der Worker nimmt Leads fuer sie ohne Werbebuchung an (ads.js sponsor-lead)
     write("quotes.json", json.dumps({"version": 1, "generated": TODAY, "quotes": _SQ.ALL}, ensure_ascii=False))   # Quotes an Personen-Entitaeten; der Worker uebernimmt sie in D1 (importQuotesFromSite)
     write("robots.txt", f"User-agent: *\nContent-Signal: search=yes, ai-input=yes, ai-train=yes\nAllow: /\n\n# KI-Suchen und Assistenten ausdrücklich erlaubt\n" + "".join(f"User-agent: {b}\nAllow: /\n\n" for b in ("GPTBot", "OAI-SearchBot", "ChatGPT-User", "ClaudeBot", "Claude-User", "Claude-SearchBot", "PerplexityBot", "Google-Extended", "Applebot-Extended", "Bingbot")) + f"Sitemap: {BASE}/sitemap.xml\n")
     # llms.txt (Überblick), llms-full.txt (alle Folgen), agent.json (Maschinen-Beschreibung), episodes.json (Datenfeed)
@@ -1825,6 +1831,8 @@ def build():
             {"id": "find-entity", "name": "Look up a Microsoft product, concept or certification", "description": "entities.json / llms-entities.txt: definition, facts, sources, related episodes and articles for each entity; entity pages define schema.org nodes (#entity).", "inputModes": ["text"], "outputModes": ["application/json", "text/html"]},
             {"id": "find-article", "name": "Find a blog article", "description": "articles.json / llms-blog.txt: articles with date, summary and topics (entity ids); episodes.json entries with kind 'show' carry the same entity ids.", "inputModes": ["text"], "outputModes": ["application/json", "text/html"]}]
     }, ensure_ascii=False, indent=1))
+    _sec_exp = (date.fromisoformat(TODAY) + timedelta(days=365)).strftime("%Y-%m-%dT00:00:00Z")   # RFC 9116: Expires Pflicht, mit jedem Bau um ein Jahr verlaengert
+    write(".well-known/security.txt", f"Contact: mailto:mirko.peters@m365.fm\nExpires: {_sec_exp}\nPreferred-Languages: en, de\nCanonical: {BASE}/.well-known/security.txt\nPolicy: {BASE}/security/\n")   # verlinkt von /security/ und /sicherheit/
     write(".well-known/agent.json", (OUT / "agent.json").read_text(encoding="utf-8"))
     _card = json.loads((OUT / "agent.json").read_text(encoding="utf-8"))   # A2A Agent Card: dieselben Faehigkeiten, Schnittstelle ist /a2a im Worker (nur lesen)
     write(".well-known/agent-card.json", json.dumps({

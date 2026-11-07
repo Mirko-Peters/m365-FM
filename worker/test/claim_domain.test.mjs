@@ -1,7 +1,8 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
-import { allowedDomains, matchEmailDomain, registrable, maskEmail, handleClaimVerify } from "../src/claimverify.js";
+import { allowedDomains, matchEmailDomain, registrable, maskEmail, handleClaimVerify, safeName, domainUses, SHARED_MAX } from "../src/claimverify.js";
+import { mergeStatements } from "../src/identities.js";
 import { handleEvents } from "../src/events.js";
 
 const J = (data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "content-type": "application/json" } });
@@ -21,7 +22,8 @@ async function setup() {
   raw.prepare("UPDATE users SET role='admin' WHERE id=4").run();
   return { raw, env, mails };
 }
-const withEntities = () => { const old = globalThis.fetch; globalThis.fetch = async (i) => String(i).endsWith("/entities.json") ? { json: async () => ({ entities }) } : { ok: false, json: async () => ({}) }; return () => { globalThis.fetch = old; }; };
+// /entities-src.json = Repo-Fassung (Grundlage der erlaubten Domains), /entities.json = mit Community-Bearbeitungen (Namen, Anzeige)
+const withEntities = (src = () => entities, site = src) => { const old = globalThis.fetch; globalThis.fetch = async (i) => { const u = String(i); return u.endsWith("/entities-src.json") ? { ok: true, json: async () => ({ entities: src() }) } : u.endsWith("/entities.json") ? { ok: true, json: async () => ({ entities: site() }) } : { ok: false, json: async () => ({}) }; }; return () => { globalThis.fetch = old; }; };
 const call = (env, path, user, body, method = "POST") => { const req = new Request("https://api.test" + path, { method, ...(method === "POST" ? { body: JSON.stringify(body) } : {}) }); return handleClaimVerify(env, req, new URL(req.url), new URL(req.url).pathname, user, J); };
 const tokenOf = (mail) => /claimverify=([^&#\s]+)/.exec(mail.text)[1];
 const claim = (raw, eid, uid, status = "pending") => raw.prepare("INSERT INTO entity_claims(eid,user_id,status,via,created) VALUES(?,?,?,'manual',1)").run(eid, uid, status);
@@ -161,5 +163,102 @@ test("Admin-Bestätigung setzt org_entity.confirmed automatisch (nur Inhaber/Adm
     const req2 = new Request("https://api.test/api/admin/entity/claim", { method: "POST", body: JSON.stringify({ eid: "acme", ok: true }) });
     await handleEvents(env, req2, new URL(req2.url), "/api/admin/entity/claim", { id: 4, admin: true }, J);
     assert.equal(raw.prepare("SELECT confirmed FROM org_entity WHERE org_id=8").get().confirmed, 0, "einfaches Mitglied: nicht bestätigt");
+  } finally { restore(); raw.close(); }
+});
+
+
+// ---- Review vor dem Merge (#309) ----
+test("Übernahme-Schutz: Community-Bearbeitung von web/developed_by ändert die erlaubten Domains nicht", async () => {
+  const { raw, env, mails } = await setup();
+  const edited = entities.map((e) => e.id === "acme" ? { ...e, web: "https://attacker.example", same_as: [] } : e)
+    .concat([{ id: "victim-tool", type: "product", name: "Victim Tool", rel: [["developed_by", "evil-org"]] }, { id: "evil-org", type: "org", name: "Evil", web: "https://attacker.example" }]);
+  const src = entities.concat([{ id: "victim-tool", type: "product", name: "Victim Tool", rel: [] }]);
+  const restore = withEntities(() => src, () => edited);
+  try {
+    // live-Fassung in D1 mit fremder Website (vertrauenswuerdiges Mitglied hat sie direkt live gesetzt)
+    raw.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES('acme',?,'web geaendert',1,'live',1)").run(JSON.stringify({ name: "Acme GmbH", type: "org", web: "https://attacker.example" }));
+    claim(raw, "acme", 1); claim(raw, "victim-tool", 1);
+    const r = await call(env, "/api/entity/claim/domain", U(1), { eid: "acme", email: "me@attacker.example" });
+    assert.equal(r.status, 400); assert.equal((await r.json()).error, "domain_mismatch");
+    assert.deepEqual((await (await call(env, "/api/entity/claim/domains?eid=acme", U(1), null, "GET")).json()).domains.sort(), ["acme-group.com", "acme.de"]);
+    assert.equal((await call(env, "/api/entity/claim/domain", U(1), { eid: "victim-tool", email: "me@attacker.example" })).status, 409);   // Produkt ohne Hersteller in der Repo-Fassung: keine Domain
+    assert.equal(mails.length, 0);
+  } finally { restore(); raw.close(); }
+});
+
+test("Bestätigen prüft die Domain erneut: entfällt sie in der Repo-Fassung, wird nichts übernommen und der Link nicht verbraucht", async () => {
+  const { raw, env, mails } = await setup();
+  let src = entities; const restore = withEntities(() => src);
+  try {
+    claim(raw, "acme", 1);
+    assert.equal((await call(env, "/api/entity/claim/domain", U(1), { eid: "acme", email: "max@acme.de" })).status, 200);
+    src = entities.map((e) => e.id === "acme" ? { ...e, web: "https://www.acme-neu.de" } : e);
+    const r = await call(env, "/api/entity/claim/confirm", U(1), { t: tokenOf(mails[0]) });
+    assert.equal(r.status, 409); assert.equal((await r.json()).error, "domain_changed");
+    assert.equal(raw.prepare("SELECT status FROM entity_claims WHERE eid='acme'").get().status, "email_sent");
+    assert.equal(raw.prepare("SELECT used FROM entity_claim_mail").get().used, 0);
+  } finally { restore(); raw.close(); }
+});
+
+test("Geteilte Domain (mehr als SHARED_MAX Seiten, z. B. microsoft.com): Firmen-E-Mail ist nur Nachweis, die Redaktion entscheidet", async () => {
+  const { raw, env, mails } = await setup();
+  const big = [{ id: "bigco", type: "org", name: "BigCo", web: "https://www.bigco.com" }, ...Array.from({ length: SHARED_MAX + 1 }, (_, i) => ({ id: "big-p" + i, type: "product", name: "Big " + i, rel: [["developed_by", "bigco"]] }))];
+  const restore = withEntities(() => entities.concat(big));
+  try {
+    assert.equal(domainUses("bigco.com", new Map(entities.concat(big).map((e) => [e.id, e]))), SHARED_MAX + 2);
+    assert.equal(domainUses("acme.de", new Map(entities.map((e) => [e.id, e]))), 2);   // acme + acme-tool: automatisch
+    claim(raw, "big-p1", 1);
+    assert.equal((await call(env, "/api/entity/claim/domain", U(1), { eid: "big-p1", email: "jane@bigco.com" })).status, 200);
+    const r = await call(env, "/api/entity/claim/confirm", U(1), { t: tokenOf(mails[0]) }), j = await r.json();
+    assert.equal(r.status, 200); assert.equal(j.review, true);
+    const c = raw.prepare("SELECT status,via,verified_via,verified_domain FROM entity_claims WHERE eid='big-p1'").get();
+    assert.deepEqual([c.status, c.via, c.verified_via, c.verified_domain], ["pending", "domain_email", "", "bigco.com"]);
+    const req = new Request("https://api.test/api/admin/entity/claims");
+    const list = await (await handleEvents(env, req, new URL(req.url), "/api/admin/entity/claims", { id: 4, admin: true }, J)).json();
+    assert.deepEqual(list.claims.map((x) => [x.eid, x.via]), [["big-p1", "domain_email"]]);
+    assert.equal(list.domain_verified.length, 0);
+  } finally { restore(); raw.close(); }
+});
+
+test("Mail an Firmenadressen: Anzeigename ohne Links/Hostnamen, nur der Bestätigungs-Link ist klickbar", async () => {
+  const { raw, env, mails } = await setup(), restore = withEntities();
+  try {
+    raw.prepare("UPDATE users SET name='IT Security: https://evil.example/sso bitte einloggen' WHERE id=1").run();
+    claim(raw, "acme", 1);
+    assert.equal((await call(env, "/api/entity/claim/forward", U(1), { eid: "acme", email: "kollege@acme.de" })).status, 200);
+    assert.ok(!/evil\.example/.test(mails[0].text) && !/evil\.example/.test(mails[0].html), "kein fremder Link in der Mail");
+    assert.equal((mails[0].html.split("</div>")[0].match(/<a /g) || []).length, 1);   // im Mailtext nur der Bestaetigungs-Link (danach ggf. das Banner von sendMail)
+    assert.match(mails[0].html, /claimverify=/);
+    assert.equal(safeName("www.evil.de Team"), "Team");
+    assert.equal(safeName("Dr. Anna-Lena Groß"), "Dr. Anna-Lena Groß");
+    assert.equal(safeName("evil.example"), "");
+  } finally { restore(); raw.close(); }
+});
+
+test("Admin: Widerrufen nur für per Firmen-E-Mail bestätigte Übernahmen", async () => {
+  const { raw, env } = await setup(), restore = withEntities();
+  const post = (user, body) => { const req = new Request("https://api.test/api/admin/entity/claim", { method: "POST", body: JSON.stringify(body) }); return handleEvents(env, req, new URL(req.url), "/api/admin/entity/claim", user, J); };
+  try {
+    raw.exec(`INSERT INTO entity_claims(eid,user_id,status,via,verified_via,verified_domain,created) VALUES('acme',1,'verified','domain_email','domain_email','acme.de',2),('nodom',2,'verified','manual','admin','',2);
+      INSERT INTO orgs(id,handle,name,created) VALUES(5,'ac','Acme',1); INSERT INTO org_members(org_id,user_id,role,status,created) VALUES(5,1,'owner','active',1); INSERT INTO org_entity(org_id,eid,confirmed) VALUES(5,'acme',1);`);
+    assert.equal((await post({ id: 3 }, { eid: "acme", revoke: true })).status, 403);
+    assert.equal((await post({ id: 4, admin: true }, { eid: "nodom", revoke: true })).status, 404);   // von der Redaktion bestätigt: nicht über diesen Weg
+    assert.equal((await post({ id: 4, admin: true }, { eid: "acme", revoke: true })).status, 200);
+    assert.deepEqual(Object.values(raw.prepare("SELECT status,verified_via FROM entity_claims WHERE eid='acme'").get()), ["rejected", ""]);
+    assert.equal(raw.prepare("SELECT confirmed FROM org_entity WHERE org_id=5").get().confirmed, 0);
+    assert.equal(raw.prepare("SELECT status FROM entity_claims WHERE eid='nodom'").get().status, "verified");
+  } finally { restore(); raw.close(); }
+});
+
+test("Konten zusammenführen: offene Einmal-Links des Quellkontos werden gelöscht", async () => {
+  const { raw, env, mails } = await setup(), restore = withEntities();
+  try {
+    claim(raw, "acme", 1);
+    await call(env, "/api/entity/claim/domain", U(1), { eid: "acme", email: "max@acme.de" });
+    assert.equal(raw.prepare("SELECT COUNT(*) n FROM entity_claim_mail WHERE claim_user=1").get().n, 1);
+    const st = await mergeStatements(env.DB, 1, 2);
+    for (const x of st) await x.run();
+    assert.equal(raw.prepare("SELECT COUNT(*) n FROM entity_claim_mail").get().n, 0);
+    assert.equal((await call(env, "/api/entity/claim/confirm", U(2), { t: tokenOf(mails[0]) })).status, 404);
   } finally { restore(); raw.close(); }
 });
