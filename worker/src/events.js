@@ -6,6 +6,7 @@ import { baseIds, entityMap } from "./entities.js";
 import { cleanUrl } from "./profiles.js";
 import { stats } from "./badges.js";
 import { ensureDirectoryCols, geocodeAddress, recordGeocodeStatus } from "./directory.js";
+import { adoptUnclaimedForEntity } from "./orgpair.js";
 
 const FREE_ASKS = 2, ASK_COST = 1000;
 const HANDLE = /^[a-z0-9][a-z0-9-]{2,39}$/, PH = /^[a-z0-9][a-z0-9-]{2,29}$/;
@@ -538,7 +539,7 @@ export async function handleEvents(env, request, url, path, user, J) {
     if (!pr) return J({ error: "need_profile" }, 409);
     sp = sp.map((x) => (x.t === tok ? { h: pr.handle, n: x.n, e: x.e || pr.handle, s: "confirmed" } : x));   // e = eigene Personen-Entitaet (Profil-Adresse), falls keine andere hinterlegt ist
     await db.batch([db.prepare("UPDATE event_sessions SET speakers=? WHERE id=?").bind(JSON.stringify(sp), se.id), db.prepare("DELETE FROM speaker_invites WHERE token=?").bind(tok)]);
-    let claimed = false; if (i.eid) claimed = await claimEntity(db, i.eid, user.id, "invite");
+    let claimed = false; if (i.eid) { claimed = await claimEntity(db, i.eid, user.id, "invite"); if (claimed) await adoptUnclaimedForEntity(db, user.id, i.eid); }
     return J({ ok: true, handle: pr.handle, claimed });
   }
   if (path === "/api/speaker/requests" && method === "GET") {
@@ -613,7 +614,10 @@ export async function handleEvents(env, request, url, path, user, J) {
         db.prepare("UPDATE org_entity SET confirmed=0 WHERE eid=? AND org_id IN (SELECT org_id FROM org_members WHERE user_id=? AND status='active' AND role IN ('owner','admin'))").bind(eid, c.user_id),
         db.prepare("UPDATE entity_claim_mail SET used=1 WHERE eid=?").bind(eid),
       ]);
-      return J({ ok: true, revoked: true });
+      // per Uebernahme erhaltene Paar-Firma (#311, adoptOrg) wieder unbeansprucht machen, wenn der Widerrufene ihr einziges Mitglied ist
+      const o = await db.prepare("SELECT o.id FROM org_entity e JOIN orgs o ON o.id=e.org_id WHERE e.eid=? AND EXISTS (SELECT 1 FROM org_members m WHERE m.org_id=o.id AND m.user_id=? AND m.role='owner' AND m.status='active') AND (SELECT COUNT(*) FROM org_members m WHERE m.org_id=o.id AND m.status='active')=1").bind(eid, c.user_id).first();
+      if (o) await db.batch([db.prepare("DELETE FROM org_members WHERE org_id=? AND user_id=?").bind(o.id, c.user_id), db.prepare("UPDATE orgs SET unclaimed=1,public=0 WHERE id=?").bind(o.id)]);
+      return J({ ok: true, revoked: true, org_released: !!o });
     }
     if (!EID.test(eid) || typeof b.ok !== "boolean") return J({ error: "bad_request" }, 400);
     const claim = await db.prepare("SELECT user_id,via FROM entity_claims WHERE eid=? AND status IN ('pending','email_sent','forwarded')").bind(eid).first();
@@ -634,7 +638,7 @@ export async function handleEvents(env, request, url, path, user, J) {
         : await db.prepare("UPDATE entity_claims SET status='rejected',fwd_mask='' WHERE eid=? AND status IN ('pending','email_sent','forwarded')").bind(eid).run();
     if (!Number(updated.meta?.changes || 0)) return J({ error: "not_found" }, 404);
     await db.prepare("UPDATE entity_claim_mail SET used=1 WHERE eid=?").bind(eid).run();
-    if (b.ok) await db.prepare("UPDATE org_entity SET confirmed=1 WHERE eid=? AND org_id IN (SELECT org_id FROM org_members WHERE user_id=? AND status='active' AND role IN ('owner','admin'))").bind(eid, claim.user_id).run();
+    if (b.ok) { await db.prepare("UPDATE org_entity SET confirmed=1 WHERE eid=? AND org_id IN (SELECT org_id FROM org_members WHERE user_id=? AND status='active' AND role IN ('owner','admin'))").bind(eid, claim.user_id).run(); await adoptUnclaimedForEntity(db, claim.user_id, eid); }
     if (linkedIn) {
       const entity = (await entityMap(env)).get(eid), page = `${env.SITE}/entity/${eid}/`;
       const outcome = b.ok ? "bestätigt" : "abgelehnt", subject = `Dein M365.FM-Profil wurde ${outcome}`;
