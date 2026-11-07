@@ -1,6 +1,6 @@
-# Spreaker-Website-Feld im RSS (2026-11-06 04:54 UTC)
+# Spreaker-Website-Feld im RSS (2026-11-07 04:52 UTC)
 
-Gesetzt laut Protokoll: 3202 · im Feed gleich: 3159 · im Feed anders: 0 · nicht im Feed: 43 · ausstehend (frisch gesetzt, Feed noch nicht erneuert): 0
+Gesetzt laut Protokoll: 3207 · im Feed gleich: 3157 · im Feed anders: 0 · nicht im Feed: 50 · ausstehend (frisch gesetzt, Feed noch nicht erneuert): 0
 
 - 67311542: nicht_im_feed · soll https://www.m365.fm/show/episodes/building-reusable-components-with-power-platform-cli-pac-cli/ · Feed None
 - 67312816: nicht_im_feed · soll https://www.m365.fm/show/episodes/using-microsoft-graph-for-custom-app-integrations/ · Feed None
@@ -45,3 +45,10 @@ Gesetzt laut Protokoll: 3202 · im Feed gleich: 3159 · im Feed anders: 0 · nic
 - 67450573: nicht_im_feed · soll https://www.m365.fm/show/episodes/step-by-step-guide-to-organizing-projects-in-teams/ · Feed None
 - 67455991: nicht_im_feed · soll https://www.m365.fm/show/episodes/how-to-monitor-compliance-in-microsoft-defender-for-cloud/ · Feed None
 - 67464190: nicht_im_feed · soll https://www.m365.fm/show/episodes/how-to-set-up-data-loss-prevention-dlp-in-microsoft-365/ · Feed None
+- 67469719: nicht_im_feed · soll https://www.m365.fm/show/episodes/step-by-step-automate-compliance-checklists-in-power-automate/ · Feed None
+- 67474639: nicht_im_feed · soll https://www.m365.fm/show/episodes/what-makes-microsoft-entra-a-comprehensive-iam-solution/ · Feed None
+- 67481390: nicht_im_feed · soll https://www.m365.fm/show/episodes/how-to-set-up-and-use-microsoft-copilot-in-teams/ · Feed None
+- 67485890: nicht_im_feed · soll https://www.m365.fm/show/episodes/zero-trust-vs-user-freedom-both-are-broken/ · Feed None
+- 67489476: nicht_im_feed · soll https://www.m365.fm/show/episodes/stop-patchwork-coding-copilots-agent-changes-everything/ · Feed None
+- 67489477: nicht_im_feed · soll https://www.m365.fm/show/episodes/copilot-agent-or-copilot-hype-the-hard-choice/ · Feed None
+- 67493012: nicht_im_feed · soll https://www.m365.fm/show/episodes/guest-access-in-m365-brilliant-or-broken/ · Feed None
