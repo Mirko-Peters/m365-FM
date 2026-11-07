@@ -1,34 +1,42 @@
 import { cleanText, rateLimit } from "./util.js";
 import { goodHost } from "./profiles.js";
-import { discoverFeed, parseFeed } from "./feeds.js";
+import { describeSource, fetchSourceItems, ingestItems, notifyFound, reviewAction, ogOnly, linkedInUrl, canonUrl, knownKeys, ctypeOf, summarize, entryKindOf,
+  topicsOf, MODES, MANUAL_KINDS, SOURCE_KINDS, CTYPES, BOT_UA } from "./contrib_sources.js";
 import { token as youtubeToken } from "./youtube.js";
 import { mvpActivity, gdeActivity, MVP_AUDIENCES, MVP_ROLES, EVENT_FORMATS, MVP_PORTAL_URL } from "./mvp_mapping.js";
 
 const now = () => Math.floor(Date.now() / 1000);
-const SOURCE_KINDS = ["podcast", "youtube", "blog", "github"];
-const ENTRY_KINDS = ["podcast", "video", "blog", "session", "github", "article", "book", "workshop", "mentoring", "other"];
+const ENTRY_KINDS = ["podcast", "video", "blog", "session", "github", "article", "book", "workshop", "mentoring", "forum", "package", "other"];
 const YOUTUBE_HOSTS = new Set(["youtube.com", "www.youtube.com", "m.youtube.com"]);
 const GITHUB_HOSTS = new Set(["github.com", "www.github.com"]);
 const MVP_CATEGORIES = ["Video/Webcast/Podcast", "Blog", "Speaker/Presenter", "Book/E-book"];
 const IMPORT_LIMIT = 5000;
 const DEFAULT_CATEGORIES = { video: "Video/Webcast/Podcast", podcast: "Video/Webcast/Podcast", blog: "Blog", session: "Speaker/Presenter", book: "Book/E-book" };
-const TOPIC_ID = /^[a-z0-9][a-z0-9-]{1,47}$/;
 const SPREAKER_EPISODE = /^https:\/\/(?:www\.)?spreaker\.com\/episode\/(?:[a-z0-9-]+--)?(\d+)(?:[\/?#]|$)/i;
 const COLS = `c.id,c.title,c.url,c.published,c.kind,c.category,c.topics,c.views,c.downloads,c.public,c.manual,c.portal,c.portal_at,c.review,
-  c.portal_desc,c.role,c.audience,c.area,c.attendees,c.live_views,c.sessions,c.event_format,c.country`;
+  c.portal_desc,c.role,c.audience,c.area,c.attendees,c.live_views,c.sessions,c.event_format,c.country,c.source_id,c.ctype,c.teaser,c.feed_item_id`;
 const NEW_COLUMNS = [["topics_edited", "INTEGER NOT NULL DEFAULT 0"], ["portal", "INTEGER NOT NULL DEFAULT 0"], ["portal_at", "INTEGER NOT NULL DEFAULT 0"],
   ["review", "TEXT NOT NULL DEFAULT ''"], ["portal_desc", "TEXT NOT NULL DEFAULT ''"], ["role", "TEXT NOT NULL DEFAULT ''"], ["audience", "TEXT NOT NULL DEFAULT '[]'"],
   ["area", "TEXT NOT NULL DEFAULT ''"], ["attendees", "INTEGER NOT NULL DEFAULT 0"], ["live_views", "INTEGER NOT NULL DEFAULT 0"], ["sessions", "INTEGER NOT NULL DEFAULT 0"],
   ["event_format", "TEXT NOT NULL DEFAULT ''"], ["country", "TEXT NOT NULL DEFAULT ''"]];
+const EXTRA_COLUMNS = [["guid,canon,ctype,teaser,feed_item_id", "contributions", ["guid TEXT NOT NULL DEFAULT ''", "canon TEXT NOT NULL DEFAULT ''", "ctype TEXT NOT NULL DEFAULT ''", "teaser TEXT NOT NULL DEFAULT ''", "feed_item_id INTEGER NOT NULL DEFAULT 0"]],
+  ["mode,etag,modified,last_error,topics", "contribution_sources", ["mode TEXT NOT NULL DEFAULT 'track'", "etag TEXT NOT NULL DEFAULT ''", "modified TEXT NOT NULL DEFAULT ''", "last_error TEXT NOT NULL DEFAULT ''", "topics TEXT NOT NULL DEFAULT '[]'"]],
+  ["origin", "feed_items", ["origin TEXT NOT NULL DEFAULT ''"]]];
 // Lesbare Fehlertexte (MCP und API); die Oberflaeche uebersetzt anhand von error
 const MESSAGES = {
-  login: "Please sign in.", rate_limit: "Too many changes today. Please try again later.", bad_source: "The source needs a valid https URL that matches its type (YouTube or GitHub links for those types).",
+  login: "Please sign in.", rate_limit: "Too many changes today. Please try again later.", bad_source: "The source needs a valid https URL that matches its type (e.g. YouTube, GitHub, Sessionize, Stack Overflow, npm/NuGet/PowerShell Gallery or Meetup links for those types).",
+  bad_mode: "mode must be track, publish or ask.", not_publishable: "This item cannot be published as a short post (GitHub activity stays private).", profile_required: "A public profile with a handle is needed to publish short posts.",
+  url_taken: "This link already exists in the community feed from another member.", no_url: "The item has no link.", bad_items: "Send 1-200 items with title, https link and date.", fetch_failed: "The source could not be read.",
   source_exists: "This source already exists.", source_limit: "You can add up to 20 sources.", not_found: "Not found or not yours.", bad_request: "Nothing to change.",
   bad_contribution: "A contribution needs a title (3-200 characters), a known type and an optional https link.", contribution_limit: "Too many manual contributions.",
   bad_date: "Use a valid date as YYYY-MM-DD.", bad_category: `Category must be one of: ${MVP_CATEGORIES.join(", ")}.`, contribution_exists: "A contribution with this link already exists.",
   bad_period: "Use from/to as YYYY-MM-DD with from <= to.", bad_format: "format must be csv, mvp or gde.", bad_field: "A field is invalid.", not_editable: "Title, link, date and type can only be changed for contributions added by hand.",
   bad_url: "Enter a public https link.", bad_month: "report_start must be a month number from 1 (January) to 12 (December).", preview_failed: "The link could not be read. Fill in the fields by hand.",
 };
+const sourceOut = (s) => { let topics = []; try { topics = JSON.parse(s.topics || "[]"); } catch {}
+  return { ...s, topics, public: !!s.public, active: !!s.active, items: s.items || 0, found: s.found || 0, last_error: s.last_error || "",
+    status: s.fails >= 5 ? "paused_after_errors" : s.active ? "active" : MANUAL_KINDS.includes(s.kind) ? "manual" : "paused" }; };
+const canPublishKind = (k) => k !== "github";
 const fail = (J, error, status, extra = {}) => J({ error, message: MESSAGES[error] || "Request failed.", ...extra }, status);
 
 async function ensureContributionColumns(db) {
@@ -36,6 +44,9 @@ async function ensureContributionColumns(db) {
   catch {
     for (const [name, type] of NEW_COLUMNS) { try { await db.prepare(`ALTER TABLE contributions ADD COLUMN ${name} ${type}`).run(); } catch {} }
     try { await db.prepare("ALTER TABLE user_prefs ADD COLUMN report_start INTEGER NOT NULL DEFAULT 4").run(); } catch {}
+  }
+  for (const [probe, table, cols] of EXTRA_COLUMNS) {   // 0036 (eigene Quellen): nur anlegen, wenn die Migration noch fehlt
+    try { await db.prepare(`SELECT ${probe} FROM ${table} LIMIT 1`).first(); } catch { for (const c of cols) { try { await db.prepare(`ALTER TABLE ${table} ADD COLUMN ${c}`).run(); } catch {} } }
   }
   await db.prepare("CREATE TABLE IF NOT EXISTS contribution_ignored (user_id INTEGER NOT NULL, url TEXT NOT NULL, created INTEGER NOT NULL, PRIMARY KEY(user_id,url))").run();
 }
@@ -53,18 +64,6 @@ function safeUrl(value) {
     u.hash = "";
     return u.href;
   } catch { return ""; }
-}
-
-function sourceOk(kind, sourceUrl) {
-  if (!SOURCE_KINDS.includes(kind) || !sourceUrl) return false;
-  const host = new URL(sourceUrl).hostname.toLowerCase();
-  return !(kind === "youtube" && !YOUTUBE_HOSTS.has(host)) && !(kind === "github" && !GITHUB_HOSTS.has(host));
-}
-
-function topicsOf(value) {
-  if (!Array.isArray(value)) return [];
-  return [...new Set(value.slice(0, 10).map((x) => String(x || "").toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, "")
-    .replace(/[^a-z0-9-]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 48)).filter((x) => TOPIC_ID.test(x)))];
 }
 
 function dateValue(value) {
@@ -116,7 +115,8 @@ function contributionOutput(row) {
     topics, views: row.views, downloads: row.downloads, public: !!row.public, manual: !!row.manual, source: row.source || "",
     portal: !!row.portal, portal_at: row.portal_at || 0, review: row.review || "", description: row.portal_desc || "", role: row.role || "",
     audience, area: row.area || "", attendees: row.attendees || 0, live_views: row.live_views || 0, sessions: row.sessions || 0,
-    event_format: row.event_format || "", country: row.country || "", mvp };
+    event_format: row.event_format || "", country: row.country || "", type: ctypeOf(row), summary: row.teaser || "",
+    source_id: row.source_id || 0, found: row.review === "pending", posted: !!row.feed_item_id, mvp };
 }
 
 // Beginn des Berichtsjahrs (Monat 1-12); ohne Eintrag April (ab April zaehlen Beitraege fuer die MVP-Verlaengerung)
@@ -161,9 +161,9 @@ async function exportData(db, uid, p) {
       ...(format === "mvp" ? { portal: MVP_PORTAL_URL, note: "No automatic submission: copy each field into the MVP portal, then mark the entry as entered (update_contribution portal=true)." } : {}) };
   }
   const items = rows.map(contributionOutput).map(({ mvp, ...x }) => x);
-  const columns = ["title", "url", "published", "kind", "category", "topics", "views", "downloads", "in_portal"];
+  const columns = ["title", "url", "published", "kind", "category", "mvp_type", "topics", "views", "downloads", "in_portal"];
   const csv = [columns.map(csvCell).join(","), ...items.map((x) => [
-    x.title, x.url, dayOf(x.published), x.kind, x.category, x.topics.join("; "), x.views, x.downloads, x.portal ? "yes" : "no",
+    x.title, x.url, dayOf(x.published), x.kind, x.category, x.type, x.topics.join("; "), x.views, x.downloads, x.portal ? "yes" : "no",
   ].map(csvCell).join(","))].join("\r\n");
   const de = p.lang === "de";
   const L = de ? ["Kategorie", "Noch zuordnen", "Beitrag", "Link", "Datum", "Typ", "Entitäten/Themen", "Kennzahlen", "YouTube-Aufrufe", "Spreaker-Downloads", "Beschreibung"]
@@ -212,24 +212,95 @@ export async function handleContributions(env, request, url, path, user, J) {
   await ensureContributionColumns(db);
 
   if (path === "/api/contributions/sources" && method === "GET") {
-    const rows = (await db.prepare("SELECT id,kind,url,feed,title,public,active,created,fetched,fails FROM contribution_sources WHERE user_id=? ORDER BY created DESC").bind(user.id).all()).results || [];
-    return J({ sources: rows.map((s) => ({ ...s, public: !!s.public, active: !!s.active })) }, 200, { "cache-control": "no-store" });
+    const rows = (await db.prepare("SELECT s.id,s.kind,s.url,s.feed,s.title,s.public,s.active,s.created,s.fetched,s.fails,s.mode,s.last_error,s.topics,(SELECT COUNT(*) FROM contributions c WHERE c.source_id=s.id) items,(SELECT COUNT(*) FROM contributions c WHERE c.source_id=s.id AND c.review='pending') found FROM contribution_sources s WHERE s.user_id=? ORDER BY s.created DESC").bind(user.id).all()).results || [];
+    return J({ sources: rows.map(sourceOut) }, 200, { "cache-control": "no-store" });
   }
   if (path === "/api/contributions/source" && method === "POST") {
     if (!(await rateLimit(db, `contrib-source:${user.id}`, 10, 86400))) return fail(J, "rate_limit", 429);
-    const b = await request.json().catch(() => ({})), kind = String(b.kind || ""), sourceUrl = safeUrl(b.url);
-    if (!sourceOk(kind, sourceUrl)) return fail(J, "bad_source", 400);
+    const b = await request.json().catch(() => ({})), kind = String(b.kind || ""), d = describeSource(kind, b.url);
+    if (d.error) return fail(J, "bad_source", 400);
+    const mode = b.mode === undefined ? "ask" : String(b.mode);   // Standard: jedes Mal fragen
+    if (!MODES.includes(mode)) return fail(J, "bad_mode", 400);
+    if (mode === "publish" && !canPublishKind(kind)) return fail(J, "not_publishable", 400);
     if ((await db.prepare("SELECT COUNT(*) n FROM contribution_sources WHERE user_id=?").bind(user.id).first()).n >= 20) return fail(J, "source_limit", 400);
-    const title = plain(b.title || "", 100);
-    const feed = /\.(?:rss|xml|atom)(?:$|[?#])/i.test(sourceUrl) ? sourceUrl : "";
+    const title = plain(b.title || "", 100), topics = JSON.stringify(topicsOf(b.topics));
+    let id;
     try {
-      await db.prepare("INSERT INTO contribution_sources(user_id,kind,url,feed,title,public,created) VALUES(?,?,?,?,?,?,?)")
-        .bind(user.id, kind, sourceUrl, feed, title, b.public ? 1 : 0, now()).run();
+      id = (await db.prepare("INSERT INTO contribution_sources(user_id,kind,url,feed,title,public,created,mode,topics,active) VALUES(?,?,?,?,?,?,?,?,?,?)")
+        .bind(user.id, kind, d.url, d.feed, title, b.public ? 1 : 0, now(), mode, topics, d.manual ? 0 : 1).run()).meta.last_row_id;
     } catch (e) {
       if (/UNIQUE/i.test(String(e))) return fail(J, "source_exists", 409);
       throw e;
     }
-    return J({ ok: true, source: { kind, url: sourceUrl, title, public: !!b.public, feed_status: feed ? "ready" : "discovery_pending" } }, 201);
+    return J({ ok: true, id, source: { id, kind, url: d.url, title, mode, public: !!b.public, feed_status: d.feed || d.manual ? "ready" : "discovery_pending" } }, 201);
+  }
+  if (path === "/api/contributions/source/preview" && method === "POST") {   // letzte 3 Eintraege einer Quelle ansehen, nichts wird gespeichert
+    if (!(await rateLimit(db, `contrib-sprev:${user.id}`, 40, 86400))) return fail(J, "rate_limit", 429);
+    const b = await request.json().catch(() => ({})), kind = String(b.kind || ""), d = describeSource(kind, b.url);
+    if (d.error || d.manual) return fail(J, "bad_source", 400);
+    const r = await fetchSourceItems({ kind, url: d.url, feed: d.feed, etag: "", modified: "" });
+    if (r.status !== "ok") return fail(J, "fetch_failed", 422, { reason: r.error || r.status });
+    return J({ ok: true, url: d.url, items: r.items.slice(0, 3).map((x) => ({ title: x.title, url: x.url, published: x.t, summary: x.desc, kind: entryKindOf(kind), type: ctypeOf({ kind: entryKindOf(kind) }) })) }, 200, { "cache-control": "no-store" });
+  }
+  if (path === "/api/contributions/linkedin-og" && method === "GET") {   // Weg (a): nur Open-Graph-Tags der Artikel-Seite, sonst nichts
+    if (!(await rateLimit(db, `contrib-li:${user.id}`, 30, 86400))) return fail(J, "rate_limit", 429);
+    const link = linkedInUrl(url.searchParams.get("url"));
+    if (!link) return fail(J, "bad_url", 400);
+    const ctl = new AbortController(), timeout = setTimeout(() => ctl.abort(), 6000);
+    try {
+      const r = await fetch(link, { signal: ctl.signal, redirect: "follow", headers: { "user-agent": BOT_UA, accept: "text/html" } });
+      if (!r.ok || !linkedInUrl(r.url || link)) return J({ ok: true, preview: { url: link, title: "", description: "", published: "" }, partial: true });
+      return J({ ok: true, preview: { url: link, ...ogOnly(await r.text()) } }, 200, { "cache-control": "no-store" });
+    } catch { return J({ ok: true, preview: { url: link, title: "", description: "", published: "" }, partial: true }); }
+    finally { clearTimeout(timeout); }
+  }
+  if (path === "/api/contributions/import" && method === "POST") {   // gewaehlte Eintraege (LinkedIn-Link/-Export, "andere Links"); mode wie bei Quellen
+    if (!(await rateLimit(db, `contrib-import:${user.id}`, 20, 86400))) return fail(J, "rate_limit", 429);
+    const b = await request.json().catch(() => ({})), kind = String(b.kind || "other"), mode = b.mode === undefined ? "ask" : String(b.mode);
+    if (!MANUAL_KINDS.includes(kind)) return fail(J, "bad_source", 400);
+    if (!MODES.includes(mode)) return fail(J, "bad_mode", 400);
+    const items = [];
+    for (const x of (Array.isArray(b.items) ? b.items : []).slice(0, 200)) {
+      const link = x?.url ? safeUrl(x.url) : "", title = plain(x?.title, 200), published = dateValue(x?.date);
+      if (title.length < 3 || published === null || (x?.url && !link) || (kind === "linkedin" && link && !linkedInUrl(link))) continue;
+      items.push({ title, url: link, guid: "", t: published || now(), desc: summarize(x?.summary), topics: [] });
+    }
+    if (!items.length) return fail(J, "bad_items", 400);
+    const d = describeSource(kind);
+    await db.prepare("INSERT OR IGNORE INTO contribution_sources(user_id,kind,url,feed,title,created,mode,active) VALUES(?,?,?,?,?,?,?,0)").bind(user.id, kind, d.url, "", kind === "linkedin" ? "LinkedIn" : "", now(), mode).run();
+    const src = await db.prepare("SELECT * FROM contribution_sources WHERE user_id=? AND url=?").bind(user.id, d.url).first();
+    await db.prepare("UPDATE contribution_sources SET mode=? WHERE id=?").bind(mode, src.id).run();
+    const withUrl = items.filter((x) => x.url), noUrl = items.filter((x) => !x.url);
+    const res = await ingestItems(env, { ...src, mode }, withUrl);
+    for (const x of noUrl) {   // ohne Link: kein Dedupe moeglich, nur tracken
+      const r = await db.prepare("INSERT INTO contributions(user_id,source_id,title,url,published,kind,category,topics,public,created,review,teaser) VALUES(?,?,?,'',?,?,'','[]',0,?,?,?)")
+        .bind(user.id, src.id, x.title, x.t, entryKindOf(kind), now(), mode === "ask" ? "pending" : "", x.desc).run();
+      if (r.meta.changes) { res.added++; res[mode === "ask" ? "pending" : "tracked"]++; }
+    }
+    await db.prepare("UPDATE contribution_sources SET fetched=? WHERE id=?").bind(now(), src.id).run();
+    return J({ ok: true, source_id: src.id, ...res, firstTitle: undefined }, 201);
+  }
+  if (path === "/api/contributions/review" && method === "POST") {   // "Neu gefunden": track | publish | ignore (und unpublish) fuer einen eigenen Eintrag
+    if (!(await rateLimit(db, `contrib-review:${user.id}`, 600, 86400))) return fail(J, "rate_limit", 429);
+    const b = await request.json().catch(() => ({}));
+    const r = await reviewAction(env, user.id, Math.floor(+b.id), String(b.action || ""), { ctype: b.ctype, topics: b.topics === undefined ? undefined : topicsOf(b.topics) });
+    return r.error ? fail(J, r.error, r.status || 400, r.field ? { field: r.field } : {}) : J(r);
+  }
+  if (path === "/api/contributions/review-batch" && method === "POST") {   // Vorschau + Bestaetigung (MCP review_new_contributions)
+    if (!(await rateLimit(db, `contrib-rbatch:${user.id}`, 60, 86400))) return fail(J, "rate_limit", 429);
+    const b = await request.json().catch(() => ({}));
+    const pending = (await db.prepare(`SELECT ${COLS}, COALESCE(s.title,'') source FROM contributions c LEFT JOIN contribution_sources s ON s.id=c.source_id WHERE c.user_id=? AND c.review='pending' ORDER BY c.published DESC LIMIT 100`).bind(user.id).all()).results || [];
+    const out = pending.map((r) => ({ id: r.id, title: r.title, url: r.url, published: r.published, type: ctypeOf(r), source: r.source, summary: r.teaser || "" }));
+    const decisions = Array.isArray(b.decisions) ? b.decisions.slice(0, 100) : [];
+    if (!decisions.length) return J({ ok: true, pending: out, actions: ["track", "publish", "ignore"], note: "Send decisions [{id, action}] to preview; add confirm=true to apply." }, 200, { "cache-control": "no-store" });
+    const byId = new Map(pending.map((r) => [r.id, r])), plan = decisions.map((d) => ({ id: Math.floor(+d.id), action: String(d.action || ""), title: byId.get(Math.floor(+d.id))?.title || "" }));
+    const effect = { track: "counts for the MVP tracker, private", publish: "tracked and published as an external short post in the community feed (noindex until you add your own text)", ignore: "removed and never suggested again" };
+    const bad = plan.filter((d) => !byId.has(d.id) || !effect[d.action]);
+    if (bad.length) return fail(J, "bad_field", 400, { field: "decisions", invalid: bad.map((d) => d.id) });
+    if (b.confirm !== true) return J({ ok: true, confirmed: false, preview: plan.map((d) => ({ ...d, effect: effect[d.action] })), note: "Nothing changed yet. Call again with confirm=true to apply." });
+    const results = [];
+    for (const d of plan) { const r = await reviewAction(env, user.id, d.id, d.action); results.push({ id: d.id, action: d.action, ok: !!r.ok, error: r.error }); }
+    return J({ ok: true, confirmed: true, results });
   }
   if (path === "/api/contributions/source/update" && method === "POST") {
     const b = await request.json().catch(() => ({})), id = Math.floor(+b.id);
@@ -238,13 +309,19 @@ export async function handleContributions(env, request, url, path, user, J) {
     if (!source) return fail(J, "not_found", 404);
     const updates = [], values = [];
     if (b.kind !== undefined || b.url !== undefined) {
-      const kind = b.kind === undefined ? source.kind : String(b.kind), sourceUrl = b.url === undefined ? source.url : safeUrl(b.url);
-      if (!sourceOk(kind, sourceUrl)) return fail(J, "bad_source", 400);
-      if (kind !== source.kind || sourceUrl !== source.url) {
-        updates.push("kind=?", "url=?", "feed=?", "fetched=0", "fails=0");
-        values.push(kind, sourceUrl, /\.(?:rss|xml|atom)(?:$|[?#])/i.test(sourceUrl) ? sourceUrl : "");
+      const kind = b.kind === undefined ? source.kind : String(b.kind), d = describeSource(kind, b.url === undefined ? source.url : b.url);
+      if (d.error || d.manual) return fail(J, "bad_source", 400);
+      if (kind !== source.kind || d.url !== source.url) {
+        updates.push("kind=?", "url=?", "feed=?", "fetched=0", "fails=0", "etag=''", "modified=''", "last_error=''");
+        values.push(kind, d.url, d.feed);
       }
     }
+    if (b.mode !== undefined) {   // spaeter aenderbar; gilt fuer kuenftige Funde
+      if (!MODES.includes(b.mode)) return fail(J, "bad_mode", 400);
+      if (b.mode === "publish" && !canPublishKind(b.kind === undefined ? source.kind : String(b.kind))) return fail(J, "not_publishable", 400);
+      updates.push("mode=?"); values.push(b.mode);
+    }
+    if (b.topics !== undefined) { updates.push("topics=?"); values.push(JSON.stringify(topicsOf(b.topics))); }
     if (b.title !== undefined) { updates.push("title=?"); values.push(plain(b.title, 100)); }
     if (b.public !== undefined) { updates.push("public=?"); values.push(b.public ? 1 : 0); }
     if (b.active !== undefined) {
@@ -305,7 +382,7 @@ export async function handleContributions(env, request, url, path, user, J) {
     if (!link) return fail(J, "bad_url", 400);
     const ctl = new AbortController(), timeout = setTimeout(() => ctl.abort(), 6000);
     try {
-      const r = await fetch(link, { signal: ctl.signal, redirect: "follow", headers: { "user-agent": "M365FM-contributions/1.0 (+https://www.m365.fm)", accept: "text/html,*/*;q=0.5" } });
+      const r = await fetch(link, { signal: ctl.signal, redirect: "follow", headers: { "user-agent": "M365.FM-Bot (+https://www.m365.fm/bot/)", accept: "text/html,*/*;q=0.5" } });
       const finalUrl = safeUrl(r.url || link);
       if (!r.ok || !finalUrl || !/html/i.test(r.headers.get("content-type") || "text/html")) return J({ ok: true, preview: { url: link, title: "", published: "", description: "", kind: previewFromHtml("", link).kind }, partial: true });
       return J({ ok: true, preview: previewFromHtml((await r.text()).slice(0, 400000), link) }, 200, { "cache-control": "no-store" });
@@ -313,14 +390,13 @@ export async function handleContributions(env, request, url, path, user, J) {
     finally { clearTimeout(timeout); }
   }
   if (path === "/api/contributions/mine" && method === "GET") {
-    const sources = (await db.prepare("SELECT id,kind,url,title,public,active,fails,fetched FROM contribution_sources WHERE user_id=? ORDER BY created DESC").bind(user.id).all()).results || [];
+    const sources = (await db.prepare("SELECT s.id,s.kind,s.url,s.title,s.public,s.active,s.fails,s.fetched,s.mode,s.last_error,s.topics,(SELECT COUNT(*) FROM contributions c WHERE c.source_id=s.id) items,(SELECT COUNT(*) FROM contributions c WHERE c.source_id=s.id AND c.review='pending') found FROM contribution_sources s WHERE s.user_id=? ORDER BY s.created DESC").bind(user.id).all()).results || [];
     const rows = (await db.prepare(`SELECT ${COLS}, COALESCE(s.title,'') source FROM contributions c LEFT JOIN contribution_sources s ON s.id=c.source_id
         WHERE c.user_id=? AND NOT EXISTS (SELECT 1 FROM contribution_ignored i WHERE i.user_id=c.user_id AND i.url=c.url)
         ORDER BY c.published DESC,c.id DESC LIMIT 500`).bind(user.id).all()).results || [];
-    return J({ sources: sources.map((s) => ({ ...s, public: !!s.public, active: !!s.active,
-      status: s.fails >= 5 ? "paused_after_errors" : s.active ? "active" : "paused" })), contributions: rows.map(contributionOutput),
+    return J({ sources: sources.map(sourceOut), contributions: rows.map(contributionOutput),
       settings: await settingsOf(db, user.id),
-      options: { categories: MVP_CATEGORIES, kinds: ENTRY_KINDS, roles: MVP_ROLES, audiences: MVP_AUDIENCES, event_formats: EVENT_FORMATS, portal: MVP_PORTAL_URL } }, 200, { "cache-control": "no-store" });
+      options: { categories: MVP_CATEGORIES, kinds: ENTRY_KINDS, source_kinds: SOURCE_KINDS, modes: MODES, types: CTYPES, roles: MVP_ROLES, audiences: MVP_AUDIENCES, event_formats: EVENT_FORMATS, portal: MVP_PORTAL_URL } }, 200, { "cache-control": "no-store" });
   }
   if (path === "/api/contributions/settings" && method === "GET") return J({ settings: await settingsOf(db, user.id) }, 200, { "cache-control": "no-store" });
   if (path === "/api/contributions/settings" && method === "POST") {
@@ -343,6 +419,7 @@ export async function handleContributions(env, request, url, path, user, J) {
       set("category", category);
     }
     if (b.topics !== undefined) { updates.push("topics=?", "topics_edited=1"); values.push(JSON.stringify(topicsOf(b.topics))); }
+    if (b.ctype !== undefined) { if (b.ctype !== "" && !CTYPES.includes(b.ctype)) return fail(J, "bad_field", 400, { field: "ctype" }); set("ctype", b.ctype); }
     if (b.public !== undefined) set("public", b.public ? 1 : 0);
     if (b.portal !== undefined) { set("portal", b.portal ? 1 : 0); set("portal_at", b.portal ? now() : 0); }
     if (b.review !== undefined) {   // "" = bestaetigt/sichtbar, "hidden" = verborgen; "pending" setzt nur der Import (z. B. Event-Scraper)
@@ -405,49 +482,26 @@ export async function refreshContributions(env, max = 5) {
   const db = env.DB, t = now();
   await ensureContributionColumns(db);
   const sources = (await db.prepare("SELECT * FROM contribution_sources WHERE active=1 AND fails<5 AND fetched<? ORDER BY fetched ASC LIMIT ?").bind(t - 1800, max).all()).results || [];
-  let collected = 0;
+  let collected = 0, found = 0;
+  const hosts = new Set();   // hoeflich: je Lauf hoechstens eine Anfrage pro Zielhost, die uebrigen Quellen sind im naechsten Lauf dran
   for (const source of sources) {
+    let host = ""; try { host = new URL(source.feed || source.url).hostname; } catch {}
+    if (hosts.has(host)) continue;
+    hosts.add(host);
     try {
-      const readFeed = async (feedUrl) => {
-        const ctl = new AbortController(), timeout = setTimeout(() => ctl.abort(), 6000);
-        try {
-          const response = await fetch(feedUrl, { signal: ctl.signal, redirect: "follow", headers: { "user-agent": "M365FM-contributions/1.0 (+https://www.m365.fm)", accept: "application/rss+xml, application/atom+xml, text/xml, */*" } });
-          if (!response.ok || !safeUrl(response.url || feedUrl)) return [];
-          return parseFeed((await response.text()).slice(0, 600000), 20);
-        } finally { clearTimeout(timeout); }
-      };
-      let feed = source.feed, items = feed ? await readFeed(feed) : await readFeed(source.url);
-      if (!items.length && !feed) { feed = await discoverFeed(source.kind, source.url); if (feed) items = await readFeed(feed); }
-      if (!feed && items.length) feed = source.url;
-      if (!feed || !items.length) throw new Error("feed_unavailable");
-      const existing = new Set(((await db.prepare("SELECT url FROM contributions WHERE user_id=?").bind(source.user_id).all()).results || []).map((r) => r.url));
-      const ignored = new Set(((await db.prepare("SELECT url FROM contribution_ignored WHERE user_id=?").bind(source.user_id).all()).results || []).map((r) => r.url));
-      let imports = (await db.prepare(`SELECT COUNT(*) n FROM contributions c WHERE c.user_id=? AND c.manual=0
-        AND NOT EXISTS (SELECT 1 FROM contribution_ignored i WHERE i.user_id=c.user_id AND i.url=c.url)`).bind(source.user_id).first()).n;
-      const categories = { podcast: DEFAULT_CATEGORIES.podcast, youtube: DEFAULT_CATEGORIES.video, blog: DEFAULT_CATEGORIES.blog };
-      const values = [];
-      for (const item of items) {
-        if (ignored.has(item.url)) continue;
-        if (!existing.has(item.url) && imports >= IMPORT_LIMIT) continue;
-        if (!existing.has(item.url)) { existing.add(item.url); imports++; }
-        const category = categories[source.kind] || "";
-        values.push(db.prepare(`INSERT INTO contributions(user_id,source_id,title,url,published,kind,category,topics,public,created)
-          SELECT ?,?,?,?,?,?,?,?,?,? WHERE NOT EXISTS (SELECT 1 FROM contribution_ignored WHERE user_id=? AND url=?)
-          ON CONFLICT(user_id,url) WHERE url<>'' DO UPDATE SET
-          title=CASE WHEN contributions.manual=0 THEN excluded.title ELSE contributions.title END,
-          topics=CASE WHEN contributions.manual=0 AND contributions.topics_edited=0 AND contributions.topics='[]' THEN excluded.topics ELSE contributions.topics END`)
-          .bind(source.user_id, source.id, item.title, item.url, item.t, source.kind === "youtube" ? "video" : source.kind,
-            category, JSON.stringify(topicsOf(item.topics)), source.public, t, source.user_id, item.url));
-      }
-      if (values.length) await db.batch(values);
-      await db.prepare("UPDATE contribution_sources SET feed=?,fetched=?,fails=0 WHERE id=?").bind(feed, t, source.id).run();
-      collected += items.length;
-    } catch {
-      await db.prepare("UPDATE contribution_sources SET fetched=?,fails=fails+1 WHERE id=?").bind(t, source.id).run();
+      const r = await fetchSourceItems(source);
+      if (r.status === "notmodified") { await db.prepare("UPDATE contribution_sources SET fetched=?,fails=0,last_error='' WHERE id=?").bind(t, source.id).run(); continue; }
+      if (r.status !== "ok") throw new Error(r.error || "feed_unavailable");
+      const res = await ingestItems(env, source, r.items, { limit: IMPORT_LIMIT });
+      await db.prepare("UPDATE contribution_sources SET feed=?,fetched=?,fails=0,etag=?,modified=?,last_error='' WHERE id=?").bind(r.feed || source.feed, t, r.etag || "", r.modified || "", source.id).run();
+      collected += r.items.length;
+      if (res.pending && source.fetched) { await notifyFound(env, source.user_id, res.pending, res.firstTitle); found += res.pending; }
+    } catch (e) {
+      await db.prepare("UPDATE contribution_sources SET fetched=?,fails=fails+1,last_error=? WHERE id=?").bind(t, String(e?.message || "error").slice(0, 60), source.id).run();
     }
   }
   const metrics = await refreshContributionMetrics(env);
-  return { sources: sources.length, collected, metrics };
+  return { sources: sources.length, collected, found, metrics };
 }
 
 async function refreshContributionMetrics(env) {

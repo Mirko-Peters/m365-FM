@@ -27,7 +27,7 @@ export function parseFeed(xml, max = 12) {
     }).filter(Boolean))].slice(0, 10);
     let thumb = ""; const tm = /<media:thumbnail[^>]*url=["']([^"']+)["']/i.exec(b) || /<enclosure[^>]*type=["']image[^"']*["'][^>]*url=["']([^"']+)["']/i.exec(b) || /<img[^>]*src=["']([^"']+)["']/i.exec(dec(raw));
     if (tm) { try { const tu = new URL(dec(tm[1])); if (tu.protocol === "https:" && goodHost(tu.hostname) && tu.href.length < 400) thumb = tu.href; } catch {} }
-    if (title.length >= 3 && link.length <= 400) out.push({ desc, thumb, title, topics, url: link, t: Math.min(t, Math.floor(Date.now() / 1000)) });
+    if (title.length >= 3 && link.length <= 400) out.push({ desc, thumb, title, topics, guid: cleanText(tag(b, "guid") || tag(b, "id"), 300), url: link, t: Math.min(t, Math.floor(Date.now() / 1000)) });
   }
   return out;
 }
@@ -35,7 +35,7 @@ export function parseFeed(xml, max = 12) {
 // Feed automatisch finden: YouTube-Handle -> channel_id, GitHub/Bluesky/Mastodon -> Standard-Feed, sonst <link rel="alternate"> im HTML
 async function get(u, ms = 6000) {
   const ctl = new AbortController(), to = setTimeout(() => ctl.abort(), ms);
-  try { const r = await fetch(u, { signal: ctl.signal, redirect: "follow", headers: { "user-agent": "M365FM-community-feed/1.0 (+https://www.m365.fm)", accept: "text/html,application/xml,*/*" } }); return r.ok ? (await r.text()).slice(0, 400000) : ""; } catch { return ""; } finally { clearTimeout(to); }
+  try { const r = await fetch(u, { signal: ctl.signal, redirect: "follow", headers: { "user-agent": "M365.FM-Bot (+https://www.m365.fm/bot/)", accept: "text/html,application/xml,*/*" } }); return r.ok ? (await r.text()).slice(0, 400000) : ""; } catch { return ""; } finally { clearTimeout(to); }
 }
 export async function discoverFeed(kind, url) {
   let u; try { u = new URL(url); } catch { return ""; }
@@ -65,7 +65,7 @@ export async function refreshFeeds(env, max = 8) {
   for (const c of rows) {
     try {
       const ctl = new AbortController(), to = setTimeout(() => ctl.abort(), 6000);
-      const r = await fetch(c.feed, { signal: ctl.signal, headers: { "user-agent": "M365FM-community-feed/1.0 (+https://www.m365.fm)", accept: "application/rss+xml, application/atom+xml, text/xml, */*" } });
+      const r = await fetch(c.feed, { signal: ctl.signal, headers: { "user-agent": "M365.FM-Bot (+https://www.m365.fm/bot/)", accept: "application/rss+xml, application/atom+xml, text/xml, */*" } });
       clearTimeout(to);
       if (!r.ok) throw new Error("http " + r.status);
       const xml = (await r.text()).slice(0, 600000);

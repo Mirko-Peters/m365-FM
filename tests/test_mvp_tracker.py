@@ -72,6 +72,7 @@ class TrackerStringsTest(unittest.TestCase):
         used |= {"nav_" + v for v in re.search(r"VIEWS = \[([^\]]+)\]", JS).group(1).replace('"', "").replace(" ", "").split(",")}
         used |= {"k_" + k for k in re.search(r"var KINDS = \[([^\]]+)\]", JS).group(1).replace('"', "").replace(" ", "").split(",")}
         used |= {"s_k_" + k for k in re.search(r"var SKINDS = \[([^\]]+)\]", JS).group(1).replace('"', "").replace(" ", "").split(",")}
+        used -= {"nav_inbox"}   # "Neu gefunden": Text kommt aus assets/mvp-sources.js (M365L, englische Quelle in data/ui_js_en.json)
         en = {k[4:] for k in CI["en"] if k.startswith("mvp_")}
         self.assertFalse(used - en, f"fehlende Texte: {sorted(used - en)}")
         self.assertEqual(set(CI), set(LANGS))
