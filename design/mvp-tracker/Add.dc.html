@@ -62,14 +62,12 @@ button,input,select{font:inherit;color:inherit}
 
       <div style="display: grid; gap: 0; background: #ffffff; border: 1px solid rgba(23,25,28,.14)">
         <span style="padding: 10px 14px; border-bottom: 1px solid rgba(23,25,28,.14); font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #2f6b3a">{{recognizedLabel}} · check and correct</span>
-        <label style="display: grid; gap: 2px; padding: 8px 14px; border-bottom: 1px solid rgba(23,25,28,.08)"><span style="font-size: 12px; color: #5d6470">Title</span><input type="text" value="Azure Virtual Desktop in practice" style="border: 0; padding: 4px 0; background: transparent; font-size: 16px"></label>
-        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr))">
-          <label style="display: grid; gap: 2px; padding: 8px 14px; border-right: 1px solid rgba(23,25,28,.08)"><span style="font-size: 12px; color: #5d6470">Type</span>
-            <select style="border: 0; padding: 4px 0; background: transparent; font-size: 16px"><option>Talk</option><option>Podcast</option><option>Blog post</option><option>Video</option><option>Code</option><option>Training</option></select>
-          </label>
-          <label style="display: grid; gap: 2px; padding: 8px 14px"><span style="font-size: 12px; color: #5d6470">Date</span><input type="text" value="[DATE]" style="border: 0; padding: 4px 0; background: transparent; font-size: 16px"></label>
-        </div>
-        <label style="display: grid; gap: 2px; padding: 8px 14px; border-top: 1px solid rgba(23,25,28,.08)"><span style="font-size: 12px; color: #5d6470">Reach</span><input type="text" value="[N] attendees" style="border: 0; padding: 4px 0; background: transparent; font-size: 16px"></label>
+        <label style="display: grid; gap: 2px; padding: 8px 14px; border-bottom: 1px solid rgba(23,25,28,.08)"><span style="font-size: 12px; color: #5d6470">Title</span><input type="text" value="{{vTitle}}" placeholder="What you did, max 100 characters" maxlength="100" style="border: 0; padding: 4px 0; background: transparent; font-size: 16px"></label>
+        <label style="display: grid; gap: 2px; padding: 8px 14px; border-bottom: 1px solid rgba(23,25,28,.08)"><span style="font-size: 12px; color: #5d6470">Activity type (as in the MVP portal)</span>
+          <select style="border: 0; padding: 4px 0; background: transparent; font-size: 16px; min-width: 0; max-width: 100%"><option selected="{{opt0}}">Article</option><option selected="{{opt1}}">Podcast</option><option selected="{{opt2}}">Webinar/Online Training/Video/Livestream</option><option selected="{{opt3}}">Speaker/Presenter at Microsoft Event</option><option selected="{{opt4}}">Speaker/Presenter at Third-party Event</option><option selected="{{opt5}}">Open Source/Project/Sample code/Tools</option><option selected="{{opt6}}">Online Support</option><option selected="{{opt7}}">Product Feedback</option><option selected="{{opt8}}">Mentorship/Coaching</option></select>
+        </label>
+        <label style="display: grid; gap: 2px; padding: 8px 14px"><span style="font-size: 12px; color: #5d6470">Date</span><input type="text" value="{{vDate}}" placeholder="Start date" style="border: 0; padding: 4px 0; background: transparent; font-size: 16px"></label>
+        <label style="display: grid; gap: 2px; padding: 8px 14px; border-top: 1px solid rgba(23,25,28,.08)"><span style="font-size: 12px; color: #5d6470">Reach (goes into the portal description)</span><input type="text" value="{{vReach}}" placeholder="Attendees, views, listeners" style="border: 0; padding: 4px 0; background: transparent; font-size: 16px"></label>
       </div>
 
       <div style="display: grid; gap: 8px">
@@ -79,17 +77,17 @@ button,input,select{font:inherit;color:inherit}
             <button type="button" onClick="{{p.toggle}}" aria-pressed="{{p.on}}" style="{{p.style}}">{{p.n}}</button>
           </sc-for>
         </div>
-        <span style="font-size: 13px; color: #5d6470">Suggested from the topic: Azure Virtual Desktop also counts for Nerdio NVP.</span>
+        <sc-if value="{{notHand}}" hint-placeholder-val="{{ true }}"><span style="font-size: 13px; color: #5d6470">Suggested from the topic: Azure Virtual Desktop also counts for Nerdio NVP.</span></sc-if>
       </div>
 
       <button type="button" onClick="{{save}}" style="min-height: 50px; background: #3b6391; color: #ffffff; border: 1px solid #3b6391; border-radius: 0; cursor: pointer; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 18px; letter-spacing: .1em; text-transform: uppercase">Save contribution</button>
-      <a href="#" style="text-align: center; min-height: 44px; display: grid; place-items: center">Add by hand instead</a>
+      <sc-if value="{{notHand}}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{toHand}}" style="min-height: 44px; border: 0; background: transparent; color: #3b6391; text-decoration: underline; cursor: pointer">Add by hand instead</button></sc-if>
     </sc-if>
 
     <sc-if value="{{saved}}" hint-placeholder-val="{{ false }}">
       <div role="status" style="display: grid; gap: 12px; padding: 22px; background: #ffffff; border: 1px solid rgba(23,25,28,.14)">
         <span style="display: flex; gap: 10px; align-items: center; color: #2f6b3a; font-weight: 600"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 11l4 4 8-8"></path></svg>Saved</span>
-        <b style="font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 24px; line-height: 1.1">Azure Virtual Desktop in practice</b>
+        <b style="font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 24px; line-height: 1.1">{{savedTitle}}</b>
         <span style="font-size: 14px; color: #5d6470">Counts for {{progText}} · now 4 of 4 for this month</span>
         <a href="Contribution-Detail.dc.html" style="display: grid; place-items: center; min-height: 48px; background: #17191c; color: #ffffff; text-decoration: none; font-weight: 600">Copy it to the MVP portal now</a>
         <a href="Contributions.dc.html" style="text-align: center; min-height: 44px; display: grid; place-items: center">Later</a>
@@ -110,13 +108,24 @@ class Component extends DCLogic {
     }));
     const sel = ['MVP', 'MCT', 'NVP', 'SAP'].filter((n) => on[n]);
     const mode = s.mode || 'photo';
+    const hand = mode === 'hand';
+    // Photo and link come back pre-filled; by hand starts empty.
+    const typeIdx = mode === 'photo' ? 4 : mode === 'link' ? 0 : -1;
+    const opts = {};
+    for (let i = 0; i < 9; i += 1) opts['opt' + i] = i === typeIdx;
     const modes = [['photo', 'Photo'], ['link', 'Link'], ['hand', 'By hand']].map(([k, label]) => ({
       label, on: mode === k,
       pick: () => this.setState({ mode: k }),
       style: 'min-height: 44px; border: 0; border-radius: 0; cursor: pointer; font-family: Barlow Condensed, sans-serif; font-weight: 600; font-size: 15px; letter-spacing: .08em; text-transform: uppercase; ' + (mode === k ? 'background: #17191c; color: #ffffff;' : 'background: #ffffff; color: #17191c;')
     }));
     return {
-      progs, modes,
+      progs, modes, hand, notHand: !hand,
+      vTitle: hand ? '' : 'Azure Virtual Desktop in practice',
+      vDate: hand ? '' : '[DATE]',
+      vReach: hand ? '' : '[N] attendees',
+      savedTitle: hand ? 'Your contribution' : 'Azure Virtual Desktop in practice',
+      toHand: () => this.setState({ mode: 'hand' }),
+      ...opts,
       isPhoto: mode === 'photo', isLink: mode === 'link',
       recognizedLabel: mode === 'photo' ? 'Read from the photo' : mode === 'link' ? 'Recognized from the post' : 'Your entry',
       saved: !!s.saved, notSaved: !s.saved,
