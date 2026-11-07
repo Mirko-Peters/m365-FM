@@ -6,7 +6,9 @@ import { adoptUnclaimedForEntity } from "./orgpair.js";
 
 const now = () => Math.floor(Date.now() / 1000);
 const EID = /^[a-z0-9][a-z0-9-]{1,78}$/;
-const EMAIL = /^[^\s@<>]{1,64}@[^\s@<>]{1,190}\.[a-z]{2,}$/i;
+// streng: lokaler Teil nur dot-atom-Zeichen, Host nur LDH-Labels (keine ( ) , ; : " \\ [ ] - sonst liest ein grosszuegiger Parser beim Versand
+// "me@attacker.example(.firma.de" als Adresse bei attacker.example, waehrend der Domain-Vergleich firma.de sieht)
+const EMAIL = /^[a-z0-9.!#$%&'*+\/=?^_`{|}~-]{1,64}@(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.){1,8}[a-z]{2,63}$/i;
 export const TOKEN_TTL = 86400;
 export const OPEN_STATES = ["pending", "email_sent", "forwarded"];
 
@@ -14,24 +16,30 @@ export const FREE_MAIL = new Set(["gmail.com", "googlemail.com", "outlook.com", 
 // Gemeinsame Hosts: keine Firmen-Domain (Profil-/Code-/Social-Seiten)
 const SHARED_HOSTS = new Set(["github.com", "gitlab.com", "linkedin.com", "x.com", "twitter.com", "facebook.com", "instagram.com", "youtube.com", "youtu.be", "wikipedia.org", "wikidata.org", "medium.com", "xing.com", "github.io", "sourceforge.net", "npmjs.com", "pypi.org", "apple.com.invalid",
   // Hosting- und Baukasten-Domains: Postfaecher dort beweisen nichts ueber eine Firma (z. B. Testmandant <x>.onmicrosoft.com)
-  "onmicrosoft.com", "sharepoint.com", "azurewebsites.net", "cloudapp.net", "azurestaticapps.net", "blogspot.com", "wordpress.com", "substack.com", "notion.site", "linktr.ee", "wixsite.com", "squarespace.com", "netlify.app", "vercel.app", "pages.dev", "webflow.io"]);
+  "onmicrosoft.com", "sharepoint.com", "apple.com", "crunchbase.com", "gitlab.io", "bitbucket.org", "about.me", "behance.net", "dribbble.com", "tiktok.com", "threads.net", "bsky.app", "mastodon.social", "meetup.com", "eventbrite.com", "sessionize.com", "credly.com", "kununu.com", "glassdoor.com", "azurewebsites.net", "cloudapp.net", "azurestaticapps.net", "blogspot.com", "wordpress.com", "substack.com", "notion.site", "linktr.ee", "wixsite.com", "squarespace.com", "netlify.app", "vercel.app", "pages.dev", "webflow.io"]);
 // Eine Domain, die bei mehr als SHARED_MAX Entitaeten erlaubt ist (z. B. microsoft.com fuer ~140 Produktseiten), beweist keine Zustaendigkeit
 // fuer eine bestimmte Seite: die Firmen-E-Mail gilt dann nur als Nachweis, entscheiden muss die Redaktion
-export const SHARED_MAX = 3;
-const MULTI = new Set(["co.uk", "org.uk", "ac.uk", "com.au", "net.au", "co.nz", "co.jp", "co.kr", "com.br", "com.mx", "com.tr", "co.za", "co.in", "com.cn", "com.sg", "com.hk", "com.ar", "co.il"]);
+export const SHARED_MAX = 25;   // ein normaler Produktkatalog (iFAKT: Firma + 8 Polaris-Seiten = 9) bleibt automatisch, microsoft.com (~140) nicht
+const MULTI = new Set(["co.uk", "org.uk", "ac.uk", "com.au", "net.au", "co.nz", "co.jp", "co.kr", "com.br", "com.mx", "com.tr", "co.za", "co.in", "com.cn", "com.sg", "com.hk", "com.ar", "co.il",
+  "eu.org", "de.com", "eu.com", "us.com", "uk.com", "gb.com", "cn.com", "za.com", "com.de", "br.com", "ru.com", "sa.com", "jpn.com"]);
+// zweite Ebene unter einer Laender-Endung, die selbst eine oeffentliche Endung ist (co.at, or.at, com.pl, org.au, ne.jp ...): drei Labels
+const SLD = new Set(["co", "com", "org", "net", "ac", "gov", "edu", "ne", "or", "go", "gv", "nom", "ltd", "plc", "sch", "info", "biz", "priv", "firm", "gen", "web", "mil"]);
 
 export function registrable(host) {
   const parts = String(host || "").toLowerCase().replace(/\.$/, "").split(".").filter(Boolean);
   if (parts.length < 2) return "";
   const tail2 = parts.slice(-2).join(".");
-  return parts.length >= 3 && MULTI.has(tail2) ? parts.slice(-3).join(".") : tail2;
+  const tld = parts[parts.length - 1], sld = parts[parts.length - 2];
+  const multi = MULTI.has(tail2) || (tld.length === 2 && SLD.has(sld));
+  if (!multi) return tail2;
+  return parts.length >= 3 ? parts.slice(-3).join(".") : "";   // nur die Endung selbst (co.at): keine Firmen-Domain
 }
 function hostOf(url) {
   try { const u = new URL(String(url || "")); return u.protocol === "https:" || u.protocol === "http:" ? u.hostname.toLowerCase() : ""; } catch { return ""; }
 }
 const usable = (d) => !!d && !FREE_MAIL.has(d) && !SHARED_HOSTS.has(d);
-function siteDomains(e) {
-  const out = new Set(), urls = [e?.web, ...(Array.isArray(e?.same_as) ? e.same_as : [])];
+function siteDomains(e) {   // die eigene Website; same_as (oft Profilseiten auf fremden Hosts) nur, wenn es keine Website gibt
+  const out = new Set(), urls = e?.web ? [e.web] : (Array.isArray(e?.same_as) ? e.same_as : []);
   for (const u of urls) { const d = registrable(hostOf(u)); if (usable(d)) out.add(d); }
   return out;
 }
@@ -54,13 +62,14 @@ export function allowedDomains(entity, map) {
 // (T30). /entities.json und entityMap() enthalten Community-Bearbeitungen - ein vertrauenswuerdiges Mitglied koennte sonst "web" oder
 // "developed_by" auf die eigene Domain setzen und die Seite danach per E-Mail uebernehmen. Entitaeten ohne Repo-Fassung: keine Domain
 // (die Redaktion entscheidet wie bisher).
-export async function trustedEntityMap(env) {
+export async function trustedEntityMap(env) {   // null = Repo-Fassung gerade nicht erreichbar (503, nichts wird verbraucht)
   const m = new Map();
   try {
     const r = await fetch(env.SITE + "/entities-src.json", { cf: { cacheTtl: 600 } });
-    if (r.ok) for (const e of ((await r.json()).entities || [])) if (e && e.id) m.set(e.id, e);
-  } catch { /* nicht erreichbar: keine Domain */ }
-  return m;
+    if (!r.ok) return null;
+    for (const e of ((await r.json()).entities || [])) if (e && e.id) m.set(e.id, e);
+  } catch { return null; }
+  return m.size ? m : null;
 }
 export function domainUses(domain, map) {
   let n = 0;
@@ -100,12 +109,12 @@ function mailTexts(kind, lang, p) {
 // nur der erzeugte Bestaetigungs-Link wird klickbar, sonst nichts aus dem Text
 const toHtml = (t, link) => { const L = esc(link); return `<div style="font-family:system-ui,Segoe UI,Arial,sans-serif;max-width:560px;color:#1b2430;line-height:1.55">${esc(t).split(L).join(`<a href="${L}">${L}</a>`).replace(/\n/g, "<br>")}</div>`; };
 
-async function issue(env, { kind, eid, user, email, domain, lang }) {
+async function issue(env, { kind, eid, user, email, domain, lang, entName }) {
   const db = env.DB, token = randomToken(32), t = now();
   await db.prepare("UPDATE entity_claim_mail SET used=1 WHERE eid=? AND claim_user=? AND kind=? AND used=0").bind(eid, user.id, kind).run();
   await db.prepare("INSERT INTO entity_claim_mail(token_hash,eid,kind,claim_user,email_hash,email_mask,domain,expires,used,created) VALUES(?,?,?,?,?,?,?,?,0,?)")
     .bind(await tokHash(token), eid, kind, user.id, await mailHash(env, email), maskEmail(email), domain, t + TOKEN_TTL, t).run();
-  const map = await entityMap(env), ent = map.get(eid)?.name || eid;
+  const ent = entName || eid;   // Name aus der Repo-Fassung: die Community-Fassung koennte Phishing-Text ("neu anmelden unter www....") enthalten
   const wr = await db.prepare("SELECT COALESCE(p.real_name,u.name) n,pr.handle FROM users u LEFT JOIN user_prefs p ON p.user_id=u.id LEFT JOIN profiles pr ON pr.user_id=u.id WHERE u.id=?").bind(user.id).first();
   const who = safeName(cleanText(wr?.n || user.name || "", 80)) || safeName(wr?.handle || "") || (lang === "de" ? "Ein Mitglied" : "A member");
   const link = `${env.SITE}${lang === "de" ? "/de" : ""}/community/?claimverify=${encodeURIComponent(token)}#c-expert`;
@@ -127,9 +136,11 @@ export async function handleClaimVerify(env, request, url, path, user, J) {
   const body = async () => request.json().catch(() => ({}));
   if (path === "/api/entity/claim/domains" && method === "GET") {
     const eid = (url.searchParams.get("eid") || "").toLowerCase(); if (!EID.test(eid)) return J({ error: "bad_id" }, 400);
-    const map = await trustedEntityMap(env), domains = allowedDomains(map.get(eid), map);
-    const c = await db.prepare("SELECT status,fwd_mask FROM entity_claims WHERE eid=? AND user_id=?").bind(eid, user.id).first();
-    return J({ domains, mail: mailReady(env), status: c?.status || "", fwd_mask: c?.fwd_mask || "" });
+    const map = await trustedEntityMap(env); if (!map) return J({ error: "unavailable" }, 503);
+    const domains = allowedDomains(map.get(eid), map);
+    const c = await db.prepare("SELECT status,fwd_mask,via,verified_domain FROM entity_claims WHERE eid=? AND user_id=?").bind(eid, user.id).first();
+    const review = c?.status === "pending" && c?.via === "domain_email";   // Firmen-E-Mail schon bestaetigt, die Redaktion entscheidet
+    return J({ domains, mail: mailReady(env), status: c?.status || "", fwd_mask: c?.fwd_mask || "", review, review_domain: review ? c.verified_domain : "" });
   }
   if ((path === "/api/entity/claim/domain" || path === "/api/entity/claim/forward") && method === "POST") {
     const kind = path.endsWith("/forward") ? "forward" : "verify", b = await body(), eid = String(b.eid || "").toLowerCase();
@@ -137,12 +148,13 @@ export async function handleClaimVerify(env, request, url, path, user, J) {
     if (!EID.test(eid)) return J({ error: "bad_id" }, 400);
     const claim = await db.prepare("SELECT status FROM entity_claims WHERE eid=? AND user_id=?").bind(eid, user.id).first();
     if (!claim || !OPEN_STATES.includes(claim.status)) return J({ error: "no_claim" }, 404);
-    const map = await trustedEntityMap(env), domains = allowedDomains(map.get(eid), map);
+    const map = await trustedEntityMap(env); if (!map) return J({ error: "unavailable" }, 503);
+    const domains = allowedDomains(map.get(eid), map);
     if (!domains.length) return J({ error: "no_domain" }, 409);
     const m = matchEmailDomain(b.email, domains); if (!m.ok) return J({ error: m.error }, 400);
     if (!mailReady(env)) return J({ error: "mail_off" }, 503);
     if (!(await rateLimit(db, `claimmail:u:${user.id}`, 5, 86400)) || !(await rateLimit(db, `claimmail:e:${await mailHash(env, m.email)}`, 3, 86400))) return J({ error: "rate_limit" }, 429);
-    const r = await issue(env, { kind, eid, user, email: m.email, domain: m.domain, lang });
+    const r = await issue(env, { kind, eid, user, email: m.email, domain: m.domain, lang, entName: map.get(eid)?.name || "" });
     if (!r.ok) return J({ error: "mail_failed" }, 502);
     if (kind === "verify") await db.prepare("UPDATE entity_claims SET status='email_sent',fwd_mask='' WHERE eid=? AND user_id=? AND status IN ('pending','email_sent','forwarded')").bind(eid, user.id).run();
     else await db.prepare("UPDATE entity_claims SET status='forwarded',fwd_mask=? WHERE eid=? AND user_id=? AND status IN ('pending','email_sent','forwarded')").bind(maskEmail(m.email), eid, user.id).run();
@@ -159,13 +171,14 @@ export async function handleClaimVerify(env, request, url, path, user, J) {
     if (!okState) return J({ error: "invalid" }, 404);
     const pr = await db.prepare("SELECT 1 x FROM profiles WHERE user_id=? AND public=1 AND handle IS NOT NULL").bind(user.id).first();
     if (!pr) return J({ error: "need_profile" }, 409);
-    const tmap = await trustedEntityMap(env);   // Domain beim Bestaetigen neu pruefen: gilt sie (noch) fuer diese Entitaet?
+    const tmap = await trustedEntityMap(env); if (!tmap) return J({ error: "unavailable" }, 503);   // Domain beim Bestaetigen neu pruefen: gilt sie (noch)?
     if (!allowedDomains(tmap.get(row.eid), tmap).includes(row.domain)) return J({ error: "domain_changed" }, 409);
-    const review = domainUses(row.domain, tmap) > SHARED_MAX;
+    // Redaktion entscheidet: geteilte Domain, oder die Redaktion hat eine Uebernahme dieser Entitaet schon einmal widerrufen (verified_via 'revoked' bleibt stehen)
+    const review = domainUses(row.domain, tmap) > SHARED_MAX || (await db.prepare("SELECT 1 x FROM entity_claims WHERE eid=? AND verified_via='revoked'").bind(row.eid).first()) != null;
     const used = await db.prepare("UPDATE entity_claim_mail SET used=1 WHERE token_hash=? AND used=0 AND expires>?").bind(th, now()).run();
     if (Number(used.meta?.changes || 0) !== 1) return J({ error: "used" }, 410);
     const up = review   // geteilte Domain: Firmen-E-Mail ist Nachweis, die Redaktion entscheidet (Anfrage bleibt offen)
-      ? await db.prepare("UPDATE entity_claims SET user_id=?,status='pending',via='domain_email',verified_via='',verified_domain=?,fwd_mask='' WHERE eid=? AND user_id=? AND status IN ('pending','email_sent','forwarded')").bind(user.id, row.domain, row.eid, row.claim_user).run()
+      ? await db.prepare("UPDATE entity_claims SET user_id=?,status='pending',via='domain_email',verified_via=CASE WHEN verified_via='revoked' THEN 'revoked' ELSE '' END,verified_domain=?,fwd_mask='' WHERE eid=? AND user_id=? AND status IN ('pending','email_sent','forwarded')").bind(user.id, row.domain, row.eid, row.claim_user).run()
       : await db.prepare("UPDATE entity_claims SET user_id=?,status='verified',via='domain_email',verified_via='domain_email',verified_domain=?,fwd_mask='' WHERE eid=? AND user_id=? AND status IN ('pending','email_sent','forwarded')").bind(user.id, row.domain, row.eid, row.claim_user).run();
     if (Number(up.meta?.changes || 0) !== 1) return J({ error: "invalid" }, 404);
     await db.prepare("UPDATE entity_claim_mail SET used=1 WHERE eid=?").bind(row.eid).run();

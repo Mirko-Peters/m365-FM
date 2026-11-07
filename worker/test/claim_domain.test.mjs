@@ -31,8 +31,9 @@ const U = (id) => ({ id, name: "User " + id });
 
 test("Domain: Subdomain erlaubt, Freemail und fremde Domain abgelehnt, Produkte erben Entwickler-Domain", () => {
   const map = new Map(entities.map((e) => [e.id, e]));
-  assert.deepEqual(allowedDomains(map.get("acme"), map).sort(), ["acme-group.com", "acme.de"]);   // LinkedIn-Seite zaehlt nicht
-  assert.deepEqual(allowedDomains(map.get("acme-tool"), map).sort(), ["acme-group.com", "acme.de"]);   // github.com als eigene Seite zaehlt nicht
+  assert.deepEqual(allowedDomains(map.get("acme"), map).sort(), ["acme.de"]);   // mit eigener Website zaehlt same_as nicht (Review #309: Profilseiten auf fremden Hosts)
+  assert.deepEqual(allowedDomains(map.get("acme-tool"), map).sort(), ["acme.de"]);   // github.com als eigene Seite zaehlt nicht
+  assert.deepEqual(allowedDomains({ type: "org", same_as: ["https://acme-group.com", "https://www.linkedin.com/company/acme"] }, map), ["acme-group.com"]);   // ohne Website: same_as (ohne Social)
   assert.deepEqual(allowedDomains(map.get("nodom"), map), []);
   assert.deepEqual(allowedDomains(map.get("someone"), map), []);
   const d = ["acme.de"];
@@ -180,7 +181,7 @@ test("Übernahme-Schutz: Community-Bearbeitung von web/developed_by ändert die 
     claim(raw, "acme", 1); claim(raw, "victim-tool", 1);
     const r = await call(env, "/api/entity/claim/domain", U(1), { eid: "acme", email: "me@attacker.example" });
     assert.equal(r.status, 400); assert.equal((await r.json()).error, "domain_mismatch");
-    assert.deepEqual((await (await call(env, "/api/entity/claim/domains?eid=acme", U(1), null, "GET")).json()).domains.sort(), ["acme-group.com", "acme.de"]);
+    assert.deepEqual((await (await call(env, "/api/entity/claim/domains?eid=acme", U(1), null, "GET")).json()).domains.sort(), ["acme.de"]);
     assert.equal((await call(env, "/api/entity/claim/domain", U(1), { eid: "victim-tool", email: "me@attacker.example" })).status, 409);   // Produkt ohne Hersteller in der Repo-Fassung: keine Domain
     assert.equal(mails.length, 0);
   } finally { restore(); raw.close(); }
@@ -244,7 +245,7 @@ test("Admin: Widerrufen nur für per Firmen-E-Mail bestätigte Übernahmen", asy
     assert.equal((await post({ id: 3 }, { eid: "acme", revoke: true })).status, 403);
     assert.equal((await post({ id: 4, admin: true }, { eid: "nodom", revoke: true })).status, 404);   // von der Redaktion bestätigt: nicht über diesen Weg
     assert.equal((await post({ id: 4, admin: true }, { eid: "acme", revoke: true })).status, 200);
-    assert.deepEqual(Object.values(raw.prepare("SELECT status,verified_via FROM entity_claims WHERE eid='acme'").get()), ["rejected", ""]);
+    assert.deepEqual(Object.values(raw.prepare("SELECT status,verified_via FROM entity_claims WHERE eid='acme'").get()), ["rejected", "revoked"]);
     assert.equal(raw.prepare("SELECT confirmed FROM org_entity WHERE org_id=5").get().confirmed, 0);
     assert.equal(raw.prepare("SELECT status FROM entity_claims WHERE eid='nodom'").get().status, "verified");
   } finally { restore(); raw.close(); }
@@ -261,4 +262,90 @@ test("Konten zusammenführen: offene Einmal-Links des Quellkontos werden gelösc
     assert.equal(raw.prepare("SELECT COUNT(*) n FROM entity_claim_mail").get().n, 0);
     assert.equal((await call(env, "/api/entity/claim/confirm", U(2), { t: tokenOf(mails[0]) })).status, 404);
   } finally { restore(); raw.close(); }
+});
+
+
+// ---- Gegenpruefung (#309, zweite Runde) ----
+test("Normaler Produktkatalog (1 Firma + 8 Produkte wie iFAKT) bestätigt automatisch, microsoft.com-Größe geht an die Redaktion", async () => {
+  const { raw, env, mails } = await setup();
+  const cat = [{ id: "fab", type: "org", name: "Fab GmbH", web: "https://www.fab.de", same_as: ["https://www.linkedin.com/company/fab"] }, ...Array.from({ length: 8 }, (_, i) => ({ id: "fab-p" + i, type: "product", name: "Fab " + i, rel: [["developed_by", "fab"]] }))];
+  const restore = withEntities(() => entities.concat(cat));
+  try {
+    assert.equal(domainUses("fab.de", new Map(entities.concat(cat).map((e) => [e.id, e]))), 9);
+    claim(raw, "fab", 1);
+    await call(env, "/api/entity/claim/domain", U(1), { eid: "fab", email: "max@fab.de" });
+    const j = await (await call(env, "/api/entity/claim/confirm", U(1), { t: tokenOf(mails[0]) })).json();
+    assert.equal(j.review, undefined);
+    assert.deepEqual(Object.values(raw.prepare("SELECT status,verified_via FROM entity_claims WHERE eid='fab'").get()), ["verified", "domain_email"]);
+  } finally { restore(); raw.close(); }
+});
+
+test("Widerruf bleibt bestehen: dieselbe Person bestätigt erneut -> nur noch Redaktion (pending), Marker bleibt", async () => {
+  const { raw, env, mails } = await setup(), restore = withEntities();
+  const admin = (body) => { const req = new Request("https://api.test/api/admin/entity/claim", { method: "POST", body: JSON.stringify(body) }); return handleEvents(env, req, new URL(req.url), "/api/admin/entity/claim", { id: 4, admin: true }, J); };
+  const ev = (path, user, body) => { const req = new Request("https://api.test" + path, { method: "POST", body: JSON.stringify(body) }); return handleEvents(env, req, new URL(req.url), path, user, J); };
+  try {
+    claim(raw, "acme", 1);
+    await call(env, "/api/entity/claim/domain", U(1), { eid: "acme", email: "ex@acme.de" });
+    assert.equal((await call(env, "/api/entity/claim/confirm", U(1), { t: tokenOf(mails[0]) })).status, 200);
+    assert.equal((await admin({ eid: "acme", revoke: true })).status, 200);
+    assert.equal((await ev("/api/entity/claim", U(1), { eid: "acme" })).status, 200);   // neue Anfrage geht
+    await call(env, "/api/entity/claim/domain", U(1), { eid: "acme", email: "ex@acme.de" });
+    const j = await (await call(env, "/api/entity/claim/confirm", U(1), { t: tokenOf(mails[1]) })).json();
+    assert.equal(j.review, true);
+    assert.deepEqual(Object.values(raw.prepare("SELECT status,verified_via,via FROM entity_claims WHERE eid='acme'").get()), ["pending", "revoked", "domain_email"]);
+    const dom = await (await call(env, "/api/entity/claim/domains?eid=acme", U(1), null, "GET")).json();
+    assert.deepEqual([dom.review, dom.review_domain], [true, "acme.de"]);   // Oberflaeche zeigt "Redaktion prueft" statt des Formulars
+    const list = await (await handleEvents(env, new Request("https://api.test/api/admin/entity/claims"), new URL("https://api.test/api/admin/entity/claims"), "/api/admin/entity/claims", { id: 4, admin: true }, J)).json();
+    assert.equal(list.claims.find((c) => c.eid === "acme").proof_domain, "acme.de");   // Nachweis fuer die Redaktion sichtbar
+    assert.equal((await admin({ eid: "acme", ok: true })).status, 200);   // Redaktion bestaetigt -> Marker weg
+    assert.deepEqual(Object.values(raw.prepare("SELECT status,verified_via FROM entity_claims WHERE eid='acme'").get()), ["verified", "admin"]);
+  } finally { restore(); raw.close(); }
+});
+
+test("Adressen streng: Sonderzeichen im Host-Teil abgelehnt, Versand nur an die normalisierte Adresse", () => {
+  for (const e of ["me@attacker.example(.acme.de", "me@attacker.example,.acme.de", "me@attacker.example;.acme.de", 'me@attacker.example".acme.de', "me@attacker.example\\.acme.de", "a(b)@acme.de", "me@[1.2.3.4]", "me@-acme.de", "me@acme..de"])
+    assert.equal(matchEmailDomain(e, ["acme.de"]).error, "bad_email", e);
+  assert.deepEqual(matchEmailDomain(" Max.Muster+x@Mail.ACME.de ", ["acme.de"]), { ok: true, domain: "acme.de", email: "max.muster+x@mail.acme.de" });
+});
+
+test("Öffentliche Endungen werden nie Firmen-Domain (co.at, eu.org, com.pl ...)", () => {
+  assert.equal(registrable("www.alpen-it.co.at"), "alpen-it.co.at");
+  assert.equal(registrable("co.at"), "");
+  assert.equal(registrable("freeorg.eu.org"), "freeorg.eu.org");
+  assert.equal(registrable("shop.firma.com.pl"), "firma.com.pl");
+  assert.equal(registrable("www.ifakt.de"), "ifakt.de");
+  assert.deepEqual(allowedDomains({ type: "org", web: "https://www.alpen-it.co.at" }, null), ["alpen-it.co.at"]);
+  assert.equal(matchEmailDomain("me@attacker.co.at", ["alpen-it.co.at"]).error, "domain_mismatch");
+});
+
+test("Mail nutzt den Namen aus der Repo-Fassung, nicht eine Community-Umbenennung", async () => {
+  const { raw, env, mails } = await setup();
+  const edited = entities.map((e) => e.id === "acme" ? { ...e, name: "Acme: Konto gesperrt, neu anmelden unter www.acme-sso.example" } : e);
+  const restore = withEntities(() => entities, () => edited);
+  try {
+    raw.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES('acme',?,'x',1,'live',1)").run(JSON.stringify({ name: "Acme: Konto gesperrt, neu anmelden unter www.acme-sso.example", type: "org", web: "https://www.acme.de" }));
+    claim(raw, "acme", 1);
+    assert.equal((await call(env, "/api/entity/claim/forward", U(1), { eid: "acme", email: "ceo@acme.de", lang: "de" })).status, 200);
+    for (const k of ["subject", "text", "html"]) assert.ok(!/acme-sso/.test(mails[0][k]), k);
+    assert.match(mails[0].subject, /Acme GmbH/);
+  } finally { restore(); raw.close(); }
+});
+
+test("Repo-Fassung nicht erreichbar: 503, Link wird nicht verbraucht, danach klappt es", async () => {
+  const { raw, env, mails } = await setup();
+  let up = true; const old = globalThis.fetch;
+  globalThis.fetch = async (i) => (up && String(i).endsWith("/entities-src.json") ? { ok: true, json: async () => ({ entities }) } : { ok: false, json: async () => ({}) });
+  try {
+    claim(raw, "acme", 1);
+    assert.equal((await call(env, "/api/entity/claim/domain", U(1), { eid: "acme", email: "max@acme.de" })).status, 200);
+    up = false;
+    const d = await call(env, "/api/entity/claim/domains?eid=acme", U(1), null, "GET");
+    assert.deepEqual([d.status, (await d.json()).error], [503, "unavailable"]);
+    const c = await call(env, "/api/entity/claim/confirm", U(1), { t: tokenOf(mails[0]) });
+    assert.deepEqual([c.status, (await c.json()).error], [503, "unavailable"]);
+    assert.equal(raw.prepare("SELECT used FROM entity_claim_mail").get().used, 0);
+    up = true;
+    assert.equal((await call(env, "/api/entity/claim/confirm", U(1), { t: tokenOf(mails[0]) })).status, 200);
+  } finally { globalThis.fetch = old; raw.close(); }
 });
