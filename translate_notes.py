@@ -6,6 +6,7 @@ from datetime import date
 from pathlib import Path
 import requests
 import site_podpage as P
+import site_shownotes_seo as SSEO
 from translate_show import call, NAMES, OUT, MODEL, cost, guard, text_of
 from ai_gateway import anthropic_request, check_budget, estimated_eur, report_usage, urlopen
 
@@ -55,13 +56,57 @@ def ranking(eps):
     return fe + [e for e in sorted(eps, key=lambda e: e["create_time"], reverse=True) if e not in fe]
 
 
+def src_hash(html):
+    """Quell-Hash je Folge (Feld = ganzes HTML). Mit PR #315 (tm_hash.fields_hash) derselbe Hash wie dort, sonst sha256; Datei wie dort: data/podpage_i18n/src/notes_<lang>.json {slug: hash}."""
+    try:
+        from tm_hash import fields_hash
+        return fields_hash(html)
+    except Exception:
+        import hashlib
+        return hashlib.sha256(html.encode("utf-8")).hexdigest()[:16]
+
+
+def load_src(langs):
+    out = {}
+    for l in langs:
+        f = OUT / "src" / f"notes_{l}.json"
+        try: out[l] = json.loads(f.read_text("utf-8"))
+        except Exception: out[l] = {}
+    return out
+
+
+def save_src(h):
+    (OUT / "src").mkdir(parents=True, exist_ok=True)
+    for l, d in h.items(): (OUT / "src" / f"notes_{l}.json").write_text(json.dumps(d, ensure_ascii=False, sort_keys=True), encoding="utf-8")
+
+
+def rewritten(eps):
+    """Folgen mit neu geschriebenen englischen Notes (rewrite_shownotes.py) -> {slug: (episode-id, html, hash)}; Quelle der Uebersetzung ist deren schlanke HTML-Fassung."""
+    out = {}
+    for e in eps:
+        n = SSEO.get(e["slug"])
+        if n:
+            h = SSEO.html_for_translation(n, P.ENTS, "https://www.m365.fm"); out[e["slug"]] = (e["id"], h, src_hash(h))
+    return out
+
+
 def main():
     langs = list(NAMES)
     eps = [e for e in P.load("episodes") if e.get("published") not in (False, "False") and e.get("hidden") not in (True, "True") and len(P.plain(e.get("show_notes"))) > 200]
-    top = ranking(eps)[:TOP]
+    allep = [e for e in P.load("episodes") if e.get("published") not in (False, "False") and e.get("hidden") not in (True, "True")]
+    rw = rewritten(allep)   # fuer diese Folgen gilt das Limit TOP nicht: alle Sprachen, sobald die Quelle neu oder geaendert ist
+    top = [e for e in (ranking(eps)[:TOP] if TOP else []) if e["slug"] not in rw]
     OUT.mkdir(parents=True, exist_ok=True)
     have = {l: (json.loads((OUT / f"notes_{l}.json").read_text("utf-8")) if (OUT / f"notes_{l}.json").exists() else {}) for l in langs}
-    reqs, key = [], {}
+    reqs, key, nh, hashes = [], {}, {}, load_src(langs)
+    for l in langs:
+        for e in allep:
+            if e["slug"] not in rw or hashes[l].get(e["slug"]) == rw[e["slug"]][2]: continue   # unveraenderte Quelle: nichts tun
+            cid = f"{l}__{e['id']}"; key[cid] = e["slug"]; nh[cid] = rw[e["slug"]][2]
+            reqs.append({"custom_id": cid, "params": {"model": MODEL, "max_tokens": 6000, "thinking": {"type": "disabled"},
+                "system": f"Translate this podcast show-notes HTML into {NAMES[l]}. Keep the HTML tags and structure (p, ul, li, h2, h3, strong, a href). Keep product names (Microsoft 365, Copilot, Power BI, Azure ...), entity link URLs and time stamps like 12:30 untranslated. Reply with the translated HTML only.",
+                "messages": [{"role": "user", "content": rw[e["slug"]][1]}]}})
+    nrw = len(reqs)
     for l in langs:
         for e in top:
             if e["slug"] in have[l]: continue
@@ -71,8 +116,8 @@ def main():
                 "system": f"Translate this podcast show-notes HTML into {NAMES[l]}. Keep the HTML tags and structure (p, ul, li, h2, h3, strong, em, a href). Keep product names (Microsoft 365, Copilot, Power BI, Azure ...) and URLs untranslated. Reply with the translated HTML only.",
                 "messages": [{"role": "user", "content": src}]}})
     if not reqs: print("Nichts zu tun"); return
-    print(len(reqs), "Anfragen fuer", len(top), "Folgen")
-    guard(len(reqs), 3500, 9000, "Show Notes")
+    print(len(reqs), "Anfragen:", nrw, "neu geschriebene Notes,", len(reqs) - nrw, "alte Notes der", len(top), "meistgehoerten Folgen")
+    guard(nrw, 1500, 2500, "Show Notes (neu geschrieben)"); guard(len(reqs) - nrw, 3500, 9000, "Show Notes (alt)") if len(reqs) > nrw else None
     if not check_budget("translate_notes", MODEL, estimated_eur(len(json.dumps(reqs)) // 3, len(reqs) * 9000, batch=True)):
         return
     b = call("POST", "/v1/messages/batches", {"requests": reqs}, job="translate_notes"); bid = b["id"]; print("Batch", bid)
@@ -87,7 +132,9 @@ def main():
         if res["message"].get("stop_reason") == "max_tokens": bad += 1; why["max_tokens"] = why.get("max_tokens", 0) + 1; continue
         if bad_text(text_of(res["message"])): bad += 1; why["encoding"] = why.get("encoding", 0) + 1; continue   # T5
         have[l][key[r["custom_id"]]] = P.san(text_of(res["message"])); ok += 1
+        if r["custom_id"] in nh: hashes[l][key[r["custom_id"]]] = nh[r["custom_id"]]
     for l in langs: (OUT / f"notes_{l}.json").write_text(json.dumps(have[l], ensure_ascii=False), encoding="utf-8")
+    save_src(hashes)
     uf = OUT / "usage.json"; old = json.loads(uf.read_text()) if uf.exists() else {"input_tokens": 0, "output_tokens": 0, "runs": []}
     old["input_tokens"] += tin; old["output_tokens"] += tout; old["runs"].append({"kind": "notes", "batch": bid, "model": MODEL, "ok": ok, "failed": bad, "input_tokens": tin, "output_tokens": tout}); uf.write_text(json.dumps(old, indent=1))
     report_usage("translate_notes", MODEL, tin, tout, "batch", batch=True)

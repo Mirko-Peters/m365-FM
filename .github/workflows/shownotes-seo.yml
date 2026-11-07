@@ -1,0 +1,66 @@
+name: Shownotes SEO (woechentlich)
+# Mirko, 7.11.2026: englische Show Notes aller Folgen einmal mit Sonnet neu schreiben (Batch), dann mit Haiku in die 14 Sprachen uebersetzen; danach woechentlich nur Neues.
+# Erster Lauf nach dem Merge von Hand: Actions -> Shownotes SEO -> Run workflow. Die Seite baut der normale Seitenbau (site.yml); dieser Lauf loest nichts aus.
+on:
+  schedule:
+    - cron: "17 2 * * 1"   # montags 03:17 Europe/Berlin (Winterzeit = 02:17 UTC)
+  workflow_dispatch:
+    inputs:
+      limit: { description: "Hoechstens so viele Folgen in diesem Lauf (leer = alle offenen, begrenzt nur durch das Budget)", required: false, default: "" }
+      budget: { description: "Monatsgrenze in USD fuer diesen Lauf (leer = Repo-Variable SHOWNOTES_BUDGET_USD, sonst 30)", required: false, default: "" }
+permissions:
+  contents: write
+concurrency:
+  group: shownotes-seo
+  cancel-in-progress: false
+jobs:
+  shownotes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      AI_GATEWAY_ID: ${{ vars.AI_GATEWAY_ID || 'm365fm' }}
+      CF_AIG_TOKEN: ${{ secrets.CF_AIG_TOKEN }}
+      COMMUNITY_API: https://api-dub.m365.fm
+      CRON_KEY: ${{ secrets.CRON_KEY }}
+      HAIKU_USD_PER_MTOK_IN: ${{ vars.HAIKU_USD_PER_MTOK_IN || '0.10' }}
+      HAIKU_USD_PER_MTOK_OUT: ${{ vars.HAIKU_USD_PER_MTOK_OUT || '0.50' }}
+      USD_PER_EUR: ${{ vars.USD_PER_EUR || '1.08' }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY_SHOW }}   # derselbe Schluessel wie articles.yml (Artikel-Key, GitHub-Secret)
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Notes neu schreiben (Batch absenden, bis ca. 4 h abwarten, einsammeln)
+        env:
+          SHOWNOTES_MODEL: ${{ vars.SHOWNOTES_MODEL || 'claude-sonnet-5-5' }}
+          SHOWNOTES_BUDGET_USD: ${{ inputs.budget || vars.SHOWNOTES_BUDGET_USD || '30' }}   # eigene Monatsgrenze, zaehlt nicht zum Artikel-Budget (data/spend.json, Schluessel "shownotes")
+          SHOWNOTES_LIMIT: ${{ inputs.limit }}
+          SHOWNOTES_WAIT_S: "14400"
+        run: |
+          pip install requests cryptography
+          python rewrite_shownotes.py
+      - name: Speichern (Zwischenstand, falls die Uebersetzung scheitert)
+        if: always()
+        run: |
+          if [ -n "$(git status --porcelain data/shownotes_en data/spend.json)" ]; then
+            git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
+            git add data/shownotes_en data/spend.json && git commit -m "Shownotes SEO (wöchentlich): neu geschrieben"
+            (git pull --rebase -q -X theirs || git rebase --abort) && git push -q
+          fi
+      - name: Uebersetzen (Haiku, Batch, nur neue oder geaenderte Quellen)
+        env:
+          NOTES_TOP: "0"   # nur neu geschriebene Folgen, nicht die alten Top-150
+        run: |
+          pip install requests cryptography
+          python translate_notes.py
+      - name: Daten committen (der normale Seitenbau uebernimmt sie)
+        if: always()
+        run: |
+          if [ -n "$(git status --porcelain data/shownotes_en data/podpage_i18n data/spend.json)" ]; then
+            git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
+            git add data/shownotes_en data/podpage_i18n data/spend.json && git commit -m "Shownotes SEO (wöchentlich)"
+            (git pull --rebase -q -X theirs || git rebase --abort) && git push -q
+          else
+            echo "Nichts Neues"
+          fi
