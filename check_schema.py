@@ -21,7 +21,7 @@ REQ = {
 }
 iso = re.compile(r"^\d{4}(-\d{2}(-\d{2}(T[\d:.+\-Z]+)?)?)?$")   # ISO 8601 inkl. reduzierter Genauigkeit (Jahr, Jahr-Monat: Erscheinungsdaten von Produkten)
 IDENT = {"@id", "@type", "@context", "name", "url"}
-SPN_TYPES = {"WebPage", "PodcastEpisode", "BlogPosting", "VideoObject"}   # T37 Sponsor: Knoten mit Kennzeichnung bezahlter Inhalte (Event.sponsor = Event-Partner, keine Kennzeichnung der Seite)
+SPN_TYPES = {"WebPage", "CollectionPage", "PodcastEpisode", "BlogPosting", "VideoObject"}   # T37 Sponsor: Knoten mit Kennzeichnung bezahlter Inhalte (Event.sponsor = Event-Partner, keine Kennzeichnung der Seite); CollectionPage ist ein WebPage (Firmenverzeichnis mit Partner-Block, #308)
 errs, warns = Counter(), Counter()
 examples = {}
 ids = defaultdict(set)
