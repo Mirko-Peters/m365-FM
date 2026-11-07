@@ -8,7 +8,8 @@ from datetime import date
 from pathlib import Path
 import requests
 import site_podpage as P
-from translate_show import call, NAMES, OUT, MODEL, cost, guard, text_of, load_hashes, save_hashes, sync_hashes, is_pending
+from translate_show import call, NAMES, OUT, MODEL, cost, guard, text_of, load_hashes, save_hashes, sync_hashes, state, wanted, changed_fields, update_stale
+import i18n_overrides as OV
 from tm_hash import fields_hash
 from ai_gateway import anthropic_request, check_budget, estimated_eur, report_usage, urlopen
 
@@ -59,7 +60,8 @@ def ranking(eps):
 
 
 def main():
-    langs = list(NAMES)
+    arg = sys.argv; langs = [l for l in arg[arg.index("--langs") + 1].split(",") if l in NAMES] if "--langs" in arg else list(NAMES)
+    slugs = set(arg[arg.index("--slugs") + 1].split(",")) if "--slugs" in arg else set()
     eps = [e for e in P.load("episodes") if e.get("published") not in (False, "False") and e.get("hidden") not in (True, "True") and len(P.plain(e.get("show_notes"))) > 200]
     top = ranking(eps)[:TOP]
     OUT.mkdir(parents=True, exist_ok=True)
@@ -67,15 +69,20 @@ def main():
     hashes = load_hashes("notes_", langs); eh = {e["slug"]: fields_hash(P.san(e["show_notes"])[:MAXC]) for e in top}
     mig = sum(sync_hashes(have[l], hashes[l], eh) for l in langs)
     if mig: save_hashes("notes_", hashes); print(f"{mig} Quell-Hashes aus dem Bestand eingetragen (ohne API)")
-    reqs, key, nh = [], {}, {}
+    reqs, key, nh, stale = [], {}, {}, {}
     for l in langs:
         for e in top:
-            if not is_pending(e["slug"], have[l], hashes[l], eh[e["slug"]]): continue
+            st = state(e["slug"], have[l], hashes[l], eh[e["slug"]], bool(OV.get("notes", l, e["slug"])) and "--force-manual" not in sys.argv)
+            if st == "stale": stale.setdefault(l, {})[e["slug"]] = ["notes_html"]
+            if slugs and e["slug"] not in slugs: continue
+            if not wanted(st, "--stale" in sys.argv): continue
             cid = f"{l}__{e['id']}"; key[cid] = e["slug"]; nh[cid] = eh[e["slug"]]
             src = P.san(e["show_notes"])[:MAXC]
             reqs.append({"custom_id": cid, "params": {"model": MODEL, "max_tokens": 16000, "thinking": {"type": "disabled"},
                 "system": f"Translate this podcast show-notes HTML into {NAMES[l]}. Keep the HTML tags and structure (p, ul, li, h2, h3, strong, em, a href). Keep product names (Microsoft 365, Copilot, Power BI, Azure ...) and URLs untranslated. Reply with the translated HTML only.",
                 "messages": [{"role": "user", "content": src}]}})
+    update_stale(("notes_html",), stale, [e["slug"] for e in top])
+    if stale: print(f"{sum(len(v) for v in stale.values())} Show Notes veraltet (Original geaendert) -> stale.json, nicht automatisch neu uebersetzt")
     if not reqs: print("Nichts zu tun"); return
     print(len(reqs), "Anfragen fuer", len(top), "Folgen")
     guard(len(reqs), 3500, 9000, "Show Notes")

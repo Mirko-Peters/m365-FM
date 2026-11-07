@@ -1,11 +1,14 @@
 """Uebersetzt Titel + Zusammenfassungen der englischen Show (data/podpage) mit Claude Haiku per Message Batch (halber Preis).
 Aufruf: python translate_show.py [--langs de,es,...] [--limit N]. Ergebnis: data/podpage_i18n/<lang>.json {folgen-slug: [titel, zusammenfassung]}
 und data/podpage_i18n/usage.json (Tokens gesamt, fuer die Kostenrechnung). Je Folge und Sprache steht der Hash der englischen Quelle in
-data/podpage_i18n/src/<lang>.json: Folgen mit unveraendertem Original werden uebersprungen, geaenderte neu uebersetzt. Erster Lauf: Hashes fuer vorhandene Uebersetzungen
+data/podpage_i18n/src/<lang>.json: Politik (Mirko, 7.11.2026): nur EINMAL uebersetzen. Eine vorhandene Uebersetzung wird nie automatisch neu uebersetzt oder ueberschrieben; ein geaendertes
+Original markiert sie nur als stale (data/podpage_i18n/stale.json {lang: {slug: [title|summary|notes_html]}}). Neu uebersetzt wird nur auf Anforderung: --stale
+(nur veraltete Fassungen, --langs/--slugs). Von Hand bearbeitete Folgen (data/i18n_overrides/show|notes/<lang>.json) fasst kein Modus an, ausser --force-manual. Erster Lauf: Hashes fuer vorhandene Uebersetzungen
 werden ohne API aus dem aktuellen Original eingetragen."""
 import json, os, sys, time, urllib.request, urllib.error
 from site_text import bad as bad_text
 from tm_hash import fields_hash
+import i18n_overrides as OV
 from pathlib import Path
 import site_podpage as P
 from ai_gateway import anthropic_request, check_budget, estimated_eur, report_usage, urlopen
@@ -61,9 +64,36 @@ def sync_hashes(have, hashes, src_hash):
     return n
 
 
-def is_pending(slug, have, hashes, h):
-    """Offen, wenn noch keine Uebersetzung existiert oder das englische Original sich seit der Uebersetzung geaendert hat."""
-    return slug not in have or hashes.get(slug) != h
+def state(slug, have, hashes, h, manual=False):
+    """new = nie uebersetzt, stale = Original seit der Uebersetzung geaendert (Text bleibt), ok, manual = im Editor bearbeitet (gesperrt)."""
+    if manual: return "manual"
+    if slug not in have: return "new"
+    return "ok" if hashes.get(slug) == h else "stale"
+
+
+def wanted(st, stale_mode):
+    """Automatik uebersetzt nur Neues; im Modus stale nur Veraltetes. Vorhandene Texte nie."""
+    return st == ("stale" if stale_mode else "new")
+
+
+def changed_fields(old, new, names):
+    """Felder (Namen in der Reihenfolge der '|'-getrennten Teil-Hashes), deren Quelle sich geaendert hat; ohne alten Hash alle."""
+    o, n = (old or "").split("|"), new.split("|")
+    return [nm for k, nm in enumerate(names) if k >= len(o) or k >= len(n) or o[k] != n[k]] or list(names)
+
+
+def update_stale(fields, found, examined):
+    """data/podpage_i18n/stale.json {lang: {slug: [felder]}}: fuer die geprueften Folgen die Eintraege dieser Felder neu setzen, Rest (andere Felder/Folgen) behalten."""
+    f = OUT / "stale.json"; cur = json.loads(f.read_text("utf-8")) if f.exists() else {}
+    for l in set(cur) | set(found):
+        d = cur.setdefault(l, {})
+        for slug in examined:
+            keep = [x for x in d.get(slug, []) if x not in fields] + list(found.get(l, {}).get(slug, []))
+            if keep: d[slug] = keep
+            else: d.pop(slug, None)
+        if not d: cur.pop(l, None)
+    OUT.mkdir(parents=True, exist_ok=True); f.write_text(json.dumps(cur, ensure_ascii=False, indent=1, sort_keys=True), encoding="utf-8")
+    return cur
 
 
 def show_source(e):
@@ -73,7 +103,7 @@ def show_source(e):
     return e["name"], summ
 
 
-def show_hash(e): return fields_hash(*show_source(e))
+def show_hash(e): return "|".join(fields_hash(x) for x in show_source(e))   # Teil-Hashes je Feld: title|summary
 
 
 def parse_json(txt):
@@ -112,10 +142,15 @@ def main():
     hashes = load_hashes("", langs); eh = {e["slug"]: show_hash(e) for e in eps}
     mig = sum(sync_hashes(have[l], hashes[l], eh) for l in langs)
     if mig: save_hashes("", hashes); print(f"{mig} Quell-Hashes aus dem Bestand eingetragen (ohne API)")
+    stale_mode = "--stale" in a; force_manual = "--force-manual" in a; stale = {}
+    slugs = set(a[a.index("--slugs") + 1].split(",")) if "--slugs" in a else set()
     shash = {}; reqs = []
     for l in langs:
         for e in eps:
-            if not is_pending(e["slug"], have[l], hashes[l], eh[e["slug"]]): continue
+            st = state(e["slug"], have[l], hashes[l], eh[e["slug"]], bool(OV.get("show", l, e["slug"])) and not force_manual)
+            if st == "stale": stale.setdefault(l, {})[e["slug"]] = changed_fields(hashes[l].get(e["slug"]), eh[e["slug"]], ("title", "summary"))
+            if slugs and e["slug"] not in slugs: continue
+            if not wanted(st, stale_mode): continue
             shash[(l, e["slug"])] = eh[e["slug"]]
             _, summ = show_source(e)
             src = (f"Translate the following podcast episode into {NAMES[l]}. The text below is the SOURCE to translate (it is complete as given; a trailing '…' only marks a shortened summary).\n\n"
@@ -124,6 +159,8 @@ def main():
             reqs.append({"custom_id": f"{l}__{e['slug']}"[:64] if len(f"{l}__{e['slug']}") <= 64 else f"{l}__{e['id']}", "params": {"model": MODEL, "max_tokens": 4096, "thinking": {"type": "disabled"},
                          "system": "You are a translation engine for podcast metadata. Always translate the SOURCE given in the user message and answer with JSON only. Keep product names (Microsoft 365, Copilot, Power BI, Azure ...) untranslated. Never ask for more text.",
                          "messages": [{"role": "user", "content": src}]}})
+    update_stale(("title", "summary"), stale, [e["slug"] for e in eps])
+    if stale: print(f"{sum(len(v) for v in stale.values())} Fassungen veraltet (Original geaendert) -> stale.json, werden nicht automatisch neu uebersetzt")
     if not reqs:
         print("Nichts zu uebersetzen"); return
     if not check_budget("translate_show", MODEL, estimated_eur(len(json.dumps(reqs)) // 3, len(reqs) * 1500, batch=True)):
