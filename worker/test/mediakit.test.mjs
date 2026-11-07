@@ -170,6 +170,84 @@ test("Admin-Leads: Reiter in assets/admin.js (nur Text, mailto, CSV, Filter) und
   assert.match(js, /\["mk", "Mediadaten-Anfragen"\]/); assert.match(js, /api\("\/api\/admin\/mediakit"\)/);
   assert.match(js, /href: mailto\(x\.email\)/); assert.match(js, /encodeURIComponent\(String\(a \|\| ""\)\)\.replace\(\/%40\/g, "@"\)/); assert.doesNotMatch(js, /"mailto:" \+ x\.email/); assert.match(js, /text\/csv/); assert.match(js, /Mediadaten-Anfragen \(Leads\)/);
   assert.doesNotMatch(js, /\binnerHTML\b|insertAdjacentHTML/);
+  const seg = (a, b) => { const i = js.indexOf(a), j = js.indexOf(b, i); assert.ok(i >= 0 && j > i, a); return js.slice(i, j); };   // Lead-Code ohne window.confirm (die Buchungs-Aktionen weiter unten sind nicht Teil davon)
+  for (const part of [seg("// Lead-Status (", "function h(t"), seg("function mediakitLeads", "function sponsorRequests"), seg('var lSec = h("section")', "loadLeads();\n  }")]) assert.doesNotMatch(part, /window\.confirm|\bconfirm\(/);
+  assert.match(js, /Wirklich löschen\? /); assert.match(js, /action: "status"/); assert.match(js, /action: "delete"/);
   for (const f of readdirSync(new URL("../../assets/", import.meta.url)).filter((f) => f.endsWith(".js") && f !== "admin.js"))
     assert.doesNotMatch(readFileSync(new URL("../../assets/" + f, import.meta.url), "utf8"), /\/api\/admin\/mediakit/, f);
+});
+
+// ---------------------------------------------------------------- Lead-Status und Loeschen (0031)
+
+const post = (env, path, user, data) => {
+  const url = new URL("https://api-dub.m365.fm" + path), request = new Request(url, { method: "POST", headers: { origin: "https://www.m365.fm", "content-type": "application/json" }, body: JSON.stringify(data) });
+  const J = (d, s = 200, x) => json(d, s, env, request, x);
+  return path.startsWith("/api/admin/ads/") ? handleAds(env, request, url, url.pathname, user, J) : handleMediakit(env, request, url, url.pathname, user, J);
+};
+const ADMIN = { id: 1, admin: true };
+async function withLeads() {
+  const t = await setup({});
+  t.raw.prepare("INSERT INTO mediakit_requests(name,company,email,lang,source,created) VALUES('Ada','Contoso','ada@contoso.com','de','/x/',1)").run();
+  return t;
+}
+function adLead(raw) {
+  raw.exec("INSERT INTO ad_bookings(id,org_id,user_id,code,product,quantity,created,updated) VALUES(1,1,1,'C1','top',1,1,1)");
+  raw.exec("INSERT INTO ad_leads(id,booking_id,org_id,name,email,consent_text,email_hash,created) VALUES(7,1,1,'Bob','bob@x.de','ok','h',5)");
+}
+
+test("Lead-Status Mediadaten: Standard open, GET liefert Status, Admin setzt gueltige Schluessel", async () => {
+  const t = await withLeads();
+  let r = await asUser(t.env, "/api/admin/mediakit", ADMIN); let it = (await r.json()).items[0];
+  assert.equal(it.status, "open");
+  for (const st of ["in_progress", "closed_lost", "closed_won", "open"]) {
+    r = await post(t.env, "/api/admin/mediakit", ADMIN, { action: "status", id: it.id, status: st });
+    assert.equal(r.status, 200); assert.equal(r.headers.get("cache-control"), "no-store");
+    const row = (await (await asUser(t.env, "/api/admin/mediakit", ADMIN)).json()).items[0];
+    assert.equal(row.status, st); assert.ok(row.status_updated > 0);
+  }
+});
+
+test("Lead-Status Mediadaten: ungueltiger Status 400, unbekannte id 404, Nicht-Admin 401/403 (Status und Loeschen)", async () => {
+  const t = await withLeads();
+  assert.equal((await post(t.env, "/api/admin/mediakit", ADMIN, { action: "status", id: 1, status: "won" })).status, 400);
+  assert.equal((await post(t.env, "/api/admin/mediakit", ADMIN, { action: "status", id: 1 })).status, 400);
+  assert.equal((await post(t.env, "/api/admin/mediakit", ADMIN, { action: "status", id: 99, status: "open" })).status, 404);
+  assert.equal((await post(t.env, "/api/admin/mediakit", ADMIN, { action: "nope", id: 1 })).status, 400);
+  for (const user of [null, { id: 5, admin: false }]) for (const data of [{ action: "status", id: 1, status: "closed_won" }, { action: "delete", id: 1 }]) {
+    const r = await post(t.env, "/api/admin/mediakit", user, data);
+    assert.ok([401, 403].includes(r.status), `${JSON.stringify(user)} ${data.action} -> ${r.status}`);
+  }
+  const row = t.raw.prepare("SELECT status FROM mediakit_requests WHERE id=1").get();
+  assert.equal(row.status, "open");
+});
+
+test("Lead-Loeschen Mediadaten: entfernt die Zeile endgueltig, no-store", async () => {
+  const t = await withLeads();
+  const r = await post(t.env, "/api/admin/mediakit", ADMIN, { action: "delete", id: 1 });
+  assert.equal(r.status, 200); assert.equal(r.headers.get("cache-control"), "no-store");
+  assert.equal(t.raw.prepare("SELECT COUNT(*) n FROM mediakit_requests").get().n, 0);
+  assert.equal((await post(t.env, "/api/admin/mediakit", ADMIN, { action: "delete", id: 1 })).status, 404);
+});
+
+test("Lead-Status Werbung: GET liefert lead_status, Status setzen, 400/401/403, Loeschen entfernt die Zeile", async () => {
+  const t = await setup({}); adLead(t.raw);
+  let r = await asUser(t.env, "/api/admin/ads/leads", ADMIN);
+  assert.equal(r.headers.get("cache-control"), "no-store");
+  assert.equal((await r.json()).leads[0].lead_status, "open");
+  r = await post(t.env, "/api/admin/ads/lead-status", ADMIN, { action: "status", id: 7, status: "closed_won" });
+  assert.equal(r.status, 200); assert.equal(r.headers.get("cache-control"), "no-store");
+  assert.equal(t.raw.prepare("SELECT lead_status s, status b FROM ad_leads WHERE id=7").get().s, "closed_won");
+  assert.equal(t.raw.prepare("SELECT status b FROM ad_leads WHERE id=7").get().b, "new");   // Abrechnungs-Status bleibt unberuehrt
+  assert.equal((await post(t.env, "/api/admin/ads/lead-status", ADMIN, { action: "status", id: 7, status: "x" })).status, 400);
+  for (const user of [null, { id: 5, admin: false }]) for (const data of [{ action: "status", id: 7, status: "open" }, { action: "delete", id: 7 }]) {
+    const x = await post(t.env, "/api/admin/ads/lead-status", user, data);
+    assert.ok([401, 403].includes(x.status), `${JSON.stringify(user)} ${data.action} -> ${x.status}`);
+  }
+  assert.equal(t.raw.prepare("SELECT COUNT(*) n FROM ad_leads").get().n, 1);
+  // Benachrichtigungen zum Lead liegen im Postausgang (Name/E-Mail/Nachricht); die eines anderen Leads (70) bleiben
+  for (const k of ["adlead:7:5", "adlead:7:6", "adlead:70:5"]) t.raw.prepare("INSERT INTO mail_outbox(user_id,kind,subject,html,key,created) VALUES(5,'system','M365.FM Lead: Max','<p>max@example.com</p>',?,1)").run(k);
+  assert.equal((await post(t.env, "/api/admin/ads/lead-status", ADMIN, { action: "delete", id: 7 })).status, 200);
+  assert.equal(t.raw.prepare("SELECT COUNT(*) n FROM ad_leads").get().n, 0);
+  assert.deepEqual(t.raw.prepare("SELECT key FROM mail_outbox ORDER BY key").all().map(x => x.key), ["adlead:70:5"]);
+  assert.equal((await post(t.env, "/api/admin/ads/lead-status", ADMIN, { action: "delete", id: 7 })).status, 404);
 });
