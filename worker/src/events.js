@@ -156,7 +156,7 @@ async function evView(db, ev, withPending) {
   const ow = await db.prepare("SELECT u.name,p.handle FROM users u LEFT JOIN profiles p ON p.user_id=u.id AND p.public=1 WHERE u.id=?").bind(ev.owner_id).first();
   const rows = (await db.prepare("SELECT * FROM event_sessions WHERE event_id=? " + (withPending ? "" : "AND status='live' ") + "ORDER BY start,id").bind(ev.id).all()).results || [];
   return { handle: ev.handle, title: ev.title, summary: ev.summary, about: ev.about, start: ev.start, end: ev.end, tz: ev.tz, mode: ev.mode, location: ev.location, country: ev.country, url: ev.url, tickets_url: ev.tickets_url,
-    free: !!ev.free, lang: ev.lang, topics: parse(ev.topics, []), seeking_sponsor: !!ev.seeking_sponsor, public: !!ev.public,
+    free: !!ev.free, lang: ev.lang, linkedin_url: (await db.prepare("SELECT url FROM linkedin_events WHERE event_id=? AND status='published'").bind(ev.id).first().catch(() => null))?.url || "", topics: parse(ev.topics, []), seeking_sponsor: !!ev.seeking_sponsor, public: !!ev.public,
     partners: ((await db.prepare("SELECT p.kind,p.level,o.handle,o.name,o.public FROM event_partners p JOIN orgs o ON o.id=p.org_id WHERE p.event_id=? AND p.status='confirmed' ORDER BY p.created").bind(ev.id).all()).results || []).map((x) => ({ kind: x.kind, level: x.level, name: x.name, handle: x.public ? x.handle : "" })),
     asked: withPending ? ((await db.prepare("SELECT o.handle FROM sponsor_asks a JOIN orgs o ON o.id=a.org_id WHERE a.event_id=?").bind(ev.id).all()).results || []).map((x) => x.handle) : undefined,
     organizer: org ? { kind: "o", handle: org.public ? org.handle : "", name: org.name } : { kind: "u", handle: ow?.handle || "", name: ow?.name || "" }, sessions: rows.map((r) => sessView(r, withPending)) };
