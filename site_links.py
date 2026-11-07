@@ -301,6 +301,34 @@ def rewrite_xml(xml, res, stats=None, page=""):
     return _XML.sub(rep, xml)
 
 
+_URLBLK = re.compile(r"<url>.*?</url>\n?", re.S)
+_LOC1 = re.compile(r"<loc>\s*([^<\s]+)\s*</loc>")
+_LM1 = re.compile(r"<lastmod>\s*([^<\s]*)\s*</lastmod>")
+
+
+def dedupe_urlset(xml):
+    """Sitemap (<urlset>): nach dem Umschreiben von Weiterleitungen koennen zwei Eintraege dieselbe Adresse haben (z. B. /entity/<alt>/ ->
+    /entity/<neu>/, wenn beide gelistet waren). Je Adresse bleibt ein Eintrag: der reichere (mehr hreflang-Alternates, dann juengeres lastmod,
+    dann der erste); er behaelt seine Stelle. Dateien ohne Doppelte bleiben unveraendert."""
+    if "<urlset" not in xml:
+        return xml
+    blocks = [m.group(0) for m in _URLBLK.finditer(xml)]
+    best, keep = {}, set()
+    for i, b in enumerate(blocks):
+        m = _LOC1.search(b)
+        if not m:
+            keep.add(i); continue
+        lm = _LM1.search(b)
+        key = (b.count("<xhtml:link"), lm.group(1) if lm else "")
+        if m.group(1) not in best or key > best[m.group(1)][0]:
+            best[m.group(1)] = (key, i)
+    if len(best) == len(blocks):
+        return xml
+    keep |= {i for _, i in best.values()}
+    it = iter(range(len(blocks)))
+    return _URLBLK.sub(lambda m: m.group(0) if next(it) in keep else "", xml)
+
+
 def section(page):
     """Bereich einer Seite fuer den Bericht, z. B. /show/episodes/, /<lang>/community/u/*/blog/, /entity/."""
     segs = [x for x in page.split("/") if x]
@@ -399,7 +427,7 @@ def fix_tree(roots, res, stats=None, rel_of=None):
                 continue
             page = "/" + str(f.relative_to(root)).replace("\\", "/")
             page = page[:-len("index.html")] if page.endswith("/index.html") else page
-            n = rewrite_xml(h, res, stats, page) if f.suffix == ".xml" else rewrite_jsonld(rewrite_html(h, res, stats, page), res, stats, page)
+            n = dedupe_urlset(rewrite_xml(h, res, stats, page)) if f.suffix == ".xml" else rewrite_jsonld(rewrite_html(h, res, stats, page), res, stats, page)
             if n != h:
                 f.write_text(n, "utf-8")
                 changed += 1

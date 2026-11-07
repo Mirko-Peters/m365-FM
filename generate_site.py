@@ -34,7 +34,7 @@ from site_size import sizes
 import site_sponsorships as SPM   # T37 Sponsor: Kennzeichnung bezahlter Inhalte (data/sponsorships.json)
 import site_transcripts as TRF   # #266: Transkripte als Dateien je Folge (R2, /…/transcript.txt|.vtt)
 import glob, hashlib, html, json, os, re, shutil, sys, unicodedata
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 import hashlib
 import site_money as SM
@@ -1830,6 +1830,8 @@ def build():
             {"id": "find-entity", "name": "Look up a Microsoft product, concept or certification", "description": "entities.json / llms-entities.txt: definition, facts, sources, related episodes and articles for each entity; entity pages define schema.org nodes (#entity).", "inputModes": ["text"], "outputModes": ["application/json", "text/html"]},
             {"id": "find-article", "name": "Find a blog article", "description": "articles.json / llms-blog.txt: articles with date, summary and topics (entity ids); episodes.json entries with kind 'show' carry the same entity ids.", "inputModes": ["text"], "outputModes": ["application/json", "text/html"]}]
     }, ensure_ascii=False, indent=1))
+    _sec_exp = (date.fromisoformat(TODAY) + timedelta(days=365)).strftime("%Y-%m-%dT00:00:00Z")   # RFC 9116: Expires Pflicht, mit jedem Bau um ein Jahr verlaengert
+    write(".well-known/security.txt", f"Contact: mailto:mirko.peters@m365.fm\nExpires: {_sec_exp}\nPreferred-Languages: en, de\nCanonical: {BASE}/.well-known/security.txt\nPolicy: {BASE}/security/\n")   # verlinkt von /security/ und /sicherheit/
     write(".well-known/agent.json", (OUT / "agent.json").read_text(encoding="utf-8"))
     _card = json.loads((OUT / "agent.json").read_text(encoding="utf-8"))   # A2A Agent Card: dieselben Faehigkeiten, Schnittstelle ist /a2a im Worker (nur lesen)
     write(".well-known/agent-card.json", json.dumps({
