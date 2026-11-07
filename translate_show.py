@@ -1,8 +1,14 @@
 """Uebersetzt Titel + Zusammenfassungen der englischen Show (data/podpage) mit Claude Haiku per Message Batch (halber Preis).
 Aufruf: python translate_show.py [--langs de,es,...] [--limit N]. Ergebnis: data/podpage_i18n/<lang>.json {folgen-slug: [titel, zusammenfassung]}
-und data/podpage_i18n/usage.json (Tokens gesamt, fuer die Kostenrechnung). Bereits uebersetzte Folgen werden uebersprungen."""
+und data/podpage_i18n/usage.json (Tokens gesamt, fuer die Kostenrechnung). Je Folge und Sprache steht der Hash der englischen Quelle in
+data/podpage_i18n/src/<lang>.json: Politik (Mirko, 7.11.2026): nur EINMAL uebersetzen. Eine vorhandene Uebersetzung wird nie automatisch neu uebersetzt oder ueberschrieben; ein geaendertes
+Original markiert sie nur als stale (data/podpage_i18n/stale.json {lang: {slug: [title|summary|notes_html]}}). Neu uebersetzt wird nur auf Anforderung: --stale
+(nur veraltete Fassungen, --langs/--slugs). Von Hand bearbeitete Folgen (data/i18n_overrides/show|notes/<lang>.json) fasst kein Modus an, ausser --force-manual. Erster Lauf: Hashes fuer vorhandene Uebersetzungen
+werden ohne API aus dem aktuellen Original eingetragen."""
 import json, os, sys, time, urllib.request, urllib.error
 from site_text import bad as bad_text
+from tm_hash import fields_hash
+import i18n_overrides as OV
 from pathlib import Path
 import site_podpage as P
 from ai_gateway import anthropic_request, check_budget, estimated_eur, report_usage, urlopen
@@ -39,6 +45,67 @@ def guard(n, est_in, est_out, what):
     if spent() + already + est > BUDGET: raise SystemExit(f"Abbruch: Budget {BUDGET} $ wuerde ueberschritten")
 
 
+def load_hashes(name, langs):
+    """{lang: {slug: Quell-Hash}} aus data/podpage_i18n/src/<name-praefix><lang>.json (name: '' fuer Titel, 'notes_' fuer Show Notes)."""
+    return {l: (json.loads((OUT / "src" / f"{name}{l}.json").read_text("utf-8")) if (OUT / "src" / f"{name}{l}.json").exists() else {}) for l in langs}
+
+
+def save_hashes(name, hashes):
+    (OUT / "src").mkdir(parents=True, exist_ok=True)
+    for l, d in hashes.items(): (OUT / "src" / f"{name}{l}.json").write_text(json.dumps(d, ensure_ascii=False, sort_keys=True), encoding="utf-8")
+
+
+def sync_hashes(have, hashes, src_hash):
+    """Erster Lauf / Altbestand: vorhandene Uebersetzung ohne gespeicherten Hash -> aktuellen Quell-Hash eintragen (Annahme: Uebersetzung passt zum Original), keine API.
+    src_hash: {slug: hash}. -> Anzahl neu eingetragener Hashes."""
+    n = 0
+    for slug, h in src_hash.items():
+        if slug in have and slug not in hashes: hashes[slug] = h; n += 1
+    return n
+
+
+def state(slug, have, hashes, h, manual=False):
+    """new = nie uebersetzt, stale = Original seit der Uebersetzung geaendert (Text bleibt), ok, manual = im Editor bearbeitet (gesperrt)."""
+    if manual: return "manual"
+    if slug not in have: return "new"
+    return "ok" if hashes.get(slug) == h else "stale"
+
+
+def wanted(st, stale_mode):
+    """Automatik uebersetzt nur Neues; im Modus stale nur Veraltetes. Vorhandene Texte nie."""
+    return st == ("stale" if stale_mode else "new")
+
+
+def changed_fields(old, new, names):
+    """Felder (Namen in der Reihenfolge der '|'-getrennten Teil-Hashes), deren Quelle sich geaendert hat; ohne alten Hash alle."""
+    o, n = (old or "").split("|"), new.split("|")
+    return [nm for k, nm in enumerate(names) if k >= len(o) or k >= len(n) or o[k] != n[k]] or list(names)
+
+
+def update_stale(fields, found, examined):
+    """data/podpage_i18n/stale.json {lang: {slug: [felder]}}: fuer die geprueften Folgen die Eintraege dieser Felder neu setzen, Rest (andere Felder/Folgen) behalten."""
+    f = OUT / "stale.json"; cur = json.loads(f.read_text("utf-8")) if f.exists() else {}
+    for l in set(cur) | set(found):
+        d = cur.setdefault(l, {})
+        for slug in examined:
+            keep = [x for x in d.get(slug, []) if x not in fields] + list(found.get(l, {}).get(slug, []))
+            if keep: d[slug] = keep
+            else: d.pop(slug, None)
+        if not d: cur.pop(l, None)
+    OUT.mkdir(parents=True, exist_ok=True); f.write_text(json.dumps(cur, ensure_ascii=False, indent=1, sort_keys=True), encoding="utf-8")
+    return cur
+
+
+def show_source(e):
+    """(Titel, Zusammenfassung <= 900 Zeichen) einer Folge - genau der Text, der uebersetzt wird."""
+    summ = (P.plain(e.get("summary")) or P.plain(e.get("show_notes")))[:900]
+    if len(summ) == 900: summ = summ.rsplit(" ", 1)[0] + " …"
+    return e["name"], summ
+
+
+def show_hash(e): return "|".join(fields_hash(x) for x in show_source(e))   # Teil-Hashes je Feld: title|summary
+
+
 def parse_json(txt):
     """Robust: Codezaeune entfernen, sonst Felder per Regex holen."""
     import re
@@ -72,18 +139,28 @@ def main():
     if limit: eps = eps[:limit]
     OUT.mkdir(parents=True, exist_ok=True)
     have = {l: (json.loads((OUT / f"{l}.json").read_text("utf-8")) if (OUT / f"{l}.json").exists() else {}) for l in langs}
-    reqs = []
+    hashes = load_hashes("", langs); eh = {e["slug"]: show_hash(e) for e in eps}
+    mig = sum(sync_hashes(have[l], hashes[l], eh) for l in langs)
+    if mig: save_hashes("", hashes); print(f"{mig} Quell-Hashes aus dem Bestand eingetragen (ohne API)")
+    stale_mode = "--stale" in a; force_manual = "--force-manual" in a; stale = {}
+    slugs = set(a[a.index("--slugs") + 1].split(",")) if "--slugs" in a else set()
+    shash = {}; reqs = []
     for l in langs:
         for e in eps:
-            if e["slug"] in have[l]: continue
-            summ = (P.plain(e.get("summary")) or P.plain(e.get("show_notes")))[:900]
-            if len(summ) == 900: summ = summ.rsplit(" ", 1)[0] + " …"
+            st = state(e["slug"], have[l], hashes[l], eh[e["slug"]], bool(OV.get("show", l, e["slug"])) and not force_manual)
+            if st == "stale": stale.setdefault(l, {})[e["slug"]] = changed_fields(hashes[l].get(e["slug"]), eh[e["slug"]], ("title", "summary"))
+            if slugs and e["slug"] not in slugs: continue
+            if not wanted(st, stale_mode): continue
+            shash[(l, e["slug"])] = eh[e["slug"]]
+            _, summ = show_source(e)
             src = (f"Translate the following podcast episode into {NAMES[l]}. The text below is the SOURCE to translate (it is complete as given; a trailing '…' only marks a shortened summary).\n\n"
                    f"TITLE: {e['name']}\n\nSUMMARY: {summ or '(none)'}\n\n"
                    f"Reply with one JSON object only, no other text: {{\"title\": \"<translated title>\", \"summary\": \"<translated summary, or empty string if the summary is (none)>\"}}")
             reqs.append({"custom_id": f"{l}__{e['slug']}"[:64] if len(f"{l}__{e['slug']}") <= 64 else f"{l}__{e['id']}", "params": {"model": MODEL, "max_tokens": 4096, "thinking": {"type": "disabled"},
                          "system": "You are a translation engine for podcast metadata. Always translate the SOURCE given in the user message and answer with JSON only. Keep product names (Microsoft 365, Copilot, Power BI, Azure ...) untranslated. Never ask for more text.",
                          "messages": [{"role": "user", "content": src}]}})
+    update_stale(("title", "summary"), stale, [e["slug"] for e in eps])
+    if stale: print(f"{sum(len(v) for v in stale.values())} Fassungen veraltet (Original geaendert) -> stale.json, werden nicht automatisch neu uebersetzt")
     if not reqs:
         print("Nichts zu uebersetzen"); return
     if not check_budget("translate_show", MODEL, estimated_eur(len(json.dumps(reqs)) // 3, len(reqs) * 1500, batch=True)):
@@ -111,11 +188,12 @@ def main():
             bad += 1; why["max_tokens"] = why.get("max_tokens", 0) + 1; continue
         if any(bad_text(c.get("text", "")) for c in res["message"]["content"]): bad += 1; why["encoding"] = why.get("encoding", 0) + 1; continue   # T5
         try:
-            t, sm = parse_json(text_of(res["message"])); have[l][key] = [t.strip(), sm.strip()]; ok += 1
+            t, sm = parse_json(text_of(res["message"])); have[l][key] = [t.strip(), sm.strip()]; hashes[l][key] = shash.get((l, key), ""); ok += 1
         except Exception:
             bad += 1; why["parse"] = why.get("parse", 0) + 1
             if len(samples) < 8: samples.append({"id": cid, "text": text_of(res["message"])[:400]})
     for l in langs: (OUT / f"{l}.json").write_text(json.dumps(have[l], ensure_ascii=False), encoding="utf-8")
+    save_hashes("", hashes)
     uf = OUT / "usage.json"; old = json.loads(uf.read_text()) if uf.exists() else {"input_tokens": 0, "output_tokens": 0, "runs": []}
     old["input_tokens"] += tin; old["output_tokens"] += tout; old["runs"].append({"batch": bid, "model": MODEL, "ok": ok, "failed": bad, "why": why, "input_tokens": tin, "output_tokens": tout})
     report_usage("translate_show", MODEL, tin, tout, "batch", batch=True)

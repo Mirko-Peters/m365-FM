@@ -9,12 +9,23 @@ B) Claude-Agenten hier in Claude (Cowork, ohne API) - fuer Nacharbeit, Reviews, 
    prepare  -> work/blog-i18n/<lang>/BRIEF.md + <key>.in.txt;  Agent schreibt <key>.out.txt;  apply -> pruefen, speichern
 sample: Stichprobe fuer die Review-Agenten (data/blog_i18n/review/<lang>.json)
 Optionen: --langs de,fr  --limit N (Artikel je Sprache, Batch)  --per-agent N  --order newest|oldest  --slugs a,b  --redo
+POLITIK (Mirko, 7.11.2026): Sprachfassungen werden nur EINMAL uebersetzt; danach sind sie Redaktionssache. Eine vorhandene Uebersetzung wird nie automatisch neu
+uebersetzt oder ueberschrieben - auch nicht, wenn sich das englische Original aendert (auto/run/submit/prepare): TM und Quell-Hashes erkennen nur die Aenderung, die Einheit
+bleibt mit altem Text stehen und wird in data/blog_i18n/stale.json {lang: {slug: [ids]}} fuer die Redaktion gelistet. Nie uebersetzte Einheiten (neu/fehlend) werden einmal uebersetzt.
+Neu uebersetzen nur auf Anforderung: --slugs/--redo (ganzer Beitrag), Modus `stale` bzw. --stale (nur die geaenderten Einheiten veralteter Fassungen, --langs/--slugs).
+Von Hand bearbeitete Einheiten (Overrides data/i18n_overrides/blog/<lang>.json, siehe i18n_overrides.py) ueberschreibt kein Modus, auch --redo nicht, ausser mit --force-manual.
+Uebersetzungsspeicher (TM): data/blog_i18n/tm/<lang>.json.gz {hash(Art+normalisierter Quelltext): {t, m, ts, ok}} - geaenderte Artikel schicken nur neue/geaenderte Einheiten
+an Haiku, der Rest kommt aus dem TM (ids spielen keine Rolle); Einheiten, die die QA nicht bestehen, kommen nie ins TM. Erster Lauf baut das TM aus dem Bestand (ohne API).
 Profile: agents/blog-team/uebersetzer/<lang>.md (Systemprompt je Sprache). Quellen: data/podpage/blog_posts.json.gz (dieselben Beitraege liegen inzwischen in D1)
 und die freigegebenen englischen Content-Pakete imports/blog/en/*.md (status: approved, site_content_blog.tr_sources; Schluessel content/<slug>, --slugs nimmt auch den nackten Slug).
 Zwischenablage: data/blog_i18n/<lang>/<bucket>.json.gz {slug: {h, n, seg{id: text}, ok, m, ts}}; Seiten baut site_legacy_blog bzw. site_content_blog.translations.
 """
 import gzip, hashlib, json, os, random, re, sys, time, urllib.request, urllib.error
 from site_text import bad as bad_text
+import copy
+from difflib import SequenceMatcher
+import i18n_overrides as OV
+from tm_hash import unit_hash, kind_of
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from ai_gateway import anthropic_request, check_budget, estimated_eur, report_usage, urlopen
@@ -140,6 +151,118 @@ def save_lang(lang, data, only_buckets=None):
         elif f.exists(): f.unlink()
 
 
+# ---------- Uebersetzungsspeicher (TM) ----------
+def load_tm(lang):
+    f = OUT / "tm" / f"{lang}.json.gz"
+    return json.loads(gzip.open(f, "rt", encoding="utf-8").read()) if f.exists() else {}
+
+
+def save_tm(lang, tm):
+    d = OUT / "tm"; d.mkdir(parents=True, exist_ok=True)
+    (d / f"{lang}.json.gz").write_bytes(gzip.compress(json.dumps(tm, ensure_ascii=False, sort_keys=True).encode(), mtime=0))
+
+
+def tm_put(tm, uid, src, text, model):
+    """Nur QA-geprueften Text speichern (Aufrufer ruft das erst nach qa() == ok)."""
+    tm[unit_hash(uid, src)] = {"t": text, "m": model, "ts": datetime.now(timezone.utc).strftime("%Y-%m-%d"), "ok": True}
+
+
+def ordkey(i):
+    i = str(i)
+    if i == "T": return (0, 0, 0)
+    if i == "D": return (1, 0, 0)
+    n = int(re.sub(r"\D", "", i) or 0)
+    return (2, n, 0) if i[0] == "Q" else (2, n, 1) if i[0] == "A" else (3, n, 0)
+
+
+def h8(h): return h[:8]
+
+
+def manual_ids(lang, slug, units):
+    ids = {i for i, _ in units}
+    return {i: t for i, t in OV.get("blog", lang, slug).items() if i in ids}
+
+
+def stale_ids(rec, units, manual=()):
+    """Einheiten, deren englischer Quelltext sich seit der Uebersetzung geaendert hat (Text bleibt stehen, Redaktion entscheidet). Manuell bearbeitete zaehlen nicht."""
+    sh = rec.get("sh") or {}; man = set(manual) | set(rec.get("manual") or [])
+    return [i for i, t in units if i in rec.get("seg", {}) and i in sh and sh[i] != h8(unit_hash(i, t)) and i not in man]
+
+
+def fresh(rec, i, t):
+    """Einheit hat eine zum aktuellen Quelltext passende Uebersetzung (nichts mehr zu tun)."""
+    return i in rec["seg"] and (rec.get("sh") or {}).get(i, h8(unit_hash(i, t))) == h8(unit_hash(i, t))
+
+
+def store(rec, i, t, text, manual=()):
+    """Maschinentext einer QA-geprueften Einheit speichern; nie ueber eine aktuelle oder manuelle Einheit. -> True wenn gespeichert."""
+    if i in manual or fresh(rec, i, t): return False
+    rec["seg"][i] = text; rec.setdefault("sh", {})[i] = h8(unit_hash(i, t)); return True
+
+
+def realign(old, units, h, tm):
+    """Quelle hat sich geaendert: vorhandene Uebersetzungen auf die neuen ids abbilden (difflib ueber die Quell-Hashes). Gleiche Einheiten wandern mit (auch bei
+    eingefuegten Absaetzen), geaenderte behalten den alten Text (-> stale), neue bleiben offen. Ohne gespeicherte Quell-Hashes (Altbestand) ist keine Zuordnung moeglich."""
+    rec = {"h": h, "n": len(units), "seg": {}, "sh": {}, "ok": False}
+    osh = old.get("sh")
+    if not osh: return rec
+    opairs = [(i, osh[i]) for i in sorted(osh, key=ordkey) if i in old.get("seg", {})]
+    new = [(i, h8(unit_hash(i, t))) for i, t in units]
+    for tag, i1, i2, j1, j2 in SequenceMatcher(None, [x[1] for x in opairs], [x[1] for x in new], autojunk=False).get_opcodes():
+        if tag == "equal":
+            for k in range(i2 - i1):
+                (oi, _), (ni, nh) = opairs[i1 + k], new[j1 + k]; rec["seg"][ni] = old["seg"][oi]; rec["sh"][ni] = nh
+        elif tag == "replace":
+            for k in range(min(i2 - i1, j2 - j1)):
+                (oi, oh), (ni, nh) = opairs[i1 + k], new[j1 + k]
+                if kind_of(oi) == kind_of(ni): rec["seg"][ni] = old["seg"][oi]; rec["sh"][ni] = oh   # alter Hash bleibt -> stale
+    return rec
+
+
+def resolve(lang, p, units, h, have, tm, redo=False, force_manual=False):
+    """Aktueller Datensatz des Beitrags. Unveraendert: wie gespeichert. Original geaendert: realign (alte Texte bleiben, geaenderte werden stale). Fehlende Einheiten kommen
+    aus dem TM, wenn der Quelltext dort steht; Overrides (manuell) werden eingetragen und sind gesperrt. -> (rec, dirty); dirty = geaendert, speichern. redo: leer beginnen,
+    nichts aus TM/alter Fassung, nur manuelle Einheiten bleiben (ausser force_manual)."""
+    old = have.get(p["slug"]); dirty = False
+    man = {} if force_manual else manual_ids(lang, p["slug"], units)
+    if redo or not old: rec = {"h": h, "n": len(units), "seg": {}, "sh": {}, "ok": False}
+    elif old.get("h") == h: rec = old
+    else: rec = realign(old, units, h, tm); dirty = True
+    rec.setdefault("sh", {})
+    if not redo:
+        for i, t in units:
+            if i not in rec["seg"]:
+                hit = tm.get(unit_hash(i, t))
+                if hit: rec["seg"][i] = hit["t"]; rec["sh"][i] = h8(unit_hash(i, t)); dirty = True
+    for i, t in man.items():
+        if rec["seg"].get(i) != t: rec["seg"][i] = t; dirty = True
+        rec["sh"][i] = h8(unit_hash(i, dict(units)[i]))
+    if man and rec.get("manual") != sorted(man, key=ordkey): rec["manual"] = sorted(man, key=ordkey); dirty = True
+    if not rec.get("ok") and all(i in rec["seg"] for i, _ in units):
+        rec["ok"] = True; rec.setdefault("m", "tm"); rec["ts"] = datetime.now(timezone.utc).strftime("%Y-%m-%d"); rec.pop("tries", None); dirty = True
+    return rec, dirty and not redo
+
+
+def migrate(ps):
+    """Einmalig je Sprache (Datei fehlt): TM aus dem Bestand bauen - rec.seg aller Beitraege, deren Hash zum aktuellen Original passt (id -> Quelltext bekannt). Keine API."""
+    n = 0
+    for lang in LANGS:
+        if (OUT / "tm" / f"{lang}.json.gz").exists(): continue
+        have = load_lang(lang); tm = {}; sh_new = False
+        for p in ps:
+            rec = have.get(p["slug"])
+            if not rec: continue
+            tpl, units, h = source_of(p)
+            if rec.get("h") != h: continue
+            for i, t in units:
+                if i in rec.get("seg", {}) and rec["seg"][i]:
+                    tm[unit_hash(i, t)] = {"t": rec["seg"][i], "m": rec.get("m", "?"), "ts": rec.get("ts", ""), "ok": True}
+            if "sh" not in rec: rec["sh"] = {i: h8(unit_hash(i, t)) for i, t in units if i in rec.get("seg", {})}; sh_new = True   # Quell-Hash je Einheit: Grundlage fuer stale-Erkennung und Zuordnung
+        if sh_new: save_lang(lang, have)
+        save_tm(lang, tm); n += len(tm); print(f"TM {lang}: {len(tm)} Einheiten aus dem Bestand (ohne API)")
+    return n
+
+
 def jload(name, default):
     f = OUT / name
     return json.loads(f.read_text("utf-8")) if f.exists() else default
@@ -149,13 +272,16 @@ def jsave(name, obj):
     OUT.mkdir(parents=True, exist_ok=True); (OUT / name).write_text(json.dumps(obj, ensure_ascii=False, indent=1), encoding="utf-8")
 
 
-def assemble(p, rec):
+def assemble(p, rec, lang=None):
     """Fertige Sprachfassung: (titel, beschreibung, html, faq) oder None, solange nicht vollstaendig."""
     if not rec or not rec.get("ok"): return None
     import site_podpage as P
     tpl, units, h = source_of(p)
     if rec.get("h") != h: return None   # Original wurde geaendert -> alte Uebersetzung nicht mehr anzeigen
-    sg = rec["seg"]
+    sg = dict(rec["seg"])
+    if lang:   # Overrides (im Editor bearbeitet) gewinnen gegen den Maschinentext
+        san = __import__("site_podpage").san
+        sg.update({i: (san(t) if ("<" in t or "&" in t) else t) for i, t in OV.get("blog", lang, p["slug"]).items() if i in dict(units)})
     html = re.sub("\x00(\\d+)\x00", lambda m: sg.get(m.group(1), ""), tpl)
     faq, i = [], 1
     while f"Q{i}" in sg:
@@ -193,6 +319,13 @@ def system_prompt(lang):
 def user_prompt(lang, units):
     body = "\n".join(f"[[{i}]] {t}" for i, t in units)
     return f"Translate every segment into {NAMES[lang]}. Keep the markers.\n\n{body}"
+
+
+def open_units(rec, units, stale=False, manual=()):
+    """Was jetzt zu uebersetzen ist: normal nur nie uebersetzte Einheiten; im Modus stale nur die geaenderten Einheiten veralteter Fassungen. Manuelle nie."""
+    if stale:
+        sid = set(stale_ids(rec, units, manual)); return [(i, t) for i, t in units if i in sid]
+    return [(i, t) for i, t in units if i not in rec["seg"] and i not in manual]
 
 
 def chunks(units, have):
@@ -247,16 +380,21 @@ def parse(text):
 
 
 # ---------- Runden fuer die Agenten ----------
-def pick(a, lang, have, ps, busy):
+def pick(a, lang, have, ps, busy, tm=None, touched=None):
     n = a["per_agent"] or PER_AGENT
     out = []
     for p in ps:
         if len(out) >= n: break
         if p["slug"] in busy: continue
         if QUEUE and p["slug"] not in QUEUE.get(lang, ()) and p.get("cp_slug") not in QUEUE.get(lang, ()): continue   # Vormerkliste: nur die fuer diese Sprache markierten Beitraege
-        tpl, units, h = source_of(p); rec = have.get(p["slug"])
-        if a["redo"] or not rec or rec.get("h") != h: rec = {"h": h, "n": len(units), "seg": {}, "ok": False}
-        if rec.get("ok"): continue
+        tpl, units, h = source_of(p)
+        rec, dirty = resolve(lang, p, units, h, have, tm or {}, a["redo"], a.get("force_manual", False))
+        if dirty:
+            have[p["slug"]] = rec
+            if touched is not None: touched.add(bucket(p["slug"]))
+        if a.get("stale"):
+            if not stale_ids(rec, units, manual_ids(lang, p["slug"], units)): continue
+        elif rec.get("ok"): continue
         out.append((p, units, h, rec))
     return out
 
@@ -267,10 +405,11 @@ def prepare(a):
     for lang in langs:
         d = WORK / lang; d.mkdir(parents=True, exist_ok=True)
         busy = {json.loads(f.read_text("utf-8").split("\n", 1)[0][2:]).get("slug") for f in d.glob("*.in.txt")}
-        have = load_lang(lang); new = pick(a, lang, have, ps, busy)
+        have = load_lang(lang); touched = set(); new = pick(a, lang, have, ps, busy, load_tm(lang), touched)
+        if touched: save_lang(lang, have, touched)   # komplett aus dem TM aufgefuellte Beitraege ohne API fertig
         for p, units, h, rec in new:
-            todo = [(i, t) for i, t in units if i not in rec["seg"]]
-            head = json.dumps({"slug": p["slug"], "h": h, "lang": lang}, ensure_ascii=False)
+            todo = open_units(rec, units, a.get("stale"), manual_ids(lang, p["slug"], units))
+            head = json.dumps({"slug": p["slug"], "h": h, "lang": lang, **({"fm": True} if a.get("force_manual") else {})}, ensure_ascii=False)
             (d / f"{key(p['slug'])}.in.txt").write_text(f"# {head}\n" + "\n".join(f"[[{i}]] {t}" for i, t in todo) + "\n", encoding="utf-8")
         (d / "BRIEF.md").write_text(system_prompt(lang) + f"""
 
@@ -292,7 +431,7 @@ def apply(a=None):
     for d in sorted(WORK.glob("*")) if WORK.exists() else []:
         lang = d.name
         if lang not in LANGS: continue
-        have = load_lang(lang); touched = set(); qa_log = []; ok = bad = done = 0; why = {}
+        have = load_lang(lang); tm = load_tm(lang); tm_n = len(tm); touched = set(); qa_log = []; ok = bad = done = 0; why = {}
         for fin in sorted(d.glob("*.in.txt")):
             fout = fin.with_name(fin.name.replace(".in.txt", ".out.txt"))
             if not fout.exists(): continue
@@ -300,24 +439,27 @@ def apply(a=None):
             if not p: fin.unlink(); fout.unlink(); continue
             tpl, units, h = source_of(p)
             if h != meta["h"]: fin.unlink(); fout.unlink(); continue   # Original geaendert -> neu vorbereiten
-            src = dict(units); rec = have.get(p["slug"])
-            if not rec or rec.get("h") != h: rec = {"h": h, "n": len(units), "seg": {}, "ok": False}
+            src = dict(units); rec, _ = resolve(lang, p, units, h, have, tm, False, bool(meta.get("fm"))); man = set() if meta.get("fm") else set(manual_ids(lang, p["slug"], units))
+            asked = set(parse(fin.read_text("utf-8").split("\n", 1)[1]))
             for i, t in parse(fout.read_text("utf-8")).items():
                 if i not in src: continue
                 good, reason, warn = qa(lang, src[i], t)
                 if good:
-                    rec["seg"][i] = __import__("site_podpage").san(t) if ("<" in t or "&" in t) else t; ok += 1
+                    txt = __import__("site_podpage").san(t) if ("<" in t or "&" in t) else t
+                    if not store(rec, i, src[i], txt, man): continue   # schon aktuell oder manuell: nie ueberschreiben
+                    ok += 1; tm_put(tm, i, src[i], txt, AGENT_MODEL)
                     if warn: qa_log.append({"slug": p["slug"], "seg": i, "warn": warn})
                 else:
                     bad += 1; why[reason] = why.get(reason, 0) + 1
                     qa_log.append({"slug": p["slug"], "seg": i, "fehler": reason, "src": src[i][:160], "out": t[:160]})
             rec["ok"] = all(i in rec["seg"] for i in src); rec["m"] = AGENT_MODEL; rec["ts"] = datetime.now(timezone.utc).strftime("%Y-%m-%d")
             have[p["slug"]] = rec; touched.add(bucket(p["slug"])); fout.unlink()
-            if rec["ok"]: fin.unlink(); done += 1
+            todo = [(i, t) for i, t in units if i not in man and not fresh(rec, i, t) and (i in asked or i not in rec["seg"])]
+            if rec["ok"] and not todo: fin.unlink(); done += 1
             else:
-                todo = [(i, t) for i, t in units if i not in rec["seg"]]
                 fin.write_text(fin.read_text("utf-8").split("\n", 1)[0] + "\n" + "\n".join(f"[[{i}]] {t}" for i, t in todo) + "\n", encoding="utf-8")
         if touched: save_lang(lang, have, touched)
+        if len(tm) != tm_n or touched: save_tm(lang, tm)
         if qa_log:
             (OUT / "qa").mkdir(parents=True, exist_ok=True); f = OUT / "qa" / f"{lang}.json"
             old = json.loads(f.read_text("utf-8")) if f.exists() else []
@@ -412,18 +554,20 @@ def submit(a):
     reqs, items, money = [], [], 0.0
     room = BUDGET - spent_month() - pending_cost()
     for lang in langs:
-        have = load_lang(lang); sysp = system_prompt(lang); n_posts = 0
+        have = load_lang(lang); tm = load_tm(lang); sysp = system_prompt(lang); n_posts = 0; touched = set()
         for p in ps:
             if a["limit"] and n_posts >= a["limit"]: break
             if (lang, p["slug"]) in busy: continue
             tpl, units, h = source_of(p)
-            rec = have.get(p["slug"])
-            if a["redo"] or not rec or rec.get("h") != h: rec = {"h": h, "n": len(units), "seg": {}, "ok": False}
-            if rec.get("ok"): continue
-            if rec.get("tries", 0) >= MAX_TRIES and not (a["redo"] or a["slugs"]):
+            rec, dirty = resolve(lang, p, units, h, have, tm, a["redo"], a["force_manual"])
+            if dirty: have[p["slug"]] = rec; touched.add(bucket(p["slug"]))   # aus dem TM gefuellt / auf neue ids abgebildet: ohne API gespeichert
+            man = manual_ids(lang, p["slug"], units) if not a["force_manual"] else {}
+            todo = open_units(rec, units, a["stale"], man)
+            if not todo: continue   # normal: nichts Neues; stale: nichts veraltet. Vorhandene Uebersetzungen werden nie automatisch neu gesendet
+            if rec.get("tries", 0) >= MAX_TRIES and not (a["redo"] or a["slugs"] or a["stale"]):
                 continue   # schon MAX_TRIES Mal abgeholt und noch unvollstaendig: nicht alle 3 h erneut senden (Kosten, Commits)
             n_posts += 1
-            cs = chunks(units, rec["seg"])
+            cs = chunks(todo, {})
             ti, to = est(lang, [u for c in cs for u in c]); c_usd = cost(ti, to)
             if money + c_usd > room:
                 print(f"Monatsbudget erreicht ({BUDGET:.2f} $; diesen Monat {spent_month():.2f} $, offen {pending_cost():.2f} $) - Rest bleibt fuer naechsten Monat"); break
@@ -432,9 +576,10 @@ def submit(a):
                 reqs.append({"custom_id": f"{lang}_{key(p['slug'])}_{ci}", "params": {"model": MODEL, "max_tokens": MAX_TOK,
                              "system": [{"type": "text", "text": sysp, "cache_control": {"type": "ephemeral"}}],
                              "messages": [{"role": "user", "content": user_prompt(lang, c)}]}})
-            items.append({"lang": lang, "slug": p["slug"], "h": h, "n": len(units)})
+            items.append({"lang": lang, "slug": p["slug"], "h": h, "n": len(units), **({"fm": True} if a["force_manual"] else {})})
             if a["redo"]: have[p["slug"]] = rec
         if a["redo"]: save_lang(lang, have)
+        elif touched: save_lang(lang, have, touched)
     if not reqs:
         print("Nichts abzusenden."); return 0
     if not check_budget("translate_blog", MODEL, money / max(0.000001, float(os.environ.get("USD_PER_EUR", "1.08")))):   # money = Batch-Preis (PRICE_IN/OUT)
@@ -457,13 +602,13 @@ def collect():
         st = api("GET", f"/v1/messages/batches/{b['id']}")
         if st["processing_status"] != "ended": print(b["id"], st["processing_status"], st["request_counts"]); left.append(b); continue
         info = {(it["lang"], key(it["slug"])): it for it in b["items"]}
-        data, touched, qa_log, seen = {}, {}, {}, set()
+        data, touched, qa_log, seen, tms = {}, {}, {}, set(), {}
         tin = tout = ok = bad = 0; why = {}
         for line in api("GET", st["results_url"], raw=True).decode().splitlines():
             r = json.loads(line); lang, k, _ = r["custom_id"].split("_")
             it = info.get((lang, k))
             if not it: continue
-            if lang not in data: data[lang] = load_lang(lang); touched[lang] = set()
+            if lang not in data: data[lang] = load_lang(lang); touched[lang] = set(); tms[lang] = load_tm(lang)
             res = r["result"]
             if res["type"] != "succeeded": bad += 1; why[res["type"]] = why.get(res["type"], 0) + 1; continue
             msg = res["message"]; u = msg["usage"]
@@ -479,13 +624,14 @@ def collect():
             tpl, units, h = source_of(p)
             if h != it["h"]: continue   # Original inzwischen geaendert
             src = dict(units)
-            rec = data[lang].get(p["slug"])
-            if not rec or rec.get("h") != h: rec = {"h": h, "n": len(units), "seg": {}, "ok": False}
+            rec, _ = resolve(lang, p, units, h, data[lang], tms[lang], False, bool(it.get("fm"))); man = set() if it.get("fm") else set(manual_ids(lang, p["slug"], units))
             for i, t in got.items():
                 if i not in src: continue
                 good, reason, warn = qa(lang, src[i], t)
                 if good:
-                    rec["seg"][i] = __import__("site_podpage").san(t) if "<" in t or "&" in t else t; ok += 1
+                    txt = __import__("site_podpage").san(t) if "<" in t or "&" in t else t
+                    if not store(rec, i, src[i], txt, man): continue   # schon aktuell (Doppel-Antwort) oder manuell: nie ueberschreiben
+                    ok += 1; tm_put(tms[lang], i, src[i], txt, MODEL)
                     if warn: qa_log.setdefault(lang, []).append({"slug": p["slug"], "seg": i, "warn": warn})
                 else:
                     bad += 1; why[reason] = why.get(reason, 0) + 1
@@ -496,7 +642,7 @@ def collect():
             rc = data[lang].get(sl)
             if rc is not None and rc.get("ok"): rc.pop("tries", None)
             elif rc is not None: rc["tries"] = rc.get("tries", 0) + 1
-        for lang, d in data.items(): save_lang(lang, d, touched[lang])
+        for lang, d in data.items(): save_lang(lang, d, touched[lang]); save_tm(lang, tms[lang])
         for lang, lg in qa_log.items():
             (OUT / "qa").mkdir(parents=True, exist_ok=True)
             f = OUT / "qa" / f"{lang}.json"; old = json.loads(f.read_text("utf-8")) if f.exists() else []
@@ -515,18 +661,24 @@ def status():
     ps = posts(); per_round = len(LANGS) * PER_AGENT
     st = {"updated": datetime.now(timezone.utc).isoformat()[:19], "posts": len(ps), "engine": f"{MODEL} (Batch) + Claude-Agenten", "per_agent": PER_AGENT,
           "budget_usd": BUDGET, "budget_period": "month", "month": month(), "spent_month_usd": round(spent_month(), 3), "spent_usd": round(spent(), 3), "pending_batches": len(jload("batches.json", [])), "pending_est_usd": round(pending_cost(), 3), "langs": {}}
+    stale_all = {}
     srcs0 = {p["slug"]: source_of(p) for p in ps}; srcs = {k: v[2] for k, v in srcs0.items()}; left = 0; all_ti = all_to = 0; cdone = {}
     for lang in LANGS:
-        have = load_lang(lang)
-        done = sum(1 for p in ps if (have.get(p["slug"]) or {}).get("ok") and have[p["slug"]].get("h") == srcs[p["slug"]])
+        have = load_lang(lang); tm = load_tm(lang)
+        done = 0; ti = to = 0; sl = {}
         for p in ps:
-            if p.get("cp_slug") and (have.get(p["slug"]) or {}).get("ok") and have[p["slug"]].get("h") == srcs[p["slug"]]: cdone[p["slug"]] = cdone.get(p["slug"], 0) + 1
-        ti = to = 0
-        for p in ps:
-            rec = have.get(p["slug"]) or {}
-            if rec.get("ok") and rec.get("h") == srcs[p["slug"]]: continue
-            seg = rec.get("seg", {}) if rec.get("h") == srcs[p["slug"]] else {}
-            x, y = est(lang, [u for u in srcs0[p["slug"]][1] if u[0] not in seg]); ti += x; to += y
+            units = srcs0[p["slug"]][1]
+            rec, _ = resolve(lang, p, units, srcs[p["slug"]], {p["slug"]: copy.deepcopy(have[p["slug"]])} if p["slug"] in have else {}, tm)   # wie submit: realign + TM, ohne zu speichern
+            man = manual_ids(lang, p["slug"], units)
+            pend = [u for u in units if u[0] not in rec["seg"] and u[0] not in man]
+            sid = stale_ids(rec, units, man)
+            if sid: sl[p["slug"]] = sid
+            if not pend and rec["seg"]:
+                done += 1
+                if p.get("cp_slug"): cdone[p["slug"]] = cdone.get(p["slug"], 0) + 1
+                continue
+            x, y = est(lang, pend); ti += x; to += y   # nur nie uebersetzte Einheiten (TM-Treffer und vorhandene Texte kosten nichts)
+        if sl: stale_all[lang] = sl
         all_ti += ti; all_to += to
         qf = OUT / "qa" / f"{lang}.json"; ql = json.loads(qf.read_text("utf-8")) if qf.exists() else []
         st["langs"][lang] = {"name": NAMES[lang], "done": done, "open": len(ps) - done, "pct": round(100 * done / max(1, len(ps)), 1), "rest_est_usd": round(cost(ti, to), 2), "out_factor": round(measured_factor(lang), 2),
@@ -535,7 +687,8 @@ def status():
     st["open_translations"] = left; st["rounds_left"] = -(-left // per_round); st["rest_est_usd_all"] = round(cost(all_ti, all_to), 2)
     st["content"] = [{"slug": p["cp_slug"], "est_usd_all_langs": post_cost(srcs0[p["slug"]][1]), "done_langs": cdone.get(p["slug"], 0)}   # Content-Pakete: Kosten je Beitrag x 14 Sprachen (Batch-Preis)
                      for p in ps if p.get("cp_slug")]
-    jsave("status.json", st)
+    st["stale_items"] = sum(len(v) for v in stale_all.values())
+    jsave("status.json", st); jsave("stale.json", stale_all)   # stale.json: {lang: {slug: [ids]}} - englisches Original geaendert, Fassung steht noch (Redaktion)
     for c in st["content"]: print(f"  Content-Paket {c['slug']}: ~{c['est_usd_all_langs']} $ fuer {len(LANGS)} Sprachen, fertig {c['done_langs']}/{len(LANGS)}")
     print(f"{st['posts']} Artikel x 19 Sprachen | offen {left} Uebersetzungen | Haiku-Batch ~{st['rest_est_usd_all']} $ (diesen Monat {st['spent_month_usd']} von {BUDGET} $, gesamt {st['spent_usd']} $) | Agenten ~{st['rounds_left']} Runden")
     for l, v in st["langs"].items(): print(f"  {l:3} {v['done']:5}/{st['posts']} fertig ({v['pct']} %), Rest ~{v['rest_est_usd']} $")
@@ -564,7 +717,8 @@ def args():
     mode = a[0] if a and not a[0].startswith("-") else "plan"
     langs = [l for l in (opt("--langs") or ",".join(LANGS)).split(",") if l in LANGS]
     return {"mode": mode, "langs": langs, "limit": int(opt("--limit", "0") or 0), "per_agent": int(opt("--per-agent", "0") or 0), "order": opt("--order", "newest"),
-            "slugs": [s for s in opt("--slugs").split(",") if s], "redo": "--redo" in a, "seed": opt("--seed"), "queue": "--queue" in a}
+            "slugs": [s for s in opt("--slugs").split(",") if s], "redo": "--redo" in a, "seed": opt("--seed"), "queue": "--queue" in a,
+            "stale": mode == "stale" or "--stale" in a, "force_manual": "--force-manual" in a}
 
 
 BY_SLUG = {}
@@ -574,12 +728,13 @@ BY_KEY = {}
 def main():
     a = args(); ps = posts(); BY_SLUG.update({p["slug"]: p for p in ps}); BY_KEY.update({key(p["slug"]): p for p in ps})
     m = a["mode"]
+    migrate(ps)   # erster Lauf: TM aus dem Bestand, ohne API
     if m == "prepare": prepare(a); return
     if m == "apply": apply(a); status(); return
     if m == "sample": sample(a); return
-    if m in ("collect", "run", "auto"): collect()
-    if m in ("submit", "run", "auto"): submit(a)
-    if m in ("run", "auto"):
+    if m in ("collect", "run", "auto", "stale"): collect()
+    if m in ("submit", "run", "auto", "stale"): submit(a)
+    if m in ("run", "auto", "stale"):
         t0 = time.time()
         while jload("batches.json", []) and time.time() - t0 < WAIT_MIN * 60:
             time.sleep(120)

@@ -1,12 +1,16 @@
 """Uebersetzt die Show Notes der meistgehoerten englischen Folgen (Haiku, Message Batch). Ranking: Spreaker-Statistik (Plays/Downloads seit 2025),
-Ersatz: featured + neueste. Ergebnis: data/podpage_i18n/notes_<lang>.json {folgen-slug: html}. Kosten in usage.json (Schluessel notes_*)."""
+Ersatz: featured + neueste. Ergebnis: data/podpage_i18n/notes_<lang>.json {folgen-slug: html}. Kosten in usage.json (Schluessel notes_*).
+Je Folge und Sprache steht der Hash der englischen Show Notes in data/podpage_i18n/src/notes_<lang>.json (pro Feld, nicht pro Absatz: eine Anfrage uebersetzt das ganze HTML):
+nur geaenderte Originale werden neu uebersetzt; Altbestand bekommt beim ersten Lauf den aktuellen Hash ohne API."""
 import json, os, sys, time, urllib.request
 from site_text import bad as bad_text
 from datetime import date
 from pathlib import Path
 import requests
 import site_podpage as P
-from translate_show import call, NAMES, OUT, MODEL, cost, guard, text_of
+from translate_show import call, NAMES, OUT, MODEL, cost, guard, text_of, load_hashes, save_hashes, sync_hashes, state, wanted, changed_fields, update_stale
+import i18n_overrides as OV
+from tm_hash import fields_hash
 from ai_gateway import anthropic_request, check_budget, estimated_eur, report_usage, urlopen
 
 TOP = int(os.environ.get("NOTES_TOP", "150")); MAXC = 8000
@@ -56,20 +60,29 @@ def ranking(eps):
 
 
 def main():
-    langs = list(NAMES)
+    arg = sys.argv; langs = [l for l in arg[arg.index("--langs") + 1].split(",") if l in NAMES] if "--langs" in arg else list(NAMES)
+    slugs = set(arg[arg.index("--slugs") + 1].split(",")) if "--slugs" in arg else set()
     eps = [e for e in P.load("episodes") if e.get("published") not in (False, "False") and e.get("hidden") not in (True, "True") and len(P.plain(e.get("show_notes"))) > 200]
     top = ranking(eps)[:TOP]
     OUT.mkdir(parents=True, exist_ok=True)
     have = {l: (json.loads((OUT / f"notes_{l}.json").read_text("utf-8")) if (OUT / f"notes_{l}.json").exists() else {}) for l in langs}
-    reqs, key = [], {}
+    hashes = load_hashes("notes_", langs); eh = {e["slug"]: fields_hash(P.san(e["show_notes"])[:MAXC]) for e in top}
+    mig = sum(sync_hashes(have[l], hashes[l], eh) for l in langs)
+    if mig: save_hashes("notes_", hashes); print(f"{mig} Quell-Hashes aus dem Bestand eingetragen (ohne API)")
+    reqs, key, nh, stale = [], {}, {}, {}
     for l in langs:
         for e in top:
-            if e["slug"] in have[l]: continue
-            cid = f"{l}__{e['id']}"; key[cid] = e["slug"]
+            st = state(e["slug"], have[l], hashes[l], eh[e["slug"]], bool(OV.get("notes", l, e["slug"])) and "--force-manual" not in sys.argv)
+            if st == "stale": stale.setdefault(l, {})[e["slug"]] = ["notes_html"]
+            if slugs and e["slug"] not in slugs: continue
+            if not wanted(st, "--stale" in sys.argv): continue
+            cid = f"{l}__{e['id']}"; key[cid] = e["slug"]; nh[cid] = eh[e["slug"]]
             src = P.san(e["show_notes"])[:MAXC]
             reqs.append({"custom_id": cid, "params": {"model": MODEL, "max_tokens": 16000, "thinking": {"type": "disabled"},
                 "system": f"Translate this podcast show-notes HTML into {NAMES[l]}. Keep the HTML tags and structure (p, ul, li, h2, h3, strong, em, a href). Keep product names (Microsoft 365, Copilot, Power BI, Azure ...) and URLs untranslated. Reply with the translated HTML only.",
                 "messages": [{"role": "user", "content": src}]}})
+    update_stale(("notes_html",), stale, [e["slug"] for e in top])
+    if stale: print(f"{sum(len(v) for v in stale.values())} Show Notes veraltet (Original geaendert) -> stale.json, nicht automatisch neu uebersetzt")
     if not reqs: print("Nichts zu tun"); return
     print(len(reqs), "Anfragen fuer", len(top), "Folgen")
     guard(len(reqs), 3500, 9000, "Show Notes")
@@ -86,8 +99,9 @@ def main():
         u = res["message"]["usage"]; tin += u["input_tokens"]; tout += u["output_tokens"]
         if res["message"].get("stop_reason") == "max_tokens": bad += 1; why["max_tokens"] = why.get("max_tokens", 0) + 1; continue
         if bad_text(text_of(res["message"])): bad += 1; why["encoding"] = why.get("encoding", 0) + 1; continue   # T5
-        have[l][key[r["custom_id"]]] = P.san(text_of(res["message"])); ok += 1
+        have[l][key[r["custom_id"]]] = P.san(text_of(res["message"])); hashes[l][key[r["custom_id"]]] = nh[r["custom_id"]]; ok += 1
     for l in langs: (OUT / f"notes_{l}.json").write_text(json.dumps(have[l], ensure_ascii=False), encoding="utf-8")
+    save_hashes("notes_", hashes)
     uf = OUT / "usage.json"; old = json.loads(uf.read_text()) if uf.exists() else {"input_tokens": 0, "output_tokens": 0, "runs": []}
     old["input_tokens"] += tin; old["output_tokens"] += tout; old["runs"].append({"kind": "notes", "batch": bid, "model": MODEL, "ok": ok, "failed": bad, "input_tokens": tin, "output_tokens": tout}); uf.write_text(json.dumps(old, indent=1))
     report_usage("translate_notes", MODEL, tin, tout, "batch", batch=True)
