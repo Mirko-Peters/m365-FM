@@ -604,6 +604,16 @@ export async function handleEvents(env, request, url, path, user, J) {
   if (path === "/api/admin/entity/claim" && method === "POST") {
     if (!(user?.admin || user?.editor)) return J({ error: "forbidden" }, 403);
     const b = await body(), eid = String(b.eid || "").toLowerCase();
+    if (EID.test(eid) && b.revoke === true) {   // per Firmen-E-Mail automatisch bestaetigte Uebernahme zuruecknehmen (Missbrauch, falsche Domain)
+      const c = await db.prepare("SELECT user_id FROM entity_claims WHERE eid=? AND status='verified' AND verified_via='domain_email'").bind(eid).first();
+      if (!c) return J({ error: "not_found" }, 404);
+      await db.batch([
+        db.prepare("UPDATE entity_claims SET status='rejected',verified_via='',fwd_mask='' WHERE eid=? AND status='verified' AND verified_via='domain_email'").bind(eid),
+        db.prepare("UPDATE org_entity SET confirmed=0 WHERE eid=? AND org_id IN (SELECT org_id FROM org_members WHERE user_id=? AND status='active' AND role IN ('owner','admin'))").bind(eid, c.user_id),
+        db.prepare("UPDATE entity_claim_mail SET used=1 WHERE eid=?").bind(eid),
+      ]);
+      return J({ ok: true, revoked: true });
+    }
     if (!EID.test(eid) || typeof b.ok !== "boolean") return J({ error: "bad_request" }, 400);
     const claim = await db.prepare("SELECT user_id,via FROM entity_claims WHERE eid=? AND status IN ('pending','email_sent','forwarded')").bind(eid).first();
     if (!claim) return J({ error: "not_found" }, 404);
