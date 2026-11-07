@@ -319,7 +319,7 @@ def build_learn(ctx):
             u = f"{gb}{x['id']}/"; tgt = f"{BASE}/{'de/' if lang == 'de' else ''}entity/{x['id']}/"
             tl = ("Seite ausgemustert", "Dieser Glossareintrag ist jetzt die Entität:", "Glossar") if lang == "de" else ("Page retired", "This glossary entry is now the entity:", "Glossary")
             bb = f'<main class="wrap"><h1>{tl[0]}</h1><p>{tl[1]} <a class="btn main" href="{tgt}">{esc(x["name"])}</a></p><p><a class="btn" href="{gb}">{tl[2]}</a></p></main>'
-            write(f"{rel}/{x['id']}/index.html", page(lang, tl[0], tl[1], u, bb, None, [], noindex=True))
+            (g.get("write_r2") or write)(f"{rel}/{x['id']}/index.html", page(lang, tl[0], tl[1], u, bb, None, [], noindex=True))   # noindex-Hinweisseiten (je ~12 kB, ~44 MB): R2 statt GitHub Pages (Groessenlimit docs/)
 
     for lang in langs_all:
         t = T(lang)
@@ -422,6 +422,24 @@ def _fetch_json(url, timeout=120):
 SRC_ENTS = {}   # T30: Entitaeten aus data/*.json ohne D1-Ueberlagerung (der Worker gleicht sie mit D1 ab)
 
 
+def merged_ids():
+    """Entitaets-ids zusammengefuehrter Gaeste (data/guest_merge.json "merge": alter Slug -> Ziel). Die alte Adresse /entity/<id>/
+    leitet weiter (site_podpage.redirect_table: id = Slug, bei Kollision mit data/entities.json Slug-guest); D1 kennt die alten ids
+    aus der Zeit vor dem Zusammenfuehren noch."""
+    d = Path(__file__).parent / "data"
+    try:
+        merge = json.loads((d / "guest_merge.json").read_text("utf-8")).get("merge") or {}
+        baseids = {e["id"] for e in json.loads((d / "entities.json").read_text("utf-8"))}
+    except (OSError, ValueError):
+        return set()
+    out = set()
+    for old, new in merge.items():
+        oid = old + "-guest" if old in baseids else old
+        if oid != new:
+            out.add(oid)
+    return out
+
+
 def load_entities(api):
     base = {}
     f = Path(__file__).parent / "data" / "entities.json"
@@ -437,9 +455,12 @@ def load_entities(api):
         for e in json.loads(sf.read_text("utf-8")):
             base.setdefault(e["id"], e)
     SRC_ENTS.clear(); SRC_ENTS.update({k: dict(v) for k, v in base.items()})   # T30: reine Repo-Fassung (vor D1) fuer /entities-src.json
+    gone = merged_ids()
     over = (_fetch_json(f"{api}/api/entity/export") or {}).get("items", [])
     for it in over:
         d = it.get("data") or {}
+        if it.get("id") in gone and it["id"] not in base:   # zusammengefuehrte Person (data/guest_merge.json): alte D1-Fassung keine eigene Seite, die Adresse leitet weiter
+            continue
         if it.get("id") and d.get("name") and d.get("type"):
             rec = {"id": it["id"], **d, "desc": d.get("desc") or {"en": "", "de": ""}, "rel": d.get("rel") or [], "aliases": d.get("aliases") or [], "edited": it.get("created")}
             for k in REPO_KEYS:   # Felder ohne Formularfeld: fehlen sie in der D1-Fassung (Formular-Bearbeitung, selbst verwaltete Entitaet), gilt die Repo-Fassung
@@ -449,7 +470,10 @@ def load_entities(api):
     return base
 
 
-REPO_KEYS = ("city", "country", "street", "zip", "founded", "company", "disclosure", "logo_src")   # nur in data/entities.json gepflegt (Redaktion), nicht im Bearbeiten-Formular
+REPO_KEYS = ("city", "country", "street", "zip", "founded", "company", "disclosure", "logo_src", "logo_bg", "award",
+             # belegte Fakten (site_facts.py, #305): ebenfalls nur hier gepflegt, fehlen im Formular und damit in der D1-Fassung
+             "legal_form", "register", "employees", "founders", "ceo", "certifications", "partners", "customers",
+             "deployment", "integrations", "release_year", "trial_url", "positions")   # nur in data/entities.json gepflegt (Redaktion), nicht im Bearbeiten-Formular
 
 
 COMMUNITY_API_DEFAULT = os.environ.get("COMMUNITY_API", "https://api-dub.m365.fm")

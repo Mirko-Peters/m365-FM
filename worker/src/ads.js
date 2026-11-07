@@ -4,6 +4,7 @@
 // - Webhook /paypal/webhook: jede Nachricht per verify-webhook-signature mit PAYPAL_WEBHOOK_ID pruefen, idempotent ueber die Event-ID.
 // - Kampagne startet erst nach bestaetigter Zahlung UND Freigabe des Werbemittels durch einen Admin.
 // - Einblendungen cookiefrei beim Ausliefern des Platzes gezaehlt (je Kampagne, Platz, Seitentyp, Tag), Klicks ueber /go/<code>.
+import { LEAD_STATUS } from "./mediakit.js";
 import { cleanText, esc, rateLimit, sha256hex, audit, cors } from "./util.js";
 import { notify } from "./mail.js";
 import { sponsorOrderInvoiceEvent } from "./sponsor_orders.js";
@@ -1041,9 +1042,29 @@ export async function handleAds(env, request, url, path, user, J, ctx) {
       by_slot: agg((r) => `${r.house} · ${r.slot}`), by_country: agg((r) => `${r.house} · ${r.country}`), by_lang: agg((r) => `${r.house} · ${r.lang}`) }, 200, NS);
   }
   if (path === "/api/admin/ads/leads" && method === "GET") {
-    const leads = (await db.prepare(`SELECT l.id,COALESCE(b.code,'sponsor:'||l.sponsor) code,COALESCE(o.name,l.sponsor) org,l.sponsor,l.assigned,l.name,l.email,l.message,l.page,l.lang,l.status,l.charged,l.dispute_reason,l.mailed,l.created
+    const leads = (await db.prepare(`SELECT l.id,COALESCE(b.code,'sponsor:'||l.sponsor) code,COALESCE(o.name,l.sponsor) org,l.sponsor,l.assigned,l.name,l.email,l.message,l.page,l.lang,l.status,l.lead_status,l.lead_status_updated,l.charged,l.dispute_reason,l.mailed,l.created
       FROM ad_leads l LEFT JOIN ad_bookings b ON b.id=l.booking_id LEFT JOIN orgs o ON o.id=l.org_id ORDER BY (l.status='disputed') DESC,l.created DESC LIMIT 500`).all()).results || [];
     return J({ leads }, 200, NS);
+  }
+  if (path === "/api/admin/ads/lead-status" && method === "POST") {   // Nachverfolgung (open/in_progress/closed_*) oder endgueltig loeschen (DSGVO); x-requested-with-Check in index.js
+    const body = await request.json().catch(() => ({})) || {};
+    const id = Number(body.id);
+    if (!Number.isSafeInteger(id) || id < 1) return E("bad_request");
+    if (body.action === "status") {
+      if (!LEAD_STATUS.includes(body.status)) return E("bad_status");
+      const r = await db.prepare("UPDATE ad_leads SET lead_status=?,lead_status_updated=? WHERE id=?").bind(body.status, now(), id).run();
+      return r.meta.changes ? J({ ok: true, status: body.status }, 200, NS) : E("not_found");
+    }
+    if (body.action === "delete") {
+      // Zuerst die Benachrichtigungs-Mails zum Lead (Name, E-Mail, Nachricht) loeschen, sonst bleiben die Daten im Postausgang;
+      // scheitert danach das Loeschen des Leads, kann der Admin es einfach wiederholen
+      await db.prepare("DELETE FROM mail_outbox WHERE key LIKE ?").bind(`adlead:${id}:%`).run();
+      const r = await db.prepare("DELETE FROM ad_leads WHERE id=?").bind(id).run();
+      if (!r.meta.changes) return E("not_found");
+      await audit(db, user.id, "ad-lead", String(id), "deleted").catch(() => 0);
+      return J({ ok: true }, 200, NS);
+    }
+    return E("bad_request");
   }
   if (path === "/api/admin/ads/lead" && method === "POST") {
     const body = await request.json().catch(() => ({})) || {};

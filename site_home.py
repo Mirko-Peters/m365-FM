@@ -41,6 +41,7 @@ N_FIRST = 24   # Karten im HTML (T6: Startseite unter 300 kB)
 # Startseite je Sprache (6.11.2026): Inhalte der Sprache zuerst; gibt es von einer Art (Blog, Podcast, Bibliothek, Creator-Videos) in der Sprache
 # nichts, stehen bis zu FB_N englische Eintraege da - gekennzeichnet ("· Englisch") und mit lang="en".
 FB_N = 8
+BLOG_MAX_OWN = 48   # Blogkarten auf der Startseite einer Sprache (neueste zuerst): Seitenbau-Groesse (docs/ <= 980 MB) - alle Beitraege der Sprache stehen im Blog-Verzeichnis
 EN_WORD = {"de": "Englisch", "fr": "Anglais", "es": "Inglés", "it": "Inglese", "nl": "Engels", "pt": "Inglês", "pl": "Angielski", "id": "Bahasa Inggris",
            "ru": "Английский", "uk": "Англійська", "ar": "الإنجليزية", "he": "אנגלית", "ja": "英語", "ko": "영어"}
 
@@ -70,7 +71,8 @@ def hub(g, lang, base, api, videos, vid_html, root=False, posts=None):
         cards[-1] = (dd, kk, hh)
     croot = f"{base}{pfx(lang)}/community/"
     _posts = sorted(C["posts"] if posts is None else posts, key=lambda p: -(p.get("published") or 0))
-    _sel, _fbk = pick(_posts, lang, root, n=10**9 if root else 60)   # eigene Sprache: alle (Karten jenseits der ersten N stehen auf /page/N/)
+    _sel, _fbk = pick(_posts, lang, root, n=10**9 if root else 60)
+    if not root and not _fbk: _sel = _sel[:BLOG_MAX_OWN]   # Sprachfassungen: hoechstens BLOG_MAX_OWN neueste Beitraege (der Rest steht im Blog-Verzeichnis der Sprache)
     _kb = esc(T(lang, "Blog", "Blog"))
     for p in _sel:
         d = __import__("datetime").datetime.fromtimestamp(p["published"]).strftime("%Y-%m-%d")
