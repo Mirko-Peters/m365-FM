@@ -66,12 +66,14 @@ function sanHtml(input, ok, plain = false) {
   return { text: plain ? out.replace(/[<>]/g, " ").replace(/\s+/g, " ").trim() : out.trim(), err };
 }
 const MAXLEN = { lblog: 20000, notes: 60000, episode: 2000 };
-// -> { text, err }: lblog = Inline-HTML einer Einheit, notes = HTML der Show Notes, episode = reiner Text. text ist immer sauber; err (too_long, bad_html,
+const PLAIN_UNIT = /^(?:T|D|[QA]\d+)$/;   // lblog: Titel, Beschreibung und FAQ sind im Original reiner Text (translate_blog.source_of), nur die Absaetze tragen Inline-HTML
+// -> { text, err }: lblog = Inline-HTML eines Absatzes (Titel, Beschreibung, FAQ: reiner Text), notes = HTML der Show Notes, episode = reiner Text. text ist immer sauber; err (too_long, bad_html,
 // foreign_image) sagt dem Speichern, dass etwas weggefallen waere - dann wird abgelehnt statt still gekuerzt. Der Export nimmt bei alten Zeilen den sauberen Text.
-export function cleanUnit(kind, s) {
+export function cleanUnit(kind, s, unit = "") {
   const raw = String(s ?? "").replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/g, "");
   if (raw.length > (MAXLEN[kind] || 20000)) return { text: "", err: "too_long" };
-  return kind === "episode" ? { text: sanHtml(raw, null, true).text, err: "" } : sanHtml(raw, kind === "notes" ? BLOCKS : INLINE);   // episode: Marken fallen ohne Fehler weg (reiner Text)
+  if (kind === "episode" || (kind === "lblog" && PLAIN_UNIT.test(unit))) return { text: sanHtml(raw, null, true).text, err: "" };   // reiner Text: Marken fallen ohne Fehler weg
+  return sanHtml(raw, kind === "notes" ? BLOCKS : INLINE);
 }
 
 // Eintrag veroeffentlicht? Blog: live in der Datenbank (Pakete als content/<slug>), Folgen: im Register mit Datum
@@ -100,7 +102,7 @@ export async function saveUnit(env, user, { kind, item, lang, unit, text, prev =
   if (!valid(kind, item, lang, unit)) return res(400, { error: "bad_request" });
   const actor = await loadActor(db, user), perm = can(actor, "content.edit_full", ip(lang));
   if (!perm.ok) return res(403, { error: perm.why });
-  const c = cleanUnit(kind, text), clean = c.text;
+  const c = cleanUnit(kind, text, unit), clean = c.text;
   if (c.err) return res(400, { error: c.err });
   if (!clean) return res(400, { error: "empty" });
   const anchor = String(sh || "").trim().toLowerCase();
@@ -112,7 +114,7 @@ export async function saveUnit(env, user, { kind, item, lang, unit, text, prev =
     return res(200, { ok: true, proposed: true, proposal: pid });
   }
   const t = now(), cur = await db.prepare("SELECT text,src_hash FROM i18n_override WHERE kind=? AND item=? AND lang=? AND unit=?").bind(kind, item, lang, unit).first();
-  const base = cleanUnit(kind, prev).text;
+  const base = cleanUnit(kind, prev, unit).text;
   if ((cur ? cur.text : base) === clean && (!cur || cur.src_hash === anchor)) return res(409, { error: "unchanged" });   // gleicher Text mit neuem Anker = "passt weiter zum geaenderten Original"
   const rev = db.prepare("INSERT INTO i18n_override_rev(kind,item,lang,unit,text,src_hash,user_id,role,action,reason,ts) VALUES(?,?,?,?,?,?,?,?,?,?,?)");
   if (!(await db.prepare("SELECT 1 x FROM i18n_override_rev WHERE kind=? AND item=? AND lang=? AND unit=?").bind(kind, item, lang, unit).first()))
@@ -143,7 +145,7 @@ export async function revertUnit(env, user, { kind, item, lang, unit, rev, cur: 
   if (+seen !== h.current) return res(409, { error: "conflict", current: h.current });
   if (target.id === h.current) return res(409, { error: "already_current" });
   if (role !== "admin" && cur && cur.role !== "editor") return res(403, { error: "not_editor_edit" });
-  const t = now(), back = cleanUnit(kind, target.body).text;   // auch alte Zeilen gehen nur bereinigt wieder in den Export
+  const t = now(), back = cleanUnit(kind, target.body, unit).text;   // auch alte Zeilen gehen nur bereinigt wieder in den Export
   if (target.action === "baseline" || !back) await db.prepare("DELETE FROM i18n_override WHERE kind=? AND item=? AND lang=? AND unit=?").bind(kind, item, lang, unit).run();
   else await db.prepare("INSERT INTO i18n_override(kind,item,lang,unit,text,src_hash,by,ts) VALUES(?,?,?,?,?,?,?,?) ON CONFLICT(kind,item,lang,unit) DO UPDATE SET text=excluded.text,src_hash=excluded.src_hash,by=excluded.by,ts=excluded.ts").bind(kind, item, lang, unit, back, target.sh, actor.id, t).run();
   const reason = `Zurückgesetzt auf Version #${target.id}`;
@@ -187,7 +189,7 @@ export async function overridesExport(db, kind, lang) {
   for (const r of rows) {
     if (!UNIT[kind].test(r.unit)) continue;
     if (!ok.has(r.item)) ok.set(r.item, await isPublished(db, kind, r.item));
-    const t = ok.get(r.item) ? cleanUnit(kind, r.text).text : "";
+    const t = ok.get(r.item) ? cleanUnit(kind, r.text, r.unit).text : "";
     if (t) (items[r.item] = items[r.item] || {})[r.unit] = { t, sh: ANCHOR.test(r.src_hash || "") ? r.src_hash : "" };
   }
   return { kind, lang, items };

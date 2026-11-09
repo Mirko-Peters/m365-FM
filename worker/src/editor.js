@@ -330,7 +330,7 @@ export async function itemView(env, user, kind, id) {
   const it = f.it, actions = {};
   for (const a of KIND_ACTIONS[kind]) actions[a] = modeOf(can(actor, ACT[a], f.ip));
   const props = (await db.prepare("SELECT id,ts,role,action,reason,status FROM edit_proposals WHERE kind=? AND item_id=? ORDER BY ts DESC LIMIT 10").bind(kind, String(id)).all()).results || [];
-  const edit = kind === "blog" && !(it.html && !it.body) ? { minor: modeOf(can(actor, "content.edit_minor", f.ip)), full: modeOf(can(actor, "content.edit_full", f.ip)) } : null;
+  const edit = kind === "blog" ? { minor: modeOf(can(actor, "content.edit_minor", f.ip)), full: it.html && !it.body ? "no" : modeOf(can(actor, "content.edit_full", f.ip)) } : null;   // uebernommener HTML-Beitrag ohne Wiki-Text: nur Titel, Zusammenfassung, Themen
   // body = Vorschau (gekuerzt, bei uebernommenen Beitraegen ersatzweise die Zusammenfassung); edit = alles, was das Bearbeiten-Formular braucht: der GANZE
   // Text (nie die Vorschau), die Themen und base = Stand beim Laden, den /api/editor/edit zurueckerwartet
   return { kind, id: String(id), title: it.title || "", body: String(it.body || it.summary || "").slice(0, 4000), summary: it.summary || "", lang: it.lang || "", status: it.status || "", author: it.name || "", handle: it.handle || "", authorId: it.ownerId || null,

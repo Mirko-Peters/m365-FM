@@ -152,6 +152,8 @@ test("319-2: Nutzlasten ueber die echte Speicher-Route - gespeichert und exporti
   assert.doesNotMatch(raw.prepare("SELECT payload FROM edit_proposals WHERE id=?").get(p2.j.proposal).payload, BAD);
   // Arten: Folgen sind reiner Text, Show Notes HTML nach Positivliste
   assert.deepEqual(cleanUnit("episode", "Q&amp;A with <b>X</b><script>alert(1)</script>"), { text: "Q&A with X", err: "" });
+  assert.equal((await save(2, 'Titel <b>fett</b> &amp; <a href="https://x.example/">Link</a>', { unit: "T" })).s, 200);   // Titel, Beschreibung, FAQ: reiner Text, keine Marken im <title>
+  assert.equal(raw.prepare("SELECT text FROM i18n_override WHERE unit='T'").get().text, "Titel fett & Link");
   assert.deepEqual(cleanUnit("notes", '<p onclick="x()">Hi</p><ul><li>a</li></ul><style>p{}</style><h1>raus</h1>'), { text: "<p>Hi</p><ul><li>a</li></ul>raus", err: "bad_html" });
   assert.deepEqual(cleanUnit("notes", '<p onclick="x()">Hi</p><ul><li>a</li></ul><h1>raus</h1>'), { text: "<p>Hi</p><ul><li>a</li></ul>raus", err: "" });
 });
@@ -268,7 +270,10 @@ test("319-9: Bearbeiten bereinigt wie der Editor des Autors (Quellen, Bilder, Ro
   // uebernommener Beitrag: Inhalt steht in html, body ist leer -> kein Bearbeiten-Formular, kein Ueberschreiben
   blog(raw, 33, 4, "live", { body: "", html: "<p>Alter HTML-Inhalt</p>" });
   const h = await item(env, 2, 33);
-  assert.equal(h.editable, false); assert.equal(h.edit, undefined); assert.equal(h.body, "Kurz");   // Vorschau: ersatzweise die Zusammenfassung
+  assert.deepEqual([h.editable, h.edit.minor, h.edit.full, h.edit.body, h.body], [true, "do", "no", "", "Kurz"]);   // nur kleine Aenderungen; Vorschau ersatzweise die Zusammenfassung, das Formular nie
+  assert.equal((await call(env, 2, "POST", "/api/editor/edit", { kind: "blog", id: "33", level: "full", fields: { body: LONG(400) }, base: h.edit.base, reason: "x" })).j.error, "imported_html");
+  assert.equal((await call(env, 2, "POST", "/api/editor/edit", { kind: "blog", id: "33", level: "minor", fields: { title: "Besserer Titel" }, base: h.edit.base })).s, 200);
+  assert.deepEqual({ ...raw.prepare("SELECT title,html,body FROM blog_posts WHERE id=33").get() }, { title: "Besserer Titel", html: "<p>Alter HTML-Inhalt</p>", body: "" });
 });
 
 test("319-9: Entwuerfe und Abgelehntes sieht die Redaktion nie; Moderatoren nur ihre Pruefliste; Fach-Editoren nur ihren Bereich", async () => {
