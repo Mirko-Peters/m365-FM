@@ -37,6 +37,7 @@ import { handleReviews } from "./reviews.js";
 import { handleEntityInvite, remindInvites } from "./entinvite.js";
 import { handleDemo } from "./demo.js";
 import { handleGuests, deleteUserGuests } from "./guests.js";
+import { deleteUserEntityInvites } from "./entinvite.js";
 import { handleExpertRequests, deleteUserExpertRequests, syncExpertVectors, closeExpiredExpertRequests } from "./expert_requests.js";
 import { handlePodcast, deleteUserPodcast, pollPodcast } from "./podcast.js";
 import { handleVideo, deleteUserVideos, pollVideos } from "./youtube.js";
@@ -221,6 +222,7 @@ async function deleteAccount(env, id) {
     db.prepare("DELETE FROM push_subs WHERE user_id=?").bind(id), db.prepare("DELETE FROM wiki_reports WHERE user_id=?").bind(id), db.prepare("DELETE FROM wiki_rev WHERE user_id=? AND status IN ('pending','rejected')").bind(id), db.prepare("UPDATE wiki_rev SET user_id=0 WHERE user_id=?").bind(id), db.prepare("DELETE FROM curators WHERE user_id=?").bind(id), db.prepare("DELETE FROM user_identities WHERE user_id=?").bind(id), db.prepare("DELETE FROM users WHERE id=?").bind(id),
   ]);
   await deleteUserEvents(db, id);
+  await deleteUserEntityInvites(db, id);   // braucht mail_addr und die bestaetigten Claims: vor deleteUserData
   await deleteUserMessages(db, id); await deleteUserTokens(db, id); await deleteUserQa(db, id); await deleteUserBlog(db, id); await deleteUserLibrary(db, id); await deleteUserPodcast(db, id); await deleteUserVideos(db, id); await deleteUserGuests(db, id); await deleteUserGuestCredits(db, id);
   await deleteUserData(db, id); await deleteUserExpertRequests(env, id);
 }
@@ -235,7 +237,7 @@ function pubComment(c, mine, liked, badges, admin) {
 async function api(env, request, url, path, asUser, ctx) {
   const method = request.method, J = (d, s = 200, x) => json(d, s, env, request, x);
   if (method === "OPTIONS") return new Response(null, { status: 204, headers: cors(env, request) });
-  if (asUser === undefined && method !== "GET" && !["/api/internal/ai-spend", "/api/internal/sponsor-metrics", "/api/email/unsub", "/api/mail/unsub", "/api/topics/email-unsub"].includes(path) && request.headers.get("x-requested-with") !== "m365") return J({ error: "bad_request" }, 400);   // interne Routen per CRON_KEY; Abmeldelinks (RFC 8058) senden keinen Zusatz-Header, alle per Token geschuetzt
+  if (asUser === undefined && method !== "GET" && !["/api/internal/ai-spend", "/api/internal/sponsor-metrics", "/api/email/unsub", "/api/mail/unsub", "/api/topics/email-unsub", "/api/entityinvite/decline"].includes(path) && request.headers.get("x-requested-with") !== "m365") return J({ error: "bad_request" }, 400);   // interne Routen per CRON_KEY; Abmeldelinks (RFC 8058) senden keinen Zusatz-Header, alle per Token geschuetzt
   // asUser: vom MCP-Server (Token bereits geprueft) - dann keine Cookie-Sitzung noetig
   const uid = asUser === undefined ? await readSession(env, request) : null, user = asUser === undefined ? (uid ? await me(env, uid) : null) : asUser;
   const need = () => (user ? null : J({ error: "login" }, 401));
