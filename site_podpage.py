@@ -499,8 +499,9 @@ def build(g):
     # Folgenseiten
     # Lokalisierte Show-Seiten: Titel/Zusammenfassung (translate_show.py) und Show Notes der meistgehoerten Folgen (translate_notes.py)
     I18 = D / "podpage_i18n"; LG = g["LANGS"]
-    TRL = {l: json.loads((I18 / f"{l}.json").read_text("utf-8")) for l in LG if (I18 / f"{l}.json").exists()}
-    NTL = {l: json.loads((I18 / f"notes_{l}.json").read_text("utf-8")) for l in LG if (I18 / f"notes_{l}.json").exists()}
+    import i18n_overrides as _OVR   # im Editor bearbeitete Fassungen gewinnen gegen den Maschinentext
+    TRL = {l: _OVR.apply_show(l, json.loads((I18 / f"{l}.json").read_text("utf-8"))) for l in LG if (I18 / f"{l}.json").exists()}
+    NTL = {l: _OVR.apply_notes(l, json.loads((I18 / f"notes_{l}.json").read_text("utf-8"))) for l in LG if (I18 / f"notes_{l}.json").exists()}
     loc_url = lambda l, rel: f"{BASE}/{l}/show/{rel}"
     elinks = json.loads((D / "episode_links.json").read_text("utf-8")) if (D / "episode_links.json").exists() else {}   # Plattform-Abgleich (sync_platforms.py)
     SNALL = SNS.load_all(); ENTS_ALL = ENTS
