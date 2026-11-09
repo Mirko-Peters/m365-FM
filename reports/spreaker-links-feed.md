@@ -1,6 +1,6 @@
-# Spreaker-Website-Feld im RSS (2026-11-08 04:52 UTC)
+# Spreaker-Website-Feld im RSS (2026-11-09 04:52 UTC)
 
-Gesetzt laut Protokoll: 3221 · im Feed gleich: 3164 · im Feed anders: 0 · nicht im Feed: 57 · ausstehend (frisch gesetzt, Feed noch nicht erneuert): 0
+Gesetzt laut Protokoll: 3227 · im Feed gleich: 3164 · im Feed anders: 0 · nicht im Feed: 63 · ausstehend (frisch gesetzt, Feed noch nicht erneuert): 0
 
 - 67311542: nicht_im_feed · soll https://www.m365.fm/show/episodes/building-reusable-components-with-power-platform-cli-pac-cli/ · Feed None
 - 67312816: nicht_im_feed · soll https://www.m365.fm/show/episodes/using-microsoft-graph-for-custom-app-integrations/ · Feed None
@@ -59,3 +59,9 @@ Gesetzt laut Protokoll: 3221 · im Feed gleich: 3164 · im Feed anders: 0 · nic
 - 67519720: nicht_im_feed · soll https://www.m365.fm/show/episodes/is-your-m365-rollout-quietly-failing/ · Feed None
 - 67526027: nicht_im_feed · soll https://www.m365.fm/show/episodes/this-m365-feature-makes-old-training-obsolete/ · Feed None
 - 67532834: nicht_im_feed · soll https://www.m365.fm/show/episodes/jira-teams-the-it-support-shortcut/ · Feed None
+- 67538976: nicht_im_feed · soll https://www.m365.fm/show/episodes/10-dirty-data-habits-killing-copilots-potential/ · Feed None
+- 67544333: nicht_im_feed · soll https://www.m365.fm/show/episodes/the-hidden-danger-of-m365-guest-accounts/ · Feed None
+- 67544807: nicht_im_feed · soll https://www.m365.fm/show/episodes/m365-update-flood-the-hidden-cost-for-it/ · Feed None
+- 67549620: nicht_im_feed · soll https://www.m365.fm/show/episodes/copilot-agents-without-chaos-how/ · Feed None
+- 67555685: nicht_im_feed · soll https://www.m365.fm/show/episodes/the-one-command-that-runs-your-whole-stack/ · Feed None
+- 67562881: nicht_im_feed · soll https://www.m365.fm/show/episodes/the-m365-task-jungle-is-real/ · Feed None
