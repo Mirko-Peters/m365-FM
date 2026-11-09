@@ -1,12 +1,13 @@
 """Entitaetsseiten fuellen: englischer SEO-Text (Sonnet, Batch) + Uebersetzung in 14 Sprachen (Haiku, Batch).
 
-Aufruf: python fill_entities.py inventory|plan|run|collect [--limit N] [--budget USD] [--model ID] [--no-translate] [--refresh]
+Aufruf: python fill_entities.py inventory|plan|run|collect|push [--limit N] [--budget USD] [--model ID] [--no-translate] [--refresh]
   inventory  Bestandsaufnahme ohne API -> reports/entity_fill_inventory.md + data/entity_fill/todo.json
   plan       Anzahl, geschaetzte Kosten (Sonnet/Haiku, Batch = halber Preis) und Rest bis alles fertig; sendet nichts
   collect    fertige Batches abholen, pruefen, speichern
+  push       KI-Texte (data/entity_fill = Audit-Kopie) in die Datenbank schreiben: POST /api/internal/entity-fill (CRON_KEY), Revision "KI-Entwurf"
   run        collect -> Schreib-Batch (en) -> warten -> collect -> Uebersetzungs-Batches -> warten -> collect; stoppt am Budget
 Speicher (siehe entity_fill_data.py): data/entity_fill/en.json, data/entity_fill/i18n/<lang>.json, state.json (Batches, Versuche), edited.json.
-Regeln: Repo-Entitaeten only; von Mitgliedern bearbeitete (D1), Sponsor-/Eigenfirma-Entitaeten (ifakt, polaris*) und Entitaeten mit redaktionellem
+Regeln: Datenbank = Quelle der Wahrheit; nur von Menschen bearbeitete (D1-Export src=human, nicht blosse Uebernahme), Sponsor-/Eigenfirma-Entitaeten (ifakt, polaris*) und Entitaeten mit redaktionellem
 Langtext werden uebersprungen; Personen nur mit Quellenfakten; Uebersetzungen entstehen einmal und werden nie ueberschrieben (translate-once);
 max. 3 Versuche je Auftrag; Budget ENTITY_BUDGET_USD gilt kumulativ fuer data/spend.json["entities"] (inkl. offener Batches)."""
 import hashlib, json, os, re, sys, time, urllib.request
@@ -266,21 +267,80 @@ def validate_translation(lang, src, out, protected):
 
 
 # ---------- Aufgabenliste ----------
-def edited_ids(strict):
-    """IDs der von Mitgliedern bearbeiteten Entitaeten (D1-Export). strict: ohne frische Antwort abbrechen (Fail-closed)."""
+D1 = {}   # id -> {"src": seed|ai|human, "h": Hash von desc/long/faq} aus dem D1-Export (wird von edited_ids gefuellt)
+
+
+def d1_edited(items):
+    """Datenbank = Quelle der Wahrheit: bearbeitet = die live-Fassung stammt von einem Menschen (Export-Feld src == human). Nur-Uebernahme (seed) und
+    eigene KI-Entwuerfe (ai) sperren nicht. Fehlt src (aelterer Worker), gilt jede D1-Fassung als bearbeitet (fail-closed)."""
+    D1.clear(); ids = set()
+    for it in items:
+        if not it.get("id"): continue
+        src = it.get("src") or "human"
+        D1[it["id"]] = {"src": src, "h": it.get("h") or ""}
+        if src == "human" or (src != "seed" and src != "ai"): ids.add(it["id"])
+    return ids
+
+
+def fetch_export():
     api = os.environ.get("COMMUNITY_API", "https://api-dub.m365.fm")
+    req = urllib.request.Request(api.rstrip("/") + "/api/entity/export", headers={"user-agent": "m365fm-actions/1.0 (+https://www.m365.fm)", "accept": "application/json", "cache-control": "no-cache"})
+    with urllib.request.urlopen(req, timeout=60) as r:
+        return json.loads(r.read().decode()).get("items") or []
+
+
+def edited_ids(strict):
+    """IDs der von Menschen bearbeiteten Entitaeten (D1-Export). strict: ohne frische Antwort abbrechen (Fail-closed)."""
     cache = OUT / "edited.json"
     try:
-        req = urllib.request.Request(api.rstrip("/") + "/api/entity/export", headers={"user-agent": "m365fm-actions/1.0 (+https://www.m365.fm)", "accept": "application/json"})
-        with urllib.request.urlopen(req, timeout=30) as r:
-            ids = sorted({it["id"] for it in (json.loads(r.read().decode()).get("items") or []) if it.get("id")})
-        jsave(cache, ids, indent=0)
-        return set(ids)
+        ids = d1_edited(fetch_export())
+        jsave(cache, sorted(ids), indent=0)
+        return ids
     except Exception as ex:
         if strict:
             raise SystemExit(f"D1-Export nicht erreichbar ({type(ex).__name__}) - ohne die Liste bearbeiteter Entitaeten wird nichts gesendet (fail-closed)")
         print(f"::warning::D1-Export nicht erreichbar ({type(ex).__name__}); nehme gespeicherte Liste")
         return set(jload(cache, []))
+
+
+def payload_for(eid, fill, i18n):
+    """Was an /api/internal/entity-fill geht: englischer KI-Text, deutscher und die uebrigen Sprachen (Audit-Stand data/entity_fill)."""
+    en = fill.get(eid) or {}; pick = lambda r: {k: r[k] for k in ("desc", "long", "faq") if r.get(k)}
+    out = {"id": eid, **pick(en), "de": pick(i18n.get("de", {}).get(eid) or {}),
+           "tr": {l: pick(i18n[l].get(eid) or {}) for l in LANGS if l != "de" and i18n.get(l, {}).get(eid)}}
+    return out
+
+
+def push(ents, state, edited, fill, i18n, post=None):
+    """KI-Texte in die Datenbank schreiben (neue Revision "KI-Entwurf" des Systemnutzers). Der Worker prueft nochmals Mensch/Hash und fuellt nur duenne Felder."""
+    api = os.environ.get("COMMUNITY_API", "https://api-dub.m365.fm").rstrip("/"); keyv = os.environ.get("CRON_KEY", "")
+    if post is None:
+        if not keyv: raise SystemExit("CRON_KEY fehlt")
+        def post(items):
+            req = urllib.request.Request(api + "/api/internal/entity-fill", data=json.dumps({"items": items}).encode(), method="POST", headers={
+                "content-type": "application/json", "x-cron-key": keyv, "x-requested-with": "m365", "user-agent": "m365fm-actions/1.0 (+https://www.m365.fm)"})
+            with urllib.request.urlopen(req, timeout=120) as r: return json.loads(r.read().decode())
+    done = state.setdefault("pushed", {}); jobs = []
+    for eid in sorted(set(fill) | set(i18n.get("de", {}))):
+        d = D1.get(eid)
+        if eid not in ents or not d or eid in edited or d["src"] not in ("seed", "ai") or is_sponsored(eid): continue
+        item = payload_for(eid, fill, i18n); ph = hsh(item)
+        if done.get(eid) == ph: continue
+        item["base"] = (fill.get(eid) or {}).get("d1h") or d["h"]   # Stand, fuer den der Text erzeugt wurde (sonst der aktuelle)
+        jobs.append((eid, ph, item))
+    counts = {}
+    for i in range(0, len(jobs), 20):
+        part = jobs[i:i + 20]; res = post([j[2] for j in part])
+        for r in res.get("results") or []:
+            counts[r["status"]] = counts.get(r["status"], 0) + 1
+            job = next((j for j in part if j[0] == r["id"]), None)
+            if not job: continue
+            if r["status"] in ("ok", "unchanged", "human_edited"): done[job[0]] = job[1]
+            elif r["status"] == "changed_meanwhile" and (fill.get(job[0]) or {}).get("d1h"):
+                fill[job[0]].pop("d1h", None); print(f"::warning::{job[0]}: changed_meanwhile - uebersprungen, naechster Lauf nimmt den dann aktuellen Stand")
+    jsave(OUT / "en.json", fill); jsave(OUT / "state.json", state)
+    print("Push in die Datenbank: " + (", ".join(f"{k} {v}" for k, v in sorted(counts.items())) or "nichts zu senden"))
+    return counts
 
 
 def effective_en(e, gen, fill):
@@ -407,7 +467,7 @@ def select_writes(todo, ents, budget_room, limit, state, refresh=False):
         tin = tok(SYSTEM_WRITE) + tok(json.dumps(f, ensure_ascii=False)); c = cost(MODEL, tin, WRITE_OUT_TOK[r["write"]])
         if est_total + c > budget_room:
             print(f"Budget erreicht - Schreiben stoppt nach {len(reqs)} Auftraegen"); break
-        est_total += c
+        est_total += c; state.setdefault("d1h", {})[r["id"]] = (D1.get(r["id"]) or {}).get("h", "")   # D1-Stand zum Zeitpunkt der Beauftragung (Hash-Schutz beim Push)
         reqs.append({"custom_id": f"w_{key(r['id'])}_{hsh(f)[:8]}", "params": {"model": MODEL, "max_tokens": 1800,
                      "system": [{"type": "text", "text": SYSTEM_WRITE, "cache_control": {"type": "ephemeral"}}],
                      "messages": [{"role": "user", "content": write_prompt(f, r["write"])}]}})
@@ -479,7 +539,7 @@ def collect(ents, gen, state, edited):
                 rec, err = validate_write(out, f, want)
                 if err: bad += 1; why[err] = why.get(err, 0) + 1; bump(state, "w:" + eid); continue
                 if eid in fill and fill[eid].get("long"): continue   # nie ueberschreiben
-                rec.update({"h": hsh(f), "m": b["model"], "ts": datetime.now(timezone.utc).strftime("%Y-%m-%d")}); fill[eid] = rec; en_dirty = True; ok += 1
+                rec.update({"h": hsh(f), "d1h": state.get("d1h", {}).get(eid) or "", "m": b["model"], "ts": datetime.now(timezone.utc).strftime("%Y-%m-%d")}); fill[eid] = rec; en_dirty = True; ok += 1
             else:
                 lang = parts[1]; src = effective_en(e, gen, fill); need = translate_need(e, lang, src, gen, i18n)   # translate-once: nur noch fehlende Felder
                 part = {k: src[k] for k in need}
@@ -562,7 +622,7 @@ def main():
     if opt("--model"): MODEL = opt("--model")
     if opt("--budget"): BUDGET = float(opt("--budget"))
     limit = int(opt("--limit") or 0); no_tr = "--no-translate" in args
-    strict = mode in ("run", "collect")
+    strict = mode in ("run", "collect", "push")
     ents, gen = load_entities(), load_gentext(); fill = jload(OUT / "en.json", {}); i18n = {l: jload(OUT / "i18n" / f"{l}.json", {}) for l in LANGS}
     state = jload(OUT / "state.json", {"batches": [], "tries": {}}); spons = sponsored_ids()
     edited = edited_ids(strict)
@@ -579,6 +639,8 @@ def main():
     print(f"Entitaeten {len(ents)} | schreiben {est['write_n']} | Sonnet-Batch ~{est['write_usd']} USD | Uebersetzungsauftraege {est['tr_n']} | Haiku-Batch ~{est['tr_usd']} USD | Rest gesamt ~{est['total_usd']} USD")
     print(f"Budget {BUDGET:.2f} USD, bisher {sp.get('usd', 0):.2f}, offene Batches ~{pending_usd(state):.2f}, frei {room(BUDGET, state):.2f}; uebersprungen: " + ", ".join(f"{k} {len(v)}" for k, v in skipped.items()))
     if mode == "plan": return
+    if mode == "push":
+        push(ents, state, edited, jload(OUT / "en.json", {}), {l: jload(OUT / "i18n" / f"{l}.json", {}) for l in LANGS}); return
     if not os.environ.get("ANTHROPIC_API_KEY"): raise SystemExit("ANTHROPIC_API_KEY fehlt")
     collect(ents, gen, state, edited)
     if mode == "collect": return

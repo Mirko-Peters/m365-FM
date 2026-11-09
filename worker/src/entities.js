@@ -3,7 +3,8 @@ import { cleanText, rateLimit } from "./util.js";
 import { entityTranslations } from "./autotr.js";
 import { stats, evalBadges } from "./badges.js";
 import { findDuplicate } from "./kinds.js";
-import { pairNewOrgEntity } from "./orgpair.js";
+import { pairNewOrgEntity, pairExisting } from "./orgpair.js";
+import { aiUserId, humanEdited, revSource, stateHash } from "./entfill.js";
 
 const ID = /^[a-z0-9-]{2,48}$/;
 export const TYPES = ["product", "platform", "concept", "org", "person", "cert", "event", "media", "category", "industry", "job"];
@@ -49,7 +50,8 @@ export async function importEntitiesFromSite(env) {
   for (let i = 0; i < todo.length; i += 50)
     await db.batch(todo.slice(i, i + 50).map((e) => { const { id, ...data } = e; return db.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES(?,?,?,0,'live',?)").bind(id, JSON.stringify(data), "Übernahme aus entities.json", t); }));
   const synced = await syncEntitiesFromSite(env).catch((e) => ({ error: String(e).slice(0, 120) }));
-  return { imported: todo.length, db: have.size + todo.length, file: list.length, synced };
+  const paired = await pairExisting(env, { dry: false, limit: 50 }).catch((e) => ({ error: String(e).slice(0, 120) }));   // neue Firmen-Entitaeten aus dem Repo bekommen ihre Paar-Firma automatisch (idempotent)
+  return { imported: todo.length, db: have.size + todo.length, file: list.length, synced, paired };
 }
 
 // T30: Abgleich JSON -> D1 fuer Entitaeten, die schon in der Datenbank sind. Grundlage ist /entities-src.json (Repo-Fassung ohne
@@ -247,8 +249,11 @@ export async function handleEntity(env, request, url, path, user, J) {
   }
   if (path === "/api/entity/tr" && method === "GET") return J({ items: await entityTranslations(env.DB) }, 200, { "cache-control": "public, max-age=300" });   // automatische Uebersetzungen (autotr.js)
   if (path === "/api/entity/export" && method === "GET") {
-    const rows = (await db.prepare("SELECT r.eid,r.data,r.created,r.user_id FROM entity_rev r WHERE r.status='live'").all()).results || [];
-    return J({ items: rows.map((r) => ({ id: r.eid, data: JSON.parse(r.data), created: r.created, uid: r.user_id })) }, 200, { "cache-control": "public, max-age=300" });
+    // src: Herkunft der live-Fassung (seed = Uebernahme aus entities.json, ai = KI-Entwurf, human = von einem Menschen veraendert); h: Hash von desc/long/faq (Schutz in /api/internal/entity-fill)
+    const rows = (await db.prepare("SELECT r.eid,r.data,r.created,r.user_id,r.summary FROM entity_rev r WHERE r.status='live'").all()).results || [], sys = await aiUserId(db, false), human = await humanEdited(db, sys);
+    const items = [];
+    for (const r of rows) { const data = JSON.parse(r.data); items.push({ id: r.eid, data, created: r.created, uid: r.user_id, src: revSource(r, sys, human), h: await stateHash(data) }); }
+    return J({ items }, 200, { "cache-control": "public, max-age=300" });
   }
   if (path.startsWith("/api/admin/entity")) {
     if (!(user?.admin || user?.editor)) return J({ error: "forbidden" }, 403);

@@ -71,15 +71,13 @@
       p.appendChild(h("h2", { text: "Umzug in die Datenbank" }));
       var miss = d.entities_file == null ? null : Math.max(0, d.entities_file - (d.entities_db || 0));
       p.appendChild(h("div", { class: "adm-grid" }, [tile("Entitäten in der Datenbank", d.entities_db, miss == null ? "" : miss + " noch nur in der Datei"), tile("Frühere Blog-Beiträge übernommen", d.blog_legacy, "Import-Stand " + d.blog_import_offset + " von 2307"), tile("Profil-Export", d.profiles_export_age == null ? "–" : Math.round(d.profiles_export_age / 60) + " min", "Alter des Zwischenspeichers"), tile("Übersetzungen (Inhalte)", d.item_tr), tile("Übersetzungen (Entitäten)", d.ent_tr)]));
-      p.appendChild(h("p", {}, ["Entitäten: Bisher liegt die Grundlage in der Datei ", h("code", { text: "data/entities.json" }), ". Mit dem Knopf wird jede Entität, die noch keine Fassung in der Datenbank hat, einmal dorthin übernommen. Danach werden Änderungen nur noch hier und in der Datenbank gemacht. Es wird nichts überschrieben, was schon in der Datenbank steht."]));
-      p.appendChild(h("button", { type: "button", class: "btn main", text: "Entitäten in die Datenbank übernehmen", onclick: function (ev) { ev.target.disabled = true; msg(m, "Läuft …"); api("/api/admin/panel/import-entities", { method: "POST", body: {} }).then(function (r) { ev.target.disabled = false; if (r.s === 200) { msg(m, r.j.imported + " übernommen, " + r.j.already + " waren schon da (" + r.j.total + " in der Datei)."); setTimeout(LOAD.db, 1500); } else msg(m, ERR[r.j.error] || "Fehler " + r.s, true); }); } }));
-      p.appendChild(h("h2", { text: "Firmen und Entitäten paaren" }));
-      p.appendChild(h("p", {}, ["Firma und Entität gehören immer zusammen. Die Aktion legt für Firmen-Entitäten ohne Community-Firma eine unbeanspruchte Firma an (ohne öffentliche Seite) und für Community-Firmen ohne Entität eine wartende Firmen-Entität (Freigabe unter Entitäten); passende vorhandene Entitäten werden verknüpft statt doppelt angelegt. Mehrfach klicken ist unschädlich (idempotent), je Lauf höchstens 150 Einträge."]));
-      var pm = h("p", { class: "adm-msg" });
-      function pairRun(dry) { pm.textContent = "Läuft …"; api("/api/admin/org-pair", { method: "POST", body: { dry: dry } }).then(function (r) { var j = r.j || {}; pm.textContent = r.s !== 200 ? "Fehler (" + (j.error || r.s) + ")" : dry ? "Probelauf: " + j.orgs_without_entity + " Firmen ohne Entität (" + j.link_existing + " mit vorhandener Entität verknüpfen, " + j.entities_to_create + " neue wartende Entitäten), " + j.entities_without_org + " Firmen-Entitäten ohne Firma." : "Erledigt: " + j.linked + " verknüpft, " + j.entities_created + " Entitäten angelegt, " + j.orgs_created + " Firmen angelegt, noch offen: " + j.remaining + "."; }); }
-      p.appendChild(h("p", {}, [h("button", { type: "button", class: "btn", text: "Probelauf (nur zählen)", onclick: function () { pairRun(true); } }), " ", h("button", { type: "button", class: "btn main", text: "Firmen und Entitäten paaren", onclick: function () { if (window.confirm("Bestand jetzt paaren?")) pairRun(false); } })]));
-      p.appendChild(pm);
-      p.appendChild(m);
+      var pr = o.pair || {}, open = pr.dry ? (pr.orgs_without_entity || 0) + (pr.entities_without_org || 0) : null;
+      p.appendChild(h("p", { id: "adm-ent-status", text: "Entitäten: " + (d.entities_db || 0) + " in der Datenbank, " + (miss == null ? "?" : miss) + " nur im Repo. Die Datenbank ist die Quelle der Wahrheit; neue Einträge aus " }));
+      p.lastChild.appendChild(h("code", { text: "data/entities.json" })); p.lastChild.appendChild(document.createTextNode(" übernimmt der Worker automatisch (nichts in der Datenbank wird überschrieben)."));
+      p.appendChild(h("h2", { text: "Firmen und Entitäten" }));
+      var pm = h("p", { id: "adm-pair-status", class: "adm-msg", text: open == null ? "Status nicht verfügbar." : (open ? "Firma und Entität werden automatisch gepaart. Noch offen: " + (pr.orgs_without_entity || 0) + " Firmen ohne Entität, " + (pr.entities_without_org || 0) + " Firmen-Entitäten ohne Firma. " : "Firmen und Entitäten sind vollständig gepaart. ") });
+      if (open) pm.appendChild(h("a", { href: "#", id: "adm-pair-now", text: "Jetzt nachziehen", onclick: function (ev) { ev.preventDefault(); pm.textContent = "Läuft …"; api("/api/admin/org-pair", { method: "POST", body: { dry: false } }).then(function (r) { var j = r.j || {}; pm.textContent = r.s !== 200 ? "Fehler (" + (j.error || r.s) + ")" : "Erledigt: " + j.linked + " verknüpft, " + j.entities_created + " Entitäten, " + j.orgs_created + " Firmen angelegt, noch offen: " + j.remaining + "."; }); } }));
+      p.appendChild(pm); p.appendChild(m);
     }); },
     sw: function () { overview(function (o) { var p = panes.sw, f = o.flags, m = h("p", { class: "adm-msg" }); p.textContent = "";
       p.appendChild(h("h2", { text: "Automatische Übersetzung (Haiku)" }));
@@ -524,23 +522,24 @@
 
   // ---------- Entitaeten ----------
   function entities() {
-    var p = panes.ent, q = h("input", { type: "search", id: "adm-q", placeholder: "Suchen: Name, ID oder Alias", "aria-label": "Entitäten suchen" }), tf = h("select", { id: "adm-tf", "aria-label": "Typ" }), list = h("ul", { class: "adm-list" }), form = h("div", { class: "adm-form", hidden: "" }), all = [];
+    var p = panes.ent, q = h("input", { type: "search", id: "adm-q", placeholder: "Suchen: Name, ID oder Alias", "aria-label": "Entitäten suchen" }), tf = h("select", { id: "adm-tf", "aria-label": "Typ" }), kf = h("select", { id: "adm-kf", "aria-label": "Herkunft" }), list = h("ul", { class: "adm-list" }), form = h("div", { class: "adm-form", hidden: "" }), all = [];
     tf.appendChild(h("option", { value: "", text: "Alle Typen" })); Object.keys(TYPES).forEach(function (k) { tf.appendChild(h("option", { value: k, text: TYPES[k] })); });
-    p.append(h("div", { class: "adm-row" }, [q, tf]), list, form);
+    [["", "Alle Herkünfte"], ["ai", "KI-Entwurf"], ["human", "Von Menschen bearbeitet"], ["seed", "Nur übernommen"]].forEach(function (o) { kf.appendChild(h("option", { value: o[0], text: o[1] })); });
+    p.append(h("div", { class: "adm-row" }, [q, tf, kf]), list, form);
     list.appendChild(h("li", { class: "mut", text: "Lädt …" }));
     Promise.all([fetch(BASE + "/entities.json").then(function (r) { return r.json(); }).catch(function () { return { entities: [] }; }), api("/api/entity/export")]).then(function (res) {
       var by = {}; (res[0].entities || []).forEach(function (e) { by[e.id] = { e: e, db: false }; });
-      ((res[1].j || {}).items || []).forEach(function (x) { by[x.id] = { e: Object.assign({ id: x.id }, x.data), db: true }; });
+      ((res[1].j || {}).items || []).forEach(function (x) { by[x.id] = { e: Object.assign({ id: x.id }, x.data), db: true, src: x.src || "" }; });
       all = Object.keys(by).map(function (k) { return by[k]; }).sort(function (a, b) { return String(a.e.name).localeCompare(String(b.e.name)); }); draw();
     });
     function draw() {
-      var s = q.value.trim().toLowerCase(), t = tf.value, n = 0; list.textContent = "";
-      all.forEach(function (x) { var e = x.e; if (t && e.type !== t) return; if (s && (e.name + " " + e.id + " " + (e.aliases || []).join(" ")).toLowerCase().indexOf(s) < 0) return; if (++n > 80) return;
-        list.appendChild(h("li", {}, [h("button", { type: "button", class: "adm-item", onclick: function () { edit(e.id); } }, [h("b", { text: e.name }), " ", h("span", { class: "mut", text: (TYPES[e.type] || e.type) + " · " + e.id }), " ", h("span", { class: "adm-badge" + (x.db ? " on" : ""), text: x.db ? "Datenbank" : "nur Datei" })])])); });
+      var s = q.value.trim().toLowerCase(), t = tf.value, k = kf.value, n = 0; list.textContent = "";
+      all.forEach(function (x) { var e = x.e; if (t && e.type !== t) return; if (k && x.src !== k) return; if (s && (e.name + " " + e.id + " " + (e.aliases || []).join(" ")).toLowerCase().indexOf(s) < 0) return; if (++n > 80) return;
+        list.appendChild(h("li", {}, [h("button", { type: "button", class: "adm-item", onclick: function () { edit(e.id); } }, [h("b", { text: e.name }), " ", h("span", { class: "mut", text: (TYPES[e.type] || e.type) + " · " + e.id }), " ", h("span", { class: "adm-badge" + (x.db ? " on" : ""), text: x.db ? "Datenbank" : "nur Datei" }), x.src === "ai" ? h("span", { class: "adm-badge on", text: "KI-Entwurf" }) : null])])); });
       if (n > 80) list.appendChild(h("li", { class: "mut", text: (n - 80) + " weitere, bitte genauer suchen" }));
       if (!n) list.appendChild(h("li", { class: "mut", text: "Keine Treffer" }));
     }
-    q.addEventListener("input", draw); tf.addEventListener("change", draw);
+    q.addEventListener("input", draw); tf.addEventListener("change", draw); kf.addEventListener("change", draw);
     function field(id, label, val, o) { o = o || {}; var inp = o.area ? h("textarea", { id: id, rows: o.rows || 3, maxlength: o.max || 600 }) : h("input", { type: "text", id: id, maxlength: o.max || 300 }); inp.value = val || ""; return h("p", { class: "adm-field" }, [h("label", { for: id, text: label }), inp, o.hint ? h("small", { class: "mut", text: o.hint }) : null]); }
     function edit(id) {
       form.hidden = false; form.textContent = "Lädt …"; form.scrollIntoView({ behavior: "smooth", block: "start" });

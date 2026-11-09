@@ -462,7 +462,10 @@ def load_entities(api):
         if it.get("id") in gone and it["id"] not in base:   # zusammengefuehrte Person (data/guest_merge.json): alte D1-Fassung keine eigene Seite, die Adresse leitet weiter
             continue
         if it.get("id") and d.get("name") and d.get("type"):
-            rec = {"id": it["id"], **d, "desc": d.get("desc") or {"en": "", "de": ""}, "rel": d.get("rel") or [], "aliases": d.get("aliases") or [], "edited": it.get("created")}
+            rec = {"id": it["id"], **d, "desc": d.get("desc") or {"en": "", "de": ""}, "rel": d.get("rel") or [], "aliases": d.get("aliases") or []}
+            # Herkunft der D1-Fassung (Export "src"): nur "human" (oder unbekannt = aelterer Worker, fail-closed) gilt als redaktionell bearbeitet und sperrt die KI-Rueckfalltexte;
+            # "seed" (Uebernahme aus entities.json) und "ai" (KI-Entwurf) sind keine Menschen-Aenderung, "dbrev" haelt nur das Datum der Fassung
+            rec["edited" if it.get("src", "human") == "human" else "dbrev"] = it.get("created")
             for k in REPO_KEYS:   # Felder ohne Formularfeld: fehlen sie in der D1-Fassung (Formular-Bearbeitung, selbst verwaltete Entitaet), gilt die Repo-Fassung
                 if k not in rec and (base.get(it["id"]) or {}).get(k):
                     rec[k] = base[it["id"]][k]

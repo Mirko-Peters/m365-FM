@@ -3,8 +3,8 @@
 data/entity_fill/en.json            {id: {h, desc, long, faq[{q,a}], m, ts}}     englische Fassung (Sonnet)
 data/entity_fill/i18n/<lang>.json   {id: {h, desc?, long?, faq?, m, ts}}         Uebersetzung (Haiku), einmalig: nie ueberschrieben
 
-Rangfolge beim Lesen: redaktioneller Text in data/entities.json / D1 (immer vorn) > diese Texte. Von Mitgliedern bearbeitete Entitaeten
-(e["edited"], D1-Fassung) bekommen nie einen KI-Text. Nur Lesen, keine Abhaengigkeit von site_*.py."""
+Rangfolge beim Lesen: redaktioneller Text in data/entities.json / D1 (immer vorn) > diese Texte. Von Menschen bearbeitete Entitaeten
+(e["edited"] = D1-Fassung mit src human; seed/ai setzen es nicht) bekommen nie einen KI-Text. KI-Texte stehen zusaetzlich als KI-Entwurf in D1 (fill_entities.py push). Nur Lesen, keine Abhaengigkeit von site_*.py."""
 import json
 from pathlib import Path
 
@@ -69,8 +69,10 @@ def long_text(e, lang):
 
 
 def faq(e, lang):
-    if e.get("edited"):
-        return []
+    own = e.get("faq") if isinstance(e.get("faq"), dict) else {}   # KI-Entwurf in der Datenbank (en/de), kommt als normales Feld der D1-Fassung
+    db = [{"q": x["q"], "a": x["a"], "lang": lang} for x in (own.get(lang) or []) if isinstance(x, dict) and x.get("q") and x.get("a")]
+    if db or e.get("edited"):   # D1-Fassung (gleicher Text wie der Audit-Stand in data/entity_fill) gewinnt, keine Doppelung
+        return db
     return [{"q": x["q"], "a": x["a"], "lang": lang} for x in (_rec(e["id"], lang).get("faq") or []) if x.get("q") and x.get("a")]
 
 

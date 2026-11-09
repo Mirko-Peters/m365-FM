@@ -1,13 +1,13 @@
 name: Entitaeten fuellen (Sonnet en + Haiku 14 Sprachen)
-# Nur von Hand (kein Cron). plan = Anzahl und Kosten, run = collect -> schreiben -> uebersetzen (Batch), collect = fertige Batches abholen.
+# Nur von Hand (kein Cron). Die Datenbank (D1) ist die Quelle der Wahrheit: nach collect geht jeder Text per push an /api/internal/entity-fill (data/entity_fill bleibt Audit-Kopie). plan = Anzahl und Kosten, run = collect -> schreiben -> uebersetzen (Batch), collect = fertige Batches abholen.
 # Budget: ENTITY_BUDGET_USD gilt kumulativ fuer data/spend.json["entities"] inkl. offener Batches. Details: fill_entities.py
 on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "plan = nur Zaehlung/Kosten, run = Batches senden und abholen, collect = fertige Batches abholen"
+        description: "plan = nur Zaehlung/Kosten, run = Batches senden und abholen, collect = fertige Batches abholen, push = nur die Texte in die Datenbank schreiben"
         type: choice
-        options: [plan, run, collect]
+        options: [plan, run, collect, push]
         default: plan
       limit: { description: "Hoechstens N Auftraege je Stufe (leer = alle im Budget)", required: false, default: "" }
       budget: { description: "Gesamtbudget in USD (kumulativ)", required: false, default: "100" }
@@ -31,6 +31,7 @@ jobs:
       - uses: actions/setup-python@v5
         with: { python-version: "3.12" }
       - name: Entitaeten fuellen
+        if: inputs.mode != 'push'
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY_SHOW }}
           ENTITY_BUDGET_USD: ${{ inputs.budget || '100' }}
@@ -42,6 +43,9 @@ jobs:
           [ -n "$LIMIT_IN" ] && ARGS="$ARGS --limit $LIMIT_IN"
           [ -n "$MODEL_IN" ] && ARGS="$ARGS --model $MODEL_IN"
           python fill_entities.py "$MODE_IN" $ARGS | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: In die Datenbank schreiben (KI-Entwurf, nur wo kein Mensch bearbeitet hat)
+        if: always() && inputs.mode != 'plan'
+        run: python fill_entities.py push | tee -a "$GITHUB_STEP_SUMMARY"
       - name: Ergebnis committen
         if: always() && inputs.mode != 'plan'
         run: |

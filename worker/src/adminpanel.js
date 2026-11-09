@@ -1,4 +1,4 @@
-// Verwaltung (No-Code-Backend unter /admin/): Uebersicht, Uebernahme der Entitaeten in die Datenbank, Schalter. Nur fuer Admins.
+// Verwaltung (No-Code-Backend unter /admin/): Uebersicht, Statuszeilen zum Umzug in die Datenbank (Entitaeten-Uebernahme und Firmen-Paarung laufen per Cron), Schalter. Nur fuer Admins.
 const now = () => Math.floor(Date.now() / 1000);
 async function n(db, sql, ...b) { try { return (await db.prepare(sql).bind(...b).first())?.n ?? 0; } catch { return null; } }   // Tabelle fehlt -> null
 async function meta(db, k) { try { return (await db.prepare("SELECT v FROM meta WHERE k=?").bind(k).first())?.v ?? ""; } catch { return ""; } }
@@ -6,6 +6,7 @@ const FLAGS = { tr_off: /^[01]$/, atr_off: /^[01]$/, atr_ent_cap: /^\d{1,4}$/, t
 const QKINDS = new Set(["blog", "podcast", "video", "entity", "lblog", "notes"]), QLANGS = new Set(["en", "de", "fr", "es", "it", "nl", "pt", "pl", "id", "ru", "uk", "ar", "he", "ja", "ko"]);
 import { audit, aiBudgetStatus } from "./util.js";
 import { SPONSOR_STATUSES } from "./sponsor.js";
+import { pairExisting } from "./orgpair.js";
 
 export async function handleAdminPanel(env, request, url, path, user, J) {
   if (!path.startsWith("/api/admin/panel/")) return null;
@@ -20,7 +21,9 @@ export async function handleAdminPanel(env, request, url, path, user, J) {
     const spendRows = (await db.prepare("SELECT day,SUM(usd) usd FROM ai_spend WHERE day>=? AND model LIKE 'claude-haiku%' GROUP BY day ORDER BY day DESC LIMIT 30").bind(cutoff).all().catch(() => ({ results: [] }))).results || [];
     const spent30d = spendRows.reduce((sum, row) => sum + Number(row.usd || 0), 0);
     const mailMonth = new Date().toISOString().slice(0, 7), mailSent = await n(db, "SELECT sent n FROM mail_monthly_usage WHERE month=?", mailMonth) ?? 0;
+    const pair = await pairExisting(env, { dry: true }).catch(() => null);   // Statuszeile "Firmen und Entitaeten": Probelauf-Zahlen; der Cron (importEntitiesFromSite) paart automatisch
     return J({
+      pair,
       queues: {
         blog: await n(db, "SELECT COUNT(*) n FROM blog_posts WHERE status='pending'"),
         podcast: await n(db, "SELECT COUNT(*) n FROM pod_episodes WHERE status IN ('submitted','review')"),
@@ -47,16 +50,6 @@ export async function handleAdminPanel(env, request, url, path, user, J) {
       flags: { tr_off: await meta(db, "tr_off"), atr_off: await meta(db, "atr_off"), atr_ent_cap: await meta(db, "atr_ent_cap"), entity_source: (await meta(db, "entity_source")) || "json",
         atr_today: +(await meta(db, "atr_count:" + day)) || 0, atr_ent_today: +(await meta(db, "atr_ent:" + day)) || 0, key: !!env.ANTHROPIC_API_KEY },
     });
-  }
-
-  if (path === "/api/admin/panel/import-entities" && request.method === "POST") {   // Basis-Entitaeten aus entities.json einmalig als live-Revision in die Datenbank
-    let list = []; try { list = (await (await fetch(env.SITE + "/entities.json", { cf: { cacheTtl: 0 } })).json()).entities || []; } catch { return J({ error: "site_unreachable" }, 502); }
-    const have = new Set(((await db.prepare("SELECT DISTINCT eid FROM entity_rev WHERE status='live'").all()).results || []).map((r) => r.eid));
-    const todo = list.filter((e) => e && /^[a-z0-9][a-z0-9-]{1,79}$/.test(e.id || "") && !have.has(e.id)), t = now();
-    for (let i = 0; i < todo.length; i += 50) {
-      await db.batch(todo.slice(i, i + 50).map((e) => { const { id, ...data } = e; return db.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES(?,?,?,0,'live',?)").bind(id, JSON.stringify(data), "Übernahme aus entities.json", t); }));
-    }
-    return J({ ok: true, imported: todo.length, already: have.size, total: list.length });
   }
 
   if (path === "/api/admin/panel/flag" && request.method === "POST") {
