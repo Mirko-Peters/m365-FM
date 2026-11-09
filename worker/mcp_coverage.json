@@ -10,14 +10,14 @@
   "/api/me/merge": {
    "skip": "Anmeldungen verknüpfen/entfernen und Konten zusammenführen (#279) nur mit Browser-Sitzung und frischer Anmeldung, bewusst nicht per KI-Token"
   },
- "/api/directory": {
-  "tools": [
-   "search_directory"
-  ]
- },
- "/api/directory/key": {
-  "skip": "Öffentlicher Maps-Schlüssel wird ausschließlich vom zustimmungsgebundenen Karten-Frontend abgerufen"
- },
+  "/api/directory": {
+   "tools": [
+    "search_directory"
+   ]
+  },
+  "/api/directory/key": {
+   "skip": "Öffentlicher Maps-Schlüssel wird ausschließlich vom zustimmungsgebundenen Karten-Frontend abgerufen"
+  },
   "/api/admin/blog": {
    "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
   },
@@ -258,7 +258,8 @@
   },
   "/api/contributions/sources": {
    "tools": [
-    "list_my_contributions"
+    "list_my_contributions",
+    "list_contribution_sources"
    ]
   },
   "/api/contributions/update": {
@@ -1124,6 +1125,28 @@
   },
   "/api/admin/ads/house-stats": {
    "skip": "Admin-Funktionen (#281 Werbeplätze): nur im Admin-Panel, bewusst nicht per KI-Token"
+  },
+  "/api/contributions/review-batch": {
+   "tools": [
+    "review_new_contributions"
+   ]
+  },
+  "/api/contributions/source/preview": {
+   "skip": "Vorschau der letzten 3 Einträge beim Hinzufügen einer Quelle (Oberfläche); eine KI legt die Quelle mit add_contribution_source an und sieht Funde in review_new_contributions"
+  },
+  "/api/contributions/linkedin-og": {
+   "skip": "Formularhilfe für LinkedIn-Artikel-Links (nur Open-Graph-Tags); eine KI legt Artikel mit add_contribution an"
+  },
+  "/api/contributions/import": {
+   "skip": "Import gewählter Einträge aus dem LinkedIn-Datenexport (im Browser gelesen) bzw. \"andere Links\" in der Oberfläche; per KI gibt es add_contribution"
+  },
+  "/api/contributions/review": {
+   "skip": "Einzelaktionen der Neu-gefunden-Liste in der Oberfläche; per KI review_new_contributions (Vorschau + confirm)"
+  },
+  "/api/contributions/unpublish": {
+   "tools": [
+    "unpublish_contribution"
+   ]
   }
-}
+ }
 }

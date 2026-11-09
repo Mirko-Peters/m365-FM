@@ -1,5 +1,5 @@
 // Community-API (Cloudflare Worker + D1): Login (Google/Microsoft), Kommentare, Abzeichen, Kurator, Push, E-Mail
-import { json, cors, cookie, makeSession, readSession, readSessionInfo, sha256hex, cleanText, cleanName, randomToken, rateLimit, isLang, esc, b64u, sign, verify, audit, aiBudgetStatus, reportExternalAiUsage } from "./util.js";
+import { json, cors, cookie, makeSession, readSession, readSessionInfo, sha256hex, cleanText, cleanName, randomToken, rateLimit, isLang, esc, b64u, sign, verify, audit, aiBudgetStatus, reportExternalAiUsage, memberOf } from "./util.js";
 import { evalBadges, stats, topUsers, badgesFor, award } from "./badges.js";
 import { runDigest, runPushDigest } from "./digest.js";
 import { sendMail } from "./mailer.js";
@@ -91,7 +91,6 @@ function shortName(full) {
   return `${p[0]} ${[...p[p.length - 1]][0]}.`;
 }
 const safeReturn = (env, u) => { try { const x = new URL(u); return x.origin === env.SITE ? x.href : env.SITE + "/"; } catch { return env.SITE + "/"; } };
-const isAdmin = (env, u) => u.role === "admin" || (env.ADMIN_SUBS || "").split(",").map((s) => s.trim()).includes(`${u.provider}:${u.sub}`);
 
 const firstName = (full) => cleanName(full).split(" ").filter(Boolean)[0] || "";
 async function namePrefs(db, user) {
@@ -228,12 +227,7 @@ async function deleteAccount(env, id) {
   await deleteUserData(db, id); await deleteUserExpertRequests(env, id);
 }
 
-async function me(env, uid) {
-  const u = await env.DB.prepare("SELECT id,provider,sub,name,bio,lang,banned,role,created FROM users WHERE id=?").bind(uid).first();
-  if (!u || u.banned) return null;
-  const pro = !!(await env.DB.prepare("SELECT 1 x FROM programs WHERE owner_type='u' AND owner_id=? AND verified=1 AND program IN ('mvp','mct','rd','msa','ms_employee') LIMIT 1").bind(uid).first());
-  return { ...u, admin: isAdmin(env, u), editor: u.role === "editor", pro };
-}
+const me = memberOf;   // util.js: dieselbe Rollen-Ermittlung auch fuer Cron-Laeufe (Kurzposts)
 
 function pubComment(c, mine, liked, badges, admin) {
   return { id: c.id, parent: c.parent_id, user: { id: c.user_id, name: c.name, badges: badges.get(c.user_id) || [] }, body: c.status === "hidden" ? "" : c.body,

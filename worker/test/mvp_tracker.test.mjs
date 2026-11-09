@@ -165,7 +165,7 @@ test("Quellen: GitHub, Bearbeiten von Name/Link, Pausieren und Reaktivieren", as
   raw.prepare("UPDATE contribution_sources SET fails=5, feed='https://github.com/anna.atom' WHERE id=?").run(id);
   assert.equal((await call("/api/contributions/source/update", "POST", { id, title: "Anna on GitHub", url: "https://github.com/anna-dev" })).status, 200);
   const s = raw.prepare("SELECT title,url,feed,fails FROM contribution_sources WHERE id=?").get(id);
-  assert.deepEqual([s.title, s.url, s.feed, s.fails], ["Anna on GitHub", "https://github.com/anna-dev", "", 0], "neuer Link startet die Feed-Suche neu");
+  assert.deepEqual([s.title, s.url, s.feed, s.fails], ["Anna on GitHub", "https://github.com/anna-dev", "https://github.com/anna-dev.atom", 0], "neuer Link setzt den Feed (github.com/<user>.atom) neu");
   assert.equal((await call("/api/contributions/source/update", "POST", { id, url: "https://evil.example/anna" })).status, 400);
   assert.equal((await call("/api/contributions/source/update", "POST", { id, active: false })).status, 200);
   assert.equal((await json(call("/api/contributions/mine"))).sources[0].status, "paused");

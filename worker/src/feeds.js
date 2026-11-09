@@ -1,9 +1,9 @@
 // Feeds der Creator-Kanaele einsammeln: nur Titel, Link und Datum (kein Volltext), https, begrenzte Groesse
-import { cleanText } from "./util.js";
+import { cleanText, BOT_UA } from "./util.js";
 import { sendPush } from "./push.js";
 import { goodHost, ensureFeedCols } from "./profiles.js";
 import { queueTopicNotification } from "./topic_notifications.js";
-import { PRIVATE_FEED_KINDS, publicKindSql } from "./feedpolicy.js";
+import { PRIVATE_FEED_KINDS, publicKindSql, canonUrl, HIDDEN_MOD } from "./feedpolicy.js";
 
 const dec = (s) => s.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, "$1").replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(Math.min(+n, 0x10ffff))).replace(/&#x([0-9a-f]+);/gi, (_, n) => String.fromCodePoint(Math.min(parseInt(n, 16), 0x10ffff)))
   .replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&amp;/g, "&");
@@ -27,7 +27,7 @@ export function parseFeed(xml, max = 12) {
     }).filter(Boolean))].slice(0, 10);
     let thumb = ""; const tm = /<media:thumbnail[^>]*url=["']([^"']+)["']/i.exec(b) || /<enclosure[^>]*type=["']image[^"']*["'][^>]*url=["']([^"']+)["']/i.exec(b) || /<img[^>]*src=["']([^"']+)["']/i.exec(dec(raw));
     if (tm) { try { const tu = new URL(dec(tm[1])); if (tu.protocol === "https:" && goodHost(tu.hostname) && tu.href.length < 400) thumb = tu.href; } catch {} }
-    if (title.length >= 3 && link.length <= 400) out.push({ desc, thumb, title, topics, url: link, t: Math.min(t, Math.floor(Date.now() / 1000)) });
+    if (title.length >= 3 && link.length <= 400) out.push({ desc, thumb, title, topics, guid: cleanText(tag(b, "guid") || tag(b, "id"), 300), url: link, t: Math.min(t, Math.floor(Date.now() / 1000)) });
   }
   return out;
 }
@@ -35,7 +35,7 @@ export function parseFeed(xml, max = 12) {
 // Feed automatisch finden: YouTube-Handle -> channel_id, GitHub/Bluesky/Mastodon -> Standard-Feed, sonst <link rel="alternate"> im HTML
 async function get(u, ms = 6000) {
   const ctl = new AbortController(), to = setTimeout(() => ctl.abort(), ms);
-  try { const r = await fetch(u, { signal: ctl.signal, redirect: "follow", headers: { "user-agent": "M365FM-community-feed/1.0 (+https://www.m365.fm)", accept: "text/html,application/xml,*/*" } }); return r.ok ? (await r.text()).slice(0, 400000) : ""; } catch { return ""; } finally { clearTimeout(to); }
+  try { const r = await fetch(u, { signal: ctl.signal, redirect: "follow", headers: { "user-agent": BOT_UA, accept: "text/html,application/xml,*/*" } }); return r.ok ? (await r.text()).slice(0, 400000) : ""; } catch { return ""; } finally { clearTimeout(to); }
 }
 export async function discoverFeed(kind, url) {
   let u; try { u = new URL(url); } catch { return ""; }
@@ -55,6 +55,8 @@ export async function discoverFeed(kind, url) {
   return "";
 }
 
+const KEEP_DAYS = 400;   // so lange bleiben gezogene Eintraege in feed_items
+
 // Private Kanal-Arten (feedpolicy.js, z. B. GitHub) werden nicht abgerufen: ihre Inhalte erscheinen nirgends oeffentlich. Fuer MVP-Nachweise liest contributions.js den Feed selbst.
 export async function refreshFeeds(env, max = 8) {
   const db = env.DB, now = Math.floor(Date.now() / 1000);
@@ -65,22 +67,50 @@ export async function refreshFeeds(env, max = 8) {
   for (const c of rows) {
     try {
       const ctl = new AbortController(), to = setTimeout(() => ctl.abort(), 6000);
-      const r = await fetch(c.feed, { signal: ctl.signal, headers: { "user-agent": "M365FM-community-feed/1.0 (+https://www.m365.fm)", accept: "application/rss+xml, application/atom+xml, text/xml, */*" } });
+      const r = await fetch(c.feed, { signal: ctl.signal, headers: { "user-agent": BOT_UA, accept: "application/rss+xml, application/atom+xml, text/xml, */*" } });
       clearTimeout(to);
       if (!r.ok) throw new Error("http " + r.status);
       const xml = (await r.text()).slice(0, 600000);
       const items = parseFeed(xml); if (!items.length) throw new Error("empty");
       await ensureFeedCols(db);
-      let fresh = [];
-      if (c.owner_type === "u" || c.owner_type === "o") { const ex = new Set(((await db.prepare("SELECT url FROM feed_items WHERE channel_id=?").bind(c.id).all()).results || []).map((r) => r.url)); fresh = items.filter((i) => !ex.has(i.url)); if (ex.size === 0) fresh = []; }
-      await db.batch([...items.map((i) => db.prepare("INSERT INTO feed_items(channel_id,owner_type,owner_id,url,title,published,summary,thumb) VALUES(?,?,?,?,?,?,?,?) ON CONFLICT(url) DO UPDATE SET summary=CASE WHEN feed_items.summary='' THEN excluded.summary ELSE feed_items.summary END, thumb=CASE WHEN feed_items.thumb='' THEN excluded.thumb ELSE feed_items.thumb END").bind(c.id, c.owner_type, c.owner_id, i.url, i.title, i.t, i.desc || "", i.thumb || "")),
+      // Was davon kennt der Feed schon - gleich unter welchem Kanal? Nur wirklich Neues loest Hinweise aus: eine URL, die ein anderer Kanal haelt
+      // (feed_items.url ist eindeutig), galt sonst bei jedem Lauf wieder als neu.
+      const marks = items.map(() => "?").join(","), urls = items.map((i) => i.url), look = async () => db.prepare(`SELECT id,url,owner_type,owner_id,origin,hidden FROM feed_items WHERE url IN (${marks})`).bind(...urls).all();
+      const known = (await look().catch(async () => { await db.prepare("ALTER TABLE feed_items ADD COLUMN origin TEXT NOT NULL DEFAULT ''").run().catch(() => {}); return look(); })).results || [];   // 0036 fehlt noch: Spalte anlegen statt den Kanal als fehlerhaft zu zaehlen
+      const had = !!(await db.prepare("SELECT 1 x FROM feed_items WHERE channel_id=? LIMIT 1").bind(c.id).first());   // erster Abruf eines Kanals: keine Hinweise
+      // Eigene Kurzposts aus dem MVP-Tracker (origin='kurzpost') weichen dem eigenen Kanal: Der Eintrag wandert hierher und gilt wieder als gezogen
+      // (Plattform, Vorschaubild, VideoObject) - auch wenn der Kurzpost dieselbe Seite unter leicht anderer Adresse fuehrt (canonUrl), dann bekommt
+      // er die Adresse aus dem Feed. Zurueckgezogen war der Kurzpost, nicht der Kanal-Inhalt: als gezogener Eintrag ist er wieder sichtbar; eine
+      // Sperre der Moderation bleibt. Kurzposts anderer Mitglieder bleiben, wo sie sind (wer zuerst da ist, behaelt den Eintrag - wie bei
+      // gezogenen Inhalten): Die Feed-Adresse eines Kanals ist frei eingetippt und belegt keine Urheberschaft, eine Playlist oder ein Blog mit
+      // mehreren Autoren listet auch fremde Links. Streit darum klaert die Moderation - und nur ihre Entscheidung gibt den Link frei: Ein fremder
+      // Kurzpost, den sie ausgeblendet hat, weicht dem Kanal (Zeile und Stimmen entfallen, der Inhalt kommt unten als neuer Eintrag des Kanals).
+      // Sonst hielte ein ausgeblendeter Kurzpost den Link fuer immer besetzt, und der echte Kanal koennte seinen Inhalt nie zeigen.
+      const own = (k) => k.owner_type === c.owner_type && k.owner_id === c.owner_id;
+      const gone = known.filter((k) => k.origin === "kurzpost" && !own(k) && (k.hidden & HIDDEN_MOD)), seen = new Set(known.filter((k) => !gone.includes(k)).map((k) => k.url));
+      const adopt = known.filter((k) => k.origin === "kurzpost" && own(k)).map((k) => ({ id: k.id, hidden: k.hidden, url: k.url }));
+      if (c.owner_type === "u") {
+        const free = new Map(items.filter((i) => !seen.has(i.url)).map((i) => [canonUrl(i.url), i.url]));
+        const mine = free.size ? (await db.prepare("SELECT id,url,hidden FROM feed_items WHERE owner_type='u' AND owner_id=? AND origin='kurzpost'").bind(c.owner_id).all()).results || [] : [];
+        for (const k of mine) { const to = free.get(canonUrl(k.url)); if (to) { free.delete(canonUrl(k.url)); seen.add(to); adopt.push({ id: k.id, hidden: k.hidden, url: to }); } }
+      }
+      // Was aelter ist als die Aufbewahrung (KEEP_DAYS), wird am Ende des Laufs wieder geloescht und waere beim naechsten Abruf erneut "neu":
+      // dafuer gibt es keinen Hinweis (sonst bekaeme der Creator bei einem Feed mit sehr alten Eintraegen alle 30 Minuten eine Nachricht).
+      const fresh = (c.owner_type === "u" || c.owner_type === "o") && had ? items.filter((i) => !seen.has(i.url) && i.t >= now - KEEP_DAYS * 86400) : [];
+      // Wer dem Creator folgt, erfaehrt auch von Inhalten, die zuerst als Kurzpost kamen und jetzt uebernommen werden (beim Kurzpost selbst gab es
+      // keinen Hinweis). Der Creator bekommt dafuer kein "Neuer Inhalt gezogen": er kennt den Inhalt schon.
+      const adopted = new Set(had ? adopt.filter((k) => !(k.hidden & HIDDEN_MOD)).map((k) => k.url) : []), news = [...fresh, ...items.filter((i) => adopted.has(i.url))];
+      await db.batch([...gone.flatMap((k) => [db.prepare("UPDATE contributions SET feed_item_id=0 WHERE feed_item_id=?").bind(k.id), db.prepare("DELETE FROM item_votes WHERE item_id=?").bind(k.id),
+          db.prepare("DELETE FROM feed_items WHERE id=? AND origin='kurzpost' AND (hidden&?)<>0").bind(k.id, HIDDEN_MOD)]),
+        ...adopt.map((k) => db.prepare("UPDATE feed_items SET url=?, channel_id=?, origin='', hidden=hidden&? WHERE id=? AND origin='kurzpost'").bind(k.url, c.id, HIDDEN_MOD, k.id)),
+        ...items.map((i) => db.prepare("INSERT INTO feed_items(channel_id,owner_type,owner_id,url,title,published,summary,thumb) VALUES(?,?,?,?,?,?,?,?) ON CONFLICT(url) DO UPDATE SET summary=CASE WHEN feed_items.summary='' THEN excluded.summary ELSE feed_items.summary END, thumb=CASE WHEN feed_items.thumb='' THEN excluded.thumb ELSE feed_items.thumb END").bind(c.id, c.owner_type, c.owner_id, i.url, i.title, i.t, i.desc || "", i.thumb || "")),
         db.prepare("UPDATE channels SET fetched=?, fails=0 WHERE id=?").bind(now, c.id)]);
       n += items.length;
-      if (fresh.length) {
+      if (news.length) {
         const owner = c.owner_type === "u"
           ? await db.prepare("SELECT handle FROM profiles WHERE user_id=? AND public=1 AND handle IS NOT NULL").bind(c.owner_id).first()
           : await db.prepare("SELECT handle FROM orgs WHERE id=? AND public=1").bind(c.owner_id).first();
-        if (owner?.handle) for (const item of fresh) await queueTopicNotification(env, {
+        if (owner?.handle) for (const item of news) await queueTopicNotification(env, {
           kind: "creator", topicId: owner.handle, key: `feed:${item.url}`, title: item.title, body: item.desc || "",
           url: item.url,
         });
@@ -91,7 +121,7 @@ export async function refreshFeeds(env, max = 8) {
       }
     } catch { await db.prepare("UPDATE channels SET fetched=?, fails=fails+1 WHERE id=?").bind(now, c.id).run(); }
   }
-  await db.prepare("DELETE FROM feed_items WHERE published<?").bind(now - 400 * 86400).run();
+  await db.prepare("DELETE FROM feed_items WHERE published<?").bind(now - KEEP_DAYS * 86400).run();
   return n;
 }
 
