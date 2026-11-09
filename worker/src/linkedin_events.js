@@ -19,27 +19,33 @@ export const LI = {
   visibility: "PUBLIC", cancelState: "CANCELLED",
   nameMax: 100, descMax: 2000, locale: { language: "de", country: "DE" },
   redirectPath: "/auth/linkedin-events/callback", stateCookie: "m365le",
-  timeoutMs: 30000,                                          // laenger wartet kein Aufruf; HOLD_S (unten) ist bewusst groesser
+  timeoutMs: 30000, tokenTimeoutMs: 15000,                   // laenger wartet kein Aufruf (Event-API bzw. Token-Erneuerung); HOLD_S (unten) ist bewusst groesser
 };
 // HeySummit-API v2 (Authorization: Token <HEYSUMMIT_API_KEY>). Feldnamen so, wie das verbundene Konto sie liefert (Event 229506 "M365 Con 27", gelesen am 9.11.2026
 // ueber den HeySummit-Connector; tools/mediakit_con.py liest dieselben Event-Felder). Zeiten kommen ohne Zone in UTC ("2027-01-11T07:00:00"), bei Talks steht der
 // Versatz daneben (date_timezone_offset "+0000"). Antwortform des REST-Endpunkts (Seiten mit results/next) vor der ersten Veroeffentlichung einmal mit dem Schluessel pruefen:
 // passt sie nicht, meldet die Liste "hs_format" bzw. "0 mit Termin" und schlaegt nichts vor (nie umgekehrt).
+// Nicht veroeffentlichte HeySummit-Events (is_live false, z. B. die Kopie 229209 "M365 Con (copy)") und archivierte zaehlen nie als "laeuft gleichzeitig".
 export const HS = {
   api: "https://api.heysummit.com/api",
   events: "/events/", talks: "/talks/",
-  evStart: "first_talk_at", evEnd: "last_talk_at", evUrl: "event_url", evUrlAlt: "url", evArchived: "is_archived",
+  evStart: "first_talk_at", evEnd: "last_talk_at", evUrl: "event_url", evUrlAlt: "url", evArchived: "is_archived", evLive: "is_live",
   talkStart: "date", talkOffset: "date_timezone_offset", talkMins: "broadcast_duration_mins", talkUrl: "url", talkEvent: "event", talkCancelled: "talk_cancelled", talkActive: "is_active",
   defaultMins: 45,                                           // Talk ohne Dauer; auch: last_talk_at ist der BEGINN des letzten Talks
   maxPages: 12, maxCalls: 30, timeoutMs: 15000,
 };
 export const UTM = "utm_source=linkedin&utm_medium=event&utm_campaign=linkedin-events";
-export const HOLD_S = 120;   // so lange gilt eine Reservierung als "laeuft gerade": erst danach darf der Admin sie aufloesen (URN eintragen) oder freigeben
+// So lange gilt eine Reservierung als "laeuft gerade": erst danach darf der Admin sie aufloesen (URN eintragen) oder freigeben. Gezaehlt wird ab dem Eintragen
+// der Reservierung (echte Uhr, direkt vor dem LinkedIn-Aufruf), nicht ab dem Beginn der Anfrage - HeySummit zu lesen kann davor lange dauern. Muss deutlich
+// groesser bleiben als alles, was nach der Reservierung noch warten kann: LI.tokenTimeoutMs + LI.timeoutMs (der Test prueft das Doppelte).
+export const HOLD_S = 120;
+export const CAND_MAX = 500;   // so viele Kandidaten prueft die Vorschlagsliste hoechstens; wird die Grenze erreicht, meldet sie das (truncated) statt still zu kuerzen
 const ACTIONS = ["publish", "update", "cancel", "resolve", "release"];
 // Kandidaten fuer NEUE Vorschlaege und Aktualisierungen - die EINE Stelle fuer weitere Ausschluesse (proposals() und act() lesen beide hierueber).
 // Nach #317 (Event-Import) hier die Bedingung fuer importierte, stillgelegte und zusammengefuehrte Events mit AND anhaengen.
 const CANDIDATE = "e.public=1";
 const now = () => Math.floor(Date.now() / 1000);
+const DAY = 86400000, iso = (ms) => new Date(ms).toISOString();
 const rowsOf = (r) => r?.results || [];
 
 // ---------- Token-Verschluesselung (AES-GCM, Schluessel aus LINKEDIN_TOKEN_KEY, sonst SESSION_SECRET) ----------
@@ -88,7 +94,7 @@ export function evWindow(ev) {
 
 // ---------- HeySummit (nur lesen) ----------
 // Liefert je HeySummit-Event { id, name, url, start, end, talks: [{ id, title, url, start, end }] } in UTC-ms. Abgesagte und inaktive Talks zaehlen nicht,
-// archivierte Events auch nicht. Talks werden nur fuer Events geladen, die noch nicht vorbei sind (ein vergangenes Event ist nie "gleichzeitig" mit einem kommenden).
+// archivierte und nicht veroeffentlichte Events (Entwuerfe, Kopien: is_live false) auch nicht. Talks werden nur fuer Events geladen, die noch nicht vorbei sind (ein vergangenes Event ist nie "gleichzeitig" mit einem kommenden).
 export async function fetchHeySummit(env, f = fetch, nowMs = Date.now()) {
   if (!env.HEYSUMMIT_API_KEY) return { error: "no_heysummit_key", events: [] };
   const H = { authorization: `Token ${env.HEYSUMMIT_API_KEY}`, accept: "application/json" }, base = new URL(HS.api);
@@ -110,7 +116,7 @@ export async function fetchHeySummit(env, f = fetch, nowMs = Date.now()) {
   };
   try {
     const out = [];
-    for (const e of (await pages(HS.events)).filter((x) => x && x.id != null && x[HS.evArchived] !== true).slice(0, 20)) {
+    for (const e of (await pages(HS.events)).filter((x) => x && x.id != null && x[HS.evArchived] !== true && x[HS.evLive] !== false).slice(0, 20)) {
       const start = hsMs(e[HS.evStart]), last = hsMs(e[HS.evEnd]);
       const ev = { id: String(e.id), name: String(e.title || e.name || ""), url: String(e[HS.evUrl] || e[HS.evUrlAlt] || ""), start, end: last == null ? null : last + HS.defaultMins * 60000, talks: [] };
       if (start != null && ev.end != null && ev.end > nowMs) {
@@ -120,7 +126,7 @@ export async function fetchHeySummit(env, f = fetch, nowMs = Date.now()) {
           const ts = hsMs(t[HS.talkStart], t[HS.talkOffset]), mins = Number(t[HS.talkMins]); if (ts == null) continue;
           ev.talks.push({ id: String(t.id), title: String(t.title || t.name || ""), url: String(t[HS.talkUrl] || ""), start: ts, end: ts + (mins > 0 ? mins : HS.defaultMins) * 60000 });
         }
-        for (const t of ev.talks) if (t.end > ev.end) ev.end = t.end;
+        for (const t of ev.talks) { if (t.end > ev.end) ev.end = t.end; if (t.start < ev.start) ev.start = t.start; }   // Zeitraum = Huelle aller Talks (proposals() waehlt danach vor)
       }
       out.push(ev);
     }
@@ -194,7 +200,8 @@ async function accessToken(env, f) {
   const open = (blob) => decryptToken(env, blob).catch(() => { throw new Error("expired"); });   // Schluessel gewechselt: neu verbinden
   if (c.expires > now() + 60) return open(c.access_enc);
   if (!c.refresh_enc) throw new Error("expired");   // LinkedIn gibt Refresh-Tokens nur an freigegebene Partner: dann neu verbinden
-  const k = creds(env), r = await f(LI.token, { method: "POST", headers: { "content-type": "application/x-www-form-urlencoded" }, body: new URLSearchParams({ grant_type: "refresh_token", refresh_token: await open(c.refresh_enc), client_id: k.id, client_secret: k.secret }) });
+  const k = creds(env), r = await f(LI.token, { method: "POST", headers: { "content-type": "application/x-www-form-urlencoded" }, body: new URLSearchParams({ grant_type: "refresh_token", refresh_token: await open(c.refresh_enc), client_id: k.id, client_secret: k.secret }), signal: AbortSignal.timeout(LI.tokenTimeoutMs) })
+    .catch((e) => { throw new Error(/Timeout|Abort/.test(String(e?.name)) ? "li_timeout" : "li_network"); });   // Token-Erneuerung haengt: der Event-Aufruf ist dann noch nicht erfolgt
   if (!r.ok) throw new Error("expired");
   await saveTokens(env, await r.json(), c.connected_by, c.scope); return open((await getConn(env.DB)).access_enc);
 }
@@ -215,8 +222,8 @@ export async function checkState(env, cookieHeader, state, uid) {   // Cookie si
 export async function oauthCallbackLE(env, request, url, user, f = fetch) {
   if (!(await checkState(env, request.headers.get("cookie"), url.searchParams.get("state"), user.id))) return { error: "bad_state" };
   const code = url.searchParams.get("code"); if (!code) return { error: "no_code" };
-  const k = creds(env), r = await f(LI.token, { method: "POST", headers: { "content-type": "application/x-www-form-urlencoded" }, body: new URLSearchParams({ grant_type: "authorization_code", code, client_id: k.id, client_secret: k.secret, redirect_uri: env.API + LI.redirectPath }) });
-  if (!r.ok) return { error: "token" };
+  const k = creds(env), r = await f(LI.token, { method: "POST", headers: { "content-type": "application/x-www-form-urlencoded" }, body: new URLSearchParams({ grant_type: "authorization_code", code, client_id: k.id, client_secret: k.secret, redirect_uri: env.API + LI.redirectPath }), signal: AbortSignal.timeout(LI.tokenTimeoutMs) }).catch(() => null);
+  if (!r?.ok) return { error: "token" };
   const tok = await r.json().catch(() => ({})); if (!tok.access_token) return { error: "token" };
   await saveTokens(env, tok, user.id, tok.scope);
   return { ok: true };
@@ -226,6 +233,7 @@ export async function oauthCallbackLE(env, request, url, user, f = fetch) {
 // Fehler tragen nur feste Kennungen (nie Antworttexte oder Token) und sagen, ob LinkedIn sicher NICHTS getan hat (definite) oder der Ausgang offen ist.
 const fail = (code, definite) => Object.assign(new Error(code), { definite });
 const errCode = (e) => (/^(li_\w+|expired|not_connected|no_key)$/.test(String(e?.message)) ? e.message : "li_error");
+const isGone = (e) => /^li_(404|410)$/.test(errCode(e));   // LinkedIn kennt den Event nicht (mehr), z. B. weil er dort selbst geloescht wurde
 const urnId = (urn) => String(urn || "").split(":").pop();
 export const eventUrl = (urn) => `https://www.linkedin.com/events/${urnId(urn)}/`;
 // Eingabe des Admins beim Aufloesen einer Reservierung: URN, reine Zahl oder Adresse https://www.linkedin.com/events/<Zahl>/
@@ -263,14 +271,14 @@ export const liCancel = (env, urn, f = fetch) => liPatch(env, urn, { lifecycleSt
 // Fuer publish und update kommt danach noch die HeySummit-Regel (needsHs).
 const needsHs = (a) => a === "publish" || a === "update";
 const holdLeft = (li, nowMs) => Math.max(0, Math.ceil(HOLD_S - (nowMs / 1000 - li.updated)));   // Sekunden, bis eine Reservierung geklaert werden darf
-function rowRule(action, ev, li, nowMs) {
+function rowRule(action, ev, li, nowMs, known = false) {   // known: die Anfrage traegt den Beleg einer store_failed-Antwort (ticketFor), die Wartezeit entfaellt
   const w = ev ? evWindow(ev) : null;
   if (action === "publish") {   // nur oeffentliche Events, die noch nicht begonnen haben und noch keine Zeile haben (auch keine reservierte oder abgesagte)
     if (li) return li.status === "pending" ? "publish_pending" : li.status === "cancelled" ? "cancelled" : "already_published";
     return !ev ? "not_found" : !ev.li_ok ? "not_public" : !w ? "no_time" : w.start <= nowMs ? "past" : "";
   }
   if (!li) return "not_published";
-  if (action === "resolve" || action === "release") return li.status !== "pending" ? "not_pending" : holdLeft(li, nowMs) > 0 ? "publish_running" : "";
+  if (action === "resolve" || action === "release") return li.status !== "pending" ? "not_pending" : !known && holdLeft(li, nowMs) > 0 ? "publish_running" : "";
   if (li.status !== "published") return li.status === "pending" ? "publish_pending" : "cancelled";   // nach einer Absage gibt es kein Aktualisieren und kein zweites Absagen
   if (action === "cancel") return "";   // Absagen geht immer: auch wenn das m365.fm-Event versteckt, vorbei oder geloescht ist
   return !ev ? "orphan" : !ev.li_ok ? "not_public" : !w ? "no_time" : w.end <= nowMs ? "past" : "";
@@ -278,13 +286,20 @@ function rowRule(action, ev, li, nowMs) {
 const hsReason = (m, hs) => (m.reason === "no_match" && hs.error ? hs.error : m.reason);
 
 // ---------- Vorschlagsliste ----------
-// Neue Vorschlaege: oeffentliche Events (CANDIDATE), die noch nicht begonnen haben, naechstes zuerst - gefiltert in SQL, nicht erst nach dem LIMIT.
+// Neue Vorschlaege: oeffentliche Events (CANDIDATE) mit Uhrzeit, die noch nicht begonnen haben, naechstes zuerst. Die Vorauswahl geschieht in SQL und VOR dem
+// LIMIT schon nach der HeySummit-Regel: nur Events, deren Termin in den Zeitraum eines kommenden HeySummit-Events faellt (je ein Tag Luft fuer Zeitzonen; genau
+// gerechnet wird danach in rowRule/matchHeySummit). Events ohne Uhrzeit, ohne HeySummit-Zeitraum oder mit LinkedIn-Zeile verbrauchen die Grenze so nie; wird sie
+// trotzdem erreicht (mehr als CAND_MAX Events im HeySummit-Zeitraum), entfallen die fernsten und die Antwort sagt es (truncated).
 // Dazu jede LinkedIn-Zeile, an der noch etwas zu tun ist: reservierte (pending), veroeffentlichte bis zum Ende des Events (auch wenn das m365.fm-Event
 // inzwischen versteckt ist) und verwaiste (m365.fm-Event geloescht) - damit kein LinkedIn-Event ohne Absage-Knopf zurueckbleibt.
 export async function proposals(env, f = fetch, nowMs = Date.now()) {
   const db = env.DB, conn = await getConn(db), hs = await fetchHeySummit(env, f, nowMs), org = conn?.org_urn || "urn:li:organization:?";
-  const day = new Date(nowMs - 86400000).toISOString().slice(0, 10);   // grobe Vorauswahl mit einem Tag Luft fuer Zeitzonen; genau gerechnet wird in rowRule/matchHeySummit
-  const evs = rowsOf(await db.prepare(`SELECT e.*, 1 AS li_ok FROM events e WHERE ${CANDIDATE} AND COALESCE(NULLIF(e.end,''),e.start)>=? ORDER BY e.start LIMIT 300`).bind(day).all());
+  const spans = hs.events.filter((e) => e.start != null && e.end != null && e.end > nowMs).map((e) => [iso(e.start - DAY).slice(0, 10), iso(e.end + DAY).slice(0, 16)]);
+  let evs = [], truncated = false;
+  if (spans.length) {   // ohne kommendes HeySummit-Event (oder HeySummit nicht lesbar) gibt es keinen neuen Vorschlag
+    evs = rowsOf(await db.prepare(`SELECT e.*, 1 AS li_ok FROM events e WHERE ${CANDIDATE} AND e.start LIKE '%T%' AND e.start>=? AND e.id NOT IN (SELECT event_id FROM linkedin_events) AND (${spans.map(() => "(MAX(e.start,COALESCE(NULLIF(e.end,''),e.start))>=? AND e.start<=?)").join(" OR ")}) ORDER BY e.start LIMIT ${CAND_MAX + 1}`).bind(iso(nowMs - DAY).slice(0, 10), ...spans.flat()).all());
+    truncated = evs.length > CAND_MAX; if (truncated) evs.length = CAND_MAX;
+  }
   const lis = rowsOf(await db.prepare("SELECT * FROM linkedin_events ORDER BY (status='pending') DESC, published DESC LIMIT 500").all()), byEvent = new Map(lis.map((x) => [x.event_id, x]));
   const seen = new Set(evs.map((e) => e.id));
   for (const e of rowsOf(await db.prepare(`SELECT e.*, (CASE WHEN ${CANDIDATE} THEN 1 ELSE 0 END) AS li_ok FROM events e WHERE e.id IN (SELECT event_id FROM linkedin_events)`).all())) if (!seen.has(e.id)) { seen.add(e.id); evs.push(e); }
@@ -311,11 +326,29 @@ export async function proposals(env, f = fetch, nowMs = Date.now()) {
   const urgent = (x) => (x.state === "pending" || x.orphan || x.hidden ? 0 : 1);
   items.sort((a, b) => urgent(a) - urgent(b) || a.at - b.at);
   const info = { events: hs.events.length, dated: hs.events.filter((e) => e.start != null).length, talks: hs.events.reduce((n, e) => n + e.talks.length, 0), partial: !!hs.partial };
-  return { items, hs_error: hs.error || "", hs_info: info, connected: !!conn?.access_enc, org: conn?.org_name || "" };
+  return { items, hs_error: hs.error || "", hs_info: info, truncated, limit: CAND_MAX, connected: !!conn?.access_enc, org: conn?.org_name || "" };
+}
+
+// Beleg fuer "LinkedIn hat diesen Event angelegt, nur das Eintragen hier ist gescheitert" (store_failed): gebunden an Event, URN und genau diese Reservierung.
+// Wer ihn bei resolve mitschickt, muss die Wartezeit nicht abwarten - der Aufruf an LinkedIn ist ja beendet und die URN kommt vom Server selbst.
+const ticketVal = (eid, urn, stamp) => `linkedin-events-resolve|${eid}|${urn}|${stamp}`;
+const ticketFor = async (env, eid, urn, stamp) => (env.SESSION_SECRET ? sign(env.SESSION_SECRET, ticketVal(eid, urn, stamp)).catch(() => "") : "");
+// Ergebnis des LinkedIn-Aufrufs in GENAU diese Reservierung eintragen (stamp = ihr Zeitstempel): "ok", "lost" (die Reservierung gibt es nicht mehr, z. B. zu
+// Unrecht freigegeben und neu belegt - eine fremde Reservierung wird nie ueberschrieben) oder "failed" (D1 nach drei Versuchen nicht erreichbar).
+async function storeUrn(db, eid, stamp, urn, url) {
+  for (let i = 0; i < 3; i++) {
+    try {
+      const n = Number((await db.prepare("UPDATE linkedin_events SET urn=?,url=?,status='published',updated=? WHERE event_id=? AND status='pending' AND urn='' AND updated=?").bind(urn, url, now(), eid, stamp).run()).meta?.changes || 0);
+      if (n === 1) return "ok";
+      return (await db.prepare("SELECT 1 x FROM linkedin_events WHERE event_id=? AND urn=?").bind(eid, urn).first()) ? "ok" : "lost";   // "ok": ein frueherer Versuch hatte doch geschrieben
+    } catch { /* naechster Versuch */ }
+  }
+  return "failed";
 }
 
 // Aktion fuer ein Event; jede Aktion nur auf expliziten Klick (confirm === true), ohne confirm nur Vorschau.
-// ref = Handle oder { handle, event_id, urn }: event_id geht vor (verwaiste Zeilen haben kein m365.fm-Event mehr), urn nur fuer resolve.
+// ref = Handle oder { handle, event_id, urn, ticket, gone }: event_id geht vor (verwaiste Zeilen haben kein m365.fm-Event mehr), urn/ticket nur fuer resolve,
+// gone nur fuer cancel. nowMs gilt fuer die Regeln (Tests); der Zeitstempel einer Reservierung kommt immer von der echten Uhr im Moment des Eintragens.
 export async function act(env, user, action, ref, confirm, f = fetch, nowMs = Date.now()) {
   if (!user?.admin) return { error: "forbidden" };
   if (!ACTIONS.includes(action)) return { error: "bad_action" };
@@ -327,7 +360,8 @@ export async function act(env, user, action, ref, confirm, f = fetch, nowMs = Da
   const online = action === "publish" || action === "update" || action === "cancel", conn = online ? await getConn(db) : null;
   if (online && !conn?.access_enc) return { error: "not_connected" };
   if (needsHs(action) && !conn.org_urn) return { error: "no_org" };
-  const denied = rowRule(action, ev, li, nowMs); if (denied) return { error: denied, ...(li?.url ? { linkedin_url: li.url } : {}) };
+  const known = action === "resolve" && li?.status === "pending" && !!env.SESSION_SECRET && typeof q.ticket === "string" && !!urnOf(q.urn) && await verify(env.SESSION_SECRET, ticketVal(eid, urnOf(q.urn), li.updated), q.ticket);
+  const denied = rowRule(action, ev, li, nowMs, known); if (denied) return { error: denied, ...(li?.url ? { linkedin_url: li.url } : {}) };
   const name = ev?.handle || li?.handle || String(eid);
   let payload = null;
   if (needsHs(action)) {   // die HeySummit-Regel gilt beim Veroeffentlichen UND beim Aktualisieren; ist HeySummit nicht lesbar, geht nichts raus
@@ -337,20 +371,23 @@ export async function act(env, user, action, ref, confirm, f = fetch, nowMs = Da
   }
   if (action === "publish") {
     if (confirm !== true) return { preview: payload };
-    // 1) Reservieren, BEVOR LinkedIn gerufen wird: nur wer die Zeile anlegt (changes === 1), darf weiter
-    let res; try { res = await db.prepare("INSERT INTO linkedin_events(event_id,urn,url,status,hash,handle,title,starts,ends,published_by,published,updated) VALUES(?,'','','pending',?,?,?,?,?,?,?,?) ON CONFLICT(event_id) DO NOTHING").bind(ev.id, await hashOf(payload), ev.handle, clip(ev.title, 200), payload.timeRange.start, payload.timeRange.end, user.id, t, t).run(); } catch { return { error: "db_error" }; }
+    // 1) Reservieren, BEVOR LinkedIn gerufen wird: nur wer die Zeile anlegt (changes === 1), darf weiter. Der Zeitstempel ist die Uhr JETZT (nicht der Beginn
+    //    der Anfrage, HeySummit kann davor lange gebraucht haben): ab hier laeuft HOLD_S, und er ist zugleich das Kennzeichen genau dieser Reservierung
+    const stamp = now(); let res;
+    try { res = await db.prepare("INSERT INTO linkedin_events(event_id,urn,url,status,hash,handle,title,starts,ends,published_by,published,updated) VALUES(?,'','','pending',?,?,?,?,?,?,?,?) ON CONFLICT(event_id) DO NOTHING").bind(ev.id, await hashOf(payload), ev.handle, clip(ev.title, 200), payload.timeRange.start, payload.timeRange.end, user.id, stamp, stamp).run(); } catch { return { error: "db_error" }; }
     if (Number(res?.meta?.changes || 0) !== 1) return { error: "publish_pending" };
     // 2) LinkedIn. Sicher abgelehnt: Reservierung weg, neuer Versuch moeglich. Ausgang offen: Reservierung bleibt, der Admin klaert es (resolve/release)
     let r;
     try { r = await liPublish(env, payload, f); } catch (e) {
-      if (e.definite) { await db.prepare("DELETE FROM linkedin_events WHERE event_id=? AND status='pending' AND urn=''").bind(ev.id).run().catch(() => 0); return { error: errCode(e) }; }
+      if (e.definite) { await db.prepare("DELETE FROM linkedin_events WHERE event_id=? AND status='pending' AND urn='' AND updated=?").bind(ev.id, stamp).run().catch(() => 0); return { error: errCode(e) }; }
       await audit(db, user.id, "linkedin-publish-unclear", name, errCode(e)); return { error: errCode(e), pending: true };
     }
-    // 3) Ergebnis eintragen. Scheitert das, existiert der LinkedIn-Event: die Reservierung bleibt und die URN geht an den Admin zum Nachtragen
-    const url = eventUrl(r.urn); let stored = false;
-    try { stored = Number((await db.prepare("UPDATE linkedin_events SET urn=?,url=?,status='published',updated=? WHERE event_id=? AND status='pending' AND urn=''").bind(r.urn, url, t, ev.id).run()).meta?.changes || 0) === 1; } catch { /* stored bleibt false */ }
-    await audit(db, user.id, stored ? "linkedin-publish" : "linkedin-publish-unstored", name, r.urn);
-    return stored ? { ok: true, urn: r.urn, linkedin_url: url } : { error: "store_failed", pending: true, urn: r.urn, linkedin_url: url };
+    // 3) Ergebnis eintragen. Scheitert das, existiert der LinkedIn-Event: die Reservierung bleibt, URN und Beleg gehen an den Admin, der sie sofort nachtragen kann
+    const url = eventUrl(r.urn), stored = await storeUrn(db, ev.id, stamp, r.urn, url);
+    await audit(db, user.id, stored === "ok" ? "linkedin-publish" : stored === "lost" ? "linkedin-publish-lost" : "linkedin-publish-unstored", name, r.urn);
+    if (stored === "ok") return { ok: true, urn: r.urn, linkedin_url: url };
+    if (stored === "lost") return { error: "store_failed", lost: true, urn: r.urn, linkedin_url: url };   // hier gibt es nichts nachzutragen: den Event auf LinkedIn selbst entfernen
+    return { error: "store_failed", pending: true, urn: r.urn, linkedin_url: url, ticket: await ticketFor(env, ev.id, r.urn, stamp) };
   }
   if (action === "resolve") {   // Reservierung mit offenem Ausgang: der Admin hat den Event auf LinkedIn gefunden und traegt ihn ein
     const urn = urnOf(q.urn); if (!urn) return { error: "bad_urn" };
@@ -368,21 +405,28 @@ export async function act(env, user, action, ref, confirm, f = fetch, nowMs = Da
   }
   if (action === "update") {
     if (confirm !== true) return { preview: payload };
-    try { await liUpdate(env, li.urn, payload, f); } catch (e) { return { error: errCode(e) }; }
+    try { await liUpdate(env, li.urn, payload, f); } catch (e) { return { error: isGone(e) ? "li_gone" : errCode(e), ...(isGone(e) ? { linkedin_url: li.url } : {}) }; }
     await db.prepare("UPDATE linkedin_events SET hash=?,handle=?,title=?,starts=?,ends=?,updated=? WHERE event_id=? AND status='published'").bind(await hashOf(payload), ev.handle, clip(ev.title, 200), payload.timeRange.start, payload.timeRange.end, t, eid).run();   // der Status bleibt, wie er ist
     await audit(db, user.id, "linkedin-update", name, li.urn); return { ok: true, linkedin_url: li.url };
   }
   if (confirm !== true) return { preview: { action, urn: li.urn, linkedin_url: li.url } };
-  try { await liCancel(env, li.urn, f); } catch (e) { return { error: errCode(e) }; }
+  // 404/410: LinkedIn kennt den Event nicht (mehr) - etwa, weil er dort selbst geloescht wurde. Das allein traegt hier nichts aus (ein falscher Endpunkt saehe
+  // genauso aus): erst wenn der Admin es ausdruecklich bestaetigt (gone) UND LinkedIn dabei wieder 404/410 antwortet, gilt der Event als erledigt.
+  let gone = false;
+  try { await liCancel(env, li.urn, f); } catch (e) {
+    if (!isGone(e)) return { error: errCode(e) };
+    if (q.gone !== true) return { error: "li_gone", linkedin_url: li.url };
+    gone = true;
+  }
   // Abgesagt. Gibt es das m365.fm-Event noch, bleibt die Zeile als "abgesagt" stehen (kein zweites Veroeffentlichen); eine verwaiste Zeile ist damit erledigt
   if (ev) await db.prepare("UPDATE linkedin_events SET status='cancelled',updated=? WHERE event_id=? AND status='published'").bind(t, eid).run();
   else await db.prepare("DELETE FROM linkedin_events WHERE event_id=? AND status='published'").bind(eid).run();
-  await audit(db, user.id, "linkedin-cancel", name, li.urn); return { ok: true, linkedin_url: li.url };
+  await audit(db, user.id, gone ? "linkedin-cancel-gone" : "linkedin-cancel", name, li.urn); return { ok: true, linkedin_url: li.url, ...(gone ? { gone: true } : {}) };
 }
 
 // ---------- REST (/api/admin/linkedin/...) ----------
 // Jede Route steht als path === "..." da: so sieht sie tools/mcp_routes.mjs, und der Deploy verlangt den Eintrag in worker/mcp_coverage.json.
-const CODE = { forbidden: 403, not_found: 404, already_published: 409, publish_pending: 409, publish_running: 409, cancelled: 409, not_pending: 409, not_published: 409, urn_taken: 409, db_error: 503, store_failed: 502 };
+const CODE = { forbidden: 403, not_found: 404, already_published: 409, publish_pending: 409, publish_running: 409, cancelled: 409, not_pending: 409, not_published: 409, urn_taken: 409, li_gone: 409, db_error: 503, store_failed: 502 };
 export async function handleLinkedinEvents(env, request, url, path, user, J, f = fetch) {
   if (!path.startsWith("/api/admin/linkedin/")) return null;
   if (!user?.admin) return J({ error: "forbidden" }, 403);
@@ -400,7 +444,7 @@ export async function handleLinkedinEvents(env, request, url, path, user, J, f =
   const action = path === "/api/admin/linkedin/publish" ? "publish" : path === "/api/admin/linkedin/update" ? "update" : path === "/api/admin/linkedin/cancel" ? "cancel"
     : path === "/api/admin/linkedin/resolve" ? "resolve" : path === "/api/admin/linkedin/release" ? "release" : "";
   if (action && post) {
-    const b = await request.json().catch(() => ({})), r = await act(env, user, action, { handle: b?.handle, event_id: b?.event_id, urn: b?.urn }, b?.confirm === true, f);
+    const b = await request.json().catch(() => ({})), r = await act(env, user, action, { handle: b?.handle, event_id: b?.event_id, urn: b?.urn, ticket: b?.ticket, gone: b?.gone === true }, b?.confirm === true, f);
     return J(r, r.error ? CODE[r.error] || (/^(li|hs)_/.test(r.error) ? 502 : 400) : 200);
   }
   return J({ error: "not_found" }, 404);

@@ -573,8 +573,13 @@
 
   // LinkedIn-Events (Vorschlaege): nichts geht automatisch raus, jede Veroeffentlichung, Aktualisierung und Absage braucht einen Klick plus Rueckfrage.
   // Welche Knoepfe eine Zeile bekommt, sagt der Server (it.can); er prueft jede Aktion beim Ausfuehren noch einmal selbst.
+  // LIOPEN: LinkedIn hat einen Event angelegt, der Eintrag hier fehlt aber (Antwort store_failed). Je Event { urn, ticket } zum sofortigen Nachtragen bzw.
+  // unter "x<ID>" { lost, urn, url, title }, wenn es hier nichts nachzutragen gibt. Bleibt ueber das Neuladen des Reiters und der Seite stehen (sessionStorage).
+  var LIOPEN = {};
+  function liOpen(save) { try { if (save) window.sessionStorage.setItem("m365li", JSON.stringify(LIOPEN)); else { var v = JSON.parse(window.sessionStorage.getItem("m365li") || "{}"); LIOPEN = {}; Object.keys(v && typeof v === "object" ? v : {}).forEach(function (k) { if (v[k] && typeof v[k].urn === "string") LIOPEN[k] = v[k]; }); } } catch (e) { /* ohne Speicher gilt es bis zum Neuladen der Seite */ } }
+  liOpen(false);
   LOAD.li = function (note, bad) {
-    var p = panes.li, m = h("p", { class: "adm-msg" }), LIERR = { not_connected: "LinkedIn-Seite ist noch nicht verbunden.", no_org: "Bitte zuerst die Seite auswählen.", no_match: "Kein gleichzeitiges HeySummit-Event.", past: "Das Event hat schon begonnen oder ist vorbei.", no_time: "Das Event hat keine Uhrzeit.", not_public: "Das m365.fm-Event ist nicht öffentlich.", already_published: "Schon veröffentlicht.", cancelled: "Der LinkedIn-Event ist abgesagt.", not_published: "Zu diesem Event gibt es keinen LinkedIn-Event.", publish_pending: "Für dieses Event läuft schon eine Veröffentlichung oder ihr Ausgang ist offen: bitte in der Liste klären.", publish_running: "Die Veröffentlichung läuft noch, bitte zwei Minuten warten.", not_pending: "Hier ist nichts (mehr) zu klären.", store_failed: "LinkedIn hat den Event angelegt, er konnte hier aber nicht gespeichert werden.", bad_urn: "Das ist keine LinkedIn-Event-ID (die Zahl am Ende der Event-Adresse).", urn_taken: "Diese LinkedIn-Event-ID gehört schon zu einem anderen Event.", orphan: "Das m365.fm-Event gibt es nicht mehr.", db_error: "Datenbank nicht erreichbar, es wurde nichts an LinkedIn gesendet.", li_timeout: "LinkedIn hat nicht rechtzeitig geantwortet.", li_network: "LinkedIn ist nicht erreichbar.", li_no_urn: "LinkedIn hat keine Event-ID zurückgegeben.", li_error: "Der LinkedIn-Aufruf ist fehlgeschlagen.", no_heysummit_key: "HEYSUMMIT_API_KEY fehlt im Worker.", expired: "LinkedIn-Zugang abgelaufen, bitte neu verbinden.", forbidden: "Nur für Admins." };
+    var p = panes.li, m = h("p", { class: "adm-msg" }), LIERR = { not_connected: "LinkedIn-Seite ist noch nicht verbunden.", no_org: "Bitte zuerst die Seite auswählen.", no_match: "Kein gleichzeitiges HeySummit-Event.", past: "Das Event hat schon begonnen oder ist vorbei.", no_time: "Das Event hat keine Uhrzeit.", not_public: "Das m365.fm-Event ist nicht öffentlich.", already_published: "Schon veröffentlicht.", cancelled: "Der LinkedIn-Event ist abgesagt.", not_published: "Zu diesem Event gibt es keinen LinkedIn-Event.", publish_pending: "Für dieses Event läuft schon eine Veröffentlichung oder ihr Ausgang ist offen: bitte in der Liste klären.", publish_running: "Die Veröffentlichung läuft noch, bitte zwei Minuten warten.", not_pending: "Hier ist nichts (mehr) zu klären.", store_failed: "LinkedIn hat den Event angelegt, er konnte hier aber nicht gespeichert werden.", bad_urn: "Das ist keine LinkedIn-Event-ID (die Zahl am Ende der Event-Adresse).", urn_taken: "Diese LinkedIn-Event-ID gehört schon zu einem anderen Event.", orphan: "Das m365.fm-Event gibt es nicht mehr.", db_error: "Datenbank nicht erreichbar, es wurde nichts an LinkedIn gesendet.", li_timeout: "LinkedIn hat nicht rechtzeitig geantwortet.", li_network: "LinkedIn ist nicht erreichbar.", li_no_urn: "LinkedIn hat keine Event-ID zurückgegeben.", li_gone: "LinkedIn kennt diesen Event nicht (mehr). Wurde er dort gelöscht, bitte hier über „Absagen“ austragen.", li_error: "Der LinkedIn-Aufruf ist fehlgeschlagen.", no_heysummit_key: "HEYSUMMIT_API_KEY fehlt im Worker.", expired: "LinkedIn-Zugang abgelaufen, bitte neu verbinden.", forbidden: "Nur für Admins." };
     function err(j) { var e = (j || {}).error || ""; return LIERR[e] || (/^li_\d/.test(e) ? "LinkedIn antwortet mit Fehler " + e.slice(3) + "." : /^hs_/.test(e) ? "HeySummit nicht lesbar (" + e.slice(3) + "); ohne HeySummit geht nichts an LinkedIn." : "Fehler: " + (e || "unbekannt")); }
     p.textContent = ""; p.append(h("h2", { text: "LinkedIn-Events (Vorschläge)" }), m);
     var q = /[?&]li=([a-z_]+)/.exec(location.search || ""); if (q) msg(m, q[1] === "ok" ? "LinkedIn verbunden." : "Verbindung fehlgeschlagen (" + q[1] + ").", q[1] !== "ok");
@@ -596,26 +601,44 @@
         var hi = x.j.hs_info || {}, items = x.j.items || [];
         if (x.j.hs_error) msg(m, err({ error: x.j.hs_error }), true);
         else box.appendChild(h("p", { class: "mut", text: "HeySummit: " + (hi.events || 0) + " Events, davon " + (hi.dated || 0) + " mit Termin; " + (hi.talks || 0) + " Talks kommender Events geladen" + (hi.partial ? " (unvollständig)" : "") + ". Vorgeschlagen werden nur öffentliche, kommende m365.fm-Events, die sich zeitlich mit einem HeySummit-Event überschneiden." }));
+        if (x.j.truncated) box.appendChild(h("p", { class: "adm-msg bad", text: "Im Zeitraum der HeySummit-Events liegen mehr als " + (x.j.limit || "") + " kommende m365.fm-Events: geprüft wurden nur die nächsten, spätere fehlen in dieser Liste." }));
+        // Merkzettel aufraeumen: nachtragen laesst sich nur, solange die Zeile offen ist; Hinweise ohne Zeile (lost) bleiben, bis sie abgehakt sind
+        Object.keys(LIOPEN).forEach(function (k) { if (!LIOPEN[k].lost && !items.some(function (it) { return String(it.id) === k && it.state === "pending"; })) delete LIOPEN[k]; }); liOpen(true);
+        Object.keys(LIOPEN).forEach(function (k) { var o = LIOPEN[k]; if (!o.lost) return;
+          box.appendChild(h("p", { class: "adm-msg bad" }, ["LinkedIn-Event " + String(o.urn).split(":").pop() + (o.title ? " („" + o.title + "“)" : "") + " wurde angelegt, hat hier aber keinen Eintrag (die Reservierung wurde inzwischen freigegeben oder neu belegt). Bitte direkt auf LinkedIn absagen oder löschen. ",
+            /^https:\/\/www\.linkedin\.com\//.test(o.url || "") ? h("a", { href: o.url, target: "_blank", rel: "noopener", text: "Auf LinkedIn ansehen" }) : null, " ", h("button", { type: "button", class: "btn", text: "Erledigt", onclick: function () { delete LIOPEN[k]; liOpen(true); LOAD.li(); } })])); });
         if (!items.length) { box.appendChild(h("p", { class: "mut", text: "Keine Vorschläge: kein kommendes m365.fm-Event mit gleichzeitigem HeySummit-Event." })); return; }
         var body = h("tbody"), TXT = { publish: "Auf LinkedIn veröffentlichen", update: "Aktualisieren", cancel: "Absagen", resolve: "LinkedIn-ID eintragen", release: "Reservierung freigeben" };
         var ASK = { publish: "Jetzt öffentlich auf LinkedIn veröffentlichen?", update: "Änderungen an LinkedIn senden?", cancel: "Event auf LinkedIn absagen?", release: "Reservierung freigeben?\n\nNur, wenn auf LinkedIn KEIN Event dazu angelegt wurde – sonst entsteht beim nächsten Veröffentlichen ein zweiter." };
         var STATE = { proposal: "Vorschlag", pending: "Veröffentlichung offen", published: "Veröffentlicht", cancelled: "Abgesagt" };
         items.forEach(function (it) {
+          var open = it.state === "pending" ? LIOPEN[it.id] : null, openId = open ? String(open.urn).split(":").pop() : "";
+          function send(a, b, btn) {
+            btn.disabled = true;
+            api("/api/admin/linkedin/" + a, { method: "POST", body: b }).then(function (r) {
+              btn.disabled = false; var j = r.j || {};
+              if (r.s === 200) { if (LIOPEN[it.id]) { delete LIOPEN[it.id]; liOpen(true); } LOAD.li(j.gone ? "Auf LinkedIn gab es den Event nicht mehr: hier als abgesagt eingetragen." : ""); }
+              else if (j.error === "store_failed" && j.urn) {   // LinkedIn hat angelegt, der Eintrag hier fehlt: ID merken (bleibt beim Neuladen stehen) und sofort nachtragbar machen
+                if (j.lost) LIOPEN["x" + String(j.urn).split(":").pop()] = { lost: true, urn: j.urn, url: j.linkedin_url || "", title: it.title }; else LIOPEN[it.id] = { urn: j.urn, ticket: j.ticket || "" };
+                liOpen(true); LOAD.li(err(j) + " LinkedIn-Event-ID: " + String(j.urn).split(":").pop() + (j.lost ? "." : " – in der Liste über „Jetzt eintragen“ nachtragen."), true);
+              }
+              else if (j.pending) LOAD.li(err(j) + " Ob LinkedIn den Event angelegt hat, ist offen: bitte auf LinkedIn nachsehen und in der Liste klären (ID eintragen oder Reservierung freigeben).", true);
+              else if (a === "cancel" && j.error === "li_gone" && !b.gone) {   // auf LinkedIn selbst geloescht? Nur nach ausdruecklicher Bestaetigung hier austragen (der Server fragt LinkedIn dabei noch einmal)
+                if (window.confirm("LinkedIn kennt diesen Event nicht (mehr).\n\nWurde er auf LinkedIn selbst gelöscht? Dann wird er hier als abgesagt eingetragen und der Link auf der Event-Seite verschwindet.\n\nNur bestätigen, wenn es den LinkedIn-Event wirklich nicht mehr gibt.\n\n" + it.title)) { b.gone = true; send(a, b, btn); } else msg(m, err(j), true);
+              }
+              else msg(m, err(j), true);
+            });
+          }
           function act(a) { return h("button", { type: "button", class: "btn" + (a === "publish" ? " main" : ""), text: TXT[a], onclick: function (e) {
             var b = { event_id: it.id, confirm: true };
-            if (a === "resolve") { b.urn = (window.prompt("LinkedIn-Event-ID (die Zahl am Ende der Event-Adresse) oder urn:li:event:… für „" + it.title + "“:") || "").trim(); if (!b.urn) return; }
+            if (a === "resolve") { b.urn = (window.prompt("LinkedIn-Event-ID (die Zahl am Ende der Event-Adresse) oder urn:li:event:… für „" + it.title + "“:", openId) || "").trim(); if (!b.urn) return; }
             else if (!window.confirm(ASK[a] + "\n\n" + it.title + "\n" + it.when)) return;
-            e.target.disabled = true;
-            api("/api/admin/linkedin/" + a, { method: "POST", body: b }).then(function (r) {
-              e.target.disabled = false;
-              if (r.s === 200) LOAD.li();
-              else if (r.j && r.j.pending) LOAD.li(err(r.j) + (r.j.urn ? " LinkedIn-Event-ID: " + String(r.j.urn).split(":").pop() + " – bitte in der Liste über „LinkedIn-ID eintragen“ nachtragen." : " Ob LinkedIn den Event angelegt hat, ist offen: bitte auf LinkedIn nachsehen und in der Liste klären (ID eintragen oder Reservierung freigeben)."), true);
-              else msg(m, err(r.j), true);
-            }); } }); }
+            send(a, b, e.target); } }); }
           var pv = it.preview ? h("details", {}, [h("summary", { text: it.preview.name }), h("p", { class: "mut", text: it.preview.start + " – " + it.preview.end + " · " + it.preview.format + " · " + (it.preview.free ? "kostenlos" : "kostenpflichtig") }), h("pre", { style: "white-space:pre-wrap", text: it.preview.description })]) : h("span", { class: "mut", text: "–" });
-          var flags = [STATE[it.state] || it.state, it.wait ? "läuft noch oder Ausgang offen – klären in " + Math.ceil(it.wait / 60) + " Min. möglich (Reiter neu laden)" : null, it.orphan ? "m365.fm-Event gelöscht" : null, it.hidden ? "m365.fm-Event nicht mehr öffentlich" : null, it.rule ? "Aktualisieren gesperrt: " + err({ error: it.rule }) : null].filter(Boolean);
+          var flags = [STATE[it.state] || it.state, it.wait && !(open && open.ticket) ? "läuft noch oder Ausgang offen – klären in " + Math.ceil(it.wait / 60) + " Min. möglich (Reiter neu laden)" : null, it.orphan ? "m365.fm-Event gelöscht" : null, it.hidden ? "m365.fm-Event nicht mehr öffentlich" : null, it.rule ? "Aktualisieren gesperrt: " + err({ error: it.rule }) : null, open ? "LinkedIn hat den Event angelegt (ID " + openId + "), nur der Eintrag hier fehlt" : null].filter(Boolean);
           var cell = [h("span", { class: "mut", text: flags.join(" · ") })];
           if (/^https:\/\/www\.linkedin\.com\//.test(it.linkedin_url || "")) cell.push(" ", h("a", { href: it.linkedin_url, target: "_blank", rel: "noopener", text: "Auf LinkedIn ansehen" }));
+          if (open && open.ticket) cell.push(" ", h("button", { type: "button", class: "btn main", text: "Jetzt eintragen", onclick: function (e) { send("resolve", { event_id: it.id, urn: open.urn, ticket: open.ticket, confirm: true }, e.target); } }));
           (it.can || []).forEach(function (a) { if (TXT[a] && (a !== "update" || it.changed)) cell.push(" ", act(a)); });
           body.appendChild(h("tr", {}, [h("td", { text: it.title }), h("td", { text: it.when }), h("td", { text: it.preview ? it.preview.format + (it.preview.free ? ", kostenlos" : ", kostenpflichtig") : "–" }), h("td", { text: it.hs ? it.hs.event + (it.hs.talk ? " · " + it.hs.talk : "") : "–" }), h("td", {}, [pv]), h("td", {}, cell)]));
         });
