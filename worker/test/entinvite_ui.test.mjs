@@ -146,6 +146,26 @@ test("322-3: ungueltiges oder abgelehntes Token zeigt eine Meldung; andere invit
   }
 });
 
+test("322-3/322-9: der Knopf der Testmail (TEST-Token) zeigt einen Hinweis statt einer leeren Seite, uebernimmt nichts und fragt die API nicht", async () => {
+  const { raw, env } = await setup(), sent = [], oldFetch = globalThis.fetch;
+  raw.exec("INSERT INTO mail_addr(user_id,email,verified,token,created) VALUES(1,'admin@example.com',1,'',1)");
+  globalThis.fetch = async () => ({ ok: false, json: async () => ({}) });   // entities.json: hier ohne Belang
+  try {
+    const req = new Request("https://api.test/api/entityinvite/test", { method: "POST", body: JSON.stringify({ eid: "plain-person", variant: "speaker" }) });
+    const mailEnv = { ...env, MAIL_FROM: "M365.FM <system@m365.fm>", EMAIL: { send: async (m) => { sent.push(m); return { messageId: "x" }; } } };
+    assert.equal((await handleEntityInvite(mailEnv, req, new URL(req.url), "/api/entityinvite/test", { id: 1, admin: true, name: "Admin" }, J)).status, 200);
+  } finally { globalThis.fetch = oldFetch; }
+  const href = /Claim my page: (\S+)/.exec(sent[0].text)[1], u = new URL(href);
+  assert.match(u.searchParams.get("invite"), /^TEST-[A-Za-z0-9_-]{16}$/);
+  for (const user of [null, { id: 7, name: "Pia Plain" }]) {
+    const { calls, card } = await bootProfile(env, { search: u.search, hash: u.hash, user });
+    assert.match(card().textContent, /This is the link from a test mail/);
+    assert.equal(card().all((e) => e.tagName === "BUTTON" || e.tagName === "A").length, 0);
+    assert.equal(calls.some((x) => x.path.startsWith("/api/entityinvite/")), false);
+  }
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM entity_claims").get().n, 0);
+});
+
 test("322-3: Texte der Einladungskarte stehen fuer die Uebersetzung in data/ui_js_en.json und der Link der Mail passt zum Skript", () => {
   const line = PROFILE_JS.split("\n").find((l) => l.includes('M365L(de, "profile.IV"'));
   const { de, en } = JSON.parse(JSON.stringify(vm.runInNewContext("var de = false, M365L = function (d, k, a, b) { return { de: a, en: b }; };" + line + ";IV")));   // JSON: Objekte aus dem vm-Kontext vergleichbar machen
