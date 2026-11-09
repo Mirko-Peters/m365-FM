@@ -1442,7 +1442,6 @@ def build():
     import site_contributor as CONTRIB
     CONTRIB.build({"BASE": BASE, "write": write, "page": page, "header": header, "footer": footer, "community_tags": community_tags,
                    "COMMUNITY_API": COMMUNITY_API, "CI": _CI, "langs": list(dict.fromkeys(list(active) + ["en"]))})
-    import site_i18n_overrides as OVR; OVR.publish(OUT)   # Veraltet-Liste und Absatz-Ansicht fuer /redaktion/
     shutil.copy(ROOT / "assets" / "sw.js", OUT / "sw.js")
     if (ROOT / "data" / "m365con_program.json").exists():
         shutil.copy(ROOT / "data" / "m365con_program.json", OUT / "m365con_program.json")
@@ -1589,6 +1588,7 @@ def build():
     SHW.build(_ctx, (LRN._fetch_json(f"{COMMUNITY_API}/api/show/export") or {}).get("items", []))
     phase("Community (Profile, Events, Blog, Bibliothek, Podcast, Video, Feed, Shows)")
     PP.build(_ctx)
+    import site_i18n_overrides as OVR; OVR.publish(OUT)   # Veraltet-Liste und Einheiten-Ansicht fuer /redaktion/: erst HIER, nach allen note_blog/note_podpage (PP.build merkt Folgen und Show Notes vor)
     phase("Englische Show (Podpage)")
     MCPS.build(_ctx)
     LIVE.build(_ctx)   # M365 Show: Livestream-Seite + Seite je Stream (data/live.json, sync_live.py)
@@ -1944,18 +1944,11 @@ Mirko Peters, {BASE}/about/
           f'<script>window.M365ADM={{api:"{COMMUNITY_API}",base:"{BASE}"}}</script><script defer src="{BASE}/assets/admin.js"></script></main>{footer("de")}',
           noindex=True, og_type="website"))
     # Rollen-Erklaerung (/rollen/) sowie Arbeitsseiten der Redaktion (/redaktion/) und Moderation (/moderation/): alle Sprachen, noindex fuer die Arbeitsseiten
-    _ED_T = {"redaktion": {"en": ("Editorial desk", "Everything waiting for review in one list."), "de": ("Redaktion", "Alles, was auf Prüfung wartet, in einer Liste.")},
-             "moderation": {"en": ("Moderation", "Reported comments and answers, plus a read-only view of the other queues."), "de": ("Moderation", "Gemeldete Kommentare und Antworten sowie die übrigen Warteschlangen zum Lesen.")}}
     for _l in COMM_LANGS:
         _pf = ROLE.pfx_for(_l)
         _rt = ROLE._t(_l)["title"]
         write(f"{_pf}rollen/index.html", page(_l, f"{_rt} – M365.FM", _rt, ROLE.about_url(BASE, _l), f'{header(_l, "")}{ROLE.about_page_body(BASE, _l)}{footer(_l)}', og_type="website"))
-        for _k, _js in (("redaktion", "redaktion"), ("moderation", "moderation")):
-            _tt = _ED_T[_k].get(_l) or _ED_T[_k]["en"]
-            write(f"{_pf}{_k}/index.html", page(_l, f"{_tt[0]} – M365.FM", _tt[1], f"{BASE}/{_pf}{_k}/",
-                  f'{header(_l, "")}<main class="wrap" id="main"><h1>{esc(_tt[0])}</h1><p class="mut">{esc(_tt[1])}</p><div id="red"><p class="mut">…</p></div>'
-                  f'<script>window.M365ED={{api:"{COMMUNITY_API}",base:"{BASE}",lang:"{_l}",mode:"{"moderator" if _k == "moderation" else "editor"}"}}</script><script defer src="{BASE}/assets/{_js}.js"></script></main>{footer(_l)}',
-                  noindex=True, og_type="website"))
+    ROLE.desk_pages(dict(BASE=BASE, API=COMMUNITY_API, langs=COMM_LANGS, write=write, page=page, header=header, footer=footer))   # noindex, nicht in der Sitemap, ohne Daten im HTML
     write("callback/index.html", """<!doctype html><meta charset=utf-8><meta name=robots content="noindex,nofollow"><meta name=viewport content="width=device-width,initial-scale=1"><title>Anmeldung</title>
 <body style="font-family:system-ui,sans-serif;background:#101214;color:#e9ecef;padding:40px;max-width:640px;margin:auto"><h2>Anmeldung</h2><p id=m>Kein Code in der Adresse.</p>
 <pre id=c style="white-space:pre-wrap;word-break:break-all;background:#1d2126;padding:14px;border:1px solid #444"></pre><button id=b style="display:none;padding:10px 18px">Code kopieren</button>

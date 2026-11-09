@@ -136,3 +136,28 @@ def about_page_body(BASE, lang):
     t = _t(lang)
     sec = "".join(f'<section id="{r}"><h2>{ICON[r].replace("12", "20")} {NAME[r]}</h2><p>{esc(t[r])}.</p></section>' for r in ROLES)
     return f'<main class="wrap" id="main" style="max-width:44em"><h1>{esc(t["title"])}</h1>{sec}</main>'
+
+
+# Arbeitsseiten der Redaktion (/redaktion/) und Moderation (/moderation/)
+DESK = {"redaktion": {"en": ("Editorial desk", "Everything waiting for review in one list."), "de": ("Redaktion", "Alles, was auf Prüfung wartet, in einer Liste.")},
+        "moderation": {"en": ("Moderation", "Reported comments and answers, plus a read-only view of the other queues."), "de": ("Moderation", "Gemeldete Kommentare und Antworten sowie die übrigen Warteschlangen zum Lesen.")}}
+
+
+def desk_pages(g):
+    """Arbeitsseiten in allen Community-Sprachen schreiben. Regeln (tests/test_desk_pages.py): noindex, nie in einer Sitemap (g["sitemap"] wird nicht
+    angefasst), kein JSON-LD und keine Daten im HTML - die Seite ist eine leere Huelle, alles Weitere laedt assets/redaktion.js erst mit Sitzung und Rolle
+    ueber /api/editor/*. g: BASE, API, langs, write, page, header, footer. -> geschriebene Pfade"""
+    import json
+    BASE, out = g["BASE"], []
+    for l in g["langs"]:
+        pf = pfx_for(l)
+        for k in DESK:
+            tt = DESK[k].get(l) or DESK[k]["en"]
+            cfg = json.dumps({"api": g["API"], "base": BASE, "lang": l, "mode": "moderator" if k == "moderation" else "editor"}).replace("<", "\\u003c")
+            rel = f"{pf}{k}/index.html"
+            g["write"](rel, g["page"](l, f"{tt[0]} – M365.FM", tt[1], f"{BASE}/{pf}{k}/",
+                       f'{g["header"](l, "")}<main class="wrap" id="main"><h1>{esc(tt[0])}</h1><p class="mut">{esc(tt[1])}</p><div id="red"><p class="mut">…</p></div>'
+                       f'<script>window.M365ED={cfg}</script><script defer src="{BASE}/assets/{k}.js"></script></main>{g["footer"](l)}', noindex=True, og_type="website"))
+            out.append(rel)
+    return out
+

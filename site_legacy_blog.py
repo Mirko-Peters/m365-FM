@@ -59,7 +59,7 @@ def translations(BASE, posts_by_slug, fixhtml):
     out = []
     for lang in build:
         import site_i18n_overrides as OVR
-        data = OVR.apply_blog(lang, TB.load_lang(lang)); n = 0
+        data = TB.load_lang(lang); n = 0   # Handtexte der Redaktion legt nur TB.assemble(..., lang) darueber (i18n_overrides); OVR liefert der Redaktion nur zu
         for slug, p in posts_by_slug.items():
             OVR.note_blog(lang, slug, p["src"], data.get(slug))
             r = TB.assemble(p["src"], data.get(slug), lang)
