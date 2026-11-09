@@ -51,6 +51,13 @@ def strip_private_items(j):
     return j
 
 
+def public_orgs(orgs):
+    """Unbeanspruchte Firmen (Paar aus einer Entitaet, noch ohne Inhaber, orgs.unclaimed=1) bekommen KEINE eigene Seite: die Entitaetsseite
+    ist die einzige oeffentliche Seite (kein Duplikat). Der Export liefert sie schon nicht mehr aus (claimed=false); der Filter sichert aeltere
+    Zwischenspeicher und Sonderfaelle ab. Erst mit Inhaber (claimed) entsteht /community/c/<handle>/ mit sameAs auf die Entitaetsseite."""
+    return [o for o in orgs or [] if o.get("claimed", True) is not False]
+
+
 def fetch_members(api):
     import sys, time
     j = None
@@ -72,7 +79,7 @@ def fetch_members(api):
         print("FEHLER: Profil-Export nicht erreichbar und keine gespeicherte Fassung: es entstehen keine Profilseiten", file=sys.stderr)
         j = j or {}
     print(f"Profile: {len(j.get('people', []))} Personen, {len(j.get('orgs', []))} Firmen", file=sys.stderr)
-    return j.get("people", []), j.get("orgs", [])
+    return j.get("people", []), public_orgs(j.get("orgs", []))
 
 
 def experts_index(people, orgs):
@@ -258,6 +265,7 @@ def build(g, people, orgs, extra=None):
     BASE, write, page, header, footer, footer_en, LANGS = g["BASE"], g["write"], g["page"], g["header"], g["footer"], g["footer_en"], g["LANGS"]
     sitemap, TODAY = g["sitemap"], g["TODAY"]; api = g.get("api", "https://api-dub.m365.fm")
     shell = lambda lang, b: f'{header(lang, "")}<main class="wrap" style="max-width:56em">{b}</main>{footer(lang) if lang in LANGS else footer_en()}'
+    orgs = public_orgs(orgs)
     pb = {p["handle"]: p for p in people}; ob = {o["handle"]: o for o in orgs}
     css = ('<style>.mb-card{list-style:none;padding:.7em 0;border-bottom:1px solid var(--bd)}.mb-list{padding:0}.mb-tag{display:inline-block;border:1px solid var(--bd);border-radius:2em;padding:.1em .7em;margin:.15em .3em .15em 0;font-size:.88rem;background:var(--card)}'
            '.mb-tag.ok{border-color:var(--ac)}.mb-f{font:inherit;cursor:pointer;border:1px solid var(--bd);border-radius:2em;padding:.35em .9em;margin:.2em .3em .2em 0;background:var(--card);color:var(--fg);min-height:2.5rem}.mb-f[aria-pressed=true]{background:var(--ac);color:var(--onac);border-color:var(--ac)}'
@@ -419,9 +427,12 @@ def build(g, people, orgs, extra=None):
             feed = f'<h2>{esc(s["feed"])}</h2><div id="pf-feed" data-top="{esc(s["feedtop"])}" data-new="{esc(s["feed"])}"></div>' if kind == "members" else ""
             if kind == "companies": partners = partner_block(lang, lst)
             else: partners = ""
+            _prec = [o["rec"] for o in __import__("site_sponsorships").active_sponsor_orgs(__import__("site_sponsorships")._state()["today"], ENTS)] if partners else []
             b = shell(lang, f'<h1>{esc(title)}</h1><p class="mut">{esc(intro)}</p>{partners}<p><a class="btn main" href="{croot}">{esc(s["join"])}</a>{(" <a class=\"btn\" href=\"" + croot + "blog/\">Blog</a>") if lang in BLOGLANGS else ""}</p><div role="group" aria-label="{esc(s["filter"])}">{fb}</div><ul class="mb-list">{cards}</ul>{feed}{fjs}{lm}{live_js}{css}')
             ld = [{"@context": "https://schema.org", "@type": "CollectionPage", "name": title, "url": ru, "description": intro, "mainEntity": {"@type": "ItemList", "numberOfItems": len(lst), "itemListElement":
                    [{"@type": "ListItem", "position": i + 1, "item": {"@id": f"{purl(BASE, 'en', pk, it['handle'])}#{'person' if pk == 'u' else 'org'}"}} for i, it in enumerate(lst)]}}]
+            if _prec:   # Partner-Block ist als Anzeige gekennzeichnet: Sponsor auch im JSON-LD der Seite (check_schema: Kennzeichnung <-> sponsor)
+                ld[0]["sponsor"] = __import__("site_sponsorships").ld(_prec)
             write(f"{pfx2(lang)}community/{kind}/index.html", page(lang, f'{title} – M365.FM', intro, ru, b, None, ld, og_type="website", extra_head=LCSS, noindex=noidx))
             if not noidx:
                 sitemap.append((ru, TODAY, None))
