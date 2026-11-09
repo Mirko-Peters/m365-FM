@@ -1,9 +1,10 @@
-import contextlib, io, json, os, runpy, subprocess, sys, tempfile, unittest, warnings
+import contextlib, html as _html, io, json, os, random, re, runpy, subprocess, sys, tempfile, unittest, warnings
 from pathlib import Path
 from unittest import mock
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
+import content_hash as CH
 from content_hash import MAX_INDEXNOW, content_hash, content_text, indexnow_batches, indexnow_select
 
 PAGE = ('<html><body><header>Nav 12 Folgen</header><main><h1>Titel</h1><article><p>Text eins <a href="/a/">Link</a> <img src="/assets/bild.png?v=1"></p></article>'
@@ -18,6 +19,69 @@ HEAD = ('<!doctype html>\n<html lang="en" dir="ltr">\n<head>\n<meta charset="utf
         '<script type="application/ld+json">{"@type":"WebPage","dateModified":"2026-11-09"}</script>\n</head>\n')
 FULL = HEAD + PAGE[len("<html>"):]
 doc = lambda inner: f"<html><head><title>T</title></head><body><main>{inner}</main></body></html>"
+
+
+
+# Vergleichsfassung: Kopf-Felder und Hauptinhalt mit den naheliegenden Regex-Einzeilern. Sie legt fest, was herauskommen muss (auch bei kaputtem HTML), ist dort aber
+# quadratisch langsam - tools/content_hash.py liest dasselbe in einem Durchgang.
+def ref_head(html):
+    m = re.search(r"</head\s*>|<body\b", html, re.I) or re.search(r"<main\b|<article\b", html, re.I)
+    h = re.sub(r"<!--.*?-->|<(script|style)\b.*?</\1\s*>", "", html[:m.start()] if m else "", flags=re.S | re.I)
+    t = re.search(r"<title\b[^>]*>(.*?)</title\s*>", h, re.S | re.I)
+    f = {"title": _html.unescape(t.group(1)) if t else ""}
+    for tag, rest in re.findall(r"""<(meta|link)\b((?:"[^"]*"|'[^']*'|[^>"'])*)>""", h, re.I):
+        a = {k.lower(): _html.unescape(v1 or v2 or v3) for k, v1, v2, v3 in re.findall(r"""([^\s"'<>/=]+)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'<>]+))""", rest)}
+        if tag.lower() == "meta" and a.get("name", "").lower() in ("description", "robots"): f.setdefault(a["name"].lower(), a.get("content", ""))
+        elif tag.lower() == "link" and "canonical" in a.get("rel", "").lower().split(): f.setdefault("canonical", a.get("href", ""))
+    return " | ".join(re.sub(r"\s+", " ", f.get(k, "")).strip() for k in ("title", "description", "robots", "canonical"))
+
+
+def ref_extract(html):
+    html = re.sub(r"<!--.*?-->", "", html, flags=re.S)
+    for tag in ("main", "article", "body"):
+        m = re.search(rf"<{tag}\b[^>]*>(.*)</{tag}>", html, re.S | re.I)
+        if m: html = m.group(1); break
+    p = CH._P(); p.feed(html)
+    return "".join(p.cur)
+
+
+BROKEN = [   # kaputtes HTML, von Hand: Anfaenge ohne Ende, Anfuehrungszeichen ohne Partner, Tags ohne ">"
+    '<head><meta name="x" content="offen\n<meta name="robots" content="noindex"><link rel="canonical" href="/a/"></head>',
+    '<head><meta name="x" content="a\n<meta name="y" content="b\n<meta name="robots" content="noindex"></head>',
+    "<head><meta name='x' content=\"a'\n<meta name=\"robots\" content='noindex'><meta name=description content=D></head>",
+    '<head><meta a="\'" b=\'<meta name="robots" content="noindex">\'<meta name="description" content="D"></head>',
+    '<head><meta name="robots" content="noindex"<meta name="description" content="D"></head>',
+    '<head><meta name="robots" content="a>b"><meta name="description" content=\'c>d\'><link rel=canonical href=/x/></head>',
+    '<head><meta <meta <link "<meta name="robots" content="noindex">" \'<link rel="canonical" href="/a/">\'></head>',
+    '<head><title>A<title>B</title><title>C</title></head>', '<head><title <title>B</title></head>', '<head><title>A</head><body><main>x</main></body>', '<head><title a="b>c">d</TITLE ></head>',
+    '<head><!-- offen <title>A</title><meta name="robots" content="noindex"></head>', '<head><!-- a --><title>A</title><!-- offen <!-- b --><meta name="robots" content="noindex"></head>',
+    '<head><script>x<title>A</title><meta name="robots" content="noindex"></head>', '<head><script>a</script><style>offen<title>A</title><script>b</SCRIPT ><meta name="robots" content="noindex"></head>',
+    '<head><style>a</style><script>offen <style>b</style><!-- c --><title>A</title></head>', '<head><!-- <script> --><title>A</title></script><meta name=robots content=noindex></head>',
+    '<head><meta namenamename name="robots" content = "noindex" /><meta name=description content=a=b></head>', '<head><meta name="robots"content="noindex"x=y z = \'1\'></head>',
+    '<main>A <main>B</main> C', '<main>A</main> B </main> C', '<main <main>A</main>', '<main>A <article>B</article> C</body>', '<article>A <main>B', '<body>A <!-- offen <main>B</main> C</body>',
+    '<body><main>A <!-- b --> C <!-- offen </main> D</body>', '<p>ohne Wurzel <!-- a --> <a href="/x/?v=1">L</a>', '</main><main>A', '<MAIN class="a>b">C</Main>', '<main>A</main',
+]
+FRAG = ["<meta ", "<meta", "<link ", "<LINK ", "<metadata ", '"', '"', "'", "'", ">", ">", "<", " ", "\n", "=", "/", "name", "content", "rel", "href", "description", "robots", "canonical", "noindex", "Text",
+        "&amp;", "<title>", "<title ", "</title>", "</TITLE\n>", "<!--", "-->", "<script>", "<script ", "</script>", "</SCRIPT >", "<style>", "</style>", "</head>", "<body>", "<main>", "<main ", "</main>", "</MAIN>",
+        "<article>", "</article>", "</body>", "<p>", "</p>", "<a href=", "/assets/x.png?v=1", "<aside>", "</aside>", 'name="description"', 'name="robots"', 'content="', "content='", 'rel="canonical"', 'href="/a/"']
+
+
+def broken_forms(n, a="a" * 50):
+    """n kaputte Anfaenge je Form: (Name, Funktion, Seite). Ausser bei den offenen Anfuehrungszeichen (dort kaeme sonst ein Tag-Ende, und alles waere ein einziges Tag)
+    steht dahinter ein echtes robots-Tag."""
+    d = lambda head, body="<main>x</main>", tail='<meta name="robots" content="noindex">': "<html><head>" + head + tail + "</head><body>" + body + "</body></html>"
+    return [("Anfuehrungszeichen offen", CH._head, d(('<meta name="x" content="' + a + "\n") * n, tail="")), ("einfache Anfuehrungszeichen offen", CH._head, d(("<link rel='canonical' href='" + a) * n, tail="")),
+            ("Tag ohne Ende", CH._head, d("<meta x y z " * n + '"')), ("Kommentar offen", CH._head, d(("<!-- " + a) * n)), ("Skript offen", CH._head, d(("<script>" + a) * n)),
+            ("Style offen", CH._head, d(("<style>" + a) * n)), ("Titel offen", CH._head, d(("<title>" + a) * n)), ("Titel ohne Ende", CH._head, d(("<title " + a) * n).replace(">", "") + "</head>"),
+            ("langer Attributname", CH._head, d("<meta " + "a" * (10 * n) + ">")), ("Kommentar offen im Rumpf", CH._extract, d("", "<main>" + ("<!-- " + a) * n + "</main>")),
+            ("main offen", CH._extract, d("", ("<main>" + a) * n)), ("main ohne Ende", CH._extract, "<html><body>" + ("<main " + a) * n)]
+
+
+def zeitprobe(n):
+    """Laeuft in einem eigenen Prozess (test_broken_html_is_read_in_one_pass): je Form eine Zeile [Name, Sekunden, Zeichen, Ergebnis-Anfang]."""
+    import time
+    for name, f, page in broken_forms(n):
+        t = time.perf_counter(); r = f(page); print(json.dumps([name, round(time.perf_counter() - t, 3), len(page), r[:40]]), flush=True)
 
 
 class IndexNow(unittest.TestCase):
@@ -68,6 +132,35 @@ class IndexNow(unittest.TestCase):
         b = a.replace("Icon eins", "Icon zwei").replace('content="noindex"', 'content="index"').replace("<title>Alt</title>", "<title>Aelter</title>")
         self.assertEqual(content_hash(a), content_hash(b))
         self.assertNotEqual(content_hash(a), content_hash(a.replace("<title>T</title>", "<title>U</title>")))
+
+    # ---- Kaputtes HTML: gleiches Ergebnis wie die Regex-Einzeiler, aber in einem Durchgang
+    def test_broken_html_same_result_as_reference(self):
+        r = random.Random(312); cases = list(BROKEN) + [x * 30 for x in BROKEN[:8]] + [page for n in (1, 2, 40, 41) for _, _, page in broken_forms(n, "a b")]
+        for i in range(4000):
+            x = "".join(r.choice(FRAG) for _ in range(r.randint(1, 60)))
+            cases.append(x if i % 3 else "<html><head>" + x.replace("</head>", "").replace("<body>", "") + "</head><body><main>" + "".join(r.choice(FRAG) for _ in range(r.randint(0, 12))) + "</main></body></html>")
+        fields = 0
+        for x in cases + [FULL, PAGE]:
+            a = ref_head(x); fields += a != " |  |  | "
+            if a != CH._head(x) or ref_extract(x) != CH._extract(x):   # subTest nur im Fehlerfall: 4.000 Unterfaelle waeren sonst nur Ballast
+                with self.subTest(x[:300]): self.assertEqual(CH._head(x), a); self.assertEqual(CH._extract(x), ref_extract(x))
+        self.assertGreater(fields, 300)   # die Zufallsfaelle treffen wirklich Kopf-Felder
+        self.assertEqual(CH._head(BROKEN[0]), " |  | noindex | /a/"); self.assertEqual(CH._head(BROKEN[5]), " | c>d | a>b | /x/"); self.assertEqual(CH._head(BROKEN[7]), "A<title>B |  |  | ")
+
+    def test_broken_html_is_read_in_one_pass(self):
+        # 20.000 kaputte Anfaenge je Form (ueber 1 MB Kopf): die Regex-Einzeiler brauchen dafuer Minuten bis Stunden, ein Durchgang Millisekunden. Eigener Prozess mit
+        # Zeitgrenze, damit ein Rueckfall den Testlauf nicht aufhaengt.
+        code = "import sys; sys.path.insert(0, sys.argv[1]); import test_indexnow_content as T; T.zeitprobe(20000)"
+        try: p = subprocess.run([sys.executable, "-B", "-c", code, str(ROOT / "tests")], capture_output=True, text=True, timeout=120)
+        except subprocess.TimeoutExpired as e: self.fail("kaputtes HTML nach 120 s nicht gelesen; fertig waren: " + str(e.stdout))
+        self.assertEqual(p.returncode, 0, p.stderr[-500:])
+        rows = [json.loads(l) for l in p.stdout.splitlines()]
+        self.assertEqual(len(rows), 12)
+        for name, secs, size, res in rows:
+            with self.subTest(name): self.assertGreater(size, 100000); self.assertLess(secs, 5, f"{name}: {secs} s fuer {size} Zeichen")
+        res = {name: r for name, _, _, r in rows}
+        for name in ("Tag ohne Ende", "Kommentar offen", "Skript offen", "Style offen", "Titel offen", "langer Attributname"):   # der kaputte Teil bleibt stehen, das echte Tag dahinter zaehlt
+            with self.subTest(name): self.assertEqual(res[name], " |  | noindex | ")
 
     # ---- 312-3: Auslassregeln duerfen keinen Hauptinhalt schlucken
     def test_ad_prefixed_content_counts(self):   # Preistabelle der Werbe-Landingpage (site_landing.py): ad-price, ad-prices, ad-note, ad-soon sind Inhalt
