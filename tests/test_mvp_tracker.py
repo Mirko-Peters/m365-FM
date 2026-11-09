@@ -54,6 +54,48 @@ class PublicProfileTest(unittest.TestCase):
         self.assertEqual(works[0]["genre"], "Speaker/Presenter")
         self.assertNotIn("url", works[1])
 
+    def test_bad_date_does_not_stop_the_build(self):
+        """Review #318: ein Beitrag oder Feed-Eintrag mit Millisekunden-Zeitstempel brach den Bau der Profilseiten ab."""
+        written, ld = {}, {}
+        profile = {"handle": "anna", "name": "Anna", "public": True,
+                   "mvp_contributions": [{"id": 7, "title": "Talk", "url": "https://example.com/talk", "published": 1767225600000, "category": "", "topics": []}],
+                   "items": [{"id": 3, "title": "Post", "url": "https://example.com/post", "published": 1767225600000, "kind": "blog", "votes": 0}]}
+        site_members.build(fake_g(written, ld), [profile], [])
+        html = written["community/u/anna/index.html"]
+        self.assertIn('<time datetime="2026-01-01">', html)
+        self.assertIn("Blog · 2026-01-01", html)
+        works = [x for x in ld["https://www.m365.fm/community/u/anna/"] if x.get("@type") == "CreativeWork"]
+        self.assertEqual(works[0]["datePublished"], "2026-01-01")
+
+    def test_own_blog_channel_only_with_blog_page(self):
+        """Review #318: der erste Kurzpost legt den Kanal /community/u/<handle>/blog/ an; ohne Blogbeitraege gibt es diese Seite nicht (toter Link, totes sameAs)."""
+        chans = [{"kind": "blog", "url": "https://www.m365.fm/community/u/anna/blog/", "feed": ""}, {"kind": "youtube", "url": "https://www.youtube.com/@anna", "feed": ""}]
+        only = [{"kind": "blog", "url": "https://www.m365.fm/community/u/ben/blog/", "feed": ""}]
+        people = [{"handle": "anna", "name": "Anna", "public": True, "channels": chans}, {"handle": "ben", "name": "Ben", "public": True, "channels": only}]
+        person = lambda ld, h: [x for x in ld[f"https://www.m365.fm/community/u/{h}/"] if x.get("@type") == "ProfilePage"][0]["mainEntity"]
+        old = dict(site_members.BLOGS)
+        try:
+            site_members.BLOGS.clear()
+            written, ld = {}, {}
+            site_members.build(fake_g(written, ld), people, [])
+            for lang in ("", "de/"):
+                html = written[f"{lang}community/u/anna/index.html"]
+                self.assertNotIn("/community/u/anna/blog/", html, "kein Link auf eine Seite, die nicht gebaut wird")
+                self.assertIn("https://www.youtube.com/@anna", html, "andere Kanaele bleiben")
+            self.assertEqual(person(ld, "anna")["sameAs"], ["https://www.youtube.com/@anna"])
+            self.assertNotIn("Channels and links", written["community/u/ben/index.html"], "keine leere Kanal-Ueberschrift")
+            self.assertNotIn("sameAs", person(ld, "ben"))
+            # mit englischen Blogbeitraegen gibt es die Seite: der Kanal erscheint wie bisher; nur deutsche Beitraege reichen dafuer nicht
+            site_members.BLOGS.update({"anna": {"en", "de"}, "ben": {"de"}})
+            written, ld = {}, {}
+            site_members.build(fake_g(written, ld), people, [])
+            self.assertIn('href="https://www.m365.fm/community/u/anna/blog/" rel="me nofollow ugc noopener"', written["community/u/anna/index.html"])
+            self.assertIn("https://www.m365.fm/community/u/anna/blog/", person(ld, "anna")["sameAs"])
+            self.assertNotIn('href="https://www.m365.fm/community/u/ben/blog/" rel="me', written["community/u/ben/index.html"])
+        finally:
+            site_members.BLOGS.clear()
+            site_members.BLOGS.update(old)
+
     def test_no_section_without_public_contributions(self):
         written, ld = {}, {}
         site_members.build(fake_g(written, ld), [{"handle": "ben", "name": "Ben", "public": True}], [])

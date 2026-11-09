@@ -43,6 +43,18 @@ class KurzpostTest(unittest.TestCase):
         written, _, _ = build(item(""))
         self.assertNotIn("External post", " ".join(written.values()))
 
+    def test_bad_date_does_not_stop_the_build(self):
+        """Review #318: ein Zeitstempel in Millisekunden liess FEED.build mit ValueError abbrechen (der ganze Seitenbau stand)."""
+        ms = dict(item("kurzpost"), published=NOW * 1000)
+        written, _, _ = build(ms)
+        day = time.strftime("%Y-%m-%d", time.gmtime(NOW))
+        self.assertIn(f"· {day}", written[f"{FEED.path_of(ms)}index.html"], "Millisekunden werden als Datum gelesen")
+        self.assertEqual(FEED.iso(1767225600), "2026-01-01")
+        self.assertEqual(FEED.iso(1767225600000), "2026-01-01")
+        today = time.strftime("%Y-%m-%d", time.gmtime())
+        for bad in (None, "", "morgen", -1, 10 ** 30, float("nan")):
+            self.assertEqual(FEED.iso(bad), today, repr(bad))
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -37,8 +37,22 @@ def link(base, lang, it):
     return f"{base}{'/de' if lang == 'de' else ''}/{path_of(it)}"
 
 
+MAX_TS = 4102444800   # 2100-01-01 in Unix-Sekunden; alles darueber ist kein Datum in Sekunden (z. B. Millisekunden)
+
+
 def iso(ts):
-    return datetime.fromtimestamp(ts, timezone.utc).strftime("%Y-%m-%d")
+    """Datum YYYY-MM-DD aus Unix-Sekunden. Ein einzelner unbrauchbarer Wert haelt den Seitenbau nicht an: Millisekunden (Altbestand, fremde
+    Clients) werden umgerechnet, alles andere (leer, Text, ausserhalb 1970-2100) ergibt das heutige Datum. Der Worker laesst solche Werte
+    nicht mehr herein (contributions.js dateValue, contrib_sources.js publishAsPost)."""
+    try:
+        t = int(ts)
+        if t > MAX_TS:
+            t //= 1000
+        if 0 <= t <= MAX_TS:
+            return datetime.fromtimestamp(t, timezone.utc).strftime("%Y-%m-%d")
+    except (TypeError, ValueError, OverflowError, OSError):
+        pass
+    return datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
 
 def build(g, items, api):
