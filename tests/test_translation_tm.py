@@ -1,5 +1,6 @@
 """Uebersetzung (PR #315): Segment-TM nur im Speicher, Quell-Hashes je Einheit, veraltet statt Neuuebersetzung, Handtexte der Redaktion als reine Leseschicht
 (i18n_overrides, Vertrag mit #319). Alle Laeufe gehen ueber eine nachgebaute Batch-API - keine Netz- und keine API-Aufrufe."""
+import contextlib
 import io
 import json
 import os
@@ -9,6 +10,7 @@ import sys
 import tempfile
 import unittest
 import urllib.error
+import urllib.parse
 from datetime import datetime, timezone
 from pathlib import Path
 from unittest.mock import patch
@@ -86,6 +88,21 @@ class Base(unittest.TestCase):
 
     def overrides(self, kind, lang, items):
         f = OV.DIR / kind / f"{lang}.json"; f.parent.mkdir(parents=True, exist_ok=True); f.write_text(json.dumps(items, ensure_ascii=False), encoding="utf-8"); OV.clear_cache()
+
+    @contextlib.contextmanager
+    def export(self, items=None, status=0, only=None):
+        """Export der Redaktion wie im Workflow (COMMUNITY_API gesetzt, Vertrag 3): items {(kind, lang): {item: {unit: {t, sh}}}}; status = HTTP-Fehler, den jede
+        Abfrage bekommt (only: nur diese Sprachen). Die Abfragen stehen in self.asked."""
+        self.asked = []
+
+        def get(path, timeout=20):
+            self.asked.append(path); q = dict(urllib.parse.parse_qsl(path.split("?", 1)[1])) if "?" in path else {}
+            if status and (not only or q.get("lang") in only): raise urllib.error.HTTPError(path, status, "Fehler", {}, None)
+            if "/retranslate" in path: return {"items": []}
+            return {"kind": q["kind"], "lang": q["lang"], "items": (items or {}).get((q["kind"], q["lang"]), {})}
+        with patch.object(OV, "_get", get), patch.dict(os.environ, {"COMMUNITY_API": "https://api.example.test"}):
+            try: OV.use_api(); yield
+            finally: OV.use_api("")
 
     def hand(self, unit, source, text, slug="a-post", lang="de"):
         """Handtext der Redaktion fuer eine Blog-Einheit, verankert am Quelltext, den der Editor vor sich hatte (Vertrag 2)."""
@@ -321,6 +338,29 @@ class ReplaceWithTmHit(Base):
         self.run_blog([a2], "auto", "--langs", "de")
         rec = self.rec(); tpl, units, h = TB.source_of(a2)
         self.assertEqual(rec["seg"]["2"], "deV1:" + PARAS[1]); self.assertEqual(TB.stale_ids(rec, units, h), ["2"])
+
+    def test_tm_hit_never_replaces_a_paragraph_with_hand_text(self):
+        x = "X boilerplate call to action: subscribe to the M365.FM podcast today."
+        a = post(PARAS[:3], iso=OLD); b = post([x, PARAS[7]], slug="b-post", title="Other", iso=OLD); self.run_blog([a, b], "run", "--langs", "de,fr")
+        self.hand("2", PARAS[1], "HAND zwei."); a2 = post([PARAS[0], x, PARAS[2]], iso=OLD)   # der Absatz mit Handtext wird im Original durch einen Text ersetzt, den das TM kennt
+        self.run_blog([a2, b], "auto", "--langs", "de,fr")
+        self.assertEqual(self.rec()["seg"]["2"], "deV1:" + PARAS[1]); self.assertIn("<p>HAND zwei.</p>", self.html(a2)); self.assertEqual(self.stale(), {"de": {"a-post": ["2"]}})
+        self.assertEqual(self.rec("fr")["seg"]["2"], "frV1:" + x)   # ohne Handtext nimmt die Sprache den Treffer
+        n = len(self.api.batches); self.run_blog([a2, b], "stale", "--langs", "de")
+        self.assertEqual(len(self.api.batches), n); self.assertEqual(self.rec()["seg"]["2"], "deV1:" + PARAS[1])   # gesperrt, auch fuer den kostenlosen Treffer
+        self.run_blog([a2, b], "stale", "--langs", "de", "--force-manual")
+        self.assertEqual(len(self.api.batches), n); self.assertEqual(self.rec()["seg"]["2"], "deV1:" + x); self.assertNotIn("HAND", self.html(a2))
+
+    def test_no_tm_replacement_while_the_hand_texts_are_unknown(self):
+        x = "X boilerplate call to action: subscribe to the M365.FM podcast today."
+        a = post(PARAS[:3], iso=OLD); b = post([x, PARAS[7]], slug="b-post", title="Other", iso=OLD); self.run_blog([a, b], "run", "--langs", "de")
+        a2 = post([PARAS[0], x, PARAS[2]], iso=OLD)
+        with self.export(status=503): self.run_blog([a2, b], "auto", "--langs", "de")
+        self.assertEqual(self.rec()["seg"]["2"], "deV1:" + PARAS[1]); self.assertEqual(self.rec()["sh"]["2"], OV.anchor("lblog", "2", PARAS[1]))   # alter Text bleibt, veraltet
+        with self.export({}): self.run_blog([a2, b], "auto", "--langs", "de")
+        self.assertEqual(self.rec()["seg"]["2"], "deV1:" + PARAS[1]); self.assertEqual(self.stale(), {"de": {"a-post": ["2"]}})   # gelistet, sobald die Handtexte wieder bekannt sind
+        with self.export({}): self.run_blog([a2, b], "stale", "--langs", "de")
+        self.assertEqual(self.rec()["seg"]["2"], "deV1:" + x); self.assertEqual(len(self.api.batches), 1)
 
     def test_stale_mode_takes_a_later_tm_hit_for_free(self):
         a = post(PARAS[:3], iso=OLD); self.run_blog([a], "run", "--langs", "de")
@@ -584,6 +624,223 @@ class ShowAndNotes(Base):
         self.assertEqual(json.loads((TS.OUT / "src" / "notes_fr.json").read_text())["ep-1"], TS.notes_hash(e2))
         self.assertEqual(self.run_notes([e2], "--stale", "--langs", "de", "--force-manual"), ["de__7"])
         self.assertEqual(OV.apply_notes("de", json.loads((TS.OUT / "notes_de.json").read_text()))["ep-1"], "<p>Hand</p>")   # der Handtext bleibt die angezeigte Fassung
+
+
+# ---------------- Sperre unbekannt: Export der Redaktion nicht abrufbar (Vertrag 5) ----------------
+class ExportUnreachable(Base):
+    def setUp(self):
+        super().setUp(); self.p = post(); self.run_blog([self.p], "run", "--langs", "de")
+        self.edited = list(PARAS); self.edited[2] = "Paragraph three was rewritten in the English original, about Intune."; self.p2 = post(self.edited)
+        self.ov = {("lblog", "de"): {"a-post": {"3": {"t": "HAND drei.", "sh": OV.anchor("lblog", "3", PARAS[2])}}}}
+
+    def pending(self): return [b["id"] for b in json.loads((TB.OUT / "batches.json").read_text("utf-8"))]
+
+    def test_failed_state_per_kind_and_language(self):
+        with self.export(self.ov, status=503, only=("fr",)):
+            self.assertEqual(OV.load("lblog", "de"), self.ov[("lblog", "de")]); self.assertFalse(OV.failed("lblog", "de"))
+            self.assertEqual(OV.load("lblog", "fr"), {}); self.assertTrue(OV.failed("lblog", "fr")); self.assertEqual(OV.failed("lblog"), ["fr"])
+            OV.load("notes", "de"); self.assertTrue(OV.failed("notes", "de"))   # nach dem Fehlschlag fragt der Lauf nicht weiter: genauso unbekannt
+            self.assertEqual(len(self.asked), 2)
+        with self.export(status=404):
+            self.assertEqual(OV.load("lblog", "de"), {}); self.assertEqual(OV.failed("lblog"), [])   # Endpunkt noch nicht ausgerollt: es gibt keine Handtexte
+        with patch.object(OV, "_get", lambda path, timeout=20: {"error": "kaputt"}):
+            OV.use_api("https://api.example.test"); OV.load("lblog", "de"); self.assertTrue(OV.failed("lblog", "de")); OV.use_api("")   # Antwort ohne items
+        OV.load("lblog", "de"); self.assertEqual(OV.failed("lblog"), [])   # ohne eingestellten Export gelten die Dateien
+
+    def test_stale_run_stops_and_the_hand_text_survives(self):
+        with self.export(self.ov):
+            self.run_blog([self.p2], "auto", "--langs", "de")
+            self.assertIn("<p>HAND drei.</p>", self.html(self.p2)); self.assertEqual(self.stale(), {"de": {"a-post": ["3"]}})
+        with self.export(status=503):
+            with self.assertRaises(SystemExit) as cm: self.run_blog([self.p2], "stale", "--langs", "de")
+            self.assertIn("Export der Redaktion nicht abrufbar", str(cm.exception)); self.assertIn("de", str(cm.exception))
+        self.assertEqual(len(self.api.batches), 1); self.assertEqual(self.pending(), [])   # nichts gesendet, nichts bezahlt
+        self.assertEqual(self.rec()["seg"]["3"], "deV1:" + PARAS[2]); self.assertEqual(self.rec()["sh"]["3"], OV.anchor("lblog", "3", PARAS[2]))
+        self.assertEqual(self.stale(), {"de": {"a-post": ["3"]}})   # Status wurde trotzdem geschrieben
+        with self.export(self.ov): self.assertIn("<p>HAND drei.</p>", self.html(self.p2))   # der Anker passt weiter: Handtext nicht verwaist
+
+    def test_redo_does_not_touch_existing_text_but_new_posts_still_go_out(self):
+        b = post(PARAS[4:6] + ["A never translated paragraph about Loop components."], slug="b-post", title="Second post")
+        self.api.gen = "V2"
+        with self.export(status=503):
+            with self.assertRaises(SystemExit): self.run_blog([self.p, b], "run", "--langs", "de", "--redo")
+        self.assertEqual(self.api.sent(), ["T", "D", "1", "2", "3"])   # a-post: nichts Vorhandenes; b-post ist nie uebersetzt und geht ganz hinaus (--redo: ohne TM)
+        self.assertEqual(self.rec()["seg"]["1"], "deV1:" + PARAS[0]); self.assertTrue(self.rec(slug="b-post")["ok"])
+        c = post(["A third post paragraph that nobody has translated so far, about Viva."], slug="c-post", title="Third post")
+        with self.export(status=503): self.run_blog([self.p, b, c], "auto", "--langs", "de")   # Automatik (nur Neues) laeuft ohne Fehler weiter
+        self.assertTrue(self.rec(slug="c-post")["ok"])
+
+    def test_stale_mode_takes_no_tm_hit_while_the_lock_is_unknown(self):
+        x = "X boilerplate call to action: subscribe to the M365.FM podcast today."
+        a2 = post([PARAS[0], x] + PARAS[2:], iso=OLD); b = post([x, PARAS[7]], slug="b-post", title="Other")
+        self.run_blog([a2, b], "run", "--langs", "de"); self.assertEqual(self.rec()["seg"]["2"], "deV1:" + PARAS[1])
+        with self.export(status=503):
+            with self.assertRaises(SystemExit): self.run_blog([a2, b], "stale", "--langs", "de")
+        self.assertEqual(self.rec()["seg"]["2"], "deV1:" + PARAS[1])   # auch ohne API wird nichts Vorhandenes ersetzt
+        with self.export({}): self.run_blog([a2, b], "stale", "--langs", "de")
+        self.assertEqual(self.rec()["seg"]["2"], "deV1:" + x)
+
+    def test_404_force_manual_and_other_languages_do_not_stop_the_run(self):
+        self.run_blog([self.p], "run", "--langs", "fr"); self.api.gen = "V2"
+        with self.export(status=503, only=("fr",)):
+            self.run_blog([self.p2], "stale", "--langs", "de")   # fr gehoert nicht zum Lauf (nur der Status sieht es an)
+            self.assertEqual(OV.failed("lblog"), ["fr"])
+        self.assertEqual(self.api.sent(), ["3"]); self.assertEqual(self.rec()["seg"]["3"], "deV2:" + self.edited[2]); self.assertEqual(self.rec("fr")["seg"]["3"], "frV1:" + PARAS[2])
+        e4 = list(self.edited); e4[3] = NEW4; p4 = post(e4)
+        with self.export(status=404): self.run_blog([p4], "stale", "--langs", "de")   # Endpunkt noch nicht ausgerollt: keine Handtexte, keine Sperre
+        self.assertEqual(self.api.sent(), ["4"])
+        e5 = list(e4); e5[4] = "Paragraph five got a new wording about Teams Premium."; p5 = post(e5)
+        with self.export(status=503): self.run_blog([p5], "stale", "--langs", "de", "--force-manual")   # braucht die Sperre nicht
+        self.assertEqual(self.api.sent(), ["5"]); self.assertNotIn("de", self.stale())
+
+    def test_collect_holds_batches_that_replace_text_until_the_export_is_back(self):
+        b = post(["A never translated paragraph about Loop components."], slug="b-post", title="Second post")
+        with self.export({}):
+            self.run_blog([self.p2], "submit", "--stale", "--langs", "de")
+            self.run_blog([self.p2, b], "submit", "--langs", "de")
+        self.assertEqual(self.pending(), ["b2", "b3"]); self.api.gen = "V2"
+        with self.export(status=503):
+            self.run_blog([self.p2, b], "collect")
+            self.assertEqual(self.pending(), ["b2"])   # Neuuebersetzung bleibt liegen, der neue Beitrag ist gespeichert
+            self.assertEqual(self.rec()["seg"]["3"], "deV1:" + PARAS[2]); self.assertTrue(self.rec(slug="b-post")["ok"])
+            slept = []
+            with patch.object(TB.time, "sleep", slept.append): self.run_blog([self.p2, b], "auto", "--langs", "de")
+            self.assertEqual(slept, []); self.assertEqual(self.pending(), ["b2"]); self.assertEqual(len(self.api.batches), 3)   # wartet nicht auf einen zurueckgehaltenen Batch
+        with self.export({}): self.run_blog([self.p2, b], "collect")
+        self.assertEqual(self.pending(), []); self.assertEqual(self.rec()["seg"]["3"], "deV2:" + self.edited[2])
+
+    def test_collect_never_overwrites_existing_text_while_the_lock_is_unknown(self):
+        tpl, units, h = TB.source_of(self.p); rec = self.rec()
+        with self.export(status=503):
+            man = TB.locked({}, "de", self.p, units, h, rec)
+            self.assertEqual(set(man), set(rec["seg"])); self.assertFalse(TB.store(rec, "3", PARAS[2], "neu", man, True))
+            self.assertEqual(TB.locked({"force_manual": True}, "de", self.p, units, h, rec), {})
+        self.assertEqual(TB.locked({}, "de", self.p, units, h, rec), {})
+
+    def test_apply_keeps_job_and_answer_while_the_lock_is_unknown(self):
+        with patch.object(TB, "posts", lambda: [self.p]):
+            TB.BY_SLUG["a-post"] = self.p
+            TB.prepare(self.args("prepare", "--langs", "de", "--slugs", "a-post", "--redo"))
+            fin = TB.WORK / "de" / f"{TB.key('a-post')}.in.txt"; fout = fin.with_name(fin.name.replace(".in.txt", ".out.txt")); job = fin.read_text("utf-8")
+            fout.write_text("\n".join(f"[[{i}]] deAG:{t}" for i, t in TB.parse(job.split("\n", 1)[1]).items()) + "\n", encoding="utf-8")
+        with self.export(status=503):
+            with self.assertRaises(SystemExit): self.run_blog([self.p], "apply")
+        self.assertTrue(fout.exists()); self.assertEqual(fin.read_text("utf-8"), job); self.assertEqual(self.rec()["seg"]["1"], "deV1:" + PARAS[0])
+        with self.export({}): self.run_blog([self.p], "apply")
+        self.assertFalse(fin.exists()); self.assertEqual(self.rec()["seg"]["1"], "deAG:" + PARAS[0])
+        with self.export(status=503):   # prepare legt fuer vorhandene Texte keinen Auftrag an
+            with self.assertRaises(SystemExit): self.run_blog([self.p], "prepare", "--langs", "de", "--slugs", "a-post", "--redo")
+        self.assertFalse(fin.exists())
+
+    def test_stale_list_of_a_language_stays_while_its_hand_texts_are_unknown(self):
+        e = list(PARAS); e[3] = NEW4; p4 = post(e)
+        ov = {("lblog", "de"): {"a-post": {"4": {"t": "HAND vier, schon nachgezogen.", "sh": OV.anchor("lblog", "4", NEW4)}}}}
+        with self.export(ov): self.run_blog([p4], "auto", "--langs", "de")
+        self.assertEqual(self.stale(), {})   # Handtext gehoert zum aktuellen Original: nicht veraltet
+        with self.export(status=503): self.run_blog([p4], "auto", "--langs", "de")
+        self.assertEqual(self.stale(), {})   # ohne die Handtexte saehe die Einheit veraltet aus - die Liste bleibt, wie sie war
+
+    def test_show_stale_run_stops_new_episodes_still_go_out(self):
+        s = ShowAndNotes("run_show"); s.__dict__.update(self.__dict__)   # derselbe nachgebaute Lauf wie in ShowAndNotes
+        e = ep(); s.run_show([e], "--langs", "de,fr"); f = TS.OUT / "stale.json"
+        e2 = ep(summary="Episode summary text, now edited."); s.run_show([e2], "--langs", "de,fr")
+        before = json.loads(f.read_text()); self.assertEqual(before, {"de": {"ep-1": ["summary"]}, "fr": {"ep-1": ["summary"]}})
+        with self.export(status=503):
+            with self.assertRaises(SystemExit) as cm: s.run_show([e2], "--stale", "--langs", "de,fr")
+            self.assertIn("de, fr", str(cm.exception))
+        self.assertEqual(json.loads((TS.OUT / "de.json").read_text())["ep-1"], ["T-de__ep-1", "S-neu"]); self.assertEqual(json.loads(f.read_text()), before)
+        self.assertEqual(json.loads((TS.OUT / "src" / "de.json").read_text())["ep-1"], TS.show_hash(e))   # nichts gesendet, Hash unveraendert
+        with self.export(status=503): self.assertEqual(s.run_show([e2, ep(slug="ep-2")], "--langs", "de"), ["de__ep-2"])   # Neues laeuft weiter
+        with self.export(status=503): self.assertEqual(s.run_show([e2], "--stale", "--langs", "de", "--force-manual"), ["de__ep-1"])
+        with self.export(status=404): self.assertEqual(s.run_show([e2], "--stale", "--langs", "fr"), ["fr__ep-1"])
+
+    def test_show_stale_list_of_a_language_stays_while_its_hand_texts_are_unknown(self):
+        s = ShowAndNotes("run_show"); s.__dict__.update(self.__dict__)
+        e = ep(); s.run_show([e], "--langs", "de,fr"); f = TS.OUT / "stale.json"; e2 = ep(summary="Episode summary text, now edited.")
+        ov = {("episode", "de"): {"ep-1": {"summary": {"t": "Hand, schon nachgezogen", "sh": TS.anchors(e2)["summary"]}}}}
+        with self.export(ov): s.run_show([e2], "--langs", "de,fr")
+        self.assertEqual(json.loads(f.read_text()), {"fr": {"ep-1": ["summary"]}})   # de: Handtext gehoert zum aktuellen Original
+        with self.export(status=503): self.assertEqual(s.run_show([e2], "--langs", "de,fr"), [])   # kein --stale: laeuft ohne Fehler durch
+        self.assertEqual(json.loads(f.read_text()), {"fr": {"ep-1": ["summary"]}})   # ohne die Handtexte saehe de veraltet aus - die Liste bleibt
+
+    def test_show_run_with_one_unknown_language_translates_the_others_and_ends_red(self):
+        s = ShowAndNotes("run_show"); s.__dict__.update(self.__dict__)
+        e = ep(); s.run_show([e], "--langs", "de,fr"); e2 = ep(summary="Episode summary text, now edited."); done = []
+        with self.export(status=503, only=("fr",)), patch.object(OV, "wishes", lambda kind: {"de": {"ep-1": []}, "fr": {"ep-1": []}}), patch.object(OV, "wishes_done", lambda kind, d: done.append(list(d))):
+            with self.assertRaises(SystemExit) as cm: s.run_show([e2], "--wishes", "--langs", "de,fr")
+        self.assertIn(" in fr.", str(cm.exception)); self.assertEqual(done, [[("de", "ep-1")]])   # der Wunsch fuer fr bleibt offen
+        self.assertEqual(json.loads((TS.OUT / "src" / "de.json").read_text())["ep-1"], TS.show_hash(e2)); self.assertEqual(json.loads((TS.OUT / "src" / "fr.json").read_text())["ep-1"], TS.show_hash(e))
+        self.assertEqual(json.loads((TS.OUT / "stale.json").read_text()), {})   # de erledigt; die Liste von fr bleibt, wie sie vor dem Lauf war
+
+    @unittest.skipIf(TN is None, "translate_notes braucht requests")
+    def test_notes_stale_run_stops(self):
+        s = ShowAndNotes("run_notes"); s.__dict__.update(self.__dict__)
+        e = ep(); s.run_notes([e], "--langs", "de,fr"); e2 = ep(notes="<p>" + "Other notes about Outlook. " * 12 + "</p>"); f = TS.OUT / "stale.json"
+        ov = {("notes", "de"): {"ep-1": {"html": {"t": "<p>Hand, schon nachgezogen</p>", "sh": TS.anchors(e2)["html"]}}}}
+        with self.export(ov): s.run_notes([e2], "--langs", "de")
+        self.assertEqual(json.loads(f.read_text()), {})   # Handtext gehoert zum aktuellen Original
+        with self.export(status=503):
+            self.assertEqual(s.run_notes([e2], "--langs", "de"), []); self.assertEqual(json.loads(f.read_text()), {})   # Liste der Sprache bleibt, kein Fehler ohne --stale
+            with self.assertRaises(SystemExit): s.run_notes([e2], "--stale", "--langs", "de")
+        self.assertEqual(json.loads((TS.OUT / "notes_de.json").read_text())["ep-1"], "<p>N-de__7</p>")
+        with self.export(status=503, only=("fr",)):
+            with self.assertRaises(SystemExit): s.run_notes([e2], "--stale", "--langs", "de,fr", "--slugs", "ep-1")   # de wird neu uebersetzt, fr ist unbekannt -> der Lauf endet rot
+        hs = lambda l: json.loads((TS.OUT / "src" / f"notes_{l}.json").read_text())["ep-1"]
+        self.assertEqual((hs("de"), hs("fr")), (TS.notes_hash(e2), TS.notes_hash(e)))
+        with self.export({}): self.assertEqual(s.run_notes([e2], "--stale", "--langs", "de,fr"), ["fr__7"])
+
+
+# ---------------- Protokoll der Handtexte, Bilder nur aus dem eigenen Bucket ----------------
+class ReportAndImages(Base):
+    def test_report_counts_each_hand_text_once(self):
+        p = post(); self.run_blog([p], "run", "--langs", "de")
+        self.overrides("lblog", "de", {"a-post": {"2": "ohne Anker", "3": {"t": "HAND drei.", "sh": OV.anchor("lblog", "3", PARAS[2])}, "5": {"t": "weg", "sh": "00000000"},
+                                                  "6": {"t": "<script>x()</script>", "sh": OV.anchor("lblog", "6", PARAS[5])}}, "kein-beitrag": {"1": {"t": "x", "sh": "01234567"}, "T": {"t": "y", "sh": "01234567"}}})
+        for _ in range(3): self.assertIn("HAND drei.", self.html(p))   # der Bau sieht einen Beitrag mehrfach an (Seite, Liste, Feed)
+        TB.editor_view("de", p, self.rec())
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out): got = OV.report()
+        got = {k[2].split(" (")[0]: n for k, n in got.items() if k[:2] == ("lblog", "de")}
+        self.assertEqual(got, {"angewendet": 1, "ohne Quell-Anker": 1, "verwaist": 1, "nach der Bereinigung leer": 1, "ohne angezeigte Fassung des Eintrags": 2})
+        self.assertIn("Handtexte lblog/de: 1 ohne Quell-Anker (nicht angewendet)", out.getvalue()); self.assertIn("Handtexte lblog/de: 1 angewendet", out.getvalue())
+
+    def test_report_for_show_and_notes(self):
+        self.overrides("episode", "de", {"ep-1": {"title": "Eigener Titel", "summary": "<b></b>"}, "ep-9": {"title": "ohne Maschinenfassung"}})
+        self.overrides("notes", "de", {"ep-1": {"html": "<p>Eigene Notes</p>"}, "ep-9": {"html": "<p>x</p>"}})
+        for _ in range(2): OV.apply_show("de", {"ep-1": ["Maschine", "Zusammenfassung"]}); OV.apply_notes("de", {"ep-1": "<p>x</p>"})   # site_podpage und site_register lesen beide
+        with contextlib.redirect_stdout(io.StringIO()): got = OV.report()
+        self.assertEqual(got, {("episode", "de", "angewendet"): 1, ("episode", "de", "nach der Bereinigung leer (nicht angewendet)"): 1, ("episode", "de", "ohne Maschinenfassung der Folge (nicht angewendet)"): 1,
+                               ("notes", "de", "angewendet"): 1, ("notes", "de", "ohne Maschinenfassung der Folge (nicht angewendet)"): 1})
+
+    def test_site_build_reports_at_the_end(self):
+        s = (ROOT / "generate_site.py").read_text("utf-8"); at = s.index("_OVR.report()")
+        for before in ("CBL.translations(", "LBL.items(BASE)", "PP.build(_ctx)", "REG.build(write"): self.assertLess(s.index(before), at, before)   # nach allen Lesern der Handtexte
+
+    def test_hand_text_keeps_only_images_of_the_bucket_or_of_the_post(self):
+        own, src, evil = "https://img.m365.fm/blog/a.webp", "https://cdn.example.org/pic.png?a=1&b=2", "https://evil.example/x.png"
+        self.assertEqual(OV.clean("lblog", "1", f'<img src="{evil}" onerror=alert(1)>'), "")
+        self.assertEqual(OV.clean("lblog", "1", f'Text <img src="{evil}"> bleibt <img src="{own}" alt="A">'), f'Text  bleibt <img src="{own}" alt="A" loading="lazy">')
+        self.assertEqual(OV.clean("lblog", "1", '<img src="https://img.m365.fm.evil.example/x.png">'), "")
+        self.assertEqual(OV.clean("notes", "html", f'<p>ok</p><img src="{evil}">', '<p>Maschine</p>'), "<p>ok</p>")
+        ref = TB.source_of(post([f'Intro with a picture <img src="{src}" alt="Chart"> and some more text about Fabric.'], slug="img-post"))[1][-1][1]
+        self.assertIn("&amp;b=2", ref)
+        self.assertIn("pic.png", OV.clean("lblog", "1", f'Hand <img src="{src}" alt="Diagramm">', ref)); self.assertNotIn("pic.png", OV.clean("lblog", "1", f'Hand <img src="{src}">'))
+        import site_r2 as R2
+        with patch.object(R2, "MAP", {"https://old.example/pod.png": own}), patch.object(R2, "_RX", re.compile(re.escape("https://old.example/pod.png"))):
+            self.assertIn("old.example/pod.png", OV.clean("lblog", "1", 'x <img src="https://old.example/pod.png">'))   # der Seitenbau schreibt die Adresse auf den Bucket um
+            self.assertEqual(OV.clean("lblog", "1", f'<img src="{evil}?u=https://old.example/pod.png">'), "")
+
+    def test_images_in_shown_versions(self):
+        src = "https://cdn.example.org/pic.png"; paras = [f'Intro with a picture <img src="{src}" alt="Chart"> and some more text about Fabric.', PARAS[1], PARAS[2]]
+        p = post(paras, slug="img-post"); self.run_blog([p], "run", "--langs", "de")
+        u = dict(TB.source_of(p)[1])
+        self.overrides("lblog", "de", {"img-post": {"2": {"t": f'Bild umgehaengt <img src="{src}">', "sh": OV.anchor("lblog", "2", u["2"])},
+                                                    "3": {"t": 'Fremdes Bild <img src="https://evil.example/x.png"> im Handtext', "sh": OV.anchor("lblog", "3", u["3"])}}})
+        html = self.html(p)
+        self.assertIn("Bild umgehaengt <img", html); self.assertIn("Fremdes Bild  im Handtext", html); self.assertNotIn("evil.example", html)
+        self.overrides("notes", "de", {"ep-1": {"html": f'<p>Hand</p><img src="{src}"><img src="https://evil.example/x.png">'}})
+        got = OV.apply_notes("de", {"ep-1": f'<p>Maschine</p><img src="{src}" alt="" loading="lazy">'})["ep-1"]
+        self.assertIn(src, got); self.assertNotIn("evil.example", got); self.assertIn("<p>Hand</p>", got)
 
 
 # ---------------- 315-8: Workflows ----------------

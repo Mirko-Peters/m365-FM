@@ -17,6 +17,8 @@ Neu uebersetzen nur auf Anforderung: --slugs/--redo (ganzer Beitrag; der alte Te
 (nur die geaenderten Einheiten veralteter Fassungen, --langs/--slugs/--limit; --wishes = nur die Wunschliste der Redaktion).
 Von Hand bearbeitete Einheiten (Redaktion, i18n_overrides.py: kind lblog) sind eine reine Leseschicht ueber dem Maschinentext: assemble legt sie beim Seitenbau darueber, hier
 sperren sie die Einheit nur fuer die Uebersetzung (auch bei --redo; Ausnahme --force-manual). In data/blog_i18n steht ausschliesslich Maschinentext.
+Ist der Export der Redaktion eingestellt, aber nicht abrufbar (kein 404), ist die Sperre unbekannt: dann ersetzt kein Lauf vorhandenen Text (locked, collect haelt
+Batches mit Neuuebersetzungen zurueck) und stale/--redo enden mit Fehler; nie uebersetzte Einheiten laufen weiter (i18n_overrides Vertrag 5).
 Quell-Hashes: je Einheit merkt der Datensatz den Hash des Quelltexts, aus dem sie uebersetzt wurde (rec.sh, 8 Hex). Aendert sich das Original, ordnet realign die alten Texte
 den neuen Einheiten zu (auch im Seitenbau, dort nur im Speicher); settle() speichert das vor jedem Lauf fuer ALLE Beitraege. Der Altbestand hat kein rec.sh: fuer ihn liegt einmalig
 ein sprachunabhaengiger Schnappschuss der Quell-Hashes in data/blog_i18n/srch/ (rund 1,4 MB), die Schalen selbst werden dafuer nicht neu geschrieben.
@@ -245,7 +247,7 @@ def manual_ids(lang, slug, units, h, rec):
     if not ov: return {}
     a8 = unit_hashes(units, h)[1]
     placed, lost = OV.place(ov, a8, rec_hashes(rec, a8) if rec and rec.get("h") == h else None)
-    if lost: OV.note("lblog", lang, "verwaist (Absatz geloescht oder neu uebersetzt, nicht angewendet)", len(lost))
+    for u in lost: OV.note("lblog", lang, "verwaist (Absatz geloescht oder neu uebersetzt, nicht angewendet)", key=(slug, u))
     return placed
 
 
@@ -267,10 +269,11 @@ def store(rec, i, t, text, manual=(), force=False):
     rec["seg"][i] = text; rec.setdefault("sh", {})[i] = h8(unit_hash(i, t)); return True
 
 
-def realign(old, osh, units, h, tm=None):
+def realign(old, osh, units, h, tm=None, keep=()):
     """Quelle hat sich geaendert: vorhandene Uebersetzungen auf die neuen ids abbilden (difflib ueber die Quell-Anker osh des alten Datensatzes). Gleiche Einheiten
     wandern mit (auch bei eingefuegten Absaetzen), geaenderte behalten den alten Text (-> stale), neue bleiben offen. Kennt das TM genau den neuen Quelltext
-    eines ersetzten Absatzes, bleibt er offen und resolve nimmt den Treffer statt des Textes eines anderen Absatzes."""
+    eines ersetzten Absatzes, bleibt er offen und resolve nimmt den Treffer statt des Textes eines anderen Absatzes - ausser der alte Absatz traegt einen Handtext
+    der Redaktion (keep: deren Quell-Anker): dann bleibt sein Text als veraltet stehen, sonst passte der Handtext zu nichts mehr und verschwaende."""
     rec = {**new_rec(h, units), **{k: old[k] for k in ("m", "ts") if k in old}}
     opairs = [(i, osh[i]) for i in sorted(osh, key=ordkey)]
     full, a8 = unit_hashes(units, h); new = [(i, a8[i]) for i, _ in units]
@@ -281,24 +284,26 @@ def realign(old, osh, units, h, tm=None):
         elif tag == "replace":
             for k in range(min(i2 - i1, j2 - j1)):
                 (oi, oh), (ni, nh) = opairs[i1 + k], new[j1 + k]
-                if kind_of(oi) != kind_of(ni) or (tm is not None and tm.get(full[ni])): continue
+                if kind_of(oi) != kind_of(ni) or (tm is not None and oh not in keep and tm.get(full[ni])): continue
                 rec["seg"][ni] = old["seg"][oi]; rec["sh"][ni] = oh   # alter Hash bleibt -> stale
     return rec
 
 
-def current(slug, rec, units, h, tm=None):
+def current(slug, rec, units, h, tm=None, keep=()):
     """Datensatz passend zum aktuellen Original, ohne etwas zu speichern oder zu veraendern: unveraendert der gespeicherte; Original geaendert -> realign;
     None, wenn es keinen gibt oder keine Zuordnung moeglich ist (Altbestand ohne Quell-Anker: wie bisher nicht mehr anzeigbar)."""
     if not rec or rec.get("h") == h: return rec or None
     osh = old_hashes(slug, rec)
-    return realign(rec, osh, units, h, tm) if osh else None
+    return realign(rec, osh, units, h, tm, keep) if osh else None
 
 
 def resolve(lang, p, units, h, have, tm=None):
     """Aktueller Maschinen-Datensatz des Beitrags. Unveraendert: wie gespeichert. Original geaendert: realign (alte Texte bleiben, geaenderte werden stale). Fehlende
     Einheiten kommen aus dem TM, wenn der Quelltext dort steht (tm=None: ohne TM). -> (rec, dirty); dirty = gegenueber have geaendert, speichern. Ein Altbestand
     ohne Zuordnung beginnt leer und wird erst gespeichert, wenn etwas dazukommt (der alte Datensatz bleibt bis dahin liegen)."""
-    old = have.get(p["slug"]); rec = current(p["slug"], old, units, h, tm)
+    # ein TM-Treffer ersetzt beim Nachziehen nie den Text einer Einheit mit Handtext - und gar keinen, solange die Handtexte unbekannt sind (Export nicht abrufbar)
+    ov = OV.load("lblog", lang).get(p["slug"], {}) if tm is not None else {}
+    old = have.get(p["slug"]); rec = current(p["slug"], old, units, h, None if OV.failed("lblog", lang) else tm, {o["sh"] for o in ov.values()})
     dirty = rec is not None and rec is not old and bool(rec["seg"])
     if rec is None: rec = new_rec(h, units)
     if tm is not None:
@@ -360,11 +365,15 @@ def shown(p, rec, lang=None):
     tpl, units, h = source_of(p)
     rec = current(p["slug"], rec, units, h)
     if not rec: return None   # Altbestand ohne Zuordnung: alte Uebersetzung nicht mehr anzeigen
-    sg = dict(rec["seg"]); man = manual_ids(lang, p["slug"], units, h, rec) if lang else {}
+    sg = dict(rec["seg"]); man = manual_ids(lang, p["slug"], units, h, rec) if lang else {}; used = {}
+    ref = "".join(t for _, t in units) + "".join(rec["seg"].values()) if any("<img" in t.lower() for t, _ in man.values()) else ""   # Bilder nur aus diesem Beitrag oder dem eigenen Bucket
     for i, (t, _) in man.items():
-        t = OV.clean("lblog", i, t)
-        if t.strip(): sg[i] = t
-    if not rec.get("ok") and not all(i in sg for i, _ in units): return None
+        t = OV.clean("lblog", i, t, ref); used[i] = bool(t.strip())
+        if used[i]: sg[i] = t
+    vis = bool(rec.get("ok")) or all(i in sg for i, _ in units)
+    for i, ok in used.items():   # Protokoll des Seitenbaus (OV.report): jede Einheit einmal
+        OV.note("lblog", lang, "angewendet" if vis and ok else "nach der Bereinigung leer (nicht angewendet)" if vis else "ohne angezeigte Fassung des Eintrags (nicht angewendet)", key=(p["slug"], i))
+    if not vis: return None
     return units, h, rec, sg, man
 
 
@@ -486,8 +495,16 @@ def parse(text):
 
 # ---------- Runden fuer die Agenten ----------
 def locked(a, lang, p, units, h, rec):
-    """Einheiten mit Handtext der Redaktion: fuer die Uebersetzung gesperrt, ausser mit --force-manual."""
-    return {} if a.get("force_manual") else manual_ids(lang, p["slug"], units, h, rec)
+    """Einheiten mit Handtext der Redaktion: fuer die Uebersetzung gesperrt, ausser mit --force-manual. Ist der Export der Redaktion nicht abrufbar (OV.failed:
+    Sperrzustand unbekannt), gilt jede schon uebersetzte Einheit als gesperrt - vorhandener Text wird dann weder gesendet noch ueberschrieben, nie Uebersetztes schon."""
+    if a.get("force_manual"): return {}
+    man = manual_ids(lang, p["slug"], units, h, rec)
+    return {**{i: ("", "unbekannt") for i in rec["seg"]}, **man} if OV.failed("lblog", lang) else man
+
+
+def halted(a):
+    """Sprachen, in denen ein Lauf, der vorhandenen Text ersetzen soll (stale, --redo, --wishes), nichts ersetzen durfte: Export der Redaktion nicht abrufbar."""
+    return [l for l in OV.failed("lblog") if l in a["langs"]] if (a.get("stale") or a.get("redo")) and not a.get("force_manual") else []
 
 
 def pick(a, lang, have, ps, busy, tm=None, touched=None):
@@ -539,7 +556,7 @@ def apply(a=None):
     for d in sorted(WORK.glob("*")) if WORK.exists() else []:
         lang = d.name
         if lang not in LANGS: continue
-        have = load_lang(lang); touched = set(); qa_log = []; ok = bad = done = 0; why = {}
+        have = load_lang(lang); touched = set(); qa_log = []; ok = bad = done = held = 0; why = {}
         for fin in sorted(d.glob("*.in.txt")):
             fout = fin.with_name(fin.name.replace(".in.txt", ".out.txt"))
             if not fout.exists(): continue
@@ -548,6 +565,8 @@ def apply(a=None):
             tpl, units, h = source_of(p)
             if h != meta["h"]: fin.unlink(); fout.unlink(); continue   # Original geaendert -> neu vorbereiten
             src = dict(units); rec, _ = resolve(lang, p, units, h, have); man = locked({"force_manual": meta.get("fm")}, lang, p, units, h, rec)
+            if not meta.get("fm") and OV.failed("lblog", lang):   # Sperre unbekannt: Auftrag und Antwort bleiben liegen, bis der Export wieder antwortet (nichts verwerfen)
+                held += 1; continue
             asked = set(parse(fin.read_text("utf-8").split("\n", 1)[1])); redo = bool(meta.get("redo")); stored = set()
             for i, t in parse(fout.read_text("utf-8")).items():
                 if i not in src: continue
@@ -573,6 +592,7 @@ def apply(a=None):
             old = json.loads(f.read_text("utf-8")) if f.exists() else []
             f.write_text(json.dumps((old + qa_log)[-500:], ensure_ascii=False, indent=1), encoding="utf-8")
         stats[lang] = {"artikel_fertig": done, "segmente_ok": ok, "segmente_fehler": bad, "gruende": why, "offen": len(list(d.glob("*.in.txt")))}
+        if held: stats[lang]["zurueckgehalten"] = held; print(f"WARNUNG: {lang}: {held} Auftraege nicht angewendet - Export der Redaktion nicht abrufbar, Sperre fuer Handtexte unbekannt", file=sys.stderr)
         print(lang, stats[lang])
     log = jload("rounds.json", []); log.append({"ts": datetime.now(timezone.utc).isoformat()[:19], "stats": stats}); jsave("rounds.json", log[-300:])
     return stats
@@ -696,9 +716,12 @@ def submit(a):
                 reqs.append({"custom_id": f"{lang}_{key(p['slug'])}_{ci}", "params": {"model": MODEL, "max_tokens": MAX_TOK,
                              "system": [{"type": "text", "text": sysp, "cache_control": {"type": "ephemeral"}}],
                              "messages": [{"role": "user", "content": user_prompt(lang, c)}]}})
-            # fm/redo gehen mit in den Auftrag: collect muss wissen, dass gesperrte bzw. aktuelle Einheiten ueberschrieben werden duerfen (sonst bezahlt und verworfen)
-            items.append({"lang": lang, "slug": p["slug"], "h": h, "n": len(units), **({"fm": True} if a["force_manual"] else {}), **({"redo": True} if a["redo"] else {})})
+            # fm/redo gehen mit in den Auftrag: collect muss wissen, dass gesperrte bzw. aktuelle Einheiten ueberschrieben werden duerfen (sonst bezahlt und verworfen);
+            # repl = der Auftrag ersetzt vorhandenen Text (collect laesst ihn liegen, solange die Sperre fuer Handtexte unbekannt ist)
+            items.append({"lang": lang, "slug": p["slug"], "h": h, "n": len(units), **({"fm": True} if a["force_manual"] else {}), **({"redo": True} if a["redo"] else {}),
+                          **({"repl": any(i in rec["seg"] for i, _ in todo)} if a["redo"] or a["stale"] else {})})
         if touched: save_lang(lang, have, touched)
+    if halted(a): print(f"WARNUNG: Export der Redaktion nicht abrufbar - keine Neuuebersetzung vorhandener Texte in {', '.join(halted(a))} (Sperre fuer Handtexte unbekannt)", file=sys.stderr)
     if not reqs:
         print("Nichts abzusenden."); return 0
     if not check_budget("translate_blog", MODEL, money / max(0.000001, float(os.environ.get("USD_PER_EUR", "1.08")))):   # money = Batch-Preis (PRICE_IN/OUT)
@@ -715,9 +738,25 @@ def submit(a):
     return len(reqs)
 
 
+HELD = set()   # Batch-ids, die collect in diesem Lauf zurueckgehalten hat (Warten hilft nicht)
+
+
+def held_back(b):
+    """Batch ersetzt vorhandenen Text (stale/--redo, ohne --force-manual) in einer Sprache, deren Sperre fuer Handtexte gerade unbekannt ist (Export der Redaktion
+    nicht abrufbar): nicht abholen - die Ergebnisse liegen 29 Tage bei Anthropic, der naechste Lauf mit erreichbarem Export uebernimmt sie. -> betroffene Sprachen"""
+    langs = sorted({it["lang"] for it in b.get("items", []) if it.get("repl", bool(it.get("redo"))) and not it.get("fm")})   # aeltere Auftraege ohne repl: --redo ersetzt
+    for l in langs: OV.load("lblog", l)
+    return [l for l in langs if OV.failed("lblog", l)]
+
+
 def collect():
-    bl = jload("batches.json", []); left = []; usage = jload("usage.json", {"input_tokens": 0, "output_tokens": 0, "runs": [], "by_lang": {}})
+    """-> Anzahl der Batches, die bei Anthropic noch in Arbeit sind (zurueckgehaltene zaehlen nicht: Warten hilft ihnen nicht)."""
+    bl = jload("batches.json", []); left = []; usage = jload("usage.json", {"input_tokens": 0, "output_tokens": 0, "runs": [], "by_lang": {}}); HELD.clear()
     for b in bl:
+        hb = held_back(b)
+        if hb:
+            print(f"WARNUNG: Batch {b['id']} nicht abgeholt - Export der Redaktion nicht abrufbar ({', '.join(hb)}), Sperre fuer Handtexte unbekannt", file=sys.stderr)
+            left.append(b); HELD.add(b["id"]); continue
         st = api("GET", f"/v1/messages/batches/{b['id']}")
         if st["processing_status"] != "ended": print(b["id"], st["processing_status"], st["request_counts"]); left.append(b); continue
         info = {(it["lang"], key(it["slug"])): it for it in b["items"]}
@@ -773,14 +812,14 @@ def collect():
         usage["runs"].append({"batch": b["id"], "model": b["model"], "segments_ok": ok, "segments_failed": bad, "why": why, "input_tokens": tin, "output_tokens": tout, "cost_usd": round(cost(tin, tout), 3)})
         jsave("usage.json", usage); print(f"{b['id']}: {ok} Segmente ok, {bad} fehlgeschlagen {why}, Kosten {cost(tin, tout):.3f} $")
     jsave("batches.json", left)
-    return len(left)
+    return len(left) - len(HELD)
 
 
 def status():
     ps = posts(); per_round = len(LANGS) * PER_AGENT
     st = {"updated": datetime.now(timezone.utc).isoformat()[:19], "posts": len(ps), "engine": f"{MODEL} (Batch) + Claude-Agenten", "per_agent": PER_AGENT,
           "budget_usd": BUDGET, "budget_period": "month", "month": month(), "spent_month_usd": round(spent_month(), 3), "spent_usd": round(spent(), 3), "pending_batches": len(jload("batches.json", [])), "pending_est_usd": round(pending_cost(), 3), "langs": {}}
-    stale_all = {}
+    stale_all = {}; stale_old = jload("stale.json", {})
     srcs0 = {p["slug"]: source_of(p) for p in ps}; left = 0; all_ti = all_to = 0; cdone = {}
     for lang in LANGS:
         have = load_lang(lang)
@@ -797,6 +836,7 @@ def status():
                 if p.get("cp_slug"): cdone[p["slug"]] = cdone.get(p["slug"], 0) + 1
                 continue
             x, y = est(lang, pend); ti += x; to += y   # nur nie uebersetzte Einheiten (vorhandene Texte kosten nichts)
+        if OV.failed("lblog", lang): sl = stale_old.get(lang) or {}   # Handtexte unbekannt: die Liste dieser Sprache bleibt, wie sie war (Vertrag 5)
         if sl: stale_all[lang] = sl
         all_ti += ti; all_to += to
         qf = OUT / "qa" / f"{lang}.json"; ql = json.loads(qf.read_text("utf-8")) if qf.exists() else []
@@ -871,17 +911,27 @@ def main():
     if m == "sample": sample(a); return
     OV.use_api()   # Handtexte der Redaktion live aus dem Export (COMMUNITY_API), sonst aus data/i18n_overrides
     if m != "plan": settle(ps)   # alle Beitraege auf ihr aktuelles Original nachziehen, ohne API (plan aendert nichts am Speicher)
-    if m == "prepare": prepare(a); return
-    if m == "apply": apply(a); status(); return
+    stop = ("Export der Redaktion nicht abrufbar - {} Lauf wiederholen, sobald der Export wieder antwortet "
+            "(--force-manual braucht die Sperre nicht und ueberschreibt auch den Maschinentext unter Handtexten).")
+    if m == "prepare":
+        prepare(a)
+        if halted(a): raise SystemExit(stop.format(f"keine Auftraege fuer vorhandene Texte in {', '.join(halted(a))}."))
+        return
+    if m == "apply":
+        held = sorted(l for l, v in apply(a).items() if v.get("zurueckgehalten")); status()
+        if held: raise SystemExit(stop.format(f"Auftraege in {', '.join(held)} nicht angewendet (liegen weiter in work/blog-i18n)."))
+        return
     if m in ("collect", "run", "auto", "stale"): collect()
     if m in ("submit", "run", "auto", "stale"): submit(a)
     if m in ("run", "auto", "stale"):
         t0 = time.time()
-        while jload("batches.json", []) and time.time() - t0 < WAIT_MIN * 60:
+        while [b for b in jload("batches.json", []) if b["id"] not in HELD] and time.time() - t0 < WAIT_MIN * 60:
             time.sleep(120)
             if collect() == 0: break
     if m != "plan": report_wishes()
     status()
+    if m in ("submit", "run", "auto", "stale") and halted(a):   # nach dem Status, damit der Workflow den Stand trotzdem committet; der Lauf selbst endet rot
+        raise SystemExit(stop.format(f"keine Neuuebersetzung vorhandener Texte in {', '.join(halted(a))}."))
 
 
 if __name__ == "__main__":
