@@ -8,6 +8,10 @@
 //  4) Beim Zusammenfuehren wird nie hart geloescht (merged_into + merge_log); geloeschte Import-Events hinterlassen eine Loeschmarke (event_tombstone).
 //  5) Gelesene Texte werden beim Eingang gesaeubert (scrub); gespeichert werden nur http/https-Adressen (safeUrl, httpsUrl).
 //  6) Lesen und Schreiben laufen gebuendelt ueber db.batch, damit ein Lauf weit unter den Subrequest-Grenzen bleibt.
+//  7) Ein Datensatz einer Quelle wird an seiner eigenen Geschichte wiedererkannt (event_source: Kennung + Name und Tag, wie ihn die Quelle zuletzt lieferte),
+//     nicht am heutigen Namen oder Termin des Events hier: umbenannt, verschoben oder (auch von einem Admin) zusammengefuehrt, er wird aufgefrischt und nie neu angelegt.
+//  8) Fuer ein Import-Event, das niemand pflegt, ist eine Quelle massgeblich – der Datensatz der Veranstaltungsliste (Community Days), sonst der, aus dem es
+//     entstand: aendert ihn die Quelle (Termin, Ort, Texte), folgt das Event. Andere Datensaetze ergaenzen nur; gepflegte Events aendert kein Import.
 import { ensureDirectoryCols } from "./directory.js";
 import { cleanUrl, goodHost } from "./profiles.js";
 import { cleanText } from "./util.js";
@@ -153,8 +157,11 @@ const mergedStmt = (db, kind, a, b, by, t) => { const [x, y] = pairOf(a, b); ret
 const logStmt = (db, kind, from, into, snapshot, auto, by, t) => db.prepare("INSERT INTO merge_log(kind,from_id,into_id,snapshot,auto,by_user,created) VALUES(?,?,?,?,?,?,?)").bind(kind, from, into, JSON.stringify(snapshot), auto ? 1 : 0, by || 0, t);
 
 // ---------------------------------------------------------------- Quellen
-const evSourceStmt = (db, id, s, t) => db.prepare("INSERT INTO event_source(event_id,kind,ref,url,url_key,first_seen,last_seen) VALUES(?,?,?,?,?,?,?) ON CONFLICT(event_id,kind,ref) DO UPDATE SET last_seen=excluded.last_seen,url=CASE WHEN event_source.url='' THEN excluded.url ELSE event_source.url END,url_key=CASE WHEN event_source.url_key='' THEN excluded.url_key ELSE event_source.url_key END")
-  .bind(id, s.kind, s.ref, s.url || "", OWN_KINDS.includes(s.kind) ? ownUrlKey(s.url) : "", t, t);
+// s.name_key/day/hash = Stand des Datensatzes in seiner Quelle. Er steht nur an der Zeile des Datensatzes selbst (dem Event, das aus ihm entstand, oder seiner
+// ausgeblendeten Zeile); Verweise, die beim Zusammenfuehren ans Ziel-Event kopiert werden (srcCopy), tragen keinen Stand und aendern einen vorhandenen nicht.
+const evSourceStmt = (db, id, s, t) => db.prepare("INSERT INTO event_source(event_id,kind,ref,url,url_key,name_key,day,hash,first_seen,last_seen) VALUES(?,?,?,?,?,?,?,?,?,?) ON CONFLICT(event_id,kind,ref) DO UPDATE SET last_seen=excluded.last_seen,url=CASE WHEN event_source.url='' THEN excluded.url ELSE event_source.url END,url_key=CASE WHEN event_source.url_key='' THEN excluded.url_key ELSE event_source.url_key END,name_key=CASE WHEN excluded.hash<>'' THEN excluded.name_key ELSE event_source.name_key END,day=CASE WHEN excluded.hash<>'' THEN excluded.day ELSE event_source.day END,hash=CASE WHEN excluded.hash<>'' THEN excluded.hash ELSE event_source.hash END")
+  .bind(id, s.kind, s.ref, s.url || "", OWN_KINDS.includes(s.kind) ? ownUrlKey(s.url) : "", s.hash ? s.name_key || "" : "", s.hash ? s.day || "" : "", s.hash || "", t, t);
+const srcCopy = ({ kind, ref, url }) => ({ kind, ref, url });
 const sesSourceStmt = (db, id, s, t) => db.prepare("INSERT INTO session_source(session_id,kind,ref,url,hash,first_seen,last_seen) VALUES(?,?,?,?,?,?,?) ON CONFLICT(session_id,kind,ref) DO UPDATE SET last_seen=excluded.last_seen,hash=excluded.hash")
   .bind(id, s.kind, s.ref, s.url || "", s.hash || "", t, t);
 export async function addEventSource(db, id, kind, ref, url = "", t = now()) { await evSourceStmt(db, id, { kind, ref, url: safeUrl(url) }, t).run(); }
@@ -167,6 +174,7 @@ const richerDate = (a, b) => (!a ? b : !b ? a : b.length > a.length && b.startsW
 // Eingang: { title, summary, about, start, end, mode, city, country, url, tickets_url, organizer_name, lang, free, source, source_url, sources:[{kind,ref,url}] }
 // sources[0] ist die Kennung des Datensatzes in seiner Quelle (z. B. die eigene Seite des Events); nur daran wird ein erneuter Import desselben Datensatzes erkannt.
 // Eine Quelle der Art sessionize_mention (Adresse nur im Fliesstext) landet in out.mentions: sie fuehrt nie zusammen, sondern nur in die Warteschlange.
+// sole (optional): der Importer hat die ganze Quelle gelesen und weiss, ob sources[0] dort genau einen Datensatz bezeichnet (siehe sameRecord).
 export function cleanCand(c) {
   const title = scrubLine(c?.title, 120); if (title.length < 3) return null;
   const start = dateOk(String(c.start || "")) ? String(c.start) : "", place = scrubLine(c.city, 80);
@@ -177,7 +185,9 @@ export function cleanCand(c) {
   }
   const out = { title, summary: scrubLine(c.summary, 200), about: scrub(c.about, 3000), start, end: normEnd(start, String(c.end || "")), mode, city, location: city, country: scrubLine(c.country, 60),
     url: httpsUrl(c.url), tickets_url: httpsUrl(c.tickets_url), organizer_name: scrubLine(c.organizer_name, 120), lang: scrubLine(c.lang, 10).replace(/[^A-Za-z-]/g, ""), free: c.free === true ? 1 : c.free === false ? 0 : -1,
-    source: /^[a-z_]{2,20}$/.test(c.source || "") ? c.source : "", source_url: safeUrl(c.source_url), sources };
+    source: /^[a-z_]{2,20}$/.test(c.source || "") ? c.source : "", source_url: safeUrl(c.source_url), sources,
+    sole: c.sole === true ? true : c.sole === false ? false : undefined,   // true = einziger Datensatz mit dieser Kennung im aktuellen Stand der Quelle, false = mehrere teilen sie, sonst unbekannt
+    online_stated: c.online_stated === true };   // die Quelle sagt ausdruecklich "online" (nicht bloss: kein Ort gefunden)
   const k = eventKeys(out), n = normEventName(title);
   out.name_key = k.name_key; out.city_key = k.city_key; out.url_key = ownUrlKey(safeUrl(c.url)); out.year = n.year;   // Schluessel auch aus einer http-Adresse (gespeichert wird sie nicht)
   out.mentions = mentions.filter((x) => !sources.some((y) => y.kind === "sessionize_event" && y.ref === x.ref));
@@ -187,27 +197,53 @@ export function cleanCand(c) {
   }
   return out;
 }
+// Passen zwei Namens-Schluessel zueinander (einer enthaelt den anderen oder mindestens die halben Woerter stimmen)? Ein fehlender Schluessel widerspricht nicht.
+const nameLike = (a, b) => !a || !b || a.includes(b) || b.includes(a) || jaccard(a, b) >= 0.5;
+// Ist der Kandidat der Datensatz, den die Quelle unter derselben Kennung zuletzt mit Namen rk am Tag rd lieferte?
+//   "same"    Name passt und der Tag liegt hoechstens 3 Tage daneben. Teilen sich in der Quelle mehrere Datensaetze die Kennung (c.sole === false),
+//             muessen Name und Tag genau stimmen: sonst wuerden zwei Eintraege einer Reihe still zu einem.
+//   sonst nur, wenn der Importer weiss, dass die Kennung in der Quelle jetzt genau EINEN Datensatz bezeichnet (c.sole): dann hat sich der Datensatz geaendert –
+//   "changed" (UID eines Kalenders), "moved" (gleicher Name, neuer Termin hoechstens MOVE_DAYS entfernt, der alte lag noch nicht in der Vergangenheit)
+//   oder "renamed" (neuer Name, gleicher Termin).
+//   ""        ein anderer Datensatz: mehrere Events teilen die Adresse (Reihe, Seite einer User Group) oder es ist die naechste Ausgabe unter derselben Adresse.
+const MOVE_DAYS = 180;   // weiter weg ist es keine Verlegung mehr, sondern die naechste Ausgabe
+function sameRecord(c, rk, rd, today) {
+  const nm = nameLike(c.name_key, rk), dd = dayDiff(c.start, rd), near = dd === null || dd <= 3;
+  if (c.sole === false) return c.name_key === rk && !dd ? "same" : "";
+  if (nm && near) return "same";
+  if (c.sole !== true) return "";
+  if (c.sources[0].ref.startsWith("uid:")) return "changed";
+  return nm ? (rd >= today && dd <= MOVE_DAYS ? "moved" : "") : near ? "renamed" : "";
+}
 // Treffer fuer einen gesaeuberten Kandidaten. Rang 3 = eigene Quelle, 2 = eigene URL, 1 = Name+Tag+Stadt (jeweils "high"); alles andere "low" (Rang 0).
-// Ergebnis: null oder { id, row, rank, confidence, reason, others:[{id,confidence,reason}] }. Wer vom besten Treffer "getrennt gelassen" wurde, entfaellt.
+// Ergebnis: null oder { id, row, rank, confidence, reason, rec?, others:[{id,confidence,reason}] }. Wer vom besten Treffer "getrennt gelassen" wurde, entfaellt.
+// rec = { holder, hash }: derselbe Datensatz wurde schon einmal gelesen; holder ist die Zeile, die ihn haelt – das Event selbst oder eine ausgeblendete Zeile,
+// die (automatisch oder von einem Admin) in das Event zusammengefuehrt wurde. Ausgeblendete Zeilen nehmen deshalb an der Quellen-Suche teil und zaehlen fuer ihr Ziel.
 // Events ohne Schluessel (von Hand, aus Programm-Importen oder dem Altbestand; keys_v < KEYS_V) nehmen trotzdem teil: ihre Schluessel werden hier
 // im Speicher berechnet und – ausser im Probelauf (opts.dry) – gleich gespeichert.
 export async function findEvent(db, c, opts = {}) {
-  const refs = c.sources.filter((s) => OWN_KINDS.includes(s.kind) || s.kind === KEY_KIND), d = c.start.slice(0, 10), j = (a) => JSON.stringify(a);
+  const refs = c.sources.filter((s) => OWN_KINDS.includes(s.kind) || s.kind === KEY_KIND), d = c.start.slice(0, 10), j = (a) => JSON.stringify(a), prim = c.sources[0];
+  const today = opts.today || new Date().toISOString().slice(0, 10);
   const uks = [...new Set([c.url_key, ...refs.map((s) => (OWN_KINDS.includes(s.kind) ? ownUrlKey(s.url) : ""))].filter(Boolean))];
   const weak = [...c.sources.filter((s) => s.kind === "sessionize_event").map((s) => [MENTION, s.ref]), ...(c.mentions || []).map((s) => ["sessionize_event", s.ref])];
   const pairs = (list) => list.map(() => "(s.kind=? AND s.ref=?)").join(" OR ") || "0";
   const res = await db.batch([
-    db.prepare(`SELECT e.*,s.kind sk FROM event_source s JOIN events e ON e.id=s.event_id WHERE e.merged_into=0 AND (${pairs(refs)})`).bind(...refs.flatMap((s) => [s.kind, s.ref])),
+    db.prepare(`SELECT e.*,s.kind sk,s.ref sr,s.name_key rk,s.day rd,s.hash rh FROM event_source s JOIN events e ON e.id=s.event_id WHERE ${pairs(refs)} ORDER BY e.merged_into<>0,e.id`).bind(...refs.flatMap((s) => [s.kind, s.ref])),
     db.prepare("SELECT e.* FROM events e WHERE e.merged_into=0 AND (e.url_key IN (SELECT value FROM json_each(?1)) OR e.id IN (SELECT event_id FROM event_source WHERE url_key IN (SELECT value FROM json_each(?1))))").bind(j(uks)),
     db.prepare("SELECT * FROM events WHERE merged_into=0 AND name_key<>'' AND ?1<>'' AND (name_key=?1 OR (?2<>'' AND substr(start,1,10) BETWEEN ?3 AND ?4)) LIMIT 500").bind(c.name_key, d, shiftDay(d, -1), shiftDay(d, 1)),
     db.prepare(`SELECT e.* FROM event_source s JOIN events e ON e.id=s.event_id WHERE e.merged_into=0 AND (${pairs(weak)})`).bind(...weak.flat()),
     db.prepare("SELECT * FROM events WHERE keys_v<? LIMIT 400").bind(KEYS_V),
   ]), rows = (i) => res[i]?.results || [], hits = new Map(), rekey = [];
-  const put = (ev, rank, reason) => { if (ev.id === opts.excludeId) return; const o = hits.get(ev.id); if (!o || rank > o.rank) hits.set(ev.id, { id: ev.id, row: ev, rank, confidence: rank ? "high" : "low", reason }); };
+  const put = (ev, rank, reason, rec) => {
+    if (ev.id === opts.excludeId) return; const o = hits.get(ev.id);
+    if (!o || rank > o.rank) hits.set(ev.id, { id: ev.id, row: ev, rank, confidence: rank ? "high" : "low", reason, rec });
+    else if (rec && rank === o.rank && (!o.rec || (rec.holder.id === ev.id && o.rec.holder.id !== ev.id))) { o.rec = rec; o.reason = reason; }   // haelt das Event den Datensatz selbst, gilt diese Zeile
+  };
   const clash = (ev) => { const x = dayDiff(c.start, ev.start); return x !== null && x > 3; };   // gleiche Adresse, aber andere Ausgabe (Jahr)
   // Eine Adresse kann trotz allem mehreren Events gehoeren (Seite einer User Group, Reihe): passt der Name gar nicht, entscheidet ein Admin
-  const nameOk = (ev) => !c.name_key || !ev.name_key || c.name_key.includes(ev.name_key) || ev.name_key.includes(c.name_key) || jaccard(c.name_key, ev.name_key) >= 0.5;
-  const byUrl = (ev) => (clash(ev) ? put(ev, 0, "url_date_differs") : nameOk(ev) ? put(ev, 2, "url") : put(ev, 0, "url_name_differs"));
+  const nameOk = (ev) => nameLike(c.name_key, ev.name_key);
+  // Listet die Quelle selbst mehrere Datensaetze unter dieser Adresse (c.sole === false), ist sie nicht die eigene Adresse EINES Events: nur ein Hinweis fuer die Admins
+  const byUrl = (ev) => (c.sole === false ? put(ev, 0, "url_shared") : clash(ev) ? put(ev, 0, "url_date_differs") : nameOk(ev) ? put(ev, 2, "url") : put(ev, 0, "url_name_differs"));
   const byName = (ev) => {
     if (ev.name_key === c.name_key) {
       const x = dayDiff(c.start, ev.start);
@@ -216,7 +252,22 @@ export async function findEvent(db, c, opts = {}) {
       else if (x <= 1) put(ev, 0, x ? "name+date_near" : c.city_key || ev.city_key ? "name+day_place_differs" : "name+day_online");   // online: kein Ort, der die Gleichheit belegt
     } else if (c.city_key === ev.city_key && (dayDiff(c.start, ev.start) ?? 9) <= 1 && jaccard(c.name_key, ev.name_key) >= 0.8) put(ev, 0, "similar_name");
   };
-  for (const ev of rows(0)) clash(ev) ? put(ev, 0, "source_date_differs") : ev.sk === "communitydays" && !nameOk(ev) ? put(ev, 0, "source_name_differs") : put(ev, 3, "source:" + ev.sk);   // communitydays-Kennung = Adresse aus einer Liste
+  // Ausgeblendete (zusammengefuehrte) Zeilen zaehlen fuer das Event, in dem sie aufgegangen sind
+  const known = new Map(); for (let i = 0; i < 5; i++) for (const r of rows(i)) if (!known.has(r.id)) known.set(r.id, r);
+  for (let i = 0, ids = [...new Set(rows(0).map((r) => r.merged_into).filter((id) => id && !known.has(id)))]; i < 5 && ids.length; i++) {
+    const got = (await db.prepare("SELECT * FROM events WHERE id IN (SELECT value FROM json_each(?))").bind(j(ids)).all()).results || [];
+    for (const g of got) known.set(g.id, g);
+    ids = [...new Set(got.map((g) => g.merged_into).filter((id) => id && !known.has(id)))];
+  }
+  const target = (e) => { for (let i = 0; i < 6 && e?.merged_into; i++) e = known.get(e.merged_into); return e && !e.merged_into ? e : null; };
+  for (const r of rows(0)) {
+    const ev = target(r); if (!ev) continue;
+    if (r.sk === prim.kind && r.sr === prim.ref && r.rh) {   // Zeile eines Datensatzes mit dieser Kennung: derselbe (auch umbenannt, verschoben, zusammengefuehrt) oder ein anderer unter derselben Adresse?
+      const how = sameRecord(c, r.rk, r.rd, today);
+      if (how) put(ev, 3, how === "same" ? "source:" + r.sk : "source_" + how, { holder: r, hash: r.rh });
+      else put(ev, 0, (dayDiff(c.start, r.rd) ?? 0) > 3 ? "source_date_differs" : c.sole === false ? "source_shared" : "source_name_differs");
+    } else if (!r.merged_into) clash(ev) ? put(ev, 0, "source_date_differs") : r.sk === "communitydays" && (c.sole === false || !nameOk(ev)) ? put(ev, 0, c.sole === false ? "source_shared" : "source_name_differs") : put(ev, 3, "source:" + r.sk);   // Verweis ohne eigenen Stand (anderer Datensatz desselben Events): das Event muss selbst passen
+  }
   rows(1).forEach(byUrl); if (c.name_key) rows(2).forEach(byName);
   for (const ev of rows(3)) put(ev, 0, "mentioned_link");
   for (const ev of rows(4)) {   // noch ohne Schluessel: jetzt berechnen
@@ -227,7 +278,7 @@ export async function findEvent(db, c, opts = {}) {
   }
   if (rekey.length && !opts.dry) await runBatch(db, rekey, 80);
   let all = [...hits.values()]; if (!all.length) return null;
-  all.sort((a, b) => b.rank - a.rank || (b.row.source === c.source) - (a.row.source === c.source) || a.id - b.id);
+  all.sort((a, b) => b.rank - a.rank || !!b.rec - !!a.rec || (b.row.source === c.source) - (a.row.source === c.source) || a.id - b.id);
   if (all.length > 1) {
     const ids = j(all.map((x) => x.id)), best = all[0];
     const sep = (await db.prepare("SELECT a_id,b_id FROM dedupe_queue WHERE kind='event' AND status='separate' AND a_id IN (SELECT value FROM json_each(?1)) AND b_id IN (SELECT value FROM json_each(?1))").bind(ids).all()).results || [];
@@ -237,61 +288,99 @@ export async function findEvent(db, c, opts = {}) {
   return { ...best, others: others.map(({ id, confidence, reason }) => ({ id, confidence, reason })) };
 }
 // Was ein ungeschuetztes Event von einem weiteren Datensatz (Kandidat oder zusammengefuehrtes Event) uebernimmt: laengerer Text, genaueres Datum, leere Felder.
+// auth = x ist der fuer dieses Event massgebliche Datensatz (siehe upsertEvent) und die Quelle liefert ihn geaendert: Titel, Termin, Ort, Texte und Links folgen
+// dann der Quelle (ein Import-Event ohne Veranstalter pflegt sonst niemand). Angaben, die die Quelle nicht (mehr) macht, loeschen nichts – ausser dem Ende, das zum Termin gehoert,
+// und dem Ort, wenn die Quelle das Event ausdruecklich als online ausweist (fehlt nur die Ortsangabe, bleiben Modus und Ort).
 // Liefert { before, after } nur mit den geaenderten Spalten.
-function fillEvent(ev, x) {
+function fillEvent(ev, x, auth = false, today = "") {
   if (protectedEvent(ev)) return { before: {}, after: {} };
-  const nu = { title: richer(ev.title, x.title), summary: richer(ev.summary, x.summary), about: richer(ev.about, x.about), start: richerDate(ev.start, x.start || ""), mode: ev.mode !== "online" ? ev.mode : x.mode || ev.mode, free: ev.free < 0 && x.free >= 0 ? x.free : ev.free };
-  nu.end = normEnd(nu.start, richerDate(ev.end, x.end || "")) || (nu.start === ev.start ? ev.end : "");
-  for (const f of ["url", "tickets_url", "location", "country", "lang", "organizer_name", "city"]) nu[f] = ev[f] || x[f] || "";
-  if (nu.mode === "online" && ev.mode === "online") { nu.location = ev.location; nu.city = ev.city || ""; }   // Online-Event bekommt keinen Ort untergeschoben
+  let nu;
+  if (auth) {
+    const start = x.start && !(ev.start.length > x.start.length && ev.start.startsWith(x.start)) ? x.start : ev.start;   // ein reines Datum der Quelle nimmt eine bekannte Uhrzeit desselben Tages nicht weg
+    const online = x.mode === "online" && (ev.mode === "online" || x.online_stated === true);
+    nu = { title: x.title || ev.title, summary: x.summary || ev.summary, about: x.about || ev.about, start, end: x.start ? normEnd(start, x.end || "") : ev.end, mode: online ? "online" : x.mode === "online" ? ev.mode : x.mode || ev.mode, free: x.free >= 0 ? x.free : ev.free,
+      location: online ? "" : x.city || ev.location, city: online ? "" : x.city || ev.city || "" };
+    for (const f of ["url", "tickets_url", "country", "lang", "organizer_name"]) nu[f] = x[f] || ev[f] || "";
+    if (nu.location !== ev.location) Object.assign(nu, { lat: null, lng: null, geo_precision: "", geo_address: "", geo_at: 0 });   // neuer Ort: Koordinaten verwerfen, der Geocode-Lauf holt sie neu
+    if (ev.retired && today && (nu.end || nu.start).slice(0, 10) >= today) nu.retired = 0;   // als vergangen markiert, jetzt auf einen kuenftigen Termin verlegt
+  } else {
+    nu = { title: richer(ev.title, x.title), summary: richer(ev.summary, x.summary), about: richer(ev.about, x.about), start: richerDate(ev.start, x.start || ""), mode: ev.mode !== "online" ? ev.mode : x.mode || ev.mode, free: ev.free < 0 && x.free >= 0 ? x.free : ev.free };
+    nu.end = normEnd(nu.start, richerDate(ev.end, x.end || "")) || (nu.start === ev.start ? ev.end : "");
+    for (const f of ["url", "tickets_url", "location", "country", "lang", "organizer_name", "city"]) nu[f] = ev[f] || x[f] || "";
+    if (nu.mode === "online" && ev.mode === "online") { nu.location = ev.location; nu.city = ev.city || ""; }   // Online-Event bekommt keinen Ort untergeschoben
+  }
   Object.assign(nu, eventKeys(nu)); if (!nu.url_key) nu.url_key = ev.url_key || x.url_key || "";
   if (!ev.start && nu.start && !ev.public && !ev.merged_into) nu.public = 1;   // ohne Datum verborgen angelegt (siehe insertEvent): mit dem nachgetragenen Datum sichtbar
   const before = {}, after = {};
-  for (const k of Object.keys(nu)) if (nu[k] !== (ev[k] ?? "")) { before[k] = ev[k] ?? ""; after[k] = nu[k]; }
+  for (const k of Object.keys(nu)) if ((nu[k] ?? "") !== (ev[k] ?? "")) { before[k] = ev[k] ?? ""; after[k] = nu[k]; }
   return { before, after };
 }
 const setCols = (db, table, id, cols, extra = [], extraSql = "") => db.prepare(`UPDATE ${table} SET ${Object.keys(cols).map((c) => `"${c}"=?`).join(",")}${extraSql} WHERE id=?`).bind(...Object.values(cols), ...extra, id);
+// Technische Adresse einer Zeile, die gleich beim Anlegen in einem anderen Event aufgeht: "~" kommt in keiner echten Adresse vor (Formular und Routen
+// erlauben nur a-z, 0-9, -). Eine nie sichtbare Zeile belegt so keine Adresse, die ein Mitglied vergeben moechte; wird sie zurueckgenommen, bekommt sie eine echte.
+const HIDDEN = "~";
 async function insertEvent(db, c, t, mergedInto = 0) {
-  const handle = await freeHandle(db, c.title, c.year);
+  const handle = mergedInto ? HIDDEN + rndToken().slice(0, 30) : await freeHandle(db, c.title, c.year);
   const id = (await db.prepare("INSERT INTO events(handle,owner_id,org_id,title,summary,about,start,end,tz,mode,location,country,url,tickets_url,free,lang,topics,seeking_sponsor,public,created,updated,source,source_url,url_key,name_key,city_key,keys_v,unclaimed,organizer_name,merged_into,city) VALUES(?,0,NULL,?,?,?,?,?,'',?,?,?,?,?,?,?,'[]',0,?,?,?,?,?,?,?,?,?,1,?,?,?)")
     .bind(handle, c.title, c.summary, c.about, c.start, c.end, c.mode, c.city, c.country, c.url, c.tickets_url, c.free, c.lang, !c.start || mergedInto ? 0 : 1, t, t,   // ohne Datum: verborgen, bis ein Admin den Namens-Treffer entschieden hat
       c.source, c.source_url, c.url_key, c.name_key, c.city_key, KEYS_V, c.organizer_name, mergedInto, c.city).run()).meta.last_row_id;
   return { id, handle };
 }
 const TOMB_DAYS = 3;
-async function tombstoned(db, c) {
-  const day = c.start.slice(0, 10), keys = [...c.sources.filter((s) => OWN_KINDS.includes(s.kind)).map((s) => [s.kind, s.ref]), ...(c.url_key ? [["url", c.url_key]] : []), ...(c.name_key && day ? [["name", `${c.name_key}|${c.city_key}`]] : [])];
+async function tombstoned(db, c, today) {
+  const day = c.start.slice(0, 10), prim = c.sources[0], keys = [...c.sources.filter((s) => OWN_KINDS.includes(s.kind)).map((s) => [s.kind, s.ref]), ...(c.url_key ? [["url", c.url_key]] : []), ...(c.name_key && day ? [["name", `${c.name_key}|${c.city_key}`]] : [])];
   if (!keys.length) return false;
-  const rows = (await db.prepare(`SELECT kind,day FROM event_tombstone WHERE ${keys.map(() => "(kind=? AND ref=?)").join(" OR ")}`).bind(...keys.flat()).all()).results || [];
-  return rows.some((r) => { const d = dayDiff(day, r.day); return r.kind === "name" ? d === 0 : d === null || d <= TOMB_DAYS; });   // gleiche Adresse in einem anderen Jahr ist eine neue Ausgabe
+  const rows = (await db.prepare(`SELECT kind,ref,day,title FROM event_tombstone WHERE ${keys.map(() => "(kind=? AND ref=?)").join(" OR ")}`).bind(...keys.flat()).all()).results || [];
+  return rows.some((r) => {
+    const d = dayDiff(day, r.day); if (r.kind === "name") return d === 0;
+    if (d === null || d <= TOMB_DAYS) return true;   // gleiche Adresse in einem anderen Jahr ist eine neue Ausgabe ...
+    return c.sole === true && r.kind === prim.kind && r.ref === prim.ref && r.day >= today && d <= MOVE_DAYS && nameLike(c.name_key, normEventName(r.title).key);   // ... ein geloeschtes, noch nicht vergangenes Event, das die Quelle nur verlegt hat, ist es nicht
+  });
 }
+const LEAD_KIND = "communitydays";   // die Veranstaltungsliste: fuer ein Import-Event ohne Veranstalter die massgebliche Quelle (vor Angaben aus Speaker-Profilen)
+const recordHash = (c) => hash24(JSON.stringify(["v1", c.title, c.summary, c.about, c.start, c.end, c.mode, c.city, c.country, c.url, c.tickets_url, c.organizer_name, c.lang, c.free]));
 // Event anlegen, auffrischen oder mit dem sicheren Treffer zusammenfuehren. opts.dry = nichts schreiben.
-// Liefert { action: created | merged | queued | skipped, id, handle?, reason, log? } (log = merge_log-ID einer neuen automatischen Zusammenfuehrung).
+// Liefert { action: created | merged | queued | skipped, id, handle?, reason, log?, changed? } (log = merge_log-ID einer neuen automatischen Zusammenfuehrung,
+// changed = beim Auffrischen wurden Aenderungen der Quelle in das Event uebernommen).
 export async function upsertEvent(db, cand, opts = {}) {
   await ensureDirectoryCols(db);
   const t = opts.now || now(), c = cleanCand(cand); if (!c) return { action: "skipped", reason: "bad_data" };
-  const m = await findEvent(db, c, { dry: opts.dry }), srcs = [...c.sources, ...c.mentions];
+  const today = opts.today || new Date(t * 1000).toISOString().slice(0, 10), rec = c.sources[0];
+  Object.assign(rec, { name_key: c.name_key, day: c.start.slice(0, 10), hash: await recordHash(c) });   // Stand des Datensatzes, an dem er beim naechsten Lesen wiedererkannt wird
+  const m = await findEvent(db, c, { dry: opts.dry, today }), srcs = [...c.sources, ...c.mentions];
   if (m && m.confidence === "high") {
     if (opts.dry) return { action: "merged", id: m.id, reason: m.reason };
     const ev = m.row, have = (await db.prepare("SELECT kind,ref FROM event_source WHERE event_id=?").bind(ev.id).all()).results || [];
-    const has = (s) => have.some((h) => h.kind === s.kind && h.ref === s.ref), f = fillEvent(ev, c), ops = [];
+    const has = (s) => have.some((h) => h.kind === s.kind && h.ref === s.ref), ops = [];
     const others = m.others.map((o) => queueStmt(db, "event", ev.id, o.id, o.reason, t));
-    if (has(c.sources[0])) {   // derselbe Datensatz erneut gelesen: auffrischen, keine neue Zusammenfuehrung
-      if (Object.keys(f.after).length) ops.push(setCols(db, "events", ev.id, f.after, [t], ",updated=?"));
-      for (const s of srcs) ops.push(evSourceStmt(db, ev.id, s, t));
+    if (m.rec) {   // derselbe Datensatz erneut gelesen: auffrischen, keine neue Zusammenfuehrung
+      // Hat die Quelle ihn geaendert (und teilt er seine Kennung mit keinem anderen), folgt ihm die Zeile, die ihn haelt: das Event selbst oder seine ausgeblendete Zeile.
+      // Fuer das (ungepflegte) Event ist genau eine Quelle massgeblich: der Datensatz der Veranstaltungsliste (LEAD_KIND), auch wenn er erst spaeter dazukam;
+      // ein anderer nur, wenn das Event aus ihm entstand und kein Listen-Datensatz dazugehoert. Alle uebrigen ergaenzen wie bei jeder Zusammenfuehrung.
+      const h = m.rec.holder, own = h.id === ev.id, changed = m.rec.hash !== rec.hash && c.sole !== false;
+      const lead = changed && (rec.kind === LEAD_KIND || (own && !have.some((x) => x.kind === LEAD_KIND))), f = fillEvent(ev, c, lead, today), touched = Object.keys(f.after).length > 0;
+      if (!own) {
+        const fh = fillEvent(h, c, changed, today); if (Object.keys(fh.after).length) ops.push(setCols(db, "events", h.id, fh.after, [t], ",updated=?"));
+        ops.push(evSourceStmt(db, h.id, rec, t));
+        // was das Event von dem zusammengefuehrten Datensatz nachtraeglich uebernimmt, gehoert zu dieser Zusammenfuehrung: beim Zuruecknehmen geht es mit zurueck
+        const l = touched ? await db.prepare("SELECT id,snapshot FROM merge_log WHERE kind='event' AND from_id=? AND into_id=? AND undone=0 ORDER BY id DESC LIMIT 1").bind(h.id, ev.id).first() : null;
+        if (l) { const sn = parse(l.snapshot, {}); ops.push(db.prepare("UPDATE merge_log SET snapshot=? WHERE id=?").bind(JSON.stringify({ ...sn, into_before: { ...f.before, ...(sn.into_before || {}) }, into_after: { ...(sn.into_after || {}), ...f.after } }), l.id)); }
+      }
+      if (touched) ops.push(setCols(db, "events", ev.id, f.after, [t], ",updated=?"));
+      for (const s of srcs) ops.push(evSourceStmt(db, ev.id, own || s !== rec ? s : srcCopy(s), t));
       await runBatch(db, [...ops, ...others]);
-      return { action: "merged", id: ev.id, reason: m.reason };
+      return { action: "merged", id: ev.id, reason: m.reason, changed: lead && touched };
     }
     // anderer Datensatz desselben Events: als ausgeblendete Zeile festhalten und protokolliert zusammenfuehren (umkehrbar)
-    const hid = await insertEvent(db, c, t, ev.id), added = srcs.filter((s) => !has(s));
+    const f = fillEvent(ev, c), hid = await insertEvent(db, c, t, ev.id), added = srcs.filter((s) => !has(s));
     for (const s of srcs) ops.push(evSourceStmt(db, hid.id, s, t));
     if (Object.keys(f.after).length) ops.push(setCols(db, "events", ev.id, f.after, [t], ",updated=?"));
-    for (const s of added) ops.push(evSourceStmt(db, ev.id, s, t));
+    for (const s of added) ops.push(evSourceStmt(db, ev.id, srcCopy(s), t));
     ops.push(...others, logStmt(db, "event", hid.id, ev.id, { into_before: f.before, into_after: f.after, from_public: c.start ? 1 : 0, added_sources: added.map(({ kind, ref }) => ({ kind, ref })), moved: {}, session_logs: [], reason: m.reason }, true, opts.by, t));
     const res = await runBatch(db, ops, 60);
     return { action: "merged", id: ev.id, reason: m.reason, log: res[res.length - 1]?.meta?.last_row_id || 0 };
   }
-  if (await tombstoned(db, c)) return { action: "skipped", reason: "deleted" };   // von Admin/Veranstalter geloescht: kommt nicht zurueck
+  if (await tombstoned(db, c, today)) return { action: "skipped", reason: "deleted" };   // von Admin/Veranstalter geloescht: kommt nicht zurueck
   if (opts.dry) return { action: m ? "queued" : "created", id: m?.id || 0, reason: m?.reason || "" };
   const nu = await insertEvent(db, c, t), ops = srcs.map((s) => evSourceStmt(db, nu.id, s, t));
   if (m) for (const o of [m, ...m.others]) ops.push(queueStmt(db, "event", o.id, nu.id, o.reason, t));   // unsicherer Treffer: beide bleiben, ein Admin entscheidet
@@ -351,14 +440,18 @@ export async function sessionDeleteOps(db, sid, tomb = true, t = now()) {
 }
 // Konto wird geloescht: alles entfernen, was der Import ueber dieses Konto gespeichert hat (Anweisungen fuer eine Batch) –
 // Beanspruchungen, Vorschau, das an Speaker-Identitaeten gemerkte Profil, die selbst importierten Speaker-Eintraege samt deren Quellen-Kennung
-// (sie enthaelt den Sessionize-Namen). Protokolle und Entscheidungen bleiben ohne Personenbezug.
+// (sie enthaelt den Sessionize-Namen), die Speaker-Identitaet selbst (Name), sobald keine Session mehr auf sie verweist, und den Eintrag der Person
+// in den Vorher-/Nachher-Staenden des Protokolls (merge_log.snapshot). Protokolle und Entscheidungen bleiben ohne Personenbezug.
+// Die Anweisungen gehoeren ans ENDE der Batch (nach dem Loeschen der Events und offenen Vorschlaege des Kontos): die Pruefung "verweist noch eine Session
+// auf die Identitaet?" laeuft in SQL zum Zeitpunkt der Ausfuehrung.
 export async function forgetImporter(db, uid) {
-  const h = (await db.prepare("SELECT handle FROM profiles WHERE user_id=?").bind(uid).first())?.handle || "", ops = [];
+  const h = (await db.prepare("SELECT handle FROM profiles WHERE user_id=?").bind(uid).first())?.handle || "", ops = [], gone = new Set();
   const refs = ((await db.prepare("SELECT DISTINCT x.ref FROM session_source x JOIN event_sessions s ON s.id=x.session_id WHERE x.kind='sessionize_profile' AND s.proposer_id=?").bind(uid).all()).results || []).map((r) => r.ref), rj = JSON.stringify(refs);
   if (refs.length) {
     const rows = (await db.prepare("SELECT s.id,s.speakers,s.proposer_id,s.merged_into,(SELECT COUNT(*) FROM session_source o WHERE o.session_id=s.id AND NOT (o.kind='sessionize_profile' AND o.ref IN (SELECT value FROM json_each(?1)))) other FROM event_sessions s WHERE s.id IN (SELECT session_id FROM session_source WHERE kind='sessionize_profile' AND ref IN (SELECT value FROM json_each(?1)))").bind(rj).all()).results || [];
     for (const r of rows) {
       const sp = parse(r.speakers, []), rest = h ? sp.filter((x) => x.h !== h) : sp;
+      for (const x of sp) if (h && x.h === h && x.r) gone.add(x.r);
       if (r.merged_into || (!rest.length && !r.other && r.proposer_id === uid)) ops.push(...(await sessionDeleteOps(db, r.id, false)));   // nur dieser Import trug die Session
       else if (rest.length !== sp.length) ops.push(db.prepare("UPDATE event_sessions SET speakers=? WHERE id=?").bind(JSON.stringify(rest), r.id));
     }
@@ -366,7 +459,26 @@ export async function forgetImporter(db, uid) {
   }
   ops.push(db.prepare("DELETE FROM event_claims WHERE user_id=?").bind(uid), db.prepare("DELETE FROM import_preview WHERE user_id=?").bind(uid),
     db.prepare("UPDATE merge_log SET by_user=0 WHERE by_user=?").bind(uid), db.prepare("UPDATE dedupe_queue SET decided_by=0 WHERE decided_by=?").bind(uid));
-  if (h) ops.push(db.prepare("UPDATE speaker_ref SET handle='' WHERE handle=?").bind(h));
+  if (h) {
+    for (const r of (await db.prepare("SELECT id FROM speaker_ref WHERE handle=?").bind(h).all()).results || []) gone.add(r.id);
+    ops.push(db.prepare("UPDATE speaker_ref SET handle='' WHERE handle=?").bind(h));
+    // Protokoll: den Eintrag der Person (Name + Profil) aus den gemerkten Speaker-Listen nehmen; die Zusammenfuehrung selbst bleibt nachvollziehbar
+    const drop = (js) => { const a = parse(js, null); if (!Array.isArray(a)) return js; const b = a.filter((x) => x?.h !== h); return b.length === a.length ? js : JSON.stringify(b); };
+    for (const l of (await db.prepare("SELECT id,kind,snapshot FROM merge_log WHERE kind IN ('session','speaker') AND snapshot LIKE ? LIMIT 500").bind(`%${h}%`).all()).results || []) {
+      const s = parse(l.snapshot, null); if (!s || typeof s !== "object") continue;
+      for (const o of [s.into_before, s.into_after]) if (o && typeof o.speakers === "string") o.speakers = drop(o.speakers);
+      if (s.into_before?.handle === h) s.into_before.handle = "";
+      for (const x of Array.isArray(s.sessions) ? s.sessions : []) { x.before = drop(x.before); x.after = drop(x.after); }
+      const js = JSON.stringify(s); if (js !== l.snapshot) ops.push(db.prepare("UPDATE merge_log SET snapshot=? WHERE id=?").bind(js, l.id));
+    }
+  }
+  if (gone.size) {   // Speaker-Identitaeten dieses Kontos: weg, sobald keine Session mehr auf sie verweist (sonst bleibt nur der Name, den ein Veranstalter in seinem Programm fuehrt)
+    const ids = JSON.stringify([...gone]), orphan = "id IN (SELECT value FROM json_each(?1)) AND NOT EXISTS (SELECT 1 FROM event_sessions s, json_each(CASE WHEN json_valid(s.speakers) THEN s.speakers ELSE '[]' END) j WHERE json_extract(j.value,'$.r')=speaker_ref.id)";
+    const dead = "(SELECT value FROM json_each(?1) WHERE value NOT IN (SELECT id FROM speaker_ref))";
+    ops.push(db.prepare(`DELETE FROM speaker_ref WHERE ${orphan}`).bind(ids),
+      db.prepare(`DELETE FROM dedupe_queue WHERE kind='speaker' AND (a_id IN ${dead} OR b_id IN ${dead})`).bind(ids),
+      db.prepare(`UPDATE merge_log SET undone=1,snapshot='{}' WHERE kind='speaker' AND (from_id IN ${dead} OR into_id IN ${dead})`).bind(ids));
+  }
   return ops;
 }
 
@@ -675,6 +787,8 @@ export async function unmerge(db, logId, by = 0, nested = false) {
     for (const id of [...new Set([...(s.session_logs || []), ...cross])].sort((x, y) => y - x)) await unmerge(db, id, by, true);
     restore("events");
     ops.push(db.prepare("UPDATE events SET merged_into=0,public=? WHERE id=?").bind(s.from_public ?? 1, l.from_id));
+    const fr = await db.prepare("SELECT handle,title FROM events WHERE id=?").bind(l.from_id).first();   // nie sichtbar gewesene Zeile: jetzt eine echte Adresse
+    if (fr?.handle.startsWith(HIDDEN)) ops.push(db.prepare("UPDATE events SET handle=? WHERE id=?").bind(await freeHandle(db, fr.title, normEventName(fr.title).year), l.from_id));
     for (const x of EVENT_TABLES) {
       const keys = (s.moved || {})[x.table]; if (!keys) continue;
       ops.push(x.key ? db.prepare(`UPDATE OR IGNORE ${x.table} SET event_id=?1 WHERE event_id=?2 AND ${x.key} IN (SELECT value FROM json_each(?3))`).bind(l.from_id, l.into_id, JSON.stringify(keys)) : db.prepare(`UPDATE OR IGNORE ${x.table} SET event_id=?1 WHERE event_id=?2`).bind(l.from_id, l.into_id));

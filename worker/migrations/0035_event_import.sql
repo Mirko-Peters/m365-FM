@@ -3,7 +3,8 @@
 -- Woran man Zeilen in events erkennt (auch fuer andere Module, z. B. LinkedIn-Events):
 --   importiert      source<>''  (communitydays | sessionize); unclaimed=1 solange kein Veranstalter uebernommen hat (owner_id=0)
 --   vergangen       retired=1   (nur Import; bleibt public=1)
---   zusammengefuehrt merged_into<>0 (ID des verbleibenden Events) und public=0
+--   zusammengefuehrt merged_into<>0 (ID des verbleibenden Events) und public=0; ueber die Adress-Routen nicht erreichbar. Zeilen, die der Import gleich
+--                   beim Anlegen zusammengefuehrt hat, tragen eine technische Adresse (handle beginnt mit '~') und belegen keine echte
 --   von Hand gepflegt edited_at>0 oder owner_id<>0 oder org_id gesetzt: Importe aendern die Inhalte dann nicht mehr
 --   geloescht       keine Zeile mehr; fuer Import-Events bleibt eine Loeschmarke in event_tombstone
 -- Unbekanntes bei Import-Events: free=-1 (Preis unbekannt, wird nicht als kostenlos ausgegeben), tz='' (Zeitzone unbekannt, keine Session-Erinnerungen)
@@ -38,6 +39,9 @@ CREATE TABLE IF NOT EXISTS event_source (
   ref TEXT NOT NULL,
   url TEXT NOT NULL DEFAULT '',
   url_key TEXT NOT NULL DEFAULT '',
+  name_key TEXT NOT NULL DEFAULT '',   -- der Datensatz, wie ihn die Quelle zuletzt lieferte: Name (normalisiert) ...
+  day TEXT NOT NULL DEFAULT '',        -- ... und Tag. Daran wird derselbe Datensatz wiedererkannt, auch wenn das Event hier umbenannt, verschoben oder zusammengefuehrt wurde.
+  hash TEXT NOT NULL DEFAULT '',       -- Inhalts-Hash des zuletzt gelesenen Stands: nur eine Aenderung in der Quelle wird in ein ungepflegtes Import-Event uebernommen
   first_seen INTEGER NOT NULL,
   last_seen INTEGER NOT NULL,
   PRIMARY KEY (event_id, kind, ref)

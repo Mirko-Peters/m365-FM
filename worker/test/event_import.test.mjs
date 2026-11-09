@@ -9,7 +9,8 @@ import { robotsAllowed, UA, politeGet, CACHE_MAX } from "../src/botfetch.js";
 import { normEventName, normSessionTitle, normLink, normUrl, upsertEvent, upsertSession, listDupes, listMerges, decideDupe, unmerge, mergeEvents, slugHandle, backfillKeys, cleanCand, normEnd, EVENT_TABLES } from "../src/eventmerge.js";
 import { mergeStatements } from "../src/identities.js";
 import { queueSessionReminders } from "../src/topic_notifications.js";
-import { TOOLS } from "../src/mcp.js";
+import { TOOLS, handleMcp } from "../src/mcp.js";
+import { createHash } from "node:crypto";
 
 const fx = (n) => readFileSync(new URL("./fixtures/" + n, import.meta.url), "utf8");
 const J = (data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "content-type": "application/json" } });
@@ -680,4 +681,242 @@ test("Abhaengige Tabellen (317-17): jede Tabelle mit event_id steht in EVENT_TAB
   await unmerge(db, m.log, 1);
   assert.deepEqual(raw.prepare("SELECT user_id FROM event_attendees WHERE event_id=? ORDER BY user_id").all(b.id).map((r) => r.user_id), [7, 8]); assert.equal(raw.prepare("SELECT COUNT(*) n FROM event_roles WHERE event_id=?").get(b.id).n, 1); assert.equal(raw.prepare("SELECT COUNT(*) n FROM event_settings WHERE event_id=?").get(b.id).n, 1);
   assert.deepEqual({ ...raw.prepare("SELECT merged_into,public FROM events WHERE id=?").get(b.id) }, { merged_into: 0, public: 1 });
+});
+
+// ---------------------------------------------------------------- zweite Runde (Nachpruefung #317)
+const cdEvent = (o = {}) => ({ name: "Azure Day Bonn", startDate: "2026-06-16T09:00", url: "https://communitydays.org/events/bonn", description: "Azure day in Bonn with a long text about everything that happens there.", location: { address: { addressLocality: "Bonn" } }, ...o });
+const cdRun = async (s, list, today) => { cdPages(s.pages, ldList(list)); s.raw.exec("DELETE FROM import_cache"); return runCommunityDays(s.env, { ...s.opts, today, force: true }); };
+const rpcFor = (env, raw, uid) => { raw.prepare("INSERT INTO api_tokens(hash,user_id,created) VALUES(?,?,1)").run(createHash("sha256").update("m365_t" + uid).digest("hex"), uid);
+  return async (name, args) => JSON.parse((await (await handleMcp(env, new Request("https://x/mcp", { method: "POST", headers: { "content-type": "application/json", authorization: "Bearer m365_t" + uid }, body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "tools/call", params: { name, arguments: args } }) }), async (id) => ({ id }), null)).json()).result.content[0].text); };
+
+test("Derselbe Datensatz wird an seiner Geschichte wiedererkannt: vom Veranstalter umbenannt, vom Admin zusammengefuehrt, in der Quelle verlegt – nie eine neue Dublette", async () => {
+  // (1) Veranstalter uebernimmt das Import-Event und benennt es so um, dass weniger als die Haelfte der Woerter bleibt
+  const a = await setup(), ev = via(handleEvents, a.env), imp = via(handleEventImport, a.env), orga = user(a.raw, 1, "Olga Org", "olga"), admin = { ...user(a.raw, 9, "Admin", "admin-p"), admin: true };
+  const hh = cdEvent({ name: "Hamburg Copilot Day 2026", startDate: "2026-05-16T09:00", url: "https://communitydays.org/events/hamburg-copilot-day", location: { address: { addressLocality: "Hamburg" } } });
+  await cdRun(a, [hh], "2026-01-01");
+  await imp(orga, "/api/event/hamburg-copilot-day-2026/claim", "POST", {}); await imp(admin, "/api/admin/events/claim", "POST", { event_id: 1, user_id: 1, ok: true });
+  assert.equal((await ev(orga, "/api/event", "POST", { handle: "hamburg-copilot-day-2026", title: "Hamburger Copilot-Tag 2026", start: "2026-05-16T09:00", mode: "onsite", location: "Hamburg" }))[0], 200);
+  for (const day of ["2026-01-02", "2026-01-03", "2026-01-04"]) { const r = await cdRun(a, [hh], day); assert.deepEqual([r.created, r.queued, r.merged], [0, 0, 1], day); }
+  assert.deepEqual(a.raw.prepare("SELECT id,title,owner_id FROM events").all().map((r) => [r.id, r.title, r.owner_id]), [[1, "Hamburger Copilot-Tag 2026", 1]]);
+  assert.equal(a.raw.prepare("SELECT COUNT(*) n FROM dedupe_queue").get().n, 0);
+  // verlegt die Quelle das uebernommene Event, bleibt es beim Stand des Veranstalters – und bei EINEM Event
+  const moved = await cdRun(a, [{ ...hh, startDate: "2026-05-30T09:00" }], "2026-01-05"); assert.deepEqual([moved.created, moved.queued, moved.merged, moved.updated], [0, 0, 1, 0]);
+  assert.deepEqual(a.raw.prepare("SELECT title,start FROM events").all().map((r) => [r.title, r.start]), [["Hamburger Copilot-Tag 2026", "2026-05-16T09:00"]]);
+  assert.equal(a.raw.prepare("SELECT day FROM event_source WHERE kind='communitydays'").get().day, "2026-05-30");   // gemerkt ist der Stand der Quelle
+
+  // (2) Mitglieds-Event und Datensatz teilen die Adresse, heissen aber verschieden: Warteschlange -> Admin fuehrt zusammen -> die Entscheidung haelt
+  const b = await setup(), evB = via(handleEvents, b.env), impB = via(handleEventImport, b.env), m = user(b.raw, 1, "Olga Org", "olga"), adminB = { ...user(b.raw, 9, "Admin", "admin-p"), admin: true };
+  const url = "https://communitydays.org/events/azure-evening-cologne", rec = cdEvent({ name: "Azure Evening Cologne", startDate: "2026-05-16T18:00", url, location: { address: { addressLocality: "Cologne" } } });
+  await evB(m, "/api/event", "POST", { handle: "koelner-azure-abend", title: "Kölner Azure-Abend", start: "2026-05-16T18:00", mode: "onsite", location: "Köln", url });
+  assert.equal((await cdRun(b, [rec], "2026-01-01")).queued, 1);
+  const q = (await impB(adminB, "/api/admin/events/dupes"))[1].items; assert.equal(q.length, 1); assert.equal(q[0].reason, "url_name_differs");
+  assert.equal((await impB(adminB, "/api/admin/events/dupes", "POST", { id: q[0].id, action: "merge" }))[0], 200);
+  for (const day of ["2026-01-02", "2026-01-03"]) { const r = await cdRun(b, [rec], day); assert.deepEqual([r.created, r.queued, r.merged], [0, 0, 1], day); }
+  assert.equal(b.raw.prepare("SELECT COUNT(*) n FROM events").get().n, 2); assert.deepEqual(visible(b.raw).map((e) => [e.title, e.owner_id]), [["Kölner Azure-Abend", 1]]);
+  assert.equal(b.raw.prepare("SELECT COUNT(*) n FROM dedupe_queue WHERE status='open'").get().n, 0);
+  // der Stand des Datensatzes steht nur an seiner eigenen (ausgeblendeten) Zeile; der Verweis am Mitglieds-Event traegt keinen
+  assert.deepEqual(b.raw.prepare("SELECT event_id,name_key,day,hash<>'' h FROM event_source WHERE kind='communitydays' ORDER BY event_id").all().map((r) => [r.event_id, r.name_key, r.day, r.h]), [[1, "", "", 0], [2, "azure evening cologne", "2026-05-16", 1]]);
+  // nimmt der Admin die Zusammenfuehrung zurueck, steht der Datensatz wieder fuer sich und bleibt es
+  assert.equal((await impB(adminB, "/api/admin/events/unmerge", "POST", { log: 1 }))[0], 200);
+  const again = await cdRun(b, [rec], "2026-01-04"); assert.deepEqual([again.created, again.queued, again.merged], [0, 0, 1]);
+  assert.deepEqual(visible(b.raw).map((e) => e.title), ["Kölner Azure-Abend", "Azure Evening Cologne"]);
+
+  // (3) die Quelle verlegt ein Event um zwei Wochen: dasselbe Event bekommt den neuen Termin, es entsteht kein zweites
+  const c = await setup(); await cdRun(c, [cdEvent()], "2026-01-01");
+  for (const day of ["2026-01-02", "2026-01-03"]) { const r = await cdRun(c, [cdEvent({ startDate: "2026-06-30T09:00" })], day); assert.deepEqual([r.created, r.queued, r.merged], [0, 0, 1], day); }
+  assert.deepEqual(c.raw.prepare("SELECT id,start FROM events").all().map((r) => [r.id, r.start]), [[1, "2026-06-30T09:00"]]); assert.equal(c.raw.prepare("SELECT COUNT(*) n FROM dedupe_queue").get().n, 0);
+  // neuer Name am selben Tag unter derselben (nur einmal vergebenen) Adresse: ebenfalls derselbe Datensatz
+  const ren = await cdRun(c, [cdEvent({ name: "Rheinland Cloud Summit", startDate: "2026-06-30T09:00" })], "2026-01-04"); assert.deepEqual([ren.created, ren.queued, ren.updated], [0, 0, 1]);
+  assert.deepEqual(c.raw.prepare("SELECT title,handle,name_key FROM events").all().map((r) => [r.title, r.handle, r.name_key]), [["Rheinland Cloud Summit", "azure-day-bonn", "rheinland cloud summit"]]);   // die Adresse der Seite bleibt
+  // die Ausgabe des naechsten Jahres (der alte Termin ist vorbei) ist dagegen ein neues Event
+  const next = await cdRun(c, [cdEvent({ name: "Rheinland Cloud Summit", startDate: "2027-06-29T09:00" })], "2026-07-15"); assert.equal(next.created + next.queued, 1);
+  assert.equal(visible(c.raw).length, 2);
+
+  // (4) ohne Wissen ueber die ganze Quelle (direkter Aufruf): neuer Termin -> Warteschlange; nach der Entscheidung des Admins kommt der Datensatz nicht wieder
+  const d = await setup(), impD = via(handleEventImport, d.env), adminD = { ...user(d.raw, 9, "Admin", "admin-p"), admin: true };
+  const cand = (start) => ({ title: "Azure Day Bonn", start, city: "Bonn", url: "https://communitydays.org/events/bonn", source: "communitydays", sources: [{ kind: "communitydays", ref: "communitydays.org/events/bonn", url: "https://communitydays.org/events/bonn" }] });
+  assert.equal((await upsertEvent(d.env.DB, cand("2026-06-16T09:00"))).action, "created");
+  const late = await upsertEvent(d.env.DB, cand("2026-06-30T09:00")); assert.deepEqual([late.action, late.reason], ["queued", "source_date_differs"]);
+  const qd = (await impD(adminD, "/api/admin/events/dupes"))[1].items; await impD(adminD, "/api/admin/events/dupes", "POST", { id: qd[0].id, action: "merge" });
+  for (let i = 0; i < 3; i++) { const r = await upsertEvent(d.env.DB, cand("2026-06-30T09:00")); assert.deepEqual([r.action, r.id], ["merged", 1]); }
+  assert.equal(d.raw.prepare("SELECT COUNT(*) n FROM events").get().n, 2); assert.equal(visible(d.raw).length, 1); assert.equal(d.raw.prepare("SELECT COUNT(*) n FROM dedupe_queue WHERE status='open'").get().n, 0);
+  // "getrennt lassen" haelt genauso
+  const e = await setup(), impE = via(handleEventImport, e.env), adminE = { ...user(e.raw, 9, "Admin", "admin-p"), admin: true };
+  await upsertEvent(e.env.DB, cand("2026-06-16T09:00")); await upsertEvent(e.env.DB, cand("2026-06-30T09:00"));
+  await impE(adminE, "/api/admin/events/dupes", "POST", { id: (await impE(adminE, "/api/admin/events/dupes"))[1].items[0].id, action: "separate" });
+  for (const [start, id] of [["2026-06-30T09:00", 2], ["2026-06-16T09:00", 1], ["2026-06-30T09:00", 2]]) { const r = await upsertEvent(e.env.DB, cand(start)); assert.deepEqual([r.action, r.id], ["merged", id]); }
+  assert.equal(e.raw.prepare("SELECT COUNT(*) n FROM events").get().n, 2); assert.equal(e.raw.prepare("SELECT COUNT(*) n FROM dedupe_queue WHERE status='open'").get().n, 0);
+});
+test("Reihe unter einer gemeinsamen Adresse: zwei gleichzeitig gelistete Termine bleiben zwei Events und ueberschreiben sich nicht gegenseitig", async () => {
+  const s = await setup(), g = "https://communitydays.org/events/azure-meetup-bonn";
+  const list = [cdEvent({ name: "Azure Meetup Bonn #12", startDate: "2026-06-16T18:00", url: g, description: "Azure: Topic A" }), cdEvent({ name: "Azure Meetup Bonn #13", startDate: "2026-06-18T18:00", url: g, description: "Azure: Topic B" })];
+  const r1 = await cdRun(s, list, "2026-01-01"); assert.equal(r1.created + r1.queued, 2);
+  const snap = () => JSON.stringify(s.raw.prepare("SELECT id,title,start,summary,updated,merged_into FROM events ORDER BY id").all());
+  const before = snap(); assert.deepEqual(visible(s.raw).map((e) => [e.title, e.start]), [["Azure Meetup Bonn #12", "2026-06-16T18:00"], ["Azure Meetup Bonn #13", "2026-06-18T18:00"]]);
+  for (const day of ["2026-01-02", "2026-01-03"]) { const r = await cdRun(s, list, day); assert.deepEqual([r.created, r.queued, r.merged, r.updated], [0, 0, 2, 0], day); }
+  assert.equal(snap(), before);
+  // aendert einer der beiden seinen Text, folgt ihm das Event nicht automatisch (welcher Eintrag welcher ist, weiss bei geteilter Adresse nur ein Mensch) – der andere bleibt unberuehrt
+  await cdRun(s, [{ ...list[0], description: "Azure: Topic A, now with pizza and a much longer text" }, list[1]], "2026-01-04");
+  assert.deepEqual(visible(s.raw).map((e) => e.summary), ["Azure: Topic A, now with pizza and a much longer text", "Azure: Topic B"]);   // laengerer Text wird wie bisher ergaenzt
+});
+test("Aenderungen der Quelle kommen im ungepflegten Import-Event an (Termin, Ort, Texte); gepflegte Events und andere Quellen bleiben, wie sie sind", async () => {
+  const s = await setup(), ev = via(handleEvents, s.env), admin = { ...user(s.raw, 9, "Admin", "admin-p"), admin: true };
+  await cdRun(s, [cdEvent(), cdEvent({ name: "Fabric Day Essen", url: "https://communitydays.org/events/essen", startDate: "2026-09-01T09:00", location: { address: { addressLocality: "Essen" } } })], "2026-01-01");
+  s.raw.prepare("UPDATE events SET lat=50.7,lng=7.1,geo_at=5,geo_address='Bonn',geo_precision='city' WHERE id=1").run();
+  const changed = cdEvent({ startDate: "2026-06-17T10:00", endDate: "2026-06-18", description: "Azure day. Moved by one day!", location: { address: { addressLocality: "Köln", addressCountry: "Germany" } } });
+  const essen = cdEvent({ name: "Fabric Day Essen", url: "https://communitydays.org/events/essen", startDate: "2026-09-01T09:00", location: { address: { addressLocality: "Essen" } } });
+  const r = await cdRun(s, [changed, essen], "2026-01-02"); assert.deepEqual([r.created, r.queued, r.merged, r.updated], [0, 0, 2, 1]);
+  const row = () => s.raw.prepare("SELECT * FROM events WHERE id=1").get(), a = row();
+  assert.deepEqual([a.title, a.start, a.end, a.location, a.city, a.country, a.summary, a.about, a.city_key], ["Azure Day Bonn", "2026-06-17T10:00", "2026-06-18", "Köln", "Köln", "Germany", "Azure day. Moved by one day!", "Azure day. Moved by one day!", "koln"]);
+  assert.deepEqual([a.lat, a.lng, a.geo_at, a.geo_address], [null, null, 0, ""]);   // neuer Ort: Koordinaten verworfen, der Geocode-Lauf holt sie neu
+  assert.equal(s.raw.prepare("SELECT COUNT(*) n FROM events").get().n, 2); assert.equal(s.raw.prepare("SELECT COUNT(*) n FROM dedupe_queue").get().n, 0);
+  // unveraenderte Quelle: nichts wird erneut geschrieben
+  const u0 = a.updated; assert.equal((await cdRun(s, [changed, essen], "2026-01-03")).updated, 0); assert.equal(row().updated, u0);
+  // faellt in der Quelle nur die Ortsangabe weg, ohne dass sie "online" sagt, bleiben Modus und Ort (eine Luecke loescht nichts)
+  const gap = await cdRun(s, [{ ...changed, location: undefined, description: "Azure day. Moved by one day! Now with workshops." }, essen], "2026-01-03"); assert.equal(gap.updated, 1);
+  assert.deepEqual([row().mode, row().location, row().city, row().summary], ["onsite", "Köln", "Köln", "Azure day. Moved by one day! Now with workshops."]);
+  await cdRun(s, [changed, essen], "2026-01-03");
+  // ein Datensatz einer ANDEREN Quelle zum selben Event ergaenzt nur (laengerer Text, leere Felder) und wird nie massgeblich
+  const other = await upsertEvent(s.env.DB, { title: "Azure Day Bonn", start: "2026-06-17", city: "Köln", url: "https://sessionize.com/azure-day-bonn", source: "sessionize", sources: [{ kind: "sessionize_event", ref: "azure-day-bonn", url: "https://sessionize.com/azure-day-bonn" }] });
+  assert.equal(other.reason, "name+day+city"); assert.ok(other.log > 0);
+  await upsertEvent(s.env.DB, { title: "Azure Day Bonn", start: "2026-06-17", city: "Köln", summary: "Kurz", url: "https://sessionize.com/azure-day-bonn", source: "sessionize", sources: [{ kind: "sessionize_event", ref: "azure-day-bonn", url: "https://sessionize.com/azure-day-bonn" }] });   // derselbe Sessionize-Datensatz, geaendert
+  assert.deepEqual([row().start, row().summary, row().url], ["2026-06-17T10:00", "Azure day. Moved by one day!", "https://communitydays.org/events/bonn"]);
+  assert.equal(s.raw.prepare("SELECT summary FROM events WHERE merged_into=1").get().summary, "Kurz");   // seine eigene (ausgeblendete) Zeile haelt den aktuellen Stand, falls die Zusammenfuehrung zurueckgenommen wird
+  // wird das Event auf "online" umgestellt, entfaellt der Ort; eine Angabe, die die Quelle nicht mehr macht, loescht dagegen nichts
+  await cdRun(s, [cdEvent({ startDate: "2026-06-17T10:00", description: "", eventAttendanceMode: "https://schema.org/OnlineEventAttendanceMode", location: { "@type": "VirtualLocation" } }), essen], "2026-01-04");
+  assert.deepEqual([row().mode, row().location, row().city, row().summary, row().end], ["online", "", "", "Azure day. Moved by one day!", ""]);
+  // als vergangen markiert und dann auf einen kuenftigen Termin verlegt: wieder aktuell
+  s.raw.prepare("UPDATE events SET retired=1 WHERE id=2").run();
+  await cdRun(s, [essen, cdEvent({ startDate: "2026-06-17T10:00", eventAttendanceMode: "https://schema.org/OnlineEventAttendanceMode", location: { "@type": "VirtualLocation" } })].map((x) => (x === essen ? { ...essen, startDate: "2026-09-02T09:00" } : x)), "2026-01-05");
+  assert.deepEqual(s.raw.prepare("SELECT start,retired FROM events WHERE id=2").all().map((x) => [x.start, x.retired]), [["2026-09-02T09:00", 0]]);
+  // ein Admin korrigiert das Event von Hand: ab jetzt aendert die Quelle nichts mehr
+  assert.equal((await ev(admin, "/api/event", "POST", { handle: "fabric-day-essen", title: "Fabric Day Essen", start: "2026-09-03T09:00", mode: "onsite", location: "Essen, Zeche" }))[0], 200);
+  await cdRun(s, [{ ...essen, startDate: "2026-09-10T09:00", description: "Completely new text from the source" }], "2026-01-06");
+  assert.deepEqual(s.raw.prepare("SELECT start,location,summary FROM events WHERE id=2").all().map((x) => [x.start, x.location, x.summary]), [["2026-09-03T09:00", "Essen, Zeche", ""]]);
+});
+test("Massgebliche Quelle: ein aus einem Speaker-Profil entstandenes Event folgt der Veranstaltungsliste, sobald sie es fuehrt; Zuruecknehmen nimmt auch das zurueck", async () => {
+  const s = await setup(), db = s.env.DB, imp = via(handleEventImport, s.env), admin = { ...user(s.raw, 9, "Admin", "admin-p"), admin: true };
+  const prof = (o = {}) => ({ title: "Azure Day Bonn", start: "2026-06-16", city: "Bonn", url: "https://sessionize.com/azure-day-bonn", source: "sessionize", sources: [{ kind: "sessionize_event", ref: "azure-day-bonn", url: "https://sessionize.com/azure-day-bonn" }], ...o });
+  assert.deepEqual([(await upsertEvent(db, prof())).action, (await cdRun(s, [cdEvent()], "2026-01-01")).merged], ["created", 1]);   // die Liste fuehrt dasselbe Event (Name, Tag, Stadt): protokolliert vereint
+  const row = () => s.raw.prepare("SELECT * FROM events WHERE id=1").get(), log = s.raw.prepare("SELECT id FROM merge_log WHERE kind='event'").get().id;
+  assert.deepEqual([row().start, row().source, row().url], ["2026-06-16T09:00", "sessionize", "https://sessionize.com/azure-day-bonn"]);
+  // die Liste verlegt das Event und beschreibt es neu: das Event folgt, obwohl es nicht aus ihr entstand
+  const r = await cdRun(s, [cdEvent({ startDate: "2026-06-18T10:00", description: "New text from the listing" })], "2026-01-02"); assert.deepEqual([r.created, r.queued, r.merged, r.updated], [0, 0, 1, 1]);
+  assert.deepEqual([row().start, row().summary], ["2026-06-18T10:00", "New text from the listing"]);
+  // das Speaker-Profil liefert seinen Datensatz geaendert (weiter mit dem alten Tag): es ergaenzt nur noch
+  const p2 = await upsertEvent(db, prof({ country: "Germany" })); assert.deepEqual([p2.action, p2.id, p2.changed], ["merged", 1, false]);
+  assert.deepEqual([row().start, row().summary, row().country], ["2026-06-18T10:00", "New text from the listing", "Germany"]);
+  assert.equal(s.raw.prepare("SELECT COUNT(*) n FROM events").get().n, 2); assert.equal(s.raw.prepare("SELECT COUNT(*) n FROM dedupe_queue").get().n, 0);
+  // ein reines Datum nimmt eine bekannte Uhrzeit desselben Tages nicht weg
+  const s2 = await setup(); await upsertEvent(s2.env.DB, prof({ start: "2026-06-16T09:00" })); await upsertEvent(s2.env.DB, prof({ start: "2026-06-16", country: "Germany" }));
+  assert.deepEqual(s2.raw.prepare("SELECT start,country FROM events").all().map((x) => [x.start, x.country]), [["2026-06-16T09:00", "Germany"]]);
+  // Zuruecknehmen: was das Event von der Liste uebernommen hat, geht mit zurueck; beide stehen wieder fuer sich und bleiben getrennt
+  assert.equal((await imp(admin, "/api/admin/events/unmerge", "POST", { log }))[0], 200);
+  assert.deepEqual(visible(s.raw).map((e) => [e.id, e.start, e.summary, e.source]), [[1, "2026-06-16", "", "sessionize"], [2, "2026-06-18T10:00", "New text from the listing", "communitydays"]]);
+  const again = await cdRun(s, [cdEvent({ startDate: "2026-06-19T10:00", description: "New text from the listing" })], "2026-01-03"); assert.deepEqual([again.created, again.queued, again.merged, again.updated], [0, 0, 1, 1]);
+  assert.deepEqual(visible(s.raw).map((e) => [e.id, e.start]), [[1, "2026-06-16"], [2, "2026-06-19T10:00"]]);
+});
+test("Geloescht bleibt geloescht, auch wenn die Quelle das Event danach verlegt", async () => {
+  const s = await setup(), ev = via(handleEvents, s.env), admin = { ...user(s.raw, 9, "Admin", "admin-p"), admin: true };
+  await cdRun(s, [cdEvent()], "2026-01-01");
+  assert.equal((await ev(admin, "/api/event/azure-day-bonn", "DELETE"))[0], 200);
+  for (const [start, day] of [["2026-06-16T09:00", "2026-01-02"], ["2026-06-30T09:00", "2026-01-03"], ["2026-06-30T09:00", "2026-01-04"]]) { const r = await cdRun(s, [cdEvent({ startDate: start })], day); assert.deepEqual([r.created, r.queued, r.skipped], [0, 0, 1], day); }
+  assert.equal(s.raw.prepare("SELECT COUNT(*) n FROM events").get().n, 0);
+  assert.equal((await cdRun(s, [cdEvent({ startDate: "2027-06-15T09:00" })], "2026-07-01")).created, 1);   // die naechste Ausgabe kommt wieder
+});
+test("Import-Events ohne Veranstalter: keine Anmeldung und kein Session-Vorschlag ueber M365.FM (Route und MCP); nach dem Uebernehmen geht beides", async () => {
+  const s = await setup(), ev = via(handleEvents, s.env), imp = via(handleEventImport, s.env);
+  const orga = user(s.raw, 1, "Olga Org", "olga"), guest = user(s.raw, 2, "Gast Member", "gast"), admin = { ...user(s.raw, 9, "Admin", "admin-p"), admin: true };
+  await cdRun(s, [cdEvent()], "2026-01-01");
+  assert.deepEqual(await ev(guest, "/api/event/azure-day-bonn/register", "POST", { visible: false }), [409, { error: "unclaimed" }]);
+  assert.deepEqual(await ev(guest, "/api/event/azure-day-bonn/session", "POST", { title: "Mein Vorschlag", abstract: "x", speakers: [] }), [409, { error: "unclaimed" }]);
+  const mcp = rpcFor(s.env, s.raw, 2); assert.equal((await mcp("register_for_event", { event: "azure-day-bonn" })).error, "unclaimed");
+  assert.equal(s.raw.prepare("SELECT COUNT(*) n FROM event_attendees").get().n, 0); assert.equal(s.raw.prepare("SELECT COUNT(*) n FROM event_sessions").get().n, 0);
+  assert.equal((await ev(guest, "/api/event/azure-day-bonn/attendees"))[0], 200);   // lesen bleibt moeglich (leer)
+  assert.equal((await ev(admin, "/api/event/azure-day-bonn/session", "POST", { title: "Vom Admin nachgetragen", speakers: [] }))[1].status, "live");   // Admins pflegen herrenlose Events weiter
+  await imp(orga, "/api/event/azure-day-bonn/claim", "POST", {}); await imp(admin, "/api/admin/events/claim", "POST", { event_id: 1, user_id: 1, ok: true });
+  assert.deepEqual(await ev(guest, "/api/event/azure-day-bonn/register", "POST", { visible: false }), [200, { ok: true, status: "going" }]);
+  assert.deepEqual(await ev(guest, "/api/event/azure-day-bonn/session", "POST", { title: "Mein Vorschlag", abstract: "x", speakers: [] }), [200, { ok: true, status: "pending" }]);
+  assert.equal((await mcp("register_for_event", { event: "azure-day-bonn", visible: true })).ok, true);
+  const js = readFileSync(new URL("../../assets/events.js", import.meta.url), "utf8");
+  assert.match(js, /\(j\.events \|\| \[\]\)\.filter\(function \(e\) \{ return !e\.unclaimed; \}\)/);   // die Auswahl "Session vorschlagen" bietet herrenlose Events nicht an
+});
+test("Session im Formular bearbeitet: die Kennungen der Speaker aus dem Import bleiben, ein spaeter zurueckgezogener Speaker verschwindet", async () => {
+  const s = await setup(), ev = via(handleEvents, s.env), imp = via(handleEventImport, s.env), orga = user(s.raw, 1, "Olga Org", "olga");
+  await ev(orga, "/api/event", "POST", { handle: "hh-copilot-day", title: "Hamburg Copilot Day 2026", start: "2026-05-16T09:00", mode: "onsite", location: "Hamburg" });
+  s.pages[SZ] = { sessions: [{ id: "101", title: "Copilot Studio agents", description: "d", startsAt: "2026-05-16T09:00:00", endsAt: "2026-05-16T09:45:00", speakers: ["aaaa-1", "bbbb-2"], roomId: 1 }], speakers: [{ id: "aaaa-1", fullName: "Jane Doe" }, { id: "bbbb-2", fullName: "Max Muster" }], rooms: [{ id: 1, name: "Room A" }], categories: [] };
+  assert.equal((await imp(orga, "/api/event/hh-copilot-day/sessionize", "POST", { api_id: "abc123" }))[0], 200);
+  const mine = (await ev(orga, "/api/events/mine"))[1].events[0].sessions[0];
+  // der Veranstalter aendert nur den Raum; das Formular schickt die Speaker ohne Kennungen zurueck (Name bzw. Profil)
+  assert.equal((await ev(orga, "/api/event/hh-copilot-day/session", "POST", { id: mine.id, title: mine.title, abstract: mine.abstract, start: mine.start, end: mine.end, room: "Saal 1", speakers: mine.speakers.map((x) => ({ n: x.n })) }))[0], 200);
+  const row = () => s.raw.prepare("SELECT * FROM event_sessions WHERE id=?").get(mine.id);
+  assert.equal(row().edited_fields, "room"); assert.deepEqual(JSON.parse(row().speakers).map((x) => [x.n, x.sz, x.r, x.t]), mine.speakers.map((x) => [x.n, x.sz, x.r, x.t]));
+  s.pages[SZ].sessions[0].speakers = ["aaaa-1"]; s.pages[SZ].sessions[0].startsAt = "2026-05-16T11:00:00"; s.pages[SZ].sessions[0].endsAt = "2026-05-16T11:45:00"; s.raw.exec("DELETE FROM import_cache");
+  assert.equal((await imp(orga, "/api/event/hh-copilot-day/sessionize/sync", "POST"))[1].updated, 1);
+  assert.deepEqual([row().start, row().room, JSON.parse(row().speakers).map((x) => x.n)], ["2026-05-16T11:00", "Saal 1", ["Jane Doe"]]);
+  assert.deepEqual((await ev(null, "/api/events/export"))[1].events[0].sessions[0].speakers.map((x) => x.n), ["Jane Doe"]);
+  // aendert der Veranstalter die Speaker selbst, gilt weiter sein Stand
+  assert.equal((await ev(orga, "/api/event/hh-copilot-day/session", "POST", { id: mine.id, title: mine.title, abstract: mine.abstract, start: row().start, end: row().end, room: "Saal 1", speakers: [{ n: "Jane Doe" }, { n: "Gast Rednerin" }] }))[0], 200);
+  s.pages[SZ].sessions[0].speakers = ["bbbb-2"]; s.raw.exec("DELETE FROM import_cache"); await imp(orga, "/api/event/hh-copilot-day/sessionize/sync", "POST");
+  assert.deepEqual(JSON.parse(row().speakers).map((x) => x.n), ["Jane Doe", "Gast Rednerin"]);
+});
+test("Ausgeblendete (zusammengefuehrte) Zeilen belegen keine Adresse und sind ueber keine Adress-Route erreichbar", async () => {
+  const s = await setup(), ev = via(handleEvents, s.env), imp = via(handleEventImport, s.env);
+  const orga = user(s.raw, 1, "Olga Org", "olga"), other = user(s.raw, 2, "Other Member", "other"), admin = { ...user(s.raw, 9, "Admin", "admin-p"), admin: true };
+  await ev(orga, "/api/event", "POST", { handle: "hh-copilot-day", title: "Hamburg Copilot Day 2026", start: "2026-05-16T09:00", mode: "onsite", location: "Hamburg" });
+  const r = await upsertEvent(s.env.DB, { title: "Hamburg Copilot Day 2026", start: "2026-05-16", city: "Hamburg", source: "communitydays", sources: [{ kind: "communitydays", ref: "uid:1", url: "" }] });
+  assert.equal(r.action, "merged"); const hid = s.raw.prepare("SELECT * FROM events WHERE merged_into=1").get();
+  assert.match(hid.handle, /^~[0-9a-f]{30}$/); assert.ok(!/^\/api\/event\/[a-z0-9-]{3,40}$/.test("/api/event/" + hid.handle));   // technische Adresse: von keiner Route und keinem Formular erreichbar
+  // die Adresse, die der Import sonst vergeben haette, ist frei
+  assert.equal((await ev(other, "/api/event", "POST", { handle: "hamburg-copilot-day-2026", title: "Hamburg Copilot Day 2026 Afterparty", start: "2026-05-16T19:00", mode: "onsite", location: "Hamburg" }))[0], 200);
+  // zurueckgenommen bekommt die Zeile eine echte, freie Adresse
+  assert.equal((await imp(admin, "/api/admin/events/unmerge", "POST", { log: r.log }))[0], 200);
+  const back = s.raw.prepare("SELECT handle,public,merged_into FROM events WHERE id=?").get(hid.id); assert.match(back.handle, HANDLE); assert.notEqual(back.handle, "hamburg-copilot-day-2026"); assert.deepEqual([back.public, back.merged_into], [1, 0]);
+  assert.equal((await ev(null, `/api/event/${back.handle}/attendees`))[0], 200);
+  // ein von einem Admin zusammengefuehrtes Event behaelt seine Adresse, ist aber nicht mehr erreichbar und laesst sich nicht ueber das Formular wiederbeleben
+  await ev(other, "/api/event", "POST", { handle: "doppelt", title: "Doppelt eingetragen", start: "2026-05-16T09:00", mode: "onsite", location: "Hamburg" });
+  const dup = s.raw.prepare("SELECT id FROM events WHERE handle='doppelt'").get().id; assert.ok((await mergeEvents(s.env.DB, dup, 1, 9)).ok);
+  assert.deepEqual(await ev(other, "/api/event", "POST", { handle: "doppelt", title: "Doppelt eingetragen", start: "2026-05-16T09:00", mode: "onsite", location: "Hamburg" }), [409, { error: "handle_taken" }]);
+  assert.deepEqual(await ev(admin, "/api/event", "POST", { handle: "doppelt", title: "Admin ueberschreibt", start: "2026-05-16T09:00", mode: "online" }), [409, { error: "handle_taken" }]);
+  assert.equal((await ev(other, "/api/event/doppelt/session", "POST", { title: "Ghost session", speakers: [] }))[0], 404);
+  assert.equal((await ev(admin, "/api/event/doppelt/attendees"))[0], 404); assert.equal((await ev(admin, "/api/event/doppelt/team"))[0], 404); assert.equal((await ev(other, "/api/event/doppelt", "DELETE"))[0], 403);
+  assert.deepEqual(s.raw.prepare("SELECT title,public,merged_into FROM events WHERE id=?").all(dup).map((x) => [x.title, x.public, x.merged_into]), [["Doppelt eingetragen", 0, 1]]);
+  assert.equal(s.raw.prepare("SELECT COUNT(*) n FROM event_sessions WHERE title='Ghost session'").get().n, 0);
+});
+test("Datensparsamkeit im Abruf-Cache: Sessionize-Antworten nur mit Kennung und Name der Speaker, Profilseiten gar nicht; Konto-Loeschung nimmt Speaker-Identitaet und Protokoll-Eintraege mit", async () => {
+  const { raw, env, pages, opts } = await setup(), db = env.DB, ev = via(handleEvents, env);
+  const orga = user(raw, 9, "Orga", "orga-p"), carla = user(raw, 2, "Carla Coder", "carla-c");
+  await ev(orga, "/api/event", "POST", { handle: "hh-copilot", title: "Hamburg Copilot Day 2026", start: "2026-05-16", mode: "onsite", location: "Hamburg" });
+  pages[SZ] = JSON.parse(fx("sessionize_all.json")); const link = await linkSessionize(env, raw.prepare("SELECT * FROM events").get(), "abc123", opts); assert.equal(link.ok, true);
+  const cache = () => JSON.stringify(raw.prepare("SELECT * FROM import_cache").all());
+  assert.ok(raw.prepare("SELECT COUNT(*) n FROM import_cache WHERE url=?").get(SZ).n === 1 && /Jane Doe/.test(cache()));   // der Cache traegt weiter (kein zweiter Abruf binnen 5 Minuten) ...
+  assert.ok(!/Principal Architect|Jane builds things|image\/abcd|linkedin|twitter|maxmuster\.example|tagLine|bio|profilePicture|links/i.test(cache()), cache().slice(0, 300));   // ... aber ohne Slogan, Kurzvorstellung, Foto, Links
+  const n0 = raw.prepare("SELECT COUNT(*) n FROM event_sessions").get().n; assert.equal((await syncSessionize(env, raw.prepare("SELECT * FROM events").get(), opts)).unchanged, n0);   // aus dem gekuerzten Cache gelesen: derselbe Stand
+  // Profilseite: gelesen und ausgewertet, nie zwischengespeichert
+  pages["https://sessionize.com/robots.txt"] = ""; pages["https://sessionize.com/carla-coder"] = profilePage("Carla Coder", [{ slug: "solo-day", title: "Solo Day 2026", date: "2026-07-01", place: "Bonn, Germany", sessions: [{ id: 7, title: "My only talk" }] }, { slug: "hh-day", title: "Hamburg Copilot Day 2026", date: "2026-05-16", place: "Hamburg, Germany", sessions: [{ id: 101, title: "Copilot Studio: Agents that actually ship" }] }], '<p class="tagline">Bio of Carla with secrets</p><a class="s-link" href="https://site.test/community/u/carla-c/">M365.FM</a>');
+  const pv = await previewProfile(env, carla, "https://sessionize.com/carla-coder", similarName, opts); assert.equal(pv.ok, true);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM import_cache WHERE url LIKE '%carla-coder%'").get().n, 0); assert.ok(!/Bio of Carla/.test(cache()));
+  await confirmProfile(env, carla, pv.token, ["0.0"], opts);
+  const solo = raw.prepare("SELECT * FROM event_sessions WHERE title='My only talk'").get(), jr = JSON.parse(solo.speakers)[0].r;
+  assert.deepEqual(raw.prepare("SELECT name,handle FROM speaker_ref WHERE id=?").all(jr).map((r) => [r.name, r.handle]), [["Carla Coder", "carla-c"]]);
+  // Protokoll-Eintraege mit ihrem Namen und Profil (Vorher-/Nachher-Staende von Zusammenfuehrungen)
+  const keynote = raw.prepare("SELECT id,speakers FROM event_sessions WHERE event_id=1 ORDER BY id").get(), withCarla = JSON.stringify([...JSON.parse(keynote.speakers), { n: "Carla Coder", h: "carla-c", s: "confirmed", r: jr }]);
+  raw.prepare("INSERT INTO merge_log(kind,from_id,into_id,snapshot,created) VALUES('session',?,?,?,1)").run(solo.id, keynote.id, JSON.stringify({ into_before: { speakers: keynote.speakers }, into_after: { speakers: withCarla }, from_status: "live", added_sources: [], invites: [] }));
+  raw.prepare("INSERT INTO speaker_ref(id,name,name_key,created,updated) VALUES(70,'Someone Else','someone else',1,1)").run();
+  raw.prepare("INSERT INTO merge_log(kind,from_id,into_id,snapshot,created) VALUES('speaker',70,?,?,1)").run(jr, JSON.stringify({ into_before: { sessionize_id: "", handle: "carla-c", name: "Carla Coder" }, sessions: [{ id: solo.id, before: solo.speakers, after: solo.speakers }] }));
+  raw.prepare("INSERT INTO dedupe_queue(kind,a_id,b_id,reason,created) VALUES('speaker',?,70,'name_without_shared_event',1)").run(jr);
+  await deleteUserEvents(db, 2);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM speaker_ref WHERE id=?").get(jr).n, 0);   // niemand verweist mehr auf die Identitaet: auch der Name ist weg
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM dedupe_queue WHERE kind='speaker'").get().n, 0);
+  const logs = JSON.stringify(raw.prepare("SELECT snapshot FROM merge_log").all()); assert.ok(!/carla-c|Carla Coder/.test(logs), logs.slice(0, 400));
+  assert.ok(raw.prepare("SELECT undone FROM merge_log WHERE kind='speaker'").get().undone === 1);
+  assert.ok(!/carla/i.test(JSON.stringify(["speaker_ref", "session_source", "import_preview", "import_cache", "dedupe_queue"].map((t) => raw.prepare(`SELECT * FROM ${t}`).all()))));
+  assert.deepEqual(raw.prepare("SELECT name FROM speaker_ref ORDER BY id").all().map((r) => r.name), ["Jane Doe", "Max Muster", "Someone Else"]);   // die Speaker aus dem Programm des Veranstalters bleiben
+  // steht die Person ausserdem im Programm eines Veranstalters (dessen Sessionize-Abgleich), bleibt dort nur der Name: ohne Profil
+  const s2 = await setup(), max = user(s2.raw, 5, "Max Muster", "max-m"), ev2 = via(handleEvents, s2.env), orga2 = user(s2.raw, 9, "Orga", "orga-p");
+  await ev2(orga2, "/api/event", "POST", { handle: "hh-copilot", title: "Hamburg Copilot Day 2026", start: "2026-05-16", mode: "onsite", location: "Hamburg" });
+  s2.pages[SZ] = JSON.parse(fx("sessionize_all.json")); await linkSessionize(s2.env, s2.raw.prepare("SELECT * FROM events").get(), "abc123", s2.opts);
+  s2.raw.prepare("UPDATE speaker_ref SET handle='max-m' WHERE name='Max Muster'").run();
+  await deleteUserEvents(s2.env.DB, max.id);
+  assert.deepEqual(s2.raw.prepare("SELECT name,handle FROM speaker_ref WHERE name='Max Muster'").all().map((r) => [r.name, r.handle]), [["Max Muster", ""]]);
 });

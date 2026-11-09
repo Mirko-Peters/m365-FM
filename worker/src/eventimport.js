@@ -18,7 +18,7 @@ const DUE = 20 * 3600;   // ein verknuepfter Sessionize-Endpunkt wird etwa einma
 export async function runEventImport(env, opts = {}) {
   const db = env.DB, t = opts.now || now(), state = opts.state || { last: {}, count: 0 }, out = {};
   await ensureDirectoryCols(db);
-  await db.batch([db.prepare("DELETE FROM import_preview WHERE created<?").bind(t - 3600), db.prepare("DELETE FROM import_cache WHERE fetched<?").bind(t - 7 * 86400)]);   // abgelaufene Vorschauen (Namen, Sessions) und alter Abruf-Cache
+  await db.batch([db.prepare("DELETE FROM import_preview WHERE created<?").bind(t - 3600), db.prepare("DELETE FROM import_cache WHERE fetched<?").bind(t - 2 * 86400)]);   // abgelaufene Vorschauen (Namen, Sessions) und alter Abruf-Cache (laengste Nutzung: ein Tag, robots.txt)
   out.keys = await backfillKeys(db, CAP.rekey);
   if (out.keys.events >= CAP.rekey) return { ...out, waiting: "keys" };   // Altbestand noch nicht vollstaendig mit Schluesseln versehen: erst danach importieren, sonst entstuenden Dubletten
   out.communitydays = await runCommunityDays(env, { ...opts, state, cap: CAP.cdEvents, maxRequests: CAP.requests }).catch((e) => ({ error: String(e.message || e).slice(0, 120) }));

@@ -31,10 +31,23 @@ export function parseAllView(j) {
   return { sessions, speakers: [...speakers.values()] };
 }
 
+// view/All auf das kuerzen, was parseAllView liest. Die Antwort enthaelt je Speaker auch Kurzvorstellung, Slogan, Foto-Adresse und Link-Liste:
+// nichts davon wird verwendet, also wird es auch nicht zwischengespeichert (import_cache). null = keine brauchbare Antwort.
+export function slimAllView(body) {
+  let j; try { j = JSON.parse(body); } catch { return null; }
+  if (!j || !Array.isArray(j.sessions)) return null;
+  const arr = (x) => (Array.isArray(x) ? x : []), pick = (o, keys) => Object.fromEntries(keys.filter((k) => o?.[k] !== undefined).map((k) => [k, o[k]]));
+  return JSON.stringify({
+    sessions: j.sessions.map((s) => ({ ...pick(s, ["id", "title", "description", "startsAt", "endsAt", "isServiceSession", "roomId", "recordingUrl"]), categoryItems: arr(s.categoryItems).filter((x) => typeof x !== "object"), speakers: arr(s.speakers).filter((x) => typeof x !== "object") })),
+    speakers: arr(j.speakers).map((s) => pick(s, ["id", "fullName", "firstName", "lastName"])),
+    rooms: arr(j.rooms).map((r) => pick(r, ["id", "name"])),
+    categories: arr(j.categories).map((c) => ({ ...pick(c, ["title", "name"]), items: arr(c.items || c.categoryItems).map((it) => pick(it, ["id", "name"])) })),
+  });
+}
 // ---- Organisator: Endpunkt abrufen und idempotent einspielen
 export async function fetchAllView(env, apiId, opts = {}) {
   if (!API_ID.test(String(apiId || ""))) return { error: "bad_id" };
-  const r = await politeGet(env, `https://sessionize.com/api/v2/${apiId}/view/All`, { ...opts, ttl: 300, skipRobots: true, accept: "application/json" });   // oeffentliche, schreibgeschuetzte API; Sessionize cached 5 Min
+  const r = await politeGet(env, `https://sessionize.com/api/v2/${apiId}/view/All`, { ...opts, ttl: 300, skipRobots: true, accept: "application/json", reduce: slimAllView });   // oeffentliche, schreibgeschuetzte API; Sessionize cached 5 Min
   if (!r.ok) return { error: r.status === 404 ? "not_found" : "fetch_failed" };
   let j; try { j = JSON.parse(r.body); } catch { return { error: "bad_json" }; }
   const p = parseAllView(j); return p ? { data: p } : { error: "bad_json" };
@@ -157,7 +170,7 @@ async function ownsProfile(env, user, slug, parsed, similarName) {
 export async function previewProfile(env, user, input, similarName, opts = {}) {
   const db = env.DB, slug = profileSlug(String(input || "").trim());
   if (!slug) return { error: "bad_url", hint: "Bitte die öffentliche Sessionize-Profil-URL einfügen (sessionize.com/dein-name) oder die Event-Seite bzw. einen Session-Link." };
-  const r = await politeGet(env, `https://sessionize.com/${slug}`, { ...opts, ttl: 600 });
+  const r = await politeGet(env, `https://sessionize.com/${slug}`, { ...opts, noStore: true });   // Profilseite einer Person (Kurzvorstellung, Foto, Links): gelesen, ausgewertet, nie zwischengespeichert
   const soft = { error: "parse_failed", hint: "Bitte Event-Seite oder Session-Link einfügen." };
   if (!r.ok) return r.error === "robots_disallow" ? { ...soft, error: "robots" } : soft;
   const p = parseProfilePage(r.body); if (p.error) return { ...soft, error: p.error };

@@ -28,11 +28,15 @@ export function robotsAllowed(txt, path) {
   return best ? best.allow : true;
 }
 // opts: { fetch, sleep, ttl (Sekunden Cache), minGapMs, maxRequests (Abrufe je Lauf), state }  state = { last: {host: ms}, count }
+// Datensparsam: der Cache haelt nie mehr, als der Importer verwendet.
+//   opts.noStore = Antwort gar nicht zwischenspeichern (Profilseiten von Personen: Kurzvorstellung, Foto, Links)
+//   opts.reduce  = (body) => String | null: die Antwort vor dem Speichern UND vor der Rueckgabe auf das Verwendete kuerzen (Sessionize view/All: von Speakern nur
+//                  Kennung und Name). null = unbrauchbar: die Antwort wird unveraendert zurueckgegeben und nicht gespeichert.
 export async function politeGet(env, url, opts = {}) {
   const db = env.DB, f = opts.fetch || globalThis.fetch, sleep = opts.sleep || ((ms) => new Promise((r) => setTimeout(r, ms)));
   const u = new URL(url), ttl = opts.ttl ?? 6 * 3600, st = opts.state || (opts.state = { last: {}, count: 0 });
   if (u.protocol !== "https:") return { ok: false, error: "https_only" };
-  const cached = await db.prepare("SELECT body,status,fetched FROM import_cache WHERE url=?").bind(url).first();
+  const cached = opts.noStore ? null : await db.prepare("SELECT body,status,fetched FROM import_cache WHERE url=?").bind(url).first();
   if (cached && now() - cached.fetched < ttl && cached.status > 0) return { ok: cached.status < 400, status: cached.status, body: cached.body, cached: true };
   if (!opts.skipRobots) {
     const ru = `${u.origin}/robots.txt`;
@@ -48,9 +52,12 @@ export async function politeGet(env, url, opts = {}) {
   }
   if (st.count >= (opts.maxRequests || 80)) return { ok: false, error: "request_budget" };
   const r = await rawGet(f, url, st, sleep, opts.minGapMs, opts.accept);
+  if (opts.noStore) return r;
+  let keep = true;
+  if (opts.reduce) { const slim = r.ok ? opts.reduce(r.body) : ""; if (slim === null || slim === undefined) keep = false; else r.body = slim; }   // Fehlerseiten: nur der Status
   // Nur vollstaendige Antworten zwischenspeichern: eine abgeschnittene Kopie waere beim naechsten Lesen kaputt (z. B. JSON grosser Events)
-  if (r.status > 0 && (r.body || "").length <= CACHE_MAX) await db.prepare("INSERT INTO import_cache(url,body,status,fetched) VALUES(?,?,?,?) ON CONFLICT(url) DO UPDATE SET body=excluded.body,status=excluded.status,fetched=excluded.fetched").bind(url, r.body || "", r.status, now()).run();
-  else if (r.status > 0 && cached) await db.prepare("DELETE FROM import_cache WHERE url=?").bind(url).run();   // zu gross fuer den Cache: auch keinen alten Stand liefern
+  if (keep && r.status > 0 && (r.body || "").length <= CACHE_MAX) await db.prepare("INSERT INTO import_cache(url,body,status,fetched) VALUES(?,?,?,?) ON CONFLICT(url) DO UPDATE SET body=excluded.body,status=excluded.status,fetched=excluded.fetched").bind(url, r.body || "", r.status, now()).run();
+  else if (r.status > 0 && cached) await db.prepare("DELETE FROM import_cache WHERE url=?").bind(url).run();   // zu gross fuer den Cache oder unbrauchbar: auch keinen alten Stand liefern
   return r;
 }
 async function rawGet(f, url, st, sleep, gap = 1500, accept = "text/html,application/json,text/calendar,application/xml;q=0.9,*/*;q=0.5") {

@@ -73,9 +73,12 @@ export async function partnerAction(db, user, ev, orgHandle, kind, level, action
 }
 const EID = /^[a-z0-9-]{2,48}$/;
 const rndToken = () => [...crypto.getRandomValues(new Uint8Array(18))].map((b) => b.toString(16).padStart(2, "0")).join("");
-// Speaker pruefen. Jede Person muss die Teilnahme selbst bestaetigen (s: invited|confirmed). Bestehende Stati/Tokens bleiben erhalten.
+// Speaker pruefen. Jede Person muss die Teilnahme selbst bestaetigen (s: invited|confirmed). Bestehende Stati/Tokens bleiben erhalten,
+// ebenso die Kennungen aus dem Import (sz = Sessionize-Kennung, r = Speaker-Identitaet): ohne sie koennte der naechste Abgleich einen in der Quelle
+// zurueckgezogenen Speaker nicht mehr entfernen, sobald der Veranstalter irgendein Feld der Session im Formular gespeichert hat.
 async function speakersCheck(db, list, prev, selfHandle) {
-  const out = [], old = new Map((prev || []).map((x) => [x.h || x.n, x]));
+  const out = [], old = new Map((prev || []).map((x) => [x.h || x.n, x])), byName = new Map((prev || []).filter((x) => x.sz || x.r).map((x) => [x.n, x]));
+  const ids = (k, n) => { const x = k?.sz || k?.r ? k : byName.get(n); return { ...(x?.sz ? { sz: x.sz } : {}), ...(x?.r ? { r: x.r } : {}) }; };
   for (const s of (Array.isArray(list) ? list : []).slice(0, 8)) {
     const n = txt(s?.n, 80); let h = String(s?.h || "").toLowerCase().trim(), e = String(s?.e || "").toLowerCase().trim();
     if (e && !EID.test(e)) return null;
@@ -92,8 +95,8 @@ async function speakersCheck(db, list, prev, selfHandle) {
       if (!PH.test(h)) return null;
       const p = await db.prepare("SELECT u.name FROM profiles p JOIN users u ON u.id=p.user_id WHERE p.handle=? AND p.public=1").bind(h).first();
       if (!p) return null;
-      out.push({ h, n: keep?.n || n || p.name, ...(e ? { e } : keep?.e ? { e: keep.e } : {}), s: keep?.s === "confirmed" || h === selfHandle ? "confirmed" : keep?.s === "declined" ? "declined" : "invited" });
-    } else if (n.length >= 2) out.push({ n, ...(e ? { e } : keep?.e ? { e: keep.e } : {}), s: keep?.s === "confirmed" ? "confirmed" : "invited", ...(keep?.o ? { o: 1 } : {}), ...(keep?.t ? { t: keep.t } : { t: rndToken() }) });
+      out.push({ h, n: keep?.n || n || p.name, ...(e ? { e } : keep?.e ? { e: keep.e } : {}), s: keep?.s === "confirmed" || h === selfHandle ? "confirmed" : keep?.s === "declined" ? "declined" : "invited", ...ids(keep, keep?.n || n) });
+    } else if (n.length >= 2) out.push({ n, ...(e ? { e } : keep?.e ? { e: keep.e } : {}), s: keep?.s === "confirmed" ? "confirmed" : "invited", ...(keep?.o ? { o: 1 } : {}), ...(keep?.t ? { t: keep.t } : { t: rndToken() }), ...ids(keep, n) });
   }
   return out;
 }
@@ -337,7 +340,7 @@ export async function handleEvents(env, request, url, path, user, J) {
       if (!o) return J({ error: "forbidden" }, 403); orgId = o.id;
     }
     const ex = await db.prepare("SELECT * FROM events WHERE handle=?").bind(handle).first();
-    if (ex && !(await canManage(db, user, ex))) return J({ error: "handle_taken" }, 409);
+    if (ex && (ex.merged_into || !(await canManage(db, user, ex)))) return J({ error: "handle_taken" }, 409);   // in einem anderen Event aufgegangene Zeile: nicht ueber das Formular wiederbeleben (Zuruecknehmen ist Sache der Admins)
     const tz = timezone(String(b.tz || ex?.tz || "Europe/Berlin")); if (!tz) return J({ error: "bad_timezone" }, 400);
     const vals = [title, txt(b.summary, 200), long(b.about, 3000), b.start, end, tz, mode, txt(b.location, 120), txt(b.country, 60), eu, tu, b.free === false ? 0 : b.free === true || !ex ? 1 : ex.free, txt(b.lang, 10), JSON.stringify(tp), b.seeking_sponsor ? 1 : 0, b.public === false ? 0 : 1, now()];
     let eventId = ex?.id;
@@ -356,7 +359,7 @@ export async function handleEvents(env, request, url, path, user, J) {
   }
   if ((m = path.match(/^\/api\/event\/([a-z0-9-]{3,40})$/)) && method === "DELETE") {
     if (need()) return need();
-    const ev = await db.prepare("SELECT * FROM events WHERE handle=?").bind(m[1]).first();
+    const ev = await db.prepare("SELECT * FROM events WHERE handle=? AND merged_into=0").bind(m[1]).first();
     if (!(await canManage(db, user, ev, "delete"))) return J({ error: "forbidden" }, 403);
     await db.batch(await eventDeleteOps(db, ev));   // alles, was am Event haengt (EVENT_TABLES, Quellen); Import-Events hinterlassen eine Loeschmarke und kommen nicht zurueck
     return J({ ok: true });
@@ -365,8 +368,9 @@ export async function handleEvents(env, request, url, path, user, J) {
   if ((m = path.match(/^\/api\/event\/([a-z0-9-]{3,40})\/session$/)) && method === "POST") {
     if (need()) return need();
     if (!(await rateLimit(db, `sess:${user.id}`, 40, 3600))) return J({ error: "rate_limit" }, 429);
-    const ev = await db.prepare("SELECT * FROM events WHERE handle=?").bind(m[1]).first(); if (!ev) return J({ error: "not_found" }, 404);
+    const ev = await db.prepare("SELECT * FROM events WHERE handle=? AND merged_into=0").bind(m[1]).first(); if (!ev) return J({ error: "not_found" }, 404);   // nie an eine ausgeblendete (zusammengefuehrte) Zeile
     const mgr = await canManage(db, user, ev, "sessions"), b = await body();
+    if (ev.unclaimed && !mgr && !b.id) return J({ error: "unclaimed" }, 409);   // importiertes Event ohne Veranstalter: niemand koennte den Vorschlag freigeben
     const title = txt(b.title, 140); if (title.length < 3) return J({ error: "bad_title" }, 400);
     const st = String(b.start || ""), en = String(b.end || "");
     if ((st && !okDate(st)) || (en && !okDate(en))) return J({ error: "bad_date" }, 400);
@@ -397,7 +401,7 @@ export async function handleEvents(env, request, url, path, user, J) {
   }
   if ((m = path.match(/^\/api\/event\/([a-z0-9-]{3,40})\/session\/(\d+)(\/approve)?$/))) {
     if (need()) return need();
-    const ev = await db.prepare("SELECT * FROM events WHERE handle=?").bind(m[1]).first(); if (!ev) return J({ error: "not_found" }, 404);
+    const ev = await db.prepare("SELECT * FROM events WHERE handle=? AND merged_into=0").bind(m[1]).first(); if (!ev) return J({ error: "not_found" }, 404);
     const s = await db.prepare("SELECT * FROM event_sessions WHERE id=? AND event_id=?").bind(+m[2], ev.id).first(); if (!s) return J({ error: "not_found" }, 404);
     const mgr = await canManage(db, user, ev, "sessions");
     if (m[3] && method === "POST") {
@@ -414,7 +418,7 @@ export async function handleEvents(env, request, url, path, user, J) {
   }
   // ---- Teilnehmer: anmelden (Warteliste bei vollem Event), Sichtbarkeit selbst bestimmen, abmelden ----
   if ((m = path.match(/^\/api\/event\/([a-z0-9-]{3,40})\/(attendees|register|capacity|invite-mail)$/))) {
-    const ev = await db.prepare("SELECT * FROM events WHERE handle=?").bind(m[1]).first(); if (!ev || (!ev.public && !(await canManage(db, user, ev, "edit")))) return J({ error: "not_found" }, 404);
+    const ev = await db.prepare("SELECT * FROM events WHERE handle=? AND merged_into=0").bind(m[1]).first(); if (!ev || (!ev.public && !(await canManage(db, user, ev, "edit")))) return J({ error: "not_found" }, 404);
     const cap = (await db.prepare("SELECT capacity FROM event_settings WHERE event_id=?").bind(ev.id).first())?.capacity || 0;
     if (m[2] === "attendees" && method === "GET") {
       const going = (await db.prepare("SELECT COUNT(*) n FROM event_attendees WHERE event_id=? AND status='going'").bind(ev.id).first()).n;
@@ -425,6 +429,7 @@ export async function handleEvents(env, request, url, path, user, J) {
     }
     if (need()) return need();
     if (m[2] === "register" && method === "POST") {
+      if (ev.unclaimed) return J({ error: "unclaimed" }, 409);   // importiertes Event ohne Veranstalter: hier fuehrt niemand eine Teilnehmerliste; Anmeldung nur beim Veranstalter selbst
       if (!(await rateLimit(db, `reg:${user.id}`, 40, 3600))) return J({ error: "rate_limit" }, 429);
       const b = await body(), vis = b.visible ? 1 : 0;
       if (vis && !(await db.prepare("SELECT 1 x FROM profiles WHERE user_id=? AND public=1").bind(user.id).first())) return J({ error: "need_profile" }, 400);
@@ -488,7 +493,7 @@ export async function handleEvents(env, request, url, path, user, J) {
   }
   // ---- Event-Team: Rollen vergeben (Organisator, Co-Organisator, Programm-, Sponsoren-Manager, Kommunikation, Helfer) ----
   if ((m = path.match(/^\/api\/event\/([a-z0-9-]{3,40})\/team$/))) {
-    const ev = await db.prepare("SELECT * FROM events WHERE handle=?").bind(m[1]).first(); if (!ev) return J({ error: "not_found" }, 404);
+    const ev = await db.prepare("SELECT * FROM events WHERE handle=? AND merged_into=0").bind(m[1]).first(); if (!ev) return J({ error: "not_found" }, 404);
     if (method === "GET") {
       const rows = (await db.prepare("SELECT r.role,r.user_id,u.name,p.handle FROM event_roles r JOIN users u ON u.id=r.user_id LEFT JOIN profiles p ON p.user_id=u.id AND p.public=1 WHERE r.event_id=? ORDER BY r.created").bind(ev.id).all()).results || [];
       const mine = need() ? false : await canManage(db, user, ev, "roles");
@@ -732,7 +737,7 @@ export async function deleteUserEvents(db, uid) {
   const evs = (await db.prepare("SELECT * FROM events WHERE owner_id=? AND org_id IS NULL").bind(uid).all()).results || [];
   const ops = [];
   for (const e of evs) ops.push(...(await eventDeleteOps(db, e)));   // auch uebernommene Import-Events: sie kommen nicht als herrenlose Kopie zurueck (Loeschmarke)
-  ops.push(...(await forgetImporter(db, uid)));   // Beanspruchungen, Import-Vorschau, gemerkte Speaker-Identitaet, selbst importierte Speaker-Eintraege
   ops.push(db.prepare("DELETE FROM session_source WHERE session_id IN (SELECT id FROM event_sessions WHERE proposer_id=? AND status='pending')").bind(uid), db.prepare("DELETE FROM event_sessions WHERE proposer_id=? AND status='pending'").bind(uid), db.prepare("DELETE FROM event_roles WHERE user_id=?").bind(uid), db.prepare("DELETE FROM event_attendees WHERE user_id=?").bind(uid), db.prepare("DELETE FROM event_transfers WHERE user_id=?").bind(uid));
+  ops.push(...(await forgetImporter(db, uid)));   // zuletzt: Beanspruchungen, Import-Vorschau, selbst importierte Speaker-Eintraege, Speaker-Identitaet (Name), Protokoll-Staende
   for (let i = 0; i < ops.length; i += 80) await db.batch(ops.slice(i, i + 80));
 }

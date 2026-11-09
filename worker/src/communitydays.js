@@ -46,6 +46,7 @@ export function toCandidate(raw, pageUrl, own = false) {
   const free = raw.isAccessibleForFree === true || raw.isAccessibleForFree === "true" ? true : raw.isAccessibleForFree === false || raw.isAccessibleForFree === "false" ? false : undefined;   // sonst unbekannt
   return { title, summary: strip(raw.description).slice(0, 200), about: strip(raw.description).slice(0, 3000), start, end: ymd(raw.endDate || raw.dtend),
     mode: virtual ? "online" : hybrid ? "hybrid" : city ? "onsite" : "online", city: virtual ? "" : city, country, url, tickets_url: "", organizer_name: strip(org && org.name || raw.organizerName || ""), lang: strip(raw.inLanguage || ""), free,
+    online_stated: !!virtual,   // ausdruecklich online (Teilnahme-Modus oder virtueller Ort), nicht bloss "kein Ort angegeben"
     tags: [].concat(raw.keywords || []).join(",").split(",").map((x) => x.trim()).filter(Boolean), source: "communitydays", source_url: url || pageUrl, sources };
 }
 export function parseJsonLd(html, pageUrl = SOURCE.base, own = false) {
@@ -62,7 +63,7 @@ export function parseIcs(text, pageUrl = SOURCE.base) {
   const lines = String(text || "").replace(/\r?\n[ \t]/g, "").split(/\r?\n/), out = []; let cur = null;
   const val = (l) => dec(l.slice(l.indexOf(":") + 1).replace(/\\n/gi, " ").replace(/\\([,;\\])/g, "$1"));
   for (const l of lines) {
-    if (l === "BEGIN:VEVENT") cur = {}; else if (l === "END:VEVENT" && cur) { if (cur.summary && cur.dtstart) { const loc = cur.location || ""; out.push(toCandidate({ ...cur, location: /^https?:|online|virtual|teams/i.test(loc) || !loc ? { "@type": "VirtualLocation" } : { address: loc.split(",").length > 1 ? { addressLocality: loc.split(",").slice(-2)[0].trim(), addressCountry: loc.split(",").pop().trim() } : { addressLocality: loc } } }, pageUrl)); } cur = null; }
+    if (l === "BEGIN:VEVENT") cur = {}; else if (l === "END:VEVENT" && cur) { if (cur.summary && cur.dtstart) { const loc = cur.location || ""; out.push(toCandidate({ ...cur, location: /^https?:|online|virtual|teams/i.test(loc) ? { "@type": "VirtualLocation" } : !loc ? {} : { address: loc.split(",").length > 1 ? { addressLocality: loc.split(",").slice(-2)[0].trim(), addressCountry: loc.split(",").pop().trim() } : { addressLocality: loc } } }, pageUrl)); } cur = null; }
     else if (cur) { const k = l.split(/[;:]/)[0].toUpperCase(); if (k === "SUMMARY") cur.summary = val(l); else if (k === "DTSTART") cur.dtstart = val(l); else if (k === "DTEND") cur.dtend = val(l); else if (k === "DESCRIPTION") cur.description = val(l); else if (k === "LOCATION") cur.location = val(l); else if (k === "URL") cur.url = val(l); else if (k === "UID") cur.uid = val(l); else if (k === "ORGANIZER") cur.organizerName = (/CN=([^;:]+)/i.exec(l) || [])[1] || ""; }
   }
   return out;
@@ -105,11 +106,15 @@ export async function runCommunityDays(env, opts = {}) {
   const save = () => db.prepare("INSERT INTO meta(k,v) VALUES(?,?) ON CONFLICT(k) DO UPDATE SET v=excluded.v").bind(STATE, JSON.stringify(st)).run();
   const { candidates, notes, complete } = await collect(env, { ttl: 20 * 3600, maxRequests: 12, ...opts });
   const ref = candKey, list = candidates.filter(isMicrosoftRelated).sort((a, b) => (ref(a) < ref(b) ? -1 : ref(a) > ref(b) ? 1 : 0));
-  const rep = { dry: !!opts.dry, found: candidates.length, microsoft: list.length, skipped_non_ms: candidates.length - list.length, ...zero, retired: 0, remaining: 0, notes };
+  const rep = { dry: !!opts.dry, found: candidates.length, microsoft: list.length, skipped_non_ms: candidates.length - list.length, ...zero, updated: 0, retired: 0, remaining: 0, notes };   // updated = Aenderungen der Quelle uebernommen (Teil von merged)
   if (!complete) { if (!opts.dry) await save(); return { ...rep, fetching: true, remaining: list.length }; }   // noch nicht alles gelesen: der naechste Lauf macht weiter
   const todo = opts.dry ? list : list.filter((c) => ref(c) > st.after), work = todo.slice(0, opts.dry ? Math.min(60, opts.cap || 60) : cap);
+  // Die Quelle ist vollstaendig gelesen: je Kennung ist bekannt, ob sie genau einen Datensatz bezeichnet (sole). Nur dann gilt ein Eintrag mit neuem Termin oder
+  // neuem Namen als derselbe, geaenderte Datensatz und nur dann folgt ein ungepflegtes Import-Event seinen Aenderungen (siehe eventmerge.js sameRecord).
+  const per = new Map(); for (const c of candidates) per.set(c.sources[0].ref, (per.get(c.sources[0].ref) || 0) + 1);
   for (const c of work) {
-    const r = await upsertEvent(db, c, { dry: opts.dry, now: t });
+    const r = await upsertEvent(db, { ...c, sole: per.get(c.sources[0].ref) === 1 }, { dry: opts.dry, now: t, today });
+    if (r.changed) rep.updated++;
     rep[r.action === "created" || r.action === "merged" || r.action === "queued" ? r.action : "skipped"]++;
     if (!opts.dry) st.after = ref(c);
   }
