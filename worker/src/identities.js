@@ -122,6 +122,15 @@ export async function mergeStatements(db, S, T) {
   for (const t of ["comments", "curators", "wiki_rev", "entity_rev", "entity_q", "entity_a", "push_subs", "push_topics", "points_spent", "api_tokens",
     "entity_claims", "episode_notes", "pod_episodes", "yt_videos", "guest_listings", "shows", "wish", "expert_requests", "mail_outbox"]) simple(t);
   simple("events", "owner_id"); simple("event_sessions", "proposer_id"); simple("event_roles", "added_by"); simple("entity_invites", "by_user");
+  // Einlader: Einladungen von S gehoeren T; ist S selbst eingeladen worden, zaehlt das nur, wenn T noch keinen Einlader hat (kein doppeltes Zaehlen)
+  st.push(q("UPDATE invite_success SET inviter_user_id=? WHERE inviter_user_id=?", T, S));
+  st.push(q("DELETE FROM invite_success WHERE invitee_user_id=? AND EXISTS (SELECT 1 FROM invite_success x WHERE x.invitee_user_id=?)", S, T));
+  st.push(q("UPDATE invite_success SET invitee_user_id=? WHERE invitee_user_id=?", T, S));
+  st.push(q("DELETE FROM invite_success WHERE inviter_user_id=invitee_user_id"));
+  simple("invite_success", "voided_by");   // wer entwertet hat (Admin), bleibt nachvollziehbar
+  // vorgemerkte Zurechnungen (Tagesgrenze erreicht): wie oben; ob das Zielkonto nach dem Klick entstanden ist, prueft der Tageslauf vor dem Zaehlen
+  simple("invite_pending", "inviter_user_id"); set("invite_pending", "invitee_user_id");
+  st.push(q("DELETE FROM invite_pending WHERE inviter_user_id=invitee_user_id"));
   simple("msg_messages", "from_id"); simple("sponsor_manual_metrics", "entered_by"); simple("tr_queue", "requested_by");
   simple("merge_log", "by_user"); simple("dedupe_queue", "decided_by");   // Event-Import (#317): wer zusammengefuehrt/entschieden hat
   // Blog und Bibliothek: UNIQUE(user_id, slug) -> Slug von S bei Kollision umbenennen
@@ -170,7 +179,17 @@ export async function mergeStatements(db, S, T) {
   st.push(q(`UPDATE contributions SET source_id=(SELECT t.id FROM contribution_sources s JOIN contribution_sources t ON t.user_id=? AND t.url=s.url WHERE s.id=contributions.source_id)
     WHERE source_id IN (SELECT id FROM contribution_sources WHERE user_id=?)`, T, S));
   st.push(q("DELETE FROM contribution_sources WHERE user_id=?", S));
+  // Eigene Quellen (0036): Wie beim Abruf gilt gleiche kanonische URL oder GUID als derselbe Beitrag - der von T bleibt. Hatte nur der Eintrag von S
+  // einen Kurzpost (feed_item_id), haengt der kuenftig am Eintrag von T; die Feed-Zeile selbst ist oben schon zu T gewandert.
+  const same = (a) => `((${a}.url<>'' AND ${a}.url=contributions.url) OR (${a}.canon<>'' AND ${a}.canon=contributions.canon) OR (${a}.guid<>'' AND ${a}.guid=contributions.guid))`;
+  st.push(q(`UPDATE contributions SET feed_item_id=(SELECT s.feed_item_id FROM contributions s WHERE s.user_id=? AND s.feed_item_id>0 AND ${same("s")} LIMIT 1)
+    WHERE user_id=? AND feed_item_id=0 AND EXISTS (SELECT 1 FROM contributions s WHERE s.user_id=? AND s.feed_item_id>0 AND ${same("s")})`, S, T, S));
+  st.push(q(`DELETE FROM contributions WHERE user_id=? AND EXISTS (SELECT 1 FROM contributions t WHERE t.user_id=? AND ${same("t")})`, S, T));
   set("contributions");
+  // Kurzposts, an denen danach kein Beitrag mehr haengt (der Eintrag von T hatte schon einen eigenen), entfallen samt Stimmen. Was die Moderation
+  // ausgeblendet hat (hidden Bit 1), bleibt als Sperre stehen und gilt zusaetzlich als zurueckgezogen (Bit 2) - wie in contrib_sources.js dropPosts.
+  const orphan = (mod) => `owner_type='u' AND owner_id=? AND origin='kurzpost' AND (hidden&1)=${mod} AND id NOT IN (SELECT feed_item_id FROM contributions WHERE user_id=?)`;
+  st.push(q(`UPDATE feed_items SET hidden=hidden|2 WHERE ${orphan(1)}`, T, T), q(`DELETE FROM item_votes WHERE item_id IN (SELECT id FROM feed_items WHERE ${orphan(0)})`, T, T), q(`DELETE FROM feed_items WHERE ${orphan(0)}`, T, T));
   // Rezensionen: je Show eine; die von S wird ausgeblendet, nicht geloescht
   keepT("show_reviews"); st.push(q("UPDATE show_reviews SET status='merged' WHERE user_id=?", S));
   keepT("expert_request_replies");

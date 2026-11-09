@@ -523,9 +523,33 @@
   }
 
   // ---------- Entitaeten ----------
+  // ---------- Gäste einladen: Zähler, Probelauf und Sammelversand (max. 50) der Entitäten-Einladungen; Rückfrage inline, kein window.confirm ----------
+  function guestInvite(p) {
+    var box = h("section", { class: "adm-guest-invite" }), counts = h("p", { class: "mut", text: "Lädt …" }), m = h("p", { class: "adm-msg", role: "status" }), out = h("ul", { class: "adm-list" }), ask = h("span"), dry, send, running = false;
+    var SRC = "guest", tg = h("span", { role: "group", "aria-label": "Quelle" });
+    function tgDraw() { tg.textContent = ""; [["guest", "Gäste"], ["speaker", "Speaker"]].forEach(function (o) { tg.append(h("button", { type: "button", class: "btn" + (SRC === o[0] ? " main" : ""), "aria-pressed": SRC === o[0] ? "true" : "false", text: o[1], onclick: function () { SRC = o[0]; idle(); tgDraw(); } }), " "); }); }
+    function load() { api("/api/entityinvite/send-batch").then(function (r) { var j = r.j || {}, g = (j.sources || {}).guest || {}, sp = (j.sources || {}).speaker || {}; counts.textContent = r.s === 200 ? ("Gäste: " + g.contacts + " Kontakte, " + g.eligible + " offen · Speaker: " + sp.contacts + " Kontakte, " + sp.eligible + " offen (ohne gesperrte, übernommene und doppelte Adressen).") : "Zähler nicht abrufbar (" + ((r.j || {}).error || r.s) + ")"; }); }
+    function idle() { ask.textContent = ""; if (!running) send.disabled = false; }   // waehrend ein Versand laeuft, bleibt "50 senden" gesperrt (auch beim Wechsel Gäste/Speaker)
+    function done() { running = false; send.disabled = false; dry.disabled = false; load(); }
+    function list(items) { out.textContent = ""; (items || []).forEach(function (x) { out.appendChild(h("li", { text: x.eid + " · " + (x.email || "") + " · " + (x.variant || "") + (x.error ? " · " + x.error : x.ok === false ? " · Fehler" : "") })); }); }
+    dry = h("button", { type: "button", class: "btn", text: "Probelauf (50)", onclick: function () { dry.disabled = true; msg(m, "Läuft …"); api("/api/entityinvite/send-batch", { method: "POST", body: { limit: 50, dry_run: true, source: SRC } }).then(function (r) { dry.disabled = false; var j = r.j || {}; if (r.s !== 200) { msg(m, "Fehler (" + (j.error || r.s) + ")", true); return; } list(j.items); msg(m, "Probelauf: " + (j.items || []).length + " Einladungen würden gesendet, nichts verschickt."); }); } });
+    send = h("button", { type: "button", class: "btn main", text: "50 senden", onclick: function () {
+      send.disabled = true; ask.textContent = "";
+      ask.append(h("span", { text: "Wirklich 50 Einladungen (" + (SRC === "speaker" ? "Speaker" : "Gäste") + ") senden? " }), h("button", { type: "button", class: "btn main", text: "Ja", onclick: function () {
+        // Erst wenn die Antwort da ist, wird wieder freigegeben: ein zweiter Klick wuerde sonst einen zweiten Lauf starten (der Server weist ihn zusaetzlich mit 409 busy ab)
+        running = true; ask.textContent = ""; dry.disabled = true; msg(m, "Sendet … bitte warten, bis der Versand fertig ist.");
+        api("/api/entityinvite/send-batch", { method: "POST", body: { limit: 50, dry_run: false, source: SRC } }).then(function (r) { var j = r.j || {}; list(j.results); if (r.s === 200 || j.sent) msg(m, j.sent + " Einladungen gesendet" + (j.rate_limited ? " (Tageslimit erreicht)" : "") + "."); else msg(m, j.error === "busy" ? "Es läuft bereits ein Versand – bitte warten und danach neu laden." : "Fehler (" + (j.error || r.s) + ")", true); done(); },
+          function () { msg(m, "Keine Antwort vom Server – ob gesendet wurde, zeigt der Zähler oben.", true); done(); }); } }), " ", h("button", { type: "button", class: "btn", text: "Nein", onclick: idle }));
+    } });
+    var eidIn = h("input", { type: "text", placeholder: "Entitäts-ID, z. B. david-benaim", "aria-label": "Entitäts-ID für Testmail" }), vSel = h("select", { "aria-label": "Variante der Testmail" }), tb = h("button", { type: "button", class: "btn", text: "Testmail an mich", onclick: function () { var e = eidIn.value.trim().toLowerCase(); if (!e) return; tb.disabled = true; api("/api/entityinvite/test", { method: "POST", body: { eid: e, variant: vSel.value } }).then(function (r) { tb.disabled = false; var j = r.j || {}; msg(m, r.s === 200 ? "Testmail an dein Konto gesendet (Variante " + j.variant + ")." : "Fehler (" + (j.error || r.s) + ")", r.s !== 200); }); } });
+    // Testmail: jede Fassung vorab ansehen; "automatisch" nimmt die Fassung, die diese Entitaet beim echten Versand bekaeme
+    [["", "Variante: automatisch"], ["default", "Gast (Standard)"], ["mvp", "Gast (MVP/MCT)"], ["speaker", "Speaker (M365Con)"], ["neutral", "Neutral (Mitglied lädt ein)"]].forEach(function (o) { vSel.appendChild(h("option", { value: o[0], text: o[1] })); });
+    tgDraw(); box.append(h("h2", { text: "Gäste einladen" }), counts, h("p", {}, [tg]), h("p", {}, [dry, " ", send, " ", ask]), h("p", {}, [eidIn, " ", vSel, " ", tb]), m, out); p.appendChild(box); load();
+  }
   function entities() {
     var p = panes.ent, q = h("input", { type: "search", id: "adm-q", placeholder: "Suchen: Name, ID oder Alias", "aria-label": "Entitäten suchen" }), tf = h("select", { id: "adm-tf", "aria-label": "Typ" }), list = h("ul", { class: "adm-list" }), form = h("div", { class: "adm-form", hidden: "" }), all = [];
     tf.appendChild(h("option", { value: "", text: "Alle Typen" })); Object.keys(TYPES).forEach(function (k) { tf.appendChild(h("option", { value: k, text: TYPES[k] })); });
+    guestInvite(p);
     p.append(h("div", { class: "adm-row" }, [q, tf]), list, form);
     list.appendChild(h("li", { class: "mut", text: "Lädt …" }));
     Promise.all([fetch(BASE + "/entities.json").then(function (r) { return r.json(); }).catch(function () { return { entities: [] }; }), api("/api/entity/export")]).then(function (res) {

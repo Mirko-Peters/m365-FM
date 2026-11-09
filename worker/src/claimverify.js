@@ -3,6 +3,7 @@ import { mailReady, sendMail } from "./mailer.js";
 import { cleanText, esc, randomToken, rateLimit, sha256hex } from "./util.js";
 import { entityMap } from "./entities.js";
 import { adoptUnclaimedForEntity } from "./orgpair.js";
+import { recordInvite } from "./inviter.js";
 
 const now = () => Math.floor(Date.now() / 1000);
 const EID = /^[a-z0-9][a-z0-9-]{1,78}$/;
@@ -182,6 +183,7 @@ export async function handleClaimVerify(env, request, url, path, user, J) {
       : await db.prepare("UPDATE entity_claims SET user_id=?,status='verified',via='domain_email',verified_via='domain_email',verified_domain=?,fwd_mask='' WHERE eid=? AND user_id=? AND status IN ('pending','email_sent','forwarded')").bind(user.id, row.domain, row.eid, row.claim_user).run();
     if (Number(up.meta?.changes || 0) !== 1) return J({ error: "invalid" }, 404);
     await db.prepare("UPDATE entity_claim_mail SET used=1 WHERE eid=?").bind(row.eid).run();
+    if (row.kind === "forward") await recordInvite(env, { inviter: row.claim_user, invitee: user.id, source: "forward", ref: row.eid, since: row.created });   // #309: weitergeleitete Einladung an Kolleg:in
     if (review) return J({ ok: true, review: true, eid: row.eid, domain: row.domain, forwarded: row.kind === "forward" });
     await confirmOrgLinks(db, user.id, row.eid);
     return J({ ok: true, eid: row.eid, domain: row.domain, forwarded: row.kind === "forward" });

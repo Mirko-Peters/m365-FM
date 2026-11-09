@@ -5,6 +5,7 @@ import { cleanText, esc, rateLimit } from "./util.js";
 import { baseIds, entityMap } from "./entities.js";
 import { cleanUrl } from "./profiles.js";
 import { stats } from "./badges.js";
+import { recordInvite } from "./inviter.js";
 import { ensureDirectoryCols, geocodeAddress, recordGeocodeStatus } from "./directory.js";
 import { adoptUnclaimedForEntity } from "./orgpair.js";
 import { eventKeys, KEYS_V, markEdited, normSessionTitle, eventDeleteOps, sessionDeleteOps, forgetImporter, dedupeEventSessions } from "./eventmerge.js";
@@ -567,6 +568,8 @@ export async function handleEvents(env, request, url, path, user, J) {
     sp = sp.map((x) => (x.t === tok ? { h: pr.handle, n: x.n, e: x.e || pr.handle, s: "confirmed" } : x));   // e = eigene Personen-Entitaet (Profil-Adresse), falls keine andere hinterlegt ist
     await db.batch([db.prepare("UPDATE event_sessions SET speakers=? WHERE id=?").bind(JSON.stringify(sp), se.id), db.prepare("DELETE FROM speaker_invites WHERE token=?").bind(tok)]);
     let claimed = false; if (i.eid) { claimed = await claimEntity(db, i.eid, user.id, "invite"); if (claimed) await adoptUnclaimedForEntity(db, user.id, i.eid); }
+    const host = await db.prepare("SELECT owner_id FROM events WHERE id=?").bind(i.event_id).first();
+    if (host) await recordInvite(env, { inviter: host.owner_id, invitee: user.id, source: "speaker", ref: String(i.event_id), since: i.created });
     return J({ ok: true, handle: pr.handle, claimed });
   }
   if (path === "/api/speaker/requests" && method === "GET") {

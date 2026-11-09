@@ -183,6 +183,14 @@ function seed(raw, T, S) {
   x("INSERT INTO msg_messages(thread_id,from_id,body,created) VALUES(1,?,'t-c',5),(2,?,'s-c',6),(3,?,'t-s',7)", T, S, T);
   x("INSERT INTO contribution_sources(id,user_id,kind,url,created) VALUES(1,?,'blog','https://blog.example/feed',1),(2,?,'blog','https://blog.example/feed',1)", T, S);
   x("INSERT INTO contributions(user_id,source_id,title,url,published,kind,created) VALUES(?,2,'Post A','https://blog.example/a',1,'blog',1),(?,1,'Post B','https://blog.example/b',1,'blog',1),(?,2,'Post B dup','https://blog.example/b',1,'blog',1)", S, T, S);
+  // 0036 (eigene Quellen): S hat zwei Kurzposts - einer haengt an einem Beitrag, den es bei T unter derselben URL schon gibt - und eine Loeschmarke
+  x("INSERT INTO channels(id,owner_type,owner_id,kind,url) VALUES(50,'u',?,'blog','https://www.m365.fm/community/u/anna-old/blog/')", S);
+  x("INSERT INTO feed_items(id,channel_id,owner_type,owner_id,url,title,published,origin) VALUES(501,50,'u',?,'https://blog.example/a','Post A',1,'kurzpost'),(502,50,'u',?,'https://blog.example/b','Post B dup',1,'kurzpost')", S, S);
+  x("UPDATE contributions SET feed_item_id=501, canon='blog.example/a', guid='g-a', ctype='Book', teaser='Teaser A' WHERE user_id=? AND url='https://blog.example/a'", S);
+  x("UPDATE contributions SET feed_item_id=502 WHERE user_id=? AND url='https://blog.example/b'", S);
+  x("UPDATE contribution_sources SET mode='publish', seeded=1, topics='[\"copilot\"]' WHERE user_id=?", S);
+  x("INSERT INTO contribution_ignored(user_id,url,created) VALUES(?,'https://blog.example/gone',1)", S);
+  x("INSERT INTO item_votes(item_id,user_id,created) VALUES(501,?,1),(502,?,1)", C, C);
   x("INSERT INTO mail_addr(user_id,email,verified,created) VALUES(?,'t@example.com',1,1),(?,'s@example.com',1,1)", T, S);
   x("INSERT INTO blog_follows(user_id,handle,created) VALUES(?,'anna-old',1),(?,'anna',1),(?,'anna-old',1)", C, C, T);
   x("INSERT INTO show_reviews(show,user_id,rating,created,updated) VALUES('m365',?,5,1,1),('m365',?,4,1,1)", T, S);
@@ -252,6 +260,12 @@ test("Zusammenfuehren: Vorschau mit Zaehlern, alle Tabellen auf das Ziel, UNIQUE
   // MVP-Beitraege: Quelle zusammengelegt, doppelte URL entfaellt
   assert.deepEqual(all("SELECT id,user_id FROM contribution_sources"), [{ id: 1, user_id: T }]);
   assert.deepEqual(all("SELECT title,user_id,source_id FROM contributions ORDER BY title"), [{ title: "Post A", user_id: T, source_id: 1 }, { title: "Post B", user_id: T, source_id: 1 }]);
+  // 0036: neue Spalten wandern mit, der Kurzpost des doppelten Beitrags haengt jetzt am Eintrag von T, beide Kurzposts gehoeren T
+  assert.deepEqual(all("SELECT title,feed_item_id,canon,guid,ctype,teaser FROM contributions ORDER BY title"), [{ title: "Post A", feed_item_id: 501, canon: "blog.example/a", guid: "g-a", ctype: "Book", teaser: "Teaser A" }, { title: "Post B", feed_item_id: 502, canon: "", guid: "", ctype: "", teaser: "" }]);
+  assert.deepEqual(all("SELECT id,owner_id,origin FROM feed_items ORDER BY id"), [{ id: 501, owner_id: T, origin: "kurzpost" }, { id: 502, owner_id: T, origin: "kurzpost" }]);
+  assert.equal(one("SELECT owner_id FROM channels WHERE id=50").owner_id, T);
+  assert.equal(one("SELECT mode FROM contribution_sources WHERE id=1").mode, "track", "bei gleicher Quelle bleibt die Einstellung von T");
+  assert.deepEqual(all("SELECT user_id,url FROM contribution_ignored"), [{ user_id: T, url: "https://blog.example/gone" }]);
   // E-Mail: Adresse von T bleibt, stillgelegtes Konto bekommt keine Post
   assert.deepEqual(all("SELECT user_id,email FROM mail_addr"), [{ user_id: T, email: "t@example.com" }]);
   assert.deepEqual(all("SELECT handle FROM blog_follows WHERE user_id=900"), [{ handle: "anna" }]);
@@ -272,6 +286,8 @@ test("Zusammenfuehren: Vorschau mit Zaehlern, alle Tabellen auf das Ziel, UNIQUE
   assert.equal((await call(env, "DELETE", "/api/me", `m365s=${tSess}`)).s, 200);
   assert.equal(one("SELECT COUNT(*) n FROM users WHERE id IN (?,?)", T, S).n, 0);
   assert.equal(one("SELECT COUNT(*) n FROM user_identities").n, 0);
+  // ... und alles aus dem MVP-Tracker samt Kurzposts, ihrem Kanal und den Stimmen darauf (0012, 0036)
+  for (const t of ["contributions", "contribution_sources", "contribution_ignored", "feed_items", "channels", "item_votes"]) assert.equal(one(`SELECT COUNT(*) n FROM ${t}`).n, 0, t);
 });
 
 test("Zusammenfuehren: ohne frische Anmeldung beider Konten abgelehnt", async () => {
