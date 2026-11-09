@@ -16,12 +16,19 @@
     return fetch(API + path, o).then(function (r) { return r.json().then(function (j) { return { s: r.status, j: j }; }); });
   }
   var mePromise = null;
-  /* Einladungslink: ?ref=<handle> 30 Tage im Browser merken (nur localStorage dieser Website) und nach der Anmeldung einmal zurechnen */
+  /* Einladungslink: ?ref=<handle> 30 Tage im Browser merken (nur localStorage dieser Website). Der Server bestaetigt den Klick sofort mit einem
+     signierten Beleg (Kuerzel + Serverzeit); nach der Anmeldung loest ihn der Browser einmal ein, zugerechnet wird allein nach dem Beleg (inviter.js). */
   var SH = window.M365Share;
-  try { if (SH) SH.saveRef(new URLSearchParams(location.search).get("ref")); } catch (e) { /* ignore */ }
+  try {
+    if (SH) {
+      var clean = SH.takeRef(location); if (clean) history.replaceState(null, "", clean);   // ohne ref in der Adresse: sie ist das Ruecksprungziel der Anmeldung
+      var ref0 = SH.readRef();   // raeumt abgelaufene Eintraege auf, auch ohne Anmeldung
+      if (ref0 && !ref0.token) api("/api/invite/click", { method: "POST", body: { ref: ref0.ref } }).then(function (x) { if (x.s !== 200) return; if (x.j.token) SH.setToken(ref0.ref, x.j.token); else SH.clearRef(); }).catch(function () {});   // leerer Beleg: schon angemeldet, nichts zuzurechnen
+    }
+  } catch (e) { /* ignore */ }
   function attributeRef(u) {
-    var r = SH && u ? SH.readRef() : null; if (!r) return;
-    api("/api/invite/ref", { method: "POST", body: { ref: r.ref, t: r.t } }).then(function (x) { if (x.s === 200) SH.clearRef(); });
+    var r = SH && u ? SH.readRef() : null; if (!r || !r.token) return;
+    api("/api/invite/ref", { method: "POST", body: { token: r.token } }).then(function (x) { if (x.s === 200 || x.s === 400) SH.clearRef(); }).catch(function () {});   // 200 = entschieden, 400 = Beleg ungueltig/abgelaufen; 429 (Tagesgrenze): spaeter erneut
   }
   function me(force) { if (!mePromise || force) mePromise = api("/api/me").then(function (r) { var u = r.j.user || null; attributeRef(u); return u; }); return mePromise; }
   function hideAll(sel) { document.querySelectorAll(sel).forEach(function (e) { e.hidden = true; }); }
@@ -46,6 +53,7 @@
       Object.keys(urls).forEach(function (k) { var a = h("a", { class: "btn", href: urls[k], target: k === "mail" ? "_self" : "_blank", rel: "noopener noreferrer", title: names[k], "aria-label": names[k] }); a.appendChild(SHR.icon(k)); row.appendChild(a); });
       if (navigator.share) row.appendChild(h("button", { type: "button", class: "btn", text: tt("inv_share"), onclick: function () { navigator.share({ title: SHR.texts(LANG).subject, text: SHR.texts(LANG).text, url: j.link }).catch(function () {}); } }));
       box.appendChild(inp); box.appendChild(row); box.appendChild(ok);
+      if (j.preview === false) box.appendChild(h("p", { class: "cmut", text: tt("inv_private") }));   // Profil nicht oeffentlich: schlichter Link /community/?ref=<kuerzel>, keine Seite mit Name und Vorschau
       if (j.next) box.appendChild(h("p", { class: "cmut", text: tt("inv_next").replace("{n}", j.next - j.count) }));
     });
     return box;

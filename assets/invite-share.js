@@ -29,20 +29,38 @@
     svg.setAttribute("viewBox", "0 0 24 24"); svg.setAttribute("width", "20"); svg.setAttribute("height", "20"); svg.setAttribute("aria-hidden", "true"); svg.setAttribute("fill", "currentColor");
     p.setAttribute("d", ICONS[name]); svg.appendChild(p); return svg;
   }
-  // Referenz: nur das Profilkuerzel (Kleinbuchstaben, Ziffern, Bindestrich) + Zeitpunkt, 30 Tage, ausschliesslich im Browser dieser Website
+  // Referenz: nur das Profilkuerzel (Kleinbuchstaben, Ziffern, Bindestrich) + Zeitpunkt, 30 Tage, ausschliesslich im Browser dieser Website.
+  // k = Klick-Beleg des Servers (Kuerzel + Serverzeit, signiert; /api/invite/click): nur damit rechnet der Server die Einladung nach der Anmeldung zu.
   function cleanRef(r) { r = String(r || "").toLowerCase(); return /^[a-z0-9][a-z0-9-]{1,38}$/.test(r) ? r : ""; }
-  function saveRef(ref, store) {
-    ref = cleanRef(ref); if (!ref) return false;
-    try { (store || root.localStorage).setItem(KEY, JSON.stringify({ r: ref, t: Math.floor(Date.now() / 1000) })); return true; } catch (e) { return false; }
-  }
+  function nowS() { return Math.floor(Date.now() / 1000); }
+  // Liest den Eintrag; ein abgelaufener (30 Tage), kaputter oder aus der Zukunft datierter Eintrag wird dabei geloescht (Datenschutzerklaerung: hoechstens 30 Tage)
   function readRef(store, nowSec) {
     try {
-      var v = JSON.parse((store || root.localStorage).getItem(KEY) || "null"), n = nowSec || Math.floor(Date.now() / 1000);
-      if (!v || !cleanRef(v.r) || !(v.t > 0) || n - v.t > DAYS * 86400) return null;
-      return { ref: v.r, t: v.t };
+      store = store || root.localStorage; var raw = store.getItem(KEY), v = null, n = nowSec || nowS(); if (raw == null) return null;
+      try { v = JSON.parse(raw); } catch (e) { v = null; }
+      if (!v || !v.r || cleanRef(v.r) !== v.r || !(v.t > 0) || n - v.t > DAYS * 86400 || v.t > n + 86400) { store.removeItem(KEY); return null; }
+      return { ref: v.r, t: v.t, token: typeof v.k === "string" ? v.k : "" };
     } catch (e) { return null; }
   }
+  // Derselbe Einlader ist schon gemerkt: Zeitpunkt und Klick-Beleg des ersten Klicks bleiben (ein erneuter Aufruf, z. B. die Rueckkehr von der
+  // Anmeldung auf dieselbe Adresse, darf den Klick nie hinter die Kontoanlage schieben). Ein anderer Einlader ersetzt den Eintrag.
+  function saveRef(ref, store) {
+    ref = cleanRef(ref); if (!ref) return false;
+    var cur = readRef(store); if (cur && cur.ref === ref) return true;
+    try { (store || root.localStorage).setItem(KEY, JSON.stringify({ r: ref, t: nowS() })); return true; } catch (e) { return false; }
+  }
+  function setToken(ref, token, store) {   // Klick-Beleg zum gemerkten Einlader ablegen (nur wenn der Eintrag noch zu diesem Einlader gehoert)
+    var cur = readRef(store); if (!cur || cur.ref !== cleanRef(ref) || !/^[a-z0-9-]+\.\d+\.[A-Za-z0-9_-]+$/.test(String(token || ""))) return false;
+    try { (store || root.localStorage).setItem(KEY, JSON.stringify({ r: cur.ref, t: cur.t, k: token })); return true; } catch (e) { return false; }
+  }
   function clearRef(store) { try { (store || root.localStorage).removeItem(KEY); } catch (e) { /* ignore */ } }
-  var api = { shareUrls: shareUrls, texts: texts, icon: icon, cleanRef: cleanRef, saveRef: saveRef, readRef: readRef, clearRef: clearRef, ICONS: ICONS, DAYS: DAYS };
+  // ?ref=<kuerzel> aus der Adresse uebernehmen und den Parameter entfernen: die Adresse ohne ref ist das Ruecksprungziel der Anmeldung.
+  // Gibt die neue Adresse (Pfad + Query + Anker) zurueck oder "" (kein ref in der Adresse).
+  function takeRef(loc, store) {
+    var q = new URLSearchParams(loc.search || ""); if (!q.has("ref")) return "";
+    saveRef(q.get("ref"), store); q.delete("ref");
+    var rest = q.toString(); return loc.pathname + (rest ? "?" + rest : "") + (loc.hash || "");
+  }
+  var api = { shareUrls: shareUrls, texts: texts, icon: icon, cleanRef: cleanRef, saveRef: saveRef, readRef: readRef, setToken: setToken, clearRef: clearRef, takeRef: takeRef, ICONS: ICONS, DAYS: DAYS };
   if (typeof module !== "undefined" && module.exports) module.exports = api; else root.M365Share = api;
 })(typeof window !== "undefined" ? window : globalThis);

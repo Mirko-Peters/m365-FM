@@ -35,7 +35,7 @@ import { handleMediakit } from "./mediakit.js";
 import { handleMail, flushOutbox, notify } from "./mail.js";
 import { handleReviews } from "./reviews.js";
 import { handleEntityInvite, remindInvites } from "./entinvite.js";
-import { handleInviter, syncInviterBadges } from "./inviter.js";
+import { handleInviter, syncInviterBadges, deleteUserInvites } from "./inviter.js";
 import { handleDemo } from "./demo.js";
 import { handleGuests, deleteUserGuests } from "./guests.js";
 import { handleExpertRequests, deleteUserExpertRequests, syncExpertVectors, closeExpiredExpertRequests } from "./expert_requests.js";
@@ -215,7 +215,7 @@ async function deleteAccount(env, id) {
     db.prepare("DELETE FROM entity_claims WHERE user_id=? AND status<>'verified'").bind(id),
     db.prepare("DELETE FROM likes WHERE user_id=? OR comment_id IN (SELECT id FROM comments WHERE user_id=?)").bind(id, id),
     db.prepare("DELETE FROM reports WHERE user_id=? OR comment_id IN (SELECT id FROM comments WHERE user_id=?)").bind(id, id),
-    db.prepare("DELETE FROM comments WHERE user_id=?").bind(id), db.prepare("DELETE FROM user_badges WHERE user_id=?").bind(id), db.prepare("DELETE FROM invite_success WHERE invitee_user_id=?").bind(id),
+    db.prepare("DELETE FROM comments WHERE user_id=?").bind(id), db.prepare("DELETE FROM user_badges WHERE user_id=?").bind(id),
     db.prepare("DELETE FROM push_topics WHERE user_id=? OR endpoint IN (SELECT endpoint FROM push_subs WHERE user_id=?)").bind(id, id), db.prepare("DELETE FROM email_topics WHERE user_id=?").bind(id),
     db.prepare("DELETE FROM topic_queue WHERE recipient=? OR recipient IN (SELECT endpoint FROM push_subs WHERE user_id=?)").bind(String(id), id),
     db.prepare("DELETE FROM topic_deliveries WHERE recipient=? OR recipient IN (SELECT endpoint FROM push_subs WHERE user_id=?)").bind(String(id), id),
@@ -225,6 +225,7 @@ async function deleteAccount(env, id) {
   await deleteUserEvents(db, id);
   await deleteUserMessages(db, id); await deleteUserTokens(db, id); await deleteUserQa(db, id); await deleteUserBlog(db, id); await deleteUserLibrary(db, id); await deleteUserPodcast(db, id); await deleteUserVideos(db, id); await deleteUserGuests(db, id); await deleteUserGuestCredits(db, id);
   await deleteUserData(db, id); await deleteUserExpertRequests(env, id);
+  await deleteUserInvites(env, id);   // Einlader: beide Seiten (eingeladen und Einlader samt eigenem Kuerzel in ref)
 }
 
 async function me(env, uid) {
@@ -414,7 +415,7 @@ async function api(env, request, url, path, asUser, ctx) {
   if (path.startsWith("/api/podcast/") || path.startsWith("/api/admin/podcast")) { const q = await handlePodcast(env, request, url, path, user, J); if (q) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return q; } }
   if (path === "/api/updates/export" || path === "/api/admin/updates/poll") { const q = await handleUpdates(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/reviews")) { const q = await handleReviews(env, request, url, path, user, J); if (q) return q; }
-  if (path === "/api/invite/me" || path === "/api/invite/ref" || path === "/api/admin/invites" || path === "/api/admin/invite/void") { const q = await handleInviter(env, request, url, path, user, J); if (q) return q; }
+  if (path.startsWith("/api/invite/") || path === "/api/admin/invites" || path === "/api/admin/invite/void") { const q = await handleInviter(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/entityinvite/")) { const q = await handleEntityInvite(env, request, url, path, user, J); if (q) return q; }
   if (path === "/api/mediakit" || path === "/api/mediakit/summary" || path === "/api/admin/mediakit") { const q = await handleMediakit(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/mail/") || path.startsWith("/api/admin/mail")) { const q = await handleMail(env, request, url, path, user, J); if (q) return q; }
@@ -590,6 +591,7 @@ export default {
     if (event.cron === "0 6 * * *") {
       T("runPushDigest", () => runPushDigest(env));
       T("runDigest", () => runDigest(env, { at: scheduledAt }));
+      T("syncInviterBadges", () => syncInviterBadges(env));   // einmal taeglich (Sicherheitsnetz: Zurechnung, Entwertung und Kontoloeschung bewerten sofort)
     }
     if (event.cron === "*/30 * * * *") T("runDigest", () => runDigest(env, { at: scheduledAt }));
     T("refreshFeeds", () => refreshFeeds(env));
@@ -615,7 +617,6 @@ export default {
     T("refreshProfilesExport", () => refreshProfilesExport(env));
     T("backfillDirectoryGeocodes", () => backfillDirectoryGeocodes(env));
     T("remindInvites", () => remindInvites(env));
-    T("syncInviterBadges", () => syncInviterBadges(env));
     T("runTrQueue", () => runTrQueue(env, entityMap));
     T("syncLiveEvents", () => syncLiveEvents(env, entityMap));
     T("syncContentTopics", () => syncContentTopics(env));

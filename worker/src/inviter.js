@@ -1,12 +1,25 @@
 // Abzeichen "Einlader": Zurechnung erfolgreicher Einladungen (invite_success), persoenlicher Link, Admin-Entwertung.
 // Erfolgreich = die eingeladene Person hat ein Konto angelegt (OAuth-Anmeldung oder bestaetigte E-Mail) und es ueber einen Einladungsweg genutzt.
 import { evalBadges, INVITER_TIERS, inviterTier } from "./badges.js";
-import { audit } from "./util.js";
+import { audit, rateLimit, sha256hex, sign, verify } from "./util.js";
 
 const now = () => Math.floor(Date.now() / 1000);
 export const REF_DAYS = 30;
+export const REF_DAY_CAP = 20, REF_IP_CAP = 5;   // Zurechnungen ueber den Link pro Tag: je Einlader und je Anschluss (gegen Sammeln mit Wegwerfkonten)
 export const SOURCES = ["ref", "entity", "speaker", "org", "forward"];
 const OAUTH = ["google", "microsoft", "linkedin", "github"];
+const HANDLE = /^[a-z0-9][a-z0-9-]{1,38}$/;
+
+// Klick-Beleg fuer den persoenlichen Link: Kuerzel + Serverzeit, mit dem Sitzungsgeheimnis signiert. Der Browser merkt ihn nur (localStorage,
+// 30 Tage) und legt ihn nach der Anmeldung vor; ob und wem zugerechnet wird, entscheidet allein der Server: Signatur, Alter des Belegs und
+// "Konto nach dem Klick entstanden" - beides Serverzeit. Einen Zeitpunkt aus dem Browser gibt es nicht mehr (vorher: {ref, t} frei waehlbar).
+export async function clickToken(env, h, t = now()) { return `${h}.${t}.${await sign(env.SESSION_SECRET, `invite|${h}|${t}`)}`; }
+export async function readClick(env, token) {
+  const m = /^([a-z0-9][a-z0-9-]{1,38})\.(\d{9,11})\.([A-Za-z0-9_-]{20,64})$/.exec(String(token || ""));
+  if (!m || !(await verify(env.SESSION_SECRET, `invite|${m[1]}|${m[2]}`, m[3]))) return null;
+  const t = +m[2]; if (t > now() + 60 || now() - t > REF_DAYS * 86400) return null;   // 60 s Spielraum zwischen Worker-Instanzen
+  return { h: m[1], t };
+}
 let ready = false;
 export async function ensureInvites(db) {
   if (ready) return;
@@ -22,20 +35,36 @@ async function eligible(db, u) {
   return !!(await db.prepare("SELECT 1 x FROM mail_addr WHERE user_id=? AND verified=1").bind(u.id).first().catch(() => null));
 }
 
-// since: Zeitpunkt der Einladung; das Konto muss danach entstanden sein (kein Einladen bestehender Mitglieder). Gibt true zurueck, wenn neu gezaehlt.
-export async function recordInvite(env, { inviter, invitee, source, ref = "", since = 0 }) {
-  const db = env.DB; await ensureInvites(db);
-  inviter = +inviter; invitee = +invitee;
+// Pruefung ohne Schreiben: Einlader aktiv, eingeladene Person mit nachgewiesener Anmeldung, keine Selbst-Einladung, noch niemandem zugerechnet.
+// since: Zeitpunkt der Einladung; das Konto muss danach entstanden sein (kein Einladen bestehender Mitglieder).
+async function inviteOpen(db, { inviter, invitee, source, since = 0 }) {
   if (!inviter || !invitee || inviter === invitee || !SOURCES.includes(source)) return false;
   const a = await db.prepare("SELECT id,banned,merged_into FROM users WHERE id=?").bind(inviter).first();
   if (!a || a.banned || a.merged_into) return false;
   const b = await db.prepare("SELECT * FROM users WHERE id=?").bind(invitee).first();
   if (!(await eligible(db, b))) return false;
   if (since && (b.created || 0) < since) return false;
+  return !(await db.prepare("SELECT 1 x FROM invite_success WHERE invitee_user_id=?").bind(invitee).first());
+}
+
+// Gibt true zurueck, wenn neu gezaehlt.
+export async function recordInvite(env, { inviter, invitee, source, ref = "", since = 0 }) {
+  const db = env.DB; await ensureInvites(db);
+  inviter = +inviter; invitee = +invitee;
+  if (!(await inviteOpen(db, { inviter, invitee, source, since }))) return false;
   const r = await db.prepare("INSERT OR IGNORE INTO invite_success(inviter_user_id,invitee_user_id,source,ref,created) VALUES(?,?,?,?,?)").bind(inviter, invitee, source, String(ref).slice(0, 80), now()).run();
   if (!(r.meta?.changes > 0)) return false;
   await evalBadges(env, inviter).catch(() => 0);
   return true;
+}
+
+// Kontoloeschung (DSGVO): alle Zeilen des Kontos, als Einlader (ref = eigenes Profilkuerzel) wie als eingeladene Person; wer ein Konto entwertet
+// hat (voided_by), bleibt nicht als Verweis stehen. Die Stufe des Einladers einer geloeschten Person wird sofort neu bewertet.
+export async function deleteUserInvites(env, id) {
+  const db = env.DB; await ensureInvites(db);
+  const by = (await db.prepare("SELECT inviter_user_id i FROM invite_success WHERE invitee_user_id=?").bind(id).first())?.i || 0;
+  await db.batch([db.prepare("DELETE FROM invite_success WHERE inviter_user_id=? OR invitee_user_id=?").bind(id, id), db.prepare("UPDATE invite_success SET voided_by=0 WHERE voided_by=?").bind(id)]);
+  if (by && by !== id) await evalBadges(env, by).catch(() => 0);
 }
 
 export async function inviteCount(db, uid) {
@@ -44,26 +73,45 @@ export async function inviteCount(db, uid) {
 
 export async function syncInviterBadges(env) {   // taeglich: Stufen neu bewerten (auch Entzug nach Entwertung)
   const db = env.DB; await ensureInvites(db);
-  const ids = new Set(((await db.prepare("SELECT DISTINCT inviter_user_id id FROM invite_success UNION SELECT user_id id FROM user_badges WHERE badge LIKE 'inviter\\_%' ESCAPE '\\'").all()).results || []).map((r) => r.id));
+  // abgelaufene Zaehler der Tagesgrenzen loeschen (invref:<konto>, invref:ip:<hash der IP-Adresse>): nichts davon bleibt laenger als zwei Tage (Datenschutzerklaerung)
+  await db.prepare("DELETE FROM ratelimit WHERE k>='invref:' AND k<'invref;' AND win<?").bind(now() - 86400).run().catch(() => 0);
+  // nur bestehende Konten: evalBadges legt sonst fuer eine verwaiste Kennung wieder Abzeichen an
+  const ids = new Set(((await db.prepare("SELECT s.inviter_user_id id FROM invite_success s JOIN users u ON u.id=s.inviter_user_id UNION SELECT b.user_id id FROM user_badges b JOIN users u ON u.id=b.user_id WHERE b.badge LIKE 'inviter\\_%' ESCAPE '\\'").all()).results || []).map((r) => r.id));
   let n = 0; for (const id of ids) { await evalBadges(env, id); n++; }
   return n;
 }
 
 export async function handleInviter(env, request, url, path, user, J) {
-  if (path !== "/api/invite/me" && path !== "/api/invite/ref" && path !== "/api/admin/invites" && path !== "/api/admin/invite/void") return null;
-  const db = env.DB, method = request.method; await ensureInvites(db);
+  if (path !== "/api/invite/me" && path !== "/api/invite/click" && path !== "/api/invite/ref" && path !== "/api/admin/invites" && path !== "/api/admin/invite/void") return null;
+  const db = env.DB, method = request.method;
+  if (path === "/api/invite/click" && method === "POST") {   // Link geoeffnet (/einladung/<kuerzel>/ oder ?ref=): Klick-Beleg, ohne Anmeldung und ohne Datenbank (weder Zugriff noch Eintrag)
+    const h = String((await request.json().catch(() => ({}))).ref || "").toLowerCase();
+    if (!HANDLE.test(h)) return J({ error: "bad_request" }, 400);
+    return J({ ok: true, token: user ? "" : await clickToken(env, h) });   // schon angemeldet: das Konto gibt es bereits, nichts zuzurechnen
+  }
+  await ensureInvites(db);
   if (!user) return J({ error: "login" }, 401);
   if (path === "/api/invite/me" && method === "GET") {
-    const h = (await db.prepare("SELECT handle FROM profiles WHERE user_id=? AND handle IS NOT NULL").bind(user.id).first())?.handle || "";
+    // Seite /einladung/<kuerzel>/ mit Name, Kurzvorstellung und Teilen-Karte gibt es nur fuer oeffentliche Profile (site_invite.py). Ist das Profil
+    // nicht (mehr) oeffentlich, gibt es ab sofort nur den schlichten Link /community/?ref=<kuerzel> (ohne Vorschau, ohne Namen); ohne Kuerzel keinen.
+    // Die Seite entsteht erst mit dem naechsten Seitenbau: bis dahin leitet der Site-Worker /einladung/<kuerzel>/ auf den schlichten Link (kein 404).
+    const p = await db.prepare("SELECT handle,public FROM profiles WHERE user_id=? AND handle IS NOT NULL").bind(user.id).first();
+    const h = p?.handle || "", preview = !!(h && p.public), ref_link = h ? `${env.SITE}/community/?ref=${h}` : "";
     const count = await inviteCount(db, user.id), tier = inviterTier(count);
-    return J({ handle: h, link: h ? `${env.SITE}/einladung/${h}/` : "", ref_link: h ? `${env.SITE}/community/?ref=${h}` : "", count, tier, next: INVITER_TIERS.find((t) => t > count) || 0, tiers: INVITER_TIERS }, 200, { "cache-control": "no-store" });
+    return J({ handle: h, link: preview ? `${env.SITE}/einladung/${h}/` : ref_link, ref_link, preview, count, tier, next: INVITER_TIERS.find((t) => t > count) || 0, tiers: INVITER_TIERS }, 200, { "cache-control": "no-store" });
   }
-  if (path === "/api/invite/ref" && method === "POST") {   // Ref aus Cookie/localStorage der Website bei der Anmeldung zurechnen
-    const b = await request.json().catch(() => ({})), h = String(b.ref || "").toLowerCase().slice(0, 40);
-    if (!/^[a-z0-9][a-z0-9-]{1,38}$/.test(h)) return J({ error: "bad_request" }, 400);
-    const p = await db.prepare("SELECT user_id FROM profiles WHERE handle=?").bind(h).first(); if (!p) return J({ ok: true, counted: false });
-    const since = Math.max(Math.min(+b.t || 0, now()), now() - REF_DAYS * 86400);
-    return J({ ok: true, counted: await recordInvite(env, { inviter: p.user_id, invitee: user.id, source: "ref", ref: h, since }) });
+  if (path === "/api/invite/ref" && method === "POST") {   // Klick-Beleg nach der Anmeldung einloesen
+    const k = await readClick(env, (await request.json().catch(() => ({}))).token);
+    if (!k) return J({ error: "bad_request" }, 400);   // ohne gueltigen Beleg keine Zurechnung (auch nicht mit {ref, t} aus dem Browser)
+    if (!(await rateLimit(db, `invref:${user.id}`, 10, 86400))) return J({ error: "rate_limit" }, 429);
+    const p = await db.prepare("SELECT user_id FROM profiles WHERE handle=?").bind(k.h).first();
+    const o = { inviter: +p?.user_id || 0, invitee: user.id, source: "ref", ref: k.h, since: k.t };   // since = Serverzeit des Klicks: das Konto muss danach entstanden sein
+    if (!(await inviteOpen(db, o))) return J({ ok: true, counted: false });
+    // Tagesgrenzen erst, wenn die Einladung sonst zaehlen wuerde. Darueber 429: der Beleg bleibt gueltig, der Browser legt ihn spaeter erneut vor.
+    const day = (await db.prepare("SELECT COUNT(*) n FROM invite_success WHERE inviter_user_id=? AND source='ref' AND created>?").bind(o.inviter, now() - 86400).first())?.n || 0;
+    const ip = (await sha256hex(`${env.SESSION_SECRET}:invref:${request.headers.get("cf-connecting-ip") || "0"}`)).slice(0, 32);
+    if (day >= REF_DAY_CAP || !(await rateLimit(db, `invref:ip:${ip}`, REF_IP_CAP, 86400))) return J({ error: "rate_limit" }, 429);
+    return J({ ok: true, counted: await recordInvite(env, o) });
   }
   if (!user.admin) return J({ error: "forbidden" }, 403);
   if (path === "/api/admin/invites" && method === "GET") {
