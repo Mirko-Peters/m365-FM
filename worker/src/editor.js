@@ -2,6 +2,8 @@
 // Routen: /api/editor/* (Redakteure, Moderatoren, Admin) und /api/admin/editlog* (nur Admin). Die alten /api/admin/*-Routen rufen decide() auf.
 import { can, roleOf, isStaff, loadActor, logEdit, emailFor, scopeOf } from "./perm.js";
 import { evalBadges } from "./badges.js";
+import { baseIds } from "./entities.js";
+import { pairNewOrgEntity } from "./orgpair.js";
 import { notify } from "./mail.js";
 import { saveUnit, unitHistory, revertUnit, requestRetranslate, currentOverrides, runProposal, I18N_KINDS, LANGS as I18N_LANGS } from "./i18n_edit.js";
 import { applyForRole, myApplications, listApplications, decideApplication, NEEDED } from "./roles.js";
@@ -47,8 +49,14 @@ const A = {
     async load(db, id) { const r = await db.prepare("SELECT r.id,r.eid,r.data,r.summary,r.status,r.user_id,r.created,COALESCE(u.name,'') name FROM entity_rev r LEFT JOIN users u ON u.id=r.user_id WHERE r.id=?").bind(id).first(); let d = {}; try { d = JSON.parse(r?.data || "{}"); } catch { /* leer */ } return r && { ...r, title: d.name || r.eid, body: ((d.desc || {}).en || (d.desc || {}).de || ""), ownerId: r.user_id || null, pending: r.status === "pending" }; },
     async approve(env, it) {
       const db = env.DB, prev = await db.prepare("SELECT id FROM entity_rev WHERE eid=? AND status='live'").bind(it.eid).first();
+      const wasLive = !!prev || (await baseIds(env)).has(it.eid);
       await db.batch([db.prepare("UPDATE entity_rev SET status='old' WHERE eid=? AND status='live'").bind(it.eid), db.prepare("UPDATE entity_rev SET status='live' WHERE id=?").bind(it.id)]);
-      if (it.user_id) await evalBadges(env, it.user_id); return { before: { status: it.status, prevLive: prev?.id || 0 }, after: { status: "live" } };
+      if (it.user_id) await evalBadges(env, it.user_id);
+      if (!wasLive) {   // #311: neue Firmen-Entitaet freigegeben -> jetzt die (unbeanspruchte) Paar-Firma anlegen; Inhaber wird, wer die Entitaet uebernimmt
+        let d = null; try { d = JSON.parse(it.data || "null"); } catch { d = null; }
+        if (d?.type === "org") await pairNewOrgEntity(env, null, it.eid, d).catch(() => null);
+      }
+      return { before: { status: it.status, prevLive: prev?.id || 0 }, after: { status: "live" } };
     },
     async reject(env, it) { await env.DB.prepare("UPDATE entity_rev SET status='rejected' WHERE id=?").bind(it.id).run(); return { before: { status: it.status }, after: { status: "rejected" } }; },
     async undo(env, b, id) { const db = env.DB; await db.prepare("UPDATE entity_rev SET status=? WHERE id=?").bind(b.status || "pending", id).run(); if (b.prevLive) await db.prepare("UPDATE entity_rev SET status='live' WHERE id=?").bind(b.prevLive).run(); },

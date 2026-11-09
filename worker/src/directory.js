@@ -129,7 +129,7 @@ async function allDirectoryItems(env) {
       FROM profiles p JOIN users u ON u.id=p.user_id AND u.banned=0
       LEFT JOIN profile_private pp ON pp.user_id=p.user_id
       WHERE p.public=1 AND p.handle IS NOT NULL ORDER BY p.updated DESC LIMIT ${MAX_ROWS}`).all(),
-    db.prepare(`SELECT id,handle,name,tagline,country,public FROM orgs WHERE public=1 ORDER BY created DESC LIMIT ${MAX_ROWS}`).all(),
+    db.prepare(`SELECT id,handle,name,tagline,country,public FROM orgs WHERE public=1 AND unclaimed=0 ORDER BY created DESC LIMIT ${MAX_ROWS}`).all(),
     db.prepare(`SELECT id,handle,title,summary,start,end,mode,location,country,url,lang,topics,city,lat,lng,geo_precision
       FROM events WHERE public=1 AND COALESCE(NULLIF(end,''),start)>=? ORDER BY start LIMIT ${MAX_ROWS}`).bind(new Date().toISOString().slice(0, 10)).all(),
   ]);
