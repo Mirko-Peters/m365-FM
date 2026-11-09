@@ -1,6 +1,6 @@
-# Spreaker-Website-Feld im RSS (2026-11-07 04:52 UTC)
+# Spreaker-Website-Feld im RSS (2026-11-09 04:52 UTC)
 
-Gesetzt laut Protokoll: 3207 · im Feed gleich: 3157 · im Feed anders: 0 · nicht im Feed: 50 · ausstehend (frisch gesetzt, Feed noch nicht erneuert): 0
+Gesetzt laut Protokoll: 3227 · im Feed gleich: 3164 · im Feed anders: 0 · nicht im Feed: 63 · ausstehend (frisch gesetzt, Feed noch nicht erneuert): 0
 
 - 67311542: nicht_im_feed · soll https://www.m365.fm/show/episodes/building-reusable-components-with-power-platform-cli-pac-cli/ · Feed None
 - 67312816: nicht_im_feed · soll https://www.m365.fm/show/episodes/using-microsoft-graph-for-custom-app-integrations/ · Feed None
@@ -52,3 +52,16 @@ Gesetzt laut Protokoll: 3207 · im Feed gleich: 3157 · im Feed anders: 0 · nic
 - 67489476: nicht_im_feed · soll https://www.m365.fm/show/episodes/stop-patchwork-coding-copilots-agent-changes-everything/ · Feed None
 - 67489477: nicht_im_feed · soll https://www.m365.fm/show/episodes/copilot-agent-or-copilot-hype-the-hard-choice/ · Feed None
 - 67493012: nicht_im_feed · soll https://www.m365.fm/show/episodes/guest-access-in-m365-brilliant-or-broken/ · Feed None
+- 67497114: nicht_im_feed · soll https://www.m365.fm/show/episodes/microsoft-365-tasks-why-youre-drowning/ · Feed None
+- 67501593: nicht_im_feed · soll https://www.m365.fm/show/episodes/why-sharepoint-fails-at-knowledge-management/ · Feed None
+- 67509218: nicht_im_feed · soll https://www.m365.fm/show/episodes/gpt-5-in-copilot-fixes-what-slowed-you-down/ · Feed None
+- 67514464: nicht_im_feed · soll https://www.m365.fm/show/episodes/microsoft-teams-is-missing-hidden-or-gone/ · Feed None
+- 67519720: nicht_im_feed · soll https://www.m365.fm/show/episodes/is-your-m365-rollout-quietly-failing/ · Feed None
+- 67526027: nicht_im_feed · soll https://www.m365.fm/show/episodes/this-m365-feature-makes-old-training-obsolete/ · Feed None
+- 67532834: nicht_im_feed · soll https://www.m365.fm/show/episodes/jira-teams-the-it-support-shortcut/ · Feed None
+- 67538976: nicht_im_feed · soll https://www.m365.fm/show/episodes/10-dirty-data-habits-killing-copilots-potential/ · Feed None
+- 67544333: nicht_im_feed · soll https://www.m365.fm/show/episodes/the-hidden-danger-of-m365-guest-accounts/ · Feed None
+- 67544807: nicht_im_feed · soll https://www.m365.fm/show/episodes/m365-update-flood-the-hidden-cost-for-it/ · Feed None
+- 67549620: nicht_im_feed · soll https://www.m365.fm/show/episodes/copilot-agents-without-chaos-how/ · Feed None
+- 67555685: nicht_im_feed · soll https://www.m365.fm/show/episodes/the-one-command-that-runs-your-whole-stack/ · Feed None
+- 67562881: nicht_im_feed · soll https://www.m365.fm/show/episodes/the-m365-task-jungle-is-real/ · Feed None

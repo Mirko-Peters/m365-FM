@@ -427,9 +427,12 @@ def build(g, people, orgs, extra=None):
             feed = f'<h2>{esc(s["feed"])}</h2><div id="pf-feed" data-top="{esc(s["feedtop"])}" data-new="{esc(s["feed"])}"></div>' if kind == "members" else ""
             if kind == "companies": partners = partner_block(lang, lst)
             else: partners = ""
+            _prec = [o["rec"] for o in __import__("site_sponsorships").active_sponsor_orgs(__import__("site_sponsorships")._state()["today"], ENTS)] if partners else []
             b = shell(lang, f'<h1>{esc(title)}</h1><p class="mut">{esc(intro)}</p>{partners}<p><a class="btn main" href="{croot}">{esc(s["join"])}</a>{(" <a class=\"btn\" href=\"" + croot + "blog/\">Blog</a>") if lang in BLOGLANGS else ""}</p><div role="group" aria-label="{esc(s["filter"])}">{fb}</div><ul class="mb-list">{cards}</ul>{feed}{fjs}{lm}{live_js}{css}')
             ld = [{"@context": "https://schema.org", "@type": "CollectionPage", "name": title, "url": ru, "description": intro, "mainEntity": {"@type": "ItemList", "numberOfItems": len(lst), "itemListElement":
                    [{"@type": "ListItem", "position": i + 1, "item": {"@id": f"{purl(BASE, 'en', pk, it['handle'])}#{'person' if pk == 'u' else 'org'}"}} for i, it in enumerate(lst)]}}]
+            if _prec:   # Partner-Block ist als Anzeige gekennzeichnet: Sponsor auch im JSON-LD der Seite (check_schema: Kennzeichnung <-> sponsor)
+                ld[0]["sponsor"] = __import__("site_sponsorships").ld(_prec)
             write(f"{pfx2(lang)}community/{kind}/index.html", page(lang, f'{title} – M365.FM', intro, ru, b, None, ld, og_type="website", extra_head=LCSS, noindex=noidx))
             if not noidx:
                 sitemap.append((ru, TODAY, None))
