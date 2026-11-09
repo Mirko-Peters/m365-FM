@@ -10,7 +10,7 @@
     add: "Eigene Quelle hinzufügen", step1: "1. Art der Quelle", step2: "2. Link", step3: "3. Was soll mit neuen Beiträgen passieren?", url: "Link (https)", preview: "Vorschau der letzten 3", previewing: "Lade …",
     prev_h: "Letzte Beiträge", prev_none: "Hier ist nichts zu sehen. Prüfe den Link.", next: "Weiter", back: "Zurück", save: "Quelle speichern", cancel: "Abbrechen", title: "Name der Quelle (optional)",
     m_ask: "Jedes Mal fragen", m_ask_d: "Neue Beiträge landen in „Neu gefunden“, du entscheidest je Beitrag. Empfohlen.", m_track: "Nur tracken", m_track_d: "Zählt für den MVP-Tracker und bleibt privat, ohne öffentliche Seite.",
-    m_publish: "Als Kurzpost veröffentlichen", m_publish_d: "Jeder neue Beitrag wird ein Kurzpost im Community-Feed (Titel, 1–2 Sätze, Link zum Original, als externer Beitrag gekennzeichnet, nofollow). Für Google erst mit eigenem Text.",
+    m_publish: "Als Kurzpost veröffentlichen", m_publish_d: "Jeder neue Beitrag wird ein Kurzpost im Community-Feed (Titel, 1–2 Sätze, Link zum Original, als externer Beitrag gekennzeichnet, nofollow). Für Google erst mit eigenem Text. Höchstens 5 pro Tag; beim ersten Abruf einer Quelle wird nichts veröffentlicht.",
     m_gh: "GitHub-Aktivität bleibt privat und kann nicht veröffentlicht werden.", topics: "Themen für Kurzposts (Entitäts-IDs, kommagetrennt)", saved: "Gespeichert.", err: "Das hat nicht geklappt. Bitte versuche es erneut.",
     bad_url: "Bitte gib einen passenden https-Link ein.", no_mode: "Wähle eine Option.", li_url: "Artikel-Link", li_zip: "Datenexport (ZIP)", li_url_h: "Wir lesen nur Titel, Beschreibung und Datum aus den Open-Graph-Angaben der Seite.",
     li_zip_h: "LinkedIn: Einstellungen > Datenschutz > Kopie Ihrer Daten > Artikel. Die ZIP-Datei wird nur in deinem Browser gelesen; gesendet werden nur die Einträge, die du auswählst (Titel, Link, Datum).",
@@ -22,14 +22,20 @@
     h_github: "Profil https://github.com/name (Aktivität) oder Repository https://github.com/name/repo (Releases).", h_techcommunity: "Feed-Link oder Seite eines Blogs der Tech Community.", h_sessionize: "https://sessionize.com/dein-name",
     h_stackoverflow: "Profil-Link mit Nummer, z. B. https://stackoverflow.com/users/123/name.", h_package: "https://www.npmjs.com/~name, https://www.nuget.org/profiles/name oder https://www.powershellgallery.com/profiles/name",
     h_meetup: "https://www.meetup.com/gruppen-name/", e_fetch_failed: "Die Quelle konnte nicht gelesen werden.", e_bad_source: "Der Link passt nicht zur gewählten Art.", e_source_exists: "Diese Quelle gibt es schon.", e_source_limit: "Es sind höchstens 20 Quellen möglich.",
-    e_not_publishable: "Dieser Beitrag kann nicht veröffentlicht werden.", e_profile_required: "Für Kurzposts brauchst du ein öffentliches Profil mit Handle.", e_url_taken: "Dieser Link ist schon von jemand anderem im Feed.", e_rate_limit: "Zu viele Aktionen heute."
+    e_not_publishable: "Dieser Beitrag kann nicht veröffentlicht werden.", e_profile_required: "Für Kurzposts brauchst du ein öffentliches Profil mit Handle.", e_url_taken: "Dieser Link ist schon von jemand anderem im Feed.", e_rate_limit: "Zu viele Aktionen heute.",
+    e_not_trusted: "Kurzposts stehen vertrauenswürdigen Mitgliedern offen: bestätigtes Programm (MVP, MCT, RD, MSA, Microsoft) oder 25 Community-Punkte. Bis dahin warten neue Beiträge in „Neu gefunden“ und lassen sich tracken.",
+    e_post_limit: "Heute sind schon 5 Kurzposts veröffentlicht. Der Beitrag bleibt in „Neu gefunden“, morgen geht es weiter.", e_hidden_by_moderation: "Dieser Kurzpost wurde von der Moderation ausgeblendet und kann nicht erneut veröffentlicht werden.",
+    e_already_in_feed: "Dieser Link ist über einen deiner Profil-Kanäle schon im Community-Feed. Wähle „Tracken“.", e_too_old: "Nur Beiträge der letzten 120 Tage können Kurzposts werden. Wähle „Tracken“.", e_contribution_limit: "Es sind zu viele Einträge von Hand.",
+    imp_posted: "{n} als Kurzpost veröffentlicht.", imp_held: "{n} warten in „Neu gefunden“:", imp_unposted: "{n} nur getrackt (ohne Link, älter als 120 Tage oder schon im Feed).",
+    p_h: "Kurzpost", p_chip: "Kurzpost", p_live: "Dieser Beitrag steht als Kurzpost im Community-Feed.", p_hint: "Wenn du den Eintrag löschst, wird auch der Kurzpost entfernt.", p_withdrawn: "Der Kurzpost ist zurückgezogen und nicht mehr öffentlich.",
+    p_moderated: "Der Kurzpost wurde von der Moderation ausgeblendet.", unpost: "Kurzpost zurückziehen", unposted: "Der Kurzpost ist zurückgezogen.", repost: "Wieder veröffentlichen"
   }, {
     inbox: "New finds", inbox_intro: "New finds from your sources. Nothing here is public until you decide.", inbox_none: "Nothing new. New finds show up here when a source set to “Ask every time” finds something.",
     track: "Track", post: "Publish as short post", ignore: "Ignore", type: "MVP category", no_link: "Without a link there can be no short post.", from: "Source",
     add: "Add your own source", step1: "1. Type of source", step2: "2. Link", step3: "3. What should happen to new items?", url: "Link (https)", preview: "Preview the last 3", previewing: "Loading …",
     prev_h: "Latest items", prev_none: "Nothing to see here. Check the link.", next: "Next", back: "Back", save: "Save source", cancel: "Cancel", title: "Name of the source (optional)",
     m_ask: "Ask every time", m_ask_d: "New items land in “New finds” and you decide per item. Recommended.", m_track: "Only track", m_track_d: "Counts for the MVP tracker and stays private, with no public page.",
-    m_publish: "Publish as short post", m_publish_d: "Every new item becomes a short post in the community feed (title, 1-2 sentences, link to the original, labelled as an external post, nofollow). Indexed by Google only with your own text.",
+    m_publish: "Publish as short post", m_publish_d: "Every new item becomes a short post in the community feed (title, 1-2 sentences, link to the original, labelled as an external post, nofollow). Indexed by Google only with your own text. Up to 5 per day; nothing is published on the first fetch of a source.",
     m_gh: "GitHub activity stays private and cannot be published.", topics: "Topics for short posts (entity ids, comma separated)", saved: "Saved.", err: "That did not work. Please try again.",
     bad_url: "Please enter a matching https link.", no_mode: "Choose an option.", li_url: "Article link", li_zip: "Data export (ZIP)", li_url_h: "We only read the title, description and date from the page's Open Graph tags.",
     li_zip_h: "LinkedIn: Settings > Data privacy > Get a copy of your data > Articles. The ZIP file is read only in your browser; only the items you select (title, link, date) are sent.",
@@ -41,12 +47,18 @@
     h_github: "Profile https://github.com/name (activity) or repository https://github.com/name/repo (releases).", h_techcommunity: "Feed link or page of a Tech Community blog.", h_sessionize: "https://sessionize.com/your-name",
     h_stackoverflow: "Profile link with number, e.g. https://stackoverflow.com/users/123/name.", h_package: "https://www.npmjs.com/~name, https://www.nuget.org/profiles/name or https://www.powershellgallery.com/profiles/name",
     h_meetup: "https://www.meetup.com/group-name/", e_fetch_failed: "The source could not be read.", e_bad_source: "The link does not match the chosen type.", e_source_exists: "This source already exists.", e_source_limit: "You can add up to 20 sources.",
-    e_not_publishable: "This item cannot be published.", e_profile_required: "Short posts need a public profile with a handle.", e_url_taken: "This link is already in the feed from someone else.", e_rate_limit: "Too many actions today."
+    e_not_publishable: "This item cannot be published.", e_profile_required: "Short posts need a public profile with a handle.", e_url_taken: "This link is already in the feed from someone else.", e_rate_limit: "Too many actions today.",
+    e_not_trusted: "Short posts are open to trusted members: a confirmed program (MVP, MCT, RD, MSA, Microsoft) or 25 community points. Until then new items wait in “New finds” and can be tracked.",
+    e_post_limit: "You have already published 5 short posts today. The item stays in “New finds”; try again tomorrow.", e_hidden_by_moderation: "This short post was hidden by the moderation team and cannot be published again.",
+    e_already_in_feed: "This link is already in the community feed through one of your profile channels. Choose “Track”.", e_too_old: "Only items from the last 120 days can become short posts. Choose “Track”.", e_contribution_limit: "Too many entries added by hand.",
+    imp_posted: "{n} published as short posts.", imp_held: "{n} are waiting in “New finds”:", imp_unposted: "{n} only tracked (no link, older than 120 days or already in the feed).",
+    p_h: "Short post", p_chip: "Short post", p_live: "This entry is published as a short post in the community feed.", p_hint: "Deleting the entry also removes the short post.", p_withdrawn: "The short post has been taken back and is no longer public.",
+    p_moderated: "The short post was hidden by the moderation team.", unpost: "Take short post back", unposted: "The short post has been taken back.", repost: "Publish again"
   });
   var KINDS = ["podcast", "blog", "youtube", "github", "techcommunity", "sessionize", "stackoverflow", "package", "meetup", "linkedin", "other"];
   var TYPES = ["Blog/Article", "Podcast", "Video/Webcast", "Speaking", "Open Source/Code", "Q&A/Forum", "Book", "Other"];
   var W = fresh();
-  function fresh() { return { step: 1, kind: "", url: "", title: "", items: null, mode: "ask", topics: "", err: "", busy: false, li: "url", picked: {} }; }
+  function fresh() { return { step: 1, kind: "", url: "", title: "", items: null, chosen: null, mode: "ask", topics: "", err: "", busy: false, li: "url", picked: {} }; }
   function f(s, v) { Object.keys(v || {}).forEach(function (n) { s = s.split("{" + n + "}").join(v[n]); }); return s; }
   function err(j) { var k = "e_" + ((j && j.error) || ""); return Q[k] || (j && j.message) || Q.err; }
   function isManual(k) { return k === "linkedin" || k === "other"; }
@@ -75,7 +87,8 @@
     var back = c.btn(Q.back, function () { W = fresh(); again(); });
     if (k === "other") return out.concat(manualForm(c, again, back));
     if (k === "linkedin") {
-      out.push(c.segmented(Q.step2, [["url", Q.li_url], ["zip", Q.li_zip]], W.li, function (v) { W.li = v; W.items = null; W.err = ""; again(); }));
+      // Wechsel zwischen Link und ZIP: auch die fruehere Auswahl verwerfen, sonst wuerde save() sie statt des zuletzt Gezeigten senden
+      out.push(c.segmented(Q.step2, [["url", Q.li_url], ["zip", Q.li_zip]], W.li, function (v) { W.li = v; W.items = null; W.chosen = null; W.picked = {}; W.err = ""; again(); }));
       return out.concat(W.li === "zip" ? zipPart(c, again, back) : liUrlPart(c, again, back));
     }
     var url = c.input("url", W.url, { inputmode: "url", placeholder: "https://", required: true, autocomplete: "off" }), prev = c.el("div", { class: "mvpsrc-prev", "aria-live": "polite" });
@@ -109,7 +122,7 @@
         W.url = url.value.trim(); W.err = "";
         c.api("/api/contributions/linkedin-og?url=" + encodeURIComponent(W.url)).then(function (r) {
           if (r.s !== 200) { W.err = err(r.j); return again(); }
-          var p = r.j.preview || {}; W.items = [{ title: p.title || "", url: p.url || W.url, date: p.published || "", summary: p.description || "" }]; again();
+          var p = r.j.preview || {}; W.chosen = null; W.items = [{ title: p.title || "", url: p.url || W.url, date: p.published || "", summary: p.description || "" }]; again();
         });
       }, "main")]));
       return out;
@@ -156,7 +169,7 @@
       if (t.value.trim().length < 3) return c.invalid(t, Q.err);
       if (u.value.trim() && !/^https:\/\//i.test(u.value.trim())) return c.invalid(u, Q.bad_url);
       if (!d.value) return c.invalid(d, Q.err);
-      W.chosen = [{ title: t.value.trim(), url: u.value.trim(), date: d.value, summary: "" }]; W.step = 3; W.err = ""; again();
+      W.chosen = [{ title: t.value.trim(), url: u.value.trim(), date: d.value, summary: "", ctype: ty.value }]; W.step = 3; W.err = ""; again();
     }, "main")])];
   }
 
@@ -174,12 +187,20 @@
   function save(c, again) {
     var topics = W.topics.split(",").map(function (x) { return x.trim(); }).filter(Boolean), done = function (text) { W = fresh(); c.load(function () { c.say(text, true); }); };
     if (isManual(W.kind)) {
-      var items = (W.chosen || W.items || []).slice(0, 200).map(function (i) { return { title: i.title, url: i.url, date: i.date, summary: i.summary || "" }; });
-      return c.api("/api/contributions/import", { kind: W.kind, mode: W.mode, items: items }).then(function (r) { if (r.s === 201) done(f(Q.imported, { n: r.j.added })); else { W.err = err(r.j); again(); } });
+      var items = (W.chosen || W.items || []).slice(0, 200).map(function (i) { return { title: i.title, url: i.url, date: i.date, summary: i.summary || "", ctype: i.ctype || undefined }; });
+      return c.api("/api/contributions/import", { kind: W.kind, mode: W.mode, items: items }).then(function (r) { if (r.s === 201) done(importText(r.j)); else { W.err = err(r.j); again(); } });
     }
     c.api("/api/contributions/source", { kind: W.kind, url: W.url, title: W.title, mode: W.mode, topics: topics }).then(function (r) {
-      if (r.s === 201) done(Q.saved); else { W.err = err(r.j); if (r.j.error === "bad_source") W.step = 2; again(); }
+      if (r.s === 201) done(Q.saved + (r.j.hint ? " " + err({ error: r.j.hint }) : "")); else { W.err = err(r.j); if (r.j.error === "bad_source") W.step = 2; again(); }
     });
+  }
+  // Ergebnis eines Imports in Worten: was uebernommen wurde, was als Kurzpost erschien, was (und warum) wartet oder nur getrackt ist
+  function importText(j) {
+    var out = [f(Q.imported, { n: j.added })];
+    if (j.published) out.push(f(Q.imp_posted, { n: j.published }));
+    if (j.held && j.pending) out.push(f(Q.imp_held, { n: j.pending }) + " " + err({ error: j.held }));
+    if (j.unposted) out.push(f(Q.imp_unposted, { n: j.unposted }));
+    return out.join(" ");
   }
 
   // Zusatzzeilen je Quelle: Modus (aenderbar), Status, Funde, Fehler
@@ -211,5 +232,18 @@
     return out;
   }
 
-  window.M365MVPSources = { addCard: addCard, rowExtras: rowExtras, inbox: inbox, label: Q.inbox, strings: Q };
+  // Kurzpost eines Eintrags (Detailansicht in mvp-tracker.js): Stand zeigen, zurueckziehen, (wieder) veroeffentlichen.
+  // Funde entscheidet "Neu gefunden"; ohne Link und fuer GitHub-Aktivitaet gibt es keinen Kurzpost.
+  function postBox(c, x) {
+    if (!x || (!x.post && (x.review || !x.url || x.kind === "github"))) return null;
+    var act = function (path, body, ok) { c.api(path, body).then(function (r) { if (r.s === 200) c.load(function () { c.say(ok, true); }); else c.say(err(r.j)); }); };
+    var publish = function () { act("/api/contributions/review", { id: x.id, action: "publish" }, Q.saved); }, kids = [c.el("h3", { text: Q.p_h })];
+    if (x.post === "live") kids.push(c.el("p", { class: "mvp-mut", text: Q.p_live + " " + Q.p_hint }), c.el("div", { class: "btns" }, [c.btn(Q.unpost, function () { act("/api/contributions/unpublish", { id: x.id }, Q.unposted); })]));
+    else if (x.post === "moderated") kids.push(c.el("p", { class: "mvp-mut", text: Q.p_moderated }));
+    else if (x.post === "withdrawn") kids.push(c.el("p", { class: "mvp-mut", text: Q.p_withdrawn }), c.el("div", { class: "btns" }, [c.btn(Q.repost, publish)]));
+    else kids.push(c.el("p", { class: "mvp-mut", text: Q.m_publish_d }), c.el("div", { class: "btns" }, [c.btn(Q.post, publish)]));
+    return c.el("section", { class: "mvp-card mvpsrc-post" }, kids);
+  }
+
+  window.M365MVPSources = { addCard: addCard, rowExtras: rowExtras, inbox: inbox, postBox: postBox, label: Q.inbox, strings: Q };
 })();

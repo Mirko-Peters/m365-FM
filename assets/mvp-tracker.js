@@ -198,7 +198,8 @@ window.M365MVPPeriod = (function () {
         el("div", { class: "mvp-row" }, [el("span", { class: "mvp-kicker", text: kindLabel(c.kind) + " · " + fmtDate(c.published) }), badge(st[0], st[1])]),
         el("a", { class: "mvp-title", href: "#" + HP + "item/" + c.id, text: c.title }),
         el("div", { class: "mvp-row sub" }, [el("span", { class: "mvp-mut", text: c.manual ? t("src_hand") : t("src_auto", { s: c.source || (c.url ? hostOf(c.url) : "") }) }),
-          c.category ? el("span", { class: "mvp-chip", text: c.category }) : null, el("span", { class: "mvp-chip", text: c.public ? t("vis_public") : t("vis_private") })]),
+          c.category ? el("span", { class: "mvp-chip", text: c.category }) : null, el("span", { class: "mvp-chip", text: c.public ? t("vis_public") : t("vis_private") }),
+          c.posted && window.M365MVPSources ? el("span", { class: "mvp-chip", text: window.M365MVPSources.strings.p_chip }) : null]),
         c.review === "pending" ? el("div", { class: "btns" }, [btn(t("confirm"), function () { patch({ id: c.id, review: "" }); }, "main"), btn(t("hide"), function () { patch({ id: c.id, review: "hidden" }); })]) : null,
         c.review === "hidden" ? el("div", { class: "btns" }, [btn(t("unhide"), function () { patch({ id: c.id, review: "" }); })]) : null,
       ]));
@@ -221,6 +222,8 @@ window.M365MVPPeriod = (function () {
     var out = [btn(t("back"), function () { go("log"); }, "mvp-back"), el("span", { class: "mvp-kicker", text: kindLabel(c.kind) + " · " + (c.manual ? t("src_hand") : t("src_auto", { s: c.source || hostOf(c.url) })) }), heading(c.title)];
     if (c.review === "pending") out.push(el("div", { class: "mvp-card warn" }, [el("p", { text: t("pending_hint") }), el("div", { class: "btns" }, [btn(t("confirm"), function () { patch({ id: c.id, review: "" }); }, "main"), btn(t("hide"), function () { patch({ id: c.id, review: "hidden" }); })])]));
     if (c.review === "hidden") out.push(el("div", { class: "mvp-card" }, [badge("hidden", t("st_hidden")), btn(t("unhide"), function () { patch({ id: c.id, review: "" }); })]));
+    var post = window.M365MVPSources && window.M365MVPSources.postBox ? window.M365MVPSources.postBox(ctx(), c) : null;   // Kurzpost: Stand, zurueckziehen, veroeffentlichen
+    if (post) out.push(post);
     out.push(portalBox(c), editForm(c));
     return out;
   }
