@@ -76,7 +76,7 @@ def _head(html):
     h = re.sub(r"<!--.*?-->|<(script|style)\b.*?</\1\s*>", "", html[:m.start()] if m else "", flags=re.S | re.I)
     t = re.search(r"<title\b[^>]*>(.*?)</title\s*>", h, re.S | re.I)
     f = {"title": _html.unescape(t.group(1)) if t else ""}
-    for tag, rest in re.findall(r"<(meta|link)\b([^>]*)>", h, re.I):
+    for tag, rest in re.findall(r"""<(meta|link)\b((?:"[^"]*"|'[^']*'|[^>"'])*)>""", h, re.I):   # ein ">" in einem Attributwert in Anfuehrungszeichen beendet das Tag nicht
         a = {k.lower(): _html.unescape(v1 or v2 or v3) for k, v1, v2, v3 in _ATTR.findall(rest)}
         if tag.lower() == "meta" and a.get("name", "").lower() in ("description", "robots"): f.setdefault(a["name"].lower(), a.get("content", ""))
         elif tag.lower() == "link" and "canonical" in a.get("rel", "").lower().split(): f.setdefault("canonical", a.get("href", ""))

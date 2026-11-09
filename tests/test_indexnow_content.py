@@ -56,6 +56,12 @@ class IndexNow(unittest.TestCase):
         for want in ("Titel A | M365.FM", "Beschreibung A & mehr", "index,follow,max-image-preview:large,max-snippet:-1", "https://www.m365.fm/a/"): self.assertIn(want, t)
         self.assertNotIn("OG A", t); self.assertNotIn("color", t); self.assertNotIn("dateModified", t)
 
+    def test_head_attribute_with_angle_bracket(self):   # ein nicht maskiertes ">" im Attributwert schneidet weder das Feld ab noch verschluckt es die folgenden
+        a = '<html><head><title>T</title><meta name="description" content="Teams > Kanaele: Teil eins"><meta name="robots" content=\'index,follow\'><link rel="canonical" href="/a/"></head><body><main>x</main></body></html>'
+        self.assertTrue(content_text(a).startswith("T | Teams > Kanaele: Teil eins | index,follow | /a/ || "))
+        for x, y in (("Teil eins", "Teil zwei"), ("index,follow", "noindex,follow"), ('href="/a/"', 'href="/b/"')):
+            with self.subTest(x): self.assertNotEqual(content_hash(a), content_hash(a.replace(x, y)))
+
     def test_head_only_from_head(self):
         # <title> eines SVG und meta im Rumpf sind keine Kopf-Felder; auskommentierte auch nicht
         a = '<html><head><!-- <title>Alt</title> --><title>T</title></head><body><main><p>x</p><svg><title>Icon eins</title></svg></main><meta name="robots" content="noindex"></body></html>'
