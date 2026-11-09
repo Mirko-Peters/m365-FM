@@ -60,7 +60,7 @@
         var token = window.turnstile && widget != null ? window.turnstile.getResponse(widget) : "";
         send.disabled = true; status.textContent = T.sending;
         fetch(C.api + "/api/ads/lead", { method: "POST", credentials: "omit", headers: { "content-type": "application/json", "x-requested-with": "m365" },
-          body: JSON.stringify({ code: ad.code, name: nameI.value, email: mailI.value, message: msgI.value, consent: ck.checked === true, consent_text: consent,
+          body: JSON.stringify({ code: ad.code, sponsor: ad.sponsor || undefined, name: nameI.value, email: mailI.value, message: msgI.value, consent: ck.checked === true, consent_text: consent,
             turnstile: token, lang: C.lang, page: location.href, pt: slotEl.getAttribute("data-pt") }) })
           .then(function (r) { if (!r.ok) throw r; status.textContent = fill(T.ok, ad.org); form.reset(); })
           .catch(function () { send.disabled = false; status.textContent = T.err; if (window.turnstile && widget != null) window.turnstile.reset(widget); });
@@ -82,6 +82,12 @@
       else if (j && j.house) house(box, j.house);
     }).catch(function () {});
   }
+  Array.prototype.slice.call(document.querySelectorAll("[data-sponsor-lead]")).forEach(function (btn) {   // Lead-Formular eines laufenden Sponsors (kein Werbeplatz)
+    btn.addEventListener("click", function () {
+      fetch(C.api + "/api/ads/sponsor-lead?e=" + encodeURIComponent(btn.getAttribute("data-sponsor-lead")), { credentials: "omit" })
+        .then(function (r) { return r.ok ? r.json() : {}; }).then(function (j) { if (j && j.ad) leadDialog(j.ad, btn.parentNode); }).catch(function () {});
+    });
+  });
   var slots = Array.prototype.slice.call(document.querySelectorAll("[data-ad-slot]"));   // data-ad-house: nur Hausanzeige (wird nur gezaehlt)
   if (!("IntersectionObserver" in window)) { slots.forEach(load); return; }
   var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { io.unobserve(e.target); load(e.target); } }); }, { rootMargin: "300px 0px" });

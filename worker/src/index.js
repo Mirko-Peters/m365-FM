@@ -19,6 +19,8 @@ import { importEpisodes, importTranslations, handleRegister } from "./register.j
 import { importSearchIndex, syncSearchVectors, handleSearch } from "./search.js";
 import { entityMap } from "./entities.js";
 import { handleProfiles, deleteUserData, refreshProfilesExport } from "./profiles.js";
+import { handleClaimVerify } from "./claimverify.js";
+import { handleOrgPair } from "./orgpair.js";
 import { handleEventImport, IMPORT_ROUTE, dailyEventImport } from "./eventimport.js";
 import { handleEvents, deleteUserEvents, ensureM365Con, claimLinkedinEntity, purgeEntityClaimReview } from "./events.js";
 import { handleVotes } from "./votes.js";
@@ -209,6 +211,7 @@ async function deleteAccount(env, id) {
   const db = env.DB;
   await db.batch([
     db.prepare("DELETE FROM entity_claim_review WHERE eid IN (SELECT eid FROM entity_claims WHERE user_id=?)").bind(id),
+    db.prepare("DELETE FROM entity_claim_mail WHERE claim_user=?").bind(id),
     db.prepare("DELETE FROM entity_claims WHERE user_id=? AND status<>'verified'").bind(id),
     db.prepare("DELETE FROM likes WHERE user_id=? OR comment_id IN (SELECT id FROM comments WHERE user_id=?)").bind(id, id),
     db.prepare("DELETE FROM reports WHERE user_id=? OR comment_id IN (SELECT id FROM comments WHERE user_id=?)").bind(id, id),
@@ -392,6 +395,8 @@ async function api(env, request, url, path, asUser, ctx) {
 
   if (/^\/api\/points(\/|$)/.test(path) || path.startsWith("/api/admin/points/")) { const p = await handlePoints(env, request, url, path, user, J); if (p) return p; }
   if (/^\/api\/msg(\/|$)/.test(path)) { const p = await handleMessages(env, request, url, path, user, J); if (p) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return p; } }
+  if (path === "/api/admin/org-pair") { const q = await handleOrgPair(env, request, url, path, user, J); if (q) return q; }
+  if (/^\/api\/entity\/claim\/(domains|domain|forward|confirm)$/.test(path)) return handleClaimVerify(env, request, url, path, user, J);
   if (IMPORT_ROUTE.test(path)) { const p = await handleEventImport(env, request, url, path, user, J); if (p) return p; }
   if (/^\/api\/(events?|speaker)(\/|$)/.test(path) || /^\/api\/entity\/claims?(\/|$)/.test(path) || /^\/api\/admin\/entity\/claims?$/.test(path)) { const p = await handleEvents(env, request, url, path, user, J); if (p) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return p; } }
   if (path === "/api/ui-i18n" && request.method === "GET") return J(await uiI18nExport(env), 200, { "cache-control": "public, max-age=300" });
