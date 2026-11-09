@@ -571,17 +571,20 @@
     }
   }
 
-  // LinkedIn-Events (Vorschlaege): nichts geht automatisch raus, jede Veroeffentlichung, Aktualisierung und Absage braucht einen Klick plus Rueckfrage
-  LOAD.li = function () {
-    var p = panes.li, m = h("p", { class: "adm-msg" }), LIERR = { not_connected: "LinkedIn-Seite ist noch nicht verbunden.", no_org: "Bitte zuerst die Seite auswählen.", no_match: "Kein gleichzeitiges HeySummit-Event.", past: "Das Event liegt in der Vergangenheit.", no_time: "Das Event hat keine Uhrzeit.", already_published: "Schon veröffentlicht.", no_heysummit_key: "HEYSUMMIT_API_KEY fehlt im Worker.", expired: "LinkedIn-Zugang abgelaufen, bitte neu verbinden.", forbidden: "Nur für Admins." };
-    function err(j) { return LIERR[j.error] || (/^li_/.test(j.error || "") ? "LinkedIn lehnt ab (" + j.error.slice(3) + ")." : "Fehler: " + (j.error || "unbekannt")); }
+  // LinkedIn-Events (Vorschlaege): nichts geht automatisch raus, jede Veroeffentlichung, Aktualisierung und Absage braucht einen Klick plus Rueckfrage.
+  // Welche Knoepfe eine Zeile bekommt, sagt der Server (it.can); er prueft jede Aktion beim Ausfuehren noch einmal selbst.
+  LOAD.li = function (note, bad) {
+    var p = panes.li, m = h("p", { class: "adm-msg" }), LIERR = { not_connected: "LinkedIn-Seite ist noch nicht verbunden.", no_org: "Bitte zuerst die Seite auswählen.", no_match: "Kein gleichzeitiges HeySummit-Event.", past: "Das Event hat schon begonnen oder ist vorbei.", no_time: "Das Event hat keine Uhrzeit.", not_public: "Das m365.fm-Event ist nicht öffentlich.", already_published: "Schon veröffentlicht.", cancelled: "Der LinkedIn-Event ist abgesagt.", not_published: "Zu diesem Event gibt es keinen LinkedIn-Event.", publish_pending: "Für dieses Event läuft schon eine Veröffentlichung oder ihr Ausgang ist offen: bitte in der Liste klären.", publish_running: "Die Veröffentlichung läuft noch, bitte zwei Minuten warten.", not_pending: "Hier ist nichts (mehr) zu klären.", store_failed: "LinkedIn hat den Event angelegt, er konnte hier aber nicht gespeichert werden.", bad_urn: "Das ist keine LinkedIn-Event-ID (die Zahl am Ende der Event-Adresse).", urn_taken: "Diese LinkedIn-Event-ID gehört schon zu einem anderen Event.", orphan: "Das m365.fm-Event gibt es nicht mehr.", db_error: "Datenbank nicht erreichbar, es wurde nichts an LinkedIn gesendet.", li_timeout: "LinkedIn hat nicht rechtzeitig geantwortet.", li_network: "LinkedIn ist nicht erreichbar.", li_no_urn: "LinkedIn hat keine Event-ID zurückgegeben.", li_error: "Der LinkedIn-Aufruf ist fehlgeschlagen.", no_heysummit_key: "HEYSUMMIT_API_KEY fehlt im Worker.", expired: "LinkedIn-Zugang abgelaufen, bitte neu verbinden.", forbidden: "Nur für Admins." };
+    function err(j) { var e = (j || {}).error || ""; return LIERR[e] || (/^li_\d/.test(e) ? "LinkedIn antwortet mit Fehler " + e.slice(3) + "." : /^hs_/.test(e) ? "HeySummit nicht lesbar (" + e.slice(3) + "); ohne HeySummit geht nichts an LinkedIn." : "Fehler: " + (e || "unbekannt")); }
     p.textContent = ""; p.append(h("h2", { text: "LinkedIn-Events (Vorschläge)" }), m);
-    var q = /[?&]li=([a-z_]+)/.exec(location.search); if (q) msg(m, q[1] === "ok" ? "LinkedIn verbunden." : "Verbindung fehlgeschlagen (" + q[1] + ").", q[1] !== "ok");
+    var q = /[?&]li=([a-z_]+)/.exec(location.search || ""); if (q) msg(m, q[1] === "ok" ? "LinkedIn verbunden." : "Verbindung fehlgeschlagen (" + q[1] + ").", q[1] !== "ok");
+    if (note) msg(m, note, bad);
     api("/api/admin/linkedin/status").then(function (r) {
       if (r.s !== 200) { msg(m, err(r.j), true); return; }
       var st = r.j, box = h("div");
       p.appendChild(h("p", {}, [h("span", { text: st.connected ? "Verbunden mit: " + (st.org_name || "(Seite noch nicht gewählt)") : "Nicht verbunden. " }), " ",
-        st.configured ? h("a", { class: "btn" + (st.connected ? "" : " main"), href: API + "/auth/linkedin-events/start", text: "LinkedIn-Seite verbinden" }) : h("span", { class: "adm-msg bad", text: "LinkedIn-Zugang (Client-ID/Secret) fehlt im Worker." })]));
+        st.configured ? h("a", { class: "btn" + (st.connected ? "" : " main"), href: API + "/auth/linkedin-events/start", text: "LinkedIn-Seite verbinden" }) : h("span", { class: "adm-msg bad", text: "LinkedIn-Zugang (Client-ID/Secret) fehlt im Worker." }), " ",
+        st.connected ? h("button", { type: "button", class: "btn", text: "Verbindung trennen", onclick: function () { if (!window.confirm("Den hier gespeicherten LinkedIn-Zugang löschen?\n\nVeröffentlichte LinkedIn-Events bleiben bestehen; zum Ändern oder Absagen muss die Seite danach neu verbunden werden.")) return; api("/api/admin/linkedin/disconnect", { method: "POST", body: {} }).then(function (x) { if (x.s === 200) LOAD.li("LinkedIn-Zugang gelöscht."); else msg(m, err(x.j), true); }); } }) : null]));
       if (st.connected) {
         var sel = h("select", { "aria-label": "LinkedIn-Seite" });
         p.appendChild(h("p", {}, [h("button", { type: "button", class: "btn", text: "Meine LinkedIn-Seiten laden", onclick: function () { api("/api/admin/linkedin/orgs").then(function (o) { if (o.s !== 200) { msg(m, err(o.j), true); return; } sel.textContent = ""; (o.j.orgs || []).forEach(function (x) { var op = h("option", { value: x.urn, text: x.name }); sel.appendChild(op); }); }); } }), " ", sel, " ",
@@ -590,16 +593,33 @@
       p.appendChild(box);
       api("/api/admin/linkedin/proposals").then(function (x) {
         if (x.s !== 200) { msg(m, err(x.j), true); return; }
-        if (x.j.hs_error) msg(m, "HeySummit nicht lesbar: " + x.j.hs_error, true);
-        if (!x.j.items.length) { box.appendChild(h("p", { class: "mut", text: "Keine Vorschläge: kein kommendes m365.fm-Event mit gleichzeitigem HeySummit-Event." })); return; }
-        var body = h("tbody");
-        x.j.items.forEach(function (it) {
-          function act(a, ask) { return h("button", { type: "button", class: "btn" + (a === "publish" ? " main" : ""), text: { publish: "Auf LinkedIn veröffentlichen", update: "Aktualisieren", cancel: "Absagen" }[a], onclick: function (e) { if (!window.confirm(ask + "\n\n" + it.title + "\n" + it.when)) return; e.target.disabled = true; api("/api/admin/linkedin/" + a, { method: "POST", body: { handle: it.handle, confirm: true } }).then(function (r) { e.target.disabled = false; if (r.s === 200) LOAD.li(); else msg(m, err(r.j), true); }); } }); }
-          var pv = it.preview ? h("details", {}, [h("summary", { text: it.preview.name }), h("pre", { style: "white-space:pre-wrap", text: it.preview.description })]) : h("span", { class: "mut", text: "–" });
-          var btns = it.state === "proposal" ? [act("publish", "Jetzt öffentlich auf LinkedIn veröffentlichen?")] : it.state === "published" ? [it.linkedin_url ? h("a", { href: it.linkedin_url, target: "_blank", rel: "noopener", text: "Auf LinkedIn ansehen" }) : null, it.changed ? h("span", {}, [" ", act("update", "Änderungen an LinkedIn senden?")]) : null, " ", act("cancel", "Event auf LinkedIn absagen?")] : [h("span", { class: "mut", text: "Abgesagt" })];
-          body.appendChild(h("tr", {}, [h("td", { text: it.title }), h("td", { text: it.when }), h("td", { text: it.hs ? it.hs.event + (it.hs.talk ? " · " + it.hs.talk : "") : "–" }), h("td", {}, [pv]), h("td", {}, btns)]));
+        var hi = x.j.hs_info || {}, items = x.j.items || [];
+        if (x.j.hs_error) msg(m, err({ error: x.j.hs_error }), true);
+        else box.appendChild(h("p", { class: "mut", text: "HeySummit: " + (hi.events || 0) + " Events, davon " + (hi.dated || 0) + " mit Termin; " + (hi.talks || 0) + " Talks kommender Events geladen" + (hi.partial ? " (unvollständig)" : "") + ". Vorgeschlagen werden nur öffentliche, kommende m365.fm-Events, die sich zeitlich mit einem HeySummit-Event überschneiden." }));
+        if (!items.length) { box.appendChild(h("p", { class: "mut", text: "Keine Vorschläge: kein kommendes m365.fm-Event mit gleichzeitigem HeySummit-Event." })); return; }
+        var body = h("tbody"), TXT = { publish: "Auf LinkedIn veröffentlichen", update: "Aktualisieren", cancel: "Absagen", resolve: "LinkedIn-ID eintragen", release: "Reservierung freigeben" };
+        var ASK = { publish: "Jetzt öffentlich auf LinkedIn veröffentlichen?", update: "Änderungen an LinkedIn senden?", cancel: "Event auf LinkedIn absagen?", release: "Reservierung freigeben?\n\nNur, wenn auf LinkedIn KEIN Event dazu angelegt wurde – sonst entsteht beim nächsten Veröffentlichen ein zweiter." };
+        var STATE = { proposal: "Vorschlag", pending: "Veröffentlichung offen", published: "Veröffentlicht", cancelled: "Abgesagt" };
+        items.forEach(function (it) {
+          function act(a) { return h("button", { type: "button", class: "btn" + (a === "publish" ? " main" : ""), text: TXT[a], onclick: function (e) {
+            var b = { event_id: it.id, confirm: true };
+            if (a === "resolve") { b.urn = (window.prompt("LinkedIn-Event-ID (die Zahl am Ende der Event-Adresse) oder urn:li:event:… für „" + it.title + "“:") || "").trim(); if (!b.urn) return; }
+            else if (!window.confirm(ASK[a] + "\n\n" + it.title + "\n" + it.when)) return;
+            e.target.disabled = true;
+            api("/api/admin/linkedin/" + a, { method: "POST", body: b }).then(function (r) {
+              e.target.disabled = false;
+              if (r.s === 200) LOAD.li();
+              else if (r.j && r.j.pending) LOAD.li(err(r.j) + (r.j.urn ? " LinkedIn-Event-ID: " + String(r.j.urn).split(":").pop() + " – bitte in der Liste über „LinkedIn-ID eintragen“ nachtragen." : " Ob LinkedIn den Event angelegt hat, ist offen: bitte auf LinkedIn nachsehen und in der Liste klären (ID eintragen oder Reservierung freigeben)."), true);
+              else msg(m, err(r.j), true);
+            }); } }); }
+          var pv = it.preview ? h("details", {}, [h("summary", { text: it.preview.name }), h("p", { class: "mut", text: it.preview.start + " – " + it.preview.end + " · " + it.preview.format + " · " + (it.preview.free ? "kostenlos" : "kostenpflichtig") }), h("pre", { style: "white-space:pre-wrap", text: it.preview.description })]) : h("span", { class: "mut", text: "–" });
+          var flags = [STATE[it.state] || it.state, it.wait ? "läuft noch oder Ausgang offen – klären in " + Math.ceil(it.wait / 60) + " Min. möglich (Reiter neu laden)" : null, it.orphan ? "m365.fm-Event gelöscht" : null, it.hidden ? "m365.fm-Event nicht mehr öffentlich" : null, it.rule ? "Aktualisieren gesperrt: " + err({ error: it.rule }) : null].filter(Boolean);
+          var cell = [h("span", { class: "mut", text: flags.join(" · ") })];
+          if (/^https:\/\/www\.linkedin\.com\//.test(it.linkedin_url || "")) cell.push(" ", h("a", { href: it.linkedin_url, target: "_blank", rel: "noopener", text: "Auf LinkedIn ansehen" }));
+          (it.can || []).forEach(function (a) { if (TXT[a] && (a !== "update" || it.changed)) cell.push(" ", act(a)); });
+          body.appendChild(h("tr", {}, [h("td", { text: it.title }), h("td", { text: it.when }), h("td", { text: it.preview ? it.preview.format + (it.preview.free ? ", kostenlos" : ", kostenpflichtig") : "–" }), h("td", { text: it.hs ? it.hs.event + (it.hs.talk ? " · " + it.hs.talk : "") : "–" }), h("td", {}, [pv]), h("td", {}, cell)]));
         });
-        box.appendChild(h("div", { style: "overflow-x:auto" }, [h("table", { class: "adm-tbl" }, [h("thead", {}, [h("tr", {}, ["Titel", "Zeit (Berlin)", "HeySummit", "LinkedIn-Text", ""].map(function (c) { return h("th", { text: c }); }))]), body])]));
+        box.appendChild(h("div", { style: "overflow-x:auto" }, [h("table", { class: "adm-tbl" }, [h("thead", {}, [h("tr", {}, ["Titel", "Zeit (Berlin)", "Format", "HeySummit", "LinkedIn-Text", "Stand und Aktionen"].map(function (c) { return h("th", { text: c }); }))]), body])]));
       });
     });
   };

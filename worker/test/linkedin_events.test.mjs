@@ -1,93 +1,498 @@
-// LinkedIn-Events: nur Fixtures, kein Netz. Vorschlagsregel, Nutzlast, OAuth-State, Token-Verschluesselung, Aufrufe (Schein-fetch), Admin-Zugriff.
+// LinkedIn-Events: nur Fixtures, kein Netz. Regel "gleichzeitig mit HeySummit" (echte Feldnamen), Reservierung vor dem LinkedIn-Aufruf, Nutzlast nach Event,
+// Regeln je Aktion auf dem Server, verwaiste LinkedIn-Events, Routen und Deploy-Abgleich, Konto loeschen/zusammenfuehren, OAuth-State, Token-Verschluesselung.
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
-import { LI, UTM, localToMs, matchHeySummit, buildPayload, encryptToken, decryptToken, oauthStartLE, checkState, oauthCallbackLE, handleLinkedinEvents, proposals, act, getConn } from "../src/linkedin_events.js";
-import { handleEvents } from "../src/events.js";
-import { callTool } from "../src/mcp.js";
+import vm from "node:vm";
+import worker from "../src/index.js";
+import { LI, HS, UTM, HOLD_S, localToMs, hsMs, evWindow, fetchHeySummit, matchHeySummit, buildPayload, encryptToken, decryptToken, oauthStartLE, checkState, oauthCallbackLE, handleLinkedinEvents, proposals, act, getConn, urnOf, deleteUserLinkedin } from "../src/linkedin_events.js";
+import { handleEvents, deleteUserEvents } from "../src/events.js";
+import { mergeStatements } from "../src/identities.js";
+import { callTool, TOOLS, HOWTO } from "../src/mcp.js";
+import { makeSession } from "../src/util.js";
+import { routes } from "../../tools/mcp_routes.mjs";
 
 const J = (data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "content-type": "application/json" } });
-const NOW = Date.UTC(2027, 0, 1);
-const EV = { id: 1, handle: "m365con-day1", title: "M365Con Day 1", summary: "Free online day", about: "", start: "2027-01-11T17:00", end: "2027-01-11T18:30", tz: "Europe/Berlin", url: "https://m365con.net/", tickets_url: "", public: 1 };
-const HSX = [{ id: "229506", name: "M365Con 2027", url: "https://m365con.net/", start: Date.UTC(2027, 0, 11, 8), end: Date.UTC(2027, 0, 22), talks: [{ id: "t1", title: "Keynote", url: "https://m365con.net/talks/keynote", start: Date.UTC(2027, 0, 11, 15, 30), end: Date.UTC(2027, 0, 11, 17, 0) }] }];
+const NOW = Date.UTC(2026, 10, 9, 12), LATER = NOW + (HOLD_S + 1) * 1000;   // LATER: die Wartezeit einer Reservierung ist vorbei
+const ADMIN = { id: 1, admin: true };
+// m365.fm-Event zur selben Minute wie die Keynote (08:00 Berlin = 07:00 UTC), verlinkt auf m365con.net
+const EV = { id: 1, handle: "m365con-day1", title: "M365Con Day 1", summary: "Free online day", about: "", start: "2027-01-11T08:00", end: "2027-01-11T17:00", tz: "Europe/Berlin", url: "https://m365con.net/", tickets_url: "", public: 1, free: 1, mode: "online", location: "", country: "" };
+
+// HeySummit so, wie das verbundene Konto antwortet (Events und Talks von Event 229506, gekuerzt auf die Felder der Antwort ohne Texte und Personen).
+// Es gibt KEIN start_date/end_date: Events tragen first_talk_at/last_talk_at, Talks date (UTC ohne Zone) + date_timezone_offset + broadcast_duration_mins.
+const HS_EVENTS = [
+  { id: 232509, url: "https://datascience.show", title: "DataScience.Show", event_url: "https://datascience.show", first_talk_at: null, last_talk_at: null, is_live: true, is_archived: false, is_evergreen: false, status: "planning", timezone: "Europe/London" },
+  { id: 229506, url: "https://m365con.net", title: "M365 Con 27 - The Microsoft Community Convention", event_url: "https://m365con.net", first_talk_at: "2027-01-11T07:00:00", last_talk_at: "2027-01-22T19:00:00", is_live: true, is_archived: false, is_evergreen: false, status: "planning", timezone: "Europe/Berlin" },
+  { id: 229540, url: "https://de.m365con.net", title: "M365 Con DACH", event_url: "https://de.m365con.net", first_talk_at: "2026-09-14T07:00:00", last_talk_at: "2026-09-18T19:00:00", is_live: true, is_archived: false, is_evergreen: false, status: "finished", timezone: "Europe/Berlin" },
+  { id: 150009, url: "https://2026.m365con.net", title: "M365 Con", event_url: "https://2026.m365con.net", first_talk_at: "2026-01-12T08:00:00", last_talk_at: "2026-01-23T19:00:00", is_live: true, is_archived: false, is_evergreen: false, status: "finished", timezone: "Europe/Berlin" },
+];
+const talk = (x) => ({ external_url: "", date_timezone_offset: "+0000", broadcast_duration_mins: 45, event: 229506, is_active: true, talk_cancelled: false, is_agenda_item: false, ...x });
+const HS_TALKS = [
+  talk({ id: 917909, title: "Power Platform Meets Agent Governance: Building Trustworthy Automation at Scale", url: "https://m365con.net/talks/keynote-overview-tbd-topic/", date: "2027-01-11T07:00:00", date_localised: "2027-01-11T08:00:00" }),
+  talk({ id: 1107710, title: "Make AI Adoption Safe: What Happens When the Rules Run Out?", url: "https://m365con.net/talks/make-ai-adoption-safe-what-happens-when-the-rules-run-out/", date: "2027-01-11T08:00:00", date_localised: "2027-01-11T09:00:00" }),
+  talk({ id: 3, title: "Abgesagt", url: "https://m365con.net/talks/abgesagt/", date: "2027-01-13T10:00:00", talk_cancelled: true }),
+  talk({ id: 4, title: "Inaktiv", url: "https://m365con.net/talks/inaktiv/", date: "2027-01-14T10:00:00", is_active: false }),
+  talk({ id: 5, title: "Fremdes Event", url: "https://de.m365con.net/talks/fremd/", date: "2027-01-15T10:00:00", event: 229540 }),
+  talk({ id: 6, title: "Workshop mit Versatz", url: "https://m365con.net/talks/workshop/", date: "2027-01-12T10:00:00", date_timezone_offset: "+0100", broadcast_duration_mins: 120 }),
+];
+const page = (results, next = null) => ({ count: results.length, next, previous: null, results });
 
 async function setup() {
   const { DatabaseSync } = await import("node:sqlite");
   const raw = new DatabaseSync(":memory:"), dir = new URL("../migrations/", import.meta.url);
   for (const f of readdirSync(dir).filter((f) => f.endsWith(".sql")).sort()) raw.exec(readFileSync(new URL(f, dir), "utf-8"));
-  raw.exec("INSERT INTO users(id,provider,sub,name,role,banned,created) VALUES(1,'google','a','Admin','admin',0,1),(2,'google','b','Normal','',0,1)");
-  const db = { prepare(sql) { let a = []; const o = { bind(...x) { a = x; return o; }, all: async () => ({ results: raw.prepare(sql).all(...a) }), first: async () => raw.prepare(sql).get(...a) ?? null, run: async () => { const r = raw.prepare(sql).run(...a); return { meta: { changes: Number(r.changes) } }; } }; return o; }, async batch(s) { for (const x of s) await x.run(); } };
+  raw.exec("INSERT INTO users(id,provider,sub,name,role,banned,created) VALUES(1,'google','a','Admin','admin',0,1),(2,'google','b','Normal','',0,1),(3,'google','c','Zweitkonto','admin',0,1)");
+  // failOn(sql): D1-Fehler fuer genau diese Anweisung (z. B. das Eintragen der URN nach dem LinkedIn-Aufruf)
+  const db = { failOn: null, prepare(sql) { let a = []; const hit = () => { if (db.failOn && db.failOn(sql)) throw new Error("D1_ERROR: transient"); }; const o = { bind(...x) { a = x; return o; }, all: async () => { hit(); return { results: raw.prepare(sql).all(...a) }; }, first: async () => { hit(); return raw.prepare(sql).get(...a) ?? null; }, run: async () => { hit(); const r = raw.prepare(sql).run(...a); return { meta: { changes: Number(r.changes), last_row_id: Number(r.lastInsertRowid) } }; } }; return o; }, async batch(s) { const out = []; for (const x of s) out.push(await x.run()); return out; } };
   const env = { DB: db, SESSION_SECRET: "s3cret", SITE: "https://www.m365.fm", API: "https://api-dub.m365.fm", LINKEDIN_CLIENT_ID: "cid", LINKEDIN_CLIENT_SECRET: "csec", HEYSUMMIT_API_KEY: "hk" };
   return { raw, env };
 }
-// Schein-fetch: zeichnet Aufrufe auf
-function mockFetch(log) {
-  return async (u, o = {}) => {
-    log.push({ u: String(u), method: o.method || "GET", headers: o.headers || {}, body: o.body });
-    u = String(u);
-    if (u.startsWith("https://api.heysummit.com/api/events")) return J({ results: [{ id: 229506, title: "M365Con 2027", url: "https://m365con.net/", start_date: "2027-01-11T08:00:00Z", end_date: "2027-01-22T20:00:00Z" }] });
-    if (u.startsWith("https://api.heysummit.com/api/talks")) return J({ results: [{ id: 1, title: "Keynote", url: "https://m365con.net/talks/keynote", start_date: "2027-01-11T15:30:00Z", end_date: "2027-01-11T17:00:00Z" }] });
+// Schein-fetch: zeichnet Aufrufe auf. o.create / o.patch ersetzen die LinkedIn-Antwort, o.hsEvents / o.hsStatus die von HeySummit.
+function mockFetch(log, o = {}) {
+  let n = 776;
+  return async (u, init = {}) => {
+    u = String(u); log.push({ u, method: init.method || "GET", headers: init.headers || {}, body: init.body });
+    if (u.startsWith(HS.api)) {
+      if (o.hsStatus) return new Response("kaputt", { status: o.hsStatus });
+      if (u === HS.api + HS.events) return J(page(o.hsEvents || HS_EVENTS));
+      if (u === `${HS.api}${HS.talks}?event=229506`) return J(page(HS_TALKS.slice(0, 1), `${HS.api}${HS.talks}?event=229506&page=2`));
+      if (u === `${HS.api}${HS.talks}?event=229506&page=2`) return J(page(HS_TALKS.slice(1)));
+      return new Response("", { status: 404 });
+    }
     if (u === LI.token) return J({ access_token: "AT", refresh_token: "RT", expires_in: 3600, scope: LI.scope });
-    if (u.startsWith(LI.api + LI.events) && (o.method === "POST") && !u.includes("urn")) return new Response("", { status: 201, headers: { "x-restli-id": "urn:li:event:777" } });
-    if (u.includes("urn%3Ali%3Aevent")) return new Response(null, { status: 204 });
+    if (u === LI.api + LI.events && init.method === "POST") return o.create ? o.create() : new Response("", { status: 201, headers: { "x-restli-id": String(++n) } });
+    if (u.startsWith(LI.api + LI.events + "/")) return o.patch ? o.patch() : new Response(null, { status: 204 });
     if (u.includes("organizationAcls")) return J({ elements: [{ organization: "urn:li:organization:42" }] });
     if (u.includes("/rest/organizations/")) return J({ localizedName: "M365 Show" });
     return new Response("", { status: 404 });
   };
 }
-async function connected(env, org = true) {
-  const { encryptToken: enc } = await import("../src/linkedin_events.js");
-  await env.DB.prepare("INSERT INTO linkedin_conn(id,org_urn,org_name,access_enc,refresh_enc,expires,scope,connected_by,updated) VALUES(1,?,?,?,?,?,?,1,1)").bind(org ? "urn:li:organization:42" : "", org ? "M365 Show" : "", await enc(env, "AT"), "", Math.floor(Date.now() / 1000) + 3600, LI.scope).run();
+const creates = (log) => log.filter((l) => l.u === LI.api + LI.events && l.method === "POST").length;
+const patches = (log) => log.filter((l) => l.u.startsWith(LI.api + LI.events + "/"));
+async function connected(env, org = true, by = 1) {
+  await env.DB.prepare("INSERT INTO linkedin_conn(id,org_urn,org_name,access_enc,refresh_enc,expires,scope,connected_by,updated) VALUES(1,?,?,?,?,?,?,?,1)").bind(org ? "urn:li:organization:42" : "", org ? "M365 Show" : "", await encryptToken(env, "AT"), await encryptToken(env, "RT"), Math.floor(Date.now() / 1000) + 3600, LI.scope, by).run();
 }
-const addEv = (raw, e = {}) => { const x = { ...EV, ...e }; raw.prepare("INSERT INTO events(id,handle,owner_id,title,summary,about,start,end,url,tickets_url,tz,public,created,updated) VALUES(?,?,1,?,?,?,?,?,?,?,?,?,1,1)").run(x.id, x.handle, x.title, x.summary, x.about, x.start, x.end, x.url, x.tickets_url, x.tz, x.public); };
+const addEv = (raw, e = {}) => { const x = { ...EV, ...e }; raw.prepare("INSERT INTO events(id,handle,owner_id,title,summary,about,start,end,url,tickets_url,tz,public,free,mode,location,country,created,updated) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,1,1)").run(x.id, x.handle, x.owner_id || 1, x.title, x.summary, x.about, x.start, x.end, x.url, x.tickets_url, x.tz, x.public, x.free, x.mode, x.location, x.country); };
+const liRows = (raw) => raw.prepare("SELECT event_id,urn,status FROM linkedin_events ORDER BY event_id").all().map((r) => ({ ...r }));
+const hsParsed = async (o) => (await fetchHeySummit({ HEYSUMMIT_API_KEY: "hk" }, mockFetch([], o), NOW)).events;
+const rest = (env, f, user = ADMIN) => async (path, method = "GET", body) => { const r = await handleLinkedinEvents(env, new Request("https://x" + path, { method, body: method === "GET" || !body ? undefined : JSON.stringify(body) }), new URL("https://x" + path), path, user, J, f); return { status: r.status, j: await r.json() }; };
 
-test("Zeitumrechnung Berlin Winter/Sommer in UTC-ms", () => {
+const freeze = (t, ms) => t.mock.timers.enable({ apis: ["Date"], now: ms });   // Wege ohne nowMs (REST, MCP) lesen die Uhr: im Test steht sie fest
+
+// ---------- Zeit ----------
+test("Zeitumrechnung: Ortszeit je Zeitzone, HeySummit-Zeiten ohne Zone als UTC, Zeitfenster eines Events", () => {
   assert.equal(localToMs("2027-01-11T17:00", "Europe/Berlin"), Date.UTC(2027, 0, 11, 16));
   assert.equal(localToMs("2027-07-01T17:00", "Europe/Berlin"), Date.UTC(2027, 6, 1, 15));
+  assert.equal(localToMs("2027-01-11T02:00", "America/New_York"), Date.UTC(2027, 0, 11, 7));
   assert.equal(localToMs("2027-01-11", "Europe/Berlin"), null);
+  assert.equal(hsMs("2027-01-11T07:00:00"), Date.UTC(2027, 0, 11, 7), "ohne Zone = UTC, nicht die Zeitzone des Rechners");
+  assert.equal(hsMs("2027-01-11T07:00:00", "+0000"), Date.UTC(2027, 0, 11, 7));
+  assert.equal(hsMs("2027-01-11T08:00:00", "+0100"), Date.UTC(2027, 0, 11, 7), "mitgelieferter Versatz");
+  assert.equal(hsMs("2027-01-11T08:00:00+01:00", "+0000"), Date.UTC(2027, 0, 11, 7), "Zone im Text hat Vorrang");
+  assert.equal(hsMs("2027-01-11T07:00:00Z"), Date.UTC(2027, 0, 11, 7));
+  assert.equal(hsMs(null), null); assert.equal(hsMs("bald"), null);
+  assert.deepEqual(evWindow(EV), { start: Date.UTC(2027, 0, 11, 7), end: Date.UTC(2027, 0, 11, 16) });
+  assert.deepEqual(evWindow({ ...EV, end: "" }), { start: Date.UTC(2027, 0, 11, 7), end: Date.UTC(2027, 0, 11, 8) }, "ohne Ende: eine Stunde");
+  assert.equal(evWindow({ ...EV, end: "2027-01-22" }).end, Date.UTC(2027, 0, 22, 22, 59), "Ende nur als Datum: bis 23:59 Ortszeit");
+  assert.equal(evWindow({ ...EV, tz: "America/New_York" }).start, Date.UTC(2027, 0, 11, 13));
+  assert.equal(evWindow({ ...EV, start: "2027-01-11" }), null);
 });
 
-test("Eignung: Treffer, kein Treffer, vergangen, ohne Uhrzeit", () => {
-  assert.equal(matchHeySummit(EV, HSX, {}, NOW).ok, true);                                   // Talk-Zeitraum 16:30-18:00 Berlin enthaelt 17:00
-  const near = { ...EV, url: "", start: "2027-01-11T09:00" };                                 // 08:00 UTC = HeySummit-Event-Start (+-2 h)
-  assert.deepEqual([matchHeySummit(near, HSX, {}, NOW).ok, matchHeySummit(near, HSX, {}, NOW).how], [true, "event_start"]);
-  const talkStart = { ...EV, url: "", start: "2027-01-11T19:00" };                            // 18:00 UTC: Talk-Start 2,5 h davor, Talk-Ende 1 h davor, Event-Start 10 h davor: kein Treffer
-  assert.equal(matchHeySummit(talkStart, HSX, {}, NOW).ok, false);
-  assert.equal(matchHeySummit({ ...EV, url: "", start: "2027-01-15T10:00" }, HSX, {}, NOW).reason, "no_match");
-  assert.equal(matchHeySummit({ ...EV, url: "", start: "2026-12-01T10:00" }, HSX, {}, NOW).reason, "past");
-  assert.equal(matchHeySummit({ ...EV, start: "2027-01-11" }, HSX, {}, NOW).reason, "no_time");
-  assert.equal(matchHeySummit({ ...EV, url: "", start: "2027-03-01T10:00" }, HSX, { "m365con-day1": "heysummit:229506" }, NOW).how, "linked");   // direkte Verknuepfung
-  assert.equal(matchHeySummit({ ...EV, url: "https://www.m365con.net/x", start: "2027-03-01T10:00" }, HSX, {}, NOW).how, "linked");               // gleicher Host
+// ---------- 323-1: echte HeySummit-Felder, "gleichzeitig" = ueberschneidende Zeitfenster, auf jedem Weg ----------
+test("323-1 HeySummit lesen: echte Feldnamen, Folgeseiten, abgesagte/inaktive/fremde Talks zaehlen nicht", async () => {
+  const log = [], r = await fetchHeySummit({ HEYSUMMIT_API_KEY: "hk" }, mockFetch(log), NOW), con = r.events.find((e) => e.id === "229506");
+  assert.equal(r.error, undefined); assert.equal(r.partial, false);
+  assert.deepEqual(r.events.map((e) => e.id), ["232509", "229506", "229540", "150009"]);
+  assert.equal(con.start, Date.UTC(2027, 0, 11, 7), "first_talk_at"); assert.equal(con.end, Date.UTC(2027, 0, 22, 19, 45), "last_talk_at ist der Beginn des letzten Talks");
+  assert.equal(con.url, "https://m365con.net"); assert.equal(con.name, "M365 Con 27 - The Microsoft Community Convention");
+  assert.deepEqual(con.talks.map((t) => t.id), ["917909", "1107710", "6"], "Seite 2 gelesen; abgesagt, inaktiv und fremdes Event entfallen");
+  assert.deepEqual([con.talks[0].start, con.talks[0].end], [Date.UTC(2027, 0, 11, 7), Date.UTC(2027, 0, 11, 7, 45)], "date + broadcast_duration_mins");
+  assert.deepEqual([con.talks[2].start, con.talks[2].end], [Date.UTC(2027, 0, 12, 9), Date.UTC(2027, 0, 12, 11)], "date_timezone_offset +0100");
+  assert.deepEqual([r.events[0].start, r.events[0].end], [null, null], "Event ohne Termin");
+  assert.deepEqual(log.map((l) => l.u), [HS.api + HS.events, `${HS.api}${HS.talks}?event=229506`, `${HS.api}${HS.talks}?event=229506&page=2`], "Talks nur fuer Events, die noch nicht vorbei sind");
+  assert.ok(log.every((l) => l.headers.authorization === "Token hk"));
 });
 
-test("Vorschlagsliste: nur Treffer, nicht veroeffentlichte; veroeffentlichte bleiben mit Status", async () => {
+test("323-1 HeySummit lesen: Schluessel geht nie an einen fremden Host; Fehler und unbekannte Antwortform schlagen nichts vor", async () => {
+  const log = [], f = async (u, init) => { log.push(String(u)); return String(u) === HS.api + HS.events ? J(page(HS_EVENTS.slice(2), "https://evil.example/api/events/?page=2")) : new Response("", { status: 404 }); };
+  const r = await fetchHeySummit({ HEYSUMMIT_API_KEY: "hk" }, f, NOW);
+  assert.deepEqual(log, [HS.api + HS.events]); assert.equal(r.partial, true, "abgeschnitten wird gemeldet");
+  assert.deepEqual(await fetchHeySummit({}, f, NOW), { error: "no_heysummit_key", events: [] });
+  assert.deepEqual(await fetchHeySummit({ HEYSUMMIT_API_KEY: "hk" }, mockFetch([], { hsStatus: 500 }), NOW), { error: "hs_500", events: [] });
+  assert.deepEqual(await fetchHeySummit({ HEYSUMMIT_API_KEY: "hk" }, async () => J({ data: [] }), NOW), { error: "hs_format", events: [] });
+  assert.deepEqual(await fetchHeySummit({ HEYSUMMIT_API_KEY: "hk" }, async () => { throw Object.assign(new Error("x"), { name: "TimeoutError" }); }, NOW), { error: "hs_timeout", events: [] });
+  // die alten, geratenen Feldnamen ergeben keinen Termin und damit nie einen Vorschlag
+  const old = await hsParsed({ hsEvents: [{ id: 229506, title: "M365Con", url: "https://m365con.net/", start_date: "2027-01-11T08:00:00Z", end_date: "2027-01-22T20:00:00Z" }] });
+  assert.deepEqual([old[0].start, old[0].end], [null, null]);
+  assert.equal(matchHeySummit(EV, old, {}, NOW).reason, "no_match");
+});
+
+test("323-1 Regel: Verknuepfung allein genuegt nie, es zaehlt die Ueberschneidung der Zeitfenster (Zeitzonen beachtet)", async () => {
+  const hs = await hsParsed(), other = { ...EV, url: "", handle: "stream" };
+  const m = matchHeySummit(other, hs, {}, NOW);                                              // andere Adresse, gleiche Minute wie die Keynote
+  assert.deepEqual([m.ok, m.how, m.talk.id], [true, "talk", "917909"]);
+  const linked = matchHeySummit(EV, hs, {}, NOW); assert.deepEqual([linked.ok, linked.how, linked.event.id], [true, "linked", "229506"]);   // gleicher Host UND im Zeitraum
+  assert.equal(matchHeySummit({ ...EV, start: "2027-06-15T10:00", end: "" }, hs, {}, NOW).reason, "no_match", "gleicher Host, anderer Termin");
+  assert.equal(matchHeySummit({ ...EV, url: "https://de.m365con.net/", start: "2027-06-15T10:00", end: "" }, hs, {}, NOW).reason, "no_match", "HeySummit-Event ist vorbei");
+  assert.equal(matchHeySummit({ ...EV, url: "", tickets_url: "https://datascience.show/", start: "2027-06-15T10:00", end: "" }, hs, {}, NOW).reason, "no_match", "HeySummit-Event ohne Termin");
+  const T = { "m365con-2027": "heysummit:229506" };
+  assert.equal(matchHeySummit({ ...EV, handle: "m365con-2027", url: "", start: "2027-01-11T09:00", end: "2027-01-22" }, hs, T, NOW).how, "linked");
+  assert.equal(matchHeySummit({ ...EV, handle: "m365con-2027", url: "", start: "2027-03-01T10:00", end: "" }, hs, T, NOW).reason, "no_match", "TRANSFER ohne Ueberschneidung");
+  // Zeitzone des Events: 02:00 in New York ist 07:00 UTC (Keynote), 02:00 in Berlin ist 01:00 UTC (sechs Stunden davor)
+  assert.equal(matchHeySummit({ ...other, start: "2027-01-11T02:00", end: "", tz: "America/New_York" }, hs, {}, NOW).how, "talk");
+  assert.equal(matchHeySummit({ ...other, start: "2027-01-11T02:00", end: "", tz: "Europe/Berlin" }, hs, {}, NOW).reason, "no_match");
+  // ohne Toleranz: Beginn genau am Ende des zweiten Talks (08:45 UTC = 09:45 Berlin, danach ist bis zum naechsten Tag nichts)
+  assert.equal(matchHeySummit({ ...other, start: "2027-01-11T09:45", end: "" }, hs, {}, NOW).reason, "no_match");
+  assert.equal(matchHeySummit({ ...other, start: "2027-01-11T09:44", end: "" }, hs, {}, NOW).how, "talk");
+  assert.equal(matchHeySummit({ ...other, start: "2027-01-13T11:00", end: "" }, hs, {}, NOW).reason, "no_match", "abgesagter Talk zaehlt nicht");
+  assert.equal(matchHeySummit({ ...EV, start: "2026-10-01T10:00", end: "" }, hs, {}, NOW).reason, "past");
+  assert.equal(matchHeySummit({ ...EV, start: "2027-01-11" }, hs, {}, NOW).reason, "no_time");
+  assert.equal(matchHeySummit(EV, hs, {}, Date.UTC(2027, 1, 1)).reason, "past");
+});
+
+test("323-1 Server: Liste, Veroeffentlichen und Aktualisieren verlangen die Ueberschneidung; ohne lesbares HeySummit geht nichts raus", async () => {
   const { raw, env } = await setup(); await connected(env);
-  addEv(raw); addEv(raw, { id: 2, handle: "other", title: "Other", start: "2027-02-20T10:00", end: "", url: "" }); addEv(raw, { id: 3, handle: "old", title: "Old", start: "2020-01-11T17:00", url: "" });
+  addEv(raw); addEv(raw, { id: 2, handle: "spaeter", title: "Gleicher Host, anderer Termin", start: "2027-06-15T10:00", end: "" }); addEv(raw, { id: 3, handle: "alt-dach", title: "Vorbei", url: "https://de.m365con.net/", start: "2027-06-16T10:00", end: "" });
+  addEv(raw, { id: 4, handle: "stream", title: "Stream zur Keynote", url: "", start: "2027-01-11T08:30", end: "" });
   const log = [], f = mockFetch(log), p = await proposals(env, f, NOW);
-  assert.deepEqual(p.items.map((x) => x.handle), ["m365con-day1"]);
-  assert.equal(p.items[0].state, "proposal");
-  assert.match(p.items[0].when, /11\.01\.2027/);
-  const r = await act(env, { id: 1, admin: true }, "publish", "m365con-day1", true, f, NOW);
-  assert.equal(r.linkedin_url, "https://www.linkedin.com/events/777/");
-  const p2 = await proposals(env, f, NOW);
-  assert.equal(p2.items[0].state, "published");
-  assert.equal(p2.items[0].changed, false);
+  assert.deepEqual(p.items.map((x) => [x.handle, x.state, x.hs.how]), [["m365con-day1", "proposal", "linked"], ["stream", "proposal", "talk"]]);
+  assert.deepEqual(p.hs_info, { events: 4, dated: 3, talks: 3, partial: false });
+  for (const h of ["spaeter", "alt-dach"]) assert.deepEqual(await act(env, ADMIN, "publish", h, true, f, NOW), { error: "no_match" });
+  assert.equal(creates(log), 0); assert.deepEqual(liRows(raw), []);
+  assert.equal((await act(env, ADMIN, "publish", "m365con-day1", true, f, NOW)).ok, true);
+  // Termin verschoben: die Regel gilt auch beim Aktualisieren
+  raw.prepare("UPDATE events SET start='2027-06-15T10:00', end='' WHERE id=1").run(); log.length = 0;
+  assert.deepEqual(await act(env, ADMIN, "update", "m365con-day1", true, f, NOW), { error: "no_match" }); assert.equal(patches(log).length, 0);
+  const row = (await proposals(env, f, NOW)).items.find((x) => x.handle === "m365con-day1");
+  assert.deepEqual([row.state, row.rule, row.can], ["published", "no_match", ["cancel"]], "Absagen bleibt, Aktualisieren ist gesperrt");
+  // HeySummit nicht lesbar oder ohne Schluessel: kein Vorschlag, kein Aufruf an LinkedIn
+  const down = mockFetch(log, { hsStatus: 503 }); log.length = 0;
+  assert.deepEqual(await act(env, ADMIN, "publish", "stream", true, down, NOW), { error: "hs_503" });
+  const pd = await proposals(env, down, NOW); assert.equal(pd.hs_error, "hs_503"); assert.ok(!pd.items.some((x) => x.state === "proposal"));
+  assert.deepEqual(await act({ ...env, HEYSUMMIT_API_KEY: "" }, ADMIN, "publish", "stream", true, f, NOW), { error: "no_heysummit_key" });
+  assert.equal(creates(log), 0);
 });
 
-test("Nutzlast: Laengenlimits, Zeiten in ms, UTM, Links", () => {
-  const env = { SITE: "https://www.m365.fm" };
-  const p = buildPayload(env, { ...EV, title: "T".repeat(300), summary: "S".repeat(5000) }, { event: HSX[0], talk: HSX[0].talks[0] }, "urn:li:organization:42");
+// ---------- 323-2: Reservierung VOR dem LinkedIn-Aufruf ----------
+test("323-2 gleichzeitige Klicks: genau ein LinkedIn-Event", async () => {
+  const { raw, env } = await setup(); await connected(env); addEv(raw);
+  const log = [], f = mockFetch(log);
+  const res = await Promise.all([act(env, ADMIN, "publish", "m365con-day1", true, f, NOW), act(env, ADMIN, "publish", { event_id: 1 }, true, f, NOW), act(env, ADMIN, "publish", "m365con-day1", true, f, NOW)]);
+  assert.equal(creates(log), 1);
+  assert.deepEqual(res.map((r) => r.error || "ok").sort(), ["ok", "publish_pending", "publish_pending"]);
+  assert.deepEqual(liRows(raw), [{ event_id: 1, urn: "urn:li:event:777", status: "published" }]);
+  assert.equal((await act(env, ADMIN, "publish", "m365con-day1", true, f, NOW)).error, "already_published"); assert.equal(creates(log), 1);
+});
+
+test("323-2 LinkedIn legt an, nennt aber keine ID: Reservierung bleibt, kein zweiter Event; im Admin klaerbar (ID eintragen)", async () => {
+  const { raw, env } = await setup(); await connected(env); addEv(raw); addEv(raw, { id: 2, handle: "stream", title: "Stream", url: "", start: "2027-01-11T08:30", end: "" });
+  const log = [], f = mockFetch(log, { create: () => new Response("", { status: 201 }) });
+  assert.deepEqual(await act(env, ADMIN, "publish", "m365con-day1", true, f, NOW), { error: "li_no_urn", pending: true });
+  assert.deepEqual(liRows(raw), [{ event_id: 1, urn: "", status: "pending" }]);
+  assert.equal((await act(env, ADMIN, "publish", "m365con-day1", true, f, NOW)).error, "publish_pending"); assert.equal(creates(log), 1, "Wiederholung ruft LinkedIn nicht noch einmal");
+  // Liste: waehrend der Wartezeit ohne Knopf, danach "ID eintragen" und "freigeben"
+  let it = (await proposals(env, f, NOW)).items[0]; assert.deepEqual([it.handle, it.state, it.can, it.wait], ["m365con-day1", "pending", [], HOLD_S]);
+  assert.equal((await act(env, ADMIN, "resolve", { event_id: 1, urn: "7777777" }, true, f, NOW)).error, "publish_running");
+  assert.equal((await act(env, ADMIN, "release", { event_id: 1 }, true, f, NOW)).error, "publish_running");
+  it = (await proposals(env, f, LATER)).items[0]; assert.deepEqual([it.state, it.can, it.wait], ["pending", ["resolve", "release"], 0]);
+  assert.equal((await act(env, ADMIN, "resolve", { event_id: 1, urn: "kaputt" }, true, f, LATER)).error, "bad_urn");
+  assert.deepEqual(await act(env, ADMIN, "resolve", { event_id: 1, urn: "https://www.linkedin.com/events/7777777/" }, false, f, LATER), { preview: { action: "resolve", urn: "urn:li:event:7777777", linkedin_url: "https://www.linkedin.com/events/7777777/" } });
+  assert.deepEqual(await act(env, ADMIN, "resolve", { event_id: 1, urn: "7777777" }, true, f, LATER), { ok: true, urn: "urn:li:event:7777777", linkedin_url: "https://www.linkedin.com/events/7777777/" });
+  assert.deepEqual(liRows(raw), [{ event_id: 1, urn: "urn:li:event:7777777", status: "published" }]);
+  assert.equal((await act(env, ADMIN, "resolve", { event_id: 1, urn: "7777777" }, true, f, LATER)).error, "not_pending");
+  // dieselbe LinkedIn-ID kann nicht zu einem zweiten Event gehoeren
+  assert.equal((await act(env, ADMIN, "publish", "stream", true, f, NOW)).pending, true);
+  assert.equal((await act(env, ADMIN, "resolve", { event_id: 2, urn: "urn:li:event:7777777" }, true, f, LATER)).error, "urn_taken");
+  assert.equal(creates(log), 2, "je Event genau ein Aufruf");
+  assert.deepEqual([urnOf("12345"), urnOf("urn:li:event:12345"), urnOf("https://www.linkedin.com/events/12345"), urnOf("https://evil.example/events/12345"), urnOf("12")], ["urn:li:event:12345", "urn:li:event:12345", "urn:li:event:12345", "", ""]);
+});
+
+test("323-2 D1-Fehler nach dem LinkedIn-Aufruf: Reservierung bleibt, die URN geht an den Admin, Wiederholung legt nichts Zweites an", async () => {
+  const { raw, env } = await setup(); await connected(env); addEv(raw);
+  const log = [], f = mockFetch(log, { create: () => new Response("", { status: 201, headers: { "x-restli-id": "7123456789012345678" } }) });   // IDs sind bei LinkedIn so lang
+  env.DB.failOn = (sql) => /^UPDATE linkedin_events SET urn=/.test(sql);
+  assert.deepEqual(await act(env, ADMIN, "publish", "m365con-day1", true, f, NOW), { error: "store_failed", pending: true, urn: "urn:li:event:7123456789012345678", linkedin_url: "https://www.linkedin.com/events/7123456789012345678/" });
+  env.DB.failOn = null;
+  assert.deepEqual(liRows(raw), [{ event_id: 1, urn: "", status: "pending" }]);
+  assert.equal((await act(env, ADMIN, "publish", "m365con-day1", true, f, NOW)).error, "publish_pending"); assert.equal(creates(log), 1);
+  const rs = await act(env, ADMIN, "resolve", { event_id: 1, urn: "urn:li:event:7123456789012345678" }, true, f, LATER); assert.equal(rs.ok, true, JSON.stringify(rs));
+  assert.deepEqual(raw.prepare("SELECT action,detail FROM audit WHERE action LIKE 'linkedin-%' ORDER BY id").all().map((r) => [r.action, r.detail]), [["linkedin-publish-unstored", "urn:li:event:7123456789012345678"], ["linkedin-resolve", "urn:li:event:7123456789012345678"]]);
+  // scheitert schon die Reservierung, wird LinkedIn gar nicht erst gerufen
+  addEv(raw, { id: 2, handle: "stream", title: "Stream", url: "", start: "2027-01-11T08:30", end: "" }); env.DB.failOn = (sql) => /^INSERT INTO linkedin_events/.test(sql);
+  assert.deepEqual(await act(env, ADMIN, "publish", "stream", true, f, NOW), { error: "db_error" }); assert.equal(creates(log), 1);
+});
+
+test("323-2 Ausgang offen (Netz, Zeit, 5xx) haelt die Reservierung; sichere Ablehnung (4xx) gibt sie frei; Freigeben im Admin", async () => {
+  const { raw, env } = await setup(); await connected(env); addEv(raw);
+  const log = [];
+  for (const [create, code] of [[() => { throw new TypeError("fetch failed"); }, "li_network"], [() => { throw Object.assign(new Error("t"), { name: "TimeoutError" }); }, "li_timeout"], [() => new Response("", { status: 502 }), "li_502"], [() => new Response("", { status: 408 }), "li_408"]]) {
+    assert.deepEqual(await act(env, ADMIN, "publish", "m365con-day1", true, mockFetch(log, { create }), NOW), { error: code, pending: true }, code);
+    assert.deepEqual(liRows(raw), [{ event_id: 1, urn: "", status: "pending" }]);
+    assert.equal((await act(env, ADMIN, "publish", "m365con-day1", true, mockFetch(log), NOW)).error, "publish_pending");
+    assert.deepEqual(await act(env, ADMIN, "release", { event_id: 1 }, false, mockFetch(log), LATER), { preview: { action: "release" } });
+    assert.deepEqual(await act(env, ADMIN, "release", { event_id: 1 }, true, mockFetch(log), LATER), { ok: true });   // der Admin hat auf LinkedIn nachgesehen: nichts angelegt
+    assert.deepEqual(liRows(raw), []);
+  }
+  assert.equal(creates(log), 4);
+  for (const st of [400, 401, 403, 422, 429]) {
+    assert.deepEqual(await act(env, ADMIN, "publish", "m365con-day1", true, mockFetch(log, { create: () => new Response("{\"message\":\"nein\"}", { status: st }) }), NOW), { error: "li_" + st });
+    assert.deepEqual(liRows(raw), [], "abgelehnt: keine Reservierung bleibt zurueck");
+  }
+  // ID aus dem Location-Kopf, wenn x-restli-id fehlt
+  const ok = await act(env, ADMIN, "publish", "m365con-day1", true, mockFetch(log, { create: () => new Response("", { status: 201, headers: { location: "/rest/events/4242" } }) }), NOW);
+  assert.deepEqual(ok, { ok: true, urn: "urn:li:event:4242", linkedin_url: "https://www.linkedin.com/events/4242/" });
+  assert.equal((await act(env, ADMIN, "release", { event_id: 1 }, true, mockFetch(log), LATER)).error, "not_pending", "ein veroeffentlichter Event laesst sich nicht freigeben");
+});
+
+// ---------- 323-3: Text, Aufruf und Format folgen dem Event ----------
+test("323-3 Nutzlast: kostenlos oder nicht, online / vor Ort / hybrid, Laengenlimits, Zeiten in ms, UTM, Links", async () => {
+  const env = { SITE: "https://www.m365.fm" }, hs = await hsParsed(), m = { event: hs[1], talk: hs[1].talks[0] };
+  const p = buildPayload(env, { ...EV, title: "T".repeat(300), summary: "S".repeat(5000) }, m, "urn:li:organization:42");
   assert.ok([...p.name.value].length <= LI.nameMax && p.name.value.endsWith("…"));
   assert.ok([...p.description.value].length <= LI.descMax);
-  assert.equal(p.timeRange.start, Date.UTC(2027, 0, 11, 16)); assert.equal(p.timeRange.end, Date.UTC(2027, 0, 11, 17, 30));
-  assert.ok(Number.isInteger(p.timeRange.start));
-  assert.ok(p.description.value.includes("https://www.m365.fm/community/events/m365con-day1/?" + UTM));
-  assert.ok(p.description.value.includes("https://m365con.net/talks/keynote?" + UTM));
+  assert.deepEqual(p.timeRange, { start: Date.UTC(2027, 0, 11, 7), end: Date.UTC(2027, 0, 11, 16) });
+  assert.ok(p.description.value.includes("Mehr zum Event: https://www.m365.fm/community/events/m365con-day1/?" + UTM));
+  assert.ok(p.description.value.includes("Kostenlos anmelden: https://m365con.net/talks/keynote-overview-tbd-topic/?" + UTM));
+  assert.equal(p.externalUrl, "https://m365con.net/talks/keynote-overview-tbd-topic/?" + UTM);
   assert.equal(p.organizer, "urn:li:organization:42"); assert.equal(p.eventFormat, "ONLINE"); assert.equal(p.visibility, "PUBLIC");
-  assert.equal(buildPayload(env, { ...EV, end: "" }, null, "o").timeRange.end - p.timeRange.start, 3600000);
+  assert.ok(!/\nOrt: /.test(p.description.value));
+  // kostenpflichtig und vor Ort: kein "Kostenlos", Format und Ort stimmen, der eigene Ticket-Link geht vor
+  const paid = buildPayload(env, { ...EV, free: 0, mode: "onsite", location: "Köln", country: "Deutschland", tickets_url: "https://tickets.example/buy?x=1" }, m, "o");
+  assert.equal(paid.eventFormat, "IN_PERSON"); assert.ok(!/kostenlos/i.test(paid.description.value));
+  assert.ok(paid.description.value.includes("Anmeldung und Tickets: https://tickets.example/buy?x=1&" + UTM));
+  assert.ok(paid.description.value.includes("\nOrt: Köln, Deutschland\n"));
+  const hybrid = buildPayload(env, { ...EV, free: 1, mode: "hybrid", location: "Wien" }, null, "o");
+  assert.equal(hybrid.eventFormat, "HYBRID"); assert.ok(hybrid.description.value.includes("Ort: Wien (und online)")); assert.ok(hybrid.description.value.includes("Kostenlos anmelden: https://m365con.net/?" + UTM));
+  assert.equal(buildPayload(env, { ...EV, mode: "unbekannt" }, null, "o").eventFormat, "ONLINE");
+  const bare = buildPayload(env, { ...EV, url: "", free: 0 }, null, "o");   // ohne Anmeldelink: kein Aufruf, externalUrl ist die Event-Seite
+  assert.ok(!/anmeld/i.test(bare.description.value)); assert.equal(bare.externalUrl, "https://www.m365.fm/community/events/m365con-day1/?" + UTM);
   assert.equal(buildPayload(env, { ...EV, start: "2027-01-11" }, null, "o"), null);
 });
 
+test("323-3 Vorschau im Admin nennt Format, Preis und Zeitraum; gesendet wird dasselbe", async () => {
+  const { raw, env } = await setup(); await connected(env);
+  addEv(raw, { free: 0, mode: "hybrid", location: "Köln", tickets_url: "https://tickets.example/buy" });
+  const log = [], f = mockFetch(log), it = (await proposals(env, f, NOW)).items[0];
+  assert.deepEqual([it.preview.format, it.preview.free, it.preview.start, it.preview.end], ["Hybrid (vor Ort und online)", false, "11.01.2027, 08:00", "11.01.2027, 17:00"]);
+  assert.ok(it.preview.description.includes("Anmeldung und Tickets: https://tickets.example/buy?" + UTM)); assert.ok(!/kostenlos/i.test(it.preview.description));
+  assert.equal((await act(env, ADMIN, "publish", { event_id: 1 }, true, f, NOW)).ok, true);
+  const sent = JSON.parse(log.find((l) => l.u === LI.api + LI.events).body);
+  assert.equal(sent.eventFormat, "HYBRID"); assert.equal(sent.description.value, it.preview.description);
+});
+
+// ---------- Aufrufe ----------
+test("Veroeffentlichen/Aktualisieren/Absagen rufen die richtigen Endpunkte; ohne confirm nur Vorschau", async () => {
+  const { raw, env } = await setup(); await connected(env); addEv(raw);
+  const log = [], f = mockFetch(log);
+  const pre = await act(env, ADMIN, "publish", "m365con-day1", false, f, NOW);
+  assert.ok(pre.preview); assert.equal(creates(log), 0); assert.deepEqual(liRows(raw), [], "Vorschau reserviert nichts");
+  const pub = await act(env, ADMIN, "publish", "m365con-day1", true, f, NOW);
+  const post = log.find((l) => l.u === LI.api + LI.events);
+  assert.equal(post.method, "POST"); assert.equal(post.headers["LinkedIn-Version"], LI.version); assert.equal(post.headers.authorization, "Bearer AT");
+  assert.equal(JSON.parse(post.body).organizer, "urn:li:organization:42");
+  assert.deepEqual(pub, { ok: true, urn: "urn:li:event:777", linkedin_url: "https://www.linkedin.com/events/777/" });
+  assert.deepEqual({ ...raw.prepare("SELECT handle,title,starts,ends,published_by FROM linkedin_events").get() }, { handle: "m365con-day1", title: "M365Con Day 1", starts: Date.UTC(2027, 0, 11, 7), ends: Date.UTC(2027, 0, 11, 16), published_by: 1 });
+  let it = (await proposals(env, f, NOW)).items[0]; assert.deepEqual([it.state, it.changed, it.can], ["published", false, ["update", "cancel"]]);
+  raw.prepare("UPDATE events SET title='Neuer Titel' WHERE id=1").run();
+  assert.equal((await proposals(env, f, NOW)).items[0].changed, true);
+  log.length = 0;
+  assert.ok((await act(env, ADMIN, "update", "m365con-day1", false, f, NOW)).preview); assert.equal(patches(log).length, 0);
+  const ur = await act(env, ADMIN, "update", "m365con-day1", true, f, NOW); assert.equal(ur.ok, true, JSON.stringify(ur));
+  const up = patches(log)[0]; assert.ok(up.u.endsWith("/urn%3Ali%3Aevent%3A777"));
+  assert.equal(up.headers["X-RestLi-Method"], "PARTIAL_UPDATE");
+  const patch = JSON.parse(up.body).patch.$set; assert.equal(patch.name.value, "Neuer Titel"); assert.equal(patch.organizer, undefined);
+  it = (await proposals(env, f, NOW)).items[0]; assert.deepEqual([it.changed, it.state], [false, "published"]);
+  log.length = 0;
+  assert.deepEqual(await act(env, ADMIN, "cancel", "m365con-day1", false, f, NOW), { preview: { action: "cancel", urn: "urn:li:event:777", linkedin_url: "https://www.linkedin.com/events/777/" } }); assert.equal(patches(log).length, 0);
+  assert.equal((await act(env, ADMIN, "cancel", "m365con-day1", true, f, NOW)).ok, true);
+  assert.deepEqual(JSON.parse(patches(log)[0].body), { patch: { $set: { lifecycleState: "CANCELLED" } } });
+  assert.deepEqual(liRows(raw), [{ event_id: 1, urn: "urn:li:event:777", status: "cancelled" }]);
+  // LinkedIn lehnt eine Aenderung ab: der Stand hier bleibt, wie er war
+  const { raw: r2, env: e2 } = await setup(); await connected(e2); addEv(r2);
+  assert.equal((await act(e2, ADMIN, "publish", "m365con-day1", true, f, NOW)).ok, true);
+  assert.deepEqual(await act(e2, ADMIN, "cancel", "m365con-day1", true, mockFetch([], { patch: () => new Response("", { status: 500 }) }), NOW), { error: "li_500" });
+  assert.equal(liRows(r2)[0].status, "published");
+});
+
+test("Ohne Verbindung oder Seite geht nichts; abgelaufener Zugang wird als solcher gemeldet und reserviert nichts", async () => {
+  const { raw, env } = await setup(); addEv(raw);
+  const log = [], f = mockFetch(log);
+  assert.equal((await act(env, ADMIN, "publish", "m365con-day1", true, f, NOW)).error, "not_connected");
+  await connected(env, false);
+  assert.equal((await act(env, ADMIN, "publish", "m365con-day1", true, f, NOW)).error, "no_org");
+  await env.DB.prepare("UPDATE linkedin_conn SET org_urn='urn:li:organization:42', expires=1, refresh_enc=''").run();
+  assert.deepEqual(await act(env, ADMIN, "publish", "m365con-day1", true, f, NOW), { error: "expired" });
+  assert.equal(creates(log), 0); assert.deepEqual(liRows(raw), []);
+  assert.equal((await act(env, ADMIN, "publish", "gibt-es-nicht", true, f, NOW)).error, "not_found");
+  assert.equal((await act(env, ADMIN, "sprengen", "m365con-day1", true, f, NOW)).error, "bad_action");
+});
+
+// ---------- 323-4: Regeln auf dem Server ----------
+test("323-4 nur oeffentliche, kommende Events; nach der Absage kein Aktualisieren, kein zweites Absagen, kein neues Veroeffentlichen", async () => {
+  const { raw, env } = await setup(); await connected(env);
+  addEv(raw); addEv(raw, { id: 2, handle: "versteckt", title: "Entwurf", public: 0 }); addEv(raw, { id: 3, handle: "laeuft", title: "Läuft schon", start: "2027-01-11T08:00", end: "2027-01-22" }); addEv(raw, { id: 4, handle: "ohne-zeit", title: "Ohne Uhrzeit", start: "2027-01-12", end: "" });
+  const log = [], f = mockFetch(log), call = rest(env, f);
+  assert.deepEqual(await call("/api/admin/linkedin/publish", "POST", { handle: "versteckt", confirm: true }), { status: 400, j: { error: "not_public" } });
+  assert.deepEqual(await act(env, ADMIN, "publish", { event_id: 2 }, true, f, NOW), { error: "not_public" });
+  assert.deepEqual(await act(env, ADMIN, "publish", "ohne-zeit", true, f, NOW), { error: "no_time" });
+  const running = Date.UTC(2027, 0, 12);   // Event 3 hat begonnen, laeuft aber noch
+  assert.deepEqual(await act(env, ADMIN, "publish", "laeuft", true, f, running), { error: "past" });
+  assert.ok(!(await proposals(env, f, running)).items.some((x) => x.handle === "laeuft"));
+  assert.equal(creates(log), 0); assert.deepEqual(liRows(raw), []);
+  assert.deepEqual((await proposals(env, f, NOW)).items.map((x) => x.handle), ["m365con-day1", "laeuft"], "versteckte und Events ohne Uhrzeit fehlen in der Liste");
+  // veroeffentlichen -> absagen -> aktualisieren
+  assert.equal((await act(env, ADMIN, "publish", "m365con-day1", true, f, NOW)).ok, true);
+  assert.equal((await act(env, ADMIN, "cancel", "m365con-day1", true, f, NOW)).ok, true); log.length = 0;
+  assert.deepEqual(await call("/api/admin/linkedin/update", "POST", { handle: "m365con-day1", confirm: true }), { status: 409, j: { error: "cancelled", linkedin_url: "https://www.linkedin.com/events/777/" } });
+  assert.equal((await act(env, ADMIN, "cancel", "m365con-day1", true, f, NOW)).error, "cancelled");
+  assert.equal((await act(env, ADMIN, "publish", "m365con-day1", true, f, NOW)).error, "cancelled");
+  assert.equal(log.filter((l) => l.u.startsWith(LI.api)).length, 0, "nichts davon erreicht LinkedIn");
+  assert.deepEqual(liRows(raw), [{ event_id: 1, urn: "urn:li:event:777", status: "cancelled" }]);
+  const it = (await proposals(env, f, NOW)).items.find((x) => x.handle === "m365con-day1"); assert.deepEqual([it.state, it.can], ["cancelled", []]);
+  // Aktionen ohne LinkedIn-Event
+  for (const a of ["update", "cancel", "resolve", "release"]) assert.equal((await act(env, ADMIN, a, { event_id: 3, urn: "12345" }, true, f, NOW)).error, "not_published", a);
+  // veroeffentlicht, dann versteckt: Aktualisieren gesperrt
+  assert.equal((await act(env, ADMIN, "publish", "laeuft", true, f, NOW)).ok, true); raw.prepare("UPDATE events SET public=0 WHERE id=3").run();
+  assert.equal((await act(env, ADMIN, "update", "laeuft", true, f, NOW)).error, "not_public");
+});
+
+// ---------- 323-5: kein LinkedIn-Event bleibt ohne Absage-Knopf zurueck ----------
+test("323-5 Event versteckt oder geloescht: der LinkedIn-Event bleibt gelistet und absagbar", async () => {
+  const { raw, env } = await setup(); await connected(env);
+  addEv(raw); addEv(raw, { id: 2, handle: "stream", title: "Stream", url: "", start: "2027-01-11T08:30", end: "" }); addEv(raw, { id: 3, handle: "abgesagt", title: "Wird abgesagt", url: "", start: "2027-01-11T09:10", end: "" });
+  const log = [], f = mockFetch(log);
+  for (const h of ["m365con-day1", "stream", "abgesagt"]) assert.equal((await act(env, ADMIN, "publish", h, true, f, NOW)).ok, true);
+  assert.equal((await act(env, ADMIN, "cancel", "abgesagt", true, f, NOW)).ok, true);
+  // versteckt (public=0): bleibt in der Liste, markiert, mit Absagen
+  raw.prepare("UPDATE events SET public=0 WHERE id=2").run();
+  let items = (await proposals(env, f, NOW)).items, hid = items.find((x) => x.handle === "stream");
+  assert.deepEqual([hid.state, hid.hidden, hid.can], ["published", true, ["cancel"]]); assert.equal(items[0].handle, "stream", "Zeilen mit Handlungsbedarf stehen oben");
+  // geloescht (Route und Kontoloeschung): veroeffentlichte Zeile bleibt, die abgesagte faellt weg
+  const del = await handleEvents(env, new Request("https://x/api/event/m365con-day1", { method: "DELETE" }), new URL("https://x/api/event/m365con-day1"), "/api/event/m365con-day1", ADMIN, J);
+  assert.equal(del.status, 200);
+  await handleEvents(env, new Request("https://x/api/event/abgesagt", { method: "DELETE" }), new URL("https://x/api/event/abgesagt"), "/api/event/abgesagt", ADMIN, J);
+  assert.deepEqual(liRows(raw), [{ event_id: 1, urn: "urn:li:event:777", status: "published" }, { event_id: 2, urn: "urn:li:event:778", status: "published" }]);
+  items = (await proposals(env, f, NOW)).items; const orphan = items.find((x) => x.id === 1);
+  assert.deepEqual([orphan.orphan, orphan.state, orphan.title, orphan.handle, orphan.linkedin_url, orphan.can], [true, "published", "M365Con Day 1", "m365con-day1", "https://www.linkedin.com/events/777/", ["cancel"]]);
+  assert.equal((await act(env, ADMIN, "cancel", "m365con-day1", true, f, NOW)).error, "not_found", "das Handle gibt es nicht mehr ...");
+  assert.equal((await act(env, ADMIN, "update", { event_id: 1 }, true, f, NOW)).error, "orphan");
+  log.length = 0;
+  assert.deepEqual(await act(env, ADMIN, "cancel", { event_id: 1 }, true, f, NOW), { ok: true, linkedin_url: "https://www.linkedin.com/events/777/" });   // ... die event_id schon
+  assert.ok(patches(log)[0].u.endsWith("/urn%3Ali%3Aevent%3A777"));
+  assert.deepEqual(liRows(raw), [{ event_id: 2, urn: "urn:li:event:778", status: "published" }], "verwaiste Zeile ist nach der Absage erledigt");
+  assert.equal((await act(env, ADMIN, "cancel", { event_id: 2 }, true, f, NOW)).ok, true);
+  assert.deepEqual(liRows(raw), [{ event_id: 2, urn: "urn:li:event:778", status: "cancelled" }]);
+  assert.ok(!(await proposals(env, f, NOW)).items.some((x) => x.id === 2), "abgesagt und versteckt: nichts mehr zu tun");
+});
+
+test("323-5 Kontoloeschung des Veranstalters: veroeffentlichter LinkedIn-Event bleibt als verwaist stehen, bis er vorbei ist; Reservierung bleibt klaerbar", async () => {
+  const { raw, env } = await setup(); await connected(env);
+  addEv(raw, { owner_id: 2 }); addEv(raw, { id: 2, handle: "stream", title: "Stream", url: "", start: "2027-01-11T08:30", end: "", owner_id: 2 });
+  const f = mockFetch([]);
+  assert.equal((await act(env, ADMIN, "publish", "m365con-day1", true, f, NOW)).ok, true);
+  assert.equal((await act(env, ADMIN, "publish", "stream", true, mockFetch([], { create: () => new Response("", { status: 500 }) }), NOW)).pending, true);
+  await deleteUserEvents(env.DB, 2);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM events").get().n, 0);
+  let items = (await proposals(env, f, LATER)).items;
+  assert.deepEqual(items.map((x) => [x.id, x.state, x.orphan, x.can]), [[1, "published", true, ["cancel"]], [2, "pending", true, ["resolve", "release"]]]);
+  items = (await proposals(env, f, Date.UTC(2027, 0, 11, 16))).items;   // LinkedIn-Event 1 ist zu Ende
+  assert.deepEqual(items.map((x) => [x.id, x.state]), [[2, "pending"]]);
+  assert.deepEqual(await act(env, ADMIN, "release", { event_id: 2 }, true, f, LATER), { ok: true });
+});
+
+// ---------- 323-6 / 323-7: Routen ----------
+test("323-6 unbekannte Unterroute und falsche Methode: 404 als JSON statt null (auch durch den ganzen Worker)", async () => {
+  const { env } = await setup(), call = rest(env, mockFetch([]));
+  for (const [p, m] of [["/api/admin/linkedin/nope", "GET"], ["/api/admin/linkedin/publish", "GET"], ["/api/admin/linkedin/status", "POST"], ["/api/admin/linkedin/", "GET"]]) assert.deepEqual(await call(p, m, m === "POST" ? {} : undefined), { status: 404, j: { error: "not_found" } }, `${m} ${p}`);
+  assert.equal(await handleLinkedinEvents(env, new Request("https://x/api/admin/panel/x"), new URL("https://x/api/admin/panel/x"), "/api/admin/panel/x", ADMIN, J), null, "fremde Praefixe bleiben beim Aufrufer");
+  const cookie = `m365s=${await makeSession(env, 1)}`;
+  const res = await worker.fetch(new Request("https://api-dub.m365.fm/api/admin/linkedin/nope", { headers: { cookie } }), env);
+  assert.ok(res instanceof Response); assert.equal(res.status, 404); assert.deepEqual(await res.json(), { error: "not_found" });
+  const st = await worker.fetch(new Request("https://api-dub.m365.fm/api/admin/linkedin/status", { headers: { cookie } }), env);
+  assert.equal(st.status, 200); assert.equal((await st.json()).connected, false);
+});
+
+test("323-7 Deploy-Abgleich sieht jede LinkedIn-Route; Schreibwege sind begruendet ausgenommen, die Pruefung selbst hat keine neue Ausnahme", async () => {
+  const live = routes().filter((r) => r.startsWith("/api/admin/linkedin/"));
+  assert.deepEqual(live, ["cancel", "disconnect", "org", "orgs", "proposals", "publish", "release", "resolve", "status", "update"].map((k) => "/api/admin/linkedin/" + k));
+  const cov = JSON.parse(readFileSync(new URL("../mcp_coverage.json", import.meta.url), "utf8")).routes;
+  for (const r of live) assert.ok(cov[r], "Eintrag fehlt: " + r);
+  assert.deepEqual(cov["/api/admin/linkedin/proposals"], { tools: ["linkedin_event_proposals"] });
+  for (const r of live.filter((x) => !x.endsWith("/proposals"))) { assert.equal(cov[r].tools, undefined, r); assert.match(cov[r].skip, /Admin.*Browser/, r); }
+  // jede gefundene Route gibt es wirklich (kein 404), keine laeuft am Abgleich vorbei
+  const { raw, env } = await setup(), call = rest(env, mockFetch([])), GET = ["status", "orgs", "proposals"]; addEv(raw);
+  for (const r of live) assert.notEqual((await call(r, GET.some((k) => r.endsWith("/" + k)) ? "GET" : "POST", { handle: "m365con-day1" })).status, 404, r);
+  const src = readFileSync(new URL("../src/linkedin_events.js", import.meta.url), "utf8");
+  assert.doesNotMatch(src, /path\.slice\(|\bk === "/, "Routen stehen als path === \"...\" da, nicht hinter einem abgeschnittenen Praefix");
+  // beide Tools stehen in einer Anleitung: die Ausnahmeliste der Pruefung braucht sie nicht
+  const gate = readFileSync(new URL("../../tools/check_mcp_coverage.mjs", import.meta.url), "utf8");
+  assert.doesNotMatch(gate, /linkedin/i);
+  for (const t of ["linkedin_event_proposals", "publish_linkedin_event"]) { assert.ok(TOOLS.some((x) => x.name === t && x.de && !x.write)); assert.ok(HOWTO.some((h) => h.tools.includes(t) && h.en && h.de), t); }
+});
+
+// ---------- 323-8: kommende Events, naechstes zuerst ----------
+test("323-8 Vorschlagsliste: Datumsfilter in SQL (nicht die 300 aeltesten), naechstes zuerst", async () => {
+  const { raw, env } = await setup(); await connected(env);
+  const ins = raw.prepare("INSERT INTO events(handle,owner_id,title,start,public,created,updated) VALUES(?,1,?,?,1,1,1)");
+  raw.exec("BEGIN"); for (let i = 0; i < 320; i++) ins.run(`live-${i}`, `Stream ${i}`, `2026-${String(1 + (i % 10)).padStart(2, "0")}-${String(1 + (i % 28)).padStart(2, "0")}T18:00`); raw.exec("COMMIT");
+  addEv(raw, { id: 1001, handle: "tag-2", title: "Tag 2", start: "2027-01-12T09:00", end: "2027-01-12T17:00" }); addEv(raw, { id: 1002 });
+  addEv(raw, { id: 1003, handle: "letzter-tag", title: "Letzter Tag", start: "2027-01-22T09:00", end: "" }); addEv(raw, { id: 1004, handle: "kein-treffer", title: "Anderer Termin", start: "2027-03-01T09:00", end: "" });
+  const f = mockFetch([]), p = await proposals(env, f, NOW);
+  assert.deepEqual(p.items.map((x) => x.handle), ["m365con-day1", "tag-2", "letzter-tag"]);
+  assert.ok(p.items.every((x) => x.state === "proposal" && x.can.join() === "publish"));
+  // veroeffentlichte stehen weiter in der Liste (mit Knoepfen), auch hinter vielen vergangenen Events
+  assert.equal((await act(env, ADMIN, "publish", "tag-2", true, f, NOW)).ok, true);
+  assert.deepEqual((await proposals(env, f, NOW)).items.map((x) => [x.handle, x.state]), [["m365con-day1", "proposal"], ["tag-2", "published"], ["letzter-tag", "proposal"]]);
+  // heute laufende und gestrige Events ohne Treffer stoeren nicht; ein vergangenes Event wird nie vorgeschlagen
+  assert.deepEqual((await proposals(env, f, Date.UTC(2027, 0, 12, 12))).items.map((x) => [x.handle, x.state]), [["tag-2", "published"], ["letzter-tag", "proposal"]]);
+});
+
+// ---------- 323-9: Konto loeschen / zusammenfuehren, Verbindung trennen ----------
+test("323-9 Kontoloeschung entfernt den LinkedIn-Zugang des Admins und loest 'veroeffentlicht von'; Zusammenfuehren zieht beides um", async () => {
+  const { raw, env } = await setup(); await connected(env, true, 3); addEv(raw);
+  const f = mockFetch([]);
+  assert.equal((await act(env, { id: 3, admin: true }, "publish", "m365con-day1", true, f, NOW)).ok, true);
+  // zusammenfuehren 3 -> 1
+  await env.DB.batch(await mergeStatements(env.DB, 3, 1));
+  assert.equal((await getConn(env.DB)).connected_by, 1); assert.equal(raw.prepare("SELECT published_by FROM linkedin_events").get().published_by, 1);
+  assert.equal(await decryptToken(env, (await getConn(env.DB)).access_enc), "AT", "der Zugang selbst bleibt beim Zusammenfuehren erhalten");
+  // ein anderes Konto loeschen aendert nichts
+  await deleteUserLinkedin(env.DB, 2); assert.notEqual((await getConn(env.DB)).access_enc, "");
+  // Konto 1 loeschen (ganzer Worker, DELETE /api/me)
+  const res = await worker.fetch(new Request("https://api-dub.m365.fm/api/me", { method: "DELETE", headers: { cookie: `m365s=${await makeSession(env, 1)}`, "x-requested-with": "m365" } }), env);
+  assert.equal(res.status, 200); assert.equal(raw.prepare("SELECT COUNT(*) n FROM users WHERE id=1").get().n, 0);
+  const c = await getConn(env.DB);
+  assert.deepEqual([c.access_enc, c.refresh_enc, c.expires, c.scope, c.connected_by], ["", "", 0, "", 0]); assert.equal(c.org_urn, "urn:li:organization:42");
+  assert.deepEqual({ ...raw.prepare("SELECT published_by,status,urn FROM linkedin_events").get() }, { published_by: 0, status: "published", urn: "urn:li:event:777" }, "der LinkedIn-Event gehoert der Seite und bleibt verwaltbar");
+  assert.equal((await act(env, { id: 3, admin: true }, "cancel", { event_id: 1 }, true, f, NOW)).error, "not_connected");
+});
+
+test("323-9 Verbindung trennen loescht die Tokens; Status und Liste geben nie Zugangsdaten heraus", async () => {
+  const { raw, env } = await setup(); await connected(env); addEv(raw);
+  const f = mockFetch([]), call = rest(env, f);
+  const before = JSON.stringify([await call("/api/admin/linkedin/status"), await call("/api/admin/linkedin/proposals"), await call("/api/admin/linkedin/publish", "POST", { handle: "m365con-day1" })]);
+  const c0 = await getConn(env.DB);
+  for (const secret of ["AT", "RT", c0.access_enc, c0.refresh_enc, "csec", "s3cret", "\"hk\"", "Token hk"]) assert.ok(!before.includes(secret), "Zugangsdaten in der Antwort: " + secret);
+  assert.deepEqual((await call("/api/admin/linkedin/status")).j, { configured: true, connected: true, org_urn: "urn:li:organization:42", org_name: "M365 Show", redirect_uri: "https://api-dub.m365.fm/auth/linkedin-events/callback", scope: LI.scope, heysummit_key: true });
+  assert.deepEqual(await call("/api/admin/linkedin/disconnect", "POST", {}), { status: 200, j: { ok: true } });
+  const c = await getConn(env.DB); assert.deepEqual([c.access_enc, c.refresh_enc, c.connected_by, c.org_name], ["", "", 0, "M365 Show"]);
+  assert.equal((await call("/api/admin/linkedin/status")).j.connected, false);
+  assert.deepEqual(await call("/api/admin/linkedin/publish", "POST", { handle: "m365con-day1", confirm: true }), { status: 400, j: { error: "not_connected" } });
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM audit WHERE action='linkedin-disconnect'").get().n, 1);
+});
+
+test("Migration 0039: zweimal anwendbar, Reservierung ist je Event und je LinkedIn-ID eindeutig", async () => {
+  const { raw } = await setup(), sql = readFileSync(new URL("../migrations/0039_linkedin_events.sql", import.meta.url), "utf8");
+  raw.exec(sql); raw.exec(sql);
+  for (const s of sql.replace(/--[^\n]*/g, "").split(";").map((x) => x.trim()).filter(Boolean)) assert.match(s, /^CREATE (TABLE|UNIQUE INDEX|INDEX) IF NOT EXISTS /);
+  raw.exec("INSERT INTO linkedin_events(event_id,published,updated) VALUES(1,1,1),(2,1,1)");   // zwei Reservierungen ohne URN vertragen sich
+  assert.deepEqual({ ...raw.prepare("SELECT urn,status FROM linkedin_events WHERE event_id=1").get() }, { urn: "", status: "pending" });
+  assert.throws(() => raw.exec("INSERT INTO linkedin_events(event_id,published,updated) VALUES(1,1,1)"), /UNIQUE|PRIMARY/);
+  raw.exec("UPDATE linkedin_events SET urn='urn:li:event:5' WHERE event_id=1");
+  assert.throws(() => raw.exec("UPDATE linkedin_events SET urn='urn:li:event:5' WHERE event_id=2"), /UNIQUE/);
+});
+
+// ---------- OAuth, Verschluesselung, Zugriff ----------
 test("OAuth-Callback: State-Pruefung (Cookie, Wert, Admin-Bindung) und Token-Speicherung verschluesselt", async () => {
   const { env } = await setup();
   const o = await oauthStartLE(env, { id: 1 }), state = new URL(o.location).searchParams.get("state");
@@ -99,7 +504,7 @@ test("OAuth-Callback: State-Pruefung (Cookie, Wert, Admin-Bindung) und Token-Spe
   assert.equal(await checkState(env, ck, state, 2), false);
   assert.equal(await checkState(env, "", state, 1), false);
   assert.equal(await checkState(env, ck.slice(0, -2) + "xx", state, 1), false);
-  const log = [], f = mockFetch(log), mk = (st) => new Request("https://x/cb", { headers: { cookie: ck } });
+  const log = [], f = mockFetch(log), mk = () => new Request("https://x/cb", { headers: { cookie: ck } });
   assert.deepEqual(await oauthCallbackLE(env, mk(), new URL("https://x/cb?code=c&state=nope"), { id: 1 }, f), { error: "bad_state" });
   assert.equal(log.length, 0);   // bei falschem State kein Token-Aufruf
   assert.deepEqual(await oauthCallbackLE(env, mk(), new URL(`https://x/cb?code=c&state=${state}`), { id: 1 }, f), { ok: true });
@@ -117,58 +522,21 @@ test("Token-Verschluesselung: Round-Trip, zufaelliger IV, falscher Schluessel sc
   assert.equal(await encryptToken(env, ""), "");
 });
 
-test("Veroeffentlichen/Aktualisieren/Absagen rufen die richtigen Endpunkte; ohne confirm nur Vorschau", async () => {
-  const { raw, env } = await setup(); await connected(env); addEv(raw);
-  const log = [], f = mockFetch(log), admin = { id: 1, admin: true };
-  const pre = await act(env, admin, "publish", "m365con-day1", false, f, NOW);
-  assert.ok(pre.preview); assert.ok(!log.some((l) => l.u.startsWith(LI.api + LI.events)));   // nichts an LinkedIn gesendet
-  const pub = await act(env, admin, "publish", "m365con-day1", true, f, NOW);
-  const post = log.find((l) => l.u === LI.api + LI.events);
-  assert.equal(post.method, "POST"); assert.equal(post.headers["LinkedIn-Version"], LI.version); assert.equal(post.headers.authorization, "Bearer AT");
-  assert.equal(JSON.parse(post.body).organizer, "urn:li:organization:42");
-  assert.equal(pub.urn, "urn:li:event:777");
-  assert.equal((await act(env, admin, "publish", "m365con-day1", true, f, NOW)).error, "already_published");
-  raw.prepare("UPDATE events SET title='Neuer Titel' WHERE id=1").run();
-  assert.equal((await proposals(env, f, NOW)).items[0].changed, true);
-  log.length = 0;
-  const ur = await act(env, admin, "update", "m365con-day1", true, f, NOW); assert.equal(ur.ok, true, JSON.stringify(ur));
-  const up = log.find((l) => l.u.includes("urn%3Ali%3Aevent%3A777"));
-  assert.equal(up.headers["X-RestLi-Method"], "PARTIAL_UPDATE");
-  const patch = JSON.parse(up.body).patch.$set; assert.equal(patch.name.value, "Neuer Titel"); assert.equal(patch.organizer, undefined);
-  assert.equal((await proposals(env, f, NOW)).items[0].changed, false);
-  log.length = 0;
-  assert.equal((await act(env, admin, "cancel", "m365con-day1", true, f, NOW)).ok, true);
-  assert.deepEqual(JSON.parse(log.find((l) => l.u.includes("urn%3Ali%3Aevent")).body), { patch: { $set: { lifecycleState: "CANCELLED" } } });
-  assert.equal(raw.prepare("SELECT status FROM linkedin_events").get().status, "cancelled");
-});
-
-test("Nicht vorschlagbare Events lassen sich nicht veroeffentlichen; ohne Verbindung/Seite Fehler", async () => {
-  const { raw, env } = await setup(); addEv(raw, { id: 2, handle: "x", start: "2027-02-20T10:00", url: "" });
-  const admin = { id: 1, admin: true }, f = mockFetch([]);
-  assert.equal((await act(env, admin, "publish", "x", true, f, NOW)).error, "not_connected");
-  await connected(env, false);
-  assert.equal((await act(env, admin, "publish", "x", true, f, NOW)).error, "no_org");
-  await env.DB.prepare("UPDATE linkedin_conn SET org_urn='urn:li:organization:42'").run();
-  assert.equal((await act(env, admin, "publish", "x", true, f, NOW)).error, "no_match");
-});
-
 test("Seitenwahl: Organisationen laden und URN speichern (nur gueltige URN)", async () => {
   const { env } = await setup(); await connected(env, false);
-  const f = mockFetch([]), admin = { id: 1, admin: true };
-  const call = (path, method = "GET", body) => handleLinkedinEvents(env, new Request("https://x" + path, { method, body: body && JSON.stringify(body) }), new URL("https://x" + path), path, admin, J, f).then((r) => r.json());
-  assert.deepEqual((await call("/api/admin/linkedin/orgs")).orgs, [{ urn: "urn:li:organization:42", name: "M365 Show" }]);
-  assert.equal((await call("/api/admin/linkedin/org", "POST", { urn: "evil" })).error, "bad_urn");
-  assert.equal((await call("/api/admin/linkedin/org", "POST", { urn: "urn:li:organization:42", name: "M365 Show" })).ok, true);
+  const call = rest(env, mockFetch([]));
+  assert.deepEqual((await call("/api/admin/linkedin/orgs")).j.orgs, [{ urn: "urn:li:organization:42", name: "M365 Show" }]);
+  assert.equal((await call("/api/admin/linkedin/org", "POST", { urn: "evil" })).j.error, "bad_urn");
+  assert.equal((await call("/api/admin/linkedin/org", "POST", { urn: "urn:li:organization:42", name: "M365 Show" })).j.ok, true);
   assert.equal((await getConn(env.DB)).org_name, "M365 Show");
 });
 
 test("Nur Admin: REST, MCP und Event-Export ohne Token", async () => {
   const { raw, env } = await setup(); await connected(env); addEv(raw);
   const f = mockFetch([]);
-  for (const [p, m] of [["/api/admin/linkedin/status", "GET"], ["/api/admin/linkedin/proposals", "GET"], ["/api/admin/linkedin/publish", "POST"], ["/api/admin/linkedin/cancel", "POST"]]) {
-    for (const u of [null, { id: 2, admin: false }]) assert.equal((await handleLinkedinEvents(env, new Request("https://x" + p, { method: m, body: m === "POST" ? "{}" : undefined }), new URL("https://x" + p), p, u, J, f)).status, 403);
-  }
-  assert.equal((await act(env, { id: 2, admin: false }, "publish", "m365con-day1", true, f, NOW)).error, "forbidden");
+  for (const r of routes().filter((x) => x.startsWith("/api/admin/linkedin/"))) for (const m of ["GET", "POST"]) for (const u of [null, { id: 2, admin: false }])
+    assert.equal((await rest(env, f, u)(r, m, m === "POST" ? { handle: "m365con-day1", event_id: 1, confirm: true } : undefined)).status, 403, `${m} ${r}`);
+  for (const a of ["publish", "update", "cancel", "resolve", "release"]) assert.equal((await act(env, { id: 2, admin: false }, a, "m365con-day1", true, f, NOW)).error, "forbidden");
   const user = { id: 2, admin: false };
   assert.equal((await callTool(env, user, "linkedin_event_proposals", {})).error, "forbidden");
   assert.equal((await callTool(env, user, "publish_linkedin_event", { handle: "m365con-day1" })).error, "forbidden");
@@ -176,22 +544,94 @@ test("Nur Admin: REST, MCP und Event-Export ohne Token", async () => {
   const txt = await pub.text(); assert.ok(!txt.includes("AT") || !/access|token|urn:li:organization/.test(txt));
 });
 
-test("MCP publish_linkedin_event veroeffentlicht nie, nur Vorschau", async () => {
-  const { raw, env } = await setup(); await connected(env); addEv(raw);
+test("MCP publish_linkedin_event veroeffentlicht nie, nur Vorschau", async (t) => {
+  freeze(t, NOW); const { raw, env } = await setup(); await connected(env); addEv(raw);
   const log = [], realFetch = globalThis.fetch; globalThis.fetch = mockFetch(log);
   try {
-    const out = await callTool(env, { id: 1, admin: true }, "publish_linkedin_event", { handle: "m365con-day1", confirm: true });
-    assert.ok(out.preview); assert.ok(!log.some((l) => l.u.startsWith(LI.api + LI.events)));
+    const out = await callTool(env, ADMIN, "publish_linkedin_event", { handle: "m365con-day1", confirm: true });
+    assert.ok(out.preview); assert.equal(out.confirm_in_browser, "https://www.m365.fm/admin/#li"); assert.equal(creates(log), 0);
     assert.equal(raw.prepare("SELECT COUNT(*) n FROM linkedin_events").get().n, 0);
+    const list = await callTool(env, ADMIN, "linkedin_event_proposals", {});
+    assert.deepEqual(list.items.map((x) => [x.handle, x.state]), [["m365con-day1", "proposal"]]);
   } finally { globalThis.fetch = realFetch; }
 });
 
-test("Event-Export zeigt die LinkedIn-URL erst nach der Veroeffentlichung", async () => {
+test("Event-Export zeigt die LinkedIn-URL nur fuer veroeffentlichte Events (nicht reserviert, nicht abgesagt)", async () => {
   const { raw, env } = await setup(); addEv(raw);
   const get = async () => (await (await handleEvents(env, new Request("https://x/api/events/export"), new URL("https://x/api/events/export"), "/api/events/export", null, J)).json()).events[0];
   assert.equal((await get()).linkedin_url, "");
-  raw.prepare("INSERT INTO linkedin_events(event_id,urn,url,status,published,updated) VALUES(1,'urn:li:event:777','https://www.linkedin.com/events/777/','published',1,1)").run();
+  raw.prepare("INSERT INTO linkedin_events(event_id,published,updated) VALUES(1,1,1)").run();
+  assert.equal((await get()).linkedin_url, "", "Reservierung");
+  raw.prepare("UPDATE linkedin_events SET urn='urn:li:event:777',url='https://www.linkedin.com/events/777/',status='published'").run();
   assert.equal((await get()).linkedin_url, "https://www.linkedin.com/events/777/");
   raw.prepare("UPDATE linkedin_events SET status='cancelled'").run();
   assert.equal((await get()).linkedin_url, "");
+});
+
+// ---------- Admin-Reiter (assets/admin.js unveraendert in node:vm, kleines Schein-DOM, Aufrufe gehen an den echten Handler) ----------
+function fakeDom() {
+  class Text { constructor(t) { this.nodeType = 3; this.data = String(t); } get textContent() { return this.data; } }
+  class El {
+    constructor(tag) { this.nodeType = 1; this.tagName = tag.toUpperCase(); this.attrs = {}; this.childNodes = []; this.className = ""; this.disabled = false; }
+    setAttribute(k, v) { this.attrs[k] = String(v); }
+    getAttribute(k) { return this.attrs[k] ?? null; }
+    get hidden() { return "hidden" in this.attrs; }
+    set hidden(v) { if (v) this.attrs.hidden = ""; else delete this.attrs.hidden; }
+    appendChild(c) { this.childNodes.push(c); return c; }
+    append(...cs) { for (const c of cs) this.appendChild(typeof c === "string" ? new Text(c) : c); }
+    get textContent() { return this.childNodes.map((n) => n.textContent).join(""); }
+    set textContent(t) { this.childNodes = []; if (t != null && t !== "") this.childNodes.push(new Text(t)); }
+    get innerHTML() { throw new Error("innerHTML in admin.js"); }
+    set innerHTML(_) { throw new Error("innerHTML in admin.js"); }
+    all(tag) { const out = []; const walk = (n) => { for (const c of n.childNodes) if (c.nodeType === 1) { if (c.tagName === tag.toUpperCase()) out.push(c); walk(c); } }; walk(this); return out; }
+    querySelector(sel) { const m = /^\[([\w-]+)=([\w-]+)\]$/.exec(sel); if (!m) throw new Error("Selektor nicht unterstuetzt: " + sel); let hit = null; const walk = (n) => { for (const c of n.childNodes) if (c.nodeType === 1 && !hit) { if (c.attrs[m[1]] === m[2]) hit = c; else walk(c); } }; walk(this); return hit; }
+  }
+  const root = new El("div");
+  return { root, document: { createElement: (t) => new El(t), createTextNode: (t) => new Text(t), getElementById: (id) => (id === "adm" ? root : null) } };
+}
+async function until(cond, what) { for (let i = 0; i < 500; i++) { if (cond()) return; await new Promise((r) => setTimeout(r, 2)); } assert.fail("Zeitueberschreitung: " + what); }
+
+test("Admin-Reiter: Knoepfe folgen dem Server; eine haengende Veroeffentlichung laesst sich dort klaeren, ein verwaister Event dort absagen", async (t) => {
+  freeze(t, NOW);
+  const { raw, env } = await setup(); await connected(env); addEv(raw, { free: 0, mode: "onsite", location: "Köln" });
+  const log = [], sent = [], o = { create: () => new Response("", { status: 201 }) }, f = mockFetch(log, { create: () => o.create() });
+  const { root, document } = fakeDom(), asked = [];
+  const fetch = async (url, init = {}) => {
+    const u = new URL(url); if (u.pathname === "/api/admin/panel/overview") return J({ queues: {} });
+    sent.push({ path: u.pathname, method: init.method || "GET", xrw: (init.headers || {})["x-requested-with"], body: init.body ? JSON.parse(init.body) : undefined });
+    return handleLinkedinEvents(env, new Request(u, { method: init.method || "GET", headers: init.headers, body: init.body }), u, u.pathname, ADMIN, J, f);
+  };
+  const win = { M365ADM: { api: "https://api.test", base: "" }, confirm: (q) => { asked.push(q); return true; }, prompt: () => "" };
+  vm.runInContext(readFileSync(new URL("../../assets/admin.js", import.meta.url), "utf8"), vm.createContext({ window: win, document, location: { hash: "#li", search: "" }, fetch, setTimeout }), { filename: "assets/admin.js" });
+  const pane = () => root.all("section").find((x) => x.all("h2")[0]?.textContent === "LinkedIn-Events (Vorschläge)"), rows = () => (pane()?.all("tbody")[0]?.all("tr") || []).map((tr) => tr.all("td"));
+  const buttons = (cells) => cells[5].all("button"), names = (cells) => buttons(cells).map((b) => b.textContent), note = () => pane().all("p").find((x) => x.className.startsWith("adm-msg")).textContent;
+  const click = (b) => b.onclick({ target: b }), reload = () => click(root.querySelector("[data-k=li]"));
+  const state = (txt) => until(() => rows().length === 1 && rows()[0][5].textContent.startsWith(txt), txt + " / ist: " + (rows()[0]?.[5].textContent || pane()?.textContent));
+
+  await state("Vorschlag");
+  assert.deepEqual(rows()[0].slice(0, 3).map((c) => c.textContent), ["M365Con Day 1", "11.01.2027, 08:00 – 11.01.2027, 17:00", "Vor Ort, kostenpflichtig"]);
+  assert.match(rows()[0][4].textContent, /Ort: Köln/); assert.doesNotMatch(rows()[0][4].textContent, /kostenlos anmelden/i);
+  assert.deepEqual(names(rows()[0]), ["Auf LinkedIn veröffentlichen"]);
+  // 1) Veroeffentlichen, LinkedIn nennt keine ID: Hinweis, Zeile "offen", waehrend der Wartezeit kein Knopf
+  click(buttons(rows()[0])[0]); await state("Veröffentlichung offen");
+  assert.match(asked.at(-1), /^Jetzt öffentlich auf LinkedIn veröffentlichen\?\n\nM365Con Day 1\n/);
+  assert.deepEqual(sent.at(-3), { path: "/api/admin/linkedin/publish", method: "POST", xrw: "m365", body: { event_id: 1, confirm: true } });
+  assert.match(note(), /keine Event-ID.*auf LinkedIn nachsehen/); assert.deepEqual(names(rows()[0]), []); assert.match(rows()[0][5].textContent, /klären in 2 Min\. möglich/);
+  // 2) nach der Wartezeit: ID eintragen oder freigeben; freigeben -> wieder Vorschlag
+  t.mock.timers.setTime(LATER); reload(); await until(() => rows().length === 1 && names(rows()[0]).length === 2, "Knoepfe zum Klaeren");
+  assert.deepEqual(names(rows()[0]), ["LinkedIn-ID eintragen", "Reservierung freigeben"]);
+  click(buttons(rows()[0])[0]); assert.equal(sent.at(-1).path, "/api/admin/linkedin/proposals", "ohne Eingabe im Dialog geht nichts raus");
+  click(buttons(rows()[0])[1]); await state("Vorschlag");
+  assert.match(asked.at(-1), /KEIN Event/); assert.deepEqual(liRows(raw), []);
+  // 3) jetzt klappt es: veroeffentlicht, Link, nur "Absagen" (nichts geaendert)
+  o.create = () => new Response("", { status: 201, headers: { "x-restli-id": "7123456789012345678" } });
+  click(buttons(rows()[0])[0]); await state("Veröffentlicht");
+  assert.deepEqual(names(rows()[0]), ["Absagen"]); assert.equal(rows()[0][5].all("a")[0].getAttribute("href"), "https://www.linkedin.com/events/7123456789012345678/");
+  assert.equal(creates(log), 2);
+  // 4) m365.fm-Event geloescht: Zeile bleibt als verwaist mit "Absagen"; danach ist die Liste leer
+  raw.exec("DELETE FROM events WHERE id=1"); reload(); await state("Veröffentlicht · m365.fm-Event gelöscht");
+  assert.deepEqual(names(rows()[0]), ["Absagen"]);
+  click(buttons(rows()[0])[0]); await until(() => /Keine Vorschläge/.test(pane().textContent), "leere Liste");
+  assert.deepEqual(sent.findLast((x) => x.method === "POST"), { path: "/api/admin/linkedin/cancel", method: "POST", xrw: "m365", body: { event_id: 1, confirm: true } });
+  assert.deepEqual(liRows(raw), []); assert.equal(patches(log).length, 1);
 });
