@@ -151,7 +151,7 @@ def translations(BASE, posts, ents):
         for s in srcs:
             o = orig.get((s["author"], s["cp_slug"]))
             if o: OVR.note_blog(lang, s["slug"], s, data.get(s["slug"]))
-            r = TB.assemble(s, data.get(s["slug"])) if o else None
+            r = TB.assemble(s, data.get(s["slug"]), lang) if o else None
             if not r: continue
             title, desc, html, faq = r
             out.append({**{k: o[k] for k in COPY if k in o}, "lang": lang, "title": title, "summary": (desc or "")[:400], "body": "", "html": html, "keypoints": [], "votes": 0,

@@ -38,16 +38,17 @@ def build(write, BASE, TODAY, posts):
     # Uebersetzungen der Folgen (Titel, Teaser, Show Notes)
     tr = []
     I18 = ROOT / "data" / "podpage_i18n"
+    import i18n_overrides as _OVR
     for l in LANGS:
         f = I18 / f"{l}.json"
         if f.exists():
-            for slug, v in json.loads(f.read_text("utf-8")).items():
+            for slug, v in _OVR.apply_show(l, json.loads(f.read_text("utf-8"))).items():
                 if not v or not v[0]: continue
                 tr.append({"kind": "episode", "id": slug, "lang": l, "field": "title", "text": v[0], "src": "haiku"})
                 if len(v) > 1 and v[1]: tr.append({"kind": "episode", "id": slug, "lang": l, "field": "summary", "text": v[1], "src": "haiku"})
         f = I18 / f"notes_{l}.json"
         if f.exists():
-            for slug, v in json.loads(f.read_text("utf-8")).items():
+            for slug, v in _OVR.apply_notes(l, json.loads(f.read_text("utf-8"))).items():
                 if v: tr.append({"kind": "episode", "id": slug, "lang": l, "field": "notes_html", "text": v if isinstance(v, str) else json.dumps(v, ensure_ascii=False), "src": "haiku"})
     for l in LANGS:   # je Sprache eine Datei (Worker-Speicher); der Worker nimmt je Lauf eine Sprache
         items = [x for x in tr if x["lang"] == l]

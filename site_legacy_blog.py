@@ -62,7 +62,7 @@ def translations(BASE, posts_by_slug, fixhtml):
         data = OVR.apply_blog(lang, TB.load_lang(lang)); n = 0
         for slug, p in posts_by_slug.items():
             OVR.note_blog(lang, slug, p["src"], data.get(slug))
-            r = TB.assemble(p["src"], data.get(slug))
+            r = TB.assemble(p["src"], data.get(slug), lang)
             if not r: continue
             title, desc, html, faq = r
             html = fixhtml(html)
