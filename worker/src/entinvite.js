@@ -3,7 +3,7 @@
 import { mailReady, sendMail } from "./mailer.js";
 import { esc, randomToken, rateLimit, cleanText } from "./util.js";
 import { claimEntity } from "./events.js";
-import { maskEmail } from "./perm.js";
+import { maskEmail } from "./claimverify.js";   // ein Helfer, ein Format (m***@example.com)
 
 const now = () => Math.floor(Date.now() / 1000);
 const EID = /^[a-z0-9][a-z0-9-]{1,78}$/;

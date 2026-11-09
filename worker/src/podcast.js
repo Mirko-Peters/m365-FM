@@ -1,6 +1,7 @@
 // Community-Podcast: Mitglieder reichen Episoden ein (Audio -> Entwurf bei Spreaker), die Community stimmt ab,
 // ab der Schwelle prueft Mirko in Spreaker und veroeffentlicht dort; der Cron erkennt die Veroeffentlichung.
-import { logEdit } from "./perm.js";
+import { gate, inScope } from "./perm.js";
+import { decide } from "./editor.js";
 import { guestsOf, dropGuests } from "./credits.js";
 import { cleanText, rateLimit, isLang } from "./util.js";
 import { baseIds } from "./entities.js";
@@ -57,6 +58,14 @@ export async function pollPodcast(env) {
   return { published: pub, expired: old.length };
 }
 
+// Pitch ablehnen (nur ueber editor.js decide()): Entwurf bei Spreaker entfernen, Status setzen. -> false, wenn es die Episode nicht gibt
+export async function rejectPitch(env, id, note) {
+  const db = env.DB, ep = await db.prepare("SELECT * FROM pod_episodes WHERE id=?").bind(+id).first(); if (!ep) return false;
+  await dropDraft(env, ep);
+  await db.prepare("UPDATE pod_episodes SET status='rejected',note=?,updated=? WHERE id=?").bind(txt(note || "", 300), now(), ep.id).run();
+  return true;
+}
+
 export async function deleteUserPodcast(db, uid) {
   await db.batch([db.prepare("DELETE FROM pod_votes WHERE user_id=? OR ep_id IN (SELECT id FROM pod_episodes WHERE user_id=?)").bind(uid, uid), db.prepare("DELETE FROM pod_episodes WHERE user_id=?").bind(uid)]);
 }
@@ -82,17 +91,14 @@ export async function handlePodcast(env, request, url, path, user, J) {
   }
 
   if (path.startsWith("/api/admin/podcast")) {
-    if (!user || !(user.admin || user.editor)) return J({ error: "forbidden" }, 403);
+    const g = await gate(db, user, "queue.review"); if (!g.ok) return J({ error: "forbidden" }, 403);   // Editoren und Admin (perm.js can())
     if (path === "/api/admin/podcast" && method === "GET") {
-      const rows = (await db.prepare("SELECT e.id,e.title,e.description,e.lang,e.status,e.spreaker_id,e.ai,e.created,u.name,(SELECT COUNT(*) FROM pod_votes v WHERE v.ep_id=e.id) votes FROM pod_episodes e JOIN users u ON u.id=e.user_id WHERE e.status IN ('review','submitted') ORDER BY (e.status='review') DESC, e.created").all()).results || [];
-      return J({ items: rows.map((r) => ({ ...r, spreaker: r.spreaker_id ? `https://www.spreaker.com/episode/${r.spreaker_id}` : "" })), threshold: THRESHOLD });
+      const rows = (await db.prepare("SELECT e.id,e.title,e.description,e.lang,e.topics,e.status,e.spreaker_id,e.ai,e.created,u.name,(SELECT COUNT(*) FROM pod_votes v WHERE v.ep_id=e.id) votes FROM pod_episodes e JOIN users u ON u.id=e.user_id WHERE e.status IN ('review','submitted') ORDER BY (e.status='review') DESC, e.created").all()).results || [];
+      return J({ items: rows.filter((r) => inScope(g.actor, { topics: parse(r.topics, []), lang: r.lang })).map(({ topics, ...r }) => ({ ...r, spreaker: r.spreaker_id ? `https://www.spreaker.com/episode/${r.spreaker_id}` : "" })), threshold: THRESHOLD });
     }
-    if (path === "/api/admin/podcast/reject" && method === "POST") {
-      const b = await request.json().catch(() => ({})), ep = await db.prepare("SELECT * FROM pod_episodes WHERE id=?").bind(+b.id).first(); if (!ep) return J({ error: "not_found" }, 404);
-      await dropDraft(env, ep);
-      await db.prepare("UPDATE pod_episodes SET status='rejected',note=?,updated=? WHERE id=?").bind(txt(b.note || "", 300), now(), ep.id).run();
-      if (!user._viaEditor) await logEdit(db, user, "review.reject", "podcast", ep.id, { reason: b.note || "", before: { status: ep.status }, after: { status: "rejected" } });
-      return J({ ok: true });
+    if (path === "/api/admin/podcast/reject" && method === "POST") {   // Entscheidung: can() (eigener Inhalt, eigene Firma, Fachbereich, Tageslimit) und Protokoll in editor.js decide()
+      const b = await request.json().catch(() => ({})), r = await decide(env, user, { kind: "podcast", id: String(+b.id), action: "reject", reason: b.note || "", legacy: true });
+      return J(r.body, r.status);
     }
     if (path === "/api/admin/podcast/poll" && method === "POST") return J(await pollPodcast(env));
     return null;

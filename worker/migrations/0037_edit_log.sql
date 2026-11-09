@@ -89,7 +89,7 @@ CREATE TABLE IF NOT EXISTS i18n_override (
   kind TEXT NOT NULL,            -- lblog | episode | notes
   item TEXT NOT NULL,            -- Slug (Blog-Pakete: content/<slug>)
   lang TEXT NOT NULL,
-  unit TEXT NOT NULL,            -- Absatz-ID (T, D, Q1, A1, 1..n; episode: title, summary; notes: n0..)
+  unit TEXT NOT NULL,            -- Einheit (lblog: T, D, Q1, A1, 1..n; episode: title, summary; notes: html); Quell-Anker src_hash: Migration 0041
   text TEXT NOT NULL,
   by INTEGER NOT NULL,
   ts INTEGER NOT NULL,
@@ -109,7 +109,8 @@ CREATE TABLE IF NOT EXISTS i18n_override_rev (
   ts INTEGER NOT NULL
 );
 CREATE INDEX IF NOT EXISTS i18n_override_rev_unit ON i18n_override_rev(kind, item, lang, unit, id);
--- Wunsch "Geaenderte Absaetze neu uebersetzen": nur vermerkt, ein spaeterer Workflow-Lauf mit --stale holt die Wuensche ab (kein API-Aufruf im Worker)
+-- Wunsch "Geaenderte Absaetze neu uebersetzen": nur vermerkt, ein Uebersetzungslauf mit --stale --wishes holt die Wuensche ab (kein API-Aufruf im Worker).
+-- Erledigte Wuensche werden geloescht (/api/i18n/retranslate/done): die Tabelle haelt nur offene Zeilen, je Eintrag und Sprache hoechstens eine.
 CREATE TABLE IF NOT EXISTS i18n_retranslate_req (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   kind TEXT NOT NULL,
@@ -118,6 +119,6 @@ CREATE TABLE IF NOT EXISTS i18n_retranslate_req (
   units TEXT NOT NULL DEFAULT '[]',
   by INTEGER NOT NULL,
   ts INTEGER NOT NULL,
-  status TEXT NOT NULL DEFAULT 'open',   -- open | done
+  status TEXT NOT NULL DEFAULT 'open',   -- immer open (erledigt = Zeile geloescht)
   UNIQUE (kind, item, lang, status)
 );

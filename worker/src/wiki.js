@@ -1,5 +1,6 @@
 // Community-Wiki fuer Glossarbegriffe: kurze Ergaenzung zur Kurzinfo, Revisionen, Moderation
-import { decide } from "./editor.js";
+import { legacyRev } from "./editor.js";
+import { gate, inScope, roleOf, logEdit } from "./perm.js";
 import { cleanText, rateLimit, isLang } from "./util.js";
 import { stats, evalBadges } from "./badges.js";
 import { baseIds } from "./entities.js";
@@ -10,7 +11,8 @@ const now = () => Math.floor(Date.now() / 1000);
 const TRUST_POINTS = 25;   // ab so vielen Punkten duerfen Beitraege sofort live gehen
 const AUTO_REVERT = 3;     // so viele Meldungen blenden eine Revision aus
 
-const MAX_BODY = 12000, MAX_REFS = 25, MAX_IMGS = 10, MAX_LINKS = 40;
+export const MAX_BODY = 12000;
+const MAX_REFS = 25, MAX_IMGS = 10, MAX_LINKS = 40;
 const BAD_HOST = /(^|\.)(bit\.ly|t\.co|tinyurl\.com|goo\.gl|is\.gd|ow\.ly|buff\.ly|cutt\.ly|rebrand\.ly|shorturl\.at)$/i;
 // Markup: ## / ### Ueberschriften, **fett**, *kursiv*, - Listen, 1. Listen, > Zitat, [[id|Text]] interne Links,
 // {{ref|Titel|https://url|Herausgeber|Datum}} Quelle als Fussnote, {{cn}} = Beleg fehlt. Links sonst nur ueber Quellen.
@@ -104,6 +106,10 @@ export async function handleWiki(env, request, url, path, user, J) {
         db.prepare("UPDATE wiki_rev SET status='old' WHERE term=? AND lang=? AND status='live'").bind(term, lang),
         db.prepare("INSERT INTO wiki_rev(term,lang,body,summary,user_id,status,created) VALUES(?,?,?,?,?,'live',?)").bind(term, lang, body, summary, user.id, t),
       ]);
+      if (roleOf(user) !== "user") {   // Redaktion schreibt live: mit der Rolle zum Zeitpunkt der Aenderung im Protokoll (daran haengt, wer es zuruecksetzen darf)
+        const rid = (await db.prepare("SELECT id FROM wiki_rev WHERE term=? AND lang=? AND user_id=? AND status='live' ORDER BY id DESC LIMIT 1").bind(term, lang, user.id).first())?.id;
+        if (rid) await logEdit(db, user, "entity.edit_live", "wiki", rid, { reason: summary });
+      }
       await evalBadges(env, user.id);
       return J({ ok: true, status: "live" });
     }
@@ -132,22 +138,12 @@ export async function handleWiki(env, request, url, path, user, J) {
   }
 
   if (path.startsWith("/api/admin/wiki")) {
-    if (!(user?.admin || user?.editor)) return J({ error: "forbidden" }, 403);
+    const g = await gate(db, user, "queue.review"); if (!g.ok) return J({ error: "forbidden" }, 403);   // Editoren und Admin (perm.js can())
     if (path === "/api/admin/wiki/pending" && method === "GET") {
       const rows = (await db.prepare("SELECT r.id,r.term,r.lang,r.body,r.summary,r.created,COALESCE(u.name,'') name FROM wiki_rev r LEFT JOIN users u ON u.id=r.user_id WHERE r.status='pending' ORDER BY r.created ASC LIMIT 50").all()).results || [];
-      return J({ pending: rows });
+      return J({ pending: rows.filter((r) => inScope(g.actor, { topics: [r.term], lang: r.lang })) });   // Fach-Editor: nur der eigene Bereich
     }
-    if ((m = /^\/api\/admin\/wiki\/(approve|reject|restore)\/(\d+)$/.exec(path)) && method === "POST") {
-      if (m[1] !== "restore") { const r = await decide(env, user, { kind: "wiki", id: m[2], action: m[1], legacy: true }); return J(r.body, r.status); }   // can() + Protokoll in editor.js
-      const r = await db.prepare("SELECT id,term,lang,status,user_id FROM wiki_rev WHERE id=?").bind(+m[2]).first();
-      if (!r) return J({ error: "not_found" }, 404);
-      await db.batch([
-        db.prepare("UPDATE wiki_rev SET status='old' WHERE term=? AND lang=? AND status='live'").bind(r.term, r.lang),
-        db.prepare("UPDATE wiki_rev SET status='live' WHERE id=?").bind(r.id),
-      ]);
-      if (r.user_id) await evalBadges(env, r.user_id);
-      return J({ ok: true });
-    }
+    if ((m = /^\/api\/admin\/wiki\/(approve|reject|restore)\/(\d+)$/.exec(path)) && method === "POST") { const r = await legacyRev(env, user, "wiki", m[2], m[1]); return J(r.body, r.status); }   // can() + Protokoll in editor.js (Freigabe: decide, fruehere Fassung: revertTo)
   }
   return null;
 }

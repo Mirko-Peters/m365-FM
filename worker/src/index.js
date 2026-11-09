@@ -8,10 +8,10 @@ import { importLegacyBlog } from "./legacyblog.js";
 import { importContentBlog } from "./contentblog.js";
 import { handleA2a } from "./a2a.js";
 import { handleAdminPanel } from "./adminpanel.js";
-import { handleEditor, decide } from "./editor.js";
-import { syncAutoRoles } from "./roles.js";
+import { handleEditor, decide, deleteUserEditorial } from "./editor.js";
+import { syncAutoRoles, closeObsolete } from "./roles.js";
 import { handleI18nPublic } from "./i18n_edit.js";
-import { can, roleOf, isStaff, publicRoles, loadActor, logEdit } from "./perm.js";
+import { can, roleOf, isStaff, inScope, publicRoles, loadActor, logEdit } from "./perm.js";
 import { handleSponsor, handleSponsorLink } from "./sponsor.js";
 import { handleAds, handlePaypalWebhook } from "./ads.js";
 import { handleSponsorOrders } from "./sponsor_orders.js";
@@ -226,6 +226,7 @@ async function deleteAccount(env, id) {
     db.prepare("DELETE FROM push_subs WHERE user_id=?").bind(id), db.prepare("DELETE FROM wiki_reports WHERE user_id=?").bind(id), db.prepare("DELETE FROM wiki_rev WHERE user_id=? AND status IN ('pending','rejected')").bind(id), db.prepare("UPDATE wiki_rev SET user_id=0 WHERE user_id=?").bind(id), db.prepare("DELETE FROM curators WHERE user_id=?").bind(id), db.prepare("DELETE FROM user_identities WHERE user_id=?").bind(id), db.prepare("DELETE FROM users WHERE id=?").bind(id),
   ]);
   await deleteUserEvents(db, id);
+  await deleteUserEditorial(db, id);   // Redaktion (Migration 0037): vor deleteUserBlog, weil der Verlauf an den Beitraegen des Kontos haengt
   await deleteUserMessages(db, id); await deleteUserTokens(db, id); await deleteUserQa(db, id); await deleteUserBlog(db, id); await deleteUserLibrary(db, id); await deleteUserPodcast(db, id); await deleteUserVideos(db, id); await deleteUserGuests(db, id); await deleteUserGuestCredits(db, id);
   await deleteUserData(db, id); await deleteUserExpertRequests(env, id);
 }
@@ -534,15 +535,16 @@ async function api(env, request, url, path, asUser, ctx) {
   if (path.startsWith("/api/admin/")) {
     const keyOk = env.CRON_KEY && (request.headers.get("x-cron-key") === env.CRON_KEY || url.searchParams.get("key") === env.CRON_KEY);   // Header bevorzugt (Query landet in Logs)
     if ((path === "/api/admin/run-weekly" || path === "/api/admin/run-daily") && keyOk) return J(await runDigest(env, { dry: url.searchParams.get("dry") === "1" }));
-    if (isStaff(user) && !user.admin && path === "/api/admin/reports" && method === "GET") {   // Redaktion/Moderation: gemeldete Kommentare (Lesen)
-      const rows = (await db.prepare("SELECT c.id,c.vid,c.lang,c.body,c.status,c.user_id,(SELECT COUNT(*) FROM reports r WHERE r.comment_id=c.id) n FROM comments c WHERE c.id IN (SELECT comment_id FROM reports) ORDER BY n DESC LIMIT 50").all()).results || [];
+    if (isStaff(user) && !user.admin && path === "/api/admin/reports" && method === "GET") {   // Redaktion/Moderation: gemeldete Kommentare (Lesen); Fach-Editoren sehen sie nicht (kein Thema)
+      const actor = await loadActor(db, user); if (!can(actor, "queue.view").ok || !inScope(actor, {})) return J({ error: "forbidden" }, 403);
+      const rows = (await db.prepare("SELECT c.id,c.vid,c.lang,c.body,c.status,(SELECT COUNT(*) FROM reports r WHERE r.comment_id=c.id) n FROM comments c WHERE c.id IN (SELECT comment_id FROM reports) ORDER BY n DESC LIMIT 50").all()).results || [];
       return J({ reports: rows });
     }
     if (isStaff(user) && !user.admin && (m = /^\/api\/admin\/(hide|show)\/(\d+)$/.exec(path)) && method === "POST") {   // wie Admin, aber ueber can() und mit Protokoll
       const r = await decide(env, user, { kind: "comment", id: m[2], action: m[1] === "hide" ? "hide" : "resolve", reason: "" });
       return J(r.body, r.status);
     }
-    if (!user?.admin) return J({ error: "forbidden" }, 403);
+    if (!can(user, "role.assign").ok) return J({ error: "forbidden" }, 403);   // alles Weitere (Rollen, Sperren, Nutzerliste) nur Admin
     if (path === "/api/admin/expertise-sync" && method === "POST") { const r = await syncExpertise(env, entityMap); await audit(db, user.id, "expertise-sync", "", JSON.stringify(r)); return J(r); }   // Stufen sofort neu berechnen
     if (path === "/api/admin/reports" && method === "GET") {
       const rows = (await db.prepare("SELECT c.id,c.vid,c.lang,c.body,c.status,c.user_id,(SELECT COUNT(*) FROM reports r WHERE r.comment_id=c.id) n FROM comments c WHERE c.id IN (SELECT comment_id FROM reports) ORDER BY n DESC LIMIT 50").all()).results || [];
@@ -557,6 +559,7 @@ async function api(env, request, url, path, asUser, ctx) {
     if ((m = /^\/api\/admin\/role\/(\d+)$/.exec(path)) && method === "POST") {
       const b = await request.json().catch(() => ({})), role = ["editor", "moderator", "admin"].includes(b.role) ? b.role : "user";   // Rollen in der Datenbank: user, moderator, editor, admin
       await db.prepare("UPDATE users SET role=?,role_source='manual' WHERE id=?").bind(role, +m[1]).run(); await audit(db, user.id, "role", m[1], role); await logEdit(db, user, "admin.role", "user", m[1], { reason: role });
+      await closeObsolete(db, +m[1]);   // eine offene Bewerbung um diese (oder eine niedrigere) Rolle hat sich damit erledigt
       await evalBadges(env, +m[1]);
       return J({ ok: true, role });
     }

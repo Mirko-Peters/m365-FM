@@ -7,6 +7,7 @@ import { cleanUrl } from "./profiles.js";
 import { stats } from "./badges.js";
 import { ensureDirectoryCols, geocodeAddress, recordGeocodeStatus } from "./directory.js";
 import { adoptUnclaimedForEntity } from "./orgpair.js";
+import { gate, inScope, logEdit } from "./perm.js";
 
 const FREE_ASKS = 2, ASK_COST = 1000;
 const HANDLE = /^[a-z0-9][a-z0-9-]{2,39}$/, PH = /^[a-z0-9][a-z0-9-]{2,29}$/;
@@ -590,11 +591,11 @@ export async function handleEvents(env, request, url, path, user, J) {
     return J({ claims: (await db.prepare("SELECT eid,status,fwd_mask,verified_via,verified_domain FROM entity_claims WHERE user_id=?").bind(user.id).all()).results || [] });
   }
   if (path === "/api/admin/entity/claims" && method === "GET") {
-    if (!(user?.admin || user?.editor)) return J({ error: "forbidden" }, 403);
+    const g = await gate(db, user, "queue.review"); if (!g.ok) return J({ error: "forbidden" }, 403);   // Editoren und Admin (perm.js can())
     const rows = (await db.prepare("SELECT c.eid,c.user_id,c.via,c.status,c.fwd_mask,c.verified_domain,u.name,u.provider,p.handle,up.real_name,cr.picture FROM entity_claims c JOIN users u ON u.id=c.user_id LEFT JOIN profiles p ON p.user_id=c.user_id LEFT JOIN user_prefs up ON up.user_id=c.user_id LEFT JOIN entity_claim_review cr ON cr.eid=c.eid WHERE c.status IN ('pending','email_sent','forwarded')").all()).results || [];
     const entities = await entityMap(env);
     const dv = (await db.prepare("SELECT c.eid,c.verified_domain domain,u.name FROM entity_claims c JOIN users u ON u.id=c.user_id WHERE c.status='verified' AND c.verified_via='domain_email' ORDER BY c.created DESC LIMIT 20").all()).results || [];
-    return J({ domain_verified: dv, claims: rows.map((r) => {
+    return J({ domain_verified: dv.filter((r) => inScope(g.actor, { topics: [r.eid] })), claims: rows.filter((r) => inScope(g.actor, { topics: [r.eid] })).map((r) => {
       const entity = entities.get(r.eid) || {}, name = r.real_name || r.name, entityName = entity.name || r.eid;
       const linkedin = r.via === "linkedin" && r.provider === "linkedin";
       const link = linkedin ? (Array.isArray(entity.same_as) ? entity.same_as : []).find(linkedinProfile) || "" : "";
@@ -603,11 +604,15 @@ export async function handleEvents(env, request, url, path, user, J) {
     }) });
   }
   if (path === "/api/admin/entity/claim" && method === "POST") {
-    if (!(user?.admin || user?.editor)) return J({ error: "forbidden" }, 403);
+    // Uebernahme bestaetigen, ablehnen oder widerrufen: can(claim.decide) - nie die eigene Uebernahme, nie die eines Kollegen der eigenen Firma,
+    // Fach-Editoren nur in ihrem Bereich, Moderatoren gar nicht; jede Entscheidung steht im Protokoll.
+    const pre = await gate(db, user, "queue.review"); if (!pre.ok) return J({ error: "forbidden" }, 403);
     const b = await body(), eid = String(b.eid || "").toLowerCase();
+    const claimGate = (uid) => gate(db, user, "claim.decide", { ownerId: uid, topics: [eid] });
     if (EID.test(eid) && b.revoke === true) {   // per Firmen-E-Mail automatisch bestaetigte Uebernahme zuruecknehmen (Missbrauch, falsche Domain)
       const c = await db.prepare("SELECT user_id FROM entity_claims WHERE eid=? AND status='verified' AND verified_via='domain_email'").bind(eid).first();
       if (!c) return J({ error: "not_found" }, 404);
+      const g = await claimGate(c.user_id); if (!g.ok) return J({ error: g.why }, 403);
       await db.batch([
         // verified_via 'revoked' bleibt bei einer neuen Anfrage stehen (claimEntity setzt es nicht zurueck): jede weitere Uebernahme per Firmen-E-Mail geht an die Redaktion
         db.prepare("UPDATE entity_claims SET status='rejected',verified_via='revoked',fwd_mask='' WHERE eid=? AND status='verified' AND verified_via='domain_email'").bind(eid),
@@ -617,11 +622,13 @@ export async function handleEvents(env, request, url, path, user, J) {
       // per Uebernahme erhaltene Paar-Firma (#311, adoptOrg) wieder unbeansprucht machen, wenn der Widerrufene ihr einziges Mitglied ist
       const o = await db.prepare("SELECT o.id FROM org_entity e JOIN orgs o ON o.id=e.org_id WHERE e.eid=? AND EXISTS (SELECT 1 FROM org_members m WHERE m.org_id=o.id AND m.user_id=? AND m.role='owner' AND m.status='active') AND (SELECT COUNT(*) FROM org_members m WHERE m.org_id=o.id AND m.status='active')=1").bind(eid, c.user_id).first();
       if (o) await db.batch([db.prepare("DELETE FROM org_members WHERE org_id=? AND user_id=?").bind(o.id, c.user_id), db.prepare("UPDATE orgs SET unclaimed=1,public=0 WHERE id=?").bind(o.id)]);
+      await logEdit(db, g.actor, "claim.decide", "claim", eid, { reason: "Übernahme per Firmen-E-Mail widerrufen", before: { status: "verified" }, after: { status: "rejected" } });
       return J({ ok: true, revoked: true, org_released: !!o });
     }
     if (!EID.test(eid) || typeof b.ok !== "boolean") return J({ error: "bad_request" }, 400);
-    const claim = await db.prepare("SELECT user_id,via FROM entity_claims WHERE eid=? AND status IN ('pending','email_sent','forwarded')").bind(eid).first();
+    const claim = await db.prepare("SELECT user_id,via,status FROM entity_claims WHERE eid=? AND status IN ('pending','email_sent','forwarded')").bind(eid).first();
     if (!claim) return J({ error: "not_found" }, 404);
+    const g = await claimGate(claim.user_id); if (!g.ok) return J({ error: g.why }, 403);
     const linkedIn = claim.via === "linkedin";
     let to = "", name = "";
     if (linkedIn) {
@@ -637,6 +644,7 @@ export async function handleEvents(env, request, url, path, user, J) {
         ? await db.prepare("UPDATE entity_claims SET status='verified',verified_via='admin',fwd_mask='' WHERE eid=? AND status IN ('pending','email_sent','forwarded')").bind(eid).run()
         : await db.prepare("UPDATE entity_claims SET status='rejected',fwd_mask='' WHERE eid=? AND status IN ('pending','email_sent','forwarded')").bind(eid).run();
     if (!Number(updated.meta?.changes || 0)) return J({ error: "not_found" }, 404);
+    await logEdit(db, g.actor, "claim.decide", "claim", eid, { reason: b.ok ? "Übernahme bestätigt" : "Übernahme abgelehnt", before: { status: claim.status }, after: { status } });
     await db.prepare("UPDATE entity_claim_mail SET used=1 WHERE eid=?").bind(eid).run();
     if (b.ok) { await db.prepare("UPDATE org_entity SET confirmed=1 WHERE eid=? AND org_id IN (SELECT org_id FROM org_members WHERE user_id=? AND status='active' AND role IN ('owner','admin'))").bind(eid, claim.user_id).run(); await adoptUnclaimedForEntity(db, claim.user_id, eid); }
     if (linkedIn) {

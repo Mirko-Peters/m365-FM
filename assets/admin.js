@@ -146,11 +146,13 @@
   }
   // ---------- Redaktions-Protokoll: wer hat wann was entschieden; Undo fuer Ausblenden, Freigeben, Ablehnen ----------
   function editLog() {
-    var p = panes.elog, m = h("p", { class: "adm-msg", role: "status" }), tb = h("tbody"), pr = h("ul", { class: "adm-list" });
-    p.textContent = ""; p.appendChild(h("h2", { text: "Redaktions-Protokoll" })); p.appendChild(m);
+    var p = panes.elog, m = h("p", { class: "adm-msg", role: "status" }), tb = h("tbody"), pr = h("ul", { class: "adm-list" }), wi = h("p", { class: "mut" });
+    p.textContent = ""; p.appendChild(h("h2", { text: "Redaktions-Protokoll" })); p.appendChild(m); p.appendChild(wi);
     p.appendChild(h("h3", { text: "Offene Empfehlungen und Eskalationen" })); p.appendChild(pr);
     p.appendChild(h("table", { class: "adm-tbl" }, [h("thead", {}, [h("tr", {}, ["Zeit", "Wer", "Rolle", "Aktion", "Eintrag", "Grund", "Vorher → Nachher", ""].map(function (t) { return h("th", { text: t }); }))]), tb]));
-    function load() { api("/api/admin/editlog").then(function (r) { tb.textContent = ""; pr.textContent = ""; if (r.s !== 200) { msg(m, "Nicht abrufbar", true); return; }
+    function load() { api("/api/admin/editlog").then(function (r) { tb.textContent = ""; pr.textContent = ""; wi.textContent = ""; if (r.s !== 200) { msg(m, "Nicht abrufbar", true); return; }
+      var w = (r.j || {}).wishes || {}, wn = (w.lblog || 0) + (w.episode || 0) + (w.notes || 0);   // Wunschliste der Redaktion: wird nur von einem von Hand gestarteten Lauf abgeholt (kostenpflichtig)
+      if (wn) wi.textContent = "Offene Wünsche „neu übersetzen“: Blog " + (w.lblog || 0) + ", Folgen " + (w.episode || 0) + ", Show Notes " + (w.notes || 0) + ". Abholen: Workflow „Blog uebersetzen“ (Modus stale, wishes) bzw. translate-show / translate-notes mit wishes von Hand starten.";
       ((r.j || {}).proposals || []).forEach(function (x) { pr.appendChild(h("li", {}, [h("b", { text: x.action + " · " + x.kind + " #" + x.item_id }), " ", h("span", { class: "mut", text: x.name + " (" + x.role + ") · " + (x.reason || "ohne Grund") }), " ", h("button", { type: "button", class: "btn", text: "Erledigt", onclick: function (ev) { ev.target.disabled = true; api("/api/editor/proposals/" + x.id + "/dismiss", { method: "POST", body: {} }).then(load); } })])); });
       if (!pr.children.length) pr.appendChild(h("li", { class: "mut", text: "Nichts offen." }));
       ((r.j || {}).items || []).forEach(function (x) { var undo = x.undoable ? h("button", { type: "button", class: "btn", text: "Rückgängig", onclick: function (ev) { ev.target.disabled = true; api("/api/admin/editlog/undo/" + x.id, { method: "POST", body: {} }).then(function (u) { msg(m, u.s === 200 ? "Rückgängig gemacht." : "Nicht möglich (" + ((u.j || {}).error || u.s) + ")", u.s !== 200); load(); }); } }) : h("span", { class: "mut", text: x.undone ? "rückgängig" : "" });

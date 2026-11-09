@@ -1,5 +1,6 @@
 // Experten- und Firmenprofile, Programme (MVP/MCT/...), Kanaele mit Feeds, Upvotes, Bestaetigungen
-import { scopeOf } from "./perm.js";
+import { scopeOf, can, gate, inScope, logEdit, roleOf } from "./perm.js";
+import { decide } from "./editor.js";
 import { syncAutoRoles } from "./roles.js";
 import { cleanKeypoints, cleanFaq, jsonList, ensureSectionCols } from "./sections.js";
 import { sanitize } from "./wiki.js";
@@ -51,7 +52,7 @@ export async function orgEntityCheck(env, user, eid) {
   if (!ID.test(eid || "")) return { error: "bad_entity" };
   const e = (await entityMap(env)).get(eid);
   if (!e || e.type !== "org") return { error: "bad_entity" };
-  if (user.admin || user.editor) return { ok: true };
+  if (can(user, "entity.edit_live", { ownerId: user.id }).ok) return { ok: true };   // die EIGENE Firma verknuepfen ist eine Entscheidung in eigener Sache: ohne Uebernahme nur der Admin, kein Editor
   const c = await env.DB.prepare("SELECT 1 x FROM entity_claims WHERE eid=? AND user_id=? AND status='verified'").bind(eid, user.id).first();
   return c ? { ok: true } : { error: "entity_claim_required" };
 }
@@ -473,9 +474,9 @@ export async function handleProfiles(env, request, url, path, user, J) {
     return J({ ok: true });
   }
   if (path === "/api/admin/cert-queue" && method === "GET") {
-    if (!(user?.admin || user?.editor)) return J({ error: "forbidden" }, 403);
+    const g = await gate(db, user, "queue.review"); if (!g.ok) return J({ error: "forbidden" }, 403);   // Editoren und Admin (perm.js can())
     const rows = (await db.prepare("SELECT c.user_id uid,c.eid e,c.year,c.url,u.name,p.handle FROM cert_check k JOIN certs c ON c.user_id=k.user_id AND c.eid=k.eid JOIN users u ON u.id=c.user_id LEFT JOIN profiles p ON p.user_id=c.user_id WHERE k.status='pending' ORDER BY k.created LIMIT 50").all()).results || [];
-    return J({ items: rows });
+    return J({ items: rows.filter((r) => inScope(g.actor, { topics: [r.e] })) });   // Fach-Editor: nur der eigene Bereich
   }
   if ((m = /^\/api\/vote\/(\d+)$/.exec(path)) && method === "POST") {
     if (need()) return need();
@@ -647,24 +648,39 @@ export async function handleProfiles(env, request, url, path, user, J) {
     return J({ items: rows });
   }
 
-  // ---- Bestaetigen durch Editor/Admin ----
+  // ---- Bestaetigen (Angaben eines Profils) ----
+  // Alles ueber can(verify.set) bzw. die Pruefliste. Was Rolle, Vertrauen oder Fachbereich verleiht, bestaetigt NUR der Admin (item.confers): Programme
+  // von Personen (MVP/MCT machen zum Editor, alle Programme geben das Vertrauen "pro") und Expertise von Personen (daraus wird der Bereich eines
+  // Fach-Editors abgeleitet). Editoren bestaetigen Angaben von Firmen (nie der eigenen) und Zertifikate (nie die eigenen); Moderatoren nichts.
   if (path === "/api/admin/verify" && method === "POST") {
-    if (!(user?.admin || user?.editor)) return J({ error: "forbidden" }, 403);
+    const pre = await gate(db, user, "queue.review"); if (!pre.ok) return J({ error: "forbidden" }, 403);
     const b = await body(), o = await resolve(db, b.owner); if (!o) return J({ error: "not_found" }, 404);
-    const v = b.value ? 1 : 0;
-    if (b.kind === "program" && PROGRAMS.includes(b.key)) await db.prepare("UPDATE programs SET verified=? WHERE owner_type=? AND owner_id=? AND program=?").bind(v, o.t, o.id, b.key).run();
-    else if (b.kind === "exp" && ID.test(b.key || "")) { await db.prepare("UPDATE expertise SET verified=? WHERE owner_type=? AND owner_id=? AND eid=?").bind(v, o.t, o.id, b.key).run(); if (o.t === "u") await computeLevels(db, { uid: o.id, eid: b.key }).catch(() => 0); }
-    else if (b.kind === "cert" && o.t === "u" && ID.test(b.key || "")) {
-      if (v) await db.prepare("INSERT INTO cert_check(user_id,eid,status,via,created) VALUES(?,?,'verified','admin',?) ON CONFLICT(user_id,eid) DO UPDATE SET status='verified',via='admin',created=excluded.created").bind(o.id, b.key, now()).run();
-      else await db.prepare("INSERT INTO cert_check(user_id,eid,status,via,created) VALUES(?,?,'rejected','admin',?) ON CONFLICT(user_id,eid) DO UPDATE SET status='rejected',via='admin',created=excluded.created").bind(o.id, b.key, now()).run();
+    const v = b.value ? 1 : 0, kind = b.kind === "program" && PROGRAMS.includes(b.key) ? "program" : b.kind === "exp" && ID.test(b.key || "") ? "exp" : b.kind === "cert" && o.t === "u" && ID.test(b.key || "") ? "cert" : "";
+    if (!kind) return J({ error: "bad_request" }, 400);
+    if (kind === "cert" && roleOf(pre.actor) !== "admin") {   // Editoren: wie in der Pruefliste, nur wartende Nachweise
+      const r = await decide(env, user, { kind: "cert", id: `${o.id}:${b.key}`, action: v ? "approve" : "reject", legacy: true });
+      return J(r.body, r.status);
     }
-    else return J({ error: "bad_request" }, 400);
-    if (b.kind === "program" && o.t === "u" && (b.key === "mvp" || b.key === "mct")) await syncAutoRoles(db, o.id).catch(() => 0);   // MVP/MCT verifiziert -> Editor (oder Rolle zurueck, wenn entzogen)
+    const item = o.t === "u" ? { ownerId: o.id, topics: kind === "program" ? [] : [b.key], confers: kind !== "cert" } : { ownerId: null, orgIds: [o.id], topics: kind === "program" ? [] : [b.key] };
+    const g = await gate(db, user, "verify.set", item); if (!g.ok) return J({ error: g.why }, 403);
+    let n = 1;
+    if (kind === "program") n = (await db.prepare("UPDATE programs SET verified=? WHERE owner_type=? AND owner_id=? AND program=?").bind(v, o.t, o.id, b.key).run()).meta.changes;
+    else if (kind === "exp") { n = (await db.prepare("UPDATE expertise SET verified=? WHERE owner_type=? AND owner_id=? AND eid=?").bind(v, o.t, o.id, b.key).run()).meta.changes; if (o.t === "u") await computeLevels(db, { uid: o.id, eid: b.key }).catch(() => 0); }
+    else if (v) await db.prepare("INSERT INTO cert_check(user_id,eid,status,via,created) VALUES(?,?,'verified','admin',?) ON CONFLICT(user_id,eid) DO UPDATE SET status='verified',via='admin',created=excluded.created").bind(o.id, b.key, now()).run();
+    else await db.prepare("INSERT INTO cert_check(user_id,eid,status,via,created) VALUES(?,?,'rejected','admin',?) ON CONFLICT(user_id,eid) DO UPDATE SET status='rejected',via='admin',created=excluded.created").bind(o.id, b.key, now()).run();
+    if (n) await logEdit(db, g.actor, "verify.set", "verify", `${o.t}:${o.id}:${kind}:${b.key}`, { reason: v ? "bestätigt" : "Bestätigung entzogen", after: { verified: v } });
+    if (kind === "program" && o.t === "u" && (b.key === "mvp" || b.key === "mct")) await syncAutoRoles(db, o.id).catch(() => 0);   // vom Admin verifiziert -> Editor (oder Rolle zurueck, wenn entzogen)
     return J({ ok: true });
   }
-  if (path === "/api/admin/feed-hide" && method === "POST") {
-    if (!(user?.admin || user?.editor)) return J({ error: "forbidden" }, 403);
-    const b = await body(); await db.prepare("UPDATE feed_items SET hidden=? WHERE id=?").bind(b.hidden ? 1 : 0, +b.id).run(); return J({ ok: true });
+  if (path === "/api/admin/feed-hide" && method === "POST") {   // Feed-Eintrag aus-/einblenden: can(review.hide) - nicht der eigene, nicht der der eigenen Firma; im Protokoll
+    if (!(await gate(db, user, "queue.review")).ok) return J({ error: "forbidden" }, 403);   // wie bisher nur Editoren und Admin
+    const b = await body(), it = await db.prepare("SELECT id,owner_type,owner_id,hidden,topics FROM feed_items WHERE id=?").bind(+b.id).first();
+    let topics = []; try { topics = JSON.parse(it?.topics || "[]"); } catch { topics = []; }
+    const g = await gate(db, user, "review.hide", !it ? {} : it.owner_type === "u" ? { ownerId: it.owner_id, topics } : { ownerId: null, orgIds: [it.owner_id], topics }); if (!g.ok) return J({ error: g.why }, 403);
+    if (!it) return J({ error: "not_found" }, 404);
+    await db.prepare("UPDATE feed_items SET hidden=? WHERE id=?").bind(b.hidden ? 1 : 0, it.id).run();
+    await logEdit(db, g.actor, "review.hide", "feed", it.id, { before: { hidden: it.hidden }, after: { hidden: b.hidden ? 1 : 0 } });
+    return J({ ok: true });
   }
   return null;
 }

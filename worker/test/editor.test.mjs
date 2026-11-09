@@ -2,7 +2,8 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
-import { can, roleOf, maskEmail, emailFor, DAILY_CAP, canHardDelete } from "../src/perm.js";
+import { can, roleOf, emailFor, DAILY_CAP, canHardDelete } from "../src/perm.js";
+import { maskEmail } from "../src/claimverify.js";
 import { handleEditor, decide, undoLog } from "../src/editor.js";
 
 async function mkdb() {
@@ -15,6 +16,8 @@ async function mkdb() {
 }
 const U = { admin: { id: 1, role: "admin", admin: true }, editor: { id: 2, role: "editor", editor: true }, mod: { id: 3, role: "moderator", moderator: true }, user: { id: 4, role: "user" }, editor2: { id: 5, role: "editor", editor: true } };
 const J = (d, s = 200) => new Response(JSON.stringify(d), { status: s });
+const baseOf = async (env, user, id) => (await call(env, user, "GET", "/api/editor/item?kind=blog&id=" + id)).j.item?.edit?.base;   // Stand, den das Bearbeiten-Formular zurueckschickt
+const curOf = async (env, user, kind, id) => (await call(env, user, "GET", `/api/editor/history?kind=${kind}&id=${id}`)).j.current;   // Fassung, die der Aufrufer als aktuell sieht
 const call = async (env, user, method, path, body) => { const u = new URL("https://x" + path); const r = await handleEditor(env, new Request(u, { method, ...(body ? { body: JSON.stringify(body) } : {}) }), u, u.pathname, user, J); return { s: r.status, j: await r.json() }; };
 
 test("can(): Rollen und Aktionen", () => {
@@ -42,8 +45,8 @@ test("can(): eigene Inhalte und eigene Firma, Tageslimit", () => {
 });
 
 test("E-Mail-Adressen werden fuer Nicht-Admins maskiert", () => {
-  assert.equal(maskEmail("max.mustermann@example.com"), "m***@e***.com");
-  assert.equal(emailFor(U.admin, "a@b.de"), "a@b.de"); assert.equal(emailFor(U.editor, "max@example.com"), "m***@e***.com");
+  assert.equal(maskEmail("max.mustermann@example.com"), "m***@example.com");   // ein Helfer (claimverify.js), ein Format
+  assert.equal(emailFor(U.admin, "a@b.de"), "a@b.de"); assert.equal(emailFor(U.editor, "max@example.com"), "m***@example.com"); assert.equal(emailFor(U.editor, ""), "");
 });
 
 test("Editor entscheidet, schreibt Protokoll; Admin macht Freigabe rueckgaengig", async () => {
@@ -117,11 +120,12 @@ test("Bearbeiten: kleine Aenderung, volle Aenderung wird protokolliert und der A
   raw.prepare("INSERT INTO mail_addr(user_id,email,verified,created) VALUES(4,'autor@example.com',1,1)").run();
   raw.prepare("INSERT INTO blog_posts(id,user_id,slug,title,summary,body,lang,status,created,updated) VALUES(30,4,'e','Tippfehlr','s','alter Text','de','pending',100,100)").run();
   assert.equal((await call(env, U.editor, "POST", "/api/editor/edit", { kind: "blog", id: "30", level: "minor", fields: { body: "x" } })).j.error, "bad_fields");
-  assert.equal((await call(env, U.editor, "POST", "/api/editor/edit", { kind: "blog", id: "30", level: "minor", fields: { title: "Tippfehler" } })).s, 200);
+  assert.equal((await call(env, U.editor, "POST", "/api/editor/edit", { kind: "blog", id: "30", level: "minor", fields: { title: "Tippfehler" } })).j.error, "base_required");   // ohne den geladenen Stand geht nichts
+  assert.equal((await call(env, U.editor, "POST", "/api/editor/edit", { kind: "blog", id: "30", level: "minor", fields: { title: "Tippfehler" }, base: await baseOf(env, U.editor, 30) })).s, 200);
   assert.equal(raw.prepare("SELECT title FROM blog_posts WHERE id=30").get().title, "Tippfehler");
-  const m = await call(env, U.mod, "POST", "/api/editor/edit", { kind: "blog", id: "30", level: "full", fields: { body: "neu" } });
+  const m = await call(env, U.mod, "POST", "/api/editor/edit", { kind: "blog", id: "30", level: "full", fields: { body: "neu" }, base: await baseOf(env, U.mod, 30) });
   assert.equal(m.j.proposed, true); assert.equal(raw.prepare("SELECT body FROM blog_posts WHERE id=30").get().body, "alter Text");
-  const f = await call(env, U.editor, "POST", "/api/editor/edit", { kind: "blog", id: "30", level: "full", fields: { body: "neuer Text" }, reason: "Fakten" });
+  const f = await call(env, U.editor, "POST", "/api/editor/edit", { kind: "blog", id: "30", level: "full", fields: { body: "neuer Text" }, reason: "Fakten", base: await baseOf(env, U.editor, 30) });
   assert.equal(f.s, 200);
   assert.deepEqual({ ...raw.prepare("SELECT action,role FROM edit_log ORDER BY id DESC").get() }, { action: "content.edit_full", role: "editor" });
   assert.equal(JSON.parse(raw.prepare("SELECT before FROM edit_log ORDER BY id DESC").get().before).body, "alter Text");
@@ -279,23 +283,25 @@ test("Bewerbung: 3 verschiedene Editoren, keine Selbst- oder Kollegenstimmen, Ab
 
 test("Versionsverlauf: Ursprungsfassung, Diff, Zuruecksetzen nur auf Editor-Aenderungen (Admin alles), Autor sieht den Verlauf", async () => {
   const { raw, db } = await mkdb(), env = { DB: db };
+  const edit = async (u, body, reason) => call(env, u, "POST", "/api/editor/edit", { kind: "blog", id: "50", level: "full", fields: { body }, reason, base: await baseOf(env, u, 50) });
+  const revert = async (u, rev) => call(env, u, "POST", "/api/editor/revert", { kind: "blog", id: "50", rev, cur: await curOf(env, U.admin, "blog", 50) });
   raw.prepare("INSERT INTO blog_posts(id,user_id,slug,title,summary,body,lang,status,created,updated) VALUES(50,4,'v','Titel','S','Der alte Text','de','live',100,100)").run();
-  assert.equal((await call(env, U.editor, "POST", "/api/editor/edit", { kind: "blog", id: "50", level: "full", fields: { body: "Der neue Text" }, reason: "Fakten" })).s, 200);
+  assert.equal((await edit(U.editor, "Der neue Text", "Fakten")).s, 200);
   const h1 = await call(env, U.editor, "GET", "/api/editor/history?kind=blog&id=50");
   assert.equal(h1.j.versions.length, 2); assert.equal(h1.j.versions[1].action, "baseline"); assert.equal(h1.j.versions[0].reason, "Fakten"); assert.equal(h1.j.canRevert, true);
-  assert.equal((await call(env, U.mod, "POST", "/api/editor/revert", { kind: "blog", id: "50", rev: h1.j.versions[1].id })).s, 403);   // Moderator nicht
+  assert.equal((await revert(U.mod, h1.j.versions[1].id)).s, 403);   // Moderator nicht
   // Admin bearbeitet danach: Editor darf das nicht zuruecksetzen
-  await call(env, U.admin, "POST", "/api/editor/edit", { kind: "blog", id: "50", level: "full", fields: { body: "Admin-Text" }, reason: "A" });
-  assert.equal((await call(env, U.editor, "POST", "/api/editor/revert", { kind: "blog", id: "50", rev: h1.j.versions[1].id })).j.error, "not_editor_edit");
+  await edit(U.admin, "Admin-Text", "A");
+  assert.equal((await revert(U.editor, h1.j.versions[1].id)).j.error, "not_editor_edit");
   const h2 = await call(env, U.admin, "GET", "/api/editor/history?kind=blog&id=50");
-  assert.equal((await call(env, U.admin, "POST", "/api/editor/revert", { kind: "blog", id: "50", rev: h2.j.versions[2].id })).s, 200);   // Admin: Ursprungsfassung
+  assert.equal((await revert(U.admin, h2.j.versions[2].id)).s, 200);   // Admin: Ursprungsfassung
   assert.equal(raw.prepare("SELECT body FROM blog_posts WHERE id=50").get().body, "Der alte Text");
   // Editor setzt eigene Aenderung zurueck
-  await call(env, U.editor, "POST", "/api/editor/edit", { kind: "blog", id: "50", level: "full", fields: { body: "Zweite Fassung" } });
+  await edit(U.editor, "Zweite Fassung");
   const h3 = await call(env, U.editor, "GET", "/api/editor/history?kind=blog&id=50");
-  assert.equal((await call(env, U.editor, "POST", "/api/editor/revert", { kind: "blog", id: "50", rev: h3.j.versions[1].id })).s, 200);
+  assert.equal((await revert(U.editor, h3.j.versions[1].id)).s, 200);
   assert.equal(raw.prepare("SELECT body FROM blog_posts WHERE id=50").get().body, "Der alte Text");
-  assert.equal((await call(env, U.editor, "POST", "/api/editor/revert", { kind: "blog", id: "50", rev: h3.j.versions[0].id })).s, 200);   // Revert-Eintrag selbst stammt vom Editor
+  assert.equal((await revert(U.editor, h3.j.versions[0].id)).s, 200);   // Revert-Eintrag selbst stammt vom Editor
   assert.ok(raw.prepare("SELECT 1 FROM edit_log WHERE kind='blog' AND reason LIKE 'Zurückgesetzt%'").get());
   // Autor sieht den Verlauf des eigenen Beitrags, andere nicht
   assert.ok((await call(env, U.user, "GET", "/api/editor/my-history?kind=blog&id=50")).j.versions.length >= 3);
@@ -307,13 +313,15 @@ test("Wiki-/Entitaetenverlauf nutzt die Revisionstabellen; Zuruecksetzen setzt e
   const { raw, db } = await mkdb(), env = { DB: db };
   const w = raw.prepare("INSERT INTO wiki_rev(id,term,lang,body,summary,user_id,status,created) VALUES(?,?,?,?,?,?,?,?)");
   w.run(1, "teams", "de", "erste Fassung", "s1", 4, "old", 10); w.run(2, "teams", "de", "zweite Fassung", "s2", 2, "live", 20);   // 2 = Editor
+  raw.prepare("INSERT INTO edit_log(ts,user_id,role,action,kind,item_id,day) VALUES(1,2,'editor','entity.edit_live','wiki','2',0)").run();   // als Editor geschrieben (Rolle zum Zeitpunkt der Aenderung)
   const h = await call(env, U.editor2, "GET", "/api/editor/history?kind=wiki&id=2");
   assert.deepEqual(h.j.versions.map((v) => [v.id, v.status]), [[2, "live"], [1, "old"]]); assert.equal(h.j.current, 2);
-  assert.equal((await call(env, U.editor2, "POST", "/api/editor/revert", { kind: "wiki", id: "2", rev: 1 })).s, 200);
+  assert.equal((await call(env, U.editor2, "POST", "/api/editor/revert", { kind: "wiki", id: "2", rev: 1 })).j.error, "conflict");   // ohne die gesehene Fassung wird nichts ueberschrieben
+  assert.equal((await call(env, U.editor2, "POST", "/api/editor/revert", { kind: "wiki", id: "2", rev: 1, cur: 2 })).s, 200);
   assert.deepEqual(raw.prepare("SELECT id,status FROM wiki_rev ORDER BY id").all().map((r) => [r.id, r.status]), [[1, "live"], [2, "old"]]);
   w.run(3, "teams", "de", "dritte", "s3", 4, "live", 30); raw.prepare("UPDATE wiki_rev SET status='old' WHERE id=1").run();   // aktuelle Fassung stammt von einem Mitglied
-  assert.equal((await call(env, U.editor2, "POST", "/api/editor/revert", { kind: "wiki", id: "3", rev: 1 })).j.error, "not_editor_edit");
-  assert.equal((await call(env, U.admin, "POST", "/api/editor/revert", { kind: "wiki", id: "3", rev: 1 })).s, 200);
+  assert.equal((await call(env, U.editor2, "POST", "/api/editor/revert", { kind: "wiki", id: "3", rev: 1, cur: 3 })).j.error, "not_editor_edit");
+  assert.equal((await call(env, U.admin, "POST", "/api/editor/revert", { kind: "wiki", id: "3", rev: 1, cur: 3 })).s, 200);
   assert.ok((await call(env, U.user, "GET", "/api/editor/my-history?kind=wiki&id=3")).j.versions.length === 3);
 });
 
@@ -337,7 +345,7 @@ const seed = (raw) => {
   raw.prepare("INSERT INTO blog_posts(id,user_id,slug,title,body,lang,status,created,updated) VALUES(20,4,'live-post','L','x','en','live',1,1)").run();
   raw.prepare("INSERT INTO blog_posts(id,user_id,slug,title,body,lang,status,created,updated) VALUES(21,4,'draft-post','D','x','en','pending',1,1)").run();
 };
-const base = { kind: "lblog", item: "live-post", lang: "de", unit: "1", prev: "Maschinell", reason: "Fachbegriff" };
+const base = { kind: "lblog", item: "live-post", lang: "de", unit: "1", prev: "Maschinell", reason: "Fachbegriff", sh: "0a1b2c3d" };   // sh = Quell-Anker aus docs/i18n-units
 
 test("Sprachfassungen: Rechte (Editor ja, Moderator nur Empfehlung, andere nein, Sprach-Scope)", async () => {
   const { raw, db } = await mkdb(), env = { DB: db }; seed(raw);
@@ -367,15 +375,16 @@ test("Sprachfassungen: Absatz-Versionen, Verlauf, Zuruecksetzen", async () => {
   assert.deepEqual(h.versions.map((v) => [v.action, v.body]), [["edit", "Zwei"], ["edit", "Eins"], ["baseline", "Maschinell"]]);
   assert.equal(h.current, h.versions[0].id);
   assert.equal((await saveUnit(env, U.editor, { ...base, text: "Zwei", prev: "Eins" })).body.error, "unchanged");
-  assert.equal((await revertUnit(env, U.editor, { ...base, rev: h.versions[1].id })).status, 200);
+  assert.equal((await revertUnit(env, U.editor, { ...base, rev: h.versions[1].id })).body.error, "conflict");   // ohne die gesehene Fassung wird nichts ueberschrieben
+  assert.equal((await revertUnit(env, U.editor, { ...base, rev: h.versions[1].id, cur: h.current })).status, 200);
   assert.equal(raw.prepare("SELECT text FROM i18n_override WHERE unit='1'").get().text, "Eins");
   h = await unitHistory(db, "lblog", "live-post", "de", "1");
   assert.equal(h.versions[0].action, "revert"); assert.equal(h.versions.length, 4);
-  assert.equal((await revertUnit(env, U.mod, { ...base, rev: h.versions[3].id })).status, 403);
-  await revertUnit(env, U.editor, { ...base, rev: h.versions[3].id });   // Ursprungsfassung: Override verschwindet, Build nimmt die Maschinenfassung
+  assert.equal((await revertUnit(env, U.mod, { ...base, rev: h.versions[3].id, cur: h.current })).status, 403);
+  await revertUnit(env, U.editor, { ...base, rev: h.versions[3].id, cur: h.current });   // Ursprungsfassung: Override verschwindet, Build nimmt die Maschinenfassung
   assert.equal(raw.prepare("SELECT COUNT(*) n FROM i18n_override").get().n, 0);
   assert.ok(raw.prepare("SELECT COUNT(*) n FROM edit_log WHERE kind='i18n'").get().n >= 4);
-  assert.equal(cleanUnit('a<script>x()</script><b onclick="y()">b</b><a href="javascript:z()">c</a>'), 'a<b>b</b><a href="#">c</a>');
+  assert.deepEqual(cleanUnit("lblog", 'a<script>x()</script><b onclick="y()">b</b><a href="javascript:z()">c</a>'), { text: "a<b>b</b><a>c</a>", err: "bad_html" });
 });
 
 test("Sprachfassungen: Export enthaelt nur veroeffentlichte Eintraege; Neuuebersetzung nur vormerken", async () => {
@@ -384,9 +393,9 @@ test("Sprachfassungen: Export enthaelt nur veroeffentlichte Eintraege; Neuuebers
   raw.prepare("INSERT INTO i18n_override(kind,item,lang,unit,text,by,ts) VALUES('lblog','draft-post','de','1','geheim',2,1)").run();   // Entwurf: darf nicht raus
   raw.prepare("INSERT INTO i18n_override(kind,item,lang,unit,text,by,ts) VALUES('lblog','live-post','fr','1','autre',2,1)").run();
   const e = await pub(env, "/api/i18n/overrides?kind=lblog&lang=de");
-  assert.deepEqual(e.j, { kind: "lblog", lang: "de", items: { "live-post": { 1: "Eins" } } });
+  assert.deepEqual(e.j, { kind: "lblog", lang: "de", items: { "live-post": { 1: { t: "Eins", sh: "0a1b2c3d" } } } });   // Vertrag i18n-overrides v1, Punkt 3
   assert.match(e.c, /public/);
-  assert.deepEqual((await overridesExport(db, "lblog", "fr")).items, { "live-post": { 1: "autre" } });
+  assert.deepEqual((await overridesExport(db, "lblog", "fr")).items, { "live-post": { 1: { t: "autre", sh: "" } } });   // alte Zeile ohne Anker: der Seitenbau wendet sie nicht an
   assert.equal((await pub(env, "/api/i18n/overrides?kind=x&lang=de")).s, 400);
   assert.equal((await requestRetranslate(env, U.editor, { kind: "lblog", item: "live-post", lang: "de", units: ["1", "T"] })).status, 200);
   await requestRetranslate(env, U.editor, { kind: "lblog", item: "live-post", lang: "de", units: ["2"] });

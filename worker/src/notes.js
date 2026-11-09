@@ -2,6 +2,7 @@
 // Override = Bearbeitung hier (Haupttext bis 12000 Zeichen, ohne Mindestlaenge; Kernpunkte und FAQ als eigene Felder). Bearbeiten duerfen Admin und Redaktion.
 // Der Seitenbau nimmt den Override, sonst den Spreaker-Text. Zuruecksetzen stellt den Spreaker-Text wieder her.
 import { rateLimit } from "./util.js";
+import { gate, inScope, logEdit } from "./perm.js";
 import { sanitize } from "./wiki.js";
 import { cleanKeypoints, cleanFaq, jsonList } from "./sections.js";
 
@@ -27,7 +28,9 @@ export async function handleNotes(env, request, url, path, user, J) {
     return J({ notes: out }, 200, { "cache-control": "public, max-age=300" });
   }
   if (!user) return J({ error: "login" }, 401);
-  if (!user.admin && !user.editor) return J({ error: "forbidden" }, 403);
+  // Show Notes sind Sprachfassungen der eigenen Show: lesen can(queue.review), schreiben can(content.edit_full) wie im Sprachfassungen-Editor - Editoren und
+  // Admin, Fach-Editoren nur in ihren Sprachen, Moderatoren nicht (die alten Routen kennen keine Empfehlungen). Jede Aenderung steht im Protokoll.
+  const g0 = await gate(db, user, "queue.review"); if (!g0.ok || (method === "GET" && !inScope(g0.actor, { i18n: true, lang: url.searchParams.get("lang") || "en" }))) return J({ error: "forbidden" }, 403);
   if (!(await rateLimit(db, `notes:${user.id}`, 300, 3600))) return J({ error: "rate_limit" }, 429);
 
   if (path === "/api/notes/list" && method === "GET") {
@@ -48,6 +51,7 @@ export async function handleNotes(env, request, url, path, user, J) {
   }
   if (method !== "POST") return J({ error: "bad_request" }, 400);
   const b = await request.json().catch(() => ({})), lang = String(b.lang || "en"), id = String(b.id || "");
+  const g = await gate(db, user, "content.edit_full", { ownerId: null, orgIds: [], topics: [], lang, i18n: true }); if (!g.ok) return J({ error: g.why }, 403);   // vor allem anderen: wer nicht darf, erfaehrt auch nicht, welche Folgen es gibt
   if (!LANG.test(lang) || !EID.test(id)) return J({ error: "bad_request" }, 400);
   if (!(await base(env, lang))[id]) return J({ error: "not_found" }, 404);
   if (path === "/api/notes/save") {
@@ -56,8 +60,9 @@ export async function handleNotes(env, request, url, path, user, J) {
     if (kp.err) return J({ error: kp.err }, 400); if (fq.err) return J({ error: fq.err }, 400);
     await db.prepare("INSERT INTO episode_notes(lang,ep_id,body,keypoints,faq,user_id,updated) VALUES(?,?,?,?,?,?,?) ON CONFLICT(lang,ep_id) DO UPDATE SET body=excluded.body,keypoints=excluded.keypoints,faq=excluded.faq,user_id=excluded.user_id,updated=excluded.updated")
       .bind(lang, id, sb.body, JSON.stringify(kp.list), JSON.stringify(fq.list), user.id, now()).run();
+    await logEdit(db, g.actor, "content.edit_full", "shownotes", `${lang}|${id}`, { reason: "Show Notes bearbeitet", after: sb.body.slice(0, 300) });
     return J({ ok: true, words: words(sb.body), keypoints: kp.list.length, faq: fq.list.length, note: "Visible after the next site build (hourly). Spreaker itself is not changed." });
   }
-  if (path === "/api/notes/reset") { await db.prepare("DELETE FROM episode_notes WHERE lang=? AND ep_id=?").bind(lang, id).run(); return J({ ok: true }); }
+  if (path === "/api/notes/reset") { const n = (await db.prepare("DELETE FROM episode_notes WHERE lang=? AND ep_id=?").bind(lang, id).run()).meta.changes; if (n) await logEdit(db, g.actor, "content.edit_full", "shownotes", `${lang}|${id}`, { reason: "Show Notes auf den Spreaker-Text zurückgesetzt" }); return J({ ok: true }); }
   return null;
 }

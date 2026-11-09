@@ -7,8 +7,9 @@ import { autoVerifyCert, cleanI18n, saveI18n, readI18n } from "./profiles.js";
 import { canManage, EVENT_ROLES, promoteWaitlist, partnerAction, handleEvents } from "./events.js";
 import { askQuestion, answerQuestion } from "./qa.js";
 import { handleBlog } from "./blog.js";
-import { handleEditor, itemView, listProposals, KINDS as EDITOR_KINDS } from "./editor.js";
-import { isStaff, roleOf, loadActor, can } from "./perm.js";
+import { handleEditor, itemView, decide, KINDS as EDITOR_KINDS } from "./editor.js";
+const jsonArr = (s) => { try { const v = JSON.parse(s || "[]"); return Array.isArray(v) ? v : []; } catch { return []; } };
+import { isStaff, roleOf, loadActor, can, gate, inScope } from "./perm.js";
 import { saveUnit } from "./i18n_edit.js";
 import { siteFetch } from "./util.js";
 import { handlePodcast } from "./podcast.js";
@@ -197,7 +198,7 @@ export const TOOLS = [
   { name: "editor_view_item", de: "Redaktion/Moderation: einen Eintrag mit Vorschau, Quelle und Verlauf lesen.", staff: true, write: false, description: "Read one review item (kind, id from editor_queue) with preview, source, history and the actions allowed for the caller. Staff only.", inputSchema: { type: "object", properties: { kind: { type: "string", enum: EDITOR_KINDS }, id: { type: "string" } }, required: ["kind", "id"] } },
   { name: "editor_propose_decision", de: "Redaktion/Moderation: Entscheidung vorschlagen; sie wird erst nach Bestätigung im Browser (/redaktion/) ausgeführt.", staff: true, write: true, description: "Store a decision as a PROPOSAL (action approve | reject | hide | resolve | escalate, with a reason). Nothing is executed here: an editor confirms it in the browser at /redaktion/ (Preview, then Confirm). Staff only.", inputSchema: { type: "object", properties: { kind: { type: "string", enum: EDITOR_KINDS }, id: { type: "string" }, action: { type: "string", enum: ["approve", "reject", "hide", "resolve", "escalate"] }, reason: { type: "string" } }, required: ["kind", "id", "action"] } },
   { name: "list_stale_translations", de: "Redaktion: veraltete Sprachfassungen (Original geändert, Übersetzung nicht angepasst) je Sprache.", staff: true, write: false, description: "List stale translations (source changed since the language version was made) per language, with the paragraph IDs that changed, from the published build file i18n-stale.json. Staff only. Optional filters lang and kind (lblog | episode | notes).", inputSchema: { type: "object", properties: { lang: { type: "string" }, kind: { type: "string", enum: ["lblog", "episode", "notes"] }, limit: { type: "number" } } } },
-  { name: "propose_translation_edit", de: "Redaktion: Absatz einer Sprachfassung zur Änderung vorschlagen (Vorschau; Bestätigung im Browser unter /redaktion/).", staff: true, write: true, description: "Propose a new text for ONE paragraph of a language version (kind lblog|episode|notes, item slug, lang, unit id such as T, D, 12, title, summary, text, reason). It is stored as a PROPOSAL and nothing changes until an editor confirms it in the browser at /redaktion/ (Sprachfassungen). Staff only.", inputSchema: { type: "object", properties: { kind: { type: "string", enum: ["lblog", "episode", "notes"] }, item: { type: "string" }, lang: { type: "string" }, unit: { type: "string" }, text: { type: "string" }, reason: { type: "string" } }, required: ["kind", "item", "lang", "unit", "text", "reason"] } },
+  { name: "propose_translation_edit", de: "Redaktion: Absatz einer Sprachfassung zur Änderung vorschlagen (Vorschau; Bestätigung im Browser unter /redaktion/).", staff: true, write: true, description: "Propose a new text for ONE paragraph of a language version (kind lblog|episode|notes, item slug, lang, unit id: lblog T, D, Q1, A1, 12; episode title | summary; notes html; text, reason; optional sh = source anchor of the unit from the published paragraph view, looked up automatically when omitted). It is stored as a PROPOSAL and nothing changes until an editor confirms it in the browser at /redaktion/ (Sprachfassungen). Staff only.", inputSchema: { type: "object", properties: { kind: { type: "string", enum: ["lblog", "episode", "notes"] }, item: { type: "string" }, lang: { type: "string" }, unit: { type: "string" }, text: { type: "string" }, reason: { type: "string" }, sh: { type: "string" } }, required: ["kind", "item", "lang", "unit", "text", "reason"] } },
   { name: "save_blog_post", de: "Blog-Beitrag speichern oder einreichen (Wiki-Markup, Quellen über {{ref|Titel|https://url|Herausgeber|Datum}}).", write: true, description: "Create or update an own blog post. Body uses wiki markup (## headings, **bold**, *italic*, - lists, [[entity-id|text]] links, sources only as {{ref|Title|https://url|Publisher|Date}}, images as {{img|https://host/pic.jpg|Alt text}} (https, jpg/png/webp/gif/avif, alt text of 5+ characters is required, max 10; plain links are removed). With submit=true the post is published at once for trusted members, otherwise it goes to editorial review; submit needs a public profile and at least 300 characters. Key points and FAQ are SEPARATE fields (keypoints[], faq[{q,a}]), not part of body: they render as a summary box and an FAQ section with FAQPage schema. Co-authors (like guests on a podcast or video): coauthors = profile handles, each must confirm with respond_coauthor_request before appearing on the post. Omit id to create, pass id to update. Always set topics (entity ids from search_entities) instead of free categories: the topics link the post to the entities and appear in the author's profile as expertise (shown by own posts).", inputSchema: { type: "object", properties: { id: { type: "number" }, title: { type: "string" }, summary: { type: "string" }, body: { type: "string" }, lang: { type: "string", description: "en, de, fr, ..." }, topics: { type: "array", items: { type: "string" }, description: "entity ids" }, keypoints: { type: "array", items: { type: "string" }, description: "3-6 key points (10-200 chars each), shown as a summary box above the text" }, faq: { type: "array", items: { type: "object", properties: { q: { type: "string" }, a: { type: "string" } } }, description: "up to 10 FAQ entries {q (10-200 chars), a (20-600 chars)}, shown as FAQ section with FAQPage schema" }, coauthors: { type: "array", items: { type: "string" }, description: "profile handles of up to 3 co-authors (they get an invitation and confirm it themselves); omit to keep, [] to remove all" }, submit: { type: "boolean" } }, required: ["title", "body"] } },
   { name: "delete_blog_post", de: "Eigenen Blog-Beitrag löschen.", write: true, description: "Delete one of the member's own blog posts.", inputSchema: { type: "object", properties: { id: { type: "number" } }, required: ["id"] } },
   { name: "list_library", de: "Bibliothek durchsuchen: Prompts, Anweisungen, KQL, DAX, PowerShell, Flows ...", write: false, description: "List public library entries (prompts, agent instructions, KQL, DAX, PowerShell, flows, Adaptive Cards ...), most upvoted first. Optional filters: kind, topic (entity id), q (text in title/summary).", inputSchema: { type: "object", properties: { kind: { type: "string", enum: LIB_KINDS }, topic: { type: "string" }, q: { type: "string" } } } },
@@ -302,19 +303,24 @@ async function callTool(env, user, name, a) {
     return { registrations: rows.map((r) => ({ event: r.handle, title: r.title, start: r.start, status: r.status, visible: !!r.visible })) };
   }
   if (name === "list_stale_translations") {
-    if (!isStaff(user)) return { error: "forbidden" };
+    if (!can(user, "queue.view").ok) return { error: "forbidden" };
     const r = await siteFetch(env, "/i18n-stale.json", { cf: { cacheTtl: 300 } }).catch(() => null), j = r && r.ok ? await r.json().catch(() => null) : null;
     if (!j || !Array.isArray(j.items)) return { error: "not_available", note: "i18n-stale.json is published with the site build" };
     const items = j.items.filter((x) => (!a.lang || x.lang === a.lang) && (!a.kind || x.kind === a.kind));
     return { total: items.length, items: items.slice(0, Math.min(200, Math.max(1, parseInt(a.limit) || 50))) };
   }
   if (name === "propose_translation_edit") {   // nur Empfehlung; Ausfuehrung durch Bestaetigung im Browser
-    if (!isStaff(user)) return { error: "forbidden" };
-    const r = await saveUnit(env, { ...user, moderator: true, editor: false, admin: false, role: "moderator" }, { kind: String(a.kind), item: String(a.item), lang: String(a.lang), unit: String(a.unit), text: a.text, prev: "", reason: cleanText(a.reason, 300) });
-    return r.status === 200 ? { ok: true, stored_as: "proposal", proposal: r.body.proposal, executed: false, confirm_in_browser: "https://www.m365.fm/redaktion/" } : { error: r.body.error };
+    if (!can(user, "queue.view").ok) return { error: "forbidden" };
+    // Quell-Anker (Vertrag i18n-overrides, Punkt 2) und angezeigter Text: aus der veroeffentlichten Einheiten-Datei des Seitenbaus, wenn der Aufrufer keinen Anker mitgibt
+    let sh = String(a.sh || ""), prev = "";
+    const uf = await siteFetch(env, `/i18n-units/${encodeURIComponent(String(a.kind))}/${encodeURIComponent(String(a.lang))}.json`, { cf: { cacheTtl: 300 } }).catch(() => null), uj = uf && uf.ok ? await uf.json().catch(() => null) : null;
+    const row = ((uj && uj[String(a.item)] && uj[String(a.item)].units) || []).find((x) => Array.isArray(x) && x[0] === String(a.unit));
+    if (row) { prev = String(row[2] || ""); if (!sh) sh = String(row[3] || ""); }
+    const r = await saveUnit(env, { ...user, moderator: true, editor: false, admin: false, role: "moderator" }, { kind: String(a.kind), item: String(a.item), lang: String(a.lang), unit: String(a.unit), text: a.text, prev, sh, reason: cleanText(a.reason, 300) });
+    return r.status === 200 ? { ok: true, stored_as: "proposal", proposal: r.body.proposal, executed: false, confirm_in_browser: "https://www.m365.fm/redaktion/" } : { error: r.body.error, ...(r.body.error === "anchor_required" ? { note: "The entry is not in the published paragraph view (/i18n-units/). Only outdated or already edited entries are listed there; pass sh (source anchor) if you have it." } : {}) };
   }
   if (name === "editor_queue" || name === "editor_view_item" || name === "editor_propose_decision") {   // Vorschau -> Bestaetigung im Browser (Muster wie bei den Entwuerfen)
-    if (!isStaff(user)) return { error: "forbidden" };
+    if (!can(user, "queue.view").ok) return { error: "forbidden" };
     const kinds = new Set(EDITOR_KINDS);
     if (name === "editor_queue") {
       const q = new URL("https://x/api/editor/queue"); if (a.kind) q.searchParams.set("kind", String(a.kind)); if (a.lang) q.searchParams.set("lang", String(a.lang));
@@ -328,6 +334,7 @@ async function callTool(env, user, name, a) {
     const v = await itemView(env, user, String(a.kind), String(a.id)); if (!v) return { error: "not_found" };
     if (!v.actions[action] || v.actions[action] === "no") return { error: "forbidden" };
     const reason = cleanText(a.reason, 300);
+    if (action === "escalate") { const r = await decide(env, user, { kind: String(a.kind), id: String(a.id), action, reason }); return r.status === 200 ? { ok: true, stored_as: "escalation", proposal: r.body.proposal, executed: false } : { error: r.body.error }; }   // wie im Browser: Eskalation samt Protokoll
     const pid = (await db.prepare("INSERT INTO edit_proposals(ts,user_id,role,action,kind,item_id,reason) VALUES(?,?,?,?,?,?,?) RETURNING id").bind(now(), user.id, roleOf(user), allowed, String(a.kind), String(a.id), reason).first())?.id;
     return { ok: true, stored_as: "proposal", proposal: pid, executed: false, confirm_in_browser: "https://www.m365.fm/redaktion/" };
   }
@@ -364,8 +371,8 @@ async function callTool(env, user, name, a) {
     return r ? await r.json() : { error: "failed" };
   }
   if (name === "list_video_todo") {
-    if (!user.admin && !user.editor) return { error: "forbidden" };
-    const rows = (await db.prepare("SELECT v.id,v.title,v.lang,v.status,v.video_id,u.name author,(SELECT COUNT(*) FROM yt_votes x WHERE x.vid_id=v.id) votes FROM yt_videos v JOIN users u ON u.id=v.user_id WHERE v.status IN ('review','submitted') ORDER BY (v.status='review') DESC, v.created").all()).results || [];
+    const g = await gate(db, user, "queue.review"); if (!g.ok) return { error: "forbidden" };   // Editoren und Admin (perm.js can()); Fach-Editor: nur der eigene Bereich
+    const rows = ((await db.prepare("SELECT v.id,v.title,v.lang,v.topics,v.status,v.video_id,u.name author,(SELECT COUNT(*) FROM yt_votes x WHERE x.vid_id=v.id) votes FROM yt_videos v JOIN users u ON u.id=v.user_id WHERE v.status IN ('review','submitted') ORDER BY (v.status='review') DESC, v.created").all()).results || []).filter((r) => inScope(g.actor, { topics: jsonArr(r.topics), lang: r.lang })).map(({ topics, ...r }) => r);
     return { todo: rows.filter((r) => r.status === "review").map((r) => ({ ...r, studio: `https://studio.youtube.com/video/${r.video_id}/edit`, action: "check the video, then set it public in YouTube Studio" })), open_pitches: rows.filter((r) => r.status === "submitted").map(({ video_id, ...x }) => x) };
   }
   if (name === "list_video_pitches" || name === "vote_video_pitch" || name === "list_my_videos") {
@@ -377,8 +384,8 @@ async function callTool(env, user, name, a) {
     return out;
   }
   if (name === "list_podcast_todo") {
-    if (!user.admin && !user.editor) return { error: "forbidden" };
-    const rows = (await db.prepare("SELECT e.id,e.title,e.lang,e.status,e.spreaker_id,u.name author,(SELECT COUNT(*) FROM pod_votes v WHERE v.ep_id=e.id) votes FROM pod_episodes e JOIN users u ON u.id=e.user_id WHERE e.status IN ('review','submitted') ORDER BY (e.status='review') DESC, e.created").all()).results || [];
+    const g = await gate(db, user, "queue.review"); if (!g.ok) return { error: "forbidden" };   // Editoren und Admin (perm.js can()); Fach-Editor: nur der eigene Bereich
+    const rows = ((await db.prepare("SELECT e.id,e.title,e.lang,e.topics,e.status,e.spreaker_id,u.name author,(SELECT COUNT(*) FROM pod_votes v WHERE v.ep_id=e.id) votes FROM pod_episodes e JOIN users u ON u.id=e.user_id WHERE e.status IN ('review','submitted') ORDER BY (e.status='review') DESC, e.created").all()).results || []).filter((r) => inScope(g.actor, { topics: jsonArr(r.topics), lang: r.lang })).map(({ topics, ...r }) => r);
     return { todo: rows.filter((r) => r.status === "review").map((r) => ({ ...r, spreaker: `https://www.spreaker.com/episode/${r.spreaker_id}`, action: "make stick-man video, then approve in Spreaker" })), open_pitches: rows.filter((r) => r.status === "submitted") };
   }
   if (name === "list_podcast_pitches" || name === "vote_podcast_pitch" || name === "list_my_podcast_episodes") {
