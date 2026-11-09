@@ -2,7 +2,8 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import worker from "../src/index.js";
-import { handleEntityInvite, inviteVariant, mailBody, mailText, mailSubject, remindInvites, resolveVariant, spokeAtCon, VARIANTS } from "../src/entinvite.js";
+import { handleEntityInvite, inviteVariant, mailBody, mailText, mailSubject, personName, remindInvites, resolveVariant, spokeAtCon, VARIANTS } from "../src/entinvite.js";
+import * as entinvite from "../src/entinvite.js";
 import { mergeStatements } from "../src/identities.js";
 import { makeSession } from "../src/util.js";
 
@@ -252,7 +253,11 @@ test("322-4: Mitglieder und Redaktion laden neutral ein (Absender M365.FM, nennt
       const bad = await call(env, "/api/entityinvite/send", member, { items: part.map((name) => ({ eid: "plain-person", name, email: "jane@victim.example" })) });
       assert.deepEqual(bad.j.results, part.map(() => ({ eid: "plain-person", error: "bad_input" })));
     }
+    // ... und keine kurze Nachricht: Ziffern und weitere Satzzeichen (Telefonnummer, Aufforderung) gehoeren in keinen Namen
+    const msgs = ["Jane, call +49 170 1234567 now", "Jane – urgent: reply with your password", "Jane 0170 1234567"];
+    assert.deepEqual((await call(env, "/api/entityinvite/send", member, { items: msgs.map((name) => ({ eid: "plain-person", name, email: "jane@victim.example" })) })).j.results, msgs.map(() => ({ eid: "plain-person", error: "bad_input" })));
     assert.equal(sent.length, 1);
+    assert.equal(raw.prepare("SELECT COUNT(*) n FROM entity_invites").get().n, 1);
     // Redaktion: ebenfalls neutral; gespeicherte Kontaktadressen (Mirkos Korrespondenz) schreibt nur der Admin an
     contact(raw, "c1", "c1@example.com");
     assert.deepEqual((await call(env, "/api/entityinvite/send", editor, { eid: "c1" })).j.results, [{ eid: "c1", error: "bad_input" }]);
@@ -417,11 +422,27 @@ test("322-10: zweiter paralleler Sammelversand wird mit 409 abgewiesen (kein 500
   } finally { restore(); }
 });
 
+// Nur die eigene Definition ist verboten. Ein Import namens maskEmail aus einem anderen Modul (#319 holt ihn aus perm.js) ist erlaubt: der Helfer
+// dieser Datei heisst maskAddr, beide Bindungen vertragen sich.
 test("322-5: entinvite.js definiert kein eigenes maskEmail (Helfer aus claimverify.js unter anderem Namen)", () => {
   const js = readFileSync(new URL("../src/entinvite.js", import.meta.url), "utf8");
   assert.doesNotMatch(js, /(?:const|let|var|function)\s+maskEmail\b/);
-  assert.doesNotMatch(js, /import\s*\{[^}]*\bmaskEmail\s*[,}]/, "kein Binding namens maskEmail: ein spaeterer Import gleichen Namens (#319) bleibt konfliktfrei");
   assert.match(js, /import \{ maskEmail as maskAddr \} from "\.\/claimverify\.js";/);
+  assert.doesNotMatch(js, /(?:const|let|var|function)\s+maskAddr\b/);
+});
+
+test("Namensregel der Anrede (Mitglieder, Redaktion): Buchstaben, Leerzeichen, Punkt, Apostroph, Bindestrich; 2 bis 60 Zeichen", () => {
+  for (const n of ["Pia Plain", "C. Two-O'Neil Jr.", "Jean-Luc O’Brien", "María José García de la Fuente", "Søren Ångström", "Jo", "J.R.R. Tolkien", "王小明", "अमित शर्मा", "J".repeat(60)]) assert.equal(personName(n), true, n);
+  for (const n of ["", "J", "J".repeat(61), "Jane, call +49 170 1234567 now", "Jane – urgent: reply with your password", "Jane 2", "Jane!", "Jane: hi", "Jane (HR)", "Jane & Joe", "Jane\nDoe", "Jane\tDoe", " Jane", "-Jane", "jane@evil.example", "Jane evil.example/x", "Jane_Doe", "Jane=Doe", "Jane www.evil.example", "Jane evil.example today", "www.evil.example", "Jane пример.рф", "Jane \u{1F600}"]) assert.equal(personName(n), false, JSON.stringify(n));
+});
+
+// Der Loeschhelfer heisst nach dem, was er loescht: inviter.js (#320, Einlader-Kuerzel) bringt ein eigenes deleteUserInvites mit, index.js importiert beide.
+test("Kontoloeschung: der Helfer dieser Datei heisst deleteUserEntityInvites (kein Export deleteUserInvites)", () => {
+  assert.equal(typeof entinvite.deleteUserEntityInvites, "function");
+  assert.equal(entinvite.deleteUserInvites, undefined);
+  const idx = readFileSync(new URL("../src/index.js", import.meta.url), "utf8");
+  assert.match(idx, /import \{[^}]*\bdeleteUserEntityInvites\b[^}]*\} from "\.\/entinvite\.js";/);
+  assert.match(idx, /await deleteUserEntityInvites\(db, id\);/);
 });
 
 test("Kontoloeschung und Zusammenfuehren: Kontaktadresse und Einladungen der Person verlieren Name und Adresse, verschickte Einladungen bleiben gueltig", async () => {

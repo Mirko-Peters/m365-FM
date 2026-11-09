@@ -49,9 +49,14 @@ export function inviteVariant(ent) {
   return [ent.program, ent.programs, ent.desc, ent.long].some((v) => strs(v).some((t) => PROGRAM.test(t))) ? "mvp" : "default";
 }
 async function entMap(env) { try { return await entityMap(env); } catch { return new Map(); } }
-// Namen in der Mail: nur ein Name (eine Zeile, hoechstens 60 Zeichen), kein Link, keine Adresse, kein Hostname. Gilt fuer die Anrede in Einladungen von
-// Mitgliedern und Redaktion (sonst bad_input) und fuer den frei waehlbaren Anzeigenamen des einladenden Mitglieds (sonst ohne Namen).
+// Namen in der Mail. Anzeigename des einladenden Mitglieds (frei waehlbar, darf Ziffern enthalten): eine Zeile, hoechstens 60 Zeichen, kein Link, keine
+// Adresse, kein Hostname - sonst steht die Mail ohne Namen da. Anrede in Einladungen von Mitgliedern und Redaktion (personName, sonst bad_input): nur
+// Buchstaben, Leerzeichen, Punkt, Apostroph und Bindestrich - ohne Ziffern und weitere Satzzeichen passt keine Telefonnummer und keine Aufforderung
+// ("Jane, call +49 ... now", "Jane - urgent: ...") in das Namensfeld; Hostnamen aus Buchstaben und Punkten ("www.evil.example") faengt weiter plainName ab,
+// solche in anderen Schriften ("пример.рф") die Regel "nach einem Punkt keine zwei Buchstaben" (Initialen wie "J.R.R. Tolkien" bleiben moeglich).
+// Der Admin ist ausgenommen (Firmennamen wie "1&1" oder "Contoso 365").
 const plainName = (n) => n.length <= 60 && !/[\n\r@\/\\]|:\/\/|\bwww\.|[\w-]\.[a-z]{2,}\b/i.test(n);
+export const personName = (n) => plainName(n) && /^\p{L}[\p{L}\p{M} .'’-]{1,59}$/u.test(n) && !/\.\p{L}{2}/u.test(n);
 const inviter = (byName) => { const n = cleanText(byName || "", 80).replace(/[<>]/g, "").replace(/\s+/g, " ").trim(); return n.length >= 2 && plainName(n) ? n : "A community member"; };
 export function mailSubject(reminder, variant = "default") {
   if (variant === "neutral") return reminder ? "Reminder: your page on M365.FM" : "Your page on M365.FM – claim it or have it removed";
@@ -120,7 +125,7 @@ async function inviteOne(env, db, user, staff, x, emap, dry, seen) {
   let email = String(x.email || "").trim().toLowerCase(), name = cleanText(x.name, 80).replace(/[<>]/g, "");
   // Kontaktadressen (Mirkos Gaeste- und Speaker-Korrespondenz) schreibt nur der Admin an: nur er verschickt die persoenliche Fassung
   if (admin && eid && !email) { const c = await db.prepare("SELECT email,name FROM entity_contacts WHERE eid=?").bind(eid).first(); if (c) { email = c.email; name = name || c.name; } }
-  if (!EID.test(eid) || !name || !MAIL_RE.test(email) || (!admin && !plainName(name))) return { eid, error: "bad_input" };
+  if (!EID.test(eid) || !name || !MAIL_RE.test(email) || (!admin && !personName(name))) return { eid, error: "bad_input" };
   if (!staff) {   // Mitglieder: nur fuer Entitaeten, die sie selbst angelegt haben
     const own = await db.prepare("SELECT 1 x FROM entity_rev WHERE eid=? AND user_id=?").bind(eid, user.id).first(); if (!own) return { eid, error: "not_yours" };
   }
@@ -156,7 +161,7 @@ export async function remindInvites(env) {   // Cron: nach 7 Tagen einmal erinne
 // verlieren Name und Adresse; die Einladungszeile bleibt als Merker "schon eingeladen" (kein zweites Anschreiben nach einem neuen Kontakte-Import).
 // Einladungen, die das Konto selbst verschickt hat, bleiben fuer die Eingeladenen gueltig (Entfernen-Link), verweisen aber auf kein Konto mehr.
 // Muss vor dem Loeschen von mail_addr laufen.
-export async function deleteUserInvites(db, uid) {
+export async function deleteUserEntityInvites(db, uid) {
   const mail = String((await db.prepare("SELECT email FROM mail_addr WHERE user_id=? AND verified=1").bind(uid).first().catch(() => null))?.email || "").trim().toLowerCase();
   const mine = "eid IN (SELECT eid FROM entity_claims WHERE user_id=?1 AND status='verified')";
   await db.batch([
