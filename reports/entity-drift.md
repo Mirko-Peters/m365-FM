@@ -1,8 +1,8 @@
-# Entitäten: JSON gegen D1 (2026-11-07T06:52Z)
+# Entitäten: JSON gegen D1 (2026-11-09T06:56Z)
 
-JSON-Basis 2197 · D1 live 2173 · in beiden 2169 · nur JSON 28 · nur D1 4
+JSON-Basis 2197 · D1 live 2201 · in beiden 2197 · nur JSON 0 · nur D1 4
 
-**4 Entitäten** weichen ab (letzte live-Fassung: import/auto 2, person 2).
+**3 Entitäten** weichen ab (letzte live-Fassung: import/auto 1, person 2).
 
 | Feld | JSON anders als D1 | davon in D1 leer | Beispiele |
 |---|---|---|---|
@@ -14,7 +14,7 @@ JSON-Basis 2197 · D1 live 2173 · in beiden 2169 · nur JSON 28 · nur D1 4
 | web | 1 | 0 | ifakt |
 | same_as | 1 | 1 | ifakt |
 | aliases | 0 | 0 |  |
-| rel | 1 | 0 | industry-4-0 |
+| rel | 0 | 0 |  |
 | image | 0 | 0 |  |
 | job | 1 | 1 | marcel-lehmann |
 | desc.en | 1 | 0 | marcel-lehmann |
