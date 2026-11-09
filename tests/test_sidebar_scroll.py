@@ -20,7 +20,10 @@ def page_html(cards):
 class SidebarScroll(unittest.TestCase):
     def run_case(self, cards, fn):
         with sync_playwright() as p:
-            b = p.chromium.launch()
+            try: b = p.chromium.launch()
+            except Exception as e:   # Paket vorhanden, aber kein passender Browser installiert ("playwright install chromium"): ueberspringen wie ohne Playwright
+                if "Executable doesn't exist" in str(e): self.skipTest("Chromium fuer Playwright fehlt")
+                raise
             pg = b.new_page(viewport={"width": 1280, "height": 800})
             pg.set_content(page_html(cards)); pg.add_script_tag(path=str(ROOT / "assets" / "attend.js"))
             box = lambda: pg.evaluate("(()=>{const r=document.querySelector('aside.sbar').getBoundingClientRect();return [r.top,r.bottom]})()")
