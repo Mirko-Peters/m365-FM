@@ -53,6 +53,19 @@ def _xml(entries, langs):
     return "\n".join(x)
 
 
+def drop_redirected(sitemap, table):
+    """Eintraege ohne Adressen, die der Site-Worker per Regel weiterleitet (show/redirects.json, Regeln vor der Seite):
+    solche Seiten liefert er nie aus. Sonst schreibt der Link-Umbau (site_links.fix_tree) ihre loc auf das Ziel um,
+    und das Ziel steht doppelt in der Sitemap (z. B. zusammengefuehrte Personen /entity/<alt>/ -> /entity/<neu>/).
+    -> (bereinigte Liste, entfernte URLs)."""
+    import site_links as SLK
+    keep, gone = [], []
+    for x in sitemap:
+        p = urlsplit(x[0]).path or "/"
+        (gone if SLK.rule_target(p, table) else keep).append(x)
+    return keep, [x[0] for x in gone]
+
+
 def write_all(sitemap, write, base, langs, today):
     """Schreibt alle Dateien und den Index; -> Liste der Dateinamen."""
     groups = {}

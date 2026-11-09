@@ -207,10 +207,7 @@ def build(g, events, people, orgs):
                       + f'<p><a class="btn" href="{croot}?propose={esc(ev["handle"])}#c-events">{esc(s["propose"])}</a></p><script>window.M365TopicConfig={{api:{json.dumps(api)},lang:{json.dumps(lang)}}}</script><script defer src="{BASE}/assets/topic-follow.js"></script>' + css)
             ld = [{"@context": "https://schema.org", **event_ld(BASE, ev, pb, ob)}]
             write(f"{pfx2(lang)}community/events/{ev['handle']}/index.html", page(lang, f'{ev["title"]} – {s["events"]} | M365.FM', (ev.get("summary") or ev.get("about") or "")[:155], u, b, None, ld, og_type="website", extra_head=LCSS, noindex=noidx, side=(g["side"](lang, ev["title"] + " " + (ev.get("about") or "")[:1500], ids=ev.get("topics", []), exclude=(ev["handle"],)) if g.get("side") else "")))
-            if lang == "en":
-                write(f"community/events/{ev['handle']}/event.ics", ics_for(ev, BASE))
-            else:
-                write(f"de/community/events/{ev['handle']}/event.ics", ics_for(ev, BASE))
+            write(f"{pfx2(lang)}community/events/{ev['handle']}/event.ics", ics_for(ev, BASE))   # in jeder Sprache neben der Eventseite (deren Link verweist auf <Seite>/event.ics)
             if not noidx:
                 sitemap.append((u, TODAY, None))
         # Verzeichnis

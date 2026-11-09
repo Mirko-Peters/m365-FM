@@ -53,6 +53,7 @@ beforeEach(async () => {
     if (/\/v2\/checkout\/orders\/ORDER1\/capture$/.test(u)) return J(ppResponses.capture || { id: "ORDER1", status: "COMPLETED", purchase_units: [{ payments: { captures: [{ id: "CAP1", status: "COMPLETED", amount: { value: ppResponses.captureValue, currency_code: "EUR" } }] } }] }, 201);
     if (u.endsWith("/v2/invoicing/invoices")) return J({ id: "INV2-AAAA" }, 201);
     if (/\/invoices\/INV2-AAAA\/send$/.test(u)) return J({ links: [{ rel: "payer-view", href: "https://www.sandbox.paypal.com/invoice/p/#INV2AAAA" }] });
+    if (u.endsWith("/sponsors.json")) return J(ppResponses.sponsors || { orgs: [] });
     if (u.includes("challenges.cloudflare.com/turnstile")) return J({ success: ppResponses.turnstile !== false });
     throw new Error("unerwarteter Abruf " + u);
   };
@@ -365,6 +366,33 @@ test("Lead: Einwilligung Pflicht, Turnstile (ohne Secret geschlossen), E-Mail-Pr
   assert.equal((await call("/api/ads/leads", { user: OWNER, query: "?org=contoso" })).json.leads.length, 2);
   assert.equal((await call("/api/ads/leads", { user: OTHER, query: "?org=contoso" })).status, 404);
   assert.equal((await call("/api/admin/ads/leads", { user: ADMIN })).json.leads.length, 2);
+});
+
+test("Sponsor-Lead: laufender Sponsor (sponsors.json) nimmt Leads ohne Buchung an, zugewiesen an den Betreuer, andere Firmen weiter abgelehnt", async () => {
+  env.TURNSTILE_SECRET = "1x0000000000000000000000000000000AA";
+  env.ADS_BOOKING = "0";   // Buchungsschalter aus: Sponsor-Leads bleiben moeglich (kein Zahlungsvorgang)
+  raw.exec("INSERT INTO profiles(user_id,public,handle,updated) VALUES(2,1,'mirko-p',1)");
+  ppResponses.sponsors = { orgs: [{ id: "ifakt", name: "iFAKT GmbH", manager: "mirko-p" }] };
+  const send = (extra) => call("/api/ads/lead", { method: "POST", body: { sponsor: "ifakt", name: "Erika Muster", email: "erika@fabrikam.de", message: "Rückruf", consent: true, turnstile: "tok", lang: "de", ...extra } });
+  assert.equal((await call("/api/ads/sponsor-lead", { query: "?e=ifakt" })).json.ad.org, "iFAKT GmbH");
+  assert.equal((await call("/api/ads/sponsor-lead", { query: "?e=contoso" })).status, 404);
+  assert.equal((await send({ consent: false })).json.error, "consent_required");
+  assert.equal((await send({ sponsor: "contoso" })).status, 404, "kein Sponsor, keine Buchung");
+  assert.equal((await send({ code: "ad-x", sponsor: undefined })).status, 503, "Buchungs-Leads bleiben bei ausgeschaltetem Schalter zu");
+  ppResponses.turnstile = false;
+  assert.equal((await send({})).json.error, "captcha");
+  ppResponses.turnstile = true;
+  const ok = await send({});
+  assert.equal(ok.status, 200, ok.text);
+  let lead = raw.prepare("SELECT * FROM ad_leads ORDER BY id DESC").get();
+  assert.equal(lead.sponsor, "ifakt"); assert.equal(lead.assigned, "mirko-p"); assert.equal(lead.booking_id, 0); assert.equal(lead.charged, 0); assert.equal(lead.status, "new");
+  assert.match(lead.consent_text, /iFAKT GmbH/);
+  await send({});
+  assert.equal(raw.prepare("SELECT status FROM ad_leads ORDER BY id DESC").get().status, "duplicate");
+  const adm = (await call("/api/admin/ads/leads", { user: ADMIN })).json.leads;
+  assert.equal(adm.length, 2); assert.equal(adm[0].org, "ifakt"); assert.equal(adm[0].assigned, "mirko-p"); assert.equal(adm[0].code, "sponsor:ifakt");
+  for (let i = 0; i < 4; i++) await send({ email: `x${i}@fabrikam.de` });
+  assert.equal((await send({ email: "late@fabrikam.de" })).status, 429, "Rate-Limit wie beim Buchungs-Formular");
 });
 
 test("Admin-Statistik mit CSV (Formelzellen entschärft) und Sponsor-Dashboard-Zahlen", async () => {

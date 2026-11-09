@@ -6,6 +6,7 @@ unter der eingetragenen Domain (www.m365.fm) ausgeliefert wird. Dann:
   nie auf Community-, Rechts-, Login- oder noindex-Seiten, nie ueber dem ersten Textabschnitt
 - Einwilligung fuer EWR/UK/CH: laeuft ueber die in AdSense eingerichtete Google-Nachricht (zertifizierte CMP, "Datenschutz und Mitteilungen")."""
 import hashlib, json, os, re
+from site_i18n import T
 from html import escape
 from urllib.parse import urlencode
 from pathlib import Path
@@ -386,6 +387,16 @@ def slot_script(base, lang):
     return f'<script>window.M365AD={cfg}</script><script defer src="{base}/assets/ads.js?v={v}"></script>'
 
 
+def sponsor_lead(base, lang, eid, name):
+    """Lead-Formular eines laufenden Sponsors (data/sponsorships.json) auf der Firmen-Entitaetsseite: gekennzeichneter Kasten mit Button.
+    Das Formular ist das bestehende Lead-Formular (assets/ads.js, POST /api/ads/lead); ads.js und Konfiguration kommen nur auf Seiten mit diesem Kasten."""
+    t = texts(lang, "slot")
+    btn = escape(t["contact"].replace("{org}", name))
+    return (f'<section class="ad ad-own en-lead" role="note" data-pt="entity" style="border:1px solid var(--bd);border-inline-start:4px solid var(--ac,#0a5);background:var(--card);'
+            f'padding:.6em .9em;border-radius:.4em;margin:.5em 0 .8em"><small><strong>{escape(T(lang, "Sponsored", "Anzeige"))}</strong></small><p style="margin:.3em 0 .5em">{escape(name)}</p>'
+            f'<button type="button" class="btn main" data-sponsor-lead="{escape(eid)}" data-pt="entity">{btn}</button></section>') + slot_script(base, lang)
+
+
 def inject_slots(base, body, lang, canonical, today=None):
     """Werbeplaetze (Mirko, 5.11.2026):
     - "mid": frueh im Text, direkt nach der Einleitung (nach dem ersten Absatz oder vor der ersten H2, was zuerst kommt; nie ueber H1/Lede,
@@ -424,7 +435,7 @@ def inject_slots(base, body, lang, canonical, today=None):
     if on.get("bottom") and "<footer>" in body:
         body = body.replace("<footer>", _slot("bottom", lang, pt, topics, _svc(base, lang), house_key="services", slug=slug) + "<footer>", 1)
         placed = True
-    if placed:
+    if placed and "window.M365AD=" not in body:
         body = body.replace("</body>", slot_script(base, lang) + "</body>", 1) if "</body>" in body else body + slot_script(base, lang)
     return body
 

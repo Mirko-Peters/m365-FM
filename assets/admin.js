@@ -4,6 +4,26 @@
   var C = window.M365ADM || {}, API = C.api, BASE = C.base || "", root = document.getElementById("adm"); if (!root || !API) return;
   // mailto-Link: Adresse kodieren, damit ?cc=/&body= aus einer eingeschleusten Adresse nicht als Mail-Parameter wirken
   function mailto(a) { return "mailto:" + encodeURIComponent(String(a || "")).replace(/%40/g, "@"); }
+  // Lead-Status (Mediadaten-Anfragen und Werbung > Leads): stabile Schluessel, Badge, Auswahl, Zaehler, Loeschen mit Rueckfrage im Zeilen-Feld
+  var LEAD_ST = [["open", "offen", "#fde68a", "#5b4300"], ["in_progress", "in Bearbeitung", "#bfdbfe", "#0b2e66"], ["closed_lost", "geschlossen – verloren", "#fecaca", "#6b1111"], ["closed_won", "geschlossen – gewonnen", "#bbf7d0", "#0b4a1f"]];
+  function leadSt(k) { for (var i = 0; i < LEAD_ST.length; i++) if (LEAD_ST[i][0] === k) return LEAD_ST[i]; return LEAD_ST[0]; }
+  function leadBadge(k) { var o = leadSt(k); return h("span", { class: "adm-badge", "data-status": o[0], style: "display:inline-block;padding:.1em .6em;border-radius:1em;font-size:.85em;white-space:nowrap;background:" + o[2] + ";color:" + o[3], text: o[1] }); }
+  function leadFilterSel() { var s = h("select", { "aria-label": "Lead-Status filtern" }); [["", "Alle Status"]].concat(LEAD_ST).forEach(function (o) { s.appendChild(h("option", { value: o[0], text: o[1] })); }); return s; }
+  function leadCounts(list, key) { var n = {}; list.forEach(function (x) { var k = leadSt(x[key]) [0]; n[k] = (n[k] || 0) + 1; }); return h("p", { class: "mut" }, LEAD_ST.map(function (o) { return h("span", { style: "margin-right:.8em" }, [leadBadge(o[0]), " " + (n[o[0]] || 0)]); })); }
+  function leadStatusSel(x, key, url, msgEl, done) {   // POST {action:"status"}; bei Fehler zurueck auf den alten Wert
+    var sel = h("select", { "aria-label": "Status für " + (x.name || x.id) }); LEAD_ST.forEach(function (o) { var op = h("option", { value: o[0], text: o[1] }); if (leadSt(x[key])[0] === o[0]) op.selected = true; sel.appendChild(op); });
+    sel.addEventListener("change", function () { var old = x[key]; sel.disabled = true;
+      api(url, { method: "POST", body: { action: "status", id: x.id, status: sel.value } }).then(function (r) { sel.disabled = false;
+        if (r.s === 200) { x[key] = sel.value; done(); } else { sel.value = leadSt(old)[0]; msg(msgEl, "Status konnte nicht gespeichert werden (" + ((r.j || {}).error || r.s) + ")", true); } }); });
+    return sel;
+  }
+  function leadDelete(x, url, msgEl, done) {   // Button -> "Wirklich löschen? Ja / Nein"; Ja loescht die Zeile endgueltig (personenbezogene Daten)
+    var box = h("span");
+    function idle() { box.textContent = ""; box.appendChild(h("button", { type: "button", class: "btn", text: "Löschen", "aria-label": "Lead löschen: " + (x.name || x.id), onclick: ask })); }
+    function ask() { box.textContent = ""; box.append(h("span", { text: "Wirklich löschen? " }), h("button", { type: "button", class: "btn main", text: "Ja", onclick: function () {
+        api(url, { method: "POST", body: { action: "delete", id: x.id } }).then(function (r) { if (r.s === 200) done(); else { idle(); msg(msgEl, "Löschen fehlgeschlagen (" + ((r.j || {}).error || r.s) + ")", true); } }); } }), " ", h("button", { type: "button", class: "btn", text: "Nein", onclick: idle })); }
+    idle(); return box;
+  }
   function h(t, a, kids) { var e = document.createElement(t); a = a || {}; for (var k in a) { if (k === "text") e.textContent = a[k]; else if (k === "class") e.className = a[k]; else if (k.slice(0, 2) === "on") e[k] = a[k]; else e.setAttribute(k, a[k]); } (kids || []).forEach(function (x) { if (x != null) e.appendChild(typeof x === "string" ? document.createTextNode(x) : x); }); return e; }
   function api(p, o) { o = o || {}; o.credentials = "include"; o.headers = Object.assign({ "x-requested-with": "m365" }, o.headers || {}); if (o.body && typeof o.body !== "string") { o.body = JSON.stringify(o.body); o.headers["content-type"] = "application/json"; } return fetch(API + p, o).then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { s: r.status, j: j }; }); }); }
   var TYPES = { product: "Produkt", platform: "Plattform", concept: "Konzept", org: "Firma", person: "Person", cert: "Zertifikat", event: "Event", media: "Medium", category: "Kategorie" };
@@ -53,6 +73,12 @@
       p.appendChild(h("div", { class: "adm-grid" }, [tile("Entitäten in der Datenbank", d.entities_db, miss == null ? "" : miss + " noch nur in der Datei"), tile("Frühere Blog-Beiträge übernommen", d.blog_legacy, "Import-Stand " + d.blog_import_offset + " von 2307"), tile("Profil-Export", d.profiles_export_age == null ? "–" : Math.round(d.profiles_export_age / 60) + " min", "Alter des Zwischenspeichers"), tile("Übersetzungen (Inhalte)", d.item_tr), tile("Übersetzungen (Entitäten)", d.ent_tr)]));
       p.appendChild(h("p", {}, ["Entitäten: Bisher liegt die Grundlage in der Datei ", h("code", { text: "data/entities.json" }), ". Mit dem Knopf wird jede Entität, die noch keine Fassung in der Datenbank hat, einmal dorthin übernommen. Danach werden Änderungen nur noch hier und in der Datenbank gemacht. Es wird nichts überschrieben, was schon in der Datenbank steht."]));
       p.appendChild(h("button", { type: "button", class: "btn main", text: "Entitäten in die Datenbank übernehmen", onclick: function (ev) { ev.target.disabled = true; msg(m, "Läuft …"); api("/api/admin/panel/import-entities", { method: "POST", body: {} }).then(function (r) { ev.target.disabled = false; if (r.s === 200) { msg(m, r.j.imported + " übernommen, " + r.j.already + " waren schon da (" + r.j.total + " in der Datei)."); setTimeout(LOAD.db, 1500); } else msg(m, ERR[r.j.error] || "Fehler " + r.s, true); }); } }));
+      p.appendChild(h("h2", { text: "Firmen und Entitäten paaren" }));
+      p.appendChild(h("p", {}, ["Firma und Entität gehören immer zusammen. Die Aktion legt für Firmen-Entitäten ohne Community-Firma eine unbeanspruchte Firma an (ohne öffentliche Seite) und für Community-Firmen ohne Entität eine wartende Firmen-Entität (Freigabe unter Entitäten); passende vorhandene Entitäten werden verknüpft statt doppelt angelegt. Mehrfach klicken ist unschädlich (idempotent), je Lauf höchstens 150 Einträge."]));
+      var pm = h("p", { class: "adm-msg" });
+      function pairRun(dry) { pm.textContent = "Läuft …"; api("/api/admin/org-pair", { method: "POST", body: { dry: dry } }).then(function (r) { var j = r.j || {}; pm.textContent = r.s !== 200 ? "Fehler (" + (j.error || r.s) + ")" : dry ? "Probelauf: " + j.orgs_without_entity + " Firmen ohne Entität (" + j.link_existing + " mit vorhandener Entität verknüpfen, " + j.entities_to_create + " neue wartende Entitäten), " + j.entities_without_org + " Firmen-Entitäten ohne Firma." : "Erledigt: " + j.linked + " verknüpft, " + j.entities_created + " Entitäten angelegt, " + j.orgs_created + " Firmen angelegt, noch offen: " + j.remaining + "."; }); }
+      p.appendChild(h("p", {}, [h("button", { type: "button", class: "btn", text: "Probelauf (nur zählen)", onclick: function () { pairRun(true); } }), " ", h("button", { type: "button", class: "btn main", text: "Firmen und Entitäten paaren", onclick: function () { if (window.confirm("Bestand jetzt paaren?")) pairRun(false); } })]));
+      p.appendChild(pm);
       p.appendChild(m);
     }); },
     sw: function () { overview(function (o) { var p = panes.sw, f = o.flags, m = h("p", { class: "adm-msg" }); p.textContent = "";
@@ -89,10 +115,10 @@
     api("/api/admin/blog").then(function (r) { var it = (r.j || {}).items || []; if (it.length) { var ul = section("Blog-Beiträge (" + it.length + ")"); it.forEach(function (x) { var rm = row(ul, [h("b", { text: x.title }), " ", h("span", { class: "mut", text: (x.name || "") + " · " + (x.lang || "") + " · " + when(x.created) }), h("p", { class: "mut", text: (x.summary || x.body || "").slice(0, 220) }), h("p", {}, [act("Freigeben", true, function () { return api("/api/admin/blog/decide", { method: "POST", body: { id: x.id, ok: true } }); }, function () { rm(); }), " ", act("Ablehnen", false, function () { return api("/api/admin/blog/decide", { method: "POST", body: { id: x.id, ok: false, note: note() } }); }, function () { rm(); })])]); }); } done(); });
     api("/api/admin/wiki/pending").then(function (r) { var it = (r.j || {}).pending || []; if (it.length) { var ul = section("Wiki-Änderungen (" + it.length + ")"); it.forEach(function (x) { var rm = row(ul, [h("b", { text: x.term + " (" + x.lang + ")" }), " ", h("span", { class: "mut", text: (x.name || "") + " · " + when(x.created) + (x.summary ? " · " + x.summary : "") }), h("p", { class: "mut", text: (x.body || "").slice(0, 260) }), h("p", {}, [act("Freigeben", true, function () { return api("/api/admin/wiki/approve/" + x.id, { method: "POST", body: {} }); }, function () { rm(); }), " ", act("Ablehnen", false, function () { return api("/api/admin/wiki/reject/" + x.id, { method: "POST", body: {} }); }, function () { rm(); })])]); }); } done(); });
     api("/api/admin/entity/pending").then(function (r) { var it = (r.j || {}).pending || []; if (it.length) { var ul = section("Entitäten-Vorschläge (" + it.length + ")"); it.forEach(function (x) { var d = x.data || {}; var rm = row(ul, [h("b", { text: (d.name || x.eid) }), " ", h("span", { class: "mut", text: x.eid + " · " + (x.name || "") + " · " + when(x.created) + (x.summary ? " · " + x.summary : "") }), h("p", { class: "mut", text: ((d.desc || {}).en || (d.desc || {}).de || "").slice(0, 220) }), h("p", {}, [act("Freigeben", true, function () { return api("/api/admin/entity/approve/" + x.id, { method: "POST", body: {} }); }, function () { rm(); }), " ", act("Ablehnen", false, function () { return api("/api/admin/entity/reject/" + x.id, { method: "POST", body: {} }); }, function () { rm(); }), " ", h("a", { href: BASE + "/entity/" + x.eid + "/", target: "_blank", rel: "noopener", text: "Seite" })])]); }); } done(); });
-    api("/api/admin/entity/claims").then(function (r) { var it = (r.j || {}).claims || []; if (it.length) { var ul = section("Übernahme-Anfragen (" + it.length + ")", "Ein Mitglied möchte eine Entität als Inhaber betreuen."); it.forEach(function (x) { var rm = row(ul, [h("b", { text: x.entity_name || x.eid }), " ", h("span", { class: "mut", text: x.eid + (x.handle ? " · " + x.handle : "") }), x.via === "linkedin" ? h("div", { style: "display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.75em;margin:.6em 0" }, [
+    api("/api/admin/entity/claims").then(function (r) { var it = (r.j || {}).claims || []; var dv = (r.j || {}).domain_verified || []; if (dv.length) { var u2 = section("Per Firmen-E-Mail bestätigt (" + dv.length + ")", "Automatisch verifiziert. Nur bei Missbrauch oder falscher Domain widerrufen."); dv.forEach(function (x) { var rm2 = row(u2, [h("b", { text: x.eid }), " ", h("span", { class: "mut", text: "verifiziert per Domain @" + x.domain + " · " + x.name }), " ", act("Widerrufen", false, function () { return api("/api/admin/entity/claim", { method: "POST", body: { eid: x.eid, revoke: true } }); }, function () { rm2(); })]); }); } if (it.length) { var ul = section("Übernahme-Anfragen (" + it.length + ")", "Ein Mitglied möchte eine Entität als Inhaber betreuen."); it.forEach(function (x) { var rm = row(ul, [h("b", { text: x.entity_name || x.eid }), " ", h("span", { class: "mut", text: x.eid + (x.handle ? " · " + x.handle : "") }), h("span", { class: "mut", text: " · " + ({ pending: "offen", email_sent: "E-Mail gesendet", forwarded: "weitergegeben an " + (x.fwd_mask || "") }[x.status] || x.status) }), x.via === "linkedin" ? h("div", { style: "display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.75em;margin:.6em 0" }, [
         h("div", {}, [x.picture ? h("img", { src: x.picture, alt: "LinkedIn-Profilbild", referrerpolicy: "no-referrer", style: "width:64px;height:64px;object-fit:cover;border-radius:50%" }) : null, h("p", { text: "LinkedIn: " + (x.name || "Unbekannt") })]),
         h("div", {}, [h("p", { text: "Entität: " + (x.entity_name || x.eid) }), x.linkedin_url ? h("a", { href: x.linkedin_url, target: "_blank", rel: "noopener noreferrer", text: "LinkedIn-Link der Entität" }) : null, h("p", { class: "mut", text: x.name_match === "equal" ? "Name gleich" : x.name_match === "similar" ? "Name ähnlich" : "Name weicht ab" })])
-      ]) : h("span", { class: "mut", text: (x.name || "") + (x.handle ? " (" + x.handle + ")" : "") }), h("p", {}, [act("Bestätigen", true, function () { return api("/api/admin/entity/claim", { method: "POST", body: { eid: x.eid, ok: true } }); }, function () { rm(); }), " ", act("Ablehnen", false, function () { return api("/api/admin/entity/claim", { method: "POST", body: { eid: x.eid, ok: false } }); }, function () { rm(); })])]); }); } done(); });
+      ]) : h("span", { class: "mut", text: (x.name || "") + (x.handle ? " (" + x.handle + ")" : "") + (x.proof_domain ? " · Firmen-E-Mail bestätigt @" + x.proof_domain : "") }), h("p", {}, [act("Bestätigen", true, function () { return api("/api/admin/entity/claim", { method: "POST", body: { eid: x.eid, ok: true } }); }, function () { rm(); }), " ", act("Ablehnen", false, function () { return api("/api/admin/entity/claim", { method: "POST", body: { eid: x.eid, ok: false } }); }, function () { rm(); })])]); }); } done(); });
     api("/api/admin/cert-queue").then(function (r) { var it = (r.j || {}).items || []; if (it.length) { var ul = section("Zertifikate prüfen (" + it.length + ")"); it.forEach(function (x) { var rm = row(ul, [h("b", { text: x.e + (x.year ? " · " + x.year : "") }), " ", h("span", { class: "mut", text: (x.name || "") + (x.handle ? " (" + x.handle + ")" : "") }), x.url ? h("p", {}, [h("a", { href: x.url, target: "_blank", rel: "noopener nofollow", text: "Nachweis öffnen" })]) : null, h("p", {}, [act("Bestätigen", true, function () { return api("/api/admin/verify", { method: "POST", body: { owner: "u:" + x.handle, kind: "cert", key: x.e, value: 1 } }); }, function () { rm(); }), " ", act("Ablehnen", false, function () { return api("/api/admin/verify", { method: "POST", body: { owner: "u:" + x.handle, kind: "cert", key: x.e, value: 0 } }); }, function () { rm(); })])]); }); } done(); });
     api("/api/admin/reports").then(function (r) { var it = (r.j || {}).reports || []; if (it.length) { var ul = section("Gemeldete Kommentare (" + it.length + ")"); it.forEach(function (x) { var rm = row(ul, [h("b", { text: x.n + "× gemeldet" }), " ", h("span", { class: "mut", text: (x.lang || "") + " · " + (x.status || "") }), h("p", { class: "mut", text: (x.body || "").slice(0, 260) }), h("p", {}, [act("Ausblenden", true, function () { return api("/api/admin/hide/" + x.id, { method: "POST", body: {} }); }, function () { rm(); }), " ", act("Behalten", false, function () { return api("/api/admin/show/" + x.id, { method: "POST", body: {} }); }, function () { rm(); })])]); }); } done(); });
     api("/api/admin/expert-requests/reports").then(function (r) { var it = (r.j || {}).reports || []; if (it.length) { var ul = section("Gemeldete Publisher-Anfragen (" + it.length + ")"); it.forEach(function (x) { var rm = row(ul, [h("b", { text: x.title }), " ", h("span", { class: "mut", text: "Publisher: " + (x.publisher_name || "–") + " (#" + x.publisher_id + ") · gemeldet von #" + x.reporter_id }), h("p", { class: "mut", text: x.reason || "" }), x.reply_id ? h("p", { class: "mut", text: "Gemeldete Antwort (" + (x.expert_name || "–") + " #" + (x.expert_id || "?") + "): " + (x.reply_body || "bereits gelöscht") }) : null, h("p", {}, [x.reply_id ? act("Antwort entfernen", true, function () { return api("/api/admin/expert-requests/reply-delete", { method: "POST", body: { reply_id: x.reply_id } }); }, function () { rm(); }) : null, x.reply_id ? " " : null, act("Anfrage schließen", !x.reply_id, function () { return api("/api/admin/expert-requests/close", { method: "POST", body: { id: x.request_id } }); }, function () { ul.querySelectorAll('li[data-request-id="' + x.request_id + '"]').forEach(function (li) { li.remove(); }); })])], { "data-request-id": x.request_id }); }); } done(); });
@@ -131,26 +157,27 @@
   }
 
   function mediakitLeads() {   // Mediadaten-Anfragen (Leads): personenbezogen, nur Admin; Werbe-Anfragen (ad_leads) stehen im Reiter Werbung
-    var p = panes.mk, rows = [], COLS = ["Datum", "Name", "Firma", "E-Mail", "Sprache", "Herkunft", "Mail gesendet"];
+    var p = panes.mk, rows = [], COLS = ["Datum", "Name", "Firma", "E-Mail", "Sprache", "Herkunft", "Mail gesendet", "Status", "Ändern", ""], MKU = "/api/admin/mediakit";
     var filter = h("input", { type: "search", "aria-label": "Anfragen filtern", placeholder: "Filter (Name, Firma, E-Mail, Herkunft)" }), msgEl = h("p", { class: "adm-msg" }), count = h("span", { class: "mut" });
-    var csvBtn = h("button", { type: "button", class: "btn", text: "CSV exportieren" }), body = h("tbody");
+    var csvBtn = h("button", { type: "button", class: "btn", text: "CSV exportieren" }), body = h("tbody"), stFilter = leadFilterSel(), counts = h("div");
     function day(t) { return t ? new Date(t * 1000).toISOString().slice(0, 10) : ""; }
     function sent(x) { return x.sent ? "ja" : "nein" + (x.err ? " (" + x.err + ")" : ""); }
     function view() {
       var q = filter.value.trim().toLowerCase();
-      var list = rows.filter(function (x) { return !q || [x.name, x.company, x.email, x.source, x.lang, x.err].join(" ").toLowerCase().indexOf(q) >= 0; });
-      body.textContent = "";
-      list.forEach(function (x) { body.appendChild(h("tr", {}, [h("td", { text: day(x.created) }), h("td", { text: x.name }), h("td", { text: x.company }), h("td", {}, [h("a", { href: mailto(x.email), text: x.email })]), h("td", { text: x.lang }), h("td", { text: x.source }), h("td", { text: sent(x) })])); });
+      var list = rows.filter(function (x) { return (!q || [x.name, x.company, x.email, x.source, x.lang, x.err].join(" ").toLowerCase().indexOf(q) >= 0) && (!stFilter.value || leadSt(x.status)[0] === stFilter.value); });
+      body.textContent = ""; counts.textContent = ""; counts.appendChild(leadCounts(rows, "status"));
+      list.forEach(function (x) { body.appendChild(h("tr", {}, [h("td", { text: day(x.created) }), h("td", { text: x.name }), h("td", { text: x.company }), h("td", {}, [h("a", { href: mailto(x.email), text: x.email })]), h("td", { text: x.lang }), h("td", { text: x.source }), h("td", { text: sent(x) }),
+        h("td", {}, [leadBadge(x.status)]), h("td", {}, [leadStatusSel(x, "status", MKU, msgEl, view)]), h("td", {}, [leadDelete(x, MKU, msgEl, function () { rows = rows.filter(function (y) { return y.id !== x.id; }); view(); })])])); });
       count.textContent = list.length + " von " + rows.length; csvBtn._list = list;
     }
     function cell(v) { v = String(v == null ? "" : v); if (/^[=+\-@\t\r]/.test(v)) v = "'" + v; return '"' + v.replace(/"/g, '""') + '"'; }
     csvBtn.onclick = function () {
-      var lines = [COLS.join(",")].concat((csvBtn._list || []).map(function (x) { return [day(x.created), x.name, x.company, x.email, x.lang, x.source, sent(x)].map(cell).join(","); }));
+      var lines = [COLS.slice(0, 7).concat(["Status"]).join(",")].concat((csvBtn._list || []).map(function (x) { return [day(x.created), x.name, x.company, x.email, x.lang, x.source, sent(x), leadSt(x.status)[1]].map(cell).join(","); }));
       var a = h("a", { href: URL.createObjectURL(new Blob(["\ufeff" + lines.join("\r\n")], { type: "text/csv;charset=utf-8" })), download: "m365fm-mediadaten-anfragen.csv" }); document.body.appendChild(a); a.click(); a.remove();
     };
-    filter.oninput = view;
+    filter.oninput = view; stFilter.onchange = view;
     p.textContent = "";
-    p.append(h("h2", { text: "Mediadaten-Anfragen (Leads)" }), h("p", { class: "mut", text: "Personenbezogene Daten, nur für Admins. Neueste zuerst, höchstens 200. Werbe-Anfragen der Banner-Formulare stehen im Reiter Werbung unter Leads." }), filter, " ", csvBtn, " ", count, msgEl,
+    p.append(h("h2", { text: "Mediadaten-Anfragen (Leads)" }), h("p", { class: "mut", text: "Personenbezogene Daten, nur für Admins. Neueste zuerst, höchstens 200. Werbe-Anfragen der Banner-Formulare stehen im Reiter Werbung unter Leads." }), filter, " ", stFilter, " ", csvBtn, " ", count, counts, msgEl,
       h("div", { style: "overflow-x:auto" }, [h("table", { class: "adm-tbl" }, [h("thead", {}, [h("tr", {}, COLS.map(function (c) { return h("th", { text: c }); }))]), body])]));
     api("/api/admin/mediakit").then(function (r) {
       if (r.s !== 200) { msg(msgEl, ERR[(r.j || {}).error] || "Fehler " + r.s, true); return; }
@@ -437,15 +464,26 @@
 
     // Leads (alle; beanstandete zuerst)
     var lSec = h("section"); p.append(lSec);
+    var lSt = leadFilterSel(), lMsg = h("p", { class: "adm-msg" }), lAll = [], lCsv = h("button", { type: "button", class: "btn", text: "CSV exportieren" }), LU = "/api/admin/ads/lead-status";
+    function lcell(v) { v = String(v == null ? "" : v); if (/^[=+\-@\t\r]/.test(v)) v = "'" + v; return '"' + v.replace(/"/g, '""') + '"'; }
+    function lday(x) { return new Date(x.created * 1000).toISOString().slice(0, 10); }
+    function leadsView() {
+      var list = lAll.filter(function (x) { return !lSt.value || leadSt(x.lead_status)[0] === lSt.value; }); lCsv._list = list;
+      lSec.textContent = "";
+      lSec.append(h("h3", { text: "Leads" }), lSt, " ", lCsv, leadCounts(lAll, "lead_status"), lMsg, tbl(["Datum", "Kampagne", "Firma", "Name", "E-Mail", "Abrechnung", "Grund", "", "Lead-Status", "Ändern", ""], list.map(function (x) {
+        var acts = x.status === "disputed" ? h("span", {}, [h("button", { type: "button", class: "btn main", text: "Gutschreiben", onclick: function () { post("/api/admin/ads/lead", { id: x.id, credit: true }).then(loadLeads).then(loadBookings); } }), " ",
+          h("button", { type: "button", class: "btn", text: "Berechnen", onclick: function () { post("/api/admin/ads/lead", { id: x.id, credit: false }).then(loadLeads); } })]) : null;
+        return [lday(x), x.code, x.org + (x.assigned ? " → " + x.assigned : ""), x.name, x.email, x.status + (x.charged ? "" : " (nicht berechnet)"), x.dispute_reason, acts, leadBadge(x.lead_status), leadStatusSel(x, "lead_status", LU, lMsg, leadsView),
+          leadDelete(x, LU, lMsg, function () { lAll = lAll.filter(function (y) { return y.id !== x.id; }); leadsView(); })];
+      }), "Noch keine Leads."));
+    }
+    lSt.onchange = leadsView;
+    lCsv.onclick = function () {
+      var lines = [["Datum", "Kampagne", "Firma", "Name", "E-Mail", "Abrechnung", "Grund", "Lead-Status"].join(",")].concat((lCsv._list || []).map(function (x) { return [lday(x), x.code, x.org + (x.assigned ? " → " + x.assigned : ""), x.name, x.email, x.status, x.dispute_reason, leadSt(x.lead_status)[1]].map(lcell).join(","); }));
+      var a = h("a", { href: URL.createObjectURL(new Blob(["\ufeff" + lines.join("\r\n")], { type: "text/csv;charset=utf-8" })), download: "m365fm-werbe-leads.csv" }); document.body.appendChild(a); a.click(); a.remove();
+    };
     function loadLeads() {
-      api("/api/admin/ads/leads").then(function (r) {
-        lSec.textContent = ""; if (r.s !== 200) return;
-        lSec.append(h("h3", { text: "Leads" }), tbl(["Datum", "Kampagne", "Firma", "Name", "E-Mail", "Status", "Grund", ""], (r.j.leads || []).map(function (x) {
-          var acts = x.status === "disputed" ? h("span", {}, [h("button", { type: "button", class: "btn main", text: "Gutschreiben", onclick: function () { post("/api/admin/ads/lead", { id: x.id, credit: true }).then(loadLeads).then(loadBookings); } }), " ",
-            h("button", { type: "button", class: "btn", text: "Berechnen", onclick: function () { post("/api/admin/ads/lead", { id: x.id, credit: false }).then(loadLeads); } })]) : null;
-          return [new Date(x.created * 1000).toISOString().slice(0, 10), x.code, x.org, x.name, x.email, x.status + (x.charged ? "" : " (nicht berechnet)"), x.dispute_reason, acts];
-        }), "Noch keine Leads."));
-      });
+      return api("/api/admin/ads/leads").then(function (r) { if (r.s !== 200) { lSec.textContent = ""; return; } lAll = r.j.leads || []; leadsView(); });
     }
     loadLeads();
   }
