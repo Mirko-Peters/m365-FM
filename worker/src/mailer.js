@@ -48,10 +48,11 @@ export function b64(content) {
   return btoa(s);
 }
 
-export async function sendMail(env, { to, subject, html, text, headers = {}, replyTo = "", fromName = "", attachments = [], lang = "en", bannerAt = Date.now() }) {
+export async function sendMail(env, { to, subject, html, text, headers = {}, replyTo = "", fromName = "", attachments = [], lang = "en", bannerAt = Date.now(), banner: withBanner = true }) {
   // attachments: [{ filename, content (Uint8Array/ArrayBuffer oder Base64-String), type, disposition }] - Cloudflare Email Service und Resend.
   // Cloudflare bekommt Binaerdaten unveraendert (5.11.2026: per Base64-String verschickte Mediadaten kamen als ungueltiges PDF an).
-  const banner = conBanner(lang, bannerAt);
+  // banner: false laesst den M365Con-Hinweis weg (Einladungen an Personen ohne Konto: Hinweis auf gespeicherte Daten, keine Eigenwerbung anhaengen).
+  const banner = withBanner === false ? "" : conBanner(lang, bannerAt);
   if (banner && typeof html === "string") html += banner;
   if (banner && typeof text === "string") text += lang === "de"
     ? "\n\nM365Con · Mehr erfahren: https://m365con.net"
