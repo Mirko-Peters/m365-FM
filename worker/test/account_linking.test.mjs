@@ -462,6 +462,33 @@ test("Zusammenfuehren: Branche und Job (#304) gehen nicht verloren, die Auswahl 
   assert.equal((await r2.prepare("SELECT COUNT(*) n FROM profile_job").first()).n + (await r2.prepare("SELECT COUNT(*) n FROM profile_industry").first()).n, 0);
 });
 
+test("Zusammenfuehren und Loeschen: Tabellen des Event-Imports (#317) – Beanspruchung, Import-Vorschau, gemerkte Speaker-Identitaet", async () => {
+  const { db, raw } = await d1(), env = { ...ENV, DB: db };
+  const { tSess, T, S } = await twoAccounts(env);
+  const x = (sql, ...a) => raw.prepare(sql).run(...a), n = (sql, ...a) => raw.prepare(sql).get(...a).n;
+  x("INSERT INTO profiles(user_id,public,handle,updated) VALUES(?,1,'anna-old',1),(?,1,'anna',1)", S, T);
+  x("INSERT INTO events(id,handle,owner_id,title,start,created,updated,unclaimed,source) VALUES(5,'herrenlos',0,'Herrenlos','2027-01-01',1,1,1,'communitydays')");
+  x("INSERT INTO event_claims(event_id,user_id,status,created) VALUES(5,?,'pending',1)", S);
+  x("INSERT INTO import_preview(token,user_id,data,created) VALUES('tok',?,'{\"name\":\"Anna Example\"}',1)", S);
+  x("INSERT INTO speaker_ref(name,name_key,handle,created,updated) VALUES('Anna Example','anna example','anna-old',1,1)");
+  x("INSERT INTO merge_log(kind,from_id,into_id,by_user,created) VALUES('event',1,2,?,1)", S);
+  x("INSERT INTO dedupe_queue(kind,a_id,b_id,status,created,decided_by) VALUES('event',1,2,'separate',1,?)", S);
+  const m = await link(env, tSess, "li-anna");
+  assert.equal((await call(env, "POST", "/api/me/merge", `m365s=${tSess}; m365m=${m.proof}`, { confirm: true })).s, 200);
+  assert.deepEqual(raw.prepare("SELECT event_id,user_id,status FROM event_claims").all().map((r) => ({ ...r })), [{ event_id: 5, user_id: T, status: "pending" }], "offene Beanspruchung wandert zum Ziel");
+  assert.equal(n("SELECT COUNT(*) n FROM import_preview"), 0, "Vorschau des stillgelegten Kontos verfaellt");
+  assert.equal(raw.prepare("SELECT handle FROM speaker_ref").get().handle, "anna", "gemerkte Speaker-Identitaet zeigt auf das Profil des Ziels");
+  assert.equal(raw.prepare("SELECT by_user FROM merge_log").get().by_user, T); assert.equal(raw.prepare("SELECT decided_by FROM dedupe_queue").get().decided_by, T);
+  // die Admin-Liste zeigt die Anfrage nun am lebenden Konto
+  x("UPDATE users SET role='admin' WHERE id=?", T);
+  const claims = await call(env, "GET", "/api/admin/events/claims", `m365s=${tSess}`); assert.equal(claims.s, 200); assert.deepEqual(claims.j.items.map((c) => c.user_id), [T]);
+  // Loeschen des Ziels: nichts aus dem Import bleibt am Konto oder seinem Profil haengen
+  x("INSERT INTO import_preview(token,user_id,data,created) VALUES('tok2',?,'{}',1)", T);
+  assert.equal((await call(env, "DELETE", "/api/me", `m365s=${tSess}`)).s, 200);
+  assert.equal(n("SELECT COUNT(*) n FROM event_claims") + n("SELECT COUNT(*) n FROM import_preview") + n("SELECT COUNT(*) n FROM speaker_ref WHERE handle<>''"), 0);
+  assert.equal(raw.prepare("SELECT by_user FROM merge_log").get().by_user, 0); assert.equal(raw.prepare("SELECT decided_by FROM dedupe_queue").get().decided_by, 0);
+});
+
 test("KI-Token (MCP) duerfen Anmeldungen weder lesen noch aendern", async () => {
   const { db } = await d1(), env = { ...ENV, DB: db };
   const sess = await signIn(env, "gh-anna"), uid = uidOf(sess);

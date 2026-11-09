@@ -4,6 +4,7 @@ export const UA = "M365.FM-EventBot (+https://www.m365.fm/bot/)";
 const TOKEN = "m365.fm-eventbot";
 const now = () => Math.floor(Date.now() / 1000);
 const DAY = 86400;
+export const CACHE_MAX = 400000;   // Zeichen; groessere Antworten werden nicht zwischengespeichert (nie gekuerzt)
 
 // robots.txt-Auswertung: Gruppe des eigenen Tokens, sonst "*"; laengste passende Regel gewinnt, Allow vor Disallow bei Gleichstand
 export function robotsAllowed(txt, path) {
@@ -26,7 +27,7 @@ export function robotsAllowed(txt, path) {
   }
   return best ? best.allow : true;
 }
-// opts: { fetch, sleep, ttl (Sekunden Cache), minGapMs, state }  state = { last: {host: ms}, count }
+// opts: { fetch, sleep, ttl (Sekunden Cache), minGapMs, maxRequests (Abrufe je Lauf), state }  state = { last: {host: ms}, count }
 export async function politeGet(env, url, opts = {}) {
   const db = env.DB, f = opts.fetch || globalThis.fetch, sleep = opts.sleep || ((ms) => new Promise((r) => setTimeout(r, ms)));
   const u = new URL(url), ttl = opts.ttl ?? 6 * 3600, st = opts.state || (opts.state = { last: {}, count: 0 });
@@ -47,7 +48,9 @@ export async function politeGet(env, url, opts = {}) {
   }
   if (st.count >= (opts.maxRequests || 80)) return { ok: false, error: "request_budget" };
   const r = await rawGet(f, url, st, sleep, opts.minGapMs, opts.accept);
-  if (r.status > 0) await db.prepare("INSERT INTO import_cache(url,body,status,fetched) VALUES(?,?,?,?) ON CONFLICT(url) DO UPDATE SET body=excluded.body,status=excluded.status,fetched=excluded.fetched").bind(url, (r.body || "").slice(0, 400000), r.status, now()).run();
+  // Nur vollstaendige Antworten zwischenspeichern: eine abgeschnittene Kopie waere beim naechsten Lesen kaputt (z. B. JSON grosser Events)
+  if (r.status > 0 && (r.body || "").length <= CACHE_MAX) await db.prepare("INSERT INTO import_cache(url,body,status,fetched) VALUES(?,?,?,?) ON CONFLICT(url) DO UPDATE SET body=excluded.body,status=excluded.status,fetched=excluded.fetched").bind(url, r.body || "", r.status, now()).run();
+  else if (r.status > 0 && cached) await db.prepare("DELETE FROM import_cache WHERE url=?").bind(url).run();   // zu gross fuer den Cache: auch keinen alten Stand liefern
   return r;
 }
 async function rawGet(f, url, st, sleep, gap = 1500, accept = "text/html,application/json,text/calendar,application/xml;q=0.9,*/*;q=0.5") {

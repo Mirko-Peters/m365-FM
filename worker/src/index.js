@@ -21,7 +21,7 @@ import { entityMap } from "./entities.js";
 import { handleProfiles, deleteUserData, refreshProfilesExport } from "./profiles.js";
 import { handleClaimVerify } from "./claimverify.js";
 import { handleOrgPair } from "./orgpair.js";
-import { handleEventImport, IMPORT_ROUTE, dailyEventImport } from "./eventimport.js";
+import { handleEventImport, IMPORT_ROUTE, runEventImport } from "./eventimport.js";
 import { handleEvents, deleteUserEvents, ensureM365Con, claimLinkedinEntity, purgeEntityClaimReview } from "./events.js";
 import { handleVotes } from "./votes.js";
 import { handleQa, deleteUserQa } from "./qa.js";
@@ -580,16 +580,20 @@ export default {
     if (event.cron === "*/30 * * * *" && tick.getUTCHours() === 6 && tick.getUTCMinutes() === 0) return;
     const T = (name, fn) => ctx.waitUntil(track(env, name, fn));
     if (event.cron === "*/15 * * * *") {
-      T("topicSessionReminders", async () => {
+      const reminders = track(env, "topicSessionReminders", async () => {
         const queued = await queueSessionReminders(env);
         const dispatched = await dispatchTopicNotifications(env);
         return { queued, dispatched };
       });
+      ctx.waitUntil(reminders);
+      // Event-Import (Community Days, Sessionize) zur Minute 15 und 45: in diesem Aufruf, also nie im Aufruf der Digests (0 6 und */30) und der uebrigen
+      // Aufgaben, und erst NACH den Benachrichtigungen (sie bekommen ihr Kontingent zuerst). Jeder Lauf ist hart gedeckelt (eventimport.js CAP:
+      // rund 100 D1-Aufrufe und 12 Abrufe); was nicht hineinpasst, folgt im naechsten.
+      if (tick.getUTCMinutes() % 30 === 15) ctx.waitUntil(reminders.catch(() => 0).then(() => track(env, "eventImport", () => runEventImport(env))));
       return;
     }
     if (event.cron === "0 6 * * *") {
       T("runPushDigest", () => runPushDigest(env));
-      T("dailyEventImport", () => dailyEventImport(env));   // Community Days + Sessionize-Abgleich (taeglich)
       T("runDigest", () => runDigest(env, { at: scheduledAt }));
     }
     if (event.cron === "*/30 * * * *") T("runDigest", () => runDigest(env, { at: scheduledAt }));

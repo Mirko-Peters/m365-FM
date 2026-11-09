@@ -123,6 +123,7 @@ export async function mergeStatements(db, S, T) {
     "entity_claims", "episode_notes", "pod_episodes", "yt_videos", "guest_listings", "shows", "wish", "expert_requests", "mail_outbox"]) simple(t);
   simple("events", "owner_id"); simple("event_sessions", "proposer_id"); simple("event_roles", "added_by"); simple("entity_invites", "by_user");
   simple("msg_messages", "from_id"); simple("sponsor_manual_metrics", "entered_by"); simple("tr_queue", "requested_by");
+  simple("merge_log", "by_user"); simple("dedupe_queue", "decided_by");   // Event-Import (#317): wer zusammengefuehrt/entschieden hat
   // Blog und Bibliothek: UNIQUE(user_id, slug) -> Slug von S bei Kollision umbenennen
   for (const t of ["blog_posts", "lib_items"]) {
     // Zusatz -<S>-<id>: die id ist eindeutig, so kollidiert der neue Slug weder bei S noch bei T (ein schlichtes -<S> konnte es, dann scheiterte der ganze Batch)
@@ -132,7 +133,8 @@ export async function mergeStatements(db, S, T) {
   // Stimmen, Meldungen, Abos, Mitgliedschaften: doppelte Eintraege entfallen
   for (const t of ["user_badges", "likes", "reports", "wiki_reports", "edit_votes", "entity_a_votes", "email_topics", "item_votes", "blog_votes", "pod_votes",
     "yt_votes", "lib_votes", "wish_votes", "review_helpful", "event_attendees", "event_transfers", "item_guests", "blog_coauthors", "mail_prefs",
-    "mail_topic_follows", "contribution_ignored", "msg_bonus", "certs", "cert_check", "expert_request_reports"]) set(t);
+    "mail_topic_follows", "contribution_ignored", "msg_bonus", "certs", "cert_check", "expert_request_reports", "event_claims"]) set(t);   // event_claims (#317): offene Beanspruchung importierter Events wandert mit
+  st.push(q("DELETE FROM import_preview WHERE user_id=?", S));   // #317: Import-Vorschau des stillgelegten Kontos verfaellt (an das Konto gebunden, hoechstens 1 Stunde gueltig)
   st.push(q("DELETE FROM likes WHERE user_id=? AND comment_id IN (SELECT id FROM comments WHERE user_id=?)", T, T));   // eigene Kommentare liken geht nicht
   st.push(q("DELETE FROM reports WHERE user_id=? AND comment_id IN (SELECT id FROM comments WHERE user_id=?)", T, T));
   st.push(q("DELETE FROM blog_coauthors WHERE user_id=? AND post_id IN (SELECT id FROM blog_posts WHERE user_id=?)", T, T));
@@ -191,6 +193,7 @@ export async function mergeStatements(db, S, T) {
   else if (sh && th && sh !== th) {   // Handle von S zeigt kuenftig auf T: Blog-Abos und Speaker-Eintraege umhaengen
     st.push(q("UPDATE OR IGNORE blog_follows SET handle=? WHERE handle=?", th, sh), q("DELETE FROM blog_follows WHERE handle=?", sh));
     st.push(q("UPDATE event_sessions SET speakers=replace(speakers,?,?) WHERE instr(speakers,?)>0", `"h":"${sh}"`, `"h":"${th}"`, `"h":"${sh}"`));
+    st.push(q("UPDATE speaker_ref SET handle=? WHERE handle=?", th, sh));   // #317: gemerkte Speaker-Identitaet zeigt kuenftig auf das Profil von T
   }
   set("blog_follows");
   if (th || sh) st.push(q("DELETE FROM blog_follows WHERE user_id=? AND handle=?", T, th || sh));
