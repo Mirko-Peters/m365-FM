@@ -1,5 +1,13 @@
 // Abzeichen und Punkte. Anzeigenamen stehen im Frontend (data/community_i18n.json), hier nur IDs und Regeln.
-export const BADGE_ORDER = ["editor", "wiki_author", "author", "podcaster", "videomaker", "curator", "voice", "polyglot", "helpful", "early_bird", "streak", "commentator", "guardian", "li_follower", "founder", "team_member", "organizer", "speaker", "recommender", "recommended", "endorsed", "endorser", "connector", "profile_pro", "entity_owner", "sponsor_open", "notified", "first_comment", "newcomer"];
+export const BADGE_ORDER = ["editor", "wiki_author", "author", "podcaster", "videomaker", "curator", "voice", "polyglot", "helpful", "early_bird", "streak", "commentator", "guardian", "li_follower", "founder", "team_member", "organizer", "speaker", "recommender", "recommended", "endorsed", "endorser", "connector", "inviter_1", "inviter_5", "inviter_10", "inviter_50", "inviter_100", "inviter_1000", "profile_pro", "entity_owner", "sponsor_open", "notified", "first_comment", "newcomer"];
+
+// Einlader: Stufen nach erfolgreichen Einladungen (invite_success, inviter.js). Gespeichert wird je erreichter Stufe ein Abzeichen inviter_<n>, angezeigt nur die hoechste.
+export const INVITER_TIERS = [1, 5, 10, 50, 100, 1000];
+export const inviterTier = (n) => INVITER_TIERS.filter((t) => n >= t).length;   // 0 = keine Stufe, 1..6
+export function collapseInviter(list) {
+  const top = Math.max(0, ...list.filter((b) => /^inviter_\d+$/.test(b)).map((b) => INVITER_TIERS.indexOf(+b.slice(8)) + 1));
+  return [...list.filter((b) => !/^inviter_\d+$/.test(b)), ...(top ? ["inviter_" + INVITER_TIERS[top - 1]] : [])];
+}
 
 let epCache = { at: 0, map: null };
 export async function episodeDates(env) {
@@ -74,6 +82,11 @@ export async function evalBadges(env, uid) {
   };
   const need = { founder: 1, team_member: 1, organizer: 1, speaker: 1, recommender: 1, recommended: 1, endorsed: 3, endorser: 5, connector: 3, profile_pro: 1, entity_owner: 1, sponsor_open: 1 };
   for (const [b, k] of Object.entries(need)) if (q[b] >= k && (await award(db, uid, b))) got.push(b);
+  const inv = await n("SELECT COUNT(*) n FROM invite_success WHERE inviter_user_id=? AND voided=0", uid);
+  for (const t of INVITER_TIERS) {
+    if (inv >= t) { if (await award(db, uid, "inviter_" + t)) got.push("inviter_" + t); }
+    else await db.prepare("DELETE FROM user_badges WHERE user_id=? AND badge=?").bind(uid, "inviter_" + t).run();
+  }
   return got;
 }
 
@@ -83,7 +96,8 @@ export async function stats(db, uid) {
   const c = await db.prepare("SELECT COUNT(*) n FROM comments WHERE user_id=? AND status='ok'").bind(uid).first();
   const l = await db.prepare("SELECT COUNT(*) n FROM likes l JOIN comments c ON c.id=l.comment_id WHERE c.user_id=? AND l.user_id<>?").bind(uid, uid).first();
   const b = await db.prepare("SELECT badge FROM user_badges WHERE user_id=?").bind(uid).all();
-  const badges = (b.results || []).map((x) => x.badge).sort((a, z) => BADGE_ORDER.indexOf(a) - BADGE_ORDER.indexOf(z));
+  const rawBadges = (b.results || []).map((x) => x.badge), nb = rawBadges.length;
+  const badges = collapseInviter(rawBadges).sort((a, z) => BADGE_ORDER.indexOf(a) - BADGE_ORDER.indexOf(z));
   const a = {
     wiki: await n("SELECT COUNT(*) n FROM wiki_rev WHERE user_id=? AND status IN ('live','old')", uid), ent: await n("SELECT COUNT(*) n FROM entity_rev WHERE user_id=? AND status IN ('live','old')", uid),
     orgs_owned: await n("SELECT COUNT(*) n FROM org_members WHERE user_id=? AND role='owner' AND status='active'", uid), orgs_joined: await n("SELECT COUNT(*) n FROM org_members WHERE user_id=? AND role<>'owner' AND status='active'", uid),
@@ -91,10 +105,10 @@ export async function stats(db, uid) {
     endo_r: await n("SELECT COUNT(*) n FROM endorsements WHERE owner_id=?", uid), endo_g: await n("SELECT COUNT(*) n FROM endorsements WHERE by_id=?", uid),
     speaker: await n("SELECT COUNT(*) n FROM event_sessions WHERE speakers LIKE '%\"s\":\"confirmed\"%' AND speakers LIKE '%\"h\":\"' || COALESCE((SELECT handle FROM profiles WHERE user_id=?),'-') || '\"%'", uid),
     pub: await n("SELECT COUNT(*) n FROM profiles WHERE user_id=? AND public=1", uid),
-    blog: await n("SELECT COUNT(*) n FROM blog_posts WHERE user_id=? AND status='live'", uid), vids: await n("SELECT COUNT(*) n FROM yt_videos WHERE user_id=? AND status='published'", uid), pod: await n("SELECT COUNT(*) n FROM pod_episodes WHERE user_id=? AND status='published'", uid), blog_v: await n("SELECT COUNT(*) n FROM blog_votes v JOIN blog_posts b ON b.id=v.post_id WHERE b.user_id=? AND v.user_id<>?", uid, uid),
+    blog: await n("SELECT COUNT(*) n FROM blog_posts WHERE user_id=? AND status='live'", uid), vids: await n("SELECT COUNT(*) n FROM yt_videos WHERE user_id=? AND status='published'", uid), pod: await n("SELECT COUNT(*) n FROM pod_episodes WHERE user_id=? AND status='published'", uid), inv: await n("SELECT COUNT(*) n FROM invite_success WHERE inviter_user_id=? AND voided=0", uid), blog_v: await n("SELECT COUNT(*) n FROM blog_votes v JOIN blog_posts b ON b.id=v.post_id WHERE b.user_id=? AND v.user_id<>?", uid, uid),
   };
-  // Punkteskala: Kommentar 1, erhaltener Like 1, Wiki-/Entitaets-Aenderung 3, Bestaetigung 2/1, Empfehlung 5/5, Firma gruenden 30, beitreten 5, Event 50, bestaetigter Speaker 100, oeffentliches Profil 10, Abzeichen je 5
-  const earned = c.n * 1 + l.n * 1 + badges.length * 5 + a.wiki * 3 + a.ent * 3 + a.orgs_owned * 30 + a.orgs_joined * 5 + a.events * 50 + a.speaker * 100 + a.rec_w * 5 + a.rec_r * 5 + Math.min(a.endo_r, 20) * 2 + Math.min(a.endo_g, 20) + a.pub * 10 + Math.min(a.blog, 20) * 5 + Math.min(a.blog_v, 200) + Math.min(a.pod, 20) * 20 + Math.min(a.vids, 20) * 20;
+  // Punkteskala: Kommentar 1, erhaltener Like 1, Wiki-/Entitaets-Aenderung 3, Bestaetigung 2/1, Empfehlung 5/5, Firma gruenden 30, beitreten 5, Event 50, bestaetigter Speaker 100, oeffentliches Profil 10, Abzeichen je 5, erfolgreiche Einladung 2 (bis 100)
+  const earned = c.n * 1 + l.n * 1 + nb * 5 + Math.min(a.inv, 100) * 2 + a.wiki * 3 + a.ent * 3 + a.orgs_owned * 30 + a.orgs_joined * 5 + a.events * 50 + a.speaker * 100 + a.rec_w * 5 + a.rec_r * 5 + Math.min(a.endo_r, 20) * 2 + Math.min(a.endo_g, 20) + a.pub * 10 + Math.min(a.blog, 20) * 5 + Math.min(a.blog_v, 200) + Math.min(a.pod, 20) * 20 + Math.min(a.vids, 20) * 20;
   const spent = await n("SELECT COALESCE(SUM(cost),0) n FROM points_spent WHERE user_id=?", uid);
   return { comments: c.n, likes: l.n, badges, points: earned, earned, spent, balance: earned - spent };
 }
@@ -116,7 +130,7 @@ export async function badgesFor(db, ids) {
   const q = await db.prepare(`SELECT user_id, badge FROM user_badges WHERE user_id IN (${ids.map(() => "?").join(",")})`).bind(...ids).all();
   const m = new Map();
   for (const r of q.results || []) { if (!m.has(r.user_id)) m.set(r.user_id, []); m.get(r.user_id).push(r.badge); }
-  for (const [k, v] of m) m.set(k, v.sort((a, z) => BADGE_ORDER.indexOf(a) - BADGE_ORDER.indexOf(z)));
+  for (const [k, v] of m) m.set(k, collapseInviter(v).sort((a, z) => BADGE_ORDER.indexOf(a) - BADGE_ORDER.indexOf(z)));
   const pq = await db.prepare(`SELECT owner_id id, program p FROM programs WHERE owner_type='u' AND verified=1 AND owner_id IN (${ids.map(() => "?").join(",")})`).bind(...ids).all();
   const PO = ["mvp", "rd", "mct", "msa", "ms_employee", "partner"];
   for (const r of (pq.results || []).sort((a, z) => PO.indexOf(z.p) - PO.indexOf(a.p))) m.set(r.id, ["prog_" + r.p, ...(m.get(r.id) || [])]);
