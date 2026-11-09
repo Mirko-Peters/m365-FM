@@ -35,6 +35,7 @@ import { handleMediakit } from "./mediakit.js";
 import { handleMail, flushOutbox, notify } from "./mail.js";
 import { handleReviews } from "./reviews.js";
 import { handleEntityInvite, remindInvites } from "./entinvite.js";
+import { handleInviter, syncInviterBadges, deleteUserInvites } from "./inviter.js";
 import { handleDemo } from "./demo.js";
 import { handleGuests, deleteUserGuests } from "./guests.js";
 import { deleteUserEntityInvites } from "./entinvite.js";
@@ -225,6 +226,7 @@ async function deleteAccount(env, id) {
   await deleteUserEntityInvites(db, id);   // braucht mail_addr und die bestaetigten Claims: vor deleteUserData
   await deleteUserMessages(db, id); await deleteUserTokens(db, id); await deleteUserQa(db, id); await deleteUserBlog(db, id); await deleteUserLibrary(db, id); await deleteUserPodcast(db, id); await deleteUserVideos(db, id); await deleteUserGuests(db, id); await deleteUserGuestCredits(db, id);
   await deleteUserData(db, id); await deleteUserExpertRequests(env, id);
+  await deleteUserInvites(env, id);   // Einlader: beide Seiten (eingeladen und Einlader samt eigenem Kuerzel in ref)
 }
 
 const me = memberOf;   // util.js: dieselbe Rollen-Ermittlung auch fuer Cron-Laeufe (Kurzposts)
@@ -409,6 +411,7 @@ async function api(env, request, url, path, asUser, ctx) {
   if (path.startsWith("/api/podcast/") || path.startsWith("/api/admin/podcast")) { const q = await handlePodcast(env, request, url, path, user, J); if (q) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return q; } }
   if (path === "/api/updates/export" || path === "/api/admin/updates/poll") { const q = await handleUpdates(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/reviews")) { const q = await handleReviews(env, request, url, path, user, J); if (q) return q; }
+  if (path.startsWith("/api/invite/") || path === "/api/admin/invites" || path === "/api/admin/invite/void") { const q = await handleInviter(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/entityinvite/")) { const q = await handleEntityInvite(env, request, url, path, user, J); if (q) return q; }
   if (path === "/api/mediakit" || path === "/api/mediakit/summary" || path === "/api/admin/mediakit") { const q = await handleMediakit(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/mail/") || path.startsWith("/api/admin/mail")) { const q = await handleMail(env, request, url, path, user, J); if (q) return q; }
@@ -584,6 +587,7 @@ export default {
     if (event.cron === "0 6 * * *") {
       T("runPushDigest", () => runPushDigest(env));
       T("runDigest", () => runDigest(env, { at: scheduledAt }));
+      T("syncInviterBadges", () => syncInviterBadges(env));   // einmal taeglich (Sicherheitsnetz: Zurechnung, Entwertung und Kontoloeschung bewerten sofort)
     }
     if (event.cron === "*/30 * * * *") T("runDigest", () => runDigest(env, { at: scheduledAt }));
     T("refreshFeeds", () => refreshFeeds(env));

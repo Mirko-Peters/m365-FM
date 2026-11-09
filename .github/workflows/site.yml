@@ -294,7 +294,9 @@ jobs:
       # Teilen-Bilder liegen nicht mehr in docs/ (GitHub Pages, 1-GB-Limit), sondern im R2-Bucket unter og/ und werden ueber
       # https://img.m365.fm/og/... ausgeliefert (generate_site.py OG_BASE). Ersatzbild fuer jede Seite auch dann, wenn das Zeichnen scheitert;
       # Upload VOR dem Deploy und blockierend (OG_REQUIRED=1): schlaegt er fehl, wird nicht veroeffentlicht, der naechste Lauf laedt nur den Rest.
-      # Alte Adressen www.m365.fm/og/... leitet der Site-Worker per 301 auf img.m365.fm weiter. Nichts wird geloescht.
+      # Alte Adressen www.m365.fm/og/... leitet der Site-Worker per 301 auf img.m365.fm weiter. Geloescht werden nur persoenliche Karten
+      # (Einladungskarte og/einladung/<kuerzel>.png, Profilkarte og/[<sprache>/]community/u/<kuerzel>.png), die der Bau nicht mehr erzeugt:
+      # Konto geloescht oder Profil nicht mehr oeffentlich (#320). Sicherung gegen Massenloeschung; bewusst uebergehen: Repo-Variable OG_PRUNE_FORCE=1.
       - name: Teilen-Bilder - Ersatzbild fuer jede Seite ohne Bild
         run: python generate_og.py --fallback-only
       # Illustrationen der Service-Landingpages (site_landing.py): Pillow, deterministisch, wenige Sekunden. Blockierend, weil die Seiten
@@ -303,10 +305,11 @@ jobs:
         run: |
           pip install -q pillow
           python generate_service_images.py r2img
-      - name: Teilen- und Service-Bilder in den R2-Bucket laden (img.m365.fm/og/ und /services/; nur main, blockierend; nichts wird geloescht)
+      - name: Teilen- und Service-Bilder in den R2-Bucket laden (img.m365.fm/og/ und /services/; nur main, blockierend; Karten entfernter Profile werden geloescht)
         if: github.ref == 'refs/heads/main'
         env:
           OG_REQUIRED: "1"
+          OG_PRUNE_FORCE: ${{ vars.OG_PRUNE_FORCE || '0' }}
           R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
           R2_BUCKET: ${{ secrets.R2_BUCKET }}
           R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}

@@ -16,14 +16,51 @@
     return fetch(API + path, o).then(function (r) { return r.json().then(function (j) { return { s: r.status, j: j }; }); });
   }
   var mePromise = null;
-  function me(force) { if (!mePromise || force) mePromise = api("/api/me").then(function (r) { return r.j.user || null; }); return mePromise; }
+  /* Einladungslink: ?ref=<handle> 30 Tage im Browser merken (nur localStorage dieser Website). Der Server bestaetigt den Klick sofort mit einem
+     signierten Beleg (Kuerzel + Serverzeit); nach der Anmeldung loest ihn der Browser einmal ein, zugerechnet wird allein nach dem Beleg (inviter.js). */
+  var SH = window.M365Share;
+  try {
+    if (SH) {
+      var clean = SH.takeRef(location); if (clean) history.replaceState(null, "", clean);   // ohne ref in der Adresse: sie ist das Ruecksprungziel der Anmeldung
+      var ref0 = SH.readRef();   // raeumt abgelaufene Eintraege auf, auch ohne Anmeldung
+      if (ref0 && !ref0.token) api("/api/invite/click", { method: "POST", body: { ref: ref0.ref } }).then(function (x) { if (x.s !== 200) return; if (x.j.token) SH.setToken(ref0.ref, x.j.token); else SH.clearRef(); }).catch(function () {});   // leerer Beleg: schon angemeldet, nichts zuzurechnen
+    }
+  } catch (e) { /* ignore */ }
+  function attributeRef(u) {
+    var r = SH && u ? SH.readRef() : null; if (!r || !r.token) return;
+    api("/api/invite/ref", { method: "POST", body: { token: r.token } }).then(function (x) { if (x.s === 200 || x.s === 400) SH.clearRef(); }).catch(function () {});   // 200 = entschieden oder beim Server vorgemerkt (Tagesgrenze: er holt es nach), 400 = Beleg ungueltig/abgelaufen; 429 (zu viele Versuche dieses Kontos): spaeter erneut
+  }
+  function me(force) { if (!mePromise || force) mePromise = api("/api/me").then(function (r) { var u = r.j.user || null; attributeRef(u); return u; }); return mePromise; }
   function hideAll(sel) { document.querySelectorAll(sel).forEach(function (e) { e.hidden = true; }); }
   function date(ts) { try { return new Date(ts * 1000).toLocaleDateString(LANG); } catch (e) { return ""; } }
 
   function SPN(d, n, e) { return (document.documentElement.lang || "en").slice(0, 2) === "de" ? "Speaker " + d + " (" + n + " bestätigte Sessions)" : "Speaker " + (e || d) + " (" + n + " confirmed sessions)"; }
   var PGI = { speaker_bronze: "🥉", speaker_silver: "🥈", speaker_gold: "🥇", speaker_platinum: "💎", mvp: "🏆", mct: "🎓", rd: "🧭", msa: "🌟", ms_employee: "🪟", partner: "🤝" }, PGN = { speaker_bronze: SPN("Bronze", "1+"), speaker_silver: SPN("Silber", "3+", "Silver"), speaker_gold: SPN("Gold", "7+"), speaker_platinum: SPN("Platin", "15+", "Platinum"), mvp: "Microsoft MVP", mct: "Microsoft Certified Trainer", rd: "Microsoft Regional Director", msa: "Microsoft Student Ambassador", ms_employee: "Microsoft", partner: "Microsoft Partner" };
+  var INV = { 1: ["🥉", "Bronze", "Bronze"], 5: ["🥈", "Silber", "Silver"], 10: ["🥇", "Gold", "Gold"], 50: ["💎", "Platin", "Platinum"], 100: ["💠", "Diamant", "Diamond"], 1000: ["👑", "Legende", "Legend"] };
+  function invBadge(b) { var n = +b.slice(8), d = INV[n], de = (document.documentElement.lang || "en").slice(0, 2) === "de"; return d ? { icon: d[0], title: (de ? "Einlader " + d[1] + " (" + n + " erfolgreiche Einladungen)" : "Inviter " + d[2] + " (" + n + " successful invitations)") } : null; }
+  /* Freunde und Kollegen einladen: persoenlicher Link, Teilen-Links (reine Links, kein SDK) und Zaehler */
+  function inviteCard() {
+    var box = h("div", { class: "ccard cinvite" }), SHR = window.M365Share; if (!SHR) return box;
+    box.appendChild(h("h2", { text: tt("inv_title") }));
+    api("/api/invite/me").then(function (r) {
+      if (r.s !== 200) return;
+      var j = r.j; box.appendChild(h("p", { class: "cmut", text: j.count + " " + tt(j.count === 1 ? "inv_count_1" : "inv_count") }));
+      if (!j.link) { box.appendChild(h("p", { class: "cmut", text: tt("inv_need_profile") })); return; }
+      var inp = h("input", { type: "text", readonly: "readonly", value: j.link, "aria-label": tt("inv_title"), style: "width:100%" }), ok = h("span", { class: "cmut" });
+      function copy() { var done = function () { ok.textContent = "✓ " + tt("inv_copied"); }; if (navigator.clipboard) navigator.clipboard.writeText(j.link).then(done, function () { inp.select(); document.execCommand("copy"); done(); }); else { inp.select(); document.execCommand("copy"); done(); } }
+      var urls = SHR.shareUrls(j.link, LANG), names = { linkedin: "LinkedIn", facebook: "Facebook", x: "X", whatsapp: "WhatsApp", mail: "E-Mail" };
+      var row = h("div", { class: "btns" }, [h("button", { type: "button", class: "btn main", text: tt("inv_copy"), onclick: copy })]);
+      Object.keys(urls).forEach(function (k) { var a = h("a", { class: "btn", href: urls[k], target: k === "mail" ? "_self" : "_blank", rel: "noopener noreferrer", title: names[k], "aria-label": names[k] }); a.appendChild(SHR.icon(k)); row.appendChild(a); });
+      if (navigator.share) row.appendChild(h("button", { type: "button", class: "btn", text: tt("inv_share"), onclick: function () { navigator.share({ title: SHR.texts(LANG).subject, text: SHR.texts(LANG).text, url: j.link }).catch(function () {}); } }));
+      box.appendChild(inp); box.appendChild(row); box.appendChild(ok);
+      if (j.preview === false) box.appendChild(h("p", { class: "cmut", text: tt("inv_private") }));   // Profil nicht oeffentlich: schlichter Link /community/?ref=<kuerzel>, keine Seite mit Name und Vorschau
+      if (j.pending > 0) box.appendChild(h("p", { class: "cmut", text: tt("inv_pending").replace("{n}", j.pending) }));   // ueber der Tagesgrenze: der Server holt sie an den folgenden Tagen nach
+      if (j.next) box.appendChild(h("p", { class: "cmut", text: tt("inv_next").replace("{n}", j.next - j.count) }));
+    });
+    return box;
+  }
   function badgeEls(list, big) {
-    return h("span", { class: "cbs" }, (list || []).map(function (b) { return h("span", { class: "cb" + (big ? " big" : ""), title: /^prog_/.test(b) ? PGN[b.slice(5)] : tt("b_" + b) + " – " + tt("b_" + b + "_d"), text: PGI[b.slice(5)] && /^prog_/.test(b) ? PGI[b.slice(5)] : (ICON[b] || "★") }); }));
+    return h("span", { class: "cbs" }, (list || []).map(function (b) { var iv = /^inviter_\d+$/.test(b) ? invBadge(b) : null; if (iv) return h("span", { class: "cb" + (big ? " big" : ""), title: iv.title, text: iv.icon }); return h("span", { class: "cb" + (big ? " big" : ""), title: /^prog_/.test(b) ? PGN[b.slice(5)] : tt("b_" + b) + " – " + tt("b_" + b + "_d"), text: PGI[b.slice(5)] && /^prog_/.test(b) ? PGI[b.slice(5)] : (ICON[b] || "★") }); }));
   }
   function pruneLogin(box){var P=window.__m365p=window.__m365p||fetch(API+"/api/providers").then(function(r){return r.json()}).catch(function(){return null});P.then(function(j){if(!j||!j.providers)return;[].slice.call(box.querySelectorAll("a[href*=\"/auth/login/\"]")).forEach(function(a){var m=/login\/(\w+)/.exec(a.href);if(m&&j.providers.indexOf(m[1])<0)a.remove()})})}
   function loginBox() {
@@ -290,6 +327,7 @@
             h("button", { type: "button", class: "btn", text: tt("signout"), onclick: function () { api("/api/logout", { method: "POST" }).then(function () { location.reload(); }); } }), ok]),
           h("details", { class: "cdel" }, [h("summary", { text: tt("delete_account") }), h("p", { class: "cmut", text: tt("delete_account_d") }), h("button", { type: "button", class: "btn", text: tt("delete_account_btn"), onclick: function () { if (confirm(tt("delete_account_d"))) api("/api/me", { method: "DELETE" }).then(function () { location.reload(); }); } })])]));
         root.appendChild(signinsCard());
+        root.appendChild(inviteCard());
       }
       var gotL = BADGES.filter(function (b) { return u && u.badges.indexOf(b) > -1; }), bd = h("div", { class: "cbadges" }, gotL.map(function (b) { return h("div", { class: "cbadge got" }, [h("span", { class: "cb big", text: ICON[b] }), h("div", {}, [h("b", { text: tt("b_" + b) }), h("span", { class: "cmut", text: tt("b_" + b + "_d") })])]); }));
       if (BADGES.length > gotL.length) bd.appendChild(h("div", { class: "cbadge" }, [h("span", { class: "cb big", text: "❔" }), h("div", {}, [h("b", { text: tt("hid").replace("{n}", BADGES.length - gotL.length) })])]));
