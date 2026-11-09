@@ -55,7 +55,7 @@ async function adminDecision(env, eid, ok) {
   return handleEvents(env, req, new URL(req.url), "/api/admin/entity/claim", { id: 99, admin: true }, J);
 }
 
-test("LinkedIn: automatisch bestätigt nur redaktionelle Kontakte und Admin-/Editor-Einladungen", async () => {
+test("LinkedIn: bestätigt nie automatisch, auch nicht bei redaktionellen Kontakten (nur Admin entscheidet)", async () => {
   const { raw, env } = await setup(), restore = withEntities();
   try {
     addUser(raw, 1); setRole(raw, 1, "admin");
@@ -74,9 +74,9 @@ test("LinkedIn: automatisch bestätigt nur redaktionelle Kontakte und Admin-/Edi
       INSERT INTO profile_private(user_id,email,updated) VALUES(3,'taylor@example.com',1);
     `);
     const cases = [
-      [20, "contact-person", "alex@example.com", "verified"],
-      [21, "invite-person", "casey@example.com", "verified"],
-      [22, "claimed-invite-person", "riley@example.com", "verified"],
+      [20, "contact-person", "alex@example.com", "pending"],
+      [21, "invite-person", "casey@example.com", "pending"],
+      [22, "claimed-invite-person", "riley@example.com", "pending"],
       [23, "speaker-person", "jordan@example.com", "pending"],
       [24, "guest-person", "taylor@example.com", "pending"],
       [25, "untrusted-invite-person", "jamie@example.com", "pending"],
@@ -172,8 +172,8 @@ test("LinkedIn: Callback übergibt verifizierte Userinfo-Mail an den Claim-Abgle
     };
     const callback = await worker.fetch(new Request(`https://api.test/auth/callback/linkedin?code=test-code&state=${encodeURIComponent(state)}`, { headers: { cookie } }), env);
     assert.equal(callback.status, 302);
-    assert.match(callback.headers.get("location"), /claim_result=verified/);
-    assert.equal(raw.prepare("SELECT status FROM entity_claims WHERE eid='contact-person'").get().status, "verified");
+    assert.match(callback.headers.get("location"), /claim_result=pending/);
+    assert.equal(raw.prepare("SELECT status FROM entity_claims WHERE eid='contact-person'").get().status, "pending");
   } finally { restore(); raw.close(); }
 });
 

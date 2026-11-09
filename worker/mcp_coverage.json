@@ -10,14 +10,14 @@
   "/api/me/merge": {
    "skip": "Anmeldungen verknüpfen/entfernen und Konten zusammenführen (#279) nur mit Browser-Sitzung und frischer Anmeldung, bewusst nicht per KI-Token"
   },
- "/api/directory": {
-  "tools": [
-   "search_directory"
-  ]
- },
- "/api/directory/key": {
-  "skip": "Öffentlicher Maps-Schlüssel wird ausschließlich vom zustimmungsgebundenen Karten-Frontend abgerufen"
- },
+  "/api/directory": {
+   "tools": [
+    "search_directory"
+   ]
+  },
+  "/api/directory/key": {
+   "skip": "Öffentlicher Maps-Schlüssel wird ausschließlich vom zustimmungsgebundenen Karten-Frontend abgerufen"
+  },
   "/api/admin/blog": {
    "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
   },
@@ -258,7 +258,8 @@
   },
   "/api/contributions/sources": {
    "tools": [
-    "list_my_contributions"
+    "list_my_contributions",
+    "list_contribution_sources"
    ]
   },
   "/api/contributions/update": {
@@ -334,6 +335,18 @@
     "list_my_entity_claims"
    ]
   },
+  "/api/entity/claim/confirm": {
+   "skip": "Übernahme per Firmen-E-Mail (#309): nur angemeldet im Browser, Einmal-Link aus der Mail, bewusst nicht per KI-Token"
+  },
+  "/api/entity/claim/domain": {
+   "skip": "Übernahme per Firmen-E-Mail (#309): nur angemeldet im Browser, Einmal-Link aus der Mail, bewusst nicht per KI-Token"
+  },
+  "/api/entity/claim/domains": {
+   "skip": "Übernahme per Firmen-E-Mail (#309): nur angemeldet im Browser, Einmal-Link aus der Mail, bewusst nicht per KI-Token"
+  },
+  "/api/entity/claim/forward": {
+   "skip": "Übernahme per Firmen-E-Mail (#309): nur angemeldet im Browser, Einmal-Link aus der Mail, bewusst nicht per KI-Token"
+  },
   "/api/entity/claims": {
    "skip": "Redaktions-Prüfung der Beanspruchungen (Admin)"
   },
@@ -369,6 +382,12 @@
    "tools": [
     "list_my_entity_invites"
    ]
+  },
+  "/api/entityinvite/send-batch": {
+   "skip": "Nur Admin: Sammelversand und Probelauf der Einladungen, bewusst nicht per KI-Token"
+  },
+  "/api/entityinvite/test": {
+   "skip": "Nur Admin: Testmail an das eigene Konto, bewusst nicht per KI-Token"
   },
   "/api/entityinvite/send": {
    "tools": [
@@ -715,6 +734,23 @@
     "vote_podcast_pitch"
    ]
   },
+  "/api/invite/me": {
+   "tools": [
+    "my_invite_link"
+   ]
+  },
+  "/api/invite/click": {
+   "skip": "Klick-Beleg (Kuerzel + Serverzeit, signiert) beim Oeffnen eines Einladungslinks, nur durch die Website"
+  },
+  "/api/invite/ref": {
+   "skip": "Klick-Beleg aus dem Browser (localStorage) nach der Anmeldung einloesen, nur durch die Website"
+  },
+  "/api/admin/invites": {
+   "skip": "Admin-Funktionen: bewusst nicht per KI-Token"
+  },
+  "/api/admin/invite/void": {
+   "skip": "Admin-Funktionen: bewusst nicht per KI-Token"
+  },
   "/api/points": {
    "tools": [
     "get_my_points"
@@ -1023,6 +1059,9 @@
     "vote_wish"
    ]
   },
+  "/api/admin/org-pair": {
+   "skip": "Admin-Sammelaktion (Firmen und Entitäten paaren, mit Probelauf) nur im Admin-Panel, bewusst nicht per KI-Token"
+  },
   "/api/admin/ads/account": {
    "skip": "Admin-Funktionen (#281 Werbeplätze): nur im Admin-Panel, bewusst nicht per KI-Token"
   },
@@ -1071,6 +1110,9 @@
   "/api/ads/lead": {
    "skip": "Kontaktformular mit Turnstile und Einwilligung nur für Besucher im Browser"
   },
+  "/api/ads/sponsor-lead": {
+   "skip": "Formulardaten (Sponsorname, Turnstile-Schlüssel) für das Sponsor-Lead-Formular im Browser; kein Anwendungsfall für Agenten"
+  },
   "/api/ads/leads": {
    "skip": "Leads enthalten personenbezogene Daten: nur im Firmen-Dashboard, nicht per KI-Token"
   },
@@ -1100,6 +1142,28 @@
   },
   "/api/admin/ads/house-stats": {
    "skip": "Admin-Funktionen (#281 Werbeplätze): nur im Admin-Panel, bewusst nicht per KI-Token"
+  },
+  "/api/contributions/review-batch": {
+   "tools": [
+    "review_new_contributions"
+   ]
+  },
+  "/api/contributions/source/preview": {
+   "skip": "Vorschau der letzten 3 Einträge beim Hinzufügen einer Quelle (Oberfläche); eine KI legt die Quelle mit add_contribution_source an und sieht Funde in review_new_contributions"
+  },
+  "/api/contributions/linkedin-og": {
+   "skip": "Formularhilfe für LinkedIn-Artikel-Links (nur Open-Graph-Tags); eine KI legt Artikel mit add_contribution an"
+  },
+  "/api/contributions/import": {
+   "skip": "Import gewählter Einträge aus dem LinkedIn-Datenexport (im Browser gelesen) bzw. \"andere Links\" in der Oberfläche; per KI gibt es add_contribution"
+  },
+  "/api/contributions/review": {
+   "skip": "Einzelaktionen der Neu-gefunden-Liste in der Oberfläche; per KI review_new_contributions (Vorschau + confirm)"
+  },
+  "/api/contributions/unpublish": {
+   "tools": [
+    "unpublish_contribution"
+   ]
   }
-}
+ }
 }

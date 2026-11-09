@@ -1,5 +1,5 @@
 """Mitglieder- und Firmenverzeichnis: oeffentliche Experten-Profile (nur Opt-in) mit Schema.org-Verknuepfung zu den Entitaeten."""
-import json
+import json, re
 from pathlib import Path
 BLOGLANGS = set()
 BLOGS = {}   # handle -> Sprachen mit Beiträgen
@@ -51,6 +51,13 @@ def strip_private_items(j):
     return j
 
 
+def public_orgs(orgs):
+    """Unbeanspruchte Firmen (Paar aus einer Entitaet, noch ohne Inhaber, orgs.unclaimed=1) bekommen KEINE eigene Seite: die Entitaetsseite
+    ist die einzige oeffentliche Seite (kein Duplikat). Der Export liefert sie schon nicht mehr aus (claimed=false); der Filter sichert aeltere
+    Zwischenspeicher und Sonderfaelle ab. Erst mit Inhaber (claimed) entsteht /community/c/<handle>/ mit sameAs auf die Entitaetsseite."""
+    return [o for o in orgs or [] if o.get("claimed", True) is not False]
+
+
 def fetch_members(api):
     import sys, time
     j = None
@@ -72,7 +79,7 @@ def fetch_members(api):
         print("FEHLER: Profil-Export nicht erreichbar und keine gespeicherte Fassung: es entstehen keine Profilseiten", file=sys.stderr)
         j = j or {}
     print(f"Profile: {len(j.get('people', []))} Personen, {len(j.get('orgs', []))} Firmen", file=sys.stderr)
-    return j.get("people", []), j.get("orgs", [])
+    return j.get("people", []), public_orgs(j.get("orgs", []))
 
 
 def experts_index(people, orgs):
@@ -122,6 +129,25 @@ def _https(u):
     return u if isinstance(u, str) and u.startswith("https://") else ""
 
 
+def _day(ts):
+    """Datum eines Beitrags oder Feed-Eintrags; unbrauchbare Werte (z. B. Millisekunden) brechen den Seitenbau nicht ab (site_feed.iso)."""
+    import site_feed
+    return site_feed.iso(ts)
+
+
+def own_blog(BASE, url):
+    """Handle, wenn die Kanal-URL der eigene Blog eines Mitglieds auf dieser Website ist (/community/u/<handle>/blog/), sonst ''."""
+    m = re.fullmatch(re.escape(BASE) + r"/community/u/([^/]+)/blog/", url or "")
+    return m.group(1) if m else ""
+
+
+def shown_channels(BASE, x):
+    """Kanaele fuer Profilseite und sameAs. Der Kanal "eigener Blog" entsteht im Worker auch fuer Kurzposts aus dem MVP-Tracker
+    (contrib_sources.js); die Seite /community/u/<handle>/blog/ gibt es aber nur mit Blogbeitraegen in der Standardsprache (site_blog.py).
+    Ohne sie waere der Link tot - dann wird der Kanal nicht gezeigt. Den Blog verlinkt die Profilseite ohnehin selbst (BLOGS)."""
+    return [c for c in x.get("channels", []) if not own_blog(BASE, c.get("url")) or "en" in BLOGS.get(own_blog(BASE, c["url"]), ())]
+
+
 def mvp_contrib_html(p, s):
     """MVP-Tracker (#231): oeffentliche Beitraege des Profils. Der Worker liefert nur public=1 und bestaetigte Eintraege (profiles.js)."""
     items = p.get("mvp_contributions") or []
@@ -129,7 +155,7 @@ def mvp_contrib_html(p, s):
         return ""
     li = []
     for c in items:
-        day = datetime.fromtimestamp(int(c.get("published") or 0), timezone.utc).strftime("%Y-%m-%d")
+        day = _day(c.get("published") or 0)
         title = esc(c.get("title") or "")
         link = f'<a href="{esc(_https(c.get("url")))}" rel="nofollow ugc noopener">{title}</a>' if _https(c.get("url")) else title
         li.append(f'<li>{link} <span class="mut">· {esc(c.get("category") or s["mvp_other"])} · <time datetime="{day}">{day}</time></span></li>')
@@ -143,7 +169,7 @@ def mvp_contrib_ld(BASE, p):
     for c in p.get("mvp_contributions") or []:
         url = _https(c.get("url"))
         node = {"@context": "https://schema.org", "@type": "CreativeWork", "@id": url or f"{pid}-contribution-{c.get('id', '')}", "name": c.get("title") or "",
-                "datePublished": datetime.fromtimestamp(int(c.get("published") or 0), timezone.utc).strftime("%Y-%m-%d"), "author": {"@id": pid}}
+                "datePublished": _day(c.get("published") or 0), "author": {"@id": pid}}
         if url:
             node["url"] = url
         if c.get("category"):
@@ -216,7 +242,7 @@ def person_ld(BASE, p, orgs_by_handle):
     mem = [{"@type": "OrganizationRole", "memberOf": {"@id": eid_of(BASE, "microsoft")}, "roleName": PROG_FULL.get(x["p"], PROG[x["p"]][0])} for x in p.get("programs", []) if x.get("verified")]
     if mem:
         n["memberOf"] = mem
-    same = [c["url"] for c in p.get("channels", [])] + [x["url"] for x in p.get("programs", []) if x.get("verified") and x.get("url")]
+    same = [c["url"] for c in shown_channels(BASE, p)] + [x["url"] for x in p.get("programs", []) if x.get("verified") and x.get("url")]
     if person_entity(p["handle"]):   # dieselbe Person in der Entitaetsdatenbank: Seite und Knoten (eine Identitaet, Profil haengt daran)
         same += [eurl(BASE, "en", person_entity(p["handle"])), f"{BASE}/entity/{person_entity(p['handle'])}/#entity"]
     if same:
@@ -258,12 +284,30 @@ def build(g, people, orgs, extra=None):
     BASE, write, page, header, footer, footer_en, LANGS = g["BASE"], g["write"], g["page"], g["header"], g["footer"], g["footer_en"], g["LANGS"]
     sitemap, TODAY = g["sitemap"], g["TODAY"]; api = g.get("api", "https://api-dub.m365.fm")
     shell = lambda lang, b: f'{header(lang, "")}<main class="wrap" style="max-width:56em">{b}</main>{footer(lang) if lang in LANGS else footer_en()}'
+    orgs = public_orgs(orgs)
     pb = {p["handle"]: p for p in people}; ob = {o["handle"]: o for o in orgs}
     css = ('<style>.mb-card{list-style:none;padding:.7em 0;border-bottom:1px solid var(--bd)}.mb-list{padding:0}.mb-tag{display:inline-block;border:1px solid var(--bd);border-radius:2em;padding:.1em .7em;margin:.15em .3em .15em 0;font-size:.88rem;background:var(--card)}'
            '.mb-tag.ok{border-color:var(--ac)}.mb-f{font:inherit;cursor:pointer;border:1px solid var(--bd);border-radius:2em;padding:.35em .9em;margin:.2em .3em .2em 0;background:var(--card);color:var(--fg);min-height:2.5rem}.mb-f[aria-pressed=true]{background:var(--ac);color:var(--onac);border-color:var(--ac)}'
            '.pf-lvl{font-weight:600}.pf-lvl4,.pf-lvl5,.pf-lvl6{color:var(--ac)}.pf-lvl5,.pf-lvl6{text-decoration:underline dotted}.pf-levels{font-size:.85rem;margin-top:.4em}.mb-card[hidden]{display:none}.mb-facts{border-collapse:collapse}.mb-facts th{text-align:start;padding:.3em .8em .3em 0;vertical-align:top}.pf-item{display:flex;gap:.8em;align-items:flex-start;padding:.5em 0;border-bottom:1px solid var(--bd);list-style:none}.pf-item .vt{font:inherit;min-width:3.2rem;min-height:2.5rem;border:1px solid var(--bd);border-radius:.5em;background:var(--card);color:var(--fg);cursor:pointer}.pf-item .vt[aria-pressed=true]{background:var(--ac);color:var(--onac);border-color:var(--ac)}.pf-list{padding:0}</style>')
     live_js = f'<script>window.M365P={{api:"{api}",base:"{BASE}"}}</script><script defer src="{BASE}/assets/pfpub.js"></script>'
     topic_js = f'<script>window.M365TopicConfig={{api:{json.dumps(api)},lang:document.documentElement.lang.slice(0,2)}}</script><script defer src="{BASE}/assets/topic-follow.js"></script>'
+
+    def partner_block(lang, lst):
+        """Partner/Sponsoren (data/sponsorships.json, laufend) oben im Firmenverzeichnis, als Anzeige gekennzeichnet; Link zur Firmen-Entitaet (mit Lead-Formular)
+        und, wenn es eine passende Community-Firma gibt (gleiche Website), zu deren Profil."""
+        import site_sponsorships as SPM
+        sp = SPM.active_sponsor_orgs(SPM._state()["today"], ENTS)
+        if not sp: return ""
+        host = lambda u: re.sub(r"^https?://(www\.)?", "", str(u or "").lower()).split("/")[0]
+        items = ""
+        for o in sp:
+            e = ENTS.get(o["id"]) or {}
+            c = next((x for x in lst if (host(x.get("website")) and host(x.get("website")) == host(e.get("web"))) or x["name"].strip().lower() == o["name"].strip().lower()), None)
+            tag = (e.get("desc") or {}).get(lang) or (e.get("desc") or {}).get("en") or ""
+            items += (f'<li class="mb-card"><a href="{eurl(BASE, lang, o["id"])}"><b>{esc(o["name"])}</b></a> <span class="mb-tag">{esc(SPM.badge(lang, [o["rec"]]))}</span>'
+                      f'<br><span class="mut">{esc(tag[:160])}</span>' + (f' <a href="{purl(BASE, lang, "c", c["handle"])}">{esc(s["company"])}</a>' if c else "") + "</li>")
+        return (f'<section class="mb-partners" role="note" data-spm="partners" style="{SPM.NOTE_STYLE}"><h2 style="margin:.1em 0">{esc(T(lang, "Partners and sponsors", "Partner und Sponsoren"))} '
+                f'<small class="mut">· {esc(T(lang, "Advertisement", "Anzeige"))}</small></h2><ul class="mb-list">{items}</ul></section>')
 
     def rec_html(p, lang, li, pb):
         if not p.get("recs"):
@@ -305,7 +349,7 @@ def build(g, people, orgs, extra=None):
         if not its:
             return ""
         return '<ul class="pf-list">' + "".join(f'<li class="pf-item" data-id="{i["id"]}"><button type="button" class="vt" aria-pressed="false" aria-label="Upvote"><span aria-hidden="true">▲</span> <span class="n">{i["votes"]}</span></button>'
-                                                f'<div><a href="{esc(i["url"])}" rel="nofollow ugc noopener" target="_blank">{esc(i["title"])}</a><br><span class="mut">{esc(KIND.get(i["kind"], i["kind"]))} · {datetime.fromtimestamp(i["published"], timezone.utc).strftime("%Y-%m-%d")}</span></div></li>' for i in its) + "</ul>"
+                                                f'<div><a href="{esc(i["url"])}" rel="nofollow ugc noopener" target="_blank">{esc(i["title"])}</a><br><span class="mut">{esc(KIND.get(i["kind"], i["kind"]))} · {_day(i["published"])}</span></div></li>' for i in its) + "</ul>"
 
     def fol(n, lang):
         n = int(n or 0)
@@ -316,7 +360,8 @@ def build(g, people, orgs, extra=None):
     MS_A = {"modern_work": ("Modern Work", "Modern Work"), "business_apps": ("Business Applications", "Business Applications"), "data_ai": ("Data & AI", "Data & AI"), "infrastructure": ("Infrastructure", "Infrastructure"), "digital_app": ("Digital & App Innovation", "Digital & App Innovation"), "security": ("Security", "Security"), "csp": ("Cloud Solution Provider (CSP)", "Cloud Solution Provider (CSP)"), "msp": ("Managed Service Provider", "Managed Service Provider"), "isv": ("Software Vendor (ISV)", "Softwarehersteller (ISV)"), "inner_circle": ("Inner Circle", "Inner Circle"), "other": ("Other", "Sonstiges")}
     MS_L = {"solutions_partner": ("Solutions Partner", "Solutions Partner"), "specialization": ("Specialization", "Spezialisierung"), "advanced_specialization": ("Advanced specialization", "Advanced Specialization"), "inner_circle": ("Inner Circle member", "Inner-Circle-Mitglied"), "poty_finalist": ("Partner of the Year finalist", "Partner-of-the-Year-Finalist"), "poty_winner": ("Partner of the Year winner", "Partner-of-the-Year-Gewinner"), "registered": ("Registered partner", "Registrierter Partner"), "other": ("Other", "Sonstiges")}
     def chan_ul(x, lang="en"):
-        return '<ul>' + "".join(f'<li><a href="{esc(c["url"])}" rel="me nofollow ugc noopener" target="_blank">{esc(KIND.get(c["kind"], c["kind"]))}</a> <span class="mut">{esc(c["url"].replace("https://", "").rstrip("/")[:60])}{fol(c.get("followers"), lang)}</span></li>' for c in x.get("channels", [])) + "</ul>" if x.get("channels") else ""
+        chans = shown_channels(BASE, x)
+        return '<ul>' + "".join(f'<li><a href="{esc(c["url"])}" rel="me nofollow ugc noopener" target="_blank">{esc(KIND.get(c["kind"], c["kind"]))}</a> <span class="mut">{esc(c["url"].replace("https://", "").rstrip("/")[:60])}{fol(c.get("followers"), lang)}</span></li>' for c in chans) + "</ul>" if chans else ""
 
     for lang in COMM_LANGS:
         s = S[lang]; li = 1 if lang == "de" else 0; noidx = lang != "en"
@@ -359,7 +404,7 @@ def build(g, people, orgs, extra=None):
             b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{croot}members/">{esc(s["members"])}</a></nav>{img_tag("u", p, p["name"])}<h1>{esc(p["name"])}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="creator" data-topic-id="{esc(p["handle"])}" data-topic-label="{esc(T(lang, "Follow", "Folgen"))}">🔔 {T(lang, "Follow", "Folgen")}</button><p style="font-size:1.1em">{esc(p.get("headline", ""))}</p><p>{tags_of_p(p, li, s)}</p>{ft}'
                           + (f'<h2>{esc(s["about"])}</h2><p style="white-space:pre-line">{esc(p["about"])}</p>' if p.get("about") else "")
                           + (f'<h2>{esc(s["expertise"])}</h2>{exp_ul(p, lang, li, s)}' if p.get("expertise") else "") + (f'<h2>{esc(s["certs"])}</h2>{certs}' if certs else "")
-                          + (f'<h2>{esc(s["latest"])}</h2>{items_ul(p)}' if items_ul(p) else "") + (f'<h2>{esc(s["channels"])}</h2>{chan_ul(p, lang)}' if p.get("channels") else "")
+                          + (f'<h2>{esc(s["latest"])}</h2>{items_ul(p)}' if items_ul(p) else "") + (f'<h2>{esc(s["channels"])}</h2>{chan_ul(p, lang)}' if chan_ul(p, lang) else "")
                           + rec_html(p, lang, li, pb) + (f'<h2>{esc(s["contrib"])}</h2>{contrib}' if contrib else "") + mvp_contrib_html(p, s) + ((extra or {}).get(lang, {}).get("u", {}).get(p["handle"], "")) + live_js + topic_js + css)
             node = person_ld(BASE, p, ob)
             ld = [{"@context": "https://schema.org", "@type": "ProfilePage", "@id": purl(BASE, "en", "u", p["handle"]) + "#profile", "url": u, "name": p["name"], "inLanguage": lang, "dateModified": TODAY, "mainEntity": node}]
@@ -385,7 +430,7 @@ def build(g, people, orgs, extra=None):
             b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{croot}companies/">{esc(s["companies"])}</a></nav>{img_tag("o", o, o["name"])}<h1>{esc(o["name"])}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="creator" data-topic-id="{esc(o["handle"])}" data-topic-label="{esc(T(lang, "Follow", "Folgen"))}">🔔 {T(lang, "Follow", "Folgen")}</button><p style="font-size:1.1em">{esc(o.get("tagline", ""))}</p><p>{tags_of_p(o, li, s)}</p>{ft}'
                           + (f'<h2>{esc(s["about"])}</h2><p style="white-space:pre-line">{esc(o["about"])}</p>' if o.get("about") else "")
                           + (f'<h2>{esc(s["expertise"])}</h2>{exp_ul(o, lang, li, s)}' if o.get("expertise") else "") + (f'<h2>{esc(s["team"])}</h2>{mem}' if mem else "")
-                          + (f'<h2>{esc(s["latest"])}</h2>{items_ul(o)}' if items_ul(o) else "") + (f'<h2>{esc(s["channels"])}</h2>{chan_ul(o, lang)}' if o.get("channels") else "") + ((extra or {}).get(lang, {}).get("c", {}).get(o["handle"], "")) + live_js + topic_js + css)
+                          + (f'<h2>{esc(s["latest"])}</h2>{items_ul(o)}' if items_ul(o) else "") + (f'<h2>{esc(s["channels"])}</h2>{chan_ul(o, lang)}' if chan_ul(o, lang) else "") + ((extra or {}).get(lang, {}).get("c", {}).get(o["handle"], "")) + live_js + topic_js + css)
             ld = [{"@context": "https://schema.org", "@type": "ProfilePage", "@id": purl(BASE, "en", "c", o["handle"]) + "#profile", "url": u, "name": o["name"], "inLanguage": lang, "dateModified": TODAY, "mainEntity": org_ld(BASE, o, pb)}]
             write(f"{pfx2(lang)}community/c/{o['handle']}/index.html", page(lang, f'{o["name"]} – {o.get("tagline") or s["companies"]} | M365.FM', (o.get("tagline") or o.get("about") or "")[:155], u, b, None, ld, og_type="profile", extra_head=LCSS, noindex=noidx, side=(g["side"](lang, (o.get("tagline") or "") + " " + (o.get("about") or "")[:1500], ids=[x["e"] for x in o.get("expertise", [])]) if g.get("side") else "")))
             if not noidx:
@@ -400,9 +445,14 @@ def build(g, people, orgs, extra=None):
             fjs = '<script>(function(){var b=[].slice.call(document.querySelectorAll(".mb-f")),l=[].slice.call(document.querySelectorAll(".mb-card[data-p]"));b.forEach(function(x){x.addEventListener("click",function(){b.forEach(function(y){y.setAttribute("aria-pressed",y===x?"true":"false")});l.forEach(function(i){i.hidden=!!x.dataset.f&&(" "+i.dataset.p+" ").indexOf(" "+x.dataset.f+" ")<0})})})})()</script>'
             lm = '<script>' + LIVEMERGE.replace("%KEY%", "people" if kind == "members" else "orgs").replace("%BASE%", purl(BASE, lang, pk, "")) + '</script>'
             feed = f'<h2>{esc(s["feed"])}</h2><div id="pf-feed" data-top="{esc(s["feedtop"])}" data-new="{esc(s["feed"])}"></div>' if kind == "members" else ""
-            b = shell(lang, f'<h1>{esc(title)}</h1><p class="mut">{esc(intro)}</p><p><a class="btn main" href="{croot}">{esc(s["join"])}</a>{(" <a class=\"btn\" href=\"" + croot + "blog/\">Blog</a>") if lang in BLOGLANGS else ""}</p><div role="group" aria-label="{esc(s["filter"])}">{fb}</div><ul class="mb-list">{cards}</ul>{feed}{fjs}{lm}{live_js}{css}')
+            if kind == "companies": partners = partner_block(lang, lst)
+            else: partners = ""
+            _prec = [o["rec"] for o in __import__("site_sponsorships").active_sponsor_orgs(__import__("site_sponsorships")._state()["today"], ENTS)] if partners else []
+            b = shell(lang, f'<h1>{esc(title)}</h1><p class="mut">{esc(intro)}</p>{partners}<p><a class="btn main" href="{croot}">{esc(s["join"])}</a>{(" <a class=\"btn\" href=\"" + croot + "blog/\">Blog</a>") if lang in BLOGLANGS else ""}</p><div role="group" aria-label="{esc(s["filter"])}">{fb}</div><ul class="mb-list">{cards}</ul>{feed}{fjs}{lm}{live_js}{css}')
             ld = [{"@context": "https://schema.org", "@type": "CollectionPage", "name": title, "url": ru, "description": intro, "mainEntity": {"@type": "ItemList", "numberOfItems": len(lst), "itemListElement":
                    [{"@type": "ListItem", "position": i + 1, "item": {"@id": f"{purl(BASE, 'en', pk, it['handle'])}#{'person' if pk == 'u' else 'org'}"}} for i, it in enumerate(lst)]}}]
+            if _prec:   # Partner-Block ist als Anzeige gekennzeichnet: Sponsor auch im JSON-LD der Seite (check_schema: Kennzeichnung <-> sponsor)
+                ld[0]["sponsor"] = __import__("site_sponsorships").ld(_prec)
             write(f"{pfx2(lang)}community/{kind}/index.html", page(lang, f'{title} – M365.FM', intro, ru, b, None, ld, og_type="website", extra_head=LCSS, noindex=noidx))
             if not noidx:
                 sitemap.append((ru, TODAY, None))

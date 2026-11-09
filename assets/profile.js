@@ -60,7 +60,7 @@
       box.hidden = false; if (!box.firstChild) box.appendChild(h("h2", { text: de ? "Bist du das?" : "Is this you?" }));
       es.forEach(function (x) {
         var row = h("p", {}, [h("a", { href: X.base + (de ? "/de" : "") + "/entity/" + x.eid + "/", target: "_blank", text: x.name }), " · " + (x.type === "org" ? (de ? "Firma – passt zu " : "company – matches ") + x.org : (de ? "Person" : "person")) + " "]);
-        row.appendChild(h("button", { type: "button", class: "btn main", text: de ? "Ja, gehört mir" : "Yes, it is mine", onclick: function () { api("/api/entity/claim", { method: "POST", body: { eid: x.eid } }).then(function (q) { row.textContent = (q.j || {}).ok ? (de ? "Anfrage gesendet – die Redaktion prüft sie." : "Request sent – the editors will review it.") : (de ? "Nicht möglich (bereits vergeben oder Limit erreicht)." : "Not possible (already claimed or limit reached)."); }); } }));
+        row.appendChild(h("button", { type: "button", class: "btn main", text: de ? "Ja, gehört mir" : "Yes, it is mine", onclick: function () { api("/api/entity/claim", { method: "POST", body: { eid: x.eid } }).then(function (q) { row.textContent = (q.j || {}).ok ? CL.created : (de ? "Nicht möglich (bereits vergeben oder Limit erreicht)." : "Not possible (already claimed or limit reached)."); if ((q.j || {}).ok) row.appendChild(claimBox(x.eid)); }); } }));
         row.appendChild(document.createTextNode(" ")); row.appendChild(h("button", { type: "button", class: "btn", text: de ? "Nein" : "No", onclick: function () { dis["e:" + x.eid] = 1; try { localStorage.setItem("m365-nosug", JSON.stringify(dis)); } catch (e) {} row.remove(); } }));
         box.appendChild(row);
       });
@@ -216,22 +216,76 @@
       });
     } })); w.appendChild(msg); return w;
   }
+  var CL = M365L(de, "profile.CL", {"step1": "Bestätigen mit Firmen-E-Mail", "hint1": "Wir senden einen Einmal-Link an diese Adresse (24 Stunden gültig). Du musst dafür angemeldet sein.", "send1": "Link senden", "step2": "Kein Firmen-Postfach? Weitergeben an Kollegin/Kollegen", "hint2": "Nur mit einer Adresse bei der Firmen-Domain. Nach der Bestätigung wird die Kollegin/der Kollege Inhaber:in, nicht du.", "send2": "Einladung senden", "mail1": "E-Mail an die Firmen-Adresse", "mail2": "E-Mail der Kollegin/des Kollegen", "sent": "E-Mail gesendet – öffne den Link darin (24 Stunden gültig, einmal nutzbar).", "fwd": "Weitergegeben an ", "fwdwait": " – ohne Firmen-Postfach kannst du die Übernahme nicht selbst abschließen.", "done": "✔ Übernahme bestätigt (Firmen-E-Mail).", "nodomain": "Für diese Entität gibt es keine Firmen-Domain – die Redaktion prüft die Anfrage manuell.", "created": "Anfrage angelegt – bestätige sie jetzt mit deiner Firmen-E-Mail.", "nomail": "Der Versand ist gerade nicht verfügbar.", "free_mail": "Private Adressen (Gmail, Outlook, GMX …) zählen nicht – bitte eine Adresse der Firma.", "domain_mismatch": "Die Adresse gehört nicht zur Firmen-Domain.", "bad_email": "Die E-Mail-Adresse ist ungültig.", "rate_limit": "Zu viele Versuche – bitte später erneut.", "mail_off": "Der Versand ist gerade nicht verfügbar.", "mail_failed": "Die E-Mail konnte nicht gesendet werden.", "no_claim": "Es gibt keine offene Anfrage von dir für diese Entität.", "no_domain": "Für diese Entität gibt es keine Firmen-Domain.", "fail": "Das hat nicht geklappt.", "c_ok": "Bestätigt – du bist jetzt Inhaber:in der Entität.", "c_ok_fwd": "Danke – du bist jetzt Inhaber:in der Entität (weitergegeben an dich).", "c_invalid": "Dieser Link ist ungültig oder die Anfrage ist nicht mehr offen.", "c_used": "Dieser Link wurde schon benutzt.", "c_expired": "Dieser Link ist abgelaufen – bitte einen neuen anfordern.", "c_wrong_user": "Dieser Link gehört zu einem anderen Konto – bitte mit dem Konto anmelden, das die Anfrage gestellt hat.", "c_need_profile": "Bitte lege zuerst ein öffentliches Profil an und öffne den Link danach erneut.", "c_login": "Bitte anmelden und den Link aus der E-Mail danach erneut öffnen.", "c_review": "Firmen-E-Mail bestätigt. Die Redaktion prüft die Übernahme noch (die Domain gehört zu vielen Seiten oder eine frühere Übernahme wurde widerrufen).", "unavailable": "Gerade nicht verfügbar – bitte später erneut versuchen.", "c_unavailable": "Gerade nicht verfügbar – bitte den Link später erneut öffnen (er bleibt gültig).", "c_domain_changed": "Die Domain dieser Adresse gilt für diese Entität nicht mehr – bitte eine neue Anfrage stellen.", "took": "Zugeordnet: ", "pickone": "Mehrere Firmen passen – bitte eine auswählen.", "nomatch": "Keine passende Firma gefunden.", "propose": "Als neue Firmen-Entität vorschlagen", "p_live": "Entität angelegt – wähle sie jetzt aus.", "p_pending": "Vorgeschlagen – die Redaktion prüft sie; danach kannst du sie verknüpfen.", "p_fail": "Der Vorschlag konnte nicht gespeichert werden.", "fits": "Passt diese Entität?", "yes": "Ja", "no": "Nein"}, {"step1": "Confirm with company email", "hint1": "We send a one-time link to this address (valid for 24 hours). You must be signed in.", "send1": "Send link", "step2": "No company mailbox? Pass on to a colleague", "hint2": "Only with an address at the company domain. After confirmation the colleague becomes the owner, not you.", "send2": "Send invitation", "mail1": "Email at the company domain", "mail2": "Colleague's email", "sent": "Email sent – open the link in it (valid for 24 hours, single use).", "fwd": "Passed on to ", "fwdwait": " – without a company mailbox you cannot complete the takeover yourself.", "done": "✔ Takeover confirmed (company email).", "nodomain": "This entity has no company domain – the editors review the request manually.", "created": "Request created – now confirm it with your company email.", "nomail": "Sending is currently unavailable.", "free_mail": "Private addresses (Gmail, Outlook, GMX …) do not count – please use a company address.", "domain_mismatch": "This address is not at the company domain.", "bad_email": "The email address is invalid.", "rate_limit": "Too many attempts – please try again later.", "mail_off": "Sending is currently unavailable.", "mail_failed": "The email could not be sent.", "no_claim": "You have no open request for this entity.", "no_domain": "This entity has no company domain.", "fail": "That did not work.", "c_ok": "Confirmed – you are now the owner of the entity.", "c_ok_fwd": "Thank you – you are now the owner of the entity (passed on to you).", "c_invalid": "This link is invalid or the request is no longer open.", "c_used": "This link has already been used.", "c_expired": "This link has expired – please request a new one.", "c_wrong_user": "This link belongs to another account – please sign in with the account that made the request.", "c_need_profile": "Please create a public profile first, then open the link again.", "c_login": "Please sign in, then open the link from the email again.", "c_review": "Company email confirmed. The editors still review the takeover (the domain belongs to many pages or an earlier takeover was revoked).", "unavailable": "Not available right now – please try again later.", "c_unavailable": "Not available right now – please open the link again later (it stays valid).", "c_domain_changed": "This address's domain no longer applies to this entity – please make a new request.", "took": "Matched: ", "pickone": "Several companies match – please pick one.", "nomatch": "No matching company found.", "propose": "Suggest as a new company entity", "p_live": "Entity created – select it now.", "p_pending": "Suggested – the editors will review it; then you can link it.", "p_fail": "The suggestion could not be saved.", "fits": "Is this the right entity?", "yes": "Yes", "no": "No"});
+  var EM = window.M365EntityMatch || null;
+  var CS = M365L(de, "profile.CS", {"sum": "Firma anlegen oder beitreten", "lab": "Name oder Website der Firma", "hint": "Zuerst suchen: Vielleicht gibt es deine Firma schon – dann trittst du bei oder übernimmst sie, ohne langes Formular.", "comm": "Firma in der Community: ", "ent": "Firmen-Entität: ", "take": "Diese Firma übernehmen", "no": "Nein, meine Firma ist nicht dabei", "cont": "Weiter: Firma neu anlegen", "none": "Keine passende Firma gefunden.", "claimed": "Diese Entität wurde schon übernommen.", "need_profile": "Bitte lege zuerst ein öffentliches Profil an.", "rl": "Zu viele Versuche – bitte später erneut.", "err": "Das hat nicht geklappt.", "made": "Firma angelegt und Übernahme gestartet – bestätige jetzt mit der Firmen-E-Mail."}, {"sum": "Create or join a company", "lab": "Company name or website", "hint": "Search first: your company may already exist – then you join or take it over, without a long form.", "comm": "Community company: ", "ent": "Company entity: ", "take": "Take over this company", "no": "No, my company is not listed", "cont": "Continue: create a new company", "none": "No matching company found.", "claimed": "This entity has already been claimed.", "need_profile": "Please create a public profile first.", "rl": "Too many attempts – please try again later.", "err": "That did not work.", "made": "Company created and takeover started – now confirm with the company email."});
+  // Uebernahme bestaetigen: Firmen-E-Mail (Domain der Entitaet) oder an Kollegin/Kollegen weitergeben; Status kommt vom Worker
+  function claimBox(eid, hintDomain) {
+    var box = h("div", { class: "wk-form" }), msg = h("p", { class: "cmut", role: "status", "aria-live": "polite" });
+    function build(d) {
+      box.textContent = ""; msg.textContent = "";
+      if (d.status === "verified") { box.appendChild(h("p", { text: CL.done })); return; }
+      if (d.review) { box.appendChild(h("p", { class: "cmut", text: CL.c_review + (d.review_domain ? " (@" + d.review_domain + ")" : "") })); return; }   // Firmen-E-Mail bestaetigt, Redaktion entscheidet
+      var doms = d.domains || []; if (!doms.length) { box.appendChild(h("p", { class: "cmut", text: CL.nodomain })); return; }
+      var dom = doms[0], e1 = h("input", { type: "email", maxlength: 254, autocomplete: "email", placeholder: "name@" + dom }), e2 = h("input", { type: "email", maxlength: 254, autocomplete: "off", placeholder: "kollege@" + dom });
+      function send(kind, input, btn) { var v = input.value.trim(); if (!v) return; btn.disabled = true; api("/api/entity/claim/" + kind, { method: "POST", body: { eid: eid, email: v, lang: de ? "de" : "en" } }).then(function (r) {
+        btn.disabled = false; var j = r.j || {};
+        if (j.ok) { input.value = ""; d.status = j.status; d.fwd_mask = j.mask; status(); } else msg.textContent = CL[j.error] || CL.fail; }); }
+      var b1 = h("button", { type: "button", class: "btn main", text: CL.send1, onclick: function () { send("domain", e1, b1); } });
+      var b2 = h("button", { type: "button", class: "btn", text: CL.send2, onclick: function () { send("forward", e2, b2); } });
+      box.appendChild(h("h4", { text: CL.step1 + " (@" + dom + ")" })); box.appendChild(h("p", { class: "cmut", text: CL.hint1 }));
+      box.appendChild(lab(CL.mail1, e1)); box.appendChild(h("p", {}, [b1]));
+      box.appendChild(h("h4", { text: CL.step2 })); box.appendChild(h("p", { class: "cmut", text: CL.hint2 }));
+      box.appendChild(lab(CL.mail2, e2)); box.appendChild(h("p", {}, [b2])); box.appendChild(msg); status();
+      function status() { msg.textContent = d.status === "email_sent" ? CL.sent : d.status === "forwarded" ? CL.fwd + (d.fwd_mask || "") + CL.fwdwait : ""; }
+    }
+    if (hintDomain) box.appendChild(h("p", { class: "cmut", text: CL.step1 + " (@" + hintDomain + ")" }));
+    api("/api/entity/claim/domains?eid=" + encodeURIComponent(eid)).then(function (r) { if (r.s === 200) build(r.j || {}); else { box.textContent = ""; box.appendChild(h("p", { class: "cmut", text: CL.fail })); } });
+    return box;
+  }
   // Firmen-Entitaet waehlen (nur Inhaber/Admin): verknuepft das Firmenkonto mit der Entitaetsseite (/entity/<eid>/); die oeffentlichen Mitglieder erscheinen dort unter "Personen"
   function entityLinkUI(all, o) {
-    var EL = M365L(de, "profile.EL", { h: "Verknüpfte Firmen-Entität", hint: "Wähle die Firma in der Entitäten-Datenbank. Nach der Bestätigung erscheinen alle Mitglieder mit öffentlichem Profil (und sichtbarer Firmenzugehörigkeit) auf der Entitätsseite unter „Personen“ – ab dem nächsten Seitenbau. Bestätigen können Inhaber/Admins der Firma, die die Entität beansprucht haben, oder die Redaktion.", pick: "Firma suchen (Name aus der Entitäten-Datenbank)…", ok: "✔ bestätigt", wait: "⏳ noch nicht bestätigt – zum Bestätigen speichern (Claim der Entität nötig)", none: "Keine Entität verknüpft.", page: "Entitätsseite", nf: "Diese Firma gibt es in der Entitäten-Datenbank nicht – bitte einen Namen aus der Liste wählen.", claim: "Entität beanspruchen", sent: "Anspruch gesendet – die Redaktion prüft ihn; danach hier erneut speichern.", nope: "Nicht möglich (schon beansprucht oder Limit erreicht)." }, { h: "Linked company entity", hint: "Pick the company in the entity database. Once confirmed, every member with a public profile (and visible company membership) appears on the entity page under “People” – from the next site build. Owners/admins of the company who have claimed the entity, or the editors, can confirm it.", pick: "Search company (name from the entity database)…", ok: "✔ confirmed", wait: "⏳ not confirmed yet – save to confirm (requires a claim on the entity)", none: "No entity linked.", page: "Entity page", nf: "This company is not in the entity database – please pick a name from the list.", claim: "Claim this entity", sent: "Claim sent – the editors will review it; then save here again.", nope: "Not possible (already claimed or limit reached)." });
+    var EL = M365L(de, "profile.EL", { h: "Verknüpfte Firmen-Entität", hint: "Wähle die Firma in der Entitäten-Datenbank. Nach der Bestätigung erscheinen alle Mitglieder mit öffentlichem Profil (und sichtbarer Firmenzugehörigkeit) auf der Entitätsseite unter „Personen“ – ab dem nächsten Seitenbau. Bestätigen können Inhaber/Admins der Firma, die die Entität beansprucht haben, oder die Redaktion.", pick: "Firma suchen (Name aus der Entitäten-Datenbank)…", ok: "✔ bestätigt", wait: "⏳ noch nicht bestätigt – erst die Entität beanspruchen", none: "Keine Entität verknüpft.", page: "Entitätsseite", nf: "Diese Firma gibt es in der Entitäten-Datenbank nicht – bitte einen Namen aus der Liste wählen.", claim: "Entität beanspruchen", sent: "Anspruch gesendet – die Bestätigung erfolgt automatisch.", nope: "Nicht möglich (schon beansprucht oder Limit erreicht)." }, { h: "Linked company entity", hint: "Pick the company in the entity database. Once confirmed, every member with a public profile (and visible company membership) appears on the entity page under “People” – from the next site build. Owners/admins of the company who have claimed the entity, or the editors, can confirm it.", pick: "Search company (name from the entity database)…", ok: "✔ confirmed", wait: "⏳ not confirmed yet – claim the entity first", none: "No entity linked.", page: "Entity page", nf: "This company is not in the entity database – please pick a name from the list.", claim: "Claim this entity", sent: "Claim sent – confirmation happens automatically.", nope: "Not possible (already claimed or limit reached)." });
     var orgs = all.filter(function (x) { return x.type === "org"; }), dl = h("datalist", { id: "pdl" + (++uid) });
     orgs.forEach(function (x) { dl.appendChild(h("option", { value: x.name })); });
     var cur = orgs.filter(function (x) { return x.id === o.eid; })[0], inp0 = h("input", { type: "text", list: dl.id, maxlength: 80, placeholder: EL.pick, "aria-label": EL.h });
     inp0.value = cur ? cur.name : (o.eid || "");
     var st = h("p", { class: "cmut" }, o.eid ? [h("a", { href: X.base + (de ? "/de" : "") + "/entity/" + o.eid + "/", target: "_blank", text: EL.page + ": " + (cur ? cur.name : o.eid) }), " · " + (o.eid_ok ? EL.ok : EL.wait)] : [EL.none]);
     var cm = h("span", { class: "cmut", role: "status", "aria-live": "polite" });
-    var cb = h("button", { type: "button", class: "btn", text: EL.claim, onclick: function () { var id = w.get(); if (!id) { cm.textContent = EL.nf; return; } cb.disabled = true; api("/api/entity/claim", { method: "POST", body: { eid: id } }).then(function (q) { cb.disabled = false; cm.textContent = " " + ((q.j || {}).ok ? EL.sent : EL.nope); }); } });
-    var w = h("div", {}, [h("h4", { text: EL.h }), h("p", { class: "cmut", text: EL.hint }), dl, inp0, st, h("p", {}, [cb, cm])]);
+    var claimHost = h("div"), sug = h("div", { role: "status", "aria-live": "polite" }), picked = "", dismissed = false, lastSite = "";
+    function showClaim(id, dom) { claimHost.textContent = ""; claimHost.appendChild(claimBox(id, dom)); }
+    var cb = h("button", { type: "button", class: "btn", text: EL.claim, onclick: function () { var id = w.get(); if (!id) { cm.textContent = " " + w.nf; return; } cb.disabled = true; api("/api/entity/claim", { method: "POST", body: { eid: id } }).then(function (q) { cb.disabled = false; var ok = (q.j || {}).ok; cm.textContent = " " + (ok ? CL.created : EL.nope); if (ok) showClaim(id, w.domain); }); } });
+    if (o.eid) api("/api/entity/claim/mine").then(function (r) { ((r.j || {}).claims || []).forEach(function (c) { if (c.eid === o.eid && c.status !== "verified" && c.status !== "rejected") showClaim(o.eid); }); });
+    function pick(e) { inp0.value = e.name; sug.textContent = ""; w.domain = EM ? (EM.domainsOf(e)[0] || "") : ""; }
+    function propose(v) {
+      var base = (EM ? EM.slug(v) : v.toLowerCase().replace(/[^a-z0-9]+/g, "-")).slice(0, 44), id = base, n = 1;
+      while (all.some(function (x) { return x.id === id; })) id = base + "-" + (++n);
+      var web = lastSite && EM && EM.domainOf(lastSite) ? "https://" + (lastSite.replace(/^[a-z]+:\/\//i, "").split(/[\/?#]/)[0]) : "";
+      var data = { name: v, type: "org", aliases: [], desc: { en: v + " – company profile suggested by a community member.", de: v + " – Firmenprofil, vorgeschlagen von einem Community-Mitglied." } }; if (web) data.web = web;
+      api("/api/entity", { method: "POST", body: { id: id, data: data, summary: "Vorschlag aus Firmenprofil" } }).then(function (r) {
+        var j = r.j || {}; sug.textContent = ""; if (j.ok) { if (j.status === "live") { all.push({ id: id, name: v, type: "org" }); orgs.push({ id: id, name: v, type: "org" }); } sug.appendChild(h("p", { class: "cmut", text: j.status === "live" ? CL.p_live : CL.p_pending })); } else sug.appendChild(h("p", { class: "cmut", text: CL.p_fail })); });
+    }
+    function resolve(v) {
+      var lv = v.toLowerCase(), hit = orgs.filter(function (x) { return x.name.toLowerCase() === lv || x.id === lv || (x.aliases || []).some(function (a) { return String(a).toLowerCase() === lv; }); })[0];
+      var m = hit ? { entity: hit, candidates: [] } : (EM ? EM.match(v, orgs, "org") : { entity: null, candidates: [] });
+      sug.textContent = "";
+      if (m.entity) { pick(m.entity); if (!hit) sug.appendChild(h("p", { class: "cmut", text: CL.took + m.entity.name })); return m.entity.id; }
+      if (m.candidates.length) { w.nf = CL.pickone; sug.appendChild(h("p", { class: "cmut", text: CL.pickone })); m.candidates.forEach(function (e) { sug.appendChild(h("button", { type: "button", class: "btn", style: "margin:.2em .4em .2em 0", text: e.name, onclick: function () { pick(e); } })); }); return null; }
+      w.nf = CL.nomatch; sug.appendChild(h("p", { class: "cmut", text: CL.nomatch })); sug.appendChild(h("button", { type: "button", class: "btn", text: CL.propose, onclick: function () { propose(v); } })); return null;
+    }
+    var w = h("div", {}, [h("h4", { text: EL.h }), h("p", { class: "cmut", text: EL.hint }), dl, inp0, sug, st, h("p", {}, [cb, cm]), claimHost]);
     // null = ungueltig, undefined = nichts senden (neue Firma ohne Wahl), "" = loesen, sonst die Entitaets-ID
-    w.get = function () { var v = inp0.value.trim().toLowerCase(); if (!v) return o.handle ? "" : undefined; var hit = orgs.filter(function (x) { return x.name.toLowerCase() === v || x.id === v || (x.aliases || []).some(function (a) { return String(a).toLowerCase() === v; }); })[0]; return hit ? hit.id : null; };
+    w.get = function () { var v = inp0.value.trim(); if (!v) return o.handle ? "" : undefined; return resolve(v); };
+    // Vorschlag aus Firmenname/Website der Community-Firma (nur wenn noch nichts gewaehlt ist)
+    w.hint = function (name, site) {
+      lastSite = site || ""; if (dismissed || !EM || (inp0.value.trim() && inp0.value !== picked)) return;
+      var s0 = EM.suggest(name, site, orgs); if (!s0) return;
+      picked = inp0.value = s0.entity.name; w.domain = s0.domain; sug.textContent = "";
+      sug.appendChild(h("p", {}, [CL.fits + " " + s0.entity.name + " ✔ ", h("button", { type: "button", class: "btn", text: CL.no, onclick: function () { dismissed = true; inp0.value = picked = ""; w.domain = ""; sug.textContent = ""; } })]));
+    };
     w.nf = EL.nf; return w;
   }
-  function orgForm(all, org, onDone, canLink) {
+  function orgForm(all, org, onDone, canLink, pre) {
     var o = org || {}, f = h("div", { class: "wk-form" }), msg = h("p", { class: "wk-msg", role: "status", "aria-live": "polite" });
     var link = canLink ? entityLinkUI(all, o) : null;
     var handle = inp(30, o.handle), name = inp(80, o.name), tag = inp(120, o.tagline), about = h("textarea", { rows: 4, maxlength: 1500 }), site = inp(250, o.website), country = inp(60, o.country), size = h("select");
@@ -256,6 +310,8 @@
       h("h4", { text: de ? "Standort und Kartenanzeige" : "Location and map display" }), h("p", { class: "cmut", text: de ? "Nur ausdrücklich veröffentlichte Firmenstandorte erscheinen im Verzeichnis." : "Only locations explicitly made public appear in the directory." }), locations,
       h("button", { type: "button", class: "btn", text: de ? "+ Standort" : "+ Location", onclick: function () { addLocation(); } }),
       h("h4", { text: Q.prog }), prog, h("h4", { text: Q.exp }), ex, h("h4", { text: KQ.ind }), h("p", { class: "cmut", text: KQ.indh }), indo, h("h4", { text: Q.chan }), ch].concat(link ? [link] : [], [sponsorUI(function () { return o.handle || ""; })]).forEach(function (x) { f.appendChild(x); });
+    if (pre) { if (pre.name) name.value = pre.name; if (pre.website) site.value = pre.website; }
+    if (link) { var hint = function () { link.hint(name.value, site.value); }; name.addEventListener("change", hint); site.addEventListener("change", hint); if (!o.eid) hint(); }
     var mainSave = saveBtn(Q.save, function () {
       var e = ex.get(); if (e === null) { msg.textContent = Q.bad_expertise; return Promise.resolve(null); }
       var io = indo.get(); if (io === null) { msg.textContent = KQ.bad_industry; return Promise.resolve(null); }
@@ -267,7 +323,7 @@
     }, msg); f.appendChild(h("div", { class: "btns" }, [mainSave])); f.appendChild(msg); return f;
   }
 
-  Promise.all([api("/api/profile/me"), fetch(X.base + "/entities.json").then(function (r) { return r.json(); }), api("/api/org/mine")]).then(function (a) {
+  Promise.all([api("/api/profile/me"), fetch(X.base + "/entities.json" + (X.v ? "?v=" + encodeURIComponent(X.v) : ""), { cache: "no-cache" }).then(function (r) { return r.json(); }), api("/api/org/mine")]).then(function (a) {
     if (a[0].s !== 200) return; var me = a[0].j, all = (a[1].entities || []), p = me.profile || {}, orgs = (a[2].j.orgs || []);
     var sec = h("section", { class: "ccard" }, [h("h2", { text: Q.h }), h("p", { class: "cmut", text: Q.intro })]), msg = h("p", { class: "wk-msg", role: "status", "aria-live": "polite" });
     var pub = chk(Q.pub, p.public), handle = inp(30, p.handle || me.suggest), head = inp(100, p.headline), about = h("textarea", { rows: 6, maxlength: 1500 }), company = inp(80, p.company_eid ? ((all.filter(function (x) { return x.id === p.company_eid; })[0] || {}).name || p.company) : ""), jobp = pickerRows(all, function (x) { return x.type === "job"; }, p.job_eid ? [{ e: p.job_eid }] : jobGuess(all, p.job), false, KQ.jobl, "job", { single: true, pick: KQ.jobpick, mk: KQ.mk, pend: KQ.pend_sel, dup: KQ.dup }), indp = pickerRows(all, function (x) { return x.type === "industry"; }, (p.industries || []).map(function (e) { return { e: e }; }), false, KQ.indadd, "industry", { pick: KQ.indpick, mk: KQ.mk, pend: KQ.pend_sel, dup: KQ.dup }), country = inp(60, p.country), so = chk(Q.showorg, p.show_org !== false);
@@ -304,11 +360,79 @@
       d.appendChild(h("button", { type: "button", class: "btn", text: Q.leave, onclick: function () { api("/api/org/" + o.handle + "/leave", { method: "POST" }).then(function () { location.reload(); }); } }));
       os.appendChild(d);
     });
-    var nd = h("details", { class: "wk-edit" }, [h("summary", { text: Q.neworg })]); nd.appendChild(orgForm(all, null, function () {}, true)); os.appendChild(nd);
-    var jd = h("details", { class: "wk-edit" }, [h("summary", { text: Q.join })]), q = inp(40, ""), res = h("ul"), jm = h("p", { class: "wk-msg", role: "status", "aria-live": "polite" });
-    q.setAttribute("placeholder", Q.search); q.setAttribute("aria-label", Q.search); var t;
-    q.addEventListener("input", function () { clearTimeout(t); t = setTimeout(function () { api("/api/orgs/search?q=" + encodeURIComponent(q.value)).then(function (r) { res.textContent = ""; if (!(r.j.items || []).length && q.value.trim().length > 1) res.appendChild(h("li", {}, [CQ.nf + " ", h("button", { type: "button", class: "btn main", text: CQ.mk + ": " + q.value.trim(), onclick: function () { nd.open = true; var ins = nd.querySelectorAll("input[type=text]"); if (ins[1]) { ins[1].value = q.value.trim(); } nd.scrollIntoView({ behavior: "smooth" }); } })])); (r.j.items || []).forEach(function (o) { res.appendChild(h("li", {}, [o.name + " ", h("button", { type: "button", class: "btn", text: Q.req, onclick: function () { api("/api/org/" + o.handle + "/join", { method: "POST" }).then(function (x) { jm.textContent = x.s === 200 ? "✓ " + Q.pend_me : Q.err; }); } })])); }); }); }, 300); });
-    [q, res, jm].forEach(function (x) { jd.appendChild(x); }); os.appendChild(jd);
+    var sd = h("details", { class: "wk-edit" }, [h("summary", { text: CS.sum })]), st1 = h("div", { class: "wk-form" }), ff = h("div", { hidden: "" });
+    var q = inp(80, ""), res = h("div", { role: "status", "aria-live": "polite" }), jm = h("p", { class: "wk-msg", role: "status", "aria-live": "polite" }), t;
+    var orgEnts = all.filter(function (x) { return x.type === "org"; });
+    q.setAttribute("aria-label", CS.lab); q.setAttribute("placeholder", CS.lab);
+    function showForm() {
+      var v = q.value.trim(), site0 = EM && EM.domainOf(v), pre = site0 ? { website: /^https?:/i.test(v) ? v : "https://" + v } : { name: v };
+      st1.hidden = true; ff.textContent = ""; ff.appendChild(orgForm(all, null, function () {}, true, pre)); ff.hidden = false;
+    }
+    function takeEntity(e, row) {   // Entitaet beanspruchen + Community-Firma (gleicher Name -> automatisch verknuepft) in einem Schritt
+      api("/api/entity/claim", { method: "POST", body: { eid: e.id } }).then(function (c) {
+        var j = c.j || {}; if (!j.ok) { jm.textContent = c.s === 429 ? CS.rl : j.error === "need_profile" ? CS.need_profile : j.error === "claimed" ? CS.claimed : CS.err; return; }
+        var base = (EM ? EM.slug(e.name) : e.id).slice(0, 26); if (base.length < 3) base = e.id.slice(0, 26); var tries = 0;
+        (function mk(hd) { api("/api/org", { method: "POST", body: { handle: hd, name: e.name, website: e.web || "", public: false, programs: [], expertise: [], channels: [], locations: [] } }).then(function (r) {
+          if (r.s === 409 && ++tries < 4) { mk(base.slice(0, 24) + "-" + (tries + 1)); return; }
+          jm.textContent = r.s === 200 ? CS.made : CS.err; row.appendChild(claimBox(e.id, EM ? EM.domainsOf(e)[0] : "")); }); })(base);
+      });
+    }
+    function search() {
+      var v = q.value.trim(); res.textContent = ""; jm.textContent = ""; if (v.length < 2) return;
+      var dom = EM && EM.domainOf(v), m = EM ? EM.match(v, orgEnts, "org") : { entity: null, candidates: [] }, ents = m.entity ? [m.entity] : m.candidates;
+      api("/api/orgs/search?q=" + encodeURIComponent(dom ? dom.split(".")[0] : v)).then(function (r) {
+        if (q.value.trim() !== v) return; var items = (r.j || {}).items || [];
+        items.forEach(function (o) { res.appendChild(h("p", {}, [CS.comm + o.name + " ", h("button", { type: "button", class: "btn", text: Q.req, onclick: function () { api("/api/org/" + o.handle + "/join", { method: "POST" }).then(function (x) { jm.textContent = x.s === 200 ? "✓ " + Q.pend_me : Q.err; }); } })])); });
+        ents.forEach(function (e) { var row = h("div"); row.appendChild(h("p", {}, [CS.ent + e.name + " ", h("button", { type: "button", class: "btn main", text: CS.take, onclick: function () { takeEntity(e, row); } })])); res.appendChild(row); });
+        var any = items.length || ents.length; if (!any) res.appendChild(h("p", { class: "cmut", text: CS.none }));
+        res.appendChild(h("p", {}, [h("button", { type: "button", class: any ? "btn" : "btn main", text: any ? CS.no : CS.cont, onclick: showForm })]));
+      });
+    }
+    q.addEventListener("input", function () { clearTimeout(t); t = setTimeout(search, 300); });
+    [h("p", { class: "cmut", text: CS.hint }), lab(CS.lab, q), res, jm].forEach(function (x) { st1.appendChild(x); }); sd.appendChild(st1); sd.appendChild(ff); os.appendChild(sd);
     (orgHost || root).appendChild(os);
   }).catch(function () {});
+  (function claimLink() {   // Link aus der Bestaetigungs-Mail: ?claimverify=<token>
+    var t = ""; try { t = new URLSearchParams(location.search).get("claimverify") || ""; } catch (e) {} if (!t) return;
+    var m = h("p", { class: "wk-msg", role: "status", "aria-live": "polite" }); root.insertBefore(m, root.firstChild);
+    api("/api/entity/claim/confirm", { method: "POST", body: { t: t } }).then(function (r) {
+      var j = r.j || {}; if (r.s === 401) { m.textContent = CL.c_login; return; }
+      m.textContent = j.ok ? (j.review ? CL.c_review : j.forwarded ? CL.c_ok_fwd : CL.c_ok) : (CL["c_" + j.error] || CL.fail);
+      try { var u = new URL(location.href); u.searchParams.delete("claimverify"); history.replaceState(null, "", u.pathname + u.search + u.hash); } catch (e) {}
+    });
+  })();
+  // Link aus der Einladungs-Mail (Entitaet uebernehmen): ?invite=<token>, 27 Zeichen base64url (Testmail: TEST-<16 Zeichen>). Die 36-stelligen Hex-Tokens der Speaker-Einladungen
+  // verarbeitet events.js. Die Karte steht ueber den Reitern und haengt nicht am Anker: nach der Anmeldung kommt man ohne #c-invite zurueck, das Token
+  // bleibt in der Adresse, bis die Seite uebernommen ist.
+  var IV = M365L(de, "profile.IV", {"h": "Einladung: deine Seite auf M365.FM", "hi": "Hallo {n},", "hi0": "Hallo,", "txt": "mit dieser Einladung übernimmst du die Seite über dich und pflegst Angaben, Themen und Links danach selbst:", "login": "Melde dich an (oder registriere dich kostenlos), um die Seite zu übernehmen. Die Einladung bleibt dabei erhalten.", "signin": "Anmelden mit", "go": "Seite übernehmen", "busy": "Wird übernommen …", "ok": "✓ Die Seite gehört jetzt zu deinem Konto.", "view": "Seite ansehen", "need_profile": "Dafür brauchst du ein öffentliches Profil: im Reiter „Profil“ eine Profil-Adresse wählen, „Profil öffentlich anzeigen“ ankreuzen und speichern. Klicke danach erneut auf „Seite übernehmen“.", "toprofile": "Zum Profil", "claimed": "Diese Seite ist bereits einem anderen Konto zugeordnet. Stimmt das nicht, antworte bitte auf die Einladungs-Mail.", "used": "Diese Einladung wurde bereits eingelöst.", "invalid": "Dieser Einladungs-Link ist ungültig oder wurde zurückgezogen.", "fail": "Das hat nicht geklappt – bitte später erneut versuchen.", "test": "Das ist der Link aus einer Testmail. In einer echten Einladung stehen hier der Name der eingeladenen Person und der Knopf „Seite übernehmen“."}, {"h": "Invitation: your page on M365.FM", "hi": "Hi {n},", "hi0": "Hi,", "txt": "with this invitation you claim the page about you and keep its details, topics and links up to date yourself:", "login": "Sign in (or register for free) to claim the page. The invitation stays valid while you do.", "signin": "Sign in with", "go": "Claim my page", "busy": "Claiming …", "ok": "✓ The page now belongs to your account.", "view": "View the page", "need_profile": "You need a public profile for this: on the “Profile” tab choose a profile address, tick “Show my profile publicly” and save. Then click “Claim my page” again.", "toprofile": "Go to profile", "claimed": "This page is already linked to another account. If that is wrong, please reply to the invitation e-mail.", "used": "This invitation has already been used.", "invalid": "This invitation link is invalid or has been withdrawn.", "fail": "That did not work – please try again later.", "test": "This is the link from a test mail. In a real invitation the invited person sees their name and the “Claim my page” button here."});
+  (function inviteLink() {
+    var t = ""; try { t = new URLSearchParams(location.search).get("invite") || ""; } catch (e) {} if (!/^(?:[A-Za-z0-9_-]{27}|TEST-[A-Za-z0-9_-]{16})$/.test(t)) return;
+    var card = h("section", { class: "ccard", id: "c-invite" }, [h("h2", { text: IV.h })]), m = h("p", { class: "wk-msg", role: "status", "aria-live": "polite" });
+    function put() { var at = document.querySelector(".ctabs") || document.getElementById("c-page") || root; at.parentNode.insertBefore(card, at); }
+    if (t.slice(0, 5) === "TEST-") { put(); card.appendChild(h("p", { text: IV.test })); return; }   // "Testmail an mich" (Verwaltung): kein echtes Token, nichts zu uebernehmen
+    Promise.all([api("/api/entityinvite/info?t=" + encodeURIComponent(t)), api("/api/me")]).then(function (a) {
+      var i = a[0].j || {}, me = (a[1].j || {}).user || null; put();
+      if (a[0].s !== 200 || !i.eid || i.status === "declined") { card.appendChild(h("p", { text: IV.invalid })); return; }
+      var pageUrl = X.base + (de ? "/de" : "") + "/entity/" + i.eid + "/";
+      card.appendChild(h("p", {}, [(i.name ? IV.hi.replace("{n}", i.name) : IV.hi0) + " " + IV.txt + " ", h("a", { href: pageUrl, text: pageUrl })]));
+      if (i.status === "claimed") { card.appendChild(h("p", { text: IV.used })); return; }
+      if (!me) {   // nicht angemeldet: Anmeldeknoepfe; die Rueckkehr-Adresse enthaelt ?invite=..., danach geht es hier mit dem Knopf weiter
+        var ret = encodeURIComponent(location.href.split("#")[0]), lg = h("div", { class: "btns" }); card.appendChild(h("p", { text: IV.login })); card.appendChild(lg);
+        fetch(X.api + "/api/providers").then(function (r) { return r.json(); }).catch(function () { return {}; }).then(function (pj) { var pv = (pj && pj.providers) || ["linkedin", "microsoft", "google"]; if (!Array.isArray(pv)) pv = Object.keys(pv);
+          [["linkedin", "LinkedIn"], ["microsoft", "Microsoft"], ["google", "Google"], ["github", "GitHub"]].forEach(function (x) { if (pv.indexOf(x[0]) >= 0) lg.appendChild(h("a", { class: "btn" + (x[0] === "linkedin" ? " main" : ""), href: X.api + "/auth/login/" + x[0] + "?return=" + ret, rel: "nofollow", text: IV.signin + " " + x[1] })); }); });
+        return;
+      }
+      var go = h("button", { type: "button", class: "btn main", text: IV.go, onclick: function () {
+        go.disabled = true; m.textContent = IV.busy;
+        api("/api/entityinvite/accept", { method: "POST", body: { t: t } }).then(function (r) {
+          var j = r.j || {};
+          if (j.ok) { m.textContent = IV.ok + " "; m.appendChild(h("a", { href: pageUrl, text: IV.view })); go.hidden = true; try { var u = new URL(location.href); u.searchParams.delete("invite"); history.replaceState(null, "", u.pathname + u.search + u.hash); } catch (e) {} return; }
+          go.disabled = false;
+          if (j.error === "need_profile") { m.textContent = IV.need_profile + " "; m.appendChild(h("a", { href: "#c-expert", text: IV.toprofile })); return; }
+          m.textContent = j.error === "claimed" ? IV.claimed : j.error === "not_found" ? IV.invalid : r.s === 401 ? IV.login : IV.fail;
+        }, function () { go.disabled = false; m.textContent = IV.fail; });
+      } });
+      card.appendChild(h("div", { class: "btns" }, [go])); card.appendChild(m);
+    }).catch(function () { put(); card.appendChild(h("p", { text: IV.fail })); });
+  })();
 })();
