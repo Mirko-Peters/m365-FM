@@ -7,7 +7,7 @@ import { findExperts } from "./experts.js";
 import { computeLevels } from "./levels.js";
 import { ensureDirectoryCols, geocodeAddress, recordGeocodeStatus } from "./directory.js";
 import { checkKindIds } from "./kinds.js";
-import { publicKindSql, publicItemSql } from "./feedpolicy.js";
+import { publicKindSql, publicItemSql, FEED_DAYS } from "./feedpolicy.js";
 import { createOrgEntity, findOrgEntity, setOrgEntity, unclaimedOrgOf, adoptOrg } from "./orgpair.js";
 
 export const PROGRAMS = ["mvp", "mct", "rd", "msa", "ms_employee", "partner", "gde"];   // gde: Google Developer Experts (MVP-Tracker, format=gde)
@@ -508,7 +508,7 @@ export async function handleProfiles(env, request, url, path, user, J) {
     await ensureSectionCols(db);
     const rows = (await db.prepare(`SELECT i.id,i.title,i.url,i.summary,i.thumb,i.body,i.topics,i.keypoints,i.faq,i.published,i.origin,c.kind,i.owner_type,i.owner_id,(SELECT COUNT(*) FROM item_votes v WHERE v.item_id=i.id) votes FROM feed_items i JOIN channels c ON c.id=i.channel_id
       WHERE i.hidden=0 AND ${publicKindSql()} AND i.url NOT LIKE ? AND i.published>? AND ((i.owner_type='u' AND i.owner_id IN (SELECT p.user_id FROM profiles p JOIN users u ON u.id=p.user_id AND u.banned=0 WHERE p.public=1)) OR (i.owner_type='o' AND i.owner_id IN (SELECT id FROM orgs WHERE public=1)))
-      ORDER BY i.published DESC LIMIT 300`).bind(env.SITE + "%", now() - 120 * 86400).all()).results || [];
+      ORDER BY i.published DESC LIMIT 300`).bind(env.SITE + "%", now() - FEED_DAYS * 86400).all()).results || [];
     const names = new Map(), out = [];
     for (const r of rows) {
       const k = r.owner_type + r.owner_id;
@@ -661,7 +661,9 @@ export async function handleProfiles(env, request, url, path, user, J) {
   }
   if (path === "/api/admin/feed-hide" && method === "POST") {
     if (!(user?.admin || user?.editor)) return J({ error: "forbidden" }, 403);
-    const b = await body(); await db.prepare("UPDATE feed_items SET hidden=? WHERE id=?").bind(b.hidden ? 1 : 0, +b.id).run(); return J({ ok: true });
+    // hidden: 0 = sichtbar, 1 = von der Moderation ausgeblendet, 2 = vom Mitglied zurueckgezogen (Kurzpost, contrib_sources.js). Einblenden hebt nur
+    // die eigene Entscheidung der Moderation auf; was ein Mitglied zurueckgezogen hat, macht hier niemand wieder oeffentlich.
+    const b = await body(); await db.prepare(b.hidden ? "UPDATE feed_items SET hidden=1 WHERE id=?" : "UPDATE feed_items SET hidden=0 WHERE id=? AND hidden=1").bind(+b.id).run(); return J({ ok: true });
   }
   return null;
 }

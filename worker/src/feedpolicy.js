@@ -7,6 +7,10 @@ export const PRIVATE_FEED_KINDS = Object.freeze(["github"]);
 
 export const isPublicFeedKind = (kind) => !PRIVATE_FEED_KINDS.includes(String(kind || "").toLowerCase());
 
+// Fenster des oeffentlichen Feeds in Tagen: /api/feed/export (und damit der Seitenbau) zeigt nur Eintraege, die juenger sind.
+// Aelteres bekaeme nie eine Seite, deshalb entsteht daraus auch kein Kurzpost (contrib_sources.js publishAsPost).
+export const FEED_DAYS = 120;
+
 const list = () => PRIVATE_FEED_KINDS.map((k) => `'${k}'`).join(",");
 
 // Bedingung auf die Kanal-Art, wenn channels schon verbunden ist (z. B. "c.kind")

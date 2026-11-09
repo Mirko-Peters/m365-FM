@@ -107,6 +107,19 @@ export async function sha256hex(s) {
   return [...new Uint8Array(d)].map((x) => x.toString(16).padStart(2, "0")).join("");
 }
 
+// Kennung fuer alle Abrufe fremder Seiten (Feeds der Profil-Kanaele, eigene Quellen im MVP-Tracker, Link-Vorschau). Die Seite /bot/ erklaert den Bot.
+export const BOT_UA = "M365.FM-Bot (+https://www.m365.fm/bot/)";
+
+// Mitglied mit Rollen laden: admin (Rolle oder ADMIN_SUBS), editor, pro (bestaetigtes Programm). null = unbekannt oder gesperrt.
+// Eine Stelle fuer Sitzung, KI-Token und Cron-Laeufe, die nur die Nutzer-ID kennen (z. B. Kurzposts aus eigenen Quellen).
+export const isAdmin = (env, u) => u.role === "admin" || (env.ADMIN_SUBS || "").split(",").map((s) => s.trim()).includes(`${u.provider}:${u.sub}`);
+export async function memberOf(env, uid) {
+  const u = await env.DB.prepare("SELECT id,provider,sub,name,bio,lang,banned,role,created FROM users WHERE id=?").bind(uid).first();
+  if (!u || u.banned) return null;
+  const pro = !!(await env.DB.prepare("SELECT 1 x FROM programs WHERE owner_type='u' AND owner_id=? AND verified=1 AND program IN ('mvp','mct','rd','msa','ms_employee') LIMIT 1").bind(uid).first());
+  return { ...u, admin: isAdmin(env, u), editor: u.role === "editor", pro };
+}
+
 // Ratelimit: max Aktionen pro Fenster (Sekunden). true = erlaubt
 export async function rateLimit(db, key, max, windowSec) {
   const now = Math.floor(Date.now() / 1000);

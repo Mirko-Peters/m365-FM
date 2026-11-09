@@ -1,5 +1,5 @@
 // Feeds der Creator-Kanaele einsammeln: nur Titel, Link und Datum (kein Volltext), https, begrenzte Groesse
-import { cleanText } from "./util.js";
+import { cleanText, BOT_UA } from "./util.js";
 import { sendPush } from "./push.js";
 import { goodHost, ensureFeedCols } from "./profiles.js";
 import { queueTopicNotification } from "./topic_notifications.js";
@@ -35,7 +35,7 @@ export function parseFeed(xml, max = 12) {
 // Feed automatisch finden: YouTube-Handle -> channel_id, GitHub/Bluesky/Mastodon -> Standard-Feed, sonst <link rel="alternate"> im HTML
 async function get(u, ms = 6000) {
   const ctl = new AbortController(), to = setTimeout(() => ctl.abort(), ms);
-  try { const r = await fetch(u, { signal: ctl.signal, redirect: "follow", headers: { "user-agent": "M365.FM-Bot (+https://www.m365.fm/bot/)", accept: "text/html,application/xml,*/*" } }); return r.ok ? (await r.text()).slice(0, 400000) : ""; } catch { return ""; } finally { clearTimeout(to); }
+  try { const r = await fetch(u, { signal: ctl.signal, redirect: "follow", headers: { "user-agent": BOT_UA, accept: "text/html,application/xml,*/*" } }); return r.ok ? (await r.text()).slice(0, 400000) : ""; } catch { return ""; } finally { clearTimeout(to); }
 }
 export async function discoverFeed(kind, url) {
   let u; try { u = new URL(url); } catch { return ""; }
@@ -55,6 +55,8 @@ export async function discoverFeed(kind, url) {
   return "";
 }
 
+const hostOf = (u) => { try { return new URL(u).hostname.toLowerCase().replace(/^(?:www|m)\./, ""); } catch { return ""; } };
+
 // Private Kanal-Arten (feedpolicy.js, z. B. GitHub) werden nicht abgerufen: ihre Inhalte erscheinen nirgends oeffentlich. Fuer MVP-Nachweise liest contributions.js den Feed selbst.
 export async function refreshFeeds(env, max = 8) {
   const db = env.DB, now = Math.floor(Date.now() / 1000);
@@ -65,15 +67,32 @@ export async function refreshFeeds(env, max = 8) {
   for (const c of rows) {
     try {
       const ctl = new AbortController(), to = setTimeout(() => ctl.abort(), 6000);
-      const r = await fetch(c.feed, { signal: ctl.signal, headers: { "user-agent": "M365.FM-Bot (+https://www.m365.fm/bot/)", accept: "application/rss+xml, application/atom+xml, text/xml, */*" } });
+      const r = await fetch(c.feed, { signal: ctl.signal, headers: { "user-agent": BOT_UA, accept: "application/rss+xml, application/atom+xml, text/xml, */*" } });
       clearTimeout(to);
       if (!r.ok) throw new Error("http " + r.status);
       const xml = (await r.text()).slice(0, 600000);
       const items = parseFeed(xml); if (!items.length) throw new Error("empty");
       await ensureFeedCols(db);
-      let fresh = [];
-      if (c.owner_type === "u" || c.owner_type === "o") { const ex = new Set(((await db.prepare("SELECT url FROM feed_items WHERE channel_id=?").bind(c.id).all()).results || []).map((r) => r.url)); fresh = items.filter((i) => !ex.has(i.url)); if (ex.size === 0) fresh = []; }
-      await db.batch([...items.map((i) => db.prepare("INSERT INTO feed_items(channel_id,owner_type,owner_id,url,title,published,summary,thumb) VALUES(?,?,?,?,?,?,?,?) ON CONFLICT(url) DO UPDATE SET summary=CASE WHEN feed_items.summary='' THEN excluded.summary ELSE feed_items.summary END, thumb=CASE WHEN feed_items.thumb='' THEN excluded.thumb ELSE feed_items.thumb END").bind(c.id, c.owner_type, c.owner_id, i.url, i.title, i.t, i.desc || "", i.thumb || "")),
+      // Was davon kennt der Feed schon - gleich unter welchem Kanal? Nur wirklich Neues loest Hinweise aus: eine URL, die ein anderer Kanal haelt
+      // (feed_items.url ist eindeutig), galt sonst bei jedem Lauf wieder als neu.
+      const marks = items.map(() => "?").join(","), urls = items.map((i) => i.url), look = async () => db.prepare(`SELECT id,url,owner_type,owner_id,origin FROM feed_items WHERE url IN (${marks})`).bind(...urls).all();
+      const known = (await look().catch(async () => { await db.prepare("ALTER TABLE feed_items ADD COLUMN origin TEXT NOT NULL DEFAULT ''").run().catch(() => {}); return look(); })).results || [];   // 0036 fehlt noch: Spalte anlegen statt den Kanal als fehlerhaft zu zaehlen
+      const had = !!(await db.prepare("SELECT 1 x FROM feed_items WHERE channel_id=? LIMIT 1").bind(c.id).first());   // erster Abruf eines Kanals: keine Hinweise
+      // Kurzposts aus dem MVP-Tracker (origin='kurzpost') weichen dem echten Kanal: Der Eintrag wandert hierher und gilt wieder als gezogen
+      // (Plattform, Vorschaubild, VideoObject). Gehoerte er jemand anderem, wechselt auch der Eigentuemer - der Kanal belegt die Urheberschaft,
+      // ein Kurzpost ist nur ein Link, sein eigener Text gilt dann nicht weiter. Das gilt nur, wenn der Feed vom selben Host kommt wie der Link
+      // (YouTube-Feed fuer ein YouTube-Video, der Feed des Blogs fuer dessen Beitraege): Ein beliebiger Feed, der fremde Links auflistet, belegt
+      // nichts und koennte sonst Kurzposts anderer Mitglieder samt ihrem Text an sich ziehen. Zurueckgezogen (hidden=2) war der Kurzpost, nicht
+      // der Kanal-Inhalt: als gezogener Eintrag ist er wieder sichtbar. Eine Sperre der Moderation (hidden=1) bleibt in beiden Faellen.
+      const own = (k) => k.owner_type === c.owner_type && k.owner_id === c.owner_id, feedHost = hostOf(c.feed), byUrl = new Map(items.map((i) => [i.url, i]));
+      const posts = known.filter((k) => k.origin === "kurzpost" && (own(k) || (feedHost && hostOf(k.url) === feedHost)));
+      const taken = new Set(posts.filter((k) => !own(k)).map((k) => k.url)), seen = new Set(known.map((k) => k.url));
+      const fresh = (c.owner_type === "u" || c.owner_type === "o") && had ? items.filter((i) => !seen.has(i.url) || taken.has(i.url)) : [];
+      const adopt = posts.flatMap((k) => own(k) ? [db.prepare("UPDATE feed_items SET channel_id=?, origin='', hidden=CASE WHEN hidden=2 THEN 0 ELSE hidden END WHERE id=? AND origin='kurzpost'").bind(c.id, k.id)]
+        : [db.prepare("UPDATE contributions SET feed_item_id=0 WHERE feed_item_id=?").bind(k.id),
+          db.prepare("UPDATE feed_items SET channel_id=?, owner_type=?, owner_id=?, origin='', title=?, published=?, summary='', thumb='', body='', topics='[]', keypoints='[]', faq='[]', seo_at=0, hidden=CASE WHEN hidden=2 THEN 0 ELSE hidden END WHERE id=? AND origin='kurzpost'")
+            .bind(c.id, c.owner_type, c.owner_id, byUrl.get(k.url).title, byUrl.get(k.url).t, k.id)]);
+      await db.batch([...adopt, ...items.map((i) => db.prepare("INSERT INTO feed_items(channel_id,owner_type,owner_id,url,title,published,summary,thumb) VALUES(?,?,?,?,?,?,?,?) ON CONFLICT(url) DO UPDATE SET summary=CASE WHEN feed_items.summary='' THEN excluded.summary ELSE feed_items.summary END, thumb=CASE WHEN feed_items.thumb='' THEN excluded.thumb ELSE feed_items.thumb END").bind(c.id, c.owner_type, c.owner_id, i.url, i.title, i.t, i.desc || "", i.thumb || "")),
         db.prepare("UPDATE channels SET fetched=?, fails=0 WHERE id=?").bind(now, c.id)]);
       n += items.length;
       if (fresh.length) {

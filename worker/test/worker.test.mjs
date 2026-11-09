@@ -467,7 +467,7 @@ test("schema: Migrationen sind idempotent und enthalten jede zur Laufzeit angele
       || /^ALTER TABLE contributions ADD COLUMN audience TEXT NOT NULL DEFAULT '\[\]'$/i.test(s)
       || /^ALTER TABLE user_prefs ADD COLUMN report_start INTEGER NOT NULL DEFAULT 4$/i.test(s)) continue;
     // 0036 (eigene Quellen): Spalten mit Standardwert; contributions.js legt sie zur Laufzeit nur an, wenn sie fehlen
-    if (/^ALTER TABLE (?:contributions ADD COLUMN (?:guid|canon|ctype|teaser) TEXT NOT NULL DEFAULT ''|contributions ADD COLUMN feed_item_id INTEGER NOT NULL DEFAULT 0|contribution_sources ADD COLUMN (?:mode TEXT NOT NULL DEFAULT 'track'|(?:etag|modified|last_error) TEXT NOT NULL DEFAULT ''|topics TEXT NOT NULL DEFAULT '\[\]')|feed_items ADD COLUMN origin TEXT NOT NULL DEFAULT '')$/i.test(s)) continue;
+    if (/^ALTER TABLE (?:contributions ADD COLUMN (?:guid|canon|ctype|teaser) TEXT NOT NULL DEFAULT ''|contributions ADD COLUMN feed_item_id INTEGER NOT NULL DEFAULT 0|contribution_sources ADD COLUMN (?:mode TEXT NOT NULL DEFAULT 'track'|(?:etag|modified|last_error) TEXT NOT NULL DEFAULT ''|topics TEXT NOT NULL DEFAULT '\[\]'|seeded INTEGER NOT NULL DEFAULT 0)|feed_items ADD COLUMN origin TEXT NOT NULL DEFAULT '')$/i.test(s)) continue;
     assert.match(s, /^CREATE (TABLE|INDEX|UNIQUE INDEX) IF NOT EXISTS /i, "nur idempotente Anweisungen: " + s.slice(0, 60));
   }
   const inMig = new Set([...sql.matchAll(/CREATE (?:TABLE|UNIQUE INDEX|INDEX) IF NOT EXISTS (\w+)/gi)].map((m) => m[1]));

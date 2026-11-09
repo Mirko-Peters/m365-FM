@@ -1,13 +1,15 @@
 // MVP-Tracker: eigene Quellen (#282). Quellenarten mit URL-Pruefung und Abruf, Dedupe ueber kanonische URL/GUID,
 // die drei Modi pro Quelle (track | publish | ask) und die "Neu gefunden"-Aktionen. Erweitert contribution_sources/contributions
 // (contributions.js) - kein zweiter Mechanismus. Es werden nur Titel, Link, Datum und eine Kurzbeschreibung gelesen, nie Volltexte.
-import { cleanText } from "./util.js";
+import { cleanText, rateLimit, memberOf, BOT_UA } from "./util.js";
 import { goodHost } from "./profiles.js";
+import { trustedUser } from "./entities.js";
 import { parseFeed, discoverFeed } from "./feeds.js";
 import { sendPush } from "./push.js";
-import { isPublicFeedKind } from "./feedpolicy.js";
+import { isPublicFeedKind, FEED_DAYS } from "./feedpolicy.js";
 
-export const BOT_UA = "M365.FM-Bot (+https://www.m365.fm/bot/)";
+export { BOT_UA };
+export const KURZPOST_DAY = 5;   // neue Kurzposts je Mitglied und Tag (wie MAX_POSTS_DAY im Blog)
 export const MODES = ["track", "publish", "ask"];
 export const MANUAL_KINDS = ["linkedin", "other"];   // kein Abruf: Eintraege kommen per Link-Vorschau oder Export-Upload (POST /api/contributions/import)
 export const SOURCE_KINDS = ["podcast", "blog", "youtube", "github", "techcommunity", "sessionize", "stackoverflow", "package", "meetup", ...MANUAL_KINDS];
@@ -129,7 +131,7 @@ export function parseSessionize(html, base = "https://sessionize.com") {
     seen.add(u.href);
     out.push({ title, url: u.href, guid: u.pathname.split("/").pop(), t: secs(d) || now(), desc, topics: [] });
   });
-  return out;
+  return out.slice(0, 20);
 }
 
 export function parseStackExchange(body) {
@@ -236,35 +238,57 @@ export async function knownKeys(db, uid) {
   return { canon, guid, urls, ignored: new Set(ign.map((r) => canonUrl(r.url))) };
 }
 
+// Gruende, an denen Warten nichts aendert: der Eintrag wird nur getrackt. Alles andere (Tagesgrenze, fehlendes Vertrauen oder Profil)
+// wartet in "Neu gefunden", bis das Mitglied dort entscheidet.
+const FINAL = new Set(["no_url", "not_publishable", "already_in_feed", "too_old", "url_taken", "hidden_by_moderation"]);
+
 // Neue Eintraege einer Quelle speichern. mode: track (privat, zaehlt) | publish (zaehlt + Kurzpost) | ask (review='pending' = "Neu gefunden").
 // Doppelte (gleiche kanonische URL oder GUID, auch aus einer anderen Quelle) werden zusammengefuehrt = nicht erneut angelegt.
-export async function ingestItems(env, source, items, { limit = 5000 } = {}) {
+// first:  erster erfolgreicher Abruf einer Quelle - alles Vorhandene wird still getrackt und nie veroeffentlicht (NuGet, Sessionize und
+//         Feeds ohne Datum melden "jetzt", die Datumsregel allein schuetzt dort nicht vor einer Flut am ersten Tag).
+// chosen: vom Mitglied ausgewaehlte Eintraege (Import): ohne die Altersregel der Quelle, eine fruehere Loeschmarke gilt nicht mehr.
+// manual: von Hand erfasst (manual=1: Titel, Link und Datum spaeter aenderbar, Loeschen ohne Loeschmarke); limit zaehlt dann die Hand-Eintraege.
+// Ergebnis: held = Grund, aus dem gewuenschte Kurzposts in "Neu gefunden" warten; unposted = nur getrackt, weil kein Kurzpost moeglich ist.
+export async function ingestItems(env, source, items, { limit = 5000, first = false, chosen = false, manual = false } = {}) {
   const db = env.DB, t = now(), keys = await knownKeys(db, source.user_id), mode = MODES.includes(source.mode) ? source.mode : "track";
-  const kind = entryKindOf(source.kind), srcTopics = topicList(source.topics), result = { added: 0, pending: 0, published: 0, duplicates: 0, tracked: 0, firstTitle: "" };
-  let imports = (await db.prepare("SELECT COUNT(*) n FROM contributions WHERE user_id=? AND manual=0").bind(source.user_id).first()).n;
+  const kind = entryKindOf(source.kind), srcTopics = topicList(source.topics), gate = {};
+  const result = { added: 0, pending: 0, published: 0, duplicates: 0, tracked: 0, unposted: 0, limited: 0, held: "", firstTitle: "" };
+  let count = (await db.prepare("SELECT COUNT(*) n FROM contributions WHERE user_id=? AND manual=?").bind(source.user_id, manual ? 1 : 0).first()).n;
   for (const item of items) {
-    const canon = canonUrl(item.url);
-    if (!canon || keys.ignored.has(canon)) continue;
-    if (keys.urls.has(item.url)) {   // gleiche URL: Titel auffrischen wie bisher, nichts doppelt anlegen
-      await db.prepare("UPDATE contributions SET title=? WHERE user_id=? AND url=? AND manual=0").bind(item.title, source.user_id, item.url).run();
-      continue;
+    const canon = item.url ? canonUrl(item.url) : "";
+    if (item.url) {   // ohne Link ist kein Dedupe moeglich
+      if (!canon || (!chosen && keys.ignored.has(canon))) continue;
+      if (keys.urls.has(item.url)) {   // gleiche URL: Titel auffrischen wie bisher, nichts doppelt anlegen
+        await db.prepare("UPDATE contributions SET title=? WHERE user_id=? AND url=? AND manual=0").bind(item.title, source.user_id, item.url).run();
+        continue;
+      }
+      if (keys.canon.has(canon) || (item.guid && keys.guid.has(item.guid))) { result.duplicates++; continue; }
     }
-    if (keys.canon.has(canon) || (item.guid && keys.guid.has(item.guid))) { result.duplicates++; continue; }
-    if (imports >= limit) continue;
-    imports++; keys.canon.add(canon); keys.urls.add(item.url); if (item.guid) keys.guid.add(item.guid);
-    const pending = mode === "ask", topics = JSON.stringify([...new Set([...srcTopics, ...topicsOf(item.topics)])].slice(0, 10));
-    const r = await db.prepare(`INSERT OR IGNORE INTO contributions(user_id,source_id,title,url,published,kind,category,topics,public,created,review,guid,canon,teaser)
-      VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)`).bind(source.user_id, source.id, item.title, item.url, item.t, kind, categoryOf(kind), topics, pending ? 0 : source.public ? 1 : 0, t,
-      pending ? "pending" : "", item.guid || "", canon, item.desc || "").run();
+    if (count >= limit) { result.limited++; continue; }
+    count++; if (item.url) { keys.canon.add(canon); keys.urls.add(item.url); } if (item.guid) keys.guid.add(item.guid);
+    const ask = mode === "ask", topics = JSON.stringify([...new Set([...srcTopics, ...topicsOf(item.topics)])].slice(0, 10));
+    if (chosen && item.url && keys.ignored.has(canon)) await db.prepare("DELETE FROM contribution_ignored WHERE user_id=? AND url=?").bind(source.user_id, item.url).run();   // sonst bliebe der Eintrag in /mine unsichtbar
+    const r = await db.prepare(`INSERT OR IGNORE INTO contributions(user_id,source_id,title,url,published,kind,category,topics,public,created,review,guid,canon,teaser,ctype,manual)
+      VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`).bind(source.user_id, source.id, item.title, item.url, item.t, kind, categoryOf(kind), topics, ask ? 0 : source.public ? 1 : 0, t,
+      ask ? "pending" : "", item.guid || "", canon, item.desc || "", CTYPES.includes(item.ctype) ? item.ctype : "", manual ? 1 : 0).run();
     if (!r.meta.changes) continue;
     result.added++; result.firstTitle = result.firstTitle || item.title;
-    if (pending) { result.pending++; continue; }
-    result.tracked++;
-    // Kurzpost nur fuer Neues (nach dem Hinzufuegen der Quelle); der erste Abruf legt Aelteres nur im Tracker ab
-    if (mode === "publish" && canPublish(source.kind) && item.t >= source.created - 86400) {
-      const row = await db.prepare("SELECT id,user_id,title,url,published,teaser,topics FROM contributions WHERE id=?").bind(r.meta.last_row_id).first();
-      if ((await publishAsPost(env, db, source.user_id, row)).id) result.published++;
+    if (ask) { result.pending++; continue; }
+    // Kurzpost nur fuer Neues: nie beim ersten Abruf, und bei Quellen mit Datum nur, was nach dem Hinzufuegen der Quelle erschienen ist
+    if (mode === "publish" && canPublish(source.kind) && !first && (chosen || item.t >= source.created - 86400)) {
+      // Ohne Link oder zu alt steht ohne Abfrage fest. Ist die Tagesgrenze erreicht oder fehlen Vertrauen bzw. Profil (held), gilt das auch fuer die
+      // uebrigen Eintraege dieses Laufs - nicht jeden einzeln pruefen (ein Import hat bis zu 200).
+      let error = !item.url ? "no_url" : Math.min(item.t, t) < t - FEED_DAYS * 86400 ? "too_old" : result.held;
+      if (!error) error = (await publishAsPost(env, db, source.user_id, { id: r.meta.last_row_id, title: item.title, url: item.url, published: item.t, teaser: item.desc || "", topics }, gate)).error || "";
+      if (!error) result.published++;
+      else if (FINAL.has(error)) result.unposted++;
+      else {
+        result.held = error; result.pending++;
+        await db.prepare("UPDATE contributions SET review='pending', public=0 WHERE id=? AND user_id=?").bind(r.meta.last_row_id, source.user_id).run();
+        continue;
+      }
     }
+    result.tracked++;
   }
   return result;
 }
@@ -272,27 +296,65 @@ export async function ingestItems(env, source, items, { limit = 5000 } = {}) {
 // ---------- Kurzpost ----------
 // Landet im Community-Feed (feed_items) im Blog-Kanal des Profils: Titel, Kurzfassung, Link zum Original, gewaehlte Themen; origin='kurzpost'.
 // Es gelten die Regeln fuer gezogene Inhalte: ohne eigenen Text (>= 300 Zeichen) noindex; Abstimmen und Ausblenden wie bei allen Feed-Eintraegen.
-export async function publishAsPost(env, db, uid, row) {
+// Schutz des oeffentlichen Feeds - eine Stelle fuer alle Wege (Quelle im Modus publish, Import, "Neu gefunden", MCP):
+//  - Vertrauens-Schwelle wie bei Wiki, Entitaeten und Firmenangeboten (entities.js trustedUser: Redaktion, bestaetigtes Programm oder 25 Punkte)
+//  - hoechstens KURZPOST_DAY neue Kurzposts je Mitglied und Tag
+//  - Datum nie in der Zukunft und nicht aelter als das Feed-Fenster (FEED_DAYS; Aelteres bekaeme nie eine Seite)
+//  - ein Link, den schon jemand im Feed hat, bleibt dort (auch dasselbe YouTube-Video unter anderer Adresse); kommt er spaeter ueber einen
+//    echten Profil-Kanal, uebernimmt der Kanal den Eintrag (feeds.js refreshFeeds)
+//  - hidden: 0 sichtbar, 1 von der Moderation ausgeblendet, 2 vom Mitglied zurueckgezogen. Hier wird nur 2 wieder sichtbar.
+//  - Links auf die eigene Website kommen ueber Blog, Podcast und Video in den Feed, nicht als Kurzpost
+// gate merkt sich Profil und Vertrauen ueber mehrere Aufrufe (ein Lauf mit vielen Eintraegen fragt nur einmal).
+export const trustedMember = async (env, uid) => trustedUser(env.DB, await memberOf(env, uid));
+function sameLinks(raw) {
+  let u; try { u = new URL(raw); } catch { return [raw]; }
+  const id = youtubeId(u);
+  return id ? [...new Set([raw, `https://www.youtube.com/watch?v=${id}`, `https://youtu.be/${id}`, `https://www.youtube.com/shorts/${id}`, `https://m.youtube.com/watch?v=${id}`])] : [raw];
+}
+export async function publishAsPost(env, db, uid, row, gate = {}) {
   if (!row?.url) return { error: "no_url" };
-  const profile = await db.prepare("SELECT handle FROM profiles WHERE user_id=? AND public=1 AND handle IS NOT NULL").bind(uid).first();
-  if (!profile?.handle) return { error: "profile_required" };
-  const ex = await db.prepare("SELECT id,owner_type,owner_id FROM feed_items WHERE url=?").bind(row.url).first();
-  if (ex && !(ex.owner_type === "u" && ex.owner_id === uid)) return { error: "url_taken" };
+  if (gate.error === undefined) {
+    gate.handle = (await db.prepare("SELECT handle FROM profiles WHERE user_id=? AND public=1 AND handle IS NOT NULL").bind(uid).first())?.handle || "";
+    gate.error = !gate.handle ? "profile_required" : (await trustedMember(env, uid)) ? "" : "not_trusted";
+  }
+  if (gate.error) return { error: gate.error };
+  const links = sameLinks(row.url), mine = (x) => x.owner_type === "u" && x.owner_id === uid;
+  const found = (await db.prepare(`SELECT id,owner_type,owner_id,hidden,origin,url FROM feed_items WHERE url IN (${links.map(() => "?").join(",")})`).bind(...links).all()).results || [];
+  if (found.some((x) => !mine(x))) return { error: "url_taken" };
+  const ex = found.find((x) => x.url === row.url) || found[0];
   let id = ex?.id;
-  if (ex) await db.prepare("UPDATE feed_items SET hidden=0 WHERE id=?").bind(ex.id).run();
-  else {
-    const curl = `${env.SITE}/community/u/${profile.handle}/blog/`;
+  if (ex) {
+    if (ex.hidden === 1) return { error: "hidden_by_moderation" };
+    if (ex.origin !== "kurzpost") return { error: "already_in_feed" };   // kommt schon ueber einen eigenen Profil-Kanal; der gezogene Eintrag bleibt unberuehrt
+    await db.prepare("UPDATE feed_items SET hidden=0 WHERE id=? AND hidden=2").bind(ex.id).run();
+  } else {
+    if (String(row.url).startsWith(`${env.SITE}/`)) return { error: "not_publishable" };
+    const t = now(), published = Math.min(+row.published || t, t);
+    if (published < t - FEED_DAYS * 86400) return { error: "too_old" };
+    if (!(await rateLimit(db, `kurzpost:${uid}`, KURZPOST_DAY, 86400))) return { error: "post_limit" };
+    const curl = `${env.SITE}/community/u/${gate.handle}/blog/`;
     await db.prepare("INSERT OR IGNORE INTO channels(owner_type,owner_id,kind,url,feed) VALUES('u',?,'blog',?,'')").bind(uid, curl).run();
     const ch = await db.prepare("SELECT id FROM channels WHERE owner_type='u' AND owner_id=? AND url=?").bind(uid, curl).first();
-    const r = await db.prepare("INSERT INTO feed_items(channel_id,owner_type,owner_id,url,title,published,summary,topics,origin) VALUES(?,'u',?,?,?,?,?,?,'kurzpost')")
-      .bind(ch.id, uid, row.url, row.title, row.published, summarize(row.teaser, 280), JSON.stringify(topicList(row.topics).slice(0, 10))).run();
+    const r = await db.prepare("INSERT OR IGNORE INTO feed_items(channel_id,owner_type,owner_id,url,title,published,summary,topics,origin) VALUES(?,'u',?,?,?,?,?,?,'kurzpost')")
+      .bind(ch.id, uid, row.url, row.title, published, summarize(row.teaser, 280), JSON.stringify(topicList(row.topics).slice(0, 10))).run();
+    if (!r.meta.changes) return { error: "url_taken" };   // zeitgleich von jemand anderem angelegt
     id = r.meta.last_row_id;
   }
   await db.prepare("UPDATE contributions SET feed_item_id=?, review='' WHERE id=? AND user_id=?").bind(id, row.id, uid).run();
   return { id };
 }
 
-// "Neu gefunden"-Aktion: track | publish | ignore | unpublish (nur eigene Eintraege)
+// Kurzposts zu Beitraegen entfernen, die gleich geloescht werden (where = Bedingung auf contributions). Gezogene Eintraege der Profil-Kanaele
+// bleiben unberuehrt. Was die Moderation ausgeblendet hat (hidden=1), bleibt als Sperre stehen - sonst waere Loeschen und neu Anlegen ein Weg,
+// einen ausgeblendeten Kurzpost zurueckzuholen; oeffentlich ist er ohnehin nicht.
+export function dropPosts(db, uid, where, binds = []) {
+  const ids = `SELECT id FROM feed_items WHERE owner_type='u' AND owner_id=? AND origin='kurzpost' AND hidden<>1 AND id IN (SELECT feed_item_id FROM contributions WHERE user_id=? AND feed_item_id>0 AND ${where})`;
+  return [db.prepare(`DELETE FROM item_votes WHERE item_id IN (${ids})`).bind(uid, uid, ...binds), db.prepare(`DELETE FROM feed_items WHERE id IN (${ids})`).bind(uid, uid, ...binds)];
+}
+
+// "Neu gefunden"-Aktion: track | publish | ignore | unpublish (nur eigene Eintraege). publish geht auch fuer schon getrackte Eintraege,
+// unpublish zieht den Kurzpost zurueck (hidden=2); die Verknuepfung bleibt, damit erneutes Veroeffentlichen und Loeschen ihn wiederfinden.
+const ERROR_STATUS = { post_limit: 429, not_trusted: 403 };
 export async function reviewAction(env, uid, id, action, opts = {}) {
   const db = env.DB, row = await db.prepare("SELECT id,user_id,source_id,title,url,published,teaser,topics,review,kind,feed_item_id FROM contributions WHERE id=? AND user_id=?").bind(id, uid).first();
   if (!row) return { error: "not_found", status: 404 };
@@ -312,17 +374,16 @@ export async function reviewAction(env, uid, id, action, opts = {}) {
     if (opts.topics) await db.prepare("UPDATE contributions SET topics=?, topics_edited=1 WHERE id=? AND user_id=?").bind(JSON.stringify(opts.topics), id, uid).run();
     const fresh = await db.prepare("SELECT id,user_id,title,url,published,teaser,topics FROM contributions WHERE id=? AND user_id=?").bind(id, uid).first();
     const p = await publishAsPost(env, db, uid, fresh);
-    return p.error ? { error: p.error, status: 400 } : { ok: true, action, feed_item_id: p.id };
+    return p.error ? { error: p.error, status: ERROR_STATUS[p.error] || 400 } : { ok: true, action, feed_item_id: p.id };
   }
-  if (action === "ignore") {
-    const stmts = [db.prepare("DELETE FROM contributions WHERE id=? AND user_id=?").bind(id, uid)];
+  if (action === "ignore") {   // weg samt Kurzpost, und der Link wird nicht wieder vorgeschlagen
+    const stmts = [...dropPosts(db, uid, "id=?", [id]), db.prepare("DELETE FROM contributions WHERE id=? AND user_id=?").bind(id, uid)];
     if (row.url) stmts.unshift(db.prepare("INSERT OR IGNORE INTO contribution_ignored(user_id,url,created) VALUES(?,?,?)").bind(uid, row.url, now()));
     await db.batch(stmts);
     return { ok: true, action };
   }
-  if (row.feed_item_id) await db.prepare("UPDATE feed_items SET hidden=1 WHERE id=? AND owner_type='u' AND owner_id=?").bind(row.feed_item_id, uid).run();
-  await db.prepare("UPDATE contributions SET feed_item_id=0 WHERE id=? AND user_id=?").bind(id, uid).run();
-  return { ok: true, action };
+  const r = row.feed_item_id ? await db.prepare("UPDATE feed_items SET hidden=2 WHERE id=? AND owner_type='u' AND owner_id=? AND origin='kurzpost' AND hidden=0").bind(row.feed_item_id, uid).run() : null;
+  return { ok: true, action, withdrawn: !!r?.meta.changes };
 }
 
 // Hinweis ueber den vorhandenen Push-Weg (wie bei gezogenen Inhalten); ohne Abo oder VAPID passiert nichts

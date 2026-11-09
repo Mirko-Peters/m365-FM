@@ -17,12 +17,13 @@ async function makeDb() {
     run: async () => { const r = st.run(...args); return { meta: { changes: Number(r.changes), last_row_id: Number(r.lastInsertRowid) } }; } }; return o; }, async batch(stmts) { for (const st of stmts) await st.run(); } };
   raw.exec("INSERT INTO users(id,provider,sub,name,created) VALUES(1,'g','1','Anna',1),(2,'g','2','Ben',1)");
   raw.exec("INSERT INTO profiles(user_id,public,handle,headline,about,company,job,country,show_org,updated) VALUES(1,1,'anna','','','','','',1,1)");
+  raw.exec("INSERT INTO programs(owner_type,owner_id,program,verified) VALUES('u',1,'mvp',1)");   // Anna darf Kurzposts veroeffentlichen (Vertrauens-Schwelle); Ben (2) nicht
   return { db, raw, env: { DB: db, SITE: "https://www.m365.fm" } };
 }
 const J = (data, status = 200, headers = {}) => new Response(JSON.stringify(data), { status, headers: { "content-type": "application/json", ...headers } });
 const caller = (db) => (path, method = "GET", data, actor = { id: 1 }) => {
   const url = new URL(`https://x${path}`);
-  return handleContributions({ DB: db }, new Request(url, { method, headers: { "content-type": "application/json" }, ...(data === undefined ? {} : { body: JSON.stringify(data) }) }), url, url.pathname, actor, J);
+  return handleContributions({ DB: db, SITE: "https://www.m365.fm" }, new Request(url, { method, headers: { "content-type": "application/json" }, ...(data === undefined ? {} : { body: JSON.stringify(data) }) }), url, url.pathname, actor, J);
 };
 const json = async (r) => (await r).json();
 async function withFetch(map, fn) {   // map: url -> { body, status?, headers? } | function(req); zeichnet Anfragen auf
@@ -137,14 +138,23 @@ test("Modus 'Kurzpost': neuer Beitrag landet im Feed (extern gekennzeichnet), ae
   assert.equal((await addSource(call, { kind: "github", url: "https://github.com/anna", mode: "publish" })).status, 400, "GitHub-Aktivitaet bleibt privat");
   assert.equal((await json(addSource(call, { kind: "github", url: "https://github.com/anna", mode: "publish" }))).error, "not_publishable");
   assert.equal((await addSource(call, { kind: "podcast", url: "https://podcast.example.com/feed.xml", mode: "publish", topics: ["Copilot", "power-bi"] })).status, 201);
+  // erster Abruf: alles Vorhandene wird still getrackt, auch die Folge von heute (318-6)
   await withFetch({ "https://podcast.example.com/feed.xml": { body: fx("podcast.rss") } }, () => refreshContributions(env, 5));
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM feed_items").get().n, 0, "erster Abruf veroeffentlicht nichts");
+  assert.deepEqual({ ...raw.prepare("SELECT COUNT(*) n, SUM(review='') ok FROM contributions").get() }, { n: 2, ok: 2 }, "beide zaehlen im Tracker");
+  assert.equal(raw.prepare("SELECT seeded FROM contribution_sources").get().seeded, 1);
+  // spaeterer Abruf: eine neue Folge und eine alte, die erst jetzt im Feed auftaucht
+  const later = fx("podcast.rss").replace("<item>", `<item><title>Episode 13: Agents</title><link>https://podcast.example.com/ep13</link><guid isPermaLink="false">pod-ep-13</guid><pubDate>${RFC}</pubDate><description>We talk about agents. It is a long story. Third.</description></item>
+    <item><title>Episode 3: Old one</title><link>https://podcast.example.com/ep3</link><guid isPermaLink="false">pod-ep-3</guid><pubDate>Mon, 01 Jan 2023 00:00:00 GMT</pubDate><description>Old.</description></item><item>`);
+  raw.exec("UPDATE contribution_sources SET fetched=1");
+  await withFetch({ "https://podcast.example.com/feed.xml": { body: later } }, () => refreshContributions(env, 5));
   const posts = raw.prepare("SELECT title,url,summary,topics,origin,hidden,owner_id FROM feed_items").all();
-  assert.equal(posts.length, 1, "nur der neue Beitrag, nicht die Folge von 2024");
-  assert.deepEqual([posts[0].origin, posts[0].url, posts[0].hidden, posts[0].owner_id], ["kurzpost", "https://podcast.example.com/ep12", 0, 1]);
-  assert.equal(posts[0].summary, "We talk about governance. It is a long story.");
+  assert.equal(posts.length, 1, "nur der neue Beitrag, nicht die Folge von 2023");
+  assert.deepEqual([posts[0].origin, posts[0].url, posts[0].hidden, posts[0].owner_id], ["kurzpost", "https://podcast.example.com/ep13", 0, 1]);
+  assert.equal(posts[0].summary, "We talk about agents. It is a long story.");
   assert.deepEqual(JSON.parse(posts[0].topics), ["copilot", "power-bi"], "gewaehlte Themen-Entitaeten");
   assert.equal(raw.prepare("SELECT body FROM feed_items").get().body, "", "ohne eigenen Text: noindex (site_feed.py)");
-  assert.equal(raw.prepare("SELECT COUNT(*) n FROM contributions WHERE review=''").get().n, 2, "beide zaehlen im Tracker");
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM contributions WHERE review=''").get().n, 4, "alle vier zaehlen im Tracker");
   assert.equal(raw.prepare("SELECT COUNT(*) n FROM contributions WHERE feed_item_id>0").get().n, 1);
   // ohne oeffentliches Profil kein Kurzpost
   raw.exec("INSERT INTO contributions(user_id,title,url,published,kind,created) VALUES(2,'x','https://b.example.com/x',1,'blog',1)");
