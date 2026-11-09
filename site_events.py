@@ -213,6 +213,10 @@ def build(g, events, people, orgs):
                 ps = [x for x in ev.get("partners", []) if x["kind"] == kd]
                 if ps:
                     pt += f'<h2>{pl[kd]}</h2><ul>' + "".join(f'<li>' + (f'<a href="{BASE}{pfx(lang)}/community/c/{x["handle"]}/">{esc(x["name"])}</a>' if x.get("handle") in ob else esc(x["name"])) + (f' <span class="mut">· {esc(x["level"])}</span>' if x.get("level") else "") + '</li>' for x in ps) + "</ul>"
+            # Anmeldung und Session-Vorschlag laufen ueber M365.FM und brauchen einen Veranstalter, der die Teilnehmerliste fuehrt und Vorschlaege freigibt.
+            # Ein importiertes Event ohne Veranstalter bekommt deshalb beides nicht (der Worker lehnt es ebenfalls ab); nach dem Uebernehmen ist beides da.
+            reg = "" if ev.get("unclaimed") else (f'<h2>{T(lang, "Registration", "Anmeldung")}</h2><div id="ev-reg" data-e="{esc(ev["handle"])}"></div><script>' + REGJS.replace("%API%", api).replace("%T%", json.dumps(REGT[lang], ensure_ascii=False)).replace("%CROOT%", croot) + '</script>'
+                                                  + f'<p><a class="btn" href="{croot}?propose={esc(ev["handle"])}#c-events">{esc(s["propose"])}</a></p>')
             ss = []
             for se in ev.get("sessions", []):
                 spk = ", ".join((f'<a href="{BASE}{pfx(lang)}/community/u/{x["h"]}/">{esc(x["n"])}</a>' if x.get("h") in pb else f'<a href="{eurl(BASE, lang, x["e"])}">{esc(x["n"])}</a>' if x.get("e") in ENTS else esc(x["n"])) for x in se.get("speakers", []))
@@ -223,8 +227,7 @@ def build(g, events, people, orgs):
             b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{croot}events/">{esc(s["events"])}</a></nav><h1>{esc(ev["title"])}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="event" data-topic-id="{esc(ev["handle"])}" data-topic-label="{esc(T(lang, "Follow event", "Event folgen"))}">🔔 {T(lang, "Follow event", "Event folgen")}</button><p style="font-size:1.1em">{esc(ev.get("summary", ""))}</p>{ft}<p>{btn}</p>{claim}'
                       + (f'<h2>{esc(s["about"])}</h2><p style="white-space:pre-line">{esc(ev["about"])}</p>' if ev.get("about") else "") + (f'<h2>{esc(s["topics"])}</h2><p>{tp}</p>' if tp else "")
                       + f'<p><a class="btn" href="{u}event.ics" download>{T(lang, "Add to calendar (.ics)", "Zum Kalender hinzufügen (.ics)")}</a></p>' + f'<h2>{esc(s["sessions"])}</h2>' + ("".join(ss) or f'<p class="mut">{esc(s["nosess"])}</p>')
-                      + pt + f'<h2>{T(lang, "Registration", "Anmeldung")}</h2><div id="ev-reg" data-e="{esc(ev["handle"])}"></div><script>' + REGJS.replace("%API%", api).replace("%T%", json.dumps(REGT[lang], ensure_ascii=False)).replace("%CROOT%", croot) + '</script>'
-                      + f'<p><a class="btn" href="{croot}?propose={esc(ev["handle"])}#c-events">{esc(s["propose"])}</a></p><script>window.M365TopicConfig={{api:{json.dumps(api)},lang:{json.dumps(lang)}}}</script><script defer src="{BASE}/assets/topic-follow.js"></script>' + css)
+                      + pt + reg + f'<script>window.M365TopicConfig={{api:{json.dumps(api)},lang:{json.dumps(lang)}}}</script><script defer src="{BASE}/assets/topic-follow.js"></script>' + css)
             ld = [{"@context": "https://schema.org", **event_ld(BASE, ev, pb, ob)}]
             write(f"{pfx2(lang)}community/events/{ev['handle']}/index.html", page(lang, f'{ev["title"]} – {s["events"]} | M365.FM', (ev.get("summary") or ev.get("about") or "")[:155], u, b, None, ld, og_type="website", extra_head=LCSS, noindex=noidx, side=(g["side"](lang, ev["title"] + " " + (ev.get("about") or "")[:1500], ids=ev.get("topics", []), exclude=(ev["handle"],)) if g.get("side") else "")))
             write(f"{pfx2(lang)}community/events/{ev['handle']}/event.ics", ics_for(ev, BASE))   # in jeder Sprache neben der Eventseite (deren Link verweist auf <Seite>/event.ics)

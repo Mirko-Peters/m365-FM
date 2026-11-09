@@ -84,6 +84,16 @@ class EventImportSite(unittest.TestCase):
             self.assertIn("?claim=", h)   # ohne Anmeldung weiter zur Community-Seite (assets/events-import.js)
         self.assertNotIn("ev-claim", self.page("hamburg-copilot-day"))
 
+    def test_ohne_veranstalter_keine_anmeldung_und_kein_vorschlag(self):   # Nachpruefung #317: "Register (free)" bei einem fremden, evtl. kostenpflichtigen Event
+        for lang, words in (("en", ("Register (free)", "Registration", "Propose a session")), ("de", ("Anmelden (kostenlos)", "Anmeldung", "Session vorschlagen"))):
+            h = self.page("azure-summit-seattle", lang)
+            for w in ('id="ev-reg"', "/register", "?propose=", f"<h2>{words[1]}</h2>", words[0], words[2]):
+                self.assertNotIn(w, h)
+            self.assertIn('id="ev-claim"', h); self.assertIn("event.ics", h); self.assertIn("data-topic-follow", h)   # Uebernehmen, Kalender und Folgen bleiben
+            m = self.page("hamburg-copilot-day", lang)   # Event mit Veranstalter: beides wie bisher
+            for w in ('id="ev-reg" data-e="hamburg-copilot-day"', "?propose=hamburg-copilot-day#c-events", f"<h2>{words[1]}</h2>", words[0], words[2]):
+                self.assertIn(w, m)
+
     def test_schema_pruefung_bleibt_gruen(self):
         r = subprocess.run([sys.executable, str(ROOT / "check_schema.py"), str(self.docs)], capture_output=True, text=True)
         self.assertEqual(r.returncode, 0, r.stdout[-800:] + r.stderr[-400:])
