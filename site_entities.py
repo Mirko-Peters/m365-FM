@@ -38,6 +38,7 @@ S = {"en": dict(entities="Microsoft ecosystem entity database", intro="Products,
 
 
 SPEAKERS = {}   # Entitaets-ID -> zusammengefuehrter Speaker (data/speakers.json) mit Events und Sessions
+import entity_fill_data as FD
 GENTEXT = {}   # Entitaet -> {en, de}: Ueberblickstexte aus data/entity_texts/part-*.json (aus Folgen und Fakten geschrieben, tools/entity_text_tasks.py)
 for _f in sorted((Path(__file__).parent / "data" / "entity_texts").glob("part-*.json")) if (Path(__file__).parent / "data" / "entity_texts").exists() else []:
     try: GENTEXT.update(json.loads(_f.read_text("utf-8")))
@@ -329,7 +330,7 @@ def musicgroup_ld(BASE):
 def ent_ld(BASE, e, lang, glossary_set=None, person_aka=None):
     """Schema.org-Knoten einer Entitaet (sprachneutrale @id)."""
     person_aka = person_aka or {}
-    t = e["type"]; i = e["id"]; d = e["desc"].get(lang) or e["desc"].get("en") or e["desc"].get("de") or ""
+    t = e["type"]; i = e["id"]; d = FD.desc(e, lang)
     ref = lambda x: {"@id": eid_of(BASE, x)}
     rel = {}
     _inv = inverse_index()
@@ -650,7 +651,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
         rel = f"{pfx2(lang)}entity"
         # Index mit Typ-Filter
         def card(e):
-            d = (e["desc"].get(lang) or e["desc"].get("en") or "")[:140]
+            d = (FD.desc(e, lang) or "")[:140]
             old = is_old(e, TODAY)
             _spb = SPM.badge(lang, SPM.entity(e["id"]))   # T37 Sponsor: Badge auch in der Liste (Teaser)
             return (f'<li class="en-i" data-t="{e["type"]}"{" data-old=1 hidden" if old else ""}><a href="{root}{e["id"]}/"><b>{esc(e["name"])}</b></a> <span class="mut">· {esc(tlab(lang, e["type"]))}{(" · " + OLD[lang][0]) if old else ""}{(" · <strong>" + esc(_spb) + "</strong>") if _spb else ""}</span><br><span class="mut">{esc(d)}</span></li>')
@@ -673,7 +674,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
 
         # Einzelseiten
         for e in recs:
-            u = f"{root}{e['id']}/"; d = e["desc"].get(lang) or e["desc"].get("en") or e["desc"].get("de") or ""
+            u = f"{root}{e['id']}/"; d = FD.desc(e, lang)
             groups = {}
             for p, to in e.get("rel", []):
                 if to in ENTS:
@@ -802,14 +803,14 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                 oldbanner = f'<p class="en-old" role="note"><b>{esc(OLD[lang][2])}</b>' + (f' {esc(OLD[lang][3])} <a href="{root}{rp["id"]}/">{esc(rp["name"])}</a>.' if rp else "") + "</p>"
             _lt = (e.get("long") or {}).get(lang) or (e.get("long") or {}).get("en") or (e.get("long") or {}).get("de") or (EVENTS[e["id"]].get("about") if e["id"] in EVENTS else "") or ""
             _gen = ""
-            if not _lt.strip() and e["id"] in GENTEXT:   # Ueberblick aus den Folgen der Show und den Fakten der Seite (data/entity_texts), solange es keinen redaktionellen Langtext gibt
-                _lt = GENTEXT[e["id"]].get(lang) or GENTEXT[e["id"]].get("en") or ""
+            if not _lt.strip() and (e["id"] in GENTEXT or FD.long_text(e, "en") or FD.long_text(e, lang)):   # Ueberblick aus den Folgen der Show und den Fakten der Seite (data/entity_texts, data/entity_fill), solange es keinen redaktionellen Langtext gibt
+                _lt = (GENTEXT.get(e["id"]) or {}).get(lang) or FD.long_text(e, lang) or (GENTEXT.get(e["id"]) or {}).get("en") or FD.long_text(e, "en") or ""
                 _gen = f'<p class="mut" style="font-size:.85em">{esc(T(lang, "Overview compiled with AI from M365.FM episodes and the facts on this page. You can improve it with the edit button below.", "Überblick, mit KI aus M365.FM-Folgen und den Fakten dieser Seite zusammengestellt. Du kannst ihn unten über „Bearbeiten“ verbessern."))}</p>' if _lt.strip() else ""
             longbox = ("<h2>" + (T(lang, "Description", "Beschreibung")) + "</h2>" + "".join(f"<p>{esc(par).replace(chr(10), '<br>')}</p>" for par in _lt.split("\n\n") if par.strip()) + _gen) if _lt.strip() else ""
             w = WT.get(lang, WT["en"])
             data_attr = esc(json.dumps({k: e.get(k) for k in ("id", "name", "type", "aliases", "desc", "web", "docs", "wikipedia", "wikidata", "rel", "outdated", "replaced_by", "start", "end", "long", "logo", "version", "released", "license", "level", "exam", "valid_months")}, ensure_ascii=False))
             edit = f'<div id="en-edit" data-e="{data_attr}"></div>'
-            _fq = [x for x in FAQ.get(e["id"], []) if x.get("lang", "en") == lang][:8]
+            _fq = ([x for x in FAQ.get(e["id"], []) if x.get("lang", "en") == lang] + FD.faq(e, lang))[:8]
             kpbox, _efq = "", []
             if lang == "en" and eps:   # Kernpunkte und FAQ der Folgen, die den Namen nennen (nur englisch: keine gemischtsprachigen Seiten)
                 _nrx = [re.compile(r"(?<![\w-])" + re.escape(n) + r"(?![\w-])", re.I) for n in ent_names(e) if len(n) > 1]
@@ -889,11 +890,11 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                 if _epids:
                     node["subjectOf"] = (node.get("subjectOf") or []) + _epids
             # hreflang en/de nur bei echtem deutschem Text (Gast-Entitaeten haben de == en: dann ist /de/ ein Duplikat und bleibt ohne Index)
-            _has_de = bool(e["desc"].get("de")) and e["desc"].get("de") != e["desc"].get("en") or bool((e.get("long") or {}).get("de")) or bool(GENTEXT.get(e["id"], {}).get("de"))
+            _has_de = bool(e["desc"].get("de")) and e["desc"].get("de") != e["desc"].get("en") or bool((e.get("long") or {}).get("de")) or bool(GENTEXT.get(e["id"], {}).get("de")) or FD.has_text(e, "de")
             _thin = False
             if e["type"] == "person" and e["id"] != AUTHOR_EID:   # Personen: nur mit echter Beschreibung (nicht der Speaker-Schablone) oder mehreren Auftritten in den Index
                 _app = max(len(ep_find(e, "en")), len(ep_find(e, "de"))) + len((SPEAKERS.get(e["id"]) or {}).get("sessions") or [])   # T42: gleiche Entscheidung fuer en und de (sonst verweist en per hreflang auf ein noindex-de)
-                _real = (len(e["desc"].get("en") or "") > 80 and not e.get("speaker")) or bool((e.get("long") or {}).get("en"))
+                _real = (len(FD.desc_en(e)) > 80 and not e.get("speaker")) or bool((e.get("long") or {}).get("en")) or bool(FD.long_text(e, "en"))
                 _thin = not _real and _app < 2 and not SQ.BY_PERSON.get(e["id"])   # eigene Zitate sind echter Inhalt
             _alts = {"en": eurl(BASE, "en", e["id"]), "de": eurl(BASE, "de", e["id"])} if _has_de and not _thin else None
             _noidx = lang not in ("en", "de") or (lang == "de" and not _has_de) or _thin

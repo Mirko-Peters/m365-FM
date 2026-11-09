@@ -1,0 +1,52 @@
+name: Entitaeten fuellen (Sonnet en + Haiku 14 Sprachen)
+# Nur von Hand (kein Cron). plan = Anzahl und Kosten, run = collect -> schreiben -> uebersetzen (Batch), collect = fertige Batches abholen.
+# Budget: ENTITY_BUDGET_USD gilt kumulativ fuer data/spend.json["entities"] inkl. offener Batches. Details: fill_entities.py
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "plan = nur Zaehlung/Kosten, run = Batches senden und abholen, collect = fertige Batches abholen"
+        type: choice
+        options: [plan, run, collect]
+        default: plan
+      limit: { description: "Hoechstens N Auftraege je Stufe (leer = alle im Budget)", required: false, default: "" }
+      budget: { description: "Gesamtbudget in USD (kumulativ)", required: false, default: "100" }
+      model: { description: "Schreibmodell (leer = claude-sonnet-5-5)", required: false, default: "" }
+permissions:
+  contents: write
+concurrency: { group: entity-fill, cancel-in-progress: false }
+jobs:
+  fill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    env:
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      AI_GATEWAY_ID: ${{ vars.AI_GATEWAY_ID || 'm365fm' }}
+      CF_AIG_TOKEN: ${{ secrets.CF_AIG_TOKEN }}
+      COMMUNITY_API: https://api-dub.m365.fm
+      CRON_KEY: ${{ secrets.CRON_KEY }}
+      USD_PER_EUR: ${{ vars.USD_PER_EUR || '1.08' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Entitaeten fuellen
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY_SHOW }}
+          ENTITY_BUDGET_USD: ${{ inputs.budget || '100' }}
+          MODE_IN: ${{ inputs.mode }}
+          LIMIT_IN: ${{ inputs.limit }}
+          MODEL_IN: ${{ inputs.model }}
+        run: |
+          ARGS=""
+          [ -n "$LIMIT_IN" ] && ARGS="$ARGS --limit $LIMIT_IN"
+          [ -n "$MODEL_IN" ] && ARGS="$ARGS --model $MODEL_IN"
+          python fill_entities.py "$MODE_IN" $ARGS | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Ergebnis committen
+        if: always() && inputs.mode != 'plan'
+        run: |
+          if [ -n "$(git status --porcelain data/entity_fill data/spend.json)" ]; then
+            git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
+            git add data/entity_fill data/spend.json && git commit -q -m "Entitaeten-Texte (Sonnet en, Haiku 14 Sprachen)"
+            for i in 1 2 3; do (git pull --rebase -q -X theirs && git push -q) && break || { git rebase --abort 2>/dev/null; sleep $((i*5)); }; done
+          fi
