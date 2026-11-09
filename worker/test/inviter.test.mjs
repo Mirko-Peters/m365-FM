@@ -414,8 +414,11 @@ test("Kontoloeschung (320-5): Zeilen als Einlader und als eingeladene Person ver
     raw.prepare("INSERT INTO invite_success(inviter_user_id,invitee_user_id,source,ref,created) VALUES(77,3,'ref','weg',1)").run();
     assert.equal(await syncInviterBadges(env), 1);
     assert.equal(raw.prepare("SELECT COUNT(*) n FROM user_badges WHERE user_id=77").get().n, 0);
+    // Zaehler der Tagesgrenzen mit der Kontonummer verschwinden sofort; die eines anderen Kontos (33, 13) bleiben
+    for (const k of ["invref:3", "invref:late:3", "invref:ip:3:abc", "invref:33", "invref:ip:33:abc", "invref:ip:13:abc"]) raw.prepare("INSERT OR REPLACE INTO ratelimit(k,n,win) VALUES(?,1,?)").run(k, Math.floor(Date.now() / 1000));
     await deleteUserInvites(env, 3);
     assert.equal(raw.prepare("SELECT COUNT(*) n FROM invite_success WHERE invitee_user_id=3").get().n, 0);
+    assert.deepEqual(raw.prepare("SELECT k FROM ratelimit WHERE k LIKE 'invref:%' ORDER BY k").all().map((x) => x.k), ["invref:33", "invref:ip:13:abc", "invref:ip:33:abc"]);
   } finally { restore(); }
 });
 

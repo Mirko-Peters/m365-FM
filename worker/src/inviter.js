@@ -96,6 +96,8 @@ export async function deleteUserInvites(env, id) {
   const by = (await db.prepare("SELECT inviter_user_id i FROM invite_success WHERE invitee_user_id=?").bind(id).first())?.i || 0;
   await db.batch([db.prepare("DELETE FROM invite_success WHERE inviter_user_id=? OR invitee_user_id=?").bind(id, id), db.prepare("UPDATE invite_success SET voided_by=0 WHERE voided_by=?").bind(id),
     db.prepare("DELETE FROM invite_pending WHERE inviter_user_id=? OR invitee_user_id=?").bind(id, id)]);   // auch vorgemerkte Zurechnungen, beide Seiten
+  // Zaehler der Tagesgrenzen mit der Kontonummer sofort entfernen (nicht erst beim taeglichen Aufraeumen)
+  await db.prepare("DELETE FROM ratelimit WHERE k=? OR k=? OR k LIKE ?").bind("invref:" + id, "invref:late:" + id, "invref:ip:" + id + ":%").run().catch(() => 0);
   if (by && by !== id) await evalBadges(env, by).catch(() => 0);
 }
 
