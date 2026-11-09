@@ -1,7 +1,7 @@
 import { cleanText, rateLimit } from "./util.js";
 import { goodHost } from "./profiles.js";
 import { describeSource, fetchSourceItems, ingestItems, notifyFound, reviewAction, dropPosts, trustedMember, ogOnly, linkedInUrl, ctypeOf, summarize, entryKindOf,
-  topicsOf, MODES, MANUAL_KINDS, SOURCE_KINDS, CTYPES, BOT_UA, KURZPOST_DAY } from "./contrib_sources.js";
+  topicsOf, canonUrl, MODES, MANUAL_KINDS, SOURCE_KINDS, CTYPES, BOT_UA, KURZPOST_DAY } from "./contrib_sources.js";
 import { FEED_DAYS } from "./feedpolicy.js";
 import { token as youtubeToken } from "./youtube.js";
 import { mvpActivity, gdeActivity, MVP_AUDIENCES, MVP_ROLES, EVENT_FORMATS, MVP_PORTAL_URL } from "./mvp_mapping.js";
@@ -18,7 +18,7 @@ const SPREAKER_EPISODE = /^https:\/\/(?:www\.)?spreaker\.com\/episode\/(?:[a-z0-
 const COLS = `c.id,c.title,c.url,c.published,c.kind,c.category,c.topics,c.views,c.downloads,c.public,c.manual,c.portal,c.portal_at,c.review,
   c.portal_desc,c.role,c.audience,c.area,c.attendees,c.live_views,c.sessions,c.event_format,c.country,c.source_id,c.ctype,c.teaser,c.feed_item_id,
   (SELECT f.hidden FROM feed_items f WHERE f.id=c.feed_item_id AND f.owner_type='u' AND f.owner_id=c.user_id AND f.origin='kurzpost') post_hidden`;
-const POST_STATE = { 0: "live", 1: "moderated", 2: "withdrawn" };   // Kurzpost zum Beitrag: sichtbar, von der Moderation ausgeblendet, selbst zurueckgezogen
+const POST_STATE = { 0: "live", 1: "moderated", 2: "withdrawn", 3: "moderated" };   // Kurzpost zum Beitrag: sichtbar, von der Moderation ausgeblendet, selbst zurueckgezogen (feedpolicy.js: 3 = beides)
 const NEW_COLUMNS = [["topics_edited", "INTEGER NOT NULL DEFAULT 0"], ["portal", "INTEGER NOT NULL DEFAULT 0"], ["portal_at", "INTEGER NOT NULL DEFAULT 0"],
   ["review", "TEXT NOT NULL DEFAULT ''"], ["portal_desc", "TEXT NOT NULL DEFAULT ''"], ["role", "TEXT NOT NULL DEFAULT ''"], ["audience", "TEXT NOT NULL DEFAULT '[]'"],
   ["area", "TEXT NOT NULL DEFAULT ''"], ["attendees", "INTEGER NOT NULL DEFAULT 0"], ["live_views", "INTEGER NOT NULL DEFAULT 0"], ["sessions", "INTEGER NOT NULL DEFAULT 0"],
@@ -41,7 +41,7 @@ const MESSAGES = {
   hidden_by_moderation: "This short post was hidden by the moderation team and cannot be published again.",
   already_in_feed: "This link is already in the community feed through one of your profile channels. Track it instead.",
   too_old: `Only items from the last ${FEED_DAYS} days can become short posts. Track it instead.`,
-  posted: "This entry is published as a short post. Take the short post back before you change its link.",
+  posted: "This entry is published as a short post in the community feed. Take the short post back first (unpublish), then the link can be changed; the withdrawn short post is removed with it.",
 };
 const sourceOut = (s) => { let topics = []; try { topics = JSON.parse(s.topics || "[]"); } catch {}
   return { ...s, topics, public: !!s.public, active: !!s.active, items: s.items || 0, found: s.found || 0, last_error: s.last_error || "",
@@ -388,9 +388,10 @@ export async function handleContributions(env, request, url, path, user, J) {
     const topics = topicsOf(b.topics), cols = Object.keys(extra);
     let r;
     try {
-      r = await db.prepare(`INSERT INTO contributions(user_id,title,url,published,kind,category,topics,public,manual,created${cols.map((c) => "," + c).join("")})
-          VALUES(?,?,?,?,?,?,?,?,1,?${cols.map(() => ",?").join("")})`)
-        .bind(user.id, title, link, published, kind, category, JSON.stringify(topics), b.public ? 1 : 0, now(), ...cols.map((c) => extra[c])).run();
+      // canon wie beim Abruf (contrib_sources.js): daran erkennen Dedupe und das Zusammenfuehren von Konten dieselbe Seite unter anderer Adresse
+      r = await db.prepare(`INSERT INTO contributions(user_id,title,url,published,kind,category,topics,public,manual,created,canon${cols.map((c) => "," + c).join("")})
+          VALUES(?,?,?,?,?,?,?,?,1,?,?${cols.map(() => ",?").join("")})`)
+        .bind(user.id, title, link, published, kind, category, JSON.stringify(topics), b.public ? 1 : 0, now(), link ? canonUrl(link) : "", ...cols.map((c) => extra[c])).run();
     } catch (e) {
       if (/UNIQUE/i.test(String(e))) return fail(J, "contribution_exists", 409);
       throw e;
@@ -433,7 +434,8 @@ export async function handleContributions(env, request, url, path, user, J) {
     const b = await request.json().catch(() => ({})), id = Math.floor(+b.id);
     const entry = await db.prepare("SELECT id,url,public,manual,review,feed_item_id FROM contributions WHERE id=? AND user_id=?").bind(id, user.id).first();
     if (!entry) return fail(J, "not_found", 404);
-    const post = entry.feed_item_id ? await db.prepare("SELECT id FROM feed_items WHERE id=? AND owner_type='u' AND owner_id=? AND origin='kurzpost'").bind(entry.feed_item_id, user.id).first() : null;
+    const post = entry.feed_item_id ? await db.prepare("SELECT id,hidden FROM feed_items WHERE id=? AND owner_type='u' AND owner_id=? AND origin='kurzpost'").bind(entry.feed_item_id, user.id).first() : null;
+    let relink = false;
     const updates = [], values = [], set = (col, v) => { updates.push(`${col}=?`); values.push(v); };
     if (b.category !== undefined) {
       const category = plain(b.category, 100);
@@ -453,8 +455,10 @@ export async function handleContributions(env, request, url, path, user, J) {
       if (b.title !== undefined) { const t = plain(b.title, 200); if (t.length < 3) return fail(J, "bad_contribution", 400); set("title", t); }
       if (b.url !== undefined) {
         const l = b.url ? safeUrl(b.url) : ""; if (b.url && !l) return fail(J, "bad_url", 400);
-        if (post && l !== entry.url) return fail(J, "posted", 400);   // der Kurzpost (mit Stimmen und eigenem Text) gehoert zu genau diesem Link
-        set("url", l);
+        // Der Kurzpost (mit Stimmen und eigenem Text) gehoert zu genau diesem Link. Solange er oeffentlich ist, bleibt der Link; ist er
+        // zurueckgezogen oder von der Moderation ausgeblendet, loest sich der Beitrag von ihm (unten) und bekommt den neuen Link.
+        if (post && l !== entry.url) { if (!post.hidden) return fail(J, "posted", 400); relink = true; }
+        set("url", l); set("canon", l ? canonUrl(l) : "");
       }
       if (b.published !== undefined) { const d = dateValue(b.published); if (d === null) return fail(J, "bad_date", 400); set("published", d); }
       if (b.kind !== undefined) { if (!ENTRY_KINDS.includes(b.kind)) return fail(J, "bad_contribution", 400); set("kind", b.kind); }
@@ -469,7 +473,10 @@ export async function handleContributions(env, request, url, path, user, J) {
       if (/UNIQUE/i.test(String(e))) return fail(J, "contribution_exists", 409);
       throw e;
     }
-    if (post && b.title !== undefined) await db.prepare("UPDATE feed_items SET title=? WHERE id=?").bind(plain(b.title, 200), post.id).run();
+    // Neuer Link: der zurueckgezogene Kurzpost entfaellt samt Stimmen (dropPosts; eine Sperre der Moderation bleibt als Zeile stehen), der Beitrag
+    // ist wieder frei. Erst nach dem geglueckten UPDATE - scheitert es an einem doppelten Link, bleibt alles, wie es war.
+    if (relink) await db.batch([...dropPosts(db, user.id, "id=?", [id]), db.prepare("UPDATE contributions SET feed_item_id=0 WHERE id=? AND user_id=?").bind(id, user.id)]);
+    else if (post && b.title !== undefined) await db.prepare("UPDATE feed_items SET title=? WHERE id=?").bind(plain(b.title, 200), post.id).run();
     if ((entry.public && !entry.review && (b.public === false || b.review === "hidden" || b.title !== undefined || b.url !== undefined)) || (post && b.title !== undefined)) await invalidateProfileExport(db);
     return J({ ok: true });
   }

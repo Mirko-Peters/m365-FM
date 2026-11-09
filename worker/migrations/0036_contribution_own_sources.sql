@@ -15,7 +15,8 @@ ALTER TABLE contributions ADD COLUMN ctype TEXT NOT NULL DEFAULT '';
 ALTER TABLE contributions ADD COLUMN teaser TEXT NOT NULL DEFAULT '';
 ALTER TABLE contributions ADD COLUMN feed_item_id INTEGER NOT NULL DEFAULT 0;
 -- Kurzposts: feed_items.origin='kurzpost' (als externer Beitrag gekennzeichnet; sonst gelten die Regeln fuer gezogene Inhalte).
--- feed_items.hidden bekommt dafuer einen dritten Wert: 0 sichtbar, 1 von der Moderation ausgeblendet, 2 vom Mitglied zurueckgezogen.
+-- feed_items.hidden wird dafuer zu zwei Schaltern: Bit 1 = von der Moderation ausgeblendet, Bit 2 = vom Mitglied zurueckgezogen
+-- (0 sichtbar, 1 Moderation, 2 zurueckgezogen, 3 beides; worker/src/feedpolicy.js). Sichtbar bleibt nur hidden=0.
 ALTER TABLE feed_items ADD COLUMN origin TEXT NOT NULL DEFAULT '';
 CREATE INDEX IF NOT EXISTS idx_contributions_canon ON contributions(user_id, canon) WHERE canon<>'';
 CREATE INDEX IF NOT EXISTS idx_contributions_guid ON contributions(user_id, guid) WHERE guid<>'';

@@ -26,6 +26,7 @@
     e_not_trusted: "Kurzposts stehen vertrauenswürdigen Mitgliedern offen: bestätigtes Programm (MVP, MCT, RD, MSA, Microsoft) oder 25 Community-Punkte. Bis dahin warten neue Beiträge in „Neu gefunden“ und lassen sich tracken.",
     e_post_limit: "Heute sind schon 5 Kurzposts veröffentlicht. Der Beitrag bleibt in „Neu gefunden“, morgen geht es weiter.", e_hidden_by_moderation: "Dieser Kurzpost wurde von der Moderation ausgeblendet und kann nicht erneut veröffentlicht werden.",
     e_already_in_feed: "Dieser Link ist über einen deiner Profil-Kanäle schon im Community-Feed. Wähle „Tracken“.", e_too_old: "Nur Beiträge der letzten 120 Tage können Kurzposts werden. Wähle „Tracken“.", e_contribution_limit: "Es sind zu viele Einträge von Hand.",
+    e_posted: "Dieser Beitrag steht als Kurzpost im Community-Feed. Zieh den Kurzpost zuerst zurück, dann lässt sich der Link ändern; der zurückgezogene Kurzpost entfällt dabei.",
     imp_posted: "{n} als Kurzpost veröffentlicht.", imp_held: "{n} warten in „Neu gefunden“:", imp_unposted: "{n} nur getrackt (ohne Link, älter als 120 Tage oder schon im Feed).",
     p_h: "Kurzpost", p_chip: "Kurzpost", p_live: "Dieser Beitrag steht als Kurzpost im Community-Feed.", p_hint: "Wenn du den Eintrag löschst, wird auch der Kurzpost entfernt.", p_withdrawn: "Der Kurzpost ist zurückgezogen und nicht mehr öffentlich.",
     p_moderated: "Der Kurzpost wurde von der Moderation ausgeblendet.", unpost: "Kurzpost zurückziehen", unposted: "Der Kurzpost ist zurückgezogen.", repost: "Wieder veröffentlichen"
@@ -51,6 +52,7 @@
     e_not_trusted: "Short posts are open to trusted members: a confirmed program (MVP, MCT, RD, MSA, Microsoft) or 25 community points. Until then new items wait in “New finds” and can be tracked.",
     e_post_limit: "You have already published 5 short posts today. The item stays in “New finds”; try again tomorrow.", e_hidden_by_moderation: "This short post was hidden by the moderation team and cannot be published again.",
     e_already_in_feed: "This link is already in the community feed through one of your profile channels. Choose “Track”.", e_too_old: "Only items from the last 120 days can become short posts. Choose “Track”.", e_contribution_limit: "Too many entries added by hand.",
+    e_posted: "This entry is published as a short post in the community feed. Take the short post back first, then the link can be changed; the withdrawn short post is removed with it.",
     imp_posted: "{n} published as short posts.", imp_held: "{n} are waiting in “New finds”:", imp_unposted: "{n} only tracked (no link, older than 120 days or already in the feed).",
     p_h: "Short post", p_chip: "Short post", p_live: "This entry is published as a short post in the community feed.", p_hint: "Deleting the entry also removes the short post.", p_withdrawn: "The short post has been taken back and is no longer public.",
     p_moderated: "The short post was hidden by the moderation team.", unpost: "Take short post back", unposted: "The short post has been taken back.", repost: "Publish again"

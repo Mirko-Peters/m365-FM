@@ -7,7 +7,7 @@ import { findExperts } from "./experts.js";
 import { computeLevels } from "./levels.js";
 import { ensureDirectoryCols, geocodeAddress, recordGeocodeStatus } from "./directory.js";
 import { checkKindIds } from "./kinds.js";
-import { publicKindSql, publicItemSql, FEED_DAYS } from "./feedpolicy.js";
+import { publicKindSql, publicItemSql, FEED_DAYS, HIDDEN_MOD } from "./feedpolicy.js";
 import { createOrgEntity, findOrgEntity, setOrgEntity, unclaimedOrgOf, adoptOrg } from "./orgpair.js";
 
 export const PROGRAMS = ["mvp", "mct", "rd", "msa", "ms_employee", "partner", "gde"];   // gde: Google Developer Experts (MVP-Tracker, format=gde)
@@ -661,9 +661,9 @@ export async function handleProfiles(env, request, url, path, user, J) {
   }
   if (path === "/api/admin/feed-hide" && method === "POST") {
     if (!(user?.admin || user?.editor)) return J({ error: "forbidden" }, 403);
-    // hidden: 0 = sichtbar, 1 = von der Moderation ausgeblendet, 2 = vom Mitglied zurueckgezogen (Kurzpost, contrib_sources.js). Einblenden hebt nur
-    // die eigene Entscheidung der Moderation auf; was ein Mitglied zurueckgezogen hat, macht hier niemand wieder oeffentlich.
-    const b = await body(); await db.prepare(b.hidden ? "UPDATE feed_items SET hidden=1 WHERE id=?" : "UPDATE feed_items SET hidden=0 WHERE id=? AND hidden=1").bind(+b.id).run(); return J({ ok: true });
+    // hidden (feedpolicy.js): Bit 1 = von der Moderation ausgeblendet, Bit 2 = vom Mitglied zurueckgezogen (Kurzpost, contrib_sources.js). Die
+    // Redaktion setzt und loescht nur ihren eigenen Schalter: Aus- und wieder Einblenden macht nichts oeffentlich, was das Mitglied zurueckgezogen hat.
+    const b = await body(); await db.prepare(b.hidden ? "UPDATE feed_items SET hidden=hidden|? WHERE id=?" : "UPDATE feed_items SET hidden=hidden&? WHERE id=?").bind(b.hidden ? HIDDEN_MOD : ~HIDDEN_MOD, +b.id).run(); return J({ ok: true });
   }
   return null;
 }
@@ -689,6 +689,7 @@ export async function deleteUserData(db, id) {
     db.prepare("DELETE FROM contributions WHERE user_id=?").bind(id), db.prepare("DELETE FROM contribution_sources WHERE user_id=?").bind(id), db.prepare("DELETE FROM contribution_ignored WHERE user_id=?").bind(id),   // Loeschmarken enthalten URLs geloeschter Beitraege (DSGVO)
     db.prepare("DELETE FROM item_votes WHERE user_id=? OR item_id IN (SELECT id FROM feed_items WHERE owner_type='u' AND owner_id=?)").bind(id, id),
     db.prepare("DELETE FROM feed_items WHERE owner_type='u' AND owner_id=?").bind(id), db.prepare("DELETE FROM channels WHERE owner_type='u' AND owner_id=?").bind(id),
+    db.prepare("DELETE FROM ratelimit WHERE k=? OR k LIKE ?").bind(`kurzpost:${id}`, `contrib-%:${id}`),   // Zaehler des MVP-Trackers (Kurzposts je Tag, Importe, Aenderungen) tragen die Konto-Nummer
     db.prepare("DELETE FROM expertise WHERE owner_type='u' AND owner_id=?").bind(id), db.prepare("DELETE FROM expertise_evidence WHERE owner_id=?").bind(id), db.prepare("DELETE FROM expertise_score WHERE owner_id=?").bind(id), db.prepare("DELETE FROM programs WHERE owner_type='u' AND owner_id=?").bind(id),
     db.prepare("DELETE FROM profile_private WHERE user_id=?").bind(id), db.prepare("DELETE FROM profile_i18n WHERE user_id=?").bind(id), db.prepare("DELETE FROM certs WHERE user_id=?").bind(id), db.prepare("DELETE FROM cert_check WHERE user_id=?").bind(id), db.prepare("DELETE FROM cert_endorse WHERE owner_id=? OR by_id=?").bind(id, id), db.prepare("DELETE FROM endorsements WHERE owner_id=? OR by_id=?").bind(id, id),
     db.prepare("DELETE FROM profiles WHERE user_id=?").bind(id),

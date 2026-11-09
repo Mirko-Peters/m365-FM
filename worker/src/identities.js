@@ -176,9 +176,9 @@ export async function mergeStatements(db, S, T) {
   st.push(q(`DELETE FROM contributions WHERE user_id=? AND EXISTS (SELECT 1 FROM contributions t WHERE t.user_id=? AND ${same("t")})`, S, T));
   set("contributions");
   // Kurzposts, an denen danach kein Beitrag mehr haengt (der Eintrag von T hatte schon einen eigenen), entfallen samt Stimmen. Was die Moderation
-  // ausgeblendet hat (hidden=1), bleibt als Sperre stehen (contrib_sources.js dropPosts).
-  const orphan = "owner_type='u' AND owner_id=? AND origin='kurzpost' AND hidden<>1 AND id NOT IN (SELECT feed_item_id FROM contributions WHERE user_id=?)";
-  st.push(q(`DELETE FROM item_votes WHERE item_id IN (SELECT id FROM feed_items WHERE ${orphan})`, T, T), q(`DELETE FROM feed_items WHERE ${orphan}`, T, T));
+  // ausgeblendet hat (hidden Bit 1), bleibt als Sperre stehen und gilt zusaetzlich als zurueckgezogen (Bit 2) - wie in contrib_sources.js dropPosts.
+  const orphan = (mod) => `owner_type='u' AND owner_id=? AND origin='kurzpost' AND (hidden&1)=${mod} AND id NOT IN (SELECT feed_item_id FROM contributions WHERE user_id=?)`;
+  st.push(q(`UPDATE feed_items SET hidden=hidden|2 WHERE ${orphan(1)}`, T, T), q(`DELETE FROM item_votes WHERE item_id IN (SELECT id FROM feed_items WHERE ${orphan(0)})`, T, T), q(`DELETE FROM feed_items WHERE ${orphan(0)}`, T, T));
   // Rezensionen: je Show eine; die von S wird ausgeblendet, nicht geloescht
   keepT("show_reviews"); st.push(q("UPDATE show_reviews SET status='merged' WHERE user_id=?", S));
   keepT("expert_request_replies");

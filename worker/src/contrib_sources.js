@@ -6,9 +6,9 @@ import { goodHost } from "./profiles.js";
 import { trustedUser } from "./entities.js";
 import { parseFeed, discoverFeed } from "./feeds.js";
 import { sendPush } from "./push.js";
-import { isPublicFeedKind, FEED_DAYS } from "./feedpolicy.js";
+import { isPublicFeedKind, FEED_DAYS, youtubeId, canonUrl, sameLinks, HIDDEN_MOD, HIDDEN_OWN } from "./feedpolicy.js";
 
-export { BOT_UA };
+export { BOT_UA, youtubeId, canonUrl };
 export const KURZPOST_DAY = 5;   // neue Kurzposts je Mitglied und Tag (wie MAX_POSTS_DAY im Blog)
 export const MODES = ["track", "publish", "ask"];
 export const MANUAL_KINDS = ["linkedin", "other"];   // kein Abruf: Eintraege kommen per Link-Vorschau oder Export-Upload (POST /api/contributions/import)
@@ -45,25 +45,6 @@ function httpsUrl(v) {
 }
 const seg = (u) => u.pathname.split("/").filter(Boolean);
 const NAME = /^[A-Za-z0-9._~-]{1,100}$/;
-
-export function youtubeId(u) {
-  const h = bare(u.hostname);
-  if (h === "youtu.be") return /^[\w-]{11}$/.test(seg(u)[0] || "") ? seg(u)[0] : "";
-  if (h === "youtube.com" || h === "m.youtube.com") {
-    const v = u.searchParams.get("v"); if (/^[\w-]{11}$/.test(v || "")) return v;
-    const m = /^\/(?:shorts|embed|live)\/([\w-]{11})/.exec(u.pathname); return m ? m[1] : "";
-  }
-  return "";
-}
-
-// Kanonische URL fuer den Vergleich (ohne Schema, ohne www/m., Tracking-Parameter, #, abschliessenden /); YouTube auf watch?v=ID
-export function canonUrl(raw) {
-  let u; try { u = new URL(String(raw || "").trim()); } catch { return ""; }
-  const id = youtubeId(u); if (id) return `youtube.com/watch?v=${id}`;
-  const q = [...u.searchParams.entries()].filter(([k]) => !/^(utm_|mc_|fbclid|gclid|igshid|ref$|ref_|source$|trk|si$|feature$)/i.test(k)).sort(([a], [b]) => (a < b ? -1 : 1));
-  const path = u.pathname.replace(/\/+$/, "");
-  return `${bare(u.hostname).replace(/^m\./, "")}${path}${q.length ? "?" + q.map(([k, v]) => `${k}=${v}`).join("&") : ""}`.toLowerCase();
-}
 
 // Quelle pruefen: { url, feed } (feed leer = wird beim Abruf entdeckt) oder { error: "bad_source" }. Kein Netzwerk.
 export function describeSource(kind, raw) {
@@ -300,17 +281,15 @@ export async function ingestItems(env, source, items, { limit = 5000, first = fa
 //  - Vertrauens-Schwelle wie bei Wiki, Entitaeten und Firmenangeboten (entities.js trustedUser: Redaktion, bestaetigtes Programm oder 25 Punkte)
 //  - hoechstens KURZPOST_DAY neue Kurzposts je Mitglied und Tag
 //  - Datum nie in der Zukunft und nicht aelter als das Feed-Fenster (FEED_DAYS; Aelteres bekaeme nie eine Seite)
-//  - ein Link, den schon jemand im Feed hat, bleibt dort (auch dasselbe YouTube-Video unter anderer Adresse); kommt er spaeter ueber einen
-//    echten Profil-Kanal, uebernimmt der Kanal den Eintrag (feeds.js refreshFeeds)
-//  - hidden: 0 sichtbar, 1 von der Moderation ausgeblendet, 2 vom Mitglied zurueckgezogen. Hier wird nur 2 wieder sichtbar.
+//  - ein Link, den schon jemand im Feed hat, bleibt dort (auch dasselbe YouTube-Video unter anderer Adresse). Wer zuerst da ist, behaelt den
+//    Eintrag - wie bei gezogenen Inhalten; Streit um die Urheberschaft klaert die Moderation. Nur der eigene Profil-Kanal uebernimmt einen
+//    eigenen Kurzpost (feeds.js refreshFeeds).
+//  - je Mitglied und Seite ein Eintrag: dieselbe Seite unter leicht anderer Adresse (canonUrl: / am Ende, Tracking-Parameter, www, YouTube-Formen)
+//    ist derselbe Eintrag. Hat die Moderation ihn ausgeblendet, gibt es dafuer keinen neuen - auch nicht mit angehaengten Parametern.
+//  - hidden (feedpolicy.js): Moderation und Zurueckziehen sind getrennte Schalter. Hier wird nur das eigene Zurueckziehen aufgehoben.
 //  - Links auf die eigene Website kommen ueber Blog, Podcast und Video in den Feed, nicht als Kurzpost
-// gate merkt sich Profil und Vertrauen ueber mehrere Aufrufe (ein Lauf mit vielen Eintraegen fragt nur einmal).
+// gate merkt sich Profil, Vertrauen und die eigenen Feed-Eintraege ueber mehrere Aufrufe (ein Lauf mit vielen Eintraegen fragt nur einmal).
 export const trustedMember = async (env, uid) => trustedUser(env.DB, await memberOf(env, uid));
-function sameLinks(raw) {
-  let u; try { u = new URL(raw); } catch { return [raw]; }
-  const id = youtubeId(u);
-  return id ? [...new Set([raw, `https://www.youtube.com/watch?v=${id}`, `https://youtu.be/${id}`, `https://www.youtube.com/shorts/${id}`, `https://m.youtube.com/watch?v=${id}`])] : [raw];
-}
 export async function publishAsPost(env, db, uid, row, gate = {}) {
   if (!row?.url) return { error: "no_url" };
   if (gate.error === undefined) {
@@ -318,15 +297,21 @@ export async function publishAsPost(env, db, uid, row, gate = {}) {
     gate.error = !gate.handle ? "profile_required" : (await trustedMember(env, uid)) ? "" : "not_trusted";
   }
   if (gate.error) return { error: gate.error };
-  const links = sameLinks(row.url), mine = (x) => x.owner_type === "u" && x.owner_id === uid;
-  const found = (await db.prepare(`SELECT id,owner_type,owner_id,hidden,origin,url FROM feed_items WHERE url IN (${links.map(() => "?").join(",")})`).bind(...links).all()).results || [];
-  if (found.some((x) => !mine(x))) return { error: "url_taken" };
-  const ex = found.find((x) => x.url === row.url) || found[0];
+  const links = sameLinks(row.url), canon = canonUrl(row.url);
+  const found = (await db.prepare(`SELECT id,owner_type,owner_id FROM feed_items WHERE url IN (${links.map(() => "?").join(",")})`).bind(...links).all()).results || [];
+  if (found.some((x) => x.owner_type !== "u" || x.owner_id !== uid)) return { error: "url_taken" };
+  if (!gate.own) gate.own = ((await db.prepare("SELECT id,hidden,origin,url FROM feed_items WHERE owner_type='u' AND owner_id=?").bind(uid).all()).results || []).map((x) => ({ ...x, canon: canonUrl(x.url) }));
+  const same = gate.own.filter((x) => x.url === row.url || links.includes(x.url) || (canon && x.canon === canon));
+  // Sperre der Moderation: auch fuer dieselbe Seite mit angehaengten Parametern (/seite -> /seite?x=1). Das gilt nur, wenn die gesperrte Adresse
+  // selbst ohne Parameter auskommt und einen Pfad hat - wo der Parameter die Seite bestimmt (?p=12, watch?v=), sperrt ein Eintrag nicht die anderen.
+  const page = canon.split("?")[0];
+  if (same.some((x) => x.hidden & HIDDEN_MOD) || (page.includes("/") && gate.own.some((x) => (x.hidden & HIDDEN_MOD) && x.canon === page))) return { error: "hidden_by_moderation" };
+  if (same.some((x) => x.origin !== "kurzpost")) return { error: "already_in_feed" };   // kommt schon ueber einen eigenen Profil-Kanal; der gezogene Eintrag bleibt unberuehrt
+  const ex = same.find((x) => x.url === row.url) || same[0];
   let id = ex?.id;
   if (ex) {
-    if (ex.hidden === 1) return { error: "hidden_by_moderation" };
-    if (ex.origin !== "kurzpost") return { error: "already_in_feed" };   // kommt schon ueber einen eigenen Profil-Kanal; der gezogene Eintrag bleibt unberuehrt
-    await db.prepare("UPDATE feed_items SET hidden=0 WHERE id=? AND hidden=2").bind(ex.id).run();
+    await db.prepare("UPDATE feed_items SET hidden=hidden&? WHERE id=? AND owner_type='u' AND owner_id=? AND origin='kurzpost'").bind(~HIDDEN_OWN, ex.id, uid).run();
+    ex.hidden &= ~HIDDEN_OWN;
   } else {
     if (String(row.url).startsWith(`${env.SITE}/`)) return { error: "not_publishable" };
     const t = now(), published = Math.min(+row.published || t, t);
@@ -339,21 +324,27 @@ export async function publishAsPost(env, db, uid, row, gate = {}) {
       .bind(ch.id, uid, row.url, row.title, published, summarize(row.teaser, 280), JSON.stringify(topicList(row.topics).slice(0, 10))).run();
     if (!r.meta.changes) return { error: "url_taken" };   // zeitgleich von jemand anderem angelegt
     id = r.meta.last_row_id;
+    gate.own.push({ id, hidden: 0, origin: "kurzpost", url: row.url, canon });
   }
   await db.prepare("UPDATE contributions SET feed_item_id=?, review='' WHERE id=? AND user_id=?").bind(id, row.id, uid).run();
   return { id };
 }
 
-// Kurzposts zu Beitraegen entfernen, die gleich geloescht werden (where = Bedingung auf contributions). Gezogene Eintraege der Profil-Kanaele
-// bleiben unberuehrt. Was die Moderation ausgeblendet hat (hidden=1), bleibt als Sperre stehen - sonst waere Loeschen und neu Anlegen ein Weg,
-// einen ausgeblendeten Kurzpost zurueckzuholen; oeffentlich ist er ohnehin nicht.
+// Kurzposts zu Beitraegen entfernen, die gleich geloescht werden oder ihren Link wechseln (where = Bedingung auf contributions). Gezogene
+// Eintraege der Profil-Kanaele bleiben unberuehrt. Was die Moderation ausgeblendet hat, bleibt als Sperre stehen - sonst waere Loeschen und neu
+// Anlegen ein Weg, einen ausgeblendeten Kurzpost zurueckzuholen. Die Zeile gilt dann zusaetzlich als zurueckgezogen: hebt die Redaktion die
+// Sperre spaeter auf, steht kein Kurzpost ohne Beitrag oeffentlich da. Haengt noch ein anderer Beitrag am selben Kurzpost (dieselbe Seite
+// unter zwei Adressen erfasst), bleibt er fuer diesen stehen, samt Stimmen und eigenem Text.
 export function dropPosts(db, uid, where, binds = []) {
-  const ids = `SELECT id FROM feed_items WHERE owner_type='u' AND owner_id=? AND origin='kurzpost' AND hidden<>1 AND id IN (SELECT feed_item_id FROM contributions WHERE user_id=? AND feed_item_id>0 AND ${where})`;
-  return [db.prepare(`DELETE FROM item_votes WHERE item_id IN (${ids})`).bind(uid, uid, ...binds), db.prepare(`DELETE FROM feed_items WHERE id IN (${ids})`).bind(uid, uid, ...binds)];
+  const of = (mod) => `SELECT id FROM feed_items WHERE owner_type='u' AND owner_id=? AND origin='kurzpost' AND (hidden&${HIDDEN_MOD})=${mod}
+    AND id IN (SELECT feed_item_id FROM contributions WHERE user_id=? AND feed_item_id>0 AND (${where}))
+    AND id NOT IN (SELECT feed_item_id FROM contributions WHERE user_id=? AND feed_item_id>0 AND (${where}) IS NOT 1)`, all = [uid, uid, ...binds, uid, ...binds];
+  return [db.prepare(`UPDATE feed_items SET hidden=hidden|${HIDDEN_OWN} WHERE id IN (${of(HIDDEN_MOD)})`).bind(...all),
+    db.prepare(`DELETE FROM item_votes WHERE item_id IN (${of(0)})`).bind(...all), db.prepare(`DELETE FROM feed_items WHERE id IN (${of(0)})`).bind(...all)];
 }
 
 // "Neu gefunden"-Aktion: track | publish | ignore | unpublish (nur eigene Eintraege). publish geht auch fuer schon getrackte Eintraege,
-// unpublish zieht den Kurzpost zurueck (hidden=2); die Verknuepfung bleibt, damit erneutes Veroeffentlichen und Loeschen ihn wiederfinden.
+// unpublish zieht den Kurzpost zurueck (HIDDEN_OWN); die Verknuepfung bleibt, damit erneutes Veroeffentlichen und Loeschen ihn wiederfinden.
 const ERROR_STATUS = { post_limit: 429, not_trusted: 403 };
 export async function reviewAction(env, uid, id, action, opts = {}) {
   const db = env.DB, row = await db.prepare("SELECT id,user_id,source_id,title,url,published,teaser,topics,review,kind,feed_item_id FROM contributions WHERE id=? AND user_id=?").bind(id, uid).first();
@@ -382,7 +373,9 @@ export async function reviewAction(env, uid, id, action, opts = {}) {
     await db.batch(stmts);
     return { ok: true, action };
   }
-  const r = row.feed_item_id ? await db.prepare("UPDATE feed_items SET hidden=2 WHERE id=? AND owner_type='u' AND owner_id=? AND origin='kurzpost' AND hidden=0").bind(row.feed_item_id, uid).run() : null;
+  // withdrawn: der Kurzpost war noch nicht zurueckgezogen und ist es jetzt. Auch unter einer Sperre der Moderation wird der Wunsch vermerkt:
+  // hebt die Redaktion die Sperre spaeter auf, bleibt der Kurzpost zurueckgezogen.
+  const r = row.feed_item_id ? await db.prepare("UPDATE feed_items SET hidden=hidden|? WHERE id=? AND owner_type='u' AND owner_id=? AND origin='kurzpost' AND (hidden&?)=0").bind(HIDDEN_OWN, row.feed_item_id, uid, HIDDEN_OWN).run() : null;
   return { ok: true, action, withdrawn: !!r?.meta.changes };
 }
 

@@ -1,5 +1,6 @@
 // Kurzposts aus dem MVP-Tracker: Schutz des oeffentlichen Feeds (Review #318). Tagesgrenze, Vertrauens-Schwelle, Eigentum, Datumsgrenzen,
-// Moderation bleibt Moderation, Zurueckziehen und Loeschen, echter Kanal uebernimmt, stiller erster Abruf, Abruf-Reihenfolge, Import.
+// Moderation bleibt Moderation, Zurueckziehen und Loeschen, eigener Kanal uebernimmt (fremde Kurzposts bleiben), stiller erster Abruf,
+// Abruf-Reihenfolge, Import. "318 Nachpruefung": zweite Runde (Uebernahme ueber Sammel-Feeds, Adress-Varianten, Hinweise, Link aendern).
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
@@ -58,6 +59,17 @@ async function posted(x, title, url, actor = { id: 1 }) {
   assert.equal(p.s, 200, JSON.stringify(p.j));
   return { id: c.j.id, post: p.j.feed_item_id };
 }
+
+async function pushEnv(x, uid) {   // echtes VAPID-Schluesselpaar und ein Push-Abo des Mitglieds: Hinweise werden als POST an den Push-Dienst sichtbar
+  const v = await crypto.subtle.generateKey({ name: "ECDSA", namedCurve: "P-256" }, true, ["sign"]), e = await crypto.subtle.generateKey({ name: "ECDH", namedCurve: "P-256" }, true, ["deriveBits"]);
+  Object.assign(x.env, { VAPID_PRIVATE_JWK: JSON.stringify(await crypto.subtle.exportKey("jwk", v.privateKey)), VAPID_PUBLIC: "pub", VAPID_SUBJECT: "mailto:test@example.com" });
+  x.raw.prepare("INSERT INTO push_subs(endpoint,p256dh,auth,lang,user_id,created,digest) VALUES('https://push.example.com/sub1',?,?,'en',?,1,1)")
+    .run(b64u.enc(new Uint8Array(await crypto.subtle.exportKey("raw", e.publicKey))), b64u.enc(crypto.getRandomValues(new Uint8Array(16))), uid);
+}
+const YT = "https://www.youtube.com/feeds/videos.xml?channel_id=UCabcdefghijklmnopqrstuv", PUSH = "https://push.example.com/";
+
+const queued = (x) => x.one("SELECT COUNT(*) n FROM topic_queue").n;
+const follow = (x, handle) => x.raw.prepare("INSERT INTO push_subs(endpoint,p256dh,auth,lang,user_id,created,digest) VALUES('https://push.example.com/f','k','a','en',3,1,0)").run() && x.raw.prepare("INSERT INTO push_topics(endpoint,kind,topic_id,lang,user_id,created) VALUES('https://push.example.com/f','creator',?,'en',3,1)").run(handle);
 
 test("318-1 Tagesgrenze: hoechstens 5 neue Kurzposts je Mitglied und Tag, ueber Import, Neu gefunden und Batch zusammen", async () => {
   const x = await makeDb();
@@ -126,57 +138,94 @@ test("318-1 Vertrauens-Schwelle: neue Mitglieder veroeffentlichen nicht direkt, 
   assert.deepEqual([carl.j.published, carl.j.held], [0, "profile_required"]);
 });
 
-test("318-1 Eigentum: kein Link, den schon jemand im Feed hat; keine Seiten der eigenen Website; der echte Kanal uebernimmt einen fremden Kurzpost", async () => {
+test("318-1 Eigentum: kein Link, den schon jemand im Feed hat; keine Seiten der eigenen Website; wer zuerst da ist, behaelt den Eintrag", async () => {
   const x = await makeDb();
   x.raw.exec(`INSERT INTO channels(id,owner_type,owner_id,kind,url,feed,fetched) VALUES(700,'u',2,'youtube','https://www.youtube.com/@ben','https://www.youtube.com/feeds/videos.xml?channel_id=UCben',${NOW});
     INSERT INTO feed_items(id,channel_id,owner_type,owner_id,url,title,published) VALUES(70,700,'u',2,'https://www.youtube.com/watch?v=bbbbbbbbbbb','Ben video',${NOW - 100})`);
   const man = async (title, url) => (await x.call("/api/contributions/manual", { title, url, kind: "video", published: day(NOW) })).j.id;
-  for (const [title, url] of [["Same link", "https://www.youtube.com/watch?v=bbbbbbbbbbb"], ["Short link", "https://youtu.be/bbbbbbbbbbb"]]) {
+  for (const [title, url] of [["Same link", "https://www.youtube.com/watch?v=bbbbbbbbbbb"], ["Short link", "https://youtu.be/bbbbbbbbbbb"], ["Music link", "https://music.youtube.com/watch?v=bbbbbbbbbbb&si=abc"], ["Embed link", "https://www.youtube-nocookie.com/embed/bbbbbbbbbbb"]]) {
     const r = await x.call("/api/contributions/review", { id: await man(title, url), action: "publish" });
     assert.deepEqual([r.s, r.j.error], [400, "url_taken"], title);
   }
   const own = await x.call("/api/contributions/review", { id: await man("Bens blog post", `${SITE}/community/u/ben/blog/hello/`), action: "publish" });
   assert.deepEqual([own.s, own.j.error], [400, "not_publishable"], "Blog, Podcast und Video der Website kommen selbst in den Feed");
   assert.equal(posts(x, "origin='kurzpost'").length, 0);
-  // Anna postet den Link eines Videos von Ben, bevor Bens Kanal es gezogen hat
-  const steal = await posted(x, "My great video", "https://www.youtube.com/watch?v=ccccccccccc");
-  x.raw.prepare("UPDATE feed_items SET body=?, hidden=2 WHERE id=?").run("x".repeat(320), steal.post);
-  x.raw.exec("INSERT INTO item_votes(item_id,user_id,created) VALUES(" + steal.post + ",3,1); UPDATE channels SET fetched=1 WHERE id=700");
-  await withFetch({ "https://www.youtube.com/feeds/videos.xml?channel_id=UCben": { body: atom([["Ben: the real title", "https://www.youtube.com/watch?v=ccccccccccc"], ["Ben video", "https://www.youtube.com/watch?v=bbbbbbbbbbb"]]) } }, () => refreshFeeds(x.env));
-  const row = x.one("SELECT owner_type,owner_id,channel_id,origin,title,hidden,body,summary FROM feed_items WHERE id=?", steal.post);
-  assert.deepEqual({ ...row }, { owner_type: "u", owner_id: 2, channel_id: 700, origin: "", title: "Ben: the real title", hidden: 0, body: "", summary: "About Ben: the real title." });
-  assert.equal(x.one("SELECT feed_item_id FROM contributions WHERE id=?", steal.id).feed_item_id, 0);
-  const mine = (await x.call("/api/contributions/mine")).j.contributions.find((c) => c.id === steal.id);
-  assert.deepEqual([mine.posted, mine.post], [false, ""]);
-  const exp = (await x.prof("/api/feed/export")).j.items.find((i) => i.url.endsWith("ccccccccccc"));
-  assert.deepEqual([exp.handle, exp.kind, exp.origin], ["ben", "youtube", ""]);
-  // Anna hat keinen Griff mehr auf den Eintrag
-  assert.equal((await x.call("/api/contributions/unpublish", { id: steal.id })).j.withdrawn, false);
-  assert.equal((await x.call("/api/contributions/delete", { id: steal.id })).s, 200);
-  assert.equal(x.one("SELECT COUNT(*) n FROM feed_items WHERE id=?", steal.post).n, 1);
-  // eine Sperre der Moderation uebersteht die Uebernahme
-  const spam = await posted(x, "Spam", "https://www.youtube.com/watch?v=ddddddddddd");
-  await x.prof("/api/admin/feed-hide", { id: spam.post, hidden: true }, ADMIN);
-  x.raw.exec("UPDATE channels SET fetched=1 WHERE id=700");
-  await withFetch({ "https://www.youtube.com/feeds/videos.xml?channel_id=UCben": { body: atom([["Ben four", "https://www.youtube.com/watch?v=ddddddddddd"]]) } }, () => refreshFeeds(x.env));
-  assert.deepEqual({ ...x.one("SELECT owner_id,origin,hidden FROM feed_items WHERE id=?", spam.post) }, { owner_id: 2, origin: "", hidden: 1 });
-  // Umgekehrt belegt ein Feed auf fremdem Host nichts: listet Bens Blog-Feed Annas Link auf, bleibt der Kurzpost samt eigenem Text bei Anna -
-  // sonst koennte jeder Kanal mit einem selbst gebauten Feed die Kurzposts anderer an sich ziehen. Und Ben bekommt dafuer keinen Dauer-Hinweis.
-  const keep = await posted(x, "Annas article", "https://anna.example.com/article");
-  x.raw.prepare("UPDATE feed_items SET body=? WHERE id=?").run("z".repeat(320), keep.post);
-  x.raw.exec(`INSERT INTO channels(id,owner_type,owner_id,kind,url,feed,fetched) VALUES(790,'u',2,'blog','https://ben.example.com/','https://ben.example.com/feed.xml',1);
-    INSERT INTO feed_items(id,channel_id,owner_type,owner_id,url,title,published) VALUES(791,790,'u',2,'https://ben.example.com/first','First',${NOW - DAY})`);
-  await pushEnv(x, 2);
+  // Anna postet einen Link, den spaeter auch Bens Kanal fuehrt: Der Eintrag bleibt bei Anna, samt eigenem Text, Themen und Stimmen. Die Feed-Adresse
+  // eines Kanals ist frei eingetippt und belegt nichts - nicht einmal auf demselben Host (Kanal-Feed, Playlist, Blog mit mehreren Autoren).
+  const first = await posted(x, "My great video", "https://www.youtube.com/watch?v=ccccccccccc");
+  x.raw.prepare("UPDATE feed_items SET body=?, topics='[\"copilot\"]' WHERE id=?").run("x".repeat(320), first.post);
+  x.raw.exec("INSERT INTO item_votes(item_id,user_id,created) VALUES(" + first.post + ",3,1); UPDATE channels SET fetched=1 WHERE id=700");
+  await pushEnv(x, 2); follow(x, "ben");
   let pushes = 0;
   for (let run = 0; run < 3; run++) {
-    x.raw.exec("UPDATE channels SET fetched=1 WHERE id=790");
-    await withFetch({ "https://ben.example.com/feed.xml": { body: atom([["Grabbed", "https://anna.example.com/article"], ["First", "https://ben.example.com/first"]]) }, [PUSH]: { status: 201 } },
+    x.raw.exec("UPDATE channels SET fetched=1 WHERE id=700");
+    await withFetch({ "https://www.youtube.com/feeds/videos.xml?channel_id=UCben": { body: atom([["Ben: the real title", "https://www.youtube.com/watch?v=ccccccccccc"], ["Ben video", "https://www.youtube.com/watch?v=bbbbbbbbbbb"]]) }, [PUSH]: { status: 201 } },
       async (calls) => { await refreshFeeds(x.env); pushes += calls.filter((c) => c.url.startsWith(PUSH)).length; });
   }
-  assert.deepEqual({ ...x.one("SELECT owner_id,origin,title,hidden,length(body) n FROM feed_items WHERE id=?", keep.post) }, { owner_id: 1, origin: "kurzpost", title: "Annas article", hidden: 0, n: 320 });
-  assert.equal(x.one("SELECT feed_item_id FROM contributions WHERE id=?", keep.id).feed_item_id, keep.post);
-  assert.equal(x.one("SELECT fetched>1 f FROM channels WHERE id=790").f, 1, "der Kanal selbst wurde gelesen");
-  assert.equal(pushes, 0);
+  const kept = { owner_type: "u", owner_id: 1, origin: "kurzpost", title: "My great video", hidden: 0, n: 320, topics: "[\"copilot\"]" };
+  assert.deepEqual({ ...x.one("SELECT owner_type,owner_id,origin,title,hidden,length(body) n,topics FROM feed_items WHERE id=?", first.post) }, kept);
+  assert.deepEqual([x.one("SELECT feed_item_id FROM contributions WHERE id=?", first.id).feed_item_id, x.one("SELECT COUNT(*) n FROM item_votes WHERE item_id=?", first.post).n], [first.post, 1]);
+  assert.deepEqual([pushes, queued(x), x.one("SELECT fetched>1 f, fails FROM channels WHERE id=700").f], [0, 0, 1], "kein Hinweis fuer einen Link, den ein anderer haelt; der Kanal selbst wurde gelesen");
+  assert.equal((await x.prof("/api/feed/export")).j.items.find((i) => i.url.endsWith("ccccccccccc")).handle, "anna");
+});
+
+test("318 Nachpruefung: ein Kanal mit Playlist- oder Sammel-Feed zieht keine Kurzposts anderer Mitglieder an sich (echte Profil-Route)", async () => {
+  const x = await makeDb();
+  const video = await posted(x, "Anna's own video", "https://www.youtube.com/watch?v=aaaaaaaaaaa"), article = await posted(x, "Anna's article", "https://techcommunity.microsoft.com/blog/microsoft365copilotblog/annas-article/123");
+  x.raw.prepare("UPDATE feed_items SET body=?, topics='[\"copilot\"]', keypoints='[\"k\"]', faq='[{\"q\":\"a\"}]' WHERE id IN (?,?)").run("Annas eigener Text. ".repeat(30), video.post, article.post);
+  x.raw.exec(`INSERT INTO item_votes(item_id,user_id,created) VALUES(${video.post},9,1)`);
+  const before = x.all("SELECT id,channel_id,owner_type,owner_id,url,title,origin,hidden,body,topics,keypoints,faq FROM feed_items ORDER BY id");
+  // Ben (neu, ohne Vertrauen) traegt zwei Kanaele ein, deren Feeds Annas Links auflisten: eine YouTube-Playlist und den Feed eines Blogs mit vielen Autoren
+  const PLAY = "https://www.youtube.com/feeds/videos.xml?playlist_id=PLbenplaylist", BOARD = "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=Microsoft365CopilotBlog";
+  const save = await withFetch({}, () => x.prof("/api/profile/me", { handle: "ben", public: true, name: "Ben", channels: [{ kind: "youtube", url: "https://www.youtube.com/@ben", feed: PLAY },
+    { kind: "blog", url: "https://techcommunity.microsoft.com/category/microsoft365copilot/blog/microsoft365copilotblog", feed: BOARD }] }, { id: 2, name: "Ben" }));
+  assert.equal(save.s, 200, JSON.stringify(save.j));
+  assert.deepEqual(x.all("SELECT feed FROM channels WHERE owner_id=2 AND feed<>'' ORDER BY id").map((c) => c.feed), [PLAY, BOARD]);
+  await pushEnv(x, 2); follow(x, "ben");
+  let pushes = 0;
+  for (let run = 0; run < 3; run++) {
+    x.raw.exec("UPDATE channels SET fetched=1 WHERE owner_id=2");
+    await withFetch({ [PLAY]: { body: atom([["Annas Video (Playlist)", "https://www.youtube.com/watch?v=aaaaaaaaaaa"]]) },
+      [BOARD]: { body: atom([["Anna's article", "https://techcommunity.microsoft.com/blog/microsoft365copilotblog/annas-article/123"], ["Other", "https://techcommunity.microsoft.com/blog/microsoft365copilotblog/other/124"]]) }, [PUSH]: { status: 201 } },
+      async (calls) => { await refreshFeeds(x.env); pushes += calls.filter((c) => c.url.startsWith(PUSH)).length; });
+  }
+  assert.deepEqual(x.all(`SELECT id,channel_id,owner_type,owner_id,url,title,origin,hidden,body,topics,keypoints,faq FROM feed_items WHERE id IN (${video.post},${article.post}) ORDER BY id`), before, "Eigentuemer, Kanal, Titel, eigener Text, Themen, Kernpunkte und FAQ unveraendert");
+  assert.deepEqual(x.all("SELECT id,feed_item_id FROM contributions ORDER BY id"), [{ id: video.id, feed_item_id: video.post }, { id: article.id, feed_item_id: article.post }]);
+  assert.deepEqual(x.all("SELECT item_id,user_id FROM item_votes"), [{ item_id: video.post, user_id: 9 }]);
+  const exp = (await x.prof("/api/feed/export")).j.items.map((i) => [i.title, i.handle]).sort();
+  assert.deepEqual(exp, [["Anna's article", "anna"], ["Anna's own video", "anna"], ["Other", "ben"]], "Ben bekommt nur, was noch niemand im Feed hat");
+  assert.deepEqual(x.all("SELECT title,owner_id FROM feed_items WHERE owner_id=2"), [{ title: "Other", owner_id: 2 }]);
+  assert.equal(pushes, 0, "kein Dauer-Hinweis fuer Links, die Anna haelt");
+  // Anna behaelt den Griff: zurueckziehen und wieder veroeffentlichen
+  assert.equal((await x.call("/api/contributions/unpublish", { id: video.id })).j.withdrawn, true);
+  // auch zurueckgezogen bleibt der Eintrag ihrer: ohne Entscheidung der Moderation gibt kein Abruf den Link frei
+  x.raw.exec("UPDATE channels SET fetched=1 WHERE owner_id=2");
+  await withFetch({ [PLAY]: { body: atom([["Annas Video (Playlist)", "https://www.youtube.com/watch?v=aaaaaaaaaaa"]]) } }, () => refreshFeeds(x.env));
+  assert.deepEqual({ ...x.one("SELECT owner_id,origin,hidden,length(body) n FROM feed_items WHERE id=?", video.post) }, { owner_id: 1, origin: "kurzpost", hidden: 2, n: 600 });
+  const again = await x.call("/api/contributions/review", { id: video.id, action: "publish" });
+  assert.deepEqual([again.s, again.j.feed_item_id, x.one("SELECT hidden FROM feed_items WHERE id=?", video.post).hidden], [200, video.post, 0]);
+});
+
+test("318 Nachpruefung: nur die Moderation gibt einen Link frei - ein von ihr ausgeblendeter fremder Kurzpost weicht dem Kanal, die Sperre wandert nicht mit", async () => {
+  const x = await makeDb(), V = "https://www.youtube.com/watch?v=bbbbbbbbbbb", FEED = "https://www.youtube.com/feeds/videos.xml?channel_id=UCben";
+  x.raw.exec(`INSERT INTO channels(id,owner_type,owner_id,kind,url,feed,fetched) VALUES(700,'u',2,'youtube','https://www.youtube.com/@ben','${FEED}',1);
+    INSERT INTO feed_items(id,channel_id,owner_type,owner_id,url,title,published) VALUES(70,700,'u',2,'https://www.youtube.com/watch?v=ooooooooooo','Older',${NOW - DAY})`);
+  const a = await posted(x, "Bens video, posted by Anna", V);
+  x.raw.prepare("UPDATE feed_items SET body=? WHERE id=?").run("x".repeat(320), a.post);
+  x.raw.exec(`INSERT INTO item_votes(item_id,user_id,created) VALUES(${a.post},3,1)`);
+  assert.equal((await x.prof("/api/admin/feed-hide", { id: a.post, hidden: true }, ADMIN)).s, 200);
+  follow(x, "ben");
+  for (let run = 0; run < 2; run++) {
+    x.raw.exec("UPDATE channels SET fetched=1 WHERE id=700");
+    await withFetch({ [FEED]: { body: atom([["Ben video", V], ["Older", "https://www.youtube.com/watch?v=ooooooooooo"]]) } }, () => refreshFeeds(x.env));
+  }
+  assert.deepEqual(x.all("SELECT title,owner_id,channel_id,origin,hidden,body FROM feed_items WHERE url=?", V), [{ title: "Ben video", owner_id: 2, channel_id: 700, origin: "", hidden: 0, body: "" }], "Bens eigenes Video ist sichtbar, ohne Annas Text");
+  assert.deepEqual([x.one("SELECT COUNT(*) n FROM item_votes").n, x.one("SELECT feed_item_id FROM contributions WHERE id=?", a.id).feed_item_id, queued(x)], [0, 0, 1], "Stimmen galten dem Kurzpost; wer Ben folgt, erfaehrt einmal vom Video");
+  const mine = (await x.call("/api/contributions/mine")).j.contributions.find((c) => c.id === a.id);
+  assert.deepEqual([mine.posted, mine.post], [false, ""]);
+  const re = await x.call("/api/contributions/review", { id: a.id, action: "publish" });
+  assert.deepEqual([re.s, re.j.error], [400, "url_taken"]);
+  assert.equal((await x.prof("/api/feed/export")).j.items.find((i) => i.url === V).handle, "ben");
 });
 
 test("318-2 Datum: Sekunden zwischen 1970 und 2100, im Feed nie in der Zukunft und nicht aelter als das Feed-Fenster", async () => {
@@ -219,30 +268,67 @@ test("318-3 Moderation: was die Redaktion ausblendet, holt das Mitglied nicht zu
   const again = await x.call("/api/contributions/review", { id: a.id, action: "publish" });
   assert.deepEqual([again.s, again.j.error, state()], [400, "hidden_by_moderation", 1]);
   assert.deepEqual([(await mine(a.id)).posted, (await mine(a.id)).post], [false, "moderated"]);
-  assert.deepEqual([(await x.call("/api/contributions/unpublish", { id: a.id })).j.withdrawn, state()], [false, 1], "Zurueckziehen aendert die Sperre nicht");
-  // Loeschen und neu anlegen ist kein Umweg: die Sperre bleibt stehen
-  assert.equal((await x.call("/api/contributions/delete", { id: a.id })).s, 200);
-  assert.equal(state(), 1);
-  const re = await x.call("/api/contributions/manual", { title: "Spammy again", url: "https://a.example.com/spam", kind: "blog", published: day(NOW) });
-  assert.equal((await x.call("/api/contributions/review", { id: re.j.id, action: "publish" })).j.error, "hidden_by_moderation");
-  assert.equal(state(), 1);
+  // Die Redaktion kann ihre Entscheidung aufheben - und wieder treffen
   assert.equal((await x.prof("/api/admin/feed-hide", { id: a.post, hidden: false }, ADMIN)).s, 200);
-  assert.equal(state(), 0, "die Redaktion kann ihre Entscheidung aufheben");
-  // eigenes Zurueckziehen = 2: nur das Mitglied macht es rueckgaengig, die Redaktion blendet es nicht versehentlich wieder ein
+  assert.deepEqual([state(), (await mine(a.id)).post], [0, "live"]);
+  await x.prof("/api/admin/feed-hide", { id: a.post, hidden: true }, ADMIN);
+  // Moderation und Zurueckziehen sind zwei Schalter (feedpolicy.js): Zurueckziehen unter der Sperre wird vermerkt, die Sperre bleibt
+  assert.deepEqual([(await x.call("/api/contributions/unpublish", { id: a.id })).j.withdrawn, state(), (await mine(a.id)).post], [true, 3, "moderated"]);
+  assert.deepEqual([(await x.call("/api/contributions/review", { id: a.id, action: "publish" })).j.error, state()], ["hidden_by_moderation", 3]);
+  // Loeschen und neu anlegen ist kein Umweg: die Sperre bleibt stehen, auch fuer dieselbe Seite unter leicht anderer Adresse
+  x.raw.exec(`INSERT INTO item_votes(item_id,user_id,created) VALUES(${a.post},2,1)`);
+  assert.equal((await x.call("/api/contributions/delete", { id: a.id })).s, 200);
+  assert.equal(state(), 3);
+  for (const url of ["https://a.example.com/spam", "https://a.example.com/spam/", "https://www.a.example.com/spam?utm_source=x", "https://a.example.com/Spam?fbclid=1", "https://a.example.com/spam?x=1", "https://a.example.com/spam/?page=2&utm_source=y"]) {
+    const re = await x.call("/api/contributions/manual", { title: "Spammy again", url, kind: "blog", published: day(NOW) });
+    assert.equal(re.s, 201, url);
+    assert.equal((await x.call("/api/contributions/review", { id: re.j.id, action: "publish" })).j.error, "hidden_by_moderation", url);
+    const imp = await x.call("/api/contributions/import", { kind: "other", mode: "publish", items: [{ title: "Spammy import", url: url + (url.includes("?") ? "&" : "?") + "utm_medium=m", date: day(NOW) }] });
+    assert.deepEqual([imp.j.published, imp.j.pending], [0, 0], url);
+  }
+  assert.deepEqual([state(), posts(x, "hidden=0").length, (await x.prof("/api/feed/export")).j.items.length], [3, 0, 0]);
+  // Hebt die Redaktion die Sperre auf, nachdem das Mitglied den Beitrag geloescht hatte, steht kein Kurzpost ohne Beitrag oeffentlich da
+  x.raw.exec("DELETE FROM contributions");
+  await x.prof("/api/admin/feed-hide", { id: a.post, hidden: false }, ADMIN);
+  assert.deepEqual([state(), (await x.prof("/api/feed/export")).j.items.length], [2, 0]);
+  const back = await x.call("/api/contributions/manual", { title: "Spammy, allowed again", url: "https://a.example.com/spam/", kind: "blog", published: day(NOW) });
+  assert.deepEqual([(await x.call("/api/contributions/review", { id: back.j.id, action: "publish" })).j.feed_item_id, state()], [a.post, 0], "derselbe Eintrag, kein zweiter fuer dieselbe Seite");
+  // eigenes Zurueckziehen: nur das Mitglied macht es rueckgaengig - die Redaktion blendet es weder direkt noch mit Aus- und Einblenden wieder ein
   const b = await posted(x, "Mine", "https://a.example.com/mine");
   assert.equal((await x.call("/api/contributions/unpublish", { id: b.id })).j.withdrawn, true);
+  assert.equal((await x.call("/api/contributions/unpublish", { id: b.id })).j.withdrawn, false, "war schon zurueckgezogen");
   const hb = () => x.one("SELECT hidden FROM feed_items WHERE id=?", b.post).hidden;
   assert.deepEqual([hb(), (await mine(b.id)).post, (await mine(b.id)).posted], [2, "withdrawn", false]);
   assert.ok(!(await x.prof("/api/feed/export")).j.items.some((i) => i.url === "https://a.example.com/mine"));
   await x.prof("/api/admin/feed-hide", { id: b.post, hidden: false }, ADMIN);
   assert.equal(hb(), 2);
+  await x.prof("/api/admin/feed-hide", { id: b.post, hidden: true }, ADMIN);
+  assert.deepEqual([hb(), (await mine(b.id)).post], [3, "moderated"]);
+  await x.prof("/api/admin/feed-hide", { id: b.post, hidden: false }, ADMIN);
+  assert.deepEqual([hb(), (await mine(b.id)).post], [2, "withdrawn"], "Aus- und Einblenden veroeffentlicht nichts, was das Mitglied zurueckgezogen hat");
+  assert.ok(!(await x.prof("/api/feed/export")).j.items.some((i) => i.url === "https://a.example.com/mine"));
   assert.equal((await x.call("/api/contributions/review", { id: b.id, action: "publish" })).s, 200);
   assert.deepEqual([hb(), (await mine(b.id)).post], [0, "live"]);
+  // Wo der Parameter die Seite bestimmt, sperrt ein ausgeblendeter Eintrag nicht die anderen Seiten; auch die Startseite sperrt nicht alles darunter
+  const q1 = await posted(x, "Query page 1", "https://q.example.com/?p=1"), q0 = await posted(x, "Start page", "https://r.example.com/"), q3 = await posted(x, "Thread 5", "https://f.example.com/viewtopic.php?t=5");
+  for (const p of [q1, q0, q3]) await x.prof("/api/admin/feed-hide", { id: p.post, hidden: true }, ADMIN);
+  x.raw.exec("DELETE FROM ratelimit WHERE k='kurzpost:1'");
+  for (const url of ["https://q.example.com/?p=2", "https://r.example.com/?p=2", "https://r.example.com/article", "https://f.example.com/viewtopic.php?t=6"]) {
+    const c = await x.call("/api/contributions/manual", { title: "Another page", url, kind: "blog", published: day(NOW) });
+    assert.equal((await x.call("/api/contributions/review", { id: c.j.id, action: "publish" })).s, 200, url);
+  }
+  for (const url of ["https://q.example.com/?p=1&utm_source=a", "https://r.example.com/?utm_source=a", "https://f.example.com/viewtopic.php?t=5&ref=x"]) {
+    const c = await x.call("/api/contributions/manual", { title: "Same page", url, kind: "blog", published: day(NOW) });
+    assert.equal((await x.call("/api/contributions/review", { id: c.j.id, action: "publish" })).j.error, "hidden_by_moderation", url);
+  }
   // gezogener Eintrag eines eigenen Profil-Kanals: der Tracker fasst ihn nicht an, weder sichtbar noch ausgeblendet
   x.raw.exec(`INSERT INTO channels(id,owner_type,owner_id,kind,url,feed,fetched) VALUES(600,'u',1,'youtube','https://www.youtube.com/@anna','https://www.youtube.com/feeds/videos.xml?channel_id=UCanna',${NOW});
     INSERT INTO feed_items(id,channel_id,owner_type,owner_id,url,title,published,hidden) VALUES(61,600,'u',1,'https://www.youtube.com/watch?v=aaaaaaaaaaa','Hidden video',${NOW - 50},1),(62,600,'u',1,'https://www.youtube.com/watch?v=eeeeeeeeeee','Visible video',${NOW - 50},0)`);
-  const c1 = await x.call("/api/contributions/manual", { title: "Hidden video", url: "https://www.youtube.com/watch?v=aaaaaaaaaaa", kind: "video", published: day(NOW) });
-  assert.equal((await x.call("/api/contributions/review", { id: c1.j.id, action: "publish" })).j.error, "hidden_by_moderation");
+  for (const url of ["https://www.youtube.com/watch?v=aaaaaaaaaaa", "https://youtu.be/aaaaaaaaaaa", "https://www.youtube.com/watch?v=aaaaaaaaaaa&t=5", "https://www.youtube.com/embed/aaaaaaaaaaa", "https://www.youtube.com/live/aaaaaaaaaaa",
+    "https://music.youtube.com/watch?v=aaaaaaaaaaa", "https://www.youtube-nocookie.com/embed/aaaaaaaaaaa", "https://youtube.com/watch?v=aaaaaaaaaaa", "https://m.youtube.com/watch?v=aaaaaaaaaaa&feature=share", "https://www.youtube.com/shorts/aaaaaaaaaaa"]) {
+    const c1 = await x.call("/api/contributions/manual", { title: "Hidden video", url, kind: "video", published: day(NOW) });
+    assert.equal((await x.call("/api/contributions/review", { id: c1.j.id, action: "publish" })).j.error, "hidden_by_moderation", url);
+  }
   const c2 = await x.call("/api/contributions/manual", { title: "Visible video", url: "https://youtu.be/eeeeeeeeeee", kind: "video", published: day(NOW) });
   const r2 = await x.call("/api/contributions/review", { id: c2.j.id, action: "publish" });
   assert.deepEqual([r2.s, r2.j.error], [400, "already_in_feed"]);
@@ -305,13 +391,122 @@ test("318-4 Zurueckziehen und Loeschen: der Kurzpost geht mit dem Beitrag; Oberf
   assert.equal(x.one("SELECT COUNT(*) n FROM feed_items WHERE id=?", d.post).n, 0, "auch ein zurueckgezogener Kurzpost bleibt nicht liegen");
 });
 
-async function pushEnv(x, uid) {   // echtes VAPID-Schluesselpaar und ein Push-Abo des Mitglieds: Hinweise werden als POST an den Push-Dienst sichtbar
-  const v = await crypto.subtle.generateKey({ name: "ECDSA", namedCurve: "P-256" }, true, ["sign"]), e = await crypto.subtle.generateKey({ name: "ECDH", namedCurve: "P-256" }, true, ["deriveBits"]);
-  Object.assign(x.env, { VAPID_PRIVATE_JWK: JSON.stringify(await crypto.subtle.exportKey("jwk", v.privateKey)), VAPID_PUBLIC: "pub", VAPID_SUBJECT: "mailto:test@example.com" });
-  x.raw.prepare("INSERT INTO push_subs(endpoint,p256dh,auth,lang,user_id,created,digest) VALUES('https://push.example.com/sub1',?,?,'en',?,1,1)")
-    .run(b64u.enc(new Uint8Array(await crypto.subtle.exportKey("raw", e.publicKey))), b64u.enc(crypto.getRandomValues(new Uint8Array(16))), uid);
-}
-const YT = "https://www.youtube.com/feeds/videos.xml?channel_id=UCabcdefghijklmnopqrstuv", PUSH = "https://push.example.com/";
+test("318 Nachpruefung: der Link eines Beitrags laesst sich aendern, sobald der Kurzpost zurueckgezogen ist; die Meldung sagt, was zu tun ist", async () => {
+  const x = await makeDb();
+  const a = await posted(x, "Title one", "https://t.example.com/1");
+  x.raw.exec(`INSERT INTO item_votes(item_id,user_id,created) VALUES(${a.post},2,1)`);
+  const live = await x.call("/api/contributions/update", { id: a.id, url: "https://t.example.com/other" });
+  assert.deepEqual([live.s, live.j.error], [400, "posted"]);
+  assert.match(live.j.message, /Take the short post back first/);
+  assert.equal((await x.call("/api/contributions/update", { id: a.id, url: "https://t.example.com/1", title: "Title two" })).s, 200, "derselbe Link ist keine Aenderung");
+  assert.equal(x.one("SELECT title FROM feed_items WHERE id=?", a.post).title, "Title two");
+  assert.equal((await x.call("/api/contributions/unpublish", { id: a.id })).j.withdrawn, true);
+  // ein Link, den schon ein anderer eigener Beitrag hat, aendert nichts - auch der zurueckgezogene Kurzpost bleibt
+  const other = await x.call("/api/contributions/manual", { title: "Other entry", url: "https://t.example.com/taken", kind: "blog", published: day(NOW) });
+  assert.equal((await x.call("/api/contributions/update", { id: a.id, url: "https://t.example.com/taken" })).j.error, "contribution_exists");
+  assert.deepEqual([x.one("SELECT hidden FROM feed_items WHERE id=?", a.post).hidden, x.one("SELECT feed_item_id f FROM contributions WHERE id=?", a.id).f], [2, a.post]);
+  // jetzt mit freiem Link: der zurueckgezogene Kurzpost entfaellt samt Stimmen, der Beitrag ist wieder frei
+  const moved = await x.call("/api/contributions/update", { id: a.id, url: "https://t.example.com/other/?utm_source=x" });
+  assert.equal(moved.s, 200, JSON.stringify(moved.j));
+  assert.deepEqual({ ...x.one("SELECT url,canon,feed_item_id FROM contributions WHERE id=?", a.id) }, { url: "https://t.example.com/other/?utm_source=x", canon: "t.example.com/other", feed_item_id: 0 });
+  assert.deepEqual([posts(x).length, x.one("SELECT COUNT(*) n FROM item_votes").n], [0, 0]);
+  const mine = async (id) => (await x.call("/api/contributions/mine")).j.contributions.find((c) => c.id === id);
+  assert.deepEqual([(await mine(a.id)).post, (await mine(a.id)).posted], ["", false]);
+  const re = await x.call("/api/contributions/review", { id: a.id, action: "publish" });
+  assert.equal(re.s, 200);
+  assert.deepEqual(posts(x).map((p) => [p.url, p.hidden]), [["https://t.example.com/other/?utm_source=x", 0]]);
+  // unter einer Sperre der Moderation: der Beitrag loest sich, die Sperre bleibt fuer den alten Link stehen (und gilt als zurueckgezogen)
+  await x.prof("/api/admin/feed-hide", { id: re.j.feed_item_id, hidden: true }, ADMIN);
+  assert.equal((await x.call("/api/contributions/update", { id: a.id, url: "https://t.example.com/third" })).s, 200);
+  assert.deepEqual([x.one("SELECT feed_item_id f FROM contributions WHERE id=?", a.id).f, x.one("SELECT hidden FROM feed_items WHERE id=?", re.j.feed_item_id).hidden], [0, 3]);
+  assert.equal((await x.call("/api/contributions/update", { id: other.j.id, url: "https://t.example.com/other" })).s, 200);
+  assert.equal((await x.call("/api/contributions/review", { id: other.j.id, action: "publish" })).j.error, "hidden_by_moderation", "der alte Link bleibt gesperrt, auch ohne Tracking-Parameter");
+  assert.equal((await x.call("/api/contributions/review", { id: a.id, action: "publish" })).s, 200);
+  assert.deepEqual(posts(x, "hidden=0").map((p) => p.url), ["https://t.example.com/third"]);
+  assert.equal((await x.call("/api/contributions/update", { id: a.id, url: "https://t.example.com/fourth" }, { id: 2 })).s, 404);
+  // Oberflaeche: die Detailansicht (mvp-tracker.js) zeigt fuer posted den Text aus mvp-sources.js statt "Fehler"
+  const tracker = readFileSync(new URL("../../assets/mvp-tracker.js", import.meta.url), "utf-8"), sources = readFileSync(new URL("../../assets/mvp-sources.js", import.meta.url), "utf-8");
+  const errText = new Function("window", "t", /function errText\(j\) \{[\s\S]*?\n  \}/.exec(tracker)[0] + "; return errText;");
+  const strings = { e_posted: /e_posted: "(Dieser Beitrag[^"]+)"/.exec(sources)[1] };
+  assert.match(errText({ M365MVPSources: { strings } }, (k) => `[${k}]`)(live.j), /^Dieser Beitrag steht als Kurzpost .* Zieh den Kurzpost zuerst zurück/);
+  assert.equal(errText({ M365MVPSources: { strings } }, (k) => `[${k}]`)({ error: "bad_date" }), "[e_date]");
+  assert.equal(errText({}, (k) => `[${k}]`)({ error: "posted" }), "[error]", "ohne nachgeladenes Skript bleibt die allgemeine Meldung");
+  assert.match(TOOLS.find((t) => t.name === "update_contribution").description, /error posted\) until you take the post back with unpublish_contribution/);
+});
+
+test("318 Nachpruefung: dieselbe Seite unter zwei Adressen ist ein Kurzpost; er bleibt, solange noch ein Beitrag an ihm haengt", async () => {
+  const x = await makeDb();
+  const a = await posted(x, "Vid long", "https://www.youtube.com/watch?v=ccccccccccc&t=5"), b = await posted(x, "Vid short", "https://youtu.be/ccccccccccc"), c = await posted(x, "Vid music", "https://music.youtube.com/watch?v=ccccccccccc&si=abc");
+  const d = await posted(x, "Page", "https://p.example.com/page"), e = await posted(x, "Page again", "https://www.p.example.com/page/?utm_campaign=x#top");
+  assert.deepEqual([b.post, c.post, e.post], [a.post, a.post, d.post]);
+  assert.equal(posts(x).length, 2);
+  assert.equal(x.one("SELECT n FROM ratelimit WHERE k='kurzpost:1'").n, 2, "nur neue Eintraege zaehlen gegen die Tagesgrenze");
+  x.raw.prepare("UPDATE feed_items SET body=? WHERE id=?").run("y".repeat(320), a.post);
+  x.raw.exec(`INSERT INTO item_votes(item_id,user_id,created) VALUES(${a.post},2,1)`);
+  assert.equal((await x.call("/api/contributions/delete", { id: a.id })).s, 200);
+  assert.equal((await x.call("/api/contributions/review", { id: b.id, action: "ignore" })).s, 200);
+  assert.deepEqual({ ...x.one("SELECT hidden,length(body) n,(SELECT COUNT(*) FROM item_votes v WHERE v.item_id=feed_items.id) votes FROM feed_items WHERE id=?", a.post) }, { hidden: 0, n: 320, votes: 1 }, "der dritte Beitrag haelt den Kurzpost");
+  assert.equal((await x.call("/api/contributions/mine")).j.contributions.find((k) => k.id === c.id).post, "live");
+  assert.equal((await x.call("/api/contributions/delete", { id: c.id })).s, 200);
+  assert.deepEqual(posts(x).map((p) => p.id), [d.post]);
+  assert.equal(x.one("SELECT COUNT(*) n FROM item_votes").n, 0);
+});
+
+test("318 Nachpruefung: wer dem Creator folgt, erfaehrt von Inhalten, die zuerst als Kurzpost kamen - einmal, ohne 'Neuer Inhalt gezogen'", async () => {
+  for (const withSource of [false, true]) {
+    const x = await makeDb(), NEW = "https://www.youtube.com/watch?v=nnnnnnnnnnn", OLD = "https://www.youtube.com/watch?v=ooooooooooo", old = new Date((NOW - 5 * DAY) * 1000).toISOString();
+    await pushEnv(x, 1); follow(x, "anna");
+    x.raw.exec(`INSERT INTO channels(id,owner_type,owner_id,kind,url,feed,fetched) VALUES(600,'u',1,'youtube','https://www.youtube.com/channel/UCabcdefghijklmnopqrstuv','${YT}',1);
+      INSERT INTO feed_items(id,channel_id,owner_type,owner_id,url,title,published) VALUES(60,600,'u',1,'${OLD}','Older video',${NOW - 5 * DAY})`);
+    if (withSource) {   // die Quelle im Modus publish sieht das neue Video vor dem Profil-Kanal
+      await x.call("/api/contributions/source", { kind: "youtube", url: "https://www.youtube.com/channel/UCabcdefghijklmnopqrstuv", mode: "publish" });
+      await withFetch({ [YT]: { body: atom([["Older video", OLD, old]]) } }, () => refreshContributions(x.env, 5));
+      x.raw.exec("UPDATE contribution_sources SET fetched=1");
+      await withFetch({ [YT]: { body: atom([["Brand new video", NEW], ["Older video", OLD, old]]) } }, () => refreshContributions(x.env, 5));
+      assert.equal(x.one("SELECT origin FROM feed_items WHERE url=?", NEW).origin, "kurzpost");
+      assert.equal(queued(x), 0, "der Kurzpost selbst loest keinen Hinweis aus");
+    }
+    let pushes = 0;
+    for (let run = 0; run < 3; run++) {
+      x.raw.exec("UPDATE channels SET fetched=1 WHERE id=600");
+      await withFetch({ [YT]: { body: atom([["Brand new video", NEW], ["Older video", OLD, old]]) }, [PUSH]: { status: 201 } }, async (calls) => { await refreshFeeds(x.env); pushes += calls.filter((c) => c.url.startsWith(PUSH)).length; });
+      assert.equal(queued(x), 1, `Lauf ${run + 1}, Quelle zuerst: ${withSource}`);
+    }
+    assert.deepEqual({ ...x.one("SELECT kind,topic_id,item_key,url FROM topic_queue") }, { kind: "creator", topic_id: "anna", item_key: `feed:${NEW}`, url: NEW });
+    assert.equal(pushes, withSource ? 0 : 1, "nur wirklich neu Gezogenes meldet sich beim Creator");
+    assert.deepEqual(x.all("SELECT channel_id,origin FROM feed_items WHERE url=?", NEW), [{ channel_id: 600, origin: "" }]);
+  }
+  // Der Kanal uebernimmt den eigenen Kurzpost auch, wenn er dieselbe Seite unter leicht anderer Adresse fuehrt: ein Eintrag, mit der Adresse aus dem Feed.
+  // Ausgeblendetes bleibt ausgeblendet und meldet sich nicht; ein neuer Kanal (erster Abruf) meldet gar nichts.
+  const x = await makeDb(), FEED = "https://anna.example.com/feed.xml";
+  follow(x, "anna");
+  x.raw.exec(`INSERT INTO channels(id,owner_type,owner_id,kind,url,feed,fetched) VALUES(610,'u',1,'blog','https://anna.example.com/','${FEED}',1);
+    INSERT INTO feed_items(id,channel_id,owner_type,owner_id,url,title,published) VALUES(61,610,'u',1,'https://anna.example.com/old','Old',${NOW - DAY})`);
+  const a = await posted(x, "Post A", "https://www.anna.example.com/a/?utm_source=newsletter"), b = await posted(x, "Post B", "https://anna.example.com/b"), w = await posted(x, "Post W", "https://anna.example.com/w/");
+  await x.prof("/api/admin/feed-hide", { id: b.post, hidden: true }, ADMIN);
+  await x.call("/api/contributions/unpublish", { id: w.id });
+  x.raw.prepare("UPDATE feed_items SET body=? WHERE id=?").run("y".repeat(320), a.post);
+  for (let run = 0; run < 2; run++) {
+    x.raw.exec("UPDATE channels SET fetched=1 WHERE id=610");
+    await withFetch({ [FEED]: { body: atom([["Post A (feed)", "https://anna.example.com/a"], ["Post B (feed)", "https://anna.example.com/b"], ["Post W (feed)", "https://anna.example.com/w"], ["Old", "https://anna.example.com/old"]]) } }, () => refreshFeeds(x.env));
+  }
+  assert.deepEqual(x.all("SELECT id,url,channel_id,origin,hidden,length(body) n FROM feed_items WHERE id<>61 ORDER BY id"), [
+    { id: a.post, url: "https://anna.example.com/a", channel_id: 610, origin: "", hidden: 0, n: 320 },
+    { id: b.post, url: "https://anna.example.com/b", channel_id: 610, origin: "", hidden: 1, n: 0 },
+    { id: w.post, url: "https://anna.example.com/w", channel_id: 610, origin: "", hidden: 0, n: 0 }], "zurueckgezogen war der Kurzpost, nicht der Kanal-Inhalt; die Sperre bleibt");
+  assert.deepEqual(x.all("SELECT url FROM topic_queue ORDER BY url").map((r) => r.url), ["https://anna.example.com/a", "https://anna.example.com/w"]);
+  assert.equal((await x.call("/api/contributions/review", { id: a.id, action: "publish" })).j.error, "already_in_feed");
+  assert.equal((await x.call("/api/contributions/review", { id: b.id, action: "publish" })).j.error, "hidden_by_moderation");
+  // Ein Feed-Eintrag, der aelter ist als die Aufbewahrung (400 Tage), wird nach jedem Lauf wieder geloescht - er meldet sich nicht jedes Mal als neu
+  await pushEnv(x, 1);
+  let pushes = 0;
+  for (let run = 0; run < 3; run++) {
+    x.raw.exec("UPDATE channels SET fetched=1 WHERE id=610");
+    await withFetch({ [FEED]: { body: atom([["Old", "https://anna.example.com/old"], ["Ancient", "https://anna.example.com/ancient", new Date((NOW - 500 * DAY) * 1000).toISOString()]]) }, [PUSH]: { status: 201 } },
+      async (calls) => { await refreshFeeds(x.env); pushes += calls.filter((c) => c.url.startsWith(PUSH)).length; });
+  }
+  assert.deepEqual([pushes, queued(x), x.one("SELECT COUNT(*) n FROM feed_items WHERE url LIKE '%/ancient'").n, x.one("SELECT fails FROM channels WHERE id=610").fails], [0, 2, 0, 0]);
+});
 
 test("318-5 Derselbe Feed als Profil-Kanal und als Quelle: der Kanal uebernimmt den Kurzpost, kein Hinweis alle 30 Minuten", async () => {
   const x = await makeDb();
@@ -540,4 +735,22 @@ test("Konten zusammenfuehren und loeschen: Spalten und Kurzposts aus 0036 wander
   await deleteUserData(x.db, T);
   for (const [t, where] of [["contributions", "user_id=1"], ["contribution_sources", "user_id=1"], ["contribution_ignored", "user_id=1"], ["feed_items", "owner_type='u' AND owner_id=1"], ["channels", "owner_type='u' AND owner_id=1"], ["item_votes", "1=1"]])
     assert.equal(x.one(`SELECT COUNT(*) n FROM ${t} WHERE ${where}`).n, 0, t);
+  assert.deepEqual(x.all("SELECT k FROM ratelimit WHERE k LIKE '%:1' ORDER BY k").map((r) => r.k), [], "auch die Zaehler des Trackers tragen die Konto-Nummer");
+  assert.ok(x.one("SELECT COUNT(*) n FROM ratelimit WHERE k LIKE '%:2'").n > 0, "die Zaehler anderer Konten bleiben");
+});
+
+test("318 Nachpruefung: Zusammenfuehren erkennt dieselbe Seite auch bei Hand-Eintraegen; eine Sperre der Moderation ueberlebt als Sperre", async () => {
+  const x = await makeDb(), S = 2, T = 1;
+  x.raw.exec("INSERT INTO programs(owner_type,owner_id,program,verified) VALUES('u',2,'mct',1)");
+  const t1 = await posted(x, "T both", "https://both.example.com/1"), t2 = await posted(x, "T mod", "https://mod.example.com/1");
+  const s1 = await posted(x, "S both variant", "https://www.both.example.com/1/?utm_source=x", { id: S }), s2 = await posted(x, "S mod variant", "https://mod.example.com/1/", { id: S }), s3 = await posted(x, "S only", "https://s.example.com/only", { id: S });
+  assert.deepEqual(x.all("SELECT canon FROM contributions ORDER BY id").map((c) => c.canon), ["both.example.com/1", "mod.example.com/1", "both.example.com/1", "mod.example.com/1", "s.example.com/only"], "Hand-Eintraege tragen die kanonische Adresse");
+  await x.prof("/api/admin/feed-hide", { id: s2.post, hidden: true }, ADMIN);
+  await x.prof("/api/admin/feed-hide", { id: s3.post, hidden: true }, ADMIN);
+  await x.db.batch(await mergeStatements(x.db, S, T));
+  assert.deepEqual(x.all("SELECT id,user_id,feed_item_id FROM contributions ORDER BY id"), [{ id: t1.id, user_id: 1, feed_item_id: t1.post }, { id: t2.id, user_id: 1, feed_item_id: t2.post }, { id: s3.id, user_id: 1, feed_item_id: s3.post }], "die Zwillinge von S entfallen");
+  // der sichtbare Zwilling-Kurzpost entfaellt; die ausgeblendeten bleiben als Sperre bei T - ohne Beitrag zusaetzlich als zurueckgezogen vermerkt
+  assert.deepEqual(posts(x).map((p) => [p.id, p.owner_id, p.hidden]), [[t1.post, 1, 0], [t2.post, 1, 0], [s2.post, 1, 3], [s3.post, 1, 1]]);
+  await x.prof("/api/admin/feed-hide", { id: s2.post, hidden: false }, ADMIN);
+  assert.deepEqual([x.one("SELECT hidden FROM feed_items WHERE id=?", s2.post).hidden, (await x.prof("/api/feed/export")).j.items.length], [2, 2], "Einblenden stellt keinen Kurzpost ohne Beitrag oeffentlich");
 });

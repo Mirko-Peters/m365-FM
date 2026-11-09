@@ -54,7 +54,8 @@ window.M365MVPPeriod = (function () {
     var e = (j && j.error) || "";
     var map = { offline: "offline", rate_limit: "e_rate", contribution_exists: "e_exists", bad_date: "e_date", bad_url: "e_url", bad_contribution: "e_title", bad_field: "e_field",
       source_exists: "s_exists", source_limit: "s_limit", bad_source: "s_bad", login: "login" };
-    return map[e] ? t(map[e]) : t("error");
+    var q = window.M365MVPSources && window.M365MVPSources.strings;   // Texte zu Kurzposts (z. B. posted: Link eines veroeffentlichten Beitrags) stehen in mvp-sources.js
+    return map[e] ? t(map[e]) : (q && q["e_" + e]) || t("error");
   }
   function say(text, ok) { S.msg = text || ""; S.msgOk = !!ok; if (live) { live.textContent = S.msg; live.className = "mvp-msg" + (S.msg ? (ok ? " ok" : " err") : ""); } }
   function day(sec) { return new Date(sec * 1000).toISOString().slice(0, 10); }
