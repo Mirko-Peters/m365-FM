@@ -77,6 +77,10 @@ jobs:
           GOOGLE_GEOCODING_KEY: ${{ secrets.GOOGLE_GEOCODING_KEY }}
           LINKEDIN_CLIENT_ID: ${{ secrets.LINKEDIN_CLIENT_ID }}
           LINKEDIN_CLIENT_SECRET: ${{ secrets.LINKEDIN_CLIENT_SECRET }}
+          LINKEDIN_EVENTS_CLIENT_ID: ${{ secrets.LINKEDIN_EVENTS_CLIENT_ID }}   # optional: sonst gilt LINKEDIN_CLIENT_ID (gleiche App)
+          LINKEDIN_EVENTS_CLIENT_SECRET: ${{ secrets.LINKEDIN_EVENTS_CLIENT_SECRET }}
+          LINKEDIN_TOKEN_KEY: ${{ secrets.LINKEDIN_TOKEN_KEY }}   # optional: Schlüssel für die Token-Verschlüsselung, sonst SESSION_SECRET
+          HEYSUMMIT_API_KEY: ${{ secrets.HEYSUMMIT_API_KEY }}
           GH_OAUTH_CLIENT_ID: ${{ secrets.GH_OAUTH_CLIENT_ID }}
           GH_OAUTH_CLIENT_SECRET: ${{ secrets.GH_OAUTH_CLIENT_SECRET }}
           SPREAKER_TOKEN: ${{ env.SPREAKER_TOKEN || secrets.SPREAKER_TOKEN }}
