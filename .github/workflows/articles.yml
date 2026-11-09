@@ -7,6 +7,13 @@ on:
       limit: { description: "Neue Artikel in diesem Lauf (leer = 20; fuer einen kompletten Nachholdurchlauf z. B. 600)", required: false, default: "" }
       budget: { description: "Monatsgrenze in USD fuer diesen Lauf (leer = Repo-Variable ARTICLE_BUDGET_USD, sonst 25)", required: false, default: "" }
       workers: { description: "Parallele Aufrufe (leer = 5)", required: false, default: "" }
+      mode:
+        description: "plan = nur Zahlen (ohne API) | en = Sonnet schreibt fehlende englische Artikel | translate = Haiku uebersetzt vorhandene englische Artikel in 14 Sprachen (unabhaengig von der Sonnet-Monatsgrenze) | all = en, dann translate"
+        required: false
+        default: "en"
+        type: choice
+        options: [plan, en, translate, all]
+      tr_budget: { description: "Monatsgrenze in USD fuer die Haiku-Uebersetzungen (leer = Repo-Variable ARTICLE_TR_BUDGET_USD, sonst 60)", required: false, default: "" }
 permissions:
   contents: write
 concurrency:
@@ -15,7 +22,7 @@ concurrency:
 jobs:
   articles:
     runs-on: ubuntu-latest
-    timeout-minutes: 240   # Nachholdurchlauf mit vielen Artikeln; der taegliche Lauf braucht wenige Minuten
+    timeout-minutes: 300   # Uebersetzungs-Batches (WAIT_MIN 200); Nachholdurchlauf mit vielen Artikeln; der taegliche Lauf braucht wenige Minuten
     env:
       CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
       AI_GATEWAY_ID: ${{ vars.AI_GATEWAY_ID || 'm365fm' }}
@@ -29,24 +36,28 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: "3.12" }
-      - name: Artikel schreiben (wenige pro Lauf)
+      - name: Artikel schreiben (en) bzw. uebersetzen (translate/all) bzw. Plan
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY_SHOW }}
+          ARTICLE_MODE: ${{ inputs.mode || 'en' }}   # taeglicher Lauf (cron): nur Sonnet-Englisch; Uebersetzen per Hand (mode translate/all)
+          ARTICLE_TR_BUDGET_USD: ${{ inputs.tr_budget || vars.ARTICLE_TR_BUDGET_USD || '60' }}   # Haiku-Uebersetzungen je Kalendermonat, getrennt von ARTICLE_BUDGET_USD ("articles_tr" in data/spend.json)
+          TRANSLATE_MODEL: ${{ vars.TRANSLATE_MODEL || 'claude-haiku-5-5' }}
           ARTICLE_LIMIT: ${{ inputs.limit || '20' }}
           ARTICLE_WORKERS: ${{ inputs.workers || '5' }}
           ARTICLE_MODEL: ${{ vars.ARTICLE_MODEL || 'claude-sonnet-5-5' }}   # Mirko, 6.11.2026: Sonnet bleibt; Monatsgrenze haelt die Artikel im November an (erst ab 1.12. wieder)
           ARTICLE_BUDGET_USD: ${{ inputs.budget || vars.ARTICLE_BUDGET_USD || '25' }}   # Sonnet-Kosten je Kalendermonat; ist sie erreicht, schreibt der Lauf nichts mehr
         run: python generate_articles.py
       - name: Cover-Texte entwerfen
+        if: ${{ inputs.mode != 'plan' && inputs.mode != 'translate' }}
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY_SHOW }}
           COVER_LIMIT: "100"
         run: python generate_covers.py
       - name: Speichern (auf die Website kommen Artikel und Cover mit dem naechtlichen Seitenbau, site.yml 01:07 UTC - Bot-Commits loesen keinen Bau aus)
         run: |
-          if [ -n "$(git status --porcelain data/articles data/covers data/spend.json)" ]; then
+          if [ -n "$(git status --porcelain data/articles data/covers data/spend.json data/articles_tr_state.json)" ]; then
             git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
-            git add data/articles data/covers data/spend.json && git commit -m "Artikel/Cover ergänzt (täglich)"
+            git add data/articles data/covers data/spend.json && { git add -A data/articles_tr_state.json 2>/dev/null || true; } && git commit -m "Artikel/Cover ergänzt (täglich)"
             (git pull --rebase -q -X theirs || git rebase --abort) && git push -q
           else
             echo "Nichts Neues"
