@@ -128,6 +128,9 @@ export async function mergeStatements(db, S, T) {
   st.push(q("UPDATE invite_success SET invitee_user_id=? WHERE invitee_user_id=?", T, S));
   st.push(q("DELETE FROM invite_success WHERE inviter_user_id=invitee_user_id"));
   simple("invite_success", "voided_by");   // wer entwertet hat (Admin), bleibt nachvollziehbar
+  // vorgemerkte Zurechnungen (Tagesgrenze erreicht): wie oben; ob das Zielkonto nach dem Klick entstanden ist, prueft der Tageslauf vor dem Zaehlen
+  simple("invite_pending", "inviter_user_id"); set("invite_pending", "invitee_user_id");
+  st.push(q("DELETE FROM invite_pending WHERE inviter_user_id=invitee_user_id"));
   simple("msg_messages", "from_id"); simple("sponsor_manual_metrics", "entered_by"); simple("tr_queue", "requested_by");
   // Blog und Bibliothek: UNIQUE(user_id, slug) -> Slug von S bei Kollision umbenennen
   for (const t of ["blog_posts", "lib_items"]) {

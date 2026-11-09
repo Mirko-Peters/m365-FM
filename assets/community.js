@@ -28,7 +28,7 @@
   } catch (e) { /* ignore */ }
   function attributeRef(u) {
     var r = SH && u ? SH.readRef() : null; if (!r || !r.token) return;
-    api("/api/invite/ref", { method: "POST", body: { token: r.token } }).then(function (x) { if (x.s === 200 || x.s === 400) SH.clearRef(); }).catch(function () {});   // 200 = entschieden, 400 = Beleg ungueltig/abgelaufen; 429 (Tagesgrenze): spaeter erneut
+    api("/api/invite/ref", { method: "POST", body: { token: r.token } }).then(function (x) { if (x.s === 200 || x.s === 400) SH.clearRef(); }).catch(function () {});   // 200 = entschieden oder beim Server vorgemerkt (Tagesgrenze: er holt es nach), 400 = Beleg ungueltig/abgelaufen; 429 (zu viele Versuche dieses Kontos): spaeter erneut
   }
   function me(force) { if (!mePromise || force) mePromise = api("/api/me").then(function (r) { var u = r.j.user || null; attributeRef(u); return u; }); return mePromise; }
   function hideAll(sel) { document.querySelectorAll(sel).forEach(function (e) { e.hidden = true; }); }
@@ -54,6 +54,7 @@
       if (navigator.share) row.appendChild(h("button", { type: "button", class: "btn", text: tt("inv_share"), onclick: function () { navigator.share({ title: SHR.texts(LANG).subject, text: SHR.texts(LANG).text, url: j.link }).catch(function () {}); } }));
       box.appendChild(inp); box.appendChild(row); box.appendChild(ok);
       if (j.preview === false) box.appendChild(h("p", { class: "cmut", text: tt("inv_private") }));   // Profil nicht oeffentlich: schlichter Link /community/?ref=<kuerzel>, keine Seite mit Name und Vorschau
+      if (j.pending > 0) box.appendChild(h("p", { class: "cmut", text: tt("inv_pending").replace("{n}", j.pending) }));   // ueber der Tagesgrenze: der Server holt sie an den folgenden Tagen nach
       if (j.next) box.appendChild(h("p", { class: "cmut", text: tt("inv_next").replace("{n}", j.next - j.count) }));
     });
     return box;

@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createRequire } from "node:module";
 import worker from "../src/index.js";
-import { recordInvite, handleInviter, inviteCount, syncInviterBadges, deleteUserInvites, clickToken, readClick, REF_DAY_CAP, REF_IP_CAP } from "../src/inviter.js";
+import { recordInvite, handleInviter, inviteCount, syncInviterBadges, creditPending, deleteUserInvites, clickToken, readClick, REF_DAY_CAP, REF_IP_CAP, PEND_RUN } from "../src/inviter.js";
 import { evalBadges, INVITER_TIERS, inviterTier, badgesFor, stats } from "../src/badges.js";
 import { mergeStatements } from "../src/identities.js";
 import { handleEntityInvite } from "../src/entinvite.js";
@@ -31,6 +31,7 @@ const user = (raw, id, { provider = "github", created = 100, handle = "", pub = 
 function clock(start = 1794000000) { const real = Date.now, c = { t: start, restore: () => { Date.now = real; } }; Date.now = () => c.t * 1000; return c; }
 const post = (env, path, u, body, ip = "203.0.113.1") => { const req = new Request("https://api.test" + path, { method: "POST", body: JSON.stringify(body), headers: { "cf-connecting-ip": ip } }); return handleInviter(env, req, new URL(req.url), path, u, J); };
 const click = async (env, ref, u = null) => (await (await post(env, "/api/invite/click", u, { ref })).json()).token;
+const pend = (raw) => raw.prepare("SELECT invitee_user_id e,inviter_user_id i,ref,since,held,created FROM invite_pending ORDER BY invitee_user_id").all().map((x) => ({ ...x }));
 const badges = (raw, id) => raw.prepare("SELECT badge FROM user_badges WHERE user_id=? AND badge LIKE 'inviter_%' ORDER BY badge").all(id).map((r) => r.badge);
 
 test("Zurechnung fuer jede Quelle", async () => {
@@ -169,29 +170,44 @@ test("Ref-Ablauf (320-6): ohne gueltigen Klick-Beleg keine Zurechnung - kein Zei
   } finally { c.restore(); restore(); }
 });
 
-test("Ref-Ablauf (320-6): Tagesgrenzen je Einlader, je Anschluss und je Konto; der Beleg bleibt gueltig und zaehlt spaeter", async () => {
+test("Ref-Ablauf (320-6): Tagesgrenzen je Einlader (insgesamt und von einem Anschluss) und je Konto; darueber wird vorgemerkt und ohne Wiederkommen nachgeholt", async () => {
   const { raw, env, restore } = await setup(), c = clock();
   try {
     user(raw, 1, { handle: "einlader", created: c.t - 86400 }); user(raw, 2, { handle: "zweite", created: c.t - 86400 });
-    const token = await click(env, "einlader"), token2 = await click(env, "zweite"); c.t += 30;
+    const t0 = c.t, token = await click(env, "einlader"), token2 = await click(env, "zweite"); c.t += 30;
     let id = 1000; const fresh = () => { user(raw, ++id, { created: c.t }); return { id }; };
-    // je Anschluss: REF_IP_CAP gezaehlte Einladungen pro Tag, die naechste wartet (429) und zaehlt am Folgetag
+    const P = { ok: true, counted: false, pending: true };
+    // je Einlader von einem Anschluss: REF_IP_CAP gezaehlte Einladungen pro Tag, die naechste wird vorgemerkt (frueher 429 und nur gezaehlt, wenn die Person wiederkam)
     for (let i = 0; i < REF_IP_CAP; i++) assert.equal((await (await post(env, "/api/invite/ref", fresh(), { token }, "198.51.100.7")).json()).counted, true, "ip " + i);
     const late = fresh(), r1 = await post(env, "/api/invite/ref", late, { token }, "198.51.100.7");
-    assert.equal(r1.status, 429); assert.equal(await inviteCount(env.DB, 1), REF_IP_CAP);
+    assert.equal(r1.status, 200); assert.deepEqual(await r1.json(), P); assert.equal(await inviteCount(env.DB, 1), REF_IP_CAP);
+    assert.deepEqual(pend(raw), [{ e: late.id, i: 1, ref: "einlader", since: t0, held: 1, created: c.t }]);
+    assert.deepEqual(await (await post(env, "/api/invite/ref", late, { token }, "198.51.100.9")).json(), P, "erneutes Vorlegen: bleibt vorgemerkt, keine zweite Zeile, keine Zurechnung an der Grenze vorbei");
+    assert.deepEqual(await (await post(env, "/api/invite/ref", late, { token: token2 }, "198.51.100.9")).json(), P, "auch nicht fuer einen anderen Einlader: die erste Einladung gilt");
+    assert.equal(pend(raw).length, 1); assert.equal(await inviteCount(env.DB, 2), 0);
+    // der Zaehler je Anschluss gehoert zum Einlader: dieselbe Adresse (Buero, Mobilfunknetz) zaehlt fuer ein anderes Mitglied weiter (frueher gemeinsam: 429)
+    assert.equal((await (await post(env, "/api/invite/ref", fresh(), { token: token2 }, "198.51.100.7")).json()).counted, true, "anderer Einlader, selber Anschluss");
     assert.equal((await (await post(env, "/api/invite/ref", fresh(), { token }, "198.51.100.8")).json()).counted, true, "anderer Anschluss");
     assert.equal(raw.prepare("SELECT COUNT(*) n FROM ratelimit WHERE k LIKE '%198.51.100%'").get().n, 0, "die IP-Adresse steht nur als Hash in der Datenbank");
+    assert.equal(raw.prepare("SELECT COUNT(*) n FROM ratelimit WHERE k GLOB 'invref:ip:[12]:*'").get().n, 3, "Zaehler je Einlader und Anschluss");
     // je Einlader: REF_DAY_CAP pro Tag, egal von wo
     for (let i = REF_IP_CAP + 1; i < REF_DAY_CAP; i++) assert.equal((await (await post(env, "/api/invite/ref", fresh(), { token }, "192.0.2." + i)).json()).counted, true, "tag " + i);
     assert.equal(await inviteCount(env.DB, 1), REF_DAY_CAP);
     const over = fresh();
-    assert.equal((await post(env, "/api/invite/ref", over, { token }, "192.0.2.200")).status, 429);
+    assert.deepEqual(await (await post(env, "/api/invite/ref", over, { token }, "192.0.2.200")).json(), P);
+    assert.deepEqual(pend(raw).map((x) => [x.e, x.held]), [[late.id, 1], [over.id, 0]]);
     assert.equal((await (await post(env, "/api/invite/ref", fresh(), { token: token2 }, "192.0.2.201")).json()).counted, true, "andere Einlader sind nicht betroffen");
     assert.equal(await inviteCount(env.DB, 1), REF_DAY_CAP);
-    c.t += 86400 + 60;   // am naechsten Tag zaehlen die wartenden Belege
-    assert.equal((await (await post(env, "/api/invite/ref", over, { token }, "192.0.2.200")).json()).counted, true);
-    assert.equal((await (await post(env, "/api/invite/ref", late, { token }, "198.51.100.7")).json()).counted, true);
-    assert.equal(await inviteCount(env.DB, 1), REF_DAY_CAP + 2);
+    raw.prepare("UPDATE profiles SET public=1 WHERE user_id=1").run();
+    const me = await (await handleInviter(env, new Request("https://api.test/api/invite/me"), new URL("https://api.test/api/invite/me"), "/api/invite/me", { id: 1 }, J)).json();
+    assert.equal(me.count, REF_DAY_CAP); assert.equal(me.pending, 2, "der Einlader sieht, dass zwei Anmeldungen noch gutgeschrieben werden");
+    // am naechsten Tag holt der Tageslauf beide nach - niemand muss dafuer wiederkommen
+    c.t += 86400 + 60;
+    assert.equal(await creditPending(env), 2);
+    assert.equal(await inviteCount(env.DB, 1), REF_DAY_CAP + 2); assert.deepEqual(pend(raw), []);
+    assert.deepEqual(raw.prepare("SELECT invitee_user_id e,source,ref,created FROM invite_success WHERE invitee_user_id IN (?,?) ORDER BY invitee_user_id").all(late.id, over.id).map((x) => ({ ...x })),
+      [{ e: late.id, source: "ref", ref: "einlader", created: c.t }, { e: over.id, source: "ref", ref: "einlader", created: c.t }]);
+    assert.deepEqual(await (await post(env, "/api/invite/ref", late, { token }, "198.51.100.7")).json(), { ok: true, counted: false }, "kommt die Person doch wieder: nichts doppelt");
     // je Konto: hoechstens 10 Versuche pro Tag
     const u = fresh(); let last;
     for (let i = 0; i < 11; i++) last = await post(env, "/api/invite/ref", u, { token: await click(env, "gibt-es-nicht") }, "192.0.2.250");
@@ -208,6 +224,104 @@ test("Ref-Ablauf (320-6): Tagesgrenzen je Einlader, je Anschluss und je Konto; d
     assert.deepEqual(keys(), [], "nach spaetestens zwei Tagen steht kein Hash einer IP-Adresse mehr in der Datenbank");
     assert.deepEqual(raw.prepare("SELECT k FROM ratelimit ORDER BY k").all().map((r) => r.k), ["invref", "invref;x", "login:1.2.3.4"]);
   } finally { c.restore(); restore(); }
+});
+
+test("Vorgemerkte Zurechnungen: ein Buero hinter einer Adresse wird ohne Wiederkommen gutgeschrieben, Sammeln bleibt begrenzt", async () => {
+  const { raw, env, restore } = await setup(), c = clock();
+  try {
+    user(raw, 1, { handle: "chefin", created: c.t - 9 * 86400 });
+    const token = await click(env, "chefin"); c.t += 60;
+    let id = 2000; const fresh = () => { user(raw, ++id, { created: c.t }); return { id }; };
+    // 12 Kolleginnen und Kollegen melden sich ueber den Link an, alle hinter derselben Adresse; niemand ruft die Seite spaeter noch einmal auf
+    const res = []; for (let i = 0; i < 12; i++) res.push(await (await post(env, "/api/invite/ref", fresh(), { token }, "203.0.113.50")).json());
+    assert.equal(res.filter((x) => x.counted).length, REF_IP_CAP); assert.equal(res.filter((x) => x.pending).length, 12 - REF_IP_CAP);
+    assert.equal(await inviteCount(env.DB, 1), 5); assert.deepEqual(badges(raw, 1), ["inviter_1", "inviter_5"]);
+    assert.ok(pend(raw).every((x) => x.held === 1 && x.i === 1));
+    // Tageslauf (06:00, cron) am naechsten Morgen: hoechstens REF_IP_CAP der an der Anschluss-Grenze vorgemerkten je Lauf, die Stufe folgt im selben Lauf
+    c.t += 86400; await syncInviterBadges(env);
+    assert.equal(await inviteCount(env.DB, 1), 10); assert.equal(pend(raw).length, 2); assert.deepEqual(badges(raw, 1), ["inviter_1", "inviter_10", "inviter_5"]);
+    assert.deepEqual(pend(raw).map((x) => x.e), [id - 1, id], "die aeltesten zuerst");
+    // der naechste Lauf kommt 5 s frueher als 24 h nach dem letzten (cron laeuft nie auf die Sekunde gleich) und zaehlt trotzdem
+    c.t += 86400 - 5; await syncInviterBadges(env);
+    assert.equal(await inviteCount(env.DB, 1), 12); assert.deepEqual(pend(raw), []);
+    // Sammeln mit 50 Wegwerfkonten von einer Adresse: 5 sofort, danach 5 je Tageslauf - nicht alle auf einmal
+    c.t += 3 * 86400; const t2 = await click(env, "chefin"); c.t += 60;
+    for (let i = 0; i < 50; i++) await post(env, "/api/invite/ref", fresh(), { token: t2 }, "198.51.100.99");
+    assert.equal(await inviteCount(env.DB, 1), 17); assert.equal(pend(raw).length, 45);
+    await syncInviterBadges(env); assert.equal(await inviteCount(env.DB, 1), 22, "gleicher Tag: 5 direkt + 5 nachgeholt");
+    await syncInviterBadges(env); await syncInviterBadges(env); await creditPending(env);
+    assert.equal(await inviteCount(env.DB, 1), 22, "weitere Laeufe am selben Tag (Wiederholung von Hand) holen nichts zusaetzlich nach");
+    assert.equal(pend(raw).length, 40);
+    // viele Adressen: die Tagesgrenze je Einlader gilt fuer direkte und nachgeholte zusammen
+    user(raw, 3, { handle: "viral", created: c.t - 86400 }); const t3 = await click(env, "viral"); c.t += 60;
+    for (let i = 0; i < 50; i++) await post(env, "/api/invite/ref", fresh(), { token: t3 }, "192.0.2." + i);
+    assert.equal(await inviteCount(env.DB, 3), REF_DAY_CAP); assert.equal(pend(raw).filter((x) => x.i === 3 && x.held === 0).length, 30);
+    await creditPending(env); assert.equal(await inviteCount(env.DB, 3), REF_DAY_CAP, "am selben Tag nichts darueber");
+    c.t += 86400; assert.equal(await creditPending(env, 7), 7, "Obergrenze je Lauf (Datenbankabfragen)"); assert.ok(PEND_RUN >= REF_DAY_CAP);
+    await creditPending(env); assert.equal(await inviteCount(env.DB, 3), 2 * REF_DAY_CAP); assert.equal(await inviteCount(env.DB, 1), 22 + REF_IP_CAP);
+    c.t += 86400; await creditPending(env); assert.equal(await inviteCount(env.DB, 3), 50, "alle 50 echten Anmeldungen sind am dritten Tag gutgeschrieben");
+    assert.equal(pend(raw).filter((x) => x.i === 3).length, 0);
+  } finally { c.restore(); restore(); }
+});
+
+test("Vorgemerkte Zurechnungen: vor dem Zaehlen wird neu geprueft; Kontoloeschung und Zusammenfuehren erfassen die Vormerkung auf beiden Seiten", async () => {
+  const { raw, env, restore } = await setup(), c = clock();
+  try {
+    user(raw, 1, { handle: "max-m", created: c.t - 9 * 86400 }); user(raw, 4, { handle: "anna-b", created: c.t - 9 * 86400 }); user(raw, 5, { created: c.t - 9 * 86400 });
+    const token = await click(env, "max-m"), tokenA = await click(env, "anna-b"); c.t += 60;
+    const mk = async (id, tok = token) => { user(raw, id, { created: c.t }); return (await post(env, "/api/invite/ref", { id }, { token: tok }, "203.0.113.50")).json(); };
+    for (let i = 0; i < REF_IP_CAP; i++) await mk(100 + i);
+    for (const i of [200, 201, 202, 203, 204, 205]) assert.equal((await mk(i)).pending, true);
+    // 200: gesperrt; 201: inzwischen ueber einen anderen Weg zugerechnet; 202: in ein aelteres Konto aufgegangen (bestand schon vor dem Klick); 203: Konto geloescht
+    raw.prepare("UPDATE users SET banned=1 WHERE id=200").run();
+    assert.equal(await recordInvite(env, { inviter: 4, invitee: 201, source: "entity", ref: "firma" }), true);
+    for (const st of await mergeStatements(env.DB, 202, 5)) await st.run(); raw.prepare("UPDATE users SET merged_into=5 WHERE id=202").run();
+    assert.deepEqual(pend(raw).filter((x) => x.e === 5 || x.e === 202).map((x) => [x.e, x.i]), [[5, 1]], "Vormerkung haengt am Zielkonto");
+    const del = (id) => makeSession(env, id).then((sess) => worker.fetch(new Request("https://api.test/api/me", { method: "DELETE", headers: { cookie: `m365s=${sess}`, "x-requested-with": "m365" } }), env));
+    assert.equal((await del(203)).status, 200);
+    assert.equal(raw.prepare("SELECT COUNT(*) n FROM invite_pending WHERE invitee_user_id=203").get().n, 0, "geloeschtes Konto: Vormerkung sofort weg");
+    const me = async (id) => (await (await handleInviter(env, new Request("https://api.test/api/invite/me"), new URL("https://api.test/api/invite/me"), "/api/invite/me", { id }, J)).json()).pending;
+    assert.equal(await me(1), 4, "ohne die inzwischen anders zugerechnete Person (201)");
+    c.t += 86400; await syncInviterBadges(env);
+    assert.deepEqual(raw.prepare("SELECT invitee_user_id e FROM invite_success WHERE inviter_user_id=1 AND invitee_user_id>=200 ORDER BY 1").all().map((x) => x.e), [204, 205], "nur die beiden, die weiterhin zaehlen duerfen");
+    assert.deepEqual(pend(raw), [], "was nicht mehr zaehlen kann, bleibt nicht liegen");
+    assert.equal(await inviteCount(env.DB, 1), REF_IP_CAP + 2); assert.equal(await inviteCount(env.DB, 4), 1);
+    // Einlader loescht sein Konto: Vormerkungen an ihn verschwinden mit (sein Kuerzel steht in ref)
+    c.t += 86400; const tk = await click(env, "anna-b"); c.t += 60;
+    for (let i = 0; i < REF_IP_CAP + 3; i++) await mk(300 + i, tk);
+    assert.equal(pend(raw).filter((x) => x.i === 4 && x.ref === "anna-b").length, 3);
+    assert.equal((await del(4)).status, 200);
+    assert.deepEqual(pend(raw), []); await syncInviterBadges(env);
+    assert.equal(raw.prepare("SELECT COUNT(*) n FROM invite_success WHERE inviter_user_id=4 OR ref='anna-b'").get().n, 0, "der Tageslauf legt fuer das geloeschte Konto nichts neu an");
+    // Zusammenfuehren: S=3 ist Einlader einer Vormerkung und selbst vorgemerkt -> beides geht auf T=2; hat T schon eine eigene Vormerkung, bleibt die von T;
+    // eine Vormerkung zwischen S und T (dieselbe Person) entfaellt
+    for (const i of [2, 3, 6, 7, 8, 9, 12, 13]) user(raw, i, { created: c.t });
+    const ins = (e, i) => raw.prepare("INSERT INTO invite_pending(invitee_user_id,inviter_user_id,ref,since,held,created) VALUES(?,?,?,?,0,?)").run(e, i, "x", c.t - 5, c.t);
+    ins(7, 3); ins(3, 6); ins(9, 13); ins(13, 8); ins(12, 8); ins(8, 12);
+    for (const st of await mergeStatements(env.DB, 3, 2)) await st.run();
+    for (const st of await mergeStatements(env.DB, 13, 12)) await st.run();
+    assert.deepEqual(pend(raw).map((x) => [x.e, x.i]), [[2, 6], [7, 2], [8, 12], [9, 12], [12, 8]]);
+    assert.equal(raw.prepare("SELECT COUNT(*) n FROM invite_pending WHERE invitee_user_id IN (3,13) OR inviter_user_id IN (3,13)").get().n, 0);
+    for (const st of await mergeStatements(env.DB, 8, 12)) await st.run();
+    assert.deepEqual(pend(raw).map((x) => [x.e, x.i]), [[2, 6], [7, 2], [9, 12]], "keine Selbst-Einladung durch Zusammenfuehren");
+  } finally { c.restore(); restore(); }
+});
+
+test("Koerper null oder kein Objekt: 400 statt 500 (Klick ohne Anmeldung, Einloesen, Entwerten)", async () => {
+  const { raw, env, restore } = await setup(), err = console.error, logged = [];
+  try {
+    console.error = (...a) => logged.push(a.join(" "));
+    user(raw, 1, { handle: "einlader" }); user(raw, 2); env.ADMIN_SUBS = "github:s2";
+    const sess = await makeSession(env, 2);
+    const call = (path, body, cookie = "") => worker.fetch(new Request("https://api.test" + path, { method: "POST", body, headers: { "content-type": "application/json", "x-requested-with": "m365", ...(cookie ? { cookie } : {}) } }), env);
+    for (const body of ["null", "5", "\"x\"", "[]", "true", "", "{", "{\"ref\":null}", "{\"ref\":{}}"]) {
+      const a = await call("/api/invite/click", body); assert.equal(a.status, 400, "click " + body); assert.equal((await a.json()).error, "bad_request");
+      assert.equal((await call("/api/invite/ref", body.replace("ref", "token"), `m365s=${sess}`)).status, 400, "ref " + body);
+      assert.equal((await call("/api/admin/invite/void", body.replace("ref", "invitee"), `m365s=${sess}`)).status, 404, "void " + body);
+    }
+    assert.deepEqual(logged, [], "keine Ausnahme im Protokoll");
+    assert.equal((await call("/api/invite/click", "{\"ref\":\"einlader\"}")).status, 200);
+  } finally { console.error = err; restore(); }
 });
 
 test("Persoenlicher Link (320-3, Entscheidung b/d): Seite mit Vorschau nur fuer oeffentliche Profile, sonst der schlichte Link, ohne Kuerzel keiner", async () => {

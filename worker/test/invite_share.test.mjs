@@ -92,6 +92,12 @@ test("Einladungskarte (320-3): geteilt wird nur der Link des Servers; ist das Pr
   const i18n = JSON.parse(readFileSync(new URL("../../data/community_i18n.json", import.meta.url), "utf8"));
   for (const [lang, t] of Object.entries(i18n)) for (const k of card.match(/tt\("inv_[a-z_0-9]+"\)/g).map((x) => x.slice(4, -2))) assert.ok(t[k] && t[k] !== k, `${lang}: ${k}`);
   assert.match(i18n.de.inv_private, /nicht öffentlich/); assert.match(i18n.en.inv_private, /not public/);
+  // ueber der Tagesgrenze vorgemerkte Anmeldungen: die Karte nennt die Zahl (der Server holt sie nach), mit Platzhalter in jeder Sprache
+  assert.match(card, /if \(j\.pending > 0\) box\.appendChild\(h\("p", \{ class: "cmut", text: tt\("inv_pending"\)\.replace\("\{n\}", j\.pending\) \}\)\)/);
+  for (const [lang, t] of Object.entries(i18n)) assert.ok(t.inv_pending.includes("{n}"), lang);
+  assert.match(i18n.de.inv_pending, /Tagesgrenze/);
+  // Einloesen: 200 (gezaehlt, nicht gezaehlt oder beim Server vorgemerkt) und 400 raeumen den Eintrag ab - nach einer Vormerkung muss niemand wiederkommen
+  assert.match(src, /api\("\/api\/invite\/ref", \{ method: "POST", body: \{ token: r\.token \} \}\)\.then\(function \(x\) \{ if \(x\.s === 200 \|\| x\.s === 400\) SH\.clearRef\(\); \}\)/);
 });
 
 test("Keine Fremdskripte: Teilen-Modul laedt nichts nach", () => {
