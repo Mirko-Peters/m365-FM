@@ -15,6 +15,7 @@ import { autoTranslateItems, autoTranslateEntities, runTrQueue } from "./autotr.
 import { syncLiveEvents } from "./liveevents.js";
 import { syncContentTopics, handleTopics } from "./topics.js";
 import { importQuotesFromSite, handleQuotes } from "./quotes.js";
+import { importEpisodeUrls } from "./episode_urls.js";
 import { importEpisodes, importTranslations, handleRegister } from "./register.js";
 import { importSearchIndex, syncSearchVectors, handleSearch } from "./search.js";
 import { entityMap } from "./entities.js";
@@ -618,6 +619,7 @@ export default {
     T("syncContentTopics", () => syncContentTopics(env));
     T("importEntitiesFromSite", () => importEntitiesFromSite(env));
     T("importQuotesFromSite", () => importQuotesFromSite(env));
+    T("importEpisodeUrls", () => importEpisodeUrls(env));   // Spreaker-Folge <-> Adresse (Admin-Reiter Spreaker-Adressen); Korrektur bei Spreaker: GitHub-Workflow spreaker-urls.yml
     T("importEpisodes", () => importEpisodes(env));
     T("importTranslations", () => importTranslations(env));
     T("importSearchIndex", () => importSearchIndex(env));
