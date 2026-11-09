@@ -48,20 +48,24 @@ if tok:
 else:
     print("Kein Cloudflare-Token - kein Purge")
 
-# IndexNow: nur neue, entfallene und inhaltlich geaenderte Seiten (Hauptinhalt, ohne Sidebar/Kopf/Fuss/Werbung/Zeitangaben). Der Datei-Hash oben bleibt fuer den Purge.
+# IndexNow: nur neue, entfallene und inhaltlich geaenderte Seiten (Titel, Beschreibung, robots, canonical und Hauptinhalt - ohne Sidebar/Kopf-/Fussleiste/Werbung/
+# Zeitangaben, tools/content_hash.py). Der Datei-Hash oben bleibt fuer den Purge.
 # Inhalts-Hashes: Umgebung OLD_CONTENT/NEW_CONTENT (Dateien). Erster Lauf ohne alte Inhalts-Hashes: nur sichern, nichts melden.
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from content_hash import indexnow_select
+from content_hash import indexnow_batches, indexnow_select
 key = os.environ.get("INDEXNOW_KEY", "")
 _j = lambda p: json.load(open(p)) if p and os.path.exists(p) else {}
 sel, st = indexnow_select(old, new, _j(os.environ.get("OLD_CONTENT")), _j(os.environ.get("NEW_CONTENT")))
-print(f"IndexNow: neu {st['new']}, entfallen {st['removed']}, Inhalt geaendert {st['content']}, nur Boilerplate uebersprungen {st['boilerplate']}" + (f", ueber Limit abgeschnitten {st['capped']}" if st["capped"] else "") + (" (erster Lauf: Inhalts-Hashes gesichert, keine Meldung)" if st["seed"] else ""))
+print(f"IndexNow: neu {st['new']}, entfallen {st['removed']}, Inhalt geaendert {st['content']}, nur Boilerplate uebersprungen {st['boilerplate']}" + (" (erster Lauf: Inhalts-Hashes gesichert, keine Meldung)" if st["seed"] else ""))
 pages = [base + q(u) for u in sel]
 if key and pages:
     host = base.split("//")[1]
-    body = json.dumps({"host": host, "key": key, "keyLocation": f"{base}/{key}.txt", "urlList": pages}).encode()
-    try:
-        with urllib.request.urlopen(urllib.request.Request("https://api.indexnow.org/indexnow", body, {"Content-Type": "application/json; charset=utf-8", "User-Agent": "m365fm-site-build/1.0 (+https://www.m365.fm/)"}), timeout=60) as r: print("IndexNow:", r.status, len(pages), "Seiten gemeldet")
-    except Exception as e: print("IndexNow-Fehler:", str(e)[:120])
+    # IndexNow begrenzt den einzelnen Aufruf (10.000 Adressen), nicht die Zahl der Aufrufe: alles melden, nichts abschneiden - der neue Stand ersetzt nach diesem
+    # Schritt den alten, eine ausgelassene Adresse wuerde nie nachgemeldet. Jeder Aufruf fuer sich: scheitert einer, gehen die uebrigen trotzdem raus.
+    for part in indexnow_batches(pages):
+        body = json.dumps({"host": host, "key": key, "keyLocation": f"{base}/{key}.txt", "urlList": part}).encode()
+        try:
+            with urllib.request.urlopen(urllib.request.Request("https://api.indexnow.org/indexnow", body, {"Content-Type": "application/json; charset=utf-8", "User-Agent": "m365fm-site-build/1.0 (+https://www.m365.fm/)"}), timeout=60) as r: print("IndexNow:", r.status, len(part), "Seiten gemeldet")
+        except Exception as e: print("IndexNow-Fehler:", str(e)[:120], f"({len(part)} Seiten nicht gemeldet)")
 else:
     print("IndexNow: nichts zu melden")

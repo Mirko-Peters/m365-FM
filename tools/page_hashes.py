@@ -1,6 +1,6 @@
 """Hash je ausgelieferter Datei (docs/): Grundlage, um nach dem Deploy nur geaenderte Adressen im Cloudflare-Cache zu leeren und bei IndexNow zu melden.
 Aufruf: python tools/page_hashes.py docs page-hashes.json [content-hashes.json]
-Dritte Datei: Hash nur des Hauptinhalts je HTML-Seite (tools/content_hash.py), Grundlage fuer IndexNow."""
+Dritte Datei: Inhalts-Hash je HTML-Seite (Titel, Beschreibung, robots, canonical und Hauptinhalt, tools/content_hash.py), Grundlage fuer IndexNow."""
 import hashlib, json, sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
