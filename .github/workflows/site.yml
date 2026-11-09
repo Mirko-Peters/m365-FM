@@ -315,7 +315,7 @@ jobs:
           pip install -q boto3
           python tools/r2_og_upload.py r2img
       - name: Seiten-Hashes (fuer gezieltes Purge und IndexNow)
-        run: python tools/page_hashes.py docs page-hashes.json
+        run: python tools/page_hashes.py docs page-hashes.json content-hashes.json
       # R2 als Ursprung: Bau-Kennung fuer den Spiegel im Deploy-Job (tools/r2_site_sync.py). Der Site-Worker liest R2 nur, wenn pages/r2-build.txt
       # im Bucket mit /r2-build.txt auf GitHub Pages uebereinstimmt - also erst, wenn dieser Bau vollstaendig und fehlerfrei gespiegelt ist.
       - name: Bau-Kennung fuer den R2-Spiegel
@@ -326,6 +326,7 @@ jobs:
           retention-days: 3
           path: |
             page-hashes.json
+            content-hashes.json
             r2-changed.json
             r2-keys.json
       - uses: actions/configure-pages@v5
@@ -361,10 +362,13 @@ jobs:
           CF_ZONE_ID: ${{ secrets.CF_ZONE_ID }}
           INDEXNOW_KEY: 0348df8af6514d5bae4d9f9a5ba51f57
           BASE: https://www.m365.fm
+          OLD_CONTENT: .pagehashes/content-hashes.json
+          NEW_CONTENT: .newhashes/content-hashes.json
         run: |
           mkdir -p .pagehashes
           python3 tools/purge_changed.py .pagehashes/page-hashes.json .newhashes/page-hashes.json .newhashes/r2-changed.json
           cp .newhashes/page-hashes.json .pagehashes/page-hashes.json
+          cp .newhashes/content-hashes.json .pagehashes/content-hashes.json
       # ausdruecklich sichern (nicht erst am Jobende): auch wenn der R2-Spiegel danach scheitert, bleibt der Stand fuer Purge und IndexNow aktuell
       - name: Seiten-Stand dieses Deploys sichern
         if: always() && hashFiles('.pagehashes/page-hashes.json') != ''
