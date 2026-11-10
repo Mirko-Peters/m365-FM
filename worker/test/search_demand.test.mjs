@@ -5,7 +5,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import worker from "../src/index.js";
-import { searchTerm, countSearch, classifySearches, aggregateDemand, purgeSearchStats, demandItem } from "../src/search_demand.js";
+import { searchTerm, countSearch, classifySearches, aggregateDemand, purgeSearchStats, demandItem, deleteUserSearchDemand } from "../src/search_demand.js";
 import { runTrDemand } from "../src/autotr.js";
 import { makeSession, sha256hex } from "../src/util.js";
 import { mergeStatements } from "../src/identities.js";
@@ -49,16 +49,21 @@ const cookieFor = async (env, uid) => ({ cookie: `m365s=${await makeSession(env,
 
 test("Anonymisierung: E-Mail, Telefon, Adresse, lange Eingabe und reine Zahlen werden verworfen, der Rest normalisiert", () => {
   for (const bad of ["max@example.com", "mail an jemand @ firma", "+49 176 1234567", "0176/123 45 67", "(555) 123-4567", "call 555-123-4567", "https://www.m365.fm/x",
-    "www.contoso.com", "teams.microsoft.com", "contoso.de/impressum", "12345678", "2024", "  42  ", "!!!", "x".repeat(121), ""]) assert.equal(searchTerm(bad), "", bad);
+    "www.contoso.com", "teams.microsoft.com", "contoso.de/impressum", "12345678", "2024", "  42  ", "!!!", "x".repeat(121), "",
+    // Ziffernfolgen neben Woertern (Gegenpruefung): ohne Trennzeichen mit +/0, 10+ am Stueck, 7+ mit Trennzeichen, IBAN
+    "tel +491512345678", "rückruf 01512345678", "call 4155552671", "mobil 151 2345 6789", "my ssn 123-45-6789", "ticket 4711-0815-1234",
+    "iban de89 3704 0044 0532 0130 00", "IBAN DE89370400440532013000", "kunde 0049 30 1234567", "sharepoint 2016 01761234567"]) assert.equal(searchTerm(bad), "", bad);
   assert.equal(searchTerm("  Copilot   STUDIO\tAgent "), "copilot studio agent");
   assert.equal(searchTerm("SharePoint 2016 2019 2022"), "sharepoint 2016 2019 2022", "Versionslisten sind keine Rufnummer");
+  assert.equal(searchTerm("Exchange 2010/2013/2016/2019"), "exchange 2010/2013/2016/2019");
+  assert.equal(searchTerm("Windows 11 24H2 build 26100"), "windows 11 24h2 build 26100");
   assert.equal(searchTerm("KB5034441"), "kb5034441");
   assert.equal(searchTerm("ASP.NET Core"), "asp.net core");
   assert.equal(searchTerm("Entra ID 2026-11"), "entra id 2026-11");
   assert.equal(Array.from(searchTerm("ä".repeat(100))).length, 80, "hoechstens 80 Zeichen");
 });
 
-test("Zaehlung: ueber den echten Worker-Einstieg in waitUntil, die Antwort wartet nicht; je Begriff einmal je Fenster; MCP und Seite 2 zaehlen nicht", async () => {
+test("Zaehlung: ueber den echten Worker-Einstieg in waitUntil, die Antwort wartet nicht; nur mit c=1; je Begriff einmal je Fenster; MCP zaehlt nicht", async () => {
   let release; const gateP = new Promise((r) => { release = r; });
   const { raw, env } = await setup({ hook: async (sql) => { if (/INSERT INTO search_q/.test(sql)) await gateP; } });
   seedDocs(raw, [{ id: "en:/a/", url: "https://www.m365.fm/a/", lang: "en", type: "page", title: "Copilot Studio agents" }]);
@@ -67,21 +72,24 @@ test("Zaehlung: ueber den echten Worker-Einstieg in waitUntil, die Antwort warte
   try {
     const pending = [], ctx = { waitUntil: (p) => pending.push(p) };
     const get = (qs, ip = "198.51.100.1") => worker.fetch(new Request(`https://api-dub.m365.fm/api/search?${qs}`, { headers: { "cf-connecting-ip": ip } }), env, ctx);
-    const r = await get("q=Copilot+Studio&pref=de");
+    await get("q=copilot+stu&pref=de"); await get("q=copilot+studi&pref=de&page=1");
+    assert.equal(pending.length, 0, "ohne c=1 (Zwischenstaende beim Tippen) wird nichts gezaehlt");
+    const r = await get("q=Copilot+Studio&pref=de&c=1");
     assert.equal(r.status, 200);
     assert.equal(pending.length, 1, "Zaehlung als waitUntil angemeldet");
     assert.equal(sq(raw).length, 0, "Antwort ist da, bevor gezaehlt wird");
     release(); await Promise.all(pending);
     assert.deepEqual(sq(raw), [{ day: day(), lang: "de", q_norm: "copilot studio", n: 1, zero: 0, cls: "" }]);
-    await get("q=copilot%20%20studio&pref=de"); await get("q=nichtvorhanden&pref=de"); await get("q=a%40b.de&pref=de"); await get("q=Copilot+Studio&pref=de&page=2"); await get("q=Copilot+Studio");
+    await get("q=copilot%20%20studio&pref=de&c=1"); await get("q=nichtvorhanden&pref=de&c=1"); await get("q=a%40b.de&pref=de&c=1"); await get("q=tel+%2B491512345678&pref=de&c=1"); await get("q=Copilot+Studio&c=1");
+    await get("q=Purview&pref=de&page=2&c=1");
     await Promise.all(pending);
-    assert.deepEqual(sq(raw).map((x) => [x.q_norm, x.n, x.zero]), [["copilot studio", 1, 0], ["nichtvorhanden", 1, 1]], "gleicher Begriff im Fenster einmal, E-Mail verworfen, Seite 2 und ohne pref nicht");
-    store.clear(); await get("q=COPILOT+studio&pref=de"); await Promise.all(pending);
+    assert.deepEqual(sq(raw).map((x) => [x.q_norm, x.n, x.zero]), [["copilot studio", 1, 0], ["nichtvorhanden", 1, 1], ["purview", 1, 1]], "gleicher Begriff im Fenster einmal, E-Mail und Rufnummer verworfen, ohne pref nicht; Mehr (Seite 2) mit c=1 zaehlt");
+    store.clear(); await get("q=COPILOT+studio&pref=de&c=1"); await Promise.all(pending);
     assert.equal(sq(raw)[0].n, 2, "nach dem Fenster zaehlt der Begriff wieder");
     assert.equal(await countSearch(env, { q: "Copilot", lang: "xx" }), false, "nur Sprachen der Website");
     const before = pending.length;
     const { handleSearch } = await import("../src/search.js");
-    const req = new Request("https://x/api/search?q=Copilot&pref=de");
+    const req = new Request("https://x/api/search?q=Copilot&pref=de&c=1");
     await handleSearch(env, req, new URL(req.url), (d) => d);   // wie der MCP-Weg: ohne ctx
     assert.equal(pending.length, before, "ohne ctx (MCP) wird nichts gezaehlt");
     assert.doesNotMatch(readFileSync(new URL("../src/index.js", import.meta.url), "utf8").match(/path === "\/api\/search"\).*$/m)[0], /handleSearch\(env, request, url, J, ctx\)/, "MCP-Aufrufe (asUser) bekommen kein ctx");
@@ -113,7 +121,9 @@ test("Einordnung: eigene Sprache, Uebersetzungsluecke (Inhalte zugeordnet), Inha
   assert.deepEqual(JSON.parse(rows["copilot agent"].docs).map((d) => [d.k, d.i, d.p]), [["blog", "9", "/community/u/anna/blog/teams-tipps/"], ["lblog", "alter-beitrag", "/community/u/mirko-p/blog/alter-beitrag/"], ["episode", "copilot-agents", "/show/episodes/copilot-agents/"]], "hoechstens 3 Inhalte, Community-Beitrag per ID, frueherer per Slug");
   assert.deepEqual(await demandItem(env.DB, { url: "https://www.m365.fm/fr/community/podcast/7-agent-talk/" }), { k: "podcast", i: "7", p: "/community/podcast/7-agent-talk/" });
   assert.deepEqual(await demandItem(env.DB, { url: "https://www.m365.fm/entity/copilot-studio/", type: "entity" }), { k: "entity", i: "copilot-studio", p: "/entity/copilot-studio/" });
-  assert.equal((await demandItem(env.DB, { url: "https://www.m365.fm/entity/jane-doe/", type: "person" })).k, "page", "Personen werden nicht uebersetzt");
+  assert.equal(await demandItem(env.DB, { url: "https://www.m365.fm/entity/jane-doe/", type: "person" }), null, "Personen werden nicht uebersetzt");
+  assert.equal(await demandItem(env.DB, { url: "https://www.m365.fm/community/u/anna/", title: "Anna Beispiel", type: "person" }), null, "Profil: weder Handle noch Name in die Nachfrage");
+  assert.equal(await demandItem(env.DB, { url: "https://www.m365.fm/de/community/u/anna/blog/", title: "Annas Blog", type: "page" }), null);
   assert.equal((await classifySearches(env, { classify })).classified, 0); assert.equal(calls, 4, "jede Zeile (Tag, Sprache, Begriff) nur einmal");
   const thrown = async () => { throw new Error("Vectorize weg"); };
   addQ(raw, day(), "fr", "agent", 1);
@@ -256,5 +266,68 @@ test("Datenschutz und Deploy-Gate: keine Personenspalten, Migration 0044 idempot
   assert.doesNotMatch(merge, /search_q|tr_demand/, "keine Nutzerbezuege, also nichts zusammenzufuehren");
   const sql = readFileSync(new URL("0044_search_demand.sql", MIG), "utf-8").replace(/--[^\n]*/g, "").split(";").map((s) => s.trim()).filter(Boolean);
   for (const s of sql) assert.match(s, /^CREATE (TABLE|INDEX) IF NOT EXISTS /i);
+  raw.close();
+});
+
+test("Nachfrage: bleibende Fehler (Antwort kaputt, API 4xx) sofort failed, voruebergehende hoechstens 3 Versuche; DAILY_CAP bleibt fuer den 24-Stunden-Lauf", async () => {
+  const { raw, env } = await setup();
+  Object.assign(env, { ANTHROPIC_API_KEY: "unit-test-key", AI_DAILY_EUR_HAIKU: "5", USD_PER_EUR: "1" });
+  raw.exec("INSERT INTO pod_episodes(id,user_id,title,description,lang,status,created,updated,published) VALUES(1,4,'Kaputt','x','en','published',1,1,1),(2,4,'Verboten','x','en','published',1,1,1),(3,4,'Wackelig','x','en','published',1,1,1),(4,4,'Zurueckgezogen','x','en','rejected',1,1,0)");
+  const ins = raw.prepare("INSERT INTO tr_demand(kind,item,lang,title,searches,days,status,first_seen,last_seen) VALUES('podcast',?,'de',?,?,2,'open',?,?)");
+  ins.run("1", "Kaputt", 90, day(3), day()); ins.run("2", "Verboten", 80, day(3), day()); ins.run("3", "Wackelig", 70, day(3), day()); ins.run("4", "Zurueckgezogen", 99, day(3), day());
+  const sent = [], oldFetch = globalThis.fetch;
+  globalThis.fetch = async (url, init) => {
+    const title = JSON.parse(JSON.parse(init.body).messages[0].content).title; sent.push(title);
+    if (title === "Verboten") return new Response(JSON.stringify({ type: "error" }), { status: 403 });
+    if (title === "Wackelig") return new Response("überlastet", { status: 529 });
+    return new Response(JSON.stringify({ content: [{ type: "text", text: "{kaputt" }], usage: { input_tokens: 100, output_tokens: 40 } }), { status: 200 });
+  };
+  const st = () => Object.fromEntries(raw.prepare("SELECT item,status,tries,info FROM tr_demand").all().map((r) => [r.item, [r.status, r.tries, r.info]]));
+  const cap = () => +(raw.prepare("SELECT v FROM meta WHERE k=?").get("atr_count:" + day())?.v || 0);
+  try {
+    await runTrDemand(env, async () => new Map());
+    let s = st();
+    assert.deepEqual(s["4"], ["failed", 0, "nicht veröffentlicht"], "zurueckgezogener Inhalt: kein Aufruf");
+    assert.ok(!sent.includes("Zurueckgezogen"));
+    assert.equal(s["1"][0], "failed", "Antwort nicht lesbar: bleibend"); assert.equal(s["1"][1], 1);
+    assert.deepEqual(s["2"].slice(0, 2), ["failed", 1], "API 403: bleibend");
+    assert.deepEqual(s["3"].slice(0, 2), ["open", 1], "529/5xx: voruebergehend, naechster Lauf");
+    assert.equal(cap(), 3, "nur echte Aufrufe zaehlen gegen DAILY_CAP");
+    const after1 = sent.length;
+    await runTrDemand(env, async () => new Map());
+    assert.deepEqual(sent.slice(after1), ["Wackelig"], "kaputte und verbotene werden nicht wiederholt");
+    await runTrDemand(env, async () => new Map());
+    assert.deepEqual(st()["3"].slice(0, 2), ["failed", 3], "nach 3 voruebergehenden Fehlern: failed");
+    const n = sent.length;
+    for (let i = 0; i < 5; i++) await runTrDemand(env, async () => new Map());
+    assert.equal(sent.length, n, "danach kein einziger bezahlter Aufruf mehr");
+    assert.equal(cap(), 5, "DAILY_CAP: 5 Aufrufe statt eines vollen Tages");
+    assert.equal(raw.prepare("SELECT COUNT(*) n FROM ai_spend WHERE job='worker_translation_demand'").get().n, 5);
+  } finally { globalThis.fetch = oldFetch; raw.close(); }
+});
+
+test("Kontoloeschung: Nachfrage zu eigenen Inhalten und zum Profil verschwindet aus tr_demand und search_q.docs, die Begriffe bleiben", async () => {
+  const { raw, env } = await setup();
+  raw.exec("INSERT INTO profiles(user_id,handle,public,updated) VALUES(4,'anna',1,1),(2,'bert',1,1)");
+  raw.exec("INSERT INTO blog_posts(id,user_id,slug,title,lang,status,created,published,updated) VALUES(9,4,'teams-tipps','Teams tips','en','live',1,1,1),(10,2,'bert-post','Bert','en','live',1,1,1)");
+  raw.exec("INSERT INTO pod_episodes(id,user_id,title,description,lang,status,created,updated,published) VALUES(7,4,'Annas Talk','x','en','published',1,1,1)");
+  raw.exec("INSERT INTO yt_videos(id,user_id,title,description,lang,status,created,updated,published) VALUES(5,4,'Annas Video','x','en','published',1,1,1)");
+  const ins = raw.prepare("INSERT INTO tr_demand(kind,item,lang,title,path,searches,days,status,first_seen,last_seen) VALUES(?,?,'de',?,?,5,2,'open',?,?)");
+  ins.run("blog", "9", "Teams tips", "/community/u/anna/blog/teams-tipps/", day(2), day()); ins.run("lblog", "alt", "Annas alter Beitrag", "/community/u/anna/blog/alt/", day(2), day());
+  ins.run("page", "/community/u/anna/", "Anna Beispiel", "/community/u/anna/", day(2), day()); ins.run("podcast", "7", "Annas Talk", "/community/podcast/7-annas-talk/", day(2), day());
+  ins.run("video", "5", "Annas Video", "/community/video/5-annas-video/", day(2), day()); ins.run("blog", "10", "Bert", "/community/u/bert/blog/bert-post/", day(2), day());
+  ins.run("episode", "copilot", "Copilot", "/show/episodes/copilot/", day(2), day()); ins.run("page", "/community/u/annabell/", "Annabell", "/community/u/annabell/", day(2), day());
+  const docs = [{ k: "blog", i: "9", t: "Teams tips", p: "/community/u/anna/blog/teams-tipps/" }, { k: "podcast", i: "7", t: "Annas Talk", p: "/community/podcast/7-annas-talk/" }, { k: "episode", i: "copilot", t: "Copilot", p: "/show/episodes/copilot/" }];
+  addQ(raw, day(), "de", "teams tipps", 4, "translation_gap", docs); addQ(raw, day(), "de", "bert", 4, "translation_gap", [{ k: "blog", i: "10", t: "Bert", p: "/community/u/bert/blog/bert-post/" }]);
+  addQ(raw, day(), "de", "nur anna", 4, "translation_gap", docs.slice(0, 1));
+  const r = await worker.fetch(new Request("https://api-dub.m365.fm/api/me", { method: "DELETE", headers: { ...(await cookieFor(env, 4)), "x-requested-with": "m365" } }), env, { waitUntil() {} });
+  assert.equal(r.status, 200);
+  assert.deepEqual(raw.prepare("SELECT kind,item FROM tr_demand ORDER BY kind,item").all().map((x) => [x.kind, x.item]), [["blog", "10"], ["episode", "copilot"], ["page", "/community/u/annabell/"]], "nur fremde Inhalte bleiben (annabell ist nicht anna)");
+  const q = Object.fromEntries(raw.prepare("SELECT q_norm,docs FROM search_q").all().map((x) => [x.q_norm, JSON.parse(x.docs)]));
+  assert.deepEqual(q["teams tipps"], [{ k: "episode", i: "copilot", t: "Copilot", p: "/show/episodes/copilot/" }]);
+  assert.deepEqual(q["nur anna"], []); assert.equal(q.bert.length, 1, "andere Konten unberuehrt");
+  assert.doesNotMatch(JSON.stringify(raw.prepare("SELECT * FROM tr_demand").all()) + JSON.stringify(raw.prepare("SELECT docs FROM search_q").all()), /anna\/|Annas|Teams tips/);
+  await deleteUserSearchDemand(env.DB, 99);   // Konto ohne Profil: kein Fehler, nichts geloescht
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM tr_demand").get().n, 3);
   raw.close();
 });

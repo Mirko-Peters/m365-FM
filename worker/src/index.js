@@ -22,7 +22,7 @@ import { syncContentTopics, handleTopics } from "./topics.js";
 import { importQuotesFromSite, handleQuotes } from "./quotes.js";
 import { importEpisodes, importTranslations, handleRegister } from "./register.js";
 import { importSearchIndex, syncSearchVectors, handleSearch } from "./search.js";
-import { handleSearchDemand, classifySearches, aggregateDemand, purgeSearchStats } from "./search_demand.js";
+import { handleSearchDemand, classifySearches, aggregateDemand, purgeSearchStats, deleteUserSearchDemand } from "./search_demand.js";
 import { entityMap } from "./entities.js";
 import { handleProfiles, deleteUserData, refreshProfilesExport } from "./profiles.js";
 import { handleClaimVerify } from "./claimverify.js";
@@ -240,6 +240,7 @@ async function deleteAccount(env, id) {
   await deleteUserEvents(db, id);
   await deleteUserEditorial(db, id);   // Redaktion (Migration 0037): vor deleteUserBlog, weil der Verlauf an den Beitraegen des Kontos haengt
   await deleteUserEntityInvites(db, id);   // braucht mail_addr und die bestaetigten Claims: vor deleteUserData
+  await deleteUserSearchDemand(db, id);   // Nachfrage zu eigenen Inhalten und zum Profil (#156): braucht Handle und Inhalte, also vor deleteUserBlog/deleteUserData
   await deleteUserMessages(db, id); await deleteUserTokens(db, id); await deleteUserQa(db, id); await deleteUserBlog(db, id); await deleteUserLibrary(db, id); await deleteUserPodcast(db, id); await deleteUserVideos(db, id); await deleteUserGuests(db, id); await deleteUserGuestCredits(db, id);
   await deleteUserData(db, id); await deleteUserExpertRequests(env, id);
   await deleteUserLinkedin(db, id);   // LinkedIn-Zugang dieses Admins (verschluesselte Tokens) und "veroeffentlicht von"

@@ -17,6 +17,7 @@ CREATE INDEX IF NOT EXISTS idx_search_q_term ON search_q(lang, q_norm);
 CREATE INDEX IF NOT EXISTS idx_search_q_cls ON search_q(cls, day);
 -- tr_demand: Warteschlange "Uebersetzung auf Nachfrage" je Inhalt und Zielsprache (nur Begriffe ueber der Missbrauchsschwelle SEARCH_DEMAND_MIN
 -- Suchen an mindestens 2 Tagen). searches/days = Summe der Suchen bzw. Zahl der Tage dieser Begriffe. status: open | translated | waiting_budget | failed.
+-- tries = Uebersetzungsversuche (Haiku-Aufrufe) dieser Zeile; nach 3 voruebergehenden Fehlern wird sie failed (kein endloses Wiederholen).
 -- kind blog/podcast/video/entity uebersetzt der Worker (autotr.js runTrDemand, item_tr/ent_tr); episode/lblog die Python-Skripte des Seitenbaus
 -- (Reihenfolge aus GET /api/search/demand-export); page ist nur ein Hinweis fuer die Redaktion.
 CREATE TABLE IF NOT EXISTS tr_demand (
@@ -29,6 +30,7 @@ CREATE TABLE IF NOT EXISTS tr_demand (
   days INTEGER NOT NULL DEFAULT 0,
   status TEXT NOT NULL DEFAULT 'open',
   info TEXT NOT NULL DEFAULT '',
+  tries INTEGER NOT NULL DEFAULT 0,
   first_seen TEXT NOT NULL DEFAULT '',
   last_seen TEXT NOT NULL DEFAULT '',
   PRIMARY KEY (kind, item, lang)

@@ -526,8 +526,9 @@ function countEntityFacet(rows) {
   return Object.fromEntries(Object.entries(counts).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, 15));
 }
 
-// ctx (nur die Suche der Website, nicht MCP): zaehlt den Begriff anonym nach der Antwort (search_demand.js countSearch, Issue #156). Die Zaehlung laeuft
-// ausschliesslich in ctx.waitUntil, die Antwortzeit aendert sich nicht; hier gibt es keinen weiteren KI- oder Vectorize-Aufruf.
+// ctx (nur die Suche der Website, nicht MCP): zaehlt den Begriff anonym nach der Antwort (search_demand.js countSearch, Issue #156), aber nur mit c=1:
+// assets/search.js setzt es nur, wenn die Eingabe steht (Absenden, Adresse mit q, Filter/Mehr/Trefferklick, 1,5 s Tipppause), nie fuer Zwischenstaende
+// beim Tippen. Die Zaehlung laeuft ausschliesslich in ctx.waitUntil, die Antwortzeit aendert sich nicht; hier gibt es keinen weiteren KI- oder Vectorize-Aufruf.
 export async function handleSearch(env, request, url, J, ctx) {
   if (request.method !== "GET") return J({ error: "bad_request" }, 405);
   const q = (url.searchParams.get("q") || "").replace(/\p{Cc}/gu, "").trim().replace(/\s+/g, " ");
@@ -570,7 +571,7 @@ export async function handleSearch(env, request, url, J, ctx) {
     return filters.lang && scope !== "lang" ? rows : dedupeLanguages(rows, pref);
   };
   const resultRows = rowsFor("main");
-  if (ctx?.waitUntil && page === 1) {
+  if (ctx?.waitUntil && url.searchParams.get("c") === "1") {
     ctx.waitUntil(countSearch(env, { q, lang: pref, zero: resultRows.length === 0, origin: url.origin })
       .catch((error) => console.warn("Suchbegriff nicht gezaehlt:", String(error?.message || error))));
   }

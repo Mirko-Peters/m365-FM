@@ -1,10 +1,12 @@
 // Suchbegriffe anonym erfassen, Luecken erkennen, Uebersetzung auf Nachfrage (Issue #156, Migration 0044).
-// Ablauf: handleSearch zaehlt jede Suche der Website (pref = Seitensprache) per ctx.waitUntil (countSearch), ohne die Antwort zu verzoegern.
+// Ablauf: handleSearch zaehlt Suchen der Website (pref = Seitensprache), bei denen die Eingabe steht (c=1 aus assets/search.js: Absenden, Adresse mit q,
+// Filter/Mehr/Trefferklick, 1,5 s Tipppause; keine Zwischenstaende beim Tippen), per ctx.waitUntil (countSearch), ohne die Antwort zu verzoegern.
 // Der 30-Minuten-Cron ordnet neue Begriffe ein (classifySearches: classifyQuery aus search.js, hoechstens einmal je Tag, Sprache und Begriff),
 // fasst Uebersetzungsluecken ueber der Missbrauchsschwelle in tr_demand zusammen (aggregateDemand) und uebersetzt Community-Inhalte im Haiku-
 // Tagesbudget (autotr.js runTrDemand). Der Cron um 06:00 loescht alles, was aelter als 12 Monate ist (purgeSearchStats).
-// Datenschutz: keine IP, kein Konto, kein Zeitpunkt feiner als der Tag; Eingaben, die nach E-Mail, Telefonnummer, Adresse oder reiner Zahl aussehen,
-// werden verworfen (searchTerm). Alle Ausgaben sind Summen.
+// Datenschutz: keine IP, kein Konto, kein Zeitpunkt feiner als der Tag; Eingaben, die nach E-Mail, Webadresse, Telefon-/Konto-/Kundennummer (laengere
+// Ziffernfolgen) oder reiner Zahl aussehen, werden verworfen (searchTerm). Profile und Personen kommen nicht in die Nachfrage (demandItem), die Kontoloeschung
+// raeumt Nachfrage zu eigenen Inhalten weg (deleteUserSearchDemand). Alle Ausgaben sind Summen.
 //
 // Schnittstelle fuer die SEO-Routinen (claude.ai-Aufgaben ausserhalb des Repos: Topical Map/NeuronWriter donnerstags, QuickCreator samstags):
 //   GET https://api-dub.m365.fm/api/search/gaps?weeks=1&lang=en[&limit=50]
@@ -30,17 +32,23 @@ const noindex = { "x-robots-tag": "noindex" };
 
 // Eingabe -> normalisierter Begriff ("" = verwerfen). Klein, Leerraum zusammengefasst, hoechstens 80 Zeichen. Verworfen: mehr als 120 Zeichen,
 // reine Zahlen (ohne einen Buchstaben), alles mit @ (E-Mail-Adressen), Webadressen (Schema, www. oder Name mit gaengiger Endung; .net/.io bleiben wegen
-// ASP.NET, socket.io) und Telefonnummern: 7+ Ziffern mit Trennzeichen, die wie eine Rufnummer beginnen (+, 0, Klammer) oder dem Muster 555-123-4567
-// folgen. Versionslisten wie "SharePoint 2016 2019 2022" sind keine Rufnummer und bleiben.
-const PHONE = /[+(]?\d[\d\s()./-]*\d/g;
+// ASP.NET, socket.io) und Ziffernfolgen, die Rufnummern, Konto-, Ausweis- oder Vorgangsnummern sein koennen (DIGITS): 7+ Ziffern, die mit +, 0 oder
+// Klammer beginnen (mit oder ohne Trennzeichen: "tel +491512345678", "rueckruf 01512345678"), 7+ Ziffern mit Trennzeichen ("151 2345 6789",
+// "123-45-6789", IBAN in Vierergruppen) und 10+ Ziffern am Stueck ("4155552671"). Ausnahmen: Jahreslisten wie "SharePoint 2016 2019 2022" (jede Gruppe
+// ein Jahr) und kurze Kennungen wie "KB5034441" (7-9 Ziffern am Stueck ohne fuehrende 0).
+const DIGITS = /[+(]?\d[\d\s()./-]*\d/g, YEAR = /^(?:19|20)\d\d$/;
+const numberLike = (m) => {
+  const d = (m.match(/\d/g) || []).length;
+  if (d < 7) return false;
+  const groups = m.split(/[\s()./-]+/).filter(Boolean);
+  if (groups.length > 1 && !/^[+(]/.test(m) && groups.every((g) => YEAR.test(g))) return false;   // Jahresliste
+  return /^[+(0]/.test(m) || d >= 10 || groups.length > 1;
+};
 export function searchTerm(raw) {
   const s = String(raw || "").normalize("NFC").replace(/\p{Cc}/gu, " ");
   if (Array.from(s).length > 120 || s.includes("@") || !/\p{L}/u.test(s)) return "";
   if (/https?:|www\.|:\/\/|\b[\p{L}\p{N}-]+\.(?:com|org|de|at|ch|eu|fm|info|biz|app|dev|ly|co\.uk)(?:[/:?#]|\s|$)/iu.test(s)) return "";
-  for (const [m] of s.matchAll(PHONE)) {
-    if ((m.match(/\d/g) || []).length < 7 || !/[\s()./-]/.test(m)) continue;
-    if (/^(?:\+|\(|0)/.test(m) || /\d{3}[\s.-]\d{3}[\s.-]\d{4}/.test(m)) return "";
-  }
+  for (const [m] of s.matchAll(DIGITS)) if (numberLike(m)) return "";
   return Array.from(s.toLocaleLowerCase().replace(/\s+/g, " ").trim()).slice(0, 80).join("").trim();
 }
 
@@ -82,6 +90,8 @@ export async function demandItem(db, doc) {
     return r && !r.html ? { k: "blog", i: String(r.id), p } : { k: "lblog", i: m[2], p };   // nicht in der Datenbank oder mit HTML: frueherer Beitrag (translate_blog.py)
   }
   if ((m = /^\/community\/(podcast|video)\/(\d+)-[a-z0-9-]*\/$/.exec(p))) return { k: m[1], i: m[2], p };
+  // Profile (/community/u/<handle>/...) und Personen sind keine Uebersetzungsarbeit; so landen weder Name noch Handle in tr_demand oder search_q.docs
+  if (doc.type === "person" || /^\/community\/u\//.test(p)) return null;
   if ((m = /^\/entity\/([a-z0-9-]+)\/$/.exec(p)) && doc.type === "entity") return { k: "entity", i: m[1], p };
   return { k: "page", i: p.slice(0, 200), p: p.slice(0, 200) };
 }
@@ -135,6 +145,20 @@ export async function aggregateDemand(env) {
     db.prepare("UPDATE tr_demand SET status='translated',info='' WHERE status<>'translated' AND kind NOT IN ('blog','podcast','video','entity') AND path<>'' AND EXISTS (SELECT 1 FROM search_doc d WHERE d.gone=0 AND d.lang=tr_demand.lang AND d.url=?||CASE WHEN tr_demand.lang='en' THEN '' ELSE '/'||tr_demand.lang END||tr_demand.path)").bind(site),
   ]);
   return { items: rows.length, min };
+}
+
+// Konto loeschen (index.js deleteAccount, VOR deleteUserBlog/deleteUserPodcast/deleteUserVideos/deleteUserData, die Handle und Inhalte noch kennen):
+// Nachfrage zu Inhalten dieses Kontos (Blog, Podcast, Video und alles unter /community/u/<handle>/) samt Titel und Pfad aus tr_demand und aus
+// search_q.docs entfernen. Die Suchbegriffe selbst bleiben: Tagessummen ohne Personenbezug.
+export async function deleteUserSearchDemand(db, uid) {
+  const h = (await db.prepare("SELECT handle FROM profiles WHERE user_id=?").bind(uid).first().catch(() => null))?.handle || "", pre = h ? `/community/u/${h}/` : "";
+  const mine = (k, i, p) => `((${k}='blog' AND ${i} IN (SELECT CAST(id AS TEXT) FROM blog_posts WHERE user_id=?)) OR (${k}='podcast' AND ${i} IN (SELECT CAST(id AS TEXT) FROM pod_episodes WHERE user_id=?)) ` +
+    `OR (${k}='video' AND ${i} IN (SELECT CAST(id AS TEXT) FROM yt_videos WHERE user_id=?)) OR (?<>'' AND substr(${p},1,length(?))=?))`;
+  const args = [uid, uid, uid, pre, pre, pre], J = (f) => `json_extract(j.value,'$.${f}')`, jm = mine(J("k"), J("i"), J("p"));
+  await db.batch([
+    db.prepare(`DELETE FROM tr_demand WHERE ${mine("kind", "item", "path")}`).bind(...args),
+    db.prepare(`UPDATE search_q SET docs=(SELECT json_group_array(json(j.value)) FROM json_each(search_q.docs) j WHERE NOT ${jm}) WHERE docs<>'[]' AND EXISTS (SELECT 1 FROM json_each(search_q.docs) j WHERE ${jm})`).bind(...args, ...args),
+  ]);
 }
 
 // Cron 06:00: Aufbewahrung 12 Monate
