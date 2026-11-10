@@ -1,7 +1,9 @@
 // KI-Entwurf fuer Entitaeten (Datenbank = Quelle der Wahrheit): fill_entities.py (Actions) schickt die erzeugten Texte hierher.
 // Schutz: nie eine Menschen-Aenderung ueberschreiben (Revision eines Nutzers ausser dem Systemnutzer, oder Live-Fassung ohne Maschinen-Herkunft),
 // nur schreiben, wenn desc/long/faq noch genau dem Stand entsprechen, fuer den der Text erzeugt wurde (Hash), und nur duenne/leere Felder fuellen.
+// Nie bei selbst verwalteten Entitaeten (entity_claims verified, wie T30-Abgleich und Auto-Uebersetzung).
 import { cleanText } from "./util.js";
+import { ensureEntTr, entTrHash, entTrSource } from "./autotr.js";
 
 export const AI_USER = { provider: "system", sub: "ki-entwurf", name: "M365.FM Redaktion (KI-Entwurf)" };
 export const AI_PREFIX = "KI-Entwurf";
@@ -26,7 +28,9 @@ export async function stateHash(data) {
 }
 
 // Herkunft der live-Fassung: seed (Uebernahme/Abgleich/Auto-Uebersetzung), ai (KI-Entwurf), human (alles andere, auch Konten, die inzwischen geloescht sind)
-export function revSource(row, sysId, humanIds) {
+// owned (selbst verwaltet, entity_claims verified) geht vor: solche Entitaeten bekommen nie einen KI-Text
+export function revSource(row, sysId, humanIds, ownedIds) {
+  if (ownedIds?.has(row.eid)) return "owned";
   if (humanIds?.has(row.eid)) return "human";
   if (sysId && row.user_id === sysId) return "ai";
   if (!row.user_id && MACHINE.test(row.summary || "")) return "seed";
@@ -37,23 +41,31 @@ export async function humanEdited(db, sysId) {
   const rows = (await db.prepare("SELECT DISTINCT eid FROM entity_rev WHERE status IN ('live','old') AND user_id>0 AND user_id<>?").bind(sysId || -1).all().catch(() => ({ results: [] }))).results || [];
   return new Set(rows.map((r) => r.eid));
 }
+export async function ownedEntities(db) {
+  const rows = (await db.prepare("SELECT DISTINCT eid FROM entity_claims WHERE status='verified'").all().catch(() => ({ results: [] }))).results || [];
+  return new Set(rows.map((r) => r.eid));
+}
+const isObj = (v) => v && typeof v === "object" && !Array.isArray(v);
 
 const faqList = (v) => (Array.isArray(v) ? v : []).slice(0, 5).map((x) => ({ q: txt(x?.q, 200), a: txt(x?.a, 600) })).filter((x) => x.q && x.a);
 
 // items: [{id, base, desc, long, faq, de:{desc,long,faq}, tr:{lang:{desc,long,faq}}}] (desc/long/faq = Englisch)
 export async function fillEntities(env, items) {
-  const db = env.DB, sys = await aiUserId(db), human = await humanEdited(db, sys), out = [], t = now();
+  const db = env.DB, sys = await aiUserId(db), human = await humanEdited(db, sys), owned = await ownedEntities(db), out = [], t = now();
+  await ensureEntTr(db);
   for (const it of Array.isArray(items) ? items.slice(0, 50) : []) {
     const id = String(it?.id || ""), res = (status, extra = {}) => out.push({ id, status, ...extra });
     if (!ID.test(id)) { res("bad_id"); continue; }
     const live = await db.prepare("SELECT id,data,user_id,summary FROM entity_rev WHERE eid=? AND status='live' ORDER BY created DESC,id DESC LIMIT 1").bind(id).first();
     if (!live) { res("no_db_version"); continue; }
+    if (owned.has(id)) { res("owned"); continue; }
     if (human.has(id) || revSource({ eid: id, user_id: live.user_id, summary: live.summary }, sys, human) === "human") { res("human_edited"); continue; }
     let d; try { d = JSON.parse(live.data); } catch { res("bad_data"); continue; }
     if (String(it.base || "") !== (await stateHash(d))) { res("changed_meanwhile"); continue; }
     const next = JSON.parse(live.data), fields = [];
     const de = it.de || {}, setFaq = (v) => { next.faq = { ...(next.faq || {}), ...v }; };
-    next.desc = { en: d.desc?.en || "", de: d.desc?.de || "" }; next.long = { en: d.long?.en || "", de: d.long?.de || "" };
+    // nur en/de setzen, weitere Sprachen der live-Fassung (desc.nl ...) bleiben erhalten
+    next.desc = { ...(isObj(d.desc) ? d.desc : {}), en: d.desc?.en || "", de: d.desc?.de || "" }; next.long = { ...(isObj(d.long) ? d.long : {}), en: d.long?.en || "", de: d.long?.de || "" };
     const dEn = txt(it.desc, 300), lEn = longTxt(it.long, 3000), dDe = txt(de.desc, 300), lDe = longTxt(de.long, 3000);
     if (dEn.length >= 20 && next.desc.en.length < SHORT_DESC && dEn !== next.desc.en) { next.desc.en = dEn; fields.push("desc.en"); }
     if (lEn && !next.long.en) { next.long.en = lEn; fields.push("long.en"); }
@@ -62,7 +74,7 @@ export async function fillEntities(env, items) {
     const fe = faqList(it.faq), fd = faqList(de.faq);
     if (fe.length && !next.faq?.en?.length) { setFaq({ en: fe }); fields.push("faq.en"); }
     if (fd.length && !next.faq?.de?.length) { setFaq({ de: fd }); fields.push("faq.de"); }
-    if (!next.long.en && !next.long.de) delete next.long;
+    if (!next.long.en && !next.long.de) { delete next.long.en; delete next.long.de; if (!Object.keys(next.long).length) delete next.long; }
     // Weitere Sprachen: ent_tr (Quelle fuer /api/entity/tr); INSERT OR IGNORE, vorhandene Uebersetzungen bleiben
     const trStmts = [];
     for (const [lang, v] of Object.entries(it.tr && typeof it.tr === "object" ? it.tr : {})) {
@@ -71,8 +83,17 @@ export async function fillEntities(env, items) {
         if (val) trStmts.push(db.prepare("INSERT OR IGNORE INTO ent_tr(eid,field,lang,text,created) VALUES(?,?,?,?,?)").bind(id, f, lang, val, t));
     }
     const stmts = [];
+    // Auto-Uebersetzung (autotr.js) abstimmen: fuer jedes geaenderte Feld gilt der neue Text als gesehen (gleicher Hash wie dort), die Uebersetzungen des alten
+    // Texts sind veraltet und gehen; die mitgelieferten Sprachfassungen (unten) gelten fuer den neuen Text - sonst loescht autotr sie und kauft sie neu
+    for (const f of ["desc", "long"]) {
+      if (!fields.some((x) => x.startsWith(f + "."))) continue;
+      const src = entTrSource(next[f]); if (!src || src === entTrSource(d[f])) continue;
+      const mine = "EXISTS (SELECT 1 FROM entity_rev WHERE eid=? AND status='live' AND user_id=? AND created=?)";   // nur, wenn der Entwurf wirklich live wurde
+      stmts.push(db.prepare(`INSERT INTO ent_tr_seen(eid,field,first,h) SELECT ?,?,?,? WHERE ${mine} ON CONFLICT(eid,field) DO UPDATE SET first=excluded.first,h=excluded.h`).bind(id, f, t, entTrHash(src), id, sys, t),
+        db.prepare(`DELETE FROM ent_tr WHERE eid=? AND field=? AND ${mine}`).bind(id, f, id, sys, t));
+    }
     if (fields.length) {
-      stmts.push(db.prepare("UPDATE entity_rev SET status='old' WHERE id=? AND status='live' AND user_id IS ?").bind(live.id, live.user_id),
+      stmts.unshift(db.prepare("UPDATE entity_rev SET status='old' WHERE id=? AND status='live' AND user_id IS ?").bind(live.id, live.user_id),
         db.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) SELECT ?,?,?,?,'live',? WHERE NOT EXISTS (SELECT 1 FROM entity_rev WHERE eid=? AND status='live')")
           .bind(id, JSON.stringify(next), `${AI_PREFIX}: ${fields.join(", ")}`.slice(0, 140), sys, t, id));
     }

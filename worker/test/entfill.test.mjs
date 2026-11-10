@@ -3,7 +3,8 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { handleEntFill, stateHash } from "../src/entfill.js";
-import { handleEntity, importEntitiesFromSite } from "../src/entities.js";
+import { handleEntity, importEntitiesFromSite, mergeFromJson, syncEntitiesFromSite } from "../src/entities.js";
+import { ensureEntTr, entTrHash, entTrSource } from "../src/autotr.js";
 import { handleAdminPanel } from "../src/adminpanel.js";
 
 const J = (data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "content-type": "application/json" } });
@@ -93,5 +94,64 @@ test("Uebernahme aus dem Repo: idempotent, nur Eintraege ohne DB-Fassung, kein K
     assert.equal(raw.prepare("SELECT COUNT(*) n FROM org_entity WHERE eid='contoso'").get().n, 1, "Firmen-Entitaet bekommt ihre Firma automatisch");
     const q = new Request("https://api.test/api/admin/panel/import-entities", { method: "POST" });
     assert.equal((await handleAdminPanel(env, q, new URL(q.url), "/api/admin/panel/import-entities", { admin: true }, J)).status, 404);
+  } finally { globalThis.fetch = old; }
+});
+
+test("Selbst verwaltete Entitaet (Claim verified): kein KI-Entwurf, Export src owned", async () => {
+  const { raw, env } = await setup();
+  seedRev(raw, "hub", thin); seedRev(raw, "free", thin);
+  raw.prepare("INSERT INTO users(id,provider,sub,name,created) VALUES(5,'t','5','Owner',1)").run();
+  raw.prepare("INSERT INTO entity_claims(eid,user_id,status,created) VALUES('hub',5,'verified',1)").run();
+  const r = await call(env, "k", { items: [item("hub", await stateHash(thin)), item("free", await stateHash(thin))] });
+  assert.deepEqual(r.j.results.map((x) => x.status), ["owned", "ok"]);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM entity_rev WHERE eid='hub' AND summary LIKE 'KI-Entwurf%'").get().n, 0);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM ent_tr WHERE eid='hub'").get().n, 0);
+  const q = new Request("https://api.test/api/entity/export"), x = await handleEntity(env, q, new URL(q.url), "/api/entity/export", null, J), by = Object.fromEntries((await x.json()).items.map((i) => [i.id, i]));
+  assert.deepEqual([by.hub.src, by.free.src], ["owned", "ai"]);
+});
+
+test("KI-Entwurf behaelt Beschreibungen weiterer Sprachen (desc.nl)", async () => {
+  const { raw, env } = await setup();
+  const multi = { ...thin, desc: { en: "A hub.", de: "", nl: "Contoso Hub is een dienst." }, long: { nl: "Lange tekst." } };
+  seedRev(raw, "hub", multi);
+  assert.equal((await call(env, "k", { items: [item("hub", await stateHash(multi))] })).j.results[0].status, "ok");
+  const d = JSON.parse(raw.prepare("SELECT data FROM entity_rev WHERE eid='hub' AND status='live'").get().data);
+  assert.equal(d.desc.nl, "Contoso Hub is een dienst."); assert.equal(d.long.nl, "Lange tekst."); assert.match(d.desc.en, /organising shared team/);
+});
+
+test("Auto-Uebersetzung abgestimmt: neuer Text gilt als gesehen, alte desc-Uebersetzungen gehen, neue bleiben", async () => {
+  const { raw, env } = await setup();
+  seedRev(raw, "hub", thin);
+  await ensureEntTr(env.DB);
+  raw.prepare("INSERT INTO ent_tr_seen(eid,field,first,h) VALUES('hub','desc',1,?)").run(entTrHash(entTrSource(thin.desc)));
+  raw.prepare("INSERT INTO ent_tr(eid,field,lang,text,created) VALUES('hub','desc','fr','Un hub.',1),('hub','desc','es','Un hub.',1)").run();
+  assert.equal((await call(env, "k", { items: [item("hub", await stateHash(thin))] })).j.results[0].status, "ok");
+  const d = JSON.parse(raw.prepare("SELECT data FROM entity_rev WHERE eid='hub' AND status='live'").get().data);
+  const seen = Object.fromEntries(raw.prepare("SELECT field,h FROM ent_tr_seen WHERE eid='hub'").all().map((r) => [r.field, r.h]));
+  assert.equal(seen.desc, entTrHash(entTrSource(d.desc)), "autotr sieht keinen geaenderten Text -> loescht nichts");
+  assert.equal(seen.long, entTrHash(entTrSource(d.long)));
+  const tr = raw.prepare("SELECT lang,text FROM ent_tr WHERE eid='hub' AND field='desc' ORDER BY lang").all().map((r) => [r.lang, r.text]);
+  assert.deepEqual(tr, [["fr", "Contoso Hub est un service."]], "Uebersetzung des alten Kurztexts (es) ist weg, die neue (fr) steht");
+});
+
+test("T30-Abgleich: KI-Entwurf ist keine Menschen-Aenderung - unveraenderte JSON setzt ihn nicht zurueck, Redaktions-Aenderung gewinnt", async () => {
+  const { raw, env } = await setup(), old = globalThis.fetch;
+  seedRev(raw, "hub", thin); seedRev(raw, "other", thin);
+  await call(env, "k", { items: [item("hub", await stateHash(thin)), item("other", await stateHash(thin))] });
+  const sys = raw.prepare("SELECT id FROM users WHERE sub='ki-entwurf'").get().id;
+  const revs = (eid) => raw.prepare("SELECT id,data,user_id,summary,status FROM entity_rev WHERE eid=? ORDER BY (status='live'), id").all(eid).map((r) => ({ ...r, data: JSON.parse(r.data) }));
+  const edited = { ...thin, desc: { en: "Contoso Hub is the editorial description of the product, improved by the team in entities.json.", de: "" }, long: { en: "Editorial long text." } };
+  const m = mergeFromJson(edited, revs("hub"), sys);
+  assert.deepEqual([m.fields, m.kept], [["desc.en", "long.en"], []]);
+  assert.equal(m.data.desc.en, edited.desc.en);
+  const same = mergeFromJson(thin, revs("hub"), sys);   // Repo noch mit dem alten Kurztext: KI-Text bleibt
+  assert.deepEqual([same.fields, same.kept], [[], []]);
+  assert.deepEqual(mergeFromJson(edited, revs("hub")).kept, ["desc.en", "long.en"], "ohne sysId galt der Entwurf als Mensch (alter Fehler)");
+  globalThis.fetch = async (u) => (String(u).endsWith("/entities-src.json") ? { ok: true, json: async () => ({ entities: [{ id: "hub", ...edited }, { id: "other", ...thin }] }) } : { ok: false, json: async () => ({}) });
+  try {
+    const r = await syncEntitiesFromSite(env);
+    assert.equal(r.updated, 1, JSON.stringify(r));
+    assert.equal(JSON.parse(raw.prepare("SELECT data FROM entity_rev WHERE eid='hub' AND status='live'").get().data).long.en, "Editorial long text.");
+    assert.match(JSON.parse(raw.prepare("SELECT data FROM entity_rev WHERE eid='other' AND status='live'").get().data).desc.en, /organising shared team/);
   } finally { globalThis.fetch = old; }
 });

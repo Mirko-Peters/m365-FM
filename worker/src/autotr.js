@@ -75,6 +75,10 @@ const SKIP_TYPES = ["person", "event", "org"], ENT_PER_RUN = 8, ENT_CAP = 300;
 const ESYS = "You translate encyclopedia texts about Microsoft products and IT concepts. Translate the JSON values into the requested language and answer with the JSON object only, same keys. " +
   "Never translate names: product and feature names, event, person and company names, abbreviations and codes (e.g. Copilot Studio, Power Fx, MS-900, M365Con). Keep the structure exactly: paragraphs (blank lines), headings (== ... ==, ### ... or lines starting with #), lists, links and URLs. Keep tone and length. No commentary.";
 
+// Quelltext eines Entitaetsfelds, wie ihn die Auto-Uebersetzung sieht (en, sonst de), und sein Hash in ent_tr_seen; entfill.js traegt damit eigene Texte ein
+export const entTrSource = (v) => ((v?.en || "").trim() || (v?.de || "").trim()).slice(0, 8000);
+export const entTrHash = (x) => { let h = 5381; for (let i = 0; i < x.length; i++) h = ((h << 5) + h + x.charCodeAt(i)) | 0; return String(h); };
+
 export async function ensureEntTr(db) {
   await db.prepare("CREATE TABLE IF NOT EXISTS ent_tr (eid TEXT NOT NULL, field TEXT NOT NULL, lang TEXT NOT NULL, text TEXT NOT NULL, created INTEGER NOT NULL, PRIMARY KEY (eid, field, lang))").run();
   await db.prepare("CREATE TABLE IF NOT EXISTS ent_tr_seen (eid TEXT NOT NULL, field TEXT NOT NULL, first INTEGER NOT NULL, h TEXT NOT NULL DEFAULT '', PRIMARY KEY (eid, field))").run();
@@ -90,12 +94,12 @@ export async function autoTranslateEntities(env, entityMap) {
   const claimed = new Set(((await db.prepare("SELECT eid FROM entity_claims WHERE status='verified'").all()).results || []).map((r) => r.eid));
   const seen = new Map(((await db.prepare("SELECT eid,field,first,h FROM ent_tr_seen").all()).results || []).map((r) => [r.eid + "|" + r.field, r]));
   const have = new Set(((await db.prepare("SELECT eid,field,lang FROM ent_tr").all()).results || []).map((r) => r.eid + "|" + r.field + "|" + r.lang));
-  const hash = (x) => { let h = 5381; for (let i = 0; i < x.length; i++) h = ((h << 5) + h + x.charCodeAt(i)) | 0; return String(h); };
+  const hash = entTrHash;
   const jobs = [];
   for (const e of map.values()) {
     if (SKIP_TYPES.includes(e.type) || claimed.has(e.id) || e.outdated || e.replaced_by) continue;
     const src = {}; let from = "";
-    for (const f of ["desc", "long"]) { const v = e[f] || {}; const txt = (v.en || "").trim() || (v.de || "").trim(); if (txt) { src[f] = txt.slice(0, 8000); from ||= (v.en || "").trim() ? "en" : "de"; } }
+    for (const f of ["desc", "long"]) { const v = e[f] || {}; const txt = entTrSource(v); if (txt) { src[f] = txt; from ||= (v.en || "").trim() ? "en" : "de"; } }
     if (!Object.keys(src).length) continue;
     for (const f of Object.keys(src)) {   // Text neu oder geaendert: Wartezeit beginnt von vorn
       const k = e.id + "|" + f, h = hash(src[f]), s = seen.get(k);
