@@ -297,6 +297,7 @@ jobs:
       # Alte Adressen www.m365.fm/og/... leitet der Site-Worker per 301 auf img.m365.fm weiter. Geloescht werden nur persoenliche Karten
       # (Einladungskarte og/einladung/<kuerzel>.png, Profilkarte og/[<sprache>/]community/u/<kuerzel>.png), die der Bau nicht mehr erzeugt:
       # Konto geloescht oder Profil nicht mehr oeffentlich (#320). Sicherung gegen Massenloeschung; bewusst uebergehen: Repo-Variable OG_PRUNE_FORCE=1.
+      # Ist der Profil-Export frisch abgerufen und leer (Merker r2img/profiles-export.json), gehen auch die letzten Karten ohne OG_PRUNE_FORCE.
       - name: Teilen-Bilder - Ersatzbild fuer jede Seite ohne Bild
         run: python generate_og.py --fallback-only
       # Illustrationen der Service-Landingpages (site_landing.py): Pillow, deterministisch, wenige Sekunden. Blockierend, weil die Seiten

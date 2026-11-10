@@ -88,7 +88,7 @@ class MembersTest(unittest.TestCase):
     def test_fetch_members_filters_live_export_and_cache(self):
         import tempfile
         with tempfile.TemporaryDirectory() as d:
-            cache = Path(d) / "members_export.json"
+            cache = Path(d) / "members_export.json"; mark = mock.patch.object(MEM, "MARK", Path(d) / "profiles-export.json"); mark.start(); self.addCleanup(mark.stop)
             with mock.patch.object(MEM, "CACHE", cache), mock.patch.object(MEM, "_fetch_export", return_value=self.export()):
                 people, orgs = MEM.fetch_members("https://api.example.test")
             self.assertEqual([i["id"] for i in people[0]["items"]], [101]); self.assertEqual(orgs[0]["items"], [])

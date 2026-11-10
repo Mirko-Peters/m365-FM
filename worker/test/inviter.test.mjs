@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createRequire } from "node:module";
 import worker from "../src/index.js";
-import { recordInvite, handleInviter, inviteCount, syncInviterBadges, creditPending, deleteUserInvites, clickToken, readClick, REF_DAY_CAP, REF_IP_CAP, PEND_RUN } from "../src/inviter.js";
+import { recordInvite, handleInviter, inviteCount, syncInviterBadges, creditPending, deleteUserInvites, clickToken, readClick, netOf, REF_DAY_CAP, REF_IP_CAP, PEND_RUN } from "../src/inviter.js";
 import { evalBadges, INVITER_TIERS, inviterTier, badgesFor, stats } from "../src/badges.js";
 import { mergeStatements } from "../src/identities.js";
 import { handleEntityInvite } from "../src/entinvite.js";
@@ -453,4 +453,30 @@ test("Cron (320-7): syncInviterBadges laeuft einmal am Tag (06:00), nicht bei je
     assert.deepEqual(await runs("*/30 * * * *", "2026-11-10T06:00:00Z"), [], "um 06:00 laeuft nur der Tageslauf");
     assert.equal((await runs("*/15 * * * *", "2026-11-10T06:15:00Z")).filter((n) => n === "syncInviterBadges").length, 0);
   } finally { console.error = err; console.log = log; restore(); }
+});
+
+test("F06 (#320) Tagesgrenze streng: in keinen 24 h mehr als REF_DAY_CAP Link-Zurechnungen, auch nicht ueber den Tageslauf; IPv6 zaehlt je /64", async () => {
+  const { raw, env, restore } = await setup(), day0 = Date.UTC(2026, 10, 9, 6, 30) / 1000, c = clock(day0 - 600);
+  try {
+    user(raw, 1, { handle: "viral", created: c.t - 86400 }); const token = await click(env, "viral"); c.t = day0;
+    let id = 5000; const fresh = () => { user(raw, ++id, { created: c.t }); return { id }; };
+    for (let i = 0; i < 100; i++) await post(env, "/api/invite/ref", fresh(), { token }, "192.0.2." + i);   // 100 Anmeldungen um 06:30 von 100 Adressen
+    assert.equal(await inviteCount(env.DB, 1), REF_DAY_CAP);
+    const run = async (at) => { c.t = at; await syncInviterBadges(env); return inviteCount(env.DB, 1); };
+    const maxIn24h = () => { const ts = raw.prepare("SELECT created FROM invite_success WHERE inviter_user_id=1 AND source='ref' ORDER BY created").all().map((r) => r.created); return Math.max(...ts.map((t) => ts.filter((u) => u >= t && u < t + 86400).length)); };
+    const six = (d, s = 3) => Date.UTC(2026, 10, 9 + d, 6, 0, s) / 1000;
+    assert.equal(await run(six(1)), REF_DAY_CAP, "06:00 am Folgetag: die 20 von 06:30 liegen noch in den letzten 24 h");
+    assert.equal(await run(six(2)), 2 * REF_DAY_CAP);
+    assert.equal(await run(six(3, 1)), 2 * REF_DAY_CAP, "zwei Sekunden vor Ablauf der 24 h: der Rest wartet einen Tag");
+    assert.equal(await run(six(4, 5)), 3 * REF_DAY_CAP);
+    assert.equal(maxIn24h(), REF_DAY_CAP);
+    // IPv6: Adressen aus einem /64 sind ein Anschluss (REF_IP_CAP), ein anderes /64 ist ein anderer
+    assert.deepEqual(["2001:db8:1:2::1", "2001:DB8:1:2:ffff:0:0:9", "2001:db8:1:2:0:0:0:abcd", "2001:db8:1:3::1", "::ffff:198.51.100.4", "198.51.100.4", "::1"].map(netOf),
+      ["2001:db8:1:2::/64", "2001:db8:1:2::/64", "2001:db8:1:2::/64", "2001:db8:1:3::/64", "198.51.100.4", "198.51.100.4", "0:0:0:0::/64"]);
+    user(raw, 2, { handle: "zwei", created: c.t - 86400 }); const t2 = await click(env, "zwei"); c.t += 60;
+    const res = []; for (let i = 0; i < REF_IP_CAP + 2; i++) res.push(await (await post(env, "/api/invite/ref", fresh(), { token: t2 }, `2001:db8:aa:bb::${(i + 1).toString(16)}`)).json());
+    assert.deepEqual(res.map((x) => !!x.counted), [...Array(REF_IP_CAP).fill(true), false, false]);
+    assert.equal((await (await post(env, "/api/invite/ref", fresh(), { token: t2 }, "2001:db8:aa:bc::1")).json()).counted, true);
+    assert.equal(raw.prepare("SELECT COUNT(*) n FROM ratelimit WHERE k LIKE '%2001%'").get().n, 0, "nur der Hash steht in der Datenbank");
+  } finally { c.restore(); restore(); }
 });

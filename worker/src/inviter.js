@@ -57,6 +57,15 @@ export async function recordInvite(env, { inviter, invitee, source, ref = "", si
   await evalBadges(env, inviter).catch(() => 0);
   return true;
 }
+// Anschluss fuer die Grenze je Anschluss: IPv4 wie geliefert, IPv6 als /64-Netz (ein Anschluss bekommt meist ein ganzes /64 und kann darin
+// beliebig viele Adressen nutzen). Gespeichert wird davon nur ein Hash.
+export function netOf(ip) {
+  const s = String(ip || "").trim().toLowerCase(), v4 = /(?:^|:)(\d{1,3}(?:\.\d{1,3}){3})$/.exec(s);
+  if (v4 || !s.includes(":")) return v4 ? v4[1] : s;
+  const [h, t] = s.split("::"), hs = h ? h.split(":") : [], ts = t ? t.split(":") : [];
+  const g = s.includes("::") ? [...hs, ...Array(Math.max(0, 8 - hs.length - ts.length)).fill("0"), ...ts] : hs;
+  return g.slice(0, 4).map((x) => (parseInt(x, 16) || 0).toString(16)).join(":") + "::/64";
+}
 const insertInvite = async (db, { inviter, invitee, source, ref = "" }) => (await db.prepare("INSERT OR IGNORE INTO invite_success(inviter_user_id,invitee_user_id,source,ref,created) VALUES(?,?,?,?,?)").bind(inviter, invitee, source, String(ref).slice(0, 80), now()).run()).meta?.changes > 0;
 
 // Zurechnungen ueber den Link an diesen Einlader in den letzten win Sekunden (Tagesgrenze)
@@ -67,15 +76,17 @@ const refDay = async (db, inviter, win = 86400) => (await db.prepare("SELECT COU
 // ueber den Link pro Tag (direkte und nachgeholte zusammen); Zeilen, die an der Grenze je Anschluss lagen (held=1), hoechstens REF_IP_CAP je
 // Einlader und Tag (Zaehler invref:late:<einlader>, auch bei mehreren Laeufen am Tag) - der Hash der IP-Adresse wird dafuer nicht aufbewahrt.
 // Vor dem Zaehlen wird alles erneut geprueft (Einlader aktiv, Konto berechtigt, nach dem Klick entstanden und niemandem zugerechnet); was nicht
-// mehr zaehlen kann, entfaellt. Die Stufe bewertet danach syncInviterBadges, einmal je Einlader. Fenster 23 h statt 24 h: der Lauf von gestern
-// (06:00, auf die Sekunde nie gleich) darf den von heute nicht blockieren.
+// mehr zaehlen kann, entfaellt. Die Stufe bewertet danach syncInviterBadges, einmal je Einlader. Die Tagesgrenze REF_DAY_CAP zaehlt wie beim
+// direkten Weg die letzten 24 h (streng: in keinen 24 h mehr als REF_DAY_CAP). Hat der Lauf von gestern die Grenze ausgeschoepft, wartet der Rest
+// deshalb einen Tag laenger (der heutige Lauf kommt ein paar Sekunden vor Ablauf der 24 h); mit einem Fenster von 23 h waren einmalig fast doppelt
+// so viele in 24 h moeglich. Fuer die Tagesmenge der an der Anschluss-Grenze vorgemerkten (invref:late) bleibt es bei 23 h.
 export async function creditPending(env, max = PEND_RUN) {
   const db = env.DB; await ensureInvites(db);
   const all = async (sql, ...b) => (await db.prepare(sql).bind(...b).all()).results || [];
   const pick = (i, held, n) => all("SELECT * FROM invite_pending WHERE inviter_user_id=? AND held=? ORDER BY created,invitee_user_id LIMIT ?", i, held, n);
   let n = 0;
   for (const { i } of await all("SELECT inviter_user_id i FROM invite_pending GROUP BY inviter_user_id ORDER BY MIN(created) LIMIT 100")) {
-    let room = Math.min(REF_DAY_CAP - await refDay(db, i, 82800), max - n); if (room <= 0) continue;
+    let room = Math.min(REF_DAY_CAP - await refDay(db, i), max - n); if (room <= 0) continue;
     const rows = [...await pick(i, 0, room), ...await pick(i, 1, Math.min(room, REF_IP_CAP))].sort((a, b) => a.created - b.created);
     let full = false;   // Tagesmenge der an der Anschluss-Grenze vorgemerkten erreicht
     for (const r of rows) {
@@ -152,7 +163,7 @@ export async function handleInviter(env, request, url, path, user, J) {
     // Tagesgrenzen erst, wenn die Einladung sonst zaehlen wuerde: je Einlader von einem Anschluss (der Zaehler gehoert zum Einlader - ein Buero oder
     // Mobilfunknetz, das zwei Mitglieder einladen, teilt ihn nicht) und je Einlader insgesamt. Darueber geht nichts verloren und niemand muss
     // wiederkommen: die Zurechnung wird vorgemerkt, der Tageslauf holt sie nach (creditPending). held=1: lag an der Grenze je Anschluss.
-    const ip = (await sha256hex(`${env.SESSION_SECRET}:invref:${request.headers.get("cf-connecting-ip") || "0"}`)).slice(0, 32);
+    const ip = (await sha256hex(`${env.SESSION_SECRET}:invref:${netOf(request.headers.get("cf-connecting-ip")) || "0"}`)).slice(0, 32);
     const held = !(await rateLimit(db, `invref:ip:${o.inviter}:${ip}`, REF_IP_CAP, 86400)) ? 1 : (await refDay(db, o.inviter)) >= REF_DAY_CAP ? 0 : -1;
     if (held < 0) return J({ ok: true, counted: await recordInvite(env, o) });
     await db.prepare("INSERT OR IGNORE INTO invite_pending(invitee_user_id,inviter_user_id,ref,since,held,created) VALUES(?,?,?,?,?,?)").bind(user.id, o.inviter, k.h, k.t, held, now()).run();

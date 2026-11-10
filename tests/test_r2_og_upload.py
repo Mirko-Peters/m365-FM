@@ -140,6 +140,79 @@ class PersonalCardsTest(unittest.TestCase):
         self.assertEqual(self.s3.log, [("delete", "og/einladung/max-m.png")])
 
 
+class EmptyExportTest(unittest.TestCase):
+    """F07 (Folge-PR zu #320): ist der Profil-Export frisch abgerufen und leer (letztes oeffentliches Profil entfernt), gehen auch die letzten
+    persoenlichen Karten ohne OG_PRUNE_FORCE; ist er ausgefallen (Zwischenspeicher, fehlt) oder fehlen nur die Karten im Bau, greift die Sicherung weiter."""
+    KEEP = {"og/index.png": b"A", "og/community/u/max-m/blog/post.png": b"S"}
+    CARDS = {"og/einladung/max-m.png": b"M", "og/community/u/max-m.png": b"P", "og/de/community/u/max-m.png": b"Q"}
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory(); self.src, self.s3 = Path(self.tmp.name) / "r2img", EtagS3()
+        for rel, body in {**self.KEEP, **self.CARDS}.items():
+            p = self.src / rel; p.parent.mkdir(parents=True, exist_ok=True); p.write_bytes(body)
+        self.assertEqual(run_upload(self.src, self.s3), 0)
+        for rel in self.CARDS: (self.src / rel).unlink()   # der Bau erzeugt keine persoenliche Karte mehr
+        self.s3.log.clear()
+    def tearDown(self): self.tmp.cleanup()
+
+    def run_with(self, mark):
+        if mark is not None: (self.src / "profiles-export.json").write_text(mark if isinstance(mark, str) else json.dumps(mark), "utf-8")
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out): rc = run_upload(self.src, self.s3, required=True)
+        return rc, out.getvalue()
+
+    def test_frisch_und_leer_loescht_die_letzten_karten(self):
+        rc, out = self.run_with({"state": "frisch", "people": 0})
+        self.assertEqual(rc, 0); self.assertEqual(sorted(self.s3.obj), sorted(self.KEEP))
+        self.assertEqual(sorted(x[1] for x in self.s3.log if x[0] == "delete"), sorted(self.CARDS))
+        self.assertNotIn("max-m", out); self.assertNotIn("::warning::", out)
+        self.assertNotIn("profiles-export.json", self.s3.obj, "der Merker wird nicht hochgeladen")
+
+    def test_frisch_und_leer_auch_ueber_der_mengen_sicherung(self):
+        for i in range(12): self.s3.obj[f"og/einladung/alt-{i}.png"] = {"body": b"X", "ct": "image/png", "meta": {}}
+        self.assertEqual(self.run_with({"state": "frisch", "people": 0})[0], 0)
+        self.assertEqual(sorted(self.s3.obj), sorted(self.KEEP))
+
+    def test_ausgefallener_export_loescht_nichts(self):
+        for mark in (None, {"state": "cache", "people": 0}, {"state": "fehlt", "people": 0}, {"state": "frisch", "people": 3}, {"state": "frisch"}, "kaputt"):
+            rc, out = self.run_with(mark)
+            self.assertEqual(rc, 0); self.assertEqual(self.s3.log, [], mark); self.assertIn("nichts geloescht", out)
+            (self.src / "profiles-export.json").unlink(missing_ok=True)
+
+
+class MembersExportMarkTest(unittest.TestCase):
+    """site_members.fetch_members: ein frisch abgerufener, leerer Export ersetzt die gespeicherte Fassung (keine Seiten und Karten entfernter Profile)
+    und setzt den Merker fuer den Upload; ein Ausfall nutzt die gespeicherte Fassung und markiert "cache"."""
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory(); t = Path(self.tmp.name)
+        sys.path.insert(0, str(ROOT))
+        try: import site_members as MEM; import site_fetch as SF
+        finally: sys.path.remove(str(ROOT))
+        self.MEM, self.SF, self.cache, self.mark = MEM, SF, t / "members_export.json", t / "r2img" / "profiles-export.json"
+        self.cache.write_text(json.dumps({"people": [{"handle": "max-m", "name": "Max", "items": []}], "orgs": []}), "utf-8")
+    def tearDown(self): self.tmp.cleanup()
+
+    def fetch(self, export, state):
+        from unittest import mock
+        url = "https://api.example.test/api/profiles/export"
+        with mock.patch.object(self.MEM, "CACHE", self.cache), mock.patch.object(self.MEM, "MARK", self.mark), mock.patch.object(self.MEM, "_fetch_export", return_value=export), \
+                mock.patch.object(self.SF, "states", return_value={url: state}), mock.patch("time.sleep"), contextlib.redirect_stderr(io.StringIO()):
+            people, _ = self.MEM.fetch_members("https://api.example.test")
+        return [p["handle"] for p in people], json.loads(self.mark.read_text("utf-8"))
+
+    def test_frisch_leer(self):
+        self.assertEqual(self.fetch({"people": [], "orgs": []}, "frisch"), ([], {"state": "frisch", "people": 0}))
+        self.assertEqual(json.loads(self.cache.read_text("utf-8"))["people"], [], "die gespeicherte Fassung folgt dem Export")
+
+    def test_leer_mit_fehlern_oder_aus_zwischenspeicher_gilt_als_ausfall(self):
+        self.assertEqual(self.fetch({"people": [], "orgs": [], "failed": 3}, "frisch"), (["max-m"], {"state": "cache", "people": 1}))
+        self.assertEqual(self.fetch({"people": [], "orgs": []}, "cache"), (["max-m"], {"state": "cache", "people": 1}))
+        self.assertEqual(self.fetch(None, "fehlt"), (["max-m"], {"state": "cache", "people": 1}))
+
+    def test_frisch_mit_profilen(self):
+        self.assertEqual(self.fetch({"people": [{"handle": "anna-b", "name": "Anna", "items": []}], "orgs": []}, "frisch"), (["anna-b"], {"state": "frisch", "people": 1}))
+
+
 class GenerateOgTest(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory(); t = self.t = Path(self.tmp.name)

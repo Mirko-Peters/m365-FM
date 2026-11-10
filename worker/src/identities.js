@@ -227,6 +227,7 @@ export async function mergeStatements(db, S, T) {
   st.push(q("UPDATE edit_log SET item_id=?||substr(item_id,instr(item_id,':')) WHERE kind='cert' AND item_id LIKE ?", String(T), `${S}:%`));   // Zertifikats-Eintraege tragen die Nutzer-ID im Schluessel
   st.push(q("UPDATE edit_proposals SET item_id=?||substr(item_id,instr(item_id,':')) WHERE kind='cert' AND item_id LIKE ?", String(T), `${S}:%`));
   st.push(q("UPDATE edit_log SET item_id=? WHERE kind='user' AND item_id=?", String(T), String(S)));
+  st.push(q("UPDATE edit_log SET item_id=substr(item_id,1,instr(item_id,':'))||? WHERE kind='event_claim' AND item_id LIKE ?", String(T), `%:${S}`));   // Beanspruchung eines Events (#317, <event>:<nutzer>) wie event_claims
   set("editor_votes", "voter_id");
   st.push(q("DELETE FROM editor_votes WHERE voter_id=? AND app_id IN (SELECT id FROM editor_applications WHERE user_id=?)", T, T));   // keine Stimme fuer die eigene Bewerbung
   // Bewerbungen von S, die T nicht mehr braucht (Rolle schon vorhanden), schliessen; von zwei offenen bleibt die aeltere
