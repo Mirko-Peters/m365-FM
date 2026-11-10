@@ -162,6 +162,8 @@ class Modes(unittest.TestCase):
         d = Path(tempfile.mkdtemp()); rows = U.run_plan(Fake(world()), self.pages(), res(), [6704921], out=lambda *_: 0)
         U.save_state(rows, {"at": "t"}, d / "s.json")
         self.assertEqual(json.loads((d / "s.json").read_text())["episodes"]["1"]["s"], "differs")
+        e = json.loads((d / "s.json").read_text())["episodes"]["1"]   # Titel und abweichende Felder fuer die Listen im Admin-Reiter
+        self.assertEqual(e["t"], "Keep"); self.assertTrue(e["f"]); self.assertLessEqual(set(e["f"]), {"episode_link", "description_html"})
 
 
 class Safety(unittest.TestCase):

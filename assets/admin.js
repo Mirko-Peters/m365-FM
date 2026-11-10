@@ -68,9 +68,31 @@
     slinks: function () { sponsorLinks(); },
     spurls: function () { var p = panes.spurls; p.textContent = ""; p.appendChild(h("h2", { text: "Spreaker-Adressen der Folgen" }));
       api("/api/admin/panel/episode-urls").then(function (r) { if (r.s !== 200) { p.appendChild(h("p", { class: "adm-msg bad", text: "Nicht abrufbar" })); return; } var d = r.j, run = d.last_run;
-        p.appendChild(h("div", { class: "adm-grid" }, [tile("In Ordnung", d.ok), tile("Weicht ab", d.differs), tile("Ohne Seite", d.missing), tile("Nicht veröffentlicht", d.skipped), tile("Fehler", d.error)]));
+        var lst = h("div"), FL = { episode_link: "Website-Link", description_html: "Beschreibung" };
+        function showList(st, label, off, q) {   // klickbare Kacheln: Folgen dieses Status (je 100, mit Suche)
+          if (!off) { lst.textContent = ""; lst.appendChild(h("h3", { text: label })); var qi = h("input", { type: "search", placeholder: "Titel, Adresse oder Folgen-ID", "aria-label": "Liste durchsuchen", value: q || "" });
+            lst.appendChild(h("p", {}, [qi, " ", h("button", { type: "button", class: "btn", text: "Suchen", onclick: function () { showList(st, label, 0, qi.value); } })])); }
+          var more = lst.querySelector(".spl-more"); if (more) more.remove();
+          api("/api/admin/panel/episode-urls/list?status=" + encodeURIComponent(st) + "&offset=" + (off || 0) + "&q=" + encodeURIComponent(q || "")).then(function (r) {
+            if (r.s !== 200) { lst.appendChild(h("p", { class: "adm-msg bad", text: "Liste nicht abrufbar" })); return; }
+            var j = r.j, tb = lst.querySelector("tbody");
+            if (!tb) { if (!j.total) { lst.appendChild(h("p", { class: "mut", text: "Keine Folgen." })); return; }
+              var tbl = h("table", { class: "adm-tbl" }, [h("thead", {}, [h("tr", {}, [h("th", { text: "Folge" }), h("th", { text: "Sprache / Show" }), h("th", { text: "Bei Spreaker" }), h("th", { text: "Soll" }), h("th", { text: "Weicht ab" })])])]);
+              tb = h("tbody"); tbl.appendChild(tb); lst.appendChild(h("p", { class: "mut", text: j.total + " Folgen" })); lst.appendChild(tbl); }
+            j.items.forEach(function (x) {
+              var link = function (u, t) { return u ? h("a", { href: u, target: "_blank", rel: "noopener", text: t || u }) : h("span", { class: "mut", text: "(leer)" }); };
+              tb.appendChild(h("tr", {}, [h("td", {}, [link(x.spreaker, x.title || ("Folge " + x.id))]), h("td", { text: (x.lang || "–") + " · " + (x.show_id || "–") }),
+                h("td", {}, [link(x.url_on_spreaker)]), h("td", {}, [link(x.url)]), h("td", { text: (x.fields || []).map(function (f) { return FL[f] || f; }).join(", ") || "–" })]));
+            });
+            if (j.offset + j.items.length < j.total) lst.appendChild(h("p", { class: "spl-more" }, [h("button", { type: "button", class: "btn", text: "Weitere laden", onclick: function () { showList(st, label, j.offset + 100, q); } })]));
+          });
+        }
+        function ctile(label, v, st) { var t = tile(label, v); if (!v) return t; t.setAttribute("role", "button"); t.setAttribute("tabindex", "0"); t.setAttribute("style", "cursor:pointer"); t.setAttribute("title", "Liste anzeigen");
+          var go = function () { showList(st, label, 0, ""); if (lst.scrollIntoView) lst.scrollIntoView({ behavior: "smooth", block: "start" }); };
+          t.addEventListener("click", go); t.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } }); return t; }
+        p.appendChild(h("div", { class: "adm-grid" }, [ctile("In Ordnung", d.ok, "ok"), ctile("Weicht ab", d.differs, "differs"), ctile("Ohne Seite", d.missing, "missing"), ctile("Nicht veröffentlicht", d.skipped, "skipped"), ctile("Fehler", d.error, "error")]));
         p.appendChild(h("p", { class: "mut", text: run ? "Letzter Lauf: " + run.at + " (" + run.mode + "), geändert " + (run.changed || 0) + " von " + (run.checked || 0) + " Folgen." + (run.show_errors && run.show_errors.length ? " Folgenliste nicht lesbar (nicht geprüft): Show " + run.show_errors.join(", ") + "." : "") : "Noch kein Lauf. Aktion „Spreaker-Adressen“ unter GitHub Actions starten (erst plan, dann apply); danach täglich automatisch." }));
-        if (d.differs_sample.length) { var tb = h("table", { class: "adm-tbl" }, [h("thead", {}, [h("tr", {}, [h("th", { text: "Folge" }), h("th", { text: "Bei Spreaker" }), h("th", { text: "Soll" })])])]), tbd = h("tbody"); d.differs_sample.forEach(function (x) { tbd.appendChild(h("tr", {}, [h("td", { text: x.id }), h("td", { text: x.url_on_spreaker || "(leer)" }), h("td", { text: x.url })])); }); tb.appendChild(tbd); p.appendChild(tb); }
+        p.appendChild(lst);
         p.appendChild(h("button", { type: "button", class: "btn", text: "Zuordnung jetzt übernehmen", onclick: function (ev) { ev.target.disabled = true; api("/api/admin/panel/episode-urls/import", { method: "POST", body: {} }).then(function () { LOAD.spurls(); }); } })); }); },
     ads: function () { adsAdmin(); },
     mk: function () { mediakitLeads(); },
