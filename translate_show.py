@@ -5,7 +5,9 @@ data/podpage_i18n/src/<lang>.json. Politik (Mirko, 7.11.2026): nur EINMAL uebers
 geaendertes Original markiert sie nur als stale (data/podpage_i18n/stale.json {lang: {slug: [title|summary|notes_html]}}, i18n_overrides Vertrag 7). Neu uebersetzt wird nur auf
 Anforderung: --stale (nur veraltete Fassungen; --langs/--slugs, ohne --slugs hoechstens STALE_MAX Anfragen je Lauf) oder --wishes (nur die Wunschliste der Redaktion).
 Von Hand bearbeitete Felder (Redaktion, i18n_overrides.py: kind episode bzw. notes) sind eine reine Leseschicht ueber dem Maschinentext; eine Folge, bei der nur solche Felder
-veraltet sind, sendet kein Lauf, ausser mit --force-manual. Erster Lauf: Hashes fuer vorhandene Uebersetzungen werden ohne API aus dem aktuellen Original eingetragen."""
+veraltet sind, sendet kein Lauf, ausser mit --force-manual. Ist der Export der Redaktion eingestellt, aber nicht abrufbar (kein 404), sendet --stale/--wishes in dieser
+Sprache nichts und der Lauf endet mit Fehler (Sperre unbekannt, i18n_overrides Vertrag 5); Neues laeuft weiter. Erster Lauf: Hashes fuer vorhandene Uebersetzungen werden
+ohne API aus dem aktuellen Original eingetragen."""
 import json, os, sys, time, urllib.request, urllib.error
 from site_text import bad as bad_text
 from tm_hash import fields_hash
@@ -114,6 +116,19 @@ def plan(kind, lang, slug, have, hashes, h, stale_mode=False, force_manual=False
     return stale_mode and any(force_manual or u not in ov for u in changed), listed
 
 
+def unknown_lock(kind, langs, stale_mode, force_manual):
+    """Sprachen, in denen ein Lauf mit --stale/--wishes nichts ersetzen darf: Export der Redaktion eingestellt, aber nicht abrufbar - welche Felder einen Handtext
+    haben, ist unbekannt (i18n_overrides Vertrag 5). --force-manual braucht die Sperre nicht."""
+    if not stale_mode or force_manual: return []
+    for l in langs: OV.load(kind, l)
+    return [l for l in langs if OV.failed(kind, l)]
+
+
+def halt(kind, held):
+    if held: raise SystemExit(f"Export der Redaktion nicht abrufbar - keine Neuuebersetzung vorhandener Fassungen ({kind}) in {', '.join(held)}. Lauf wiederholen, sobald der Export wieder "
+                              "antwortet (--force-manual braucht die Sperre nicht).")
+
+
 def show_source(e):
     """(Titel, Zusammenfassung <= 900 Zeichen) einer Folge - genau der Text, der uebersetzt wird."""
     summ = (P.plain(e.get("summary")) or P.plain(e.get("show_notes")))[:900]
@@ -178,6 +193,7 @@ def main():
     force_manual = "--force-manual" in a
     slugs = set(a[a.index("--slugs") + 1].split(",")) if "--slugs" in a else set()
     wish = OV.wishes("episode") if "--wishes" in a else None; stale_mode = "--stale" in a or wish is not None   # Wunschliste der Redaktion (Vertrag 8)
+    held = unknown_lock("episode", langs, stale_mode, force_manual)   # Sperre unbekannt: in diesen Sprachen wird nichts Vorhandenes gesendet
 
     def scan():
         """Zustand aller geprueften Folgen: was zu senden waere und was veraltet ist (stale.json wird fuer die geprueften Sprachen und Folgen neu geschrieben)."""
@@ -186,14 +202,14 @@ def main():
             for e in eps:
                 go, listed = plan("episode", l, e["slug"], have[l], hashes[l], eh[e["slug"]], stale_mode, force_manual)
                 if listed: stale.setdefault(l, {})[e["slug"]] = listed
-                if go and not (slugs and e["slug"] not in slugs) and (wish is None or e["slug"] in wish.get(l, {})): send.append((l, e))
-        update_stale(("title", "summary"), stale, [e["slug"] for e in eps], langs)
+                if go and l not in held and not (slugs and e["slug"] not in slugs) and (wish is None or e["slug"] in wish.get(l, {})): send.append((l, e))
+        update_stale(("title", "summary"), stale, [e["slug"] for e in eps], [l for l in langs if not OV.failed("episode", l)])   # Handtexte unbekannt: Liste der Sprache bleibt
         return send, stale
 
     def finish():
         """Nach dem Lauf: stale.json aus den neuen Hashes (neu uebersetzte Fassungen fallen heraus), erledigte Wuensche zurueck an die Redaktion."""
         open_ = {(l, e["slug"]) for l, e in scan()[0]}
-        if wish is not None: OV.wishes_done("episode", [(l, s) for l in langs for s in wish.get(l, {}) if (l, s) not in open_])
+        if wish is not None: OV.wishes_done("episode", [(l, s) for l in langs if l not in held for s in wish.get(l, {}) if (l, s) not in open_])
 
     send, stale = scan()
     if stale_mode and not slugs and wish is None and len(send) > STALE_MAX:
@@ -210,7 +226,7 @@ def main():
                      "messages": [{"role": "user", "content": src}]}})
     if stale: print(f"{sum(len(v) for v in stale.values())} Fassungen veraltet (Original geaendert) -> stale.json, werden nicht automatisch neu uebersetzt")
     if not reqs:
-        finish(); print("Nichts zu uebersetzen"); return
+        finish(); print("Nichts zu uebersetzen"); halt("episode", held); return
     if not check_budget("translate_show", MODEL, estimated_eur(len(json.dumps(reqs)) // 3, len(reqs) * 1500, batch=True)):
         return
     idmap = {r["custom_id"]: r["custom_id"] for r in reqs}
@@ -251,6 +267,7 @@ def main():
     rep = {"stage": "titles", "requests": len(reqs), "ok": ok, "failed": bad, "why": why, "input_tokens": tin, "output_tokens": tout, "cost_usd": round(cost(tin, tout), 3), "success_rate": round(ok / max(1, ok + bad), 4)}
     (OUT / "report_titles.json").write_text(json.dumps(rep, indent=1))
     print(f"fertig: {ok} ok, {bad} fehlgeschlagen {why}, Tokens ein/aus: {tin}/{tout}, Kosten {cost(tin, tout):.3f} $")
+    halt("episode", held)
     return rep
 
 

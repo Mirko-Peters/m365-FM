@@ -16,6 +16,7 @@ import site_entities as ENT
 from site_i18n import COMM_LANGS, pfx
 import site_members as MEM
 import site_roles as ROLE
+import site_invite as INV
 import site_events as EVT
 import site_directory as DIR
 import site_mcp as MCPS
@@ -770,7 +771,7 @@ def community_tags(lang, vid=None, mode="", css_async=False):
     css = (f'<link rel="preload" as="style" href="{css_url}" onload="this.onload=null;this.rel=\'stylesheet\'">' if css_async
            else f'<link rel="stylesheet" href="{css_url}">')
     return (f'{css}<script defer src="{BASE}/assets/cm-{lang if lang in _CI else "en"}.js?v={_cv("data/community_i18n.json")}"></script>'
-            f'<script>window.M365C={json.dumps(cfg, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")}</script><script defer src="{BASE}/assets/community.js?v={_cv("assets/community.js")}"></script>')
+            f'<script>window.M365C={json.dumps(cfg, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")}</script><script defer src="{BASE}/assets/invite-share.js?v={_cv("assets/invite-share.js")}"></script><script defer src="{BASE}/assets/community.js?v={_cv("assets/community.js")}"></script>')
 
 
 def write_cm_js(out):
@@ -1498,7 +1499,7 @@ def build():
                         articles=articles, url_of=url_of, cat_name=cat_name, ORDER=ORDER, strip_tags=strip_tags, anchor_title=anchor_title, short=short, parse_desc=parse_desc,
                         sitemap=sitemap, TODAY=TODAY, api=COMMUNITY_API, SCORE={l: (_QUI.get(l, {}).get("score") or _QUI["en"]["score"]) for l in list(LANGS) + ["en"]}))
 
-    _ctx = dict(community_tags=community_tags, write=write, write_r2=write_r2, page=page, header=header, footer=footer, footer_en=footer_en, BASE=BASE, LANGS=LANGS, active=active, url_of=url_of, anchor_title=anchor_title, sitemap=sitemap, TODAY=TODAY, api=COMMUNITY_API, google_maps_key=os.environ.get("GOOGLE_MAPS_API_KEY", ""), orig_alts=ORIG_ALTS, side=sidebar)   # side: die eine Sidebar der Inhaltsseiten (Entitaeten, Blog, Videos, Bibliothek, Events, Profile, Show)
+    _ctx = dict(OGLIST=OGLIST, OG_BASE=OG_BASE, community_tags=community_tags, write=write, write_r2=write_r2, page=page, header=header, footer=footer, footer_en=footer_en, BASE=BASE, LANGS=LANGS, active=active, url_of=url_of, anchor_title=anchor_title, sitemap=sitemap, TODAY=TODAY, api=COMMUNITY_API, google_maps_key=os.environ.get("GOOGLE_MAPS_API_KEY", ""), orig_alts=ORIG_ALTS, side=sidebar)   # side: die eine Sidebar der Inhaltsseiten (Entitaeten, Blog, Videos, Bibliothek, Events, Profile, Show)
     phase("Folgenseiten (Dub-Sprachen), Startseiten")
     _people, _orgs = MEM.fetch_members(COMMUNITY_API)
     ROLE.set_people(_people)   # Editor/Moderator-Abzeichen (Ring, Chip, JSON-LD) fuer Profile, Listen, Autorenkasten und Event-Speaker
@@ -1571,6 +1572,7 @@ def build():
     ENT.build(_ctx, lambda lang: _glc[lang] if lang in _glc else _glc.setdefault(lang, LRN.gloss_links(lang, BASE)), MEM.experts_index(_people, _orgs), _ep_find)
     phase("Entitaetsseiten")
     MEM.build(_ctx, _people, _orgs, extra={l: EVT.blocks(BASE, _events, l) for l in COMM_LANGS})
+    INV.build(_ctx, _people)   # persoenliche Einladungsseiten mit eigener Teilen-Vorschau (site_invite.py)
     DIR.build(_ctx)
     EVT.build(_ctx, _events, _people, _orgs)
     BLG.build(_ctx, _posts, _people, COMMUNITY_API)
@@ -1995,6 +1997,7 @@ Mirko Peters, {BASE}/about/
     except Exception as _e:
         import traceback; traceback.print_exc(); print("Interne Links nicht umgeschrieben:", _e)
     phase("Interne Links ohne Umweg")
+    import i18n_overrides as _OVR; _OVR.report()   # Handtexte der Redaktion: je Art und Sprache angewendet / nicht angewendet (ohne Quell-Anker, verwaist, ohne angezeigte Fassung)
     sizes()
     print(f"r2out/: {_r2n[0]} Seiten, {_r2n[1] / 1e6:.0f} MB (werden in den R2-Bucket geladen, nicht in GitHub Pages)")
     print(f"{len(items)} Episodenseiten, {len(active)} Sprachen, {len(sitemap)} URLs → docs/")

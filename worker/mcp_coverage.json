@@ -10,77 +10,77 @@
   "/api/me/merge": {
    "skip": "Anmeldungen verknüpfen/entfernen und Konten zusammenführen (#279) nur mit Browser-Sitzung und frischer Anmeldung, bewusst nicht per KI-Token"
   },
- "/api/editor/queue": {
-  "tools": [
-   "editor_queue"
-  ]
- },
- "/api/editor/item": {
-  "tools": [
-   "editor_view_item"
-  ]
- },
- "/api/editor/proposals": {
-  "tools": [
-   "editor_propose_decision"
-  ]
- },
- "/api/editor/edit": {
-  "skip": "Inhaltsbearbeitung nur im Browser (/redaktion/): wird protokolliert und der Autor benachrichtigt, bewusst nicht per KI-Token"
- },
- "/api/editor/decide": {
-  "skip": "Entscheidungen werden per MCP nur vorgeschlagen (editor_propose_decision) und im Browser bestätigt"
- },
- "/api/admin/editlog": {
-  "skip": "Admin-Protokoll mit Rückgängig nur im Browser"
- },
- "/api/editor/applications": {
-  "skip": "Abstimmung über Bewerbungen nur im Browser durch angemeldete Editoren"
- },
- "/api/editor/apply": {
-  "skip": "Bewerbung um Editor/Moderator nur im Browser (Profil)"
- },
- "/api/editor/history": {
-  "skip": "Versionsverlauf mit Diff nur im Browser (/redaktion/)"
- },
- "/api/editor/my-history": {
-  "skip": "Verlauf des eigenen Beitrags nur im Browser (Profilbereich)"
- },
- "/api/editor/revert": {
-  "skip": "Zurücksetzen auf eine Version nur im Browser"
- },
- "/api/editor/i18n/overrides": {
-  "skip": "Sprachfassungen bearbeiten nur im Browser (/redaktion/); per MCP nur Vorschlag (propose_translation_edit)"
- },
- "/api/editor/i18n/history": {
-  "skip": "Sprachfassungen: Verlauf nur im Browser"
- },
- "/api/editor/i18n/retranslate": {
-  "skip": "Neuübersetzung nur vormerken im Browser; der Workflow holt die Wünsche ab"
- },
- "/api/editor/i18n/revert": {
-  "skip": "Zurücksetzen nur im Browser"
- },
- "/api/editor/i18n/save": {
-  "skip": "Speichern nur nach Bestätigung im Browser; per MCP nur Vorschlag (propose_translation_edit)"
- },
- "/api/i18n/overrides": {
-  "skip": "Maschinen-Export für den Seitenbau (öffentlich, gecacht), kein Agenten-Werkzeug nötig"
- },
- "/api/i18n/retranslate": {
-  "skip": "Wunschliste für den Workflow-Lauf mit --stale, kein Agenten-Werkzeug nötig"
- },
- "/api/i18n/retranslate/done": {
-  "skip": "Rückmeldung des Workflows mit Cron-Schlüssel"
- },
- "/api/directory": {
-  "tools": [
-   "search_directory"
-  ]
- },
- "/api/directory/key": {
-  "skip": "Öffentlicher Maps-Schlüssel wird ausschließlich vom zustimmungsgebundenen Karten-Frontend abgerufen"
- },
+  "/api/editor/queue": {
+   "tools": [
+    "editor_queue"
+   ]
+  },
+  "/api/editor/item": {
+   "tools": [
+    "editor_view_item"
+   ]
+  },
+  "/api/editor/proposals": {
+   "tools": [
+    "editor_propose_decision"
+   ]
+  },
+  "/api/editor/edit": {
+   "skip": "Inhaltsbearbeitung nur im Browser (/redaktion/): wird protokolliert und der Autor benachrichtigt, bewusst nicht per KI-Token"
+  },
+  "/api/editor/decide": {
+   "skip": "Entscheidungen werden per MCP nur vorgeschlagen (editor_propose_decision) und im Browser bestätigt"
+  },
+  "/api/admin/editlog": {
+   "skip": "Admin-Protokoll mit Rückgängig nur im Browser"
+  },
+  "/api/editor/applications": {
+   "skip": "Abstimmung über Bewerbungen nur im Browser durch angemeldete Editoren"
+  },
+  "/api/editor/apply": {
+   "skip": "Bewerbung um Editor/Moderator nur im Browser (Profil)"
+  },
+  "/api/editor/history": {
+   "skip": "Versionsverlauf mit Diff nur im Browser (/redaktion/)"
+  },
+  "/api/editor/my-history": {
+   "skip": "Verlauf des eigenen Beitrags nur im Browser (Profilbereich)"
+  },
+  "/api/editor/revert": {
+   "skip": "Zurücksetzen auf eine Version nur im Browser"
+  },
+  "/api/editor/i18n/overrides": {
+   "skip": "Sprachfassungen bearbeiten nur im Browser (/redaktion/); per MCP nur Vorschlag (propose_translation_edit)"
+  },
+  "/api/editor/i18n/history": {
+   "skip": "Sprachfassungen: Verlauf nur im Browser"
+  },
+  "/api/editor/i18n/retranslate": {
+   "skip": "Neuübersetzung nur vormerken im Browser; der Workflow holt die Wünsche ab"
+  },
+  "/api/editor/i18n/revert": {
+   "skip": "Zurücksetzen nur im Browser"
+  },
+  "/api/editor/i18n/save": {
+   "skip": "Speichern nur nach Bestätigung im Browser; per MCP nur Vorschlag (propose_translation_edit)"
+  },
+  "/api/i18n/overrides": {
+   "skip": "Maschinen-Export für den Seitenbau (öffentlich, gecacht), kein Agenten-Werkzeug nötig"
+  },
+  "/api/i18n/retranslate": {
+   "skip": "Wunschliste für den Workflow-Lauf mit --stale, kein Agenten-Werkzeug nötig"
+  },
+  "/api/i18n/retranslate/done": {
+   "skip": "Rückmeldung des Workflows mit Cron-Schlüssel"
+  },
+  "/api/directory": {
+   "tools": [
+    "search_directory"
+   ]
+  },
+  "/api/directory/key": {
+   "skip": "Öffentlicher Maps-Schlüssel wird ausschließlich vom zustimmungsgebundenen Karten-Frontend abgerufen"
+  },
   "/api/admin/blog": {
    "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
   },
@@ -321,7 +321,8 @@
   },
   "/api/contributions/sources": {
    "tools": [
-    "list_my_contributions"
+    "list_my_contributions",
+    "list_contribution_sources"
    ]
   },
   "/api/contributions/update": {
@@ -1181,6 +1182,83 @@
   },
   "/api/admin/ads/house-stats": {
    "skip": "Admin-Funktionen (#281 Werbeplätze): nur im Admin-Panel, bewusst nicht per KI-Token"
+  },
+  "/api/entityinvite/send-batch": {
+   "skip": "Nur Admin: Sammelversand und Probelauf der Einladungen, bewusst nicht per KI-Token"
+  },
+  "/api/entityinvite/test": {
+   "skip": "Nur Admin: Testmail an das eigene Konto, bewusst nicht per KI-Token"
+  },
+  "/api/invite/me": {
+   "tools": [
+    "my_invite_link"
+   ]
+  },
+  "/api/invite/click": {
+   "skip": "Klick-Beleg (Kuerzel + Serverzeit, signiert) beim Oeffnen eines Einladungslinks, nur durch die Website"
+  },
+  "/api/invite/ref": {
+   "skip": "Klick-Beleg aus dem Browser (localStorage) nach der Anmeldung einloesen, nur durch die Website"
+  },
+  "/api/admin/invites": {
+   "skip": "Admin-Funktionen: bewusst nicht per KI-Token"
+  },
+  "/api/admin/invite/void": {
+   "skip": "Admin-Funktionen: bewusst nicht per KI-Token"
+  },
+  "/api/admin/linkedin/status": {
+   "skip": "LinkedIn-Events (#323): nur für Admins mit Browser-Sitzung unter /admin/#li, bewusst nicht per KI-Token"
+  },
+  "/api/admin/linkedin/orgs": {
+   "skip": "LinkedIn-Events (#323): nur für Admins mit Browser-Sitzung unter /admin/#li, bewusst nicht per KI-Token"
+  },
+  "/api/admin/linkedin/org": {
+   "skip": "LinkedIn-Events (#323): nur für Admins mit Browser-Sitzung unter /admin/#li, bewusst nicht per KI-Token"
+  },
+  "/api/admin/linkedin/disconnect": {
+   "skip": "LinkedIn-Events (#323): nur für Admins mit Browser-Sitzung unter /admin/#li, bewusst nicht per KI-Token"
+  },
+  "/api/admin/linkedin/proposals": {
+   "tools": [
+    "linkedin_event_proposals"
+   ]
+  },
+  "/api/admin/linkedin/publish": {
+   "skip": "LinkedIn-Events (#323): Veröffentlichen, Ändern, Absagen und das Auflösen einer Reservierung nur per Klick mit Admin-Sitzung im Browser (/admin/#li), nie per KI-Token; publish_linkedin_event liefert nur die Vorschau"
+  },
+  "/api/admin/linkedin/update": {
+   "skip": "LinkedIn-Events (#323): Veröffentlichen, Ändern, Absagen und das Auflösen einer Reservierung nur per Klick mit Admin-Sitzung im Browser (/admin/#li), nie per KI-Token; publish_linkedin_event liefert nur die Vorschau"
+  },
+  "/api/admin/linkedin/cancel": {
+   "skip": "LinkedIn-Events (#323): Veröffentlichen, Ändern, Absagen und das Auflösen einer Reservierung nur per Klick mit Admin-Sitzung im Browser (/admin/#li), nie per KI-Token; publish_linkedin_event liefert nur die Vorschau"
+  },
+  "/api/admin/linkedin/resolve": {
+   "skip": "LinkedIn-Events (#323): Veröffentlichen, Ändern, Absagen und das Auflösen einer Reservierung nur per Klick mit Admin-Sitzung im Browser (/admin/#li), nie per KI-Token; publish_linkedin_event liefert nur die Vorschau"
+  },
+  "/api/admin/linkedin/release": {
+   "skip": "LinkedIn-Events (#323): Veröffentlichen, Ändern, Absagen und das Auflösen einer Reservierung nur per Klick mit Admin-Sitzung im Browser (/admin/#li), nie per KI-Token; publish_linkedin_event liefert nur die Vorschau"
+  },
+  "/api/contributions/review-batch": {
+   "tools": [
+    "review_new_contributions"
+   ]
+  },
+  "/api/contributions/source/preview": {
+   "skip": "Vorschau der letzten 3 Einträge beim Hinzufügen einer Quelle (Oberfläche); eine KI legt die Quelle mit add_contribution_source an und sieht Funde in review_new_contributions"
+  },
+  "/api/contributions/linkedin-og": {
+   "skip": "Formularhilfe für LinkedIn-Artikel-Links (nur Open-Graph-Tags); eine KI legt Artikel mit add_contribution an"
+  },
+  "/api/contributions/import": {
+   "skip": "Import gewählter Einträge aus dem LinkedIn-Datenexport (im Browser gelesen) bzw. \"andere Links\" in der Oberfläche; per KI gibt es add_contribution"
+  },
+  "/api/contributions/review": {
+   "skip": "Einzelaktionen der Neu-gefunden-Liste in der Oberfläche; per KI review_new_contributions (Vorschau + confirm)"
+  },
+  "/api/contributions/unpublish": {
+   "tools": [
+    "unpublish_contribution"
+   ]
   }
-}
+ }
 }

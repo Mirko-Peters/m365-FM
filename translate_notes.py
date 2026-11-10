@@ -3,7 +3,8 @@ Ersatz: featured + neueste. Ergebnis: data/podpage_i18n/notes_<lang>.json {folge
 Aufruf: python translate_notes.py [--langs de,fr] [--slugs a,b] [--stale] [--force-manual] [--wishes].
 Je Folge und Sprache steht der Hash der englischen Show Notes in data/podpage_i18n/src/notes_<lang>.json (pro Feld, nicht pro Absatz: eine Anfrage uebersetzt das ganze HTML).
 Politik wie translate_show.py: nur einmal uebersetzen; ein geaendertes Original wird nur in stale.json gemeldet (Feld notes_html) und erst mit --stale bzw. --wishes neu
-uebersetzt; Show Notes mit Handtext der Redaktion (i18n_overrides: kind notes, unit html) sendet kein Lauf, ausser mit --force-manual. Altbestand bekommt beim ersten Lauf den
+uebersetzt; Show Notes mit Handtext der Redaktion (i18n_overrides: kind notes, unit html) sendet kein Lauf, ausser mit --force-manual; ist der Export der Redaktion nicht
+abrufbar (Sperre unbekannt), sendet --stale/--wishes in dieser Sprache nichts und der Lauf endet mit Fehler. Altbestand bekommt beim ersten Lauf den
 aktuellen Hash ohne API. Geprueft werden die Top-Folgen und alle Folgen, die schon eine Fassung haben (neu uebersetzt werden nur die Top-Folgen)."""
 import json, os, sys, time, urllib.request
 from site_text import bad as bad_text
@@ -11,7 +12,7 @@ from datetime import date
 from pathlib import Path
 import requests
 import site_podpage as P
-from translate_show import call, NAMES, OUT, MODEL, cost, guard, text_of, load_hashes, save_hashes, sync_hashes, update_stale, plan, notes_source, notes_hash, NOTES_MAXC, STALE_MAX
+from translate_show import call, NAMES, OUT, MODEL, cost, guard, text_of, load_hashes, save_hashes, sync_hashes, update_stale, plan, notes_source, notes_hash, NOTES_MAXC, STALE_MAX, unknown_lock, halt
 import i18n_overrides as OV
 from ai_gateway import anthropic_request, check_budget, estimated_eur, report_usage, urlopen
 
@@ -75,6 +76,7 @@ def main():
     if mig: save_hashes("notes_", hashes); print(f"{mig} Quell-Hashes aus dem Bestand eingetragen (ohne API)")
     force_manual = "--force-manual" in arg
     wish = OV.wishes("notes") if "--wishes" in arg else None; stale_mode = "--stale" in arg or wish is not None   # Wunschliste der Redaktion (i18n_overrides Vertrag 8)
+    held = unknown_lock("notes", langs, stale_mode, force_manual)   # Sperre unbekannt: in diesen Sprachen wird nichts Vorhandenes gesendet
 
     def scan():
         """Zustand aller geprueften Folgen: was zu senden waere und was veraltet ist (stale.json: Feld notes_html, nur gepruefte Sprachen und Folgen)."""
@@ -84,14 +86,14 @@ def main():
                 go, listed = plan("notes", l, e["slug"], have[l], hashes[l], eh[e["slug"]], stale_mode, force_manual)
                 if listed: stale.setdefault(l, {})[e["slug"]] = listed
                 if e["slug"] not in tops and e["slug"] not in have[l]: continue   # ausserhalb der Top-Liste wird nichts neu angelegt
-                if go and not (slugs and e["slug"] not in slugs) and (wish is None or e["slug"] in wish.get(l, {})): send.append((l, e))
-        update_stale(("notes_html",), stale, [e["slug"] for e in known], langs)
+                if go and l not in held and not (slugs and e["slug"] not in slugs) and (wish is None or e["slug"] in wish.get(l, {})): send.append((l, e))
+        update_stale(("notes_html",), stale, [e["slug"] for e in known], [l for l in langs if not OV.failed("notes", l)])   # Handtexte unbekannt: Liste der Sprache bleibt
         return send, stale
 
     def finish():
         """Nach dem Lauf: stale.json aus den neuen Hashes, erledigte Wuensche zurueck an die Redaktion."""
         open_ = {(l, e["slug"]) for l, e in scan()[0]}
-        if wish is not None: OV.wishes_done("notes", [(l, s) for l in langs for s in wish.get(l, {}) if (l, s) not in open_])
+        if wish is not None: OV.wishes_done("notes", [(l, s) for l in langs if l not in held for s in wish.get(l, {}) if (l, s) not in open_])
 
     send, stale = scan()
     if stale_mode and not slugs and wish is None and len(send) > STALE_MAX:
@@ -103,7 +105,7 @@ def main():
             "system": f"Translate this podcast show-notes HTML into {NAMES[l]}. Keep the HTML tags and structure (p, ul, li, h2, h3, strong, em, a href). Keep product names (Microsoft 365, Copilot, Power BI, Azure ...) and URLs untranslated. Reply with the translated HTML only.",
             "messages": [{"role": "user", "content": notes_source(e)}]}})
     if stale: print(f"{sum(len(v) for v in stale.values())} Show Notes veraltet (Original geaendert) -> stale.json, nicht automatisch neu uebersetzt")
-    if not reqs: finish(); print("Nichts zu tun"); return
+    if not reqs: finish(); print("Nichts zu tun"); halt("notes", held); return
     print(len(reqs), "Anfragen fuer", len(top), "Folgen")
     guard(len(reqs), 3500, 9000, "Show Notes")
     if not check_budget("translate_notes", MODEL, estimated_eur(len(json.dumps(reqs)) // 3, len(reqs) * 9000, batch=True)):
@@ -128,6 +130,7 @@ def main():
     rep = {"stage": "notes", "requests": len(reqs), "ok": ok, "failed": bad, "why": why, "input_tokens": tin, "output_tokens": tout, "cost_usd": round(cost(tin, tout), 3), "success_rate": round(ok / max(1, ok + bad), 4)}
     (OUT / "report_notes.json").write_text(json.dumps(rep, indent=1))
     print(f"fertig: {ok} ok, {bad} fehlgeschlagen {why}, Tokens ein/aus: {tin}/{tout}, Kosten {cost(tin, tout):.3f} $")
+    halt("notes", held)
     return rep
 
 

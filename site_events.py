@@ -187,6 +187,8 @@ def build(g, events, people, orgs):
                 facts.append((s["lang"], esc(ev["lang"])))
             ft = '<table class="mb-facts"><tbody>' + "".join(f'<tr><th scope="row">{esc(a)}</th><td>{b_}</td></tr>' for a, b_ in facts if b_) + "</tbody></table>"
             btn = (f'<a class="btn main" href="{esc(ev["tickets_url"])}" rel="nofollow noopener" target="_blank">{esc(s["tickets"])}</a> ' if ev.get("tickets_url") else "") + (f'<a class="btn" href="{esc(ev["url"])}" rel="nofollow noopener" target="_blank">{esc(s["website"])}</a>' if ev.get("url") else "")
+            if ev.get("linkedin_url", "").startswith("https://www.linkedin.com/"):
+                btn += f'<a class="btn" href="{esc(ev["linkedin_url"])}" rel="noopener" target="_blank">{esc(T(lang, "Also on LinkedIn", "Auch auf LinkedIn"))}</a>'
             tp = "".join(f'<a class="ev-tag" href="{eurl(BASE, lang, e)}">{esc(ENTS[e]["name"])}</a>' for e in ev.get("topics", []) if e in ENTS)
             pl = {"sponsor": T(lang, "Sponsors", "Sponsoren"), "media": T(lang, "Media partners", "Medienpartner")}
             pt = ""

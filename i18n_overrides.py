@@ -23,7 +23,8 @@ VERTRAG i18n-overrides v1
 3. Export (Worker, #319): GET {COMMUNITY_API}/api/i18n/overrides?kind=<kind>&lang=<lang> -> {"kind": ..., "lang": ..., "items": <Dateiinhalt wie in 2.>},
    nur veroeffentlichte Eintraege. Seitenbau: site_i18n_overrides.sync() (#319) holt den Export und schreibt die Dateien, sonst nichts: Export erreichbar ->
    Datei ersetzen (keine Eintraege -> Datei loeschen), nicht erreichbar -> vorhandene Datei bleibt. Uebersetzungs-Skripte rufen use_api() auf: load() nimmt
-   dann den Export anstelle der Datei, bei 404 oder Fehler die Datei.
+   dann den Export anstelle der Datei, bei 404 (Endpunkt noch nicht ausgerollt) oder Fehler die Datei. Bei einem Fehler (alles ausser 404: 5xx, Zeitlimit,
+   Antwort ohne "items") ist der Sperrzustand dieser Art und Sprache unbekannt (failed()): siehe 5.
 4. Anwenden (nur in diesem Modul bzw. ueber place()):
    lblog: Ein Override gilt fuer GENAU EINE Einheit des aktuellen Originals und wird ueber den Anker gesetzt, nie ueber die Nummer allein:
      a) die Einheit mit derselben id, wenn ihr aktueller Quell-Anker dem Anker des Overrides entspricht;
@@ -34,9 +35,19 @@ VERTRAG i18n-overrides v1
    episode/notes: Felder wandern nicht; ein Override gilt, solange es existiert und die Folge eine Maschinenfassung hat.
    Bereinigung beim Anwenden (der Datei wird nie vertraut): lblog-Absaetze wie der Maschinentext durch site_podpage.san, sobald '<' oder '&' vorkommt; notes immer
    durch site_podpage.san; episode und lblog T/D/Q/A als reiner Text (Tags entfernt, Entities aufgeloest, Leerraum normalisiert). Bleibt danach nichts uebrig, gilt der Maschinentext.
-5. Sperre: Einheiten und Felder mit angewendetem Override sendet kein Modus zur Uebersetzung (auto, run, stale, --redo), ausser mit --force-manual.
+   Bilder (Projektregel: nur ueber den eigenen Bucket): ein <img> in einem Handtext bleibt nur, wenn seine Adresse mit https://img.m365.fm/ beginnt, der Seitenbau
+   sie dorthin umschreibt (data/r2_map.json) oder sie schon im englischen Original bzw. im Maschinentext desselben Eintrags steht; jedes andere <img> wird
+   entfernt (der uebrige Text bleibt). #319: cleanUnit im Worker lehnt solche Bilder schon beim Speichern ab (erste Linie), die Pruefung hier bleibt die zweite.
+   Protokoll: report() nennt je Art und Sprache, wie viele Handtexte angewendet und wie viele NICHT angewendet wurden (ohne Quell-Anker, verwaist, Eintrag ohne
+   angezeigte Fassung bzw. Folge ohne Maschinenfassung, nach der Bereinigung leer) - jede Einheit einmal; der Seitenbau ruft es am Ende auf, translate_blog im Status.
+5. Sperre: Einheiten und Felder mit angewendetem Override sendet kein Modus zur Uebersetzung (auto, run, stale, --redo), ausser mit --force-manual; auch ein
+   Treffer im Uebersetzungsspeicher ersetzt den Maschinentext einer solchen Blog-Einheit nicht.
    --force-manual erneuert nur den Maschinentext darunter. lblog: danach passt der Anker zu nichts mehr (4d) und die frische Maschinenfassung wird sichtbar;
    episode/notes: der Handtext bleibt, bis die Redaktion ihn zuruecksetzt oder neu speichert.
+   Sperrzustand unbekannt (Export eingestellt, aber mit Fehler ausser 404 nicht abrufbar - failed(kind, lang)): kein Lauf ersetzt in dieser Sprache vorhandenen
+   Text (jede schon uebersetzte Einheit gilt als gesperrt; fertige Batches mit Neuuebersetzungen bleiben liegen, bis der Export wieder antwortet); ein Lauf, der
+   genau das sollte (stale, --stale, --redo, --wishes), endet mit Fehler. Nie uebersetzte Einheiten und Folgen laufen weiter, ebenso --force-manual (braucht
+   die Sperre nicht). Die Veraltet-Liste (7) dieser Sprache bleibt in so einem Lauf unveraendert.
 6. Zuruecksetzen: Zeile in D1 loeschen (#319 revertUnit auf die Ursprungsfassung) -> die Einheit fehlt im Export -> die Datei enthaelt sie nicht mehr -> ab
    dem naechsten Bau bzw. Lauf gilt wieder der Maschinentext und die Sperre entfaellt. Es gibt keinen weiteren Speicherort, der nachzuziehen waere.
 7. Veraltet-Listen (schreiben nur die Uebersetzungs-Skripte, #319 liest sie):
@@ -58,17 +69,27 @@ KINDS = ("lblog", "episode", "notes")
 UNITS = {"episode": ("title", "summary"), "notes": ("html",)}   # lblog: Einheiten-ids des Beitrags
 STALE_FIELD = {"title": "title", "summary": "summary", "html": "notes_html"}   # unit -> Feldname in data/podpage_i18n/stale.json
 UA = "m365-dub-build"
+IMG_HOST = "https://img.m365.fm/"   # Projektregel: Bilder nur ueber den eigenen R2-Bucket
 _CACHE = {}
-_API = {"base": "", "off": False}
+_API = {"base": "", "off": False, "err": ""}
+_FAILED = set()   # (kind, lang): Export eingestellt, aber nicht abrufbar (kein 404) -> Sperrzustand unbekannt (Vertrag 5)
 NOTES = {}   # (kind, lang, was) -> Anzahl; report() schreibt sie ins Protokoll
+_NOTED = set()   # (kind, lang, was, schluessel): jede Einheit zaehlt einmal, auch wenn der Bau sie mehrfach ansieht
+_ASKED = set()   # (kind, lang, item): Eintraege, nach denen ein Leser gefragt hat (der Rest hat keine angezeigte Fassung)
 
 
-def clear_cache(): _CACHE.clear(); NOTES.clear()
+def clear_cache(): _CACHE.clear(); NOTES.clear(); _NOTED.clear(); _ASKED.clear()
 
 
 def use_api(base=None):
     """Uebersetzungs-Skripte: Handtexte live aus dem Export der Redaktion lesen (Basis: I18N_OVERRIDES_API, sonst COMMUNITY_API). Ohne Basis bleibt es bei den Dateien."""
-    _API["base"] = (base if base is not None else os.environ.get("I18N_OVERRIDES_API") or os.environ.get("COMMUNITY_API") or "").rstrip("/"); _API["off"] = False; clear_cache()
+    _API.update(base=(base if base is not None else os.environ.get("I18N_OVERRIDES_API") or os.environ.get("COMMUNITY_API") or "").rstrip("/"), off=False, err=""); _FAILED.clear(); clear_cache()
+
+
+def failed(kind, lang=None):
+    """Sperrzustand unbekannt (Vertrag 5): der Export ist eingestellt, war fuer diese Art und Sprache aber nicht abrufbar (kein 404). Erst nach load()/get()
+    aussagekraeftig. Ohne lang: die betroffenen Sprachen dieser Art, sortiert."""
+    return (kind, lang) in _FAILED if lang else sorted(l for k, l in _FAILED if k == kind)
 
 
 def anchor(kind, unit, source):
@@ -76,11 +97,24 @@ def anchor(kind, unit, source):
     return (unit_hash(unit, source) if kind == "lblog" else fields_hash(source))[:8]
 
 
-def note(kind, lang, what, n=1): NOTES[(kind, lang, what)] = NOTES.get((kind, lang, what), 0) + n
+def note(kind, lang, what, n=1, key=None):
+    """Zaehler fuers Protokoll; mit key (z. B. (item, unit)) zaehlt dieselbe Einheit nur einmal."""
+    if key is not None:
+        if (kind, lang, what, key) in _NOTED: return
+        _NOTED.add((kind, lang, what, key))
+    NOTES[(kind, lang, what)] = NOTES.get((kind, lang, what), 0) + n
 
 
 def report():
+    """Protokoll (Vertrag 4): je Art und Sprache angewendete und nicht angewendete Handtexte. Eintraege, nach denen kein Leser gefragt hat (lblog: Beitrag ohne
+    angezeigte Fassung oder unbekannt), zaehlen als nicht angewendet. -> {(kind, lang, was): Anzahl}"""
+    for (kind, lang), d in sorted(_CACHE.items()):
+        if kind != "lblog": continue
+        for item, us in d.items():
+            if (kind, lang, item) not in _ASKED:
+                for u in us: note(kind, lang, "ohne angezeigte Fassung des Eintrags (nicht angewendet)", key=(item, u))
     for (kind, lang, what), n in sorted(NOTES.items()): print(f"Handtexte {kind}/{lang}: {n} {what}")
+    return dict(NOTES)
 
 
 def _get(path, timeout=20):
@@ -97,15 +131,21 @@ def load_file(kind, lang):
 
 def load_api(kind, lang):
     """Export der Redaktion oder None (kein Endpunkt eingestellt, noch nicht ausgerollt, nicht erreichbar). Nach dem ersten Fehlschlag fragt der Lauf nicht weiter
-    (sonst 14 Sprachen x Zeitlimit); 404 = Endpunkt gibt es noch nicht, ohne Meldung."""
-    if not _API["base"] or _API["off"]: return None
+    (sonst 14 Sprachen x Zeitlimit); 404 = Endpunkt gibt es noch nicht, ohne Meldung. Jeder andere Fehlschlag merkt Art und Sprache in _FAILED (failed())."""
+    if not _API["base"]: return None
+    if _API["off"]:
+        if _API["err"]: _FAILED.add((kind, lang))   # nicht mehr gefragt, aber genauso unbekannt
+        return None
     try:
         d = _get("/api/i18n/overrides?" + urllib.parse.urlencode({"kind": kind, "lang": lang}))
-        return d["items"] if isinstance(d, dict) and isinstance(d.get("items"), dict) else None
+        if isinstance(d, dict) and isinstance(d.get("items"), dict): return d["items"]
+        raise ValueError("Antwort ohne items")
     except Exception as e:
         _API["off"] = True
         if not (isinstance(e, urllib.error.HTTPError) and e.code == 404):
-            print(f"WARNUNG: Export der Redaktion nicht abrufbar ({str(e)[:100]}) - es gelten die Dateien in data/i18n_overrides", file=sys.stderr)
+            _API["err"] = str(e)[:100]; _FAILED.add((kind, lang))
+            print(f"WARNUNG: Export der Redaktion nicht abrufbar ({_API['err']}) - es gelten die Dateien in data/i18n_overrides; Sperrzustand unbekannt, "
+                  "vorhandene Texte werden in diesem Lauf nicht ersetzt", file=sys.stderr)
         return None
 
 
@@ -118,7 +158,7 @@ def _norm(kind, lang, raw):
             if not isinstance(t, str) or not t.strip(): continue
             sh = sh.strip().lower() if isinstance(sh, str) and re.fullmatch(r"[0-9a-fA-F]{8}", sh.strip()) else ""
             if kind in UNITS and u not in UNITS[kind]: continue
-            if kind == "lblog" and not sh: note(kind, lang, "ohne Quell-Anker (nicht angewendet)"); continue   # koennte nach einer Aenderung des Originals auf einem anderen Absatz landen
+            if kind == "lblog" and not sh: note(kind, lang, "ohne Quell-Anker (nicht angewendet)", key=(str(item), str(u))); continue   # koennte nach einer Aenderung des Originals auf einem anderen Absatz landen
             out.setdefault(str(item), {})[str(u)] = {"t": t, "sh": sh}
     return out
 
@@ -133,18 +173,36 @@ def load(kind, lang):
 
 def get(kind, lang, item):
     """{unit: {"t", "sh"}} der Redaktion fuer einen Eintrag."""
+    _ASKED.add((kind, lang, item))
     return load(kind, lang).get(item, {})
 
 
 PLAIN_UNIT = re.compile(r"^(?:T|D|[QA]\d+)$")   # lblog: Titel, Beschreibung und FAQ sind im Original reiner Text (translate_blog.source_of), nur Absaetze tragen Inline-HTML
+_IMG = re.compile(r"<img\b[^>]*>", re.I)
+_SRC = re.compile(r'\ssrc="([^"]*)"', re.I)
 
 
-def clean(kind, unit, text):
-    """Bereinigung beim Anwenden (Vertrag 4): der Datei wird nie vertraut, auch wenn der Worker schon gefiltert hat.
+def img_srcs(html):
+    """Bild-Adressen (wie sie im bereinigten HTML stehen) eines Textes."""
+    return {m.group(1) for t in _IMG.findall(html or "") for m in [_SRC.search(t)] if m}
+
+
+def clean(kind, unit, text, ref=""):
+    """Bereinigung beim Anwenden (Vertrag 4): der Datei wird nie vertraut, auch wenn der Worker schon gefiltert hat. ref = bereinigtes HTML des Eintrags
+    (englisches Original, Maschinentext): nur dessen Bilder und die des eigenen Buckets bleiben in einem Handtext stehen.
     Reiner Text (episode; lblog T/D/Q/A) bleibt unmaskiert wie der Maschinentext - die Seiten maskieren ihn beim Einsetzen (esc); san() wuerde '&' doppelt maskieren."""
     if kind == "episode" or (kind == "lblog" and PLAIN_UNIT.match(str(unit))): return re.sub(r"\s+", " ", _html.unescape(re.sub(r"<[^>]*>", " ", text))).strip()
+    if not (kind == "notes" or "<" in text or "&" in text): return text
     import site_podpage as P
-    return P.san(text) if kind == "notes" or "<" in text or "&" in text else text
+    out = P.san(text)
+    if "<img" not in out.lower(): return out
+    import site_r2 as R2
+    known = img_srcs(ref)
+
+    def own(tag):
+        m = _SRC.search(tag); s = m.group(1) if m else ""
+        return s.startswith(IMG_HOST) or R2.rewrite(s).startswith(IMG_HOST) or s in known
+    return _IMG.sub(lambda m: m.group(0) if own(m.group(0)) else "", out)
 
 
 def _num(u): return int(re.sub(r"\D", "", str(u)) or 0)
@@ -179,10 +237,15 @@ def apply_show(lang, data):
     out = dict(data)
     for slug, f in ov.items():
         cur = out.get(slug)
-        if not cur or not cur[0]: continue
-        cur = list(cur) + [""]
-        out[slug] = [("title" in f and clean("episode", "title", f["title"]["t"])) or cur[0], ("summary" in f and clean("episode", "summary", f["summary"]["t"])) or cur[1]]
+        if not cur or not cur[0]: _unused("episode", lang, slug, f, "ohne Maschinenfassung der Folge (nicht angewendet)"); continue
+        cur = list(cur) + [""]; new = {u: clean("episode", u, f[u]["t"]) if u in f else "" for u in ("title", "summary")}
+        for u in f: note("episode", lang, "angewendet" if new.get(u) else "nach der Bereinigung leer (nicht angewendet)", key=(slug, u))
+        out[slug] = [new["title"] or cur[0], new["summary"] or cur[1]]
     return out
+
+
+def _unused(kind, lang, item, units, what):
+    for u in units: note(kind, lang, what, key=(item, u))
 
 
 def apply_notes(lang, data):
@@ -191,7 +254,9 @@ def apply_notes(lang, data):
     if not ov: return data
     out = dict(data)
     for slug, f in ov.items():
-        h = clean("notes", "html", f["html"]["t"]) if slug in out and "html" in f else ""
+        if slug not in out: _unused("notes", lang, slug, f, "ohne Maschinenfassung der Folge (nicht angewendet)"); continue
+        h = clean("notes", "html", f["html"]["t"], out[slug]) if "html" in f else ""   # Bilder: nur die der Maschinenfassung (= des Originals) und des eigenen Buckets
+        if "html" in f: note("notes", lang, "angewendet" if h.strip() else "nach der Bereinigung leer (nicht angewendet)", key=(slug, "html"))
         if h.strip(): out[slug] = h
     return out
 

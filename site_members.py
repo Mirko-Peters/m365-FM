@@ -136,6 +136,25 @@ def _https(u):
     return u if isinstance(u, str) and u.startswith("https://") else ""
 
 
+def _day(ts):
+    """Datum eines Beitrags oder Feed-Eintrags; unbrauchbare Werte (z. B. Millisekunden) brechen den Seitenbau nicht ab (site_feed.iso)."""
+    import site_feed
+    return site_feed.iso(ts)
+
+
+def own_blog(BASE, url):
+    """Handle, wenn die Kanal-URL der eigene Blog eines Mitglieds auf dieser Website ist (/community/u/<handle>/blog/), sonst ''."""
+    m = re.fullmatch(re.escape(BASE) + r"/community/u/([^/]+)/blog/", url or "")
+    return m.group(1) if m else ""
+
+
+def shown_channels(BASE, x):
+    """Kanaele fuer Profilseite und sameAs. Der Kanal "eigener Blog" entsteht im Worker auch fuer Kurzposts aus dem MVP-Tracker
+    (contrib_sources.js); die Seite /community/u/<handle>/blog/ gibt es aber nur mit Blogbeitraegen in der Standardsprache (site_blog.py).
+    Ohne sie waere der Link tot - dann wird der Kanal nicht gezeigt. Den Blog verlinkt die Profilseite ohnehin selbst (BLOGS)."""
+    return [c for c in x.get("channels", []) if not own_blog(BASE, c.get("url")) or "en" in BLOGS.get(own_blog(BASE, c["url"]), ())]
+
+
 def mvp_contrib_html(p, s):
     """MVP-Tracker (#231): oeffentliche Beitraege des Profils. Der Worker liefert nur public=1 und bestaetigte Eintraege (profiles.js)."""
     items = p.get("mvp_contributions") or []
@@ -143,7 +162,7 @@ def mvp_contrib_html(p, s):
         return ""
     li = []
     for c in items:
-        day = datetime.fromtimestamp(int(c.get("published") or 0), timezone.utc).strftime("%Y-%m-%d")
+        day = _day(c.get("published") or 0)
         title = esc(c.get("title") or "")
         link = f'<a href="{esc(_https(c.get("url")))}" rel="nofollow ugc noopener">{title}</a>' if _https(c.get("url")) else title
         li.append(f'<li>{link} <span class="mut">· {esc(c.get("category") or s["mvp_other"])} · <time datetime="{day}">{day}</time></span></li>')
@@ -157,7 +176,7 @@ def mvp_contrib_ld(BASE, p):
     for c in p.get("mvp_contributions") or []:
         url = _https(c.get("url"))
         node = {"@context": "https://schema.org", "@type": "CreativeWork", "@id": url or f"{pid}-contribution-{c.get('id', '')}", "name": c.get("title") or "",
-                "datePublished": datetime.fromtimestamp(int(c.get("published") or 0), timezone.utc).strftime("%Y-%m-%d"), "author": {"@id": pid}}
+                "datePublished": _day(c.get("published") or 0), "author": {"@id": pid}}
         if url:
             node["url"] = url
         if c.get("category"):
@@ -232,7 +251,7 @@ def person_ld(BASE, p, orgs_by_handle):
         n["memberOf"] = mem
     if ROLE.role_of(p):   # Rolle bei M365.FM (Editor/Moderator) zusaetzlich, ohne Programme oder hasOccupation zu ueberschreiben
         ROLE.add_to_person_ld(BASE, n, ROLE.role_of(p))
-    same = [c["url"] for c in p.get("channels", [])] + [x["url"] for x in p.get("programs", []) if x.get("verified") and x.get("url")]
+    same = [c["url"] for c in shown_channels(BASE, p)] + [x["url"] for x in p.get("programs", []) if x.get("verified") and x.get("url")]
     if person_entity(p["handle"]):   # dieselbe Person in der Entitaetsdatenbank: Seite und Knoten (eine Identitaet, Profil haengt daran)
         same += [eurl(BASE, "en", person_entity(p["handle"])), f"{BASE}/entity/{person_entity(p['handle'])}/#entity"]
     if same:
@@ -339,7 +358,7 @@ def build(g, people, orgs, extra=None):
         if not its:
             return ""
         return '<ul class="pf-list">' + "".join(f'<li class="pf-item" data-id="{i["id"]}"><button type="button" class="vt" aria-pressed="false" aria-label="Upvote"><span aria-hidden="true">▲</span> <span class="n">{i["votes"]}</span></button>'
-                                                f'<div><a href="{esc(i["url"])}" rel="nofollow ugc noopener" target="_blank">{esc(i["title"])}</a><br><span class="mut">{esc(KIND.get(i["kind"], i["kind"]))} · {datetime.fromtimestamp(i["published"], timezone.utc).strftime("%Y-%m-%d")}</span></div></li>' for i in its) + "</ul>"
+                                                f'<div><a href="{esc(i["url"])}" rel="nofollow ugc noopener" target="_blank">{esc(i["title"])}</a><br><span class="mut">{esc(KIND.get(i["kind"], i["kind"]))} · {_day(i["published"])}</span></div></li>' for i in its) + "</ul>"
 
     def fol(n, lang):
         n = int(n or 0)
@@ -350,7 +369,8 @@ def build(g, people, orgs, extra=None):
     MS_A = {"modern_work": ("Modern Work", "Modern Work"), "business_apps": ("Business Applications", "Business Applications"), "data_ai": ("Data & AI", "Data & AI"), "infrastructure": ("Infrastructure", "Infrastructure"), "digital_app": ("Digital & App Innovation", "Digital & App Innovation"), "security": ("Security", "Security"), "csp": ("Cloud Solution Provider (CSP)", "Cloud Solution Provider (CSP)"), "msp": ("Managed Service Provider", "Managed Service Provider"), "isv": ("Software Vendor (ISV)", "Softwarehersteller (ISV)"), "inner_circle": ("Inner Circle", "Inner Circle"), "other": ("Other", "Sonstiges")}
     MS_L = {"solutions_partner": ("Solutions Partner", "Solutions Partner"), "specialization": ("Specialization", "Spezialisierung"), "advanced_specialization": ("Advanced specialization", "Advanced Specialization"), "inner_circle": ("Inner Circle member", "Inner-Circle-Mitglied"), "poty_finalist": ("Partner of the Year finalist", "Partner-of-the-Year-Finalist"), "poty_winner": ("Partner of the Year winner", "Partner-of-the-Year-Gewinner"), "registered": ("Registered partner", "Registrierter Partner"), "other": ("Other", "Sonstiges")}
     def chan_ul(x, lang="en"):
-        return '<ul>' + "".join(f'<li><a href="{esc(c["url"])}" rel="me nofollow ugc noopener" target="_blank">{esc(KIND.get(c["kind"], c["kind"]))}</a> <span class="mut">{esc(c["url"].replace("https://", "").rstrip("/")[:60])}{fol(c.get("followers"), lang)}</span></li>' for c in x.get("channels", [])) + "</ul>" if x.get("channels") else ""
+        chans = shown_channels(BASE, x)
+        return '<ul>' + "".join(f'<li><a href="{esc(c["url"])}" rel="me nofollow ugc noopener" target="_blank">{esc(KIND.get(c["kind"], c["kind"]))}</a> <span class="mut">{esc(c["url"].replace("https://", "").rstrip("/")[:60])}{fol(c.get("followers"), lang)}</span></li>' for c in chans) + "</ul>" if chans else ""
 
     for lang in COMM_LANGS:
         s = S[lang]; li = 1 if lang == "de" else 0; noidx = lang != "en"
@@ -393,7 +413,7 @@ def build(g, people, orgs, extra=None):
             b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{croot}members/">{esc(s["members"])}</a></nav>{img_tag("u", p, p["name"])}<h1>{esc(p["name"])}{ROLE.chip(BASE, lang, ROLE.role_of(p), p.get("scope"))}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="creator" data-topic-id="{esc(p["handle"])}" data-topic-label="{esc(T(lang, "Follow", "Folgen"))}">🔔 {T(lang, "Follow", "Folgen")}</button><p style="font-size:1.1em">{esc(p.get("headline", ""))}</p><p>{tags_of_p(p, li, s)}</p>{ft}'
                           + (f'<h2>{esc(s["about"])}</h2><p style="white-space:pre-line">{esc(p["about"])}</p>' if p.get("about") else "")
                           + (f'<h2>{esc(s["expertise"])}</h2>{exp_ul(p, lang, li, s)}' if p.get("expertise") else "") + (f'<h2>{esc(s["certs"])}</h2>{certs}' if certs else "")
-                          + (f'<h2>{esc(s["latest"])}</h2>{items_ul(p)}' if items_ul(p) else "") + (f'<h2>{esc(s["channels"])}</h2>{chan_ul(p, lang)}' if p.get("channels") else "")
+                          + (f'<h2>{esc(s["latest"])}</h2>{items_ul(p)}' if items_ul(p) else "") + (f'<h2>{esc(s["channels"])}</h2>{chan_ul(p, lang)}' if chan_ul(p, lang) else "")
                           + rec_html(p, lang, li, pb) + (f'<h2>{esc(s["contrib"])}</h2>{contrib}' if contrib else "") + mvp_contrib_html(p, s) + ((extra or {}).get(lang, {}).get("u", {}).get(p["handle"], "")) + live_js + topic_js + css)
             node = person_ld(BASE, p, ob)
             ld = [{"@context": "https://schema.org", "@type": "ProfilePage", "@id": purl(BASE, "en", "u", p["handle"]) + "#profile", "url": u, "name": p["name"], "inLanguage": lang, "dateModified": TODAY, "mainEntity": node}]
@@ -419,7 +439,7 @@ def build(g, people, orgs, extra=None):
             b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{croot}companies/">{esc(s["companies"])}</a></nav>{img_tag("o", o, o["name"])}<h1>{esc(o["name"])}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="creator" data-topic-id="{esc(o["handle"])}" data-topic-label="{esc(T(lang, "Follow", "Folgen"))}">🔔 {T(lang, "Follow", "Folgen")}</button><p style="font-size:1.1em">{esc(o.get("tagline", ""))}</p><p>{tags_of_p(o, li, s)}</p>{ft}'
                           + (f'<h2>{esc(s["about"])}</h2><p style="white-space:pre-line">{esc(o["about"])}</p>' if o.get("about") else "")
                           + (f'<h2>{esc(s["expertise"])}</h2>{exp_ul(o, lang, li, s)}' if o.get("expertise") else "") + (f'<h2>{esc(s["team"])}</h2>{mem}' if mem else "")
-                          + (f'<h2>{esc(s["latest"])}</h2>{items_ul(o)}' if items_ul(o) else "") + (f'<h2>{esc(s["channels"])}</h2>{chan_ul(o, lang)}' if o.get("channels") else "") + ((extra or {}).get(lang, {}).get("c", {}).get(o["handle"], "")) + live_js + topic_js + css)
+                          + (f'<h2>{esc(s["latest"])}</h2>{items_ul(o)}' if items_ul(o) else "") + (f'<h2>{esc(s["channels"])}</h2>{chan_ul(o, lang)}' if chan_ul(o, lang) else "") + ((extra or {}).get(lang, {}).get("c", {}).get(o["handle"], "")) + live_js + topic_js + css)
             ld = [{"@context": "https://schema.org", "@type": "ProfilePage", "@id": purl(BASE, "en", "c", o["handle"]) + "#profile", "url": u, "name": o["name"], "inLanguage": lang, "dateModified": TODAY, "mainEntity": org_ld(BASE, o, pb)}]
             write(f"{pfx2(lang)}community/c/{o['handle']}/index.html", page(lang, f'{o["name"]} – {o.get("tagline") or s["companies"]} | M365.FM', (o.get("tagline") or o.get("about") or "")[:155], u, b, None, ld, og_type="profile", extra_head=LCSS, noindex=noidx, side=(g["side"](lang, (o.get("tagline") or "") + " " + (o.get("about") or "")[:1500], ids=[x["e"] for x in o.get("expertise", [])]) if g.get("side") else "")))
             if not noidx:

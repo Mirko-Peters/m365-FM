@@ -53,7 +53,7 @@ def service_worker(base, lang):
     """Service Worker nur fuer den App-Pfad: App-Huelle + Offline-Seite, /api/ und fremde Hosts nie aus dem Cache."""
     root = urlparse(base).path.rstrip("/")
     scope = root + path_of(lang)
-    shell = [scope, scope + "offline.html", f"{root}/assets/mvp-tracker.js", f"{root}/assets/mvp-tracker.css", f"{root}/assets/community.css",
+    shell = [scope, scope + "offline.html", f"{root}/assets/mvp-tracker.js", f"{root}/assets/mvp-sources.js", f"{root}/assets/linkedin-export.js", f"{root}/assets/mvp-tracker.css", f"{root}/assets/community.css",
              f"{root}/assets/cm-{lang}.js", f"{root}/assets/favicon.svg", f"{root}/assets/favicon-192.png"]
     return f"""// Service Worker der App "{APP_NAME}" ({lang}), nur fuer {scope} (site_contributor.py). Kein Web-Push (das macht /sw.js).
 // Gespeichert wird nur die App-Huelle. Private Daten kommen von der Community-API (/api/...) und werden NIE gespeichert.

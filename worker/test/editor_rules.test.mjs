@@ -720,7 +720,7 @@ test("319-11: eine offene Moderator-Bewerbung stuft nie zurueck, wer inzwischen 
 // ---------- 319-12: ein maskEmail im Worker ----------
 test("319-12: maskEmail kommt aus claimverify.js; Redakteure sehen Einladungs-Adressen nur maskiert", async () => {
   const src = (f) => readFileSync(new URL("../src/" + f, import.meta.url), "utf-8");
-  assert.match(src("entinvite.js"), /import \{ maskEmail \} from "\.\/claimverify\.js";/);
+  assert.match(src("entinvite.js"), /import \{ maskEmail(?: as maskAddr)? \} from "\.\/claimverify\.js";/);
   assert.equal((src("entinvite.js").match(/maskEmail\s*=|function maskEmail/g) || []).length, 0);   // keine eigene Definition (PR #322 bringt maskAddr aus derselben Quelle)
   assert.equal((src("perm.js").match(/maskEmail\s*=|function maskEmail/g) || []).length, 0);
   const { raw, env } = await mk();
