@@ -73,13 +73,20 @@ def upload_link(base, lang, title, vid, fallback, fetch=page_fetch):
     return url if st == 200 and page_of_video(html, vid) else fallback
 
 
-def build_mapping(base, en_items, dub_items, show_ids, generated=""):
-    """en_items: Dicts mit sid, slug; dub_items: (lang, Dict mit eid, slug); show_ids: Sprache -> Spreaker-Show-ID.
-    Rueckgabe: {version, generated, items:[{spreaker_episode_id, show_id, lang, slug, url}]}, sortiert, je Folgen-ID einmal."""
-    rows = {}
+def build_mapping(base, en_items, dub_items, show_ids, generated="", out=print):
+    """en_items: Dicts mit sid, slug (und sid_q: Guete der Zuordnung, site_podpage.spreaker_match); dub_items: (lang, Dict mit eid, slug);
+    show_ids: Sprache -> Spreaker-Show-ID. Rueckgabe: {version, generated, items:[{spreaker_episode_id, show_id, lang, slug, url}]}, sortiert,
+    je Folgen-ID einmal. Zeigen zwei englische Seiten auf dieselbe Folgen-ID, gilt nie stillschweigend die letzte: die mit der sichereren
+    Zuordnung (kleineres sid_q, etwa sekundengleiche Zeit vor mehrdeutigem Titel) bleibt, bei Gleichstand die erste; out meldet es."""
+    rows, q = {}, {}
     for it in en_items:
         if it.get("sid") and it.get("slug"):
-            rows[str(it["sid"])] = {"spreaker_episode_id": str(it["sid"]), "show_id": EN_SHOW_ID, "lang": "en", "slug": it["slug"], "url": episode_url(base, "en", it["slug"])}
+            sid, iq = str(it["sid"]), it.get("sid_q", 9)
+            if sid in rows and rows[sid]["slug"] != it["slug"]:
+                keep = it["slug"] if iq < q[sid] else rows[sid]["slug"]
+                out(f"::warning::Spreaker-Folge {sid}: zwei Seiten ({rows[sid]['slug']}, {it['slug']}) - behalte {keep}")
+                if iq >= q[sid]: continue
+            rows[sid], q[sid] = {"spreaker_episode_id": sid, "show_id": EN_SHOW_ID, "lang": "en", "slug": it["slug"], "url": episode_url(base, "en", it["slug"])}, iq
     for lang, it in dub_items:
         if it.get("eid") and it.get("slug"):
             rows.setdefault(str(it["eid"]), {"spreaker_episode_id": str(it["eid"]), "show_id": int(show_ids[lang]), "lang": lang, "slug": it["slug"], "url": episode_url(base, lang, it["slug"])})
