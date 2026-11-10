@@ -13,7 +13,7 @@ import site_landing as LND
 import site_mediakit as MKT
 import site_expert_connect as ECN
 import site_entities as ENT
-from site_i18n import COMM_LANGS, pfx
+from site_i18n import COMM_LANGS, pfx, site_langs
 import site_members as MEM
 import site_roles as ROLE
 import site_invite as INV
@@ -69,6 +69,10 @@ LANGS = {
     "ja": ("日本語", "ja", "ltr", 7393232, "ja_JP"),
     "ko": ("한국어", "ko", "ltr", 7393236, "ko_KR")
 }
+
+_SEL = site_langs()
+if _SEL is not None:   # SITE_LANGS: verkleinerter Bau (Staging); ohne Variable bleibt LANGS vollstaendig
+    LANGS = {k: v for k, v in LANGS.items() if k in _SEL}
 
 # UI-Texte je Sprache: listen, watch, transcript, all, more, about, bio, home
 UI = {
