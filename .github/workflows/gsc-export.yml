@@ -1,6 +1,8 @@
 name: Search-Console-Export (woechentlich, #156)
-# tools/gsc_export.py schreibt data/seo/gsc/<bis-datum>.json: Suchanfrage, Seite, Land, Klicks, Impressionen, CTR, Position der letzten 7 Tage bis vor 3 Tagen
+# tools/gsc_export.py schreibt <bis-datum>.json: Suchanfrage, Seite, Land, Klicks, Impressionen, CTR, Position der letzten 7 Tage bis vor 3 Tagen
 # (Format im Kopf des Werkzeugs). Grundlage fuer die SEO-Auswertung neben den Suchbegriffen der Seitensuche (GET /api/search/gaps).
+# NICHT IM REPO: Das Repo ist oeffentlich, Suchanfragen aus der Search Console gehoeren nicht hinein (wie team-analytics.yml). Die Datei wird mit
+# TEAM_ANALYTICS_KEY verschluesselt und nur als Artefakt "gsc-export" (90 Tage) hochgeladen; entschluesseln wie in team-analytics.yml beschrieben.
 # Einrichtung wie ai-stats.yml: Dienstkonto in Google Cloud mit aktivierter "Google Search Console API", JSON-Schluessel als Secret GSC_SERVICE_ACCOUNT_JSON,
 # die E-Mail des Dienstkontos in der Search Console als Nutzer (eingeschraenkt) der Property eintragen; Property ueber die Eingabe site, sonst die
 # Repo-Variable GSC_SITE, sonst sc-domain:m365.fm. Das Secret wird nie ausgegeben (nur als Umgebungsvariable an das Werkzeug).
@@ -19,7 +21,7 @@ on:
         type: boolean
         default: false
 permissions:
-  contents: write
+  contents: read
 concurrency:
   group: gsc-export
   cancel-in-progress: false
@@ -39,22 +41,24 @@ jobs:
         env:
           GSC_SERVICE_ACCOUNT_JSON: ${{ secrets.GSC_SERVICE_ACCOUNT_JSON }}
           GSC_SITE: ${{ inputs.site || vars.GSC_SITE }}
-        run: python tools/gsc_export.py ${{ inputs.dry_run && '--dry-run' || '' }}
-      - name: Speichern
+        run: python tools/gsc_export.py --out-dir gscout ${{ inputs.dry_run && '--dry-run' || '' }}
+      - name: Verschluesseln (unverschluesselt nie hochladen, nie ins Repo)
+        id: enc
         if: ${{ !inputs.dry_run }}
+        env:
+          TEAM_ANALYTICS_KEY: ${{ secrets.TEAM_ANALYTICS_KEY }}
         run: |
-          git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
-          mkdir -p data/seo/gsc
-          git add data/seo/gsc
-          if git diff --cached --quiet; then echo "Nichts zu speichern"; exit 0; fi
-          git commit -q -m "Search-Console-Export aktualisiert (data/seo/gsc)"
-          # main bewegt sich oft (Bots): vor dem Push nachziehen und wiederholen; ein endgueltiger Fehlschlag faellt auf (kein || echo)
-          for i in 1 2 3 4 5; do
-            if git pull --rebase --autostash -q origin main; then
-              if git push -q origin HEAD:main; then exit 0; fi
-            else
-              git rebase --abort 2>/dev/null || true
-            fi
-            sleep $((i*5))
-          done
-          echo "::error::Search-Console-Export konnte nicht gesichert werden"; exit 1
+          set -o pipefail
+          if [ ! -d gscout ] || [ -z "$(ls -A gscout 2>/dev/null)" ]; then echo "Nichts exportiert"; exit 0; fi
+          if [ -z "$TEAM_ANALYTICS_KEY" ]; then rm -rf gscout; echo "::notice::Secret TEAM_ANALYTICS_KEY fehlt - der Export wird nicht aufgehoben (oeffentliches Repo)."; exit 0; fi
+          mkdir -p enc
+          tar czf - -C gscout . | openssl enc -aes-256-cbc -pbkdf2 -iter 600000 -salt -out enc/gsc-export.tar.gz.enc -pass env:TEAM_ANALYTICS_KEY
+          rm -rf gscout
+          echo "ready=1" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ steps.enc.outputs.ready == '1' }}
+        with:
+          name: gsc-export
+          path: enc/gsc-export.tar.gz.enc
+          retention-days: 90
+          if-no-files-found: error
