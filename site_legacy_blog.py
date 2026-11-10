@@ -60,7 +60,7 @@ def translations(BASE, posts_by_slug, fixhtml):
     for lang in build:
         data = TB.load_lang(lang); n = 0
         for slug, p in posts_by_slug.items():
-            r = TB.assemble(p["src"], data.get(slug))
+            r = TB.assemble(p["src"], data.get(slug), lang)
             if not r: continue
             title, desc, html, faq = r
             html = fixhtml(html)
