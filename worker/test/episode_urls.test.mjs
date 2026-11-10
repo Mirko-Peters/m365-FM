@@ -40,6 +40,13 @@ test("Import: geaenderte Adresse macht eine als ok gefuehrte Folge wieder offen;
   const moved = items.map((x, i) => (i === 0 ? { ...x, url: "https://www.m365.fm/show/episodes/neu/" } : x));
   await withFetch({ "/spreaker-urls.json": { items: moved } }, () => importEpisodeUrls(env));
   assert.equal(raw.prepare("SELECT status FROM episode_urls WHERE spreaker_episode_id='1000'").get().status, "differs");
+  // derselbe (noch alte) Zustand im selben Import darf die Folge nicht wieder auf ok setzen
+  await withFetch({ "/spreaker-urls.json": { items: moved }, spreaker_urls_state: st }, () => importEpisodeUrls(env));
+  assert.equal(raw.prepare("SELECT status FROM episode_urls WHERE spreaker_episode_id='1000'").get().status, "differs");
+  // passt der Wert bei Spreaker wieder zur Adresse, bleibt der Zustand ok
+  const fixed = { episodes: { 1000: { s: "ok", u: "https://www.m365.fm/show/episodes/neu/", h: 6704921, c: "2026-11-11T04:47:00Z" } } };
+  await withFetch({ "/spreaker-urls.json": { items: moved }, spreaker_urls_state: fixed }, () => importEpisodeUrls(env));
+  assert.equal(raw.prepare("SELECT status FROM episode_urls WHERE spreaker_episode_id='1000'").get().status, "ok");
   const small = await withFetch({ "/spreaker-urls.json": { items: items.slice(0, 5) } }, () => importEpisodeUrls(env));
   assert.ok(small.skipped);
 });

@@ -14,8 +14,6 @@ export async function importEpisodeUrls(env) {
   for (let i = 0; i < ok.length; i += 50)
     await db.batch(ok.slice(i, i + 50).map((x) => db.prepare("INSERT INTO episode_urls(spreaker_episode_id,show_id,lang,slug,url) VALUES(?,?,?,?,?) ON CONFLICT(spreaker_episode_id) DO UPDATE SET show_id=excluded.show_id,lang=excluded.lang,slug=excluded.slug,url=excluded.url")
       .bind(String(x.spreaker_episode_id), +x.show_id || 0, x.lang, String(x.slug || "").slice(0, 200), x.url)));
-  // Eine Folge, deren Adresse sich seit dem letzten Abgleich geaendert hat, ist wieder offen (Wert bei Spreaker passt nicht mehr zur Adresse).
-  await db.prepare("UPDATE episode_urls SET status='differs' WHERE status='ok' AND url<>'' AND rtrim(url_on_spreaker,'/')<>rtrim(url,'/')").run().catch(() => 0);
   let st = null;
   try { st = await (await fetch(env.EPISODE_URLS_STATE || STATE_URL, { cf: { cacheTtl: 300 } })).json(); } catch { /* Zustand noch nicht im Repo */ }
   let applied = 0;
@@ -28,6 +26,9 @@ export async function importEpisodeUrls(env) {
     applied = rows.length;
     if (st.run) await db.prepare("INSERT INTO meta(k,v) VALUES('episode_urls_run',?) ON CONFLICT(k) DO UPDATE SET v=excluded.v").bind(JSON.stringify(st.run).slice(0, 2000)).run().catch(() => 0);
   }
+  // Erst nach dem Zustand: eine Folge, deren Adresse sich seit dem letzten Abgleich geaendert hat, ist wieder offen (Wert bei Spreaker passt nicht
+  // mehr zur Adresse). Vorher gesetzt, wuerde der noch alte Zustand ("ok" mit der alten Adresse) es im selben Import wieder zuruecksetzen.
+  await db.prepare("UPDATE episode_urls SET status='differs' WHERE status='ok' AND url<>'' AND rtrim(url_on_spreaker,'/')<>rtrim(url,'/')").run().catch(() => 0);
   return { imported: ok.length, state: applied };
 }
 
