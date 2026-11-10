@@ -183,6 +183,14 @@ function seed(raw, T, S) {
   x("INSERT INTO msg_messages(thread_id,from_id,body,created) VALUES(1,?,'t-c',5),(2,?,'s-c',6),(3,?,'t-s',7)", T, S, T);
   x("INSERT INTO contribution_sources(id,user_id,kind,url,created) VALUES(1,?,'blog','https://blog.example/feed',1),(2,?,'blog','https://blog.example/feed',1)", T, S);
   x("INSERT INTO contributions(user_id,source_id,title,url,published,kind,created) VALUES(?,2,'Post A','https://blog.example/a',1,'blog',1),(?,1,'Post B','https://blog.example/b',1,'blog',1),(?,2,'Post B dup','https://blog.example/b',1,'blog',1)", S, T, S);
+  // 0036 (eigene Quellen): S hat zwei Kurzposts - einer haengt an einem Beitrag, den es bei T unter derselben URL schon gibt - und eine Loeschmarke
+  x("INSERT INTO channels(id,owner_type,owner_id,kind,url) VALUES(50,'u',?,'blog','https://www.m365.fm/community/u/anna-old/blog/')", S);
+  x("INSERT INTO feed_items(id,channel_id,owner_type,owner_id,url,title,published,origin) VALUES(501,50,'u',?,'https://blog.example/a','Post A',1,'kurzpost'),(502,50,'u',?,'https://blog.example/b','Post B dup',1,'kurzpost')", S, S);
+  x("UPDATE contributions SET feed_item_id=501, canon='blog.example/a', guid='g-a', ctype='Book', teaser='Teaser A' WHERE user_id=? AND url='https://blog.example/a'", S);
+  x("UPDATE contributions SET feed_item_id=502 WHERE user_id=? AND url='https://blog.example/b'", S);
+  x("UPDATE contribution_sources SET mode='publish', seeded=1, topics='[\"copilot\"]' WHERE user_id=?", S);
+  x("INSERT INTO contribution_ignored(user_id,url,created) VALUES(?,'https://blog.example/gone',1)", S);
+  x("INSERT INTO item_votes(item_id,user_id,created) VALUES(501,?,1),(502,?,1)", C, C);
   x("INSERT INTO mail_addr(user_id,email,verified,created) VALUES(?,'t@example.com',1,1),(?,'s@example.com',1,1)", T, S);
   x("INSERT INTO blog_follows(user_id,handle,created) VALUES(?,'anna-old',1),(?,'anna',1),(?,'anna-old',1)", C, C, T);
   x("INSERT INTO show_reviews(show,user_id,rating,created,updated) VALUES('m365',?,5,1,1),('m365',?,4,1,1)", T, S);
@@ -252,6 +260,12 @@ test("Zusammenfuehren: Vorschau mit Zaehlern, alle Tabellen auf das Ziel, UNIQUE
   // MVP-Beitraege: Quelle zusammengelegt, doppelte URL entfaellt
   assert.deepEqual(all("SELECT id,user_id FROM contribution_sources"), [{ id: 1, user_id: T }]);
   assert.deepEqual(all("SELECT title,user_id,source_id FROM contributions ORDER BY title"), [{ title: "Post A", user_id: T, source_id: 1 }, { title: "Post B", user_id: T, source_id: 1 }]);
+  // 0036: neue Spalten wandern mit, der Kurzpost des doppelten Beitrags haengt jetzt am Eintrag von T, beide Kurzposts gehoeren T
+  assert.deepEqual(all("SELECT title,feed_item_id,canon,guid,ctype,teaser FROM contributions ORDER BY title"), [{ title: "Post A", feed_item_id: 501, canon: "blog.example/a", guid: "g-a", ctype: "Book", teaser: "Teaser A" }, { title: "Post B", feed_item_id: 502, canon: "", guid: "", ctype: "", teaser: "" }]);
+  assert.deepEqual(all("SELECT id,owner_id,origin FROM feed_items ORDER BY id"), [{ id: 501, owner_id: T, origin: "kurzpost" }, { id: 502, owner_id: T, origin: "kurzpost" }]);
+  assert.equal(one("SELECT owner_id FROM channels WHERE id=50").owner_id, T);
+  assert.equal(one("SELECT mode FROM contribution_sources WHERE id=1").mode, "track", "bei gleicher Quelle bleibt die Einstellung von T");
+  assert.deepEqual(all("SELECT user_id,url FROM contribution_ignored"), [{ user_id: T, url: "https://blog.example/gone" }]);
   // E-Mail: Adresse von T bleibt, stillgelegtes Konto bekommt keine Post
   assert.deepEqual(all("SELECT user_id,email FROM mail_addr"), [{ user_id: T, email: "t@example.com" }]);
   assert.deepEqual(all("SELECT handle FROM blog_follows WHERE user_id=900"), [{ handle: "anna" }]);
@@ -272,6 +286,8 @@ test("Zusammenfuehren: Vorschau mit Zaehlern, alle Tabellen auf das Ziel, UNIQUE
   assert.equal((await call(env, "DELETE", "/api/me", `m365s=${tSess}`)).s, 200);
   assert.equal(one("SELECT COUNT(*) n FROM users WHERE id IN (?,?)", T, S).n, 0);
   assert.equal(one("SELECT COUNT(*) n FROM user_identities").n, 0);
+  // ... und alles aus dem MVP-Tracker samt Kurzposts, ihrem Kanal und den Stimmen darauf (0012, 0036)
+  for (const t of ["contributions", "contribution_sources", "contribution_ignored", "feed_items", "channels", "item_votes"]) assert.equal(one(`SELECT COUNT(*) n FROM ${t}`).n, 0, t);
 });
 
 test("Zusammenfuehren: ohne frische Anmeldung beider Konten abgelehnt", async () => {
@@ -460,6 +476,33 @@ test("Zusammenfuehren: Branche und Job (#304) gehen nicht verloren, die Auswahl 
   // Loeschen des Ziels entfernt auch die Reste am stillgelegten Konto
   assert.equal((await call(e2, "DELETE", "/api/me", `m365s=${a.tSess}`)).s, 200);
   assert.equal((await r2.prepare("SELECT COUNT(*) n FROM profile_job").first()).n + (await r2.prepare("SELECT COUNT(*) n FROM profile_industry").first()).n, 0);
+});
+
+test("Zusammenfuehren und Loeschen: Tabellen des Event-Imports (#317) – Beanspruchung, Import-Vorschau, gemerkte Speaker-Identitaet", async () => {
+  const { db, raw } = await d1(), env = { ...ENV, DB: db };
+  const { tSess, T, S } = await twoAccounts(env);
+  const x = (sql, ...a) => raw.prepare(sql).run(...a), n = (sql, ...a) => raw.prepare(sql).get(...a).n;
+  x("INSERT INTO profiles(user_id,public,handle,updated) VALUES(?,1,'anna-old',1),(?,1,'anna',1)", S, T);
+  x("INSERT INTO events(id,handle,owner_id,title,start,created,updated,unclaimed,source) VALUES(5,'herrenlos',0,'Herrenlos','2027-01-01',1,1,1,'communitydays')");
+  x("INSERT INTO event_claims(event_id,user_id,status,created) VALUES(5,?,'pending',1)", S);
+  x("INSERT INTO import_preview(token,user_id,data,created) VALUES('tok',?,'{\"name\":\"Anna Example\"}',1)", S);
+  x("INSERT INTO speaker_ref(name,name_key,handle,created,updated) VALUES('Anna Example','anna example','anna-old',1,1)");
+  x("INSERT INTO merge_log(kind,from_id,into_id,by_user,created) VALUES('event',1,2,?,1)", S);
+  x("INSERT INTO dedupe_queue(kind,a_id,b_id,status,created,decided_by) VALUES('event',1,2,'separate',1,?)", S);
+  const m = await link(env, tSess, "li-anna");
+  assert.equal((await call(env, "POST", "/api/me/merge", `m365s=${tSess}; m365m=${m.proof}`, { confirm: true })).s, 200);
+  assert.deepEqual(raw.prepare("SELECT event_id,user_id,status FROM event_claims").all().map((r) => ({ ...r })), [{ event_id: 5, user_id: T, status: "pending" }], "offene Beanspruchung wandert zum Ziel");
+  assert.equal(n("SELECT COUNT(*) n FROM import_preview"), 0, "Vorschau des stillgelegten Kontos verfaellt");
+  assert.equal(raw.prepare("SELECT handle FROM speaker_ref").get().handle, "anna", "gemerkte Speaker-Identitaet zeigt auf das Profil des Ziels");
+  assert.equal(raw.prepare("SELECT by_user FROM merge_log").get().by_user, T); assert.equal(raw.prepare("SELECT decided_by FROM dedupe_queue").get().decided_by, T);
+  // die Admin-Liste zeigt die Anfrage nun am lebenden Konto
+  x("UPDATE users SET role='admin' WHERE id=?", T);
+  const claims = await call(env, "GET", "/api/admin/events/claims", `m365s=${tSess}`); assert.equal(claims.s, 200); assert.deepEqual(claims.j.items.map((c) => c.user_id), [T]);
+  // Loeschen des Ziels: nichts aus dem Import bleibt am Konto oder seinem Profil haengen
+  x("INSERT INTO import_preview(token,user_id,data,created) VALUES('tok2',?,'{}',1)", T);
+  assert.equal((await call(env, "DELETE", "/api/me", `m365s=${tSess}`)).s, 200);
+  assert.equal(n("SELECT COUNT(*) n FROM event_claims") + n("SELECT COUNT(*) n FROM import_preview") + n("SELECT COUNT(*) n FROM speaker_ref WHERE handle<>''"), 0);
+  assert.equal(raw.prepare("SELECT by_user FROM merge_log").get().by_user, 0); assert.equal(raw.prepare("SELECT decided_by FROM dedupe_queue").get().decided_by, 0);
 });
 
 test("KI-Token (MCP) duerfen Anmeldungen weder lesen noch aendern", async () => {

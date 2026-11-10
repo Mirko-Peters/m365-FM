@@ -19,6 +19,8 @@ ESSENTIAL = ("/api/blog/export", "/api/profiles/export", "/api/entity/export", "
 # Vorab parallel: alles, was der Seitenbau an Exporten kennt
 PREFETCH = ESSENTIAL + ("/api/entity/claims", "/api/feed/export", "/api/show/export", "/api/events/export", "/api/guests/export", "/api/library/export",
                         "/api/podcast/export", "/api/video/export", "/api/notes/export", "/api/ui-i18n")
+# Aenderungen der Redaktion an Sprachfassungen (site_i18n_overrides.sync schreibt data/i18n_overrides/); Ausfall ist unkritisch: die Dateien im Repo bleiben
+PREFETCH += tuple(f"/api/i18n/overrides?kind={_k}&lang={_l}" for _k in ("lblog", "episode", "notes") for _l in ("de", "fr", "es", "it", "nl", "pt", "pl", "id", "ru", "uk", "ar", "he", "ja", "ko"))
 
 _MEM, _STATE, _LOCK = {}, {}, threading.Lock()   # url -> json | None ; url -> "frisch" | "cache" | "fehlt"
 

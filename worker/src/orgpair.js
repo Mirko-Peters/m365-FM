@@ -3,6 +3,7 @@
 import EM from "../../assets/entity-match.js";
 import { baseIds, entityMap, trustedUser, validate } from "./entities.js";
 import { allowedDomains, matchEmailDomain } from "./claimverify.js";
+import { gate, logEdit } from "./perm.js";
 
 const now = () => Math.floor(Date.now() / 1000);
 const MAX_OWNED = 3;   // wie /api/org: hoechstens 3 eigene Firmen
@@ -151,9 +152,12 @@ export async function pairExisting(env, { dry = true, limit = 150 } = {}) {
 
 export async function handleOrgPair(env, request, url, path, user, J) {
   if (path !== "/api/admin/org-pair") return null;
-  if (!(user?.admin || user?.editor)) return J({ error: "forbidden" }, 403);
+  // Abgleich Firmen <-> Firmen-Entitaeten ueber den ganzen Bestand: can(dupes.merge) - Admin und allgemeine Editoren (ohne Thema, also nicht fuer
+  // Fach-Editoren; Moderatoren koennten nur empfehlen, das kennt diese Route nicht). Ein echter Lauf steht im Protokoll.
+  const g = await gate(env.DB, user, "dupes.merge"); if (!g.ok) return J({ error: g.status === 401 ? "forbidden" : g.why }, 403);
   if (request.method === "GET") return J(await pairExisting(env, { dry: true }));
   if (request.method !== "POST") return J({ error: "method" }, 405);
-  const b = await request.json().catch(() => ({}));
-  return J(await pairExisting(env, { dry: b.dry !== false }));
+  const b = await request.json().catch(() => ({})), r = await pairExisting(env, { dry: b.dry !== false });
+  if (!r.dry) await logEdit(env.DB, g.actor, "dupes.merge", "orgpair", "all", { reason: "Firmen und Firmen-Entitäten abgeglichen", after: { linked: r.linked, entities_created: r.entities_created, orgs_created: r.orgs_created } });
+  return J(r);
 }

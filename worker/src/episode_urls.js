@@ -1,4 +1,4 @@
-// Spreaker-Folge <-> kanonische m365.fm-Adresse (Tabelle episode_urls, Migration 0041).
+// Spreaker-Folge <-> kanonische m365.fm-Adresse (Tabelle episode_urls, Migration 0043).
 // Der Worker speichert und zeigt die Zuordnung; die Korrektur bei Spreaker macht der GitHub-Workflow spreaker-urls.yml (der Worker hat den
 // Spreaker-Token nur als Deploy-Momentaufnahme, die ablaeuft). Zwei Quellen: spreaker-urls.json der Website (Adresse je Folge) und
 // data/spreaker_urls_state.json im Repo (Wert bei Spreaker, Status, Zeitpunkt, letzter Lauf).

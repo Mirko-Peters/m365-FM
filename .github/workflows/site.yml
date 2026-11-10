@@ -294,7 +294,9 @@ jobs:
       # Teilen-Bilder liegen nicht mehr in docs/ (GitHub Pages, 1-GB-Limit), sondern im R2-Bucket unter og/ und werden ueber
       # https://img.m365.fm/og/... ausgeliefert (generate_site.py OG_BASE). Ersatzbild fuer jede Seite auch dann, wenn das Zeichnen scheitert;
       # Upload VOR dem Deploy und blockierend (OG_REQUIRED=1): schlaegt er fehl, wird nicht veroeffentlicht, der naechste Lauf laedt nur den Rest.
-      # Alte Adressen www.m365.fm/og/... leitet der Site-Worker per 301 auf img.m365.fm weiter. Nichts wird geloescht.
+      # Alte Adressen www.m365.fm/og/... leitet der Site-Worker per 301 auf img.m365.fm weiter. Geloescht werden nur persoenliche Karten
+      # (Einladungskarte og/einladung/<kuerzel>.png, Profilkarte og/[<sprache>/]community/u/<kuerzel>.png), die der Bau nicht mehr erzeugt:
+      # Konto geloescht oder Profil nicht mehr oeffentlich (#320). Sicherung gegen Massenloeschung; bewusst uebergehen: Repo-Variable OG_PRUNE_FORCE=1.
       - name: Teilen-Bilder - Ersatzbild fuer jede Seite ohne Bild
         run: python generate_og.py --fallback-only
       # Illustrationen der Service-Landingpages (site_landing.py): Pillow, deterministisch, wenige Sekunden. Blockierend, weil die Seiten
@@ -303,10 +305,11 @@ jobs:
         run: |
           pip install -q pillow
           python generate_service_images.py r2img
-      - name: Teilen- und Service-Bilder in den R2-Bucket laden (img.m365.fm/og/ und /services/; nur main, blockierend; nichts wird geloescht)
+      - name: Teilen- und Service-Bilder in den R2-Bucket laden (img.m365.fm/og/ und /services/; nur main, blockierend; Karten entfernter Profile werden geloescht)
         if: github.ref == 'refs/heads/main'
         env:
           OG_REQUIRED: "1"
+          OG_PRUNE_FORCE: ${{ vars.OG_PRUNE_FORCE || '0' }}
           R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
           R2_BUCKET: ${{ secrets.R2_BUCKET }}
           R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
@@ -315,7 +318,7 @@ jobs:
           pip install -q boto3
           python tools/r2_og_upload.py r2img
       - name: Seiten-Hashes (fuer gezieltes Purge und IndexNow)
-        run: python tools/page_hashes.py docs page-hashes.json
+        run: python tools/page_hashes.py docs page-hashes.json content-hashes.json
       # R2 als Ursprung: Bau-Kennung fuer den Spiegel im Deploy-Job (tools/r2_site_sync.py). Der Site-Worker liest R2 nur, wenn pages/r2-build.txt
       # im Bucket mit /r2-build.txt auf GitHub Pages uebereinstimmt - also erst, wenn dieser Bau vollstaendig und fehlerfrei gespiegelt ist.
       - name: Bau-Kennung fuer den R2-Spiegel
@@ -326,6 +329,7 @@ jobs:
           retention-days: 3
           path: |
             page-hashes.json
+            content-hashes.json
             r2-changed.json
             r2-keys.json
       - uses: actions/configure-pages@v5
@@ -361,10 +365,13 @@ jobs:
           CF_ZONE_ID: ${{ secrets.CF_ZONE_ID }}
           INDEXNOW_KEY: 0348df8af6514d5bae4d9f9a5ba51f57
           BASE: https://www.m365.fm
+          OLD_CONTENT: .pagehashes/content-hashes.json
+          NEW_CONTENT: .newhashes/content-hashes.json
         run: |
           mkdir -p .pagehashes
           python3 tools/purge_changed.py .pagehashes/page-hashes.json .newhashes/page-hashes.json .newhashes/r2-changed.json
           cp .newhashes/page-hashes.json .pagehashes/page-hashes.json
+          cp .newhashes/content-hashes.json .pagehashes/content-hashes.json
       # ausdruecklich sichern (nicht erst am Jobende): auch wenn der R2-Spiegel danach scheitert, bleibt der Stand fuer Purge und IndexNow aktuell
       - name: Seiten-Stand dieses Deploys sichern
         if: always() && hashFiles('.pagehashes/page-hashes.json') != ''

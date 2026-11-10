@@ -15,6 +15,8 @@ import site_expert_connect as ECN
 import site_entities as ENT
 from site_i18n import COMM_LANGS, pfx
 import site_members as MEM
+import site_roles as ROLE
+import site_invite as INV
 import site_events as EVT
 import site_directory as DIR
 import site_mcp as MCPS
@@ -566,7 +568,7 @@ def css_link():
     """Das gesamte Stylesheet liegt einmal als Datei mit Inhalts-Hash unter /assets/ (statt ~33 KB inline in jeder Seite): kleinere Seiten, Browser- und CDN-Cache."""
     if not _CSSF:
         import hashlib
-        css = SBAR_CSS + "\n" + CSS + (ADS.CSS if ADS.css_needed(BASE) else "") + "\n" + FORMS_CSS + "\n" + A11Y_CSS + "\n"
+        css = SBAR_CSS + "\n" + CSS + (ADS.CSS if ADS.css_needed(BASE) else "") + "\n" + FORMS_CSS + "\n" + A11Y_CSS + "\n" + ROLE.CSS + "\n"
         name = "site." + hashlib.sha1(css.encode("utf-8")).hexdigest()[:10] + ".css"
         (OUT / "assets").mkdir(parents=True, exist_ok=True); (OUT / "assets" / name).write_text(css, encoding="utf-8")
         _CSSF["u"] = f"{BASE}/assets/{name}"
@@ -756,13 +758,13 @@ def community_tags(lang, vid=None, mode="", css_async=False):
     css_async: community.css nicht renderblockierend laden (Folgenseiten: die Widgets stehen unten und erscheinen erst nach der API-Antwort;
     Lighthouse zaehlte das Stylesheet am Seitenende als blockierend, ~0,4 s auf dem Handy). Ohne JavaScript gibt es dort ohnehin keine Widgets."""
     priv = f"{BASE}/{'datenschutz' if lang == 'de' else 'privacy'}/"
-    cfg = {"api": COMMUNITY_API, "lang": lang, "vid": vid, "privacy": priv, "communityUrl": f"{BASE}/{lang}/community/"}
+    cfg = {"api": COMMUNITY_API, "lang": lang, "vid": vid, "privacy": priv, "communityUrl": f"{BASE}/{lang}/community/", "roles": ROLE.js_cfg(BASE, lang)}
     # Die Oberflaechentexte (ca. 6 KB je Sprache, auf jeder Seite gleich) liegen in assets/cm-<sprache>.js (gecacht), nicht mehr in jeder Seite.
     css_url = f'{BASE}/assets/community.css?v={_cv("assets/community.css")}'
     css = (f'<link rel="preload" as="style" href="{css_url}" onload="this.onload=null;this.rel=\'stylesheet\'">' if css_async
            else f'<link rel="stylesheet" href="{css_url}">')
     return (f'{css}<script defer src="{BASE}/assets/cm-{lang if lang in _CI else "en"}.js?v={_cv("data/community_i18n.json")}"></script>'
-            f'<script>window.M365C={json.dumps(cfg, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")}</script><script defer src="{BASE}/assets/community.js?v={_cv("assets/community.js")}"></script>')
+            f'<script>window.M365C={json.dumps(cfg, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")}</script><script defer src="{BASE}/assets/invite-share.js?v={_cv("assets/invite-share.js")}"></script><script defer src="{BASE}/assets/community.js?v={_cv("assets/community.js")}"></script>')
 
 
 def write_cm_js(out):
@@ -894,6 +896,7 @@ def author_box(lang):
         chs = "".join(f'<a href="{esc(c["url"])}" rel="me noopener" itemprop="sameAs">{esc(KL.get(c["kind"], "Link"))}</a> ' for c in a.get("channels", [])[:8] if c.get("url"))
         img = f'{COMMUNITY_API}/api/img/u/{a["handle"]}' if a.get("img") else (f"{BASE}/assets/mirko-peters.jpg" if (ROOT / "assets" / "mirko-peters.jpg").exists() else "")
         badge = f'<img class="badge" src="{img}" alt="{esc(a["name"])}" width="58" height="58" loading="lazy" itemprop="image">' if img else '<div class="badge">MP</div>'
+        badge = ROLE.avatar(badge, ROLE.role_of(a), lang, small=True)   # Editor/Moderator: Ring und Symbol auch im Autorenkasten
         bio = _sentences(a.get("about") or a.get("headline") or "", 360)
         names = _ent_names(); ex = sorted([e for e in a.get("expertise", []) if e.get("e") in names], key=lambda e: (-int(bool(e.get("verified") or e.get("via"))), -(e.get("level") or 0)))[:6]
         exh = "".join(f'<li><a href="{pref}entity/{e["e"]}/" itemprop="knowsAbout">{esc(names[e["e"]])}</a></li>' for e in ex)
@@ -901,7 +904,7 @@ def author_box(lang):
         csh = "".join(f'<li itemprop="hasCredential" itemscope itemtype="https://schema.org/EducationalOccupationalCredential"><a href="{pref}entity/{c["e"]}/" itemprop="name">{esc(names[c["e"]])}</a></li>' for c in cs)
         job = esc((a.get("headline") or progs.get(vp[0], "") if vp else a.get("headline") or "")[:100])
         return (f'<aside class="author" itemscope itemtype="https://schema.org/Person" itemid="{ent}" aria-label="{esc(L["about"])}"><link itemprop="sameAs" href="{ent}">{badge}<div>'
-                f'<strong><a href="{pref}community/u/{a["handle"]}/" rel="author" itemprop="url"><span itemprop="name">{esc(a["name"])}</span></a>{(" · " + esc(lab)) if lab else ""}</strong>'
+                f'<strong><a href="{pref}community/u/{a["handle"]}/" rel="author" itemprop="url"><span itemprop="name">{esc(a["name"])}</span></a>{ROLE.chip(BASE, lang, ROLE.role_of(a), a.get("scope"))}{(" · " + esc(lab)) if lab else ""}</strong>'
                 + (f'<meta itemprop="jobTitle" content="{job}">' if job else "") + f'<p itemprop="description">{esc(bio)}</p>'
                 + (f'<p class="auth-ex"><b>{esc(L["exp"])}:</b></p><ul class="auth-ul">{exh}</ul>' if exh else "")
                 + (f'<p class="auth-ex"><b>{esc(L["cert"])}:</b></p><ul class="auth-ul">{csh}</ul>' if csh else "")
@@ -965,7 +968,7 @@ def build():
     import shutil as _sh
     if (ROOT / "r2out").exists(): _sh.rmtree(ROOT / "r2out")
     TRF.REG = TRF.Registry()   # #266: Transkripte dieses Baus (Index /show/transcripts.txt)
-    SF.prefetch(COMMUNITY_API, langs=list(COMM_LANGS)); SF.check(COMMUNITY_API)   # alle Exporte einmal, parallel; ohne Pflicht-Exporte kein Bau
+    SF.prefetch(COMMUNITY_API, langs=list(COMM_LANGS)); SF.check(COMMUNITY_API); import site_i18n_overrides as _OV0; _OV0.sync(COMMUNITY_API)   # alle Exporte einmal, parallel; ohne Pflicht-Exporte kein Bau
     phase("Exporte geholt")
     eps, pub, seo = load()
     try:
@@ -1415,6 +1418,9 @@ def build():
         _lsw = {lg: f"{BASE}/{path}/", ("en" if lg == "de" else "de"): f"{BASE}/{_pair}/"}
         write(f"{path}/index.html", page(lg, f"{ttl} – M365.FM", ttl, f"{BASE}/{path}/", f"{header(lg, '')}<main class=\"wrap\" style=\"max-width:46em\">{fn()}</main>{footer(lg)}", og_type="website", noindex=True, switch=_lsw))
 
+    # Bot-Seite: erklaert den EventBot (User-Agent "M365.FM-EventBot (+https://www.m365.fm/bot/)"), noindex wie die Rechtsseiten
+    write("bot/index.html", page("en", "M365.FM EventBot – M365.FM", "M365.FM EventBot", f"{BASE}/bot/", f"{header('en', '')}<main class=\"wrap\" style=\"max-width:46em\">{SL.bot_page()}</main>{footer('en')}", og_type="website", noindex=True))
+
     # Barrierefreiheitserklaerung je Sprache
     for lg in ["en"] + list(active):
         if lg not in _AST and lg != "en":
@@ -1428,7 +1434,7 @@ def build():
     # Community-Seite je Sprache (noindex) + Service Worker fuer Web-Push
     for l in list(active) + ["en"]:
         ct = _CI.get(l, _CI.get("en", {})).get("profile", "Profile")
-        write("community/index.html" if l == "en" else f"{l}/community/index.html", page(l, f"{ct} – M365.FM" + ("" if l == "en" else f" {LANGS[l][0]}"), ct, (f"{BASE}/community/" if l == "en" else f"{BASE}/{l}/community/"), f'{header(l, "")}<main class="wrap" style="max-width:48em"><h1 id="c-h1">{esc(ct)}</h1><div id="c-page"></div><div id="c-expert"></div><div id="c-mvp"></div><div id="c-events"></div><div id="c-blog"></div><div id="c-podcast"></div><div id="c-shows"></div><div id="c-video"></div><div id="c-library"></div><div id="c-guests"></div><div id="c-feed"></div><div id="c-notes"></div><div id="c-wish"></div><div id="c-mail"></div><div id="c-messages"></div></main>{footer(l)}{community_tags(l)}<script>window.M365X={{api:"{COMMUNITY_API}",base:"{BASE}",lang:"{l}"}}</script><script defer src="{BASE}/assets/entity-match.js"></script><script defer src="{BASE}/assets/profile.js"></script><script defer src="{BASE}/assets/mvp-tracker.js"></script><script defer src="{BASE}/assets/events.js"></script><script defer src="{BASE}/assets/editor.js"></script><script defer src="{BASE}/assets/seo.js"></script><script defer src="{BASE}/assets/credits.js"></script><script defer src="{BASE}/assets/notes.js"></script><script defer src="{BASE}/assets/blog.js"></script><script defer src="{BASE}/assets/podcast.js"></script><script defer src="{BASE}/assets/shows.js"></script><script defer src="{BASE}/assets/video.js"></script><script defer src="{BASE}/assets/library.js"></script><script defer src="{BASE}/assets/guests.js"></script><script defer src="{BASE}/assets/feeditems.js"></script><script defer src="{BASE}/assets/wish.js"></script><script defer src="{BASE}/assets/mailprefs.js"></script><script defer src="{BASE}/assets/messages.js"></script>', og_type="website", extra_head=LRN.WCSS + f'<link rel="stylesheet" href="{BASE}/assets/mvp-tracker.css">', noindex=True))
+        write("community/index.html" if l == "en" else f"{l}/community/index.html", page(l, f"{ct} – M365.FM" + ("" if l == "en" else f" {LANGS[l][0]}"), ct, (f"{BASE}/community/" if l == "en" else f"{BASE}/{l}/community/"), f'{header(l, "")}<main class="wrap" style="max-width:48em"><h1 id="c-h1">{esc(ct)}</h1><div id="c-page"></div><div id="c-expert"></div><div id="c-mvp"></div><div id="c-events"></div><div id="c-events-import"></div><div id="c-blog"></div><div id="c-podcast"></div><div id="c-shows"></div><div id="c-video"></div><div id="c-library"></div><div id="c-guests"></div><div id="c-feed"></div><div id="c-notes"></div><div id="c-wish"></div><div id="c-mail"></div><div id="c-messages"></div></main>{footer(l)}{community_tags(l)}<script>window.M365X={{api:"{COMMUNITY_API}",base:"{BASE}",lang:"{l}"}}</script><script defer src="{BASE}/assets/entity-match.js"></script><script defer src="{BASE}/assets/profile.js"></script><script defer src="{BASE}/assets/mvp-tracker.js"></script><script defer src="{BASE}/assets/events.js"></script><script defer src="{BASE}/assets/events-import.js"></script><script defer src="{BASE}/assets/editor.js"></script><script defer src="{BASE}/assets/seo.js"></script><script defer src="{BASE}/assets/credits.js"></script><script defer src="{BASE}/assets/notes.js"></script><script defer src="{BASE}/assets/blog.js"></script><script defer src="{BASE}/assets/podcast.js"></script><script defer src="{BASE}/assets/shows.js"></script><script defer src="{BASE}/assets/video.js"></script><script defer src="{BASE}/assets/library.js"></script><script defer src="{BASE}/assets/guests.js"></script><script defer src="{BASE}/assets/feeditems.js"></script><script defer src="{BASE}/assets/wish.js"></script><script defer src="{BASE}/assets/mailprefs.js"></script><script defer src="{BASE}/assets/messages.js"></script>', og_type="website", extra_head=LRN.WCSS + f'<link rel="stylesheet" href="{BASE}/assets/mvp-tracker.css">', noindex=True))
     # MVP-Tracker als eigene App "M365.FM Contributor" (PWA nur fuer /community/contributor/, eigenes Manifest und eigener Service Worker)
     import site_contributor as CONTRIB
     CONTRIB.build({"BASE": BASE, "write": write, "page": page, "header": header, "footer": footer, "community_tags": community_tags,
@@ -1489,9 +1495,10 @@ def build():
                         articles=articles, url_of=url_of, cat_name=cat_name, ORDER=ORDER, strip_tags=strip_tags, anchor_title=anchor_title, short=short, parse_desc=parse_desc,
                         sitemap=sitemap, TODAY=TODAY, api=COMMUNITY_API, SCORE={l: (_QUI.get(l, {}).get("score") or _QUI["en"]["score"]) for l in list(LANGS) + ["en"]}))
 
-    _ctx = dict(community_tags=community_tags, write=write, write_r2=write_r2, page=page, header=header, footer=footer, footer_en=footer_en, BASE=BASE, LANGS=LANGS, active=active, url_of=url_of, anchor_title=anchor_title, sitemap=sitemap, TODAY=TODAY, api=COMMUNITY_API, google_maps_key=os.environ.get("GOOGLE_MAPS_API_KEY", ""), orig_alts=ORIG_ALTS, side=sidebar)   # side: die eine Sidebar der Inhaltsseiten (Entitaeten, Blog, Videos, Bibliothek, Events, Profile, Show)
+    _ctx = dict(OGLIST=OGLIST, OG_BASE=OG_BASE, community_tags=community_tags, write=write, write_r2=write_r2, page=page, header=header, footer=footer, footer_en=footer_en, BASE=BASE, LANGS=LANGS, active=active, url_of=url_of, anchor_title=anchor_title, sitemap=sitemap, TODAY=TODAY, api=COMMUNITY_API, google_maps_key=os.environ.get("GOOGLE_MAPS_API_KEY", ""), orig_alts=ORIG_ALTS, side=sidebar)   # side: die eine Sidebar der Inhaltsseiten (Entitaeten, Blog, Videos, Bibliothek, Events, Profile, Show)
     phase("Folgenseiten (Dub-Sprachen), Startseiten")
     _people, _orgs = MEM.fetch_members(COMMUNITY_API)
+    ROLE.set_people(_people)   # Editor/Moderator-Abzeichen (Ring, Chip, JSON-LD) fuer Profile, Listen, Autorenkasten und Event-Speaker
 
     import site_podpage as PP
     _epc = {}
@@ -1561,6 +1568,7 @@ def build():
     ENT.build(_ctx, lambda lang: _glc[lang] if lang in _glc else _glc.setdefault(lang, LRN.gloss_links(lang, BASE)), MEM.experts_index(_people, _orgs), _ep_find)
     phase("Entitaetsseiten")
     MEM.build(_ctx, _people, _orgs, extra={l: EVT.blocks(BASE, _events, l) for l in COMM_LANGS})
+    INV.build(_ctx, _people)   # persoenliche Einladungsseiten mit eigener Teilen-Vorschau (site_invite.py)
     DIR.build(_ctx)
     EVT.build(_ctx, _events, _people, _orgs)
     BLG.build(_ctx, _posts, _people, COMMUNITY_API)
@@ -1578,6 +1586,7 @@ def build():
     SHW.build(_ctx, (LRN._fetch_json(f"{COMMUNITY_API}/api/show/export") or {}).get("items", []))
     phase("Community (Profile, Events, Blog, Bibliothek, Podcast, Video, Feed, Shows)")
     PP.build(_ctx)
+    import site_i18n_overrides as OVR; OVR.publish(OUT)   # Veraltet-Liste und Einheiten-Ansicht fuer /redaktion/: erst HIER, nach allen note_blog/note_podpage (PP.build merkt Folgen und Show Notes vor)
     phase("Englische Show (Podpage)")
     MCPS.build(_ctx)
     LIVE.build(_ctx)   # M365 Show: Livestream-Seite + Seite je Stream (data/live.json, sync_live.py)
@@ -1935,6 +1944,12 @@ Mirko Peters, {BASE}/about/
           f'<div id="adm"><p class="mut">Lädt …</p></div>{_adm_css}'
           f'<script>window.M365ADM={{api:"{COMMUNITY_API}",base:"{BASE}"}}</script><script defer src="{BASE}/assets/admin.js"></script></main>{footer("de")}',
           noindex=True, og_type="website"))
+    # Rollen-Erklaerung (/rollen/) sowie Arbeitsseiten der Redaktion (/redaktion/) und Moderation (/moderation/): alle Sprachen, noindex fuer die Arbeitsseiten
+    for _l in COMM_LANGS:
+        _pf = ROLE.pfx_for(_l)
+        _rt = ROLE._t(_l)["title"]
+        write(f"{_pf}rollen/index.html", page(_l, f"{_rt} – M365.FM", _rt, ROLE.about_url(BASE, _l), f'{header(_l, "")}{ROLE.about_page_body(BASE, _l)}{footer(_l)}', og_type="website"))
+    ROLE.desk_pages(dict(BASE=BASE, API=COMMUNITY_API, langs=COMM_LANGS, write=write, page=page, header=header, footer=footer))   # noindex, nicht in der Sitemap, ohne Daten im HTML
     write("callback/index.html", """<!doctype html><meta charset=utf-8><meta name=robots content="noindex,nofollow"><meta name=viewport content="width=device-width,initial-scale=1"><title>Anmeldung</title>
 <body style="font-family:system-ui,sans-serif;background:#101214;color:#e9ecef;padding:40px;max-width:640px;margin:auto"><h2>Anmeldung</h2><p id=m>Kein Code in der Adresse.</p>
 <pre id=c style="white-space:pre-wrap;word-break:break-all;background:#1d2126;padding:14px;border:1px solid #444"></pre><button id=b style="display:none;padding:10px 18px">Code kopieren</button>
@@ -1981,6 +1996,7 @@ Mirko Peters, {BASE}/about/
     except Exception as _e:
         import traceback; traceback.print_exc(); print("Interne Links nicht umgeschrieben:", _e)
     phase("Interne Links ohne Umweg")
+    import i18n_overrides as _OVR; _OVR.report()   # Handtexte der Redaktion: je Art und Sprache angewendet / nicht angewendet (ohne Quell-Anker, verwaist, ohne angezeigte Fassung)
     sizes()
     print(f"r2out/: {_r2n[0]} Seiten, {_r2n[1] / 1e6:.0f} MB (werden in den R2-Bucket geladen, nicht in GitHub Pages)")
     print(f"{len(items)} Episodenseiten, {len(active)} Sprachen, {len(sitemap)} URLs → docs/")

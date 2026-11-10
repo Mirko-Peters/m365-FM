@@ -148,7 +148,7 @@
   function proposeBox(want) {
     var sec = h("div", { class: "ccard" }, [h("h3", { text: Q.propose })]);
     fetch(X.api + "/api/events/export").then(function (r) { return r.json(); }).then(function (j) {
-      var evs = j.events || [], s = sel([["", Q.pick]].concat(evs.map(function (e) { return [e.handle, e.title]; })), want || ""), slot = h("div");
+      var evs = (j.events || []).filter(function (e) { return !e.unclaimed; }), s = sel([["", Q.pick]].concat(evs.map(function (e) { return [e.handle, e.title]; })), want || ""), slot = h("div");
       function draw() { slot.textContent = ""; var ev = evs.filter(function (e) { return e.handle === s.value; })[0]; if (ev) slot.appendChild(sessionForm(ev, null, null, true)); }
       s.addEventListener("change", draw); sec.appendChild(s); sec.appendChild(slot); draw();
     }).catch(function () {});

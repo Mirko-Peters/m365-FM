@@ -1,4 +1,6 @@
 // Entitaetsdatenbank fuer das Microsoft-Oekosystem: Community-Revisionen ueber den statischen Basisdaten (data/entities.json)
+import { legacyRev } from "./editor.js";
+import { gate, inScope, roleOf, logEdit } from "./perm.js";
 import { cleanText, rateLimit } from "./util.js";
 import { entityTranslations } from "./autotr.js";
 import { stats, evalBadges } from "./badges.js";
@@ -234,6 +236,10 @@ export async function handleEntity(env, request, url, path, user, J) {
     }
     if (claimed || (await trustedUser(db, user)) || (await certScoped(env, user, id))) {
       await db.batch([db.prepare("UPDATE entity_rev SET status='old' WHERE eid=? AND status='live'").bind(id), db.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES(?,?,?,?,'live',?)").bind(id, data, summary, user.id, t)]);
+      if (roleOf(user) !== "user") {   // Redaktion schreibt live: mit der Rolle zum Zeitpunkt der Aenderung im Protokoll (daran haengt, wer es zuruecksetzen darf)
+        const rid = (await db.prepare("SELECT id FROM entity_rev WHERE eid=? AND user_id=? AND status='live' ORDER BY id DESC LIMIT 1").bind(id, user.id).first())?.id;
+        if (rid) await logEdit(db, user, "entity.edit_live", "entity", rid, { reason: summary });
+      }
       await evalBadges(env, user.id);
       const pair = fresh ? await pairNewOrgEntity(env, user, id, v.data).catch(() => null) : null;
       return J({ ok: true, status: "live", ...(pair ? { company: pair.handle, owner: pair.owner } : {}) });
@@ -251,22 +257,14 @@ export async function handleEntity(env, request, url, path, user, J) {
     return J({ items: rows.map((r) => ({ id: r.eid, data: JSON.parse(r.data), created: r.created, uid: r.user_id })) }, 200, { "cache-control": "public, max-age=300" });
   }
   if (path.startsWith("/api/admin/entity")) {
-    if (!(user?.admin || user?.editor)) return J({ error: "forbidden" }, 403);
+    const g = await gate(db, user, "queue.review"); if (!g.ok) return J({ error: "forbidden" }, 403);   // Editoren und Admin (perm.js can())
     if (path === "/api/admin/entity/pending" && method === "GET") {
       const rows = (await db.prepare("SELECT r.id,r.eid,r.data,r.summary,r.created,COALESCE(u.name,'') name FROM entity_rev r LEFT JOIN users u ON u.id=r.user_id WHERE r.status='pending' ORDER BY r.created ASC LIMIT 50").all()).results || [];
-      return J({ pending: rows.map((r) => ({ ...r, data: JSON.parse(r.data) })) });
+      return J({ pending: rows.filter((r) => inScope(g.actor, { topics: [r.eid] })).map((r) => ({ ...r, data: JSON.parse(r.data) })) });   // Fach-Editor: nur der eigene Bereich
     }
     if ((m = /^\/api\/admin\/entity\/(approve|reject)\/(\d+)$/.exec(path)) && method === "POST") {
-      const r = await db.prepare("SELECT id,eid,user_id FROM entity_rev WHERE id=?").bind(+m[2]).first(); if (!r) return J({ error: "not_found" }, 404);
-      if (m[1] === "reject") { await db.prepare("UPDATE entity_rev SET status='rejected' WHERE id=?").bind(r.id).run(); return J({ ok: true }); }
-      const wasLive = !!(await liveOf(db, r.eid)) || (await baseIds(env)).has(r.eid);
-      await db.batch([db.prepare("UPDATE entity_rev SET status='old' WHERE eid=? AND status='live'").bind(r.eid), db.prepare("UPDATE entity_rev SET status='live' WHERE id=?").bind(r.id)]);
-      if (r.user_id) await evalBadges(env, r.user_id);
-      if (!wasLive) {   // neue Firmen-Entitaet freigegeben: jetzt die (unbeanspruchte) Paar-Firma anlegen; Inhaber wird, wer die Entitaet uebernimmt
-        let d = null; try { d = JSON.parse((await db.prepare("SELECT data FROM entity_rev WHERE id=?").bind(r.id).first())?.data || "null"); } catch { d = null; }
-        if (d?.type === "org") await pairNewOrgEntity(env, null, r.eid, d).catch(() => null);
-      }
-      return J({ ok: true });
+      const r = await legacyRev(env, user, "entity", m[2], m[1]);   // can() + Protokoll in editor.js (Freigabe: decide, fruehere Fassung: revertTo)
+      return J(r.body, r.status);
     }
   }
   return null;
