@@ -40,22 +40,37 @@ class _NoRedirect(urllib.request.HTTPRedirectHandler):
     def redirect_request(self, *a, **k): return None
 
 
-def page_status(url, timeout=30):
-    """HTTP-Status der Seite ohne Weiterleitung folgen (wie tools/set_spreaker_links.status_of); -1 bei Netzfehler."""
+def page_fetch(url, timeout=30, limit=2_000_000):
+    """(HTTP-Status, Text) der Seite ohne Weiterleitung folgen (wie tools/set_spreaker_links.status_of); (-1, "") bei Netzfehler."""
     try:
-        with urllib.request.build_opener(_NoRedirect).open(urllib.request.Request(url, headers={"User-Agent": "m365-site-bot (episode urls)"}), timeout=timeout) as r: return r.status
+        with urllib.request.build_opener(_NoRedirect).open(urllib.request.Request(url, headers={"User-Agent": "m365-site-bot (episode urls)"}), timeout=timeout) as r:
+            return r.status, r.read(limit).decode("utf-8", "replace")
     except urllib.error.HTTPError as e:
-        return e.code
+        return e.code, ""
     except Exception:
-        return -1
+        return -1, ""
 
 
-def upload_link(base, lang, title, vid, fallback, status=page_status):
+def page_status(url, timeout=30):
+    """HTTP-Status der Seite ohne Weiterleitung folgen; -1 bei Netzfehler."""
+    return page_fetch(url, timeout)[0]
+
+
+def page_of_video(html, vid):
+    """Gehoert die Folgenseite zu diesem YouTube-Video? Jede Dub-Folgenseite nennt ihr Video im JSON-LD (VideoObject.contentUrl,
+    generate_site.py); das schliessende Anfuehrungszeichen verhindert, dass eine laengere ID mit gleichem Anfang passt."""
+    return bool(vid) and f'youtube.com/watch?v={vid}"' in (html or "")
+
+
+def upload_link(base, lang, title, vid, fallback, fetch=page_fetch):
     """Feld "Website" (episode_link) beim Hochladen einer Dub-Folge: die Folgenseite nur, wenn sie schon mit 200 antwortet (wie
-    tools/set_spreaker_links.py), sonst der Rueckfall (Show-Seite). Neue Folgen bekommen ihre Seite erst beim naechsten Seitenbau;
-    die Adresse setzt dann der taegliche Abgleich (set_spreaker_links.py / spreaker_urls.py), nie eine Adresse, die noch 404 liefert."""
+    tools/set_spreaker_links.py) UND zu diesem Video gehoert, sonst der Rueckfall (Show-Seite). Bei einer Slug-Kollision haengt
+    generate_site.py die Video-ID an den Slug; die Seite ohne Anhang gehoert dann einer anderen Folge und antwortet trotzdem 200 -
+    deshalb die Pruefung auf die Video-ID im Seiteninhalt. Neue Folgen bekommen ihre Seite erst beim naechsten Seitenbau; die Adresse
+    setzt dann der taegliche Abgleich (set_spreaker_links.py / spreaker_urls.py), nie eine Adresse, die noch 404 liefert."""
     url = dub_url(base, lang, title, vid)
-    return url if status(url) == 200 else fallback
+    st, html = fetch(url)
+    return url if st == 200 and page_of_video(html, vid) else fallback
 
 
 def build_mapping(base, en_items, dub_items, show_ids, generated=""):

@@ -271,10 +271,18 @@ def backup(ep, fields, path=None):
 
 
 # ---------------------------------------------------------------- Modi
-def run_plan(sp, pages, res, show_ids, only_ids=None, examples=10, out=print, rows=None, pause=0.0):
+def show_error(sid, ep, err, show_errors):
+    """Folgenliste einer Show nicht lesbar (scan liefert ep=None): als Lauf-Fehler zaehlen (run.show_errors, Exit-Code), sonst bliebe die
+    ganze Show unbemerkt auf ihrem alten Zustand."""
+    if ep is None and err and show_errors is not None: show_errors[str(sid)] = err
+
+
+def run_plan(sp, pages, res, show_ids, only_ids=None, examples=10, out=print, rows=None, pause=0.0, show_errors=None):
     rows = [] if rows is None else rows
+    show_errors = {} if show_errors is None else show_errors
     try:
         for s, e, p, err in scan(sp, pages, show_ids, only_ids, pause, out):
+            show_error(s, e, err, show_errors)
             r = classify(s, e, p, res, err)
             if r: rows.append(r)
     finally:   # auch nach einem Abbruch (401) die bis dahin gelesenen Folgen zusammenfassen
@@ -282,6 +290,7 @@ def run_plan(sp, pages, res, show_ids, only_ids=None, examples=10, out=print, ro
         for r in rows: by.setdefault(r["show"], []).append(r)
         for sid in show_ids:
             rs = by.get(sid, [])
+            if str(sid) in show_errors: out(f"Show {sid}: Folgenliste nicht lesbar - Show nicht geprueft ({show_errors[str(sid)]})"); continue
             cnt = {k: sum(1 for r in rs if r["status"] == k) for k in ("ok", "differs", "missing", "skipped", "error")}
             out(f"Show {sid}: {len(rs)} Folgen, {cnt['differs']} mit abweichender Adresse, {cnt['ok']} in Ordnung, {cnt['missing']} ohne Seite, {cnt['skipped']} nicht veroeffentlicht"
                 + (f", {cnt['error']} nicht lesbar" if cnt["error"] else ""))
@@ -294,12 +303,14 @@ def run_plan(sp, pages, res, show_ids, only_ids=None, examples=10, out=print, ro
 
 
 def run_apply(sp, pages, res, show_ids, only_ids=None, limit=300, pause=0.4, log_path=None, out=print, link_only=False, rows=None,
-              read_pause=0.0, check=SEU.page_status, backup_dir=None):
+              read_pause=0.0, check=SEU.page_status, backup_dir=None, show_errors=None):
     """Schreibt die Abweichungen zu Spreaker (hoechstens limit Folgen). link_only: nur das Feld Website (episode_link), die Beschreibung bleibt
     (Zeitplan; Beschreibungen nur in einem von Hand gestarteten Lauf). Vor jedem Schreiben: Zielseite muss mit 200 antworten (check), alte Werte
-    werden gesichert (backup). rows sammelt die Ergebnisse laufend, damit main() den Zustand auch nach einem Abbruch speichert."""
+    werden gesichert (backup). rows sammelt die Ergebnisse laufend, damit main() den Zustand auch nach einem Abbruch speichert; show_errors (Dict
+    Show-ID -> Fehler) die Shows, deren Folgenliste nicht lesbar war."""
     rows, n = ([] if rows is None else rows), 0
     for sid, ep, page, err in scan(sp, pages, show_ids, only_ids, read_pause, out):
+        show_error(sid, ep, err, show_errors)
         r = classify(sid, ep, page, res, err)
         if r is None:
             continue
@@ -379,20 +390,22 @@ def main(argv=None, sp=None):
         sp = A.Spreaker()
         if not sp.login(): return 1
     run = {"at": now(), "mode": mode, "limit": a.limit, "link_only": link_only}
-    rows, n, aborted = [], 0, False
+    rows, n, aborted, shows_bad = [], 0, False, {}
     try:
         if mode == "plan":
-            run_plan(sp, pages, res, show_ids, only, rows=rows, pause=a.read_pause)
+            run_plan(sp, pages, res, show_ids, only, rows=rows, pause=a.read_pause, show_errors=shows_bad)
         else:
-            _, n = run_apply(sp, pages, res, show_ids, only, a.limit, a.pause, link_only=link_only, rows=rows, read_pause=a.read_pause)
+            _, n = run_apply(sp, pages, res, show_ids, only, a.limit, a.pause, link_only=link_only, rows=rows, read_pause=a.read_pause, show_errors=shows_bad)
             wait = sum(1 for r in rows if r["status"] == "differs")
             print(f"{n} Folgen geaendert" + (f", {wait} weichen noch ab (Limit {a.limit}" + (", Beschreibungen nur in einem Lauf von Hand" if link_only else "") + ")" if wait else ""))
     except PermissionError:
         aborted = True; raise
     finally:   # Zustand auch nach einem Abbruch sichern (bis dahin gelesene Folgen)
-        run.update(changed=n, checked=len(rows), aborted=aborted, **{k: sum(1 for r in rows if r["status"] == k) for k in ("ok", "differs", "missing", "skipped", "error")})
+        run.update(changed=n, checked=len(rows), aborted=aborted, show_errors=sorted(shows_bad, key=int), **{k: sum(1 for r in rows if r["status"] == k) for k in ("ok", "differs", "missing", "skipped", "error")})
         if not a.no_state: save_state(rows, run)
-    return 1 if run["error"] and mode == "apply" else 0
+    if run["error"] or shows_bad:   # Zusammenfassung (Step-Summary): nicht lesbare Folgen und ganze Shows, deren Liste fehlte
+        print(f"Fehler: {run['error']} Folgen nicht lesbar/geschrieben" + (f", Folgenliste nicht lesbar bei Show {', '.join(run['show_errors'])} (Show nicht geprueft)" if shows_bad else ""))
+    return 1 if (run["error"] or shows_bad) and mode == "apply" else 0
 
 
 if __name__ == "__main__":

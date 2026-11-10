@@ -37,6 +37,11 @@ class Fake:
 OK200 = lambda u: 200   # noqa: E731  Zielseite antwortet (kein Netz im Test)
 
 
+def page_html(vid):
+    """Kopf einer Dub-Folgenseite wie generate_site._jsonld_script (JSON-LD des VideoObject)."""
+    return '<script type="application/ld+json">' + json.dumps({"@type": "VideoObject", "contentUrl": f"https://www.youtube.com/watch?v={vid}"}, ensure_ascii=False) + "</script>"
+
+
 def ep(i, show, link, html, vis="PUBLIC", title="T"):
     return {"episode_id": i, "show": show, "episode_link": link, "description_html": html, "published_at": "2025-01-01 10:00:00", "visibility": vis, "title": title}
 
@@ -233,11 +238,42 @@ class Safety(unittest.TestCase):
         self.assertEqual(st["episodes"]["1"]["s"], "differs"); self.assertTrue(st["run"]["aborted"])
 
     def test_upload_link_only_when_page_answers(self):
-        """F6: der Uploader setzt die Folgenseite nur, wenn sie schon 200 liefert, sonst die Show-Seite."""
-        self.assertEqual(SEU.upload_link(BASE, "pt", "Pare de criar aplicativos", "AbC_123", "https://www.m365.fm", lambda u: 404), "https://www.m365.fm")
-        self.assertEqual(SEU.upload_link(BASE, "pt", "Pare de criar aplicativos", "AbC_123", "https://www.m365.fm", lambda u: 200), f"{BASE}/pt/pare-de-criar-aplicativos/")
+        """F6: der Uploader setzt die Folgenseite nur, wenn sie schon 200 liefert und zu diesem Video gehoert, sonst die Show-Seite."""
+        own = page_html("AbC_123")
+        self.assertEqual(SEU.upload_link(BASE, "pt", "Pare de criar aplicativos", "AbC_123", "https://www.m365.fm", lambda u: (404, "")), "https://www.m365.fm")
+        self.assertEqual(SEU.upload_link(BASE, "pt", "Pare de criar aplicativos", "AbC_123", "https://www.m365.fm", lambda u: (-1, "")), "https://www.m365.fm")
+        self.assertEqual(SEU.upload_link(BASE, "pt", "Pare de criar aplicativos", "AbC_123", "https://www.m365.fm", lambda u: (200, own)), f"{BASE}/pt/pare-de-criar-aplicativos/")
         src = (ROOT / "yt_dub_to_spreaker.py").read_text("utf-8")
         self.assertIn("upload_link(", src); self.assertNotIn("return dub_url(", src)
+
+    def test_upload_link_slug_collision_other_episode(self):
+        """Gleicher Titel-Slug wie eine schon gebaute Folge: die Seite ohne ID-Anhang antwortet 200, gehoert aber dem anderen Video
+        (generate_site.py haengt der neuen Folge '-<vid6>' an) - dann nicht deren Adresse setzen, sondern die Show-Seite."""
+        other = page_html("Zzz999xyz00")
+        self.assertEqual(SEU.upload_link(BASE, "pt", "Pare de criar aplicativos", "AbC_123", "https://www.m365.fm", lambda u: (200, other)), "https://www.m365.fm")
+        self.assertEqual(SEU.upload_link(BASE, "pt", "Pare de criar aplicativos", "AbC_123", "https://www.m365.fm", lambda u: (200, page_html("AbC_1234"))), "https://www.m365.fm")   # nur Anfang gleich
+        self.assertEqual(SEU.upload_link(BASE, "pt", "Pare de criar aplicativos", "AbC_123", "https://www.m365.fm", lambda u: (200, "<html></html>")), "https://www.m365.fm")
+        src = (ROOT / "generate_site.py").read_text("utf-8")   # Vertrag: jede Dub-Folgenseite nennt ihr Video im JSON-LD (VideoObject.contentUrl)
+        self.assertIn('"contentUrl": f"https://www.youtube.com/watch?v={vid}"', src)
+        self.assertIn("json.dumps(value, ensure_ascii=False)", src)
+
+    def test_show_list_error_counts_in_run(self):
+        """Folgenliste einer Show nicht lesbar: zaehlt als Fehler (run.show_errors), apply endet mit 1, der Probelauf nennt die Show."""
+        d = Path(tempfile.mkdtemp()); sp = Fake(world(), fail_show=7393243); bad = {}
+        U.run_apply(sp, self.pages(), res(), self.shows, pause=0, log_path=d / "l.tsv", out=lambda *_: 0, check=OK200, backup_dir=d / "bk", show_errors=bad)
+        self.assertEqual(list(bad), ["7393243"])
+        lines, bad = [], {}
+        U.run_plan(Fake(world(), fail_show=7393243), self.pages(), res(), self.shows, out=lines.append, show_errors=bad)
+        self.assertTrue(any("7393243" in l and "nicht lesbar" in l for l in lines)); self.assertEqual(list(bad), ["7393243"])
+        m = d / "map.json"; m.write_text(json.dumps({"items": [dict(v, spreaker_episode_id=k) for k, v in self.pages().items()]}))
+        old = (U.STATE, U.LOG, U.BACKUP); U.STATE, U.LOG, U.BACKUP = d / "s.json", d / "run.tsv", d / "bk2"
+        try:
+            for mode, want in (("plan", 0), ("apply", 1)):
+                sp = Fake(world(), fail_show=7393243)
+                self.assertEqual(U.main([mode, "--map", str(m), "--redirects", "", "--read-pause", "0", "--pause", "0", "--ids", "3"], sp=sp), want, mode)   # nur Folge 3 (Show mit Fehler): kein Schreiben, kein Netz
+                self.assertEqual(json.loads((d / "s.json").read_text())["run"]["show_errors"], ["7393243"])
+        finally:
+            U.STATE, U.LOG, U.BACKUP = old
 
 
 if __name__ == "__main__":

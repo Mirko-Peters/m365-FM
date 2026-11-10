@@ -807,7 +807,8 @@ def create_missing_show(lang: str, cfg, sp: Spreaker, dry: bool) -> int | None:
 
 def episode_page_url(cfg, lang: str, title: str, vid: str) -> str:
     """Feld "Website" (episode_link) der neuen Folge: die kanonische m365.fm-Seite dieser Sprache (site_episode_urls.dub_url, dieselbe
-    Funktion wie der Seitenbau), aber nur, wenn sie schon mit 200 antwortet - sonst die Show-Seite. Neue Folgen haben ihre Seite erst nach
+    Funktion wie der Seitenbau), aber nur, wenn sie schon mit 200 antwortet und zu diesem Video gehoert (Slug-Kollision: die Seite ohne
+    angehaengte ID gehoert einer anderen Folge) - sonst die Show-Seite. Neue Folgen haben ihre Seite erst nach
     dem naechsten Seitenbau; die Folgenadresse setzt dann der taegliche Abgleich (set_spreaker_links.py / spreaker_urls.py)."""
     fallback = cfg.get("show_website_url", "https://www.m365.fm")
     try:

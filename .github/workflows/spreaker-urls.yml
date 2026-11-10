@@ -34,8 +34,12 @@ jobs:
         run: |
           if [ -e shownotes/PAUSED ]; then echo "shownotes/PAUSED vorhanden - Lauf uebersprungen"; exit 0; fi
           MODE="${{ inputs.mode || 'auto' }}"   # Zeitplan: auto (Probelauf ohne data/SPREAKER_URLS_APPROVED, sonst nur Feld Website)
-          python tools/spreaker_urls.py "$MODE" --limit "${{ inputs.limit || '300' }}" --ids "${{ inputs.ids }}" | tee spreaker-urls-run.txt
-          if [ "$MODE" != "apply" ] && [ "$MODE" != "export" ]; then { echo "### Spreaker-Adressen ($MODE)"; echo '```'; head -c 60000 spreaker-urls-run.txt; echo '```'; } >> "$GITHUB_STEP_SUMMARY"; fi
+          # Exit-Code des Werkzeugs durch tee hindurch behalten (Standard-Shell ohne pipefail); Fehler (Folgen oder ganze Folgenliste einer Show
+          # nicht lesbar) machen einen apply-Lauf rot - erst nach der Zusammenfassung.
+          set -o pipefail; rc=0
+          python tools/spreaker_urls.py "$MODE" --limit "${{ inputs.limit || '300' }}" --ids "${{ inputs.ids }}" | tee spreaker-urls-run.txt || rc=$?
+          if [ "$MODE" != "export" ]; then { echo "### Spreaker-Adressen ($MODE)"; echo '```'; head -c 60000 spreaker-urls-run.txt; echo '```'; } >> "$GITHUB_STEP_SUMMARY"; fi
+          exit "$rc"
       - name: Protokoll und Zustand sichern
         if: always()
         run: |
