@@ -51,7 +51,7 @@
   function sourceLabel(source) {
     return text(({
       "Cross-channel estimate": "source_reach", "Spreaker API": "source_spreaker", "YouTube Analytics API": "source_youtube",
-      "Cloudflare Analytics": "source_cloudflare", "Cloudflare Web Analytics": "source_cloudflare_rum", "M365.FM-Linkzähler": "source_counter",
+      "Cloudflare Analytics": "source_cloudflare", "Cloudflare Web Analytics": "source_cloudflare_rum", "M365.FM-Linkzähler": "source_counter", "M365.FM lead form": "source_leads",
       "D1-Projektanfragen (#232)": "source_directory", "Bing AI Performance": "source_bing",
       "Google Search Console": "source_gsc", "Bing Webmaster API": "source_bing_webmaster",
       "Press Ranger": "source_press", "bing_ai": "source_bing", "press_portal": "source_press",
@@ -206,6 +206,14 @@
         if (metric.value != null) rows.push([org.name, text("company_total"), metricLabel(metric.key), metric.value,
           sourceLabel(metric.source), kindLabel(metric.kind), metric.as_of, period, ""]);
       });
+      if (org.click_quality && (org.click_quality.as_of || org.click_quality.real || org.click_quality.filtered)) {
+        rows.push([org.name, text("company_total"), text("clicks_real"), org.click_quality.real, text("source_counter"), kindLabel("measured"), org.click_quality.as_of, period, ""]);
+        rows.push([org.name, text("company_total"), text("clicks_filtered"), org.click_quality.filtered, text("source_counter"), kindLabel("estimated"), org.click_quality.as_of, period, ""]);
+      }
+      (org.queries || []).forEach(function (query) {
+        rows.push([org.name, query.query + " · " + query.page, text("search_impressions"), query.impressions, text("source_gsc"), kindLabel("measured"), query.as_of, period, ""]);
+        rows.push([org.name, query.query + " · " + query.page, text("position"), query.position, text("source_gsc"), kindLabel("measured"), query.as_of, period, ""]);
+      });
       allPlacements(org).forEach(function (placement) {
         var link = placement.refs && placement.refs.press_release || "";
         (placement.metrics || []).forEach(function (metric) {
@@ -213,8 +221,10 @@
             kindLabel(metric.kind), metric.day, period, link]);
         });
         (placement.clicks || []).forEach(function (click) {
-          rows.push([org.name, placement.title + " · " + click.surface, metricLabel("link_clicks"), click.clicks,
+          rows.push([org.name, placement.title + " · " + click.surface + " · " + (click.country || "XX"), metricLabel("link_clicks"), click.clicks,
             text("source_counter"), kindLabel("measured"), click.as_of, period, ""]);
+          if (click.clicks_filtered) rows.push([org.name, placement.title + " · " + click.surface + " · " + (click.country || "XX"), text("clicks_filtered"), click.clicks_filtered,
+            text("source_counter"), kindLabel("estimated"), click.as_of, period, ""]);
         });
         placement.manual.forEach(function (manual) {
           rows.push([org.name, placement.title, metricLabel(manual.metric), manual.value, sourceLabel(manual.source),
@@ -305,6 +315,163 @@
       node("td", {}, [link(key + ": " + value), figure ? node("div", { class: "sdb-source-inline" }, [sourceLine(figure)]) : null])
     ]);
   }
+  // ---- Klicks (echt/gefiltert), Leads, Seiten je Entitaet und Beitrag, Suche und KI. Nichts wird erfunden: ohne Quelle steht "noch nicht angebunden".
+  var SITE_LANGS = ["de", "es", "fr", "it", "pt", "nl", "pl", "id", "ru", "uk", "ar", "he", "ja", "ko"];
+  function pagePath(dim) {   // /de/entity/x/, https://www.m365.fm/entity/x/ -> /entity/x/ (Sprachfassungen zaehlen zur selben Seite)
+    var p = String(dim || "");
+    try { p = new URL(p, "https://www.m365.fm").pathname; } catch (e) { /* Pfad bleibt wie geliefert */ }
+    var m = /^\/([a-z]{2})(\/.*)?$/.exec(p);
+    if (m && SITE_LANGS.indexOf(m[1]) >= 0) p = m[2] || "/";
+    return p.replace(/\/+$/, "") + "/";
+  }
+  function pct(part, total) { return total > 0 ? Math.round(part / total * 1000) / 10 : null; }
+  function numberCell(value) { return value == null ? "–" : new Intl.NumberFormat(C.lang).format(value); }
+  function panel(title, children) { return node("section", { class: "sdb-panel" }, [node("h2", { text: title })].concat(children)); }
+  function table(heads, rows, empty) {
+    var body = node("tbody");
+    if (!rows.length) body.appendChild(node("tr", {}, [node("td", { colspan: String(heads.length), class: "mut", text: empty })]));
+    rows.forEach(function (cells) {
+      body.appendChild(node("tr", {}, cells.map(function (cell) { return node("td", {}, [cell == null ? "–" : cell]); })));
+    });
+    return node("div", { class: "sdb-table" }, [node("table", {}, [node("thead", {}, [node("tr", {}, heads.map(function (key) {
+      return node("th", { scope: "col", text: text(key) });
+    }))]), body])]);
+  }
+  function regionName(code) {
+    if (!/^[A-Z]{2}$/.test(code) || code === "XX") return text("country_unknown");
+    try { return new Intl.DisplayNames([C.lang], { type: "region" }).of(code) + " (" + code + ")"; } catch (e) { return code; }
+  }
+  function statusBadge(connected, asOf) {
+    return connected ? text("connected") + (asOf ? " · " + text("as_of") + " " + formatDate(asOf) : "") : text("not_connected_yet");
+  }
+  function clickSection(org) {
+    var q = org.click_quality || {};
+    var real = Number(q.real) || 0, filtered = Number(q.filtered) || 0, total = real + filtered;
+    var has = !!q.as_of || total > 0;
+    var cards = node("div", { class: "cols" }, [
+      metricCard({ key: "link_clicks", value: has ? real : null, source: "M365.FM-Linkzähler", kind: "measured", as_of: q.as_of }, text("clicks_real")),
+      metricCard({ key: "link_clicks", value: has ? filtered : null, source: "M365.FM-Linkzähler", kind: "estimated", as_of: q.as_of }, text("clicks_filtered")),
+      metricCard({ key: "link_clicks", value: has && total > 0 ? pct(filtered, total) + " %" : null, source: "M365.FM-Linkzähler", kind: "estimated", as_of: q.as_of }, text("filtered_share"))
+    ]);
+    var byCountry = {}, bySurface = {};
+    (org.placements || []).forEach(function (placement) {
+      (placement.clicks || []).forEach(function (click) {
+        [[byCountry, click.country || "XX"], [bySurface, click.surface || "other"]].forEach(function (pair) {
+          var slot = pair[0][pair[1]] = pair[0][pair[1]] || { real: 0, filtered: 0 };
+          slot.real += Number(click.clicks) || 0; slot.filtered += Number(click.clicks_filtered) || 0;
+        });
+      });
+    });
+    function rowsOf(map, label) {
+      return Object.keys(map).sort(function (a, b) { return (map[b].real + map[b].filtered) - (map[a].real + map[a].filtered); })
+        .map(function (key) { return [label(key), numberCell(map[key].real), numberCell(map[key].filtered)]; });
+    }
+    return panel(text("clicks_title"), [cards,
+      node("p", { class: "mut", text: text("filter_note") }),
+      node("h3", { text: text("country_title") }),
+      table(["country", "clicks_real", "clicks_filtered"], rowsOf(byCountry, regionName), text("unavailable")),
+      node("h3", { text: text("surface_title") }),
+      table(["surface", "clicks_real", "clicks_filtered"], rowsOf(bySurface, function (key) { return key; }), text("unavailable")),
+      node("p", { class: "mut", text: text("country_note") })]);
+  }
+  function leadsSection(org) {
+    var ads = org.ads || [], leads = ads.reduce(function (sum, ad) { return sum + (Number(ad.leads) || 0); }, 0);
+    var has = ads.some(function (ad) { return ad.product === "lead_form"; });   // nur wenn ein Lead-Formular gebucht ist, sonst steht dort keine Null
+    return panel(text("leads_title"), [
+      node("div", { class: "cols" }, [metricCard({ key: "leads", value: has ? leads : null, source: "M365.FM lead form", kind: "measured", as_of: null }, text("leads_title"))]),
+      node("p", { class: "mut", text: has ? text("leads_note") : text("leads_none") })]);
+  }
+  // Seitenzahlen je Pfad aus allen Platzierungen der Firma
+  function pageFigures(org) {
+    var pages = {}, sources = {};
+    (org.placements || []).forEach(function (placement) {
+      (placement.metrics || []).forEach(function (m) {
+        var column = ({ page_views: "pv", gsc_impressions: "gi", gsc_clicks: "gc", bing_impressions: "bi", bing_clicks: "bc" })[m.metric];
+        if (!column) return;
+        var key = pagePath(m.dim), slot = pages[key] = pages[key] || {};
+        slot[column] = (slot[column] || 0) + (Number(m.value) || 0);
+        var s = sources[column] = sources[column] || { day: "" };
+        if (m.day && m.day > s.day) s.day = m.day;
+      });
+    });
+    return { pages: pages, sources: sources };
+  }
+  function sponsorInfo(org) {
+    var info = { entities: {}, posts: {} };
+    (org.placements || []).forEach(function (placement) {
+      var sp = (C.sp || {})[placement.id];
+      if (!sp) return;
+      (sp.entities || []).forEach(function (e) { info.entities["/entity/" + e.id + "/"] = e; });
+      (sp.posts || []).forEach(function (p) { info.posts[pagePath(p.path)] = p; });
+    });
+    return info;
+  }
+  function kindName(kind) { return text("kind_" + (kind || "other")); }
+  function entitiesSection(org, figures, info) {
+    var rows = [], seen = {};
+    function add(path, name, kind) {
+      var f = figures.pages[path] || {}; seen[path] = true;
+      rows.push({ cells: [name, kindName(kind), numberCell(f.pv), numberCell(f.gi), numberCell(f.gc), numberCell(f.bi), numberCell(f.bc)], pv: f.pv || 0, gi: f.gi || 0 });
+    }
+    Object.keys(info.entities).forEach(function (path) { add(path, info.entities[path].name, info.entities[path].kind); });
+    Object.keys(figures.pages).forEach(function (path) {
+      if (seen[path] || info.posts[path]) return;
+      var m = /^\/entity\/([a-z0-9-]+)\/$/.exec(path);
+      add(path, m ? m[1] : path, m ? "entity" : /^\/show\/episodes\//.test(path) ? "episode" : "other");
+    });
+    rows.sort(function (a, b) { return b.pv - a.pv || b.gi - a.gi; });
+    return panel(text("entities_title"), [
+      table(["name", "type", "page_views", "search_impressions", "search_clicks", "bing_impressions", "bing_clicks"], rows.map(function (r) { return r.cells; }), text("unavailable")),
+      node("p", { class: "mut", text: text("entities_note") })]);
+  }
+  function postsSection(org, figures, info) {
+    var posts = Object.keys(info.posts).map(function (path) { return info.posts[path]; });
+    if (!posts.length) return null;
+    posts.sort(function (a, b) { return (a.nr || 0) - (b.nr || 0) || String(a.date || "").localeCompare(String(b.date || "")); });
+    var rows = posts.map(function (post) {
+      var f = figures.pages[pagePath(post.path)] || {}, published = post.status === "published";
+      return [post.nr == null ? "" : String(post.nr), post.title, post.date ? formatDate(post.date) : "–",
+        published ? text("post_published") : text("post_planned"), post.sponsored ? text("post_sponsored") : "–",
+        published ? numberCell(f.pv) : "–", published ? numberCell(f.gi) : "–"];
+    });
+    return panel(text("posts_title"), [
+      table(["post_nr", "post_title", "post_date", "status", "post_sponsored_col", "page_views", "search_impressions"], rows, text("unavailable")),
+      node("p", { class: "mut", text: text("posts_note") })]);
+  }
+  function searchSection(org, figures) {
+    var q = org.queries || [], hasGsc = !!(figures.sources.gi || figures.sources.gc), hasBing = !!(figures.sources.bi || figures.sources.bc);
+    var statusRows = [
+      [text("source_gsc") + " · " + text("search_pages"), statusBadge(hasGsc, hasGsc && (figures.sources.gi || figures.sources.gc).day), text("measured")],
+      [text("source_gsc") + " · " + text("search_queries"), statusBadge(q.length > 0, q.length ? q.reduce(function (d, r) { return r.as_of > d ? r.as_of : d; }, "") : ""), text("measured")],
+      [text("source_bing_webmaster") + " · " + text("search_pages"), statusBadge(hasBing, hasBing && (figures.sources.bi || figures.sources.bc).day), text("measured")],
+      [text("source_bing_webmaster") + " · " + text("search_queries"), text("not_connected_yet"), "–"]
+    ];
+    var rows = q.slice(0, 50).map(function (r) {
+      return [r.query, pagePath(r.page), numberCell(r.impressions), numberCell(r.clicks), r.position == null ? "–" : new Intl.NumberFormat(C.lang, { maximumFractionDigits: 1 }).format(r.position)];
+    });
+    return panel(text("search_title"), [
+      table(["source", "status", "type"], statusRows, text("unavailable")),
+      node("h3", { text: text("rankings_title") }),
+      table(["search_query", "search_page", "search_impressions", "search_clicks", "position"], rows, text("not_connected_yet")),
+      node("p", { class: "mut", text: text("rankings_note") })]);
+  }
+  function aiSection(org) {
+    var own = (org.metrics || []).filter(function (m) { return m.key === "ai_citations"; })[0];
+    var site = (C.siteAi || []).map(function (e) {
+      return [e.label, numberCell(e.value) + " " + e.unit, e.period, kindLabel(e.kind) + " · " + (e.kind === "manual" ? text("source_manual") : e.source), e.retrieved ? formatDate(e.retrieved) : "–"];
+    });
+    return panel(text("ai_title"), [
+      node("div", { class: "cols" }, [metricCard(own || { key: "ai_citations", value: null, source: "bing_ai", kind: "manual", as_of: null }, text("ai_citations"))]),
+      own && own.value != null ? node("p", { class: "mut", text: text("ai_manual_note") }) : node("p", { class: "mut", text: text("not_connected_yet") }),
+      node("h3", { text: text("ai_site_title") }),
+      table(["source", "value", "period", "type", "as_of"], site, text("not_connected_yet")),
+      node("p", { class: "mut", text: text("ai_site_note") })]);
+  }
+  function insights(org) {
+    var figures = pageFigures(org), info = sponsorInfo(org);
+    return [clickSection(org), leadsSection(org), entitiesSection(org, figures, info), postsSection(org, figures, info), searchSection(org, figures), aiSection(org)]
+      .filter(Boolean);
+  }
   function renderOverview(orgs, admin) {
     header(orgs, admin);
     var selected = currentPreset || "30";
@@ -330,6 +497,7 @@
       var cards = node("div", { class: "cols" });
       metricsFor(org).forEach(function (metric) { cards.appendChild(metricCard(metric, metricLabel(metric.key))); });
       section.appendChild(cards);
+      insights(org).forEach(function (part) { section.appendChild(part); });
       var highlights = [];
       items.forEach(function (item) {
         (item.metrics || []).forEach(function (metric) {

@@ -66,10 +66,16 @@ export function cookie(name, value, maxAge) {
 // das Mediadaten-Formular der M365Con im HeySummit-Pagebuilder (m365con.net und Ausgaben-Subdomains, #260)
 export const CON_ORIGINS = ["https://m365con.net", "https://www.m365con.net", "https://de.m365con.net", "https://2026.m365con.net"];
 export const ROUTE_ORIGINS = { "/api/mediakit": CON_ORIGINS, "/api/mediakit/summary": CON_ORIGINS };
+// Eigene Seiten, die mit Cookie anfragen und nach der Anmeldung zurueckkehren duerfen: SITE und (falls gesetzt) PARTNER_SITE
+// (Sponsor-Dashboard auf https://partner.m365.fm). Nur ein reiner https-Ursprung ohne Pfad zaehlt; sonst bleibt es bei SITE.
+export function partnerOrigin(env) {
+  try { const u = new URL(String(env.PARTNER_SITE || "").trim()); return u.protocol === "https:" && u.pathname === "/" && !u.search && !u.hash && !u.username ? u.origin : ""; } catch { return ""; }
+}
+export const isOwnSite = (env, origin) => !!origin && (origin === env.SITE || (!!partnerOrigin(env) && origin === partnerOrigin(env)));
 export function cors(env, request) {
   const origin = request.headers.get("origin");
   const h = { "vary": "Origin" };
-  if (origin && (origin === env.SITE || /^http:\/\/localhost(:\d+)?$/.test(origin))) {
+  if (origin && (isOwnSite(env, origin) || /^http:\/\/localhost(:\d+)?$/.test(origin))) {
     h["access-control-allow-origin"] = origin;
     h["access-control-allow-credentials"] = "true";
     h["access-control-allow-headers"] = "content-type, x-requested-with";

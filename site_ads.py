@@ -220,6 +220,15 @@ def inject(base, body, lang, canonical, noindex=False, today=None):
 SLOT_CFG = Path(__file__).parent / "data" / "ad_slots.json"
 I18N_FILE = Path(__file__).parent / "data" / "ads_i18n.json"
 API = os.environ.get("COMMUNITY_API", "https://api-dub.m365.fm")
+
+
+def go_link(code, query=""):
+    """Zaehl-Link des Workers. Mit GO_BASE (z. B. https://c.m365.fm, nur ein reiner https-Ursprung): Kurzform <GO_BASE>/<code>?...;
+    ohne GO_BASE (offline-Bau, Tests, Notfall) die alte Form <API>/go/<code>?... - beide gelten im Worker. GO_BASE setzt der Seitenbau
+    (Repo-Variable GO_BASE im Workflow site.yml) erst, wenn der Worker die Kurzdomain ausliefert."""
+    base = (os.environ.get("GO_BASE") or "").strip().rstrip("/")
+    q = f"?{query}" if query else ""
+    return f"{base}/{code}{q}" if re.fullmatch(r"https://[a-z0-9]([a-z0-9.-]*[a-z0-9])?", base) else f"{API}/go/{code}{q}"
 _LANG_RX = re.compile(r"^/(de|es|fr|it|pt|nl|pl|id|ru|uk|ar|he|ja|ko)/")
 _I18N = None
 
@@ -356,7 +365,7 @@ def _track(house, key, slot, pt, lang, entity, slug):
         q["e"] = entity
     if slug:
         q["p"] = slug
-    go = f"{API}/go/h-{key}?{urlencode(q)}"
+    go = go_link(f"h-{key}", urlencode(q))
     house = re.sub(r'href="[^"]*"', f'href="{escape(go)}"', house, count=1)
     head = house.split(">", 1)[0]
     if ' rel="' in head:

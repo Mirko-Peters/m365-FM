@@ -83,6 +83,71 @@ class SponsorMetricTests(unittest.TestCase):
         self.assertEqual(len(posted), 5)
         self.assertTrue(all(0 < len(batch) <= 500 for batch in posted))
 
+    def test_query_rows_validate_and_round(self):
+        row = metrics.query_row("p1", "2026-11-03", " sharepoint oversharing ", "https://www.m365.fm/entity/oversharing/", 2, 40, 7.349)
+        self.assertEqual(row, {"placement_id": "p1", "day": "2026-11-03", "query": "sharepoint oversharing", "page": "https://www.m365.fm/entity/oversharing/",
+                               "clicks": 2.0, "impressions": 40.0, "position": 7.3, "source": "gsc", "kind": "measured"})
+        self.assertEqual(metrics.query_row("p1", "2026-11-03", "x", "/p/", 0, 0, 0)["clicks"], 0)   # echte Nullen bleiben
+        self.assertIsNone(metrics.query_row("p1", "2026-11-03", "", "/p/", 1, 1, 1))
+        self.assertIsNone(metrics.query_row("p1", "bad", "x", "/p/", 1, 1, 1))
+        self.assertIsNone(metrics.query_row("p1", "2026-11-03", "x", "/p/", -1, 1, 1))
+        self.assertIsNone(metrics.query_row("p1", "2026-11-03", "x", "/p/", 1, 1, None))
+
+    def test_gsc_collects_page_totals_and_top_queries_for_the_sponsored_pages_only(self):
+        requests = []
+
+        def http_json(url, body=None, form=None, headers=None, timeout=60):
+            if form is not None:
+                return {"access_token": "t"}
+            requests.append(body)
+            flt = body["dimensionFilterGroups"][0]["filters"][0]
+            self.assertEqual((flt["dimension"], flt["operator"]), ("page", "equals"))   # nur Seiten der Sponsor-Entitaeten, nie die ganze Website
+            if body["dimensions"] == ["date"]:
+                return {"rows": [{"keys": ["2026-11-03"], "clicks": 3, "impressions": 90, "position": 6.1}]}
+            return {"rows": [{"keys": ["sharepoint oversharing"], "clicks": 2, "impressions": 60, "position": 5.2}, {"keys": [""], "clicks": 1, "impressions": 30, "position": 9}]}
+
+        helper = type("H", (), {"http_json": staticmethod(http_json), "token_uri": staticmethod(lambda s: "https://token"),
+                                "jwt_assertion": staticmethod(lambda s, t: "jwt"), "GSC_API": "https://gsc/{site}"})
+        out, statuses = [], {}
+        with patch.dict(os.environ, {"GSC_SERVICE_ACCOUNT_JSON": "{}"}), \
+             patch.dict(sys.modules, {"tools.update_ai_stats": helper}), \
+             patch.object(metrics, "slug_rows", return_value={"entities": ["oversharing"]}):
+            metrics.gsc([{"id": "p1", "langs": "", "refs": "{}"}], "2026-11-03", out, statuses)
+        self.assertEqual(statuses["Google Search Console"], "Abruf abgeschlossen")
+        self.assertEqual(len(requests), 2)   # Tageswerte und Suchbegriffe fuer die eine Seite
+        pages = [m for m in out if "query" not in m]
+        queries = [m for m in out if "query" in m]
+        self.assertEqual({m["metric"] for m in pages}, {"gsc_impressions", "gsc_clicks"})
+        self.assertEqual(len(queries), 1)   # der leere Suchbegriff wird verworfen
+        self.assertEqual((queries[0]["query"], queries[0]["position"], queries[0]["page"]), ("sharepoint oversharing", 5.2, "https://www.m365.fm/entity/oversharing/"))
+
+    def test_main_posts_queries_separately_from_metrics(self):
+        posted = []
+
+        def api(url, data=None, headers=None, timeout=40):
+            if url.endswith("/api/internal/sponsor-placements"):
+                return 200, {"placements": [{"id": "p1"}]}, {}
+            posted.append(json.loads(data))
+            return 200, {}, {}
+
+        def gsc_rows(_placements, day, out, statuses):
+            out.append({"placement_id": "p1", "day": day, "metric": "gsc_clicks", "value": 1, "dim": "/x/", "source": "gsc", "kind": "measured"})
+            out.append(metrics.query_row("p1", day, "q", "/x/", 1, 2, 3.0))
+            statuses["Google Search Console"] = "Abruf abgeschlossen"
+
+        def noop(name):
+            return lambda _placements, _day, _out, statuses: statuses.__setitem__(name, "Abruf abgeschlossen")
+
+        with patch.dict(os.environ, {"CRON_KEY": "test-key"}), \
+             patch.object(metrics, "json_request", side_effect=api), \
+             patch.object(metrics, "spreaker", side_effect=noop("Spreaker")), patch.object(metrics, "youtube", side_effect=noop("YouTube Analytics")), \
+             patch.object(metrics, "cloudflare", side_effect=noop("Cloudflare")), patch.object(metrics, "gsc", side_effect=gsc_rows), \
+             patch.object(metrics, "bing", side_effect=noop("Bing Webmaster API")), patch.object(metrics, "press_ranger", side_effect=noop("Press Ranger")):
+            self.assertEqual(metrics.main(dt.date(2026, 11, 5)), 0)
+        self.assertEqual(sum(len(p.get("queries", [])) for p in posted), 4)
+        self.assertEqual(sum(len(p.get("metrics", [])) for p in posted), 4)
+        self.assertTrue(all(("queries" in p) != ("metrics" in p) for p in posted))
+
 
 if __name__ == "__main__":
     unittest.main()
