@@ -1,0 +1,79 @@
+name: Staging - Seite bauen und veröffentlichen
+# Testumgebung staging.m365.fm (Staging Schritt 2, siehe STAGING.md). Läuft NUR bei Push auf den Zweig `staging` oder von Hand, in der GitHub-Umgebung `staging`.
+# Baut die Seite verkleinert (Deutsch und Englisch) mit den ÖFFENTLICHEN Exporten der Live-API (nur GET, damit die Testseite echte Inhalte hat), schreibt alle
+# Adressen auf staging.m365.fm / api-staging.m365.fm um, lädt das Ergebnis in den EIGENEN Bucket m365-fm-staging und veröffentlicht den Staging-Site-Worker
+# (wrangler deploy --env staging). Nie: GitHub Pages, Live-Bucket m365-fm, Live-Worker, Live-Domain, Live-Secrets, IndexNow, Cache-Leeren der Live-Zone.
+# tools/check_staging_isolation.py (Teil von staging-checks und hier vorab) prüft das.
+on:
+  push:
+    branches: [staging]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency: { group: site-staging, cancel-in-progress: true }
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    environment: staging
+    env:
+      SITE_LANGS: "de,en"                    # verkleinerter Bau (site_i18n.site_langs)
+      SITE_BASE: https://staging.m365.fm      # kanonische Adressen der Testseite
+      COMMUNITY_API: https://api-dub.m365.fm  # Exporte nur LESEN; staging_rewrite.py setzt danach api-staging.m365.fm in die Seiten
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: pip install -q requests cryptography pillow boto3 pyyaml
+      - name: Trennung von Live prüfen (rot = kein Deploy)
+        run: python3 tools/check_staging_isolation.py
+      - name: Tests des Site-Workers - rot heißt kein Deploy
+        working-directory: sitewrk
+        run: node --check index.js && node --test
+      - name: Cache der Community-Exporte (nur lesen)
+        uses: actions/cache/restore@v4
+        with:
+          path: data/cache
+          key: exports-${{ github.run_id }}
+          restore-keys: exports-
+      - name: Seite bauen (verkleinert, nichts wird veröffentlicht)
+        run: python generate_site.py
+      - name: Adressen auf Staging umschreiben (keine Live-Adresse bleibt in den Seiten)
+        run: python3 tools/staging_rewrite.py docs r2out
+      - name: Bucket m365-fm-staging anlegen, falls es ihn noch nicht gibt
+        continue-on-error: true
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if npx --yes wrangler@4 r2 bucket create m365-fm-staging > "$RUNNER_TEMP/bucket.log" 2>&1; then echo "Bucket m365-fm-staging angelegt."
+          elif grep -qiE "already exists|10004" "$RUNNER_TEMP/bucket.log"; then echo "Bucket m365-fm-staging gibt es schon."
+          else
+            echo "::warning::Bucket m365-fm-staging konnte nicht angelegt werden (dem Token fehlt vermutlich 'Workers R2 Storage: Edit'). Von Hand anlegen: https://dash.cloudflare.com/?to=/:account/r2/new - siehe STAGING.md"
+            sed -E 's/[a-f0-9]{32}/[Konto-ID]/g' "$RUNNER_TEMP/bucket.log" | head -5
+          fi
+      - name: Zugangsdaten prüfen
+        run: |
+          miss=""
+          for v in R2_ACCOUNT_ID STAGING_R2_ACCESS_KEY_ID STAGING_R2_SECRET_ACCESS_KEY CLOUDFLARE_API_TOKEN CLOUDFLARE_ACCOUNT_ID; do [ -z "${!v}" ] && miss="$miss $v"; done
+          if [ -n "$miss" ]; then echo "::error::Es fehlen (Namen):$miss - bitte in der GitHub-Umgebung staging anlegen, siehe STAGING.md"; exit 1; fi
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          STAGING_R2_ACCESS_KEY_ID: ${{ secrets.STAGING_R2_ACCESS_KEY_ID }}
+          STAGING_R2_SECRET_ACCESS_KEY: ${{ secrets.STAGING_R2_SECRET_ACCESS_KEY }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      - name: Bau in den Bucket m365-fm-staging laden (der Bucket steht fest im Skript)
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          STAGING_R2_ACCESS_KEY_ID: ${{ secrets.STAGING_R2_ACCESS_KEY_ID }}
+          STAGING_R2_SECRET_ACCESS_KEY: ${{ secrets.STAGING_R2_SECRET_ACCESS_KEY }}
+        run: python3 tools/staging_upload.py docs r2out
+      - name: Staging-Site-Worker veröffentlichen (wrangler deploy --env staging)
+        working-directory: sitewrk
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: npx --yes wrangler@4 deploy --env staging

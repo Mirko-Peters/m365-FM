@@ -21,3 +21,23 @@ R2_PRIMARY = "0"
 [[r2_buckets]]
 binding = "PAGES"   # Seiten, die der Seitenbau nach R2 laedt (pages/<pfad>/index.html), statt in GitHub Pages
 bucket_name = "m365-fm"
+
+# ================================================================ Testumgebung (Staging) - STAGING.md
+# Eigener Worker auf staging.m365.fm. Liefert NUR Seiten aus dem eigenen Bucket m365-fm-staging (pages/<pfad>), nie GitHub Pages und nie den Live-Bucket
+# (sitewrk/index.js, stagingFetch). Alles noindex/nofollow, robots.txt sperrt alles. Deploy ausschliesslich ueber .github/workflows/site-staging.yml
+# (wrangler deploy --env staging). routes und workers_dev stehen hier ausdruecklich, weil wrangler sie sonst vom Live-Teil erbt (dub.m365.fm, www.m365.fm).
+# tools/check_staging_isolation.py verbietet hier jeden Live-Namen.
+[env.staging]
+name = "m365-dub-site-staging"
+workers_dev = false
+routes = [{ pattern = "staging.m365.fm", custom_domain = true, zone_name = "m365.fm" }]
+
+[env.staging.vars]
+ENVIRONMENT = "staging"
+ORIGIN = "https://staging.m365.fm"
+MIGRATED = "0"
+R2_PRIMARY = "0"
+
+[[env.staging.r2_buckets]]
+binding = "PAGES"
+bucket_name = "m365-fm-staging"

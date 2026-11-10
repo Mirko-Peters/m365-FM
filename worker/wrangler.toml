@@ -54,3 +54,38 @@ bucket_name = "m365-fm"
 
 [observability]
 enabled = true   # Workers Logs (Fehler je Request und Cron im Dashboard sichtbar)
+
+# ================================================================ Testumgebung (Staging) - STAGING.md
+# Eigener Worker, eigene D1-Datenbank, eigene Adresse. Bindungen, Variablen und Crons werden von wrangler NICHT aus dem Live-Teil oben geerbt
+# (nur routes, workers_dev, main, compatibility_date und observability werden geerbt - darum stehen routes und workers_dev hier ausdruecklich).
+# Absichtlich NICHT vorhanden: [ai], [[vectorize]] (Live-Index m365-search), [[send_email]], [[r2_buckets]], [triggers] (keine Crons) und alle Secrets fuer
+# Mail, KI, LinkedIn, Spreaker, YouTube, Maps, HeySummit, Push. Zusaetzlich sperrt ENVIRONMENT="staging" diese Wege im Code (worker/src/staging.js).
+# Deploy ausschliesslich ueber .github/workflows/worker-staging.yml (wrangler deploy --env staging). tools/check_staging_isolation.py verbietet hier jeden Live-Namen.
+# Dieser Block bleibt der LETZTE der Datei: setup.mjs (Live) ersetzt nur das erste database_id / AI_GATEWAY_ID weiter oben.
+[env.staging]
+name = "m365-dub-community-staging"
+workers_dev = false
+routes = [{ pattern = "api-staging.m365.fm", custom_domain = true, zone_name = "m365.fm" }]
+
+[[env.staging.d1_databases]]
+binding = "DB"
+database_name = "m365-dub-staging"
+database_id = "REPLACE_WITH_STAGING_D1_ID"   # wird von worker/setup-staging.mjs (worker-staging.yml) eingetragen
+migrations_dir = "migrations"   # dieselben Migrationen wie live
+
+[env.staging.vars]
+ENVIRONMENT = "staging"
+SITE = "https://staging.m365.fm"
+API = "https://api-staging.m365.fm"
+PAYPAL_ENV = "sandbox"
+ADS_BOOKING = "0"
+AI_DAILY_EUR_HAIKU = "0"   # kein KI-Budget
+HAIKU_USD_PER_MTOK_IN = "0.10"
+HAIKU_USD_PER_MTOK_OUT = "0.50"
+USD_PER_EUR = "1.08"
+SEARCH_GAP_THRESHOLD = "0.35"
+SEARCH_VECTOR_MIN_SCORE = "0.4"
+SEARCH_DEMAND_MIN = "3"
+
+[env.staging.observability]
+enabled = true
