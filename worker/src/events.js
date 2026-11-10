@@ -5,6 +5,7 @@ import { cleanText, esc, rateLimit } from "./util.js";
 import { baseIds, entityMap } from "./entities.js";
 import { cleanUrl } from "./profiles.js";
 import { stats } from "./badges.js";
+import { recordInvite } from "./inviter.js";
 import { ensureDirectoryCols, geocodeAddress, recordGeocodeStatus } from "./directory.js";
 import { adoptUnclaimedForEntity } from "./orgpair.js";
 
@@ -26,6 +27,9 @@ async function topics(env, list) {
 // Event-Rollen: Rechte je Rolle (Veranstalter-Firma Inhaber/Admin/Event-Manager und Eigentuemer koennen alles ausser Rollen-Details)
 // Events, deren Anmeldungen (mit Einwilligung) an ein externes System uebergeben werden
 export const TRANSFER = { "m365con-2027": "heysummit:229506" };
+// Event geloescht: von seiner LinkedIn-Zeile (linkedin_events.js) faellt nur eine bereits abgesagte weg. Eine veroeffentlichte oder reservierte bleibt mit Absicht
+// stehen - der LinkedIn-Event ist noch oeffentlich und erscheint im Admin als "verwaist" mit Absage-Knopf (abgesagt wird nur per Klick, nie automatisch).
+const LI_GONE = "DELETE FROM linkedin_events WHERE event_id=? AND status='cancelled'";
 export const EVENT_ROLES = {
   organisator: ["edit", "sessions", "sponsor", "roles", "delete"],
   "co-organisator": ["edit", "sessions", "sponsor", "roles"],
@@ -156,7 +160,7 @@ async function evView(db, ev, withPending) {
   const ow = await db.prepare("SELECT u.name,p.handle FROM users u LEFT JOIN profiles p ON p.user_id=u.id AND p.public=1 WHERE u.id=?").bind(ev.owner_id).first();
   const rows = (await db.prepare("SELECT * FROM event_sessions WHERE event_id=? " + (withPending ? "" : "AND status='live' ") + "ORDER BY start,id").bind(ev.id).all()).results || [];
   return { handle: ev.handle, title: ev.title, summary: ev.summary, about: ev.about, start: ev.start, end: ev.end, tz: ev.tz, mode: ev.mode, location: ev.location, country: ev.country, url: ev.url, tickets_url: ev.tickets_url,
-    free: !!ev.free, lang: ev.lang, topics: parse(ev.topics, []), seeking_sponsor: !!ev.seeking_sponsor, public: !!ev.public,
+    free: !!ev.free, lang: ev.lang, linkedin_url: (await db.prepare("SELECT url FROM linkedin_events WHERE event_id=? AND status='published'").bind(ev.id).first().catch(() => null))?.url || "", topics: parse(ev.topics, []), seeking_sponsor: !!ev.seeking_sponsor, public: !!ev.public,
     partners: ((await db.prepare("SELECT p.kind,p.level,o.handle,o.name,o.public FROM event_partners p JOIN orgs o ON o.id=p.org_id WHERE p.event_id=? AND p.status='confirmed' ORDER BY p.created").bind(ev.id).all()).results || []).map((x) => ({ kind: x.kind, level: x.level, name: x.name, handle: x.public ? x.handle : "" })),
     asked: withPending ? ((await db.prepare("SELECT o.handle FROM sponsor_asks a JOIN orgs o ON o.id=a.org_id WHERE a.event_id=?").bind(ev.id).all()).results || []).map((x) => x.handle) : undefined,
     organizer: org ? { kind: "o", handle: org.public ? org.handle : "", name: org.name } : { kind: "u", handle: ow?.handle || "", name: ow?.name || "" }, sessions: rows.map((r) => sessView(r, withPending)) };
@@ -339,7 +343,7 @@ export async function handleEvents(env, request, url, path, user, J) {
     if (need()) return need();
     const ev = await db.prepare("SELECT * FROM events WHERE handle=?").bind(m[1]).first();
     if (!(await canManage(db, user, ev, "delete"))) return J({ error: "forbidden" }, 403);
-    await db.batch([db.prepare("DELETE FROM event_roles WHERE event_id=?").bind(ev.id), db.prepare("DELETE FROM event_partners WHERE event_id=?").bind(ev.id), db.prepare("DELETE FROM event_attendees WHERE event_id=?").bind(ev.id), db.prepare("DELETE FROM event_settings WHERE event_id=?").bind(ev.id), db.prepare("DELETE FROM event_sessions WHERE event_id=?").bind(ev.id), db.prepare("DELETE FROM events WHERE id=?").bind(ev.id)]);
+    await db.batch([db.prepare("DELETE FROM event_roles WHERE event_id=?").bind(ev.id), db.prepare("DELETE FROM event_partners WHERE event_id=?").bind(ev.id), db.prepare("DELETE FROM event_attendees WHERE event_id=?").bind(ev.id), db.prepare("DELETE FROM event_settings WHERE event_id=?").bind(ev.id), db.prepare("DELETE FROM event_sessions WHERE event_id=?").bind(ev.id), db.prepare("DELETE FROM events WHERE id=?").bind(ev.id), db.prepare(LI_GONE).bind(ev.id)]);
     return J({ ok: true });
   }
   // Session anlegen/aendern: Veranstalter -> sofort live; andere Mitglieder -> Vorschlag (pending)
@@ -540,6 +544,8 @@ export async function handleEvents(env, request, url, path, user, J) {
     sp = sp.map((x) => (x.t === tok ? { h: pr.handle, n: x.n, e: x.e || pr.handle, s: "confirmed" } : x));   // e = eigene Personen-Entitaet (Profil-Adresse), falls keine andere hinterlegt ist
     await db.batch([db.prepare("UPDATE event_sessions SET speakers=? WHERE id=?").bind(JSON.stringify(sp), se.id), db.prepare("DELETE FROM speaker_invites WHERE token=?").bind(tok)]);
     let claimed = false; if (i.eid) { claimed = await claimEntity(db, i.eid, user.id, "invite"); if (claimed) await adoptUnclaimedForEntity(db, user.id, i.eid); }
+    const host = await db.prepare("SELECT owner_id FROM events WHERE id=?").bind(i.event_id).first();
+    if (host) await recordInvite(env, { inviter: host.owner_id, invitee: user.id, source: "speaker", ref: String(i.event_id), since: i.created });
     return J({ ok: true, handle: pr.handle, claimed });
   }
   if (path === "/api/speaker/requests" && method === "GET") {
@@ -709,7 +715,7 @@ export async function purgeEntityClaimReview(db) {
 export async function deleteUserEvents(db, uid) {
   const evs = (await db.prepare("SELECT id FROM events WHERE owner_id=? AND org_id IS NULL").bind(uid).all()).results || [];
   const ops = [];
-  for (const e of evs) ops.push(db.prepare("DELETE FROM event_roles WHERE event_id=?").bind(e.id), db.prepare("DELETE FROM event_partners WHERE event_id=?").bind(e.id), db.prepare("DELETE FROM event_attendees WHERE event_id=?").bind(e.id), db.prepare("DELETE FROM event_settings WHERE event_id=?").bind(e.id), db.prepare("DELETE FROM event_sessions WHERE event_id=?").bind(e.id), db.prepare("DELETE FROM events WHERE id=?").bind(e.id));
+  for (const e of evs) ops.push(db.prepare("DELETE FROM event_roles WHERE event_id=?").bind(e.id), db.prepare("DELETE FROM event_partners WHERE event_id=?").bind(e.id), db.prepare("DELETE FROM event_attendees WHERE event_id=?").bind(e.id), db.prepare("DELETE FROM event_settings WHERE event_id=?").bind(e.id), db.prepare("DELETE FROM event_sessions WHERE event_id=?").bind(e.id), db.prepare("DELETE FROM events WHERE id=?").bind(e.id), db.prepare(LI_GONE).bind(e.id));
   ops.push(db.prepare("DELETE FROM event_sessions WHERE proposer_id=? AND status='pending'").bind(uid), db.prepare("DELETE FROM event_roles WHERE user_id=?").bind(uid), db.prepare("DELETE FROM event_attendees WHERE user_id=?").bind(uid), db.prepare("DELETE FROM event_transfers WHERE user_id=?").bind(uid));
   if (ops.length) await db.batch(ops);
 }

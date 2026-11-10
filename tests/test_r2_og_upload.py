@@ -1,7 +1,7 @@
 """Teilen-Bilder nach R2: generate_og.py legt sie unter r2img/og/ ab (nicht mehr in docs/), tools/r2_og_upload.py gleicht direkt mit dem
-Bucket ab (ETag = MD5) und laedt nur fehlende/geaenderte Bilder mit image/png und 1 Tag Cache; nichts wird geloescht. Auf main
-(OG_REQUIRED=1) haelt jeder Fehler den Deploy auf, damit og:image nie ins Leere zeigt."""
-import hashlib, importlib, json, os, sys, tempfile, types, unittest
+Bucket ab (ETag = MD5) und laedt nur fehlende/geaenderte Bilder mit image/png und 1 Tag Cache; geloescht werden nur persoenliche Karten
+entfernter Profile (Einladungs- und Profilkarte, PR #320). Auf main (OG_REQUIRED=1) haelt jeder Fehler den Deploy auf, damit og:image nie ins Leere zeigt."""
+import contextlib, hashlib, importlib, io, json, os, sys, tempfile, types, unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -20,14 +20,18 @@ class EtagS3(FakeS3):
         r = super().list_objects_v2(Bucket, Prefix, MaxKeys, ContinuationToken)
         for o in r["Contents"]: o["ETag"] = '"' + hashlib.md5(self.obj[o["Key"]]["body"]).hexdigest() + '"'
         return r
+    fail_delete = False
+    def delete_object(self, Bucket, Key):
+        if self.fail_delete: raise RuntimeError("AccessDenied " + Key)
+        self.obj.pop(Key, None); self.log.append(("delete", Key))
 
 
-def run_upload(src, s3, creds=True, required=False):
+def run_upload(src, s3, creds=True, required=False, env=None):
     fake = types.ModuleType("boto3"); fake.client = lambda *a, **k: s3
     old_mod, old_env = sys.modules.get("boto3"), dict(os.environ)
     sys.modules["boto3"] = fake
-    for k in [*CREDS, "OG_REQUIRED"]: os.environ.pop(k, None)
-    os.environ.update({**(CREDS if creds else {}), **({"OG_REQUIRED": "1"} if required else {})})
+    for k in [*CREDS, "OG_REQUIRED", "OG_PRUNE_FORCE"]: os.environ.pop(k, None)
+    os.environ.update({**(CREDS if creds else {}), **({"OG_REQUIRED": "1"} if required else {}), **(env or {})})
     sys.path.insert(0, str(ROOT / "tools"))
     try:
         for m in ("r2_common", "r2_og_upload"): sys.modules.pop(m, None)
@@ -81,6 +85,59 @@ class OgUploadTest(unittest.TestCase):
         self.assertEqual(run_upload(self.src, self.s3, creds=False), 0); self.assertEqual(self.s3.obj, {})
         self.assertEqual(run_upload(self.src, self.s3, creds=False, required=True), 1)
         self.assertEqual(run_upload(self.src / "fehlt", self.s3, required=True), 1)
+
+
+class PersonalCardsTest(unittest.TestCase):
+    """320-4, Entscheidung (b): die Einladungskarte (Foto + Name) und die Karte der Profilseite (Name) verschwinden mit dem naechsten Bau aus dem
+    Bucket, wenn das Konto geloescht oder das Profil nicht mehr oeffentlich ist - alle anderen Bilder bleiben wie bisher."""
+    CARDS = {"og/index.png": b"A", "og/entity/teams.png": b"B", "og/einladung/max-m.png": b"M", "og/einladung/anna-b.png": b"N",
+             "og/community/u/max-m.png": b"P", "og/de/community/u/max-m.png": b"Q", "og/community/u/anna-b.png": b"R", "og/community/u/max-m/blog/post.png": b"S"}
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory(); self.src, self.s3 = Path(self.tmp.name) / "r2img", EtagS3()
+        for rel, body in self.CARDS.items():
+            p = self.src / rel; p.parent.mkdir(parents=True, exist_ok=True); p.write_bytes(body)
+        self.assertEqual(run_upload(self.src, self.s3), 0); self.assertEqual(sorted(self.s3.obj), sorted(self.CARDS)); self.s3.log.clear()
+    def tearDown(self): self.tmp.cleanup()
+
+    def run_quiet(self, **kw):
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out): rc = run_upload(self.src, self.s3, **kw)
+        return rc, out.getvalue()
+
+    def test_karten_eines_entfernten_profils_werden_geloescht(self):
+        for rel in ("og/einladung/max-m.png", "og/community/u/max-m.png", "og/de/community/u/max-m.png", "og/community/u/max-m/blog/post.png", "og/entity/teams.png"):
+            (self.src / rel).unlink()   # max-m ist nicht mehr oeffentlich; eine Entitaetsseite und ein Blogbeitrag sind ebenfalls weg
+        rc, out = self.run_quiet(required=True)
+        self.assertEqual(rc, 0)
+        self.assertEqual(sorted(self.s3.log), [("delete", "og/community/u/max-m.png"), ("delete", "og/de/community/u/max-m.png"), ("delete", "og/einladung/max-m.png")])
+        self.assertEqual(sorted(self.s3.obj), ["og/community/u/anna-b.png", "og/community/u/max-m/blog/post.png", "og/einladung/anna-b.png", "og/entity/teams.png", "og/index.png"])
+        self.assertNotIn("max-m", out)   # das Kuerzel eines entfernten Profils steht nie im (oeffentlichen) Bau-Protokoll
+
+    def test_ohne_karten_im_bau_wird_nichts_geloescht(self):
+        for rel in list(self.CARDS):
+            if "einladung" in rel or "community/u" in rel: (self.src / rel).unlink()   # Profil-Export ausgefallen: keine Profile im Bau
+        rc, out = self.run_quiet(required=True)
+        self.assertEqual(rc, 0); self.assertEqual(self.s3.log, []); self.assertEqual(sorted(self.s3.obj), sorted(self.CARDS))
+        self.assertIn("::warning::", out); self.assertIn("nichts geloescht", out)
+        rc, out = self.run_quiet(required=True, env={"OG_PRUNE_FORCE": "1"})   # wirklich kein oeffentliches Profil mehr: bewusst freigegeben
+        self.assertEqual(rc, 0); self.assertEqual(sorted(self.s3.obj), ["og/community/u/max-m/blog/post.png", "og/entity/teams.png", "og/index.png"])
+
+    def test_sicherung_gegen_massenloeschung(self):
+        for i in range(12): self.s3.obj[f"og/einladung/alt-{i}.png"] = {"body": b"X", "ct": "image/png", "meta": {}}   # 12 alte Karten, der Bau hat nur 2
+        rc, out = self.run_quiet()
+        self.assertEqual(rc, 0); self.assertEqual(self.s3.log, []); self.assertIn("OG_PRUNE_FORCE=1", out)
+        rc, out = self.run_quiet(env={"OG_PRUNE_FORCE": "1"})
+        self.assertEqual(len([x for x in self.s3.log if x[0] == "delete"]), 12)
+        self.assertEqual(sorted(k for k in self.s3.obj if k.startswith("og/einladung/")), ["og/einladung/anna-b.png", "og/einladung/max-m.png"])
+
+    def test_loeschfehler_haelt_den_deploy_nicht_auf_und_wird_wiederholt(self):
+        (self.src / "og/einladung/max-m.png").unlink(); self.s3.fail_delete = True
+        rc, out = self.run_quiet(required=True)
+        self.assertEqual(rc, 0); self.assertIn("og/einladung/max-m.png", self.s3.obj); self.assertIn("::warning::", out); self.assertNotIn("max-m", out)
+        self.s3.fail_delete = False
+        rc, out = self.run_quiet(required=True)
+        self.assertEqual(self.s3.log, [("delete", "og/einladung/max-m.png")])
 
 
 class GenerateOgTest(unittest.TestCase):

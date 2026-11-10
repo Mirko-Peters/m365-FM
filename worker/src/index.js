@@ -1,5 +1,5 @@
 // Community-API (Cloudflare Worker + D1): Login (Google/Microsoft), Kommentare, Abzeichen, Kurator, Push, E-Mail
-import { json, cors, cookie, makeSession, readSession, readSessionInfo, sha256hex, cleanText, cleanName, randomToken, rateLimit, isLang, esc, b64u, sign, verify, audit, aiBudgetStatus, reportExternalAiUsage } from "./util.js";
+import { json, cors, cookie, makeSession, readSession, readSessionInfo, sha256hex, cleanText, cleanName, randomToken, rateLimit, isLang, esc, b64u, sign, verify, audit, aiBudgetStatus, reportExternalAiUsage, memberOf } from "./util.js";
 import { evalBadges, stats, topUsers, badgesFor, award } from "./badges.js";
 import { runDigest, runPushDigest } from "./digest.js";
 import { sendMail } from "./mailer.js";
@@ -8,6 +8,7 @@ import { importLegacyBlog } from "./legacyblog.js";
 import { importContentBlog } from "./contentblog.js";
 import { handleA2a } from "./a2a.js";
 import { handleAdminPanel } from "./adminpanel.js";
+import { handleLinkedinEvents, oauthStartLE, oauthCallbackLE, deleteUserLinkedin } from "./linkedin_events.js";
 import { handleSponsor, handleSponsorLink } from "./sponsor.js";
 import { handleAds, handlePaypalWebhook } from "./ads.js";
 import { handleSponsorOrders } from "./sponsor_orders.js";
@@ -35,8 +36,10 @@ import { handleMediakit } from "./mediakit.js";
 import { handleMail, flushOutbox, notify } from "./mail.js";
 import { handleReviews } from "./reviews.js";
 import { handleEntityInvite, remindInvites } from "./entinvite.js";
+import { handleInviter, syncInviterBadges, deleteUserInvites } from "./inviter.js";
 import { handleDemo } from "./demo.js";
 import { handleGuests, deleteUserGuests } from "./guests.js";
+import { deleteUserEntityInvites } from "./entinvite.js";
 import { handleExpertRequests, deleteUserExpertRequests, syncExpertVectors, closeExpiredExpertRequests } from "./expert_requests.js";
 import { handlePodcast, deleteUserPodcast, pollPodcast } from "./podcast.js";
 import { handleVideo, deleteUserVideos, pollVideos } from "./youtube.js";
@@ -90,7 +93,6 @@ function shortName(full) {
   return `${p[0]} ${[...p[p.length - 1]][0]}.`;
 }
 const safeReturn = (env, u) => { try { const x = new URL(u); return x.origin === env.SITE ? x.href : env.SITE + "/"; } catch { return env.SITE + "/"; } };
-const isAdmin = (env, u) => u.role === "admin" || (env.ADMIN_SUBS || "").split(",").map((s) => s.trim()).includes(`${u.provider}:${u.sub}`);
 
 const firstName = (full) => cleanName(full).split(" ").filter(Boolean)[0] || "";
 async function namePrefs(db, user) {
@@ -143,6 +145,14 @@ async function auth(env, request, url, path) {
       scope: "https://www.googleapis.com/auth/youtube https://www.googleapis.com/auth/yt-analytics.readonly",
       access_type: "offline", prompt: "consent", include_granted_scopes: "true" });
     return new Response(null, { status: 302, headers: { location: `https://accounts.google.com/o/oauth2/v2/auth?${q}`, "cache-control": "no-store" } });
+  }
+  if (path === "/auth/linkedin-events/start" || path === "/auth/linkedin-events/callback") {   // einmalige Verbindung der LinkedIn-Seite, nur Admin
+    const sess = await readSessionInfo(env, request), admin = sess ? await me(env, sess.uid) : null;
+    if (!admin?.admin) return html("<p>Admin login required.</p>", 403);
+    const back = (r) => new Response(null, { status: 302, headers: { location: `${env.SITE}/admin/?li=${r}#li`, "set-cookie": cookie("m365le", "", 0) } });
+    if (path.endsWith("/start")) { const o = await oauthStartLE(env, admin); return o.error ? html("<p>LinkedIn not configured.</p>", 503) : new Response(null, { status: 302, headers: { location: o.location, "set-cookie": o.setCookie } }); }
+    const r = await oauthCallbackLE(env, request, url, admin);
+    return back(r.ok ? "ok" : r.error);
   }
   if (!m) return null;
   const P = PROVIDERS[m[2]];
@@ -222,16 +232,14 @@ async function deleteAccount(env, id) {
     db.prepare("DELETE FROM push_subs WHERE user_id=?").bind(id), db.prepare("DELETE FROM wiki_reports WHERE user_id=?").bind(id), db.prepare("DELETE FROM wiki_rev WHERE user_id=? AND status IN ('pending','rejected')").bind(id), db.prepare("UPDATE wiki_rev SET user_id=0 WHERE user_id=?").bind(id), db.prepare("DELETE FROM curators WHERE user_id=?").bind(id), db.prepare("DELETE FROM user_identities WHERE user_id=?").bind(id), db.prepare("DELETE FROM users WHERE id=?").bind(id),
   ]);
   await deleteUserEvents(db, id);
+  await deleteUserEntityInvites(db, id);   // braucht mail_addr und die bestaetigten Claims: vor deleteUserData
   await deleteUserMessages(db, id); await deleteUserTokens(db, id); await deleteUserQa(db, id); await deleteUserBlog(db, id); await deleteUserLibrary(db, id); await deleteUserPodcast(db, id); await deleteUserVideos(db, id); await deleteUserGuests(db, id); await deleteUserGuestCredits(db, id);
   await deleteUserData(db, id); await deleteUserExpertRequests(env, id);
+  await deleteUserLinkedin(db, id);   // LinkedIn-Zugang dieses Admins (verschluesselte Tokens) und "veroeffentlicht von"
+  await deleteUserInvites(env, id);   // Einlader: beide Seiten (eingeladen und Einlader samt eigenem Kuerzel in ref)
 }
 
-async function me(env, uid) {
-  const u = await env.DB.prepare("SELECT id,provider,sub,name,bio,lang,banned,role,created FROM users WHERE id=?").bind(uid).first();
-  if (!u || u.banned) return null;
-  const pro = !!(await env.DB.prepare("SELECT 1 x FROM programs WHERE owner_type='u' AND owner_id=? AND verified=1 AND program IN ('mvp','mct','rd','msa','ms_employee') LIMIT 1").bind(uid).first());
-  return { ...u, admin: isAdmin(env, u), editor: u.role === "editor", pro };
-}
+const me = memberOf;   // util.js: dieselbe Rollen-Ermittlung auch fuer Cron-Laeufe (Kurzposts)
 
 function pubComment(c, mine, liked, badges, admin) {
   return { id: c.id, parent: c.parent_id, user: { id: c.user_id, name: c.name, badges: badges.get(c.user_id) || [] }, body: c.status === "hidden" ? "" : c.body,
@@ -241,7 +249,7 @@ function pubComment(c, mine, liked, badges, admin) {
 async function api(env, request, url, path, asUser, ctx) {
   const method = request.method, J = (d, s = 200, x) => json(d, s, env, request, x);
   if (method === "OPTIONS") return new Response(null, { status: 204, headers: cors(env, request) });
-  if (asUser === undefined && method !== "GET" && !["/api/internal/ai-spend", "/api/internal/sponsor-metrics", "/api/email/unsub", "/api/mail/unsub", "/api/topics/email-unsub"].includes(path) && request.headers.get("x-requested-with") !== "m365") return J({ error: "bad_request" }, 400);   // interne Routen per CRON_KEY; Abmeldelinks (RFC 8058) senden keinen Zusatz-Header, alle per Token geschuetzt
+  if (asUser === undefined && method !== "GET" && !["/api/internal/ai-spend", "/api/internal/sponsor-metrics", "/api/email/unsub", "/api/mail/unsub", "/api/topics/email-unsub", "/api/entityinvite/decline"].includes(path) && request.headers.get("x-requested-with") !== "m365") return J({ error: "bad_request" }, 400);   // interne Routen per CRON_KEY; Abmeldelinks (RFC 8058) senden keinen Zusatz-Header, alle per Token geschuetzt
   // asUser: vom MCP-Server (Token bereits geprueft) - dann keine Cookie-Sitzung noetig
   const uid = asUser === undefined ? await readSession(env, request) : null, user = asUser === undefined ? (uid ? await me(env, uid) : null) : asUser;
   const need = () => (user ? null : J({ error: "login" }, 401));
@@ -413,6 +421,7 @@ async function api(env, request, url, path, asUser, ctx) {
   if (path.startsWith("/api/podcast/") || path.startsWith("/api/admin/podcast")) { const q = await handlePodcast(env, request, url, path, user, J); if (q) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return q; } }
   if (path === "/api/updates/export" || path === "/api/admin/updates/poll") { const q = await handleUpdates(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/reviews")) { const q = await handleReviews(env, request, url, path, user, J); if (q) return q; }
+  if (path.startsWith("/api/invite/") || path === "/api/admin/invites" || path === "/api/admin/invite/void") { const q = await handleInviter(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/entityinvite/")) { const q = await handleEntityInvite(env, request, url, path, user, J); if (q) return q; }
   if (path === "/api/mediakit" || path === "/api/mediakit/summary" || path === "/api/admin/mediakit") { const q = await handleMediakit(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/mail/") || path.startsWith("/api/admin/mail")) { const q = await handleMail(env, request, url, path, user, J); if (q) return q; }
@@ -426,6 +435,7 @@ async function api(env, request, url, path, asUser, ctx) {
   if (path.startsWith("/api/credit/")) { const q = await handleCredits(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/seo/")) { const q = await handleSeo(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/edits/")) { const v = await handleVotes(env, request, url, path, user, J); if (v) return v; }
+  if (path.startsWith("/api/admin/linkedin/")) return await handleLinkedinEvents(env, request, url, path, user, J);
   if (path.startsWith("/api/admin/panel/")) return await handleAdminPanel(env, request, url, path, user, J);
   if (path.startsWith("/api/entity") || path.startsWith("/api/admin/entity")) { const e = await handleEntity(env, request, url, path, user, J); if (e) return e; }
   if (/^\/api\/(profile|profiles|endorse|cert-endorse|vote|feed|org|orgs|img|recommend)(\/|$)/.test(path) || path === "/api/admin/verify" || path === "/api/admin/cert-queue" || path === "/api/admin/feed-hide") { const p = await handleProfiles(env, request, url, path, user, J); if (p) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return p; } }
@@ -588,6 +598,7 @@ export default {
     if (event.cron === "0 6 * * *") {
       T("runPushDigest", () => runPushDigest(env));
       T("runDigest", () => runDigest(env, { at: scheduledAt }));
+      T("syncInviterBadges", () => syncInviterBadges(env));   // einmal taeglich (Sicherheitsnetz: Zurechnung, Entwertung und Kontoloeschung bewerten sofort)
     }
     if (event.cron === "*/30 * * * *") T("runDigest", () => runDigest(env, { at: scheduledAt }));
     T("refreshFeeds", () => refreshFeeds(env));

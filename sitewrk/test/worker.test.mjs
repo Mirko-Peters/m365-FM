@@ -16,6 +16,7 @@ globalThis.fetch = async (req) => {
   if (u.pathname === "/callback") return new Response(null, { status: 301, headers: { location: "https://www.m365.fm/callback/" } });
   if (u.pathname === "/og/alt.png") return new Response("PNG", { headers: { "content-type": "image/png" } });
   if (u.pathname === "/community/feed/101-copilot-explained/") return new Response("<html>feed</html>", { headers: { "content-type": "text/html; charset=utf-8" } });
+  if (u.pathname === "/einladung/gebaut/") return new Response("<html>einladung</html>", { headers: { "content-type": "text/html; charset=utf-8" } });
   return new Response("404", { status: 404, headers: { "content-type": "text/html" } });
 };
 const { default: W, r2Key, __resetR2Ready, isHtmlPath } = await import("../index.js");
@@ -218,4 +219,15 @@ test("Entfernte Inhaltsseiten (/community/feed/<id>-<slug>/, z. B. GitHub-Aktivi
   const h = await run(req("/community/feed/100-x/", "US", {}, "HEAD")); assert.equal(h.status, 410); assert.equal(await h.text(), "");
   const ok = await run(req("/community/feed/101-copilot-explained/", "US")); assert.equal(ok.status, 200);
   for (const p of ["/community/feedback/", "/community/feed/", "/community/feed/abc/", "/fr/community/feed/100-x/"]) assert.equal((await run(req(p, "US"))).status, 404, p);
+});
+test("Einladungslink (#320): gebaute Seite bleibt 200; fehlt sie (noch nicht gebaut, Profil privat, Konto geloescht), 302 zur Community mit dem Kuerzel statt 404", async () => {
+  const ok = await run(req("/einladung/gebaut/", "DE")); assert.equal(ok.status, 200); assert.equal(await ok.text(), "<html>einladung</html>");
+  for (const [path, to] of [["/einladung/neu-dabei/", "/community/?ref=neu-dabei"], ["/einladung/neu-dabei", "/community/?ref=neu-dabei"], ["/einladung/max-m/?utm_source=x", "/community/?ref=max-m"], ["/einladung/" + "a".repeat(39) + "/", "/community/?ref=" + "a".repeat(39)]]) {
+    const r = await run(req(path, "DE")); assert.equal(r.status, 302, path); assert.equal(r.headers.get("location"), "https://www.m365.fm" + to);
+    assert.equal(r.headers.get("cache-control"), "no-store"); assert.equal(r.headers.get("x-robots-tag"), "noindex");
+  }
+  const head = await run(req("/einladung/neu-dabei/", "DE", {}, "HEAD")); assert.equal(head.status, 302);
+  for (const path of ["/einladung/", "/einladung/Gross/", "/einladung/a/", "/einladung/" + "a".repeat(40) + "/", "/einladung/max-m/x/", "/einladung/%3Cscript%3E/", "/de/einladung/max-m/"])
+    assert.equal((await run(req(path, "DE"))).status, 404, path);   // nur gueltige Kuerzel, nur genau diese Adresse
+  assert.equal((await run(req("/einladung/neu-dabei/", "DE", {}, "POST"))).status, 404);
 });
