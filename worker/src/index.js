@@ -8,6 +8,7 @@ import { importLegacyBlog } from "./legacyblog.js";
 import { importContentBlog } from "./contentblog.js";
 import { handleA2a } from "./a2a.js";
 import { handleAdminPanel } from "./adminpanel.js";
+import { handleLinkedinEvents, oauthStartLE, oauthCallbackLE, deleteUserLinkedin } from "./linkedin_events.js";
 import { handleSponsor, handleSponsorLink } from "./sponsor.js";
 import { handleAds, handlePaypalWebhook } from "./ads.js";
 import { handleSponsorOrders } from "./sponsor_orders.js";
@@ -145,6 +146,14 @@ async function auth(env, request, url, path) {
       access_type: "offline", prompt: "consent", include_granted_scopes: "true" });
     return new Response(null, { status: 302, headers: { location: `https://accounts.google.com/o/oauth2/v2/auth?${q}`, "cache-control": "no-store" } });
   }
+  if (path === "/auth/linkedin-events/start" || path === "/auth/linkedin-events/callback") {   // einmalige Verbindung der LinkedIn-Seite, nur Admin
+    const sess = await readSessionInfo(env, request), admin = sess ? await me(env, sess.uid) : null;
+    if (!admin?.admin) return html("<p>Admin login required.</p>", 403);
+    const back = (r) => new Response(null, { status: 302, headers: { location: `${env.SITE}/admin/?li=${r}#li`, "set-cookie": cookie("m365le", "", 0) } });
+    if (path.endsWith("/start")) { const o = await oauthStartLE(env, admin); return o.error ? html("<p>LinkedIn not configured.</p>", 503) : new Response(null, { status: 302, headers: { location: o.location, "set-cookie": o.setCookie } }); }
+    const r = await oauthCallbackLE(env, request, url, admin);
+    return back(r.ok ? "ok" : r.error);
+  }
   if (!m) return null;
   const P = PROVIDERS[m[2]];
   if (!P.id(env) || !P.secret(env)) return html("<p>Login not configured.</p>", 503);
@@ -226,6 +235,7 @@ async function deleteAccount(env, id) {
   await deleteUserEntityInvites(db, id);   // braucht mail_addr und die bestaetigten Claims: vor deleteUserData
   await deleteUserMessages(db, id); await deleteUserTokens(db, id); await deleteUserQa(db, id); await deleteUserBlog(db, id); await deleteUserLibrary(db, id); await deleteUserPodcast(db, id); await deleteUserVideos(db, id); await deleteUserGuests(db, id); await deleteUserGuestCredits(db, id);
   await deleteUserData(db, id); await deleteUserExpertRequests(env, id);
+  await deleteUserLinkedin(db, id);   // LinkedIn-Zugang dieses Admins (verschluesselte Tokens) und "veroeffentlicht von"
   await deleteUserInvites(env, id);   // Einlader: beide Seiten (eingeladen und Einlader samt eigenem Kuerzel in ref)
 }
 
@@ -425,6 +435,7 @@ async function api(env, request, url, path, asUser, ctx) {
   if (path.startsWith("/api/credit/")) { const q = await handleCredits(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/seo/")) { const q = await handleSeo(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/edits/")) { const v = await handleVotes(env, request, url, path, user, J); if (v) return v; }
+  if (path.startsWith("/api/admin/linkedin/")) return await handleLinkedinEvents(env, request, url, path, user, J);
   if (path.startsWith("/api/admin/panel/")) return await handleAdminPanel(env, request, url, path, user, J);
   if (path.startsWith("/api/entity") || path.startsWith("/api/admin/entity")) { const e = await handleEntity(env, request, url, path, user, J); if (e) return e; }
   if (/^\/api\/(profile|profiles|endorse|cert-endorse|vote|feed|org|orgs|img|recommend)(\/|$)/.test(path) || path === "/api/admin/verify" || path === "/api/admin/cert-queue" || path === "/api/admin/feed-hide") { const p = await handleProfiles(env, request, url, path, user, J); if (p) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return p; } }
