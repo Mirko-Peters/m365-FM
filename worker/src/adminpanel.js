@@ -7,7 +7,7 @@ const QKINDS = new Set(["blog", "podcast", "video", "entity", "lblog", "notes"])
 import { audit, aiBudgetStatus } from "./util.js";
 import { SPONSOR_STATUSES } from "./sponsor.js";
 import { pairExisting } from "./orgpair.js";
-import { episodeUrlsOverview, importEpisodeUrls } from "./episode_urls.js";
+import { episodeUrlsOverview, importEpisodeUrls, episodeUrlsList } from "./episode_urls.js";
 
 export async function handleAdminPanel(env, request, url, path, user, J) {
   if (!path.startsWith("/api/admin/panel/")) return null;
@@ -62,6 +62,10 @@ export async function handleAdminPanel(env, request, url, path, user, J) {
 
   if (path === "/api/admin/panel/episode-urls" && request.method === "GET") return J(await episodeUrlsOverview(db));   // Spreaker-Adressen: ok / abweichend / ohne Seite, letzter Lauf
   if (path === "/api/admin/panel/episode-urls/import" && request.method === "POST") return J(await importEpisodeUrls(env));
+  if (path === "/api/admin/panel/episode-urls/list" && request.method === "GET") {   // Liste je Status (klickbare Kacheln im Admin-Reiter)
+    const r = await episodeUrlsList(db, url.searchParams.get("status") || "", url.searchParams.get("offset") || 0, url.searchParams.get("q") || "");
+    return r.error ? J(r, 400) : J(r);
+  }
 
   if (path === "/api/admin/panel/ops" && request.method === "GET") {   // Betrieb: letzter Lauf je Cron-Aufgabe, Audit-Protokoll
     const runs = (await db.prepare("SELECT name,started,finished,ok,info FROM cron_runs WHERE id IN (SELECT MAX(id) FROM cron_runs GROUP BY name) ORDER BY name").all().catch(() => ({ results: [] }))).results || [];

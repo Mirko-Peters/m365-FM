@@ -361,3 +361,28 @@ test("Reiter Suche (#156): Tagessummen, Suchen ohne Treffer, Uebersetzungs- und 
   assert.match(p.querySelector("p.adm-msg").textContent, /9 Suchen/);
   raw.close();
 }));
+
+test("Reiter Spreaker-Adressen: Kacheln sind klickbar und zeigen die Folgen des Status (Titel, Spreaker-Link, Soll, was abweicht)", () => withoutNet(async () => {
+  const { raw, env } = await setup();
+  const ins = raw.prepare("INSERT INTO episode_urls(spreaker_episode_id,show_id,lang,slug,url,url_on_spreaker,checked_at,status,title,fields) VALUES(?,?,?,?,?,?,?,?,?,?)");
+  ins.run("1001", 6704921, "en", "a", "https://www.m365.fm/show/episodes/a/", "https://www.m365.fm/m365-fm-podcast/a", 1, "differs", "Copilot <b>agents</b>", "episode_link,description_html");
+  ins.run("1002", 7393187, "", "", "", "", 1, "missing", "Ohne Seite", "");
+  ins.run("1003", 6704921, "en", "c", "https://www.m365.fm/show/episodes/c/", "https://www.m365.fm/show/episodes/c/", 1, "ok", "Passt", "");
+  const { root, calls } = await bootAdmin(env, "#spurls");
+  const sec = () => root.all("section").find((x) => x.querySelector("h2")?.textContent === "Spreaker-Adressen der Folgen");
+  await until(() => sec()?.all(".adm-tile").length === 5, "Kacheln");
+  const tileOf = (label) => sec().all(".adm-tile").find((t) => t.textContent.includes(label));
+  assert.equal(tileOf("Weicht ab").getAttribute("role"), "button");
+  assert.equal(tileOf("Fehler").getAttribute("role"), null, "leere Kachel ist nicht klickbar");
+  tileOf("Weicht ab").fire("click");
+  await until(() => sec().all("tbody tr").length === 1, "Liste Weicht ab");
+  assert.ok(calls.some((c) => c.path.startsWith("/api/admin/panel/episode-urls/list?status=differs")));
+  const row = texts(sec().all("tbody tr")[0], "td");
+  assert.deepEqual(row, ["Copilot <b>agents</b>", "en · 6704921", "https://www.m365.fm/m365-fm-podcast/a", "https://www.m365.fm/show/episodes/a/", "Website-Link, Beschreibung"]);
+  assert.equal(sec().all("tbody tr")[0].querySelector("a").getAttribute("href"), "https://www.spreaker.com/episode/1001");
+  assert.equal(root.all("b").filter((b) => b.textContent === "agents").length, 0, "Titel nur als Text");
+  tileOf("Ohne Seite").fire("click");
+  await until(() => sec().all("h3")[0]?.textContent === "Ohne Seite" && sec().all("tbody tr").length === 1, "Liste Ohne Seite");
+  assert.deepEqual(texts(sec().all("tbody tr")[0], "td"), ["Ohne Seite", "– · 7393187", "(leer)", "(leer)", "–"]);
+  raw.close();
+}));

@@ -459,6 +459,7 @@ test("schema: Migrationen sind idempotent und enthalten jede zur Laufzeit angele
     if (/^ALTER TABLE org_entity ADD COLUMN confirmed INTEGER NOT NULL DEFAULT 0$/i.test(s) || /^UPDATE org_entity SET confirmed=1 WHERE EXISTS \(/i.test(s)) continue;   // 0026: Rueckfuellung setzt nur 1, idempotent
     if (/^ALTER TABLE orgs ADD COLUMN unclaimed INTEGER NOT NULL DEFAULT 0$/i.test(s)) continue;   // 0034: Spalte mit Standardwert
     if (/^ALTER TABLE i18n_override(?:_rev)? ADD COLUMN src_hash TEXT NOT NULL DEFAULT ''$/i.test(s)) continue;   // 0041: Quell-Anker der Handtexte (Vertrag i18n-overrides v1), Spalte mit Standardwert
+    if (/^ALTER TABLE episode_urls ADD COLUMN (?:title|fields) TEXT NOT NULL DEFAULT ''$/i.test(s)) continue;   // 0045: Titel und abweichende Felder der Spreaker-Folge, Spalten mit Standardwert
     if (/^ALTER TABLE entity_contacts ADD COLUMN source TEXT NOT NULL DEFAULT 'guest'$/i.test(s)) continue;   // 0040: Herkunft der Kontaktadresse (guest | speaker), Laufzeit-Absicherung in entinvite.js
     if (/^ALTER TABLE entity_claims ADD COLUMN (?:verified_via|verified_domain|fwd_mask) TEXT NOT NULL DEFAULT ''$/i.test(s) || /^UPDATE entity_claims SET verified_via=CASE /i.test(s)) continue;   // 0032: Spalten mit Standardwert, Rueckfuellung idempotent
     if (/^ALTER TABLE ad_leads ADD COLUMN (?:sponsor|assigned) TEXT NOT NULL DEFAULT ''$/i.test(s)) continue;   // 0033: Sponsor-Leads, Spalten mit Standardwert

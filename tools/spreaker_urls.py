@@ -234,11 +234,11 @@ def classify(sid, ep, page, res, err=None):
         return None
     eid = str(ep["episode_id"])
     if err:
-        return {"id": eid, "show": sid, "status": "error", "plan": None, "link": ep.get("episode_link") or "", "note": err}
+        return {"id": eid, "show": sid, "status": "error", "plan": None, "link": ep.get("episode_link") or "", "note": err, "title": ep.get("title", "")}
     if page is None:
-        return {"id": eid, "show": sid, "status": "missing", "plan": None}
+        return {"id": eid, "show": sid, "status": "missing", "plan": None, "title": ep.get("title", "")}
     if not published(ep):
-        return {"id": eid, "show": sid, "status": "skipped", "plan": None, "link": ep.get("episode_link") or ""}
+        return {"id": eid, "show": sid, "status": "skipped", "plan": None, "link": ep.get("episode_link") or "", "title": ep.get("title", "")}
     pl = plan_episode(ep, page, res)
     return {"id": eid, "show": sid, "status": "differs" if pl["fields"] else "ok", "plan": pl, "link": pl["old_link"], "title": ep.get("title", "")}
 
@@ -250,7 +250,10 @@ def save_state(rows, run, path=None):
         try: old = json.loads(p.read_text("utf-8")).get("episodes", {})
         except ValueError: old = {}
     for r in rows:
-        old[r["id"]] = {"s": r["status"], "u": r.get("link", ""), "h": r["show"], "c": run["at"]}
+        e = {"s": r["status"], "u": r.get("link", ""), "h": r["show"], "c": run["at"]}
+        if r.get("title"): e["t"] = str(r["title"])[:200]   # Titel fuer die Listen im Admin-Reiter
+        if r.get("plan") and r["plan"].get("fields"): e["f"] = sorted(r["plan"]["fields"])   # was abweicht: episode_link / description_html
+        old[r["id"]] = e
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(json.dumps({"version": 1, "run": run, "episodes": old}, ensure_ascii=False, separators=(",", ":")), "utf-8")
 
