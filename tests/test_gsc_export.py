@@ -134,11 +134,15 @@ class GscExport(unittest.TestCase):
         code, out = run({**ENV, "GSC_SERVICE_ACCOUNT_JSON": "{kein json"}, FakeApi(ROWS), out=self.tmp)
         self.assertEqual(code, 1); self.assertNotIn("kein json", out)
 
-    def test_workflow_guards_secret_and_commits_with_retry(self):
+    def test_workflow_guards_secret_and_never_commits_search_data(self):
         wf = (ROOT / ".github" / "workflows" / "gsc-export.yml").read_text("utf-8")
         self.assertIn("GSC_SERVICE_ACCOUNT_JSON: ${{ secrets.GSC_SERVICE_ACCOUNT_JSON }}", wf)
         self.assertNotRegex(wf, r"echo[^\n]*GSC_SERVICE_ACCOUNT_JSON", "Secret wird nie ausgegeben")
-        self.assertIn("pip install -q requests cryptography", wf); self.assertIn("git pull --rebase", wf); self.assertIn("schedule:", wf)
+        self.assertIn("pip install -q requests cryptography", wf); self.assertIn("schedule:", wf)
+        # oeffentliches Repo: Suchanfragen nie committen, nur verschluesselt als Artefakt (wie team-analytics.yml)
+        for bad in ("git add", "git commit", "git push", "contents: write"): self.assertNotIn(bad, wf)
+        self.assertIn("openssl enc -aes-256-cbc -pbkdf2 -iter 600000", wf); self.assertIn("--out-dir gscout", wf); self.assertIn("rm -rf gscout", wf)
+        self.assertRegex(wf, r"path: enc/gsc-export\.tar\.gz\.enc")
 
     def test_privacy_policy_mentions_anonymous_search_counting(self):
         de, en = SL.privacy_de(), SL.privacy_en()

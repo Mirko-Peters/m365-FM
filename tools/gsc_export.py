@@ -1,4 +1,5 @@
-"""Woechentlicher Search-Console-Export (Issue #156, Workflow .github/workflows/gsc-export.yml): data/seo/gsc/<bis-datum>.json.
+"""Woechentlicher Search-Console-Export (Issue #156, Workflow .github/workflows/gsc-export.yml): <out-dir>/<bis-datum>.json. Der Workflow
+schreibt nach gscout/ und laedt die Datei nur verschluesselt als Artefakt hoch - nie ins (oeffentliche) Repo.
 
 Inhalt: Google Search Console, Search Analytics (Websuche) der letzten 7 Tage bis vor 3 Tagen (juengere Tage sind noch nicht vollstaendig), je
 Suchanfrage, Seite und Land: clicks, impressions, ctr, position. Eine Sprache liefert die API nicht; die Sprache steckt im Pfad der Seite (/de/...)
