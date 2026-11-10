@@ -44,6 +44,11 @@ const ACTIONS = ["publish", "update", "cancel", "resolve", "release"];
 // Kandidaten fuer NEUE Vorschlaege und Aktualisierungen - die EINE Stelle fuer weitere Ausschluesse (proposals() und act() lesen beide hierueber).
 // Importierte Events ohne Veranstalter (unclaimed), vorbei gemeldete Import-Events (retired) und in ein anderes zusammengefuehrte (merged_into) nie (#317).
 const CANDIDATE = "e.public=1 AND e.merged_into=0 AND e.unclaimed=0 AND e.retired=0";
+// Zusammengefuehrte Events (#317): eine Reservierung (pending) wandert nicht mit (eventmerge.js EVENT_TABLES), eine Zeile am Quell-Event kann also bleiben, waehrend
+// das Ziel-Event keine hat. Das Ziel-Event gilt dann als belegt (FAMILY_ROW: Zeile eines in es aufgegangenen Events, ueber hoechstens 6 Stufen), sonst entstuende
+// ein zweiter LinkedIn-Event fuer dasselbe Event. Zuruecknehmen der Zusammenfuehrung loest die Bindung wieder.
+const FAMILY_ROW = "WITH RECURSIVE fam(id,d) AS (SELECT id,0 FROM events WHERE merged_into=?1 AND id<>?1 UNION SELECT e.id,fam.d+1 FROM events e JOIN fam ON e.merged_into=fam.id WHERE fam.d<5) SELECT l.* FROM linkedin_events l JOIN fam ON fam.id=l.event_id ORDER BY (l.status='pending') DESC,(l.status='published') DESC LIMIT 1";
+const FAMILY_TAKEN = "WITH RECURSIVE up(id,p,d) AS (SELECT e.id,e.merged_into,0 FROM events e JOIN linkedin_events l ON l.event_id=e.id WHERE e.merged_into<>0 UNION SELECT e.id,e.merged_into,up.d+1 FROM events e JOIN up ON e.id=up.p WHERE up.p<>0 AND up.d<6) SELECT DISTINCT p id FROM up WHERE p<>0";
 const now = () => Math.floor(Date.now() / 1000);
 const DAY = 86400000, iso = (ms) => new Date(ms).toISOString();
 const rowsOf = (r) => r?.results || [];
@@ -265,6 +270,13 @@ export async function liPublish(env, payload, f = fetch) {
 const liPatch = (env, urn, set, f) => liCall(env, f, `${LI.api}${LI.events}/${encodeURIComponent(urn)}`, { method: "POST", headers: { "X-RestLi-Method": "PARTIAL_UPDATE" }, body: JSON.stringify({ patch: { $set: set } }) });
 export const liUpdate = (env, urn, payload, f = fetch) => { const { organizer, ...set } = payload; return liPatch(env, urn, set, f); };
 export const liCancel = (env, urn, f = fetch) => liPatch(env, urn, { lifecycleState: LI.cancelState }, f);
+// 404/410 auf Aktualisieren oder Absagen allein beweist nichts (ein falscher Pfad oder eine falsche Version saehe genauso aus, siehe Kopf und LI). Erst wenn auch
+// das Lesen des Events unter derselben Adresse 404/410 antwortet, gilt er als auf LinkedIn geloescht. Antwortet das Lesen anders, bleibt der Fehler des
+// Aufrufs stehen (li_404/li_410) und es wird nichts ausgetragen. Pfad und Version erst nach dem Live-Test des Besitzers aendern.
+async function confirmGone(env, urn, e, f) {
+  if (!isGone(e)) return false;
+  try { await liCall(env, f, `${LI.api}${LI.events}/${encodeURIComponent(urn)}`, { method: "GET" }); return false; } catch (g) { return isGone(g); }
+}
 
 // ---------- Regeln je Aktion: eine Stelle fuer die Liste (welche Knoepfe) und fuer die Ausfuehrung (act) ----------
 // ev = Zeile aus events mit li_ok (erfuellt CANDIDATE) oder null (geloescht), li = Zeile aus linkedin_events oder null. Rueckgabe: Fehlerkennung oder "" (erlaubt).
@@ -294,10 +306,12 @@ const hsReason = (m, hs) => (m.reason === "no_match" && hs.error ? hs.error : m.
 // inzwischen versteckt ist) und verwaiste (m365.fm-Event geloescht) - damit kein LinkedIn-Event ohne Absage-Knopf zurueckbleibt.
 export async function proposals(env, f = fetch, nowMs = Date.now()) {
   const db = env.DB, conn = await getConn(db), hs = await fetchHeySummit(env, f, nowMs), org = conn?.org_urn || "urn:li:organization:?";
+  await purgeLinkedinOrphans(db, nowMs).catch(() => 0);
   const spans = hs.events.filter((e) => e.start != null && e.end != null && e.end > nowMs).map((e) => [iso(e.start - DAY).slice(0, 10), iso(e.end + DAY).slice(0, 16)]);
   let evs = [], truncated = false;
   if (spans.length) {   // ohne kommendes HeySummit-Event (oder HeySummit nicht lesbar) gibt es keinen neuen Vorschlag
-    evs = rowsOf(await db.prepare(`SELECT e.*, 1 AS li_ok FROM events e WHERE ${CANDIDATE} AND e.start LIKE '%T%' AND e.start>=? AND e.id NOT IN (SELECT event_id FROM linkedin_events) AND (${spans.map(() => "(MAX(e.start,COALESCE(NULLIF(e.end,''),e.start))>=? AND e.start<=?)").join(" OR ")}) ORDER BY e.start LIMIT ${CAND_MAX + 1}`).bind(iso(nowMs - DAY).slice(0, 10), ...spans.flat()).all());
+    const taken = JSON.stringify(rowsOf(await db.prepare(FAMILY_TAKEN).all()).map((r) => r.id));   // Ziel-Events mit LinkedIn-Zeile an einem in sie aufgegangenen Event: kein neuer Vorschlag
+    evs = rowsOf(await db.prepare(`SELECT e.*, 1 AS li_ok FROM events e WHERE ${CANDIDATE} AND e.start LIKE '%T%' AND e.start>=? AND e.id NOT IN (SELECT event_id FROM linkedin_events) AND e.id NOT IN (SELECT value FROM json_each(?)) AND (${spans.map(() => "(MAX(e.start,COALESCE(NULLIF(e.end,''),e.start))>=? AND e.start<=?)").join(" OR ")}) ORDER BY e.start LIMIT ${CAND_MAX + 1}`).bind(iso(nowMs - DAY).slice(0, 10), taken, ...spans.flat()).all());
     truncated = evs.length > CAND_MAX; if (truncated) evs.length = CAND_MAX;
   }
   const lis = rowsOf(await db.prepare("SELECT * FROM linkedin_events ORDER BY (status='pending') DESC, published DESC LIMIT 500").all()), byEvent = new Map(lis.map((x) => [x.event_id, x]));
@@ -361,7 +375,8 @@ export async function act(env, user, action, ref, confirm, f = fetch, nowMs = Da
   if (online && !conn?.access_enc) return { error: "not_connected" };
   if (needsHs(action) && !conn.org_urn) return { error: "no_org" };
   const known = action === "resolve" && li?.status === "pending" && !!env.SESSION_SECRET && typeof q.ticket === "string" && !!urnOf(q.urn) && await verify(env.SESSION_SECRET, ticketVal(eid, urnOf(q.urn), li.updated), q.ticket);
-  const denied = rowRule(action, ev, li, nowMs, known); if (denied) return { error: denied, ...(li?.url ? { linkedin_url: li.url } : {}) };
+  const fam = action === "publish" && !li && ev ? await db.prepare(FAMILY_ROW).bind(ev.id).first() : null;   // Zeile eines in dieses Event aufgegangenen Events zaehlt wie eine eigene
+  const denied = rowRule(action, ev, li || fam, nowMs, known); if (denied) return { error: denied, ...((li || fam)?.url ? { linkedin_url: (li || fam).url } : {}) };
   const name = ev?.handle || li?.handle || String(eid);
   let payload = null;
   if (needsHs(action)) {   // die HeySummit-Regel gilt beim Veroeffentlichen UND beim Aktualisieren; ist HeySummit nicht lesbar, geht nichts raus
@@ -405,16 +420,17 @@ export async function act(env, user, action, ref, confirm, f = fetch, nowMs = Da
   }
   if (action === "update") {
     if (confirm !== true) return { preview: payload };
-    try { await liUpdate(env, li.urn, payload, f); } catch (e) { return { error: isGone(e) ? "li_gone" : errCode(e), ...(isGone(e) ? { linkedin_url: li.url } : {}) }; }
+    try { await liUpdate(env, li.urn, payload, f); } catch (e) { const gone = await confirmGone(env, li.urn, e, f); return { error: gone ? "li_gone" : errCode(e), ...(gone ? { linkedin_url: li.url } : {}) }; }
     await db.prepare("UPDATE linkedin_events SET hash=?,handle=?,title=?,starts=?,ends=?,updated=? WHERE event_id=? AND status='published'").bind(await hashOf(payload), ev.handle, clip(ev.title, 200), payload.timeRange.start, payload.timeRange.end, t, eid).run();   // der Status bleibt, wie er ist
     await audit(db, user.id, "linkedin-update", name, li.urn); return { ok: true, linkedin_url: li.url };
   }
   if (confirm !== true) return { preview: { action, urn: li.urn, linkedin_url: li.url } };
   // 404/410: LinkedIn kennt den Event nicht (mehr) - etwa, weil er dort selbst geloescht wurde. Das allein traegt hier nichts aus (ein falscher Endpunkt saehe
-  // genauso aus): erst wenn der Admin es ausdruecklich bestaetigt (gone) UND LinkedIn dabei wieder 404/410 antwortet, gilt der Event als erledigt.
+  // genauso aus): angeboten wird "austragen" (li_gone) nur, wenn auch das Lesen des Events 404/410 antwortet (confirmGone), und erst wenn der Admin es
+  // ausdruecklich bestaetigt (gone) UND LinkedIn dabei wieder so antwortet, gilt der Event als erledigt.
   let gone = false;
   try { await liCancel(env, li.urn, f); } catch (e) {
-    if (!isGone(e)) return { error: errCode(e) };
+    if (!(await confirmGone(env, li.urn, e, f))) return { error: errCode(e) };
     if (q.gone !== true) return { error: "li_gone", linkedin_url: li.url };
     gone = true;
   }
@@ -448,6 +464,12 @@ export async function handleLinkedinEvents(env, request, url, path, user, J, f =
     return J(r, r.error ? CODE[r.error] || (/^(li|hs)_/.test(r.error) ? 502 : 400) : 200);
   }
   return J({ error: "not_found" }, 404);
+}
+// Verwaiste veroeffentlichte Zeilen (m365.fm-Event geloescht, auch per Kontoloeschung), deren LinkedIn-Event vorbei ist: nichts mehr abzusagen, die Liste zeigt sie
+// nicht mehr - Handle und Titel des geloeschten Events verschwinden dann auch hier (taeglicher Cron und beim Laden der Liste). Reservierungen bleiben (klaeren).
+export async function purgeLinkedinOrphans(db, nowMs = Date.now()) {
+  const r = await db.prepare("DELETE FROM linkedin_events WHERE status='published' AND ends>0 AND ends<=? AND event_id NOT IN (SELECT id FROM events)").bind(nowMs).run();
+  return { deleted: Number(r.meta?.changes || 0) };
 }
 // Nur zum Verlinken auf der Event-Seite: LinkedIn-URL eines veroeffentlichten (nicht abgesagten) Events
 export async function linkedinUrlFor(db, eventId) { const r = await db.prepare("SELECT url FROM linkedin_events WHERE event_id=? AND status='published'").bind(eventId).first().catch(() => null); return r?.url || ""; }

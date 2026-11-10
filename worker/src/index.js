@@ -12,7 +12,7 @@ import { handleEditor, decide, deleteUserEditorial } from "./editor.js";
 import { syncAutoRoles, closeObsolete } from "./roles.js";
 import { handleI18nPublic } from "./i18n_edit.js";
 import { can, roleOf, isStaff, inScope, publicRoles, loadActor, logEdit } from "./perm.js";
-import { handleLinkedinEvents, oauthStartLE, oauthCallbackLE, deleteUserLinkedin } from "./linkedin_events.js";
+import { handleLinkedinEvents, oauthStartLE, oauthCallbackLE, deleteUserLinkedin, purgeLinkedinOrphans } from "./linkedin_events.js";
 import { handleSponsor, handleSponsorLink } from "./sponsor.js";
 import { handleAds, handlePaypalWebhook } from "./ads.js";
 import { handleSponsorOrders } from "./sponsor_orders.js";
@@ -624,6 +624,7 @@ export default {
       T("syncAutoRoles", () => syncAutoRoles(env.DB));   // taeglich: MVP/MCT -> Editor, entzogene Verifizierung -> Rolle zurueck (idempotent)
       T("runDigest", () => runDigest(env, { at: scheduledAt }));
       T("syncInviterBadges", () => syncInviterBadges(env));   // einmal taeglich (Sicherheitsnetz: Zurechnung, Entwertung und Kontoloeschung bewerten sofort)
+      T("purgeLinkedinOrphans", () => purgeLinkedinOrphans(env.DB));   // verwaiste LinkedIn-Zeilen nach dem Ende des Events (#323)
     }
     if (event.cron === "*/30 * * * *") T("runDigest", () => runDigest(env, { at: scheduledAt }));
     T("refreshFeeds", () => refreshFeeds(env));

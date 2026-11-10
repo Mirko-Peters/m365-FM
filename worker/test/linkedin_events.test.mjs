@@ -7,7 +7,7 @@ import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import vm from "node:vm";
 import worker from "../src/index.js";
-import { LI, HS, UTM, HOLD_S, CAND_MAX, localToMs, hsMs, evWindow, fetchHeySummit, matchHeySummit, buildPayload, encryptToken, decryptToken, oauthStartLE, checkState, oauthCallbackLE, handleLinkedinEvents, proposals, act, getConn, urnOf, deleteUserLinkedin, linkedinUrlFor } from "../src/linkedin_events.js";
+import { LI, HS, UTM, HOLD_S, CAND_MAX, localToMs, hsMs, evWindow, fetchHeySummit, matchHeySummit, buildPayload, encryptToken, decryptToken, oauthStartLE, checkState, oauthCallbackLE, handleLinkedinEvents, proposals, act, getConn, urnOf, deleteUserLinkedin, linkedinUrlFor, purgeLinkedinOrphans } from "../src/linkedin_events.js";
 import { handleEvents, deleteUserEvents } from "../src/events.js";
 import { handleEventImport } from "../src/eventimport.js";
 import { mergeStatements } from "../src/identities.js";
@@ -933,4 +933,82 @@ test("317-01b Vorschlagsliste: importierte Events ohne Veranstalter, zusammengef
   assert.deepEqual(await props(), ["m365con-day1"], "nur beansprucht, noch nicht freigegeben");
   assert.equal((await imp(env)("/api/admin/events/claim", "POST", { event_id: 3, user_id: 2, ok: true })).status, 200);
   assert.deepEqual(await props(), ["m365con-day1", "import-uebernommen"]);
+});
+
+// ---------- Folge-PR (F02, F10, F11, F12) ----------
+test("F02 (#317) Reservierung am zusammengefuehrten Quell-Event: das Ziel-Event wird nicht ein zweites Mal veroeffentlicht (auch ueber zwei Stufen)", async (t) => {
+  freeze(t, NOW); const { raw, env } = await setup(); await connected(env);
+  addEv(raw); addEv(raw, { id: 2, handle: "stream", title: "Stream", url: "", start: "2027-01-11T08:30", end: "" }); addEv(raw, { id: 3, handle: "drei", title: "Drei", url: "", start: "2027-01-11T09:10", end: "" });
+  const log = [], f = mockFetch(log), call = rest(env, f);
+  assert.equal((await act(env, ADMIN, "publish", "drei", true, mockFetch([], { create: () => new Response("", { status: 500 }) }), NOW)).pending, true);   // Ausgang offen
+  await dupeMerge(raw, env, 2, 3); const l = await dupeMerge(raw, env, 1, 2);   // 3 -> 2 -> 1
+  assert.deepEqual(liRows(raw), [{ event_id: 3, urn: "", status: "pending" }]);
+  const items = (await call("/api/admin/linkedin/proposals")).j.items;
+  assert.deepEqual(items.map((x) => [x.id, x.state, x.hidden, x.can]), [[3, "pending", true, []]], "Event 1 ist kein neuer Vorschlag; die Reservierung laeuft noch");
+  assert.deepEqual(await call("/api/admin/linkedin/publish", "POST", { handle: "m365con-day1", confirm: true }), { status: 409, j: { error: "publish_pending" } });
+  assert.equal(creates(log), 0);
+  // aufgeloest: der LinkedIn-Event haengt am ausgeblendeten Event, das Ziel-Event bleibt belegt
+  t.mock.timers.setTime(LATER);
+  const rs = await act(env, ADMIN, "resolve", { event_id: 3, urn: "urn:li:event:424242" }, true, f, LATER); assert.equal(rs.ok, true, JSON.stringify(rs));
+  assert.deepEqual(await act(env, ADMIN, "publish", "m365con-day1", true, f, LATER), { error: "already_published", linkedin_url: "https://www.linkedin.com/events/424242/" });
+  assert.ok(!(await proposals(env, f, LATER)).items.some((x) => x.id === 1 && x.state === "proposal"));
+  // Zuruecknehmen trennt die Events wieder: dann ist Event 1 frei
+  assert.equal((await imp(env)("/api/admin/events/unmerge", "POST", { log: l })).status, 200);
+  assert.ok((await proposals(env, f, LATER)).items.some((x) => x.id === 1 && x.state === "proposal"));
+  assert.equal(creates(log), 0);
+});
+
+test("F10 (#323) 404 auf Absagen/Aktualisieren gilt erst als 'auf LinkedIn geloescht', wenn auch das Lesen des Events 404/410 antwortet", async () => {
+  const { raw, env } = await setup(); await connected(env); addEv(raw);
+  const log = [], f = mockFetch(log);
+  assert.equal((await act(env, ADMIN, "publish", "m365con-day1", true, f, NOW)).ok, true);
+  // falscher Pfad o. ae.: Aendern antwortet 404, der Event selbst ist aber lesbar
+  const path404 = (getStatus) => { const base = mockFetch(log, { patch: () => new Response("", { status: 404 }) }); return async (u, init = {}) => (String(u).startsWith(LI.api + LI.events + "/") && (init.method || "GET") === "GET" ? (log.push({ u: String(u), method: "GET" }), new Response("{}", { status: getStatus })) : base(u, init)); };
+  log.length = 0;
+  assert.deepEqual(await act(env, ADMIN, "cancel", { event_id: 1 }, true, path404(200), NOW), { error: "li_404" });
+  assert.deepEqual(log.filter((x) => x.u.startsWith(LI.api + LI.events + "/")).map((x) => [x.method, x.u]), [["POST", LI.api + LI.events + "/urn%3Ali%3Aevent%3A777"], ["GET", LI.api + LI.events + "/urn%3Ali%3Aevent%3A777"]], "derselbe Pfad wird gelesen");
+  assert.deepEqual(await act(env, ADMIN, "cancel", { event_id: 1, gone: true }, true, path404(200), NOW), { error: "li_404" }, "auch mit Bestaetigung wird nichts ausgetragen");
+  raw.prepare("UPDATE events SET title='Neu' WHERE id=1").run();
+  assert.deepEqual(await act(env, ADMIN, "update", { event_id: 1 }, true, path404(200), NOW), { error: "li_404" });
+  assert.deepEqual(await act(env, ADMIN, "cancel", { event_id: 1, gone: true }, true, path404(500), NOW), { error: "li_404" }, "Lesen scheitert anders: offen, nichts austragen");
+  assert.deepEqual(liRows(raw), [{ event_id: 1, urn: "urn:li:event:777", status: "published" }]); assert.equal(await linkedinUrlFor(env.DB, 1), "https://www.linkedin.com/events/777/");
+  // Lesen bestaetigt 404/410: erst dann li_gone, und mit gone erledigt
+  assert.deepEqual(await act(env, ADMIN, "cancel", { event_id: 1 }, true, path404(410), NOW), { error: "li_gone", linkedin_url: "https://www.linkedin.com/events/777/" });
+  assert.deepEqual(await act(env, ADMIN, "cancel", { event_id: 1, gone: true }, true, path404(404), NOW), { ok: true, linkedin_url: "https://www.linkedin.com/events/777/", gone: true });
+  assert.equal(LI.version, "202511", "Version und Pfad bleiben bis zum Live-Test unveraendert");
+});
+
+test("F11 (#323) Vorauswahl der Vorschlagsliste: ein Tag Luft fuer Zeitzonen (UTC+14, UTC-12), Ueberschneidung nur in UTC", async () => {
+  const { raw, env } = await setup(); await connected(env);
+  // HeySummit-Zeitraum: 2027-01-11T07:00Z bis 2027-01-22T19:45Z. Beide Events liegen in Ortszeit ausserhalb, in UTC innerhalb.
+  addEv(raw, { id: 1, handle: "kiritimati", title: "Kiritimati", start: "2027-01-23T09:30", end: "", tz: "Pacific/Kiritimati" });   // = 2027-01-22T19:30Z
+  addEv(raw, { id: 2, handle: "gmt-12", title: "GMT-12", start: "2027-01-10T19:10", end: "", tz: "Etc/GMT+12" });                // = 2027-01-11T07:10Z
+  addEv(raw, { id: 3, handle: "zu-spaet", title: "Zu spaet", start: "2027-01-23T10:00", end: "", tz: "Pacific/Kiritimati" });     // = 2027-01-22T20:00Z: kein Treffer
+  const p = await proposals(env, mockFetch([]), NOW);
+  assert.deepEqual(p.items.map((x) => [x.handle, x.state, x.hs?.how]), [["gmt-12", "proposal", "linked"], ["kiritimati", "proposal", "linked"]]);
+});
+
+test("F12 (#323) verwaiste veroeffentlichte Zeilen verschwinden nach dem Ende des Events (Liste und taeglicher Cron), Reservierungen und bestehende Events bleiben", async (t) => {
+  freeze(t, NOW); const { raw, env } = await setup(); await connected(env);
+  addEv(raw, { owner_id: 2 }); addEv(raw, { id: 2, handle: "stream", title: "Stream", url: "", start: "2027-01-11T08:30", end: "", owner_id: 2 }); addEv(raw, { id: 3, handle: "bleibt", title: "Bleibt", url: "", start: "2027-01-11T09:10", end: "" });
+  const f = mockFetch([]);
+  assert.equal((await act(env, ADMIN, "publish", "m365con-day1", true, f, NOW)).ok, true);
+  assert.equal((await act(env, ADMIN, "publish", "bleibt", true, f, NOW)).ok, true);
+  assert.equal((await act(env, ADMIN, "publish", "stream", true, mockFetch([], { create: () => new Response("", { status: 500 }) }), NOW)).pending, true);
+  await deleteUserEvents(env.DB, 2);
+  assert.deepEqual(await purgeLinkedinOrphans(env.DB, NOW), { deleted: 0 }, "vor dem Ende: noch absagbar");
+  const END = Date.UTC(2027, 0, 11, 16);   // LinkedIn-Event 1 ist zu Ende
+  assert.deepEqual((await proposals(env, f, END)).items.map((x) => [x.id, x.state]), [[2, "pending"]]);
+  assert.deepEqual(liRows(raw).map((r) => [r.event_id, r.status]), [[2, "pending"], [3, "published"]], "Handle und Titel des geloeschten Events sind weg");
+  // taeglicher Cron
+  raw.prepare("INSERT INTO events(id,handle,owner_id,title,start,end,public,created,updated) VALUES(4,'weg',2,'Weg','2027-01-11T10:00','',1,1,1)").run();
+  raw.prepare("INSERT INTO linkedin_events(event_id,urn,url,status,hash,handle,title,starts,ends,published_by,published,updated) VALUES(4,'urn:li:event:5','u','published','h','weg','Weg',1,?,1,1,1)").run(END - 1000);
+  raw.exec("DELETE FROM events WHERE id=4");
+  t.mock.timers.setTime(END); const err = console.error, lg = console.log, gf = globalThis.fetch;
+  try {
+    globalThis.fetch = async () => new Response("{}", { status: 404 }); console.error = () => {}; console.log = () => {};
+    const w = []; await worker.scheduled({ cron: "0 6 * * *", scheduledTime: END }, env, { waitUntil: (x) => w.push(x) }); await Promise.all(w);
+  } finally { console.error = err; console.log = lg; globalThis.fetch = gf; }
+  assert.deepEqual(raw.prepare("SELECT ok FROM cron_runs WHERE name='purgeLinkedinOrphans'").all().map((r) => r.ok), [1]);
+  assert.deepEqual(liRows(raw).map((r) => [r.event_id, r.status]), [[2, "pending"], [3, "published"]]);
 });
