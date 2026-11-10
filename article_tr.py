@@ -2,14 +2,17 @@
 """Haiku-Uebersetzung der englischen Video-Artikel (data/articles/<VIDEO>.json) in die 14 Zielsprachen (Mirko, 9.11.2026, "Weg B").
 Sonnet schreibt nur die englische Fassung (generate_articles.py); hier uebersetzt Haiku sie EINMAL im Message Batch (50 % Rabatt).
 Wiederverwendet aus translate_blog.py: Segmentierung (HTML-Struktur bleibt), System-Prompt/Sprachprofile, QA (Tags, Links, Schrift, Namen/KEEP),
-Marker-Parser, Preise. Vorhandene Sprachfassungen werden nie angefasst. Ausgaben werden getrennt als "articles_tr" in data/spend.json gezaehlt.
+Marker-Parser, Preise. Vorhandene Sprachfassungen werden nie neu uebersetzt (Vertrag wie translate_blog.py, #315): aendert sich die englische Fassung, wird die
+Uebersetzung nur als stale markiert und im Log gelistet. Fehlende Teile (FAQ, Quiz, Infografiken), die Sonnet erst spaeter ergaenzt, werden dagegen einmal
+nachuebersetzt (gap) und in die vorhandene Haiku-Fassung eingefuegt - der uebrige Text bleibt. Ausgaben werden getrennt als "articles_tr" in data/spend.json gezaehlt.
+Ausfaelle der API (errored/expired/canceled, Netz- und HTTP-Fehler) zaehlen nie als Versuch; nur inhaltliche Fehler (QA) zaehlen, nach MAX_TRIES ist die Fassung gesperrt.
 Zwischenstand (laufende Batches, Teilsegmente, Versuche): data/articles_tr_state.json."""
 import copy, hashlib, json, os, re, time, urllib.error
 from datetime import datetime, timezone
 from pathlib import Path
 
 import translate_blog as TB
-from ai_gateway import anthropic_request, check_budget, report_usage, urlopen
+from ai_gateway import anthropic_request, check_budget, report_usage, thinking_off, urlopen
 
 ROOT = Path(__file__).parent
 STATE = "articles_tr_state.json"
@@ -20,6 +23,12 @@ TR_LIMIT = int(os.environ.get("ARTICLE_TR_LIMIT") or 0)            # Sprachfassu
 MAX_TRIES = TB.MAX_TRIES
 SKIP_KEYS = {"typ", "art"}                                          # Typkennungen der Infografiken bleiben
 ART_KEYS = ("info", "infos", "faq", "quiz")
+API_ERR = (OSError, ValueError)                                     # Netz/HTTP (URLError, HTTPError, Timeout sind OSError) und kaputtes JSON der API
+
+
+def transient(e):
+    """Voruebergehender Ausfall (Netz, Zeitlimit, HTTP 408/409/429/5xx) - im Gegensatz zu einer abgewiesenen Anfrage (HTTP 4xx), die ein Fehler im Code ist."""
+    return not isinstance(e, urllib.error.HTTPError) or e.code in (408, 409, 429) or e.code >= 500
 
 
 # ---------- Quelle: Hash, Einheiten, Zusammensetzen ----------
@@ -70,6 +79,24 @@ def build(a, seg):
     return out
 
 
+def gap_keys(en, cur):
+    """Teile (info/infos/faq/quiz), die die englische Fassung inzwischen hat, der Uebersetzung aber fehlen (Sonnet hat sie erst nach der Uebersetzung ergaenzt)."""
+    return [k for k in ART_KEYS if en.get(k) and not cur.get(k)]
+
+
+def base_hash(en, cur):
+    """Quell-Hash der englischen Fassung ohne die Teile, die der Uebersetzung fehlen = Hash zur Zeit der Uebersetzung, wenn sich sonst nichts geaendert hat."""
+    g = gap_keys(en, cur)
+    return en_hash({k: v for k, v in en.items() if k not in g})
+
+
+def needed(en, cur=None):
+    """Einheiten, die zu uebersetzen sind: ohne Fassung alle, mit Haiku-Fassung nur die der fehlenden Teile (gap)."""
+    _tpl, units, paths = units_of(en)
+    if cur is None: return units
+    g = set(gap_keys(en, cur)); return [(i, t) for i, t in units if i in paths and paths[i][0] in g]
+
+
 # ---------- Zustand ----------
 def load_state():
     f = ROOT / "data" / STATE
@@ -118,8 +145,10 @@ def pending_cost(s): return sum(b.get("est_usd", 0) for b in s["batches"])
 
 # ---------- Auswahl und Schaetzung ----------
 def todo(store, vids, langs=LANGS):
-    """[(vid, lang)]: Video hat eine englische Fassung, die Sprache fehlt noch (vorhandene bleiben unberuehrt)."""
-    return [(v, l) for v in vids for l in langs if (store.get(v) or {}).get("en", {}).get("html") and l not in store[v]]
+    """[(vid, lang)]: Video hat eine englische Fassung und die Sprache fehlt noch, oder der Haiku-Fassung fehlen Teile, die Englisch inzwischen hat (gap).
+    Vorhandener Text wird nie neu angefragt; Sprachfassungen anderer Herkunft (Altbestand) bleiben ganz unberuehrt."""
+    return [(v, l) for v in vids for l in langs if (store.get(v) or {}).get("en", {}).get("html")
+            and (l not in store[v] or (store[v][l].get("src") == "haiku-tr" and gap_keys(store[v]["en"], store[v][l])))]
 
 
 def est_usd(lang, units):
@@ -127,21 +156,26 @@ def est_usd(lang, units):
 
 
 def mark_stale(store):
-    """Uebersetzungen (src haiku-tr), deren Quell-Hash nicht mehr zur englischen Fassung passt, werden nur markiert (stale), nie neu uebersetzt."""
+    """Uebersetzungen (src haiku-tr), deren Quell-Hash nicht mehr zur englischen Fassung passt, werden nur markiert (stale), nie neu uebersetzt.
+    Nur fehlende, spaeter ergaenzte Teile (gap) machen eine Fassung nicht veraltet - die werden nachuebersetzt."""
     n = 0
     for v, d in store.items():
         en = d.get("en")
         if not en:
             continue
-        h = en_hash(en)
         for l, a in d.items():
             if l != "en" and a.get("src") == "haiku-tr":
-                stale = a.get("h") != h
+                stale = a.get("h") != base_hash(en, a)
                 if stale != bool(a.get("stale")):
                     n += 1
                     if stale: a["stale"] = True
                     else: a.pop("stale", None)
     return n
+
+
+def stale_list(store):
+    """{vid: [Sprachen]} der als veraltet markierten Haiku-Fassungen (fuers Protokoll; neu uebersetzt wird nicht automatisch)."""
+    return {v: sorted(l for l, a in d.items() if l != "en" and a.get("stale")) for v, d in sorted(store.items()) if any(l != "en" and a.get("stale") for l, a in d.items())}
 
 
 # ---------- API ----------
@@ -162,9 +196,11 @@ def submit(store, vids, s, langs=LANGS, limit=0):
     reqs, items, money, n = [], [], 0.0, 0
     for v, l in todo(store, vids, langs):
         if (l, v) in busy or s["failed"].get(pk(l, v)): continue
-        en = store[v]["en"]; tpl, units, _ = units_of(en); h = en_hash(en)
+        en = store[v]["en"]; h = en_hash(en); cur = store[v].get(l); units = needed(en, cur)
+        if not units: continue
         rec = s["partial"].get(pk(l, v))
-        if not rec or rec["h"] != h: rec = {"h": h, "seg": {}, "tries": 0}
+        if not rec or rec["h"] != h or rec.get("gap") != (gap_keys(en, cur) if cur else None):
+            rec = {"h": h, "seg": {}, "tries": 0, **({"gap": gap_keys(en, cur)} if cur else {})}
         if rec["tries"] >= MAX_TRIES:
             s["failed"][pk(l, v)] = "qa"; s["partial"].pop(pk(l, v), None); continue
         if limit and n >= limit: break
@@ -175,7 +211,7 @@ def submit(store, vids, s, langs=LANGS, limit=0):
         money += c_usd; n += 1; s["partial"][pk(l, v)] = rec
         for ci, c in enumerate(cs):
             reqs.append({"custom_id": f"{l}_{TB.key(v)}_{ci}", "params": {"model": MODEL, "max_tokens": TB.MAX_TOK,
-                         "system": [{"type": "text", "text": TB.system_prompt(l), "cache_control": {"type": "ephemeral"}}],
+                         **thinking_off(MODEL), "system": [{"type": "text", "text": TB.system_prompt(l), "cache_control": {"type": "ephemeral"}}],
                          "messages": [{"role": "user", "content": TB.user_prompt(l, c)}]}})
         items.append({"lang": l, "vid": v, "h": h})
     if not reqs:
@@ -188,7 +224,17 @@ def submit(store, vids, s, langs=LANGS, limit=0):
         part = reqs[i:i + TB.PER_BATCH]
         ids = {r["custom_id"].rsplit("_", 1)[0] for r in part}
         its = [it for it in items if f"{it['lang']}_{TB.key(it['vid'])}" in ids]
-        b = _api("POST", "/v1/messages/batches", {"requests": part})
+        try:
+            b = _api("POST", "/v1/messages/batches", {"requests": part})
+        except API_ERR as e:   # nichts verloren: unbezahlte Fassungen bleiben offen fuer den naechsten Lauf
+            print(f"::warning::Batch nicht abgesendet ({type(e).__name__}: {str(e)[:200]}) - {len(reqs) - i} Anfragen bleiben offen")
+            rest = {r["custom_id"].rsplit("_", 1)[0] for r in reqs[i:]} - {r["custom_id"].rsplit("_", 1)[0] for r in reqs[:i]}   # Fassungen ganz ohne abgesendete Anfrage
+            for it in [it for it in items if f"{it['lang']}_{TB.key(it['vid'])}" in rest]:
+                r0 = s["partial"].get(pk(it["lang"], it["vid"]))
+                if r0 and not r0["seg"] and not r0["tries"]: s["partial"].pop(pk(it["lang"], it["vid"]), None)
+            save_state(s)
+            if not transient(e): raise   # abgewiesene Anfrage (z. B. HTTP 400): Lauf sichtbar rot, Zwischenstand ist gespeichert
+            return i
         s["batches"].append({"id": b["id"], "n": len(part), "model": MODEL, "created": datetime.now(timezone.utc).isoformat()[:19],
                              "est_usd": round(money * len(part) / len(reqs), 3), "items": its})
         save_state(s); print("Batch", b["id"], len(part), "Anfragen, geschaetzt", round(money * len(part) / len(reqs), 2), "$")
@@ -198,8 +244,8 @@ def submit(store, vids, s, langs=LANGS, limit=0):
 def ingest(store, s, lang, vid, h, got):
     """Segmente einer Antwort pruefen (TB.qa) und in den Zwischenstand legen; Rueckgabe (ok, schlecht, Gruende)."""
     en = store[vid]["en"]; tpl, units, _ = units_of(en); src = dict(units)
-    rec = s["partial"].get(pk(lang, vid))
-    if not rec or rec["h"] != h: rec = s["partial"][pk(lang, vid)] = {"h": h, "seg": {}, "tries": 0}
+    rec = s["partial"].get(pk(lang, vid)); cur = store[vid].get(lang)
+    if not rec or rec["h"] != h: rec = s["partial"][pk(lang, vid)] = {"h": h, "seg": {}, "tries": 0, **({"gap": gap_keys(en, cur)} if cur else {})}
     ok = bad = 0; why = {}
     for i, t in got.items():
         if i not in src: continue
@@ -209,36 +255,53 @@ def ingest(store, s, lang, vid, h, got):
     return ok, bad, why
 
 
-def finish(store, s, lang, vid):
-    """Vollstaendige Uebersetzung speichern (nie eine vorhandene Fassung ersetzen), sonst Versuch zaehlen."""
+def finish(store, s, lang, vid, count=True):
+    """Vollstaendige Uebersetzung speichern (nie eine vorhandene Fassung ersetzen; gap: nur die fehlenden Teile in die Haiku-Fassung einfuegen), sonst Versuch zaehlen.
+    count=False (Ausfall der API bei einem Teil der Anfragen): unvollstaendig bleibt offen, ohne Versuch."""
     rec = s["partial"].get(pk(lang, vid))
     if not rec: return False
-    en = store[vid].get("en"); tpl, units, _ = units_of(en)
+    en = store[vid].get("en"); cur = store[vid].get(lang); gap = rec.get("gap"); today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    if gap is not None and not (cur and cur.get("src") == "haiku-tr"):   # Fassung inzwischen weg oder ersetzt: nichts einfuegen, kein Versuch
+        s["partial"].pop(pk(lang, vid), None); return False
+    units = needed(en, cur) if gap is not None else needed(en)
     if rec["h"] == en_hash(en) and all(i in rec["seg"] for i, _t in units):
-        if lang not in store[vid]:
-            res = build(en, rec["seg"]); res.update({"model": MODEL, "src": "haiku-tr", "h": rec["h"], "ts": datetime.now(timezone.utc).strftime("%Y-%m-%d")})
+        if gap is None and cur is None:
+            res = build(en, rec["seg"]); res.update({"model": MODEL, "src": "haiku-tr", "h": rec["h"], "ts": today})
             store[vid][lang] = res
+        elif gap is not None:   # nur die fehlenden Teile einfuegen; das HTML und vorhandene Teile bleiben, wie sie sind
+            new = build(en, {**{i: "" for i, _t in units_of(en)[1]}, **rec["seg"]}); fresh = cur.get("h") == base_hash(en, cur)
+            for k in gap_keys(en, cur): cur[k] = new[k]
+            cur["gap_ts"] = today
+            if fresh: cur["h"] = rec["h"]; cur.pop("stale", None)   # sonst bleibt der alte Quell-Hash: das HTML ist weiter veraltet (stale)
         s["partial"].pop(pk(lang, vid), None); return True
+    if not count: return False
     rec["tries"] += 1
     if rec["tries"] >= MAX_TRIES:
         s["failed"][pk(lang, vid)] = "qa"; s["partial"].pop(pk(lang, vid), None)
     return False
 
 
-def collect(store, s, save=None):
-    """Fertige Batches abholen. save(vid) schreibt data/articles/<vid>.json. Rueckgabe: Anzahl noch laufender Batches."""
-    left = []
+def collect(store, s, save=None, stats=None):
+    """Fertige Batches abholen. save(vid) schreibt data/articles/<vid>.json. Rueckgabe: Anzahl noch laufender Batches.
+    Netz-/HTTP-Fehler beim Abfragen: der Batch bleibt offen (naechste Abfrage oder naechster Lauf), nichts geht verloren. Ergebnisse ohne Antwort der API
+    (errored/expired/canceled) zaehlen nicht als Versuch; stats {"results", "api"} zaehlt sie fuer run()."""
+    left = []; stats = stats if stats is not None else {}
     for b in s["batches"]:
-        st = _api("GET", f"/v1/messages/batches/{b['id']}")
-        if st["processing_status"] != "ended":
+        try:
+            st = _api("GET", f"/v1/messages/batches/{b['id']}")
+            lines = _api("GET", st["results_url"], raw=True).decode().splitlines() if st["processing_status"] == "ended" else None
+        except API_ERR as e:
+            print(f"::warning::Batch {b['id']} gerade nicht abrufbar ({type(e).__name__}: {str(e)[:200]}) - bleibt offen"); left.append(b); continue
+        if lines is None:
             print(b["id"], st["processing_status"], st["request_counts"]); left.append(b); continue
         info = {(it["lang"], TB.key(it["vid"])): it for it in b["items"]}
-        tin = tout = ok = bad = 0; why = {}; seen = set(); calls = 0
-        for line in _api("GET", st["results_url"], raw=True).decode().splitlines():
+        tin = tout = ok = bad = 0; why = {}; seen = set(); apifail = set(); calls = 0
+        for line in lines:
             r = json.loads(line); lang, k, _ = r["custom_id"].split("_"); it = info.get((lang, k))
             if not it: continue
-            res = r["result"]
-            if res["type"] != "succeeded": bad += 1; why[res["type"]] = why.get(res["type"], 0) + 1; seen.add((lang, it["vid"])); continue
+            res = r["result"]; stats["results"] = stats.get("results", 0) + 1
+            if res["type"] != "succeeded":   # Ausfall der API, kein Inhaltsfehler: kein Versuch (wie translate_blog.py und rewrite_shownotes.py)
+                why["api:" + res["type"]] = why.get("api:" + res["type"], 0) + 1; apifail.add((lang, it["vid"])); stats["api"] = stats.get("api", 0) + 1; continue
             msg = res["message"]; u = msg["usage"]; calls += 1
             tin += u["input_tokens"] + u.get("cache_read_input_tokens", 0) + u.get("cache_creation_input_tokens", 0); tout += u["output_tokens"]
             text = "".join(c.get("text", "") for c in msg["content"] if c.get("type") == "text")
@@ -250,8 +313,8 @@ def collect(store, s, save=None):
             o, bd, w = ingest(store, s, lang, it["vid"], it["h"], got); ok += o; bad += bd
             for kk, vv in w.items(): why[kk] = why.get(kk, 0) + vv
         done = 0
-        for lang, vid in sorted(seen):
-            if vid in store and store[vid].get("en") and finish(store, s, lang, vid):
+        for lang, vid in sorted(seen | apifail):
+            if vid in store and store[vid].get("en") and finish(store, s, lang, vid, count=(lang, vid) not in apifail):
                 done += 1
                 if save: save(vid)
         usd = add_spend(tin, tout, calls)
@@ -262,15 +325,20 @@ def collect(store, s, save=None):
     return len(left)
 
 
-def run(store, vids, save, langs=LANGS, wait_min=None):
-    """collect -> submit -> warten -> collect, bis alles fertig ist oder MAX_TRIES Runden verbraucht sind."""
+def run(store, vids, save, langs=LANGS, wait_min=None, stats=None):
+    """collect -> submit -> warten -> collect, bis alles fertig ist oder MAX_TRIES Runden verbraucht sind. Hat die API in einer Runde Anfragen nicht beantwortet
+    (errored/expired/canceled), sendet der Lauf nicht sofort erneut (die Fassungen bleiben offen fuer den naechsten Lauf). stats: {"results", "api"} des Laufs."""
     s = load_state(); wait = (wait_min if wait_min is not None else int(os.environ.get("WAIT_MIN", "200"))) * 60; t0 = time.time()
-    collect(store, s, save)
+    stats = stats if stats is not None else {}
+    collect(store, s, save, stats)
     for _round in range(MAX_TRIES):
+        api0 = stats.get("api", 0)
         if not submit(store, vids, s, langs, TR_LIMIT): break
         while s["batches"] and time.time() - t0 < wait:
             time.sleep(120)
-            if collect(store, s, save) == 0: break
+            if collect(store, s, save, stats) == 0: break
         if s["batches"]: break
+        if stats.get("api", 0) > api0:
+            print(f"::warning::{stats['api'] - api0} Anfragen ohne Ergebnis der API (zaehlen nicht als Versuch) - keine weitere Runde in diesem Lauf"); break
     save_state(s)
     return s

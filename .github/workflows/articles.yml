@@ -36,6 +36,10 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: "3.12" }
+      - name: Kostenbuch je Schluessel zusammenfuehren (data/spend.json, auch bei pull --rebase -X theirs; Schluessel anderer Jobs wie "shownotes" bleiben)
+        run: |
+          cp tools/spend_merge.py "$RUNNER_TEMP/spend_merge.py"; echo 'data/spend.json merge=spendjson' >> .git/info/attributes
+          git config merge.spendjson.driver "python3 $RUNNER_TEMP/spend_merge.py %O %A %B"
       - name: Artikel schreiben (en) bzw. uebersetzen (translate/all) bzw. Plan
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY_SHOW }}
@@ -54,11 +58,34 @@ jobs:
           COVER_LIMIT: "100"
         run: python generate_covers.py
       - name: Speichern (auf die Website kommen Artikel und Cover mit dem naechtlichen Seitenbau, site.yml 01:07 UTC - Bot-Commits loesen keinen Bau aus)
+        if: always()   # auch nach Fehler, Zeitlimit oder Abbruch: bezahlte Uebersetzungen, offene Batch-IDs (articles_tr_state.json) und das Kostenbuch gehen nie verloren
         run: |
-          if [ -n "$(git status --porcelain data/articles data/covers data/spend.json data/articles_tr_state.json)" ]; then
-            git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
-            git add data/articles data/covers data/spend.json && { git add -A data/articles_tr_state.json 2>/dev/null || true; } && git commit -m "Artikel/Cover ergänzt (täglich)"
-            (git pull --rebase -q -X theirs || git rebase --abort) && git push -q
-          else
-            echo "Nichts Neues"
-          fi
+          git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
+          for f in data/articles data/covers data/spend.json data/articles_tr_state.json; do git add -A -- "$f" 2>/dev/null || true; done   # auch geloeschter Zwischenstand
+          if ! git diff --cached --quiet; then git commit -q -m "Artikel/Cover ergänzt (täglich)"; fi
+          git fetch -q origin main
+          N=$(git rev-list --count FETCH_HEAD..HEAD)
+          if [ "$N" = "0" ]; then echo "Artikel: nichts Neues zu speichern" | tee -a "$GITHUB_STEP_SUMMARY"; exit 0; fi
+          # main bewegt sich oft (Bots): nachziehen und wiederholen; data/spend.json fuehrt der Treiber spendjson je Schluessel zusammen, -X theirs gilt nur fuer die uebrigen Dateien
+          for i in 1 2 3 4 5; do
+            if git pull --rebase --autostash -q -X theirs origin main; then
+              if git push -q origin HEAD:main; then echo "Artikel: $N Commit(s) auf main gespeichert (Artikel, Uebersetzungen, Zwischenstand, Kostenbuch)" | tee -a "$GITHUB_STEP_SUMMARY"; exit 0; fi
+            else
+              git rebase --abort 2>/dev/null || true
+            fi
+            sleep $((i*7))
+          done
+          echo "Artikel: Push fehlgeschlagen - $N Commit(s) mit bezahlten Ergebnissen liegen NICHT auf main (Artefakt artikel-daten am Lauf)" | tee -a "$GITHUB_STEP_SUMMARY"
+          echo "::error::Artikel/Uebersetzungen und Kostenbuch konnten nicht gespeichert werden (Push abgelehnt)"; exit 1
+      - name: Daten als Artefakt sichern (nur wenn ein Schritt gescheitert ist - bezahlte Ergebnisse gehen nicht mit dem Runner verloren)
+        if: failure() || cancelled()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artikel-daten
+          path: |
+            data/articles
+            data/covers
+            data/spend.json
+            data/articles_tr_state.json
+          if-no-files-found: ignore
+          retention-days: 30

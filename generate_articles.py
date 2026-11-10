@@ -34,7 +34,7 @@ def clean(html):
 
 CREDITS_OUT = False
 import threading
-from ai_gateway import anthropic_request, check_budget, estimated_eur, report_usage, urlopen, usage_tokens
+from ai_gateway import anthropic_request, check_budget, estimated_eur, report_usage, thinking_off, urlopen, usage_tokens
 _ULOCK = threading.Lock()
 USAGE = {"in": 0, "out": 0, "calls": 0, "cache_read": 0, "cache_write": 0}   # "in" = Eingabe gesamt, davon cache_read/cache_write aus dem Prompt-Cache
 MONTH_START_USD = 0.0   # Monatskosten vor diesem Lauf (setzt main); _post stoppt, sobald Monatsstand + dieser Lauf die Grenze erreicht
@@ -64,7 +64,7 @@ def _post(prompt, max_tokens, prefix=None, cache=True):
         {"type": "text", "text": prefix, **({"cache_control": {"type": "ephemeral"}} if cache else {})},
         {"type": "text", "text": prompt},
     ]
-    body = {"model": MODEL, "max_tokens": max_tokens, "messages": [{"role": "user", "content": content}]}
+    body = {"model": MODEL, "max_tokens": max_tokens, **thinking_off(MODEL), "messages": [{"role": "user", "content": content}]}   # ohne Denken: max_tokens gilt nur fuer die Antwort (JSON-Aufrufe 1.500-3.000)
     req = anthropic_request("/v1/messages", body, job="generate_articles", lang="", model=MODEL, api_key=os.environ["ANTHROPIC_API_KEY"])
     r = None
     for attempt in range(5):
@@ -411,9 +411,16 @@ def main(mode=None):
         if mode == "all":
             main("en"); store = load_store(vids)   # englische Artikel zuerst (Sonnet, Monatsgrenze), danach Haiku
         print(f"Uebersetzungs-Budget {TR.month()}: {TR.spent_month():.2f} von {TR.TR_BUDGET:.2f} USD (articles_tr)")
-        TR.run(store, vids, lambda v: save_vid(store, v))
+        stats = {}
+        TR.run(store, vids, lambda v: save_vid(store, v), stats=stats)
         if TR.mark_stale(store):
             for v in store: save_vid(store, v)
+        st = TR.stale_list(store)
+        if st:   # Vertrag wie translate_blog.py: veraltete Fassungen bleiben stehen und werden nur gemeldet (keine automatische Neuuebersetzung)
+            print(f"{sum(map(len, st.values()))} Haiku-Fassungen veraltet (englischer Text seit der Uebersetzung geaendert, bleiben stehen): "
+                  + "; ".join(f"{v}: {','.join(ls)}" for v, ls in list(st.items())[:50]) + (" ..." if len(st) > 50 else ""))
+        if stats.get("api", 0) * 2 > stats.get("results", 0) > 0:   # wie rewrite_shownotes.py: faellt mehr als die Haelfte bei der API aus, endet der Lauf sichtbar mit Fehler
+            raise SystemExit(f"::error::{stats['api']} von {stats['results']} Uebersetzungsanfragen ohne Ergebnis der API (errored/expired/canceled) - nichts verloren, die Fassungen bleiben offen")
         return
     try:
         _sd = json.load(open(ROOT / "data" / "spend.json", encoding="utf-8"))
