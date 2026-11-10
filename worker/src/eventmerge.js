@@ -391,6 +391,8 @@ export async function upsertEvent(db, cand, opts = {}) {
 // Tabellen, die an einem Event haengen. EINE Stelle fuer Zusammenfuehren, Zuruecknehmen und Loeschen: eine weitere Tabelle (z. B. linkedin_events)
 // wird nur hier eingetragen. key = Spalte, die eine Zeile innerhalb eines Events eindeutig macht ("" = hoechstens eine Zeile je Event).
 // Beim Zusammenfuehren wandern die Zeilen, die es am Ziel-Event unter demselben Schluessel noch nicht gibt; der Rest bleibt am ausgeblendeten Quell-Event.
+// ident (nur bei key "") = Spalte, die die gewanderte Zeile wiedererkennt: zurueck geht nur sie, nicht eine spaeter am Ziel-Event neu angelegte.
+// gone = Bedingung, unter der eine Zeile mit dem Event geloescht wird (fehlt sie: immer).
 export const EVENT_TABLES = [
   { table: "event_sessions", key: "id" },
   { table: "speaker_invites", key: "token" },
@@ -401,6 +403,10 @@ export const EVENT_TABLES = [
   { table: "sponsor_asks", key: "org_id" },
   { table: "event_claims", key: "user_id" },
   { table: "event_settings", key: "" },
+  // LinkedIn-Events (#323, event_id ist Primaerschluessel): hat das Ziel-Event schon eine Zeile, bleibt seine und die des Quell-Events am ausgeblendeten
+  // Quell-Event (dort im Admin weiter absagbar). Geloescht wird mit dem Event nur eine abgesagte Zeile; eine veroeffentlichte oder reservierte bleibt mit
+  // Absicht stehen - der LinkedIn-Event ist noch oeffentlich und erscheint im Admin als "verwaist" mit Absage-Knopf (abgesagt wird nur per Klick, nie automatisch).
+  { table: "linkedin_events", key: "", ident: "published", gone: "status='cancelled'" },
 ];
 // Event samt allem, was daran haengt, loeschen (Anweisungen fuer eine Batch). Hat das Event eine Import-Quelle, bleiben Loeschmarken zurueck,
 // damit es der naechste Import-Lauf nicht neu anlegt. Mit ihm verschwinden die in es zusammengefuehrten (ausgeblendeten) Zeilen.
@@ -421,7 +427,7 @@ export async function eventDeleteOps(db, ev, t = now()) {
   const ses = "SELECT id FROM event_sessions WHERE event_id IN (SELECT value FROM json_each(?1))";
   ops.push(db.prepare(`DELETE FROM session_source WHERE session_id IN (${ses})`).bind(ids), db.prepare(`DELETE FROM dedupe_queue WHERE kind='session' AND (a_id IN (${ses}) OR b_id IN (${ses}))`).bind(ids),
     db.prepare(`UPDATE merge_log SET undone=1 WHERE (kind='session' AND into_id IN (${ses})) OR (kind='event' AND (from_id IN (SELECT value FROM json_each(?1)) OR into_id IN (SELECT value FROM json_each(?1))))`).bind(ids));
-  for (const x of EVENT_TABLES) ops.push(db.prepare(`DELETE FROM ${x.table} WHERE event_id IN (SELECT value FROM json_each(?))`).bind(ids));
+  for (const x of EVENT_TABLES) ops.push(db.prepare(`DELETE FROM ${x.table} WHERE event_id IN (SELECT value FROM json_each(?))${x.gone ? ` AND ${x.gone}` : ""}`).bind(ids));
   ops.push(db.prepare("DELETE FROM event_source WHERE event_id IN (SELECT value FROM json_each(?))").bind(ids), db.prepare("DELETE FROM dedupe_queue WHERE kind='event' AND (a_id IN (SELECT value FROM json_each(?1)) OR b_id IN (SELECT value FROM json_each(?1)))").bind(ids),
     db.prepare("DELETE FROM events WHERE id IN (SELECT value FROM json_each(?))").bind(ids));
   return ops;
@@ -712,7 +718,7 @@ export async function mergeSessions(db, fromId, intoId, by = 0, auto = false) {
 }
 // Event a geht in Event b auf (die Richtung waehlt der Aufrufer: das von Hand gepflegte Event bleibt). Alles aus EVENT_TABLES wandert mit.
 export async function mergeEvents(db, fromId, intoId, by = 0, auto = false) {
-  const moveSel = (x) => (x.key ? db.prepare(`SELECT ${x.key} k FROM ${x.table} WHERE event_id=?1 AND ${x.key} NOT IN (SELECT ${x.key} FROM ${x.table} WHERE event_id=?2)`) : db.prepare(`SELECT 1 k FROM ${x.table} WHERE event_id=?1 AND NOT EXISTS (SELECT 1 FROM ${x.table} WHERE event_id=?2)`)).bind(fromId, intoId);
+  const moveSel = (x) => (x.key ? db.prepare(`SELECT ${x.key} k FROM ${x.table} WHERE event_id=?1 AND ${x.key} NOT IN (SELECT ${x.key} FROM ${x.table} WHERE event_id=?2)`) : db.prepare(`SELECT ${x.ident || 1} k FROM ${x.table} WHERE event_id=?1 AND NOT EXISTS (SELECT 1 FROM ${x.table} WHERE event_id=?2)`)).bind(fromId, intoId);
   const [ra, rb, rs, ...mv] = await db.batch([
     db.prepare("SELECT * FROM events WHERE id=? AND merged_into=0").bind(fromId), db.prepare("SELECT * FROM events WHERE id=? AND merged_into=0").bind(intoId),
     db.prepare("SELECT event_id,kind,ref,url FROM event_source WHERE event_id IN (?,?)").bind(fromId, intoId), ...EVENT_TABLES.map(moveSel),
@@ -724,8 +730,8 @@ export async function mergeEvents(db, fromId, intoId, by = 0, auto = false) {
   for (const s of added) ops.push(evSourceStmt(db, b.id, s, t));
   EVENT_TABLES.forEach((x, i) => {
     const keys = (mv[i].results || []).map((r) => r.k); if (!keys.length) return;
-    moved[x.table] = x.key ? keys : true;
-    ops.push(x.key ? db.prepare(`UPDATE ${x.table} SET event_id=?1 WHERE event_id=?2 AND ${x.key} IN (SELECT value FROM json_each(?3))`).bind(b.id, a.id, JSON.stringify(keys)) : db.prepare(`UPDATE ${x.table} SET event_id=?1 WHERE event_id=?2`).bind(b.id, a.id));
+    moved[x.table] = x.key || x.ident ? keys : true;   // ohne key hoechstens eine Zeile je Event: OR IGNORE, falls das Ziel-Event inzwischen eine hat (sie bleibt dann am Quell-Event)
+    ops.push(x.key ? db.prepare(`UPDATE ${x.table} SET event_id=?1 WHERE event_id=?2 AND ${x.key} IN (SELECT value FROM json_each(?3))`).bind(b.id, a.id, JSON.stringify(keys)) : db.prepare(`UPDATE OR IGNORE ${x.table} SET event_id=?1 WHERE event_id=?2`).bind(b.id, a.id));
   });
   ops.push(db.prepare("UPDATE events SET merged_into=?,public=0 WHERE id=?").bind(b.id, a.id), mergedStmt(db, "event", a.id, b.id, by, t),
     logStmt(db, "event", a.id, b.id, { into_before: f.before, into_after: f.after, from_public: a.public, added_sources: added.map(({ kind, ref }) => ({ kind, ref })), moved, session_logs: [] }, auto, by, t));
@@ -791,7 +797,8 @@ export async function unmerge(db, logId, by = 0, nested = false) {
     if (fr?.handle.startsWith(HIDDEN)) ops.push(db.prepare("UPDATE events SET handle=? WHERE id=?").bind(await freeHandle(db, fr.title, normEventName(fr.title).year), l.from_id));
     for (const x of EVENT_TABLES) {
       const keys = (s.moved || {})[x.table]; if (!keys) continue;
-      ops.push(x.key ? db.prepare(`UPDATE OR IGNORE ${x.table} SET event_id=?1 WHERE event_id=?2 AND ${x.key} IN (SELECT value FROM json_each(?3))`).bind(l.from_id, l.into_id, JSON.stringify(keys)) : db.prepare(`UPDATE OR IGNORE ${x.table} SET event_id=?1 WHERE event_id=?2`).bind(l.from_id, l.into_id));
+      const col = x.key || (Array.isArray(keys) && x.ident);   // ohne key mit ident: nur die Zeile, die damals vom Quell-Event kam
+      ops.push(col ? db.prepare(`UPDATE OR IGNORE ${x.table} SET event_id=?1 WHERE event_id=?2 AND ${col} IN (SELECT value FROM json_each(?3))`).bind(l.from_id, l.into_id, JSON.stringify(keys)) : db.prepare(`UPDATE OR IGNORE ${x.table} SET event_id=?1 WHERE event_id=?2`).bind(l.from_id, l.into_id));
     }
     for (const x of s.added_sources || []) ops.push(db.prepare("DELETE FROM event_source WHERE event_id=? AND kind=? AND ref=?").bind(l.into_id, x.kind, x.ref));
   } else if (l.kind === "speaker") {

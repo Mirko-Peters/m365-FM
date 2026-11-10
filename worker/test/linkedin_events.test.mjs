@@ -9,6 +9,7 @@ import vm from "node:vm";
 import worker from "../src/index.js";
 import { LI, HS, UTM, HOLD_S, CAND_MAX, localToMs, hsMs, evWindow, fetchHeySummit, matchHeySummit, buildPayload, encryptToken, decryptToken, oauthStartLE, checkState, oauthCallbackLE, handleLinkedinEvents, proposals, act, getConn, urnOf, deleteUserLinkedin, linkedinUrlFor } from "../src/linkedin_events.js";
 import { handleEvents, deleteUserEvents } from "../src/events.js";
+import { handleEventImport } from "../src/eventimport.js";
 import { mergeStatements } from "../src/identities.js";
 import { callTool, TOOLS, HOWTO } from "../src/mcp.js";
 import { makeSession } from "../src/util.js";
@@ -47,7 +48,7 @@ async function setup() {
   for (const f of readdirSync(dir).filter((f) => f.endsWith(".sql")).sort()) raw.exec(readFileSync(new URL(f, dir), "utf-8"));
   raw.exec("INSERT INTO users(id,provider,sub,name,role,banned,created) VALUES(1,'google','a','Admin','admin',0,1),(2,'google','b','Normal','',0,1),(3,'google','c','Zweitkonto','admin',0,1)");
   // failOn(sql): D1-Fehler fuer genau diese Anweisung (z. B. das Eintragen der URN nach dem LinkedIn-Aufruf)
-  const db = { failOn: null, prepare(sql) { let a = []; const hit = () => { if (db.failOn && db.failOn(sql)) throw new Error("D1_ERROR: transient"); }; const o = { bind(...x) { a = x; return o; }, all: async () => { hit(); return { results: raw.prepare(sql).all(...a) }; }, first: async () => { hit(); return raw.prepare(sql).get(...a) ?? null; }, run: async () => { hit(); const r = raw.prepare(sql).run(...a); return { meta: { changes: Number(r.changes), last_row_id: Number(r.lastInsertRowid) } }; } }; return o; }, async batch(s) { const out = []; for (const x of s) out.push(await x.run()); return out; } };
+  const db = { failOn: null, prepare(sql) { let a = []; const hit = () => { if (db.failOn && db.failOn(sql)) throw new Error("D1_ERROR: transient"); }; const o = { bind(...x) { a = x; return o; }, all: async () => { hit(); return { results: raw.prepare(sql).all(...a) }; }, first: async () => { hit(); return raw.prepare(sql).get(...a) ?? null; }, run: async () => { hit(); if (/^\s*(SELECT|WITH)\b/i.test(sql)) return { results: raw.prepare(sql).all(...a), meta: { changes: 0, last_row_id: 0 } }; const r = raw.prepare(sql).run(...a); return { results: [], meta: { changes: Number(r.changes), last_row_id: Number(r.lastInsertRowid) } }; } }; return o; }, async batch(s) { const out = []; for (const x of s) out.push(await x.run()); return out; } };
   const env = { DB: db, SESSION_SECRET: "s3cret", SITE: "https://www.m365.fm", API: "https://api-dub.m365.fm", LINKEDIN_CLIENT_ID: "cid", LINKEDIN_CLIENT_SECRET: "csec", HEYSUMMIT_API_KEY: "hk" };
   return { raw, env };
 }
@@ -852,4 +853,73 @@ test("Admin-Reiter R2: nach store_failed sofort eintragbar (auch nach Neuladen),
   const ins = raw.prepare("INSERT INTO events(handle,owner_id,title,start,end,public,created,updated) VALUES(?,1,?,?,'',1,1,1)");
   raw.exec("BEGIN"); for (let i = 0; i <= CAND_MAX; i++) ins.run(`abend-${i}`, `Abendstream ${i}`, `2027-01-${String(13 + (i % 8)).padStart(2, "0")}T18:00`); raw.exec("COMMIT");
   ui.reload(); await until(() => new RegExp("mehr als " + CAND_MAX + " kommende m365\\.fm-Events").test(ui.pane()?.textContent || ""), "Hinweis gekuerzt");
+});
+
+// ---------- #317 (Event-Import) x #323: Zusammenfuehren, Zuruecknehmen, Loeschen und Vorschlagsliste, alles ueber die echten Routen ----------
+const imp = (env, user = ADMIN) => async (path, method = "GET", body) => { const r = await handleEventImport(env, new Request("https://x" + path, { method, body: body ? JSON.stringify(body) : undefined }), new URL("https://x" + path), path, user, J); return { status: r.status, j: await r.json() }; };
+const evDel = async (env, h) => (await handleEvents(env, new Request("https://x/api/event/" + h, { method: "DELETE" }), new URL("https://x/api/event/" + h), "/api/event/" + h, ADMIN, J)).status;
+const dupeMerge = async (raw, env, a, b) => { const q = raw.prepare("INSERT INTO dedupe_queue(kind,a_id,b_id,reason,created) VALUES('event',?,?,'test',1)").run(a, b); const r = await imp(env)("/api/admin/events/dupes", "POST", { id: Number(q.lastInsertRowid), action: "merge" }); assert.equal(r.status, 200, JSON.stringify(r.j)); return raw.prepare("SELECT id FROM merge_log WHERE kind='event' AND from_id=? AND into_id=? ORDER BY id DESC").get(b, a).id; };
+
+test("317-01b Event-Zusammenfuehrung: die LinkedIn-Zeile wandert mit und zurueck, eine vorhandene des Ziel-Events bleibt; Loeschen laesst veroeffentlichte stehen", async (t) => {
+  freeze(t, NOW); const { raw, env } = await setup(); await connected(env);
+  addEv(raw); addEv(raw, { id: 2, handle: "stream", title: "Stream", url: "", start: "2027-01-11T08:30", end: "" }); addEv(raw, { id: 3, handle: "drei", title: "Drei", url: "", start: "2027-01-11T09:10", end: "" });
+  const f = mockFetch([]), call = rest(env, f);
+  assert.equal((await act(env, ADMIN, "publish", "stream", true, f, NOW)).ok, true);
+  // (1) Ziel-Event ohne LinkedIn-Zeile: sie wandert mit (Liste und Event-Export zeigen sie am Ziel), beim Zuruecknehmen zurueck
+  const l1 = await dupeMerge(raw, env, 1, 2);
+  assert.deepEqual(liRows(raw), [{ event_id: 1, urn: "urn:li:event:777", status: "published" }]);
+  let items = (await call("/api/admin/linkedin/proposals")).j.items;
+  assert.deepEqual(items.filter((x) => x.id <= 2).map((x) => [x.id, x.state, x.linkedin_url]), [[1, "published", "https://www.linkedin.com/events/777/"]], "kein verwaister Eintrag fuer das ausgeblendete Event");
+  assert.equal((await (await handleEvents(env, new Request("https://x/api/events/export"), new URL("https://x/api/events/export"), "/api/events/export", null, J)).json()).events.find((e) => e.handle === "m365con-day1").linkedin_url, "https://www.linkedin.com/events/777/");
+  assert.equal((await imp(env)("/api/admin/events/unmerge", "POST", { log: l1 })).status, 200);
+  assert.deepEqual(liRows(raw), [{ event_id: 2, urn: "urn:li:event:777", status: "published" }]);
+  // (2) beide haben eine Zeile: die des Ziel-Events bleibt, die des Quell-Events bleibt am ausgeblendeten Event und ist dort weiter absagbar
+  assert.equal((await act(env, ADMIN, "publish", "m365con-day1", true, f, NOW)).ok, true);
+  assert.equal((await act(env, ADMIN, "publish", "drei", true, f, NOW)).ok, true);
+  const l2 = await dupeMerge(raw, env, 1, 3);
+  assert.deepEqual(liRows(raw).map((r) => [r.event_id, r.urn]), [[1, "urn:li:event:778"], [2, "urn:li:event:777"], [3, "urn:li:event:779"]]);
+  const hid = (await call("/api/admin/linkedin/proposals")).j.items.find((x) => x.id === 3);
+  assert.deepEqual([hid.state, hid.hidden, hid.can], ["published", true, ["cancel"]]);
+  assert.equal((await imp(env)("/api/admin/events/unmerge", "POST", { log: l2 })).status, 200);
+  assert.deepEqual(liRows(raw).map((r) => [r.event_id, r.urn]), [[1, "urn:li:event:778"], [2, "urn:li:event:777"], [3, "urn:li:event:779"]], "die Zeile des Ziel-Events geht nicht an das Quell-Event");
+  // (3) Loeschen des Ziel-Events (mit ausgeblendetem Quell-Event): veroeffentlichte Zeilen bleiben (verwaist, absagbar), eine abgesagte faellt weg
+  await dupeMerge(raw, env, 2, 3);
+  assert.equal((await act(env, ADMIN, "cancel", { event_id: 3 }, true, f, NOW)).ok, true);
+  assert.equal(await evDel(env, "stream"), 200);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM events WHERE id IN (2,3)").get().n, 0);
+  assert.deepEqual(liRows(raw), [{ event_id: 1, urn: "urn:li:event:778", status: "published" }, { event_id: 2, urn: "urn:li:event:777", status: "published" }]);
+  const orphan = (await call("/api/admin/linkedin/proposals")).j.items.find((x) => x.id === 2);
+  assert.deepEqual([orphan.orphan, orphan.can], [true, ["cancel"]]);
+});
+
+test("317-01b Zuruecknehmen bringt nur die Zeile zurueck, die vom Quell-Event kam, nicht eine spaeter am Ziel-Event angelegte", async (t) => {
+  freeze(t, NOW); const { raw, env } = await setup(); await connected(env);
+  addEv(raw); addEv(raw, { id: 2, handle: "stream", title: "Stream", url: "", start: "2027-01-11T08:30", end: "" });
+  assert.equal((await act(env, ADMIN, "publish", "stream", true, mockFetch([], { create: () => new Response("", { status: 500 }) }), NOW)).pending, true);   // Reservierung am Quell-Event
+  const l = await dupeMerge(raw, env, 1, 2);
+  assert.deepEqual(liRows(raw), [{ event_id: 1, urn: "", status: "pending" }]);
+  t.mock.timers.setTime(LATER);
+  assert.equal((await act(env, ADMIN, "release", { event_id: 1 }, true, mockFetch([]), LATER)).ok, true);
+  assert.equal((await act(env, ADMIN, "publish", "m365con-day1", true, mockFetch([]), LATER)).ok, true);   // neu am Ziel-Event, nach der Zusammenfuehrung
+  assert.equal((await imp(env)("/api/admin/events/unmerge", "POST", { log: l })).status, 200);
+  assert.deepEqual(liRows(raw), [{ event_id: 1, urn: "urn:li:event:777", status: "published" }]);
+});
+
+test("317-01b Vorschlagsliste: importierte Events ohne Veranstalter, zusammengefuehrte und vorbei gemeldete nie; uebernommene und Mitglieds-Events schon", async (t) => {
+  freeze(t, NOW); const { raw, env } = await setup(); await connected(env);
+  raw.prepare("INSERT INTO profiles(user_id,public,handle,updated) VALUES(2,1,'normal',1)").run();
+  addEv(raw);
+  addEv(raw, { id: 2, handle: "import-offen", title: "Import offen", url: "", start: "2027-01-12T10:00", end: "", owner_id: 0 });
+  addEv(raw, { id: 3, handle: "import-uebernommen", title: "Import uebernommen", url: "", start: "2027-01-12T11:00", end: "", owner_id: 0 });
+  addEv(raw, { id: 4, handle: "zusammengefuehrt", title: "Zusammengefuehrt", url: "", start: "2027-01-12T12:00", end: "" });
+  addEv(raw, { id: 5, handle: "vorbei-gemeldet", title: "Vorbei gemeldet", url: "", start: "2027-01-12T13:00", end: "", owner_id: 0 });
+  raw.exec("UPDATE events SET owner_id=0,unclaimed=1,source='communitydays' WHERE id IN (2,3); UPDATE events SET merged_into=1 WHERE id=4; UPDATE events SET owner_id=0,source='communitydays',retired=1 WHERE id=5");
+  const call = rest(env, mockFetch([])), props = async () => (await call("/api/admin/linkedin/proposals")).j.items.filter((x) => x.state === "proposal").map((x) => x.handle);
+  assert.deepEqual(await props(), ["m365con-day1"]);
+  assert.equal((await act(env, ADMIN, "publish", "import-offen", false, mockFetch([]), NOW)).error, "not_public");
+  // Beanspruchen und Freigeben ueber die echten Routen: danach ist es ein Event mit Veranstalter
+  assert.equal((await imp(env, { id: 2, name: "Normal" })("/api/event/import-uebernommen/claim", "POST", {})).status, 200);
+  assert.deepEqual(await props(), ["m365con-day1"], "nur beansprucht, noch nicht freigegeben");
+  assert.equal((await imp(env)("/api/admin/events/claim", "POST", { event_id: 3, user_id: 2, ok: true })).status, 200);
+  assert.deepEqual(await props(), ["m365con-day1", "import-uebernommen"]);
 });

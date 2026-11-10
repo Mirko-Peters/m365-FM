@@ -29,9 +29,6 @@ async function topics(env, list) {
 // Event-Rollen: Rechte je Rolle (Veranstalter-Firma Inhaber/Admin/Event-Manager und Eigentuemer koennen alles ausser Rollen-Details)
 // Events, deren Anmeldungen (mit Einwilligung) an ein externes System uebergeben werden
 export const TRANSFER = { "m365con-2027": "heysummit:229506" };
-// Event geloescht: von seiner LinkedIn-Zeile (linkedin_events.js) faellt nur eine bereits abgesagte weg. Eine veroeffentlichte oder reservierte bleibt mit Absicht
-// stehen - der LinkedIn-Event ist noch oeffentlich und erscheint im Admin als "verwaist" mit Absage-Knopf (abgesagt wird nur per Klick, nie automatisch).
-const LI_GONE = "DELETE FROM linkedin_events WHERE event_id=? AND status='cancelled'";
 export const EVENT_ROLES = {
   organisator: ["edit", "sessions", "sponsor", "roles", "delete"],
   "co-organisator": ["edit", "sessions", "sponsor", "roles"],
@@ -366,7 +363,7 @@ export async function handleEvents(env, request, url, path, user, J) {
     if (need()) return need();
     const ev = await db.prepare("SELECT * FROM events WHERE handle=? AND merged_into=0").bind(m[1]).first();
     if (!(await canManage(db, user, ev, "delete"))) return J({ error: "forbidden" }, 403);
-    await db.batch([...(await eventDeleteOps(db, ev)), db.prepare(LI_GONE).bind(ev.id)]);   // alles, was am Event haengt (EVENT_TABLES, Quellen); Import-Events hinterlassen eine Loeschmarke und kommen nicht zurueck
+    await db.batch(await eventDeleteOps(db, ev));   // alles, was am Event haengt (EVENT_TABLES, Quellen; von linkedin_events nur abgesagte Zeilen); Import-Events hinterlassen eine Loeschmarke und kommen nicht zurueck
     return J({ ok: true });
   }
   // Session anlegen/aendern: Veranstalter -> sofort live; andere Mitglieder -> Vorschlag (pending)
@@ -743,7 +740,7 @@ export async function purgeEntityClaimReview(db) {
 export async function deleteUserEvents(db, uid) {
   const evs = (await db.prepare("SELECT * FROM events WHERE owner_id=? AND org_id IS NULL").bind(uid).all()).results || [];
   const ops = [];
-  for (const e of evs) ops.push(...(await eventDeleteOps(db, e)), db.prepare(LI_GONE).bind(e.id));   // auch uebernommene Import-Events: sie kommen nicht als herrenlose Kopie zurueck (Loeschmarke)
+  for (const e of evs) ops.push(...(await eventDeleteOps(db, e)));   // auch uebernommene Import-Events: sie kommen nicht als herrenlose Kopie zurueck (Loeschmarke)
   ops.push(db.prepare("DELETE FROM session_source WHERE session_id IN (SELECT id FROM event_sessions WHERE proposer_id=? AND status='pending')").bind(uid), db.prepare("DELETE FROM event_sessions WHERE proposer_id=? AND status='pending'").bind(uid), db.prepare("DELETE FROM event_roles WHERE user_id=?").bind(uid), db.prepare("DELETE FROM event_attendees WHERE user_id=?").bind(uid), db.prepare("DELETE FROM event_transfers WHERE user_id=?").bind(uid));
   ops.push(...(await forgetImporter(db, uid)));   // zuletzt: Beanspruchungen, Import-Vorschau, selbst importierte Speaker-Eintraege, Speaker-Identitaet (Name), Protokoll-Staende
   for (let i = 0; i < ops.length; i += 80) await db.batch(ops.slice(i, i + 80));

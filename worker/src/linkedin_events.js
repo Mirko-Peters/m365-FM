@@ -42,8 +42,8 @@ export const HOLD_S = 120;
 export const CAND_MAX = 500;   // so viele Kandidaten prueft die Vorschlagsliste hoechstens; wird die Grenze erreicht, meldet sie das (truncated) statt still zu kuerzen
 const ACTIONS = ["publish", "update", "cancel", "resolve", "release"];
 // Kandidaten fuer NEUE Vorschlaege und Aktualisierungen - die EINE Stelle fuer weitere Ausschluesse (proposals() und act() lesen beide hierueber).
-// Nach #317 (Event-Import) hier die Bedingung fuer importierte, stillgelegte und zusammengefuehrte Events mit AND anhaengen.
-const CANDIDATE = "e.public=1";
+// Importierte Events ohne Veranstalter (unclaimed), vorbei gemeldete Import-Events (retired) und in ein anderes zusammengefuehrte (merged_into) nie (#317).
+const CANDIDATE = "e.public=1 AND e.merged_into=0 AND e.unclaimed=0 AND e.retired=0";
 const now = () => Math.floor(Date.now() / 1000);
 const DAY = 86400000, iso = (ms) => new Date(ms).toISOString();
 const rowsOf = (r) => r?.results || [];
