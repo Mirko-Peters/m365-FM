@@ -8,6 +8,10 @@ import { importLegacyBlog } from "./legacyblog.js";
 import { importContentBlog } from "./contentblog.js";
 import { handleA2a } from "./a2a.js";
 import { handleAdminPanel } from "./adminpanel.js";
+import { handleEditor, decide, deleteUserEditorial } from "./editor.js";
+import { syncAutoRoles, closeObsolete } from "./roles.js";
+import { handleI18nPublic } from "./i18n_edit.js";
+import { can, roleOf, isStaff, inScope, publicRoles, loadActor, logEdit } from "./perm.js";
 import { handleLinkedinEvents, oauthStartLE, oauthCallbackLE, deleteUserLinkedin } from "./linkedin_events.js";
 import { handleSponsor, handleSponsorLink } from "./sponsor.js";
 import { handleAds, handlePaypalWebhook } from "./ads.js";
@@ -233,6 +237,7 @@ async function deleteAccount(env, id) {
     db.prepare("DELETE FROM push_subs WHERE user_id=?").bind(id), db.prepare("DELETE FROM wiki_reports WHERE user_id=?").bind(id), db.prepare("DELETE FROM wiki_rev WHERE user_id=? AND status IN ('pending','rejected')").bind(id), db.prepare("UPDATE wiki_rev SET user_id=0 WHERE user_id=?").bind(id), db.prepare("DELETE FROM curators WHERE user_id=?").bind(id), db.prepare("DELETE FROM user_identities WHERE user_id=?").bind(id), db.prepare("DELETE FROM users WHERE id=?").bind(id),
   ]);
   await deleteUserEvents(db, id);
+  await deleteUserEditorial(db, id);   // Redaktion (Migration 0037): vor deleteUserBlog, weil der Verlauf an den Beitraegen des Kontos haengt
   await deleteUserEntityInvites(db, id);   // braucht mail_addr und die bestaetigten Claims: vor deleteUserData
   await deleteUserMessages(db, id); await deleteUserTokens(db, id); await deleteUserQa(db, id); await deleteUserBlog(db, id); await deleteUserLibrary(db, id); await deleteUserPodcast(db, id); await deleteUserVideos(db, id); await deleteUserGuests(db, id); await deleteUserGuestCredits(db, id);
   await deleteUserData(db, id); await deleteUserExpertRequests(env, id);
@@ -242,8 +247,8 @@ async function deleteAccount(env, id) {
 
 const me = memberOf;   // util.js: dieselbe Rollen-Ermittlung auch fuer Cron-Laeufe (Kurzposts)
 
-function pubComment(c, mine, liked, badges, admin) {
-  return { id: c.id, parent: c.parent_id, user: { id: c.user_id, name: c.name, badges: badges.get(c.user_id) || [] }, body: c.status === "hidden" ? "" : c.body,
+function pubComment(c, mine, liked, badges, admin, roles) {
+  return { id: c.id, parent: c.parent_id, user: { id: c.user_id, name: c.name, badges: badges.get(c.user_id) || [], ...(roles?.get(c.user_id) ? { role: roles.get(c.user_id) } : {}), ...(roles?.scopes?.get(c.user_id) ? { scope: roles.scopes.get(c.user_id) } : {}) }, body: c.status === "hidden" ? "" : c.body,
     hidden: c.status === "hidden", created: c.created, likes: c.likes, liked: liked.has(c.id), mine: mine === c.user_id, canDelete: mine === c.user_id || admin };
 }
 
@@ -321,7 +326,7 @@ async function api(env, request, url, path, asUser, ctx) {
   const ids = await handleIdentities(env, request, url, path, user, J, asUser !== undefined);
   if (ids) return ids;
   if (path === "/api/me") {
-    if (method === "GET") return J({ user: user ? { ...(await namePrefs(db, user)), id: user.id, name: user.name, bio: user.bio, lang: user.lang, admin: user.admin, editor: user.editor, provider: user.provider, ...(user.admin || user.editor ? {} : { sub_hint: `${user.provider}:${user.sub}` }), ...(await stats(db, user.id)) } : null });
+    if (method === "GET") return J({ user: user ? { ...(await namePrefs(db, user)), id: user.id, name: user.name, bio: user.bio, lang: user.lang, admin: user.admin, editor: user.editor, moderator: user.moderator, provider: user.provider, ...(user.admin || user.editor || user.moderator ? {} : { sub_hint: `${user.provider}:${user.sub}` }), ...(await stats(db, user.id)) } : null });
     if (need()) return need();
     if (method === "POST") {
       const b = await request.json().catch(() => ({}));
@@ -346,9 +351,9 @@ async function api(env, request, url, path, asUser, ctx) {
     const rows = (await db.prepare(
       `SELECT c.id,c.user_id,c.parent_id,c.body,c.status,c.created,u.name,(SELECT COUNT(*) FROM likes l WHERE l.comment_id=c.id) likes
        FROM comments c JOIN users u ON u.id=c.user_id WHERE c.vid=? AND c.lang=? AND u.banned=0 ORDER BY c.created ASC LIMIT 300`).bind(vid, lang).all()).results || [];
-    const badges = await badgesFor(db, [...new Set(rows.map((r) => r.user_id))]);
+    const badges = await badgesFor(db, [...new Set(rows.map((r) => r.user_id))]), roles = await publicRoles(db, rows.map((r) => r.user_id));
     const liked = new Set(user ? ((await db.prepare("SELECT comment_id FROM likes WHERE user_id=?").bind(user.id).all()).results || []).map((r) => r.comment_id) : []);
-    return J({ comments: rows.filter((r) => r.status === "ok" || rows.some((x) => x.parent_id === r.id)).map((r) => pubComment(r, user?.id, liked, badges, user?.admin)) }, 200, { "cache-control": "no-store" });
+    return J({ comments: rows.filter((r) => r.status === "ok" || rows.some((x) => x.parent_id === r.id)).map((r) => pubComment(r, user?.id, liked, badges, user?.admin, roles)) }, 200, { "cache-control": "no-store" });
   }
   if (path === "/api/comments" && method === "POST") {
     if (need()) return need();
@@ -401,6 +406,8 @@ async function api(env, request, url, path, asUser, ctx) {
     return J({ ok: true });
   }
 
+  if (path.startsWith("/api/i18n/")) { const q = await handleI18nPublic(env, request, url, path, J); if (q) return q; }   // Overrides-Export fuer den Seitenbau, Neuuebersetzungs-Wuensche
+  if (path.startsWith("/api/editor/") || path.startsWith("/api/admin/editlog") || path.startsWith("/api/admin/editor-scope")) return await handleEditor(env, request, url, path, user, J);   // Redaktion/Moderation (perm.js can())
   if (/^\/api\/points(\/|$)/.test(path) || path.startsWith("/api/admin/points/")) { const p = await handlePoints(env, request, url, path, user, J); if (p) return p; }
   if (/^\/api\/msg(\/|$)/.test(path)) { const p = await handleMessages(env, request, url, path, user, J); if (p) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return p; } }
   if (path === "/api/admin/org-pair") { const q = await handleOrgPair(env, request, url, path, user, J); if (q) return q; }
@@ -447,9 +454,9 @@ async function api(env, request, url, path, asUser, ctx) {
     const lang = url.searchParams.get("lang");
     if (!isLang(lang)) return J({ error: "bad_request" }, 400);
     const d = new Date(), since = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1) / 1000;
-    const top = await topUsers(db, lang, since, 5), bm = await badgesFor(db, top.map((t) => t.id));
+    const top = await topUsers(db, lang, since, 5), bm = await badgesFor(db, top.map((t) => t.id)), rm = await publicRoles(db, top.map((t) => t.id));
     const last = await db.prepare("SELECT c.month,c.points,u.id,u.name,u.bio FROM curators c JOIN users u ON u.id=c.user_id WHERE c.lang=? ORDER BY c.month DESC LIMIT 1").bind(lang).first();
-    return J({ month: d.toISOString().slice(0, 7), top: top.map((t) => ({ ...t, badges: bm.get(t.id) || [] })), last: last || null }, 200, { "cache-control": "public, max-age=300" });
+    return J({ month: d.toISOString().slice(0, 7), top: top.map((t) => ({ ...t, badges: bm.get(t.id) || [], ...(rm.get(t.id) ? { role: rm.get(t.id) } : {}), ...(rm.scopes.get(t.id) ? { scope: rm.scopes.get(t.id) } : {}) })), last: last || null }, 200, { "cache-control": "public, max-age=300" });
   }
   if ((m = /^\/api\/u\/(\d+)$/.exec(path)) && method === "GET") {
     const u = await db.prepare("SELECT id,name,bio,lang,created FROM users WHERE id=? AND banned=0").bind(+m[1]).first();
@@ -540,21 +547,31 @@ async function api(env, request, url, path, asUser, ctx) {
   if (path.startsWith("/api/admin/")) {
     const keyOk = env.CRON_KEY && (request.headers.get("x-cron-key") === env.CRON_KEY || url.searchParams.get("key") === env.CRON_KEY);   // Header bevorzugt (Query landet in Logs)
     if ((path === "/api/admin/run-weekly" || path === "/api/admin/run-daily") && keyOk) return J(await runDigest(env, { dry: url.searchParams.get("dry") === "1" }));
-    if (!user?.admin) return J({ error: "forbidden" }, 403);
+    if (isStaff(user) && !user.admin && path === "/api/admin/reports" && method === "GET") {   // Redaktion/Moderation: gemeldete Kommentare (Lesen); Fach-Editoren sehen sie nicht (kein Thema)
+      const actor = await loadActor(db, user); if (!can(actor, "queue.view").ok || !inScope(actor, {})) return J({ error: "forbidden" }, 403);
+      const rows = (await db.prepare("SELECT c.id,c.vid,c.lang,c.body,c.status,(SELECT COUNT(*) FROM reports r WHERE r.comment_id=c.id) n FROM comments c WHERE c.id IN (SELECT comment_id FROM reports) ORDER BY n DESC LIMIT 50").all()).results || [];
+      return J({ reports: rows });
+    }
+    if (isStaff(user) && !user.admin && (m = /^\/api\/admin\/(hide|show)\/(\d+)$/.exec(path)) && method === "POST") {   // wie Admin, aber ueber can() und mit Protokoll
+      const r = await decide(env, user, { kind: "comment", id: m[2], action: m[1] === "hide" ? "hide" : "resolve", reason: "" });
+      return J(r.body, r.status);
+    }
+    if (!can(user, "role.assign").ok) return J({ error: "forbidden" }, 403);   // alles Weitere (Rollen, Sperren, Nutzerliste) nur Admin
     if (path === "/api/admin/expertise-sync" && method === "POST") { const r = await syncExpertise(env, entityMap); await audit(db, user.id, "expertise-sync", "", JSON.stringify(r)); return J(r); }   // Stufen sofort neu berechnen
     if (path === "/api/admin/reports" && method === "GET") {
       const rows = (await db.prepare("SELECT c.id,c.vid,c.lang,c.body,c.status,c.user_id,(SELECT COUNT(*) FROM reports r WHERE r.comment_id=c.id) n FROM comments c WHERE c.id IN (SELECT comment_id FROM reports) ORDER BY n DESC LIMIT 50").all()).results || [];
       return J({ reports: rows });
     }
-    if ((m = /^\/api\/admin\/(hide|show)\/(\d+)$/.exec(path)) && method === "POST") { await db.prepare("UPDATE comments SET status=? WHERE id=?").bind(m[1] === "hide" ? "hidden" : "ok", +m[2]).run(); return J({ ok: true }); }
+    if ((m = /^\/api\/admin\/(hide|show)\/(\d+)$/.exec(path)) && method === "POST") { const c = await db.prepare("SELECT status FROM comments WHERE id=?").bind(+m[2]).first(); await db.prepare("UPDATE comments SET status=? WHERE id=?").bind(m[1] === "hide" ? "hidden" : "ok", +m[2]).run(); if (c) await logEdit(db, user, m[1] === "hide" ? "review.hide" : "report.resolve", "comment", m[2], { before: { status: c.status }, after: { status: m[1] === "hide" ? "hidden" : "ok" } }); return J({ ok: true }); }
     if (path === "/api/admin/users" && method === "GET") {
       const q = cleanName(url.searchParams.get("q") || "").replace(/[%_]/g, "");
-      const rows = (await db.prepare("SELECT id,name,role,banned FROM users WHERE name LIKE ? ORDER BY (role='editor') DESC, id DESC LIMIT 20").bind(`%${q}%`).all()).results || [];
+      const rows = (await db.prepare("SELECT id,name,role,banned FROM users WHERE name LIKE ? ORDER BY (role IN ('editor','moderator','admin')) DESC, id DESC LIMIT 20").bind(`%${q}%`).all()).results || [];
       return J({ users: rows });
     }
     if ((m = /^\/api\/admin\/role\/(\d+)$/.exec(path)) && method === "POST") {
-      const b = await request.json().catch(() => ({})), role = b.role === "editor" ? "editor" : b.role === "admin" ? "admin" : "user";   // Rollen in der Datenbank: user, editor, admin
-      await db.prepare("UPDATE users SET role=? WHERE id=?").bind(role, +m[1]).run(); await audit(db, user.id, "role", m[1], role);
+      const b = await request.json().catch(() => ({})), role = ["editor", "moderator", "admin"].includes(b.role) ? b.role : "user";   // Rollen in der Datenbank: user, moderator, editor, admin
+      await db.prepare("UPDATE users SET role=?,role_source='manual' WHERE id=?").bind(role, +m[1]).run(); await audit(db, user.id, "role", m[1], role); await logEdit(db, user, "admin.role", "user", m[1], { reason: role });
+      await closeObsolete(db, +m[1]);   // eine offene Bewerbung um diese (oder eine niedrigere) Rolle hat sich damit erledigt
       await evalBadges(env, +m[1]);
       return J({ ok: true, role });
     }
@@ -604,6 +621,7 @@ export default {
     }
     if (event.cron === "0 6 * * *") {
       T("runPushDigest", () => runPushDigest(env));
+      T("syncAutoRoles", () => syncAutoRoles(env.DB));   // taeglich: MVP/MCT -> Editor, entzogene Verifizierung -> Rolle zurueck (idempotent)
       T("runDigest", () => runDigest(env, { at: scheduledAt }));
       T("syncInviterBadges", () => syncInviterBadges(env));   // einmal taeglich (Sicherheitsnetz: Zurechnung, Entwertung und Kontoloeschung bewerten sofort)
     }

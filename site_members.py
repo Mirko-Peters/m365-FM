@@ -7,6 +7,7 @@ from site_i18n import COMM_LANGS, pfx, pfx2, overlay, T
 from datetime import datetime, timezone
 from site_learn import ENTS, esc, _fetch_json, LCSS
 from site_entities import TL, eurl, eid_of, tlab
+import site_roles as ROLE
 
 PROG_FULL = {"gde": "Google Developer Expert (GDE)", "mvp": "Microsoft Most Valuable Professional (MVP)", "mct": "Microsoft Certified Trainer (MCT)", "rd": "Microsoft Regional Director (RD)", "msa": "Microsoft Student Ambassador (MSA)", "ms_employee": "Microsoft employee", "partner": "Microsoft Partner"}
 PROG = {"gde": ("Google Developer Expert", "Google Developer Expert"), "mvp": ("Microsoft MVP", "Microsoft MVP"), "mct": ("Microsoft Certified Trainer (MCT)", "Microsoft Certified Trainer (MCT)"), "rd": ("Microsoft Regional Director", "Microsoft Regional Director"),
@@ -114,7 +115,13 @@ def img_url(kind, x):
 
 def img_tag(kind, x, alt):
     u = img_url(kind, x)
-    return f'<img src="{esc(u)}" alt="{esc(alt)}" width="112" height="112" loading="lazy" style="float:inline-end;border-radius:{"50%" if kind == "u" else "12px"};object-fit:cover;margin-inline-start:1em">' if u else ""
+    if not u:
+        return ""
+    role = ROLE.role_of(x) if kind == "u" else ""
+    if role:   # Editor/Moderator: Ring und Symbol um das Bild (site_roles), Float sitzt am Umschlag
+        im = f'<img src="{esc(u)}" alt="{esc(alt)}" width="112" height="112" loading="lazy" style="border-radius:50%;object-fit:cover">'
+        return f'<span style="float:inline-end;margin-inline-start:1em">{ROLE.avatar(im, role)}</span>'
+    return f'<img src="{esc(u)}" alt="{esc(alt)}" width="112" height="112" loading="lazy" style="float:inline-end;border-radius:{"50%" if kind == "u" else "12px"};object-fit:cover;margin-inline-start:1em">'
 
 
 CLAIMED = {}   # profil-handle -> entity id
@@ -242,6 +249,8 @@ def person_ld(BASE, p, orgs_by_handle):
     mem = [{"@type": "OrganizationRole", "memberOf": {"@id": eid_of(BASE, "microsoft")}, "roleName": PROG_FULL.get(x["p"], PROG[x["p"]][0])} for x in p.get("programs", []) if x.get("verified")]
     if mem:
         n["memberOf"] = mem
+    if ROLE.role_of(p):   # Rolle bei M365.FM (Editor/Moderator) zusaetzlich, ohne Programme oder hasOccupation zu ueberschreiben
+        ROLE.add_to_person_ld(BASE, n, ROLE.role_of(p))
     same = [c["url"] for c in shown_channels(BASE, p)] + [x["url"] for x in p.get("programs", []) if x.get("verified") and x.get("url")]
     if person_entity(p["handle"]):   # dieselbe Person in der Entitaetsdatenbank: Seite und Knoten (eine Identitaet, Profil haengt daran)
         same += [eurl(BASE, "en", person_entity(p["handle"])), f"{BASE}/entity/{person_entity(p['handle'])}/#entity"]
@@ -401,7 +410,7 @@ def build(g, people, orgs, extra=None):
                                      + (f' <span class="mut">· {c["endorsed"]} ' + (T(lang, "confirmations", "Bestätigungen")) + "</span>" if c.get("endorsed") else "")
                                      + f' <span class="pf-certend" data-h="{esc(p["handle"])}" data-e="{c["e"]}"></span></li>' for c in _cs) + "</ul>" if _cs else ""
             contrib = "<ul>" + "".join(f'<li><a href="{eurl(BASE, lang, c["t"])}">{esc(ENTS[c["t"]]["name"] if c["t"] in ENTS else c["t"])}</a> <span class="mut">· {esc(s["wiki"] if c["k"] == "wiki" else s["entity"])} · {datetime.fromtimestamp(c["c"], timezone.utc).strftime("%Y-%m-%d")}{" – " + esc(c["s"]) if c.get("s") else ""}</span></li>' for c in p.get("contrib", []) if c["t"] in ENTS) + "</ul>" if p.get("contrib") else ""
-            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{croot}members/">{esc(s["members"])}</a></nav>{img_tag("u", p, p["name"])}<h1>{esc(p["name"])}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="creator" data-topic-id="{esc(p["handle"])}" data-topic-label="{esc(T(lang, "Follow", "Folgen"))}">🔔 {T(lang, "Follow", "Folgen")}</button><p style="font-size:1.1em">{esc(p.get("headline", ""))}</p><p>{tags_of_p(p, li, s)}</p>{ft}'
+            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{croot}members/">{esc(s["members"])}</a></nav>{img_tag("u", p, p["name"])}<h1>{esc(p["name"])}{ROLE.chip(BASE, lang, ROLE.role_of(p), p.get("scope"))}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="creator" data-topic-id="{esc(p["handle"])}" data-topic-label="{esc(T(lang, "Follow", "Folgen"))}">🔔 {T(lang, "Follow", "Folgen")}</button><p style="font-size:1.1em">{esc(p.get("headline", ""))}</p><p>{tags_of_p(p, li, s)}</p>{ft}'
                           + (f'<h2>{esc(s["about"])}</h2><p style="white-space:pre-line">{esc(p["about"])}</p>' if p.get("about") else "")
                           + (f'<h2>{esc(s["expertise"])}</h2>{exp_ul(p, lang, li, s)}' if p.get("expertise") else "") + (f'<h2>{esc(s["certs"])}</h2>{certs}' if certs else "")
                           + (f'<h2>{esc(s["latest"])}</h2>{items_ul(p)}' if items_ul(p) else "") + (f'<h2>{esc(s["channels"])}</h2>{chan_ul(p, lang)}' if chan_ul(p, lang) else "")
@@ -416,7 +425,7 @@ def build(g, people, orgs, extra=None):
         # ---- Firmen-Seiten ----
         for o in orgs:
             u = purl(BASE, lang, "c", o["handle"])
-            mem = "<ul>" + "".join(f'<li><a href="{purl(BASE, lang, "u", m["handle"])}">{esc(m["name"])}</a><span class="mut"> · {esc(m.get("headline", "")[:80])}</span></li>' for m in o.get("members", []) if m["handle"] in pb) + "</ul>" if o.get("members") else ""
+            mem = "<ul>" + "".join(f'<li><a href="{purl(BASE, lang, "u", m["handle"])}">{esc(m["name"])}</a>{ROLE.chip_for(BASE, lang, m["handle"])}<span class="mut"> · {esc(m.get("headline", "")[:80])}</span></li>' for m in o.get("members", []) if m["handle"] in pb) + "</ul>" if o.get("members") else ""
             facts = [(s["size"], esc(o["size"]))] if o.get("size") else []
             if o.get("country"):
                 facts.append((s["country"], esc(o["country"])))
@@ -440,7 +449,7 @@ def build(g, people, orgs, extra=None):
             pk = "u" if kind == "members" else "c"; ru = f"{croot}{kind}/"
             progs = sorted({x["p"] for it in lst for x in it.get("programs", [])})
             fb = f'<button type="button" class="mb-f" data-f="" aria-pressed="true">{esc(s["all"])}</button>' + "".join(f'<button type="button" class="mb-f" data-f="{p_}" aria-pressed="false">{esc(PROG[p_][li])}</button>' for p_ in progs)
-            cards = "".join(f'<li class="mb-card" data-p="{" ".join(x["p"] for x in it.get("programs", []))}"><a href="{purl(BASE, lang, pk, it["handle"])}"><b>{esc(it["name"])}</b></a> <span class="mut">{esc(it.get("headline") or it.get("tagline") or "")}</span><br>{tags_of_p(it, li, s)}'
+            cards = "".join(f'<li class="mb-card" data-p="{" ".join(x["p"] for x in it.get("programs", []))}"><a href="{purl(BASE, lang, pk, it["handle"])}"><b>{esc(it["name"])}</b></a>{ROLE.chip(BASE, lang, ROLE.role_of(it), it.get("scope")) if pk == "u" else ""} <span class="mut">{esc(it.get("headline") or it.get("tagline") or "")}</span><br>{tags_of_p(it, li, s)}'
                             + "".join(f'<span class="mb-tag">{esc(ENTS[e["e"]]["name"])}</span>' for e in it.get("expertise", [])[:5] if e["e"] in ENTS) + "</li>" for it in lst) or f'<li class="mb-card mut">{esc(s["none"])}</li>'
             fjs = '<script>(function(){var b=[].slice.call(document.querySelectorAll(".mb-f")),l=[].slice.call(document.querySelectorAll(".mb-card[data-p]"));b.forEach(function(x){x.addEventListener("click",function(){b.forEach(function(y){y.setAttribute("aria-pressed",y===x?"true":"false")});l.forEach(function(i){i.hidden=!!x.dataset.f&&(" "+i.dataset.p+" ").indexOf(" "+x.dataset.f+" ")<0})})})})()</script>'
             lm = '<script>' + LIVEMERGE.replace("%KEY%", "people" if kind == "members" else "orgs").replace("%BASE%", purl(BASE, lang, pk, "")) + '</script>'

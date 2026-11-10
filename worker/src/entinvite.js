@@ -2,11 +2,13 @@
 // Token im Link belegt die Adresse; Annahme verknuepft die Entitaet mit dem Konto (entity_claims, via invite). Ablehnen sperrt weitere Einladungen.
 import { entityMap } from "./entities.js";
 import { maskEmail as maskAddr } from "./claimverify.js";   // kein eigenes maskEmail in dieser Datei (ein Helfer, ein Format: m***@example.com)
+import { trustedEntityMap } from "./claimverify.js";   // Repo-Fassung der Entitaeten (Ersteller-Regel bei der Annahme)
 import { M365CON_HANDLES } from "./pastevents.js";
 import { notifyAdmins } from "./ads.js";
 import { mailReady, sendMail } from "./mailer.js";
 import { esc, randomToken, rateLimit, cleanText } from "./util.js";
 import { claimEntity } from "./events.js";
+import { gate, logEdit, can, inScope, loadActor, emailFor } from "./perm.js";
 import { recordInvite } from "./inviter.js";
 
 const now = () => Math.floor(Date.now() / 1000);
@@ -118,6 +120,15 @@ export async function resolveVariant(db, eid, ent, source, personal = true) {
   }
   return source === "speaker" ? "speaker" : inviteVariant(ent);
 }
+// Ersteller einer Entitaet: die erste Revision stammt von ihm und ist freigegeben (live oder abgeloest), und die Entitaet steht nicht in der Repo-Fassung
+// (/entities-src.json, von Mitgliedern nicht aenderbar). Eine Bearbeitung oder ein abgelehnter Vorschlag macht niemanden zum Ersteller; ist die Repo-Fassung
+// nicht erreichbar, gilt niemand als Ersteller (die Uebernahme wartet dann wie jede Anfrage auf claim.decide).
+async function createdBy(env, eid, uid) {
+  const f = await env.DB.prepare("SELECT user_id,status FROM entity_rev WHERE eid=? ORDER BY id LIMIT 1").bind(eid).first();
+  if (!f || Number(f.user_id) !== Number(uid) || (f.status !== "live" && f.status !== "old")) return false;
+  const src = await trustedEntityMap(env).catch(() => null);
+  return !!src && !src.has(eid);
+}
 const adminRow = (env, u) => !!u && (u.role === "admin" || (!!u.provider && (env.ADMIN_SUBS || "").split(",").map((s) => s.trim()).includes(`${u.provider}:${u.sub}`)));   // wie isAdmin in index.js
 const MAIL_RE = /^[^\s@<>]{1,64}@[^\s@<>]{1,190}\.[a-z]{2,}$/;
 // Eine Einladung pruefen und (ausser bei dry) anlegen + senden. Gemeinsame Logik fuer /send und /send-batch.
@@ -127,7 +138,10 @@ async function inviteOne(env, db, user, staff, x, emap, dry, seen) {
   // Kontaktadressen (Mirkos Gaeste- und Speaker-Korrespondenz) schreibt nur der Admin an: nur er verschickt die persoenliche Fassung
   if (admin && eid && !email) { const c = await db.prepare("SELECT email,name FROM entity_contacts WHERE eid=?").bind(eid).first(); if (c) { email = c.email; name = name || c.name; } }
   if (!EID.test(eid) || !name || !MAIL_RE.test(email) || (!admin && !personName(name))) return { eid, error: "bad_input" };
-  if (!staff) {   // Mitglieder: nur fuer Entitaeten, die sie selbst angelegt haben
+  // staff (Editor/Admin) bestimmt nur die Mengen; Redaktionsrechte fuer DIESE Entitaet entscheidet can(claim.decide) (Bereich der Fach-Editoren, Tageslimit).
+  // Ohne sie gilt die Mitglieder-Regel: nur fuer Entitaeten, die man selbst angelegt hat.
+  const g = staff ? await gate(db, user, "claim.decide", { topics: [eid] }) : null, asStaff = !!g?.ok;
+  if (!asStaff) {
     const own = await db.prepare("SELECT 1 x FROM entity_rev WHERE eid=? AND user_id=?").bind(eid, user.id).first(); if (!own) return { eid, error: "not_yours" };
   }
   if (await db.prepare("SELECT 1 x FROM invite_block WHERE email=?").bind(email).first()) return { eid, error: "blocked" };
@@ -142,6 +156,9 @@ async function inviteOne(env, db, user, staff, x, emap, dry, seen) {
   if (!Number(ins.meta?.changes || 0)) return { eid, error: "already" };
   const r = await send(env, inv, user.name, false, variant);
   if (!r.ok) await db.prepare("DELETE FROM entity_invites WHERE token=?").bind(inv.token).run();
+  // Redaktionsrecht genutzt: ins Protokoll (zaehlt zum Tageslimit). Ohne Adresse, auch nicht maskiert: Entitaets-ID und Grund genuegen fuer Tageslimit und
+  // Nachvollziehbarkeit, und der Entfernen-Link (decline) wie die Kontoloeschung versprechen, dass die Kontaktdaten weg sind - edit_log raeumt keiner von beiden auf.
+  else if (asStaff) await logEdit(db, g.actor, "claim.decide", "claim", eid, { reason: "Zur Übernahme eingeladen", after: { status: "invited" } });
   return { eid, ok: r.ok, variant };
 }
 // Erledigt = nie (mehr) erinnern: Adresse gesperrt (auch ueber eine andere Einladung abgelehnt) oder die Seite ist uebernommen bzw. in Pruefung
@@ -204,17 +221,27 @@ export async function handleEntityInvite(env, request, url, path, user, J) {
   if (path === "/api/entityinvite/accept" && method === "POST") {
     const b = await body(), i = await db.prepare("SELECT * FROM entity_invites WHERE token=?").bind(String(b.t || "")).first();
     if (!i || i.status === "declined") return J({ error: "not_found" }, 404);
+    if (Number(i.by_user) === Number(user.id) && !user.admin) return J({ error: "own_content" }, 403);   // die eigene Einladung annehmen hiesse, sich selbst zu bestaetigen
     const pr = await db.prepare("SELECT 1 x FROM profiles WHERE user_id=? AND public=1 AND handle IS NOT NULL").bind(user.id).first(); if (!pr) return J({ error: "need_profile" }, 409);
-    if (!(await claimEntity(db, i.eid, user.id, "invite"))) return J({ error: "claimed" }, 409);
+    // Sofort bestaetigt nur, was ein Admin oder nach der Mitglieder-Regel (selbst angelegte Entitaet) eingeladen hat; eine Einladung mit Redaktionsrechten wartet
+    // wie jede Anfrage auf claim.decide (can(), der Einladende entscheidet nicht selbst: events.js claimGate)
+    const by = await db.prepare("SELECT role,provider,sub FROM users WHERE id=?").bind(i.by_user).first();
+    const direct = !!by && (adminRow(env, by) || (await createdBy(env, i.eid, i.by_user)));
+    if (!(await claimEntity(db, i.eid, user.id, "invite", direct))) return J({ error: "claimed" }, 409);
     await db.prepare("UPDATE entity_invites SET status='claimed' WHERE token=?").bind(i.token).run();
     await recordInvite(env, { inviter: i.by_user, invitee: user.id, source: "entity", ref: i.eid, since: i.created });
-    return J({ ok: true, eid: i.eid });
+    return J({ ok: true, eid: i.eid, pending: !direct });
   }
   if (path === "/api/entityinvite/mine" && method === "GET") {
-    const rows = (await db.prepare(`SELECT eid,name,status,created,reminded,${user.admin || user.editor ? "email" : "'' email"} FROM entity_invites WHERE ${user.admin || user.editor ? "1=1" : "by_user=?"} ORDER BY created DESC LIMIT 300`).bind(...(user.admin || user.editor ? [] : [user.id])).all()).results || [];
-    return J({ items: rows, mail: mailReady(env), staff: !!(user.admin || user.editor) }, 200, { "cache-control": "no-store" });
+    // Redaktionsansicht nur ueber can(): queue.review (Editoren und Admin) und je Zeile inScope - Fach-Editoren sehen fremde Einladungen nur zu Entitaeten
+    // ihres Bereichs, ausserhalb nur die eigenen; Mitglieder und Moderatoren nur die eigenen (ohne Adresse). Adressen sieht nur der Admin ungekuerzt.
+    const actor = await loadActor(db, user), staff = can(actor, "queue.review").ok;
+    const rows0 = (await db.prepare(`SELECT eid,name,status,created,reminded,by_user,${staff ? "email" : "'' email"} FROM entity_invites WHERE ${staff ? "1=1" : "by_user=?"} ORDER BY created DESC LIMIT ?`).bind(...(staff ? [] : [user.id]), staff && actor.scope ? 3000 : 300).all()).results || [];
+    const rows = rows0.filter((r) => !staff || Number(r.by_user) === Number(user.id) || inScope(actor, { topics: [r.eid] })).slice(0, 300)
+      .map(({ by_user, ...r }) => ({ ...r, email: emailFor(actor, r.email) }));
+    return J({ items: rows, mail: mailReady(env), staff }, 200, { "cache-control": "no-store" });
   }
-  if (path === "/api/entityinvite/contacts" && (user.admin || user.editor)) {   // Kontaktadressen (nur DB, nie im Repo)
+  if (path === "/api/entityinvite/contacts" && (await gate(db, user, "claim.decide")).ok) {   // Kontaktadressen (nur DB, nie im Repo); Fach-Editoren nicht (kein Bereich)
     if (method === "GET") { const c = await db.prepare("SELECT COUNT(*) n FROM entity_contacts").first(); const o = await db.prepare("SELECT COUNT(*) n FROM entity_contacts c WHERE NOT EXISTS (SELECT 1 FROM entity_invites i WHERE i.eid=c.eid)").first(); return J({ contacts: c.n, not_invited: o.n }); }
     if (method === "POST") {
       const b = await body(), items = (Array.isArray(b.items) ? b.items : []).slice(0, 400), src = b.source === "speaker" ? "speaker" : "guest"; let n = 0;
@@ -229,7 +256,7 @@ export async function handleEntityInvite(env, request, url, path, user, J) {
     }
   }
   if (path === "/api/entityinvite/send" && method === "POST") {
-    const b = await body(), staff = !!(user.admin || user.editor);
+    const b = await body(), staff = !!(user.admin || user.editor);   // nur Mengen; Redaktionsrechte je Entitaet entscheidet can(claim.decide) (Bereich, Tageslimit)
     const list = (Array.isArray(b.items) ? b.items : [b]).slice(0, staff ? 50 : 3);
     if (!mailReady(env)) return J({ error: "mail_off" }, 503);
     if (!(await rateLimit(db, `einv:${user.id}`, staff ? 200 : 5, 86400))) return J({ error: "rate_limit" }, 429);

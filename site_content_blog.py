@@ -146,9 +146,11 @@ def translations(BASE, posts, ents):
     srcs = [s for s in srcs if s["cp_slug"] not in other]
     out = []
     for lang in build:
-        data = TB.load_lang(lang); n = 0
+        import site_i18n_overrides as OVR
+        data = TB.load_lang(lang); n = 0   # Handtexte der Redaktion legt nur TB.assemble(..., lang) darueber (i18n_overrides); OVR liefert der Redaktion nur zu
         for s in srcs:
             o = orig.get((s["author"], s["cp_slug"]))
+            if o: OVR.note_blog(lang, s["slug"], s, data.get(s["slug"]))
             r = TB.assemble(s, data.get(s["slug"]), lang) if o else None
             if not r: continue
             title, desc, html, faq = r

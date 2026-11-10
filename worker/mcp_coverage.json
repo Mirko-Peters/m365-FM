@@ -45,6 +45,72 @@
   "/api/me/merge": {
    "skip": "Anmeldungen verknüpfen/entfernen und Konten zusammenführen (#279) nur mit Browser-Sitzung und frischer Anmeldung, bewusst nicht per KI-Token"
   },
+  "/api/editor/queue": {
+   "tools": [
+    "editor_queue"
+   ]
+  },
+  "/api/editor/item": {
+   "tools": [
+    "editor_view_item"
+   ]
+  },
+  "/api/editor/proposals": {
+   "tools": [
+    "editor_propose_decision"
+   ]
+  },
+  "/api/editor/edit": {
+   "skip": "Inhaltsbearbeitung nur im Browser (/redaktion/): wird protokolliert und der Autor benachrichtigt, bewusst nicht per KI-Token"
+  },
+  "/api/editor/decide": {
+   "skip": "Entscheidungen werden per MCP nur vorgeschlagen (editor_propose_decision) und im Browser bestätigt"
+  },
+  "/api/admin/editlog": {
+   "skip": "Admin-Protokoll mit Rückgängig nur im Browser"
+  },
+  "/api/editor/applications": {
+   "skip": "Abstimmung über Bewerbungen nur im Browser durch angemeldete Editoren"
+  },
+  "/api/editor/apply": {
+   "skip": "Bewerbung um Editor/Moderator nur im Browser (Profil)"
+  },
+  "/api/editor/history": {
+   "skip": "Versionsverlauf mit Diff nur im Browser (/redaktion/)"
+  },
+  "/api/editor/my-history": {
+   "skip": "Verlauf des eigenen Beitrags nur im Browser (Profilbereich)"
+  },
+  "/api/editor/revert": {
+   "skip": "Zurücksetzen auf eine Version nur im Browser"
+  },
+  "/api/editor/i18n/overrides": {
+   "skip": "Sprachfassungen bearbeiten nur im Browser (/redaktion/); per MCP nur Vorschlag (propose_translation_edit)"
+  },
+  "/api/editor/i18n/history": {
+   "skip": "Sprachfassungen: Verlauf nur im Browser"
+  },
+  "/api/editor/i18n/retranslate": {
+   "skip": "Neuübersetzung nur vormerken im Browser; der Workflow holt die Wünsche ab"
+  },
+  "/api/editor/i18n/open": {
+   "skip": "Absatz-Ansicht eines Eintrags anfordern nur im Browser (/redaktion/); der nächste Seitenbau veröffentlicht sie"
+  },
+  "/api/editor/i18n/revert": {
+   "skip": "Zurücksetzen nur im Browser"
+  },
+  "/api/editor/i18n/save": {
+   "skip": "Speichern nur nach Bestätigung im Browser; per MCP nur Vorschlag (propose_translation_edit)"
+  },
+  "/api/i18n/overrides": {
+   "skip": "Maschinen-Export für den Seitenbau (öffentlich, gecacht), kein Agenten-Werkzeug nötig"
+  },
+  "/api/i18n/retranslate": {
+   "skip": "Wunschliste für den Workflow-Lauf mit --stale, kein Agenten-Werkzeug nötig"
+  },
+  "/api/i18n/retranslate/done": {
+   "skip": "Rückmeldung des Workflows mit Cron-Schlüssel"
+  },
   "/api/directory": {
    "tools": [
     "search_directory"
@@ -418,12 +484,6 @@
     "list_my_entity_invites"
    ]
   },
-  "/api/entityinvite/send-batch": {
-   "skip": "Nur Admin: Sammelversand und Probelauf der Einladungen, bewusst nicht per KI-Token"
-  },
-  "/api/entityinvite/test": {
-   "skip": "Nur Admin: Testmail an das eigene Konto, bewusst nicht per KI-Token"
-  },
   "/api/entityinvite/send": {
    "tools": [
     "send_entity_invites"
@@ -768,23 +828,6 @@
    "tools": [
     "vote_podcast_pitch"
    ]
-  },
-  "/api/invite/me": {
-   "tools": [
-    "my_invite_link"
-   ]
-  },
-  "/api/invite/click": {
-   "skip": "Klick-Beleg (Kuerzel + Serverzeit, signiert) beim Oeffnen eines Einladungslinks, nur durch die Website"
-  },
-  "/api/invite/ref": {
-   "skip": "Klick-Beleg aus dem Browser (localStorage) nach der Anmeldung einloesen, nur durch die Website"
-  },
-  "/api/admin/invites": {
-   "skip": "Admin-Funktionen: bewusst nicht per KI-Token"
-  },
-  "/api/admin/invite/void": {
-   "skip": "Admin-Funktionen: bewusst nicht per KI-Token"
   },
   "/api/points": {
    "tools": [
@@ -1177,6 +1220,29 @@
   },
   "/api/admin/ads/house-stats": {
    "skip": "Admin-Funktionen (#281 Werbeplätze): nur im Admin-Panel, bewusst nicht per KI-Token"
+  },
+  "/api/entityinvite/send-batch": {
+   "skip": "Nur Admin: Sammelversand und Probelauf der Einladungen, bewusst nicht per KI-Token"
+  },
+  "/api/entityinvite/test": {
+   "skip": "Nur Admin: Testmail an das eigene Konto, bewusst nicht per KI-Token"
+  },
+  "/api/invite/me": {
+   "tools": [
+    "my_invite_link"
+   ]
+  },
+  "/api/invite/click": {
+   "skip": "Klick-Beleg (Kuerzel + Serverzeit, signiert) beim Oeffnen eines Einladungslinks, nur durch die Website"
+  },
+  "/api/invite/ref": {
+   "skip": "Klick-Beleg aus dem Browser (localStorage) nach der Anmeldung einloesen, nur durch die Website"
+  },
+  "/api/admin/invites": {
+   "skip": "Admin-Funktionen: bewusst nicht per KI-Token"
+  },
+  "/api/admin/invite/void": {
+   "skip": "Admin-Funktionen: bewusst nicht per KI-Token"
   },
   "/api/admin/linkedin/status": {
    "skip": "LinkedIn-Events (#323): nur für Admins mit Browser-Sitzung unter /admin/#li, bewusst nicht per KI-Token"

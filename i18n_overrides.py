@@ -33,8 +33,8 @@ VERTRAG i18n-overrides v1
         bleibt stehen, die Einheit gilt als veraltet;
      d) sonst gar nicht (verwaist: Absatz geloescht oder mit --force-manual neu uebersetzt); es gilt der Maschinentext, das Protokoll nennt die Zahl.
    episode/notes: Felder wandern nicht; ein Override gilt, solange es existiert und die Folge eine Maschinenfassung hat.
-   Bereinigung beim Anwenden (der Datei wird nie vertraut): lblog wie der Maschinentext durch site_podpage.san, sobald '<' oder '&' vorkommt; notes immer
-   durch site_podpage.san; episode als reiner Text (Tags entfernt, Entities aufgeloest, Leerraum normalisiert). Bleibt danach nichts uebrig, gilt der Maschinentext.
+   Bereinigung beim Anwenden (der Datei wird nie vertraut): lblog-Absaetze wie der Maschinentext durch site_podpage.san, sobald '<' oder '&' vorkommt; notes immer
+   durch site_podpage.san; episode und lblog T/D/Q/A als reiner Text (Tags entfernt, Entities aufgeloest, Leerraum normalisiert). Bleibt danach nichts uebrig, gilt der Maschinentext.
    Bilder (Projektregel: nur ueber den eigenen Bucket): ein <img> in einem Handtext bleibt nur, wenn seine Adresse mit https://img.m365.fm/ beginnt, der Seitenbau
    sie dorthin umschreibt (data/r2_map.json) oder sie schon im englischen Original bzw. im Maschinentext desselben Eintrags steht; jedes andere <img> wird
    entfernt (der uebrige Text bleibt). #319: cleanUnit im Worker lehnt solche Bilder schon beim Speichern ab (erste Linie), die Pruefung hier bleibt die zweite.
@@ -177,6 +177,7 @@ def get(kind, lang, item):
     return load(kind, lang).get(item, {})
 
 
+PLAIN_UNIT = re.compile(r"^(?:T|D|[QA]\d+)$")   # lblog: Titel, Beschreibung und FAQ sind im Original reiner Text (translate_blog.source_of), nur Absaetze tragen Inline-HTML
 _IMG = re.compile(r"<img\b[^>]*>", re.I)
 _SRC = re.compile(r'\ssrc="([^"]*)"', re.I)
 
@@ -188,8 +189,9 @@ def img_srcs(html):
 
 def clean(kind, unit, text, ref=""):
     """Bereinigung beim Anwenden (Vertrag 4): der Datei wird nie vertraut, auch wenn der Worker schon gefiltert hat. ref = bereinigtes HTML des Eintrags
-    (englisches Original, Maschinentext): nur dessen Bilder und die des eigenen Buckets bleiben in einem Handtext stehen."""
-    if kind == "episode": return re.sub(r"\s+", " ", _html.unescape(re.sub(r"<[^>]*>", " ", text))).strip()
+    (englisches Original, Maschinentext): nur dessen Bilder und die des eigenen Buckets bleiben in einem Handtext stehen.
+    Reiner Text (episode; lblog T/D/Q/A) bleibt unmaskiert wie der Maschinentext - die Seiten maskieren ihn beim Einsetzen (esc); san() wuerde '&' doppelt maskieren."""
+    if kind == "episode" or (kind == "lblog" and PLAIN_UNIT.match(str(unit))): return re.sub(r"\s+", " ", _html.unescape(re.sub(r"<[^>]*>", " ", text))).strip()
     if not (kind == "notes" or "<" in text or "&" in text): return text
     import site_podpage as P
     out = P.san(text)

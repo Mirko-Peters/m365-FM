@@ -117,7 +117,7 @@ export async function memberOf(env, uid) {
   const u = await env.DB.prepare("SELECT id,provider,sub,name,bio,lang,banned,role,created FROM users WHERE id=?").bind(uid).first();
   if (!u || u.banned) return null;
   const pro = !!(await env.DB.prepare("SELECT 1 x FROM programs WHERE owner_type='u' AND owner_id=? AND verified=1 AND program IN ('mvp','mct','rd','msa','ms_employee') LIMIT 1").bind(uid).first());
-  return { ...u, admin: isAdmin(env, u), editor: u.role === "editor", pro };
+  return { ...u, admin: isAdmin(env, u), editor: u.role === "editor", moderator: u.role === "moderator", pro };
 }
 
 // Ratelimit: max Aktionen pro Fenster (Sekunden). true = erlaubt

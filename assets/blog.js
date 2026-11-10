@@ -40,6 +40,26 @@ Object.assign(Q, de ? { e_bad_image: "Ein Bild braucht eine https-Adresse auf .j
     f.appendChild(row); f.addEventListener("submit", function (e) { e.preventDefault(); }); return f;
   }
   var seoMap = {};
+  /* Verlauf des eigenen Beitrags (Redaktionsaenderungen wie im Wiki): wer, wann, warum - Vergleich wortweise per <del>/<ins> mit textContent */
+  var HV = X.lang === "de" ? { t: "Verlauf", none: "Noch keine Änderungen durch die Redaktion.", diff: "Änderung zeigen", base: "Ursprungsfassung" } : { t: "History", none: "No editorial changes yet.", diff: "Show change", base: "Original" };
+  function diffText(a, b) {
+    var x = String(a || "").split(/(\s+)/).filter(Boolean), y = String(b || "").split(/(\s+)/).filter(Boolean), pre = h("pre", { style: "white-space:pre-wrap;font:inherit;border:1px solid var(--bd);padding:.6em" });
+    if (x.length * y.length > 4000000) { pre.appendChild(h("del", { text: a })); pre.appendChild(h("ins", { text: b })); return pre; }
+    var n = x.length, m = y.length, L = [], i, j; for (i = 0; i <= n; i++) L.push(new Array(m + 1).fill(0));
+    for (i = n - 1; i >= 0; i--) for (j = m - 1; j >= 0; j--) L[i][j] = x[i] === y[j] ? L[i + 1][j + 1] + 1 : Math.max(L[i + 1][j], L[i][j + 1]);
+    function put(t, v) { pre.appendChild(t === "eq" ? document.createTextNode(v) : h(t, { text: v })); }
+    i = 0; j = 0; while (i < n && j < m) { if (x[i] === y[j]) { put("eq", x[i]); i++; j++; } else if (L[i + 1][j] >= L[i][j + 1]) put("del", x[i++]); else put("ins", y[j++]); }
+    while (i < n) put("del", x[i++]); while (j < m) put("ins", y[j++]); return pre;
+  }
+  function authorHistory(p, host) {
+    if (host.firstChild) { host.textContent = ""; return; }
+    api("/api/editor/my-history?kind=blog&id=" + p.id).then(function (r) { var vs = (r.j && r.j.versions) || []; if (r.s !== 200 || vs.length < 2) { host.appendChild(h("p", { class: "mut", text: HV.none })); return; }
+      var ul = h("ul", { style: "padding:0;list-style:none" });
+      vs.forEach(function (v, k) { var li = h("li", { style: "margin:.4em 0" }, [h("span", { class: "mut", text: new Date(v.ts * 1000).toLocaleString() + " · " + (v.action === "baseline" ? HV.base : (v.user || "") + (v.reason ? " · " + v.reason : "")) })]), d = h("div");
+        if (vs[k + 1]) li.appendChild(h("button", { type: "button", class: "btn", style: "margin-inline-start:.5em", text: HV.diff, onclick: function () { if (d.firstChild) d.textContent = ""; else d.appendChild(diffText((vs[k + 1].title + "\n\n" + vs[k + 1].summary + "\n\n" + vs[k + 1].body), (v.title + "\n\n" + v.summary + "\n\n" + v.body))); } }));
+        li.appendChild(d); ul.appendChild(li); });
+      host.appendChild(ul); });
+  }
   function list(d) {
     box.textContent = ""; box.appendChild(h("p", {}, [h("button", { type: "button", class: "btn main", text: Q.newp, onclick: function () { box.textContent = ""; box.appendChild(form(null)); } })]));
     if ((d.invites || []).length) {
@@ -58,7 +78,9 @@ Object.assign(Q, de ? { e_bad_image: "Ein Bild braucht eine https-Adresse auf .j
       var acts = h("div", {}, [h("button", { type: "button", class: "btn", text: Q.edit, onclick: function () { box.textContent = ""; box.appendChild(form(p)); } }), " "]);
       if (p.status === "live" && d.handle) acts.appendChild(h("a", { class: "btn", href: X.base + pfx() + "/community/u/" + d.handle + "/blog/" + p.slug + "/", text: Q.viewp }));
       acts.appendChild(document.createTextNode(" ")); acts.appendChild(h("button", { type: "button", class: "btn", text: Q.del_, onclick: function () { if (confirm(Q.confirmdel)) api("/api/blog/delete", { method: "POST", body: { id: p.id } }).then(load); } }));
-      li.appendChild(acts); ul.appendChild(li);
+      var hbox = h("div");
+      acts.appendChild(document.createTextNode(" ")); acts.appendChild(h("button", { type: "button", class: "btn", text: HV.t, onclick: function () { authorHistory(p, hbox); } }));
+      li.appendChild(acts); li.appendChild(hbox); ul.appendChild(li);
     });
     box.appendChild(ul);
   }

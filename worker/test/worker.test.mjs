@@ -453,11 +453,12 @@ test("schema: Migrationen sind idempotent und enthalten jede zur Laufzeit angele
     if (/^ALTER TABLE search_doc ADD COLUMN (?:grp|title_norm) TEXT NOT NULL DEFAULT ''$/i.test(s)
       || /^ALTER TABLE (?:push_subs ADD COLUMN digest INTEGER NOT NULL DEFAULT 1|events ADD COLUMN tz TEXT NOT NULL DEFAULT 'Europe\/Berlin')$/i.test(s)) continue;
     if (/^ALTER TABLE (?:expert_requests ADD COLUMN (?:hide_outlet INTEGER NOT NULL DEFAULT 0|reach TEXT NOT NULL DEFAULT ''|audience TEXT NOT NULL DEFAULT 'all'|mode TEXT NOT NULL DEFAULT 'match'|held_reason TEXT NOT NULL DEFAULT '')|expert_request_replies ADD COLUMN (?:kind TEXT NOT NULL DEFAULT 'match'|status TEXT NOT NULL DEFAULT 'pending')|contributions ADD COLUMN expert_request_id INTEGER)$/i.test(s)) continue;
-    if (/^ALTER TABLE users ADD COLUMN (?:merged_into INTEGER|merged_at INTEGER NOT NULL DEFAULT 0)$/i.test(s)
+    if (/^ALTER TABLE users ADD COLUMN (?:merged_into INTEGER|merged_at INTEGER NOT NULL DEFAULT 0|role_source TEXT NOT NULL DEFAULT '')$/i.test(s)
       || /^INSERT OR IGNORE INTO user_identities\(user_id, provider, sub, created\) SELECT id, provider, sub, created FROM users$/i.test(s)) continue;   // #279: Rueckfuellung ist idempotent
     if (/^INSERT OR IGNORE INTO ad_(?:products|prices|settings)\(/i.test(s)) continue;   // #281: Startwerte, idempotent (vorhandene Admin-Werte bleiben)
     if (/^ALTER TABLE org_entity ADD COLUMN confirmed INTEGER NOT NULL DEFAULT 0$/i.test(s) || /^UPDATE org_entity SET confirmed=1 WHERE EXISTS \(/i.test(s)) continue;   // 0026: Rueckfuellung setzt nur 1, idempotent
     if (/^ALTER TABLE orgs ADD COLUMN unclaimed INTEGER NOT NULL DEFAULT 0$/i.test(s)) continue;   // 0034: Spalte mit Standardwert
+    if (/^ALTER TABLE i18n_override(?:_rev)? ADD COLUMN src_hash TEXT NOT NULL DEFAULT ''$/i.test(s)) continue;   // 0041: Quell-Anker der Handtexte (Vertrag i18n-overrides v1), Spalte mit Standardwert
     if (/^ALTER TABLE entity_contacts ADD COLUMN source TEXT NOT NULL DEFAULT 'guest'$/i.test(s)) continue;   // 0040: Herkunft der Kontaktadresse (guest | speaker), Laufzeit-Absicherung in entinvite.js
     if (/^ALTER TABLE entity_claims ADD COLUMN (?:verified_via|verified_domain|fwd_mask) TEXT NOT NULL DEFAULT ''$/i.test(s) || /^UPDATE entity_claims SET verified_via=CASE /i.test(s)) continue;   // 0032: Spalten mit Standardwert, Rueckfuellung idempotent
     if (/^ALTER TABLE ad_leads ADD COLUMN (?:sponsor|assigned) TEXT NOT NULL DEFAULT ''$/i.test(s)) continue;   // 0033: Sponsor-Leads, Spalten mit Standardwert

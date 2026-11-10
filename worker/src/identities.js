@@ -220,6 +220,19 @@ export async function mergeStatements(db, S, T) {
   for (const t of ["profile_private", "profile_company", "user_prefs", "msg_prefs", "expert_settings", "profile_job"]) keepT(t);
   // Branchen (#304, bis zu 5 je Profil): wie das Profil gilt die Auswahl von T; hat T keine, uebernimmt T die von S
   st.push(q("UPDATE profile_industry SET user_id=? WHERE user_id=? AND NOT EXISTS (SELECT 1 FROM profile_industry WHERE user_id=?)", T, S, T));
+  // Redaktion und Moderation (Migration 0037): Protokoll, Empfehlungen, Fassungen, Bewerbungen und Handtexte gehoeren kuenftig T - sonst koennte T die eigene,
+  // als S abgegebene Empfehlung bestaetigen (Vier-Augen-Regel) und das Tageslimit von vorn beginnen.
+  for (const [t, c] of [["edit_log", "user_id"], ["edit_proposals", "user_id"], ["edit_proposals", "decided_by"], ["content_rev", "user_id"], ["i18n_override_rev", "user_id"],
+    ["i18n_override", '"by"'], ["i18n_retranslate_req", '"by"'], ["editor_applications", "user_id"], ["editor_applications", "decided_by"]]) simple(t, c);
+  st.push(q("UPDATE edit_log SET item_id=?||substr(item_id,instr(item_id,':')) WHERE kind='cert' AND item_id LIKE ?", String(T), `${S}:%`));   // Zertifikats-Eintraege tragen die Nutzer-ID im Schluessel
+  st.push(q("UPDATE edit_proposals SET item_id=?||substr(item_id,instr(item_id,':')) WHERE kind='cert' AND item_id LIKE ?", String(T), `${S}:%`));
+  st.push(q("UPDATE edit_log SET item_id=? WHERE kind='user' AND item_id=?", String(T), String(S)));
+  set("editor_votes", "voter_id");
+  st.push(q("DELETE FROM editor_votes WHERE voter_id=? AND app_id IN (SELECT id FROM editor_applications WHERE user_id=?)", T, T));   // keine Stimme fuer die eigene Bewerbung
+  // Bewerbungen von S, die T nicht mehr braucht (Rolle schon vorhanden), schliessen; von zwei offenen bleibt die aeltere
+  st.push(q("UPDATE editor_applications SET status='obsolete',decided_ts=?,reason='Rolle bereits vorhanden' WHERE user_id=? AND status='open' AND (CASE role WHEN 'editor' THEN 2 ELSE 1 END)<=(SELECT CASE role WHEN 'admin' THEN 3 WHEN 'editor' THEN 2 WHEN 'moderator' THEN 1 ELSE 0 END FROM users WHERE id=?)", now(), T, T));
+  st.push(q("UPDATE editor_applications SET status='obsolete',decided_ts=?,reason='Konten zusammengeführt' WHERE user_id=? AND status='open' AND id<>(SELECT MIN(id) FROM editor_applications WHERE user_id=? AND status='open')", now(), T, T));
+  st.push(q("DELETE FROM editor_scope WHERE user_id=?", S));   // Rolle und Fachbereich wandern nicht mit: es gilt, was T hat
   st.push(q("DELETE FROM entity_claim_mail WHERE claim_user=?", S));   // #309: offene Einmal-Links des stillgelegten Kontos gelten nicht weiter (sie sind an claim_user gebunden)
   keepT("images", "owner_id", " AND kind='u'");
   keepT("mail_addr"); st.push(q("DELETE FROM mail_addr WHERE user_id=?", S));   // stillgelegtes Konto bekommt keine E-Mails
