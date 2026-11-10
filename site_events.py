@@ -6,15 +6,16 @@ from site_i18n import COMM_LANGS, pfx, pfx2, overlay
 from datetime import datetime
 from site_learn import ENTS, esc, _fetch_json, LCSS
 from site_entities import eurl, eid_of
+import site_event_link as EVL   # Event <-> Event-Entitaet (Reihe): Link auf der Event-Seite, superEvent im Schema
 
 S = {"en": dict(events="Events", intro="Conferences, webinars and meetups of the Microsoft community – with their sessions and speakers.", upcoming="Upcoming", past="Past", none="No events yet.",
                 organizer="Organizer", when="When", where="Where", online="Online", onsite="On site", hybrid="Hybrid", free="Free", paid="Paid", topics="Topics", sessions="Sessions", speakers="Speakers", website="Website", tickets="Tickets / register",
                 lang="Language", level="Level", room="Room", track="Track", about="About", create="Add your event", my="Sessions at events", recording="Recording", more="Events", sponsors="Looking for sponsors", nosess="No sessions published yet.", tbc="speaker(s) to be confirmed", propose="Propose a session",
-                imported="This entry was imported from a public event listing and has no organizer on M365.FM yet.", claim="This is my event"),
+                series="Event series", imported="This entry was imported from a public event listing and has no organizer on M365.FM yet.", claim="This is my event"),
      "de": dict(events="Events", intro="Konferenzen, Webinare und Meetups der Microsoft-Community – mit Sessions und Speakern.", upcoming="Kommende", past="Vergangene", none="Noch keine Events.",
                 organizer="Veranstalter", when="Wann", where="Wo", online="Online", onsite="Vor Ort", hybrid="Hybrid", free="Kostenlos", paid="Kostenpflichtig", topics="Themen", sessions="Sessions", speakers="Speaker", website="Webseite", tickets="Tickets / Anmeldung",
                 lang="Sprache", level="Level", room="Raum", track="Track", about="Über das Event", create="Event eintragen", my="Sessions bei Events", recording="Aufzeichnung", more="Events", sponsors="Sucht Sponsoren", nosess="Noch keine Sessions veröffentlicht.", tbc="Speaker noch zu bestätigen", propose="Session vorschlagen",
-                imported="Dieser Eintrag stammt aus einer öffentlichen Veranstaltungsliste und hat auf M365.FM noch keinen Veranstalter.", claim="Das ist mein Event")}
+                series="Event-Reihe", imported="Dieser Eintrag stammt aus einer öffentlichen Veranstaltungsliste und hat auf M365.FM noch keinen Veranstalter.", claim="Das ist mein Event")}
 MODE_URL = {"online": "OnlineEventAttendanceMode", "onsite": "OfflineEventAttendanceMode", "hybrid": "MixedEventAttendanceMode"}
 
 
@@ -46,7 +47,8 @@ def span(ev, lang):
     return a if not b or b == a else f"{a} – {b}"
 
 
-def event_ld(BASE, ev, pb, ob):
+def event_ld(BASE, ev, pb, ob, max_sessions=None):
+    """max_sessions: hoechstens so viele Sessions als subEvent (None = alle; 0 = keine). Die Event-Seite selbst nimmt alle, die Reihe (Entitaetsseite) eine Auswahl."""
     u = eurl_(BASE, "en", ev["handle"])
     n = {"@type": "Event", "@id": u + "#event", "name": ev["title"], "url": u, "startDate": ev["start"], "eventStatus": "https://schema.org/EventScheduled",
          "eventAttendanceMode": "https://schema.org/" + MODE_URL.get(ev["mode"], "OnlineEventAttendanceMode")}
@@ -80,8 +82,11 @@ def event_ld(BASE, ev, pb, ob):
     t = [{"@id": eid_of(BASE, e)} for e in ev.get("topics", []) if e in ENTS]
     if t:
         n["about"] = t
+    sup = EVL.superevent_id(BASE, ev)   # gehoert zu einer bestaetigten Event-Reihe (Entitaet ohne eigenes Datum = EventSeries)
+    if sup:
+        n["superEvent"] = {"@id": sup}
     subs = []
-    for s in ev.get("sessions", []):
+    for s in (ev.get("sessions", []) if max_sessions is None else ev.get("sessions", [])[:max_sessions]):
         sub = {"@type": "Event", "name": s["title"], "superEvent": {"@id": u + "#event"}, "location": n["location"], "eventAttendanceMode": n["eventAttendanceMode"]}   # T4: jedes Event braucht einen Ort
         if s.get("start"):
             sub["startDate"] = s["start"]
@@ -201,6 +206,9 @@ def build(g, events, people, orgs):
                      (s["organizer"], oh), ("", "" if ev.get("free") is None else esc(s["free"] if ev["free"] else s["paid"]))]   # Preis unbekannt: keine Zeile
             if ev.get("lang"):
                 facts.append((s["lang"], esc(ev["lang"])))
+            ser = EVL.series_of(ev)   # bestaetigte Event-Reihe (Entitaet): die Seite der Reihe zeigt alle Termine
+            if ser:
+                facts.append((s["series"], f'<a href="{eurl(BASE, lang, ser)}">{esc(ENTS[ser]["name"])}</a>'))
             ft = '<table class="mb-facts"><tbody>' + "".join(f'<tr><th scope="row">{esc(a)}</th><td>{b_}</td></tr>' for a, b_ in facts if b_) + "</tbody></table>"
             tix, web = https_url(ev.get("tickets_url")), https_url(ev.get("url"))
             btn = (f'<a class="btn main" href="{esc(tix)}" rel="nofollow noopener" target="_blank">{esc(s["tickets"])}</a> ' if tix else "") + (f'<a class="btn" href="{esc(web)}" rel="nofollow noopener" target="_blank">{esc(s["website"])}</a>' if web else "")
@@ -238,7 +246,7 @@ def build(g, events, people, orgs):
                 sitemap.append((u, TODAY, None))
         # Verzeichnis
         up = sorted([e for e in events if (e.get("end") or e["start"])[:10] >= TODAY], key=lambda e: e["start"]); pa = sorted([e for e in events if (e.get("end") or e["start"])[:10] < TODAY], key=lambda e: e["start"], reverse=True)
-        li = lambda lst: "".join(f'<li class="ev-card"><a href="{eurl_(BASE, lang, e["handle"])}"><b>{esc(e["title"])}</b></a> <span class="mut">· {esc(span(e, lang))} · {esc({"online": s["online"], "onsite": s["onsite"], "hybrid": s["hybrid"]}[e["mode"]])}</span><br>{esc(e.get("summary", ""))}</li>' for e in lst)
+        li = lambda lst: "".join(f'<li class="ev-card"><a href="{eurl_(BASE, lang, e["handle"])}"><b>{esc(e["title"])}</b></a> <span class="mut">· {esc(span(e, lang))} · {esc({"online": s["online"], "onsite": s["onsite"], "hybrid": s["hybrid"]}[e["mode"]])}</span>{(' <a class="ev-tag" href="' + eurl(BASE, lang, EVL.series_of(e)) + '">' + esc(ENTS[EVL.series_of(e)]["name"]) + '</a>') if EVL.series_of(e) else ""}<br>{esc(e.get("summary", ""))}</li>' for e in lst)
         ru = f"{croot}events/"
         b = shell(lang, f'<h1>{esc(s["events"])}</h1><p class="mut">{esc(s["intro"])}</p><p><a class="btn main" href="{croot}#c-events">{esc(s["create"])}</a></p>'
                   + (f'<h2>{esc(s["upcoming"])}</h2><ul class="ev-list">{li(up)}</ul>' if up else "") + (f'<details class="ev-past"><summary><h2 style="display:inline">{esc(s["past"])} ({len(pa)})</h2></summary><ul class="ev-list">{li(pa)}</ul></details>' if pa else "") + ("" if events else f'<p class="mut">{esc(s["none"])}</p>') + "<script>" + EVLIVE.replace("%API%", api).replace("%BASE%", eurl_(BASE, lang, "")) + "</script>" + css)

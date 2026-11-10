@@ -181,6 +181,7 @@ async function evViews(db, evs, withPending) {
         asked: asked ? (asked.get(ev.id) || []).map((x) => x.handle) : undefined,
         organizer: org ? { kind: "o", handle: org.public ? org.handle : "", name: org.name } : { kind: "u", handle: ow?.handle || "", name: ow?.name || ev.organizer_name || "" }, unclaimed: !!ev.unclaimed, source: ev.source || "", retired: !!ev.retired,
         sources: (sources.get(ev.id) || []).map(({ kind, url }) => ({ kind, url })),
+        entity: ev.entity_state === "confirmed" ? ev.entity || "" : "", entity_link: withPending ? { id: ev.entity || "", state: ev.entity_state || "" } : undefined,   // Event-Entitaet (evententity.js): oeffentlich nur bestaetigt; der Veranstalter sieht auch Vorschlag und Zustand
         sessions: (sess.get(ev.id) || []).map((r) => sessView(r, withPending)) });
     }
   }

@@ -4,6 +4,7 @@ from site_i18n import T
 import site_updates as SU
 import site_quotes as SQ   # Quotes an Personen-Entitaeten
 import site_media as MED
+import site_event_link as EVL   # Event <-> Event-Entitaet: Termine, Sessions und Speaker auf der Seite der Entitaet
 import site_sponsorships as SPM
 import site_ads as ADS   # T37 Sponsor: Kennzeichnung gesponserter Entitaeten (data/sponsorships.json)
 import json
@@ -465,6 +466,8 @@ def ent_ld(BASE, e, lang, glossary_set=None, person_aka=None):
             n["@type"] = "EventSeries"
         if rel.get("organized_by"):
             n["organizer"] = [ref(x) for x in rel["organized_by"]]
+        if n["@type"] == "EventSeries" and EVL.for_entity(i):   # bestaetigte, oeffentliche Termine als subEvent (Event.superEvent auf den Event-Seiten zeigt zurueck)
+            n["subEvent"] = EVL.ld_nodes(BASE, i)
     elif t == "media":
         if rel.get("created_by"):
             n["creator"] = [ref(x) for x in rel["created_by"]]; n["author"] = [ref(x) for x in rel["created_by"]]
@@ -738,8 +741,11 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                 facts.append((T(lang, "Date", "Datum"), esc(e["start"] + (" – " + e["end"] if e.get("end") else ""))))
             ft = '<table class="en-facts"><tbody>' + "".join(f'<tr><th scope="row">{esc(a)}</th><td>{b}</td></tr>' for a, b in facts) + "</tbody></table>"
             evl = ""
-            if e["id"] in EVENTS:
-                ev_ = EVENTS[e["id"]]; evl = f'<p><a class="btn" href="{BASE}{pfx(lang)}/community/events/{ev_["handle"]}/">{T(lang, "Go to the event", "Zum Event")}: {esc(ev_["title"])}</a></p>'
+            _lk = EVL.for_entity(e["id"])   # bestaetigt zugeordnete Events (Termine, Sessions, Speaker); sonst bleibt es beim bisherigen Block ueber die Themen des Events
+            if _lk:
+                evl += EVL.html(BASE, lang, e["id"], TODAY)
+            if e["id"] in EVENTS and EVENTS[e["id"]]["handle"] not in {_x["handle"] for _x in _lk}:
+                ev_ = EVENTS[e["id"]]; evl += f'<p><a class="btn" href="{BASE}{pfx(lang)}/community/events/{ev_["handle"]}/">{T(lang, "Go to the event", "Zum Event")}: {esc(ev_["title"])}</a></p>'
                 _ses = ev_.get("sessions", []); _spk = {}
                 for _se in _ses:
                     for _x in _se.get("speakers", []):
