@@ -5,6 +5,7 @@ import { runCommunityDays } from "./communitydays.js";
 import { backfillKeys, decideDupe, listDupes, listMerges, unmerge } from "./eventmerge.js";
 import { ensureDirectoryCols } from "./directory.js";
 import { rateLimit } from "./util.js";
+import { gate, logEdit } from "./perm.js";
 
 const now = () => Math.floor(Date.now() / 1000);
 export const IMPORT_ROUTE = /^\/api\/(events\/import\/|event\/[a-z0-9-]{3,40}\/(sessionize|claim)|admin\/events\/(import|dupes|unmerge|claims?))/;
@@ -12,7 +13,11 @@ export const IMPORT_ROUTE = /^\/api\/(events\/import\/|event\/[a-z0-9-]{3,40}\/(
 // Deckel je Lauf. Ein Lauf bleibt damit weit unter den Grenzen eines Worker-Aufrufs (1.000 Subrequests): wenige Abrufe, gebuendelte D1-Aufrufe.
 // Was nicht in einen Lauf passt, folgt in den naechsten (Fortschritt: meta communitydays_state, session_source.hash, events.sessionize_state='partial').
 export const CAP = { requests: 12, cdEvents: 12, szEvents: 3, szSessions: SYNC_CAP, rekey: 150 };
-const DUE = 20 * 3600;   // ein verknuepfter Sessionize-Endpunkt wird etwa einmal am Tag abgeglichen
+const DUE = 20 * 3600;
+// Tor fuer die Admin-Routen /api/admin/events/* und das MCP-Tool manage_event_duplicates: wie alle /api/admin/*-Routen ueber perm.js can() (gate).
+// Beanspruchungen = claim.decide, alles andere (Import, Dubletten, Zuruecknehmen) = dupes.merge; confers haelt beides Admin-Sache (Editoren und Moderatoren: 403).
+export const adminEventAction = (path) => (/^\/api\/admin\/events\/claims?$/.test(path) ? "claim.decide" : "dupes.merge");
+export const adminEventGate = (db, user, path) => gate(db, user, adminEventAction(path), { confers: true });   // ein verknuepfter Sessionize-Endpunkt wird etwa einmal am Tag abgeglichen
 // Ein Stueck Event-Import: Aufraeumen, Schluessel-Rueckfuellung, Community Days, Sessionize-Abgleich.
 // Laeuft in einem eigenen Cron-Aufruf (siehe index.js), nicht im Aufruf der Digests.
 export async function runEventImport(env, opts = {}) {
@@ -73,7 +78,7 @@ export async function handleEventImport(env, request, url, path, user, J) {
   }
   // ---- Admin
   if (path.startsWith("/api/admin/events/")) {
-    if (!user?.admin) return J({ error: "forbidden" }, 403);
+    const g = await adminEventGate(db, user, path); if (!g.ok) return J({ error: "forbidden" }, 403);
     if (path === "/api/admin/events/import") {
       if (method === "GET") { const v = async (k) => JSON.parse((await db.prepare("SELECT v FROM meta WHERE k=?").bind(k).first())?.v || "null"); return J({ last: await v("communitydays_last"), state: await v("communitydays_state") }); }
       if (method !== "POST") return J({ error: "method_not_allowed" }, 405);
@@ -81,8 +86,17 @@ export async function handleEventImport(env, request, url, path, user, J) {
       return J(await runCommunityDays(env, { ...opts, dry, force: !dry, cap: CAP.cdEvents, maxRequests: CAP.requests }));   // echter Lauf: neuen Durchgang beginnen, erstes Stueck sofort, der Rest folgt im Cron
     }
     if (path === "/api/admin/events/dupes" && method === "GET") return J({ items: await listDupes(db), recent: await listMerges(db) }, 200, { "cache-control": "no-store" });   // recent: letzte (auch automatische) Zusammenfuehrungen mit Protokoll-ID zum Zuruecknehmen
-    if (path === "/api/admin/events/dupes" && method === "POST") { const b = await body(), r = await decideDupe(db, +b.id, String(b.action), user.id); return J(r, r.error ? 400 : 200); }
-    if (path === "/api/admin/events/unmerge" && method === "POST") { const r = await unmerge(db, +(await body()).log, user.id); return J(r, r.error ? 404 : 200); }
+    // Entscheidungen stehen im Redaktionsprotokoll (edit_log), zusaetzlich zu merge_log/dedupe_queue
+    if (path === "/api/admin/events/dupes" && method === "POST") {
+      const b = await body(), r = await decideDupe(db, +b.id, String(b.action), user.id);
+      if (!r.error) await logEdit(db, g.actor, "dupes.merge", "dedupe", +b.id, { reason: r.status === "merged" ? "Dublette zusammengeführt" : "Dublette getrennt gelassen", before: { status: "open" }, after: { status: r.status, ...(r.log ? { log: r.log } : {}) } });
+      return J(r, r.error ? 400 : 200);
+    }
+    if (path === "/api/admin/events/unmerge" && method === "POST") {
+      const log = +(await body()).log, r = await unmerge(db, log, user.id);
+      if (!r.error) await logEdit(db, g.actor, "dupes.merge", "merge_log", log, { reason: "Zusammenführung zurückgenommen", before: { undone: 0 }, after: { undone: 1, kind: r.kind } });
+      return J(r, r.error ? 404 : 200);
+    }
     if (path === "/api/admin/events/claims" && method === "GET") {
       const rows = (await db.prepare("SELECT c.event_id,c.user_id,e.handle,e.title,u.name FROM event_claims c JOIN events e ON e.id=c.event_id AND e.unclaimed=1 AND e.merged_into=0 JOIN users u ON u.id=c.user_id AND u.banned=0 AND u.merged_into IS NULL WHERE c.status='pending' ORDER BY c.created LIMIT 100").all()).results || [];
       return J({ items: rows });
@@ -90,12 +104,14 @@ export async function handleEventImport(env, request, url, path, user, J) {
     if (path === "/api/admin/events/claim" && method === "POST") {
       const b = await body(), c = await db.prepare("SELECT * FROM event_claims WHERE event_id=? AND user_id=? AND status='pending'").bind(+b.event_id, +b.user_id).first(); if (!c) return J({ error: "not_found" }, 404);
       const reject = () => db.prepare("UPDATE event_claims SET status='rejected' WHERE event_id=? AND user_id=?").bind(c.event_id, c.user_id).run();
-      if (b.ok !== true) { await reject(); return J({ ok: true }); }
+      const logClaim = (status, reason) => logEdit(db, g.actor, "claim.decide", "event_claim", `${c.event_id}:${c.user_id}`, { reason, before: { status: "pending" }, after: { status } });
+      if (b.ok !== true) { await reject(); await logClaim("rejected", "Beanspruchung abgelehnt"); return J({ ok: true }); }
       // Freigabe nur an ein aktives Konto (nicht gesperrt, nicht in ein anderes Konto zusammengefuehrt) und nur solange das Event noch herrenlos ist
       const u = await db.prepare("SELECT id FROM users WHERE id=? AND banned=0 AND merged_into IS NULL").bind(c.user_id).first();
       const ev = await db.prepare("SELECT id FROM events WHERE id=? AND unclaimed=1 AND merged_into=0").bind(c.event_id).first();
-      if (!u || !ev) { await reject(); return J({ error: u ? "not_claimable" : "user_gone" }, 409); }
+      if (!u || !ev) { await reject(); await logClaim("rejected", u ? "Beanspruchung abgelehnt (Event nicht mehr herrenlos)" : "Beanspruchung abgelehnt (Konto nicht mehr aktiv)"); return J({ error: u ? "not_claimable" : "user_gone" }, 409); }
       await db.batch([db.prepare("UPDATE event_claims SET status='approved' WHERE event_id=? AND user_id=?").bind(c.event_id, c.user_id), db.prepare("UPDATE event_claims SET status='rejected' WHERE event_id=? AND user_id<>? AND status='pending'").bind(c.event_id, c.user_id), db.prepare("UPDATE events SET owner_id=?,unclaimed=0 WHERE id=? AND unclaimed=1").bind(c.user_id, c.event_id)]);
+      await logClaim("approved", "Beanspruchung freigegeben");
       return J({ ok: true });
     }
   }

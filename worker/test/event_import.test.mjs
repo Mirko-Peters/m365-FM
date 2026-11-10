@@ -9,7 +9,7 @@ import { robotsAllowed, UA, politeGet, CACHE_MAX } from "../src/botfetch.js";
 import { normEventName, normSessionTitle, normLink, normUrl, upsertEvent, upsertSession, listDupes, listMerges, decideDupe, unmerge, mergeEvents, slugHandle, backfillKeys, cleanCand, normEnd, EVENT_TABLES } from "../src/eventmerge.js";
 import { mergeStatements } from "../src/identities.js";
 import { queueSessionReminders } from "../src/topic_notifications.js";
-import { TOOLS, handleMcp } from "../src/mcp.js";
+import { TOOLS, handleMcp, callTool } from "../src/mcp.js";
 import { createHash } from "node:crypto";
 
 const fx = (n) => readFileSync(new URL("./fixtures/" + n, import.meta.url), "utf8");
@@ -997,4 +997,37 @@ test("317-18b Verlegt der massgebliche Listen-Datensatz, kommt ein weiterer mit 
   // gleicher Tag wieder: kein weiterer Eintrag
   await cdRun(s, [A, { ...B, startDate: "2026-06-30T09:00", description: "Anderer Text." }], "2026-01-03");
   assert.equal(s.raw.prepare("SELECT COUNT(*) n FROM dedupe_queue").get().n, 1);
+});
+
+test("F13 (#319) Admin-Routen der Events und manage_event_duplicates laufen ueber perm.js gate(): nur Admin; Beanspruchungen und Dubletten-Entscheidungen stehen im edit_log", async () => {
+  const { raw, env } = await setup(), call = via(handleEventImport, env);
+  const admin = { ...user(raw, 1, "Admin", "admin-p"), admin: true }, editor = { ...user(raw, 2, "Editorin", "editor-p"), role: "editor" }, mod = { ...user(raw, 3, "Moderator", "mod-p"), role: "moderator" };
+  user(raw, 4, "Anna", "anna-p"); user(raw, 5, "Ben", "ben-p");
+  raw.prepare("UPDATE users SET role='editor' WHERE id=2").run(); raw.prepare("UPDATE users SET role='moderator' WHERE id=3").run();
+  for (const [h, d] of [["herrenlos", "2026-09-01"], ["herrenlos-2", "2026-09-02"]]) raw.prepare("INSERT INTO events(handle,owner_id,title,start,mode,created,updated,unclaimed) VALUES(?,0,?,?,'online',1,1,1)").run(h, h, d);
+  assert.equal((await call({ id: 4 }, "/api/event/herrenlos/claim", "POST", {}))[1].status, "pending");
+  assert.equal((await call({ id: 5 }, "/api/event/herrenlos-2/claim", "POST", {}))[1].status, "pending");
+  // Editoren und Moderatoren: weder Routen noch MCP (confers: Admin-Sache)
+  for (const u of [editor, mod, { id: 4 }]) {
+    for (const [p, m, b] of [["/api/admin/events/claims", "GET"], ["/api/admin/events/claim", "POST", { event_id: 1, user_id: 4, ok: true }], ["/api/admin/events/dupes", "GET"], ["/api/admin/events/dupes", "POST", { id: 1, action: "merge" }], ["/api/admin/events/unmerge", "POST", { log: 1 }], ["/api/admin/events/import", "GET"]])
+      assert.deepEqual(await call(u, p, m, b), [403, { error: "forbidden" }], `${u.id} ${m} ${p}`);
+    for (const action of ["list", "list_claims", "decide_claim"]) assert.deepEqual(await callTool(env, u, "manage_event_duplicates", { action, event_id: 1, user_id: 4, ok: true }), { error: "forbidden" });
+  }
+  assert.equal((await call(null, "/api/admin/events/claims", "GET"))[0], 403);
+  assert.equal(raw.prepare("SELECT owner_id FROM events WHERE id=1").get().owner_id, 0);
+  // Admin: Freigabe (Route) und Ablehnung (MCP) mit Protokoll
+  assert.equal((await call(admin, "/api/admin/events/claim", "POST", { event_id: 1, user_id: 4, ok: true }))[0], 200);
+  assert.deepEqual(await callTool(env, admin, "manage_event_duplicates", { action: "decide_claim", event_id: 2, user_id: 5, ok: false }), { ok: true });
+  const log = () => raw.prepare("SELECT user_id,role,action,kind,item_id,after FROM edit_log ORDER BY id").all().map((r) => ({ ...r, after: JSON.parse(r.after) }));
+  assert.deepEqual(log(), [
+    { user_id: 1, role: "admin", action: "claim.decide", kind: "event_claim", item_id: "1:4", after: { status: "approved" } },
+    { user_id: 1, role: "admin", action: "claim.decide", kind: "event_claim", item_id: "2:5", after: { status: "rejected" } },
+  ]);
+  // Dubletten: Zusammenfuehren und Zuruecknehmen ebenfalls im Protokoll
+  raw.exec("DELETE FROM edit_log");
+  const q = raw.prepare("INSERT INTO dedupe_queue(kind,a_id,b_id,reason,created) VALUES('event',1,2,'test',1)").run();
+  const m = await call(admin, "/api/admin/events/dupes", "POST", { id: Number(q.lastInsertRowid), action: "merge" }); assert.equal(m[0], 200);
+  assert.equal((await call(admin, "/api/admin/events/unmerge", "POST", { log: m[1].log }))[0], 200);
+  assert.equal((await call(admin, "/api/admin/events/unmerge", "POST", { log: m[1].log }))[0], 404, "zweimal geht nicht und wird nicht protokolliert");
+  assert.deepEqual(log().map((r) => [r.action, r.kind, r.item_id, r.after.status || r.after.undone]), [["dupes.merge", "dedupe", String(q.lastInsertRowid), "merged"], ["dupes.merge", "merge_log", String(m[1].log), 1]]);
 });

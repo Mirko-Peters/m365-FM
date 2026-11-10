@@ -5,7 +5,7 @@ import { levelName } from "./levels.js";
 import { baseIds, entityMap, handleEntity } from "./entities.js";
 import { autoVerifyCert, cleanI18n, saveI18n, readI18n } from "./profiles.js";
 import { canManage, EVENT_ROLES, promoteWaitlist, partnerAction, handleEvents } from "./events.js";
-import { handleEventImport } from "./eventimport.js";
+import { handleEventImport, adminEventGate } from "./eventimport.js";
 import { markEdited } from "./eventmerge.js";
 import { proposals as liProposals, act as liAct } from "./linkedin_events.js";
 import { askQuestion, answerQuestion } from "./qa.js";
@@ -274,8 +274,8 @@ export async function callTool(env, user, name, a) {
   }
   if (name === "get_entity") { const e = (await allEntities(env)).get(String(a.id || "")); return e ? { ...shortEnt(e), long: { en: e.long?.en || "", de: e.long?.de || "" }, aliases: e.aliases || [], web: e.web || "", docs: e.docs || "", wikipedia: e.wikipedia || "", relations: e.rel || [] } : { error: "not_found", hint: "Use search_entities to find the id." }; }
   if (name === "manage_event_duplicates") {
-    if (!user.admin) return { error: "forbidden" };
     const J = (d, st = 200) => new Response(JSON.stringify(d), { status: st }), act = String(a.action), P = "/api/admin/events/";
+    if (!(await adminEventGate(db, user, P + (act === "list_claims" || act === "decide_claim" ? "claim" : "dupes"))).ok) return { error: "forbidden" };   // perm.js can(), Admin-Sache (wie die Routen)
     const spec = { list: ["dupes", "GET"], combine: ["dupes", "POST", { id: a.id, action: "merge" }], separate: ["dupes", "POST", { id: a.id, action: "separate" }], undo_combine: ["unmerge", "POST", { log: a.log }], import_communitydays: ["import", "POST", { dry_run: a.dry_run !== false }], list_claims: ["claims", "GET"], decide_claim: ["claim", "POST", { event_id: a.event_id, user_id: a.user_id, ok: a.ok === true }] }[act];
     if (!spec) return { error: "bad_action" };
     const path = P + spec[0], req = new Request("https://x" + path, { method: spec[1], headers: { "content-type": "application/json" }, body: spec[2] ? JSON.stringify(spec[2]) : undefined });
