@@ -283,12 +283,18 @@ export async function ingestItems(env, source, items, { limit = 5000, first = fa
 //  - Datum nie in der Zukunft und nicht aelter als das Feed-Fenster (FEED_DAYS; Aelteres bekaeme nie eine Seite)
 //  - ein Link, den schon jemand im Feed hat, bleibt dort (auch dasselbe YouTube-Video unter anderer Adresse). Wer zuerst da ist, behaelt den
 //    Eintrag - wie bei gezogenen Inhalten; Streit um die Urheberschaft klaert die Moderation. Nur der eigene Profil-Kanal uebernimmt einen
-//    eigenen Kurzpost (feeds.js refreshFeeds).
+//    eigenen Kurzpost (feeds.js refreshFeeds). Ausnahme: ein fremder Kurzpost, den sein Mitglied zurueckgezogen hat, gibt den Link frei.
 //  - je Mitglied und Seite ein Eintrag: dieselbe Seite unter leicht anderer Adresse (canonUrl: / am Ende, Tracking-Parameter, www, YouTube-Formen)
 //    ist derselbe Eintrag. Hat die Moderation ihn ausgeblendet, gibt es dafuer keinen neuen - auch nicht mit angehaengten Parametern.
 //  - hidden (feedpolicy.js): Moderation und Zurueckziehen sind getrennte Schalter. Hier wird nur das eigene Zurueckziehen aufgehoben.
 //  - Links auf die eigene Website kommen ueber Blog, Podcast und Video in den Feed, nicht als Kurzpost
 // gate merkt sich Profil, Vertrauen und die eigenen Feed-Eintraege ueber mehrere Aufrufe (ein Lauf mit vielen Eintraegen fragt nur einmal).
+// Blog-Kanal des Profils, in dem Kurzposts stehen (wird beim ersten Kurzpost angelegt)
+async function blogChannel(env, db, uid, handle) {
+  const curl = `${env.SITE}/community/u/${handle}/blog/`;
+  await db.prepare("INSERT OR IGNORE INTO channels(owner_type,owner_id,kind,url,feed) VALUES('u',?,'blog',?,'')").bind(uid, curl).run();
+  return db.prepare("SELECT id FROM channels WHERE owner_type='u' AND owner_id=? AND url=?").bind(uid, curl).first();
+}
 export const trustedMember = async (env, uid) => trustedUser(env.DB, await memberOf(env, uid));
 export async function publishAsPost(env, db, uid, row, gate = {}) {
   if (!row?.url) return { error: "no_url" };
@@ -298,8 +304,11 @@ export async function publishAsPost(env, db, uid, row, gate = {}) {
   }
   if (gate.error) return { error: gate.error };
   const links = sameLinks(row.url), canon = canonUrl(row.url);
-  const found = (await db.prepare(`SELECT id,owner_type,owner_id FROM feed_items WHERE url IN (${links.map(() => "?").join(",")})`).bind(...links).all()).results || [];
-  if (found.some((x) => x.owner_type !== "u" || x.owner_id !== uid)) return { error: "url_taken" };
+  const found = (await db.prepare(`SELECT id,owner_type,owner_id,origin,hidden FROM feed_items WHERE url IN (${links.map(() => "?").join(",")})`).bind(...links).all()).results || [];
+  // Ein fremder Kurzpost, den sein Mitglied zurueckgezogen hat (nur HIDDEN_OWN, keine Sperre der Moderation), belegt den Link nicht mehr: er weicht
+  // wie im Kanal-Abruf (feeds.js refreshFeeds). Alles andere Fremde haelt ihn (wer zuerst da ist).
+  const yielded = (x) => x.origin === "kurzpost" && (x.hidden & (HIDDEN_MOD | HIDDEN_OWN)) === HIDDEN_OWN, foreign = found.filter((x) => x.owner_type !== "u" || x.owner_id !== uid);
+  if (foreign.some((x) => !yielded(x))) return { error: "url_taken" };
   if (!gate.own) gate.own = ((await db.prepare("SELECT id,hidden,origin,url FROM feed_items WHERE owner_type='u' AND owner_id=?").bind(uid).all()).results || []).map((x) => ({ ...x, canon: canonUrl(x.url) }));
   const same = gate.own.filter((x) => x.url === row.url || links.includes(x.url) || (canon && x.canon === canon));
   // Sperre der Moderation: auch fuer dieselbe Seite mit angehaengten Parametern (/seite -> /seite?x=1). Das gilt nur, wenn die gesperrte Adresse
@@ -309,17 +318,18 @@ export async function publishAsPost(env, db, uid, row, gate = {}) {
   if (same.some((x) => x.origin !== "kurzpost")) return { error: "already_in_feed" };   // kommt schon ueber einen eigenen Profil-Kanal; der gezogene Eintrag bleibt unberuehrt
   const ex = same.find((x) => x.url === row.url) || same[0];
   let id = ex?.id;
-  if (ex) {
-    await db.prepare("UPDATE feed_items SET hidden=hidden&? WHERE id=? AND owner_type='u' AND owner_id=? AND origin='kurzpost'").bind(~HIDDEN_OWN, ex.id, uid).run();
+  if (ex) {   // erneut veroeffentlicht: zurueck in den aktuellen Blog-Kanal (wurde der alte im Profil entfernt oder das Handle geaendert, fehlte er sonst im Export)
+    const ch = await blogChannel(env, db, uid, gate.handle);
+    await db.prepare("UPDATE feed_items SET hidden=hidden&?, channel_id=? WHERE id=? AND owner_type='u' AND owner_id=? AND origin='kurzpost'").bind(~HIDDEN_OWN, ch.id, ex.id, uid).run();
     ex.hidden &= ~HIDDEN_OWN;
   } else {
     if (String(row.url).startsWith(`${env.SITE}/`)) return { error: "not_publishable" };
     const t = now(), published = Math.min(+row.published || t, t);
     if (published < t - FEED_DAYS * 86400) return { error: "too_old" };
     if (!(await rateLimit(db, `kurzpost:${uid}`, KURZPOST_DAY, 86400))) return { error: "post_limit" };
-    const curl = `${env.SITE}/community/u/${gate.handle}/blog/`;
-    await db.prepare("INSERT OR IGNORE INTO channels(owner_type,owner_id,kind,url,feed) VALUES('u',?,'blog',?,'')").bind(uid, curl).run();
-    const ch = await db.prepare("SELECT id FROM channels WHERE owner_type='u' AND owner_id=? AND url=?").bind(uid, curl).first();
+    for (const k of foreign) await db.batch([db.prepare("UPDATE contributions SET feed_item_id=0 WHERE feed_item_id=?").bind(k.id), db.prepare("DELETE FROM item_votes WHERE item_id=?").bind(k.id),
+      db.prepare("DELETE FROM feed_items WHERE id=? AND origin='kurzpost' AND (hidden&?)=?").bind(k.id, HIDDEN_MOD | HIDDEN_OWN, HIDDEN_OWN)]);
+    const ch = await blogChannel(env, db, uid, gate.handle);
     const r = await db.prepare("INSERT OR IGNORE INTO feed_items(channel_id,owner_type,owner_id,url,title,published,summary,topics,origin) VALUES(?,'u',?,?,?,?,?,?,'kurzpost')")
       .bind(ch.id, uid, row.url, row.title, published, summarize(row.teaser, 280), JSON.stringify(topicList(row.topics).slice(0, 10))).run();
     if (!r.meta.changes) return { error: "url_taken" };   // zeitgleich von jemand anderem angelegt

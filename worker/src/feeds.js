@@ -1,9 +1,9 @@
 // Feeds der Creator-Kanaele einsammeln: nur Titel, Link und Datum (kein Volltext), https, begrenzte Groesse
-import { cleanText, BOT_UA } from "./util.js";
+import { cleanText, BOT_UA, audit } from "./util.js";
 import { sendPush } from "./push.js";
 import { goodHost, ensureFeedCols } from "./profiles.js";
 import { queueTopicNotification } from "./topic_notifications.js";
-import { PRIVATE_FEED_KINDS, publicKindSql, canonUrl, HIDDEN_MOD } from "./feedpolicy.js";
+import { PRIVATE_FEED_KINDS, publicKindSql, canonUrl, HIDDEN_MOD, HIDDEN_OWN } from "./feedpolicy.js";
 
 const dec = (s) => s.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, "$1").replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(Math.min(+n, 0x10ffff))).replace(/&#x([0-9a-f]+);/gi, (_, n) => String.fromCodePoint(Math.min(parseInt(n, 16), 0x10ffff)))
   .replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&amp;/g, "&");
@@ -81,13 +81,18 @@ export async function refreshFeeds(env, max = 8) {
       // Eigene Kurzposts aus dem MVP-Tracker (origin='kurzpost') weichen dem eigenen Kanal: Der Eintrag wandert hierher und gilt wieder als gezogen
       // (Plattform, Vorschaubild, VideoObject) - auch wenn der Kurzpost dieselbe Seite unter leicht anderer Adresse fuehrt (canonUrl), dann bekommt
       // er die Adresse aus dem Feed. Zurueckgezogen war der Kurzpost, nicht der Kanal-Inhalt: als gezogener Eintrag ist er wieder sichtbar; eine
-      // Sperre der Moderation bleibt. Kurzposts anderer Mitglieder bleiben, wo sie sind (wer zuerst da ist, behaelt den Eintrag - wie bei
+      // Sperre der Moderation bleibt. Sichtbare Kurzposts anderer Mitglieder bleiben, wo sie sind (wer zuerst da ist, behaelt den Eintrag - wie bei
       // gezogenen Inhalten): Die Feed-Adresse eines Kanals ist frei eingetippt und belegt keine Urheberschaft, eine Playlist oder ein Blog mit
-      // mehreren Autoren listet auch fremde Links. Streit darum klaert die Moderation - und nur ihre Entscheidung gibt den Link frei: Ein fremder
-      // Kurzpost, den sie ausgeblendet hat, weicht dem Kanal (Zeile und Stimmen entfallen, der Inhalt kommt unten als neuer Eintrag des Kanals).
-      // Sonst hielte ein ausgeblendeter Kurzpost den Link fuer immer besetzt, und der echte Kanal koennte seinen Inhalt nie zeigen.
+      // mehreren Autoren listet auch fremde Links. Streit darum klaert die Moderation; der Konflikt steht dafuer einmal im Audit-Protokoll.
+      // Ein fremder Kurzpost weicht dem Kanal (Zeile und Stimmen entfallen, der Inhalt kommt unten als neuer Eintrag des Kanals), wenn
+      //  - das Mitglied ihn zurueckgezogen hat (HIDDEN_OWN): sonst hielte ein unsichtbarer Eintrag den Link fuer immer besetzt, oder
+      //  - die Moderation ihn ausgeblendet hat - aber nicht zugunsten einer Firmenseite, in der der Kurzpost-Eigentuemer selbst Mitglied ist:
+      //    sonst holte das Mitglied den gesperrten Link ueber die eigene Firma als neuen, sichtbaren Eintrag zurueck. (Ein zweites eigenes Konto
+      //    ist nicht erkennbar; die Moderation blendet den neuen Eintrag dann aus, das haelt.)
       const own = (k) => k.owner_type === c.owner_type && k.owner_id === c.owner_id;
-      const gone = known.filter((k) => k.origin === "kurzpost" && !own(k) && (k.hidden & HIDDEN_MOD)), seen = new Set(known.filter((k) => !gone.includes(k)).map((k) => k.url));
+      const foreign = known.filter((k) => k.origin === "kurzpost" && !own(k));
+      const members = c.owner_type === "o" && foreign.some((k) => k.hidden & HIDDEN_MOD) ? new Set(((await db.prepare("SELECT user_id FROM org_members WHERE org_id=? AND status='active'").bind(c.owner_id).all()).results || []).map((r) => r.user_id)) : new Set();
+      const gone = foreign.filter((k) => (k.hidden & HIDDEN_MOD) ? !(k.owner_type === "u" && members.has(k.owner_id)) : (k.hidden & HIDDEN_OWN)), seen = new Set(known.filter((k) => !gone.includes(k)).map((k) => k.url));
       const adopt = known.filter((k) => k.origin === "kurzpost" && own(k)).map((k) => ({ id: k.id, hidden: k.hidden, url: k.url }));
       if (c.owner_type === "u") {
         const free = new Map(items.filter((i) => !seen.has(i.url)).map((i) => [canonUrl(i.url), i.url]));
@@ -101,11 +106,16 @@ export async function refreshFeeds(env, max = 8) {
       // keinen Hinweis). Der Creator bekommt dafuer kein "Neuer Inhalt gezogen": er kennt den Inhalt schon.
       const adopted = new Set(had ? adopt.filter((k) => !(k.hidden & HIDDEN_MOD)).map((k) => k.url) : []), news = [...fresh, ...items.filter((i) => adopted.has(i.url))];
       await db.batch([...gone.flatMap((k) => [db.prepare("UPDATE contributions SET feed_item_id=0 WHERE feed_item_id=?").bind(k.id), db.prepare("DELETE FROM item_votes WHERE item_id=?").bind(k.id),
-          db.prepare("DELETE FROM feed_items WHERE id=? AND origin='kurzpost' AND (hidden&?)<>0").bind(k.id, HIDDEN_MOD)]),
+          db.prepare("DELETE FROM feed_items WHERE id=? AND origin='kurzpost' AND (hidden&?)=?").bind(k.id, k.hidden & HIDDEN_MOD ? HIDDEN_MOD : HIDDEN_OWN | HIDDEN_MOD, k.hidden & HIDDEN_MOD ? HIDDEN_MOD : HIDDEN_OWN)]),
         ...adopt.map((k) => db.prepare("UPDATE feed_items SET url=?, channel_id=?, origin='', hidden=hidden&? WHERE id=? AND origin='kurzpost'").bind(k.url, c.id, HIDDEN_MOD, k.id)),
         ...items.map((i) => db.prepare("INSERT INTO feed_items(channel_id,owner_type,owner_id,url,title,published,summary,thumb) VALUES(?,?,?,?,?,?,?,?) ON CONFLICT(url) DO UPDATE SET summary=CASE WHEN feed_items.summary='' THEN excluded.summary ELSE feed_items.summary END, thumb=CASE WHEN feed_items.thumb='' THEN excluded.thumb ELSE feed_items.thumb END").bind(c.id, c.owner_type, c.owner_id, i.url, i.title, i.t, i.desc || "", i.thumb || "")),
         db.prepare("UPDATE channels SET fetched=?, fails=0 WHERE id=?").bind(now, c.id)]);
       n += items.length;
+      // sichtbarer fremder Kurzpost haelt einen Link dieses Kanals: einmal je Eintrag und Kanal fuer die Moderation festhalten (sie entscheidet, wem er gehoert)
+      for (const k of foreign.filter((k) => !k.hidden)) {
+        const tgt = `feed_item:${k.id}`, det = `channel:${c.id}`;
+        if (!(await db.prepare("SELECT 1 x FROM audit WHERE action='feed-kurzpost-conflict' AND target=? AND detail=? LIMIT 1").bind(tgt, det).first().catch(() => null))) await audit(db, 0, "feed-kurzpost-conflict", tgt, det);
+      }
       if (news.length) {
         const owner = c.owner_type === "u"
           ? await db.prepare("SELECT handle FROM profiles WHERE user_id=? AND public=1 AND handle IS NOT NULL").bind(c.owner_id).first()
