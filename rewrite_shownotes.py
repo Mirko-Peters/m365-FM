@@ -248,16 +248,26 @@ def _sentence_start(text, pos):
     return not before.strip() or before.endswith("\n") or before.rstrip()[-1] in ".!?:"
 
 
+VERB_PARTICLE = re.compile(r"\s+(?:up|together)\b")   # "teams up", "teams together": das letzte Wort ist hier ein Verb, kein Teil des Namens
+
+
+def _verb_use(text, m, nm):
+    """Gewoehnliches Englisch statt Produktname: der Text hat die vorderen Woerter des Namens woertlich, das letzte klein geschrieben, und dahinter folgt
+    eine Verbpartikel ("Microsoft teams up with partners" ist nicht "Microsoft Teams"). "Use Microsoft teams for meetings" bleibt ein Fehler."""
+    head, _, last = nm.rpartition(" ")
+    return bool(head) and m.group(0) == head + " " + last.lower() and last != last.lower() and bool(VERB_PARTICLE.match(text, m.end()))
+
+
 def keep_errors(text, ep):
     """Produktnamen (_keep_names): kommt der Name des Titels im Text vor, muss er mindestens einmal woertlich stehen; abweichende Schreibweisen
     (Leerzeichen/Bindestrich, falsche Gross-/Kleinschreibung bei Namen mit Leerzeichen oder Binnenversal) sind Fehler. Kein Fehler: nur der erste Buchstabe
-    weicht ab und der Name steht am Satzanfang (eDiscovery -> "EDiscovery helps ...")."""
+    weicht ab und der Name steht am Satzanfang (eDiscovery -> "EDiscovery helps ..."), oder das letzte Wort ist ein Verb vor einer Partikel (_verb_use)."""
     err = []; title = ep.get("title") or ""
     for nm in _keep_names(ep):
         multi = " " in nm or bool(re.search(r"[a-z][A-Z]", nm))
         if multi:
             for m in re.finditer(r"(?<![\w-])" + re.escape(nm) + r"(?![\w-])", text, re.I):
-                if m.group(0) != nm and not (m.group(0) == nm[:1].upper() + nm[1:] and _sentence_start(text, m.start())):
+                if m.group(0) != nm and not (m.group(0) == nm[:1].upper() + nm[1:] and _sentence_start(text, m.start())) and not _verb_use(text, m, nm):
                     err.append(f"Name veraendert: {m.group(0)!r} statt {nm!r}"); break
             if " " in nm:
                 for alt in (nm.replace(" ", ""), nm.replace(" ", "-")):

@@ -376,9 +376,12 @@ EP9 = {**EP, "entities": EP["entities"] + [{"id": "conditional-access", "name": 
                                             {"id": "ediscovery-premium", "name": "eDiscovery Premium", "type": "product"}]}
 ACCEPTED = ["Migrate ASP.NET Core apps and ML.NET models without a rewrite.", "VB.NET code still runs many line-of-business tools.", "The M365.FM team explains why gateways matter.",
             "Node.js and .NET services can share one gateway.", "Good data governance keeps refreshes predictable.", "Conditional access policies protect the gateway admin portal.",
-            "Teams adopting generative AI need clear data rules.", "EDiscovery Premium helps legal teams with holds."]
+            "Teams adopting generative AI need clear data rules.", "EDiscovery Premium helps legal teams with holds.", "Microsoft teams up with partners on gateway support.",
+            "Microsoft Teams and SharePoint teams together cover most needs.", "Microsoft teams together with OEMs on new devices."]
 REJECTED = [("See asp.net for details.", "URL"), ("Visit m365.fm today.", "URL"), ("Go to evil.com now.", "URL"), ("Read https://x.example/a first.", "URL"),
-            ("PowerBI admins often skip monitoring.", "veraendert"), ("Most power bi admins skip monitoring.", "veraendert"), ("Use eDiscovery premium for holds.", "veraendert")]
+            ("PowerBI admins often skip monitoring.", "veraendert"), ("Most power bi admins skip monitoring.", "veraendert"), ("Use eDiscovery premium for holds.", "veraendert"),
+            ("Use Microsoft teams for meetings.", "veraendert"), ("Chat in Microsoft teams with colleagues.", "veraendert"), ("Use microsoft Teams up front.", "veraendert"),
+            ("Microsoft teams.", "veraendert"), ("Most Power apps break.", "veraendert")]
 
 
 class ValidatorNames(unittest.TestCase):
