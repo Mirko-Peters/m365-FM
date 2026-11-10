@@ -1,6 +1,7 @@
 """Events und Sessions: oeffentliche Event-Seiten mit Schema.org (Event, subEvent, performer, organizer, about -> Entitaeten)."""
 from site_i18n import T
 import json
+import site_roles as ROLE
 from site_i18n import COMM_LANGS, pfx, pfx2, overlay
 from datetime import datetime
 from site_learn import ENTS, esc, _fetch_json, LCSS
@@ -8,11 +9,19 @@ from site_entities import eurl, eid_of
 
 S = {"en": dict(events="Events", intro="Conferences, webinars and meetups of the Microsoft community – with their sessions and speakers.", upcoming="Upcoming", past="Past", none="No events yet.",
                 organizer="Organizer", when="When", where="Where", online="Online", onsite="On site", hybrid="Hybrid", free="Free", paid="Paid", topics="Topics", sessions="Sessions", speakers="Speakers", website="Website", tickets="Tickets / register",
-                lang="Language", level="Level", room="Room", track="Track", about="About", create="Add your event", my="Sessions at events", recording="Recording", more="Events", sponsors="Looking for sponsors", nosess="No sessions published yet.", tbc="speaker(s) to be confirmed", propose="Propose a session"),
+                lang="Language", level="Level", room="Room", track="Track", about="About", create="Add your event", my="Sessions at events", recording="Recording", more="Events", sponsors="Looking for sponsors", nosess="No sessions published yet.", tbc="speaker(s) to be confirmed", propose="Propose a session",
+                imported="This entry was imported from a public event listing and has no organizer on M365.FM yet.", claim="This is my event"),
      "de": dict(events="Events", intro="Konferenzen, Webinare und Meetups der Microsoft-Community – mit Sessions und Speakern.", upcoming="Kommende", past="Vergangene", none="Noch keine Events.",
                 organizer="Veranstalter", when="Wann", where="Wo", online="Online", onsite="Vor Ort", hybrid="Hybrid", free="Kostenlos", paid="Kostenpflichtig", topics="Themen", sessions="Sessions", speakers="Speaker", website="Webseite", tickets="Tickets / Anmeldung",
-                lang="Sprache", level="Level", room="Raum", track="Track", about="Über das Event", create="Event eintragen", my="Sessions bei Events", recording="Aufzeichnung", more="Events", sponsors="Sucht Sponsoren", nosess="Noch keine Sessions veröffentlicht.", tbc="Speaker noch zu bestätigen", propose="Session vorschlagen")}
+                lang="Sprache", level="Level", room="Raum", track="Track", about="Über das Event", create="Event eintragen", my="Sessions bei Events", recording="Aufzeichnung", more="Events", sponsors="Sucht Sponsoren", nosess="Noch keine Sessions veröffentlicht.", tbc="Speaker noch zu bestätigen", propose="Session vorschlagen",
+                imported="Dieser Eintrag stammt aus einer öffentlichen Veranstaltungsliste und hat auf M365.FM noch keinen Veranstalter.", claim="Das ist mein Event")}
 MODE_URL = {"online": "OnlineEventAttendanceMode", "onsite": "OfflineEventAttendanceMode", "hybrid": "MixedEventAttendanceMode"}
+
+
+def https_url(u):
+    """Nur https-Adressen werden als Link oder in Schema.org ausgegeben (Events koennen aus fremden Quellen importiert sein): alles andere wird zu ''."""
+    u = u.strip() if isinstance(u, str) else ""
+    return u if u.lower().startswith("https://") and not any(c in u for c in ' "<>\\\n\r\t') else ""
 
 
 def fetch_events(api):
@@ -40,7 +49,9 @@ def span(ev, lang):
 def event_ld(BASE, ev, pb, ob):
     u = eurl_(BASE, "en", ev["handle"])
     n = {"@type": "Event", "@id": u + "#event", "name": ev["title"], "url": u, "startDate": ev["start"], "eventStatus": "https://schema.org/EventScheduled",
-         "eventAttendanceMode": "https://schema.org/" + MODE_URL.get(ev["mode"], "OnlineEventAttendanceMode"), "isAccessibleForFree": bool(ev.get("free"))}
+         "eventAttendanceMode": "https://schema.org/" + MODE_URL.get(ev["mode"], "OnlineEventAttendanceMode")}
+    if ev.get("free") is not None:   # None = Preis unbekannt (importiertes Event ohne Angabe): keine Aussage statt "nicht kostenlos"
+        n["isAccessibleForFree"] = bool(ev["free"])
     if ev.get("end"):
         n["endDate"] = ev["end"]
     d = ev.get("summary") or ev.get("about") or ""
@@ -50,7 +61,7 @@ def event_ld(BASE, ev, pb, ob):
         n["inLanguage"] = ev["lang"]
     loc = []
     if ev["mode"] in ("online", "hybrid"):
-        loc.append({"@type": "VirtualLocation", "url": ev.get("url") or u})
+        loc.append({"@type": "VirtualLocation", "url": https_url(ev.get("url")) or u})
     if ev["mode"] in ("onsite", "hybrid"):
         loc.append({"@type": "Place", "name": ev.get("location") or ev.get("country") or "TBA", **({"address": {"@type": "PostalAddress", "addressCountry": ev["country"]}} if ev.get("country") else {})})
     n["location"] = loc[0] if len(loc) == 1 else loc
@@ -61,8 +72,8 @@ def event_ld(BASE, ev, pb, ob):
         n["organizer"] = {"@id": f"{BASE}/community/u/{org['handle']}/#person"}
     elif org.get("name"):
         n["organizer"] = {"@type": "Organization" if org.get("kind") == "o" else "Person", "name": org["name"]}
-    if ev.get("tickets_url"):
-        n["offers"] = {"@type": "Offer", "url": ev["tickets_url"], "availability": "https://schema.org/InStock", **({"price": 0, "priceCurrency": "EUR"} if ev.get("free") else {})}
+    if https_url(ev.get("tickets_url")):
+        n["offers"] = {"@type": "Offer", "url": https_url(ev["tickets_url"]), "availability": "https://schema.org/InStock", **({"price": 0, "priceCurrency": "EUR"} if ev.get("free") else {})}
     sp = [{"@id": f"{BASE}/community/c/{x['handle']}/#org"} if x.get("handle") in ob else {"@type": "Organization", "name": x["name"]} for x in ev.get("partners", [])]
     if sp:
         n["sponsor"] = sp
@@ -89,8 +100,8 @@ def event_ld(BASE, ev, pb, ob):
         st = [{"@id": eid_of(BASE, e)} for e in s.get("topics", []) if e in ENTS]
         if st:
             sub["about"] = st
-        if s.get("recording_url"):
-            sub["recordedIn"] = {"@type": "CreativeWork", "url": s["recording_url"]}
+        if https_url(s.get("recording_url")):
+            sub["recordedIn"] = {"@type": "CreativeWork", "url": https_url(s["recording_url"])}
         subs.append(sub)
     if subs:
         n["subEvent"] = subs
@@ -161,6 +172,12 @@ REGT = {
     "en": {"going": "registered", "wait": "on the waiting list", "cap": "{n} places", "vis": "Show my profile in the public participant list (off by default)", "join": "Register (free)", "joinwl": "Join the waiting list", "in": "✓ You are registered.", "inwl": "You are on the waiting list and move up automatically.", "out": "Cancel registration", "prof": "Create a public profile first to be shown in the list.", "who": "Participants who chose to be listed", "tr": "Also register me at m365con.net: pass my name and email address on once (the address is deleted here afterwards)", "em": "Email address", "bad": "Please enter a valid email address."},
     "de": {"going": "angemeldet", "wait": "auf der Warteliste", "cap": "{n} Plätze", "vis": "Mein Profil in der öffentlichen Teilnehmerliste zeigen (standardmäßig aus)", "join": "Anmelden (kostenlos)", "joinwl": "Auf die Warteliste", "in": "✓ Du bist angemeldet.", "inwl": "Du stehst auf der Warteliste und rückst automatisch nach.", "out": "Anmeldung zurückziehen", "prof": "Lege zuerst ein öffentliches Profil an, um in der Liste zu erscheinen.", "who": "Teilnehmende, die sich zeigen wollen", "tr": "Mich auch bei m365con.net anmelden: Name und E-Mail-Adresse werden einmalig weitergegeben (die Adresse wird hier danach gelöscht)", "em": "E-Mail-Adresse", "bad": "Bitte eine gültige E-Mail-Adresse eingeben."},
 }
+# Importiertes Event uebernehmen: Anfrage senden; ohne Anmeldung weiter zur Community-Seite (dort wartet dieselbe Anfrage, assets/events-import.js ?claim=)
+CLAIMJS = r'''(function(){var b=document.getElementById("ev-claim"),m=document.getElementById("ev-claim-msg");if(!b||!m)return;var T=%T%,E=b.getAttribute("data-e");b.addEventListener("click",function(){b.disabled=true;fetch("%API%/api/event/"+E+"/claim",{method:"POST",credentials:"include",headers:{"x-requested-with":"m365","content-type":"application/json"},body:"{}"}).then(function(r){return r.json().then(function(j){return{s:r.status,j:j}})}).then(function(x){if(x.s===401){location.href="%CROOT%?claim="+E+"#c-events-import";return}m.textContent=x.s===200?T.sent:x.j.error==="need_profile"?T.prof:x.j.error==="rate_limit"?T.limit:x.s===404?T.gone:T.err;if(x.s!==200)b.disabled=false}).catch(function(){m.textContent=T.err;b.disabled=false})})})()'''
+CLAIMT = {
+    "en": {"sent": "✓ Request sent. We check it and then make you the organizer.", "prof": "Create a public profile first.", "limit": "Too many requests – please try again later.", "gone": "This event already has an organizer.", "err": "That did not work – please try again."},
+    "de": {"sent": "✓ Anfrage gesendet. Wir prüfen sie und tragen dich dann als Veranstalter ein.", "prof": "Lege zuerst ein öffentliches Profil an.", "limit": "Zu viele Anfragen – bitte später erneut.", "gone": "Dieses Event hat bereits einen Veranstalter.", "err": "Das hat nicht geklappt – bitte erneut versuchen."},
+}
 EVLIVE = r'''(function(){fetch("%API%/api/events/export").then(function(r){return r.json()}).then(function(j){var have={};[].forEach.call(document.querySelectorAll(".ev-list a[href]"),function(a){have[a.getAttribute("href")]=1});var T=new Date().toISOString().slice(0,10),ups=document.querySelector(".ev-list");(j.events||[]).forEach(function(e){var u="%BASE%"+e.handle+"/";if(have[u])return;if((e.end||e.start).slice(0,10)<T)return;var ul=document.querySelector(".ev-list");if(!ul){ul=document.createElement("ul");ul.className="ev-list";document.querySelector("h1").parentNode.appendChild(ul)}var li=document.createElement("li");li.className="ev-card";var a=document.createElement("a");a.href=u;var b=document.createElement("b");b.textContent=e.title;a.appendChild(b);li.appendChild(a);var sp=document.createElement("span");sp.className="mut";sp.textContent=" · "+e.start.slice(0,10);li.appendChild(sp);ul.insertBefore(li,ul.firstChild)})}).catch(function(){})})()'''
 
 
@@ -181,11 +198,17 @@ def build(g, events, people, orgs):
             else:
                 oh = esc(org.get("name", ""))
             facts = [(s["when"], esc(span(ev, lang))), (s["where"], esc({"online": s["online"], "onsite": s["onsite"], "hybrid": s["hybrid"]}[ev["mode"]] + (" · " + ev["location"] if ev.get("location") else "") + (" · " + ev["country"] if ev.get("country") else ""))),
-                     (s["organizer"], oh), ("", esc(s["free"] if ev.get("free") else s["paid"]))]
+                     (s["organizer"], oh), ("", "" if ev.get("free") is None else esc(s["free"] if ev["free"] else s["paid"]))]   # Preis unbekannt: keine Zeile
             if ev.get("lang"):
                 facts.append((s["lang"], esc(ev["lang"])))
             ft = '<table class="mb-facts"><tbody>' + "".join(f'<tr><th scope="row">{esc(a)}</th><td>{b_}</td></tr>' for a, b_ in facts if b_) + "</tbody></table>"
-            btn = (f'<a class="btn main" href="{esc(ev["tickets_url"])}" rel="nofollow noopener" target="_blank">{esc(s["tickets"])}</a> ' if ev.get("tickets_url") else "") + (f'<a class="btn" href="{esc(ev["url"])}" rel="nofollow noopener" target="_blank">{esc(s["website"])}</a>' if ev.get("url") else "")
+            tix, web = https_url(ev.get("tickets_url")), https_url(ev.get("url"))
+            btn = (f'<a class="btn main" href="{esc(tix)}" rel="nofollow noopener" target="_blank">{esc(s["tickets"])}</a> ' if tix else "") + (f'<a class="btn" href="{esc(web)}" rel="nofollow noopener" target="_blank">{esc(s["website"])}</a>' if web else "")
+            if ev.get("linkedin_url", "").startswith("https://www.linkedin.com/"):
+                btn += f'<a class="btn" href="{esc(ev["linkedin_url"])}" rel="noopener" target="_blank">{esc(T(lang, "Also on LinkedIn", "Auch auf LinkedIn"))}</a>'
+            # Importiertes Event ohne Veranstalter: Hinweis und Einstieg zum Uebernehmen (POST /api/event/<handle>/claim, ein Admin gibt frei)
+            claim = (f'<p class="mut">{esc(s["imported"])} <button type="button" class="btn" id="ev-claim" data-e="{esc(ev["handle"])}">{esc(s["claim"])}</button> <span id="ev-claim-msg" role="status" aria-live="polite"></span></p><script>'
+                     + CLAIMJS.replace("%API%", api).replace("%T%", json.dumps(CLAIMT[lang], ensure_ascii=False)).replace("%CROOT%", croot) + "</script>") if ev.get("unclaimed") else ""
             tp = "".join(f'<a class="ev-tag" href="{eurl(BASE, lang, e)}">{esc(ENTS[e]["name"])}</a>' for e in ev.get("topics", []) if e in ENTS)
             pl = {"sponsor": T(lang, "Sponsors", "Sponsoren"), "media": T(lang, "Media partners", "Medienpartner")}
             pt = ""
@@ -193,18 +216,21 @@ def build(g, events, people, orgs):
                 ps = [x for x in ev.get("partners", []) if x["kind"] == kd]
                 if ps:
                     pt += f'<h2>{pl[kd]}</h2><ul>' + "".join(f'<li>' + (f'<a href="{BASE}{pfx(lang)}/community/c/{x["handle"]}/">{esc(x["name"])}</a>' if x.get("handle") in ob else esc(x["name"])) + (f' <span class="mut">· {esc(x["level"])}</span>' if x.get("level") else "") + '</li>' for x in ps) + "</ul>"
+            # Anmeldung und Session-Vorschlag laufen ueber M365.FM und brauchen einen Veranstalter, der die Teilnehmerliste fuehrt und Vorschlaege freigibt.
+            # Ein importiertes Event ohne Veranstalter bekommt deshalb beides nicht (der Worker lehnt es ebenfalls ab); nach dem Uebernehmen ist beides da.
+            reg = "" if ev.get("unclaimed") else (f'<h2>{T(lang, "Registration", "Anmeldung")}</h2><div id="ev-reg" data-e="{esc(ev["handle"])}"></div><script>' + REGJS.replace("%API%", api).replace("%T%", json.dumps(REGT[lang], ensure_ascii=False)).replace("%CROOT%", croot) + '</script>'
+                                                  + f'<p><a class="btn" href="{croot}?propose={esc(ev["handle"])}#c-events">{esc(s["propose"])}</a></p>')
             ss = []
             for se in ev.get("sessions", []):
-                spk = ", ".join((f'<a href="{BASE}{pfx(lang)}/community/u/{x["h"]}/">{esc(x["n"])}</a>' if x.get("h") in pb else f'<a href="{eurl(BASE, lang, x["e"])}">{esc(x["n"])}</a>' if x.get("e") in ENTS else esc(x["n"])) for x in se.get("speakers", []))
+                spk = ", ".join((f'<a href="{BASE}{pfx(lang)}/community/u/{x["h"]}/">{esc(x["n"])}</a>{ROLE.chip_for(BASE, lang, x["h"])}' if x.get("h") in pb else f'<a href="{eurl(BASE, lang, x["e"])}">{esc(x["n"])}</a>' if x.get("e") in ENTS else esc(x["n"])) for x in se.get("speakers", []))
                 meta = " · ".join(esc(v) for v in [fdate(se["start"], lang) if se.get("start") else "", f'{s["room"]} {se["room"]}' if se.get("room") else "", f'{s["track"]} {se["track"]}' if se.get("track") else "", f'{s["level"]} {se["level"]}' if se.get("level") else "", se.get("lang", "")] if v)
                 st = "".join(f'<a class="ev-tag" href="{eurl(BASE, lang, e)}">{esc(ENTS[e]["name"])}</a>' for e in se.get("topics", []) if e in ENTS)
                 ss.append(f'<div class="ev-s"><h3>{esc(se["title"])}</h3><button type="button" class="btn" data-topic-follow data-topic-kind="session" data-topic-id="{esc(str(se["id"]))}" data-topic-label="{esc(T(lang, "Follow session", "Session folgen"))}">🔔 {T(lang, "Follow session", "Session folgen")}</button><p class="mut">{meta}{" · " if meta and spk else ""}{spk}{(" · " + str(se["speakers_open"]) + " " + s["tbc"]) if se.get("speakers_open") else ""}</p>' + (f'<p style="white-space:pre-line">{esc(se["abstract"])}</p>' if se.get("abstract") else "") + st
-                          + (f'<p><a href="{esc(se["recording_url"])}" rel="nofollow noopener" target="_blank">{esc(s["recording"])}</a></p>' if se.get("recording_url") else "") + "</div>")
-            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{croot}events/">{esc(s["events"])}</a></nav><h1>{esc(ev["title"])}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="event" data-topic-id="{esc(ev["handle"])}" data-topic-label="{esc(T(lang, "Follow event", "Event folgen"))}">🔔 {T(lang, "Follow event", "Event folgen")}</button><p style="font-size:1.1em">{esc(ev.get("summary", ""))}</p>{ft}<p>{btn}</p>'
+                          + (f'<p><a href="{esc(https_url(se["recording_url"]))}" rel="nofollow noopener" target="_blank">{esc(s["recording"])}</a></p>' if https_url(se.get("recording_url")) else "") + "</div>")
+            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{croot}events/">{esc(s["events"])}</a></nav><h1>{esc(ev["title"])}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="event" data-topic-id="{esc(ev["handle"])}" data-topic-label="{esc(T(lang, "Follow event", "Event folgen"))}">🔔 {T(lang, "Follow event", "Event folgen")}</button><p style="font-size:1.1em">{esc(ev.get("summary", ""))}</p>{ft}<p>{btn}</p>{claim}'
                       + (f'<h2>{esc(s["about"])}</h2><p style="white-space:pre-line">{esc(ev["about"])}</p>' if ev.get("about") else "") + (f'<h2>{esc(s["topics"])}</h2><p>{tp}</p>' if tp else "")
                       + f'<p><a class="btn" href="{u}event.ics" download>{T(lang, "Add to calendar (.ics)", "Zum Kalender hinzufügen (.ics)")}</a></p>' + f'<h2>{esc(s["sessions"])}</h2>' + ("".join(ss) or f'<p class="mut">{esc(s["nosess"])}</p>')
-                      + pt + f'<h2>{T(lang, "Registration", "Anmeldung")}</h2><div id="ev-reg" data-e="{esc(ev["handle"])}"></div><script>' + REGJS.replace("%API%", api).replace("%T%", json.dumps(REGT[lang], ensure_ascii=False)).replace("%CROOT%", croot) + '</script>'
-                      + f'<p><a class="btn" href="{croot}?propose={esc(ev["handle"])}#c-events">{esc(s["propose"])}</a></p><script>window.M365TopicConfig={{api:{json.dumps(api)},lang:{json.dumps(lang)}}}</script><script defer src="{BASE}/assets/topic-follow.js"></script>' + css)
+                      + pt + reg + f'<script>window.M365TopicConfig={{api:{json.dumps(api)},lang:{json.dumps(lang)}}}</script><script defer src="{BASE}/assets/topic-follow.js"></script>' + css)
             ld = [{"@context": "https://schema.org", **event_ld(BASE, ev, pb, ob)}]
             write(f"{pfx2(lang)}community/events/{ev['handle']}/index.html", page(lang, f'{ev["title"]} – {s["events"]} | M365.FM', (ev.get("summary") or ev.get("about") or "")[:155], u, b, None, ld, og_type="website", extra_head=LCSS, noindex=noidx, side=(g["side"](lang, ev["title"] + " " + (ev.get("about") or "")[:1500], ids=ev.get("topics", []), exclude=(ev["handle"],)) if g.get("side") else "")))
             write(f"{pfx2(lang)}community/events/{ev['handle']}/event.ics", ics_for(ev, BASE))   # in jeder Sprache neben der Eventseite (deren Link verweist auf <Seite>/event.ics)
@@ -225,3 +251,4 @@ def build(g, events, people, orgs):
 
 overlay("events.S", S)
 overlay("events.REGT", REGT)
+overlay("events.CLAIMT", CLAIMT)

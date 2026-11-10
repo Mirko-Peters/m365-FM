@@ -37,8 +37,22 @@ def link(base, lang, it):
     return f"{base}{'/de' if lang == 'de' else ''}/{path_of(it)}"
 
 
+MAX_TS = 4102444800   # 2100-01-01 in Unix-Sekunden; alles darueber ist kein Datum in Sekunden (z. B. Millisekunden)
+
+
 def iso(ts):
-    return datetime.fromtimestamp(ts, timezone.utc).strftime("%Y-%m-%d")
+    """Datum YYYY-MM-DD aus Unix-Sekunden. Ein einzelner unbrauchbarer Wert haelt den Seitenbau nicht an: Millisekunden (Altbestand, fremde
+    Clients) werden umgerechnet, alles andere (leer, Text, ausserhalb 1970-2100) ergibt das heutige Datum. Der Worker laesst solche Werte
+    nicht mehr herein (contributions.js dateValue, contrib_sources.js publishAsPost)."""
+    try:
+        t = int(ts)
+        if t > MAX_TS:
+            t //= 1000
+        if 0 <= t <= MAX_TS:
+            return datetime.fromtimestamp(t, timezone.utc).strftime("%Y-%m-%d")
+    except (TypeError, ValueError, OverflowError, OSError):
+        pass
+    return datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
 
 def build(g, items, api):
@@ -58,7 +72,8 @@ def build(g, items, api):
             body_html = wiki_render(own, links_l, WT.get(lang, WT["en"]))[0] if has_text else ""
             _kp, _fq, _fld = SNT.sections(it.get("keypoints"), it.get("faq"), lang) if has_text else ("", "", [])   # Kernpunkte und FAQ aus eigenen Feldern
             thumb = f'<p><a href="{esc(it["url"])}" rel="nofollow ugc noopener" target="_blank"><img src="{esc(it["thumb"])}" alt="{esc(it["title"])}" loading="lazy" style="max-width:100%;border-radius:.5em"></a></p>' if it.get("thumb") else ""
-            b = shell(lang, f'{WCSS}<p class="mut"><a href="{who}">{esc(it["name"])}</a> · {esc(plat)} · {iso(it["published"])}</p><article class="wk-body"><h1>{esc(it["title"])}</h1>{thumb}'
+            ext = f' · <b>{esc(T(lang, "External post", "Externer Beitrag"))}</b>' if it.get("origin") == "kurzpost" else ""
+            b = shell(lang, f'{WCSS}<p class="mut"><a href="{who}">{esc(it["name"])}</a> · {esc(plat)} · {iso(it["published"])}{ext}</p><article class="wk-body"><h1>{esc(it["title"])}</h1>{thumb}'
                             f'{("<p>" + esc(it["summary"]) + "</p>") if it.get("summary") else ""}{_kp}{body_html}{_fq}{SNT.CSS if (_kp or _fq) else ""}</article>'
                             f'<p><a class="btn main" href="{esc(it["url"])}" rel="nofollow ugc noopener" target="_blank">{esc(T(lang, "View the original on", "Original ansehen auf"))} {esc(plat)} ↗</a></p><p>{tl}</p>'
                             f'<p class="mut">{esc(T(lang, "Title, description and thumbnail come from the creator’s public feed; the original stays with its author.", "Titel, Beschreibung und Vorschaubild stammen aus dem öffentlichen Feed des Creators; das Original bleibt beim Urheber."))}</p>')

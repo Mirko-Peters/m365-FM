@@ -122,7 +122,18 @@ export async function mergeStatements(db, S, T) {
   for (const t of ["comments", "curators", "wiki_rev", "entity_rev", "entity_q", "entity_a", "push_subs", "push_topics", "points_spent", "api_tokens",
     "entity_claims", "episode_notes", "pod_episodes", "yt_videos", "guest_listings", "shows", "wish", "expert_requests", "mail_outbox"]) simple(t);
   simple("events", "owner_id"); simple("event_sessions", "proposer_id"); simple("event_roles", "added_by"); simple("entity_invites", "by_user");
+  // Einlader: Einladungen von S gehoeren T; ist S selbst eingeladen worden, zaehlt das nur, wenn T noch keinen Einlader hat (kein doppeltes Zaehlen)
+  st.push(q("UPDATE invite_success SET inviter_user_id=? WHERE inviter_user_id=?", T, S));
+  st.push(q("DELETE FROM invite_success WHERE invitee_user_id=? AND EXISTS (SELECT 1 FROM invite_success x WHERE x.invitee_user_id=?)", S, T));
+  st.push(q("UPDATE invite_success SET invitee_user_id=? WHERE invitee_user_id=?", T, S));
+  st.push(q("DELETE FROM invite_success WHERE inviter_user_id=invitee_user_id"));
+  simple("invite_success", "voided_by");   // wer entwertet hat (Admin), bleibt nachvollziehbar
+  // vorgemerkte Zurechnungen (Tagesgrenze erreicht): wie oben; ob das Zielkonto nach dem Klick entstanden ist, prueft der Tageslauf vor dem Zaehlen
+  simple("invite_pending", "inviter_user_id"); set("invite_pending", "invitee_user_id");
+  st.push(q("DELETE FROM invite_pending WHERE inviter_user_id=invitee_user_id"));
   simple("msg_messages", "from_id"); simple("sponsor_manual_metrics", "entered_by"); simple("tr_queue", "requested_by");
+  simple("merge_log", "by_user"); simple("dedupe_queue", "decided_by");   // Event-Import (#317): wer zusammengefuehrt/entschieden hat
+  simple("linkedin_conn", "connected_by"); simple("linkedin_events", "published_by");   // LinkedIn-Events: Zugang und "veroeffentlicht von" gehen auf das Zielkonto ueber
   // Blog und Bibliothek: UNIQUE(user_id, slug) -> Slug von S bei Kollision umbenennen
   for (const t of ["blog_posts", "lib_items"]) {
     // Zusatz -<S>-<id>: die id ist eindeutig, so kollidiert der neue Slug weder bei S noch bei T (ein schlichtes -<S> konnte es, dann scheiterte der ganze Batch)
@@ -132,7 +143,8 @@ export async function mergeStatements(db, S, T) {
   // Stimmen, Meldungen, Abos, Mitgliedschaften: doppelte Eintraege entfallen
   for (const t of ["user_badges", "likes", "reports", "wiki_reports", "edit_votes", "entity_a_votes", "email_topics", "item_votes", "blog_votes", "pod_votes",
     "yt_votes", "lib_votes", "wish_votes", "review_helpful", "event_attendees", "event_transfers", "item_guests", "blog_coauthors", "mail_prefs",
-    "mail_topic_follows", "contribution_ignored", "msg_bonus", "certs", "cert_check", "expert_request_reports"]) set(t);
+    "mail_topic_follows", "contribution_ignored", "msg_bonus", "certs", "cert_check", "expert_request_reports", "event_claims"]) set(t);   // event_claims (#317): offene Beanspruchung importierter Events wandert mit
+  st.push(q("DELETE FROM import_preview WHERE user_id=?", S));   // #317: Import-Vorschau des stillgelegten Kontos verfaellt (an das Konto gebunden, hoechstens 1 Stunde gueltig)
   st.push(q("DELETE FROM likes WHERE user_id=? AND comment_id IN (SELECT id FROM comments WHERE user_id=?)", T, T));   // eigene Kommentare liken geht nicht
   st.push(q("DELETE FROM reports WHERE user_id=? AND comment_id IN (SELECT id FROM comments WHERE user_id=?)", T, T));
   st.push(q("DELETE FROM blog_coauthors WHERE user_id=? AND post_id IN (SELECT id FROM blog_posts WHERE user_id=?)", T, T));
@@ -168,7 +180,17 @@ export async function mergeStatements(db, S, T) {
   st.push(q(`UPDATE contributions SET source_id=(SELECT t.id FROM contribution_sources s JOIN contribution_sources t ON t.user_id=? AND t.url=s.url WHERE s.id=contributions.source_id)
     WHERE source_id IN (SELECT id FROM contribution_sources WHERE user_id=?)`, T, S));
   st.push(q("DELETE FROM contribution_sources WHERE user_id=?", S));
+  // Eigene Quellen (0036): Wie beim Abruf gilt gleiche kanonische URL oder GUID als derselbe Beitrag - der von T bleibt. Hatte nur der Eintrag von S
+  // einen Kurzpost (feed_item_id), haengt der kuenftig am Eintrag von T; die Feed-Zeile selbst ist oben schon zu T gewandert.
+  const same = (a) => `((${a}.url<>'' AND ${a}.url=contributions.url) OR (${a}.canon<>'' AND ${a}.canon=contributions.canon) OR (${a}.guid<>'' AND ${a}.guid=contributions.guid))`;
+  st.push(q(`UPDATE contributions SET feed_item_id=(SELECT s.feed_item_id FROM contributions s WHERE s.user_id=? AND s.feed_item_id>0 AND ${same("s")} LIMIT 1)
+    WHERE user_id=? AND feed_item_id=0 AND EXISTS (SELECT 1 FROM contributions s WHERE s.user_id=? AND s.feed_item_id>0 AND ${same("s")})`, S, T, S));
+  st.push(q(`DELETE FROM contributions WHERE user_id=? AND EXISTS (SELECT 1 FROM contributions t WHERE t.user_id=? AND ${same("t")})`, S, T));
   set("contributions");
+  // Kurzposts, an denen danach kein Beitrag mehr haengt (der Eintrag von T hatte schon einen eigenen), entfallen samt Stimmen. Was die Moderation
+  // ausgeblendet hat (hidden Bit 1), bleibt als Sperre stehen und gilt zusaetzlich als zurueckgezogen (Bit 2) - wie in contrib_sources.js dropPosts.
+  const orphan = (mod) => `owner_type='u' AND owner_id=? AND origin='kurzpost' AND (hidden&1)=${mod} AND id NOT IN (SELECT feed_item_id FROM contributions WHERE user_id=?)`;
+  st.push(q(`UPDATE feed_items SET hidden=hidden|2 WHERE ${orphan(1)}`, T, T), q(`DELETE FROM item_votes WHERE item_id IN (SELECT id FROM feed_items WHERE ${orphan(0)})`, T, T), q(`DELETE FROM feed_items WHERE ${orphan(0)}`, T, T));
   // Rezensionen: je Show eine; die von S wird ausgeblendet, nicht geloescht
   keepT("show_reviews"); st.push(q("UPDATE show_reviews SET status='merged' WHERE user_id=?", S));
   keepT("expert_request_replies");
@@ -191,12 +213,27 @@ export async function mergeStatements(db, S, T) {
   else if (sh && th && sh !== th) {   // Handle von S zeigt kuenftig auf T: Blog-Abos und Speaker-Eintraege umhaengen
     st.push(q("UPDATE OR IGNORE blog_follows SET handle=? WHERE handle=?", th, sh), q("DELETE FROM blog_follows WHERE handle=?", sh));
     st.push(q("UPDATE event_sessions SET speakers=replace(speakers,?,?) WHERE instr(speakers,?)>0", `"h":"${sh}"`, `"h":"${th}"`, `"h":"${sh}"`));
+    st.push(q("UPDATE speaker_ref SET handle=? WHERE handle=?", th, sh));   // #317: gemerkte Speaker-Identitaet zeigt kuenftig auf das Profil von T
   }
   set("blog_follows");
   if (th || sh) st.push(q("DELETE FROM blog_follows WHERE user_id=? AND handle=?", T, th || sh));
   for (const t of ["profile_private", "profile_company", "user_prefs", "msg_prefs", "expert_settings", "profile_job"]) keepT(t);
   // Branchen (#304, bis zu 5 je Profil): wie das Profil gilt die Auswahl von T; hat T keine, uebernimmt T die von S
   st.push(q("UPDATE profile_industry SET user_id=? WHERE user_id=? AND NOT EXISTS (SELECT 1 FROM profile_industry WHERE user_id=?)", T, S, T));
+  // Redaktion und Moderation (Migration 0037): Protokoll, Empfehlungen, Fassungen, Bewerbungen und Handtexte gehoeren kuenftig T - sonst koennte T die eigene,
+  // als S abgegebene Empfehlung bestaetigen (Vier-Augen-Regel) und das Tageslimit von vorn beginnen.
+  for (const [t, c] of [["edit_log", "user_id"], ["edit_proposals", "user_id"], ["edit_proposals", "decided_by"], ["content_rev", "user_id"], ["i18n_override_rev", "user_id"],
+    ["i18n_override", '"by"'], ["i18n_retranslate_req", '"by"'], ["editor_applications", "user_id"], ["editor_applications", "decided_by"]]) simple(t, c);
+  st.push(q("UPDATE edit_log SET item_id=?||substr(item_id,instr(item_id,':')) WHERE kind='cert' AND item_id LIKE ?", String(T), `${S}:%`));   // Zertifikats-Eintraege tragen die Nutzer-ID im Schluessel
+  st.push(q("UPDATE edit_proposals SET item_id=?||substr(item_id,instr(item_id,':')) WHERE kind='cert' AND item_id LIKE ?", String(T), `${S}:%`));
+  st.push(q("UPDATE edit_log SET item_id=? WHERE kind='user' AND item_id=?", String(T), String(S)));
+  st.push(q("UPDATE edit_log SET item_id=substr(item_id,1,instr(item_id,':'))||? WHERE kind='event_claim' AND item_id LIKE ?", String(T), `%:${S}`));   // Beanspruchung eines Events (#317, <event>:<nutzer>) wie event_claims
+  set("editor_votes", "voter_id");
+  st.push(q("DELETE FROM editor_votes WHERE voter_id=? AND app_id IN (SELECT id FROM editor_applications WHERE user_id=?)", T, T));   // keine Stimme fuer die eigene Bewerbung
+  // Bewerbungen von S, die T nicht mehr braucht (Rolle schon vorhanden), schliessen; von zwei offenen bleibt die aeltere
+  st.push(q("UPDATE editor_applications SET status='obsolete',decided_ts=?,reason='Rolle bereits vorhanden' WHERE user_id=? AND status='open' AND (CASE role WHEN 'editor' THEN 2 ELSE 1 END)<=(SELECT CASE role WHEN 'admin' THEN 3 WHEN 'editor' THEN 2 WHEN 'moderator' THEN 1 ELSE 0 END FROM users WHERE id=?)", now(), T, T));
+  st.push(q("UPDATE editor_applications SET status='obsolete',decided_ts=?,reason='Konten zusammengeführt' WHERE user_id=? AND status='open' AND id<>(SELECT MIN(id) FROM editor_applications WHERE user_id=? AND status='open')", now(), T, T));
+  st.push(q("DELETE FROM editor_scope WHERE user_id=?", S));   // Rolle und Fachbereich wandern nicht mit: es gilt, was T hat
   st.push(q("DELETE FROM entity_claim_mail WHERE claim_user=?", S));   // #309: offene Einmal-Links des stillgelegten Kontos gelten nicht weiter (sie sind an claim_user gebunden)
   keepT("images", "owner_id", " AND kind='u'");
   keepT("mail_addr"); st.push(q("DELETE FROM mail_addr WHERE user_id=?", S));   // stillgelegtes Konto bekommt keine E-Mails

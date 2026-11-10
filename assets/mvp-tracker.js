@@ -19,7 +19,7 @@ window.M365MVPPeriod = (function () {
   if (!X || !X.api || !host) return;
   var APP = host.id === "mvp-app", HP = APP ? "" : "c-mvp/", LANG = X.lang || "en";
   var T = window.M365CT || {};
-  var VIEWS = ["overview", "log", "add", "impact", "export", "sources", "chances"];
+  var VIEWS = ["overview", "log", "add", "inbox", "impact", "export", "sources", "chances"];
   var KINDS = ["podcast", "video", "blog", "session", "github", "article", "book", "workshop", "mentoring", "other"];
   var SKINDS = ["youtube", "podcast", "blog", "github"];
   var CATS = ["Video/Webcast/Podcast", "Blog", "Speaker/Presenter", "Book/E-book"];
@@ -54,13 +54,14 @@ window.M365MVPPeriod = (function () {
     var e = (j && j.error) || "";
     var map = { offline: "offline", rate_limit: "e_rate", contribution_exists: "e_exists", bad_date: "e_date", bad_url: "e_url", bad_contribution: "e_title", bad_field: "e_field",
       source_exists: "s_exists", source_limit: "s_limit", bad_source: "s_bad", login: "login" };
-    return map[e] ? t(map[e]) : t("error");
+    var q = window.M365MVPSources && window.M365MVPSources.strings;   // Texte zu Kurzposts (z. B. posted: Link eines veroeffentlichten Beitrags) stehen in mvp-sources.js
+    return map[e] ? t(map[e]) : (q && q["e_" + e]) || t("error");
   }
   function say(text, ok) { S.msg = text || ""; S.msgOk = !!ok; if (live) { live.textContent = S.msg; live.className = "mvp-msg" + (S.msg ? (ok ? " ok" : " err") : ""); } }
   function day(sec) { return new Date(sec * 1000).toISOString().slice(0, 10); }
   function fmtDate(sec) { try { return new Intl.DateTimeFormat(LANG, { dateStyle: "medium", timeZone: "UTC" }).format(new Date(sec * 1000)); } catch (e) { return day(sec); } }
   function num(n) { try { return Number(n || 0).toLocaleString(LANG); } catch (e) { return String(n || 0); } }
-  function kindLabel(k) { return t("k_" + k); }
+  function kindLabel(k) { var s = T["mvp_k_" + k]; return s !== undefined ? s : String(k).charAt(0).toUpperCase() + String(k).slice(1); }
   function copyText(text, btn) {
     var done = function () { if (btn) { btn.textContent = t("d_copied"); btn.classList.add("on"); } say(t("d_copied"), true); };
     if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(String(text)).then(done, function () { fallback(); });
@@ -116,13 +117,26 @@ window.M365MVPPeriod = (function () {
     var n = el("nav", { class: "mvp-nav", "aria-label": t("nav_label") });
     VIEWS.forEach(function (v) {
       var cur = S.view === v && !(v === "log" && S.id);
-      var a = el("a", { href: "#" + HP + v, class: "mvp-navi" + (v === "add" ? " add" : ""), "aria-current": cur ? "page" : null, text: t("nav_" + v) });
+      var a = el("a", { href: "#" + HP + v, class: "mvp-navi" + (v === "add" ? " add" : ""), "aria-current": cur ? "page" : null, text: v === "inbox" ? inboxLabel() : t("nav_" + v) });
       n.appendChild(a);
     });
     return n;
   }
 
   // ---------- Bausteine ----------
+  // Eigene Quellen (assets/mvp-sources.js, wird nachgeladen): Quellen hinzufuegen, Quellenstatus, "Neu gefunden"
+  function inboxLabel() {
+    var n = items().filter(function (c) { return c.review === "pending"; }).length;
+    return (window.M365MVPSources ? window.M365MVPSources.label : LANG === "de" ? "Neu gefunden" : "New finds") + (n ? " (" + n + ")" : "");
+  }
+  function ctx() { return { S: S, el: el, btn: btn, field: field, select: select, check: check, input: input, segmented: segmented, heading: heading, api: api, say: say, load: load, render: render, fmtDate: fmtDate, hostOf: hostOf, invalid: invalid }; }
+  function loadExtras() {
+    if (window.M365MVPSources || document.getElementById("mvp-src-js")) return;
+    ["linkedin-export.js", "mvp-sources.js"].forEach(function (f) {
+      var sc = document.createElement("script"); sc.src = (X.base || "") + "/assets/" + f; if (f === "mvp-sources.js") { sc.id = "mvp-src-js"; sc.onload = function () { if (main) render(false); }; } document.head.appendChild(sc);
+    });
+  }
+  function viewInbox() { return window.M365MVPSources ? window.M365MVPSources.inbox(ctx()) : [heading(inboxLabel()), el("p", { class: "mvp-mut", text: t("loading") })]; }
   function heading(text) { return el("h2", { class: "mvp-h", tabindex: "-1", text: text }); }
   function badge(kind, text) { return el("span", { class: "mvp-badge " + kind, text: text }); }
   function btn(text, fn, cls, extra) { return el("button", Object.assign({ type: "button", class: "btn" + (cls ? " " + cls : ""), text: text, onclick: fn }, extra || {})); }
@@ -185,7 +199,8 @@ window.M365MVPPeriod = (function () {
         el("div", { class: "mvp-row" }, [el("span", { class: "mvp-kicker", text: kindLabel(c.kind) + " · " + fmtDate(c.published) }), badge(st[0], st[1])]),
         el("a", { class: "mvp-title", href: "#" + HP + "item/" + c.id, text: c.title }),
         el("div", { class: "mvp-row sub" }, [el("span", { class: "mvp-mut", text: c.manual ? t("src_hand") : t("src_auto", { s: c.source || (c.url ? hostOf(c.url) : "") }) }),
-          c.category ? el("span", { class: "mvp-chip", text: c.category }) : null, el("span", { class: "mvp-chip", text: c.public ? t("vis_public") : t("vis_private") })]),
+          c.category ? el("span", { class: "mvp-chip", text: c.category }) : null, el("span", { class: "mvp-chip", text: c.public ? t("vis_public") : t("vis_private") }),
+          c.posted && window.M365MVPSources ? el("span", { class: "mvp-chip", text: window.M365MVPSources.strings.p_chip }) : null]),
         c.review === "pending" ? el("div", { class: "btns" }, [btn(t("confirm"), function () { patch({ id: c.id, review: "" }); }, "main"), btn(t("hide"), function () { patch({ id: c.id, review: "hidden" }); })]) : null,
         c.review === "hidden" ? el("div", { class: "btns" }, [btn(t("unhide"), function () { patch({ id: c.id, review: "" }); })]) : null,
       ]));
@@ -208,6 +223,8 @@ window.M365MVPPeriod = (function () {
     var out = [btn(t("back"), function () { go("log"); }, "mvp-back"), el("span", { class: "mvp-kicker", text: kindLabel(c.kind) + " · " + (c.manual ? t("src_hand") : t("src_auto", { s: c.source || hostOf(c.url) })) }), heading(c.title)];
     if (c.review === "pending") out.push(el("div", { class: "mvp-card warn" }, [el("p", { text: t("pending_hint") }), el("div", { class: "btns" }, [btn(t("confirm"), function () { patch({ id: c.id, review: "" }); }, "main"), btn(t("hide"), function () { patch({ id: c.id, review: "hidden" }); })])]));
     if (c.review === "hidden") out.push(el("div", { class: "mvp-card" }, [badge("hidden", t("st_hidden")), btn(t("unhide"), function () { patch({ id: c.id, review: "" }); })]));
+    var post = window.M365MVPSources && window.M365MVPSources.postBox ? window.M365MVPSources.postBox(ctx(), c) : null;   // Kurzpost: Stand, zurueckziehen, veroeffentlichen
+    if (post) out.push(post);
     out.push(portalBox(c), editForm(c));
     return out;
   }
@@ -469,13 +486,13 @@ window.M365MVPPeriod = (function () {
     srcs.forEach(function (s) {
       if (S.srcEdit === s.id) { ul.appendChild(el("li", { class: "mvp-item" }, [sourceForm(s)])); return; }
       var st = s.status === "paused_after_errors" ? ["warn", t("s_errors")] : s.status === "paused" ? ["hidden", t("s_paused")] : ["ok", t("s_active")];
-      var acts = el("div", { class: "btns" }, [btn(t("s_edit"), function () { S.srcEdit = s.id; S.srcDel = 0; render(false); var i = main.querySelector(".mvp-srcform input[type=url]"); if (i) i.focus(); }),
+      var acts = el("div", { class: "btns" }, [SKINDS.indexOf(s.kind) < 0 ? null : btn(t("s_edit"), function () { S.srcEdit = s.id; S.srcDel = 0; render(false); var i = main.querySelector(".mvp-srcform input[type=url]"); if (i) i.focus(); }),
         btn(s.active && s.status !== "paused_after_errors" ? t("s_pause") : t("s_resume"), function () { srcUpdate({ id: s.id, active: !(s.active && s.status !== "paused_after_errors") }); }),
         btn(s.public ? t("vis_private") : t("vis_public"), function () { srcUpdate({ id: s.id, public: !s.public }); }),
         btn(t("delete"), function () { S.srcDel = s.id; render(false); var b = main.querySelector(".mvp-confirm button"); if (b) b.focus(); }, "danger")]);
-      var li = el("li", { class: "mvp-item" }, [el("div", { class: "mvp-row" }, [el("span", { class: "mvp-kicker", text: t("s_k_" + s.kind) }), badge(st[0], st[1])]),
+      var li = el("li", { class: "mvp-item" }, [el("div", { class: "mvp-row" }, [el("span", { class: "mvp-kicker", text: T["mvp_s_k_" + s.kind] || (window.M365MVPSources && window.M365MVPSources.strings["k_" + s.kind]) || s.kind }), badge(st[0], st[1])]),
         el("b", { class: "mvp-title", text: s.title || hostOf(s.url) }), el("span", { class: "mvp-mut mvp-url", text: s.url }),
-        el("div", { class: "mvp-row sub" }, [el("span", { class: "mvp-chip", text: s.public ? t("vis_public") : t("vis_private") }), el("span", { class: "mvp-mut", text: s.fetched ? t("s_fetched", { d: fmtDate(s.fetched) }) : t("s_never") })]), acts]);
+        el("div", { class: "mvp-row sub" }, [el("span", { class: "mvp-chip", text: s.public ? t("vis_public") : t("vis_private") }), el("span", { class: "mvp-mut", text: s.fetched ? t("s_fetched", { d: fmtDate(s.fetched) }) : t("s_never") })]), acts].concat(window.M365MVPSources ? window.M365MVPSources.rowExtras(ctx(), s) : []));
       if (S.srcDel === s.id) {
         var also = check(t("s_del_items"), false);
         li.appendChild(el("div", { class: "mvp-confirm", role: "alert" }, [el("p", { text: t("s_del_confirm") }), also, el("div", { class: "btns" }, [btn(t("del_yes"), function () {
@@ -485,7 +502,7 @@ window.M365MVPPeriod = (function () {
       ul.appendChild(li);
     });
     out.push(srcs.length ? ul : el("p", { class: "mvp-empty", text: t("s_none") }));
-    out.push(el("section", { class: "mvp-card" }, [el("h3", { text: t("s_add") }), sourceForm(null)]));
+    out.push(window.M365MVPSources ? window.M365MVPSources.addCard(ctx()) : el("section", { class: "mvp-card" }, [el("h3", { text: t("s_add") }), sourceForm(null)]));
     out.push(settingsForm());
     return out;
   }
@@ -548,7 +565,7 @@ window.M365MVPPeriod = (function () {
       else main.appendChild(el("p", { class: "mvp-mut", text: t("loading") }));
       return;
     }
-    var fn = { overview: viewOverview, log: viewLog, add: viewAdd, impact: viewImpact, export: viewExport, sources: viewSources, chances: viewChances }[S.view];
+    var fn = { overview: viewOverview, log: viewLog, add: viewAdd, impact: viewImpact, export: viewExport, sources: viewSources, chances: viewChances, inbox: viewInbox }[S.view];
     fn().forEach(function (n) { if (n) main.appendChild(n); });
     if (focus === true) { var h = main.querySelector(".mvp-h"); if (h) h.focus(); }
   }
@@ -563,5 +580,6 @@ window.M365MVPPeriod = (function () {
   window.addEventListener("hashchange", function () { route(true); });
   window.addEventListener("online", function () { if (!S.data) load(); });
   route(false);
+  loadExtras();
   load();
 })();

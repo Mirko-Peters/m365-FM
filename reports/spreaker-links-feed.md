@@ -1,6 +1,6 @@
-# Spreaker-Website-Feld im RSS (2026-11-09 04:52 UTC)
+# Spreaker-Website-Feld im RSS (2026-11-10 04:52 UTC)
 
-Gesetzt laut Protokoll: 3227 · im Feed gleich: 3164 · im Feed anders: 0 · nicht im Feed: 63 · ausstehend (frisch gesetzt, Feed noch nicht erneuert): 0
+Gesetzt laut Protokoll: 3233 · im Feed gleich: 3163 · im Feed anders: 0 · nicht im Feed: 70 · ausstehend (frisch gesetzt, Feed noch nicht erneuert): 0
 
 - 67311542: nicht_im_feed · soll https://www.m365.fm/show/episodes/building-reusable-components-with-power-platform-cli-pac-cli/ · Feed None
 - 67312816: nicht_im_feed · soll https://www.m365.fm/show/episodes/using-microsoft-graph-for-custom-app-integrations/ · Feed None
@@ -65,3 +65,10 @@ Gesetzt laut Protokoll: 3227 · im Feed gleich: 3164 · im Feed anders: 0 · nic
 - 67549620: nicht_im_feed · soll https://www.m365.fm/show/episodes/copilot-agents-without-chaos-how/ · Feed None
 - 67555685: nicht_im_feed · soll https://www.m365.fm/show/episodes/the-one-command-that-runs-your-whole-stack/ · Feed None
 - 67562881: nicht_im_feed · soll https://www.m365.fm/show/episodes/the-m365-task-jungle-is-real/ · Feed None
+- 67563188: nicht_im_feed · soll https://www.m365.fm/show/episodes/unlock-ironclad-m365-security-without-annoying-users/ · Feed None
+- 67567341: nicht_im_feed · soll https://www.m365.fm/show/episodes/microsoft-places-exposes-the-hybrid-work-mess/ · Feed None
+- 67572668: nicht_im_feed · soll https://www.m365.fm/show/episodes/copilot-efficiency-numbers-that-shock-managers/ · Feed None
+- 67576798: nicht_im_feed · soll https://www.m365.fm/show/episodes/your-powerapps-form-looks-great-but-fails-you/ · Feed None
+- 67582550: nicht_im_feed · soll https://www.m365.fm/show/episodes/the-ideal-teams-team-is-a-lie-or-is-it/ · Feed None
+- 67589747: nicht_im_feed · soll https://www.m365.fm/show/episodes/why-task-lists-are-failing-you/ · Feed None
+- 67597954: nicht_im_feed · soll https://www.m365.fm/show/episodes/the-ai-chatbot-that-knows-all-your-data/ · Feed None

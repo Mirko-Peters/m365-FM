@@ -82,3 +82,27 @@ test("mailer returns binding failures with status and logs no recipient address"
     console.error = oldLog;
   }
 });
+
+test("mailer: banner false laesst den M365Con-Hinweis weg (beide Anbieter), ohne Angabe bleibt er wie bisher", async () => {
+  const oldFetch = globalThis.fetch, oldLog = console.log;
+  console.log = () => {};
+  try {
+    for (const lang of ["en", "de"]) {
+      let payload;
+      const cf = { MAIL_FROM: "M365.FM <system@m365.fm>", EMAIL: { send: async (value) => { payload = value; return { messageId: "x" }; } } };
+      await sendMail(cf, { ...message, lang, bannerAt, banner: false });
+      assert.equal(payload.html, message.html); assert.equal(payload.text, message.text);
+      await sendMail(cf, { ...message, lang, bannerAt });
+      assert.equal(payload.html, message.html + conBanner(lang, bannerAt)); assert.match(payload.text, /M365Con · .*https:\/\/m365con\.net$/);
+      await sendMail(cf, { ...message, lang, bannerAt, banner: true });
+      assert.equal(payload.html, message.html + conBanner(lang, bannerAt));
+      let body;
+      globalThis.fetch = async (url, options) => { body = JSON.parse(options.body); return new Response(JSON.stringify({ id: "r" }), { status: 200 }); };
+      await sendMail({ MAIL_FROM: "M365.FM <system@m365.fm>", RESEND_API_KEY: "k" }, { ...message, lang, bannerAt, banner: false });
+      assert.equal(body.html, message.html); assert.equal(body.text, message.text);
+    }
+  } finally {
+    globalThis.fetch = oldFetch;
+    console.log = oldLog;
+  }
+});
