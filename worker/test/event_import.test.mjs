@@ -1078,13 +1078,29 @@ test("Community Days (Next.js): Liste, Startseite und Event-Seite ergeben vollst
   assert.ok(!/orga@example\.org|Dronning|latitude|preview_image/.test(cache));
   assert.ok(/"cdv":1/.test(cache));
 });
-test("Community Days (Next.js): aufgebrauchtes Abruf-Kontingent stoppt nur die Beschreibungen, die Liste wird trotzdem eingespielt", async () => {
-  const many = Array.from({ length: 20 }, (_, i) => cdRec({ RowKey: "r" + i, title: `Azure Community Day ${i}`, slug: `2027-0${1 + (i % 9)}-1${i % 10}/acd-${i}`, start_date: `2027-0${1 + (i % 9)}-1${i % 10}T09:00`, end_date: "", city: "City" + i, country: "de" }));
-  const s = await setup(); cdNext(s.pages, { list: many });
-  const r = await runCommunityDays(s.env, { ...s.opts, today: "2026-11-10", maxRequests: 5 });
-  assert.equal(r.fetching, undefined, JSON.stringify(r)); assert.equal(r.found, 20); assert.equal(r.created + r.merged + r.queued, 12, JSON.stringify(r)); assert.equal(r.remaining, 8);
-  assert.ok(r.notes.some((n) => /^detail:\d+\/20/.test(n)));
-  // Cache aus dem ersten Lauf: der Folgelauf liest die Liste ohne neuen Abruf und spielt den Rest ein
-  const r2 = await runCommunityDays(s.env, { ...s.opts, today: "2026-11-10", maxRequests: 5 });
-  assert.equal(r2.created + r2.merged + r2.queued, 8, JSON.stringify(r2)); assert.equal(r2.remaining, 0);
+test("Community Days (Next.js): Kontingent - eingespielt wird nur, wessen Event-Seite gelesen wurde; alle bekommen ihre Beschreibung, der Durchgang steht nie", async () => {
+  const many = Array.from({ length: 20 }, (_, i) => cdRec({ RowKey: "r" + i, title: `Azure Community Day ${String(i).padStart(2, "0")}`, slug: `2027-0${1 + (i % 9)}-1${i % 10}/acd-${i}`, start_date: `2027-0${1 + (i % 9)}-1${i % 10}T09:00`, end_date: "", city: "City" + i, country: "de", website: "" }));
+  const s = await setup(); cdNext(s.pages, { list: many, detail: Object.fromEntries(many.map((r) => [r.slug, { ...r, home_content: `<p>About ${r.title}</p>` }])) });
+  const runs = [];
+  for (let k = 0; k < 15; k++) { const r = await runCommunityDays(s.env, { ...s.opts, today: "2026-11-10", maxRequests: 6 }); if (r.skipped_run) break; runs.push(r); assert.equal(r.fetching, undefined, JSON.stringify(r)); assert.ok(r.created + r.merged + r.queued <= 12); }
+  assert.ok(runs.length >= 3, JSON.stringify(runs.map((r) => r.notes)));   // 6 Abrufe je Lauf: mehrere Laeufe, keiner spielt ungelesene Events ein
+  const rows = s.raw.prepare("SELECT title,about FROM events WHERE source='communitydays'").all();
+  assert.equal(rows.length, 20); assert.deepEqual(rows.filter((x) => !/About Azure/.test(x.about)).map((x) => x.title), []);
+  // Kontingent schon verbraucht (z. B. vom Sessionize-Teil desselben Laufs): die Listendaten werden trotzdem eingespielt, der Durchgang kommt voran
+  const s2 = await setup(); cdNext(s2.pages, { list: many });
+  await runCommunityDays(s2.env, { ...s2.opts, today: "2026-11-10", dry: true, maxRequests: 3 });   // fuellt nur den Cache von robots.txt und der Listen
+  const r2 = await runCommunityDays(s2.env, { ...s2.opts, today: "2026-11-10", state: { last: {}, count: 99 } });
+  assert.equal(r2.created + r2.merged + r2.queued, 12, JSON.stringify(r2)); assert.ok(r2.notes.some((n) => /^detail:0\/\d+:budget$/.test(n)), r2.notes.join(" "));
+});
+test("Community Days (Next.js): Praesenz ohne Ort bleibt vor Ort, Seite meldet abgesagt, Website ohne Schema", async () => {
+  const inp = cdRec({ RowKey: "b1", title: "Bergen Power Platform Day", slug: "2027-05-02/bergen-pp-day", start_date: "2027-05-02T09:00", end_date: "", city: "", country: "no", event_type: "In Person", website: "www.bergenppday.no", registration_url: "event.checkin.no/1/bergen?utm_source=x" });
+  const can = cdRec({ RowKey: "c1", title: "Oslo Copilot Day", slug: "2027-05-03/oslo-copilot-day", start_date: "2027-05-03T09:00", end_date: "", city: "Oslo", country: "no", event_type: "In Person" });
+  const rel = cdRec({ RowKey: "x1", title: "Relative Day Azure", slug: "2027-05-04/relative-day", start_date: "2027-05-04T09:00", end_date: "", city: "Bonn", country: "de", website: "/foo/bar", registration_url: "javascript:alert(1)" });
+  const s = await setup(); cdNext(s.pages, { list: [inp, can, rel], detail: { [inp.slug]: inp, [can.slug]: { ...can, status: "cancelled" }, [rel.slug]: rel } });
+  const r = await runCommunityDays(s.env, { ...s.opts, today: "2026-11-10" });
+  assert.equal(r.created, 2, JSON.stringify(r));
+  const ev = (t) => s.raw.prepare("SELECT * FROM events WHERE title=?").get(t);
+  assert.equal(ev("Oslo Copilot Day"), undefined);   // die Event-Seite sagt abgesagt
+  const b = ev("Bergen Power Platform Day"); assert.deepEqual([b.mode, b.location, b.country, b.url, b.tickets_url], ["onsite", "", "Norway", "https://www.bergenppday.no/", "https://event.checkin.no/1/bergen"]);
+  const x = ev("Relative Day Azure"); assert.deepEqual([x.url, x.tickets_url], ["https://communitydays.org/event/2027-05-04/relative-day", ""]);   // nie relativ zur Event-Seite, nie javascript:
 });

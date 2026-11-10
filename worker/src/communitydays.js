@@ -84,6 +84,8 @@ export function nextRecords(body) {
 // Fuer politeGet reduce: Seiten mit Next-Daten werden nur als die gelesenen Felder zwischengespeichert, alle anderen unveraendert.
 export const slimNext = (body) => { const l = nextRecords(body); return l.length ? JSON.stringify({ cdv: 1, events: l }) : body; };
 const COUNTRY = (cc) => { const x = String(cc || "").trim(); if (!/^[a-z]{2}$/i.test(x)) return x; try { return new Intl.DisplayNames(["en"], { type: "region" }).of(x.toUpperCase()) || x.toUpperCase(); } catch { return x.toUpperCase(); } };
+// Website und Anmelde-Link sind Freitext der Veranstalter: immer absolute Adressen (ohne Schema: https://), nie relativ zur Event-Seite aufgeloest.
+const extUrl = (v) => { let x = String(v || "").trim(); if (!x) return ""; if (!/^[a-z][a-z0-9+.-]*:/i.test(x)) { if (!/^(\/\/)?[a-z0-9-]+(\.[a-z0-9-]+)+(?:[:/?#]|$)/i.test(x)) return ""; x = "https://" + x.replace(/^\/\//, ""); } return abs(x, "https://invalid.invalid/"); };
 const noUtm = (u) => { try { const x = new URL(u); for (const k of [...x.searchParams.keys()]) if (/^utm_/i.test(k)) x.searchParams.delete(k); return x.href; } catch { return ""; } };
 export const cdPage = (slug, base = SOURCE.base) => abs("/event/" + String(slug || "").replace(/^\/+/, ""), base);
 // Datensatz von communitydays.org -> Kandidat. Kennung bleibt die Seite des Events auf communitydays.org; url ist die eigene Website des Events, sonst diese Seite.
@@ -95,8 +97,10 @@ export function cdCandidate(r, base = SOURCE.base) {
     location: virtual ? { "@type": "VirtualLocation", address: { addressCountry: country } } : { address: { addressLocality: r.city || "", addressCountry: country } },
     isAccessibleForFree: tiers.length && tiers.every((t) => t === "free") ? true : tiers.length && !tiers.includes("free") ? false : undefined,
     sameAs: [r.website, r.registration_url].filter(Boolean), keywords: r.hashtag ? [r.hashtag] : [] }, page, true);
-  const site = r.website ? abs(String(r.website), page) : "", reg = r.registration_url ? noUtm(abs(String(r.registration_url), page)) : "";
-  return { ...c, url: site || page, tickets_url: reg, ms: true };
+  const site = extUrl(r.website), reg = extUrl(r.registration_url) && noUtm(extUrl(r.registration_url));
+  // Modus aus event_type (nicht aus "Stadt fehlt = online": ein Praesenz-Event ohne eingetragenen Ort bleibt vor Ort)
+  const mode = virtual ? "online" : hybrid ? "hybrid" : /person|onsite|in-person/i.test(type) ? "onsite" : c.mode;
+  return { ...c, mode, online_stated: virtual, url: site || page, tickets_url: reg, ms: true };
 }
 
 export function parseIcs(text, pageUrl = SOURCE.base) {
@@ -118,18 +122,20 @@ export const candKey = (c) => `${c.sources[0].ref}|${String(c.start).slice(0, 10
 // complete = false: das Abruf-Kontingent dieses Laufs war aufgebraucht (der naechste Lauf liest aus dem Cache weiter).
 export async function collect(env, opts = {}) {
   const notes = [], f = (p) => (p.startsWith("http") ? p : SOURCE.base + p), by = new Map(); let complete = true;
+  let detailStop = "";   // erste Kennung, deren Event-Seite das Kontingent nicht mehr erlaubte ("" = alle versucht)
   if (!opts.state) opts.state = { last: {}, count: 0 };   // ein Abruf-Kontingent fuer alle Abrufe dieses Laufs
   const today = String(opts.today || new Date().toISOString()).slice(0, 10), recs = new Map();
   const add = (list) => { for (const c of list) if (c.title && c.start) by.set(candKey(c), c); };   // je Datensatz ein Kandidat (nie je Listen-Adresse)
   const get = async (u) => { const r = await politeGet(env, u, { ...opts, reduce: slimNext }); if (r.error === "request_budget") complete = false; return r; };
   // Next-Datensaetze sammeln (je slug zusammengefuehrt: die Startseite hat den Anmelde-Link, /events alle kommenden); nur veroeffentlichte, nicht vorbei
-  const addRecs = (l) => { let n = 0; for (const r of l) { if (r.status && r.status !== "published") continue; if (String(r.end_date || r.start_date).slice(0, 10) < today) continue; recs.set(r.slug, { ...recs.get(r.slug), ...r }); n++; } return n; };
+  const keep = (r) => (!r.status || r.status === "published") && String(r.end_date || r.start_date).slice(0, 10) >= today;
+  const addRecs = (l) => { let n = 0; for (const r of l) { if (!keep(r)) continue; recs.set(r.slug, { ...recs.get(r.slug), ...r }); n++; } return n; };
   for (const strat of opts.strategies || STRATEGIES) {
     if (by.size || !complete) break;
     if (strat === "ics") for (const p of SOURCE.ics) { const r = await get(f(p)); if (r.ok && /BEGIN:VCALENDAR/.test(r.body)) { add(parseIcs(r.body, f(p))); notes.push(`ics:${p}`); break; } else notes.push(`ics:${p}:${r.error || r.status}`); }
     if (strat === "jsonld-list") {
       for (const p of SOURCE.list) { const r = await get(f(p)); if (r.ok) { const n = addRecs(nextRecords(r.body)), l = parseJsonLd(r.body, f(p)); add(l); notes.push(`list:${p}:${n + l.length}`); } else notes.push(`list:${p}:${r.error || r.status}`); }
-      if (recs.size && complete) await details(env, recs, opts, notes);
+      if (recs.size && complete) detailStop = await details(env, recs, { ...opts, keep }, notes);
       for (const r of recs.values()) add([cdCandidate(r)]);
     }
     if (strat === "sitemap") {
@@ -139,20 +145,23 @@ export async function collect(env, opts = {}) {
       for (const r of recs.values()) add([cdCandidate(r)]);
     }
   }
-  return { candidates: [...by.values()], notes, complete };
+  return { candidates: [...by.values()], notes, complete, detailStop };
 }
-// Beschreibung aus den Seiten der kommenden Events (in der Reihenfolge des Einspielens, ab opts.after). Ergaenzt nur: ist das Abruf-Kontingent aufgebraucht,
-// gelten die Listendaten (der Lauf bleibt vollstaendig); spaetere Laeufe lesen die uebrigen Seiten, der naechste Durchgang uebernimmt sie (updated).
+// Beschreibung aus den Seiten der kommenden Events (in der Reihenfolge des Einspielens, ab opts.after). Ist das Abruf-Kontingent aufgebraucht, gibt die
+// Funktion die erste nicht gelesene Kennung zurueck: runCommunityDays spielt in diesem Lauf nur Events davor ein, der Rest folgt im naechsten Lauf
+// (Listen aus dem Cache, das Kontingent reicht dann fuer die naechsten Seiten). Sagt die Event-Seite, das Event ist nicht (mehr) veroeffentlicht oder vorbei, faellt es weg.
 async function details(env, recs, opts, notes) {
   const key = (r) => candKey(cdCandidate(r)), list = [...recs.values()].map((r) => [key(r), r]).filter(([k]) => k > (opts.after || "")).sort((a, b) => (a[0] < b[0] ? -1 : 1)).slice(0, SOURCE.maxEventPages);
   let got = 0, miss = 0;
-  for (const [, r] of list) {
+  let stop = "";
+  for (const [k, r] of list) {
     const res = await politeGet(env, cdPage(r.slug), { ...opts, reduce: slimNext });
-    if (res.error === "request_budget") break;
+    if (res.error === "request_budget") { stop = k; break; }
     const d = res.ok ? nextRecords(res.body).find((x) => x.slug === r.slug) : null;
-    if (d) { recs.set(r.slug, { ...r, ...d }); got++; } else miss++;
+    if (d) { const m = { ...r, ...d }; if (opts.keep(m)) recs.set(r.slug, m); else recs.delete(r.slug); got++; } else miss++;
   }
-  notes.push(`detail:${got}/${list.length}` + (miss ? `:miss${miss}` : ""));
+  notes.push(`detail:${got}/${list.length}` + (miss ? `:miss${miss}` : "") + (stop ? ":budget" : ""));
+  return stop;
 }
 const STATE = "communitydays_state", parse = (s) => { try { return JSON.parse(s); } catch { return null; } };
 // Ein Stueck Import. opts.dry = nur zaehlen (nichts schreiben, hoechstens 60 Kandidaten); opts.force = neuen Durchgang beginnen (Admin).
@@ -166,11 +175,15 @@ export async function runCommunityDays(env, opts = {}) {
     else if (st.done) return { dry: false, skipped_run: "done", day: st.day };
   }
   const save = () => db.prepare("INSERT INTO meta(k,v) VALUES(?,?) ON CONFLICT(k) DO UPDATE SET v=excluded.v").bind(STATE, JSON.stringify(st)).run();
-  const { candidates, notes, complete } = await collect(env, { ttl: 20 * 3600, maxRequests: 12, ...opts, today, after: opts.dry ? "" : st.after });
+  const { candidates, notes, complete, detailStop } = await collect(env, { ttl: 20 * 3600, maxRequests: 12, ...opts, today, after: opts.dry ? "" : st.after });
   const ref = candKey, list = candidates.filter(isMicrosoftRelated).sort((a, b) => (ref(a) < ref(b) ? -1 : ref(a) > ref(b) ? 1 : 0));
   const rep = { dry: !!opts.dry, found: candidates.length, microsoft: list.length, skipped_non_ms: candidates.length - list.length, ...zero, updated: 0, retired: 0, remaining: 0, notes };   // updated = Aenderungen der Quelle uebernommen (Teil von merged)
   if (!complete) { if (!opts.dry) await save(); return { ...rep, fetching: true, remaining: list.length }; }   // noch nicht alles gelesen: der naechste Lauf macht weiter
-  const todo = opts.dry ? list : list.filter((c) => ref(c) > st.after), work = todo.slice(0, opts.dry ? Math.min(60, opts.cap || 60) : cap);
+  const todo = opts.dry ? list : list.filter((c) => ref(c) > st.after);
+  // Nur Events, deren Event-Seite in diesem Lauf gelesen oder versucht wurde (sonst blieben dieselben Events Tag fuer Tag ohne Beschreibung).
+  // Kam der Lauf an gar keiner Seite vorbei (Kontingent schon verbraucht), gelten die Listendaten, damit der Durchgang nie stehen bleibt.
+  const ready = !opts.dry && detailStop ? todo.filter((c) => ref(c) < detailStop) : todo;
+  const work = (ready.length ? ready : todo).slice(0, opts.dry ? Math.min(60, opts.cap || 60) : cap);
   // Die Quelle ist vollstaendig gelesen: je Kennung ist bekannt, ob sie genau einen Datensatz bezeichnet (sole). Nur dann gilt ein Eintrag mit neuem Termin oder
   // neuem Namen als derselbe, geaenderte Datensatz und nur dann folgt ein ungepflegtes Import-Event seinen Aenderungen (siehe eventmerge.js sameRecord).
   const per = new Map(); for (const c of candidates) per.set(c.sources[0].ref, (per.get(c.sources[0].ref) || 0) + 1);
