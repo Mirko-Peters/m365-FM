@@ -303,6 +303,36 @@ class ScheduledAndIndex(unittest.TestCase):
         rows = U.run_plan(ListFull(self.w()), PAGES, res(), [6704921], out=lambda *_: 0)
         self.assertEqual({r["id"]: r["status"] for r in rows}["6"], "skipped")
 
+    def test_get_only_while_api_gives_visibility(self):
+        """Nennt auch die Einzelabfrage keine Sichtbarkeit, fragt der Lauf Folgen ohne Seite mit vergangenem Datum nicht mehr einzeln ab
+        (eine Abfrage je Lauf statt je Folge); Folgen ohne Datum weiter, geplante (Datum in der Zukunft) nie."""
+        w = self.w(); w["9"] = ep("9", 6704921, "", "x", title="Noch eine alte"); w["10"] = ep("10", 6704921, "", "x", title="Ohne Datum")
+        def mk(api_vis):
+            class NoVis(Fake):
+                gets = []
+                def paged(self, path):   # Liste: Datum (ausser Folge 10), nie Sichtbarkeit
+                    return [{k: v for k, v in e.items() if k not in ("show", "visibility") and not (k == "published_at" and e["episode_id"] == "10")}
+                            for e in self.eps.values() if e["show"] == int(path.split("/")[2])]
+                def req(self, method, path, **kw):
+                    r = super().req(method, path, **kw)
+                    if method == "GET": self.gets.append(path.rsplit("/", 1)[1])
+                    if method == "GET" and not api_vis: r["episode"].pop("visibility", None)
+                    return r
+            return NoVis(w)
+        sp = mk(False); rows = {r["id"]: r["status"] for r in U.run_plan(sp, PAGES, res(), [6704921], out=lambda *_: 0)}
+        self.assertEqual([g for g in sp.gets if g in ("6", "7", "8", "9", "10")], ["7", "10"])   # 6 geplant: keine Abfrage; nach 7 keine fuer 8, 9
+        self.assertEqual((rows["6"], rows["8"], rows["9"], rows["10"]), ("skipped", "missing", "missing", "missing"))
+        sp = mk(True); rows = {r["id"]: r["status"] for r in U.run_plan(sp, PAGES, res(), [6704921], out=lambda *_: 0)}
+        self.assertEqual([g for g in sp.gets if g in ("6", "7", "8", "9", "10")], ["7", "8", "9", "10"])   # API nennt die Sichtbarkeit: weiter einzeln
+        self.assertEqual((rows["6"], rows["7"], rows["8"]), ("skipped", "skipped", "missing"))
+
+    def test_save_index_malformed_old_file(self):
+        d = Path(tempfile.mkdtemp()); f = d / "spreaker_index.json"
+        for raw in ("[1]", '"abc"', '{"episodes": [1, 2]}', '{"episodes": {"1": "x", "2": [3]}}', "{kaputt"):
+            f.write_text(raw, "utf-8")
+            self.assertTrue(U.save_index({"1": {"t": "A", "p": "2025-01-01 10:00:00"}, "2": {"t": "B"}}, f, out=lambda *_: 0), raw)
+            self.assertEqual(json.loads(f.read_text())["episodes"], {"1": {"t": "A", "p": "2025-01-01 10:00:00"}, "2": {"t": "B"}}, raw)
+
     def test_get_error_stays_missing(self):
         rows = U.run_plan(Fake(self.w(), fail={"6": RuntimeError("503")}), PAGES, res(), [6704921], out=lambda *_: 0)
         self.assertEqual({r["id"]: r["status"] for r in rows}["6"], "missing")

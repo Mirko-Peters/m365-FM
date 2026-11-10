@@ -215,8 +215,10 @@ def save_index(index, path=None, out=print):
     bliebe jeder Lauf ein Commit), und nicht, wenn die neue Liste deutlich kleiner ist als die alte (unvollstaendige Antwort der API)."""
     p = path or INDEX or STATE.with_name("spreaker_index.json")
     if not index: return False
-    try: old = (json.loads(p.read_text("utf-8")).get("episodes") or {}) if p.exists() else {}
+    try: old = json.loads(p.read_text("utf-8")) if p.exists() else {}
     except ValueError: old = {}
+    old = old.get("episodes") if isinstance(old, dict) else None   # falsche Form: wie ohne alten Index
+    old = {k: v for k, v in old.items() if isinstance(v, dict)} if isinstance(old, dict) else {}
     new = {k: {**old.get(k, {}), **index[k]} for k in sorted(index, key=int)}   # Felder, die die Liste nicht nennt, bleiben aus dem alten Index
     if new == old: return False
     if len(new) < 0.9 * len(old):
@@ -231,7 +233,10 @@ def scan(sp, pages, show_ids, only_ids=None, pause=0.0, out=print, index=None):
     einer Show) bricht den Lauf nicht ab: die Folge kommt als Fehler zurueck, es geht mit der naechsten weiter. Nur 401 (PermissionError)
     bricht ab - dann scheitert jeder weitere Aufruf. pause: Wartezeit nach jeder Einzelabfrage (schont die Spreaker-API). index (Dict): nimmt
     alle Folgen der Hauptshow auf (vor dem Filter --ids, also immer vollstaendig). Folgen ohne Seite werden einzeln abgefragt, wenn der
-    Listeneintrag Veroeffentlichung oder Sichtbarkeit nicht nennt - classify() meldet geplante/private Folgen dann als skipped statt missing."""
+    Listeneintrag die Veroeffentlichung nicht nennt, oder bei vergangenem Datum die Sichtbarkeit nicht - classify() meldet geplante/private
+    Folgen dann als skipped statt missing. Nennt auch die Einzelabfrage keine Sichtbarkeit (die API liefert sie nicht immer), fragt der Lauf
+    danach nur noch Folgen ohne Datum einzeln ab: sonst kostete jede Folge ohne Seite in jedem Lauf eine Abfrage ohne neue Auskunft."""
+    vis = True   # liefert die Einzelabfrage die Sichtbarkeit? (bis zur ersten Antwort ohne sie)
     for sid in show_ids:
         try:
             items = episodes_of_show(sp, sid)
@@ -248,9 +253,9 @@ def scan(sp, pages, show_ids, only_ids=None, pause=0.0, out=print, index=None):
                 continue
             page = pages.get(eid)
             if not page:
-                if not ("published_at" in item and "visibility" in item):   # geplant/privat? steht nur sicher in der Einzelabfrage
+                if not item.get("published_at") or (vis and "visibility" not in item and published(item)):   # geplant/privat? steht nur in der Einzelabfrage
                     try:
-                        item = sp.req("GET", f"/episodes/{eid}")["episode"]
+                        item = sp.req("GET", f"/episodes/{eid}")["episode"]; vis = vis and "visibility" in item
                         if index is not None and int(sid) == SEU.EN_SHOW_ID: index_add(index, item)
                     except PermissionError:
                         raise
