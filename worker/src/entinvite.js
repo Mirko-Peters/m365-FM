@@ -146,7 +146,9 @@ async function inviteOne(env, db, user, staff, x, emap, dry, seen) {
   if (!Number(ins.meta?.changes || 0)) return { eid, error: "already" };
   const r = await send(env, inv, user.name, false, variant);
   if (!r.ok) await db.prepare("DELETE FROM entity_invites WHERE token=?").bind(inv.token).run();
-  else if (asStaff) await logEdit(db, g.actor, "claim.decide", "claim", eid, { reason: "Zur Übernahme eingeladen", after: { invite: maskAddr(email) } });   // Redaktionsrecht genutzt: ins Protokoll (zaehlt zum Tageslimit), Adresse maskiert
+  // Redaktionsrecht genutzt: ins Protokoll (zaehlt zum Tageslimit). Ohne Adresse, auch nicht maskiert: Entitaets-ID und Grund genuegen fuer Tageslimit und
+  // Nachvollziehbarkeit, und der Entfernen-Link (decline) wie die Kontoloeschung versprechen, dass die Kontaktdaten weg sind - edit_log raeumt keiner von beiden auf.
+  else if (asStaff) await logEdit(db, g.actor, "claim.decide", "claim", eid, { reason: "Zur Übernahme eingeladen", after: { status: "invited" } });
   return { eid, ok: r.ok, variant };
 }
 // Erledigt = nie (mehr) erinnern: Adresse gesperrt (auch ueber eine andere Einladung abgelehnt) oder die Seite ist uebernommen bzw. in Pruefung

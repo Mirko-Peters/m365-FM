@@ -165,6 +165,19 @@ class Zulieferung(Base):
         self.assertEqual(json.loads((out / "i18n-units" / "notes" / "de.json").read_text("utf-8"))["ep1"]["units"][0][2], "<p>N1 de</p>")
         self.assertEqual(json.loads((out / "i18n-stale.json").read_text("utf-8"))["items"], [])   # angefordert ist nicht veraltet
 
+    def test_anforderung_mit_blankem_slug_oeffnet_die_content_fassung(self):
+        """Nachpruefung 319-14: Sprachfassungen der Content-Pakete heissen im Bau content/<slug>; eine Anforderung unter dem blanken Slug (aeltere
+        Anforderung, anderer Weg) darf nicht still verfallen. Der Worker speichert inzwischen content/<slug> (buildKey) - beides oeffnet die Ansicht."""
+        _, _, rec = record()
+        OVR._OPEN[("lblog", "de")] = {"cp-a", "content/cp-b", "legacy"}
+        for it in ("content/cp-a", "content/cp-b", "legacy"): self.assertTrue(OVR.asked("lblog", "de", it), it)
+        self.assertFalse(OVR.asked("lblog", "de", "content/legacy-x")); self.assertFalse(OVR.asked("lblog", "fr", "content/cp-a"))
+        self.assertFalse(OVR.asked("notes", "de", "content/cp-a"))
+        OVR.note_blog("de", "content/cp-a", POST, rec)
+        self.assertIn("content/cp-a", OVR._NOTED[("lblog", "de")])
+        import site_content_blog as SCB
+        self.assertEqual(OVR.CONTENT, SCB.TR_PREFIX)   # derselbe Schluessel wie im Bau
+
     def test_blog_original_geaendert_handtext_bleibt_und_gilt_als_veraltet(self):
         a = self.anchors(); units, h, rec = record()
         self.write("lblog", "de", {"p": {"1": {"t": "Von Hand", "sh": a["1"]}}})

@@ -222,16 +222,18 @@
       sticky = { kind: kS.value, lang: lS.value, item: iI.value.trim() }; out.textContent = ""; msg.textContent = t("loading");
       Promise.all([getJSON(C.base + "/i18n-units/" + sticky.kind + "/" + sticky.lang + ".json"), api("/api/editor/i18n/overrides?kind=" + sticky.kind + "&item=" + encodeURIComponent(sticky.item) + "&lang=" + sticky.lang)]).then(function (a) {
         var d = a[0] && a[0][sticky.item]; msg.textContent = ""; if (a[1].s === 401 || a[1].s === 403) { msg.textContent = a[1].s === 401 ? t("login") : t("denied"); return; }
-        if (!d) { msg.textContent = t2("noItem"); if (sticky.item) out.appendChild(openReq(msg)); return; }
+        /* Sprachfassungen der Content-Pakete heissen im Seitenbau content/<slug>: der blanke Slug aus der Adresse oeffnet sie ebenfalls (mit dem richtigen Schluessel) */
+        if (!d && sticky.kind === "lblog" && sticky.item.indexOf("/") < 0 && a[0] && a[0]["content/" + sticky.item]) { iI.value = "content/" + sticky.item; return go(); }
+        if (!d) { msg.textContent = t2("noItem"); if (sticky.item) out.appendChild(openReq(msg, iI)); return; }
         drawUnits(out, d, a[1].j.overrides || {}, msg, a[1].j.anchors || {}, !!a[1].j.wish);
       });
     }
     if (sticky.item) go();
   }
   /* Absatz-Ansicht anfordern: der Seitenbau veroeffentlicht Einheiten und Quell-Anker nur fuer veraltete, bearbeitete und angeforderte Eintraege */
-  function openReq(msg) {
+  function openReq(msg, iI) {   /* der Worker meldet den Schluessel des Seitenbaus zurueck (content/<slug> bei Content-Paketen): ins Feld, damit das spaetere Oeffnen ihn trifft */
     var k = sticky, b = h("button", { type: "button", class: "btn", text: t2("reqOpen"), onclick: function () {
-      b.disabled = true; api("/api/editor/i18n/open", { method: "POST", body: { kind: k.kind, item: k.item, lang: k.lang } }).then(function (r) { msg.textContent = r.s === 200 ? t2("reqOk") : err2(r.j); if (r.s !== 200) b.disabled = false; });
+      b.disabled = true; api("/api/editor/i18n/open", { method: "POST", body: { kind: k.kind, item: k.item, lang: k.lang } }).then(function (r) { msg.textContent = r.s === 200 ? t2("reqOk") : err2(r.j); if (r.s !== 200) b.disabled = false; else if (r.j && r.j.item && iI) { iI.value = r.j.item; sticky.item = r.j.item; } });
     } });
     return b;
   }

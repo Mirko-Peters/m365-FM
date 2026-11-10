@@ -83,6 +83,14 @@ export async function isPublished(db, kind, item) {
   if (kind === "episode" || kind === "notes") return !!(await db.prepare("SELECT 1 x FROM episode WHERE slug=? AND published<>''").bind(item).first().catch(() => null));
   return false;
 }
+// Schluessel des Seitenbaus: Sprachfassungen der Content-Pakete heissen content/<slug> (site_content_blog TR_PREFIX), in blog_posts steht der blanke Slug.
+// Wer den Slug aus der Adresse eintippt, landet sonst unter einem Schluessel, den der Seitenbau nie liest (Anforderung, Handtext, Wunsch verfielen still).
+// Nur fuer Pakete (content_import en/<slug>) und nur, wenn kein frueherer Beitrag denselben Slug traegt (dann ueberspringt der Seitenbau das Paket).
+export async function buildKey(db, kind, item) {
+  if (kind !== "lblog" || item.includes("/")) return item;
+  const r = await db.prepare("SELECT EXISTS(SELECT 1 FROM blog_posts p JOIN content_import c ON c.post_id=p.id AND c.k='en/'||p.slug WHERE p.status='live' AND p.slug=?1) AND NOT EXISTS(SELECT 1 FROM blog_posts p WHERE p.status='live' AND p.slug=?1 AND p.id NOT IN (SELECT post_id FROM content_import)) x").bind(item).first().catch(() => null);
+  return r?.x ? "content/" + item : item;
+}
 const validItem = (kind, item, lang) => I18N_KINDS.includes(kind) && LANGS.includes(lang) && /^[\w./-]{1,160}$/.test(item || "") && !String(item).includes("..");
 const valid = (kind, item, lang, unit) => validItem(kind, item, lang) && UNIT[kind].test(unit || "");
 const ip = (lang) => ({ ownerId: null, orgIds: [], topics: [], lang, i18n: true });
@@ -103,6 +111,7 @@ export async function saveUnit(env, user, { kind, item, lang, unit, text, prev =
   if (!valid(kind, item, lang, unit)) return res(400, { error: "bad_request" });
   const actor = await loadActor(db, user), perm = can(actor, "content.edit_full", ip(lang));
   if (!perm.ok) return res(403, { error: perm.why });
+  item = await buildKey(db, kind, item);
   const c = cleanUnit(kind, text, unit), clean = c.text;
   if (c.err) return res(400, { error: c.err });
   if (!clean) return res(400, { error: "empty" });
@@ -162,6 +171,7 @@ export async function requestRetranslate(env, user, { kind, item, lang, units = 
   if (!validItem(kind, item, lang)) return res(400, { error: "bad_request" });
   const actor = await loadActor(db, user), perm = can(actor, "content.edit_full", ip(lang));
   if (!perm.ok) return res(403, { error: perm.why });
+  item = await buildKey(db, kind, item);
   const us = [...new Set((Array.isArray(units) ? units : []).map((u) => txt(u, 20)).filter((u) => UNIT[kind].test(u)))].slice(0, 400);
   if (!(await isPublished(db, kind, item))) return res(404, { error: "not_published" });
   if (perm.propose) {
@@ -185,9 +195,10 @@ export async function requestOpen(env, user, { kind, item, lang }) {
   if (!perm.ok) return res(403, { error: perm.why });
   if (!(await isPublished(db, kind, item))) return res(404, { error: "not_published" });
   if (!(await rateLimit(db, `i18nopen:${user.id}`, 100, 86400))) return res(429, { error: "rate_limit" });
+  item = await buildKey(db, kind, item);   // gespeichert wird der Schluessel, den der Seitenbau fragt (asked()); die Oberflaeche uebernimmt ihn aus der Antwort
   await db.batch([db.prepare("DELETE FROM i18n_open_req WHERE ts<?").bind(now() - OPEN_DAYS * 86400),
     db.prepare("INSERT INTO i18n_open_req(kind,item,lang,ts) VALUES(?,?,?,?) ON CONFLICT(kind,item,lang) DO UPDATE SET ts=excluded.ts").bind(kind, item, lang, now())]);
-  return res(200, { ok: true, days: OPEN_DAYS });
+  return res(200, { ok: true, days: OPEN_DAYS, item });
 }
 
 // Empfehlung eines Moderators bestaetigt ein Editor im Browser: fuehrt dieselbe Funktion mit den Daten der Empfehlung aus

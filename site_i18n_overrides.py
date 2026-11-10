@@ -26,6 +26,7 @@ SHOW_STALE = ROOT / "data" / "podpage_i18n" / "stale.json"
 _NOTED = {}   # (kind, lang) -> {item: {"units": [[id, original, angezeigter Text, Quell-Anker]], "stale": [ids], "edited": [ids]}}
 _SHOW = {}    # Zwischenspeicher der Veraltet-Liste der Show (eine Datei fuer episode und notes)
 _OPEN = {}    # (kind, lang) -> {item}: von der Redaktion angeforderte Absatz-Ansichten (Export "open", sync)
+CONTENT = "content/"   # Schluesselpraefix der Content-Pakete in data/blog_i18n (= site_content_blog.TR_PREFIX; hier ohne dessen Importe)
 
 
 def paths():
@@ -70,8 +71,11 @@ def sync(api=None):
 
 
 def asked(kind, lang, item):
-    """Absatz-Ansicht dieses Eintrags von der Redaktion angefordert (Export "open")?"""
-    return item in _OPEN.get((kind, lang), ())
+    """Absatz-Ansicht dieses Eintrags von der Redaktion angefordert (Export "open")? Sprachfassungen der Content-Pakete heissen hier content/<slug>;
+    der Worker speichert die Anforderung unter diesem Schluessel (i18n_edit.js buildKey), der blanke Slug zaehlt trotzdem (aeltere oder ueber einen
+    anderen Weg gestellte Anforderung) - einen frueheren Beitrag mit demselben Slug ueberspringt translations() ohnehin."""
+    s = _OPEN.get((kind, lang), ())
+    return item in s or (kind == "lblog" and item.startswith(CONTENT) and item[len(CONTENT):] in s)
 
 
 def _note(kind, lang, item, units, stale, edited):

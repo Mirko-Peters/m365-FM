@@ -202,7 +202,7 @@ test("319-14: erste Handfassung einer korrekten Blog-Sprachfassung - Absatz-Ansi
   assert.equal((await req(6)).s, 403); assert.equal((await req(4)).s, 403);   // Mitglieder (auch der Autor) nicht
   assert.equal((await req(5)).j.error, "out_of_scope");   // Sprache ausserhalb des Bereichs
   assert.equal((await req(2, { item: "draft-post" })).j.error, "not_published"); assert.equal((await req(2, { kind: "x" })).s, 400);
-  assert.deepEqual((await req(3)).j, { ok: true, days: 30 });   // Moderator: Ansehen anfordern ist keine Aenderung (Speichern bleibt Empfehlung)
+  assert.deepEqual((await req(3)).j, { ok: true, days: 30, item: "live-post" });   // Moderator: Ansehen anfordern ist keine Aenderung (Speichern bleibt Empfehlung)
   assert.equal((await req(5, { lang: "fr" })).s, 200); assert.equal((await req(2, { kind: "notes", item: "ep1" })).s, 200);
   assert.deepEqual((await ex("lblog")).open, ["live-post"]); assert.deepEqual((await ex("lblog", "fr")).open, ["live-post"]); assert.deepEqual((await ex("notes")).open, ["ep1"]);
   assert.equal((await ex("lblog", "es")).open, undefined);
@@ -213,6 +213,29 @@ test("319-14: erste Handfassung einer korrekten Blog-Sprachfassung - Absatz-Ansi
   assert.deepEqual(raw.prepare("SELECT item FROM i18n_open_req ORDER BY item").all().map((r) => r.item), ["ep1", "live-post", "live-post"]);
   await req(2, { kind: "notes", item: "ep1" });   // die naechste Anforderung raeumt Verfallenes weg
   assert.deepEqual(raw.prepare("SELECT lang FROM i18n_open_req ORDER BY lang").all().map((r) => r.lang), ["de", "de"]);
+});
+
+test("319-14 Nachpruefung: blanker Slug eines Content-Pakets landet unter content/<slug> (Anforderung, Handtext, Wunsch, MCP-Anker); fruehere Beitraege bleiben blank", async () => {
+  const { raw, env } = await mk();
+  blog(raw, 20, 4, "live", { slug: "live-post", lang: "en" });   // frueherer Beitrag (kein Paket): Schluessel bleibt der blanke Slug
+  blog(raw, 22, 4, "live", { slug: "cp-post", lang: "en" }); ins(raw, "content_import", { k: "en/cp-post", post_id: 22, hash: "h", imported: 1 });
+  blog(raw, 23, 4, "live", { slug: "both", lang: "en" }); blog(raw, 24, 6, "live", { slug: "both", lang: "en" }); ins(raw, "content_import", { k: "en/both", post_id: 24, hash: "h", imported: 1 });   // Slug auch von einem frueheren Beitrag belegt: Seitenbau ueberspringt das Paket
+  const req = (item) => call(env, 2, "POST", "/api/editor/i18n/open", { kind: "lblog", item, lang: "de" });
+  assert.deepEqual((await req("cp-post")).j, { ok: true, days: 30, item: "content/cp-post" });
+  assert.equal((await req("content/cp-post")).j.item, "content/cp-post"); assert.equal((await req("live-post")).j.item, "live-post"); assert.equal((await req("both")).j.item, "both");
+  assert.deepEqual((await call(env, null, "GET", "/api/i18n/overrides?kind=lblog&lang=de")).j.open, ["both", "content/cp-post", "live-post"]);
+  // Speichern und Neuuebersetzen mit dem blanken Slug schreiben ebenfalls unter den Schluessel, den der Seitenbau anwendet
+  assert.equal((await call(env, 2, "POST", "/api/editor/i18n/save", { kind: "lblog", item: "cp-post", lang: "de", unit: "1", text: "Von Hand", prev: "Maschinell", sh: "0a1b2c3d", reason: "Fachbegriff" })).s, 200);
+  assert.equal((await call(env, 2, "POST", "/api/editor/i18n/retranslate", { kind: "lblog", item: "cp-post", lang: "de", units: ["T"] })).s, 200);
+  assert.deepEqual(raw.prepare("SELECT item FROM i18n_override UNION ALL SELECT item FROM i18n_retranslate_req").all().map((r) => r.item), ["content/cp-post", "content/cp-post"]);
+  assert.deepEqual(Object.keys((await call(env, null, "GET", "/api/i18n/overrides?kind=lblog&lang=de")).j.items), ["content/cp-post"]);
+  // MCP: der Anker kommt aus der Einheiten-Datei unter content/<slug>, auch wenn der Aufrufer den blanken Slug nennt
+  env.PAGES = { get: async (k) => (k === "pages/i18n-units/lblog/de.json" ? { body: JSON.stringify({ "content/cp-post": { units: [["2", "Two.", "Zwei.", "1234abcd"]], stale: [], edited: [] } }) } : null) };
+  const tok = "m365_test3"; ins(raw, "api_tokens", { user_id: 3, hash: await sha256hex(tok), created: 1 });
+  const r = await W.fetch(new Request(API + "/mcp", { method: "POST", headers: { "content-type": "application/json", authorization: "Bearer " + tok }, body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "tools/call", params: { name: "propose_translation_edit", arguments: { kind: "lblog", item: "cp-post", lang: "de", unit: "2", text: "Zwei, von Hand.", reason: "Stil" } } }) }), env, { waitUntil() {} });
+  assert.equal(JSON.parse((await r.json()).result.content[0].text).stored_as, "proposal");
+  const pl = JSON.parse(raw.prepare("SELECT payload FROM edit_proposals ORDER BY id DESC").get().payload);
+  assert.deepEqual([pl.item, pl.sh, pl.prev], ["content/cp-post", "1234abcd", "Zwei."]);
 });
 
 // ---------- 319-10: Wunschliste ----------
@@ -836,6 +859,29 @@ test("319-16: /api/entityinvite/mine geht ueber can()/inScope je Zeile - Fach-Ed
   // Moderator und Mitglieder: nur eigene, ohne Adresse
   assert.deepEqual(await mine(3), [false, []]); assert.deepEqual(await mine(6), [false, [["sharepoint", ""]]]);
   assert.equal((await call(env, 4, "GET", "/api/entityinvite/mine")).j.items.every((x) => x.email === "" && !("by_user" in x)), true);
+  // die MCP-Beschreibung sagt dasselbe (Clients verlassen sich darauf)
+  const { TOOLS } = await import("../src/mcp.js"), d = TOOLS.find((x) => x.name === "list_my_entity_invites").description;
+  assert.doesNotMatch(d, /see all invitations including addresses/); assert.match(d, /masked/); assert.match(d, /only the admin sees full addresses/);
+});
+
+test("319-15 Nachpruefung: Einladung mit Redaktionsrecht protokolliert keine (auch keine maskierte) Adresse - nach Entfernen-Link und Kontoloeschung bleibt nichts davon", async () => {
+  const { raw, env } = await mk(); env.EMAIL = { send: async () => ({}) };
+  ins(raw, "entity_contacts", { eid: "jane-doe", email: "jane@contact.example", name: "Jane Doe", created: 1 });
+  const batch = (await call(env, 1, "POST", "/api/entityinvite/send-batch", {})).j;   // Sammelversand des Admins an die Kontaktliste
+  assert.equal(JSON.stringify(batch).includes("jane-doe"), true, JSON.stringify(batch)); assert.equal(raw.prepare("SELECT COUNT(*) n FROM entity_invites WHERE eid='jane-doe'").get().n, 1);
+  assert.deepEqual((await call(env, 2, "POST", "/api/entityinvite/send", { eid: "contoso", name: "Max Muster", email: "max@contoso.example" })).j.results, [{ eid: "contoso", ok: true }]);
+  const rows = () => raw.prepare("SELECT item_id,before,after,reason FROM edit_log WHERE action='claim.decide' ORDER BY id").all().map((r) => ({ ...r }));
+  assert.deepEqual(rows().map((r) => [r.item_id, r.after]), [["jane-doe", '{"status":"invited"}'], ["contoso", '{"status":"invited"}']]);
+  const leak = () => JSON.stringify(raw.prepare("SELECT * FROM edit_log").all());
+  assert.doesNotMatch(leak(), /contact\.example|contoso\.example|\*\*\*|jane@|max@/);
+  // Entfernen-Link: Kontaktdaten weg, im Protokoll stand ohnehin nie etwas davon
+  const t = raw.prepare("SELECT token FROM entity_invites WHERE eid='jane-doe'").get().token;
+  assert.equal((await W.fetch(new Request(API + "/api/entityinvite/decline?t=" + t, { method: "POST" }), env, { waitUntil() {} })).status, 200);
+  assert.deepEqual({ ...raw.prepare("SELECT name,status FROM entity_invites WHERE eid='jane-doe'").get() }, { name: "", status: "declined" });
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM entity_contacts").get().n, 0);
+  assert.doesNotMatch(leak(), /contact\.example|\*\*\*/);
+  assert.equal((await call(env, 2, "DELETE", "/api/me")).s, 200);   // Konto des einladenden Editors geloescht
+  assert.doesNotMatch(leak(), /contoso\.example|\*\*\*|max@/);
 });
 
 test("Wiki-Verlauf fuer Mitglieder: fremde wartende und abgelehnte Fassungen bleiben verborgen; die Wiki-Seite zeigt Fehler beim Wiederherstellen", async () => {
@@ -966,4 +1012,23 @@ test("319-14 Oberflaeche: Eintrag ohne Absatz-Ansicht - ehrlicher Hinweis und 'Z
   assert.match(status(), /Angefordert\. Nach dem nächsten Seitenbau/);
   slug.value = "falsch"; u.btn("Öffnen")[0].click(); await tick(); u.btn("Zum Bearbeiten anfordern").at(-1).click(); await tick();
   assert.match(status(), /nicht veröffentlicht/);
+});
+
+test("319-14 Nachpruefung Oberflaeche: blanker Slug eines Content-Pakets oeffnet content/<slug>; die Anforderung uebernimmt den Schluessel des Workers", async () => {
+  const u = ui({
+    "API:/api/editor/queue": [200, { role: "editor", scope: { subject: false }, kinds: ["blog"], modKinds: [], items: [], proposals: [] }], "API:/api/editor/applications": [200, { items: [] }],
+    "SITE:/i18n-units/lblog/de.json": [200, { "content/da": { units: [["1", "First.", "Erster.", "bbbb2222"]], stale: [], edited: [] } }], "API:/api/editor/i18n/overrides": [200, { overrides: {}, anchors: {}, wish: false }],
+    "API:/api/editor/i18n/open": [200, { ok: true, days: 30, item: "content/neu" }], "API:/api/editor/i18n/save": [200, { ok: true, log: 2 }],
+  });
+  await tick();
+  const tabs = u.find((n) => n.attrs.role === "tablist")[0]; tabs.children[1].click(); await tick();
+  const slug = u.find((n) => n.tag === "input" && n.attrs.maxlength === "160")[0];
+  slug.value = "da"; u.btn("Öffnen")[0].click(); await tick(); await tick();
+  assert.equal(slug.value, "content/da"); assert.ok(u.calls.some((c) => c.u.startsWith("API:/api/editor/i18n/overrides") && c.u.includes("item=content%2Fda")));
+  const ta = u.find((n) => n.tag === "textarea" && n.value === "Erster.")[0]; assert.ok(ta, "Absatz-Ansicht geoeffnet"); ta.value = "Erster, von Hand.";
+  u.find((n) => n.tag === "input" && n.attrs.maxlength === "300").at(-1).value = "Stil";
+  ta.parent.children.find((n) => n.tag === "button" && n.textContent === "Speichern").click(); await tick();
+  assert.equal(u.calls.find((c) => c.u.startsWith("API:/api/editor/i18n/save")).body.item, "content/da");
+  slug.value = "neu"; u.btn("Öffnen")[0].click(); await tick(); u.btn("Zum Bearbeiten anfordern").at(-1).click(); await tick();
+  assert.equal(slug.value, "content/neu");   // spaeteres Oeffnen trifft den Schluessel der Einheiten-Datei
 });
