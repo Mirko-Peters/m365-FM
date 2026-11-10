@@ -805,6 +805,21 @@ def create_missing_show(lang: str, cfg, sp: Spreaker, dry: bool) -> int | None:
     return show["show_id"]
 
 
+def episode_page_url(cfg, lang: str, title: str, vid: str) -> str:
+    """Feld "Website" (episode_link) der neuen Folge: die kanonische m365.fm-Seite dieser Sprache (site_episode_urls.dub_url, dieselbe
+    Funktion wie der Seitenbau), aber nur, wenn sie schon mit 200 antwortet und zu diesem Video gehoert (Slug-Kollision: die Seite ohne
+    angehaengte ID gehoert einer anderen Folge) - sonst die Show-Seite. Neue Folgen haben ihre Seite erst nach
+    dem naechsten Seitenbau; die Folgenadresse setzt dann der taegliche Abgleich (set_spreaker_links.py / spreaker_urls.py)."""
+    fallback = cfg.get("show_website_url", "https://www.m365.fm")
+    try:
+        sys.path.insert(0, str(BASE))
+        from site_episode_urls import upload_link
+        return upload_link(cfg.get("site_base", "https://www.m365.fm"), lang, title, vid, fallback)
+    except Exception as e:
+        log.warning("Folgenadresse nicht berechnet (%s) - Rueckfall %s", e, fallback)
+        return fallback
+
+
 def episode_payload(meta: dict, cfg) -> dict:
     title = meta["title"][:140]
     desc = (meta.get("description") or "").strip()
@@ -904,7 +919,7 @@ def cmd_upload_texts(cfg, state, args) -> int:
             log.warning("Datei fehlt: %s", media)
             continue
         data = {"title": t["title"][:140], "description": t["desc"], "visibility": "PUBLIC",
-                "ai_generated": "true", "episode_link": cfg.get("show_website_url", "https://www.m365.fm"),
+                "ai_generated": "true", "episode_link": episode_page_url(cfg, lang, t["title"], meta["video_id"]),
                 "download_enabled": "true"}
         if t.get("tags"):
             data["tags"] = t["tags"]

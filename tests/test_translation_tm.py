@@ -68,7 +68,7 @@ class Base(unittest.TestCase):
                                (TB, "LANGS", ("de", "fr")), (TB, "api", self.api), (TB, "check_budget", lambda *a, **k: True), (TB, "report_usage", lambda *a, **k: None),
                                (OV, "DIR", self.tmp / "ov"), (OV, "API_DEFAULT", ""), (TS, "OUT", self.tmp / "pi18n"), (TB.time, "sleep", lambda s: None)):   # ohne Export: nur die Dateien (kein Netz im Test)
             p = patch.object(obj, name, val); p.start(); self.addCleanup(p.stop)
-        p = patch.dict(os.environ, {"ANTHROPIC_API_KEY": "test"}); p.start(); self.addCleanup(p.stop)
+        p = patch.dict(os.environ, {"ANTHROPIC_API_KEY": "test", "SEARCH_DEMAND": "0"}); p.start(); self.addCleanup(p.stop)   # Suchnachfrage (#156) nur, wo ein Test sie setzt
         for k in ("COMMUNITY_API", "I18N_OVERRIDES_API", "CRON_KEY"): os.environ.pop(k, None)
         OV.use_api(""); self.addCleanup(OV.use_api, "")
 
@@ -1016,6 +1016,51 @@ class Workflows(unittest.TestCase):
             for flag in ("--stale", "--slugs $SLUGS_IN", "--langs $LANGS_IN", "--force-manual", "--wishes"): self.assertIn(flag, s, name)
             self.assertIn("python " + script, s); self.assertNotIn("schedule:", s)   # nur von Hand
             self.assertIn("stale: {", s); self.assertIn("default: false", s)
+
+
+# ---------------- #156: Suchnachfrage nur als Reihenfolge ----------------
+class SearchDemandOrder(Base):
+    """GET /api/search/demand-export (search_demand.py) ordnet nur, was die Regeln ohnehin senden wuerden: nichts kommt hinzu, nichts wird neu uebersetzt."""
+
+    def run_show(self, eps, *argv):
+        return ShowAndNotes.run_show(self, eps, *argv)
+
+    def test_show_demand_orders_new_translations_and_never_resends_existing(self):
+        eps = [ep(slug=f"ep-{k}") for k in range(1, 5)]
+        self.run_show(eps[:1], "--langs", "de")   # ep-1 ist schon uebersetzt
+        demand = {"de": {("episode", "ep-1"): 0, ("episode", "ep-4"): 1, ("episode", "ep-9"): 2}}
+        with patch.object(TS.DM, "load", lambda *a, **k: demand):
+            self.assertEqual(self.run_show(eps, "--langs", "de"), ["de__ep-4", "de__ep-2", "de__ep-3"], "gesuchte zuerst; ep-1 nicht erneut, ep-9 (unbekannt) nicht dazu")
+        eps2 = [ep(slug=f"ep-{k}", summary="Edited summary.") for k in range(1, 5)]
+        with patch.object(TS.DM, "load", lambda *a, **k: {"de": {("episode", "ep-3"): 0}}):
+            self.assertEqual(self.run_show(eps2, "--langs", "de"), [], "geaendertes Original ohne --stale: weiter nur gemeldet")
+            with patch.object(TS, "STALE_MAX", 1): self.assertEqual(self.run_show(eps2, "--stale", "--langs", "de"), ["de__ep-3"], "die Obergrenze trifft die gesuchten zuerst")
+
+    def test_blog_demand_orders_within_the_limit_only(self):
+        a, b = post(slug="a-post", iso="2026-01-01T00:00:00+00:00"), post(slug="b-post", iso="2026-02-01T00:00:00+00:00")
+        def slugs():
+            return [it["slug"] for bt in json.loads((TB.OUT / "batches.json").read_text()) for it in bt["items"]]
+        with patch.object(TB, "posts", lambda: [b, a]), patch.object(TB.DM, "load", lambda *a_, **k: {"de": {("lblog", "a-post"): 0}}):
+            self.assertGreater(TB.submit(self.args("run", "--langs", "de", "--limit", "1")), 0)
+        self.assertEqual(slugs(), ["a-post"], "mit --limit 1 der gesuchte Beitrag statt des neuesten")
+
+    def test_loader_needs_community_api_and_never_raises(self):
+        import search_demand as DM
+        DM._CACHE.clear(); self.addCleanup(DM._CACHE.clear)
+        calls = []
+        def opener(req, timeout=0):
+            calls.append(req.full_url); return io.BytesIO(json.dumps({"langs": {"de": [{"kind": "episode", "item": "x", "searches": 9}, {"kind": "lblog", "item": "y"}, {"kind": 1}], "fr": "kaputt"}}).encode())
+        self.assertEqual(DM.load(opener=opener), {}, "ohne COMMUNITY_API kein Abruf")
+        with patch.dict(os.environ, {"COMMUNITY_API": "https://api.example.test/", "SEARCH_DEMAND": ""}):
+            self.assertEqual(DM.load(opener=opener), {"de": {("episode", "x"): 0, ("lblog", "y"): 1}})
+            self.assertEqual(DM.load(opener=opener)["de"][("episode", "x")], 0); self.assertEqual(calls, ["https://api.example.test/api/search/demand-export"], "einmal je Lauf")
+            DM._CACHE.clear()
+            def broken(req, timeout=0): raise urllib.error.URLError("weg")
+            self.assertEqual(DM.load(opener=broken), {}, "nicht abrufbar: bisherige Reihenfolge")
+        seq = ["c", "a", "b", "d"]
+        self.assertEqual(DM.order(seq, {"de": {("lblog", "b"): 0, ("lblog", "d"): 1}}, "lblog", lambda x: "de", lambda x: x), ["b", "d", "c", "a"])
+        self.assertEqual(DM.order(seq, {}, "lblog", lambda x: "de", lambda x: x), seq)
+        self.assertEqual(DM.order_any(seq, {"fr": {("episode", "a"): 0}, "de": {("episode", "d"): 0}}, "episode", ["de", "fr"], lambda x: x), ["a", "d", "c", "b"])
 
 
 if __name__ == "__main__":
