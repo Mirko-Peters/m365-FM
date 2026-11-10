@@ -16,12 +16,13 @@ import { handleLinkedinEvents, oauthStartLE, oauthCallbackLE, deleteUserLinkedin
 import { handleSponsor, handleSponsorLink } from "./sponsor.js";
 import { handleAds, handlePaypalWebhook } from "./ads.js";
 import { handleSponsorOrders } from "./sponsor_orders.js";
-import { autoTranslateItems, autoTranslateEntities, runTrQueue } from "./autotr.js";
+import { autoTranslateItems, autoTranslateEntities, runTrQueue, runTrDemand } from "./autotr.js";
 import { syncLiveEvents } from "./liveevents.js";
 import { syncContentTopics, handleTopics } from "./topics.js";
 import { importQuotesFromSite, handleQuotes } from "./quotes.js";
 import { importEpisodes, importTranslations, handleRegister } from "./register.js";
 import { importSearchIndex, syncSearchVectors, handleSearch } from "./search.js";
+import { handleSearchDemand, classifySearches, aggregateDemand, purgeSearchStats } from "./search_demand.js";
 import { entityMap } from "./entities.js";
 import { handleProfiles, deleteUserData, refreshProfilesExport } from "./profiles.js";
 import { handleClaimVerify } from "./claimverify.js";
@@ -305,7 +306,8 @@ async function api(env, request, url, path, asUser, ctx) {
     await ensureDirectoryCols(db);
     return (await handleDirectory(env, request, url, J)) || J({ error: "not_found" }, 404);
   }
-  if (path === "/api/search") return handleSearch(env, request, url, J);
+  if (path === "/api/search") return handleSearch(env, request, url, J, asUser === undefined ? ctx : undefined);   // nur Suchen der Website zaehlen (#156), keine MCP-Aufrufe
+  if (path === "/api/search/report" || path === "/api/search/gaps" || path === "/api/search/demand-export") return await handleSearchDemand(env, request, url, path, user, J);   // #156
   if (path === "/api/providers") return J({ providers: Object.keys(PROVIDERS).filter((k) => PROVIDERS[k].id(env) && PROVIDERS[k].secret(env)) }, 200, { "cache-control": "public, max-age=300" });
   if (path === "/api/me/li-follow" && method === "POST") {
     if (need()) return need();
@@ -625,6 +627,7 @@ export default {
       T("runDigest", () => runDigest(env, { at: scheduledAt }));
       T("syncInviterBadges", () => syncInviterBadges(env));   // einmal taeglich (Sicherheitsnetz: Zurechnung, Entwertung und Kontoloeschung bewerten sofort)
       T("purgeLinkedinOrphans", () => purgeLinkedinOrphans(env.DB));   // verwaiste LinkedIn-Zeilen nach dem Ende des Events (#323)
+      T("purgeSearchStats", () => purgeSearchStats(env.DB));   // Suchbegriffe und Nachfrage: 12 Monate (#156)
     }
     if (event.cron === "*/30 * * * *") T("runDigest", () => runDigest(env, { at: scheduledAt }));
     T("refreshFeeds", () => refreshFeeds(env));
@@ -651,6 +654,11 @@ export default {
     T("backfillDirectoryGeocodes", () => backfillDirectoryGeocodes(env));
     T("remindInvites", () => remindInvites(env));
     T("runTrQueue", () => runTrQueue(env, entityMap));
+    T("searchDemand", async () => {   // #156: Begriffe einordnen (Workers AI/Vectorize, nie im Suchpfad), Nachfrage fortschreiben, im Haiku-Budget uebersetzen
+      // Fortschreiben liest die ganze Tabelle (12 Monate): nur nach neuen Uebersetzungsluecken und einmal taeglich um 06:00 (D1-Lesekontingent)
+      const classified = await classifySearches(env), demand = classified.translation_gap || event.cron === "0 6 * * *" ? await aggregateDemand(env) : { skipped: true };
+      return { classified, demand, translated: await runTrDemand(env, entityMap) };
+    });
     T("syncLiveEvents", () => syncLiveEvents(env, entityMap));
     T("syncContentTopics", () => syncContentTopics(env));
     T("importEntitiesFromSite", () => importEntitiesFromSite(env));
