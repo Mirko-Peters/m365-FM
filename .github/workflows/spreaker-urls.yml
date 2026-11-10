@@ -7,6 +7,8 @@ name: Spreaker-Adressen der Folgen abgleichen
 # (schreibt nichts), mit Freigabe nur das Feld Website (episode_link). Die Datei legt Mirko an, nachdem er die Ausgabe eines Probelaufs geprueft hat.
 # Beschreibungen (description_html) aendert nur ein von Hand gestarteter Lauf mit mode=apply. Vor jedem Schreiben sichert das Werkzeug die alten
 # Werte in shownotes/spreaker_backup/urls-<id>.json und schreibt nur, wenn die Zielseite mit 200 antwortet.
+# Jeder Lauf haelt data/spreaker_index.json aktuell (ID, Titel, Veroeffentlichungszeit aller Folgen der Hauptshow, nur oeffentliche Metadaten):
+# damit ordnet der Seitenbau auch alte Podpage-Seiten ausserhalb des RSS-Fensters ihrer Spreaker-ID zu (site_podpage.spreaker_match).
 on:
   schedule:
     - cron: "17 5 * * *"
@@ -44,7 +46,7 @@ jobs:
         if: always()
         run: |
           git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
-          for f in data/spreaker_urls.tsv data/spreaker_urls_state.json data/episode_urls.json data/spreaker_auth.enc shownotes/spreaker_backup; do [ -e "$f" ] && git add -A "$f"; done
+          for f in data/spreaker_urls.tsv data/spreaker_urls_state.json data/spreaker_index.json data/episode_urls.json data/spreaker_auth.enc shownotes/spreaker_backup; do [ -e "$f" ] && git add -A "$f"; done
           if git diff --cached --quiet; then echo "nichts zu sichern"; exit 0; fi
           git commit -q -m "Spreaker-Adressen: Protokoll $(date -u +%Y-%m-%dT%H:%MZ) [skip ci]"
           for i in 1 2 3 4 5; do

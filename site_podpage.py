@@ -9,7 +9,7 @@ from site_design import pager as PG   # Vor/Zurueck am Seitenende (rel=prev/next
 import site_sponsorships as SPM   # T37 Sponsor: Kennzeichnung gesponserter Folgen (data/sponsorships.json)
 import site_shownotes_seo as SSEO   # neu geschriebene englische Show Notes (rewrite_shownotes.py)
 import site_transcripts as TRS   # #266: Transkripte als Dateien neben der Folgenseite (R2)
-from site_episode_urls import episode_url   # kanonische Folgen-Adresse (eine Quelle)
+from site_episode_urls import episode_url, sid_owners   # kanonische Folgen-Adresse (eine Quelle); eine Spreaker-ID je Seite
 import gzip, json, re, unicodedata, html as _h
 from functools import lru_cache
 from html.parser import HTMLParser
@@ -230,32 +230,103 @@ _IDX = {}
 _SIDS = {}
 
 
+def _ts(s):
+    """Unix-Zeit aus ISO (Podpage), RFC 2822 (RSS) oder "JJJJ-MM-TT HH:MM:SS" (Spreaker-API, UTC); None, wenn unlesbar."""
+    from email.utils import parsedate_to_datetime
+    from datetime import timezone
+    s = str(s or "")
+    for f in (lambda v: datetime.fromisoformat(v), parsedate_to_datetime, lambda v: datetime.strptime(v[:19], "%Y-%m-%d %H:%M:%S").replace(tzinfo=timezone.utc)):
+        try:
+            d = f(s)
+            return int((d if d.tzinfo else d.replace(tzinfo=timezone.utc)).timestamp())
+        except (TypeError, ValueError, IndexError):
+            pass
+    return None
+
+
+def _pslug(t):
+    """Slug eines Spreaker-Titels wie die Podpage-Slugs: _slugify ohne Kuerzung, Apostrophe entfallen (Podpage: "Who's" -> "whos")."""
+    return _slugify(re.sub(r"['\u2019]", "", t or ""), 10 ** 6)
+
+
+def _slug_hit(slug, slugs):
+    """Podpage-Slug passt zu einem Titel-Slug: gleich oder einer Anfang des anderen (Podpage kuerzt lange Slugs, auch mitten im Wort)."""
+    return len(slug or "") >= 15 and any(len(x) >= 15 and (x == slug or x.startswith(slug) or slug.startswith(x)) for x in slugs)
+
+
 def _EN_SID():
-    """Spreaker-IDs der Hauptshow (data/en_episodes.json), einmal je Bau: {"title": norm(Titel) -> ID, "pub": [(Unix-Zeit, ID)]}."""
+    """Spreaker-IDs der Hauptshow, einmal je Bau. title: norm(Titel) -> ID und pub: [(Unix-Zeit, ID)] aus dem RSS (data/en_episodes.json);
+    ititle/ipub dasselbe aus dem Index der Spreaker-API (data/spreaker_index.json, alle Folgen auch ausserhalb des RSS-Fensters, schreibt
+    tools/spreaker_urls.py; fehlt er, bleiben sie leer); ids: norm(Titel) -> alle IDs mit diesem Titel (RSS, Show Notes, Index);
+    names: ID -> Slugs ihrer Titel; at: ID -> Veroeffentlichungszeiten."""
     if not _SIDS:
-        _SIDS.update(title={}, pub=[])
-        if (D / "en_episodes.json").exists():
-            from email.utils import parsedate_to_datetime
-            for k, v in json.loads((D / "en_episodes.json").read_text("utf-8")).items():
-                if not isinstance(v, dict) or not str(v.get("spreaker_id") or "").isdigit(): continue
-                _SIDS["title"].setdefault(norm(v.get("title") or k), str(v["spreaker_id"]))
-                try: _SIDS["pub"].append((int(parsedate_to_datetime(v["pub"]).timestamp()), str(v["spreaker_id"])))
-                except (TypeError, ValueError, KeyError): pass
+        _SIDS.update(title={}, pub=[], ititle={}, ipub=[], ids={}, names={}, at={})
+        def add(sid, title, when, src):
+            k = norm(title)
+            if k: _SIDS["ids"].setdefault(k, set()).add(sid); _SIDS["names"].setdefault(sid, set()).add(_pslug(title))
+            if src == "rss" and k: _SIDS["title"].setdefault(k, sid)
+            if src == "idx" and k: _SIDS["ititle"].setdefault(k, set()).add(sid)
+            t = _ts(when) if when else None
+            if t is not None and src != "notes": _SIDS["pub" if src == "rss" else "ipub"].append((t, sid)); _SIDS["at"].setdefault(sid, set()).add(t)
+        def read(f):
+            try: return json.loads((D / f).read_text("utf-8")) if (D / f).exists() else {}
+            except ValueError: return {}
+        for k, v in read("en_episodes.json").items():
+            if isinstance(v, dict) and str(v.get("spreaker_id") or "").isdigit(): add(str(v["spreaker_id"]), v.get("title") or k, v.get("pub"), "rss")
+        sn = (read("show_notes/en.json") or {}).get("episodes") or {}
+        for r in (sn.values() if isinstance(sn, dict) else sn):
+            if isinstance(r, dict) and str(r.get("id") or "").isdigit(): add(str(r["id"]), r.get("title"), None, "notes")
+        ix = read("spreaker_index.json"); ix = ix.get("episodes") if isinstance(ix, dict) else None   # falsche Form (Liste, Text): wie ohne Index
+        for sid, v in (ix.items() if isinstance(ix, dict) else ()):
+            if str(sid).isdigit() and isinstance(v, dict): add(str(sid), str(v.get("t") or ""), str(v.get("p") or ""), "idx")
     return _SIDS
 
 
+def _by_time(x, pub, t, slug, only=None):
+    """ID per Veroeffentlichungszeit (+-2 min): eine Kandidatin, sonst die eine sekundengleiche, sonst die eine, deren Titel-Slug zum
+    Podpage-Slug passt (Podpage hat den Titel umbenannt, der Slug blieb). Nur eindeutige Ergebnisse. -> (ID, Guete) oder ("", 9)"""
+    if t is None: return "", 9
+    c = {}
+    for p, sid in pub:
+        if abs(p - t) <= 120 and (only is None or sid in only): c[sid] = min(c.get(sid, 999), abs(p - t))
+    if len(c) == 1: sid, d = c.popitem(); return sid, (2 if d <= 1 else 3)
+    ex = [s for s, d in c.items() if d <= 1]
+    if len(ex) == 1: return ex[0], 2
+    sl = [s for s in (ex or c) if _slug_hit(slug, x["names"].get(s, ()))]
+    return (sl[0], 4) if len(sl) == 1 else ("", 9)
+
+
+def spreaker_match(e, nrec=None):
+    """(Spreaker-ID, Guete) einer Podpage-Folge. Guete (kleiner = sicherer; build_mapping behaelt bei zwei Seiten mit einer ID die bessere):
+    0 Folge stammt aus Spreaker, 1 Titel eindeutig, 2 Zeit sekundengleich, 3 Zeit +-2 min eindeutig, 4 Slug unter mehreren im 2-min-Fenster,
+    5 nur Slug (hoechstens 2 Tage auseinander), 6 Titel mehrdeutig und keine Zeit-Entscheidung (alte Regel); ("", 9) ohne Treffer.
+    Reihenfolge wie bisher Show Notes, RSS-Titel, RSS-Zeit; erst danach (nur fuer Folgen, die so keine ID bekamen) der Index der
+    Spreaker-API (Titel, Zeit) und zuletzt der Slug allein."""
+    if e.get("spreaker_id"): return str(e["spreaker_id"]), 0   # T28: Folge stammt direkt aus Spreaker
+    x = _EN_SID(); k = norm(e.get("name")); t = _ts(e.get("published")) if e.get("published") else None; slug = e.get("slug") or ""
+    hit = str((nrec or {}).get("id") or "") or x["title"].get(k, "")
+    same = x["ids"].get(k, set()) | ({hit} if hit else set())
+    if hit and len(same) == 1: return hit, 1
+    if hit:   # gleicher Titel bei mehreren Spreaker-Folgen (Neu-Upload): Zeit entscheidet unter ihnen, sonst die alte Regel (erster Treffer)
+        r = _by_time(x, x["pub"] + x["ipub"], t, slug, same)
+        return r if r[0] else (hit, 6)
+    r = _by_time(x, x["pub"], t, slug)
+    if r[0]: return r
+    ii = x["ititle"].get(k, set())   # Index der Spreaker-API: alte Folgen ausserhalb des RSS-Fensters
+    if ii and len(same) == 1: return next(iter(ii)), 1
+    if ii:
+        r = _by_time(x, x["pub"] + x["ipub"], t, slug, same)
+        if r[0]: return r
+    r = _by_time(x, x["ipub"], t, slug)
+    if r[0] or t is None: return r
+    sl = {s for s, ns in x["names"].items() if _slug_hit(slug, ns) and any(abs(p - t) <= 2 * 86400 for p in x["at"].get(s, ()))}   # Podpage hat Titel und Zeit geaendert
+    return (sl.pop(), 5) if len(sl) == 1 else ("", 9)
+
+
 def spreaker_id(e, nrec=None):
-    """Spreaker-ID einer Podpage-Folge: aus den Show Notes, sonst per Titel, sonst per Veroeffentlichungszeit (+-2 min, nur eindeutig)."""
-    if e.get("spreaker_id"): return str(e["spreaker_id"])   # T28: Folge stammt direkt aus Spreaker
-    if (nrec or {}).get("id"): return str(nrec["id"])
-    x = _EN_SID()
-    if norm(e.get("name")) in x["title"]: return x["title"][norm(e.get("name"))]
-    try:
-        t = int(datetime.fromisoformat(str(e.get("published"))).timestamp())
-    except (TypeError, ValueError):
-        return ""
-    c = {sid for p, sid in x["pub"] if abs(p - t) <= 120}
-    return c.pop() if len(c) == 1 else ""
+    """Spreaker-ID einer Podpage-Folge (spreaker_match ohne Guete): Show Notes, Titel (nur eindeutig), Veroeffentlichungszeit (+-2 min, nur
+    eindeutig), Index der Spreaker-API, Slug."""
+    return spreaker_match(e, nrec)[0]
 
 
 def episode_index(BASE):
@@ -282,12 +353,14 @@ def episode_index(BASE):
               "sum": short_desc(e, nrec, 260), "keypoints": [x for x in kp if isinstance(x, str)], "faq": faq, "guests": [gg["slug"] for gg in eg[e["slug"]]],
               "duration": iso_dur((nrec or {}).get("duration")), "number": (str(e.get("number") or "") if str(e.get("number") or "") not in ("None", "") else ""), "season": (str(e.get("season") or "") if str(e.get("season")) != "None" else "")}
         it["_t"] = e["name"].lower(); it["_k"] = " ".join(it["keypoints"] + [x["q"] + " " + x["a"] for x in faq]).lower()
-        it["sid"] = spreaker_id(e, nrec)   # Spreaker-Folgen-ID (Schluessel der Extraktion shownotes/entities/<id>.json)
+        it["sid"], it["sid_q"] = spreaker_match(e, nrec)   # Spreaker-Folgen-ID (Schluessel der Extraktion shownotes/entities/<id>.json) und Guete der Zuordnung
+        items.append(it); by_slug[e["slug"]] = it
+    by_sid = sid_owners(items, print)   # eine ID nie auf zwei Seiten (Regel wie build_mapping): die unsicherere Seite verliert die ID ganz, damit
+    for e, it in zip(eps, items):       # Extraktion, YouTube-Video, spreaker-pages.json und spreaker-urls.json dieselbe Seite nennen
+        if it["sid"] and by_sid.get(it["sid"], it)["slug"] != it["slug"]: it["sid"], it["sid_q"] = "", 9
         _vl = re.search(r"(?:v=|youtu\.be/)([\w-]{11})", str(e.get("video_link") or ""))
         if _vl: it["yt"] = _vl.group(1)   # YouTube-Video der Folge (Podpage)
         if SX.yt_of(it["sid"]) and not it.get("yt"): it["yt"] = SX.yt_of(it["sid"])
-        items.append(it); by_slug[e["slug"]] = it
-    by_sid = {it["sid"]: it for it in items if it["sid"]}
     _IDX[BASE] = {"eps": eps, "items": items, "eg": eg, "ge": ge, "by_slug": by_slug, "by_sid": by_sid, "guests": guests}
     return _IDX[BASE]
 
