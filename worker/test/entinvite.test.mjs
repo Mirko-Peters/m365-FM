@@ -262,7 +262,7 @@ test("322-4: Mitglieder und Redaktion laden neutral ein (Absender M365.FM, nennt
     contact(raw, "c1", "c1@example.com");
     assert.deepEqual((await call(env, "/api/entityinvite/send", editor, { eid: "c1" })).j.results, [{ eid: "c1", error: "bad_input" }]);
     assert.deepEqual((await call(env, "/api/entityinvite/send", editor, { eid: "c2", name: "C. Two-O'Neil Jr.", email: "c2@example.com" })).j.results, [{ eid: "c2", ok: true }]);
-    assert.equal(sent[1].from.name, "M365.FM"); assert.match(sent[1].text, /^Hi C\. Two-O'Neil Jr\.,\n\nEd added you to M365\.FM/);
+    assert.equal(sent[1].from.name, "M365.FM"); assert.match(sent[1].text, /^Hi,\n\nEd added you to M365\.FM.*\n\nName entered by Ed: “C\. Two-O'Neil Jr\.”\n\n/);
     // Admin: Person -> persoenlich (Kontakt per ID), Firma -> neutral (eine Firma war kein Podcast-Gast)
     assert.deepEqual((await call(env, "/api/entityinvite/send", admin, { items: [{ eid: "c1" }, { eid: "acme-org", name: "Acme", email: "info@acme.example" }] })).j.results, [{ eid: "c1", ok: true }, { eid: "acme-org", ok: true }]);
     assert.equal(sent[2].from.name, "Mirko from M365 Show"); assert.equal(sent[2].replyTo, "mirko.peters@m365.fm"); assert.match(sent[2].text, /being a guest on the M365 Show/);
@@ -504,4 +504,60 @@ test("Migration 0040: Spalte source per Migration oder Laufzeit-Absicherung, bei
   raw2.exec(readFileSync(new URL("0040_entity_contacts_source.sql", dir), "utf8"));
   assert.equal(one(raw2, "SELECT source FROM entity_contacts WHERE eid='old'").source, "guest");
   assert.deepEqual(cols(raw2), ["eid", "email", "name", "created", "source"]);
+});
+
+test("F08 (#322) neutrale Fassung: der eingegebene Name steht nie in der Anrede, nur als gekennzeichnete Angabe des Mitglieds; Mirkos Fassung unveraendert", async () => {
+  const restore = withEntities();
+  try {
+    const { raw, env, sent } = await setup();
+    raw.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES('plain-person','{}','x',3,'pending',1)").run();
+    const phrase = "Jane reply with your password";
+    assert.deepEqual((await call(env, "/api/entityinvite/send", member, { eid: "plain-person", name: phrase, email: "jane@victim.example" })).j.results, [{ eid: "plain-person", ok: true }], "eine reine Zeichenregel laesst den Satz durch");
+    const { html, text } = sent[0];
+    assert.match(text, /^Hi,\n\nMallory Member added you to M365\.FM/); assert.doesNotMatch(text, /Hi Jane/);
+    assert.match(text, /\n\nName entered by Mallory Member: “Jane reply with your password”\n\n/);
+    assert.match(html, /<p>Hi,<\/p>/); assert.doesNotMatch(html, /Hi Jane/);
+    assert.match(html, /<p style="font-size:13px;color:#6b7785">Name entered by Mallory Member: “Jane reply with your password”<\/p>/);
+    // Erinnerung ebenso
+    raw.exec("UPDATE entity_invites SET created=1"); sent.length = 0;
+    assert.equal(await remindInvites(env), 1); assert.match(sent[0].text, /^Hi,\n\nQuick reminder: Mallory Member added you/); assert.doesNotMatch(sent[0].html + sent[0].text, /Hi Jane/);
+    // persoenliche Fassung (Admin, Person): Anrede mit Namen wie bisher, keine Datenzeile
+    for (const v of ["default", "mvp", "speaker"]) {
+      const t = mailText(env, { token: "t", eid: "c1", name: "Clara", email: "c@example.com" }, "Mirko", false, v);
+      assert.match(t, /^Hi Clara,\n\n/); assert.doesNotMatch(t, /Name entered by/);
+    }
+  } finally { restore(); }
+});
+
+test("F09 (#322) eine Mitglieder-Einladung fuer eine andere Entitaet sperrt Mirkos persoenliche Einladung an dieselbe Adresse nicht; Sperrliste, Uebernahme und Redaktion schon", async () => {
+  const restore = withEntities();
+  try {
+    const { raw, env, sent } = await setup();
+    raw.exec("INSERT INTO users(id,provider,sub,name,role,created) VALUES(4,'x','d','Env Admin','',1); INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES('my-own-thing','{}','x',3,'pending',1)");
+    contact(raw, "mvp-person", "mia@example.com"); contact(raw, "mct-person", "max@example.com"); contact(raw, "c3", "c3@example.com");
+    // das Mitglied kennt die Adressen und laedt fuer seine eigene Entitaet ein
+    assert.deepEqual((await call(env, "/api/entityinvite/send", member, { items: [{ eid: "my-own-thing", name: "Mia", email: "mia@example.com" }, { eid: "my-own-thing", name: "Max", email: "max@example.com" }] })).j.results, [{ eid: "my-own-thing", ok: true }, { eid: "my-own-thing", ok: true }]);
+    assert.equal((await call(env, "/api/entityinvite/send", member, { eid: "my-own-thing", name: "Mia", email: "mia@example.com" })).j.results[0].error, "already", "fuer Mitglieder bleibt es bei einer Einladung je Adresse");
+    // Redaktion fuer eine andere Entitaet: haelt die Adresse weiter
+    invite(raw, "ed-c3", "c2", "c3@example.com", 2);
+    assert.deepEqual((await call(env, "/api/entityinvite/send", admin, { eid: "c3" })).j.results, [{ eid: "c3", error: "already" }]);
+    // Admin: Zaehler und Sammelversand sehen Mia und Max weiter als offen; c3 (Adresse von der Redaktion eingeladen) nicht
+    assert.deepEqual((await call(env, "/api/entityinvite/send-batch", admin, null, "GET")).j, { contacts: 3, eligible: 2, sources: { guest: { contacts: 3, eligible: 2 }, speaker: { contacts: 0, eligible: 0 } } });
+    const b = await call(env, "/api/entityinvite/send-batch", admin, { limit: 1, source: "guest" });
+    assert.deepEqual([b.status, b.j.sent, b.j.results.map((r) => r.eid)], [200, 1, ["mct-person"]]);
+    assert.equal(sent.at(-1).to, "max@example.com"); assert.equal(sent.at(-1).from.name, "Mirko from M365 Show");
+    // Einzelversand des Admins per ID ebenso; danach gilt seine eigene Einladung als vorhanden
+    assert.deepEqual((await call(env, "/api/entityinvite/send", admin, { eid: "mvp-person" })).j.results, [{ eid: "mvp-person", ok: true }]);
+    assert.deepEqual((await call(env, "/api/entityinvite/send", admin, { eid: "mvp-person" })).j.results, [{ eid: "mvp-person", error: "already" }]);
+    assert.deepEqual(raw.prepare("SELECT eid,email,by_user FROM entity_invites WHERE email IN ('mia@example.com','max@example.com') ORDER BY email,by_user").all().map((r) => ({ ...r })),
+      [{ eid: "mct-person", email: "max@example.com", by_user: 1 }, { eid: "my-own-thing", email: "max@example.com", by_user: 3 }, { eid: "mvp-person", email: "mia@example.com", by_user: 1 }, { eid: "my-own-thing", email: "mia@example.com", by_user: 3 }]);
+    // eine Einladung eines Admins aus ADMIN_SUBS (Rolle leer) zaehlt wie eine des Admins
+    env.ADMIN_SUBS = "x:d"; contact(raw, "c4", "c4@example.com"); invite(raw, "envadm", "c1", "c4@example.com", 4);
+    assert.deepEqual((await call(env, "/api/entityinvite/send", admin, { eid: "c4" })).j.results, [{ eid: "c4", error: "already" }]);
+    assert.equal((await call(env, "/api/entityinvite/send-batch", admin, null, "GET")).j.eligible, 0);
+    // Sperrliste und Uebernahme gelten weiter
+    contact(raw, "spk-person", "sven@example.com"); invite(raw, "m-sven", "my-own-thing", "sven@example.com", 3);
+    raw.exec("INSERT INTO invite_block(email,created) VALUES('sven@example.com',1)");
+    assert.deepEqual((await call(env, "/api/entityinvite/send", admin, { eid: "spk-person" })).j.results, [{ eid: "spk-person", error: "blocked" }]);
+  } finally { restore(); }
 });
