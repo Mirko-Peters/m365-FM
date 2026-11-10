@@ -28,6 +28,16 @@ SIZE_N = {"1": (1, 1), "2-10": (2, 10), "11-50": (11, 50), "51-200": (51, 200), 
 
 
 CACHE = Path(__file__).parent / "data" / "members_export.json"   # letzte erfolgreiche Fassung: faellt der Abruf aus, bleiben die Profilseiten erhalten
+# Merker fuer tools/r2_og_upload.py im Bilder-Ordner (OG_OUT, wird nicht hochgeladen): Stand des Profil-Exports dieses Baus. Nur bei "frisch" und
+# 0 Personen darf der Upload die letzten persoenlichen Karten loeschen; bei "cache"/"fehlt" (Export ausgefallen) greift seine Sicherung.
+MARK = Path(__file__).parent / __import__("os").environ.get("OG_OUT", "r2img") / "profiles-export.json"
+
+
+def _mark(state, people):
+    try:
+        MARK.parent.mkdir(parents=True, exist_ok=True); MARK.write_text(json.dumps({"state": state, "people": people}), encoding="utf-8")
+    except Exception:
+        pass
 
 
 def _fetch_export(url):
@@ -60,25 +70,30 @@ def public_orgs(orgs):
 
 
 def fetch_members(api):
-    import sys, time
-    j = None
+    import sys, time, site_fetch as SF
+    j, url = None, f"{api}/api/profiles/export"
     for n in range(3):   # der Export liest alle Profile nacheinander aus D1: kann dauern
-        j = _fetch_export(f"{api}/api/profiles/export")
+        j = _fetch_export(url)
         if j and j.get("people") is not None:
             break
         print(f"WARNUNG: Profil-Export Versuch {n + 1}/3 fehlgeschlagen", file=sys.stderr); time.sleep(5 * (n + 1))
-    if j and j.get("people"):
-        j = strip_private_items(j)
+    live = SF.states().get(url) == "frisch"
+    # Frisch abgerufen, ohne Fehler und wirklich leer (kein oeffentliches Profil mehr): kein Rueckgriff auf die alte Fassung - sonst blieben Seiten und
+    # Teilen-Karten (Foto, Name) entfernter Profile stehen. Ein leerer Export mit Fehlern (failed) oder aus einem Zwischenspeicher gilt als ausgefallen.
+    empty = live and bool(j) and j.get("people") == [] and not j.get("failed")
+    if (j and j.get("people")) or empty:
+        j = strip_private_items(j); state = "frisch" if live else "cache"
         try:
             CACHE.write_text(json.dumps(j, ensure_ascii=False), encoding="utf-8")
         except Exception:
             pass
     elif CACHE.exists():
         print("WARNUNG: Profil-Export nicht erreichbar, nutze die gespeicherte Fassung", file=sys.stderr)
-        j = strip_private_items(json.loads(CACHE.read_text("utf-8")))
+        j = strip_private_items(json.loads(CACHE.read_text("utf-8"))); state = "cache"
     else:
         print("FEHLER: Profil-Export nicht erreichbar und keine gespeicherte Fassung: es entstehen keine Profilseiten", file=sys.stderr)
-        j = j or {}
+        j = j or {}; state = "fehlt"
+    _mark(state, len(j.get("people") or []))
     print(f"Profile: {len(j.get('people', []))} Personen, {len(j.get('orgs', []))} Firmen", file=sys.stderr)
     return j.get("people", []), public_orgs(j.get("orgs", []))
 
