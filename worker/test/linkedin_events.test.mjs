@@ -7,7 +7,7 @@ import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import vm from "node:vm";
 import worker from "../src/index.js";
-import { LI, HS, UTM, HOLD_S, CAND_MAX, localToMs, hsMs, evWindow, fetchHeySummit, matchHeySummit, buildPayload, encryptToken, decryptToken, oauthStartLE, checkState, oauthCallbackLE, handleLinkedinEvents, proposals, act, getConn, urnOf, deleteUserLinkedin, linkedinUrlFor, purgeLinkedinOrphans } from "../src/linkedin_events.js";
+import { orgUrn, LI, HS, UTM, HOLD_S, CAND_MAX, localToMs, hsMs, evWindow, fetchHeySummit, matchHeySummit, buildPayload, encryptToken, decryptToken, oauthStartLE, checkState, oauthCallbackLE, handleLinkedinEvents, proposals, act, getConn, urnOf, deleteUserLinkedin, linkedinUrlFor, purgeLinkedinOrphans } from "../src/linkedin_events.js";
 import { handleEvents, deleteUserEvents } from "../src/events.js";
 import { handleEventImport } from "../src/eventimport.js";
 import { mergeStatements } from "../src/identities.js";
@@ -1011,4 +1011,24 @@ test("F12 (#323) verwaiste veroeffentlichte Zeilen verschwinden nach dem Ende de
   } finally { console.error = err; console.log = lg; globalThis.fetch = gf; }
   assert.deepEqual(raw.prepare("SELECT ok FROM cron_runs WHERE name='purgeLinkedinOrphans'").all().map((r) => r.ok), [1]);
   assert.deepEqual(liRows(raw).map((r) => [r.event_id, r.status]), [[2, "pending"], [3, "published"]]);
+});
+
+test("Seite von Hand (10.11.): die m365.fm-App hat kein r_organization_admin - Adresse oder Nummer der Seite reicht, die Seitenliste meldet no_org_scope", async () => {
+  // orgUrn: Schul-, Unternehmens- und Showcase-Seiten, Admin-Adresse, Nummer, URN; alles andere nicht
+  assert.equal(orgUrn("https://www.linkedin.com/school/107092120/admin/"), "urn:li:organization:107092120");
+  assert.equal(orgUrn("https://de.linkedin.com/company/123456/"), "urn:li:organization:123456");
+  assert.equal(orgUrn("https://www.linkedin.com/showcase/77"), "urn:li:organization:77");
+  assert.equal(orgUrn(" 107092120 "), "urn:li:organization:107092120");
+  assert.equal(orgUrn("urn:li:organization:42"), "urn:li:organization:42");
+  for (const bad of ["", "https://evil.example/company/1/", "https://www.linkedin.com/in/someone/", "https://www.linkedin.com/company/m365fm/", "urn:li:person:1", "12a"]) assert.equal(orgUrn(bad), "", bad);
+  // Verbinden fragt nur Scopes an, die die App hat
+  assert.deepEqual(LI.scope.split(" ").sort(), ["r_events", "rw_events"]);
+  const { env } = await setup(); await connected(env, false);
+  const f = mockFetch([]), call = rest(env, f);
+  assert.deepEqual(await call("/api/admin/linkedin/org", "POST", { ref: "https://www.linkedin.com/school/107092120/admin/", name: "M365.FM" }), { status: 200, j: { ok: true } });
+  const c = await getConn(env.DB); assert.deepEqual([c.org_urn, c.org_name], ["urn:li:organization:107092120", "M365.FM"]);
+  assert.equal((await call("/api/admin/linkedin/org", "POST", { ref: "https://www.linkedin.com/in/someone/" })).j.error, "bad_urn");
+  // Seitenliste ohne r_organization_admin: LinkedIn antwortet 403 -> verstaendlicher Fehler statt li_403
+  const f403 = async (u, init) => (String(u).includes("organizationAcls") ? new Response("", { status: 403 }) : f(u, init));
+  assert.deepEqual(await rest(env, f403)("/api/admin/linkedin/orgs"), { status: 502, j: { error: "no_org_scope" } });
 });

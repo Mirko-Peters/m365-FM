@@ -11,7 +11,8 @@ export const LI = {
   api: "https://api.linkedin.com",
   auth: "https://www.linkedin.com/oauth/v2/authorization",
   token: "https://www.linkedin.com/oauth/v2/accessToken",
-  scope: "rw_events r_organization_admin",                   // muss mit den Produkten der App unter "Auth" uebereinstimmen
+  scope: "rw_events r_events",                               // muss mit den Scopes der App unter "Auth" uebereinstimmen (m365.fm-App, 10.11.: openid, profile, email,
+                                                             // w_member_social, r_events, rw_events). r_organization_admin hat die App nicht: die Seite wird dann von Hand gewaehlt.
   events: "/rest/events",                                    // POST = anlegen; POST /rest/events/{urn} + X-RestLi-Method: PARTIAL_UPDATE = aendern
   acls: "/rest/organizationAcls?q=roleAssignee&role=ADMINISTRATOR&state=APPROVED",
   org: "/rest/organizations/",
@@ -237,7 +238,7 @@ export async function oauthCallbackLE(env, request, url, user, f = fetch) {
 // ---------- LinkedIn-Aufrufe ----------
 // Fehler tragen nur feste Kennungen (nie Antworttexte oder Token) und sagen, ob LinkedIn sicher NICHTS getan hat (definite) oder der Ausgang offen ist.
 const fail = (code, definite) => Object.assign(new Error(code), { definite });
-const errCode = (e) => (/^(li_\w+|expired|not_connected|no_key)$/.test(String(e?.message)) ? e.message : "li_error");
+const errCode = (e) => (/^(li_\w+|expired|not_connected|no_key|no_org_scope)$/.test(String(e?.message)) ? e.message : "li_error");
 const isGone = (e) => /^li_(404|410)$/.test(errCode(e));   // LinkedIn kennt den Event nicht (mehr), z. B. weil er dort selbst geloescht wurde
 const urnId = (urn) => String(urn || "").split(":").pop();
 export const eventUrl = (urn) => `https://www.linkedin.com/events/${urnId(urn)}/`;
@@ -249,8 +250,18 @@ async function liCall(env, f, url, init) {
   if (!r.ok) throw fail("li_" + r.status, r.status >= 400 && r.status < 500 && r.status !== 408);   // 4xx = abgelehnt; 408 und 5xx koennen trotzdem etwas angelegt haben
   return r;
 }
+// Seite von Hand: urn:li:organization:N, die Nummer allein oder die Adresse der Seite (auch die Admin-Adresse), z. B.
+// https://www.linkedin.com/school/107092120/admin/ - Schulseiten und Unternehmensseiten sind bei LinkedIn beide "organization".
+export function orgUrn(v) {
+  const s = String(v || "").trim(); let m;
+  if ((m = /^urn:li:organization:(\d{1,20})$/.exec(s))) return "urn:li:organization:" + m[1];
+  if ((m = /^(\d{1,20})$/.exec(s))) return "urn:li:organization:" + m[1];
+  if ((m = /^https:\/\/(?:[a-z]{2,3}\.)?(?:www\.)?linkedin\.com\/(?:company|school|showcase)\/(\d{1,20})(?:[/?#]|$)/i.exec(s))) return "urn:li:organization:" + m[1];
+  return "";
+}
 export async function listOrgs(env, f = fetch) {
   const tok = await accessToken(env, f), r = await f(LI.api + LI.acls, { headers: liHeaders(tok) });
+  if (r.status === 403) throw new Error("no_org_scope");   // ohne r_organization_admin: Seite von Hand eintragen (orgUrn)
   if (!r.ok) throw new Error("li_" + r.status);
   const urns = [...new Set(((await r.json()).elements || []).map((e) => e.organization).filter(Boolean))].slice(0, 20), out = [];
   for (const urn of urns) {
@@ -451,7 +462,7 @@ export async function handleLinkedinEvents(env, request, url, path, user, J, f =
   if (path === "/api/admin/linkedin/status" && get) { const c = await getConn(db), cr = creds(env); return J({ configured: !!(cr.id && cr.secret), connected: !!c?.access_enc, org_urn: c?.org_urn || "", org_name: c?.org_name || "", redirect_uri: env.API + LI.redirectPath, scope: LI.scope, heysummit_key: !!env.HEYSUMMIT_API_KEY }); }
   if (path === "/api/admin/linkedin/orgs" && get) { try { return J({ orgs: await listOrgs(env, f) }); } catch (e) { return J({ error: errCode(e) }, 502); } }
   if (path === "/api/admin/linkedin/org" && post) {
-    const b = await request.json().catch(() => ({})), urn = String(b.urn || ""); if (!/^urn:li:organization:\d{1,20}$/.test(urn)) return J({ error: "bad_urn" }, 400);
+    const b = await request.json().catch(() => ({})), urn = orgUrn(b.urn || b.ref); if (!urn) return J({ error: "bad_urn" }, 400);
     const r = await db.prepare("UPDATE linkedin_conn SET org_urn=?,org_name=?,updated=? WHERE id=1").bind(urn, cleanText(b.name, 120), now()).run();
     return Number(r.meta?.changes || 0) === 1 ? J({ ok: true }) : J({ error: "not_connected" }, 400);
   }
