@@ -1,5 +1,5 @@
 // Feeds der Creator-Kanaele einsammeln: nur Titel, Link und Datum (kein Volltext), https, begrenzte Groesse
-import { cleanText, BOT_UA, audit } from "./util.js";
+import { cleanText, BOT_UA, audit, rateLimit } from "./util.js";
 import { sendPush } from "./push.js";
 import { goodHost, ensureFeedCols } from "./profiles.js";
 import { queueTopicNotification } from "./topic_notifications.js";
@@ -111,11 +111,10 @@ export async function refreshFeeds(env, max = 8) {
         ...items.map((i) => db.prepare("INSERT INTO feed_items(channel_id,owner_type,owner_id,url,title,published,summary,thumb) VALUES(?,?,?,?,?,?,?,?) ON CONFLICT(url) DO UPDATE SET summary=CASE WHEN feed_items.summary='' THEN excluded.summary ELSE feed_items.summary END, thumb=CASE WHEN feed_items.thumb='' THEN excluded.thumb ELSE feed_items.thumb END").bind(c.id, c.owner_type, c.owner_id, i.url, i.title, i.t, i.desc || "", i.thumb || "")),
         db.prepare("UPDATE channels SET fetched=?, fails=0 WHERE id=?").bind(now, c.id)]);
       n += items.length;
-      // sichtbarer fremder Kurzpost haelt einen Link dieses Kanals: einmal je Eintrag und Kanal fuer die Moderation festhalten (sie entscheidet, wem er gehoert)
-      for (const k of foreign.filter((k) => !k.hidden)) {
-        const tgt = `feed_item:${k.id}`, det = `channel:${c.id}`;
-        if (!(await db.prepare("SELECT 1 x FROM audit WHERE action='feed-kurzpost-conflict' AND target=? AND detail=? LIMIT 1").bind(tgt, det).first().catch(() => null))) await audit(db, 0, "feed-kurzpost-conflict", tgt, det);
-      }
+      // sichtbarer fremder Kurzpost haelt einen Link dieses Kanals: hoechstens alle 30 Tage je Eintrag und Kanal fuer die Moderation festhalten (sie entscheidet, wem er gehoert).
+      // Gemerkt wird das ueber den Schluessel kpconf:<eintrag>:<kanal> in ratelimit (Primaerschluessel), nicht ueber eine Suche im nie geleerten Audit-Protokoll.
+      for (const k of foreign.filter((k) => !k.hidden))
+        if (await rateLimit(db, `kpconf:${k.id}:${c.id}`, 1, 30 * 86400).catch(() => false)) await audit(db, 0, "feed-kurzpost-conflict", `feed_item:${k.id}`, `channel:${c.id}`);
       if (news.length) {
         const owner = c.owner_type === "u"
           ? await db.prepare("SELECT handle FROM profiles WHERE user_id=? AND public=1 AND handle IS NOT NULL").bind(c.owner_id).first()

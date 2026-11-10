@@ -13,11 +13,11 @@ export const IMPORT_ROUTE = /^\/api\/(events\/import\/|event\/[a-z0-9-]{3,40}\/(
 // Deckel je Lauf. Ein Lauf bleibt damit weit unter den Grenzen eines Worker-Aufrufs (1.000 Subrequests): wenige Abrufe, gebuendelte D1-Aufrufe.
 // Was nicht in einen Lauf passt, folgt in den naechsten (Fortschritt: meta communitydays_state, session_source.hash, events.sessionize_state='partial').
 export const CAP = { requests: 12, cdEvents: 12, szEvents: 3, szSessions: SYNC_CAP, rekey: 150 };
-const DUE = 20 * 3600;
+const DUE = 20 * 3600;   // ein verknuepfter Sessionize-Endpunkt wird etwa einmal am Tag abgeglichen
 // Tor fuer die Admin-Routen /api/admin/events/* und das MCP-Tool manage_event_duplicates: wie alle /api/admin/*-Routen ueber perm.js can() (gate).
 // Beanspruchungen = claim.decide, alles andere (Import, Dubletten, Zuruecknehmen) = dupes.merge; confers haelt beides Admin-Sache (Editoren und Moderatoren: 403).
 export const adminEventAction = (path) => (/^\/api\/admin\/events\/claims?$/.test(path) ? "claim.decide" : "dupes.merge");
-export const adminEventGate = (db, user, path) => gate(db, user, adminEventAction(path), { confers: true });   // ein verknuepfter Sessionize-Endpunkt wird etwa einmal am Tag abgeglichen
+export const adminEventGate = (db, user, path) => gate(db, user, adminEventAction(path), { confers: true });
 // Ein Stueck Event-Import: Aufraeumen, Schluessel-Rueckfuellung, Community Days, Sessionize-Abgleich.
 // Laeuft in einem eigenen Cron-Aufruf (siehe index.js), nicht im Aufruf der Digests.
 export async function runEventImport(env, opts = {}) {

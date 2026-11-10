@@ -8,6 +8,7 @@ import { parseJsonLd, parseIcs, parseSitemap, runCommunityDays, isMicrosoftRelat
 import { robotsAllowed, UA, politeGet, CACHE_MAX } from "../src/botfetch.js";
 import { normEventName, normSessionTitle, normLink, normUrl, upsertEvent, upsertSession, listDupes, listMerges, decideDupe, unmerge, mergeEvents, slugHandle, backfillKeys, cleanCand, normEnd, EVENT_TABLES } from "../src/eventmerge.js";
 import { mergeStatements } from "../src/identities.js";
+import { deleteUserEditorial } from "../src/editor.js";
 import { queueSessionReminders } from "../src/topic_notifications.js";
 import { TOOLS, handleMcp, callTool } from "../src/mcp.js";
 import { createHash } from "node:crypto";
@@ -1023,6 +1024,10 @@ test("F13 (#319) Admin-Routen der Events und manage_event_duplicates laufen uebe
     { user_id: 1, role: "admin", action: "claim.decide", kind: "event_claim", item_id: "1:4", after: { status: "approved" } },
     { user_id: 1, role: "admin", action: "claim.decide", kind: "event_claim", item_id: "2:5", after: { status: "rejected" } },
   ]);
+  // die Kennung traegt die Nutzer-ID der Beanspruchung: Zusammenfuehren zeigt auf das Ziel-Konto, Loeschen anonymisiert (wie cert, user, verify)
+  raw.prepare("INSERT INTO edit_log(user_id,role,action,kind,item_id,before,after,ts) VALUES(1,'admin','claim.decide','event_claim','3:14','{}','{}',1)").run();
+  user(raw, 6, "Anna neu", "anna-neu"); await env.DB.batch(await mergeStatements(env.DB, 4, 6)); await deleteUserEditorial(env.DB, 5);
+  assert.deepEqual(raw.prepare("SELECT user_id,item_id FROM edit_log WHERE kind='event_claim' ORDER BY id").all().map((r) => [r.user_id, r.item_id]), [[1, "1:6"], [1, "2:0"], [1, "3:14"]]);
   // Dubletten: Zusammenfuehren und Zuruecknehmen ebenfalls im Protokoll
   raw.exec("DELETE FROM edit_log");
   const q = raw.prepare("INSERT INTO dedupe_queue(kind,a_id,b_id,reason,created) VALUES('event',1,2,'test',1)").run();

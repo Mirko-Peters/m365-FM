@@ -789,6 +789,12 @@ test("F04 (#318) ein zurueckgezogener fremder Kurzpost gibt den Link frei (Kanal
   await poll([["Ben video", V1], ["Older", "https://www.youtube.com/watch?v=ooooooooooo"]]); await poll([["Ben video", V1]]);
   assert.deepEqual(x.all("SELECT owner_id,origin,hidden FROM feed_items WHERE url=?", V1), [{ owner_id: 1, origin: "kurzpost", hidden: 0 }]);
   assert.deepEqual(x.all("SELECT user_id,action,target,detail FROM audit WHERE action='feed-kurzpost-conflict'"), [{ user_id: 0, action: "feed-kurzpost-conflict", target: `feed_item:${a1.post}`, detail: "channel:700" }]);
+  // gemerkt wird die Meldung in ratelimit (Primaerschluessel), nicht durch Suchen im Audit-Protokoll: ohne den Audit-Eintrag kommt in 30 Tagen keine zweite Meldung, danach eine Erinnerung
+  assert.equal(x.one("SELECT n FROM ratelimit WHERE k=?", `kpconf:${a1.post}:700`).n, 1);
+  x.raw.exec("DELETE FROM audit WHERE action='feed-kurzpost-conflict'"); await poll([["Ben video", V1]]);
+  assert.equal(x.one("SELECT COUNT(*) n FROM audit WHERE action='feed-kurzpost-conflict'").n, 0);
+  x.raw.prepare("UPDATE ratelimit SET win=win-? WHERE k=?").run(31 * DAY, `kpconf:${a1.post}:700`); await poll([["Ben video", V1]]); await poll([["Ben video", V1]]);
+  assert.equal(x.one("SELECT COUNT(*) n FROM audit WHERE action='feed-kurzpost-conflict'").n, 1);
   // zurueckgezogen: Bens Kanal bekommt sein Video
   for (const c of [a1, a2, a3]) assert.equal((await x.call("/api/contributions/unpublish", { id: c.id })).j.withdrawn, true);
   await poll([["Ben video", V1]]);
