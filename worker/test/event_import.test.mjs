@@ -1092,6 +1092,13 @@ test("Community Days (Next.js): Kontingent - eingespielt wird nur, wessen Event-
   const r2 = await runCommunityDays(s2.env, { ...s2.opts, today: "2026-11-10", state: { last: {}, count: 99 } });
   assert.equal(r2.created + r2.merged + r2.queued, 12, JSON.stringify(r2)); assert.ok(r2.notes.some((n) => /^detail:0\/\d+:budget$/.test(n)), r2.notes.join(" "));
 });
+test("Community Days (Next.js): fallen alle gelesenen Seiten weg (abgesagt), spielt der Lauf keine ungelesenen Events ein", async () => {
+  const many = Array.from({ length: 24 }, (_, i) => cdRec({ RowKey: "q" + i, title: `Azure Day ${String(i).padStart(2, "0")}`, slug: `2027-03-${String(1 + i).padStart(2, "0")}/azure-day-${String(i).padStart(2, "0")}`, start_date: `2027-03-${String(1 + i).padStart(2, "0")}T09:00`, end_date: "", city: "C" + i, country: "de", website: "" }));
+  const s = await setup(); cdNext(s.pages, { list: many, detail: Object.fromEntries(many.map((r, i) => [r.slug, i < 9 ? { ...r, status: "cancelled" } : { ...r, home_content: `<p>About ${r.title}</p>` }])) });
+  for (let k = 0; k < 15; k++) { const r = await runCommunityDays(s.env, { ...s.opts, today: "2026-11-10", maxRequests: 12 }); if (r.skipped_run) break; }
+  const rows = s.raw.prepare("SELECT title,about FROM events WHERE source='communitydays'").all();
+  assert.equal(rows.length, 15); assert.deepEqual(rows.filter((x) => !/About Azure/.test(x.about)).map((x) => x.title), []);
+});
 test("Community Days (Next.js): Praesenz ohne Ort bleibt vor Ort, Seite meldet abgesagt, Website ohne Schema", async () => {
   const inp = cdRec({ RowKey: "b1", title: "Bergen Power Platform Day", slug: "2027-05-02/bergen-pp-day", start_date: "2027-05-02T09:00", end_date: "", city: "", country: "no", event_type: "In Person", website: "www.bergenppday.no", registration_url: "event.checkin.no/1/bergen?utm_source=x" });
   const can = cdRec({ RowKey: "c1", title: "Oslo Copilot Day", slug: "2027-05-03/oslo-copilot-day", start_date: "2027-05-03T09:00", end_date: "", city: "Oslo", country: "no", event_type: "In Person" });
