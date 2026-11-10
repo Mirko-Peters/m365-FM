@@ -30,7 +30,10 @@ async function setup() {
   const puts = [], env = { DB: db, SITE: "https://site.test", IMPORT_OPTS: { fetch, sleep: async () => {} }, PAGES: { put: async (k) => { puts.push(k); } } };
   return { raw, env, pages, calls, n, puts, opts: env.IMPORT_OPTS };
 }
-const user = (raw, id, name, handle, role) => { raw.prepare("INSERT INTO users(id,provider,sub,name,created) VALUES(?,'github',?,?,1)").run(id, "s" + id, name); if (handle) raw.prepare("INSERT INTO profiles(user_id,public,handle,updated) VALUES(?,1,?,1)").run(id, handle); return { id, name }; };
+const user = (raw, id, name, handle, role) => { raw.prepare("INSERT INTO users(id,provider,sub,name,created) VALUES(?,'github',?,?,1)").run(id, "s" + id, name); if (handle) raw.prepare("INSERT INTO profiles(user_id,public,handle,updated) VALUES(?,1,?,1)").run(id, handle); return { id, name, pro: true }; };   // pro = bestaetigtes Mitglied (Programm verifiziert, wie util.js loadUser): deren Events brauchen keine Freigabe (Pruefliste, 0045)
+// Entscheidung "Uebernehmen" fuer alle neuen Events (wie die Route /api/admin/events/review, nur ohne Umweg): die Tests ab hier pruefen Import und Zusammenfuehren, nicht die Pruefliste
+const accept = (raw) => raw.prepare("UPDATE events SET review='approved',review_at=1,public=CASE WHEN start<>'' THEN 1 ELSE 0 END WHERE review='pending'").run();
+const newMember = (...a) => { const u = user(...a); delete u.pro; return u; };   // Mitglied ohne Programm und ohne Punkte: noch nicht bestaetigt
 const SZ = "https://sessionize.com/api/v2/abc123/view/All";
 
 const HANDLE = /^[a-z0-9][a-z0-9-]{2,39}$/;   // wie events.js und die Routen /api/event/<handle>
@@ -518,7 +521,7 @@ test("Speaker-Import (317-07): gleicher Name reicht nie fuer ein fremdes Event o
 test("Eigentum (317-08): was Veranstalter oder Admin bearbeitet haben, ueberschreibt kein Import; importiertes Ende bleibt im Formular speicherbar", async () => {
   const { raw, env, pages, opts } = await setup(), ev = via(handleEvents, env), imp = via(handleEventImport, env);
   const orga = user(raw, 1, "Orga", "orga-p"), admin = { ...user(raw, 3, "Admin", "admin-p"), admin: true };
-  cdPages(pages, fx("communitydays_list.html")); await runCommunityDays(env, { ...opts, today: "2026-05-01" });
+  cdPages(pages, fx("communitydays_list.html")); await runCommunityDays(env, { ...opts, today: "2026-05-01" }); accept(raw);
   const row = () => raw.prepare("SELECT * FROM events WHERE title LIKE 'Hamburg%' AND merged_into=0").get(), first = row();
   assert.equal(first.start, "2026-05-16T09:00"); assert.equal(first.end, "");   // "2026-05-16" als Ende eines Events mit Uhrzeit sagt nichts aus und wuerde im Formular als "Ende vor Beginn" scheitern
   assert.equal(normEnd("2026-05-16T09:00", "2026-05-17"), "2026-05-17"); assert.equal(normEnd("2026-05-16T09:00", "2026-05-16T17:00"), "2026-05-16T17:00"); assert.equal(normEnd("2026-05-16", "2026-05-15"), "");
@@ -616,7 +619,7 @@ test("Adressen (317-13): erzeugte Handles bestehen nur aus a-z, 0-9 und Bindestr
   const { raw, env } = await setup(), db = env.DB, imp = via(handleEventImport, env), u = user(raw, 1, "Orga", "orga-p");
   const titles = ["Community Day Gießen 2027", "Azure Day Łódź", "Global Azure 東京", "Power Platform Tag Москва", "東京 サミット", "Azure Dag København", "Ein sehr langer Titel für eine Veranstaltung der Microsoft Community in Süddeutschland 2027"];
   for (const [i, title] of titles.entries()) { const r = await upsertEvent(db, { title, start: `2027-04-${10 + i}`, city: "Ort", sources: [] }); assert.equal(r.action, "created"); assert.match(r.handle, HANDLE, title); }
-  assert.equal(new Set(raw.prepare("SELECT handle FROM events").all().map((r) => r.handle)).size, titles.length);
+  accept(raw); assert.equal(new Set(raw.prepare("SELECT handle FROM events").all().map((r) => r.handle)).size, titles.length);
   assert.match(raw.prepare("SELECT handle FROM events WHERE title='東京 サミット'").get().handle, /^event-[0-9a-f]{8}$/);
   const h = raw.prepare("SELECT handle FROM events WHERE title LIKE '%Gießen%'").get().handle;
   assert.equal((await imp(u, `/api/event/${h}/claim`, "POST", {}))[0], 200);   // die Route findet das Event
@@ -651,7 +654,7 @@ test("Unbekanntes bleibt unbekannt (317-16): Import-Events sind weder 'kostenlos
   const { raw, env, pages, opts } = await setup(), ev = via(handleEvents, env), admin = { ...user(raw, 3, "Admin", "admin-p"), admin: true };
   cdPages(pages, ldList([{ name: "Azure Summit Seattle", startDate: "2026-11-05T09:00", url: "https://communitydays.org/events/seattle", description: "Azure", location: { "@type": "Place", address: { addressLocality: "Seattle" } } },
     { name: "Power Platform Free Day", startDate: "2026-11-06", url: "https://communitydays.org/events/free", isAccessibleForFree: true, description: "Power Platform", location: { "@type": "Place", address: { addressLocality: "Bonn" } } }]));
-  await runCommunityDays(env, { ...opts, today: "2026-10-01" });
+  await runCommunityDays(env, { ...opts, today: "2026-10-01" }); accept(raw);
   const sea = raw.prepare("SELECT * FROM events WHERE title LIKE '%Seattle'").get();
   assert.deepEqual([sea.free, sea.tz, sea.unclaimed, sea.public], [-1, "", 1, 1]); assert.equal(raw.prepare("SELECT free FROM events WHERE title LIKE '%Free Day'").get().free, 1);   // nur was die Quelle sagt
   const exp = JSON.parse(await (await handleEvents(env, new Request("https://x/api/events/export"), new URL("https://x/api/events/export"), "/api/events/export", null, J)).text()).events;
@@ -673,6 +676,7 @@ test("Abhaengige Tabellen (317-17): jede Tabelle mit event_id steht in EVENT_TAB
   const withEventId = raw.prepare("SELECT name FROM sqlite_master WHERE type='table'").all().map((t) => t.name).filter((t) => raw.prepare(`PRAGMA table_info(${t})`).all().some((c) => c.name === "event_id"));
   assert.deepEqual(withEventId.filter((t) => t !== "event_source").sort(), EVENT_TABLES.map((x) => x.table).sort());   // event_source wird gesondert gefuehrt (Quellen werden kopiert, nicht verschoben)
   const a = await upsertEvent(db, { title: "Alpha Con", start: "2026-01-10", city: "Berlin", sources: [{ kind: "sessionize_event", ref: "alpha" }] }), b = await upsertEvent(db, { title: "Alpha Conference", start: "2026-01-10", city: "Berlin", sources: [{ kind: "sessionize_event", ref: "alpha-conf" }] });
+  accept(raw);
   raw.exec(`INSERT INTO event_attendees(event_id,user_id,status,created) VALUES(${b.id},7,'going',1),(${a.id},7,'going',1),(${b.id},8,'going',1);
     INSERT INTO event_roles(event_id,user_id,role,added_by,created) VALUES(${b.id},8,'helfer',1,1); INSERT INTO event_settings(event_id) VALUES(${b.id});`);
   const m = await mergeEvents(db, b.id, a.id, 1); assert.equal(m.ok, true);
@@ -694,7 +698,7 @@ test("Derselbe Datensatz wird an seiner Geschichte wiedererkannt: vom Veranstalt
   // (1) Veranstalter uebernimmt das Import-Event und benennt es so um, dass weniger als die Haelfte der Woerter bleibt
   const a = await setup(), ev = via(handleEvents, a.env), imp = via(handleEventImport, a.env), orga = user(a.raw, 1, "Olga Org", "olga"), admin = { ...user(a.raw, 9, "Admin", "admin-p"), admin: true };
   const hh = cdEvent({ name: "Hamburg Copilot Day 2026", startDate: "2026-05-16T09:00", url: "https://communitydays.org/events/hamburg-copilot-day", location: { address: { addressLocality: "Hamburg" } } });
-  await cdRun(a, [hh], "2026-01-01");
+  await cdRun(a, [hh], "2026-01-01"); accept(a.raw);
   await imp(orga, "/api/event/hamburg-copilot-day-2026/claim", "POST", {}); await imp(admin, "/api/admin/events/claim", "POST", { event_id: 1, user_id: 1, ok: true });
   assert.equal((await ev(orga, "/api/event", "POST", { handle: "hamburg-copilot-day-2026", title: "Hamburger Copilot-Tag 2026", start: "2026-05-16T09:00", mode: "onsite", location: "Hamburg" }))[0], 200);
   for (const day of ["2026-01-02", "2026-01-03", "2026-01-04"]) { const r = await cdRun(a, [hh], day); assert.deepEqual([r.created, r.queued, r.merged], [0, 0, 1], day); }
@@ -828,7 +832,7 @@ test("Geloescht bleibt geloescht, auch wenn die Quelle das Event danach verlegt"
 test("Import-Events ohne Veranstalter: keine Anmeldung und kein Session-Vorschlag ueber M365.FM (Route und MCP); nach dem Uebernehmen geht beides", async () => {
   const s = await setup(), ev = via(handleEvents, s.env), imp = via(handleEventImport, s.env);
   const orga = user(s.raw, 1, "Olga Org", "olga"), guest = user(s.raw, 2, "Gast Member", "gast"), admin = { ...user(s.raw, 9, "Admin", "admin-p"), admin: true };
-  await cdRun(s, [cdEvent()], "2026-01-01");
+  await cdRun(s, [cdEvent()], "2026-01-01"); accept(s.raw);
   assert.deepEqual(await ev(guest, "/api/event/azure-day-bonn/register", "POST", { visible: false }), [409, { error: "unclaimed" }]);
   assert.deepEqual(await ev(guest, "/api/event/azure-day-bonn/session", "POST", { title: "Mein Vorschlag", abstract: "x", speakers: [] }), [409, { error: "unclaimed" }]);
   const mcp = rpcFor(s.env, s.raw, 2); assert.equal((await mcp("register_for_event", { event: "azure-day-bonn" })).error, "unclaimed");

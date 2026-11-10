@@ -316,7 +316,7 @@ function fillEvent(ev, x, auth = false, today = "") {
     if (nu.mode === "online" && ev.mode === "online") { nu.location = ev.location; nu.city = ev.city || ""; }   // Online-Event bekommt keinen Ort untergeschoben
   }
   Object.assign(nu, eventKeys(nu)); if (!nu.url_key) nu.url_key = ev.url_key || x.url_key || "";
-  if (!ev.start && nu.start && !ev.public && !ev.merged_into) nu.public = 1;   // ohne Datum verborgen angelegt (siehe insertEvent): mit dem nachgetragenen Datum sichtbar
+  if (!ev.start && nu.start && !ev.public && !ev.merged_into && (ev.review || "approved") === "approved") nu.public = 1;   // ohne Datum verborgen angelegt (siehe insertEvent): mit dem nachgetragenen Datum sichtbar - ausser es wartet auf die Pruefung oder wurde abgelehnt (eventreview.js)
   const before = {}, after = {};
   for (const k of Object.keys(nu)) if ((nu[k] ?? "") !== (ev[k] ?? "")) { before[k] = ev[k] ?? ""; after[k] = nu[k]; }
   return { before, after };
@@ -325,11 +325,13 @@ const setCols = (db, table, id, cols, extra = [], extraSql = "") => db.prepare(`
 // Technische Adresse einer Zeile, die gleich beim Anlegen in einem anderen Event aufgeht: "~" kommt in keiner echten Adresse vor (Formular und Routen
 // erlauben nur a-z, 0-9, -). Eine nie sichtbare Zeile belegt so keine Adresse, die ein Mitglied vergeben moechte; wird sie zurueckgenommen, bekommt sie eine echte.
 const HIDDEN = "~";
-async function insertEvent(db, c, t, mergedInto = 0) {
+// review: Zustand des neuen Events (Migration 0045). Ein neu entdecktes Event kommt zur Pruefung (pending, nicht oeffentlich); die ausgeblendete Zeile einer
+// Zusammenfuehrung erbt den Zustand des Ziel-Events, damit ein Zuruecknehmen nichts ungeprueft veroeffentlicht.
+async function insertEvent(db, c, t, mergedInto = 0, review = "pending") {
   const handle = mergedInto ? HIDDEN + rndToken().slice(0, 30) : await freeHandle(db, c.title, c.year);
-  const id = (await db.prepare("INSERT INTO events(handle,owner_id,org_id,title,summary,about,start,end,tz,mode,location,country,url,tickets_url,free,lang,topics,seeking_sponsor,public,created,updated,source,source_url,url_key,name_key,city_key,keys_v,unclaimed,organizer_name,merged_into,city) VALUES(?,0,NULL,?,?,?,?,?,'',?,?,?,?,?,?,?,'[]',0,?,?,?,?,?,?,?,?,?,1,?,?,?)")
-    .bind(handle, c.title, c.summary, c.about, c.start, c.end, c.mode, c.city, c.country, c.url, c.tickets_url, c.free, c.lang, !c.start || mergedInto ? 0 : 1, t, t,   // ohne Datum: verborgen, bis ein Admin den Namens-Treffer entschieden hat
-      c.source, c.source_url, c.url_key, c.name_key, c.city_key, KEYS_V, c.organizer_name, mergedInto, c.city).run()).meta.last_row_id;
+  const id = (await db.prepare("INSERT INTO events(handle,owner_id,org_id,title,summary,about,start,end,tz,mode,location,country,url,tickets_url,free,lang,topics,seeking_sponsor,public,created,updated,source,source_url,url_key,name_key,city_key,keys_v,unclaimed,organizer_name,merged_into,city,review) VALUES(?,0,NULL,?,?,?,?,?,'',?,?,?,?,?,?,?,'[]',0,?,?,?,?,?,?,?,?,?,1,?,?,?,?)")
+    .bind(handle, c.title, c.summary, c.about, c.start, c.end, c.mode, c.city, c.country, c.url, c.tickets_url, c.free, c.lang, !c.start || mergedInto || review !== "approved" ? 0 : 1, t, t,   // ohne Datum: verborgen, bis ein Admin den Namens-Treffer entschieden hat; zur Pruefung: verborgen, bis ein Admin es uebernimmt
+      c.source, c.source_url, c.url_key, c.name_key, c.city_key, KEYS_V, c.organizer_name, mergedInto, c.city, review).run()).meta.last_row_id;
   return { id, handle };
 }
 const TOMB_DAYS = 3;
@@ -389,11 +391,11 @@ export async function upsertEvent(db, cand, opts = {}) {
       return { action: "merged", id: ev.id, reason: m.reason, changed: lead && touched };
     }
     // anderer Datensatz desselben Events: als ausgeblendete Zeile festhalten und protokolliert zusammenfuehren (umkehrbar)
-    const f = fillEvent(ev, c, rec.kind === LEAD_KIND && (await leadRecords(db, ev.id)).length > 0 && "empty"), hid = await insertEvent(db, c, t, ev.id), added = srcs.filter((s) => !has(s));   // weiterer Listen-Datensatz: nur leere Felder
+    const f = fillEvent(ev, c, rec.kind === LEAD_KIND && (await leadRecords(db, ev.id)).length > 0 && "empty"), hid = await insertEvent(db, c, t, ev.id, ev.review || "approved"), added = srcs.filter((s) => !has(s));   // weiterer Listen-Datensatz: nur leere Felder
     for (const s of srcs) ops.push(evSourceStmt(db, hid.id, s, t));
     if (Object.keys(f.after).length) ops.push(setCols(db, "events", ev.id, f.after, [t], ",updated=?"));
     for (const s of added) ops.push(evSourceStmt(db, ev.id, srcCopy(s), t));
-    ops.push(...others, logStmt(db, "event", hid.id, ev.id, { into_before: f.before, into_after: f.after, from_public: c.start ? 1 : 0, added_sources: added.map(({ kind, ref }) => ({ kind, ref })), moved: {}, session_logs: [], reason: m.reason }, true, opts.by, t));
+    ops.push(...others, logStmt(db, "event", hid.id, ev.id, { into_before: f.before, into_after: f.after, from_public: c.start && (ev.review || "approved") === "approved" ? 1 : 0, added_sources: added.map(({ kind, ref }) => ({ kind, ref })), moved: {}, session_logs: [], reason: m.reason }, true, opts.by, t));
     const res = await runBatch(db, ops, 60);
     return { action: "merged", id: ev.id, reason: m.reason, log: res[res.length - 1]?.meta?.last_row_id || 0 };
   }
@@ -751,6 +753,9 @@ export async function mergeEvents(db, fromId, intoId, by = 0, auto = false) {
     moved[x.table] = x.key || x.ident ? keys : true;   // ohne key hoechstens eine Zeile je Event: OR IGNORE, falls das Ziel-Event inzwischen eine hat (sie bleibt dann am Quell-Event)
     ops.push(x.key ? db.prepare(`UPDATE ${x.table} SET event_id=?1 WHERE event_id=?2 AND ${x.key} IN (SELECT value FROM json_each(?3))`).bind(b.id, a.id, JSON.stringify(keys)) : db.prepare(`UPDATE OR IGNORE ${x.table} SET event_id=?1 WHERE event_id=?2${x.move ? ` AND ${x.move}` : ""}`).bind(b.id, a.id));
   });
+  // Ein sichtbares (freigegebenes) Event geht in eines auf, das noch auf die Pruefung wartet oder abgelehnt wurde: der Admin hat die beiden bewusst zusammengelegt, das Ergebnis darf nicht
+  // aus der Seite verschwinden - das Ziel-Event gilt ab jetzt als freigegeben (ohne review_at: keine Entscheidung ueber ein neues Event, nur Fortbestand des alten)
+  if ((a.review || "approved") === "approved" && a.public && (b.review || "approved") !== "approved") ops.push(db.prepare("UPDATE events SET review='approved',public=1 WHERE id=?").bind(b.id));
   ops.push(db.prepare("UPDATE events SET merged_into=?,public=0 WHERE id=?").bind(b.id, a.id), mergedStmt(db, "event", a.id, b.id, by, t),
     logStmt(db, "event", a.id, b.id, { into_before: f.before, into_after: f.after, from_public: a.public, added_sources: added.map(({ kind, ref }) => ({ kind, ref })), moved, session_logs: [] }, auto, by, t));
   const id = idOf(await runBatch(db, ops, 60));
@@ -871,7 +876,7 @@ const titles = async (db, kind, ids) => {
 };
 export async function listDupes(db) {
   const rows = (await db.prepare("SELECT * FROM dedupe_queue WHERE status='open' ORDER BY id LIMIT 100").all()).results || [];
-  const side = (kind, id) => (kind === "event" ? db.prepare("SELECT id,handle,title,start,city,mode,source,unclaimed FROM events WHERE id=?")
+  const side = (kind, id) => (kind === "event" ? db.prepare("SELECT id,handle,title,start,city,mode,source,unclaimed,review FROM events WHERE id=?")
     : kind === "session" ? db.prepare("SELECT s.id,s.title,s.start,s.room,e.title event,e.handle FROM event_sessions s JOIN events e ON e.id=s.event_id WHERE s.id=?")
     : db.prepare("SELECT id,name,sessionize_id FROM speaker_ref WHERE id=?")).bind(id);
   const res = await runBatch(db, rows.flatMap((q) => [side(q.kind, q.a_id), side(q.kind, q.b_id)]), 50);   // gebuendelt statt zwei Abfragen je Eintrag
