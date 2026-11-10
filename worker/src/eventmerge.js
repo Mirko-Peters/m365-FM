@@ -291,11 +291,17 @@ export async function findEvent(db, c, opts = {}) {
 // auth = x ist der fuer dieses Event massgebliche Datensatz (siehe upsertEvent) und die Quelle liefert ihn geaendert: Titel, Termin, Ort, Texte und Links folgen
 // dann der Quelle (ein Import-Event ohne Veranstalter pflegt sonst niemand). Angaben, die die Quelle nicht (mehr) macht, loeschen nichts – ausser dem Ende, das zum Termin gehoert,
 // und dem Ort, wenn die Quelle das Event ausdruecklich als online ausweist (fehlt nur die Ortsangabe, bleiben Modus und Ort).
+// auth = "empty": x ist ein weiterer, nicht massgeblicher Listen-Datensatz und fuellt nur leere Felder (Termin und Ende nur, wenn das Event keinen hat).
 // Liefert { before, after } nur mit den geaenderten Spalten.
 function fillEvent(ev, x, auth = false, today = "") {
   if (protectedEvent(ev)) return { before: {}, after: {} };
   let nu;
-  if (auth) {
+  if (auth === "empty") {
+    nu = { start: ev.start || x.start || "", mode: ev.mode, free: ev.free < 0 && x.free >= 0 ? x.free : ev.free };
+    nu.end = ev.start ? ev.end : normEnd(nu.start, x.end || "");
+    for (const f of ["title", "summary", "about", "url", "tickets_url", "country", "lang", "organizer_name"]) nu[f] = ev[f] || x[f] || "";
+    for (const f of ["location", "city"]) nu[f] = ev[f] || (ev.mode === "online" ? "" : x[f]) || "";   // der Modus bleibt: ein Online-Event bekommt keinen Ort
+  } else if (auth) {
     const start = x.start && !(ev.start.length > x.start.length && ev.start.startsWith(x.start)) ? x.start : ev.start;   // ein reines Datum der Quelle nimmt eine bekannte Uhrzeit desselben Tages nicht weg
     const online = x.mode === "online" && (ev.mode === "online" || x.online_stated === true);
     nu = { title: x.title || ev.title, summary: x.summary || ev.summary, about: x.about || ev.about, start, end: x.start ? normEnd(start, x.end || "") : ev.end, mode: online ? "online" : x.mode === "online" ? ev.mode : x.mode || ev.mode, free: x.free >= 0 ? x.free : ev.free,
@@ -338,6 +344,12 @@ async function tombstoned(db, c, today) {
   });
 }
 const LEAD_KIND = "communitydays";   // die Veranstaltungsliste: fuer ein Import-Event ohne Veranstalter die massgebliche Quelle (vor Angaben aus Speaker-Profilen)
+// Haengen mehrere Listen-Datensaetze an einem Event (z. B. die Seite auf communitydays.org und die eigene Seite des Events), ist genau einer massgeblich:
+// der des Events selbst, sonst der am laengsten bekannte der in es zusammengefuehrten (ausgeblendeten) Zeilen. null = keiner.
+async function leadRecord(db, eventId) {
+  return db.prepare("WITH RECURSIVE fam(id,d) AS (SELECT ?1,0 UNION SELECT e.id,fam.d+1 FROM events e JOIN fam ON e.merged_into=fam.id WHERE fam.d<5) SELECT s.event_id,s.ref,s.day FROM event_source s JOIN fam ON fam.id=s.event_id WHERE s.kind=?2 AND s.hash<>'' ORDER BY s.event_id<>?1,s.first_seen,s.event_id,s.ref LIMIT 1")
+    .bind(eventId, LEAD_KIND).first();
+}
 const recordHash = (c) => hash24(JSON.stringify(["v1", c.title, c.summary, c.about, c.start, c.end, c.mode, c.city, c.country, c.url, c.tickets_url, c.organizer_name, c.lang, c.free]));
 // Event anlegen, auffrischen oder mit dem sicheren Treffer zusammenfuehren. opts.dry = nichts schreiben.
 // Liefert { action: created | merged | queued | skipped, id, handle?, reason, log?, changed? } (log = merge_log-ID einer neuen automatischen Zusammenfuehrung,
@@ -355,10 +367,13 @@ export async function upsertEvent(db, cand, opts = {}) {
     const others = m.others.map((o) => queueStmt(db, "event", ev.id, o.id, o.reason, t));
     if (m.rec) {   // derselbe Datensatz erneut gelesen: auffrischen, keine neue Zusammenfuehrung
       // Hat die Quelle ihn geaendert (und teilt er seine Kennung mit keinem anderen), folgt ihm die Zeile, die ihn haelt: das Event selbst oder seine ausgeblendete Zeile.
-      // Fuer das (ungepflegte) Event ist genau eine Quelle massgeblich: der Datensatz der Veranstaltungsliste (LEAD_KIND), auch wenn er erst spaeter dazukam;
-      // ein anderer nur, wenn das Event aus ihm entstand und kein Listen-Datensatz dazugehoert. Alle uebrigen ergaenzen wie bei jeder Zusammenfuehrung.
+      // Fuer das (ungepflegte) Event ist genau eine Quelle massgeblich: der Datensatz der Veranstaltungsliste (LEAD_KIND, bei mehreren nur leadRecord), auch wenn er
+      // erst spaeter dazukam; ein anderer nur, wenn das Event aus ihm entstand und kein Listen-Datensatz dazugehoert. Die uebrigen ergaenzen wie bei jeder
+      // Zusammenfuehrung, weitere Listen-Datensaetze nur leere Felder. Nennt ein weiterer Listen-Datensatz einen anderen Tag, entscheidet ein Admin (Warteschlange).
       const h = m.rec.holder, own = h.id === ev.id, changed = m.rec.hash !== rec.hash && c.sole !== false;
-      const lead = changed && (rec.kind === LEAD_KIND || (own && !have.some((x) => x.kind === LEAD_KIND))), f = fillEvent(ev, c, lead, today), touched = Object.keys(f.after).length > 0;
+      const ld = rec.kind === LEAD_KIND ? await leadRecord(db, ev.id) : null, second = !!ld && !(ld.event_id === h.id && ld.ref === rec.ref);
+      const lead = changed && (rec.kind === LEAD_KIND ? !second : own && !have.some((x) => x.kind === LEAD_KIND)), f = fillEvent(ev, c, lead || (second && "empty"), today), touched = Object.keys(f.after).length > 0;
+      if (changed && second && !own && (dayDiff(rec.day, ld.day) ?? 0) > 0) others.push(queueStmt(db, "event", ev.id, h.id, "source_date_differs", t));
       if (!own) {
         const fh = fillEvent(h, c, changed, today); if (Object.keys(fh.after).length) ops.push(setCols(db, "events", h.id, fh.after, [t], ",updated=?"));
         ops.push(evSourceStmt(db, h.id, rec, t));
@@ -372,7 +387,7 @@ export async function upsertEvent(db, cand, opts = {}) {
       return { action: "merged", id: ev.id, reason: m.reason, changed: lead && touched };
     }
     // anderer Datensatz desselben Events: als ausgeblendete Zeile festhalten und protokolliert zusammenfuehren (umkehrbar)
-    const f = fillEvent(ev, c), hid = await insertEvent(db, c, t, ev.id), added = srcs.filter((s) => !has(s));
+    const f = fillEvent(ev, c, rec.kind === LEAD_KIND && !!(await leadRecord(db, ev.id)) && "empty"), hid = await insertEvent(db, c, t, ev.id), added = srcs.filter((s) => !has(s));   // weiterer Listen-Datensatz: nur leere Felder
     for (const s of srcs) ops.push(evSourceStmt(db, hid.id, s, t));
     if (Object.keys(f.after).length) ops.push(setCols(db, "events", ev.id, f.after, [t], ",updated=?"));
     for (const s of added) ops.push(evSourceStmt(db, ev.id, srcCopy(s), t));
@@ -814,6 +829,15 @@ export async function unmerge(db, logId, by = 0, nested = false) {
 // Entscheidung in der Warteschlange: "merge" fuehrt zusammen, "separate" merkt sich dauerhaft "getrennt lassen"
 export async function decideDupe(db, id, action, by) {
   const q = await db.prepare("SELECT * FROM dedupe_queue WHERE id=? AND status='open'").bind(id).first(); if (!q) return { error: "not_found" };
+  // Eintrag zu einer bestehenden Zusammenfuehrung (ein weiterer Listen-Datensatz nennt einen anderen Termin, siehe upsertEvent): "merge" bestaetigt sie,
+  // "separate" nimmt sie zurueck (danach dauerhaft getrennt), die ausgeblendete Zeile wird ein eigenes Event mit ihrem Termin.
+  const inner = q.kind === "event" ? await db.prepare("SELECT id FROM events WHERE id IN (?,?) AND merged_into<>0 ORDER BY id DESC LIMIT 1").bind(q.a_id, q.b_id).first() : null;
+  if (inner && (action === "merge" || action === "separate")) {
+    const l = action === "separate" ? await db.prepare("SELECT id FROM merge_log WHERE kind='event' AND from_id=? AND undone=0 ORDER BY id DESC LIMIT 1").bind(inner.id).first() : null;
+    if (l) { const r = await unmerge(db, l.id, by); if (r.error) return r; }
+    await db.prepare("UPDATE dedupe_queue SET status=?,decided=?,decided_by=? WHERE id=?").bind(action === "merge" ? "merged" : "separate", now(), by, id).run();
+    return { ok: true, status: action === "merge" ? "merged" : "separate" };
+  }
   if (action === "separate") { await db.prepare("UPDATE dedupe_queue SET status='separate',decided=?,decided_by=? WHERE id=?").bind(now(), by, id).run(); return { ok: true, status: "separate" }; }
   if (action !== "merge") return { error: "bad_action" };
   let r;

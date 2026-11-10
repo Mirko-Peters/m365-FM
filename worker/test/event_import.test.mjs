@@ -920,3 +920,44 @@ test("Datensparsamkeit im Abruf-Cache: Sessionize-Antworten nur mit Kennung und 
   await deleteUserEvents(s2.env.DB, max.id);
   assert.deepEqual(s2.raw.prepare("SELECT name,handle FROM speaker_ref WHERE name='Max Muster'").all().map((r) => [r.name, r.handle]), [["Max Muster", ""]]);
 });
+
+// ---------------------------------------------------------------- dritte Runde (317-18)
+test("317-18 Zwei Community-Days-Datensaetze an einem Event: nur einer ist massgeblich, ein abweichender Termin geht in die Warteschlange", async () => {
+  const s = await setup(), imp = via(handleEventImport, s.env), admin = { ...user(s.raw, 9, "Admin", "admin-p"), admin: true };
+  const A = cdEvent(), B = cdEvent({ url: "https://events.example/azure-day-bonn", description: "Kurz." }), ev = () => s.raw.prepare("SELECT id,start,about,title FROM events WHERE merged_into=0").all().map((r) => ({ ...r }));
+  const r1 = await cdRun(s, [A, B], "2026-01-01"); assert.deepEqual([r1.created, r1.merged], [1, 1]);
+  const [e] = ev(), hid = s.raw.prepare("SELECT id FROM events WHERE merged_into=?").get(e.id).id;
+  assert.equal(e.about, A.description, "der zweite Datensatz fuellt nur leere Felder");
+  // B verlegt: das Event bleibt beim Termin von A, der Widerspruch geht an die Admins
+  const r2 = await cdRun(s, [A, { ...B, startDate: "2026-06-30T09:00" }], "2026-01-02"); assert.equal(r2.updated, 0);
+  assert.deepEqual(ev().map((x) => x.start), ["2026-06-16T09:00"]);
+  assert.deepEqual(s.raw.prepare("SELECT a_id,b_id,reason,status FROM dedupe_queue").all().map((r) => ({ ...r })), [{ a_id: e.id, b_id: hid, reason: "source_date_differs", status: "open" }]);
+  // B schreibt einen laengeren Text: er ersetzt den von A nicht
+  await cdRun(s, [A, { ...B, startDate: "2026-06-30T09:00", description: "Ein sehr viel laengerer Text von der eigenen Seite des Events, laenger als alles, was die Liste dazu schreibt, wirklich." }], "2026-01-03");
+  assert.equal(ev()[0].about, A.description);
+  // A aendert nur den Text: das Event folgt A (Text), der Termin bleibt; A verlegt: das Event folgt A
+  const r3 = await cdRun(s, [{ ...A, description: "Neuer Text der Liste fuer den Azure Day in Bonn." }, { ...B, startDate: "2026-06-30T09:00" }], "2026-01-04"); assert.equal(r3.updated, 1);
+  assert.deepEqual(ev().map((x) => [x.start, x.about]), [["2026-06-16T09:00", "Neuer Text der Liste fuer den Azure Day in Bonn."]]);
+  await cdRun(s, [{ ...A, startDate: "2026-06-23T09:00", description: "Neuer Text der Liste fuer den Azure Day in Bonn." }, { ...B, startDate: "2026-06-30T09:00" }], "2026-01-05");
+  assert.deepEqual(ev().map((x) => x.start), ["2026-06-23T09:00"]);
+  // Admin entscheidet "getrennt lassen": die Zusammenfuehrung wird zurueckgenommen, B ist ein eigenes Event mit seinem Termin
+  const q = (await imp(admin, "/api/admin/events/dupes"))[1].items; assert.equal(q.length, 1);
+  assert.deepEqual(await imp(admin, "/api/admin/events/dupes", "POST", { id: q[0].id, action: "separate" }), [200, { ok: true, status: "separate" }]);
+  assert.deepEqual(ev().map((x) => [x.id, x.start]), [[e.id, "2026-06-23T09:00"], [hid, "2026-06-30T09:00"]]);
+  const r5 = await cdRun(s, [{ ...A, startDate: "2026-06-23T09:00" }, { ...B, startDate: "2026-06-30T09:00" }], "2026-01-06"); assert.equal(r5.created, 0);
+  assert.equal(ev().length, 2, "bleibt getrennt");
+});
+
+test("317-18 Admin bestaetigt die Zusammenfuehrung: der Eintrag ist erledigt, das Event bleibt beim massgeblichen Datensatz", async () => {
+  const s = await setup(), imp = via(handleEventImport, s.env), admin = { ...user(s.raw, 9, "Admin", "admin-p"), admin: true };
+  const A = cdEvent(), B = cdEvent({ url: "https://azuredaybonn.example/" });
+  await cdRun(s, [A, B], "2026-01-01");   // B zuerst gelesen (Reihenfolge nach Kennung): das Event entsteht aus B, B ist sein eigener Datensatz und massgeblich
+  await cdRun(s, [{ ...A, startDate: "2026-06-30T09:00" }, B], "2026-01-02");
+  assert.deepEqual(s.raw.prepare("SELECT start FROM events WHERE merged_into=0").all().map((r) => r.start), ["2026-06-16T09:00"]);
+  const q = (await imp(admin, "/api/admin/events/dupes"))[1].items; assert.equal(q.length, 1);
+  assert.deepEqual(await imp(admin, "/api/admin/events/dupes", "POST", { id: q[0].id, action: "merge" }), [200, { ok: true, status: "merged" }]);
+  assert.equal(s.raw.prepare("SELECT COUNT(*) n FROM events WHERE merged_into<>0").get().n, 1);
+  await cdRun(s, [{ ...A, startDate: "2026-06-30T09:00" }, B], "2026-01-03");
+  assert.equal((await imp(admin, "/api/admin/events/dupes"))[1].items.length, 0, "die Entscheidung haelt");
+  assert.deepEqual(s.raw.prepare("SELECT start FROM events WHERE merged_into=0").all().map((r) => r.start), ["2026-06-16T09:00"]);
+});
