@@ -170,6 +170,12 @@
   "/api/admin/mediakit": {
    "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
   },
+  "/api/admin/panel/episode-urls": {
+   "skip": "Admin-Funktionen: Spreaker-Adressen (Zuordnung Folge <-> m365.fm-Adresse) nur im Admin-Reiter; Daten kommen aus dem GitHub-Workflow spreaker-urls.yml"
+  },
+  "/api/admin/panel/episode-urls/import": {
+   "skip": "Admin-Funktionen: Import der Spreaker-Adressen laeuft per Cron (importEpisodeUrls); der Knopf im Admin-Reiter stoesst ihn nur an, bewusst nicht per KI-Token"
+  },
   "/api/admin/panel/flag": {
    "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Verwaltung ueber /admin/"
   },
@@ -1297,6 +1303,19 @@
    "tools": [
     "unpublish_contribution"
    ]
+  },
+  "/api/search/report": {
+   "tools": [
+    "search_report"
+   ]
+  },
+  "/api/search/gaps": {
+   "tools": [
+    "search_content_gaps"
+   ]
+  },
+  "/api/search/demand-export": {
+   "skip": "Schnittstelle für den Seitenbau (translate_show.py, translate_notes.py, translate_blog.py lesen sie nur als Reihenfolge); dieselben Übersetzungslücken liefert search_report"
   }
  }
 }

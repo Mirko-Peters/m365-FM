@@ -7,6 +7,7 @@ const QKINDS = new Set(["blog", "podcast", "video", "entity", "lblog", "notes"])
 import { audit, aiBudgetStatus } from "./util.js";
 import { SPONSOR_STATUSES } from "./sponsor.js";
 import { pairExisting } from "./orgpair.js";
+import { episodeUrlsOverview, importEpisodeUrls } from "./episode_urls.js";
 
 export async function handleAdminPanel(env, request, url, path, user, J) {
   if (!path.startsWith("/api/admin/panel/")) return null;
@@ -58,6 +59,9 @@ export async function handleAdminPanel(env, request, url, path, user, J) {
     await db.prepare("INSERT INTO meta(k,v) VALUES(?,?) ON CONFLICT(k) DO UPDATE SET v=excluded.v").bind(k, v).run(); await audit(db, user.id, "flag", k, v);
     return J({ ok: true });
   }
+
+  if (path === "/api/admin/panel/episode-urls" && request.method === "GET") return J(await episodeUrlsOverview(db));   // Spreaker-Adressen: ok / abweichend / ohne Seite, letzter Lauf
+  if (path === "/api/admin/panel/episode-urls/import" && request.method === "POST") return J(await importEpisodeUrls(env));
 
   if (path === "/api/admin/panel/ops" && request.method === "GET") {   // Betrieb: letzter Lauf je Cron-Aufgabe, Audit-Protokoll
     const runs = (await db.prepare("SELECT name,started,finished,ok,info FROM cron_runs WHERE id IN (SELECT MAX(id) FROM cron_runs GROUP BY name) ORDER BY name").all().catch(() => ({ results: [] }))).results || [];

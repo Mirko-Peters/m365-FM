@@ -61,6 +61,17 @@ def anthropic_request(path, data=None, headers=None, *, job, lang="", model="", 
     return urllib.request.Request(gateway_base_url() + path, payload, h)
 
 
+def thinking_off(model):
+    """Feld fuer den Anfragekoerper, das das Denken fuer dieses Modell abschaltet (Anthropic-Modellreferenz, Stand 3.11.2026; wie rewrite_shownotes.thinking_off):
+    Haiku nimmt {"type": "disabled"} (Claude Haiku 5.5 denkt ohne das Feld adaptiv, das kostet Ausgabe-Token und frisst max_tokens); Claude Sonnet 5.5 weist
+    "disabled" mit HTTP 400 ab und nimmt stattdessen {"type": "between_tools"} (ohne weiteres Feld, nur bis effort high - ohne effort gilt high); bei allen anderen
+    Modellen bleibt das Feld weg (dort laesst sich das Denken nicht sicher abschalten)."""
+    m = str(model).lower()
+    if "haiku" in m: return {"thinking": {"type": "disabled"}}
+    if m.startswith("claude-sonnet-5-5"): return {"thinking": {"type": "between_tools"}}
+    return {}
+
+
 def urlopen(request, timeout):
     try:
         return urllib.request.urlopen(request, timeout=timeout)

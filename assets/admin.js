@@ -28,9 +28,9 @@
   function api(p, o) { o = o || {}; o.credentials = "include"; o.headers = Object.assign({ "x-requested-with": "m365" }, o.headers || {}); if (o.body && typeof o.body !== "string") { o.body = JSON.stringify(o.body); o.headers["content-type"] = "application/json"; } return fetch(API + p, o).then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { s: r.status, j: j }; }); }); }
   var TYPES = { product: "Produkt", platform: "Plattform", concept: "Konzept", org: "Firma", person: "Person", cert: "Zertifikat", event: "Event", media: "Medium", category: "Kategorie" };
   var ERR = { bad_name: "Name zu kurz", bad_type: "Typ fehlt", too_short: "Kurzbeschreibung fehlt (mindestens 20 Zeichen in Englisch oder Deutsch)", too_long: "Kurzbeschreibung zu lang (höchstens 300 Zeichen)", bad_url: "Eine Adresse ist ungültig (nur https, Docs nur microsoft.com, azure.com oder github.com)", bad_qid: "Wikidata-ID muss wie Q12345 aussehen", bad_relation: "Eine Beziehung zeigt auf eine unbekannte Entität", unchanged: "Nichts geändert", rate_limit: "Zu viele Änderungen in kurzer Zeit, bitte später", login: "Bitte anmelden", forbidden: "Nur für Admins", email_required: "Kein verifizierter E-Mail-Empfang für diese Person hinterlegt.", mail_off: "E-Mail-Versand ist nicht verfügbar; die Anfrage bleibt offen." };
-  var tabs = [["ov", "Übersicht"], ["fr", "Freigaben"], ["sponsor", "Sponsor-Anfragen"], ["slinks", "Sponsorlinks"], ["ads", "Werbung"], ["mk", "Mediadaten-Anfragen"], ["tr", "Übersetzungen"], ["ent", "Entitäten"], ["li", "LinkedIn-Events"], ["mem", "Mitglieder"], ["elog", "Redaktions-Protokoll"], ["db", "Datenbank"], ["sw", "Schalter"]], panes = {}, bar = h("div", { class: "adm-tabs", role: "tablist" });
+  var tabs = [["ov", "Übersicht"], ["fr", "Freigaben"], ["sponsor", "Sponsor-Anfragen"], ["slinks", "Sponsorlinks"], ["ads", "Werbung"], ["mk", "Mediadaten-Anfragen"], ["tr", "Übersetzungen"], ["sq", "Suche"], ["ent", "Entitäten"], ["li", "LinkedIn-Events"], ["mem", "Mitglieder"], ["elog", "Redaktions-Protokoll"], ["db", "Datenbank"], ["spurls", "Spreaker-Adressen"], ["sw", "Schalter"]], panes = {}, bar = h("div", { class: "adm-tabs", role: "tablist" });
   var LANGN = { de: "Deutsch", fr: "Französisch", es: "Spanisch", it: "Italienisch", nl: "Niederländisch", pt: "Portugiesisch", pl: "Polnisch", id: "Indonesisch", ru: "Russisch", uk: "Ukrainisch", ar: "Arabisch", he: "Hebräisch", ja: "Japanisch", ko: "Koreanisch", en: "Englisch" };
-  var KINDN = { lblog: "Blog (früher)", blog: "Blog (Community)", podcast: "Podcast", video: "Video", notes: "Show Notes", entity: "Entität" };
+  var KINDN = { lblog: "Blog (früher)", blog: "Blog (Community)", podcast: "Podcast", video: "Video", notes: "Show Notes", entity: "Entität", episode: "Folge (Hauptshow)", page: "Seite" };
   function ago(t) { if (!t) return "–"; var d = Math.round(Date.now() / 1000 - t); return d < 90 ? d + " s" : d < 5400 ? Math.round(d / 60) + " min" : d < 172800 ? Math.round(d / 3600) + " h" : Math.round(d / 86400) + " d"; }
   function show(k) { tabs.forEach(function (t) { panes[t[0]].hidden = t[0] !== k; bar.querySelector("[data-k=" + t[0] + "]").setAttribute("aria-selected", t[0] === k ? "true" : "false"); }); try { location.hash = k; } catch (e) {} if (LOAD[k]) LOAD[k](); }
   tabs.forEach(function (t) { bar.appendChild(h("button", { type: "button", role: "tab", "data-k": t[0], text: t[1], onclick: function () { show(t[0]); } })); panes[t[0]] = h("section", { class: "adm-pane", hidden: "" }); });
@@ -40,7 +40,7 @@
   var OV = null;
   function overview(cb) { api("/api/admin/panel/overview").then(function (r) { if (r.s !== 200) { root.textContent = ""; root.appendChild(h("p", { class: "adm-msg bad", text: ERR[(r.j || {}).error] || "Kein Zugriff. Bitte als Admin anmelden." })); root.appendChild(h("p", {}, [h("a", { href: BASE + "/community/", text: "Zur Anmeldung in der Community" })])); return; } OV = r.j; cb && cb(OV); }); }
   var LOAD = {
-    mem: function () { members(); }, elog: function () { editLog(); },
+    mem: function () { members(); }, elog: function () { editLog(); }, sq: function () { searchStats(); },
     ov: function () { overview(function (o) { var p = panes.ov, q = o.queues; p.textContent = "";
       p.appendChild(h("h2", { text: "Wartet auf dich" }));
       p.appendChild(h("div", { class: "adm-grid" }, [tile("Blog-Beiträge", q.blog), tile("Podcast-Folgen", q.podcast), tile("Videos", q.video), tile("Wiki-Änderungen", q.wiki), tile("Entitäten-Vorschläge", q.entity), tile("Übernahme-Anfragen", q.claims), tile("Zertifikate", q.certs), tile("Meldungen", q.reports), tile("Gemeldete Publisher-Anfragen", q.expert_request_reports), tile("Sponsor-Anfragen (neu)", q.sponsor)]));
@@ -66,6 +66,12 @@
     fr: function () { approvals(); },
     sponsor: function () { sponsorRequests(); },
     slinks: function () { sponsorLinks(); },
+    spurls: function () { var p = panes.spurls; p.textContent = ""; p.appendChild(h("h2", { text: "Spreaker-Adressen der Folgen" }));
+      api("/api/admin/panel/episode-urls").then(function (r) { if (r.s !== 200) { p.appendChild(h("p", { class: "adm-msg bad", text: "Nicht abrufbar" })); return; } var d = r.j, run = d.last_run;
+        p.appendChild(h("div", { class: "adm-grid" }, [tile("In Ordnung", d.ok), tile("Weicht ab", d.differs), tile("Ohne Seite", d.missing), tile("Nicht veröffentlicht", d.skipped), tile("Fehler", d.error)]));
+        p.appendChild(h("p", { class: "mut", text: run ? "Letzter Lauf: " + run.at + " (" + run.mode + "), geändert " + (run.changed || 0) + " von " + (run.checked || 0) + " Folgen." + (run.show_errors && run.show_errors.length ? " Folgenliste nicht lesbar (nicht geprüft): Show " + run.show_errors.join(", ") + "." : "") : "Noch kein Lauf. Aktion „Spreaker-Adressen“ unter GitHub Actions starten (erst plan, dann apply); danach täglich automatisch." }));
+        if (d.differs_sample.length) { var tb = h("table", { class: "adm-tbl" }, [h("thead", {}, [h("tr", {}, [h("th", { text: "Folge" }), h("th", { text: "Bei Spreaker" }), h("th", { text: "Soll" })])])]), tbd = h("tbody"); d.differs_sample.forEach(function (x) { tbd.appendChild(h("tr", {}, [h("td", { text: x.id }), h("td", { text: x.url_on_spreaker || "(leer)" }), h("td", { text: x.url })])); }); tb.appendChild(tbd); p.appendChild(tb); }
+        p.appendChild(h("button", { type: "button", class: "btn", text: "Zuordnung jetzt übernehmen", onclick: function (ev) { ev.target.disabled = true; api("/api/admin/panel/episode-urls/import", { method: "POST", body: {} }).then(function () { LOAD.spurls(); }); } })); }); },
     ads: function () { adsAdmin(); },
     mk: function () { mediakitLeads(); },
     db: function () { overview(function (o) { var p = panes.db, d = o.db, m = h("p", { class: "adm-msg" }); p.textContent = "";
@@ -141,6 +147,27 @@
         sel.addEventListener("change", feUI); feUI();
         list.appendChild(h("li", {}, [h("b", { text: u.name }), " ", h("span", { class: "mut", text: "#" + u.id + (u.banned ? " · gesperrt" : "") }), " ", sel, " ", fe])); }); }); }
     p.appendChild(h("p", { class: "adm-row" }, [q, h("button", { type: "button", class: "btn main", text: "Suchen", onclick: load })])); p.appendChild(m); p.appendChild(list); load();
+  }
+  // ---------- Suche (#156): anonyme Tagessummen der Seitensuche (ohne IP, ohne Konto), Uebersetzungs- und Inhaltsluecken; GET /api/search/report ----------
+  var SQST = { open: "offen", translated: "übersetzt", waiting_budget: "wartet auf Budget", failed: "fehlgeschlagen" };
+  function searchStats() {
+    var p = panes.sq, m = h("p", { class: "adm-msg", role: "status" }), out = h("div"), lang = h("select", { "aria-label": "Sprache" }), weeks = h("select", { "aria-label": "Zeitraum" });
+    [["", "Alle Sprachen"], ["en", "Englisch"]].concat(Object.keys(LANGN).map(function (k) { return [k, LANGN[k]]; })).forEach(function (o) { lang.appendChild(h("option", { value: o[0], text: o[1] })); });
+    [["1", "Letzte 7 Tage"], ["4", "Letzte 4 Wochen"], ["13", "Letzte 13 Wochen"], ["52", "Letzte 12 Monate"]].forEach(function (o) { weeks.appendChild(h("option", { value: o[0], text: o[1] })); });
+    p.textContent = ""; p.append(h("h2", { text: "Suche" }), h("p", { class: "mut", text: "Anonyme Tagessummen der Seitensuche: Begriff, Sprache der Seite, ob es Treffer gab – ohne IP-Adresse und Konto, 12 Monate aufbewahrt. Übersetzungslücken: Inhalt gibt es nur in einer anderen Sprache; Community-Inhalte übersetzt der Worker im Haiku-Tagesbudget, Folgen und frühere Blogbeiträge die Übersetzungs-Workflows (nur als Reihenfolge). Inhaltslücken: nichts passt, in keiner Sprache." }), h("p", { class: "adm-row" }, [lang, " ", weeks]), m, out);
+    function tbl(head, rows) { return h("div", { style: "overflow-x:auto" }, [h("table", { class: "adm-tbl" }, [h("thead", {}, [h("tr", {}, head.map(function (x) { return h("th", { text: x }); }))]), h("tbody", {}, rows.map(function (r) { return h("tr", {}, r.map(function (c) { return h("td", { text: c == null ? "" : String(c) }); })); }))])]); }
+    function sec(title, head, rows) { out.appendChild(h("h3", { text: title })); out.appendChild(rows.length ? tbl(head, rows) : h("p", { class: "mut", text: "Keine Einträge im Zeitraum." })); }
+    function terms(list) { return (list || []).map(function (x) { return [x.q, LANGN[x.lang] || (x.lang === "en" ? "Englisch" : x.lang), x.searches, x.days]; }); }
+    function load() { msg(m, "Lädt …"); out.textContent = "";
+      api("/api/search/report?weeks=" + weeks.value + (lang.value ? "&lang=" + lang.value : "")).then(function (r) { if (r.s !== 200) { msg(m, "Nicht abrufbar (" + ((r.j || {}).error || r.s) + ")", true); return; }
+        var j = r.j, t = j.totals || {}; msg(m, j.from + " bis " + j.to + ": " + (t.searches || 0) + " Suchen, " + (t.terms || 0) + " Begriffe. Übersetzung auf Nachfrage ab " + j.min + " Suchen an mindestens 2 Tagen.");
+        sec("Suchen je Woche", ["Woche", "Sprache", "Suchen", "Begriffe"], (j.by_week || []).map(function (x) { return [x.week, LANGN[x.lang] || x.lang, x.searches, x.terms]; }));
+        sec("Häufigste Suchen", ["Begriff", "Sprache", "Suchen", "Tage"], terms(j.top));
+        sec("Suchen ohne Treffer", ["Begriff", "Sprache", "Suchen", "Tage"], terms(j.zero));
+        sec("Übersetzungslücken", ["Inhalt", "Art", "Zielsprache", "Suchen", "Tage", "Status", "Zuletzt gesucht"], (j.translation_gaps || []).map(function (x) { return [x.title || x.item, KINDN[x.kind] || x.kind, LANGN[x.lang] || x.lang, x.searches, x.days, (SQST[x.status] || x.status) + (x.info ? " – " + x.info : ""), x.last_seen]; }));
+        sec("Inhaltslücken (Themenideen)", ["Begriff", "Sprache", "Suchen", "Tage"], terms(j.content_gaps));
+      }); }
+    lang.onchange = load; weeks.onchange = load; load();
   }
   // ---------- Redaktions-Protokoll: wer hat wann was entschieden; Undo fuer Ausblenden, Freigeben, Ablehnen ----------
   function editLog() {

@@ -9,6 +9,7 @@ from site_design import pager as PG   # Vor/Zurueck am Seitenende (rel=prev/next
 import site_sponsorships as SPM   # T37 Sponsor: Kennzeichnung gesponserter Folgen (data/sponsorships.json)
 import site_shownotes_seo as SSEO   # neu geschriebene englische Show Notes (rewrite_shownotes.py)
 import site_transcripts as TRS   # #266: Transkripte als Dateien neben der Folgenseite (R2)
+from site_episode_urls import episode_url   # kanonische Folgen-Adresse (eine Quelle)
 import gzip, json, re, unicodedata, html as _h
 from functools import lru_cache
 from html.parser import HTMLParser
@@ -277,7 +278,7 @@ def episode_index(BASE):
         eg[e["slug"]] = [gg for n, gg in gnames if n.lower() in hay][:5]
         for gg in eg[e["slug"]]:
             ge.setdefault(gg["slug"], []).append(e)
-        it = {"slug": e["slug"], "lang": "en", "e": {"title": e["name"], "desc": ""}, "date": day(e["create_time"]), "url": f"{BASE}/show/episodes/{e['slug']}/",
+        it = {"slug": e["slug"], "lang": "en", "e": {"title": e["name"], "desc": ""}, "date": day(e["create_time"]), "url": episode_url(BASE, "en", e["slug"]),
               "sum": short_desc(e, nrec, 260), "keypoints": [x for x in kp if isinstance(x, str)], "faq": faq, "guests": [gg["slug"] for gg in eg[e["slug"]]],
               "duration": iso_dur((nrec or {}).get("duration")), "number": (str(e.get("number") or "") if str(e.get("number") or "") not in ("None", "") else ""), "season": (str(e.get("season") or "") if str(e.get("season")) != "None" else "")}
         it["_t"] = e["name"].lower(); it["_k"] = " ".join(it["keypoints"] + [x["q"] + " " + x["a"] for x in faq]).lower()

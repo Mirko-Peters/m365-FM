@@ -159,14 +159,7 @@ CSS = FONT_CSS + CSS + INDUSTRY + PL.CSS
 def esc(s): return html.escape(s or "", quote=True)
 
 
-def ascii_slug(t, vid):
-    s = unicodedata.normalize("NFKD", t)
-    s = "".join(c for c in s if not unicodedata.combining(c))
-    s = re.sub(r"\(.*?\)|（.*?）", "", s)
-    s = re.sub(r"[^A-Za-z0-9]+", "-", s).strip("-").lower()
-    if len(s) > 70:
-        s = s[:70].rsplit("-", 1)[0]
-    return s.rstrip("-") if len(s) >= 15 else ""
+from site_episode_urls import ascii_slug, episode_url, dub_slug   # eine Quelle fuer die Folgen-Adresse (auch tools/spreaker_urls.py, Uploader)
 
 
 def parse_desc(desc):
@@ -1007,7 +1000,7 @@ def build():
             p = pub.get(f"{vid}:{l}") or pub.get(f"{vid}:{l}-pub")
             if not p:
                 continue
-            slug = ascii_slug(e["title"], vid) or vid.lower().replace("_", "-")
+            slug = dub_slug(e["title"], vid)
             items[(vid, l)] = dict(vid=vid, lang=l, e=e, eid=p["episode_id"], slug=slug, date=(p.get("at") or TODAY)[:10])
     # Slug-Kollisionen je Sprache auflösen
     seen = {}
@@ -1029,7 +1022,7 @@ def build():
 
     sitemap = []  # (url, lastmod, alternates)
 
-    def url_of(it): return f'{BASE}/{it["lang"]}/{it["slug"]}/'
+    def url_of(it): return episode_url(BASE, it["lang"], it["slug"])
     SBX = SBR.Index()
     _SHP = json.loads((ROOT / "data" / "platforms.json").read_text("utf-8")) if (ROOT / "data" / "platforms.json").exists() else {}
     def sidebar(l, text="", ids=None, exclude=(), home=False):
@@ -1750,6 +1743,9 @@ def build():
         for _it in _its:
             if _it.get("eid"): _spk.setdefault(str(_it["eid"]), url_of(_it))
     write("spreaker-pages.json", json.dumps({"generated": TODAY, "count": len(_spk), "pages": _spk}, ensure_ascii=False))
+    import site_episode_urls as _SEU   # Spreaker-Folge <-> Adresse (Slug, Sprache, Show): Quelle fuer tools/spreaker_urls.py und den Worker (episode_urls)
+    _spm = _SEU.build_mapping(BASE, _showix["items"], [(_l, _it) for _l, _its in by_lang.items() for _it in _its], {_l: LANGS[_l][3] for _l in LANGS}, TODAY)
+    write("spreaker-urls.json", json.dumps(_spm, ensure_ascii=False))
     print(f"Spreaker-Seitenzuordnung: {len(_spk)} Folgen")
     phase("Sitemaps")
     import site_quotes as _SQ
