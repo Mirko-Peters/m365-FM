@@ -133,6 +133,19 @@ test("322-3: angemeldet (auch nach der Anmeldung ohne Anker) - Knopf uebernimmt 
   assert.match(other.card().textContent, /already linked to another account/);
 });
 
+test("319-15: Einladung mit Redaktionsrechten (kein Admin, fremde Entitaet) - die Karte meldet die wartende Pruefung statt 'gehoert dir'; die eigene Einladung nimmt niemand selbst an", async () => {
+  const { raw, env } = await setup();
+  raw.exec("INSERT INTO users(id,provider,sub,name,role,created) VALUES(2,'x','e','Edi','editor',1); UPDATE entity_invites SET by_user=2; INSERT INTO profiles(user_id,public,handle,updated) VALUES(7,1,'pia-plain',1),(2,1,'edi',1)");
+  const own = await bootProfile(env, { search: "?invite=" + TOKEN, user: { id: 2, name: "Edi" } });
+  byText(own.card(), "BUTTON", "Claim my page").click(); await flush();
+  assert.match(own.card().textContent, /You sent this invitation yourself/); assert.equal(raw.prepare("SELECT COUNT(*) n FROM entity_claims").get().n, 0);
+  const { card } = await bootProfile(env, { search: "?invite=" + TOKEN, user: { id: 7, name: "Pia Plain" } });
+  const go = byText(card(), "BUTTON", "Claim my page"); go.click(); await flush();
+  assert.match(card().textContent, /Your claim has been requested: the editorial team confirms it shortly/);
+  assert.doesNotMatch(card().textContent, /The page now belongs to your account/); assert.equal(card().all((e) => e.className === "wk-msg")[0].all((e) => e.tagName === "A").length, 0, "kein 'Seite ansehen' als eigene Seite");
+  assert.deepEqual({ ...raw.prepare("SELECT user_id,status,via FROM entity_claims WHERE eid='plain-person'").get() }, { user_id: 7, status: "pending", via: "invite" });
+});
+
 test("322-3: ungueltiges oder abgelehntes Token zeigt eine Meldung; andere invite-Werte (Speaker-Einladung, Unsinn) loesen nichts aus", async () => {
   const { raw, env } = await setup();
   const bad = await bootProfile(env, { search: "?invite=" + "x".repeat(27) });

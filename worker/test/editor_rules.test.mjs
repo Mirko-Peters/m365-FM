@@ -763,6 +763,57 @@ test("Einladung zur Uebernahme: kein Editor bestaetigt sich selbst; Redaktionsre
   assert.equal((await call(env, 2, "GET", "/api/entityinvite/contacts")).s, 200);
 });
 
+// ---------- Dritte Gegenpruefung: #322 inviteOne() mit dem Tor je Entitaet, /mine ueber can()/inScope ----------
+test("319-15: inviteOne (#322) prueft can(claim.decide) je Entitaet - Admin, Editor, Fach-Editor im/ausserhalb des Bereichs, Mitglied; Protokoll und Tageslimit", async () => {
+  const { raw, env } = await mk(); const sent = []; env.EMAIL = { send: async (m) => { sent.push(m); return {}; } };
+  const send = (uid, items) => call(env, uid, "POST", "/api/entityinvite/send", { items });
+  const claimLog = () => logs(raw, "action='claim.decide'").map((r) => [r.user_id, r.item_id]);
+  const last = () => sent.at(-1), personal = (m) => !!m.replyTo;   // nur die persoenlichen Fassungen (Admin) antworten an Mirko
+  ins(raw, "entity_contacts", { eid: "guest-a", email: "guest.a@contact.example", name: "Guest A", created: 1 });
+  ins(raw, "entity_contacts", { eid: "guest-b", email: "guest.b@contact.example", name: "Guest B", created: 1 });
+  ins(raw, "entity_rev", { eid: "eigen-6", user_id: 6, status: "live", created: 1 }); ins(raw, "entity_rev", { eid: "eigen-7", user_id: 7, status: "live", created: 1 });
+  // Admin: Kontaktadresse aus entity_contacts, persoenliche Fassung (Absender Mirko), Protokoll mit maskierter Adresse
+  assert.deepEqual((await send(1, [{ eid: "guest-a" }])).j.results, [{ eid: "guest-a", ok: true }]);
+  assert.equal(last().to, "guest.a@contact.example"); assert.equal(personal(last()), true);
+  assert.deepEqual(claimLog(), [[1, "guest-a"]]); assert.doesNotMatch(raw.prepare("SELECT after FROM edit_log WHERE item_id='guest-a'").get().after, /guest\.a@/);
+  // Editor: keine Kontaktadressen (nur der Admin schreibt sie an), mit eigener Adresse die neutrale Mitteilung, Redaktionsrecht protokolliert
+  assert.deepEqual((await send(2, [{ eid: "guest-b", name: "Guest B" }])).j.results, [{ eid: "guest-b", error: "bad_input" }]);
+  assert.deepEqual((await send(2, [{ eid: "contoso", name: "Max Muster", email: "max@contoso.example" }])).j.results, [{ eid: "contoso", ok: true }]);
+  assert.equal(personal(last()), false); assert.match(last().subject, /claim it or have it removed/);
+  assert.deepEqual(claimLog().at(-1), [2, "contoso"]);
+  // Fach-Editor (teams): im Bereich mit Redaktionsrecht (protokolliert), ausserhalb nur nach der Mitglieder-Regel (ohne Protokoll), sonst not_yours
+  const n0 = sent.length;
+  assert.deepEqual((await send(7, [{ eid: "azure", name: "Az Ure", email: "az@azure.example" }])).j.results, [{ eid: "azure", error: "not_yours" }]);
+  assert.equal(sent.length, n0, "ausserhalb des Bereichs geht keine Mail hinaus");
+  assert.deepEqual((await send(7, [{ eid: "teams", name: "Te Ams", email: "te@teams.example" }, { eid: "eigen-7", name: "Ei Gen", email: "ei7@own.example" }])).j.results, [{ eid: "teams", ok: true }, { eid: "eigen-7", ok: true }]);
+  assert.deepEqual(claimLog().filter((r) => r[0] === 7), [[7, "teams"]]);
+  // Mitglied: nur selbst angelegte Entitaeten, neutral, kein Protokolleintrag (keine Redaktionsrechte)
+  assert.deepEqual((await send(6, [{ eid: "teams", name: "Te Ams", email: "te2@teams.example" }, { eid: "eigen-6", name: "Ei Gen", email: "ei6@own.example" }])).j.results, [{ eid: "teams", error: "not_yours" }, { eid: "eigen-6", ok: true }]);
+  assert.equal(personal(last()), false); assert.equal(claimLog().some((r) => r[0] === 6), false);
+  // Annahme: Einladung mit Redaktionsrecht fuer eine fremde Entitaet wartet, Mitglieder-Regel und Admin bestaetigen sofort
+  const tok = (eid) => raw.prepare("SELECT token FROM entity_invites WHERE eid=?").get(eid).token, acc = async (uid, eid) => (await call(env, uid, "POST", "/api/entityinvite/accept", { t: tok(eid) })).j.pending;
+  assert.deepEqual([await acc(4, "teams"), await acc(3, "eigen-7"), await acc(5, "eigen-6")], [true, false, false]);
+  // Tageslimit: ein Editor ueber DAILY_CAP hat fuer fremde Entitaeten keine Redaktionsrechte mehr - keine Mail, kein Protokoll
+  const today = Math.floor(Date.now() / 86400000);
+  for (let i = 0; i < 300; i++) ins(raw, "edit_log", { ts: 1, user_id: 5, role: "editor", action: "review.hide", kind: "blog", item_id: String(i), day: today });
+  const n1 = sent.length, l1 = claimLog().length;
+  assert.deepEqual((await send(5, [{ eid: "sharepoint", name: "Sha Re", email: "sp@sp.example" }])).j.results, [{ eid: "sharepoint", error: "not_yours" }]);
+  assert.deepEqual([sent.length, claimLog().length], [n1, l1]);
+});
+
+test("319-16: /api/entityinvite/mine geht ueber can()/inScope je Zeile - Fach-Editoren sehen fremde Einladungen nur im Bereich, Adressen nur der Admin", async () => {
+  const { raw, env } = await mk();
+  for (const [t, eid, by] of [["a", "teams", 4], ["b", "azure", 4], ["c", "contoso", 7], ["d", "sharepoint", 6]]) ins(raw, "entity_invites", { token: t, eid, name: "N " + t, email: `${t}.person@example.com`, by_user: by, status: "sent", created: t.charCodeAt(0) });
+  const mine = async (uid) => { const r = (await call(env, uid, "GET", "/api/entityinvite/mine")).j; return [r.staff, r.items.map((x) => [x.eid, x.email])]; };
+  assert.deepEqual(await mine(1), [true, [["sharepoint", "d.person@example.com"], ["contoso", "c.person@example.com"], ["azure", "b.person@example.com"], ["teams", "a.person@example.com"]]]);
+  assert.deepEqual(await mine(2), [true, [["sharepoint", "d***@example.com"], ["contoso", "c***@example.com"], ["azure", "b***@example.com"], ["teams", "a***@example.com"]]]);
+  // Fach-Editor (teams): die eigene Einladung (contoso, ausserhalb) und fremde nur im Bereich (teams); azure/sharepoint nicht
+  assert.deepEqual(await mine(7), [true, [["contoso", "c***@example.com"], ["teams", "a***@example.com"]]]);
+  // Moderator und Mitglieder: nur eigene, ohne Adresse
+  assert.deepEqual(await mine(3), [false, []]); assert.deepEqual(await mine(6), [false, [["sharepoint", ""]]]);
+  assert.equal((await call(env, 4, "GET", "/api/entityinvite/mine")).j.items.every((x) => x.email === "" && !("by_user" in x)), true);
+});
+
 test("Wiki-Verlauf fuer Mitglieder: fremde wartende und abgelehnte Fassungen bleiben verborgen; die Wiki-Seite zeigt Fehler beim Wiederherstellen", async () => {
   const { raw, env } = await mk();
   const w = (id, uid, status, body) => ins(raw, "wiki_rev", { id, term: "teams", lang: "de", body, summary: "", user_id: uid, status, created: id });
