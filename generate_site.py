@@ -1990,6 +1990,7 @@ Mirko Peters, {BASE}/about/
     except Exception as _e:
         import traceback; traceback.print_exc(); print("Interne Links nicht umgeschrieben:", _e)
     phase("Interne Links ohne Umweg")
+    import i18n_overrides as _OVR; _OVR.report()   # Handtexte der Redaktion: je Art und Sprache angewendet / nicht angewendet (ohne Quell-Anker, verwaist, ohne angezeigte Fassung)
     sizes()
     print(f"r2out/: {_r2n[0]} Seiten, {_r2n[1] / 1e6:.0f} MB (werden in den R2-Bucket geladen, nicht in GitHub Pages)")
     print(f"{len(items)} Episodenseiten, {len(active)} Sprachen, {len(sitemap)} URLs → docs/")

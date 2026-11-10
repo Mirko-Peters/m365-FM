@@ -133,6 +133,7 @@ export async function mergeStatements(db, S, T) {
   st.push(q("DELETE FROM invite_pending WHERE inviter_user_id=invitee_user_id"));
   simple("msg_messages", "from_id"); simple("sponsor_manual_metrics", "entered_by"); simple("tr_queue", "requested_by");
   simple("merge_log", "by_user"); simple("dedupe_queue", "decided_by");   // Event-Import (#317): wer zusammengefuehrt/entschieden hat
+  simple("linkedin_conn", "connected_by"); simple("linkedin_events", "published_by");   // LinkedIn-Events: Zugang und "veroeffentlicht von" gehen auf das Zielkonto ueber
   // Blog und Bibliothek: UNIQUE(user_id, slug) -> Slug von S bei Kollision umbenennen
   for (const t of ["blog_posts", "lib_items"]) {
     // Zusatz -<S>-<id>: die id ist eindeutig, so kollidiert der neue Slug weder bei S noch bei T (ein schlichtes -<S> konnte es, dann scheiterte der ganze Batch)

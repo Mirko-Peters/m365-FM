@@ -203,6 +203,8 @@ def build(g, events, people, orgs):
             ft = '<table class="mb-facts"><tbody>' + "".join(f'<tr><th scope="row">{esc(a)}</th><td>{b_}</td></tr>' for a, b_ in facts if b_) + "</tbody></table>"
             tix, web = https_url(ev.get("tickets_url")), https_url(ev.get("url"))
             btn = (f'<a class="btn main" href="{esc(tix)}" rel="nofollow noopener" target="_blank">{esc(s["tickets"])}</a> ' if tix else "") + (f'<a class="btn" href="{esc(web)}" rel="nofollow noopener" target="_blank">{esc(s["website"])}</a>' if web else "")
+            if ev.get("linkedin_url", "").startswith("https://www.linkedin.com/"):
+                btn += f'<a class="btn" href="{esc(ev["linkedin_url"])}" rel="noopener" target="_blank">{esc(T(lang, "Also on LinkedIn", "Auch auf LinkedIn"))}</a>'
             # Importiertes Event ohne Veranstalter: Hinweis und Einstieg zum Uebernehmen (POST /api/event/<handle>/claim, ein Admin gibt frei)
             claim = (f'<p class="mut">{esc(s["imported"])} <button type="button" class="btn" id="ev-claim" data-e="{esc(ev["handle"])}">{esc(s["claim"])}</button> <span id="ev-claim-msg" role="status" aria-live="polite"></span></p><script>'
                      + CLAIMJS.replace("%API%", api).replace("%T%", json.dumps(CLAIMT[lang], ensure_ascii=False)).replace("%CROOT%", croot) + "</script>") if ev.get("unclaimed") else ""

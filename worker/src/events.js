@@ -29,6 +29,9 @@ async function topics(env, list) {
 // Event-Rollen: Rechte je Rolle (Veranstalter-Firma Inhaber/Admin/Event-Manager und Eigentuemer koennen alles ausser Rollen-Details)
 // Events, deren Anmeldungen (mit Einwilligung) an ein externes System uebergeben werden
 export const TRANSFER = { "m365con-2027": "heysummit:229506" };
+// Event geloescht: von seiner LinkedIn-Zeile (linkedin_events.js) faellt nur eine bereits abgesagte weg. Eine veroeffentlichte oder reservierte bleibt mit Absicht
+// stehen - der LinkedIn-Event ist noch oeffentlich und erscheint im Admin als "verwaist" mit Absage-Knopf (abgesagt wird nur per Klick, nie automatisch).
+const LI_GONE = "DELETE FROM linkedin_events WHERE event_id=? AND status='cancelled'";
 export const EVENT_ROLES = {
   organisator: ["edit", "sessions", "sponsor", "roles", "delete"],
   "co-organisator": ["edit", "sessions", "sponsor", "roles"],
@@ -157,7 +160,7 @@ export async function claimLinkedinEntity(env, user, info, eid) {
   return { status };
 }
 const sessView = (r, mgr) => ({ id: r.id, title: r.title, abstract: r.abstract, start: r.start, end: r.end, room: r.room, track: r.track, level: r.level, lang: r.lang, topics: parse(r.topics, []), speakers: mgr ? parse(r.speakers, []).map(({ email, ...x }) => x) : parse(r.speakers, []).filter((x) => x.s === "confirmed").map((x) => ({ h: x.h, n: x.n, e: x.e })), speakers_open: parse(r.speakers, []).filter((x) => x.s !== "confirmed").length, recording_url: r.recording_url, status: r.status });
-// Ansichten vieler Events mit fester Zahl an Abfragen (je 50 Events sechs), nicht mehreren je Event: der Export aller oeffentlichen Events
+// Ansichten vieler Events mit fester Zahl an Abfragen (je 50 Events hoechstens sieben), nicht mehreren je Event: der Export aller oeffentlichen Events
 // bleibt so auch mit Hunderten importierter Events weit unter der Subrequest-Grenze eines Aufrufs.
 async function evViews(db, evs, withPending) {
   const out = [], all = async (sql, ...a) => (await db.prepare(sql).bind(...a).all()).results || [], IN = "IN (SELECT value FROM json_each(?))";
@@ -170,10 +173,11 @@ async function evViews(db, evs, withPending) {
     const partners = group(await all(`SELECT p.event_id,p.kind,p.level,o.handle,o.name,o.public FROM event_partners p JOIN orgs o ON o.id=p.org_id WHERE p.event_id ${IN} AND p.status='confirmed' ORDER BY p.created`, ids), "event_id");
     const asked = withPending ? group(await all(`SELECT a.event_id,o.handle FROM sponsor_asks a JOIN orgs o ON o.id=a.org_id WHERE a.event_id ${IN}`, ids), "event_id") : null;
     const sources = group(await all(`SELECT event_id,kind,url FROM event_source WHERE event_id ${IN} AND kind IN ('communitydays','sessionize_event') AND url<>''`, ids), "event_id");
+    const li = new Map((await all(`SELECT event_id,url FROM linkedin_events WHERE event_id ${IN} AND status='published'`, ids).catch(() => [])).map((r) => [r.event_id, r.url]));   // "Auch auf LinkedIn" (#323)
     for (const ev of part) {
       const org = ev.org_id ? orgs.get(ev.org_id) : null, ow = owners.get(ev.owner_id);
       out.push({ handle: ev.handle, title: ev.title, summary: ev.summary, about: ev.about, start: ev.start, end: ev.end, tz: ev.tz, mode: ev.mode, location: ev.location, country: ev.country, url: ev.url, tickets_url: ev.tickets_url,
-        free: ev.free < 0 ? null : !!ev.free, lang: ev.lang, topics: parse(ev.topics, []), seeking_sponsor: !!ev.seeking_sponsor, public: !!ev.public,   // free null = unbekannt (Import ohne Preisangabe)
+        free: ev.free < 0 ? null : !!ev.free, lang: ev.lang, linkedin_url: li.get(ev.id) || "", topics: parse(ev.topics, []), seeking_sponsor: !!ev.seeking_sponsor, public: !!ev.public,   // free null = unbekannt (Import ohne Preisangabe)
         partners: (partners.get(ev.id) || []).map((x) => ({ kind: x.kind, level: x.level, name: x.name, handle: x.public ? x.handle : "" })),
         asked: asked ? (asked.get(ev.id) || []).map((x) => x.handle) : undefined,
         organizer: org ? { kind: "o", handle: org.public ? org.handle : "", name: org.name } : { kind: "u", handle: ow?.handle || "", name: ow?.name || ev.organizer_name || "" }, unclaimed: !!ev.unclaimed, source: ev.source || "", retired: !!ev.retired,
@@ -362,7 +366,7 @@ export async function handleEvents(env, request, url, path, user, J) {
     if (need()) return need();
     const ev = await db.prepare("SELECT * FROM events WHERE handle=? AND merged_into=0").bind(m[1]).first();
     if (!(await canManage(db, user, ev, "delete"))) return J({ error: "forbidden" }, 403);
-    await db.batch(await eventDeleteOps(db, ev));   // alles, was am Event haengt (EVENT_TABLES, Quellen); Import-Events hinterlassen eine Loeschmarke und kommen nicht zurueck
+    await db.batch([...(await eventDeleteOps(db, ev)), db.prepare(LI_GONE).bind(ev.id)]);   // alles, was am Event haengt (EVENT_TABLES, Quellen); Import-Events hinterlassen eine Loeschmarke und kommen nicht zurueck
     return J({ ok: true });
   }
   // Session anlegen/aendern: Veranstalter -> sofort live; andere Mitglieder -> Vorschlag (pending)
@@ -739,7 +743,7 @@ export async function purgeEntityClaimReview(db) {
 export async function deleteUserEvents(db, uid) {
   const evs = (await db.prepare("SELECT * FROM events WHERE owner_id=? AND org_id IS NULL").bind(uid).all()).results || [];
   const ops = [];
-  for (const e of evs) ops.push(...(await eventDeleteOps(db, e)));   // auch uebernommene Import-Events: sie kommen nicht als herrenlose Kopie zurueck (Loeschmarke)
+  for (const e of evs) ops.push(...(await eventDeleteOps(db, e)), db.prepare(LI_GONE).bind(e.id));   // auch uebernommene Import-Events: sie kommen nicht als herrenlose Kopie zurueck (Loeschmarke)
   ops.push(db.prepare("DELETE FROM session_source WHERE session_id IN (SELECT id FROM event_sessions WHERE proposer_id=? AND status='pending')").bind(uid), db.prepare("DELETE FROM event_sessions WHERE proposer_id=? AND status='pending'").bind(uid), db.prepare("DELETE FROM event_roles WHERE user_id=?").bind(uid), db.prepare("DELETE FROM event_attendees WHERE user_id=?").bind(uid), db.prepare("DELETE FROM event_transfers WHERE user_id=?").bind(uid));
   ops.push(...(await forgetImporter(db, uid)));   // zuletzt: Beanspruchungen, Import-Vorschau, selbst importierte Speaker-Eintraege, Speaker-Identitaet (Name), Protokoll-Staende
   for (let i = 0; i < ops.length; i += 80) await db.batch(ops.slice(i, i + 80));
