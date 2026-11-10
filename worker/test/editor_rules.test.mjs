@@ -15,7 +15,7 @@ const ENTS = [{ id: "teams", type: "product", name: "Microsoft Teams" }, { id: "
 const realFetch = globalThis.fetch;
 globalThis.fetch = async (input, init) => {   // der Worker liest nur die Entitaeten der Seite; alles andere gibt es im Test nicht
   const u = String(input?.url || input);
-  if (u.endsWith("/entities.json")) return new Response(JSON.stringify({ entities: ENTS }), { headers: { "content-type": "application/json" } });
+  if (u.startsWith(SITE + "/") && (u.endsWith("/entities.json") || u.endsWith("/entities-src.json"))) return new Response(JSON.stringify({ entities: ENTS }), { headers: { "content-type": "application/json" } });   // Repo-Fassung = Basis-Entitaeten
   if (/^https:\/\/(www|api-dub)\.m365\.fm\//.test(u)) return new Response("{}", { status: 404 });
   return realFetch(input, init);
 };
@@ -1031,4 +1031,49 @@ test("319-14 Nachpruefung Oberflaeche: blanker Slug eines Content-Pakets oeffnet
   assert.equal(u.calls.find((c) => c.u.startsWith("API:/api/editor/i18n/save")).body.item, "content/da");
   slug.value = "neu"; u.btn("Öffnen")[0].click(); await tick(); u.btn("Zum Bearbeiten anfordern").at(-1).click(); await tick();
   assert.equal(slug.value, "content/neu");   // spaeteres Oeffnen trifft den Schluessel der Einheiten-Datei
+});
+
+test("319-15 Nachpruefung: sofort bestaetigt nur Admin oder echter Ersteller - eine Bearbeitung, ein abgelehnter Vorschlag oder eine Basis-Entitaet reichen nicht", async () => {
+  const { raw, env } = await mk(); env.EMAIL = { send: async () => ({}) };
+  const t0 = 1;
+  // eigen-6: Mitglied 6 hat sie angelegt (erste Revision live) -> sofort bestaetigt
+  ins(raw, "entity_rev", { eid: "eigen-6", user_id: 6, status: "live", created: t0 });
+  // fremd-1: Mitglied 4 hat sie angelegt, Editor 2 hat sie nur bearbeitet (spaetere Revision) -> Einladung von 2 wartet
+  ins(raw, "entity_rev", { eid: "fremd-1", user_id: 4, status: "old", created: t0 }); ins(raw, "entity_rev", { eid: "fremd-1", user_id: 2, status: "live", created: t0 + 1 });
+  // abgelehnt-6: der erste Vorschlag von 6 wurde abgelehnt -> 6 ist nicht Ersteller
+  ins(raw, "entity_rev", { eid: "abgelehnt-6", user_id: 6, status: "rejected", created: t0 });
+  // teams ist Basis-Entitaet (Repo-Fassung); die erste D1-Revision stammt von Mitglied 6 (Bearbeitung) -> nicht Ersteller
+  ins(raw, "entity_rev", { eid: "teams", user_id: 6, status: "live", created: t0 });
+  const inv = (token, eid, by) => ins(raw, "entity_invites", { token, eid, name: "N " + token, email: token + "@person.example", by_user: by, status: "sent", created: t0 });
+  inv("tok-eigen6", "eigen-6", 6); inv("tok-fremd1", "fremd-1", 2); inv("tok-abg6", "abgelehnt-6", 6); inv("tok-teams6", "teams", 6); inv("tok-admin", "azure", 1);
+  const acc = async (uid, t) => { const r = await call(env, uid, "POST", "/api/entityinvite/accept", { t }); return r.j?.pending ?? r.j?.error; };
+  assert.deepEqual([await acc(3, "tok-eigen6"), await acc(4, "tok-fremd1"), await acc(5, "tok-abg6"), await acc(7, "tok-teams6"), await acc(2, "tok-admin")], [false, true, true, true, false]);
+  const st = (eid) => raw.prepare("SELECT status FROM entity_claims WHERE eid=?").get(eid)?.status;
+  assert.deepEqual(["eigen-6", "fremd-1", "abgelehnt-6", "teams", "azure"].map(st), ["verified", "pending", "pending", "pending", "verified"]);
+  // Repo-Fassung nicht erreichbar: niemand gilt als Ersteller (sicherer Weg)
+  const { raw: raw2, env: env2 } = await mk(); env2.SITE = "https://unreachable.example";
+  ins(raw2, "entity_rev", { eid: "eigen-6", user_id: 6, status: "live", created: t0 });
+  ins(raw2, "entity_invites", { token: "tok-x", eid: "eigen-6", name: "X", email: "x@person.example", by_user: 6, status: "sent", created: t0 });
+  assert.equal((await call(env2, 3, "POST", "/api/entityinvite/accept", { t: "tok-x" })).j?.pending, true);
+});
+
+test("319-14 Nachpruefung: Absatz-Ansicht anfordern hat eine Gesamtgrenze (OPEN_MAX); Verlaengern eines offenen Eintrags geht immer", async () => {
+  const { raw, env } = await mk();
+  const { OPEN_MAX } = await import("../src/i18n_edit.js");
+  blog(raw, 50, 4, "live");
+  const key = (await call(env, 2, "POST", "/api/editor/i18n/open", { kind: "lblog", item: "p50", lang: "de" }));
+  assert.equal(key.s, 200, JSON.stringify(key.j));
+  const now = Math.floor(Date.now() / 1000);
+  for (let i = 0; i < OPEN_MAX; i++) ins(raw, "i18n_open_req", { kind: "lblog", item: "fill-" + i, lang: "fr", ts: now });
+  // voll: ein neuer Eintrag wird abgewiesen, der schon offene darf verlaengert werden
+  blog(raw, 51, 4, "live");
+  const r = await call(env, 2, "POST", "/api/editor/i18n/open", { kind: "lblog", item: "p51", lang: "de" });
+  assert.deepEqual([r.s, r.j?.error], [429, "open_full"]);
+  assert.equal((await call(env, 2, "POST", "/api/editor/i18n/open", { kind: "lblog", item: key.j.item, lang: "de" })).s, 200);
+  // abgelaufene Anforderungen zaehlen nicht
+  raw.prepare("UPDATE i18n_open_req SET ts=1 WHERE item LIKE 'fill-%'").run();
+  assert.equal((await call(env, 2, "POST", "/api/editor/i18n/open", { kind: "lblog", item: "p51", lang: "de" })).s, 200);
+  // die Oberflaeche kennt den Fehlertext in beiden Sprachen
+  const ui = readFileSync(new URL("../../assets/redaktion.js", import.meta.url), "utf-8");
+  assert.equal((ui.match(/open_full: "/g) || []).length, 2);
 });

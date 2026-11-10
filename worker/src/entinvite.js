@@ -2,6 +2,7 @@
 // Token im Link belegt die Adresse; Annahme verknuepft die Entitaet mit dem Konto (entity_claims, via invite). Ablehnen sperrt weitere Einladungen.
 import { entityMap } from "./entities.js";
 import { maskEmail as maskAddr } from "./claimverify.js";   // kein eigenes maskEmail in dieser Datei (ein Helfer, ein Format: m***@example.com)
+import { trustedEntityMap } from "./claimverify.js";   // Repo-Fassung der Entitaeten (Ersteller-Regel bei der Annahme)
 import { M365CON_HANDLES } from "./pastevents.js";
 import { notifyAdmins } from "./ads.js";
 import { mailReady, sendMail } from "./mailer.js";
@@ -119,6 +120,15 @@ export async function resolveVariant(db, eid, ent, source, personal = true) {
   }
   return source === "speaker" ? "speaker" : inviteVariant(ent);
 }
+// Ersteller einer Entitaet: die erste Revision stammt von ihm und ist freigegeben (live oder abgeloest), und die Entitaet steht nicht in der Repo-Fassung
+// (/entities-src.json, von Mitgliedern nicht aenderbar). Eine Bearbeitung oder ein abgelehnter Vorschlag macht niemanden zum Ersteller; ist die Repo-Fassung
+// nicht erreichbar, gilt niemand als Ersteller (die Uebernahme wartet dann wie jede Anfrage auf claim.decide).
+async function createdBy(env, eid, uid) {
+  const f = await env.DB.prepare("SELECT user_id,status FROM entity_rev WHERE eid=? ORDER BY id LIMIT 1").bind(eid).first();
+  if (!f || Number(f.user_id) !== Number(uid) || (f.status !== "live" && f.status !== "old")) return false;
+  const src = await trustedEntityMap(env).catch(() => null);
+  return !!src && !src.has(eid);
+}
 const adminRow = (env, u) => !!u && (u.role === "admin" || (!!u.provider && (env.ADMIN_SUBS || "").split(",").map((s) => s.trim()).includes(`${u.provider}:${u.sub}`)));   // wie isAdmin in index.js
 const MAIL_RE = /^[^\s@<>]{1,64}@[^\s@<>]{1,190}\.[a-z]{2,}$/;
 // Eine Einladung pruefen und (ausser bei dry) anlegen + senden. Gemeinsame Logik fuer /send und /send-batch.
@@ -216,7 +226,7 @@ export async function handleEntityInvite(env, request, url, path, user, J) {
     // Sofort bestaetigt nur, was ein Admin oder nach der Mitglieder-Regel (selbst angelegte Entitaet) eingeladen hat; eine Einladung mit Redaktionsrechten wartet
     // wie jede Anfrage auf claim.decide (can(), der Einladende entscheidet nicht selbst: events.js claimGate)
     const by = await db.prepare("SELECT role,provider,sub FROM users WHERE id=?").bind(i.by_user).first();
-    const direct = !!by && (adminRow(env, by) || !!(await db.prepare("SELECT 1 x FROM entity_rev WHERE eid=? AND user_id=?").bind(i.eid, i.by_user).first()));
+    const direct = !!by && (adminRow(env, by) || (await createdBy(env, i.eid, i.by_user)));
     if (!(await claimEntity(db, i.eid, user.id, "invite", direct))) return J({ error: "claimed" }, 409);
     await db.prepare("UPDATE entity_invites SET status='claimed' WHERE token=?").bind(i.token).run();
     await recordInvite(env, { inviter: i.by_user, invitee: user.id, source: "entity", ref: i.eid, since: i.created });
