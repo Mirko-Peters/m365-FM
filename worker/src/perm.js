@@ -7,7 +7,7 @@ export const ROLES = ["user", "moderator", "editor", "admin"];
 // can() ist das EINZIGE Tor fuer Redaktion und Moderation: jede Route (neu unter /api/editor/*, alt unter /api/admin/* und die MCP-Tools) fragt hier.
 //   queue.view    Pruefliste und Verlauf lesen (ohne Tageslimit; Fach-Editoren filtert inScope je Eintrag)
 //   queue.review  die Listen der Editoren lesen und abgleichen (alte /api/admin/*-Listen, Show Notes lesen): Editoren und Admin, keine Moderatoren
-//   claim.decide  Uebernahme einer Entitaet bestaetigen/ablehnen/widerrufen      verify.set  Angabe eines Profils bestaetigen (item.confers: nur Admin)
+//   claim.decide  Uebernahme einer Entitaet bestaetigen/ablehnen/widerrufen, mit Redaktionsrechten dazu einladen      verify.set  Angabe eines Profils bestaetigen (item.confers: nur Admin)
 //   role.vote     Bewerbung bestaetigen/ablehnen (Abstimmung der Editoren)        role.assign Rolle oder Fachbereich direkt setzen (nur Admin)
 //   admin.undo    Entscheidung zuruecknehmen (nur Admin)                          escalation.close  Eskalation "an den Admin" erledigen (nur Admin)
 export const ACTIONS = ["review.approve", "review.reject", "review.hide", "review.escalate", "content.edit_minor", "content.edit_full", "entity.edit_live", "report.resolve", "dupes.merge",
@@ -47,7 +47,8 @@ export function can(user, action, item = {}) {
   const cap = DAILY_CAP[role];
   if ((user.actionsToday || 0) >= cap) return { ok: false, propose: false, why: "daily_cap" };
   if (DECIDING.has(action) || action.startsWith("content.edit") || action === "entity.edit_live") {
-    if (item.ownerId != null && user.id != null && Number(item.ownerId) === Number(user.id)) return { ok: false, propose: false, why: "own_content" };
+    // item.ownerIds: weitere Beteiligte, fuer die es eine Entscheidung in eigener Sache waere (z. B. wer zu einer Uebernahme eingeladen hat)
+    if (user.id != null && [item.ownerId, ...(item.ownerIds || [])].some((o) => o != null && Number(o) === Number(user.id))) return { ok: false, propose: false, why: "own_content" };
     const mine = new Set((user.orgIds || []).map(Number));
     if ((item.orgIds || []).some((o) => mine.has(Number(o)))) return { ok: false, propose: false, why: "own_company" };
   }

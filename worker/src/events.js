@@ -101,14 +101,15 @@ async function saveInvites(db, evId, sid, sp) {
   for (const x of sp) if (x.t && x.s !== "confirmed") ops.push(db.prepare("INSERT OR IGNORE INTO speaker_invites(token,event_id,session_id,name,eid,created) VALUES(?,?,?,?,?,?)").bind(x.t, evId, sid, x.n, x.e || "", now()));
   await db.batch(ops);
 }
-export async function claimEntity(db, eid, uid, via) {
-  const c = await db.prepare("SELECT user_id,status FROM entity_claims WHERE eid=?").bind(eid).first();
+// direct=false: die Einladung allein bestaetigt nicht (ein Editor hat mit Redaktionsrechten eingeladen) - die Uebernahme wartet wie jede Anfrage auf die Pruefung
+export async function claimEntity(db, eid, uid, via, direct = true) {
+  const c = await db.prepare("SELECT user_id,status FROM entity_claims WHERE eid=?").bind(eid).first(), sure = via === "invite" && direct;
   if (c && c.status !== "rejected") {
     if (c.user_id !== uid) return false;
-    if (via === "invite") await db.prepare("UPDATE entity_claims SET status='verified' WHERE eid=?").bind(eid).run();
+    if (sure) await db.prepare("UPDATE entity_claims SET status='verified' WHERE eid=?").bind(eid).run();
     return true;
   }
-  const result = await db.prepare("INSERT INTO entity_claims(eid,user_id,status,via,created) VALUES(?,?,?,?,?) ON CONFLICT(eid) DO UPDATE SET user_id=excluded.user_id,status=excluded.status,via=excluded.via,created=excluded.created WHERE entity_claims.status='rejected'").bind(eid, uid, via === "invite" ? "verified" : "pending", via, now()).run();
+  const result = await db.prepare("INSERT INTO entity_claims(eid,user_id,status,via,created) VALUES(?,?,?,?,?) ON CONFLICT(eid) DO UPDATE SET user_id=excluded.user_id,status=excluded.status,via=excluded.via,created=excluded.created WHERE entity_claims.status='rejected'").bind(eid, uid, sure ? "verified" : "pending", via, now()).run();
   return Number(result.meta?.changes || 0) === 1;
 }
 const CLAIM_EMAIL = /^[^\s@<>]{1,64}@[^\s@<>]{1,190}\.[a-z]{2,}$/i;
@@ -608,7 +609,8 @@ export async function handleEvents(env, request, url, path, user, J) {
     // Fach-Editoren nur in ihrem Bereich, Moderatoren gar nicht; jede Entscheidung steht im Protokoll.
     const pre = await gate(db, user, "queue.review"); if (!pre.ok) return J({ error: "forbidden" }, 403);
     const b = await body(), eid = String(b.eid || "").toLowerCase();
-    const claimGate = (uid) => gate(db, user, "claim.decide", { ownerId: uid, topics: [eid] });
+    // ownerIds: wer zu dieser Uebernahme eingeladen hat, entscheidet nicht selbst darueber (Einladung mit Redaktionsrechten, entinvite.js)
+    const claimGate = async (uid) => gate(db, user, "claim.decide", { ownerId: uid, topics: [eid], ownerIds: ((await db.prepare("SELECT by_user FROM entity_invites WHERE eid=? AND status='claimed'").bind(eid).all().catch(() => ({ results: [] }))).results || []).map((r) => r.by_user) });
     if (EID.test(eid) && b.revoke === true) {   // per Firmen-E-Mail automatisch bestaetigte Uebernahme zuruecknehmen (Missbrauch, falsche Domain)
       const c = await db.prepare("SELECT user_id FROM entity_claims WHERE eid=? AND status='verified' AND verified_via='domain_email'").bind(eid).first();
       if (!c) return J({ error: "not_found" }, 404);

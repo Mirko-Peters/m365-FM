@@ -320,8 +320,9 @@ test("Wiki-/Entitaetenverlauf nutzt die Revisionstabellen; Zuruecksetzen setzt e
   assert.equal((await call(env, U.editor2, "POST", "/api/editor/revert", { kind: "wiki", id: "2", rev: 1, cur: 2 })).s, 200);
   assert.deepEqual(raw.prepare("SELECT id,status FROM wiki_rev ORDER BY id").all().map((r) => [r.id, r.status]), [[1, "live"], [2, "old"]]);
   w.run(3, "teams", "de", "dritte", "s3", 4, "live", 30); raw.prepare("UPDATE wiki_rev SET status='old' WHERE id=1").run();   // aktuelle Fassung stammt von einem Mitglied
-  assert.equal((await call(env, U.editor2, "POST", "/api/editor/revert", { kind: "wiki", id: "3", rev: 1, cur: 3 })).j.error, "not_editor_edit");
-  assert.equal((await call(env, U.admin, "POST", "/api/editor/revert", { kind: "wiki", id: "3", rev: 1, cur: 3 })).s, 200);
+  assert.equal((await call(env, U.editor2, "POST", "/api/editor/revert", { kind: "wiki", id: "3", rev: 1, cur: 3 })).s, 200);   // Wiki: gemeinsamer Text, Fassung 3 bleibt im Verlauf
+  assert.deepEqual(raw.prepare("SELECT id,status FROM wiki_rev ORDER BY id").all().map((r) => [r.id, r.status]), [[1, "live"], [2, "old"], [3, "old"]]);
+  assert.equal((await call(env, U.admin, "POST", "/api/editor/revert", { kind: "wiki", id: "1", rev: 3, cur: 1 })).s, 200);
   assert.ok((await call(env, U.user, "GET", "/api/editor/my-history?kind=wiki&id=3")).j.versions.length === 3);
 });
 

@@ -367,9 +367,10 @@ test("319-9: Wiki wiederherstellen laeuft ueber das Zuruecksetzen - nie die eige
   assert.equal((await approve(5, 3)).j.error, "own_content");        // die eigene fruehere Fassung
   assert.equal((await approve(5, 2)).j.error, "not_pending");        // Abgelehntes erneut entscheiden: nur der Admin
   w(5, 6, "live"); raw.prepare("UPDATE wiki_rev SET status='old' WHERE id=1").run();   // jetzt steht die Fassung eines Mitglieds live
-  assert.equal((await approve(2, 1)).j.error, "not_editor_edit");    // Editoren nehmen nur Redaktionsaenderungen zurueck
-  assert.equal((await approve(1, 1)).s, 200);                        // der Admin jederzeit
+  assert.equal((await approve(7, 1)).j.error, "out_of_scope");       // Fach-Editor ausserhalb seines Bereichs
+  assert.equal((await approve(2, 1)).s, 200);                        // wie auf main: ein Editor setzt die Fassung eines Mitglieds zurueck (sie bleibt im Verlauf)
   assert.equal(state(), "1:live 2:rejected 3:old 4:old 5:old");
+  assert.deepEqual(logs(raw, "action='content.edit_full'").at(-1), { user_id: 2, role: "editor", action: "content.edit_full", kind: "wiki", item_id: "1" });
   assert.equal((await approve(1, 2)).s, 200);                        // und der Admin entscheidet auch Abgelehntes neu (wie bisher)
   assert.equal(state(), "1:old 2:live 3:old 4:old 5:old");
 });
@@ -508,9 +509,16 @@ test("319-6: Wiki/Entitaeten - es zaehlt die Rolle zum Zeitpunkt der Aenderung, 
   // Begriff teams: Fassung 2 schrieb Konto 6 als MITGLIED; spaeter wird 6 Editor (z. B. als MVP)
   w(1, 4, "old", "teams"); w(2, 6, "live", "teams");
   raw.prepare("UPDATE users SET role='editor',role_source='auto_mvp' WHERE id=6").run();
-  assert.equal((await revert(env, 2, "wiki", 2, 1, 2)).j.error, "not_editor_edit");
-  assert.equal(raw.prepare("SELECT status FROM wiki_rev WHERE id=2").get().status, "live");
-  assert.equal((await hist(env, 2, "wiki", 2)).versions[0].role, "user");
+  assert.equal((await hist(env, 2, "wiki", 2)).versions[0].role, "user");   // der Verlauf zeigt die Rolle beim Schreiben, nicht die heutige
+  assert.equal((await revert(env, 6, "wiki", 2, 1, 2)).j.error, "own_content");
+  // Entitaet mit bestaetigtem Inhaber: dessen live stehende Fassung nimmt kein Editor zurueck (wie beim Blog der Text des Autors), nur der Admin
+  ins(raw, "entity_rev", { id: 20, eid: "azure", data: JSON.stringify({ name: "Azure", desc: { de: "Alte Beschreibung der Plattform." } }), summary: "s", user_id: 4, status: "old", created: 1 });
+  ins(raw, "entity_rev", { id: 21, eid: "azure", data: JSON.stringify({ name: "Azure", desc: { de: "Beschreibung des Inhabers der Seite." } }), summary: "s", user_id: 6, status: "live", created: 2 });
+  ins(raw, "entity_claims", { eid: "azure", user_id: 6, via: "email", status: "verified", created: 1 });
+  assert.equal((await revert(env, 2, "entity", 21, 20, 21)).j.error, "not_editor_edit");
+  assert.equal(raw.prepare("SELECT status FROM entity_rev WHERE id=21").get().status, "live");
+  raw.prepare("UPDATE entity_claims SET user_id=4 WHERE eid='azure'").run();   // ohne Inhaber-Fassung live: wie im Wiki
+  assert.equal((await revert(env, 2, "entity", 21, 20, 21)).s, 200);
   // Begriff azure: Fassung 11 schreibt ein Editor ueber die echte Route (live, mit Protokoll) - auch wenn er spaeter kein Editor mehr ist, bleibt es eine Redaktionsaenderung
   w(10, 4, "live", "azure");
   const sv = await call(env, 5, "POST", "/api/wiki", { term: "azure", lang: "de", body: "Azure ist die Cloud-Plattform von Microsoft, hier von der Redaktion ergaenzt.", summary: "ergaenzt" });
@@ -719,6 +727,67 @@ test("319-12: maskEmail kommt aus claimverify.js; Redakteure sehen Einladungs-Ad
   ins(raw, "entity_invites", { token: "tok1", eid: "teams", name: "Max", email: "max.mustermann@example.com", by_user: 4, status: "sent", created: 1 });
   const mail = async (uid) => (await call(env, uid, "GET", "/api/entityinvite/mine")).j.items[0]?.email;
   assert.equal(await mail(2), "m***@example.com"); assert.equal(await mail(1), "max.mustermann@example.com"); assert.equal(await mail(4), "");
+});
+
+// ---------- Zweite Gegenpruefung: Einladung, Verlauf, Loeschreste ----------
+test("Einladung zur Uebernahme: kein Editor bestaetigt sich selbst; Redaktionsrechte nur ueber can(claim.decide) im Bereich, mit Protokoll", async () => {
+  const { raw, env } = await mk(); const sent = []; env.EMAIL = { send: async (m) => { sent.push(m); return {}; } };
+  const send = (uid, eid, email) => call(env, uid, "POST", "/api/entityinvite/send", { eid, email, name: "Name" });
+  const tok = (eid, email) => raw.prepare("SELECT token FROM entity_invites WHERE eid=? AND email=?").get(eid, email)?.token;
+  const claims = () => raw.prepare("SELECT eid,user_id,status,via FROM entity_claims ORDER BY eid").all().map((r) => ({ ...r }));
+  // Fach-Editor (teams) laedt sich fuer contoso ein: ausserhalb des Bereichs keine Redaktionsrechte, es gilt die Mitglieder-Regel
+  assert.deepEqual((await send(7, "contoso", "fach@privat.example")).j.results, [{ eid: "contoso", error: "not_yours" }]);
+  // Editor laedt die eigene Adresse ein und nimmt selbst an: nein, und es entsteht keine Uebernahme
+  assert.deepEqual((await send(2, "contoso", "edi@privat.example")).j.results, [{ eid: "contoso", ok: true }]);
+  assert.deepEqual(logs(raw, "action='claim.decide'"), [{ user_id: 2, role: "editor", action: "claim.decide", kind: "claim", item_id: "contoso" }]);
+  assert.doesNotMatch(raw.prepare("SELECT after FROM edit_log").get().after, /edi@privat/);   // Adresse nur maskiert im Protokoll
+  const t1 = tok("contoso", "edi@privat.example");
+  assert.deepEqual([(await call(env, 2, "POST", "/api/entityinvite/accept", { t: t1 })).j.error, claims()], ["own_content", []]);
+  // ein anderes Konto nimmt die Einladung des Editors an: wartet auf die Pruefung, nicht sofort bestaetigt
+  const a = await call(env, 6, "POST", "/api/entityinvite/accept", { t: t1 });
+  assert.deepEqual([a.s, a.j.pending], [200, true]); assert.deepEqual(claims(), [{ eid: "contoso", user_id: 6, status: "pending", via: "invite" }]);
+  // der Einladende entscheidet nicht ueber "seine" Uebernahme, ein anderer Editor schon
+  assert.equal((await call(env, 2, "POST", "/api/admin/entity/claim", { eid: "contoso", ok: true })).j.error, "own_content");
+  assert.equal(claims()[0].status, "pending");
+  assert.equal((await call(env, 5, "POST", "/api/admin/entity/claim", { eid: "contoso", ok: true })).s, 200);
+  assert.equal(claims()[0].status, "verified");
+  // Fach-Editor im eigenen Bereich laedt mit Redaktionsrechten ein (auch ohne eigene Entitaet), die Annahme wartet ebenfalls
+  assert.deepEqual((await send(7, "teams", "t@privat.example")).j.results, [{ eid: "teams", ok: true }]);
+  assert.equal((await call(env, 4, "POST", "/api/entityinvite/accept", { t: tok("teams", "t@privat.example") })).j.pending, true);
+  // Admin-Einladung und Mitglieder-Regel (selbst angelegte Entitaet) bestaetigen wie bisher sofort
+  assert.deepEqual((await send(1, "azure", "a@privat.example")).j.results, [{ eid: "azure", ok: true }]);
+  assert.equal((await call(env, 4, "POST", "/api/entityinvite/accept", { t: tok("azure", "a@privat.example") })).j.pending, false);
+  assert.deepEqual(claims().find((c) => c.eid === "azure"), { eid: "azure", user_id: 4, status: "verified", via: "invite" });
+  // Moderatoren und Mitglieder: weder Kontaktliste noch Redaktionsrechte
+  for (const uid of [3, 6, 7]) assert.notEqual((await call(env, uid, "GET", "/api/entityinvite/contacts")).s, 200, "Konto " + uid);
+  assert.equal((await call(env, 2, "GET", "/api/entityinvite/contacts")).s, 200);
+});
+
+test("Wiki-Verlauf fuer Mitglieder: fremde wartende und abgelehnte Fassungen bleiben verborgen; die Wiki-Seite zeigt Fehler beim Wiederherstellen", async () => {
+  const { raw, env } = await mk();
+  const w = (id, uid, status, body) => ins(raw, "wiki_rev", { id, term: "teams", lang: "de", body, summary: "", user_id: uid, status, created: id });
+  w(1, 6, "old", "alte Fassung von 6"); w(2, 2, "live", "live"); w(3, 4, "pending", "WARTEND von 4"); w(4, 4, "rejected", "ABGELEHNT von 4"); w(5, 6, "rejected", "eigene abgelehnte");
+  const r = await call(env, 6, "GET", "/api/editor/my-history?kind=wiki&id=1");
+  assert.deepEqual(r.j.versions.map((v) => [v.id, v.status]), [[5, "rejected"], [2, "live"], [1, "old"]]);
+  assert.deepEqual((await call(env, 4, "GET", "/api/editor/my-history?kind=wiki&id=1")).j.versions.map((v) => v.id), [4, 3, 2, 1]);   // die eigenen sieht der Verfasser
+  const js = readFileSync(new URL("../../assets/wiki.js", import.meta.url), "utf-8");
+  assert.doesNotMatch(js, /\.then\(load\)/);   // kein Redaktionsknopf laedt mehr still neu
+  assert.match(js, /act\("\/api\/admin\/wiki\/approve\/" \+ x\.id, e\.target\)/); assert.match(js, /btn\.textContent = label \+ " – " \+ T\.error \+ \(r\.j && r\.j\.error/);
+});
+
+test("Konto loeschen: Profil-ID in Bestaetigungen und die Begruendung des Melders verschwinden aus dem Protokoll", async () => {
+  const { raw, env } = await mk();
+  ins(raw, "programs", { owner_type: "u", owner_id: 6, program: "rd", verified: 0 });
+  assert.equal((await call(env, 1, "POST", "/api/admin/verify", { owner: "u:user-6", kind: "program", key: "rd", value: 1 })).s, 200);
+  const er = ins(raw, "expert_requests", { user_id: 4, title: "Anfrage", description: "Beschreibung", status: "open", lang: "de", created: 1 });
+  ins(raw, "expert_request_reports", { request_id: er, user_id: 6, reply_id: 0, reason: "MELDERTEXT von Konto 6 mit Namen", created: 2 });
+  ins(raw, "expert_request_reports", { request_id: er, user_id: 5, reply_id: 0, reason: "Text von Konto 5", created: 3 });
+  assert.equal((await call(env, 3, "POST", "/api/editor/decide", { kind: "expert_report", id: `${er}:0`, action: "resolve" })).s, 200);
+  ins(raw, "edit_log", { ts: 1, user_id: 1, role: "admin", action: "verify.set", kind: "verify", item_id: "u:61:program:mvp", day: 0 });   // anderes Konto mit aehnlicher ID bleibt
+  assert.equal((await call(env, 6, "DELETE", "/api/me")).s, 200);
+  const all = raw.prepare("SELECT item_id,before FROM edit_log").all().map((r) => JSON.stringify(r)).join("\n");
+  assert.doesNotMatch(all, /MELDERTEXT|u:6:/); assert.match(all, /u:0:program:rd/); assert.match(all, /u:61:program:mvp/);
+  assert.match(all, /Text von Konto 5/);   // fremde Meldungen bleiben
 });
 
 // ---------- Oberflaeche (assets/redaktion.js) mit kleinem DOM-Nachbau: keine Daten ohne Sitzung, ganzer Text im Formular, Anker beim Speichern ----------

@@ -95,6 +95,21 @@ class Bereinigung(Base):
         html = TB.assemble(POST, rec, "de")[2]
         self.assertIn("<strong>Hand</strong>", html); self.assertIn('href="https://example.com/x"', html)
 
+    def test_titel_beschreibung_und_faq_sind_reiner_text_ohne_doppelte_maskierung(self):
+        # Der Worker speichert T/D/Q/A als reinen Text (wie der Maschinentext); die Seiten maskieren beim Einsetzen. san() wuerde aus '&' ein '&amp;' machen,
+        # das auf der Seite als "&amp;" stehen bliebe.
+        post = {**POST, "title": "Q&A about Teams", "desc": "Tips & tricks", "faq": [{"name": "Why A&B?", "acceptedAnswer": {"text": "Because C&D."}}]}
+        tpl, units, h = TB.source_of(post); a = TB.unit_hashes(units, h)[1]
+        rec = {"h": h, "m": "x", "n": 1, "ok": True, "seg": {u: f"DE {t}" for u, t in units}, "sh": dict(a)}
+        self.write("lblog", "de", {"p": {"T": {"t": 'Fragen & Antworten zu "Teams"', "sh": a["T"]}, "D": {"t": "Tipps &amp; <b>Tricks</b>", "sh": a["D"]},
+                                         "Q1": {"t": "Warum A&B?", "sh": a["Q1"]}, "A1": {"t": "Weil <script>x</script>C&D.", "sh": a["A1"]}, "1": {"t": "R&D <b>x</b>", "sh": a["1"]}}})
+        title, desc, html, faq = TB.assemble(post, rec, "de")
+        self.assertEqual((title, desc), ('Fragen & Antworten zu "Teams"', "Tipps & Tricks"))
+        self.assertEqual((faq[0]["name"], faq[0]["acceptedAnswer"]["text"]), ("Warum A&B?", "Weil x C&D."))
+        self.assertIn("<p>R&amp;D <b>x</b></p>", html)   # Absaetze bleiben Inline-HTML und werden bereinigt
+        view = TB.editor_view("de", post, rec)["units"]
+        self.assertEqual(view[0][2], 'Fragen & Antworten zu "Teams"')   # die Redaktion sieht denselben Text, ein erneutes Speichern maskiert nichts doppelt
+
     def test_folgen_und_show_notes(self):
         for bad in XSS:
             self.write("episode", "de", {"e1": {"title": {"t": bad, "sh": ""}, "summary": {"t": bad, "sh": ""}}})

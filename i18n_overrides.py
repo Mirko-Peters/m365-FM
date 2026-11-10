@@ -32,8 +32,8 @@ VERTRAG i18n-overrides v1
         bleibt stehen, die Einheit gilt als veraltet;
      d) sonst gar nicht (verwaist: Absatz geloescht oder mit --force-manual neu uebersetzt); es gilt der Maschinentext, das Protokoll nennt die Zahl.
    episode/notes: Felder wandern nicht; ein Override gilt, solange es existiert und die Folge eine Maschinenfassung hat.
-   Bereinigung beim Anwenden (der Datei wird nie vertraut): lblog wie der Maschinentext durch site_podpage.san, sobald '<' oder '&' vorkommt; notes immer
-   durch site_podpage.san; episode als reiner Text (Tags entfernt, Entities aufgeloest, Leerraum normalisiert). Bleibt danach nichts uebrig, gilt der Maschinentext.
+   Bereinigung beim Anwenden (der Datei wird nie vertraut): lblog-Absaetze wie der Maschinentext durch site_podpage.san, sobald '<' oder '&' vorkommt; notes immer
+   durch site_podpage.san; episode und lblog T/D/Q/A als reiner Text (Tags entfernt, Entities aufgeloest, Leerraum normalisiert). Bleibt danach nichts uebrig, gilt der Maschinentext.
 5. Sperre: Einheiten und Felder mit angewendetem Override sendet kein Modus zur Uebersetzung (auto, run, stale, --redo), ausser mit --force-manual.
    --force-manual erneuert nur den Maschinentext darunter. lblog: danach passt der Anker zu nichts mehr (4d) und die frische Maschinenfassung wird sichtbar;
    episode/notes: der Handtext bleibt, bis die Redaktion ihn zuruecksetzt oder neu speichert.
@@ -136,9 +136,13 @@ def get(kind, lang, item):
     return load(kind, lang).get(item, {})
 
 
+PLAIN_UNIT = re.compile(r"^(?:T|D|[QA]\d+)$")   # lblog: Titel, Beschreibung und FAQ sind im Original reiner Text (translate_blog.source_of), nur Absaetze tragen Inline-HTML
+
+
 def clean(kind, unit, text):
-    """Bereinigung beim Anwenden (Vertrag 4): der Datei wird nie vertraut, auch wenn der Worker schon gefiltert hat."""
-    if kind == "episode": return re.sub(r"\s+", " ", _html.unescape(re.sub(r"<[^>]*>", " ", text))).strip()
+    """Bereinigung beim Anwenden (Vertrag 4): der Datei wird nie vertraut, auch wenn der Worker schon gefiltert hat.
+    Reiner Text (episode; lblog T/D/Q/A) bleibt unmaskiert wie der Maschinentext - die Seiten maskieren ihn beim Einsetzen (esc); san() wuerde '&' doppelt maskieren."""
+    if kind == "episode" or (kind == "lblog" and PLAIN_UNIT.match(str(unit))): return re.sub(r"\s+", " ", _html.unescape(re.sub(r"<[^>]*>", " ", text))).strip()
     import site_podpage as P
     return P.san(text) if kind == "notes" or "<" in text or "&" in text else text
 

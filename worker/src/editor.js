@@ -246,8 +246,10 @@ async function staffVersions(db, actor, kind, id, scoped = true) {
   return visible(actor, kind, v.it) && (!scoped || inScope(actor, ip)) ? { ...v, ip } : null;
 }
 
-// Zuruecksetzen: Editor nur eine Redaktionsaenderung (die aktuelle Fassung wurde in der Rolle Editor geschrieben - Rolle zum Zeitpunkt der Aenderung), Admin
-// jederzeit. seen = Fassung, die der Aufrufer als aktuell gesehen hat. Stimmt sie nicht mehr (der Autor oder jemand anderes hat inzwischen gespeichert),
+// Zuruecksetzen: Blog - Editor nur eine Redaktionsaenderung (die aktuelle Fassung wurde in der Rolle Editor geschrieben - Rolle zum Zeitpunkt der Aenderung),
+// nie den Text des Autors; Admin jederzeit. Wiki/Entitaet: gemeinsame Texte, deren live stehende Fassung im Verlauf bleibt - Editoren duerfen auf eine fruehere
+// Fassung zuruecksetzen wie bisher (can(): Bereich, nie die eigene Fassung, Tageslimit; Protokoll), ausser die live stehende Fassung stammt vom Inhaber
+// der Entitaet (bestaetigte Uebernahme). seen = Fassung, die der Aufrufer als aktuell gesehen hat. Stimmt sie nicht mehr (der Autor oder jemand anderes hat inzwischen gespeichert),
 // wird nichts ueberschrieben: 409 conflict mit der jetzt aktuellen Fassung; ein noch nicht erfasster Stand des Autors wird dabei im Verlauf festgehalten.
 export async function revertTo(env, user, kind, id, revId, seen) {
   const db = env.DB, actor = await loadActor(db, user), role = roleOf(actor);
@@ -262,7 +264,7 @@ export async function revertTo(env, user, kind, id, revId, seen) {
   if (+seen !== v.current) return { status: 409, body: { error: "conflict", current: v.current } };
   if (target.id === v.current) return { status: 409, body: { error: "already_current" } };
   const cur = v.versions.find((x) => x.id === v.current);
-  if (role !== "admin" && cur?.role !== "editor") return { status: 403, body: { error: "not_editor_edit" } };   // Editor: nur Redaktionsaenderungen zuruecknehmen
+  if (role !== "admin" && cur?.role !== "editor" && (kind === "blog" || (kind === "entity" && cur?.authorId && (await entityOwnerId(db, v.it.eid)) === Number(cur.authorId)))) return { status: 403, body: { error: "not_editor_edit" } };   // Editor: beim Blog nur Redaktionsaenderungen zuruecknehmen
   const reason = `Zurückgesetzt auf Version #${target.id}`;
   let logItem = id;
   if (kind === "blog") {
@@ -295,6 +297,7 @@ export async function legacyRev(env, user, kind, id, action) {
   return out;
 }
 
+const entityOwnerId = async (db, eid) => Number((await db.prepare("SELECT user_id FROM entity_claims WHERE eid=? AND status='verified'").bind(eid).first().catch(() => null))?.user_id || 0);
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
 // ---- Pruefliste ----
@@ -407,13 +410,13 @@ export async function undoLog(env, user, id) {
 // Konto loeschen (index.js deleteAccount, VOR deleteUserBlog): alles Persoenliche aus den Tabellen der Redaktion entfernen, den Rest anonymisieren.
 // Weg: Bewerbungen (mit Motivation) samt Stimmen, eigene Stimmen, Fachbereich, offene eigene Empfehlungen, Verlauf/Empfehlungen/Textauszuege zu den
 // eigenen Beitraegen, Zertifikats-Eintraege (die Nutzer-ID steht in item_id). Anonymisiert (user_id 0): Protokoll, erledigte Empfehlungen, Fassungen an
-// fremden Beitraegen, Handtexte der Sprachfassungen, Wuensche; Melder-IDs in protokollierten Meldungen.
+// fremden Beitraegen, Handtexte der Sprachfassungen, Wuensche; Melder-IDs und ihre Begruendungen in protokollierten Meldungen, die Profil-ID in Bestaetigungen.
 export async function deleteUserEditorial(db, id) {
   const mine = "(SELECT CAST(id AS TEXT) FROM blog_posts WHERE user_id=?)", cert = `${id}:%`;
   for (const r of (await db.prepare("SELECT id,before FROM edit_log WHERE action='report.resolve' AND before LIKE '%\"reports\"%'").all().catch(() => ({ results: [] }))).results || []) {
     let b = null; try { b = JSON.parse(r.before); } catch { b = null; }
-    if (!b || !Array.isArray(b.reports) || !b.reports.some((x) => Array.isArray(x) && Number(x[0]) === Number(id))) continue;
-    await db.prepare("UPDATE edit_log SET before=? WHERE id=?").bind(JSON.stringify({ ...b, reports: b.reports.map((x) => (Array.isArray(x) && Number(x[0]) === Number(id) ? [0, ...x.slice(1)] : x)) }), r.id).run();
+    if (!b || !Array.isArray(b.reports) || !b.reports.some((x) => Array.isArray(x) && Number(x[0]) === Number(id))) continue;   // [melder, zeit] bzw. [melder, begruendung, zeit]: eine Begruendung schrieb der Melder selbst
+    await db.prepare("UPDATE edit_log SET before=? WHERE id=?").bind(JSON.stringify({ ...b, reports: b.reports.map((x) => (Array.isArray(x) && Number(x[0]) === Number(id) ? [0, ...x.slice(1).map((v) => (typeof v === "string" ? "" : v))] : x)) }), r.id).run();
   }
   await db.batch([
     db.prepare("DELETE FROM editor_votes WHERE voter_id=? OR app_id IN (SELECT id FROM editor_applications WHERE user_id=?)").bind(id, id),
@@ -425,6 +428,7 @@ export async function deleteUserEditorial(db, id) {
     db.prepare(`UPDATE edit_log SET before='',after='' WHERE kind='blog' AND item_id IN ${mine}`).bind(id),
     db.prepare("UPDATE edit_log SET item_id='0:'||substr(item_id,instr(item_id,':')+1) WHERE kind='cert' AND item_id LIKE ?").bind(cert),
     db.prepare("UPDATE edit_log SET item_id='0' WHERE kind='user' AND item_id=?").bind(String(id)),
+    db.prepare("UPDATE edit_log SET item_id='u:0:'||substr(item_id,?) WHERE kind='verify' AND substr(item_id,1,?)=?").bind(`u:${id}:`.length + 1, `u:${id}:`.length, `u:${id}:`),   // bestaetigte Angaben eines Profils (u:<id>:<art>:<schluessel>)
     db.prepare("UPDATE edit_log SET user_id=0 WHERE user_id=?").bind(id),
     db.prepare("UPDATE i18n_override SET \"by\"=0 WHERE \"by\"=?").bind(id), db.prepare("UPDATE i18n_override_rev SET user_id=0 WHERE user_id=?").bind(id), db.prepare("UPDATE i18n_retranslate_req SET \"by\"=0 WHERE \"by\"=?").bind(id),
   ]);
@@ -470,7 +474,8 @@ export async function handleEditor(env, request, url, path, user, J) {
     if (method === "GET") {   // Autor sieht den Verlauf des eigenen Eintrags (Blog) bzw. der eigenen Wiki-/Entitaeten-Aenderungen
       const kind = url.searchParams.get("kind") || "", v = ["blog", "wiki", "entity"].includes(kind) ? await versionsOf(db, kind, url.searchParams.get("id") || "") : null;
       if (!v || (kind === "blog" ? v.ownerId !== user.id : !v.versions.some((x) => x.authorId === user.id))) return J({ error: "not_found" }, 404, NS);
-      return J({ versions: v.versions.map(({ authorId, ...x }) => x), current: v.current }, 200, NS);
+      // Wiki/Entitaet: fremde wartende oder abgelehnte Fassungen sind nicht oeffentlich - nur was live war oder ist, und die eigenen
+      return J({ versions: v.versions.filter((x) => kind === "blog" || x.status === "live" || x.status === "old" || x.authorId === user.id).map(({ authorId, ...x }) => x), current: v.current }, 200, NS);
     }
   }
   if (!can(user, "queue.view").ok) return J({ error: user ? "forbidden" : "login" }, user ? 403 : 401, NS);   // ab hier nur Redaktion/Moderation; jede Route fragt can() fuer ihre Aktion
