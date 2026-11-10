@@ -32,6 +32,7 @@ import gzip, hashlib, json, os, random, re, sys, time, urllib.request, urllib.er
 from site_text import bad as bad_text
 from difflib import SequenceMatcher
 import i18n_overrides as OV
+import search_demand as DM
 from tm_hash import unit_hash, kind_of
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
@@ -688,10 +689,12 @@ def submit(a):
     busy = {(b2["lang"], b2["slug"]) for b in jload("batches.json", []) for b2 in b.get("items", [])}
     reqs, items, money = [], [], 0.0
     room = BUDGET - spent_month() - pending_cost()
+    demand = DM.load()   # Suchnachfrage (#156): nur Reihenfolge je Sprache; was gesendet wird, entscheiden resolve/wanted_units und das Budget
     for lang in langs:
         have = load_lang(lang); tm = TM(lang, have, allps); sysp = system_prompt(lang); n_posts = 0; touched = set()
         # auto sieht nur die letzten NEW_DAYS Tage - plus aeltere, schon uebersetzte Beitraege, deren Original neue Absaetze bekommen hat (gap): nur diese fehlen
         cand = ps + [p for p in allps if p["slug"] not in sel and (have.get(p["slug"]) or {}).get("gap")] if a["mode"] == "auto" else ps
+        cand = DM.order(cand, demand, "lblog", lambda p: lang, lambda p: p["slug"])
         for p in cand:
             if a["limit"] and n_posts >= a["limit"]: break
             if (lang, p["slug"]) in busy: continue
