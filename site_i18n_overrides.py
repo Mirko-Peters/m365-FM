@@ -6,8 +6,10 @@ GET /api/i18n/overrides?kind=&lang= -> {kind, lang, items: {item: {unit: {"t", "
 - sync(): holt den Export (site_fetch, mit Cache-Rueckfall) und schreibt data/i18n_overrides/<kind>/<lang>.json. Export erreichbar -> Datei ersetzen
   (keine Eintraege -> Datei loeschen), nicht erreichbar -> die vorhandene Datei bleibt.
 - note_blog() / note_podpage(): merken je Eintrag, was die Redaktion im Tab "Sprachfassungen" braucht - Original neben der angezeigten Fassung und je
-  Einheit der Quell-Anker, den die Oberflaeche beim Speichern als "sh" mitschickt (translate_blog.editor_view, translate_show.anchors). Nur fuer veraltete
-  oder schon bearbeitete Eintraege; alle Einheiten aller Fassungen zu veroeffentlichen waere zu gross.
+  Einheit der Quell-Anker, den die Oberflaeche beim Speichern als "sh" mitschickt (translate_blog.editor_view, translate_show.anchors). Nur fuer veraltete,
+  schon bearbeitete und von der Redaktion angeforderte Eintraege (alle Einheiten aller Fassungen zu veroeffentlichen waere zu gross): die Anforderung
+  ("Zum Bearbeiten anfordern", Worker /api/editor/i18n/open) nennt der Export unter "open", sync() merkt sie fuer diesen Bau. Ohne sie gaebe es fuer eine
+  korrekte, aber schlechte Maschinenfassung nie einen ersten Handtext (lblog speichert nur mit Anker).
 - publish(): schreibt daraus docs/i18n-stale.json und docs/i18n-units/<kind>/<lang>.json. Muss NACH allen note_*-Aufrufen laufen (generate_site.py: nach
   PP.build), sonst fehlen Folgen und Show Notes.
 Veraltet-Listen (schreiben nur die Uebersetzungs-Skripte, Vertrag Punkt 7): Blog aus translate_blog.editor_view (dieselbe Rechnung wie data/blog_i18n/stale.json,
@@ -23,6 +25,7 @@ LANGS = ("de", "fr", "es", "it", "nl", "pt", "pl", "id", "ru", "uk", "ar", "he",
 SHOW_STALE = ROOT / "data" / "podpage_i18n" / "stale.json"
 _NOTED = {}   # (kind, lang) -> {item: {"units": [[id, original, angezeigter Text, Quell-Anker]], "stale": [ids], "edited": [ids]}}
 _SHOW = {}    # Zwischenspeicher der Veraltet-Liste der Show (eine Datei fuer episode und notes)
+_OPEN = {}    # (kind, lang) -> {item}: von der Redaktion angeforderte Absatz-Ansichten (Export "open", sync)
 
 
 def paths():
@@ -53,6 +56,8 @@ def sync(api=None):
         if not isinstance(j, dict) or not isinstance(j.get("items"), dict):
             continue   # nicht erreichbar: vorhandene Datei bleibt
         items = {str(i): us for i, us in ((i, _units(u)) for i, u in j["items"].items()) if us}
+        op = j.get("open")
+        _OPEN[(k, l)] = {i for i in op if isinstance(i, str) and i} if isinstance(op, list) else set()
         f = _file(k, l)
         if items:
             f.parent.mkdir(parents=True, exist_ok=True); f.write_text(json.dumps(items, ensure_ascii=False, indent=1, sort_keys=True), encoding="utf-8")
@@ -64,8 +69,13 @@ def sync(api=None):
     return n
 
 
+def asked(kind, lang, item):
+    """Absatz-Ansicht dieses Eintrags von der Redaktion angefordert (Export "open")?"""
+    return item in _OPEN.get((kind, lang), ())
+
+
 def _note(kind, lang, item, units, stale, edited):
-    if stale or edited:
+    if stale or edited or asked(kind, lang, item):
         _NOTED.setdefault((kind, lang), {})[item] = {"units": units, "stale": list(stale), "edited": list(edited)}
 
 
@@ -114,13 +124,13 @@ def note_podpage(eps, TRL, NTL):
             cur = (TRL.get(l) or {}).get(slug)
             ed = set(OV.get("episode", l, slug)) & {"title", "summary"}
             st = [f for f in ("title", "summary") if f in fields]
-            if cur and cur[0] and (st or ed):
+            if cur and cur[0] and (st or ed or asked("episode", l, slug)):
                 t, sm, _, a = source(slug)
                 _note("episode", l, slug, [["title", t, cur[0], a["title"]], ["summary", sm, cur[1] if len(cur) > 1 else "", a["summary"]]], st, sorted(ed))
             html = (NTL.get(l) or {}).get(slug)
             ned = set(OV.get("notes", l, slug)) & {"html"}
             nst = ["html"] if "notes_html" in fields else []
-            if html and (nst or ned):
+            if html and (nst or ned or asked("notes", l, slug)):
                 _, _, nsrc, a = source(slug)
                 _note("notes", l, slug, [["html", nsrc, html, a["html"]]], nst, sorted(ned))
 

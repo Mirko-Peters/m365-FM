@@ -27,7 +27,7 @@ def record():
 class Base(unittest.TestCase):
     def setUp(self):
         self.tmp = Path(tempfile.mkdtemp()); self.addCleanup(shutil.rmtree, self.tmp, True)
-        for obj, name, val in ((OV, "DIR", self.tmp / "ov"), (OVR, "_NOTED", {}), (OVR, "_SHOW", {}), (OVR, "SHOW_STALE", self.tmp / "podpage_stale.json"), (TB, "_SRC", {})):
+        for obj, name, val in ((OV, "DIR", self.tmp / "ov"), (OVR, "_NOTED", {}), (OVR, "_SHOW", {}), (OVR, "_OPEN", {}), (OVR, "SHOW_STALE", self.tmp / "podpage_stale.json"), (TB, "_SRC", {})):
             p = patch.object(obj, name, val); p.start(); self.addCleanup(p.stop)
         OV.use_api(""); self.addCleanup(OV.use_api, "")
 
@@ -142,6 +142,28 @@ class Zulieferung(Base):
         self.assertEqual(by["T"], ["T", "Title", "DE Title", a["T"]])          # [id, Original, angezeigt, Quell-Anker]
         self.assertEqual(by["1"], ["1", "First paragraph.", "Von Hand", a["1"]])
         self.assertTrue(all(re.fullmatch(r"[0-9a-f]{8}", u[3]) for u in v["units"]))
+
+    def test_angeforderte_eintraege_bekommen_die_absatz_ansicht_fuer_den_ersten_handtext(self):
+        """319-14: eine korrekte, nicht bearbeitete Fassung war bisher nie im Bearbeitungsfenster - und lblog speichert nur mit Anker. Die Anforderung der
+        Redaktion (Export "open") veroeffentlicht Einheiten und Anker mit dem naechsten Bau, auch fuer Folgen und Show Notes."""
+        a = self.anchors(); _, _, rec = record()
+        eps = [{"slug": "ep1", "name": "Ep one", "summary": "Sum one", "show_notes": "<p>Notes one</p>"}]
+        ans = {"/api/i18n/overrides?kind=lblog&lang=de": {"kind": "lblog", "lang": "de", "items": {}, "open": ["p", 7, ""]},
+               "/api/i18n/overrides?kind=notes&lang=de": {"kind": "notes", "lang": "de", "items": {}, "open": ["ep1"]}}
+        with patch.object(SF, "fetch", lambda u, *x, **k: ans.get(u.split("m365.fm", 1)[-1], {"items": {}})):
+            OVR.sync("https://api-dub.m365.fm")
+        self.assertEqual(OVR._OPEN[("lblog", "de")], {"p"}); self.assertFalse((OV.DIR / "lblog" / "de.json").exists())   # die Anforderung ist kein Handtext
+        OVR.note_blog("de", "p", POST, rec); OVR.note_blog("fr", "p", POST, rec)   # fr nicht angefordert
+        OVR.note_podpage(eps, {"de": {"ep1": ["T1 de", "S1 de"]}}, {"de": {"ep1": "<p>N1 de</p>"}})
+        out = self.tmp / "docs"; out.mkdir(); OVR.publish(out)
+        u = json.loads((out / "i18n-units" / "lblog" / "de.json").read_text("utf-8"))["p"]
+        self.assertEqual((u["stale"], u["edited"]), ([], []))
+        self.assertEqual({x[0]: x[3] for x in u["units"]}, dict(a))   # Quell-Anker jeder Einheit: damit ist der erste Handtext speicherbar
+        self.assertEqual(u["units"][2], ["1", "First paragraph.", "DE First paragraph.", a["1"]])
+        self.assertFalse((out / "i18n-units" / "lblog" / "fr.json").exists())
+        self.assertFalse((out / "i18n-units" / "episode").exists())   # nur die Show Notes waren angefordert
+        self.assertEqual(json.loads((out / "i18n-units" / "notes" / "de.json").read_text("utf-8"))["ep1"]["units"][0][2], "<p>N1 de</p>")
+        self.assertEqual(json.loads((out / "i18n-stale.json").read_text("utf-8"))["items"], [])   # angefordert ist nicht veraltet
 
     def test_blog_original_geaendert_handtext_bleibt_und_gilt_als_veraltet(self):
         a = self.anchors(); units, h, rec = record()

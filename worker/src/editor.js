@@ -6,7 +6,7 @@ import { evalBadges } from "./badges.js";
 import { baseIds } from "./entities.js";
 import { pairNewOrgEntity } from "./orgpair.js";
 import { notify } from "./mail.js";
-import { saveUnit, unitHistory, revertUnit, requestRetranslate, currentOverrides, overrideAnchors, openWishes, runProposal } from "./i18n_edit.js";
+import { saveUnit, unitHistory, revertUnit, requestRetranslate, requestOpen, currentOverrides, overrideAnchors, openWishes, runProposal } from "./i18n_edit.js";
 import { applyForRole, myApplications, listApplications, decideApplication, NEEDED } from "./roles.js";
 import { sanitize, MAX_BODY } from "./wiki.js";
 import { cleanText, sha256hex } from "./util.js";
@@ -503,6 +503,7 @@ export async function handleEditor(env, request, url, path, user, J) {
     const b = method === "POST" ? await body() : {};
     if (path === "/api/editor/i18n/save" && method === "POST") return R(await saveUnit(env, user, { kind: String(b.kind || ""), item: String(b.item || ""), lang: String(b.lang || ""), unit: String(b.unit || ""), text: b.text, prev: b.prev, sh: String(b.sh || ""), reason: txt(b.reason, 300) }));
     if (path === "/api/editor/i18n/revert" && method === "POST") return R(await revertUnit(env, user, { kind: String(b.kind || ""), item: String(b.item || ""), lang: String(b.lang || ""), unit: String(b.unit || ""), rev: b.rev, cur: b.cur }));
+    if (path === "/api/editor/i18n/open" && method === "POST") return R(await requestOpen(env, user, { kind: String(b.kind || ""), item: String(b.item || ""), lang: String(b.lang || "") }));
     if (path === "/api/editor/i18n/retranslate" && method === "POST") return R(await requestRetranslate(env, user, { kind: String(b.kind || ""), item: String(b.item || ""), lang: String(b.lang || ""), units: b.units }));
     return J({ error: "not_found" }, 404, NS);
   }

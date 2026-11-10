@@ -3,6 +3,7 @@
 // notes, Einheiten wie dort, je Handtext der Quell-Anker sh (Spalte src_hash; die Oberflaeche schickt ihn mit, der Worker rechnet nicht). Angewendet
 // wird ausschliesslich im Seitenbau ueber i18n_overrides.py. Rechte ueber can() wie bei Inhalten.
 import { can, roleOf, loadActor, logEdit } from "./perm.js";
+import { rateLimit } from "./util.js";
 
 const now = () => Math.floor(Date.now() / 1000);
 export const I18N_KINDS = ["lblog", "episode", "notes"];
@@ -173,6 +174,22 @@ export async function requestRetranslate(env, user, { kind, item, lang, units = 
 }
 export const openWishes = async (db, kind, item, lang) => !!(await db.prepare("SELECT 1 x FROM i18n_retranslate_req WHERE kind=? AND item=? AND lang=? AND status='open'").bind(kind, item, lang).first());
 
+// Absatz-Ansicht anfordern (Migration 0042): docs/i18n-units enthaelt nur veraltete, bearbeitete und angeforderte Eintraege (alle waeren zu gross). Wer die
+// Sprachfassung bearbeiten darf (can content.edit_minor in der Sprache, Moderatoren als Empfehlung eingeschlossen), merkt den Eintrag vor; der Export nennt ihn
+// unter "open", und der naechste Seitenbau veroeffentlicht Einheiten und Quell-Anker. Kein Personenbezug, nichts am Inhalt geaendert -> kein Protokoll.
+export const OPEN_DAYS = 30;
+export async function requestOpen(env, user, { kind, item, lang }) {
+  const db = env.DB;
+  if (!validItem(kind, item, lang)) return res(400, { error: "bad_request" });
+  const perm = can(await loadActor(db, user), "content.edit_minor", ip(lang));
+  if (!perm.ok) return res(403, { error: perm.why });
+  if (!(await isPublished(db, kind, item))) return res(404, { error: "not_published" });
+  if (!(await rateLimit(db, `i18nopen:${user.id}`, 100, 86400))) return res(429, { error: "rate_limit" });
+  await db.batch([db.prepare("DELETE FROM i18n_open_req WHERE ts<?").bind(now() - OPEN_DAYS * 86400),
+    db.prepare("INSERT INTO i18n_open_req(kind,item,lang,ts) VALUES(?,?,?,?) ON CONFLICT(kind,item,lang) DO UPDATE SET ts=excluded.ts").bind(kind, item, lang, now())]);
+  return res(200, { ok: true, days: OPEN_DAYS });
+}
+
 // Empfehlung eines Moderators bestaetigt ein Editor im Browser: fuehrt dieselbe Funktion mit den Daten der Empfehlung aus
 export async function runProposal(env, actor, p) {
   let pl = {}; try { pl = JSON.parse(p.payload || "{}"); } catch { pl = {}; }
@@ -192,7 +209,13 @@ export async function overridesExport(db, kind, lang) {
     const t = ok.get(r.item) ? cleanUnit(kind, r.text, r.unit).text : "";
     if (t) (items[r.item] = items[r.item] || {})[r.unit] = { t, sh: ANCHOR.test(r.src_hash || "") ? r.src_hash : "" };
   }
-  return { kind, lang, items };
+  // angeforderte Absatz-Ansichten (requestOpen): nur veroeffentlichte Eintraege, nur wenn es welche gibt (sonst bleibt die Antwort genau Vertrag v1)
+  const open = [];
+  for (const r of (await db.prepare("SELECT item FROM i18n_open_req WHERE kind=? AND lang=? AND ts>=? ORDER BY item LIMIT 2000").bind(kind, lang, now() - OPEN_DAYS * 86400).all().catch(() => ({ results: [] }))).results || []) {
+    if (!ok.has(r.item)) ok.set(r.item, await isPublished(db, kind, r.item));
+    if (ok.get(r.item)) open.push(r.item);
+  }
+  return { kind, lang, items, ...(open.length ? { open } : {}) };
 }
 export async function handleI18nPublic(env, request, url, path, J) {
   const db = env.DB, C = { "cache-control": "public, max-age=300" };

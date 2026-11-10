@@ -331,7 +331,7 @@ export async function callTool(env, user, name, a) {
     const row = ((uj && uj[String(a.item)] && uj[String(a.item)].units) || []).find((x) => Array.isArray(x) && x[0] === String(a.unit));
     if (row) { prev = String(row[2] || ""); if (!sh) sh = String(row[3] || ""); }
     const r = await saveUnit(env, { ...user, moderator: true, editor: false, admin: false, role: "moderator" }, { kind: String(a.kind), item: String(a.item), lang: String(a.lang), unit: String(a.unit), text: a.text, prev, sh, reason: cleanText(a.reason, 300) });
-    return r.status === 200 ? { ok: true, stored_as: "proposal", proposal: r.body.proposal, executed: false, confirm_in_browser: "https://www.m365.fm/redaktion/" } : { error: r.body.error, ...(r.body.error === "anchor_required" ? { note: "The entry is not in the published paragraph view (/i18n-units/). Only outdated or already edited entries are listed there; pass sh (source anchor) if you have it." } : {}) };
+    return r.status === 200 ? { ok: true, stored_as: "proposal", proposal: r.body.proposal, executed: false, confirm_in_browser: "https://www.m365.fm/redaktion/" } : { error: r.body.error, ...(r.body.error === "anchor_required" ? { note: "The entry is not in the published paragraph view (/i18n-units/). Only outdated, already edited and requested entries are listed there: an editor requests the entry in the browser (/redaktion/, \"Request for editing\"), it is listed after the next site build. Pass sh (source anchor) if you have it." } : {}) };
   }
   if (name === "editor_queue" || name === "editor_view_item" || name === "editor_propose_decision") {   // Vorschau -> Bestaetigung im Browser (Muster wie bei den Entwuerfen)
     if (!can(user, "queue.view").ok) return { error: "forbidden" };

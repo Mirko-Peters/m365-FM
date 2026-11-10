@@ -191,6 +191,30 @@ test("319-3: Vertrag i18n-overrides v1 - Arten, Einheiten, Quell-Anker (src_hash
   assert.equal((await ex("lblog")).items["live-post"].T, undefined);   // Ursprungsfassung = Zeile weg (Vertrag Punkt 6)
 });
 
+test("319-14: erste Handfassung einer korrekten Blog-Sprachfassung - Absatz-Ansicht anfordern (can je Sprache), der Export nennt sie unter open", async () => {
+  const { raw, env } = await mk();
+  blog(raw, 20, 4, "live", { slug: "live-post", lang: "en" }); blog(raw, 21, 4, "pending", { slug: "draft-post", lang: "en" });
+  ins(raw, "episode", { slug: "ep1", published: "2026-01-01" });
+  ins(raw, "editor_scope", { user_id: 5, topics: "[]", langs: '["fr"]', updated: 1 });   // Fach-Editor nur fuer Franzoesisch
+  const req = (uid, b) => call(env, uid, "POST", "/api/editor/i18n/open", { kind: "lblog", item: "live-post", lang: "de", ...b });
+  const ex = async (k, l = "de") => (await call(env, null, "GET", `/api/i18n/overrides?kind=${k}&lang=${l}`)).j;
+  assert.deepEqual(await ex("lblog"), { kind: "lblog", lang: "de", items: {} });   // ohne Anforderung genau Vertrag v1
+  assert.equal((await req(6)).s, 403); assert.equal((await req(4)).s, 403);   // Mitglieder (auch der Autor) nicht
+  assert.equal((await req(5)).j.error, "out_of_scope");   // Sprache ausserhalb des Bereichs
+  assert.equal((await req(2, { item: "draft-post" })).j.error, "not_published"); assert.equal((await req(2, { kind: "x" })).s, 400);
+  assert.deepEqual((await req(3)).j, { ok: true, days: 30 });   // Moderator: Ansehen anfordern ist keine Aenderung (Speichern bleibt Empfehlung)
+  assert.equal((await req(5, { lang: "fr" })).s, 200); assert.equal((await req(2, { kind: "notes", item: "ep1" })).s, 200);
+  assert.deepEqual((await ex("lblog")).open, ["live-post"]); assert.deepEqual((await ex("lblog", "fr")).open, ["live-post"]); assert.deepEqual((await ex("notes")).open, ["ep1"]);
+  assert.equal((await ex("lblog", "es")).open, undefined);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM pragma_table_info('i18n_open_req') WHERE name IN ('by','user_id')").get().n, 0, "ohne Personenbezug");
+  // nach 30 Tagen verfallen; ein Eintrag, der nicht mehr veroeffentlicht ist, geht nicht hinaus
+  raw.prepare("UPDATE i18n_open_req SET ts=1 WHERE lang='fr'").run(); raw.prepare("UPDATE blog_posts SET status='hidden' WHERE id=20").run();
+  assert.equal((await ex("lblog", "fr")).open, undefined); assert.equal((await ex("lblog")).open, undefined);
+  assert.deepEqual(raw.prepare("SELECT item FROM i18n_open_req ORDER BY item").all().map((r) => r.item), ["ep1", "live-post", "live-post"]);
+  await req(2, { kind: "notes", item: "ep1" });   // die naechste Anforderung raeumt Verfallenes weg
+  assert.deepEqual(raw.prepare("SELECT lang FROM i18n_open_req ORDER BY lang").all().map((r) => r.lang), ["de", "de"]);
+});
+
 // ---------- 319-10: Wunschliste ----------
 test("319-10: Neuuebersetzung vormerken - zweiter Wunsch fuer denselben Eintrag laesst sich wieder erledigen; Rueckmeldung nur mit Cron-Schluessel", async () => {
   const { raw, env } = await mk();
@@ -924,4 +948,22 @@ test("Oberflaeche: Bearbeiten zeigt den ganzen Text und schickt nur Geaendertes 
   u.find((n) => n.tag === "input" && n.attrs.maxlength === "300").at(-1).value = "Stil";
   ta.parent.children.find((n) => n.tag === "button" && n.textContent === "Speichern").click(); await tick();
   assert.deepEqual(u.calls.find((c) => c.u.startsWith("API:/api/editor/i18n/save")).body, { kind: "lblog", item: "p", lang: "de", unit: "1", text: "Erster, von Hand.", prev: "Erster.", sh: "bbbb2222", reason: "Stil" });
+});
+
+test("319-14 Oberflaeche: Eintrag ohne Absatz-Ansicht - ehrlicher Hinweis und 'Zum Bearbeiten anfordern' statt 'folgt mit dem naechsten Bau'", async () => {
+  const u = ui({
+    "API:/api/editor/queue": [200, { role: "editor", scope: { subject: false }, kinds: ["blog"], modKinds: [], items: [], proposals: [] }], "API:/api/editor/applications": [200, { items: [] }],
+    "SITE:/i18n-units/lblog/de.json": [200, { andere: { units: [], stale: [], edited: [] } }], "API:/api/editor/i18n/overrides": [200, { overrides: {}, anchors: {}, wish: false }],
+    "API:/api/editor/i18n/open": (c) => (c.body.item === "gut" ? [200, { ok: true, days: 30 }] : [404, { error: "not_published" }]),
+  });
+  await tick();
+  const tabs = u.find((n) => n.attrs.role === "tablist")[0]; tabs.children[1].click(); await tick();
+  const slug = u.find((n) => n.tag === "input" && n.attrs.maxlength === "160")[0], status = () => u.find((n) => n.attrs.role === "status").at(-1).textContent;
+  slug.value = "gut"; u.btn("Öffnen")[0].click(); await tick();
+  assert.match(status(), /noch keine Absatz-Ansicht veröffentlicht/); assert.doesNotMatch(u.root.textContent, /folgen mit dem nächsten Bau/);
+  u.btn("Zum Bearbeiten anfordern")[0].click(); await tick();
+  assert.deepEqual(u.calls.find((c) => c.u.startsWith("API:/api/editor/i18n/open")).body, { kind: "lblog", item: "gut", lang: "de" });
+  assert.match(status(), /Angefordert\. Nach dem nächsten Seitenbau/);
+  slug.value = "falsch"; u.btn("Öffnen")[0].click(); await tick(); u.btn("Zum Bearbeiten anfordern").at(-1).click(); await tick();
+  assert.match(status(), /nicht veröffentlicht/);
 });
