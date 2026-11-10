@@ -1,4 +1,4 @@
-// LinkedIn-Events: nur Fixtures, kein Netz. Regel "gleichzeitig mit HeySummit" (echte Feldnamen), Reservierung vor dem LinkedIn-Aufruf, Nutzlast nach Event,
+// LinkedIn-Events: nur Fixtures, kein Netz. HeySummit nur als Zusatzinfo (echte Feldnamen; seit der Pruefliste 0045 keine Voraussetzung mehr), Reservierung vor dem LinkedIn-Aufruf, Nutzlast nach Event,
 // Regeln je Aktion auf dem Server, verwaiste LinkedIn-Events, Routen und Deploy-Abgleich, Konto loeschen/zusammenfuehren, OAuth-State, Token-Verschluesselung.
 // Zweite Runde (R2-1 bis R2-5): Wartezeit ab der Reservierung, Vorauswahl nach HeySummit-Zeitraum vor dem LIMIT, HeySummit-Entwuerfe, auf LinkedIn geloeschte
 // Events, sofortiges Nachtragen nach store_failed.
@@ -155,30 +155,30 @@ test("323-1 Regel: Verknuepfung allein genuegt nie, es zaehlt die Ueberschneidun
   assert.equal(matchHeySummit(EV, hs, {}, Date.UTC(2027, 1, 1)).reason, "past");
 });
 
-test("323-1 Server: Liste, Veroeffentlichen und Aktualisieren verlangen die Ueberschneidung; ohne lesbares HeySummit geht nichts raus", async () => {
+test("323-1 Server (Pruefliste 0045): HeySummit ist keine Voraussetzung mehr - jedes uebernommene, kommende Event mit Uhrzeit ist ein Kandidat, ein passendes HeySummit-Event nur Zusatzinfo", async () => {
   const { raw, env } = await setup(); await connected(env);
   addEv(raw); addEv(raw, { id: 2, handle: "spaeter", title: "Gleicher Host, anderer Termin", start: "2027-06-15T10:00", end: "" }); addEv(raw, { id: 3, handle: "alt-dach", title: "Vorbei", url: "https://de.m365con.net/", start: "2027-06-16T10:00", end: "" });
   addEv(raw, { id: 4, handle: "stream", title: "Stream zur Keynote", url: "", start: "2027-01-11T08:30", end: "" });
   const log = [], f = mockFetch(log), p = await proposals(env, f, NOW);
-  assert.deepEqual(p.items.map((x) => [x.handle, x.state, x.hs.how]), [["m365con-day1", "proposal", "linked"], ["stream", "proposal", "talk"]]);
+  assert.deepEqual(p.items.map((x) => [x.handle, x.state, x.hs ? x.hs.how : null]), [["m365con-day1", "proposal", "linked"], ["stream", "proposal", "talk"], ["spaeter", "proposal", null], ["alt-dach", "proposal", null]]);   // Treffer = Zusatzinfo
   assert.deepEqual(p.hs_info, { events: 4, dated: 3, talks: 3, partial: false });
-  for (const h of ["spaeter", "alt-dach"]) assert.deepEqual(await act(env, ADMIN, "publish", h, true, f, NOW), { error: "no_match" });
-  assert.equal(creates(log), 0); assert.deepEqual(liRows(raw), []);
+  assert.ok(p.items.every((x) => x.can.join() === "publish"));
+  // ohne gleichzeitiges HeySummit-Event geht Veroeffentlichen trotzdem; die Nutzlast bekommt dann nur keinen Anmeldelink von HeySummit
+  assert.equal((await act(env, ADMIN, "publish", "spaeter", true, f, NOW)).ok, true); assert.equal(creates(log), 1);
   assert.equal((await act(env, ADMIN, "publish", "m365con-day1", true, f, NOW)).ok, true);
-  // Termin verschoben: die Regel gilt auch beim Aktualisieren
+  // Termin verschoben (kein HeySummit-Treffer mehr): Aktualisieren geht, die Liste zeigt keine Sperre
   raw.prepare("UPDATE events SET start='2027-06-15T10:00', end='' WHERE id=1").run(); log.length = 0;
-  assert.deepEqual(await act(env, ADMIN, "update", "m365con-day1", true, f, NOW), { error: "no_match" }); assert.equal(patches(log).length, 0);
+  assert.equal((await act(env, ADMIN, "update", "m365con-day1", true, f, NOW)).ok, true); assert.equal(patches(log).length, 1);
   const row = (await proposals(env, f, NOW)).items.find((x) => x.handle === "m365con-day1");
-  assert.deepEqual([row.state, row.rule, row.can], ["published", "no_match", ["cancel"]], "Absagen bleibt, Aktualisieren ist gesperrt");
-  // HeySummit nicht lesbar oder ohne Schluessel: kein Vorschlag, kein Aufruf an LinkedIn
-  const down = mockFetch(log, { hsStatus: 503 }); log.length = 0;
-  assert.deepEqual(await act(env, ADMIN, "publish", "stream", true, down, NOW), { error: "hs_503" });
-  const pd = await proposals(env, down, NOW); assert.equal(pd.hs_error, "hs_503"); assert.ok(!pd.items.some((x) => x.state === "proposal"));
-  assert.deepEqual(await act({ ...env, HEYSUMMIT_API_KEY: "" }, ADMIN, "publish", "stream", true, f, NOW), { error: "no_heysummit_key" });
-  assert.equal(creates(log), 0);
+  assert.deepEqual([row.state, row.rule, row.hs, row.changed, row.can], ["published", undefined, null, false, ["update", "cancel"]], "keine Sperre mehr; nach dem Aktualisieren ist nichts offen (changed false)");
+  // HeySummit nicht lesbar oder ohne Schluessel: die Liste meldet es nur als Zusatzinfo, Veroeffentlichen geht trotzdem
+  let nid = 9000; const down = mockFetch(log, { hsStatus: 503, create: () => new Response("", { status: 201, headers: { "x-restli-id": String(++nid) } }) }); log.length = 0;
+  const pd = await proposals(env, down, NOW); assert.equal(pd.hs_error, "hs_503"); assert.deepEqual(pd.items.filter((x) => x.state === "proposal").map((x) => x.handle), ["stream", "alt-dach"]);
+  assert.equal((await act(env, ADMIN, "publish", "stream", true, down, NOW)).ok, true);
+  assert.equal((await act({ ...env, HEYSUMMIT_API_KEY: "" }, ADMIN, "publish", "alt-dach", true, down, NOW)).ok, true);
+  assert.equal(creates(log), 2); assert.equal(liRows(raw).length, 4);
 });
 
-// ---------- 323-2: Reservierung VOR dem LinkedIn-Aufruf ----------
 test("323-2 gleichzeitige Klicks: genau ein LinkedIn-Event", async () => {
   const { raw, env } = await setup(); await connected(env); addEv(raw);
   const log = [], f = mockFetch(log);
@@ -444,13 +444,13 @@ test("323-8 Vorschlagsliste: Datumsfilter in SQL (nicht die 300 aeltesten), naec
   addEv(raw, { id: 1001, handle: "tag-2", title: "Tag 2", start: "2027-01-12T09:00", end: "2027-01-12T17:00" }); addEv(raw, { id: 1002 });
   addEv(raw, { id: 1003, handle: "letzter-tag", title: "Letzter Tag", start: "2027-01-22T09:00", end: "" }); addEv(raw, { id: 1004, handle: "kein-treffer", title: "Anderer Termin", start: "2027-03-01T09:00", end: "" });
   const f = mockFetch([]), p = await proposals(env, f, NOW);
-  assert.deepEqual(p.items.map((x) => x.handle), ["m365con-day1", "tag-2", "letzter-tag"]);
+  assert.deepEqual(p.items.map((x) => x.handle), ["m365con-day1", "tag-2", "letzter-tag", "kein-treffer"]);   // auch ohne gleichzeitiges HeySummit-Event (Pruefliste 0045)
   assert.ok(p.items.every((x) => x.state === "proposal" && x.can.join() === "publish"));
   // veroeffentlichte stehen weiter in der Liste (mit Knoepfen), auch hinter vielen vergangenen Events
   assert.equal((await act(env, ADMIN, "publish", "tag-2", true, f, NOW)).ok, true);
-  assert.deepEqual((await proposals(env, f, NOW)).items.map((x) => [x.handle, x.state]), [["m365con-day1", "proposal"], ["tag-2", "published"], ["letzter-tag", "proposal"]]);
-  // heute laufende und gestrige Events ohne Treffer stoeren nicht; ein vergangenes Event wird nie vorgeschlagen
-  assert.deepEqual((await proposals(env, f, Date.UTC(2027, 0, 12, 12))).items.map((x) => [x.handle, x.state]), [["tag-2", "published"], ["letzter-tag", "proposal"]]);
+  assert.deepEqual((await proposals(env, f, NOW)).items.map((x) => [x.handle, x.state]), [["m365con-day1", "proposal"], ["tag-2", "published"], ["letzter-tag", "proposal"], ["kein-treffer", "proposal"]]);
+  // heute laufende und gestrige Events stoeren nicht; ein vergangenes Event wird nie vorgeschlagen
+  assert.deepEqual((await proposals(env, f, Date.UTC(2027, 0, 12, 12))).items.map((x) => [x.handle, x.state]), [["tag-2", "published"], ["letzter-tag", "proposal"], ["kein-treffer", "proposal"]]);
 });
 
 // ---------- 323-9: Konto loeschen / zusammenfuehren, Verbindung trennen ----------
@@ -560,29 +560,28 @@ test("R2-1 eine Reservierung wird nur von dem Aufruf beschrieben oder entfernt, 
   assert.deepEqual(liRows(raw)[2], { event_id: 3, urn: "", status: "pending" });
 });
 
-test("R2-2 Vorschlagsliste: die Grenze zaehlt erst nach der Vorauswahl auf den HeySummit-Zeitraum; wird sie erreicht, sagt die Antwort es", async () => {
+test("R2-2 Vorschlagsliste: Events ohne Uhrzeit verbrauchen die Grenze nicht (sie werden gezaehlt); wird die Grenze erreicht, sagt die Antwort es", async () => {
   const { raw, env } = await setup(); await connected(env);
   const ins = raw.prepare("INSERT INTO events(handle,owner_id,title,start,end,public,created,updated) VALUES(?,1,?,?,'',1,1,1)");
-  // je mehr als CAND_MAX kommende Events mit Uhrzeit VOR dem Kongress und ohne Uhrzeit zu Beginn des Kongresses (in der Sortierung vor den Treffern):
-  // beides kann nie ein Vorschlag werden und zaehlt deshalb nicht mit
-  raw.exec("BEGIN"); for (let i = 0; i < CAND_MAX + 20; i++) { ins.run(`dez-${i}`, `Stream ${i}`, `2026-12-${String(1 + (i % 28)).padStart(2, "0")}T18:00`); ins.run(`cday-${i}`, `Community Day ${i}`, `2027-01-${10 + (i % 2)}`); } raw.exec("COMMIT");
+  // mehr als CAND_MAX kommende Events nur mit Datum: sie koennen nie ein Vorschlag werden, zaehlen nicht gegen die Grenze, werden aber gemeldet (no_time)
+  raw.exec("BEGIN"); for (let i = 0; i < CAND_MAX + 20; i++) ins.run(`cday-${i}`, `Community Day ${i}`, `2027-01-${10 + (i % 2)}`); raw.exec("COMMIT");
   addEv(raw, { id: 90001 }); addEv(raw, { id: 90002, handle: "tag-2", title: "Tag 2", start: "2027-01-12T09:00", end: "2027-01-12T17:00" });
   addEv(raw, { id: 90003, handle: "lang", title: "Beginnt frueher, laeuft in den Kongress", start: "2027-01-05T09:00", end: "2027-01-12" });
   addEv(raw, { id: 90004, handle: "nach-dem-kongress", title: "Gleicher Host, danach", start: "2027-02-10T09:00", end: "" });
   const f = mockFetch([]), p = await proposals(env, f, NOW);
-  assert.deepEqual(p.items.map((x) => [x.handle, x.hs.how]), [["lang", "linked"], ["m365con-day1", "linked"], ["tag-2", "linked"]]);
-  assert.deepEqual([p.truncated, p.limit], [false, CAND_MAX]);
-  // mehr als CAND_MAX Events mit Uhrzeit im Kongress-Zeitraum: die naechsten werden geprueft, der Rest fehlt - und das wird gemeldet
+  assert.deepEqual(p.items.map((x) => [x.handle, x.hs ? x.hs.how : null]), [["lang", "linked"], ["m365con-day1", "linked"], ["tag-2", "linked"], ["nach-dem-kongress", null]]);   // nach dem Kongress: Kandidat ohne Zusatzinfo
+  assert.deepEqual([p.truncated, p.limit, p.no_time], [false, CAND_MAX, CAND_MAX + 20]);
+  // mehr als CAND_MAX Events mit Uhrzeit: die naechsten werden geprueft, der Rest fehlt - und das wird gemeldet
   raw.exec("BEGIN"); for (let i = 0; i < CAND_MAX + 20; i++) ins.run(`abend-${i}`, `Abendstream ${i}`, `2027-01-${String(13 + (i % 8)).padStart(2, "0")}T18:00`); raw.exec("COMMIT");
-  addEv(raw, { id: 99001, handle: "letzter-tag", title: "Letzter Tag", start: "2027-01-22T09:00", end: "" });
+  addEv(raw, { id: 99001, handle: "letzter-tag", title: "Letzter Tag", start: "2027-03-22T09:00", end: "" });
   const p2 = await proposals(env, f, NOW);
-  assert.equal(p2.truncated, true); assert.deepEqual(p2.items.map((x) => x.handle), ["lang", "m365con-day1", "tag-2"]);
+  assert.equal(p2.truncated, true); assert.equal(p2.items.length, CAND_MAX); assert.deepEqual(p2.items.slice(0, 3).map((x) => x.handle), ["lang", "m365con-day1", "tag-2"]); assert.ok(!p2.items.some((x) => x.handle === "letzter-tag"));
   // veroeffentlichte Events haengen nicht an der Grenze, und sie verbrauchen sie nicht
   assert.equal((await act(env, ADMIN, "publish", "letzter-tag", true, f, NOW)).ok, true);
-  assert.deepEqual((await proposals(env, f, NOW)).items.map((x) => [x.handle, x.state]).at(-1), ["letzter-tag", "published"]);
-  // ohne kommendes HeySummit-Event wird nichts vorgeschlagen (und nichts vorausgewaehlt)
+  const p3 = await proposals(env, f, NOW); assert.deepEqual(p3.items.map((x) => [x.handle, x.state]).at(-1), ["letzter-tag", "published"]); assert.equal(p3.items.length, CAND_MAX + 1);
+  // ohne kommendes HeySummit-Event wird trotzdem vorgeschlagen (nur die Zusatzinfo fehlt)
   const none = await proposals(env, mockFetch([], { hsEvents: HS_EVENTS.filter((e) => e.id !== 229506) }), NOW);
-  assert.deepEqual(none.items.map((x) => x.state), ["published"]); assert.equal(none.truncated, false);
+  assert.equal(none.items.length, CAND_MAX + 1); assert.ok(none.items.filter((x) => x.state === "proposal").every((x) => x.hs === null)); assert.equal(none.truncated, true);
 });
 
 test("R2-3 nicht veroeffentlichte HeySummit-Events (is_live false) zaehlen nie als gleichzeitig", async () => {
@@ -601,8 +600,8 @@ test("R2-3 nicht veroeffentlichte HeySummit-Events (is_live false) zaehlen nie a
   // Server: weder Vorschlag noch Veroeffentlichung, kein Aufruf an LinkedIn
   const { raw, env } = await setup(); await connected(env); addEv(raw, ev);
   const log = [], f = mockFetch(log, { hsEvents: [draft] });
-  assert.deepEqual((await proposals(env, f, NOW)).items, []);
-  assert.deepEqual(await act(env, ADMIN, "publish", "kopie", true, f, NOW), { error: "no_match" }); assert.equal(creates(log), 0);
+  const pk = (await proposals(env, f, NOW)).items; assert.deepEqual(pk.map((x) => [x.handle, x.hs]), [["kopie", null]]);   // der Entwurf ist keine Zusatzinfo, das Event bleibt ein Kandidat
+  assert.equal((await act(env, ADMIN, "publish", "kopie", true, f, NOW)).ok, true); assert.equal(creates(log), 1);
 });
 
 test("R2-4 auf LinkedIn selbst geloeschter Event: Absagen meldet es, erst die ausdrueckliche Bestaetigung traegt ihn hier aus", async () => {
@@ -852,7 +851,7 @@ test("Admin-Reiter R2: nach store_failed sofort eintragbar (auch nach Neuladen),
   // 4) mehr Kandidaten als die Grenze: die Liste sagt, dass sie gekuerzt ist
   const ins = raw.prepare("INSERT INTO events(handle,owner_id,title,start,end,public,created,updated) VALUES(?,1,?,?,'',1,1,1)");
   raw.exec("BEGIN"); for (let i = 0; i <= CAND_MAX; i++) ins.run(`abend-${i}`, `Abendstream ${i}`, `2027-01-${String(13 + (i % 8)).padStart(2, "0")}T18:00`); raw.exec("COMMIT");
-  ui.reload(); await until(() => new RegExp("mehr als " + CAND_MAX + " kommende m365\\.fm-Events").test(ui.pane()?.textContent || ""), "Hinweis gekuerzt");
+  ui.reload(); await until(() => new RegExp("mehr als " + CAND_MAX + " übernommene kommende m365\\.fm-Events").test(ui.pane()?.textContent || ""), "Hinweis gekuerzt");
 });
 
 // ---------- #317 (Event-Import) x #323: Zusammenfuehren, Zuruecknehmen, Loeschen und Vorschlagsliste, alles ueber die echten Routen ----------
@@ -978,14 +977,14 @@ test("F10 (#323) 404 auf Absagen/Aktualisieren gilt erst als 'auf LinkedIn geloe
   assert.equal(LI.version, "202511", "Version und Pfad bleiben bis zum Live-Test unveraendert");
 });
 
-test("F11 (#323) Vorauswahl der Vorschlagsliste: ein Tag Luft fuer Zeitzonen (UTC+14, UTC-12), Ueberschneidung nur in UTC", async () => {
+test("F11 (#323) Zusatzinfo HeySummit: Zeitzonen (UTC+14, UTC-12), Ueberschneidung nur in UTC; die Vorschlaege selbst haengen nicht daran", async () => {
   const { raw, env } = await setup(); await connected(env);
   // HeySummit-Zeitraum: 2027-01-11T07:00Z bis 2027-01-22T19:45Z. Beide Events liegen in Ortszeit ausserhalb, in UTC innerhalb.
   addEv(raw, { id: 1, handle: "kiritimati", title: "Kiritimati", start: "2027-01-23T09:30", end: "", tz: "Pacific/Kiritimati" });   // = 2027-01-22T19:30Z
   addEv(raw, { id: 2, handle: "gmt-12", title: "GMT-12", start: "2027-01-10T19:10", end: "", tz: "Etc/GMT+12" });                // = 2027-01-11T07:10Z
   addEv(raw, { id: 3, handle: "zu-spaet", title: "Zu spaet", start: "2027-01-23T10:00", end: "", tz: "Pacific/Kiritimati" });     // = 2027-01-22T20:00Z: kein Treffer
   const p = await proposals(env, mockFetch([]), NOW);
-  assert.deepEqual(p.items.map((x) => [x.handle, x.state, x.hs?.how]), [["gmt-12", "proposal", "linked"], ["kiritimati", "proposal", "linked"]]);
+  assert.deepEqual(p.items.map((x) => [x.handle, x.state, x.hs?.how]), [["gmt-12", "proposal", "linked"], ["kiritimati", "proposal", "linked"], ["zu-spaet", "proposal", undefined]]);   // "zu-spaet" ist in UTC kein Treffer, bleibt aber ein Kandidat
 });
 
 test("F12 (#323) verwaiste veroeffentlichte Zeilen verschwinden nach dem Ende des Events (Liste und taeglicher Cron), Reservierungen und bestehende Events bleiben", async (t) => {

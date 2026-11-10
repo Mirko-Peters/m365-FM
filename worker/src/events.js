@@ -9,6 +9,7 @@ import { recordInvite } from "./inviter.js";
 import { ensureDirectoryCols, geocodeAddress, recordGeocodeStatus } from "./directory.js";
 import { adoptUnclaimedForEntity } from "./orgpair.js";
 import { gate, inScope, logEdit } from "./perm.js";
+import { memberReview, reviewOf } from "./eventreview.js";
 import { eventKeys, KEYS_V, markEdited, normSessionTitle, eventDeleteOps, sessionDeleteOps, forgetImporter, dedupeEventSessions } from "./eventmerge.js";
 
 const FREE_ASKS = 2, ASK_COST = 1000;
@@ -176,7 +177,7 @@ async function evViews(db, evs, withPending) {
     for (const ev of part) {
       const org = ev.org_id ? orgs.get(ev.org_id) : null, ow = owners.get(ev.owner_id);
       out.push({ handle: ev.handle, title: ev.title, summary: ev.summary, about: ev.about, start: ev.start, end: ev.end, tz: ev.tz, mode: ev.mode, location: ev.location, country: ev.country, url: ev.url, tickets_url: ev.tickets_url,
-        free: ev.free < 0 ? null : !!ev.free, lang: ev.lang, linkedin_url: li.get(ev.id) || "", topics: parse(ev.topics, []), seeking_sponsor: !!ev.seeking_sponsor, public: !!ev.public,   // free null = unbekannt (Import ohne Preisangabe)
+        free: ev.free < 0 ? null : !!ev.free, lang: ev.lang, linkedin_url: li.get(ev.id) || "", topics: parse(ev.topics, []), seeking_sponsor: !!ev.seeking_sponsor, public: !!ev.public, review: withPending ? reviewOf(ev) : undefined,   // free null = unbekannt (Import ohne Preisangabe)
         partners: (partners.get(ev.id) || []).map((x) => ({ kind: x.kind, level: x.level, name: x.name, handle: x.public ? x.handle : "" })),
         asked: asked ? (asked.get(ev.id) || []).map((x) => x.handle) : undefined,
         organizer: org ? { kind: "o", handle: org.public ? org.handle : "", name: org.name } : { kind: "u", handle: ow?.handle || "", name: ow?.name || ev.organizer_name || "" }, unclaimed: !!ev.unclaimed, source: ev.source || "", retired: !!ev.retired,
@@ -344,12 +345,14 @@ export async function handleEvents(env, request, url, path, user, J) {
       if (!o) return J({ error: "forbidden" }, 403); orgId = o.id;
     }
     const ex = await db.prepare("SELECT * FROM events WHERE handle=?").bind(handle).first();
-    if (ex && (ex.merged_into || !(await canManage(db, user, ex)))) return J({ error: "handle_taken" }, 409);   // in einem anderen Event aufgegangene Zeile: nicht ueber das Formular wiederbeleben (Zuruecknehmen ist Sache der Admins)
+    if (ex && (ex.merged_into || !(await canManage(db, user, ex)))) return J({ error: "handle_taken" }, 409);
+    // Neues Event eines noch nicht bestaetigten Mitglieds: wartet auf die Pruefung durch einen Admin und ist bis dahin nicht oeffentlich (eventreview.js memberReview)
+    const rv = await memberReview(db, user, ex, b.public !== false);   // in einem anderen Event aufgegangene Zeile: nicht ueber das Formular wiederbeleben (Zuruecknehmen ist Sache der Admins)
     const tz = timezone(String(b.tz || ex?.tz || "Europe/Berlin")); if (!tz) return J({ error: "bad_timezone" }, 400);
-    const vals = [title, txt(b.summary, 200), long(b.about, 3000), b.start, end, tz, mode, txt(b.location, 120), txt(b.country, 60), eu, tu, b.free === false ? 0 : b.free === true || !ex ? 1 : ex.free, txt(b.lang, 10), JSON.stringify(tp), b.seeking_sponsor ? 1 : 0, b.public === false ? 0 : 1, now()];
+    const vals = [title, txt(b.summary, 200), long(b.about, 3000), b.start, end, tz, mode, txt(b.location, 120), txt(b.country, 60), eu, tu, b.free === false ? 0 : b.free === true || !ex ? 1 : ex.free, txt(b.lang, 10), JSON.stringify(tp), b.seeking_sponsor ? 1 : 0, rv.public, now()];
     let eventId = ex?.id;
-    if (ex) await db.prepare("UPDATE events SET title=?,summary=?,about=?,start=?,end=?,tz=?,mode=?,location=?,country=?,url=?,tickets_url=?,free=?,lang=?,topics=?,seeking_sponsor=?,public=?,updated=?,org_id=? WHERE id=?").bind(...vals, b.org === undefined ? ex.org_id : orgId, ex.id).run();
-    else eventId = (await db.prepare("INSERT INTO events(title,summary,about,start,end,tz,mode,location,country,url,tickets_url,free,lang,topics,seeking_sponsor,public,updated,handle,owner_id,org_id,created) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)").bind(...vals, handle, user.id, orgId, now()).run()).meta.last_row_id;
+    if (ex) await db.prepare("UPDATE events SET title=?,summary=?,about=?,start=?,end=?,tz=?,mode=?,location=?,country=?,url=?,tickets_url=?,free=?,lang=?,topics=?,seeking_sponsor=?,public=?,updated=?,org_id=?,review=? WHERE id=?").bind(...vals, b.org === undefined ? ex.org_id : orgId, rv.review, ex.id).run();
+    else eventId = (await db.prepare("INSERT INTO events(title,summary,about,start,end,tz,mode,location,country,url,tickets_url,free,lang,topics,seeking_sponsor,public,updated,handle,owner_id,org_id,created,review) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)").bind(...vals, handle, user.id, orgId, now(), rv.review).run()).meta.last_row_id;
     const address = mode === "online" || b.public === false ? "" : [txt(b.location, 120), txt(b.country, 60)].filter(Boolean).join(", ");
     const geo = address ? await geocodeAddress(env, address, ex || {}, "address") : { lat: null, lng: null, geo_precision: "", geo_address: "", geo_at: 0 };
     await recordGeocodeStatus(db, geo, address);
@@ -358,8 +361,8 @@ export async function handleEvents(env, request, url, path, user, J) {
     const keys = eventKeys({ title, url: eu, city, location: txt(b.location, 120), mode });
     await db.prepare("UPDATE events SET lat=?,lng=?,geo_precision=?,geo_address=?,geo_at=?,city=?,name_key=?,url_key=?,city_key=?,keys_v=?,edited_at=? WHERE id=?")
       .bind(geo.lat, geo.lng, geo.geo_precision, geo.geo_address, geo.geo_at, city, keys.name_key, keys.url_key, keys.city_key, KEYS_V, now(), eventId).run();
-    if (b.public !== false) await ownedEntity(env, user, { eid: handle, type: "event", name: title, en: `${title} is an event in the Microsoft community, starting ${b.start}.`, de: `${title} ist eine Veranstaltung der Microsoft-Community, Beginn ${b.start}.`, web: String(b.url || "").startsWith("https://") ? b.url : "" });
-    return J({ ok: true });
+    if (rv.review === "approved" && rv.public) await ownedEntity(env, user, { eid: handle, type: "event", name: title, en: `${title} is an event in the Microsoft community, starting ${b.start}.`, de: `${title} ist eine Veranstaltung der Microsoft-Community, Beginn ${b.start}.`, web: String(b.url || "").startsWith("https://") ? b.url : "" });
+    return J({ ok: true, review: rv.review, public: !!rv.public });   // review pending = wartet auf die Pruefung, draft = Entwurf eines noch nicht bestaetigten Mitglieds
   }
   if ((m = path.match(/^\/api\/event\/([a-z0-9-]{3,40})$/)) && method === "DELETE") {
     if (need()) return need();
@@ -584,7 +587,7 @@ export async function handleEvents(env, request, url, path, user, J) {
   if (path === "/api/speaker/requests" && method === "GET") {
     if (need()) return need();
     const pr = await db.prepare("SELECT handle FROM profiles WHERE user_id=?").bind(user.id).first(); if (!pr?.handle) return J({ items: [] });
-    const rows = (await db.prepare("SELECT s.id,s.title,e.title ev,e.handle eh,s.speakers FROM event_sessions s JOIN events e ON e.id=s.event_id WHERE s.merged_into=0 AND s.speakers LIKE ?").bind(`%"h":"${pr.handle}"%`).all()).results || [];
+    const rows = (await db.prepare("SELECT s.id,s.title,e.title ev,e.handle eh,s.speakers FROM event_sessions s JOIN events e ON e.id=s.event_id WHERE s.merged_into=0 AND e.public=1 AND s.speakers LIKE ?").bind(`%"h":"${pr.handle}"%`).all()).results || [];
     return J({ items: rows.filter((r) => parse(r.speakers, []).some((x) => x.h === pr.handle && x.s === "invited")).map((r) => ({ id: r.id, title: r.title, event: r.ev, eh: r.eh })) });
   }
   if (path === "/api/speaker/respond" && method === "POST") {

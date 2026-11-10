@@ -1,8 +1,9 @@
 // LinkedIn-Events fuer die Seite "M365 Show": Vorschlagsliste + Veroeffentlichen per Klick im Admin (nie automatisch, kein Cron).
-// Regel, auf dem Server fuer jeden Weg durchgesetzt (Liste, Veroeffentlichen, Aktualisieren): nur oeffentliche, kommende m365.fm-Events, deren Zeitfenster
-// sich mit einem HeySummit-Event (m365con.net) ueberschneidet - Definition von "gleichzeitig" bei matchHeySummit, Regeln je Aktion bei rowRule.
+// Regel, auf dem Server fuer jeden Weg durchgesetzt (Liste, Veroeffentlichen, Aktualisieren): nur uebernommene (freigegebene), oeffentliche, kommende m365.fm-Events
+// mit Uhrzeit - Regeln je Aktion bei rowRule. Ein HeySummit-Event (m365con.net), das gleichzeitig laeuft, ist nur Zusatzinfo (matchHeySummit) und nie Voraussetzung.
 // Alles, was nach einem Live-Test ggf. korrigiert werden muss (Endpunkte, Version, Scopes, Feldnamen), steht in LI und HS.
 import { TRANSFER } from "./events.js";
+import { countReview } from "./eventreview.js";
 import { audit, b64u, cleanText, cookie, randomToken, sha256hex, sign, verify } from "./util.js";
 
 export const LI = {
@@ -27,6 +28,7 @@ export const LI = {
 // Versatz daneben (date_timezone_offset "+0000"). Antwortform des REST-Endpunkts (Seiten mit results/next) vor der ersten Veroeffentlichung einmal mit dem Schluessel pruefen:
 // passt sie nicht, meldet die Liste "hs_format" bzw. "0 mit Termin" und schlaegt nichts vor (nie umgekehrt).
 // Nicht veroeffentlichte HeySummit-Events (is_live false, z. B. die Kopie 229209 "M365 Con (copy)") und archivierte zaehlen nie als "laeuft gleichzeitig".
+// Seit der Pruefliste (Migration 0045) ist HeySummit keine Voraussetzung mehr: ist es nicht lesbar, gibt es keine Zusatzinfo und keinen Anmeldelink von dort - sonst aendert sich nichts.
 export const HS = {
   api: "https://api.heysummit.com/api",
   events: "/events/", talks: "/talks/",
@@ -43,8 +45,10 @@ export const HOLD_S = 120;
 export const CAND_MAX = 500;   // so viele Kandidaten prueft die Vorschlagsliste hoechstens; wird die Grenze erreicht, meldet sie das (truncated) statt still zu kuerzen
 const ACTIONS = ["publish", "update", "cancel", "resolve", "release"];
 // Kandidaten fuer NEUE Vorschlaege und Aktualisierungen - die EINE Stelle fuer weitere Ausschluesse (proposals() und act() lesen beide hierueber).
-// Importierte Events ohne Veranstalter (unclaimed), vorbei gemeldete Import-Events (retired) und in ein anderes zusammengefuehrte (merged_into) nie (#317).
-const CANDIDATE = "e.public=1 AND e.merged_into=0 AND e.unclaimed=0 AND e.retired=0";
+// Nur freigegebene Events (review='approved': Events zur Pruefung oder abgelehnte sind ohnehin public=0). Importierte Events ohne Veranstalter (unclaimed) nur, wenn ein Admin
+// sie in der Pruefliste uebernommen hat (review_at>0) - Altbestand aus der Zeit vor der Pruefliste (review_at=0) schlaegt weiter nichts vor (#317). Vorbei gemeldete
+// Import-Events (retired) und in ein anderes zusammengefuehrte (merged_into) nie.
+const CANDIDATE = "e.public=1 AND e.review='approved' AND e.merged_into=0 AND (e.unclaimed=0 OR e.review_at>0) AND e.retired=0";
 // Zusammengefuehrte Events (#317): eine Reservierung (pending) wandert nicht mit (eventmerge.js EVENT_TABLES), eine Zeile am Quell-Event kann also bleiben, waehrend
 // das Ziel-Event keine hat. Das Ziel-Event gilt dann als belegt (FAMILY_ROW: Zeile eines in es aufgegangenen Events, ueber hoechstens 6 Stufen), sonst entstuende
 // ein zweiter LinkedIn-Event fuer dasselbe Event. Zuruecknehmen der Zusammenfuehrung loest die Bindung wieder.
@@ -291,8 +295,7 @@ async function confirmGone(env, urn, e, f) {
 
 // ---------- Regeln je Aktion: eine Stelle fuer die Liste (welche Knoepfe) und fuer die Ausfuehrung (act) ----------
 // ev = Zeile aus events mit li_ok (erfuellt CANDIDATE) oder null (geloescht), li = Zeile aus linkedin_events oder null. Rueckgabe: Fehlerkennung oder "" (erlaubt).
-// Fuer publish und update kommt danach noch die HeySummit-Regel (needsHs).
-const needsHs = (a) => a === "publish" || a === "update";
+const hasPayload = (a) => a === "publish" || a === "update";   // diese Aktionen senden die Nutzlast an LinkedIn
 const holdLeft = (li, nowMs) => Math.max(0, Math.ceil(HOLD_S - (nowMs / 1000 - li.updated)));   // Sekunden, bis eine Reservierung geklaert werden darf
 function rowRule(action, ev, li, nowMs, known = false) {   // known: die Anfrage traegt den Beleg einer store_failed-Antwort (ticketFor), die Wartezeit entfaellt
   const w = ev ? evWindow(ev) : null;
@@ -306,32 +309,28 @@ function rowRule(action, ev, li, nowMs, known = false) {   // known: die Anfrage
   if (action === "cancel") return "";   // Absagen geht immer: auch wenn das m365.fm-Event versteckt, vorbei oder geloescht ist
   return !ev ? "orphan" : !ev.li_ok ? "not_public" : !w ? "no_time" : w.end <= nowMs ? "past" : "";
 }
-const hsReason = (m, hs) => (m.reason === "no_match" && hs.error ? hs.error : m.reason);
 
 // ---------- Vorschlagsliste ----------
-// Neue Vorschlaege: oeffentliche Events (CANDIDATE) mit Uhrzeit, die noch nicht begonnen haben, naechstes zuerst. Die Vorauswahl geschieht in SQL und VOR dem
-// LIMIT schon nach der HeySummit-Regel: nur Events, deren Termin in den Zeitraum eines kommenden HeySummit-Events faellt (je ein Tag Luft fuer Zeitzonen; genau
-// gerechnet wird danach in rowRule/matchHeySummit). Events ohne Uhrzeit, ohne HeySummit-Zeitraum oder mit LinkedIn-Zeile verbrauchen die Grenze so nie; wird sie
-// trotzdem erreicht (mehr als CAND_MAX Events im HeySummit-Zeitraum), entfallen die fernsten und die Antwort sagt es (truncated).
+// Neue Vorschlaege: jedes uebernommene, oeffentliche Event (CANDIDATE) mit Uhrzeit, das noch nicht begonnen hat, naechstes zuerst - ob ein HeySummit-Event gleichzeitig laeuft,
+// spielt keine Rolle (es wird nur als Zusatzinfo gezeigt). Events ohne Uhrzeit (nur Datum) lassen sich nicht an LinkedIn senden und werden gezaehlt (no_time), Events mit LinkedIn-Zeile
+// verbrauchen die Grenze nie; wird sie trotzdem erreicht (mehr als CAND_MAX kommende Events), entfallen die fernsten und die Antwort sagt es (truncated).
 // Dazu jede LinkedIn-Zeile, an der noch etwas zu tun ist: reservierte (pending), veroeffentlichte bis zum Ende des Events (auch wenn das m365.fm-Event
 // inzwischen versteckt ist) und verwaiste (m365.fm-Event geloescht) - damit kein LinkedIn-Event ohne Absage-Knopf zurueckbleibt.
 export async function proposals(env, f = fetch, nowMs = Date.now()) {
   const db = env.DB, conn = await getConn(db), hs = await fetchHeySummit(env, f, nowMs), org = conn?.org_urn || "urn:li:organization:?";
   await purgeLinkedinOrphans(db, nowMs).catch(() => 0);
-  const spans = hs.events.filter((e) => e.start != null && e.end != null && e.end > nowMs).map((e) => [iso(e.start - DAY).slice(0, 10), iso(e.end + DAY).slice(0, 16)]);
   let evs = [], truncated = false;
-  if (spans.length) {   // ohne kommendes HeySummit-Event (oder HeySummit nicht lesbar) gibt es keinen neuen Vorschlag
-    const taken = JSON.stringify(rowsOf(await db.prepare(FAMILY_TAKEN).all()).map((r) => r.id));   // Ziel-Events mit LinkedIn-Zeile an einem in sie aufgegangenen Event: kein neuer Vorschlag
-    evs = rowsOf(await db.prepare(`SELECT e.*, 1 AS li_ok FROM events e WHERE ${CANDIDATE} AND e.start LIKE '%T%' AND e.start>=? AND e.id NOT IN (SELECT event_id FROM linkedin_events) AND e.id NOT IN (SELECT value FROM json_each(?)) AND (${spans.map(() => "(MAX(e.start,COALESCE(NULLIF(e.end,''),e.start))>=? AND e.start<=?)").join(" OR ")}) ORDER BY e.start LIMIT ${CAND_MAX + 1}`).bind(iso(nowMs - DAY).slice(0, 10), taken, ...spans.flat()).all());
-    truncated = evs.length > CAND_MAX; if (truncated) evs.length = CAND_MAX;
-  }
+  const taken = JSON.stringify(rowsOf(await db.prepare(FAMILY_TAKEN).all()).map((r) => r.id)), from = iso(nowMs - DAY).slice(0, 10);   // taken: Ziel-Events mit LinkedIn-Zeile an einem in sie aufgegangenen Event: kein neuer Vorschlag
+  evs = rowsOf(await db.prepare(`SELECT e.*, 1 AS li_ok FROM events e WHERE ${CANDIDATE} AND e.start LIKE '%T%' AND e.start>=? AND e.id NOT IN (SELECT event_id FROM linkedin_events) AND e.id NOT IN (SELECT value FROM json_each(?)) ORDER BY e.start LIMIT ${CAND_MAX + 1}`).bind(from, taken).all());
+  truncated = evs.length > CAND_MAX; if (truncated) evs.length = CAND_MAX;
+  const noTime = (await db.prepare(`SELECT COUNT(*) n FROM events e WHERE ${CANDIDATE} AND e.start NOT LIKE '%T%' AND e.start<>'' AND substr(COALESCE(NULLIF(e.end,''),e.start),1,10)>=? AND e.id NOT IN (SELECT event_id FROM linkedin_events)`).bind(from).first())?.n || 0;
   const lis = rowsOf(await db.prepare("SELECT * FROM linkedin_events ORDER BY (status='pending') DESC, published DESC LIMIT 500").all()), byEvent = new Map(lis.map((x) => [x.event_id, x]));
   const seen = new Set(evs.map((e) => e.id));
   for (const e of rowsOf(await db.prepare(`SELECT e.*, (CASE WHEN ${CANDIDATE} THEN 1 ELSE 0 END) AS li_ok FROM events e WHERE e.id IN (SELECT event_id FROM linkedin_events)`).all())) if (!seen.has(e.id)) { seen.add(e.id); evs.push(e); }
   const items = [];
   for (const ev of evs) {
     const li = byEvent.get(ev.id) || null, w = evWindow(ev), m = matchHeySummit(ev, hs.events, TRANSFER, nowMs);
-    const can = ACTIONS.filter((a) => !rowRule(a, ev, li, nowMs) && (!needsHs(a) || m.ok));
+    const can = ACTIONS.filter((a) => !rowRule(a, ev, li, nowMs));
     if (!li && !can.includes("publish")) continue;                                       // neu nur, wenn alle Regeln erfuellt sind
     const over = w ? w.end : localToMs(String(ev.end || ev.start).slice(0, 10) + "T23:59", ev.tz || "Europe/Berlin");   // ohne Uhrzeit: bis zum Ende des Tages
     if (li && li.status !== "pending" && over != null && over <= nowMs) continue;        // vorbei: nichts mehr zu verwalten
@@ -341,17 +340,17 @@ export async function proposals(env, f = fetch, nowMs = Date.now()) {
       hs: m.ok ? { how: m.how, event: m.event.name, talk: m.talk?.title || "" } : null, preview: payload ? previewOf(payload, ev) : null, state: li ? li.status : "proposal", can };
     if (li) {
       row.linkedin_url = li.url; row.hidden = !ev.li_ok; if (li.status === "pending") row.wait = holdLeft(li, nowMs); row.changed = li.status === "published" && !!payload && (await hashOf(payload)) !== li.hash;
-      if (li.status === "published" && !m.ok) row.rule = hsReason(m, hs);                // Regel nicht (mehr) erfuellt: Aktualisieren gesperrt, Absagen bleibt
     }
     items.push(row);
   }
   // Verwaist (m365.fm-Event geloescht): reservierte immer, veroeffentlichte bis zum Ende des LinkedIn-Events (danach gibt es nichts mehr abzusagen)
   for (const li of lis) if (!seen.has(li.event_id) && li.status !== "cancelled" && !(li.status === "published" && li.ends > 0 && li.ends <= nowMs))
-    items.push({ id: li.event_id, handle: li.handle, title: li.title || `Event ${li.event_id}`, when: li.starts ? fmtBerlin(li.starts) : "", at: li.starts || 0, hs: null, preview: null, state: li.status, orphan: true, linkedin_url: li.url, ...(li.status === "pending" ? { wait: holdLeft(li, nowMs) } : {}), can: ACTIONS.filter((a) => !needsHs(a) && !rowRule(a, null, li, nowMs)) });
+    items.push({ id: li.event_id, handle: li.handle, title: li.title || `Event ${li.event_id}`, when: li.starts ? fmtBerlin(li.starts) : "", at: li.starts || 0, hs: null, preview: null, state: li.status, orphan: true, linkedin_url: li.url, ...(li.status === "pending" ? { wait: holdLeft(li, nowMs) } : {}), can: ACTIONS.filter((a) => !hasPayload(a) && !rowRule(a, null, li, nowMs)) });
   const urgent = (x) => (x.state === "pending" || x.orphan || x.hidden ? 0 : 1);
   items.sort((a, b) => urgent(a) - urgent(b) || a.at - b.at);
   const info = { events: hs.events.length, dated: hs.events.filter((e) => e.start != null).length, talks: hs.events.reduce((n, e) => n + e.talks.length, 0), partial: !!hs.partial };
-  return { items, hs_error: hs.error || "", hs_info: info, truncated, limit: CAND_MAX, connected: !!conn?.access_enc, org: conn?.org_name || "" };
+  // hs_error/hs_info: nur Zusatzinfo. no_time: uebernommene kommende Events ohne Uhrzeit. review_pending: neue Events, die noch auf die Entscheidung des Admins warten (Reiter Freigaben)
+  return { items, hs_error: hs.error || "", hs_info: info, truncated, limit: CAND_MAX, no_time: noTime, review_pending: await countReview(db), connected: !!conn?.access_enc, org: conn?.org_name || "" };
 }
 
 // Beleg fuer "LinkedIn hat diesen Event angelegt, nur das Eintragen hier ist gescheitert" (store_failed): gebunden an Event, URN und genau diese Reservierung.
@@ -384,16 +383,15 @@ export async function act(env, user, action, ref, confirm, f = fetch, nowMs = Da
   if (!ev && !li) return { error: "not_found" };
   const online = action === "publish" || action === "update" || action === "cancel", conn = online ? await getConn(db) : null;
   if (online && !conn?.access_enc) return { error: "not_connected" };
-  if (needsHs(action) && !conn.org_urn) return { error: "no_org" };
+  if (hasPayload(action) && !conn.org_urn) return { error: "no_org" };
   const known = action === "resolve" && li?.status === "pending" && !!env.SESSION_SECRET && typeof q.ticket === "string" && !!urnOf(q.urn) && await verify(env.SESSION_SECRET, ticketVal(eid, urnOf(q.urn), li.updated), q.ticket);
   const fam = action === "publish" && !li && ev ? await db.prepare(FAMILY_ROW).bind(ev.id).first() : null;   // Zeile eines in dieses Event aufgegangenen Events zaehlt wie eine eigene
   const denied = rowRule(action, ev, li || fam, nowMs, known); if (denied) return { error: denied, ...((li || fam)?.url ? { linkedin_url: (li || fam).url } : {}) };
   const name = ev?.handle || li?.handle || String(eid);
   let payload = null;
-  if (needsHs(action)) {   // die HeySummit-Regel gilt beim Veroeffentlichen UND beim Aktualisieren; ist HeySummit nicht lesbar, geht nichts raus
+  if (hasPayload(action)) {   // HeySummit ist nur Zusatzinfo (Anmeldelink, wenn das Event selbst keinen hat); nicht lesbar oder kein Treffer: die Nutzlast entsteht trotzdem
     const hs = await fetchHeySummit(env, f, nowMs), m = matchHeySummit(ev, hs.events, TRANSFER, nowMs);
-    if (!m.ok) return { error: hsReason(m, hs) };
-    payload = buildPayload(env, ev, m, conn.org_urn); if (!payload) return { error: "no_time" };
+    payload = buildPayload(env, ev, m.ok ? m : null, conn.org_urn); if (!payload) return { error: "no_time" };
   }
   if (action === "publish") {
     if (confirm !== true) return { preview: payload };
