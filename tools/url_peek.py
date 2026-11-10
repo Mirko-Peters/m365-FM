@@ -12,6 +12,19 @@ def text(s):
     return html.unescape(re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", s))).strip()
 
 
+def shape(j, path="", depth=0, out=None):
+    """Gliederung eingebetteter App-Daten: Schluessel, Typen, Listenlaengen, erstes Element (zum Anpassen von Parsern)."""
+    if depth > 6: return
+    if isinstance(j, dict):
+        for k, v in list(j.items())[:60]:
+            p = f"{path}.{k}" if path else k
+            if isinstance(v, (dict, list)):
+                print("  shape:", p, type(v).__name__, len(v)); shape(v, p, depth + 1)
+            else: print("  shape:", p, "=", json.dumps(v, ensure_ascii=False)[:160])
+    elif isinstance(j, list) and j:
+        shape(j[0], path + "[0]", depth + 1)
+
+
 def struct(url):
     """Aufbau einer Seite fuer Import-Adapter (nur lesen, gekuerzt)."""
     req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36", "Accept": "text/html,application/xhtml+xml,application/xml,application/json,text/calendar"})
@@ -32,7 +45,10 @@ def struct(url):
         if i < 6: print(f"ld+json[{i}]:", re.sub(r"\s+", " ", m.group(1))[:1500])
     for name in ("__NEXT_DATA__", "__NUXT__", "__INITIAL_STATE__", "__APOLLO_STATE__", "wpApiSettings"):
         m = re.search(name + r'[^>{]*>?\s*=?\s*(\{.*?)</script>', h, re.S)
-        if m: print(f"{name}:", re.sub(r"\s+", " ", m.group(1))[:3000])
+        if m:
+            print(f"{name}:", re.sub(r"\s+", " ", m.group(1))[:3000])
+            try: shape(json.loads(m.group(1).strip()))
+            except Exception as e: print("  (kein JSON:", str(e)[:80], ")")
     inline = " ".join(re.findall(r"<script\b(?![^>]*src=)[^>]*>(.*?)</script>", h, re.S | re.I))
     print("api-pfade:", sorted(set(re.findall(r'["\'](/?(?:api|wp-json|graphql|_next/data|feeds?|events?|calendar)[^"\'\s<>]{0,120})["\']', inline + h, re.I)))[:60])
     for f in re.findall(r"<form\b[^>]*>", h, re.I)[:5]: print("form:", f[:200])
