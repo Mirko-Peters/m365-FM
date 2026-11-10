@@ -108,6 +108,18 @@ def check_budget(job, model, estimate_eur=0):
     return True
 
 
+def remaining_eur(job, model):
+    """Rest des Haiku-Tagesbudgets in EUR laut Community-Worker, damit ein Lauf seine Anfragen darauf zuschneiden kann. None, wenn die Grenze nicht gilt (kein
+    Haiku, kein COMMUNITY_API) oder der Rest nicht abrufbar ist - dann entscheidet wie bisher allein check_budget (fail-closed)."""
+    if "haiku" not in str(model).lower() or not os.environ.get("COMMUNITY_API"):
+        return None
+    result = _budget_request({"action": "check", "job": job, "model": model, "estimate_eur": 0})
+    try:
+        return max(0.0, float(result["remaining_eur"])) if isinstance(result, dict) else None
+    except (KeyError, TypeError, ValueError):
+        return None
+
+
 def usage_tokens(usage):
     """usage-Antwort von Claude -> (Eingabe gesamt inkl. Prompt-Cache, Ausgabe, davon Cache gelesen, davon Cache geschrieben)."""
     u = usage or {}

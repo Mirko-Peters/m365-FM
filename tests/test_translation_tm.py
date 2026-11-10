@@ -843,6 +843,120 @@ class ReportAndImages(Base):
         self.assertIn(src, got); self.assertNotIn("evil.example", got); self.assertIn("<p>Hand</p>", got)
 
 
+# ---------------- PR #316: Uebersetzung der neu geschriebenen Show Notes auf der Struktur von #315 ----------------
+RWN = {"meta": "Meta text.", "summary": "Short summary of the episode about gateways.", "key_points": ["One.", "Two.", "Three.", "Four."], "chapters": [], "entities": ["power-bi"],
+       "faq": [{"q": "Why?", "a": "Because."}, {"q": "How?", "a": "Like this."}]}
+
+
+class _Pages:
+    """Stand der englischen Seiten fuer site_shownotes_seo.source_for_translation ohne Netz: slug -> Regel (Standard: ausfuehrlich)."""
+    def __init__(self, rules): self.rules = rules
+    def rule(self, e): return self.rules.get(e["slug"], "long")
+
+
+def tep(k, notes="<p>Short thin notes about gateways.</p>"):
+    return {**ep(slug=f"ep-{k}", notes=notes), "id": 100 + k}
+
+
+@unittest.skipIf(TN is None, "translate_notes braucht requests")
+class RewrittenNotes(Base):
+    def setUp(self):
+        super().setUp()
+        import site_shownotes_seo as SSEO
+        self.SSEO = SSEO; self.rules = {}; self.budget = []; self.left = None
+        for obj, name, val in ((SSEO, "DIR", self.tmp / "shownotes_en"), (SSEO, "_PAGES", [_Pages(self.rules)]), (TN, "TOP", 0), (TN, "remaining_eur", lambda job, model: self.left)):
+            p = patch.object(obj, name, val); p.start(); self.addCleanup(p.stop)
+        p = patch.dict(SSEO._CACHE, clear=True); p.start(); self.addCleanup(p.stop)
+
+    def rewrite(self, slugs, rule="thin"):
+        store = self.SSEO.load_all()
+        for s in slugs: store[s] = {"h_src": "h", "v": 1, "notes": RWN, "model": "m", "ts": "t"}; self.rules[s] = rule
+        self.SSEO.save_all(store); self.SSEO._CACHE.clear()
+
+    def go(self, eps, *argv):
+        """Ein Lauf von translate_notes.py wie im Workflow (NOTES_TOP=0); -> Anfragen des Batches (leer: nichts gesendet)."""
+        self._reqs = []
+
+        def call(method, path, body=None, job="translate_notes"):
+            self._reqs = body["requests"]; return {"id": "b1", "processing_status": "ended", "request_counts": {}, "results_url": "https://api.anthropic.com/v1/results"}
+
+        def results(req, timeout=0):
+            return io.BytesIO("\n".join(json.dumps({"custom_id": r["custom_id"], "result": {"type": "succeeded", "message": {"usage": {"input_tokens": 9, "output_tokens": 9}, "stop_reason": "end_turn",
+                              "content": [{"type": "text", "text": "<p>N-" + r["custom_id"] + "</p>"}]}}}) for r in self._reqs).encode())
+
+        def budget(job, model, est):
+            self.budget.append(est); return True
+        with patch.object(TN.P, "load", lambda name: list(eps)), patch.object(TN, "OUT", TS.OUT), patch.object(TN, "ranking", lambda eps: list(eps)), patch.object(TN, "call", call), \
+                patch.object(TN, "urlopen", results), patch.object(TN, "check_budget", budget), patch.object(TN, "report_usage", lambda *a, **k: None), patch.object(TN.time, "sleep", lambda s: None), \
+                patch.object(sys, "argv", ["translate_notes.py", *argv]), contextlib.redirect_stdout(io.StringIO()) as out:
+            TN.main()
+        self.out = out.getvalue()
+        return self._reqs
+
+    def notes(self, lang): return json.loads((TS.OUT / f"notes_{lang}.json").read_text("utf-8"))
+    def src(self, lang): return json.loads((TS.OUT / "src" / f"notes_{lang}.json").read_text("utf-8"))
+
+    def test_new_rewrite_is_translated_once_in_every_language_outside_the_top_list(self):
+        e = tep(1); self.rewrite([e["slug"]])
+        html = self.SSEO.html_for_translation(RWN)
+        self.assertEqual(TS.notes_source(e), html); self.assertEqual(TS.notes_hash(e), fields_hash(html))   # tm_hash.fields_hash, kein anderer Hash
+        reqs = self.go([e], "--langs", "de,fr")
+        self.assertEqual(sorted(r["custom_id"] for r in reqs), ["de__101", "fr__101"])
+        p = reqs[0]["params"]; self.assertEqual(p["messages"][0]["content"], html); self.assertEqual(p["max_tokens"], 6000)
+        self.assertEqual(p["thinking"], {"type": "disabled"})   # Haiku: disabled ist erlaubt
+        self.assertNotIn("<a ", html); self.assertNotIn("href", p["system"])   # Themen-Zeile setzt der Seitenbau, nicht die Uebersetzung
+        self.assertEqual(self.notes("de")["ep-1"], "<p>N-de__101</p>"); self.assertEqual(self.src("de")["ep-1"], fields_hash(html))
+        self.assertEqual(self.go([e], "--langs", "de,fr"), [])   # nur einmal
+
+    def test_existing_translation_of_the_old_thin_notes_is_never_overwritten(self):
+        e = tep(1); (TS.OUT).mkdir(parents=True, exist_ok=True); (TS.OUT / "notes_de.json").write_text(json.dumps({"ep-1": "<p>Alte Fassung</p>"}), "utf-8")
+        self.rewrite([e["slug"]])
+        reqs = self.go([e], "--langs", "de,fr")
+        self.assertEqual([r["custom_id"] for r in reqs], ["fr__101"])   # nur die Sprache ohne Fassung
+        self.assertEqual(self.notes("de")["ep-1"], "<p>Alte Fassung</p>"); self.assertEqual(self.src("de")["ep-1"], fields_hash(TS.notes_original(e)))   # Altbestand: Hash der bisherigen Notes
+        self.assertEqual(json.loads((TS.OUT / "stale.json").read_text()), {"de": {"ep-1": ["notes_html"]}})   # gemeldet wie jede andere Aenderung
+        self.overrides("notes", "de", {"ep-1": {"html": {"t": "<p>Hand</p>", "sh": OV.anchor("notes", "html", TS.notes_original(e))}}})
+        self.assertEqual(self.go([e], "--stale", "--langs", "de"), [])   # Handtext sperrt
+        self.assertEqual([r["custom_id"] for r in self.go([e], "--stale", "--langs", "de", "--force-manual")], ["de__101"])
+
+    def test_episode_whose_page_keeps_its_notes_translates_the_original(self):
+        e = tep(1, notes="<p>" + "Long original notes. " * 100 + "</p>"); self.rewrite([e["slug"]], rule="long")
+        self.assertEqual(TS.notes_source(e), TS.notes_original(e))
+        self.assertEqual(self.go([e], "--langs", "de"), [])   # NOTES_TOP=0: nichts Neues, die Neufassung ist nicht auf der Seite
+
+    def test_no_second_hash_function(self):
+        for name in ("src_hash", "load_src", "save_src", "rewritten"): self.assertFalse(hasattr(TN, name), name)
+        self.assertNotIn("sha256", (ROOT / "translate_notes.py").read_text("utf-8"))
+
+    def test_runs_are_chunked_to_the_daily_budget_and_the_rest_follows(self):
+        eps = [tep(k) for k in range(1, 41)]; self.rewrite([e["slug"] for e in eps])
+        one = TN.est_eur(TN.request_for("de", eps[0], True), True)
+        with patch.object(TN, "RUN_EUR", one * 25.5):
+            first = self.go(eps, "--langs", "de,fr")
+            self.assertEqual(len(first), 25); self.assertLessEqual(self.budget[-1], one * 25.5)   # nie mehr als die Grenze je Lauf
+            self.assertEqual({r["custom_id"] for r in first[:24]}, {f"{l}__{100 + k}" for k in range(1, 13) for l in ("de", "fr")})   # ganze Folgen zuerst
+            self.assertIn("bleiben fuer den naechsten Lauf", self.out)
+            self.assertEqual(len(self.src("de")) + len(self.src("fr")), 25)   # Hash nur fuer Gesendetes
+            self.left = one * 10.2; second = self.go(eps, "--langs", "de,fr")   # Rest des Haiku-Tagesbudgets ist kleiner als NOTES_RUN_EUR
+            self.assertEqual(len(second), 10); self.assertFalse({r["custom_id"] for r in first} & {r["custom_id"] for r in second})
+            self.left = 0.0; self.assertEqual(self.go(eps, "--langs", "de,fr"), []); self.assertIn("naechste Lauf holt alles nach", self.out)
+            self.left = None; rest = self.go(eps, "--langs", "de,fr"); self.assertEqual(len(rest), 25)
+            last = self.go(eps, "--langs", "de,fr"); self.assertEqual(len(last), 20)
+        self.assertEqual(len(self.notes("de")) + len(self.notes("fr")), 80); self.assertEqual(self.go(eps, "--langs", "de,fr"), [])   # nichts endgueltig uebersprungen
+
+    def test_realistic_backlog_fits_the_haiku_day(self):
+        """316-2: 300 Folgen x 14 Sprachen haetten mit der alten Schaetzung (9.000 Token je Anfrage, ein Batch) 9 EUR verlangt und den Lauf fuer immer uebersprungen."""
+        eps = [tep(k) for k in range(1, 301)]; self.rewrite([e["slug"] for e in eps])
+        reqs = self.go(eps)
+        self.assertEqual(len(reqs), 300 * len(TS.NAMES)); self.assertLessEqual(self.budget[-1], TN.RUN_EUR)   # kurze Quellen: realistisch geschaetzt passt alles in einen Lauf
+        self.assertGreater(TN.estimated_eur(len(json.dumps(reqs)) // 3, len(reqs) * 9000, batch=True), 5)   # alte Schaetzung: ueber dem Tagesbudget, Lauf uebersprungen
+
+    def test_request_thinking_only_off_for_haiku(self):
+        e = tep(1); self.rewrite([e["slug"]])
+        with patch.object(TN, "MODEL", "claude-sonnet-5-5"): self.assertNotIn("thinking", TN.request_for("de", e, True)["params"])
+        with patch.object(TN, "MODEL", "claude-haiku-5-5"): self.assertEqual(TN.request_for("de", e, False)["params"]["thinking"], {"type": "disabled"})
+
+
 # ---------------- 315-8: Workflows ----------------
 class Workflows(unittest.TestCase):
     def wf(self, name): return (ROOT / ".github" / "workflows" / name).read_text("utf-8")
