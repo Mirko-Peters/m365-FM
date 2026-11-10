@@ -1077,3 +1077,36 @@ test("319-14 Nachpruefung: Absatz-Ansicht anfordern hat eine Gesamtgrenze (OPEN_
   const ui = readFileSync(new URL("../../assets/redaktion.js", import.meta.url), "utf-8");
   assert.equal((ui.match(/open_full: "/g) || []).length, 2);
 });
+
+test("Nachpruefung #319: Speaker-Einladung bestaetigt nur die eigene Personen-Entitaet sofort - eine vom Veranstalter gesetzte fremde Entitaet wartet auf claim.decide, keine verwaiste Firma wird uebernommen", async () => {
+  const { raw, env } = await mk();
+  assert.equal((await call(env, 4, "POST", "/api/event", { handle: "my-meetup", title: "My Meetup", start: "2027-03-01T10:00", topics: [] })).s, 200);
+  assert.equal((await call(env, 4, "POST", "/api/event/my-meetup/session", { title: "Talk one", speakers: [{ n: "Somebody Else", e: "contoso" }, { n: "Mitglied Sechs", e: "user-6" }], topics: [] })).s, 200);
+  const toks = raw.prepare("SELECT token,eid FROM speaker_invites ORDER BY eid").all().map((r) => [r.eid, r.token]);
+  const tok = Object.fromEntries(toks);
+  // der Veranstalter selbst nimmt den Token fuer contoso an: keine sofort bestaetigte Uebernahme, sondern eine Anfrage in der Prueferliste
+  const c = await call(env, 4, "POST", "/api/speaker/confirm", { token: tok.contoso });
+  assert.deepEqual([c.s, c.j.claimed], [200, "pending"]);
+  assert.equal(raw.prepare("SELECT status FROM entity_claims WHERE eid='contoso'").get().status, "pending");
+  assert.ok(((await call(env, 1, "GET", "/api/admin/entity/claims")).j?.claims || []).some((x) => x.eid === "contoso"), "die Anfrage steht in der Liste der Pruefer");
+  // eigene Personen-Entitaet (Profil-Adresse) bleibt sofort bestaetigt
+  const d = await call(env, 6, "POST", "/api/speaker/confirm", { token: tok["user-6"] });
+  assert.deepEqual([d.s, d.j.claimed], [200, true]);
+  assert.equal(raw.prepare("SELECT status FROM entity_claims WHERE eid='user-6'").get().status, "verified");
+});
+
+test("Nachpruefung #319: Absatz-Ansicht - Anteil je Person (OPEN_USER), damit niemand die Gesamtgrenze allein belegt", async () => {
+  const { raw, env } = await mk();
+  const { OPEN_USER } = await import("../src/i18n_edit.js");
+  for (let i = 0; i < OPEN_USER + 1; i++) blog(raw, 100 + i, 4, "live", { slug: "q" + i, lang: "en" });
+  for (let i = 0; i < OPEN_USER; i++) assert.equal((await call(env, 3, "POST", "/api/editor/i18n/open", { kind: "lblog", item: "q" + i, lang: "de" })).s, 200);
+  const r = await call(env, 3, "POST", "/api/editor/i18n/open", { kind: "lblog", item: "q" + OPEN_USER, lang: "de" });
+  assert.deepEqual([r.s, r.j?.error], [429, "open_quota"]);
+  // eine andere Person kann weiter anfordern; ein frisch geoeffneter Eintrag laesst sich ohne Anteil verlaengern
+  assert.equal((await call(env, 2, "POST", "/api/editor/i18n/open", { kind: "lblog", item: "q" + OPEN_USER, lang: "de" })).s, 200);
+  assert.equal((await call(env, 3, "POST", "/api/editor/i18n/open", { kind: "lblog", item: "q0", lang: "de" })).s, 200);
+  // ein alter Eintrag festzuhalten kostet Anteil
+  raw.prepare("UPDATE i18n_open_req SET ts=? WHERE item='q1'").run(Math.floor(Date.now() / 1000) - 20 * 86400);
+  assert.equal((await call(env, 3, "POST", "/api/editor/i18n/open", { kind: "lblog", item: "q1", lang: "de" })).j?.error, "open_quota");
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM pragma_table_info('i18n_open_req') WHERE name IN ('by','user_id')").get().n, 0, "weiter ohne Personenbezug in der Tabelle");
+});

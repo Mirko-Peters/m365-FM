@@ -570,7 +570,13 @@ export async function handleEvents(env, request, url, path, user, J) {
     if (!pr) return J({ error: "need_profile" }, 409);
     sp = sp.map((x) => (x.t === tok ? { h: pr.handle, n: x.n, e: x.e || pr.handle, s: "confirmed" } : x));   // e = eigene Personen-Entitaet (Profil-Adresse), falls keine andere hinterlegt ist
     await db.batch([db.prepare("UPDATE event_sessions SET speakers=? WHERE id=?").bind(JSON.stringify(sp), se.id), db.prepare("DELETE FROM speaker_invites WHERE token=?").bind(tok)]);
-    let claimed = false; if (i.eid) { claimed = await claimEntity(db, i.eid, user.id, "invite"); if (claimed) await adoptUnclaimedForEntity(db, user.id, i.eid); }
+    // Die Entitaet eines Speaker-Eintrags setzt der Veranstalter frei (speakersCheck prueft nur das Format). Sofort bestaetigt ist nur die eigene Personen-Entitaet
+    // (Profil-Adresse); jede andere Uebernahme wartet wie jede Anfrage auf claim.decide (#319: can() ist der einzige Weg zu einer bestaetigten Uebernahme), und
+    // eine verwaiste Firma uebernimmt erst die bestaetigte Uebernahme.
+    let claimed = false; if (i.eid) {
+      claimed = await claimEntity(db, i.eid, user.id, "invite", i.eid === pr.handle);
+      if (claimed && (await db.prepare("SELECT 1 x FROM entity_claims WHERE eid=? AND user_id=? AND status='verified'").bind(i.eid, user.id).first())) await adoptUnclaimedForEntity(db, user.id, i.eid); else if (claimed) claimed = "pending";
+    }
     const host = await db.prepare("SELECT owner_id FROM events WHERE id=?").bind(i.event_id).first();
     if (host) await recordInvite(env, { inviter: host.owner_id, invitee: user.id, source: "speaker", ref: String(i.event_id), since: i.created });
     return J({ ok: true, handle: pr.handle, claimed });

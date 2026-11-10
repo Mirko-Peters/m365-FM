@@ -187,7 +187,7 @@ export const openWishes = async (db, kind, item, lang) => !!(await db.prepare("S
 // Absatz-Ansicht anfordern (Migration 0042): docs/i18n-units enthaelt nur veraltete, bearbeitete und angeforderte Eintraege (alle waeren zu gross). Wer die
 // Sprachfassung bearbeiten darf (can content.edit_minor in der Sprache, Moderatoren als Empfehlung eingeschlossen), merkt den Eintrag vor; der Export nennt ihn
 // unter "open", und der naechste Seitenbau veroeffentlicht Einheiten und Quell-Anker. Kein Personenbezug, nichts am Inhalt geaendert -> kein Protokoll.
-export const OPEN_DAYS = 30, OPEN_MAX = 300;   // OPEN_MAX: offene Anforderungen insgesamt (alle Arten und Sprachen) - jede Absatz-Ansicht kostet Platz in docs/ (Abbruch bei 980 MB)
+export const OPEN_DAYS = 30, OPEN_MAX = 300, OPEN_USER = 40;   // OPEN_MAX: offene Anforderungen insgesamt (alle Arten und Sprachen) - jede Absatz-Ansicht kostet Platz in docs/ (Abbruch bei 980 MB)
 export async function requestOpen(env, user, { kind, item, lang }) {
   const db = env.DB;
   if (!validItem(kind, item, lang)) return res(400, { error: "bad_request" });
@@ -198,6 +198,10 @@ export async function requestOpen(env, user, { kind, item, lang }) {
   item = await buildKey(db, kind, item);   // gespeichert wird der Schluessel, den der Seitenbau fragt (asked()); die Oberflaeche uebernimmt ihn aus der Antwort
   const cut = now() - OPEN_DAYS * 86400, there = await db.prepare("SELECT 1 x FROM i18n_open_req WHERE kind=? AND item=? AND lang=? AND ts>=?").bind(kind, item, lang, cut).first();
   if (!there && ((await db.prepare("SELECT COUNT(*) n FROM i18n_open_req WHERE ts>=?").bind(cut).first())?.n || 0) >= OPEN_MAX) return res(429, { error: "open_full" });   // Verlaengern geht immer
+  // Anteil je Person: hoechstens OPEN_USER neue Eintraege in OPEN_DAYS (Zaehler, kein Personenbezug in i18n_open_req), sonst koennte eine Person die Grenze allein belegen.
+  // Verlaengern zaehlt mit, sobald der Eintrag aelter als die Haelfte der Frist ist - auch das Festhalten eines Platzes kostet so Anteil.
+  const renew = there && (await db.prepare("SELECT 1 x FROM i18n_open_req WHERE kind=? AND item=? AND lang=? AND ts<?").bind(kind, item, lang, now() - (OPEN_DAYS / 2) * 86400).first());
+  if ((!there || renew) && !(await rateLimit(db, `i18nopenq:${user.id}`, OPEN_USER, OPEN_DAYS * 86400))) return res(429, { error: "open_quota" });
   await db.batch([db.prepare("DELETE FROM i18n_open_req WHERE ts<?").bind(now() - OPEN_DAYS * 86400),
     db.prepare("INSERT INTO i18n_open_req(kind,item,lang,ts) VALUES(?,?,?,?) ON CONFLICT(kind,item,lang) DO UPDATE SET ts=excluded.ts").bind(kind, item, lang, now())]);
   return res(200, { ok: true, days: OPEN_DAYS, item });
