@@ -13,7 +13,7 @@ from pathlib import Path
 
 import site_podpage as P
 import site_shownotes_seo as S
-from ai_gateway import anthropic_request, urlopen
+from ai_gateway import anthropic_request, thinking_off, urlopen
 from generate_articles import cost_usd
 
 ROOT = Path(__file__).resolve().parent
@@ -318,16 +318,6 @@ def overview(eps, store, tries):
         if rec and rec.get("h_src") == h and rec.get("v") == VERSION and rec.get("notes"): done += 1
         elif t.get("h") == h and t.get("n", 0) >= MAX_TRIES: locked += 1
     return {**c, "done": done, "locked": locked, "open": c["thin"] - done - locked}
-
-
-def thinking_off(model):
-    """Feld, das das Denken fuer dieses Modell abschaltet (Anthropic-Modellreferenz, Stand 3.11.2026; wie generate_covers.py und tools/translate_*.py nie blind
-    "disabled"): Haiku nimmt {"type": "disabled"}; Claude Sonnet 5.5 weist das mit HTTP 400 ab und nimmt stattdessen {"type": "between_tools"} (ohne weiteres Feld,
-    nur dieses Modell); bei allen anderen bleibt das Feld weg - dort denkt das Modell und max_tokens bekommt den Zuschlag THINK_TOKENS (max_tokens_for)."""
-    m = str(model).lower()
-    if "haiku" in m: return {"thinking": {"type": "disabled"}}
-    if m.startswith("claude-sonnet-5-5"): return {"thinking": {"type": "between_tools"}}
-    return {}
 
 
 def max_tokens_for(model):

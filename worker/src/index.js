@@ -28,6 +28,7 @@ import { entityMap } from "./entities.js";
 import { handleProfiles, deleteUserData, refreshProfilesExport } from "./profiles.js";
 import { handleClaimVerify } from "./claimverify.js";
 import { handleOrgPair } from "./orgpair.js";
+import { handleEntFill } from "./entfill.js";
 import { handleEventImport, IMPORT_ROUTE, runEventImport } from "./eventimport.js";
 import { handleEvents, deleteUserEvents, ensureM365Con, claimLinkedinEntity, purgeEntityClaimReview } from "./events.js";
 import { handleVotes } from "./votes.js";
@@ -264,6 +265,7 @@ async function api(env, request, url, path, asUser, ctx) {
   const need = () => (user ? null : J({ error: "login" }, 401));
   const db = env.DB;
 
+  if (path === "/api/internal/entity-fill") return handleEntFill(env, request, path, J);   // KI-Entwurf fuer Entitaeten (CRON_KEY), Details in entfill.js
   if (path === "/api/internal/ai-spend") {
     if (method !== "POST") return J({ error: "method_not_allowed" }, 405);
     if (!env.CRON_KEY || request.headers.get("x-cron-key") !== env.CRON_KEY) return J({ error: "forbidden" }, 403);
