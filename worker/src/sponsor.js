@@ -1,6 +1,7 @@
 import { cleanText, esc, rateLimit, sha256hex } from "./util.js";
 import { notify } from "./mail.js";
 import { handleAdGo, handleHouseGo, adStatsForOrg } from "./ads.js";
+import { classify } from "./botcheck.js";
 
 const now = () => Math.floor(Date.now() / 1000);
 const STATUSES = new Set(["new", "contacted", "won", "lost", "spam"]);
@@ -139,19 +140,15 @@ export async function handleSponsorLink(env, request, url, path, ctx) {
   if (!link || !target) return miss();
   for (const [key, value] of Object.entries(cleanUtm(link.utm))) target.searchParams.set(key, value);
 
-  const purpose = ["sec-purpose", "purpose", "x-purpose"].map((key) => request.headers.get(key) || "").join(" ").toLowerCase();
   const bot = request.headers.get("user-agent") || "";
-  const botManagement = request.cf?.botManagement;
-  const score = Number(botManagement?.score);
-  const shouldCount = request.method === "GET" && !/\b(prefetch|prerender)\b/.test(purpose) &&
-    request.headers.get("x-moz")?.toLowerCase() !== "prefetch" &&
-    !botManagement?.verifiedBot && !(Number.isFinite(score) && score < 30) &&
-    !/(bot|crawl|spider|slurp|preview|facebookexternalhit|linkedinbot|slackbot|discordbot|whatsapp|telegrambot|curl|wget|python-requests|headless)/i.test(bot);
+  // Mensch oder Bot (botcheck.js, eine Schaetzung): Bot-/Scanner-/Vorschau-Abrufe werden getrennt als clicks_filtered gezaehlt, nicht verworfen
+  const filtered = classify(request).bot;
+  const shouldCount = request.method === "GET";
   if (shouldCount && env.SESSION_SECRET && ctx?.waitUntil) {
     ctx.waitUntil((async () => {
       const day = new Date().toISOString().slice(0, 10);
       const salt = await hmac(env.SESSION_SECRET, `go:${day}`);
-      const keyHash = await hmac(salt, `${request.headers.get("cf-connecting-ip") || ""}|${bot}|${code}`);
+      const keyHash = await hmac(salt, `${request.headers.get("cf-connecting-ip") || ""}|${bot}|${filtered ? "f:" : ""}${code}`);
       const cache = globalThis.caches?.default;
       let duplicate = false;
       if (cache) {
@@ -166,8 +163,9 @@ export async function handleSponsorLink(env, request, url, path, ctx) {
       const rawSurface = url.searchParams.get("s") || "";
       const surface = SURFACES.has(rawSurface) ? rawSurface : "other";
       const country = /^[A-Z]{2}$/.test(request.cf?.country || "") ? request.cf.country : "XX";
-      await env.DB.prepare(`INSERT INTO sponsor_clicks_daily(day,code,surface,country,clicks)
-        VALUES(?,?,?,?,1) ON CONFLICT(day,code,surface,country) DO UPDATE SET clicks=clicks+1`)
+      const field = filtered ? "clicks_filtered" : "clicks";
+      await env.DB.prepare(`INSERT INTO sponsor_clicks_daily(day,code,surface,country,${field})
+        VALUES(?,?,?,?,1) ON CONFLICT(day,code,surface,country) DO UPDATE SET ${field}=${field}+1`)
         .bind(day, code, surface, country).run();
     })().catch(() => {}));
   }
@@ -228,7 +226,7 @@ export async function handleSponsor(env, request, url, path, J, user) {
         FROM sponsor_placements WHERE org_id=? AND start>=? AND start<=? ORDER BY start,id`)
         .bind(org.id, `${nextMonth}-01`, nextMonthEnd).all()).results || [];
       const sums = Object.fromEntries(aggregate.map((row) => [row.metric, row]));
-      const linkClicks = (await db.prepare(`SELECT COALESCE(SUM(c.clicks),0) value,MAX(c.day) last_day
+      const linkClicks = (await db.prepare(`SELECT COALESCE(SUM(c.clicks),0) value,COALESCE(SUM(c.clicks_filtered),0) filtered,MAX(c.day) last_day
         FROM sponsor_clicks_daily c JOIN sponsor_links l ON l.code=c.code
         JOIN sponsor_placements p ON p.id=l.placement_id
         WHERE p.org_id=? AND c.day>=? AND c.day<=?`).bind(org.id, period.from, period.to).first());
@@ -255,14 +253,23 @@ export async function handleSponsor(env, request, url, path, J, user) {
         const records = (await db.prepare(`SELECT day,metric,dim,value,source,kind,fetched_at
           FROM sponsor_metrics_daily m WHERE placement_id=? AND day>=? AND day<=? AND ${RUM_PREFERRED} ORDER BY day,metric,dim`)
           .bind(placement.id, period.from, period.to).all()).results || [];
-        const clickBreakdown = (await db.prepare(`SELECT c.surface,c.country,SUM(c.clicks) clicks,MAX(c.day) as_of
+        const clickBreakdown = (await db.prepare(`SELECT c.surface,c.country,SUM(c.clicks) clicks,SUM(c.clicks_filtered) clicks_filtered,MAX(c.day) as_of
           FROM sponsor_clicks_daily c JOIN sponsor_links l ON l.code=c.code
           WHERE l.placement_id=? AND c.day>=? AND c.day<=? GROUP BY c.surface,c.country`)
           .bind(placement.id, period.from, period.to).all()).results || [];
         placementRows.push({ ...placement, refs, metrics: records, clicks: clickBreakdown });
       }
       const ads = await adStatsForOrg(db, org.id, period.from, period.to).catch(() => []);   // #281: gebuchte Werbeplaetze
-      items.push({ id: org.id, handle: org.handle, name: org.name, metrics, weekly, next_placements: nextPlacements, ads,
+      // Suchbegriffe und Position (Google Search Console) der Seiten dieser Firma; nur was gemessen wurde, nichts geschaetzt
+      const queries = (await db.prepare(`SELECT q.query,q.page,SUM(q.clicks) clicks,SUM(q.impressions) impressions,
+        CASE WHEN SUM(q.impressions)>0 THEN SUM(q.position*q.impressions)/SUM(q.impressions) ELSE AVG(q.position) END position,
+        MAX(q.day) as_of FROM sponsor_queries_daily q WHERE q.source='gsc' AND q.day>=? AND q.day<=?
+        AND q.placement_id IN (SELECT id FROM sponsor_placements WHERE org_id=?)
+        GROUP BY q.query,q.page ORDER BY impressions DESC,clicks DESC,q.query LIMIT 100`).bind(period.from, period.to, org.id).all().catch(() => ({ results: [] }))).results || [];
+      const clickQuality = { real: Number(linkClicks?.value) || 0, filtered: Number(linkClicks?.filtered) || 0, as_of: linkClicks?.last_day || null,
+        source: "M365.FM-Linkzähler", kind: "measured", filter_kind: "estimated" };   // Zaehlung gemessen, die Trennung Mensch/Bot ist eine Schaetzung (botcheck.js)
+      items.push({ id: org.id, handle: org.handle, name: org.name, metrics, weekly, next_placements: nextPlacements, ads, click_quality: clickQuality,
+        queries: queries.map((q) => ({ ...q, position: q.position == null ? null : Math.round(q.position * 10) / 10, source: "Google Search Console", kind: "measured" })),
         manual: manual.map((metric) => ({ ...metric, kind: "manual", as_of: new Date(metric.updated * 1000).toISOString().slice(0, 10) })),
         placements: placementRows.map((placement) => ({ ...placement, type: placement.channel })),
         event_partners: eventPartners.map((event) => ({ ...event, type: "event_partner", metric: null })),
@@ -287,7 +294,7 @@ export async function handleSponsor(env, request, url, path, J, user) {
     const manual = (await db.prepare(`SELECT source,metric,period,value,link,updated FROM sponsor_manual_metrics
       WHERE placement_id=? AND period BETWEEN substr(?,1,7) AND substr(?,1,7) ORDER BY period,metric`)
       .bind(id, period.from, period.to).all()).results || [];
-    const clicks = (await db.prepare(`SELECT c.surface,c.country,SUM(c.clicks) clicks,MAX(c.day) as_of
+    const clicks = (await db.prepare(`SELECT c.surface,c.country,SUM(c.clicks) clicks,SUM(c.clicks_filtered) clicks_filtered,MAX(c.day) as_of
       FROM sponsor_clicks_daily c JOIN sponsor_links l ON l.code=c.code
       WHERE l.placement_id=? AND c.day>=? AND c.day<=? GROUP BY c.surface,c.country`)
       .bind(id, period.from, period.to).all()).results || [];
@@ -368,7 +375,7 @@ export async function handleSponsor(env, request, url, path, J, user) {
       AND status='active' AND role IN ('owner','admin','events')`).bind(org.id, user.id).first()))) {
       return J({ error: "not_found" }, 404, { "cache-control": "no-store" });
     }
-    const stats = (await db.prepare(`SELECT l.code,l.placement_id,c.surface,c.country,SUM(c.clicks) clicks
+    const stats = (await db.prepare(`SELECT l.code,l.placement_id,c.surface,c.country,SUM(c.clicks) clicks,SUM(c.clicks_filtered) clicks_filtered
       FROM sponsor_links l JOIN sponsor_placements p ON p.id=l.placement_id AND p.org_id=?
       LEFT JOIN sponsor_clicks_daily c ON c.code=l.code AND c.day>=? AND c.day<=?
       GROUP BY l.code,l.placement_id,c.surface,c.country ORDER BY l.code,c.surface,c.country`)
@@ -389,7 +396,8 @@ export async function handleSponsor(env, request, url, path, J, user) {
     if (!env.CRON_KEY || request.headers.get("x-cron-key") !== env.CRON_KEY) return J({ error: "forbidden" }, 403, { "cache-control": "no-store" });
     const body = (await request.json().catch(() => ({}))) || {};
     const entries = Array.isArray(body.metrics) ? body.metrics : [];
-    if (!entries.length || entries.length > 500) return J({ error: "bad_request" }, 400, { "cache-control": "no-store" });
+    const queryEntries = Array.isArray(body.queries) ? body.queries : [];
+    if ((!entries.length && !queryEntries.length) || entries.length > 500 || queryEntries.length > 500) return J({ error: "bad_request" }, 400, { "cache-control": "no-store" });
     const fetchedAt = now(), writes = [], placementIds = new Set();
     const placements = (await db.prepare("SELECT id FROM sponsor_placements").all()).results || [];
     const validPlacements = new Set(placements.map((placement) => placement.id));
@@ -406,6 +414,15 @@ export async function handleSponsor(env, request, url, path, J, user) {
       placementIds.add(placementId);
       validated.push({ placementId, day, metric, dim, value, source, kind });
     }
+    const queryRows = [];
+    for (const entry of queryEntries) {   // Suchbegriffe (nur Google Search Console): Platzierung, Tag, Begriff, Seite, Klicks, Impressionen, Position
+      const placementId = String(entry?.placement_id || ""), day = String(entry?.day || ""), query = cleanText(entry?.query, 200), page = String(entry?.page || "").slice(0, 300);
+      const clicks = Number(entry?.clicks), impressions = Number(entry?.impressions), position = Number(entry?.position), kind = entry?.kind || "measured";
+      if (String(entry?.source || "") !== "gsc" || !isDay(day) || !placementId || !query || !page || ![clicks, impressions, position].every((n) => Number.isFinite(n) && n >= 0 && n < 1e12) ||
+          !["measured", "estimated", "manual"].includes(kind)) return J({ error: "bad_metric" }, 400, { "cache-control": "no-store" });
+      placementIds.add(placementId);
+      queryRows.push({ placementId, day, query, page, clicks, impressions, position, kind });
+    }
     if ([...placementIds].some((id) => !validPlacements.has(id))) {
       return J({ error: "bad_placement" }, 400, { "cache-control": "no-store" });
     }
@@ -415,6 +432,13 @@ export async function handleSponsor(env, request, url, path, J, user) {
         ON CONFLICT(placement_id,day,metric,dim,source) DO UPDATE SET value=excluded.value,
         kind=excluded.kind,fetched_at=excluded.fetched_at`)
         .bind(placementId, day, metric, dim, value, source, kind, fetchedAt, placementId));
+    }
+    for (const q of queryRows) {
+      writes.push(db.prepare(`INSERT INTO sponsor_queries_daily(placement_id,day,query,page,clicks,impressions,position,source,kind,fetched_at)
+        SELECT ?,?,?,?,?,?,?,'gsc',?,? WHERE EXISTS(SELECT 1 FROM sponsor_placements WHERE id=?)
+        ON CONFLICT(placement_id,day,query,page,source) DO UPDATE SET clicks=excluded.clicks,impressions=excluded.impressions,
+        position=excluded.position,kind=excluded.kind,fetched_at=excluded.fetched_at`)
+        .bind(q.placementId, q.day, q.query, q.page, q.clicks, q.impressions, q.position, q.kind, fetchedAt, q.placementId));
     }
     await db.batch(writes);
     return J({ ok: true, count: writes.length }, 200, { "cache-control": "no-store" });

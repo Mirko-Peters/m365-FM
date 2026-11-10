@@ -4,6 +4,7 @@
 // - Webhook /paypal/webhook: jede Nachricht per verify-webhook-signature mit PAYPAL_WEBHOOK_ID pruefen, idempotent ueber die Event-ID.
 // - Kampagne startet erst nach bestaetigter Zahlung UND Freigabe des Werbemittels durch einen Admin.
 // - Einblendungen cookiefrei beim Ausliefern des Platzes gezaehlt (je Kampagne, Platz, Seitentyp, Tag), Klicks ueber /go/<code>.
+import { classify, isBot } from "./botcheck.js";
 import { LEAD_STATUS } from "./mediakit.js";
 import { cleanText, esc, rateLimit, sha256hex, audit, cors } from "./util.js";
 import { notify } from "./mail.js";
@@ -407,13 +408,18 @@ export async function handlePaypalWebhook(env, request) {
 
 // ---------------------------------------------------------------- Auslieferung, Zaehlung, Go-Link
 
-export function isBot(request) {
-  const ua = request.headers.get("user-agent") || "";
-  const purpose = ["sec-purpose", "purpose", "x-purpose"].map((k) => request.headers.get(k) || "").join(" ").toLowerCase();
-  const bm = request.cf?.botManagement, score = Number(bm?.score);
-  return !ua || /\b(prefetch|prerender)\b/.test(purpose) || request.headers.get("x-moz")?.toLowerCase() === "prefetch" ||
-    !!bm?.verifiedBot || (Number.isFinite(score) && score < 30) ||
-    /(bot|crawl|spider|slurp|preview|facebookexternalhit|linkedinbot|slackbot|discordbot|whatsapp|telegrambot|curl|wget|python|headless|lighthouse|pingdom|monitor|http-client|axios|node-fetch|go-http)/i.test(ua);
+// Mensch oder Bot: Schaetzung aus Kopfzeilen, siehe botcheck.js (dort auch, was gespeichert wird: nur Tageszaehler)
+export { classify, isBot };
+
+// Kurzlink-Basis (Teil "c.m365.fm"): env.GO_BASE = reiner https-Ursprung ohne Pfad, z. B. https://c.m365.fm. Ohne Wert (offline, Tests, Notfall)
+// bleibt die alte Adresse ${API}/go/<code>, die auch mit gesetzter Basis weiter funktioniert (alte Links in Seiten, Mails, Videobeschreibungen).
+export function goBase(env) {
+  try { const u = new URL(String(env.GO_BASE || "").trim()); return u.protocol === "https:" && u.pathname === "/" && !u.search && !u.hash && !u.username ? u.origin : ""; } catch { return ""; }
+}
+export const goHost = (env) => { const b = goBase(env); return b ? new URL(b).hostname : ""; };
+export function goUrl(env, code, query = "") {
+  const q = query ? (String(query).startsWith("?") ? query : `?${query}`) : "", base = goBase(env);
+  return base ? `${base}/${code}${q}` : `${env.API}/go/${code}${q}`;
 }
 
 // Land nur als Laendercode aus Cloudflare (cf.country bzw. cf-ipcountry), keine IP, kein Cookie
@@ -472,10 +478,11 @@ export async function handleHouseGo(env, request, url, code, ctx) {
   const lang = SITE_LANGS.has(url.searchParams.get("l")) ? url.searchParams.get("l") : "en";
   const target = await houseTarget(env, key, lang, { term: String(url.searchParams.get("e") || ""), content: String(url.searchParams.get("p") || "") });
   if (!target) return new Response(null, { status: 404, headers });
-  if (request.method === "GET" && !isBot(request)) {
+  if (request.method === "GET") {
+    const filtered = classify(request).bot;   // Bots/Scanner/Vorschau: getrennt zaehlen (clicks_filtered), nicht verwerfen
     const work = (async () => {
-      if (await dedupe(env, request, `${code}:${slot}`)) return;
-      await countHouse(env.DB, key, slot, pageType, lang, countryOf(request), "clicks");
+      if (await dedupe(env, request, `${filtered ? "f:" : ""}${code}:${slot}`)) return;
+      await countHouse(env.DB, key, slot, pageType, lang, countryOf(request), filtered ? "clicks_filtered" : "clicks");
     })().catch(() => {});
     if (ctx?.waitUntil) ctx.waitUntil(work); else await work;
   }
@@ -538,7 +545,7 @@ async function serve(env, request, url, J) {
       if (b.kind === "cpm") await consume(db, b.id);
     }
     const org = await db.prepare("SELECT id,handle,name,tagline FROM orgs WHERE id=?").bind(b.org_id).first() || {};
-    const go = `${env.API}/go/${b.code}?s=${slot}&pt=${pageType}`;
+    const go = goUrl(env, b.code, `s=${slot}&pt=${pageType}`);
     const ad = b.kind === "cpm"
       ? { type: "banner", code: b.code, href: go, img: b.banner_url, w: b.banner_w, h: b.banner_h, mimg: b.mobile_url || b.banner_url, mw: b.mobile_w || b.banner_w, mh: b.mobile_h || b.banner_h, alt: b.alt }
       : { type: b.kind === "cpc" ? "card" : "lead", code: b.code, href: b.kind === "cpc" ? go : "", org: org.name || "", tagline: b.tagline || org.tagline || "",
@@ -553,7 +560,7 @@ async function serve(env, request, url, J) {
   const ctxq = new URLSearchParams({ s: slot, pt: pageType, l: SITE_LANGS.has(lang) ? lang : "en" });
   if (topics[0]) ctxq.set("e", topics[0]);
   if (SLUG.test(url.searchParams.get("p") || "")) ctxq.set("p", url.searchParams.get("p"));
-  return J({ ad: null, house: h ? { title: h.title, body: h.body, cta: h.cta, url: `${env.API}/go/h-x${h.id}?${ctxq}` } : null }, 200, NS);
+  return J({ ad: null, house: h ? { title: h.title, body: h.body, cta: h.cta, url: goUrl(env, `h-x${h.id}`, ctxq.toString()) } : null }, 200, NS);
 }
 
 async function dedupe(env, request, code) {
@@ -581,13 +588,14 @@ export async function handleAdGo(env, request, url, code, ctx) {
     if (!target) return new Response(null, { status: 404, headers });
     for (const [k, v] of [["utm_source", "m365.fm"], ["utm_medium", "display"], ["utm_campaign", b.code]]) if (!target.searchParams.has(k)) target.searchParams.set(k, v);
   }
-  if (request.method === "GET" && b.status === "active" && !isBot(request)) {
+  if (request.method === "GET" && b.status === "active") {
     const slot = SLOTS.includes(url.searchParams.get("s")) ? url.searchParams.get("s") : b.slot;
     const pageType = PAGE_TYPES.includes(url.searchParams.get("pt")) ? url.searchParams.get("pt") : "other";
+    const filtered = classify(request).bot;   // gefilterte Klicks werden nie abgerechnet (kein consume), aber sichtbar gezaehlt
     const work = (async () => {
-      if (await dedupe(env, request, code)) return;
-      await countStat(db, b.id, slot, pageType, "clicks", countryOf(request));
-      if (b.kind === "cpc") await consume(db, b.id);
+      if (await dedupe(env, request, filtered ? `f:${code}` : code)) return;
+      await countStat(db, b.id, slot, pageType, filtered ? "clicks_filtered" : "clicks", countryOf(request));
+      if (b.kind === "cpc" && !filtered) await consume(db, b.id);
     })().catch(() => {});
     if (ctx?.waitUntil) ctx.waitUntil(work); else await work;
   }
@@ -833,19 +841,19 @@ async function paypalReturn(env, url) {
 
 export async function adStatsForOrg(db, orgId, from, to) {
   const rows = (await db.prepare(`SELECT b.id,b.code,b.product,b.status,b.pay_status,b.creative_status,b.start,b.end,b.quantity,b.delivered,
-      COALESCE(SUM(s.impressions),0) impressions,COALESCE(SUM(s.clicks),0) clicks,COALESCE(SUM(s.leads),0) leads
+      COALESCE(SUM(s.impressions),0) impressions,COALESCE(SUM(s.clicks),0) clicks,COALESCE(SUM(s.clicks_filtered),0) clicks_filtered,COALESCE(SUM(s.leads),0) leads
     FROM ad_bookings b LEFT JOIN ad_stats_daily s ON s.booking_id=b.id AND s.day>=? AND s.day<=?
     WHERE b.org_id=? AND b.status<>'draft' GROUP BY b.id ORDER BY b.created DESC`).bind(from, to, orgId).all()).results || [];
   return rows.map((r) => ({ ...r, ctr: r.impressions ? Math.round(r.clicks / r.impressions * 10000) / 100 : null }));
 }
 
 async function adminStats(db, from, to) {
-  const rows = (await db.prepare(`SELECT s.day,b.code,o.name org,b.product,s.slot,s.page_type,s.country,s.impressions,s.clicks,s.leads
+  const rows = (await db.prepare(`SELECT s.day,b.code,o.name org,b.product,s.slot,s.page_type,s.country,s.impressions,s.clicks,s.clicks_filtered,s.leads
     FROM ad_stats_daily s JOIN ad_bookings b ON b.id=s.booking_id LEFT JOIN orgs o ON o.id=b.org_id
     WHERE s.day>=? AND s.day<=? ORDER BY s.day,b.code,s.slot,s.page_type,s.country`).bind(from, to).all()).results || [];
   const revenue = await db.prepare(`SELECT COALESCE(SUM(net_cents),0) net,COALESCE(SUM(total_cents),0) total,COUNT(*) n FROM ad_bookings
     WHERE pay_status='paid' AND paid_at>=? AND paid_at<?`).bind(Date.parse(`${from}T00:00:00Z`) / 1000, Date.parse(`${to}T00:00:00Z`) / 1000 + 86400).first();
-  const tot = rows.reduce((a, r) => ({ impressions: a.impressions + r.impressions, clicks: a.clicks + r.clicks, leads: a.leads + r.leads }), { impressions: 0, clicks: 0, leads: 0 });
+  const tot = rows.reduce((a, r) => ({ impressions: a.impressions + r.impressions, clicks: a.clicks + r.clicks, clicks_filtered: a.clicks_filtered + r.clicks_filtered, leads: a.leads + r.leads }), { impressions: 0, clicks: 0, clicks_filtered: 0, leads: 0 });
   return { rows, totals: { ...tot, ctr: tot.impressions ? Math.round(tot.clicks / tot.impressions * 10000) / 100 : null, revenue_net_cents: revenue.net, revenue_total_cents: revenue.total, paid_bookings: revenue.n } };
 }
 
@@ -1014,8 +1022,8 @@ export async function handleAds(env, request, url, path, user, J, ctx) {
     if (!p) return E("bad_period");
     const s = await adminStats(db, p.from, p.to);
     if (url.searchParams.get("format") === "csv") {
-      const head = ["day", "campaign", "company", "product", "slot", "page_type", "country", "impressions", "clicks", "ctr_pct", "leads"];
-      const lines = [head, ...s.rows.map((r) => [r.day, r.code, r.org, r.product, r.slot, r.page_type, r.country, r.impressions, r.clicks, r.impressions ? (r.clicks / r.impressions * 100).toFixed(2) : "", r.leads])];
+      const head = ["day", "campaign", "company", "product", "slot", "page_type", "country", "impressions", "clicks", "ctr_pct", "leads", "clicks_filtered"];
+      const lines = [head, ...s.rows.map((r) => [r.day, r.code, r.org, r.product, r.slot, r.page_type, r.country, r.impressions, r.clicks, r.impressions ? (r.clicks / r.impressions * 100).toFixed(2) : "", r.leads, r.clicks_filtered])];
       return new Response("﻿" + lines.map((l) => l.map(csvCell).join(",")).join("\r\n"), { status: 200, headers: { "content-type": "text/csv; charset=utf-8", "content-disposition": `attachment; filename="m365fm-ads-${p.from}-${p.to}.csv"`, ...NS, ...cors(env, request) } });
     }
     return J({ ...s, period: p }, 200, NS);
@@ -1025,17 +1033,17 @@ export async function handleAds(env, request, url, path, user, J, ctx) {
     const p = [7, 30, 90].includes(days) ? { from: new Date(Date.now() - (days - 1) * 86400000).toISOString().slice(0, 10), to: today() } : period(url);
     if (!p) return E("bad_period");
     const house = String(url.searchParams.get("house") || "");
-    const rows = (await db.prepare(`SELECT house,slot,page_type,lang,country,SUM(impressions) impressions,SUM(clicks) clicks FROM ad_house_stats
+    const rows = (await db.prepare(`SELECT house,slot,page_type,lang,country,SUM(impressions) impressions,SUM(clicks) clicks,SUM(clicks_filtered) clicks_filtered FROM ad_house_stats
       WHERE day>=? AND day<=? AND (?='' OR house=?) GROUP BY house,slot,page_type,lang,country ORDER BY house,impressions DESC`).bind(p.from, p.to, house, house).all()).results || [];
     const ctr = (c, i) => (i ? Math.round(c / i * 10000) / 100 : null);
     const agg = (keyFn) => {
       const m = new Map();
-      for (const r of rows) { const k = keyFn(r); const x = m.get(k) || { impressions: 0, clicks: 0 }; x.impressions += r.impressions; x.clicks += r.clicks; m.set(k, x); }
+      for (const r of rows) { const k = keyFn(r); const x = m.get(k) || { impressions: 0, clicks: 0, clicks_filtered: 0 }; x.impressions += r.impressions; x.clicks += r.clicks; x.clicks_filtered += r.clicks_filtered; m.set(k, x); }
       return [...m].map(([k, x]) => ({ key: k, ...x, ctr: ctr(x.clicks, x.impressions) })).sort((a, b) => b.impressions - a.impressions);
     };
     if (url.searchParams.get("format") === "csv") {
-      const head = ["house", "slot", "page_type", "lang", "country", "impressions", "clicks", "ctr_pct"];
-      const lines = [head, ...rows.map((r) => [r.house, r.slot, r.page_type, r.lang, r.country, r.impressions, r.clicks, r.impressions ? (r.clicks / r.impressions * 100).toFixed(2) : ""])];
+      const head = ["house", "slot", "page_type", "lang", "country", "impressions", "clicks", "ctr_pct", "clicks_filtered"];
+      const lines = [head, ...rows.map((r) => [r.house, r.slot, r.page_type, r.lang, r.country, r.impressions, r.clicks, r.impressions ? (r.clicks / r.impressions * 100).toFixed(2) : "", r.clicks_filtered])];
       return new Response("\ufeff" + lines.map((l) => l.map(csvCell).join(",")).join("\r\n"), { status: 200, headers: { "content-type": "text/csv; charset=utf-8", "content-disposition": `attachment; filename="m365fm-hausanzeigen-${p.from}-${p.to}.csv"`, ...NS, ...cors(env, request) } });
     }
     return J({ period: p, rows: rows.map((r) => ({ ...r, ctr: ctr(r.clicks, r.impressions) })), by_house: agg((r) => r.house),

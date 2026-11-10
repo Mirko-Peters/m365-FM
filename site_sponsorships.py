@@ -48,6 +48,7 @@ from html import escape
 from pathlib import Path
 from urllib.parse import urlsplit
 from site_i18n import COMM_LANGS, T
+from site_ads import go_link
 
 FILE = Path(__file__).parent / "data" / "sponsorships.json"
 I18N = Path(__file__).parent / "data" / "py_i18n.json"
@@ -426,7 +427,7 @@ def link_url(recs, url, surface="sponsor-page"):
         if not code or _GO_OFFLINE:
             return url
         if code in _GO_CODES:
-            return f"https://api-dub.m365.fm/go/{code}?s={surface}"
+            return go_link(code, f"s={surface}")
         if code not in _GO_WARNED:
             print(f"WARNUNG: Sponsor-Linkcode {code} ist nicht aktiv; Direktlink bleibt bestehen")
             _GO_WARNED.add(code)

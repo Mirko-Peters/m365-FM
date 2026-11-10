@@ -3,7 +3,10 @@ main = "src/index.js"
 compatibility_date = "2025-09-01"
 workers_dev = false
 
-routes = [{ pattern = "api-dub.m365.fm", custom_domain = true, zone_name = "m365.fm" }]
+routes = [
+  { pattern = "api-dub.m365.fm", custom_domain = true, zone_name = "m365.fm" },
+  { pattern = "c.m365.fm", custom_domain = true, zone_name = "m365.fm" },   # Kurzlink c.m365.fm/<code> (gleicher Worker, nur /<code> und robots.txt; GO_BASE unten). Legt den DNS-Eintrag selbst an: ein vorhandener Eintrag "c" blockiert den Deploy
+]
 
 [[d1_databases]]
 binding = "DB"
@@ -24,6 +27,8 @@ crons = ["0 6 * * *", "*/30 * * * *", "*/15 * * * *"]   # Push taeglich, Wochenm
 [vars]
 SITE = "https://www.m365.fm"
 API = "https://api-dub.m365.fm"
+# Basis der Kurzlinks fuer Sponsor-Links, Werbeplaetze und Hausanzeigen: https://c.m365.fm/<code>. Leer/entfernt = alte Form ${API}/go/<code> (beide Formen bleiben gueltig).
+GO_BASE = "https://c.m365.fm"
 MAIL_FROM = "M365.FM <system@m365.fm>"
 VAPID_SUBJECT = "mailto:system@m365.fm"
 AI_GATEWAY_ID = "m365fm"
