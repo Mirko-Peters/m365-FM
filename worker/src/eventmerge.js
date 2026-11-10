@@ -345,10 +345,10 @@ async function tombstoned(db, c, today) {
 }
 const LEAD_KIND = "communitydays";   // die Veranstaltungsliste: fuer ein Import-Event ohne Veranstalter die massgebliche Quelle (vor Angaben aus Speaker-Profilen)
 // Haengen mehrere Listen-Datensaetze an einem Event (z. B. die Seite auf communitydays.org und die eigene Seite des Events), ist genau einer massgeblich:
-// der des Events selbst, sonst der am laengsten bekannte der in es zusammengefuehrten (ausgeblendeten) Zeilen. null = keiner.
-async function leadRecord(db, eventId) {
-  return db.prepare("WITH RECURSIVE fam(id,d) AS (SELECT ?1,0 UNION SELECT e.id,fam.d+1 FROM events e JOIN fam ON e.merged_into=fam.id WHERE fam.d<5) SELECT s.event_id,s.ref,s.day FROM event_source s JOIN fam ON fam.id=s.event_id WHERE s.kind=?2 AND s.hash<>'' ORDER BY s.event_id<>?1,s.first_seen,s.event_id,s.ref LIMIT 1")
-    .bind(eventId, LEAD_KIND).first();
+// der des Events selbst, sonst der am laengsten bekannte der in es zusammengefuehrten (ausgeblendeten) Zeilen. Liefert alle, der massgebliche zuerst ([] = keiner).
+async function leadRecords(db, eventId) {
+  return (await db.prepare("WITH RECURSIVE fam(id,d) AS (SELECT ?1,0 UNION SELECT e.id,fam.d+1 FROM events e JOIN fam ON e.merged_into=fam.id WHERE fam.d<5) SELECT s.event_id,s.ref,s.day FROM event_source s JOIN fam ON fam.id=s.event_id WHERE s.kind=?2 AND s.hash<>'' ORDER BY s.event_id<>?1,s.first_seen,s.event_id,s.ref LIMIT 50")
+    .bind(eventId, LEAD_KIND).all()).results || [];
 }
 const recordHash = (c) => hash24(JSON.stringify(["v1", c.title, c.summary, c.about, c.start, c.end, c.mode, c.city, c.country, c.url, c.tickets_url, c.organizer_name, c.lang, c.free]));
 // Event anlegen, auffrischen oder mit dem sicheren Treffer zusammenfuehren. opts.dry = nichts schreiben.
@@ -367,13 +367,15 @@ export async function upsertEvent(db, cand, opts = {}) {
     const others = m.others.map((o) => queueStmt(db, "event", ev.id, o.id, o.reason, t));
     if (m.rec) {   // derselbe Datensatz erneut gelesen: auffrischen, keine neue Zusammenfuehrung
       // Hat die Quelle ihn geaendert (und teilt er seine Kennung mit keinem anderen), folgt ihm die Zeile, die ihn haelt: das Event selbst oder seine ausgeblendete Zeile.
-      // Fuer das (ungepflegte) Event ist genau eine Quelle massgeblich: der Datensatz der Veranstaltungsliste (LEAD_KIND, bei mehreren nur leadRecord), auch wenn er
+      // Fuer das (ungepflegte) Event ist genau eine Quelle massgeblich: der Datensatz der Veranstaltungsliste (LEAD_KIND, bei mehreren nur der erste von leadRecords), auch wenn er
       // erst spaeter dazukam; ein anderer nur, wenn das Event aus ihm entstand und kein Listen-Datensatz dazugehoert. Die uebrigen ergaenzen wie bei jeder
       // Zusammenfuehrung, weitere Listen-Datensaetze nur leere Felder. Nennt ein weiterer Listen-Datensatz einen anderen Tag, entscheidet ein Admin (Warteschlange).
       const h = m.rec.holder, own = h.id === ev.id, changed = m.rec.hash !== rec.hash && c.sole !== false;
-      const ld = rec.kind === LEAD_KIND ? await leadRecord(db, ev.id) : null, second = !!ld && !(ld.event_id === h.id && ld.ref === rec.ref);
+      const lds = rec.kind === LEAD_KIND ? await leadRecords(db, ev.id) : [], ld = lds[0], second = !!ld && !(ld.event_id === h.id && ld.ref === rec.ref);
       const lead = changed && (rec.kind === LEAD_KIND ? !second : own && !have.some((x) => x.kind === LEAD_KIND)), f = fillEvent(ev, c, lead || (second && "empty"), today), touched = Object.keys(f.after).length > 0;
       if (changed && second && !own && (dayDiff(rec.day, ld.day) ?? 0) > 0) others.push(queueStmt(db, "event", ev.id, h.id, "source_date_differs", t));
+      // der massgebliche Datensatz hat sich geaendert (z. B. verlegt): jeder weitere Listen-Datensatz mit anderem Tag kommt ebenso in die Warteschlange
+      if (changed && ld && !second) for (const o of lds.slice(1)) if (o.event_id !== ev.id && (dayDiff(rec.day, o.day) ?? 0) > 0) others.push(queueStmt(db, "event", ev.id, o.event_id, "source_date_differs", t));
       if (!own) {
         const fh = fillEvent(h, c, changed, today); if (Object.keys(fh.after).length) ops.push(setCols(db, "events", h.id, fh.after, [t], ",updated=?"));
         ops.push(evSourceStmt(db, h.id, rec, t));
@@ -387,7 +389,7 @@ export async function upsertEvent(db, cand, opts = {}) {
       return { action: "merged", id: ev.id, reason: m.reason, changed: lead && touched };
     }
     // anderer Datensatz desselben Events: als ausgeblendete Zeile festhalten und protokolliert zusammenfuehren (umkehrbar)
-    const f = fillEvent(ev, c, rec.kind === LEAD_KIND && !!(await leadRecord(db, ev.id)) && "empty"), hid = await insertEvent(db, c, t, ev.id), added = srcs.filter((s) => !has(s));   // weiterer Listen-Datensatz: nur leere Felder
+    const f = fillEvent(ev, c, rec.kind === LEAD_KIND && (await leadRecords(db, ev.id)).length > 0 && "empty"), hid = await insertEvent(db, c, t, ev.id), added = srcs.filter((s) => !has(s));   // weiterer Listen-Datensatz: nur leere Felder
     for (const s of srcs) ops.push(evSourceStmt(db, hid.id, s, t));
     if (Object.keys(f.after).length) ops.push(setCols(db, "events", ev.id, f.after, [t], ",updated=?"));
     for (const s of added) ops.push(evSourceStmt(db, ev.id, srcCopy(s), t));
@@ -407,7 +409,7 @@ export async function upsertEvent(db, cand, opts = {}) {
 // wird nur hier eingetragen. key = Spalte, die eine Zeile innerhalb eines Events eindeutig macht ("" = hoechstens eine Zeile je Event).
 // Beim Zusammenfuehren wandern die Zeilen, die es am Ziel-Event unter demselben Schluessel noch nicht gibt; der Rest bleibt am ausgeblendeten Quell-Event.
 // ident (nur bei key "") = Spalte, die die gewanderte Zeile wiedererkennt: zurueck geht nur sie, nicht eine spaeter am Ziel-Event neu angelegte.
-// gone = Bedingung, unter der eine Zeile mit dem Event geloescht wird (fehlt sie: immer).
+// gone = Bedingung, unter der eine Zeile mit dem Event geloescht wird (fehlt sie: immer). move = Bedingung, unter der eine Zeile beim Zusammenfuehren wandert (fehlt sie: immer).
 export const EVENT_TABLES = [
   { table: "event_sessions", key: "id" },
   { table: "speaker_invites", key: "token" },
@@ -421,7 +423,8 @@ export const EVENT_TABLES = [
   // LinkedIn-Events (#323, event_id ist Primaerschluessel): hat das Ziel-Event schon eine Zeile, bleibt seine und die des Quell-Events am ausgeblendeten
   // Quell-Event (dort im Admin weiter absagbar). Geloescht wird mit dem Event nur eine abgesagte Zeile; eine veroeffentlichte oder reservierte bleibt mit
   // Absicht stehen - der LinkedIn-Event ist noch oeffentlich und erscheint im Admin als "verwaist" mit Absage-Knopf (abgesagt wird nur per Klick, nie automatisch).
-  { table: "linkedin_events", key: "", ident: "published", gone: "status='cancelled'" },
+  // Eine reservierte (pending) Zeile wandert nicht: das laufende Veroeffentlichen speichert die URN bzw. raeumt auf ueber die Kennung des Quell-Events.
+  { table: "linkedin_events", key: "", ident: "published", gone: "status='cancelled'", move: "status<>'pending'" },
 ];
 // Event samt allem, was daran haengt, loeschen (Anweisungen fuer eine Batch). Hat das Event eine Import-Quelle, bleiben Loeschmarken zurueck,
 // damit es der naechste Import-Lauf nicht neu anlegt. Mit ihm verschwinden die in es zusammengefuehrten (ausgeblendeten) Zeilen.
@@ -733,7 +736,7 @@ export async function mergeSessions(db, fromId, intoId, by = 0, auto = false) {
 }
 // Event a geht in Event b auf (die Richtung waehlt der Aufrufer: das von Hand gepflegte Event bleibt). Alles aus EVENT_TABLES wandert mit.
 export async function mergeEvents(db, fromId, intoId, by = 0, auto = false) {
-  const moveSel = (x) => (x.key ? db.prepare(`SELECT ${x.key} k FROM ${x.table} WHERE event_id=?1 AND ${x.key} NOT IN (SELECT ${x.key} FROM ${x.table} WHERE event_id=?2)`) : db.prepare(`SELECT ${x.ident || 1} k FROM ${x.table} WHERE event_id=?1 AND NOT EXISTS (SELECT 1 FROM ${x.table} WHERE event_id=?2)`)).bind(fromId, intoId);
+  const moveSel = (x) => (x.key ? db.prepare(`SELECT ${x.key} k FROM ${x.table} WHERE event_id=?1 AND ${x.key} NOT IN (SELECT ${x.key} FROM ${x.table} WHERE event_id=?2)`) : db.prepare(`SELECT ${x.ident || 1} k FROM ${x.table} WHERE event_id=?1${x.move ? ` AND ${x.move}` : ""} AND NOT EXISTS (SELECT 1 FROM ${x.table} WHERE event_id=?2)`)).bind(fromId, intoId);
   const [ra, rb, rs, ...mv] = await db.batch([
     db.prepare("SELECT * FROM events WHERE id=? AND merged_into=0").bind(fromId), db.prepare("SELECT * FROM events WHERE id=? AND merged_into=0").bind(intoId),
     db.prepare("SELECT event_id,kind,ref,url FROM event_source WHERE event_id IN (?,?)").bind(fromId, intoId), ...EVENT_TABLES.map(moveSel),
@@ -746,7 +749,7 @@ export async function mergeEvents(db, fromId, intoId, by = 0, auto = false) {
   EVENT_TABLES.forEach((x, i) => {
     const keys = (mv[i].results || []).map((r) => r.k); if (!keys.length) return;
     moved[x.table] = x.key || x.ident ? keys : true;   // ohne key hoechstens eine Zeile je Event: OR IGNORE, falls das Ziel-Event inzwischen eine hat (sie bleibt dann am Quell-Event)
-    ops.push(x.key ? db.prepare(`UPDATE ${x.table} SET event_id=?1 WHERE event_id=?2 AND ${x.key} IN (SELECT value FROM json_each(?3))`).bind(b.id, a.id, JSON.stringify(keys)) : db.prepare(`UPDATE OR IGNORE ${x.table} SET event_id=?1 WHERE event_id=?2`).bind(b.id, a.id));
+    ops.push(x.key ? db.prepare(`UPDATE ${x.table} SET event_id=?1 WHERE event_id=?2 AND ${x.key} IN (SELECT value FROM json_each(?3))`).bind(b.id, a.id, JSON.stringify(keys)) : db.prepare(`UPDATE OR IGNORE ${x.table} SET event_id=?1 WHERE event_id=?2${x.move ? ` AND ${x.move}` : ""}`).bind(b.id, a.id));
   });
   ops.push(db.prepare("UPDATE events SET merged_into=?,public=0 WHERE id=?").bind(b.id, a.id), mergedStmt(db, "event", a.id, b.id, by, t),
     logStmt(db, "event", a.id, b.id, { into_before: f.before, into_after: f.after, from_public: a.public, added_sources: added.map(({ kind, ref }) => ({ kind, ref })), moved, session_logs: [] }, auto, by, t));
@@ -826,14 +829,21 @@ export async function unmerge(db, logId, by = 0, nested = false) {
   await runBatch(db, ops, 60);
   return { ok: true, kind: l.kind };
 }
+// Ist Event id (ueber hoechstens 6 Stufen) in Event outer aufgegangen? Liefert { id, merged_into } von id (merged_into = sein direktes Ziel), sonst null.
+async function innerEvent(db, id, outer) {
+  return db.prepare("WITH RECURSIVE up(id,p,d) AS (SELECT id,merged_into,0 FROM events WHERE id=?1 UNION SELECT e.id,e.merged_into,up.d+1 FROM events e JOIN up ON e.id=up.p WHERE up.p<>0 AND up.d<6) SELECT id,merged_into FROM events WHERE id=?1 AND merged_into<>0 AND EXISTS (SELECT 1 FROM up WHERE p=?2)")
+    .bind(id, outer).first();
+}
 // Entscheidung in der Warteschlange: "merge" fuehrt zusammen, "separate" merkt sich dauerhaft "getrennt lassen"
 export async function decideDupe(db, id, action, by) {
   const q = await db.prepare("SELECT * FROM dedupe_queue WHERE id=? AND status='open'").bind(id).first(); if (!q) return { error: "not_found" };
   // Eintrag zu einer bestehenden Zusammenfuehrung (ein weiterer Listen-Datensatz nennt einen anderen Termin, siehe upsertEvent): "merge" bestaetigt sie,
   // "separate" nimmt sie zurueck (danach dauerhaft getrennt), die ausgeblendete Zeile wird ein eigenes Event mit ihrem Termin.
-  const inner = q.kind === "event" ? await db.prepare("SELECT id FROM events WHERE id IN (?,?) AND merged_into<>0 ORDER BY id DESC LIMIT 1").bind(q.a_id, q.b_id).first() : null;
+  // Nur wenn die eine Zeile (direkt oder ueber Zwischenstufen) in der anderen aufgegangen ist; ein veralteter Eintrag, dessen eine Seite in ein drittes Event
+  // ging, beruehrt diese fremde Zusammenfuehrung nicht (dann wie sonst: "separate" vermerkt nur, "merge" endet mit not_found).
+  const inner = q.kind === "event" ? (await innerEvent(db, q.a_id, q.b_id)) || (await innerEvent(db, q.b_id, q.a_id)) : null;
   if (inner && (action === "merge" || action === "separate")) {
-    const l = action === "separate" ? await db.prepare("SELECT id FROM merge_log WHERE kind='event' AND from_id=? AND undone=0 ORDER BY id DESC LIMIT 1").bind(inner.id).first() : null;
+    const l = action === "separate" ? await db.prepare("SELECT id FROM merge_log WHERE kind='event' AND from_id=? AND into_id=? AND undone=0 ORDER BY id DESC LIMIT 1").bind(inner.id, inner.merged_into).first() : null;
     if (l) { const r = await unmerge(db, l.id, by); if (r.error) return r; }
     await db.prepare("UPDATE dedupe_queue SET status=?,decided=?,decided_by=? WHERE id=?").bind(action === "merge" ? "merged" : "separate", now(), by, id).run();
     return { ok: true, status: action === "merge" ? "merged" : "separate" };

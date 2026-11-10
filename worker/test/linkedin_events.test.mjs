@@ -892,17 +892,28 @@ test("317-01b Event-Zusammenfuehrung: die LinkedIn-Zeile wandert mit und zurueck
   assert.deepEqual([orphan.orphan, orphan.can], [true, ["cancel"]]);
 });
 
-test("317-01b Zuruecknehmen bringt nur die Zeile zurueck, die vom Quell-Event kam, nicht eine spaeter am Ziel-Event angelegte", async (t) => {
+test("317-01b Eine Reservierung bleibt beim Zusammenfuehren am Quell-Event; Zuruecknehmen bringt keine spaeter am Ziel-Event angelegte Zeile", async (t) => {
   freeze(t, NOW); const { raw, env } = await setup(); await connected(env);
   addEv(raw); addEv(raw, { id: 2, handle: "stream", title: "Stream", url: "", start: "2027-01-11T08:30", end: "" });
   assert.equal((await act(env, ADMIN, "publish", "stream", true, mockFetch([], { create: () => new Response("", { status: 500 }) }), NOW)).pending, true);   // Reservierung am Quell-Event
   const l = await dupeMerge(raw, env, 1, 2);
-  assert.deepEqual(liRows(raw), [{ event_id: 1, urn: "", status: "pending" }]);
+  assert.deepEqual(liRows(raw), [{ event_id: 2, urn: "", status: "pending" }], "bleibt, wo das Veroeffentlichen sie sucht");
   t.mock.timers.setTime(LATER);
-  assert.equal((await act(env, ADMIN, "release", { event_id: 1 }, true, mockFetch([]), LATER)).ok, true);
+  assert.equal((await act(env, ADMIN, "release", { event_id: 2 }, true, mockFetch([]), LATER)).ok, true);
   assert.equal((await act(env, ADMIN, "publish", "m365con-day1", true, mockFetch([]), LATER)).ok, true);   // neu am Ziel-Event, nach der Zusammenfuehrung
   assert.equal((await imp(env)("/api/admin/events/unmerge", "POST", { log: l })).status, 200);
   assert.deepEqual(liRows(raw), [{ event_id: 1, urn: "urn:li:event:777", status: "published" }]);
+});
+
+test("317-01b Zusammenfuehrung waehrend des LinkedIn-Aufrufs: die URN landet trotzdem in der Reservierung, eine sichere Ablehnung gibt sie frei", async (t) => {
+  freeze(t, NOW); const { raw, env } = await setup(); await connected(env);
+  addEv(raw); addEv(raw, { id: 2, handle: "stream", title: "Stream", url: "", start: "2027-01-11T08:30", end: "" }); addEv(raw, { id: 3, handle: "drei", title: "Drei", url: "", start: "2027-01-11T09:10", end: "" });
+  const ok = mockFetch([], { create: async () => { await dupeMerge(raw, env, 1, 2); return new Response("", { status: 201, headers: { "x-restli-id": "900" } }); } });
+  const r = await act(env, ADMIN, "publish", "stream", true, ok, NOW); assert.equal(r.ok, true, JSON.stringify(r));
+  assert.deepEqual(liRows(raw), [{ event_id: 2, urn: "urn:li:event:900", status: "published" }], "kein store_failed, keine haengende Reservierung");
+  const no = mockFetch([], { create: async () => { await dupeMerge(raw, env, 1, 3); return new Response("nein", { status: 400 }); } });
+  assert.equal((await act(env, ADMIN, "publish", "drei", true, no, NOW)).ok, undefined);
+  assert.deepEqual(liRows(raw).map((x) => x.event_id), [2], "die Reservierung von Event 3 ist wieder frei");
 });
 
 test("317-01b Vorschlagsliste: importierte Events ohne Veranstalter, zusammengefuehrte und vorbei gemeldete nie; uebernommene und Mitglieds-Events schon", async (t) => {

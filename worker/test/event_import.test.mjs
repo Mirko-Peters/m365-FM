@@ -961,3 +961,40 @@ test("317-18 Admin bestaetigt die Zusammenfuehrung: der Eintrag ist erledigt, da
   assert.equal((await imp(admin, "/api/admin/events/dupes"))[1].items.length, 0, "die Entscheidung haelt");
   assert.deepEqual(s.raw.prepare("SELECT start FROM events WHERE merged_into=0").all().map((r) => r.start), ["2026-06-16T09:00"]);
 });
+
+// ---------------------------------------------------------------- vierte Runde (Nachpruefung 317-18)
+test("317-18b Veralteter Warteschlangen-Eintrag, dessen eine Seite in ein drittes Event ging: 'getrennt lassen' nimmt diese fremde Zusammenfuehrung nicht zurueck, 'zusammenfuehren' schliesst nichts", async () => {
+  const s = await setup(), imp = via(handleEventImport, s.env), admin = { ...user(s.raw, 9, "Admin", "admin-p"), admin: true };
+  for (const [h, d] of [["x-ev", "01"], ["y-ev", "02"], ["z-ev", "03"], ["w-ev", "04"], ["g-ev", "05"], ["p-ev", "06"], ["t-ev", "07"]]) s.raw.prepare("INSERT INTO events(handle,owner_id,title,start,mode,public,created,updated,unclaimed) VALUES(?,0,?,?,'online',1,1,1,1)").run(h, h.toUpperCase(), `2026-09-${d}`);
+  const q = (a, b, reason = "similar_name") => Number(s.raw.prepare("INSERT INTO dedupe_queue(kind,a_id,b_id,reason,created) VALUES('event',?,?,?,1)").run(a, b, reason).lastInsertRowid);
+  const qXY = q(1, 2), qXW = q(1, 4);
+  assert.equal((await mergeEvents(s.env.DB, 1, 3)).ok, true);   // X geht in Z auf (anderer Weg), X-Y und X-W bleiben offen
+  assert.deepEqual(await imp(admin, "/api/admin/events/dupes", "POST", { id: qXY, action: "separate" }), [200, { ok: true, status: "separate" }]);
+  assert.deepEqual(s.raw.prepare("SELECT id,merged_into FROM events WHERE id<=3 ORDER BY id").all().map((r) => [r.id, r.merged_into]), [[1, 3], [2, 0], [3, 0]], "X bleibt in Z");
+  assert.equal(s.raw.prepare("SELECT undone FROM merge_log WHERE kind='event' AND from_id=1 AND into_id=3").get().undone, 0);
+  assert.equal(s.raw.prepare("SELECT COUNT(*) n FROM dedupe_queue WHERE a_id=1 AND b_id=3").get().n, 0, "X und Z nicht dauerhaft getrennt");
+  const [st, j] = await imp(admin, "/api/admin/events/dupes", "POST", { id: qXW, action: "merge" });
+  assert.equal(j.error, "not_found"); assert.notEqual(st, 200);
+  assert.equal(s.raw.prepare("SELECT status FROM dedupe_queue WHERE id=?").get(qXW).status, "open", "nicht als zusammengefuehrt geschlossen");
+  assert.equal(s.raw.prepare("SELECT merged_into FROM events WHERE id=4").get().merged_into, 0);
+  // ueber Zwischenstufen (G in P, P in T): ein Eintrag T-G nimmt beim Trennen nur G aus P heraus
+  assert.equal((await mergeEvents(s.env.DB, 5, 6)).ok, true); assert.equal((await mergeEvents(s.env.DB, 6, 7)).ok, true);
+  const qTG = q(5, 7, "source_date_differs");
+  assert.deepEqual(await imp(admin, "/api/admin/events/dupes", "POST", { id: qTG, action: "separate" }), [200, { ok: true, status: "separate" }]);
+  assert.deepEqual(s.raw.prepare("SELECT id,merged_into FROM events WHERE id>=5 ORDER BY id").all().map((r) => [r.id, r.merged_into]), [[5, 0], [6, 7], [7, 0]]);
+  assert.equal(s.raw.prepare("SELECT status FROM dedupe_queue WHERE a_id=5 AND b_id=6").get().status, "separate");
+});
+
+test("317-18b Verlegt der massgebliche Listen-Datensatz, kommt ein weiterer mit dem alten Tag in die Warteschlange", async () => {
+  const s = await setup();
+  const A = cdEvent(), B = cdEvent({ url: "https://azuredaybonn.example/" });
+  await cdRun(s, [A, B], "2026-01-01");   // das Event entsteht aus B (eigene Seite zuerst), B ist massgeblich, A haengt als ausgeblendete Zeile daran
+  const e = s.raw.prepare("SELECT id FROM events WHERE merged_into=0").get().id, hid = s.raw.prepare("SELECT id FROM events WHERE merged_into=?").get(e).id;
+  assert.equal(s.raw.prepare("SELECT COUNT(*) n FROM dedupe_queue").get().n, 0);
+  const r2 = await cdRun(s, [A, { ...B, startDate: "2026-06-30T09:00" }], "2026-01-02"); assert.equal(r2.updated, 1);
+  assert.deepEqual(s.raw.prepare("SELECT start FROM events WHERE merged_into=0").all().map((r) => r.start), ["2026-06-30T09:00"], "das Event folgt dem massgeblichen Datensatz");
+  assert.deepEqual(s.raw.prepare("SELECT a_id,b_id,reason,status FROM dedupe_queue").all().map((r) => ({ ...r })), [{ a_id: Math.min(e, hid), b_id: Math.max(e, hid), reason: "source_date_differs", status: "open" }]);
+  // gleicher Tag wieder: kein weiterer Eintrag
+  await cdRun(s, [A, { ...B, startDate: "2026-06-30T09:00", description: "Anderer Text." }], "2026-01-03");
+  assert.equal(s.raw.prepare("SELECT COUNT(*) n FROM dedupe_queue").get().n, 1);
+});
