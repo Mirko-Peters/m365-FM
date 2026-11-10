@@ -248,12 +248,62 @@ export async function finalTarget(p, migrated) {
   return n ? cur : "";
 }
 
-export default {
+// ---------------------------------------------------------------- partner.m365.fm: Sponsor-Dashboard auf eigener Subdomain
+// Das Dashboard liegt weiter als Seite unter /sponsor/dashboard/ (Seitenbau, GitHub Pages bzw. R2); partner.m365.fm zeigt dieselben Seiten ohne den
+// Pfadteil: / = Dashboard, /placement/ /report/ /sources/, davor optional die Sprache (/de/, /de/report/). Die alte Adresse auf www.m365.fm leitet per 301 um.
+// Anmeldung und Daten bleiben bei api-dub.m365.fm (Cookie dort, CORS und Rueckkehr erlauben PARTNER_SITE; die OAuth-Rueckleitung bleibt api-dub.m365.fm/auth/callback/<anbieter>).
+const PARTNER_LANG = "de|es|fr|it|pt|nl|pl|id|ru|uk|ar|he|ja|ko", PARTNER_VIEWS = "placement|report|sources";
+const WWW_DASH = new RegExp(`^(?:/(${PARTNER_LANG}))?/sponsor/dashboard(?:/(${PARTNER_VIEWS}))?/?$`);
+const PARTNER_DASH = new RegExp(`^(?:/(${PARTNER_LANG}))?(?:/(${PARTNER_VIEWS}))?/?$`);
+// /de/sponsor/dashboard/report/ -> /de/report/ ; "" = kein Dashboard-Pfad
+export function wwwToPartner(path) {
+  const m = WWW_DASH.exec(path);
+  return m ? (m[1] ? "/" + m[1] : "") + (m[2] ? "/" + m[2] : "") + "/" : "";
+}
+// /de/report/ -> /de/sponsor/dashboard/report/ ; auch die lange Form wird angenommen; "" = kein Dashboard-Pfad
+export function partnerToWww(path) {
+  const m = PARTNER_DASH.exec(path) || WWW_DASH.exec(path);
+  return m ? (m[1] ? "/" + m[1] : "") + "/sponsor/dashboard" + (m[2] ? "/" + m[2] : "") + "/" : "";
+}
+const WWW_HOSTS = new Set(["www.m365.fm", "m365.fm", "dub.m365.fm"]);
+const PARTNER_NOINDEX = { "x-robots-tag": "noindex, nofollow" };
+
+async function partnerRequest(request, env, ctx, url) {
+  const quiet = (status, extra = {}) => new Response(status === 405 ? "Method not allowed" : null, { status, headers: { ...SEC, ...PARTNER_NOINDEX, "cache-control": "no-store", ...extra } });
+  const p = url.pathname;
+  if (p === "/robots.txt") return new Response("User-agent: *\nDisallow: /\n", { headers: { ...SEC, "content-type": "text/plain; charset=utf-8", "cache-control": "public, max-age=3600" } });
+  if (request.method !== "GET" && request.method !== "HEAD") return quiet(405, { allow: "GET, HEAD" });
+  if (/^\/sitemap[^/]*\.xml$/i.test(p)) return quiet(404);   // die Subdomain steht in keiner Sitemap
+  const origin = (env.ORIGIN || "https://www.m365.fm").replace(/\/+$/, "");
+  const www = partnerToWww(p);
+  // Dashboard-Seiten und statische Dateien (Skripte, Stile, Bilder, Schriften) kommen ueber die normale Kette von www.m365.fm; alles andere gehoert zur Website
+  if (!www && !(STATIC.test(p) || FONT.test(p) || IMG.test(p))) return quiet(302, { location: origin + p + url.search });
+  const target = new URL(origin + (www || p)); target.search = url.search;
+  const inner = new Request(target.href, request);
+  inner.headers.set("x-partner-rewrite", "1");   // der www-Zweig leitet dann nicht zurueck auf partner (keine Schleife)
+  const res = await worker.fetch(inner, env, ctx);
+  const h = new Headers(res.headers);
+  if (www) h.set("x-robots-tag", PARTNER_NOINDEX["x-robots-tag"]);
+  const loc = h.get("location");
+  if (loc && res.status >= 300 && res.status < 400) {
+    try { const l = new URL(loc, target); const back = l.origin === new URL(origin).origin ? wwwToPartner(l.pathname) : ""; if (back) h.set("location", url.origin + back + l.search); } catch { /* Ziel bleibt wie geliefert */ }
+  }
+  return new Response(request.method === "HEAD" ? null : res.body, { status: res.status, statusText: res.statusText, headers: h });
+}
+
+const worker = {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
     // img.m365.fm ist die oeffentliche Adresse des R2-Buckets: Spiegel- und Sprachseiten (pages/) und Verwaltungsdateien (meta/) sind dort nicht
     // gedacht (doppelte Inhalte, als entfernt markierte Seiten). Nur diese Pfade sind hierher geroutet; Bilder (i/, og/) kommen weiter direkt aus R2.
     if (url.hostname === "img.m365.fm") return new Response("Not found", { status: 404, headers: { "content-type": "text/plain; charset=utf-8", "x-robots-tag": "noindex", "cache-control": "public, max-age=3600" } });
+    // partner.m365.fm (PARTNER_HOST): Sponsor-Dashboard auf eigener Subdomain, noindex, nicht in der Sitemap
+    const partnerHost = env.PARTNER_HOST || "";
+    if (partnerHost && url.hostname === partnerHost) return partnerRequest(request, env, ctx, url);
+    if (partnerHost && env.PARTNER_REDIRECT === "1" && WWW_HOSTS.has(url.hostname) && !request.headers.has("x-partner-rewrite") && (request.method === "GET" || request.method === "HEAD")) {
+      const to = wwwToPartner(url.pathname);   // alte Adresse /sponsor/dashboard/... -> 301 in einem Schritt (auch von m365.fm, dub.m365.fm und http://)
+      if (to) return new Response(null, { status: 301, headers: { ...SEC, location: "https://" + partnerHost + to + url.search, "cache-control": "public, max-age=3600" } });
+    }
     // Umzug (MIGRATED=1): dub.m365.fm und m365.fm -> www.m365.fm, alte Podpage-Adressen -> /show/ (301, damit der SEO-Traffic erhalten bleibt)
     // Alle Adressregeln (alte Podpage-Adressen, alter Blog-Profilname, entfernte Sprachen, /en/) in EINEM Schritt bis zum Endziel;
     // alter Host (dub.m365.fm, m365.fm) und http:// gleich mit (T8: vorher zwei oder drei 301 hintereinander).
@@ -339,3 +389,4 @@ export default {
     return new Response(request.method === "HEAD" ? null : res.body, { status: res.status, statusText: res.statusText, headers: h });
   },
 };
+export default worker;

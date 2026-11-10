@@ -17,9 +17,11 @@ globalThis.fetch = async (req) => {
   if (u.pathname === "/og/alt.png") return new Response("PNG", { headers: { "content-type": "image/png" } });
   if (u.pathname === "/community/feed/101-copilot-explained/") return new Response("<html>feed</html>", { headers: { "content-type": "text/html; charset=utf-8" } });
   if (u.pathname === "/einladung/gebaut/") return new Response("<html>einladung</html>", { headers: { "content-type": "text/html; charset=utf-8" } });
+  if (/^\/(?:de\/)?sponsor\/dashboard\/(?:report\/)?$/.test(u.pathname)) return new Response("<html>dashboard " + u.pathname + u.search + "</html>", { headers: { "content-type": "text/html; charset=utf-8" } });
+  if (u.pathname === "/sponsor/dashboard/old/") return new Response(null, { status: 301, headers: { location: "https://www.m365.fm/de/sponsor/dashboard/report/" } });
   return new Response("404", { status: 404, headers: { "content-type": "text/html" } });
 };
-const { default: W, r2Key, __resetR2Ready, isHtmlPath } = await import("../index.js");
+const { default: W, r2Key, __resetR2Ready, isHtmlPath, wwwToPartner, partnerToWww } = await import("../index.js");
 const PAGES = { get: async (k) => { r2gets++; if (k === "pages/pl/x/index.html") return { httpEtag: '"r2e"', uploaded: new Date("2026-11-01T20:00:00Z"), arrayBuffer: async () => new TextEncoder().encode("<html>pl</html>").buffer }; if (k === "pages/blog-import/index.json") return { body: new Response('{"total":7}').body }; if (k === "pages/translations-blog.json") return { body: new Response('{"count":3}').body }; return null; } };
 const env = { PAGES, MIGRATED: "1" };
 const req = (path, c, h = {}, method = "GET") => { const r = new Request("https://www.m365.fm" + path, { headers: h, method }); if (c) Object.defineProperty(r, "cf", { value: { country: c } }); return r; };
@@ -230,4 +232,52 @@ test("Einladungslink (#320): gebaute Seite bleibt 200; fehlt sie (noch nicht geb
   for (const path of ["/einladung/", "/einladung/Gross/", "/einladung/a/", "/einladung/" + "a".repeat(40) + "/", "/einladung/max-m/x/", "/einladung/%3Cscript%3E/", "/de/einladung/max-m/"])
     assert.equal((await run(req(path, "DE"))).status, 404, path);   // nur gueltige Kuerzel, nur genau diese Adresse
   assert.equal((await run(req("/einladung/neu-dabei/", "DE", {}, "POST"))).status, 404);
+});
+
+// ---- partner.m365.fm: Sponsor-Dashboard auf eigener Subdomain (Teil 4)
+const penv = { PAGES, MIGRATED: "1", PARTNER_HOST: "partner.m365.fm", PARTNER_REDIRECT: "1" };
+const prun = async (url, { method = "GET", headers = {}, e = penv } = {}) => { const w = []; const res = await W.fetch(new Request(url, { method, headers }), e, { waitUntil: (p) => w.push(p) }); await Promise.all(w); return res; };
+test("Partner: Pfade werden eindeutig zwischen www und partner umgerechnet", () => {
+  const pairs = [["/sponsor/dashboard/", "/"], ["/sponsor/dashboard/report/", "/report/"], ["/de/sponsor/dashboard/", "/de/"], ["/ar/sponsor/dashboard/sources/", "/ar/sources/"], ["/ko/sponsor/dashboard/placement/", "/ko/placement/"]];
+  for (const [www, partner] of pairs) { assert.equal(wwwToPartner(www), partner, www); assert.equal(partnerToWww(partner), www, partner); }
+  assert.equal(wwwToPartner("/sponsor/dashboard"), "/", "ohne Schraegstrich am Ende");
+  assert.equal(partnerToWww("/de/sponsor/dashboard/report/"), "/de/sponsor/dashboard/report/", "lange Form wird angenommen");
+  for (const p of ["/sponsor/", "/sponsor/dashboard/x/", "/xx/sponsor/dashboard/", "/entity/x/", "/de/foo/", "/report/x/", "/sponsor/dashboardx/"]) assert.equal(wwwToPartner(p), "", p);
+  for (const p of ["/entity/x/", "/de/foo/", "/report/x/", "/en/", "//evil.example/"]) assert.equal(partnerToWww(p), "", p);
+});
+test("Partner: / und /de/report/ zeigen die Dashboard-Seiten, noindex, nur lesen", async () => {
+  let r = await prun("https://partner.m365.fm/"); assert.equal(r.status, 200);
+  assert.equal(await r.text(), "<html>dashboard /sponsor/dashboard/</html>");
+  assert.match(r.headers.get("x-robots-tag"), /noindex/);
+  r = await prun("https://partner.m365.fm/de/report/?org=cognillo"); assert.equal(r.status, 200);
+  assert.equal(await r.text(), "<html>dashboard /de/sponsor/dashboard/report/</html>", "Seite ist statisch; die Abfrage (?org=) liest der Browser selbst"); assert.match(r.headers.get("x-robots-tag"), /noindex/);
+  r = await prun("https://partner.m365.fm/", { method: "HEAD" }); assert.equal(r.status, 200); assert.equal(await r.text(), "");
+  r = await prun("https://partner.m365.fm/", { method: "POST" }); assert.equal(r.status, 405);
+  assert.equal(r.headers.get("allow"), "GET, HEAD");
+});
+test("Partner: robots.txt sperrt alles, keine Sitemap, fremde Pfade gehen zur Website (kein Spiegel der Website)", async () => {
+  let r = await prun("https://partner.m365.fm/robots.txt"); assert.equal(r.status, 200); assert.match(await r.text(), /Disallow: \//);
+  for (const p of ["/sitemap.xml", "/sitemap-1.xml"]) { r = await prun("https://partner.m365.fm" + p); assert.equal(r.status, 404, p); assert.match(r.headers.get("x-robots-tag"), /noindex/); }
+  r = await prun("https://partner.m365.fm/entity/x/?a=1"); assert.equal(r.status, 302); assert.equal(r.headers.get("location"), "https://www.m365.fm/entity/x/?a=1");
+  assert.match(r.headers.get("x-robots-tag"), /noindex/); assert.equal(r.headers.get("cache-control"), "no-store");
+  r = await prun("https://partner.m365.fm//evil.example/"); assert.equal(r.status, 302); assert.equal(new URL(r.headers.get("location")).origin, "https://www.m365.fm", "kein offener Redirect");
+});
+test("Partner: Skripte und Stile kommen ueber dieselbe Kette (www)", async () => {
+  const r = await prun("https://partner.m365.fm/assets/a.css"); assert.equal(r.status, 200); assert.equal(await r.text(), "a{}");
+});
+test("Partner: alte Adresse auf www/m365.fm/dub leitet mit 301 um, nichts anderes, Notschalter PARTNER_REDIRECT=0", async () => {
+  for (const [from, to] of [["https://www.m365.fm/sponsor/dashboard/", "https://partner.m365.fm/"], ["https://www.m365.fm/de/sponsor/dashboard/report/?org=a", "https://partner.m365.fm/de/report/?org=a"],
+    ["https://m365.fm/sponsor/dashboard/", "https://partner.m365.fm/"], ["https://dub.m365.fm/ar/sponsor/dashboard/sources/", "https://partner.m365.fm/ar/sources/"]]) {
+    const r = await prun(from); assert.equal(r.status, 301, from); assert.equal(r.headers.get("location"), to);
+  }
+  assert.equal((await prun("https://www.m365.fm/sponsor/dashboard/", { method: "POST" })).status !== 301, true, "nur GET/HEAD");
+  assert.notEqual((await prun("https://www.m365.fm/")).status, 301);
+  assert.notEqual((await prun("https://www.m365.fm/sponsor/dashboard/", { e: { ...penv, PARTNER_REDIRECT: "0" } })).status, 301, "Notschalter");
+  assert.notEqual((await prun("https://www.m365.fm/sponsor/dashboard/", { e: { PAGES, MIGRATED: "1" } })).status, 301, "ohne PARTNER_HOST nichts");
+});
+test("Partner: keine Schleife - ein Ziel-301 des Ursprungs landet wieder auf partner", async () => {
+  const r = await prun("https://partner.m365.fm/old/");   // /old/ ist kein Dashboard-Pfad -> Website
+  assert.equal(r.status, 302);
+  const w = await prun("https://partner.m365.fm/de/report/", { headers: { "x-partner-rewrite": "1" } });
+  assert.equal(w.status, 200, "der Schutz-Header von aussen aendert nichts am Ergebnis");
 });

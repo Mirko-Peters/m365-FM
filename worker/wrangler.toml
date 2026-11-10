@@ -27,6 +27,8 @@ crons = ["0 6 * * *", "*/30 * * * *", "*/15 * * * *"]   # Push taeglich, Wochenm
 [vars]
 SITE = "https://www.m365.fm"
 API = "https://api-dub.m365.fm"
+# Sponsor-Dashboard auf eigener Subdomain: darf mit Cookie anfragen (CORS) und nach der Anmeldung zurueckkehren. Leer/entfernt = nur SITE. Das Cookie bleibt bei api-dub.m365.fm (gleiche Site m365.fm, SameSite=Lax).
+PARTNER_SITE = "https://partner.m365.fm"
 # Basis der Kurzlinks fuer Sponsor-Links, Werbeplaetze und Hausanzeigen: https://c.m365.fm/<code>. Leer/entfernt = alte Form ${API}/go/<code> (beide Formen bleiben gueltig).
 GO_BASE = "https://c.m365.fm"
 MAIL_FROM = "M365.FM <system@m365.fm>"

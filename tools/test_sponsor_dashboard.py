@@ -138,5 +138,47 @@ class SponsorDashboardTests(unittest.TestCase):
         self.assertIn("<h2>Sponsor links</h2><p>We count clicks on sponsor links", en)
 
 
+    def _build(self, env):
+        written, rendered = {}, {}
+
+        def page(lang, title, desc, canonical, body, *args, **kwargs):
+            rendered[canonical] = {"body": body, "kwargs": kwargs}
+            return body
+
+        ctx = {"write": lambda path, content: written.__setitem__(path, content), "page": page, "header": lambda lang, switch: "", "footer": lambda lang: "",
+               "BASE": "https://www.m365.fm",
+               "LANGS": {lang: (lang, lang, "ltr", "show", "en_US") for lang in SPN.LANGS_ALL if lang != "en"},
+               "sitemap": [], "TODAY": "2026-11-04", "api": "https://api-dub.m365.fm", "langs": list(SPN.LANGS_ALL), "day": lambda value, lang: str(value)}
+        with patch.dict("os.environ", env, clear=False), patch.object(SPN, "_ssr", return_value={}), \
+             patch.object(SPN, "T", side_effect=lambda lang, en, de: de if lang == "de" else en):
+            SPN.build(ctx)
+        return written, rendered, ctx
+
+    def test_partner_base_moves_the_dashboard_links_but_not_the_files_or_canonical(self):
+        written, rendered, ctx = self._build({"PARTNER_BASE": "https://partner.m365.fm"})
+        www = "https://www.m365.fm/sponsor/dashboard/"
+        self.assertIn("sponsor/dashboard/index.html", written, "die Seitendatei bleibt unter dem alten Pfad (der Site-Worker schreibt um)")
+        self.assertIn("de/sponsor/dashboard/report/index.html", written)
+        self.assertIn(www, rendered, "Canonical bleibt die Adresse der Seitendatei")
+        self.assertTrue(rendered[www]["kwargs"]["noindex"])
+        cfg = json.loads(re.search(r"window\.M365SP=Object\.assign\((\{.*?\}),\{view:", written["de/sponsor/dashboard/index.html"]).group(1))
+        self.assertEqual(cfg["urls"]["overview"], "https://partner.m365.fm/de/")
+        self.assertEqual(cfg["urls"]["report"], "https://partner.m365.fm/de/report/")
+        en = json.loads(re.search(r"window\.M365SP=Object\.assign\((\{.*?\}),\{view:", written["sponsor/dashboard/index.html"]).group(1))
+        self.assertEqual(en["urls"]["sources"], "https://partner.m365.fm/sources/")
+        self.assertIn('href="https://partner.m365.fm/"', written["sponsor/index.html"], "Knopf auf der Sponsor-Seite fuehrt direkt zur Subdomain")
+        self.assertFalse(any("partner.m365.fm" in url for url, *_ in ctx["sitemap"]), "nicht in der Sitemap")
+        self.assertFalse(any("/sponsor/dashboard/" in url for url, *_ in ctx["sitemap"]))
+
+    def test_without_partner_base_or_with_invalid_value_nothing_changes(self):
+        for value in ("", "http://partner.m365.fm", "https://partner.m365.fm/x", "partner.m365.fm", "https://evil.example/\"><script>"):
+            with patch.dict("os.environ", {"PARTNER_BASE": value}):
+                self.assertEqual(SPN.partner_base(), "", value)
+                self.assertEqual(SPN.dashboard_url("https://www.m365.fm", "de", public=True), "https://www.m365.fm/de/sponsor/dashboard/")
+        with patch.dict("os.environ", {"PARTNER_BASE": "https://partner.m365.fm/"}):
+            self.assertEqual(SPN.dashboard_url("https://www.m365.fm", "en", public=True), "https://partner.m365.fm/")
+            self.assertEqual(SPN.dashboard_view_url("https://www.m365.fm", "ar", "sources", public=True), "https://partner.m365.fm/ar/sources/")
+            self.assertEqual(SPN.dashboard_url("https://www.m365.fm", "en"), "https://www.m365.fm/sponsor/dashboard/", "ohne public immer der Dateipfad")
+
 if __name__ == "__main__":
     unittest.main()

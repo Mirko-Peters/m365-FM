@@ -4,14 +4,20 @@ compatibility_date = "2025-09-01"
 workers_dev = false
 
 # Vor GitHub Pages: nur aktiv, wenn dub.m365.fm in Cloudflare auf "Proxied" (orange Wolke) steht.
-routes = [{ pattern = "dub.m365.fm/*", zone_name = "m365.fm" }, { pattern = "www.m365.fm/*", zone_name = "m365.fm" }, { pattern = "m365.fm/*", zone_name = "m365.fm" },
-  { pattern = "img.m365.fm/pages/*", zone_name = "m365.fm" }, { pattern = "img.m365.fm/meta/*", zone_name = "m365.fm" }]   # Bucket-Interna auf img.m365.fm sperren (404), Bilder bleiben direkt aus R2
 # Spaeter, wenn m365.fm von Podpage auf die Plattform umzieht (MIGRATED=1 setzen):
 # routes = [{ pattern = "dub.m365.fm/*", zone_name = "m365.fm" }, { pattern = "www.m365.fm/*", zone_name = "m365.fm" }, { pattern = "m365.fm/*", zone_name = "m365.fm" }]
+
+# partner.m365.fm: Sponsor-Dashboard auf eigener Subdomain (noindex). Custom Domain: Cloudflare legt den DNS-Eintrag "partner" selbst an; ein vorhandener Eintrag "partner" blockiert den Deploy.
+# Rueckbau: Zeile entfernen und PARTNER_HOST leeren (www.m365.fm/sponsor/dashboard/ bleibt dann die Adresse).
+routes = [{ pattern = "dub.m365.fm/*", zone_name = "m365.fm" }, { pattern = "www.m365.fm/*", zone_name = "m365.fm" }, { pattern = "m365.fm/*", zone_name = "m365.fm" },
+  { pattern = "img.m365.fm/pages/*", zone_name = "m365.fm" }, { pattern = "img.m365.fm/meta/*", zone_name = "m365.fm" },
+  { pattern = "partner.m365.fm", custom_domain = true, zone_name = "m365.fm" }]
 
 [vars]
 ORIGIN = "https://www.m365.fm"
 MIGRATED = "1"
+PARTNER_HOST = "partner.m365.fm"   # leer = keine Subdomain, keine Umleitung
+PARTNER_REDIRECT = "1"   # "1" = www.m365.fm/sponsor/dashboard/... leitet per 301 auf partner.m365.fm um; "0" = nur die Subdomain, keine Umleitung (Notschalter)
 # Hier aendern, nicht im Dashboard (wrangler deploy ueberschreibt Dashboard-Variablen).
 # R2 als Ursprung: "1" = Seiten und Dateien zuerst aus dem Bucket (pages/<pfad>, Spiegel der Website aus dem Deploy-Job, tools/r2_site_sync.py),
 # aber nur solange pages/r2-build.txt mit /r2-build.txt auf GitHub Pages uebereinstimmt - sonst automatisch GitHub Pages.

@@ -224,6 +224,9 @@ jobs:
           # Kurzlink-Basis fuer Sponsor-Links und Hausanzeigen (https://c.m365.fm). Leer = alte Adresse api-dub.m365.fm/go/<code>.
           # Erst als Repo-Variable GO_BASE eintragen, wenn c.m365.fm/<code> ausgeliefert wird (Worker-Deploy mit Route c.m365.fm).
           GO_BASE: ${{ vars.GO_BASE }}
+          # Eigene Adresse des Sponsor-Dashboards (https://partner.m365.fm). Leer = Dashboard-Links bleiben www.m365.fm/sponsor/dashboard/.
+          # Erst als Repo-Variable PARTNER_BASE eintragen, wenn partner.m365.fm ausgeliefert wird (Site-Worker-Deploy mit Route partner.m365.fm).
+          PARTNER_BASE: ${{ vars.PARTNER_BASE }}
           GOOGLE_MAPS_API_KEY: ${{ vars.GOOGLE_MAPS_API_KEY || secrets.GOOGLE_MAPS_API_KEY }}
       # Pruefsummenliste der R2-Seiten in einem eigenen Cache: wird direkt nach dem Upload gesichert (auch wenn spaeter eine blockierende Pruefung
       # scheitert oder der Lauf abgebrochen wird). Vorher ging sie dann verloren und der naechste Lauf lud dieselben Seiten noch einmal hoch.

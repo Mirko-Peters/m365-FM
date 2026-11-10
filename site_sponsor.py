@@ -8,7 +8,7 @@ indexierbar und in der Sitemap (wie die Barrierefreiheitserklaerung).
 - Belegzahlen: data/stats/ai_performance.json (bing_ai, google_ai, gsc) und data/stats/topic_difficulty.json; fehlen die Dateien, gelten die
   eingebauten Startwerte (gleiche Felder wie design.md D4). Folgen der Hauptshow und Sprach-Shows zaehlt der Seitenbau.
 - Haengt nicht von generate_site ab: alle Helfer (page, header, footer, write, ...) kommen ueber den ctx-Dict."""
-import hashlib, html, json, math, re, subprocess
+import hashlib, html, json, math, os, re, subprocess
 from pathlib import Path
 from urllib.parse import urlsplit
 from site_i18n import T
@@ -80,12 +80,24 @@ def mediakit_url(base, lang):
     return f"{base}/de/media-kit/" if lang == "de" else f"{base}/media-kit/"
 
 
-def dashboard_url(base, lang):
+def partner_base():
+    """Eigene Adresse des Sponsor-Dashboards (z. B. https://partner.m365.fm), nur ein reiner https-Ursprung. Setzt der Seitenbau aus der
+    Repo-Variable PARTNER_BASE (site.yml) erst, wenn der Site-Worker partner.m365.fm ausliefert; leer = Dashboard bleibt unter <BASE>/sponsor/dashboard/."""
+    v = (os.environ.get("PARTNER_BASE") or "").strip().rstrip("/")
+    return v if re.fullmatch(r"https://[a-z0-9]([a-z0-9.-]*[a-z0-9])?", v) else ""
+
+
+def dashboard_url(base, lang, public=False):
+    """Adresse der Dashboard-Seite. public=False: Pfad im Seitenbau (Datei, Canonical). public=True: die Adresse, die Menschen aufrufen und
+    auf die verlinkt wird - mit PARTNER_BASE https://partner.m365.fm/ bzw. /<sprache>/, sonst dieselbe wie oben."""
+    pb = partner_base() if public else ""
+    if pb:
+        return f"{pb}/" if lang == "en" else f"{pb}/{lang}/"
     return f"{base}/sponsor/dashboard/" if lang == "en" else f"{base}/{lang}/sponsor/dashboard/"
 
 
-def dashboard_view_url(base, lang, view):
-    root = dashboard_url(base, lang)
+def dashboard_view_url(base, lang, view, public=False):
+    root = dashboard_url(base, lang, public)
     return root if view == "overview" else root + view + "/"
 
 
@@ -981,7 +993,7 @@ def build(g):
                "ents": search, "entBase": ebase, "key": S.get("key", ""), "dec": S.get("dec"),
                "community": f"{B}/{'' if lang == 'en' else lang + '/'}community/", "adsJs": asset_url(B, "ads-book.js")}
         body = body_html(g, lang, stats, quick, S, n_main, n_langs, con_on)
-        dash = dashboard_url(B, lang)
+        dash = dashboard_url(B, lang, public=True)
         adv = advertise_button(B, lang)
         body = (f'{g["header"](lang, "")}<main class="wrap spn-wrap"><p><a class="btn" href="{E(dash)}">{E(tx(lang, "dash_h"))}</a> {adv}</p>'
                 f'<div class="spn" id="spn" data-ssr="{1 if S else 0}" data-cfg="{E(json.dumps(cfg, ensure_ascii=False, separators=(",", ":")))}">'
@@ -996,11 +1008,12 @@ def build(g):
         q = dashboard_copy(lang)
         views = (("overview", "dashboard"), ("placement", "placement_view"),
                  ("report", "report_view"), ("sources", "sources_view"))
-        urls = {view: dashboard_view_url(B, lang, view) for view, _ in views}
+        urls = {view: dashboard_view_url(B, lang, view, public=True) for view, _ in views}   # Links im Dashboard: mit PARTNER_BASE auf partner.m365.fm
+        canon = {view: dashboard_view_url(B, lang, view) for view, _ in views}   # Canonical/Schema bleiben die Adresse der Seitendatei (noindex)
         config = json.dumps({"api": g["api"], "base": B, "lang": lang, "today": TODAY, "copy": q, "urls": urls, "sp": sp_ctx, "siteAi": site_ai},
                             ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
         for view, title_key in views:
-            canonical = urls[view]
+            canonical = canon[view]
             dashboard_body = (f'{g["header"](lang, "")}<main class="wrap sdb-main">'
                               f'<div><div class="kicker">{E(q["dash_kicker"])}</div>'
                               f'<h1 id="sdb-title">{E(q["achievement_title"] if view == "overview" else q[title_key])}</h1><p class="lede">{E(q["intro"])}</p></div>'
