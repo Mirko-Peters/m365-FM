@@ -227,6 +227,7 @@ function redirect(request, origin, path, search, status = 301) {
 }
 const GONE_LANG = /^\/(pa|hi|ml|ta|te)(\/|$)/, MIRKO = /^(\/[a-z]{2})?\/community\/u\/mirko-peters(\/.*)?$/, EN_PREFIX = /^\/en(\/.*)?$/;
 const LANG_EP = /^\/(de|es|fr|it|pt|nl|pl|id|ru|uk|ar|he|ja|ko)\/show\/episodes\/([a-z0-9-]+)\/?$/;
+const INVITE = /^\/einladung\/([a-z0-9][a-z0-9-]{1,38})\/?$/;   // Profilkuerzel wie im Community-Worker (worker/src/inviter.js)
 // Reine Adressregeln (ohne Ursprung) - ein Schritt: Ziel oder "". site_links.py rule_target() ist der Nachbau.
 async function ruleStep(p, migrated) {
   const p0 = p.replace(/\/+$/, "") || "/";
@@ -290,6 +291,13 @@ export default {
       if (loc && !loc.includes("?")) { const h = new Headers(res.headers); h.set("location", loc + url.search); return new Response(null, { status: res.status, headers: h }); }
     }
     if (res.status === 404 && /^\/og\/.+\.png$/i.test(p)) return Response.redirect("https://img.m365.fm" + p, 301);   // Teilen-Bilder liegen im R2-Bucket (img.m365.fm/og/...): frueher geteilte Adressen bleiben gueltig; solange GitHub Pages das Bild noch hat, kommt es von dort
+    // Persoenlicher Einladungslink (site_invite.py, #320): die Seite /einladung/<kuerzel>/ gibt es nur fuer oeffentliche Profile und erst nach dem
+    // naechsten Seitenbau. Fehlt sie (noch nicht gebaut, Profil nicht mehr oeffentlich, Konto geloescht), fuehrt der Link mit dem Kuerzel zur
+    // Community statt auf ein 404 - 302 und ohne Cache, weil die Seite spaeter entstehen kann. Die Zurechnung laeuft dort wie mit der Seite.
+    if (res.status === 404 && (request.method === "GET" || request.method === "HEAD")) {
+      const iv = INVITE.exec(p);
+      if (iv) return new Response(null, { status: 302, headers: { ...SEC, location: url.origin + "/community/?ref=" + iv[1], "cache-control": "no-store", "x-robots-tag": "noindex" } });
+    }
     // Seiten aus dem R2-Bucket (Paket 20): uebersetzte Seiten (Blog-Sprachfassungen, Sprachfassungen der Folgen) liegen unter pages/<pfad>/index.html im Bucket statt in GitHub Pages - gleiche Adressen, indexierbar
     if (res.status === 404 && env.MIGRATED === "1" && /^(\/[a-z]{2})?\/show\/episodes\/[a-z0-9-]+\/?$/.test(p)) {   // T12: umbenannte Folge (show/redirects.json), vor dem R2-Rueckfall mit der alten Seite
       const to = (await redirectMap())[p.replace(/\/+$/, "")];

@@ -28,7 +28,7 @@
   function api(p, o) { o = o || {}; o.credentials = "include"; o.headers = Object.assign({ "x-requested-with": "m365" }, o.headers || {}); if (o.body && typeof o.body !== "string") { o.body = JSON.stringify(o.body); o.headers["content-type"] = "application/json"; } return fetch(API + p, o).then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { s: r.status, j: j }; }); }); }
   var TYPES = { product: "Produkt", platform: "Plattform", concept: "Konzept", org: "Firma", person: "Person", cert: "Zertifikat", event: "Event", media: "Medium", category: "Kategorie" };
   var ERR = { bad_name: "Name zu kurz", bad_type: "Typ fehlt", too_short: "Kurzbeschreibung fehlt (mindestens 20 Zeichen in Englisch oder Deutsch)", too_long: "Kurzbeschreibung zu lang (höchstens 300 Zeichen)", bad_url: "Eine Adresse ist ungültig (nur https, Docs nur microsoft.com, azure.com oder github.com)", bad_qid: "Wikidata-ID muss wie Q12345 aussehen", bad_relation: "Eine Beziehung zeigt auf eine unbekannte Entität", unchanged: "Nichts geändert", rate_limit: "Zu viele Änderungen in kurzer Zeit, bitte später", login: "Bitte anmelden", forbidden: "Nur für Admins", email_required: "Kein verifizierter E-Mail-Empfang für diese Person hinterlegt.", mail_off: "E-Mail-Versand ist nicht verfügbar; die Anfrage bleibt offen." };
-  var tabs = [["ov", "Übersicht"], ["fr", "Freigaben"], ["sponsor", "Sponsor-Anfragen"], ["slinks", "Sponsorlinks"], ["ads", "Werbung"], ["mk", "Mediadaten-Anfragen"], ["tr", "Übersetzungen"], ["ent", "Entitäten"], ["db", "Datenbank"], ["sw", "Schalter"]], panes = {}, bar = h("div", { class: "adm-tabs", role: "tablist" });
+  var tabs = [["ov", "Übersicht"], ["fr", "Freigaben"], ["sponsor", "Sponsor-Anfragen"], ["slinks", "Sponsorlinks"], ["ads", "Werbung"], ["mk", "Mediadaten-Anfragen"], ["tr", "Übersetzungen"], ["ent", "Entitäten"], ["li", "LinkedIn-Events"], ["mem", "Mitglieder"], ["elog", "Redaktions-Protokoll"], ["db", "Datenbank"], ["sw", "Schalter"]], panes = {}, bar = h("div", { class: "adm-tabs", role: "tablist" });
   var LANGN = { de: "Deutsch", fr: "Französisch", es: "Spanisch", it: "Italienisch", nl: "Niederländisch", pt: "Portugiesisch", pl: "Polnisch", id: "Indonesisch", ru: "Russisch", uk: "Ukrainisch", ar: "Arabisch", he: "Hebräisch", ja: "Japanisch", ko: "Koreanisch", en: "Englisch" };
   var KINDN = { lblog: "Blog (früher)", blog: "Blog (Community)", podcast: "Podcast", video: "Video", notes: "Show Notes", entity: "Entität" };
   function ago(t) { if (!t) return "–"; var d = Math.round(Date.now() / 1000 - t); return d < 90 ? d + " s" : d < 5400 ? Math.round(d / 60) + " min" : d < 172800 ? Math.round(d / 3600) + " h" : Math.round(d / 86400) + " d"; }
@@ -40,6 +40,7 @@
   var OV = null;
   function overview(cb) { api("/api/admin/panel/overview").then(function (r) { if (r.s !== 200) { root.textContent = ""; root.appendChild(h("p", { class: "adm-msg bad", text: ERR[(r.j || {}).error] || "Kein Zugriff. Bitte als Admin anmelden." })); root.appendChild(h("p", {}, [h("a", { href: BASE + "/community/", text: "Zur Anmeldung in der Community" })])); return; } OV = r.j; cb && cb(OV); }); }
   var LOAD = {
+    mem: function () { members(); }, elog: function () { editLog(); },
     ov: function () { overview(function (o) { var p = panes.ov, q = o.queues; p.textContent = "";
       p.appendChild(h("h2", { text: "Wartet auf dich" }));
       p.appendChild(h("div", { class: "adm-grid" }, [tile("Blog-Beiträge", q.blog), tile("Podcast-Folgen", q.podcast), tile("Videos", q.video), tile("Wiki-Änderungen", q.wiki), tile("Entitäten-Vorschläge", q.entity), tile("Übernahme-Anfragen", q.claims), tile("Zertifikate", q.certs), tile("Meldungen", q.reports), tile("Gemeldete Publisher-Anfragen", q.expert_request_reports), tile("Sponsor-Anfragen (neu)", q.sponsor)]));
@@ -122,6 +123,39 @@
     api("/api/admin/expert-requests/reports").then(function (r) { var it = (r.j || {}).reports || []; if (it.length) { var ul = section("Gemeldete Publisher-Anfragen (" + it.length + ")"); it.forEach(function (x) { var rm = row(ul, [h("b", { text: x.title }), " ", h("span", { class: "mut", text: "Publisher: " + (x.publisher_name || "–") + " (#" + x.publisher_id + ") · gemeldet von #" + x.reporter_id }), h("p", { class: "mut", text: x.reason || "" }), x.reply_id ? h("p", { class: "mut", text: "Gemeldete Antwort (" + (x.expert_name || "–") + " #" + (x.expert_id || "?") + "): " + (x.reply_body || "bereits gelöscht") }) : null, h("p", {}, [x.reply_id ? act("Antwort entfernen", true, function () { return api("/api/admin/expert-requests/reply-delete", { method: "POST", body: { reply_id: x.reply_id } }); }, function () { rm(); }) : null, x.reply_id ? " " : null, act("Anfrage schließen", !x.reply_id, function () { return api("/api/admin/expert-requests/close", { method: "POST", body: { id: x.request_id } }); }, function () { ul.querySelectorAll('li[data-request-id="' + x.request_id + '"]').forEach(function (li) { li.remove(); }); })])], { "data-request-id": x.request_id }); }); } done(); });
     api("/api/admin/podcast").then(function (r) { var it = (r.j || {}).items || []; if (it.length) { var ul = section("Podcast-Folgen (" + it.length + ")", "Freigabe läuft über die Abstimmung der Community (" + ((r.j || {}).threshold || 25) + " Punkte) und die Veröffentlichung bei Spreaker; hier nur ablehnen."); it.forEach(function (x) { var rm = row(ul, [h("b", { text: x.title }), " ", h("span", { class: "mut", text: (x.name || "") + " · " + x.status + " · " + (x.votes || 0) + " Stimmen · " + when(x.created) }), x.spreaker ? h("p", {}, [h("a", { href: x.spreaker, target: "_blank", rel: "noopener", text: "Bei Spreaker öffnen" })]) : null, h("p", {}, [act("Ablehnen", false, function () { return api("/api/admin/podcast/reject", { method: "POST", body: { id: x.id, note: note() } }); }, function () { rm(); })])]); }); } done(); });
     api("/api/admin/video").then(function (r) { var it = (r.j || {}).items || []; if (it.length) { var ul = section("Videos (" + it.length + ")", "Freigabe über die Abstimmung (" + ((r.j || {}).threshold || 25) + " Punkte) und die Veröffentlichung bei YouTube; hier nur ablehnen."); it.forEach(function (x) { var rm = row(ul, [h("b", { text: x.title }), " ", h("span", { class: "mut", text: (x.name || "") + " · " + x.status + " · " + (x.votes || 0) + " Stimmen · " + when(x.created) }), x.youtube ? h("p", {}, [h("a", { href: x.youtube, target: "_blank", rel: "noopener", text: "Im YouTube Studio öffnen" })]) : null, h("p", {}, [act("Ablehnen", false, function () { return api("/api/admin/video/reject", { method: "POST", body: { id: x.id, note: note() } }); }, function () { rm(); })])]); }); } done(); });
+  }
+
+  // ---------- Mitglieder: Rollen vergeben (Mitglied, Moderator, Editor, Admin) ----------
+  var ROLEN = [["user", "Mitglied"], ["moderator", "Moderator"], ["editor", "Editor"], ["admin", "Admin"]];
+  function members() {
+    var p = panes.mem, m = h("p", { class: "adm-msg", role: "status" }), q = h("input", { type: "search", id: "adm-mq", placeholder: "Name suchen", "aria-label": "Mitglied suchen" }), list = h("ul", { class: "adm-list" });
+    p.textContent = ""; p.appendChild(h("h2", { text: "Mitglieder und Rollen" }));
+    p.appendChild(h("p", { class: "mut", text: "Editoren prüfen und bearbeiten Inhalte, Moderatoren blenden Gemeldetes aus und geben Empfehlungen ab. Beide sehen ein Abzeichen am Profil." }));
+    function load() { api("/api/admin/users?q=" + encodeURIComponent(q.value)).then(function (r) { list.textContent = ""; if (r.s !== 200) { msg(m, "Nicht abrufbar", true); return; }
+      ((r.j || {}).users || []).forEach(function (u) { var sel = h("select", { "aria-label": "Rolle für " + u.name }); ROLEN.forEach(function (o) { var op = h("option", { value: o[0], text: o[1] }); if (o[0] === (u.role || "user")) op.selected = true; sel.appendChild(op); });
+        sel.addEventListener("change", function () { sel.disabled = true; api("/api/admin/role/" + u.id, { method: "POST", body: { role: sel.value } }).then(function (x) { sel.disabled = false; msg(m, x.s === 200 ? u.name + ": Rolle ist jetzt " + sel.value + "." : "Fehler " + x.s, x.s !== 200); }); });
+        var fe = h("span"); function feUI() { fe.textContent = ""; if (sel.value !== "editor") return; var cb = h("input", { type: "checkbox", id: "fe-" + u.id }), info = h("small", { class: "mut" });
+          api("/api/admin/editor-scope/" + u.id).then(function (x) { cb.checked = !!(x.j || {}).subject; info.textContent = cb.checked ? "Themen: " + (((x.j || {}).auto || []).concat((x.j || {}).extra || []).join(", ") || "noch keine bestätigte Expertise") : "allgemeiner Editor (sieht alles)"; });
+          cb.addEventListener("change", function () { api("/api/admin/editor-scope/" + u.id, { method: "POST", body: { subject: cb.checked } }).then(function (x) { msg(m, x.s === 200 ? u.name + (cb.checked ? ": Fach-Editor (Themen aus bestätigter Expertise)." : ": allgemeiner Editor.") : "Fehler " + x.s, x.s !== 200); feUI(); }); });
+          fe.appendChild(h("label", { for: "fe-" + u.id }, [cb, " Fach-Editor "])); fe.appendChild(info); }
+        sel.addEventListener("change", feUI); feUI();
+        list.appendChild(h("li", {}, [h("b", { text: u.name }), " ", h("span", { class: "mut", text: "#" + u.id + (u.banned ? " · gesperrt" : "") }), " ", sel, " ", fe])); }); }); }
+    p.appendChild(h("p", { class: "adm-row" }, [q, h("button", { type: "button", class: "btn main", text: "Suchen", onclick: load })])); p.appendChild(m); p.appendChild(list); load();
+  }
+  // ---------- Redaktions-Protokoll: wer hat wann was entschieden; Undo fuer Ausblenden, Freigeben, Ablehnen ----------
+  function editLog() {
+    var p = panes.elog, m = h("p", { class: "adm-msg", role: "status" }), tb = h("tbody"), pr = h("ul", { class: "adm-list" }), wi = h("p", { class: "mut" });
+    p.textContent = ""; p.appendChild(h("h2", { text: "Redaktions-Protokoll" })); p.appendChild(m); p.appendChild(wi);
+    p.appendChild(h("h3", { text: "Offene Empfehlungen und Eskalationen" })); p.appendChild(pr);
+    p.appendChild(h("table", { class: "adm-tbl" }, [h("thead", {}, [h("tr", {}, ["Zeit", "Wer", "Rolle", "Aktion", "Eintrag", "Grund", "Vorher → Nachher", ""].map(function (t) { return h("th", { text: t }); }))]), tb]));
+    function load() { api("/api/admin/editlog").then(function (r) { tb.textContent = ""; pr.textContent = ""; wi.textContent = ""; if (r.s !== 200) { msg(m, "Nicht abrufbar", true); return; }
+      var w = (r.j || {}).wishes || {}, wn = (w.lblog || 0) + (w.episode || 0) + (w.notes || 0);   // Wunschliste der Redaktion: wird nur von einem von Hand gestarteten Lauf abgeholt (kostenpflichtig)
+      if (wn) wi.textContent = "Offene Wünsche „neu übersetzen“: Blog " + (w.lblog || 0) + ", Folgen " + (w.episode || 0) + ", Show Notes " + (w.notes || 0) + ". Abholen: Workflow „Blog uebersetzen“ (Modus stale, wishes) bzw. translate-show / translate-notes mit wishes von Hand starten.";
+      ((r.j || {}).proposals || []).forEach(function (x) { pr.appendChild(h("li", {}, [h("b", { text: x.action + " · " + x.kind + " #" + x.item_id }), " ", h("span", { class: "mut", text: x.name + " (" + x.role + ") · " + (x.reason || "ohne Grund") }), " ", h("button", { type: "button", class: "btn", text: "Erledigt", onclick: function (ev) { ev.target.disabled = true; api("/api/editor/proposals/" + x.id + "/dismiss", { method: "POST", body: {} }).then(load); } })])); });
+      if (!pr.children.length) pr.appendChild(h("li", { class: "mut", text: "Nichts offen." }));
+      ((r.j || {}).items || []).forEach(function (x) { var undo = x.undoable ? h("button", { type: "button", class: "btn", text: "Rückgängig", onclick: function (ev) { ev.target.disabled = true; api("/api/admin/editlog/undo/" + x.id, { method: "POST", body: {} }).then(function (u) { msg(m, u.s === 200 ? "Rückgängig gemacht." : "Nicht möglich (" + ((u.j || {}).error || u.s) + ")", u.s !== 200); load(); }); } }) : h("span", { class: "mut", text: x.undone ? "rückgängig" : "" });
+        tb.appendChild(h("tr", {}, [new Date(x.ts * 1000).toLocaleString("de-DE"), x.name || "#" + x.user_id, x.role, x.action, x.kind + " #" + x.item_id, x.reason, (x.before || "").slice(0, 80) + " → " + (x.after || "").slice(0, 80), undo].map(function (c) { return h("td", {}, [typeof c === "string" ? document.createTextNode(c) : c]); }))); }); }); }
+    load();
   }
 
   // ---------- Sponsor-Anfragen (T37): Liste mit Status und Paging, je Anfrage eine Detailzeile mit Nachricht und ganzem Paket ----------
@@ -521,10 +555,34 @@
   }
 
   // ---------- Entitaeten ----------
+  // ---------- Gäste einladen: Zähler, Probelauf und Sammelversand (max. 50) der Entitäten-Einladungen; Rückfrage inline, kein window.confirm ----------
+  function guestInvite(p) {
+    var box = h("section", { class: "adm-guest-invite" }), counts = h("p", { class: "mut", text: "Lädt …" }), m = h("p", { class: "adm-msg", role: "status" }), out = h("ul", { class: "adm-list" }), ask = h("span"), dry, send, running = false;
+    var SRC = "guest", tg = h("span", { role: "group", "aria-label": "Quelle" });
+    function tgDraw() { tg.textContent = ""; [["guest", "Gäste"], ["speaker", "Speaker"]].forEach(function (o) { tg.append(h("button", { type: "button", class: "btn" + (SRC === o[0] ? " main" : ""), "aria-pressed": SRC === o[0] ? "true" : "false", text: o[1], onclick: function () { SRC = o[0]; idle(); tgDraw(); } }), " "); }); }
+    function load() { api("/api/entityinvite/send-batch").then(function (r) { var j = r.j || {}, g = (j.sources || {}).guest || {}, sp = (j.sources || {}).speaker || {}; counts.textContent = r.s === 200 ? ("Gäste: " + g.contacts + " Kontakte, " + g.eligible + " offen · Speaker: " + sp.contacts + " Kontakte, " + sp.eligible + " offen (ohne gesperrte, übernommene und doppelte Adressen).") : "Zähler nicht abrufbar (" + ((r.j || {}).error || r.s) + ")"; }); }
+    function idle() { ask.textContent = ""; if (!running) send.disabled = false; }   // waehrend ein Versand laeuft, bleibt "50 senden" gesperrt (auch beim Wechsel Gäste/Speaker)
+    function done() { running = false; send.disabled = false; dry.disabled = false; load(); }
+    function list(items) { out.textContent = ""; (items || []).forEach(function (x) { out.appendChild(h("li", { text: x.eid + " · " + (x.email || "") + " · " + (x.variant || "") + (x.error ? " · " + x.error : x.ok === false ? " · Fehler" : "") })); }); }
+    dry = h("button", { type: "button", class: "btn", text: "Probelauf (50)", onclick: function () { dry.disabled = true; msg(m, "Läuft …"); api("/api/entityinvite/send-batch", { method: "POST", body: { limit: 50, dry_run: true, source: SRC } }).then(function (r) { dry.disabled = false; var j = r.j || {}; if (r.s !== 200) { msg(m, "Fehler (" + (j.error || r.s) + ")", true); return; } list(j.items); msg(m, "Probelauf: " + (j.items || []).length + " Einladungen würden gesendet, nichts verschickt."); }); } });
+    send = h("button", { type: "button", class: "btn main", text: "50 senden", onclick: function () {
+      send.disabled = true; ask.textContent = "";
+      ask.append(h("span", { text: "Wirklich 50 Einladungen (" + (SRC === "speaker" ? "Speaker" : "Gäste") + ") senden? " }), h("button", { type: "button", class: "btn main", text: "Ja", onclick: function () {
+        // Erst wenn die Antwort da ist, wird wieder freigegeben: ein zweiter Klick wuerde sonst einen zweiten Lauf starten (der Server weist ihn zusaetzlich mit 409 busy ab)
+        running = true; ask.textContent = ""; dry.disabled = true; msg(m, "Sendet … bitte warten, bis der Versand fertig ist.");
+        api("/api/entityinvite/send-batch", { method: "POST", body: { limit: 50, dry_run: false, source: SRC } }).then(function (r) { var j = r.j || {}; list(j.results); if (r.s === 200 || j.sent) msg(m, j.sent + " Einladungen gesendet" + (j.rate_limited ? " (Tageslimit erreicht)" : "") + "."); else msg(m, j.error === "busy" ? "Es läuft bereits ein Versand – bitte warten und danach neu laden." : "Fehler (" + (j.error || r.s) + ")", true); done(); },
+          function () { msg(m, "Keine Antwort vom Server – ob gesendet wurde, zeigt der Zähler oben.", true); done(); }); } }), " ", h("button", { type: "button", class: "btn", text: "Nein", onclick: idle }));
+    } });
+    var eidIn = h("input", { type: "text", placeholder: "Entitäts-ID, z. B. david-benaim", "aria-label": "Entitäts-ID für Testmail" }), vSel = h("select", { "aria-label": "Variante der Testmail" }), tb = h("button", { type: "button", class: "btn", text: "Testmail an mich", onclick: function () { var e = eidIn.value.trim().toLowerCase(); if (!e) return; tb.disabled = true; api("/api/entityinvite/test", { method: "POST", body: { eid: e, variant: vSel.value } }).then(function (r) { tb.disabled = false; var j = r.j || {}; msg(m, r.s === 200 ? "Testmail an dein Konto gesendet (Variante " + j.variant + ")." : "Fehler (" + (j.error || r.s) + ")", r.s !== 200); }); } });
+    // Testmail: jede Fassung vorab ansehen; "automatisch" nimmt die Fassung, die diese Entitaet beim echten Versand bekaeme
+    [["", "Variante: automatisch"], ["default", "Gast (Standard)"], ["mvp", "Gast (MVP/MCT)"], ["speaker", "Speaker (M365Con)"], ["neutral", "Neutral (Mitglied lädt ein)"]].forEach(function (o) { vSel.appendChild(h("option", { value: o[0], text: o[1] })); });
+    tgDraw(); box.append(h("h2", { text: "Gäste einladen" }), counts, h("p", {}, [tg]), h("p", {}, [dry, " ", send, " ", ask]), h("p", {}, [eidIn, " ", vSel, " ", tb]), m, out); p.appendChild(box); load();
+  }
   function entities() {
     var p = panes.ent, q = h("input", { type: "search", id: "adm-q", placeholder: "Suchen: Name, ID oder Alias", "aria-label": "Entitäten suchen" }), tf = h("select", { id: "adm-tf", "aria-label": "Typ" }), kf = h("select", { id: "adm-kf", "aria-label": "Herkunft" }), list = h("ul", { class: "adm-list" }), form = h("div", { class: "adm-form", hidden: "" }), all = [];
     tf.appendChild(h("option", { value: "", text: "Alle Typen" })); Object.keys(TYPES).forEach(function (k) { tf.appendChild(h("option", { value: k, text: TYPES[k] })); });
     [["", "Alle Herkünfte"], ["ai", "KI-Entwurf"], ["human", "Von Menschen bearbeitet"], ["seed", "Nur übernommen"]].forEach(function (o) { kf.appendChild(h("option", { value: o[0], text: o[1] })); });
+    guestInvite(p);
     p.append(h("div", { class: "adm-row" }, [q, tf, kf]), list, form);
     list.appendChild(h("li", { class: "mut", text: "Lädt …" }));
     Promise.all([fetch(BASE + "/entities.json").then(function (r) { return r.json(); }).catch(function () { return { entities: [] }; }), api("/api/entity/export")]).then(function (res) {
@@ -569,6 +627,85 @@
       });
     }
   }
+
+  // LinkedIn-Events (Vorschlaege): nichts geht automatisch raus, jede Veroeffentlichung, Aktualisierung und Absage braucht einen Klick plus Rueckfrage.
+  // Welche Knoepfe eine Zeile bekommt, sagt der Server (it.can); er prueft jede Aktion beim Ausfuehren noch einmal selbst.
+  // LIOPEN: LinkedIn hat einen Event angelegt, der Eintrag hier fehlt aber (Antwort store_failed). Je Event { urn, ticket } zum sofortigen Nachtragen bzw.
+  // unter "x<ID>" { lost, urn, url, title }, wenn es hier nichts nachzutragen gibt. Bleibt ueber das Neuladen des Reiters und der Seite stehen (sessionStorage).
+  var LIOPEN = {};
+  function liOpen(save) { try { if (save) window.sessionStorage.setItem("m365li", JSON.stringify(LIOPEN)); else { var v = JSON.parse(window.sessionStorage.getItem("m365li") || "{}"); LIOPEN = {}; Object.keys(v && typeof v === "object" ? v : {}).forEach(function (k) { if (v[k] && typeof v[k].urn === "string") LIOPEN[k] = v[k]; }); } } catch (e) { /* ohne Speicher gilt es bis zum Neuladen der Seite */ } }
+  liOpen(false);
+  LOAD.li = function (note, bad) {
+    var p = panes.li, m = h("p", { class: "adm-msg" }), LIERR = { not_connected: "LinkedIn-Seite ist noch nicht verbunden.", no_org_scope: "Die LinkedIn-App darf die Liste deiner Seiten nicht lesen (Berechtigung r_organization_admin fehlt). Trage die Seite unten von Hand ein.", bad_urn: "Das ist keine Adresse oder Nummer einer LinkedIn-Seite.", no_org: "Bitte zuerst die Seite auswählen.", no_match: "Kein gleichzeitiges HeySummit-Event.", past: "Das Event hat schon begonnen oder ist vorbei.", no_time: "Das Event hat keine Uhrzeit.", not_public: "Das m365.fm-Event ist nicht öffentlich.", already_published: "Schon veröffentlicht.", cancelled: "Der LinkedIn-Event ist abgesagt.", not_published: "Zu diesem Event gibt es keinen LinkedIn-Event.", publish_pending: "Für dieses Event läuft schon eine Veröffentlichung oder ihr Ausgang ist offen: bitte in der Liste klären.", publish_running: "Die Veröffentlichung läuft noch, bitte zwei Minuten warten.", not_pending: "Hier ist nichts (mehr) zu klären.", store_failed: "LinkedIn hat den Event angelegt, er konnte hier aber nicht gespeichert werden.", bad_urn: "Das ist keine LinkedIn-Event-ID (die Zahl am Ende der Event-Adresse).", urn_taken: "Diese LinkedIn-Event-ID gehört schon zu einem anderen Event.", orphan: "Das m365.fm-Event gibt es nicht mehr.", db_error: "Datenbank nicht erreichbar, es wurde nichts an LinkedIn gesendet.", li_timeout: "LinkedIn hat nicht rechtzeitig geantwortet.", li_network: "LinkedIn ist nicht erreichbar.", li_no_urn: "LinkedIn hat keine Event-ID zurückgegeben.", li_gone: "LinkedIn kennt diesen Event nicht (mehr). Wurde er dort gelöscht, bitte hier über „Absagen“ austragen.", li_error: "Der LinkedIn-Aufruf ist fehlgeschlagen.", no_heysummit_key: "HEYSUMMIT_API_KEY fehlt im Worker.", expired: "LinkedIn-Zugang abgelaufen, bitte neu verbinden.", forbidden: "Nur für Admins." };
+    function err(j) { var e = (j || {}).error || ""; return LIERR[e] || (/^li_\d/.test(e) ? "LinkedIn antwortet mit Fehler " + e.slice(3) + "." : /^hs_/.test(e) ? "HeySummit nicht lesbar (" + e.slice(3) + "); ohne HeySummit geht nichts an LinkedIn." : "Fehler: " + (e || "unbekannt")); }
+    p.textContent = ""; p.append(h("h2", { text: "LinkedIn-Events (Vorschläge)" }), m);
+    var q = /[?&]li=([a-z_]+)/.exec(location.search || ""); if (q) msg(m, q[1] === "ok" ? "LinkedIn verbunden." : "Verbindung fehlgeschlagen (" + q[1] + ").", q[1] !== "ok");
+    if (note) msg(m, note, bad);
+    api("/api/admin/linkedin/status").then(function (r) {
+      if (r.s !== 200) { msg(m, err(r.j), true); return; }
+      var st = r.j, box = h("div");
+      p.appendChild(h("p", {}, [h("span", { text: st.connected ? "Verbunden mit: " + (st.org_name || "(Seite noch nicht gewählt)") : "Nicht verbunden. " }), " ",
+        st.configured ? h("a", { class: "btn" + (st.connected ? "" : " main"), href: API + "/auth/linkedin-events/start", text: "LinkedIn-Seite verbinden" }) : h("span", { class: "adm-msg bad", text: "LinkedIn-Zugang (Client-ID/Secret) fehlt im Worker." }), " ",
+        st.connected ? h("button", { type: "button", class: "btn", text: "Verbindung trennen", onclick: function () { if (!window.confirm("Den hier gespeicherten LinkedIn-Zugang löschen?\n\nVeröffentlichte LinkedIn-Events bleiben bestehen; zum Ändern oder Absagen muss die Seite danach neu verbunden werden.")) return; api("/api/admin/linkedin/disconnect", { method: "POST", body: {} }).then(function (x) { if (x.s === 200) LOAD.li("LinkedIn-Zugang gelöscht."); else msg(m, err(x.j), true); }); } }) : null]));
+      if (st.connected) {
+        var sel = h("select", { "aria-label": "LinkedIn-Seite" });
+        p.appendChild(h("p", {}, [h("button", { type: "button", class: "btn", text: "Meine LinkedIn-Seiten laden", onclick: function () { api("/api/admin/linkedin/orgs").then(function (o) { if (o.s !== 200) { msg(m, err(o.j), true); return; } sel.textContent = ""; (o.j.orgs || []).forEach(function (x) { var op = h("option", { value: x.urn, text: x.name }); sel.appendChild(op); }); }); } }), " ", sel, " ",
+          h("button", { type: "button", class: "btn", text: "Diese Seite verwenden", onclick: function () { var op = sel.options[sel.selectedIndex]; if (!op) return; api("/api/admin/linkedin/org", { method: "POST", body: { urn: op.value, name: op.text } }).then(function (x) { if (x.s === 200) LOAD.li(); else msg(m, err(x.j), true); }); } })]));
+        var ref = h("input", { type: "text", size: "48", "aria-label": "Adresse oder Nummer der LinkedIn-Seite", placeholder: "https://www.linkedin.com/school/107092120/admin/" }), nm = h("input", { type: "text", size: "24", "aria-label": "Name der Seite", placeholder: "M365.FM" });
+        p.appendChild(h("p", {}, [h("span", { text: "Oder von Hand (Adresse der Seite oder ihre Nummer): " }), ref, " ", nm, " ",
+          h("button", { type: "button", class: "btn", text: "Seite übernehmen", onclick: function () { api("/api/admin/linkedin/org", { method: "POST", body: { ref: ref.value, name: nm.value || "LinkedIn-Seite" } }).then(function (x) { if (x.s === 200) LOAD.li(); else msg(m, err(x.j), true); }); } })]));
+      }
+      p.appendChild(box);
+      api("/api/admin/linkedin/proposals").then(function (x) {
+        if (x.s !== 200) { msg(m, err(x.j), true); return; }
+        var hi = x.j.hs_info || {}, items = x.j.items || [];
+        if (x.j.hs_error) msg(m, err({ error: x.j.hs_error }), true);
+        else box.appendChild(h("p", { class: "mut", text: "HeySummit: " + (hi.events || 0) + " Events, davon " + (hi.dated || 0) + " mit Termin; " + (hi.talks || 0) + " Talks kommender Events geladen" + (hi.partial ? " (unvollständig)" : "") + ". Vorgeschlagen werden nur öffentliche, kommende m365.fm-Events, die sich zeitlich mit einem HeySummit-Event überschneiden." }));
+        if (x.j.truncated) box.appendChild(h("p", { class: "adm-msg bad", text: "Im Zeitraum der HeySummit-Events liegen mehr als " + (x.j.limit || "") + " kommende m365.fm-Events: geprüft wurden nur die nächsten, spätere fehlen in dieser Liste." }));
+        // Merkzettel aufraeumen: nachtragen laesst sich nur, solange die Zeile offen ist; Hinweise ohne Zeile (lost) bleiben, bis sie abgehakt sind
+        Object.keys(LIOPEN).forEach(function (k) { if (!LIOPEN[k].lost && !items.some(function (it) { return String(it.id) === k && it.state === "pending"; })) delete LIOPEN[k]; }); liOpen(true);
+        Object.keys(LIOPEN).forEach(function (k) { var o = LIOPEN[k]; if (!o.lost) return;
+          box.appendChild(h("p", { class: "adm-msg bad" }, ["LinkedIn-Event " + String(o.urn).split(":").pop() + (o.title ? " („" + o.title + "“)" : "") + " wurde angelegt, hat hier aber keinen Eintrag (die Reservierung wurde inzwischen freigegeben oder neu belegt). Bitte direkt auf LinkedIn absagen oder löschen. ",
+            /^https:\/\/www\.linkedin\.com\//.test(o.url || "") ? h("a", { href: o.url, target: "_blank", rel: "noopener", text: "Auf LinkedIn ansehen" }) : null, " ", h("button", { type: "button", class: "btn", text: "Erledigt", onclick: function () { delete LIOPEN[k]; liOpen(true); LOAD.li(); } })])); });
+        if (!items.length) { box.appendChild(h("p", { class: "mut", text: "Keine Vorschläge: kein kommendes m365.fm-Event mit gleichzeitigem HeySummit-Event." })); return; }
+        var body = h("tbody"), TXT = { publish: "Auf LinkedIn veröffentlichen", update: "Aktualisieren", cancel: "Absagen", resolve: "LinkedIn-ID eintragen", release: "Reservierung freigeben" };
+        var ASK = { publish: "Jetzt öffentlich auf LinkedIn veröffentlichen?", update: "Änderungen an LinkedIn senden?", cancel: "Event auf LinkedIn absagen?", release: "Reservierung freigeben?\n\nNur, wenn auf LinkedIn KEIN Event dazu angelegt wurde – sonst entsteht beim nächsten Veröffentlichen ein zweiter." };
+        var STATE = { proposal: "Vorschlag", pending: "Veröffentlichung offen", published: "Veröffentlicht", cancelled: "Abgesagt" };
+        items.forEach(function (it) {
+          var open = it.state === "pending" ? LIOPEN[it.id] : null, openId = open ? String(open.urn).split(":").pop() : "";
+          function send(a, b, btn) {
+            btn.disabled = true;
+            api("/api/admin/linkedin/" + a, { method: "POST", body: b }).then(function (r) {
+              btn.disabled = false; var j = r.j || {};
+              if (r.s === 200) { if (LIOPEN[it.id]) { delete LIOPEN[it.id]; liOpen(true); } LOAD.li(j.gone ? "Auf LinkedIn gab es den Event nicht mehr: hier als abgesagt eingetragen." : ""); }
+              else if (j.error === "store_failed" && j.urn) {   // LinkedIn hat angelegt, der Eintrag hier fehlt: ID merken (bleibt beim Neuladen stehen) und sofort nachtragbar machen
+                if (j.lost) LIOPEN["x" + String(j.urn).split(":").pop()] = { lost: true, urn: j.urn, url: j.linkedin_url || "", title: it.title }; else LIOPEN[it.id] = { urn: j.urn, ticket: j.ticket || "" };
+                liOpen(true); LOAD.li(err(j) + " LinkedIn-Event-ID: " + String(j.urn).split(":").pop() + (j.lost ? "." : " – in der Liste über „Jetzt eintragen“ nachtragen."), true);
+              }
+              else if (j.pending) LOAD.li(err(j) + " Ob LinkedIn den Event angelegt hat, ist offen: bitte auf LinkedIn nachsehen und in der Liste klären (ID eintragen oder Reservierung freigeben).", true);
+              else if (a === "cancel" && j.error === "li_gone" && !b.gone) {   // auf LinkedIn selbst geloescht? Nur nach ausdruecklicher Bestaetigung hier austragen (der Server fragt LinkedIn dabei noch einmal)
+                if (window.confirm("LinkedIn kennt diesen Event nicht (mehr).\n\nWurde er auf LinkedIn selbst gelöscht? Dann wird er hier als abgesagt eingetragen und der Link auf der Event-Seite verschwindet.\n\nNur bestätigen, wenn es den LinkedIn-Event wirklich nicht mehr gibt.\n\n" + it.title)) { b.gone = true; send(a, b, btn); } else msg(m, err(j), true);
+              }
+              else msg(m, err(j), true);
+            });
+          }
+          function act(a) { return h("button", { type: "button", class: "btn" + (a === "publish" ? " main" : ""), text: TXT[a], onclick: function (e) {
+            var b = { event_id: it.id, confirm: true };
+            if (a === "resolve") { b.urn = (window.prompt("LinkedIn-Event-ID (die Zahl am Ende der Event-Adresse) oder urn:li:event:… für „" + it.title + "“:", openId) || "").trim(); if (!b.urn) return; }
+            else if (!window.confirm(ASK[a] + "\n\n" + it.title + "\n" + it.when)) return;
+            send(a, b, e.target); } }); }
+          var pv = it.preview ? h("details", {}, [h("summary", { text: it.preview.name }), h("p", { class: "mut", text: it.preview.start + " – " + it.preview.end + " · " + it.preview.format + " · " + (it.preview.free ? "kostenlos" : "kostenpflichtig") }), h("pre", { style: "white-space:pre-wrap", text: it.preview.description })]) : h("span", { class: "mut", text: "–" });
+          var flags = [STATE[it.state] || it.state, it.wait && !(open && open.ticket) ? "läuft noch oder Ausgang offen – klären in " + Math.ceil(it.wait / 60) + " Min. möglich (Reiter neu laden)" : null, it.orphan ? "m365.fm-Event gelöscht" : null, it.hidden ? "m365.fm-Event nicht mehr öffentlich" : null, it.rule ? "Aktualisieren gesperrt: " + err({ error: it.rule }) : null, open ? "LinkedIn hat den Event angelegt (ID " + openId + "), nur der Eintrag hier fehlt" : null].filter(Boolean);
+          var cell = [h("span", { class: "mut", text: flags.join(" · ") })];
+          if (/^https:\/\/www\.linkedin\.com\//.test(it.linkedin_url || "")) cell.push(" ", h("a", { href: it.linkedin_url, target: "_blank", rel: "noopener", text: "Auf LinkedIn ansehen" }));
+          if (open && open.ticket) cell.push(" ", h("button", { type: "button", class: "btn main", text: "Jetzt eintragen", onclick: function (e) { send("resolve", { event_id: it.id, urn: open.urn, ticket: open.ticket, confirm: true }, e.target); } }));
+          (it.can || []).forEach(function (a) { if (TXT[a] && (a !== "update" || it.changed)) cell.push(" ", act(a)); });
+          body.appendChild(h("tr", {}, [h("td", { text: it.title }), h("td", { text: it.when }), h("td", { text: it.preview ? it.preview.format + (it.preview.free ? ", kostenlos" : ", kostenpflichtig") : "–" }), h("td", { text: it.hs ? it.hs.event + (it.hs.talk ? " · " + it.hs.talk : "") : "–" }), h("td", {}, [pv]), h("td", {}, cell)]));
+        });
+        box.appendChild(h("div", { style: "overflow-x:auto" }, [h("table", { class: "adm-tbl" }, [h("thead", {}, [h("tr", {}, ["Titel", "Zeit (Berlin)", "Format", "HeySummit", "LinkedIn-Text", "Stand und Aktionen"].map(function (c) { return h("th", { text: c }); }))]), body])]));
+      });
+    });
+  };
 
   root.textContent = ""; root.append(bar); tabs.forEach(function (t) { root.appendChild(panes[t[0]]); });
   overview(function () { var k = (location.hash || "").slice(1); show(panes[k] ? k : "ov"); });

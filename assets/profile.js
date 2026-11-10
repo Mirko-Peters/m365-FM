@@ -78,6 +78,19 @@
     });
     return box;
   }
+  /* Bewerbung um Editor/Moderator (oeffentliches Profil und mind. 25 Punkte): erscheint in /redaktion/ unter "Bewerbungen", Editoren bestaetigen */
+  function editorApplyUI() {
+    var L = de ? { t: "Redaktion mitgestalten", intro: "Editoren prüfen und verbessern Inhalte, Moderatoren halten Kommentare respektvoll. Voraussetzung: öffentliches Profil und mindestens 25 Punkte. Mindestens 3 verschiedene Editoren bestätigen (Moderator: 2).", role: "Rolle", ed: "Editor", mo: "Moderator", mot: "Kurze Motivation (mindestens 20 Zeichen)", top: "Themen (Entitäten-IDs, mit Komma getrennt)", send: "Bewerbung senden", ok: "Bewerbung gesendet.", open: "Offene Bewerbung", votes: "Bestätigungen", st_approved: "angenommen", st_rejected: "abgelehnt", e_profile_not_public: "Dein Profil muss öffentlich sein.", e_not_enough_points: "Dir fehlen noch Punkte (mindestens 25).", e_motivation_short: "Bitte etwas ausführlicher.", e_open_exists: "Du hast schon eine offene Bewerbung.", e_already: "Du hast diese Rolle schon.", e_generic: "Fehler" }
+      : { t: "Join the editorial team", intro: "Editors review and improve content, moderators keep comments respectful. Requirements: a public profile and at least 25 points. At least 3 different editors must confirm (moderator: 2).", role: "Role", ed: "Editor", mo: "Moderator", mot: "Short motivation (at least 20 characters)", top: "Topics (entity IDs, comma separated)", send: "Send application", ok: "Application sent.", open: "Open application", votes: "confirmations", st_approved: "approved", st_rejected: "rejected", e_profile_not_public: "Your profile must be public.", e_not_enough_points: "You need more points (at least 25).", e_motivation_short: "Please write a little more.", e_open_exists: "You already have an open application.", e_already: "You already have this role.", e_generic: "Error" };
+    var w = h("section", { class: "ccard" }, [h("h2", { text: L.t }), h("p", { class: "cmut", text: L.intro })]), box = h("div"), msg = h("p", { role: "status", class: "cmut" });
+    function load() { api("/api/editor/apply").then(function (r) { box.textContent = ""; var items = (r.j && r.j.items) || [], op = items.filter(function (x) { return x.status === "open"; })[0];
+      items.slice(0, 3).forEach(function (x) { box.appendChild(h("p", { class: "cmut", text: (x.role === "editor" ? L.ed : L.mo) + " · " + (x.status === "open" ? L.open + " (" + x.votes + "/" + x.needed + " " + L.votes + ")" : L["st_" + x.status] + (x.reason ? ": " + x.reason : "")) })); });
+      if (op) return;
+      var role = h("select", { "aria-label": L.role }, [h("option", { value: "editor", text: L.ed }), h("option", { value: "moderator", text: L.mo })]), mot = h("textarea", { rows: "4", maxlength: "1000", "aria-label": L.mot }), top = h("input", { type: "text", "aria-label": L.top });
+      box.appendChild(h("label", {}, [L.role + " ", role])); box.appendChild(h("label", { style: "display:block;margin:.5em 0" }, [L.mot, mot])); box.appendChild(h("label", { style: "display:block;margin:.5em 0" }, [L.top, top]));
+      box.appendChild(h("button", { type: "button", class: "btn main", text: L.send, onclick: function (ev) { ev.target.disabled = true; api("/api/editor/apply", { method: "POST", body: { role: role.value, motivation: mot.value, topics: top.value.split(",").map(function (x) { return x.trim(); }).filter(Boolean) } }).then(function (x) { ev.target.disabled = false; msg.textContent = x.s === 200 ? L.ok : (L["e_" + (x.j || {}).error] || L.e_generic); if (x.s === 200) load(); }); } })); }); }
+    w.appendChild(box); w.appendChild(msg); load(); return w;
+  }
   function recInbox() {
     var w = h("section", { class: "ccard" }, [h("h2", { text: RIQ.t })]);
     function load() { api("/api/recommend/inbox").then(function (r) { while (w.children.length > 1) w.removeChild(w.lastChild); var l = (r.j && r.j.items) || []; if (!l.length) w.appendChild(h("p", { class: "cmut", text: RIQ.none }));
@@ -341,7 +354,7 @@
     }, msg); sec.appendChild(h("div", { class: "btns" }, [mainSave]));
     sec.appendChild(msg);
     if (p.public && p.handle) sec.appendChild(h("p", {}, [h("a", { href: X.base + (de ? "/de" : "") + "/community/u/" + p.handle + "/", text: Q.open })]));
-    root.appendChild(sec); if (p.handle) { root.insertBefore(suggestUI(), root.firstChild); root.appendChild(recInbox()); }
+    root.appendChild(sec); if (p.handle) { root.insertBefore(suggestUI(), root.firstChild); root.appendChild(recInbox()); root.appendChild(editorApplyUI()); }
     // ---- Firmen ----
     var os = h("section", { class: "ccard" }, [h("h2", { text: Q.orgs })]);
     orgs.forEach(function (o) {
@@ -400,5 +413,39 @@
       m.textContent = j.ok ? (j.review ? CL.c_review : j.forwarded ? CL.c_ok_fwd : CL.c_ok) : (CL["c_" + j.error] || CL.fail);
       try { var u = new URL(location.href); u.searchParams.delete("claimverify"); history.replaceState(null, "", u.pathname + u.search + u.hash); } catch (e) {}
     });
+  })();
+  // Link aus der Einladungs-Mail (Entitaet uebernehmen): ?invite=<token>, 27 Zeichen base64url (Testmail: TEST-<16 Zeichen>). Die 36-stelligen Hex-Tokens der Speaker-Einladungen
+  // verarbeitet events.js. Die Karte steht ueber den Reitern und haengt nicht am Anker: nach der Anmeldung kommt man ohne #c-invite zurueck, das Token
+  // bleibt in der Adresse, bis die Seite uebernommen ist.
+  var IV = M365L(de, "profile.IV", {"h": "Einladung: deine Seite auf M365.FM", "hi": "Hallo {n},", "hi0": "Hallo,", "txt": "mit dieser Einladung übernimmst du die Seite über dich und pflegst Angaben, Themen und Links danach selbst:", "login": "Melde dich an (oder registriere dich kostenlos), um die Seite zu übernehmen. Die Einladung bleibt dabei erhalten.", "signin": "Anmelden mit", "go": "Seite übernehmen", "busy": "Wird übernommen …", "ok": "✓ Die Seite gehört jetzt zu deinem Konto.", "pending": "✓ Danke! Die Übernahme ist angefragt: Die Redaktion bestätigt sie in Kürze, danach gehört die Seite zu deinem Konto.", "own": "Diese Einladung hast du selbst verschickt – annehmen kann sie nur die eingeladene Person.", "view": "Seite ansehen", "need_profile": "Dafür brauchst du ein öffentliches Profil: im Reiter „Profil“ eine Profil-Adresse wählen, „Profil öffentlich anzeigen“ ankreuzen und speichern. Klicke danach erneut auf „Seite übernehmen“.", "toprofile": "Zum Profil", "claimed": "Diese Seite ist bereits einem anderen Konto zugeordnet. Stimmt das nicht, antworte bitte auf die Einladungs-Mail.", "used": "Diese Einladung wurde bereits eingelöst.", "invalid": "Dieser Einladungs-Link ist ungültig oder wurde zurückgezogen.", "fail": "Das hat nicht geklappt – bitte später erneut versuchen.", "test": "Das ist der Link aus einer Testmail. In einer echten Einladung stehen hier der Name der eingeladenen Person und der Knopf „Seite übernehmen“."}, {"h": "Invitation: your page on M365.FM", "hi": "Hi {n},", "hi0": "Hi,", "txt": "with this invitation you claim the page about you and keep its details, topics and links up to date yourself:", "login": "Sign in (or register for free) to claim the page. The invitation stays valid while you do.", "signin": "Sign in with", "go": "Claim my page", "busy": "Claiming …", "ok": "✓ The page now belongs to your account.", "pending": "✓ Thanks! Your claim has been requested: the editorial team confirms it shortly, then the page belongs to your account.", "own": "You sent this invitation yourself – only the invited person can accept it.", "view": "View the page", "need_profile": "You need a public profile for this: on the “Profile” tab choose a profile address, tick “Show my profile publicly” and save. Then click “Claim my page” again.", "toprofile": "Go to profile", "claimed": "This page is already linked to another account. If that is wrong, please reply to the invitation e-mail.", "used": "This invitation has already been used.", "invalid": "This invitation link is invalid or has been withdrawn.", "fail": "That did not work – please try again later.", "test": "This is the link from a test mail. In a real invitation the invited person sees their name and the “Claim my page” button here."});
+  (function inviteLink() {
+    var t = ""; try { t = new URLSearchParams(location.search).get("invite") || ""; } catch (e) {} if (!/^(?:[A-Za-z0-9_-]{27}|TEST-[A-Za-z0-9_-]{16})$/.test(t)) return;
+    var card = h("section", { class: "ccard", id: "c-invite" }, [h("h2", { text: IV.h })]), m = h("p", { class: "wk-msg", role: "status", "aria-live": "polite" });
+    function put() { var at = document.querySelector(".ctabs") || document.getElementById("c-page") || root; at.parentNode.insertBefore(card, at); }
+    if (t.slice(0, 5) === "TEST-") { put(); card.appendChild(h("p", { text: IV.test })); return; }   // "Testmail an mich" (Verwaltung): kein echtes Token, nichts zu uebernehmen
+    Promise.all([api("/api/entityinvite/info?t=" + encodeURIComponent(t)), api("/api/me")]).then(function (a) {
+      var i = a[0].j || {}, me = (a[1].j || {}).user || null; put();
+      if (a[0].s !== 200 || !i.eid || i.status === "declined") { card.appendChild(h("p", { text: IV.invalid })); return; }
+      var pageUrl = X.base + (de ? "/de" : "") + "/entity/" + i.eid + "/";
+      card.appendChild(h("p", {}, [(i.name ? IV.hi.replace("{n}", i.name) : IV.hi0) + " " + IV.txt + " ", h("a", { href: pageUrl, text: pageUrl })]));
+      if (i.status === "claimed") { card.appendChild(h("p", { text: IV.used })); return; }
+      if (!me) {   // nicht angemeldet: Anmeldeknoepfe; die Rueckkehr-Adresse enthaelt ?invite=..., danach geht es hier mit dem Knopf weiter
+        var ret = encodeURIComponent(location.href.split("#")[0]), lg = h("div", { class: "btns" }); card.appendChild(h("p", { text: IV.login })); card.appendChild(lg);
+        fetch(X.api + "/api/providers").then(function (r) { return r.json(); }).catch(function () { return {}; }).then(function (pj) { var pv = (pj && pj.providers) || ["linkedin", "microsoft", "google"]; if (!Array.isArray(pv)) pv = Object.keys(pv);
+          [["linkedin", "LinkedIn"], ["microsoft", "Microsoft"], ["google", "Google"], ["github", "GitHub"]].forEach(function (x) { if (pv.indexOf(x[0]) >= 0) lg.appendChild(h("a", { class: "btn" + (x[0] === "linkedin" ? " main" : ""), href: X.api + "/auth/login/" + x[0] + "?return=" + ret, rel: "nofollow", text: IV.signin + " " + x[1] })); }); });
+        return;
+      }
+      var go = h("button", { type: "button", class: "btn main", text: IV.go, onclick: function () {
+        go.disabled = true; m.textContent = IV.busy;
+        api("/api/entityinvite/accept", { method: "POST", body: { t: t } }).then(function (r) {
+          var j = r.j || {};   // j.pending: Einladung mit Redaktionsrechten, die Uebernahme wartet auf die Bestaetigung (claim.decide)
+          if (j.ok) { m.textContent = (j.pending ? IV.pending : IV.ok) + " "; if (!j.pending) m.appendChild(h("a", { href: pageUrl, text: IV.view })); go.hidden = true; try { var u = new URL(location.href); u.searchParams.delete("invite"); history.replaceState(null, "", u.pathname + u.search + u.hash); } catch (e) {} return; }
+          go.disabled = false;
+          if (j.error === "need_profile") { m.textContent = IV.need_profile + " "; m.appendChild(h("a", { href: "#c-expert", text: IV.toprofile })); return; }
+          m.textContent = j.error === "claimed" ? IV.claimed : j.error === "own_content" ? IV.own : j.error === "not_found" ? IV.invalid : r.s === 401 ? IV.login : IV.fail;
+        }, function () { go.disabled = false; m.textContent = IV.fail; });
+      } });
+      card.appendChild(h("div", { class: "btns" }, [go])); card.appendChild(m);
+    }).catch(function () { put(); card.appendChild(h("p", { text: IV.fail })); });
   })();
 })();

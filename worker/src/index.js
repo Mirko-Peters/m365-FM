@@ -1,5 +1,5 @@
 // Community-API (Cloudflare Worker + D1): Login (Google/Microsoft), Kommentare, Abzeichen, Kurator, Push, E-Mail
-import { json, cors, cookie, makeSession, readSession, readSessionInfo, sha256hex, cleanText, cleanName, randomToken, rateLimit, isLang, esc, b64u, sign, verify, audit, aiBudgetStatus, reportExternalAiUsage } from "./util.js";
+import { json, cors, cookie, makeSession, readSession, readSessionInfo, sha256hex, cleanText, cleanName, randomToken, rateLimit, isLang, esc, b64u, sign, verify, audit, aiBudgetStatus, reportExternalAiUsage, memberOf } from "./util.js";
 import { evalBadges, stats, topUsers, badgesFor, award } from "./badges.js";
 import { runDigest, runPushDigest } from "./digest.js";
 import { sendMail } from "./mailer.js";
@@ -8,6 +8,11 @@ import { importLegacyBlog } from "./legacyblog.js";
 import { importContentBlog } from "./contentblog.js";
 import { handleA2a } from "./a2a.js";
 import { handleAdminPanel } from "./adminpanel.js";
+import { handleEditor, decide, deleteUserEditorial } from "./editor.js";
+import { syncAutoRoles, closeObsolete } from "./roles.js";
+import { handleI18nPublic } from "./i18n_edit.js";
+import { can, roleOf, isStaff, inScope, publicRoles, loadActor, logEdit } from "./perm.js";
+import { handleLinkedinEvents, oauthStartLE, oauthCallbackLE, deleteUserLinkedin, purgeLinkedinOrphans } from "./linkedin_events.js";
 import { handleSponsor, handleSponsorLink } from "./sponsor.js";
 import { handleAds, handlePaypalWebhook } from "./ads.js";
 import { handleSponsorOrders } from "./sponsor_orders.js";
@@ -22,6 +27,7 @@ import { handleProfiles, deleteUserData, refreshProfilesExport } from "./profile
 import { handleClaimVerify } from "./claimverify.js";
 import { handleOrgPair } from "./orgpair.js";
 import { handleEntFill } from "./entfill.js";
+import { handleEventImport, IMPORT_ROUTE, runEventImport } from "./eventimport.js";
 import { handleEvents, deleteUserEvents, ensureM365Con, claimLinkedinEntity, purgeEntityClaimReview } from "./events.js";
 import { handleVotes } from "./votes.js";
 import { handleQa, deleteUserQa } from "./qa.js";
@@ -36,8 +42,10 @@ import { handleMediakit } from "./mediakit.js";
 import { handleMail, flushOutbox, notify } from "./mail.js";
 import { handleReviews } from "./reviews.js";
 import { handleEntityInvite, remindInvites } from "./entinvite.js";
+import { handleInviter, syncInviterBadges, deleteUserInvites } from "./inviter.js";
 import { handleDemo } from "./demo.js";
 import { handleGuests, deleteUserGuests } from "./guests.js";
+import { deleteUserEntityInvites } from "./entinvite.js";
 import { handleExpertRequests, deleteUserExpertRequests, syncExpertVectors, closeExpiredExpertRequests } from "./expert_requests.js";
 import { handlePodcast, deleteUserPodcast, pollPodcast } from "./podcast.js";
 import { handleVideo, deleteUserVideos, pollVideos } from "./youtube.js";
@@ -91,7 +99,6 @@ function shortName(full) {
   return `${p[0]} ${[...p[p.length - 1]][0]}.`;
 }
 const safeReturn = (env, u) => { try { const x = new URL(u); return x.origin === env.SITE ? x.href : env.SITE + "/"; } catch { return env.SITE + "/"; } };
-const isAdmin = (env, u) => u.role === "admin" || (env.ADMIN_SUBS || "").split(",").map((s) => s.trim()).includes(`${u.provider}:${u.sub}`);
 
 const firstName = (full) => cleanName(full).split(" ").filter(Boolean)[0] || "";
 async function namePrefs(db, user) {
@@ -144,6 +151,14 @@ async function auth(env, request, url, path) {
       scope: "https://www.googleapis.com/auth/youtube https://www.googleapis.com/auth/yt-analytics.readonly",
       access_type: "offline", prompt: "consent", include_granted_scopes: "true" });
     return new Response(null, { status: 302, headers: { location: `https://accounts.google.com/o/oauth2/v2/auth?${q}`, "cache-control": "no-store" } });
+  }
+  if (path === "/auth/linkedin-events/start" || path === "/auth/linkedin-events/callback") {   // einmalige Verbindung der LinkedIn-Seite, nur Admin
+    const sess = await readSessionInfo(env, request), admin = sess ? await me(env, sess.uid) : null;
+    if (!admin?.admin) return html("<p>Admin login required.</p>", 403);
+    const back = (r) => new Response(null, { status: 302, headers: { location: `${env.SITE}/admin/?li=${r}#li`, "set-cookie": cookie("m365le", "", 0) } });
+    if (path.endsWith("/start")) { const o = await oauthStartLE(env, admin); return o.error ? html("<p>LinkedIn not configured.</p>", 503) : new Response(null, { status: 302, headers: { location: o.location, "set-cookie": o.setCookie } }); }
+    const r = await oauthCallbackLE(env, request, url, admin);
+    return back(r.ok ? "ok" : r.error);
   }
   if (!m) return null;
   const P = PROVIDERS[m[2]];
@@ -223,26 +238,25 @@ async function deleteAccount(env, id) {
     db.prepare("DELETE FROM push_subs WHERE user_id=?").bind(id), db.prepare("DELETE FROM wiki_reports WHERE user_id=?").bind(id), db.prepare("DELETE FROM wiki_rev WHERE user_id=? AND status IN ('pending','rejected')").bind(id), db.prepare("UPDATE wiki_rev SET user_id=0 WHERE user_id=?").bind(id), db.prepare("DELETE FROM curators WHERE user_id=?").bind(id), db.prepare("DELETE FROM user_identities WHERE user_id=?").bind(id), db.prepare("DELETE FROM users WHERE id=?").bind(id),
   ]);
   await deleteUserEvents(db, id);
+  await deleteUserEditorial(db, id);   // Redaktion (Migration 0037): vor deleteUserBlog, weil der Verlauf an den Beitraegen des Kontos haengt
+  await deleteUserEntityInvites(db, id);   // braucht mail_addr und die bestaetigten Claims: vor deleteUserData
   await deleteUserMessages(db, id); await deleteUserTokens(db, id); await deleteUserQa(db, id); await deleteUserBlog(db, id); await deleteUserLibrary(db, id); await deleteUserPodcast(db, id); await deleteUserVideos(db, id); await deleteUserGuests(db, id); await deleteUserGuestCredits(db, id);
   await deleteUserData(db, id); await deleteUserExpertRequests(env, id);
+  await deleteUserLinkedin(db, id);   // LinkedIn-Zugang dieses Admins (verschluesselte Tokens) und "veroeffentlicht von"
+  await deleteUserInvites(env, id);   // Einlader: beide Seiten (eingeladen und Einlader samt eigenem Kuerzel in ref)
 }
 
-async function me(env, uid) {
-  const u = await env.DB.prepare("SELECT id,provider,sub,name,bio,lang,banned,role,created FROM users WHERE id=?").bind(uid).first();
-  if (!u || u.banned) return null;
-  const pro = !!(await env.DB.prepare("SELECT 1 x FROM programs WHERE owner_type='u' AND owner_id=? AND verified=1 AND program IN ('mvp','mct','rd','msa','ms_employee') LIMIT 1").bind(uid).first());
-  return { ...u, admin: isAdmin(env, u), editor: u.role === "editor", pro };
-}
+const me = memberOf;   // util.js: dieselbe Rollen-Ermittlung auch fuer Cron-Laeufe (Kurzposts)
 
-function pubComment(c, mine, liked, badges, admin) {
-  return { id: c.id, parent: c.parent_id, user: { id: c.user_id, name: c.name, badges: badges.get(c.user_id) || [] }, body: c.status === "hidden" ? "" : c.body,
+function pubComment(c, mine, liked, badges, admin, roles) {
+  return { id: c.id, parent: c.parent_id, user: { id: c.user_id, name: c.name, badges: badges.get(c.user_id) || [], ...(roles?.get(c.user_id) ? { role: roles.get(c.user_id) } : {}), ...(roles?.scopes?.get(c.user_id) ? { scope: roles.scopes.get(c.user_id) } : {}) }, body: c.status === "hidden" ? "" : c.body,
     hidden: c.status === "hidden", created: c.created, likes: c.likes, liked: liked.has(c.id), mine: mine === c.user_id, canDelete: mine === c.user_id || admin };
 }
 
 async function api(env, request, url, path, asUser, ctx) {
   const method = request.method, J = (d, s = 200, x) => json(d, s, env, request, x);
   if (method === "OPTIONS") return new Response(null, { status: 204, headers: cors(env, request) });
-  if (asUser === undefined && method !== "GET" && !["/api/internal/ai-spend", "/api/internal/sponsor-metrics", "/api/internal/entity-fill", "/api/email/unsub", "/api/mail/unsub", "/api/topics/email-unsub"].includes(path) && request.headers.get("x-requested-with") !== "m365") return J({ error: "bad_request" }, 400);   // interne Routen per CRON_KEY; Abmeldelinks (RFC 8058) senden keinen Zusatz-Header, alle per Token geschuetzt
+  if (asUser === undefined && method !== "GET" && !["/api/internal/ai-spend", "/api/internal/sponsor-metrics", "/api/email/unsub", "/api/mail/unsub", "/api/topics/email-unsub", "/api/entityinvite/decline"].includes(path) && request.headers.get("x-requested-with") !== "m365") return J({ error: "bad_request" }, 400);   // interne Routen per CRON_KEY; Abmeldelinks (RFC 8058) senden keinen Zusatz-Header, alle per Token geschuetzt
   // asUser: vom MCP-Server (Token bereits geprueft) - dann keine Cookie-Sitzung noetig
   const uid = asUser === undefined ? await readSession(env, request) : null, user = asUser === undefined ? (uid ? await me(env, uid) : null) : asUser;
   const need = () => (user ? null : J({ error: "login" }, 401));
@@ -314,7 +328,7 @@ async function api(env, request, url, path, asUser, ctx) {
   const ids = await handleIdentities(env, request, url, path, user, J, asUser !== undefined);
   if (ids) return ids;
   if (path === "/api/me") {
-    if (method === "GET") return J({ user: user ? { ...(await namePrefs(db, user)), id: user.id, name: user.name, bio: user.bio, lang: user.lang, admin: user.admin, editor: user.editor, provider: user.provider, ...(user.admin || user.editor ? {} : { sub_hint: `${user.provider}:${user.sub}` }), ...(await stats(db, user.id)) } : null });
+    if (method === "GET") return J({ user: user ? { ...(await namePrefs(db, user)), id: user.id, name: user.name, bio: user.bio, lang: user.lang, admin: user.admin, editor: user.editor, moderator: user.moderator, provider: user.provider, ...(user.admin || user.editor || user.moderator ? {} : { sub_hint: `${user.provider}:${user.sub}` }), ...(await stats(db, user.id)) } : null });
     if (need()) return need();
     if (method === "POST") {
       const b = await request.json().catch(() => ({}));
@@ -339,9 +353,9 @@ async function api(env, request, url, path, asUser, ctx) {
     const rows = (await db.prepare(
       `SELECT c.id,c.user_id,c.parent_id,c.body,c.status,c.created,u.name,(SELECT COUNT(*) FROM likes l WHERE l.comment_id=c.id) likes
        FROM comments c JOIN users u ON u.id=c.user_id WHERE c.vid=? AND c.lang=? AND u.banned=0 ORDER BY c.created ASC LIMIT 300`).bind(vid, lang).all()).results || [];
-    const badges = await badgesFor(db, [...new Set(rows.map((r) => r.user_id))]);
+    const badges = await badgesFor(db, [...new Set(rows.map((r) => r.user_id))]), roles = await publicRoles(db, rows.map((r) => r.user_id));
     const liked = new Set(user ? ((await db.prepare("SELECT comment_id FROM likes WHERE user_id=?").bind(user.id).all()).results || []).map((r) => r.comment_id) : []);
-    return J({ comments: rows.filter((r) => r.status === "ok" || rows.some((x) => x.parent_id === r.id)).map((r) => pubComment(r, user?.id, liked, badges, user?.admin)) }, 200, { "cache-control": "no-store" });
+    return J({ comments: rows.filter((r) => r.status === "ok" || rows.some((x) => x.parent_id === r.id)).map((r) => pubComment(r, user?.id, liked, badges, user?.admin, roles)) }, 200, { "cache-control": "no-store" });
   }
   if (path === "/api/comments" && method === "POST") {
     if (need()) return need();
@@ -394,10 +408,13 @@ async function api(env, request, url, path, asUser, ctx) {
     return J({ ok: true });
   }
 
+  if (path.startsWith("/api/i18n/")) { const q = await handleI18nPublic(env, request, url, path, J); if (q) return q; }   // Overrides-Export fuer den Seitenbau, Neuuebersetzungs-Wuensche
+  if (path.startsWith("/api/editor/") || path.startsWith("/api/admin/editlog") || path.startsWith("/api/admin/editor-scope")) return await handleEditor(env, request, url, path, user, J);   // Redaktion/Moderation (perm.js can())
   if (/^\/api\/points(\/|$)/.test(path) || path.startsWith("/api/admin/points/")) { const p = await handlePoints(env, request, url, path, user, J); if (p) return p; }
   if (/^\/api\/msg(\/|$)/.test(path)) { const p = await handleMessages(env, request, url, path, user, J); if (p) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return p; } }
   if (path === "/api/admin/org-pair") { const q = await handleOrgPair(env, request, url, path, user, J); if (q) return q; }
   if (/^\/api\/entity\/claim\/(domains|domain|forward|confirm)$/.test(path)) return handleClaimVerify(env, request, url, path, user, J);
+  if (IMPORT_ROUTE.test(path)) { const p = await handleEventImport(env, request, url, path, user, J); if (p) return p; }
   if (/^\/api\/(events?|speaker)(\/|$)/.test(path) || /^\/api\/entity\/claims?(\/|$)/.test(path) || /^\/api\/admin\/entity\/claims?$/.test(path)) { const p = await handleEvents(env, request, url, path, user, J); if (p) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return p; } }
   if (path === "/api/ui-i18n" && request.method === "GET") return J(await uiI18nExport(env), 200, { "cache-control": "public, max-age=300" });
   if (path === "/api/admin/translate" && user?.admin) {   // Status und Notaus der Auto-Uebersetzung
@@ -415,6 +432,7 @@ async function api(env, request, url, path, asUser, ctx) {
   if (path.startsWith("/api/podcast/") || path.startsWith("/api/admin/podcast")) { const q = await handlePodcast(env, request, url, path, user, J); if (q) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return q; } }
   if (path === "/api/updates/export" || path === "/api/admin/updates/poll") { const q = await handleUpdates(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/reviews")) { const q = await handleReviews(env, request, url, path, user, J); if (q) return q; }
+  if (path.startsWith("/api/invite/") || path === "/api/admin/invites" || path === "/api/admin/invite/void") { const q = await handleInviter(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/entityinvite/")) { const q = await handleEntityInvite(env, request, url, path, user, J); if (q) return q; }
   if (path === "/api/mediakit" || path === "/api/mediakit/summary" || path === "/api/admin/mediakit") { const q = await handleMediakit(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/mail/") || path.startsWith("/api/admin/mail")) { const q = await handleMail(env, request, url, path, user, J); if (q) return q; }
@@ -428,6 +446,7 @@ async function api(env, request, url, path, asUser, ctx) {
   if (path.startsWith("/api/credit/")) { const q = await handleCredits(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/seo/")) { const q = await handleSeo(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/edits/")) { const v = await handleVotes(env, request, url, path, user, J); if (v) return v; }
+  if (path.startsWith("/api/admin/linkedin/")) return await handleLinkedinEvents(env, request, url, path, user, J);
   if (path.startsWith("/api/admin/panel/")) return await handleAdminPanel(env, request, url, path, user, J);
   if (path.startsWith("/api/entity") || path.startsWith("/api/admin/entity")) { const e = await handleEntity(env, request, url, path, user, J); if (e) return e; }
   if (/^\/api\/(profile|profiles|endorse|cert-endorse|vote|feed|org|orgs|img|recommend)(\/|$)/.test(path) || path === "/api/admin/verify" || path === "/api/admin/cert-queue" || path === "/api/admin/feed-hide") { const p = await handleProfiles(env, request, url, path, user, J); if (p) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return p; } }
@@ -437,9 +456,9 @@ async function api(env, request, url, path, asUser, ctx) {
     const lang = url.searchParams.get("lang");
     if (!isLang(lang)) return J({ error: "bad_request" }, 400);
     const d = new Date(), since = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1) / 1000;
-    const top = await topUsers(db, lang, since, 5), bm = await badgesFor(db, top.map((t) => t.id));
+    const top = await topUsers(db, lang, since, 5), bm = await badgesFor(db, top.map((t) => t.id)), rm = await publicRoles(db, top.map((t) => t.id));
     const last = await db.prepare("SELECT c.month,c.points,u.id,u.name,u.bio FROM curators c JOIN users u ON u.id=c.user_id WHERE c.lang=? ORDER BY c.month DESC LIMIT 1").bind(lang).first();
-    return J({ month: d.toISOString().slice(0, 7), top: top.map((t) => ({ ...t, badges: bm.get(t.id) || [] })), last: last || null }, 200, { "cache-control": "public, max-age=300" });
+    return J({ month: d.toISOString().slice(0, 7), top: top.map((t) => ({ ...t, badges: bm.get(t.id) || [], ...(rm.get(t.id) ? { role: rm.get(t.id) } : {}), ...(rm.scopes.get(t.id) ? { scope: rm.scopes.get(t.id) } : {}) })), last: last || null }, 200, { "cache-control": "public, max-age=300" });
   }
   if ((m = /^\/api\/u\/(\d+)$/.exec(path)) && method === "GET") {
     const u = await db.prepare("SELECT id,name,bio,lang,created FROM users WHERE id=? AND banned=0").bind(+m[1]).first();
@@ -530,21 +549,31 @@ async function api(env, request, url, path, asUser, ctx) {
   if (path.startsWith("/api/admin/")) {
     const keyOk = env.CRON_KEY && (request.headers.get("x-cron-key") === env.CRON_KEY || url.searchParams.get("key") === env.CRON_KEY);   // Header bevorzugt (Query landet in Logs)
     if ((path === "/api/admin/run-weekly" || path === "/api/admin/run-daily") && keyOk) return J(await runDigest(env, { dry: url.searchParams.get("dry") === "1" }));
-    if (!user?.admin) return J({ error: "forbidden" }, 403);
+    if (isStaff(user) && !user.admin && path === "/api/admin/reports" && method === "GET") {   // Redaktion/Moderation: gemeldete Kommentare (Lesen); Fach-Editoren sehen sie nicht (kein Thema)
+      const actor = await loadActor(db, user); if (!can(actor, "queue.view").ok || !inScope(actor, {})) return J({ error: "forbidden" }, 403);
+      const rows = (await db.prepare("SELECT c.id,c.vid,c.lang,c.body,c.status,(SELECT COUNT(*) FROM reports r WHERE r.comment_id=c.id) n FROM comments c WHERE c.id IN (SELECT comment_id FROM reports) ORDER BY n DESC LIMIT 50").all()).results || [];
+      return J({ reports: rows });
+    }
+    if (isStaff(user) && !user.admin && (m = /^\/api\/admin\/(hide|show)\/(\d+)$/.exec(path)) && method === "POST") {   // wie Admin, aber ueber can() und mit Protokoll
+      const r = await decide(env, user, { kind: "comment", id: m[2], action: m[1] === "hide" ? "hide" : "resolve", reason: "" });
+      return J(r.body, r.status);
+    }
+    if (!can(user, "role.assign").ok) return J({ error: "forbidden" }, 403);   // alles Weitere (Rollen, Sperren, Nutzerliste) nur Admin
     if (path === "/api/admin/expertise-sync" && method === "POST") { const r = await syncExpertise(env, entityMap); await audit(db, user.id, "expertise-sync", "", JSON.stringify(r)); return J(r); }   // Stufen sofort neu berechnen
     if (path === "/api/admin/reports" && method === "GET") {
       const rows = (await db.prepare("SELECT c.id,c.vid,c.lang,c.body,c.status,c.user_id,(SELECT COUNT(*) FROM reports r WHERE r.comment_id=c.id) n FROM comments c WHERE c.id IN (SELECT comment_id FROM reports) ORDER BY n DESC LIMIT 50").all()).results || [];
       return J({ reports: rows });
     }
-    if ((m = /^\/api\/admin\/(hide|show)\/(\d+)$/.exec(path)) && method === "POST") { await db.prepare("UPDATE comments SET status=? WHERE id=?").bind(m[1] === "hide" ? "hidden" : "ok", +m[2]).run(); return J({ ok: true }); }
+    if ((m = /^\/api\/admin\/(hide|show)\/(\d+)$/.exec(path)) && method === "POST") { const c = await db.prepare("SELECT status FROM comments WHERE id=?").bind(+m[2]).first(); await db.prepare("UPDATE comments SET status=? WHERE id=?").bind(m[1] === "hide" ? "hidden" : "ok", +m[2]).run(); if (c) await logEdit(db, user, m[1] === "hide" ? "review.hide" : "report.resolve", "comment", m[2], { before: { status: c.status }, after: { status: m[1] === "hide" ? "hidden" : "ok" } }); return J({ ok: true }); }
     if (path === "/api/admin/users" && method === "GET") {
       const q = cleanName(url.searchParams.get("q") || "").replace(/[%_]/g, "");
-      const rows = (await db.prepare("SELECT id,name,role,banned FROM users WHERE name LIKE ? ORDER BY (role='editor') DESC, id DESC LIMIT 20").bind(`%${q}%`).all()).results || [];
+      const rows = (await db.prepare("SELECT id,name,role,banned FROM users WHERE name LIKE ? ORDER BY (role IN ('editor','moderator','admin')) DESC, id DESC LIMIT 20").bind(`%${q}%`).all()).results || [];
       return J({ users: rows });
     }
     if ((m = /^\/api\/admin\/role\/(\d+)$/.exec(path)) && method === "POST") {
-      const b = await request.json().catch(() => ({})), role = b.role === "editor" ? "editor" : b.role === "admin" ? "admin" : "user";   // Rollen in der Datenbank: user, editor, admin
-      await db.prepare("UPDATE users SET role=? WHERE id=?").bind(role, +m[1]).run(); await audit(db, user.id, "role", m[1], role);
+      const b = await request.json().catch(() => ({})), role = ["editor", "moderator", "admin"].includes(b.role) ? b.role : "user";   // Rollen in der Datenbank: user, moderator, editor, admin
+      await db.prepare("UPDATE users SET role=?,role_source='manual' WHERE id=?").bind(role, +m[1]).run(); await audit(db, user.id, "role", m[1], role); await logEdit(db, user, "admin.role", "user", m[1], { reason: role });
+      await closeObsolete(db, +m[1]);   // eine offene Bewerbung um diese (oder eine niedrigere) Rolle hat sich damit erledigt
       await evalBadges(env, +m[1]);
       return J({ ok: true, role });
     }
@@ -580,16 +609,24 @@ export default {
     if (event.cron === "*/30 * * * *" && tick.getUTCHours() === 6 && tick.getUTCMinutes() === 0) return;
     const T = (name, fn) => ctx.waitUntil(track(env, name, fn));
     if (event.cron === "*/15 * * * *") {
-      T("topicSessionReminders", async () => {
+      const reminders = track(env, "topicSessionReminders", async () => {
         const queued = await queueSessionReminders(env);
         const dispatched = await dispatchTopicNotifications(env);
         return { queued, dispatched };
       });
+      ctx.waitUntil(reminders);
+      // Event-Import (Community Days, Sessionize) zur Minute 15 und 45: in diesem Aufruf, also nie im Aufruf der Digests (0 6 und */30) und der uebrigen
+      // Aufgaben, und erst NACH den Benachrichtigungen (sie bekommen ihr Kontingent zuerst). Jeder Lauf ist hart gedeckelt (eventimport.js CAP:
+      // rund 100 D1-Aufrufe und 12 Abrufe); was nicht hineinpasst, folgt im naechsten.
+      if (tick.getUTCMinutes() % 30 === 15) ctx.waitUntil(reminders.catch(() => 0).then(() => track(env, "eventImport", () => runEventImport(env))));
       return;
     }
     if (event.cron === "0 6 * * *") {
       T("runPushDigest", () => runPushDigest(env));
+      T("syncAutoRoles", () => syncAutoRoles(env.DB));   // taeglich: MVP/MCT -> Editor, entzogene Verifizierung -> Rolle zurueck (idempotent)
       T("runDigest", () => runDigest(env, { at: scheduledAt }));
+      T("syncInviterBadges", () => syncInviterBadges(env));   // einmal taeglich (Sicherheitsnetz: Zurechnung, Entwertung und Kontoloeschung bewerten sofort)
+      T("purgeLinkedinOrphans", () => purgeLinkedinOrphans(env.DB));   // verwaiste LinkedIn-Zeilen nach dem Ende des Events (#323)
     }
     if (event.cron === "*/30 * * * *") T("runDigest", () => runDigest(env, { at: scheduledAt }));
     T("refreshFeeds", () => refreshFeeds(env));
