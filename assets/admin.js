@@ -652,6 +652,11 @@
         var sel = h("select", { "aria-label": "LinkedIn-Seite" });
         p.appendChild(h("p", {}, [h("button", { type: "button", class: "btn", text: "Meine LinkedIn-Seiten laden", onclick: function () { api("/api/admin/linkedin/orgs").then(function (o) { if (o.s !== 200) { msg(m, err(o.j), true); return; } sel.textContent = ""; (o.j.orgs || []).forEach(function (x) { var op = h("option", { value: x.urn, text: x.name }); sel.appendChild(op); }); }); } }), " ", sel, " ",
           h("button", { type: "button", class: "btn", text: "Diese Seite verwenden", onclick: function () { var op = sel.options[sel.selectedIndex]; if (!op) return; api("/api/admin/linkedin/org", { method: "POST", body: { urn: op.value, name: op.text } }).then(function (x) { if (x.s === 200) LOAD.li(); else msg(m, err(x.j), true); }); } })]));
+        var numIn = h("input", { type: "text", placeholder: "Nummer der Seite, z. B. 12345678", "aria-label": "Nummer der LinkedIn-Seite", size: 28 }), nameIn = h("input", { type: "text", placeholder: "Name (frei wählbar)", "aria-label": "Name der LinkedIn-Seite", size: 22 });
+        p.appendChild(h("p", { class: "mut", text: "Die Seite trägst du von Hand ein: Öffne die LinkedIn-Seite als Admin, die Nummer steht in der Adresse (linkedin.com/company/12345678/admin/ oder linkedin.com/school/12345678/admin/). Der Knopf „Meine LinkedIn-Seiten laden“ braucht eine zusätzliche LinkedIn-Berechtigung und geht nur, wenn die App sie hat." }));
+        p.appendChild(h("p", {}, [numIn, " ", nameIn, " ", h("button", { type: "button", class: "btn main", text: "Seite speichern", onclick: function () {
+          var mm = /(\d{5,20})/.exec(numIn.value); if (!mm) { msg(m, "Bitte die Zahl aus der Adresse der Seite eintragen (linkedin.com/company/12345678/admin/).", true); return; }
+          api("/api/admin/linkedin/org", { method: "POST", body: { urn: "urn:li:organization:" + mm[1], name: nameIn.value.trim() || ("Seite " + mm[1]) } }).then(function (x) { if (x.s === 200) LOAD.li("Seite gespeichert."); else msg(m, err(x.j), true); }); } })]));
       }
       p.appendChild(box);
       api("/api/admin/linkedin/proposals").then(function (x) {

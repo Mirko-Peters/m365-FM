@@ -934,3 +934,8 @@ test("317-01b Vorschlagsliste: importierte Events ohne Veranstalter, zusammengef
   assert.equal((await imp(env)("/api/admin/events/claim", "POST", { event_id: 3, user_id: 2, ok: true })).status, 200);
   assert.deepEqual(await props(), ["m365con-day1", "import-uebernommen"]);
 });
+
+test("LinkedIn-Anmeldung fordert nur rw_events an (r_organization_admin gehoert zu einem anderen Produkt)", () => {
+  assert.equal(LI.scope, "rw_events");
+  assert.ok(!/r_organization_admin/.test(LI.scope));
+});

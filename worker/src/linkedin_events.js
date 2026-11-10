@@ -11,7 +11,7 @@ export const LI = {
   api: "https://api.linkedin.com",
   auth: "https://www.linkedin.com/oauth/v2/authorization",
   token: "https://www.linkedin.com/oauth/v2/accessToken",
-  scope: "rw_events r_organization_admin",                   // muss mit den Produkten der App unter "Auth" uebereinstimmen
+  scope: "rw_events",                                        // nur die Events-Berechtigung (Produkt "Events Management API"); r_organization_admin gehoert zur Community Management API und wird nicht angefordert: die Seite traegt der Admin von Hand ein
   events: "/rest/events",                                    // POST = anlegen; POST /rest/events/{urn} + X-RestLi-Method: PARTIAL_UPDATE = aendern
   acls: "/rest/organizationAcls?q=roleAssignee&role=ADMINISTRATOR&state=APPROVED",
   org: "/rest/organizations/",
