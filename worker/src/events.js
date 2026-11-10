@@ -9,6 +9,7 @@ import { recordInvite } from "./inviter.js";
 import { ensureDirectoryCols, geocodeAddress, recordGeocodeStatus } from "./directory.js";
 import { adoptUnclaimedForEntity } from "./orgpair.js";
 import { gate, inScope, logEdit } from "./perm.js";
+import { eventKeys, KEYS_V, markEdited, normSessionTitle, eventDeleteOps, sessionDeleteOps, forgetImporter, dedupeEventSessions } from "./eventmerge.js";
 
 const FREE_ASKS = 2, ASK_COST = 1000;
 const HANDLE = /^[a-z0-9][a-z0-9-]{2,39}$/, PH = /^[a-z0-9][a-z0-9-]{2,29}$/;
@@ -18,6 +19,7 @@ const timezone = (value) => { try { return new Intl.DateTimeFormat("en", { timeZ
 const txt = (s, n) => cleanText(s, n).replace(/[<>]/g, "").replace(/https?:\/\/\S+/gi, "").replace(/\s+/g, " ").trim();
 const long = (s, n) => cleanText(s, n).replace(/[<>]/g, "").replace(/https?:\/\/\S+/gi, "").trim();
 const okDate = (s) => DATE.test(s) && !isNaN(Date.parse(s.length === 10 ? s + "T00:00:00Z" : s + ":00Z"));
+const endsBefore = (end, start) => (end.length === start.length ? end < start : end.slice(0, 10) < start.slice(0, 10));   // Datum ohne Uhrzeit gegen Datum mit Uhrzeit: nur der Tag zaehlt
 const parse = (s, d) => { try { return JSON.parse(s); } catch { return d; } };
 
 async function topics(env, list) {
@@ -28,9 +30,6 @@ async function topics(env, list) {
 // Event-Rollen: Rechte je Rolle (Veranstalter-Firma Inhaber/Admin/Event-Manager und Eigentuemer koennen alles ausser Rollen-Details)
 // Events, deren Anmeldungen (mit Einwilligung) an ein externes System uebergeben werden
 export const TRANSFER = { "m365con-2027": "heysummit:229506" };
-// Event geloescht: von seiner LinkedIn-Zeile (linkedin_events.js) faellt nur eine bereits abgesagte weg. Eine veroeffentlichte oder reservierte bleibt mit Absicht
-// stehen - der LinkedIn-Event ist noch oeffentlich und erscheint im Admin als "verwaist" mit Absage-Knopf (abgesagt wird nur per Klick, nie automatisch).
-const LI_GONE = "DELETE FROM linkedin_events WHERE event_id=? AND status='cancelled'";
 export const EVENT_ROLES = {
   organisator: ["edit", "sessions", "sponsor", "roles", "delete"],
   "co-organisator": ["edit", "sessions", "sponsor", "roles"],
@@ -76,9 +75,12 @@ export async function partnerAction(db, user, ev, orgHandle, kind, level, action
 }
 const EID = /^[a-z0-9-]{2,48}$/;
 const rndToken = () => [...crypto.getRandomValues(new Uint8Array(18))].map((b) => b.toString(16).padStart(2, "0")).join("");
-// Speaker pruefen. Jede Person muss die Teilnahme selbst bestaetigen (s: invited|confirmed). Bestehende Stati/Tokens bleiben erhalten.
+// Speaker pruefen. Jede Person muss die Teilnahme selbst bestaetigen (s: invited|confirmed). Bestehende Stati/Tokens bleiben erhalten,
+// ebenso die Kennungen aus dem Import (sz = Sessionize-Kennung, r = Speaker-Identitaet): ohne sie koennte der naechste Abgleich einen in der Quelle
+// zurueckgezogenen Speaker nicht mehr entfernen, sobald der Veranstalter irgendein Feld der Session im Formular gespeichert hat.
 async function speakersCheck(db, list, prev, selfHandle) {
-  const out = [], old = new Map((prev || []).map((x) => [x.h || x.n, x]));
+  const out = [], old = new Map((prev || []).map((x) => [x.h || x.n, x])), byName = new Map((prev || []).filter((x) => x.sz || x.r).map((x) => [x.n, x]));
+  const ids = (k, n) => { const x = k?.sz || k?.r ? k : byName.get(n); return { ...(x?.sz ? { sz: x.sz } : {}), ...(x?.r ? { r: x.r } : {}) }; };
   for (const s of (Array.isArray(list) ? list : []).slice(0, 8)) {
     const n = txt(s?.n, 80); let h = String(s?.h || "").toLowerCase().trim(), e = String(s?.e || "").toLowerCase().trim();
     if (e && !EID.test(e)) return null;
@@ -95,8 +97,8 @@ async function speakersCheck(db, list, prev, selfHandle) {
       if (!PH.test(h)) return null;
       const p = await db.prepare("SELECT u.name FROM profiles p JOIN users u ON u.id=p.user_id WHERE p.handle=? AND p.public=1").bind(h).first();
       if (!p) return null;
-      out.push({ h, n: keep?.n || n || p.name, ...(e ? { e } : keep?.e ? { e: keep.e } : {}), s: keep?.s === "confirmed" || h === selfHandle ? "confirmed" : keep?.s === "declined" ? "declined" : "invited" });
-    } else if (n.length >= 2) out.push({ n, ...(e ? { e } : keep?.e ? { e: keep.e } : {}), s: keep?.s === "confirmed" ? "confirmed" : "invited", ...(keep?.o ? { o: 1 } : {}), ...(keep?.t ? { t: keep.t } : { t: rndToken() }) });
+      out.push({ h, n: keep?.n || n || p.name, ...(e ? { e } : keep?.e ? { e: keep.e } : {}), s: keep?.s === "confirmed" || h === selfHandle ? "confirmed" : keep?.s === "declined" ? "declined" : "invited", ...ids(keep, keep?.n || n) });
+    } else if (n.length >= 2) out.push({ n, ...(e ? { e } : keep?.e ? { e: keep.e } : {}), s: keep?.s === "confirmed" ? "confirmed" : "invited", ...(keep?.o ? { o: 1 } : {}), ...(keep?.t ? { t: keep.t } : { t: rndToken() }), ...ids(keep, n) });
   }
   return out;
 }
@@ -157,15 +159,32 @@ export async function claimLinkedinEntity(env, user, info, eid) {
   return { status };
 }
 const sessView = (r, mgr) => ({ id: r.id, title: r.title, abstract: r.abstract, start: r.start, end: r.end, room: r.room, track: r.track, level: r.level, lang: r.lang, topics: parse(r.topics, []), speakers: mgr ? parse(r.speakers, []).map(({ email, ...x }) => x) : parse(r.speakers, []).filter((x) => x.s === "confirmed").map((x) => ({ h: x.h, n: x.n, e: x.e })), speakers_open: parse(r.speakers, []).filter((x) => x.s !== "confirmed").length, recording_url: r.recording_url, status: r.status });
-async function evView(db, ev, withPending) {
-  const org = ev.org_id ? await db.prepare("SELECT handle,name,public FROM orgs WHERE id=?").bind(ev.org_id).first() : null;
-  const ow = await db.prepare("SELECT u.name,p.handle FROM users u LEFT JOIN profiles p ON p.user_id=u.id AND p.public=1 WHERE u.id=?").bind(ev.owner_id).first();
-  const rows = (await db.prepare("SELECT * FROM event_sessions WHERE event_id=? " + (withPending ? "" : "AND status='live' ") + "ORDER BY start,id").bind(ev.id).all()).results || [];
-  return { handle: ev.handle, title: ev.title, summary: ev.summary, about: ev.about, start: ev.start, end: ev.end, tz: ev.tz, mode: ev.mode, location: ev.location, country: ev.country, url: ev.url, tickets_url: ev.tickets_url,
-    free: !!ev.free, lang: ev.lang, linkedin_url: (await db.prepare("SELECT url FROM linkedin_events WHERE event_id=? AND status='published'").bind(ev.id).first().catch(() => null))?.url || "", topics: parse(ev.topics, []), seeking_sponsor: !!ev.seeking_sponsor, public: !!ev.public,
-    partners: ((await db.prepare("SELECT p.kind,p.level,o.handle,o.name,o.public FROM event_partners p JOIN orgs o ON o.id=p.org_id WHERE p.event_id=? AND p.status='confirmed' ORDER BY p.created").bind(ev.id).all()).results || []).map((x) => ({ kind: x.kind, level: x.level, name: x.name, handle: x.public ? x.handle : "" })),
-    asked: withPending ? ((await db.prepare("SELECT o.handle FROM sponsor_asks a JOIN orgs o ON o.id=a.org_id WHERE a.event_id=?").bind(ev.id).all()).results || []).map((x) => x.handle) : undefined,
-    organizer: org ? { kind: "o", handle: org.public ? org.handle : "", name: org.name } : { kind: "u", handle: ow?.handle || "", name: ow?.name || "" }, sessions: rows.map((r) => sessView(r, withPending)) };
+// Ansichten vieler Events mit fester Zahl an Abfragen (je 50 Events hoechstens sieben), nicht mehreren je Event: der Export aller oeffentlichen Events
+// bleibt so auch mit Hunderten importierter Events weit unter der Subrequest-Grenze eines Aufrufs.
+async function evViews(db, evs, withPending) {
+  const out = [], all = async (sql, ...a) => (await db.prepare(sql).bind(...a).all()).results || [], IN = "IN (SELECT value FROM json_each(?))";
+  const group = (rows, key) => { const m = new Map(); for (const r of rows) { const l = m.get(r[key]); if (l) l.push(r); else m.set(r[key], [r]); } return m; };
+  for (let i = 0; i < evs.length; i += 50) {
+    const part = evs.slice(i, i + 50), ids = JSON.stringify(part.map((e) => e.id)), oid = [...new Set(part.map((e) => e.org_id).filter(Boolean))], uid = [...new Set(part.map((e) => e.owner_id).filter(Boolean))];
+    const orgs = new Map((oid.length ? await all(`SELECT id,handle,name,public FROM orgs WHERE id ${IN}`, JSON.stringify(oid)) : []).map((o) => [o.id, o]));
+    const owners = new Map((uid.length ? await all(`SELECT u.id,u.name,p.handle FROM users u LEFT JOIN profiles p ON p.user_id=u.id AND p.public=1 WHERE u.id ${IN}`, JSON.stringify(uid)) : []).map((u) => [u.id, u]));
+    const sess = group(await all(`SELECT * FROM event_sessions WHERE event_id ${IN} AND merged_into=0 ${withPending ? "" : "AND status='live' "}ORDER BY start,id`, ids), "event_id");
+    const partners = group(await all(`SELECT p.event_id,p.kind,p.level,o.handle,o.name,o.public FROM event_partners p JOIN orgs o ON o.id=p.org_id WHERE p.event_id ${IN} AND p.status='confirmed' ORDER BY p.created`, ids), "event_id");
+    const asked = withPending ? group(await all(`SELECT a.event_id,o.handle FROM sponsor_asks a JOIN orgs o ON o.id=a.org_id WHERE a.event_id ${IN}`, ids), "event_id") : null;
+    const sources = group(await all(`SELECT event_id,kind,url FROM event_source WHERE event_id ${IN} AND kind IN ('communitydays','sessionize_event') AND url<>''`, ids), "event_id");
+    const li = new Map((await all(`SELECT event_id,url FROM linkedin_events WHERE event_id ${IN} AND status='published'`, ids).catch(() => [])).map((r) => [r.event_id, r.url]));   // "Auch auf LinkedIn" (#323)
+    for (const ev of part) {
+      const org = ev.org_id ? orgs.get(ev.org_id) : null, ow = owners.get(ev.owner_id);
+      out.push({ handle: ev.handle, title: ev.title, summary: ev.summary, about: ev.about, start: ev.start, end: ev.end, tz: ev.tz, mode: ev.mode, location: ev.location, country: ev.country, url: ev.url, tickets_url: ev.tickets_url,
+        free: ev.free < 0 ? null : !!ev.free, lang: ev.lang, linkedin_url: li.get(ev.id) || "", topics: parse(ev.topics, []), seeking_sponsor: !!ev.seeking_sponsor, public: !!ev.public,   // free null = unbekannt (Import ohne Preisangabe)
+        partners: (partners.get(ev.id) || []).map((x) => ({ kind: x.kind, level: x.level, name: x.name, handle: x.public ? x.handle : "" })),
+        asked: asked ? (asked.get(ev.id) || []).map((x) => x.handle) : undefined,
+        organizer: org ? { kind: "o", handle: org.public ? org.handle : "", name: org.name } : { kind: "u", handle: ow?.handle || "", name: ow?.name || ev.organizer_name || "" }, unclaimed: !!ev.unclaimed, source: ev.source || "", retired: !!ev.retired,
+        sources: (sources.get(ev.id) || []).map(({ kind, url }) => ({ kind, url })),
+        sessions: (sess.get(ev.id) || []).map((r) => sessView(r, withPending)) });
+    }
+  }
+  return out;
 }
 
 export async function ensureM365Con(env) {   // M365Con 2027 ist ein Event und gehoert dem Admin als Veranstalter
@@ -279,7 +298,7 @@ export function similarName(a, b) {
   return lx === ly || (lx.length === 1 && ly[0] === lx) || (ly.length === 1 && lx[0] === ly) || (Math.min(lx.length, ly.length) >= 5 && lev(lx, ly) <= 1);
 }
 async function speakerMatches(db, me) {
-  const rows = (await db.prepare("SELECT s.speakers,e.title ev FROM event_sessions s JOIN events e ON e.id=s.event_id WHERE s.speakers LIKE '%\"n\":%' AND e.public=1 LIMIT 3000").all()).results || [], by = new Map();
+  const rows = (await db.prepare("SELECT s.speakers,e.title ev FROM event_sessions s JOIN events e ON e.id=s.event_id WHERE s.merged_into=0 AND s.speakers LIKE '%\"n\":%' AND e.public=1 LIMIT 3000").all()).results || [], by = new Map();
   for (const r of rows) { let sp = []; try { sp = JSON.parse(r.speakers); } catch { continue; } for (const x of sp) if (x.n && !x.h && similarName(me.name, x.n)) { const o = by.get(x.n) || { name: x.n, sessions: 0, events: new Set() }; o.sessions++; o.events.add(r.ev); by.set(x.n, o); } }
   return [...by.values()].map((o) => ({ name: o.name, sessions: o.sessions, events: [...o.events].slice(0, 4) }));
 }
@@ -298,14 +317,13 @@ export async function handleEvents(env, request, url, path, user, J) {
     return J({ ok: true, handle: "m365con-2027", public: false });
   }
   if (path === "/api/events/export" && method === "GET") {
-    const evs = (await db.prepare("SELECT * FROM events WHERE public=1 ORDER BY start DESC LIMIT 300").all()).results || [];
-    const out = []; for (const e of evs) out.push(await evView(db, e, false));
-    return J({ events: out }, 200, { "cache-control": "public, max-age=300" });
+    const evs = (await db.prepare("SELECT * FROM events WHERE public=1 ORDER BY unclaimed,start DESC LIMIT 300").all()).results || [];   // von Mitgliedern gepflegte Events zuerst: importierte verdraengen sie nie aus dem Export (und damit von der Seite)
+    return J({ events: await evViews(db, evs, false) }, 200, { "cache-control": "public, max-age=300" });
   }
   if (path === "/api/events/mine" && method === "GET") {
     if (need()) return need();
-    const evs = (await db.prepare("SELECT e.* FROM events e WHERE e.owner_id=?1 OR e.id IN (SELECT event_id FROM event_roles WHERE user_id=?1) OR e.org_id IN (SELECT org_id FROM org_members WHERE user_id=?1 AND status='active' AND role IN ('owner','admin','events')) ORDER BY e.start DESC").bind(user.id).all()).results || [];
-    const out = []; for (const e of evs) out.push(await evView(db, e, true));
+    const evs = (await db.prepare("SELECT e.* FROM events e WHERE e.merged_into=0 AND (e.owner_id=?1 OR e.id IN (SELECT event_id FROM event_roles WHERE user_id=?1) OR e.org_id IN (SELECT org_id FROM org_members WHERE user_id=?1 AND status='active' AND role IN ('owner','admin','events'))) ORDER BY e.start DESC").bind(user.id).all()).results || [];
+    const out = await evViews(db, evs, true);
     const orgs = (await db.prepare("SELECT o.handle,o.name FROM org_members m JOIN orgs o ON o.id=m.org_id WHERE m.user_id=? AND m.status='active' AND m.role IN ('owner','admin','events')").bind(user.id).all()).results || [];
     return J({ events: out, orgs });
   }
@@ -316,7 +334,7 @@ export async function handleEvents(env, request, url, path, user, J) {
     if (!HANDLE.test(handle)) return J({ error: "bad_handle" }, 400);
     const title = txt(b.title, 120); if (title.length < 3) return J({ error: "bad_title" }, 400);
     if (!okDate(String(b.start || ""))) return J({ error: "bad_date" }, 400);
-    const end = String(b.end || ""); if (end && (!okDate(end) || end < b.start)) return J({ error: "bad_date" }, 400);
+    const end = String(b.end || ""); if (end && (!okDate(end) || endsBefore(end, b.start))) return J({ error: "bad_date" }, 400);
     const mode = MODES.includes(b.mode) ? b.mode : "online";
     const eu = cleanUrl(b.url, null), tu = cleanUrl(b.tickets_url, null); if (eu === null || tu === null) return J({ error: "bad_url" }, 400);
     const tp = await topics(env, b.topics); if (!tp) return J({ error: "bad_topic" }, 400);
@@ -326,9 +344,9 @@ export async function handleEvents(env, request, url, path, user, J) {
       if (!o) return J({ error: "forbidden" }, 403); orgId = o.id;
     }
     const ex = await db.prepare("SELECT * FROM events WHERE handle=?").bind(handle).first();
-    if (ex && !(await canManage(db, user, ex))) return J({ error: "handle_taken" }, 409);
+    if (ex && (ex.merged_into || !(await canManage(db, user, ex)))) return J({ error: "handle_taken" }, 409);   // in einem anderen Event aufgegangene Zeile: nicht ueber das Formular wiederbeleben (Zuruecknehmen ist Sache der Admins)
     const tz = timezone(String(b.tz || ex?.tz || "Europe/Berlin")); if (!tz) return J({ error: "bad_timezone" }, 400);
-    const vals = [title, txt(b.summary, 200), long(b.about, 3000), b.start, end, tz, mode, txt(b.location, 120), txt(b.country, 60), eu, tu, b.free === false ? 0 : 1, txt(b.lang, 10), JSON.stringify(tp), b.seeking_sponsor ? 1 : 0, b.public === false ? 0 : 1, now()];
+    const vals = [title, txt(b.summary, 200), long(b.about, 3000), b.start, end, tz, mode, txt(b.location, 120), txt(b.country, 60), eu, tu, b.free === false ? 0 : b.free === true || !ex ? 1 : ex.free, txt(b.lang, 10), JSON.stringify(tp), b.seeking_sponsor ? 1 : 0, b.public === false ? 0 : 1, now()];
     let eventId = ex?.id;
     if (ex) await db.prepare("UPDATE events SET title=?,summary=?,about=?,start=?,end=?,tz=?,mode=?,location=?,country=?,url=?,tickets_url=?,free=?,lang=?,topics=?,seeking_sponsor=?,public=?,updated=?,org_id=? WHERE id=?").bind(...vals, b.org === undefined ? ex.org_id : orgId, ex.id).run();
     else eventId = (await db.prepare("INSERT INTO events(title,summary,about,start,end,tz,mode,location,country,url,tickets_url,free,lang,topics,seeking_sponsor,public,updated,handle,owner_id,org_id,created) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)").bind(...vals, handle, user.id, orgId, now()).run()).meta.last_row_id;
@@ -336,24 +354,27 @@ export async function handleEvents(env, request, url, path, user, J) {
     const geo = address ? await geocodeAddress(env, address, ex || {}, "address") : { lat: null, lng: null, geo_precision: "", geo_address: "", geo_at: 0 };
     await recordGeocodeStatus(db, geo, address);
     const city = geo.city || (address && address === ex?.geo_address ? ex.city || "" : "");
-    await db.prepare("UPDATE events SET lat=?,lng=?,geo_precision=?,geo_address=?,geo_at=?,city=? WHERE id=?")
-      .bind(geo.lat, geo.lng, geo.geo_precision, geo.geo_address, geo.geo_at, city, eventId).run();
+    // Schluessel fuer den Dubletten-Abgleich der Importe gleich mitschreiben; edited_at = von Hand gepflegt (Importe ueberschreiben danach nichts)
+    const keys = eventKeys({ title, url: eu, city, location: txt(b.location, 120), mode });
+    await db.prepare("UPDATE events SET lat=?,lng=?,geo_precision=?,geo_address=?,geo_at=?,city=?,name_key=?,url_key=?,city_key=?,keys_v=?,edited_at=? WHERE id=?")
+      .bind(geo.lat, geo.lng, geo.geo_precision, geo.geo_address, geo.geo_at, city, keys.name_key, keys.url_key, keys.city_key, KEYS_V, now(), eventId).run();
     if (b.public !== false) await ownedEntity(env, user, { eid: handle, type: "event", name: title, en: `${title} is an event in the Microsoft community, starting ${b.start}.`, de: `${title} ist eine Veranstaltung der Microsoft-Community, Beginn ${b.start}.`, web: String(b.url || "").startsWith("https://") ? b.url : "" });
     return J({ ok: true });
   }
   if ((m = path.match(/^\/api\/event\/([a-z0-9-]{3,40})$/)) && method === "DELETE") {
     if (need()) return need();
-    const ev = await db.prepare("SELECT * FROM events WHERE handle=?").bind(m[1]).first();
+    const ev = await db.prepare("SELECT * FROM events WHERE handle=? AND merged_into=0").bind(m[1]).first();
     if (!(await canManage(db, user, ev, "delete"))) return J({ error: "forbidden" }, 403);
-    await db.batch([db.prepare("DELETE FROM event_roles WHERE event_id=?").bind(ev.id), db.prepare("DELETE FROM event_partners WHERE event_id=?").bind(ev.id), db.prepare("DELETE FROM event_attendees WHERE event_id=?").bind(ev.id), db.prepare("DELETE FROM event_settings WHERE event_id=?").bind(ev.id), db.prepare("DELETE FROM event_sessions WHERE event_id=?").bind(ev.id), db.prepare("DELETE FROM events WHERE id=?").bind(ev.id), db.prepare(LI_GONE).bind(ev.id)]);
+    await db.batch(await eventDeleteOps(db, ev));   // alles, was am Event haengt (EVENT_TABLES, Quellen; von linkedin_events nur abgesagte Zeilen); Import-Events hinterlassen eine Loeschmarke und kommen nicht zurueck
     return J({ ok: true });
   }
   // Session anlegen/aendern: Veranstalter -> sofort live; andere Mitglieder -> Vorschlag (pending)
   if ((m = path.match(/^\/api\/event\/([a-z0-9-]{3,40})\/session$/)) && method === "POST") {
     if (need()) return need();
     if (!(await rateLimit(db, `sess:${user.id}`, 40, 3600))) return J({ error: "rate_limit" }, 429);
-    const ev = await db.prepare("SELECT * FROM events WHERE handle=?").bind(m[1]).first(); if (!ev) return J({ error: "not_found" }, 404);
+    const ev = await db.prepare("SELECT * FROM events WHERE handle=? AND merged_into=0").bind(m[1]).first(); if (!ev) return J({ error: "not_found" }, 404);   // nie an eine ausgeblendete (zusammengefuehrte) Zeile
     const mgr = await canManage(db, user, ev, "sessions"), b = await body();
+    if (ev.unclaimed && !mgr && !b.id) return J({ error: "unclaimed" }, 409);   // importiertes Event ohne Veranstalter: niemand koennte den Vorschlag freigeben
     const title = txt(b.title, 140); if (title.length < 3) return J({ error: "bad_title" }, 400);
     const st = String(b.start || ""), en = String(b.end || "");
     if ((st && !okDate(st)) || (en && !okDate(en))) return J({ error: "bad_date" }, 400);
@@ -368,37 +389,40 @@ export async function handleEvents(env, request, url, path, user, J) {
       const s = await db.prepare("SELECT * FROM event_sessions WHERE id=? AND event_id=?").bind(+b.id, ev.id).first(); if (!s) return J({ error: "not_found" }, 404);
       if (!mgr && !(s.proposer_id === user.id && s.status === "pending")) {
         if (!(myH && parse(s.speakers, []).some((x) => x.h === myH && x.s === "confirmed"))) return J({ error: "forbidden" }, 403);
-        await db.prepare("UPDATE event_sessions SET abstract=?,recording_url=? WHERE id=?").bind(f[1], ru, s.id).run();   // bestaetigte Speaker pflegen nur Beschreibung und Aufzeichnung
+        await db.prepare("UPDATE event_sessions SET abstract=?,recording_url=?,edited_fields=? WHERE id=?").bind(f[1], ru, markEdited(s.edited_fields, [f[1] !== s.abstract && "abstract", ru !== s.recording_url && "recording_url"]), s.id).run();   // bestaetigte Speaker pflegen nur Beschreibung und Aufzeichnung
         return J({ ok: true, limited: true });
       }
-      await db.prepare("UPDATE event_sessions SET title=?,abstract=?,start=?,end=?,room=?,track=?,level=?,lang=?,topics=?,speakers=?,recording_url=? WHERE id=?").bind(...f, s.id).run();
+      // von Hand geaenderte Felder merken: ein spaeterer Sessionize-Abgleich laesst sie stehen
+      const names = ["title", "abstract", "start", "end", "room", "track", "level", "lang", "topics", "speakers", "recording_url"], changed = names.filter((k, i) => k !== "topics" && (k === "speakers" ? JSON.stringify(sp.map((x) => [x.h || "", x.n])) !== JSON.stringify(prevSp.map((x) => [x.h || "", x.n])) : f[i] !== s[k]));
+      await db.prepare("UPDATE event_sessions SET title=?,abstract=?,start=?,end=?,room=?,track=?,level=?,lang=?,topics=?,speakers=?,recording_url=?,title_key=?,edited_fields=? WHERE id=?").bind(...f, normSessionTitle(title) || "-", markEdited(s.edited_fields, changed), s.id).run();
       await saveInvites(db, ev.id, s.id, sp);
       return J({ ok: true });
     }
     if ((await db.prepare("SELECT COUNT(*) n FROM event_sessions WHERE event_id=?").bind(ev.id).first()).n >= 300) return J({ error: "limit" }, 400);
-    await db.prepare("INSERT INTO event_sessions(title,abstract,start,end,room,track,level,lang,topics,speakers,recording_url,event_id,status,proposer_id,created) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)").bind(...f, ev.id, mgr ? "live" : "pending", user.id, now()).run();
+    await db.prepare("INSERT INTO event_sessions(title,abstract,start,end,room,track,level,lang,topics,speakers,recording_url,event_id,status,proposer_id,created,title_key) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)").bind(...f, ev.id, mgr ? "live" : "pending", user.id, now(), normSessionTitle(title) || "-").run();
     const nid = (await db.prepare("SELECT last_insert_rowid() id").first()).id; await saveInvites(db, ev.id, nid, sp);
     return J({ ok: true, status: mgr ? "live" : "pending" });
   }
   if ((m = path.match(/^\/api\/event\/([a-z0-9-]{3,40})\/session\/(\d+)(\/approve)?$/))) {
     if (need()) return need();
-    const ev = await db.prepare("SELECT * FROM events WHERE handle=?").bind(m[1]).first(); if (!ev) return J({ error: "not_found" }, 404);
+    const ev = await db.prepare("SELECT * FROM events WHERE handle=? AND merged_into=0").bind(m[1]).first(); if (!ev) return J({ error: "not_found" }, 404);
     const s = await db.prepare("SELECT * FROM event_sessions WHERE id=? AND event_id=?").bind(+m[2], ev.id).first(); if (!s) return J({ error: "not_found" }, 404);
     const mgr = await canManage(db, user, ev, "sessions");
     if (m[3] && method === "POST") {
       if (!mgr) return J({ error: "forbidden" }, 403);
       const b = await body();
-      if (b.ok === false) await db.prepare("DELETE FROM event_sessions WHERE id=?").bind(s.id).run(); else await db.prepare("UPDATE event_sessions SET status='live' WHERE id=?").bind(s.id).run();
+      if (b.ok === false) await db.batch(await sessionDeleteOps(db, s.id));
+      else { await db.prepare("UPDATE event_sessions SET status='live' WHERE id=?").bind(s.id).run(); await dedupeEventSessions(db, ev.id, user.id); }   // freigegebener Import-Vorschlag: mit der gleichen Session vereinen (protokolliert, umkehrbar)
       return J({ ok: true });
     }
     if (!m[3] && method === "DELETE") {
       if (!mgr && s.proposer_id !== user.id) return J({ error: "forbidden" }, 403);
-      await db.prepare("DELETE FROM event_sessions WHERE id=?").bind(s.id).run(); return J({ ok: true });
+      await db.batch(await sessionDeleteOps(db, s.id)); return J({ ok: true });   // samt Quellen; importierte Sessions hinterlassen eine Loeschmarke (kein Wiederkommen beim naechsten Abgleich)
     }
   }
   // ---- Teilnehmer: anmelden (Warteliste bei vollem Event), Sichtbarkeit selbst bestimmen, abmelden ----
   if ((m = path.match(/^\/api\/event\/([a-z0-9-]{3,40})\/(attendees|register|capacity|invite-mail)$/))) {
-    const ev = await db.prepare("SELECT * FROM events WHERE handle=?").bind(m[1]).first(); if (!ev || (!ev.public && !(await canManage(db, user, ev, "edit")))) return J({ error: "not_found" }, 404);
+    const ev = await db.prepare("SELECT * FROM events WHERE handle=? AND merged_into=0").bind(m[1]).first(); if (!ev || (!ev.public && !(await canManage(db, user, ev, "edit")))) return J({ error: "not_found" }, 404);
     const cap = (await db.prepare("SELECT capacity FROM event_settings WHERE event_id=?").bind(ev.id).first())?.capacity || 0;
     if (m[2] === "attendees" && method === "GET") {
       const going = (await db.prepare("SELECT COUNT(*) n FROM event_attendees WHERE event_id=? AND status='going'").bind(ev.id).first()).n;
@@ -409,6 +433,7 @@ export async function handleEvents(env, request, url, path, user, J) {
     }
     if (need()) return need();
     if (m[2] === "register" && method === "POST") {
+      if (ev.unclaimed) return J({ error: "unclaimed" }, 409);   // importiertes Event ohne Veranstalter: hier fuehrt niemand eine Teilnehmerliste; Anmeldung nur beim Veranstalter selbst
       if (!(await rateLimit(db, `reg:${user.id}`, 40, 3600))) return J({ error: "rate_limit" }, 429);
       const b = await body(), vis = b.visible ? 1 : 0;
       if (vis && !(await db.prepare("SELECT 1 x FROM profiles WHERE user_id=? AND public=1").bind(user.id).first())) return J({ error: "need_profile" }, 400);
@@ -472,7 +497,7 @@ export async function handleEvents(env, request, url, path, user, J) {
   }
   // ---- Event-Team: Rollen vergeben (Organisator, Co-Organisator, Programm-, Sponsoren-Manager, Kommunikation, Helfer) ----
   if ((m = path.match(/^\/api\/event\/([a-z0-9-]{3,40})\/team$/))) {
-    const ev = await db.prepare("SELECT * FROM events WHERE handle=?").bind(m[1]).first(); if (!ev) return J({ error: "not_found" }, 404);
+    const ev = await db.prepare("SELECT * FROM events WHERE handle=? AND merged_into=0").bind(m[1]).first(); if (!ev) return J({ error: "not_found" }, 404);
     if (method === "GET") {
       const rows = (await db.prepare("SELECT r.role,r.user_id,u.name,p.handle FROM event_roles r JOIN users u ON u.id=r.user_id LEFT JOIN profiles p ON p.user_id=u.id AND p.public=1 WHERE r.event_id=? ORDER BY r.created").bind(ev.id).all()).results || [];
       const mine = need() ? false : await canManage(db, user, ev, "roles");
@@ -522,7 +547,7 @@ export async function handleEvents(env, request, url, path, user, J) {
     if (!me) return J({ error: "need_profile" }, 400);
     const ok = (await speakerMatches(db, me)).find((x) => x.name === String(b.name || "")); if (!ok) return J({ error: "not_found" }, 404);
     let n = 0, ops = [];
-    for (const r of (await db.prepare("SELECT id,speakers FROM event_sessions WHERE speakers LIKE ?").bind(`%"n":${JSON.stringify(ok.name).slice(0, -1)}"%`).all()).results || []) {
+    for (const r of (await db.prepare("SELECT id,speakers FROM event_sessions WHERE merged_into=0 AND speakers LIKE ?").bind(`%"n":${JSON.stringify(ok.name).slice(0, -1)}"%`).all()).results || []) {
       let sp = []; try { sp = JSON.parse(r.speakers); } catch { continue; } let ch = false;
       for (const x of sp) if (x.n === ok.name && !x.h) { if (x.t) ops.push(db.prepare("DELETE FROM speaker_invites WHERE token=?").bind(x.t)); delete x.t; delete x.o; x.h = me.handle; x.s = "invited"; ch = true; n++; }
       if (ch) ops.push(db.prepare("UPDATE event_sessions SET speakers=? WHERE id=?").bind(JSON.stringify(sp), r.id));
@@ -553,7 +578,7 @@ export async function handleEvents(env, request, url, path, user, J) {
   if (path === "/api/speaker/requests" && method === "GET") {
     if (need()) return need();
     const pr = await db.prepare("SELECT handle FROM profiles WHERE user_id=?").bind(user.id).first(); if (!pr?.handle) return J({ items: [] });
-    const rows = (await db.prepare("SELECT s.id,s.title,e.title ev,e.handle eh,s.speakers FROM event_sessions s JOIN events e ON e.id=s.event_id WHERE s.speakers LIKE ?").bind(`%"h":"${pr.handle}"%`).all()).results || [];
+    const rows = (await db.prepare("SELECT s.id,s.title,e.title ev,e.handle eh,s.speakers FROM event_sessions s JOIN events e ON e.id=s.event_id WHERE s.merged_into=0 AND s.speakers LIKE ?").bind(`%"h":"${pr.handle}"%`).all()).results || [];
     return J({ items: rows.filter((r) => parse(r.speakers, []).some((x) => x.h === pr.handle && x.s === "invited")).map((r) => ({ id: r.id, title: r.title, event: r.ev, eh: r.eh })) });
   }
   if (path === "/api/speaker/respond" && method === "POST") {
@@ -680,7 +705,7 @@ export async function handleEvents(env, request, url, path, user, J) {
     const crits = o.map((r) => parse(r.criteria, {}));
     const today = new Date().toISOString().slice(0, 10);
     const evs = (await db.prepare("SELECT * FROM events WHERE seeking_sponsor=1 AND public=1 AND (CASE WHEN end<>'' THEN end ELSE start END)>=? ORDER BY start LIMIT 100").bind(today).all()).results || [];
-    const out = []; for (const e of evs) { const v = await evView(db, e, false); delete v.sessions; v.match = crits.some((c) => !c.format || c.format === e.mode); out.push(v); }
+    const out = (await evViews(db, evs, false)).map((v, i) => { delete v.sessions; v.match = crits.some((c) => !c.format || c.format === evs[i].mode); return v; });
     return J({ events: out });
   }
   // Veranstalter fragen Firmen an (2 Wunschfirmen je Event frei, weitere kosten Punkte); Nachricht landet im Postfach der Firma
@@ -723,9 +748,10 @@ export async function purgeEntityClaimReview(db) {
 }
 
 export async function deleteUserEvents(db, uid) {
-  const evs = (await db.prepare("SELECT id FROM events WHERE owner_id=? AND org_id IS NULL").bind(uid).all()).results || [];
+  const evs = (await db.prepare("SELECT * FROM events WHERE owner_id=? AND org_id IS NULL").bind(uid).all()).results || [];
   const ops = [];
-  for (const e of evs) ops.push(db.prepare("DELETE FROM event_roles WHERE event_id=?").bind(e.id), db.prepare("DELETE FROM event_partners WHERE event_id=?").bind(e.id), db.prepare("DELETE FROM event_attendees WHERE event_id=?").bind(e.id), db.prepare("DELETE FROM event_settings WHERE event_id=?").bind(e.id), db.prepare("DELETE FROM event_sessions WHERE event_id=?").bind(e.id), db.prepare("DELETE FROM events WHERE id=?").bind(e.id), db.prepare(LI_GONE).bind(e.id));
-  ops.push(db.prepare("DELETE FROM event_sessions WHERE proposer_id=? AND status='pending'").bind(uid), db.prepare("DELETE FROM event_roles WHERE user_id=?").bind(uid), db.prepare("DELETE FROM event_attendees WHERE user_id=?").bind(uid), db.prepare("DELETE FROM event_transfers WHERE user_id=?").bind(uid));
-  if (ops.length) await db.batch(ops);
+  for (const e of evs) ops.push(...(await eventDeleteOps(db, e)));   // auch uebernommene Import-Events: sie kommen nicht als herrenlose Kopie zurueck (Loeschmarke)
+  ops.push(db.prepare("DELETE FROM session_source WHERE session_id IN (SELECT id FROM event_sessions WHERE proposer_id=? AND status='pending')").bind(uid), db.prepare("DELETE FROM event_sessions WHERE proposer_id=? AND status='pending'").bind(uid), db.prepare("DELETE FROM event_roles WHERE user_id=?").bind(uid), db.prepare("DELETE FROM event_attendees WHERE user_id=?").bind(uid), db.prepare("DELETE FROM event_transfers WHERE user_id=?").bind(uid));
+  ops.push(...(await forgetImporter(db, uid)));   // zuletzt: Beanspruchungen, Import-Vorschau, selbst importierte Speaker-Eintraege, Speaker-Identitaet (Name), Protokoll-Staende
+  for (let i = 0; i < ops.length; i += 80) await db.batch(ops.slice(i, i + 80));
 }

@@ -1,4 +1,4 @@
-# Entitäten: JSON gegen D1 (2026-11-09T06:56Z)
+# Entitäten: JSON gegen D1 (2026-11-10T06:53Z)
 
 JSON-Basis 2197 · D1 live 2201 · in beiden 2197 · nur JSON 0 · nur D1 4
 

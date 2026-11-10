@@ -1,6 +1,41 @@
 {
  "_doc": "Jede API-Route unter worker/src muss hier einem MCP-Tool zugeordnet (tools) oder mit Begründung ausgenommen (skip) sein. tools/check_mcp_coverage.mjs prüft das täglich.",
  "routes": {
+  "/api/events/import/sessionize-profile/preview": {
+   "tools": [
+    "import_sessionize_profile"
+   ]
+  },
+  "/api/events/import/sessionize-profile/confirm": {
+   "tools": [
+    "import_sessionize_profile"
+   ]
+  },
+  "/api/admin/events/dupes": {
+   "tools": [
+    "manage_event_duplicates"
+   ]
+  },
+  "/api/admin/events/unmerge": {
+   "tools": [
+    "manage_event_duplicates"
+   ]
+  },
+  "/api/admin/events/import": {
+   "tools": [
+    "manage_event_duplicates"
+   ]
+  },
+  "/api/admin/events/claims": {
+   "tools": [
+    "manage_event_duplicates"
+   ]
+  },
+  "/api/admin/events/claim": {
+   "tools": [
+    "manage_event_duplicates"
+   ]
+  },
   "/api/me/identities": {
    "skip": "Anmeldungen verknüpfen/entfernen und Konten zusammenführen (#279) nur mit Browser-Sitzung und frischer Anmeldung, bewusst nicht per KI-Token"
   },

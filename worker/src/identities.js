@@ -132,6 +132,7 @@ export async function mergeStatements(db, S, T) {
   simple("invite_pending", "inviter_user_id"); set("invite_pending", "invitee_user_id");
   st.push(q("DELETE FROM invite_pending WHERE inviter_user_id=invitee_user_id"));
   simple("msg_messages", "from_id"); simple("sponsor_manual_metrics", "entered_by"); simple("tr_queue", "requested_by");
+  simple("merge_log", "by_user"); simple("dedupe_queue", "decided_by");   // Event-Import (#317): wer zusammengefuehrt/entschieden hat
   simple("linkedin_conn", "connected_by"); simple("linkedin_events", "published_by");   // LinkedIn-Events: Zugang und "veroeffentlicht von" gehen auf das Zielkonto ueber
   // Blog und Bibliothek: UNIQUE(user_id, slug) -> Slug von S bei Kollision umbenennen
   for (const t of ["blog_posts", "lib_items"]) {
@@ -142,7 +143,8 @@ export async function mergeStatements(db, S, T) {
   // Stimmen, Meldungen, Abos, Mitgliedschaften: doppelte Eintraege entfallen
   for (const t of ["user_badges", "likes", "reports", "wiki_reports", "edit_votes", "entity_a_votes", "email_topics", "item_votes", "blog_votes", "pod_votes",
     "yt_votes", "lib_votes", "wish_votes", "review_helpful", "event_attendees", "event_transfers", "item_guests", "blog_coauthors", "mail_prefs",
-    "mail_topic_follows", "contribution_ignored", "msg_bonus", "certs", "cert_check", "expert_request_reports"]) set(t);
+    "mail_topic_follows", "contribution_ignored", "msg_bonus", "certs", "cert_check", "expert_request_reports", "event_claims"]) set(t);   // event_claims (#317): offene Beanspruchung importierter Events wandert mit
+  st.push(q("DELETE FROM import_preview WHERE user_id=?", S));   // #317: Import-Vorschau des stillgelegten Kontos verfaellt (an das Konto gebunden, hoechstens 1 Stunde gueltig)
   st.push(q("DELETE FROM likes WHERE user_id=? AND comment_id IN (SELECT id FROM comments WHERE user_id=?)", T, T));   // eigene Kommentare liken geht nicht
   st.push(q("DELETE FROM reports WHERE user_id=? AND comment_id IN (SELECT id FROM comments WHERE user_id=?)", T, T));
   st.push(q("DELETE FROM blog_coauthors WHERE user_id=? AND post_id IN (SELECT id FROM blog_posts WHERE user_id=?)", T, T));
@@ -211,6 +213,7 @@ export async function mergeStatements(db, S, T) {
   else if (sh && th && sh !== th) {   // Handle von S zeigt kuenftig auf T: Blog-Abos und Speaker-Eintraege umhaengen
     st.push(q("UPDATE OR IGNORE blog_follows SET handle=? WHERE handle=?", th, sh), q("DELETE FROM blog_follows WHERE handle=?", sh));
     st.push(q("UPDATE event_sessions SET speakers=replace(speakers,?,?) WHERE instr(speakers,?)>0", `"h":"${sh}"`, `"h":"${th}"`, `"h":"${sh}"`));
+    st.push(q("UPDATE speaker_ref SET handle=? WHERE handle=?", th, sh));   // #317: gemerkte Speaker-Identitaet zeigt kuenftig auf das Profil von T
   }
   set("blog_follows");
   if (th || sh) st.push(q("DELETE FROM blog_follows WHERE user_id=? AND handle=?", T, th || sh));
