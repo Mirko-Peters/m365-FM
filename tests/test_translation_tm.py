@@ -16,6 +16,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 import i18n_overrides as OV
+API_DEFAULT = OV.API_DEFAULT   # vor jedem patch: die echte Vorgabe
 import translate_blog as TB
 import translate_show as TS
 from tm_hash import fields_hash, norm, unit_hash
@@ -65,7 +66,7 @@ class Base(unittest.TestCase):
         self.api = FakeBatch()
         for obj, name, val in ((TB, "OUT", self.tmp / "blog_i18n"), (TB, "WORK", self.tmp / "work"), (TB, "_SRC", {}), (TB, "BY_SLUG", {}), (TB, "BY_KEY", {}), (TB, "QUEUE", {}), (TB, "WISH", {}),
                                (TB, "LANGS", ("de", "fr")), (TB, "api", self.api), (TB, "check_budget", lambda *a, **k: True), (TB, "report_usage", lambda *a, **k: None),
-                               (OV, "DIR", self.tmp / "ov"), (TS, "OUT", self.tmp / "pi18n"), (TB.time, "sleep", lambda s: None)):
+                               (OV, "DIR", self.tmp / "ov"), (OV, "API_DEFAULT", ""), (TS, "OUT", self.tmp / "pi18n"), (TB.time, "sleep", lambda s: None)):   # ohne Export: nur die Dateien (kein Netz im Test)
             p = patch.object(obj, name, val); p.start(); self.addCleanup(p.stop)
         p = patch.dict(os.environ, {"ANTHROPIC_API_KEY": "test"}); p.start(); self.addCleanup(p.stop)
         for k in ("COMMUNITY_API", "I18N_OVERRIDES_API", "CRON_KEY"): os.environ.pop(k, None)
@@ -398,6 +399,7 @@ class Overrides(Base):
             OV.use_api("https://api.example.test")
             self.assertEqual(OV.load("lblog", "de"), {"a-post": {"3": {"t": "aus der Datei", "sh": "01234567"}}})
             OV.load("lblog", "fr"); self.assertEqual(len(calls), 2)   # nach dem ersten Fehlschlag fragt der Lauf nicht weiter
+            self.assertEqual(OV.failed("lblog"), ["de", "fr"])   # F01: die Datei gilt, die Sperre ist trotzdem unbekannt
 
     def test_override_wins_is_sanitised_and_never_stored(self):
         self.hand("3", PARAS[2], EVIL)
@@ -641,8 +643,8 @@ class ExportUnreachable(Base):
             self.assertEqual(OV.load("lblog", "fr"), {}); self.assertTrue(OV.failed("lblog", "fr")); self.assertEqual(OV.failed("lblog"), ["fr"])
             OV.load("notes", "de"); self.assertTrue(OV.failed("notes", "de"))   # nach dem Fehlschlag fragt der Lauf nicht weiter: genauso unbekannt
             self.assertEqual(len(self.asked), 2)
-        with self.export(status=404):
-            self.assertEqual(OV.load("lblog", "de"), {}); self.assertEqual(OV.failed("lblog"), [])   # Endpunkt noch nicht ausgerollt: es gibt keine Handtexte
+        with self.export(status=404):   # F01: seit #319 gibt es den Endpunkt - ein 404 (falsche Basis, Rueckbau) ist genauso unbekannt wie ein 5xx
+            self.assertEqual(OV.load("lblog", "de"), {}); self.assertEqual(OV.failed("lblog"), ["de"])
         with patch.object(OV, "_get", lambda path, timeout=20: {"error": "kaputt"}):
             OV.use_api("https://api.example.test"); OV.load("lblog", "de"); self.assertTrue(OV.failed("lblog", "de")); OV.use_api("")   # Antwort ohne items
         OV.load("lblog", "de"); self.assertEqual(OV.failed("lblog"), [])   # ohne eingestellten Export gelten die Dateien
@@ -687,7 +689,10 @@ class ExportUnreachable(Base):
             self.assertEqual(OV.failed("lblog"), ["fr"])
         self.assertEqual(self.api.sent(), ["3"]); self.assertEqual(self.rec()["seg"]["3"], "deV2:" + self.edited[2]); self.assertEqual(self.rec("fr")["seg"]["3"], "frV1:" + PARAS[2])
         e4 = list(self.edited); e4[3] = NEW4; p4 = post(e4)
-        with self.export(status=404): self.run_blog([p4], "stale", "--langs", "de")   # Endpunkt noch nicht ausgerollt: keine Handtexte, keine Sperre
+        with self.export(status=404):   # F01: 404 heisst nicht "keine Handtexte" - der Lauf ersetzt nichts und endet rot
+            with self.assertRaises(SystemExit): self.run_blog([p4], "stale", "--langs", "de")
+        self.assertEqual(self.api.sent(), ["3"])
+        with self.export({}): self.run_blog([p4], "stale", "--langs", "de")
         self.assertEqual(self.api.sent(), ["4"])
         e5 = list(e4); e5[4] = "Paragraph five got a new wording about Teams Premium."; p5 = post(e5)
         with self.export(status=503): self.run_blog([p5], "stale", "--langs", "de", "--force-manual")   # braucht die Sperre nicht
@@ -732,6 +737,38 @@ class ExportUnreachable(Base):
             with self.assertRaises(SystemExit): self.run_blog([self.p], "prepare", "--langs", "de", "--slugs", "a-post", "--redo")
         self.assertFalse(fin.exists())
 
+    def test_f01_local_run_without_variable_asks_the_default_export(self):
+        """F01 (#315): ohne COMMUNITY_API fragte use_api() keinen Export, failed() blieb leer und prepare --stale legte einen Auftrag fuer einen von Hand
+        bearbeiteten Absatz an. Jetzt gilt die Vorgabe des Projekts; ist sie nicht erreichbar, ist die Sperre unbekannt."""
+        self.assertEqual(API_DEFAULT, "https://api-dub.m365.fm")   # dieselbe Vorgabe wie COMMUNITY_API in translate_blog.queue_items und site_fetch
+        asked = []
+
+        def down(path, timeout=20): asked.append(OV._API["base"] + path); raise urllib.error.URLError("unreachable")
+        with patch.object(OV, "API_DEFAULT", API_DEFAULT), patch.object(OV, "_get", down):
+            with patch.object(TB, "posts", lambda: [self.p2]):
+                TB.BY_SLUG["a-post"] = self.p2
+                with self.assertRaises(SystemExit): self.run_blog([self.p2], "prepare", "--langs", "de", "--stale")
+            self.assertEqual(asked, [API_DEFAULT + "/api/i18n/overrides?kind=lblog&lang=de"]); self.assertEqual(OV.failed("lblog"), ["de"])
+        self.assertEqual(list((TB.WORK / "de").glob("*.in.txt")), [], "kein Auftrag, der den Handtext-Absatz ersetzen koennte")
+        OV.use_api(""); self.assertEqual(OV.failed("lblog"), [], "use_api('') heisst ausdruecklich: nur die Dateien")
+
+    def test_f01_apply_holds_only_jobs_that_replace_existing_text(self):
+        b = post(["A never translated paragraph about Loop components.", "And a second one about Planner boards."], slug="b-post", title="Second post")
+        with patch.object(TB, "posts", lambda: [self.p, b]), self.export({}):
+            TB.BY_SLUG.update({"a-post": self.p, "b-post": b})
+            TB.prepare(self.args("prepare", "--langs", "de", "--slugs", "a-post", "--redo"))   # ersetzt vorhandenen Text
+            TB.prepare(self.args("prepare", "--langs", "de", "--slugs", "b-post"))             # nur nie uebersetzte Einheiten
+        jobs = {}
+        for slug in ("a-post", "b-post"):
+            fin = TB.WORK / "de" / f"{TB.key(slug)}.in.txt"; fout = fin.with_name(fin.name.replace(".in.txt", ".out.txt")); job = fin.read_text("utf-8")
+            fout.write_text("\n".join(f"[[{i}]] deAG:{t}" for i, t in TB.parse(job.split("\n", 1)[1]).items()) + "\n", encoding="utf-8"); jobs[slug] = (fin, fout, job)
+        with self.export(status=503):
+            with self.assertRaises(SystemExit) as cm: self.run_blog([self.p, b], "apply")
+        self.assertIn("de", str(cm.exception))
+        fin, fout, job = jobs["a-post"]; self.assertTrue(fout.exists()); self.assertEqual(fin.read_text("utf-8"), job); self.assertEqual(self.rec()["seg"]["1"], "deV1:" + PARAS[0])
+        fin, fout, _ = jobs["b-post"]; self.assertFalse(fin.exists() or fout.exists())
+        self.assertTrue(self.rec(slug="b-post")["ok"]); self.assertEqual(self.rec(slug="b-post")["seg"]["1"], "deAG:A never translated paragraph about Loop components.")
+
     def test_stale_list_of_a_language_stays_while_its_hand_texts_are_unknown(self):
         e = list(PARAS); e[3] = NEW4; p4 = post(e)
         ov = {("lblog", "de"): {"a-post": {"4": {"t": "HAND vier, schon nachgezogen.", "sh": OV.anchor("lblog", "4", NEW4)}}}}
@@ -752,7 +789,9 @@ class ExportUnreachable(Base):
         self.assertEqual(json.loads((TS.OUT / "src" / "de.json").read_text())["ep-1"], TS.show_hash(e))   # nichts gesendet, Hash unveraendert
         with self.export(status=503): self.assertEqual(s.run_show([e2, ep(slug="ep-2")], "--langs", "de"), ["de__ep-2"])   # Neues laeuft weiter
         with self.export(status=503): self.assertEqual(s.run_show([e2], "--stale", "--langs", "de", "--force-manual"), ["de__ep-1"])
-        with self.export(status=404): self.assertEqual(s.run_show([e2], "--stale", "--langs", "fr"), ["fr__ep-1"])
+        with self.export(status=404):   # F01: auch 404 laesst den Sperrzustand offen
+            with self.assertRaises(SystemExit): s.run_show([e2], "--stale", "--langs", "fr")
+        with self.export({}): self.assertEqual(s.run_show([e2], "--stale", "--langs", "fr"), ["fr__ep-1"])
 
     def test_show_stale_list_of_a_language_stays_while_its_hand_texts_are_unknown(self):
         s = ShowAndNotes("run_show"); s.__dict__.update(self.__dict__)

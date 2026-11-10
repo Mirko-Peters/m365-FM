@@ -22,9 +22,10 @@ VERTRAG i18n-overrides v1
    gilt der Text, die Veraltet-Erkennung faellt auf den Maschinentext zurueck. Die Kurzform "<unit>": "<text>" bedeutet: ohne Anker.
 3. Export (Worker, #319): GET {COMMUNITY_API}/api/i18n/overrides?kind=<kind>&lang=<lang> -> {"kind": ..., "lang": ..., "items": <Dateiinhalt wie in 2.>},
    nur veroeffentlichte Eintraege. Seitenbau: site_i18n_overrides.sync() (#319) holt den Export und schreibt die Dateien, sonst nichts: Export erreichbar ->
-   Datei ersetzen (keine Eintraege -> Datei loeschen), nicht erreichbar -> vorhandene Datei bleibt. Uebersetzungs-Skripte rufen use_api() auf: load() nimmt
-   dann den Export anstelle der Datei, bei 404 (Endpunkt noch nicht ausgerollt) oder Fehler die Datei. Bei einem Fehler (alles ausser 404: 5xx, Zeitlimit,
-   Antwort ohne "items") ist der Sperrzustand dieser Art und Sprache unbekannt (failed()): siehe 5.
+   Datei ersetzen (keine Eintraege -> Datei loeschen), nicht erreichbar -> vorhandene Datei bleibt. Uebersetzungs-Skripte rufen use_api() auf (Basis wie im
+   ganzen Projekt: I18N_OVERRIDES_API, sonst COMMUNITY_API, sonst https://api-dub.m365.fm; nur use_api("") heisst ausdruecklich "nur die Dateien"): load()
+   nimmt dann den Export anstelle der Datei, bei einem Fehler die Datei. Jeder Fehler (auch 404 - #319 ist ausgerollt, ein 404 heisst falsche Basis oder
+   Rueckbau -, 5xx, Zeitlimit, Antwort ohne "items") macht den Sperrzustand dieser Art und Sprache unbekannt (failed()): siehe 5.
 4. Anwenden (nur in diesem Modul bzw. ueber place()):
    lblog: Ein Override gilt fuer GENAU EINE Einheit des aktuellen Originals und wird ueber den Anker gesetzt, nie ueber die Nummer allein:
      a) die Einheit mit derselben id, wenn ihr aktueller Quell-Anker dem Anker des Overrides entspricht;
@@ -44,8 +45,8 @@ VERTRAG i18n-overrides v1
    Treffer im Uebersetzungsspeicher ersetzt den Maschinentext einer solchen Blog-Einheit nicht.
    --force-manual erneuert nur den Maschinentext darunter. lblog: danach passt der Anker zu nichts mehr (4d) und die frische Maschinenfassung wird sichtbar;
    episode/notes: der Handtext bleibt, bis die Redaktion ihn zuruecksetzt oder neu speichert.
-   Sperrzustand unbekannt (Export eingestellt, aber mit Fehler ausser 404 nicht abrufbar - failed(kind, lang)): kein Lauf ersetzt in dieser Sprache vorhandenen
-   Text (jede schon uebersetzte Einheit gilt als gesperrt; fertige Batches mit Neuuebersetzungen bleiben liegen, bis der Export wieder antwortet); ein Lauf, der
+   Sperrzustand unbekannt (Export nicht abrufbar - failed(kind, lang)): kein Lauf ersetzt in dieser Sprache vorhandenen Text (jede schon uebersetzte Einheit
+   gilt als gesperrt; fertige Batches und Agenten-Auftraege, die vorhandenen Text ersetzen, bleiben liegen, bis der Export wieder antwortet); ein Lauf, der
    genau das sollte (stale, --stale, --redo, --wishes), endet mit Fehler. Nie uebersetzte Einheiten und Folgen laufen weiter, ebenso --force-manual (braucht
    die Sperre nicht). Die Veraltet-Liste (7) dieser Sprache bleibt in so einem Lauf unveraendert.
 6. Zuruecksetzen: Zeile in D1 loeschen (#319 revertUnit auf die Ursprungsfassung) -> die Einheit fehlt im Export -> die Datei enthaelt sie nicht mehr -> ab
@@ -71,8 +72,9 @@ STALE_FIELD = {"title": "title", "summary": "summary", "html": "notes_html"}   #
 UA = "m365-dub-build"
 IMG_HOST = "https://img.m365.fm/"   # Projektregel: Bilder nur ueber den eigenen R2-Bucket
 _CACHE = {}
+API_DEFAULT = "https://api-dub.m365.fm"   # wie COMMUNITY_API in den uebrigen Skripten (translate_blog.queue_items, site_fetch)
 _API = {"base": "", "off": False, "err": ""}
-_FAILED = set()   # (kind, lang): Export eingestellt, aber nicht abrufbar (kein 404) -> Sperrzustand unbekannt (Vertrag 5)
+_FAILED = set()   # (kind, lang): Export eingestellt, aber nicht abrufbar (auch 404) -> Sperrzustand unbekannt (Vertrag 5)
 NOTES = {}   # (kind, lang, was) -> Anzahl; report() schreibt sie ins Protokoll
 _NOTED = set()   # (kind, lang, was, schluessel): jede Einheit zaehlt einmal, auch wenn der Bau sie mehrfach ansieht
 _ASKED = set()   # (kind, lang, item): Eintraege, nach denen ein Leser gefragt hat (der Rest hat keine angezeigte Fassung)
@@ -82,12 +84,13 @@ def clear_cache(): _CACHE.clear(); NOTES.clear(); _NOTED.clear(); _ASKED.clear()
 
 
 def use_api(base=None):
-    """Uebersetzungs-Skripte: Handtexte live aus dem Export der Redaktion lesen (Basis: I18N_OVERRIDES_API, sonst COMMUNITY_API). Ohne Basis bleibt es bei den Dateien."""
-    _API.update(base=(base if base is not None else os.environ.get("I18N_OVERRIDES_API") or os.environ.get("COMMUNITY_API") or "").rstrip("/"), off=False, err=""); _FAILED.clear(); clear_cache()
+    """Uebersetzungs-Skripte: Handtexte live aus dem Export der Redaktion lesen (Basis: I18N_OVERRIDES_API, sonst COMMUNITY_API, sonst API_DEFAULT - ein lokaler
+    Lauf ohne Variable fragt also denselben Export wie der Workflow und liest nicht still die womoeglich fehlenden Dateien). use_api("") = nur die Dateien."""
+    _API.update(base=(base if base is not None else os.environ.get("I18N_OVERRIDES_API") or os.environ.get("COMMUNITY_API") or API_DEFAULT).rstrip("/"), off=False, err=""); _FAILED.clear(); clear_cache()
 
 
 def failed(kind, lang=None):
-    """Sperrzustand unbekannt (Vertrag 5): der Export ist eingestellt, war fuer diese Art und Sprache aber nicht abrufbar (kein 404). Erst nach load()/get()
+    """Sperrzustand unbekannt (Vertrag 5): der Export ist eingestellt, war fuer diese Art und Sprache aber nicht abrufbar (auch 404). Erst nach load()/get()
     aussagekraeftig. Ohne lang: die betroffenen Sprachen dieser Art, sortiert."""
     return (kind, lang) in _FAILED if lang else sorted(l for k, l in _FAILED if k == kind)
 
@@ -130,8 +133,8 @@ def load_file(kind, lang):
 
 
 def load_api(kind, lang):
-    """Export der Redaktion oder None (kein Endpunkt eingestellt, noch nicht ausgerollt, nicht erreichbar). Nach dem ersten Fehlschlag fragt der Lauf nicht weiter
-    (sonst 14 Sprachen x Zeitlimit); 404 = Endpunkt gibt es noch nicht, ohne Meldung. Jeder andere Fehlschlag merkt Art und Sprache in _FAILED (failed())."""
+    """Export der Redaktion oder None (kein Endpunkt eingestellt oder nicht abrufbar). Nach dem ersten Fehlschlag fragt der Lauf nicht weiter
+    (sonst 14 Sprachen x Zeitlimit). Jeder Fehlschlag, auch 404 (seit #319 gibt es den Endpunkt), merkt Art und Sprache in _FAILED (failed())."""
     if not _API["base"]: return None
     if _API["off"]:
         if _API["err"]: _FAILED.add((kind, lang))   # nicht mehr gefragt, aber genauso unbekannt
@@ -141,11 +144,9 @@ def load_api(kind, lang):
         if isinstance(d, dict) and isinstance(d.get("items"), dict): return d["items"]
         raise ValueError("Antwort ohne items")
     except Exception as e:
-        _API["off"] = True
-        if not (isinstance(e, urllib.error.HTTPError) and e.code == 404):
-            _API["err"] = str(e)[:100]; _FAILED.add((kind, lang))
-            print(f"WARNUNG: Export der Redaktion nicht abrufbar ({_API['err']}) - es gelten die Dateien in data/i18n_overrides; Sperrzustand unbekannt, "
-                  "vorhandene Texte werden in diesem Lauf nicht ersetzt", file=sys.stderr)
+        _API["off"] = True; _API["err"] = str(e)[:100] or type(e).__name__; _FAILED.add((kind, lang))
+        print(f"WARNUNG: Export der Redaktion nicht abrufbar ({_API['err']}) - es gelten die Dateien in data/i18n_overrides; Sperrzustand unbekannt, "
+              "vorhandene Texte werden in diesem Lauf nicht ersetzt", file=sys.stderr)
         return None
 
 
