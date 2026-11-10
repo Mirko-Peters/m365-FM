@@ -7,6 +7,7 @@ import site_media as MED
 import site_img_dims as IMG
 from site_design import pager as PG   # Vor/Zurueck am Seitenende (rel=prev/next)
 import site_sponsorships as SPM   # T37 Sponsor: Kennzeichnung gesponserter Folgen (data/sponsorships.json)
+import site_shownotes_seo as SSEO   # neu geschriebene englische Show Notes (rewrite_shownotes.py)
 import site_transcripts as TRS   # #266: Transkripte als Dateien neben der Folgenseite (R2)
 import gzip, json, re, unicodedata, html as _h
 from functools import lru_cache
@@ -14,6 +15,7 @@ from html.parser import HTMLParser
 from pathlib import Path
 from datetime import datetime
 from site_learn import esc, ENTS
+from site_taxonomy import TOPICS
 
 D = Path(__file__).parent / "data"
 PD = D / "podpage"
@@ -515,6 +517,7 @@ def build(g):
         newer = ix[j - 1] if j > 0 else None
         it = lambda k2: (loc_url(l, f"episodes/{eps[k2]['slug']}/"), TRL[l][eps[k2]["slug"]][0]) if k2 is not None else None
         return PG(l, it(older), it(newer))
+    _RWC = {}   # neu geschriebene Show Notes (site_shownotes_seo): Folgen je Regel, fuers Protokoll
     for k, e in enumerate(eps):
         r, tr = tr_for(e)
         nrec = SNT.get("en", title=e["name"])   # Spreaker-Show-Notes (oder im Editor bearbeitete Fassung) statt Podpage-Sicherung
@@ -533,6 +536,9 @@ def build(g):
             nnotes = IMG.enhance(nnotes)
         else:
             nnotes = san(e.get("show_notes"))
+        # Mirko, 9.11.2026: neu geschriebene Notes ersetzen NUR duenne Show Notes (unter 1.500 Zeichen), nie eine Vollfassung oder eine im Editor bearbeitete Fassung; jede andere Seite bleibt unveraendert
+        nkp, nnotes, nfaq, nld, _rwm, _rwr, _rwn = SSEO.for_page(e, nrec, bool(snx), (nkp, nnotes, nfaq, nld), ENTS_ALL, BASE, html=None if (nrec and nrec.get("markup")) else nnotes)
+        _rw = bool(_rwn); _RWC[_rwr] = _RWC.get(_rwr, 0) + 1; _RWC["used"] = _RWC.get("used", 0) + _rw
         nnotes = rename_links(nnotes)   # T12: Show Notes verlinken die Folge oft ueber die alte Podpage-Adresse
         prev_, next_ = (eps[k + 1] if k + 1 < len(eps) else None), (eps[k - 1] if k else None)
         aud = f'<audio controls preload="none" style="width:100%" src="{esc(r["audio"])}"></audio>' if r and r.get("audio") else ""
@@ -548,7 +554,7 @@ def build(g):
         tx = (f'<h2>Transcript</h2>{TRS.links_html(_trf)}<details open><summary>Read the full transcript</summary><p style="white-space:pre-wrap;line-height:1.6">{esc(tr)}</p></details>' if len(tr) > 200
               else f'<h2>Transcript</h2>{TRS.links_html(_trf)}' if _trf else "")   # #266: Dateien sichtbar verlinkt, Transkript im HTML unveraendert
         body = (f'<article><p class="mut">{day(e["create_time"])}{" · Season " + str(e["season"]) if e.get("season") else ""}</p><h1>{esc(e["name"])}</h1>{SPM.note("en", _spr, "episode")}{aud}'
-                f'<div style="display:flex;gap:1rem;align-items:flex-start;margin:1em 0">{img_tag(thumb_of(e, nrec), e["name"], 160, eager=True)}<div><strong>{esc(short_desc(e, nrec, 300))}</strong></div></div>{nkp}<div class="pp-notes">{nnotes}{IMG.CSS if IMG.needs_responsive_css(nnotes) else ""}</div>{nfaq}{SNT.CSS if (nkp or nnotes or nfaq) else ""}'
+                f'<div style="display:flex;gap:1rem;align-items:flex-start;margin:1em 0">{img_tag(thumb_of(e, nrec), e["name"], 160, eager=True)}<div><strong>{esc(_rwm or short_desc(e, nrec, 300))}</strong></div></div>{nkp}<div class="pp-notes">{nnotes}{IMG.CSS if IMG.needs_responsive_css(nnotes) else ""}</div>{nfaq}{SNT.CSS if (nkp or nnotes or nfaq) else ""}'
                 + (f"<p>{ext}</p>" if ext else "") + (f'<p class="mut">Host: {hl}</p>' if hl else "") + (f"<h2>Guests</h2><ul>{gl}</ul>" if gl else "") + also
                 + (("<h2>Related articles</h2><ul>" + "".join(f'<li><a href="{bp_url(p)}">{esc(p["title"])}</a></li>' for p in related_posts(e["slug"])) + "</ul>") if related_posts(e["slug"]) else "") + tx + "</article>" + (g.get("author_box")("en") if g.get("author_box") else "")
                 + PG("en", (ep_url(prev_), prev_["name"]) if prev_ else None, (ep_url(next_), next_["name"]) if next_ else None))
@@ -570,8 +576,8 @@ def build(g):
         # Alternates nur fuer Sprachfassungen mit uebersetzten Show Notes (150 je Sprache); die uebrigen ~14.000 Fassungen (nur Titel + Teaser) bleiben noindex und ausserhalb der Sitemap
         alts = {"en": ep_url(e), **{l: loc_url(l, f"episodes/{e['slug']}/") for l in TRL if e["slug"] in TRL[l] and TRL[l][e["slug"]][0]}}   # alle Sprachfassungen (uebersetzte Titel/Teaser, teils Show Notes) sind indexierbar und verknuepft
         for _dl, (_du, _) in oa.items(): alts[_dl] = _du   # T3: die Dub-Fassung (eigene Folge in der Sprache) ist die Sprachalternative, nicht die duenne Show-Kopie
-        pub(f"episodes/{e['slug']}/", e.get("meta_title") or e["name"], e.get("meta_description") or short_desc(e, nrec, 155), body, ([ld] + nld) if nld else ld, "article", last=day(e.get("update_time")) or TODAY, alts=alts if len(alts) > 1 else None,
-            noindex=e.get("source") == "spreaker" and not snx and not plain(e.get("show_notes")) and not (nrec or {}).get("markup"))   # T28: neue Folge ohne Show Notes erst nach dem Show-Notes-Abgleich in den Index
+        pub(f"episodes/{e['slug']}/", e.get("meta_title") or e["name"], _rwm or short_desc(e, nrec, 155), body, ([ld] + nld) if nld else ld, "article", last=day(e.get("update_time")) or TODAY, alts=alts if len(alts) > 1 else None,
+            noindex=e.get("source") == "spreaker" and not snx and not _rw and not plain(e.get("show_notes")) and not (nrec or {}).get("markup"))   # T28: neue Folge ohne Show Notes erst nach dem Show-Notes-Abgleich in den Index
         # lokalisierte Fassungen dieser Folge
         for l in TRL:
             tt = TRL[l].get(e["slug"])
@@ -579,6 +585,7 @@ def build(g):
             lt, ls = tt[0], tt[1] or short_desc(e, nrec, 300)
             ln = NTL.get(l, {}).get(e["slug"])
             ln_html = san(ln) if ln else ""
+            if ln and _rwn: ln_html += SSEO.topics_html(_rwn, ENTS_ALL, BASE, TOPICS.get(l, "Topics"))   # Themen-Zeile mit Entitaetslinks setzt der Bau, sie wird nicht mituebersetzt
             lu = loc_url(l, f"episodes/{e['slug']}/")
             _ldub = TRS.REG.dub.get((l, e["slug"]))   # #266: Dub-Folge der Sprache hat ein Transkript -> dieselben Dateien auch unter dieser Adresse
             _ltrf = TRS.REG.publish(g.get("write_r2") or write, BASE, f"{l}/show/episodes/{e['slug']}/", vtt=TRS.dub_vtt(l, _ldub[0]), index=False) if _ldub else {}
@@ -598,6 +605,9 @@ def build(g):
             _lh = g["page"](l, f"{lt} – {NAME}", ls[:300], _lcan, f'{g["header"](l, "")}<main class="wrap">{lbody}{loc_pager(l, k)}</main>{g["footer"](l)}', _lalts, [lald], xdefault=ep_url(e), og_type="article", og_of=ep_url(e), switch=alts, self_url=lu)
             (g.get("write_r2") or write)(f"{l}/show/episodes/{e['slug']}/index.html", _lh)
             if l not in oa: sitemap.append((lu, day(e.get("update_time")) or TODAY, _lalts))
+    if _RWC.get("thin") or _RWC.get("unknown"):
+        print(f"Show Notes neu geschrieben: {_RWC.get('used', 0)} von {_RWC.get('thin', 0)} duennen Folgen ersetzt; unveraendert: {_RWC.get('long', 0)} ausfuehrlich, {_RWC.get('edited', 0)} im Editor bearbeitet, "
+              f"{_RWC.get('full', 0)} mit Vollfassung" + (f", {_RWC['unknown']} duenn, aber Editor-Export nicht abrufbar" if _RWC.get("unknown") else ""))
 
     # Listen (paginiert)
     _list_langs = [l for l in TRL if any(TRL[l].get(e["slug"]) and TRL[l][e["slug"]][0] for e in eps)]
