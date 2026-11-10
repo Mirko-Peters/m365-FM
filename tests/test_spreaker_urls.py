@@ -1,5 +1,5 @@
 """tools/spreaker_urls.py: Zuordnung, Weiterleitungen in einem Schritt, Umschreiben nur von m365.fm-Links, Probelauf/Apply, Wiederaufnahme."""
-import json, sys, tempfile, unittest
+import json, os, re, sys, tempfile, unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -21,15 +21,20 @@ def res(): return SL.Resolver(dict(TABLE), SL.Site())
 
 
 class Fake:
-    def __init__(self, eps):
-        self.eps, self.posts = eps, []
+    def __init__(self, eps, fail=None, fail_show=None):
+        self.eps, self.posts, self.fail, self.fail_show = eps, [], fail or {}, fail_show
     def paged(self, path):
         sid = int(path.split("/")[2])
+        if sid == self.fail_show: raise RuntimeError("Spreaker GET liste: 503")
         return [{"episode_id": e["episode_id"]} for e in self.eps.values() if e["show"] == sid]
     def req(self, method, path, **kw):
         eid = path.rsplit("/", 1)[1]
+        if method == "GET" and eid in self.fail: raise self.fail[eid]
         if method == "GET": return {"episode": {k: v for k, v in self.eps[eid].items() if k != "show"}}
         self.posts.append((eid, kw["data"])); self.eps[eid].update(kw["data"]); return {"episode": {}}
+
+
+OK200 = lambda u: 200   # noqa: E731  Zielseite antwortet (kein Netz im Test)
 
 
 def ep(i, show, link, html, vis="PUBLIC", title="T"):
@@ -75,6 +80,39 @@ class Rewrite(unittest.TestCase):
         h = f'<a href="{BASE}/de/copilot-agenten-einfach-erklaert/">x</a> <i>keine Links</i>'
         self.assertEqual(U.rewrite_text(h, PAGES["2"]["url"], PAGES["2"]["slug"], res()), (h, []))
 
+    def test_guest_entity_with_episode_slug_stays(self):
+        """F2: Folgen-Slug = Name des Gastes - /entity/<slug>/ ist der Gast, nicht die Folge, und bleibt Byte fuer Byte."""
+        can = f"{BASE}/show/episodes/adrian-espes/"
+        q = "?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=adrian-espes"
+        h = (f'<a href="{BASE}/entity/adrian-espes/{q}">Adrian</a> <a href="{BASE}/de/entity/adrian-espes/">de</a> '
+             f'<a href="{BASE}/community/u/adrian-espes">Profil</a> <a href="{can}{q}">Folge</a>')
+        self.assertEqual(U.rewrite_text(h, can, "adrian-espes", res()), (h, []))
+        new, ch = U.rewrite_text(f'<a href="https://m365.fm/m365-fm-podcast/adrian-espes{q}">alt</a>', can, "adrian-espes", res())
+        self.assertEqual(ch, [(f"https://m365.fm/m365-fm-podcast/adrian-espes{q}", f"{can}{q}")])
+
+    def test_dub_own_paths_only_in_its_language(self):
+        """Sprachfolge: /<sprache>/<slug> und /<sprache>/show/episodes/<slug> sind eigene Pfade; die englische Folge gleichen Slugs nicht."""
+        can, slug = f"{BASE}/de/copilot-agenten-einfach-erklaert/", "copilot-agenten-einfach-erklaert"
+        self.assertTrue(U.is_own_page(f"{BASE}/de/show/episodes/{slug}", can, slug, res()))
+        self.assertTrue(U.is_own_page(f"https://dub.m365.fm/de/{slug}", can, slug, res()))
+        self.assertFalse(U.is_own_page(f"{BASE}/show/episodes/{slug}/", can, slug, res()))
+        self.assertFalse(U.is_own_page(f"{BASE}/fr/{slug}/", can, slug, res()))
+        self.assertFalse(U.is_own_page(f"{BASE}/entity/{slug}/", can, slug, res()))
+
+    @unittest.skipUnless((ROOT / "shownotes" / "spreaker" / "74753075.html").exists() or os.environ.get("SHOWNOTES_DIR"), "shownotes/ nicht ausgecheckt")
+    def test_real_shownotes_keep_guest_links(self):
+        """F2 mit echten Show Notes: die 12 Folgen, deren Slug der Gastname ist, verlieren keinen Gast-/Entitaetslink."""
+        d = Path(os.environ.get("SHOWNOTES_DIR") or ROOT / "shownotes") / "spreaker"
+        ids = "73192525 73819585 74084199 74138955 74640221 74711575 74728795 74753075 74870393 75327523 75328001 75473689".split()
+        r0 = SL.Resolver({}, SL.Site())
+        for eid in ids:
+            f = d / f"{eid}.html"
+            if not f.exists(): continue
+            h = f.read_text("utf-8"); slug = re.search(r"utm_campaign=([a-z0-9-]+)", h).group(1)
+            self.assertIn(f"/entity/{slug}/", h)
+            _, ch = U.rewrite_text(h, f"{BASE}/show/episodes/{slug}/", slug, r0)
+            self.assertEqual([c for c in ch if "/show/episodes/" not in c[0]], [], eid)
+
     def test_language_old_address_to_canonical(self):
         new, _ = U.rewrite_text(f'<a href="{BASE}/de/show/episodes/copilot-agenten">x</a>', PAGES["2"]["url"], PAGES["2"]["slug"], res())
         self.assertIn(f'"{BASE}/de/copilot-agenten-einfach-erklaert/"', new)
@@ -102,11 +140,12 @@ class Modes(unittest.TestCase):
     def test_apply_only_urls_resumable(self):
         d = Path(tempfile.mkdtemp()); lg = d / "l.tsv"
         sp = Fake(world())
-        rows, n = U.run_apply(sp, self.pages(), res(), [6704921, 7393187, 7393243], limit=1, pause=0, log_path=lg, out=lambda *_: 0)
+        kw = dict(pause=0, log_path=lg, out=lambda *_: 0, check=OK200, backup_dir=d / "bk")
+        rows, n = U.run_apply(sp, self.pages(), res(), [6704921, 7393187, 7393243], limit=1, **kw)
         self.assertEqual(n, 1); self.assertEqual(len(sp.posts), 1)
-        rows, n = U.run_apply(sp, self.pages(), res(), [6704921, 7393187, 7393243], limit=10, pause=0, log_path=lg, out=lambda *_: 0)
+        rows, n = U.run_apply(sp, self.pages(), res(), [6704921, 7393187, 7393243], limit=10, **kw)
         self.assertEqual(n, 1)                      # nur die zweite; die erste wird nicht noch einmal geschrieben
-        rows, n = U.run_apply(sp, self.pages(), res(), [6704921, 7393187, 7393243], limit=10, pause=0, log_path=lg, out=lambda *_: 0)
+        rows, n = U.run_apply(sp, self.pages(), res(), [6704921, 7393187, 7393243], limit=10, **kw)
         self.assertEqual(n, 0); self.assertEqual(len(sp.posts), 2)
         for _, data in sp.posts: self.assertLessEqual(set(data), {"episode_link", "description_html", "description"})
         self.assertEqual(sp.eps["1"]["title"], "Keep"); self.assertEqual(sp.eps["5"]["episode_link"], "")
@@ -118,6 +157,87 @@ class Modes(unittest.TestCase):
         d = Path(tempfile.mkdtemp()); rows = U.run_plan(Fake(world()), self.pages(), res(), [6704921], out=lambda *_: 0)
         U.save_state(rows, {"at": "t"}, d / "s.json")
         self.assertEqual(json.loads((d / "s.json").read_text())["episodes"]["1"]["s"], "differs")
+
+
+class Safety(unittest.TestCase):
+    """F2/F3/F5/F6: Sicherung vor dem Schreiben, Zeitplan nur mit Freigabe und nur Feld Website, Lesefehler je Folge, Ziel muss 200 liefern."""
+    shows = [6704921, 7393187, 7393243]
+    def pages(self): return dict(PAGES, **{"5": {"show_id": 7393187, "lang": "de", "slug": "z", "url": f"{BASE}/de/z/"}})
+
+    def test_backup_before_post(self):
+        d = Path(tempfile.mkdtemp()); sp = Fake(world()); orig = dict(sp.eps["1"])
+        U.run_apply(sp, self.pages(), res(), self.shows, pause=0, log_path=d / "l.tsv", out=lambda *_: 0, check=OK200, backup_dir=d / "bk")
+        b = json.loads((d / "bk" / "urls-1.json").read_text())
+        self.assertEqual(b["versions"][0]["description_html"], orig["description_html"])
+        self.assertEqual(b["versions"][0]["episode_link"], orig["episode_link"])
+        self.assertTrue((d / "bk" / "urls-2.json").exists()); self.assertFalse((d / "bk" / "urls-3.json").exists())
+        U.backup(dict(orig, episode_id="1"), ["episode_link"], d / "bk")   # dieselbe Fassung nicht doppelt
+        self.assertEqual(len(json.loads((d / "bk" / "urls-1.json").read_text())["versions"]), 1)
+
+    def test_backup_failure_blocks_post(self):
+        d = Path(tempfile.mkdtemp()); (d / "bk").write_text("keine Mappe"); sp = Fake(world())
+        rows, n = U.run_apply(sp, self.pages(), res(), self.shows, pause=0, log_path=d / "l.tsv", out=lambda *_: 0, check=OK200, backup_dir=d / "bk")
+        self.assertEqual(sp.posts, []); self.assertEqual(n, 0)
+
+    def test_auto_needs_approval_file(self):
+        d = Path(tempfile.mkdtemp())
+        self.assertEqual(U.effective_mode("auto", d / "APPROVED"), ("plan", False))
+        (d / "APPROVED").write_text("")
+        self.assertEqual(U.effective_mode("auto", d / "APPROVED"), ("apply", True))
+        self.assertEqual(U.effective_mode("apply", d / "nein"), ("apply", False))
+
+    def test_main_auto_without_approval_writes_nothing(self):
+        d = Path(tempfile.mkdtemp()); m = d / "map.json"
+        m.write_text(json.dumps({"items": [dict(v, spreaker_episode_id=k) for k, v in self.pages().items()]}))
+        sp = Fake(world()); old = U.APPROVED; U.APPROVED = d / "SPREAKER_URLS_APPROVED"
+        try:
+            self.assertEqual(U.main(["auto", "--ids", "1,2,3", "--map", str(m), "--redirects", "", "--no-state", "--read-pause", "0"], sp=sp), 0)
+        finally:
+            U.APPROVED = old
+        self.assertEqual(sp.posts, [])
+
+    def test_link_only_leaves_description(self):
+        d = Path(tempfile.mkdtemp()); w = world()
+        w["3"]["description_html"] = '<a href="https://www.m365.fm/blog/old-post/">x</a>'   # nur die Beschreibung weicht ab
+        sp = Fake(w)
+        rows, n = U.run_apply(sp, self.pages(), res(), self.shows, pause=0, log_path=d / "l.tsv", out=lambda *_: 0, check=OK200, backup_dir=d / "bk", link_only=True)
+        self.assertEqual(sorted(e for e, _ in sp.posts), ["1", "2"])
+        for _, data in sp.posts: self.assertEqual(set(data), {"episode_link"})
+        st = {r["id"]: r["status"] for r in rows}
+        self.assertEqual(st["3"], "differs"); self.assertEqual(st["1"], "differs")   # Beschreibung von 1 wartet auf einen Lauf von Hand
+        self.assertEqual(sp.eps["1"]["episode_link"], PAGES["1"]["url"]); self.assertNotIn(PAGES["1"]["url"], sp.eps["1"]["description_html"])
+
+    def test_target_not_200_no_write(self):
+        d = Path(tempfile.mkdtemp()); sp = Fake(world())
+        rows, n = U.run_apply(sp, self.pages(), res(), self.shows, pause=0, log_path=d / "l.tsv", out=lambda *_: 0, check=lambda u: 404, backup_dir=d / "bk")
+        self.assertEqual((sp.posts, n), ([], 0)); self.assertEqual(U.read_log(d / "l.tsv")["1"]["status"], "target_not_200")
+
+    def test_read_error_does_not_stop_run(self):
+        d = Path(tempfile.mkdtemp()); sp = Fake(world(), fail={"1": RuntimeError("Spreaker GET /episodes/1: 404")}, fail_show=7393243)
+        rows, n = U.run_apply(sp, self.pages(), res(), self.shows, pause=0, log_path=d / "l.tsv", out=lambda *_: 0, check=OK200, backup_dir=d / "bk")
+        st = {r["id"]: r["status"] for r in rows}
+        self.assertEqual(st["1"], "error"); self.assertEqual(st["2"], "ok"); self.assertEqual(n, 1)
+        rows = U.run_plan(Fake(world(), fail={"2": RuntimeError("503")}), self.pages(), res(), self.shows, out=lambda *_: 0)
+        self.assertEqual({r["id"]: r["status"] for r in rows}["2"], "error")
+
+    def test_state_saved_after_401(self):
+        d = Path(tempfile.mkdtemp()); m = d / "map.json"
+        m.write_text(json.dumps({"items": [dict(v, spreaker_episode_id=k) for k, v in self.pages().items()]}))
+        sp = Fake(world(), fail={"2": PermissionError("Spreaker 401")}); old = U.STATE; U.STATE = d / "s.json"
+        try:
+            with self.assertRaises(PermissionError):
+                U.main(["plan", "--ids", "1,2,3", "--map", str(m), "--redirects", "", "--read-pause", "0"], sp=sp)
+        finally:
+            U.STATE = old
+        st = json.loads((d / "s.json").read_text())
+        self.assertEqual(st["episodes"]["1"]["s"], "differs"); self.assertTrue(st["run"]["aborted"])
+
+    def test_upload_link_only_when_page_answers(self):
+        """F6: der Uploader setzt die Folgenseite nur, wenn sie schon 200 liefert, sonst die Show-Seite."""
+        self.assertEqual(SEU.upload_link(BASE, "pt", "Pare de criar aplicativos", "AbC_123", "https://www.m365.fm", lambda u: 404), "https://www.m365.fm")
+        self.assertEqual(SEU.upload_link(BASE, "pt", "Pare de criar aplicativos", "AbC_123", "https://www.m365.fm", lambda u: 200), f"{BASE}/pt/pare-de-criar-aplicativos/")
+        src = (ROOT / "yt_dub_to_spreaker.py").read_text("utf-8")
+        self.assertIn("upload_link(", src); self.assertNotIn("return dub_url(", src)
 
 
 if __name__ == "__main__":

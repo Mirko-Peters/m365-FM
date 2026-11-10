@@ -5,6 +5,8 @@ Der Dub-Slug entsteht aus dem Titel (ascii_slug, Mindestlaenge 15, sonst die You
 (generate_site.py). Der Seitenbau schreibt die Zuordnung Spreaker-Folge -> Adresse nach spreaker-urls.json."""
 import re
 import unicodedata
+import urllib.error
+import urllib.request
 
 EN_SHOW_ID = 6704921
 
@@ -32,6 +34,28 @@ def dub_slug(title, vid):
 def dub_url(base, lang, title, vid):
     """Adresse, die der Seitenbau der Dub-Folge geben wird - fuer den Uploader (Feld episode_link beim Hochladen)."""
     return episode_url(base, lang, dub_slug(title, vid))
+
+
+class _NoRedirect(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, *a, **k): return None
+
+
+def page_status(url, timeout=30):
+    """HTTP-Status der Seite ohne Weiterleitung folgen (wie tools/set_spreaker_links.status_of); -1 bei Netzfehler."""
+    try:
+        with urllib.request.build_opener(_NoRedirect).open(urllib.request.Request(url, headers={"User-Agent": "m365-site-bot (episode urls)"}), timeout=timeout) as r: return r.status
+    except urllib.error.HTTPError as e:
+        return e.code
+    except Exception:
+        return -1
+
+
+def upload_link(base, lang, title, vid, fallback, status=page_status):
+    """Feld "Website" (episode_link) beim Hochladen einer Dub-Folge: die Folgenseite nur, wenn sie schon mit 200 antwortet (wie
+    tools/set_spreaker_links.py), sonst der Rueckfall (Show-Seite). Neue Folgen bekommen ihre Seite erst beim naechsten Seitenbau;
+    die Adresse setzt dann der taegliche Abgleich (set_spreaker_links.py / spreaker_urls.py), nie eine Adresse, die noch 404 liefert."""
+    url = dub_url(base, lang, title, vid)
+    return url if status(url) == 200 else fallback
 
 
 def build_mapping(base, en_items, dub_items, show_ids, generated=""):

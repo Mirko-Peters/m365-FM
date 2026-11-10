@@ -806,13 +806,14 @@ def create_missing_show(lang: str, cfg, sp: Spreaker, dry: bool) -> int | None:
 
 
 def episode_page_url(cfg, lang: str, title: str, vid: str) -> str:
-    """Feld "Website" (episode_link) der neuen Folge: die kanonische m365.fm-Seite dieser Sprache, mit derselben Funktion wie der Seitenbau
-    (site_episode_urls.dub_url). Faellt die Seite im Bau auf einen anderen Slug (Kollision), zieht der taegliche Workflow spreaker-urls.yml nach."""
+    """Feld "Website" (episode_link) der neuen Folge: die kanonische m365.fm-Seite dieser Sprache (site_episode_urls.dub_url, dieselbe
+    Funktion wie der Seitenbau), aber nur, wenn sie schon mit 200 antwortet - sonst die Show-Seite. Neue Folgen haben ihre Seite erst nach
+    dem naechsten Seitenbau; die Folgenadresse setzt dann der taegliche Abgleich (set_spreaker_links.py / spreaker_urls.py)."""
     fallback = cfg.get("show_website_url", "https://www.m365.fm")
     try:
         sys.path.insert(0, str(BASE))
-        from site_episode_urls import dub_url
-        return dub_url(cfg.get("site_base", "https://www.m365.fm"), lang, title, vid)
+        from site_episode_urls import upload_link
+        return upload_link(cfg.get("site_base", "https://www.m365.fm"), lang, title, vid, fallback)
     except Exception as e:
         log.warning("Folgenadresse nicht berechnet (%s) - Rueckfall %s", e, fallback)
         return fallback

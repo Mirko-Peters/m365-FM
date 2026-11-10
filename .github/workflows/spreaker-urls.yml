@@ -3,13 +3,16 @@ name: Spreaker-Adressen der Folgen abgleichen
 # (tools/spreaker_urls.py). Taeglich nach dem Seitenbau: hoechstens "limit" Aenderungen je Lauf. Entscheidung: Die Korrektur laeuft hier und nicht
 # im Worker, weil der Worker den Spreaker-Token nur als Deploy-Momentaufnahme hat (worker.yml); der Worker speichert/zeigt die Zuordnung
 # (Tabelle episode_urls, Admin-Reiter "Spreaker-Adressen"). shownotes/PAUSED haelt auch diesen Lauf an.
-# Erstes Mal: Run workflow mit mode=plan (Probelauf, aendert nichts), danach mode=apply (ggf. mehrfach, bis nichts mehr abweicht).
+# Sicherheit (Entscheidung Mirko, #325): Der Zeitplan laeuft als mode=auto - ohne Freigabedatei data/SPREAKER_URLS_APPROVED nur Probelauf
+# (schreibt nichts), mit Freigabe nur das Feld Website (episode_link). Die Datei legt Mirko an, nachdem er die Ausgabe eines Probelaufs geprueft hat.
+# Beschreibungen (description_html) aendert nur ein von Hand gestarteter Lauf mit mode=apply. Vor jedem Schreiben sichert das Werkzeug die alten
+# Werte in shownotes/spreaker_backup/urls-<id>.json und schreibt nur, wenn die Zielseite mit 200 antwortet.
 on:
   schedule:
     - cron: "17 5 * * *"
   workflow_dispatch:
     inputs:
-      mode: { description: "plan = Probelauf, apply = bei Spreaker aendern, export = Zuordnung als JSON", type: choice, options: [plan, apply, export], default: plan }
+      mode: { description: "plan = Probelauf, apply = bei Spreaker aendern (Website-Feld und Beschreibung), auto = wie der Zeitplan, export = Zuordnung als JSON", type: choice, options: [plan, apply, auto, export], default: plan }
       limit: { description: "apply: hoechstens so viele Folgen aendern", required: false, default: "300" }
       ids: { description: "Nur diese Folgen-IDs (Komma)", required: false, default: "" }
 permissions:
@@ -30,14 +33,14 @@ jobs:
           SPREAKER_CLIENT_SECRET: ${{ secrets.SPREAKER_CLIENT_SECRET }}
         run: |
           if [ -e shownotes/PAUSED ]; then echo "shownotes/PAUSED vorhanden - Lauf uebersprungen"; exit 0; fi
-          MODE="${{ inputs.mode || 'apply' }}"
+          MODE="${{ inputs.mode || 'auto' }}"   # Zeitplan: auto (Probelauf ohne data/SPREAKER_URLS_APPROVED, sonst nur Feld Website)
           python tools/spreaker_urls.py "$MODE" --limit "${{ inputs.limit || '300' }}" --ids "${{ inputs.ids }}" | tee spreaker-urls-run.txt
-          if [ "$MODE" = "plan" ]; then { echo '### Probelauf Spreaker-Adressen'; echo '```'; head -c 60000 spreaker-urls-run.txt; echo '```'; } >> "$GITHUB_STEP_SUMMARY"; fi
+          if [ "$MODE" != "apply" ] && [ "$MODE" != "export" ]; then { echo "### Spreaker-Adressen ($MODE)"; echo '```'; head -c 60000 spreaker-urls-run.txt; echo '```'; } >> "$GITHUB_STEP_SUMMARY"; fi
       - name: Protokoll und Zustand sichern
         if: always()
         run: |
           git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
-          for f in data/spreaker_urls.tsv data/spreaker_urls_state.json data/episode_urls.json data/spreaker_auth.enc; do [ -e "$f" ] && git add -A "$f"; done
+          for f in data/spreaker_urls.tsv data/spreaker_urls_state.json data/episode_urls.json data/spreaker_auth.enc shownotes/spreaker_backup; do [ -e "$f" ] && git add -A "$f"; done
           if git diff --cached --quiet; then echo "nichts zu sichern"; exit 0; fi
           git commit -q -m "Spreaker-Adressen: Protokoll $(date -u +%Y-%m-%dT%H:%MZ) [skip ci]"
           for i in 1 2 3 4 5; do
