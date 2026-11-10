@@ -1,5 +1,5 @@
 // Automatische Uebersetzung neuer Community-Inhalte (Blog, Podcast, Video) mit Claude Haiku: ohne Denkphase, Aufwand "low".
-import { AI_BUDGET_ERROR, haikuJson } from "./util.js";
+import { AI_BUDGET_ERROR, aiBudgetStatus, haikuJson } from "./util.js";
 export { haikuJson } from "./util.js";
 // Regel: 24 Stunden nach dem Erscheinen eines Inhalts wird nachgeschaut; fehlt eine Sprachfassung (hat sie niemand uebersetzt), uebersetzt Haiku sie.
 // Sicherheitsnetz: nur mit Secret ANTHROPIC_API_KEY, Tageslimit, nur Inhalte der letzten 30 Tage, Notaus ueber meta atr_off=1.
@@ -23,7 +23,7 @@ export async function ensureItemTr(db) {
 }
 const count = (s, re) => (String(s).match(re) || []).length;
 
-const call = (env, from, to, obj) => haikuJson(env, SYS + ` Target language: ${LANGS[to]}.`, obj, { job: "worker_autotr_items", lang: to });
+const call = (env, from, to, obj, job = "worker_autotr_items") => haikuJson(env, SYS + ` Target language: ${LANGS[to]}.`, obj, { job, lang: to });
 
 export async function autoTranslateItems(env) {
   const db = env.DB;
@@ -134,6 +134,38 @@ export async function entityTranslations(db) {   // fuer /api/entity/tr: {eid: {
 // Arten: blog/podcast/video (Community-Inhalte aus D1 -> item_tr), entity (desc/long -> ent_tr). Fruehere Blogbeitraege (lblog) und Show Notes (notes)
 // uebersetzen die Python-Pipelines (translate_blog.py --queue, translate_notes.py); sie lesen dieselbe Liste ueber GET /api/tr-queue.
 const QUEUE_PER_RUN = 6;
+// Einen Inhalt in eine Sprache uebersetzen (Vormerkliste und Nachfrage) -> { ok, info }. Ein erreichtes Haiku-Tagesbudget wirft AI_BUDGET_ERROR.
+// replace=false (Nachfrage): eine vorhandene Fassung bleibt stehen - einmal uebersetzen, nie ueberschreiben.
+// live=true (Nachfrage, automatisch angelegt): nur Inhalte, die gerade erscheinen (KINDS[*].where); zurueckgezogene, versteckte oder abgelehnte kosten keinen Aufruf.
+async function translateOne(env, q, getMap, t, { replace = true, live = false, src = "queue", itemJob = "worker_autotr_items", entJob = "worker_translation_queue" } = {}) {
+  const db = env.DB, verb = replace ? "INSERT OR REPLACE" : "INSERT OR IGNORE";
+  if (!LANGS[q.lang] && q.lang !== "en") return { ok: false, info: "unbekannte Sprache" };
+  if (q.kind === "entity") {
+    const e = (await getMap()).get(q.item_id);
+    if (!e) return { ok: false, info: "Entitaet unbekannt" };
+    const inp = {}; let from = "en";
+    for (const f of ["desc", "long"]) { const v = e[f] || {}; const txt = (v.en || "").trim() || (v.de || "").trim(); if (txt) { inp[f] = txt.slice(0, 8000); from = (v.en || "").trim() ? "en" : "de"; } }
+    if (!Object.keys(inp).length || q.lang === from) return { ok: false, info: "kein Quelltext" };
+    const out = await haikuJson(env, ESYS + ` Target language: ${LANGS[q.lang] || "English"}.`, inp, { job: entJob, lang: q.lang }); let n = 0;
+    for (const f of Object.keys(inp)) { const o = String(out[f] || "").replace(/<script/gi, "").trim(), ratio = o.length / Math.max(1, inp[f].length); if (!o || ratio < 0.2 || ratio > 3 || (f === "desc" && o.length > 400)) continue;
+      await db.prepare(`${verb} INTO ent_tr(eid,field,lang,text,created) VALUES(?,?,?,?,?)`).bind(q.item_id, f, q.lang, o, t).run(); n++; }
+    return n ? { ok: true, info: n + " Felder", call: true } : { ok: false, info: "Antwort unbrauchbar", call: true };
+  }
+  const K = KINDS[q.kind];
+  if (!K) return { ok: false, info: "Art unbekannt" };
+  const r = await db.prepare(`SELECT ${K.sel},(${K.where}) AS live_ok FROM ${K.table} WHERE id=?`).bind(+q.item_id).first();
+  if (!r) return { ok: false, info: "Inhalt unbekannt" };
+  if (live && !r.live_ok) return { ok: false, info: "nicht veröffentlicht" };
+  const inp = {}; for (const f of K.f) inp[f] = String(r[f] || "").slice(0, f === "body" ? 12000 : 600);
+  const out = await call(env, r.lang, q.lang, inp, itemJob);
+  const bad = K.f.some((f) => inp[f] && typeof out[f] !== "string") || /<script/i.test(JSON.stringify(out));
+  const lr = (out.body || "").length / Math.max(1, (inp.body || "").length);
+  if (bad || (inp.body && (lr < 0.2 || lr > 3)) || (inp.body && count(out.body, /\{\{ref\|/g) !== count(inp.body, /\{\{ref\|/g))) return { ok: false, info: "Antwort unbrauchbar", call: true };
+  await db.prepare(`${verb} INTO item_tr(kind,item_id,lang,title,summary,body,src,created) VALUES(?,?,?,?,?,?,?,?)`).bind(q.kind, +q.item_id, q.lang, String(out.title || "").slice(0, 140), String(out.summary || "").slice(0, 400), String(out.body || ""), src, t).run();
+  return { ok: true, info: "", call: true };
+}
+const memo = (fn) => { let p = null; return () => (p ||= fn()); };
+
 export async function runTrQueue(env, entityMap) {
   const db = env.DB;
   if (!env.ANTHROPIC_API_KEY || (await meta(db, "tr_queue_on")) !== "1") return { skipped: true };
@@ -143,35 +175,56 @@ export async function runTrQueue(env, entityMap) {
   try { rows = (await db.prepare("SELECT kind,item_id,lang,title FROM tr_queue WHERE status='open' AND kind IN ('blog','podcast','video','entity') ORDER BY created LIMIT ?").bind(room).all()).results || []; } catch { return { skipped: true }; }
   if (!rows.length) return { done: 0 };
   await ensureItemTr(db); await ensureEntTr(db);
-  const t = now(); let done = 0, failed = 0, map = null;
+  const t = now(), getMap = memo(() => entityMap(env)); let done = 0, failed = 0, blocked = 0;
   const mark = (r, st, info) => db.prepare("UPDATE tr_queue SET status=?,info=? WHERE kind=? AND item_id=? AND lang=?").bind(st, String(info || "").slice(0, 200), r.kind, r.item_id, r.lang).run();
-  let blocked = 0;
   await Promise.all(rows.map(async (q) => {
     try {
-      if (!LANGS[q.lang] && q.lang !== "en") { await mark(q, "failed", "unbekannte Sprache"); failed++; return; }
-      if (q.kind === "entity") {
-        map ||= await entityMap(env); const e = map.get(q.item_id);
-        if (!e) { await mark(q, "failed", "Entitaet unbekannt"); failed++; return; }
-        const inp = {}; let from = "en";
-        for (const f of ["desc", "long"]) { const v = e[f] || {}; const txt = (v.en || "").trim() || (v.de || "").trim(); if (txt) { inp[f] = txt.slice(0, 8000); from = (v.en || "").trim() ? "en" : "de"; } }
-        if (!Object.keys(inp).length || q.lang === from) { await mark(q, "failed", "kein Quelltext"); failed++; return; }
-        const out = await haikuJson(env, ESYS + ` Target language: ${LANGS[q.lang] || "English"}.`, inp, { job: "worker_translation_queue", lang: q.lang }); let n = 0;
-        for (const f of Object.keys(inp)) { const o = String(out[f] || "").replace(/<script/gi, "").trim(), ratio = o.length / Math.max(1, inp[f].length); if (!o || ratio < 0.2 || ratio > 3 || (f === "desc" && o.length > 400)) continue;
-          await db.prepare("INSERT OR REPLACE INTO ent_tr(eid,field,lang,text,created) VALUES(?,?,?,?,?)").bind(q.item_id, f, q.lang, o, t).run(); n++; }
-        if (!n) { await mark(q, "failed", "Antwort unbrauchbar"); failed++; return; }
-        await mark(q, "done", n + " Felder"); done++; return;
-      }
-      const K = KINDS[q.kind], r = await db.prepare(`SELECT ${K.sel} FROM ${K.table} WHERE id=?`).bind(+q.item_id).first();
-      if (!r) { await mark(q, "failed", "Inhalt unbekannt"); failed++; return; }
-      const inp = {}; for (const f of K.f) inp[f] = String(r[f] || "").slice(0, f === "body" ? 12000 : 600);
-      const out = await call(env, r.lang, q.lang, inp);
-      const bad = K.f.some((f) => inp[f] && typeof out[f] !== "string") || /<script/i.test(JSON.stringify(out));
-      const lr = (out.body || "").length / Math.max(1, (inp.body || "").length);
-      if (bad || (inp.body && (lr < 0.2 || lr > 3)) || (inp.body && count(out.body, /\{\{ref\|/g) !== count(inp.body, /\{\{ref\|/g))) { await mark(q, "failed", "Antwort unbrauchbar"); failed++; return; }
-      await db.prepare("INSERT OR REPLACE INTO item_tr(kind,item_id,lang,title,summary,body,src,created) VALUES(?,?,?,?,?,?,?,?)").bind(q.kind, +q.item_id, q.lang, String(out.title || "").slice(0, 140), String(out.summary || "").slice(0, 400), String(out.body || ""), "queue", t).run();
-      await mark(q, "done", ""); done++;
+      const r = await translateOne(env, q, getMap, t);
+      await mark(q, r.ok ? "done" : "failed", r.info); if (r.ok) done++; else failed++;
     } catch (e) { if (e?.code === AI_BUDGET_ERROR) blocked++; else { await mark(q, "failed", String(e && e.message || e)); failed++; } }
   }));
   await setMeta(db, "atr_count:" + day, used + done + failed);
   return { done, failed, ...(blocked ? { capped: true, open: blocked } : {}) };
+}
+
+// ---------- Uebersetzung auf Nachfrage (Issue #156): tr_demand aus der Suche (search_demand.js), meistgesucht zuerst, auch aeltere Inhalte ----------
+// Nur Community-Inhalte der Datenbank (blog, podcast, video) und Entitaeten; Ergebnis in item_tr/ent_tr (Blog mit KI-Hinweis wie bisher), nie ueber eine
+// vorhandene Fassung. Jeder Haiku-Aufruf zaehlt gegen das Tagesbudget (util.js aiBudgetStatus/anthropicFetch) und die Tagesgrenze DAILY_CAP; ist das Budget
+// erreicht, wartet die Warteschlange (status waiting_budget) bis zum naechsten Tag - es geht nichts verloren. Notaus wie bei den uebrigen: meta atr_off=1.
+// Fehler: unbrauchbare Antwort (JSON kaputt, Laenge/Markup falsch) und API-Fehler 4xx sind bleibend -> sofort failed, wie in runTrQueue. Nur Netzfehler,
+// 429 und 5xx bleiben offen, hoechstens DEMAND_TRIES Versuche (Spalte tries): sonst fraesse ein meistgesuchter Problemfall alle 30 Minuten einen bezahlten
+// Aufruf und die gemeinsame Tagesgrenze DAILY_CAP, und autoTranslateItems/runTrQueue kaemen nicht mehr dran.
+const DEMAND_PER_RUN = 4, DEMAND_TRIES = 3, DEMAND_KINDS = ["blog", "podcast", "video", "entity"];
+const transient = (e) => /^(?:Claude API request failed|api (?:408|409|429|5\d\d))$/.test(String(e?.message || ""));
+const configError = (e) => /^api (?:401|403)$/.test(String(e?.message || ""));   // Schluessel ungueltig/entzogen: liegt nicht am Eintrag, nichts als failed markieren
+export async function runTrDemand(env, entityMap) {
+  const db = env.DB, IN = DEMAND_KINDS.map(() => "?").join(",");
+  if (!env.ANTHROPIC_API_KEY || (await meta(db, "atr_off")) === "1") return { skipped: true };
+  let rows = [];
+  try { rows = (await db.prepare(`SELECT kind,item,lang,tries FROM tr_demand WHERE status IN ('open','waiting_budget') AND kind IN (${IN}) ORDER BY searches DESC,days DESC,last_seen DESC,item LIMIT ?`).bind(...DEMAND_KINDS, DEMAND_PER_RUN).all()).results || []; } catch { return { skipped: true }; }
+  if (!rows.length) return { done: 0 };
+  const wait = () => db.prepare(`UPDATE tr_demand SET status='waiting_budget' WHERE status='open' AND kind IN (${IN})`).bind(...DEMAND_KINDS).run();
+  if (!(await aiBudgetStatus(env)).allowed) { await wait(); return { waiting_budget: true }; }
+  const day = new Date().toISOString().slice(0, 10), used = +(await meta(db, "atr_count:" + day)) || 0, room = Math.min(DEMAND_PER_RUN, DAILY_CAP - used);
+  if (room <= 0) return { capped: true };
+  await ensureItemTr(db); await ensureEntTr(db);
+  const t = now(), getMap = memo(() => entityMap(env)); let done = 0, failed = 0, blocked = 0, skipped = 0, calls = 0;
+  const mark = (r, st, info = "", tries = 0) => db.prepare("UPDATE tr_demand SET status=?,info=?,tries=tries+? WHERE kind=? AND item=? AND lang=?").bind(st, String(info).slice(0, 200), tries, r.kind, r.item, r.lang).run();
+  for (const r of rows.slice(0, room)) {   // nacheinander: ein erreichtes Budget haelt die folgenden an, statt sie parallel anzustossen
+    const have = r.kind === "entity" ? await db.prepare("SELECT 1 x FROM ent_tr WHERE eid=? AND lang=? LIMIT 1").bind(r.item, r.lang).first()
+      : await db.prepare("SELECT 1 x FROM item_tr WHERE kind=? AND item_id=? AND lang=?").bind(r.kind, +r.item, r.lang).first();
+    if (have) { await mark(r, "translated"); skipped++; continue; }   // inzwischen anders uebersetzt (Handtext, Vormerkliste, 24-Stunden-Lauf): kein Aufruf
+    if (blocked) { await mark(r, "waiting_budget"); continue; }
+    try {
+      const x = await translateOne(env, { kind: r.kind, item_id: r.item, lang: r.lang }, getMap, t, { replace: false, live: true, src: "demand", itemJob: "worker_translation_demand", entJob: "worker_translation_demand" });
+      await mark(r, x.ok ? "translated" : "failed", x.info, x.call ? 1 : 0); if (x.ok) done++; else failed++; if (x.call) calls++;
+    } catch (e) {
+      if (e?.code === AI_BUDGET_ERROR) { blocked++; await mark(r, "waiting_budget"); }
+      else if (configError(e)) { console.warn("tr_demand: API-Zugang abgelehnt, Lauf beendet", String(e.message)); break; }   // Eintraege bleiben offen, kein Versuch gezaehlt
+      else { failed++; calls++; await mark(r, transient(e) && (r.tries || 0) + 1 < DEMAND_TRIES ? "open" : "failed", String(e && e.message || e), 1); }   // nur voruebergehende Fehler: naechster Lauf
+    }
+  }
+  if (blocked) await wait();
+  await setMeta(db, "atr_count:" + day, used + calls);   // nur echte Aufrufe (ohne Aufruf: nicht veroeffentlicht, unbekannt, schon uebersetzt)
+  return { done, failed, ...(skipped ? { already: skipped } : {}), ...(blocked ? { waiting_budget: true } : {}) };
 }

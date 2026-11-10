@@ -8,6 +8,7 @@ import vm from "node:vm";
 import { handleSponsor, sponsorPackageDetails } from "../src/sponsor.js";
 import { handleAdminPanel } from "../src/adminpanel.js";
 import { handleExpertRequests } from "../src/expert_requests.js";
+import { handleSearchDemand } from "../src/search_demand.js";
 
 const ADMIN_JS = readFileSync(new URL("../../assets/admin.js", import.meta.url), "utf8");
 const J = (data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "content-type": "application/json" } });
@@ -123,6 +124,7 @@ async function bootAdmin(env, hash) {
     const req = new Request(u, { method: o.method || "GET", headers: o.headers, body: o.body });
     const res = u.pathname.startsWith("/api/admin/expert-requests/")
       ? await handleExpertRequests(env, req, u.pathname, { id: 1, admin: true }, J)
+      : u.pathname.startsWith("/api/search/") ? await handleSearchDemand(env, req, u, u.pathname, { id: 1, admin: true }, J)
       : await handleAdminPanel(env, req, u, u.pathname, { id: 1, admin: true }, J);
     return res || J({ error: "not_found" }, 404);
   };
@@ -334,3 +336,28 @@ test("sponsor mail: Kurzfassung fuer aeltere Pakete (packageDetails)", () => {
   assert.equal(d({ monthlyUsd: -400, totalUsd: 1234.5 }).price, "-$400/Monat · $1,234.5 gesamt");
   assert.equal(d({ monthlyUsd: true }).price, "–", "kein Betrag -> kein leeres /Monat");
 });
+
+test("Reiter Suche (#156): Tagessummen, Suchen ohne Treffer, Uebersetzungs- und Inhaltsluecken nur als Text (SQLite + Schein-DOM)", () => withoutNet(async () => {
+  const { raw, env } = await setup();
+  const d = new Date().toISOString().slice(0, 10);
+  raw.prepare("INSERT INTO search_q(day,lang,q_norm,n,zero,cls) VALUES(?,?,?,?,?,?)").run(d, "de", "copilot <b>agent</b>", 7, 0, "translation_gap");
+  raw.prepare("INSERT INTO search_q(day,lang,q_norm,n,zero,cls) VALUES(?,?,?,?,?,?)").run(d, "de", "quantenkaffee", 2, 1, "content_gap");
+  raw.prepare("INSERT INTO tr_demand(kind,item,lang,title,path,searches,days,status,info,first_seen,last_seen) VALUES('podcast','7','de','Agent talk','/community/podcast/7-a/',7,2,'waiting_budget','',?,?)").run(d, d);
+  const { root, calls } = await bootAdmin(env, "#sq");
+  const sec = () => root.all("section").find((x) => x.querySelector("h2")?.textContent === "Suche");
+  await until(() => sec()?.all("h3").length === 5, "Abschnitte");
+  assert.ok(calls.some((c) => c.path === "/api/search/report?weeks=1"), "Auswertung der letzten 7 Tage, alle Sprachen");
+  const p = sec(), h3 = texts(p, "h3");
+  assert.deepEqual(h3, ["Suchen je Woche", "Häufigste Suchen", "Suchen ohne Treffer", "Übersetzungslücken", "Inhaltslücken (Themenideen)"]);
+  const rows = (title) => { const h = p.all("h3").find((x) => x.textContent === title), box = h.parentNode.childNodes[h.parentNode.childNodes.indexOf(h) + 1]; return box.all("tbody tr").map((tr) => texts(tr, "td")); };
+  assert.deepEqual(rows("Häufigste Suchen"), [["copilot <b>agent</b>", "Deutsch", "7", "1"], ["quantenkaffee", "Deutsch", "2", "1"]]);
+  assert.deepEqual(rows("Suchen ohne Treffer"), [["quantenkaffee", "Deutsch", "2", "1"]]);
+  assert.deepEqual(rows("Übersetzungslücken"), [["Agent talk", "Podcast", "Deutsch", "7", "2", "wartet auf Budget", d]]);
+  assert.deepEqual(rows("Inhaltslücken (Themenideen)"), [["quantenkaffee", "Deutsch", "2", "1"]]);
+  assert.equal(root.all("b").length, 0, "Suchbegriffe nur als Text");
+  assert.match(p.querySelector("p.adm-msg").textContent, /9 Suchen, 2 Begriffe/);
+  const sel = p.all("select"); sel[0].value = "de"; sel[0].fire("change");
+  await until(() => calls.some((c) => c.path === "/api/search/report?weeks=1&lang=de") && sec().all("h3").length === 5, "Sprachfilter");
+  assert.match(p.querySelector("p.adm-msg").textContent, /9 Suchen/);
+  raw.close();
+}));
