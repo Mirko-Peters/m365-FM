@@ -1,15 +1,21 @@
 """Entitaetsseiten fuellen: englischer SEO-Text (Sonnet, Batch) + Uebersetzung in 14 Sprachen (Haiku, Batch).
 
-Aufruf: python fill_entities.py inventory|plan|run|collect|push [--limit N] [--budget USD] [--model ID] [--no-translate] [--refresh]
+Aufruf: python fill_entities.py inventory|plan|run|collect|push [--limit N] [--budget USD] [--model ID] [--no-translate] [--stale]
   inventory  Bestandsaufnahme ohne API -> reports/entity_fill_inventory.md + data/entity_fill/todo.json
   plan       Anzahl, geschaetzte Kosten (Sonnet/Haiku, Batch = halber Preis) und Rest bis alles fertig; sendet nichts
   collect    fertige Batches abholen, pruefen, speichern
   push       KI-Texte (data/entity_fill = Audit-Kopie) in die Datenbank schreiben: POST /api/internal/entity-fill (CRON_KEY), Revision "KI-Entwurf"
   run        collect -> Schreib-Batch (en) -> warten -> collect -> Uebersetzungs-Batches -> warten -> collect; stoppt am Budget
-Speicher (siehe entity_fill_data.py): data/entity_fill/en.json, data/entity_fill/i18n/<lang>.json, state.json (Batches, Versuche), edited.json.
-Regeln: Datenbank = Quelle der Wahrheit; nur von Menschen bearbeitete (D1-Export src=human, nicht blosse Uebernahme), Sponsor-/Eigenfirma-Entitaeten (ifakt, polaris*) und Entitaeten mit redaktionellem
-Langtext werden uebersprungen; Personen nur mit Quellenfakten; Uebersetzungen entstehen einmal und werden nie ueberschrieben (translate-once);
-max. 3 Versuche je Auftrag; Budget ENTITY_BUDGET_USD gilt kumulativ fuer data/spend.json["entities"] (inkl. offener Batches)."""
+Speicher (siehe entity_fill_data.py): data/entity_fill/en.json, data/entity_fill/i18n/<lang>.json, stale.json, state.json (Batches mit ihren Auftraegen, Versuche),
+edited.json, spend.json (Kostenbuch dieses Jobs; eigene Datei, damit kein Commit die Monatszahlen anderer Jobs in data/spend.json ueberschreibt).
+Regeln: Datenbank = Quelle der Wahrheit; von Menschen bearbeitete (D1-Export src=human), selbst verwaltete (src=owned), Sponsor-/Eigenfirma-Entitaeten (ifakt, polaris*,
+data/sponsorships.json) und Entitaeten mit redaktionellem Langtext werden uebersprungen; Personen nur mit Quellenfakten; Uebersetzungen entstehen einmal und werden nie
+automatisch ueberschrieben (translate-once, Vertrag von #315): aendert sich die englische Quelle, steht die Fassung in stale.json und wird nicht mehr gezeigt; neu
+uebersetzt wird sie nur mit --stale. Auftraege in noch offenen Batches werden nie ein zweites Mal gekauft. max. 3 Versuche je Auftrag.
+Kosten: Denken ist abgeschaltet, wo das Modell es zulaesst (ai_gateway.thinking_off), sonst bekommt max_tokens einen Zuschlag; jede Grenze rechnet mit der OBERGRENZE
+(Eingabe ein Token je Byte, Ausgabe = max_tokens), die beim Absenden vorgemerkt wird (state.json). Grenzen: ENTITY_BUDGET_USD kumulativ fuer alles; Schreiben (Sonnet)
+hoechstens SONNET_MONTH_CAP_USD je Kalendermonat; Uebersetzen (Haiku) hoechstens HAIKU_RUN_CAP_EUR je Lauf und nie mehr als der Rest des Haiku-Tagesbudgets
+(ai_gateway); der Verbrauch geht nach dem Einsammeln an das Kostenbuch des Workers (ai_gateway.report_usage)."""
 import hashlib, json, os, re, sys, time, urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
@@ -25,6 +31,13 @@ NAMES = {"de": "German", "es": "Spanish", "fr": "French", "it": "Italian", "pt":
 MODEL = os.environ.get("ENTITY_MODEL", "claude-sonnet-5-5")
 TMODEL = os.environ.get("ENTITY_TRANSLATE_MODEL", "claude-haiku-5-5")
 BUDGET = float(os.environ.get("ENTITY_BUDGET_USD") or 100)
+SONNET_MONTH_CAP_USD = 30.0   # feste Monatsgrenze fuer das Schreiben (wie rewrite_shownotes.HARD_CAP_USD); ENTITY_MONTH_USD kann sie nur senken
+MONTH_CAP = min(SONNET_MONTH_CAP_USD, float(os.environ.get("ENTITY_MONTH_USD") or SONNET_MONTH_CAP_USD))
+HAIKU_RUN_CAP_EUR = 4.0       # je Lauf, innerhalb des Haiku-Tagesbudgets von 5 EUR (ai_gateway.check_budget); ENTITY_HAIKU_RUN_EUR kann sie nur senken
+HAIKU_RUN_EUR = min(HAIKU_RUN_CAP_EUR, float(os.environ.get("ENTITY_HAIKU_RUN_EUR") or HAIKU_RUN_CAP_EUR))
+WRITE_MAX_TOKENS = 1800       # Antwort eines Schreibauftrags (Denken aus); TR_MAX_TOKENS ist die Obergrenze je Uebersetzung
+TR_MAX_TOKENS = 4000
+THINK_TOKENS = 4000           # Zuschlag auf max_tokens fuer Modelle, bei denen sich das Denken nicht abschalten laesst
 MAX_TRIES = int(os.environ.get("MAX_TRIES", "3"))
 PER_BATCH = int(os.environ.get("PER_BATCH", "5000"))
 WAIT_MIN = int(os.environ.get("WAIT_MIN", "90"))
@@ -72,11 +85,25 @@ def is_sponsored(eid, extra=()):
 
 
 def sponsored_ids():
-    ids = set()
-    for s in (jload(D / "sponsorships.json", {}).get("sponsorships") or []):
-        for k in ("entities", "topics"):
-            ids |= set(s.get(k) or [])
-    return ids
+    return FD.sponsored_ids()
+
+
+def month_key():
+    return datetime.now(timezone.utc).strftime("%Y-%m")
+
+
+def max_tokens(model, base):
+    """max_tokens einer Anfrage: Denken aus (thinking_off) -> base, sonst base + THINK_TOKENS (Denken zaehlt zur Ausgabe)."""
+    from ai_gateway import thinking_off
+    return base if thinking_off(model) else base + THINK_TOKENS
+
+
+def cost_cap(model, in_bytes, out_tokens):
+    """OBERGRENZE der Kosten einer Batch-Anfrage: Eingabe hoechstens ein Token je UTF-8-Byte, alles zum Preis eines Cache-Eintrags (1,25x), Ausgabe = max_tokens."""
+    return cost(model, int(in_bytes * 1.25) + 64, out_tokens)
+
+
+def nbytes(*parts): return sum(len(str(x).encode("utf-8")) for x in parts)
 
 
 # ---------- Daten ----------
@@ -89,10 +116,7 @@ def load_entities():
 
 
 def load_gentext():
-    g = {}
-    for f in sorted((D / "entity_texts").glob("part-*.json")):
-        g.update(jload(f, {}))
-    return g
+    return FD.load_gentext()
 
 
 _EPS = None
@@ -151,6 +175,12 @@ def facts_for(e, ents, eps=None):
         if e.get(k): f[k] = e[k]
     if e.get("long", {}).get("en"): f["existing_long"] = e["long"]["en"][:1200]
     return f
+
+
+def fhash(f):
+    """Hash der Fakten OHNE die Folgenliste: eine neue Folge zwischen Absenden und Einsammeln macht einen bezahlten Text nicht ungueltig (die genannten Folgen
+    stimmen weiter); aendern sich Name, Beschreibung, Beziehungen oder Links, gilt das Ergebnis als veraltet."""
+    return hsh({k: v for k, v in f.items() if k != "episodes"})
 
 
 def person_has_source(e, f):
@@ -311,7 +341,7 @@ def payload_for(eid, fill, i18n):
     return out
 
 
-def push(ents, state, edited, fill, i18n, post=None):
+def push(ents, state, edited, fill, i18n, post=None, spons=None):
     """KI-Texte in die Datenbank schreiben (neue Revision "KI-Entwurf" des Systemnutzers). Der Worker prueft nochmals Mensch/Hash und fuellt nur duenne Felder."""
     api = os.environ.get("COMMUNITY_API", "https://api-dub.m365.fm").rstrip("/"); keyv = os.environ.get("CRON_KEY", "")
     if post is None:
@@ -320,10 +350,10 @@ def push(ents, state, edited, fill, i18n, post=None):
             req = urllib.request.Request(api + "/api/internal/entity-fill", data=json.dumps({"items": items}).encode(), method="POST", headers={
                 "content-type": "application/json", "x-cron-key": keyv, "x-requested-with": "m365", "user-agent": "m365fm-actions/1.0 (+https://www.m365.fm)"})
             with urllib.request.urlopen(req, timeout=120) as r: return json.loads(r.read().decode())
-    done = state.setdefault("pushed", {}); jobs = []
+    done = state.setdefault("pushed", {}); jobs = []; spons = sponsored_ids() if spons is None else spons   # Sponsor erst nach dem Schreiben geworden: trotzdem nie senden
     for eid in sorted(set(fill) | set(i18n.get("de", {}))):
         d = D1.get(eid)
-        if eid not in ents or not d or eid in edited or d["src"] not in ("seed", "ai") or is_sponsored(eid): continue
+        if eid not in ents or not d or eid in edited or d["src"] not in ("seed", "ai") or is_sponsored(eid, spons): continue
         item = payload_for(eid, fill, i18n); ph = hsh(item)
         if done.get(eid) == ph: continue
         item["base"] = (fill.get(eid) or {}).get("d1h") or d["h"]   # Stand, fuer den der Text erzeugt wurde (sonst der aktuelle)
@@ -344,28 +374,37 @@ def push(ents, state, edited, fill, i18n, post=None):
 
 
 def effective_en(e, gen, fill):
-    """Quelltext fuer die Uebersetzung: redaktionell > GENTEXT > KI-Text. -> {desc?, long?, faq?}"""
-    eid = e["id"]; d = (e.get("desc") or {}).get("en") or ""; fe = fill.get(eid) or {}
-    src = {}
-    desc = d if len(d) >= FD.SHORT_DESC else (fe.get("desc") or d)
-    if desc: src["desc"] = desc
-    long = (e.get("long") or {}).get("en") or (gen.get(eid) or {}).get("en") or fe.get("long") or ""
-    if long: src["long"] = long
-    if fe.get("faq"): src["faq"] = fe["faq"]
-    return src
+    """Quelltext fuer die Uebersetzung: redaktionell > GENTEXT > KI-Text. -> {desc?, long?, faq?} (dieselbe Regel liest der Seitenbau: entity_fill_data)"""
+    return FD.effective_en(e, gen, fill)
 
 
-def translate_need(e, lang, src, gen, i18n):
-    """Welche Felder fehlen in lang? Vorhandenes (redaktionell, GENTEXT, frueher uebersetzt) wird nie ueberschrieben."""
+def translate_need(e, lang, src, gen, i18n, restale=False):
+    """Welche Felder fehlen in lang? Vorhandenes (redaktionell, GENTEXT, frueher uebersetzt) wird nie automatisch ueberschrieben; eine Uebersetzung, deren
+    englische Quelle sich geaendert hat (stale), nur mit restale (--stale)."""
     eid = e["id"]; have = (i18n.get(lang) or {}).get(eid) or {}
+    old = set(FD.stale_against(have, src)) if restale else set()
+    got = lambda k: have.get(k) and k not in old
     d = e.get("desc") or {}; need = {}
-    if "desc" in src and not have.get("desc") and (not d.get(lang) or d.get(lang) == d.get("en")): need["desc"] = src["desc"]
-    if "long" in src and not have.get("long") and not (e.get("long") or {}).get(lang) and not (gen.get(eid) or {}).get(lang): need["long"] = src["long"]
-    if "faq" in src and not have.get("faq"): need["faq"] = src["faq"]
+    if "desc" in src and not got("desc") and (not d.get(lang) or d.get(lang) == d.get("en")): need["desc"] = src["desc"]
+    if "long" in src and not got("long") and not (e.get("long") or {}).get(lang) and not (gen.get(eid) or {}).get(lang): need["long"] = src["long"]
+    if "faq" in src and not got("faq"): need["faq"] = src["faq"]
     return need
 
 
-def build_todo(ents, gen, fill, i18n, edited, spons, state, with_facts=False):
+def stale_report(ents, gen, fill, i18n):
+    """{lang: {id: [felder]}} der Uebersetzungen, deren englische Quelle sich seit dem Uebersetzen geaendert hat; schreibt data/entity_fill/stale.json."""
+    out = {}
+    for lang in LANGS:
+        for eid, rec in sorted((i18n.get(lang) or {}).items()):
+            if eid not in ents: continue
+            st = FD.stale_against(rec, effective_en(ents[eid], gen, fill))
+            if st: out.setdefault(lang, {})[eid] = st
+    f = OUT / "stale.json"; new = json.dumps(out, ensure_ascii=False, indent=1, sort_keys=True); old = f.read_text("utf-8") if f.exists() else ""
+    if new != old and (out or old): OUT.mkdir(parents=True, exist_ok=True); f.write_text(new, encoding="utf-8")
+    return out
+
+
+def build_todo(ents, gen, fill, i18n, edited, spons, state, with_facts=False, restale=False):
     todo, skipped = [], {}
     tries = state.get("tries", {})
     for e in sorted(ents.values(), key=lambda x: (TYPE_ORDER.index(x["type"]) if x["type"] in TYPE_ORDER else 99, x["id"])):
@@ -385,7 +424,7 @@ def build_todo(ents, gen, fill, i18n, edited, spons, state, with_facts=False):
         if e["type"] == "person" and "needs_source" in skipped and e["id"] in skipped["needs_source"]: src = {}
         tr = {}
         for lang in LANGS:
-            need = translate_need(e, lang, src, gen, i18n)
+            need = translate_need(e, lang, src, gen, i18n, restale)
             if need and tries.get(f"t:{lang}:{e['id']}", 0) < MAX_TRIES: tr[lang] = list(need)
         if tr: row["translate"] = tr   # Sprache -> fehlende Felder; gilt fuer die jetzt vorhandene en-Fassung
         elif want is None and not row.get("write"): continue
@@ -420,28 +459,45 @@ def estimate(todo, ents, gen, fill, i18n):
 
 
 # ---------- Ausgaben ----------
+SPEND = "spend.json"   # data/entity_fill/spend.json: Kostenbuch nur dieses Jobs (nicht data/spend.json - dort schreiben articles/shownotes ihre Monatszahlen)
+
+
 def spend_entities():
-    return jload(D / "spend.json", {}).get("entities", {"usd": 0.0})
+    return jload(OUT / SPEND, {"usd": 0.0})
 
 
-def add_spend(kind, model, tin, tout):
-    sp = jload(D / "spend.json", {})
-    m = sp.setdefault("entities", {"usd": 0.0})
+def add_spend(kind, model, tin, tout, month=None):
+    sp = spend_entities()
     c = cost(model, tin, tout)
-    m["usd"] = round(m.get("usd", 0.0) + c, 4)
-    k = m.setdefault(kind, {"input_tokens": 0, "output_tokens": 0, "usd": 0.0})
+    sp["usd"] = round(sp.get("usd", 0.0) + c, 4)
+    k = sp.setdefault(kind, {"input_tokens": 0, "output_tokens": 0, "usd": 0.0})
     k["input_tokens"] += tin; k["output_tokens"] += tout; k["usd"] = round(k["usd"] + c, 4)
-    m["updated"] = datetime.now(timezone.utc).isoformat()[:19]
-    (D / "spend.json").write_text(json.dumps(sp, ensure_ascii=False, indent=1), encoding="utf-8")
+    mo = sp.setdefault("months", {}).setdefault(month or month_key(), {})
+    mo[kind + "_usd"] = round(mo.get(kind + "_usd", 0.0) + c, 4)
+    sp["updated"] = datetime.now(timezone.utc).isoformat()[:19]
+    jsave(OUT / SPEND, sp)
     return c
 
 
-def pending_usd(state):
-    return sum(b.get("est_usd", 0) for b in state.get("batches", []))
+def pending_usd(state, kind=None, month=None):
+    return sum(b.get("est_usd", 0) for b in state.get("batches", []) if (kind is None or b.get("kind") == kind) and (month is None or b.get("month", month) == month))
 
 
 def room(budget, state):
     return budget - spend_entities().get("usd", 0.0) - pending_usd(state)
+
+
+def month_room(state, month=None):
+    """Rest der Monatsgrenze fuer das Schreiben: verbucht plus Obergrenze offener Schreib-Batches dieses Monats."""
+    m = month or month_key()
+    return MONTH_CAP - spend_entities().get("months", {}).get(m, {}).get("write_usd", 0.0) - pending_usd(state, "write", m)
+
+
+def haiku_room_usd():
+    """Uebersetzen je Lauf: HAIKU_RUN_EUR und nie mehr als der Rest des Haiku-Tagesbudgets laut Worker (None = nicht abrufbar -> check_budget entscheidet)."""
+    from ai_gateway import remaining_eur
+    rate = float(os.environ.get("USD_PER_EUR", "1.08")); rest = remaining_eur("fill_entities", TMODEL)
+    return min(HAIKU_RUN_EUR, rest if rest is not None else HAIKU_RUN_EUR) * rate
 
 
 # ---------- API ----------
@@ -457,46 +513,68 @@ def usage_in(u):
     return int(u.get("input_tokens") or 0) + int(u.get("cache_read_input_tokens") or 0) + int(u.get("cache_creation_input_tokens") or 0), int(u.get("output_tokens") or 0)
 
 
-def select_writes(todo, ents, budget_room, limit, state, refresh=False):
-    """Schreibauftraege in Reihenfolge, solange das Budget reicht. -> (requests, items, est_usd)"""
-    reqs, est_total = [], 0.0
+def busy_keys(state):
+    """Auftraege in noch offenen Batches ('w_<key>', 't_<lang>_<key>') - die kauft kein Lauf ein zweites Mal. -> (keys, Arten mit Batches ohne Auftragsliste)"""
+    keys, blind = set(), set()
+    for b in state.get("batches", []):
+        if isinstance(b.get("ids"), list): keys |= set(b["ids"])
+        else: blind.add(b.get("kind"))
+    return keys, blind
+
+
+def cid_key(custom_id):
+    """custom_id -> Auftragsschluessel ohne Hash: w_<key>_<h> -> w_<key>, t_<lang>_<key>_<h> -> t_<lang>_<key>"""
+    return custom_id.rsplit("_", 1)[0]
+
+
+def select_writes(todo, ents, budget_room, limit, state, refresh=False, busy=()):
+    """Schreibauftraege in Reihenfolge, solange die Obergrenze der Kosten ins Budget passt. -> (requests, Obergrenze in USD)"""
+    reqs, est_total = [], 0.0; mt = max_tokens(MODEL, WRITE_MAX_TOKENS); from ai_gateway import thinking_off
     for r in todo:
         if not r.get("write"): continue
         if limit and len(reqs) >= limit: break
-        e = ents[r["id"]]; f = facts_for(e, ents)
-        tin = tok(SYSTEM_WRITE) + tok(json.dumps(f, ensure_ascii=False)); c = cost(MODEL, tin, WRITE_OUT_TOK[r["write"]])
+        if f"w_{key(r['id'])}" in busy: continue   # schon in einem offenen Batch bezahlt
+        e = ents[r["id"]]; f = facts_for(e, ents); prompt = write_prompt(f, r["write"])
+        c = cost_cap(MODEL, nbytes(SYSTEM_WRITE, prompt), mt)
         if est_total + c > budget_room:
             print(f"Budget erreicht - Schreiben stoppt nach {len(reqs)} Auftraegen"); break
         est_total += c; state.setdefault("d1h", {})[r["id"]] = (D1.get(r["id"]) or {}).get("h", "")   # D1-Stand zum Zeitpunkt der Beauftragung (Hash-Schutz beim Push)
-        reqs.append({"custom_id": f"w_{key(r['id'])}_{hsh(f)[:8]}", "params": {"model": MODEL, "max_tokens": 1800,
+        reqs.append({"custom_id": f"w_{key(r['id'])}_{fhash(f)[:8]}", "params": {"model": MODEL, "max_tokens": mt, **thinking_off(MODEL),
                      "system": [{"type": "text", "text": SYSTEM_WRITE, "cache_control": {"type": "ephemeral"}}],
-                     "messages": [{"role": "user", "content": write_prompt(f, r["write"])}]}})
+                     "messages": [{"role": "user", "content": prompt}]}})
     return reqs, est_total
 
 
+def tr_tokens(payload, lang):
+    """max_tokens einer Uebersetzung: grosszuegig ueber der erwarteten Laenge (LANG_FACTOR + 1 je Quell-Token), hoechstens TR_MAX_TOKENS."""
+    return min(TR_MAX_TOKENS, int(tok(payload) * (LANG_FACTOR.get(lang, 1.5) + 1)) + 300)
+
+
 def select_translations(todo, ents, gen, fill, budget_room, limit, busy=()):
-    reqs, est_total = [], 0.0; protected_cache = {}
+    reqs, est_total = [], 0.0; from ai_gateway import thinking_off
     for r in todo:
         e = ents[r["id"]]; src = effective_en(e, gen, fill)
         if r.get("write") and not fill.get(e["id"]): continue   # en-Text fehlt noch
         for lang, fields in (r.get("translate") or {}).items():
             if limit and len(reqs) >= limit: return reqs, est_total
             cid = f"t_{lang}_{key(r['id'])}"
-            if cid in busy: continue
+            if cid in busy: continue   # schon in einem offenen Batch bezahlt
             part = {k: src[k] for k in fields if k in src}
             if not part: continue
-            payload = json.dumps(part, ensure_ascii=False); tin = tok(system_translate(lang, [])) + tok(payload)
-            c = cost(TMODEL, tin, int(tok(payload) * LANG_FACTOR.get(lang, 1.5)))
+            payload = json.dumps(part, ensure_ascii=False); mt = max_tokens(TMODEL, tr_tokens(payload, lang))
+            c = cost_cap(TMODEL, nbytes(system_translate(lang, []), payload), mt)
             if est_total + c > budget_room:
                 print(f"Budget erreicht - Uebersetzen stoppt nach {len(reqs)} Auftraegen"); return reqs, est_total
             est_total += c
-            reqs.append({"custom_id": f"{cid}_{hsh(part)[:6]}", "params": {"model": TMODEL, "max_tokens": 4000,
+            reqs.append({"custom_id": f"{cid}_{hsh(part)[:6]}", "params": {"model": TMODEL, "max_tokens": mt, **thinking_off(TMODEL),
                          "system": [{"type": "text", "text": system_translate(lang, []), "cache_control": {"type": "ephemeral"}}],
                          "messages": [{"role": "user", "content": payload}]}})
     return reqs, est_total
 
 
 def submit(reqs, est, kind, model, state):
+    """Sendet die Auftraege als Batch(es). est = Obergrenze der Kosten; sie wird mit der Auftragsliste in state.json vorgemerkt (zaehlt gegen Budget und
+    Monatsgrenze, bis der Batch eingesammelt ist), bevor irgendetwas anderes passiert."""
     from ai_gateway import check_budget
     if not reqs: print("Nichts abzusenden."); return 0
     if "haiku" in model.lower() and not check_budget("fill_entities", model, est / max(0.000001, float(os.environ.get("USD_PER_EUR", "1.08")))):
@@ -504,8 +582,9 @@ def submit(reqs, est, kind, model, state):
     for i in range(0, len(reqs), PER_BATCH):
         part = reqs[i:i + PER_BATCH]; share = est * len(part) / len(reqs)
         b = api("POST", "/v1/messages/batches", {"requests": part}, model=model)
-        state.setdefault("batches", []).append({"id": b["id"], "kind": kind, "model": model, "n": len(part), "est_usd": round(share, 4), "created": datetime.now(timezone.utc).isoformat()[:19]})
-        jsave(OUT / "state.json", state); print("Batch", b["id"], kind, len(part), "Anfragen, ca.", round(share, 2), "USD")
+        state.setdefault("batches", []).append({"id": b["id"], "kind": kind, "model": model, "n": len(part), "est_usd": round(share, 4), "month": month_key(),
+                                                "ids": sorted(cid_key(r["custom_id"]) for r in part), "created": datetime.now(timezone.utc).isoformat()[:19]})
+        jsave(OUT / "state.json", state); print("Batch", b["id"], kind, len(part), "Anfragen, hoechstens", round(share, 2), "USD")
     return len(reqs)
 
 
@@ -513,13 +592,15 @@ def bump(state, k):
     state.setdefault("tries", {})[k] = state.get("tries", {}).get(k, 0) + 1
 
 
-def collect(ents, gen, state, edited):
+def collect(ents, gen, state, edited, spons=None):
+    from ai_gateway import report_usage, usage_tokens
+    spons = sponsored_ids() if spons is None else spons
     fill = jload(OUT / "en.json", {}); i18n = {l: jload(OUT / "i18n" / f"{l}.json", {}) for l in LANGS}
     by_key = {key(i): i for i in ents}; left = []; touched_l = set(); en_dirty = False
     for b in state.get("batches", []):
         st = api("GET", f"/v1/messages/batches/{b['id']}", model=b["model"])
         if st["processing_status"] != "ended": print(b["id"], st["processing_status"], st["request_counts"]); left.append(b); continue
-        tin = tout = ok = bad = 0; why = {}
+        tin = tout = cread = cwrite = ok = bad = 0; why = {}
         for line in api("GET", st["results_url"], raw=True, model=b["model"]).decode().splitlines():
             r = json.loads(line); parts = r["custom_id"].split("_"); res = r["result"]
             kind = parts[0]; eid = by_key.get(parts[-2] if kind == "w" else parts[2]); h8 = parts[-1]
@@ -527,29 +608,36 @@ def collect(ents, gen, state, edited):
                 bad += 1; why[res["type"]] = why.get(res["type"], 0) + 1
                 if eid: bump(state, ("w:" + eid) if kind == "w" else f"t:{parts[1]}:{eid}")
                 continue
-            msg = res["message"]; a, c = usage_in(msg["usage"]); tin += a; tout += c
-            if not eid or eid in edited or ents[eid].get("edited") or is_sponsored(eid): continue
+            msg = res["message"]; a, c, rd, wr = usage_tokens(msg["usage"]); tin += a; tout += c; cread += rd; cwrite += wr
+            if not eid or eid in edited or ents[eid].get("edited") or is_sponsored(eid, spons): continue
             text = "".join(x.get("text", "") for x in msg["content"] if x.get("type") == "text")
             out = parse_json(text); e = ents[eid]
             if kind == "w":
                 f = facts_for(e, ents)
-                if hsh(f)[:8] != h8: why["stale"] = why.get("stale", 0) + 1; continue   # Fakten inzwischen geaendert: naechster Lauf
-                _, want = status(e, gen, fill, edited, set())
+                if h8 not in (fhash(f)[:8], hsh(f)[:8]):   # Fakten (ausser der Folgenliste) inzwischen geaendert: Text passt nicht mehr, zaehlt als Versuch
+                    why["stale"] = why.get("stale", 0) + 1; bump(state, "w:" + eid); continue
+                _, want = status(e, gen, fill, edited, spons)
                 want = want or ("full" if not (e.get("long") or {}).get("en") and eid not in gen else "desc")
                 rec, err = validate_write(out, f, want)
                 if err: bad += 1; why[err] = why.get(err, 0) + 1; bump(state, "w:" + eid); continue
                 if eid in fill and fill[eid].get("long"): continue   # nie ueberschreiben
                 rec.update({"h": hsh(f), "d1h": state.get("d1h", {}).get(eid) or "", "m": b["model"], "ts": datetime.now(timezone.utc).strftime("%Y-%m-%d")}); fill[eid] = rec; en_dirty = True; ok += 1
             else:
-                lang = parts[1]; src = effective_en(e, gen, fill); need = translate_need(e, lang, src, gen, i18n)   # translate-once: nur noch fehlende Felder
-                part = {k: src[k] for k in need}
+                # bezahlte Ergebnisse annehmen, auch fuer veraltete Felder (ein Lauf mit --stale hat sie neu gekauft); vorhandene aktuelle Felder bleiben
+                lang = parts[1]; src = effective_en(e, gen, fill); need = translate_need(e, lang, src, gen, i18n, restale=True)
+                part = {k: src[k] for k in need if not isinstance(out, dict) or k in out}   # nur die Felder, die die Antwort hat (die Auftragsliste kann kleiner gewesen sein)
                 if not part: continue
                 rec, err = validate_translation(lang, part, out, [n for n in KEEP + [e["name"]] + list(e.get("aliases") or [])])
                 if err: bad += 1; why[err] = why.get(err, 0) + 1; bump(state, f"t:{lang}:{eid}"); continue
-                cur = i18n[lang].setdefault(eid, {"h": hsh(src), "m": b["model"], "ts": datetime.now(timezone.utc).strftime("%Y-%m-%d")})
-                for k, v in rec.items(): cur.setdefault(k, v)
+                same = hsh(part)[:6] == h8   # sonst ist die Quelle seit dem Absenden geaendert: Text speichern, aber als veraltet markieren (nicht gezeigt, stale.json)
+                cur = i18n[lang].setdefault(eid, {"h": hsh(src), "m": b["model"], "ts": datetime.now(timezone.utc).strftime("%Y-%m-%d")}); sh = cur.setdefault("sh", {})
+                for k, v in rec.items():
+                    if cur.get(k) and not (k in sh and sh[k] != FD.src_hash(src[k])): continue   # aktuelle Fassung bleibt (translate-once)
+                    cur[k] = v; sh[k] = FD.src_hash(part[k]) if same else "0" * 8
+                cur.update({"m": b["model"], "ts": datetime.now(timezone.utc).strftime("%Y-%m-%d")})
                 touched_l.add(lang); ok += 1
-        c = add_spend("write" if b["kind"] == "write" else "translate", b["model"], tin, tout)
+        c = add_spend("write" if b["kind"] == "write" else "translate", b["model"], tin, tout, b.get("month"))
+        report_usage("fill_entities", b["model"], tin, tout, lang="batch", batch=True, cache_read=cread, cache_write=cwrite)   # Haiku: Kostenbuch des Workers (ai_spend)
         print(f"{b['id']}: {ok} ok, {bad} abgelehnt {why}, Kosten {c:.3f} USD")
     if en_dirty: jsave(OUT / "en.json", fill)
     for l in touched_l: jsave(OUT / "i18n" / f"{l}.json", i18n[l])
@@ -615,18 +703,32 @@ def report(ents, todo, skipped, types, lang_missing, by_type_write, est):
     return "\n".join(L) + "\n"
 
 
+def next_writes(todo, ents, state, limit):
+    """Schreibauftraege dieses Laufs: nie, was in einem offenen Batch liegt; Obergrenze im kumulativen Budget UND in der Monatsgrenze."""
+    busy, blind = busy_keys(state)
+    if "write" in blind: print("::warning::Offener Schreib-Batch ohne Auftragsliste (aelterer Lauf) - erst einsammeln, nichts Neues gesendet"); return [], 0.0
+    return select_writes(todo, ents, min(room(BUDGET, state), month_room(state)), limit, state, busy=busy)
+
+
+def next_translations(todo, ents, gen, fill, state, limit):
+    """Uebersetzungsauftraege dieses Laufs: nie, was in einem offenen Batch liegt; Obergrenze im Budget, je Lauf und im Haiku-Tagesbudget."""
+    busy, blind = busy_keys(state)
+    if "translate" in blind: print("::warning::Offener Uebersetzungs-Batch ohne Auftragsliste (aelterer Lauf) - erst einsammeln, nichts Neues gesendet"); return [], 0.0
+    return select_translations(todo, ents, gen, fill, min(room(BUDGET, state), haiku_room_usd()), limit, busy)
+
+
 def main():
     args = sys.argv[1:]; mode = args[0] if args else "plan"
     opt = lambda n, d=None: args[args.index(n) + 1] if n in args else d
     global MODEL, BUDGET
     if opt("--model"): MODEL = opt("--model")
     if opt("--budget"): BUDGET = float(opt("--budget"))
-    limit = int(opt("--limit") or 0); no_tr = "--no-translate" in args
+    limit = int(opt("--limit") or 0); no_tr = "--no-translate" in args; restale = "--stale" in args
     strict = mode in ("run", "collect", "push")
     ents, gen = load_entities(), load_gentext(); fill = jload(OUT / "en.json", {}); i18n = {l: jload(OUT / "i18n" / f"{l}.json", {}) for l in LANGS}
     state = jload(OUT / "state.json", {"batches": [], "tries": {}}); spons = sponsored_ids()
     edited = edited_ids(strict)
-    todo, skipped = build_todo(ents, gen, fill, i18n, edited, spons, state)
+    todo, skipped = build_todo(ents, gen, fill, i18n, edited, spons, state, restale=restale)
     est = estimate(todo, ents, gen, fill, i18n)
     if mode == "inventory":
         todo, skipped, types, lm, bw = inventory(ents, gen, fill, i18n, edited, spons, state)
@@ -637,25 +739,28 @@ def main():
         print("inventory ok"); return
     sp = spend_entities()
     print(f"Entitaeten {len(ents)} | schreiben {est['write_n']} | Sonnet-Batch ~{est['write_usd']} USD | Uebersetzungsauftraege {est['tr_n']} | Haiku-Batch ~{est['tr_usd']} USD | Rest gesamt ~{est['total_usd']} USD")
-    print(f"Budget {BUDGET:.2f} USD, bisher {sp.get('usd', 0):.2f}, offene Batches ~{pending_usd(state):.2f}, frei {room(BUDGET, state):.2f}; uebersprungen: " + ", ".join(f"{k} {len(v)}" for k, v in skipped.items()))
+    print(f"Budget {BUDGET:.2f} USD, bisher {sp.get('usd', 0):.2f}, offene Batches hoechstens {pending_usd(state):.2f}, frei {room(BUDGET, state):.2f}; "
+          f"Schreiben im Monat {month_key()} frei {month_room(state):.2f} von {MONTH_CAP:.2f} USD; uebersprungen: " + ", ".join(f"{k} {len(v)}" for k, v in skipped.items()))
+    st = stale_report(ents, gen, fill, i18n)
+    if st: print(f"Veraltete Uebersetzungen (englische Quelle geaendert, nicht gezeigt): {sum(len(v) for v in st.values())} -> data/entity_fill/stale.json; neu nur mit --stale")
     if mode == "plan": return
     if mode == "push":
-        push(ents, state, edited, jload(OUT / "en.json", {}), {l: jload(OUT / "i18n" / f"{l}.json", {}) for l in LANGS}); return
+        push(ents, state, edited, jload(OUT / "en.json", {}), {l: jload(OUT / "i18n" / f"{l}.json", {}) for l in LANGS}, spons=spons); return
     if not os.environ.get("ANTHROPIC_API_KEY"): raise SystemExit("ANTHROPIC_API_KEY fehlt")
-    collect(ents, gen, state, edited)
-    if mode == "collect": return
-    fill = jload(OUT / "en.json", {}); i18n = {l: jload(OUT / "i18n" / f"{l}.json", {}) for l in LANGS}
-    todo, skipped = build_todo(ents, gen, fill, i18n, edited, spons, state)
-    reqs, c = select_writes(todo, ents, room(BUDGET, state), limit, state)
-    if submit(reqs, c, "write", MODEL, state):
-        wait_batches(state); collect(ents, gen, state, edited)
-    if no_tr: return
-    fill = jload(OUT / "en.json", {}); i18n = {l: jload(OUT / "i18n" / f"{l}.json", {}) for l in LANGS}
-    todo, skipped = build_todo(ents, gen, fill, i18n, edited, spons, state)
-    busy = set()
-    reqs, c = select_translations(todo, ents, gen, fill, room(BUDGET, state), limit, busy)
-    if submit(reqs, c, "translate", TMODEL, state):
-        wait_batches(state); collect(ents, gen, state, edited)
+    collect(ents, gen, state, edited, spons)
+    if mode != "collect":
+        fill = jload(OUT / "en.json", {}); i18n = {l: jload(OUT / "i18n" / f"{l}.json", {}) for l in LANGS}
+        todo, skipped = build_todo(ents, gen, fill, i18n, edited, spons, state, restale=restale)
+        reqs, c = next_writes(todo, ents, state, limit)
+        if submit(reqs, c, "write", MODEL, state):
+            wait_batches(state); collect(ents, gen, state, edited, spons)
+        if not no_tr:
+            fill = jload(OUT / "en.json", {}); i18n = {l: jload(OUT / "i18n" / f"{l}.json", {}) for l in LANGS}
+            todo, skipped = build_todo(ents, gen, fill, i18n, edited, spons, state, restale=restale)
+            reqs, c = next_translations(todo, ents, gen, fill, state, limit)
+            if submit(reqs, c, "translate", TMODEL, state):
+                wait_batches(state); collect(ents, gen, state, edited, spons)
+    stale_report(ents, gen, jload(OUT / "en.json", {}), {l: jload(OUT / "i18n" / f"{l}.json", {}) for l in LANGS})
 
 
 if __name__ == "__main__":

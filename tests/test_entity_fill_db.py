@@ -53,7 +53,7 @@ class Push(unittest.TestCase):
 class Reading(unittest.TestCase):
     def test_db_faq_and_edited_gate(self):
         e = ent("x", faq={"en": [{"q": "What?", "a": "This."}]})
-        self.assertEqual(FD.faq(e, "en"), [{"q": "What?", "a": "This.", "lang": "en"}])
+        self.assertEqual(FD.faq(e, "en"), [{"q": "What?", "a": "This.", "lang": "en", "ai": True}])   # KI-FAQ: die Seite kennzeichnet sie
         self.assertEqual(FD.faq(e, "de"), [])
         self.assertEqual(FD.long_text({**e, "edited": 1}, "en"), "")   # Menschen-Fassung: kein KI-Rueckfalltext
 

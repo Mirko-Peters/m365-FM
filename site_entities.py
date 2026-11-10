@@ -327,6 +327,19 @@ def musicgroup_ld(BASE):
             "founder": person, "member": [person]}
 
 
+def long_for(e, lang):
+    """Langtext der Seite -> (text, KI-Text ja/nein). Redaktionell vorn (auch der Event-Text). Ein KI-Text aus data/entity_fill, der per push in der D1-Fassung
+    steht (FD.is_ai), ist KEIN redaktioneller Text: er bekommt den KI-Hinweis, und auf anderen Sprachseiten gilt die (bezahlte) Uebersetzung statt des
+    englischen KI-Texts. Sonst Ueberblick aus den Folgen und Fakten (data/entity_texts, data/entity_fill)."""
+    L = e.get("long") or {}; own = lambda k: "" if FD.is_ai(e, "long", k) else (L.get(k) or ""); ail = L.get("en") if FD.is_ai(e, "long", "en") else ""
+    lt = own(lang) or own("en") or own("de") or (EVENTS[e["id"]].get("about") if e["id"] in EVENTS else "") or ""
+    if lt.strip():
+        return lt, False
+    g = GENTEXT.get(e["id"]) or {}
+    lt = g.get(lang) or FD.long_text(e, lang) or g.get("en") or FD.long_text(e, "en") or ail or ""
+    return lt, bool(lt.strip())
+
+
 def ent_ld(BASE, e, lang, glossary_set=None, person_aka=None):
     """Schema.org-Knoten einer Entitaet (sprachneutrale @id)."""
     person_aka = person_aka or {}
@@ -801,12 +814,13 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             if is_old(e, TODAY):
                 rp = ENTS.get(e.get("replaced_by") or "")
                 oldbanner = f'<p class="en-old" role="note"><b>{esc(OLD[lang][2])}</b>' + (f' {esc(OLD[lang][3])} <a href="{root}{rp["id"]}/">{esc(rp["name"])}</a>.' if rp else "") + "</p>"
-            _lt = (e.get("long") or {}).get(lang) or (e.get("long") or {}).get("en") or (e.get("long") or {}).get("de") or (EVENTS[e["id"]].get("about") if e["id"] in EVENTS else "") or ""
+            _lt, _isgen = long_for(e, lang)
             _gen = ""
-            if not _lt.strip() and (e["id"] in GENTEXT or FD.long_text(e, "en") or FD.long_text(e, lang)):   # Ueberblick aus den Folgen der Show und den Fakten der Seite (data/entity_texts, data/entity_fill), solange es keinen redaktionellen Langtext gibt
-                _lt = (GENTEXT.get(e["id"]) or {}).get(lang) or FD.long_text(e, lang) or (GENTEXT.get(e["id"]) or {}).get("en") or FD.long_text(e, "en") or ""
+            if _isgen:
                 _gen = f'<p class="mut" style="font-size:.85em">{esc(T(lang, "Overview compiled with AI from M365.FM episodes and the facts on this page. You can improve it with the edit button below.", "Überblick, mit KI aus M365.FM-Folgen und den Fakten dieser Seite zusammengestellt. Du kannst ihn unten über „Bearbeiten“ verbessern."))}</p>' if _lt.strip() else ""
             longbox = ("<h2>" + (T(lang, "Description", "Beschreibung")) + "</h2>" + "".join(f"<p>{esc(par).replace(chr(10), '<br>')}</p>" for par in _lt.split("\n\n") if par.strip()) + _gen) if _lt.strip() else ""
+            # KI-Kurzbeschreibung (data/entity_fill, auch nach push in D1) immer sichtbar kennzeichnen; steht schon der Ueberblick-Hinweis, reicht der
+            _dnote = f'<p class="mut" style="font-size:.85em">{esc(T(lang, "Short description written with AI from the facts on this page. You can improve it with the edit button below.", "Kurzbeschreibung, mit KI aus den Fakten dieser Seite geschrieben. Du kannst sie unten über „Bearbeiten“ verbessern."))}</p>' if not _gen and FD.desc_is_ai(e, lang, d) else ""
             w = WT.get(lang, WT["en"])
             data_attr = esc(json.dumps({k: e.get(k) for k in ("id", "name", "type", "aliases", "desc", "web", "docs", "wikipedia", "wikidata", "rel", "outdated", "replaced_by", "start", "end", "long", "logo", "version", "released", "license", "level", "exam", "valid_months")}, ensure_ascii=False))
             edit = f'<div id="en-edit" data-e="{data_attr}"></div>'
@@ -826,8 +840,10 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                         if q["q"].strip().lower() not in _seenq and (_hit(q["q"]) or _hit(q["a"])):
                             _seenq.add(q["q"].strip().lower()); _efq.append({"q": q["q"], "a": q["a"], "src": x})
             _allq = _fq + _efq
-            faqbox = (f'<section class="en-faq"><h2>{T(lang, "Frequently asked questions", "Häufige Fragen")}</h2>' + "".join(
-                f'<details><summary>{esc(x["q"])}</summary><p>{esc(x["a"])}' + (f' <span class="mut">· <a href="{_epu(x["src"])}">{esc(T(lang, "From the episode", "Aus der Folge"))}: {esc(g["anchor_title"](x["src"]["e"]["title"], 48))}</a></span>' if x.get("src") else "") + "</p></details>" for x in _allq) + "</section>") if _allq else ""
+            _aitag = f' <span class="mut">({T(lang, "AI", "KI")})</span>'
+            _faqai = f'<p class="mut" style="font-size:.85em">{esc(T(lang, "Questions marked with AI were written with AI from the facts on this page.", "Mit KI markierte Fragen wurden mit KI aus den Fakten dieser Seite geschrieben."))}</p>' if any(x.get("ai") for x in _allq) else ""
+            faqbox = (f'<section class="en-faq"><h2>{T(lang, "Frequently asked questions", "Häufige Fragen")}</h2>' + _faqai + "".join(
+                f'<details><summary>{esc(x["q"])}{_aitag if x.get("ai") else ""}</summary><p>{esc(x["a"])}' + (f' <span class="mut">· <a href="{_epu(x["src"])}">{esc(T(lang, "From the episode", "Aus der Folge"))}: {esc(g["anchor_title"](x["src"]["e"]["title"], 48))}</a></span>' if x.get("src") else "") + "</p></details>" for x in _allq) + "</section>") if _allq else ""
             faqbox += f'<div id="en-qa" data-eid="{e["id"]}"></div>'
             _epq = g.get("ep_by_spreaker") or {}
             _qurl = lambda q: _epq.get(str(q.get("episode_id")), (None, None))
@@ -853,7 +869,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                        + f'{esc(T(lang, "Last updated", "Zuletzt aktualisiert"))}: <time datetime="{_mod}">{_mod}</time></p>')
             # entity.js (Fragen und Antworten #en-qa) laedt, sobald der Bereich 2500 px vor dem Bildschirm ist (vorher 600 px): auf dem Handy setzte
             # das Skript Ueberschrift und Fragen erst ein, wenn der Bereich schon sichtbar war, und schob den Rest der Seite weg (CLS ~0,18 im Labor beim Scrollen)
-            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{root}">{esc(s["entities"])}</a></nav><h1>{esc(e["name"])}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="entity" data-topic-id="{esc(e["id"])}" data-topic-label="{esc(T(lang, "Follow", "Folgen"))}">🔔 {T(lang, "Follow", "Folgen")}</button>{SPM.note(lang, _spr, "entity")}{_disc}{_lead}<p class="mut">{esc(tlab(lang, e["type"]))}</p><p class="en-def" style="font-size:1.1em">{esc(d)}</p>{oldbanner}{claim_html(e["id"], lang, e, api)}{FX.logo_html(lang, e)}{hero}{longbox}{ft}{FX.sections(lang, e, root, ENTS)}{evl}{kpbox}{eb}{tline}{artbox}'
+            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{root}">{esc(s["entities"])}</a></nav><h1>{esc(e["name"])}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="entity" data-topic-id="{esc(e["id"])}" data-topic-label="{esc(T(lang, "Follow", "Folgen"))}">🔔 {T(lang, "Follow", "Folgen")}</button>{SPM.note(lang, _spr, "entity")}{_disc}{_lead}<p class="mut">{esc(tlab(lang, e["type"]))}</p><p class="en-def" style="font-size:1.1em">{esc(d)}</p>{_dnote}{oldbanner}{claim_html(e["id"], lang, e, api)}{FX.logo_html(lang, e)}{hero}{longbox}{ft}{FX.sections(lang, e, root, ENTS)}{evl}{kpbox}{eb}{tline}{artbox}'
                           f'{qbox}{faqbox}{relmap}{relx}<div class="en-rel">{rb}</div>{gloss}{SU.block(lang, e["id"])}{wb}{("<h2>" + esc(s["experts"]) + "</h2>" + ehtml) if ehtml else ""}{srcbox}{updline}{edit}'
                           f'<script>window.M365E={{api:"{api}",lang:"{lang}",base:"{BASE}",s:{json.dumps({k: s[k] for k in ("edit_e",)}, ensure_ascii=False)}}};window.M365TopicConfig={{api:{json.dumps(api)},lang:{json.dumps(lang)}}};'
                           f'(function(){{var d=0,u="{BASE}/assets/entity.js";function go(){{if(d)return;d=1;var s=document.createElement("script");s.src=u;document.body.appendChild(s)}}'
