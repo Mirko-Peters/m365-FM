@@ -58,6 +58,8 @@ test("Anonymisierung: E-Mail, Telefon, Adresse, lange Eingabe und reine Zahlen w
   assert.equal(searchTerm("Exchange 2010/2013/2016/2019"), "exchange 2010/2013/2016/2019");
   assert.equal(searchTerm("Windows 11 24H2 build 26100"), "windows 11 24h2 build 26100");
   assert.equal(searchTerm("KB5034441"), "kb5034441");
+  // Nachpruefung: 7-9 zusammenhaengende Ziffern, andere Schriften, Binde-/Unterstrich- und Gedankenstrich-Trenner
+  for (const bad of ["ticket 1234567", "teams 123 4567", "kunde 030-123_4567", "vertrag 12\u20133456\u20137", "konto \u0661\u0662\u0663\u0664\u0665\u0666\u0667\u0668", "id 123456789", "nummer 1234567890"]) assert.equal(searchTerm(bad), "", bad);
   assert.equal(searchTerm("ASP.NET Core"), "asp.net core");
   assert.equal(searchTerm("Entra ID 2026-11"), "entra id 2026-11");
   assert.equal(Array.from(searchTerm("ä".repeat(100))).length, 80, "hoechstens 80 Zeichen");
@@ -179,6 +181,14 @@ test("Uebersetzung auf Nachfrage: meistgesucht zuerst, Budget erreicht -> wartet
     assert.deepEqual((await runTrDemand(env, async () => new Map())), { done: 0 });
     raw.exec("INSERT OR REPLACE INTO meta(k,v) VALUES('atr_off','1')"); raw.exec("UPDATE tr_demand SET status='open' WHERE item='7'");
     assert.deepEqual(await runTrDemand(env, async () => new Map()), { skipped: true }, "Notaus atr_off gilt auch hier");
+    // Nachpruefung: 401/403 (Schluessel ungueltig oder entzogen) liegt nicht am Eintrag - nichts wird failed, kein Versuch gezaehlt, der Lauf endet
+    raw.exec("DELETE FROM meta WHERE k='atr_off'"); raw.exec("UPDATE tr_demand SET status='open',tries=0 WHERE item IN ('7','8')"); raw.exec("DELETE FROM item_tr WHERE kind='podcast' AND item_id IN (7,8)");
+    for (const code of [401, 403]) {
+      let n = 0; globalThis.fetch = async () => { n++; return new Response("{}", { status: code }); };
+      await runTrDemand(env, async () => new Map());
+      assert.equal(n, 1, `nach ${code} kein weiterer Aufruf in diesem Lauf`);
+      assert.deepEqual(raw.prepare("SELECT item,status,tries FROM tr_demand WHERE item IN ('7','8') ORDER BY item").all().map((r) => [r.item, r.status, r.tries]), [["7", "open", 0], ["8", "open", 0]], `${code}: bleibt offen`);
+    }
   } finally { globalThis.fetch = oldFetch; raw.close(); }
 });
 
@@ -278,7 +288,7 @@ test("Nachfrage: bleibende Fehler (Antwort kaputt, API 4xx) sofort failed, vorue
   const sent = [], oldFetch = globalThis.fetch;
   globalThis.fetch = async (url, init) => {
     const title = JSON.parse(JSON.parse(init.body).messages[0].content).title; sent.push(title);
-    if (title === "Verboten") return new Response(JSON.stringify({ type: "error" }), { status: 403 });
+    if (title === "Verboten") return new Response(JSON.stringify({ type: "error" }), { status: 413 });   // zu gross fuer die API (Eintrag); 400 versucht util.js einmal neu, 401/403 = Zugang, nicht der Eintrag: eigener Fall weiter oben
     if (title === "Wackelig") return new Response("überlastet", { status: 529 });
     return new Response(JSON.stringify({ content: [{ type: "text", text: "{kaputt" }], usage: { input_tokens: 100, output_tokens: 40 } }), { status: 200 });
   };
@@ -290,7 +300,7 @@ test("Nachfrage: bleibende Fehler (Antwort kaputt, API 4xx) sofort failed, vorue
     assert.deepEqual(s["4"], ["failed", 0, "nicht veröffentlicht"], "zurueckgezogener Inhalt: kein Aufruf");
     assert.ok(!sent.includes("Zurueckgezogen"));
     assert.equal(s["1"][0], "failed", "Antwort nicht lesbar: bleibend"); assert.equal(s["1"][1], 1);
-    assert.deepEqual(s["2"].slice(0, 2), ["failed", 1], "API 403: bleibend");
+    assert.deepEqual(s["2"].slice(0, 2), ["failed", 1], "API 413: bleibend");
     assert.deepEqual(s["3"].slice(0, 2), ["open", 1], "529/5xx: voruebergehend, naechster Lauf");
     assert.equal(cap(), 3, "nur echte Aufrufe zaehlen gegen DAILY_CAP");
     const after1 = sent.length;

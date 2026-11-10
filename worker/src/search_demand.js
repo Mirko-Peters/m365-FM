@@ -36,19 +36,22 @@ const noindex = { "x-robots-tag": "noindex" };
 // Klammer beginnen (mit oder ohne Trennzeichen: "tel +491512345678", "rueckruf 01512345678"), 7+ Ziffern mit Trennzeichen ("151 2345 6789",
 // "123-45-6789", IBAN in Vierergruppen) und 10+ Ziffern am Stueck ("4155552671"). Ausnahmen: Jahreslisten wie "SharePoint 2016 2019 2022" (jede Gruppe
 // ein Jahr) und kurze Kennungen wie "KB5034441" (7-9 Ziffern am Stueck ohne fuehrende 0).
-const DIGITS = /[+(]?\d[\d\s()./-]*\d/g, YEAR = /^(?:19|20)\d\d$/;
+// Freistehende Ziffernfolgen (nicht an Buchstaben geklebt wie KB5034441) mit mindestens 7 Ziffern gelten als Nummer (Telefon, Kunden-, Konto-, Ausweis-
+// nummer) und werden verworfen - in jeder Schrift (\p{Nd}) und mit beliebigen Trennern (Leerzeichen, Klammern, Punkt, Schraegstrich, Binde-/Unterstrich,
+// Gedankenstrich). Ausnahme: reine Jahreslisten (SharePoint 2016 2019, Exchange 2010/2013/2016/2019). Datenschutzerklaerung: Zahlen werden nicht gespeichert.
+const DIGITS = /(?<![\p{L}\p{Nd}])[+(]?\p{Nd}[\p{Nd}\s()./_\-\u2010-\u2015]*\p{Nd}(?![\p{L}\p{Nd}])/gu, YEAR = /^(?:19|20)\d\d$/;
 const numberLike = (m) => {
-  const d = (m.match(/\d/g) || []).length;
+  const d = (m.match(/\p{Nd}/gu) || []).length;
   if (d < 7) return false;
-  const groups = m.split(/[\s()./-]+/).filter(Boolean);
-  if (groups.length > 1 && !/^[+(]/.test(m) && groups.every((g) => YEAR.test(g))) return false;   // Jahresliste
-  return /^[+(0]/.test(m) || d >= 10 || groups.length > 1;
+  const groups = m.split(/[\s()./_\-\u2010-\u2015]+/u).filter(Boolean);
+  return !(groups.length > 1 && !/^[+(]/.test(m) && groups.every((g) => YEAR.test(g)));   // Jahresliste bleibt
 };
 export function searchTerm(raw) {
   const s = String(raw || "").normalize("NFC").replace(/\p{Cc}/gu, " ");
   if (Array.from(s).length > 120 || s.includes("@") || !/\p{L}/u.test(s)) return "";
   if (/https?:|www\.|:\/\/|\b[\p{L}\p{N}-]+\.(?:com|org|de|at|ch|eu|fm|info|biz|app|dev|ly|co\.uk)(?:[/:?#]|\s|$)/iu.test(s)) return "";
   for (const [m] of s.matchAll(DIGITS)) if (numberLike(m)) return "";
+  if (/\p{Nd}{10,}/u.test(s)) return "";   // lange Ziffernfolge auch an Buchstaben (IBAN DE89370400440532013000); KB5034441 (7) bleibt
   return Array.from(s.toLocaleLowerCase().replace(/\s+/g, " ").trim()).slice(0, 80).join("").trim();
 }
 

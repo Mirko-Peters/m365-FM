@@ -196,6 +196,7 @@ export async function runTrQueue(env, entityMap) {
 // Aufruf und die gemeinsame Tagesgrenze DAILY_CAP, und autoTranslateItems/runTrQueue kaemen nicht mehr dran.
 const DEMAND_PER_RUN = 4, DEMAND_TRIES = 3, DEMAND_KINDS = ["blog", "podcast", "video", "entity"];
 const transient = (e) => /^(?:Claude API request failed|api (?:408|409|429|5\d\d))$/.test(String(e?.message || ""));
+const configError = (e) => /^api (?:401|403)$/.test(String(e?.message || ""));   // Schluessel ungueltig/entzogen: liegt nicht am Eintrag, nichts als failed markieren
 export async function runTrDemand(env, entityMap) {
   const db = env.DB, IN = DEMAND_KINDS.map(() => "?").join(",");
   if (!env.ANTHROPIC_API_KEY || (await meta(db, "atr_off")) === "1") return { skipped: true };
@@ -219,6 +220,7 @@ export async function runTrDemand(env, entityMap) {
       await mark(r, x.ok ? "translated" : "failed", x.info, x.call ? 1 : 0); if (x.ok) done++; else failed++; if (x.call) calls++;
     } catch (e) {
       if (e?.code === AI_BUDGET_ERROR) { blocked++; await mark(r, "waiting_budget"); }
+      else if (configError(e)) { console.warn("tr_demand: API-Zugang abgelehnt, Lauf beendet", String(e.message)); break; }   // Eintraege bleiben offen, kein Versuch gezaehlt
       else { failed++; calls++; await mark(r, transient(e) && (r.tries || 0) + 1 < DEMAND_TRIES ? "open" : "failed", String(e && e.message || e), 1); }   // nur voruebergehende Fehler: naechster Lauf
     }
   }
