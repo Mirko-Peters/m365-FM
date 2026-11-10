@@ -73,20 +73,28 @@ def upload_link(base, lang, title, vid, fallback, fetch=page_fetch):
     return url if st == 200 and page_of_video(html, vid) else fallback
 
 
+def sid_owners(items, out=None):
+    """Spreaker-ID -> die eine Seite (Dict mit sid, slug, sid_q: Guete der Zuordnung, site_podpage.spreaker_match). Zeigen zwei Seiten auf
+    dieselbe ID, gilt nie stillschweigend die letzte: die sicherere Zuordnung (kleineres sid_q, etwa sekundengleiche Zeit vor mehrdeutigem
+    Titel) bleibt, bei Gleichstand die erste; out meldet es. Eine Regel fuer episode_index (by_sid, sid der Seiten) und build_mapping."""
+    own = {}
+    for it in items:
+        if not (it.get("sid") and it.get("slug")): continue
+        sid = str(it["sid"]); o = own.get(sid)
+        if o is None: own[sid] = it; continue
+        if o["slug"] == it["slug"]: continue
+        keep = it if it.get("sid_q", 9) < o.get("sid_q", 9) else o
+        if out: out(f"::warning::Spreaker-Folge {sid}: zwei Seiten ({o['slug']}, {it['slug']}) - behalte {keep['slug']}")
+        own[sid] = keep
+    return own
+
+
 def build_mapping(base, en_items, dub_items, show_ids, generated="", out=print):
-    """en_items: Dicts mit sid, slug (und sid_q: Guete der Zuordnung, site_podpage.spreaker_match); dub_items: (lang, Dict mit eid, slug);
-    show_ids: Sprache -> Spreaker-Show-ID. Rueckgabe: {version, generated, items:[{spreaker_episode_id, show_id, lang, slug, url}]}, sortiert,
-    je Folgen-ID einmal. Zeigen zwei englische Seiten auf dieselbe Folgen-ID, gilt nie stillschweigend die letzte: die mit der sichereren
-    Zuordnung (kleineres sid_q, etwa sekundengleiche Zeit vor mehrdeutigem Titel) bleibt, bei Gleichstand die erste; out meldet es."""
-    rows, q = {}, {}
-    for it in en_items:
-        if it.get("sid") and it.get("slug"):
-            sid, iq = str(it["sid"]), it.get("sid_q", 9)
-            if sid in rows and rows[sid]["slug"] != it["slug"]:
-                keep = it["slug"] if iq < q[sid] else rows[sid]["slug"]
-                out(f"::warning::Spreaker-Folge {sid}: zwei Seiten ({rows[sid]['slug']}, {it['slug']}) - behalte {keep}")
-                if iq >= q[sid]: continue
-            rows[sid], q[sid] = {"spreaker_episode_id": sid, "show_id": EN_SHOW_ID, "lang": "en", "slug": it["slug"], "url": episode_url(base, "en", it["slug"])}, iq
+    """en_items: Dicts mit sid, slug (und sid_q); dub_items: (lang, Dict mit eid, slug); show_ids: Sprache -> Spreaker-Show-ID.
+    Rueckgabe: {version, generated, items:[{spreaker_episode_id, show_id, lang, slug, url}]}, sortiert, je Folgen-ID einmal. Zwei englische
+    Seiten mit derselben Folgen-ID loest sid_owners (meldet es ueber out)."""
+    rows = {sid: {"spreaker_episode_id": sid, "show_id": EN_SHOW_ID, "lang": "en", "slug": it["slug"], "url": episode_url(base, "en", it["slug"])}
+            for sid, it in sid_owners(en_items, out).items()}
     for lang, it in dub_items:
         if it.get("eid") and it.get("slug"):
             rows.setdefault(str(it["eid"]), {"spreaker_episode_id": str(it["eid"]), "show_id": int(show_ids[lang]), "lang": lang, "slug": it["slug"], "url": episode_url(base, lang, it["slug"])})

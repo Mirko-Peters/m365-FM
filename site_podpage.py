@@ -9,7 +9,7 @@ from site_design import pager as PG   # Vor/Zurueck am Seitenende (rel=prev/next
 import site_sponsorships as SPM   # T37 Sponsor: Kennzeichnung gesponserter Folgen (data/sponsorships.json)
 import site_shownotes_seo as SSEO   # neu geschriebene englische Show Notes (rewrite_shownotes.py)
 import site_transcripts as TRS   # #266: Transkripte als Dateien neben der Folgenseite (R2)
-from site_episode_urls import episode_url   # kanonische Folgen-Adresse (eine Quelle)
+from site_episode_urls import episode_url, sid_owners   # kanonische Folgen-Adresse (eine Quelle); eine Spreaker-ID je Seite
 import gzip, json, re, unicodedata, html as _h
 from functools import lru_cache
 from html.parser import HTMLParser
@@ -276,8 +276,9 @@ def _EN_SID():
         sn = (read("show_notes/en.json") or {}).get("episodes") or {}
         for r in (sn.values() if isinstance(sn, dict) else sn):
             if isinstance(r, dict) and str(r.get("id") or "").isdigit(): add(str(r["id"]), r.get("title"), None, "notes")
-        for sid, v in ((read("spreaker_index.json") or {}).get("episodes") or {}).items():
-            if str(sid).isdigit() and isinstance(v, dict): add(str(sid), v.get("t"), v.get("p"), "idx")
+        ix = read("spreaker_index.json"); ix = ix.get("episodes") if isinstance(ix, dict) else None   # falsche Form (Liste, Text): wie ohne Index
+        for sid, v in (ix.items() if isinstance(ix, dict) else ()):
+            if str(sid).isdigit() and isinstance(v, dict): add(str(sid), str(v.get("t") or ""), str(v.get("p") or ""), "idx")
     return _SIDS
 
 
@@ -353,11 +354,13 @@ def episode_index(BASE):
               "duration": iso_dur((nrec or {}).get("duration")), "number": (str(e.get("number") or "") if str(e.get("number") or "") not in ("None", "") else ""), "season": (str(e.get("season") or "") if str(e.get("season")) != "None" else "")}
         it["_t"] = e["name"].lower(); it["_k"] = " ".join(it["keypoints"] + [x["q"] + " " + x["a"] for x in faq]).lower()
         it["sid"], it["sid_q"] = spreaker_match(e, nrec)   # Spreaker-Folgen-ID (Schluessel der Extraktion shownotes/entities/<id>.json) und Guete der Zuordnung
+        items.append(it); by_slug[e["slug"]] = it
+    by_sid = sid_owners(items, print)   # eine ID nie auf zwei Seiten (Regel wie build_mapping): die unsicherere Seite verliert die ID ganz, damit
+    for e, it in zip(eps, items):       # Extraktion, YouTube-Video, spreaker-pages.json und spreaker-urls.json dieselbe Seite nennen
+        if it["sid"] and by_sid.get(it["sid"], it)["slug"] != it["slug"]: it["sid"], it["sid_q"] = "", 9
         _vl = re.search(r"(?:v=|youtu\.be/)([\w-]{11})", str(e.get("video_link") or ""))
         if _vl: it["yt"] = _vl.group(1)   # YouTube-Video der Folge (Podpage)
         if SX.yt_of(it["sid"]) and not it.get("yt"): it["yt"] = SX.yt_of(it["sid"])
-        items.append(it); by_slug[e["slug"]] = it
-    by_sid = {it["sid"]: it for it in items if it["sid"]}
     _IDX[BASE] = {"eps": eps, "items": items, "eg": eg, "ge": ge, "by_slug": by_slug, "by_sid": by_sid, "guests": guests}
     return _IDX[BASE]
 

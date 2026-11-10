@@ -64,6 +64,14 @@ class IndexA(Base):
         self.assertEqual(self.match({"name": "Umbenannt bei Podpage", "slug": "umbenannt-bei-podpage", "published": "2026-06-01T10:00:00+00:00"}), ("72000001", 3))   # nicht die sekundengleiche aus dem Index
 
 
+    def test_malformed_index_like_missing(self):
+        """Falsche Form der Datei (gueltiges JSON): der Seitenbau bricht nicht ab, die Zuordnung ist wie ohne Index."""
+        for raw in ("[1]", '"abc"', "null", "5", '{"episodes": [1, 2]}', '{"episodes": "x"}', '{"episodes": {"67289366": {"t": 5, "p": 7}}}',
+                    '{"episodes": {"67289366": ["x"], "x": {"t": "y"}}}', "{kaputt"):
+            self.data(rss(NEW)); (self.d / "spreaker_index.json").write_text(raw, "utf-8")
+            self.assertEqual(self.match(OLD), ("", 9), raw)
+            self.assertEqual(self.match({"name": NEW[1], "slug": "finops-for-manufacturing-it", "published": "2026-10-29T23:25:02-07:00"}), ("75991847", 1), raw)
+
 class TieC(Base):
     """C: zwei Folgen im 2-min-Fenster, Podpage hat beide umbenannt."""
     def test_exact_second_wins(self):
@@ -138,6 +146,38 @@ class Mapping(unittest.TestCase):
         self.assertEqual(rows["76059402"], ("ja", f"{BASE}/ja/azure-ai-foundry-ai/")); self.assertEqual(rows["76059395"][0], "en")
         self.assertEqual(msgs, [])
 
+
+
+class IndexBySid(unittest.TestCase):
+    """episode_index: eine Spreaker-ID gehoert genau einer Seite - by_sid, sid der Seiten, YouTube-Video und spreaker-urls.json folgen
+    derselben Regel wie build_mapping (kleineres sid_q, bei Gleichstand die erste = neuere Seite)."""
+    def index(self, matches):
+        eps = [{"name": f"Folge {s}", "slug": s, "create_time": t, "show_notes": "", "published": True} for s, t in
+               (("neu-q5", "2026-10-03T10:00:00"), ("mitte-q1", "2026-10-02T10:00:00"), ("alt-q5", "2026-10-01T10:00:00"), ("allein", "2026-09-01T10:00:00"))]
+        msgs = []
+        with patch.object(P, "_IDX", {}), patch.object(P, "load", lambda n: eps if n == "episodes" else []), patch.object(P.SNT, "get", lambda *a, **k: None), \
+                patch.object(P, "spreaker_match", lambda e, nrec=None: matches[e["slug"]]), patch.object(P.SX, "yt_of", lambda sid: {"100": "AAAAAAAAAAA", "200": "BBBBBBBBBBB"}.get(str(sid), "")), \
+                patch("builtins.print", lambda *a, **k: msgs.append(" ".join(map(str, a)))):
+            return P.episode_index(BASE), msgs
+
+    def test_collision_one_owner(self):
+        idx, msgs = self.index({"neu-q5": ("100", 5), "mitte-q1": ("100", 1), "alt-q5": ("100", 5), "allein": ("200", 3)})
+        it = idx["by_slug"]
+        self.assertIs(idx["by_sid"]["100"], it["mitte-q1"]); self.assertIs(idx["by_sid"]["200"], it["allein"])   # nicht die letzte (aelteste) Seite
+        self.assertEqual([(it[s]["sid"], it[s]["sid_q"]) for s in ("neu-q5", "mitte-q1", "alt-q5", "allein")], [("", 9), ("100", 1), ("", 9), ("200", 3)])
+        self.assertEqual([it[s].get("yt") for s in ("neu-q5", "mitte-q1", "alt-q5")], [None, "AAAAAAAAAAA", None])   # kein fremdes Video auf der Verliererseite
+        self.assertEqual(len(msgs), 2); self.assertTrue(all("zwei Seiten" in x and "behalte mitte-q1" in x for x in msgs))
+        m = SEU.build_mapping(BASE, idx["items"], [], {}, out=msgs.append)
+        self.assertEqual({r["spreaker_episode_id"]: r["slug"] for r in m["items"]}, {"100": "mitte-q1", "200": "allein"}); self.assertEqual(len(msgs), 2)   # schon geloest
+
+    def test_tie_keeps_newer_page(self):
+        idx, msgs = self.index({"neu-q5": ("100", 5), "mitte-q1": ("", 9), "alt-q5": ("100", 5), "allein": ("", 9)})
+        self.assertEqual((idx["by_slug"]["neu-q5"]["sid"], idx["by_slug"]["alt-q5"]["sid"]), ("100", ""))
+        self.assertEqual(list(idx["by_sid"]), ["100"]); self.assertEqual(len(msgs), 1)
+
+    def test_no_collision_unchanged(self):
+        idx, msgs = self.index({"neu-q5": ("100", 5), "mitte-q1": ("300", 1), "alt-q5": ("", 9), "allein": ("200", 3)})
+        self.assertEqual({k: v["slug"] for k, v in idx["by_sid"].items()}, {"100": "neu-q5", "300": "mitte-q1", "200": "allein"}); self.assertEqual(msgs, [])
 
 if __name__ == "__main__":
     unittest.main()
