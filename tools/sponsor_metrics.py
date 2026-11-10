@@ -52,6 +52,16 @@ def row(placement, day, metric, value, dim, source, kind="measured"):
             "dim": str(dim or "")[:200], "source": source, "kind": kind}
 
 
+def query_row(placement, day, query, page, clicks, impressions, position):
+    """Suchbegriff-Zeile (Google Search Console) fuer /api/internal/sponsor-metrics, Feld "queries". None bei ungueltigen Werten."""
+    clicks, impressions, position = number(clicks), number(impressions), number(position)
+    query = str(query or "").strip()[:200]
+    if clicks is None or impressions is None or position is None or not text_day(day) or not query:
+        return None
+    return {"placement_id": placement, "day": text_day(day), "query": query, "page": str(page or "")[:300], "clicks": clicks,
+            "impressions": impressions, "position": round(position, 1), "source": "gsc", "kind": "measured"}
+
+
 def report(statuses):
     lines = ["### Sponsor-Metriken"]
     lines.extend(f"- {source}: {state}" for source, state in sorted(statuses.items()))
@@ -455,6 +465,13 @@ def gsc(placements, day, out, statuses):
                         metric = row(placement["id"], date_value, metric_name, value, page, "gsc")
                         if metric:
                             source_rows.append(metric)
+                # Suchbegriffe und Position dieser Seite (die haeufigsten 25; Google blendet seltene Begriffe aus)
+                top = {"startDate": day, "endDate": day, "dimensions": ["query"], "rowLimit": 25,
+                       "dimensionFilterGroups": query["dimensionFilterGroups"]}
+                for result in helper.http_json(url, body=top, headers=headers).get("rows") or []:
+                    found = query_row(placement["id"], day, (result.get("keys") or [""])[0], page, result.get("clicks"), result.get("impressions"), result.get("position"))
+                    if found:
+                        source_rows.append(found)
         out.extend(source_rows)
     except Exception as error:
         statuses["Google Search Console"] = f"Abruf fehlgeschlagen ({type(error).__name__}); keine Werte geschrieben"
@@ -611,7 +628,17 @@ def main(today=None):
             day_statuses.setdefault(name, []).append(f"{day}: {state}")
     statuses = {name: " | ".join(states) for name, states in day_statuses.items()}
     # The internal API validates every placement, source, metric, value and date before UPSERT.
+    queries = [m for m in metrics if "query" in m]   # Suchbegriffe (Google Search Console) gehen in eigener Liste an dieselbe Route
+    metrics = [m for m in metrics if "query" not in m]
     count = 0
+    for offset in range(0, len(queries), 500):
+        batch = queries[offset:offset + 500]
+        status, _, _ = json_request(f"{API}/api/internal/sponsor-metrics", json.dumps({"queries": batch}).encode(), headers)
+        if status != 200:
+            statuses["D1"] = f"Suchbegriffe Batch {offset // 500 + 1} abgewiesen (HTTP {status}); weitere Batches nicht gesendet"
+            report(statuses)
+            return 1
+        count += len(batch)
     for offset in range(0, len(metrics), 500):
         batch = metrics[offset:offset + 500]
         status, _, _ = json_request(f"{API}/api/internal/sponsor-metrics",

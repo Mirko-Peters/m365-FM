@@ -267,6 +267,53 @@ def dashboard_copy(lang):
         "assign_placement": ("Assign a company placement", "Platzierung einer Firma zuordnen"),
         "placement_help": ("Map a placement to one company; refs may contain video_ids, mention_sec, press_release and page_paths.",
                            "Ordne eine Platzierung genau einer Firma zu; refs können video_ids, mention_sec, press_release und page_paths enthalten."),
+        "clicks_title": ("Link clicks: real and filtered", "Link-Klicks: echt und gefiltert"),
+        "clicks_real": ("Real clicks", "Echte Klicks"),
+        "clicks_filtered": ("Filtered clicks (bots, scanners)", "Gefilterte Klicks (Bots, Scanner)"),
+        "filtered_share": ("Share filtered", "Quote gefiltert"),
+        "filter_note": ("Real vs. filtered is an estimate from request headers (no cookies, no fingerprinting, no IP stored). Scanners that behave exactly like a browser still count as real; unusual browsers may be filtered by mistake. Filtered clicks are never billed.",
+                        "Echt oder gefiltert ist eine Schätzung aus den Kopfzeilen der Anfrage (keine Cookies, kein Fingerprinting, keine IP gespeichert). Scanner, die sich genau wie ein Browser verhalten, zählen weiter als echt; ungewöhnliche Browser können zu Unrecht gefiltert werden. Gefilterte Klicks werden nie abgerechnet."),
+        "country_title": ("Where clicks come from (country)", "Herkunft der Klicks (Land)"),
+        "country": ("Country", "Land"),
+        "country_unknown": ("Unknown", "Unbekannt"),
+        "country_note": ("The country is counted for link clicks only. Page views by country are not connected yet.",
+                         "Das Land wird nur bei Link-Klicks gezählt. Seitenaufrufe nach Land sind noch nicht angebunden."),
+        "surface_title": ("Where the link was placed", "Wo der Link stand"),
+        "surface": ("Placement of the link", "Fläche des Links"),
+        "leads_title": ("Leads", "Leads"),
+        "leads_note": ("Leads from the booked lead form, counted when a visitor sends the form with consent.",
+                       "Leads aus dem gebuchten Lead-Formular, gezählt wenn ein Besucher das Formular mit Einwilligung absendet."),
+        "leads_none": ("No lead form booked yet, so there are no leads to show.", "Noch kein Lead-Formular gebucht, daher gibt es keine Leads."),
+        "source_leads": ("M365.FM lead form", "M365.FM-Lead-Formular"),
+        "entities_title": ("Page views by entity", "Aufrufe je Entität"),
+        "entities_note": ("Company, product and topic pages of the sponsorship; language versions are added up. A dash means no figure has been reported for the page yet.",
+                          "Firmen-, Produkt- und Themenseiten des Sponsorings; Sprachfassungen sind zusammengezählt. Ein Strich heißt: für die Seite liegt noch keine Zahl vor."),
+        "name": ("Name", "Name"),
+        "kind_company": ("Company", "Firma"), "kind_product": ("Product", "Produkt"), "kind_topic": ("Topic", "Thema"),
+        "kind_entity": ("Entity", "Entität"), "kind_episode": ("Episode", "Folge"), "kind_other": ("Other page", "Andere Seite"),
+        "search_clicks": ("Search clicks", "Such-Klicks"),
+        "bing_impressions": ("Bing impressions", "Bing-Impressionen"),
+        "bing_clicks": ("Bing clicks", "Bing-Klicks"),
+        "posts_title": ("Sponsored posts", "Beiträge"),
+        "posts_note": ("Planned posts have no figures until they are published. Views come from the web analytics source shown above.",
+                       "Geplante Beiträge haben keine Zahlen, bis sie veröffentlicht sind. Die Aufrufe kommen aus der oben genannten Web-Analytics-Quelle."),
+        "post_nr": ("No.", "Nr."), "post_title": ("Title", "Titel"), "post_date": ("Date", "Datum"),
+        "post_planned": ("Planned", "Geplant"), "post_published": ("Published", "Veröffentlicht"),
+        "post_sponsored": ("Sponsored", "Gesponsert"), "post_sponsored_col": ("Labelled as sponsored", "Als gesponsert gekennzeichnet"),
+        "search_title": ("Search visibility", "Sichtbarkeit in der Suche"),
+        "search_pages": ("pages", "Seiten"), "search_queries": ("search terms and position", "Suchbegriffe und Position"),
+        "connected": ("Connected", "Angebunden"),
+        "not_connected_yet": ("Not connected yet", "Noch nicht angebunden"),
+        "rankings_title": ("Rankings (Google Search Console)", "Rankings (Google Search Console)"),
+        "search_query": ("Search term", "Suchbegriff"), "search_page": ("Page", "Seite"), "position": ("Avg. position", "Ø Position"),
+        "rankings_note": ("Only pages of the sponsored entities and posts. Google hides rare search terms, so the list is not complete. Position is the daily average, weighted by impressions (1 = top).",
+                          "Nur Seiten der gesponserten Entitäten und Beiträge. Google blendet seltene Suchbegriffe aus, die Liste ist daher nicht vollständig. Die Position ist der Tagesdurchschnitt, gewichtet nach Impressionen (1 = ganz oben)."),
+        "ai_title": ("AI citations", "KI-Zitate"),
+        "ai_manual_note": ("Entered by hand from the Bing Webmaster export (source: manual), not measured live.",
+                           "Von Hand aus dem Bing-Webmaster-Export eingetragen (Quelle: manuell), nicht live gemessen."),
+        "ai_site_title": ("Whole website (not only your pages)", "Gesamte Website (nicht nur deine Seiten)"),
+        "ai_site_note": ("Site-wide figures from the monthly update; they show how often M365.FM as a whole is cited and are no figure of your pages.",
+                         "Website-weite Zahlen aus der monatlichen Aktualisierung; sie zeigen, wie oft M365.FM insgesamt zitiert wird, und sind keine Zahl deiner Seiten."),
         "start": ("Start", "Beginn"),
         "end": ("End", "Ende"),
         "ai_citations": ("AI citations", "KI-Zitate"),
@@ -739,6 +786,69 @@ def body_html(g, lang, stats, quick, ssr, n_main, n_langs, con_on):
     return hero + nojs + f'<div class="spn-grid"><div class="spn-build">{s1}{s2}{s3}{s4}{s5}</div>{console}{form}{faq}</div>'
 
 
+ENTITY_KIND = {"org": "company", "product": "product", "platform": "product", "cert": "product"}   # alles andere (concept, ...) gilt als Thema
+
+
+def _post_path(path):
+    path = urlsplit(str(path or "").strip()).path
+    return path if path.startswith("/") and not path.startswith("//") else ""
+
+
+def _plan_for(rec, data_dir):
+    """Beitragsplan (data/sponsor_posts_<name>.json, Felder nr, reihe, title, main, others, sponsored, status, slug, date) des Sponsorings oder []."""
+    handle = (rec.get("manager") or {}).get("handle") or ""
+    sponsor = re.sub(r"[^a-z0-9]+", "-", str((rec.get("sponsor") or {}).get("name") or "").lower()).strip("-")
+    for f in sorted(Path(data_dir).glob("sponsor_posts_*.json")):
+        stem = f.stem[len("sponsor_posts_"):]
+        if stem and (str(rec.get("id") or "").startswith(stem) or sponsor == stem):
+            plan = _json(f, [])
+            return [x for x in plan if isinstance(x, dict) and x.get("slug") and handle], handle
+    return [], handle
+
+
+def sponsor_context(g, data_dir=None):
+    """Fuers Dashboard: je Sponsoring (id = Platzierungs-ID) die gekennzeichneten Entitaeten (Firma, Produkte, Themen) mit Art und die Beitraege
+    (veroeffentlicht aus data/sponsorships.json posts, geplant aus dem Plan data/sponsor_posts_<name>.json, falls vorhanden). Nur oeffentliche Daten
+    aus dem Repo; ohne Eintraege bleibt die Zuordnung leer und das Dashboard zeigt nichts an."""
+    data_dir = data_dir or D
+    ents = _ents(g)
+    out = {}
+    for rec in (_json(Path(data_dir) / "sponsorships.json", {}) or {}).get("sponsorships", []):
+        if not isinstance(rec, dict) or not rec.get("id"):
+            continue
+        rows = []
+        for kind_key in ("entities", "topics"):
+            for eid in rec.get(kind_key) or []:
+                e = ents.get(eid) or {}
+                kind = "topic" if kind_key == "topics" else ENTITY_KIND.get(e.get("type"), "topic")
+                rows.append({"id": eid, "name": e.get("name") or eid, "kind": kind})
+        published = {_post_path(x) for x in rec.get("posts") or [] if _post_path(x)}
+        posts, seen = [], set()
+        plan, handle = _plan_for(rec, data_dir)
+        for item in plan:
+            path = f"/community/u/{handle}/blog/{item['slug']}/"
+            seen.add(path)
+            posts.append({"path": path, "title": str(item.get("title") or ""), "nr": item.get("nr"), "series": item.get("reihe"), "date": item.get("date"),
+                          "sponsored": bool(item.get("sponsored")), "status": "published" if path in published else "planned"})
+        for path in sorted(published - seen):
+            posts.append({"path": path, "title": path.rstrip("/").rsplit("/", 1)[-1], "nr": None, "series": None, "date": None, "sponsored": False, "status": "published"})
+        out[rec["id"]] = {"entities": rows, "posts": posts}
+    return out
+
+
+def site_ai_rows(stats):
+    """Website-weite KI-/Suchzahlen aus data/stats/ai_performance.json (Pflege: ai-stats.yml), nur wenn gueltig. Bing AI und Google AI sind Handeintraege."""
+    rows = []
+    b, gai = stats.get("bing") or {}, stats.get("google") or {}
+    if b.get("ok"):
+        rows.append({"label": "Bing AI Performance: Copilot", "value": b["citations"], "unit": "citations", "period": f'{b["period"]["from"]} – {b["period"]["to"]}',
+                     "kind": "manual", "source": str(b.get("source") or ""), "retrieved": str(b.get("retrieved") or "")[:10]})
+    if gai.get("ok"):
+        rows.append({"label": "Google AI Overviews / AI Mode", "value": gai["impressions"], "unit": "impressions", "period": f'{gai["period"]["from"]} – {gai["period"]["to"]}',
+                     "kind": "manual", "source": str(gai.get("source") or ""), "retrieved": str(gai.get("retrieved") or "")[:10]})
+    return rows
+
+
 def banner_range():
     """Kleinster und groesster TKP der Banner (EUR, ganze Euro) aus den Startwerten data/ad_pricing.json - nur fuer die Anzeige im Konfigurator;
     der Preis der Auswahl kommt immer vom Server (/api/ads/quote, Werte aus D1)."""
@@ -841,6 +951,7 @@ def build(g):
                           str(stats["google"].get("retrieved") or "")[:10] if stats["google"].get("ok") else "", stats["diff_updated"]) if re.fullmatch(r"\d{4}-\d{2}-\d{2}", x) and x <= TODAY]
     lastmod = max(_dates) if _dates else TODAY   # Inhaltsdatum (Preise, Belegzahlen, Schwierigkeit), nicht das Baudatum
     P = PRICING
+    sp_ctx, site_ai = sponsor_context(g), site_ai_rows(stats)   # Dashboard: Entitaeten/Beitraege je Sponsoring, website-weite KI-Zahlen
     per_lang, payload = {}, []
     for lang in langs:
         quick, search, ebase = topics_for(g, lang, stats)
@@ -886,7 +997,7 @@ def build(g):
         views = (("overview", "dashboard"), ("placement", "placement_view"),
                  ("report", "report_view"), ("sources", "sources_view"))
         urls = {view: dashboard_view_url(B, lang, view) for view, _ in views}
-        config = json.dumps({"api": g["api"], "base": B, "lang": lang, "today": TODAY, "copy": q, "urls": urls},
+        config = json.dumps({"api": g["api"], "base": B, "lang": lang, "today": TODAY, "copy": q, "urls": urls, "sp": sp_ctx, "siteAi": site_ai},
                             ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
         for view, title_key in views:
             canonical = urls[view]

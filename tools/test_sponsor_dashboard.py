@@ -1,4 +1,7 @@
+import json
+import re
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
@@ -87,6 +90,47 @@ class SponsorDashboardTests(unittest.TestCase):
         self.assertIn(".sdb-report,.sdb-report *{visibility:visible!important}", SPN.DASHBOARD_CSS)
         self.assertNotIn("LinkedIn", frontend)
         self.assertNotIn("HeySummit", frontend)
+
+    def test_every_text_key_of_the_new_sections_exists_in_german_and_english(self):
+        frontend = (ROOT / "assets" / "sponsor-dashboard.js").read_text("utf-8")
+        block = frontend[frontend.index("// ---- Klicks (echt/gefiltert)"):frontend.index("function renderOverview")]
+        keys = set(re.findall(r'text\("([a-z_0-9]+)"\)', block))
+        for heads in re.findall(r'table\(\[([^\]]*)\]', block):
+            keys |= set(re.findall(r'"([a-z_0-9]+)"', heads))
+        keys |= {f"kind_{k}" for k in ("company", "product", "topic", "entity", "episode", "other")}
+        keys |= set(re.findall(r'"(source_leads)"', frontend))
+        self.assertGreater(len(keys), 40)
+        for lang in ("en", "de"):
+            copy = SPN.dashboard_copy(lang)
+            self.assertEqual(sorted(k for k in keys if k not in copy), [], lang)
+
+    def test_sponsor_context_lists_entities_with_kind_and_posts_from_the_plan_without_inventing_any(self):
+        with tempfile.TemporaryDirectory() as d:
+            d = Path(d)
+            (d / "sponsorships.json").write_text(json.dumps({"version": 1, "sponsorships": [
+                {"id": "acme-2026", "sponsor": {"name": "Acme", "url": "https://acme.example/"}, "label": "sponsored", "entities": ["acme", "acme-tool"],
+                 "topics": ["oversharing"], "posts": ["/community/u/mirko-p/blog/post-a/"], "manager": {"handle": "mirko-p", "entity": "mirko-peters"}},
+                {"id": "other-2026", "sponsor": {"name": "Other", "url": "https://other.example/"}, "label": "sponsored", "entities": ["unknown-entity"]}]}), "utf-8")
+            (d / "sponsor_posts_acme.json").write_text(json.dumps([
+                {"nr": 1, "reihe": "A", "title": "Post A", "main": "oversharing", "others": [], "sponsored": True, "status": "geplant", "slug": "post-a", "date": "2026-11-15"},
+                {"nr": 2, "reihe": "A", "title": "Post B", "main": "oversharing", "others": [], "sponsored": False, "status": "geplant", "slug": "post-b", "date": "2026-11-16"}]), "utf-8")
+            ents = {"acme": {"type": "org", "name": "Acme"}, "acme-tool": {"type": "product", "name": "Acme Tool"}, "oversharing": {"type": "concept", "name": "Oversharing"}}
+            ctx = SPN.sponsor_context({"ents": ents}, d)
+        self.assertEqual(ctx["acme-2026"]["entities"], [{"id": "acme", "name": "Acme", "kind": "company"}, {"id": "acme-tool", "name": "Acme Tool", "kind": "product"},
+                                                       {"id": "oversharing", "name": "Oversharing", "kind": "topic"}])
+        posts = {p["title"]: p for p in ctx["acme-2026"]["posts"]}
+        self.assertEqual(posts["Post A"]["status"], "published")   # steht in sponsorships.json posts
+        self.assertEqual(posts["Post B"]["status"], "planned")
+        self.assertEqual(posts["Post B"]["path"], "/community/u/mirko-p/blog/post-b/")
+        # ohne Plan und ohne Beitraege: leer, nichts erfunden; unbekannte Entitaet behaelt ihre ID als Namen
+        self.assertEqual(ctx["other-2026"], {"entities": [{"id": "unknown-entity", "name": "unknown-entity", "kind": "topic"}], "posts": []})
+
+    def test_site_ai_rows_only_with_valid_numbers_and_marked_manual(self):
+        ok = {"bing": {"ok": True, "citations": 10, "period": {"from": "2026-08-01", "to": "2026-10-31"}, "source": "Bing", "retrieved": "2026-11-04"},
+              "google": {"ok": False}}
+        rows = SPN.site_ai_rows(ok)
+        self.assertEqual([(r["label"], r["value"], r["kind"]) for r in rows], [("Bing AI Performance: Copilot", 10, "manual")])
+        self.assertEqual(SPN.site_ai_rows({"bing": {"ok": False}, "google": {}}), [])
 
     def test_sponsor_link_privacy_notice_is_a_section_in_both_languages(self):
         de, en = LEG.privacy_de(), LEG.privacy_en()
