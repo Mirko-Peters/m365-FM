@@ -5,7 +5,9 @@ Wiederverwendet aus translate_blog.py: Segmentierung (HTML-Struktur bleibt), Sys
 Marker-Parser, Preise. Vorhandene Sprachfassungen werden nie neu uebersetzt (Vertrag wie translate_blog.py, #315): aendert sich die englische Fassung, wird die
 Uebersetzung nur als stale markiert und im Log gelistet. Fehlende Teile (FAQ, Quiz, Infografiken), die Sonnet erst spaeter ergaenzt, werden dagegen einmal
 nachuebersetzt (gap) und in die vorhandene Haiku-Fassung eingefuegt - der uebrige Text bleibt. Ausgaben werden getrennt als "articles_tr" in data/spend.json gezaehlt.
-Ausfaelle der API (errored/expired/canceled, Netz- und HTTP-Fehler) zaehlen nie als Versuch; nur inhaltliche Fehler (QA) zaehlen, nach MAX_TRIES ist die Fassung gesperrt.
+Ausfaelle der API (errored/expired/canceled, Netz- und HTTP-Fehler) zaehlen nie als Versuch; nur inhaltliche Fehler (QA) und von der API abgewiesene Anfragen
+(errored mit invalid_request_error) zaehlen, nach MAX_TRIES ist die Fassung gesperrt. Ein Versuch zaehlt erst, wenn alle Anfragen der Fassung abgesendet und beantwortet sind.
+Ein Batch, den die API nicht mehr kennt (HTTP 404: geloescht, Ergebnisse abgelaufen, anderer Workspace), wird aus dem Zwischenstand genommen; seine Fassungen sind wieder offen.
 Zwischenstand (laufende Batches, Teilsegmente, Versuche): data/articles_tr_state.json."""
 import copy, hashlib, json, os, re, time, urllib.error
 from datetime import datetime, timezone
@@ -29,6 +31,14 @@ API_ERR = (OSError, ValueError)                                     # Netz/HTTP 
 def transient(e):
     """Voruebergehender Ausfall (Netz, Zeitlimit, HTTP 408/409/429/5xx) - im Gegensatz zu einer abgewiesenen Anfrage (HTTP 4xx), die ein Fehler im Code ist."""
     return not isinstance(e, urllib.error.HTTPError) or e.code in (408, 409, 429) or e.code >= 500
+
+
+def api_reason(res):
+    """(Grund, abgewiesen) eines Ergebnisses ohne Antwort: Ergebnisart, bei "errored" mit Fehlerart und Meldung der API (wie rewrite_shownotes.py).
+    abgewiesen = invalid_request_error: die Anfrage selbst ist ungueltig (z. B. zu lang) - ein erneutes Senden aendert nichts, zaehlt also als Versuch."""
+    e = res.get("error") or {}
+    while isinstance(e.get("error"), dict): e = e["error"]
+    return (res["type"] + (f": {e.get('type', '')} {e.get('message', '')}".rstrip() if e else ""))[:200], e.get("type") == "invalid_request_error"
 
 
 # ---------- Quelle: Hash, Einheiten, Zusammensetzen ----------
@@ -209,6 +219,7 @@ def submit(store, vids, s, langs=LANGS, limit=0):
         if money + c_usd > room:
             print(f"Budget articles_tr erreicht ({TR_BUDGET:.2f} $; diesen Monat {spent_month():.2f} $, offen {pending_cost(s):.2f} $) - Rest bleibt offen"); break
         money += c_usd; n += 1; s["partial"][pk(l, v)] = rec
+        rec["sent"] = False; rec.pop("api_miss", None)   # neuer Versuch: erst wenn alle Anfragen abgesendet sind (sent), kann er zaehlen
         for ci, c in enumerate(cs):
             reqs.append({"custom_id": f"{l}_{TB.key(v)}_{ci}", "params": {"model": MODEL, "max_tokens": TB.MAX_TOK,
                          **thinking_off(MODEL), "system": [{"type": "text", "text": TB.system_prompt(l), "cache_control": {"type": "ephemeral"}}],
@@ -220,6 +231,7 @@ def submit(store, vids, s, langs=LANGS, limit=0):
         for it in items:
             if not s["partial"][pk(it["lang"], it["vid"])]["seg"]: s["partial"].pop(pk(it["lang"], it["vid"]), None)
         return 0
+    lastpos = {r["custom_id"].rsplit("_", 1)[0]: j for j, r in enumerate(reqs)}   # letzte Anfrage je Fassung
     for i in range(0, len(reqs), TB.PER_BATCH):
         part = reqs[i:i + TB.PER_BATCH]
         ids = {r["custom_id"].rsplit("_", 1)[0] for r in part}
@@ -237,6 +249,8 @@ def submit(store, vids, s, langs=LANGS, limit=0):
             return i
         s["batches"].append({"id": b["id"], "n": len(part), "model": MODEL, "created": datetime.now(timezone.utc).isoformat()[:19],
                              "est_usd": round(money * len(part) / len(reqs), 3), "items": its})
+        for it in its:   # letzte Anfrage der Fassung ist abgesendet
+            if lastpos[f"{it['lang']}_{TB.key(it['vid'])}"] < i + len(part): s["partial"][pk(it["lang"], it["vid"])]["sent"] = True
         save_state(s); print("Batch", b["id"], len(part), "Anfragen, geschaetzt", round(money * len(part) / len(reqs), 2), "$")
     return len(reqs)
 
@@ -255,9 +269,10 @@ def ingest(store, s, lang, vid, h, got):
     return ok, bad, why
 
 
-def finish(store, s, lang, vid, count=True):
+def finish(store, s, lang, vid, count=True, reason="qa"):
     """Vollstaendige Uebersetzung speichern (nie eine vorhandene Fassung ersetzen; gap: nur die fehlenden Teile in die Haiku-Fassung einfuegen), sonst Versuch zaehlen.
-    count=False (Ausfall der API bei einem Teil der Anfragen): unvollstaendig bleibt offen, ohne Versuch."""
+    count=False (Ausfall der API bei einem Teil der Anfragen, oder Anfragen der Fassung stehen noch aus): unvollstaendig bleibt offen, ohne Versuch.
+    reason: Sperrgrund in failed nach MAX_TRIES ("qa" oder "api_invalid")."""
     rec = s["partial"].get(pk(lang, vid))
     if not rec: return False
     en = store[vid].get("en"); cur = store[vid].get(lang); gap = rec.get("gap"); today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
@@ -277,31 +292,49 @@ def finish(store, s, lang, vid, count=True):
     if not count: return False
     rec["tries"] += 1
     if rec["tries"] >= MAX_TRIES:
-        s["failed"][pk(lang, vid)] = "qa"; s["partial"].pop(pk(lang, vid), None)
+        s["failed"][pk(lang, vid)] = reason; s["partial"].pop(pk(lang, vid), None)
     return False
 
 
 def collect(store, s, save=None, stats=None):
     """Fertige Batches abholen. save(vid) schreibt data/articles/<vid>.json. Rueckgabe: Anzahl noch laufender Batches.
-    Netz-/HTTP-Fehler beim Abfragen: der Batch bleibt offen (naechste Abfrage oder naechster Lauf), nichts geht verloren. Ergebnisse ohne Antwort der API
-    (errored/expired/canceled) zaehlen nicht als Versuch; stats {"results", "api"} zaehlt sie fuer run()."""
-    left = []; stats = stats if stats is not None else {}
-    for b in s["batches"]:
+    Voruebergehende Netz-/HTTP-Fehler beim Abfragen: der Batch bleibt offen (naechste Abfrage oder naechster Lauf), nichts geht verloren. HTTP 404: die API kennt
+    den Batch nicht mehr - er wird verworfen (::error::, stats "lost"), seine Fassungen sind wieder offen. Andere HTTP-4xx (Schluessel ungueltig, keine Rechte):
+    Zwischenstand speichern und Fehler weitergeben (Lauf rot). Ergebnisse ohne Antwort der API (errored/expired/canceled) zaehlen nicht als Versuch, ausser die API hat
+    die Anfrage als ungueltig abgewiesen (invalid_request_error, stats "rejected"); stats {"results", "api", "rejected", "lost"} fuer run() und main()."""
+    left = []; stats = stats if stats is not None else {}; todo_b = list(s["batches"])
+    for bi, b in enumerate(todo_b):
         try:
             st = _api("GET", f"/v1/messages/batches/{b['id']}")
             lines = _api("GET", st["results_url"], raw=True).decode().splitlines() if st["processing_status"] == "ended" else None
         except API_ERR as e:
-            print(f"::warning::Batch {b['id']} gerade nicht abrufbar ({type(e).__name__}: {str(e)[:200]}) - bleibt offen"); left.append(b); continue
+            if transient(e):
+                print(f"::warning::Batch {b['id']} gerade nicht abrufbar ({type(e).__name__}: {str(e)[:200]}) - bleibt offen"); left.append(b); continue
+            if e.code != 404:   # z. B. 401/403: Schluessel falsch - nicht still weiter warten
+                s["batches"] = left + todo_b[bi:]; save_state(s); raise
+            print(f"::error::Batch {b['id']} ({b.get('created', '?')}, {b.get('n', '?')} Anfragen) ist bei der API nicht mehr vorhanden (HTTP 404: geloescht, Ergebnisse "
+                  f"abgelaufen oder anderer Workspace) - verworfen, die Fassungen werden neu angefragt")
+            stats["lost"] = stats.get("lost", 0) + 1
+            other = {(it["lang"], it["vid"]) for b2 in left + todo_b[bi + 1:] for it in b2["items"]}
+            for it in b["items"]:
+                r0 = s["partial"].get(pk(it["lang"], it["vid"]))
+                if (it["lang"], it["vid"]) not in other and r0 and not r0["seg"] and not r0["tries"]: s["partial"].pop(pk(it["lang"], it["vid"]), None)
+            continue
         if lines is None:
             print(b["id"], st["processing_status"], st["request_counts"]); left.append(b); continue
         info = {(it["lang"], TB.key(it["vid"])): it for it in b["items"]}
-        tin = tout = ok = bad = 0; why = {}; seen = set(); apifail = set(); calls = 0
+        tin = tout = ok = bad = 0; why = {}; seen = set(); apifail = set(); rejected = set(); calls = 0
         for line in lines:
             r = json.loads(line); lang, k, _ = r["custom_id"].split("_"); it = info.get((lang, k))
             if not it: continue
             res = r["result"]; stats["results"] = stats.get("results", 0) + 1
-            if res["type"] != "succeeded":   # Ausfall der API, kein Inhaltsfehler: kein Versuch (wie translate_blog.py und rewrite_shownotes.py)
-                why["api:" + res["type"]] = why.get("api:" + res["type"], 0) + 1; apifail.add((lang, it["vid"])); stats["api"] = stats.get("api", 0) + 1; continue
+            if res["type"] != "succeeded":
+                reason, inval = api_reason(res); why["api " + reason] = why.get("api " + reason, 0) + 1
+                if inval:   # von der API abgewiesen (z. B. zu lang): erneutes Senden hilft nicht -> Versuch
+                    rejected.add((lang, it["vid"])); stats["rejected"] = stats.get("rejected", 0) + 1
+                else:   # Ausfall der API, kein Inhaltsfehler: kein Versuch (wie translate_blog.py und rewrite_shownotes.py)
+                    apifail.add((lang, it["vid"])); stats["api"] = stats.get("api", 0) + 1
+                continue
             msg = res["message"]; u = msg["usage"]; calls += 1
             tin += u["input_tokens"] + u.get("cache_read_input_tokens", 0) + u.get("cache_creation_input_tokens", 0); tout += u["output_tokens"]
             text = "".join(c.get("text", "") for c in msg["content"] if c.get("type") == "text")
@@ -312,9 +345,16 @@ def collect(store, s, save=None, stats=None):
             if it["vid"] not in store or not store[it["vid"]].get("en"): continue
             o, bd, w = ingest(store, s, lang, it["vid"], it["h"], got); ok += o; bad += bd
             for kk, vv in w.items(): why[kk] = why.get(kk, 0) + vv
+        # Ein Versuch zaehlt nur, wenn alle Anfragen der Fassung abgesendet (sent) und beantwortet sind: keine mehr in einem anderen offenen Batch (in welcher
+        # Reihenfolge die Batches fertig werden, ist egal) und kein Ausfall der API in einem ihrer Batches (api_miss) - ausser die API hat eine Anfrage abgewiesen
+        other = {(it["lang"], it["vid"]) for b2 in left + todo_b[bi + 1:] for it in b2["items"]}
+        for lang, vid in apifail:
+            if s["partial"].get(pk(lang, vid)): s["partial"][pk(lang, vid)]["api_miss"] = True
         done = 0
-        for lang, vid in sorted(seen | apifail):
-            if vid in store and store[vid].get("en") and finish(store, s, lang, vid, count=(lang, vid) not in apifail):
+        for lang, vid in sorted(seen | apifail | rejected):
+            rec = s["partial"].get(pk(lang, vid)) or {}
+            count = rec.get("sent", True) and (lang, vid) not in other and ((lang, vid) in rejected or not rec.get("api_miss"))
+            if vid in store and store[vid].get("en") and finish(store, s, lang, vid, count=count, reason="api_invalid" if (lang, vid) in rejected else "qa"):
                 done += 1
                 if save: save(vid)
         usd = add_spend(tin, tout, calls)
@@ -326,8 +366,9 @@ def collect(store, s, save=None, stats=None):
 
 
 def run(store, vids, save, langs=LANGS, wait_min=None, stats=None):
-    """collect -> submit -> warten -> collect, bis alles fertig ist oder MAX_TRIES Runden verbraucht sind. Hat die API in einer Runde Anfragen nicht beantwortet
-    (errored/expired/canceled), sendet der Lauf nicht sofort erneut (die Fassungen bleiben offen fuer den naechsten Lauf). stats: {"results", "api"} des Laufs."""
+    """collect -> submit -> warten -> collect, bis alles fertig ist oder MAX_TRIES Runden verbraucht sind. Ist die API in einer Runde ausgefallen
+    (errored/expired/canceled, nicht abgewiesene Anfragen), sendet der Lauf nicht sofort erneut (die Fassungen bleiben offen fuer den naechsten Lauf); von der API
+    abgewiesene Anfragen (invalid_request_error) zaehlen als Versuch und halten die Runden der anderen Fassungen nicht auf. stats: siehe collect()."""
     s = load_state(); wait = (wait_min if wait_min is not None else int(os.environ.get("WAIT_MIN", "200"))) * 60; t0 = time.time()
     stats = stats if stats is not None else {}
     collect(store, s, save, stats)

@@ -349,6 +349,124 @@ class ApiFailures(Env):
         self.assertIn("ohne Ergebnis der API", str(cm.exception.code))
         self.assertTrue((self.root / "data" / TR.STATE).exists())   # Zwischenstand liegt vor dem Fehler auf der Platte (Workflow speichert mit if: always())
 
+    def http(self, code):
+        import io, urllib.error
+        return urllib.error.HTTPError("u", code, "x", {}, io.BytesIO(b"err"))
+
+    def test_batch_gone_404_is_dropped_and_versions_reopen(self):
+        """Neu 1: HTTP 404 beim Abfragen (Batch geloescht, Ergebnisse abgelaufen, anderer Workspace) - nicht ewig warten, sondern verwerfen und neu anfragen."""
+        store = self.store(v1={"en": EN}); api = FakeAPI(); calls = []
+        def gone(method, path, body=None, raw=False):
+            calls.append((method, path))
+            if method == "GET" and "b1" in path: raise self.http(404)
+            return api(method, path, body, raw)
+        stats = {}
+        with mock.patch.object(TR, "_api", gone):
+            TR.run(store, ["v1"], lambda v: None, langs=["de"], wait_min=1, stats=stats)
+        self.assertEqual(stats["lost"], 1); self.assertEqual(len(api.batches), 2)   # b1 verworfen, die Fassung im selben Lauf neu angefragt
+        self.assertIn("de", store["v1"]); self.assertFalse((self.root / "data" / TR.STATE).exists())
+        self.assertEqual(sum(1 for m, p in calls if m == "GET" and p.endswith("/b1")), 1)   # nur einmal abgefragt, nicht bis WAIT_MIN
+
+    def test_batch_gone_404_only_reopens_versions_without_results(self):
+        store = self.store(v1={"en": EN}); s = {"batches": [{"id": "bX", "n": 1, "model": TR.MODEL, "items": [{"lang": "de", "vid": "v1", "h": EN["h"], "last": True}]}],
+                                                "partial": {"de|v1": {"h": EN["h"], "seg": {}, "tries": 0}, "fr|v1": {"h": EN["h"], "seg": {"1": "x"}, "tries": 0}}, "failed": {}}
+        def gone(method, path, body=None, raw=False): raise self.http(404)
+        stats = {}
+        with mock.patch.object(TR, "_api", gone):
+            self.assertEqual(TR.collect(store, s, stats=stats), 0)
+        self.assertEqual(s["batches"], []); self.assertNotIn("de|v1", s["partial"]); self.assertIn("fr|v1", s["partial"]); self.assertEqual(stats["lost"], 1)
+
+    def test_main_is_red_once_when_a_batch_is_gone(self):
+        (self.root / "data" / "articles" / "v1.json").write_text(json.dumps({"en": EN}), "utf-8")
+        (self.root / "data" / "videos.json").write_text(json.dumps({"v1": {}}), "utf-8")
+        (self.root / "data" / TR.STATE).write_text(json.dumps({"batches": [{"id": "old", "n": 1, "model": TR.MODEL, "items": [{"lang": "de", "vid": "v1", "h": EN["h"]}]}],
+                                                              "partial": {}, "failed": {}}), "utf-8")
+        api = FakeAPI()
+        def gone(method, path, body=None, raw=False):
+            if method == "GET" and "old" in path: raise self.http(404)
+            return api(method, path, body, raw)
+        with mock.patch.object(TR, "_api", gone), mock.patch.object(TR, "LANGS", ["de"]), mock.patch.dict(os.environ, {"WAIT_MIN": "1"}):
+            with self.assertRaises(SystemExit) as cm:
+                GA.main("translate")
+        self.assertIn("HTTP 404", str(cm.exception.code))
+        self.assertIn("de", json.loads((self.root / "data" / "articles" / "v1.json").read_text("utf-8")))   # neu angefragt und gespeichert
+
+    def test_unauthorized_poll_fails_visibly_and_keeps_all_batches(self):
+        """Neu 1: andere HTTP-4xx (401/403) beim Abfragen: Zwischenstand speichern, Lauf rot - nicht still bis WAIT_MIN warten."""
+        import urllib.error
+        store = self.store(v1={"en": EN}, v2={"en": EN}); api = FakeAPI(); s = TR.load_state()
+        with mock.patch.object(TR, "_api", api):
+            TR.submit(store, ["v1"], s, ["de"]); TR.submit(store, ["v2"], s, ["de"])
+        def denied(method, path, body=None, raw=False): raise self.http(401)
+        with mock.patch.object(TR, "_api", denied), self.assertRaises(urllib.error.HTTPError):
+            TR.collect(store, s)
+        st = json.loads((self.root / "data" / TR.STATE).read_text("utf-8"))
+        self.assertEqual([b["id"] for b in st["batches"]], ["b1", "b2"]); self.assertEqual(st["failed"], {})
+
+    def test_invalid_request_is_logged_counts_a_try_and_does_not_stop_other_rounds(self):
+        """Neu 2: errored mit invalid_request_error steht mit Fehlerart und Meldung im Protokoll, zaehlt als Versuch (Sperre api_invalid) und haelt die
+        QA-Wiederholungsrunden der anderen Fassungen nicht auf."""
+        import contextlib, io
+        def tr2(text, lang, n):
+            return "" if text.startswith("What is Entra") and n == 1 else fake_translate(text, lang)
+        api = FakeAPI(tr2); orig = FakeAPI.__call__
+        def inval(self_, method, path, body=None, raw=False):
+            out = orig(self_, method, path, body, raw)
+            if raw:
+                ls = [json.loads(x) for x in out.decode().splitlines()]
+                for x in ls:
+                    if x["custom_id"].startswith("fr_"):
+                        x["result"] = {"type": "errored", "error": {"type": "error", "error": {"type": "invalid_request_error", "message": "prompt is too long"}}}
+                out = "\n".join(map(json.dumps, ls)).encode()
+            return out
+        store = self.store(v1={"en": EN}); stats = {}; log = io.StringIO()
+        with mock.patch.object(FakeAPI, "__call__", inval), mock.patch.object(TR, "_api", api), contextlib.redirect_stdout(log):
+            TR.run(store, ["v1"], lambda v: None, langs=["de", "fr"], wait_min=1, stats=stats)
+        self.assertIn("de", store["v1"])   # QA-Runde 2 fuer de lief trotz der abgewiesenen fr-Anfragen
+        self.assertNotIn("fr", store["v1"]); self.assertIn("invalid_request_error prompt is too long", log.getvalue())
+        s = TR.load_state(); self.assertEqual(s["failed"], {"fr|v1": "api_invalid"}); self.assertEqual(stats.get("api", 0), 0); self.assertGreater(stats["rejected"], 0)
+        n = len(api.batches); self.run_tr(store, api, langs=("fr",)); self.assertEqual(len(api.batches), n)   # gesperrt: nicht jeden Lauf erneut senden
+
+    def test_transient_errored_reason_is_logged(self):
+        self.assertEqual(TR.api_reason({"type": "errored", "error": {"type": "error", "error": {"type": "overloaded_error", "message": "Overloaded"}}}),
+                         ("errored: overloaded_error Overloaded", False))
+        self.assertEqual(TR.api_reason({"type": "expired"}), ("expired", False))
+
+    def test_split_version_counts_no_try_until_all_chunks_are_back(self):
+        """Neu 3: Fassung ueber mehrere Batches verteilt (PER_BATCH-Grenze oder POST der Folge-Batches gescheitert): kein Versuch, solange Anfragen ausstehen."""
+        import urllib.error
+        store = self.store(v1={"en": EN}); api = FakeAPI(); posts = []
+        def second_post_fails(method, path, body=None, raw=False):
+            if method == "POST":
+                posts.append(1)
+                if len(posts) == 2: raise urllib.error.URLError("conn reset")
+            return api(method, path, body, raw)
+        with mock.patch.object(TB, "CHUNK", 60), mock.patch.object(TB, "PER_BATCH", 1), mock.patch.object(TR, "_api", second_post_fails):
+            TR.run(store, ["v1"], lambda v: None, langs=["de"], wait_min=1)
+        s = TR.load_state(); self.assertEqual(s["failed"], {}); self.assertIn("de", store["v1"])
+
+    def test_split_version_with_qa_error_counts_one_try_per_round(self):
+        def tr(text, lang, n): return re.sub(r"</?strong>", "", fake_translate(text, lang)) if "<strong>" in text else fake_translate(text, lang)
+        store = self.store(v1={"en": EN}); api = FakeAPI(tr); s = TR.load_state()
+        with mock.patch.object(TB, "CHUNK", 60), mock.patch.object(TB, "PER_BATCH", 1), mock.patch.object(TR, "_api", api):
+            TR.submit(store, ["v1"], s, ["de"]); self.assertGreater(len(api.batches), 3); self.assertTrue(s["partial"]["de|v1"]["sent"])
+            s["batches"].reverse()   # Reihenfolge, in der die Batches fertig werden, ist egal
+            TR.collect(store, s)
+        self.assertEqual(s["partial"]["de|v1"]["tries"], 1); self.assertEqual(s["failed"], {})
+
+    def test_api_failure_in_an_earlier_batch_of_a_split_version_counts_no_try(self):
+        def tr(text, lang, n): return re.sub(r"</?strong>", "", fake_translate(text, lang)) if "<strong>" in text else fake_translate(text, lang)
+        store = self.store(v1={"en": EN}); api = FakeAPI(tr); s = TR.load_state(); orig = FakeAPI.__call__
+        def first_errored(self_, method, path, body=None, raw=False):
+            out = orig(self_, method, path, body, raw)
+            if raw and path.endswith("/1"):
+                out = json.dumps({"custom_id": json.loads(out.decode().splitlines()[0])["custom_id"], "result": {"type": "expired"}}).encode()
+            return out
+        with mock.patch.object(TB, "CHUNK", 60), mock.patch.object(TB, "PER_BATCH", 1), mock.patch.object(TR, "_api", api), \
+             mock.patch.object(FakeAPI, "__call__", first_errored):
+            TR.submit(store, ["v1"], s, ["de"]); TR.collect(store, s)
+        self.assertEqual(s["partial"]["de|v1"]["tries"], 0)
+
 
 class GapFill(Env):
     """F3: Teile, die Sonnet erst nach der Uebersetzung ergaenzt (FAQ, Quiz, Infografiken), werden einmal nachuebersetzt; vorhandener Text bleibt."""

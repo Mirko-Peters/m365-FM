@@ -421,6 +421,10 @@ def main(mode=None):
                   + "; ".join(f"{v}: {','.join(ls)}" for v, ls in list(st.items())[:50]) + (" ..." if len(st) > 50 else ""))
         if stats.get("api", 0) * 2 > stats.get("results", 0) > 0:   # wie rewrite_shownotes.py: faellt mehr als die Haelfte bei der API aus, endet der Lauf sichtbar mit Fehler
             raise SystemExit(f"::error::{stats['api']} von {stats['results']} Uebersetzungsanfragen ohne Ergebnis der API (errored/expired/canceled) - nichts verloren, die Fassungen bleiben offen")
+        if stats.get("rejected", 0) * 2 > stats.get("results", 0) > 0:   # die meisten Anfragen abgewiesen (invalid_request_error): eher ein Fehler im Code als im Text
+            raise SystemExit(f"::error::{stats['rejected']} von {stats['results']} Uebersetzungsanfragen von der API abgewiesen (invalid_request_error, Grund im Protokoll) - zaehlen als Versuch")
+        if stats.get("lost"):   # Batch bei der API nicht mehr vorhanden (404): einmal sichtbar rot, die Fassungen sind wieder offen
+            raise SystemExit(f"::error::{stats['lost']} Uebersetzungs-Batch(es) bei der API nicht mehr vorhanden (HTTP 404) - verworfen, die Fassungen werden neu angefragt")
         return
     try:
         _sd = json.load(open(ROOT / "data" / "spend.json", encoding="utf-8"))
