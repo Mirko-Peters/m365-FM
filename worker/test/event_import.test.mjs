@@ -1036,3 +1036,55 @@ test("F13 (#319) Admin-Routen der Events und manage_event_duplicates laufen uebe
   assert.equal((await call(admin, "/api/admin/events/unmerge", "POST", { log: m[1].log }))[0], 404, "zweimal geht nicht und wird nicht protokolliert");
   assert.deepEqual(log().map((r) => [r.action, r.kind, r.item_id, r.after.status || r.after.undone]), [["dupes.merge", "dedupe", String(q.lastInsertRowid), "merged"], ["dupes.merge", "merge_log", String(m[1].log), 1]]);
 });
+
+// communitydays.org (Next.js): Datensaetze im eingebetteten JSON, Form wie am 10.11.2026 gelesen (tools/url_peek.py struct:)
+const nextPage = (pageProps) => `<html><body><div id="__next">x</div><script id="__NEXT_DATA__" type="application/json">${JSON.stringify({ props: { pageProps, __N_SSG: true }, page: "/events", query: {}, buildId: "b1" })}</script></body></html>`;
+const cdRec = (o = {}) => ({ RowKey: "bea9912b", title: "Update Conference Prague 2026", slug: "2027-11-12/update-conference-prague-2026", start_date: "2027-11-12T08:00", end_date: "2027-11-13T18:00", preview_image: "https://cdostorageprod.blob.core.windows.net/x.png", city: "Prague", state_province: "Prague", country: "cz", event_type: "Hybrid", timezone: "Europe/Prague", cost_tiers: ["Paid"], status: "published", website: "https://prague.updateconference.net/", latitude: 50.1, longitude: 14.5, ...o });
+const CD_ROBOTS = "# *\nUser-agent: *\nDisallow: /app/*\nDisallow: /diagnostics/*\nDisallow: /sign-in\nDisallow: /blocked\nDisallow: /forbidden\nDisallow: /event/*/*/*\n\nHost: https://www.communitydays.org\nSitemap: https://www.communitydays.org/sitemap.xml\n";
+const cdNext = (pages, { list, home, detail = {} } = {}) => {
+  pages["https://communitydays.org/robots.txt"] = CD_ROBOTS;
+  if (list) pages["https://communitydays.org/events"] = nextPage({ initialEvents: list });
+  if (home) pages["https://communitydays.org/"] = nextPage({ upcomingEvents: home });
+  for (const [slug, ev] of Object.entries(detail)) pages["https://communitydays.org/event/" + slug] = nextPage({ event: ev, sponsors: [], runEventsSponsors: [] });
+};
+test("Community Days (Next.js): Liste, Startseite und Event-Seite ergeben vollstaendige Kandidaten; robots erlaubt /event/<Datum>/<slug>", async () => {
+  assert.equal(robotsAllowed(CD_ROBOTS, "/event/2026-11-23/collabdays-oslo-2026"), true);
+  assert.equal(robotsAllowed(CD_ROBOTS, "/event/2026-11-23/collabdays-oslo-2026/sessions"), false);
+  assert.equal(robotsAllowed(CD_ROBOTS, "/events"), true);
+  const oslo = cdRec({ RowKey: "184a1a95", title: "CollabDays Oslo 2027", slug: "2027-11-23/collabdays-oslo-2027", start_date: "2027-11-23T09:00", end_date: "2027-11-23T21:00", city: "Oslo", country: "no", event_type: "In Person", cost_tiers: ["Free", "Paid"], website: "https://collabdaysoslo.com/" });
+  const virt = cdRec({ RowKey: "v1", title: "AI Virtual Days 2027", slug: "2027-11-13/ai-virtual-days-2027", start_date: "2027-11-13T08:00", end_date: "2027-11-14T18:00", city: "", country: "es", event_type: "Virtual", cost_tiers: ["Free"], website: "" });
+  const past = cdRec({ RowKey: "p1", title: "Fabric Day", slug: "2026-10-14/fabric-day", start_date: "2026-10-14T08:00", end_date: "2026-10-14T17:00", city: "Oslo", country: "no" });
+  const draft = cdRec({ RowKey: "d1", title: "Draft Day", slug: "2027-12-01/draft-day", start_date: "2027-12-01T08:00", end_date: "", status: "draft" });
+  const s = await setup();
+  cdNext(s.pages, { list: [cdRec(), oslo, virt, draft], home: [{ ...cdRec(), registration_url: "https://prague.updateconference.net/register?utm_source=communitydays&utm_medium=referral&x=1", tagline: ".NET, Cloud, Security, AI", hashtag: "UCP27" }, past],
+    detail: { [oslo.slug]: { ...oslo, start_date: "2027-11-23T09:00:00.000+01:00", end_date: "2027-11-23T21:00:00.000+01:00", contact_email: "orga@example.org", address1: "Dronning Eufemias gate 71", home_content: "<p><strong>Welcome to CollabDays Oslo!</strong></p><p>Microsoft 365, SharePoint, Teams and Power Platform.</p>", registration_url: "https://event.checkin.no/230688/collabdays-oslo-2027?utm_source=communitydays" } } });
+  const rep = await runCommunityDays(s.env, { ...s.opts, dry: true, today: "2026-11-10" });
+  assert.equal(rep.found, 3, JSON.stringify(rep)); assert.equal(rep.microsoft, 3); assert.equal(rep.created, 3);   // vorbei und Entwurf fehlen
+  assert.ok(rep.notes.includes("list:/events:3") && rep.notes.includes("list:/:1") && rep.notes.some((n) => n.startsWith("detail:")), rep.notes.join(" "));
+  // eingespielt (kein Probelauf)
+  const s2 = await setup(); cdNext(s2.pages, { list: [cdRec(), oslo, virt], home: [{ ...cdRec(), registration_url: "https://prague.updateconference.net/register?utm_source=communitydays&x=1" }], detail: { [oslo.slug]: { ...oslo, contact_email: "orga@example.org", home_content: "<p>Welcome to CollabDays Oslo!</p>", registration_url: "https://event.checkin.no/230688/collabdays-oslo-2027?utm_source=communitydays" } } });
+  const r2 = await runCommunityDays(s2.env, { ...s2.opts, today: "2026-11-10" });
+  assert.equal(r2.created, 3, JSON.stringify(r2));
+  const ev = (t) => s2.raw.prepare("SELECT * FROM events WHERE title=?").get(t);
+  const pr = ev("Update Conference Prague 2026"), os = ev("CollabDays Oslo 2027"), vi = ev("AI Virtual Days 2027");
+  assert.deepEqual([pr.mode, pr.location, pr.country, pr.url, pr.tickets_url, pr.free, pr.source, pr.unclaimed], ["hybrid", "Prague", "Czechia", "https://prague.updateconference.net/", "https://prague.updateconference.net/register?x=1", 0, "communitydays", 1]);
+  assert.equal(pr.source_url, "https://communitydays.org/event/2027-11-12/update-conference-prague-2026");
+  assert.deepEqual([os.mode, os.location, os.country, os.free, os.tickets_url], ["onsite", "Oslo", "Norway", -1, "https://event.checkin.no/230688/collabdays-oslo-2027"]);
+  assert.match(os.about, /Welcome to CollabDays Oslo/);
+  assert.deepEqual([vi.mode, vi.location, vi.free], ["online", "", 1]);
+  assert.deepEqual(s2.raw.prepare("SELECT ref FROM event_source WHERE kind='communitydays' ORDER BY ref").all().map((x) => x.ref).sort(), ["communitydays.org/event/2027-11-12/update-conference-prague-2026", "communitydays.org/event/2027-11-13/ai-virtual-days-2027", "communitydays.org/event/2027-11-23/collabdays-oslo-2027"].sort());
+  // Datenschutz: aus Event-Seiten werden nur die gelesenen Felder zwischengespeichert (keine Kontakt-Adresse, keine Anschrift)
+  const cache = s2.raw.prepare("SELECT body FROM import_cache").all().map((x) => x.body).join("\n");
+  assert.ok(!/orga@example\.org|Dronning|latitude|preview_image/.test(cache));
+  assert.ok(/"cdv":1/.test(cache));
+});
+test("Community Days (Next.js): aufgebrauchtes Abruf-Kontingent stoppt nur die Beschreibungen, die Liste wird trotzdem eingespielt", async () => {
+  const many = Array.from({ length: 20 }, (_, i) => cdRec({ RowKey: "r" + i, title: `Azure Community Day ${i}`, slug: `2027-0${1 + (i % 9)}-1${i % 10}/acd-${i}`, start_date: `2027-0${1 + (i % 9)}-1${i % 10}T09:00`, end_date: "", city: "City" + i, country: "de" }));
+  const s = await setup(); cdNext(s.pages, { list: many });
+  const r = await runCommunityDays(s.env, { ...s.opts, today: "2026-11-10", maxRequests: 5 });
+  assert.equal(r.fetching, undefined, JSON.stringify(r)); assert.equal(r.found, 20); assert.equal(r.created + r.merged + r.queued, 12, JSON.stringify(r)); assert.equal(r.remaining, 8);
+  assert.ok(r.notes.some((n) => /^detail:\d+\/20/.test(n)));
+  // Cache aus dem ersten Lauf: der Folgelauf liest die Liste ohne neuen Abruf und spielt den Rest ein
+  const r2 = await runCommunityDays(s.env, { ...s.opts, today: "2026-11-10", maxRequests: 5 });
+  assert.equal(r2.created + r2.merged + r2.queued, 8, JSON.stringify(r2)); assert.equal(r2.remaining, 0);
+});

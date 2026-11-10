@@ -1,21 +1,26 @@
 // Community Days (communitydays.org): Quellen-Adapter, Parser und Import als herrenlose Events (source=communitydays).
 // Je Lauf nur ein Stueck (Abrufe und Events gedeckelt); der Stand steht in meta "communitydays_state", der Rest folgt im naechsten Lauf.
-// Die Quelle konnte aus der Entwicklungsumgebung nicht abgerufen werden. Alles Umstellbare steht in SOURCE; Reihenfolge der Strategien in STRATEGIES.
-// Strategien: "ics" (Kalender-Feed), "jsonld-list" (schema.org/Event im Listen-HTML), "sitemap" (Sitemap -> Event-Seiten mit JSON-LD).
+// Alles Umstellbare steht in SOURCE; Reihenfolge der Strategien in STRATEGIES.
+// communitydays.org ist eine Next.js-Seite (Stand 10.11.2026, per tools/url_peek.py struct: gelesen): die Event-Datensaetze stehen im eingebetteten JSON
+// (__NEXT_DATA__): /events -> pageProps.initialEvents (alle kommenden), / -> pageProps.upcomingEvents (mit Anmelde-Link), /event/<Datum>/<slug> -> pageProps.event
+// (mit Beschreibung). Kein JSON-LD, kein Kalender-Feed, Sitemap nur mit Adressen.
+// Strategien: "jsonld-list" (Listenseiten: __NEXT_DATA__ oder schema.org/Event; danach die Seiten der kommenden Events fuer die Beschreibung),
+// "ics" (Kalender-Feed), "sitemap" (Sitemap -> Event-Seiten).
 import { politeGet } from "./botfetch.js";
 import { upsertEvent, normUrl, normText } from "./eventmerge.js";
 
 export const SOURCE = {
   base: "https://communitydays.org",
   ics: ["/events.ics", "/calendar.ics", "/feed.ics"],         // unbestaetigte Kandidaten
-  list: ["/events", "/", "/past-events"],                     // Listenseiten mit JSON-LD
+  list: ["/events", "/"],                                     // Listenseiten (__NEXT_DATA__ oder JSON-LD)
   sitemap: "/sitemap.xml",
-  eventPathRx: /\/(events?|event|community-day|cd)\/[^/]+\/?$/i,   // welche Sitemap-URLs Event-Seiten sind
+  eventPathRx: /\/(events?|event|community-day|cd)\/(\d{4}-\d{2}-\d{2}\/)?[^/]+\/?$/i,   // welche Sitemap-URLs Event-Seiten sind (/event/2026-11-23/collabdays-oslo-2026)
   maxEventPages: 40,
 };
-export const STRATEGIES = ["ics", "jsonld-list", "sitemap"];
+export const STRATEGIES = ["jsonld-list", "ics", "sitemap"];
 const MS_RX = /(microsoft|m365|office ?365|microsoft ?365|azure|power ?(platform|bi|apps|automate|pages|fx)|copilot|dynamics|d365|sharepoint|teams|fabric|dataverse|entra|intune|purview|defender|sentinel|viva|windows|sql ?server|\.net|dotnet|xbox|visual studio|github|security|mvp|community days?)/i;
-export const isMicrosoftRelated = (e) => MS_RX.test([e.title, e.summary, e.about, e.organizer_name, ...(e.tags || [])].join(" "));
+// Datensaetze aus der Liste von communitydays.org (ms: true) sind Microsoft-Community-Events (die Seite ist die der Microsoft Global Community Initiative).
+export const isMicrosoftRelated = (e) => e.ms === true || MS_RX.test([e.title, e.summary, e.about, e.organizer_name, ...(e.tags || [])].join(" "));
 
 const dec = (s) => String(s ?? "").replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&#39;|&apos;/g, "'").replace(/&nbsp;/g, " ");
 const strip = (s) => dec(String(s ?? "").replace(/<[^>]*>/g, " ")).replace(/\s+/g, " ").trim();
@@ -59,6 +64,41 @@ export function parseJsonLd(html, pageUrl = SOURCE.base, own = false) {
   }
   return nodes.map((n) => toCandidate(n, pageUrl, own && nodes.length === 1));   // nur ein einzelnes Event darf die Seite als seine eigene ansehen
 }
+// --- Next.js-Daten von communitydays.org ---
+// Nur diese Felder werden gelesen und zwischengespeichert (nie Kontakt-Adressen, Postanschriften oder Team-Angaben der Event-Seite).
+const CD_KEEP = ["RowKey", "title", "slug", "start_date", "end_date", "city", "state_province", "country", "event_type", "cost_tiers", "status", "website", "registration_url", "tagline", "hashtag", "home_content"];
+const slimRec = (n) => Object.fromEntries(CD_KEEP.filter((k) => n[k] !== undefined && n[k] !== null && n[k] !== "").map((k) => [k, k === "home_content" ? String(n[k]).slice(0, 8000) : n[k]]));
+// Event-Datensaetze einer Seite: aus __NEXT_DATA__ (jedes Objekt mit title, slug und start_date) oder aus der verkleinerten Cache-Fassung ({"cdv":1,...}).
+export function nextRecords(body) {
+  const s = String(body || "");
+  if (s.startsWith('{"cdv"')) { try { return JSON.parse(s).events || []; } catch { return []; } }
+  const m = /<script[^>]+id=["']__NEXT_DATA__["'][^>]*>([\s\S]*?)<\/script>/i.exec(s); if (!m) return [];
+  let j; try { j = JSON.parse(m[1]); } catch { return []; }
+  const out = [], seen = new Set();
+  const walk = (n, d) => { if (!n || typeof n !== "object" || d > 8) return; if (Array.isArray(n)) return n.forEach((x) => walk(x, d + 1));
+    if (typeof n.title === "string" && typeof n.slug === "string" && n.start_date) { if (!seen.has(n.slug)) { seen.add(n.slug); out.push(slimRec(n)); } return; }
+    for (const v of Object.values(n)) walk(v, d + 1); };
+  walk(j.props || j, 0);
+  return out;
+}
+// Fuer politeGet reduce: Seiten mit Next-Daten werden nur als die gelesenen Felder zwischengespeichert, alle anderen unveraendert.
+export const slimNext = (body) => { const l = nextRecords(body); return l.length ? JSON.stringify({ cdv: 1, events: l }) : body; };
+const COUNTRY = (cc) => { const x = String(cc || "").trim(); if (!/^[a-z]{2}$/i.test(x)) return x; try { return new Intl.DisplayNames(["en"], { type: "region" }).of(x.toUpperCase()) || x.toUpperCase(); } catch { return x.toUpperCase(); } };
+const noUtm = (u) => { try { const x = new URL(u); for (const k of [...x.searchParams.keys()]) if (/^utm_/i.test(k)) x.searchParams.delete(k); return x.href; } catch { return ""; } };
+export const cdPage = (slug, base = SOURCE.base) => abs("/event/" + String(slug || "").replace(/^\/+/, ""), base);
+// Datensatz von communitydays.org -> Kandidat. Kennung bleibt die Seite des Events auf communitydays.org; url ist die eigene Website des Events, sonst diese Seite.
+export function cdCandidate(r, base = SOURCE.base) {
+  const page = cdPage(r.slug, base), type = String(r.event_type || ""), tiers = [].concat(r.cost_tiers || []).map((t) => String(t).trim().toLowerCase());
+  const virtual = /virtual|online/i.test(type), hybrid = /hybrid/i.test(type), country = COUNTRY(r.country), desc = r.home_content || (r.tagline && strip(r.tagline) !== strip(r.title) ? r.tagline : "");
+  const c = toCandidate({ name: r.title, startDate: r.start_date, endDate: r.end_date, url: page, uid: r.RowKey, description: desc,
+    eventAttendanceMode: virtual ? "OnlineEventAttendanceMode" : hybrid ? "MixedEventAttendanceMode" : "OfflineEventAttendanceMode",
+    location: virtual ? { "@type": "VirtualLocation", address: { addressCountry: country } } : { address: { addressLocality: r.city || "", addressCountry: country } },
+    isAccessibleForFree: tiers.length && tiers.every((t) => t === "free") ? true : tiers.length && !tiers.includes("free") ? false : undefined,
+    sameAs: [r.website, r.registration_url].filter(Boolean), keywords: r.hashtag ? [r.hashtag] : [] }, page, true);
+  const site = r.website ? abs(String(r.website), page) : "", reg = r.registration_url ? noUtm(abs(String(r.registration_url), page)) : "";
+  return { ...c, url: site || page, tickets_url: reg, ms: true };
+}
+
 export function parseIcs(text, pageUrl = SOURCE.base) {
   const lines = String(text || "").replace(/\r?\n[ \t]/g, "").split(/\r?\n/), out = []; let cur = null;
   const val = (l) => dec(l.slice(l.indexOf(":") + 1).replace(/\\n/gi, " ").replace(/\\([,;\\])/g, "$1"));
@@ -78,19 +118,41 @@ export const candKey = (c) => `${c.sources[0].ref}|${String(c.start).slice(0, 10
 // complete = false: das Abruf-Kontingent dieses Laufs war aufgebraucht (der naechste Lauf liest aus dem Cache weiter).
 export async function collect(env, opts = {}) {
   const notes = [], f = (p) => (p.startsWith("http") ? p : SOURCE.base + p), by = new Map(); let complete = true;
+  if (!opts.state) opts.state = { last: {}, count: 0 };   // ein Abruf-Kontingent fuer alle Abrufe dieses Laufs
+  const today = String(opts.today || new Date().toISOString()).slice(0, 10), recs = new Map();
   const add = (list) => { for (const c of list) if (c.title && c.start) by.set(candKey(c), c); };   // je Datensatz ein Kandidat (nie je Listen-Adresse)
-  const get = async (u) => { const r = await politeGet(env, u, opts); if (r.error === "request_budget") complete = false; return r; };
+  const get = async (u) => { const r = await politeGet(env, u, { ...opts, reduce: slimNext }); if (r.error === "request_budget") complete = false; return r; };
+  // Next-Datensaetze sammeln (je slug zusammengefuehrt: die Startseite hat den Anmelde-Link, /events alle kommenden); nur veroeffentlichte, nicht vorbei
+  const addRecs = (l) => { let n = 0; for (const r of l) { if (r.status && r.status !== "published") continue; if (String(r.end_date || r.start_date).slice(0, 10) < today) continue; recs.set(r.slug, { ...recs.get(r.slug), ...r }); n++; } return n; };
   for (const strat of opts.strategies || STRATEGIES) {
     if (by.size || !complete) break;
     if (strat === "ics") for (const p of SOURCE.ics) { const r = await get(f(p)); if (r.ok && /BEGIN:VCALENDAR/.test(r.body)) { add(parseIcs(r.body, f(p))); notes.push(`ics:${p}`); break; } else notes.push(`ics:${p}:${r.error || r.status}`); }
-    if (strat === "jsonld-list") for (const p of SOURCE.list) { const r = await get(f(p)); if (r.ok) { const l = parseJsonLd(r.body, f(p)); add(l); notes.push(`list:${p}:${l.length}`); } else notes.push(`list:${p}:${r.error || r.status}`); }
+    if (strat === "jsonld-list") {
+      for (const p of SOURCE.list) { const r = await get(f(p)); if (r.ok) { const n = addRecs(nextRecords(r.body)), l = parseJsonLd(r.body, f(p)); add(l); notes.push(`list:${p}:${n + l.length}`); } else notes.push(`list:${p}:${r.error || r.status}`); }
+      if (recs.size && complete) await details(env, recs, opts, notes);
+      for (const r of recs.values()) add([cdCandidate(r)]);
+    }
     if (strat === "sitemap") {
       const sm = await get(f(SOURCE.sitemap)); if (!sm.ok) { notes.push(`sitemap:${sm.error || sm.status}`); continue; }
       const urls = parseSitemap(sm.body).slice(0, SOURCE.maxEventPages); notes.push(`sitemap:${urls.length}`);
-      for (const u of urls) { const r = await get(u); if (r.ok) add(parseJsonLd(r.body, u, true)); else notes.push(`page:${r.error || r.status}`); }
+      for (const u of urls) { const r = await get(u); if (r.ok) { const n = nextRecords(r.body); n.length ? addRecs(n) : add(parseJsonLd(r.body, u, true)); } else notes.push(`page:${r.error || r.status}`); }
+      for (const r of recs.values()) add([cdCandidate(r)]);
     }
   }
   return { candidates: [...by.values()], notes, complete };
+}
+// Beschreibung aus den Seiten der kommenden Events (in der Reihenfolge des Einspielens, ab opts.after). Ergaenzt nur: ist das Abruf-Kontingent aufgebraucht,
+// gelten die Listendaten (der Lauf bleibt vollstaendig); spaetere Laeufe lesen die uebrigen Seiten, der naechste Durchgang uebernimmt sie (updated).
+async function details(env, recs, opts, notes) {
+  const key = (r) => candKey(cdCandidate(r)), list = [...recs.values()].map((r) => [key(r), r]).filter(([k]) => k > (opts.after || "")).sort((a, b) => (a[0] < b[0] ? -1 : 1)).slice(0, SOURCE.maxEventPages);
+  let got = 0, miss = 0;
+  for (const [, r] of list) {
+    const res = await politeGet(env, cdPage(r.slug), { ...opts, reduce: slimNext });
+    if (res.error === "request_budget") break;
+    const d = res.ok ? nextRecords(res.body).find((x) => x.slug === r.slug) : null;
+    if (d) { recs.set(r.slug, { ...r, ...d }); got++; } else miss++;
+  }
+  notes.push(`detail:${got}/${list.length}` + (miss ? `:miss${miss}` : ""));
 }
 const STATE = "communitydays_state", parse = (s) => { try { return JSON.parse(s); } catch { return null; } };
 // Ein Stueck Import. opts.dry = nur zaehlen (nichts schreiben, hoechstens 60 Kandidaten); opts.force = neuen Durchgang beginnen (Admin).
@@ -104,7 +166,7 @@ export async function runCommunityDays(env, opts = {}) {
     else if (st.done) return { dry: false, skipped_run: "done", day: st.day };
   }
   const save = () => db.prepare("INSERT INTO meta(k,v) VALUES(?,?) ON CONFLICT(k) DO UPDATE SET v=excluded.v").bind(STATE, JSON.stringify(st)).run();
-  const { candidates, notes, complete } = await collect(env, { ttl: 20 * 3600, maxRequests: 12, ...opts });
+  const { candidates, notes, complete } = await collect(env, { ttl: 20 * 3600, maxRequests: 12, ...opts, today, after: opts.dry ? "" : st.after });
   const ref = candKey, list = candidates.filter(isMicrosoftRelated).sort((a, b) => (ref(a) < ref(b) ? -1 : ref(a) > ref(b) ? 1 : 0));
   const rep = { dry: !!opts.dry, found: candidates.length, microsoft: list.length, skipped_non_ms: candidates.length - list.length, ...zero, updated: 0, retired: 0, remaining: 0, notes };   // updated = Aenderungen der Quelle uebernommen (Teil von merged)
   if (!complete) { if (!opts.dry) await save(); return { ...rep, fetching: true, remaining: list.length }; }   // noch nicht alles gelesen: der naechste Lauf macht weiter
