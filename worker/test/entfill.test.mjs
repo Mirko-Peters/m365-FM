@@ -82,6 +82,25 @@ test("Export nennt Herkunft (seed/ai/human) und Hash", async () => {
   assert.equal(by.seeded.h, await stateHash(thin));
 });
 
+test("Export nennt je Feld die KI-Herkunft (aif), auch wenn der gespeicherte Text gekuerzt wurde; Menschen-Aenderung nimmt das Feld heraus", async () => {
+  const { raw, env } = await setup();
+  seedRev(raw, "hub", thin);
+  const longDe = "Ein sehr langer deutscher Text. ".repeat(150);   // ueber 3000 Zeichen: der Worker kuerzt, der Seitenbau erkennt den Text nicht mehr am Wortlaut
+  await call(env, "k", { items: [item("hub", await stateHash(thin), { de: { desc: "Contoso Hub ist ein Microsoft-365-Dienst für gemeinsame Dokumente.", long: longDe } })] });
+  const exp = async () => { const r = new Request("https://api.test/api/entity/export"), x = await handleEntity(env, r, new URL(r.url), "/api/entity/export", null, J); return Object.fromEntries((await x.json()).items.map((i) => [i.id, i])); };
+  let by = await exp();
+  assert.deepEqual(by.hub.aif, ["desc.de", "desc.en", "faq.en", "long.de", "long.en"]);
+  assert.ok(by.hub.data.long.de.length <= 3000 && by.hub.data.long.de.length < longDe.trim().length);
+  // ein Mensch aendert desc.en: nur dieses Feld ist kein KI-Text mehr
+  raw.prepare("INSERT INTO users(id,provider,sub,name,created) VALUES(7,'t','7','Eva',1)").run();
+  const d = JSON.parse(raw.prepare("SELECT data FROM entity_rev WHERE eid='hub' AND status='live'").get().data);
+  raw.prepare("UPDATE entity_rev SET status='old' WHERE eid='hub' AND status='live'").run();
+  seedRev(raw, "hub", { ...d, desc: { ...d.desc, en: "Eva wrote this description of the hub for the editorial page." } }, 7, "Verwaltung");
+  by = await exp();
+  assert.deepEqual(by.hub.aif, ["desc.de", "faq.en", "long.de", "long.en"]); assert.equal(by.hub.src, "human");
+  seedRev(raw, "plain", thin); by = await exp(); assert.deepEqual(by.plain.aif, [], "ohne KI-Entwurf leer (der Seitenbau vergleicht dann nicht am Wortlaut)");
+});
+
 test("Uebernahme aus dem Repo: idempotent, nur Eintraege ohne DB-Fassung, kein Knopf mehr", async () => {
   const { raw, env } = await setup(), old = globalThis.fetch;
   const list = [{ id: "contoso", type: "org", name: "Contoso", desc: { en: "Contoso builds Microsoft 365 apps.", de: "" } }, { id: "hub", type: "product", name: "Hub", desc: { en: "Seed hub text here.", de: "" } }];

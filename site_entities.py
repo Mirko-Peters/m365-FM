@@ -330,8 +330,9 @@ def musicgroup_ld(BASE):
 def long_for(e, lang):
     """Langtext der Seite -> (text, KI-Text ja/nein). Redaktionell vorn (auch der Event-Text). Ein KI-Text aus data/entity_fill, der per push in der D1-Fassung
     steht (FD.is_ai), ist KEIN redaktioneller Text: er bekommt den KI-Hinweis, und auf anderen Sprachseiten gilt die (bezahlte) Uebersetzung statt des
-    englischen KI-Texts. Sonst Ueberblick aus den Folgen und Fakten (data/entity_texts, data/entity_fill)."""
-    L = e.get("long") or {}; own = lambda k: "" if FD.is_ai(e, "long", k) else (L.get(k) or ""); ail = L.get("en") if FD.is_ai(e, "long", "en") else ""
+    englischen KI-Texts. Bei Sponsoren erscheint ein KI-Langtext nie. Sonst Ueberblick aus den Folgen und Fakten (data/entity_texts, data/entity_fill)."""
+    L = e.get("long") or {}; own = lambda k: "" if FD.is_ai(e, "long", k) else (L.get(k) or "")
+    ail = L.get("en") if FD.is_ai(e, "long", "en") and not FD.is_sponsored(e["id"]) else ""   # Sponsor (auch nach dem push geworden): kein KI-Langtext
     lt = own(lang) or own("en") or own("de") or (EVENTS[e["id"]].get("about") if e["id"] in EVENTS else "") or ""
     if lt.strip():
         return lt, False

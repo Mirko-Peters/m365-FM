@@ -11,11 +11,12 @@ edited.json, spend.json (Kostenbuch dieses Jobs; eigene Datei, damit kein Commit
 Regeln: Datenbank = Quelle der Wahrheit; von Menschen bearbeitete (D1-Export src=human), selbst verwaltete (src=owned), Sponsor-/Eigenfirma-Entitaeten (ifakt, polaris*,
 data/sponsorships.json) und Entitaeten mit redaktionellem Langtext werden uebersprungen; Personen nur mit Quellenfakten; Uebersetzungen entstehen einmal und werden nie
 automatisch ueberschrieben (translate-once, Vertrag von #315): aendert sich die englische Quelle, steht die Fassung in stale.json und wird nicht mehr gezeigt; neu
-uebersetzt wird sie nur mit --stale. Auftraege in noch offenen Batches werden nie ein zweites Mal gekauft. max. 3 Versuche je Auftrag.
+uebersetzt wird sie nur mit --stale. Auftraege in noch offenen Batches werden nie ein zweites Mal gekauft; was die Auto-Uebersetzung des Workers schon in ent_tr
+hat (zur selben englischen Quelle), wird uebernommen statt gekauft. Laengere Texte, als der Worker speichert, gehen nicht in die Datenbank. max. 3 Versuche je Auftrag.
 Kosten: Denken ist abgeschaltet, wo das Modell es zulaesst (ai_gateway.thinking_off), sonst bekommt max_tokens einen Zuschlag; jede Grenze rechnet mit der OBERGRENZE
-(Eingabe ein Token je Byte, Ausgabe = max_tokens), die beim Absenden vorgemerkt wird (state.json). Grenzen: ENTITY_BUDGET_USD kumulativ fuer alles; Schreiben (Sonnet)
+(Eingabe ein Token je Byte, Ausgabe = max_tokens), die beim Absenden vorgemerkt wird (state.json); nur Modelle mit Preis in PRICES (sonst Abbruch). Grenzen: ENTITY_BUDGET_USD kumulativ fuer alles; Schreiben (Sonnet)
 hoechstens SONNET_MONTH_CAP_USD je Kalendermonat; Uebersetzen (Haiku) hoechstens HAIKU_RUN_CAP_EUR je Lauf und nie mehr als der Rest des Haiku-Tagesbudgets
-(ai_gateway); der Verbrauch geht nach dem Einsammeln an das Kostenbuch des Workers (ai_gateway.report_usage)."""
+(ai_gateway) abzueglich der noch offenen Uebersetzungs-Batches; der Verbrauch geht nach dem Einsammeln an das Kostenbuch des Workers (ai_gateway.report_usage)."""
 import hashlib, json, os, re, sys, time, urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
@@ -41,8 +42,11 @@ THINK_TOKENS = 4000           # Zuschlag auf max_tokens fuer Modelle, bei denen 
 MAX_TRIES = int(os.environ.get("MAX_TRIES", "3"))
 PER_BATCH = int(os.environ.get("PER_BATCH", "5000"))
 WAIT_MIN = int(os.environ.get("WAIT_MIN", "90"))
-# Listenpreis je 1 Mio. Token (Mirko, 9.11.2026): Sonnet 2/10, Haiku 0.10/0.50; Batch API = halber Preis
-PRICES = {"sonnet": (2.0, 10.0), "haiku": (0.10, 0.50)}
+# Listenpreis je 1 Mio. Token (Mirko, 9.11.2026: Sonnet 2/10, Haiku 0.10/0.50; uebrige laut Anthropic-Preisliste, Stand 3.11.2026); Batch API = halber Preis.
+# Nur Modelle aus dieser Liste: ein anderes --model/ENTITY_MODEL bricht ab, statt mit einem zu niedrigen Preis die harten Grenzen auszuhebeln.
+PRICES = {"claude-sonnet-5-5": (2.0, 10.0), "claude-sonnet-5": (2.0, 10.0), "claude-sonnet-4-6": (3.0, 15.0), "claude-haiku-5-5": (0.10, 0.50), "claude-haiku-4-5": (1.0, 5.0),
+          "claude-opus-5-5": (4.0, 20.0), "claude-opus-5": (5.0, 25.0), "claude-opus-4-8": (5.0, 25.0), "claude-opus-4-7": (5.0, 25.0), "claude-opus-4-6": (5.0, 25.0),
+          "claude-fable-5-2": (8.0, 40.0), "claude-mythos-5-2": (8.0, 40.0), "claude-fable-5-1": (10.0, 50.0), "claude-mythos-5-1": (10.0, 50.0), "claude-fable-5": (10.0, 50.0)}
 BATCH_FACTOR = 0.5
 SPONSORED = ("ifakt", "polaris")   # Eigenfirma/Sponsor: nie anfassen (id == ifakt oder Praefix polaris)
 TYPE_ORDER = ("product", "platform", "cert", "concept", "org", "event", "industry", "job", "category", "media", "person")
@@ -73,7 +77,16 @@ def jsave(p, v, **kw):
 def key(eid): return hashlib.sha1(eid.encode()).hexdigest()[:12]
 def hsh(o): return hashlib.sha1(json.dumps(o, sort_keys=True, ensure_ascii=False).encode()).hexdigest()[:16]
 def words(t): return len(re.findall(r"\S+", t or ""))
-def price(model): return PRICES["haiku" if "haiku" in model.lower() else "sonnet"]
+def price(model):
+    p = PRICES.get(str(model).strip().lower())
+    if not p: raise SystemExit(f"Unbekanntes Modell {model!r}: kein Preis hinterlegt (PRICES) - ohne Preis keine Kostengrenze, es wird nichts gesendet")
+    return p
+
+
+def check_models(model, tmodel):
+    """Vor jedem Lauf: beide Modelle haben einen Preis; uebersetzt wird nur mit Haiku (nur dort gelten Tagesbudget und Kostenbuch des Workers)."""
+    price(model); price(tmodel)
+    if "haiku" not in str(tmodel).lower(): raise SystemExit(f"ENTITY_TRANSLATE_MODEL {tmodel!r}: Uebersetzen nur mit einem Haiku-Modell (Haiku-Tagesbudget)")
 def cost(model, tin, tout, batch=True):
     pi, po = price(model)
     return (tin * pi + tout * po) / 1e6 * (BATCH_FACTOR if batch else 1)
@@ -297,7 +310,7 @@ def validate_translation(lang, src, out, protected):
 
 
 # ---------- Aufgabenliste ----------
-D1 = {}   # id -> {"src": seed|ai|human, "h": Hash von desc/long/faq} aus dem D1-Export (wird von edited_ids gefuellt)
+D1 = {}   # id -> {"src": seed|ai|human, "h": Hash von desc/long/faq, "en": {desc, long} der live-Fassung} aus dem D1-Export (wird von edited_ids gefuellt)
 
 
 def d1_edited(items):
@@ -307,7 +320,8 @@ def d1_edited(items):
     for it in items:
         if not it.get("id"): continue
         src = it.get("src") or "human"
-        D1[it["id"]] = {"src": src, "h": it.get("h") or ""}
+        dd = it.get("data") if isinstance(it.get("data"), dict) else {}
+        D1[it["id"]] = {"src": src, "h": it.get("h") or "", "en": {f: str((dd.get(f) if isinstance(dd.get(f), dict) else {}).get("en") or "") for f in ("desc", "long")}}
         if src == "human" or (src != "seed" and src != "ai"): ids.add(it["id"])
     return ids
 
@@ -317,6 +331,37 @@ def fetch_export():
     req = urllib.request.Request(api.rstrip("/") + "/api/entity/export", headers={"user-agent": "m365fm-actions/1.0 (+https://www.m365.fm)", "accept": "application/json", "cache-control": "no-cache"})
     with urllib.request.urlopen(req, timeout=60) as r:
         return json.loads(r.read().decode()).get("items") or []
+
+
+def fetch_tr():
+    """Uebersetzungen der Auto-Uebersetzung des Workers (ent_tr, /api/entity/tr): {eid: {field: {lang: text}}}; nicht erreichbar -> {} (dann wird nur nichts uebernommen)."""
+    api = os.environ.get("COMMUNITY_API", "https://api-dub.m365.fm")
+    try:
+        req = urllib.request.Request(api.rstrip("/") + "/api/entity/tr", headers={"user-agent": "m365fm-actions/1.0 (+https://www.m365.fm)", "accept": "application/json", "cache-control": "no-cache"})
+        with urllib.request.urlopen(req, timeout=60) as r:
+            v = json.loads(r.read().decode()).get("items")
+        return v if isinstance(v, dict) else {}
+    except Exception as ex:
+        print(f"::warning::/api/entity/tr nicht erreichbar ({type(ex).__name__}); vorhandene Auto-Uebersetzungen werden diesmal nicht uebernommen"); return {}
+
+
+def adopt_ent_tr(ents, gen, fill, i18n, tr, edited=(), spons=()):
+    """Was die Auto-Uebersetzung (autotr.js) schon in ent_tr hat, wird nicht noch einmal gekauft: die Fassung kommt als vorhandene Uebersetzung nach
+    data/entity_fill/i18n (Quelle sh = aktueller englischer Text). Nur wenn ihre Quelle - der englische Text der D1-Fassung - genau der Quelltext ist, den
+    dieser Job uebersetzen wuerde (effective_en); Vorhandenes bleibt (translate-once). -> geaenderte Sprachen"""
+    touched = set(); today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    for eid, fields in (tr or {}).items():
+        e = ents.get(eid); d = D1.get(eid) or {}
+        if not e or not isinstance(fields, dict) or eid in edited or is_sponsored(eid, spons) or e.get("edited"): continue
+        src = effective_en(e, gen, fill); db_en = d.get("en") or {}
+        for f in ("desc", "long"):
+            if f not in src or not db_en.get(f) or FD.norm(db_en[f]) != FD.norm(src[f]): continue   # ent_tr uebersetzt den D1-Text: nur dieselbe Quelle zaehlt
+            for lang, text in (fields.get(f) if isinstance(fields.get(f), dict) else {}).items():
+                if lang not in LANGS or not isinstance(text, str) or not text.strip(): continue
+                rec = i18n.setdefault(lang, {}).setdefault(eid, {"h": hsh(src), "m": "autotr", "ts": today})
+                if rec.get(f): continue
+                rec[f] = text.strip(); rec.setdefault("sh", {})[f] = FD.src_hash(src[f]); touched.add(lang)
+    return touched
 
 
 def edited_ids(strict):
@@ -335,7 +380,9 @@ def edited_ids(strict):
 
 def payload_for(eid, fill, i18n):
     """Was an /api/internal/entity-fill geht: englischer KI-Text, deutscher und die uebrigen Sprachen (Audit-Stand data/entity_fill)."""
-    en = fill.get(eid) or {}; pick = lambda r: {k: r[k] for k in ("desc", "long", "faq") if r.get(k)}
+    # nur Felder, die der Worker ungekuerzt speichert (FD.fits): ein laengerer Text bliebe sonst mitten im Satz abgeschnitten in D1 stehen; die Seite zeigt ihn
+    # dann weiter aus data/entity_fill (mit KI-Hinweis)
+    en = fill.get(eid) or {}; pick = lambda r: {k: r[k] for k in ("desc", "long", "faq") if r.get(k) and FD.fits(k, r[k])}
     out = {"id": eid, **pick(en), "de": pick(i18n.get("de", {}).get(eid) or {}),
            "tr": {l: pick(i18n[l].get(eid) or {}) for l in LANGS if l != "de" and i18n.get(l, {}).get(eid)}}
     return out
@@ -493,10 +540,12 @@ def month_room(state, month=None):
     return MONTH_CAP - spend_entities().get("months", {}).get(m, {}).get("write_usd", 0.0) - pending_usd(state, "write", m)
 
 
-def haiku_room_usd():
-    """Uebersetzen je Lauf: HAIKU_RUN_EUR und nie mehr als der Rest des Haiku-Tagesbudgets laut Worker (None = nicht abrufbar -> check_budget entscheidet)."""
+def haiku_room_usd(state=None):
+    """Uebersetzen je Lauf: HAIKU_RUN_EUR und nie mehr als der Rest des Haiku-Tagesbudgets laut Worker (None = nicht abrufbar -> check_budget entscheidet).
+    Offene Uebersetzungs-Batches dieses Jobs kennt der Worker noch nicht (gemeldet wird erst beim Einsammeln): ihre Obergrenze geht vom Tagesrest ab."""
     from ai_gateway import remaining_eur
-    rate = float(os.environ.get("USD_PER_EUR", "1.08")); rest = remaining_eur("fill_entities", TMODEL)
+    rate = max(0.000001, float(os.environ.get("USD_PER_EUR", "1.08"))); rest = remaining_eur("fill_entities", TMODEL)
+    if rest is not None: rest = max(0.0, rest - pending_usd(state or {}, "translate") / rate)
     return min(HAIKU_RUN_EUR, rest if rest is not None else HAIKU_RUN_EUR) * rate
 
 
@@ -577,7 +626,8 @@ def submit(reqs, est, kind, model, state):
     Monatsgrenze, bis der Batch eingesammelt ist), bevor irgendetwas anderes passiert."""
     from ai_gateway import check_budget
     if not reqs: print("Nichts abzusenden."); return 0
-    if "haiku" in model.lower() and not check_budget("fill_entities", model, est / max(0.000001, float(os.environ.get("USD_PER_EUR", "1.08")))):
+    # Haiku: Tagesbudget mit dem neuen Batch UND den noch nicht gemeldeten offenen Uebersetzungs-Batches pruefen
+    if "haiku" in model.lower() and not check_budget("fill_entities", model, (est + pending_usd(state, "translate")) / max(0.000001, float(os.environ.get("USD_PER_EUR", "1.08")))):
         return 0
     for i in range(0, len(reqs), PER_BATCH):
         part = reqs[i:i + PER_BATCH]; share = est * len(part) / len(reqs)
@@ -714,7 +764,7 @@ def next_translations(todo, ents, gen, fill, state, limit):
     """Uebersetzungsauftraege dieses Laufs: nie, was in einem offenen Batch liegt; Obergrenze im Budget, je Lauf und im Haiku-Tagesbudget."""
     busy, blind = busy_keys(state)
     if "translate" in blind: print("::warning::Offener Uebersetzungs-Batch ohne Auftragsliste (aelterer Lauf) - erst einsammeln, nichts Neues gesendet"); return [], 0.0
-    return select_translations(todo, ents, gen, fill, min(room(BUDGET, state), haiku_room_usd()), limit, busy)
+    return select_translations(todo, ents, gen, fill, min(room(BUDGET, state), haiku_room_usd(state)), limit, busy)
 
 
 def main():
@@ -723,11 +773,15 @@ def main():
     global MODEL, BUDGET
     if opt("--model"): MODEL = opt("--model")
     if opt("--budget"): BUDGET = float(opt("--budget"))
+    check_models(MODEL, TMODEL)
     limit = int(opt("--limit") or 0); no_tr = "--no-translate" in args; restale = "--stale" in args
     strict = mode in ("run", "collect", "push")
     ents, gen = load_entities(), load_gentext(); fill = jload(OUT / "en.json", {}); i18n = {l: jload(OUT / "i18n" / f"{l}.json", {}) for l in LANGS}
     state = jload(OUT / "state.json", {"batches": [], "tries": {}}); spons = sponsored_ids()
     edited = edited_ids(strict)
+    if mode in ("run", "plan", "inventory"):   # schon vorhandene Auto-Uebersetzungen (ent_tr) nicht noch einmal kaufen; gespeichert nur in run
+        for l in adopt_ent_tr(ents, gen, fill, i18n, fetch_tr(), edited, spons):
+            if mode == "run": jsave(OUT / "i18n" / f"{l}.json", i18n[l])
     todo, skipped = build_todo(ents, gen, fill, i18n, edited, spons, state, restale=restale)
     est = estimate(todo, ents, gen, fill, i18n)
     if mode == "inventory":

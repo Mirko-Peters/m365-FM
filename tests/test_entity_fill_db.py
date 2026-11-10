@@ -20,7 +20,7 @@ class Eligibility(unittest.TestCase):
         self.assertEqual(F.status(ents["seeded"], {}, {}, edited, set()), (None, "full"))
         self.assertEqual(F.status(ents["human"], {}, {}, edited, set()), ("member_edited", None))
         self.assertEqual(F.status(ents["repo-only"], {}, {}, edited, set()), (None, "full"))
-        self.assertEqual(F.D1["seeded"], {"src": "seed", "h": "a"})
+        self.assertEqual({k: F.D1["seeded"][k] for k in ("src", "h")}, {"src": "seed", "h": "a"})
 
 
 class Push(unittest.TestCase):

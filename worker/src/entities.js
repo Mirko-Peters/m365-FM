@@ -6,7 +6,7 @@ import { entityTranslations } from "./autotr.js";
 import { stats, evalBadges } from "./badges.js";
 import { findDuplicate } from "./kinds.js";
 import { pairNewOrgEntity, pairExisting } from "./orgpair.js";
-import { AI_PREFIX, aiUserId, humanEdited, ownedEntities, revSource, stateHash } from "./entfill.js";
+import { AI_PREFIX, aiFieldValues, aiFieldsOf, aiUserId, humanEdited, ownedEntities, revSource, stateHash } from "./entfill.js";
 
 const ID = /^[a-z0-9-]{2,48}$/;
 export const TYPES = ["product", "platform", "concept", "org", "person", "cert", "event", "media", "category", "industry", "job"];
@@ -263,9 +263,10 @@ export async function handleEntity(env, request, url, path, user, J) {
   if (path === "/api/entity/tr" && method === "GET") return J({ items: await entityTranslations(env.DB) }, 200, { "cache-control": "public, max-age=300" });   // automatische Uebersetzungen (autotr.js)
   if (path === "/api/entity/export" && method === "GET") {
     // src: Herkunft der live-Fassung (seed = Uebernahme aus entities.json, ai = KI-Entwurf, human = von einem Menschen veraendert, owned = selbst verwaltet); h: Hash von desc/long/faq (Schutz in /api/internal/entity-fill)
-    const rows = (await db.prepare("SELECT r.eid,r.data,r.created,r.user_id,r.summary FROM entity_rev r WHERE r.status='live'").all()).results || [], sys = await aiUserId(db, false), human = await humanEdited(db, sys), owned = await ownedEntities(db);
+    // aif: Felder (desc.en, long.de ...), deren Wert noch genau der eines KI-Entwurfs ist - der Seitenbau kennzeichnet sie als KI-Text
+    const rows = (await db.prepare("SELECT r.eid,r.data,r.created,r.user_id,r.summary FROM entity_rev r WHERE r.status='live'").all()).results || [], sys = await aiUserId(db, false), human = await humanEdited(db, sys), owned = await ownedEntities(db), aiv = await aiFieldValues(db, sys);
     const items = [];
-    for (const r of rows) { const data = JSON.parse(r.data); items.push({ id: r.eid, data, created: r.created, uid: r.user_id, src: revSource(r, sys, human, owned), h: await stateHash(data) }); }
+    for (const r of rows) { const data = JSON.parse(r.data), aif = aiFieldsOf(data, aiv.get(r.eid)); items.push({ id: r.eid, data, created: r.created, uid: r.user_id, src: revSource(r, sys, human, owned), h: await stateHash(data), aif }); }
     return J({ items }, 200, { "cache-control": "public, max-age=300" });
   }
   if (path.startsWith("/api/admin/entity")) {

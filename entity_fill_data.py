@@ -6,7 +6,10 @@ data/entity_fill/stale.json         {lang: {id: [felder]}}                      
 
 sh = {feld: src_hash(englischer Quelltext)} je uebersetztem Feld. Passt der Hash nicht mehr zum aktuellen englischen Text (effective_en), gilt die
 Uebersetzung als veraltet: sie wird nicht mehr gezeigt (die Seite faellt auf Englisch zurueck) und steht in stale.json.
-Sponsor-/Eigenfirma-Entitaeten (data/sponsorships.json, ifakt, polaris*) bekommen nie einen KI-Text, auch wenn er schon erzeugt wurde.
+Sponsor-/Eigenfirma-Entitaeten (data/sponsorships.json, ifakt, polaris*) bekommen nie einen KI-Text, auch wenn er schon erzeugt wurde. Steht ein KI-Text schon in
+der D1-Fassung (push vor der Sponsorschaft), bleibt er als KI-Text gekennzeichnet (is_ai/desc_is_ai); den Langtext zeigt die Seite dann gar nicht.
+Herkunft je Feld: der D1-Export nennt in "aif" die Felder, deren Wert noch genau der eines KI-Entwurfs ist (site_learn -> e["aif"]); nur ohne aif (aelterer
+Worker) wird am Wortlaut verglichen. Was der Worker beim Speichern kuerzen wuerde (WORKER_MAX), schickt push gar nicht erst (fits).
 
 Rangfolge beim Lesen: redaktioneller Text in data/entities.json / D1 (immer vorn) > diese Texte. Von Menschen bearbeitete Entitaeten
 (e["edited"] = D1-Fassung mit src human; seed/ai setzen es nicht) bekommen nie einen KI-Text. KI-Texte stehen zusaetzlich als KI-Entwurf in D1 (fill_entities.py push). Nur Lesen, keine Abhaengigkeit von site_*.py."""
@@ -17,6 +20,7 @@ ROOT = Path(__file__).parent
 FILL = ROOT / "data" / "entity_fill"
 LANGS14 = ("de", "fr", "es", "it", "nl", "pt", "pl", "id", "ru", "uk", "ar", "he", "ja", "ko")
 SHORT_DESC = 80   # kuerzere englische Beschreibungen gelten als zu duenn (gleiche Grenze wie die Personen-Regel in site_entities)
+WORKER_MAX = {"desc": 300, "long": 3000, "q": 200, "a": 600}   # Laengen, auf die worker/src/entfill.js (wie das Bearbeiten-Formular) kuerzt
 
 
 def _load(p):
@@ -66,6 +70,17 @@ def norm(t):
     return re.sub(r"\s+", " ", re.sub(r"[<>]", "", str(t or ""))).strip()
 
 
+def _u16(t):
+    return len(str(t or "").encode("utf-16-le")) // 2   # Laenge wie in JavaScript (UTF-16-Einheiten)
+
+
+def fits(field, v):
+    """True, wenn der Worker den Wert ungekuerzt speichert (sonst stuende ein mitten im Satz abgeschnittener Text in D1)."""
+    if field == "faq":
+        return isinstance(v, list) and len(v) <= 5 and all(_u16(x.get("q")) <= WORKER_MAX["q"] and _u16(x.get("a")) <= WORKER_MAX["a"] for x in v if isinstance(x, dict))
+    return _u16(v) <= WORKER_MAX.get(field, 0)
+
+
 def src_hash(v):
     """Kurz-Hash eines englischen Quelltexts (str) oder einer FAQ-Liste fuer die Veraltet-Pruefung der Uebersetzungen."""
     o = [{"q": norm(x.get("q")), "a": norm(x.get("a"))} for x in v if isinstance(x, dict)] if isinstance(v, list) else norm(v)
@@ -113,13 +128,19 @@ def _tr(e, lang, field):
 
 
 def is_ai(e, field, lang):
-    """True, wenn der Wert e[field][lang] (z. B. aus der D1-Fassung nach push) der KI-Text aus data/entity_fill ist - dann ist er kein redaktioneller Text
-    und wird als KI-Text gekennzeichnet (unabhaengig von e["edited"]: ein Mensch kann ein anderes Feld bearbeitet haben)."""
+    """True, wenn der Wert e[field][lang] (z. B. aus der D1-Fassung nach push) ein KI-Text ist - dann ist er kein redaktioneller Text und wird als KI-Text
+    gekennzeichnet (unabhaengig von e["edited"]: ein Mensch kann ein anderes Feld bearbeitet haben; auch bei Sponsoren, die erst nach dem push dazukamen).
+    Herkunft aus dem D1-Export (e["aif"]); nur ohne sie Vergleich mit data/entity_fill (gleich, oder vom Worker gekuerzt = Anfang des KI-Texts)."""
     v = (e.get(field) or {}).get(lang) if isinstance(e.get(field), dict) else None
-    if not v or is_sponsored(e["id"]):
+    if not v:
         return False
+    if isinstance(e.get("aif"), list):
+        return f"{field}.{lang}" in e["aif"]
     r = (EN if lang == "en" else I18N.get(lang, {})).get(e["id"]) or {}
-    return bool(r.get(field)) and norm(v) == norm(r[field])
+    if not r.get(field):
+        return False
+    a, b = norm(v), norm(r[field])
+    return a == b or (len(a) >= 200 and b.startswith(a))
 
 
 def desc(e, lang):
@@ -147,8 +168,12 @@ def desc_en(e):
 
 def desc_is_ai(e, lang, shown):
     """True, wenn die angezeigte Kurzbeschreibung (shown) ein KI-Text ist (englischer Entwurf oder Uebersetzung) - fuer den KI-Hinweis auf der Seite."""
-    n = norm(shown)
-    return bool(n) and not is_sponsored(e["id"]) and any(n == norm(_rec(e["id"], l).get("desc")) for l in {lang, "en"})
+    n = norm(shown); d = e.get("desc") or {}
+    if not n:
+        return False
+    if any(is_ai(e, "desc", l) and n == norm(d.get(l)) for l in {lang, "en"}):   # KI-Text in der D1-Fassung (auch bei spaeteren Sponsoren gekennzeichnet)
+        return True
+    return any(n == norm(_rec(e["id"], l).get("desc")) for l in {lang, "en"})
 
 
 def long_text(e, lang):

@@ -466,6 +466,8 @@ def load_entities(api):
             # Herkunft der D1-Fassung (Export "src"): nur "seed" (Uebernahme aus entities.json) und "ai" (KI-Entwurf) sind keine Menschen-Aenderung ("dbrev" haelt nur
             # das Datum der Fassung); alles andere - "human", "owned" (selbst verwaltet) oder unbekannt (aelterer Worker, fail-closed) - sperrt die KI-Rueckfalltexte
             rec["dbrev" if it.get("src") in ("seed", "ai") else "edited"] = it.get("created")
+            if isinstance(it.get("aif"), list):   # Felder, deren Wert noch der eines KI-Entwurfs ist (entity_fill_data.is_ai: Kennzeichnung nach Herkunft, nicht nach Wortlaut; fehlt bei aelterem Worker)
+                rec["aif"] = [str(x) for x in it["aif"]]
             for k in REPO_KEYS:   # Felder ohne Formularfeld: fehlen sie in der D1-Fassung (Formular-Bearbeitung, selbst verwaltete Entitaet), gilt die Repo-Fassung
                 if k not in rec and (base.get(it["id"]) or {}).get(k):
                     rec[k] = base[it["id"]][k]

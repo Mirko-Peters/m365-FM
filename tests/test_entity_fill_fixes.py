@@ -246,5 +246,89 @@ class Stale(Base):
         self.assertEqual(F.stale_report(ents, {}, fill, {"fr": {"hub": rec}}), {})
 
 
+# ---------------- Zweite Gegenpruefung von #326: Restpunkte ----------------
+class SecondRound(Base):
+    def test_sponsor_after_push_keeps_ai_label_and_hides_ai_long(self):
+        pushed = ent("hub", desc={"en": GOOD["desc"], "de": ""}, long={"en": LONG}, dbrev=5)
+        for e in (pushed, {**pushed, "aif": ["desc.en", "long.en"]}):   # Wortlaut-Vergleich (aelterer Worker) und Herkunft aus dem Export
+            with mock.patch.object(FD, "EN", {"hub": dict(GOOD)}), mock.patch.object(FD, "I18N", {}), mock.patch.object(FD, "SPONS", {"hub"}), \
+                 mock.patch.dict(SE.GENTEXT, clear=True), mock.patch.dict(SE.EVENTS, clear=True):
+                self.assertEqual(SE.long_for(e, "en"), ("", False), "Sponsor: KI-Langtext erscheint gar nicht")
+                self.assertEqual(SE.long_for(e, "fr"), ("", False))
+                self.assertTrue(FD.desc_is_ai(e, "en", FD.desc(e, "en")), "KI-Beschreibung bleibt gekennzeichnet")
+                self.assertTrue(FD.is_ai(e, "long", "en")); self.assertEqual(FD.faq(e, "en"), [])
+
+    def test_only_priced_models_and_family_prices(self):
+        self.assertEqual((F.price("claude-sonnet-5-5"), F.price("claude-haiku-5-5")), ((2.0, 10.0), (0.10, 0.50)))
+        self.assertEqual((F.price("claude-opus-5-5"), F.price("claude-fable-5-2"), F.price("claude-haiku-4-5")), ((4.0, 20.0), (8.0, 40.0), (1.0, 5.0)))
+        self.assertAlmostEqual(F.cost_cap("claude-fable-5-2", 1000, 1000), 4 * F.cost_cap("claude-sonnet-5-5", 1000, 1000))
+        for bad in ("claude-opus-9", "gpt-x", ""):
+            with self.assertRaises(SystemExit): F.price(bad)
+        with self.assertRaises(SystemExit): F.check_models("claude-fable-9", "claude-haiku-5-5")
+        with self.assertRaises(SystemExit): F.check_models("claude-sonnet-5-5", "claude-sonnet-5-5")   # Uebersetzen nur mit Haiku (Tagesbudget)
+        F.check_models("claude-opus-5-5", "claude-haiku-5-5")
+        with mock.patch.object(sys, "argv", ["fill_entities.py", "plan", "--model", "claude-unknown-1"]), self.assertRaises(SystemExit) as cm:
+            F.main()
+        self.assertIn("Unbekanntes Modell", str(cm.exception))
+
+    def test_haiku_day_budget_counts_open_translate_batches(self):
+        state = {"batches": [{"kind": "translate", "est_usd": 3.5, "ids": []}, {"kind": "write", "est_usd": 20, "ids": []}]}
+        with mock.patch.object(ai_gateway, "remaining_eur", lambda job, model: 5.0):
+            self.assertAlmostEqual(F.haiku_room_usd(state), 1.5, msg="offener Haiku-Batch (noch nicht gemeldet) geht vom Tagesrest ab")
+            self.assertAlmostEqual(F.haiku_room_usd({"batches": []}), F.HAIKU_RUN_EUR)
+        with mock.patch.object(ai_gateway, "remaining_eur", lambda job, model: 2.0):
+            self.assertEqual(F.haiku_room_usd(state), 0.0)
+        seen = []
+        api, _ = self.fake_api([])
+        with mock.patch.object(F, "api", api), mock.patch.object(ai_gateway, "check_budget", lambda job, model, est: seen.append(est) or True):
+            F.submit([{"custom_id": f"t_fr_{F.key('hub')}_abcdef", "params": {}}], 0.5, "translate", F.TMODEL, state)
+        self.assertAlmostEqual(seen[0], 4.0, msg="Pruefung im Worker mit neuem UND offenem Batch")
+
+    def test_truncated_ai_text_is_marked_by_provenance_and_never_pushed_truncated(self):
+        de_long = ("Contoso Hub ist ein Produkt fuer die Ablage von Teamdokumenten in Microsoft 365. " * 45).strip()   # > 3000 Zeichen
+        self.assertGreater(len(de_long), FD.WORKER_MAX["long"])
+        cut = de_long[:3000]   # so speichert der Worker ihn (longTxt ... slice)
+        de = {"long": de_long, "desc": "Contoso Hub ist ein Dienst.", "sh": {"long": FD.src_hash(LONG), "desc": FD.src_hash(GOOD["desc"])}}
+        e = ent("hub", desc={"en": GOOD["desc"], "de": "Contoso Hub ist ein Dienst."}, long={"en": LONG, "de": cut}, dbrev=5)
+        with mock.patch.object(FD, "EN", {"hub": dict(GOOD)}), mock.patch.object(FD, "I18N", {"de": {"hub": de}}), mock.patch.object(FD, "GEN", {}), \
+             mock.patch.dict(SE.GENTEXT, clear=True), mock.patch.dict(SE.EVENTS, clear=True):
+            self.assertTrue(FD.is_ai(e, "long", "de"), "gekuerzter KI-Text (aelterer Worker): Anfang des KI-Texts genuegt")
+            self.assertEqual(SE.long_for(e, "de"), (de_long, True), "vollstaendige Uebersetzung mit KI-Hinweis statt des abgeschnittenen Texts")
+            prov = {**e, "aif": ["desc.en", "long.en", "long.de"]}
+            self.assertTrue(FD.is_ai(prov, "long", "de")); self.assertFalse(FD.is_ai(prov, "desc", "de"), "Herkunft aus dem Export gilt, nicht der Wortlaut")
+            self.assertFalse(FD.is_ai({**e, "aif": []}, "long", "de"))
+        item = F.payload_for("hub", {"hub": dict(GOOD)}, {"de": {"hub": de}, "fr": {"hub": {"long": de_long, "desc": "Contoso Hub est un service."}}})
+        self.assertNotIn("long", item["de"]); self.assertEqual(item["de"]["desc"], "Contoso Hub ist ein Dienst."); self.assertEqual(item["tr"]["fr"], {"desc": "Contoso Hub est un service."})
+        self.assertIn("long", item)
+        self.assertFalse(FD.fits("desc", "x" * 301)); self.assertFalse(FD.fits("desc", "\U0001F600" * 151), "Laenge wie in JavaScript (UTF-16)")
+        self.assertFalse(FD.fits("faq", [{"q": "q", "a": "a" * 601}])); self.assertTrue(FD.fits("faq", GOOD["faq"]))
+        import site_learn as SL
+        items = [{"id": "hub", "src": "ai", "created": 5, "aif": ["long.de"], "data": {"name": "Hub", "type": "product"}}, {"id": "old", "src": "seed", "created": 6, "data": {"name": "O", "type": "product"}}]
+        with mock.patch.object(SL, "_fetch_json", lambda url, *a, **k: {"items": items}), mock.patch.object(SL, "merged_ids", lambda: set()):
+            recs = SL.load_entities("https://api.test")
+        self.assertEqual((recs["hub"].get("aif"), "aif" in recs["old"]), (["long.de"], False))
+
+    def test_translations_from_autotr_are_reused_not_bought(self):
+        ed = "Contoso Hub is the editorial description of the document service for Microsoft 365 teams."
+        e = ent("hub", desc={"en": ed, "de": ""}); ents = {"hub": e}
+        F.d1_edited([{"id": "hub", "src": "seed", "h": "H", "data": {"desc": {"en": ed, "de": ""}}}])
+        i18n = {l: {} for l in F.LANGS}
+        tr = {"hub": {"desc": {"fr": "Contoso Hub est la description du service.", "xx": "?", "es": " "}}, "ghost": {"desc": {"fr": "x"}}}
+        self.assertEqual(F.adopt_ent_tr(ents, {}, {}, i18n, tr), {"fr"})
+        rec = i18n["fr"]["hub"]; self.assertEqual(rec["desc"], "Contoso Hub est la description du service."); self.assertEqual(rec["sh"]["desc"], FD.src_hash(ed))
+        src = F.effective_en(e, {}, {})
+        self.assertNotIn("desc", F.translate_need(e, "fr", src, {}, i18n)); self.assertIn("desc", F.translate_need(e, "es", src, {}, i18n))
+        todo, _ = F.build_todo(ents, {}, {}, i18n, set(), set(), {})
+        self.assertNotIn("fr", todo[0]["translate"]); self.assertIn("es", todo[0]["translate"])
+        # Quelle anders (D1-Text weicht vom englischen Quelltext ab) oder vorhandene Uebersetzung: nichts uebernehmen
+        F.d1_edited([{"id": "hub", "src": "seed", "h": "H", "data": {"desc": {"en": "Older text of the hub.", "de": ""}}}])
+        i18n2 = {l: {} for l in F.LANGS}; self.assertEqual(F.adopt_ent_tr(ents, {}, {}, i18n2, tr), set())
+        F.d1_edited([{"id": "hub", "src": "seed", "h": "H", "data": {"desc": {"en": ed, "de": ""}}}])
+        i18n3 = {l: {} for l in F.LANGS}; i18n3["fr"]["hub"] = {"desc": "Eigene Fassung", "sh": {"desc": FD.src_hash(ed)}}
+        self.assertEqual(F.adopt_ent_tr(ents, {}, {}, i18n3, tr), set()); self.assertEqual(i18n3["fr"]["hub"]["desc"], "Eigene Fassung")
+        self.assertEqual(F.adopt_ent_tr(ents, {}, {}, {l: {} for l in F.LANGS}, tr, edited={"hub"}), set())
+        self.assertEqual(F.adopt_ent_tr(ents, {}, {}, {l: {} for l in F.LANGS}, tr, spons={"hub"}), set())
+
+
 if __name__ == "__main__":
     unittest.main()

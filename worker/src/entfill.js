@@ -47,6 +47,25 @@ export async function ownedEntities(db) {
 }
 const isObj = (v) => v && typeof v === "object" && !Array.isArray(v);
 
+// Herkunft je Feld statt Textvergleich: Werte, die eine KI-Entwurf-Revision (Systemnutzer, live/old) laut Zusammenfassung gesetzt hat ({eid: {"desc.en": JSON}}).
+// Der Seitenbau kennzeichnet ein Feld als KI-Text, solange die live-Fassung genau diesen gespeicherten Wert hat (Export "aif") - auch wenn die Bereinigung
+// beim Speichern (Kuerzen, URLs, Leerraum) ihn gegenueber data/entity_fill veraendert hat
+const AI_FIELDS = new Set(["desc.en", "desc.de", "long.en", "long.de", "faq.en", "faq.de"]);
+const fieldVal = (d, f) => { const [a, b] = f.split("."); return JSON.stringify(d?.[a]?.[b] ?? null); };
+export async function aiFieldValues(db, sysId) {
+  const out = new Map(); if (!sysId) return out;
+  const rows = (await db.prepare("SELECT eid,data,summary FROM entity_rev WHERE user_id=? AND status IN ('live','old') ORDER BY created ASC,id ASC").bind(sysId).all().catch(() => ({ results: [] }))).results || [];
+  for (const r of rows) {
+    if (!String(r.summary || "").startsWith(AI_PREFIX)) continue;
+    let d; try { d = JSON.parse(r.data); } catch { continue; }
+    const m = out.get(r.eid) || {};
+    for (const f of String(r.summary).slice(AI_PREFIX.length).replace(/^:\s*/, "").split(/,\s*/)) if (AI_FIELDS.has(f)) m[f] = fieldVal(d, f);
+    out.set(r.eid, m);
+  }
+  return out;
+}
+export const aiFieldsOf = (data, vals) => Object.keys(vals || {}).filter((f) => fieldVal(data, f) === vals[f] && fieldVal(data, f) !== "null").sort();
+
 const faqList = (v) => (Array.isArray(v) ? v : []).slice(0, 5).map((x) => ({ q: txt(x?.q, 200), a: txt(x?.a, 600) })).filter((x) => x.q && x.a);
 
 // items: [{id, base, desc, long, faq, de:{desc,long,faq}, tr:{lang:{desc,long,faq}}}] (desc/long/faq = Englisch)
