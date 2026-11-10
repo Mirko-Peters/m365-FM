@@ -1,0 +1,104 @@
+name: Shownotes SEO (woechentlich)
+# Mirko, 7.11./9.11.2026: duenne englische Show Notes (unter 1.500 Zeichen, nicht im Editor bearbeitet, ohne Vollfassung) einmal mit Sonnet neu schreiben (Batch), dann
+# mit Haiku in die 14 Sprachen uebersetzen; danach woechentlich nur Neues. Alle anderen Folgenseiten bleiben unveraendert (site_shownotes_seo.rule).
+# Erster Lauf nach dem Merge von Hand mit limit=1 (eine Folge, wenige Cent): Actions -> Shownotes SEO -> Run workflow. Die Seite baut der normale Seitenbau (site.yml).
+# Bezahlte Ergebnisse und das Kostenbuch (data/spend.json) duerfen nie an einem abgelehnten Push verloren gehen: commit, dann pull --rebase und push in einer Schleife;
+# scheitert der Push endgueltig, schlaegt der Lauf sichtbar fehl und die Daten liegen als Artefakt am Lauf.
+on:
+  schedule:
+    - cron: "17 2 * * 1"   # montags 03:17 Europe/Berlin (Winterzeit = 02:17 UTC)
+  workflow_dispatch:
+    inputs:
+      limit: { description: "Hoechstens so viele Folgen in diesem Lauf (1 = Testlauf mit einer Folge; leer = alle offenen duennen Folgen, begrenzt durch das Budget)", required: false, default: "" }
+      budget: { description: "Monatsgrenze in USD fuer diesen Lauf - kann die Grenze nur senken (hoechstens 30; leer = Repo-Variable SHOWNOTES_BUDGET_USD, sonst 30)", required: false, default: "" }
+permissions:
+  contents: write
+concurrency:
+  group: shownotes-seo
+  cancel-in-progress: false
+jobs:
+  shownotes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      AI_GATEWAY_ID: ${{ vars.AI_GATEWAY_ID || 'm365fm' }}
+      CF_AIG_TOKEN: ${{ secrets.CF_AIG_TOKEN }}
+      COMMUNITY_API: https://api-dub.m365.fm
+      CRON_KEY: ${{ secrets.CRON_KEY }}
+      HAIKU_USD_PER_MTOK_IN: ${{ vars.HAIKU_USD_PER_MTOK_IN || '0.10' }}
+      HAIKU_USD_PER_MTOK_OUT: ${{ vars.HAIKU_USD_PER_MTOK_OUT || '0.50' }}
+      USD_PER_EUR: ${{ vars.USD_PER_EUR || '1.08' }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY_SHOW }}   # derselbe Schluessel wie articles.yml (Artikel-Key, GitHub-Secret)
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Notes neu schreiben (Batch absenden, bis ca. 4 h abwarten, einsammeln)
+        env:
+          SHOWNOTES_MODEL: ${{ vars.SHOWNOTES_MODEL || 'claude-sonnet-5-5' }}
+          SHOWNOTES_BUDGET_USD: ${{ inputs.budget || vars.SHOWNOTES_BUDGET_USD || '30' }}   # eigene Monatsgrenze, zaehlt nicht zum Artikel-Budget (data/spend.json, Schluessel "shownotes"); der Code laesst hoechstens 30 zu
+          SHOWNOTES_LIMIT: ${{ inputs.limit || vars.SHOWNOTES_LIMIT || '' }}
+          SHOWNOTES_WAIT_S: "14400"
+        run: |
+          pip install requests cryptography
+          python rewrite_shownotes.py
+      - name: Speichern (Zwischenstand, falls die Uebersetzung scheitert)
+        if: always()
+        run: |
+          git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
+          for f in data/shownotes_en data/spend.json; do [ -e "$f" ] && git add -A "$f"; done
+          if git diff --cached --quiet; then echo "Neu schreiben: nichts zu speichern"; else git commit -q -m "Shownotes SEO (wöchentlich): neu geschrieben"; fi
+          git fetch -q origin main
+          if [ -z "$(git rev-list FETCH_HEAD..HEAD)" ]; then exit 0; fi
+          # main bewegt sich oft (Bots): vor dem Push nachziehen und wiederholen; ein endgueltiger Fehlschlag faellt auf
+          for i in 1 2 3 4 5; do
+            if git pull --rebase --autostash -q -X theirs origin main; then
+              if git push -q origin HEAD:main; then echo "Zwischenstand gespeichert"; exit 0; fi
+            else
+              git rebase --abort 2>/dev/null || true
+            fi
+            sleep $((i*7))
+          done
+          echo "::error::Neu geschriebene Show Notes und Kostenbuch konnten nicht gespeichert werden (Push abgelehnt) - der letzte Schritt versucht es noch einmal"; exit 1
+      - name: Uebersetzen (Haiku, Batch, nur neue Quellen; geaenderte nur melden)
+        env:
+          NOTES_TOP: "0"   # nur neu geschriebene Folgen, nicht die alten Top-150
+        run: |
+          pip install requests cryptography
+          python translate_notes.py
+      - name: Daten committen (der normale Seitenbau uebernimmt sie)
+        if: always()
+        run: |
+          git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
+          for f in data/shownotes_en data/podpage_i18n data/spend.json; do [ -e "$f" ] && git add -A "$f"; done
+          if ! git diff --cached --quiet; then git commit -q -m "Shownotes SEO (wöchentlich)"; fi
+          git fetch -q origin main
+          N=$(git rev-list --count FETCH_HEAD..HEAD)
+          if [ "$N" = "0" ]; then   # nichts Neues in diesem Schritt UND kein Commit aus einem frueheren Schritt, der noch nicht auf main liegt
+            echo "Nichts Neues zu speichern" | tee -a "$GITHUB_STEP_SUMMARY"; exit 0
+          fi
+          for i in 1 2 3 4 5; do
+            if git pull --rebase --autostash -q -X theirs origin main; then
+              if git push -q origin HEAD:main; then echo "Gespeichert: $N Commit(s) auf main" | tee -a "$GITHUB_STEP_SUMMARY"; exit 0; fi
+            else
+              git rebase --abort 2>/dev/null || true
+            fi
+            sleep $((i*7))
+          done
+          echo "Push fehlgeschlagen: $N Commit(s) mit bezahlten Ergebnissen liegen NICHT auf main (Artefakt shownotes-seo-daten am Lauf)" | tee -a "$GITHUB_STEP_SUMMARY"
+          echo "::error::Shownotes SEO: Ergebnisse und Kostenbuch konnten nicht gespeichert werden (Push abgelehnt)"; exit 1
+      - name: Daten als Artefakt sichern (nur wenn ein Schritt gescheitert ist - bezahlte Ergebnisse gehen nicht mit dem Runner verloren)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: shownotes-seo-daten
+          path: |
+            data/shownotes_en
+            data/spend.json
+            data/podpage_i18n/notes_*.json
+            data/podpage_i18n/src/notes_*.json
+            data/podpage_i18n/stale.json
+            data/podpage_i18n/usage.json
+          if-no-files-found: ignore
+          retention-days: 30

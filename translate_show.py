@@ -14,6 +14,7 @@ from tm_hash import fields_hash
 import i18n_overrides as OV
 from pathlib import Path
 import site_podpage as P
+import site_shownotes_seo as SSEO
 from ai_gateway import anthropic_request, check_budget, estimated_eur, report_usage, urlopen
 
 MODEL = os.environ.get("TRANSLATE_MODEL", "claude-haiku-5-5")
@@ -139,9 +140,15 @@ def show_source(e):
 def show_hash(e): return "|".join(fields_hash(x) for x in show_source(e))   # Teil-Hashes je Feld: title|summary
 
 
-def notes_source(e):
-    """Bereinigtes Show-Notes-HTML einer Folge - genau der Text, den translate_notes.py uebersetzt."""
+def notes_original(e):
+    """Bereinigtes HTML der bisherigen Show Notes einer Folge (Podpage-Sicherung) - die Quelle aller Uebersetzungen, die es vor den neu geschriebenen Notes gab."""
     return P.san(e.get("show_notes"))[:NOTES_MAXC]
+
+
+def notes_source(e):
+    """Genau der Text, den translate_notes.py uebersetzt (und dessen Hash bzw. Anker gilt): zeigt die englische Folgenseite die neu geschriebenen Show Notes
+    (site_shownotes_seo: nur bei duennen Originalen), deren schlanke HTML-Fassung, sonst das bereinigte HTML der bisherigen Show Notes."""
+    return SSEO.source_for_translation(e) or notes_original(e)
 
 
 def notes_hash(e): return fields_hash(notes_source(e))

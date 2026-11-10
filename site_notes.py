@@ -10,6 +10,7 @@ from site_learn import esc, _fetch_json
 
 ROOT = Path(__file__).parent
 NOTES, OVER = {}, {}   # Sprache -> {Folgen-ID: Datensatz} bzw. {Folgen-ID: Bearbeitung}
+EDITS = {"known": False}   # True, sobald der Export der Editor-Fassungen (frisch oder aus data/cache) vorliegt; sonst ist unbekannt, welche Show Notes bearbeitet sind
 L = {"en": ("Key points", "Show notes", "FAQ", "Chapters", "Guests"), "de": ("Kernpunkte", "Show Notes", "FAQ", "Kapitel", "Gäste"),
      "es": ("Puntos clave", "Notas del programa", "Preguntas frecuentes", "Capítulos", "Invitados"), "fr": ("Points clés", "Notes de l'épisode", "FAQ", "Chapitres", "Invités"),
      "it": ("Punti chiave", "Note dell'episodio", "FAQ", "Capitoli", "Ospiti"), "pt": ("Pontos-chave", "Notas do episódio", "Perguntas frequentes", "Capítulos", "Convidados"),
@@ -28,8 +29,11 @@ def load(api):
         except Exception as e:
             print("Show Notes", f.name, e)
     try:
-        OVER.update((_fetch_json(f"{api}/api/notes/export") or {}).get("notes", {}))
+        j = _fetch_json(f"{api}/api/notes/export")
+        EDITS["known"] = isinstance(j, dict) and isinstance(j.get("notes"), dict)   # site_shownotes_seo.rule: ohne den Export wird keine Spreaker-Folge ersetzt oder neu geschrieben
+        OVER.update((j or {}).get("notes", {}))
     except Exception as e:
+        EDITS["known"] = False
         print("Show-Notes-Bearbeitungen nicht abrufbar:", str(e)[:100])
 
 
