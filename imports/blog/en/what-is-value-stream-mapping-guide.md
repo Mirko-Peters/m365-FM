@@ -49,7 +49,7 @@ Two ideas matter most. First, a VSM follows **one product family**, not the whol
 
 ## How do you create a current state map?
 
-The *current state map* of a VSM shows how work is done today. Gemba Academy, a lean training provider, stresses in its [guide to drawing a current state map](https://blog.gembaacademy.com/?p=533) that it should record how the process performs now, not how it was designed to work. To create a value stream map, follow these steps, in short:
+The *current state map* of a VSM shows how work is done today. Gemba Academy, a lean training provider, stresses in its [guide to drawing a current state map](https://blog.gembaacademy.com/2008/02/24/lets-create-a-current-state-value-stream-map/) that it should record how the process performs now, not how it was designed to work. To create a value stream map, follow these steps, in short:
 
 1. **Pick one product family.** Choose a family with a clear customer and a stable set of steps.
 2. **Calculate takt time.** [Takt time](https://www.m365.fm/entity/takt-time/) is the pace at which a product must be completed to meet customer demand. You calculate it as available production time divided by customer demand in the same period.
