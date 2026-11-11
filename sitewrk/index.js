@@ -24,13 +24,17 @@ function notModified(request, etag, lastMod) {
   return !!(ims && lastMod && Date.parse(lastMod) <= Date.parse(ims));
 }
 
-// Seite aus dem R2-Bucket (pages/<pfad>/index.html) mit Kanten-Cache; null, wenn es sie dort nicht gibt (auch das wird kurz gemerkt)
+// Seite aus dem R2-Bucket (pages/<pfad>/index.html) mit Kanten-Cache; null, wenn es sie dort nicht gibt (auch das wird kurz gemerkt).
+// /a/index.html gilt wie /a/ (wie GitHub Pages). Schluessel im Bucket sind UTF-8 (z. B. pages/ru/tag/облако/index.html), die Adresse kommt
+// prozent-kodiert: fuer den Bucket dekodieren, der Cache-Schluessel bleibt kodiert (tools/purge_changed.py leert kodierte Adressen).
 async function r2Page(request, env, ctx, url, p) {
-  const cache = caches.default, ck = new Request(url.origin + "/__r2c" + r2Path(p));
+  const d = p.replace(/\/index\.html$/i, "/");
+  let dp = d; try { dp = decodeURIComponent(d); } catch { /* ungueltige Kodierung: wie angefragt */ }
+  const cache = caches.default, ck = new Request(url.origin + "/__r2c" + r2Path(d));
   let hit = await cache.match(ck).catch(() => null), state = "HIT";
   if (!hit) {
     state = "MISS";
-    const obj = await env.PAGES.get("pages" + r2Path(p) + "index.html").catch(() => null);
+    const obj = await env.PAGES.get("pages" + r2Path(dp) + "index.html").catch(() => null);
     const cm = (obj && obj.customMetadata) || {};
     if (!obj || cm.gone === "1" || cm.src === "docs") {   // fehlt, vom Seitenbau als entfernt markiert oder nur Spiegel von GitHub Pages (dort 404 = wirklich weg)
       ctx.waitUntil(cache.put(ck, new Response("", { headers: { "cache-control": `public, max-age=${R2_MISS_TTL}`, "x-r2-miss": "1" } })).catch(() => {}));
@@ -333,6 +337,7 @@ export default {
     }
     if (res.status === 404 && env.PAGES && !IMG.test(p) && (request.method === "GET" || request.method === "HEAD")) {
       const r2 = await r2Page(rq, env, ctx, url, p);
+      if (r2 && !p.endsWith("/") && !/\.[a-z0-9]{1,8}$/i.test(p)) return new Response(null, { status: 301, headers: { ...SEC, location: url.origin + p + "/" + url.search, "cache-control": "public, max-age=600" } });   // wie GitHub Pages: Verzeichnis ohne "/" -> 301 auf "/"
       if (r2) return r2;
       const m = LANG_EP.exec(p);   // noch nicht hochgeladen: englisches Original statt 404 - umbenannt gleich auf den neuen Slug (ein Schritt)
       if (m) return Response.redirect(url.origin + ((migrated && (await redirectMap())["/show/episodes/" + m[2]]) || "/show/episodes/" + m[2] + "/") + url.search, 301);

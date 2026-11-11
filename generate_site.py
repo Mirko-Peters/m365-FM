@@ -32,7 +32,7 @@ import site_media as MED
 import site_sidebar as SBR
 import site_topweek as TOPW   # Top 10 der Vorwoche (data/top.json): Wochenbezeichnung, ItemList, englische Seite /top/
 import site_r2 as R2
-from site_size import sizes
+from site_size import sizes, writers
 import site_sponsorships as SPM   # T37 Sponsor: Kennzeichnung bezahlter Inhalte (data/sponsorships.json)
 import site_transcripts as TRF   # #266: Transkripte als Dateien je Folge (R2, /…/transcript.txt|.vtt)
 import glob, hashlib, html, json, os, re, shutil, sys, unicodedata
@@ -1038,20 +1038,8 @@ def build():
     def side_for(l, title, body_html, home=False):   # Sidebar der Sprachseiten: Themen der Seite (Treffer im Text), neueste Folgen der Sprache, Community
         return sidebar(l, strip_tags(title + " " + body_html.split("<main", 1)[-1])[:2500], home=home)
 
-    R2_EXT = (".html", ".json", ".jsonld", ".xml")   # T32: Bild-URLs auch in Exporten (entities*.json, Register, Sitemaps) auf img.m365.fm
-    R2OUT = ROOT / "r2out"; _r2n = [0, 0]   # Seiten, die nicht in GitHub Pages liegen, sondern im R2-Bucket (tools/r2_pages_upload.py laedt sie hoch, der Site-Worker liefert sie aus)
-    def write_r2(rel, content):
-        p = R2OUT / rel; p.parent.mkdir(parents=True, exist_ok=True)
-        c = R2.rewrite(content) if rel.endswith(R2_EXT) else content
-        p.write_text(c, encoding="utf-8"); _r2n[0] += 1; _r2n[1] += len(c.encode("utf-8"))
-    def write(rel, content):
-        if rel == "translations-blog.json" or rel.startswith("blog-import/"):
-            write_r2(rel, content)
-            return
-        p = OUT / rel
-        p.parent.mkdir(parents=True, exist_ok=True)
-        c = R2.rewrite(content) if rel.endswith(R2_EXT) else content
-        p.write_text(c, encoding="utf-8")
+    R2OUT = ROOT / "r2out"   # Seiten, die nicht in GitHub Pages liegen, sondern im R2-Bucket (tools/r2_pages_upload.py laedt sie hoch, der Site-Worker liefert sie aus)
+    write, write_r2, _r2n = writers(OUT, R2OUT, R2.rewrite, LANGS)   # write: docs/, ausser was site_size.r2_only nach r2out/ legt (Seiten der Sprachen ausser en/de, Exporte); write_r2: immer r2out/
 
     # Taxonomie: Kategorien (video-weit) + sprachbezogene Tags
     cat_of = {}

@@ -249,7 +249,7 @@ class _Resp:
     def __exit__(self, *a): return False
 
 
-def run_purge(old, new, oc, nc, fail=()):
+def run_purge(old, new, oc, nc, fail=(), r2keys=None):
     """tools/purge_changed.py wie im Deploy-Schritt, aber ohne Cloudflare-Token und mit abgefangenem Netz. Rueckgabe: (urlList je IndexNow-Aufruf, Ausgabe)."""
     posts = []
 
@@ -265,6 +265,7 @@ def run_purge(old, new, oc, nc, fail=()):
             fs[name] = str(Path(d) / (name + ".json")); Path(fs[name]).write_text(json.dumps(val), "utf-8")
         env = {k: v for k, v in os.environ.items() if k not in ("CLOUDFLARE_API_TOKEN", "CF_ZONE_ID")}
         env.update(BASE="https://www.m365.fm", INDEXNOW_KEY="testkey", OLD_CONTENT=fs["oc"], NEW_CONTENT=fs["nc"])
+        if r2keys is not None: Path(d, "k.json").write_text(json.dumps(r2keys), "utf-8"); env["R2_KEYS"] = str(Path(d, "k.json"))
         out = io.StringIO()
         with mock.patch.dict(os.environ, env, clear=True), mock.patch.object(sys, "argv", ["purge_changed.py", fs["old"], fs["new"]]), \
                 mock.patch("urllib.request.urlopen", fake), contextlib.redirect_stdout(out), warnings.catch_warnings():
@@ -323,6 +324,29 @@ class PurgeChanged(unittest.TestCase):
         posts, out = run_purge(h["old"][0], h["new"][0], h["old"][1], h["new"][1])
         self.assertEqual(posts, [["https://www.m365.fm" + u for u in ("/de/blog/x/", "/p1/", "/p2/", "/neu/", "/weg/")]])   # /p3/ unveraendert, /p4/ nur Stylesheet, Sidebar, Fuss
         self.assertIn("IndexNow: neu 1, entfallen 1, Inhalt geaendert 3, nur Boilerplate uebersprungen 1", out)
+
+    def test_r2out_pages_first_run_and_after(self):
+        """11.11.2026: Sprachseiten ausser en/de liegen nur in r2out/. page_hashes.py nimmt sie mit (Merker /__r2out__): aus docs/ umgezogene Seiten gelten nicht
+        als entfallen, schon vorher nur in R2 liegende nicht als neu (kein Schwall), echte neue und geaenderte Seiten dort gehen danach an IndexNow."""
+        with tempfile.TemporaryDirectory() as d:
+            d = Path(d)
+            def build(name, docs, r2out):
+                for base, pages in (("docs", docs), ("r2out", r2out)):
+                    for u, body in (pages or {}).items(): p = d / name / base / u / "index.html"; p.parent.mkdir(parents=True, exist_ok=True); p.write_text(f"<html><head><title>{body}</title></head><body><main><p>{body}</p></main></body></html>", "utf-8")
+                args = [str(d / name / "docs"), str(d / (name + "-p.json")), str(d / (name + "-c.json"))] + ([str(d / name / "r2out")] if r2out is not None else [])
+                subprocess.run([sys.executable, str(ROOT / "tools" / "page_hashes.py"), *args], check=True, capture_output=True)
+                return [json.loads((d / (name + x)).read_text()) for x in ("-p.json", "-c.json")]
+            a = build("a", {"en/x": "x", "ru/tag/облако": "t", "fr/old": "o"}, None)   # vor dem Umzug: alles in docs/, r2out nicht gehasht
+            b = build("b", {"en/x": "x", "en/neu": "e"}, {"ru/tag/облако": "t", "fr/old": "o2", "fr/community/u/m/blog/p": "bp", "ja/neu": "n"})
+            self.assertEqual(b[0]["/__r2out__"], "1"); self.assertIn("/ru/tag/облако/", b[1])
+            keys = ["pages/ru/tag/облако/index.html", "pages/fr/old/index.html", "pages/fr/community/u/m/blog/p/index.html", "pages/ja/neu/index.html", "pages/search/x.json"]
+            posts, out = run_purge(a[0], b[0], a[1], b[1], r2keys=keys)
+            self.assertEqual(posts, [["https://www.m365.fm/fr/old/", "https://www.m365.fm/en/neu/"]], "umgezogen != entfallen, r2out-Bestand != neu, neue Seite in docs/ weiter gemeldet")
+            self.assertIn("erster Lauf mit r2out/: 2 Seiten", out); self.assertIn("neu 1, entfallen 0", out)
+            c = build("c", {"en/x": "x", "en/neu": "e"}, {"ru/tag/облако": "t2", "fr/old": "o2", "fr/community/u/m/blog/p": "bp", "ja/neu": "n", "ko/neu2": "k"})
+            posts, out = run_purge(b[0], c[0], b[1], c[1])
+            self.assertEqual(posts, [["https://www.m365.fm/ru/tag/%D0%BE%D0%B1%D0%BB%D0%B0%D0%BA%D0%BE/", "https://www.m365.fm/ko/neu2/"]])
+            self.assertNotIn("erster Lauf mit r2out/", out); self.assertNotIn("__r2out__", out)
 
     def test_first_run_reports_nothing(self):
         old, new, oc, nc = self.state(3)

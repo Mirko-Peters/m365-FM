@@ -230,8 +230,9 @@ jobs:
           path: data/cache/r2_pages.json
           key: r2pages-${{ github.run_id }}
           restore-keys: r2pages-
-      - name: Seiten in den R2-Bucket laden (duenne Sprachfassungen; GitHub Pages bleibt klein, nichts wird geloescht)
-        continue-on-error: true
+      # Blockierend (11.11.2026): alle Sprachseiten ausser en/de liegen nur im Bucket. tools/r2_pages_upload.py endet nur dann mit 1, wenn eine Seite
+      # dort noch ganz fehlt (sonst 404 nach dem Deploy); einzelne Fehler bei schon vorhandenen Seiten und bei Export-Dateien bleiben Warnungen.
+      - name: Seiten in den R2-Bucket laden (Sprachseiten ausser en/de, Sprachfassungen, Exporte; GitHub Pages bleibt klein, nichts wird geloescht)
         env:
           R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
           R2_BUCKET: ${{ secrets.R2_BUCKET }}
@@ -319,7 +320,7 @@ jobs:
           pip install -q boto3
           python tools/r2_og_upload.py r2img
       - name: Seiten-Hashes (fuer gezieltes Purge und IndexNow)
-        run: python tools/page_hashes.py docs page-hashes.json content-hashes.json
+        run: python tools/page_hashes.py docs page-hashes.json content-hashes.json r2out
       # R2 als Ursprung: Bau-Kennung fuer den Spiegel im Deploy-Job (tools/r2_site_sync.py). Der Site-Worker liest R2 nur, wenn pages/r2-build.txt
       # im Bucket mit /r2-build.txt auf GitHub Pages uebereinstimmt - also erst, wenn dieser Bau vollstaendig und fehlerfrei gespiegelt ist.
       - name: Bau-Kennung fuer den R2-Spiegel
@@ -377,6 +378,7 @@ jobs:
           BASE: https://www.m365.fm
           OLD_CONTENT: .pagehashes/content-hashes.json
           NEW_CONTENT: .newhashes/content-hashes.json
+          R2_KEYS: .newhashes/r2-keys.json
         run: |
           mkdir -p .pagehashes
           python3 tools/purge_changed.py .pagehashes/page-hashes.json .newhashes/page-hashes.json .newhashes/r2-changed.json
