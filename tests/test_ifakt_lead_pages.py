@@ -55,7 +55,9 @@ class LeadPages(unittest.TestCase):
     def test_not_running_or_without_field(self):
         self.assertEqual(S.lead_index([{**REC, "start": "2030-01-01"}], "2026-11-11", ENTS)[0], [])
         self.assertEqual(S.lead_index([{k: v for k, v in REC.items() if k != "lead_topics"}], "2026-11-11", ENTS)[0], [])
-        self.assertEqual(S.lead_index([{**REC, "end": "2026-11-10"}], "2026-11-11", ENTS)[0], [])
+        self.assertTrue(S.lead_index([{**REC, "end": "2026-11-10"}], "2026-11-11", ENTS)[0])   # Karenzzeit (Mirko 11.11.2026): 182 Tage nach "end" bleibt alles stehen
+        self.assertTrue(S.lead_index([{**REC, "end": "2026-05-13"}], "2026-11-11", ENTS)[0])   # Tag 182 nach dem Ende: noch aktiv
+        self.assertEqual(S.lead_index([{**REC, "end": "2026-05-12"}], "2026-11-11", ENTS)[0], [])   # Tag 183: vorbei
 
     def test_structure(self):
         ok, errs = S.check_structure({"version": 1, "sponsorships": [REC]})
