@@ -16,6 +16,16 @@ export function inSponsorGrace(placements, today) {
   });
 }
 
+// Dashboard-Status einer Platzierung am Tag today (Mirko 11.11.2026: einmal gekauft, Dashboard und Zahlen bleiben fuer immer sichtbar):
+// "upcoming" vor dem Start, "active" bis einschliesslich "end" (oder unbefristet), "grace" bis end + GRACE_DAYS (wie site_sponsorships.status/grace_end),
+// danach "ended". grace_end: ISO-Datum oder null (unbefristet/ungueltig). Die gebuchte Laufzeit (start/end) bleibt unveraendert.
+export function sponsorPhase(start, end, today) {
+  const t = dayMs(today), s = dayMs(start), e = dayMs(end);
+  const graceEnd = isNaN(e) ? null : new Date(e + GRACE_DAYS * 86400000).toISOString().slice(0, 10);
+  const status = !isNaN(s) && !isNaN(t) && t < s ? "upcoming" : end == null || isNaN(e) || isNaN(t) || t <= e ? "active" : t <= e + GRACE_DAYS * 86400000 ? "grace" : "ended";
+  return { status, grace_end: graceEnd };
+}
+
 // ents: [{id,type,rel:[[pred,target]]}]. Liefert [orgEid, ...Produkte] oder [] ausserhalb von Laufzeit + Karenzzeit.
 export function sponsorExtraEntities(orgEid, today, placements, ents) {
   if (!orgEid || !inSponsorGrace(placements, today) || !(ents || []).some((e) => e.id === orgEid)) return [];

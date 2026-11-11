@@ -4,7 +4,7 @@
 import { test, beforeEach, afterEach } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
-import { handleAds, handlePaypalWebhook, handleAdGo, quote, loadPricing, resetPaypalToken, webpSize, pickCampaign, paypalConfig } from "../src/ads.js";
+import { handleAds, handlePaypalWebhook, handleAdGo, quote, loadPricing, resetPaypalToken, webpSize, pickCampaign, paypalConfig, adStatsForOrg } from "../src/ads.js";
 import { handleSponsorLink } from "../src/sponsor.js";
 
 const J = (data, status = 200, extra = {}) => new Response(JSON.stringify(data), { status, headers: { "content-type": "application/json", ...extra } });
@@ -326,6 +326,33 @@ test("Go-Link: zählt Klick, 302 zum Ziel mit UTM; Bots nicht; Firmenkarte zähl
   assert.equal((await go("ad-unknown0001")).status, 404);
   activeBooking({ code: "ad-notapproved", creative_status: "pending", status: "awaiting" });
   assert.equal((await go("ad-notapproved")).status, 404);
+});
+
+test("Go-Link nach dem Ende (Mirko 11.11.2026): beendete Buchung leitet weiter und zaehlt fuers Dashboard, ohne Verbrauch; pausiert zaehlt nicht", async () => {
+  const go = async (code, ua) => { const url = new URL(`https://api-dub.m365.fm/go/${code}?s=mid&pt=episode`);
+    return handleSponsorLink(env, new Request(url, { headers: { "user-agent": ua } }), url, `/go/${code}`, undefined); };
+  const card = activeBooking({ code: "ad-cardend01", product: "company_card", quantity: 2, delivered: 2, status: "ended", start: "2025-01-01", end: "2025-02-01" });
+  const r = await go("ad-cardend01", "Mozilla/5.0 Chrome/130");
+  assert.equal(r.status, 302);
+  assert.equal(raw.prepare("SELECT SUM(clicks) c FROM ad_stats_daily WHERE booking_id=?").get(card).c, 1, "Klick nach dem Ende wird gezaehlt");
+  assert.equal(row(card).delivered, 2, "aber nicht mehr berechnet");
+  assert.equal(row(card).status, "ended");
+  assert.equal((await adStatsForOrg(env.DB, 1, "2000-01-01", "2099-12-31")).find((s) => s.id === card).clicks, 1, "Dashboard-Statistik zeigt ihn");
+  const paused = activeBooking({ code: "ad-paused001", status: "paused", pay_status: "refunded" });
+  assert.equal((await go("ad-paused001", "Mozilla/5.0 Chrome/131")).status, 302);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM ad_stats_daily WHERE booking_id=?").get(paused).n, 0, "pausiert/erstattet zaehlt nicht");
+});
+
+test("Go-Link: nach dem Ende erstattete Buchung bleibt 'ended', leitet weiter, zaehlt aber keine neuen Klicks; alte Klicks bleiben sichtbar", async () => {
+  const go = async (code, ua) => { const url = new URL(`https://api-dub.m365.fm/go/${code}?s=mid&pt=episode`);
+    return handleSponsorLink(env, new Request(url, { headers: { "user-agent": ua } }), url, `/go/${code}`, undefined); };
+  const id = activeBooking({ code: "ad-endrefund1", product: "company_card", quantity: 2, delivered: 2, status: "ended", start: "2025-01-01", end: "2025-02-01" });
+  assert.equal((await go("ad-endrefund1", "Mozilla/5.0 Chrome/140")).status, 302);
+  raw.prepare("UPDATE ad_bookings SET pay_status='refunded' WHERE id=?").run(id);   // wie der Erstattungszweig des PayPal-Webhooks: 'ended' bleibt 'ended'
+  assert.equal((await go("ad-endrefund1", "Mozilla/5.0 Chrome/141")).status, 302);
+  assert.equal(row(id).status, "ended");
+  assert.equal(raw.prepare("SELECT SUM(clicks) c FROM ad_stats_daily WHERE booking_id=?").get(id).c, 1, "nur der Klick vor der Erstattung zaehlt");
+  assert.equal((await adStatsForOrg(env.DB, 1, "2000-01-01", "2099-12-31")).find((s) => s.id === id).clicks, 1, "Verlauf bleibt im Dashboard");
 });
 
 // ---------------------------------------------------------------- Leads
