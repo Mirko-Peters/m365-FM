@@ -581,13 +581,16 @@ export async function handleAdGo(env, request, url, code, ctx) {
     if (!target) return new Response(null, { status: 404, headers });
     for (const [k, v] of [["utm_source", "m365.fm"], ["utm_medium", "display"], ["utm_campaign", b.code]]) if (!target.searchParams.has(k)) target.searchParams.set(k, v);
   }
-  if (request.method === "GET" && b.status === "active" && !isBot(request)) {
+  // Mirko 11.11.2026: Klicks nach dem Ende (status 'ended', Kontingent oder Laufzeit) zaehlen weiter fuers Sponsor-Dashboard, werden aber nicht
+  // mehr berechnet (consume nur bei 'active'). Pausiert, storniert und erstattet zaehlen nicht, auch eine erst nach dem Ende erstattete Buchung
+  // (bleibt 'ended'); ihre bis dahin gezaehlten Klicks bleiben im Dashboard sichtbar.
+  if (request.method === "GET" && (b.status === "active" || b.status === "ended") && b.pay_status !== "refunded" && !isBot(request)) {
     const slot = SLOTS.includes(url.searchParams.get("s")) ? url.searchParams.get("s") : b.slot;
     const pageType = PAGE_TYPES.includes(url.searchParams.get("pt")) ? url.searchParams.get("pt") : "other";
     const work = (async () => {
       if (await dedupe(env, request, code)) return;
       await countStat(db, b.id, slot, pageType, "clicks", countryOf(request));
-      if (b.kind === "cpc") await consume(db, b.id);
+      if (b.kind === "cpc" && b.status === "active") await consume(db, b.id);
     })().catch(() => {});
     if (ctx?.waitUntil) ctx.waitUntil(work); else await work;
   }
@@ -612,7 +615,7 @@ export async function verifyTurnstile(env, token, ip) {
   return j.success === true ? { ok: true } : { ok: false, error: "captcha" };
 }
 
-// Laufende Sponsoren (data/sponsorships.json): sponsors.json des Seitenbaus {orgs:[{id,name,manager}]}; der Worker nimmt Leads fuer diese Firmen ohne Buchung an
+// Laufende Sponsoren (data/sponsorships.json, inkl. 182 Tage Karenzzeit nach "end" - die Frist rechnet der Seitenbau): sponsors.json des Seitenbaus {orgs:[{id,name,manager}]}; der Worker nimmt Leads fuer diese Firmen ohne Buchung an
 export async function activeSponsor(env, id) {
   if (!/^[a-z0-9][a-z0-9-]{1,63}$/.test(String(id || ""))) return null;
   let j; try { j = await (await fetch(`${env.SITE}/sponsors.json`, { cf: { cacheTtl: 600 } })).json(); } catch { return null; }
