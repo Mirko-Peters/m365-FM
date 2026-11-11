@@ -2,7 +2,8 @@ name: Sponsor-Reihe Cognillo (schreiben, freigeben, taeglich live)
 # Drei Modi (Beschreibung: SPONSOR_POSTS.md im Hauptordner):
 #  schreiben  - von Hand: Sonnet schreibt die Beitraege (status: review, publish: false) und je 3 LinkedIn-Texte; es geht NICHTS live. Standard dry_run = nur Prompt und Kostenschaetzung.
 #  freigeben  - von Hand: setzt im Plan freigegeben=true fuer die Nummern (nur fuer Entwuerfe). Kein API-Aufruf.
-#  taeglich   - Cron 04:20 UTC: schaltet den fruehesten freigegebenen Entwurf (date <= heute) auf approved/publish true. Hoechstens EIN Beitrag je Lauf. Kein API-Aufruf.
+#  taeglich   - Cron 04:20 UTC: schaltet den fruehesten freigegebenen Entwurf (date <= heute) auf approved/publish true. Normal EIN Beitrag je Lauf, nach einem verpassten Lauf
+#               hoechstens 2 (aelteste zuerst, ::warning:: mit dem Rest). Gesponserte Beitraege kommen zugleich unter "posts" in data/sponsorships.json (dauerhafte Kennzeichnung). Kein API-Aufruf.
 # Kosten: Kostenbuch data/spend.json, Schluessel "sponsor-cognillo"; eigene Gesamtgrenze SPONSOR_POSTS_BUDGET_USD (Repo-Variable, Standard 50), unabhaengig von ARTICLE_BUDGET_USD.
 # Speichern wie articles.yml (Commit, dann pull --rebase und push in einer Schleife; spend.json je Schluessel zusammenfuehren).
 # TODO Staging-Umbau (claude/staging-schritt1/2): der Speichern-Schritt pusht heute auf main und muss spaeter auf den Zweig "staging" umgestellt werden.
@@ -59,8 +60,12 @@ jobs:
           git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
           # Speichern wie articles.yml: main bewegt sich oft (Bots), deshalb nachziehen und wiederholen. Ohne -X theirs: eine gleichzeitige Aenderung am Plan
           # (z. B. von Hand gesetzter Status) ginge sonst still verloren; data/spend.json fuehrt der Treiber spendjson je Schluessel zusammen.
+          # Nur vorhandene Pfade stagen: ein fehlender Pfad (z. B. die LinkedIn-Datei vor dem ersten bestandenen Beitrag) liesse sonst das ganze git add scheitern
+          # und das Kostenbuch bliebe ungespeichert. Fehler von git werden nicht versteckt (Schritt rot, Artefakt sponsor-daten sichert die Daten).
           save() {
-            git add -A -- imports/blog/en data/sponsor_posts_cognillo.json data/sponsor_posts_linkedin_cognillo.json data/spend.json 2>/dev/null || true
+            for p in imports/blog/en data/sponsor_posts_cognillo.json data/sponsor_posts_linkedin_cognillo.json data/spend.json data/sponsorships.json; do
+              if [ -e "$p" ]; then git add -A -- "$p" || { echo "::error::Sponsor-Reihe: git add $p gescheitert - nichts gespeichert (Artefakt sponsor-daten am Lauf)"; return 1; }; fi
+            done
             if git diff --cached --quiet; then echo "Sponsor-Reihe: nichts zu speichern"; return 0; fi
             MSG="$(cat "$SPONSOR_COMMIT_MSG_FILE" 2>/dev/null || true)"; [ -n "$MSG" ] || MSG="Cognillo-Beitraege: Kostenbuch aktualisiert"
             git commit -q -m "$MSG"
@@ -109,5 +114,6 @@ jobs:
             data/sponsor_posts_cognillo.json
             data/sponsor_posts_linkedin_cognillo.json
             data/spend.json
+            data/sponsorships.json
           if-no-files-found: ignore
           retention-days: 30

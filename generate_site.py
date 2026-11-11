@@ -1547,7 +1547,7 @@ def build():
     import site_updates as _SU
     _SU.load(COMMUNITY_API)
     # (Blogbeitraege samt Sprachfassungen: _posts entsteht seit 6.11. vor den Sprach-Startseiten, die sie zeigen)
-    SPM.check_posts(_posts)   # T37 Sponsor: Beitraege in data/sponsorships.json muessen existieren
+    SPM.check_posts(_posts + CBL.live_refs(LRN.ENTS))   # T37 Sponsor: Beitraege in data/sponsorships.json muessen existieren (auch Content-Pakete, die der Worker erst nach diesem Bau anlegt)
     LBL.publish(write, BASE); MEM.BLOGLANGS = {p["lang"] for p in _posts}   # stand seit T6 versehentlich im Kommentar: blog-import/ fuer den Worker und die Blog-Sprachen der Profile
     import site_content_blog as CBL; CBL.publish(write, LRN.ENTS)   # T15: freigegebene Content-Pakete imports/blog/<sprache>/*.md -> blog-content/index.json (Worker-Cron importContentBlog)
     for _p in _posts:

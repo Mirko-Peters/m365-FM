@@ -15,6 +15,7 @@ SLUG = "toolkit-post"
 COG = {"id": "cognillo-test", "sponsor": {"name": "Cognillo", "url": "https://www.cognillo.com/"}, "label": "sponsored", "start": "2026-11-15", "end": "2027-01-31", "entities": ["cognillo"]}
 HTML = ('<p>Read the <a href="https://www.cognillo.com/toolkit">toolkit page</a>, the <a href="https://blog.cognillo.com/x" rel="noopener">blog</a>, '
         '<a href="https://learn.microsoft.com/sharepoint/">Microsoft Learn</a> and <a href="https://cognillo.com.evil.example/">lookalike</a>.</p>')
+LD = {}   # JSON-LD je Seite aus dem letzten build()
 
 
 def post(lang="en", **extra):
@@ -27,10 +28,10 @@ def build(posts, today, recs):
     parsed, errs = SPM.check_structure({"version": 1, "sponsorships": recs})
     assert not errs, errs
     SPM._index(parsed, today, {}, {})
-    pages = {}
+    pages = {}; LD.clear()
 
     def page(lang, title, desc, canonical, body, *a, **k):
-        pages[canonical] = body
+        pages[canonical] = body; LD[canonical] = a[1] if len(a) > 1 else None
         return body
     g = {"BASE": BASE, "write": lambda *_: None, "write_r2": lambda *_: None, "page": page, "header": lambda lang, s: "", "footer": lambda lang: "", "footer_en": lambda: "",
          "LANGS": {}, "sitemap": [], "TODAY": today}
@@ -75,6 +76,23 @@ class RunningSponsorLinks(unittest.TestCase):
         self.assertIn("spm-note", body)
         self.assertEqual(len(re.findall(r'href="https://www\.cognillo\.com/toolkit"[^>]*rel="sponsored noopener"', body)), 1)
         self.assertNotRegex(body, r'rel="sponsored noopener sponsored')
+
+    def test_sponsored_post_published_after_term_end_keeps_disclosure_through_posts_entry(self):
+        """Cognillo-Reihe: gesponserte Beitraege (z. B. Nr 52, 5.1.2027) gehen nach dem Ende der Laufzeit (10.12.2026) live. Der taegliche Lauf
+        (tools/sponsor_post.py) traegt sie unter "posts" ein; damit bleiben Kennzeichnung, BlogPosting.sponsor und rel="sponsored" dauerhaft."""
+        ended = {**COG, "start": "2026-11-10", "end": "2026-12-10"}
+        de = post("de", tr_of="en", ai_tr=True, legacy=True, content_tr=True, tr_index=False)
+        without = build([post(), de], "2027-01-05", [ended])
+        for body in without.values(): self.assertNotIn("sponsored", body)   # ohne Eintrag: nach dem Ende keine Kennzeichnung (deshalb der Eintrag)
+        pages = build([post(), de], "2027-01-05", [{**ended, "posts": [f"/community/u/mirko-p/blog/{SLUG}/"]}])
+        self.assertEqual(len(pages), 2)
+        for url, body in pages.items():
+            self.assertIn("spm-note", body, url)   # Kennzeichnung unter der H1 (Original und Sprachfassung)
+            self.assertIn("Cognillo", body)
+            self.assertRegex(body, r'<a [^>]*href="https://www\.cognillo\.com/toolkit"[^>]*rel="sponsored noopener"')
+            self.assertNotIn("sponsored", re.search(r'<a [^>]*href="https://learn\.microsoft\.com/sharepoint/"[^>]*>', body).group(0))
+            self.assertEqual(LD[url][0]["sponsor"]["name"], "Cognillo")   # BlogPosting.sponsor
+        self.assertIn("Anzeige", next(b for u, b in pages.items() if "/de/" in u))
 
 
 if __name__ == "__main__":

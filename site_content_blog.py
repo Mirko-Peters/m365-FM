@@ -92,6 +92,12 @@ def collect(ents):
     return items, rep
 
 
+def live_refs(ents):
+    """Freigegebene, fehlerfreie Pakete mit publish: true als {"handle", "slug"}: der Worker legt sie erst nach diesem Bau live an. Fuer SPM.check_posts,
+    damit ein Eintrag unter "posts" in data/sponsorships.json (taeglicher Lauf der Cognillo-Reihe, gleicher Commit wie publish: true) den Bau nicht abbricht."""
+    return [{"handle": it["author"], "slug": it["slug"]} for it in collect(ents)[0] if it.get("publish")]
+
+
 def publish(write, ents):
     """Schreibt blog-content/index.json (nur freigegebene, fehlerfreie Pakete) und blog-content/report.json."""
     items, rep = collect(ents)
