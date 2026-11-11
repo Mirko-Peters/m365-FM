@@ -98,10 +98,11 @@ Ein Beitrag, dessen Plan-Datum mehr als 14 Tage zurückliegt, wird vom Zeitplan 
 
 ## rel="sponsored"
 
-Links auf die Website eines **laufenden** Sponsors (z. B. `www.cognillo.com`) bekommen in jedem Blogbeitrag und in allen Sprachfassungen `rel="sponsored noopener"`. Voraussetzung: In `data/sponsorships.json` steht ein laufendes Sponsoring mit `sponsor.url` = `https://www.cognillo.com/`. Ein Beitrag muss dafür nicht einzeln unter `posts` stehen.
-Nach dem Ende des Sponsorings verlieren Beiträge, die **nicht** unter `posts` stehen, die Link-Kennzeichnung beim nächsten Seitenbau.
+Links auf die Website eines **laufenden** Sponsors (Laufzeit plus 6 Monate Karenzzeit, siehe unten; z. B. `www.cognillo.com`) bekommen in jedem Blogbeitrag und in allen Sprachfassungen `rel="sponsored noopener"`. Voraussetzung: In `data/sponsorships.json` steht ein laufendes Sponsoring mit `sponsor.url` = `https://www.cognillo.com/`. Ein Beitrag muss dafür nicht einzeln unter `posts` stehen.
+**Karenzzeit** (Mirko, 11.11.2026, für alle Kunden): Alles, was während der Laufzeit gilt (Kennzeichnung der Entitäten, Badge, `rel="sponsored"`, Lead-Formular, Partner-Block, `sponsors.json`), bleibt 182 Tage (6 Monate) nach `end` unverändert stehen, damit ein Kunde nahtlos verlängern kann. Cognillo: Laufzeit bis 16.01.2027, Karenzzeit bis 17.07.2027.
+Erst nach der Karenzzeit verlieren Beiträge, die **nicht** unter `posts` stehen, die Link-Kennzeichnung beim nächsten Seitenbau.
 
-**Gesponserte Beiträge der Reihe** stehen dagegen immer unter `posts`, weil der tägliche Lauf sie beim Freischalten dort einträgt. Damit behalten sie dauerhaft – auch wenn sie erst nach dem Ende der Laufzeit live gehen – die Kennzeichnung unter der Überschrift („Sponsored · Paid partnership with Cognillo“, deutsch „Anzeige · …“), `BlogPosting.sponsor` und `rel="sponsored"` auf den Links zu Cognillo.
+**Gesponserte Beiträge der Reihe** stehen dagegen immer unter `posts`, weil der tägliche Lauf sie beim Freischalten dort einträgt. Damit behalten sie dauerhaft – auch wenn sie erst nach dem Ende der Laufzeit oder der Karenzzeit live gehen – die Kennzeichnung unter der Überschrift („Sponsored · Paid partnership with Cognillo“, deutsch „Anzeige · …“), `BlogPosting.sponsor` und `rel="sponsored"` auf den Links zu Cognillo.
 Der Seitenbau prüft, dass jeder Eintrag unter `posts` einen Beitrag trifft. Ein eben freigeschaltetes Content-Paket (`status: approved`, `publish: true`) zählt dabei schon mit, obwohl der Worker es erst nach diesem Bau anlegt.
 
 ## Hinweis zum Staging-Umbau

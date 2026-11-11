@@ -278,7 +278,7 @@ class Taeglich(Base):
         self.assertEqual(self.live(), [2])
 
     def test_sponsored_post_after_term_end_still_gets_posts_entry(self):
-        SP.update_plan({2: {"date": "2027-01-05"}})   # wie Nr 52 im echten Plan: Laufzeit endet am 10.12.2026
+        SP.update_plan({2: {"date": "2027-01-05"}})   # nach dem Ende der Laufzeit des Test-Eintrags (10.12.2026), in der Karenzzeit
         self.make_draft(2, release=True)
         code, out = self.run_quiet(SP.main, ["taeglich", "--date", "2027-01-05"])
         self.assertEqual(code, 0, out)
@@ -307,9 +307,18 @@ class Taeglich(Base):
         recs = [a, b, c, {"id": "x", "start": "2026-01-01", "entities": ["acme"]}]
         self.assertEqual(SP.sponsor_record(recs, "2026-11-20")["id"], "cognillo-2026-11")
         self.assertEqual(SP.sponsor_record(recs, "2027-01-05")["id"], "cognillo-2027-01")
-        self.assertEqual(SP.sponsor_record(recs, "2027-03-01")["id"], "cognillo-2027-01")   # Luecke: zuletzt begonnenes
+        self.assertEqual(SP.sponsor_record(recs, "2027-03-01")["id"], "cognillo-2027-01")   # beide in der Karenzzeit: zuletzt begonnenes
         self.assertEqual(SP.sponsor_record(recs, "2026-01-05")["id"], "cognillo-2027-06")   # noch keines begonnen: zuletzt angelegtes
         self.assertIsNone(SP.sponsor_record(recs[3:], "2026-11-20"))
+
+    def test_sponsor_record_counts_grace_period_as_running(self):
+        """Karenzzeit (182 Tage nach "end", wie im Seitenbau): ein Beitrag in der Karenzzeit findet das Sponsoring, das dann noch laeuft, nicht ein spaeter
+        begonnenes, dessen Karenzzeit schon vorbei ist."""
+        a = dict(COG); b = dict(COG, id="cognillo-kurz", start="2026-11-15", end="2026-11-20")   # Karenzzeit a bis 10.06.2027, b bis 21.05.2027
+        self.assertEqual(SP.sponsor_record([a, b], "2027-05-21")["id"], "cognillo-kurz")   # beide aktiv: zuletzt begonnenes
+        self.assertEqual(SP.sponsor_record([a, b], "2027-05-22")["id"], "cognillo-2026-11")   # nur a noch in der Karenzzeit
+        self.assertEqual(SP.sponsor_record([a, b], "2027-06-10")["id"], "cognillo-2026-11")
+        self.assertEqual(SP.sponsor_record([a, b], "2027-06-11")["id"], "cognillo-kurz")   # beide vorbei: zuletzt begonnenes (Rueckfall wie bisher)
 
     def test_sponsored_post_without_sponsorship_record_does_not_go_live(self):
         SP.SPONSORSHIPS_FILE.write_text(json.dumps({"version": 1, "sponsorships": []}), "utf-8")

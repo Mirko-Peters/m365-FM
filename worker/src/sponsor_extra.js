@@ -1,6 +1,7 @@
 // Sponsor-Entitaeten sind bei gesponserten Inhalten EXTRA zur Obergrenze von 10 Themen (Pendant zu site_sponsorships.py).
 export const GRACE_MONTHS = 6; // Mirko 6.11.2026
-// 182 Tage nach "end" (nicht Kalendermonate): Tag 182 zaehlt noch, Tag 183 nicht mehr.
+// 182 Tage nach "end" (nicht Kalendermonate): Tag 182 zaehlt noch, Tag 183 nicht mehr. Mirko 11.11.2026: dieselbe Karenzzeit gilt fuer alles, was ein laufendes
+// Sponsoring zeigt (site_sponsorships._active); Lead-Annahme ueber sponsors.json (ads.js activeSponsor), deren Frist schon der Seitenbau rechnet.
 export const GRACE_DAYS = 182;
 export const TOPIC_CAP = 10;
 
