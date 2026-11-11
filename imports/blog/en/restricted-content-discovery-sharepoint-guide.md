@@ -78,6 +78,12 @@ Microsoft's training module states it clearly: RAC closes access itself, while R
 
 This choice is part of your wider [Copilot governance](https://www.m365.fm/entity/copilot-governance/) plan. A good rule: use RAC for sites that hold truly confidential content, such as a due diligence site. Use RCD for sites that you cannot fix yet but want out of broad discovery in the meantime.
 
+## Does it replace Restricted SharePoint Search, and how does it help with oversharing?
+
+Microsoft's page on [Restricted SharePoint Search](https://learn.microsoft.com/en-us/sharepoint/restricted-sharepoint-search) opens with a retirement notice. Starting July 31, 2026, new enablement is blocked, and Microsoft points to Restricted Content Discovery for content discoverability. The two work in opposite directions. Restricted SharePoint Search used an allow list of up to 100 sites that stayed discoverable. Restricted Content Discovery works per site: you flag the sites that should drop out of broad discovery, and the rest stay discoverable. The restricted search page also calls its feature a short-term solution and not a security boundary, which fits the temporary role described above.
+
+For oversharing, the discovery page lists sites with a high risk of oversharing as a use case and recommends the data access governance reports to find them. It does not claim to fix the problem. Because it does not change permissions, the sequence stays the same: flag the risky site, repair its access, then remove the flag.
+
 ## Example: 40 flagged sites, three tools
 
 The numbers are invented to show the method. A company with 600 SharePoint sites plans a Copilot rollout in three months. A data access governance report flags 40 sites with broad access, such as Everyone except external users.

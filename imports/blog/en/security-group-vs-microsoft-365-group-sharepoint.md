@@ -59,6 +59,15 @@ Use this short decision list.
 
 A sound habit: put people into a group that matches a business role, then give the group access. Do not give each person access one by one. That keeps reviews short and matches the idea of [least privilege](https://www.m365.fm/entity/least-privilege/), where each identity has the smallest role it needs.
 
+## Where do distribution groups and mail-enabled security groups fit?
+
+Two more group types often appear in the picker. Microsoft's [group type comparison](https://learn.microsoft.com/en-us/microsoft-365/admin/create-groups/compare-groups?view=o365-worldwide) describes them.
+
+- **Distribution groups** are used for sending notifications to a group of people, such as everyone in one building. The page does not describe them as a way to grant access, and they have no dynamic membership. Use them for mail only.
+- **Mail-enabled security groups** work like regular security groups, with two differences: they cannot be managed dynamically through Microsoft Entra ID and they cannot contain devices. They can grant access to resources such as SharePoint and can also send mail to all members.
+
+So a mail-enabled security group is a fair fit when one list must both receive messages and hold site permissions, and when you accept manual membership. If you want rules-based membership, choose a regular security group or a Microsoft 365 group, and keep a separate distribution list for mail. Test any mail-enabled group on a site before you rely on it for access request emails.
+
 ## What about nesting groups?
 
 Nesting means putting a group inside another group. Microsoft Entra allows security groups to be members of other groups. Its documentation notes that when you nest an existing security group in another, only members of the parent group have access to the shared resources.

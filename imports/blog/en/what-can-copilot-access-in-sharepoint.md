@@ -83,6 +83,12 @@ And it does not fix the underlying data problems. If a site has been open to the
 
 Microsoft's security page also points to the Copilot security dashboard in the Microsoft 365 admin center, which provides insights and controls for DLP, oversharing and compliance. Viewing the Security section requires the Global Reader role, and making changes requires the AI Administrator role. Use it as one input, next to the SharePoint reports.
 
+## What about Restricted SharePoint Search?
+
+Microsoft's page on [Restricted SharePoint Search](https://learn.microsoft.com/en-us/sharepoint/restricted-sharepoint-search) describes a tenant setting that uses an allow list of sites to limit which sites appear in organization-wide search and in Microsoft Copilot responses. The page opens with a notice that the feature is retiring: starting July 31, 2026, new enablement is blocked, and Microsoft points to Restricted Content Discovery for discoverability control. So treat it as history for tenants that already use it.
+
+The page is clear about the limits. The allow list holds up to 100 sites. The feature is not a security boundary and does not change permissions. Copilot can still use a person's own OneDrive files, chats, emails and calendars, and recently accessed sites or sites shared in Teams or Outlook can still appear. Microsoft calls it a short-term solution that gives administrators time to review and audit permissions, not a long-term one. The recommended path is to fix oversharing, then disable it so that Copilot relies on standard permission-based access.
+
 ## Example: a pilot that finds a salary file
 
 The numbers are invented to show the method. A company with 1,500 employees starts a Copilot pilot with 50 users. In the first week, a pilot user in sales asks Copilot to summarize "compensation bands." The answer cites a spreadsheet from an old HR project site.
