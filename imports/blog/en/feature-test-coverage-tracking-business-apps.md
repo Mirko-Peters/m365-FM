@@ -21,7 +21,7 @@ faq:
     a: "No. Coverage shows that something is tested, not that it is tested well. A linked test is documented coverage, not proof of validation, and weak tests give weak coverage. Check results per build, the depth of the tests and the risk of each feature, not only the percentage."
 ---
 
-Feature test coverage tracking answers one plain question for a business application: which features have a test, and what happened when the test last ran? This guide is for QA leads who maintain tests for line-of-business apps and need a clear picture for release meetings. You will see how test coverage differs from code coverage, how to build and read a coverage matrix, and how to keep it current. A worked example with made-up numbers shows why a high percentage of mapped features can still hide gaps.
+Feature test coverage tracking answers one plain question for a business application: which features have a test, and what happened when the test last ran? This guide is for QA leads who maintain tests for line-of-business apps and need a clear picture for release meetings. You will see how test coverage in software testing differs from code coverage, how to measure test coverage with a coverage matrix, and how to keep it current. A worked example with made-up numbers shows why a high percentage of mapped features can still hide gaps.
 
 ## What test coverage means, and what it does not
 
@@ -43,9 +43,9 @@ The TestRail guide on the [requirements traceability matrix](https://www.testrai
 3. **Map each item to its tests.** Link each item to the test cases, reviews or analyses that evaluate it, and check that those checks address its key acceptance criteria.
 4. **Record results and review.** Record the result for the relevant build, connect defects to the affected results, agree on what counts as verified, and review the matrix for missing mappings and outdated cases.
 
-Do this first for the flows that matter most. Each QA team has its own workflow, so keep the steps light. A small matrix that is current is worth more than a complete one that nobody trusts.
+Do this first for the flows that matter most, and for each new feature as it arrives. Each QA team has its own workflow, so keep the steps light. A small matrix that is current is worth more than a complete one that nobody trusts.
 
-Automation changes the picture only a little. An automated test is still just one test case, and automation coverage means the share of mapped features whose tests run without a tester. Count it as a separate column, next to manual cases, so the team sees how much is automated and how much still depends on people. Coverage metrics such as these help planning, but the backlog of untested, high-risk features is the number that drives action.
+When a team chooses to automate a check, the picture changes only a little. An automated test is still just one test case, and automation coverage means the share of mapped features whose tests run without a tester. Count it as a separate column, next to manual cases, so the team sees how much is automated and how much still depends on people. Coverage metrics such as these help planning, but the backlog of untested, high-risk features is the number that drives action.
 
 ## What to put in the coverage matrix
 
@@ -72,11 +72,17 @@ A matrix is only as useful as the questions you ask of it.
 
 A short list of the five riskiest gaps is more useful in a release meeting than a table of two hundred rows.
 
+## Where code coverage tools still help
+
+Martin Fowler's note on [test coverage](https://martinfowler.com/bliki/TestCoverage.html) calls a coverage tool "a useful tool for finding untested parts of a codebase" and suggests running coverage tools every so often to look at the untested code. He also writes that coverage is of little use as a numeric statement of how good your tests are, because high coverage numbers are too easy to reach with low-quality testing. He would be suspicious of anything like 100 percent, and he sees coverage below about half as a sign of trouble. He adds that coverage is most useful to the people who write tests, because reading it takes technical judgment.
+
+For a QA lead, that suggests a split of work. In our view, developers read the coverage report for their unit tests and integration tests, while the QA team reads the feature matrix to improve test coverage where the business risk is highest, across manual testing and test automation. Neither number alone gives release confidence. Both are a map of testing efforts, not proof of product quality.
+
 ## Keep it up to date
 
 A stale matrix is worse than none, because people trust it. TestRail recommends reviewing it during planning, after changes and before release decisions, and keeping a dated snapshot when you need the evidence behind a decision. It also suggests naming a coordinator and owners for change requests, test updates and verification decisions. PractiTest adds that the matrix should stay visible to everyone who needs it, and it warns that emailed spreadsheet copies lead to confusion about which version is current.
 
-Keep one shared version. If you use a test management tool, let it update the links and results as tests run, so the matrix does not depend on someone's memory. It also supports your [regression testing](https://www.m365.fm/entity/regression-testing/), because the links show which tests to rerun after a change.
+Keep one shared version. If you use a test management tool, let it update the links and results as tests run, so the matrix does not depend on someone's memory. It also supports your [regression testing](https://www.m365.fm/entity/regression-testing/), because the links show which regression tests to rerun after a change.
 
 ## Example: 40 features, three different numbers
 
