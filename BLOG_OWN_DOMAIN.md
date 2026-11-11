@@ -151,4 +151,18 @@ Nichts davon wurde gemacht. Reihenfolge:
 
 ## 10. Stand der Umsetzung
 
-Siehe die Pull Requests. Nicht prüfbar ohne Cloudflare-Zugang: echter Deploy, DNS, Zertifikat, Worker-Route, Custom-Hostnames-API (im Test nur gemockt).
+Drei Pull Requests, jeder für sich testbar (alles hinter `BYOD`, aus):
+
+1. **Teil 1** (PR #361): diese Doku, Datenmodell (Migration 0048), Namensregeln, Host-Weiche im Site-Worker, Auslieferung der Blog-Seiten, Erlös-Regel.
+2. **Teil 2**: Verwaltung der Domain (API `/api/byod/*`, Prüfung des DNS-Eintrags, Cloudflare-Anbindung als Code gegen die Custom-Hostnames-API, regelmäßige Prüfung im 30-Minuten-Lauf), Oberfläche im Community-Bereich (`assets/blogdomain.js`, en/de, weitere Sprachen über den Worker) und MCP-Werkzeuge (`list_my_blog_domains`, `add_blog_domain`, `check_blog_domain`, `set_blog_domain_links`, `remove_blog_domain`).
+3. **Teil 3**: Blog-Import per Feed.
+
+Nicht prüfbar ohne Cloudflare-Zugang: echter Deploy, DNS, Zertifikat, Worker-Route, Custom-Hostnames-API. Im Test ist Cloudflare nur gemockt, es gibt keinen echten Aufruf.
+
+### Wie die Prüfung entscheidet (Teil 2)
+
+1. DNS (über Cloudflare DNS-über-HTTPS): CNAME der Domain zeigt auf `BYOD_CNAME_TARGET`, oder der TXT-Eintrag `_m365fm-verify.<domain>` trägt das Prüf-Token. Eindeutig nichts gefunden: `pending` (eine schon aktive Domain wird dabei abgeschaltet). Netzfehler: nichts ändern, Fehler `dns_unavailable`.
+2. Mit `CF_API_TOKEN` und `CF_ZONE_ID`: Custom Hostname anlegen (Zertifikat per HTTP-Prüfung) und abfragen. Erst wenn `status` und `ssl.status` beide `active` sind, geht es weiter. Ohne die Secrets: `verified`, nie `active`, kein Aufruf.
+3. Impressum-Link vorhanden: erst dann `active`. Fehlt er: `verified` mit `need_imprint`.
+4. Das Mitglied kann Impressum und Datenschutz jederzeit ändern. Ohne Impressum schaltet die Domain sofort ab.
+5. Admin kann Domains sperren (`blocked`). Gesperrte Domains werden nie ausgeliefert, nicht neu geprüft und bleiben vergeben.

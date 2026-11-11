@@ -34,7 +34,7 @@ import { handleEvents, deleteUserEvents, ensureM365Con, claimLinkedinEntity, pur
 import { handleVotes } from "./votes.js";
 import { handleQa, deleteUserQa } from "./qa.js";
 import { handleBlog, deleteUserBlog } from "./blog.js";
-import { handleByodServe } from "./byod.js";
+import { handleByodServe, handleByodApi, runByodChecks } from "./byod.js";
 import { handleUpdates, pollUpdates } from "./updates.js";
 import { ensurePastEvents, linkSpeakers, linkSpeakerEntities } from "./pastevents.js";
 import { handleLibrary, deleteUserLibrary } from "./library.js";
@@ -446,6 +446,7 @@ async function api(env, request, url, path, asUser, ctx) {
   if (path.startsWith("/api/orgoffer/")) { const q = await handleOrgOffers(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/library/")) { const q = await handleLibrary(env, request, url, path, user, J); if (q) return q; }
   if (path === "/api/blog" || path.startsWith("/api/blog/") || path.startsWith("/api/admin/blog")) { const q = await handleBlog(env, request, url, path, user, J); if (q) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return q; } }
+  if (path.startsWith("/api/byod/") || path === "/api/admin/byod" || path === "/api/admin/byod/block") { const q = await handleByodApi(env, request, url, path, user, J); if (q) return q; }   // Blog auf der eigenen Domain (Schalter BYOD)
   if (path === "/api/qa" || path.startsWith("/api/qa/")) { const q = await handleQa(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/notes/")) { const q = await handleNotes(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/credit/")) { const q = await handleCredits(env, request, url, path, user, J); if (q) return q; }
@@ -636,6 +637,7 @@ export default {
       T("purgeSearchStats", () => purgeSearchStats(env.DB));   // Suchbegriffe und Nachfrage: 12 Monate (#156)
     }
     if (event.cron === "*/30 * * * *") T("runDigest", () => runDigest(env, { at: scheduledAt }));
+    if (event.cron === "*/30 * * * *") T("byodChecks", () => runByodChecks(env));   // Blog auf der eigenen Domain: DNS/Zertifikat offener und aktiver Domains (nur mit BYOD=1)
     T("refreshFeeds", () => refreshFeeds(env));
     T("refreshContributions", () => refreshContributions(env));
     T("pollUpdates", () => pollUpdates(env));

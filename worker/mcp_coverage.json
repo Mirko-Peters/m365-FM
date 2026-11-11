@@ -1322,6 +1322,37 @@
   },
   "/api/byod/serve": {
    "skip": "Infrastruktur: liefert dem Site-Worker die Seiten des Blogs einer aktiven Mitglieds-Domain (HTML, RSS und Sitemap für Leser, keine Daten für KI-Werkzeuge); die Verwaltung der Domains läuft über die byod_* Tools"
+  },
+  "/api/byod/mine": {
+   "tools": [
+    "list_my_blog_domains"
+   ]
+  },
+  "/api/byod/add": {
+   "tools": [
+    "add_blog_domain"
+   ]
+  },
+  "/api/byod/check": {
+   "tools": [
+    "check_blog_domain"
+   ]
+  },
+  "/api/byod/links": {
+   "tools": [
+    "set_blog_domain_links"
+   ]
+  },
+  "/api/byod/remove": {
+   "tools": [
+    "remove_blog_domain"
+   ]
+  },
+  "/api/admin/byod": {
+   "skip": "Admin-Funktionen (Blog auf der eigenen Domain): Liste aller Domains und Sperre nur im Admin-Bereich der Community, nicht per KI-Token"
+  },
+  "/api/admin/byod/block": {
+   "skip": "Admin-Funktionen (Blog auf der eigenen Domain): Sperren und Freigeben einer Domain nur im Admin-Bereich der Community, nicht per KI-Token"
   }
  }
 }
