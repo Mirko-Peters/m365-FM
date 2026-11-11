@@ -20,6 +20,8 @@ export const RELATIONS = ["colleague", "manager", "report", "client", "trainer",
 export const KINDS = ["linkedin", "github", "youtube", "x", "mastodon", "bluesky", "twitch", "spotify", "apple", "amazon", "deezer", "instagram", "tiktok", "facebook", "blog", "podcast", "newsletter", "website", "other"];
 const KIND_HOST = { linkedin: /(^|\.)linkedin\.com$/, github: /(^|\.)github\.com$/, youtube: /(^|\.)(youtube\.com|youtu\.be)$/, x: /(^|\.)(x\.com|twitter\.com)$/, twitch: /(^|\.)twitch\.tv$/, bluesky: /(^|\.)bsky\.app$/, spotify: /(^|\.)spotify\.com$/, apple: /(^|\.)(podcasts|music)\.apple\.com$/, amazon: /(^|\.)(music\.amazon\.[a-z.]+|audible\.[a-z.]+)$/, deezer: /(^|\.)deezer\.com$/, instagram: /(^|\.)instagram\.com$/, tiktok: /(^|\.)tiktok\.com$/, facebook: /(^|\.)(facebook\.com|fb\.com)$/ };
 const HANDLE = /^[a-z0-9][a-z0-9-]{2,29}$/, ID = /^[a-z0-9-]{2,48}$/;
+// Feste Unterpfade von /api/profile/ (me, business, company) stehen vor der Handle-Route /api/profile/<handle> und wuerden ein gleichnamiges Profil verdecken
+export const RESERVED_HANDLES = new Set(["me", "business", "company"]);
 const SIZES = ["1", "2-10", "11-50", "51-200", "201-1000", "1000+"];
 const now = () => Math.floor(Date.now() / 1000);
 const txt = (s, n) => cleanText(s, n).replace(/[<>]/g, "").replace(/https?:\/\/\S+/gi, "").replace(/\s+/g, " ").trim();
@@ -398,6 +400,7 @@ export async function handleProfiles(env, request, url, path, user, J) {
     const previousLocation = await db.prepare("SELECT p.country,pp.* FROM profiles p LEFT JOIN profile_private pp ON pp.user_id=p.user_id WHERE p.user_id=?").bind(user.id).first();
     let handle = String(b.handle || "").toLowerCase().trim(); const isPublic = b.public ? 1 : 0;
     if (handle && !HANDLE.test(handle)) return J({ error: "bad_handle" }, 400);
+    if (RESERVED_HANDLES.has(handle)) return J({ error: "handle_taken" }, 409);
     if (isPublic && !handle) return J({ error: "bad_handle" }, 400);
     const taken = handle ? await db.prepare("SELECT user_id FROM profiles WHERE handle=? AND user_id<>?").bind(handle, user.id).first() : null;
     if (taken || (handle && (await db.prepare("SELECT 1 x FROM orgs WHERE handle=?").bind(handle).first()))) return J({ error: "handle_taken" }, 409);

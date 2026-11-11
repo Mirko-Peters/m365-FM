@@ -4,6 +4,7 @@
 // gesperrte Konten werden nicht zusammengefuehrt; Rollen (admin, editor) des Quellkontos werden nie uebertragen.
 import { cookie, sign, verify, rateLimit, audit, readSessionInfo } from "./util.js";
 import { evalBadges } from "./badges.js";
+import { BIZ_MAX } from "./claimverify.js";
 
 export const MERGE_WINDOW = 600;   // Sekunden: frische Anmeldung mit beiden Konten
 const now = () => Math.floor(Date.now() / 1000);
@@ -219,6 +220,7 @@ export async function mergeStatements(db, S, T) {
   if (th || sh) st.push(q("DELETE FROM blog_follows WHERE user_id=? AND handle=?", T, th || sh));
   for (const t of ["profile_private", "profile_company", "user_prefs", "msg_prefs", "expert_settings", "profile_job"]) keepT(t);
   set("profile_business");   // Geschaeftsadressen je Firma (0046): je Firma gilt die von T, die uebrigen von S wandern mit, der Rest am stillgelegten S entfaellt
+  st.push(q("DELETE FROM profile_business WHERE user_id=? AND eid NOT IN (SELECT eid FROM profile_business WHERE user_id=? ORDER BY updated DESC,eid LIMIT ?)", T, T, BIZ_MAX));   // Obergrenze gilt auch nach dem Zusammenfuehren: die zuletzt gepflegten bleiben
   // Branchen (#304, bis zu 5 je Profil): wie das Profil gilt die Auswahl von T; hat T keine, uebernimmt T die von S
   st.push(q("UPDATE profile_industry SET user_id=? WHERE user_id=? AND NOT EXISTS (SELECT 1 FROM profile_industry WHERE user_id=?)", T, S, T));
   // Redaktion und Moderation (Migration 0037): Protokoll, Empfehlungen, Fassungen, Bewerbungen und Handtexte gehoeren kuenftig T - sonst koennte T die eigene,

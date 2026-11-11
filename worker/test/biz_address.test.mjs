@@ -5,7 +5,8 @@ import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import worker from "../src/index.js";
 import { addressMatch, cleanAddress, companyAddress, normStreet, handleClaimVerify, BIZ_MAX } from "../src/claimverify.js";
-import { handleProfiles, deleteUserData } from "../src/profiles.js";
+import { handleProfiles, deleteUserData, RESERVED_HANDLES } from "../src/profiles.js";
+import { callTool } from "../src/mcp.js";
 import { handleEvents, purgeEntityClaimReview } from "../src/events.js";
 import { mergeStatements } from "../src/identities.js";
 import { makeSession } from "../src/util.js";
@@ -210,4 +211,35 @@ test("Routen: CSRF-Kopfzeile Pflicht, Nachweis-Route ist angebunden", async () =
     claim(raw, "acme", 1);
     assert.equal((await post("/api/entity/claim/evidence", { "x-requested-with": "m365" })).status, 200);
   } finally { restore(); raw.close(); }
+});
+
+test("Konten zusammenfuehren: Obergrenze der Geschaeftsadressen gilt danach weiter, die zuletzt gepflegten bleiben", async () => {
+  const { raw, env } = await setup();
+  try {
+    const ins = raw.prepare("INSERT INTO profile_business(user_id,eid,company,street,zip,city,country,updated) VALUES(?,?,?,'Weg 1','12345','Ort','Germany',?)");
+    for (let i = 0; i < BIZ_MAX; i++) ins.run(1, "co-" + i, "Co " + i, 100 + i);   // Quelle: volle Liste
+    ins.run(2, "co-" + BIZ_MAX, "Co " + BIZ_MAX, 500); ins.run(2, "acme", "Acme GmbH", 50);   // Ziel: eine neue und eine alte
+    for (const s of await mergeStatements(env.DB, 1, 2)) await s.run();
+    const left = raw.prepare("SELECT eid FROM profile_business WHERE user_id=2 ORDER BY updated DESC").all().map((x) => x.eid);
+    assert.equal(left.length, BIZ_MAX);
+    assert.deepEqual(left.slice(0, 2), ["co-" + BIZ_MAX, "co-" + (BIZ_MAX - 1)]);
+    assert.ok(!left.includes("acme") && !left.includes("co-0"), "die aeltesten entfallen");
+    assert.equal(raw.prepare("SELECT COUNT(*) n FROM profile_business WHERE user_id=1").get().n, 0);
+  } finally { raw.close(); }
+});
+
+test("Handles me, business und company sind gesperrt: sie wuerden /api/profile/<handle> verdecken (Profil und MCP)", async () => {
+  const { raw, env } = await setup();
+  try {
+    assert.deepEqual([...RESERVED_HANDLES], ["me", "business", "company"]);
+    for (const handle of RESERVED_HANDLES) {   // "me" ist schon zu kurz (bad_handle), business und company waeren gueltig
+      const r = req("/api/profile/me", "POST", { handle, public: 1 }), want = handle === "me" ? ["bad_handle", 400] : ["handle_taken", 409];
+      const res = await handleProfiles(env, r, new URL(r.url), "/api/profile/me", U(1), J);
+      assert.equal(res.status, want[1], handle); assert.equal((await res.json()).error, want[0]);
+      assert.equal((await callTool(env, U(2), "update_my_profile", { handle })).error, want[0], "MCP " + handle);
+    }
+    assert.deepEqual(raw.prepare("SELECT handle FROM profiles WHERE user_id IN (1,2) ORDER BY user_id").all().map((x) => x.handle), ["user1", "user2"]);
+    const r = req("/api/profile/me", "POST", { handle: "business-mirko", public: 0 });
+    assert.equal((await handleProfiles(env, r, new URL(r.url), "/api/profile/me", U(1), J)).status, 200, "Handle mit dem Wort darin bleibt erlaubt");
+  } finally { raw.close(); }
 });
