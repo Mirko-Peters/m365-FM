@@ -84,6 +84,10 @@ The same guide offers three measures that you can track:
 
 Keep in mind that the guide does not cover how long to retain records or how to prevent tampering. Those answers come from your regulator, your contracts and your own policy. If your company also works under a compliance framework such as SOC 2, ask your compliance lead whether the same records can serve both, and connect the test workflow to your pipeline through an integration, so the records arrive without manual copying.
 
+## Which evidence tasks to automate, and which need a person
+
+Evidence automation works best on repetitive steps: data collection from test runs, attaching test logs and screenshots, and linking each result to its requirement. In our view, that spares you the busywork of manually collecting evidence before every audit preparation round. A person should still review the supporting evidence, because only a person can judge whether it supports a specific control or an audit requirement. Keep test scripts, test logs and results from test runs in one store that serves as the source of truth, and use the same compliance evidence for each framework that asks for it, if your quality team agrees.
+
 ## Example: from a scramble to five minutes
 
 The numbers are made up.
@@ -94,7 +98,7 @@ The first attempt is painful. Test results sit in a pipeline output that expires
 
 After the review, the lead makes four changes. Every test gets a requirement ID. The pipeline attaches a screenshot and the execution record to each failed step and a final screenshot to each critical test. Results, with history, move to a store that is kept for the whole review period, and a review status blocks completion until artifacts are attached. The lead also writes a one-page rule per test type.
 
-At the next review, the reviewer again asks about five requirements. The team exports the history for each one in about five minutes per requirement. Evidence coverage is now 58 of 60 executions, and the two exceptions are documented smoke tests with a status only, as the rule allows. The lead's real gain is calm: nobody has to reconstruct anything.
+At the next review, the reviewer again asks about five requirements. The team exports the history for each one in about five minutes per requirement. Evidence coverage is now 58 of 60 executions, and the two exceptions are documented smoke tests with a status only, as the rule allows.
 
 ## Common mistakes
 
@@ -107,7 +111,7 @@ At the next review, the reviewer again asks about five requirements. The team ex
 
 ## How software can help
 
-Start with your test management tool and CI system. They can store results, attach artifacts and keep history. Some test platforms add evidence features. [Genta by Cognillo](https://www.m365.fm/entity/genta-automation/) is one example. According to the vendor, it reports pass or fail with screenshots, logs and failure artifacts, and offers role-based access control, an audit log and dashboard exports to Excel, CSV or PDF. These are the vendor's statements and were not tested by M365.FM. Compare tools in a pilot, and check whether the records meet your own [compliance](https://www.m365.fm/entity/compliance/) rules.
+Start with your test management tool and CI system. They can store results, attach artifacts and keep history. Some testing tools and testing platforms add evidence features. [Genta by Cognillo](https://www.m365.fm/entity/genta-automation/) is one example. According to the vendor, it reports pass or fail with screenshots, logs and failure artifacts, and offers role-based access control, an audit log and dashboard exports to Excel, CSV or PDF. These are the vendor's statements and were not tested by M365.FM. Compare tools in a pilot, and check whether the records meet your own [compliance](https://www.m365.fm/entity/compliance/) rules.
 
 ## Next step
 
