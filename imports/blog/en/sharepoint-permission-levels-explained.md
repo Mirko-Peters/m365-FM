@@ -72,6 +72,12 @@ Create one when no default level fits. A common case is people who may add and e
 
 You need the Manage Permissions permission to do this, which the Owners group has by default. Microsoft lists several cautions. Do not edit or delete default levels, because changes reach all built-in groups in the site collection. Remember that a level applies to the whole site collection. Do not remove "Use Remote Interfaces", because the modern experience needs it and its removal causes Access Denied errors. Assign levels to groups, because that is easier to track. And on team sites, manage access through the Microsoft 365 group instead of custom levels.
 
+## How do permission levels relate to inheritance and unique permissions?
+
+A level only matters where it is applied. By default, a library, folder or item inherits the permissions of its parent site, so the groups and their levels carry down. When you break permission inheritance, the item gets unique permissions, and you can assign permissions to users or groups for that item alone. Microsoft's page on [permission scopes](https://learn.microsoft.com/en-us/sharepoint/manage-permission-scope) recommends staying under 5,000 unique scopes per library and names 50,000 as the supported limit.
+
+For site permissions in SharePoint Online, a sound best practice is to keep the groups at the top of the SharePoint site simple and to use unique permissions only for real exceptions. Default permissions on a new site come from the site template, and the default permission levels stay as they are until you copy one. Good permission management therefore means reading three things together: the level, the group that holds it and the place where it applies. That is also how you grant permissions without losing track of them, and it is the core of understanding SharePoint permission levels in practice.
+
 ## Example: four audiences for one policy library
 
 The numbers are invented to show the method. A company keeps its policies in one library, "Policy Documents". There are 6 HR staff who upload and update policies, 1 HR lead who also adds new libraries for new topics, 180 employees who read policies, and 3 auditors who should view but not copy them.

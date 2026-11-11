@@ -78,6 +78,8 @@ Key details from the page:
 
 Retention policies decide what must stay, so involve records managers before you classify data as trivial or redundant. A short data classification of the top libraries, with labels such as keep, review and delete, makes later steps easier. Treat the simulation result as an estimate. The page warns that an empty report or a zero count is not proof that the full scope was evaluated.
 
+Retention and deletion belong in the same plan. Microsoft's Purview page on data risk assessments lists a retention policy as one possible fix: for content that has not been accessed for at least 3 years, Microsoft Purview Data Lifecycle Management can delete it automatically. That fits trivial data on your list, but only after legal and records managers confirm the retention rules, because deletion is the one step you cannot reverse. Treat such rules as part of your data governance for SharePoint Online and Microsoft 365 Copilot readiness, and add one line to your best practices: archive first, delete last.
+
 ## What is a safe order of work?
 
 Use a fixed order so that every step is reversible until the last one.

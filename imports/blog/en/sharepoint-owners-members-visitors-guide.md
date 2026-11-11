@@ -75,6 +75,14 @@ The steps differ by site type. Microsoft's page on customizing site permissions 
 
 Write down the change and the reason, even if it is one line. A short log of who was moved and why makes the next review much faster.
 
+## How do the groups relate to guests, access requests and Copilot?
+
+The three groups apply to external users too. A guest who is added to a SharePoint site joins one of them and gets its permission level, so an external user who lands in Members can edit content. Pick the group for a guest as carefully as for staff, and ask each site owner to keep a short list of the external users on the site.
+
+Access requests follow the same structure. According to Microsoft's article on setting up and managing access requests, only site collection administrators, SharePoint admins and members of the default Owners group can use the Access requests page. A person who has Full Control by another route may be refused. When an owner approves a request, the smallest level that fits a reader is Read, which matches Visitors.
+
+Copilot works with what each person can already open. Because membership decides what people can open, a wrong group choice also decides what Copilot can show them. Review the Members group of each important site before a Copilot pilot, and check folders that break inheritance, because their own lists of people are not visible in the site groups. The groups tell you the main story, not the whole story.
+
 ## Example: a company news site with 600 readers
 
 The numbers are invented to show the method. A communication site publishes company news. Two people from corporate communications run it. Eight people from five departments write articles. All 600 employees should read it.

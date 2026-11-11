@@ -80,6 +80,12 @@ This is the part to explain to your managers. Microsoft's page does not say that
 
 The honest summary is that the policy limits copies of the file. It does not limit what a trusted reader can remember or write down. It is also not a replacement for the right [guest access](https://www.m365.fm/entity/guest-access/) decisions: if the wrong person can open the site in the browser, they can read it.
 
+## Which license do you need, and how does Conditional Access fit in?
+
+The policy is a SharePoint Advanced Management feature. Microsoft's page on SharePoint Advanced Management features with a Copilot license lists block download policy among the features that SharePoint admins get when the organization assigns at least one Microsoft Copilot license to a user. That page does not say whether every user or every administrator needs a license, so check the licensing terms before you plan a rollout.
+
+Microsoft positions the site policy as a way to block downloads without Microsoft Entra Conditional Access policies. If your tenant already uses Conditional Access, ask your identity team how it relates to the site policy, and keep the decision in one place so that nobody tests two controls against each other. The site policy is set per SharePoint site, so the tenant also needs a list of the sites that use it, a named owner for each and a review date. The page does not describe how the policy relates to Copilot, so avoid promises in that area.
+
 ## Example: a due diligence site with 18 reviewers
 
 The numbers are invented to show the method. A company runs a due diligence site for a possible acquisition. The site holds 240 documents. Eighteen people need access: 12 internal staff, 4 outside advisers and 2 lawyers.
