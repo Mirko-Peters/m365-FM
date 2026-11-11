@@ -114,6 +114,8 @@ The whole check took five views and no scripts. That is the point: with a method
 
 Start with what Microsoft 365 gives you: the Site permissions panel, Check Permissions, Manage access and, for admins with the right licenses, data access governance reports and the SharePoint Online PowerShell module. Together they cover most single-site questions. Their weak point is repetition: you have to open each site and item by hand. Reporting tools close that gap by listing permissions for sites, folders and items in one report. Cognillo's [SharePoint Essentials Toolkit](https://www.m365.fm/entity/sharepoint-essentials-toolkit/) is one example. According to its product page, it offers permission reports for sites, folders and items, and can show everything one person can access. These are the vendor's statements and M365.FM did not test them. Other tools and scripts do similar work. Compare them against the built-in views first.
 
+Disclosure: Cognillo sponsors M365.FM.
+
 ## Next step
 
 Pick your most visited team site today and walk through the steps above to check who has access to SharePoint there. Write the three numbers you find, owners, direct shares and links, and book a quarterly repeat.

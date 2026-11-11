@@ -109,6 +109,8 @@ Your plan: remove the analyst from the seven finance site groups, review the 33 
 
 Microsoft's own route is the data access governance report described above, plus PowerShell for scripting and export. It suits quarterly reviews and one-off questions. Teams that need an answer more often, or that want to list all SharePoint sites a user can reach without waiting 30 days between runs, can add a reporting tool. Cognillo's [SharePoint Essentials Toolkit](https://www.m365.fm/entity/sharepoint-essentials-toolkit/) is one example. According to its product page, it can show everything one person can access, replace one user with another, and fix permissions from reports. These are the vendor's statements and M365.FM did not test them. Compare any tool with the built-in report first, and check what it needs in your tenant.
 
+Disclosure: Cognillo sponsors M365.FM.
+
 ## Next step
 
 Choose one person who changed roles in the last six months and run the per-user report to find everything they have access to in SharePoint. Sort the output by direct access and book the cleanup with the site owners this week.

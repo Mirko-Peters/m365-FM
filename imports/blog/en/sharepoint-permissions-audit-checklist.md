@@ -106,6 +106,8 @@ Send the report to the people who can act on it: the head of IT, the data protec
 
 Start with what Microsoft provides: data access governance reports, site access reviews, Check Permissions and PowerShell exports. Together they cover a first audit for many organizations. When audits repeat across many sites, a reporting tool saves time. Cognillo's [SharePoint Essentials Toolkit](https://www.m365.fm/entity/sharepoint-essentials-toolkit/) is one example. According to its product page, it offers permission reports for sites, folders and items, a monitor for permission changes, and scheduled reports that can be exported to Excel or CSV. These are the vendor's statements and M365.FM did not test them. Other tools and scripts can do similar work, so compare them with the built-in reports first.
 
+Disclosure: Cognillo sponsors M365.FM.
+
 ## Next step
 
 Open the SharePoint admin center today, run the organization-wide site permissions report, and take the top ten sites as the scope of your first SharePoint permissions audit. Send those ten owners a review request and put the next audit in the calendar.

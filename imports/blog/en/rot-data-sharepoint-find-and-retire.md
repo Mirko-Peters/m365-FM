@@ -120,6 +120,8 @@ Count the result: 85 inactive sites become 31 certified, 45 archived, 9 on hold.
 
 Start with the content management assessment, site lifecycle policies and Microsoft 365 Archive. For file-level work across many sites, a reporting tool can add detail. Cognillo's [SharePoint Essentials Toolkit](https://www.m365.fm/entity/sharepoint-essentials-toolkit/) is one example. According to its product page, it offers metadata reports that list items, files, folders and pages with sizes and version counts, a report on outdated content with open access, and scheduled reports that can be exported to Excel or CSV. These are the vendor's statements and M365.FM did not test them. Other tools and scripts can do similar work, so compare them with the built-in reports first.
 
+Disclosure: Cognillo sponsors M365.FM.
+
 ## Next step
 
 Run the content management assessment this week and list the inactive and ownerless sites. Pick the ten oldest, ask their owners for a decision, and start your ROT data cleanup in SharePoint with them.

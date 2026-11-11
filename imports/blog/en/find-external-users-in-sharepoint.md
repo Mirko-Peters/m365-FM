@@ -106,6 +106,8 @@ Keep a record of each decision. Next quarter, you run the same three views again
 
 The built-in route is Microsoft Entra, the SharePoint Online PowerShell module and the data access governance reports. They cover the three views, but you must join the results yourself. A reporting tool can bring permission reports and sharing links into one place. Cognillo's [SharePoint Essentials Toolkit](https://www.m365.fm/entity/sharepoint-essentials-toolkit/) is one example. According to its product page, it offers permission reports for sites, folders and items, can show everything one person can access, and reports on sharing links. These are the vendor's statements and M365.FM did not test them. Compare any tool with the built-in views before you decide.
 
+Disclosure: Cognillo sponsors M365.FM.
+
 ## Next step
 
 Run the Entra guest list today, pick the three sites with the most sensitive content, and find the external users on those sites with Get-SPOExternalUser. Send each site owner their list and ask for a decision within two weeks.

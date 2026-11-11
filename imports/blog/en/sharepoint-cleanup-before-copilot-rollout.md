@@ -116,6 +116,8 @@ Count the result before the pilot: 18 Tier 1 sites fixed, 40 inactive sites in t
 
 Start with the data access governance reports, inactive site policies, site ownership policies, site access reviews and restricted access control. For repeat work across many sites, a reporting tool can bring the lists together. Cognillo's [SharePoint Essentials Toolkit](https://www.m365.fm/entity/sharepoint-essentials-toolkit/) is one example. According to its product page, it offers an oversharing and Copilot readiness report on sharing links, sites and content open to everyone, heavily shared files that are not labeled, and outdated content with open access. These are the vendor's statements and M365.FM did not test them. Other tools and scripts can do similar work, so compare them with the built-in reports first.
 
+Disclosure: Cognillo sponsors M365.FM.
+
 ## Next step
 
 Score your top 50 sites by exposure, sensitivity and neglect this week, and mark the Tier 1 list. Then agree a date with the owners for the SharePoint cleanup before your Copilot rollout starts.
