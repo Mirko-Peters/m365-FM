@@ -73,6 +73,19 @@
     var date = new Date(value.slice(0, 10) + "T00:00:00Z");
     return Number.isNaN(date.getTime()) ? value : new Intl.DateTimeFormat(C.lang).format(date);
   }
+  // Status Stand heute (Worker sponsorPhase): laeuft, Karenzzeit bis TT.MM.JJJJ (end + 182 Tage), danach beendet - die Zahlen bleiben sichtbar.
+  // Event-Partner (bestaetigt/offen) und alte Antworten ohne grace_end behalten die bisherige Beschriftung.
+  function statusText(item) {
+    if (item.status === "upcoming") return text("upcoming");
+    if (item.status === "grace" && item.grace_end) {
+      var day = new Date(item.grace_end + "T00:00:00Z");
+      return text("grace_until") + " " + (Number.isNaN(day.getTime()) ? item.grace_end :
+        new Intl.DateTimeFormat(C.lang, { day: "2-digit", month: "2-digit", year: "numeric", timeZone: "UTC" }).format(day));
+    }
+    if (item.status === "ended") return text("ended_visible");
+    if (item.status === "active" && item.type !== "event_partner") return text("running");
+    return text(item.start ? "active" : "planned");
+  }
   function csvCell(value) {
     var text = String(value == null ? "" : value);
     if (/^[\s]*[=+\-@]/.test(text)) text = "'" + text;
@@ -264,7 +277,8 @@
       var placements = (org.placements || []).filter(function (item) { return item.start || item.end; });
       var starts = placements.map(function (item) { return item.start; }).filter(Boolean).sort();
       var ends = placements.map(function (item) { return item.end; }).filter(Boolean).sort();
-      return [starts[0] || today, ends[ends.length - 1] || today];
+      var last = ends[ends.length - 1];   // Zahlen laufen nach dem Ende weiter ein: Kampagnenzeitraum reicht mindestens bis heute
+      return [starts[0] || today, last && last > today ? last : today];
     }
     var from = new Date(today + "T00:00:00Z");
     from.setUTCDate(from.getUTCDate() - 29);
@@ -291,8 +305,7 @@
     var key = figure ? metricLabel(figure.metric) : text("key_figure");
     var href = detailUrl(org, item);
     var link = function (content) { return node("a", { href: href, class: "sdb-row-link" }, [content]); };
-    var status = node("span", { class: "sdb-badge sdb-status",
-      text: text(item.status === "upcoming" ? "upcoming" : item.status === "ended" ? "ended" : item.start ? "active" : "planned") });
+    var status = node("span", { class: "sdb-badge sdb-status", text: statusText(item) });
     var pressLink = item.channel === "press" && item.refs && item.refs.press_release;
     var pressAnchor = pressLink && /^https:\/\//.test(pressLink) ?
       node("a", { href: pressLink, rel: "noopener nofollow sponsored", target: "_blank", text: text("link") }) : null;
@@ -323,9 +336,8 @@
         var range = rangeFor(selected, org);
         return { from: range[0], to: range[1] };
       })();
-      var items = allPlacements(org).filter(function (item) {
-        return (!item.start || item.start <= period.to) && (!item.end || item.end >= period.from);
-      });
+      // Kein Filter auf das Ende: beendete Platzierungen bleiben in jedem spaeteren Zeitraum mit ihren Zahlen sichtbar (Mirko 11.11.2026)
+      var items = allPlacements(org).filter(function (item) { return !item.start || item.start <= period.to; });
       var section = node("section", { class: "sdb-org" }, [node("h2", { text: org.name }), node("h3", { text: text("key_figures") })]);
       var cards = node("div", { class: "cols" });
       metricsFor(org).forEach(function (metric) { cards.appendChild(metricCard(metric, metricLabel(metric.key))); });
@@ -406,8 +418,7 @@
       node("a", { href: C.urls.overview, text: text("dashboard") }), " / ",
       node("span", { "aria-current": "page", text: placement.title })
     ]));
-    root.appendChild(node("p", { class: "kicker", text: text(placement.status === "upcoming" ? "upcoming" :
-      placement.status === "ended" ? "ended" : placement.start ? "active" : "planned") +
+    root.appendChild(node("p", { class: "kicker", text: statusText(placement) +
       " · " + formatDate(placement.start) + " – " + formatDate(placement.end) + " · " + (placement.langs || text("unavailable")) }));
     var title = document.getElementById("sdb-title");
     if (title) title.textContent = placement.title;

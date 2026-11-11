@@ -109,6 +109,7 @@ def build(g, posts, people, api):
         for q in sorted(mine, key=lambda q: (q.get("published") or 0, q["slug"]), reverse=True): _seq.setdefault(_sk(q), []).append(q)
         _pos = {(q["handle"], q["slug"]): i for h, s_ in _seq.items() for i, q in enumerate(s_)}
         _content = [q for q in mine if not MST.is_milestone(q)]
+        _running = SPM.running()   # laufende Sponsorings inkl. Karenzzeit (einmal je Sprache)
         for p in mine:
             a = pb[p["handle"]]; au = f"{BASE}/community/u/{a['handle']}/"
             u = f"{croot}u/{p['handle']}/blog/{p['slug']}/"
@@ -151,7 +152,8 @@ def build(g, posts, people, api):
                        {"@type": "ListItem", "position": 1, "name": "M365.FM", "item": f"{BASE}/"}, {"@type": "ListItem", "position": 2, "name": a["name"], "item": au},
                        {"@type": "ListItem", "position": 3, "name": "Blog", "item": au + "blog/"}, {"@type": "ListItem", "position": 4, "name": p["title"], "item": u}]}]
             if _spr:
-                ld[0]["sponsor"] = SPM.ld(_spr); b = SPM.mark(b, _spr, "post")   # T37 Sponsor: BlogPosting.sponsor, Links zum Sponsor mit rel="sponsored"
+                ld[0]["sponsor"] = SPM.ld(_spr)   # T37 Sponsor: BlogPosting.sponsor
+            b = SPM.mark(b, _spr + [r for r in _running if r not in _spr], "post")   # Links zur Website eines laufenden Sponsors tragen rel="sponsored", auch ohne Eintrag unter "posts" (Cognillo-Reihe); ohne Sponsoring unveraendert
             noidx = False if p.get("html") else p.get("votes", 0) < INDEX_VOTES   # fruehere Blogbeitraege bleiben fuer Google sichtbar
             if p.get("tr_of"):
                 noidx = not p.get("tr_index")   # Sprachfassungen: nur nach Freigabe je Sprache (data/blog_tr.json "index") indexierbar - an genau einer Stelle entschieden
