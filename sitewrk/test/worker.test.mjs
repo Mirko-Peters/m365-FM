@@ -16,6 +16,7 @@ globalThis.fetch = async (req) => {
   if (u.pathname === "/callback") return new Response(null, { status: 301, headers: { location: "https://www.m365.fm/callback/" } });
   if (u.pathname === "/og/alt.png") return new Response("PNG", { headers: { "content-type": "image/png" } });
   if (u.pathname === "/community/feed/101-copilot-explained/") return new Response("<html>feed</html>", { headers: { "content-type": "text/html; charset=utf-8" } });
+  if (u.pathname === "/community/events/gebautes-event/") return new Response("<html>event</html>", { headers: { "content-type": "text/html; charset=utf-8" } });
   if (u.pathname === "/einladung/gebaut/") return new Response("<html>einladung</html>", { headers: { "content-type": "text/html; charset=utf-8" } });
   return new Response("404", { status: 404, headers: { "content-type": "text/html" } });
 };
@@ -230,4 +231,15 @@ test("Einladungslink (#320): gebaute Seite bleibt 200; fehlt sie (noch nicht geb
   for (const path of ["/einladung/", "/einladung/Gross/", "/einladung/a/", "/einladung/" + "a".repeat(40) + "/", "/einladung/max-m/x/", "/einladung/%3Cscript%3E/", "/de/einladung/max-m/"])
     assert.equal((await run(req(path, "DE"))).status, 404, path);   // nur gueltige Kuerzel, nur genau diese Adresse
   assert.equal((await run(req("/einladung/neu-dabei/", "DE", {}, "POST"))).status, 404);
+});
+test("Event-, Profil- oder Firmenseite noch nicht gebaut (neu, importiert): 302 zur Liste statt 404; gebaute bleibt 200", async () => {
+  const ok = await run(req("/community/events/gebautes-event/", "DE")); assert.equal(ok.status, 200); assert.equal(await ok.text(), "<html>event</html>");
+  for (const [path, to] of [["/community/events/community-days-2026-guadalajara/", "/community/events/"], ["/community/events/abc", "/community/events/"], ["/de/community/events/azure-day-bonn/?utm_source=x", "/de/community/events/"], ["/community/u/neu-dabei/", "/community/members/"], ["/de/community/c/contoso/", "/de/community/companies/"]]) {
+    const r = await run(req(path, "DE")); assert.equal(r.status, 302, path); assert.equal(r.headers.get("location"), "https://www.m365.fm" + to, path);
+    assert.equal(r.headers.get("cache-control"), "no-store"); assert.equal(r.headers.get("x-robots-tag"), "noindex");
+  }
+  assert.equal((await run(req("/community/events/neu-event/", "DE", {}, "HEAD"))).status, 302);
+  for (const path of ["/community/events/", "/community/events/ab/", "/community/events/Gross/", "/community/events/x/y/", "/community/events/" + "a".repeat(41) + "/", "/community/events/%3Cscript%3E/", "/community/events/feed.xml", "/community/u/max-m/blog/x/", "/community/u/a/", "/community/x/max-m/"])
+    assert.equal((await run(req(path, "DE"))).status, 404, path);   // nur gueltige Event-Kuerzel, nur genau diese Adresse
+  assert.equal((await run(req("/community/events/neu-event/", "DE", {}, "POST"))).status, 404);
 });
