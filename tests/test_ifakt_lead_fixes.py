@@ -73,7 +73,7 @@ class LeadIndex(unittest.TestCase):
         self.assertIn("gemba-walk", lead[0]["topics"])
 
     def test_themen_aller_aktiven_vertraege(self):
-        a = {**REC, "id": "a", "start": "2026-05-01", "end": "2026-10-31", "lead_topics": ["sharepoint"]}
+        a = {**REC, "id": "a", "start": "2026-05-01", "end": "2026-12-31", "lead_topics": ["sharepoint"]}   # beide laufen am Stichtag, auch ohne Karenzregel (#374)
         b = {**REC, "id": "b", "start": "2026-11-01", "lead_topics": ["gemba-walk", "gibt-es-nicht"]}
         lead, unknown = S.lead_index([a, b], "2026-11-12", LENTS)
         self.assertEqual(len(lead), 1)
