@@ -178,6 +178,11 @@ Podpage kostet 65 $/Monat (ca. 780 $/Jahr). Ziel: m365.fm komplett auf dub.m365.
 
 - Blog-Regel (30.10.): Jeder kann bloggen, Beiträge sind sofort live (öffentliches Profil nötig). In den Google-Index und die Sitemap kommt ein Beitrag erst ab 10 Upvotes (`INDEX_VOTES` in `site_blog.py`); Verzeichnisse sind nur indexierbar, wenn sie mindestens einen solchen Beitrag enthalten. Die Prüf-Warteschlange bleibt für Meldungen/Sonderfälle; Redaktion kann Beiträge löschen.
 
+## Blog auf der eigenen Domain (11.11.2026, Mirko; gebaut hinter dem Schalter `BYOD`, aus)
+- Mitglieder betreiben ihren Blog auf ihrer Domain (ein CNAME), bleiben im m365.fm-Ökosystem; kostenlos, Einnahmen aus M365.FM-Sponsoring und Werbung. Technik: Cloudflare for SaaS (Custom Hostnames), Details, Kosten und **Entscheidungen für Mirko** in `BLOG_OWN_DOMAIN.md`.
+- **Erlöse getrennt nach Art:** 70 % Autor / 30 % M365.FM gelten **nur für Banner-Werbung**; **Sponsoring** (Pakete, Sponsoren-Beiträge, Themen-/Entitäts-Sponsoring) bleibt bei M365.FM. Nur vorbereitet (`blog_revenue`, `worker/src/byod_revenue.js`), keine Auszahlung.
+- Podcast auf eigener Domain: später.
+
 ## Idee (30.10., vom Nutzer): Produkt-Updates und News von Microsoft einziehen
 - Updates und News von Microsoft automatisch einlesen (Microsoft-365-Roadmap, Message Center/„What's new“, Release-Notes und Blogs der Produkte, RSS/Atom wo vorhanden) und den **Entitäten** (Produkte/Plattformen) zuordnen.
 - Je Entität eine Zeitleiste „Updates & News“; Nutzer können Themen folgen (siehe „Thema folgen“); Wichtigkeit bewerten (Community-Upvotes, später KI-Einstufung), Übersetzung über den Worker.
