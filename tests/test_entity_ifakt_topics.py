@@ -1,4 +1,4 @@
-"""iFAKT-SEO-Test (11.11.2026): zehn neue Lean-/OpEx-Themen-Entitaeten, alle mit iFAKT verknuepft und mit gueltigen Zielen."""
+"""iFAKT-SEO-Test (11.11.2026): fuenfzehn neue Lean-/OpEx-Themen-Entitaeten, alle mit iFAKT verknuepft und mit gueltigen Zielen."""
 import json
 import sys
 import unittest
@@ -9,7 +9,8 @@ sys.path.insert(0, str(ROOT))
 import site_entities as E   # noqa: E402
 
 RAW = {e["id"]: e for e in json.loads((ROOT / "data" / "entities.json").read_text("utf-8"))}
-NEW = ["gemba-walk", "lean-management", "operational-excellence", "shop-floor-management", "takt-time", "kanban", "5s", "smed", "heijunka", "a3-problem-solving"]
+NEW = ["gemba-walk", "lean-management", "operational-excellence", "shop-floor-management", "takt-time", "kanban", "5s", "smed", "heijunka", "a3-problem-solving",
+       "standard-work", "visual-management", "eight-wastes", "lean-six-sigma", "tier-meeting"]
 MODULES = ["polaris-vsm", "polaris-bsm", "polaris-designer", "polaris-simulator", "polaris-optimizer", "polaris-operator", "polaris-analyzer"]
 
 
