@@ -612,7 +612,7 @@ export async function verifyTurnstile(env, token, ip) {
   return j.success === true ? { ok: true } : { ok: false, error: "captcha" };
 }
 
-// Laufende Sponsoren (data/sponsorships.json): sponsors.json des Seitenbaus {orgs:[{id,name,manager}]}; der Worker nimmt Leads fuer diese Firmen ohne Buchung an
+// Laufende Sponsoren (data/sponsorships.json, inkl. 182 Tage Karenzzeit nach "end" - die Frist rechnet der Seitenbau): sponsors.json des Seitenbaus {orgs:[{id,name,manager}]}; der Worker nimmt Leads fuer diese Firmen ohne Buchung an
 export async function activeSponsor(env, id) {
   if (!/^[a-z0-9][a-z0-9-]{1,63}$/.test(String(id || ""))) return null;
   let j; try { j = await (await fetch(`${env.SITE}/sponsors.json`, { cf: { cacheTtl: 600 } })).json(); } catch { return null; }

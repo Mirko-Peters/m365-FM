@@ -9,7 +9,7 @@
              (Plan-Status "live"). Normal EIN Beitrag je Lauf; sind mehrere faellig (verpasster Lauf), hoechstens CATCHUP_MAX = 2, die aeltesten zuerst, und
              ein ::warning:: nennt den restlichen Rueckstand. So schrumpft ein Rueckstand um einen Beitrag pro Tag. Gesponserte Beitraege (sponsored=true) traegt
              der Lauf zugleich unter "posts" des Cognillo-Sponsorings in data/sponsorships.json ein: Kennzeichnung, BlogPosting.sponsor und rel="sponsored"
-             bleiben dann dauerhaft, auch wenn der Beitrag nach dem Ende der Laufzeit live geht. Kein API-Aufruf.
+             bleiben dann dauerhaft, auch wenn der Beitrag nach dem Ende der Laufzeit und der Karenzzeit (182 Tage) live geht. Kein API-Aufruf.
 
 Plan: data/sponsor_posts_cognillo.json = Liste von {nr, reihe, title, main, others, sponsored, status ("geplant" | "entwurf" | "live"), slug, date, freigegeben?}.
 Je Beitrag: Entwurf (Sonnet, inkl. LinkedIn-Texte) -> zweiter Durchgang (Sonnet prueft auf unbelegte Aussagen/Regelverstoesse, nur beanstandete Stellen
@@ -207,10 +207,11 @@ def save_linkedin(nr, texts, path=None):
 
 
 def sponsor_record(recs, day):
-    """Sponsoring der Reihe fuer einen Beitrag mit Plan-Datum day: Eintraege mit SPONSOR_ENTITY unter "entities"; bevorzugt der am Tag laufende, sonst der zuletzt
-    begonnene (start <= day), sonst der zuletzt angelegte. -> Eintrag oder None."""
+    """Sponsoring der Reihe fuer einen Beitrag mit Plan-Datum day: Eintraege mit SPONSOR_ENTITY unter "entities"; bevorzugt der am Tag laufende (Laufzeit plus
+    182 Tage Karenzzeit, site_sponsorships._active wie im Seitenbau), sonst der zuletzt begonnene (start <= day), sonst der zuletzt angelegte. -> Eintrag oder None."""
+    import site_sponsorships as SPM
     cands = [r for r in recs if isinstance(r, dict) and SPONSOR_ENTITY in (r.get("entities") or []) and isinstance(r.get("start"), str)]
-    act = [r for r in cands if r["start"] <= day and (r.get("end") is None or day <= str(r["end"]))]
+    act = [r for r in cands if SPM._active(r, str(day)[:10])]
     past = [r for r in cands if r["start"] <= day]
     return max(act or past or cands, key=lambda r: (r["start"], str(r.get("id")))) if cands else None
 

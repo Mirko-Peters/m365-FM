@@ -48,8 +48,12 @@ class RunningSponsorLinks(unittest.TestCase):
         parsed, errs = SPM.check_structure({"version": 1, "sponsorships": recs}); self.assertEqual(errs, [])
         SPM._index(parsed, "2026-11-20", {}, {})
         self.assertEqual([r["id"] for r in SPM.running()], ["cognillo-test", "open"])
-        self.assertEqual([r["id"] for r in SPM.running("2027-06-02")], ["open", "later"])
+        self.assertEqual([r["id"] for r in SPM.running("2027-06-02")], ["cognillo-test", "open", "later"])   # Karenzzeit: end 31.01.2027 + 182 Tage = 01.08.2027
+        self.assertEqual([r["id"] for r in SPM.running("2027-08-01")], ["cognillo-test", "open", "later"])
+        self.assertEqual([r["id"] for r in SPM.running("2027-08-02")], ["open", "later"])
         self.assertEqual([r["id"] for r in SPM.running("2026-01-15")], ["old"])
+        self.assertEqual([r["id"] for r in SPM.running("2026-08-02")], ["old"])   # 01.02.2026 + 182 Tage
+        self.assertEqual([r["id"] for r in SPM.running("2026-08-03")], [])
 
     def test_links_to_running_sponsor_host_get_rel_sponsored_in_original_and_translation(self):
         de = post("de", tr_of="en", ai_tr=True, legacy=True, content_tr=True, tr_index=False)
@@ -78,13 +82,17 @@ class RunningSponsorLinks(unittest.TestCase):
         self.assertNotRegex(body, r'rel="sponsored noopener sponsored')
 
     def test_sponsored_post_published_after_term_end_keeps_disclosure_through_posts_entry(self):
-        """Cognillo-Reihe: gesponserte Beitraege (z. B. Nr 52, 5.1.2027) gehen nach dem Ende der Laufzeit (10.12.2026) live. Der taegliche Lauf
-        (tools/sponsor_post.py) traegt sie unter "posts" ein; damit bleiben Kennzeichnung, BlogPosting.sponsor und rel="sponsored" dauerhaft."""
+        """Ein gesponserter Beitrag, der nach dem Ende der Laufzeit (hier 10.12.2026) live geht: Der taegliche Lauf (tools/sponsor_post.py) traegt ihn unter "posts" ein;
+        damit bleiben Kennzeichnung, BlogPosting.sponsor und rel="sponsored" dauerhaft, auch nach der Karenzzeit (182 Tage, bis 10.06.2027)."""
         ended = {**COG, "start": "2026-11-10", "end": "2026-12-10"}
         de = post("de", tr_of="en", ai_tr=True, legacy=True, content_tr=True, tr_index=False)
-        without = build([post(), de], "2027-01-05", [ended])
-        for body in without.values(): self.assertNotIn("sponsored", body)   # ohne Eintrag: nach dem Ende keine Kennzeichnung (deshalb der Eintrag)
-        pages = build([post(), de], "2027-01-05", [{**ended, "posts": [f"/community/u/mirko-p/blog/{SLUG}/"]}])
+        grace = build([post(), de], "2027-01-05", [ended])
+        for body in grace.values():   # ohne Eintrag, in der Karenzzeit: rel="sponsored" an Sponsor-Links bleibt, aber keine Kennzeichnung unter der H1
+            self.assertRegex(body, r'<a [^>]*href="https://www\.cognillo\.com/toolkit"[^>]*rel="sponsored noopener"'); self.assertNotIn("spm-note", body)
+        for body in build([post(), de], "2027-06-10", [ended]).values(): self.assertIn('rel="sponsored noopener"', body)   # letzter Tag der Karenzzeit
+        without = build([post(), de], "2027-06-11", [ended])
+        for body in without.values(): self.assertNotIn("sponsored", body)   # ohne Eintrag: nach der Karenzzeit keine Kennzeichnung (deshalb der Eintrag)
+        pages = build([post(), de], "2027-06-11", [{**ended, "posts": [f"/community/u/mirko-p/blog/{SLUG}/"]}])
         self.assertEqual(len(pages), 2)
         for url, body in pages.items():
             self.assertIn("spm-note", body, url)   # Kennzeichnung unter der H1 (Original und Sprachfassung)
