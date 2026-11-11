@@ -25,7 +25,7 @@ To fix SharePoint permissions in bulk, you export a report of who has access, ma
 
 ## Why item-by-item fixing fails
 
-Most [SharePoint permissions](https://www.m365.fm/entity/sharepoint-permissions/) problems build up slowly. Someone shares a single file with a colleague. Someone else chooses to break permission inheritance on a folder for a project that ended long ago. After a few years, a document library holds hundreds of items with unique permissions, and nobody can say which ones still matter.
+Most [SharePoint permissions](https://www.m365.fm/entity/sharepoint-permissions/) problems build up slowly. Someone shares a single file with a colleague. Someone else chooses to break permission inheritance on a folder for a project that ended long ago. After a few years, some document libraries hold hundreds of items with unique permissions, and nobody can say which ones still matter.
 
 Fixing these one at a time has three problems. It is slow. It is easy to miss items. And it leaves no record of what you changed, so you cannot undo a mistake or answer an auditor.
 
@@ -43,6 +43,18 @@ Follow these steps in order.
 
 Do not skip step 2. A script is only as safe as the list it reads.
 
+## How permission inheritance works before you reset anything
+
+Microsoft's support page on [customizing permissions for a SharePoint list or library](https://support.microsoft.com/office/customize-permissions-for-a-sharepoint-list-or-library-02d770f3-59eb-4910-a608-5f84cc297782) explains that folders, lists and documents normally inherit permissions from the site that contains them. To give a list or library its own permissions, an owner chooses Stop Inheriting Permissions, and the items below it then inherit the new settings. To go back, the Permissions tab offers Delete unique permissions, which removes the custom permissions you set.
+
+Three warnings from the same page matter for bulk work:
+
+- **The 100,000-item limit.** You cannot break or restore inheritance on a list, library or folder that holds more than 100,000 items. A single file in a large library can still have its inheritance broken.
+- **Removing a user reaches child items.** Removing a user or group also removes them from child items, including those with broken inheritance, and restoring them is not possible. Read your log before you run a removal.
+- **Limited access stays.** A person with whom only one item was shared gets limited access to the site, and unsharing the item does not take that away.
+
+Microsoft recommends SharePoint groups and calls item-level permissions supported within reasonable use. Our own rule of thumb is to assign access through a group, not to individual users, so that site permissions stay readable and fewer unique permissions are left to fix.
+
 ## Which cmdlet fixes which problem?
 
 [PnP PowerShell](https://www.m365.fm/entity/pnp-powershell/) has cmdlets for most bulk fixes. These three come up most often.
@@ -58,7 +70,7 @@ Do not skip step 2. A script is only as safe as the list it reads.
 
 Resetting is often the cleanest fix. If an item only has unique permissions because someone shared it once, a reset returns it to the rules of the library.
 
-**Remove a site collection administrator.** The reference for [Remove-PnPSiteCollectionAdmin](https://pnp.github.io/powershell/cmdlets/Remove-PnPSiteCollectionAdmin.html) shows `Remove-PnPSiteCollectionAdmin -Owners "user@contoso.onmicrosoft.com"`. Administrators that you do not name keep their access. A list of users can also be passed in.
+**Remove a site collection administrator.** The reference for Remove-PnPSiteCollectionAdmin shows `Remove-PnPSiteCollectionAdmin -Owners "user@contoso.onmicrosoft.com"`. Administrators that you do not name keep their access. A list of users can also be passed in.
 
 To replace one user with another, run two steps: add the new person where the old person had access, then remove the old person. Do the add first, so nobody loses access in between.
 
@@ -72,7 +84,7 @@ A report is a start, not the full truth. Microsoft's sharing report page states 
 
 This has real consequences. If your goal is to find where a person has access, the report will show the group, so you must read the group's members separately. If your goal is to remove public sharing, the report will not list Anyone links at all, so you need another source, such as the Data access governance reports in the SharePoint admin center. Those need SharePoint Advanced Management, according to Microsoft.
 
-Also check [SharePoint reporting](https://www.m365.fm/entity/sharepoint-reporting/) options for the whole tenant, not only one site. A per-site CSV does not scale to hundreds of sites.
+For a single SharePoint site in SharePoint Online, also review the site permissions and the permission levels in use under Site settings before you touch items. Then check [SharePoint reporting](https://www.m365.fm/entity/sharepoint-reporting/) options for the whole tenant, not only one site. A per-site CSV does not scale to hundreds of sites.
 
 For Microsoft 365 group-connected sites, group membership is managed through the group, not in the site's own groups. A script that edits site groups will not fix a person who is in the Microsoft 365 group.
 
@@ -107,6 +119,7 @@ First, the admin runs the script on a copy of the library with 20 rows. The resu
 - **Resetting inheritance on a library where unique permissions are intended.** Some folders are restricted on purpose. Mark them as keep.
 - **Trusting the report as complete.** It leaves out Anyone links and members of SharePoint groups.
 - **Removing before adding.** When you replace one user with another, add first.
+- **Granting access person by person.** Assign permissions through a group, not to one user per item, so the next review is shorter.
 - **Forgetting the Microsoft 365 group.** A person can keep access through group membership even after you clean the site.
 - **No log and no second report.** Without them, you cannot prove the fix or undo it.
 
