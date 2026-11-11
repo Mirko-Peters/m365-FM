@@ -35,6 +35,7 @@ import { handleVotes } from "./votes.js";
 import { handleQa, deleteUserQa } from "./qa.js";
 import { handleBlog, deleteUserBlog } from "./blog.js";
 import { handleByodServe, handleByodApi, runByodChecks } from "./byod.js";
+import { handleBlogImport } from "./blog_import.js";
 import { handleUpdates, pollUpdates } from "./updates.js";
 import { ensurePastEvents, linkSpeakers, linkSpeakerEntities } from "./pastevents.js";
 import { handleLibrary, deleteUserLibrary } from "./library.js";
@@ -446,6 +447,7 @@ async function api(env, request, url, path, asUser, ctx) {
   if (path.startsWith("/api/orgoffer/")) { const q = await handleOrgOffers(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/library/")) { const q = await handleLibrary(env, request, url, path, user, J); if (q) return q; }
   if (path === "/api/blog" || path.startsWith("/api/blog/") || path.startsWith("/api/admin/blog")) { const q = await handleBlog(env, request, url, path, user, J); if (q) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return q; } }
+  if (path === "/api/byod/import/preview" || path === "/api/byod/import/save") { const q = await handleBlogImport(env, request, url, path, user, J); if (q) return q; }   // Blog-Import per Feed (Schalter BYOD)
   if (path.startsWith("/api/byod/") || path === "/api/admin/byod" || path === "/api/admin/byod/block") { const q = await handleByodApi(env, request, url, path, user, J); if (q) return q; }   // Blog auf der eigenen Domain (Schalter BYOD)
   if (path === "/api/qa" || path.startsWith("/api/qa/")) { const q = await handleQa(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/notes/")) { const q = await handleNotes(env, request, url, path, user, J); if (q) return q; }

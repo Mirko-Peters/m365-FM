@@ -120,7 +120,17 @@ Mirkos Vorgabe vom 11.11.2026: **70 % an den Autor, 30 % an M365.FM nur für Ein
 
 ## 7. Blog-Import
 
-Mitglieder geben die Feed-Adresse (RSS oder Atom) ihrer bisherigen Seite ein. Der Import legt **Entwürfe** an. Er veröffentlicht nie von selbst. Regeln: Quelle wird als Link angegeben, Bilder werden nicht kopiert (nur Hinweis), der Text wird nur mit der Bestätigung „Ich habe die Rechte an diesen Texten“ übernommen, sonst nur Titel, Kurzfassung und Link. Siehe PR „Blog-Import“.
+Mitglieder geben die Feed-Adresse (RSS oder Atom) ihrer bisherigen Seite ein, sehen die Beiträge, wählen aus und übernehmen sie. Der Import legt **nur Entwürfe** an. Er veröffentlicht nie von selbst, das Mitglied liest jeden Entwurf und veröffentlicht ihn selbst.
+
+Regeln im Code (Teil 3):
+
+- **Quelle immer angegeben**: jeder Entwurf beginnt mit „Ursprünglich veröffentlicht bei …“ und einer Quellen-Fußnote mit Titel, Adresse und Datum des Originals.
+- **Standard = Kurzfassung**: Titel, kurze Zusammenfassung (ohne Markup, ohne Links) und Quelle. Der **ganze Text** wird nur übernommen, wenn das Mitglied ausdrücklich bestätigt „Die Texte sind von mir, oder ich habe das Recht, sie hier zu veröffentlichen“. Die Datenbank erzwingt das zusätzlich (`mode='full'` nur mit `rights=1`), und der Eintrag wird im Audit-Protokoll vermerkt.
+- **Bilder werden nie kopiert** und nicht verlinkt. Sie werden nur gezählt und im Entwurf vermerkt (`images_not_copied:N`). Eigene Bilder lädt das Mitglied später über den normalen Weg hoch (R2, `img.m365.fm`). So entsteht kein Bild von einem fremden Host.
+- **Sichere Umwandlung**: aus dem HTML bleiben nur Überschriften, Absätze, Listen, Zitate, fett und kursiv. Links werden zu Text, Skripte, Formulare, Bilder und Wiki-Bausteine aus dem Fremdtext fallen weg.
+- **Sicherer Abruf des Feeds**: nur `https`, ordentlicher Hostname (keine IP, kein `localhost`, keine Zugangsdaten in der Adresse), nicht m365.fm, Weiterleitungen werden erneut geprüft, höchstens 800 KB, 7 Sekunden. Der Inhalt kommt beim Speichern immer frisch vom Feed, nie vom Browser.
+- **Grenzen**: höchstens 20 Beiträge je Aufruf, 60 je Tag und Mitglied, Vorschau 20 und Speichern 10 Aufrufe je Stunde. Doppelte werden übersprungen (`blog_import_items`). Das Datum des Entwurfs ist das Datum des Originals, damit die Grenze von 5 Beiträgen pro Tag nicht verbraucht wird.
+- Ablauf nur bei eingeschaltetem `BYOD`. Oberfläche: `assets/blogimport.js` im Community-Bereich. MCP: `preview_blog_import` (nur lesen) und `import_blog_feed` (schreibt Entwürfe, setzt `rights:true` nie von selbst).
 
 ## 8. Entscheidungen, die Mirko treffen muss
 
@@ -134,6 +144,7 @@ Mitglieder geben die Feed-Adresse (RSS oder Atom) ihrer bisherigen Seite ein. De
 8. **Tarif**: Pro und Workers Paid genügen bis 100 Domains ohne Aufpreis. Ab dann 0,10 USD je Domain. Budget-Grenze festlegen (zum Beispiel höchstens 100 Domains in der ersten Phase).
 9. **Domain-Limit** je Mitglied (am Anfang 1) und wer eine Domain bekommen darf (alle mit öffentlichem Profil oder nur Pro).
 10. **Podcast auf eigener Domain** kommt später, hier nicht gebaut.
+11. **Volltext-Import**: nur für vertrauenswürdige Mitglieder (zum Beispiel Konto älter als X Tage, oder Pro, oder von dir freigeschaltet) oder für alle mit Haken „Ich habe die Rechte“ (Stand jetzt). Risiko: Jemand bestätigt fälschlich und übernimmt fremde Texte. Gegenmittel im Code: Quelle immer angegeben, nur Entwurf, Audit-Eintrag mit Mitglied und Anzahl, Tageslimit. Offen: Frist und Weg für Beschwerden (Takedown) und ob du Volltext zuerst ganz aus lassen willst (dann nur Kurzfassung).
 
 ## 9. Manuelle Schritte für Mirko (wenn er es einschalten will)
 
@@ -155,7 +166,7 @@ Drei Pull Requests, jeder für sich testbar (alles hinter `BYOD`, aus):
 
 1. **Teil 1** (PR #361): diese Doku, Datenmodell (Migration 0048), Namensregeln, Host-Weiche im Site-Worker, Auslieferung der Blog-Seiten, Erlös-Regel.
 2. **Teil 2**: Verwaltung der Domain (API `/api/byod/*`, Prüfung des DNS-Eintrags, Cloudflare-Anbindung als Code gegen die Custom-Hostnames-API, regelmäßige Prüfung im 30-Minuten-Lauf), Oberfläche im Community-Bereich (`assets/blogdomain.js`, en/de, weitere Sprachen über den Worker) und MCP-Werkzeuge (`list_my_blog_domains`, `add_blog_domain`, `check_blog_domain`, `set_blog_domain_links`, `remove_blog_domain`).
-3. **Teil 3**: Blog-Import per Feed.
+3. **Teil 3**: Blog-Import per Feed (Migration 0049, `assets/blogimport.js`, MCP-Werkzeuge `preview_blog_import` und `import_blog_feed`).
 
 Nicht prüfbar ohne Cloudflare-Zugang: echter Deploy, DNS, Zertifikat, Worker-Route, Custom-Hostnames-API. Im Test ist Cloudflare nur gemockt, es gibt keinen echten Aufruf.
 
