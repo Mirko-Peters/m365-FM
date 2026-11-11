@@ -1,8 +1,8 @@
-# Entitäten: JSON gegen D1 (2026-11-10T06:53Z)
+# Entitäten: JSON gegen D1 (2026-11-11T06:52Z)
 
-JSON-Basis 2197 · D1 live 2201 · in beiden 2197 · nur JSON 0 · nur D1 4
+JSON-Basis 2197 · D1 live 2210 · in beiden 2197 · nur JSON 0 · nur D1 13
 
-**3 Entitäten** weichen ab (letzte live-Fassung: import/auto 1, person 2).
+**4 Entitäten** weichen ab (letzte live-Fassung: import/auto 1, person 3).
 
 | Feld | JSON anders als D1 | davon in D1 leer | Beispiele |
 |---|---|---|---|
@@ -17,5 +17,5 @@ JSON-Basis 2197 · D1 live 2201 · in beiden 2197 · nur JSON 0 · nur D1 4
 | rel | 0 | 0 |  |
 | image | 0 | 0 |  |
 | job | 1 | 1 | marcel-lehmann |
-| desc.en | 1 | 0 | marcel-lehmann |
+| desc.en | 2 | 0 | azure-api-management, marcel-lehmann |
 | desc.de | 1 | 0 | marcel-lehmann |
