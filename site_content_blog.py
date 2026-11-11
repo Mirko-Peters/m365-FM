@@ -15,6 +15,7 @@ from pathlib import Path
 
 import site_shownotes as SNS
 import site_milestones as MST
+from site_i18n import T
 from site_learn import esc
 
 ROOT = Path(__file__).resolve().parent
@@ -71,7 +72,7 @@ def check(rec, lang, slug, ents):
     if err: return None, err
     html = render(body)
     if kp:
-        box = "<h2>Key points</h2>\n<ul>" + "".join(f"<li>{SNS._inline(x)}</li>" for x in kp) + "</ul>"
+        box = f"<h2>{esc(T(lang, 'Key points', 'Kernpunkte'))}</h2>\n<ul>" + "".join(f"<li>{SNS._inline(x)}</li>" for x in kp) + "</ul>"   # Ueberschrift in der Paketsprache (data/py_i18n.json); englische Pakete uebersetzt translate_blog samt h2
         cut = html.find("</p>")
         html = box + "\n" + html if cut < 0 else html[:cut + 4] + "\n" + box + html[cut + 4:]
     item = {"slug": slug, "lang": lang, "title": title, "summary": summary, "author": author, "html": html, "topics": topics[:10], "faq": faq[:10],

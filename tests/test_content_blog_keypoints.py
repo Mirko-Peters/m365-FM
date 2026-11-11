@@ -27,6 +27,15 @@ class KeypointsTest(unittest.TestCase):
         self.assertEqual(err, [])
         self.assertNotIn("Key points", it["html"])
 
+    def test_heading_in_package_language(self):
+        """Nicht-englische Pakete (imports/blog/<sprache>/) bekommen die Ueberschrift ihrer Sprache, Englisch bleibt 'Key points'."""
+        for lang, h2 in (("de", "Kernpunkte"), ("fr", "Points clés"), ("ja", "要点"), ("en", "Key points")):
+            it, err = CBL.check(rec(KP), lang, "gemba-walk-guide", {"sap"})
+            self.assertEqual(err, [])
+            self.assertIn(f"<h2>{h2}</h2>", it["html"], lang)
+        for lang in sorted(CBL.LANGS - {"en"}):
+            self.assertNotIn("<h2>Key points</h2>", CBL.check(rec(KP), lang, "gemba-walk-guide", {"sap"})[0]["html"], lang)
+
     def test_limits(self):
         for bad in (KP[:2], KP + ["Another useful point here."] * 6, ["too short", KP[1], KP[2]]):
             it, err = CBL.check(rec(bad), "en", "gemba-walk-guide", {"sap"})
