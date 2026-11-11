@@ -400,7 +400,7 @@ export async function handleProfiles(env, request, url, path, user, J) {
     const previousLocation = await db.prepare("SELECT p.country,pp.* FROM profiles p LEFT JOIN profile_private pp ON pp.user_id=p.user_id WHERE p.user_id=?").bind(user.id).first();
     let handle = String(b.handle || "").toLowerCase().trim(); const isPublic = b.public ? 1 : 0;
     if (handle && !HANDLE.test(handle)) return J({ error: "bad_handle" }, 400);
-    if (RESERVED_HANDLES.has(handle)) return J({ error: "handle_taken" }, 409);
+    if (RESERVED_HANDLES.has(handle) && (await db.prepare("SELECT handle FROM profiles WHERE user_id=?").bind(user.id).first())?.handle !== handle) return J({ error: "handle_taken" }, 409);   // nur neu vergeben gesperrt: wer das Kuerzel schon hat, speichert weiter
     if (isPublic && !handle) return J({ error: "bad_handle" }, 400);
     const taken = handle ? await db.prepare("SELECT user_id FROM profiles WHERE handle=? AND user_id<>?").bind(handle, user.id).first() : null;
     if (taken || (handle && (await db.prepare("SELECT 1 x FROM orgs WHERE handle=?").bind(handle).first()))) return J({ error: "handle_taken" }, 409);

@@ -241,5 +241,12 @@ test("Handles me, business und company sind gesperrt: sie wuerden /api/profile/<
     assert.deepEqual(raw.prepare("SELECT handle FROM profiles WHERE user_id IN (1,2) ORDER BY user_id").all().map((x) => x.handle), ["user1", "user2"]);
     const r = req("/api/profile/me", "POST", { handle: "business-mirko", public: 0 });
     assert.equal((await handleProfiles(env, r, new URL(r.url), "/api/profile/me", U(1), J)).status, 200, "Handle mit dem Wort darin bleibt erlaubt");
+    // Bestand: wer das Kuerzel schon vor der Sperre hatte, speichert sein Profil weiter (Web und MCP); nur neu vergeben ist gesperrt
+    raw.prepare("UPDATE profiles SET handle='business' WHERE user_id=2").run();
+    const r2 = req("/api/profile/me", "POST", { handle: "business", public: 0 });
+    assert.equal((await handleProfiles(env, r2, new URL(r2.url), "/api/profile/me", U(2), J)).status, 200, "eigenes Bestands-Kuerzel");
+    assert.equal((await callTool(env, U(2), "update_my_profile", { headline: "x" })).error, undefined, "MCP mit Bestands-Kuerzel");
+    const r3 = req("/api/profile/me", "POST", { handle: "business", public: 0 });
+    assert.equal((await handleProfiles(env, r3, new URL(r3.url), "/api/profile/me", U(1), J)).status, 409, "fremdes Kuerzel bleibt vergeben");
   } finally { raw.close(); }
 });
