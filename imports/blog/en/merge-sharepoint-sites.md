@@ -108,6 +108,8 @@ Sometimes the surviving site should have a neutral name, for example Sales inste
 
 Microsoft's built-in Move to and Copy to actions are enough for small sites. For larger merges, scripts and migration tools can handle batches, metadata and reports. One example is Cognillo's [SharePoint Essentials Toolkit](https://www.m365.fm/entity/sharepoint-essentials-toolkit/), which lists SharePoint-to-SharePoint migration among its functions. According to the product page, item IDs, version history and metadata are kept, and verification reports are available after the migration. These are the vendor's statements and M365.FM has not tested them. Compare any tool with your inventory.
 
+Disclosure: Cognillo sponsors M365.FM.
+
 ## Next step
 
 Write down which site survives and why, and list the libraries, pages and permissions of the other one. With that list in hand, you can decide whether to merge SharePoint sites or simply connect them through a hub.

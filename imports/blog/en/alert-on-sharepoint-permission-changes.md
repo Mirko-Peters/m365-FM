@@ -108,6 +108,8 @@ The total is 60 + 18 + 6 = 84 alerts. The admin finds that 60 of the 84, which i
 
 Microsoft's alert policies cover the audit events, and they need tuning and a person who reads them. Some teams add a tool for monitoring. One example is Cognillo's [SharePoint Essentials Toolkit](https://www.m365.fm/entity/sharepoint-essentials-toolkit/). According to the vendor's product page, it provides a monitor for permission changes, e-mail notifications, a governance dashboard, and permission reports for sites, folders and items. These are the vendor's statements, and M365.FM has not tested them. Compare any tool with the alert policies you already have, and check which events it can see.
 
+Disclosure: Cognillo sponsors M365.FM.
+
 ## Next step
 
 Pick your three most sensitive sites and create one alert policy for site collection admins being added. Then you have a first way to alert on SharePoint permission changes, and you can read the results after two weeks before you add more events.

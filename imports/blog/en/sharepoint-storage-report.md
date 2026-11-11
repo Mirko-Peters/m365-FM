@@ -106,6 +106,8 @@ The check: 440 + 120 + 600 = 1,160 GB. The used storage falls from 5,700 GB to 4
 
 Microsoft's own tools show storage per site and the tenant total. For a view of file storage down to files and folders, some teams add a reporting tool. One example is Cognillo's [SharePoint Essentials Toolkit](https://www.m365.fm/entity/sharepoint-essentials-toolkit/). According to the vendor's product page, it provides metadata reports that list items, files, folders and pages with their sizes and version counts, a monitor for storage growth, and scheduled reports that can be exported to SharePoint, by email, or to Excel or CSV. These are the vendor's statements, and M365.FM has not tested them. Compare any tool's totals with the admin center before you rely on it.
 
+Disclosure: Cognillo sponsors M365.FM.
+
 ## Next step
 
 Export the Active sites list today, sort it by storage used and note the share of the top 10 sites. That list is the start of your SharePoint storage report, and it tells you where to look first to manage SharePoint storage.

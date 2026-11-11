@@ -118,6 +118,8 @@ The total is 126 + 0 + 12 = 138 GB. The three sites hold 300 + 150 + 80 = 530 GB
 
 Microsoft's own tools show storage per site and the what-if results for trim jobs. Some teams also use a reporting tool to look at libraries over time. One example is Cognillo's [SharePoint Essentials Toolkit](https://www.m365.fm/entity/sharepoint-essentials-toolkit/). According to the vendor's product page, it offers metadata reports that include file sizes and version counts, a monitor for storage growth, and scheduled exports to SharePoint, by email, or to Excel or CSV. These are the vendor's statements, and M365.FM has not tested them. Compare any tool's numbers with the Microsoft reports before you base a trim on them.
 
+Disclosure: Cognillo sponsors M365.FM.
+
 ## Next step
 
 To reduce SharePoint storage safely, start managing version history with one report: generate the version storage usage report for your largest site this week and run the what-if analysis for Automatic mode. That one report shows how much of your SharePoint version history storage you could recover and which libraries need an owner conversation first.

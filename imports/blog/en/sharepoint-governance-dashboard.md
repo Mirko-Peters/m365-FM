@@ -122,6 +122,8 @@ The check: the share of 72 sites out of 800 is 9 percent. The IT manager sees th
 
 Microsoft's reports and Power BI cover a first version of the dashboard. If your team wants monitoring and exports without building the pipeline, a tool can help. One example is Cognillo's [SharePoint Essentials Toolkit](https://www.m365.fm/entity/sharepoint-essentials-toolkit/). According to the vendor's product page, its governance functions include monitors, a dashboard, a monitor for permission changes, e-mail notifications and a monitor for storage growth, and reports can be scheduled and exported to SharePoint, by e-mail, or to Excel or CSV. These are the vendor's statements, and M365.FM has not tested them. Compare the metrics of any tool with your five questions before you decide.
 
+Disclosure: Cognillo sponsors M365.FM.
+
 ## Next step
 
 Write down your five governance questions this week and pick one metric for each. Then build the first version of your SharePoint governance dashboard from a single month of exports, and present it to the people who own the targets.
