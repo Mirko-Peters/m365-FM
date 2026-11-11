@@ -26,6 +26,15 @@ def one_h1(html, title=""):
     return _H1.sub(lambda x: f"<h2{x.group(1) or ''}>{x.group(2)}</h2>", html)
 
 
+def disclosures(p, body_html, lang, skip=()):
+    """Transparenzhinweise (Feld disclosure, wie auf den Entitaetsseiten: site_entities.disclosure_of) zu Themen und verlinkten Entitaeten des Beitrags,
+    z. B. iFAKT bei Links auf /entity/ifakt/ oder ein Polaris-Modul (developed_by/part_of ifakt). In allen Sprachfassungen (ohne Text der Sprache: Englisch).
+    skip: Entitaeten des Sponsorings dieses Beitrags, die SPM.note schon kennzeichnet. Jeder Hinweis nur einmal."""
+    import site_entities as SENT
+    ids = dict.fromkeys([t for t in (p.get("topics") or []) if isinstance(t, str)] + re.findall(r'/entity/([a-z0-9][a-z0-9-]{1,79})/', body_html or ""))
+    return list(dict.fromkeys(d for i in ids if i in ENTS and i not in skip for d in [SENT.disclosure_of(ENTS[i], lang)] if d))
+
+
 def fetch_posts(api):
     items = (_fetch_json(f"{api}/api/blog/export", timeout=120) or {}).get("items", [])
     if any(p.get("has_html") for p in items):   # uebernommene Beitraege: HTML seitenweise nachladen
@@ -135,7 +144,8 @@ def build(g, posts, people, api):
             cos = [c for c in (p.get("coauthors") or []) if c.get("handle") in pb and c["handle"] != p["handle"]]
             co_html = "".join(f' {esc(T(lang, "and", "und"))} <a href="{croot}u/{c["handle"]}/" rel="author">{esc(pb[c["handle"]]["name"])}</a>' for c in cos) if len(cos) == 1 else "".join(f', <a href="{croot}u/{c["handle"]}/" rel="author">{esc(pb[c["handle"]]["name"])}</a>' for c in cos)
             upd_html = f' · {esc(T(lang, "Updated", "Aktualisiert"))} <time datetime="{iso(p["updated"])}">{iso(p["updated"])}</time>' if p.get("updated") and iso(p["updated"]) != iso(p["published"]) else ""
-            b = shell(lang, f'{WCSS}{CSS}<p class="mut"><a href="{croot}blog/">{esc(title_blog)}</a> · <a href="{croot}u/{p["handle"]}/blog/">{esc(a["name"])}</a></p><article class="wk-body"><h1>{esc(p["title"])}</h1>{SPM.note(lang, _spr, "post")}'
+            _disc = "".join(f'<p class="en-disc" role="note" style="{SPM.NOTE_STYLE}">{esc(d)}</p>' for d in disclosures(p, body_html, lang, skip=_spr_ex))
+            b = shell(lang, f'{WCSS}{CSS}<p class="mut"><a href="{croot}blog/">{esc(title_blog)}</a> · <a href="{croot}u/{p["handle"]}/blog/">{esc(a["name"])}</a></p><article class="wk-body"><h1>{esc(p["title"])}</h1>{SPM.note(lang, _spr, "post")}{_disc}'
                             f'<p class="mut">{esc(T(lang, "By", "Von"))} <a href="{croot}u/{p["handle"]}/" rel="author">{esc(a["name"])}</a>{co_html}{esc(" · ")}<time datetime="{iso(p["published"])}">{iso(p["published"])}</time>{upd_html}</p>'
                             f'{("<p>" + esc(p["summary"]) + "</p>") if p.get("summary") else ""}{_aitr(p, lang, BASE)}{_kp}{body_html}{IMG.CSS if IMG.needs_responsive_css(body_html) else ""}{_fq}{SNT.CSS if (_kp or _fq) else ""}</article>{tl}{relbox}{vote}'
                             f'<p>{("" if p.get("legacy") else "<button type=" + chr(34) + "button" + chr(34) + " class=" + chr(34) + "bl-vote bl-follow" + chr(34) + " data-h=" + chr(34) + esc(p["handle"]) + chr(34) + " aria-pressed=" + chr(34) + "false" + chr(34) + "><span class=" + chr(34) + "t" + chr(34) + ">" + esc(T(lang, "Follow this blog", "Blog abonnieren")) + "</span></button> ")}<a href="{croot}u/{p["handle"]}/blog/feed.xml">RSS</a></p>'
